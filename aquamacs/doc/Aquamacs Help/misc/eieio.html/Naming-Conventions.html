@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,89 +16,118 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Naming Conventions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Naming Conventions">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Naming Conventions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="CLOS-compatibility.html#CLOS-compatibility" rel="next" title="CLOS compatibility">
-<link href="Signals.html#Signals" rel="prev" title="Signals">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Naming Conventions</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Naming Conventions" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Naming Conventions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="CLOS-compatibility.html#CLOS-compatibility" rel=
+  "next" title="CLOS compatibility" />
+  <link href="Signals.html#Signals" rel="prev" title="Signals" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Naming-Conventions"></a>
-<div class="header">
-<p>
-Next: <a href="CLOS-compatibility.html#CLOS-compatibility" accesskey="n" rel="next">CLOS compatibility</a>, Previous: <a href="Signals.html#Signals" accesskey="p" rel="prev">Signals</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Naming-Conventions-1"></a>
-<h2 class="chapter">17 Naming Conventions</h2>
+<body lang="en" xml:lang="en">
+  <a name="Naming-Conventions" id="Naming-Conventions"></a>
 
-<p>See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Tips.html#Tips">Tips and Conventions</a> in <cite>GNU Emacs Lisp Reference
-Manual</cite>, for a description of Emacs Lisp programming conventions.
-These conventions help ensure that Emacs packages work nicely one
-another, so an <i>EIEIO</i>-based program should follow them.  Here are
-some conventions that apply specifically to <i>EIEIO</i>-based programs:
-</p>
-<ul>
-<li> Come up with a package prefix that is relatively short.  Prefix
-all classes, and methods with your prefix.  This is a standard
-convention for functions and variables in Emacs.
+  <div class="header">
+    <p>Next: <a href="CLOS-compatibility.html#CLOS-compatibility"
+    accesskey="n" rel="next">CLOS compatibility</a>, Previous:
+    <a href="Signals.html#Signals" accesskey="p" rel=
+    "prev">Signals</a>, Up: <a href="index.html#Top" accesskey="u"
+    rel="up">Top</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Naming-Conventions-1" id="Naming-Conventions-1"></a>
 
-</li><li> Do not prefix method names with the class name.  All methods in
-<i>EIEIO</i> are &ldquo;virtual&rdquo;, and are dynamically dispatched.  Anyone can
-override your methods at any time.  Your methods should be prefixed
-with your package name.
+  <h2 class="chapter">17 Naming Conventions</h2>
 
-</li><li> Do not prefix slots in your class.  The slots are always locally
-scoped to your class, and need no prefixing.
+  <p>See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Tips.html#Tips">
+  Tips and Conventions</a> in <cite>GNU Emacs Lisp Reference
+  Manual</cite>, for a description of Emacs Lisp programming
+  conventions. These conventions help ensure that Emacs packages
+  work nicely one another, so an <i>EIEIO</i>-based program should
+  follow them. Here are some conventions that apply specifically to
+  <i>EIEIO</i>-based programs:</p>
 
-</li><li> If your library inherits from other libraries of classes, you
-must &ldquo;require&rdquo; that library with the <code>require</code> command.
+  <ul>
+    <li>Come up with a package prefix that is relatively short.
+    Prefix all classes, and methods with your prefix. This is a
+    standard convention for functions and variables in Emacs.</li>
 
-</li></ul>
+    <li>Do not prefix method names with the class name. All methods
+    in <i>EIEIO</i> are &ldquo;virtual&rdquo;, and are dynamically
+    dispatched. Anyone can override your methods at any time. Your
+    methods should be prefixed with your package name.</li>
 
+    <li>Do not prefix slots in your class. The slots are always
+    locally scoped to your class, and need no prefixing.</li>
 
-
-
+    <li>If your library inherits from other libraries of classes,
+    you must &ldquo;require&rdquo; that library with the
+    <code>require</code> command.</li>
+  </ul>
 </body>
 </html>

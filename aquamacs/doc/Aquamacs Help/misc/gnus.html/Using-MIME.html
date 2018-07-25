@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,245 +14,384 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Using MIME</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Using MIME">
-<meta name="keywords" content="Gnus Manual: Using MIME">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Article-Buffer.html#Article-Buffer" rel="up" title="Article Buffer">
-<link href="HTML.html#HTML" rel="next" title="HTML">
-<link href="Hiding-Headers.html#Hiding-Headers" rel="prev" title="Hiding Headers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Using MIME</title>
+  <meta name="description" content="Gnus Manual: Using MIME" />
+  <meta name="keywords" content="Gnus Manual: Using MIME" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Article-Buffer.html#Article-Buffer" rel="up" title=
+  "Article Buffer" />
+  <link href="HTML.html#HTML" rel="next" title="HTML" />
+  <link href="Hiding-Headers.html#Hiding-Headers" rel="prev" title=
+  "Hiding Headers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-MIME"></a>
-<div class="header">
-<p>
-Next: <a href="HTML.html#HTML" accesskey="n" rel="next">HTML</a>, Previous: <a href="Hiding-Headers.html#Hiding-Headers" accesskey="p" rel="prev">Hiding Headers</a>, Up: <a href="Article-Buffer.html#Article-Buffer" accesskey="u" rel="up">Article Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-MIME-1"></a>
-<h3 class="section">4.2 Using MIME</h3>
-<a name="index-MIME"></a>
+<body lang="en" xml:lang="en">
+  <a name="Using-MIME" id="Using-MIME"></a>
 
-<p>Mime is a standard for waving your hands through the air, aimlessly,
-while people stand around yawning.
-</p>
-<p><acronym>MIME</acronym>, however, is a standard for encoding your articles, aimlessly,
-while all newsreaders die of fear.
-</p>
-<p><acronym>MIME</acronym> may specify what character set the article uses, the encoding
-of the characters, and it also makes it possible to embed pictures and
-other naughty stuff in innocent-looking articles.
-</p>
-<a name="index-gnus_002ddisplay_002dmime_002dfunction"></a>
-<a name="index-gnus_002ddisplay_002dmime"></a>
-<p>Gnus pushes <acronym>MIME</acronym> articles through <code>gnus-display-mime-function</code>
-to display the <acronym>MIME</acronym> parts.  This is <code>gnus-display-mime</code> by
-default, which creates a bundle of clickable buttons that can be used to
-display, save and manipulate the <acronym>MIME</acronym> objects.
-</p>
-<p>The following commands are available when you have placed point over a
-<acronym>MIME</acronym> button:
-</p>
-<dl compact="compact">
-<dd><a name="index-gnus_002darticle_002dpress_002dbutton"></a>
-</dd>
-<dt><kbd>RET (Article)</kbd></dt>
-<dd><a name="index-RET-_0028Article_0029"></a>
-</dd>
-<dt><kbd>BUTTON-2 (Article)</kbd></dt>
-<dd><p>Toggle displaying of the <acronym>MIME</acronym> object
-(<code>gnus-article-press-button</code>).  If built-in viewers can not display
-the object, Gnus resorts to external viewers in the <samp>mailcap</samp>
-files.  If a viewer has the &lsquo;<samp>copiousoutput</samp>&rsquo; specification, the
-object is displayed inline.
-</p>
-<a name="index-gnus_002dmime_002dview_002dpart"></a>
-</dd>
-<dt><kbd>M-RET (Article)</kbd></dt>
-<dd><a name="index-M_002dRET-_0028Article_0029"></a>
-</dd>
-<dt><kbd>v (Article)</kbd></dt>
-<dd><p>Prompt for a method, and then view the <acronym>MIME</acronym> object using this
-method (<code>gnus-mime-view-part</code>).
-</p>
-<a name="index-gnus_002dmime_002dview_002dpart_002das_002dtype"></a>
-</dd>
-<dt><kbd>t (Article)</kbd></dt>
-<dd><a name="index-t-_0028Article_0029"></a>
-<p>View the <acronym>MIME</acronym> object as if it were a different <acronym>MIME</acronym> media type
-(<code>gnus-mime-view-part-as-type</code>).
-</p>
-<a name="index-gnus_002dmime_002dview_002dpart_002das_002dcharset"></a>
-</dd>
-<dt><kbd>C (Article)</kbd></dt>
-<dd><a name="index-C-_0028Article_0029"></a>
-<p>Prompt for a charset, and then view the <acronym>MIME</acronym> object using this
-charset (<code>gnus-mime-view-part-as-charset</code>).
-</p>
-<a name="index-gnus_002dmime_002dsave_002dpart"></a>
-</dd>
-<dt><kbd>o (Article)</kbd></dt>
-<dd><a name="index-o-_0028Article_0029"></a>
-<p>Prompt for a file name, and then save the <acronym>MIME</acronym> object
-(<code>gnus-mime-save-part</code>).
-</p>
-<a name="index-gnus_002dmime_002dsave_002dpart_002dand_002dstrip"></a>
-</dd>
-<dt><kbd>C-o (Article)</kbd></dt>
-<dd><a name="index-C_002do-_0028Article_0029"></a>
-<p>Prompt for a file name, then save the <acronym>MIME</acronym> object and strip it from
-the article.  Then proceed to article editing, where a reasonable
-suggestion is being made on how the altered article should look
-like.  The stripped <acronym>MIME</acronym> object will be referred via the
-message/external-body <acronym>MIME</acronym> type.
-(<code>gnus-mime-save-part-and-strip</code>).
-</p>
-<a name="index-gnus_002dmime_002dreplace_002dpart"></a>
-</dd>
-<dt><kbd>r (Article)</kbd></dt>
-<dd><a name="index-r-_0028Article_0029"></a>
-<p>Prompt for a file name, replace the <acronym>MIME</acronym> object with an
-external body referring to the file via the message/external-body
-<acronym>MIME</acronym> type.  (<code>gnus-mime-replace-part</code>).
-</p>
-<a name="index-gnus_002dmime_002ddelete_002dpart"></a>
-</dd>
-<dt><kbd>d (Article)</kbd></dt>
-<dd><a name="index-d-_0028Article_0029"></a>
-<p>Delete the <acronym>MIME</acronym> object from the article and replace it with some
-information about the removed <acronym>MIME</acronym> object
-(<code>gnus-mime-delete-part</code>).
-</p>
+  <div class="header">
+    <p>Next: <a href="HTML.html#HTML" accesskey="n" rel=
+    "next">HTML</a>, Previous: <a href=
+    "Hiding-Headers.html#Hiding-Headers" accesskey="p" rel=
+    "prev">Hiding Headers</a>, Up: <a href=
+    "Article-Buffer.html#Article-Buffer" accesskey="u" rel=
+    "up">Article Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-MIME-1" id="Using-MIME-1"></a>
 
-<a name="index-gnus_002dmime_002dcopy_002dpart"></a>
-</dd>
-<dt><kbd>c (Article)</kbd></dt>
-<dd><a name="index-c-_0028Article_0029"></a>
-<p>Copy the <acronym>MIME</acronym> object to a fresh buffer and display this buffer
-(<code>gnus-mime-copy-part</code>).  If given a prefix, copy the raw contents
-without decoding.  If given a numerical prefix, you can do semi-manual
-charset stuff (see <code>gnus-summary-show-article-charset-alist</code> in
-<a href="Paging-the-Article.html#Paging-the-Article">Paging the Article</a>).  Compressed files like <samp>.gz</samp> and
-<samp>.bz2</samp> are automatically decompressed if
-<code>auto-compression-mode</code> is enabled (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Compressed-Files.html#Compressed-Files">Accessing Compressed Files</a> in <cite>The Emacs Editor</cite>).
-</p>
-<a name="index-gnus_002dmime_002dprint_002dpart"></a>
-</dd>
-<dt><kbd>p (Article)</kbd></dt>
-<dd><a name="index-p-_0028Article_0029"></a>
-<p>Print the <acronym>MIME</acronym> object (<code>gnus-mime-print-part</code>).  This
-command respects the &lsquo;<samp>print=</samp>&rsquo; specifications in the
-<samp>.mailcap</samp> file.
-</p>
-<a name="index-gnus_002dmime_002dinline_002dpart"></a>
-</dd>
-<dt><kbd>i (Article)</kbd></dt>
-<dd><a name="index-i-_0028Article_0029"></a>
-<p>Insert the contents of the <acronym>MIME</acronym> object into the buffer
-(<code>gnus-mime-inline-part</code>) as &lsquo;<samp>text/plain</samp>&rsquo;.  If given a prefix, insert
-the raw contents without decoding.  If given a numerical prefix, you can
-do semi-manual charset stuff (see
-<code>gnus-summary-show-article-charset-alist</code> in <a href="Paging-the-Article.html#Paging-the-Article">Paging the Article</a>).  Compressed files like <samp>.gz</samp> and <samp>.bz2</samp> are
-automatically decompressed depending on <code>jka-compr</code> regardless of
-<code>auto-compression-mode</code> (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Compressed-Files.html#Compressed-Files">Accessing
-Compressed Files</a> in <cite>The Emacs Editor</cite>).
-</p>
-<a name="index-gnus_002dmime_002dview_002dpart_002dinternally"></a>
-</dd>
-<dt><kbd>E (Article)</kbd></dt>
-<dd><a name="index-E-_0028Article_0029"></a>
-<p>View the <acronym>MIME</acronym> object with an internal viewer.  If no internal
-viewer is available, use an external viewer
-(<code>gnus-mime-view-part-internally</code>).
-</p>
-<a name="index-gnus_002dmime_002dview_002dpart_002dexternally"></a>
-</dd>
-<dt><kbd>e (Article)</kbd></dt>
-<dd><a name="index-e-_0028Article_0029"></a>
-<p>View the <acronym>MIME</acronym> object with an external viewer.
-(<code>gnus-mime-view-part-externally</code>).
-</p>
-<a name="index-gnus_002dmime_002dpipe_002dpart"></a>
-</dd>
-<dt><kbd>| (Article)</kbd></dt>
-<dd><a name="index-_007c-_0028Article_0029"></a>
-<p>Output the <acronym>MIME</acronym> object to a process (<code>gnus-mime-pipe-part</code>).
-</p>
-<a name="index-gnus_002dmime_002daction_002don_002dpart"></a>
-</dd>
-<dt><kbd>. (Article)</kbd></dt>
-<dd><a name="index-_002e-_0028Article_0029"></a>
-<p>Interactively run an action on the <acronym>MIME</acronym> object
-(<code>gnus-mime-action-on-part</code>).
-</p>
-</dd>
-</dl>
+  <h3 class="section">4.2 Using MIME</h3><a name="index-MIME" id=
+  "index-MIME"></a>
 
-<p>Gnus will display some <acronym>MIME</acronym> objects automatically.  The way Gnus
-determines which parts to do this with is described in the Emacs
-<acronym>MIME</acronym> manual.
-</p>
-<p>It might be best to just use the toggling functions from the article
-buffer to avoid getting nasty surprises.  (For instance, you enter the
-group &lsquo;<samp>alt.sing-a-long</samp>&rsquo; and, before you know it, <acronym>MIME</acronym> has
-decoded the sound file in the article and some horrible sing-a-long song
-comes screaming out your speakers, and you can&rsquo;t find the volume button,
-because there isn&rsquo;t one, and people are starting to look at you, and you
-try to stop the program, but you can&rsquo;t, and you can&rsquo;t find the program
-to control the volume, and everybody else in the room suddenly decides
-to look at you disdainfully, and you&rsquo;ll feel rather stupid.)
-</p>
-<p>Any similarity to real events and people is purely coincidental.  Ahem.
-</p>
-<p>Also see <a href="MIME-Commands.html#MIME-Commands">MIME Commands</a>.
-</p>
+  <p>Mime is a standard for waving your hands through the air,
+  aimlessly, while people stand around yawning.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="HTML.html#HTML" accesskey="n" rel="next">HTML</a>, Previous: <a href="Hiding-Headers.html#Hiding-Headers" accesskey="p" rel="prev">Hiding Headers</a>, Up: <a href="Article-Buffer.html#Article-Buffer" accesskey="u" rel="up">Article Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p><acronym>MIME</acronym>, however, is a standard for encoding
+  your articles, aimlessly, while all newsreaders die of fear.</p>
 
+  <p><acronym>MIME</acronym> may specify what character set the
+  article uses, the encoding of the characters, and it also makes
+  it possible to embed pictures and other naughty stuff in
+  innocent-looking articles.</p><a name=
+  "index-gnus_002ddisplay_002dmime_002dfunction" id=
+  "index-gnus_002ddisplay_002dmime_002dfunction"></a> <a name=
+  "index-gnus_002ddisplay_002dmime" id=
+  "index-gnus_002ddisplay_002dmime"></a>
 
+  <p>Gnus pushes <acronym>MIME</acronym> articles through
+  <code>gnus-display-mime-function</code> to display the
+  <acronym>MIME</acronym> parts. This is
+  <code>gnus-display-mime</code> by default, which creates a bundle
+  of clickable buttons that can be used to display, save and
+  manipulate the <acronym>MIME</acronym> objects.</p>
 
+  <p>The following commands are available when you have placed
+  point over a <acronym>MIME</acronym> button:</p>
+
+  <dl compact="compact">
+    <dd><a name="index-gnus_002darticle_002dpress_002dbutton" id=
+    "index-gnus_002darticle_002dpress_002dbutton"></a></dd>
+
+    <dt><kbd>RET (Article)</kbd></dt>
+
+    <dd><a name="index-RET-_0028Article_0029" id=
+    "index-RET-_0028Article_0029"></a></dd>
+
+    <dt><kbd>BUTTON-2 (Article)</kbd></dt>
+
+    <dd>
+      <p>Toggle displaying of the <acronym>MIME</acronym> object
+      (<code>gnus-article-press-button</code>). If built-in viewers
+      can not display the object, Gnus resorts to external viewers
+      in the <samp>mailcap</samp> files. If a viewer has the
+      &lsquo;<samp>copiousoutput</samp>&rsquo; specification, the
+      object is displayed inline.</p><a name=
+      "index-gnus_002dmime_002dview_002dpart" id=
+      "index-gnus_002dmime_002dview_002dpart"></a>
+    </dd>
+
+    <dt><kbd>M-RET (Article)</kbd></dt>
+
+    <dd><a name="index-M_002dRET-_0028Article_0029" id=
+    "index-M_002dRET-_0028Article_0029"></a></dd>
+
+    <dt><kbd>v (Article)</kbd></dt>
+
+    <dd>
+      <p>Prompt for a method, and then view the
+      <acronym>MIME</acronym> object using this method
+      (<code>gnus-mime-view-part</code>).</p><a name=
+      "index-gnus_002dmime_002dview_002dpart_002das_002dtype" id=
+      "index-gnus_002dmime_002dview_002dpart_002das_002dtype"></a>
+    </dd>
+
+    <dt><kbd>t (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-t-_0028Article_0029" id=
+      "index-t-_0028Article_0029"></a>
+
+      <p>View the <acronym>MIME</acronym> object as if it were a
+      different <acronym>MIME</acronym> media type
+      (<code>gnus-mime-view-part-as-type</code>).</p><a name=
+      "index-gnus_002dmime_002dview_002dpart_002das_002dcharset"
+      id="index-gnus_002dmime_002dview_002dpart_002das_002dcharset"></a>
+    </dd>
+
+    <dt><kbd>C (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-C-_0028Article_0029" id=
+      "index-C-_0028Article_0029"></a>
+
+      <p>Prompt for a charset, and then view the
+      <acronym>MIME</acronym> object using this charset
+      (<code>gnus-mime-view-part-as-charset</code>).</p><a name=
+      "index-gnus_002dmime_002dsave_002dpart" id=
+      "index-gnus_002dmime_002dsave_002dpart"></a>
+    </dd>
+
+    <dt><kbd>o (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-o-_0028Article_0029" id=
+      "index-o-_0028Article_0029"></a>
+
+      <p>Prompt for a file name, and then save the
+      <acronym>MIME</acronym> object
+      (<code>gnus-mime-save-part</code>).</p><a name=
+      "index-gnus_002dmime_002dsave_002dpart_002dand_002dstrip" id=
+      "index-gnus_002dmime_002dsave_002dpart_002dand_002dstrip"></a>
+    </dd>
+
+    <dt><kbd>C-o (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-C_002do-_0028Article_0029" id=
+      "index-C_002do-_0028Article_0029"></a>
+
+      <p>Prompt for a file name, then save the
+      <acronym>MIME</acronym> object and strip it from the article.
+      Then proceed to article editing, where a reasonable
+      suggestion is being made on how the altered article should
+      look like. The stripped <acronym>MIME</acronym> object will
+      be referred via the message/external-body
+      <acronym>MIME</acronym> type.
+      (<code>gnus-mime-save-part-and-strip</code>).</p><a name=
+      "index-gnus_002dmime_002dreplace_002dpart" id=
+      "index-gnus_002dmime_002dreplace_002dpart"></a>
+    </dd>
+
+    <dt><kbd>r (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-r-_0028Article_0029" id=
+      "index-r-_0028Article_0029"></a>
+
+      <p>Prompt for a file name, replace the
+      <acronym>MIME</acronym> object with an external body
+      referring to the file via the message/external-body
+      <acronym>MIME</acronym> type.
+      (<code>gnus-mime-replace-part</code>).</p><a name=
+      "index-gnus_002dmime_002ddelete_002dpart" id=
+      "index-gnus_002dmime_002ddelete_002dpart"></a>
+    </dd>
+
+    <dt><kbd>d (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-d-_0028Article_0029" id=
+      "index-d-_0028Article_0029"></a>
+
+      <p>Delete the <acronym>MIME</acronym> object from the article
+      and replace it with some information about the removed
+      <acronym>MIME</acronym> object
+      (<code>gnus-mime-delete-part</code>).</p><a name=
+      "index-gnus_002dmime_002dcopy_002dpart" id=
+      "index-gnus_002dmime_002dcopy_002dpart"></a>
+    </dd>
+
+    <dt><kbd>c (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-c-_0028Article_0029" id=
+      "index-c-_0028Article_0029"></a>
+
+      <p>Copy the <acronym>MIME</acronym> object to a fresh buffer
+      and display this buffer (<code>gnus-mime-copy-part</code>).
+      If given a prefix, copy the raw contents without decoding. If
+      given a numerical prefix, you can do semi-manual charset
+      stuff (see
+      <code>gnus-summary-show-article-charset-alist</code> in
+      <a href="Paging-the-Article.html#Paging-the-Article">Paging
+      the Article</a>). Compressed files like <samp>.gz</samp> and
+      <samp>.bz2</samp> are automatically decompressed if
+      <code>auto-compression-mode</code> is enabled (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Compressed-Files.html#Compressed-Files">
+      Accessing Compressed Files</a> in <cite>The Emacs
+      Editor</cite>).</p><a name=
+      "index-gnus_002dmime_002dprint_002dpart" id=
+      "index-gnus_002dmime_002dprint_002dpart"></a>
+    </dd>
+
+    <dt><kbd>p (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-p-_0028Article_0029" id=
+      "index-p-_0028Article_0029"></a>
+
+      <p>Print the <acronym>MIME</acronym> object
+      (<code>gnus-mime-print-part</code>). This command respects
+      the &lsquo;<samp>print=</samp>&rsquo; specifications in the
+      <samp>.mailcap</samp> file.</p><a name=
+      "index-gnus_002dmime_002dinline_002dpart" id=
+      "index-gnus_002dmime_002dinline_002dpart"></a>
+    </dd>
+
+    <dt><kbd>i (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-i-_0028Article_0029" id=
+      "index-i-_0028Article_0029"></a>
+
+      <p>Insert the contents of the <acronym>MIME</acronym> object
+      into the buffer (<code>gnus-mime-inline-part</code>) as
+      &lsquo;<samp>text/plain</samp>&rsquo;. If given a prefix,
+      insert the raw contents without decoding. If given a
+      numerical prefix, you can do semi-manual charset stuff (see
+      <code>gnus-summary-show-article-charset-alist</code> in
+      <a href="Paging-the-Article.html#Paging-the-Article">Paging
+      the Article</a>). Compressed files like <samp>.gz</samp> and
+      <samp>.bz2</samp> are automatically decompressed depending on
+      <code>jka-compr</code> regardless of
+      <code>auto-compression-mode</code> (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Compressed-Files.html#Compressed-Files">
+      Accessing Compressed Files</a> in <cite>The Emacs
+      Editor</cite>).</p><a name=
+      "index-gnus_002dmime_002dview_002dpart_002dinternally" id=
+      "index-gnus_002dmime_002dview_002dpart_002dinternally"></a>
+    </dd>
+
+    <dt><kbd>E (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-E-_0028Article_0029" id=
+      "index-E-_0028Article_0029"></a>
+
+      <p>View the <acronym>MIME</acronym> object with an internal
+      viewer. If no internal viewer is available, use an external
+      viewer
+      (<code>gnus-mime-view-part-internally</code>).</p><a name=
+      "index-gnus_002dmime_002dview_002dpart_002dexternally" id=
+      "index-gnus_002dmime_002dview_002dpart_002dexternally"></a>
+    </dd>
+
+    <dt><kbd>e (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-e-_0028Article_0029" id=
+      "index-e-_0028Article_0029"></a>
+
+      <p>View the <acronym>MIME</acronym> object with an external
+      viewer.
+      (<code>gnus-mime-view-part-externally</code>).</p><a name=
+      "index-gnus_002dmime_002dpipe_002dpart" id=
+      "index-gnus_002dmime_002dpipe_002dpart"></a>
+    </dd>
+
+    <dt><kbd>| (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-_007c-_0028Article_0029" id=
+      "index-_007c-_0028Article_0029"></a>
+
+      <p>Output the <acronym>MIME</acronym> object to a process
+      (<code>gnus-mime-pipe-part</code>).</p><a name=
+      "index-gnus_002dmime_002daction_002don_002dpart" id=
+      "index-gnus_002dmime_002daction_002don_002dpart"></a>
+    </dd>
+
+    <dt><kbd>. (Article)</kbd></dt>
+
+    <dd>
+      <a name="index-_002e-_0028Article_0029" id=
+      "index-_002e-_0028Article_0029"></a>
+
+      <p>Interactively run an action on the <acronym>MIME</acronym>
+      object (<code>gnus-mime-action-on-part</code>).</p>
+    </dd>
+  </dl>
+
+  <p>Gnus will display some <acronym>MIME</acronym> objects
+  automatically. The way Gnus determines which parts to do this
+  with is described in the Emacs <acronym>MIME</acronym>
+  manual.</p>
+
+  <p>It might be best to just use the toggling functions from the
+  article buffer to avoid getting nasty surprises. (For instance,
+  you enter the group &lsquo;<samp>alt.sing-a-long</samp>&rsquo;
+  and, before you know it, <acronym>MIME</acronym> has decoded the
+  sound file in the article and some horrible sing-a-long song
+  comes screaming out your speakers, and you can&rsquo;t find the
+  volume button, because there isn&rsquo;t one, and people are
+  starting to look at you, and you try to stop the program, but you
+  can&rsquo;t, and you can&rsquo;t find the program to control the
+  volume, and everybody else in the room suddenly decides to look
+  at you disdainfully, and you&rsquo;ll feel rather stupid.)</p>
+
+  <p>Any similarity to real events and people is purely
+  coincidental. Ahem.</p>
+
+  <p>Also see <a href="MIME-Commands.html#MIME-Commands">MIME
+  Commands</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="HTML.html#HTML" accesskey="n" rel=
+    "next">HTML</a>, Previous: <a href=
+    "Hiding-Headers.html#Hiding-Headers" accesskey="p" rel=
+    "prev">Hiding Headers</a>, Up: <a href=
+    "Article-Buffer.html#Article-Buffer" accesskey="u" rel=
+    "up">Article Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

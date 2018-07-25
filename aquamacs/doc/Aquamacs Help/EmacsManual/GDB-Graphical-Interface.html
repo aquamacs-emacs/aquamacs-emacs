@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,101 +20,204 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: GDB Graphical Interface</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: GDB Graphical Interface">
-<meta name="keywords" content="GNU Emacs Manual: GDB Graphical Interface">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debuggers.html#Debuggers" rel="up" title="Debuggers">
-<link href="GDB-User-Interface-Layout.html#GDB-User-Interface-Layout" rel="next" title="GDB User Interface Layout">
-<link href="GUD-Customization.html#GUD-Customization" rel="prev" title="GUD Customization">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: GDB Graphical Interface</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: GDB Graphical Interface" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: GDB Graphical Interface" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debuggers.html#Debuggers" rel="up" title=
+  "Debuggers" />
+  <link href=
+  "GDB-User-Interface-Layout.html#GDB-User-Interface-Layout" rel=
+  "next" title="GDB User Interface Layout" />
+  <link href="GUD-Customization.html#GUD-Customization" rel="prev"
+  title="GUD Customization" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="GDB-Graphical-Interface" id=
+  "GDB-Graphical-Interface"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="GUD-Customization.html#GUD-Customization"
+    accesskey="p" rel="prev">GUD Customization</a>, Up: <a href=
+    "Debuggers.html#Debuggers" accesskey="u" rel="up">Debuggers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="GDB-Graphical-Interface-1" id=
+  "GDB-Graphical-Interface-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="GDB-Graphical-Interface"></a>
-<div class="header">
-<p>
-Previous: <a href="GUD-Customization.html#GUD-Customization" accesskey="p" rel="prev">GUD Customization</a>, Up: <a href="Debuggers.html#Debuggers" accesskey="u" rel="up">Debuggers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="GDB-Graphical-Interface-1"></a>
-<h4 class="subsection">27.6.5 GDB Graphical Interface</h4>
+  <h4 class="subsection">27.6.5 GDB Graphical Interface</h4>
 
-<p>The command <kbd>M-x gdb</kbd> starts GDB in an IDE-like interface, with
-specialized buffers for controlling breakpoints, stack frames, and
-other aspects of the debugger state.  It also provides additional ways
-to control the debugging session with the mouse, such as clicking in
-the fringe of a source buffer to set a breakpoint there.
-</p>
-<a name="index-gud_002dgdb_002dcommand_002dname"></a>
-<p>To run GDB using just the GUD interaction buffer interface, without
-these additional features, use <kbd>M-x gud-gdb</kbd> (see <a href="Starting-GUD.html#Starting-GUD">Starting GUD</a>).  You must use this if you want to debug multiple programs
-within one Emacs session, as that is currently unsupported by <kbd>M-x
-gdb</kbd>.
-</p>
-<p>Internally, <kbd>M-x gdb</kbd> informs GDB that its screen size is
-unlimited; for correct operation, you must not change GDB&rsquo;s screen
-height and width values during the debugging session.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="GDB-User-Interface-Layout.html#GDB-User-Interface-Layout" accesskey="1">GDB User Interface Layout</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Control the number of displayed buffers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Source-Buffers.html#Source-Buffers" accesskey="2">Source Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Use the mouse in the fringe/margin to
-                                control your program.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Breakpoints-Buffer.html#Breakpoints-Buffer" accesskey="3">Breakpoints Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A breakpoint control panel.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Threads-Buffer.html#Threads-Buffer" accesskey="4">Threads Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Displays your threads.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Stack-Buffer.html#Stack-Buffer" accesskey="5">Stack Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Select a frame from the call stack.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Other-GDB-Buffers.html#Other-GDB-Buffers" accesskey="6">Other GDB Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Other buffers for controlling the GDB state.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Watch-Expressions.html#Watch-Expressions" accesskey="7">Watch Expressions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Monitor variable values in the speedbar.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Multithreaded-Debugging.html#Multithreaded-Debugging" accesskey="8">Multithreaded Debugging</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Debugging programs with several threads.
-</td></tr>
-</table>
+  <p>The command <kbd>M-x gdb</kbd> starts GDB in an IDE-like
+  interface, with specialized buffers for controlling breakpoints,
+  stack frames, and other aspects of the debugger state. It also
+  provides additional ways to control the debugging session with
+  the mouse, such as clicking in the fringe of a source buffer to
+  set a breakpoint there.</p><a name=
+  "index-gud_002dgdb_002dcommand_002dname" id=
+  "index-gud_002dgdb_002dcommand_002dname"></a>
 
+  <p>To run GDB using just the GUD interaction buffer interface,
+  without these additional features, use <kbd>M-x gud-gdb</kbd>
+  (see <a href="Starting-GUD.html#Starting-GUD">Starting GUD</a>).
+  You must use this if you want to debug multiple programs within
+  one Emacs session, as that is currently unsupported by <kbd>M-x
+  gdb</kbd>.</p>
 
+  <p>Internally, <kbd>M-x gdb</kbd> informs GDB that its screen
+  size is unlimited; for correct operation, you must not change
+  GDB&rsquo;s screen height and width values during the debugging
+  session.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "GDB-User-Interface-Layout.html#GDB-User-Interface-Layout"
+      accesskey="1">GDB User Interface Layout</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Control the number of displayed
+      buffers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Source-Buffers.html#Source-Buffers" accesskey="2">Source
+      Buffers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Use the mouse in the
+      fringe/margin to control your program.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Breakpoints-Buffer.html#Breakpoints-Buffer" accesskey=
+      "3">Breakpoints Buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A breakpoint control
+      panel.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Threads-Buffer.html#Threads-Buffer" accesskey="4">Threads
+      Buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Displays your threads.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Stack-Buffer.html#Stack-Buffer" accesskey="5">Stack
+      Buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Select a frame from the call
+      stack.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Other-GDB-Buffers.html#Other-GDB-Buffers" accesskey=
+      "6">Other GDB Buffers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Other buffers for controlling
+      the GDB state.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Watch-Expressions.html#Watch-Expressions" accesskey=
+      "7">Watch Expressions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Monitor variable values in the
+      speedbar.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Multithreaded-Debugging.html#Multithreaded-Debugging"
+      accesskey="8">Multithreaded Debugging</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Debugging programs with several
+      threads.</td>
+    </tr>
+  </table>
 </body>
 </html>

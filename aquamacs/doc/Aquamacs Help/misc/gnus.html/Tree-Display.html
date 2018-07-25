@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,181 +14,282 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Tree Display</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Tree Display">
-<meta name="keywords" content="Gnus Manual: Tree Display">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Mail-Group-Commands.html#Mail-Group-Commands" rel="next" title="Mail Group Commands">
-<link href="Binary-Groups.html#Binary-Groups" rel="prev" title="Binary Groups">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Tree Display</title>
+  <meta name="description" content="Gnus Manual: Tree Display" />
+  <meta name="keywords" content="Gnus Manual: Tree Display" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Mail-Group-Commands.html#Mail-Group-Commands" rel=
+  "next" title="Mail Group Commands" />
+  <link href="Binary-Groups.html#Binary-Groups" rel="prev" title=
+  "Binary Groups" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Tree-Display"></a>
-<div class="header">
-<p>
-Next: <a href="Mail-Group-Commands.html#Mail-Group-Commands" accesskey="n" rel="next">Mail Group Commands</a>, Previous: <a href="Alternative-Approaches.html#Alternative-Approaches" accesskey="p" rel="prev">Alternative Approaches</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Tree-Display-1"></a>
-<h3 class="section">3.25 Tree Display</h3>
-<a name="index-trees"></a>
+<body lang="en" xml:lang="en">
+  <a name="Tree-Display" id="Tree-Display"></a>
 
-<a name="index-gnus_002duse_002dtrees"></a>
-<p>If you don&rsquo;t like the normal Gnus summary display, you might try setting
-<code>gnus-use-trees</code> to <code>t</code>.  This will create (by default) an
-additional <em>tree buffer</em>.  You can execute all summary mode commands
-in the tree buffer.
-</p>
-<p>There are a few variables to customize the tree display, of course:
-</p>
-<dl compact="compact">
-<dt><code>gnus-tree-mode-hook</code></dt>
-<dd><a name="index-gnus_002dtree_002dmode_002dhook"></a>
-<p>A hook called in all tree mode buffers.
-</p>
-</dd>
-<dt><code>gnus-tree-mode-line-format</code></dt>
-<dd><a name="index-gnus_002dtree_002dmode_002dline_002dformat"></a>
-<p>A format string for the mode bar in the tree mode buffers (see <a href="Mode-Line-Formatting.html#Mode-Line-Formatting">Mode Line Formatting</a>).  The default is &lsquo;<samp>Gnus: %%b %S %Z</samp>&rsquo;.  For a list
-of valid specs, see <a href="Summary-Buffer-Mode-Line.html#Summary-Buffer-Mode-Line">Summary Buffer Mode Line</a>.
-</p>
-</dd>
-<dt><code>gnus-selected-tree-face</code></dt>
-<dd><a name="index-gnus_002dselected_002dtree_002dface"></a>
-<p>Face used for highlighting the selected article in the tree buffer.  The
-default is <code>modeline</code>.
-</p>
-</dd>
-<dt><code>gnus-tree-line-format</code></dt>
-<dd><a name="index-gnus_002dtree_002dline_002dformat"></a>
-<p>A format string for the tree nodes.  The name is a bit of a misnomer,
-though&mdash;it doesn&rsquo;t define a line, but just the node.  The default value
-is &lsquo;<samp>%(%[%3,3n%]%)</samp>&rsquo;, which displays the first three characters of
-the name of the poster.  It is vital that all nodes are of the same
-length, so you <em>must</em> use &lsquo;<samp>%4,4n</samp>&rsquo;-like specifiers.
-</p>
-<p>Valid specs are:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>n</samp>&rsquo;</dt>
-<dd><p>The name of the poster.
-</p></dd>
-<dt>&lsquo;<samp>f</samp>&rsquo;</dt>
-<dd><p>The <code>From</code> header.
-</p></dd>
-<dt>&lsquo;<samp>N</samp>&rsquo;</dt>
-<dd><p>The number of the article.
-</p></dd>
-<dt>&lsquo;<samp>[</samp>&rsquo;</dt>
-<dd><p>The opening bracket.
-</p></dd>
-<dt>&lsquo;<samp>]</samp>&rsquo;</dt>
-<dd><p>The closing bracket.
-</p></dd>
-<dt>&lsquo;<samp>s</samp>&rsquo;</dt>
-<dd><p>The subject.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Mail-Group-Commands.html#Mail-Group-Commands"
+    accesskey="n" rel="next">Mail Group Commands</a>, Previous:
+    <a href="Alternative-Approaches.html#Alternative-Approaches"
+    accesskey="p" rel="prev">Alternative Approaches</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Tree-Display-1" id="Tree-Display-1"></a>
 
-<p>See <a href="Formatting-Variables.html#Formatting-Variables">Formatting Variables</a>.
-</p>
-<p>Variables related to the display are:
-</p>
-<dl compact="compact">
-<dt><code>gnus-tree-brackets</code></dt>
-<dd><a name="index-gnus_002dtree_002dbrackets"></a>
-<p>This is used for differentiating between &ldquo;real&rdquo; articles and
-&ldquo;sparse&rdquo; articles.  The format is
-</p><div class="example">
-<pre class="example">((<var>real-open</var> . <var>real-close</var>)
+  <h3 class="section">3.25 Tree Display</h3><a name="index-trees"
+  id="index-trees"></a> <a name="index-gnus_002duse_002dtrees" id=
+  "index-gnus_002duse_002dtrees"></a>
+
+  <p>If you don&rsquo;t like the normal Gnus summary display, you
+  might try setting <code>gnus-use-trees</code> to <code>t</code>.
+  This will create (by default) an additional <em>tree buffer</em>.
+  You can execute all summary mode commands in the tree buffer.</p>
+
+  <p>There are a few variables to customize the tree display, of
+  course:</p>
+
+  <dl compact="compact">
+    <dt><code>gnus-tree-mode-hook</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dtree_002dmode_002dhook" id=
+      "index-gnus_002dtree_002dmode_002dhook"></a>
+
+      <p>A hook called in all tree mode buffers.</p>
+    </dd>
+
+    <dt><code>gnus-tree-mode-line-format</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dtree_002dmode_002dline_002dformat"
+      id="index-gnus_002dtree_002dmode_002dline_002dformat"></a>
+
+      <p>A format string for the mode bar in the tree mode buffers
+      (see <a href=
+      "Mode-Line-Formatting.html#Mode-Line-Formatting">Mode Line
+      Formatting</a>). The default is &lsquo;<samp>Gnus: %%b %S
+      %Z</samp>&rsquo;. For a list of valid specs, see <a href=
+      "Summary-Buffer-Mode-Line.html#Summary-Buffer-Mode-Line">Summary
+      Buffer Mode Line</a>.</p>
+    </dd>
+
+    <dt><code>gnus-selected-tree-face</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dselected_002dtree_002dface" id=
+      "index-gnus_002dselected_002dtree_002dface"></a>
+
+      <p>Face used for highlighting the selected article in the
+      tree buffer. The default is <code>modeline</code>.</p>
+    </dd>
+
+    <dt><code>gnus-tree-line-format</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dtree_002dline_002dformat" id=
+      "index-gnus_002dtree_002dline_002dformat"></a>
+
+      <p>A format string for the tree nodes. The name is a bit of a
+      misnomer, though&mdash;it doesn&rsquo;t define a line, but
+      just the node. The default value is
+      &lsquo;<samp>%(%[%3,3n%]%)</samp>&rsquo;, which displays the
+      first three characters of the name of the poster. It is vital
+      that all nodes are of the same length, so you <em>must</em>
+      use &lsquo;<samp>%4,4n</samp>&rsquo;-like specifiers.</p>
+
+      <p>Valid specs are:</p>
+
+      <dl compact="compact">
+        <dt>&lsquo;<samp>n</samp>&rsquo;</dt>
+
+        <dd>
+          <p>The name of the poster.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>f</samp>&rsquo;</dt>
+
+        <dd>
+          <p>The <code>From</code> header.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>N</samp>&rsquo;</dt>
+
+        <dd>
+          <p>The number of the article.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>[</samp>&rsquo;</dt>
+
+        <dd>
+          <p>The opening bracket.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>]</samp>&rsquo;</dt>
+
+        <dd>
+          <p>The closing bracket.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>s</samp>&rsquo;</dt>
+
+        <dd>
+          <p>The subject.</p>
+        </dd>
+      </dl>
+
+      <p>See <a href=
+      "Formatting-Variables.html#Formatting-Variables">Formatting
+      Variables</a>.</p>
+
+      <p>Variables related to the display are:</p>
+
+      <dl compact="compact">
+        <dt><code>gnus-tree-brackets</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dtree_002dbrackets" id=
+          "index-gnus_002dtree_002dbrackets"></a>
+
+          <p>This is used for differentiating between
+          &ldquo;real&rdquo; articles and &ldquo;sparse&rdquo;
+          articles. The format is</p>
+
+          <div class="example">
+            <pre class="example">
+((<var>real-open</var> . <var>real-close</var>)
  (<var>sparse-open</var> . <var>sparse-close</var>)
  (<var>dummy-open</var> . <var>dummy-close</var>))
-</pre></div>
-<p>and the default is <code>((?[ . ?]) (?( . ?)) (?{ . ?}) (?&lt; . ?&gt;))</code>.
-</p>
-</dd>
-<dt><code>gnus-tree-parent-child-edges</code></dt>
-<dd><a name="index-gnus_002dtree_002dparent_002dchild_002dedges"></a>
-<p>This is a list that contains the characters used for connecting parent
-nodes to their children.  The default is <code>(?- ?\\ ?|)</code>.
-</p>
-</dd>
-</dl>
+</pre>
+          </div>
 
-</dd>
-<dt><code>gnus-tree-minimize-window</code></dt>
-<dd><a name="index-gnus_002dtree_002dminimize_002dwindow"></a>
-<p>If this variable is non-<code>nil</code>, Gnus will try to keep the tree
-buffer as small as possible to allow more room for the other Gnus
-windows.  If this variable is a number, the tree buffer will never be
-higher than that number.  The default is <code>t</code>.  Note that if you
-have several windows displayed side-by-side in a frame and the tree
-buffer is one of these, minimizing the tree window will also resize all
-other windows displayed next to it.
-</p>
-<p>You may also wish to add the following hook to keep the window minimized
-at all times:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-hook 'gnus-configure-windows-hook
+          <p>and the default is <code>((?[ . ?]) (?( . ?)) (?{ .
+          ?}) (?&lt; . ?&gt;))</code>.</p>
+        </dd>
+
+        <dt><code>gnus-tree-parent-child-edges</code></dt>
+
+        <dd>
+          <a name=
+          "index-gnus_002dtree_002dparent_002dchild_002dedges" id=
+          "index-gnus_002dtree_002dparent_002dchild_002dedges"></a>
+
+          <p>This is a list that contains the characters used for
+          connecting parent nodes to their children. The default is
+          <code>(?- ?\\ ?|)</code>.</p>
+        </dd>
+      </dl>
+    </dd>
+
+    <dt><code>gnus-tree-minimize-window</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dtree_002dminimize_002dwindow" id=
+      "index-gnus_002dtree_002dminimize_002dwindow"></a>
+
+      <p>If this variable is non-<code>nil</code>, Gnus will try to
+      keep the tree buffer as small as possible to allow more room
+      for the other Gnus windows. If this variable is a number, the
+      tree buffer will never be higher than that number. The
+      default is <code>t</code>. Note that if you have several
+      windows displayed side-by-side in a frame and the tree buffer
+      is one of these, minimizing the tree window will also resize
+      all other windows displayed next to it.</p>
+
+      <p>You may also wish to add the following hook to keep the
+      window minimized at all times:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(add-hook 'gnus-configure-windows-hook
           'gnus-tree-perhaps-minimize)
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>gnus-generate-tree-function</code></dt>
-<dd><a name="index-gnus_002dgenerate_002dtree_002dfunction"></a>
-<a name="index-gnus_002dgenerate_002dhorizontal_002dtree"></a>
-<a name="index-gnus_002dgenerate_002dvertical_002dtree"></a>
-<p>The function that actually generates the thread tree.  Two predefined
-functions are available: <code>gnus-generate-horizontal-tree</code> and
-<code>gnus-generate-vertical-tree</code> (which is the default).
-</p>
-</dd>
-</dl>
+    <dt><code>gnus-generate-tree-function</code></dt>
 
-<p>Here&rsquo;s an example from a horizontal tree buffer:
-</p>
-<div class="example">
-<pre class="example">{***}-(***)-[odd]-[Gun]
+    <dd>
+      <a name="index-gnus_002dgenerate_002dtree_002dfunction" id=
+      "index-gnus_002dgenerate_002dtree_002dfunction"></a> <a name=
+      "index-gnus_002dgenerate_002dhorizontal_002dtree" id=
+      "index-gnus_002dgenerate_002dhorizontal_002dtree"></a>
+      <a name="index-gnus_002dgenerate_002dvertical_002dtree" id=
+      "index-gnus_002dgenerate_002dvertical_002dtree"></a>
+
+      <p>The function that actually generates the thread tree. Two
+      predefined functions are available:
+      <code>gnus-generate-horizontal-tree</code> and
+      <code>gnus-generate-vertical-tree</code> (which is the
+      default).</p>
+    </dd>
+  </dl>
+
+  <p>Here&rsquo;s an example from a horizontal tree buffer:</p>
+
+  <div class="example">
+    <pre class="example">
+{***}-(***)-[odd]-[Gun]
      |      \[Jan]
      |      \[odd]-[Eri]
      |      \(***)-[Eri]
@@ -194,12 +297,15 @@ functions are available: <code>gnus-generate-horizontal-tree</code> and
      \[Bjo]
      \[Gun]
      \[Gun]-[Jor]
-</pre></div>
+</pre>
+  </div>
 
-<p>Here&rsquo;s the same thread displayed in a vertical tree buffer:
-</p>
-<div class="example">
-<pre class="example">{***}
+  <p>Here&rsquo;s the same thread displayed in a vertical tree
+  buffer:</p>
+
+  <div class="example">
+    <pre class="example">
+{***}
   |--------------------------\-----\-----\
 (***)                         [Bjo] [Gun] [Gun]
   |--\-----\-----\                          |
@@ -208,14 +314,17 @@ functions are available: <code>gnus-generate-horizontal-tree</code> and
 [Gun]       [Eri] [Eri] [odd]
                           |
                         [Paa]
-</pre></div>
+</pre>
+  </div>
 
-<p>If you&rsquo;re using horizontal trees, it might be nice to display the trees
-side-by-side with the summary buffer.  You could add something like the
-following to your <samp>~/.gnus.el</samp> file:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-use-trees t
+  <p>If you&rsquo;re using horizontal trees, it might be nice to
+  display the trees side-by-side with the summary buffer. You could
+  add something like the following to your <samp>~/.gnus.el</samp>
+  file:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-use-trees t
       gnus-generate-tree-function 'gnus-generate-horizontal-tree
       gnus-tree-minimize-window nil)
 (gnus-add-configuration
@@ -225,18 +334,23 @@ following to your <samp>~/.gnus.el</samp> file:
                          (summary 0.75 point)
                          (tree 1.0))
              (article 1.0))))
-</pre></div>
+</pre>
+  </div>
 
-<p>See <a href="Window-Layout.html#Window-Layout">Window Layout</a>.
-</p>
+  <p>See <a href="Window-Layout.html#Window-Layout">Window
+  Layout</a>.</p>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Mail-Group-Commands.html#Mail-Group-Commands" accesskey="n" rel="next">Mail Group Commands</a>, Previous: <a href="Alternative-Approaches.html#Alternative-Approaches" accesskey="p" rel="prev">Alternative Approaches</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Mail-Group-Commands.html#Mail-Group-Commands"
+    accesskey="n" rel="next">Mail Group Commands</a>, Previous:
+    <a href="Alternative-Approaches.html#Alternative-Approaches"
+    accesskey="p" rel="prev">Alternative Approaches</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

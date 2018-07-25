@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is version 8.6 of The MH-E
 Manual, last updated 2016-04-29.
 
@@ -25,347 +27,518 @@ copy of the license is included in the section entitled "GNU General
 Public License."
  -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The MH-E Manual: Sequences</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The MH-E Manual: Sequences">
-<meta name="keywords" content="The MH-E Manual: Sequences">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Junk.html#Junk" rel="next" title="Junk">
-<link href="Limits.html#Limits" rel="prev" title="Limits">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The MH-E Manual: Sequences</title>
+  <meta name="description" content="The MH-E Manual: Sequences" />
+  <meta name="keywords" content="The MH-E Manual: Sequences" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Junk.html#Junk" rel="next" title="Junk" />
+  <link href="Limits.html#Limits" rel="prev" title="Limits" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sequences"></a>
-<div class="header">
-<p>
-Next: <a href="Junk.html#Junk" accesskey="n" rel="next">Junk</a>, Previous: <a href="Limits.html#Limits" accesskey="p" rel="prev">Limits</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-Sequences"></a>
-<h2 class="chapter">18 Using Sequences</h2>
+<body lang="en" xml:lang="en">
+  <a name="Sequences" id="Sequences"></a>
 
-<a name="index-Sequence-menu-2"></a>
-<a name="index-menu_002c-Sequence-2"></a>
-<a name="index-sequences"></a>
+  <div class="header">
+    <p>Next: <a href="Junk.html#Junk" accesskey="n" rel=
+    "next">Junk</a>, Previous: <a href="Limits.html#Limits"
+    accesskey="p" rel="prev">Limits</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-Sequences" id="Using-Sequences"></a>
 
-<p>For the whole scoop on MH sequences, refer to
-&lsquo;<samp>mh-sequence</samp>&rsquo;(5)<a name="DOCF51" href="#FOOT51"><sup>51</sup></a>. As you&rsquo;ve read, several of the MH-E commands can operate on a
-sequence, which is a shorthand for a range or group of messages. For
-example, you might want to forward several messages to a friend or
-colleague. Here&rsquo;s how to manipulate sequences. These commands are also
-available in the &lsquo;<samp>Sequence</samp>&rsquo; menu.
-</p>
-<dl compact="compact">
-<dd><a name="index-Sequence-_003e-Toggle-Tick-Mark-menu-item"></a>
-<a name="index-menu-item_002c-Sequence-_003e-Toggle-Tick-Mark"></a>
-<a name="index-_0027"></a>
-<a name="index-mh_002dtoggle_002dtick"></a>
-</dd>
-<dt><kbd>'</kbd></dt>
-<dd><p>Toggle tick mark of range (<code>mh-toggle-tick</code>).
-<a name="index-S-_003f"></a>
-<a name="index-mh_002dprefix_002dhelp-7"></a>
-</p></dd>
-<dt><kbd>S ?</kbd></dt>
-<dd><p>Display cheat sheet for the commands of the current prefix in
-minibuffer (<code>mh-prefix-help</code>).
-<a name="index-Sequence-_003e-Narrow-to-Tick-Sequence-menu-item-1"></a>
-<a name="index-menu-item_002c-Sequence-_003e-Narrow-to-Tick-Sequence-1"></a>
-<a name="index-S-_0027"></a>
-<a name="index-mh_002dnarrow_002dto_002dtick-2"></a>
-</p></dd>
-<dt><kbd>S '</kbd></dt>
-<dd><p>Limit to ticked messages (<code>mh-narrow-to-tick</code>).
-<a name="index-Sequence-_003e-Delete-Message-from-Sequence_002e_002e_002e-menu-item"></a>
-<a name="index-menu-item_002c-Sequence-_003e-Delete-Message-from-Sequence_002e_002e_002e"></a>
-<a name="index-S-d"></a>
-<a name="index-mh_002ddelete_002dmsg_002dfrom_002dseq"></a>
-</p></dd>
-<dt><kbd>S d</kbd></dt>
-<dd><p>Delete range from sequence (<code>mh-delete-msg-from-seq</code>).
-<a name="index-Sequence-_003e-Delete-Sequence_002e_002e_002e-menu-item"></a>
-<a name="index-menu-item_002c-Sequence-_003e-Delete-Sequence_002e_002e_002e"></a>
-<a name="index-S-k"></a>
-<a name="index-mh_002ddelete_002dseq"></a>
-</p></dd>
-<dt><kbd>S k</kbd></dt>
-<dd><p>Delete sequence (<code>mh-delete-seq</code>).
-<a name="index-Sequence-_003e-List-Sequences-in-Folder_002e_002e_002e-menu-item"></a>
-<a name="index-menu-item_002c-Sequence-_003e-List-Sequences-in-Folder_002e_002e_002e"></a>
-<a name="index-S-l"></a>
-<a name="index-mh_002dlist_002dsequences"></a>
-</p></dd>
-<dt><kbd>S l</kbd></dt>
-<dd><p>List all sequences in folder (<code>mh-list-sequences</code>).
-<a name="index-Sequence-_003e-Narrow-to-Sequence_002e_002e_002e-menu-item"></a>
-<a name="index-menu-item_002c-Sequence-_003e-Narrow-to-Sequence_002e_002e_002e"></a>
-<a name="index-S-n"></a>
-<a name="index-mh_002dnarrow_002dto_002dseq"></a>
-</p></dd>
-<dt><kbd>S n</kbd></dt>
-<dd><p>Restrict display to messages in sequence (<code>mh-narrow-to-seq</code>).
-<a name="index-Sequence-_003e-Add-Message-to-Sequence_002e_002e_002e-menu-item"></a>
-<a name="index-menu-item_002c-Sequence-_003e-Add-Message-to-Sequence_002e_002e_002e"></a>
-<a name="index-S-p"></a>
-<a name="index-mh_002dput_002dmsg_002din_002dseq"></a>
-</p></dd>
-<dt><kbd>S p</kbd></dt>
-<dd><p>Add range to sequence (<code>mh-put-msg-in-seq</code>).
-<a name="index-Sequence-_003e-List-Sequences-for-Message-menu-item"></a>
-<a name="index-menu-item_002c-Sequence-_003e-List-Sequences-for-Message"></a>
-<a name="index-S-s"></a>
-<a name="index-mh_002dmsg_002dis_002din_002dseq"></a>
-</p></dd>
-<dt><kbd>S s</kbd></dt>
-<dd><p>Display the sequences in which the current message appears
-(<code>mh-msg-is-in-seq</code>).
-<a name="index-Sequence-_003e-Widen-from-Sequence-menu-item-1"></a>
-<a name="index-menu-item_002c-Sequence-_003e-Widen-from-Sequence-1"></a>
-<a name="index-S-w"></a>
-<a name="index-mh_002dwiden-2"></a>
-</p></dd>
-<dt><kbd>S w</kbd></dt>
-<dd><p>Remove last restriction (<code>mh-widen</code>).
-<a name="index-mh_002dupdate_002dsequences"></a>
-</p></dd>
-<dt><kbd>M-x mh-update-sequences</kbd></dt>
-<dd><p>Flush MH-E&rsquo;s state out to MH.
-</p></dd>
-</dl>
+  <h2 class="chapter">18 Using Sequences</h2><a name=
+  "index-Sequence-menu-2" id="index-Sequence-menu-2"></a> <a name=
+  "index-menu_002c-Sequence-2" id="index-menu_002c-Sequence-2"></a>
+  <a name="index-sequences" id="index-sequences"></a>
 
-<a name="index-mh_002dsequences-customization-group"></a>
-<a name="index-customization-group_002c-mh_002dsequences"></a>
+  <p>For the whole scoop on MH sequences, refer to
+  &lsquo;<samp>mh-sequence</samp>&rsquo;(5)<a name="DOCF51" href=
+  "#FOOT51" id="DOCF51"><sup>51</sup></a>. As you&rsquo;ve read,
+  several of the MH-E commands can operate on a sequence, which is
+  a shorthand for a range or group of messages. For example, you
+  might want to forward several messages to a friend or colleague.
+  Here&rsquo;s how to manipulate sequences. These commands are also
+  available in the &lsquo;<samp>Sequence</samp>&rsquo; menu.</p>
 
-<p>The &lsquo;<samp>mh-sequences</samp>&rsquo; customization group contains the options
-associated with sequences.
-</p>
-<dl compact="compact">
-<dt><code>mh-refile-preserves-sequences-flag</code>
-<a name="index-mh_002drefile_002dpreserves_002dsequences_002dflag"></a>
-</dt>
-<dd><p>On means that sequences are preserved when messages are refiled
-(default: &lsquo;<samp>on</samp>&rsquo;).
-</p></dd>
-<dt><code>mh-tick-seq</code>
-<a name="index-mh_002dtick_002dseq"></a>
-</dt>
-<dd><p>The name of the MH sequence for ticked messages (default: &lsquo;<samp>'tick</samp>&rsquo;).
-</p></dd>
-<dt><code>mh-update-sequences-after-mh-show-flag</code>
-<a name="index-mh_002dupdate_002dsequences_002dafter_002dmh_002dshow_002dflag"></a>
-</dt>
-<dd><p>On means flush MH sequences to disk after message is shown (default:
-&lsquo;<samp>on</samp>&rsquo;).
-</p></dd>
-<dt><code>mh-whitelist-preserves-sequences-flag</code>
-<a name="index-mh_002dwhitelist_002dpreserves_002dsequences_002dflag"></a>
-</dt>
-<dd><p>On means that sequences are preserved when messages are whitelisted
-(default: &lsquo;<samp>on</samp>&rsquo;).
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dd><a name="index-Sequence-_003e-Toggle-Tick-Mark-menu-item"
+    id="index-Sequence-_003e-Toggle-Tick-Mark-menu-item"></a>
+    <a name="index-menu-item_002c-Sequence-_003e-Toggle-Tick-Mark"
+    id="index-menu-item_002c-Sequence-_003e-Toggle-Tick-Mark"></a>
+    <a name="index-_0027" id="index-_0027"></a> <a name=
+    "index-mh_002dtoggle_002dtick" id=
+    "index-mh_002dtoggle_002dtick"></a></dd>
 
-<p>The following hook is available.
-</p>
-<dl compact="compact">
-<dt><code>mh-unseen-updated-hook</code>
-<a name="index-mh_002dunseen_002dupdated_002dhook"></a>
-</dt>
-<dd><p>Hook run after the unseen sequence has been updated (default: <code>nil</code>).
-</p></dd>
-</dl>
+    <dt><kbd>'</kbd></dt>
 
-<a name="index-pick-5"></a>
-<a name="index-MH-commands_002c-pick-4"></a>
-<a name="index-mh_002dput_002dmsg_002din_002dseq-1"></a>
-<a name="index-S-p-1"></a>
+    <dd>
+      <p>Toggle tick mark of range (<code>mh-toggle-tick</code>).
+      <a name="index-S-_003f" id="index-S-_003f"></a> <a name=
+      "index-mh_002dprefix_002dhelp-7" id=
+      "index-mh_002dprefix_002dhelp-7"></a></p>
+    </dd>
 
-<p>To place a message in a sequence, use <kbd>S p</kbd>
-(<code>mh-put-msg-in-seq</code>). Give <kbd>S p</kbd> a range and you can add all
-the messages in a sequence to another sequence (for example, <kbd>C-u
-S p SourceSequence <span class="key">RET</span> DestSequence <span class="key">RET</span></kbd>, see <a href="Ranges.html#Ranges">Ranges</a>).
-</p>
-<a name="index-tick-sequence-2"></a>
-<a name="index-sequence_002c-tick-2"></a>
-<a name="index-ticking-messages"></a>
-<a name="index-mh_002dindex_002dticked_002dmessages-2"></a>
-<a name="index-mh_002dtoggle_002dtick-1"></a>
-<a name="index-_0027-1"></a>
-<a name="index-F-_0027-2"></a>
-<a name="index-S-p-2"></a>
+    <dt><kbd>S ?</kbd></dt>
 
-<p>One specific use of the <kbd>S p</kbd> command is <kbd>'</kbd>
-(<code>mh-toggle-tick</code>) which adds messages to the &lsquo;<samp>tick</samp>&rsquo;
-sequence. This sequence can be viewed later with the <kbd>F '</kbd>
-(<code>mh-index-ticked-messages</code>) command (see <a href="Folders.html#Folders">Folders</a>).
-</p>
-<a name="index-mh_002dtick_002dseq-1"></a>
+    <dd>
+      <p>Display cheat sheet for the commands of the current prefix
+      in minibuffer (<code>mh-prefix-help</code>). <a name=
+      "index-Sequence-_003e-Narrow-to-Tick-Sequence-menu-item-1"
+      id="index-Sequence-_003e-Narrow-to-Tick-Sequence-menu-item-1">
+      </a> <a name=
+      "index-menu-item_002c-Sequence-_003e-Narrow-to-Tick-Sequence-1"
+      id=
+      "index-menu-item_002c-Sequence-_003e-Narrow-to-Tick-Sequence-1">
+      </a> <a name="index-S-_0027" id="index-S-_0027"></a> <a name=
+      "index-mh_002dnarrow_002dto_002dtick-2" id=
+      "index-mh_002dnarrow_002dto_002dtick-2"></a></p>
+    </dd>
 
-<p>You can customize the option <code>mh-tick-seq</code> if you already use the
-&lsquo;<samp>tick</samp>&rsquo; sequence for your own use. You can also disable all of the
-ticking functions by choosing the &lsquo;<samp>Disable Ticking</samp>&rsquo; item but
-there isn&rsquo;t much advantage to that.
-</p>
-<a name="index-MH_002dFolder-mode-9"></a>
-<a name="index-modes_002c-MH_002dFolder-9"></a>
-<a name="index-mh_002dnarrow_002dto_002dseq-1"></a>
-<a name="index-mh_002dnarrow_002dto_002dtick-3"></a>
-<a name="index-mh_002dwiden-3"></a>
-<a name="index-S-_0027-1"></a>
-<a name="index-S-n-1"></a>
-<a name="index-S-w-1"></a>
+    <dt><kbd>S '</kbd></dt>
 
-<p>Once you&rsquo;ve placed some messages in a sequence, you may wish to narrow
-the field of view to just those messages in the sequence you&rsquo;ve
-created. To do this, use <kbd>S n</kbd> (<code>mh-narrow-to-seq</code>). You are
-prompted for the name of the sequence. What this does is show only
-those messages that are in the selected sequence in the MH-Folder
-buffer. In addition, it limits further MH-E searches to just those
-messages. To narrow the view to the messages in the &lsquo;<samp>tick</samp>&rsquo;
-sequence, use <kbd>S '</kbd> (<code>mh-narrow-to-tick</code>). When you want to
-widen the view to all your messages again, use <kbd>S w</kbd>
-(<code>mh-widen</code>).
-</p>
-<a name="index-buffers_002c-_002aMH_002dE-Sequences_002a"></a>
-<a name="index-_002aMH_002dE-Sequences_002a"></a>
-<a name="index-mh_002dlist_002dsequences-1"></a>
-<a name="index-mh_002dmsg_002dis_002din_002dseq-1"></a>
-<a name="index-S-l-1"></a>
-<a name="index-S-s-1"></a>
+    <dd>
+      <p>Limit to ticked messages (<code>mh-narrow-to-tick</code>).
+      <a name=
+      "index-Sequence-_003e-Delete-Message-from-Sequence_002e_002e_002e-menu-item"
+      id=
+      "index-Sequence-_003e-Delete-Message-from-Sequence_002e_002e_002e-menu-item">
+      </a> <a name=
+      "index-menu-item_002c-Sequence-_003e-Delete-Message-from-Sequence_002e_002e_002e"
+      id=
+      "index-menu-item_002c-Sequence-_003e-Delete-Message-from-Sequence_002e_002e_002e">
+      </a> <a name="index-S-d" id="index-S-d"></a> <a name=
+      "index-mh_002ddelete_002dmsg_002dfrom_002dseq" id=
+      "index-mh_002ddelete_002dmsg_002dfrom_002dseq"></a></p>
+    </dd>
 
-<p>You can see which sequences in which a message appears with the
-command <kbd>S s</kbd> (<code>mh-msg-is-in-seq</code>). Use a prefix argument to
-display the sequences in which another message appears (as in <kbd>C-u
-42 S s <span class="key">RET</span></kbd>). Or, you can list all sequences in a selected
-folder (default is current folder) with <kbd>S l</kbd>
-(<code>mh-list-sequences</code>). The list appears in a buffer named
-<samp>*MH-E Sequences*</samp> (see <a href="Miscellaneous.html#Miscellaneous">Miscellaneous</a>).
-</p>
-<a name="index-MH-profile-component_002c-Previous_002dSequence-1"></a>
-<a name="index-cur-sequence"></a>
-<a name="index-Previous_002dSequence-MH-profile-component-1"></a>
-<a name="index-sequence_002c-cur"></a>
-<a name="index-sequence_002c-Previous_002dSequence"></a>
-<a name="index-mh_002drefile_002dpreserves_002dsequences_002dflag-1"></a>
+    <dt><kbd>S d</kbd></dt>
 
-<p>If a message is in any sequence (except
-&lsquo;<samp>Previous-Sequence:</samp>&rsquo;<a name="DOCF52" href="#FOOT52"><sup>52</sup></a> and
-&lsquo;<samp>cur</samp>&rsquo;) when it is refiled, then it will still be in those
-sequences in the destination folder. If this behavior is not desired,
-then turn off the option <code>mh-refile-preserves-sequences-flag</code>.
-</p>
-<a name="index-mh_002ddelete_002dmsg_002dfrom_002dseq-1"></a>
-<a name="index-mh_002ddelete_002dseq-1"></a>
-<a name="index-d-4"></a>
-<a name="index-S-d-1"></a>
-<a name="index-S-k-1"></a>
+    <dd>
+      <p>Delete range from sequence
+      (<code>mh-delete-msg-from-seq</code>). <a name=
+      "index-Sequence-_003e-Delete-Sequence_002e_002e_002e-menu-item"
+      id=
+      "index-Sequence-_003e-Delete-Sequence_002e_002e_002e-menu-item">
+      </a> <a name=
+      "index-menu-item_002c-Sequence-_003e-Delete-Sequence_002e_002e_002e"
+      id=
+      "index-menu-item_002c-Sequence-_003e-Delete-Sequence_002e_002e_002e">
+      </a> <a name="index-S-k" id="index-S-k"></a> <a name=
+      "index-mh_002ddelete_002dseq" id=
+      "index-mh_002ddelete_002dseq"></a></p>
+    </dd>
 
-<p>If you want to remove a message (or range, see <a href="Ranges.html#Ranges">Ranges</a>) from a
-sequence, use <kbd>S d</kbd> (<code>mh-delete-msg-from-seq</code>). If you want
-to delete an entire sequence, use <kbd>S k</kbd> (<code>mh-delete-seq</code>). In
-the latter case you are prompted for the sequence to delete. Note that
-this deletes only the sequence, not the messages in the sequence. If
-you want to delete the messages, use <kbd>C-u d</kbd> (see <a href="Reading-Mail.html#Reading-Mail">Reading Mail</a>).
-</p>
-<a name="index-Unseen_002dSequence-MH-profile-component-1"></a>
-<a name="index-cur-sequence-1"></a>
-<a name="index-tick-sequence-3"></a>
-<a name="index-MH-profile-component_002c-Unseen_002dSequence-1"></a>
-<a name="index-sequence_002c-Unseen_002dSequence"></a>
-<a name="index-sequence_002c-cur-1"></a>
-<a name="index-sequence_002c-tick-3"></a>
-<a name="index-mh_002dupdate_002dsequences-1"></a>
-<a name="index-M_002dx-mh_002dupdate_002dsequences"></a>
-<a name="index-q-4"></a>
-<a name="index-x-6"></a>
-<a name="index-mh_002dtick_002dseq-2"></a>
-<a name="index-mh_002dupdate_002dsequences_002dafter_002dmh_002dshow_002dflag-1"></a>
+    <dt><kbd>S k</kbd></dt>
 
-<p>Three sequences are maintained internally by MH-E and pushed out to MH
-when a message is shown. They include the sequence specified by your
-&lsquo;<samp>Unseen-Sequence:</samp>&rsquo; profile component, &lsquo;<samp>cur</samp>&rsquo;, and the
-sequence listed by the option <code>mh-tick-seq</code> which is &lsquo;<samp>tick</samp>&rsquo;
-by default. If you do not like this behavior, turn off the option
-<code>mh-update-sequences-after-mh-show-flag</code>. You can then update the
-state manually with the <kbd>x</kbd>, <kbd>q</kbd>, or <kbd>M-x
-mh-update-sequences</kbd> commands.
-</p>
-<a name="index-mh_002dseen_002dlist"></a>
-<a name="index-mh_002dunseen_002dupdated_002dhook-1"></a>
+    <dd>
+      <p>Delete sequence (<code>mh-delete-seq</code>). <a name=
+      "index-Sequence-_003e-List-Sequences-in-Folder_002e_002e_002e-menu-item"
+      id=
+      "index-Sequence-_003e-List-Sequences-in-Folder_002e_002e_002e-menu-item">
+      </a> <a name=
+      "index-menu-item_002c-Sequence-_003e-List-Sequences-in-Folder_002e_002e_002e"
+      id=
+      "index-menu-item_002c-Sequence-_003e-List-Sequences-in-Folder_002e_002e_002e">
+      </a> <a name="index-S-l" id="index-S-l"></a> <a name=
+      "index-mh_002dlist_002dsequences" id=
+      "index-mh_002dlist_002dsequences"></a></p>
+    </dd>
 
-<p>The hook <code>mh-unseen-updated-hook</code> is run after the unseen
-sequence has been updated. The variable <code>mh-seen-list</code> can be
-used by this hook to obtain the list of messages which were removed
-from the unseen sequence.
-</p>
-<a name="index-mark-1"></a>
-<a name="index-MH-commands_002c-mark"></a>
-<a name="index-S-n-2"></a>
-<a name="index-S-w-2"></a>
+    <dt><kbd>S l</kbd></dt>
 
-<p>With the exceptions of <kbd>S n</kbd> and <kbd>S w</kbd>, the underlying MH
-command dealing with sequences is <code>mark</code><a name="DOCF53" href="#FOOT53"><sup>53</sup></a>.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <dd>
+      <p>List all sequences in folder
+      (<code>mh-list-sequences</code>). <a name=
+      "index-Sequence-_003e-Narrow-to-Sequence_002e_002e_002e-menu-item"
+      id=
+      "index-Sequence-_003e-Narrow-to-Sequence_002e_002e_002e-menu-item">
+      </a> <a name=
+      "index-menu-item_002c-Sequence-_003e-Narrow-to-Sequence_002e_002e_002e"
+      id=
+      "index-menu-item_002c-Sequence-_003e-Narrow-to-Sequence_002e_002e_002e">
+      </a> <a name="index-S-n" id="index-S-n"></a> <a name=
+      "index-mh_002dnarrow_002dto_002dseq" id=
+      "index-mh_002dnarrow_002dto_002dseq"></a></p>
+    </dd>
 
-<h3><a name="FOOT51" href="#DOCF51">(51)</a></h3>
-<p>See the section
-<a href="http://rand-mh.sourceforge.net/book/mh/morseq.html">More About Sequences</a> in the MH
-book.</p>
-<h3><a name="FOOT52" href="#DOCF52">(52)</a></h3>
-<p>See &lsquo;<samp>mh-profile</samp>&rsquo;(5)).</p>
-<h3><a name="FOOT53" href="#DOCF53">(53)</a></h3>
-<p>See the
-section <a href="http://rand-mh.sourceforge.net/book/mh/mmbwm.html">Make Message Bookmarks
-with mark</a> in the MH book.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Junk.html#Junk" accesskey="n" rel="next">Junk</a>, Previous: <a href="Limits.html#Limits" accesskey="p" rel="prev">Limits</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><kbd>S n</kbd></dt>
 
+    <dd>
+      <p>Restrict display to messages in sequence
+      (<code>mh-narrow-to-seq</code>). <a name=
+      "index-Sequence-_003e-Add-Message-to-Sequence_002e_002e_002e-menu-item"
+      id=
+      "index-Sequence-_003e-Add-Message-to-Sequence_002e_002e_002e-menu-item">
+      </a> <a name=
+      "index-menu-item_002c-Sequence-_003e-Add-Message-to-Sequence_002e_002e_002e"
+      id=
+      "index-menu-item_002c-Sequence-_003e-Add-Message-to-Sequence_002e_002e_002e">
+      </a> <a name="index-S-p" id="index-S-p"></a> <a name=
+      "index-mh_002dput_002dmsg_002din_002dseq" id=
+      "index-mh_002dput_002dmsg_002din_002dseq"></a></p>
+    </dd>
 
+    <dt><kbd>S p</kbd></dt>
 
+    <dd>
+      <p>Add range to sequence (<code>mh-put-msg-in-seq</code>).
+      <a name=
+      "index-Sequence-_003e-List-Sequences-for-Message-menu-item"
+      id=
+      "index-Sequence-_003e-List-Sequences-for-Message-menu-item"></a>
+      <a name=
+      "index-menu-item_002c-Sequence-_003e-List-Sequences-for-Message"
+      id=
+      "index-menu-item_002c-Sequence-_003e-List-Sequences-for-Message">
+      </a> <a name="index-S-s" id="index-S-s"></a> <a name=
+      "index-mh_002dmsg_002dis_002din_002dseq" id=
+      "index-mh_002dmsg_002dis_002din_002dseq"></a></p>
+    </dd>
+
+    <dt><kbd>S s</kbd></dt>
+
+    <dd>
+      <p>Display the sequences in which the current message appears
+      (<code>mh-msg-is-in-seq</code>). <a name=
+      "index-Sequence-_003e-Widen-from-Sequence-menu-item-1" id=
+      "index-Sequence-_003e-Widen-from-Sequence-menu-item-1"></a>
+      <a name=
+      "index-menu-item_002c-Sequence-_003e-Widen-from-Sequence-1"
+      id=
+      "index-menu-item_002c-Sequence-_003e-Widen-from-Sequence-1"></a>
+      <a name="index-S-w" id="index-S-w"></a> <a name=
+      "index-mh_002dwiden-2" id="index-mh_002dwiden-2"></a></p>
+    </dd>
+
+    <dt><kbd>S w</kbd></dt>
+
+    <dd>
+      <p>Remove last restriction (<code>mh-widen</code>). <a name=
+      "index-mh_002dupdate_002dsequences" id=
+      "index-mh_002dupdate_002dsequences"></a></p>
+    </dd>
+
+    <dt><kbd>M-x mh-update-sequences</kbd></dt>
+
+    <dd>
+      <p>Flush MH-E&rsquo;s state out to MH.</p>
+    </dd>
+  </dl><a name="index-mh_002dsequences-customization-group" id=
+  "index-mh_002dsequences-customization-group"></a> <a name=
+  "index-customization-group_002c-mh_002dsequences" id=
+  "index-customization-group_002c-mh_002dsequences"></a>
+
+  <p>The &lsquo;<samp>mh-sequences</samp>&rsquo; customization
+  group contains the options associated with sequences.</p>
+
+  <dl compact="compact">
+    <dt><code>mh-refile-preserves-sequences-flag</code> <a name=
+    "index-mh_002drefile_002dpreserves_002dsequences_002dflag" id=
+    "index-mh_002drefile_002dpreserves_002dsequences_002dflag"></a></dt>
+
+    <dd>
+      <p>On means that sequences are preserved when messages are
+      refiled (default: &lsquo;<samp>on</samp>&rsquo;).</p>
+    </dd>
+
+    <dt><code>mh-tick-seq</code> <a name=
+    "index-mh_002dtick_002dseq" id=
+    "index-mh_002dtick_002dseq"></a></dt>
+
+    <dd>
+      <p>The name of the MH sequence for ticked messages (default:
+      &lsquo;<samp>'tick</samp>&rsquo;).</p>
+    </dd>
+
+    <dt><code>mh-update-sequences-after-mh-show-flag</code>
+    <a name="index-mh_002dupdate_002dsequences_002dafter_002dmh_002dshow_002dflag"
+    id=
+    "index-mh_002dupdate_002dsequences_002dafter_002dmh_002dshow_002dflag">
+    </a></dt>
+
+    <dd>
+      <p>On means flush MH sequences to disk after message is shown
+      (default: &lsquo;<samp>on</samp>&rsquo;).</p>
+    </dd>
+
+    <dt><code>mh-whitelist-preserves-sequences-flag</code> <a name=
+    "index-mh_002dwhitelist_002dpreserves_002dsequences_002dflag"
+    id=
+    "index-mh_002dwhitelist_002dpreserves_002dsequences_002dflag"></a></dt>
+
+    <dd>
+      <p>On means that sequences are preserved when messages are
+      whitelisted (default: &lsquo;<samp>on</samp>&rsquo;).</p>
+    </dd>
+  </dl>
+
+  <p>The following hook is available.</p>
+
+  <dl compact="compact">
+    <dt><code>mh-unseen-updated-hook</code> <a name=
+    "index-mh_002dunseen_002dupdated_002dhook" id=
+    "index-mh_002dunseen_002dupdated_002dhook"></a></dt>
+
+    <dd>
+      <p>Hook run after the unseen sequence has been updated
+      (default: <code>nil</code>).</p>
+    </dd>
+  </dl><a name="index-pick-5" id="index-pick-5"></a> <a name=
+  "index-MH-commands_002c-pick-4" id=
+  "index-MH-commands_002c-pick-4"></a> <a name=
+  "index-mh_002dput_002dmsg_002din_002dseq-1" id=
+  "index-mh_002dput_002dmsg_002din_002dseq-1"></a> <a name=
+  "index-S-p-1" id="index-S-p-1"></a>
+
+  <p>To place a message in a sequence, use <kbd>S p</kbd>
+  (<code>mh-put-msg-in-seq</code>). Give <kbd>S p</kbd> a range and
+  you can add all the messages in a sequence to another sequence
+  (for example, <kbd>C-u S p SourceSequence <span class=
+  "key">RET</span> DestSequence <span class="key">RET</span></kbd>,
+  see <a href="Ranges.html#Ranges">Ranges</a>).</p><a name=
+  "index-tick-sequence-2" id="index-tick-sequence-2"></a> <a name=
+  "index-sequence_002c-tick-2" id="index-sequence_002c-tick-2"></a>
+  <a name="index-ticking-messages" id="index-ticking-messages"></a>
+  <a name="index-mh_002dindex_002dticked_002dmessages-2" id=
+  "index-mh_002dindex_002dticked_002dmessages-2"></a> <a name=
+  "index-mh_002dtoggle_002dtick-1" id=
+  "index-mh_002dtoggle_002dtick-1"></a> <a name="index-_0027-1" id=
+  "index-_0027-1"></a> <a name="index-F-_0027-2" id=
+  "index-F-_0027-2"></a> <a name="index-S-p-2" id=
+  "index-S-p-2"></a>
+
+  <p>One specific use of the <kbd>S p</kbd> command is <kbd>'</kbd>
+  (<code>mh-toggle-tick</code>) which adds messages to the
+  &lsquo;<samp>tick</samp>&rsquo; sequence. This sequence can be
+  viewed later with the <kbd>F '</kbd>
+  (<code>mh-index-ticked-messages</code>) command (see <a href=
+  "Folders.html#Folders">Folders</a>).</p><a name=
+  "index-mh_002dtick_002dseq-1" id=
+  "index-mh_002dtick_002dseq-1"></a>
+
+  <p>You can customize the option <code>mh-tick-seq</code> if you
+  already use the &lsquo;<samp>tick</samp>&rsquo; sequence for your
+  own use. You can also disable all of the ticking functions by
+  choosing the &lsquo;<samp>Disable Ticking</samp>&rsquo; item but
+  there isn&rsquo;t much advantage to that.</p><a name=
+  "index-MH_002dFolder-mode-9" id="index-MH_002dFolder-mode-9"></a>
+  <a name="index-modes_002c-MH_002dFolder-9" id=
+  "index-modes_002c-MH_002dFolder-9"></a> <a name=
+  "index-mh_002dnarrow_002dto_002dseq-1" id=
+  "index-mh_002dnarrow_002dto_002dseq-1"></a> <a name=
+  "index-mh_002dnarrow_002dto_002dtick-3" id=
+  "index-mh_002dnarrow_002dto_002dtick-3"></a> <a name=
+  "index-mh_002dwiden-3" id="index-mh_002dwiden-3"></a> <a name=
+  "index-S-_0027-1" id="index-S-_0027-1"></a> <a name="index-S-n-1"
+  id="index-S-n-1"></a> <a name="index-S-w-1" id="index-S-w-1"></a>
+
+  <p>Once you&rsquo;ve placed some messages in a sequence, you may
+  wish to narrow the field of view to just those messages in the
+  sequence you&rsquo;ve created. To do this, use <kbd>S n</kbd>
+  (<code>mh-narrow-to-seq</code>). You are prompted for the name of
+  the sequence. What this does is show only those messages that are
+  in the selected sequence in the MH-Folder buffer. In addition, it
+  limits further MH-E searches to just those messages. To narrow
+  the view to the messages in the &lsquo;<samp>tick</samp>&rsquo;
+  sequence, use <kbd>S '</kbd> (<code>mh-narrow-to-tick</code>).
+  When you want to widen the view to all your messages again, use
+  <kbd>S w</kbd> (<code>mh-widen</code>).</p><a name=
+  "index-buffers_002c-_002aMH_002dE-Sequences_002a" id=
+  "index-buffers_002c-_002aMH_002dE-Sequences_002a"></a> <a name=
+  "index-_002aMH_002dE-Sequences_002a" id=
+  "index-_002aMH_002dE-Sequences_002a"></a> <a name=
+  "index-mh_002dlist_002dsequences-1" id=
+  "index-mh_002dlist_002dsequences-1"></a> <a name=
+  "index-mh_002dmsg_002dis_002din_002dseq-1" id=
+  "index-mh_002dmsg_002dis_002din_002dseq-1"></a> <a name=
+  "index-S-l-1" id="index-S-l-1"></a> <a name="index-S-s-1" id=
+  "index-S-s-1"></a>
+
+  <p>You can see which sequences in which a message appears with
+  the command <kbd>S s</kbd> (<code>mh-msg-is-in-seq</code>). Use a
+  prefix argument to display the sequences in which another message
+  appears (as in <kbd>C-u 42 S s <span class=
+  "key">RET</span></kbd>). Or, you can list all sequences in a
+  selected folder (default is current folder) with <kbd>S l</kbd>
+  (<code>mh-list-sequences</code>). The list appears in a buffer
+  named <samp>*MH-E Sequences*</samp> (see <a href=
+  "Miscellaneous.html#Miscellaneous">Miscellaneous</a>).</p><a name="index-MH-profile-component_002c-Previous_002dSequence-1"
+  id="index-MH-profile-component_002c-Previous_002dSequence-1"></a>
+  <a name="index-cur-sequence" id="index-cur-sequence"></a>
+  <a name="index-Previous_002dSequence-MH-profile-component-1" id=
+  "index-Previous_002dSequence-MH-profile-component-1"></a>
+  <a name="index-sequence_002c-cur" id=
+  "index-sequence_002c-cur"></a> <a name=
+  "index-sequence_002c-Previous_002dSequence" id=
+  "index-sequence_002c-Previous_002dSequence"></a> <a name=
+  "index-mh_002drefile_002dpreserves_002dsequences_002dflag-1" id=
+  "index-mh_002drefile_002dpreserves_002dsequences_002dflag-1"></a>
+
+  <p>If a message is in any sequence (except
+  &lsquo;<samp>Previous-Sequence:</samp>&rsquo;<a name="DOCF52"
+  href="#FOOT52" id="DOCF52"><sup>52</sup></a> and
+  &lsquo;<samp>cur</samp>&rsquo;) when it is refiled, then it will
+  still be in those sequences in the destination folder. If this
+  behavior is not desired, then turn off the option
+  <code>mh-refile-preserves-sequences-flag</code>.</p><a name=
+  "index-mh_002ddelete_002dmsg_002dfrom_002dseq-1" id=
+  "index-mh_002ddelete_002dmsg_002dfrom_002dseq-1"></a> <a name=
+  "index-mh_002ddelete_002dseq-1" id=
+  "index-mh_002ddelete_002dseq-1"></a> <a name="index-d-4" id=
+  "index-d-4"></a> <a name="index-S-d-1" id="index-S-d-1"></a>
+  <a name="index-S-k-1" id="index-S-k-1"></a>
+
+  <p>If you want to remove a message (or range, see <a href=
+  "Ranges.html#Ranges">Ranges</a>) from a sequence, use <kbd>S
+  d</kbd> (<code>mh-delete-msg-from-seq</code>). If you want to
+  delete an entire sequence, use <kbd>S k</kbd>
+  (<code>mh-delete-seq</code>). In the latter case you are prompted
+  for the sequence to delete. Note that this deletes only the
+  sequence, not the messages in the sequence. If you want to delete
+  the messages, use <kbd>C-u d</kbd> (see <a href=
+  "Reading-Mail.html#Reading-Mail">Reading Mail</a>).</p><a name=
+  "index-Unseen_002dSequence-MH-profile-component-1" id=
+  "index-Unseen_002dSequence-MH-profile-component-1"></a> <a name=
+  "index-cur-sequence-1" id="index-cur-sequence-1"></a> <a name=
+  "index-tick-sequence-3" id="index-tick-sequence-3"></a> <a name=
+  "index-MH-profile-component_002c-Unseen_002dSequence-1" id=
+  "index-MH-profile-component_002c-Unseen_002dSequence-1"></a>
+  <a name="index-sequence_002c-Unseen_002dSequence" id=
+  "index-sequence_002c-Unseen_002dSequence"></a> <a name=
+  "index-sequence_002c-cur-1" id="index-sequence_002c-cur-1"></a>
+  <a name="index-sequence_002c-tick-3" id=
+  "index-sequence_002c-tick-3"></a> <a name=
+  "index-mh_002dupdate_002dsequences-1" id=
+  "index-mh_002dupdate_002dsequences-1"></a> <a name=
+  "index-M_002dx-mh_002dupdate_002dsequences" id=
+  "index-M_002dx-mh_002dupdate_002dsequences"></a> <a name=
+  "index-q-4" id="index-q-4"></a> <a name="index-x-6" id=
+  "index-x-6"></a> <a name="index-mh_002dtick_002dseq-2" id=
+  "index-mh_002dtick_002dseq-2"></a> <a name=
+  "index-mh_002dupdate_002dsequences_002dafter_002dmh_002dshow_002dflag-1"
+  id=
+  "index-mh_002dupdate_002dsequences_002dafter_002dmh_002dshow_002dflag-1">
+  </a>
+
+  <p>Three sequences are maintained internally by MH-E and pushed
+  out to MH when a message is shown. They include the sequence
+  specified by your &lsquo;<samp>Unseen-Sequence:</samp>&rsquo;
+  profile component, &lsquo;<samp>cur</samp>&rsquo;, and the
+  sequence listed by the option <code>mh-tick-seq</code> which is
+  &lsquo;<samp>tick</samp>&rsquo; by default. If you do not like
+  this behavior, turn off the option
+  <code>mh-update-sequences-after-mh-show-flag</code>. You can then
+  update the state manually with the <kbd>x</kbd>, <kbd>q</kbd>, or
+  <kbd>M-x mh-update-sequences</kbd> commands.</p><a name=
+  "index-mh_002dseen_002dlist" id="index-mh_002dseen_002dlist"></a>
+  <a name="index-mh_002dunseen_002dupdated_002dhook-1" id=
+  "index-mh_002dunseen_002dupdated_002dhook-1"></a>
+
+  <p>The hook <code>mh-unseen-updated-hook</code> is run after the
+  unseen sequence has been updated. The variable
+  <code>mh-seen-list</code> can be used by this hook to obtain the
+  list of messages which were removed from the unseen
+  sequence.</p><a name="index-mark-1" id="index-mark-1"></a>
+  <a name="index-MH-commands_002c-mark" id=
+  "index-MH-commands_002c-mark"></a> <a name="index-S-n-2" id=
+  "index-S-n-2"></a> <a name="index-S-w-2" id="index-S-w-2"></a>
+
+  <p>With the exceptions of <kbd>S n</kbd> and <kbd>S w</kbd>, the
+  underlying MH command dealing with sequences is
+  <code>mark</code><a name="DOCF53" href="#FOOT53" id=
+  "DOCF53"><sup>53</sup></a>.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT51" href="#DOCF51" id="FOOT51">(51)</a></h3>
+
+    <p>See the section <a href=
+    "http://rand-mh.sourceforge.net/book/mh/morseq.html">More About
+    Sequences</a> in the MH book.</p>
+
+    <h3><a name="FOOT52" href="#DOCF52" id="FOOT52">(52)</a></h3>
+
+    <p>See &lsquo;<samp>mh-profile</samp>&rsquo;(5)).</p>
+
+    <h3><a name="FOOT53" href="#DOCF53" id="FOOT53">(53)</a></h3>
+
+    <p>See the section <a href=
+    "http://rand-mh.sourceforge.net/book/mh/mmbwm.html">Make
+    Message Bookmarks with mark</a> in the MH book.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Junk.html#Junk" accesskey="n" rel=
+    "next">Junk</a>, Previous: <a href="Limits.html#Limits"
+    accesskey="p" rel="prev">Limits</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

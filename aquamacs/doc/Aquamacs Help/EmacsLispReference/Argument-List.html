@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,168 +19,237 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Argument List</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Argument List">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Argument List">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lambda-Expressions.html#Lambda-Expressions" rel="up" title="Lambda Expressions">
-<link href="Function-Documentation.html#Function-Documentation" rel="next" title="Function Documentation">
-<link href="Simple-Lambda.html#Simple-Lambda" rel="prev" title="Simple Lambda">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Argument List</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Argument List" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Argument List" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lambda-Expressions.html#Lambda-Expressions" rel="up"
+  title="Lambda Expressions" />
+  <link href="Function-Documentation.html#Function-Documentation"
+  rel="next" title="Function Documentation" />
+  <link href="Simple-Lambda.html#Simple-Lambda" rel="prev" title=
+  "Simple Lambda" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Argument-List" id="Argument-List"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Function-Documentation.html#Function-Documentation" accesskey=
+    "n" rel="next">Function Documentation</a>, Previous: <a href=
+    "Simple-Lambda.html#Simple-Lambda" accesskey="p" rel=
+    "prev">Simple Lambda</a>, Up: <a href=
+    "Lambda-Expressions.html#Lambda-Expressions" accesskey="u" rel=
+    "up">Lambda Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Other-Features-of-Argument-Lists" id=
+  "Other-Features-of-Argument-Lists"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Argument-List"></a>
-<div class="header">
-<p>
-Next: <a href="Function-Documentation.html#Function-Documentation" accesskey="n" rel="next">Function Documentation</a>, Previous: <a href="Simple-Lambda.html#Simple-Lambda" accesskey="p" rel="prev">Simple Lambda</a>, Up: <a href="Lambda-Expressions.html#Lambda-Expressions" accesskey="u" rel="up">Lambda Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Other-Features-of-Argument-Lists"></a>
-<h4 class="subsection">12.2.3 Other Features of Argument Lists</h4>
-<a name="index-wrong_002dnumber_002dof_002darguments"></a>
-<a name="index-argument-binding"></a>
-<a name="index-binding-arguments"></a>
-<a name="index-argument-lists_002c-features"></a>
+  <h4 class="subsection">12.2.3 Other Features of Argument
+  Lists</h4><a name="index-wrong_002dnumber_002dof_002darguments"
+  id="index-wrong_002dnumber_002dof_002darguments"></a> <a name=
+  "index-argument-binding" id="index-argument-binding"></a>
+  <a name="index-binding-arguments" id=
+  "index-binding-arguments"></a> <a name=
+  "index-argument-lists_002c-features" id=
+  "index-argument-lists_002c-features"></a>
 
-<p>Our simple sample function, <code>(lambda (a b c) (+ a b c))</code>,
-specifies three argument variables, so it must be called with three
-arguments: if you try to call it with only two arguments or four
-arguments, you get a <code>wrong-number-of-arguments</code> error.
-</p>
-<p>It is often convenient to write a function that allows certain
-arguments to be omitted.  For example, the function <code>substring</code>
-accepts three arguments&mdash;a string, the start index and the end
-index&mdash;but the third argument defaults to the <var>length</var> of the
-string if you omit it.  It is also convenient for certain functions to
-accept an indefinite number of arguments, as the functions <code>list</code>
-and <code>+</code> do.
-</p>
-<a name="index-optional-arguments"></a>
-<a name="index-rest-arguments"></a>
-<a name="index-_0026optional"></a>
-<a name="index-_0026rest"></a>
-<p>To specify optional arguments that may be omitted when a function
-is called, simply include the keyword <code>&amp;optional</code> before the optional
-arguments.  To specify a list of zero or more extra arguments, include the
-keyword <code>&amp;rest</code> before one final argument.
-</p>
-<p>Thus, the complete syntax for an argument list is as follows:
-</p>
-<div class="example">
-<pre class="example">(<var>required-vars</var>&hellip;
- <span class="roman">[</span>&amp;optional <var>optional-vars</var>&hellip;<span class="roman">]</span>
- <span class="roman">[</span>&amp;rest <var>rest-var</var><span class="roman">]</span>)
-</pre></div>
+  <p>Our simple sample function, <code>(lambda (a b c) (+ a b
+  c))</code>, specifies three argument variables, so it must be
+  called with three arguments: if you try to call it with only two
+  arguments or four arguments, you get a
+  <code>wrong-number-of-arguments</code> error.</p>
 
-<p>The square brackets indicate that the <code>&amp;optional</code> and <code>&amp;rest</code>
-clauses, and the variables that follow them, are optional.
-</p>
-<p>A call to the function requires one actual argument for each of the
-<var>required-vars</var>.  There may be actual arguments for zero or more of
-the <var>optional-vars</var>, and there cannot be any actual arguments beyond
-that unless the lambda list uses <code>&amp;rest</code>.  In that case, there may
-be any number of extra actual arguments.
-</p>
-<p>If actual arguments for the optional and rest variables are omitted,
-then they always default to <code>nil</code>.  There is no way for the
-function to distinguish between an explicit argument of <code>nil</code> and
-an omitted argument.  However, the body of the function is free to
-consider <code>nil</code> an abbreviation for some other meaningful value.
-This is what <code>substring</code> does; <code>nil</code> as the third argument to
-<code>substring</code> means to use the length of the string supplied.
-</p>
-<a name="index-CL-note_002d_002d_002ddefault-optional-arg"></a>
-<blockquote>
-<p><b>Common Lisp note:</b> Common Lisp allows the function to specify what
-default value to use when an optional argument is omitted; Emacs Lisp
-always uses <code>nil</code>.  Emacs Lisp does not support <code>supplied-p</code>
-variables that tell you whether an argument was explicitly passed.
-</p></blockquote>
+  <p>It is often convenient to write a function that allows certain
+  arguments to be omitted. For example, the function
+  <code>substring</code> accepts three arguments&mdash;a string,
+  the start index and the end index&mdash;but the third argument
+  defaults to the <var>length</var> of the string if you omit it.
+  It is also convenient for certain functions to accept an
+  indefinite number of arguments, as the functions
+  <code>list</code> and <code>+</code> do.</p><a name=
+  "index-optional-arguments" id="index-optional-arguments"></a>
+  <a name="index-rest-arguments" id="index-rest-arguments"></a>
+  <a name="index-_0026optional" id="index-_0026optional"></a>
+  <a name="index-_0026rest" id="index-_0026rest"></a>
 
-<p>For example, an argument list that looks like this:
-</p>
-<div class="example">
-<pre class="example">(a b &amp;optional c d &amp;rest e)
-</pre></div>
+  <p>To specify optional arguments that may be omitted when a
+  function is called, simply include the keyword
+  <code>&amp;optional</code> before the optional arguments. To
+  specify a list of zero or more extra arguments, include the
+  keyword <code>&amp;rest</code> before one final argument.</p>
 
-<p>binds <code>a</code> and <code>b</code> to the first two actual arguments, which are
-required.  If one or two more arguments are provided, <code>c</code> and
-<code>d</code> are bound to them respectively; any arguments after the first
-four are collected into a list and <code>e</code> is bound to that list.  If
-there are only two arguments, <code>c</code> is <code>nil</code>; if two or three
-arguments, <code>d</code> is <code>nil</code>; if four arguments or fewer, <code>e</code>
-is <code>nil</code>.
-</p>
-<p>There is no way to have required arguments following optional
-ones&mdash;it would not make sense.  To see why this must be so, suppose
-that <code>c</code> in the example were optional and <code>d</code> were required.
-Suppose three actual arguments are given; which variable would the
-third argument be for?  Would it be used for the <var>c</var>, or for
-<var>d</var>?  One can argue for both possibilities.  Similarly, it makes
-no sense to have any more arguments (either required or optional)
-after a <code>&amp;rest</code> argument.
-</p>
-<p>Here are some examples of argument lists and proper calls:
-</p>
-<div class="example">
-<pre class="example">(funcall (lambda (n) (1+ n))        ; <span class="roman">One required:</span>
-         1)                         ; <span class="roman">requires exactly one argument.</span>
+  <p>Thus, the complete syntax for an argument list is as
+  follows:</p>
+
+  <div class="example">
+    <pre class="example">
+(<var>required-vars</var>&hellip;
+ <span class=
+"roman">[</span>&amp;optional <var>optional-vars</var>&hellip;<span class="roman">]</span>
+ <span class=
+"roman">[</span>&amp;rest <var>rest-var</var><span class=
+"roman">]</span>)
+</pre>
+  </div>
+
+  <p>The square brackets indicate that the
+  <code>&amp;optional</code> and <code>&amp;rest</code> clauses,
+  and the variables that follow them, are optional.</p>
+
+  <p>A call to the function requires one actual argument for each
+  of the <var>required-vars</var>. There may be actual arguments
+  for zero or more of the <var>optional-vars</var>, and there
+  cannot be any actual arguments beyond that unless the lambda list
+  uses <code>&amp;rest</code>. In that case, there may be any
+  number of extra actual arguments.</p>
+
+  <p>If actual arguments for the optional and rest variables are
+  omitted, then they always default to <code>nil</code>. There is
+  no way for the function to distinguish between an explicit
+  argument of <code>nil</code> and an omitted argument. However,
+  the body of the function is free to consider <code>nil</code> an
+  abbreviation for some other meaningful value. This is what
+  <code>substring</code> does; <code>nil</code> as the third
+  argument to <code>substring</code> means to use the length of the
+  string supplied.</p><a name=
+  "index-CL-note_002d_002d_002ddefault-optional-arg" id=
+  "index-CL-note_002d_002d_002ddefault-optional-arg"></a>
+
+  <blockquote>
+    <p><b>Common Lisp note:</b> Common Lisp allows the function to
+    specify what default value to use when an optional argument is
+    omitted; Emacs Lisp always uses <code>nil</code>. Emacs Lisp
+    does not support <code>supplied-p</code> variables that tell
+    you whether an argument was explicitly passed.</p>
+  </blockquote>
+
+  <p>For example, an argument list that looks like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(a b &amp;optional c d &amp;rest e)
+</pre>
+  </div>
+
+  <p>binds <code>a</code> and <code>b</code> to the first two
+  actual arguments, which are required. If one or two more
+  arguments are provided, <code>c</code> and <code>d</code> are
+  bound to them respectively; any arguments after the first four
+  are collected into a list and <code>e</code> is bound to that
+  list. If there are only two arguments, <code>c</code> is
+  <code>nil</code>; if two or three arguments, <code>d</code> is
+  <code>nil</code>; if four arguments or fewer, <code>e</code> is
+  <code>nil</code>.</p>
+
+  <p>There is no way to have required arguments following optional
+  ones&mdash;it would not make sense. To see why this must be so,
+  suppose that <code>c</code> in the example were optional and
+  <code>d</code> were required. Suppose three actual arguments are
+  given; which variable would the third argument be for? Would it
+  be used for the <var>c</var>, or for <var>d</var>? One can argue
+  for both possibilities. Similarly, it makes no sense to have any
+  more arguments (either required or optional) after a
+  <code>&amp;rest</code> argument.</p>
+
+  <p>Here are some examples of argument lists and proper calls:</p>
+
+  <div class="example">
+    <pre class="example">
+(funcall (lambda (n) (1+ n))        ; <span class=
+"roman">One required:</span>
+         1)                         ; <span class=
+"roman">requires exactly one argument.</span>
      &rArr; 2
-(funcall (lambda (n &amp;optional n1)   ; <span class="roman">One required and one optional:</span>
-           (if n1 (+ n n1) (1+ n))) ; <span class="roman">1 or 2 arguments.</span>
+(funcall (lambda (n &amp;optional n1)   ; <span class=
+"roman">One required and one optional:</span>
+           (if n1 (+ n n1) (1+ n))) ; <span class=
+"roman">1 or 2 arguments.</span>
          1 2)
      &rArr; 3
-(funcall (lambda (n &amp;rest ns)       ; <span class="roman">One required and one rest:</span>
-           (+ n (apply '+ ns)))     ; <span class="roman">1 or more arguments.</span>
+(funcall (lambda (n &amp;rest ns)       ; <span class=
+"roman">One required and one rest:</span>
+           (+ n (apply '+ ns)))     ; <span class=
+"roman">1 or more arguments.</span>
          1 2 3 4 5)
      &rArr; 15
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Function-Documentation.html#Function-Documentation" accesskey="n" rel="next">Function Documentation</a>, Previous: <a href="Simple-Lambda.html#Simple-Lambda" accesskey="p" rel="prev">Simple Lambda</a>, Up: <a href="Lambda-Expressions.html#Lambda-Expressions" accesskey="u" rel="up">Lambda Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Function-Documentation.html#Function-Documentation" accesskey=
+    "n" rel="next">Function Documentation</a>, Previous: <a href=
+    "Simple-Lambda.html#Simple-Lambda" accesskey="p" rel=
+    "prev">Simple Lambda</a>, Up: <a href=
+    "Lambda-Expressions.html#Lambda-Expressions" accesskey="u" rel=
+    "up">Lambda Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

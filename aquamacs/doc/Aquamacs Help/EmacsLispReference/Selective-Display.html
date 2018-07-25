@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,126 +19,168 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Selective Display</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Selective Display">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Selective Display">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="Temporary-Displays.html#Temporary-Displays" rel="next" title="Temporary Displays">
-<link href="Invisible-Text.html#Invisible-Text" rel="prev" title="Invisible Text">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Selective Display</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Selective Display" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Selective Display" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="Temporary-Displays.html#Temporary-Displays" rel=
+  "next" title="Temporary Displays" />
+  <link href="Invisible-Text.html#Invisible-Text" rel="prev" title=
+  "Invisible Text" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Selective-Display" id="Selective-Display"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Temporary-Displays.html#Temporary-Displays"
+    accesskey="n" rel="next">Temporary Displays</a>, Previous:
+    <a href="Invisible-Text.html#Invisible-Text" accesskey="p" rel=
+    "prev">Invisible Text</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Selective-Display-1" id="Selective-Display-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Selective-Display"></a>
-<div class="header">
-<p>
-Next: <a href="Temporary-Displays.html#Temporary-Displays" accesskey="n" rel="next">Temporary Displays</a>, Previous: <a href="Invisible-Text.html#Invisible-Text" accesskey="p" rel="prev">Invisible Text</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Selective-Display-1"></a>
-<h3 class="section">37.7 Selective Display</h3>
+  <h3 class="section">37.7 Selective Display</h3>
 
-<p><em>Selective display</em> refers to a pair of related features for
-hiding certain lines on the screen.
-</p>
-<a name="index-explicit-selective-display"></a>
-<p>The first variant, explicit selective display, was designed for use in a Lisp
-program: it controls which lines are hidden by altering the text.  This kind of
-hiding is now obsolete; instead you can get the same effect with the
-<code>invisible</code> property (see <a href="Invisible-Text.html#Invisible-Text">Invisible Text</a>).
-</p>
-<p>In the second variant, the choice of lines to hide is made
-automatically based on indentation.  This variant is designed to be a
-user-level feature.
-</p>
-<p>The way you control explicit selective display is by replacing a
-newline (control-j) with a carriage return (control-m).  The text that
-was formerly a line following that newline is now hidden.  Strictly
-speaking, it is temporarily no longer a line at all, since only
-newlines can separate lines; it is now part of the previous line.
-</p>
-<p>Selective display does not directly affect editing commands.  For
-example, <kbd>C-f</kbd> (<code>forward-char</code>) moves point unhesitatingly
-into hidden text.  However, the replacement of newline characters with
-carriage return characters affects some editing commands.  For
-example, <code>next-line</code> skips hidden lines, since it searches only
-for newlines.  Modes that use selective display can also define
-commands that take account of the newlines, or that control which
-parts of the text are hidden.
-</p>
-<p>When you write a selectively displayed buffer into a file, all the
-control-m&rsquo;s are output as newlines.  This means that when you next read
-in the file, it looks OK, with nothing hidden.  The selective display
-effect is seen only within Emacs.
-</p>
-<dl>
-<dt><a name="index-selective_002ddisplay"></a>Variable: <strong>selective-display</strong></dt>
-<dd><p>This buffer-local variable enables selective display.  This means that
-lines, or portions of lines, may be made hidden.
-</p>
-<ul>
-<li> If the value of <code>selective-display</code> is <code>t</code>, then the character
-control-m marks the start of hidden text; the control-m, and the rest
-of the line following it, are not displayed.  This is explicit selective
-display.
+  <p><em>Selective display</em> refers to a pair of related
+  features for hiding certain lines on the screen.</p><a name=
+  "index-explicit-selective-display" id=
+  "index-explicit-selective-display"></a>
 
-</li><li> If the value of <code>selective-display</code> is a positive integer, then
-lines that start with more than that many columns of indentation are not
-displayed.
-</li></ul>
+  <p>The first variant, explicit selective display, was designed
+  for use in a Lisp program: it controls which lines are hidden by
+  altering the text. This kind of hiding is now obsolete; instead
+  you can get the same effect with the <code>invisible</code>
+  property (see <a href=
+  "Invisible-Text.html#Invisible-Text">Invisible Text</a>).</p>
 
-<p>When some portion of a buffer is hidden, the vertical movement
-commands operate as if that portion did not exist, allowing a single
-<code>next-line</code> command to skip any number of hidden lines.
-However, character movement commands (such as <code>forward-char</code>) do
-not skip the hidden portion, and it is possible (if tricky) to insert
-or delete text in an hidden portion.
-</p>
-<p>In the examples below, we show the <em>display appearance</em> of the
-buffer <code>foo</code>, which changes with the value of
-<code>selective-display</code>.  The <em>contents</em> of the buffer do not
-change.
-</p>
-<div class="example">
-<pre class="example">(setq selective-display nil)
+  <p>In the second variant, the choice of lines to hide is made
+  automatically based on indentation. This variant is designed to
+  be a user-level feature.</p>
+
+  <p>The way you control explicit selective display is by replacing
+  a newline (control-j) with a carriage return (control-m). The
+  text that was formerly a line following that newline is now
+  hidden. Strictly speaking, it is temporarily no longer a line at
+  all, since only newlines can separate lines; it is now part of
+  the previous line.</p>
+
+  <p>Selective display does not directly affect editing commands.
+  For example, <kbd>C-f</kbd> (<code>forward-char</code>) moves
+  point unhesitatingly into hidden text. However, the replacement
+  of newline characters with carriage return characters affects
+  some editing commands. For example, <code>next-line</code> skips
+  hidden lines, since it searches only for newlines. Modes that use
+  selective display can also define commands that take account of
+  the newlines, or that control which parts of the text are
+  hidden.</p>
+
+  <p>When you write a selectively displayed buffer into a file, all
+  the control-m&rsquo;s are output as newlines. This means that
+  when you next read in the file, it looks OK, with nothing hidden.
+  The selective display effect is seen only within Emacs.</p>
+
+  <dl>
+    <dt><a name="index-selective_002ddisplay" id=
+    "index-selective_002ddisplay"></a>Variable:
+    <strong>selective-display</strong></dt>
+
+    <dd>
+      <p>This buffer-local variable enables selective display. This
+      means that lines, or portions of lines, may be made
+      hidden.</p>
+
+      <ul>
+        <li>If the value of <code>selective-display</code> is
+        <code>t</code>, then the character control-m marks the
+        start of hidden text; the control-m, and the rest of the
+        line following it, are not displayed. This is explicit
+        selective display.</li>
+
+        <li>If the value of <code>selective-display</code> is a
+        positive integer, then lines that start with more than that
+        many columns of indentation are not displayed.</li>
+      </ul>
+
+      <p>When some portion of a buffer is hidden, the vertical
+      movement commands operate as if that portion did not exist,
+      allowing a single <code>next-line</code> command to skip any
+      number of hidden lines. However, character movement commands
+      (such as <code>forward-char</code>) do not skip the hidden
+      portion, and it is possible (if tricky) to insert or delete
+      text in an hidden portion.</p>
+
+      <p>In the examples below, we show the <em>display
+      appearance</em> of the buffer <code>foo</code>, which changes
+      with the value of <code>selective-display</code>. The
+      <em>contents</em> of the buffer do not change.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq selective-display nil)
      &rArr; nil
 
 ---------- Buffer: foo ----------
@@ -147,8 +191,11 @@ change.
  2on this column
 1 on this column
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(setq selective-display 2)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(setq selective-display 2)
      &rArr; 2
 
 ---------- Buffer: foo ----------
@@ -157,17 +204,25 @@ change.
  2on this column
 1 on this column
 ---------- Buffer: foo ----------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-selective_002ddisplay_002dellipses"></a>User Option: <strong>selective-display-ellipses</strong></dt>
-<dd><p>If this buffer-local variable is non-<code>nil</code>, then Emacs displays
-&lsquo;<samp>&hellip;</samp>&rsquo; at the end of a line that is followed by hidden text.
-This example is a continuation of the previous one.
-</p>
-<div class="example">
-<pre class="example">(setq selective-display-ellipses t)
+  <dl>
+    <dt><a name="index-selective_002ddisplay_002dellipses" id=
+    "index-selective_002ddisplay_002dellipses"></a>User Option:
+    <strong>selective-display-ellipses</strong></dt>
+
+    <dd>
+      <p>If this buffer-local variable is non-<code>nil</code>,
+      then Emacs displays &lsquo;<samp>&hellip;</samp>&rsquo; at
+      the end of a line that is followed by hidden text. This
+      example is a continuation of the previous one.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq selective-display-ellipses t)
      &rArr; t
 
 ---------- Buffer: foo ----------
@@ -176,19 +231,26 @@ This example is a continuation of the previous one.
  2on this column
 1 on this column
 ---------- Buffer: foo ----------
-</pre></div>
+</pre>
+      </div>
 
-<p>You can use a display table to substitute other text for the ellipsis
-(&lsquo;<samp>&hellip;</samp>&rsquo;).  See <a href="Display-Tables.html#Display-Tables">Display Tables</a>.
-</p></dd></dl>
+      <p>You can use a display table to substitute other text for
+      the ellipsis (&lsquo;<samp>&hellip;</samp>&rsquo;). See
+      <a href="Display-Tables.html#Display-Tables">Display
+      Tables</a>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Temporary-Displays.html#Temporary-Displays" accesskey="n" rel="next">Temporary Displays</a>, Previous: <a href="Invisible-Text.html#Invisible-Text" accesskey="p" rel="prev">Invisible Text</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Temporary-Displays.html#Temporary-Displays"
+    accesskey="n" rel="next">Temporary Displays</a>, Previous:
+    <a href="Invisible-Text.html#Invisible-Text" accesskey="p" rel=
+    "prev">Invisible Text</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

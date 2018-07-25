@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,146 +19,190 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Intro Eval</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Intro Eval">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Intro Eval">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Evaluation.html#Evaluation" rel="up" title="Evaluation">
-<link href="Forms.html#Forms" rel="next" title="Forms">
-<link href="Evaluation.html#Evaluation" rel="prev" title="Evaluation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Intro Eval</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Intro Eval" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Intro Eval" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Evaluation.html#Evaluation" rel="up" title=
+  "Evaluation" />
+  <link href="Forms.html#Forms" rel="next" title="Forms" />
+  <link href="Evaluation.html#Evaluation" rel="prev" title=
+  "Evaluation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Intro-Eval" id="Intro-Eval"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Forms.html#Forms" accesskey="n" rel=
+    "next">Forms</a>, Up: <a href="Evaluation.html#Evaluation"
+    accesskey="u" rel="up">Evaluation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Introduction-to-Evaluation" id=
+  "Introduction-to-Evaluation"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Intro-Eval"></a>
-<div class="header">
-<p>
-Next: <a href="Forms.html#Forms" accesskey="n" rel="next">Forms</a>, Up: <a href="Evaluation.html#Evaluation" accesskey="u" rel="up">Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Introduction-to-Evaluation"></a>
-<h3 class="section">9.1 Introduction to Evaluation</h3>
+  <h3 class="section">9.1 Introduction to Evaluation</h3>
 
-<p>The Lisp interpreter, or evaluator, is the part of Emacs that
-computes the value of an expression that is given to it.  When a
-function written in Lisp is called, the evaluator computes the value
-of the function by evaluating the expressions in the function body.
-Thus, running any Lisp program really means running the Lisp
-interpreter.
-</p>
-<a name="index-form"></a>
-<a name="index-expression"></a>
-<a name="index-S_002dexpression"></a>
-<a name="index-sexp"></a>
-<p>A Lisp object that is intended for evaluation is called a <em>form</em>
-or <em>expression</em><a name="DOCF4" href="#FOOT4"><sup>4</sup></a>.  The fact that forms are data objects
-and not merely text is one of the fundamental differences between
-Lisp-like languages and typical programming languages.  Any object can
-be evaluated, but in practice only numbers, symbols, lists and strings
-are evaluated very often.
-</p>
-<p>In subsequent sections, we will describe the details of what
-evaluation means for each kind of form.
-</p>
-<p>It is very common to read a Lisp form and then evaluate the form,
-but reading and evaluation are separate activities, and either can be
-performed alone.  Reading per se does not evaluate anything; it
-converts the printed representation of a Lisp object to the object
-itself.  It is up to the caller of <code>read</code> to specify whether this
-object is a form to be evaluated, or serves some entirely different
-purpose.  See <a href="Input-Functions.html#Input-Functions">Input Functions</a>.
-</p>
-<a name="index-recursive-evaluation"></a>
-<p>Evaluation is a recursive process, and evaluating a form often
-involves evaluating parts within that form.  For instance, when you
-evaluate a <em>function call</em> form such as <code>(car x)</code>, Emacs
-first evaluates the argument (the subform <code>x</code>).  After evaluating
-the argument, Emacs <em>executes</em> the function (<code>car</code>), and if
-the function is written in Lisp, execution works by evaluating the
-<em>body</em> of the function (in this example, however, <code>car</code> is
-not a Lisp function; it is a primitive function implemented in C).
-See <a href="Functions.html#Functions">Functions</a>, for more information about functions and function
-calls.
-</p>
-<a name="index-environment"></a>
-<p>Evaluation takes place in a context called the <em>environment</em>,
-which consists of the current values and bindings of all Lisp
-variables (see <a href="Variables.html#Variables">Variables</a>).<a name="DOCF5" href="#FOOT5"><sup>5</sup></a>  Whenever a form refers to a
-variable without creating a new binding for it, the variable evaluates
-to the value given by the current environment.  Evaluating a form may
-also temporarily alter the environment by binding variables
-(see <a href="Local-Variables.html#Local-Variables">Local Variables</a>).
-</p>
-<a name="index-side-effect"></a>
-<p>Evaluating a form may also make changes that persist; these changes
-are called <em>side effects</em>.  An example of a form that produces a
-side effect is <code>(setq foo 1)</code>.
-</p>
-<p>Do not confuse evaluation with command key interpretation.  The
-editor command loop translates keyboard input into a command (an
-interactively callable function) using the active keymaps, and then
-uses <code>call-interactively</code> to execute that command.  Executing the
-command usually involves evaluation, if the command is written in
-Lisp; however, this step is not considered a part of command key
-interpretation.  See <a href="Command-Loop.html#Command-Loop">Command Loop</a>.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>The Lisp interpreter, or evaluator, is the part of Emacs that
+  computes the value of an expression that is given to it. When a
+  function written in Lisp is called, the evaluator computes the
+  value of the function by evaluating the expressions in the
+  function body. Thus, running any Lisp program really means
+  running the Lisp interpreter.</p><a name="index-form" id=
+  "index-form"></a> <a name="index-expression" id=
+  "index-expression"></a> <a name="index-S_002dexpression" id=
+  "index-S_002dexpression"></a> <a name="index-sexp" id=
+  "index-sexp"></a>
 
-<h3><a name="FOOT4" href="#DOCF4">(4)</a></h3>
-<p>It is sometimes also referred to as an
-<em>S-expression</em> or <em>sexp</em>, but we generally do not use this
-terminology in this manual.</p>
-<h3><a name="FOOT5" href="#DOCF5">(5)</a></h3>
-<p>This definition of
-&ldquo;environment&rdquo; is specifically not intended to include all the data
-that can affect the result of a program.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Forms.html#Forms" accesskey="n" rel="next">Forms</a>, Up: <a href="Evaluation.html#Evaluation" accesskey="u" rel="up">Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A Lisp object that is intended for evaluation is called a
+  <em>form</em> or <em>expression</em><a name="DOCF4" href="#FOOT4"
+  id="DOCF4"><sup>4</sup></a>. The fact that forms are data objects
+  and not merely text is one of the fundamental differences between
+  Lisp-like languages and typical programming languages. Any object
+  can be evaluated, but in practice only numbers, symbols, lists
+  and strings are evaluated very often.</p>
 
+  <p>In subsequent sections, we will describe the details of what
+  evaluation means for each kind of form.</p>
 
+  <p>It is very common to read a Lisp form and then evaluate the
+  form, but reading and evaluation are separate activities, and
+  either can be performed alone. Reading per se does not evaluate
+  anything; it converts the printed representation of a Lisp object
+  to the object itself. It is up to the caller of <code>read</code>
+  to specify whether this object is a form to be evaluated, or
+  serves some entirely different purpose. See <a href=
+  "Input-Functions.html#Input-Functions">Input
+  Functions</a>.</p><a name="index-recursive-evaluation" id=
+  "index-recursive-evaluation"></a>
 
+  <p>Evaluation is a recursive process, and evaluating a form often
+  involves evaluating parts within that form. For instance, when
+  you evaluate a <em>function call</em> form such as <code>(car
+  x)</code>, Emacs first evaluates the argument (the subform
+  <code>x</code>). After evaluating the argument, Emacs
+  <em>executes</em> the function (<code>car</code>), and if the
+  function is written in Lisp, execution works by evaluating the
+  <em>body</em> of the function (in this example, however,
+  <code>car</code> is not a Lisp function; it is a primitive
+  function implemented in C). See <a href=
+  "Functions.html#Functions">Functions</a>, for more information
+  about functions and function calls.</p><a name=
+  "index-environment" id="index-environment"></a>
+
+  <p>Evaluation takes place in a context called the
+  <em>environment</em>, which consists of the current values and
+  bindings of all Lisp variables (see <a href=
+  "Variables.html#Variables">Variables</a>).<a name="DOCF5" href=
+  "#FOOT5" id="DOCF5"><sup>5</sup></a> Whenever a form refers to a
+  variable without creating a new binding for it, the variable
+  evaluates to the value given by the current environment.
+  Evaluating a form may also temporarily alter the environment by
+  binding variables (see <a href=
+  "Local-Variables.html#Local-Variables">Local
+  Variables</a>).</p><a name="index-side-effect" id=
+  "index-side-effect"></a>
+
+  <p>Evaluating a form may also make changes that persist; these
+  changes are called <em>side effects</em>. An example of a form
+  that produces a side effect is <code>(setq foo 1)</code>.</p>
+
+  <p>Do not confuse evaluation with command key interpretation. The
+  editor command loop translates keyboard input into a command (an
+  interactively callable function) using the active keymaps, and
+  then uses <code>call-interactively</code> to execute that
+  command. Executing the command usually involves evaluation, if
+  the command is written in Lisp; however, this step is not
+  considered a part of command key interpretation. See <a href=
+  "Command-Loop.html#Command-Loop">Command Loop</a>.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT4" href="#DOCF4" id="FOOT4">(4)</a></h3>
+
+    <p>It is sometimes also referred to as an <em>S-expression</em>
+    or <em>sexp</em>, but we generally do not use this terminology
+    in this manual.</p>
+
+    <h3><a name="FOOT5" href="#DOCF5" id="FOOT5">(5)</a></h3>
+
+    <p>This definition of &ldquo;environment&rdquo; is specifically
+    not intended to include all the data that can affect the result
+    of a program.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Forms.html#Forms" accesskey="n" rel=
+    "next">Forms</a>, Up: <a href="Evaluation.html#Evaluation"
+    accesskey="u" rel="up">Evaluation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

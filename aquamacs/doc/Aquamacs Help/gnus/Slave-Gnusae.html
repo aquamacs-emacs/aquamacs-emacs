@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Slave Gnusae - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Starting-Up.html#Starting-Up" title="Starting Up">
-<link rel="prev" href="The-Server-is-Down.html#The-Server-is-Down" title="The Server is Down">
-<link rel="next" href="New-Groups.html#New-Groups" title="New Groups">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Slave Gnusae - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Starting-Up.html#Starting-Up" title=
+  "Starting Up" />
+  <link rel="prev" href=
+  "The-Server-is-Down.html#The-Server-is-Down" title=
+  "The Server is Down" />
+  <link rel="next" href="New-Groups.html#New-Groups" title=
+  "New Groups" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +36,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,54 +49,68 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Slave-Gnusae"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="New-Groups.html#New-Groups">New Groups</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="The-Server-is-Down.html#The-Server-is-Down">The Server is Down</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting Up</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Slave-Gnusae" id="Slave-Gnusae"></a>
 
-<h3 class="section">1.3 Slave Gnusae</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "New-Groups.html#New-Groups">New Groups</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "The-Server-is-Down.html#The-Server-is-Down">The Server is
+    Down</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Starting-Up.html#Starting-Up">Starting Up</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-slave-17"></a>
-You might want to run more than one Emacs with more than one Gnus at the
-same time.  If you are using different <samp><span class="file">.newsrc</span></samp> files (e.g., if you
-are using the two different Gnusae to read from two different servers),
-that is no problem whatsoever.  You just do it.
+  <h3 class="section">1.3 Slave Gnusae</h3>
 
-   <p>The problem appears when you want to run two Gnusae that use the same
-<samp><span class="file">.newsrc</span></samp> file.
+  <p><a name="index-slave-17" id="index-slave-17"></a> You might
+  want to run more than one Emacs with more than one Gnus at the
+  same time. If you are using different <samp><span class=
+  "file">.newsrc</span></samp> files (e.g., if you are using the
+  two different Gnusae to read from two different servers), that is
+  no problem whatsoever. You just do it.</p>
 
-   <p>To work around that problem some, we here at the Think-Tank at the Gnus
-Towers have come up with a new concept: <dfn>Masters</dfn> and
-<dfn>slaves</dfn>.  (We have applied for a patent on this concept, and have
-taken out a copyright on those words.  If you wish to use those words in
-conjunction with each other, you have to send $1 per usage instance to
-me.  Usage of the patent (<dfn>Master/Slave Relationships In Computer
-Applications</dfn>) will be much more expensive, of course.)
+  <p>The problem appears when you want to run two Gnusae that use
+  the same <samp><span class="file">.newsrc</span></samp> file.</p>
 
-   <p><a name="index-gnus_002dslave-18"></a>Anyway, you start one Gnus up the normal way with <kbd>M-x gnus</kbd> (or
-however you do it).  Each subsequent slave Gnusae should be started with
-<kbd>M-x gnus-slave</kbd>.  These slaves won't save normal <samp><span class="file">.newsrc</span></samp>
-files, but instead save <dfn>slave files</dfn> that contain information only
-on what groups have been read in the slave session.  When a master Gnus
-starts, it will read (and delete) these slave files, incorporating all
-information from them.  (The slave files will be read in the sequence
-they were created, so the latest changes will have precedence.)
+  <p>To work around that problem some, we here at the Think-Tank at
+  the Gnus Towers have come up with a new concept:
+  <dfn>Masters</dfn> and <dfn>slaves</dfn>. (We have applied for a
+  patent on this concept, and have taken out a copyright on those
+  words. If you wish to use those words in conjunction with each
+  other, you have to send $1 per usage instance to me. Usage of the
+  patent (<dfn>Master/Slave Relationships In Computer
+  Applications</dfn>) will be much more expensive, of course.)</p>
 
-   <p>Information from the slave files has, of course, precedence over the
-information in the normal (i.e., master) <samp><span class="file">.newsrc</span></samp> file.
+  <p><a name="index-gnus_002dslave-18" id=
+  "index-gnus_002dslave-18"></a>Anyway, you start one Gnus up the
+  normal way with <kbd>M-x gnus</kbd> (or however you do it). Each
+  subsequent slave Gnusae should be started with <kbd>M-x
+  gnus-slave</kbd>. These slaves won't save normal
+  <samp><span class="file">.newsrc</span></samp> files, but instead
+  save <dfn>slave files</dfn> that contain information only on what
+  groups have been read in the slave session. When a master Gnus
+  starts, it will read (and delete) these slave files,
+  incorporating all information from them. (The slave files will be
+  read in the sequence they were created, so the latest changes
+  will have precedence.)</p>
 
-   <p>If the <samp><span class="file">.newsrc*</span></samp> files have not been saved in the master when the
-slave starts, you may be prompted as to whether to read an auto-save
-file.  If you answer &ldquo;yes&rdquo;, the unsaved changes to the master will be
-incorporated into the slave.  If you answer &ldquo;no&rdquo;, the slave may see some
-messages as unread that have been read in the master.
+  <p>Information from the slave files has, of course, precedence
+  over the information in the normal (i.e., master)
+  <samp><span class="file">.newsrc</span></samp> file.</p>
 
-   </body></html>
-
+  <p>If the <samp><span class="file">.newsrc*</span></samp> files
+  have not been saved in the master when the slave starts, you may
+  be prompted as to whether to read an auto-save file. If you
+  answer &ldquo;yes&rdquo;, the unsaved changes to the master will
+  be incorporated into the slave. If you answer &ldquo;no&rdquo;,
+  the slave may see some messages as unread that have been read in
+  the master.</p>
+</body>
+</html>

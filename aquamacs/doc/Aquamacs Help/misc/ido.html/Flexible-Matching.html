@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the Ido package for GNU Emacs.
 
 Copyright (C) 2013-2016 Free Software Foundation, Inc.
@@ -14,88 +16,124 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Interactive Do: Flexible Matching</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Interactive Do: Flexible Matching">
-<meta name="keywords" content="Interactive Do: Flexible Matching">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Variable-Index.html#Variable-Index" rel="index" title="Variable Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Matching.html#Matching" rel="up" title="Matching">
-<link href="Regexp-Matching.html#Regexp-Matching" rel="next" title="Regexp Matching">
-<link href="Prefix-Matching.html#Prefix-Matching" rel="prev" title="Prefix Matching">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Interactive Do: Flexible Matching</title>
+  <meta name="description" content=
+  "Interactive Do: Flexible Matching" />
+  <meta name="keywords" content=
+  "Interactive Do: Flexible Matching" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Variable-Index.html#Variable-Index" rel="index"
+  title="Variable Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Matching.html#Matching" rel="up" title="Matching" />
+  <link href="Regexp-Matching.html#Regexp-Matching" rel="next"
+  title="Regexp Matching" />
+  <link href="Prefix-Matching.html#Prefix-Matching" rel="prev"
+  title="Prefix Matching" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Flexible-Matching"></a>
-<div class="header">
-<p>
-Next: <a href="Regexp-Matching.html#Regexp-Matching" accesskey="n" rel="next">Regexp Matching</a>, Previous: <a href="Prefix-Matching.html#Prefix-Matching" accesskey="p" rel="prev">Prefix Matching</a>, Up: <a href="Matching.html#Matching" accesskey="u" rel="up">Matching</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Variable-Index.html#Variable-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Flexible-Matching-1"></a>
-<h3 class="section">2.3 Flexible Matching</h3>
-<a name="index-flexible-matching"></a>
+<body lang="en" xml:lang="en">
+  <a name="Flexible-Matching" id="Flexible-Matching"></a>
 
-<dl>
-<dt><a name="index-ido_002denable_002dflex_002dmatching"></a>User Option: <strong>ido-enable-flex-matching</strong></dt>
-<dd><p>If non-<code>nil</code>, Ido will do flexible string matching.  Flexible
-matching means that if the entered string does not match any item, any
-item containing the entered characters in the given sequence will
-match.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Regexp-Matching.html#Regexp-Matching"
+    accesskey="n" rel="next">Regexp Matching</a>, Previous:
+    <a href="Prefix-Matching.html#Prefix-Matching" accesskey="p"
+    rel="prev">Prefix Matching</a>, Up: <a href=
+    "Matching.html#Matching" accesskey="u" rel="up">Matching</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Variable-Index.html#Variable-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Flexible-Matching-1" id="Flexible-Matching-1"></a>
 
-<p>If <code>ido-enable-flex-matching</code> is non-<code>nil</code>, Ido will do a
-more flexible matching (unless regexp matching is active) to find
-possible matches among the available buffer or file names if no
-matches are found using the normal prefix or substring matching.
-</p>
-<p>The flexible matching implies that any item which simply contains all
-of the entered characters in the specified sequence will match.
-</p>
-<p>For example, if you have four files <samp>alpha</samp>, <samp>beta</samp>,
-<samp>gamma</samp>, and <samp>delta</samp>, entering &lsquo;<samp>aa</samp>&rsquo; will match
-<samp>alpha</samp> and <samp>gamma</samp>, while &lsquo;<samp>ea</samp>&rsquo; matches <samp>beta</samp> and
-<samp>delta</samp>.  If prefix matching is also active, &lsquo;<samp>aa</samp>&rsquo; only
-matches <samp>alpha</samp>, while &lsquo;<samp>ea</samp>&rsquo; does not match any files.
-</p>
+  <h3 class="section">2.3 Flexible Matching</h3><a name=
+  "index-flexible-matching" id="index-flexible-matching"></a>
 
+  <dl>
+    <dt><a name="index-ido_002denable_002dflex_002dmatching" id=
+    "index-ido_002denable_002dflex_002dmatching"></a>User Option:
+    <strong>ido-enable-flex-matching</strong></dt>
 
+    <dd>
+      <p>If non-<code>nil</code>, Ido will do flexible string
+      matching. Flexible matching means that if the entered string
+      does not match any item, any item containing the entered
+      characters in the given sequence will match.</p>
+    </dd>
+  </dl>
 
+  <p>If <code>ido-enable-flex-matching</code> is
+  non-<code>nil</code>, Ido will do a more flexible matching
+  (unless regexp matching is active) to find possible matches among
+  the available buffer or file names if no matches are found using
+  the normal prefix or substring matching.</p>
+
+  <p>The flexible matching implies that any item which simply
+  contains all of the entered characters in the specified sequence
+  will match.</p>
+
+  <p>For example, if you have four files <samp>alpha</samp>,
+  <samp>beta</samp>, <samp>gamma</samp>, and <samp>delta</samp>,
+  entering &lsquo;<samp>aa</samp>&rsquo; will match
+  <samp>alpha</samp> and <samp>gamma</samp>, while
+  &lsquo;<samp>ea</samp>&rsquo; matches <samp>beta</samp> and
+  <samp>delta</samp>. If prefix matching is also active,
+  &lsquo;<samp>aa</samp>&rsquo; only matches <samp>alpha</samp>,
+  while &lsquo;<samp>ea</samp>&rsquo; does not match any files.</p>
 </body>
 </html>

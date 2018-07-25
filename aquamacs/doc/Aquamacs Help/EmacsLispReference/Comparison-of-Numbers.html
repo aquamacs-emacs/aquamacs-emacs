@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,194 +19,297 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Comparison of Numbers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Comparison of Numbers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Comparison of Numbers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numbers.html#Numbers" rel="up" title="Numbers">
-<link href="Numeric-Conversions.html#Numeric-Conversions" rel="next" title="Numeric Conversions">
-<link href="Predicates-on-Numbers.html#Predicates-on-Numbers" rel="prev" title="Predicates on Numbers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Comparison of
+  Numbers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Comparison of Numbers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Comparison of Numbers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numbers.html#Numbers" rel="up" title="Numbers" />
+  <link href="Numeric-Conversions.html#Numeric-Conversions" rel=
+  "next" title="Numeric Conversions" />
+  <link href="Predicates-on-Numbers.html#Predicates-on-Numbers"
+  rel="prev" title="Predicates on Numbers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Comparison-of-Numbers" id="Comparison-of-Numbers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Numeric-Conversions.html#Numeric-Conversions"
+    accesskey="n" rel="next">Numeric Conversions</a>, Previous:
+    <a href="Predicates-on-Numbers.html#Predicates-on-Numbers"
+    accesskey="p" rel="prev">Predicates on Numbers</a>, Up:
+    <a href="Numbers.html#Numbers" accesskey="u" rel=
+    "up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Comparison-of-Numbers-1" id=
+  "Comparison-of-Numbers-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Comparison-of-Numbers"></a>
-<div class="header">
-<p>
-Next: <a href="Numeric-Conversions.html#Numeric-Conversions" accesskey="n" rel="next">Numeric Conversions</a>, Previous: <a href="Predicates-on-Numbers.html#Predicates-on-Numbers" accesskey="p" rel="prev">Predicates on Numbers</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Comparison-of-Numbers-1"></a>
-<h3 class="section">3.4 Comparison of Numbers</h3>
-<a name="index-number-comparison"></a>
-<a name="index-comparing-numbers"></a>
+  <h3 class="section">3.4 Comparison of Numbers</h3><a name=
+  "index-number-comparison" id="index-number-comparison"></a>
+  <a name="index-comparing-numbers" id=
+  "index-comparing-numbers"></a>
 
-<p>To test numbers for numerical equality, you should normally use
-<code>=</code>, not <code>eq</code>.  There can be many distinct floating-point
-objects with the same numeric value.  If you use <code>eq</code> to
-compare them, then you test whether two values are the same
-<em>object</em>.  By contrast, <code>=</code> compares only the numeric values
-of the objects.
-</p>
-<p>In Emacs Lisp, each integer is a unique Lisp object.
-Therefore, <code>eq</code> is equivalent to <code>=</code> where integers are
-concerned.  It is sometimes convenient to use <code>eq</code> for comparing
-an unknown value with an integer, because <code>eq</code> does not report an
-error if the unknown value is not a number&mdash;it accepts arguments of
-any type.  By contrast, <code>=</code> signals an error if the arguments are
-not numbers or markers.  However, it is better programming practice to
-use <code>=</code> if you can, even for comparing integers.
-</p>
-<p>Sometimes it is useful to compare numbers with <code>equal</code>, which
-treats two numbers as equal if they have the same data type (both
-integers, or both floating point) and the same value.  By contrast,
-<code>=</code> can treat an integer and a floating-point number as equal.
-See <a href="Equality-Predicates.html#Equality-Predicates">Equality Predicates</a>.
-</p>
-<p>There is another wrinkle: because floating-point arithmetic is not
-exact, it is often a bad idea to check for equality of floating-point
-values.  Usually it is better to test for approximate equality.
-Here&rsquo;s a function to do this:
-</p>
-<div class="example">
-<pre class="example">(defvar fuzz-factor 1.0e-6)
+  <p>To test numbers for numerical equality, you should normally
+  use <code>=</code>, not <code>eq</code>. There can be many
+  distinct floating-point objects with the same numeric value. If
+  you use <code>eq</code> to compare them, then you test whether
+  two values are the same <em>object</em>. By contrast,
+  <code>=</code> compares only the numeric values of the
+  objects.</p>
+
+  <p>In Emacs Lisp, each integer is a unique Lisp object.
+  Therefore, <code>eq</code> is equivalent to <code>=</code> where
+  integers are concerned. It is sometimes convenient to use
+  <code>eq</code> for comparing an unknown value with an integer,
+  because <code>eq</code> does not report an error if the unknown
+  value is not a number&mdash;it accepts arguments of any type. By
+  contrast, <code>=</code> signals an error if the arguments are
+  not numbers or markers. However, it is better programming
+  practice to use <code>=</code> if you can, even for comparing
+  integers.</p>
+
+  <p>Sometimes it is useful to compare numbers with
+  <code>equal</code>, which treats two numbers as equal if they
+  have the same data type (both integers, or both floating point)
+  and the same value. By contrast, <code>=</code> can treat an
+  integer and a floating-point number as equal. See <a href=
+  "Equality-Predicates.html#Equality-Predicates">Equality
+  Predicates</a>.</p>
+
+  <p>There is another wrinkle: because floating-point arithmetic is
+  not exact, it is often a bad idea to check for equality of
+  floating-point values. Usually it is better to test for
+  approximate equality. Here&rsquo;s a function to do this:</p>
+
+  <div class="example">
+    <pre class="example">
+(defvar fuzz-factor 1.0e-6)
 (defun approx-equal (x y)
   (or (= x y)
       (&lt; (/ (abs (- x y))
             (max (abs x) (abs y)))
          fuzz-factor)))
-</pre></div>
+</pre>
+  </div><a name="index-CL-note_002d_002d_002dintegers-vrs-eq" id=
+  "index-CL-note_002d_002d_002dintegers-vrs-eq"></a>
 
-<a name="index-CL-note_002d_002d_002dintegers-vrs-eq"></a>
-<blockquote>
-<p><b>Common Lisp note:</b> Comparing numbers in Common Lisp always requires
-<code>=</code> because Common Lisp implements multi-word integers, and two
-distinct integer objects can have the same numeric value.  Emacs Lisp
-can have just one integer object for any given value because it has a
-limited range of integers.
-</p></blockquote>
+  <blockquote>
+    <p><b>Common Lisp note:</b> Comparing numbers in Common Lisp
+    always requires <code>=</code> because Common Lisp implements
+    multi-word integers, and two distinct integer objects can have
+    the same numeric value. Emacs Lisp can have just one integer
+    object for any given value because it has a limited range of
+    integers.</p>
+  </blockquote>
 
-<dl>
-<dt><a name="index-_003d"></a>Function: <strong>=</strong> <em>number-or-marker &amp;rest number-or-markers</em></dt>
-<dd><p>This function tests whether all its arguments are numerically equal,
-and returns <code>t</code> if so, <code>nil</code> otherwise.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-_003d" id="index-_003d"></a>Function:
+    <strong>=</strong> <em>number-or-marker &amp;rest
+    number-or-markers</em></dt>
 
-<dl>
-<dt><a name="index-eql"></a>Function: <strong>eql</strong> <em>value1 value2</em></dt>
-<dd><p>This function acts like <code>eq</code> except when both arguments are
-numbers.  It compares numbers by type and numeric value, so that
-<code>(eql 1.0 1)</code> returns <code>nil</code>, but <code>(eql 1.0 1.0)</code> and
-<code>(eql 1 1)</code> both return <code>t</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function tests whether all its arguments are
+      numerically equal, and returns <code>t</code> if so,
+      <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-_002f_003d"></a>Function: <strong>/=</strong> <em>number-or-marker1 number-or-marker2</em></dt>
-<dd><p>This function tests whether its arguments are numerically equal, and
-returns <code>t</code> if they are not, and <code>nil</code> if they are.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-eql" id="index-eql"></a>Function:
+    <strong>eql</strong> <em>value1 value2</em></dt>
 
-<dl>
-<dt><a name="index-_003c"></a>Function: <strong>&lt;</strong> <em>number-or-marker &amp;rest number-or-markers</em></dt>
-<dd><p>This function tests whether each argument is strictly less than the
-following argument.  It returns <code>t</code> if so, <code>nil</code> otherwise.
-</p></dd></dl>
+    <dd>
+      <p>This function acts like <code>eq</code> except when both
+      arguments are numbers. It compares numbers by type and
+      numeric value, so that <code>(eql 1.0 1)</code> returns
+      <code>nil</code>, but <code>(eql 1.0 1.0)</code> and
+      <code>(eql 1 1)</code> both return <code>t</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-_003c_003d"></a>Function: <strong>&lt;=</strong> <em>number-or-marker &amp;rest number-or-markers</em></dt>
-<dd><p>This function tests whether each argument is less than or equal to
-the following argument.  It returns <code>t</code> if so, <code>nil</code> otherwise.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-_002f_003d" id=
+    "index-_002f_003d"></a>Function: <strong>/=</strong>
+    <em>number-or-marker1 number-or-marker2</em></dt>
 
-<dl>
-<dt><a name="index-_003e"></a>Function: <strong>&gt;</strong> <em>number-or-marker &amp;rest number-or-markers</em></dt>
-<dd><p>This function tests whether each argument is strictly greater than
-the following argument.  It returns <code>t</code> if so, <code>nil</code> otherwise.
-</p></dd></dl>
+    <dd>
+      <p>This function tests whether its arguments are numerically
+      equal, and returns <code>t</code> if they are not, and
+      <code>nil</code> if they are.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-_003e_003d"></a>Function: <strong>&gt;=</strong> <em>number-or-marker &amp;rest number-or-markers</em></dt>
-<dd><p>This function tests whether each argument is greater than or equal to
-the following argument.  It returns <code>t</code> if so, <code>nil</code> otherwise.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-_003c" id="index-_003c"></a>Function:
+    <strong>&lt;</strong> <em>number-or-marker &amp;rest
+    number-or-markers</em></dt>
 
-<dl>
-<dt><a name="index-max"></a>Function: <strong>max</strong> <em>number-or-marker &amp;rest numbers-or-markers</em></dt>
-<dd><p>This function returns the largest of its arguments.
-If any of the arguments is floating point, the value is returned
-as floating point, even if it was given as an integer.
-</p>
-<div class="example">
-<pre class="example">(max 20)
+    <dd>
+      <p>This function tests whether each argument is strictly less
+      than the following argument. It returns <code>t</code> if so,
+      <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-_003c_003d" id=
+    "index-_003c_003d"></a>Function: <strong>&lt;=</strong>
+    <em>number-or-marker &amp;rest number-or-markers</em></dt>
+
+    <dd>
+      <p>This function tests whether each argument is less than or
+      equal to the following argument. It returns <code>t</code> if
+      so, <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-_003e" id="index-_003e"></a>Function:
+    <strong>&gt;</strong> <em>number-or-marker &amp;rest
+    number-or-markers</em></dt>
+
+    <dd>
+      <p>This function tests whether each argument is strictly
+      greater than the following argument. It returns
+      <code>t</code> if so, <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-_003e_003d" id=
+    "index-_003e_003d"></a>Function: <strong>&gt;=</strong>
+    <em>number-or-marker &amp;rest number-or-markers</em></dt>
+
+    <dd>
+      <p>This function tests whether each argument is greater than
+      or equal to the following argument. It returns <code>t</code>
+      if so, <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-max" id="index-max"></a>Function:
+    <strong>max</strong> <em>number-or-marker &amp;rest
+    numbers-or-markers</em></dt>
+
+    <dd>
+      <p>This function returns the largest of its arguments. If any
+      of the arguments is floating point, the value is returned as
+      floating point, even if it was given as an integer.</p>
+
+      <div class="example">
+        <pre class="example">
+(max 20)
      &rArr; 20
 (max 1 2.5)
      &rArr; 2.5
 (max 1 3 2.5)
      &rArr; 3.0
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-min"></a>Function: <strong>min</strong> <em>number-or-marker &amp;rest numbers-or-markers</em></dt>
-<dd><p>This function returns the smallest of its arguments.
-If any of the arguments is floating point, the value is returned
-as floating point, even if it was given as an integer.
-</p>
-<div class="example">
-<pre class="example">(min -4 1)
+  <dl>
+    <dt><a name="index-min" id="index-min"></a>Function:
+    <strong>min</strong> <em>number-or-marker &amp;rest
+    numbers-or-markers</em></dt>
+
+    <dd>
+      <p>This function returns the smallest of its arguments. If
+      any of the arguments is floating point, the value is returned
+      as floating point, even if it was given as an integer.</p>
+
+      <div class="example">
+        <pre class="example">
+(min -4 1)
      &rArr; -4
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-abs"></a>Function: <strong>abs</strong> <em>number</em></dt>
-<dd><p>This function returns the absolute value of <var>number</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-abs" id="index-abs"></a>Function:
+    <strong>abs</strong> <em>number</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Numeric-Conversions.html#Numeric-Conversions" accesskey="n" rel="next">Numeric Conversions</a>, Previous: <a href="Predicates-on-Numbers.html#Predicates-on-Numbers" accesskey="p" rel="prev">Predicates on Numbers</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns the absolute value of
+      <var>number</var>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Numeric-Conversions.html#Numeric-Conversions"
+    accesskey="n" rel="next">Numeric Conversions</a>, Previous:
+    <a href="Predicates-on-Numbers.html#Predicates-on-Numbers"
+    accesskey="p" rel="prev">Predicates on Numbers</a>, Up:
+    <a href="Numbers.html#Numbers" accesskey="u" rel=
+    "up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

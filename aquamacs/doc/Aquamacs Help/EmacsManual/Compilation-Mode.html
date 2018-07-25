@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,214 +20,317 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Compilation Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Compilation Mode">
-<meta name="keywords" content="GNU Emacs Manual: Compilation Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Building.html#Building" rel="up" title="Building">
-<link href="Compilation-Shell.html#Compilation-Shell" rel="next" title="Compilation Shell">
-<link href="Compilation.html#Compilation" rel="prev" title="Compilation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Compilation Mode</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Compilation Mode" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Compilation Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Building.html#Building" rel="up" title="Building" />
+  <link href="Compilation-Shell.html#Compilation-Shell" rel="next"
+  title="Compilation Shell" />
+  <link href="Compilation.html#Compilation" rel="prev" title=
+  "Compilation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Compilation-Mode" id="Compilation-Mode"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Compilation-Shell.html#Compilation-Shell"
+    accesskey="n" rel="next">Compilation Shell</a>, Previous:
+    <a href="Compilation.html#Compilation" accesskey="p" rel=
+    "prev">Compilation</a>, Up: <a href="Building.html#Building"
+    accesskey="u" rel="up">Building</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Compilation-Mode-1" id="Compilation-Mode-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Compilation-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="Compilation-Shell.html#Compilation-Shell" accesskey="n" rel="next">Compilation Shell</a>, Previous: <a href="Compilation.html#Compilation" accesskey="p" rel="prev">Compilation</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Compilation-Mode-1"></a>
-<h3 class="section">27.2 Compilation Mode</h3>
+  <h3 class="section">27.2 Compilation Mode</h3><a name=
+  "index-Compilation-mode" id="index-Compilation-mode"></a>
+  <a name="index-mode_002c-Compilation" id=
+  "index-mode_002c-Compilation"></a> <a name="index-locus" id=
+  "index-locus"></a>
 
-<a name="index-Compilation-mode"></a>
-<a name="index-mode_002c-Compilation"></a>
-<a name="index-locus"></a>
-<p>The <samp>*compilation*</samp> buffer uses a major mode called Compilation
-mode.  Compilation mode turns each error message in the buffer into a
-hyperlink; you can move point to it and type <tt class="key">RET</tt>, or click on it
-with the mouse (see <a href="Mouse-References.html#Mouse-References">Mouse References</a>), to visit the <em>locus</em> of
-the error message in a separate window.  The locus is the specific
-position in a file where that error occurred.
-</p>
-<a name="index-compile_002dgoto_002derror"></a>
-<a name="index-compilation_002dauto_002djump_002dto_002dfirst_002derror"></a>
-<p>If you change the variable
-<code>compilation-auto-jump-to-first-error</code> to a non-<code>nil</code> value,
-Emacs automatically visits the locus of the first error message that
-appears in the <samp>*compilation*</samp> buffer.
-</p>
-<p>Compilation mode provides the following additional commands.  These
-commands can also be used in <samp>*grep*</samp> buffers, where the
-hyperlinks are search matches rather than error messages (see <a href="Grep-Searching.html#Grep-Searching">Grep Searching</a>).
-</p>
-<dl compact="compact">
-<dt><kbd>M-g M-n</kbd></dt>
-<dt><kbd>M-g n</kbd></dt>
-<dt><kbd>C-x `</kbd></dt>
-<dd><p>Visit the locus of the next error message or match (<code>next-error</code>).
-</p></dd>
-<dt><kbd>M-g M-p</kbd></dt>
-<dt><kbd>M-g p</kbd></dt>
-<dd><p>Visit the locus of the previous error message or match
-(<code>previous-error</code>).
-</p></dd>
-<dt><kbd>M-n</kbd></dt>
-<dd><p>Move point to the next error message or match, without visiting its
-locus (<code>compilation-next-error</code>).
-</p></dd>
-<dt><kbd>M-p</kbd></dt>
-<dd><p>Move point to the previous error message or match, without visiting
-its locus (<code>compilation-previous-error</code>).
-</p></dd>
-<dt><kbd>M-}</kbd></dt>
-<dd><p>Move point to the next error message or match occurring in a different
-file (<code>compilation-next-file</code>).
-</p></dd>
-<dt><kbd>M-{</kbd></dt>
-<dd><p>Move point to the previous error message or match occurring in a
-different file (<code>compilation-previous-file</code>).
-</p></dd>
-<dt><kbd>C-c C-f</kbd></dt>
-<dd><p>Toggle Next Error Follow minor mode, which makes cursor motion in the
-compilation buffer produce automatic source display.
-</p></dd>
-</dl>
+  <p>The <samp>*compilation*</samp> buffer uses a major mode called
+  Compilation mode. Compilation mode turns each error message in
+  the buffer into a hyperlink; you can move point to it and type
+  <tt class="key">RET</tt>, or click on it with the mouse (see
+  <a href="Mouse-References.html#Mouse-References">Mouse
+  References</a>), to visit the <em>locus</em> of the error message
+  in a separate window. The locus is the specific position in a
+  file where that error occurred.</p><a name=
+  "index-compile_002dgoto_002derror" id=
+  "index-compile_002dgoto_002derror"></a> <a name=
+  "index-compilation_002dauto_002djump_002dto_002dfirst_002derror"
+  id=
+  "index-compilation_002dauto_002djump_002dto_002dfirst_002derror"></a>
 
-<a name="index-M_002dg-M_002dn"></a>
-<a name="index-M_002dg-n"></a>
-<a name="index-C_002dx-_0060"></a>
-<a name="index-next_002derror"></a>
-<a name="index-next_002derror_002dhighlight"></a>
-<p>To visit errors sequentially, type <kbd><span class="nolinebreak">C-x</span>&nbsp;`</kbd><!-- /@w -->
-(<code>next-error</code>), or equivalently <kbd>M-g M-n</kbd> or <kbd>M-g n</kbd>.
-This command can be invoked from any buffer, not just a Compilation
-mode buffer.  The first time you invoke it after a compilation, it
-visits the locus of the first error message.  Each subsequent
-<kbd><span class="nolinebreak">C-x</span>&nbsp;`</kbd><!-- /@w --> visits the next error, in a similar fashion.  If you
-visit a specific error with <tt class="key">RET</tt> or a mouse click in the
-<samp>*compilation*</samp> buffer, subsequent <kbd><span class="nolinebreak">C-x</span>&nbsp;`</kbd><!-- /@w --> commands
-advance from there.  When <kbd><span class="nolinebreak">C-x</span>&nbsp;`</kbd><!-- /@w --> finds no more error messages
-to visit, it signals an error.  <kbd><span class="nolinebreak">C-u</span>&nbsp;<span class="nolinebreak">C-x</span>&nbsp;`</kbd><!-- /@w --> starts again from
-the beginning of the compilation buffer, and visits the first locus.
-</p>
-<p><kbd>M-g M-p</kbd> or <kbd>M-g p</kbd> (<code>previous-error</code>) iterates
-through errors in the opposite direction.
-</p>
-<p>The <code>next-error</code> and <code>previous-error</code> commands don&rsquo;t just
-act on the errors or matches listed in <samp>*compilation*</samp> and
-<samp>*grep*</samp> buffers; they also know how to iterate through error or
-match lists produced by other commands, such as <kbd>M-x occur</kbd>
-(see <a href="Other-Repeating-Search.html#Other-Repeating-Search">Other Repeating Search</a>).  If you are already in a buffer
-containing error messages or matches, those are the ones that are
-iterated through; otherwise, Emacs looks for a buffer containing error
-messages or matches amongst the windows of the selected frame, then
-for one that <code>next-error</code> or <code>previous-error</code> previously
-iterated through, and finally amongst all other buffers.  If the
-buffer chosen for iterating through is not currently displayed in a
-window, it will be displayed.
-</p>
-<a name="index-compilation_002dskip_002dthreshold"></a>
-<p>By default, the <code>next-error</code> and <code>previous-error</code> commands
-skip less important messages.  The variable
-<code>compilation-skip-threshold</code> controls this.  The default value,
-1, means to skip anything less important than a warning.  A value of 2
-means to skip anything less important than an error, while 0 means not
-to skip any messages.
-</p>
-<p>When Emacs visits the locus of an error message, it momentarily
-highlights the relevant source line.  The duration of this highlight
-is determined by the variable <code>next-error-highlight</code>.
-</p>
-<a name="index-compilation_002dcontext_002dlines"></a>
-<p>If the <samp>*compilation*</samp> buffer is shown in a window with a left
-fringe (see <a href="Fringes.html#Fringes">Fringes</a>), the locus-visiting commands put an arrow in
-the fringe, pointing to the current error message.  If the window has
-no left fringe, such as on a text terminal, these commands scroll the
-window so that the current message is at the top of the window.  If
-you change the variable <code>compilation-context-lines</code> to an integer
-value <var>n</var>, these commands scroll the window so that the current
-error message is <var>n</var> lines from the top, whether or not there is a
-fringe; the default value, <code>nil</code>, gives the behavior described
-above.
-</p>
-<a name="index-compilation_002derror_002dregexp_002dalist"></a>
-<a name="index-grep_002dregexp_002dalist"></a>
-<p>To parse messages from the compiler, Compilation mode uses the
-variable <code>compilation-error-regexp-alist</code> which lists various
-error message formats and tells Emacs how to extract the locus from
-each.  A similar variable, <code>grep-regexp-alist</code>, tells Emacs how
-to parse output from a <code>grep</code> command (see <a href="Grep-Searching.html#Grep-Searching">Grep Searching</a>).
-</p>
-<a name="index-compilation_002dnext_002derror"></a>
-<a name="index-compilation_002dprevious_002derror"></a>
-<a name="index-compilation_002dnext_002dfile"></a>
-<a name="index-compilation_002dprevious_002dfile"></a>
-<p>Compilation mode also defines the keys <tt class="key">SPC</tt> and <tt class="key">DEL</tt> to
-scroll by screenfuls; <kbd>M-n</kbd> (<code>compilation-next-error</code>) and
-<kbd>M-p</kbd> (<code>compilation-previous-error</code>) to move to the next or
-previous error message; and <kbd>M-{</kbd> (<code>compilation-next-file</code>)
-and <kbd>M-}</kbd> (<code>compilation-previous-file</code>) to move to the next
-or previous error message for a different source file.
-</p>
-<a name="index-Next-Error-Follow-mode"></a>
-<a name="index-next_002derror_002dfollow_002dminor_002dmode"></a>
-<p>You can type <kbd>C-c C-f</kbd> to toggle Next Error Follow mode.  In
-this minor mode, ordinary cursor motion in the compilation buffer
-automatically updates the source buffer, i.e., moving the cursor over
-an error message causes the locus of that error to be displayed.
-</p>
-<p>The features of Compilation mode are also available in a minor mode
-called Compilation Minor mode.  This lets you parse error messages in
-any buffer, not just a normal compilation output buffer.  Type
-<kbd>M-x compilation-minor-mode</kbd> to enable the minor mode.  For
-instance, in an Rlogin buffer (see <a href="Remote-Host.html#Remote-Host">Remote Host</a>), Compilation minor
-mode automatically accesses remote source files by FTP (see <a href="File-Names.html#File-Names">File Names</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Compilation-Shell.html#Compilation-Shell" accesskey="n" rel="next">Compilation Shell</a>, Previous: <a href="Compilation.html#Compilation" accesskey="p" rel="prev">Compilation</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If you change the variable
+  <code>compilation-auto-jump-to-first-error</code> to a
+  non-<code>nil</code> value, Emacs automatically visits the locus
+  of the first error message that appears in the
+  <samp>*compilation*</samp> buffer.</p>
 
+  <p>Compilation mode provides the following additional commands.
+  These commands can also be used in <samp>*grep*</samp> buffers,
+  where the hyperlinks are search matches rather than error
+  messages (see <a href="Grep-Searching.html#Grep-Searching">Grep
+  Searching</a>).</p>
 
+  <dl compact="compact">
+    <dt><kbd>M-g M-n</kbd></dt>
 
+    <dt><kbd>M-g n</kbd></dt>
+
+    <dt><kbd>C-x `</kbd></dt>
+
+    <dd>
+      <p>Visit the locus of the next error message or match
+      (<code>next-error</code>).</p>
+    </dd>
+
+    <dt><kbd>M-g M-p</kbd></dt>
+
+    <dt><kbd>M-g p</kbd></dt>
+
+    <dd>
+      <p>Visit the locus of the previous error message or match
+      (<code>previous-error</code>).</p>
+    </dd>
+
+    <dt><kbd>M-n</kbd></dt>
+
+    <dd>
+      <p>Move point to the next error message or match, without
+      visiting its locus (<code>compilation-next-error</code>).</p>
+    </dd>
+
+    <dt><kbd>M-p</kbd></dt>
+
+    <dd>
+      <p>Move point to the previous error message or match, without
+      visiting its locus
+      (<code>compilation-previous-error</code>).</p>
+    </dd>
+
+    <dt><kbd>M-}</kbd></dt>
+
+    <dd>
+      <p>Move point to the next error message or match occurring in
+      a different file (<code>compilation-next-file</code>).</p>
+    </dd>
+
+    <dt><kbd>M-{</kbd></dt>
+
+    <dd>
+      <p>Move point to the previous error message or match
+      occurring in a different file
+      (<code>compilation-previous-file</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-f</kbd></dt>
+
+    <dd>
+      <p>Toggle Next Error Follow minor mode, which makes cursor
+      motion in the compilation buffer produce automatic source
+      display.</p>
+    </dd>
+  </dl><a name="index-M_002dg-M_002dn" id=
+  "index-M_002dg-M_002dn"></a> <a name="index-M_002dg-n" id=
+  "index-M_002dg-n"></a> <a name="index-C_002dx-_0060" id=
+  "index-C_002dx-_0060"></a> <a name="index-next_002derror" id=
+  "index-next_002derror"></a> <a name=
+  "index-next_002derror_002dhighlight" id=
+  "index-next_002derror_002dhighlight"></a>
+
+  <p>To visit errors sequentially, type <kbd><span class=
+  "nolinebreak">C-x</span>&nbsp;`</kbd><!-- /@w -->
+  (<code>next-error</code>), or equivalently <kbd>M-g M-n</kbd> or
+  <kbd>M-g n</kbd>. This command can be invoked from any buffer,
+  not just a Compilation mode buffer. The first time you invoke it
+  after a compilation, it visits the locus of the first error
+  message. Each subsequent <kbd><span class=
+  "nolinebreak">C-x</span>&nbsp;`</kbd><!-- /@w --> visits the next
+  error, in a similar fashion. If you visit a specific error with
+  <tt class="key">RET</tt> or a mouse click in the
+  <samp>*compilation*</samp> buffer, subsequent <kbd><span class=
+  "nolinebreak">C-x</span>&nbsp;`</kbd><!-- /@w --> commands
+  advance from there. When <kbd><span class=
+  "nolinebreak">C-x</span>&nbsp;`</kbd><!-- /@w --> finds no more
+  error messages to visit, it signals an error. <kbd><span class=
+  "nolinebreak">C-u</span>&nbsp;<span class=
+  "nolinebreak">C-x</span>&nbsp;`</kbd><!-- /@w --> starts again
+  from the beginning of the compilation buffer, and visits the
+  first locus.</p>
+
+  <p><kbd>M-g M-p</kbd> or <kbd>M-g p</kbd>
+  (<code>previous-error</code>) iterates through errors in the
+  opposite direction.</p>
+
+  <p>The <code>next-error</code> and <code>previous-error</code>
+  commands don&rsquo;t just act on the errors or matches listed in
+  <samp>*compilation*</samp> and <samp>*grep*</samp> buffers; they
+  also know how to iterate through error or match lists produced by
+  other commands, such as <kbd>M-x occur</kbd> (see <a href=
+  "Other-Repeating-Search.html#Other-Repeating-Search">Other
+  Repeating Search</a>). If you are already in a buffer containing
+  error messages or matches, those are the ones that are iterated
+  through; otherwise, Emacs looks for a buffer containing error
+  messages or matches amongst the windows of the selected frame,
+  then for one that <code>next-error</code> or
+  <code>previous-error</code> previously iterated through, and
+  finally amongst all other buffers. If the buffer chosen for
+  iterating through is not currently displayed in a window, it will
+  be displayed.</p><a name=
+  "index-compilation_002dskip_002dthreshold" id=
+  "index-compilation_002dskip_002dthreshold"></a>
+
+  <p>By default, the <code>next-error</code> and
+  <code>previous-error</code> commands skip less important
+  messages. The variable <code>compilation-skip-threshold</code>
+  controls this. The default value, 1, means to skip anything less
+  important than a warning. A value of 2 means to skip anything
+  less important than an error, while 0 means not to skip any
+  messages.</p>
+
+  <p>When Emacs visits the locus of an error message, it
+  momentarily highlights the relevant source line. The duration of
+  this highlight is determined by the variable
+  <code>next-error-highlight</code>.</p><a name=
+  "index-compilation_002dcontext_002dlines" id=
+  "index-compilation_002dcontext_002dlines"></a>
+
+  <p>If the <samp>*compilation*</samp> buffer is shown in a window
+  with a left fringe (see <a href=
+  "Fringes.html#Fringes">Fringes</a>), the locus-visiting commands
+  put an arrow in the fringe, pointing to the current error
+  message. If the window has no left fringe, such as on a text
+  terminal, these commands scroll the window so that the current
+  message is at the top of the window. If you change the variable
+  <code>compilation-context-lines</code> to an integer value
+  <var>n</var>, these commands scroll the window so that the
+  current error message is <var>n</var> lines from the top, whether
+  or not there is a fringe; the default value, <code>nil</code>,
+  gives the behavior described above.</p><a name=
+  "index-compilation_002derror_002dregexp_002dalist" id=
+  "index-compilation_002derror_002dregexp_002dalist"></a> <a name=
+  "index-grep_002dregexp_002dalist" id=
+  "index-grep_002dregexp_002dalist"></a>
+
+  <p>To parse messages from the compiler, Compilation mode uses the
+  variable <code>compilation-error-regexp-alist</code> which lists
+  various error message formats and tells Emacs how to extract the
+  locus from each. A similar variable,
+  <code>grep-regexp-alist</code>, tells Emacs how to parse output
+  from a <code>grep</code> command (see <a href=
+  "Grep-Searching.html#Grep-Searching">Grep
+  Searching</a>).</p><a name="index-compilation_002dnext_002derror"
+  id="index-compilation_002dnext_002derror"></a> <a name=
+  "index-compilation_002dprevious_002derror" id=
+  "index-compilation_002dprevious_002derror"></a> <a name=
+  "index-compilation_002dnext_002dfile" id=
+  "index-compilation_002dnext_002dfile"></a> <a name=
+  "index-compilation_002dprevious_002dfile" id=
+  "index-compilation_002dprevious_002dfile"></a>
+
+  <p>Compilation mode also defines the keys <tt class=
+  "key">SPC</tt> and <tt class="key">DEL</tt> to scroll by
+  screenfuls; <kbd>M-n</kbd> (<code>compilation-next-error</code>)
+  and <kbd>M-p</kbd> (<code>compilation-previous-error</code>) to
+  move to the next or previous error message; and <kbd>M-{</kbd>
+  (<code>compilation-next-file</code>) and <kbd>M-}</kbd>
+  (<code>compilation-previous-file</code>) to move to the next or
+  previous error message for a different source file.</p><a name=
+  "index-Next-Error-Follow-mode" id=
+  "index-Next-Error-Follow-mode"></a> <a name=
+  "index-next_002derror_002dfollow_002dminor_002dmode" id=
+  "index-next_002derror_002dfollow_002dminor_002dmode"></a>
+
+  <p>You can type <kbd>C-c C-f</kbd> to toggle Next Error Follow
+  mode. In this minor mode, ordinary cursor motion in the
+  compilation buffer automatically updates the source buffer, i.e.,
+  moving the cursor over an error message causes the locus of that
+  error to be displayed.</p>
+
+  <p>The features of Compilation mode are also available in a minor
+  mode called Compilation Minor mode. This lets you parse error
+  messages in any buffer, not just a normal compilation output
+  buffer. Type <kbd>M-x compilation-minor-mode</kbd> to enable the
+  minor mode. For instance, in an Rlogin buffer (see <a href=
+  "Remote-Host.html#Remote-Host">Remote Host</a>), Compilation
+  minor mode automatically accesses remote source files by FTP (see
+  <a href="File-Names.html#File-Names">File Names</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Compilation-Shell.html#Compilation-Shell"
+    accesskey="n" rel="next">Compilation Shell</a>, Previous:
+    <a href="Compilation.html#Compilation" accesskey="p" rel=
+    "prev">Compilation</a>, Up: <a href="Building.html#Building"
+    accesskey="u" rel="up">Building</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

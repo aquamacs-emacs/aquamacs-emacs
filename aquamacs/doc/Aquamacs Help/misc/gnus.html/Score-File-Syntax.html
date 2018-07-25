@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,143 +14,181 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Score File Syntax</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Score File Syntax">
-<meta name="keywords" content="Gnus Manual: Score File Syntax">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel="up" title="Gnus Reference Guide">
-<link href="Headers.html#Headers" rel="next" title="Headers">
-<link href="Mail_002dlike-Back-Ends.html#Mail_002dlike-Back-Ends" rel="prev" title="Mail-like Back Ends">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Score File Syntax</title>
+  <meta name="description" content=
+  "Gnus Manual: Score File Syntax" />
+  <meta name="keywords" content="Gnus Manual: Score File Syntax" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel=
+  "up" title="Gnus Reference Guide" />
+  <link href="Headers.html#Headers" rel="next" title="Headers" />
+  <link href="Mail_002dlike-Back-Ends.html#Mail_002dlike-Back-Ends"
+  rel="prev" title="Mail-like Back Ends" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Score-File-Syntax"></a>
-<div class="header">
-<p>
-Next: <a href="Headers.html#Headers" accesskey="n" rel="next">Headers</a>, Previous: <a href="Back-End-Interface.html#Back-End-Interface" accesskey="p" rel="prev">Back End Interface</a>, Up: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Score-File-Syntax-1"></a>
-<h4 class="subsection">11.7.3 Score File Syntax</h4>
+<body lang="en" xml:lang="en">
+  <a name="Score-File-Syntax" id="Score-File-Syntax"></a>
 
-<p>Score files are meant to be easily parsable, but yet extremely
-malleable.  It was decided that something that had the same read syntax
-as an Emacs Lisp list would fit that spec.
-</p>
-<p>Here&rsquo;s a typical score file:
-</p>
-<div class="lisp">
-<pre class="lisp">((&quot;summary&quot;
-  (&quot;Windows 95&quot; -10000 nil s)
-  (&quot;Gnus&quot;))
- (&quot;from&quot;
-  (&quot;Lars&quot; -1000))
+  <div class="header">
+    <p>Next: <a href="Headers.html#Headers" accesskey="n" rel=
+    "next">Headers</a>, Previous: <a href=
+    "Back-End-Interface.html#Back-End-Interface" accesskey="p" rel=
+    "prev">Back End Interface</a>, Up: <a href=
+    "Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u"
+    rel="up">Gnus Reference Guide</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Score-File-Syntax-1" id="Score-File-Syntax-1"></a>
+
+  <h4 class="subsection">11.7.3 Score File Syntax</h4>
+
+  <p>Score files are meant to be easily parsable, but yet extremely
+  malleable. It was decided that something that had the same read
+  syntax as an Emacs Lisp list would fit that spec.</p>
+
+  <p>Here&rsquo;s a typical score file:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(("summary"
+  ("Windows 95" -10000 nil s)
+  ("Gnus"))
+ ("from"
+  ("Lars" -1000))
  (mark -100))
-</pre></div>
+</pre>
+  </div>
 
-<p>BNF definition of a score file:
-</p>
-<div class="example">
-<pre class="example">score-file      = &quot;&quot; / &quot;(&quot; *element &quot;)&quot;
+  <p>BNF definition of a score file:</p>
+
+  <div class="example">
+    <pre class="example">
+score-file      = "" / "(" *element ")"
 element         = rule / atom
 rule            = string-rule / number-rule / date-rule
-string-rule     = &quot;(&quot; quote string-header quote space *string-match &quot;)&quot;
-number-rule     = &quot;(&quot; quote number-header quote space *number-match &quot;)&quot;
-date-rule       = &quot;(&quot; quote date-header quote space *date-match &quot;)&quot;
+string-rule     = "(" quote string-header quote space *string-match ")"
+number-rule     = "(" quote number-header quote space *number-match ")"
+date-rule       = "(" quote date-header quote space *date-match ")"
 quote           = &lt;ascii 34&gt;
-string-header   = &quot;subject&quot; / &quot;from&quot; / &quot;references&quot; / &quot;message-id&quot; /
-                  &quot;xref&quot; / &quot;body&quot; / &quot;head&quot; / &quot;all&quot; / &quot;followup&quot;
-number-header   = &quot;lines&quot; / &quot;chars&quot;
-date-header     = &quot;date&quot;
-string-match    = &quot;(&quot; quote &lt;string&gt; quote [ &quot;&quot; / [ space score [ &quot;&quot; /
-                  space date [ &quot;&quot; / [ space string-match-t ] ] ] ] ] &quot;)&quot;
-score           = &quot;nil&quot; / &lt;integer&gt;
-date            = &quot;nil&quot; / &lt;natural number&gt;
-string-match-t  = &quot;nil&quot; / &quot;s&quot; / &quot;substring&quot; / &quot;S&quot; / &quot;Substring&quot; /
-                  &quot;r&quot; / &quot;regex&quot; / &quot;R&quot; / &quot;Regex&quot; /
-                  &quot;e&quot; / &quot;exact&quot; / &quot;E&quot; / &quot;Exact&quot; /
-                  &quot;f&quot; / &quot;fuzzy&quot; / &quot;F&quot; / &quot;Fuzzy&quot;
-number-match    = &quot;(&quot; &lt;integer&gt; [ &quot;&quot; / [ space score [ &quot;&quot; /
-                  space date [ &quot;&quot; / [ space number-match-t ] ] ] ] ] &quot;)&quot;
-number-match-t  = &quot;nil&quot; / &quot;=&quot; / &quot;&lt;&quot; / &quot;&gt;&quot; / &quot;&gt;=&quot; / &quot;&lt;=&quot;
-date-match      = &quot;(&quot; quote &lt;string&gt; quote [ &quot;&quot; / [ space score [ &quot;&quot; /
-                  space date [ &quot;&quot; / [ space date-match-t ] ] ] ] &quot;)&quot;
-date-match-t    = &quot;nil&quot; / &quot;at&quot; / &quot;before&quot; / &quot;after&quot;
-atom            = &quot;(&quot; [ required-atom / optional-atom ] &quot;)&quot;
+string-header   = "subject" / "from" / "references" / "message-id" /
+                  "xref" / "body" / "head" / "all" / "followup"
+number-header   = "lines" / "chars"
+date-header     = "date"
+string-match    = "(" quote &lt;string&gt; quote [ "" / [ space score [ "" /
+                  space date [ "" / [ space string-match-t ] ] ] ] ] ")"
+score           = "nil" / &lt;integer&gt;
+date            = "nil" / &lt;natural number&gt;
+string-match-t  = "nil" / "s" / "substring" / "S" / "Substring" /
+                  "r" / "regex" / "R" / "Regex" /
+                  "e" / "exact" / "E" / "Exact" /
+                  "f" / "fuzzy" / "F" / "Fuzzy"
+number-match    = "(" &lt;integer&gt; [ "" / [ space score [ "" /
+                  space date [ "" / [ space number-match-t ] ] ] ] ] ")"
+number-match-t  = "nil" / "=" / "&lt;" / "&gt;" / "&gt;=" / "&lt;="
+date-match      = "(" quote &lt;string&gt; quote [ "" / [ space score [ "" /
+                  space date [ "" / [ space date-match-t ] ] ] ] ")"
+date-match-t    = "nil" / "at" / "before" / "after"
+atom            = "(" [ required-atom / optional-atom ] ")"
 required-atom   = mark / expunge / mark-and-expunge / files /
                   exclude-files / read-only / touched
 optional-atom   = adapt / local / eval
-mark            = &quot;mark&quot; space nil-or-number
-nil-or-number   = &quot;nil&quot; / &lt;integer&gt;
-expunge         = &quot;expunge&quot; space nil-or-number
-mark-and-expunge = &quot;mark-and-expunge&quot; space nil-or-number
-files           = &quot;files&quot; *[ space &lt;string&gt; ]
-exclude-files   = &quot;exclude-files&quot; *[ space &lt;string&gt; ]
-read-only       = &quot;read-only&quot; [ space &quot;nil&quot; / space &quot;t&quot; ]
-adapt        = &quot;adapt&quot; [ space &quot;ignore&quot; / space &quot;t&quot; / space adapt-rule ]
-adapt-rule      = &quot;(&quot; *[ &lt;string&gt; *[ &quot;(&quot; &lt;string&gt; &lt;integer&gt; &quot;)&quot; ] &quot;)&quot;
-local           = &quot;local&quot; *[ space &quot;(&quot; &lt;string&gt; space &lt;form&gt; &quot;)&quot; ]
-eval            = &quot;eval&quot; space &lt;form&gt;
-space           = *[ &quot; &quot; / &lt;TAB&gt; / &lt;NEWLINE&gt; ]
-</pre></div>
+mark            = "mark" space nil-or-number
+nil-or-number   = "nil" / &lt;integer&gt;
+expunge         = "expunge" space nil-or-number
+mark-and-expunge = "mark-and-expunge" space nil-or-number
+files           = "files" *[ space &lt;string&gt; ]
+exclude-files   = "exclude-files" *[ space &lt;string&gt; ]
+read-only       = "read-only" [ space "nil" / space "t" ]
+adapt        = "adapt" [ space "ignore" / space "t" / space adapt-rule ]
+adapt-rule      = "(" *[ &lt;string&gt; *[ "(" &lt;string&gt; &lt;integer&gt; ")" ] ")"
+local           = "local" *[ space "(" &lt;string&gt; space &lt;form&gt; ")" ]
+eval            = "eval" space &lt;form&gt;
+space           = *[ " " / &lt;TAB&gt; / &lt;NEWLINE&gt; ]
+</pre>
+  </div>
 
-<p>Any unrecognized elements in a score file should be ignored, but not
-discarded.
-</p>
-<p>As you can see, white space is needed, but the type and amount of white
-space is irrelevant.  This means that formatting of the score file is
-left up to the programmer&mdash;if it&rsquo;s simpler to just spew it all out on
-one looong line, then that&rsquo;s ok.
-</p>
-<p>The meaning of the various atoms are explained elsewhere in this
-manual (see <a href="Score-File-Format.html#Score-File-Format">Score File Format</a>).
-</p>
+  <p>Any unrecognized elements in a score file should be ignored,
+  but not discarded.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Headers.html#Headers" accesskey="n" rel="next">Headers</a>, Previous: <a href="Back-End-Interface.html#Back-End-Interface" accesskey="p" rel="prev">Back End Interface</a>, Up: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>As you can see, white space is needed, but the type and amount
+  of white space is irrelevant. This means that formatting of the
+  score file is left up to the programmer&mdash;if it&rsquo;s
+  simpler to just spew it all out on one looong line, then
+  that&rsquo;s ok.</p>
 
+  <p>The meaning of the various atoms are explained elsewhere in
+  this manual (see <a href=
+  "Score-File-Format.html#Score-File-Format">Score File
+  Format</a>).</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Headers.html#Headers" accesskey="n" rel=
+    "next">Headers</a>, Previous: <a href=
+    "Back-End-Interface.html#Back-End-Interface" accesskey="p" rel=
+    "prev">Back End Interface</a>, Up: <a href=
+    "Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u"
+    rel="up">Gnus Reference Guide</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

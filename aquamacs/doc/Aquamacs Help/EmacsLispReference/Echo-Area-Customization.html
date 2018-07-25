@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,116 +19,176 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Echo Area Customization</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Echo Area Customization">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Echo Area Customization">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-Echo-Area.html#The-Echo-Area" rel="up" title="The Echo Area">
-<link href="Warnings.html#Warnings" rel="next" title="Warnings">
-<link href="Logging-Messages.html#Logging-Messages" rel="prev" title="Logging Messages">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Echo Area
+  Customization</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Echo Area Customization" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Echo Area Customization" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-Echo-Area.html#The-Echo-Area" rel="up" title=
+  "The Echo Area" />
+  <link href="Warnings.html#Warnings" rel="next" title=
+  "Warnings" />
+  <link href="Logging-Messages.html#Logging-Messages" rel="prev"
+  title="Logging Messages" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Echo-Area-Customization" id=
+  "Echo-Area-Customization"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Logging-Messages.html#Logging-Messages"
+    accesskey="p" rel="prev">Logging Messages</a>, Up: <a href=
+    "The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The
+    Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Echo-Area-Customization-1" id=
+  "Echo-Area-Customization-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Echo-Area-Customization"></a>
-<div class="header">
-<p>
-Previous: <a href="Logging-Messages.html#Logging-Messages" accesskey="p" rel="prev">Logging Messages</a>, Up: <a href="The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Echo-Area-Customization-1"></a>
-<h4 class="subsection">37.4.4 Echo Area Customization</h4>
-<a name="index-echo-area-customization"></a>
+  <h4 class="subsection">37.4.4 Echo Area
+  Customization</h4><a name="index-echo-area-customization" id=
+  "index-echo-area-customization"></a>
 
-<p>These variables control details of how the echo area works.
-</p>
-<dl>
-<dt><a name="index-cursor_002din_002decho_002darea"></a>Variable: <strong>cursor-in-echo-area</strong></dt>
-<dd><p>This variable controls where the cursor appears when a message is
-displayed in the echo area.  If it is non-<code>nil</code>, then the cursor
-appears at the end of the message.  Otherwise, the cursor appears at
-point&mdash;not in the echo area at all.
-</p>
-<p>The value is normally <code>nil</code>; Lisp programs bind it to <code>t</code>
-for brief periods of time.
-</p></dd></dl>
+  <p>These variables control details of how the echo area
+  works.</p>
 
-<dl>
-<dt><a name="index-echo_002darea_002dclear_002dhook"></a>Variable: <strong>echo-area-clear-hook</strong></dt>
-<dd><p>This normal hook is run whenever the echo area is cleared&mdash;either by
-<code>(message nil)</code> or for any other reason.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cursor_002din_002decho_002darea" id=
+    "index-cursor_002din_002decho_002darea"></a>Variable:
+    <strong>cursor-in-echo-area</strong></dt>
 
-<dl>
-<dt><a name="index-echo_002dkeystrokes"></a>User Option: <strong>echo-keystrokes</strong></dt>
-<dd><p>This variable determines how much time should elapse before command
-characters echo.  Its value must be a number, and specifies the
-number of seconds to wait before echoing.  If the user types a prefix
-key (such as <kbd>C-x</kbd>) and then delays this many seconds before
-continuing, the prefix key is echoed in the echo area.  (Once echoing
-begins in a key sequence, all subsequent characters in the same key
-sequence are echoed immediately.)
-</p>
-<p>If the value is zero, then command input is not echoed.
-</p></dd></dl>
+    <dd>
+      <p>This variable controls where the cursor appears when a
+      message is displayed in the echo area. If it is
+      non-<code>nil</code>, then the cursor appears at the end of
+      the message. Otherwise, the cursor appears at point&mdash;not
+      in the echo area at all.</p>
 
-<dl>
-<dt><a name="index-message_002dtruncate_002dlines"></a>Variable: <strong>message-truncate-lines</strong></dt>
-<dd><p>Normally, displaying a long message resizes the echo area to display
-the entire message.  But if the variable <code>message-truncate-lines</code>
-is non-<code>nil</code>, the echo area does not resize, and the message is
-truncated to fit it.
-</p></dd></dl>
+      <p>The value is normally <code>nil</code>; Lisp programs bind
+      it to <code>t</code> for brief periods of time.</p>
+    </dd>
+  </dl>
 
-<p>The variable <code>max-mini-window-height</code>, which specifies the
-maximum height for resizing minibuffer windows, also applies to the
-echo area (which is really a special use of the minibuffer window;
-see <a href="Minibuffer-Misc.html#Minibuffer-Misc">Minibuffer Misc</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Logging-Messages.html#Logging-Messages" accesskey="p" rel="prev">Logging Messages</a>, Up: <a href="The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-echo_002darea_002dclear_002dhook" id=
+    "index-echo_002darea_002dclear_002dhook"></a>Variable:
+    <strong>echo-area-clear-hook</strong></dt>
 
+    <dd>
+      <p>This normal hook is run whenever the echo area is
+      cleared&mdash;either by <code>(message nil)</code> or for any
+      other reason.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-echo_002dkeystrokes" id=
+    "index-echo_002dkeystrokes"></a>User Option:
+    <strong>echo-keystrokes</strong></dt>
 
+    <dd>
+      <p>This variable determines how much time should elapse
+      before command characters echo. Its value must be a number,
+      and specifies the number of seconds to wait before echoing.
+      If the user types a prefix key (such as <kbd>C-x</kbd>) and
+      then delays this many seconds before continuing, the prefix
+      key is echoed in the echo area. (Once echoing begins in a key
+      sequence, all subsequent characters in the same key sequence
+      are echoed immediately.)</p>
+
+      <p>If the value is zero, then command input is not
+      echoed.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-message_002dtruncate_002dlines" id=
+    "index-message_002dtruncate_002dlines"></a>Variable:
+    <strong>message-truncate-lines</strong></dt>
+
+    <dd>
+      <p>Normally, displaying a long message resizes the echo area
+      to display the entire message. But if the variable
+      <code>message-truncate-lines</code> is non-<code>nil</code>,
+      the echo area does not resize, and the message is truncated
+      to fit it.</p>
+    </dd>
+  </dl>
+
+  <p>The variable <code>max-mini-window-height</code>, which
+  specifies the maximum height for resizing minibuffer windows,
+  also applies to the echo area (which is really a special use of
+  the minibuffer window; see <a href=
+  "Minibuffer-Misc.html#Minibuffer-Misc">Minibuffer Misc</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Logging-Messages.html#Logging-Messages"
+    accesskey="p" rel="prev">Logging Messages</a>, Up: <a href=
+    "The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The
+    Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

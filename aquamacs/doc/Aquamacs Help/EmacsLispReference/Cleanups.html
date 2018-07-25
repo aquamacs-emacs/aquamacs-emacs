@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,156 +19,218 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Cleanups</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Cleanups">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Cleanups">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Nonlocal-Exits.html#Nonlocal-Exits" rel="up" title="Nonlocal Exits">
-<link href="Variables.html#Variables" rel="next" title="Variables">
-<link href="Error-Symbols.html#Error-Symbols" rel="prev" title="Error Symbols">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Cleanups</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Cleanups" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Cleanups" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Nonlocal-Exits.html#Nonlocal-Exits" rel="up" title=
+  "Nonlocal Exits" />
+  <link href="Variables.html#Variables" rel="next" title=
+  "Variables" />
+  <link href="Error-Symbols.html#Error-Symbols" rel="prev" title=
+  "Error Symbols" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Cleanups" id="Cleanups"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Errors.html#Errors" accesskey="p" rel=
+    "prev">Errors</a>, Up: <a href=
+    "Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel=
+    "up">Nonlocal Exits</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Cleaning-Up-from-Nonlocal-Exits" id=
+  "Cleaning-Up-from-Nonlocal-Exits"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Cleanups"></a>
-<div class="header">
-<p>
-Previous: <a href="Errors.html#Errors" accesskey="p" rel="prev">Errors</a>, Up: <a href="Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel="up">Nonlocal Exits</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Cleaning-Up-from-Nonlocal-Exits"></a>
-<h4 class="subsection">10.6.4 Cleaning Up from Nonlocal Exits</h4>
-<a name="index-nonlocal-exits_002c-cleaning-up"></a>
+  <h4 class="subsection">10.6.4 Cleaning Up from Nonlocal
+  Exits</h4><a name="index-nonlocal-exits_002c-cleaning-up" id=
+  "index-nonlocal-exits_002c-cleaning-up"></a>
 
-<p>The <code>unwind-protect</code> construct is essential whenever you
-temporarily put a data structure in an inconsistent state; it permits
-you to make the data consistent again in the event of an error or
-throw.  (Another more specific cleanup construct that is used only for
-changes in buffer contents is the atomic change group; <a href="Atomic-Changes.html#Atomic-Changes">Atomic Changes</a>.)
-</p>
-<dl>
-<dt><a name="index-unwind_002dprotect"></a>Special Form: <strong>unwind-protect</strong> <em>body-form cleanup-forms&hellip;</em></dt>
-<dd><a name="index-cleanup-forms"></a>
-<a name="index-protected-forms"></a>
-<a name="index-error-cleanup"></a>
-<a name="index-unwinding"></a>
-<p><code>unwind-protect</code> executes <var>body-form</var> with a guarantee that
-the <var>cleanup-forms</var> will be evaluated if control leaves
-<var>body-form</var>, no matter how that happens.  <var>body-form</var> may
-complete normally, or execute a <code>throw</code> out of the
-<code>unwind-protect</code>, or cause an error; in all cases, the
-<var>cleanup-forms</var> will be evaluated.
-</p>
-<p>If <var>body-form</var> finishes normally, <code>unwind-protect</code> returns the
-value of <var>body-form</var>, after it evaluates the <var>cleanup-forms</var>.
-If <var>body-form</var> does not finish, <code>unwind-protect</code> does not
-return any value in the normal sense.
-</p>
-<p>Only <var>body-form</var> is protected by the <code>unwind-protect</code>.  If any
-of the <var>cleanup-forms</var> themselves exits nonlocally (via a
-<code>throw</code> or an error), <code>unwind-protect</code> is <em>not</em>
-guaranteed to evaluate the rest of them.  If the failure of one of the
-<var>cleanup-forms</var> has the potential to cause trouble, then protect
-it with another <code>unwind-protect</code> around that form.
-</p>
-<p>The number of currently active <code>unwind-protect</code> forms counts,
-together with the number of local variable bindings, against the limit
-<code>max-specpdl-size</code> (see <a href="Local-Variables.html#Definition-of-max_002dspecpdl_002dsize">Local
-Variables</a>).
-</p></dd></dl>
+  <p>The <code>unwind-protect</code> construct is essential
+  whenever you temporarily put a data structure in an inconsistent
+  state; it permits you to make the data consistent again in the
+  event of an error or throw. (Another more specific cleanup
+  construct that is used only for changes in buffer contents is the
+  atomic change group; <a href=
+  "Atomic-Changes.html#Atomic-Changes">Atomic Changes</a>.)</p>
 
-<p>For example, here we make an invisible buffer for temporary use, and
-make sure to kill it before finishing:
-</p>
-<div class="example">
-<pre class="example">(let ((buffer (get-buffer-create &quot; *temp*&quot;)))
+  <dl>
+    <dt><a name="index-unwind_002dprotect" id=
+    "index-unwind_002dprotect"></a>Special Form:
+    <strong>unwind-protect</strong> <em>body-form
+    cleanup-forms&hellip;</em></dt>
+
+    <dd>
+      <a name="index-cleanup-forms" id="index-cleanup-forms"></a>
+      <a name="index-protected-forms" id=
+      "index-protected-forms"></a> <a name="index-error-cleanup"
+      id="index-error-cleanup"></a> <a name="index-unwinding" id=
+      "index-unwinding"></a>
+
+      <p><code>unwind-protect</code> executes <var>body-form</var>
+      with a guarantee that the <var>cleanup-forms</var> will be
+      evaluated if control leaves <var>body-form</var>, no matter
+      how that happens. <var>body-form</var> may complete normally,
+      or execute a <code>throw</code> out of the
+      <code>unwind-protect</code>, or cause an error; in all cases,
+      the <var>cleanup-forms</var> will be evaluated.</p>
+
+      <p>If <var>body-form</var> finishes normally,
+      <code>unwind-protect</code> returns the value of
+      <var>body-form</var>, after it evaluates the
+      <var>cleanup-forms</var>. If <var>body-form</var> does not
+      finish, <code>unwind-protect</code> does not return any value
+      in the normal sense.</p>
+
+      <p>Only <var>body-form</var> is protected by the
+      <code>unwind-protect</code>. If any of the
+      <var>cleanup-forms</var> themselves exits nonlocally (via a
+      <code>throw</code> or an error), <code>unwind-protect</code>
+      is <em>not</em> guaranteed to evaluate the rest of them. If
+      the failure of one of the <var>cleanup-forms</var> has the
+      potential to cause trouble, then protect it with another
+      <code>unwind-protect</code> around that form.</p>
+
+      <p>The number of currently active <code>unwind-protect</code>
+      forms counts, together with the number of local variable
+      bindings, against the limit <code>max-specpdl-size</code>
+      (see <a href=
+      "Local-Variables.html#Definition-of-max_002dspecpdl_002dsize">
+      Local Variables</a>).</p>
+    </dd>
+  </dl>
+
+  <p>For example, here we make an invisible buffer for temporary
+  use, and make sure to kill it before finishing:</p>
+
+  <div class="example">
+    <pre class="example">
+(let ((buffer (get-buffer-create " *temp*")))
   (with-current-buffer buffer
     (unwind-protect
         <var>body-form</var>
       (kill-buffer buffer))))
-</pre></div>
+</pre>
+  </div>
 
-<p>You might think that we could just as well write <code>(kill-buffer
-(current-buffer))</code> and dispense with the variable <code>buffer</code>.
-However, the way shown above is safer, if <var>body-form</var> happens to
-get an error after switching to a different buffer!  (Alternatively,
-you could write a <code>save-current-buffer</code> around <var>body-form</var>,
-to ensure that the temporary buffer becomes current again in time to
-kill it.)
-</p>
-<p>Emacs includes a standard macro called <code>with-temp-buffer</code> which
-expands into more or less the code shown above (see <a href="Current-Buffer.html#Definition-of-with_002dtemp_002dbuffer">Current Buffer</a>).  Several of the macros defined in
-this manual use <code>unwind-protect</code> in this way.
-</p>
-<a name="index-ftp_002dlogin"></a>
-<p>Here is an actual example derived from an FTP package.  It creates a
-process (see <a href="Processes.html#Processes">Processes</a>) to try to establish a connection to a remote
-machine.  As the function <code>ftp-login</code> is highly susceptible to
-numerous problems that the writer of the function cannot anticipate, it
-is protected with a form that guarantees deletion of the process in the
-event of failure.  Otherwise, Emacs might fill up with useless
-subprocesses.
-</p>
-<div class="example">
-<pre class="example">(let ((win nil))
+  <p>You might think that we could just as well write
+  <code>(kill-buffer (current-buffer))</code> and dispense with the
+  variable <code>buffer</code>. However, the way shown above is
+  safer, if <var>body-form</var> happens to get an error after
+  switching to a different buffer! (Alternatively, you could write
+  a <code>save-current-buffer</code> around <var>body-form</var>,
+  to ensure that the temporary buffer becomes current again in time
+  to kill it.)</p>
+
+  <p>Emacs includes a standard macro called
+  <code>with-temp-buffer</code> which expands into more or less the
+  code shown above (see <a href=
+  "Current-Buffer.html#Definition-of-with_002dtemp_002dbuffer">Current
+  Buffer</a>). Several of the macros defined in this manual use
+  <code>unwind-protect</code> in this way.</p><a name=
+  "index-ftp_002dlogin" id="index-ftp_002dlogin"></a>
+
+  <p>Here is an actual example derived from an FTP package. It
+  creates a process (see <a href=
+  "Processes.html#Processes">Processes</a>) to try to establish a
+  connection to a remote machine. As the function
+  <code>ftp-login</code> is highly susceptible to numerous problems
+  that the writer of the function cannot anticipate, it is
+  protected with a form that guarantees deletion of the process in
+  the event of failure. Otherwise, Emacs might fill up with useless
+  subprocesses.</p>
+
+  <div class="example">
+    <pre class="example">
+(let ((win nil))
   (unwind-protect
       (progn
         (setq process (ftp-setup-buffer host file))
         (if (setq win (ftp-login process host user password))
-            (message &quot;Logged in&quot;)
-          (error &quot;Ftp login failed&quot;)))
+            (message "Logged in")
+          (error "Ftp login failed")))
     (or win (and process (delete-process process)))))
-</pre></div>
+</pre>
+  </div>
 
-<p>This example has a small bug: if the user types <kbd>C-g</kbd> to
-quit, and the quit happens immediately after the function
-<code>ftp-setup-buffer</code> returns but before the variable <code>process</code> is
-set, the process will not be killed.  There is no easy way to fix this bug,
-but at least it is very unlikely.
-</p><hr>
-<div class="header">
-<p>
-Previous: <a href="Errors.html#Errors" accesskey="p" rel="prev">Errors</a>, Up: <a href="Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel="up">Nonlocal Exits</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>This example has a small bug: if the user types <kbd>C-g</kbd>
+  to quit, and the quit happens immediately after the function
+  <code>ftp-setup-buffer</code> returns but before the variable
+  <code>process</code> is set, the process will not be killed.
+  There is no easy way to fix this bug, but at least it is very
+  unlikely.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Previous: <a href="Errors.html#Errors" accesskey="p" rel=
+    "prev">Errors</a>, Up: <a href=
+    "Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel=
+    "up">Nonlocal Exits</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

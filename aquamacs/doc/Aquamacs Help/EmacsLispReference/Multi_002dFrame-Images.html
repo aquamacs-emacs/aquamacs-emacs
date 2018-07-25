@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,135 +19,205 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Multi-Frame Images</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Multi-Frame Images">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Multi-Frame Images">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Images.html#Images" rel="up" title="Images">
-<link href="Image-Cache.html#Image-Cache" rel="next" title="Image Cache">
-<link href="Showing-Images.html#Showing-Images" rel="prev" title="Showing Images">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Multi-Frame
+  Images</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Multi-Frame Images" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Multi-Frame Images" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Images.html#Images" rel="up" title="Images" />
+  <link href="Image-Cache.html#Image-Cache" rel="next" title=
+  "Image Cache" />
+  <link href="Showing-Images.html#Showing-Images" rel="prev" title=
+  "Showing Images" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Multi_002dFrame-Images" id="Multi_002dFrame-Images"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Image-Cache.html#Image-Cache" accesskey="n"
+    rel="next">Image Cache</a>, Previous: <a href=
+    "Showing-Images.html#Showing-Images" accesskey="p" rel=
+    "prev">Showing Images</a>, Up: <a href="Images.html#Images"
+    accesskey="u" rel="up">Images</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Multi_002dFrame-Images-1" id=
+  "Multi_002dFrame-Images-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Multi_002dFrame-Images"></a>
-<div class="header">
-<p>
-Next: <a href="Image-Cache.html#Image-Cache" accesskey="n" rel="next">Image Cache</a>, Previous: <a href="Showing-Images.html#Showing-Images" accesskey="p" rel="prev">Showing Images</a>, Up: <a href="Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Multi_002dFrame-Images-1"></a>
-<h4 class="subsection">37.17.10 Multi-Frame Images</h4>
-<a name="index-multi_002dframe-images"></a>
+  <h4 class="subsection">37.17.10 Multi-Frame Images</h4><a name=
+  "index-multi_002dframe-images" id=
+  "index-multi_002dframe-images"></a> <a name="index-animation" id=
+  "index-animation"></a> <a name="index-image-animation" id=
+  "index-image-animation"></a> <a name="index-image-frames" id=
+  "index-image-frames"></a>
 
-<a name="index-animation"></a>
-<a name="index-image-animation"></a>
-<a name="index-image-frames"></a>
-<p>Some image files can contain more than one image.  We say that there
-are multiple &ldquo;frames&rdquo; in the image.  At present, Emacs supports
-multiple frames for GIF, TIFF, and certain ImageMagick formats such as
-DJVM.
-</p>
-<p>The frames can be used either to represent multiple pages (this is
-usually the case with multi-frame TIFF files, for example), or to
-create animation (usually the case with multi-frame GIF files).
-</p>
-<p>A multi-frame image has a property <code>:index</code>, whose value is an
-integer (counting from 0) that specifies which frame is being displayed.
-</p>
-<dl>
-<dt><a name="index-image_002dmulti_002dframe_002dp"></a>Function: <strong>image-multi-frame-p</strong> <em>image</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>image</var> contains more than
-one frame.  The actual return value is a cons <code>(<var>nimages</var>
-. <var>delay</var>)</code>, where <var>nimages</var> is the number of frames and
-<var>delay</var> is the delay in seconds between them, or <code>nil</code>
-if the image does not specify a delay.  Images that are intended to be
-animated usually specify a frame delay, whereas ones that are intended
-to be treated as multiple pages do not.
-</p></dd></dl>
+  <p>Some image files can contain more than one image. We say that
+  there are multiple &ldquo;frames&rdquo; in the image. At present,
+  Emacs supports multiple frames for GIF, TIFF, and certain
+  ImageMagick formats such as DJVM.</p>
 
-<dl>
-<dt><a name="index-image_002dcurrent_002dframe"></a>Function: <strong>image-current-frame</strong> <em>image</em></dt>
-<dd><p>This function returns the index of the current frame number for
-<var>image</var>, counting from 0.
-</p></dd></dl>
+  <p>The frames can be used either to represent multiple pages
+  (this is usually the case with multi-frame TIFF files, for
+  example), or to create animation (usually the case with
+  multi-frame GIF files).</p>
 
-<dl>
-<dt><a name="index-image_002dshow_002dframe"></a>Function: <strong>image-show-frame</strong> <em>image n &amp;optional nocheck</em></dt>
-<dd><p>This function switches <var>image</var> to frame number <var>n</var>.  It
-replaces a frame number outside the valid range with that of the end
-of the range, unless <var>nocheck</var> is non-<code>nil</code>.  If <var>image</var>
-does not contain a frame with the specified number, the image displays
-as a hollow box.
-</p></dd></dl>
+  <p>A multi-frame image has a property <code>:index</code>, whose
+  value is an integer (counting from 0) that specifies which frame
+  is being displayed.</p>
 
-<dl>
-<dt><a name="index-image_002danimate"></a>Function: <strong>image-animate</strong> <em>image &amp;optional index limit</em></dt>
-<dd><p>This function animates <var>image</var>.  The optional integer <var>index</var>
-specifies the frame from which to start (default 0).  The optional
-argument <var>limit</var> controls the length of the animation.  If omitted
-or <code>nil</code>, the image animates once only; if <code>t</code> it loops
-forever; if a number animation stops after that many seconds.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-image_002dmulti_002dframe_002dp" id=
+    "index-image_002dmulti_002dframe_002dp"></a>Function:
+    <strong>image-multi-frame-p</strong> <em>image</em></dt>
 
-<a name="index-image_002dminimum_002dframe_002ddelay"></a>
-<a name="index-image_002ddefault_002dframe_002ddelay"></a>
-<p>Animation operates by means of a timer.  Note that Emacs imposes a
-minimum frame delay of 0.01 (<code>image-minimum-frame-delay</code>) seconds.
-If the image itself does not specify a delay, Emacs uses
-<code>image-default-frame-delay</code>.
-</p>
-<dl>
-<dt><a name="index-image_002danimate_002dtimer"></a>Function: <strong>image-animate-timer</strong> <em>image</em></dt>
-<dd><p>This function returns the timer responsible for animating <var>image</var>,
-if there is one.
-</p></dd></dl>
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>image</var> contains more than one frame. The actual
+      return value is a cons <code>(<var>nimages</var> .
+      <var>delay</var>)</code>, where <var>nimages</var> is the
+      number of frames and <var>delay</var> is the delay in seconds
+      between them, or <code>nil</code> if the image does not
+      specify a delay. Images that are intended to be animated
+      usually specify a frame delay, whereas ones that are intended
+      to be treated as multiple pages do not.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-image_002dcurrent_002dframe" id=
+    "index-image_002dcurrent_002dframe"></a>Function:
+    <strong>image-current-frame</strong> <em>image</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Image-Cache.html#Image-Cache" accesskey="n" rel="next">Image Cache</a>, Previous: <a href="Showing-Images.html#Showing-Images" accesskey="p" rel="prev">Showing Images</a>, Up: <a href="Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns the index of the current frame
+      number for <var>image</var>, counting from 0.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-image_002dshow_002dframe" id=
+    "index-image_002dshow_002dframe"></a>Function:
+    <strong>image-show-frame</strong> <em>image n &amp;optional
+    nocheck</em></dt>
 
+    <dd>
+      <p>This function switches <var>image</var> to frame number
+      <var>n</var>. It replaces a frame number outside the valid
+      range with that of the end of the range, unless
+      <var>nocheck</var> is non-<code>nil</code>. If
+      <var>image</var> does not contain a frame with the specified
+      number, the image displays as a hollow box.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-image_002danimate" id=
+    "index-image_002danimate"></a>Function:
+    <strong>image-animate</strong> <em>image &amp;optional index
+    limit</em></dt>
+
+    <dd>
+      <p>This function animates <var>image</var>. The optional
+      integer <var>index</var> specifies the frame from which to
+      start (default 0). The optional argument <var>limit</var>
+      controls the length of the animation. If omitted or
+      <code>nil</code>, the image animates once only; if
+      <code>t</code> it loops forever; if a number animation stops
+      after that many seconds.</p>
+    </dd>
+  </dl><a name="index-image_002dminimum_002dframe_002ddelay" id=
+  "index-image_002dminimum_002dframe_002ddelay"></a> <a name=
+  "index-image_002ddefault_002dframe_002ddelay" id=
+  "index-image_002ddefault_002dframe_002ddelay"></a>
+
+  <p>Animation operates by means of a timer. Note that Emacs
+  imposes a minimum frame delay of 0.01
+  (<code>image-minimum-frame-delay</code>) seconds. If the image
+  itself does not specify a delay, Emacs uses
+  <code>image-default-frame-delay</code>.</p>
+
+  <dl>
+    <dt><a name="index-image_002danimate_002dtimer" id=
+    "index-image_002danimate_002dtimer"></a>Function:
+    <strong>image-animate-timer</strong> <em>image</em></dt>
+
+    <dd>
+      <p>This function returns the timer responsible for animating
+      <var>image</var>, if there is one.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Image-Cache.html#Image-Cache" accesskey="n"
+    rel="next">Image Cache</a>, Previous: <a href=
+    "Showing-Images.html#Showing-Images" accesskey="p" rel=
+    "prev">Showing Images</a>, Up: <a href="Images.html#Images"
+    accesskey="u" rel="up">Images</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

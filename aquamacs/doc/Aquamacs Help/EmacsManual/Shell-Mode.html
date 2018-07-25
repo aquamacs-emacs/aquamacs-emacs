@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,304 +20,476 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Shell Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Shell Mode">
-<meta name="keywords" content="GNU Emacs Manual: Shell Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Shell.html#Shell" rel="up" title="Shell">
-<link href="Shell-Prompts.html#Shell-Prompts" rel="next" title="Shell Prompts">
-<link href="Interactive-Shell.html#Interactive-Shell" rel="prev" title="Interactive Shell">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Shell Mode</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Shell Mode" />
+  <meta name="keywords" content="GNU Emacs Manual: Shell Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Shell.html#Shell" rel="up" title="Shell" />
+  <link href="Shell-Prompts.html#Shell-Prompts" rel="next" title=
+  "Shell Prompts" />
+  <link href="Interactive-Shell.html#Interactive-Shell" rel="prev"
+  title="Interactive Shell" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Shell-Mode" id="Shell-Mode"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Shell-Prompts.html#Shell-Prompts" accesskey=
+    "n" rel="next">Shell Prompts</a>, Previous: <a href=
+    "Interactive-Shell.html#Interactive-Shell" accesskey="p" rel=
+    "prev">Interactive Shell</a>, Up: <a href="Shell.html#Shell"
+    accesskey="u" rel="up">Shell</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Shell-Mode-1" id="Shell-Mode-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Shell-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="Shell-Prompts.html#Shell-Prompts" accesskey="n" rel="next">Shell Prompts</a>, Previous: <a href="Interactive-Shell.html#Interactive-Shell" accesskey="p" rel="prev">Interactive Shell</a>, Up: <a href="Shell.html#Shell" accesskey="u" rel="up">Shell</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Shell-Mode-1"></a>
-<h3 class="section">40.3 Shell Mode</h3>
-<a name="index-Shell-mode"></a>
-<a name="index-mode_002c-Shell"></a>
+  <h3 class="section">40.3 Shell Mode</h3><a name=
+  "index-Shell-mode" id="index-Shell-mode"></a> <a name=
+  "index-mode_002c-Shell" id="index-mode_002c-Shell"></a>
 
-<p>The major mode for Shell buffers is Shell mode.  Many of its special
-commands are bound to the <kbd>C-c</kbd> prefix, and resemble the usual
-editing and job control characters present in ordinary shells, except
-that you must type <kbd>C-c</kbd> first.  Here is a list of Shell mode
-commands:
-</p>
-<dl compact="compact">
-<dt><kbd><span class="key">RET</span></kbd></dt>
-<dd><a name="index-RET-_0028Shell-mode_0029"></a>
-<a name="index-comint_002dsend_002dinput"></a>
-<p>Send the current line as input to the subshell
-(<code>comint-send-input</code>).  Any shell prompt at the beginning of the
-line is omitted (see <a href="Shell-Prompts.html#Shell-Prompts">Shell Prompts</a>).  If point is at the end of
-buffer, this is like submitting the command line in an ordinary
-interactive shell.  However, you can also invoke <tt class="key">RET</tt> elsewhere
-in the shell buffer to submit the current line as input.
-</p>
-</dd>
-<dt><kbd><span class="key">TAB</span></kbd></dt>
-<dd><a name="index-TAB-_0028Shell-mode_0029"></a>
-<a name="index-completion_002dat_002dpoint-1"></a>
-<a name="index-shell-completion"></a>
-<p>Complete the command name or file name before point in the shell
-buffer (<code>completion-at-point</code>).  This uses the usual Emacs
-completion rules (see <a href="Completion.html#Completion">Completion</a>), with the completion
-alternatives being file names, environment variable names, the shell
-command history, and history references (see <a href="History-References.html#History-References">History References</a>).
-For options controlling the completion, see <a href="Shell-Options.html#Shell-Options">Shell Options</a>.
-</p>
-</dd>
-<dt><kbd>M-?</kbd></dt>
-<dd><a name="index-M_002d_003f-_0028Shell-mode_0029"></a>
-<a name="index-comint_002ddynamic_002dlist_002dfilename_2026"></a>
-<p>Display temporarily a list of the possible completions of the file
-name before point (<code>comint-dynamic-list-filename-completions</code>).
-</p>
-</dd>
-<dt><kbd>C-d</kbd></dt>
-<dd><a name="index-C_002dd-_0028Shell-mode_0029"></a>
-<a name="index-comint_002ddelchar_002dor_002dmaybe_002deof"></a>
-<p>Either delete a character or send <acronym>EOF</acronym>
-(<code>comint-delchar-or-maybe-eof</code>).  Typed at the end of the shell
-buffer, this sends <acronym>EOF</acronym> to the subshell.  Typed at any other
-position in the buffer, this deletes a character as usual.
-</p>
-</dd>
-<dt><kbd>C-c C-a</kbd></dt>
-<dd><a name="index-C_002dc-C_002da-_0028Shell-mode_0029"></a>
-<a name="index-comint_002dbol_002dor_002dprocess_002dmark"></a>
-<p>Move to the beginning of the line, but after the prompt if any
-(<code>comint-bol-or-process-mark</code>).  If you repeat this command twice
-in a row, the second time it moves back to the process mark, which is
-the beginning of the input that you have not yet sent to the subshell.
-(Normally that is the same place&mdash;the end of the prompt on this
-line&mdash;but after <kbd>C-c <span class="key">SPC</span></kbd> the process mark may be in a
-previous line.)
-</p>
-</dd>
-<dt><kbd>C-c <span class="key">SPC</span></kbd></dt>
-<dd><p>Accumulate multiple lines of input, then send them together.  This
-command inserts a newline before point, but does not send the preceding
-text as input to the subshell&mdash;at least, not yet.  Both lines, the one
-before this newline and the one after, will be sent together (along with
-the newline that separates them), when you type <tt class="key">RET</tt>.
-</p>
-</dd>
-<dt><kbd>C-c C-u</kbd></dt>
-<dd><a name="index-C_002dc-C_002du-_0028Shell-mode_0029"></a>
-<a name="index-comint_002dkill_002dinput"></a>
-<p>Kill all text pending at end of buffer to be sent as input
-(<code>comint-kill-input</code>).  If point is not at end of buffer,
-this only kills the part of this text that precedes point.
-</p>
-</dd>
-<dt><kbd>C-c C-w</kbd></dt>
-<dd><a name="index-C_002dc-C_002dw-_0028Shell-mode_0029"></a>
-<p>Kill a word before point (<code>backward-kill-word</code>).
-</p>
-</dd>
-<dt><kbd>C-c C-c</kbd></dt>
-<dd><a name="index-C_002dc-C_002dc-_0028Shell-mode_0029"></a>
-<a name="index-comint_002dinterrupt_002dsubjob"></a>
-<p>Interrupt the shell or its current subjob if any
-(<code>comint-interrupt-subjob</code>).  This command also kills
-any shell input pending in the shell buffer and not yet sent.
-</p>
-</dd>
-<dt><kbd>C-c C-z</kbd></dt>
-<dd><a name="index-C_002dc-C_002dz-_0028Shell-mode_0029"></a>
-<a name="index-comint_002dstop_002dsubjob"></a>
-<p>Stop the shell or its current subjob if any (<code>comint-stop-subjob</code>).
-This command also kills any shell input pending in the shell buffer and
-not yet sent.
-</p>
-</dd>
-<dt><kbd>C-c C-\</kbd></dt>
-<dd><a name="index-comint_002dquit_002dsubjob"></a>
-<a name="index-C_002dc-C_002d_005c-_0028Shell-mode_0029"></a>
-<p>Send quit signal to the shell or its current subjob if any
-(<code>comint-quit-subjob</code>).  This command also kills any shell input
-pending in the shell buffer and not yet sent.
-</p>
-</dd>
-<dt><kbd>C-c C-o</kbd></dt>
-<dd><a name="index-C_002dc-C_002do-_0028Shell-mode_0029"></a>
-<a name="index-comint_002ddelete_002doutput"></a>
-<p>Delete the last batch of output from a shell command
-(<code>comint-delete-output</code>).  This is useful if a shell command spews
-out lots of output that just gets in the way.
-</p>
-</dd>
-<dt><kbd>C-c C-s</kbd></dt>
-<dd><a name="index-C_002dc-C_002ds-_0028Shell-mode_0029"></a>
-<a name="index-comint_002dwrite_002doutput"></a>
-<p>Write the last batch of output from a shell command to a file
-(<code>comint-write-output</code>).  With a prefix argument, the file is
-appended to instead.  Any prompt at the end of the output is not
-written.
-</p>
-</dd>
-<dt><kbd>C-c C-r</kbd></dt>
-<dt><kbd>C-M-l</kbd></dt>
-<dd><a name="index-C_002dc-C_002dr-_0028Shell-mode_0029"></a>
-<a name="index-C_002dM_002dl-_0028Shell-mode_0029"></a>
-<a name="index-comint_002dshow_002doutput"></a>
-<p>Scroll to display the beginning of the last batch of output at the top
-of the window; also move the cursor there (<code>comint-show-output</code>).
-</p>
-</dd>
-<dt><kbd>C-c C-e</kbd></dt>
-<dd><a name="index-C_002dc-C_002de-_0028Shell-mode_0029"></a>
-<a name="index-comint_002dshow_002dmaximum_002doutput"></a>
-<p>Scroll to put the end of the buffer at the bottom of the window
-(<code>comint-show-maximum-output</code>).
-</p>
-</dd>
-<dt><kbd>C-c C-f</kbd></dt>
-<dd><a name="index-C_002dc-C_002df-_0028Shell-mode_0029"></a>
-<a name="index-shell_002dforward_002dcommand"></a>
-<a name="index-shell_002dcommand_002dregexp"></a>
-<p>Move forward across one shell command, but not beyond the current line
-(<code>shell-forward-command</code>).  The variable <code>shell-command-regexp</code>
-specifies how to recognize the end of a command.
-</p>
-</dd>
-<dt><kbd>C-c C-b</kbd></dt>
-<dd><a name="index-C_002dc-C_002db-_0028Shell-mode_0029"></a>
-<a name="index-shell_002dbackward_002dcommand"></a>
-<p>Move backward across one shell command, but not beyond the current line
-(<code>shell-backward-command</code>).
-</p>
-</dd>
-<dt><kbd>M-x dirs</kbd></dt>
-<dd><p>Ask the shell for its working directory, and update the Shell buffer&rsquo;s
-default directory.  See <a href="Directory-Tracking.html#Directory-Tracking">Directory Tracking</a>.
-</p>
-</dd>
-<dt><kbd>M-x send-invisible <span class="key">RET</span> <var>text</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-send_002dinvisible"></a>
-<p>Send <var>text</var> as input to the shell, after reading it without
-echoing.  This is useful when a shell command runs a program that asks
-for a password.
-</p>
-<p>Please note that Emacs will not echo passwords by default.  If you
-really want them to be echoed, evaluate (see <a href="Lisp-Eval.html#Lisp-Eval">Lisp Eval</a>) the
-following Lisp expression:
-</p>
-<div class="example">
-<pre class="example">(remove-hook 'comint-output-filter-functions
+  <p>The major mode for Shell buffers is Shell mode. Many of its
+  special commands are bound to the <kbd>C-c</kbd> prefix, and
+  resemble the usual editing and job control characters present in
+  ordinary shells, except that you must type <kbd>C-c</kbd> first.
+  Here is a list of Shell mode commands:</p>
+
+  <dl compact="compact">
+    <dt><kbd><span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <a name="index-RET-_0028Shell-mode_0029" id=
+      "index-RET-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002dsend_002dinput" id=
+      "index-comint_002dsend_002dinput"></a>
+
+      <p>Send the current line as input to the subshell
+      (<code>comint-send-input</code>). Any shell prompt at the
+      beginning of the line is omitted (see <a href=
+      "Shell-Prompts.html#Shell-Prompts">Shell Prompts</a>). If
+      point is at the end of buffer, this is like submitting the
+      command line in an ordinary interactive shell. However, you
+      can also invoke <tt class="key">RET</tt> elsewhere in the
+      shell buffer to submit the current line as input.</p>
+    </dd>
+
+    <dt><kbd><span class="key">TAB</span></kbd></dt>
+
+    <dd>
+      <a name="index-TAB-_0028Shell-mode_0029" id=
+      "index-TAB-_0028Shell-mode_0029"></a> <a name=
+      "index-completion_002dat_002dpoint-1" id=
+      "index-completion_002dat_002dpoint-1"></a> <a name=
+      "index-shell-completion" id="index-shell-completion"></a>
+
+      <p>Complete the command name or file name before point in the
+      shell buffer (<code>completion-at-point</code>). This uses
+      the usual Emacs completion rules (see <a href=
+      "Completion.html#Completion">Completion</a>), with the
+      completion alternatives being file names, environment
+      variable names, the shell command history, and history
+      references (see <a href=
+      "History-References.html#History-References">History
+      References</a>). For options controlling the completion, see
+      <a href="Shell-Options.html#Shell-Options">Shell
+      Options</a>.</p>
+    </dd>
+
+    <dt><kbd>M-?</kbd></dt>
+
+    <dd>
+      <a name="index-M_002d_003f-_0028Shell-mode_0029" id=
+      "index-M_002d_003f-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002ddynamic_002dlist_002dfilename_2026" id=
+      "index-comint_002ddynamic_002dlist_002dfilename_2026"></a>
+
+      <p>Display temporarily a list of the possible completions of
+      the file name before point
+      (<code>comint-dynamic-list-filename-completions</code>).</p>
+    </dd>
+
+    <dt><kbd>C-d</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dd-_0028Shell-mode_0029" id=
+      "index-C_002dd-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002ddelchar_002dor_002dmaybe_002deof" id=
+      "index-comint_002ddelchar_002dor_002dmaybe_002deof"></a>
+
+      <p>Either delete a character or send <acronym>EOF</acronym>
+      (<code>comint-delchar-or-maybe-eof</code>). Typed at the end
+      of the shell buffer, this sends <acronym>EOF</acronym> to the
+      subshell. Typed at any other position in the buffer, this
+      deletes a character as usual.</p>
+    </dd>
+
+    <dt><kbd>C-c C-a</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002da-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002da-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002dbol_002dor_002dprocess_002dmark" id=
+      "index-comint_002dbol_002dor_002dprocess_002dmark"></a>
+
+      <p>Move to the beginning of the line, but after the prompt if
+      any (<code>comint-bol-or-process-mark</code>). If you repeat
+      this command twice in a row, the second time it moves back to
+      the process mark, which is the beginning of the input that
+      you have not yet sent to the subshell. (Normally that is the
+      same place&mdash;the end of the prompt on this line&mdash;but
+      after <kbd>C-c <span class="key">SPC</span></kbd> the process
+      mark may be in a previous line.)</p>
+    </dd>
+
+    <dt><kbd>C-c <span class="key">SPC</span></kbd></dt>
+
+    <dd>
+      <p>Accumulate multiple lines of input, then send them
+      together. This command inserts a newline before point, but
+      does not send the preceding text as input to the
+      subshell&mdash;at least, not yet. Both lines, the one before
+      this newline and the one after, will be sent together (along
+      with the newline that separates them), when you type
+      <tt class="key">RET</tt>.</p>
+    </dd>
+
+    <dt><kbd>C-c C-u</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002du-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002du-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002dkill_002dinput" id=
+      "index-comint_002dkill_002dinput"></a>
+
+      <p>Kill all text pending at end of buffer to be sent as input
+      (<code>comint-kill-input</code>). If point is not at end of
+      buffer, this only kills the part of this text that precedes
+      point.</p>
+    </dd>
+
+    <dt><kbd>C-c C-w</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dw-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002dw-_0028Shell-mode_0029"></a>
+
+      <p>Kill a word before point
+      (<code>backward-kill-word</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-c</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dc-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002dc-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002dinterrupt_002dsubjob" id=
+      "index-comint_002dinterrupt_002dsubjob"></a>
+
+      <p>Interrupt the shell or its current subjob if any
+      (<code>comint-interrupt-subjob</code>). This command also
+      kills any shell input pending in the shell buffer and not yet
+      sent.</p>
+    </dd>
+
+    <dt><kbd>C-c C-z</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dz-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002dz-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002dstop_002dsubjob" id=
+      "index-comint_002dstop_002dsubjob"></a>
+
+      <p>Stop the shell or its current subjob if any
+      (<code>comint-stop-subjob</code>). This command also kills
+      any shell input pending in the shell buffer and not yet
+      sent.</p>
+    </dd>
+
+    <dt><kbd>C-c C-\</kbd></dt>
+
+    <dd>
+      <a name="index-comint_002dquit_002dsubjob" id=
+      "index-comint_002dquit_002dsubjob"></a> <a name=
+      "index-C_002dc-C_002d_005c-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002d_005c-_0028Shell-mode_0029"></a>
+
+      <p>Send quit signal to the shell or its current subjob if any
+      (<code>comint-quit-subjob</code>). This command also kills
+      any shell input pending in the shell buffer and not yet
+      sent.</p>
+    </dd>
+
+    <dt><kbd>C-c C-o</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002do-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002do-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002ddelete_002doutput" id=
+      "index-comint_002ddelete_002doutput"></a>
+
+      <p>Delete the last batch of output from a shell command
+      (<code>comint-delete-output</code>). This is useful if a
+      shell command spews out lots of output that just gets in the
+      way.</p>
+    </dd>
+
+    <dt><kbd>C-c C-s</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002ds-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002ds-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002dwrite_002doutput" id=
+      "index-comint_002dwrite_002doutput"></a>
+
+      <p>Write the last batch of output from a shell command to a
+      file (<code>comint-write-output</code>). With a prefix
+      argument, the file is appended to instead. Any prompt at the
+      end of the output is not written.</p>
+    </dd>
+
+    <dt><kbd>C-c C-r</kbd></dt>
+
+    <dt><kbd>C-M-l</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dr-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002dr-_0028Shell-mode_0029"></a> <a name=
+      "index-C_002dM_002dl-_0028Shell-mode_0029" id=
+      "index-C_002dM_002dl-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002dshow_002doutput" id=
+      "index-comint_002dshow_002doutput"></a>
+
+      <p>Scroll to display the beginning of the last batch of
+      output at the top of the window; also move the cursor there
+      (<code>comint-show-output</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-e</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002de-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002de-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002dshow_002dmaximum_002doutput" id=
+      "index-comint_002dshow_002dmaximum_002doutput"></a>
+
+      <p>Scroll to put the end of the buffer at the bottom of the
+      window (<code>comint-show-maximum-output</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-f</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002df-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002df-_0028Shell-mode_0029"></a> <a name=
+      "index-shell_002dforward_002dcommand" id=
+      "index-shell_002dforward_002dcommand"></a> <a name=
+      "index-shell_002dcommand_002dregexp" id=
+      "index-shell_002dcommand_002dregexp"></a>
+
+      <p>Move forward across one shell command, but not beyond the
+      current line (<code>shell-forward-command</code>). The
+      variable <code>shell-command-regexp</code> specifies how to
+      recognize the end of a command.</p>
+    </dd>
+
+    <dt><kbd>C-c C-b</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002db-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002db-_0028Shell-mode_0029"></a> <a name=
+      "index-shell_002dbackward_002dcommand" id=
+      "index-shell_002dbackward_002dcommand"></a>
+
+      <p>Move backward across one shell command, but not beyond the
+      current line (<code>shell-backward-command</code>).</p>
+    </dd>
+
+    <dt><kbd>M-x dirs</kbd></dt>
+
+    <dd>
+      <p>Ask the shell for its working directory, and update the
+      Shell buffer&rsquo;s default directory. See <a href=
+      "Directory-Tracking.html#Directory-Tracking">Directory
+      Tracking</a>.</p>
+    </dd>
+
+    <dt><kbd>M-x send-invisible <span class="key">RET</span>
+    <var>text</var> <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <a name="index-send_002dinvisible" id=
+      "index-send_002dinvisible"></a>
+
+      <p>Send <var>text</var> as input to the shell, after reading
+      it without echoing. This is useful when a shell command runs
+      a program that asks for a password.</p>
+
+      <p>Please note that Emacs will not echo passwords by default.
+      If you really want them to be echoed, evaluate (see <a href=
+      "Lisp-Eval.html#Lisp-Eval">Lisp Eval</a>) the following Lisp
+      expression:</p>
+
+      <div class="example">
+        <pre class="example">
+(remove-hook 'comint-output-filter-functions
              'comint-watch-for-password-prompt)
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><kbd>M-x comint-continue-subjob</kbd></dt>
-<dd><a name="index-comint_002dcontinue_002dsubjob"></a>
-<p>Continue the shell process.  This is useful if you accidentally suspend
-the shell process.<a name="DOCF18" href="#FOOT18"><sup>18</sup></a>
-</p>
-</dd>
-<dt><kbd>M-x comint-strip-ctrl-m</kbd></dt>
-<dd><a name="index-comint_002dstrip_002dctrl_002dm"></a>
-<p>Discard all control-M characters from the current group of shell output.
-The most convenient way to use this command is to make it run
-automatically when you get output from the subshell.  To do that,
-evaluate this Lisp expression:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'comint-output-filter-functions
+    <dt><kbd>M-x comint-continue-subjob</kbd></dt>
+
+    <dd>
+      <a name="index-comint_002dcontinue_002dsubjob" id=
+      "index-comint_002dcontinue_002dsubjob"></a>
+
+      <p>Continue the shell process. This is useful if you
+      accidentally suspend the shell process.<a name="DOCF18" href=
+      "#FOOT18" id="DOCF18"><sup>18</sup></a></p>
+    </dd>
+
+    <dt><kbd>M-x comint-strip-ctrl-m</kbd></dt>
+
+    <dd>
+      <a name="index-comint_002dstrip_002dctrl_002dm" id=
+      "index-comint_002dstrip_002dctrl_002dm"></a>
+
+      <p>Discard all control-M characters from the current group of
+      shell output. The most convenient way to use this command is
+      to make it run automatically when you get output from the
+      subshell. To do that, evaluate this Lisp expression:</p>
+
+      <div class="example">
+        <pre class="example">
+(add-hook 'comint-output-filter-functions
           'comint-strip-ctrl-m)
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><kbd>M-x comint-truncate-buffer</kbd></dt>
-<dd><a name="index-comint_002dtruncate_002dbuffer"></a>
-<p>This command truncates the shell buffer to a certain maximum number of
-lines, specified by the variable <code>comint-buffer-maximum-size</code>.
-Here&rsquo;s how to do this automatically each time you get output from the
-subshell:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'comint-output-filter-functions
+    <dt><kbd>M-x comint-truncate-buffer</kbd></dt>
+
+    <dd>
+      <a name="index-comint_002dtruncate_002dbuffer" id=
+      "index-comint_002dtruncate_002dbuffer"></a>
+
+      <p>This command truncates the shell buffer to a certain
+      maximum number of lines, specified by the variable
+      <code>comint-buffer-maximum-size</code>. Here&rsquo;s how to
+      do this automatically each time you get output from the
+      subshell:</p>
+
+      <div class="example">
+        <pre class="example">
+(add-hook 'comint-output-filter-functions
           'comint-truncate-buffer)
-</pre></div>
-</dd>
-</dl>
+</pre>
+      </div>
+    </dd>
+  </dl><a name="index-Comint-mode" id="index-Comint-mode"></a>
+  <a name="index-mode_002c-Comint" id="index-mode_002c-Comint"></a>
 
-<a name="index-Comint-mode"></a>
-<a name="index-mode_002c-Comint"></a>
-<p>Shell mode is a derivative of Comint mode, a general-purpose mode for
-communicating with interactive subprocesses.  Most of the features of
-Shell mode actually come from Comint mode, as you can see from the
-command names listed above.  The special features of Shell mode include
-the directory tracking feature, and a few user commands.
-</p>
-<p>Other Emacs features that use variants of Comint mode include GUD
-(see <a href="Debuggers.html#Debuggers">Debuggers</a>) and <kbd>M-x run-lisp</kbd> (see <a href="External-Lisp.html#External-Lisp">External Lisp</a>).
-</p>
-<a name="index-comint_002drun"></a>
-<p>You can use <kbd>M-x comint-run</kbd> to execute any program of your choice
-in a subprocess using unmodified Comint mode&mdash;without the
-specializations of Shell mode.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>Shell mode is a derivative of Comint mode, a general-purpose
+  mode for communicating with interactive subprocesses. Most of the
+  features of Shell mode actually come from Comint mode, as you can
+  see from the command names listed above. The special features of
+  Shell mode include the directory tracking feature, and a few user
+  commands.</p>
 
-<h3><a name="FOOT18" href="#DOCF18">(18)</a></h3>
-<p>You should not suspend the shell process.
-Suspending a subjob of the shell is a completely different matter&mdash;that
-is normal practice, but you must use the shell to continue the subjob;
-this command won&rsquo;t do it.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Shell-Prompts.html#Shell-Prompts" accesskey="n" rel="next">Shell Prompts</a>, Previous: <a href="Interactive-Shell.html#Interactive-Shell" accesskey="p" rel="prev">Interactive Shell</a>, Up: <a href="Shell.html#Shell" accesskey="u" rel="up">Shell</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Other Emacs features that use variants of Comint mode include
+  GUD (see <a href="Debuggers.html#Debuggers">Debuggers</a>) and
+  <kbd>M-x run-lisp</kbd> (see <a href=
+  "External-Lisp.html#External-Lisp">External
+  Lisp</a>).</p><a name="index-comint_002drun" id=
+  "index-comint_002drun"></a>
 
+  <p>You can use <kbd>M-x comint-run</kbd> to execute any program
+  of your choice in a subprocess using unmodified Comint
+  mode&mdash;without the specializations of Shell mode.</p>
 
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT18" href="#DOCF18" id="FOOT18">(18)</a></h3>
+
+    <p>You should not suspend the shell process. Suspending a
+    subjob of the shell is a completely different matter&mdash;that
+    is normal practice, but you must use the shell to continue the
+    subjob; this command won&rsquo;t do it.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Shell-Prompts.html#Shell-Prompts" accesskey=
+    "n" rel="next">Shell Prompts</a>, Previous: <a href=
+    "Interactive-Shell.html#Interactive-Shell" accesskey="p" rel=
+    "prev">Interactive Shell</a>, Up: <a href="Shell.html#Shell"
+    accesskey="u" rel="up">Shell</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

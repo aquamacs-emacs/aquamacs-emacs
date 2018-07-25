@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,99 +19,164 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Errors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Errors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Errors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Nonlocal-Exits.html#Nonlocal-Exits" rel="up" title="Nonlocal Exits">
-<link href="Signaling-Errors.html#Signaling-Errors" rel="next" title="Signaling Errors">
-<link href="Examples-of-Catch.html#Examples-of-Catch" rel="prev" title="Examples of Catch">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Errors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Errors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Errors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Nonlocal-Exits.html#Nonlocal-Exits" rel="up" title=
+  "Nonlocal Exits" />
+  <link href="Signaling-Errors.html#Signaling-Errors" rel="next"
+  title="Signaling Errors" />
+  <link href="Examples-of-Catch.html#Examples-of-Catch" rel="prev"
+  title="Examples of Catch" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Errors" id="Errors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Cleanups.html#Cleanups" accesskey="n" rel=
+    "next">Cleanups</a>, Previous: <a href=
+    "Examples-of-Catch.html#Examples-of-Catch" accesskey="p" rel=
+    "prev">Examples of Catch</a>, Up: <a href=
+    "Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel=
+    "up">Nonlocal Exits</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Errors-1" id="Errors-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Errors"></a>
-<div class="header">
-<p>
-Next: <a href="Cleanups.html#Cleanups" accesskey="n" rel="next">Cleanups</a>, Previous: <a href="Examples-of-Catch.html#Examples-of-Catch" accesskey="p" rel="prev">Examples of Catch</a>, Up: <a href="Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel="up">Nonlocal Exits</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Errors-1"></a>
-<h4 class="subsection">10.6.3 Errors</h4>
-<a name="index-errors"></a>
+  <h4 class="subsection">10.6.3 Errors</h4><a name="index-errors"
+  id="index-errors"></a>
 
-<p>When Emacs Lisp attempts to evaluate a form that, for some reason,
-cannot be evaluated, it <em>signals</em> an <em>error</em>.
-</p>
-<p>When an error is signaled, Emacs&rsquo;s default reaction is to print an
-error message and terminate execution of the current command.  This is
-the right thing to do in most cases, such as if you type <kbd>C-f</kbd> at
-the end of the buffer.
-</p>
-<p>In complicated programs, simple termination may not be what you want.
-For example, the program may have made temporary changes in data
-structures, or created temporary buffers that should be deleted before
-the program is finished.  In such cases, you would use
-<code>unwind-protect</code> to establish <em>cleanup expressions</em> to be
-evaluated in case of error.  (See <a href="Cleanups.html#Cleanups">Cleanups</a>.)  Occasionally, you may
-wish the program to continue execution despite an error in a subroutine.
-In these cases, you would use <code>condition-case</code> to establish
-<em>error handlers</em> to recover control in case of error.
-</p>
-<p>Resist the temptation to use error handling to transfer control from
-one part of the program to another; use <code>catch</code> and <code>throw</code>
-instead.  See <a href="Catch-and-Throw.html#Catch-and-Throw">Catch and Throw</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Signaling-Errors.html#Signaling-Errors" accesskey="1">Signaling Errors</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to report an error.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Processing-of-Errors.html#Processing-of-Errors" accesskey="2">Processing of Errors</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What Emacs does when you report an error.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Handling-Errors.html#Handling-Errors" accesskey="3">Handling Errors</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How you can trap errors and continue execution.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Error-Symbols.html#Error-Symbols" accesskey="4">Error Symbols</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How errors are classified for trapping them.
-</td></tr>
-</table>
+  <p>When Emacs Lisp attempts to evaluate a form that, for some
+  reason, cannot be evaluated, it <em>signals</em> an
+  <em>error</em>.</p>
 
+  <p>When an error is signaled, Emacs&rsquo;s default reaction is
+  to print an error message and terminate execution of the current
+  command. This is the right thing to do in most cases, such as if
+  you type <kbd>C-f</kbd> at the end of the buffer.</p>
 
+  <p>In complicated programs, simple termination may not be what
+  you want. For example, the program may have made temporary
+  changes in data structures, or created temporary buffers that
+  should be deleted before the program is finished. In such cases,
+  you would use <code>unwind-protect</code> to establish
+  <em>cleanup expressions</em> to be evaluated in case of error.
+  (See <a href="Cleanups.html#Cleanups">Cleanups</a>.)
+  Occasionally, you may wish the program to continue execution
+  despite an error in a subroutine. In these cases, you would use
+  <code>condition-case</code> to establish <em>error handlers</em>
+  to recover control in case of error.</p>
 
+  <p>Resist the temptation to use error handling to transfer
+  control from one part of the program to another; use
+  <code>catch</code> and <code>throw</code> instead. See <a href=
+  "Catch-and-Throw.html#Catch-and-Throw">Catch and Throw</a>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Signaling-Errors.html#Signaling-Errors" accesskey=
+      "1">Signaling Errors</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to report an error.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Processing-of-Errors.html#Processing-of-Errors" accesskey=
+      "2">Processing of Errors</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What Emacs does when you report
+      an error.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Handling-Errors.html#Handling-Errors" accesskey="3">Handling
+      Errors</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How you can trap errors and
+      continue execution.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Error-Symbols.html#Error-Symbols" accesskey="4">Error
+      Symbols</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How errors are classified for
+      trapping them.</td>
+    </tr>
+  </table>
 </body>
 </html>

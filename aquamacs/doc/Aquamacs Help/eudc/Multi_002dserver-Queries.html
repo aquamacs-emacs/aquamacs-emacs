@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Multi-server Queries - Emacs Unified Directory Client (EUDC) Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Emacs Unified Directory Client (EUDC) Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Usage.html#Usage" title="Usage">
-<link rel="prev" href="The-Server-Hotlist.html#The-Server-Hotlist" title="The Server Hotlist">
-<link rel="next" href="Creating-BBDB-Records.html#Creating-BBDB-Records" title="Creating BBDB Records">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Multi-server Queries - Emacs Unified Directory Client
+  (EUDC) Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Emacs Unified Directory Client (EUDC) Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Usage.html#Usage" title="Usage" />
+  <link rel="prev" href=
+  "The-Server-Hotlist.html#The-Server-Hotlist" title=
+  "The Server Hotlist" />
+  <link rel="next" href=
+  "Creating-BBDB-Records.html#Creating-BBDB-Records" title=
+  "Creating BBDB Records" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents EUDC v1.30b.
 
 EUDC is the Emacs Unified Directory Client, a common interface to
@@ -31,8 +43,10 @@ Copyright (C) 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,46 +56,79 @@ Copyright (C) 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Multi-server-Queries"></a>
-<a name="Multi_002dserver-Queries"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Creating-BBDB-Records.html#Creating-BBDB-Records">Creating BBDB Records</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="The-Server-Hotlist.html#The-Server-Hotlist">The Server Hotlist</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Usage.html#Usage">Usage</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Multi-server-Queries" id="Multi-server-Queries"></a>
+    <a name="Multi_002dserver-Queries" id=
+    "Multi_002dserver-Queries"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h3 class="section">3.6 Multi-server Queries</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Creating-BBDB-Records.html#Creating-BBDB-Records">Creating
+    BBDB Records</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href="The-Server-Hotlist.html#The-Server-Hotlist">The
+    Server Hotlist</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Usage.html#Usage">Usage</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-<p>When using inline query expansion (see <a href="Inline-Query-Expansion.html#Inline-Query-Expansion">Inline Query Expansion</a>), EUDC
-can try to query successively a sequence of directory servers until one
-of them successfully finds a match for the query.
+  <h3 class="section">3.6 Multi-server Queries</h3>
 
-<div class="defun">
-&mdash; Variable: <b>eudc-inline-expansion-servers</b><var><a name="index-eudc_002dinline_002dexpansion_002dservers-31"></a></var><br>
-<blockquote><p>This variable controls which servers are tried and in which order when
-trying to perform an inline query.  Possible values are:
-          <dl>
-<dt><code>current-server</code><dd>Only the current directory server is tried
-<br><dt><code>hotlist</code><dd>The servers in the hotlist are tried in order until one finds a match
-for the query or `eudc-max-servers-to-query' is reached
-<br><dt><code>server-then-hotlist</code><dd>The current server then the servers in the hotlist are tried in the
-order they appear in the hotlist until one of them finds a match or
-`eudc-max-servers-to-query' is reached.  This is the default. 
-</dl>
-        </p></blockquote></div>
+  <p>When using inline query expansion (see <a href=
+  "Inline-Query-Expansion.html#Inline-Query-Expansion">Inline Query
+  Expansion</a>), EUDC can try to query successively a sequence of
+  directory servers until one of them successfully finds a match
+  for the query.</p>
 
-<div class="defun">
-&mdash; Variable: <b>eudc-max-servers-to-query</b><var><a name="index-eudc_002dmax_002dservers_002dto_002dquery-32"></a></var><br>
-<blockquote><p>This variable indicates the maximum number of servers to query when
-performing a multi-server query.  The default, <code>nil</code>, indicates
-that all available servers should be tried. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Variable:
+    <b>eudc-inline-expansion-servers</b><var><a name=
+    "index-eudc_002dinline_002dexpansion_002dservers-31" id=
+    "index-eudc_002dinline_002dexpansion_002dservers-31"></a></var><br />
 
-   </body></html>
 
+    <blockquote>
+      <p>This variable controls which servers are tried and in
+      which order when trying to perform an inline query. Possible
+      values are:</p>
+
+      <dl>
+        <dt><code>current-server</code></dt>
+
+        <dd>Only the current directory server is tried<br /></dd>
+
+        <dt><code>hotlist</code></dt>
+
+        <dd>The servers in the hotlist are tried in order until one
+        finds a match for the query or `eudc-max-servers-to-query'
+        is reached<br /></dd>
+
+        <dt><code>server-then-hotlist</code></dt>
+
+        <dd>The current server then the servers in the hotlist are
+        tried in the order they appear in the hotlist until one of
+        them finds a match or `eudc-max-servers-to-query' is
+        reached. This is the default.</dd>
+      </dl>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Variable: <b>eudc-max-servers-to-query</b><var><a name=
+    "index-eudc_002dmax_002dservers_002dto_002dquery-32" id=
+    "index-eudc_002dmax_002dservers_002dto_002dquery-32"></a></var><br />
+
+
+    <blockquote>
+      <p>This variable indicates the maximum number of servers to
+      query when performing a multi-server query. The default,
+      <code>nil</code>, indicates that all available servers should
+      be tried.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

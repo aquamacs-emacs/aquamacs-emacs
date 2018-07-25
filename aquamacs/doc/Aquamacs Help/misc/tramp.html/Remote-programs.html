@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,116 +14,171 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to
 copy and modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>TRAMP User Manual: Remote programs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="TRAMP User Manual: Remote programs">
-<meta name="keywords" content="TRAMP User Manual: Remote programs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Configuration.html#Configuration" rel="up" title="Configuration">
-<link href="Remote-shell-setup.html#Remote-shell-setup" rel="next" title="Remote shell setup">
-<link href="Predefined-connection-information.html#Predefined-connection-information" rel="prev" title="Predefined connection information">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>TRAMP User Manual: Remote programs</title>
+  <meta name="description" content=
+  "TRAMP User Manual: Remote programs" />
+  <meta name="keywords" content=
+  "TRAMP User Manual: Remote programs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Configuration.html#Configuration" rel="up" title=
+  "Configuration" />
+  <link href="Remote-shell-setup.html#Remote-shell-setup" rel=
+  "next" title="Remote shell setup" />
+  <link href=
+  "Predefined-connection-information.html#Predefined-connection-information"
+  rel="prev" title="Predefined connection information" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Remote-programs"></a>
-<div class="header">
-<p>
-Next: <a href="Remote-shell-setup.html#Remote-shell-setup" accesskey="n" rel="next">Remote shell setup</a>, Previous: <a href="Predefined-connection-information.html#Predefined-connection-information" accesskey="p" rel="prev">Predefined connection information</a>, Up: <a href="Configuration.html#Configuration" accesskey="u" rel="up">Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-TRAMP-finds-and-uses-programs-on-the-remote-host"></a>
-<h3 class="section">4.15 How <small>TRAMP</small> finds and uses programs on the remote host</h3>
+<body lang="en" xml:lang="en">
+  <a name="Remote-programs" id="Remote-programs"></a>
 
-<p><small>TRAMP</small> requires access to and rights to several commands on
-remote hosts: <code>ls</code>, <code>test</code>, <code>find</code> and
-<code>cat</code>.
-</p>
-<p>Besides there are other required programs for <a href="Inline-methods.html#Inline-methods">Inline methods</a> and
-<a href="External-methods.html#External-methods">External methods</a> of connection.
-</p>
-<p>To improve performance and accuracy of remote file access,
-<small>TRAMP</small> uses <code>perl</code> (or <code>perl5</code>) and
-<code>grep</code> when available.
-</p>
-<dl>
-<dt><a name="index-tramp_002dremote_002dpath"></a>User Option: <strong>tramp-remote-path</strong></dt>
-<dd><a name="index-tramp_002dremote_002dpath-1"></a>
-<a name="index-tramp_002ddefault_002dremote_002dpath"></a>
-<a name="index-tramp_002down_002dremote_002dpath"></a>
-<p><samp>tramp-remote-path</samp> specifies which remote directory paths
-<small>TRAMP</small> can search for <a href="#Remote-programs">Remote programs</a>.
-</p>
-<p><small>TRAMP</small> uses standard defaults, such as <samp>/bin</samp> and
-<samp>/usr/bin</samp>, which are reasonable for most hosts.  To accommodate
-differences in hosts and paths, for example, <samp>/bin:/usr/bin</samp> on
-Debian GNU/Linux or
-<samp>/usr/xpg4/bin:/usr/ccs/bin:/usr/bin:/opt/SUNWspro/bin</samp> on
-Solaris, <small>TRAMP</small> queries the remote host with <code>getconf
-PATH</code> and updates the symbol <code>tramp-default-remote-path</code>.
-</p>
-<p>For instances where hosts keep obscure locations for paths for
-security reasons, manually add such paths to local <samp>.emacs</samp> as
-shown below for <small>TRAMP</small> to use when connecting.
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'tramp-remote-path &quot;/usr/local/perl/bin&quot;)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Remote-shell-setup.html#Remote-shell-setup"
+    accesskey="n" rel="next">Remote shell setup</a>, Previous:
+    <a href=
+    "Predefined-connection-information.html#Predefined-connection-information"
+    accesskey="p" rel="prev">Predefined connection information</a>,
+    Up: <a href="Configuration.html#Configuration" accesskey="u"
+    rel="up">Configuration</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="How-TRAMP-finds-and-uses-programs-on-the-remote-host"
+  id="How-TRAMP-finds-and-uses-programs-on-the-remote-host"></a>
 
-<p>Another way to find the remote path is to use the path assigned to the
-remote user by the remote host.  <small>TRAMP</small> does not normally retain
-this remote path after logging.  However, <code>tramp-own-remote-path</code>
-preserves the path value, which can be used to update
-<code>tramp-remote-path</code>.
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-</pre></div>
-</dd></dl>
+  <h3 class="section">4.15 How <small>TRAMP</small> finds and uses
+  programs on the remote host</h3>
 
-<p>When remote search paths are changed, local <small>TRAMP</small> caches must
-be recomputed.  To force <small>TRAMP</small> to recompute afresh, exit
-Emacs, remove the persistent file (see <a href="Connection-caching.html#Connection-caching">Connection caching</a>), and restart Emacs.
-</p>
+  <p><small>TRAMP</small> requires access to and rights to several
+  commands on remote hosts: <code>ls</code>, <code>test</code>,
+  <code>find</code> and <code>cat</code>.</p>
 
+  <p>Besides there are other required programs for <a href=
+  "Inline-methods.html#Inline-methods">Inline methods</a> and
+  <a href="External-methods.html#External-methods">External
+  methods</a> of connection.</p>
 
+  <p>To improve performance and accuracy of remote file access,
+  <small>TRAMP</small> uses <code>perl</code> (or
+  <code>perl5</code>) and <code>grep</code> when available.</p>
 
+  <dl>
+    <dt><a name="index-tramp_002dremote_002dpath" id=
+    "index-tramp_002dremote_002dpath"></a>User Option:
+    <strong>tramp-remote-path</strong></dt>
 
+    <dd>
+      <a name="index-tramp_002dremote_002dpath-1" id=
+      "index-tramp_002dremote_002dpath-1"></a> <a name=
+      "index-tramp_002ddefault_002dremote_002dpath" id=
+      "index-tramp_002ddefault_002dremote_002dpath"></a> <a name=
+      "index-tramp_002down_002dremote_002dpath" id=
+      "index-tramp_002down_002dremote_002dpath"></a>
+
+      <p><samp>tramp-remote-path</samp> specifies which remote
+      directory paths <small>TRAMP</small> can search for <a href=
+      "#Remote-programs">Remote programs</a>.</p>
+
+      <p><small>TRAMP</small> uses standard defaults, such as
+      <samp>/bin</samp> and <samp>/usr/bin</samp>, which are
+      reasonable for most hosts. To accommodate differences in
+      hosts and paths, for example, <samp>/bin:/usr/bin</samp> on
+      Debian GNU/Linux or
+      <samp>/usr/xpg4/bin:/usr/ccs/bin:/usr/bin:/opt/SUNWspro/bin</samp>
+      on Solaris, <small>TRAMP</small> queries the remote host with
+      <code>getconf PATH</code> and updates the symbol
+      <code>tramp-default-remote-path</code>.</p>
+
+      <p>For instances where hosts keep obscure locations for paths
+      for security reasons, manually add such paths to local
+      <samp>.emacs</samp> as shown below for <small>TRAMP</small>
+      to use when connecting.</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(add-to-list 'tramp-remote-path "/usr/local/perl/bin")
+</pre>
+      </div>
+
+      <p>Another way to find the remote path is to use the path
+      assigned to the remote user by the remote host.
+      <small>TRAMP</small> does not normally retain this remote
+      path after logging. However,
+      <code>tramp-own-remote-path</code> preserves the path value,
+      which can be used to update
+      <code>tramp-remote-path</code>.</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <p>When remote search paths are changed, local
+  <small>TRAMP</small> caches must be recomputed. To force
+  <small>TRAMP</small> to recompute afresh, exit Emacs, remove the
+  persistent file (see <a href=
+  "Connection-caching.html#Connection-caching">Connection
+  caching</a>), and restart Emacs.</p>
 </body>
 </html>

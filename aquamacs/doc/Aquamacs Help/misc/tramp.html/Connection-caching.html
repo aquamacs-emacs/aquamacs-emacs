@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,97 +14,137 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to
 copy and modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>TRAMP User Manual: Connection caching</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="TRAMP User Manual: Connection caching">
-<meta name="keywords" content="TRAMP User Manual: Connection caching">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Configuration.html#Configuration" rel="up" title="Configuration">
-<link href="Predefined-connection-information.html#Predefined-connection-information" rel="next" title="Predefined connection information">
-<link href="Password-handling.html#Password-handling" rel="prev" title="Password handling">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>TRAMP User Manual: Connection caching</title>
+  <meta name="description" content=
+  "TRAMP User Manual: Connection caching" />
+  <meta name="keywords" content=
+  "TRAMP User Manual: Connection caching" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Configuration.html#Configuration" rel="up" title=
+  "Configuration" />
+  <link href=
+  "Predefined-connection-information.html#Predefined-connection-information"
+  rel="next" title="Predefined connection information" />
+  <link href="Password-handling.html#Password-handling" rel="prev"
+  title="Password handling" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Connection-caching"></a>
-<div class="header">
-<p>
-Next: <a href="Predefined-connection-information.html#Predefined-connection-information" accesskey="n" rel="next">Predefined connection information</a>, Previous: <a href="Password-handling.html#Password-handling" accesskey="p" rel="prev">Password handling</a>, Up: <a href="Configuration.html#Configuration" accesskey="u" rel="up">Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Reusing-connection-related-information"></a>
-<h3 class="section">4.13 Reusing connection related information</h3>
-<a name="index-caching"></a>
-<a name="index-tramp_002dpersistency_002dfile_002dname"></a>
+<body lang="en" xml:lang="en">
+  <a name="Connection-caching" id="Connection-caching"></a>
 
-<p>For faster initial connection times, <small>TRAMP</small> stores previous
-connection properties in a file specified by the variable
-<code>tramp-persistency-file-name</code>.
-</p>
-<p>The default file name for <code>tramp-persistency-file-name</code> is:
-<samp>~/.emacs.d/tramp</samp>.
-</p>
-<p><small>TRAMP</small> reads this file during Emacs startup, and
-writes to it when exiting Emacs.  Delete this file for
-<small>TRAMP</small> to recreate a new one on next Emacs startup.
-</p>
-<p>Set <code>tramp-persistency-file-name</code> to <code>nil</code> to disable
-storing connections persistently.
-</p>
-<p>To reuse connection information from the persistent list,
-<small>TRAMP</small> needs to uniquely identify every host.  However in some
-cases, two different connections may result in the same persistent
-information.  For example, connecting to a host using <code>ssh</code> and
-connecting to the same host through <code>sshd</code> on port 3001.  Both
-access methods result in nearly identical persistent specifications
-<samp>/ssh:localhost:</samp> and <samp>/ssh:localhost#3001:</samp>.
-</p>
-<p>Changing host names could avoid duplicates.  One way is to add a
-<samp>Host</samp> section in <samp>~/.ssh/config</samp> (see <a href="Frequently-Asked-Questions.html#Frequently-Asked-Questions">Frequently Asked Questions</a>).  Another way is to apply multiple hops (see <a href="Multi_002dhops.html#Multi_002dhops">Multi-hops</a>).
-</p>
-<p>When <small>TRAMP</small> detects a change in the operating system version in
-a remote host (via the command <code>uname -sr</code>), it flushes all
-connection related information for that host and creates a new entry.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Predefined-connection-information.html#Predefined-connection-information"
+    accesskey="n" rel="next">Predefined connection information</a>,
+    Previous: <a href="Password-handling.html#Password-handling"
+    accesskey="p" rel="prev">Password handling</a>, Up: <a href=
+    "Configuration.html#Configuration" accesskey="u" rel=
+    "up">Configuration</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Reusing-connection-related-information" id=
+  "Reusing-connection-related-information"></a>
 
+  <h3 class="section">4.13 Reusing connection related
+  information</h3><a name="index-caching" id="index-caching"></a>
+  <a name="index-tramp_002dpersistency_002dfile_002dname" id=
+  "index-tramp_002dpersistency_002dfile_002dname"></a>
 
+  <p>For faster initial connection times, <small>TRAMP</small>
+  stores previous connection properties in a file specified by the
+  variable <code>tramp-persistency-file-name</code>.</p>
 
+  <p>The default file name for
+  <code>tramp-persistency-file-name</code> is:
+  <samp>~/.emacs.d/tramp</samp>.</p>
 
+  <p><small>TRAMP</small> reads this file during Emacs startup, and
+  writes to it when exiting Emacs. Delete this file for
+  <small>TRAMP</small> to recreate a new one on next Emacs
+  startup.</p>
+
+  <p>Set <code>tramp-persistency-file-name</code> to
+  <code>nil</code> to disable storing connections persistently.</p>
+
+  <p>To reuse connection information from the persistent list,
+  <small>TRAMP</small> needs to uniquely identify every host.
+  However in some cases, two different connections may result in
+  the same persistent information. For example, connecting to a
+  host using <code>ssh</code> and connecting to the same host
+  through <code>sshd</code> on port 3001. Both access methods
+  result in nearly identical persistent specifications
+  <samp>/ssh:localhost:</samp> and
+  <samp>/ssh:localhost#3001:</samp>.</p>
+
+  <p>Changing host names could avoid duplicates. One way is to add
+  a <samp>Host</samp> section in <samp>~/.ssh/config</samp> (see
+  <a href=
+  "Frequently-Asked-Questions.html#Frequently-Asked-Questions">Frequently
+  Asked Questions</a>). Another way is to apply multiple hops (see
+  <a href="Multi_002dhops.html#Multi_002dhops">Multi-hops</a>).</p>
+
+  <p>When <small>TRAMP</small> detects a change in the operating
+  system version in a remote host (via the command <code>uname
+  -sr</code>), it flushes all connection related information for
+  that host and creates a new entry.</p>
 </body>
 </html>

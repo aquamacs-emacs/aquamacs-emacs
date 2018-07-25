@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,180 +19,275 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Deletion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Deletion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Deletion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="User_002dLevel-Deletion.html#User_002dLevel-Deletion" rel="next" title="User-Level Deletion">
-<link href="Commands-for-Insertion.html#Commands-for-Insertion" rel="prev" title="Commands for Insertion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Deletion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Deletion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Deletion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="User_002dLevel-Deletion.html#User_002dLevel-Deletion"
+  rel="next" title="User-Level Deletion" />
+  <link href="Commands-for-Insertion.html#Commands-for-Insertion"
+  rel="prev" title="Commands for Insertion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Deletion" id="Deletion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "User_002dLevel-Deletion.html#User_002dLevel-Deletion"
+    accesskey="n" rel="next">User-Level Deletion</a>, Previous:
+    <a href="Commands-for-Insertion.html#Commands-for-Insertion"
+    accesskey="p" rel="prev">Commands for Insertion</a>, Up:
+    <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Deleting-Text" id="Deleting-Text"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Deletion"></a>
-<div class="header">
-<p>
-Next: <a href="User_002dLevel-Deletion.html#User_002dLevel-Deletion" accesskey="n" rel="next">User-Level Deletion</a>, Previous: <a href="Commands-for-Insertion.html#Commands-for-Insertion" accesskey="p" rel="prev">Commands for Insertion</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Deleting-Text"></a>
-<h3 class="section">31.6 Deleting Text</h3>
-<a name="index-text-deletion"></a>
+  <h3 class="section">31.6 Deleting Text</h3><a name=
+  "index-text-deletion" id="index-text-deletion"></a> <a name=
+  "index-deleting-text-vs-killing" id=
+  "index-deleting-text-vs-killing"></a>
 
-<a name="index-deleting-text-vs-killing"></a>
-<p>Deletion means removing part of the text in a buffer, without saving
-it in the kill ring (see <a href="The-Kill-Ring.html#The-Kill-Ring">The Kill Ring</a>).  Deleted text can&rsquo;t be
-yanked, but can be reinserted using the undo mechanism (see <a href="Undo.html#Undo">Undo</a>).
-Some deletion functions do save text in the kill ring in some special
-cases.
-</p>
-<p>All of the deletion functions operate on the current buffer.
-</p>
-<dl>
-<dt><a name="index-erase_002dbuffer"></a>Command: <strong>erase-buffer</strong></dt>
-<dd><p>This function deletes the entire text of the current buffer
-(<em>not</em> just the accessible portion), leaving it
-empty.  If the buffer is read-only, it signals a <code>buffer-read-only</code>
-error; if some of the text in it is read-only, it signals a
-<code>text-read-only</code> error.  Otherwise, it deletes the text without
-asking for any confirmation.  It returns <code>nil</code>.
-</p>
-<p>Normally, deleting a large amount of text from a buffer inhibits further
-auto-saving of that buffer because it has shrunk.  However,
-<code>erase-buffer</code> does not do this, the idea being that the future
-text is not really related to the former text, and its size should not
-be compared with that of the former text.
-</p></dd></dl>
+  <p>Deletion means removing part of the text in a buffer, without
+  saving it in the kill ring (see <a href=
+  "The-Kill-Ring.html#The-Kill-Ring">The Kill Ring</a>). Deleted
+  text can&rsquo;t be yanked, but can be reinserted using the undo
+  mechanism (see <a href="Undo.html#Undo">Undo</a>). Some deletion
+  functions do save text in the kill ring in some special
+  cases.</p>
 
-<dl>
-<dt><a name="index-delete_002dregion"></a>Command: <strong>delete-region</strong> <em>start end</em></dt>
-<dd><p>This command deletes the text between positions <var>start</var> and
-<var>end</var> in the current buffer, and returns <code>nil</code>.  If point was
-inside the deleted region, its value afterward is <var>start</var>.
-Otherwise, point relocates with the surrounding text, as markers do.
-</p></dd></dl>
+  <p>All of the deletion functions operate on the current
+  buffer.</p>
 
-<dl>
-<dt><a name="index-delete_002dand_002dextract_002dregion"></a>Function: <strong>delete-and-extract-region</strong> <em>start end</em></dt>
-<dd><p>This function deletes the text between positions <var>start</var> and
-<var>end</var> in the current buffer, and returns a string containing the
-text just deleted.
-</p>
-<p>If point was inside the deleted region, its value afterward is
-<var>start</var>.  Otherwise, point relocates with the surrounding text, as
-markers do.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-erase_002dbuffer" id=
+    "index-erase_002dbuffer"></a>Command:
+    <strong>erase-buffer</strong></dt>
 
-<dl>
-<dt><a name="index-delete_002dchar"></a>Command: <strong>delete-char</strong> <em>count &amp;optional killp</em></dt>
-<dd><p>This command deletes <var>count</var> characters directly after point, or
-before point if <var>count</var> is negative.  If <var>killp</var> is
-non-<code>nil</code>, then it saves the deleted characters in the kill ring.
-</p>
-<p>In an interactive call, <var>count</var> is the numeric prefix argument, and
-<var>killp</var> is the unprocessed prefix argument.  Therefore, if a prefix
-argument is supplied, the text is saved in the kill ring.  If no prefix
-argument is supplied, then one character is deleted, but not saved in
-the kill ring.
-</p>
-<p>The value returned is always <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function deletes the entire text of the current
+      buffer (<em>not</em> just the accessible portion), leaving it
+      empty. If the buffer is read-only, it signals a
+      <code>buffer-read-only</code> error; if some of the text in
+      it is read-only, it signals a <code>text-read-only</code>
+      error. Otherwise, it deletes the text without asking for any
+      confirmation. It returns <code>nil</code>.</p>
 
-<dl>
-<dt><a name="index-delete_002dbackward_002dchar"></a>Command: <strong>delete-backward-char</strong> <em>count &amp;optional killp</em></dt>
-<dd><a name="index-deleting-previous-char"></a>
-<p>This command deletes <var>count</var> characters directly before point, or
-after point if <var>count</var> is negative.  If <var>killp</var> is
-non-<code>nil</code>, then it saves the deleted characters in the kill ring.
-</p>
-<p>In an interactive call, <var>count</var> is the numeric prefix argument, and
-<var>killp</var> is the unprocessed prefix argument.  Therefore, if a prefix
-argument is supplied, the text is saved in the kill ring.  If no prefix
-argument is supplied, then one character is deleted, but not saved in
-the kill ring.
-</p>
-<p>The value returned is always <code>nil</code>.
-</p></dd></dl>
+      <p>Normally, deleting a large amount of text from a buffer
+      inhibits further auto-saving of that buffer because it has
+      shrunk. However, <code>erase-buffer</code> does not do this,
+      the idea being that the future text is not really related to
+      the former text, and its size should not be compared with
+      that of the former text.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-backward_002ddelete_002dchar_002duntabify"></a>Command: <strong>backward-delete-char-untabify</strong> <em>count &amp;optional killp</em></dt>
-<dd><a name="index-tab-deletion"></a>
-<p>This command deletes <var>count</var> characters backward, changing tabs
-into spaces.  When the next character to be deleted is a tab, it is
-first replaced with the proper number of spaces to preserve alignment
-and then one of those spaces is deleted instead of the tab.  If
-<var>killp</var> is non-<code>nil</code>, then the command saves the deleted
-characters in the kill ring.
-</p>
-<p>Conversion of tabs to spaces happens only if <var>count</var> is positive.
-If it is negative, exactly −<var>count</var> characters after point
-are deleted.
-</p>
-<p>In an interactive call, <var>count</var> is the numeric prefix argument, and
-<var>killp</var> is the unprocessed prefix argument.  Therefore, if a prefix
-argument is supplied, the text is saved in the kill ring.  If no prefix
-argument is supplied, then one character is deleted, but not saved in
-the kill ring.
-</p>
-<p>The value returned is always <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-delete_002dregion" id=
+    "index-delete_002dregion"></a>Command:
+    <strong>delete-region</strong> <em>start end</em></dt>
 
-<dl>
-<dt><a name="index-backward_002ddelete_002dchar_002duntabify_002dmethod"></a>User Option: <strong>backward-delete-char-untabify-method</strong></dt>
-<dd><p>This option specifies how <code>backward-delete-char-untabify</code> should
-deal with whitespace.  Possible values include <code>untabify</code>, the
-default, meaning convert a tab to many spaces and delete one;
-<code>hungry</code>, meaning delete all tabs and spaces before point with
-one command; <code>all</code> meaning delete all tabs, spaces and newlines
-before point, and <code>nil</code>, meaning do nothing special for
-whitespace characters.
-</p></dd></dl>
+    <dd>
+      <p>This command deletes the text between positions
+      <var>start</var> and <var>end</var> in the current buffer,
+      and returns <code>nil</code>. If point was inside the deleted
+      region, its value afterward is <var>start</var>. Otherwise,
+      point relocates with the surrounding text, as markers do.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="User_002dLevel-Deletion.html#User_002dLevel-Deletion" accesskey="n" rel="next">User-Level Deletion</a>, Previous: <a href="Commands-for-Insertion.html#Commands-for-Insertion" accesskey="p" rel="prev">Commands for Insertion</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-delete_002dand_002dextract_002dregion" id=
+    "index-delete_002dand_002dextract_002dregion"></a>Function:
+    <strong>delete-and-extract-region</strong> <em>start
+    end</em></dt>
 
+    <dd>
+      <p>This function deletes the text between positions
+      <var>start</var> and <var>end</var> in the current buffer,
+      and returns a string containing the text just deleted.</p>
 
+      <p>If point was inside the deleted region, its value
+      afterward is <var>start</var>. Otherwise, point relocates
+      with the surrounding text, as markers do.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-delete_002dchar" id=
+    "index-delete_002dchar"></a>Command:
+    <strong>delete-char</strong> <em>count &amp;optional
+    killp</em></dt>
+
+    <dd>
+      <p>This command deletes <var>count</var> characters directly
+      after point, or before point if <var>count</var> is negative.
+      If <var>killp</var> is non-<code>nil</code>, then it saves
+      the deleted characters in the kill ring.</p>
+
+      <p>In an interactive call, <var>count</var> is the numeric
+      prefix argument, and <var>killp</var> is the unprocessed
+      prefix argument. Therefore, if a prefix argument is supplied,
+      the text is saved in the kill ring. If no prefix argument is
+      supplied, then one character is deleted, but not saved in the
+      kill ring.</p>
+
+      <p>The value returned is always <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-delete_002dbackward_002dchar" id=
+    "index-delete_002dbackward_002dchar"></a>Command:
+    <strong>delete-backward-char</strong> <em>count &amp;optional
+    killp</em></dt>
+
+    <dd>
+      <a name="index-deleting-previous-char" id=
+      "index-deleting-previous-char"></a>
+
+      <p>This command deletes <var>count</var> characters directly
+      before point, or after point if <var>count</var> is negative.
+      If <var>killp</var> is non-<code>nil</code>, then it saves
+      the deleted characters in the kill ring.</p>
+
+      <p>In an interactive call, <var>count</var> is the numeric
+      prefix argument, and <var>killp</var> is the unprocessed
+      prefix argument. Therefore, if a prefix argument is supplied,
+      the text is saved in the kill ring. If no prefix argument is
+      supplied, then one character is deleted, but not saved in the
+      kill ring.</p>
+
+      <p>The value returned is always <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-backward_002ddelete_002dchar_002duntabify"
+    id=
+    "index-backward_002ddelete_002dchar_002duntabify"></a>Command:
+    <strong>backward-delete-char-untabify</strong> <em>count
+    &amp;optional killp</em></dt>
+
+    <dd>
+      <a name="index-tab-deletion" id="index-tab-deletion"></a>
+
+      <p>This command deletes <var>count</var> characters backward,
+      changing tabs into spaces. When the next character to be
+      deleted is a tab, it is first replaced with the proper number
+      of spaces to preserve alignment and then one of those spaces
+      is deleted instead of the tab. If <var>killp</var> is
+      non-<code>nil</code>, then the command saves the deleted
+      characters in the kill ring.</p>
+
+      <p>Conversion of tabs to spaces happens only if
+      <var>count</var> is positive. If it is negative, exactly
+      &acirc;&circ;&rsquo;<var>count</var> characters after point
+      are deleted.</p>
+
+      <p>In an interactive call, <var>count</var> is the numeric
+      prefix argument, and <var>killp</var> is the unprocessed
+      prefix argument. Therefore, if a prefix argument is supplied,
+      the text is saved in the kill ring. If no prefix argument is
+      supplied, then one character is deleted, but not saved in the
+      kill ring.</p>
+
+      <p>The value returned is always <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-backward_002ddelete_002dchar_002duntabify_002dmethod"
+    id="index-backward_002ddelete_002dchar_002duntabify_002dmethod">
+    </a>User Option:
+    <strong>backward-delete-char-untabify-method</strong></dt>
+
+    <dd>
+      <p>This option specifies how
+      <code>backward-delete-char-untabify</code> should deal with
+      whitespace. Possible values include <code>untabify</code>,
+      the default, meaning convert a tab to many spaces and delete
+      one; <code>hungry</code>, meaning delete all tabs and spaces
+      before point with one command; <code>all</code> meaning
+      delete all tabs, spaces and newlines before point, and
+      <code>nil</code>, meaning do nothing special for whitespace
+      characters.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "User_002dLevel-Deletion.html#User_002dLevel-Deletion"
+    accesskey="n" rel="next">User-Level Deletion</a>, Previous:
+    <a href="Commands-for-Insertion.html#Commands-for-Insertion"
+    accesskey="p" rel="prev">Commands for Insertion</a>, Up:
+    <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

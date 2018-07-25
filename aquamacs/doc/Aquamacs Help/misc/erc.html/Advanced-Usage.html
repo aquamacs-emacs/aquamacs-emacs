@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for ERC as distributed with Emacs 25.1.
 
 Copyright (C) 2005-2016 Free Software Foundation, Inc.
@@ -17,75 +19,123 @@ modify this GNU manual."
 All Emacs Lisp code contained in this document may be used, distributed,
 and modified without restriction. -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>ERC Manual: Advanced Usage</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="ERC Manual: Advanced Usage">
-<meta name="keywords" content="ERC Manual: Advanced Usage">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Connecting.html#Connecting" rel="next" title="Connecting">
-<link href="Modules.html#Modules" rel="prev" title="Modules">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>ERC Manual: Advanced Usage</title>
+  <meta name="description" content="ERC Manual: Advanced Usage" />
+  <meta name="keywords" content="ERC Manual: Advanced Usage" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Connecting.html#Connecting" rel="next" title=
+  "Connecting" />
+  <link href="Modules.html#Modules" rel="prev" title="Modules" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Advanced-Usage"></a>
-<div class="header">
-<p>
-Next: <a href="Getting-Help-and-Reporting-Bugs.html#Getting-Help-and-Reporting-Bugs" accesskey="n" rel="next">Getting Help and Reporting Bugs</a>, Previous: <a href="Modules.html#Modules" accesskey="p" rel="prev">Modules</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Advanced-Usage-1"></a>
-<h2 class="chapter">5 Advanced Usage</h2>
-<a name="index-advanced-topics"></a>
+<body lang="en" xml:lang="en">
+  <a name="Advanced-Usage" id="Advanced-Usage"></a>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Connecting.html#Connecting" accesskey="1">Connecting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Ways of connecting to an IRC server.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Sample-Configuration.html#Sample-Configuration" accesskey="2">Sample Configuration</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An example configuration file.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Options.html#Options" accesskey="3">Options</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Options that are available for ERC.
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href=
+    "Getting-Help-and-Reporting-Bugs.html#Getting-Help-and-Reporting-Bugs"
+    accesskey="n" rel="next">Getting Help and Reporting Bugs</a>,
+    Previous: <a href="Modules.html#Modules" accesskey="p" rel=
+    "prev">Modules</a>, Up: <a href="index.html#Top" accesskey="u"
+    rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Advanced-Usage-1" id="Advanced-Usage-1"></a>
 
+  <h2 class="chapter">5 Advanced Usage</h2><a name=
+  "index-advanced-topics" id="index-advanced-topics"></a>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Connecting.html#Connecting" accesskey=
+      "1">Connecting</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Ways of connecting to an IRC
+      server.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Sample-Configuration.html#Sample-Configuration" accesskey=
+      "2">Sample Configuration</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">An example configuration
+      file.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Options.html#Options" accesskey="3">Options</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Options that are available for
+      ERC.</td>
+    </tr>
+  </table>
 </body>
 </html>

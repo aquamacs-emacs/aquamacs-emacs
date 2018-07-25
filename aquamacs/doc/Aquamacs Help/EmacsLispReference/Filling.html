@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,271 +19,425 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Filling</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Filling">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Filling">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Margins.html#Margins" rel="next" title="Margins">
-<link href="Maintaining-Undo.html#Maintaining-Undo" rel="prev" title="Maintaining Undo">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Filling</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Filling" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Filling" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Margins.html#Margins" rel="next" title="Margins" />
+  <link href="Maintaining-Undo.html#Maintaining-Undo" rel="prev"
+  title="Maintaining Undo" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Filling" id="Filling"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Margins.html#Margins" accesskey="n" rel=
+    "next">Margins</a>, Previous: <a href=
+    "Maintaining-Undo.html#Maintaining-Undo" accesskey="p" rel=
+    "prev">Maintaining Undo</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Filling-1" id="Filling-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Filling"></a>
-<div class="header">
-<p>
-Next: <a href="Margins.html#Margins" accesskey="n" rel="next">Margins</a>, Previous: <a href="Maintaining-Undo.html#Maintaining-Undo" accesskey="p" rel="prev">Maintaining Undo</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Filling-1"></a>
-<h3 class="section">31.11 Filling</h3>
-<a name="index-filling-text"></a>
+  <h3 class="section">31.11 Filling</h3><a name=
+  "index-filling-text" id="index-filling-text"></a>
 
-<p><em>Filling</em> means adjusting the lengths of lines (by moving the line
-breaks) so that they are nearly (but no greater than) a specified
-maximum width.  Additionally, lines can be <em>justified</em>, which means
-inserting spaces to make the left and/or right margins line up
-precisely.  The width is controlled by the variable <code>fill-column</code>.
-For ease of reading, lines should be no longer than 70 or so columns.
-</p>
-<p>You can use Auto Fill mode (see <a href="Auto-Filling.html#Auto-Filling">Auto Filling</a>) to fill text
-automatically as you insert it, but changes to existing text may leave
-it improperly filled.  Then you must fill the text explicitly.
-</p>
-<p>Most of the commands in this section return values that are not
-meaningful.  All the functions that do filling take note of the current
-left margin, current right margin, and current justification style
-(see <a href="Margins.html#Margins">Margins</a>).  If the current justification style is
-<code>none</code>, the filling functions don&rsquo;t actually do anything.
-</p>
-<p>Several of the filling functions have an argument <var>justify</var>.
-If it is non-<code>nil</code>, that requests some kind of justification.  It
-can be <code>left</code>, <code>right</code>, <code>full</code>, or <code>center</code>, to
-request a specific style of justification.  If it is <code>t</code>, that
-means to use the current justification style for this part of the text
-(see <code>current-justification</code>, below).  Any other value is treated
-as <code>full</code>.
-</p>
-<p>When you call the filling functions interactively, using a prefix
-argument implies the value <code>full</code> for <var>justify</var>.
-</p>
-<dl>
-<dt><a name="index-fill_002dparagraph"></a>Command: <strong>fill-paragraph</strong> <em>&amp;optional justify region</em></dt>
-<dd><p>This command fills the paragraph at or after point.  If
-<var>justify</var> is non-<code>nil</code>, each line is justified as well.
-It uses the ordinary paragraph motion commands to find paragraph
-boundaries.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Paragraphs.html#Paragraphs">Paragraphs</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<p>When <var>region</var> is non-<code>nil</code>, then if Transient Mark mode is
-enabled and the mark is active, this command calls <code>fill-region</code>
-to fill all the paragraphs in the region, instead of filling only the
-current paragraph.  When this command is called interactively,
-<var>region</var> is <code>t</code>.
-</p></dd></dl>
+  <p><em>Filling</em> means adjusting the lengths of lines (by
+  moving the line breaks) so that they are nearly (but no greater
+  than) a specified maximum width. Additionally, lines can be
+  <em>justified</em>, which means inserting spaces to make the left
+  and/or right margins line up precisely. The width is controlled
+  by the variable <code>fill-column</code>. For ease of reading,
+  lines should be no longer than 70 or so columns.</p>
 
-<dl>
-<dt><a name="index-fill_002dregion"></a>Command: <strong>fill-region</strong> <em>start end &amp;optional justify nosqueeze to-eop</em></dt>
-<dd><p>This command fills each of the paragraphs in the region from <var>start</var>
-to <var>end</var>.  It justifies as well if <var>justify</var> is
-non-<code>nil</code>.
-</p>
-<p>If <var>nosqueeze</var> is non-<code>nil</code>, that means to leave whitespace
-other than line breaks untouched.  If <var>to-eop</var> is non-<code>nil</code>,
-that means to keep filling to the end of the paragraph&mdash;or the next hard
-newline, if <code>use-hard-newlines</code> is enabled (see below).
-</p>
-<p>The variable <code>paragraph-separate</code> controls how to distinguish
-paragraphs.  See <a href="Standard-Regexps.html#Standard-Regexps">Standard Regexps</a>.
-</p></dd></dl>
+  <p>You can use Auto Fill mode (see <a href=
+  "Auto-Filling.html#Auto-Filling">Auto Filling</a>) to fill text
+  automatically as you insert it, but changes to existing text may
+  leave it improperly filled. Then you must fill the text
+  explicitly.</p>
 
-<dl>
-<dt><a name="index-fill_002dindividual_002dparagraphs"></a>Command: <strong>fill-individual-paragraphs</strong> <em>start end &amp;optional justify citation-regexp</em></dt>
-<dd><p>This command fills each paragraph in the region according to its
-individual fill prefix.  Thus, if the lines of a paragraph were indented
-with spaces, the filled paragraph will remain indented in the same
-fashion.
-</p>
-<p>The first two arguments, <var>start</var> and <var>end</var>, are the beginning
-and end of the region to be filled.  The third and fourth arguments,
-<var>justify</var> and <var>citation-regexp</var>, are optional.  If
-<var>justify</var> is non-<code>nil</code>, the paragraphs are justified as
-well as filled.  If <var>citation-regexp</var> is non-<code>nil</code>, it means the
-function is operating on a mail message and therefore should not fill
-the header lines.  If <var>citation-regexp</var> is a string, it is used as
-a regular expression; if it matches the beginning of a line, that line
-is treated as a citation marker.
-</p>
-<p>Ordinarily, <code>fill-individual-paragraphs</code> regards each change in
-indentation as starting a new paragraph.  If
-<code>fill-individual-varying-indent</code> is non-<code>nil</code>, then only
-separator lines separate paragraphs.  That mode can handle indented
-paragraphs with additional indentation on the first line.
-</p></dd></dl>
+  <p>Most of the commands in this section return values that are
+  not meaningful. All the functions that do filling take note of
+  the current left margin, current right margin, and current
+  justification style (see <a href=
+  "Margins.html#Margins">Margins</a>). If the current justification
+  style is <code>none</code>, the filling functions don&rsquo;t
+  actually do anything.</p>
 
-<dl>
-<dt><a name="index-fill_002dindividual_002dvarying_002dindent"></a>User Option: <strong>fill-individual-varying-indent</strong></dt>
-<dd><p>This variable alters the action of <code>fill-individual-paragraphs</code> as
-described above.
-</p></dd></dl>
+  <p>Several of the filling functions have an argument
+  <var>justify</var>. If it is non-<code>nil</code>, that requests
+  some kind of justification. It can be <code>left</code>,
+  <code>right</code>, <code>full</code>, or <code>center</code>, to
+  request a specific style of justification. If it is
+  <code>t</code>, that means to use the current justification style
+  for this part of the text (see
+  <code>current-justification</code>, below). Any other value is
+  treated as <code>full</code>.</p>
 
-<dl>
-<dt><a name="index-fill_002dregion_002das_002dparagraph"></a>Command: <strong>fill-region-as-paragraph</strong> <em>start end &amp;optional justify nosqueeze squeeze-after</em></dt>
-<dd><p>This command considers a region of text as a single paragraph and fills
-it.  If the region was made up of many paragraphs, the blank lines
-between paragraphs are removed.  This function justifies as well as
-filling when <var>justify</var> is non-<code>nil</code>.
-</p>
-<p>If <var>nosqueeze</var> is non-<code>nil</code>, that means to leave whitespace
-other than line breaks untouched.  If <var>squeeze-after</var> is
-non-<code>nil</code>, it specifies a position in the region, and means don&rsquo;t
-canonicalize spaces before that position.
-</p>
-<p>In Adaptive Fill mode, this command calls <code>fill-context-prefix</code> to
-choose a fill prefix by default.  See <a href="Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>.
-</p></dd></dl>
+  <p>When you call the filling functions interactively, using a
+  prefix argument implies the value <code>full</code> for
+  <var>justify</var>.</p>
 
-<dl>
-<dt><a name="index-justify_002dcurrent_002dline"></a>Command: <strong>justify-current-line</strong> <em>&amp;optional how eop nosqueeze</em></dt>
-<dd><p>This command inserts spaces between the words of the current line so
-that the line ends exactly at <code>fill-column</code>.  It returns
-<code>nil</code>.
-</p>
-<p>The argument <var>how</var>, if non-<code>nil</code> specifies explicitly the style
-of justification.  It can be <code>left</code>, <code>right</code>, <code>full</code>,
-<code>center</code>, or <code>none</code>.  If it is <code>t</code>, that means to do
-follow specified justification style (see <code>current-justification</code>,
-below).  <code>nil</code> means to do full justification.
-</p>
-<p>If <var>eop</var> is non-<code>nil</code>, that means do only left-justification
-if <code>current-justification</code> specifies full justification.  This is
-used for the last line of a paragraph; even if the paragraph as a
-whole is fully justified, the last line should not be.
-</p>
-<p>If <var>nosqueeze</var> is non-<code>nil</code>, that means do not change interior
-whitespace.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-fill_002dparagraph" id=
+    "index-fill_002dparagraph"></a>Command:
+    <strong>fill-paragraph</strong> <em>&amp;optional justify
+    region</em></dt>
 
-<dl>
-<dt><a name="index-default_002djustification"></a>User Option: <strong>default-justification</strong></dt>
-<dd><p>This variable&rsquo;s value specifies the style of justification to use for
-text that doesn&rsquo;t specify a style with a text property.  The possible
-values are <code>left</code>, <code>right</code>, <code>full</code>, <code>center</code>, or
-<code>none</code>.  The default value is <code>left</code>.
-</p></dd></dl>
+    <dd>
+      <p>This command fills the paragraph at or after point. If
+      <var>justify</var> is non-<code>nil</code>, each line is
+      justified as well. It uses the ordinary paragraph motion
+      commands to find paragraph boundaries. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Paragraphs.html#Paragraphs">
+      Paragraphs</a> in <cite>The GNU Emacs Manual</cite>.</p>
 
-<dl>
-<dt><a name="index-current_002djustification"></a>Function: <strong>current-justification</strong></dt>
-<dd><p>This function returns the proper justification style to use for filling
-the text around point.
-</p>
-<p>This returns the value of the <code>justification</code> text property at
-point, or the variable <var>default-justification</var> if there is no such
-text property.  However, it returns <code>nil</code> rather than <code>none</code>
-to mean &ldquo;don&rsquo;t justify&rdquo;.
-</p></dd></dl>
+      <p>When <var>region</var> is non-<code>nil</code>, then if
+      Transient Mark mode is enabled and the mark is active, this
+      command calls <code>fill-region</code> to fill all the
+      paragraphs in the region, instead of filling only the current
+      paragraph. When this command is called interactively,
+      <var>region</var> is <code>t</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-sentence_002dend_002ddouble_002dspace"></a>User Option: <strong>sentence-end-double-space</strong></dt>
-<dd><a name="Definition-of-sentence_002dend_002ddouble_002dspace"></a><p>If this variable is non-<code>nil</code>, a period followed by just one space
-does not count as the end of a sentence, and the filling functions
-avoid breaking the line at such a place.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-fill_002dregion" id=
+    "index-fill_002dregion"></a>Command:
+    <strong>fill-region</strong> <em>start end &amp;optional
+    justify nosqueeze to-eop</em></dt>
 
-<dl>
-<dt><a name="index-sentence_002dend_002dwithout_002dperiod"></a>User Option: <strong>sentence-end-without-period</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, a sentence can end without a
-period.  This is used for languages like Thai, where sentences end
-with a double space but without a period.
-</p></dd></dl>
+    <dd>
+      <p>This command fills each of the paragraphs in the region
+      from <var>start</var> to <var>end</var>. It justifies as well
+      if <var>justify</var> is non-<code>nil</code>.</p>
 
-<dl>
-<dt><a name="index-sentence_002dend_002dwithout_002dspace"></a>User Option: <strong>sentence-end-without-space</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, it should be a string of
-characters that can end a sentence without following spaces.
-</p></dd></dl>
+      <p>If <var>nosqueeze</var> is non-<code>nil</code>, that
+      means to leave whitespace other than line breaks untouched.
+      If <var>to-eop</var> is non-<code>nil</code>, that means to
+      keep filling to the end of the paragraph&mdash;or the next
+      hard newline, if <code>use-hard-newlines</code> is enabled
+      (see below).</p>
 
-<dl>
-<dt><a name="index-fill_002dparagraph_002dfunction"></a>Variable: <strong>fill-paragraph-function</strong></dt>
-<dd><p>This variable provides a way to override the filling of paragraphs.
-If its value is non-<code>nil</code>, <code>fill-paragraph</code> calls this
-function to do the work.  If the function returns a non-<code>nil</code>
-value, <code>fill-paragraph</code> assumes the job is done, and immediately
-returns that value.
-</p>
-<p>The usual use of this feature is to fill comments in programming
-language modes.  If the function needs to fill a paragraph in the usual
-way, it can do so as follows:
-</p>
-<div class="example">
-<pre class="example">(let ((fill-paragraph-function nil))
+      <p>The variable <code>paragraph-separate</code> controls how
+      to distinguish paragraphs. See <a href=
+      "Standard-Regexps.html#Standard-Regexps">Standard
+      Regexps</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-fill_002dindividual_002dparagraphs" id=
+    "index-fill_002dindividual_002dparagraphs"></a>Command:
+    <strong>fill-individual-paragraphs</strong> <em>start end
+    &amp;optional justify citation-regexp</em></dt>
+
+    <dd>
+      <p>This command fills each paragraph in the region according
+      to its individual fill prefix. Thus, if the lines of a
+      paragraph were indented with spaces, the filled paragraph
+      will remain indented in the same fashion.</p>
+
+      <p>The first two arguments, <var>start</var> and
+      <var>end</var>, are the beginning and end of the region to be
+      filled. The third and fourth arguments, <var>justify</var>
+      and <var>citation-regexp</var>, are optional. If
+      <var>justify</var> is non-<code>nil</code>, the paragraphs
+      are justified as well as filled. If
+      <var>citation-regexp</var> is non-<code>nil</code>, it means
+      the function is operating on a mail message and therefore
+      should not fill the header lines. If
+      <var>citation-regexp</var> is a string, it is used as a
+      regular expression; if it matches the beginning of a line,
+      that line is treated as a citation marker.</p>
+
+      <p>Ordinarily, <code>fill-individual-paragraphs</code>
+      regards each change in indentation as starting a new
+      paragraph. If <code>fill-individual-varying-indent</code> is
+      non-<code>nil</code>, then only separator lines separate
+      paragraphs. That mode can handle indented paragraphs with
+      additional indentation on the first line.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-fill_002dindividual_002dvarying_002dindent"
+    id="index-fill_002dindividual_002dvarying_002dindent"></a>User
+    Option: <strong>fill-individual-varying-indent</strong></dt>
+
+    <dd>
+      <p>This variable alters the action of
+      <code>fill-individual-paragraphs</code> as described
+      above.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-fill_002dregion_002das_002dparagraph" id=
+    "index-fill_002dregion_002das_002dparagraph"></a>Command:
+    <strong>fill-region-as-paragraph</strong> <em>start end
+    &amp;optional justify nosqueeze squeeze-after</em></dt>
+
+    <dd>
+      <p>This command considers a region of text as a single
+      paragraph and fills it. If the region was made up of many
+      paragraphs, the blank lines between paragraphs are removed.
+      This function justifies as well as filling when
+      <var>justify</var> is non-<code>nil</code>.</p>
+
+      <p>If <var>nosqueeze</var> is non-<code>nil</code>, that
+      means to leave whitespace other than line breaks untouched.
+      If <var>squeeze-after</var> is non-<code>nil</code>, it
+      specifies a position in the region, and means don&rsquo;t
+      canonicalize spaces before that position.</p>
+
+      <p>In Adaptive Fill mode, this command calls
+      <code>fill-context-prefix</code> to choose a fill prefix by
+      default. See <a href=
+      "Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-justify_002dcurrent_002dline" id=
+    "index-justify_002dcurrent_002dline"></a>Command:
+    <strong>justify-current-line</strong> <em>&amp;optional how eop
+    nosqueeze</em></dt>
+
+    <dd>
+      <p>This command inserts spaces between the words of the
+      current line so that the line ends exactly at
+      <code>fill-column</code>. It returns <code>nil</code>.</p>
+
+      <p>The argument <var>how</var>, if non-<code>nil</code>
+      specifies explicitly the style of justification. It can be
+      <code>left</code>, <code>right</code>, <code>full</code>,
+      <code>center</code>, or <code>none</code>. If it is
+      <code>t</code>, that means to do follow specified
+      justification style (see <code>current-justification</code>,
+      below). <code>nil</code> means to do full justification.</p>
+
+      <p>If <var>eop</var> is non-<code>nil</code>, that means do
+      only left-justification if <code>current-justification</code>
+      specifies full justification. This is used for the last line
+      of a paragraph; even if the paragraph as a whole is fully
+      justified, the last line should not be.</p>
+
+      <p>If <var>nosqueeze</var> is non-<code>nil</code>, that
+      means do not change interior whitespace.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-default_002djustification" id=
+    "index-default_002djustification"></a>User Option:
+    <strong>default-justification</strong></dt>
+
+    <dd>
+      <p>This variable&rsquo;s value specifies the style of
+      justification to use for text that doesn&rsquo;t specify a
+      style with a text property. The possible values are
+      <code>left</code>, <code>right</code>, <code>full</code>,
+      <code>center</code>, or <code>none</code>. The default value
+      is <code>left</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-current_002djustification" id=
+    "index-current_002djustification"></a>Function:
+    <strong>current-justification</strong></dt>
+
+    <dd>
+      <p>This function returns the proper justification style to
+      use for filling the text around point.</p>
+
+      <p>This returns the value of the <code>justification</code>
+      text property at point, or the variable
+      <var>default-justification</var> if there is no such text
+      property. However, it returns <code>nil</code> rather than
+      <code>none</code> to mean &ldquo;don&rsquo;t
+      justify&rdquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-sentence_002dend_002ddouble_002dspace" id=
+    "index-sentence_002dend_002ddouble_002dspace"></a>User Option:
+    <strong>sentence-end-double-space</strong></dt>
+
+    <dd>
+      <a name="Definition-of-sentence_002dend_002ddouble_002dspace"
+      id="Definition-of-sentence_002dend_002ddouble_002dspace"></a>
+
+      <p>If this variable is non-<code>nil</code>, a period
+      followed by just one space does not count as the end of a
+      sentence, and the filling functions avoid breaking the line
+      at such a place.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-sentence_002dend_002dwithout_002dperiod" id=
+    "index-sentence_002dend_002dwithout_002dperiod"></a>User
+    Option: <strong>sentence-end-without-period</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, a sentence can
+      end without a period. This is used for languages like Thai,
+      where sentences end with a double space but without a
+      period.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-sentence_002dend_002dwithout_002dspace" id=
+    "index-sentence_002dend_002dwithout_002dspace"></a>User Option:
+    <strong>sentence-end-without-space</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, it should be a
+      string of characters that can end a sentence without
+      following spaces.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-fill_002dparagraph_002dfunction" id=
+    "index-fill_002dparagraph_002dfunction"></a>Variable:
+    <strong>fill-paragraph-function</strong></dt>
+
+    <dd>
+      <p>This variable provides a way to override the filling of
+      paragraphs. If its value is non-<code>nil</code>,
+      <code>fill-paragraph</code> calls this function to do the
+      work. If the function returns a non-<code>nil</code> value,
+      <code>fill-paragraph</code> assumes the job is done, and
+      immediately returns that value.</p>
+
+      <p>The usual use of this feature is to fill comments in
+      programming language modes. If the function needs to fill a
+      paragraph in the usual way, it can do so as follows:</p>
+
+      <div class="example">
+        <pre class="example">
+(let ((fill-paragraph-function nil))
   (fill-paragraph arg))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-fill_002dforward_002dparagraph_002dfunction"></a>Variable: <strong>fill-forward-paragraph-function</strong></dt>
-<dd><p>This variable provides a way to override how the filling functions,
-such as <code>fill-region</code> and <code>fill-paragraph</code>, move forward to
-the next paragraph.  Its value should be a function, which is called
-with a single argument <var>n</var>, the number of paragraphs to move, and
-should return the difference between <var>n</var> and the number of
-paragraphs actually moved.  The default value of this variable is
-<code>forward-paragraph</code>.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Paragraphs.html#Paragraphs">Paragraphs</a> in <cite>The GNU Emacs
-Manual</cite>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-fill_002dforward_002dparagraph_002dfunction"
+    id=
+    "index-fill_002dforward_002dparagraph_002dfunction"></a>Variable:
+    <strong>fill-forward-paragraph-function</strong></dt>
 
-<dl>
-<dt><a name="index-use_002dhard_002dnewlines"></a>Variable: <strong>use-hard-newlines</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, the filling functions do not delete
-newlines that have the <code>hard</code> text property.  These hard
-newlines act as paragraph separators.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Hard-and-Soft-Newlines.html#Hard-and-Soft-Newlines">Hard and Soft Newlines</a> in <cite>The GNU Emacs Manual</cite>.
-</p></dd></dl>
+    <dd>
+      <p>This variable provides a way to override how the filling
+      functions, such as <code>fill-region</code> and
+      <code>fill-paragraph</code>, move forward to the next
+      paragraph. Its value should be a function, which is called
+      with a single argument <var>n</var>, the number of paragraphs
+      to move, and should return the difference between
+      <var>n</var> and the number of paragraphs actually moved. The
+      default value of this variable is
+      <code>forward-paragraph</code>. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Paragraphs.html#Paragraphs">
+      Paragraphs</a> in <cite>The GNU Emacs Manual</cite>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Margins.html#Margins" accesskey="n" rel="next">Margins</a>, Previous: <a href="Maintaining-Undo.html#Maintaining-Undo" accesskey="p" rel="prev">Maintaining Undo</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-use_002dhard_002dnewlines" id=
+    "index-use_002dhard_002dnewlines"></a>Variable:
+    <strong>use-hard-newlines</strong></dt>
 
+    <dd>
+      <p>If this variable is non-<code>nil</code>, the filling
+      functions do not delete newlines that have the
+      <code>hard</code> text property. These hard newlines act as
+      paragraph separators. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Hard-and-Soft-Newlines.html#Hard-and-Soft-Newlines">
+      Hard and Soft Newlines</a> in <cite>The GNU Emacs
+      Manual</cite>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Margins.html#Margins" accesskey="n" rel=
+    "next">Margins</a>, Previous: <a href=
+    "Maintaining-Undo.html#Maintaining-Undo" accesskey="p" rel=
+    "prev">Maintaining Undo</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

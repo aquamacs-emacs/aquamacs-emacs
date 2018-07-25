@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,175 +19,272 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Managing Overlays</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Managing Overlays">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Managing Overlays">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Overlays.html#Overlays" rel="up" title="Overlays">
-<link href="Overlay-Properties.html#Overlay-Properties" rel="next" title="Overlay Properties">
-<link href="Overlays.html#Overlays" rel="prev" title="Overlays">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Managing Overlays</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Managing Overlays" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Managing Overlays" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Overlays.html#Overlays" rel="up" title="Overlays" />
+  <link href="Overlay-Properties.html#Overlay-Properties" rel=
+  "next" title="Overlay Properties" />
+  <link href="Overlays.html#Overlays" rel="prev" title=
+  "Overlays" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Managing-Overlays" id="Managing-Overlays"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Overlay-Properties.html#Overlay-Properties"
+    accesskey="n" rel="next">Overlay Properties</a>, Up: <a href=
+    "Overlays.html#Overlays" accesskey="u" rel="up">Overlays</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Managing-Overlays-1" id="Managing-Overlays-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Managing-Overlays"></a>
-<div class="header">
-<p>
-Next: <a href="Overlay-Properties.html#Overlay-Properties" accesskey="n" rel="next">Overlay Properties</a>, Up: <a href="Overlays.html#Overlays" accesskey="u" rel="up">Overlays</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Managing-Overlays-1"></a>
-<h4 class="subsection">37.9.1 Managing Overlays</h4>
-<a name="index-managing-overlays"></a>
-<a name="index-overlays_002c-managing"></a>
+  <h4 class="subsection">37.9.1 Managing Overlays</h4><a name=
+  "index-managing-overlays" id="index-managing-overlays"></a>
+  <a name="index-overlays_002c-managing" id=
+  "index-overlays_002c-managing"></a>
 
-<p>This section describes the functions to create, delete and move
-overlays, and to examine their contents.  Overlay changes are not
-recorded in the buffer&rsquo;s undo list, since the overlays are not
-part of the buffer&rsquo;s contents.
-</p>
-<dl>
-<dt><a name="index-overlayp"></a>Function: <strong>overlayp</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is an overlay.
-</p></dd></dl>
+  <p>This section describes the functions to create, delete and
+  move overlays, and to examine their contents. Overlay changes are
+  not recorded in the buffer&rsquo;s undo list, since the overlays
+  are not part of the buffer&rsquo;s contents.</p>
 
-<dl>
-<dt><a name="index-make_002doverlay"></a>Function: <strong>make-overlay</strong> <em>start end &amp;optional buffer front-advance rear-advance</em></dt>
-<dd><p>This function creates and returns an overlay that belongs to
-<var>buffer</var> and ranges from <var>start</var> to <var>end</var>.  Both <var>start</var>
-and <var>end</var> must specify buffer positions; they may be integers or
-markers.  If <var>buffer</var> is omitted, the overlay is created in the
-current buffer.
-</p>
-<a name="index-empty-overlay"></a>
-<a name="index-overlay_002c-empty"></a>
-<p>An overlay whose <var>start</var> and <var>end</var> specify the same buffer
-position is known as <em>empty</em>.  A non-empty overlay can become
-empty if the text between its <var>start</var> and <var>end</var> is deleted.
-When that happens, the overlay is by default not deleted, but you can
-cause it to be deleted by giving it the &lsquo;<samp>evaporate</samp>&rsquo; property
-(see <a href="Overlay-Properties.html#Overlay-Properties">evaporate property</a>).
-</p>
-<p>The arguments <var>front-advance</var> and <var>rear-advance</var> specify the
-marker insertion type for the start of the overlay and for the end of
-the overlay, respectively.  See <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>.  If they
-are both <code>nil</code>, the default, then the overlay extends to include
-any text inserted at the beginning, but not text inserted at the end.
-If <var>front-advance</var> is non-<code>nil</code>, text inserted at the
-beginning of the overlay is excluded from the overlay.  If
-<var>rear-advance</var> is non-<code>nil</code>, text inserted at the end of the
-overlay is included in the overlay.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-overlayp" id="index-overlayp"></a>Function:
+    <strong>overlayp</strong> <em>object</em></dt>
 
-<dl>
-<dt><a name="index-overlay_002dstart"></a>Function: <strong>overlay-start</strong> <em>overlay</em></dt>
-<dd><p>This function returns the position at which <var>overlay</var> starts,
-as an integer.
-</p></dd></dl>
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is an overlay.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-overlay_002dend"></a>Function: <strong>overlay-end</strong> <em>overlay</em></dt>
-<dd><p>This function returns the position at which <var>overlay</var> ends,
-as an integer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002doverlay" id=
+    "index-make_002doverlay"></a>Function:
+    <strong>make-overlay</strong> <em>start end &amp;optional
+    buffer front-advance rear-advance</em></dt>
 
-<dl>
-<dt><a name="index-overlay_002dbuffer"></a>Function: <strong>overlay-buffer</strong> <em>overlay</em></dt>
-<dd><p>This function returns the buffer that <var>overlay</var> belongs to.  It
-returns <code>nil</code> if <var>overlay</var> has been deleted.
-</p></dd></dl>
+    <dd>
+      <p>This function creates and returns an overlay that belongs
+      to <var>buffer</var> and ranges from <var>start</var> to
+      <var>end</var>. Both <var>start</var> and <var>end</var> must
+      specify buffer positions; they may be integers or markers. If
+      <var>buffer</var> is omitted, the overlay is created in the
+      current buffer.</p><a name="index-empty-overlay" id=
+      "index-empty-overlay"></a> <a name="index-overlay_002c-empty"
+      id="index-overlay_002c-empty"></a>
 
-<dl>
-<dt><a name="index-delete_002doverlay"></a>Function: <strong>delete-overlay</strong> <em>overlay</em></dt>
-<dd><p>This function deletes <var>overlay</var>.  The overlay continues to exist as
-a Lisp object, and its property list is unchanged, but it ceases to be
-attached to the buffer it belonged to, and ceases to have any effect on
-display.
-</p>
-<p>A deleted overlay is not permanently disconnected.  You can give it a
-position in a buffer again by calling <code>move-overlay</code>.
-</p></dd></dl>
+      <p>An overlay whose <var>start</var> and <var>end</var>
+      specify the same buffer position is known as <em>empty</em>.
+      A non-empty overlay can become empty if the text between its
+      <var>start</var> and <var>end</var> is deleted. When that
+      happens, the overlay is by default not deleted, but you can
+      cause it to be deleted by giving it the
+      &lsquo;<samp>evaporate</samp>&rsquo; property (see <a href=
+      "Overlay-Properties.html#Overlay-Properties">evaporate
+      property</a>).</p>
 
-<dl>
-<dt><a name="index-move_002doverlay"></a>Function: <strong>move-overlay</strong> <em>overlay start end &amp;optional buffer</em></dt>
-<dd><p>This function moves <var>overlay</var> to <var>buffer</var>, and places its bounds
-at <var>start</var> and <var>end</var>.  Both arguments <var>start</var> and <var>end</var>
-must specify buffer positions; they may be integers or markers.
-</p>
-<p>If <var>buffer</var> is omitted, <var>overlay</var> stays in the same buffer it
-was already associated with; if <var>overlay</var> was deleted, it goes into
-the current buffer.
-</p>
-<p>The return value is <var>overlay</var>.
-</p>
-<p>This is the only valid way to change the endpoints of an overlay.  Do
-not try modifying the markers in the overlay by hand, as that fails to
-update other vital data structures and can cause some overlays to be
-lost.
-</p></dd></dl>
+      <p>The arguments <var>front-advance</var> and
+      <var>rear-advance</var> specify the marker insertion type for
+      the start of the overlay and for the end of the overlay,
+      respectively. See <a href=
+      "Marker-Insertion-Types.html#Marker-Insertion-Types">Marker
+      Insertion Types</a>. If they are both <code>nil</code>, the
+      default, then the overlay extends to include any text
+      inserted at the beginning, but not text inserted at the end.
+      If <var>front-advance</var> is non-<code>nil</code>, text
+      inserted at the beginning of the overlay is excluded from the
+      overlay. If <var>rear-advance</var> is non-<code>nil</code>,
+      text inserted at the end of the overlay is included in the
+      overlay.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-remove_002doverlays"></a>Function: <strong>remove-overlays</strong> <em>&amp;optional start end name value</em></dt>
-<dd><p>This function removes all the overlays between <var>start</var> and
-<var>end</var> whose property <var>name</var> has the value <var>value</var>.  It can
-move the endpoints of the overlays in the region, or split them.
-</p>
-<p>If <var>name</var> is omitted or <code>nil</code>, it means to delete all overlays in
-the specified region.  If <var>start</var> and/or <var>end</var> are omitted or
-<code>nil</code>, that means the beginning and end of the buffer respectively.
-Therefore, <code>(remove-overlays)</code> removes all the overlays in the
-current buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-overlay_002dstart" id=
+    "index-overlay_002dstart"></a>Function:
+    <strong>overlay-start</strong> <em>overlay</em></dt>
 
-<dl>
-<dt><a name="index-copy_002doverlay"></a>Function: <strong>copy-overlay</strong> <em>overlay</em></dt>
-<dd><p>This function returns a copy of <var>overlay</var>.  The copy has the same
-endpoints and properties as <var>overlay</var>.  However, the marker
-insertion type for the start of the overlay and for the end of the
-overlay are set to their default values (see <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>).
-</p></dd></dl>
+    <dd>
+      <p>This function returns the position at which
+      <var>overlay</var> starts, as an integer.</p>
+    </dd>
+  </dl>
 
-<p>Here are some examples:
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Create an overlay.</span>
+  <dl>
+    <dt><a name="index-overlay_002dend" id=
+    "index-overlay_002dend"></a>Function:
+    <strong>overlay-end</strong> <em>overlay</em></dt>
+
+    <dd>
+      <p>This function returns the position at which
+      <var>overlay</var> ends, as an integer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-overlay_002dbuffer" id=
+    "index-overlay_002dbuffer"></a>Function:
+    <strong>overlay-buffer</strong> <em>overlay</em></dt>
+
+    <dd>
+      <p>This function returns the buffer that <var>overlay</var>
+      belongs to. It returns <code>nil</code> if <var>overlay</var>
+      has been deleted.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-delete_002doverlay" id=
+    "index-delete_002doverlay"></a>Function:
+    <strong>delete-overlay</strong> <em>overlay</em></dt>
+
+    <dd>
+      <p>This function deletes <var>overlay</var>. The overlay
+      continues to exist as a Lisp object, and its property list is
+      unchanged, but it ceases to be attached to the buffer it
+      belonged to, and ceases to have any effect on display.</p>
+
+      <p>A deleted overlay is not permanently disconnected. You can
+      give it a position in a buffer again by calling
+      <code>move-overlay</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-move_002doverlay" id=
+    "index-move_002doverlay"></a>Function:
+    <strong>move-overlay</strong> <em>overlay start end
+    &amp;optional buffer</em></dt>
+
+    <dd>
+      <p>This function moves <var>overlay</var> to
+      <var>buffer</var>, and places its bounds at <var>start</var>
+      and <var>end</var>. Both arguments <var>start</var> and
+      <var>end</var> must specify buffer positions; they may be
+      integers or markers.</p>
+
+      <p>If <var>buffer</var> is omitted, <var>overlay</var> stays
+      in the same buffer it was already associated with; if
+      <var>overlay</var> was deleted, it goes into the current
+      buffer.</p>
+
+      <p>The return value is <var>overlay</var>.</p>
+
+      <p>This is the only valid way to change the endpoints of an
+      overlay. Do not try modifying the markers in the overlay by
+      hand, as that fails to update other vital data structures and
+      can cause some overlays to be lost.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-remove_002doverlays" id=
+    "index-remove_002doverlays"></a>Function:
+    <strong>remove-overlays</strong> <em>&amp;optional start end
+    name value</em></dt>
+
+    <dd>
+      <p>This function removes all the overlays between
+      <var>start</var> and <var>end</var> whose property
+      <var>name</var> has the value <var>value</var>. It can move
+      the endpoints of the overlays in the region, or split
+      them.</p>
+
+      <p>If <var>name</var> is omitted or <code>nil</code>, it
+      means to delete all overlays in the specified region. If
+      <var>start</var> and/or <var>end</var> are omitted or
+      <code>nil</code>, that means the beginning and end of the
+      buffer respectively. Therefore,
+      <code>(remove-overlays)</code> removes all the overlays in
+      the current buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-copy_002doverlay" id=
+    "index-copy_002doverlay"></a>Function:
+    <strong>copy-overlay</strong> <em>overlay</em></dt>
+
+    <dd>
+      <p>This function returns a copy of <var>overlay</var>. The
+      copy has the same endpoints and properties as
+      <var>overlay</var>. However, the marker insertion type for
+      the start of the overlay and for the end of the overlay are
+      set to their default values (see <a href=
+      "Marker-Insertion-Types.html#Marker-Insertion-Types">Marker
+      Insertion Types</a>).</p>
+    </dd>
+  </dl>
+
+  <p>Here are some examples:</p>
+
+  <div class="example">
+    <pre class="example">
+;; <span class="roman">Create an overlay.</span>
 (setq foo (make-overlay 1 10))
      &rArr; #&lt;overlay from 1 to 10 in display.texi&gt;
 (overlay-start foo)
@@ -194,7 +293,8 @@ overlay are set to their default values (see <a href="Marker-Insertion-Types.htm
      &rArr; 10
 (overlay-buffer foo)
      &rArr; #&lt;buffer display.texi&gt;
-;; <span class="roman">Give it a property we can check later.</span>
+;; <span class=
+"roman">Give it a property we can check later.</span>
 (overlay-put foo 'happy t)
      &rArr; t
 ;; <span class="roman">Verify the property is present.</span>
@@ -230,34 +330,44 @@ foo
      &rArr; 20
 (overlay-buffer foo)
      &rArr; #&lt;buffer display.texi&gt;
-;; <span class="roman">Moving and deleting the overlay does not change its properties.</span>
+;; <span class=
+"roman">Moving and deleting the overlay does not change its properties.</span>
 (overlay-get foo 'happy)
      &rArr; t
-</pre></div>
+</pre>
+  </div>
 
-<p>Emacs stores the overlays of each buffer in two lists, divided
-around an arbitrary center position.  One list extends backwards
-through the buffer from that center position, and the other extends
-forwards from that center position.  The center position can be anywhere
-in the buffer.
-</p>
-<dl>
-<dt><a name="index-overlay_002drecenter"></a>Function: <strong>overlay-recenter</strong> <em>pos</em></dt>
-<dd><p>This function recenters the overlays of the current buffer around
-position <var>pos</var>.  That makes overlay lookup faster for positions
-near <var>pos</var>, but slower for positions far away from <var>pos</var>.
-</p></dd></dl>
+  <p>Emacs stores the overlays of each buffer in two lists, divided
+  around an arbitrary center position. One list extends backwards
+  through the buffer from that center position, and the other
+  extends forwards from that center position. The center position
+  can be anywhere in the buffer.</p>
 
-<p>A loop that scans the buffer forwards, creating overlays, can run
-faster if you do <code>(overlay-recenter (point-max))</code> first.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Overlay-Properties.html#Overlay-Properties" accesskey="n" rel="next">Overlay Properties</a>, Up: <a href="Overlays.html#Overlays" accesskey="u" rel="up">Overlays</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-overlay_002drecenter" id=
+    "index-overlay_002drecenter"></a>Function:
+    <strong>overlay-recenter</strong> <em>pos</em></dt>
 
+    <dd>
+      <p>This function recenters the overlays of the current buffer
+      around position <var>pos</var>. That makes overlay lookup
+      faster for positions near <var>pos</var>, but slower for
+      positions far away from <var>pos</var>.</p>
+    </dd>
+  </dl>
 
+  <p>A loop that scans the buffer forwards, creating overlays, can
+  run faster if you do <code>(overlay-recenter (point-max))</code>
+  first.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Overlay-Properties.html#Overlay-Properties"
+    accesskey="n" rel="next">Overlay Properties</a>, Up: <a href=
+    "Overlays.html#Overlays" accesskey="u" rel="up">Overlays</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

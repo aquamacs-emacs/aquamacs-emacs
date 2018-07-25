@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the manual for the url Emacs Lisp library.
 
 Copyright (C) 1993-1999, 2002, 2004-2016 Free Software
@@ -15,128 +17,187 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>URL Programmer&rsquo;s Manual: URI Encoding</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="URL Programmer&rsquo;s Manual: URI Encoding">
-<meta name="keywords" content="URL Programmer&rsquo;s Manual: URI Encoding">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="URI-Parsing.html#URI-Parsing" rel="up" title="URI Parsing">
-<link href="Retrieving-URLs.html#Retrieving-URLs" rel="next" title="Retrieving URLs">
-<link href="Parsed-URIs.html#Parsed-URIs" rel="prev" title="Parsed URIs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>URL Programmer&rsquo;s Manual: URI Encoding</title>
+  <meta name="description" content=
+  "URL Programmer&rsquo;s Manual: URI Encoding" />
+  <meta name="keywords" content=
+  "URL Programmer&rsquo;s Manual: URI Encoding" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="URI-Parsing.html#URI-Parsing" rel="up" title=
+  "URI Parsing" />
+  <link href="Retrieving-URLs.html#Retrieving-URLs" rel="next"
+  title="Retrieving URLs" />
+  <link href="Parsed-URIs.html#Parsed-URIs" rel="prev" title=
+  "Parsed URIs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="URI-Encoding"></a>
-<div class="header">
-<p>
-Previous: <a href="Parsed-URIs.html#Parsed-URIs" accesskey="p" rel="prev">Parsed URIs</a>, Up: <a href="URI-Parsing.html#URI-Parsing" accesskey="u" rel="up">URI Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="URI-Encoding-1"></a>
-<h3 class="section">2.2 URI Encoding</h3>
+<body lang="en" xml:lang="en">
+  <a name="URI-Encoding" id="URI-Encoding"></a>
 
-<a name="index-percent-encoding"></a>
-<p>The <code>url-generic-parse-url</code> parser does not obey RFC 3986 in
-one respect: it allows non-<acronym>ASCII</acronym> characters in URI strings.
-</p>
-<p>Strictly speaking, RFC 3986 compatible URIs may only consist of
-<acronym>ASCII</acronym> characters; non-<acronym>ASCII</acronym> characters are
-represented by converting them to UTF-8 byte sequences, and performing
-<em>percent encoding</em> on the bytes.  For example, the o-umlaut
-character is converted to the UTF-8 byte sequence &lsquo;<samp>\xD3\xA7</samp>&rsquo;,
-then percent encoded to &lsquo;<samp>%D3%A7</samp>&rsquo;.  (Certain &ldquo;reserved&rdquo;
-<acronym>ASCII</acronym> characters must also be percent encoded when they
-appear in URI components.)
-</p>
-<p>The function <code>url-encode-url</code> can be used to convert a URI
-string containing arbitrary characters to one that is properly
-percent-encoded in accordance with RFC 3986.
-</p>
-<dl>
-<dt><a name="index-url_002dencode_002durl"></a>Function: <strong>url-encode-url</strong> <em>url-string</em></dt>
-<dd><p>This function return a properly URI-encoded version of
-<var>url-string</var>.  It also performs <em>URI normalization</em>,
-e.g., converting the scheme component to lowercase if it was
-previously uppercase.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href="Parsed-URIs.html#Parsed-URIs" accesskey=
+    "p" rel="prev">Parsed URIs</a>, Up: <a href=
+    "URI-Parsing.html#URI-Parsing" accesskey="u" rel="up">URI
+    Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="URI-Encoding-1" id="URI-Encoding-1"></a>
 
-<p>To convert between a string containing arbitrary characters and a
-percent-encoded all-<acronym>ASCII</acronym> string, use the functions
-<code>url-hexify-string</code> and <code>url-unhex-string</code>:
-</p>
-<dl>
-<dt><a name="index-url_002dhexify_002dstring"></a>Function: <strong>url-hexify-string</strong> <em>string &amp;optional allowed-chars</em></dt>
-<dd><p>This function performs percent-encoding on <var>string</var>, and returns
-the result.
-</p>
-<p>If <var>string</var> is multibyte, it is first converted to a UTF-8 byte
-string.  Each byte corresponding to an allowed character is left
-as-is, while all other bytes are converted to a three-character
-sequence: &lsquo;<samp>%</samp>&rsquo; followed by two upper-case hex digits.
-</p>
-<a name="index-url_002dunreserved_002dchars"></a>
-<a name="index-unreserved-characters"></a>
-<p>The allowed characters are specified by <var>allowed-chars</var>.  If this
-argument is <code>nil</code>, the allowed characters are those specified as
-<em>unreserved characters</em> by RFC 3986 (see the variable
-<code>url-unreserved-chars</code>).  Otherwise, <var>allowed-chars</var> should
-be a vector whose <var>n</var>-th element is non-<code>nil</code> if character
-<var>n</var> is allowed.
-</p></dd></dl>
+  <h3 class="section">2.2 URI Encoding</h3><a name=
+  "index-percent-encoding" id="index-percent-encoding"></a>
 
-<dl>
-<dt><a name="index-url_002dunhex_002dstring"></a>Function: <strong>url-unhex-string</strong> <em>string &amp;optional allow-newlines</em></dt>
-<dd><p>This function replaces percent-encoding sequences in <var>string</var> with
-their character equivalents, and returns the resulting string.
-</p>
-<p>If <var>allow-newlines</var> is non-<code>nil</code>, it allows the decoding of
-carriage returns and line feeds, which are normally forbidden in URIs.
-</p></dd></dl>
+  <p>The <code>url-generic-parse-url</code> parser does not obey
+  RFC 3986 in one respect: it allows non-<acronym>ASCII</acronym>
+  characters in URI strings.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Parsed-URIs.html#Parsed-URIs" accesskey="p" rel="prev">Parsed URIs</a>, Up: <a href="URI-Parsing.html#URI-Parsing" accesskey="u" rel="up">URI Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Strictly speaking, RFC 3986 compatible URIs may only consist
+  of <acronym>ASCII</acronym> characters;
+  non-<acronym>ASCII</acronym> characters are represented by
+  converting them to UTF-8 byte sequences, and performing
+  <em>percent encoding</em> on the bytes. For example, the o-umlaut
+  character is converted to the UTF-8 byte sequence
+  &lsquo;<samp>\xD3\xA7</samp>&rsquo;, then percent encoded to
+  &lsquo;<samp>%D3%A7</samp>&rsquo;. (Certain
+  &ldquo;reserved&rdquo; <acronym>ASCII</acronym> characters must
+  also be percent encoded when they appear in URI components.)</p>
 
+  <p>The function <code>url-encode-url</code> can be used to
+  convert a URI string containing arbitrary characters to one that
+  is properly percent-encoded in accordance with RFC 3986.</p>
 
+  <dl>
+    <dt><a name="index-url_002dencode_002durl" id=
+    "index-url_002dencode_002durl"></a>Function:
+    <strong>url-encode-url</strong> <em>url-string</em></dt>
 
+    <dd>
+      <p>This function return a properly URI-encoded version of
+      <var>url-string</var>. It also performs <em>URI
+      normalization</em>, e.g., converting the scheme component to
+      lowercase if it was previously uppercase.</p>
+    </dd>
+  </dl>
+
+  <p>To convert between a string containing arbitrary characters
+  and a percent-encoded all-<acronym>ASCII</acronym> string, use
+  the functions <code>url-hexify-string</code> and
+  <code>url-unhex-string</code>:</p>
+
+  <dl>
+    <dt><a name="index-url_002dhexify_002dstring" id=
+    "index-url_002dhexify_002dstring"></a>Function:
+    <strong>url-hexify-string</strong> <em>string &amp;optional
+    allowed-chars</em></dt>
+
+    <dd>
+      <p>This function performs percent-encoding on
+      <var>string</var>, and returns the result.</p>
+
+      <p>If <var>string</var> is multibyte, it is first converted
+      to a UTF-8 byte string. Each byte corresponding to an allowed
+      character is left as-is, while all other bytes are converted
+      to a three-character sequence: &lsquo;<samp>%</samp>&rsquo;
+      followed by two upper-case hex digits.</p><a name=
+      "index-url_002dunreserved_002dchars" id=
+      "index-url_002dunreserved_002dchars"></a> <a name=
+      "index-unreserved-characters" id=
+      "index-unreserved-characters"></a>
+
+      <p>The allowed characters are specified by
+      <var>allowed-chars</var>. If this argument is
+      <code>nil</code>, the allowed characters are those specified
+      as <em>unreserved characters</em> by RFC 3986 (see the
+      variable <code>url-unreserved-chars</code>). Otherwise,
+      <var>allowed-chars</var> should be a vector whose
+      <var>n</var>-th element is non-<code>nil</code> if character
+      <var>n</var> is allowed.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-url_002dunhex_002dstring" id=
+    "index-url_002dunhex_002dstring"></a>Function:
+    <strong>url-unhex-string</strong> <em>string &amp;optional
+    allow-newlines</em></dt>
+
+    <dd>
+      <p>This function replaces percent-encoding sequences in
+      <var>string</var> with their character equivalents, and
+      returns the resulting string.</p>
+
+      <p>If <var>allow-newlines</var> is non-<code>nil</code>, it
+      allows the decoding of carriage returns and line feeds, which
+      are normally forbidden in URIs.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Parsed-URIs.html#Parsed-URIs" accesskey=
+    "p" rel="prev">Parsed URIs</a>, Up: <a href=
+    "URI-Parsing.html#URI-Parsing" accesskey="u" rel="up">URI
+    Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

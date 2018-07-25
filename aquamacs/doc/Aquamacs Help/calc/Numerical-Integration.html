@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Numerical Integration - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Calculus.html#Calculus" title="Calculus">
-<link rel="prev" href="Customizing-the-Integrator.html#Customizing-the-Integrator" title="Customizing the Integrator">
-<link rel="next" href="Taylor-Series.html#Taylor-Series" title="Taylor Series">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Numerical Integration - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Calculus.html#Calculus" title="Calculus" />
+  <link rel="prev" href=
+  "Customizing-the-Integrator.html#Customizing-the-Integrator"
+  title="Customizing the Integrator" />
+  <link rel="next" href="Taylor-Series.html#Taylor-Series" title=
+  "Taylor Series" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +38,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,50 +51,67 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Numerical-Integration"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Taylor-Series.html#Taylor-Series">Taylor Series</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Customizing-the-Integrator.html#Customizing-the-Integrator">Customizing the Integrator</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Calculus.html#Calculus">Calculus</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Numerical-Integration" id="Numerical-Integration"></a>
 
-<h4 class="subsection">11.5.4 Numerical Integration</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Taylor-Series.html#Taylor-Series">Taylor Series</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Customizing-the-Integrator.html#Customizing-the-Integrator">Customizing
+    the Integrator</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Calculus.html#Calculus">Calculus</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-a-I-1751"></a><a name="index-calc_002dnum_002dintegral-1752"></a><a name="index-ninteg-1753"></a>If you want a purely numerical answer to an integration problem, you can
-use the <kbd>a I</kbd> (<code>calc-num-integral</code>) [<code>ninteg</code>] command.  This
-command prompts for an integration variable, a lower limit, and an
-upper limit.  Except for the integration variable, all other variables
-that appear in the integrand formula must have stored values.  (A stored
-value, if any, for the integration variable itself is ignored.)
+  <h4 class="subsection">11.5.4 Numerical Integration</h4>
 
-   <p>Numerical integration works by evaluating your formula at many points in
-the specified interval.  Calc uses an &ldquo;open Romberg&rdquo; method; this means
-that it does not evaluate the formula actually at the endpoints (so that
-it is safe to integrate &lsquo;<samp><span class="samp">sin(x)/x</span></samp>&rsquo; from zero, for example).  Also,
-the Romberg method works especially well when the function being
-integrated is fairly smooth.  If the function is not smooth, Calc will
-have to evaluate it at quite a few points before it can accurately
-determine the value of the integral.
+  <p class="noindent"><a name="index-a-I-1751" id=
+  "index-a-I-1751"></a><a name=
+  "index-calc_002dnum_002dintegral-1752" id=
+  "index-calc_002dnum_002dintegral-1752"></a><a name=
+  "index-ninteg-1753" id="index-ninteg-1753"></a>If you want a
+  purely numerical answer to an integration problem, you can use
+  the <kbd>a I</kbd> (<code>calc-num-integral</code>)
+  [<code>ninteg</code>] command. This command prompts for an
+  integration variable, a lower limit, and an upper limit. Except
+  for the integration variable, all other variables that appear in
+  the integrand formula must have stored values. (A stored value,
+  if any, for the integration variable itself is ignored.)</p>
 
-   <p>Integration is much faster when the current precision is small.  It is
-best to set the precision to the smallest acceptable number of digits
-before you use <kbd>a I</kbd>.  If Calc appears to be taking too long, press
-<kbd>C-g</kbd> to halt it and try a lower precision.  If Calc still appears
-to need hundreds of evaluations, check to make sure your function is
-well-behaved in the specified interval.
+  <p>Numerical integration works by evaluating your formula at many
+  points in the specified interval. Calc uses an &ldquo;open
+  Romberg&rdquo; method; this means that it does not evaluate the
+  formula actually at the endpoints (so that it is safe to
+  integrate &lsquo;<samp><span class=
+  "samp">sin(x)/x</span></samp>&rsquo; from zero, for example).
+  Also, the Romberg method works especially well when the function
+  being integrated is fairly smooth. If the function is not smooth,
+  Calc will have to evaluate it at quite a few points before it can
+  accurately determine the value of the integral.</p>
 
-   <p>It is possible for the lower integration limit to be &lsquo;<samp><span class="samp">-inf</span></samp>&rsquo; (minus
-infinity).  Likewise, the upper limit may be plus infinity.  Calc
-internally transforms the integral into an equivalent one with finite
-limits.  However, integration to or across singularities is not supported:
-The integral of &lsquo;<samp><span class="samp">1/sqrt(x)</span></samp>&rsquo; from 0 to 1 exists (it can be found
-by Calc's symbolic integrator, for example), but <kbd>a I</kbd> will fail
-because the integrand goes to infinity at one of the endpoints.
+  <p>Integration is much faster when the current precision is
+  small. It is best to set the precision to the smallest acceptable
+  number of digits before you use <kbd>a I</kbd>. If Calc appears
+  to be taking too long, press <kbd>C-g</kbd> to halt it and try a
+  lower precision. If Calc still appears to need hundreds of
+  evaluations, check to make sure your function is well-behaved in
+  the specified interval.</p>
 
-   </body></html>
-
+  <p>It is possible for the lower integration limit to be
+  &lsquo;<samp><span class="samp">-inf</span></samp>&rsquo; (minus
+  infinity). Likewise, the upper limit may be plus infinity. Calc
+  internally transforms the integral into an equivalent one with
+  finite limits. However, integration to or across singularities is
+  not supported: The integral of &lsquo;<samp><span class=
+  "samp">1/sqrt(x)</span></samp>&rsquo; from 0 to 1 exists (it can
+  be found by Calc's symbolic integrator, for example), but <kbd>a
+  I</kbd> will fail because the integrand goes to infinity at one
+  of the endpoints.</p>
+</body>
+</html>

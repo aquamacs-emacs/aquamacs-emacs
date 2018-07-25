@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Set compiler options - Ada Mode</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Ada Mode">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Compiling-Examples.html#Compiling-Examples" title="Compiling Examples">
-<link rel="prev" href="No-project-files.html#No-project-files" title="No project files">
-<link rel="next" href="Set-source-search-path.html#Set-source-search-path" title="Set source search path">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Set compiler options - Ada Mode</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Ada Mode" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Compiling-Examples.html#Compiling-Examples"
+  title="Compiling Examples" />
+  <link rel="prev" href="No-project-files.html#No-project-files"
+  title="No project files" />
+  <link rel="next" href=
+  "Set-source-search-path.html#Set-source-search-path" title=
+  "Set source search path" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -25,8 +35,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,56 +48,74 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Set-compiler-options"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Set-source-search-path.html#Set-source-search-path">Set source search path</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="No-project-files.html#No-project-files">No project files</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Compiling-Examples.html#Compiling-Examples">Compiling Examples</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Set-compiler-options" id="Set-compiler-options"></a>
 
-<h3 class="section">6.2 Set compiler options</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Set-source-search-path.html#Set-source-search-path">Set source
+    search path</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="No-project-files.html#No-project-files">No project
+    files</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Compiling-Examples.html#Compiling-Examples">Compiling
+    Examples</a></p>
+    <hr />
+  </div>
 
-<p>This example illustrates using an Emacs Ada mode project file to set a
-compiler option.
+  <h3 class="section">6.2 Set compiler options</h3>
 
-   <p>If you have files from <samp><span class="file">Example_1</span></samp> open in Emacs, you should
-close them so you don't get confused. Use menu &lsquo;<samp><span class="samp">File | Close
-(current buffer)</span></samp>&rsquo;.
+  <p>This example illustrates using an Emacs Ada mode project file
+  to set a compiler option.</p>
 
-   <p>In directory <samp><span class="file">Example_2</span></samp>, create these files:
+  <p>If you have files from <samp><span class=
+  "file">Example_1</span></samp> open in Emacs, you should close
+  them so you don't get confused. Use menu
+  &lsquo;<samp><span class="samp">File | Close (current
+  buffer)</span></samp>&rsquo;.</p>
 
-   <p><samp><span class="file">hello.adb</span></samp>:
+  <p>In directory <samp><span class="file">Example_2</span></samp>,
+  create these files:</p>
 
-<pre class="example">     with Ada.Text_IO;
+  <p><samp><span class="file">hello.adb</span></samp>:</p>
+  <pre class="example">
+     with Ada.Text_IO;
      procedure Hello
      is begin
         Put_Line("Hello from hello.adb");
      end Hello;
 </pre>
-   <p>This is the same as <samp><span class="file">hello.adb</span></samp> from <samp><span class="file">Example_1</span></samp>. It has two
-errors; missing &ldquo;use Ada.Text_IO;&rdquo;, and no space between
-<code>Put_Line</code> and its argument list.
 
-   <p><samp><span class="file">hello.adp</span></samp>:
+  <p>This is the same as <samp><span class=
+  "file">hello.adb</span></samp> from <samp><span class=
+  "file">Example_1</span></samp>. It has two errors; missing
+  &ldquo;use Ada.Text_IO;&rdquo;, and no space between
+  <code>Put_Line</code> and its argument list.</p>
 
-<pre class="example">     comp_opt=-gnatyt
+  <p><samp><span class="file">hello.adp</span></samp>:</p>
+  <pre class="example">
+     comp_opt=-gnatyt
 </pre>
-   <p>This tells the GNAT compiler to check for token spacing; in
-particular, there must be a space preceding a parenthesis.
 
-   <p>In buffer <samp><span class="file">hello.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Project | Load...</span></samp>&rsquo;, and
-select <samp><span class="file">Example_2/hello.adp</span></samp>.
+  <p>This tells the GNAT compiler to check for token spacing; in
+  particular, there must be a space preceding a parenthesis.</p>
 
-   <p>Then, again in buffer <samp><span class="file">hello.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Set main and
-Build</span></samp>&rsquo;. You should get a <code>*compilation*</code> buffer containing
-something like (the directory paths will be different):
+  <p>In buffer <samp><span class="file">hello.adb</span></samp>,
+  invoke &lsquo;<samp><span class="samp">Ada | Project |
+  Load...</span></samp>&rsquo;, and select <samp><span class=
+  "file">Example_2/hello.adp</span></samp>.</p>
 
-<pre class="example">     cd c:/Examples/Example_2/
+  <p>Then, again in buffer <samp><span class=
+  "file">hello.adb</span></samp>, invoke &lsquo;<samp><span class=
+  "samp">Ada | Set main and Build</span></samp>&rsquo;. You should
+  get a <code>*compilation*</code> buffer containing something like
+  (the directory paths will be different):</p>
+  <pre class="example">
+     cd c:/Examples/Example_2/
      gnatmake -o hello hello -g -cargs -gnatyt  -bargs  -largs
      gcc -c -g -gnatyt hello.adb
      hello.adb:4:04: "Put_Line" is not visible
@@ -94,13 +124,18 @@ something like (the directory paths will be different):
      hello.adb:4:12: (style) space required
      gnatmake: "hello.adb" compilation error
 </pre>
-   <p>Compare this to the compiler output in <a href="No-project-files.html#No-project-files">No project files</a>; the
-gnatmake option <code>-cargs -gnatq -gnatQ</code> has been replaced by
-<code>-cargs -gnaty</code>, and an additional error is reported in
-<samp><span class="file">hello.adb</span></samp> on line 4. This shows that <samp><span class="file">hello.adp</span></samp> is being
-used to set the compiler options.
 
-   <p>Fixing the error, linking and running the code proceed as in <a href="No-project-files.html#No-project-files">No project files</a>.
+  <p>Compare this to the compiler output in <a href=
+  "No-project-files.html#No-project-files">No project files</a>;
+  the gnatmake option <code>-cargs -gnatq -gnatQ</code> has been
+  replaced by <code>-cargs -gnaty</code>, and an additional error
+  is reported in <samp><span class="file">hello.adb</span></samp>
+  on line 4. This shows that <samp><span class=
+  "file">hello.adp</span></samp> is being used to set the compiler
+  options.</p>
 
-   </body></html>
-
+  <p>Fixing the error, linking and running the code proceed as in
+  <a href="No-project-files.html#No-project-files">No project
+  files</a>.</p>
+</body>
+</html>

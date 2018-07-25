@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,122 +19,177 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Defining Hash</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Defining Hash">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Defining Hash">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Hash-Tables.html#Hash-Tables" rel="up" title="Hash Tables">
-<link href="Other-Hash.html#Other-Hash" rel="next" title="Other Hash">
-<link href="Hash-Access.html#Hash-Access" rel="prev" title="Hash Access">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Defining Hash</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Defining Hash" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Defining Hash" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Hash-Tables.html#Hash-Tables" rel="up" title=
+  "Hash Tables" />
+  <link href="Other-Hash.html#Other-Hash" rel="next" title=
+  "Other Hash" />
+  <link href="Hash-Access.html#Hash-Access" rel="prev" title=
+  "Hash Access" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Defining-Hash" id="Defining-Hash"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Other-Hash.html#Other-Hash" accesskey="n"
+    rel="next">Other Hash</a>, Previous: <a href=
+    "Hash-Access.html#Hash-Access" accesskey="p" rel="prev">Hash
+    Access</a>, Up: <a href="Hash-Tables.html#Hash-Tables"
+    accesskey="u" rel="up">Hash Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Hash-Comparisons" id=
+  "Defining-Hash-Comparisons"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Hash"></a>
-<div class="header">
-<p>
-Next: <a href="Other-Hash.html#Other-Hash" accesskey="n" rel="next">Other Hash</a>, Previous: <a href="Hash-Access.html#Hash-Access" accesskey="p" rel="prev">Hash Access</a>, Up: <a href="Hash-Tables.html#Hash-Tables" accesskey="u" rel="up">Hash Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Hash-Comparisons"></a>
-<h3 class="section">7.3 Defining Hash Comparisons</h3>
-<a name="index-hash-code"></a>
-<a name="index-define-hash-comparisons"></a>
+  <h3 class="section">7.3 Defining Hash Comparisons</h3><a name=
+  "index-hash-code" id="index-hash-code"></a> <a name=
+  "index-define-hash-comparisons" id=
+  "index-define-hash-comparisons"></a>
 
-<p>You can define new methods of key lookup by means of
-<code>define-hash-table-test</code>.  In order to use this feature, you need
-to understand how hash tables work, and what a <em>hash code</em> means.
-</p>
-<p>You can think of a hash table conceptually as a large array of many
-slots, each capable of holding one association.  To look up a key,
-<code>gethash</code> first computes an integer, the hash code, from the key.
-It reduces this integer modulo the length of the array, to produce an
-index in the array.  Then it looks in that slot, and if necessary in
-other nearby slots, to see if it has found the key being sought.
-</p>
-<p>Thus, to define a new method of key lookup, you need to specify both a
-function to compute the hash code from a key, and a function to compare
-two keys directly.
-</p>
-<dl>
-<dt><a name="index-define_002dhash_002dtable_002dtest"></a>Function: <strong>define-hash-table-test</strong> <em>name test-fn hash-fn</em></dt>
-<dd><p>This function defines a new hash table test, named <var>name</var>.
-</p>
-<p>After defining <var>name</var> in this way, you can use it as the <var>test</var>
-argument in <code>make-hash-table</code>.  When you do that, the hash table
-will use <var>test-fn</var> to compare key values, and <var>hash-fn</var> to compute
-a hash code from a key value.
-</p>
-<p>The function <var>test-fn</var> should accept two arguments, two keys, and
-return non-<code>nil</code> if they are considered the same.
-</p>
-<p>The function <var>hash-fn</var> should accept one argument, a key, and return
-an integer that is the hash code of that key.  For good results, the
-function should use the whole range of integers for hash codes,
-including negative integers.
-</p>
-<p>The specified functions are stored in the property list of <var>name</var>
-under the property <code>hash-table-test</code>; the property value&rsquo;s form is
-<code>(<var>test-fn</var> <var>hash-fn</var>)</code>.
-</p></dd></dl>
+  <p>You can define new methods of key lookup by means of
+  <code>define-hash-table-test</code>. In order to use this
+  feature, you need to understand how hash tables work, and what a
+  <em>hash code</em> means.</p>
 
-<dl>
-<dt><a name="index-sxhash"></a>Function: <strong>sxhash</strong> <em>obj</em></dt>
-<dd><p>This function returns a hash code for Lisp object <var>obj</var>.
-This is an integer which reflects the contents of <var>obj</var>
-and the other Lisp objects it points to.
-</p>
-<p>If two objects <var>obj1</var> and <var>obj2</var> are equal, then <code>(sxhash
-<var>obj1</var>)</code> and <code>(sxhash <var>obj2</var>)</code> are the same integer.
-</p>
-<p>If the two objects are not equal, the values returned by <code>sxhash</code>
-are usually different, but not always; once in a rare while, by luck,
-you will encounter two distinct-looking objects that give the same
-result from <code>sxhash</code>.
-</p></dd></dl>
+  <p>You can think of a hash table conceptually as a large array of
+  many slots, each capable of holding one association. To look up a
+  key, <code>gethash</code> first computes an integer, the hash
+  code, from the key. It reduces this integer modulo the length of
+  the array, to produce an index in the array. Then it looks in
+  that slot, and if necessary in other nearby slots, to see if it
+  has found the key being sought.</p>
 
-<p>This example creates a hash table whose keys are strings that are
-compared case-insensitively.
-</p>
-<div class="example">
-<pre class="example">(defun case-fold-string= (a b)
+  <p>Thus, to define a new method of key lookup, you need to
+  specify both a function to compute the hash code from a key, and
+  a function to compare two keys directly.</p>
+
+  <dl>
+    <dt><a name="index-define_002dhash_002dtable_002dtest" id=
+    "index-define_002dhash_002dtable_002dtest"></a>Function:
+    <strong>define-hash-table-test</strong> <em>name test-fn
+    hash-fn</em></dt>
+
+    <dd>
+      <p>This function defines a new hash table test, named
+      <var>name</var>.</p>
+
+      <p>After defining <var>name</var> in this way, you can use it
+      as the <var>test</var> argument in
+      <code>make-hash-table</code>. When you do that, the hash
+      table will use <var>test-fn</var> to compare key values, and
+      <var>hash-fn</var> to compute a hash code from a key
+      value.</p>
+
+      <p>The function <var>test-fn</var> should accept two
+      arguments, two keys, and return non-<code>nil</code> if they
+      are considered the same.</p>
+
+      <p>The function <var>hash-fn</var> should accept one
+      argument, a key, and return an integer that is the hash code
+      of that key. For good results, the function should use the
+      whole range of integers for hash codes, including negative
+      integers.</p>
+
+      <p>The specified functions are stored in the property list of
+      <var>name</var> under the property
+      <code>hash-table-test</code>; the property value&rsquo;s form
+      is <code>(<var>test-fn</var> <var>hash-fn</var>)</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-sxhash" id="index-sxhash"></a>Function:
+    <strong>sxhash</strong> <em>obj</em></dt>
+
+    <dd>
+      <p>This function returns a hash code for Lisp object
+      <var>obj</var>. This is an integer which reflects the
+      contents of <var>obj</var> and the other Lisp objects it
+      points to.</p>
+
+      <p>If two objects <var>obj1</var> and <var>obj2</var> are
+      equal, then <code>(sxhash <var>obj1</var>)</code> and
+      <code>(sxhash <var>obj2</var>)</code> are the same
+      integer.</p>
+
+      <p>If the two objects are not equal, the values returned by
+      <code>sxhash</code> are usually different, but not always;
+      once in a rare while, by luck, you will encounter two
+      distinct-looking objects that give the same result from
+      <code>sxhash</code>.</p>
+    </dd>
+  </dl>
+
+  <p>This example creates a hash table whose keys are strings that
+  are compared case-insensitively.</p>
+
+  <div class="example">
+    <pre class="example">
+(defun case-fold-string= (a b)
   (eq t (compare-strings a nil nil b nil nil t)))
 (defun case-fold-string-hash (a)
   (sxhash (upcase a)))
@@ -141,25 +198,32 @@ compared case-insensitively.
   'case-fold-string= 'case-fold-string-hash)
 
 (make-hash-table :test 'case-fold)
-</pre></div>
+</pre>
+  </div>
 
-<p>Here is how you could define a hash table test equivalent to the
-predefined test value <code>equal</code>.  The keys can be any Lisp object,
-and equal-looking objects are considered the same key.
-</p>
-<div class="example">
-<pre class="example">(define-hash-table-test 'contents-hash 'equal 'sxhash)
+  <p>Here is how you could define a hash table test equivalent to
+  the predefined test value <code>equal</code>. The keys can be any
+  Lisp object, and equal-looking objects are considered the same
+  key.</p>
+
+  <div class="example">
+    <pre class="example">
+(define-hash-table-test 'contents-hash 'equal 'sxhash)
 
 (make-hash-table :test 'contents-hash)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Other-Hash.html#Other-Hash" accesskey="n" rel="next">Other Hash</a>, Previous: <a href="Hash-Access.html#Hash-Access" accesskey="p" rel="prev">Hash Access</a>, Up: <a href="Hash-Tables.html#Hash-Tables" accesskey="u" rel="up">Hash Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Other-Hash.html#Other-Hash" accesskey="n"
+    rel="next">Other Hash</a>, Previous: <a href=
+    "Hash-Access.html#Hash-Access" accesskey="p" rel="prev">Hash
+    Access</a>, Up: <a href="Hash-Tables.html#Hash-Tables"
+    accesskey="u" rel="up">Hash Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

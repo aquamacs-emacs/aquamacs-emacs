@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,333 +14,450 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to
 copy and modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>TRAMP User Manual: External methods</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="TRAMP User Manual: External methods">
-<meta name="keywords" content="TRAMP User Manual: External methods">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Configuration.html#Configuration" rel="up" title="Configuration">
-<link href="GVFS-based-methods.html#GVFS-based-methods" rel="next" title="GVFS based methods">
-<link href="Inline-methods.html#Inline-methods" rel="prev" title="Inline methods">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>TRAMP User Manual: External methods</title>
+  <meta name="description" content=
+  "TRAMP User Manual: External methods" />
+  <meta name="keywords" content=
+  "TRAMP User Manual: External methods" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Configuration.html#Configuration" rel="up" title=
+  "Configuration" />
+  <link href="GVFS-based-methods.html#GVFS-based-methods" rel=
+  "next" title="GVFS based methods" />
+  <link href="Inline-methods.html#Inline-methods" rel="prev" title=
+  "Inline methods" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="External-methods"></a>
-<div class="header">
-<p>
-Next: <a href="GVFS-based-methods.html#GVFS-based-methods" accesskey="n" rel="next">GVFS based methods</a>, Previous: <a href="Inline-methods.html#Inline-methods" accesskey="p" rel="prev">Inline methods</a>, Up: <a href="Configuration.html#Configuration" accesskey="u" rel="up">Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="External-methods-1"></a>
-<h3 class="section">4.3 External methods</h3>
-<a name="index-methods_002c-external-1"></a>
-<a name="index-external-methods-1"></a>
+<body lang="en" xml:lang="en">
+  <a name="External-methods" id="External-methods"></a>
 
-<p>External methods operate over multiple channels, using the remote
-shell connection for some actions while delegating file transfers to
-an external transfer program.
-</p>
-<p>External methods save on the overhead of encoding and decoding of
-inline methods.
-</p>
-<p>Since external methods have the overhead of opening a new channel,
-files smaller than <var>tramp-copy-size-limit</var> still use inline
-methods.
-</p>
-<dl compact="compact">
-<dt><samp>rcp</samp>&mdash;<code>rsh</code> and <code>rcp</code></dt>
-<dd><a name="index-method-rcp"></a>
-<a name="index-rcp-method"></a>
-<a name="index-rcp-_0028with-rcp-method_0029"></a>
-<a name="index-rsh-_0028with-rcp-method_0029"></a>
+  <div class="header">
+    <p>Next: <a href="GVFS-based-methods.html#GVFS-based-methods"
+    accesskey="n" rel="next">GVFS based methods</a>, Previous:
+    <a href="Inline-methods.html#Inline-methods" accesskey="p" rel=
+    "prev">Inline methods</a>, Up: <a href=
+    "Configuration.html#Configuration" accesskey="u" rel=
+    "up">Configuration</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="External-methods-1" id="External-methods-1"></a>
 
-<p>This method uses the <code>rsh</code> and <code>rcp</code> commands to
-connect to the remote host and transfer files.  This is the fastest
-access method available.
-</p>
-<p>The alternative method <samp>remcp</samp> uses the <code>remsh</code> and
-<code>rcp</code> commands.
-</p>
-</dd>
-<dt><samp>scp</samp>&mdash;<code>ssh</code> and <code>scp</code></dt>
-<dd><a name="index-method-scp"></a>
-<a name="index-scp-method"></a>
-<a name="index-scp-_0028with-scp-method_0029"></a>
-<a name="index-ssh-_0028with-scp-method_0029"></a>
+  <h3 class="section">4.3 External methods</h3><a name=
+  "index-methods_002c-external-1" id=
+  "index-methods_002c-external-1"></a> <a name=
+  "index-external-methods-1" id="index-external-methods-1"></a>
 
-<p>Using a combination of <code>ssh</code> to connect and <code>scp</code> to
-transfer is the most secure.  While the performance is good, it is
-slower than the inline methods for smaller files.  Though there is no
-overhead of encoding and decoding of the inline methods,
-<code>scp</code>&rsquo;s cryptographic handshake negates those speed gains.
-</p>
-<p><samp>ssh</samp>-based methods support &lsquo;<samp>-p</samp>&rsquo; feature for specifying
-port numbers.  For example, <samp>host#42</samp> passes &lsquo;<samp>-p 42</samp>&rsquo; in the
-argument list to <code>ssh</code>, and &lsquo;<samp>-P 42</samp>&rsquo; in the argument list
-to <code>scp</code>.
-</p>
-</dd>
-<dt><samp>rsync</samp>&mdash;<code>ssh</code> and <code>rsync</code></dt>
-<dd><a name="index-method-rsync"></a>
-<a name="index-rsync-method"></a>
-<a name="index-rsync-_0028with-rsync-method_0029"></a>
-<a name="index-ssh-_0028with-rsync-method_0029"></a>
+  <p>External methods operate over multiple channels, using the
+  remote shell connection for some actions while delegating file
+  transfers to an external transfer program.</p>
 
-<p><code>ssh</code> command to connect in combination with <code>rsync</code>
-command to transfer is similar to the <samp>scp</samp> method.
-</p>
-<p><code>rsync</code> performs much better than <code>scp</code> when
-transferring files that exist on both hosts.  However, this advantage
-is lost if the file exists only on one side of the connection.
-</p>
-<p>This method supports the &lsquo;<samp>-p</samp>&rsquo; argument.
-</p>
+  <p>External methods save on the overhead of encoding and decoding
+  of inline methods.</p>
 
-</dd>
-<dt><samp>scpx</samp>&mdash;<code>ssh</code> and <code>scp</code></dt>
-<dd><a name="index-method-scpx"></a>
-<a name="index-scpx-method"></a>
-<a name="index-scp-_0028with-scpx-method_0029"></a>
-<a name="index-ssh-_0028with-scpx-method_0029"></a>
+  <p>Since external methods have the overhead of opening a new
+  channel, files smaller than <var>tramp-copy-size-limit</var>
+  still use inline methods.</p>
 
-<p><samp>scpx</samp> is useful to avoid login shell questions.  It is similar
-in performance to <samp>scp</samp>.  <samp>scpx</samp> uses &lsquo;<samp>ssh -t -t
-<var>host</var> -l <var>user</var> /bin/sh</samp>&rsquo; to open a connection.
-</p>
-<p><samp>sshx</samp> is useful for Windows users when <code>ssh</code> triggers
-an error about allocating a pseudo tty.  This happens due to missing
-shell prompts that confuses <small>TRAMP</small>.
-</p>
-<p>This method supports the &lsquo;<samp>-p</samp>&rsquo; argument.
-</p>
+  <dl compact="compact">
+    <dt><samp>rcp</samp>&mdash;<code>rsh</code> and
+    <code>rcp</code></dt>
 
-</dd>
-<dt><samp>pscp</samp>&mdash;<code>plink</code> and <code>pscp</code></dt>
-<dt><samp>psftp</samp>&mdash;<code>plink</code> and <code>psftp</code></dt>
-<dd><a name="index-method-pscp"></a>
-<a name="index-pscp-method"></a>
-<a name="index-pscp-_0028with-pscp-method_0029"></a>
-<a name="index-plink-_0028with-pscp-method_0029"></a>
-<a name="index-PuTTY-_0028with-pscp-method_0029"></a>
-<a name="index-method-psftp"></a>
-<a name="index-psftp-method"></a>
-<a name="index-pscp-_0028with-psftp-method_0029"></a>
-<a name="index-plink-_0028with-psftp-method_0029"></a>
-<a name="index-PuTTY-_0028with-psftp-method_0029"></a>
+    <dd>
+      <a name="index-method-rcp" id="index-method-rcp"></a>
+      <a name="index-rcp-method" id="index-rcp-method"></a>
+      <a name="index-rcp-_0028with-rcp-method_0029" id=
+      "index-rcp-_0028with-rcp-method_0029"></a> <a name=
+      "index-rsh-_0028with-rcp-method_0029" id=
+      "index-rsh-_0028with-rcp-method_0029"></a>
 
-<p>These methods are similar to <samp>scp</samp> or <samp>sftp</samp>, but they
-use the <code>plink</code> command to connect to the remote host, and
-they use <code>pscp</code> or <code>psftp</code> for transferring the files.
-These programs are part of PuTTY, an SSH implementation for Windows.
-</p>
-<p>Check the &lsquo;<samp>Share SSH connections if possible</samp>&rsquo; control for that
-session.
-</p>
-<p>These methods support the &lsquo;<samp>-P</samp>&rsquo; argument.
-</p>
+      <p>This method uses the <code>rsh</code> and <code>rcp</code>
+      commands to connect to the remote host and transfer files.
+      This is the fastest access method available.</p>
 
-</dd>
-<dt><samp>fcp</samp>&mdash;<code>fsh</code> and <code>fcp</code></dt>
-<dd><a name="index-method-fcp"></a>
-<a name="index-fcp-method"></a>
-<a name="index-fsh-_0028with-fcp-method_0029"></a>
-<a name="index-fcp-_0028with-fcp-method_0029"></a>
+      <p>The alternative method <samp>remcp</samp> uses the
+      <code>remsh</code> and <code>rcp</code> commands.</p>
+    </dd>
 
-<p>This method is similar to <samp>scp</samp>, but uses <code>fsh</code> to
-connect and <code>fcp</code> to transfer files.  <code>fsh/fcp</code>, a
-front-end for <code>ssh</code>, reuse <code>ssh</code> session by
-submitting several commands.  This avoids the startup overhead due to
-<code>scp</code>&rsquo;s secure connection.  Inline methods have similar
-benefits.
-</p>
-<p>The command used for this connection is: &lsquo;<samp>fsh <var>host</var> -l
-<var>user</var> /bin/sh -i</samp>&rsquo;
-</p>
-<a name="index-method-fsh"></a>
-<a name="index-fsh-method"></a>
+    <dt><samp>scp</samp>&mdash;<code>ssh</code> and
+    <code>scp</code></dt>
 
-<p><samp>fsh</samp> has no inline method since the multiplexing it offers is
-not useful for <small>TRAMP</small>.  <code>fsh</code> connects to remote host
-and <small>TRAMP</small> keeps that one connection open.
-</p>
-</dd>
-<dt><samp>nc</samp>&mdash;<code>telnet</code> and <code>nc</code></dt>
-<dd><a name="index-method-nc"></a>
-<a name="index-nc-method"></a>
-<a name="index-nc-_0028with-nc-method_0029"></a>
-<a name="index-telnet-_0028with-nc-method_0029"></a>
+    <dd>
+      <a name="index-method-scp" id="index-method-scp"></a>
+      <a name="index-scp-method" id="index-scp-method"></a>
+      <a name="index-scp-_0028with-scp-method_0029" id=
+      "index-scp-_0028with-scp-method_0029"></a> <a name=
+      "index-ssh-_0028with-scp-method_0029" id=
+      "index-ssh-_0028with-scp-method_0029"></a>
 
-<p>Using <code>telnet</code> to connect and <code>nc</code> to transfer files
-is sometimes the only combination suitable for accessing routers or
-NAS hosts.  These dumb devices have severely restricted local shells,
-such as the <code>busybox</code> and do not host any other encode or
-decode programs.
-</p>
-</dd>
-<dt><samp>ftp</samp></dt>
-<dd><a name="index-method-ftp"></a>
-<a name="index-ftp-method"></a>
+      <p>Using a combination of <code>ssh</code> to connect and
+      <code>scp</code> to transfer is the most secure. While the
+      performance is good, it is slower than the inline methods for
+      smaller files. Though there is no overhead of encoding and
+      decoding of the inline methods, <code>scp</code>&rsquo;s
+      cryptographic handshake negates those speed gains.</p>
 
-<p>When <small>TRAMP</small> uses <samp>ftp</samp>, it forwards requests to whatever
-ftp program is specified by Ange-FTP.  This external
-program must be capable of servicing requests from <small>TRAMP</small>.
-</p>
+      <p><samp>ssh</samp>-based methods support
+      &lsquo;<samp>-p</samp>&rsquo; feature for specifying port
+      numbers. For example, <samp>host#42</samp> passes
+      &lsquo;<samp>-p 42</samp>&rsquo; in the argument list to
+      <code>ssh</code>, and &lsquo;<samp>-P 42</samp>&rsquo; in the
+      argument list to <code>scp</code>.</p>
+    </dd>
 
+    <dt><samp>rsync</samp>&mdash;<code>ssh</code> and
+    <code>rsync</code></dt>
 
-</dd>
-<dt><samp>smb</samp>&mdash;<code>smbclient</code></dt>
-<dd><a name="index-method-smb"></a>
-<a name="index-smb-method"></a>
+    <dd>
+      <a name="index-method-rsync" id="index-method-rsync"></a>
+      <a name="index-rsync-method" id="index-rsync-method"></a>
+      <a name="index-rsync-_0028with-rsync-method_0029" id=
+      "index-rsync-_0028with-rsync-method_0029"></a> <a name=
+      "index-ssh-_0028with-rsync-method_0029" id=
+      "index-ssh-_0028with-rsync-method_0029"></a>
 
-<p>This non-native <small>TRAMP</small> method connects via the Server Message
-Block (SMB) networking protocol to hosts running file servers that are
-typically based on <a href="https://www.samba.org/">Samba</a> or MS Windows.
-</p>
-<p>Using <code>smbclient</code> requires a few tweaks when working with
-<small>TRAMP</small>:
-</p>
-<p>The first directory in the localname must be a share name on the
-remote host.
-</p>
-<p>Since SMB shares end in the <code>$</code> character, <small>TRAMP</small> must use
-<code>$$</code> when specifying those shares to avoid environment variable
-substitutions.
-</p>
-<p>When <small>TRAMP</small> is not specific about the share name or uses the
-generic remote directory <code>/</code>, <code>smbclient</code> returns all
-available shares.
-</p>
-<p>Since SMB authentication is based on each SMB share, <small>TRAMP</small>
-prompts for a password even when accessing a different share on the
-same SMB host.  This prompting can be suppressed by <a href="Password-handling.html#Password-handling">Password handling</a>.
-</p>
-<p>To accommodate user name/domain name syntax required by MS Windows
-authorization, <small>TRAMP</small> provides for an extended syntax in
-<code>user%domain</code> format (where user is username, <code>%</code> is the
-percent symbol, and domain is the windows domain name).  An example:
-</p>
-<div class="example">
-<pre class="example">/smb:daniel%BIZARRE@melancholia:/daniel$$/.emacs
-</pre></div>
+      <p><code>ssh</code> command to connect in combination with
+      <code>rsync</code> command to transfer is similar to the
+      <samp>scp</samp> method.</p>
 
-<p>where user <code>daniel</code> connects as a domain user to the SMB host
-<code>melancholia</code> in the windows domain <code>BIZARRE</code> to edit
-<samp>.emacs</samp> located in the home directory (share <code>daniel$</code>).
-</p>
-<p>Alternatively, for local WINS users (as opposed to domain users),
-substitute the domain name with the name of the local host in
-UPPERCASE as shown here:
-</p>
-<div class="example">
-<pre class="example">/smb:daniel%MELANCHOLIA@melancholia:/daniel$$/.emacs
-</pre></div>
+      <p><code>rsync</code> performs much better than
+      <code>scp</code> when transferring files that exist on both
+      hosts. However, this advantage is lost if the file exists
+      only on one side of the connection.</p>
 
-<p>where user <code>daniel</code> connects as local user to the SMB host
-<code>melancholia</code> in the local domain <code>MELANCHOLIA</code> to edit
-<samp>.emacs</samp> located in the home directory (share <code>daniel$</code>).
-</p>
-<p>The domain name and user name are optional for <code>smbclient</code>
-authentication.  When user name is not specified, <code>smbclient</code>
-uses the anonymous user (without prompting for password).  This
-behavior is unlike other <small>TRAMP</small> methods, where local user name
-is substituted.
-</p>
-<p>The <samp>smb</samp> method is unavailable if Emacs is run under a
-local user authentication context in MS Windows.  However such users
-can still access remote files using UNC file names instead of <small>TRAMP</small>:
-</p>
-<div class="example">
-<pre class="example">//melancholia/daniel$$/.emacs
-</pre></div>
+      <p>This method supports the &lsquo;<samp>-p</samp>&rsquo;
+      argument.</p>
+    </dd>
 
-<p>UNC file name specification does not allow the specification of a
-different user name for authentication like the <code>smbclient</code>
-can.
-</p>
+    <dt><samp>scpx</samp>&mdash;<code>ssh</code> and
+    <code>scp</code></dt>
 
-</dd>
-<dt><samp>adb</samp></dt>
-<dd><a name="index-method-adb"></a>
-<a name="index-adb-method"></a>
+    <dd>
+      <a name="index-method-scpx" id="index-method-scpx"></a>
+      <a name="index-scpx-method" id="index-scpx-method"></a>
+      <a name="index-scp-_0028with-scpx-method_0029" id=
+      "index-scp-_0028with-scpx-method_0029"></a> <a name=
+      "index-ssh-_0028with-scpx-method_0029" id=
+      "index-ssh-_0028with-scpx-method_0029"></a>
 
-<p>This method uses Android Debug Bridge program for accessing Android
-devices.  The Android Debug Bridge must be installed locally for
-<small>TRAMP</small> to work.  Some GNU/Linux distributions provide Android
-Debug Bridge as an installation package.  Alternatively, the program is
-installed as part of the Android SDK.  <small>TRAMP</small> finds the
-<code>adb</code> program either via the <code>PATH</code> environment variable
-or the absolute path set in the variable <var>tramp-adb-program</var>.
-</p>
-<p><small>TRAMP</small> connects to Android devices with <samp>adb</samp> only when
-the custom option <samp>tramp-adb-connect-if-not-connected</samp> is not
-<code>nil</code>.  Otherwise, the connection must be established outside
-Emacs.
-</p>
-<p><small>TRAMP</small> does not require a host name part of the remote file
-name when a single Android device is connected to <code>adb</code>.
-<small>TRAMP</small> instead uses <samp>/adb::</samp> as the default
-name.  <code>adb devices</code> shows available host names.
-</p>
-<p><samp>adb</samp> method normally does not need user name to authenticate
-on the Android device because it runs under the <code>adbd</code>
-process.  But when a user name is specified, however, <small>TRAMP</small>
-applies an <code>su</code> in the syntax.  When authentication does not
-succeed, especially on un-rooted Android devices, <small>TRAMP</small>
-displays login errors.
-</p>
-<p>For Android devices connected through TCP/IP, a port number can be
-specified using <samp>device#42</samp> host name syntax or <small>TRAMP</small> can
-use the default value as declared in <code>adb</code> command.  Port
-numbers are not applicable to Android devices connected through USB.
-</p>
-</dd>
-</dl>
+      <p><samp>scpx</samp> is useful to avoid login shell
+      questions. It is similar in performance to <samp>scp</samp>.
+      <samp>scpx</samp> uses &lsquo;<samp>ssh -t -t <var>host</var>
+      -l <var>user</var> /bin/sh</samp>&rsquo; to open a
+      connection.</p>
 
+      <p><samp>sshx</samp> is useful for Windows users when
+      <code>ssh</code> triggers an error about allocating a pseudo
+      tty. This happens due to missing shell prompts that confuses
+      <small>TRAMP</small>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="GVFS-based-methods.html#GVFS-based-methods" accesskey="n" rel="next">GVFS based methods</a>, Previous: <a href="Inline-methods.html#Inline-methods" accesskey="p" rel="prev">Inline methods</a>, Up: <a href="Configuration.html#Configuration" accesskey="u" rel="up">Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This method supports the &lsquo;<samp>-p</samp>&rsquo;
+      argument.</p>
+    </dd>
 
+    <dt><samp>pscp</samp>&mdash;<code>plink</code> and
+    <code>pscp</code></dt>
 
+    <dt><samp>psftp</samp>&mdash;<code>plink</code> and
+    <code>psftp</code></dt>
 
+    <dd>
+      <a name="index-method-pscp" id="index-method-pscp"></a>
+      <a name="index-pscp-method" id="index-pscp-method"></a>
+      <a name="index-pscp-_0028with-pscp-method_0029" id=
+      "index-pscp-_0028with-pscp-method_0029"></a> <a name=
+      "index-plink-_0028with-pscp-method_0029" id=
+      "index-plink-_0028with-pscp-method_0029"></a> <a name=
+      "index-PuTTY-_0028with-pscp-method_0029" id=
+      "index-PuTTY-_0028with-pscp-method_0029"></a> <a name=
+      "index-method-psftp" id="index-method-psftp"></a> <a name=
+      "index-psftp-method" id="index-psftp-method"></a> <a name=
+      "index-pscp-_0028with-psftp-method_0029" id=
+      "index-pscp-_0028with-psftp-method_0029"></a> <a name=
+      "index-plink-_0028with-psftp-method_0029" id=
+      "index-plink-_0028with-psftp-method_0029"></a> <a name=
+      "index-PuTTY-_0028with-psftp-method_0029" id=
+      "index-PuTTY-_0028with-psftp-method_0029"></a>
+
+      <p>These methods are similar to <samp>scp</samp> or
+      <samp>sftp</samp>, but they use the <code>plink</code>
+      command to connect to the remote host, and they use
+      <code>pscp</code> or <code>psftp</code> for transferring the
+      files. These programs are part of PuTTY, an SSH
+      implementation for Windows.</p>
+
+      <p>Check the &lsquo;<samp>Share SSH connections if
+      possible</samp>&rsquo; control for that session.</p>
+
+      <p>These methods support the &lsquo;<samp>-P</samp>&rsquo;
+      argument.</p>
+    </dd>
+
+    <dt><samp>fcp</samp>&mdash;<code>fsh</code> and
+    <code>fcp</code></dt>
+
+    <dd>
+      <a name="index-method-fcp" id="index-method-fcp"></a>
+      <a name="index-fcp-method" id="index-fcp-method"></a>
+      <a name="index-fsh-_0028with-fcp-method_0029" id=
+      "index-fsh-_0028with-fcp-method_0029"></a> <a name=
+      "index-fcp-_0028with-fcp-method_0029" id=
+      "index-fcp-_0028with-fcp-method_0029"></a>
+
+      <p>This method is similar to <samp>scp</samp>, but uses
+      <code>fsh</code> to connect and <code>fcp</code> to transfer
+      files. <code>fsh/fcp</code>, a front-end for
+      <code>ssh</code>, reuse <code>ssh</code> session by
+      submitting several commands. This avoids the startup overhead
+      due to <code>scp</code>&rsquo;s secure connection. Inline
+      methods have similar benefits.</p>
+
+      <p>The command used for this connection is: &lsquo;<samp>fsh
+      <var>host</var> -l <var>user</var> /bin/sh
+      -i</samp>&rsquo;</p><a name="index-method-fsh" id=
+      "index-method-fsh"></a> <a name="index-fsh-method" id=
+      "index-fsh-method"></a>
+
+      <p><samp>fsh</samp> has no inline method since the
+      multiplexing it offers is not useful for
+      <small>TRAMP</small>. <code>fsh</code> connects to remote
+      host and <small>TRAMP</small> keeps that one connection
+      open.</p>
+    </dd>
+
+    <dt><samp>nc</samp>&mdash;<code>telnet</code> and
+    <code>nc</code></dt>
+
+    <dd>
+      <a name="index-method-nc" id="index-method-nc"></a> <a name=
+      "index-nc-method" id="index-nc-method"></a> <a name=
+      "index-nc-_0028with-nc-method_0029" id=
+      "index-nc-_0028with-nc-method_0029"></a> <a name=
+      "index-telnet-_0028with-nc-method_0029" id=
+      "index-telnet-_0028with-nc-method_0029"></a>
+
+      <p>Using <code>telnet</code> to connect and <code>nc</code>
+      to transfer files is sometimes the only combination suitable
+      for accessing routers or NAS hosts. These dumb devices have
+      severely restricted local shells, such as the
+      <code>busybox</code> and do not host any other encode or
+      decode programs.</p>
+    </dd>
+
+    <dt><samp>ftp</samp></dt>
+
+    <dd>
+      <a name="index-method-ftp" id="index-method-ftp"></a>
+      <a name="index-ftp-method" id="index-ftp-method"></a>
+
+      <p>When <small>TRAMP</small> uses <samp>ftp</samp>, it
+      forwards requests to whatever ftp program is specified by
+      Ange-FTP. This external program must be capable of servicing
+      requests from <small>TRAMP</small>.</p>
+    </dd>
+
+    <dt><samp>smb</samp>&mdash;<code>smbclient</code></dt>
+
+    <dd>
+      <a name="index-method-smb" id="index-method-smb"></a>
+      <a name="index-smb-method" id="index-smb-method"></a>
+
+      <p>This non-native <small>TRAMP</small> method connects via
+      the Server Message Block (SMB) networking protocol to hosts
+      running file servers that are typically based on <a href=
+      "https://www.samba.org/">Samba</a> or MS Windows.</p>
+
+      <p>Using <code>smbclient</code> requires a few tweaks when
+      working with <small>TRAMP</small>:</p>
+
+      <p>The first directory in the localname must be a share name
+      on the remote host.</p>
+
+      <p>Since SMB shares end in the <code>$</code> character,
+      <small>TRAMP</small> must use <code>$$</code> when specifying
+      those shares to avoid environment variable substitutions.</p>
+
+      <p>When <small>TRAMP</small> is not specific about the share
+      name or uses the generic remote directory <code>/</code>,
+      <code>smbclient</code> returns all available shares.</p>
+
+      <p>Since SMB authentication is based on each SMB share,
+      <small>TRAMP</small> prompts for a password even when
+      accessing a different share on the same SMB host. This
+      prompting can be suppressed by <a href=
+      "Password-handling.html#Password-handling">Password
+      handling</a>.</p>
+
+      <p>To accommodate user name/domain name syntax required by MS
+      Windows authorization, <small>TRAMP</small> provides for an
+      extended syntax in <code>user%domain</code> format (where
+      user is username, <code>%</code> is the percent symbol, and
+      domain is the windows domain name). An example:</p>
+
+      <div class="example">
+        <pre class="example">
+/smb:daniel%BIZARRE@melancholia:/daniel$$/.emacs
+</pre>
+      </div>
+
+      <p>where user <code>daniel</code> connects as a domain user
+      to the SMB host <code>melancholia</code> in the windows
+      domain <code>BIZARRE</code> to edit <samp>.emacs</samp>
+      located in the home directory (share
+      <code>daniel$</code>).</p>
+
+      <p>Alternatively, for local WINS users (as opposed to domain
+      users), substitute the domain name with the name of the local
+      host in UPPERCASE as shown here:</p>
+
+      <div class="example">
+        <pre class="example">
+/smb:daniel%MELANCHOLIA@melancholia:/daniel$$/.emacs
+</pre>
+      </div>
+
+      <p>where user <code>daniel</code> connects as local user to
+      the SMB host <code>melancholia</code> in the local domain
+      <code>MELANCHOLIA</code> to edit <samp>.emacs</samp> located
+      in the home directory (share <code>daniel$</code>).</p>
+
+      <p>The domain name and user name are optional for
+      <code>smbclient</code> authentication. When user name is not
+      specified, <code>smbclient</code> uses the anonymous user
+      (without prompting for password). This behavior is unlike
+      other <small>TRAMP</small> methods, where local user name is
+      substituted.</p>
+
+      <p>The <samp>smb</samp> method is unavailable if Emacs is run
+      under a local user authentication context in MS Windows.
+      However such users can still access remote files using UNC
+      file names instead of <small>TRAMP</small>:</p>
+
+      <div class="example">
+        <pre class="example">
+//melancholia/daniel$$/.emacs
+</pre>
+      </div>
+
+      <p>UNC file name specification does not allow the
+      specification of a different user name for authentication
+      like the <code>smbclient</code> can.</p>
+    </dd>
+
+    <dt><samp>adb</samp></dt>
+
+    <dd>
+      <a name="index-method-adb" id="index-method-adb"></a>
+      <a name="index-adb-method" id="index-adb-method"></a>
+
+      <p>This method uses Android Debug Bridge program for
+      accessing Android devices. The Android Debug Bridge must be
+      installed locally for <small>TRAMP</small> to work. Some
+      GNU/Linux distributions provide Android Debug Bridge as an
+      installation package. Alternatively, the program is installed
+      as part of the Android SDK. <small>TRAMP</small> finds the
+      <code>adb</code> program either via the <code>PATH</code>
+      environment variable or the absolute path set in the variable
+      <var>tramp-adb-program</var>.</p>
+
+      <p><small>TRAMP</small> connects to Android devices with
+      <samp>adb</samp> only when the custom option
+      <samp>tramp-adb-connect-if-not-connected</samp> is not
+      <code>nil</code>. Otherwise, the connection must be
+      established outside Emacs.</p>
+
+      <p><small>TRAMP</small> does not require a host name part of
+      the remote file name when a single Android device is
+      connected to <code>adb</code>. <small>TRAMP</small> instead
+      uses <samp>/adb::</samp> as the default name. <code>adb
+      devices</code> shows available host names.</p>
+
+      <p><samp>adb</samp> method normally does not need user name
+      to authenticate on the Android device because it runs under
+      the <code>adbd</code> process. But when a user name is
+      specified, however, <small>TRAMP</small> applies an
+      <code>su</code> in the syntax. When authentication does not
+      succeed, especially on un-rooted Android devices,
+      <small>TRAMP</small> displays login errors.</p>
+
+      <p>For Android devices connected through TCP/IP, a port
+      number can be specified using <samp>device#42</samp> host
+      name syntax or <small>TRAMP</small> can use the default value
+      as declared in <code>adb</code> command. Port numbers are not
+      applicable to Android devices connected through USB.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="GVFS-based-methods.html#GVFS-based-methods"
+    accesskey="n" rel="next">GVFS based methods</a>, Previous:
+    <a href="Inline-methods.html#Inline-methods" accesskey="p" rel=
+    "prev">Inline methods</a>, Up: <a href=
+    "Configuration.html#Configuration" accesskey="u" rel=
+    "up">Configuration</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,113 +19,187 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Hash Tables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Hash Tables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Hash Tables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Creating-Hash.html#Creating-Hash" rel="next" title="Creating Hash">
-<link href="Rings.html#Rings" rel="prev" title="Rings">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Hash Tables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Hash Tables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Hash Tables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Creating-Hash.html#Creating-Hash" rel="next" title=
+  "Creating Hash" />
+  <link href="Rings.html#Rings" rel="prev" title="Rings" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Hash-Tables" id="Hash-Tables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Symbols.html#Symbols" accesskey="n" rel=
+    "next">Symbols</a>, Previous: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="p" rel="prev">Sequences Arrays Vectors</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Hash-Tables-1" id="Hash-Tables-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Hash-Tables"></a>
-<div class="header">
-<p>
-Next: <a href="Symbols.html#Symbols" accesskey="n" rel="next">Symbols</a>, Previous: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="p" rel="prev">Sequences Arrays Vectors</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Hash-Tables-1"></a>
-<h2 class="chapter">7 Hash Tables</h2>
-<a name="index-hash-tables"></a>
-<a name="index-lookup-tables"></a>
+  <h2 class="chapter">7 Hash Tables</h2><a name="index-hash-tables"
+  id="index-hash-tables"></a> <a name="index-lookup-tables" id=
+  "index-lookup-tables"></a>
 
-<p>A hash table is a very fast kind of lookup table, somewhat like an
-alist (see <a href="Association-Lists.html#Association-Lists">Association Lists</a>) in that it maps keys to
-corresponding values.  It differs from an alist in these ways:
-</p>
-<ul>
-<li> Lookup in a hash table is extremely fast for large tables&mdash;in fact, the
-time required is essentially <em>independent</em> of how many elements are
-stored in the table.  For smaller tables (a few tens of elements)
-alists may still be faster because hash tables have a more-or-less
-constant overhead.
+  <p>A hash table is a very fast kind of lookup table, somewhat
+  like an alist (see <a href=
+  "Association-Lists.html#Association-Lists">Association Lists</a>)
+  in that it maps keys to corresponding values. It differs from an
+  alist in these ways:</p>
 
-</li><li> The correspondences in a hash table are in no particular order.
+  <ul>
+    <li>Lookup in a hash table is extremely fast for large
+    tables&mdash;in fact, the time required is essentially
+    <em>independent</em> of how many elements are stored in the
+    table. For smaller tables (a few tens of elements) alists may
+    still be faster because hash tables have a more-or-less
+    constant overhead.</li>
 
-</li><li> There is no way to share structure between two hash tables,
-the way two alists can share a common tail.
-</li></ul>
+    <li>The correspondences in a hash table are in no particular
+    order.</li>
 
-<p>Emacs Lisp provides a general-purpose hash table data type, along
-with a series of functions for operating on them.  Hash tables have a
-special printed representation, which consists of &lsquo;<samp>#s</samp>&rsquo; followed
-by a list specifying the hash table properties and contents.
-See <a href="Creating-Hash.html#Creating-Hash">Creating Hash</a>.
-(Hash notation, the initial &lsquo;<samp>#</samp>&rsquo; character used in the printed
-representations of objects with no read representation, has nothing to
-do with hash tables.  See <a href="Printed-Representation.html#Printed-Representation">Printed Representation</a>.)
-</p>
-<p>Obarrays are also a kind of hash table, but they are a different type
-of object and are used only for recording interned symbols
-(see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Creating-Hash.html#Creating-Hash" accesskey="1">Creating Hash</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions to create hash tables.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Hash-Access.html#Hash-Access" accesskey="2">Hash Access</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading and writing the hash table contents.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Defining-Hash.html#Defining-Hash" accesskey="3">Defining Hash</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defining new comparison methods.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Other-Hash.html#Other-Hash" accesskey="4">Other Hash</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Miscellaneous.
-</td></tr>
-</table>
+    <li>There is no way to share structure between two hash tables,
+    the way two alists can share a common tail.</li>
+  </ul>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Symbols.html#Symbols" accesskey="n" rel="next">Symbols</a>, Previous: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="p" rel="prev">Sequences Arrays Vectors</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Emacs Lisp provides a general-purpose hash table data type,
+  along with a series of functions for operating on them. Hash
+  tables have a special printed representation, which consists of
+  &lsquo;<samp>#s</samp>&rsquo; followed by a list specifying the
+  hash table properties and contents. See <a href=
+  "Creating-Hash.html#Creating-Hash">Creating Hash</a>. (Hash
+  notation, the initial &lsquo;<samp>#</samp>&rsquo; character used
+  in the printed representations of objects with no read
+  representation, has nothing to do with hash tables. See <a href=
+  "Printed-Representation.html#Printed-Representation">Printed
+  Representation</a>.)</p>
 
+  <p>Obarrays are also a kind of hash table, but they are a
+  different type of object and are used only for recording interned
+  symbols (see <a href=
+  "Creating-Symbols.html#Creating-Symbols">Creating
+  Symbols</a>).</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Creating-Hash.html#Creating-Hash" accesskey="1">Creating
+      Hash</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions to create hash
+      tables.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Hash-Access.html#Hash-Access" accesskey="2">Hash
+      Access</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading and writing the hash
+      table contents.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Defining-Hash.html#Defining-Hash" accesskey="3">Defining
+      Hash</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Defining new comparison
+      methods.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Other-Hash.html#Other-Hash" accesskey="4">Other
+      Hash</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Miscellaneous.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Symbols.html#Symbols" accesskey="n" rel=
+    "next">Symbols</a>, Previous: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="p" rel="prev">Sequences Arrays Vectors</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

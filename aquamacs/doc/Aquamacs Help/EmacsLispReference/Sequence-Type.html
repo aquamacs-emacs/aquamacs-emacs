@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,95 +19,129 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Sequence Type</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Sequence Type">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Sequence Type">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Programming-Types.html#Programming-Types" rel="up" title="Programming Types">
-<link href="Cons-Cell-Type.html#Cons-Cell-Type" rel="next" title="Cons Cell Type">
-<link href="Symbol-Type.html#Symbol-Type" rel="prev" title="Symbol Type">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Sequence Type</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Sequence Type" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Sequence Type" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Programming-Types.html#Programming-Types" rel="up"
+  title="Programming Types" />
+  <link href="Cons-Cell-Type.html#Cons-Cell-Type" rel="next" title=
+  "Cons Cell Type" />
+  <link href="Symbol-Type.html#Symbol-Type" rel="prev" title=
+  "Symbol Type" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Sequence-Type" id="Sequence-Type"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Cons-Cell-Type.html#Cons-Cell-Type"
+    accesskey="n" rel="next">Cons Cell Type</a>, Previous: <a href=
+    "Symbol-Type.html#Symbol-Type" accesskey="p" rel="prev">Symbol
+    Type</a>, Up: <a href=
+    "Programming-Types.html#Programming-Types" accesskey="u" rel=
+    "up">Programming Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sequence-Types" id="Sequence-Types"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sequence-Type"></a>
-<div class="header">
-<p>
-Next: <a href="Cons-Cell-Type.html#Cons-Cell-Type" accesskey="n" rel="next">Cons Cell Type</a>, Previous: <a href="Symbol-Type.html#Symbol-Type" accesskey="p" rel="prev">Symbol Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sequence-Types"></a>
-<h4 class="subsection">2.3.5 Sequence Types</h4>
+  <h4 class="subsection">2.3.5 Sequence Types</h4>
 
-<p>A <em>sequence</em> is a Lisp object that represents an ordered set of
-elements.  There are two kinds of sequence in Emacs Lisp: <em>lists</em>
-and <em>arrays</em>.
-</p>
-<p>Lists are the most commonly-used sequences.  A list can hold
-elements of any type, and its length can be easily changed by adding
-or removing elements.  See the next subsection for more about lists.
-</p>
-<p>Arrays are fixed-length sequences.  They are further subdivided into
-strings, vectors, char-tables and bool-vectors.  Vectors can hold
-elements of any type, whereas string elements must be characters, and
-bool-vector elements must be <code>t</code> or <code>nil</code>.  Char-tables are
-like vectors except that they are indexed by any valid character code.
-The characters in a string can have text properties like characters in
-a buffer (see <a href="Text-Properties.html#Text-Properties">Text Properties</a>), but vectors do not support text
-properties, even when their elements happen to be characters.
-</p>
-<p>Lists, strings and the other array types also share important
-similarities.  For example, all have a length <var>l</var>, and all have
-elements which can be indexed from zero to <var>l</var> minus one.  Several
-functions, called sequence functions, accept any kind of sequence.
-For example, the function <code>length</code> reports the length of any kind
-of sequence.  See <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>.
-</p>
-<p>It is generally impossible to read the same sequence twice, since
-sequences are always created anew upon reading.  If you read the read
-syntax for a sequence twice, you get two sequences with equal contents.
-There is one exception: the empty list <code>()</code> always stands for the
-same object, <code>nil</code>.
-</p>
+  <p>A <em>sequence</em> is a Lisp object that represents an
+  ordered set of elements. There are two kinds of sequence in Emacs
+  Lisp: <em>lists</em> and <em>arrays</em>.</p>
 
+  <p>Lists are the most commonly-used sequences. A list can hold
+  elements of any type, and its length can be easily changed by
+  adding or removing elements. See the next subsection for more
+  about lists.</p>
 
+  <p>Arrays are fixed-length sequences. They are further subdivided
+  into strings, vectors, char-tables and bool-vectors. Vectors can
+  hold elements of any type, whereas string elements must be
+  characters, and bool-vector elements must be <code>t</code> or
+  <code>nil</code>. Char-tables are like vectors except that they
+  are indexed by any valid character code. The characters in a
+  string can have text properties like characters in a buffer (see
+  <a href="Text-Properties.html#Text-Properties">Text
+  Properties</a>), but vectors do not support text properties, even
+  when their elements happen to be characters.</p>
 
+  <p>Lists, strings and the other array types also share important
+  similarities. For example, all have a length <var>l</var>, and
+  all have elements which can be indexed from zero to <var>l</var>
+  minus one. Several functions, called sequence functions, accept
+  any kind of sequence. For example, the function
+  <code>length</code> reports the length of any kind of sequence.
+  See <a href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences
+  Arrays Vectors</a>.</p>
+
+  <p>It is generally impossible to read the same sequence twice,
+  since sequences are always created anew upon reading. If you read
+  the read syntax for a sequence twice, you get two sequences with
+  equal contents. There is one exception: the empty list
+  <code>()</code> always stands for the same object,
+  <code>nil</code>.</p>
 </body>
 </html>

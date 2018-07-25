@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,172 +18,234 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Polynomial and Multilinear Fits</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Polynomial and Multilinear Fits">
-<meta name="keywords" content="GNU Emacs Calc Manual: Polynomial and Multilinear Fits">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Curve-Fitting.html#Curve-Fitting" rel="up" title="Curve Fitting">
-<link href="Error-Estimates-for-Fits.html#Error-Estimates-for-Fits" rel="next" title="Error Estimates for Fits">
-<link href="Linear-Fits.html#Linear-Fits" rel="prev" title="Linear Fits">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Polynomial and Multilinear
+  Fits</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Polynomial and Multilinear Fits" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Polynomial and Multilinear Fits" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Curve-Fitting.html#Curve-Fitting" rel="up" title=
+  "Curve Fitting" />
+  <link href=
+  "Error-Estimates-for-Fits.html#Error-Estimates-for-Fits" rel=
+  "next" title="Error Estimates for Fits" />
+  <link href="Linear-Fits.html#Linear-Fits" rel="prev" title=
+  "Linear Fits" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Polynomial-and-Multilinear-Fits"></a>
-<div class="header">
-<p>
-Next: <a href="Error-Estimates-for-Fits.html#Error-Estimates-for-Fits" accesskey="n" rel="next">Error Estimates for Fits</a>, Previous: <a href="Linear-Fits.html#Linear-Fits" accesskey="p" rel="prev">Linear Fits</a>, Up: <a href="Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Polynomial-and-Multilinear-Fits-1"></a>
-<h4 class="subsection">10.8.2 Polynomial and Multilinear Fits</h4>
+<body lang="en" xml:lang="en">
+  <a name="Polynomial-and-Multilinear-Fits" id=
+  "Polynomial-and-Multilinear-Fits"></a>
 
-<p>To fit the data to higher-order polynomials, just type one of the
-digits <kbd>2</kbd> through <kbd>9</kbd> when prompted for a model.  For example,
-we could fit the original data matrix from the previous section
-(with 13, not 14) to a parabola instead of a line by typing
-<kbd>a F 2 <span class="key">RET</span></kbd>.
-</p>
-<div class="example">
-<pre class="example">2.00000000001 x - 1.5e-12 x^2 + 2.99999999999
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Error-Estimates-for-Fits.html#Error-Estimates-for-Fits"
+    accesskey="n" rel="next">Error Estimates for Fits</a>,
+    Previous: <a href="Linear-Fits.html#Linear-Fits" accesskey="p"
+    rel="prev">Linear Fits</a>, Up: <a href=
+    "Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve
+    Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Polynomial-and-Multilinear-Fits-1" id=
+  "Polynomial-and-Multilinear-Fits-1"></a>
 
-<p>Note that since the constant and linear terms are enough to fit the
-data exactly, it&rsquo;s no surprise that Calc chose a tiny contribution
-for &lsquo;<samp>x^2</samp>&rsquo;.  (The fact that it&rsquo;s not exactly zero is due only
-to roundoff error.  Since our data are exact integers, we could get
-an exact answer by typing <kbd>m f</kbd> first to get Fraction mode.
-Then the &lsquo;<samp>x^2</samp>&rsquo; term would vanish altogether.  Usually, though,
-the data being fitted will be approximate floats so Fraction mode
-won&rsquo;t help.)
-</p>
-<p>Doing the <kbd>a F 2</kbd> fit on the data set with 14 instead of 13
-gives a much larger &lsquo;<samp>x^2</samp>&rsquo; contribution, as Calc bends the
-line slightly to improve the fit.
-</p>
-<div class="example">
-<pre class="example">0.142857142855 x^2 + 1.34285714287 x + 3.59999999998
-</pre></div>
+  <h4 class="subsection">10.8.2 Polynomial and Multilinear
+  Fits</h4>
 
-<p>An important result from the theory of polynomial fitting is that it
-is always possible to fit <var>n</var> data points exactly using a polynomial
-of degree <i><var>n</var>-1</i>, sometimes called an <em>interpolating polynomial</em>.
-Using the modified (14) data matrix, a model number of 4 gives
-a polynomial that exactly matches all five data points:
-</p>
-<div class="example">
-<pre class="example">0.04167 x^4 - 0.4167 x^3 + 1.458 x^2 - 0.08333 x + 4.
-</pre></div>
+  <p>To fit the data to higher-order polynomials, just type one of
+  the digits <kbd>2</kbd> through <kbd>9</kbd> when prompted for a
+  model. For example, we could fit the original data matrix from
+  the previous section (with 13, not 14) to a parabola instead of a
+  line by typing <kbd>a F 2 <span class="key">RET</span></kbd>.</p>
 
-<p>The actual coefficients we get with a precision of 12, like
-&lsquo;<samp>0.0416666663588</samp>&rsquo;, clearly suffer from loss of precision.
-It is a good idea to increase the working precision to several
-digits beyond what you need when you do a fitting operation.
-Or, if your data are exact, use Fraction mode to get exact
-results.
-</p>
-<p>You can type <kbd>i</kbd> instead of a digit at the model prompt to fit
-the data exactly to a polynomial.  This just counts the number of
-columns of the data matrix to choose the degree of the polynomial
-automatically.
-</p>
-<p>Fitting data &ldquo;exactly&rdquo; to high-degree polynomials is not always
-a good idea, though.  High-degree polynomials have a tendency to
-wiggle uncontrollably in between the fitting data points.  Also,
-if the exact-fit polynomial is going to be used to interpolate or
-extrapolate the data, it is numerically better to use the <kbd>a p</kbd>
-command described below.  See <a href="Interpolation.html#Interpolation">Interpolation</a>.
-</p>
+  <div class="example">
+    <pre class="example">
+2.00000000001 x - 1.5e-12 x^2 + 2.99999999999
+</pre>
+  </div>
 
-<p>Another generalization of the linear model is to assume the
-&lsquo;<samp>y</samp>&rsquo; values are a sum of linear contributions from several
-&lsquo;<samp>x</samp>&rsquo; values.  This is a <em>multilinear</em> fit, and it is also
-selected by the <kbd>1</kbd> digit key.  (Calc decides whether the fit
-is linear or multilinear by counting the rows in the data matrix.)
-</p>
-<p>Given the data matrix,
-</p>
-<div class="example">
-<pre class="example">[ [  1,   2,   3,    4,   5  ]
+  <p>Note that since the constant and linear terms are enough to
+  fit the data exactly, it&rsquo;s no surprise that Calc chose a
+  tiny contribution for &lsquo;<samp>x^2</samp>&rsquo;. (The fact
+  that it&rsquo;s not exactly zero is due only to roundoff error.
+  Since our data are exact integers, we could get an exact answer
+  by typing <kbd>m f</kbd> first to get Fraction mode. Then the
+  &lsquo;<samp>x^2</samp>&rsquo; term would vanish altogether.
+  Usually, though, the data being fitted will be approximate floats
+  so Fraction mode won&rsquo;t help.)</p>
+
+  <p>Doing the <kbd>a F 2</kbd> fit on the data set with 14 instead
+  of 13 gives a much larger &lsquo;<samp>x^2</samp>&rsquo;
+  contribution, as Calc bends the line slightly to improve the
+  fit.</p>
+
+  <div class="example">
+    <pre class="example">
+0.142857142855 x^2 + 1.34285714287 x + 3.59999999998
+</pre>
+  </div>
+
+  <p>An important result from the theory of polynomial fitting is
+  that it is always possible to fit <var>n</var> data points
+  exactly using a polynomial of degree <i><var>n</var>-1</i>,
+  sometimes called an <em>interpolating polynomial</em>. Using the
+  modified (14) data matrix, a model number of 4 gives a polynomial
+  that exactly matches all five data points:</p>
+
+  <div class="example">
+    <pre class="example">
+0.04167 x^4 - 0.4167 x^3 + 1.458 x^2 - 0.08333 x + 4.
+</pre>
+  </div>
+
+  <p>The actual coefficients we get with a precision of 12, like
+  &lsquo;<samp>0.0416666663588</samp>&rsquo;, clearly suffer from
+  loss of precision. It is a good idea to increase the working
+  precision to several digits beyond what you need when you do a
+  fitting operation. Or, if your data are exact, use Fraction mode
+  to get exact results.</p>
+
+  <p>You can type <kbd>i</kbd> instead of a digit at the model
+  prompt to fit the data exactly to a polynomial. This just counts
+  the number of columns of the data matrix to choose the degree of
+  the polynomial automatically.</p>
+
+  <p>Fitting data &ldquo;exactly&rdquo; to high-degree polynomials
+  is not always a good idea, though. High-degree polynomials have a
+  tendency to wiggle uncontrollably in between the fitting data
+  points. Also, if the exact-fit polynomial is going to be used to
+  interpolate or extrapolate the data, it is numerically better to
+  use the <kbd>a p</kbd> command described below. See <a href=
+  "Interpolation.html#Interpolation">Interpolation</a>.</p>
+
+  <p>Another generalization of the linear model is to assume the
+  &lsquo;<samp>y</samp>&rsquo; values are a sum of linear
+  contributions from several &lsquo;<samp>x</samp>&rsquo; values.
+  This is a <em>multilinear</em> fit, and it is also selected by
+  the <kbd>1</kbd> digit key. (Calc decides whether the fit is
+  linear or multilinear by counting the rows in the data
+  matrix.)</p>
+
+  <p>Given the data matrix,</p>
+
+  <div class="example">
+    <pre class="example">
+[ [  1,   2,   3,    4,   5  ]
   [  7,   2,   3,    5,   2  ]
   [ 14.5, 15, 18.5, 22.5, 24 ] ]
-</pre></div>
+</pre>
+  </div>
 
-<p>the command <kbd>a F 1 <span class="key">RET</span></kbd> will call the first row &lsquo;<samp>x</samp>&rsquo; and the
-second row &lsquo;<samp>y</samp>&rsquo;, and will fit the values in the third row to the
-model &lsquo;<samp>a + b x + c y</samp>&rsquo;.
-</p>
-<div class="example">
-<pre class="example">8. + 3. x + 0.5 y
-</pre></div>
+  <p>the command <kbd>a F 1 <span class="key">RET</span></kbd> will
+  call the first row &lsquo;<samp>x</samp>&rsquo; and the second
+  row &lsquo;<samp>y</samp>&rsquo;, and will fit the values in the
+  third row to the model &lsquo;<samp>a + b x + c
+  y</samp>&rsquo;.</p>
 
-<p>Calc can do multilinear fits with any number of independent variables
-(i.e., with any number of data rows).
-</p>
+  <div class="example">
+    <pre class="example">
+8. + 3. x + 0.5 y
+</pre>
+  </div>
 
-<p>Yet another variation is <em>homogeneous</em> linear models, in which
-the constant term is known to be zero.  In the linear case, this
-means the model formula is simply &lsquo;<samp>a x</samp>&rsquo;; in the multilinear
-case, the model might be &lsquo;<samp>a x + b y + c z</samp>&rsquo;; and in the polynomial
-case, the model could be &lsquo;<samp>a x + b x^2 + c x^3</samp>&rsquo;.  You can get
-a homogeneous linear or multilinear model by pressing the letter
-<kbd>h</kbd> followed by a regular model key, like <kbd>1</kbd> or <kbd>2</kbd>.
-This will be indicated by an &ldquo;h&rdquo; in the minibuffer after the help
-message.
-</p>
-<p>It is certainly possible to have other constrained linear models,
-like &lsquo;<samp>2.3 + a x</samp>&rsquo; or &lsquo;<samp>a - 4 x</samp>&rsquo;.  While there is no single
-key to select models like these, a later section shows how to enter
-any desired model by hand.  In the first case, for example, you
-would enter <kbd>a F ' 2.3 + a x</kbd>.
-</p>
-<p>Another class of models that will work but must be entered by hand
-are multinomial fits, e.g., &lsquo;<samp>a + b x + c y + d x^2 + e y^2 + f x y</samp>&rsquo;.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Error-Estimates-for-Fits.html#Error-Estimates-for-Fits" accesskey="n" rel="next">Error Estimates for Fits</a>, Previous: <a href="Linear-Fits.html#Linear-Fits" accesskey="p" rel="prev">Linear Fits</a>, Up: <a href="Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Calc can do multilinear fits with any number of independent
+  variables (i.e., with any number of data rows).</p>
 
+  <p>Yet another variation is <em>homogeneous</em> linear models,
+  in which the constant term is known to be zero. In the linear
+  case, this means the model formula is simply &lsquo;<samp>a
+  x</samp>&rsquo;; in the multilinear case, the model might be
+  &lsquo;<samp>a x + b y + c z</samp>&rsquo;; and in the polynomial
+  case, the model could be &lsquo;<samp>a x + b x^2 + c
+  x^3</samp>&rsquo;. You can get a homogeneous linear or
+  multilinear model by pressing the letter <kbd>h</kbd> followed by
+  a regular model key, like <kbd>1</kbd> or <kbd>2</kbd>. This will
+  be indicated by an &ldquo;h&rdquo; in the minibuffer after the
+  help message.</p>
 
+  <p>It is certainly possible to have other constrained linear
+  models, like &lsquo;<samp>2.3 + a x</samp>&rsquo; or
+  &lsquo;<samp>a - 4 x</samp>&rsquo;. While there is no single key
+  to select models like these, a later section shows how to enter
+  any desired model by hand. In the first case, for example, you
+  would enter <kbd>a F ' 2.3 + a x</kbd>.</p>
 
+  <p>Another class of models that will work but must be entered by
+  hand are multinomial fits, e.g., &lsquo;<samp>a + b x + c y + d
+  x^2 + e y^2 + f x y</samp>&rsquo;.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Error-Estimates-for-Fits.html#Error-Estimates-for-Fits"
+    accesskey="n" rel="next">Error Estimates for Fits</a>,
+    Previous: <a href="Linear-Fits.html#Linear-Fits" accesskey="p"
+    rel="prev">Linear Fits</a>, Up: <a href=
+    "Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve
+    Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

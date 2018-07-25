@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Generalized Variables - Common Lisp Extensions</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Common Lisp Extensions">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Control-Structure.html#Control-Structure" title="Control Structure">
-<link rel="prev" href="Assignment.html#Assignment" title="Assignment">
-<link rel="next" href="Variable-Bindings.html#Variable-Bindings" title="Variable Bindings">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Generalized Variables - Common Lisp Extensions</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Common Lisp Extensions" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Control-Structure.html#Control-Structure"
+  title="Control Structure" />
+  <link rel="prev" href="Assignment.html#Assignment" title=
+  "Assignment" />
+  <link rel="next" href="Variable-Bindings.html#Variable-Bindings"
+  title="Variable Bindings" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -27,8 +36,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,44 +49,61 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Generalized-Variables"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Variable-Bindings.html#Variable-Bindings">Variable Bindings</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Assignment.html#Assignment">Assignment</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structure.html#Control-Structure">Control Structure</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Generalized-Variables" id="Generalized-Variables"></a>
 
-<h3 class="section">5.2 Generalized Variables</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Variable-Bindings.html#Variable-Bindings">Variable
+    Bindings</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Assignment.html#Assignment">Assignment</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Control-Structure.html#Control-Structure">Control
+    Structure</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">A &ldquo;generalized variable&rdquo; or &ldquo;place form&rdquo; is one of the many places
-in Lisp memory where values can be stored.  The simplest place form is
-a regular Lisp variable.  But the cars and cdrs of lists, elements
-of arrays, properties of symbols, and many other locations are also
-places where Lisp values are stored.
+  <h3 class="section">5.2 Generalized Variables</h3>
 
-   <p>The <code>setf</code> form is like <code>setq</code>, except that it accepts
-arbitrary place forms on the left side rather than just
-symbols.  For example, <code>(setf (car a) b)</code> sets the car of
-<code>a</code> to <code>b</code>, doing the same operation as <code>(setcar a b)</code>
-but without having to remember two separate functions for setting
-and accessing every type of place.
+  <p class="noindent">A &ldquo;generalized variable&rdquo; or
+  &ldquo;place form&rdquo; is one of the many places in Lisp memory
+  where values can be stored. The simplest place form is a regular
+  Lisp variable. But the cars and cdrs of lists, elements of
+  arrays, properties of symbols, and many other locations are also
+  places where Lisp values are stored.</p>
 
-   <p>Generalized variables are analogous to &ldquo;lvalues&rdquo; in the C
-language, where &lsquo;<samp><span class="samp">x = a[i]</span></samp>&rsquo; gets an element from an array
-and &lsquo;<samp><span class="samp">a[i] = x</span></samp>&rsquo; stores an element using the same notation. 
-Just as certain forms like <code>a[i]</code> can be lvalues in C, there
-is a set of forms that can be generalized variables in Lisp.
+  <p>The <code>setf</code> form is like <code>setq</code>, except
+  that it accepts arbitrary place forms on the left side rather
+  than just symbols. For example, <code>(setf (car a) b)</code>
+  sets the car of <code>a</code> to <code>b</code>, doing the same
+  operation as <code>(setcar a b)</code> but without having to
+  remember two separate functions for setting and accessing every
+  type of place.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Basic-Setf.html#Basic-Setf">Basic Setf</a>:          `setf' and place forms
-<li><a accesskey="2" href="Modify-Macros.html#Modify-Macros">Modify Macros</a>:       `incf', `push', `rotatef', `letf', `callf', etc. 
-<li><a accesskey="3" href="Customizing-Setf.html#Customizing-Setf">Customizing Setf</a>:    `define-modify-macro', `defsetf', `define-setf-method'
-</ul>
+  <p>Generalized variables are analogous to &ldquo;lvalues&rdquo;
+  in the C language, where &lsquo;<samp><span class="samp">x =
+  a[i]</span></samp>&rsquo; gets an element from an array and
+  &lsquo;<samp><span class="samp">a[i] = x</span></samp>&rsquo;
+  stores an element using the same notation. Just as certain forms
+  like <code>a[i]</code> can be lvalues in C, there is a set of
+  forms that can be generalized variables in Lisp.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href="Basic-Setf.html#Basic-Setf">Basic
+    Setf</a>: `setf' and place forms</li>
 
+    <li><a accesskey="2" href=
+    "Modify-Macros.html#Modify-Macros">Modify Macros</a>: `incf',
+    `push', `rotatef', `letf', `callf', etc.</li>
+
+    <li><a accesskey="3" href=
+    "Customizing-Setf.html#Customizing-Setf">Customizing Setf</a>:
+    `define-modify-macro', `defsetf', `define-setf-method'</li>
+  </ul>
+</body>
+</html>

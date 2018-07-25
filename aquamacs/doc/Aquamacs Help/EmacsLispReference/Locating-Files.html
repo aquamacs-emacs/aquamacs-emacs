@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,122 +19,191 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Locating Files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Locating Files">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Locating Files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Information-about-Files.html#Information-about-Files" rel="up" title="Information about Files">
-<link href="Changing-Files.html#Changing-Files" rel="next" title="Changing Files">
-<link href="Extended-Attributes.html#Extended-Attributes" rel="prev" title="Extended Attributes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Locating Files</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Locating Files" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Locating Files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Information-about-Files.html#Information-about-Files"
+  rel="up" title="Information about Files" />
+  <link href="Changing-Files.html#Changing-Files" rel="next" title=
+  "Changing Files" />
+  <link href="Extended-Attributes.html#Extended-Attributes" rel=
+  "prev" title="Extended Attributes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Locating-Files" id="Locating-Files"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Extended-Attributes.html#Extended-Attributes" accesskey="p"
+    rel="prev">Extended Attributes</a>, Up: <a href=
+    "Information-about-Files.html#Information-about-Files"
+    accesskey="u" rel="up">Information about Files</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Locating-Files-in-Standard-Places" id=
+  "Locating-Files-in-Standard-Places"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Locating-Files"></a>
-<div class="header">
-<p>
-Previous: <a href="Extended-Attributes.html#Extended-Attributes" accesskey="p" rel="prev">Extended Attributes</a>, Up: <a href="Information-about-Files.html#Information-about-Files" accesskey="u" rel="up">Information about Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Locating-Files-in-Standard-Places"></a>
-<h4 class="subsection">24.6.6 Locating Files in Standard Places</h4>
-<a name="index-locate-file-in-path"></a>
-<a name="index-find-file-in-path"></a>
+  <h4 class="subsection">24.6.6 Locating Files in Standard
+  Places</h4><a name="index-locate-file-in-path" id=
+  "index-locate-file-in-path"></a> <a name=
+  "index-find-file-in-path" id="index-find-file-in-path"></a>
 
-<p>This section explains how to search for a file in a list of
-directories (a <em>path</em>), or for an executable file in the standard
-list of executable file directories.
-</p>
-<p>To search for a user-specific configuration file, See <a href="Standard-File-Names.html#Standard-File-Names">Standard File Names</a>, for the <code>locate-user-emacs-file</code> function.
-</p>
-<dl>
-<dt><a name="index-locate_002dfile"></a>Function: <strong>locate-file</strong> <em>filename path &amp;optional suffixes predicate</em></dt>
-<dd><p>This function searches for a file whose name is <var>filename</var> in a
-list of directories given by <var>path</var>, trying the suffixes in
-<var>suffixes</var>.  If it finds such a file, it returns the file&rsquo;s
-absolute file name (see <a href="Relative-File-Names.html#Relative-File-Names">Relative File Names</a>); otherwise it returns
-<code>nil</code>.
-</p>
-<p>The optional argument <var>suffixes</var> gives the list of file-name
-suffixes to append to <var>filename</var> when searching.
-<code>locate-file</code> tries each possible directory with each of these
-suffixes.  If <var>suffixes</var> is <code>nil</code>, or <code>(&quot;&quot;)</code>, then there
-are no suffixes, and <var>filename</var> is used only as-is.  Typical
-values of <var>suffixes</var> are <code>exec-suffixes</code> (see <a href="Subprocess-Creation.html#Subprocess-Creation">Subprocess Creation</a>), <code>load-suffixes</code>, <code>load-file-rep-suffixes</code> and
-the return value of the function <code>get-load-suffixes</code> (see <a href="Load-Suffixes.html#Load-Suffixes">Load Suffixes</a>).
-</p>
-<p>Typical values for <var>path</var> are <code>exec-path</code> (see <a href="Subprocess-Creation.html#Subprocess-Creation">Subprocess Creation</a>) when looking for executable programs, or <code>load-path</code>
-(see <a href="Library-Search.html#Library-Search">Library Search</a>) when looking for Lisp files.  If
-<var>filename</var> is absolute, <var>path</var> has no effect, but the suffixes
-in <var>suffixes</var> are still tried.
-</p>
-<p>The optional argument <var>predicate</var>, if non-<code>nil</code>, specifies a
-predicate function for testing whether a candidate file is suitable.
-The predicate is passed the candidate file name as its single
-argument.  If <var>predicate</var> is <code>nil</code> or omitted,
-<code>locate-file</code> uses <code>file-readable-p</code> as the predicate.
-See <a href="Kinds-of-Files.html#Kinds-of-Files">Kinds of Files</a>, for other useful predicates, e.g.,
-<code>file-executable-p</code> and <code>file-directory-p</code>.
-</p>
-<p>For compatibility, <var>predicate</var> can also be one of the symbols
-<code>executable</code>, <code>readable</code>, <code>writable</code>, <code>exists</code>, or
-a list of one or more of these symbols.
-</p></dd></dl>
+  <p>This section explains how to search for a file in a list of
+  directories (a <em>path</em>), or for an executable file in the
+  standard list of executable file directories.</p>
 
-<dl>
-<dt><a name="index-executable_002dfind"></a>Function: <strong>executable-find</strong> <em>program</em></dt>
-<dd><p>This function searches for the executable file of the named
-<var>program</var> and returns the absolute file name of the executable,
-including its file-name extensions, if any.  It returns <code>nil</code> if
-the file is not found.  The functions searches in all the directories
-in <code>exec-path</code>, and tries all the file-name extensions in
-<code>exec-suffixes</code> (see <a href="Subprocess-Creation.html#Subprocess-Creation">Subprocess Creation</a>).
-</p></dd></dl>
+  <p>To search for a user-specific configuration file, See <a href=
+  "Standard-File-Names.html#Standard-File-Names">Standard File
+  Names</a>, for the <code>locate-user-emacs-file</code>
+  function.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Extended-Attributes.html#Extended-Attributes" accesskey="p" rel="prev">Extended Attributes</a>, Up: <a href="Information-about-Files.html#Information-about-Files" accesskey="u" rel="up">Information about Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-locate_002dfile" id=
+    "index-locate_002dfile"></a>Function:
+    <strong>locate-file</strong> <em>filename path &amp;optional
+    suffixes predicate</em></dt>
 
+    <dd>
+      <p>This function searches for a file whose name is
+      <var>filename</var> in a list of directories given by
+      <var>path</var>, trying the suffixes in <var>suffixes</var>.
+      If it finds such a file, it returns the file&rsquo;s absolute
+      file name (see <a href=
+      "Relative-File-Names.html#Relative-File-Names">Relative File
+      Names</a>); otherwise it returns <code>nil</code>.</p>
 
+      <p>The optional argument <var>suffixes</var> gives the list
+      of file-name suffixes to append to <var>filename</var> when
+      searching. <code>locate-file</code> tries each possible
+      directory with each of these suffixes. If <var>suffixes</var>
+      is <code>nil</code>, or <code>("")</code>, then there are no
+      suffixes, and <var>filename</var> is used only as-is. Typical
+      values of <var>suffixes</var> are <code>exec-suffixes</code>
+      (see <a href=
+      "Subprocess-Creation.html#Subprocess-Creation">Subprocess
+      Creation</a>), <code>load-suffixes</code>,
+      <code>load-file-rep-suffixes</code> and the return value of
+      the function <code>get-load-suffixes</code> (see <a href=
+      "Load-Suffixes.html#Load-Suffixes">Load Suffixes</a>).</p>
 
+      <p>Typical values for <var>path</var> are
+      <code>exec-path</code> (see <a href=
+      "Subprocess-Creation.html#Subprocess-Creation">Subprocess
+      Creation</a>) when looking for executable programs, or
+      <code>load-path</code> (see <a href=
+      "Library-Search.html#Library-Search">Library Search</a>) when
+      looking for Lisp files. If <var>filename</var> is absolute,
+      <var>path</var> has no effect, but the suffixes in
+      <var>suffixes</var> are still tried.</p>
+
+      <p>The optional argument <var>predicate</var>, if
+      non-<code>nil</code>, specifies a predicate function for
+      testing whether a candidate file is suitable. The predicate
+      is passed the candidate file name as its single argument. If
+      <var>predicate</var> is <code>nil</code> or omitted,
+      <code>locate-file</code> uses <code>file-readable-p</code> as
+      the predicate. See <a href=
+      "Kinds-of-Files.html#Kinds-of-Files">Kinds of Files</a>, for
+      other useful predicates, e.g., <code>file-executable-p</code>
+      and <code>file-directory-p</code>.</p>
+
+      <p>For compatibility, <var>predicate</var> can also be one of
+      the symbols <code>executable</code>, <code>readable</code>,
+      <code>writable</code>, <code>exists</code>, or a list of one
+      or more of these symbols.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-executable_002dfind" id=
+    "index-executable_002dfind"></a>Function:
+    <strong>executable-find</strong> <em>program</em></dt>
+
+    <dd>
+      <p>This function searches for the executable file of the
+      named <var>program</var> and returns the absolute file name
+      of the executable, including its file-name extensions, if
+      any. It returns <code>nil</code> if the file is not found.
+      The functions searches in all the directories in
+      <code>exec-path</code>, and tries all the file-name
+      extensions in <code>exec-suffixes</code> (see <a href=
+      "Subprocess-Creation.html#Subprocess-Creation">Subprocess
+      Creation</a>).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Extended-Attributes.html#Extended-Attributes" accesskey="p"
+    rel="prev">Extended Attributes</a>, Up: <a href=
+    "Information-about-Files.html#Information-about-Files"
+    accesskey="u" rel="up">Information about Files</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

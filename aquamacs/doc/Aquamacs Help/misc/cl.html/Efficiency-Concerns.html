@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,186 +16,244 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Efficiency Concerns</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Efficiency Concerns">
-<meta name="keywords" content="Common Lisp Extensions: Efficiency Concerns">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Common-Lisp-Compatibility.html#Common-Lisp-Compatibility" rel="next" title="Common Lisp Compatibility">
-<link href="Assertions.html#Assertions" rel="prev" title="Assertions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Efficiency Concerns</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Efficiency Concerns" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Efficiency Concerns" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href=
+  "Common-Lisp-Compatibility.html#Common-Lisp-Compatibility" rel=
+  "next" title="Common Lisp Compatibility" />
+  <link href="Assertions.html#Assertions" rel="prev" title=
+  "Assertions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Efficiency-Concerns"></a>
-<div class="header">
-<p>
-Next: <a href="Common-Lisp-Compatibility.html#Common-Lisp-Compatibility" accesskey="n" rel="next">Common Lisp Compatibility</a>, Previous: <a href="Assertions.html#Assertions" accesskey="p" rel="prev">Assertions</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Efficiency-Concerns-1"></a>
-<h2 class="appendix">Appendix A Efficiency Concerns</h2>
+<body lang="en" xml:lang="en">
+  <a name="Efficiency-Concerns" id="Efficiency-Concerns"></a>
 
-<a name="Macros-2"></a>
-<h3 class="appendixsec">A.1 Macros</h3>
+  <div class="header">
+    <p>Next: <a href=
+    "Common-Lisp-Compatibility.html#Common-Lisp-Compatibility"
+    accesskey="n" rel="next">Common Lisp Compatibility</a>,
+    Previous: <a href="Assertions.html#Assertions" accesskey="p"
+    rel="prev">Assertions</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Efficiency-Concerns-1" id="Efficiency-Concerns-1"></a>
 
-<p>Many of the advanced features of this package, such as <code>cl-defun</code>,
-<code>cl-loop</code>, etc., are implemented as Lisp macros.  In
-byte-compiled code, these complex notations will be expanded into
-equivalent Lisp code which is simple and efficient.  For example,
-the form
-</p>
-<div class="example">
-<pre class="example">(cl-incf i n)
-</pre></div>
+  <h2 class="appendix">Appendix A Efficiency Concerns</h2><a name=
+  "Macros-2" id="Macros-2"></a>
 
-<p>is expanded at compile-time to the Lisp form
-</p>
-<div class="example">
-<pre class="example">(setq i (+ i n))
-</pre></div>
+  <h3 class="appendixsec">A.1 Macros</h3>
 
-<p>which is the most efficient ways of doing this operation
-in Lisp.  Thus, there is no performance penalty for using the more
-readable <code>cl-incf</code> form in your compiled code.
-</p>
-<p><em>Interpreted</em> code, on the other hand, must expand these macros
-every time they are executed.  For this reason it is strongly
-recommended that code making heavy use of macros be compiled.
-A loop using <code>cl-incf</code> a hundred times will execute considerably
-faster if compiled, and will also garbage-collect less because the
-macro expansion will not have to be generated, used, and thrown away a
-hundred times.
-</p>
-<p>You can find out how a macro expands by using the
-<code>cl-prettyexpand</code> function.
-</p>
-<dl>
-<dt><a name="index-cl_002dprettyexpand"></a>Function: <strong>cl-prettyexpand</strong> <em>form &amp;optional full</em></dt>
-<dd><p>This function takes a single Lisp form as an argument and inserts
-a nicely formatted copy of it in the current buffer (which must be
-in Lisp mode so that indentation works properly).  It also expands
-all Lisp macros that appear in the form.  The easiest way to use
-this function is to go to the <samp>*scratch*</samp> buffer and type, say,
-</p>
-<div class="example">
-<pre class="example">(cl-prettyexpand '(cl-loop for x below 10 collect x))
-</pre></div>
+  <p>Many of the advanced features of this package, such as
+  <code>cl-defun</code>, <code>cl-loop</code>, etc., are
+  implemented as Lisp macros. In byte-compiled code, these complex
+  notations will be expanded into equivalent Lisp code which is
+  simple and efficient. For example, the form</p>
 
-<p>and type <kbd>C-x C-e</kbd> immediately after the closing parenthesis;
-an expansion similar to:
-</p>
-<div class="example">
-<pre class="example">(cl-block nil
+  <div class="example">
+    <pre class="example">
+(cl-incf i n)
+</pre>
+  </div>
+
+  <p>is expanded at compile-time to the Lisp form</p>
+
+  <div class="example">
+    <pre class="example">
+(setq i (+ i n))
+</pre>
+  </div>
+
+  <p>which is the most efficient ways of doing this operation in
+  Lisp. Thus, there is no performance penalty for using the more
+  readable <code>cl-incf</code> form in your compiled code.</p>
+
+  <p><em>Interpreted</em> code, on the other hand, must expand
+  these macros every time they are executed. For this reason it is
+  strongly recommended that code making heavy use of macros be
+  compiled. A loop using <code>cl-incf</code> a hundred times will
+  execute considerably faster if compiled, and will also
+  garbage-collect less because the macro expansion will not have to
+  be generated, used, and thrown away a hundred times.</p>
+
+  <p>You can find out how a macro expands by using the
+  <code>cl-prettyexpand</code> function.</p>
+
+  <dl>
+    <dt><a name="index-cl_002dprettyexpand" id=
+    "index-cl_002dprettyexpand"></a>Function:
+    <strong>cl-prettyexpand</strong> <em>form &amp;optional
+    full</em></dt>
+
+    <dd>
+      <p>This function takes a single Lisp form as an argument and
+      inserts a nicely formatted copy of it in the current buffer
+      (which must be in Lisp mode so that indentation works
+      properly). It also expands all Lisp macros that appear in the
+      form. The easiest way to use this function is to go to the
+      <samp>*scratch*</samp> buffer and type, say,</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-prettyexpand '(cl-loop for x below 10 collect x))
+</pre>
+      </div>
+
+      <p>and type <kbd>C-x C-e</kbd> immediately after the closing
+      parenthesis; an expansion similar to:</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-block nil
      (let* ((x 0)
             (G1004 nil))
        (while (&lt; x 10)
          (setq G1004 (cons x G1004))
          (setq x (+ x 1)))
        (nreverse G1004)))
-</pre></div>
+</pre>
+      </div>
 
-<p>will be inserted into the buffer.  (The <code>cl-block</code> macro is
-expanded differently in the interpreter and compiler, so
-<code>cl-prettyexpand</code> just leaves it alone.  The temporary
-variable <code>G1004</code> was created by <code>cl-gensym</code>.)
-</p>
-<p>If the optional argument <var>full</var> is true, then <em>all</em>
-macros are expanded, including <code>cl-block</code>, <code>cl-eval-when</code>,
-and compiler macros.  Expansion is done as if <var>form</var> were
-a top-level form in a file being compiled.
-</p>
+      <p>will be inserted into the buffer. (The
+      <code>cl-block</code> macro is expanded differently in the
+      interpreter and compiler, so <code>cl-prettyexpand</code>
+      just leaves it alone. The temporary variable
+      <code>G1004</code> was created by
+      <code>cl-gensym</code>.)</p>
 
-<p>Note that <code>cl-adjoin</code>, <code>cl-caddr</code>, and <code>cl-member</code> all
-have built-in compiler macros to optimize them in common cases.
-</p></dd></dl>
+      <p>If the optional argument <var>full</var> is true, then
+      <em>all</em> macros are expanded, including
+      <code>cl-block</code>, <code>cl-eval-when</code>, and
+      compiler macros. Expansion is done as if <var>form</var> were
+      a top-level form in a file being compiled.</p>
 
-<a name="Error-Checking"></a>
-<h3 class="appendixsec">A.2 Error Checking</h3>
+      <p>Note that <code>cl-adjoin</code>, <code>cl-caddr</code>,
+      and <code>cl-member</code> all have built-in compiler macros
+      to optimize them in common cases.</p>
+    </dd>
+  </dl><a name="Error-Checking" id="Error-Checking"></a>
 
-<p>Common Lisp compliance has in general not been sacrificed for the
-sake of efficiency.  A few exceptions have been made for cases
-where substantial gains were possible at the expense of marginal
-incompatibility.
-</p>
-<p>The Common Lisp standard (as embodied in Steele&rsquo;s book) uses the
-phrase &ldquo;it is an error if&rdquo; to indicate a situation that is not
-supposed to arise in complying programs; implementations are strongly
-encouraged but not required to signal an error in these situations.
-This package sometimes omits such error checking in the interest of
-compactness and efficiency.  For example, <code>cl-do</code> variable
-specifiers are supposed to be lists of one, two, or three forms; extra
-forms are ignored by this package rather than signaling a syntax
-error.  Functions taking keyword arguments will accept an odd number
-of arguments, treating the trailing keyword as if it were followed by
-the value <code>nil</code>.
-</p>
-<p>Argument lists (as processed by <code>cl-defun</code> and friends)
-<em>are</em> checked rigorously except for the minor point just
-mentioned; in particular, keyword arguments are checked for
-validity, and <code>&amp;allow-other-keys</code> and <code>:allow-other-keys</code>
-are fully implemented.  Keyword validity checking is slightly
-time consuming (though not too bad in byte-compiled code);
-you can use <code>&amp;allow-other-keys</code> to omit this check.  Functions
-defined in this package such as <code>cl-find</code> and <code>cl-member</code>
-do check their keyword arguments for validity.
-</p>
-<a name="Compiler-Optimizations"></a>
-<h3 class="appendixsec">A.3 Compiler Optimizations</h3>
+  <h3 class="appendixsec">A.2 Error Checking</h3>
 
-<p>Changing the value of <code>byte-optimize</code> from the default <code>t</code>
-is highly discouraged; many of the Common
-Lisp macros emit
-code that can be improved by optimization.  In particular,
-<code>cl-block</code>s (whether explicit or implicit in constructs like
-<code>cl-defun</code> and <code>cl-loop</code>) carry a fair run-time penalty; the
-byte-compiler removes <code>cl-block</code>s that are not actually
-referenced by <code>cl-return</code> or <code>cl-return-from</code> inside the block.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Common-Lisp-Compatibility.html#Common-Lisp-Compatibility" accesskey="n" rel="next">Common Lisp Compatibility</a>, Previous: <a href="Assertions.html#Assertions" accesskey="p" rel="prev">Assertions</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Common Lisp compliance has in general not been sacrificed for
+  the sake of efficiency. A few exceptions have been made for cases
+  where substantial gains were possible at the expense of marginal
+  incompatibility.</p>
 
+  <p>The Common Lisp standard (as embodied in Steele&rsquo;s book)
+  uses the phrase &ldquo;it is an error if&rdquo; to indicate a
+  situation that is not supposed to arise in complying programs;
+  implementations are strongly encouraged but not required to
+  signal an error in these situations. This package sometimes omits
+  such error checking in the interest of compactness and
+  efficiency. For example, <code>cl-do</code> variable specifiers
+  are supposed to be lists of one, two, or three forms; extra forms
+  are ignored by this package rather than signaling a syntax error.
+  Functions taking keyword arguments will accept an odd number of
+  arguments, treating the trailing keyword as if it were followed
+  by the value <code>nil</code>.</p>
 
+  <p>Argument lists (as processed by <code>cl-defun</code> and
+  friends) <em>are</em> checked rigorously except for the minor
+  point just mentioned; in particular, keyword arguments are
+  checked for validity, and <code>&amp;allow-other-keys</code> and
+  <code>:allow-other-keys</code> are fully implemented. Keyword
+  validity checking is slightly time consuming (though not too bad
+  in byte-compiled code); you can use
+  <code>&amp;allow-other-keys</code> to omit this check. Functions
+  defined in this package such as <code>cl-find</code> and
+  <code>cl-member</code> do check their keyword arguments for
+  validity.</p><a name="Compiler-Optimizations" id=
+  "Compiler-Optimizations"></a>
 
+  <h3 class="appendixsec">A.3 Compiler Optimizations</h3>
+
+  <p>Changing the value of <code>byte-optimize</code> from the
+  default <code>t</code> is highly discouraged; many of the Common
+  Lisp macros emit code that can be improved by optimization. In
+  particular, <code>cl-block</code>s (whether explicit or implicit
+  in constructs like <code>cl-defun</code> and
+  <code>cl-loop</code>) carry a fair run-time penalty; the
+  byte-compiler removes <code>cl-block</code>s that are not
+  actually referenced by <code>cl-return</code> or
+  <code>cl-return-from</code> inside the block.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Common-Lisp-Compatibility.html#Common-Lisp-Compatibility"
+    accesskey="n" rel="next">Common Lisp Compatibility</a>,
+    Previous: <a href="Assertions.html#Assertions" accesskey="p"
+    rel="prev">Assertions</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

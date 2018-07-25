@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Reducing and Mapping - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Matrix-Functions.html#Matrix-Functions" title="Matrix Functions">
-<link rel="prev" href="Statistical-Operations.html#Statistical-Operations" title="Statistical Operations">
-<link rel="next" href="Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats" title="Vector and Matrix Formats">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Reducing and Mapping - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Matrix-Functions.html#Matrix-Functions"
+  title="Matrix Functions" />
+  <link rel="prev" href=
+  "Statistical-Operations.html#Statistical-Operations" title=
+  "Statistical Operations" />
+  <link rel="next" href=
+  "Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats" title=
+  "Vector and Matrix Formats" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +40,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,41 +53,72 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Reducing-and-Mapping"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats">Vector and Matrix Formats</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Statistical-Operations.html#Statistical-Operations">Statistical Operations</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Reducing-and-Mapping" id="Reducing-and-Mapping"></a>
 
-<h3 class="section">10.8 Reducing and Mapping Vectors</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats">Vector
+    and Matrix Formats</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Statistical-Operations.html#Statistical-Operations">Statistical
+    Operations</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Matrix-Functions.html#Matrix-Functions">Matrix
+    Functions</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">The commands in this section allow for more general operations on the
-elements of vectors.
+  <h3 class="section">10.8 Reducing and Mapping Vectors</h3>
 
-   <p><a name="index-v-A-1489"></a><a name="index-V-A-1490"></a><a name="index-calc_002dapply-1491"></a><a name="index-apply-1492"></a>The simplest of these operations is <kbd>V A</kbd> (<code>calc-apply</code>)
-[<code>apply</code>], which applies a given operator to the elements of a vector. 
-For example, applying the hypothetical function <code>f</code> to the vector
-&lsquo;<samp><span class="samp">[1,&nbsp;2,&nbsp;3]</span></samp>&rsquo;<!-- /@w --> would produce the function call &lsquo;<samp><span class="samp">f(1, 2, 3)</span></samp>&rsquo;. 
-Applying the <code>+</code> function to the vector &lsquo;<samp><span class="samp">[a, b]</span></samp>&rsquo; gives
-&lsquo;<samp><span class="samp">a + b</span></samp>&rsquo;.  Applying <code>+</code> to the vector &lsquo;<samp><span class="samp">[a, b, c]</span></samp>&rsquo; is an
-error, since the <code>+</code> function expects exactly two arguments.
+  <p class="noindent">The commands in this section allow for more
+  general operations on the elements of vectors.</p>
 
-   <p>While <kbd>V A</kbd> is useful in some cases, you will usually find that either
-<kbd>V R</kbd> or <kbd>V M</kbd>, described below, is closer to what you want.
+  <p><a name="index-v-A-1489" id="index-v-A-1489"></a><a name=
+  "index-V-A-1490" id="index-V-A-1490"></a><a name=
+  "index-calc_002dapply-1491" id=
+  "index-calc_002dapply-1491"></a><a name="index-apply-1492" id=
+  "index-apply-1492"></a>The simplest of these operations is <kbd>V
+  A</kbd> (<code>calc-apply</code>) [<code>apply</code>], which
+  applies a given operator to the elements of a vector. For
+  example, applying the hypothetical function <code>f</code> to the
+  vector &lsquo;<samp><span class=
+  "samp">[1,&nbsp;2,&nbsp;3]</span></samp>&rsquo;<!-- /@w --> would
+  produce the function call &lsquo;<samp><span class="samp">f(1, 2,
+  3)</span></samp>&rsquo;. Applying the <code>+</code> function to
+  the vector &lsquo;<samp><span class="samp">[a,
+  b]</span></samp>&rsquo; gives &lsquo;<samp><span class="samp">a +
+  b</span></samp>&rsquo;. Applying <code>+</code> to the vector
+  &lsquo;<samp><span class="samp">[a, b, c]</span></samp>&rsquo; is
+  an error, since the <code>+</code> function expects exactly two
+  arguments.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Specifying-Operators.html#Specifying-Operators">Specifying Operators</a>
-<li><a accesskey="2" href="Mapping.html#Mapping">Mapping</a>
-<li><a accesskey="3" href="Reducing.html#Reducing">Reducing</a>
-<li><a accesskey="4" href="Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points">Nesting and Fixed Points</a>
-<li><a accesskey="5" href="Generalized-Products.html#Generalized-Products">Generalized Products</a>
-</ul>
+  <p>While <kbd>V A</kbd> is useful in some cases, you will usually
+  find that either <kbd>V R</kbd> or <kbd>V M</kbd>, described
+  below, is closer to what you want.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Specifying-Operators.html#Specifying-Operators">Specifying
+    Operators</a></li>
 
+    <li><a accesskey="2" href=
+    "Mapping.html#Mapping">Mapping</a></li>
+
+    <li><a accesskey="3" href=
+    "Reducing.html#Reducing">Reducing</a></li>
+
+    <li><a accesskey="4" href=
+    "Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points">Nesting
+    and Fixed Points</a></li>
+
+    <li><a accesskey="5" href=
+    "Generalized-Products.html#Generalized-Products">Generalized
+    Products</a></li>
+  </ul>
+</body>
+</html>

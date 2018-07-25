@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,121 +19,180 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: String Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: String Basics">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: String Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Strings-and-Characters.html#Strings-and-Characters" rel="up" title="Strings and Characters">
-<link href="Predicates-for-Strings.html#Predicates-for-Strings" rel="next" title="Predicates for Strings">
-<link href="Strings-and-Characters.html#Strings-and-Characters" rel="prev" title="Strings and Characters">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: String Basics</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: String Basics" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: String Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Strings-and-Characters.html#Strings-and-Characters"
+  rel="up" title="Strings and Characters" />
+  <link href="Predicates-for-Strings.html#Predicates-for-Strings"
+  rel="next" title="Predicates for Strings" />
+  <link href="Strings-and-Characters.html#Strings-and-Characters"
+  rel="prev" title="Strings and Characters" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="String-Basics" id="String-Basics"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Predicates-for-Strings.html#Predicates-for-Strings" accesskey=
+    "n" rel="next">Predicates for Strings</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="String-and-Character-Basics" id=
+  "String-and-Character-Basics"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="String-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Predicates-for-Strings.html#Predicates-for-Strings" accesskey="n" rel="next">Predicates for Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="String-and-Character-Basics"></a>
-<h3 class="section">4.1 String and Character Basics</h3>
+  <h3 class="section">4.1 String and Character Basics</h3>
 
-<p>A character is a Lisp object which represents a single character of
-text.  In Emacs Lisp, characters are simply integers; whether an
-integer is a character or not is determined only by how it is used.
-See <a href="Character-Codes.html#Character-Codes">Character Codes</a>, for details about character representation in
-Emacs.
-</p>
-<p>A string is a fixed sequence of characters.  It is a type of
-sequence called a <em>array</em>, meaning that its length is fixed and
-cannot be altered once it is created (see <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>).  Unlike in C, Emacs Lisp strings are <em>not</em> terminated
-by a distinguished character code.
-</p>
-<p>Since strings are arrays, and therefore sequences as well, you can
-operate on them with the general array and sequence functions documented
-in <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>.  For example, you can access or
-change individual characters in a string using the functions <code>aref</code>
-and <code>aset</code> (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>).  However, note that
-<code>length</code> should <em>not</em> be used for computing the width of a
-string on display; use <code>string-width</code> (see <a href="Size-of-Displayed-Text.html#Size-of-Displayed-Text">Size of Displayed Text</a>) instead.
-</p>
-<p>There are two text representations for non-<acronym>ASCII</acronym>
-characters in Emacs strings (and in buffers): unibyte and multibyte.
-For most Lisp programming, you don&rsquo;t need to be concerned with these
-two representations.  See <a href="Text-Representations.html#Text-Representations">Text Representations</a>, for details.
-</p>
-<p>Sometimes key sequences are represented as unibyte strings.  When a
-unibyte string is a key sequence, string elements in the range 128 to
-255 represent meta characters (which are large integers) rather than
-character codes in the range 128 to 255.  Strings cannot hold
-characters that have the hyper, super or alt modifiers; they can hold
-<acronym>ASCII</acronym> control characters, but no other control characters.
-They do not distinguish case in <acronym>ASCII</acronym> control characters.
-If you want to store such characters in a sequence, such as a key
-sequence, you must use a vector instead of a string.  See <a href="Character-Type.html#Character-Type">Character Type</a>, for more information about keyboard input characters.
-</p>
-<p>Strings are useful for holding regular expressions.  You can also
-match regular expressions against strings with <code>string-match</code>
-(see <a href="Regexp-Search.html#Regexp-Search">Regexp Search</a>).  The functions <code>match-string</code>
-(see <a href="Simple-Match-Data.html#Simple-Match-Data">Simple Match Data</a>) and <code>replace-match</code> (see <a href="Replacing-Match.html#Replacing-Match">Replacing Match</a>) are useful for decomposing and modifying strings after
-matching regular expressions against them.
-</p>
-<p>Like a buffer, a string can contain text properties for the characters
-in it, as well as the characters themselves.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.
-All the Lisp primitives that copy text from strings to buffers or other
-strings also copy the properties of the characters being copied.
-</p>
-<p>See <a href="Text.html#Text">Text</a>, for information about functions that display strings or
-copy them into buffers.  See <a href="Character-Type.html#Character-Type">Character Type</a>, and <a href="String-Type.html#String-Type">String Type</a>,
-for information about the syntax of characters and strings.
-See <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>, for functions to convert between text
-representations and to encode and decode character codes.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Predicates-for-Strings.html#Predicates-for-Strings" accesskey="n" rel="next">Predicates for Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A character is a Lisp object which represents a single
+  character of text. In Emacs Lisp, characters are simply integers;
+  whether an integer is a character or not is determined only by
+  how it is used. See <a href=
+  "Character-Codes.html#Character-Codes">Character Codes</a>, for
+  details about character representation in Emacs.</p>
 
+  <p>A string is a fixed sequence of characters. It is a type of
+  sequence called a <em>array</em>, meaning that its length is
+  fixed and cannot be altered once it is created (see <a href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences
+  Arrays Vectors</a>). Unlike in C, Emacs Lisp strings are
+  <em>not</em> terminated by a distinguished character code.</p>
 
+  <p>Since strings are arrays, and therefore sequences as well, you
+  can operate on them with the general array and sequence functions
+  documented in <a href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences
+  Arrays Vectors</a>. For example, you can access or change
+  individual characters in a string using the functions
+  <code>aref</code> and <code>aset</code> (see <a href=
+  "Array-Functions.html#Array-Functions">Array Functions</a>).
+  However, note that <code>length</code> should <em>not</em> be
+  used for computing the width of a string on display; use
+  <code>string-width</code> (see <a href=
+  "Size-of-Displayed-Text.html#Size-of-Displayed-Text">Size of
+  Displayed Text</a>) instead.</p>
 
+  <p>There are two text representations for
+  non-<acronym>ASCII</acronym> characters in Emacs strings (and in
+  buffers): unibyte and multibyte. For most Lisp programming, you
+  don&rsquo;t need to be concerned with these two representations.
+  See <a href="Text-Representations.html#Text-Representations">Text
+  Representations</a>, for details.</p>
+
+  <p>Sometimes key sequences are represented as unibyte strings.
+  When a unibyte string is a key sequence, string elements in the
+  range 128 to 255 represent meta characters (which are large
+  integers) rather than character codes in the range 128 to 255.
+  Strings cannot hold characters that have the hyper, super or alt
+  modifiers; they can hold <acronym>ASCII</acronym> control
+  characters, but no other control characters. They do not
+  distinguish case in <acronym>ASCII</acronym> control characters.
+  If you want to store such characters in a sequence, such as a key
+  sequence, you must use a vector instead of a string. See <a href=
+  "Character-Type.html#Character-Type">Character Type</a>, for more
+  information about keyboard input characters.</p>
+
+  <p>Strings are useful for holding regular expressions. You can
+  also match regular expressions against strings with
+  <code>string-match</code> (see <a href=
+  "Regexp-Search.html#Regexp-Search">Regexp Search</a>). The
+  functions <code>match-string</code> (see <a href=
+  "Simple-Match-Data.html#Simple-Match-Data">Simple Match Data</a>)
+  and <code>replace-match</code> (see <a href=
+  "Replacing-Match.html#Replacing-Match">Replacing Match</a>) are
+  useful for decomposing and modifying strings after matching
+  regular expressions against them.</p>
+
+  <p>Like a buffer, a string can contain text properties for the
+  characters in it, as well as the characters themselves. See
+  <a href="Text-Properties.html#Text-Properties">Text
+  Properties</a>. All the Lisp primitives that copy text from
+  strings to buffers or other strings also copy the properties of
+  the characters being copied.</p>
+
+  <p>See <a href="Text.html#Text">Text</a>, for information about
+  functions that display strings or copy them into buffers. See
+  <a href="Character-Type.html#Character-Type">Character Type</a>,
+  and <a href="String-Type.html#String-Type">String Type</a>, for
+  information about the syntax of characters and strings. See
+  <a href=
+  "Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII
+  Characters</a>, for functions to convert between text
+  representations and to encode and decode character codes.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Predicates-for-Strings.html#Predicates-for-Strings" accesskey=
+    "n" rel="next">Predicates for Strings</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

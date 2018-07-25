@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,122 +19,165 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Cons Cells</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Cons Cells">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Cons Cells">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lists.html#Lists" rel="up" title="Lists">
-<link href="List_002drelated-Predicates.html#List_002drelated-Predicates" rel="next" title="List-related Predicates">
-<link href="Lists.html#Lists" rel="prev" title="Lists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Cons Cells</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Cons Cells" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Cons Cells" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lists.html#Lists" rel="up" title="Lists" />
+  <link href=
+  "List_002drelated-Predicates.html#List_002drelated-Predicates"
+  rel="next" title="List-related Predicates" />
+  <link href="Lists.html#Lists" rel="prev" title="Lists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Cons-Cells" id="Cons-Cells"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "List_002drelated-Predicates.html#List_002drelated-Predicates"
+    accesskey="n" rel="next">List-related Predicates</a>, Up:
+    <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Lists-and-Cons-Cells" id="Lists-and-Cons-Cells"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Cons-Cells"></a>
-<div class="header">
-<p>
-Next: <a href="List_002drelated-Predicates.html#List_002drelated-Predicates" accesskey="n" rel="next">List-related Predicates</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Lists-and-Cons-Cells"></a>
-<h3 class="section">5.1 Lists and Cons Cells</h3>
-<a name="index-lists-and-cons-cells"></a>
+  <h3 class="section">5.1 Lists and Cons Cells</h3><a name=
+  "index-lists-and-cons-cells" id="index-lists-and-cons-cells"></a>
 
-<p>Lists in Lisp are not a primitive data type; they are built up from
-<em>cons cells</em> (see <a href="Cons-Cell-Type.html#Cons-Cell-Type">Cons Cell Type</a>).  A cons cell is a data
-object that represents an ordered pair.  That is, it has two slots,
-and each slot <em>holds</em>, or <em>refers to</em>, some Lisp object.  One
-slot is known as the <small>CAR</small>, and the other is known as the <small>CDR</small>.
-(These names are traditional; see <a href="Cons-Cell-Type.html#Cons-Cell-Type">Cons Cell Type</a>.)  <small>CDR</small> is
-pronounced &ldquo;could-er&rdquo;.
-</p>
-<p>We say that &ldquo;the <small>CAR</small> of this cons cell is&rdquo; whatever object
-its <small>CAR</small> slot currently holds, and likewise for the <small>CDR</small>.
-</p>
-<p>A list is a series of cons cells chained together, so that each
-cell refers to the next one.  There is one cons cell for each element
-of the list.  By convention, the <small>CAR</small>s of the cons cells hold the
-elements of the list, and the <small>CDR</small>s are used to chain the list
-(this asymmetry between <small>CAR</small> and <small>CDR</small> is entirely a matter of
-convention; at the level of cons cells, the <small>CAR</small> and <small>CDR</small>
-slots have similar properties).  Hence, the <small>CDR</small> slot of each cons
-cell in a list refers to the following cons cell.
-</p>
-<a name="index-true-list"></a>
-<p>Also by convention, the <small>CDR</small> of the last cons cell in a list is
-<code>nil</code>.  We call such a <code>nil</code>-terminated structure a
-<em>true list</em>.  In Emacs Lisp, the symbol <code>nil</code> is both a
-symbol and a list with no elements.  For convenience, the symbol
-<code>nil</code> is considered to have <code>nil</code> as its <small>CDR</small> (and also
-as its <small>CAR</small>).
-</p>
-<p>Hence, the <small>CDR</small> of a true list is always a true list.  The
-<small>CDR</small> of a nonempty true list is a true list containing all the
-elements except the first.
-</p>
-<a name="index-dotted-list"></a>
-<a name="index-circular-list"></a>
-<p>If the <small>CDR</small> of a list&rsquo;s last cons cell is some value other than
-<code>nil</code>, we call the structure a <em>dotted list</em>, since its
-printed representation would use dotted pair notation (see <a href="Dotted-Pair-Notation.html#Dotted-Pair-Notation">Dotted Pair Notation</a>).  There is one other possibility: some cons cell&rsquo;s
-<small>CDR</small> could point to one of the previous cons cells in the list.
-We call that structure a <em>circular list</em>.
-</p>
-<p>For some purposes, it does not matter whether a list is true,
-circular or dotted.  If a program doesn&rsquo;t look far enough down the
-list to see the <small>CDR</small> of the final cons cell, it won&rsquo;t care.
-However, some functions that operate on lists demand true lists and
-signal errors if given a dotted list.  Most functions that try to find
-the end of a list enter infinite loops if given a circular list.
-</p>
-<a name="index-list-structure-1"></a>
-<p>Because most cons cells are used as part of lists, we refer to any
-structure made out of cons cells as a <em>list structure</em>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="List_002drelated-Predicates.html#List_002drelated-Predicates" accesskey="n" rel="next">List-related Predicates</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Lists in Lisp are not a primitive data type; they are built up
+  from <em>cons cells</em> (see <a href=
+  "Cons-Cell-Type.html#Cons-Cell-Type">Cons Cell Type</a>). A cons
+  cell is a data object that represents an ordered pair. That is,
+  it has two slots, and each slot <em>holds</em>, or <em>refers
+  to</em>, some Lisp object. One slot is known as the
+  <small>CAR</small>, and the other is known as the
+  <small>CDR</small>. (These names are traditional; see <a href=
+  "Cons-Cell-Type.html#Cons-Cell-Type">Cons Cell Type</a>.)
+  <small>CDR</small> is pronounced &ldquo;could-er&rdquo;.</p>
 
+  <p>We say that &ldquo;the <small>CAR</small> of this cons cell
+  is&rdquo; whatever object its <small>CAR</small> slot currently
+  holds, and likewise for the <small>CDR</small>.</p>
 
+  <p>A list is a series of cons cells chained together, so that
+  each cell refers to the next one. There is one cons cell for each
+  element of the list. By convention, the <small>CAR</small>s of
+  the cons cells hold the elements of the list, and the
+  <small>CDR</small>s are used to chain the list (this asymmetry
+  between <small>CAR</small> and <small>CDR</small> is entirely a
+  matter of convention; at the level of cons cells, the
+  <small>CAR</small> and <small>CDR</small> slots have similar
+  properties). Hence, the <small>CDR</small> slot of each cons cell
+  in a list refers to the following cons cell.</p><a name=
+  "index-true-list" id="index-true-list"></a>
 
+  <p>Also by convention, the <small>CDR</small> of the last cons
+  cell in a list is <code>nil</code>. We call such a
+  <code>nil</code>-terminated structure a <em>true list</em>. In
+  Emacs Lisp, the symbol <code>nil</code> is both a symbol and a
+  list with no elements. For convenience, the symbol
+  <code>nil</code> is considered to have <code>nil</code> as its
+  <small>CDR</small> (and also as its <small>CAR</small>).</p>
+
+  <p>Hence, the <small>CDR</small> of a true list is always a true
+  list. The <small>CDR</small> of a nonempty true list is a true
+  list containing all the elements except the first.</p><a name=
+  "index-dotted-list" id="index-dotted-list"></a> <a name=
+  "index-circular-list" id="index-circular-list"></a>
+
+  <p>If the <small>CDR</small> of a list&rsquo;s last cons cell is
+  some value other than <code>nil</code>, we call the structure a
+  <em>dotted list</em>, since its printed representation would use
+  dotted pair notation (see <a href=
+  "Dotted-Pair-Notation.html#Dotted-Pair-Notation">Dotted Pair
+  Notation</a>). There is one other possibility: some cons
+  cell&rsquo;s <small>CDR</small> could point to one of the
+  previous cons cells in the list. We call that structure a
+  <em>circular list</em>.</p>
+
+  <p>For some purposes, it does not matter whether a list is true,
+  circular or dotted. If a program doesn&rsquo;t look far enough
+  down the list to see the <small>CDR</small> of the final cons
+  cell, it won&rsquo;t care. However, some functions that operate
+  on lists demand true lists and signal errors if given a dotted
+  list. Most functions that try to find the end of a list enter
+  infinite loops if given a circular list.</p><a name=
+  "index-list-structure-1" id="index-list-structure-1"></a>
+
+  <p>Because most cons cells are used as part of lists, we refer to
+  any structure made out of cons cells as a <em>list
+  structure</em>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "List_002drelated-Predicates.html#List_002drelated-Predicates"
+    accesskey="n" rel="next">List-related Predicates</a>, Up:
+    <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

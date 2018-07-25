@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,157 +16,245 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Evaluating code blocks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Evaluating code blocks">
-<meta name="keywords" content="The Org Manual: Evaluating code blocks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Working-With-Source-Code.html#Working-With-Source-Code" rel="up" title="Working With Source Code">
-<link href="Library-of-Babel.html#Library-of-Babel" rel="next" title="Library of Babel">
-<link href="Extracting-source-code.html#Extracting-source-code" rel="prev" title="Extracting source code">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Evaluating code blocks</title>
+  <meta name="description" content=
+  "The Org Manual: Evaluating code blocks" />
+  <meta name="keywords" content=
+  "The Org Manual: Evaluating code blocks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Working-With-Source-Code.html#Working-With-Source-Code" rel="up"
+  title="Working With Source Code" />
+  <link href="Library-of-Babel.html#Library-of-Babel" rel="next"
+  title="Library of Babel" />
+  <link href="Extracting-source-code.html#Extracting-source-code"
+  rel="prev" title="Extracting source code" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Evaluating-code-blocks"></a>
-<div class="header">
-<p>
-Next: <a href="Library-of-Babel.html#Library-of-Babel" accesskey="n" rel="next">Library of Babel</a>, Previous: <a href="Extracting-source-code.html#Extracting-source-code" accesskey="p" rel="prev">Extracting source code</a>, Up: <a href="Working-With-Source-Code.html#Working-With-Source-Code" accesskey="u" rel="up">Working With Source Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Evaluating-code-blocks-1"></a>
-<h3 class="section">14.5 Evaluating code blocks</h3>
-<a name="index-code-block_002c-evaluating"></a>
-<a name="index-source-code_002c-evaluating"></a>
-<a name="index-_0023_002bRESULTS"></a>
+<body lang="en" xml:lang="en">
+  <a name="Evaluating-code-blocks" id="Evaluating-code-blocks"></a>
 
-<p>Code blocks can be evaluated<a name="DOCF169" href="#FOOT169"><sup>169</sup></a> and the results of evaluation optionally placed in the
-Org mode buffer.  The results of evaluation are placed following a line that
-begins by default with <code>#+RESULTS</code> and optionally a cache identifier
-and/or the name of the evaluated code block.  The default value of
-<code>#+RESULTS</code> can be changed with the customizable variable
-<code>org-babel-results-keyword</code>.
-</p>
-<p>By default, the evaluation facility is only enabled for Lisp code blocks
-specified as <code>emacs-lisp</code>.  However, source code blocks in many languages
-can be evaluated within Org mode (see <a href="Languages.html#Languages">Languages</a> for a list of supported
-languages and <a href="Structure-of-code-blocks.html#Structure-of-code-blocks">Structure of code blocks</a> for information on the syntax
-used to define a code block).
-</p>
-<a name="index-C_002dc-C_002dc-17"></a>
-<p>There are a number of ways to evaluate code blocks.  The simplest is to press
-<kbd>C-c C-c</kbd> or <kbd>C-c C-v e</kbd> with the point on a code block<a name="DOCF170" href="#FOOT170"><sup>170</sup></a>.  This will call the
-<code>org-babel-execute-src-block</code> function to evaluate the block and insert
-its results into the Org mode buffer.
-<a name="index-_0023_002bCALL"></a>
-</p>
-<p>It is also possible to evaluate named code blocks from anywhere in an Org
-mode buffer or an Org mode table.  Live code blocks located in the current
-Org mode buffer or in the &ldquo;Library of Babel&rdquo; (see <a href="Library-of-Babel.html#Library-of-Babel">Library of Babel</a>)
-can be executed.  Named code blocks can be executed with a separate
-<code>#+CALL:</code> line or inline within a block of text.
-</p>
-<p>The syntax of the <code>#+CALL:</code> line is
-</p>
-<div class="example">
-<pre class="example">#+CALL: &lt;name&gt;(&lt;arguments&gt;)
+  <div class="header">
+    <p>Next: <a href="Library-of-Babel.html#Library-of-Babel"
+    accesskey="n" rel="next">Library of Babel</a>, Previous:
+    <a href="Extracting-source-code.html#Extracting-source-code"
+    accesskey="p" rel="prev">Extracting source code</a>, Up:
+    <a href=
+    "Working-With-Source-Code.html#Working-With-Source-Code"
+    accesskey="u" rel="up">Working With Source Code</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Evaluating-code-blocks-1" id=
+  "Evaluating-code-blocks-1"></a>
+
+  <h3 class="section">14.5 Evaluating code blocks</h3><a name=
+  "index-code-block_002c-evaluating" id=
+  "index-code-block_002c-evaluating"></a> <a name=
+  "index-source-code_002c-evaluating" id=
+  "index-source-code_002c-evaluating"></a> <a name=
+  "index-_0023_002bRESULTS" id="index-_0023_002bRESULTS"></a>
+
+  <p>Code blocks can be evaluated<a name="DOCF169" href="#FOOT169"
+  id="DOCF169"><sup>169</sup></a> and the results of evaluation
+  optionally placed in the Org mode buffer. The results of
+  evaluation are placed following a line that begins by default
+  with <code>#+RESULTS</code> and optionally a cache identifier
+  and/or the name of the evaluated code block. The default value of
+  <code>#+RESULTS</code> can be changed with the customizable
+  variable <code>org-babel-results-keyword</code>.</p>
+
+  <p>By default, the evaluation facility is only enabled for Lisp
+  code blocks specified as <code>emacs-lisp</code>. However, source
+  code blocks in many languages can be evaluated within Org mode
+  (see <a href="Languages.html#Languages">Languages</a> for a list
+  of supported languages and <a href=
+  "Structure-of-code-blocks.html#Structure-of-code-blocks">Structure
+  of code blocks</a> for information on the syntax used to define a
+  code block).</p><a name="index-C_002dc-C_002dc-17" id=
+  "index-C_002dc-C_002dc-17"></a>
+
+  <p>There are a number of ways to evaluate code blocks. The
+  simplest is to press <kbd>C-c C-c</kbd> or <kbd>C-c C-v e</kbd>
+  with the point on a code block<a name="DOCF170" href="#FOOT170"
+  id="DOCF170"><sup>170</sup></a>. This will call the
+  <code>org-babel-execute-src-block</code> function to evaluate the
+  block and insert its results into the Org mode buffer. <a name=
+  "index-_0023_002bCALL" id="index-_0023_002bCALL"></a></p>
+
+  <p>It is also possible to evaluate named code blocks from
+  anywhere in an Org mode buffer or an Org mode table. Live code
+  blocks located in the current Org mode buffer or in the
+  &ldquo;Library of Babel&rdquo; (see <a href=
+  "Library-of-Babel.html#Library-of-Babel">Library of Babel</a>)
+  can be executed. Named code blocks can be executed with a
+  separate <code>#+CALL:</code> line or inline within a block of
+  text.</p>
+
+  <p>The syntax of the <code>#+CALL:</code> line is</p>
+
+  <div class="example">
+    <pre class="example">
+#+CALL: &lt;name&gt;(&lt;arguments&gt;)
 #+CALL: &lt;name&gt;[&lt;inside header arguments&gt;](&lt;arguments&gt;) &lt;end header arguments&gt;
-</pre></div>
+</pre>
+  </div>
 
-<p>The syntax for inline evaluation of named code blocks is
-</p>
-<div class="example">
-<pre class="example">... call_&lt;name&gt;(&lt;arguments&gt;) ...
+  <p>The syntax for inline evaluation of named code blocks is</p>
+
+  <div class="example">
+    <pre class="example">
+... call_&lt;name&gt;(&lt;arguments&gt;) ...
 ... call_&lt;name&gt;[&lt;inside header arguments&gt;](&lt;arguments&gt;)[&lt;end header arguments&gt;] ...
-</pre></div>
+</pre>
+  </div>
 
-<dl compact="compact">
-<dt><code>&lt;name&gt;</code></dt>
-<dd><p>The name of the code block to be evaluated (see <a href="Structure-of-code-blocks.html#Structure-of-code-blocks">Structure of code blocks</a>).
-</p></dd>
-<dt><code>&lt;arguments&gt;</code></dt>
-<dd><p>Arguments specified in this section will be passed to the code block.  These
-arguments use standard function call syntax, rather than
-header argument syntax.  For example, a <code>#+CALL:</code> line that passes the
-number four to a code block named <code>double</code>, which declares the header
-argument <code>:var n=2</code>, would be written as <code>#+CALL: double(n=4)</code>.
-</p></dd>
-<dt><code>&lt;inside header arguments&gt;</code></dt>
-<dd><p>Inside header arguments are passed through and applied to the named code
-block.  These arguments use header argument syntax rather than standard
-function call syntax.  Inside header arguments affect how the code block is
-evaluated.  For example, <code>[:results output]</code> will collect the results of
-everything printed to <code>STDOUT</code> during execution of the code block.
-</p></dd>
-<dt><code>&lt;end header arguments&gt;</code></dt>
-<dd><p>End header arguments are applied to the calling instance and do not affect
-evaluation of the named code block.  They affect how the results are
-incorporated into the Org mode buffer and how the call line is exported.  For
-example, <code>:results html</code> will insert the results of the call line
-evaluation in the Org buffer, wrapped in a <code>BEGIN_HTML:</code> block.
-</p>
-<p>For more examples of passing header arguments to <code>#+CALL:</code> lines see
-<a href="Header-arguments-in-function-calls.html#Header-arguments-in-function-calls">Header arguments in function calls</a>.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><code>&lt;name&gt;</code></dt>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <dd>
+      <p>The name of the code block to be evaluated (see <a href=
+      "Structure-of-code-blocks.html#Structure-of-code-blocks">Structure
+      of code blocks</a>).</p>
+    </dd>
 
-<h3><a name="FOOT169" href="#DOCF169">(169)</a></h3>
-<p>Whenever code is evaluated there is a
-potential for that code to do harm.  Org mode provides safeguards to ensure
-that code is only evaluated after explicit confirmation from the user.  For
-information on these safeguards (and on how to disable them) see <a href="Code-evaluation-security.html#Code-evaluation-security">Code evaluation security</a>.</p>
-<h3><a name="FOOT170" href="#DOCF170">(170)</a></h3>
-<p>The
-option <code>org-babel-no-eval-on-ctrl-c-ctrl-c</code> can be used to remove code
-evaluation from the <kbd>C-c C-c</kbd> key binding.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Library-of-Babel.html#Library-of-Babel" accesskey="n" rel="next">Library of Babel</a>, Previous: <a href="Extracting-source-code.html#Extracting-source-code" accesskey="p" rel="prev">Extracting source code</a>, Up: <a href="Working-With-Source-Code.html#Working-With-Source-Code" accesskey="u" rel="up">Working With Source Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><code>&lt;arguments&gt;</code></dt>
 
+    <dd>
+      <p>Arguments specified in this section will be passed to the
+      code block. These arguments use standard function call
+      syntax, rather than header argument syntax. For example, a
+      <code>#+CALL:</code> line that passes the number four to a
+      code block named <code>double</code>, which declares the
+      header argument <code>:var n=2</code>, would be written as
+      <code>#+CALL: double(n=4)</code>.</p>
+    </dd>
 
+    <dt><code>&lt;inside header arguments&gt;</code></dt>
 
+    <dd>
+      <p>Inside header arguments are passed through and applied to
+      the named code block. These arguments use header argument
+      syntax rather than standard function call syntax. Inside
+      header arguments affect how the code block is evaluated. For
+      example, <code>[:results output]</code> will collect the
+      results of everything printed to <code>STDOUT</code> during
+      execution of the code block.</p>
+    </dd>
+
+    <dt><code>&lt;end header arguments&gt;</code></dt>
+
+    <dd>
+      <p>End header arguments are applied to the calling instance
+      and do not affect evaluation of the named code block. They
+      affect how the results are incorporated into the Org mode
+      buffer and how the call line is exported. For example,
+      <code>:results html</code> will insert the results of the
+      call line evaluation in the Org buffer, wrapped in a
+      <code>BEGIN_HTML:</code> block.</p>
+
+      <p>For more examples of passing header arguments to
+      <code>#+CALL:</code> lines see <a href=
+      "Header-arguments-in-function-calls.html#Header-arguments-in-function-calls">
+      Header arguments in function calls</a>.</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT169" href="#DOCF169" id=
+    "FOOT169">(169)</a></h3>
+
+    <p>Whenever code is evaluated there is a potential for that
+    code to do harm. Org mode provides safeguards to ensure that
+    code is only evaluated after explicit confirmation from the
+    user. For information on these safeguards (and on how to
+    disable them) see <a href=
+    "Code-evaluation-security.html#Code-evaluation-security">Code
+    evaluation security</a>.</p>
+
+    <h3><a name="FOOT170" href="#DOCF170" id=
+    "FOOT170">(170)</a></h3>
+
+    <p>The option <code>org-babel-no-eval-on-ctrl-c-ctrl-c</code>
+    can be used to remove code evaluation from the <kbd>C-c
+    C-c</kbd> key binding.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Library-of-Babel.html#Library-of-Babel"
+    accesskey="n" rel="next">Library of Babel</a>, Previous:
+    <a href="Extracting-source-code.html#Extracting-source-code"
+    accesskey="p" rel="prev">Extracting source code</a>, Up:
+    <a href=
+    "Working-With-Source-Code.html#Working-With-Source-Code"
+    accesskey="u" rel="up">Working With Source Code</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

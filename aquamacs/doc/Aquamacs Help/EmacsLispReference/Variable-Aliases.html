@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,139 +19,212 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Variable Aliases</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Variable Aliases">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Variable Aliases">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variables.html#Variables" rel="up" title="Variables">
-<link href="Variables-with-Restricted-Values.html#Variables-with-Restricted-Values" rel="next" title="Variables with Restricted Values">
-<link href="Directory-Local-Variables.html#Directory-Local-Variables" rel="prev" title="Directory Local Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Variable Aliases</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Variable Aliases" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Variable Aliases" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variables.html#Variables" rel="up" title=
+  "Variables" />
+  <link href=
+  "Variables-with-Restricted-Values.html#Variables-with-Restricted-Values"
+  rel="next" title="Variables with Restricted Values" />
+  <link href=
+  "Directory-Local-Variables.html#Directory-Local-Variables" rel=
+  "prev" title="Directory Local Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Variable-Aliases" id="Variable-Aliases"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Variables-with-Restricted-Values.html#Variables-with-Restricted-Values"
+    accesskey="n" rel="next">Variables with Restricted Values</a>,
+    Previous: <a href=
+    "Directory-Local-Variables.html#Directory-Local-Variables"
+    accesskey="p" rel="prev">Directory Local Variables</a>, Up:
+    <a href="Variables.html#Variables" accesskey="u" rel=
+    "up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Variable-Aliases-1" id="Variable-Aliases-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Variable-Aliases"></a>
-<div class="header">
-<p>
-Next: <a href="Variables-with-Restricted-Values.html#Variables-with-Restricted-Values" accesskey="n" rel="next">Variables with Restricted Values</a>, Previous: <a href="Directory-Local-Variables.html#Directory-Local-Variables" accesskey="p" rel="prev">Directory Local Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Variable-Aliases-1"></a>
-<h3 class="section">11.13 Variable Aliases</h3>
-<a name="index-variable-aliases"></a>
-<a name="index-alias_002c-for-variables"></a>
+  <h3 class="section">11.13 Variable Aliases</h3><a name=
+  "index-variable-aliases" id="index-variable-aliases"></a>
+  <a name="index-alias_002c-for-variables" id=
+  "index-alias_002c-for-variables"></a>
 
-<p>It is sometimes useful to make two variables synonyms, so that both
-variables always have the same value, and changing either one also
-changes the other.  Whenever you change the name of a
-variable&mdash;either because you realize its old name was not well
-chosen, or because its meaning has partly changed&mdash;it can be useful
-to keep the old name as an <em>alias</em> of the new one for
-compatibility.  You can do this with <code>defvaralias</code>.
-</p>
-<dl>
-<dt><a name="index-defvaralias"></a>Function: <strong>defvaralias</strong> <em>new-alias base-variable &amp;optional docstring</em></dt>
-<dd><p>This function defines the symbol <var>new-alias</var> as a variable alias
-for symbol <var>base-variable</var>. This means that retrieving the value
-of <var>new-alias</var> returns the value of <var>base-variable</var>, and
-changing the value of <var>new-alias</var> changes the value of
-<var>base-variable</var>.  The two aliased variable names always share the
-same value and the same bindings.
-</p>
-<p>If the <var>docstring</var> argument is non-<code>nil</code>, it specifies the
-documentation for <var>new-alias</var>; otherwise, the alias gets the same
-documentation as <var>base-variable</var> has, if any, unless
-<var>base-variable</var> is itself an alias, in which case <var>new-alias</var> gets
-the documentation of the variable at the end of the chain of aliases.
-</p>
-<p>This function returns <var>base-variable</var>.
-</p></dd></dl>
+  <p>It is sometimes useful to make two variables synonyms, so that
+  both variables always have the same value, and changing either
+  one also changes the other. Whenever you change the name of a
+  variable&mdash;either because you realize its old name was not
+  well chosen, or because its meaning has partly changed&mdash;it
+  can be useful to keep the old name as an <em>alias</em> of the
+  new one for compatibility. You can do this with
+  <code>defvaralias</code>.</p>
 
-<p>Variable aliases are convenient for replacing an old name for a
-variable with a new name.  <code>make-obsolete-variable</code> declares that
-the old name is obsolete and therefore that it may be removed at some
-stage in the future.
-</p>
-<dl>
-<dt><a name="index-make_002dobsolete_002dvariable"></a>Function: <strong>make-obsolete-variable</strong> <em>obsolete-name current-name when &amp;optional access-type</em></dt>
-<dd><p>This function makes the byte compiler warn that the variable
-<var>obsolete-name</var> is obsolete.  If <var>current-name</var> is a symbol,
-it is the variable&rsquo;s new name; then the warning message says to use
-<var>current-name</var> instead of <var>obsolete-name</var>.  If
-<var>current-name</var> is a string, this is the message and there is no
-replacement variable.  <var>when</var> should be a string indicating when
-the variable was first made obsolete (usually a version number
-string).
-</p>
-<p>The optional argument <var>access-type</var>, if non-<code>nil</code>, should
-specify the kind of access that will trigger obsolescence warnings; it
-can be either <code>get</code> or <code>set</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-defvaralias" id=
+    "index-defvaralias"></a>Function: <strong>defvaralias</strong>
+    <em>new-alias base-variable &amp;optional docstring</em></dt>
 
-<p>You can make two variables synonyms and declare one obsolete at the
-same time using the macro <code>define-obsolete-variable-alias</code>.
-</p>
-<dl>
-<dt><a name="index-define_002dobsolete_002dvariable_002dalias"></a>Macro: <strong>define-obsolete-variable-alias</strong> <em>obsolete-name current-name &amp;optional when docstring</em></dt>
-<dd><p>This macro marks the variable <var>obsolete-name</var> as obsolete and also
-makes it an alias for the variable <var>current-name</var>.  It is
-equivalent to the following:
-</p>
-<div class="example">
-<pre class="example">(defvaralias <var>obsolete-name</var> <var>current-name</var> <var>docstring</var>)
+    <dd>
+      <p>This function defines the symbol <var>new-alias</var> as a
+      variable alias for symbol <var>base-variable</var>. This
+      means that retrieving the value of <var>new-alias</var>
+      returns the value of <var>base-variable</var>, and changing
+      the value of <var>new-alias</var> changes the value of
+      <var>base-variable</var>. The two aliased variable names
+      always share the same value and the same bindings.</p>
+
+      <p>If the <var>docstring</var> argument is
+      non-<code>nil</code>, it specifies the documentation for
+      <var>new-alias</var>; otherwise, the alias gets the same
+      documentation as <var>base-variable</var> has, if any, unless
+      <var>base-variable</var> is itself an alias, in which case
+      <var>new-alias</var> gets the documentation of the variable
+      at the end of the chain of aliases.</p>
+
+      <p>This function returns <var>base-variable</var>.</p>
+    </dd>
+  </dl>
+
+  <p>Variable aliases are convenient for replacing an old name for
+  a variable with a new name. <code>make-obsolete-variable</code>
+  declares that the old name is obsolete and therefore that it may
+  be removed at some stage in the future.</p>
+
+  <dl>
+    <dt><a name="index-make_002dobsolete_002dvariable" id=
+    "index-make_002dobsolete_002dvariable"></a>Function:
+    <strong>make-obsolete-variable</strong> <em>obsolete-name
+    current-name when &amp;optional access-type</em></dt>
+
+    <dd>
+      <p>This function makes the byte compiler warn that the
+      variable <var>obsolete-name</var> is obsolete. If
+      <var>current-name</var> is a symbol, it is the
+      variable&rsquo;s new name; then the warning message says to
+      use <var>current-name</var> instead of
+      <var>obsolete-name</var>. If <var>current-name</var> is a
+      string, this is the message and there is no replacement
+      variable. <var>when</var> should be a string indicating when
+      the variable was first made obsolete (usually a version
+      number string).</p>
+
+      <p>The optional argument <var>access-type</var>, if
+      non-<code>nil</code>, should specify the kind of access that
+      will trigger obsolescence warnings; it can be either
+      <code>get</code> or <code>set</code>.</p>
+    </dd>
+  </dl>
+
+  <p>You can make two variables synonyms and declare one obsolete
+  at the same time using the macro
+  <code>define-obsolete-variable-alias</code>.</p>
+
+  <dl>
+    <dt><a name="index-define_002dobsolete_002dvariable_002dalias"
+    id=
+    "index-define_002dobsolete_002dvariable_002dalias"></a>Macro:
+    <strong>define-obsolete-variable-alias</strong>
+    <em>obsolete-name current-name &amp;optional when
+    docstring</em></dt>
+
+    <dd>
+      <p>This macro marks the variable <var>obsolete-name</var> as
+      obsolete and also makes it an alias for the variable
+      <var>current-name</var>. It is equivalent to the
+      following:</p>
+
+      <div class="example">
+        <pre class="example">
+(defvaralias <var>obsolete-name</var> <var>current-name</var> <var>docstring</var>)
 (make-obsolete-variable <var>obsolete-name</var> <var>current-name</var> <var>when</var>)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-indirect_002dvariable"></a>Function: <strong>indirect-variable</strong> <em>variable</em></dt>
-<dd><p>This function returns the variable at the end of the chain of aliases
-of <var>variable</var>.  If <var>variable</var> is not a symbol, or if <var>variable</var> is
-not defined as an alias, the function returns <var>variable</var>.
-</p>
-<p>This function signals a <code>cyclic-variable-indirection</code> error if
-there is a loop in the chain of symbols.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-indirect_002dvariable" id=
+    "index-indirect_002dvariable"></a>Function:
+    <strong>indirect-variable</strong> <em>variable</em></dt>
 
-<div class="example">
-<pre class="example">(defvaralias 'foo 'bar)
+    <dd>
+      <p>This function returns the variable at the end of the chain
+      of aliases of <var>variable</var>. If <var>variable</var> is
+      not a symbol, or if <var>variable</var> is not defined as an
+      alias, the function returns <var>variable</var>.</p>
+
+      <p>This function signals a
+      <code>cyclic-variable-indirection</code> error if there is a
+      loop in the chain of symbols.</p>
+    </dd>
+  </dl>
+
+  <div class="example">
+    <pre class="example">
+(defvaralias 'foo 'bar)
 (indirect-variable 'foo)
      &rArr; bar
 (indirect-variable 'bar)
@@ -157,22 +232,32 @@ there is a loop in the chain of symbols.
 (setq bar 2)
 bar
      &rArr; 2
-</pre><pre class="example">foo
+</pre>
+    <pre class="example">
+foo
      &rArr; 2
-</pre><pre class="example">(setq foo 0)
+</pre>
+    <pre class="example">
+(setq foo 0)
 bar
      &rArr; 0
 foo
      &rArr; 0
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Variables-with-Restricted-Values.html#Variables-with-Restricted-Values" accesskey="n" rel="next">Variables with Restricted Values</a>, Previous: <a href="Directory-Local-Variables.html#Directory-Local-Variables" accesskey="p" rel="prev">Directory Local Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Variables-with-Restricted-Values.html#Variables-with-Restricted-Values"
+    accesskey="n" rel="next">Variables with Restricted Values</a>,
+    Previous: <a href=
+    "Directory-Local-Variables.html#Directory-Local-Variables"
+    accesskey="p" rel="prev">Directory Local Variables</a>, Up:
+    <a href="Variables.html#Variables" accesskey="u" rel=
+    "up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

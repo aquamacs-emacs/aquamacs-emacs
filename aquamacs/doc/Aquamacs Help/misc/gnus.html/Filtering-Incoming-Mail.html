@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,160 +14,235 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Filtering Incoming Mail</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Filtering Incoming Mail">
-<meta name="keywords" content="Gnus Manual: Filtering Incoming Mail">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Package.html#Spam-Package" rel="up" title="Spam Package">
-<link href="Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups" rel="next" title="Detecting Spam in Groups">
-<link href="Spam-Package-Introduction.html#Spam-Package-Introduction" rel="prev" title="Spam Package Introduction">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Filtering Incoming Mail</title>
+  <meta name="description" content=
+  "Gnus Manual: Filtering Incoming Mail" />
+  <meta name="keywords" content=
+  "Gnus Manual: Filtering Incoming Mail" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Package.html#Spam-Package" rel="up" title=
+  "Spam Package" />
+  <link href=
+  "Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups" rel=
+  "next" title="Detecting Spam in Groups" />
+  <link href=
+  "Spam-Package-Introduction.html#Spam-Package-Introduction" rel=
+  "prev" title="Spam Package Introduction" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Filtering-Incoming-Mail"></a>
-<div class="header">
-<p>
-Next: <a href="Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups" accesskey="n" rel="next">Detecting Spam in Groups</a>, Previous: <a href="Spam-Package-Introduction.html#Spam-Package-Introduction" accesskey="p" rel="prev">Spam Package Introduction</a>, Up: <a href="Spam-Package.html#Spam-Package" accesskey="u" rel="up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Filtering-Incoming-Mail-1"></a>
-<h4 class="subsection">9.17.2 Filtering Incoming Mail</h4>
-<a name="index-spam-filtering-2"></a>
-<a name="index-spam-filtering-incoming-mail"></a>
-<a name="index-spam-4"></a>
+<body lang="en" xml:lang="en">
+  <a name="Filtering-Incoming-Mail" id=
+  "Filtering-Incoming-Mail"></a>
 
-<p>To use the Spam package to filter incoming mail, you must first set up
-fancy mail splitting.  See <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>.  The Spam package
-defines a special splitting function that you can add to your fancy
-split variable (either <code>nnmail-split-fancy</code> or
-<code>nnimap-split-fancy</code>, depending on your mail back end):
-</p>
-<div class="example">
-<pre class="example">(: spam-split)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups"
+    accesskey="n" rel="next">Detecting Spam in Groups</a>,
+    Previous: <a href=
+    "Spam-Package-Introduction.html#Spam-Package-Introduction"
+    accesskey="p" rel="prev">Spam Package Introduction</a>, Up:
+    <a href="Spam-Package.html#Spam-Package" accesskey="u" rel=
+    "up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Filtering-Incoming-Mail-1" id=
+  "Filtering-Incoming-Mail-1"></a>
 
-<a name="index-spam_002dsplit_002dgroup"></a>
-<p>The <code>spam-split</code> function scans incoming mail according to your
-chosen spam back end(s), and sends messages identified as spam to a
-spam group.  By default, the spam group is a group named &lsquo;<samp>spam</samp>&rsquo;,
-but you can change this by customizing <code>spam-split-group</code>.  Make
-sure the contents of <code>spam-split-group</code> are an unqualified group
-name.  For instance, in an <code>nnimap</code> server &lsquo;<samp>your-server</samp>&rsquo;,
-the value &lsquo;<samp>spam</samp>&rsquo; means &lsquo;<samp>nnimap+your-server:spam</samp>&rsquo;.  The value
-&lsquo;<samp>nnimap+server:spam</samp>&rsquo; is therefore wrong&mdash;it gives the group
-&lsquo;<samp>nnimap+your-server:nnimap+server:spam</samp>&rsquo;.
-</p>
-<p><code>spam-split</code> does not modify the contents of messages in any way.
-</p>
-<a name="index-nnimap_002dsplit_002ddownload_002dbody"></a>
-<p>Note for IMAP users: if you use the <code>spam-check-bogofilter</code>,
-<code>spam-check-ifile</code>, and <code>spam-check-stat</code> spam back ends,
-you should also set the variable <code>nnimap-split-download-body</code> to
-<code>t</code>.  These spam back ends are most useful when they can &ldquo;scan&rdquo;
-the full message body.  By default, the nnimap back end only retrieves
-the message headers; <code>nnimap-split-download-body</code> tells it to
-retrieve the message bodies as well.  We don&rsquo;t set this by default
-because it will slow <acronym>IMAP</acronym> down, and that is not an
-appropriate decision to make on behalf of the user.  See <a href="Client_002dSide-IMAP-Splitting.html#Client_002dSide-IMAP-Splitting">Client-Side IMAP Splitting</a>.
-</p>
-<p>You have to specify one or more spam back ends for <code>spam-split</code>
-to use, by setting the <code>spam-use-*</code> variables.  See <a href="Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a>.  Normally, <code>spam-split</code> simply uses all the spam back ends
-you enabled in this way.  However, you can tell <code>spam-split</code> to
-use only some of them.  Why this is useful?  Suppose you are using the
-<code>spam-use-regex-headers</code> and <code>spam-use-blackholes</code> spam back
-ends, and the following split rule:
-</p>
-<div class="example">
-<pre class="example"> nnimap-split-fancy '(|
-                      (any &quot;ding&quot; &quot;ding&quot;)
+  <h4 class="subsection">9.17.2 Filtering Incoming
+  Mail</h4><a name="index-spam-filtering-2" id=
+  "index-spam-filtering-2"></a> <a name=
+  "index-spam-filtering-incoming-mail" id=
+  "index-spam-filtering-incoming-mail"></a> <a name="index-spam-4"
+  id="index-spam-4"></a>
+
+  <p>To use the Spam package to filter incoming mail, you must
+  first set up fancy mail splitting. See <a href=
+  "Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail
+  Splitting</a>. The Spam package defines a special splitting
+  function that you can add to your fancy split variable (either
+  <code>nnmail-split-fancy</code> or
+  <code>nnimap-split-fancy</code>, depending on your mail back
+  end):</p>
+
+  <div class="example">
+    <pre class="example">
+(: spam-split)
+</pre>
+  </div><a name="index-spam_002dsplit_002dgroup" id=
+  "index-spam_002dsplit_002dgroup"></a>
+
+  <p>The <code>spam-split</code> function scans incoming mail
+  according to your chosen spam back end(s), and sends messages
+  identified as spam to a spam group. By default, the spam group is
+  a group named &lsquo;<samp>spam</samp>&rsquo;, but you can change
+  this by customizing <code>spam-split-group</code>. Make sure the
+  contents of <code>spam-split-group</code> are an unqualified
+  group name. For instance, in an <code>nnimap</code> server
+  &lsquo;<samp>your-server</samp>&rsquo;, the value
+  &lsquo;<samp>spam</samp>&rsquo; means
+  &lsquo;<samp>nnimap+your-server:spam</samp>&rsquo;. The value
+  &lsquo;<samp>nnimap+server:spam</samp>&rsquo; is therefore
+  wrong&mdash;it gives the group
+  &lsquo;<samp>nnimap+your-server:nnimap+server:spam</samp>&rsquo;.</p>
+
+  <p><code>spam-split</code> does not modify the contents of
+  messages in any way.</p><a name=
+  "index-nnimap_002dsplit_002ddownload_002dbody" id=
+  "index-nnimap_002dsplit_002ddownload_002dbody"></a>
+
+  <p>Note for IMAP users: if you use the
+  <code>spam-check-bogofilter</code>,
+  <code>spam-check-ifile</code>, and <code>spam-check-stat</code>
+  spam back ends, you should also set the variable
+  <code>nnimap-split-download-body</code> to <code>t</code>. These
+  spam back ends are most useful when they can &ldquo;scan&rdquo;
+  the full message body. By default, the nnimap back end only
+  retrieves the message headers;
+  <code>nnimap-split-download-body</code> tells it to retrieve the
+  message bodies as well. We don&rsquo;t set this by default
+  because it will slow <acronym>IMAP</acronym> down, and that is
+  not an appropriate decision to make on behalf of the user. See
+  <a href=
+  "Client_002dSide-IMAP-Splitting.html#Client_002dSide-IMAP-Splitting">
+  Client-Side IMAP Splitting</a>.</p>
+
+  <p>You have to specify one or more spam back ends for
+  <code>spam-split</code> to use, by setting the
+  <code>spam-use-*</code> variables. See <a href=
+  "Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a>.
+  Normally, <code>spam-split</code> simply uses all the spam back
+  ends you enabled in this way. However, you can tell
+  <code>spam-split</code> to use only some of them. Why this is
+  useful? Suppose you are using the
+  <code>spam-use-regex-headers</code> and
+  <code>spam-use-blackholes</code> spam back ends, and the
+  following split rule:</p>
+
+  <div class="example">
+    <pre class="example">
+ nnimap-split-fancy '(|
+                      (any "ding" "ding")
                       (: spam-split)
                       ;; <span class="roman">default mailbox</span>
-                      &quot;mail&quot;)
-</pre></div>
+                      "mail")
+</pre>
+  </div>
 
-<p>The problem is that you want all ding messages to make it to the ding
-folder.  But that will let obvious spam (for example, spam detected by
-SpamAssassin, and <code>spam-use-regex-headers</code>) through, when it&rsquo;s
-sent to the ding list.  On the other hand, some messages to the ding
-list are from a mail server in the blackhole list, so the invocation
-of <code>spam-split</code> can&rsquo;t be before the ding rule.
-</p>
-<p>The solution is to let SpamAssassin headers supersede ding rules, and
-perform the other <code>spam-split</code> rules (including a second
-invocation of the regex-headers check) after the ding rule.  This is
-done by passing a parameter to <code>spam-split</code>:
-</p>
-<div class="example">
-<pre class="example">nnimap-split-fancy
+  <p>The problem is that you want all ding messages to make it to
+  the ding folder. But that will let obvious spam (for example,
+  spam detected by SpamAssassin, and
+  <code>spam-use-regex-headers</code>) through, when it&rsquo;s
+  sent to the ding list. On the other hand, some messages to the
+  ding list are from a mail server in the blackhole list, so the
+  invocation of <code>spam-split</code> can&rsquo;t be before the
+  ding rule.</p>
+
+  <p>The solution is to let SpamAssassin headers supersede ding
+  rules, and perform the other <code>spam-split</code> rules
+  (including a second invocation of the regex-headers check) after
+  the ding rule. This is done by passing a parameter to
+  <code>spam-split</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+nnimap-split-fancy
       '(|
-        ;; <span class="roman">spam detected by <code>spam-use-regex-headers</code> goes to &lsquo;<samp>regex-spam</samp>&rsquo;</span>
-        (: spam-split &quot;regex-spam&quot; 'spam-use-regex-headers)
-        (any &quot;ding&quot; &quot;ding&quot;)
-        ;; <span class="roman">all other spam detected by spam-split goes to <code>spam-split-group</code></span>
+        ;; <span class=
+"roman">spam detected by <code>spam-use-regex-headers</code> goes to &lsquo;<samp>regex-spam</samp>&rsquo;</span>
+        (: spam-split "regex-spam" 'spam-use-regex-headers)
+        (any "ding" "ding")
+        ;; <span class=
+"roman">all other spam detected by spam-split goes to <code>spam-split-group</code></span>
         (: spam-split)
         ;; <span class="roman">default mailbox</span>
-        &quot;mail&quot;)
-</pre></div>
+        "mail")
+</pre>
+  </div>
 
-<p>This lets you invoke specific <code>spam-split</code> checks depending on
-your particular needs, and target the results of those checks to a
-particular spam group.  You don&rsquo;t have to throw all mail into all the
-spam tests.  Another reason why this is nice is that messages to
-mailing lists you have rules for don&rsquo;t have to have resource-intensive
-blackhole checks performed on them.  You could also specify different
-spam checks for your nnmail split vs. your nnimap split.  Go crazy.
-</p>
-<p>You should set the <code>spam-use-*</code> variables for whatever spam back
-ends you intend to use.  The reason is that when loading
-<samp>spam.el</samp>, some conditional loading is done depending on what
-<code>spam-use-xyz</code> variables you have set.  See <a href="Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a>.
-</p>
+  <p>This lets you invoke specific <code>spam-split</code> checks
+  depending on your particular needs, and target the results of
+  those checks to a particular spam group. You don&rsquo;t have to
+  throw all mail into all the spam tests. Another reason why this
+  is nice is that messages to mailing lists you have rules for
+  don&rsquo;t have to have resource-intensive blackhole checks
+  performed on them. You could also specify different spam checks
+  for your nnmail split vs. your nnimap split. Go crazy.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups" accesskey="n" rel="next">Detecting Spam in Groups</a>, Previous: <a href="Spam-Package-Introduction.html#Spam-Package-Introduction" accesskey="p" rel="prev">Spam Package Introduction</a>, Up: <a href="Spam-Package.html#Spam-Package" accesskey="u" rel="up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>You should set the <code>spam-use-*</code> variables for
+  whatever spam back ends you intend to use. The reason is that
+  when loading <samp>spam.el</samp>, some conditional loading is
+  done depending on what <code>spam-use-xyz</code> variables you
+  have set. See <a href="Spam-Back-Ends.html#Spam-Back-Ends">Spam
+  Back Ends</a>.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups"
+    accesskey="n" rel="next">Detecting Spam in Groups</a>,
+    Previous: <a href=
+    "Spam-Package-Introduction.html#Spam-Package-Introduction"
+    accesskey="p" rel="prev">Spam Package Introduction</a>, Up:
+    <a href="Spam-Package.html#Spam-Package" accesskey="u" rel=
+    "up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

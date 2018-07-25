@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,195 +19,324 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: List Motion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: List Motion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: List Motion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Motion.html#Motion" rel="up" title="Motion">
-<link href="Skipping-Characters.html#Skipping-Characters" rel="next" title="Skipping Characters">
-<link href="Screen-Lines.html#Screen-Lines" rel="prev" title="Screen Lines">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: List Motion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: List Motion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: List Motion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Motion.html#Motion" rel="up" title="Motion" />
+  <link href="Skipping-Characters.html#Skipping-Characters" rel=
+  "next" title="Skipping Characters" />
+  <link href="Screen-Lines.html#Screen-Lines" rel="prev" title=
+  "Screen Lines" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="List-Motion" id="List-Motion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Skipping-Characters.html#Skipping-Characters"
+    accesskey="n" rel="next">Skipping Characters</a>, Previous:
+    <a href="Screen-Lines.html#Screen-Lines" accesskey="p" rel=
+    "prev">Screen Lines</a>, Up: <a href="Motion.html#Motion"
+    accesskey="u" rel="up">Motion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Moving-over-Balanced-Expressions" id=
+  "Moving-over-Balanced-Expressions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="List-Motion"></a>
-<div class="header">
-<p>
-Next: <a href="Skipping-Characters.html#Skipping-Characters" accesskey="n" rel="next">Skipping Characters</a>, Previous: <a href="Screen-Lines.html#Screen-Lines" accesskey="p" rel="prev">Screen Lines</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Moving-over-Balanced-Expressions"></a>
-<h4 class="subsection">29.2.6 Moving over Balanced Expressions</h4>
-<a name="index-sexp-motion"></a>
-<a name="index-Lisp-expression-motion"></a>
-<a name="index-list-motion"></a>
-<a name="index-balanced-parenthesis-motion"></a>
+  <h4 class="subsection">29.2.6 Moving over Balanced
+  Expressions</h4><a name="index-sexp-motion" id=
+  "index-sexp-motion"></a> <a name="index-Lisp-expression-motion"
+  id="index-Lisp-expression-motion"></a> <a name=
+  "index-list-motion" id="index-list-motion"></a> <a name=
+  "index-balanced-parenthesis-motion" id=
+  "index-balanced-parenthesis-motion"></a>
 
-<p>Here are several functions concerned with balanced-parenthesis
-expressions (also called <em>sexps</em> in connection with moving across
-them in Emacs).  The syntax table controls how these functions interpret
-various characters; see <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.  See <a href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>, for lower-level primitives for scanning sexps or parts of
-sexps.  For user-level commands, see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Parentheses.html#Parentheses">Commands for
-Editing with Parentheses</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<dl>
-<dt><a name="index-forward_002dlist"></a>Command: <strong>forward-list</strong> <em>&amp;optional arg</em></dt>
-<dd><p>This function moves forward across <var>arg</var> (default 1) balanced groups of
-parentheses.  (Other syntactic entities such as words or paired string
-quotes are ignored.)
-</p></dd></dl>
+  <p>Here are several functions concerned with balanced-parenthesis
+  expressions (also called <em>sexps</em> in connection with moving
+  across them in Emacs). The syntax table controls how these
+  functions interpret various characters; see <a href=
+  "Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>. See
+  <a href="Parsing-Expressions.html#Parsing-Expressions">Parsing
+  Expressions</a>, for lower-level primitives for scanning sexps or
+  parts of sexps. For user-level commands, see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Parentheses.html#Parentheses">
+  Commands for Editing with Parentheses</a> in <cite>The GNU Emacs
+  Manual</cite>.</p>
 
-<dl>
-<dt><a name="index-backward_002dlist"></a>Command: <strong>backward-list</strong> <em>&amp;optional arg</em></dt>
-<dd><p>This function moves backward across <var>arg</var> (default 1) balanced groups of
-parentheses.  (Other syntactic entities such as words or paired string
-quotes are ignored.)
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-forward_002dlist" id=
+    "index-forward_002dlist"></a>Command:
+    <strong>forward-list</strong> <em>&amp;optional arg</em></dt>
 
-<dl>
-<dt><a name="index-up_002dlist"></a>Command: <strong>up-list</strong> <em>&amp;optional arg escape-strings no-syntax-crossing</em></dt>
-<dd><p>This function moves forward out of <var>arg</var> (default 1) levels of
-parentheses.  A negative argument means move backward but still to a
-less deep spot.  If <var>escape-strings</var> is non-<code>nil</code> (as it is
-interactively), move out of enclosing strings as well.  If
-<var>no-syntax-crossing</var> is non-<code>nil</code> (as it is interactively), prefer
-to break out of any enclosing string instead of moving to the start of
-a list broken across multiple strings.  On error, location of point is
-unspecified.
-</p></dd></dl>
+    <dd>
+      <p>This function moves forward across <var>arg</var> (default
+      1) balanced groups of parentheses. (Other syntactic entities
+      such as words or paired string quotes are ignored.)</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-backward_002dup_002dlist"></a>Command: <strong>backward-up-list</strong> <em>&amp;optional arg escape-strings no-syntax-crossing</em></dt>
-<dd><p>This function is just like <code>up-list</code>, but with a negated argument.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-backward_002dlist" id=
+    "index-backward_002dlist"></a>Command:
+    <strong>backward-list</strong> <em>&amp;optional arg</em></dt>
 
-<dl>
-<dt><a name="index-down_002dlist"></a>Command: <strong>down-list</strong> <em>&amp;optional arg</em></dt>
-<dd><p>This function moves forward into <var>arg</var> (default 1) levels of
-parentheses.  A negative argument means move backward but still go
-deeper in parentheses (−<var>arg</var> levels).
-</p></dd></dl>
+    <dd>
+      <p>This function moves backward across <var>arg</var>
+      (default 1) balanced groups of parentheses. (Other syntactic
+      entities such as words or paired string quotes are
+      ignored.)</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-forward_002dsexp"></a>Command: <strong>forward-sexp</strong> <em>&amp;optional arg</em></dt>
-<dd><p>This function moves forward across <var>arg</var> (default 1) balanced expressions.
-Balanced expressions include both those delimited by parentheses and
-other kinds, such as words and string constants.
-See <a href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>.  For example,
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
-(concat&lowast; &quot;foo &quot; (car x) y z)
+  <dl>
+    <dt><a name="index-up_002dlist" id=
+    "index-up_002dlist"></a>Command: <strong>up-list</strong>
+    <em>&amp;optional arg escape-strings
+    no-syntax-crossing</em></dt>
+
+    <dd>
+      <p>This function moves forward out of <var>arg</var> (default
+      1) levels of parentheses. A negative argument means move
+      backward but still to a less deep spot. If
+      <var>escape-strings</var> is non-<code>nil</code> (as it is
+      interactively), move out of enclosing strings as well. If
+      <var>no-syntax-crossing</var> is non-<code>nil</code> (as it
+      is interactively), prefer to break out of any enclosing
+      string instead of moving to the start of a list broken across
+      multiple strings. On error, location of point is
+      unspecified.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-backward_002dup_002dlist" id=
+    "index-backward_002dup_002dlist"></a>Command:
+    <strong>backward-up-list</strong> <em>&amp;optional arg
+    escape-strings no-syntax-crossing</em></dt>
+
+    <dd>
+      <p>This function is just like <code>up-list</code>, but with
+      a negated argument.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-down_002dlist" id=
+    "index-down_002dlist"></a>Command: <strong>down-list</strong>
+    <em>&amp;optional arg</em></dt>
+
+    <dd>
+      <p>This function moves forward into <var>arg</var> (default
+      1) levels of parentheses. A negative argument means move
+      backward but still go deeper in parentheses
+      (&acirc;&circ;&rsquo;<var>arg</var> levels).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-forward_002dsexp" id=
+    "index-forward_002dsexp"></a>Command:
+    <strong>forward-sexp</strong> <em>&amp;optional arg</em></dt>
+
+    <dd>
+      <p>This function moves forward across <var>arg</var> (default
+      1) balanced expressions. Balanced expressions include both
+      those delimited by parentheses and other kinds, such as words
+      and string constants. See <a href=
+      "Parsing-Expressions.html#Parsing-Expressions">Parsing
+      Expressions</a>. For example,</p>
+
+      <div class="example">
+        <pre class="example">
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(forward-sexp 3)
+(concat&lowast; "foo " (car x) y z)
+---------- Buffer: foo ----------
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(forward-sexp 3)
      &rArr; nil
 
 ---------- Buffer: foo ----------
-(concat &quot;foo &quot; (car x) y&lowast; z)
+(concat "foo " (car x) y&lowast; z)
 ---------- Buffer: foo ----------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-backward_002dsexp"></a>Command: <strong>backward-sexp</strong> <em>&amp;optional arg</em></dt>
-<dd><p>This function moves backward across <var>arg</var> (default 1) balanced expressions.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-backward_002dsexp" id=
+    "index-backward_002dsexp"></a>Command:
+    <strong>backward-sexp</strong> <em>&amp;optional arg</em></dt>
 
-<dl>
-<dt><a name="index-beginning_002dof_002ddefun"></a>Command: <strong>beginning-of-defun</strong> <em>&amp;optional arg</em></dt>
-<dd><p>This function moves back to the <var>arg</var>th beginning of a defun.  If
-<var>arg</var> is negative, this actually moves forward, but it still moves
-to the beginning of a defun, not to the end of one.  <var>arg</var> defaults
-to 1.
-</p></dd></dl>
+    <dd>
+      <p>This function moves backward across <var>arg</var>
+      (default 1) balanced expressions.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-end_002dof_002ddefun"></a>Command: <strong>end-of-defun</strong> <em>&amp;optional arg</em></dt>
-<dd><p>This function moves forward to the <var>arg</var>th end of a defun.  If
-<var>arg</var> is negative, this actually moves backward, but it still moves
-to the end of a defun, not to the beginning of one.  <var>arg</var> defaults
-to 1.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-beginning_002dof_002ddefun" id=
+    "index-beginning_002dof_002ddefun"></a>Command:
+    <strong>beginning-of-defun</strong> <em>&amp;optional
+    arg</em></dt>
 
-<dl>
-<dt><a name="index-defun_002dprompt_002dregexp"></a>User Option: <strong>defun-prompt-regexp</strong></dt>
-<dd><p>If non-<code>nil</code>, this buffer-local variable holds a regular
-expression that specifies what text can appear before the
-open-parenthesis that starts a defun.  That is to say, a defun begins
-on a line that starts with a match for this regular expression,
-followed by a character with open-parenthesis syntax.
-</p></dd></dl>
+    <dd>
+      <p>This function moves back to the <var>arg</var>th beginning
+      of a defun. If <var>arg</var> is negative, this actually
+      moves forward, but it still moves to the beginning of a
+      defun, not to the end of one. <var>arg</var> defaults to
+      1.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-open_002dparen_002din_002dcolumn_002d0_002dis_002ddefun_002dstart"></a>User Option: <strong>open-paren-in-column-0-is-defun-start</strong></dt>
-<dd><p>If this variable&rsquo;s value is non-<code>nil</code>, an open parenthesis in
-column 0 is considered to be the start of a defun.  If it is
-<code>nil</code>, an open parenthesis in column 0 has no special meaning.
-The default is <code>t</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-end_002dof_002ddefun" id=
+    "index-end_002dof_002ddefun"></a>Command:
+    <strong>end-of-defun</strong> <em>&amp;optional arg</em></dt>
 
-<dl>
-<dt><a name="index-beginning_002dof_002ddefun_002dfunction"></a>Variable: <strong>beginning-of-defun-function</strong></dt>
-<dd><p>If non-<code>nil</code>, this variable holds a function for finding the
-beginning of a defun.  The function <code>beginning-of-defun</code>
-calls this function instead of using its normal method, passing it its
-optional argument.  If the argument is non-<code>nil</code>, the function
-should move back by that many functions, like
-<code>beginning-of-defun</code> does.
-</p></dd></dl>
+    <dd>
+      <p>This function moves forward to the <var>arg</var>th end of
+      a defun. If <var>arg</var> is negative, this actually moves
+      backward, but it still moves to the end of a defun, not to
+      the beginning of one. <var>arg</var> defaults to 1.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-end_002dof_002ddefun_002dfunction"></a>Variable: <strong>end-of-defun-function</strong></dt>
-<dd><p>If non-<code>nil</code>, this variable holds a function for finding the end of
-a defun.  The function <code>end-of-defun</code> calls this function instead
-of using its normal method.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-defun_002dprompt_002dregexp" id=
+    "index-defun_002dprompt_002dregexp"></a>User Option:
+    <strong>defun-prompt-regexp</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Skipping-Characters.html#Skipping-Characters" accesskey="n" rel="next">Skipping Characters</a>, Previous: <a href="Screen-Lines.html#Screen-Lines" accesskey="p" rel="prev">Screen Lines</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>If non-<code>nil</code>, this buffer-local variable holds
+      a regular expression that specifies what text can appear
+      before the open-parenthesis that starts a defun. That is to
+      say, a defun begins on a line that starts with a match for
+      this regular expression, followed by a character with
+      open-parenthesis syntax.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-open_002dparen_002din_002dcolumn_002d0_002dis_002ddefun_002dstart"
+    id=
+    "index-open_002dparen_002din_002dcolumn_002d0_002dis_002ddefun_002dstart">
+    </a>User Option:
+    <strong>open-paren-in-column-0-is-defun-start</strong></dt>
 
+    <dd>
+      <p>If this variable&rsquo;s value is non-<code>nil</code>, an
+      open parenthesis in column 0 is considered to be the start of
+      a defun. If it is <code>nil</code>, an open parenthesis in
+      column 0 has no special meaning. The default is
+      <code>t</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-beginning_002dof_002ddefun_002dfunction" id=
+    "index-beginning_002dof_002ddefun_002dfunction"></a>Variable:
+    <strong>beginning-of-defun-function</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, this variable holds a function
+      for finding the beginning of a defun. The function
+      <code>beginning-of-defun</code> calls this function instead
+      of using its normal method, passing it its optional argument.
+      If the argument is non-<code>nil</code>, the function should
+      move back by that many functions, like
+      <code>beginning-of-defun</code> does.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-end_002dof_002ddefun_002dfunction" id=
+    "index-end_002dof_002ddefun_002dfunction"></a>Variable:
+    <strong>end-of-defun-function</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, this variable holds a function
+      for finding the end of a defun. The function
+      <code>end-of-defun</code> calls this function instead of
+      using its normal method.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Skipping-Characters.html#Skipping-Characters"
+    accesskey="n" rel="next">Skipping Characters</a>, Previous:
+    <a href="Screen-Lines.html#Screen-Lines" accesskey="p" rel=
+    "prev">Screen Lines</a>, Up: <a href="Motion.html#Motion"
+    accesskey="u" rel="up">Motion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

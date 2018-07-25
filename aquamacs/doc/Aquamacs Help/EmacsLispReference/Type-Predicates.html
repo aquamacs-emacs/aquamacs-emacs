@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,100 +19,139 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Type Predicates</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Type Predicates">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Type Predicates">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lisp-Data-Types.html#Lisp-Data-Types" rel="up" title="Lisp Data Types">
-<link href="Equality-Predicates.html#Equality-Predicates" rel="next" title="Equality Predicates">
-<link href="Circular-Objects.html#Circular-Objects" rel="prev" title="Circular Objects">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Type Predicates</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Type Predicates" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Type Predicates" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lisp-Data-Types.html#Lisp-Data-Types" rel="up" title=
+  "Lisp Data Types" />
+  <link href="Equality-Predicates.html#Equality-Predicates" rel=
+  "next" title="Equality Predicates" />
+  <link href="Circular-Objects.html#Circular-Objects" rel="prev"
+  title="Circular Objects" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Type-Predicates" id="Type-Predicates"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Equality-Predicates.html#Equality-Predicates"
+    accesskey="n" rel="next">Equality Predicates</a>, Previous:
+    <a href="Circular-Objects.html#Circular-Objects" accesskey="p"
+    rel="prev">Circular Objects</a>, Up: <a href=
+    "Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel=
+    "up">Lisp Data Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Type-Predicates-1" id="Type-Predicates-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Type-Predicates"></a>
-<div class="header">
-<p>
-Next: <a href="Equality-Predicates.html#Equality-Predicates" accesskey="n" rel="next">Equality Predicates</a>, Previous: <a href="Circular-Objects.html#Circular-Objects" accesskey="p" rel="prev">Circular Objects</a>, Up: <a href="Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel="up">Lisp Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Type-Predicates-1"></a>
-<h3 class="section">2.6 Type Predicates</h3>
-<a name="index-type-checking"></a>
-<a name="index-wrong_002dtype_002dargument"></a>
+  <h3 class="section">2.6 Type Predicates</h3><a name=
+  "index-type-checking" id="index-type-checking"></a> <a name=
+  "index-wrong_002dtype_002dargument" id=
+  "index-wrong_002dtype_002dargument"></a>
 
-<p>The Emacs Lisp interpreter itself does not perform type checking on
-the actual arguments passed to functions when they are called.  It could
-not do so, since function arguments in Lisp do not have declared data
-types, as they do in other programming languages.  It is therefore up to
-the individual function to test whether each actual argument belongs to
-a type that the function can use.
-</p>
-<p>All built-in functions do check the types of their actual arguments
-when appropriate, and signal a <code>wrong-type-argument</code> error if an
-argument is of the wrong type.  For example, here is what happens if you
-pass an argument to <code>+</code> that it cannot handle:
-</p>
-<div class="example">
-<pre class="example">(+ 2 'a)
+  <p>The Emacs Lisp interpreter itself does not perform type
+  checking on the actual arguments passed to functions when they
+  are called. It could not do so, since function arguments in Lisp
+  do not have declared data types, as they do in other programming
+  languages. It is therefore up to the individual function to test
+  whether each actual argument belongs to a type that the function
+  can use.</p>
+
+  <p>All built-in functions do check the types of their actual
+  arguments when appropriate, and signal a
+  <code>wrong-type-argument</code> error if an argument is of the
+  wrong type. For example, here is what happens if you pass an
+  argument to <code>+</code> that it cannot handle:</p>
+
+  <div class="example">
+    <pre class="example">
+(+ 2 'a)
      error&rarr; Wrong type argument: number-or-marker-p, a
-</pre></div>
+</pre>
+  </div><a name="index-type-predicates" id=
+  "index-type-predicates"></a> <a name="index-testing-types" id=
+  "index-testing-types"></a>
 
-<a name="index-type-predicates"></a>
-<a name="index-testing-types"></a>
-<p>If you want your program to handle different types differently, you
-must do explicit type checking.  The most common way to check the type
-of an object is to call a <em>type predicate</em> function.  Emacs has a
-type predicate for each type, as well as some predicates for
-combinations of types.
-</p>
-<p>A type predicate function takes one argument; it returns <code>t</code> if
-the argument belongs to the appropriate type, and <code>nil</code> otherwise.
-Following a general Lisp convention for predicate functions, most type
-predicates&rsquo; names end with &lsquo;<samp>p</samp>&rsquo;.
-</p>
-<p>Here is an example which uses the predicates <code>listp</code> to check for
-a list and <code>symbolp</code> to check for a symbol.
-</p>
-<div class="example">
-<pre class="example">(defun add-on (x)
+  <p>If you want your program to handle different types
+  differently, you must do explicit type checking. The most common
+  way to check the type of an object is to call a <em>type
+  predicate</em> function. Emacs has a type predicate for each
+  type, as well as some predicates for combinations of types.</p>
+
+  <p>A type predicate function takes one argument; it returns
+  <code>t</code> if the argument belongs to the appropriate type,
+  and <code>nil</code> otherwise. Following a general Lisp
+  convention for predicate functions, most type predicates&rsquo;
+  names end with &lsquo;<samp>p</samp>&rsquo;.</p>
+
+  <p>Here is an example which uses the predicates
+  <code>listp</code> to check for a list and <code>symbolp</code>
+  to check for a symbol.</p>
+
+  <div class="example">
+    <pre class="example">
+(defun add-on (x)
   (cond ((symbolp x)
          ;; If X is a symbol, put it on LIST.
          (setq list (cons x list)))
@@ -119,214 +160,359 @@ a list and <code>symbolp</code> to check for a symbol.
          (setq list (append x list)))
         (t
          ;; We handle only symbols and lists.
-         (error &quot;Invalid argument %s in add-on&quot; x))))
-</pre></div>
+         (error "Invalid argument %s in add-on" x))))
+</pre>
+  </div>
 
-<p>Here is a table of predefined type predicates, in alphabetical order,
-with references to further information.
-</p>
-<dl compact="compact">
-<dt><code>atom</code></dt>
-<dd><p>See <a href="List_002drelated-Predicates.html#List_002drelated-Predicates">atom</a>.
-</p>
-</dd>
-<dt><code>arrayp</code></dt>
-<dd><p>See <a href="Array-Functions.html#Array-Functions">arrayp</a>.
-</p>
-</dd>
-<dt><code>bool-vector-p</code></dt>
-<dd><p>See <a href="Bool_002dVectors.html#Bool_002dVectors">bool-vector-p</a>.
-</p>
-</dd>
-<dt><code>bufferp</code></dt>
-<dd><p>See <a href="Buffer-Basics.html#Buffer-Basics">bufferp</a>.
-</p>
-</dd>
-<dt><code>byte-code-function-p</code></dt>
-<dd><p>See <a href="Byte_002dCode-Type.html#Byte_002dCode-Type">byte-code-function-p</a>.
-</p>
-</dd>
-<dt><code>case-table-p</code></dt>
-<dd><p>See <a href="Case-Tables.html#Case-Tables">case-table-p</a>.
-</p>
-</dd>
-<dt><code>char-or-string-p</code></dt>
-<dd><p>See <a href="Predicates-for-Strings.html#Predicates-for-Strings">char-or-string-p</a>.
-</p>
-</dd>
-<dt><code>char-table-p</code></dt>
-<dd><p>See <a href="Char_002dTables.html#Char_002dTables">char-table-p</a>.
-</p>
-</dd>
-<dt><code>commandp</code></dt>
-<dd><p>See <a href="Interactive-Call.html#Interactive-Call">commandp</a>.
-</p>
-</dd>
-<dt><code>consp</code></dt>
-<dd><p>See <a href="List_002drelated-Predicates.html#List_002drelated-Predicates">consp</a>.
-</p>
-</dd>
-<dt><code>custom-variable-p</code></dt>
-<dd><p>See <a href="Variable-Definitions.html#Variable-Definitions">custom-variable-p</a>.
-</p>
-</dd>
-<dt><code>floatp</code></dt>
-<dd><p>See <a href="Predicates-on-Numbers.html#Predicates-on-Numbers">floatp</a>.
-</p>
-</dd>
-<dt><code>fontp</code></dt>
-<dd><p>See <a href="Low_002dLevel-Font.html#Low_002dLevel-Font">Low-Level Font</a>.
-</p>
-</dd>
-<dt><code>frame-configuration-p</code></dt>
-<dd><p>See <a href="Frame-Configurations.html#Frame-Configurations">frame-configuration-p</a>.
-</p>
-</dd>
-<dt><code>frame-live-p</code></dt>
-<dd><p>See <a href="Deleting-Frames.html#Deleting-Frames">frame-live-p</a>.
-</p>
-</dd>
-<dt><code>framep</code></dt>
-<dd><p>See <a href="Frames.html#Frames">framep</a>.
-</p>
-</dd>
-<dt><code>functionp</code></dt>
-<dd><p>See <a href="Functions.html#Functions">functionp</a>.
-</p>
-</dd>
-<dt><code>hash-table-p</code></dt>
-<dd><p>See <a href="Other-Hash.html#Other-Hash">hash-table-p</a>.
-</p>
-</dd>
-<dt><code>integer-or-marker-p</code></dt>
-<dd><p>See <a href="Predicates-on-Markers.html#Predicates-on-Markers">integer-or-marker-p</a>.
-</p>
-</dd>
-<dt><code>integerp</code></dt>
-<dd><p>See <a href="Predicates-on-Numbers.html#Predicates-on-Numbers">integerp</a>.
-</p>
-</dd>
-<dt><code>keymapp</code></dt>
-<dd><p>See <a href="Creating-Keymaps.html#Creating-Keymaps">keymapp</a>.
-</p>
-</dd>
-<dt><code>keywordp</code></dt>
-<dd><p>See <a href="Constant-Variables.html#Constant-Variables">Constant Variables</a>.
-</p>
-</dd>
-<dt><code>listp</code></dt>
-<dd><p>See <a href="List_002drelated-Predicates.html#List_002drelated-Predicates">listp</a>.
-</p>
-</dd>
-<dt><code>markerp</code></dt>
-<dd><p>See <a href="Predicates-on-Markers.html#Predicates-on-Markers">markerp</a>.
-</p>
-</dd>
-<dt><code>wholenump</code></dt>
-<dd><p>See <a href="Predicates-on-Numbers.html#Predicates-on-Numbers">wholenump</a>.
-</p>
-</dd>
-<dt><code>nlistp</code></dt>
-<dd><p>See <a href="List_002drelated-Predicates.html#List_002drelated-Predicates">nlistp</a>.
-</p>
-</dd>
-<dt><code>numberp</code></dt>
-<dd><p>See <a href="Predicates-on-Numbers.html#Predicates-on-Numbers">numberp</a>.
-</p>
-</dd>
-<dt><code>number-or-marker-p</code></dt>
-<dd><p>See <a href="Predicates-on-Markers.html#Predicates-on-Markers">number-or-marker-p</a>.
-</p>
-</dd>
-<dt><code>overlayp</code></dt>
-<dd><p>See <a href="Overlays.html#Overlays">overlayp</a>.
-</p>
-</dd>
-<dt><code>processp</code></dt>
-<dd><p>See <a href="Processes.html#Processes">processp</a>.
-</p>
-</dd>
-<dt><code>sequencep</code></dt>
-<dd><p>See <a href="Sequence-Functions.html#Sequence-Functions">sequencep</a>.
-</p>
-</dd>
-<dt><code>stringp</code></dt>
-<dd><p>See <a href="Predicates-for-Strings.html#Predicates-for-Strings">stringp</a>.
-</p>
-</dd>
-<dt><code>subrp</code></dt>
-<dd><p>See <a href="Function-Cells.html#Function-Cells">subrp</a>.
-</p>
-</dd>
-<dt><code>symbolp</code></dt>
-<dd><p>See <a href="Symbols.html#Symbols">symbolp</a>.
-</p>
-</dd>
-<dt><code>syntax-table-p</code></dt>
-<dd><p>See <a href="Syntax-Tables.html#Syntax-Tables">syntax-table-p</a>.
-</p>
-</dd>
-<dt><code>vectorp</code></dt>
-<dd><p>See <a href="Vectors.html#Vectors">vectorp</a>.
-</p>
-</dd>
-<dt><code>window-configuration-p</code></dt>
-<dd><p>See <a href="Window-Configurations.html#Window-Configurations">window-configuration-p</a>.
-</p>
-</dd>
-<dt><code>window-live-p</code></dt>
-<dd><p>See <a href="Deleting-Windows.html#Deleting-Windows">window-live-p</a>.
-</p>
-</dd>
-<dt><code>windowp</code></dt>
-<dd><p>See <a href="Basic-Windows.html#Basic-Windows">windowp</a>.
-</p>
-</dd>
-<dt><code>booleanp</code></dt>
-<dd><p>See <a href="nil-and-t.html#nil-and-t">booleanp</a>.
-</p>
-</dd>
-<dt><code>string-or-null-p</code></dt>
-<dd><p>See <a href="Predicates-for-Strings.html#Predicates-for-Strings">string-or-null-p</a>.
-</p></dd>
-</dl>
+  <p>Here is a table of predefined type predicates, in alphabetical
+  order, with references to further information.</p>
 
-<p>The most general way to check the type of an object is to call the
-function <code>type-of</code>.  Recall that each object belongs to one and
-only one primitive type; <code>type-of</code> tells you which one (see <a href="Lisp-Data-Types.html#Lisp-Data-Types">Lisp Data Types</a>).  But <code>type-of</code> knows nothing about non-primitive
-types.  In most cases, it is more convenient to use type predicates than
-<code>type-of</code>.
-</p>
-<dl>
-<dt><a name="index-type_002dof"></a>Function: <strong>type-of</strong> <em>object</em></dt>
-<dd><p>This function returns a symbol naming the primitive type of
-<var>object</var>.  The value is one of the symbols <code>bool-vector</code>,
-<code>buffer</code>, <code>char-table</code>, <code>compiled-function</code>,
-<code>cons</code>, <code>finalizer</code>, <code>float</code>, <code>font-entity</code>,
-<code>font-object</code>, <code>font-spec</code>, <code>frame</code>, <code>hash-table</code>,
-<code>integer</code>, <code>marker</code>, <code>overlay</code>, <code>process</code>,
-<code>string</code>, <code>subr</code>, <code>symbol</code>, <code>vector</code>,
-<code>window</code>, or <code>window-configuration</code>.
-</p>
-<div class="example">
-<pre class="example">(type-of 1)
+  <dl compact="compact">
+    <dt><code>atom</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "List_002drelated-Predicates.html#List_002drelated-Predicates">
+      atom</a>.</p>
+    </dd>
+
+    <dt><code>arrayp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Array-Functions.html#Array-Functions">arrayp</a>.</p>
+    </dd>
+
+    <dt><code>bool-vector-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Bool_002dVectors.html#Bool_002dVectors">bool-vector-p</a>.</p>
+    </dd>
+
+    <dt><code>bufferp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Buffer-Basics.html#Buffer-Basics">bufferp</a>.</p>
+    </dd>
+
+    <dt><code>byte-code-function-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Byte_002dCode-Type.html#Byte_002dCode-Type">byte-code-function-p</a>.</p>
+    </dd>
+
+    <dt><code>case-table-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Case-Tables.html#Case-Tables">case-table-p</a>.</p>
+    </dd>
+
+    <dt><code>char-or-string-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Predicates-for-Strings.html#Predicates-for-Strings">char-or-string-p</a>.</p>
+    </dd>
+
+    <dt><code>char-table-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Char_002dTables.html#Char_002dTables">char-table-p</a>.</p>
+    </dd>
+
+    <dt><code>commandp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Interactive-Call.html#Interactive-Call">commandp</a>.</p>
+    </dd>
+
+    <dt><code>consp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "List_002drelated-Predicates.html#List_002drelated-Predicates">
+      consp</a>.</p>
+    </dd>
+
+    <dt><code>custom-variable-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Variable-Definitions.html#Variable-Definitions">custom-variable-p</a>.</p>
+    </dd>
+
+    <dt><code>floatp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Predicates-on-Numbers.html#Predicates-on-Numbers">floatp</a>.</p>
+    </dd>
+
+    <dt><code>fontp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Low_002dLevel-Font.html#Low_002dLevel-Font">Low-Level
+      Font</a>.</p>
+    </dd>
+
+    <dt><code>frame-configuration-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Frame-Configurations.html#Frame-Configurations">frame-configuration-p</a>.</p>
+    </dd>
+
+    <dt><code>frame-live-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Deleting-Frames.html#Deleting-Frames">frame-live-p</a>.</p>
+    </dd>
+
+    <dt><code>framep</code></dt>
+
+    <dd>
+      <p>See <a href="Frames.html#Frames">framep</a>.</p>
+    </dd>
+
+    <dt><code>functionp</code></dt>
+
+    <dd>
+      <p>See <a href="Functions.html#Functions">functionp</a>.</p>
+    </dd>
+
+    <dt><code>hash-table-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Other-Hash.html#Other-Hash">hash-table-p</a>.</p>
+    </dd>
+
+    <dt><code>integer-or-marker-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Predicates-on-Markers.html#Predicates-on-Markers">integer-or-marker-p</a>.</p>
+    </dd>
+
+    <dt><code>integerp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Predicates-on-Numbers.html#Predicates-on-Numbers">integerp</a>.</p>
+    </dd>
+
+    <dt><code>keymapp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Creating-Keymaps.html#Creating-Keymaps">keymapp</a>.</p>
+    </dd>
+
+    <dt><code>keywordp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Constant-Variables.html#Constant-Variables">Constant
+      Variables</a>.</p>
+    </dd>
+
+    <dt><code>listp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "List_002drelated-Predicates.html#List_002drelated-Predicates">
+      listp</a>.</p>
+    </dd>
+
+    <dt><code>markerp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Predicates-on-Markers.html#Predicates-on-Markers">markerp</a>.</p>
+    </dd>
+
+    <dt><code>wholenump</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Predicates-on-Numbers.html#Predicates-on-Numbers">wholenump</a>.</p>
+    </dd>
+
+    <dt><code>nlistp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "List_002drelated-Predicates.html#List_002drelated-Predicates">
+      nlistp</a>.</p>
+    </dd>
+
+    <dt><code>numberp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Predicates-on-Numbers.html#Predicates-on-Numbers">numberp</a>.</p>
+    </dd>
+
+    <dt><code>number-or-marker-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Predicates-on-Markers.html#Predicates-on-Markers">number-or-marker-p</a>.</p>
+    </dd>
+
+    <dt><code>overlayp</code></dt>
+
+    <dd>
+      <p>See <a href="Overlays.html#Overlays">overlayp</a>.</p>
+    </dd>
+
+    <dt><code>processp</code></dt>
+
+    <dd>
+      <p>See <a href="Processes.html#Processes">processp</a>.</p>
+    </dd>
+
+    <dt><code>sequencep</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Sequence-Functions.html#Sequence-Functions">sequencep</a>.</p>
+    </dd>
+
+    <dt><code>stringp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Predicates-for-Strings.html#Predicates-for-Strings">stringp</a>.</p>
+    </dd>
+
+    <dt><code>subrp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Function-Cells.html#Function-Cells">subrp</a>.</p>
+    </dd>
+
+    <dt><code>symbolp</code></dt>
+
+    <dd>
+      <p>See <a href="Symbols.html#Symbols">symbolp</a>.</p>
+    </dd>
+
+    <dt><code>syntax-table-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Syntax-Tables.html#Syntax-Tables">syntax-table-p</a>.</p>
+    </dd>
+
+    <dt><code>vectorp</code></dt>
+
+    <dd>
+      <p>See <a href="Vectors.html#Vectors">vectorp</a>.</p>
+    </dd>
+
+    <dt><code>window-configuration-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Window-Configurations.html#Window-Configurations">window-configuration-p</a>.</p>
+    </dd>
+
+    <dt><code>window-live-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Deleting-Windows.html#Deleting-Windows">window-live-p</a>.</p>
+    </dd>
+
+    <dt><code>windowp</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Basic-Windows.html#Basic-Windows">windowp</a>.</p>
+    </dd>
+
+    <dt><code>booleanp</code></dt>
+
+    <dd>
+      <p>See <a href="nil-and-t.html#nil-and-t">booleanp</a>.</p>
+    </dd>
+
+    <dt><code>string-or-null-p</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Predicates-for-Strings.html#Predicates-for-Strings">string-or-null-p</a>.</p>
+    </dd>
+  </dl>
+
+  <p>The most general way to check the type of an object is to call
+  the function <code>type-of</code>. Recall that each object
+  belongs to one and only one primitive type; <code>type-of</code>
+  tells you which one (see <a href=
+  "Lisp-Data-Types.html#Lisp-Data-Types">Lisp Data Types</a>). But
+  <code>type-of</code> knows nothing about non-primitive types. In
+  most cases, it is more convenient to use type predicates than
+  <code>type-of</code>.</p>
+
+  <dl>
+    <dt><a name="index-type_002dof" id=
+    "index-type_002dof"></a>Function: <strong>type-of</strong>
+    <em>object</em></dt>
+
+    <dd>
+      <p>This function returns a symbol naming the primitive type
+      of <var>object</var>. The value is one of the symbols
+      <code>bool-vector</code>, <code>buffer</code>,
+      <code>char-table</code>, <code>compiled-function</code>,
+      <code>cons</code>, <code>finalizer</code>,
+      <code>float</code>, <code>font-entity</code>,
+      <code>font-object</code>, <code>font-spec</code>,
+      <code>frame</code>, <code>hash-table</code>,
+      <code>integer</code>, <code>marker</code>,
+      <code>overlay</code>, <code>process</code>,
+      <code>string</code>, <code>subr</code>, <code>symbol</code>,
+      <code>vector</code>, <code>window</code>, or
+      <code>window-configuration</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(type-of 1)
      &rArr; integer
-</pre><pre class="example">(type-of 'nil)
+</pre>
+        <pre class="example">
+(type-of 'nil)
      &rArr; symbol
-(type-of '())    ; <span class="roman"><code>()</code> is <code>nil</code>.</span>
+(type-of '())    ; <span class=
+"roman"><code>()</code> is <code>nil</code>.</span>
      &rArr; symbol
 (type-of '(x))
      &rArr; cons
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Equality-Predicates.html#Equality-Predicates" accesskey="n" rel="next">Equality Predicates</a>, Previous: <a href="Circular-Objects.html#Circular-Objects" accesskey="p" rel="prev">Circular Objects</a>, Up: <a href="Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel="up">Lisp Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Equality-Predicates.html#Equality-Predicates"
+    accesskey="n" rel="next">Equality Predicates</a>, Previous:
+    <a href="Circular-Objects.html#Circular-Objects" accesskey="p"
+    rel="prev">Circular Objects</a>, Up: <a href=
+    "Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel=
+    "up">Lisp Data Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

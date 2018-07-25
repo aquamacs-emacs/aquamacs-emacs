@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,151 +20,212 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Supporting additional buffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Supporting additional buffers">
-<meta name="keywords" content="GNU Emacs Manual: Supporting additional buffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Autorevert.html#Autorevert" rel="up" title="Autorevert">
-<link href="Auto-Save.html#Auto-Save" rel="next" title="Auto Save">
-<link href="Auto-Reverting-Dired.html#Auto-Reverting-Dired" rel="prev" title="Auto Reverting Dired">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Supporting additional buffers</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Supporting additional buffers" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Supporting additional buffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Autorevert.html#Autorevert" rel="up" title=
+  "Autorevert" />
+  <link href="Auto-Save.html#Auto-Save" rel="next" title=
+  "Auto Save" />
+  <link href="Auto-Reverting-Dired.html#Auto-Reverting-Dired" rel=
+  "prev" title="Auto Reverting Dired" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Supporting-additional-buffers" id=
+  "Supporting-additional-buffers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Auto-Reverting-Dired.html#Auto-Reverting-Dired" accesskey="p"
+    rel="prev">Auto Reverting Dired</a>, Up: <a href=
+    "Autorevert.html#Autorevert" accesskey="u" rel=
+    "up">Autorevert</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name=
+  "Adding-Support-for-Auto_002dReverting-additional-Buffers_002e"
+  id=
+  "Adding-Support-for-Auto_002dReverting-additional-Buffers_002e"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Supporting-additional-buffers"></a>
-<div class="header">
-<p>
-Previous: <a href="Auto-Reverting-Dired.html#Auto-Reverting-Dired" accesskey="p" rel="prev">Auto Reverting Dired</a>, Up: <a href="Autorevert.html#Autorevert" accesskey="u" rel="up">Autorevert</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Adding-Support-for-Auto_002dReverting-additional-Buffers_002e"></a>
-<h4 class="subsection">18.5.3 Adding Support for Auto-Reverting additional Buffers.</h4>
+  <h4 class="subsection">18.5.3 Adding Support for Auto-Reverting
+  additional Buffers.</h4>
 
-<p>This section is intended for Elisp programmers who would like to add
-support for auto-reverting new types of buffers.
-</p>
-<p>To support auto-reverting the buffer must first of all have a suitable
-<code>revert-buffer-function</code>.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Definition-of-revert_002dbuffer_002dfunction.html#Definition-of-revert_002dbuffer_002dfunction">Reverting</a> in <cite>the Emacs Lisp Reference Manual</cite>.
-</p>
-<p>In addition, it must have a suitable <code>buffer-stale-function</code>.
-</p>
-<dl>
-<dt><a name="index-buffer_002dstale_002dfunction"></a>Variable: <strong>buffer-stale-function</strong></dt>
-<dd><p>The value of this variable is a function to check whether a
-buffer needs reverting.  This should be a function with one optional
-argument <var>noconfirm</var>.  The function should return non-<code>nil</code>
-if the buffer should be reverted.  The buffer is current when this
-function is called.
-</p>
-<p>While this function is mainly intended for use in auto-reverting, it
-could be used for other purposes as well.  For instance, if
-auto-reverting is not enabled, it could be used to warn the user that
-the buffer needs reverting.  The idea behind the <var>noconfirm</var>
-argument is that it should be <code>t</code> if the buffer is going to be
-reverted without asking the user and <code>nil</code> if the function is
-just going to be used to warn the user that the buffer is out of date.
-In particular, for use in auto-reverting, <var>noconfirm</var> is <code>t</code>.
-If the function is only going to be used for auto-reverting, you can
-ignore the <var>noconfirm</var> argument.
-</p>
-<p>If you just want to automatically auto-revert every
-<code>auto-revert-interval</code> seconds (like the Buffer Menu), use:
-</p>
-<div class="example">
-<pre class="example">(setq-local buffer-stale-function
+  <p>This section is intended for Elisp programmers who would like
+  to add support for auto-reverting new types of buffers.</p>
+
+  <p>To support auto-reverting the buffer must first of all have a
+  suitable <code>revert-buffer-function</code>. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Definition-of-revert_002dbuffer_002dfunction.html#Definition-of-revert_002dbuffer_002dfunction">
+  Reverting</a> in <cite>the Emacs Lisp Reference
+  Manual</cite>.</p>
+
+  <p>In addition, it must have a suitable
+  <code>buffer-stale-function</code>.</p>
+
+  <dl>
+    <dt><a name="index-buffer_002dstale_002dfunction" id=
+    "index-buffer_002dstale_002dfunction"></a>Variable:
+    <strong>buffer-stale-function</strong></dt>
+
+    <dd>
+      <p>The value of this variable is a function to check whether
+      a buffer needs reverting. This should be a function with one
+      optional argument <var>noconfirm</var>. The function should
+      return non-<code>nil</code> if the buffer should be reverted.
+      The buffer is current when this function is called.</p>
+
+      <p>While this function is mainly intended for use in
+      auto-reverting, it could be used for other purposes as well.
+      For instance, if auto-reverting is not enabled, it could be
+      used to warn the user that the buffer needs reverting. The
+      idea behind the <var>noconfirm</var> argument is that it
+      should be <code>t</code> if the buffer is going to be
+      reverted without asking the user and <code>nil</code> if the
+      function is just going to be used to warn the user that the
+      buffer is out of date. In particular, for use in
+      auto-reverting, <var>noconfirm</var> is <code>t</code>. If
+      the function is only going to be used for auto-reverting, you
+      can ignore the <var>noconfirm</var> argument.</p>
+
+      <p>If you just want to automatically auto-revert every
+      <code>auto-revert-interval</code> seconds (like the Buffer
+      Menu), use:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq-local buffer-stale-function
      #'(lambda (&amp;optional noconfirm) 'fast))
-</pre></div>
+</pre>
+      </div>
 
-<p>in the buffer&rsquo;s mode function.
-</p>
-<p>The special return value &lsquo;<samp>fast</samp>&rsquo; tells the caller that the need
-for reverting was not checked, but that reverting the buffer is fast.
-It also tells Auto Revert not to print any revert messages, even if
-<code>auto-revert-verbose</code> is non-<code>nil</code>.  This is important, as
-getting revert messages every <code>auto-revert-interval</code> seconds can
-be very annoying.  The information provided by this return value could
-also be useful if the function is consulted for purposes other than
-auto-reverting.
-</p></dd></dl>
+      <p>in the buffer&rsquo;s mode function.</p>
 
-<p>Once the buffer has a suitable <code>revert-buffer-function</code> and
-<code>buffer-stale-function</code>, several problems usually remain.
-</p>
-<p>The buffer will only auto-revert if it is marked unmodified.  Hence,
-you will have to make sure that various functions mark the buffer
-modified if and only if either the buffer contains information that
-might be lost by reverting, or there is reason to believe that the user
-might be inconvenienced by auto-reverting, because he is actively
-working on the buffer.  The user can always override this by manually
-adjusting the modified status of the buffer.  To support this, calling
-the <code>revert-buffer-function</code> on a buffer that is marked
-unmodified should always keep the buffer marked unmodified.
-</p>
-<p>It is important to assure that point does not continuously jump around
-as a consequence of auto-reverting.  Of course, moving point might be
-inevitable if the buffer radically changes.
-</p>
-<p>You should make sure that the <code>revert-buffer-function</code> does not
-print messages that unnecessarily duplicate Auto Revert&rsquo;s own messages,
-displayed if <code>auto-revert-verbose</code> is <code>t</code>, and effectively
-override a <code>nil</code> value for <code>auto-revert-verbose</code>.  Hence,
-adapting a mode for auto-reverting often involves getting rid of such
-messages.  This is especially important for buffers that automatically
-revert every <code>auto-revert-interval</code> seconds.
-</p>
-<p>If the new auto-reverting is part of Emacs, you should mention it
-in the documentation string of <code>global-auto-revert-non-file-buffers</code>.
-</p>
-<p>Similarly, you should add a section to this chapter.  This section
-should at the very least make clear whether enabling auto-reverting
-for the buffer reliably assures that all information in the buffer is
-completely up to date (or will be after <code>auto-revert-interval</code>
-seconds).
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Auto-Reverting-Dired.html#Auto-Reverting-Dired" accesskey="p" rel="prev">Auto Reverting Dired</a>, Up: <a href="Autorevert.html#Autorevert" accesskey="u" rel="up">Autorevert</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>The special return value &lsquo;<samp>fast</samp>&rsquo;
+      tells the caller that the need for reverting was not checked,
+      but that reverting the buffer is fast. It also tells Auto
+      Revert not to print any revert messages, even if
+      <code>auto-revert-verbose</code> is non-<code>nil</code>.
+      This is important, as getting revert messages every
+      <code>auto-revert-interval</code> seconds can be very
+      annoying. The information provided by this return value could
+      also be useful if the function is consulted for purposes
+      other than auto-reverting.</p>
+    </dd>
+  </dl>
 
+  <p>Once the buffer has a suitable
+  <code>revert-buffer-function</code> and
+  <code>buffer-stale-function</code>, several problems usually
+  remain.</p>
 
+  <p>The buffer will only auto-revert if it is marked unmodified.
+  Hence, you will have to make sure that various functions mark the
+  buffer modified if and only if either the buffer contains
+  information that might be lost by reverting, or there is reason
+  to believe that the user might be inconvenienced by
+  auto-reverting, because he is actively working on the buffer. The
+  user can always override this by manually adjusting the modified
+  status of the buffer. To support this, calling the
+  <code>revert-buffer-function</code> on a buffer that is marked
+  unmodified should always keep the buffer marked unmodified.</p>
 
+  <p>It is important to assure that point does not continuously
+  jump around as a consequence of auto-reverting. Of course, moving
+  point might be inevitable if the buffer radically changes.</p>
+
+  <p>You should make sure that the
+  <code>revert-buffer-function</code> does not print messages that
+  unnecessarily duplicate Auto Revert&rsquo;s own messages,
+  displayed if <code>auto-revert-verbose</code> is <code>t</code>,
+  and effectively override a <code>nil</code> value for
+  <code>auto-revert-verbose</code>. Hence, adapting a mode for
+  auto-reverting often involves getting rid of such messages. This
+  is especially important for buffers that automatically revert
+  every <code>auto-revert-interval</code> seconds.</p>
+
+  <p>If the new auto-reverting is part of Emacs, you should mention
+  it in the documentation string of
+  <code>global-auto-revert-non-file-buffers</code>.</p>
+
+  <p>Similarly, you should add a section to this chapter. This
+  section should at the very least make clear whether enabling
+  auto-reverting for the buffer reliably assures that all
+  information in the buffer is completely up to date (or will be
+  after <code>auto-revert-interval</code> seconds).</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Auto-Reverting-Dired.html#Auto-Reverting-Dired" accesskey="p"
+    rel="prev">Auto Reverting Dired</a>, Up: <a href=
+    "Autorevert.html#Autorevert" accesskey="u" rel=
+    "up">Autorevert</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,210 +18,286 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Syntax Table Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Syntax Table Basics">
-<meta name="keywords" content="GNU Emacs Calc Manual: Syntax Table Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Syntax-Tables.html#Syntax-Tables" rel="up" title="Syntax Tables">
-<link href="Precedence-in-Syntax-Tables.html#Precedence-in-Syntax-Tables" rel="next" title="Precedence in Syntax Tables">
-<link href="Syntax-Tables.html#Syntax-Tables" rel="prev" title="Syntax Tables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Syntax Table Basics</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Syntax Table Basics" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Syntax Table Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Syntax-Tables.html#Syntax-Tables" rel="up" title=
+  "Syntax Tables" />
+  <link href=
+  "Precedence-in-Syntax-Tables.html#Precedence-in-Syntax-Tables"
+  rel="next" title="Precedence in Syntax Tables" />
+  <link href="Syntax-Tables.html#Syntax-Tables" rel="prev" title=
+  "Syntax Tables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Syntax-Table-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Precedence-in-Syntax-Tables.html#Precedence-in-Syntax-Tables" accesskey="n" rel="next">Precedence in Syntax Tables</a>, Previous: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="p" rel="prev">Syntax Tables</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Syntax-Table-Basics-1"></a>
-<h4 class="subsubsection">6.8.11.1 Syntax Table Basics</h4>
+<body lang="en" xml:lang="en">
+  <a name="Syntax-Table-Basics" id="Syntax-Table-Basics"></a>
 
-<p><em>Parsing</em> is the process of converting a raw string of characters,
-such as you would type in during algebraic entry, into a Calc formula.
-Calc&rsquo;s parser works in two stages.  First, the input is broken down
-into <em>tokens</em>, such as words, numbers, and punctuation symbols
-like &lsquo;<samp>+</samp>&rsquo;, &lsquo;<samp>:=</samp>&rsquo;, and &lsquo;<samp>+/-</samp>&rsquo;.  Space between tokens is
-ignored (except when it serves to separate adjacent words).  Next,
-the parser matches this string of tokens against various built-in
-syntactic patterns, such as &ldquo;an expression followed by &lsquo;<samp>+</samp>&rsquo;
-followed by another expression&rdquo; or &ldquo;a name followed by &lsquo;<samp>(</samp>&rsquo;,
-zero or more expressions separated by commas, and &lsquo;<samp>)</samp>&rsquo;.&rdquo;
-</p>
-<p>A <em>syntax table</em> is a list of user-defined <em>syntax rules</em>,
-which allow you to specify new patterns to define your own
-favorite input notations.  Calc&rsquo;s parser always checks the syntax
-table for the current language mode, then the table for the Normal
-language mode, before it uses its built-in rules to parse an
-algebraic formula you have entered.  Each syntax rule should go on
-its own line; it consists of a <em>pattern</em>, a &lsquo;<samp>:=</samp>&rsquo; symbol,
-and a Calc formula with an optional <em>condition</em>.  (Syntax rules
-resemble algebraic rewrite rules, but the notation for patterns is
-completely different.)
-</p>
-<p>A syntax pattern is a list of tokens, separated by spaces.
-Except for a few special symbols, tokens in syntax patterns are
-matched literally, from left to right.  For example, the rule,
-</p>
-<div class="example">
-<pre class="example">foo ( ) := 2+3
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Precedence-in-Syntax-Tables.html#Precedence-in-Syntax-Tables"
+    accesskey="n" rel="next">Precedence in Syntax Tables</a>,
+    Previous: <a href="Syntax-Tables.html#Syntax-Tables" accesskey=
+    "p" rel="prev">Syntax Tables</a>, Up: <a href=
+    "Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Syntax-Table-Basics-1" id="Syntax-Table-Basics-1"></a>
 
-<p>would cause Calc to parse the formula &lsquo;<samp>4+foo()*5</samp>&rsquo; as if it
-were &lsquo;<samp>4+(2+3)*5</samp>&rsquo;.  Notice that the parentheses were written
-as two separate tokens in the rule.  As a result, the rule works
-for both &lsquo;<samp>foo()</samp>&rsquo; and &lsquo;<samp>foo&nbsp;(&nbsp;&nbsp;)</samp>&rsquo;<!-- /@w -->.  If we had written
-the rule as &lsquo;<samp>foo () := 2+3</samp>&rsquo;, then Calc would treat &lsquo;<samp>()</samp>&rsquo;
-as a single, indivisible token, so that &lsquo;<samp>foo(&nbsp;)</samp>&rsquo;<!-- /@w --> would
-not be recognized by the rule.  (It would be parsed as a regular
-zero-argument function call instead.)  In fact, this rule would
-also make trouble for the rest of Calc&rsquo;s parser:  An unrelated
-formula like &lsquo;<samp>bar()</samp>&rsquo; would now be tokenized into &lsquo;<samp>bar ()</samp>&rsquo;
-instead of &lsquo;<samp>bar ( )</samp>&rsquo;, so that the standard parser for function
-calls would no longer recognize it!
-</p>
-<p>While it is possible to make a token with a mixture of letters
-and punctuation symbols, this is not recommended.  It is better to
-break it into several tokens, as we did with &lsquo;<samp>foo()</samp>&rsquo; above.
-</p>
-<p>The symbol &lsquo;<samp>#</samp>&rsquo; in a syntax pattern matches any Calc expression.
-On the righthand side, the things that matched the &lsquo;<samp>#</samp>&rsquo;s can
-be referred to as &lsquo;<samp>#1</samp>&rsquo;, &lsquo;<samp>#2</samp>&rsquo;, and so on (where &lsquo;<samp>#1</samp>&rsquo;
-matches the leftmost &lsquo;<samp>#</samp>&rsquo; in the pattern).  For example, these
-rules match a user-defined function, prefix operator, infix operator,
-and postfix operator, respectively:
-</p>
-<div class="example">
-<pre class="example">foo ( # ) := myfunc(#1)
+  <h4 class="subsubsection">6.8.11.1 Syntax Table Basics</h4>
+
+  <p><em>Parsing</em> is the process of converting a raw string of
+  characters, such as you would type in during algebraic entry,
+  into a Calc formula. Calc&rsquo;s parser works in two stages.
+  First, the input is broken down into <em>tokens</em>, such as
+  words, numbers, and punctuation symbols like
+  &lsquo;<samp>+</samp>&rsquo;, &lsquo;<samp>:=</samp>&rsquo;, and
+  &lsquo;<samp>+/-</samp>&rsquo;. Space between tokens is ignored
+  (except when it serves to separate adjacent words). Next, the
+  parser matches this string of tokens against various built-in
+  syntactic patterns, such as &ldquo;an expression followed by
+  &lsquo;<samp>+</samp>&rsquo; followed by another
+  expression&rdquo; or &ldquo;a name followed by
+  &lsquo;<samp>(</samp>&rsquo;, zero or more expressions separated
+  by commas, and &lsquo;<samp>)</samp>&rsquo;.&rdquo;</p>
+
+  <p>A <em>syntax table</em> is a list of user-defined <em>syntax
+  rules</em>, which allow you to specify new patterns to define
+  your own favorite input notations. Calc&rsquo;s parser always
+  checks the syntax table for the current language mode, then the
+  table for the Normal language mode, before it uses its built-in
+  rules to parse an algebraic formula you have entered. Each syntax
+  rule should go on its own line; it consists of a
+  <em>pattern</em>, a &lsquo;<samp>:=</samp>&rsquo; symbol, and a
+  Calc formula with an optional <em>condition</em>. (Syntax rules
+  resemble algebraic rewrite rules, but the notation for patterns
+  is completely different.)</p>
+
+  <p>A syntax pattern is a list of tokens, separated by spaces.
+  Except for a few special symbols, tokens in syntax patterns are
+  matched literally, from left to right. For example, the rule,</p>
+
+  <div class="example">
+    <pre class="example">
+foo ( ) := 2+3
+</pre>
+  </div>
+
+  <p>would cause Calc to parse the formula
+  &lsquo;<samp>4+foo()*5</samp>&rsquo; as if it were
+  &lsquo;<samp>4+(2+3)*5</samp>&rsquo;. Notice that the parentheses
+  were written as two separate tokens in the rule. As a result, the
+  rule works for both &lsquo;<samp>foo()</samp>&rsquo; and
+  &lsquo;<samp>foo&nbsp;(&nbsp;&nbsp;)</samp>&rsquo;<!-- /@w -->.
+  If we had written the rule as &lsquo;<samp>foo () :=
+  2+3</samp>&rsquo;, then Calc would treat
+  &lsquo;<samp>()</samp>&rsquo; as a single, indivisible token, so
+  that &lsquo;<samp>foo(&nbsp;)</samp>&rsquo;<!-- /@w --> would not
+  be recognized by the rule. (It would be parsed as a regular
+  zero-argument function call instead.) In fact, this rule would
+  also make trouble for the rest of Calc&rsquo;s parser: An
+  unrelated formula like &lsquo;<samp>bar()</samp>&rsquo; would now
+  be tokenized into &lsquo;<samp>bar ()</samp>&rsquo; instead of
+  &lsquo;<samp>bar ( )</samp>&rsquo;, so that the standard parser
+  for function calls would no longer recognize it!</p>
+
+  <p>While it is possible to make a token with a mixture of letters
+  and punctuation symbols, this is not recommended. It is better to
+  break it into several tokens, as we did with
+  &lsquo;<samp>foo()</samp>&rsquo; above.</p>
+
+  <p>The symbol &lsquo;<samp>#</samp>&rsquo; in a syntax pattern
+  matches any Calc expression. On the righthand side, the things
+  that matched the &lsquo;<samp>#</samp>&rsquo;s can be referred to
+  as &lsquo;<samp>#1</samp>&rsquo;, &lsquo;<samp>#2</samp>&rsquo;,
+  and so on (where &lsquo;<samp>#1</samp>&rsquo; matches the
+  leftmost &lsquo;<samp>#</samp>&rsquo; in the pattern). For
+  example, these rules match a user-defined function, prefix
+  operator, infix operator, and postfix operator, respectively:</p>
+
+  <div class="example">
+    <pre class="example">
+foo ( # ) := myfunc(#1)
 foo # := myprefix(#1)
 # foo # := myinfix(#1,#2)
 # foo := mypostfix(#1)
-</pre></div>
+</pre>
+  </div>
 
-<p>Thus &lsquo;<samp>foo(3)</samp>&rsquo; will parse as &lsquo;<samp>myfunc(3)</samp>&rsquo;, and &lsquo;<samp>2+3 foo</samp>&rsquo;
-will parse as &lsquo;<samp>mypostfix(2+3)</samp>&rsquo;.
-</p>
-<p>It is important to write the first two rules in the order shown,
-because Calc tries rules in order from first to last.  If the
-pattern &lsquo;<samp>foo #</samp>&rsquo; came first, it would match anything that could
-match the &lsquo;<samp>foo ( # )</samp>&rsquo; rule, since an expression in parentheses
-is itself a valid expression.  Thus the &lsquo;<samp>foo&nbsp;(&nbsp;#&nbsp;)</samp>&rsquo;<!-- /@w --> rule would
-never get to match anything.  Likewise, the last two rules must be
-written in the order shown or else &lsquo;<samp>3 foo 4</samp>&rsquo; will be parsed as
-&lsquo;<samp>mypostfix(3) * 4</samp>&rsquo;.  (Of course, the best way to avoid these
-ambiguities is not to use the same symbol in more than one way at
-the same time!  In case you&rsquo;re not convinced, try the following
-exercise:  How will the above rules parse the input &lsquo;<samp>foo(3,4)</samp>&rsquo;,
-if at all?  Work it out for yourself, then try it in Calc and see.)
-</p>
-<p>Calc is quite flexible about what sorts of patterns are allowed.
-The only rule is that every pattern must begin with a literal
-token (like &lsquo;<samp>foo</samp>&rsquo; in the first two patterns above), or with
-a &lsquo;<samp>#</samp>&rsquo; followed by a literal token (as in the last two
-patterns).  After that, any mixture is allowed, although putting
-two &lsquo;<samp>#</samp>&rsquo;s in a row will not be very useful since two
-expressions with nothing between them will be parsed as one
-expression that uses implicit multiplication.
-</p>
-<p>As a more practical example, Maple uses the notation
-&lsquo;<samp>sum(a(i), i=1..10)</samp>&rsquo; for sums, which Calc&rsquo;s Maple mode doesn&rsquo;t
-recognize at present.  To handle this syntax, we simply add the
-rule,
-</p>
-<div class="example">
-<pre class="example">sum ( # , # = # .. # ) := sum(#1,#2,#3,#4)
-</pre></div>
+  <p>Thus &lsquo;<samp>foo(3)</samp>&rsquo; will parse as
+  &lsquo;<samp>myfunc(3)</samp>&rsquo;, and &lsquo;<samp>2+3
+  foo</samp>&rsquo; will parse as
+  &lsquo;<samp>mypostfix(2+3)</samp>&rsquo;.</p>
 
-<p>to the Maple mode syntax table.  As another example, C mode can&rsquo;t
-read assignment operators like &lsquo;<samp>++</samp>&rsquo; and &lsquo;<samp>*=</samp>&rsquo;.  We can
-define these operators quite easily:
-</p>
-<div class="example">
-<pre class="example"># *= # := muleq(#1,#2)
+  <p>It is important to write the first two rules in the order
+  shown, because Calc tries rules in order from first to last. If
+  the pattern &lsquo;<samp>foo #</samp>&rsquo; came first, it would
+  match anything that could match the &lsquo;<samp>foo ( #
+  )</samp>&rsquo; rule, since an expression in parentheses is
+  itself a valid expression. Thus the
+  &lsquo;<samp>foo&nbsp;(&nbsp;#&nbsp;)</samp>&rsquo;<!-- /@w -->
+  rule would never get to match anything. Likewise, the last two
+  rules must be written in the order shown or else &lsquo;<samp>3
+  foo 4</samp>&rsquo; will be parsed as &lsquo;<samp>mypostfix(3) *
+  4</samp>&rsquo;. (Of course, the best way to avoid these
+  ambiguities is not to use the same symbol in more than one way at
+  the same time! In case you&rsquo;re not convinced, try the
+  following exercise: How will the above rules parse the input
+  &lsquo;<samp>foo(3,4)</samp>&rsquo;, if at all? Work it out for
+  yourself, then try it in Calc and see.)</p>
+
+  <p>Calc is quite flexible about what sorts of patterns are
+  allowed. The only rule is that every pattern must begin with a
+  literal token (like &lsquo;<samp>foo</samp>&rsquo; in the first
+  two patterns above), or with a &lsquo;<samp>#</samp>&rsquo;
+  followed by a literal token (as in the last two patterns). After
+  that, any mixture is allowed, although putting two
+  &lsquo;<samp>#</samp>&rsquo;s in a row will not be very useful
+  since two expressions with nothing between them will be parsed as
+  one expression that uses implicit multiplication.</p>
+
+  <p>As a more practical example, Maple uses the notation
+  &lsquo;<samp>sum(a(i), i=1..10)</samp>&rsquo; for sums, which
+  Calc&rsquo;s Maple mode doesn&rsquo;t recognize at present. To
+  handle this syntax, we simply add the rule,</p>
+
+  <div class="example">
+    <pre class="example">
+sum ( # , # = # .. # ) := sum(#1,#2,#3,#4)
+</pre>
+  </div>
+
+  <p>to the Maple mode syntax table. As another example, C mode
+  can&rsquo;t read assignment operators like
+  &lsquo;<samp>++</samp>&rsquo; and &lsquo;<samp>*=</samp>&rsquo;.
+  We can define these operators quite easily:</p>
+
+  <div class="example">
+    <pre class="example">
+# *= # := muleq(#1,#2)
 # ++ := postinc(#1)
 ++ # := preinc(#1)
-</pre></div>
+</pre>
+  </div>
 
-<p>To complete the job, we would use corresponding composition functions
-and <kbd>Z C</kbd> to cause these functions to display in their respective
-Maple and C notations.  (Note that the C example ignores issues of
-operator precedence, which are discussed in the next section.)
-</p>
-<p>You can enclose any token in quotes to prevent its usual
-interpretation in syntax patterns:
-</p>
-<div class="example">
-<pre class="example"># &quot;:=&quot; # := becomes(#1,#2)
-</pre></div>
+  <p>To complete the job, we would use corresponding composition
+  functions and <kbd>Z C</kbd> to cause these functions to display
+  in their respective Maple and C notations. (Note that the C
+  example ignores issues of operator precedence, which are
+  discussed in the next section.)</p>
 
-<p>Quotes also allow you to include spaces in a token, although once
-again it is generally better to use two tokens than one token with
-an embedded space.  To include an actual quotation mark in a quoted
-token, precede it with a backslash.  (This also works to include
-backslashes in tokens.)
-</p>
-<div class="example">
-<pre class="example"># &quot;bad token&quot; # &quot;/\&quot;\\&quot; # := silly(#1,#2,#3)
-</pre></div>
+  <p>You can enclose any token in quotes to prevent its usual
+  interpretation in syntax patterns:</p>
 
-<p>This will parse &lsquo;<samp>3 bad token 4 /&quot;\ 5</samp>&rsquo; to &lsquo;<samp>silly(3,4,5)</samp>&rsquo;.
-</p>
-<p>The token <kbd>#</kbd> has a predefined meaning in Calc&rsquo;s formula parser;
-it is not valid to use &lsquo;<samp>&quot;#&quot;</samp>&rsquo; in a syntax rule.  However, longer
-tokens that include the &lsquo;<samp>#</samp>&rsquo; character are allowed.  Also, while
-&lsquo;<samp>&quot;$&quot;</samp>&rsquo; and &lsquo;<samp>&quot;\&quot;&quot;</samp>&rsquo; are allowed as tokens, their presence in
-the syntax table will prevent those characters from working in their
-usual ways (referring to stack entries and quoting strings,
-respectively).
-</p>
-<p>Finally, the notation &lsquo;<samp>%%</samp>&rsquo; anywhere in a syntax table causes
-the rest of the line to be ignored as a comment.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Precedence-in-Syntax-Tables.html#Precedence-in-Syntax-Tables" accesskey="n" rel="next">Precedence in Syntax Tables</a>, Previous: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="p" rel="prev">Syntax Tables</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="example">
+    <pre class="example">
+# ":=" # := becomes(#1,#2)
+</pre>
+  </div>
 
+  <p>Quotes also allow you to include spaces in a token, although
+  once again it is generally better to use two tokens than one
+  token with an embedded space. To include an actual quotation mark
+  in a quoted token, precede it with a backslash. (This also works
+  to include backslashes in tokens.)</p>
 
+  <div class="example">
+    <pre class="example">
+# "bad token" # "/\"\\" # := silly(#1,#2,#3)
+</pre>
+  </div>
 
+  <p>This will parse &lsquo;<samp>3 bad token 4 /"\ 5</samp>&rsquo;
+  to &lsquo;<samp>silly(3,4,5)</samp>&rsquo;.</p>
+
+  <p>The token <kbd>#</kbd> has a predefined meaning in
+  Calc&rsquo;s formula parser; it is not valid to use
+  &lsquo;<samp>"#"</samp>&rsquo; in a syntax rule. However, longer
+  tokens that include the &lsquo;<samp>#</samp>&rsquo; character
+  are allowed. Also, while &lsquo;<samp>"$"</samp>&rsquo; and
+  &lsquo;<samp>"\""</samp>&rsquo; are allowed as tokens, their
+  presence in the syntax table will prevent those characters from
+  working in their usual ways (referring to stack entries and
+  quoting strings, respectively).</p>
+
+  <p>Finally, the notation &lsquo;<samp>%%</samp>&rsquo; anywhere
+  in a syntax table causes the rest of the line to be ignored as a
+  comment.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Precedence-in-Syntax-Tables.html#Precedence-in-Syntax-Tables"
+    accesskey="n" rel="next">Precedence in Syntax Tables</a>,
+    Previous: <a href="Syntax-Tables.html#Syntax-Tables" accesskey=
+    "p" rel="prev">Syntax Tables</a>, Up: <a href=
+    "Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

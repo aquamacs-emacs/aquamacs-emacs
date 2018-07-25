@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>iCalendar export - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Exporting.html#Exporting" title="Exporting">
-<link rel="prev" href="XOXO-export.html#XOXO-export" title="XOXO export">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>iCalendar export - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Exporting.html#Exporting" title=
+  "Exporting" />
+  <link rel="prev" href="XOXO-export.html#XOXO-export" title=
+  "XOXO export" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -32,8 +40,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -43,82 +53,155 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="iCalendar-export"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="XOXO-export.html#XOXO-export">XOXO export</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Exporting.html#Exporting">Exporting</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="iCalendar-export" id="iCalendar-export"></a>
 
-<h3 class="section">12.11 iCalendar export</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "XOXO-export.html#XOXO-export">XOXO export</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Exporting.html#Exporting">Exporting</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-iCalendar-export-1597"></a>
-<a name="index-org_002dicalendar_002dinclude_002dtodo-1598"></a><a name="index-org_002dicalendar_002duse_002ddeadline-1599"></a><a name="index-org_002dicalendar_002duse_002dscheduled-1600"></a><a name="index-org_002dicalendar_002dcategories-1601"></a><a name="index-org_002dicalendar_002dalarm_002dtime-1602"></a>Some people use Org-mode for keeping track of projects, but still prefer a
-standard calendar application for anniversaries and appointments.  In this
-case it can be useful to show deadlines and other time-stamped items in Org
-files in the calendar application.  Org-mode can export calendar information
-in the standard iCalendar format.  If you also want to have TODO entries
-included in the export, configure the variable
-<code>org-icalendar-include-todo</code>.  Plain timestamps are exported as VEVENT,
-and TODO items as VTODO.  It will also create events from deadlines that are
-in non-TODO items.  Deadlines and scheduling dates in TODO items will be used
-to set the start and due dates for the TODO entry<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. 
-As categories, it will use the tags locally defined in the heading, and the
-file/tree category<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  See the variable
-<code>org-icalendar-alarm-time</code> for a way to assign alarms to entries with a
-time.
+  <h3 class="section">12.11 iCalendar export</h3>
 
-   <p><a name="index-org_002dicalendar_002dstore_002dUID-1603"></a><a name="index-property_002c-ID-1604"></a>The iCalendar standard requires each entry to have a globally unique
-identifier (UID).  Org creates these identifiers during export.  If you set
-the variable <code>org-icalendar-store-UID</code>, the UID will be stored in the
-<code>:ID:</code> property of the entry and re-used next time you report this
-entry.  Since a single entry can give rise to multiple iCalendar entries (as
-a timestamp, a deadline, a scheduled item, and as a TODO item), Org adds
-prefixes to the UID, depending on what triggered the inclusion of the entry. 
-In this way the UID remains unique, but a synchronization program can still
-figure out from which entry all the different instances originate.
+  <p><a name="index-iCalendar-export-1597" id=
+  "index-iCalendar-export-1597"></a> <a name=
+  "index-org_002dicalendar_002dinclude_002dtodo-1598" id=
+  "index-org_002dicalendar_002dinclude_002dtodo-1598"></a><a name=
+  "index-org_002dicalendar_002duse_002ddeadline-1599" id=
+  "index-org_002dicalendar_002duse_002ddeadline-1599"></a><a name=
+  "index-org_002dicalendar_002duse_002dscheduled-1600" id=
+  "index-org_002dicalendar_002duse_002dscheduled-1600"></a><a name=
+  "index-org_002dicalendar_002dcategories-1601" id=
+  "index-org_002dicalendar_002dcategories-1601"></a><a name=
+  "index-org_002dicalendar_002dalarm_002dtime-1602" id=
+  "index-org_002dicalendar_002dalarm_002dtime-1602"></a>Some people
+  use Org-mode for keeping track of projects, but still prefer a
+  standard calendar application for anniversaries and appointments.
+  In this case it can be useful to show deadlines and other
+  time-stamped items in Org files in the calendar application.
+  Org-mode can export calendar information in the standard
+  iCalendar format. If you also want to have TODO entries included
+  in the export, configure the variable
+  <code>org-icalendar-include-todo</code>. Plain timestamps are
+  exported as VEVENT, and TODO items as VTODO. It will also create
+  events from deadlines that are in non-TODO items. Deadlines and
+  scheduling dates in TODO items will be used to set the start and
+  due dates for the TODO entry<a rel="footnote" href="#fn-1" name=
+  "fnd-1" id="fnd-1"><sup>1</sup></a>. As categories, it will use
+  the tags locally defined in the heading, and the file/tree
+  category<a rel="footnote" href="#fn-2" name="fnd-2" id=
+  "fnd-2"><sup>2</sup></a>. See the variable
+  <code>org-icalendar-alarm-time</code> for a way to assign alarms
+  to entries with a time.</p>
 
-     
-<a name="index-C_002dc-C_002de-i-1605"></a>
-<a name="index-org_002dexport_002dicalendar_002dthis_002dfile-1606"></a>
-<dl><dt><kbd>C-c C-e i &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-export-icalendar-this-file</code><kbd>)</kbd><dd>
-Create iCalendar entries for the current file and store them in the same
-directory, using a file extension <samp><span class="file">.ics</span></samp>. 
-<a name="index-C_002dc-C_002de-I-1607"></a><a name="index-org_002dexport_002dicalendar_002dall_002dagenda_002dfiles-1608"></a><br><dt><kbd>C-c C-e I &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-export-icalendar-all-agenda-files</code><kbd>)</kbd><dd>
-<a name="index-org_002dagenda_002dfiles-1609"></a>Like <kbd>C-c C-e i</kbd>, but do this for all files in
-<code>org-agenda-files</code>.  For each of these files, a separate iCalendar
-file will be written. 
-<a name="index-C_002dc-C_002de-c-1610"></a><a name="index-org_002dexport_002dicalendar_002dcombine_002dagenda_002dfiles-1611"></a><br><dt><kbd>C-c C-e c &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-export-icalendar-combine-agenda-files</code><kbd>)</kbd><dd>
-<a name="index-org_002dcombined_002dagenda_002dicalendar_002dfile-1612"></a>Create a single large iCalendar file from all files in
-<code>org-agenda-files</code> and write it to the file given by
-<code>org-combined-agenda-icalendar-file</code>. 
-</dl>
+  <p><a name="index-org_002dicalendar_002dstore_002dUID-1603" id=
+  "index-org_002dicalendar_002dstore_002dUID-1603"></a><a name=
+  "index-property_002c-ID-1604" id=
+  "index-property_002c-ID-1604"></a>The iCalendar standard requires
+  each entry to have a globally unique identifier (UID). Org
+  creates these identifiers during export. If you set the variable
+  <code>org-icalendar-store-UID</code>, the UID will be stored in
+  the <code>:ID:</code> property of the entry and re-used next time
+  you report this entry. Since a single entry can give rise to
+  multiple iCalendar entries (as a timestamp, a deadline, a
+  scheduled item, and as a TODO item), Org adds prefixes to the
+  UID, depending on what triggered the inclusion of the entry. In
+  this way the UID remains unique, but a synchronization program
+  can still figure out from which entry all the different instances
+  originate. <a name="index-C_002dc-C_002de-i-1605" id=
+  "index-C_002dc-C_002de-i-1605"></a> <a name=
+  "index-org_002dexport_002dicalendar_002dthis_002dfile-1606" id=
+  "index-org_002dexport_002dicalendar_002dthis_002dfile-1606"></a></p>
 
-   <p><a name="index-org_002duse_002dproperty_002dinheritance-1613"></a><a name="index-org_002dicalendar_002dinclude_002dbody-1614"></a><a name="index-property_002c-SUMMARY-1615"></a><a name="index-property_002c-DESCRIPTION-1616"></a><a name="index-property_002c-LOCATION-1617"></a>The export will honor SUMMARY, DESCRIPTION and LOCATION<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a> properties if the selected
-entries have them.  If not, the summary will be derived from the headline,
-and the description from the body (limited to
-<code>org-icalendar-include-body</code> characters).
+  <dl>
+    <dt><kbd>C-c C-e i
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-export-icalendar-this-file</code><kbd>)</kbd></dt>
 
-   <p>How this calendar is best read and updated, depends on the application
-you are using.  The FAQ covers this issue.
+    <dd>Create iCalendar entries for the current file and store
+    them in the same directory, using a file extension
+    <samp><span class="file">.ics</span></samp>. <a name=
+    "index-C_002dc-C_002de-I-1607" id=
+    "index-C_002dc-C_002de-I-1607"></a><a name=
+    "index-org_002dexport_002dicalendar_002dall_002dagenda_002dfiles-1608"
+    id=
+    "index-org_002dexport_002dicalendar_002dall_002dagenda_002dfiles-1608"></a><br />
+    </dd>
 
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See the variables
-<code>org-icalendar-use-deadline</code> and <code>org-icalendar-use-scheduled</code>.</p>
+    <dt><kbd>C-c C-e I
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-export-icalendar-all-agenda-files</code><kbd>)</kbd></dt>
 
-   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> To add inherited tags or the TODO state,
-configure the variable <code>org-icalendar-categories</code>.</p>
+    <dd><a name="index-org_002dagenda_002dfiles-1609" id=
+    "index-org_002dagenda_002dfiles-1609"></a>Like <kbd>C-c C-e
+    i</kbd>, but do this for all files in
+    <code>org-agenda-files</code>. For each of these files, a
+    separate iCalendar file will be written. <a name=
+    "index-C_002dc-C_002de-c-1610" id=
+    "index-C_002dc-C_002de-c-1610"></a><a name=
+    "index-org_002dexport_002dicalendar_002dcombine_002dagenda_002dfiles-1611"
+    id=
+    "index-org_002dexport_002dicalendar_002dcombine_002dagenda_002dfiles-1611"></a><br />
+    </dd>
 
-   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> The LOCATION
-property can be inherited from higher in the hierarchy if you configure
-<code>org-use-property-inheritance</code> accordingly.</p>
+    <dt><kbd>C-c C-e c
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-export-icalendar-combine-agenda-files</code><kbd>)</kbd></dt>
 
-   <hr></div>
+    <dd><a name=
+    "index-org_002dcombined_002dagenda_002dicalendar_002dfile-1612"
+    id=
+    "index-org_002dcombined_002dagenda_002dicalendar_002dfile-1612">
+    </a>Create a single large iCalendar file from all files in
+    <code>org-agenda-files</code> and write it to the file given by
+    <code>org-combined-agenda-icalendar-file</code>.</dd>
+  </dl>
 
-   </body></html>
+  <p><a name="index-org_002duse_002dproperty_002dinheritance-1613"
+  id=
+  "index-org_002duse_002dproperty_002dinheritance-1613"></a><a name="index-org_002dicalendar_002dinclude_002dbody-1614"
+  id=
+  "index-org_002dicalendar_002dinclude_002dbody-1614"></a><a name=
+  "index-property_002c-SUMMARY-1615" id=
+  "index-property_002c-SUMMARY-1615"></a><a name=
+  "index-property_002c-DESCRIPTION-1616" id=
+  "index-property_002c-DESCRIPTION-1616"></a><a name=
+  "index-property_002c-LOCATION-1617" id=
+  "index-property_002c-LOCATION-1617"></a>The export will honor
+  SUMMARY, DESCRIPTION and LOCATION<a rel="footnote" href="#fn-3"
+  name="fnd-3" id="fnd-3"><sup>3</sup></a> properties if the
+  selected entries have them. If not, the summary will be derived
+  from the headline, and the description from the body (limited to
+  <code>org-icalendar-include-body</code> characters).</p>
 
+  <p>How this calendar is best read and updated, depends on the
+  application you are using. The FAQ covers this issue.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4>Footnotes</h4>
+
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> See the variables
+    <code>org-icalendar-use-deadline</code> and
+    <code>org-icalendar-use-scheduled</code>.</p>
+
+    <p class="footnote"><small>[<a name="fn-2" href="#fnd-2" id=
+    "fn-2">2</a>]</small> To add inherited tags or the TODO state,
+    configure the variable
+    <code>org-icalendar-categories</code>.</p>
+
+    <p class="footnote"><small>[<a name="fn-3" href="#fnd-3" id=
+    "fn-3">3</a>]</small> The LOCATION property can be inherited
+    from higher in the hierarchy if you configure
+    <code>org-use-property-inheritance</code> accordingly.</p>
+    <hr />
+  </div>
+</body>
+</html>

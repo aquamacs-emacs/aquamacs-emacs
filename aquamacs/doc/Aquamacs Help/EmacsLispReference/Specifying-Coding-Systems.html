@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,156 +19,250 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Specifying Coding Systems</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Specifying Coding Systems">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Specifying Coding Systems">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Coding-Systems.html#Coding-Systems" rel="up" title="Coding Systems">
-<link href="Explicit-Encoding.html#Explicit-Encoding" rel="next" title="Explicit Encoding">
-<link href="Default-Coding-Systems.html#Default-Coding-Systems" rel="prev" title="Default Coding Systems">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Specifying Coding
+  Systems</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Specifying Coding Systems" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Specifying Coding Systems" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Coding-Systems.html#Coding-Systems" rel="up" title=
+  "Coding Systems" />
+  <link href="Explicit-Encoding.html#Explicit-Encoding" rel="next"
+  title="Explicit Encoding" />
+  <link href="Default-Coding-Systems.html#Default-Coding-Systems"
+  rel="prev" title="Default Coding Systems" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Specifying-Coding-Systems" id=
+  "Specifying-Coding-Systems"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Explicit-Encoding.html#Explicit-Encoding"
+    accesskey="n" rel="next">Explicit Encoding</a>, Previous:
+    <a href="Default-Coding-Systems.html#Default-Coding-Systems"
+    accesskey="p" rel="prev">Default Coding Systems</a>, Up:
+    <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel=
+    "up">Coding Systems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Specifying-a-Coding-System-for-One-Operation" id=
+  "Specifying-a-Coding-System-for-One-Operation"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Specifying-Coding-Systems"></a>
-<div class="header">
-<p>
-Next: <a href="Explicit-Encoding.html#Explicit-Encoding" accesskey="n" rel="next">Explicit Encoding</a>, Previous: <a href="Default-Coding-Systems.html#Default-Coding-Systems" accesskey="p" rel="prev">Default Coding Systems</a>, Up: <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel="up">Coding Systems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Specifying-a-Coding-System-for-One-Operation"></a>
-<h4 class="subsection">32.10.6 Specifying a Coding System for One Operation</h4>
-<a name="index-specify-coding-system"></a>
-<a name="index-force-coding-system-for-operation"></a>
-<a name="index-coding-system-for-operation"></a>
+  <h4 class="subsection">32.10.6 Specifying a Coding System for One
+  Operation</h4><a name="index-specify-coding-system" id=
+  "index-specify-coding-system"></a> <a name=
+  "index-force-coding-system-for-operation" id=
+  "index-force-coding-system-for-operation"></a> <a name=
+  "index-coding-system-for-operation" id=
+  "index-coding-system-for-operation"></a>
 
-<p>You can specify the coding system for a specific operation by binding
-the variables <code>coding-system-for-read</code> and/or
-<code>coding-system-for-write</code>.
-</p>
-<dl>
-<dt><a name="index-coding_002dsystem_002dfor_002dread"></a>Variable: <strong>coding-system-for-read</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, it specifies the coding system to
-use for reading a file, or for input from a synchronous subprocess.
-</p>
-<p>It also applies to any asynchronous subprocess or network stream, but in
-a different way: the value of <code>coding-system-for-read</code> when you
-start the subprocess or open the network stream specifies the input
-decoding method for that subprocess or network stream.  It remains in
-use for that subprocess or network stream unless and until overridden.
-</p>
-<p>The right way to use this variable is to bind it with <code>let</code> for a
-specific I/O operation.  Its global value is normally <code>nil</code>, and
-you should not globally set it to any other value.  Here is an example
-of the right way to use the variable:
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Read the file with no character code conversion.</span>
+  <p>You can specify the coding system for a specific operation by
+  binding the variables <code>coding-system-for-read</code> and/or
+  <code>coding-system-for-write</code>.</p>
+
+  <dl>
+    <dt><a name="index-coding_002dsystem_002dfor_002dread" id=
+    "index-coding_002dsystem_002dfor_002dread"></a>Variable:
+    <strong>coding-system-for-read</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, it specifies the
+      coding system to use for reading a file, or for input from a
+      synchronous subprocess.</p>
+
+      <p>It also applies to any asynchronous subprocess or network
+      stream, but in a different way: the value of
+      <code>coding-system-for-read</code> when you start the
+      subprocess or open the network stream specifies the input
+      decoding method for that subprocess or network stream. It
+      remains in use for that subprocess or network stream unless
+      and until overridden.</p>
+
+      <p>The right way to use this variable is to bind it with
+      <code>let</code> for a specific I/O operation. Its global
+      value is normally <code>nil</code>, and you should not
+      globally set it to any other value. Here is an example of the
+      right way to use the variable:</p>
+
+      <div class="example">
+        <pre class="example">
+;; <span class=
+"roman">Read the file with no character code conversion.</span>
 (let ((coding-system-for-read 'no-conversion))
   (insert-file-contents filename))
-</pre></div>
+</pre>
+      </div>
 
-<p>When its value is non-<code>nil</code>, this variable takes precedence over
-all other methods of specifying a coding system to use for input,
-including <code>file-coding-system-alist</code>,
-<code>process-coding-system-alist</code> and
-<code>network-coding-system-alist</code>.
-</p></dd></dl>
+      <p>When its value is non-<code>nil</code>, this variable
+      takes precedence over all other methods of specifying a
+      coding system to use for input, including
+      <code>file-coding-system-alist</code>,
+      <code>process-coding-system-alist</code> and
+      <code>network-coding-system-alist</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-coding_002dsystem_002dfor_002dwrite"></a>Variable: <strong>coding-system-for-write</strong></dt>
-<dd><p>This works much like <code>coding-system-for-read</code>, except that it
-applies to output rather than input.  It affects writing to files,
-as well as sending output to subprocesses and net connections.
-</p>
-<p>When a single operation does both input and output, as do
-<code>call-process-region</code> and <code>start-process</code>, both
-<code>coding-system-for-read</code> and <code>coding-system-for-write</code>
-affect it.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-coding_002dsystem_002dfor_002dwrite" id=
+    "index-coding_002dsystem_002dfor_002dwrite"></a>Variable:
+    <strong>coding-system-for-write</strong></dt>
 
-<dl>
-<dt><a name="index-inhibit_002deol_002dconversion"></a>User Option: <strong>inhibit-eol-conversion</strong></dt>
-<dd><p>When this variable is non-<code>nil</code>, no end-of-line conversion is done,
-no matter which coding system is specified.  This applies to all the
-Emacs I/O and subprocess primitives, and to the explicit encoding and
-decoding functions (see <a href="Explicit-Encoding.html#Explicit-Encoding">Explicit Encoding</a>).
-</p></dd></dl>
+    <dd>
+      <p>This works much like <code>coding-system-for-read</code>,
+      except that it applies to output rather than input. It
+      affects writing to files, as well as sending output to
+      subprocesses and net connections.</p>
 
-<a name="index-priority-order-of-coding-systems"></a>
-<a name="index-coding-systems_002c-priority"></a>
-<p>Sometimes, you need to prefer several coding systems for some
-operation, rather than fix a single one.  Emacs lets you specify a
-priority order for using coding systems.  This ordering affects the
-sorting of lists of coding systems returned by functions such as
-<code>find-coding-systems-region</code> (see <a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">Lisp and Coding Systems</a>).
-</p>
-<dl>
-<dt><a name="index-coding_002dsystem_002dpriority_002dlist"></a>Function: <strong>coding-system-priority-list</strong> <em>&amp;optional highestp</em></dt>
-<dd><p>This function returns the list of coding systems in the order of their
-current priorities.  Optional argument <var>highestp</var>, if
-non-<code>nil</code>, means return only the highest priority coding system.
-</p></dd></dl>
+      <p>When a single operation does both input and output, as do
+      <code>call-process-region</code> and
+      <code>start-process</code>, both
+      <code>coding-system-for-read</code> and
+      <code>coding-system-for-write</code> affect it.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-set_002dcoding_002dsystem_002dpriority"></a>Function: <strong>set-coding-system-priority</strong> <em>&amp;rest coding-systems</em></dt>
-<dd><p>This function puts <var>coding-systems</var> at the beginning of the
-priority list for coding systems, thus making their priority higher
-than all the rest.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-inhibit_002deol_002dconversion" id=
+    "index-inhibit_002deol_002dconversion"></a>User Option:
+    <strong>inhibit-eol-conversion</strong></dt>
 
-<dl>
-<dt><a name="index-with_002dcoding_002dpriority"></a>Macro: <strong>with-coding-priority</strong> <em>coding-systems &amp;rest body&hellip;</em></dt>
-<dd><p>This macro execute <var>body</var>, like <code>progn</code> does
-(see <a href="Sequencing.html#Sequencing">progn</a>), with <var>coding-systems</var> at the front of
-the priority list for coding systems.  <var>coding-systems</var> should be
-a list of coding systems to prefer during execution of <var>body</var>.
-</p></dd></dl>
+    <dd>
+      <p>When this variable is non-<code>nil</code>, no end-of-line
+      conversion is done, no matter which coding system is
+      specified. This applies to all the Emacs I/O and subprocess
+      primitives, and to the explicit encoding and decoding
+      functions (see <a href=
+      "Explicit-Encoding.html#Explicit-Encoding">Explicit
+      Encoding</a>).</p>
+    </dd>
+  </dl><a name="index-priority-order-of-coding-systems" id=
+  "index-priority-order-of-coding-systems"></a> <a name=
+  "index-coding-systems_002c-priority" id=
+  "index-coding-systems_002c-priority"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Explicit-Encoding.html#Explicit-Encoding" accesskey="n" rel="next">Explicit Encoding</a>, Previous: <a href="Default-Coding-Systems.html#Default-Coding-Systems" accesskey="p" rel="prev">Default Coding Systems</a>, Up: <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel="up">Coding Systems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Sometimes, you need to prefer several coding systems for some
+  operation, rather than fix a single one. Emacs lets you specify a
+  priority order for using coding systems. This ordering affects
+  the sorting of lists of coding systems returned by functions such
+  as <code>find-coding-systems-region</code> (see <a href=
+  "Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">Lisp and
+  Coding Systems</a>).</p>
 
+  <dl>
+    <dt><a name="index-coding_002dsystem_002dpriority_002dlist" id=
+    "index-coding_002dsystem_002dpriority_002dlist"></a>Function:
+    <strong>coding-system-priority-list</strong> <em>&amp;optional
+    highestp</em></dt>
 
+    <dd>
+      <p>This function returns the list of coding systems in the
+      order of their current priorities. Optional argument
+      <var>highestp</var>, if non-<code>nil</code>, means return
+      only the highest priority coding system.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-set_002dcoding_002dsystem_002dpriority" id=
+    "index-set_002dcoding_002dsystem_002dpriority"></a>Function:
+    <strong>set-coding-system-priority</strong> <em>&amp;rest
+    coding-systems</em></dt>
+
+    <dd>
+      <p>This function puts <var>coding-systems</var> at the
+      beginning of the priority list for coding systems, thus
+      making their priority higher than all the rest.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-with_002dcoding_002dpriority" id=
+    "index-with_002dcoding_002dpriority"></a>Macro:
+    <strong>with-coding-priority</strong> <em>coding-systems
+    &amp;rest body&hellip;</em></dt>
+
+    <dd>
+      <p>This macro execute <var>body</var>, like
+      <code>progn</code> does (see <a href=
+      "Sequencing.html#Sequencing">progn</a>), with
+      <var>coding-systems</var> at the front of the priority list
+      for coding systems. <var>coding-systems</var> should be a
+      list of coding systems to prefer during execution of
+      <var>body</var>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Explicit-Encoding.html#Explicit-Encoding"
+    accesskey="n" rel="next">Explicit Encoding</a>, Previous:
+    <a href="Default-Coding-Systems.html#Default-Coding-Systems"
+    accesskey="p" rel="prev">Default Coding Systems</a>, Up:
+    <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel=
+    "up">Coding Systems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

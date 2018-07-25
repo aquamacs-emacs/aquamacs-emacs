@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,123 +20,198 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Yanking</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Yanking">
-<meta name="keywords" content="GNU Emacs Manual: Yanking">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Killing.html#Killing" rel="up" title="Killing">
-<link href="Kill-Ring.html#Kill-Ring" rel="next" title="Kill Ring">
-<link href="Kill-Options.html#Kill-Options" rel="prev" title="Kill Options">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Yanking</title>
+  <meta name="description" content="GNU Emacs Manual: Yanking" />
+  <meta name="keywords" content="GNU Emacs Manual: Yanking" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Killing.html#Killing" rel="up" title="Killing" />
+  <link href="Kill-Ring.html#Kill-Ring" rel="next" title=
+  "Kill Ring" />
+  <link href="Kill-Options.html#Kill-Options" rel="prev" title=
+  "Kill Options" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Yanking" id="Yanking"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Cut-and-Paste.html#Cut-and-Paste" accesskey=
+    "n" rel="next">Cut and Paste</a>, Previous: <a href=
+    "Deletion-and-Killing.html#Deletion-and-Killing" accesskey="p"
+    rel="prev">Deletion and Killing</a>, Up: <a href=
+    "Killing.html#Killing" accesskey="u" rel="up">Killing</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Yanking-1" id="Yanking-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Yanking"></a>
-<div class="header">
-<p>
-Next: <a href="Cut-and-Paste.html#Cut-and-Paste" accesskey="n" rel="next">Cut and Paste</a>, Previous: <a href="Deletion-and-Killing.html#Deletion-and-Killing" accesskey="p" rel="prev">Deletion and Killing</a>, Up: <a href="Killing.html#Killing" accesskey="u" rel="up">Killing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Yanking-1"></a>
-<h3 class="section">12.2 Yanking</h3>
-<a name="index-moving-text"></a>
-<a name="index-copying-text"></a>
-<a name="index-kill-ring"></a>
-<a name="index-yanking"></a>
-<a name="index-pasting"></a>
+  <h3 class="section">12.2 Yanking</h3><a name="index-moving-text"
+  id="index-moving-text"></a> <a name="index-copying-text" id=
+  "index-copying-text"></a> <a name="index-kill-ring" id=
+  "index-kill-ring"></a> <a name="index-yanking" id=
+  "index-yanking"></a> <a name="index-pasting" id=
+  "index-pasting"></a>
 
-<p><em>Yanking</em> means reinserting text previously killed.  The usual
-way to move or copy text is to kill it and then yank it elsewhere.
-</p>
-<dl compact="compact">
-<dt><kbd>C-y</kbd></dt>
-<dd><p>Yank the last kill into the buffer, at point (<code>yank</code>).
-</p></dd>
-<dt><kbd>M-y</kbd></dt>
-<dd><p>Replace the text just yanked with an earlier batch of killed text
-(<code>yank-pop</code>).  See <a href="Earlier-Kills.html#Earlier-Kills">Earlier Kills</a>.
-</p></dd>
-<dt><kbd>C-M-w</kbd></dt>
-<dd><p>Cause the following command, if it is a kill command, to append to the
-previous kill (<code>append-next-kill</code>).  See <a href="Appending-Kills.html#Appending-Kills">Appending Kills</a>.
-</p></dd>
-</dl>
+  <p><em>Yanking</em> means reinserting text previously killed. The
+  usual way to move or copy text is to kill it and then yank it
+  elsewhere.</p>
 
-<a name="index-C_002dy"></a>
-<a name="index-yank"></a>
-<p>The basic yanking command is <kbd>C-y</kbd> (<code>yank</code>).  It inserts
-the most recent kill, leaving the cursor at the end of the inserted
-text.  It also sets the mark at the beginning of the inserted text,
-without activating the mark; this lets you jump easily to that
-position, if you wish, with <kbd>C-u C-<span class="key">SPC</span></kbd> (see <a href="Mark-Ring.html#Mark-Ring">Mark Ring</a>).
-</p>
-<p>With a plain prefix argument (<kbd>C-u C-y</kbd>), the command instead
-leaves the cursor in front of the inserted text, and sets the mark at
-the end.  Using any other prefix argument specifies an earlier kill;
-e.g., <kbd>C-u 4 C-y</kbd> reinserts the fourth most recent kill.
-See <a href="Earlier-Kills.html#Earlier-Kills">Earlier Kills</a>.
-</p>
-<p>On graphical displays, <kbd>C-y</kbd> first checks if another application
-has placed any text in the system clipboard more recently than the
-last Emacs kill.  If so, it inserts the clipboard&rsquo;s text instead.
-Thus, Emacs effectively treats &ldquo;cut&rdquo; or &ldquo;copy&rdquo; clipboard
-operations performed in other applications like Emacs kills, except
-that they are not recorded in the kill ring.  See <a href="Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>,
-for details.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Kill-Ring.html#Kill-Ring" accesskey="1">Kill Ring</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Where killed text is stored.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Earlier-Kills.html#Earlier-Kills" accesskey="2">Earlier Kills</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Yanking something killed some time ago.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Appending-Kills.html#Appending-Kills" accesskey="3">Appending Kills</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Several kills in a row all yank together.
-</td></tr>
-</table>
+  <dl compact="compact">
+    <dt><kbd>C-y</kbd></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Cut-and-Paste.html#Cut-and-Paste" accesskey="n" rel="next">Cut and Paste</a>, Previous: <a href="Deletion-and-Killing.html#Deletion-and-Killing" accesskey="p" rel="prev">Deletion and Killing</a>, Up: <a href="Killing.html#Killing" accesskey="u" rel="up">Killing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Yank the last kill into the buffer, at point
+      (<code>yank</code>).</p>
+    </dd>
 
+    <dt><kbd>M-y</kbd></dt>
 
+    <dd>
+      <p>Replace the text just yanked with an earlier batch of
+      killed text (<code>yank-pop</code>). See <a href=
+      "Earlier-Kills.html#Earlier-Kills">Earlier Kills</a>.</p>
+    </dd>
 
+    <dt><kbd>C-M-w</kbd></dt>
+
+    <dd>
+      <p>Cause the following command, if it is a kill command, to
+      append to the previous kill (<code>append-next-kill</code>).
+      See <a href="Appending-Kills.html#Appending-Kills">Appending
+      Kills</a>.</p>
+    </dd>
+  </dl><a name="index-C_002dy" id="index-C_002dy"></a> <a name=
+  "index-yank" id="index-yank"></a>
+
+  <p>The basic yanking command is <kbd>C-y</kbd>
+  (<code>yank</code>). It inserts the most recent kill, leaving the
+  cursor at the end of the inserted text. It also sets the mark at
+  the beginning of the inserted text, without activating the mark;
+  this lets you jump easily to that position, if you wish, with
+  <kbd>C-u C-<span class="key">SPC</span></kbd> (see <a href=
+  "Mark-Ring.html#Mark-Ring">Mark Ring</a>).</p>
+
+  <p>With a plain prefix argument (<kbd>C-u C-y</kbd>), the command
+  instead leaves the cursor in front of the inserted text, and sets
+  the mark at the end. Using any other prefix argument specifies an
+  earlier kill; e.g., <kbd>C-u 4 C-y</kbd> reinserts the fourth
+  most recent kill. See <a href=
+  "Earlier-Kills.html#Earlier-Kills">Earlier Kills</a>.</p>
+
+  <p>On graphical displays, <kbd>C-y</kbd> first checks if another
+  application has placed any text in the system clipboard more
+  recently than the last Emacs kill. If so, it inserts the
+  clipboard&rsquo;s text instead. Thus, Emacs effectively treats
+  &ldquo;cut&rdquo; or &ldquo;copy&rdquo; clipboard operations
+  performed in other applications like Emacs kills, except that
+  they are not recorded in the kill ring. See <a href=
+  "Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>, for
+  details.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Kill-Ring.html#Kill-Ring" accesskey="1">Kill Ring</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Where killed text is
+      stored.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Earlier-Kills.html#Earlier-Kills" accesskey="2">Earlier
+      Kills</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Yanking something killed some
+      time ago.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Appending-Kills.html#Appending-Kills" accesskey=
+      "3">Appending Kills</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Several kills in a row all yank
+      together.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Cut-and-Paste.html#Cut-and-Paste" accesskey=
+    "n" rel="next">Cut and Paste</a>, Previous: <a href=
+    "Deletion-and-Killing.html#Deletion-and-Killing" accesskey="p"
+    rel="prev">Deletion and Killing</a>, Up: <a href=
+    "Killing.html#Killing" accesskey="u" rel="up">Killing</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

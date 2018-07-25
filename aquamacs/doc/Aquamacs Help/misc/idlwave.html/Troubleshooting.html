@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,271 +20,403 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Troubleshooting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Troubleshooting">
-<meta name="keywords" content="IDLWAVE User Manual: Troubleshooting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" rel="next" title="GNU Free Documentation License">
-<link href="Windows-and-MacOS.html#Windows-and-MacOS" rel="prev" title="Windows and MacOS">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Troubleshooting</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Troubleshooting" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Troubleshooting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href=
+  "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+  rel="next" title="GNU Free Documentation License" />
+  <link href="Windows-and-MacOS.html#Windows-and-MacOS" rel="prev"
+  title="Windows and MacOS" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Troubleshooting"></a>
-<div class="header">
-<p>
-Next: <a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" accesskey="n" rel="next">GNU Free Documentation License</a>, Previous: <a href="Windows-and-MacOS.html#Windows-and-MacOS" accesskey="p" rel="prev">Windows and MacOS</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Troubleshooting-1"></a>
-<h2 class="appendix">Appendix E Troubleshooting</h2>
-<a name="index-Troubleshooting"></a>
+<body lang="en" xml:lang="en">
+  <a name="Troubleshooting" id="Troubleshooting"></a>
 
-<p>Although IDLWAVE usually installs and works without difficulty, a few
-common problems and their solutions are documented below.
-</p>
-<ol>
-<li> <strong>Whenever an IDL error occurs or a breakpoint is hit, I get
-errors or strange behavior when I try to type anything into some of my
-IDLWAVE buffers.</strong>
+  <div class="header">
+    <p>Next: <a href=
+    "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+    accesskey="n" rel="next">GNU Free Documentation License</a>,
+    Previous: <a href="Windows-and-MacOS.html#Windows-and-MacOS"
+    accesskey="p" rel="prev">Windows and MacOS</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Troubleshooting-1" id="Troubleshooting-1"></a>
 
-<p>This is a <em>feature</em>, not an error.  You&rsquo;re in <em>Electric
-Debug Mode</em> (see <a href="Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug Mode</a>).  You should see
-<code>*Debugging*</code> in the mode-line.  The buffer is read-only and all
-debugging and examination commands are available as single keystrokes;
-<kbd>C-?</kbd> lists these shortcuts.  Use <kbd>q</kbd> to quit the mode, and
-customize the variable <code>idlwave-shell-automatic-electric-debug</code>
-if you prefer not to enter electric debug on breakpoints&hellip; but
-you really should try it before you disable it!  You can also
-customize this variable to enter debug mode when errors are
-encountered.
-</p>
-</li><li> <strong>I get errors like &lsquo;<samp>Searching for program: no such
-file or directory, idl</samp>&rsquo; when attempting to start the IDL shell.</strong>
+  <h2 class="appendix">Appendix E Troubleshooting</h2><a name=
+  "index-Troubleshooting" id="index-Troubleshooting"></a>
 
-<p>IDLWAVE needs to know where IDL is in order to run it as a process.
-By default, it attempts to invoke it simply as &lsquo;<samp>idl</samp>&rsquo;, which
-presumes such an executable is on your search path.  You need to
-ensure &lsquo;<samp>idl</samp>&rsquo; is on your &lsquo;<samp>$PATH</samp>&rsquo;, or specify the full
-pathname to the idl program with the variable
-<code>idlwave-shell-explicit-file-name</code>.  Note that you may need to
-set your shell search path in two places when running Emacs as an Aqua
-application with MacOSX; see the next topic.
-</p>
-</li><li> <strong>IDLWAVE is disregarding my &lsquo;<samp>IDL_PATH</samp>&rsquo; which I set
-under MacOSX</strong>
+  <p>Although IDLWAVE usually installs and works without
+  difficulty, a few common problems and their solutions are
+  documented below.</p>
 
-<p>If you run Emacs directly as an Aqua application, rather than from the
-console shell, the environment is set not from your usual shell
-configuration files (e.g., <samp>.cshrc</samp>), but from the file
-<samp>~/.MacOSX/environment.plist</samp>.  Either include your path settings
-there, or start Emacs and IDLWAVE from the shell.
-</p>
-</li><li> <strong>I get errors like &lsquo;<samp>Symbol's function is void:
-overlayp</samp>&rsquo;</strong>
+  <ol>
+    <li>
+      <strong>Whenever an IDL error occurs or a breakpoint is hit,
+      I get errors or strange behavior when I try to type anything
+      into some of my IDLWAVE buffers.</strong>
 
-<p>You don&rsquo;t have the &lsquo;<samp>fsf-compat</samp>&rsquo; package installed, which IDLWAVE
-needs to run under XEmacs.  Install it, or find an XEmacs distribution
-which includes it by default.
-</p>
-</li><li> <strong>I&rsquo;m getting errors like &lsquo;<samp>Symbol's value as variable is void:
-cl-builtin-gethash</samp>&rsquo; on completion or routine info.</strong>
+      <p>This is a <em>feature</em>, not an error. You&rsquo;re in
+      <em>Electric Debug Mode</em> (see <a href=
+      "Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug
+      Mode</a>). You should see <code>*Debugging*</code> in the
+      mode-line. The buffer is read-only and all debugging and
+      examination commands are available as single keystrokes;
+      <kbd>C-?</kbd> lists these shortcuts. Use <kbd>q</kbd> to
+      quit the mode, and customize the variable
+      <code>idlwave-shell-automatic-electric-debug</code> if you
+      prefer not to enter electric debug on breakpoints&hellip; but
+      you really should try it before you disable it! You can also
+      customize this variable to enter debug mode when errors are
+      encountered.</p>
+    </li>
 
-<p>This error arises if you upgraded Emacs from 20.x to 21.x without
-re-installing IDLWAVE.  Old Emacs and new Emacs are not byte-compatible
-in compiled lisp files.  Presumably, you kept the original .elc files in
-place, and this is the source of the error.  If you recompile (or just
-&quot;make; make install&quot;) from source, it should resolve this problem.
-Another option is to recompile the <samp>idlw*.el</samp> files by hand using
-<kbd>M-x byte-compile-file</kbd>.
-</p>
-</li><li> <strong><kbd>M-<span class="key">TAB</span></kbd> doesn&rsquo;t complete words, it switches
-windows on my desktop.</strong>
+    <li>
+      <strong>I get errors like &lsquo;<samp>Searching for program:
+      no such file or directory, idl</samp>&rsquo; when attempting
+      to start the IDL shell.</strong>
 
-<p>Your system is trapping <kbd>M-<span class="key">TAB</span></kbd> and using it for its own
-nefarious purposes: Emacs never sees the keystrokes.  On many Unix
-systems, you can reconfigure your window manager to use another key
-sequence for switching among windows.  Another option is to use the
-equivalent sequence <kbd><span class="key">ESC</span>-<span class="key">TAB</span></kbd>.
-</p>
-</li><li> <strong>When stopping at breakpoints or errors, IDLWAVE does not
-seem to highlight the relevant line in the source.</strong>
+      <p>IDLWAVE needs to know where IDL is in order to run it as a
+      process. By default, it attempts to invoke it simply as
+      &lsquo;<samp>idl</samp>&rsquo;, which presumes such an
+      executable is on your search path. You need to ensure
+      &lsquo;<samp>idl</samp>&rsquo; is on your
+      &lsquo;<samp>$PATH</samp>&rsquo;, or specify the full
+      pathname to the idl program with the variable
+      <code>idlwave-shell-explicit-file-name</code>. Note that you
+      may need to set your shell search path in two places when
+      running Emacs as an Aqua application with MacOSX; see the
+      next topic.</p>
+    </li>
 
-<p>IDLWAVE scans for error and halt messages and highlights the stop
-location in the correct file.  However, if you&rsquo;ve changed the system
-variable &lsquo;<samp>!ERROR_STATE.MSG_PREFIX</samp>&rsquo;, it is unable to parse these
-message correctly.  Don&rsquo;t do that.
-</p>
-</li><li> <strong>IDLWAVE doesn&rsquo;t work correctly when using ENVI.</strong>
+    <li>
+      <strong>IDLWAVE is disregarding my
+      &lsquo;<samp>IDL_PATH</samp>&rsquo; which I set under
+      MacOSX</strong>
 
-<p>Though IDLWAVE was not written with ENVI in mind, it works just fine
-with it, as long as you update the prompt it&rsquo;s looking for (&lsquo;<samp>IDL&gt;
-</samp>&rsquo; by default).  You can do this with the variable
-<code>idlwave-shell-prompt-pattern</code> (see <a href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a>), e.g.,
-in your <samp>.emacs</samp>:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq idlwave-shell-prompt-pattern &quot;^\r? ?\\(ENVI\\|IDL\\)&gt; &quot;)
-</pre></div>
+      <p>If you run Emacs directly as an Aqua application, rather
+      than from the console shell, the environment is set not from
+      your usual shell configuration files (e.g.,
+      <samp>.cshrc</samp>), but from the file
+      <samp>~/.MacOSX/environment.plist</samp>. Either include your
+      path settings there, or start Emacs and IDLWAVE from the
+      shell.</p>
+    </li>
 
-</li><li> <strong>Attempts to set breakpoints fail: no breakpoint is
-indicated in the IDLWAVE buffer.</strong>
+    <li>
+      <strong>I get errors like &lsquo;<samp>Symbol's function is
+      void: overlayp</samp>&rsquo;</strong>
 
-<p>IDL changed its breakpoint reporting format starting with IDLv5.5.  The
-first version of IDLWAVE to support the new format is IDLWAVE v4.10.  If
-you have an older version and are using IDL &gt;v5.5, you need to upgrade,
-and/or make sure your recent version of IDLWAVE is being found on the
-Emacs load-path (see the next entry).  You can list the version being
-used with <kbd>C-h v idlwave-mode-version <span class="key">RET</span></kbd>.
-</p>
-</li><li> <strong>I installed a new version of IDLWAVE, but the old
-version is still being used</strong> or <strong>IDLWAVE works, but when I
-tried to install the optional modules <samp>idlw-roprompt.el</samp> or
-<samp>idlw-complete-structtag</samp>, I get errors like &lsquo;<samp>Cannot open
-load file</samp>&rsquo;</strong>.
+      <p>You don&rsquo;t have the
+      &lsquo;<samp>fsf-compat</samp>&rsquo; package installed,
+      which IDLWAVE needs to run under XEmacs. Install it, or find
+      an XEmacs distribution which includes it by default.</p>
+    </li>
 
-<p>The problem is that your Emacs is not finding the version of IDLWAVE you
-installed.  Many Emacsen come with an older bundled copy of IDLWAVE
-(e.g., v4.7 for Emacs 21.x), which is likely what&rsquo;s being used instead.
-You need to make sure your Emacs <em>load-path</em> contains the directory
-where IDLWAVE is installed (<samp>/usr/local/share/emacs/site-lisp</samp>, by
-default), <em>before</em> Emacs&rsquo;s default search directories.  You can
-accomplish this by putting the following in your <samp>.emacs</samp>:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq load-path (cons &quot;/usr/local/share/emacs/site-lisp&quot; load-path))
-</pre></div>
+    <li>
+      <strong>I&rsquo;m getting errors like &lsquo;<samp>Symbol's
+      value as variable is void: cl-builtin-gethash</samp>&rsquo;
+      on completion or routine info.</strong>
 
-<p>You can check on your load-path value using <kbd>C-h v
-load-path <span class="key">RET</span></kbd>, and <kbd>C-h m</kbd> in an IDLWAVE buffer should show
-you the version Emacs is using.
-</p>
-</li><li> <strong>IDLWAVE is screwing up the formatting of my <samp>.idl</samp> files.</strong>
+      <p>This error arises if you upgraded Emacs from 20.x to 21.x
+      without re-installing IDLWAVE. Old Emacs and new Emacs are
+      not byte-compatible in compiled lisp files. Presumably, you
+      kept the original .elc files in place, and this is the source
+      of the error. If you recompile (or just "make; make install")
+      from source, it should resolve this problem. Another option
+      is to recompile the <samp>idlw*.el</samp> files by hand using
+      <kbd>M-x byte-compile-file</kbd>.</p>
+    </li>
 
-<p>Actually, this isn&rsquo;t IDLWAVE at all, but &lsquo;<samp>idl-mode</samp>&rsquo;, an unrelated
-programming mode for CORBA&rsquo;s Interface Definition Language (you should
-see &lsquo;<samp>(IDL)</samp>&rsquo;, not &lsquo;<samp>(IDLWAVE)</samp>&rsquo; in the mode-line).  One
-solution: don&rsquo;t name your file <samp>.idl</samp>, but rather <samp>.pro</samp>.
-Another solution: make sure <samp>.idl</samp> files load IDLWAVE instead of
-&lsquo;<samp>idl-mode</samp>&rsquo; by adding the following to your <samp>.emacs</samp>:
-</p>
-<div class="lisp">
-<pre class="lisp">(setcdr (rassoc 'idl-mode auto-mode-alist) 'idlwave-mode)
-</pre></div>
+    <li>
+      <strong><kbd>M-<span class="key">TAB</span></kbd>
+      doesn&rsquo;t complete words, it switches windows on my
+      desktop.</strong>
 
-</li><li> <strong>The routine info for my local routines is out of date!</strong>
+      <p>Your system is trapping <kbd>M-<span class=
+      "key">TAB</span></kbd> and using it for its own nefarious
+      purposes: Emacs never sees the keystrokes. On many Unix
+      systems, you can reconfigure your window manager to use
+      another key sequence for switching among windows. Another
+      option is to use the equivalent sequence <kbd><span class=
+      "key">ESC</span>-<span class="key">TAB</span></kbd>.</p>
+    </li>
 
-<p>IDLWAVE collects routine info from various locations (see <a href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a>).  Routines in files visited in a buffer or
-compiled in the shell should be up to date.  For other routines, the
-information is only as current as the most recent scan.  If you have a
-rapidly changing set of routines, and you&rsquo;d like the latest routine
-information to be available for it, one powerful technique is to make
-use of the library catalog tool, &lsquo;<samp>idlwave_catalog</samp>&rsquo;.  Simply add a
-line to your &lsquo;<samp>cron</samp>&rsquo; file (&lsquo;<samp>crontab -e</samp>&rsquo; will let you edit this
-on some systems), like this
-</p>
-<div class="example">
-<pre class="example">45 3 * * 1-5 (cd /path/to/myidllib; /path/to/idlwave_catalog MyLib)
-</pre></div>
+    <li>
+      <strong>When stopping at breakpoints or errors, IDLWAVE does
+      not seem to highlight the relevant line in the
+      source.</strong>
 
-<p>where &lsquo;<samp>MyLib</samp>&rsquo; is the name of your library.  This will
-rescan all <samp>.pro</samp> files at or below <samp>/path/to/myidllib</samp> every
-week night at 3:45am.  You can even scan site-wide libraries with this
-method, and the most recent information will be available to all users.
-Since the scanning is very fast, there is very little impact.
-</p>
-</li><li> <strong>All the Greek-font characters in the HTML help are
-displayed as Latin characters!</strong>
+      <p>IDLWAVE scans for error and halt messages and highlights
+      the stop location in the correct file. However, if
+      you&rsquo;ve changed the system variable
+      &lsquo;<samp>!ERROR_STATE.MSG_PREFIX</samp>&rsquo;, it is
+      unable to parse these message correctly. Don&rsquo;t do
+      that.</p>
+    </li>
 
-<p>Unfortunately, the HTMLHelp files RSI provides attempt to switch to
-&lsquo;<samp>Symbol</samp>&rsquo; font to display Greek characters, which is not really an
-permitted method for doing this in HTML.  There is a &quot;workaround&quot; for
-some browsers: See <a href="HTML-Help-Browser-Tips.html#HTML-Help-Browser-Tips">HTML Help Browser Tips</a>.
-</p>
-</li><li> <strong>In the shell, my long commands are truncated at 256 characters!</strong>
+    <li>
+      <strong>IDLWAVE doesn&rsquo;t work correctly when using
+      ENVI.</strong>
 
-<p>This actually happens when running IDL in an XTerm as well.  There are
-a couple of workarounds: <code>define_key,/control,'^d'</code> (e.g., in
-your <samp>$IDL_STARTUP</samp> file) will disable the &lsquo;<samp>EOF</samp>&rsquo; character
-and give you a 512 character limit.  You won&rsquo;t be able to use
-<tt class="key">C-d</tt> to quit the shell, however.  Another possibility is
-<code>!EDIT_INPUT=0</code>, which gives you an <em>infinite</em> limit (OK, a
-memory-bounded limit), but disables the processing of background
-widget events (those with <code>/NO_BLOCK</code> passed to <code>XManager</code>).
-</p>
-</li><li> <strong>When I invoke IDL HTML help on a routine, the page which
-is loaded is one page off, e.g., for <code>CONVERT_COORD</code>, I get
-<code>CONTOUR</code>.</strong>
+      <p>Though IDLWAVE was not written with ENVI in mind, it works
+      just fine with it, as long as you update the prompt
+      it&rsquo;s looking for (&lsquo;<samp>IDL&gt;</samp> &rsquo;
+      by default). You can do this with the variable
+      <code>idlwave-shell-prompt-pattern</code> (see <a href=
+      "Starting-the-Shell.html#Starting-the-Shell">Starting the
+      Shell</a>), e.g., in your <samp>.emacs</samp>:</p>
 
-<p>You have a mismatch between your help index and the HTML help package
-you downloaded.  You need to ensure you download a &ldquo;downgrade kit&rdquo; if
-you are using anything older than the latest HTML help package.  A new
-help package appears with each IDL release (assuming the documentation
-is updated).
-Starting with IDL 6.2, the HTML help and its catalog are
-distributed with IDL, and so should never be inconsistent.
-</p>
-</li><li> <strong>I get errors such as &lsquo;<samp>void-variable
-browse-url-browser-function</samp>&rsquo; or similar when attempting to load IDLWAVE
-under XEmacs.</strong>
+      <div class="lisp">
+        <pre class="lisp">
+(setq idlwave-shell-prompt-pattern "^\r? ?\\(ENVI\\|IDL\\)&gt; ")
+</pre>
+      </div>
+    </li>
 
-<p>You don&rsquo;t have the &lsquo;<samp>browse-url</samp>&rsquo; (or other required) XEmacs package.
-Unlike Emacs, XEmacs distributes many packages separately from the
-main program.  IDLWAVE is actually among these, but is not always the
-most up to date.  When installing IDLWAVE as an XEmacs package, it
-should prompt you for required additional packages.  When installing it
-from source, it won&rsquo;t and you&rsquo;ll get this error.  The easiest solution
-is to install all the packages when you install XEmacs (the so-called
-&lsquo;<samp>sumo</samp>&rsquo; bundle).  The minimum set of XEmacs packages required by
-IDLWAVE is &lsquo;<samp>fsf-compat, xemacs-base, mail-lib</samp>&rsquo;.
-</p>
-</li></ol>
+    <li>
+      <strong>Attempts to set breakpoints fail: no breakpoint is
+      indicated in the IDLWAVE buffer.</strong>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" accesskey="n" rel="next">GNU Free Documentation License</a>, Previous: <a href="Windows-and-MacOS.html#Windows-and-MacOS" accesskey="p" rel="prev">Windows and MacOS</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>IDL changed its breakpoint reporting format starting with
+      IDLv5.5. The first version of IDLWAVE to support the new
+      format is IDLWAVE v4.10. If you have an older version and are
+      using IDL &gt;v5.5, you need to upgrade, and/or make sure
+      your recent version of IDLWAVE is being found on the Emacs
+      load-path (see the next entry). You can list the version
+      being used with <kbd>C-h v idlwave-mode-version <span class=
+      "key">RET</span></kbd>.</p>
+    </li>
 
+    <li>
+      <strong>I installed a new version of IDLWAVE, but the old
+      version is still being used</strong> or <strong>IDLWAVE
+      works, but when I tried to install the optional modules
+      <samp>idlw-roprompt.el</samp> or
+      <samp>idlw-complete-structtag</samp>, I get errors like
+      &lsquo;<samp>Cannot open load file</samp>&rsquo;</strong>.
 
+      <p>The problem is that your Emacs is not finding the version
+      of IDLWAVE you installed. Many Emacsen come with an older
+      bundled copy of IDLWAVE (e.g., v4.7 for Emacs 21.x), which is
+      likely what&rsquo;s being used instead. You need to make sure
+      your Emacs <em>load-path</em> contains the directory where
+      IDLWAVE is installed
+      (<samp>/usr/local/share/emacs/site-lisp</samp>, by default),
+      <em>before</em> Emacs&rsquo;s default search directories. You
+      can accomplish this by putting the following in your
+      <samp>.emacs</samp>:</p>
 
+      <div class="lisp">
+        <pre class="lisp">
+(setq load-path (cons "/usr/local/share/emacs/site-lisp" load-path))
+</pre>
+      </div>
+
+      <p>You can check on your load-path value using <kbd>C-h v
+      load-path <span class="key">RET</span></kbd>, and <kbd>C-h
+      m</kbd> in an IDLWAVE buffer should show you the version
+      Emacs is using.</p>
+    </li>
+
+    <li>
+      <strong>IDLWAVE is screwing up the formatting of my
+      <samp>.idl</samp> files.</strong>
+
+      <p>Actually, this isn&rsquo;t IDLWAVE at all, but
+      &lsquo;<samp>idl-mode</samp>&rsquo;, an unrelated programming
+      mode for CORBA&rsquo;s Interface Definition Language (you
+      should see &lsquo;<samp>(IDL)</samp>&rsquo;, not
+      &lsquo;<samp>(IDLWAVE)</samp>&rsquo; in the mode-line). One
+      solution: don&rsquo;t name your file <samp>.idl</samp>, but
+      rather <samp>.pro</samp>. Another solution: make sure
+      <samp>.idl</samp> files load IDLWAVE instead of
+      &lsquo;<samp>idl-mode</samp>&rsquo; by adding the following
+      to your <samp>.emacs</samp>:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setcdr (rassoc 'idl-mode auto-mode-alist) 'idlwave-mode)
+</pre>
+      </div>
+    </li>
+
+    <li>
+      <strong>The routine info for my local routines is out of
+      date!</strong>
+
+      <p>IDLWAVE collects routine info from various locations (see
+      <a href=
+      "Routine-Information-Sources.html#Routine-Information-Sources">
+      Routine Information Sources</a>). Routines in files visited
+      in a buffer or compiled in the shell should be up to date.
+      For other routines, the information is only as current as the
+      most recent scan. If you have a rapidly changing set of
+      routines, and you&rsquo;d like the latest routine information
+      to be available for it, one powerful technique is to make use
+      of the library catalog tool,
+      &lsquo;<samp>idlwave_catalog</samp>&rsquo;. Simply add a line
+      to your &lsquo;<samp>cron</samp>&rsquo; file
+      (&lsquo;<samp>crontab -e</samp>&rsquo; will let you edit this
+      on some systems), like this</p>
+
+      <div class="example">
+        <pre class="example">
+45 3 * * 1-5 (cd /path/to/myidllib; /path/to/idlwave_catalog MyLib)
+</pre>
+      </div>
+
+      <p>where &lsquo;<samp>MyLib</samp>&rsquo; is the name of your
+      library. This will rescan all <samp>.pro</samp> files at or
+      below <samp>/path/to/myidllib</samp> every week night at
+      3:45am. You can even scan site-wide libraries with this
+      method, and the most recent information will be available to
+      all users. Since the scanning is very fast, there is very
+      little impact.</p>
+    </li>
+
+    <li>
+      <strong>All the Greek-font characters in the HTML help are
+      displayed as Latin characters!</strong>
+
+      <p>Unfortunately, the HTMLHelp files RSI provides attempt to
+      switch to &lsquo;<samp>Symbol</samp>&rsquo; font to display
+      Greek characters, which is not really an permitted method for
+      doing this in HTML. There is a "workaround" for some
+      browsers: See <a href=
+      "HTML-Help-Browser-Tips.html#HTML-Help-Browser-Tips">HTML
+      Help Browser Tips</a>.</p>
+    </li>
+
+    <li>
+      <strong>In the shell, my long commands are truncated at 256
+      characters!</strong>
+
+      <p>This actually happens when running IDL in an XTerm as
+      well. There are a couple of workarounds:
+      <code>define_key,/control,'^d'</code> (e.g., in your
+      <samp>$IDL_STARTUP</samp> file) will disable the
+      &lsquo;<samp>EOF</samp>&rsquo; character and give you a 512
+      character limit. You won&rsquo;t be able to use <tt class=
+      "key">C-d</tt> to quit the shell, however. Another
+      possibility is <code>!EDIT_INPUT=0</code>, which gives you an
+      <em>infinite</em> limit (OK, a memory-bounded limit), but
+      disables the processing of background widget events (those
+      with <code>/NO_BLOCK</code> passed to
+      <code>XManager</code>).</p>
+    </li>
+
+    <li>
+      <strong>When I invoke IDL HTML help on a routine, the page
+      which is loaded is one page off, e.g., for
+      <code>CONVERT_COORD</code>, I get
+      <code>CONTOUR</code>.</strong>
+
+      <p>You have a mismatch between your help index and the HTML
+      help package you downloaded. You need to ensure you download
+      a &ldquo;downgrade kit&rdquo; if you are using anything older
+      than the latest HTML help package. A new help package appears
+      with each IDL release (assuming the documentation is
+      updated). Starting with IDL 6.2, the HTML help and its
+      catalog are distributed with IDL, and so should never be
+      inconsistent.</p>
+    </li>
+
+    <li>
+      <strong>I get errors such as &lsquo;<samp>void-variable
+      browse-url-browser-function</samp>&rsquo; or similar when
+      attempting to load IDLWAVE under XEmacs.</strong>
+
+      <p>You don&rsquo;t have the
+      &lsquo;<samp>browse-url</samp>&rsquo; (or other required)
+      XEmacs package. Unlike Emacs, XEmacs distributes many
+      packages separately from the main program. IDLWAVE is
+      actually among these, but is not always the most up to date.
+      When installing IDLWAVE as an XEmacs package, it should
+      prompt you for required additional packages. When installing
+      it from source, it won&rsquo;t and you&rsquo;ll get this
+      error. The easiest solution is to install all the packages
+      when you install XEmacs (the so-called
+      &lsquo;<samp>sumo</samp>&rsquo; bundle). The minimum set of
+      XEmacs packages required by IDLWAVE is
+      &lsquo;<samp>fsf-compat, xemacs-base,
+      mail-lib</samp>&rsquo;.</p>
+    </li>
+  </ol>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+    accesskey="n" rel="next">GNU Free Documentation License</a>,
+    Previous: <a href="Windows-and-MacOS.html#Windows-and-MacOS"
+    accesskey="p" rel="prev">Windows and MacOS</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

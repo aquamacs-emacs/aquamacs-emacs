@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,123 +19,173 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Columns</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Columns">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Columns">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Indentation.html#Indentation" rel="next" title="Indentation">
-<link href="Sorting.html#Sorting" rel="prev" title="Sorting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Columns</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Columns" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Columns" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Indentation.html#Indentation" rel="next" title=
+  "Indentation" />
+  <link href="Sorting.html#Sorting" rel="prev" title="Sorting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Columns" id="Columns"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Indentation.html#Indentation" accesskey="n"
+    rel="next">Indentation</a>, Previous: <a href=
+    "Sorting.html#Sorting" accesskey="p" rel="prev">Sorting</a>,
+    Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Counting-Columns" id="Counting-Columns"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Columns"></a>
-<div class="header">
-<p>
-Next: <a href="Indentation.html#Indentation" accesskey="n" rel="next">Indentation</a>, Previous: <a href="Sorting.html#Sorting" accesskey="p" rel="prev">Sorting</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Counting-Columns"></a>
-<h3 class="section">31.16 Counting Columns</h3>
-<a name="index-columns"></a>
-<a name="index-counting-columns"></a>
-<a name="index-horizontal-position"></a>
+  <h3 class="section">31.16 Counting Columns</h3><a name=
+  "index-columns" id="index-columns"></a> <a name=
+  "index-counting-columns" id="index-counting-columns"></a>
+  <a name="index-horizontal-position" id=
+  "index-horizontal-position"></a>
 
-<p>The column functions convert between a character position (counting
-characters from the beginning of the buffer) and a column position
-(counting screen characters from the beginning of a line).
-</p>
-<p>These functions count each character according to the number of
-columns it occupies on the screen.  This means control characters count
-as occupying 2 or 4 columns, depending upon the value of
-<code>ctl-arrow</code>, and tabs count as occupying a number of columns that
-depends on the value of <code>tab-width</code> and on the column where the tab
-begins.  See <a href="Usual-Display.html#Usual-Display">Usual Display</a>.
-</p>
-<p>Column number computations ignore the width of the window and the
-amount of horizontal scrolling.  Consequently, a column value can be
-arbitrarily high.  The first (or leftmost) column is numbered 0.  They
-also ignore overlays and text properties, aside from invisibility.
-</p>
-<dl>
-<dt><a name="index-current_002dcolumn"></a>Function: <strong>current-column</strong></dt>
-<dd><p>This function returns the horizontal position of point, measured in
-columns, counting from 0 at the left margin.  The column position is the
-sum of the widths of all the displayed representations of the characters
-between the start of the current line and point.
-</p></dd></dl>
+  <p>The column functions convert between a character position
+  (counting characters from the beginning of the buffer) and a
+  column position (counting screen characters from the beginning of
+  a line).</p>
 
-<dl>
-<dt><a name="index-move_002dto_002dcolumn"></a>Command: <strong>move-to-column</strong> <em>column &amp;optional force</em></dt>
-<dd><p>This function moves point to <var>column</var> in the current line.  The
-calculation of <var>column</var> takes into account the widths of the
-displayed representations of the characters between the start of the
-line and point.
-</p>
-<p>When called interactively, <var>column</var> is the value of prefix numeric
-argument.  If <var>column</var> is not an integer, an error is signaled.
-</p>
+  <p>These functions count each character according to the number
+  of columns it occupies on the screen. This means control
+  characters count as occupying 2 or 4 columns, depending upon the
+  value of <code>ctl-arrow</code>, and tabs count as occupying a
+  number of columns that depends on the value of
+  <code>tab-width</code> and on the column where the tab begins.
+  See <a href="Usual-Display.html#Usual-Display">Usual
+  Display</a>.</p>
 
-<p>If it is impossible to move to column <var>column</var> because that is in
-the middle of a multicolumn character such as a tab, point moves to the
-end of that character.  However, if <var>force</var> is non-<code>nil</code>, and
-<var>column</var> is in the middle of a tab, then <code>move-to-column</code>
-converts the tab into spaces so that it can move precisely to column
-<var>column</var>.  Other multicolumn characters can cause anomalies despite
-<var>force</var>, since there is no way to split them.
-</p>
-<p>The argument <var>force</var> also has an effect if the line isn&rsquo;t long
-enough to reach column <var>column</var>; if it is <code>t</code>, that means to
-add whitespace at the end of the line to reach that column.
-</p>
-<p>The return value is the column number actually moved to.
-</p></dd></dl>
+  <p>Column number computations ignore the width of the window and
+  the amount of horizontal scrolling. Consequently, a column value
+  can be arbitrarily high. The first (or leftmost) column is
+  numbered 0. They also ignore overlays and text properties, aside
+  from invisibility.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Indentation.html#Indentation" accesskey="n" rel="next">Indentation</a>, Previous: <a href="Sorting.html#Sorting" accesskey="p" rel="prev">Sorting</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-current_002dcolumn" id=
+    "index-current_002dcolumn"></a>Function:
+    <strong>current-column</strong></dt>
 
+    <dd>
+      <p>This function returns the horizontal position of point,
+      measured in columns, counting from 0 at the left margin. The
+      column position is the sum of the widths of all the displayed
+      representations of the characters between the start of the
+      current line and point.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-move_002dto_002dcolumn" id=
+    "index-move_002dto_002dcolumn"></a>Command:
+    <strong>move-to-column</strong> <em>column &amp;optional
+    force</em></dt>
 
+    <dd>
+      <p>This function moves point to <var>column</var> in the
+      current line. The calculation of <var>column</var> takes into
+      account the widths of the displayed representations of the
+      characters between the start of the line and point.</p>
+
+      <p>When called interactively, <var>column</var> is the value
+      of prefix numeric argument. If <var>column</var> is not an
+      integer, an error is signaled.</p>
+
+      <p>If it is impossible to move to column <var>column</var>
+      because that is in the middle of a multicolumn character such
+      as a tab, point moves to the end of that character. However,
+      if <var>force</var> is non-<code>nil</code>, and
+      <var>column</var> is in the middle of a tab, then
+      <code>move-to-column</code> converts the tab into spaces so
+      that it can move precisely to column <var>column</var>. Other
+      multicolumn characters can cause anomalies despite
+      <var>force</var>, since there is no way to split them.</p>
+
+      <p>The argument <var>force</var> also has an effect if the
+      line isn&rsquo;t long enough to reach column
+      <var>column</var>; if it is <code>t</code>, that means to add
+      whitespace at the end of the line to reach that column.</p>
+
+      <p>The return value is the column number actually moved
+      to.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Indentation.html#Indentation" accesskey="n"
+    rel="next">Indentation</a>, Previous: <a href=
+    "Sorting.html#Sorting" accesskey="p" rel="prev">Sorting</a>,
+    Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

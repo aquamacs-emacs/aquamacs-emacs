@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,148 +19,220 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Maintaining Undo</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Maintaining Undo">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Maintaining Undo">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Filling.html#Filling" rel="next" title="Filling">
-<link href="Undo.html#Undo" rel="prev" title="Undo">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Maintaining Undo</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Maintaining Undo" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Maintaining Undo" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Filling.html#Filling" rel="next" title="Filling" />
+  <link href="Undo.html#Undo" rel="prev" title="Undo" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Maintaining-Undo" id="Maintaining-Undo"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Filling.html#Filling" accesskey="n" rel=
+    "next">Filling</a>, Previous: <a href="Undo.html#Undo"
+    accesskey="p" rel="prev">Undo</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Maintaining-Undo-Lists" id="Maintaining-Undo-Lists"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Maintaining-Undo"></a>
-<div class="header">
-<p>
-Next: <a href="Filling.html#Filling" accesskey="n" rel="next">Filling</a>, Previous: <a href="Undo.html#Undo" accesskey="p" rel="prev">Undo</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Maintaining-Undo-Lists"></a>
-<h3 class="section">31.10 Maintaining Undo Lists</h3>
+  <h3 class="section">31.10 Maintaining Undo Lists</h3>
 
-<p>This section describes how to enable and disable undo information for
-a given buffer.  It also explains how the undo list is truncated
-automatically so it doesn&rsquo;t get too big.
-</p>
-<p>Recording of undo information in a newly created buffer is normally
-enabled to start with; but if the buffer name starts with a space, the
-undo recording is initially disabled.  You can explicitly enable or
-disable undo recording with the following two functions, or by setting
-<code>buffer-undo-list</code> yourself.
-</p>
-<dl>
-<dt><a name="index-buffer_002denable_002dundo"></a>Command: <strong>buffer-enable-undo</strong> <em>&amp;optional buffer-or-name</em></dt>
-<dd><p>This command enables recording undo information for buffer
-<var>buffer-or-name</var>, so that subsequent changes can be undone.  If no
-argument is supplied, then the current buffer is used.  This function
-does nothing if undo recording is already enabled in the buffer.  It
-returns <code>nil</code>.
-</p>
-<p>In an interactive call, <var>buffer-or-name</var> is the current buffer.
-You cannot specify any other buffer.
-</p></dd></dl>
+  <p>This section describes how to enable and disable undo
+  information for a given buffer. It also explains how the undo
+  list is truncated automatically so it doesn&rsquo;t get too
+  big.</p>
 
-<dl>
-<dt><a name="index-buffer_002ddisable_002dundo"></a>Command: <strong>buffer-disable-undo</strong> <em>&amp;optional buffer-or-name</em></dt>
-<dd><a name="index-disabling-undo"></a>
-<p>This function discards the undo list of <var>buffer-or-name</var>, and disables
-further recording of undo information.  As a result, it is no longer
-possible to undo either previous changes or any subsequent changes.  If
-the undo list of <var>buffer-or-name</var> is already disabled, this function
-has no effect.
-</p>
-<p>In an interactive call, BUFFER-OR-NAME is the current buffer.  You
-cannot specify any other buffer.  This function returns <code>nil</code>.
-</p></dd></dl>
+  <p>Recording of undo information in a newly created buffer is
+  normally enabled to start with; but if the buffer name starts
+  with a space, the undo recording is initially disabled. You can
+  explicitly enable or disable undo recording with the following
+  two functions, or by setting <code>buffer-undo-list</code>
+  yourself.</p>
 
-<p>As editing continues, undo lists get longer and longer.  To prevent
-them from using up all available memory space, garbage collection trims
-them back to size limits you can set.  (For this purpose, the size
-of an undo list measures the cons cells that make up the list, plus the
-strings of deleted text.)  Three variables control the range of acceptable
-sizes: <code>undo-limit</code>, <code>undo-strong-limit</code> and
-<code>undo-outer-limit</code>.  In these variables, size is counted as the
-number of bytes occupied, which includes both saved text and other
-data.
-</p>
-<dl>
-<dt><a name="index-undo_002dlimit"></a>User Option: <strong>undo-limit</strong></dt>
-<dd><p>This is the soft limit for the acceptable size of an undo list.  The
-change group at which this size is exceeded is the last one kept.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-buffer_002denable_002dundo" id=
+    "index-buffer_002denable_002dundo"></a>Command:
+    <strong>buffer-enable-undo</strong> <em>&amp;optional
+    buffer-or-name</em></dt>
 
-<dl>
-<dt><a name="index-undo_002dstrong_002dlimit"></a>User Option: <strong>undo-strong-limit</strong></dt>
-<dd><p>This is the upper limit for the acceptable size of an undo list.  The
-change group at which this size is exceeded is discarded itself (along
-with all older change groups).  There is one exception: the very latest
-change group is only discarded if it exceeds <code>undo-outer-limit</code>.
-</p></dd></dl>
+    <dd>
+      <p>This command enables recording undo information for buffer
+      <var>buffer-or-name</var>, so that subsequent changes can be
+      undone. If no argument is supplied, then the current buffer
+      is used. This function does nothing if undo recording is
+      already enabled in the buffer. It returns
+      <code>nil</code>.</p>
 
-<dl>
-<dt><a name="index-undo_002douter_002dlimit"></a>User Option: <strong>undo-outer-limit</strong></dt>
-<dd><p>If at garbage collection time the undo info for the current command
-exceeds this limit, Emacs discards the info and displays a warning.
-This is a last ditch limit to prevent memory overflow.
-</p></dd></dl>
+      <p>In an interactive call, <var>buffer-or-name</var> is the
+      current buffer. You cannot specify any other buffer.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-undo_002dask_002dbefore_002ddiscard"></a>User Option: <strong>undo-ask-before-discard</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, when the undo info exceeds
-<code>undo-outer-limit</code>, Emacs asks in the echo area whether to
-discard the info.  The default value is <code>nil</code>, which means to
-discard it automatically.
-</p>
-<p>This option is mainly intended for debugging.  Garbage collection is
-inhibited while the question is asked, which means that Emacs might
-leak memory if the user waits too long before answering the question.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-buffer_002ddisable_002dundo" id=
+    "index-buffer_002ddisable_002dundo"></a>Command:
+    <strong>buffer-disable-undo</strong> <em>&amp;optional
+    buffer-or-name</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Filling.html#Filling" accesskey="n" rel="next">Filling</a>, Previous: <a href="Undo.html#Undo" accesskey="p" rel="prev">Undo</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name="index-disabling-undo" id="index-disabling-undo"></a>
 
+      <p>This function discards the undo list of
+      <var>buffer-or-name</var>, and disables further recording of
+      undo information. As a result, it is no longer possible to
+      undo either previous changes or any subsequent changes. If
+      the undo list of <var>buffer-or-name</var> is already
+      disabled, this function has no effect.</p>
 
+      <p>In an interactive call, BUFFER-OR-NAME is the current
+      buffer. You cannot specify any other buffer. This function
+      returns <code>nil</code>.</p>
+    </dd>
+  </dl>
 
+  <p>As editing continues, undo lists get longer and longer. To
+  prevent them from using up all available memory space, garbage
+  collection trims them back to size limits you can set. (For this
+  purpose, the size of an undo list measures the cons cells that
+  make up the list, plus the strings of deleted text.) Three
+  variables control the range of acceptable sizes:
+  <code>undo-limit</code>, <code>undo-strong-limit</code> and
+  <code>undo-outer-limit</code>. In these variables, size is
+  counted as the number of bytes occupied, which includes both
+  saved text and other data.</p>
+
+  <dl>
+    <dt><a name="index-undo_002dlimit" id=
+    "index-undo_002dlimit"></a>User Option:
+    <strong>undo-limit</strong></dt>
+
+    <dd>
+      <p>This is the soft limit for the acceptable size of an undo
+      list. The change group at which this size is exceeded is the
+      last one kept.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-undo_002dstrong_002dlimit" id=
+    "index-undo_002dstrong_002dlimit"></a>User Option:
+    <strong>undo-strong-limit</strong></dt>
+
+    <dd>
+      <p>This is the upper limit for the acceptable size of an undo
+      list. The change group at which this size is exceeded is
+      discarded itself (along with all older change groups). There
+      is one exception: the very latest change group is only
+      discarded if it exceeds <code>undo-outer-limit</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-undo_002douter_002dlimit" id=
+    "index-undo_002douter_002dlimit"></a>User Option:
+    <strong>undo-outer-limit</strong></dt>
+
+    <dd>
+      <p>If at garbage collection time the undo info for the
+      current command exceeds this limit, Emacs discards the info
+      and displays a warning. This is a last ditch limit to prevent
+      memory overflow.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-undo_002dask_002dbefore_002ddiscard" id=
+    "index-undo_002dask_002dbefore_002ddiscard"></a>User Option:
+    <strong>undo-ask-before-discard</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, when the undo
+      info exceeds <code>undo-outer-limit</code>, Emacs asks in the
+      echo area whether to discard the info. The default value is
+      <code>nil</code>, which means to discard it
+      automatically.</p>
+
+      <p>This option is mainly intended for debugging. Garbage
+      collection is inhibited while the question is asked, which
+      means that Emacs might leak memory if the user waits too long
+      before answering the question.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Filling.html#Filling" accesskey="n" rel=
+    "next">Filling</a>, Previous: <a href="Undo.html#Undo"
+    accesskey="p" rel="prev">Undo</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

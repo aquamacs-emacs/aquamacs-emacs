@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,154 +18,219 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: AUCTeX-RefTeX Interface</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: AUCTeX-RefTeX Interface">
-<meta name="keywords" content="RefTeX User Manual: AUCTeX-RefTeX Interface">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="AUCTeX.html#AUCTeX" rel="up" title="AUCTeX">
-<link href="Style-Files.html#Style-Files" rel="next" title="Style Files">
-<link href="AUCTeX.html#AUCTeX" rel="prev" title="AUCTeX">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: AUCTeX-RefTeX Interface</title>
+  <meta name="description" content=
+  "RefTeX User Manual: AUCTeX-RefTeX Interface" />
+  <meta name="keywords" content=
+  "RefTeX User Manual: AUCTeX-RefTeX Interface" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="AUCTeX.html#AUCTeX" rel="up" title="AUCTeX" />
+  <link href="Style-Files.html#Style-Files" rel="next" title=
+  "Style Files" />
+  <link href="AUCTeX.html#AUCTeX" rel="prev" title="AUCTeX" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="AUCTeX_002dRefTeX-Interface"></a>
-<div class="header">
-<p>
-Next: <a href="Style-Files.html#Style-Files" accesskey="n" rel="next">Style Files</a>, Up: <a href="AUCTeX.html#AUCTeX" accesskey="u" rel="up">AUCTeX</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-AUCTeX_002dRefTeX-Interface"></a>
-<h3 class="section">14.1 The AUCTeX-RefTeX Interface</h3>
+<body lang="en" xml:lang="en">
+  <a name="AUCTeX_002dRefTeX-Interface" id=
+  "AUCTeX_002dRefTeX-Interface"></a>
 
-<p>RefTeX contains code to interface with AUCTeX.  When this
-interface is turned on, both packages will interact closely.  Instead of
-using RefTeX&rsquo;s commands directly, you can then also use them
-indirectly as part of the AUCTeX
-environment<a name="DOCF10" href="#FOOT10"><sup>10</sup></a>.  The interface is turned on with
-</p>
-<div class="lisp">
-<pre class="lisp">(setq reftex-plug-into-AUCTeX t)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Style-Files.html#Style-Files" accesskey="n"
+    rel="next">Style Files</a>, Up: <a href="AUCTeX.html#AUCTeX"
+    accesskey="u" rel="up">AUCTeX</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-AUCTeX_002dRefTeX-Interface" id=
+  "The-AUCTeX_002dRefTeX-Interface"></a>
 
-<p>If you need finer control about which parts of the interface are used
-and which not, read the docstring of the variable
-<code>reftex-plug-into-AUCTeX</code> or customize it with <kbd>M-x
-customize-variable <span class="key">RET</span> reftex-plug-into-AUCTeX <span class="key">RET</span></kbd>.
-</p>
-<p>The following list describes the individual parts of the interface.
-</p>
-<ul>
-<li> <a name="index-reftex_002dlabel-1"></a>
-<a name="index-LaTeX_002dlabel_002dfunction_002c-AUCTeX"></a>
-<a name="index-C_002dc-C_002de"></a>
-<a name="index-C_002dc-C_002ds-1"></a>
-<a name="index-LaTeX_002dsection_002c-AUCTeX"></a>
-<a name="index-TeX_002dinsert_002dmacro_002c-AUCTeX"></a>
-<b>AUCTeX calls <code>reftex-label</code> to insert labels</b><br>
-When a new section is created with <kbd>C-c C-s</kbd>, or a new environment
-is inserted with <kbd>C-c C-e</kbd>, AUCTeX normally prompts for a label to
-go with it.  With the interface, <code>reftex-label</code> is called instead.
-For example, if you type <kbd>C-c C-e equation <span class="key">RET</span></kbd>, AUCTeX and
-RefTeX will insert
+  <h3 class="section">14.1 The AUCTeX-RefTeX Interface</h3>
 
-<div class="example">
-<pre class="example">\begin{equation}
+  <p>RefTeX contains code to interface with AUCTeX. When this
+  interface is turned on, both packages will interact closely.
+  Instead of using RefTeX&rsquo;s commands directly, you can then
+  also use them indirectly as part of the AUCTeX
+  environment<a name="DOCF10" href="#FOOT10" id=
+  "DOCF10"><sup>10</sup></a>. The interface is turned on with</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq reftex-plug-into-AUCTeX t)
+</pre>
+  </div>
+
+  <p>If you need finer control about which parts of the interface
+  are used and which not, read the docstring of the variable
+  <code>reftex-plug-into-AUCTeX</code> or customize it with
+  <kbd>M-x customize-variable <span class="key">RET</span>
+  reftex-plug-into-AUCTeX <span class="key">RET</span></kbd>.</p>
+
+  <p>The following list describes the individual parts of the
+  interface.</p>
+
+  <ul>
+    <li>
+      <a name="index-reftex_002dlabel-1" id=
+      "index-reftex_002dlabel-1"></a> <a name=
+      "index-LaTeX_002dlabel_002dfunction_002c-AUCTeX" id=
+      "index-LaTeX_002dlabel_002dfunction_002c-AUCTeX"></a>
+      <a name="index-C_002dc-C_002de" id=
+      "index-C_002dc-C_002de"></a> <a name=
+      "index-C_002dc-C_002ds-1" id="index-C_002dc-C_002ds-1"></a>
+      <a name="index-LaTeX_002dsection_002c-AUCTeX" id=
+      "index-LaTeX_002dsection_002c-AUCTeX"></a> <a name=
+      "index-TeX_002dinsert_002dmacro_002c-AUCTeX" id=
+      "index-TeX_002dinsert_002dmacro_002c-AUCTeX"></a> <b>AUCTeX
+      calls <code>reftex-label</code> to insert labels</b><br />
+      When a new section is created with <kbd>C-c C-s</kbd>, or a
+      new environment is inserted with <kbd>C-c C-e</kbd>, AUCTeX
+      normally prompts for a label to go with it. With the
+      interface, <code>reftex-label</code> is called instead. For
+      example, if you type <kbd>C-c C-e equation <span class=
+      "key">RET</span></kbd>, AUCTeX and RefTeX will insert
+
+      <div class="example">
+        <pre class="example">
+\begin{equation}
 \label{eq:1}
 
 \end{equation}
-</pre></div>
+</pre>
+      </div>
 
-<p>without further prompts.
-</p>
-<p>Similarly, when you type <kbd>C-c C-s section <span class="key">RET</span></kbd>, RefTeX
-will offer its default label which is derived from the section title.
-</p>
-</li><li> <b>AUCTeX tells RefTeX about new sections</b><br>
-When creating a new section with <kbd>C-c C-s</kbd>, RefTeX will not
-have to rescan the buffer in order to see it.
+      <p>without further prompts.</p>
 
-</li><li> <a name="index-reftex_002darg_002dlabel"></a>
-<a name="index-TeX_002darg_002dlabel_002c-AUCTeX-function"></a>
-<a name="index-reftex_002darg_002dref"></a>
-<a name="index-TeX_002darg_002dref_002c-AUCTeX-function"></a>
-<a name="index-reftex_002darg_002dcite"></a>
-<a name="index-TeX_002darg_002dcite_002c-AUCTeX-function"></a>
-<a name="index-reftex_002darg_002dindex"></a>
-<a name="index-TeX_002darg_002dindex_002c-AUCTeX-function"></a>
-<a name="index-TeX_002dinsert_002dmacro_002c-AUCTeX-function"></a>
-<a name="index-C_002dc-RET"></a>
-<b>RefTeX supplies macro arguments</b><br> When you insert a macro
-interactively with <kbd>C-c <span class="key">RET</span></kbd>, AUCTeX normally prompts for
-macro arguments.  Internally, it uses the functions
-<code>TeX-arg-label</code>, <code>TeX-arg-cite</code>, and <code>TeX-arg-index</code> to
-prompt for arguments which are labels, citation keys and index entries.
-The interface takes over these functions<a name="DOCF11" href="#FOOT11"><sup>11</sup></a> and
-supplies the macro arguments with <b>RefTeX&rsquo;s</b> mechanisms.  For
-example, when you type <kbd>C-c <span class="key">RET</span> ref <span class="key">RET</span></kbd>, RefTeX
-will supply its label selection process (see <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a>).
+      <p>Similarly, when you type <kbd>C-c C-s section <span class=
+      "key">RET</span></kbd>, RefTeX will offer its default label
+      which is derived from the section title.</p>
+    </li>
 
-</li><li> <b>RefTeX tells AUCTeX about new labels, citation and index keys</b><br>
-RefTeX will add all newly created labels to AUCTeX&rsquo;s completion list.
-</li></ul>
+    <li><b>AUCTeX tells RefTeX about new sections</b><br />
+    When creating a new section with <kbd>C-c C-s</kbd>, RefTeX
+    will not have to rescan the buffer in order to see it.</li>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <li><a name="index-reftex_002darg_002dlabel" id=
+    "index-reftex_002darg_002dlabel"></a> <a name=
+    "index-TeX_002darg_002dlabel_002c-AUCTeX-function" id=
+    "index-TeX_002darg_002dlabel_002c-AUCTeX-function"></a>
+    <a name="index-reftex_002darg_002dref" id=
+    "index-reftex_002darg_002dref"></a> <a name=
+    "index-TeX_002darg_002dref_002c-AUCTeX-function" id=
+    "index-TeX_002darg_002dref_002c-AUCTeX-function"></a> <a name=
+    "index-reftex_002darg_002dcite" id=
+    "index-reftex_002darg_002dcite"></a> <a name=
+    "index-TeX_002darg_002dcite_002c-AUCTeX-function" id=
+    "index-TeX_002darg_002dcite_002c-AUCTeX-function"></a> <a name=
+    "index-reftex_002darg_002dindex" id=
+    "index-reftex_002darg_002dindex"></a> <a name=
+    "index-TeX_002darg_002dindex_002c-AUCTeX-function" id=
+    "index-TeX_002darg_002dindex_002c-AUCTeX-function"></a>
+    <a name="index-TeX_002dinsert_002dmacro_002c-AUCTeX-function"
+    id="index-TeX_002dinsert_002dmacro_002c-AUCTeX-function"></a>
+    <a name="index-C_002dc-RET" id="index-C_002dc-RET"></a>
+    <b>RefTeX supplies macro arguments</b><br />
+    When you insert a macro interactively with <kbd>C-c
+    <span class="key">RET</span></kbd>, AUCTeX normally prompts for
+    macro arguments. Internally, it uses the functions
+    <code>TeX-arg-label</code>, <code>TeX-arg-cite</code>, and
+    <code>TeX-arg-index</code> to prompt for arguments which are
+    labels, citation keys and index entries. The interface takes
+    over these functions<a name="DOCF11" href="#FOOT11" id=
+    "DOCF11"><sup>11</sup></a> and supplies the macro arguments
+    with <b>RefTeX&rsquo;s</b> mechanisms. For example, when you
+    type <kbd>C-c <span class="key">RET</span> ref <span class=
+    "key">RET</span></kbd>, RefTeX will supply its label selection
+    process (see <a href=
+    "Referencing-Labels.html#Referencing-Labels">Referencing
+    Labels</a>).</li>
 
-<h3><a name="FOOT10" href="#DOCF10">(10)</a></h3>
-<p>RefTeX 4.0 and AUCTeX 9.10c will be
-needed for all of this to work.  Parts of it work also with earlier
-versions.</p>
-<h3><a name="FOOT11" href="#DOCF11">(11)</a></h3>
-<p><code>fset</code> is used to
-do this, which is not reversible.  However, RefTeX implements the
-old functionality when you later decide to turn off the interface.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Style-Files.html#Style-Files" accesskey="n" rel="next">Style Files</a>, Up: <a href="AUCTeX.html#AUCTeX" accesskey="u" rel="up">AUCTeX</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li><b>RefTeX tells AUCTeX about new labels, citation and index
+    keys</b><br />
+    RefTeX will add all newly created labels to AUCTeX&rsquo;s
+    completion list.</li>
+  </ul>
 
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT10" href="#DOCF10" id="FOOT10">(10)</a></h3>
+
+    <p>RefTeX 4.0 and AUCTeX 9.10c will be needed for all of this
+    to work. Parts of it work also with earlier versions.</p>
+
+    <h3><a name="FOOT11" href="#DOCF11" id="FOOT11">(11)</a></h3>
+
+    <p><code>fset</code> is used to do this, which is not
+    reversible. However, RefTeX implements the old functionality
+    when you later decide to turn off the interface.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Style-Files.html#Style-Files" accesskey="n"
+    rel="next">Style Files</a>, Up: <a href="AUCTeX.html#AUCTeX"
+    accesskey="u" rel="up">AUCTeX</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,137 +16,215 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Internal archiving</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Internal archiving">
-<meta name="keywords" content="The Org Manual: Internal archiving">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Archiving.html#Archiving" rel="up" title="Archiving">
-<link href="Agenda-Views.html#Agenda-Views" rel="next" title="Agenda Views">
-<link href="Moving-subtrees.html#Moving-subtrees" rel="prev" title="Moving subtrees">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Internal archiving</title>
+  <meta name="description" content=
+  "The Org Manual: Internal archiving" />
+  <meta name="keywords" content=
+  "The Org Manual: Internal archiving" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Archiving.html#Archiving" rel="up" title=
+  "Archiving" />
+  <link href="Agenda-Views.html#Agenda-Views" rel="next" title=
+  "Agenda Views" />
+  <link href="Moving-subtrees.html#Moving-subtrees" rel="prev"
+  title="Moving subtrees" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Internal-archiving"></a>
-<div class="header">
-<p>
-Previous: <a href="Moving-subtrees.html#Moving-subtrees" accesskey="p" rel="prev">Moving subtrees</a>, Up: <a href="Archiving.html#Archiving" accesskey="u" rel="up">Archiving</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Internal-archiving-1"></a>
-<h4 class="subsection">9.6.2 Internal archiving</h4>
+<body lang="en" xml:lang="en">
+  <a name="Internal-archiving" id="Internal-archiving"></a>
 
-<p>If you want to just switch off (for agenda views) certain subtrees without
-moving them to a different file, you can use the <code>ARCHIVE tag</code>.
-</p>
-<p>A headline that is marked with the ARCHIVE tag (see <a href="Tags.html#Tags">Tags</a>) stays at
-its location in the outline tree, but behaves in the following way:
-</p><ul class="no-bullet">
-<li>- <a name="index-org_002dcycle_002dopen_002darchived_002dtrees"></a>
-It does not open when you attempt to do so with a visibility cycling
-command (see <a href="Visibility-cycling.html#Visibility-cycling">Visibility cycling</a>).  You can force cycling archived
-subtrees with <kbd>C-<span class="key">TAB</span></kbd>, or by setting the option
-<code>org-cycle-open-archived-trees</code>.  Also normal outline commands like
-<code>show-all</code> will open archived subtrees.
-</li><li>- <a name="index-org_002dsparse_002dtree_002dopen_002darchived_002dtrees"></a>
-During sparse tree construction (see <a href="Sparse-trees.html#Sparse-trees">Sparse trees</a>), matches in
-archived subtrees are not exposed, unless you configure the option
-<code>org-sparse-tree-open-archived-trees</code>.
-</li><li>- <a name="index-org_002dagenda_002dskip_002darchived_002dtrees"></a>
-During agenda view construction (see <a href="Agenda-Views.html#Agenda-Views">Agenda Views</a>), the content of
-archived trees is ignored unless you configure the option
-<code>org-agenda-skip-archived-trees</code>, in which case these trees will always
-be included.  In the agenda you can press <kbd>v a</kbd> to get archives
-temporarily included.
-</li><li>- <a name="index-org_002dexport_002dwith_002darchived_002dtrees"></a>
-Archived trees are not exported (see <a href="Exporting.html#Exporting">Exporting</a>), only the headline
-is.  Configure the details using the variable
-<code>org-export-with-archived-trees</code>.
-</li><li>- <a name="index-org_002dcolumns_002dskip_002darchived_002dtrees"></a>
-Archived trees are excluded from column view unless the variable
-<code>org-columns-skip-archived-trees</code> is configured to <code>nil</code>.
-</li></ul>
+  <div class="header">
+    <p>Previous: <a href="Moving-subtrees.html#Moving-subtrees"
+    accesskey="p" rel="prev">Moving subtrees</a>, Up: <a href=
+    "Archiving.html#Archiving" accesskey="u" rel="up">Archiving</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Internal-archiving-1" id="Internal-archiving-1"></a>
 
-<p>The following commands help manage the ARCHIVE tag:
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002dc-C_002dx-a"></a>
-<a name="index-org_002dtoggle_002darchive_002dtag"></a>
-</dd>
-<dt><kbd><kbd>C-c C-x a</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-toggle-archive-tag</code>)</kbd></dt>
-<dd><p>Toggle the ARCHIVE tag for the current headline.  When the tag is set,
-the headline changes to a shadowed face, and the subtree below it is
-hidden.
-<a name="index-C_002du-C_002dc-C_002dx-a"></a>
-</p></dd>
-<dt><kbd><kbd>C-u C-c C-x a</kbd></kbd></dt>
-<dd><p>Check if any direct children of the current headline should be archived.
-To do this, each subtree is checked for open TODO entries.  If none are
-found, the command offers to set the ARCHIVE tag for the child.  If the
-cursor is <em>not</em> on a headline when this command is invoked, the
-level 1 trees will be checked.
-<a name="index-C_002dTAB"></a>
-<a name="index-org_002dforce_002dcycle_002darchived"></a>
-</p></dd>
-<dt><kbd><kbd>C-<kbd>TAB</kbd></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-force-cycle-archived</code>)</kbd></dt>
-<dd><p>Cycle a tree even if it is tagged with ARCHIVE.
-<a name="index-C_002dc-C_002dx-A"></a>
-<a name="index-org_002darchive_002dto_002darchive_002dsibling"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-x A</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-archive-to-archive-sibling</code>)</kbd></dt>
-<dd><p>Move the current entry to the <em>Archive Sibling</em>.  This is a sibling of
-the entry with the heading &lsquo;<samp>Archive</samp>&rsquo; and the tag &lsquo;<samp>ARCHIVE</samp>&rsquo;.  The
-entry becomes a child of that sibling and in this way retains a lot of its
-original context, including inherited tags and approximate position in the
-outline.
-</p></dd>
-</dl>
+  <h4 class="subsection">9.6.2 Internal archiving</h4>
 
+  <p>If you want to just switch off (for agenda views) certain
+  subtrees without moving them to a different file, you can use the
+  <code>ARCHIVE tag</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Moving-subtrees.html#Moving-subtrees" accesskey="p" rel="prev">Moving subtrees</a>, Up: <a href="Archiving.html#Archiving" accesskey="u" rel="up">Archiving</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A headline that is marked with the ARCHIVE tag (see <a href=
+  "Tags.html#Tags">Tags</a>) stays at its location in the outline
+  tree, but behaves in the following way:</p>
 
+  <ul class="no-bullet">
+    <li>- <a name=
+    "index-org_002dcycle_002dopen_002darchived_002dtrees" id=
+    "index-org_002dcycle_002dopen_002darchived_002dtrees"></a> It
+    does not open when you attempt to do so with a visibility
+    cycling command (see <a href=
+    "Visibility-cycling.html#Visibility-cycling">Visibility
+    cycling</a>). You can force cycling archived subtrees with
+    <kbd>C-<span class="key">TAB</span></kbd>, or by setting the
+    option <code>org-cycle-open-archived-trees</code>. Also normal
+    outline commands like <code>show-all</code> will open archived
+    subtrees.</li>
 
+    <li>- <a name=
+    "index-org_002dsparse_002dtree_002dopen_002darchived_002dtrees"
+    id=
+    "index-org_002dsparse_002dtree_002dopen_002darchived_002dtrees">
+    </a> During sparse tree construction (see <a href=
+    "Sparse-trees.html#Sparse-trees">Sparse trees</a>), matches in
+    archived subtrees are not exposed, unless you configure the
+    option <code>org-sparse-tree-open-archived-trees</code>.</li>
 
+    <li>- <a name=
+    "index-org_002dagenda_002dskip_002darchived_002dtrees" id=
+    "index-org_002dagenda_002dskip_002darchived_002dtrees"></a>
+    During agenda view construction (see <a href=
+    "Agenda-Views.html#Agenda-Views">Agenda Views</a>), the content
+    of archived trees is ignored unless you configure the option
+    <code>org-agenda-skip-archived-trees</code>, in which case
+    these trees will always be included. In the agenda you can
+    press <kbd>v a</kbd> to get archives temporarily included.</li>
+
+    <li>- <a name=
+    "index-org_002dexport_002dwith_002darchived_002dtrees" id=
+    "index-org_002dexport_002dwith_002darchived_002dtrees"></a>
+    Archived trees are not exported (see <a href=
+    "Exporting.html#Exporting">Exporting</a>), only the headline
+    is. Configure the details using the variable
+    <code>org-export-with-archived-trees</code>.</li>
+
+    <li>- <a name=
+    "index-org_002dcolumns_002dskip_002darchived_002dtrees" id=
+    "index-org_002dcolumns_002dskip_002darchived_002dtrees"></a>
+    Archived trees are excluded from column view unless the
+    variable <code>org-columns-skip-archived-trees</code> is
+    configured to <code>nil</code>.</li>
+  </ul>
+
+  <p>The following commands help manage the ARCHIVE tag:</p>
+
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-C_002dx-a" id=
+    "index-C_002dc-C_002dx-a"></a> <a name=
+    "index-org_002dtoggle_002darchive_002dtag" id=
+    "index-org_002dtoggle_002darchive_002dtag"></a></dd>
+
+    <dt><kbd><kbd>C-c C-x a</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-toggle-archive-tag</code>)</kbd></dt>
+
+    <dd>
+      <p>Toggle the ARCHIVE tag for the current headline. When the
+      tag is set, the headline changes to a shadowed face, and the
+      subtree below it is hidden. <a name=
+      "index-C_002du-C_002dc-C_002dx-a" id=
+      "index-C_002du-C_002dc-C_002dx-a"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-u C-c C-x a</kbd></kbd></dt>
+
+    <dd>
+      <p>Check if any direct children of the current headline
+      should be archived. To do this, each subtree is checked for
+      open TODO entries. If none are found, the command offers to
+      set the ARCHIVE tag for the child. If the cursor is
+      <em>not</em> on a headline when this command is invoked, the
+      level 1 trees will be checked. <a name="index-C_002dTAB" id=
+      "index-C_002dTAB"></a> <a name=
+      "index-org_002dforce_002dcycle_002darchived" id=
+      "index-org_002dforce_002dcycle_002darchived"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-</kbd>TAB</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-force-cycle-archived</code>)</dt>
+
+    <dd>
+      <p>Cycle a tree even if it is tagged with ARCHIVE. <a name=
+      "index-C_002dc-C_002dx-A" id="index-C_002dc-C_002dx-A"></a>
+      <a name=
+      "index-org_002darchive_002dto_002darchive_002dsibling" id=
+      "index-org_002darchive_002dto_002darchive_002dsibling"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-x A</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-archive-to-archive-sibling</code>)</kbd></dt>
+
+    <dd>
+      <p>Move the current entry to the <em>Archive Sibling</em>.
+      This is a sibling of the entry with the heading
+      &lsquo;<samp>Archive</samp>&rsquo; and the tag
+      &lsquo;<samp>ARCHIVE</samp>&rsquo;. The entry becomes a child
+      of that sibling and in this way retains a lot of its original
+      context, including inherited tags and approximate position in
+      the outline.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Moving-subtrees.html#Moving-subtrees"
+    accesskey="p" rel="prev">Moving subtrees</a>, Up: <a href=
+    "Archiving.html#Archiving" accesskey="u" rel="up">Archiving</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Nested Formulas with Rewrite Rules - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title="Rewrite Rules">
-<link rel="prev" href="Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules" title="Composing Patterns in Rewrite Rules">
-<link rel="next" href="Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules" title="Multi-Phase Rewrite Rules">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Nested Formulas with Rewrite Rules - GNU Emacs Calc
+  Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title=
+  "Rewrite Rules" />
+  <link rel="prev" href=
+  "Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules"
+  title="Composing Patterns in Rewrite Rules" />
+  <link rel="next" href=
+  "Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules"
+  title="Multi-Phase Rewrite Rules" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +41,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,90 +54,116 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Nested-Formulas-with-Rewrite-Rules"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules">Multi-Phase Rewrite Rules</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules">Composing Patterns in Rewrite Rules</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Nested-Formulas-with-Rewrite-Rules" id=
+    "Nested-Formulas-with-Rewrite-Rules"></a>
 
-<h4 class="subsection">11.11.7 Nested Formulas with Rewrite Rules</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules">Multi-Phase
+    Rewrite Rules</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href=
+    "Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules">Composing
+    Patterns in Rewrite Rules</a>, Up:&nbsp;<a rel="up" accesskey=
+    "u" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite
+    Rules</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">When <kbd>a r</kbd> (<code>calc-rewrite</code>) is used, it takes an expression from
-the top of the stack and attempts to match any of the specified rules
-to any part of the expression, starting with the whole expression
-and then, if that fails, trying deeper and deeper sub-expressions. 
-For each part of the expression, the rules are tried in the order
-they appear in the rules vector.  The first rule to match the first
-sub-expression wins; it replaces the matched sub-expression according
-to the <var>new</var> part of the rule.
+  <h4 class="subsection">11.11.7 Nested Formulas with Rewrite
+  Rules</h4>
 
-   <p>Often, the rule set will match and change the formula several times. 
-The top-level formula is first matched and substituted repeatedly until
-it no longer matches the pattern; then, sub-formulas are tried, and
-so on.  Once every part of the formula has gotten its chance, the
-rewrite mechanism starts over again with the top-level formula
-(in case a substitution of one of its arguments has caused it again
-to match).  This continues until no further matches can be made
-anywhere in the formula.
+  <p class="noindent">When <kbd>a r</kbd>
+  (<code>calc-rewrite</code>) is used, it takes an expression from
+  the top of the stack and attempts to match any of the specified
+  rules to any part of the expression, starting with the whole
+  expression and then, if that fails, trying deeper and deeper
+  sub-expressions. For each part of the expression, the rules are
+  tried in the order they appear in the rules vector. The first
+  rule to match the first sub-expression wins; it replaces the
+  matched sub-expression according to the <var>new</var> part of
+  the rule.</p>
 
-   <p>It is possible for a rule set to get into an infinite loop.  The
-most obvious case, replacing a formula with itself, is not a problem
-because a rule is not considered to &ldquo;succeed&rdquo; unless the righthand
-side actually comes out to something different than the original
-formula or sub-formula that was matched.  But if you accidentally
-had both &lsquo;<samp><span class="samp">ln(a b) := ln(a) + ln(b)</span></samp>&rsquo; and the reverse
-&lsquo;<samp><span class="samp">ln(a) + ln(b) := ln(a b)</span></samp>&rsquo; in your rule set, Calc would
-run forever switching a formula back and forth between the two
-forms.
+  <p>Often, the rule set will match and change the formula several
+  times. The top-level formula is first matched and substituted
+  repeatedly until it no longer matches the pattern; then,
+  sub-formulas are tried, and so on. Once every part of the formula
+  has gotten its chance, the rewrite mechanism starts over again
+  with the top-level formula (in case a substitution of one of its
+  arguments has caused it again to match). This continues until no
+  further matches can be made anywhere in the formula.</p>
 
-   <p>To avoid disaster, Calc normally stops after 100 changes have been
-made to the formula.  This will be enough for most multiple rewrites,
-but it will keep an endless loop of rewrites from locking up the
-computer forever.  (On most systems, you can also type <kbd>C-g</kbd> to
-halt any Emacs command prematurely.)
+  <p>It is possible for a rule set to get into an infinite loop.
+  The most obvious case, replacing a formula with itself, is not a
+  problem because a rule is not considered to &ldquo;succeed&rdquo;
+  unless the righthand side actually comes out to something
+  different than the original formula or sub-formula that was
+  matched. But if you accidentally had both
+  &lsquo;<samp><span class="samp">ln(a b) := ln(a) +
+  ln(b)</span></samp>&rsquo; and the reverse
+  &lsquo;<samp><span class="samp">ln(a) + ln(b) := ln(a
+  b)</span></samp>&rsquo; in your rule set, Calc would run forever
+  switching a formula back and forth between the two forms.</p>
 
-   <p>To change this limit, give a positive numeric prefix argument. 
-In particular, <kbd>M-1 a r</kbd> applies only one rewrite at a time,
-useful when you are first testing your rule (or just if repeated
-rewriting is not what is called for by your application).
+  <p>To avoid disaster, Calc normally stops after 100 changes have
+  been made to the formula. This will be enough for most multiple
+  rewrites, but it will keep an endless loop of rewrites from
+  locking up the computer forever. (On most systems, you can also
+  type <kbd>C-g</kbd> to halt any Emacs command prematurely.)</p>
 
-   <p><a name="index-iterations-1938"></a>You can also put a &ldquo;function call&rdquo; &lsquo;<samp><span class="samp">iterations(</span><var>n</var><span class="samp">)</span></samp>&rsquo;
-in place of a rule anywhere in your rules vector (but usually at
-the top).  Then, <var>n</var> will be used instead of 100 as the default
-number of iterations for this rule set.  You can use
-&lsquo;<samp><span class="samp">iterations(inf)</span></samp>&rsquo; if you want no iteration limit by default. 
-A prefix argument will override the <code>iterations</code> limit in the
-rule set.
+  <p>To change this limit, give a positive numeric prefix argument.
+  In particular, <kbd>M-1 a r</kbd> applies only one rewrite at a
+  time, useful when you are first testing your rule (or just if
+  repeated rewriting is not what is called for by your
+  application).</p>
 
-<pre class="example">     [ iterations(1),
+  <p><a name="index-iterations-1938" id=
+  "index-iterations-1938"></a>You can also put a &ldquo;function
+  call&rdquo; &lsquo;<samp><span class=
+  "samp">iterations(</span><var>n</var><span class=
+  "samp">)</span></samp>&rsquo; in place of a rule anywhere in your
+  rules vector (but usually at the top). Then, <var>n</var> will be
+  used instead of 100 as the default number of iterations for this
+  rule set. You can use &lsquo;<samp><span class=
+  "samp">iterations(inf)</span></samp>&rsquo; if you want no
+  iteration limit by default. A prefix argument will override the
+  <code>iterations</code> limit in the rule set.</p>
+  <pre class="example">
+     [ iterations(1),
        f(x) := f(x+1) ]
 </pre>
-   <p>More precisely, the limit controls the number of &ldquo;iterations,&rdquo;
-where each iteration is a successful matching of a rule pattern whose
-righthand side, after substituting meta-variables and applying the
-default simplifications, is different from the original sub-formula
-that was matched.
 
-   <p>A prefix argument of zero sets the limit to infinity.  Use with caution!
+  <p>More precisely, the limit controls the number of
+  &ldquo;iterations,&rdquo; where each iteration is a successful
+  matching of a rule pattern whose righthand side, after
+  substituting meta-variables and applying the default
+  simplifications, is different from the original sub-formula that
+  was matched.</p>
 
-   <p>Given a negative numeric prefix argument, <kbd>a r</kbd> will match and
-substitute the top-level expression up to that many times, but
-will not attempt to match the rules to any sub-expressions.
+  <p>A prefix argument of zero sets the limit to infinity. Use with
+  caution!</p>
 
-   <p>In a formula, <code>rewrite(</code><var>expr</var><code>, </code><var>rules</var><code>, </code><var>n</var><code>)</code>
-does a rewriting operation.  Here <var>expr</var> is the expression
-being rewritten, <var>rules</var> is the rule, vector of rules, or
-variable containing the rules, and <var>n</var> is the optional
-iteration limit, which may be a positive integer, a negative
-integer, or &lsquo;<samp><span class="samp">inf</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-inf</span></samp>&rsquo;.  If <var>n</var> is omitted
-the <code>iterations</code> value from the rule set is used; if both
-are omitted, 100 is used.
+  <p>Given a negative numeric prefix argument, <kbd>a r</kbd> will
+  match and substitute the top-level expression up to that many
+  times, but will not attempt to match the rules to any
+  sub-expressions.</p>
 
-   </body></html>
-
+  <p>In a formula,
+  <code>rewrite(</code><var>expr</var><code>,</code>
+  <var>rules</var><code>,</code> <var>n</var><code>)</code> does a
+  rewriting operation. Here <var>expr</var> is the expression being
+  rewritten, <var>rules</var> is the rule, vector of rules, or
+  variable containing the rules, and <var>n</var> is the optional
+  iteration limit, which may be a positive integer, a negative
+  integer, or &lsquo;<samp><span class=
+  "samp">inf</span></samp>&rsquo; or &lsquo;<samp><span class=
+  "samp">-inf</span></samp>&rsquo;. If <var>n</var> is omitted the
+  <code>iterations</code> value from the rule set is used; if both
+  are omitted, 100 is used.</p>
+</body>
+</html>

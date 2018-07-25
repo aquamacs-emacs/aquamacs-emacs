@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,82 +18,110 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Taylor Series</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Taylor Series">
-<meta name="keywords" content="GNU Emacs Calc Manual: Taylor Series">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Calculus.html#Calculus" rel="up" title="Calculus">
-<link href="Solving-Equations.html#Solving-Equations" rel="next" title="Solving Equations">
-<link href="Numerical-Integration.html#Numerical-Integration" rel="prev" title="Numerical Integration">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Taylor Series</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Taylor Series" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Taylor Series" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Calculus.html#Calculus" rel="up" title="Calculus" />
+  <link href="Solving-Equations.html#Solving-Equations" rel="next"
+  title="Solving Equations" />
+  <link href="Numerical-Integration.html#Numerical-Integration"
+  rel="prev" title="Numerical Integration" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Taylor-Series"></a>
-<div class="header">
-<p>
-Previous: <a href="Numerical-Integration.html#Numerical-Integration" accesskey="p" rel="prev">Numerical Integration</a>, Up: <a href="Calculus.html#Calculus" accesskey="u" rel="up">Calculus</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Taylor-Series-1"></a>
-<h4 class="subsection">10.5.5 Taylor Series</h4>
+<body lang="en" xml:lang="en">
+  <a name="Taylor-Series" id="Taylor-Series"></a>
 
-<a name="index-a-t"></a>
-<a name="index-calc_002dtaylor"></a>
-<a name="index-taylor"></a>
-<p>The <kbd>a t</kbd> (<code>calc-taylor</code>) [<code>taylor</code>] command computes a
-power series expansion or Taylor series of a function.  You specify the
-variable and the desired number of terms.  You may give an expression of
-the form &lsquo;<samp><var>var</var> = <var>a</var></samp>&rsquo; or &lsquo;<samp><var>var</var> - <var>a</var></samp>&rsquo; instead
-of just a variable to produce a Taylor expansion about the point <var>a</var>.
-You may specify the number of terms with a numeric prefix argument;
-otherwise the command will prompt you for the number of terms.  Note that
-many series expansions have coefficients of zero for some terms, so you
-may appear to get fewer terms than you asked for.
-</p>
-<p>If the <kbd>a i</kbd> command is unable to find a symbolic integral for a
-function, you can get an approximation by integrating the function&rsquo;s
-Taylor series.
-</p>
+  <div class="header">
+    <p>Previous: <a href=
+    "Numerical-Integration.html#Numerical-Integration" accesskey=
+    "p" rel="prev">Numerical Integration</a>, Up: <a href=
+    "Calculus.html#Calculus" accesskey="u" rel="up">Calculus</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Taylor-Series-1" id="Taylor-Series-1"></a>
 
+  <h4 class="subsection">10.5.5 Taylor Series</h4><a name=
+  "index-a-t" id="index-a-t"></a> <a name="index-calc_002dtaylor"
+  id="index-calc_002dtaylor"></a> <a name="index-taylor" id=
+  "index-taylor"></a>
 
+  <p>The <kbd>a t</kbd> (<code>calc-taylor</code>)
+  [<code>taylor</code>] command computes a power series expansion
+  or Taylor series of a function. You specify the variable and the
+  desired number of terms. You may give an expression of the form
+  &lsquo;<samp><var>var</var> = <var>a</var></samp>&rsquo; or
+  &lsquo;<samp><var>var</var> - <var>a</var></samp>&rsquo; instead
+  of just a variable to produce a Taylor expansion about the point
+  <var>a</var>. You may specify the number of terms with a numeric
+  prefix argument; otherwise the command will prompt you for the
+  number of terms. Note that many series expansions have
+  coefficients of zero for some terms, so you may appear to get
+  fewer terms than you asked for.</p>
 
+  <p>If the <kbd>a i</kbd> command is unable to find a symbolic
+  integral for a function, you can get an approximation by
+  integrating the function&rsquo;s Taylor series.</p>
 </body>
 </html>

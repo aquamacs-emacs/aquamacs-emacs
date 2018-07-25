@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,167 +19,264 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Examining Properties</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Examining Properties">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Examining Properties">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text-Properties.html#Text-Properties" rel="up" title="Text Properties">
-<link href="Changing-Properties.html#Changing-Properties" rel="next" title="Changing Properties">
-<link href="Text-Properties.html#Text-Properties" rel="prev" title="Text Properties">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Examining
+  Properties</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Examining Properties" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Examining Properties" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text-Properties.html#Text-Properties" rel="up" title=
+  "Text Properties" />
+  <link href="Changing-Properties.html#Changing-Properties" rel=
+  "next" title="Changing Properties" />
+  <link href="Text-Properties.html#Text-Properties" rel="prev"
+  title="Text Properties" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Examining-Properties" id="Examining-Properties"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Changing-Properties.html#Changing-Properties"
+    accesskey="n" rel="next">Changing Properties</a>, Up: <a href=
+    "Text-Properties.html#Text-Properties" accesskey="u" rel=
+    "up">Text Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Examining-Text-Properties" id=
+  "Examining-Text-Properties"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Examining-Properties"></a>
-<div class="header">
-<p>
-Next: <a href="Changing-Properties.html#Changing-Properties" accesskey="n" rel="next">Changing Properties</a>, Up: <a href="Text-Properties.html#Text-Properties" accesskey="u" rel="up">Text Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Examining-Text-Properties"></a>
-<h4 class="subsection">31.19.1 Examining Text Properties</h4>
-<a name="index-examining-text-properties"></a>
-<a name="index-text-properties_002c-examining"></a>
+  <h4 class="subsection">31.19.1 Examining Text
+  Properties</h4><a name="index-examining-text-properties" id=
+  "index-examining-text-properties"></a> <a name=
+  "index-text-properties_002c-examining" id=
+  "index-text-properties_002c-examining"></a>
 
-<p>The simplest way to examine text properties is to ask for the value of
-a particular property of a particular character.  For that, use
-<code>get-text-property</code>.  Use <code>text-properties-at</code> to get the
-entire property list of a character.  See <a href="Property-Search.html#Property-Search">Property Search</a>, for
-functions to examine the properties of a number of characters at once.
-</p>
-<p>These functions handle both strings and buffers.  Keep in mind that
-positions in a string start from 0, whereas positions in a buffer start
-from 1.
-</p>
-<dl>
-<dt><a name="index-get_002dtext_002dproperty"></a>Function: <strong>get-text-property</strong> <em>pos prop &amp;optional object</em></dt>
-<dd><p>This function returns the value of the <var>prop</var> property of the
-character after position <var>pos</var> in <var>object</var> (a buffer or
-string).  The argument <var>object</var> is optional and defaults to the
-current buffer.
-</p>
-<p>If there is no <var>prop</var> property strictly speaking, but the character
-has a property category that is a symbol, then <code>get-text-property</code> returns
-the <var>prop</var> property of that symbol.
-</p></dd></dl>
+  <p>The simplest way to examine text properties is to ask for the
+  value of a particular property of a particular character. For
+  that, use <code>get-text-property</code>. Use
+  <code>text-properties-at</code> to get the entire property list
+  of a character. See <a href=
+  "Property-Search.html#Property-Search">Property Search</a>, for
+  functions to examine the properties of a number of characters at
+  once.</p>
 
-<dl>
-<dt><a name="index-get_002dchar_002dproperty"></a>Function: <strong>get-char-property</strong> <em>position prop &amp;optional object</em></dt>
-<dd><p>This function is like <code>get-text-property</code>, except that it checks
-overlays first and then text properties.  See <a href="Overlays.html#Overlays">Overlays</a>.
-</p>
-<p>The argument <var>object</var> may be a string, a buffer, or a window.  If
-it is a window, then the buffer displayed in that window is used for
-text properties and overlays, but only the overlays active for that
-window are considered.  If <var>object</var> is a buffer, then overlays in
-that buffer are considered first, in order of decreasing priority,
-followed by the text properties.  If <var>object</var> is a string, only
-text properties are considered, since strings never have overlays.
-</p></dd></dl>
+  <p>These functions handle both strings and buffers. Keep in mind
+  that positions in a string start from 0, whereas positions in a
+  buffer start from 1.</p>
 
-<dl>
-<dt><a name="index-get_002dpos_002dproperty"></a>Function: <strong>get-pos-property</strong> <em>position prop &amp;optional object</em></dt>
-<dd><p>This function is like <code>get-char-property</code>, except that it pays
-attention to properties&rsquo; stickiness and overlays&rsquo; advancement settings
-instead of the property of the character at (i.e., right after)
-<var>position</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-get_002dtext_002dproperty" id=
+    "index-get_002dtext_002dproperty"></a>Function:
+    <strong>get-text-property</strong> <em>pos prop &amp;optional
+    object</em></dt>
 
-<dl>
-<dt><a name="index-get_002dchar_002dproperty_002dand_002doverlay"></a>Function: <strong>get-char-property-and-overlay</strong> <em>position prop &amp;optional object</em></dt>
-<dd><p>This is like <code>get-char-property</code>, but gives extra information
-about the overlay that the property value comes from.
-</p>
-<p>Its value is a cons cell whose <small>CAR</small> is the property value, the
-same value <code>get-char-property</code> would return with the same
-arguments.  Its <small>CDR</small> is the overlay in which the property was
-found, or <code>nil</code>, if it was found as a text property or not found
-at all.
-</p>
-<p>If <var>position</var> is at the end of <var>object</var>, both the <small>CAR</small> and
-the <small>CDR</small> of the value are <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the value of the <var>prop</var>
+      property of the character after position <var>pos</var> in
+      <var>object</var> (a buffer or string). The argument
+      <var>object</var> is optional and defaults to the current
+      buffer.</p>
 
-<dl>
-<dt><a name="index-char_002dproperty_002dalias_002dalist"></a>Variable: <strong>char-property-alias-alist</strong></dt>
-<dd><p>This variable holds an alist which maps property names to a list of
-alternative property names.  If a character does not specify a direct
-value for a property, the alternative property names are consulted in
-order; the first non-<code>nil</code> value is used.  This variable takes
-precedence over <code>default-text-properties</code>, and <code>category</code>
-properties take precedence over this variable.
-</p></dd></dl>
+      <p>If there is no <var>prop</var> property strictly speaking,
+      but the character has a property category that is a symbol,
+      then <code>get-text-property</code> returns the
+      <var>prop</var> property of that symbol.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-text_002dproperties_002dat"></a>Function: <strong>text-properties-at</strong> <em>position &amp;optional object</em></dt>
-<dd><p>This function returns the entire property list of the character at
-<var>position</var> in the string or buffer <var>object</var>.  If <var>object</var> is
-<code>nil</code>, it defaults to the current buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-get_002dchar_002dproperty" id=
+    "index-get_002dchar_002dproperty"></a>Function:
+    <strong>get-char-property</strong> <em>position prop
+    &amp;optional object</em></dt>
 
-<dl>
-<dt><a name="index-default_002dtext_002dproperties"></a>Variable: <strong>default-text-properties</strong></dt>
-<dd><p>This variable holds a property list giving default values for text
-properties.  Whenever a character does not specify a value for a
-property, neither directly, through a category symbol, or through
-<code>char-property-alias-alist</code>, the value stored in this list is
-used instead.  Here is an example:
-</p>
-<div class="example">
-<pre class="example">(setq default-text-properties '(foo 69)
+    <dd>
+      <p>This function is like <code>get-text-property</code>,
+      except that it checks overlays first and then text
+      properties. See <a href=
+      "Overlays.html#Overlays">Overlays</a>.</p>
+
+      <p>The argument <var>object</var> may be a string, a buffer,
+      or a window. If it is a window, then the buffer displayed in
+      that window is used for text properties and overlays, but
+      only the overlays active for that window are considered. If
+      <var>object</var> is a buffer, then overlays in that buffer
+      are considered first, in order of decreasing priority,
+      followed by the text properties. If <var>object</var> is a
+      string, only text properties are considered, since strings
+      never have overlays.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-get_002dpos_002dproperty" id=
+    "index-get_002dpos_002dproperty"></a>Function:
+    <strong>get-pos-property</strong> <em>position prop
+    &amp;optional object</em></dt>
+
+    <dd>
+      <p>This function is like <code>get-char-property</code>,
+      except that it pays attention to properties&rsquo; stickiness
+      and overlays&rsquo; advancement settings instead of the
+      property of the character at (i.e., right after)
+      <var>position</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-get_002dchar_002dproperty_002dand_002doverlay" id=
+    "index-get_002dchar_002dproperty_002dand_002doverlay"></a>Function:
+    <strong>get-char-property-and-overlay</strong> <em>position
+    prop &amp;optional object</em></dt>
+
+    <dd>
+      <p>This is like <code>get-char-property</code>, but gives
+      extra information about the overlay that the property value
+      comes from.</p>
+
+      <p>Its value is a cons cell whose <small>CAR</small> is the
+      property value, the same value <code>get-char-property</code>
+      would return with the same arguments. Its <small>CDR</small>
+      is the overlay in which the property was found, or
+      <code>nil</code>, if it was found as a text property or not
+      found at all.</p>
+
+      <p>If <var>position</var> is at the end of <var>object</var>,
+      both the <small>CAR</small> and the <small>CDR</small> of the
+      value are <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-char_002dproperty_002dalias_002dalist" id=
+    "index-char_002dproperty_002dalias_002dalist"></a>Variable:
+    <strong>char-property-alias-alist</strong></dt>
+
+    <dd>
+      <p>This variable holds an alist which maps property names to
+      a list of alternative property names. If a character does not
+      specify a direct value for a property, the alternative
+      property names are consulted in order; the first
+      non-<code>nil</code> value is used. This variable takes
+      precedence over <code>default-text-properties</code>, and
+      <code>category</code> properties take precedence over this
+      variable.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-text_002dproperties_002dat" id=
+    "index-text_002dproperties_002dat"></a>Function:
+    <strong>text-properties-at</strong> <em>position &amp;optional
+    object</em></dt>
+
+    <dd>
+      <p>This function returns the entire property list of the
+      character at <var>position</var> in the string or buffer
+      <var>object</var>. If <var>object</var> is <code>nil</code>,
+      it defaults to the current buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-default_002dtext_002dproperties" id=
+    "index-default_002dtext_002dproperties"></a>Variable:
+    <strong>default-text-properties</strong></dt>
+
+    <dd>
+      <p>This variable holds a property list giving default values
+      for text properties. Whenever a character does not specify a
+      value for a property, neither directly, through a category
+      symbol, or through <code>char-property-alias-alist</code>,
+      the value stored in this list is used instead. Here is an
+      example:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq default-text-properties '(foo 69)
       char-property-alias-alist nil)
-;; <span class="roman">Make sure character 1 has no properties of its own.</span>
+;; <span class=
+"roman">Make sure character 1 has no properties of its own.</span>
 (set-text-properties 1 2 nil)
-;; <span class="roman">What we get, when we ask, is the default value.</span>
+;; <span class=
+"roman">What we get, when we ask, is the default value.</span>
 (get-text-property 1 'foo)
      &rArr; 69
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Changing-Properties.html#Changing-Properties" accesskey="n" rel="next">Changing Properties</a>, Up: <a href="Text-Properties.html#Text-Properties" accesskey="u" rel="up">Text Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Changing-Properties.html#Changing-Properties"
+    accesskey="n" rel="next">Changing Properties</a>, Up: <a href=
+    "Text-Properties.html#Text-Properties" accesskey="u" rel=
+    "up">Text Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

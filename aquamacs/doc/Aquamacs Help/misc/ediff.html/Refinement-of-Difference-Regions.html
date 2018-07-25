@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Ediff, a comprehensive visual interface to Unix diff
 and patch utilities.
 
@@ -15,142 +17,210 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Ediff User&rsquo;s Manual: Refinement of Difference Regions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Ediff User&rsquo;s Manual: Refinement of Difference Regions">
-<meta name="keywords" content="Ediff User&rsquo;s Manual: Refinement of Difference Regions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customization.html#Customization" rel="up" title="Customization">
-<link href="Patch-and-Diff-Programs.html#Patch-and-Diff-Programs" rel="next" title="Patch and Diff Programs">
-<link href="Narrowing.html#Narrowing" rel="prev" title="Narrowing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Ediff User&rsquo;s Manual: Refinement of Difference
+  Regions</title>
+  <meta name="description" content=
+  "Ediff User&rsquo;s Manual: Refinement of Difference Regions" />
+  <meta name="keywords" content=
+  "Ediff User&rsquo;s Manual: Refinement of Difference Regions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customization.html#Customization" rel="up" title=
+  "Customization" />
+  <link href="Patch-and-Diff-Programs.html#Patch-and-Diff-Programs"
+  rel="next" title="Patch and Diff Programs" />
+  <link href="Narrowing.html#Narrowing" rel="prev" title=
+  "Narrowing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Refinement-of-Difference-Regions"></a>
-<div class="header">
-<p>
-Next: <a href="Patch-and-Diff-Programs.html#Patch-and-Diff-Programs" accesskey="n" rel="next">Patch and Diff Programs</a>, Previous: <a href="Narrowing.html#Narrowing" accesskey="p" rel="prev">Narrowing</a>, Up: <a href="Customization.html#Customization" accesskey="u" rel="up">Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Refinement-of-Difference-Regions-1"></a>
-<h3 class="section">7.7 Refinement of Difference Regions</h3>
+<body lang="en" xml:lang="en">
+  <a name="Refinement-of-Difference-Regions" id=
+  "Refinement-of-Difference-Regions"></a>
 
-<p>Ediff has variables to control the way fine differences are
-highlighted.  This feature gives you control over the process of refinement.
-Note that refinement ignores spaces, tabs, and newlines.
-</p>
-<dl compact="compact">
-<dt><code>ediff-auto-refine</code></dt>
-<dd><a name="index-ediff_002dauto_002drefine"></a>
-<p>This variable controls whether fine differences within regions are
-highlighted automatically (&ldquo;auto-refining&rdquo;).  The default is yes
-(&lsquo;<samp>on</samp>&rsquo;).
-</p>
-<p>On a slow machine, automatic refinement may be painful.  In that case,
-you can turn auto-refining on or off interactively by typing
-<kbd>@</kbd>.  You can also turn off display of refining that has
-already been done.
-</p>
-<p>When auto-refining is off, fine differences are shown only for regions
-for which these differences have been computed and saved before.  If
-auto-refining and display of refining are both turned off, fine
-differences are not shown at all.
-</p>
-<p>Typing <kbd>*</kbd> computes and displays fine differences for the current
-difference region, regardless of whether auto-refining is turned on.
-</p>
-</dd>
-<dt><code>ediff-auto-refine-limit</code></dt>
-<dd><a name="index-ediff_002dauto_002drefine_002dlimit"></a>
-<p>If auto-refining is on, this variable limits the size of the regions to
-be auto-refined.  This guards against the possible slowdown that may be
-caused by extraordinary large difference regions.
-</p>
-<p>You can always refine the current region by typing <kbd>*</kbd>.
-</p>
-</dd>
-<dt><code>ediff-forward-word-function</code></dt>
-<dd><a name="index-ediff_002dforward_002dword_002dfunction"></a>
-<p>This variable controls how fine differences are computed.  The
-value must be a Lisp function that determines how the current difference
-region should be split into words.
-</p>
-<a name="index-ediff_002ddiff_002dprogram"></a>
-<a name="index-ediff_002dforward_002dword_002dfunction-1"></a>
-<a name="index-ediff_002dforward_002dword"></a>
-<p>Fine differences are computed by first splitting the current difference
-region into words and then passing the result to
-<code>ediff-diff-program</code>.  For the default forward word function (which is
-<code>ediff-forward-word</code>), a word is a string consisting of letters,
-&lsquo;<samp>-</samp>&rsquo;, or &lsquo;<samp>_</samp>&rsquo;; a string of punctuation symbols; a string of digits,
-or a string consisting of symbols that are neither space, nor a letter.
-</p>
-<p>This default behavior is controlled by four variables: <code>ediff-word-1</code>,
-..., <code>ediff-word-4</code>.  See the on-line documentation for these variables
-and for the function <code>ediff-forward-word</code> for an explanation of how to
-modify these variables.
-<a name="index-ediff_002dword_002d1"></a>
-<a name="index-ediff_002dword_002d2"></a>
-<a name="index-ediff_002dword_002d3"></a>
-<a name="index-ediff_002dword_002d4"></a>
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Patch-and-Diff-Programs.html#Patch-and-Diff-Programs"
+    accesskey="n" rel="next">Patch and Diff Programs</a>, Previous:
+    <a href="Narrowing.html#Narrowing" accesskey="p" rel=
+    "prev">Narrowing</a>, Up: <a href=
+    "Customization.html#Customization" accesskey="u" rel=
+    "up">Customization</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Refinement-of-Difference-Regions-1" id=
+  "Refinement-of-Difference-Regions-1"></a>
 
-<p>Sometimes, when a region has too many differences between the variants,
-highlighting of fine differences is inconvenient, especially on
-color displays.  If that is the case, type <kbd>*</kbd> with a negative
-prefix argument.  This unhighlights fine differences for the current
-region.
-</p>
-<p>To unhighlight fine differences in all difference regions, use the
-command <kbd>@</kbd>.  Repeated typing of this key cycles through three
-different states: auto-refining, no-auto-refining, and no-highlighting
-of fine differences.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Patch-and-Diff-Programs.html#Patch-and-Diff-Programs" accesskey="n" rel="next">Patch and Diff Programs</a>, Previous: <a href="Narrowing.html#Narrowing" accesskey="p" rel="prev">Narrowing</a>, Up: <a href="Customization.html#Customization" accesskey="u" rel="up">Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">7.7 Refinement of Difference Regions</h3>
 
+  <p>Ediff has variables to control the way fine differences are
+  highlighted. This feature gives you control over the process of
+  refinement. Note that refinement ignores spaces, tabs, and
+  newlines.</p>
 
+  <dl compact="compact">
+    <dt><code>ediff-auto-refine</code></dt>
 
+    <dd>
+      <a name="index-ediff_002dauto_002drefine" id=
+      "index-ediff_002dauto_002drefine"></a>
+
+      <p>This variable controls whether fine differences within
+      regions are highlighted automatically
+      (&ldquo;auto-refining&rdquo;). The default is yes
+      (&lsquo;<samp>on</samp>&rsquo;).</p>
+
+      <p>On a slow machine, automatic refinement may be painful. In
+      that case, you can turn auto-refining on or off interactively
+      by typing <kbd>@</kbd>. You can also turn off display of
+      refining that has already been done.</p>
+
+      <p>When auto-refining is off, fine differences are shown only
+      for regions for which these differences have been computed
+      and saved before. If auto-refining and display of refining
+      are both turned off, fine differences are not shown at
+      all.</p>
+
+      <p>Typing <kbd>*</kbd> computes and displays fine differences
+      for the current difference region, regardless of whether
+      auto-refining is turned on.</p>
+    </dd>
+
+    <dt><code>ediff-auto-refine-limit</code></dt>
+
+    <dd>
+      <a name="index-ediff_002dauto_002drefine_002dlimit" id=
+      "index-ediff_002dauto_002drefine_002dlimit"></a>
+
+      <p>If auto-refining is on, this variable limits the size of
+      the regions to be auto-refined. This guards against the
+      possible slowdown that may be caused by extraordinary large
+      difference regions.</p>
+
+      <p>You can always refine the current region by typing
+      <kbd>*</kbd>.</p>
+    </dd>
+
+    <dt><code>ediff-forward-word-function</code></dt>
+
+    <dd>
+      <a name="index-ediff_002dforward_002dword_002dfunction" id=
+      "index-ediff_002dforward_002dword_002dfunction"></a>
+
+      <p>This variable controls how fine differences are computed.
+      The value must be a Lisp function that determines how the
+      current difference region should be split into
+      words.</p><a name="index-ediff_002ddiff_002dprogram" id=
+      "index-ediff_002ddiff_002dprogram"></a> <a name=
+      "index-ediff_002dforward_002dword_002dfunction-1" id=
+      "index-ediff_002dforward_002dword_002dfunction-1"></a>
+      <a name="index-ediff_002dforward_002dword" id=
+      "index-ediff_002dforward_002dword"></a>
+
+      <p>Fine differences are computed by first splitting the
+      current difference region into words and then passing the
+      result to <code>ediff-diff-program</code>. For the default
+      forward word function (which is
+      <code>ediff-forward-word</code>), a word is a string
+      consisting of letters, &lsquo;<samp>-</samp>&rsquo;, or
+      &lsquo;<samp>_</samp>&rsquo;; a string of punctuation
+      symbols; a string of digits, or a string consisting of
+      symbols that are neither space, nor a letter.</p>
+
+      <p>This default behavior is controlled by four variables:
+      <code>ediff-word-1</code>, ..., <code>ediff-word-4</code>.
+      See the on-line documentation for these variables and for the
+      function <code>ediff-forward-word</code> for an explanation
+      of how to modify these variables. <a name=
+      "index-ediff_002dword_002d1" id=
+      "index-ediff_002dword_002d1"></a> <a name=
+      "index-ediff_002dword_002d2" id=
+      "index-ediff_002dword_002d2"></a> <a name=
+      "index-ediff_002dword_002d3" id=
+      "index-ediff_002dword_002d3"></a> <a name=
+      "index-ediff_002dword_002d4" id=
+      "index-ediff_002dword_002d4"></a></p>
+    </dd>
+  </dl>
+
+  <p>Sometimes, when a region has too many differences between the
+  variants, highlighting of fine differences is inconvenient,
+  especially on color displays. If that is the case, type
+  <kbd>*</kbd> with a negative prefix argument. This unhighlights
+  fine differences for the current region.</p>
+
+  <p>To unhighlight fine differences in all difference regions, use
+  the command <kbd>@</kbd>. Repeated typing of this key cycles
+  through three different states: auto-refining, no-auto-refining,
+  and no-highlighting of fine differences.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Patch-and-Diff-Programs.html#Patch-and-Diff-Programs"
+    accesskey="n" rel="next">Patch and Diff Programs</a>, Previous:
+    <a href="Narrowing.html#Narrowing" accesskey="p" rel=
+    "prev">Narrowing</a>, Up: <a href=
+    "Customization.html#Customization" accesskey="u" rel=
+    "up">Customization</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

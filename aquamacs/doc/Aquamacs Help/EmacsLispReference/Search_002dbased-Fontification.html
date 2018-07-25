@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,307 +19,463 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Search-based Fontification</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Search-based Fontification">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Search-based Fontification">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="up" title="Font Lock Mode">
-<link href="Customizing-Keywords.html#Customizing-Keywords" rel="next" title="Customizing Keywords">
-<link href="Font-Lock-Basics.html#Font-Lock-Basics" rel="prev" title="Font Lock Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Search-based
+  Fontification</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Search-based Fontification" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Search-based Fontification" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="up" title=
+  "Font Lock Mode" />
+  <link href="Customizing-Keywords.html#Customizing-Keywords" rel=
+  "next" title="Customizing Keywords" />
+  <link href="Font-Lock-Basics.html#Font-Lock-Basics" rel="prev"
+  title="Font Lock Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Search_002dbased-Fontification" id=
+  "Search_002dbased-Fontification"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Customizing-Keywords.html#Customizing-Keywords" accesskey="n"
+    rel="next">Customizing Keywords</a>, Previous: <a href=
+    "Font-Lock-Basics.html#Font-Lock-Basics" accesskey="p" rel=
+    "prev">Font Lock Basics</a>, Up: <a href=
+    "Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel=
+    "up">Font Lock Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Search_002dbased-Fontification-1" id=
+  "Search_002dbased-Fontification-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Search_002dbased-Fontification"></a>
-<div class="header">
-<p>
-Next: <a href="Customizing-Keywords.html#Customizing-Keywords" accesskey="n" rel="next">Customizing Keywords</a>, Previous: <a href="Font-Lock-Basics.html#Font-Lock-Basics" accesskey="p" rel="prev">Font Lock Basics</a>, Up: <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel="up">Font Lock Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Search_002dbased-Fontification-1"></a>
-<h4 class="subsection">22.6.2 Search-based Fontification</h4>
+  <h4 class="subsection">22.6.2 Search-based Fontification</h4>
 
-<p>The variable which directly controls search-based fontification is
-<code>font-lock-keywords</code>, which is typically specified via the
-<var>keywords</var> element in <code>font-lock-defaults</code>.
-</p>
-<dl>
-<dt><a name="index-font_002dlock_002dkeywords"></a>Variable: <strong>font-lock-keywords</strong></dt>
-<dd><p>The value of this variable is a list of the keywords to highlight.  Lisp
-programs should not set this variable directly.  Normally, the value is
-automatically set by Font Lock mode, using the <var>keywords</var> element in
-<code>font-lock-defaults</code>.  The value can also be altered using the
-functions <code>font-lock-add-keywords</code> and
-<code>font-lock-remove-keywords</code> (see <a href="Customizing-Keywords.html#Customizing-Keywords">Customizing Keywords</a>).
-</p></dd></dl>
+  <p>The variable which directly controls search-based
+  fontification is <code>font-lock-keywords</code>, which is
+  typically specified via the <var>keywords</var> element in
+  <code>font-lock-defaults</code>.</p>
 
-<p>Each element of <code>font-lock-keywords</code> specifies how to find
-certain cases of text, and how to highlight those cases.  Font Lock mode
-processes the elements of <code>font-lock-keywords</code> one by one, and for
-each element, it finds and handles all matches.  Ordinarily, once
-part of the text has been fontified already, this cannot be overridden
-by a subsequent match in the same text; but you can specify different
-behavior using the <var>override</var> element of a <var>subexp-highlighter</var>.
-</p>
-<p>Each element of <code>font-lock-keywords</code> should have one of these
-forms:
-</p>
-<dl compact="compact">
-<dt><code><var>regexp</var></code></dt>
-<dd><p>Highlight all matches for <var>regexp</var> using
-<code>font-lock-keyword-face</code>.  For example,
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Highlight occurrences of the word &lsquo;<samp>foo</samp>&rsquo;</span>
-;; <span class="roman">using <code>font-lock-keyword-face</code>.</span>
-&quot;\\&lt;foo\\&gt;&quot;
-</pre></div>
+  <dl>
+    <dt><a name="index-font_002dlock_002dkeywords" id=
+    "index-font_002dlock_002dkeywords"></a>Variable:
+    <strong>font-lock-keywords</strong></dt>
 
-<p>Be careful when composing these regular expressions; a poorly written
-pattern can dramatically slow things down!  The function
-<code>regexp-opt</code> (see <a href="Regexp-Functions.html#Regexp-Functions">Regexp Functions</a>) is useful for calculating
-optimal regular expressions to match several keywords.
-</p>
-</dd>
-<dt><code><var>function</var></code></dt>
-<dd><p>Find text by calling <var>function</var>, and highlight the matches
-it finds using <code>font-lock-keyword-face</code>.
-</p>
-<p>When <var>function</var> is called, it receives one argument, the limit of
-the search; it should begin searching at point, and not search beyond the
-limit.  It should return non-<code>nil</code> if it succeeds, and set the
-match data to describe the match that was found.  Returning <code>nil</code>
-indicates failure of the search.
-</p>
-<p>Fontification will call <var>function</var> repeatedly with the same limit,
-and with point where the previous invocation left it, until
-<var>function</var> fails.  On failure, <var>function</var> need not reset point
-in any particular way.
-</p>
-</dd>
-<dt><code>(<var>matcher</var> . <var>subexp</var>)</code></dt>
-<dd><p>In this kind of element, <var>matcher</var> is either a regular
-expression or a function, as described above.  The <small>CDR</small>,
-<var>subexp</var>, specifies which subexpression of <var>matcher</var> should be
-highlighted (instead of the entire text that <var>matcher</var> matched).
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Highlight the &lsquo;<samp>bar</samp>&rsquo; in each occurrence of &lsquo;<samp>fubar</samp>&rsquo;,</span>
-;; <span class="roman">using <code>font-lock-keyword-face</code>.</span>
-(&quot;fu\\(bar\\)&quot; . 1)
-</pre></div>
+    <dd>
+      <p>The value of this variable is a list of the keywords to
+      highlight. Lisp programs should not set this variable
+      directly. Normally, the value is automatically set by Font
+      Lock mode, using the <var>keywords</var> element in
+      <code>font-lock-defaults</code>. The value can also be
+      altered using the functions
+      <code>font-lock-add-keywords</code> and
+      <code>font-lock-remove-keywords</code> (see <a href=
+      "Customizing-Keywords.html#Customizing-Keywords">Customizing
+      Keywords</a>).</p>
+    </dd>
+  </dl>
 
-<p>If you use <code>regexp-opt</code> to produce the regular expression
-<var>matcher</var>, you can use <code>regexp-opt-depth</code> (see <a href="Regexp-Functions.html#Regexp-Functions">Regexp Functions</a>) to calculate the value for <var>subexp</var>.
-</p>
-</dd>
-<dt><code>(<var>matcher</var> . <var>facespec</var>)</code></dt>
-<dd><p>In this kind of element, <var>facespec</var> is an expression whose value
-specifies the face to use for highlighting.  In the simplest case,
-<var>facespec</var> is a Lisp variable (a symbol) whose value is a face
-name.
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Highlight occurrences of &lsquo;<samp>fubar</samp>&rsquo;,</span>
-;; <span class="roman">using the face which is the value of <code>fubar-face</code>.</span>
-(&quot;fubar&quot; . fubar-face)
-</pre></div>
+  <p>Each element of <code>font-lock-keywords</code> specifies how
+  to find certain cases of text, and how to highlight those cases.
+  Font Lock mode processes the elements of
+  <code>font-lock-keywords</code> one by one, and for each element,
+  it finds and handles all matches. Ordinarily, once part of the
+  text has been fontified already, this cannot be overridden by a
+  subsequent match in the same text; but you can specify different
+  behavior using the <var>override</var> element of a
+  <var>subexp-highlighter</var>.</p>
 
-<p>However, <var>facespec</var> can also evaluate to a list of this form:
-</p>
-<div class="example">
-<pre class="example">(face <var>face</var> <var>prop1</var> <var>val1</var> <var>prop2</var> <var>val2</var>&hellip;)
-</pre></div>
+  <p>Each element of <code>font-lock-keywords</code> should have
+  one of these forms:</p>
 
-<p>to specify the face <var>face</var> and various additional text properties
-to put on the text that matches.  If you do this, be sure to add the
-other text property names that you set in this way to the value of
-<code>font-lock-extra-managed-props</code> so that the properties will also
-be cleared out when they are no longer appropriate.  Alternatively,
-you can set the variable <code>font-lock-unfontify-region-function</code> to
-a function that clears these properties.  See <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>.
-</p>
-</dd>
-<dt><code>(<var>matcher</var> . <var>subexp-highlighter</var>)</code></dt>
-<dd><p>In this kind of element, <var>subexp-highlighter</var> is a list
-which specifies how to highlight matches found by <var>matcher</var>.
-It has the form:
-</p>
-<div class="example">
-<pre class="example">(<var>subexp</var> <var>facespec</var> [<var>override</var> [<var>laxmatch</var>]])
-</pre></div>
+  <dl compact="compact">
+    <dt><code><var>regexp</var></code></dt>
 
-<p>The <small>CAR</small>, <var>subexp</var>, is an integer specifying which subexpression
-of the match to fontify (0 means the entire matching text).  The second
-subelement, <var>facespec</var>, is an expression whose value specifies the
-face, as described above.
-</p>
-<p>The last two values in <var>subexp-highlighter</var>, <var>override</var> and
-<var>laxmatch</var>, are optional flags.  If <var>override</var> is <code>t</code>,
-this element can override existing fontification made by previous
-elements of <code>font-lock-keywords</code>.  If it is <code>keep</code>, then
-each character is fontified if it has not been fontified already by
-some other element.  If it is <code>prepend</code>, the face specified by
-<var>facespec</var> is added to the beginning of the <code>font-lock-face</code>
-property.  If it is <code>append</code>, the face is added to the end of the
-<code>font-lock-face</code> property.
-</p>
-<p>If <var>laxmatch</var> is non-<code>nil</code>, it means there should be no error
-if there is no subexpression numbered <var>subexp</var> in <var>matcher</var>.
-Obviously, fontification of the subexpression numbered <var>subexp</var> will
-not occur.  However, fontification of other subexpressions (and other
-regexps) will continue.  If <var>laxmatch</var> is <code>nil</code>, and the
-specified subexpression is missing, then an error is signaled which
-terminates search-based fontification.
-</p>
-<p>Here are some examples of elements of this kind, and what they do:
-</p>
-<div class="smallexample">
-<pre class="smallexample">;; <span class="roman">Highlight occurrences of either &lsquo;<samp>foo</samp>&rsquo; or &lsquo;<samp>bar</samp>&rsquo;, using</span>
-;; <span class="roman"><code>foo-bar-face</code>, even if they have already been highlighted.</span>
-;; <span class="roman"><code>foo-bar-face</code> should be a variable whose value is a face.</span>
-(&quot;foo\\|bar&quot; 0 foo-bar-face t)
+    <dd>
+      <p>Highlight all matches for <var>regexp</var> using
+      <code>font-lock-keyword-face</code>. For example,</p>
 
-;; <span class="roman">Highlight the first subexpression within each occurrence</span>
-;; <span class="roman">that the function <code>fubar-match</code> finds,</span>
-;; <span class="roman">using the face which is the value of <code>fubar-face</code>.</span>
+      <div class="example">
+        <pre class="example">
+;; <span class=
+"roman">Highlight occurrences of the word &lsquo;<samp>foo</samp>&rsquo;</span>
+;; <span class=
+"roman">using <code>font-lock-keyword-face</code>.</span>
+"\\&lt;foo\\&gt;"
+</pre>
+      </div>
+
+      <p>Be careful when composing these regular expressions; a
+      poorly written pattern can dramatically slow things down! The
+      function <code>regexp-opt</code> (see <a href=
+      "Regexp-Functions.html#Regexp-Functions">Regexp
+      Functions</a>) is useful for calculating optimal regular
+      expressions to match several keywords.</p>
+    </dd>
+
+    <dt><code><var>function</var></code></dt>
+
+    <dd>
+      <p>Find text by calling <var>function</var>, and highlight
+      the matches it finds using
+      <code>font-lock-keyword-face</code>.</p>
+
+      <p>When <var>function</var> is called, it receives one
+      argument, the limit of the search; it should begin searching
+      at point, and not search beyond the limit. It should return
+      non-<code>nil</code> if it succeeds, and set the match data
+      to describe the match that was found. Returning
+      <code>nil</code> indicates failure of the search.</p>
+
+      <p>Fontification will call <var>function</var> repeatedly
+      with the same limit, and with point where the previous
+      invocation left it, until <var>function</var> fails. On
+      failure, <var>function</var> need not reset point in any
+      particular way.</p>
+    </dd>
+
+    <dt><code>(<var>matcher</var> . <var>subexp</var>)</code></dt>
+
+    <dd>
+      <p>In this kind of element, <var>matcher</var> is either a
+      regular expression or a function, as described above. The
+      <small>CDR</small>, <var>subexp</var>, specifies which
+      subexpression of <var>matcher</var> should be highlighted
+      (instead of the entire text that <var>matcher</var>
+      matched).</p>
+
+      <div class="example">
+        <pre class="example">
+;; <span class=
+"roman">Highlight the &lsquo;<samp>bar</samp>&rsquo; in each occurrence of &lsquo;<samp>fubar</samp>&rsquo;,</span>
+;; <span class=
+"roman">using <code>font-lock-keyword-face</code>.</span>
+("fu\\(bar\\)" . 1)
+</pre>
+      </div>
+
+      <p>If you use <code>regexp-opt</code> to produce the regular
+      expression <var>matcher</var>, you can use
+      <code>regexp-opt-depth</code> (see <a href=
+      "Regexp-Functions.html#Regexp-Functions">Regexp
+      Functions</a>) to calculate the value for
+      <var>subexp</var>.</p>
+    </dd>
+
+    <dt><code>(<var>matcher</var> .
+    <var>facespec</var>)</code></dt>
+
+    <dd>
+      <p>In this kind of element, <var>facespec</var> is an
+      expression whose value specifies the face to use for
+      highlighting. In the simplest case, <var>facespec</var> is a
+      Lisp variable (a symbol) whose value is a face name.</p>
+
+      <div class="example">
+        <pre class="example">
+;; <span class=
+"roman">Highlight occurrences of &lsquo;<samp>fubar</samp>&rsquo;,</span>
+;; <span class=
+"roman">using the face which is the value of <code>fubar-face</code>.</span>
+("fubar" . fubar-face)
+</pre>
+      </div>
+
+      <p>However, <var>facespec</var> can also evaluate to a list
+      of this form:</p>
+
+      <div class="example">
+        <pre class="example">
+(face <var>face</var> <var>prop1</var> <var>val1</var> <var>prop2</var> <var>val2</var>&hellip;)
+</pre>
+      </div>
+
+      <p>to specify the face <var>face</var> and various additional
+      text properties to put on the text that matches. If you do
+      this, be sure to add the other text property names that you
+      set in this way to the value of
+      <code>font-lock-extra-managed-props</code> so that the
+      properties will also be cleared out when they are no longer
+      appropriate. Alternatively, you can set the variable
+      <code>font-lock-unfontify-region-function</code> to a
+      function that clears these properties. See <a href=
+      "Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other
+      Font Lock Variables</a>.</p>
+    </dd>
+
+    <dt><code>(<var>matcher</var> .
+    <var>subexp-highlighter</var>)</code></dt>
+
+    <dd>
+      <p>In this kind of element, <var>subexp-highlighter</var> is
+      a list which specifies how to highlight matches found by
+      <var>matcher</var>. It has the form:</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>subexp</var> <var>facespec</var> [<var>override</var> [<var>laxmatch</var>]])
+</pre>
+      </div>
+
+      <p>The <small>CAR</small>, <var>subexp</var>, is an integer
+      specifying which subexpression of the match to fontify (0
+      means the entire matching text). The second subelement,
+      <var>facespec</var>, is an expression whose value specifies
+      the face, as described above.</p>
+
+      <p>The last two values in <var>subexp-highlighter</var>,
+      <var>override</var> and <var>laxmatch</var>, are optional
+      flags. If <var>override</var> is <code>t</code>, this element
+      can override existing fontification made by previous elements
+      of <code>font-lock-keywords</code>. If it is
+      <code>keep</code>, then each character is fontified if it has
+      not been fontified already by some other element. If it is
+      <code>prepend</code>, the face specified by
+      <var>facespec</var> is added to the beginning of the
+      <code>font-lock-face</code> property. If it is
+      <code>append</code>, the face is added to the end of the
+      <code>font-lock-face</code> property.</p>
+
+      <p>If <var>laxmatch</var> is non-<code>nil</code>, it means
+      there should be no error if there is no subexpression
+      numbered <var>subexp</var> in <var>matcher</var>. Obviously,
+      fontification of the subexpression numbered <var>subexp</var>
+      will not occur. However, fontification of other
+      subexpressions (and other regexps) will continue. If
+      <var>laxmatch</var> is <code>nil</code>, and the specified
+      subexpression is missing, then an error is signaled which
+      terminates search-based fontification.</p>
+
+      <p>Here are some examples of elements of this kind, and what
+      they do:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+;; <span class=
+"roman">Highlight occurrences of either &lsquo;<samp>foo</samp>&rsquo; or &lsquo;<samp>bar</samp>&rsquo;, using</span>
+;; <span class=
+"roman"><code>foo-bar-face</code>, even if they have already been highlighted.</span>
+;; <span class=
+"roman"><code>foo-bar-face</code> should be a variable whose value is a face.</span>
+("foo\\|bar" 0 foo-bar-face t)
+
+;; <span class=
+"roman">Highlight the first subexpression within each occurrence</span>
+;; <span class=
+"roman">that the function <code>fubar-match</code> finds,</span>
+;; <span class=
+"roman">using the face which is the value of <code>fubar-face</code>.</span>
 (fubar-match 1 fubar-face)
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>(<var>matcher</var> . <var>anchored-highlighter</var>)</code></dt>
-<dd><p>In this kind of element, <var>anchored-highlighter</var> specifies how to
-highlight text that follows a match found by <var>matcher</var>.  So a
-match found by <var>matcher</var> acts as the anchor for further searches
-specified by <var>anchored-highlighter</var>.  <var>anchored-highlighter</var>
-is a list of the following form:
-</p>
-<div class="example">
-<pre class="example">(<var>anchored-matcher</var> <var>pre-form</var> <var>post-form</var>
+    <dt><code>(<var>matcher</var> .
+    <var>anchored-highlighter</var>)</code></dt>
+
+    <dd>
+      <p>In this kind of element, <var>anchored-highlighter</var>
+      specifies how to highlight text that follows a match found by
+      <var>matcher</var>. So a match found by <var>matcher</var>
+      acts as the anchor for further searches specified by
+      <var>anchored-highlighter</var>.
+      <var>anchored-highlighter</var> is a list of the following
+      form:</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>anchored-matcher</var> <var>pre-form</var> <var>post-form</var>
                         <var>subexp-highlighters</var>&hellip;)
-</pre></div>
+</pre>
+      </div>
 
-<p>Here, <var>anchored-matcher</var>, like <var>matcher</var>, is either a regular
-expression or a function.  After a match of <var>matcher</var> is found,
-point is at the end of the match.  Now, Font Lock evaluates the form
-<var>pre-form</var>.  Then it searches for matches of
-<var>anchored-matcher</var> and uses <var>subexp-highlighters</var> to highlight
-these.  A <var>subexp-highlighter</var> is as described above.  Finally,
-Font Lock evaluates <var>post-form</var>.
-</p>
-<p>The forms <var>pre-form</var> and <var>post-form</var> can be used to initialize
-before, and cleanup after, <var>anchored-matcher</var> is used.  Typically,
-<var>pre-form</var> is used to move point to some position relative to the
-match of <var>matcher</var>, before starting with <var>anchored-matcher</var>.
-<var>post-form</var> might be used to move back, before resuming with
-<var>matcher</var>.
-</p>
-<p>After Font Lock evaluates <var>pre-form</var>, it does not search for
-<var>anchored-matcher</var> beyond the end of the line.  However, if
-<var>pre-form</var> returns a buffer position that is greater than the
-position of point after <var>pre-form</var> is evaluated, then the position
-returned by <var>pre-form</var> is used as the limit of the search instead.
-It is generally a bad idea to return a position greater than the end
-of the line; in other words, the <var>anchored-matcher</var> search should
-not span lines.
-</p>
-<p>For example,
-</p>
-<div class="smallexample">
-<pre class="smallexample">;; <span class="roman">Highlight occurrences of the word &lsquo;<samp>item</samp>&rsquo; following</span>
-;; <span class="roman">an occurrence of the word &lsquo;<samp>anchor</samp>&rsquo; (on the same line)</span>
-;; <span class="roman">in the value of <code>item-face</code>.</span>
-(&quot;\\&lt;anchor\\&gt;&quot; &quot;\\&lt;item\\&gt;&quot; nil nil (0 item-face))
-</pre></div>
+      <p>Here, <var>anchored-matcher</var>, like
+      <var>matcher</var>, is either a regular expression or a
+      function. After a match of <var>matcher</var> is found, point
+      is at the end of the match. Now, Font Lock evaluates the form
+      <var>pre-form</var>. Then it searches for matches of
+      <var>anchored-matcher</var> and uses
+      <var>subexp-highlighters</var> to highlight these. A
+      <var>subexp-highlighter</var> is as described above. Finally,
+      Font Lock evaluates <var>post-form</var>.</p>
 
-<p>Here, <var>pre-form</var> and <var>post-form</var> are <code>nil</code>.  Therefore
-searching for &lsquo;<samp>item</samp>&rsquo; starts at the end of the match of
-&lsquo;<samp>anchor</samp>&rsquo;, and searching for subsequent instances of &lsquo;<samp>anchor</samp>&rsquo;
-resumes from where searching for &lsquo;<samp>item</samp>&rsquo; concluded.
-</p>
-</dd>
-<dt><code>(<var>matcher</var> <var>highlighters</var>&hellip;)</code></dt>
-<dd><p>This sort of element specifies several <var>highlighter</var> lists for a
-single <var>matcher</var>.  A <var>highlighter</var> list can be of the type
-<var>subexp-highlighter</var> or <var>anchored-highlighter</var> as described
-above.
-</p>
-<p>For example,
-</p>
-<div class="smallexample">
-<pre class="smallexample">;; <span class="roman">Highlight occurrences of the word &lsquo;<samp>anchor</samp>&rsquo; in the value</span>
-;; <span class="roman">of <code>anchor-face</code>, and subsequent occurrences of the word</span>
-;; <span class="roman">&lsquo;<samp>item</samp>&rsquo; (on the same line) in the value of <code>item-face</code>.</span>
-(&quot;\\&lt;anchor\\&gt;&quot; (0 anchor-face)
-                (&quot;\\&lt;item\\&gt;&quot; nil nil (0 item-face)))
-</pre></div>
+      <p>The forms <var>pre-form</var> and <var>post-form</var> can
+      be used to initialize before, and cleanup after,
+      <var>anchored-matcher</var> is used. Typically,
+      <var>pre-form</var> is used to move point to some position
+      relative to the match of <var>matcher</var>, before starting
+      with <var>anchored-matcher</var>. <var>post-form</var> might
+      be used to move back, before resuming with
+      <var>matcher</var>.</p>
 
-</dd>
-<dt><code>(eval . <var>form</var>)</code></dt>
-<dd><p>Here <var>form</var> is an expression to be evaluated the first time
-this value of <code>font-lock-keywords</code> is used in a buffer.
-Its value should have one of the forms described in this table.
-</p></dd>
-</dl>
+      <p>After Font Lock evaluates <var>pre-form</var>, it does not
+      search for <var>anchored-matcher</var> beyond the end of the
+      line. However, if <var>pre-form</var> returns a buffer
+      position that is greater than the position of point after
+      <var>pre-form</var> is evaluated, then the position returned
+      by <var>pre-form</var> is used as the limit of the search
+      instead. It is generally a bad idea to return a position
+      greater than the end of the line; in other words, the
+      <var>anchored-matcher</var> search should not span lines.</p>
 
-<p><strong>Warning:</strong> Do not design an element of <code>font-lock-keywords</code>
-to match text which spans lines; this does not work reliably.
-For details, see See <a href="Multiline-Font-Lock.html#Multiline-Font-Lock">Multiline Font Lock</a>.
-</p>
-<p>You can use <var>case-fold</var> in <code>font-lock-defaults</code> to specify
-the value of <code>font-lock-keywords-case-fold-search</code> which says
-whether search-based fontification should be case-insensitive.
-</p>
-<dl>
-<dt><a name="index-font_002dlock_002dkeywords_002dcase_002dfold_002dsearch"></a>Variable: <strong>font-lock-keywords-case-fold-search</strong></dt>
-<dd><p>Non-<code>nil</code> means that regular expression matching for the sake of
-<code>font-lock-keywords</code> should be case-insensitive.
-</p></dd></dl>
+      <p>For example,</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Customizing-Keywords.html#Customizing-Keywords" accesskey="n" rel="next">Customizing Keywords</a>, Previous: <a href="Font-Lock-Basics.html#Font-Lock-Basics" accesskey="p" rel="prev">Font Lock Basics</a>, Up: <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel="up">Font Lock Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <div class="smallexample">
+        <pre class="smallexample">
+;; <span class=
+"roman">Highlight occurrences of the word &lsquo;<samp>item</samp>&rsquo; following</span>
+;; <span class=
+"roman">an occurrence of the word &lsquo;<samp>anchor</samp>&rsquo; (on the same line)</span>
+;; <span class=
+"roman">in the value of <code>item-face</code>.</span>
+("\\&lt;anchor\\&gt;" "\\&lt;item\\&gt;" nil nil (0 item-face))
+</pre>
+      </div>
 
+      <p>Here, <var>pre-form</var> and <var>post-form</var> are
+      <code>nil</code>. Therefore searching for
+      &lsquo;<samp>item</samp>&rsquo; starts at the end of the
+      match of &lsquo;<samp>anchor</samp>&rsquo;, and searching for
+      subsequent instances of &lsquo;<samp>anchor</samp>&rsquo;
+      resumes from where searching for
+      &lsquo;<samp>item</samp>&rsquo; concluded.</p>
+    </dd>
 
+    <dt><code>(<var>matcher</var>
+    <var>highlighters</var>&hellip;)</code></dt>
 
+    <dd>
+      <p>This sort of element specifies several
+      <var>highlighter</var> lists for a single <var>matcher</var>.
+      A <var>highlighter</var> list can be of the type
+      <var>subexp-highlighter</var> or
+      <var>anchored-highlighter</var> as described above.</p>
+
+      <p>For example,</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+;; <span class=
+"roman">Highlight occurrences of the word &lsquo;<samp>anchor</samp>&rsquo; in the value</span>
+;; <span class=
+"roman">of <code>anchor-face</code>, and subsequent occurrences of the word</span>
+;; <span class=
+"roman">&lsquo;<samp>item</samp>&rsquo; (on the same line) in the value of <code>item-face</code>.</span>
+("\\&lt;anchor\\&gt;" (0 anchor-face)
+                ("\\&lt;item\\&gt;" nil nil (0 item-face)))
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>(eval . <var>form</var>)</code></dt>
+
+    <dd>
+      <p>Here <var>form</var> is an expression to be evaluated the
+      first time this value of <code>font-lock-keywords</code> is
+      used in a buffer. Its value should have one of the forms
+      described in this table.</p>
+    </dd>
+  </dl>
+
+  <p><strong>Warning:</strong> Do not design an element of
+  <code>font-lock-keywords</code> to match text which spans lines;
+  this does not work reliably. For details, see See <a href=
+  "Multiline-Font-Lock.html#Multiline-Font-Lock">Multiline Font
+  Lock</a>.</p>
+
+  <p>You can use <var>case-fold</var> in
+  <code>font-lock-defaults</code> to specify the value of
+  <code>font-lock-keywords-case-fold-search</code> which says
+  whether search-based fontification should be
+  case-insensitive.</p>
+
+  <dl>
+    <dt><a name=
+    "index-font_002dlock_002dkeywords_002dcase_002dfold_002dsearch"
+    id=
+    "index-font_002dlock_002dkeywords_002dcase_002dfold_002dsearch">
+    </a>Variable:
+    <strong>font-lock-keywords-case-fold-search</strong></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means that regular expression
+      matching for the sake of <code>font-lock-keywords</code>
+      should be case-insensitive.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Customizing-Keywords.html#Customizing-Keywords" accesskey="n"
+    rel="next">Customizing Keywords</a>, Previous: <a href=
+    "Font-Lock-Basics.html#Font-Lock-Basics" accesskey="p" rel=
+    "prev">Font Lock Basics</a>, Up: <a href=
+    "Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel=
+    "up">Font Lock Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

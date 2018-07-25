@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Macro Bindings - Common Lisp Extensions</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Common Lisp Extensions">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Variable-Bindings.html#Variable-Bindings" title="Variable Bindings">
-<link rel="prev" href="Function-Bindings.html#Function-Bindings" title="Function Bindings">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Macro Bindings - Common Lisp Extensions</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Common Lisp Extensions" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Variable-Bindings.html#Variable-Bindings"
+  title="Variable Bindings" />
+  <link rel="prev" href="Function-Bindings.html#Function-Bindings"
+  title="Function Bindings" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -26,8 +34,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,66 +47,93 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Macro-Bindings"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Function-Bindings.html#Function-Bindings">Function Bindings</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Variable-Bindings.html#Variable-Bindings">Variable Bindings</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Macro-Bindings" id="Macro-Bindings"></a>
 
-<h4 class="subsection">5.3.4 Macro Bindings</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Function-Bindings.html#Function-Bindings">Function
+    Bindings</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Variable-Bindings.html#Variable-Bindings">Variable
+    Bindings</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">These forms create local macros and &ldquo;symbol macros.&rdquo;
+  <h4 class="subsection">5.3.4 Macro Bindings</h4>
 
-<div class="defun">
-&mdash; Special Form: <b>macrolet</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-macrolet-36"></a></var><br>
-<blockquote><p>This form is analogous to <code>flet</code>, but for macros instead of
-functions.  Each <var>binding</var> is a list of the same form as the
-arguments to <code>defmacro*</code> (i.e., a macro name, argument list,
-and macro-expander forms).  The macro is defined accordingly for
-use within the body of the <code>macrolet</code>.
+  <p class="noindent">These forms create local macros and
+  &ldquo;symbol macros.&rdquo;</p>
 
-        <p>Because of the nature of macros, <code>macrolet</code> is lexically
-scoped even in Emacs Lisp:  The <code>macrolet</code> binding will
-affect only calls that appear physically within the body
-<var>forms</var>, possibly after expansion of other macros in the
-body. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Special Form: <b>macrolet</b>
+    (<var>bindings<small class="dots">...</small></var>)
+    <var>forms<small class="dots">...</small><a name=
+    "index-macrolet-36" id="index-macrolet-36"></a></var><br />
 
-<div class="defun">
-&mdash; Special Form: <b>symbol-macrolet</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-symbol_002dmacrolet-37"></a></var><br>
-<blockquote><p>This form creates <dfn>symbol macros</dfn>, which are macros that look
-like variable references rather than function calls.  Each
-<var>binding</var> is a list &lsquo;<samp><span class="samp">(</span><var>var</var> <var>expansion</var><span class="samp">)</span></samp>&rsquo;;
-any reference to <var>var</var> within the body <var>forms</var> is
-replaced by <var>expansion</var>.
+    <blockquote>
+      <p>This form is analogous to <code>flet</code>, but for
+      macros instead of functions. Each <var>binding</var> is a
+      list of the same form as the arguments to
+      <code>defmacro*</code> (i.e., a macro name, argument list,
+      and macro-expander forms). The macro is defined accordingly
+      for use within the body of the <code>macrolet</code>.</p>
 
-     <pre class="example">          (setq bar '(5 . 9))
+      <p>Because of the nature of macros, <code>macrolet</code> is
+      lexically scoped even in Emacs Lisp: The
+      <code>macrolet</code> binding will affect only calls that
+      appear physically within the body <var>forms</var>, possibly
+      after expansion of other macros in the body.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Special Form: <b>symbol-macrolet</b>
+    (<var>bindings<small class="dots">...</small></var>)
+    <var>forms<small class="dots">...</small><a name=
+    "index-symbol_002dmacrolet-37" id=
+    "index-symbol_002dmacrolet-37"></a></var><br />
+
+    <blockquote>
+      <p>This form creates <dfn>symbol macros</dfn>, which are
+      macros that look like variable references rather than
+      function calls. Each <var>binding</var> is a list
+      &lsquo;<samp><span class="samp">(</span><var>var</var>
+      <var>expansion</var><span class=
+      "samp">)</span></samp>&rsquo;; any reference to
+      <var>var</var> within the body <var>forms</var> is replaced
+      by <var>expansion</var>.</p>
+      <pre class="example">
+          (setq bar '(5 . 9))
           (symbol-macrolet ((foo (car bar)))
             (incf foo))
           bar
                &rArr; (6 . 9)
 </pre>
-        <p>A <code>setq</code> of a symbol macro is treated the same as a <code>setf</code>. 
-I.e., <code>(setq foo 4)</code> in the above would be equivalent to
-<code>(setf foo 4)</code>, which in turn expands to <code>(setf (car bar) 4)</code>.
 
-        <p>Likewise, a <code>let</code> or <code>let*</code> binding a symbol macro is
-treated like a <code>letf</code> or <code>letf*</code>.  This differs from true
-Common Lisp, where the rules of lexical scoping cause a <code>let</code>
-binding to shadow a <code>symbol-macrolet</code> binding.  In this package,
-only <code>lexical-let</code> and <code>lexical-let*</code> will shadow a symbol
-macro.
+      <p>A <code>setq</code> of a symbol macro is treated the same
+      as a <code>setf</code>. I.e., <code>(setq foo 4)</code> in
+      the above would be equivalent to <code>(setf foo 4)</code>,
+      which in turn expands to <code>(setf (car bar) 4)</code>.</p>
 
-        <p>There is no analogue of <code>defmacro</code> for symbol macros; all symbol
-macros are local.  A typical use of <code>symbol-macrolet</code> is in the
-expansion of another macro:
+      <p>Likewise, a <code>let</code> or <code>let*</code> binding
+      a symbol macro is treated like a <code>letf</code> or
+      <code>letf*</code>. This differs from true Common Lisp, where
+      the rules of lexical scoping cause a <code>let</code> binding
+      to shadow a <code>symbol-macrolet</code> binding. In this
+      package, only <code>lexical-let</code> and
+      <code>lexical-let*</code> will shadow a symbol macro.</p>
 
-     <pre class="example">          (defmacro* my-dolist ((x list) &amp;rest body)
+      <p>There is no analogue of <code>defmacro</code> for symbol
+      macros; all symbol macros are local. A typical use of
+      <code>symbol-macrolet</code> is in the expansion of another
+      macro:</p>
+      <pre class="example">
+          (defmacro* my-dolist ((x list) &amp;rest body)
             (let ((var (gensym)))
               (list 'loop 'for var 'on list 'do
                     (list* 'symbol-macrolet (list (list x (list 'car var)))
@@ -107,23 +144,30 @@ expansion of another macro:
           mylist
                &rArr; (2 3 4 5)
 </pre>
-        <p class="noindent">In this example, the <code>my-dolist</code> macro is similar to <code>dolist</code>
-(see <a href="Iteration.html#Iteration">Iteration</a>) except that the variable <code>x</code> becomes a true
-reference onto the elements of the list.  The <code>my-dolist</code> call
-shown here expands to
 
-     <pre class="example">          (loop for G1234 on mylist do
+      <p class="noindent">In this example, the
+      <code>my-dolist</code> macro is similar to
+      <code>dolist</code> (see <a href=
+      "Iteration.html#Iteration">Iteration</a>) except that the
+      variable <code>x</code> becomes a true reference onto the
+      elements of the list. The <code>my-dolist</code> call shown
+      here expands to</p>
+      <pre class="example">
+          (loop for G1234 on mylist do
                 (symbol-macrolet ((x (car G1234)))
                   (incf x)))
 </pre>
-        <p class="noindent">which in turn expands to
 
-     <pre class="example">          (loop for G1234 on mylist do (incf (car G1234)))
+      <p class="noindent">which in turn expands to</p>
+      <pre class="example">
+          (loop for G1234 on mylist do (incf (car G1234)))
 </pre>
-        <p>See <a href="Loop-Facility.html#Loop-Facility">Loop Facility</a>, for a description of the <code>loop</code> macro. 
-This package defines a nonstandard <code>in-ref</code> loop clause that
-works much like <code>my-dolist</code>. 
-</p></blockquote></div>
 
-   </body></html>
-
+      <p>See <a href="Loop-Facility.html#Loop-Facility">Loop
+      Facility</a>, for a description of the <code>loop</code>
+      macro. This package defines a nonstandard <code>in-ref</code>
+      loop clause that works much like <code>my-dolist</code>.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,117 +20,162 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: GDB User Interface Layout</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: GDB User Interface Layout">
-<meta name="keywords" content="GNU Emacs Manual: GDB User Interface Layout">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" rel="up" title="GDB Graphical Interface">
-<link href="Source-Buffers.html#Source-Buffers" rel="next" title="Source Buffers">
-<link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" rel="prev" title="GDB Graphical Interface">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: GDB User Interface Layout</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: GDB User Interface Layout" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: GDB User Interface Layout" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+  rel="up" title="GDB Graphical Interface" />
+  <link href="Source-Buffers.html#Source-Buffers" rel="next" title=
+  "Source Buffers" />
+  <link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+  rel="prev" title="GDB Graphical Interface" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="GDB-User-Interface-Layout" id=
+  "GDB-User-Interface-Layout"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Source-Buffers.html#Source-Buffers"
+    accesskey="n" rel="next">Source Buffers</a>, Up: <a href=
+    "GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+    accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="GDB-User-Interface-Layout-1" id=
+  "GDB-User-Interface-Layout-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="GDB-User-Interface-Layout"></a>
-<div class="header">
-<p>
-Next: <a href="Source-Buffers.html#Source-Buffers" accesskey="n" rel="next">Source Buffers</a>, Up: <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="GDB-User-Interface-Layout-1"></a>
-<h4 class="subsubsection">27.6.5.1 GDB User Interface Layout</h4>
-<a name="index-GDB-User-Interface-layout"></a>
+  <h4 class="subsubsection">27.6.5.1 GDB User Interface
+  Layout</h4><a name="index-GDB-User-Interface-layout" id=
+  "index-GDB-User-Interface-layout"></a> <a name=
+  "index-gdb_002dmany_002dwindows-1" id=
+  "index-gdb_002dmany_002dwindows-1"></a>
 
-<a name="index-gdb_002dmany_002dwindows-1"></a>
-<p>If the variable <code>gdb-many-windows</code> is <code>nil</code> (the default),
-<kbd>M-x gdb</kbd> normally displays only the GUD interaction buffer.
-However, if the variable <code>gdb-show-main</code> is also non-<code>nil</code>,
-it starts with two windows: one displaying the GUD interaction buffer,
-and the other showing the source for the <code>main</code> function of the
-program you are debugging.
-</p>
-<p>If <code>gdb-many-windows</code> is non-<code>nil</code>, then <kbd>M-x gdb</kbd>
-displays the following frame layout:
-</p>
-<div class="smallexample">
-<pre class="smallexample">+--------------------------------+--------------------------------+
+  <p>If the variable <code>gdb-many-windows</code> is
+  <code>nil</code> (the default), <kbd>M-x gdb</kbd> normally
+  displays only the GUD interaction buffer. However, if the
+  variable <code>gdb-show-main</code> is also non-<code>nil</code>,
+  it starts with two windows: one displaying the GUD interaction
+  buffer, and the other showing the source for the
+  <code>main</code> function of the program you are debugging.</p>
+
+  <p>If <code>gdb-many-windows</code> is non-<code>nil</code>, then
+  <kbd>M-x gdb</kbd> displays the following frame layout:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
++--------------------------------+--------------------------------+
 |   GUD interaction buffer       |   Locals/Registers buffer      |
 |--------------------------------+--------------------------------+
 |   Primary Source buffer        |   I/O buffer for debugged pgm  |
 |--------------------------------+--------------------------------+
 |   Stack buffer                 |   Breakpoints/Threads buffer   |
 +--------------------------------+--------------------------------+
-</pre></div>
+</pre>
+  </div><a name="index-gdb_002drestore_002dwindows" id=
+  "index-gdb_002drestore_002dwindows"></a> <a name=
+  "index-gdb_002dmany_002dwindows" id=
+  "index-gdb_002dmany_002dwindows"></a>
 
-<a name="index-gdb_002drestore_002dwindows"></a>
-<a name="index-gdb_002dmany_002dwindows"></a>
-<p>If you ever change the window layout, you can restore the many-windows
-layout by typing <kbd>M-x gdb-restore-windows</kbd>.  To toggle
-between the many windows layout and a simple layout with just the GUD
-interaction buffer and a source file, type <kbd>M-x gdb-many-windows</kbd>.
-</p>
-<p>You may also specify additional GDB-related buffers to display,
-either in the same frame or a different one.  Select the buffers you
-want by typing <code>M-x gdb-display-<var>buffertype</var>-buffer</code> or
-<code>M-x gdb-frame-<var>buffertype</var>-buffer</code>, where <var>buffertype</var>
-is the relevant buffer type, such as &lsquo;<samp>breakpoints</samp>&rsquo;.  You can do
-the same with the menu bar, with the &lsquo;<samp>GDB-Windows</samp>&rsquo; and
-&lsquo;<samp>GDB-Frames</samp>&rsquo; sub-menus of the &lsquo;<samp>GUD</samp>&rsquo; menu.
-</p>
-<p>When you finish debugging, kill the GUD interaction buffer with
-<kbd>C-x k</kbd>, which will also kill all the buffers associated with the
-session.  However you need not do this if, after editing and
-re-compiling your source code within Emacs, you wish to continue
-debugging.  When you restart execution, GDB automatically finds the
-new executable.  Keeping the GUD interaction buffer has the advantage
-of keeping the shell history as well as GDB&rsquo;s breakpoints.  You do
-need to check that the breakpoints in recently edited source files are
-still in the right places.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Source-Buffers.html#Source-Buffers" accesskey="n" rel="next">Source Buffers</a>, Up: <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If you ever change the window layout, you can restore the
+  many-windows layout by typing <kbd>M-x gdb-restore-windows</kbd>.
+  To toggle between the many windows layout and a simple layout
+  with just the GUD interaction buffer and a source file, type
+  <kbd>M-x gdb-many-windows</kbd>.</p>
 
+  <p>You may also specify additional GDB-related buffers to
+  display, either in the same frame or a different one. Select the
+  buffers you want by typing <code>M-x
+  gdb-display-<var>buffertype</var>-buffer</code> or <code>M-x
+  gdb-frame-<var>buffertype</var>-buffer</code>, where
+  <var>buffertype</var> is the relevant buffer type, such as
+  &lsquo;<samp>breakpoints</samp>&rsquo;. You can do the same with
+  the menu bar, with the &lsquo;<samp>GDB-Windows</samp>&rsquo; and
+  &lsquo;<samp>GDB-Frames</samp>&rsquo; sub-menus of the
+  &lsquo;<samp>GUD</samp>&rsquo; menu.</p>
 
+  <p>When you finish debugging, kill the GUD interaction buffer
+  with <kbd>C-x k</kbd>, which will also kill all the buffers
+  associated with the session. However you need not do this if,
+  after editing and re-compiling your source code within Emacs, you
+  wish to continue debugging. When you restart execution, GDB
+  automatically finds the new executable. Keeping the GUD
+  interaction buffer has the advantage of keeping the shell history
+  as well as GDB&rsquo;s breakpoints. You do need to check that the
+  breakpoints in recently edited source files are still in the
+  right places.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Source-Buffers.html#Source-Buffers"
+    accesskey="n" rel="next">Source Buffers</a>, Up: <a href=
+    "GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+    accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

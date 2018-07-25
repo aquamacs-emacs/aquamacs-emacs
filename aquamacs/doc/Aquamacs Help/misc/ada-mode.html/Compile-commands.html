@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,152 +14,202 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Ada Mode: Compile commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Ada Mode: Compile commands">
-<meta name="keywords" content="Ada Mode: Compile commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Compiling-Executing.html#Compiling-Executing" rel="up" title="Compiling Executing">
-<link href="Compiler-errors.html#Compiler-errors" rel="next" title="Compiler errors">
-<link href="Compiling-Executing.html#Compiling-Executing" rel="prev" title="Compiling Executing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Ada Mode: Compile commands</title>
+  <meta name="description" content="Ada Mode: Compile commands" />
+  <meta name="keywords" content="Ada Mode: Compile commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Compiling-Executing.html#Compiling-Executing" rel=
+  "up" title="Compiling Executing" />
+  <link href="Compiler-errors.html#Compiler-errors" rel="next"
+  title="Compiler errors" />
+  <link href="Compiling-Executing.html#Compiling-Executing" rel=
+  "prev" title="Compiling Executing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Compile-commands"></a>
-<div class="header">
-<p>
-Next: <a href="Compiler-errors.html#Compiler-errors" accesskey="n" rel="next">Compiler errors</a>, Up: <a href="Compiling-Executing.html#Compiling-Executing" accesskey="u" rel="up">Compiling Executing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Compile-commands-1"></a>
-<h3 class="section">4.1 Compile commands</h3>
+<body lang="en" xml:lang="en">
+  <a name="Compile-commands" id="Compile-commands"></a>
 
-<p>Here are the commands for building and using an Ada project, as
-listed in the Ada menu.
-</p>
-<p>In multi-file projects, there must be one file that is the main
-program. That is given by the <code>main</code> project file variable;
-it defaults to the current file if not yet set, but is also set by the
-&ldquo;set main and build&rdquo; command.
-</p>
-<dl compact="compact">
-<dt><code>Check file</code></dt>
-<dd><p>Compiles the current file in syntax check mode, by running
-<code>check_cmd</code> defined in the current project file. This typically
-runs faster than full compile mode, speeding up finding and fixing
-compilation errors.
-</p>
-<p>This sets <code>main</code> only if it has not been set yet.
-</p>
-</dd>
-<dt><code>Compile file</code></dt>
-<dd><p>Compiles the current file, by running <code>comp_cmd</code> from the current
-project file.
-</p>
-<p>This does not set <code>main</code>.
-</p>
-</dd>
-<dt><code>Set main and Build</code></dt>
-<dd><p>Sets <code>main</code> to the current file, then executes the Build
-command.
-</p>
-</dd>
-<dt><code>Show main</code></dt>
-<dd><p>Display <code>main</code> in the message buffer.
-</p>
-</dd>
-<dt><code>Build</code></dt>
-<dd><p>Compiles all obsolete units of the current <code>main</code>, and links
-<code>main</code>, by running <code>make_cmd</code> from the current project.
-</p>
-<p>This sets <code>main</code> only if it has not been set yet.
-</p>
-</dd>
-<dt><code>Run</code></dt>
-<dd><p>Executes the main program in a shell, displayed in a separate Emacs
-buffer. This runs <code>run_cmd</code> from the current project. The
-execution buffer allows for interactive input/output.
-</p>
-<p>To modify the run command, in particular to provide or change the
-command line arguments, type <kbd>C-u</kbd> before invoking the command.
-</p>
-<p>This command is not available for a cross-compilation toolchain.
-</p>
-</dd>
-</dl>
-<p>It is important when using these commands to understand how
-<code>main</code> is used and changed.
-</p>
-<p>Build runs &rsquo;gnatmake&rsquo; on the main unit. During a typical edit/compile
-session, this is the only command you need to invoke, which is why it
-is bound to <kbd>C-c C-c</kbd>. It will compile all files needed by the
-main unit, and display compilation errors in any of them.
-</p>
-<p>Note that Build can be invoked from any Ada buffer; typically you will
-be fixing errors in files other than the main, but you don&rsquo;t have to
-switch back to the main to invoke the compiler again.
-</p>
-<p>Novices and students typically work on single-file Ada projects. In
-this case, <kbd>C-c C-m</kbd> will normally be the only command needed; it
-will build the current file, rather than the last-built main.
-</p>
-<p>There are three ways to change <code>main</code>:
-</p>
-<ol>
-<li> Invoke &lsquo;<samp>Ada | Set main and Build</samp>&rsquo;, which sets <code>main</code> to
-the current file.
+  <div class="header">
+    <p>Next: <a href="Compiler-errors.html#Compiler-errors"
+    accesskey="n" rel="next">Compiler errors</a>, Up: <a href=
+    "Compiling-Executing.html#Compiling-Executing" accesskey="u"
+    rel="up">Compiling Executing</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Compile-commands-1" id="Compile-commands-1"></a>
 
-</li><li> Invoke &lsquo;<samp>Ada | Project | Edit</samp>&rsquo;, edit <code>main</code> and
-<code>main</code>, and click &lsquo;<samp>[save]</samp>&rsquo;
+  <h3 class="section">4.1 Compile commands</h3>
 
-</li><li> Invoke &lsquo;<samp>Ada | Project | Load</samp>&rsquo;, and load a project file that specifies <code>main</code>
+  <p>Here are the commands for building and using an Ada project,
+  as listed in the Ada menu.</p>
 
-</li></ol>
+  <p>In multi-file projects, there must be one file that is the
+  main program. That is given by the <code>main</code> project file
+  variable; it defaults to the current file if not yet set, but is
+  also set by the &ldquo;set main and build&rdquo; command.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Compiler-errors.html#Compiler-errors" accesskey="n" rel="next">Compiler errors</a>, Up: <a href="Compiling-Executing.html#Compiling-Executing" accesskey="u" rel="up">Compiling Executing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><code>Check file</code></dt>
 
+    <dd>
+      <p>Compiles the current file in syntax check mode, by running
+      <code>check_cmd</code> defined in the current project file.
+      This typically runs faster than full compile mode, speeding
+      up finding and fixing compilation errors.</p>
 
+      <p>This sets <code>main</code> only if it has not been set
+      yet.</p>
+    </dd>
 
+    <dt><code>Compile file</code></dt>
+
+    <dd>
+      <p>Compiles the current file, by running
+      <code>comp_cmd</code> from the current project file.</p>
+
+      <p>This does not set <code>main</code>.</p>
+    </dd>
+
+    <dt><code>Set main and Build</code></dt>
+
+    <dd>
+      <p>Sets <code>main</code> to the current file, then executes
+      the Build command.</p>
+    </dd>
+
+    <dt><code>Show main</code></dt>
+
+    <dd>
+      <p>Display <code>main</code> in the message buffer.</p>
+    </dd>
+
+    <dt><code>Build</code></dt>
+
+    <dd>
+      <p>Compiles all obsolete units of the current
+      <code>main</code>, and links <code>main</code>, by running
+      <code>make_cmd</code> from the current project.</p>
+
+      <p>This sets <code>main</code> only if it has not been set
+      yet.</p>
+    </dd>
+
+    <dt><code>Run</code></dt>
+
+    <dd>
+      <p>Executes the main program in a shell, displayed in a
+      separate Emacs buffer. This runs <code>run_cmd</code> from
+      the current project. The execution buffer allows for
+      interactive input/output.</p>
+
+      <p>To modify the run command, in particular to provide or
+      change the command line arguments, type <kbd>C-u</kbd> before
+      invoking the command.</p>
+
+      <p>This command is not available for a cross-compilation
+      toolchain.</p>
+    </dd>
+  </dl>
+
+  <p>It is important when using these commands to understand how
+  <code>main</code> is used and changed.</p>
+
+  <p>Build runs &rsquo;gnatmake&rsquo; on the main unit. During a
+  typical edit/compile session, this is the only command you need
+  to invoke, which is why it is bound to <kbd>C-c C-c</kbd>. It
+  will compile all files needed by the main unit, and display
+  compilation errors in any of them.</p>
+
+  <p>Note that Build can be invoked from any Ada buffer; typically
+  you will be fixing errors in files other than the main, but you
+  don&rsquo;t have to switch back to the main to invoke the
+  compiler again.</p>
+
+  <p>Novices and students typically work on single-file Ada
+  projects. In this case, <kbd>C-c C-m</kbd> will normally be the
+  only command needed; it will build the current file, rather than
+  the last-built main.</p>
+
+  <p>There are three ways to change <code>main</code>:</p>
+
+  <ol>
+    <li>Invoke &lsquo;<samp>Ada | Set main and Build</samp>&rsquo;,
+    which sets <code>main</code> to the current file.</li>
+
+    <li>Invoke &lsquo;<samp>Ada | Project | Edit</samp>&rsquo;,
+    edit <code>main</code> and <code>main</code>, and click
+    &lsquo;<samp>[save]</samp>&rsquo;</li>
+
+    <li>Invoke &lsquo;<samp>Ada | Project | Load</samp>&rsquo;, and
+    load a project file that specifies <code>main</code></li>
+  </ol>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Compiler-errors.html#Compiler-errors"
+    accesskey="n" rel="next">Compiler errors</a>, Up: <a href=
+    "Compiling-Executing.html#Compiling-Executing" accesskey="u"
+    rel="up">Compiling Executing</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

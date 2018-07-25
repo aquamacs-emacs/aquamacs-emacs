@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,171 +19,248 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Writing to Files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Writing to Files">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Writing to Files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="File-Locks.html#File-Locks" rel="next" title="File Locks">
-<link href="Reading-from-Files.html#Reading-from-Files" rel="prev" title="Reading from Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Writing to Files</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Writing to Files" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Writing to Files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href="File-Locks.html#File-Locks" rel="next" title=
+  "File Locks" />
+  <link href="Reading-from-Files.html#Reading-from-Files" rel=
+  "prev" title="Reading from Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Writing-to-Files" id="Writing-to-Files"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="File-Locks.html#File-Locks" accesskey="n"
+    rel="next">File Locks</a>, Previous: <a href=
+    "Reading-from-Files.html#Reading-from-Files" accesskey="p" rel=
+    "prev">Reading from Files</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Writing-to-Files-1" id="Writing-to-Files-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Writing-to-Files"></a>
-<div class="header">
-<p>
-Next: <a href="File-Locks.html#File-Locks" accesskey="n" rel="next">File Locks</a>, Previous: <a href="Reading-from-Files.html#Reading-from-Files" accesskey="p" rel="prev">Reading from Files</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Writing-to-Files-1"></a>
-<h3 class="section">24.4 Writing to Files</h3>
-<a name="index-writing-to-files"></a>
+  <h3 class="section">24.4 Writing to Files</h3><a name=
+  "index-writing-to-files" id="index-writing-to-files"></a>
 
-<p>You can write the contents of a buffer, or part of a buffer, directly
-to a file on disk using the <code>append-to-file</code> and
-<code>write-region</code> functions.  Don&rsquo;t use these functions to write to
-files that are being visited; that could cause confusion in the
-mechanisms for visiting.
-</p>
-<dl>
-<dt><a name="index-append_002dto_002dfile"></a>Command: <strong>append-to-file</strong> <em>start end filename</em></dt>
-<dd><p>This function appends the contents of the region delimited by
-<var>start</var> and <var>end</var> in the current buffer to the end of file
-<var>filename</var>.  If that file does not exist, it is created.  This
-function returns <code>nil</code>.
-</p>
-<p>An error is signaled if <var>filename</var> specifies a nonwritable file,
-or a nonexistent file in a directory where files cannot be created.
-</p>
-<p>When called from Lisp, this function is completely equivalent to:
-</p>
-<div class="example">
-<pre class="example">(write-region start end filename t)
-</pre></div>
-</dd></dl>
+  <p>You can write the contents of a buffer, or part of a buffer,
+  directly to a file on disk using the <code>append-to-file</code>
+  and <code>write-region</code> functions. Don&rsquo;t use these
+  functions to write to files that are being visited; that could
+  cause confusion in the mechanisms for visiting.</p>
 
-<dl>
-<dt><a name="index-write_002dregion"></a>Command: <strong>write-region</strong> <em>start end filename &amp;optional append visit lockname mustbenew</em></dt>
-<dd><p>This function writes the region delimited by <var>start</var> and <var>end</var>
-in the current buffer into the file specified by <var>filename</var>.
-</p>
-<p>If <var>start</var> is <code>nil</code>, then the command writes the entire buffer
-contents (<em>not</em> just the accessible portion) to the file and
-ignores <var>end</var>.
-</p>
-<p>If <var>start</var> is a string, then <code>write-region</code> writes or appends
-that string, rather than text from the buffer.  <var>end</var> is ignored in
-this case.
-</p>
-<p>If <var>append</var> is non-<code>nil</code>, then the specified text is appended
-to the existing file contents (if any).  If <var>append</var> is a
-number, <code>write-region</code> seeks to that byte offset from the start
-of the file and writes the data from there.
-</p>
-<p>If <var>mustbenew</var> is non-<code>nil</code>, then <code>write-region</code> asks
-for confirmation if <var>filename</var> names an existing file.  If
-<var>mustbenew</var> is the symbol <code>excl</code>, then <code>write-region</code>
-does not ask for confirmation, but instead it signals an error
-<code>file-already-exists</code> if the file already exists.
-</p>
-<p>The test for an existing file, when <var>mustbenew</var> is <code>excl</code>, uses
-a special system feature.  At least for files on a local disk, there is
-no chance that some other program could create a file of the same name
-before Emacs does, without Emacs&rsquo;s noticing.
-</p>
-<p>If <var>visit</var> is <code>t</code>, then Emacs establishes an association
-between the buffer and the file: the buffer is then visiting that file.
-It also sets the last file modification time for the current buffer to
-<var>filename</var>&rsquo;s modtime, and marks the buffer as not modified.  This
-feature is used by <code>save-buffer</code>, but you probably should not use
-it yourself.
-</p>
-<p>If <var>visit</var> is a string, it specifies the file name to visit.  This
-way, you can write the data to one file (<var>filename</var>) while recording
-the buffer as visiting another file (<var>visit</var>).  The argument
-<var>visit</var> is used in the echo area message and also for file locking;
-<var>visit</var> is stored in <code>buffer-file-name</code>.  This feature is used
-to implement <code>file-precious-flag</code>; don&rsquo;t use it yourself unless you
-really know what you&rsquo;re doing.
-</p>
-<p>The optional argument <var>lockname</var>, if non-<code>nil</code>, specifies the
-file name to use for purposes of locking and unlocking, overriding
-<var>filename</var> and <var>visit</var> for that purpose.
-</p>
-<p>The function <code>write-region</code> converts the data which it writes to
-the appropriate file formats specified by <code>buffer-file-format</code>
-and also calls the functions in the list
-<code>write-region-annotate-functions</code>.
-See <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>.
-</p>
-<p>Normally, <code>write-region</code> displays the message &lsquo;<samp>Wrote
-<var>filename</var></samp>&rsquo; in the echo area.  This message is inhibited if
-<var>visit</var> is neither <code>t</code> nor <code>nil</code> nor a string, or if
-Emacs is operating in batch mode (see <a href="Batch-Mode.html#Batch-Mode">Batch Mode</a>).  This
-feature is useful for programs that use files for internal purposes,
-files that the user does not need to know about.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-append_002dto_002dfile" id=
+    "index-append_002dto_002dfile"></a>Command:
+    <strong>append-to-file</strong> <em>start end
+    filename</em></dt>
 
-<dl>
-<dt><a name="index-with_002dtemp_002dfile"></a>Macro: <strong>with-temp-file</strong> <em>file body&hellip;</em></dt>
-<dd><a name="Definition-of-with_002dtemp_002dfile"></a><p>The <code>with-temp-file</code> macro evaluates the <var>body</var> forms with a
-temporary buffer as the current buffer; then, at the end, it writes the
-buffer contents into file <var>file</var>.  It kills the temporary buffer
-when finished, restoring the buffer that was current before the
-<code>with-temp-file</code> form.  Then it returns the value of the last form
-in <var>body</var>.
-</p>
-<p>The current buffer is restored even in case of an abnormal exit via
-<code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
-</p>
-<p>See also <code>with-temp-buffer</code> in <a href="Current-Buffer.html#Definition-of-with_002dtemp_002dbuffer">The Current Buffer</a>.
-</p></dd></dl>
+    <dd>
+      <p>This function appends the contents of the region delimited
+      by <var>start</var> and <var>end</var> in the current buffer
+      to the end of file <var>filename</var>. If that file does not
+      exist, it is created. This function returns
+      <code>nil</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="File-Locks.html#File-Locks" accesskey="n" rel="next">File Locks</a>, Previous: <a href="Reading-from-Files.html#Reading-from-Files" accesskey="p" rel="prev">Reading from Files</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>An error is signaled if <var>filename</var> specifies a
+      nonwritable file, or a nonexistent file in a directory where
+      files cannot be created.</p>
 
+      <p>When called from Lisp, this function is completely
+      equivalent to:</p>
 
+      <div class="example">
+        <pre class="example">
+(write-region start end filename t)
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-write_002dregion" id=
+    "index-write_002dregion"></a>Command:
+    <strong>write-region</strong> <em>start end filename
+    &amp;optional append visit lockname mustbenew</em></dt>
+
+    <dd>
+      <p>This function writes the region delimited by
+      <var>start</var> and <var>end</var> in the current buffer
+      into the file specified by <var>filename</var>.</p>
+
+      <p>If <var>start</var> is <code>nil</code>, then the command
+      writes the entire buffer contents (<em>not</em> just the
+      accessible portion) to the file and ignores
+      <var>end</var>.</p>
+
+      <p>If <var>start</var> is a string, then
+      <code>write-region</code> writes or appends that string,
+      rather than text from the buffer. <var>end</var> is ignored
+      in this case.</p>
+
+      <p>If <var>append</var> is non-<code>nil</code>, then the
+      specified text is appended to the existing file contents (if
+      any). If <var>append</var> is a number,
+      <code>write-region</code> seeks to that byte offset from the
+      start of the file and writes the data from there.</p>
+
+      <p>If <var>mustbenew</var> is non-<code>nil</code>, then
+      <code>write-region</code> asks for confirmation if
+      <var>filename</var> names an existing file. If
+      <var>mustbenew</var> is the symbol <code>excl</code>, then
+      <code>write-region</code> does not ask for confirmation, but
+      instead it signals an error <code>file-already-exists</code>
+      if the file already exists.</p>
+
+      <p>The test for an existing file, when <var>mustbenew</var>
+      is <code>excl</code>, uses a special system feature. At least
+      for files on a local disk, there is no chance that some other
+      program could create a file of the same name before Emacs
+      does, without Emacs&rsquo;s noticing.</p>
+
+      <p>If <var>visit</var> is <code>t</code>, then Emacs
+      establishes an association between the buffer and the file:
+      the buffer is then visiting that file. It also sets the last
+      file modification time for the current buffer to
+      <var>filename</var>&rsquo;s modtime, and marks the buffer as
+      not modified. This feature is used by
+      <code>save-buffer</code>, but you probably should not use it
+      yourself.</p>
+
+      <p>If <var>visit</var> is a string, it specifies the file
+      name to visit. This way, you can write the data to one file
+      (<var>filename</var>) while recording the buffer as visiting
+      another file (<var>visit</var>). The argument
+      <var>visit</var> is used in the echo area message and also
+      for file locking; <var>visit</var> is stored in
+      <code>buffer-file-name</code>. This feature is used to
+      implement <code>file-precious-flag</code>; don&rsquo;t use it
+      yourself unless you really know what you&rsquo;re doing.</p>
+
+      <p>The optional argument <var>lockname</var>, if
+      non-<code>nil</code>, specifies the file name to use for
+      purposes of locking and unlocking, overriding
+      <var>filename</var> and <var>visit</var> for that
+      purpose.</p>
+
+      <p>The function <code>write-region</code> converts the data
+      which it writes to the appropriate file formats specified by
+      <code>buffer-file-format</code> and also calls the functions
+      in the list <code>write-region-annotate-functions</code>. See
+      <a href="Format-Conversion.html#Format-Conversion">Format
+      Conversion</a>.</p>
+
+      <p>Normally, <code>write-region</code> displays the message
+      &lsquo;<samp>Wrote <var>filename</var></samp>&rsquo; in the
+      echo area. This message is inhibited if <var>visit</var> is
+      neither <code>t</code> nor <code>nil</code> nor a string, or
+      if Emacs is operating in batch mode (see <a href=
+      "Batch-Mode.html#Batch-Mode">Batch Mode</a>). This feature is
+      useful for programs that use files for internal purposes,
+      files that the user does not need to know about.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-with_002dtemp_002dfile" id=
+    "index-with_002dtemp_002dfile"></a>Macro:
+    <strong>with-temp-file</strong> <em>file body&hellip;</em></dt>
+
+    <dd>
+      <a name="Definition-of-with_002dtemp_002dfile" id=
+      "Definition-of-with_002dtemp_002dfile"></a>
+
+      <p>The <code>with-temp-file</code> macro evaluates the
+      <var>body</var> forms with a temporary buffer as the current
+      buffer; then, at the end, it writes the buffer contents into
+      file <var>file</var>. It kills the temporary buffer when
+      finished, restoring the buffer that was current before the
+      <code>with-temp-file</code> form. Then it returns the value
+      of the last form in <var>body</var>.</p>
+
+      <p>The current buffer is restored even in case of an abnormal
+      exit via <code>throw</code> or error (see <a href=
+      "Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).</p>
+
+      <p>See also <code>with-temp-buffer</code> in <a href=
+      "Current-Buffer.html#Definition-of-with_002dtemp_002dbuffer">The
+      Current Buffer</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="File-Locks.html#File-Locks" accesskey="n"
+    rel="next">File Locks</a>, Previous: <a href=
+    "Reading-from-Files.html#Reading-from-Files" accesskey="p" rel=
+    "prev">Reading from Files</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

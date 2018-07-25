@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,96 +18,132 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: LaTeX xr Package</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: LaTeX xr Package">
-<meta name="keywords" content="RefTeX User Manual: LaTeX xr Package">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Labels-and-References.html#Labels-and-References" rel="up" title="Labels and References">
-<link href="Citations.html#Citations" rel="next" title="Citations">
-<link href="Reference-Styles.html#Reference-Styles" rel="prev" title="Reference Styles">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: LaTeX xr Package</title>
+  <meta name="description" content=
+  "RefTeX User Manual: LaTeX xr Package" />
+  <meta name="keywords" content=
+  "RefTeX User Manual: LaTeX xr Package" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Labels-and-References.html#Labels-and-References"
+  rel="up" title="Labels and References" />
+  <link href="Citations.html#Citations" rel="next" title=
+  "Citations" />
+  <link href="Reference-Styles.html#Reference-Styles" rel="prev"
+  title="Reference Styles" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="LaTeX-xr-Package"></a>
-<div class="header">
-<p>
-Previous: <a href="Reference-Styles.html#Reference-Styles" accesskey="p" rel="prev">Reference Styles</a>, Up: <a href="Labels-and-References.html#Labels-and-References" accesskey="u" rel="up">Labels and References</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="xr_003a-Cross_002dDocument-References"></a>
-<h3 class="section">3.7 <code>xr</code>: Cross-Document References</h3>
-<a name="index-xr_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-xr"></a>
-<a name="index-_005cexternaldocument"></a>
-<a name="index-External-documents"></a>
-<a name="index-References-to-external-documents"></a>
-<a name="index-Cross_002ddocument-references"></a>
+<body lang="en" xml:lang="en">
+  <a name="LaTeX-xr-Package" id="LaTeX-xr-Package"></a>
 
-<p>The LaTeX package <code>xr</code> makes it possible to create references to
-labels defined in external documents.  The preamble of a document using
-<code>xr</code> will contain something like this:
-</p>
-<div class="example">
-<pre class="example">\usepackage{xr}
+  <div class="header">
+    <p>Previous: <a href="Reference-Styles.html#Reference-Styles"
+    accesskey="p" rel="prev">Reference Styles</a>, Up: <a href=
+    "Labels-and-References.html#Labels-and-References" accesskey=
+    "u" rel="up">Labels and References</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="xr_003a-Cross_002dDocument-References" id=
+  "xr_003a-Cross_002dDocument-References"></a>
+
+  <h3 class="section">3.7 <code>xr</code>: Cross-Document
+  References</h3><a name="index-xr_002c-LaTeX-package" id=
+  "index-xr_002c-LaTeX-package"></a> <a name=
+  "index-LaTeX-packages_002c-xr" id=
+  "index-LaTeX-packages_002c-xr"></a> <a name=
+  "index-_005cexternaldocument" id=
+  "index-_005cexternaldocument"></a> <a name=
+  "index-External-documents" id="index-External-documents"></a>
+  <a name="index-References-to-external-documents" id=
+  "index-References-to-external-documents"></a> <a name=
+  "index-Cross_002ddocument-references" id=
+  "index-Cross_002ddocument-references"></a>
+
+  <p>The LaTeX package <code>xr</code> makes it possible to create
+  references to labels defined in external documents. The preamble
+  of a document using <code>xr</code> will contain something like
+  this:</p>
+
+  <div class="example">
+    <pre class="example">
+\usepackage{xr}
 \externaldocument[V1-]{volume1}
 \externaldocument[V3-]{volume3}
-</pre></div>
+</pre>
+  </div>
 
-<p>and we can make references to any labels defined in these
-external documents by using the prefixes &lsquo;<samp>V1-</samp>&rsquo; and &lsquo;<samp>V3-</samp>&rsquo;,
-respectively.
-</p>
-<p>RefTeX can be used to create such references as well.  Start the
-referencing process normally, by pressing <kbd>C-c )</kbd>.  Select a label
-type if necessary.  When you see the label selection buffer, pressing
-<kbd>x</kbd> will switch to the label selection buffer of one of the external
-documents.  You may then select a label as before and RefTeX will
-insert it along with the required prefix.
-</p>
-<p>For this kind of inter-document cross-references, saving of parsing
-information and the use of multiple selection buffers can mean a large
-speed-up (see <a href="Optimizations.html#Optimizations">Optimizations</a>).
-</p>
+  <p>and we can make references to any labels defined in these
+  external documents by using the prefixes
+  &lsquo;<samp>V1-</samp>&rsquo; and
+  &lsquo;<samp>V3-</samp>&rsquo;, respectively.</p>
 
+  <p>RefTeX can be used to create such references as well. Start
+  the referencing process normally, by pressing <kbd>C-c )</kbd>.
+  Select a label type if necessary. When you see the label
+  selection buffer, pressing <kbd>x</kbd> will switch to the label
+  selection buffer of one of the external documents. You may then
+  select a label as before and RefTeX will insert it along with the
+  required prefix.</p>
 
-
+  <p>For this kind of inter-document cross-references, saving of
+  parsing information and the use of multiple selection buffers can
+  mean a large speed-up (see <a href=
+  "Optimizations.html#Optimizations">Optimizations</a>).</p>
 </body>
 </html>

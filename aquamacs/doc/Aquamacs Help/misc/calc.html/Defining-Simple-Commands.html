@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,106 +18,150 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Defining Simple Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Defining Simple Commands">
-<meta name="keywords" content="GNU Emacs Calc Manual: Defining Simple Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lisp-Definitions.html#Lisp-Definitions" rel="up" title="Lisp Definitions">
-<link href="Defining-Stack-Commands.html#Defining-Stack-Commands" rel="next" title="Defining Stack Commands">
-<link href="Defining-Functions.html#Defining-Functions" rel="prev" title="Defining Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Defining Simple Commands</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Defining Simple Commands" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Defining Simple Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lisp-Definitions.html#Lisp-Definitions" rel="up"
+  title="Lisp Definitions" />
+  <link href="Defining-Stack-Commands.html#Defining-Stack-Commands"
+  rel="next" title="Defining Stack Commands" />
+  <link href="Defining-Functions.html#Defining-Functions" rel=
+  "prev" title="Defining Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Simple-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Defining-Stack-Commands.html#Defining-Stack-Commands" accesskey="n" rel="next">Defining Stack Commands</a>, Previous: <a href="Defining-Functions.html#Defining-Functions" accesskey="p" rel="prev">Defining Functions</a>, Up: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel="up">Lisp Definitions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-New-Simple-Commands"></a>
-<h4 class="subsection">17.5.2 Defining New Simple Commands</h4>
+<body lang="en" xml:lang="en">
+  <a name="Defining-Simple-Commands" id=
+  "Defining-Simple-Commands"></a>
 
-<a name="index-interactive"></a>
-<p>If a <code>defmath</code> form contains an <code>interactive</code> clause, it defines
-a Calculator command.  Actually such a <code>defmath</code> results in <em>two</em>
-function definitions:  One, a &lsquo;<samp>calcFunc-</samp>&rsquo; function as was just described,
-with the <code>interactive</code> clause removed.  Two, a &lsquo;<samp>calc-</samp>&rsquo; function
-with a suitable <code>interactive</code> clause and some sort of wrapper to make
-the command work in the Calc environment.
-</p>
-<p>In the simple case, the <code>interactive</code> clause has the same form as
-for normal Emacs Lisp commands:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defmath increase-precision (delta)
-  &quot;Increase precision by DELTA.&quot;     ; This is the &quot;documentation string&quot;
-  (interactive &quot;p&quot;)                  ; Register this as a M-x-able command
+  <div class="header">
+    <p>Next: <a href=
+    "Defining-Stack-Commands.html#Defining-Stack-Commands"
+    accesskey="n" rel="next">Defining Stack Commands</a>, Previous:
+    <a href="Defining-Functions.html#Defining-Functions" accesskey=
+    "p" rel="prev">Defining Functions</a>, Up: <a href=
+    "Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel=
+    "up">Lisp Definitions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-New-Simple-Commands" id=
+  "Defining-New-Simple-Commands"></a>
+
+  <h4 class="subsection">17.5.2 Defining New Simple
+  Commands</h4><a name="index-interactive" id=
+  "index-interactive"></a>
+
+  <p>If a <code>defmath</code> form contains an
+  <code>interactive</code> clause, it defines a Calculator command.
+  Actually such a <code>defmath</code> results in <em>two</em>
+  function definitions: One, a &lsquo;<samp>calcFunc-</samp>&rsquo;
+  function as was just described, with the <code>interactive</code>
+  clause removed. Two, a &lsquo;<samp>calc-</samp>&rsquo; function
+  with a suitable <code>interactive</code> clause and some sort of
+  wrapper to make the command work in the Calc environment.</p>
+
+  <p>In the simple case, the <code>interactive</code> clause has
+  the same form as for normal Emacs Lisp commands:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defmath increase-precision (delta)
+  "Increase precision by DELTA."     ; This is the "documentation string"
+  (interactive "p")                  ; Register this as a M-x-able command
   (setq calc-internal-prec (+ calc-internal-prec delta)))
-</pre></div>
+</pre>
+  </div>
 
-<p>This expands to the pair of definitions,
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun calc-increase-precision (delta)
-  &quot;Increase precision by DELTA.&quot;
-  (interactive &quot;p&quot;)
+  <p>This expands to the pair of definitions,</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defun calc-increase-precision (delta)
+  "Increase precision by DELTA."
+  (interactive "p")
   (calc-wrapper
    (setq calc-internal-prec (math-add calc-internal-prec delta))))
 
 (defun calcFunc-increase-precision (delta)
-  &quot;Increase precision by DELTA.&quot;
+  "Increase precision by DELTA."
   (setq calc-internal-prec (math-add calc-internal-prec delta)))
-</pre></div>
+</pre>
+  </div>
 
-<p>where in this case the latter function would never really be used!  Note
-that since the Calculator stores small integers as plain Lisp integers,
-the <code>math-add</code> function will work just as well as the native
-<code>+</code> even when the intent is to operate on native Lisp integers.
-</p>
-<a name="index-calc_002dwrapper"></a>
-<p>The &lsquo;<samp>calc-wrapper</samp>&rsquo; call invokes a macro which surrounds the body of
-the function with code that looks roughly like this:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(let ((calc-command-flags nil))
+  <p>where in this case the latter function would never really be
+  used! Note that since the Calculator stores small integers as
+  plain Lisp integers, the <code>math-add</code> function will work
+  just as well as the native <code>+</code> even when the intent is
+  to operate on native Lisp integers.</p><a name=
+  "index-calc_002dwrapper" id="index-calc_002dwrapper"></a>
+
+  <p>The &lsquo;<samp>calc-wrapper</samp>&rsquo; call invokes a
+  macro which surrounds the body of the function with code that
+  looks roughly like this:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(let ((calc-command-flags nil))
   (unwind-protect
       (save-current-buffer
         (calc-select-buffer)
@@ -125,125 +171,158 @@ the function with code that looks roughly like this:
     <em>realign cursor and window</em>
     <em>clear Inverse, Hyperbolic, and Keep Args flags</em>
     <em>update Emacs mode line</em>))
-</pre></div>
+</pre>
+  </div><a name="index-calc_002dselect_002dbuffer" id=
+  "index-calc_002dselect_002dbuffer"></a>
 
-<a name="index-calc_002dselect_002dbuffer"></a>
-<p>The <code>calc-select-buffer</code> function selects the <samp>*Calculator*</samp>
-buffer if necessary, say, because the command was invoked from inside
-the <samp>*Calc Trail*</samp> window.
-</p>
-<a name="index-calc_002dset_002dcommand_002dflag"></a>
-<p>You can call, for example, <code>(calc-set-command-flag 'no-align)</code> to
-set the above-mentioned command flags.  Calc routines recognize the
-following command flags:
-</p>
-<dl compact="compact">
-<dt><code>renum-stack</code></dt>
-<dd><p>Stack line numbers &lsquo;<samp>1:</samp>&rsquo;, &lsquo;<samp>2:</samp>&rsquo;, and so on must be renumbered
-after this command completes.  This is set by routines like
-<code>calc-push</code>.
-</p>
-</dd>
-<dt><code>clear-message</code></dt>
-<dd><p>Calc should call &lsquo;<samp>(message &quot;&quot;)</samp>&rsquo; if this command completes normally
-(to clear a &ldquo;Working&hellip;&rdquo; message out of the echo area).
-</p>
-</dd>
-<dt><code>no-align</code></dt>
-<dd><p>Do not move the cursor back to the &lsquo;<samp>.</samp>&rsquo; top-of-stack marker.
-</p>
-</dd>
-<dt><code>position-point</code></dt>
-<dd><p>Use the variables <code>calc-position-point-line</code> and
-<code>calc-position-point-column</code> to position the cursor after
-this command finishes.
-</p>
-</dd>
-<dt><code>keep-flags</code></dt>
-<dd><p>Do not clear <code>calc-inverse-flag</code>, <code>calc-hyperbolic-flag</code>,
-and <code>calc-keep-args-flag</code> at the end of this command.
-</p>
-</dd>
-<dt><code>do-edit</code></dt>
-<dd><p>Switch to buffer <samp>*Calc Edit*</samp> after this command.
-</p>
-</dd>
-<dt><code>hold-trail</code></dt>
-<dd><p>Do not move trail pointer to end of trail when something is recorded
-there.
-</p></dd>
-</dl>
+  <p>The <code>calc-select-buffer</code> function selects the
+  <samp>*Calculator*</samp> buffer if necessary, say, because the
+  command was invoked from inside the <samp>*Calc Trail*</samp>
+  window.</p><a name="index-calc_002dset_002dcommand_002dflag" id=
+  "index-calc_002dset_002dcommand_002dflag"></a>
 
-<a name="index-Y"></a>
-<a name="index-Y-_003f"></a>
-<a name="index-calc_002dY_002dhelp_002dmsgs"></a>
-<p>Calc reserves a special prefix key, shift-<kbd>Y</kbd>, for user-written
-extensions to Calc.  There are no built-in commands that work with
-this prefix key; you must call <code>define-key</code> from Lisp (probably
-from inside a <code>calc-define</code> property) to add to it.  Initially only
-<kbd>Y ?</kbd> is defined; it takes help messages from a list of strings
-(initially <code>nil</code>) in the variable <code>calc-Y-help-msgs</code>.  All
-other undefined keys except for <kbd>Y</kbd> are reserved for use by
-future versions of Calc.
-</p>
-<p>If you are writing a Calc enhancement which you expect to give to
-others, it is best to minimize the number of <kbd>Y</kbd>-key sequences
-you use.  In fact, if you have more than one key sequence you should
-consider defining three-key sequences with a <kbd>Y</kbd>, then a key that
-stands for your package, then a third key for the particular command
-within your package.
-</p>
-<p>Users may wish to install several Calc enhancements, and it is possible
-that several enhancements will choose to use the same key.  In the
-example below, a variable <code>inc-prec-base-key</code> has been defined
-to contain the key that identifies the <code>inc-prec</code> package.  Its
-value is initially <code>&quot;P&quot;</code>, but a user can change this variable
-if necessary without having to modify the file.
-</p>
-<p>Here is a complete file, <samp>inc-prec.el</samp>, which makes a <kbd>Y P I</kbd>
-command that increases the precision, and a <kbd>Y P D</kbd> command that
-decreases the precision.
-</p>
-<div class="smallexample">
-<pre class="smallexample">;;; Increase and decrease Calc precision.  Dave Gillespie, 5/31/91.
+  <p>You can call, for example, <code>(calc-set-command-flag
+  'no-align)</code> to set the above-mentioned command flags. Calc
+  routines recognize the following command flags:</p>
+
+  <dl compact="compact">
+    <dt><code>renum-stack</code></dt>
+
+    <dd>
+      <p>Stack line numbers &lsquo;<samp>1:</samp>&rsquo;,
+      &lsquo;<samp>2:</samp>&rsquo;, and so on must be renumbered
+      after this command completes. This is set by routines like
+      <code>calc-push</code>.</p>
+    </dd>
+
+    <dt><code>clear-message</code></dt>
+
+    <dd>
+      <p>Calc should call &lsquo;<samp>(message "")</samp>&rsquo;
+      if this command completes normally (to clear a
+      &ldquo;Working&hellip;&rdquo; message out of the echo
+      area).</p>
+    </dd>
+
+    <dt><code>no-align</code></dt>
+
+    <dd>
+      <p>Do not move the cursor back to the
+      &lsquo;<samp>.</samp>&rsquo; top-of-stack marker.</p>
+    </dd>
+
+    <dt><code>position-point</code></dt>
+
+    <dd>
+      <p>Use the variables <code>calc-position-point-line</code>
+      and <code>calc-position-point-column</code> to position the
+      cursor after this command finishes.</p>
+    </dd>
+
+    <dt><code>keep-flags</code></dt>
+
+    <dd>
+      <p>Do not clear <code>calc-inverse-flag</code>,
+      <code>calc-hyperbolic-flag</code>, and
+      <code>calc-keep-args-flag</code> at the end of this
+      command.</p>
+    </dd>
+
+    <dt><code>do-edit</code></dt>
+
+    <dd>
+      <p>Switch to buffer <samp>*Calc Edit*</samp> after this
+      command.</p>
+    </dd>
+
+    <dt><code>hold-trail</code></dt>
+
+    <dd>
+      <p>Do not move trail pointer to end of trail when something
+      is recorded there.</p>
+    </dd>
+  </dl><a name="index-Y" id="index-Y"></a> <a name="index-Y-_003f"
+  id="index-Y-_003f"></a> <a name=
+  "index-calc_002dY_002dhelp_002dmsgs" id=
+  "index-calc_002dY_002dhelp_002dmsgs"></a>
+
+  <p>Calc reserves a special prefix key, shift-<kbd>Y</kbd>, for
+  user-written extensions to Calc. There are no built-in commands
+  that work with this prefix key; you must call
+  <code>define-key</code> from Lisp (probably from inside a
+  <code>calc-define</code> property) to add to it. Initially only
+  <kbd>Y ?</kbd> is defined; it takes help messages from a list of
+  strings (initially <code>nil</code>) in the variable
+  <code>calc-Y-help-msgs</code>. All other undefined keys except
+  for <kbd>Y</kbd> are reserved for use by future versions of
+  Calc.</p>
+
+  <p>If you are writing a Calc enhancement which you expect to give
+  to others, it is best to minimize the number of <kbd>Y</kbd>-key
+  sequences you use. In fact, if you have more than one key
+  sequence you should consider defining three-key sequences with a
+  <kbd>Y</kbd>, then a key that stands for your package, then a
+  third key for the particular command within your package.</p>
+
+  <p>Users may wish to install several Calc enhancements, and it is
+  possible that several enhancements will choose to use the same
+  key. In the example below, a variable
+  <code>inc-prec-base-key</code> has been defined to contain the
+  key that identifies the <code>inc-prec</code> package. Its value
+  is initially <code>"P"</code>, but a user can change this
+  variable if necessary without having to modify the file.</p>
+
+  <p>Here is a complete file, <samp>inc-prec.el</samp>, which makes
+  a <kbd>Y P I</kbd> command that increases the precision, and a
+  <kbd>Y P D</kbd> command that decreases the precision.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+;;; Increase and decrease Calc precision.  Dave Gillespie, 5/31/91.
 ;; (Include copyright or copyleft stuff here.)
 
-(defvar inc-prec-base-key &quot;P&quot;
-  &quot;Base key for inc-prec.el commands.&quot;)
+(defvar inc-prec-base-key "P"
+  "Base key for inc-prec.el commands.")
 
 (put 'calc-define 'inc-prec '(progn
 
-(define-key calc-mode-map (format &quot;Y%sI&quot; inc-prec-base-key)
+(define-key calc-mode-map (format "Y%sI" inc-prec-base-key)
             'increase-precision)
-(define-key calc-mode-map (format &quot;Y%sD&quot; inc-prec-base-key)
+(define-key calc-mode-map (format "Y%sD" inc-prec-base-key)
             'decrease-precision)
 
 (setq calc-Y-help-msgs
-      (cons (format &quot;%s + Inc-prec, Dec-prec&quot; inc-prec-base-key)
+      (cons (format "%s + Inc-prec, Dec-prec" inc-prec-base-key)
             calc-Y-help-msgs))
 
 (defmath increase-precision (delta)
-  &quot;Increase precision by DELTA.&quot;
-  (interactive &quot;p&quot;)
+  "Increase precision by DELTA."
+  (interactive "p")
   (setq calc-internal-prec (+ calc-internal-prec delta)))
 
 (defmath decrease-precision (delta)
-  &quot;Decrease precision by DELTA.&quot;
-  (interactive &quot;p&quot;)
+  "Decrease precision by DELTA."
+  (interactive "p")
   (setq calc-internal-prec (- calc-internal-prec delta)))
 
 ))  ; end of calc-define property
 
 (run-hooks 'calc-check-defines)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Defining-Stack-Commands.html#Defining-Stack-Commands" accesskey="n" rel="next">Defining Stack Commands</a>, Previous: <a href="Defining-Functions.html#Defining-Functions" accesskey="p" rel="prev">Defining Functions</a>, Up: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel="up">Lisp Definitions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Defining-Stack-Commands.html#Defining-Stack-Commands"
+    accesskey="n" rel="next">Defining Stack Commands</a>, Previous:
+    <a href="Defining-Functions.html#Defining-Functions" accesskey=
+    "p" rel="prev">Defining Functions</a>, Up: <a href=
+    "Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel=
+    "up">Lisp Definitions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

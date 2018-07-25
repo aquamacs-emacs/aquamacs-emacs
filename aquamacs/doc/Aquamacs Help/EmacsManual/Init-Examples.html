@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,268 +20,387 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Init Examples</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Init Examples">
-<meta name="keywords" content="GNU Emacs Manual: Init Examples">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Init-File.html#Init-File" rel="up" title="Init File">
-<link href="Terminal-Init.html#Terminal-Init" rel="next" title="Terminal Init">
-<link href="Init-Syntax.html#Init-Syntax" rel="prev" title="Init Syntax">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Init Examples</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Init Examples" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Init Examples" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Init-File.html#Init-File" rel="up" title=
+  "Init File" />
+  <link href="Terminal-Init.html#Terminal-Init" rel="next" title=
+  "Terminal Init" />
+  <link href="Init-Syntax.html#Init-Syntax" rel="prev" title=
+  "Init Syntax" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Init-Examples" id="Init-Examples"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Terminal-Init.html#Terminal-Init" accesskey=
+    "n" rel="next">Terminal Init</a>, Previous: <a href=
+    "Init-Syntax.html#Init-Syntax" accesskey="p" rel="prev">Init
+    Syntax</a>, Up: <a href="Init-File.html#Init-File" accesskey=
+    "u" rel="up">Init File</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Init-File-Examples" id="Init-File-Examples"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Init-Examples"></a>
-<div class="header">
-<p>
-Next: <a href="Terminal-Init.html#Terminal-Init" accesskey="n" rel="next">Terminal Init</a>, Previous: <a href="Init-Syntax.html#Init-Syntax" accesskey="p" rel="prev">Init Syntax</a>, Up: <a href="Init-File.html#Init-File" accesskey="u" rel="up">Init File</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Init-File-Examples"></a>
-<h4 class="subsection">51.4.2 Init File Examples</h4>
+  <h4 class="subsection">51.4.2 Init File Examples</h4>
 
-<p>Here are some examples of doing certain commonly desired things with
-Lisp expressions:
-</p>
-<ul>
-<li> Add a directory to the variable <code>load-path</code>.  You can then put
-Lisp libraries that are not included with Emacs in this directory, and
-load them with <kbd>M-x load-library</kbd>.  See <a href="Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>.
+  <p>Here are some examples of doing certain commonly desired
+  things with Lisp expressions:</p>
 
-<div class="example">
-<pre class="example">(add-to-list 'load-path &quot;/path/to/lisp/libraries&quot;)
-</pre></div>
+  <ul>
+    <li>Add a directory to the variable <code>load-path</code>. You
+    can then put Lisp libraries that are not included with Emacs in
+    this directory, and load them with <kbd>M-x load-library</kbd>.
+    See <a href="Lisp-Libraries.html#Lisp-Libraries">Lisp
+    Libraries</a>.
 
-</li><li> Make <tt class="key">TAB</tt> in C mode just insert a tab if point is in the middle of a
-line.
+      <div class="example">
+        <pre class="example">
+(add-to-list 'load-path "/path/to/lisp/libraries")
+</pre>
+      </div>
+    </li>
 
-<div class="example">
-<pre class="example">(setq c-tab-always-indent nil)
-</pre></div>
+    <li>Make <tt class="key">TAB</tt> in C mode just insert a tab
+    if point is in the middle of a line.
 
-<p>Here we have a variable whose value is normally <code>t</code> for &ldquo;true&rdquo;
-and the alternative is <code>nil</code> for &ldquo;false&rdquo;.
-</p>
-</li><li> Make searches case sensitive by default (in all buffers that do not
-override this).
+      <div class="example">
+        <pre class="example">
+(setq c-tab-always-indent nil)
+</pre>
+      </div>
 
-<div class="example">
-<pre class="example">(setq-default case-fold-search nil)
-</pre></div>
+      <p>Here we have a variable whose value is normally
+      <code>t</code> for &ldquo;true&rdquo; and the alternative is
+      <code>nil</code> for &ldquo;false&rdquo;.</p>
+    </li>
 
-<p>This sets the default value, which is effective in all buffers that do
-not have local values for the variable (see <a href="Locals.html#Locals">Locals</a>).  Setting
-<code>case-fold-search</code> with <code>setq</code> affects only the current
-buffer&rsquo;s local value, which is probably not what you want to do in an
-init file.
-</p>
-</li><li> <a name="index-user_002dmail_002daddress-1"></a>
-Specify your own email address, if Emacs can&rsquo;t figure it out correctly.
+    <li>Make searches case sensitive by default (in all buffers
+    that do not override this).
 
-<div class="example">
-<pre class="example">(setq user-mail-address &quot;cheney@torture.gov&quot;)
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(setq-default case-fold-search nil)
+</pre>
+      </div>
 
-<p>Various Emacs packages, such as Message mode, consult
-<code>user-mail-address</code> when they need to know your email address.
-See <a href="Mail-Headers.html#Mail-Headers">Mail Headers</a>.
-</p>
-</li><li> Make Text mode the default mode for new buffers.
+      <p>This sets the default value, which is effective in all
+      buffers that do not have local values for the variable (see
+      <a href="Locals.html#Locals">Locals</a>). Setting
+      <code>case-fold-search</code> with <code>setq</code> affects
+      only the current buffer&rsquo;s local value, which is
+      probably not what you want to do in an init file.</p>
+    </li>
 
-<div class="example">
-<pre class="example">(setq-default major-mode 'text-mode)
-</pre></div>
+    <li>
+      <a name="index-user_002dmail_002daddress-1" id=
+      "index-user_002dmail_002daddress-1"></a> Specify your own
+      email address, if Emacs can&rsquo;t figure it out correctly.
 
-<p>Note that <code>text-mode</code> is used because it is the command for
-entering Text mode.  The single-quote before it makes the symbol a
-constant; otherwise, <code>text-mode</code> would be treated as a variable
-name.
-</p>
-</li><li> Set up defaults for the Latin-1 character set
-which supports most of the languages of Western Europe.
+      <div class="example">
+        <pre class="example">
+(setq user-mail-address "cheney@torture.gov")
+</pre>
+      </div>
 
-<div class="example">
-<pre class="example">(set-language-environment &quot;Latin-1&quot;)
-</pre></div>
+      <p>Various Emacs packages, such as Message mode, consult
+      <code>user-mail-address</code> when they need to know your
+      email address. See <a href=
+      "Mail-Headers.html#Mail-Headers">Mail Headers</a>.</p>
+    </li>
 
-</li><li> Turn off Line Number mode, a global minor mode.
+    <li>Make Text mode the default mode for new buffers.
 
-<div class="example">
-<pre class="example">(line-number-mode 0)
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(setq-default major-mode 'text-mode)
+</pre>
+      </div>
 
-</li><li> Turn on Auto Fill mode automatically in Text mode and related modes
-(see <a href="Hooks.html#Hooks">Hooks</a>).
+      <p>Note that <code>text-mode</code> is used because it is the
+      command for entering Text mode. The single-quote before it
+      makes the symbol a constant; otherwise,
+      <code>text-mode</code> would be treated as a variable
+      name.</p>
+    </li>
 
-<div class="example">
-<pre class="example">(add-hook 'text-mode-hook 'auto-fill-mode)
-</pre></div>
+    <li>Set up defaults for the Latin-1 character set which
+    supports most of the languages of Western Europe.
 
-</li><li> Load the installed Lisp library named <samp>foo</samp> (actually a file
-<samp>foo.elc</samp> or <samp>foo.el</samp> in a standard Emacs directory).
+      <div class="example">
+        <pre class="example">
+(set-language-environment "Latin-1")
+</pre>
+      </div>
+    </li>
 
-<div class="example">
-<pre class="example">(load &quot;foo&quot;)
-</pre></div>
+    <li>Turn off Line Number mode, a global minor mode.
 
-<p>When the argument to <code>load</code> is a relative file name, not starting
-with &lsquo;<samp>/</samp>&rsquo; or &lsquo;<samp>~</samp>&rsquo;, <code>load</code> searches the directories in
-<code>load-path</code> (see <a href="Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>).
-</p>
-</li><li> Load the compiled Lisp file <samp>foo.elc</samp> from your home directory.
+      <div class="example">
+        <pre class="example">
+(line-number-mode 0)
+</pre>
+      </div>
+    </li>
 
-<div class="example">
-<pre class="example">(load &quot;~/foo.elc&quot;)
-</pre></div>
+    <li>Turn on Auto Fill mode automatically in Text mode and
+    related modes (see <a href="Hooks.html#Hooks">Hooks</a>).
 
-<p>Here a full file name is used, so no searching is done.
-</p>
-</li><li> <a name="index-loading-Lisp-libraries-automatically"></a>
-<a name="index-autoload-Lisp-libraries"></a>
-Tell Emacs to find the definition for the function <code>myfunction</code>
-by loading a Lisp library named <samp>mypackage</samp> (i.e., a file
-<samp>mypackage.elc</samp> or <samp>mypackage.el</samp>):
+      <div class="example">
+        <pre class="example">
+(add-hook 'text-mode-hook 'auto-fill-mode)
+</pre>
+      </div>
+    </li>
 
-<div class="example">
-<pre class="example">(autoload 'myfunction &quot;mypackage&quot; &quot;Do what I say.&quot; t)
-</pre></div>
+    <li>Load the installed Lisp library named <samp>foo</samp>
+    (actually a file <samp>foo.elc</samp> or <samp>foo.el</samp> in
+    a standard Emacs directory).
 
-<p>Here the string <code>&quot;Do what I say.&quot;</code> is the function&rsquo;s
-documentation string.  You specify it in the <code>autoload</code>
-definition so it will be available for help commands even when the
-package is not loaded.  The last argument, <code>t</code>, indicates that
-this function is interactive; that is, it can be invoked interactively
-by typing <kbd>M-x myfunction <span class="key">RET</span></kbd> or by binding it to a key.
-If the function is not interactive, omit the <code>t</code> or use
-<code>nil</code>.
-</p>
-</li><li> Rebind the key <kbd>C-x l</kbd> to run the function <code>make-symbolic-link</code>
-(see <a href="Init-Rebinding.html#Init-Rebinding">Init Rebinding</a>).
+      <div class="example">
+        <pre class="example">
+(load "foo")
+</pre>
+      </div>
 
-<div class="example">
-<pre class="example">(global-set-key &quot;\C-xl&quot; 'make-symbolic-link)
-</pre></div>
+      <p>When the argument to <code>load</code> is a relative file
+      name, not starting with &lsquo;<samp>/</samp>&rsquo; or
+      &lsquo;<samp>~</samp>&rsquo;, <code>load</code> searches the
+      directories in <code>load-path</code> (see <a href=
+      "Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>).</p>
+    </li>
 
-<p>or
-</p>
-<div class="example">
-<pre class="example">(define-key global-map &quot;\C-xl&quot; 'make-symbolic-link)
-</pre></div>
+    <li>Load the compiled Lisp file <samp>foo.elc</samp> from your
+    home directory.
 
-<p>Note once again the single-quote used to refer to the symbol
-<code>make-symbolic-link</code> instead of its value as a variable.
-</p>
-</li><li> Do the same thing for Lisp mode only.
+      <div class="example">
+        <pre class="example">
+(load "~/foo.elc")
+</pre>
+      </div>
 
-<div class="example">
-<pre class="example">(define-key lisp-mode-map &quot;\C-xl&quot; 'make-symbolic-link)
-</pre></div>
+      <p>Here a full file name is used, so no searching is
+      done.</p>
+    </li>
 
-</li><li> Redefine all keys which now run <code>next-line</code> in Fundamental mode
-so that they run <code>forward-line</code> instead.
+    <li>
+      <a name="index-loading-Lisp-libraries-automatically" id=
+      "index-loading-Lisp-libraries-automatically"></a> <a name=
+      "index-autoload-Lisp-libraries" id=
+      "index-autoload-Lisp-libraries"></a> Tell Emacs to find the
+      definition for the function <code>myfunction</code> by
+      loading a Lisp library named <samp>mypackage</samp> (i.e., a
+      file <samp>mypackage.elc</samp> or
+      <samp>mypackage.el</samp>):
 
-<a name="index-substitute_002dkey_002ddefinition"></a>
-<div class="example">
-<pre class="example">(substitute-key-definition 'next-line 'forward-line
+      <div class="example">
+        <pre class="example">
+(autoload 'myfunction "mypackage" "Do what I say." t)
+</pre>
+      </div>
+
+      <p>Here the string <code>"Do what I say."</code> is the
+      function&rsquo;s documentation string. You specify it in the
+      <code>autoload</code> definition so it will be available for
+      help commands even when the package is not loaded. The last
+      argument, <code>t</code>, indicates that this function is
+      interactive; that is, it can be invoked interactively by
+      typing <kbd>M-x myfunction <span class="key">RET</span></kbd>
+      or by binding it to a key. If the function is not
+      interactive, omit the <code>t</code> or use
+      <code>nil</code>.</p>
+    </li>
+
+    <li>Rebind the key <kbd>C-x l</kbd> to run the function <code>
+      make-symbolic-link</code> (see <a href=
+      "Init-Rebinding.html#Init-Rebinding">Init Rebinding</a>).
+
+      <div class="example">
+        <pre class="example">
+(global-set-key "\C-xl" 'make-symbolic-link)
+</pre>
+      </div>
+
+      <p>or</p>
+
+      <div class="example">
+        <pre class="example">
+(define-key global-map "\C-xl" 'make-symbolic-link)
+</pre>
+      </div>
+
+      <p>Note once again the single-quote used to refer to the
+      symbol <code>make-symbolic-link</code> instead of its value
+      as a variable.</p>
+    </li>
+
+    <li>Do the same thing for Lisp mode only.
+
+      <div class="example">
+        <pre class="example">
+(define-key lisp-mode-map "\C-xl" 'make-symbolic-link)
+</pre>
+      </div>
+    </li>
+
+    <li>Redefine all keys which now run <code>next-line</code> in
+    Fundamental mode so that they run <code>forward-line</code>
+    instead. <a name="index-substitute_002dkey_002ddefinition"
+      id="index-substitute_002dkey_002ddefinition"></a>
+
+      <div class="example">
+        <pre class="example">
+(substitute-key-definition 'next-line 'forward-line
                            global-map)
-</pre></div>
+</pre>
+      </div>
+    </li>
 
-</li><li> Make <kbd>C-x C-v</kbd> undefined.
+    <li>Make <kbd>C-x C-v</kbd> undefined.
 
-<div class="example">
-<pre class="example">(global-unset-key &quot;\C-x\C-v&quot;)
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(global-unset-key "\C-x\C-v")
+</pre>
+      </div>
 
-<p>One reason to undefine a key is so that you can make it a prefix.
-Simply defining <kbd>C-x C-v <var>anything</var></kbd> will make <kbd>C-x C-v</kbd> a
-prefix, but <kbd>C-x C-v</kbd> must first be freed of its usual non-prefix
-definition.
-</p>
-</li><li> Make &lsquo;<samp>$</samp>&rsquo; have the syntax of punctuation in Text mode.
-Note the use of a character constant for &lsquo;<samp>$</samp>&rsquo;.
+      <p>One reason to undefine a key is so that you can make it a
+      prefix. Simply defining <kbd>C-x C-v
+      <var>anything</var></kbd> will make <kbd>C-x C-v</kbd> a
+      prefix, but <kbd>C-x C-v</kbd> must first be freed of its
+      usual non-prefix definition.</p>
+    </li>
 
-<div class="example">
-<pre class="example">(modify-syntax-entry ?\$ &quot;.&quot; text-mode-syntax-table)
-</pre></div>
+    <li>Make &lsquo;<samp>$</samp>&rsquo; have the syntax of
+    punctuation in Text mode. Note the use of a character constant
+    for &lsquo;<samp>$</samp>&rsquo;.
 
-</li><li> Enable the use of the command <code>narrow-to-region</code> without confirmation.
+      <div class="example">
+        <pre class="example">
+(modify-syntax-entry ?\$ "." text-mode-syntax-table)
+</pre>
+      </div>
+    </li>
 
-<div class="example">
-<pre class="example">(put 'narrow-to-region 'disabled nil)
-</pre></div>
+    <li>Enable the use of the command <code>narrow-to-region</code>
+    without confirmation.
 
-</li><li> Adjusting the configuration to various platforms and Emacs versions.
+      <div class="example">
+        <pre class="example">
+(put 'narrow-to-region 'disabled nil)
+</pre>
+      </div>
+    </li>
 
-<p>Users typically want Emacs to behave the same on all systems, so the
-same init file is right for all platforms.  However, sometimes it
-happens that a function you use for customizing Emacs is not available
-on some platforms or in older Emacs versions.  To deal with that
-situation, put the customization inside a conditional that tests whether
-the function or facility is available, like this:
-</p>
-<div class="example">
-<pre class="example">(if (fboundp 'blink-cursor-mode)
+    <li>Adjusting the configuration to various platforms and Emacs
+    versions.
+
+      <p>Users typically want Emacs to behave the same on all
+      systems, so the same init file is right for all platforms.
+      However, sometimes it happens that a function you use for
+      customizing Emacs is not available on some platforms or in
+      older Emacs versions. To deal with that situation, put the
+      customization inside a conditional that tests whether the
+      function or facility is available, like this:</p>
+
+      <div class="example">
+        <pre class="example">
+(if (fboundp 'blink-cursor-mode)
     (blink-cursor-mode 0))
 
 (if (boundp 'coding-category-utf-8)
     (set-coding-priority '(coding-category-utf-8)))
-</pre></div>
+</pre>
+      </div>
 
-<p>You can also simply disregard the errors that occur if the
-function is not defined.
-</p>
-<div class="example">
-<pre class="example">(ignore-errors (set-face-background 'region &quot;grey75&quot;))
-</pre></div>
+      <p>You can also simply disregard the errors that occur if the
+      function is not defined.</p>
 
-<p>A <code>setq</code> on a variable which does not exist is generally
-harmless, so those do not need a conditional.
-</p></li></ul>
+      <div class="example">
+        <pre class="example">
+(ignore-errors (set-face-background 'region "grey75"))
+</pre>
+      </div>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Terminal-Init.html#Terminal-Init" accesskey="n" rel="next">Terminal Init</a>, Previous: <a href="Init-Syntax.html#Init-Syntax" accesskey="p" rel="prev">Init Syntax</a>, Up: <a href="Init-File.html#Init-File" accesskey="u" rel="up">Init File</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>A <code>setq</code> on a variable which does not exist is
+      generally harmless, so those do not need a conditional.</p>
+    </li>
+  </ul>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Terminal-Init.html#Terminal-Init" accesskey=
+    "n" rel="next">Terminal Init</a>, Previous: <a href=
+    "Init-Syntax.html#Init-Syntax" accesskey="p" rel="prev">Init
+    Syntax</a>, Up: <a href="Init-File.html#Init-File" accesskey=
+    "u" rel="up">Init File</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

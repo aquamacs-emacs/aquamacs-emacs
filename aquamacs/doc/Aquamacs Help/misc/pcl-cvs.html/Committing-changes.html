@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1991-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,123 +14,172 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>PCL-CVS&mdash;Emacs Front-End to CVS: Committing changes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="PCL-CVS&mdash;Emacs Front-End to CVS: Committing changes">
-<meta name="keywords" content="PCL-CVS&mdash;Emacs Front-End to CVS: Committing changes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-and-Variable-Index.html#Function-and-Variable-Index" rel="index" title="Function and Variable Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="Editing-files.html#Editing-files" rel="next" title="Editing files">
-<link href="Marking-files.html#Marking-files" rel="prev" title="Marking files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>PCL-CVS&mdash;Emacs Front-End to CVS: Committing
+  changes</title>
+  <meta name="description" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Committing changes" />
+  <meta name="keywords" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Committing changes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Function-and-Variable-Index.html#Function-and-Variable-Index"
+  rel="index" title="Function and Variable Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="Editing-files.html#Editing-files" rel="next" title=
+  "Editing files" />
+  <link href="Marking-files.html#Marking-files" rel="prev" title=
+  "Marking files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Committing-changes"></a>
-<div class="header">
-<p>
-Next: <a href="Editing-files.html#Editing-files" accesskey="n" rel="next">Editing files</a>, Previous: <a href="Marking-files.html#Marking-files" accesskey="p" rel="prev">Marking files</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-and-Variable-Index.html#Function-and-Variable-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Committing-changes-1"></a>
-<h3 class="section">5.6 Committing changes</h3>
-<a name="index-Committing-changes"></a>
-<a name="index-cvs_002dmode_002dcommit"></a>
-<a name="index-cvs_002dmode_002dcommit_002dsetup"></a>
-<a name="index-c_002d_002dcommit-files"></a>
-<a name="index-C_002d_002dcommit-files-with-ChangeLog-message"></a>
-<a name="index-cvs_002dauto_002drevert-_0028variable_0029"></a>
-<a name="index-Commit-buffer"></a>
-<a name="index-Edit-buffer"></a>
-<a name="index-Erasing-commit-message"></a>
-<a name="index-Reverting-buffers-after-commit"></a>
+<body lang="en" xml:lang="en">
+  <a name="Committing-changes" id="Committing-changes"></a>
 
-<p>Committing changes basically works as follows:
-</p>
-<ol>
-<li> After having selected the files you want to commit, you type either
-<kbd>c</kbd> or <kbd>C</kbd> which brings up a special buffer
-<samp>*cvs-commit*</samp>.
+  <div class="header">
+    <p>Next: <a href="Editing-files.html#Editing-files" accesskey=
+    "n" rel="next">Editing files</a>, Previous: <a href=
+    "Marking-files.html#Marking-files" accesskey="p" rel=
+    "prev">Marking files</a>, Up: <a href="Commands.html#Commands"
+    accesskey="u" rel="up">Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-and-Variable-Index.html#Function-and-Variable-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Committing-changes-1" id="Committing-changes-1"></a>
 
-</li><li> You type in the log message describing the changes you&rsquo;re about to
-commit (see <a href="Log-Edit-Mode.html#Log-Edit-Mode">Log Edit Mode</a>).
+  <h3 class="section">5.6 Committing changes</h3><a name=
+  "index-Committing-changes" id="index-Committing-changes"></a>
+  <a name="index-cvs_002dmode_002dcommit" id=
+  "index-cvs_002dmode_002dcommit"></a> <a name=
+  "index-cvs_002dmode_002dcommit_002dsetup" id=
+  "index-cvs_002dmode_002dcommit_002dsetup"></a> <a name=
+  "index-c_002d_002dcommit-files" id=
+  "index-c_002d_002dcommit-files"></a> <a name=
+  "index-C_002d_002dcommit-files-with-ChangeLog-message" id=
+  "index-C_002d_002dcommit-files-with-ChangeLog-message"></a>
+  <a name="index-cvs_002dauto_002drevert-_0028variable_0029" id=
+  "index-cvs_002dauto_002drevert-_0028variable_0029"></a> <a name=
+  "index-Commit-buffer" id="index-Commit-buffer"></a> <a name=
+  "index-Edit-buffer" id="index-Edit-buffer"></a> <a name=
+  "index-Erasing-commit-message" id=
+  "index-Erasing-commit-message"></a> <a name=
+  "index-Reverting-buffers-after-commit" id=
+  "index-Reverting-buffers-after-commit"></a>
 
-</li><li> When you&rsquo;re happy with it, you type <kbd>C-c C-c</kbd> to do the actual
-commit.
-</li></ol>
+  <p>Committing changes basically works as follows:</p>
 
-<p>There&rsquo;s no hidden state, so you can abort the process or pick it up
-again at any time.
-</p>
-<a name="index-log_002dedit_002dconfirm-_0028variable_0029"></a>
-<p>The set of files actually committed is really decided only during the
-very last step, which is a mixed blessing.  It allows you to go back and
-change your mind about which files to commit, but it also means that you
-might inadvertently change the set of selected files.  To reduce the
-risk of error, <kbd>C-c C-c</kbd> will ask for confirmation if the set of
-selected files has changed between the first step and the last.  You can
-change this last detail with <code>log-edit-confirm</code>.
-</p>
-<p>As for the difference between <kbd>c</kbd> (i.e., <code>cvs-mode-commit</code>) and
-<kbd>C</kbd> (i.e., <code>cvs-mode-commit-setup</code>) is that the first gets you
-straight to <samp>*cvs-commit*</samp> without erasing it or changing anything
-to its content, while the second first erases <samp>*cvs-commit*</samp>
-and tries to initialize it with a sane default (it does that by either
-using a template provided by the CVS administrator or by extracting a
-relevant log message from a <samp>ChangeLog</samp> file).
-</p>
-<p>If you are editing the files in your Emacs, an automatic
-&lsquo;<samp>revert-buffer</samp>&rsquo; will be performed.  (If the file contains
-&lsquo;<samp>$Id$</samp>&rsquo; keywords, &lsquo;<samp>cvs commit</samp>&rsquo; will write a new file with
-the new values substituted.  The auto-revert makes sure that you get
-them into your buffer.)  The revert will not occur if you have modified
-your buffer, or if &lsquo;<samp>cvs-auto-revert</samp>&rsquo; is set to
-&lsquo;<samp>nil</samp>&rsquo;.
-</p>
+  <ol>
+    <li>After having selected the files you want to commit, you
+    type either <kbd>c</kbd> or <kbd>C</kbd> which brings up a
+    special buffer <samp>*cvs-commit*</samp>.</li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Editing-files.html#Editing-files" accesskey="n" rel="next">Editing files</a>, Previous: <a href="Marking-files.html#Marking-files" accesskey="p" rel="prev">Marking files</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-and-Variable-Index.html#Function-and-Variable-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>You type in the log message describing the changes
+    you&rsquo;re about to commit (see <a href=
+    "Log-Edit-Mode.html#Log-Edit-Mode">Log Edit Mode</a>).</li>
 
+    <li>When you&rsquo;re happy with it, you type <kbd>C-c
+    C-c</kbd> to do the actual commit.</li>
+  </ol>
 
+  <p>There&rsquo;s no hidden state, so you can abort the process or
+  pick it up again at any time.</p><a name=
+  "index-log_002dedit_002dconfirm-_0028variable_0029" id=
+  "index-log_002dedit_002dconfirm-_0028variable_0029"></a>
 
+  <p>The set of files actually committed is really decided only
+  during the very last step, which is a mixed blessing. It allows
+  you to go back and change your mind about which files to commit,
+  but it also means that you might inadvertently change the set of
+  selected files. To reduce the risk of error, <kbd>C-c C-c</kbd>
+  will ask for confirmation if the set of selected files has
+  changed between the first step and the last. You can change this
+  last detail with <code>log-edit-confirm</code>.</p>
+
+  <p>As for the difference between <kbd>c</kbd> (i.e.,
+  <code>cvs-mode-commit</code>) and <kbd>C</kbd> (i.e.,
+  <code>cvs-mode-commit-setup</code>) is that the first gets you
+  straight to <samp>*cvs-commit*</samp> without erasing it or
+  changing anything to its content, while the second first erases
+  <samp>*cvs-commit*</samp> and tries to initialize it with a sane
+  default (it does that by either using a template provided by the
+  CVS administrator or by extracting a relevant log message from a
+  <samp>ChangeLog</samp> file).</p>
+
+  <p>If you are editing the files in your Emacs, an automatic
+  &lsquo;<samp>revert-buffer</samp>&rsquo; will be performed. (If
+  the file contains &lsquo;<samp>$Id$</samp>&rsquo; keywords,
+  &lsquo;<samp>cvs commit</samp>&rsquo; will write a new file with
+  the new values substituted. The auto-revert makes sure that you
+  get them into your buffer.) The revert will not occur if you have
+  modified your buffer, or if
+  &lsquo;<samp>cvs-auto-revert</samp>&rsquo; is set to
+  &lsquo;<samp>nil</samp>&rsquo;.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Editing-files.html#Editing-files" accesskey=
+    "n" rel="next">Editing files</a>, Previous: <a href=
+    "Marking-files.html#Marking-files" accesskey="p" rel=
+    "prev">Marking files</a>, Up: <a href="Commands.html#Commands"
+    accesskey="u" rel="up">Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-and-Variable-Index.html#Function-and-Variable-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

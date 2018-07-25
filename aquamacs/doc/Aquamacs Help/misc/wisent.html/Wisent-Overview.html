@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,126 +16,168 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Wisent Overview</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Wisent Overview">
-<meta name="keywords" content="Wisent Parser Development: Wisent Overview">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="top">
-<link href="Wisent-Grammar.html#Wisent-Grammar" rel="next" title="Wisent Grammar">
-<link href="index.html#Top" rel="prev" title="top">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Wisent Overview</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Wisent Overview" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Wisent Overview" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="top" />
+  <link href="Wisent-Grammar.html#Wisent-Grammar" rel="next" title=
+  "Wisent Grammar" />
+  <link href="index.html#Top" rel="prev" title="top" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Wisent-Overview"></a>
-<div class="header">
-<p>
-Next: <a href="Wisent-Grammar.html#Wisent-Grammar" accesskey="n" rel="next">Wisent Grammar</a>, Previous: <a href="index.html#Top" accesskey="p" rel="prev">top</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Wisent-Overview-1"></a>
-<h2 class="chapter">1 Wisent Overview</h2>
+<body lang="en" xml:lang="en">
+  <a name="Wisent-Overview" id="Wisent-Overview"></a>
 
-<p><em>Wisent</em> (the European Bison) is an implementation in Emacs Lisp
-of the GNU Compiler Compiler Bison. Its code is a port of the C code
-of GNU Bison 1.28 &amp; 1.31.
-</p>
-<p>For more details on the basic concepts for understanding Wisent, it is
-worthwhile to read the <a href="http://www.gnu.org/software/bison/manual/html_node/index.html#Top">(bison)Bison Manual</a>.
-</p>
-<p>Wisent can generate compilers compatible with the <i>Semantic</i> tool set.
-See the <a href="http://www.gnu.org/software/emacs/manual/html_node/semantic/index.html#Top">(semantic)Semantic Manual</a>.
-</p>
-<p>It benefits from these Bison features:
-</p>
-<ul>
-<li> It uses a fast but not so space-efficient encoding for the parse
-tables, described in Corbett&rsquo;s PhD thesis from Berkeley:
-<blockquote>
-<p><cite>Static Semantics in Compiler Error Recovery</cite><br>
-June 1985, Report No. UCB/CSD 85/251.
-</p></blockquote>
+  <div class="header">
+    <p>Next: <a href="Wisent-Grammar.html#Wisent-Grammar"
+    accesskey="n" rel="next">Wisent Grammar</a>, Previous: <a href=
+    "index.html#Top" accesskey="p" rel="prev">top</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Wisent-Overview-1" id="Wisent-Overview-1"></a>
 
-</li><li> For generating the lookahead sets, Wisent uses the well-known
-technique of F. DeRemer and T. Pennello described in:
-<blockquote>
-<p><cite>Efficient Computation of LALR(1) Look-Ahead Sets</cite><br>
-October 1982, ACM TOPLAS Vol 4 No 4, 615&ndash;49,
-<a href="http://dx.doi.org/10.1145/69622.357187">http://dx.doi.org/10.1145/69622.357187</a>.
-</p></blockquote>
+  <h2 class="chapter">1 Wisent Overview</h2>
 
-</li><li> Wisent resolves shift/reduce conflicts using operator precedence and
-associativity.
+  <p><em>Wisent</em> (the European Bison) is an implementation in
+  Emacs Lisp of the GNU Compiler Compiler Bison. Its code is a port
+  of the C code of GNU Bison 1.28 &amp; 1.31.</p>
 
-</li><li> Parser error recovery is accomplished using rules which match the
-special token <code>error</code>.
-</li></ul>
+  <p>For more details on the basic concepts for understanding
+  Wisent, it is worthwhile to read the <a href=
+  "http://www.gnu.org/software/bison/manual/html_node/index.html#Top">
+  (bison)Bison Manual</a>.</p>
 
-<p>Nevertheless there are some fundamental differences between Bison and
-Wisent.
-</p>
-<ul>
-<li> Wisent is intended to be used in Emacs.  It reads and produces Emacs
-Lisp data structures.  All the additional code used in grammars is
-Emacs Lisp code.
+  <p>Wisent can generate compilers compatible with the
+  <i>Semantic</i> tool set. See the <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/semantic/index.html#Top">
+  (semantic)Semantic Manual</a>.</p>
 
-</li><li> Contrary to Bison, Wisent does not generate a parser which combines
-Emacs Lisp code and grammar constructs.  They exist separately.
-Wisent reads the grammar from a Lisp data structure and then generates
-grammar constructs as tables.  Afterward, the derived tables can be
-included and byte-compiled in separate Emacs Lisp files, and be used
-at a later time by the Wisent&rsquo;s parser engine.
+  <p>It benefits from these Bison features:</p>
 
-</li><li> Wisent allows multiple start nonterminals and allows a call to the
-parsing function to be made for a particular start nonterminal.  For
-example, this is particularly useful to parse a region of an Emacs
-buffer.  <i>Semantic</i> heavily depends on the availability of this feature.
-</li></ul>
+  <ul>
+    <li>It uses a fast but not so space-efficient encoding for the
+    parse tables, described in Corbett&rsquo;s PhD thesis from
+    Berkeley:
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Wisent-Grammar.html#Wisent-Grammar" accesskey="n" rel="next">Wisent Grammar</a>, Previous: <a href="index.html#Top" accesskey="p" rel="prev">top</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <blockquote>
+        <p><cite>Static Semantics in Compiler Error
+        Recovery</cite><br />
+        June 1985, Report No. UCB/CSD 85/251.</p>
+      </blockquote>
+    </li>
 
+    <li>For generating the lookahead sets, Wisent uses the
+    well-known technique of F. DeRemer and T. Pennello described
+    in:
 
+      <blockquote>
+        <p><cite>Efficient Computation of LALR(1) Look-Ahead
+        Sets</cite><br />
+        October 1982, ACM TOPLAS Vol 4 No 4, 615&ndash;49, <a href=
+        "http://dx.doi.org/10.1145/69622.357187">http://dx.doi.org/10.1145/69622.357187</a>.</p>
+      </blockquote>
+    </li>
 
+    <li>Wisent resolves shift/reduce conflicts using operator
+    precedence and associativity.</li>
+
+    <li>Parser error recovery is accomplished using rules which
+    match the special token <code>error</code>.</li>
+  </ul>
+
+  <p>Nevertheless there are some fundamental differences between
+  Bison and Wisent.</p>
+
+  <ul>
+    <li>Wisent is intended to be used in Emacs. It reads and
+    produces Emacs Lisp data structures. All the additional code
+    used in grammars is Emacs Lisp code.</li>
+
+    <li>Contrary to Bison, Wisent does not generate a parser which
+    combines Emacs Lisp code and grammar constructs. They exist
+    separately. Wisent reads the grammar from a Lisp data structure
+    and then generates grammar constructs as tables. Afterward, the
+    derived tables can be included and byte-compiled in separate
+    Emacs Lisp files, and be used at a later time by the
+    Wisent&rsquo;s parser engine.</li>
+
+    <li>Wisent allows multiple start nonterminals and allows a call
+    to the parsing function to be made for a particular start
+    nonterminal. For example, this is particularly useful to parse
+    a region of an Emacs buffer. <i>Semantic</i> heavily depends on
+    the availability of this feature.</li>
+  </ul>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Wisent-Grammar.html#Wisent-Grammar"
+    accesskey="n" rel="next">Wisent Grammar</a>, Previous: <a href=
+    "index.html#Top" accesskey="p" rel="prev">top</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

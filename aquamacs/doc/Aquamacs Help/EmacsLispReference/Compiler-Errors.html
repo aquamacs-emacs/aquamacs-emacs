@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,146 +19,205 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Compiler Errors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Compiler Errors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Compiler Errors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Byte-Compilation.html#Byte-Compilation" rel="up" title="Byte Compilation">
-<link href="Byte_002dCode-Objects.html#Byte_002dCode-Objects" rel="next" title="Byte-Code Objects">
-<link href="Eval-During-Compile.html#Eval-During-Compile" rel="prev" title="Eval During Compile">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Compiler Errors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Compiler Errors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Compiler Errors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Byte-Compilation.html#Byte-Compilation" rel="up"
+  title="Byte Compilation" />
+  <link href="Byte_002dCode-Objects.html#Byte_002dCode-Objects"
+  rel="next" title="Byte-Code Objects" />
+  <link href="Eval-During-Compile.html#Eval-During-Compile" rel=
+  "prev" title="Eval During Compile" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Compiler-Errors" id="Compiler-Errors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Byte_002dCode-Objects.html#Byte_002dCode-Objects" accesskey=
+    "n" rel="next">Byte-Code Objects</a>, Previous: <a href=
+    "Eval-During-Compile.html#Eval-During-Compile" accesskey="p"
+    rel="prev">Eval During Compile</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Compiler-Errors-1" id="Compiler-Errors-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Compiler-Errors"></a>
-<div class="header">
-<p>
-Next: <a href="Byte_002dCode-Objects.html#Byte_002dCode-Objects" accesskey="n" rel="next">Byte-Code Objects</a>, Previous: <a href="Eval-During-Compile.html#Eval-During-Compile" accesskey="p" rel="prev">Eval During Compile</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Compiler-Errors-1"></a>
-<h3 class="section">16.6 Compiler Errors</h3>
-<a name="index-compiler-errors"></a>
+  <h3 class="section">16.6 Compiler Errors</h3><a name=
+  "index-compiler-errors" id="index-compiler-errors"></a>
 
-<p>Error and warning messages from byte compilation are printed in a
-buffer named <samp>*Compile-Log*</samp>.  These messages include file names
-and line numbers identifying the location of the problem.  The usual
-Emacs commands for operating on compiler output can be used on these
-messages.
-</p>
-<p>When an error is due to invalid syntax in the program, the byte
-compiler might get confused about the error&rsquo;s exact location.  One way
-to investigate is to switch to the buffer <samp>&nbsp;*Compiler&nbsp;Input*</samp><!-- /@w -->.  (This buffer name starts with a space, so it does not show
-up in the Buffer Menu.)  This buffer contains the program being
-compiled, and point shows how far the byte compiler was able to read;
-the cause of the error might be nearby.  See <a href="Syntax-Errors.html#Syntax-Errors">Syntax Errors</a>, for
-some tips for locating syntax errors.
-</p>
-<p>A common type of warning issued by the byte compiler is for
-functions and variables that were used but not defined.  Such warnings
-report the line number for the end of the file, not the locations
-where the missing functions or variables were used; to find these, you
-must search the file manually.
-</p>
-<p>If you are sure that a warning message about a missing function or
-variable is unjustified, there are several ways to suppress it:
-</p>
-<ul>
-<li> You can suppress the warning for a specific call to a function
-<var>func</var> by conditionalizing it on an <code>fboundp</code> test, like
-this:
+  <p>Error and warning messages from byte compilation are printed
+  in a buffer named <samp>*Compile-Log*</samp>. These messages
+  include file names and line numbers identifying the location of
+  the problem. The usual Emacs commands for operating on compiler
+  output can be used on these messages.</p>
 
-<div class="example">
-<pre class="example">(if (fboundp '<var>func</var>) ...(<var>func</var> ...)...)
-</pre></div>
+  <p>When an error is due to invalid syntax in the program, the
+  byte compiler might get confused about the error&rsquo;s exact
+  location. One way to investigate is to switch to the buffer
+  <samp>&nbsp;*Compiler&nbsp;Input*</samp><!-- /@w -->. (This
+  buffer name starts with a space, so it does not show up in the
+  Buffer Menu.) This buffer contains the program being compiled,
+  and point shows how far the byte compiler was able to read; the
+  cause of the error might be nearby. See <a href=
+  "Syntax-Errors.html#Syntax-Errors">Syntax Errors</a>, for some
+  tips for locating syntax errors.</p>
 
-<p>The call to <var>func</var> must be in the <var>then-form</var> of the
-<code>if</code>, and <var>func</var> must appear quoted in the call to
-<code>fboundp</code>.  (This feature operates for <code>cond</code> as well.)
-</p>
-</li><li> Likewise, you can suppress the warning for a specific use of a
-variable <var>variable</var> by conditionalizing it on a <code>boundp</code>
-test:
+  <p>A common type of warning issued by the byte compiler is for
+  functions and variables that were used but not defined. Such
+  warnings report the line number for the end of the file, not the
+  locations where the missing functions or variables were used; to
+  find these, you must search the file manually.</p>
 
-<div class="example">
-<pre class="example">(if (boundp '<var>variable</var>) ...<var>variable</var>...)
-</pre></div>
+  <p>If you are sure that a warning message about a missing
+  function or variable is unjustified, there are several ways to
+  suppress it:</p>
 
-<p>The reference to <var>variable</var> must be in the <var>then-form</var> of the
-<code>if</code>, and <var>variable</var> must appear quoted in the call to
-<code>boundp</code>.
-</p>
-</li><li> You can tell the compiler that a function is defined using
-<code>declare-function</code>. See <a href="Declaring-Functions.html#Declaring-Functions">Declaring Functions</a>.
+  <ul>
+    <li>You can suppress the warning for a specific call to a
+    function <var>func</var> by conditionalizing it on an
+    <code>fboundp</code> test, like this:
 
-</li><li> Likewise, you can tell the compiler that a variable is defined using
-<code>defvar</code> with no initial value.  (Note that this marks the
-variable as special.)  See <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>.
-</li></ul>
+      <div class="example">
+        <pre class="example">
+(if (fboundp '<var>func</var>) ...(<var>func</var> ...)...)
+</pre>
+      </div>
 
-<p>You can also suppress any and all compiler warnings within a certain
-expression using the construct <code>with-no-warnings</code>:
-</p>
+      <p>The call to <var>func</var> must be in the
+      <var>then-form</var> of the <code>if</code>, and
+      <var>func</var> must appear quoted in the call to
+      <code>fboundp</code>. (This feature operates for
+      <code>cond</code> as well.)</p>
+    </li>
 
-<dl>
-<dt><a name="index-with_002dno_002dwarnings"></a>Special Form: <strong>with-no-warnings</strong> <em>body&hellip;</em></dt>
-<dd><p>In execution, this is equivalent to <code>(progn <var>body</var>...)</code>,
-but the compiler does not issue warnings for anything that occurs
-inside <var>body</var>.
-</p>
-<p>We recommend that you use this construct around the smallest
-possible piece of code, to avoid missing possible warnings other than
-one you intend to suppress.
-</p></dd></dl>
+    <li>Likewise, you can suppress the warning for a specific use
+    of a variable <var>variable</var> by conditionalizing it on a
+    <code>boundp</code> test:
 
-<p>Byte compiler warnings can be controlled more precisely by setting
-the variable <code>byte-compile-warnings</code>.  See its documentation
-string for details.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Byte_002dCode-Objects.html#Byte_002dCode-Objects" accesskey="n" rel="next">Byte-Code Objects</a>, Previous: <a href="Eval-During-Compile.html#Eval-During-Compile" accesskey="p" rel="prev">Eval During Compile</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <div class="example">
+        <pre class="example">
+(if (boundp '<var>variable</var>) ...<var>variable</var>...)
+</pre>
+      </div>
 
+      <p>The reference to <var>variable</var> must be in the
+      <var>then-form</var> of the <code>if</code>, and
+      <var>variable</var> must appear quoted in the call to
+      <code>boundp</code>.</p>
+    </li>
 
+    <li>You can tell the compiler that a function is defined using
+    <code>declare-function</code>. See <a href=
+    "Declaring-Functions.html#Declaring-Functions">Declaring
+    Functions</a>.</li>
 
+    <li>Likewise, you can tell the compiler that a variable is
+    defined using <code>defvar</code> with no initial value. (Note
+    that this marks the variable as special.) See <a href=
+    "Defining-Variables.html#Defining-Variables">Defining
+    Variables</a>.</li>
+  </ul>
+
+  <p>You can also suppress any and all compiler warnings within a
+  certain expression using the construct
+  <code>with-no-warnings</code>:</p>
+
+  <dl>
+    <dt><a name="index-with_002dno_002dwarnings" id=
+    "index-with_002dno_002dwarnings"></a>Special Form:
+    <strong>with-no-warnings</strong> <em>body&hellip;</em></dt>
+
+    <dd>
+      <p>In execution, this is equivalent to <code>(progn
+      <var>body</var>...)</code>, but the compiler does not issue
+      warnings for anything that occurs inside <var>body</var>.</p>
+
+      <p>We recommend that you use this construct around the
+      smallest possible piece of code, to avoid missing possible
+      warnings other than one you intend to suppress.</p>
+    </dd>
+  </dl>
+
+  <p>Byte compiler warnings can be controlled more precisely by
+  setting the variable <code>byte-compile-warnings</code>. See its
+  documentation string for details.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Byte_002dCode-Objects.html#Byte_002dCode-Objects" accesskey=
+    "n" rel="next">Byte-Code Objects</a>, Previous: <a href=
+    "Eval-During-Compile.html#Eval-During-Compile" accesskey="p"
+    rel="prev">Eval During Compile</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

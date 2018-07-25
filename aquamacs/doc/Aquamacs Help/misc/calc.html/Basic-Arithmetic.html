@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,398 +18,507 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Basic Arithmetic</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Basic Arithmetic">
-<meta name="keywords" content="GNU Emacs Calc Manual: Basic Arithmetic">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Arithmetic.html#Arithmetic" rel="up" title="Arithmetic">
-<link href="Integer-Truncation.html#Integer-Truncation" rel="next" title="Integer Truncation">
-<link href="Arithmetic.html#Arithmetic" rel="prev" title="Arithmetic">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Basic Arithmetic</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Basic Arithmetic" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Basic Arithmetic" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Arithmetic.html#Arithmetic" rel="up" title=
+  "Arithmetic" />
+  <link href="Integer-Truncation.html#Integer-Truncation" rel=
+  "next" title="Integer Truncation" />
+  <link href="Arithmetic.html#Arithmetic" rel="prev" title=
+  "Arithmetic" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Arithmetic"></a>
-<div class="header">
-<p>
-Next: <a href="Integer-Truncation.html#Integer-Truncation" accesskey="n" rel="next">Integer Truncation</a>, Previous: <a href="Arithmetic.html#Arithmetic" accesskey="p" rel="prev">Arithmetic</a>, Up: <a href="Arithmetic.html#Arithmetic" accesskey="u" rel="up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Arithmetic-1"></a>
-<h3 class="section">7.1 Basic Arithmetic</h3>
+<body lang="en" xml:lang="en">
+  <a name="Basic-Arithmetic" id="Basic-Arithmetic"></a>
 
-<a name="index-_002b"></a>
-<a name="index-calc_002dplus"></a>
-<a name="index-_002b-1"></a>
-<p>The <kbd>+</kbd> (<code>calc-plus</code>) command adds two numbers.  The numbers may
-be any of the standard Calc data types.  The resulting sum is pushed back
-onto the stack.
-</p>
-<p>If both arguments of <kbd>+</kbd> are vectors or matrices (of matching dimensions),
-the result is a vector or matrix sum.  If one argument is a vector and the
-other a scalar (i.e., a non-vector), the scalar is added to each of the
-elements of the vector to form a new vector.  If the scalar is not a
-number, the operation is left in symbolic form:  Suppose you added &lsquo;<samp>x</samp>&rsquo;
-to the vector &lsquo;<samp>[1,2]</samp>&rsquo;.  You may want the result &lsquo;<samp>[1+x,2+x]</samp>&rsquo;, or
-you may plan to substitute a 2-vector for &lsquo;<samp>x</samp>&rsquo; in the future.  Since
-the Calculator can&rsquo;t tell which interpretation you want, it makes the
-safest assumption.  See <a href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>, for a way to add &lsquo;<samp>x</samp>&rsquo;
-to every element of a vector.
-</p>
-<p>If either argument of <kbd>+</kbd> is a complex number, the result will in general
-be complex.  If one argument is in rectangular form and the other polar,
-the current Polar mode determines the form of the result.  If Symbolic
-mode is enabled, the sum may be left as a formula if the necessary
-conversions for polar addition are non-trivial.
-</p>
-<p>If both arguments of <kbd>+</kbd> are HMS forms, the forms are added according to
-the usual conventions of hours-minutes-seconds notation.  If one argument
-is an HMS form and the other is a number, that number is converted from
-degrees or radians (depending on the current Angular mode) to HMS format
-and then the two HMS forms are added.
-</p>
-<p>If one argument of <kbd>+</kbd> is a date form, the other can be either a
-real number, which advances the date by a certain number of days, or
-an HMS form, which advances the date by a certain amount of time.
-Subtracting two date forms yields the number of days between them.
-Adding two date forms is meaningless, but Calc interprets it as the
-subtraction of one date form and the negative of the other.  (The
-negative of a date form can be understood by remembering that dates
-are stored as the number of days before or after Jan 1, 1 AD.)
-</p>
-<p>If both arguments of <kbd>+</kbd> are error forms, the result is an error form
-with an appropriately computed standard deviation.  If one argument is an
-error form and the other is a number, the number is taken to have zero error.
-Error forms may have symbolic formulas as their mean and/or error parts;
-adding these will produce a symbolic error form result.  However, adding an
-error form to a plain symbolic formula (as in &lsquo;<samp>(a +/- b) + c</samp>&rsquo;) will not
-work, for the same reasons just mentioned for vectors.  Instead you must
-write &lsquo;<samp>(a +/- b) + (c +/- 0)</samp>&rsquo;.
-</p>
-<p>If both arguments of <kbd>+</kbd> are modulo forms with equal values of &lsquo;<samp>M</samp>&rsquo;,
-or if one argument is a modulo form and the other a plain number, the
-result is a modulo form which represents the sum, modulo &lsquo;<samp>M</samp>&rsquo;, of
-the two values.
-</p>
-<p>If both arguments of <kbd>+</kbd> are intervals, the result is an interval
-which describes all possible sums of the possible input values.  If
-one argument is a plain number, it is treated as the interval
-&lsquo;<samp>[x&nbsp;..&nbsp;x]</samp>&rsquo;<!-- /@w -->.
-</p>
-<p>If one argument of <kbd>+</kbd> is an infinity and the other is not, the
-result is that same infinity.  If both arguments are infinite and in
-the same direction, the result is the same infinity, but if they are
-infinite in different directions the result is <code>nan</code>.
-</p>
-<a name="index-_002d"></a>
-<a name="index-calc_002dminus"></a>
-<a name="index-_002d-1"></a>
-<p>The <kbd>-</kbd> (<code>calc-minus</code>) command subtracts two values.  The top
-number on the stack is subtracted from the one behind it, so that the
-computation <kbd>5 <span class="key">RET</span> 2 -</kbd> produces 3, not <i>-3</i>.  All options
-available for <kbd>+</kbd> are available for <kbd>-</kbd> as well.
-</p>
-<a name="index-_002a"></a>
-<a name="index-calc_002dtimes"></a>
-<a name="index-_002a-1"></a>
-<p>The <kbd>*</kbd> (<code>calc-times</code>) command multiplies two numbers.  If one
-argument is a vector and the other a scalar, the scalar is multiplied by
-the elements of the vector to produce a new vector.  If both arguments
-are vectors, the interpretation depends on the dimensions of the
-vectors:  If both arguments are matrices, a matrix multiplication is
-done.  If one argument is a matrix and the other a plain vector, the
-vector is interpreted as a row vector or column vector, whichever is
-dimensionally correct.  If both arguments are plain vectors, the result
-is a single scalar number which is the dot product of the two vectors.
-</p>
-<p>If one argument of <kbd>*</kbd> is an HMS form and the other a number, the
-HMS form is multiplied by that amount.  It is an error to multiply two
-HMS forms together, or to attempt any multiplication involving date
-forms.  Error forms, modulo forms, and intervals can be multiplied;
-see the comments for addition of those forms.  When two error forms
-or intervals are multiplied they are considered to be statistically
-independent; thus, &lsquo;<samp>[-2 .. 3] * [-2 .. 3]</samp>&rsquo; is &lsquo;<samp>[-6 .. 9]</samp>&rsquo;,
-whereas &lsquo;<samp><span class="nolinebreak">[-2</span>&nbsp;..&nbsp;3]&nbsp;^&nbsp;2</samp>&rsquo;<!-- /@w --> is &lsquo;<samp>[0 .. 9]</samp>&rsquo;.
-</p>
-<a name="index-_002f"></a>
-<a name="index-calc_002ddivide"></a>
-<a name="index-_002f-1"></a>
-<p>The <kbd>/</kbd> (<code>calc-divide</code>) command divides two numbers.
-</p>
-<p>When combining multiplication and division in an algebraic formula, it
-is good style to use parentheses to distinguish between possible
-interpretations; the expression &lsquo;<samp>a/b*c</samp>&rsquo; should be written
-&lsquo;<samp>(a/b)*c</samp>&rsquo; or &lsquo;<samp>a/(b*c)</samp>&rsquo;, as appropriate.  Without the
-parentheses, Calc will interpret &lsquo;<samp>a/b*c</samp>&rsquo; as &lsquo;<samp>a/(b*c)</samp>&rsquo;, since
-in algebraic entry Calc gives division a lower precedence than
-multiplication. (This is not standard across all computer languages, and
-Calc may change the precedence depending on the language mode being used.
-See <a href="Language-Modes.html#Language-Modes">Language Modes</a>.)  This default ordering can be changed by setting
-the customizable variable <code>calc-multiplication-has-precedence</code> to
-<code>nil</code> (see <a href="Customizing-Calc.html#Customizing-Calc">Customizing Calc</a>); this will give multiplication and
-division equal precedences.  Note that Calc&rsquo;s default choice of
-precedence allows &lsquo;<samp>a b / c d</samp>&rsquo; to be used as a shortcut for
-</p><div class="smallexample">
-<pre class="smallexample">a b
+  <div class="header">
+    <p>Next: <a href="Integer-Truncation.html#Integer-Truncation"
+    accesskey="n" rel="next">Integer Truncation</a>, Previous:
+    <a href="Arithmetic.html#Arithmetic" accesskey="p" rel=
+    "prev">Arithmetic</a>, Up: <a href="Arithmetic.html#Arithmetic"
+    accesskey="u" rel="up">Arithmetic</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Arithmetic-1" id="Basic-Arithmetic-1"></a>
+
+  <h3 class="section">7.1 Basic Arithmetic</h3><a name=
+  "index-_002b" id="index-_002b"></a> <a name="index-calc_002dplus"
+  id="index-calc_002dplus"></a> <a name="index-_002b-1" id=
+  "index-_002b-1"></a>
+
+  <p>The <kbd>+</kbd> (<code>calc-plus</code>) command adds two
+  numbers. The numbers may be any of the standard Calc data types.
+  The resulting sum is pushed back onto the stack.</p>
+
+  <p>If both arguments of <kbd>+</kbd> are vectors or matrices (of
+  matching dimensions), the result is a vector or matrix sum. If
+  one argument is a vector and the other a scalar (i.e., a
+  non-vector), the scalar is added to each of the elements of the
+  vector to form a new vector. If the scalar is not a number, the
+  operation is left in symbolic form: Suppose you added
+  &lsquo;<samp>x</samp>&rsquo; to the vector
+  &lsquo;<samp>[1,2]</samp>&rsquo;. You may want the result
+  &lsquo;<samp>[1+x,2+x]</samp>&rsquo;, or you may plan to
+  substitute a 2-vector for &lsquo;<samp>x</samp>&rsquo; in the
+  future. Since the Calculator can&rsquo;t tell which
+  interpretation you want, it makes the safest assumption. See
+  <a href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing
+  and Mapping</a>, for a way to add &lsquo;<samp>x</samp>&rsquo; to
+  every element of a vector.</p>
+
+  <p>If either argument of <kbd>+</kbd> is a complex number, the
+  result will in general be complex. If one argument is in
+  rectangular form and the other polar, the current Polar mode
+  determines the form of the result. If Symbolic mode is enabled,
+  the sum may be left as a formula if the necessary conversions for
+  polar addition are non-trivial.</p>
+
+  <p>If both arguments of <kbd>+</kbd> are HMS forms, the forms are
+  added according to the usual conventions of hours-minutes-seconds
+  notation. If one argument is an HMS form and the other is a
+  number, that number is converted from degrees or radians
+  (depending on the current Angular mode) to HMS format and then
+  the two HMS forms are added.</p>
+
+  <p>If one argument of <kbd>+</kbd> is a date form, the other can
+  be either a real number, which advances the date by a certain
+  number of days, or an HMS form, which advances the date by a
+  certain amount of time. Subtracting two date forms yields the
+  number of days between them. Adding two date forms is
+  meaningless, but Calc interprets it as the subtraction of one
+  date form and the negative of the other. (The negative of a date
+  form can be understood by remembering that dates are stored as
+  the number of days before or after Jan 1, 1 AD.)</p>
+
+  <p>If both arguments of <kbd>+</kbd> are error forms, the result
+  is an error form with an appropriately computed standard
+  deviation. If one argument is an error form and the other is a
+  number, the number is taken to have zero error. Error forms may
+  have symbolic formulas as their mean and/or error parts; adding
+  these will produce a symbolic error form result. However, adding
+  an error form to a plain symbolic formula (as in &lsquo;<samp>(a
+  +/- b) + c</samp>&rsquo;) will not work, for the same reasons
+  just mentioned for vectors. Instead you must write
+  &lsquo;<samp>(a +/- b) + (c +/- 0)</samp>&rsquo;.</p>
+
+  <p>If both arguments of <kbd>+</kbd> are modulo forms with equal
+  values of &lsquo;<samp>M</samp>&rsquo;, or if one argument is a
+  modulo form and the other a plain number, the result is a modulo
+  form which represents the sum, modulo
+  &lsquo;<samp>M</samp>&rsquo;, of the two values.</p>
+
+  <p>If both arguments of <kbd>+</kbd> are intervals, the result is
+  an interval which describes all possible sums of the possible
+  input values. If one argument is a plain number, it is treated as
+  the interval &lsquo;<samp>[x&nbsp;..&nbsp;x]</samp>&rsquo;
+  <!-- /@w -->.</p>
+
+  <p>If one argument of <kbd>+</kbd> is an infinity and the other
+  is not, the result is that same infinity. If both arguments are
+  infinite and in the same direction, the result is the same
+  infinity, but if they are infinite in different directions the
+  result is <code>nan</code>.</p><a name="index-_002d" id=
+  "index-_002d"></a> <a name="index-calc_002dminus" id=
+  "index-calc_002dminus"></a> <a name="index-_002d-1" id=
+  "index-_002d-1"></a>
+
+  <p>The <kbd>-</kbd> (<code>calc-minus</code>) command subtracts
+  two values. The top number on the stack is subtracted from the
+  one behind it, so that the computation <kbd>5 <span class=
+  "key">RET</span> 2 -</kbd> produces 3, not <i>-3</i>. All options
+  available for <kbd>+</kbd> are available for <kbd>-</kbd> as
+  well.</p><a name="index-_002a" id="index-_002a"></a> <a name=
+  "index-calc_002dtimes" id="index-calc_002dtimes"></a> <a name=
+  "index-_002a-1" id="index-_002a-1"></a>
+
+  <p>The <kbd>*</kbd> (<code>calc-times</code>) command multiplies
+  two numbers. If one argument is a vector and the other a scalar,
+  the scalar is multiplied by the elements of the vector to produce
+  a new vector. If both arguments are vectors, the interpretation
+  depends on the dimensions of the vectors: If both arguments are
+  matrices, a matrix multiplication is done. If one argument is a
+  matrix and the other a plain vector, the vector is interpreted as
+  a row vector or column vector, whichever is dimensionally
+  correct. If both arguments are plain vectors, the result is a
+  single scalar number which is the dot product of the two
+  vectors.</p>
+
+  <p>If one argument of <kbd>*</kbd> is an HMS form and the other a
+  number, the HMS form is multiplied by that amount. It is an error
+  to multiply two HMS forms together, or to attempt any
+  multiplication involving date forms. Error forms, modulo forms,
+  and intervals can be multiplied; see the comments for addition of
+  those forms. When two error forms or intervals are multiplied
+  they are considered to be statistically independent; thus,
+  &lsquo;<samp>[-2 .. 3] * [-2 .. 3]</samp>&rsquo; is
+  &lsquo;<samp>[-6 .. 9]</samp>&rsquo;, whereas
+  &lsquo;<samp><span class=
+  "nolinebreak">[-2</span>&nbsp;..&nbsp;3]&nbsp;^&nbsp;2</samp>&rsquo;<!-- /@w -->
+  is &lsquo;<samp>[0 .. 9]</samp>&rsquo;.</p><a name="index-_002f"
+  id="index-_002f"></a> <a name="index-calc_002ddivide" id=
+  "index-calc_002ddivide"></a> <a name="index-_002f-1" id=
+  "index-_002f-1"></a>
+
+  <p>The <kbd>/</kbd> (<code>calc-divide</code>) command divides
+  two numbers.</p>
+
+  <p>When combining multiplication and division in an algebraic
+  formula, it is good style to use parentheses to distinguish
+  between possible interpretations; the expression
+  &lsquo;<samp>a/b*c</samp>&rsquo; should be written
+  &lsquo;<samp>(a/b)*c</samp>&rsquo; or
+  &lsquo;<samp>a/(b*c)</samp>&rsquo;, as appropriate. Without the
+  parentheses, Calc will interpret &lsquo;<samp>a/b*c</samp>&rsquo;
+  as &lsquo;<samp>a/(b*c)</samp>&rsquo;, since in algebraic entry
+  Calc gives division a lower precedence than multiplication. (This
+  is not standard across all computer languages, and Calc may
+  change the precedence depending on the language mode being used.
+  See <a href="Language-Modes.html#Language-Modes">Language
+  Modes</a>.) This default ordering can be changed by setting the
+  customizable variable
+  <code>calc-multiplication-has-precedence</code> to
+  <code>nil</code> (see <a href=
+  "Customizing-Calc.html#Customizing-Calc">Customizing Calc</a>);
+  this will give multiplication and division equal precedences.
+  Note that Calc&rsquo;s default choice of precedence allows
+  &lsquo;<samp>a b / c d</samp>&rsquo; to be used as a shortcut
+  for</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+a b
 ---.
 c d
-</pre></div>
+</pre>
+  </div>
 
-<p>When dividing a scalar &lsquo;<samp>B</samp>&rsquo; by a square matrix &lsquo;<samp>A</samp>&rsquo;, the
-computation performed is &lsquo;<samp>B</samp>&rsquo; times the inverse of &lsquo;<samp>A</samp>&rsquo;.  This
-also occurs if &lsquo;<samp>B</samp>&rsquo; is itself a vector or matrix, in which case the
-effect is to solve the set of linear equations represented by &lsquo;<samp>B</samp>&rsquo;.
-If &lsquo;<samp>B</samp>&rsquo; is a matrix with the same number of rows as &lsquo;<samp>A</samp>&rsquo;, or a
-plain vector (which is interpreted here as a column vector), then the
-equation &lsquo;<samp>A X = B</samp>&rsquo; is solved for the vector or matrix &lsquo;<samp>X</samp>&rsquo;.
-Otherwise, if &lsquo;<samp>B</samp>&rsquo; is a non-square matrix with the same number of
-<em>columns</em> as &lsquo;<samp>A</samp>&rsquo;, the equation &lsquo;<samp>X A = B</samp>&rsquo; is solved.  If
-you wish a vector &lsquo;<samp>B</samp>&rsquo; to be interpreted as a row vector to be
-solved as &lsquo;<samp>X A = B</samp>&rsquo;, make it into a one-row matrix with <kbd>C-u 1
-v p</kbd> first.  To force a left-handed solution with a square matrix
-&lsquo;<samp>B</samp>&rsquo;, transpose &lsquo;<samp>A</samp>&rsquo; and &lsquo;<samp>B</samp>&rsquo; before dividing, then
-transpose the result.
-</p>
-<p>HMS forms can be divided by real numbers or by other HMS forms.  Error
-forms can be divided in any combination of ways.  Modulo forms where both
-values and the modulo are integers can be divided to get an integer modulo
-form result.  Intervals can be divided; dividing by an interval that
-encompasses zero or has zero as a limit will result in an infinite
-interval.
-</p>
-<a name="index-_005e"></a>
-<a name="index-calc_002dpower"></a>
-<a name="index-_005e-1"></a>
-<p>The <kbd>^</kbd> (<code>calc-power</code>) command raises a number to a power.  If
-the power is an integer, an exact result is computed using repeated
-multiplications.  For non-integer powers, Calc uses Newton&rsquo;s method or
-logarithms and exponentials.  Square matrices can be raised to integer
-powers.  If either argument is an error (or interval or modulo) form,
-the result is also an error (or interval or modulo) form.
-</p>
-<a name="index-I-_005e"></a>
-<a name="index-nroot"></a>
-<p>If you press the <kbd>I</kbd> (inverse) key first, the <kbd>I ^</kbd> command
-computes an Nth root:  <kbd>125 <span class="key">RET</span> 3 I ^</kbd> computes the number 5.
-(This is entirely equivalent to <kbd>125 <span class="key">RET</span> 1:3 ^</kbd>.)
-</p>
-<a name="index-_005c"></a>
-<a name="index-calc_002didiv"></a>
-<a name="index-idiv-1"></a>
-<a name="index-_005c-1"></a>
-<p>The <kbd>\</kbd> (<code>calc-idiv</code>) command divides two numbers on the stack
-to produce an integer result.  It is equivalent to dividing with
-<tt class="key">/</tt>, then rounding down with <kbd>F</kbd> (<code>calc-floor</code>), only a bit
-more convenient and efficient.  Also, since it is an all-integer
-operation when the arguments are integers, it avoids problems that
-<kbd>/ F</kbd> would have with floating-point roundoff.
-</p>
-<a name="index-_0025"></a>
-<a name="index-calc_002dmod"></a>
-<a name="index-_0025-1"></a>
-<p>The <kbd>%</kbd> (<code>calc-mod</code>) command performs a &ldquo;modulo&rdquo; (or &ldquo;remainder&rdquo;)
-operation.  Mathematically, &lsquo;<samp>a%b = a - (a\b)*b</samp>&rsquo;, and is defined
-for all real numbers &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo; (except &lsquo;<samp>b=0</samp>&rsquo;).  For
-positive &lsquo;<samp>b</samp>&rsquo;, the result will always be between 0 (inclusive) and
-&lsquo;<samp>b</samp>&rsquo; (exclusive).  Modulo does not work for HMS forms and error forms.
-If &lsquo;<samp>a</samp>&rsquo; is a modulo form, its modulo is changed to &lsquo;<samp>b</samp>&rsquo;, which
-must be positive real number.
-</p>
-<a name="index-_003a"></a>
-<a name="index-calc_002dfdiv"></a>
-<a name="index-fdiv"></a>
-<p>The <kbd>:</kbd> (<code>calc-fdiv</code>) [<code>fdiv</code>] command
-divides the two integers on the top of the stack to produce a fractional
-result.  This is a convenient shorthand for enabling Fraction mode (with
-<kbd>m f</kbd>) temporarily and using &lsquo;<samp>/</samp>&rsquo;.  Note that during numeric entry
-the <kbd>:</kbd> key is interpreted as a fraction separator, so to divide 8 by 6
-you would have to type <kbd>8 <span class="key">RET</span> 6 <span class="key">RET</span> :</kbd>.  (Of course, in
-this case, it would be much easier simply to enter the fraction directly
-as <kbd>8:6 <span class="key">RET</span></kbd>!)
-</p>
-<a name="index-n"></a>
-<a name="index-calc_002dchange_002dsign"></a>
-<p>The <kbd>n</kbd> (<code>calc-change-sign</code>) command negates the number on the top
-of the stack.  It works on numbers, vectors and matrices, HMS forms, date
-forms, error forms, intervals, and modulo forms.
-</p>
-<a name="index-A"></a>
-<a name="index-calc_002dabs"></a>
-<a name="index-abs"></a>
-<p>The <kbd>A</kbd> (<code>calc-abs</code>) [<code>abs</code>] command computes the absolute
-value of a number.  The result of <code>abs</code> is always a nonnegative
-real number:  With a complex argument, it computes the complex magnitude.
-With a vector or matrix argument, it computes the Frobenius norm, i.e.,
-the square root of the sum of the squares of the absolute values of the
-elements.  The absolute value of an error form is defined by replacing
-the mean part with its absolute value and leaving the error part the same.
-The absolute value of a modulo form is undefined.  The absolute value of
-an interval is defined in the obvious way.
-</p>
-<a name="index-f-A"></a>
-<a name="index-calc_002dabssqr"></a>
-<a name="index-abssqr"></a>
-<p>The <kbd>f A</kbd> (<code>calc-abssqr</code>) [<code>abssqr</code>] command computes the
-absolute value squared of a number, vector or matrix, or error form.
-</p>
-<a name="index-f-s"></a>
-<a name="index-calc_002dsign"></a>
-<a name="index-sign"></a>
-<p>The <kbd>f s</kbd> (<code>calc-sign</code>) [<code>sign</code>] command returns 1 if its
-argument is positive, <i>-1</i> if its argument is negative, or 0 if its
-argument is zero.  In algebraic form, you can also write &lsquo;<samp>sign(a,x)</samp>&rsquo;
-which evaluates to &lsquo;<samp>x * sign(a)</samp>&rsquo;, i.e., either &lsquo;<samp>x</samp>&rsquo;, &lsquo;<samp>-x</samp>&rsquo;, or
-zero depending on the sign of &lsquo;<samp>a</samp>&rsquo;.
-</p>
-<a name="index-_0026"></a>
-<a name="index-calc_002dinv"></a>
-<a name="index-inv"></a>
-<a name="index-Reciprocal"></a>
-<p>The <kbd>&amp;</kbd> (<code>calc-inv</code>) [<code>inv</code>] command computes the
-reciprocal of a number, i.e., &lsquo;<samp>1 / x</samp>&rsquo;.  Operating on a square
-matrix, it computes the inverse of that matrix.
-</p>
-<a name="index-Q"></a>
-<a name="index-calc_002dsqrt"></a>
-<a name="index-sqrt"></a>
-<p>The <kbd>Q</kbd> (<code>calc-sqrt</code>) [<code>sqrt</code>] command computes the square
-root of a number.  For a negative real argument, the result will be a
-complex number whose form is determined by the current Polar mode.
-</p>
-<a name="index-f-h"></a>
-<a name="index-calc_002dhypot"></a>
-<a name="index-hypot"></a>
-<p>The <kbd>f h</kbd> (<code>calc-hypot</code>) [<code>hypot</code>] command computes the square
-root of the sum of the squares of two numbers.  That is, &lsquo;<samp>hypot(a,b)</samp>&rsquo;
-is the length of the hypotenuse of a right triangle with sides &lsquo;<samp>a</samp>&rsquo;
-and &lsquo;<samp>b</samp>&rsquo;.  If the arguments are complex numbers, their squared
-magnitudes are used.
-</p>
-<a name="index-f-Q"></a>
-<a name="index-calc_002disqrt"></a>
-<a name="index-isqrt-1"></a>
-<p>The <kbd>f Q</kbd> (<code>calc-isqrt</code>) [<code>isqrt</code>] command computes the
-integer square root of an integer.  This is the true square root of the
-number, rounded down to an integer.  For example, &lsquo;<samp>isqrt(10)</samp>&rsquo;
-produces 3.  Note that, like <kbd>\</kbd> [<code>idiv</code>], this uses exact
-integer arithmetic throughout to avoid roundoff problems.  If the input
-is a floating-point number or other non-integer value, this is exactly
-the same as &lsquo;<samp>floor(sqrt(x))</samp>&rsquo;.
-</p>
-<a name="index-f-n"></a>
-<a name="index-f-x"></a>
-<a name="index-calc_002dmin"></a>
-<a name="index-min"></a>
-<a name="index-calc_002dmax"></a>
-<a name="index-max"></a>
-<p>The <kbd>f n</kbd> (<code>calc-min</code>) [<code>min</code>] and <kbd>f x</kbd> (<code>calc-max</code>)
-[<code>max</code>] commands take the minimum or maximum of two real numbers,
-respectively.  These commands also work on HMS forms, date forms,
-intervals, and infinities.  (In algebraic expressions, these functions
-take any number of arguments and return the maximum or minimum among
-all the arguments.)
-</p>
-<a name="index-f-M"></a>
-<a name="index-f-X"></a>
-<a name="index-calc_002dmant_002dpart"></a>
-<a name="index-mant"></a>
-<a name="index-calc_002dxpon_002dpart"></a>
-<a name="index-xpon"></a>
-<p>The <kbd>f M</kbd> (<code>calc-mant-part</code>) [<code>mant</code>] function extracts
-the &ldquo;mantissa&rdquo; part &lsquo;<samp>m</samp>&rsquo; of its floating-point argument; <kbd>f X</kbd>
-(<code>calc-xpon-part</code>) [<code>xpon</code>] extracts the &ldquo;exponent&rdquo; part
-&lsquo;<samp>e</samp>&rsquo;.  The original number is equal to
-&lsquo;<samp>m * 10^e</samp>&rsquo;,
-where &lsquo;<samp>m</samp>&rsquo; is in the interval &lsquo;<samp>[1.0 .. 10.0)</samp>&rsquo; except that
-&lsquo;<samp>m=e=0</samp>&rsquo; if the original number is zero.  For integers
-and fractions, <code>mant</code> returns the number unchanged and <code>xpon</code>
-returns zero.  The <kbd>v u</kbd> (<code>calc-unpack</code>) command can also be
-used to &ldquo;unpack&rdquo; a floating-point number; this produces an integer
-mantissa and exponent, with the constraint that the mantissa is not
-a multiple of ten (again except for the &lsquo;<samp>m=e=0</samp>&rsquo; case).
-</p>
-<a name="index-f-S"></a>
-<a name="index-calc_002dscale_002dfloat"></a>
-<a name="index-scf"></a>
-<p>The <kbd>f S</kbd> (<code>calc-scale-float</code>) [<code>scf</code>] function scales a number
-by a given power of ten.  Thus, &lsquo;<samp>scf(mant(x), xpon(x)) = x</samp>&rsquo; for any
-real &lsquo;<samp>x</samp>&rsquo;.  The second argument must be an integer, but the first
-may actually be any numeric value.  For example, &lsquo;<samp>scf(5,-2) = 0.05</samp>&rsquo;
-or &lsquo;<samp>1:20</samp>&rsquo; depending on the current Fraction mode.
-</p>
-<a name="index-f-_005b"></a>
-<a name="index-f-_005d"></a>
-<a name="index-calc_002ddecrement"></a>
-<a name="index-calc_002dincrement"></a>
-<a name="index-decr"></a>
-<a name="index-incr"></a>
-<p>The <kbd>f [</kbd> (<code>calc-decrement</code>) [<code>decr</code>] and <kbd>f ]</kbd>
-(<code>calc-increment</code>) [<code>incr</code>] functions decrease or increase
-a number by one unit.  For integers, the effect is obvious.  For
-floating-point numbers, the change is by one unit in the last place.
-For example, incrementing &lsquo;<samp>12.3456</samp>&rsquo; when the current precision
-is 6 digits yields &lsquo;<samp>12.3457</samp>&rsquo;.  If the current precision had been
-8 digits, the result would have been &lsquo;<samp>12.345601</samp>&rsquo;.  Incrementing
-&lsquo;<samp>0.0</samp>&rsquo; produces
-&lsquo;<samp>10^-p</samp>&rsquo;,
-where &lsquo;<samp>p</samp>&rsquo; is the current
-precision.  These operations are defined only on integers and floats.
-With numeric prefix arguments, they change the number by &lsquo;<samp>n</samp>&rsquo; units.
-</p>
-<p>Note that incrementing followed by decrementing, or vice-versa, will
-almost but not quite always cancel out.  Suppose the precision is
-6 digits and the number &lsquo;<samp>9.99999</samp>&rsquo; is on the stack.  Incrementing
-will produce &lsquo;<samp>10.0000</samp>&rsquo;; decrementing will produce &lsquo;<samp>9.9999</samp>&rsquo;.
-One digit has been dropped.  This is an unavoidable consequence of the
-way floating-point numbers work.
-</p>
-<p>Incrementing a date/time form adjusts it by a certain number of seconds.
-Incrementing a pure date form adjusts it by a certain number of days.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Integer-Truncation.html#Integer-Truncation" accesskey="n" rel="next">Integer Truncation</a>, Previous: <a href="Arithmetic.html#Arithmetic" accesskey="p" rel="prev">Arithmetic</a>, Up: <a href="Arithmetic.html#Arithmetic" accesskey="u" rel="up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When dividing a scalar &lsquo;<samp>B</samp>&rsquo; by a
+  square matrix &lsquo;<samp>A</samp>&rsquo;, the computation
+  performed is &lsquo;<samp>B</samp>&rsquo; times the inverse of
+  &lsquo;<samp>A</samp>&rsquo;. This also occurs if
+  &lsquo;<samp>B</samp>&rsquo; is itself a vector or matrix, in
+  which case the effect is to solve the set of linear equations
+  represented by &lsquo;<samp>B</samp>&rsquo;. If
+  &lsquo;<samp>B</samp>&rsquo; is a matrix with the same number of
+  rows as &lsquo;<samp>A</samp>&rsquo;, or a plain vector (which is
+  interpreted here as a column vector), then the equation
+  &lsquo;<samp>A X = B</samp>&rsquo; is solved for the vector or
+  matrix &lsquo;<samp>X</samp>&rsquo;. Otherwise, if
+  &lsquo;<samp>B</samp>&rsquo; is a non-square matrix with the same
+  number of <em>columns</em> as &lsquo;<samp>A</samp>&rsquo;, the
+  equation &lsquo;<samp>X A = B</samp>&rsquo; is solved. If you
+  wish a vector &lsquo;<samp>B</samp>&rsquo; to be interpreted as a
+  row vector to be solved as &lsquo;<samp>X A = B</samp>&rsquo;,
+  make it into a one-row matrix with <kbd>C-u 1 v p</kbd> first. To
+  force a left-handed solution with a square matrix
+  &lsquo;<samp>B</samp>&rsquo;, transpose
+  &lsquo;<samp>A</samp>&rsquo; and &lsquo;<samp>B</samp>&rsquo;
+  before dividing, then transpose the result.</p>
 
+  <p>HMS forms can be divided by real numbers or by other HMS
+  forms. Error forms can be divided in any combination of ways.
+  Modulo forms where both values and the modulo are integers can be
+  divided to get an integer modulo form result. Intervals can be
+  divided; dividing by an interval that encompasses zero or has
+  zero as a limit will result in an infinite interval.</p><a name=
+  "index-_005e" id="index-_005e"></a> <a name=
+  "index-calc_002dpower" id="index-calc_002dpower"></a> <a name=
+  "index-_005e-1" id="index-_005e-1"></a>
 
+  <p>The <kbd>^</kbd> (<code>calc-power</code>) command raises a
+  number to a power. If the power is an integer, an exact result is
+  computed using repeated multiplications. For non-integer powers,
+  Calc uses Newton&rsquo;s method or logarithms and exponentials.
+  Square matrices can be raised to integer powers. If either
+  argument is an error (or interval or modulo) form, the result is
+  also an error (or interval or modulo) form.</p><a name=
+  "index-I-_005e" id="index-I-_005e"></a> <a name="index-nroot" id=
+  "index-nroot"></a>
 
+  <p>If you press the <kbd>I</kbd> (inverse) key first, the <kbd>I
+  ^</kbd> command computes an Nth root: <kbd>125 <span class=
+  "key">RET</span> 3 I ^</kbd> computes the number 5. (This is
+  entirely equivalent to <kbd>125 <span class="key">RET</span> 1:3
+  ^</kbd>.)</p><a name="index-_005c" id="index-_005c"></a> <a name=
+  "index-calc_002didiv" id="index-calc_002didiv"></a> <a name=
+  "index-idiv-1" id="index-idiv-1"></a> <a name="index-_005c-1" id=
+  "index-_005c-1"></a>
+
+  <p>The <kbd>\</kbd> (<code>calc-idiv</code>) command divides two
+  numbers on the stack to produce an integer result. It is
+  equivalent to dividing with <tt class="key">/</tt>, then rounding
+  down with <kbd>F</kbd> (<code>calc-floor</code>), only a bit more
+  convenient and efficient. Also, since it is an all-integer
+  operation when the arguments are integers, it avoids problems
+  that <kbd>/ F</kbd> would have with floating-point
+  roundoff.</p><a name="index-_0025" id="index-_0025"></a> <a name=
+  "index-calc_002dmod" id="index-calc_002dmod"></a> <a name=
+  "index-_0025-1" id="index-_0025-1"></a>
+
+  <p>The <kbd>%</kbd> (<code>calc-mod</code>) command performs a
+  &ldquo;modulo&rdquo; (or &ldquo;remainder&rdquo;) operation.
+  Mathematically, &lsquo;<samp>a%b = a - (a\b)*b</samp>&rsquo;, and
+  is defined for all real numbers &lsquo;<samp>a</samp>&rsquo; and
+  &lsquo;<samp>b</samp>&rsquo; (except
+  &lsquo;<samp>b=0</samp>&rsquo;). For positive
+  &lsquo;<samp>b</samp>&rsquo;, the result will always be between 0
+  (inclusive) and &lsquo;<samp>b</samp>&rsquo; (exclusive). Modulo
+  does not work for HMS forms and error forms. If
+  &lsquo;<samp>a</samp>&rsquo; is a modulo form, its modulo is
+  changed to &lsquo;<samp>b</samp>&rsquo;, which must be positive
+  real number.</p><a name="index-_003a" id="index-_003a"></a>
+  <a name="index-calc_002dfdiv" id="index-calc_002dfdiv"></a>
+  <a name="index-fdiv" id="index-fdiv"></a>
+
+  <p>The <kbd>:</kbd> (<code>calc-fdiv</code>) [<code>fdiv</code>]
+  command divides the two integers on the top of the stack to
+  produce a fractional result. This is a convenient shorthand for
+  enabling Fraction mode (with <kbd>m f</kbd>) temporarily and
+  using &lsquo;<samp>/</samp>&rsquo;. Note that during numeric
+  entry the <kbd>:</kbd> key is interpreted as a fraction
+  separator, so to divide 8 by 6 you would have to type <kbd>8
+  <span class="key">RET</span> 6 <span class="key">RET</span>
+  :</kbd>. (Of course, in this case, it would be much easier simply
+  to enter the fraction directly as <kbd>8:6 <span class=
+  "key">RET</span></kbd>!)</p><a name="index-n" id="index-n"></a>
+  <a name="index-calc_002dchange_002dsign" id=
+  "index-calc_002dchange_002dsign"></a>
+
+  <p>The <kbd>n</kbd> (<code>calc-change-sign</code>) command
+  negates the number on the top of the stack. It works on numbers,
+  vectors and matrices, HMS forms, date forms, error forms,
+  intervals, and modulo forms.</p><a name="index-A" id=
+  "index-A"></a> <a name="index-calc_002dabs" id=
+  "index-calc_002dabs"></a> <a name="index-abs" id="index-abs"></a>
+
+  <p>The <kbd>A</kbd> (<code>calc-abs</code>) [<code>abs</code>]
+  command computes the absolute value of a number. The result of
+  <code>abs</code> is always a nonnegative real number: With a
+  complex argument, it computes the complex magnitude. With a
+  vector or matrix argument, it computes the Frobenius norm, i.e.,
+  the square root of the sum of the squares of the absolute values
+  of the elements. The absolute value of an error form is defined
+  by replacing the mean part with its absolute value and leaving
+  the error part the same. The absolute value of a modulo form is
+  undefined. The absolute value of an interval is defined in the
+  obvious way.</p><a name="index-f-A" id="index-f-A"></a> <a name=
+  "index-calc_002dabssqr" id="index-calc_002dabssqr"></a> <a name=
+  "index-abssqr" id="index-abssqr"></a>
+
+  <p>The <kbd>f A</kbd> (<code>calc-abssqr</code>)
+  [<code>abssqr</code>] command computes the absolute value squared
+  of a number, vector or matrix, or error form.</p><a name=
+  "index-f-s" id="index-f-s"></a> <a name="index-calc_002dsign" id=
+  "index-calc_002dsign"></a> <a name="index-sign" id=
+  "index-sign"></a>
+
+  <p>The <kbd>f s</kbd> (<code>calc-sign</code>)
+  [<code>sign</code>] command returns 1 if its argument is
+  positive, <i>-1</i> if its argument is negative, or 0 if its
+  argument is zero. In algebraic form, you can also write
+  &lsquo;<samp>sign(a,x)</samp>&rsquo; which evaluates to
+  &lsquo;<samp>x * sign(a)</samp>&rsquo;, i.e., either
+  &lsquo;<samp>x</samp>&rsquo;, &lsquo;<samp>-x</samp>&rsquo;, or
+  zero depending on the sign of
+  &lsquo;<samp>a</samp>&rsquo;.</p><a name="index-_0026" id=
+  "index-_0026"></a> <a name="index-calc_002dinv" id=
+  "index-calc_002dinv"></a> <a name="index-inv" id="index-inv"></a>
+  <a name="index-Reciprocal" id="index-Reciprocal"></a>
+
+  <p>The <kbd>&amp;</kbd> (<code>calc-inv</code>)
+  [<code>inv</code>] command computes the reciprocal of a number,
+  i.e., &lsquo;<samp>1 / x</samp>&rsquo;. Operating on a square
+  matrix, it computes the inverse of that matrix.</p><a name=
+  "index-Q" id="index-Q"></a> <a name="index-calc_002dsqrt" id=
+  "index-calc_002dsqrt"></a> <a name="index-sqrt" id=
+  "index-sqrt"></a>
+
+  <p>The <kbd>Q</kbd> (<code>calc-sqrt</code>) [<code>sqrt</code>]
+  command computes the square root of a number. For a negative real
+  argument, the result will be a complex number whose form is
+  determined by the current Polar mode.</p><a name="index-f-h" id=
+  "index-f-h"></a> <a name="index-calc_002dhypot" id=
+  "index-calc_002dhypot"></a> <a name="index-hypot" id=
+  "index-hypot"></a>
+
+  <p>The <kbd>f h</kbd> (<code>calc-hypot</code>)
+  [<code>hypot</code>] command computes the square root of the sum
+  of the squares of two numbers. That is,
+  &lsquo;<samp>hypot(a,b)</samp>&rsquo; is the length of the
+  hypotenuse of a right triangle with sides
+  &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo;. If
+  the arguments are complex numbers, their squared magnitudes are
+  used.</p><a name="index-f-Q" id="index-f-Q"></a> <a name=
+  "index-calc_002disqrt" id="index-calc_002disqrt"></a> <a name=
+  "index-isqrt-1" id="index-isqrt-1"></a>
+
+  <p>The <kbd>f Q</kbd> (<code>calc-isqrt</code>)
+  [<code>isqrt</code>] command computes the integer square root of
+  an integer. This is the true square root of the number, rounded
+  down to an integer. For example,
+  &lsquo;<samp>isqrt(10)</samp>&rsquo; produces 3. Note that, like
+  <kbd>\</kbd> [<code>idiv</code>], this uses exact integer
+  arithmetic throughout to avoid roundoff problems. If the input is
+  a floating-point number or other non-integer value, this is
+  exactly the same as
+  &lsquo;<samp>floor(sqrt(x))</samp>&rsquo;.</p><a name="index-f-n"
+  id="index-f-n"></a> <a name="index-f-x" id="index-f-x"></a>
+  <a name="index-calc_002dmin" id="index-calc_002dmin"></a>
+  <a name="index-min" id="index-min"></a> <a name=
+  "index-calc_002dmax" id="index-calc_002dmax"></a> <a name=
+  "index-max" id="index-max"></a>
+
+  <p>The <kbd>f n</kbd> (<code>calc-min</code>) [<code>min</code>]
+  and <kbd>f x</kbd> (<code>calc-max</code>) [<code>max</code>]
+  commands take the minimum or maximum of two real numbers,
+  respectively. These commands also work on HMS forms, date forms,
+  intervals, and infinities. (In algebraic expressions, these
+  functions take any number of arguments and return the maximum or
+  minimum among all the arguments.)</p><a name="index-f-M" id=
+  "index-f-M"></a> <a name="index-f-X" id="index-f-X"></a> <a name=
+  "index-calc_002dmant_002dpart" id=
+  "index-calc_002dmant_002dpart"></a> <a name="index-mant" id=
+  "index-mant"></a> <a name="index-calc_002dxpon_002dpart" id=
+  "index-calc_002dxpon_002dpart"></a> <a name="index-xpon" id=
+  "index-xpon"></a>
+
+  <p>The <kbd>f M</kbd> (<code>calc-mant-part</code>)
+  [<code>mant</code>] function extracts the &ldquo;mantissa&rdquo;
+  part &lsquo;<samp>m</samp>&rsquo; of its floating-point argument;
+  <kbd>f X</kbd> (<code>calc-xpon-part</code>) [<code>xpon</code>]
+  extracts the &ldquo;exponent&rdquo; part
+  &lsquo;<samp>e</samp>&rsquo;. The original number is equal to
+  &lsquo;<samp>m * 10^e</samp>&rsquo;, where
+  &lsquo;<samp>m</samp>&rsquo; is in the interval &lsquo;<samp>[1.0
+  .. 10.0)</samp>&rsquo; except that
+  &lsquo;<samp>m=e=0</samp>&rsquo; if the original number is zero.
+  For integers and fractions, <code>mant</code> returns the number
+  unchanged and <code>xpon</code> returns zero. The <kbd>v u</kbd>
+  (<code>calc-unpack</code>) command can also be used to
+  &ldquo;unpack&rdquo; a floating-point number; this produces an
+  integer mantissa and exponent, with the constraint that the
+  mantissa is not a multiple of ten (again except for the
+  &lsquo;<samp>m=e=0</samp>&rsquo; case).</p><a name="index-f-S"
+  id="index-f-S"></a> <a name="index-calc_002dscale_002dfloat" id=
+  "index-calc_002dscale_002dfloat"></a> <a name="index-scf" id=
+  "index-scf"></a>
+
+  <p>The <kbd>f S</kbd> (<code>calc-scale-float</code>)
+  [<code>scf</code>] function scales a number by a given power of
+  ten. Thus, &lsquo;<samp>scf(mant(x), xpon(x)) = x</samp>&rsquo;
+  for any real &lsquo;<samp>x</samp>&rsquo;. The second argument
+  must be an integer, but the first may actually be any numeric
+  value. For example, &lsquo;<samp>scf(5,-2) = 0.05</samp>&rsquo;
+  or &lsquo;<samp>1:20</samp>&rsquo; depending on the current
+  Fraction mode.</p><a name="index-f-_005b" id="index-f-_005b"></a>
+  <a name="index-f-_005d" id="index-f-_005d"></a> <a name=
+  "index-calc_002ddecrement" id="index-calc_002ddecrement"></a>
+  <a name="index-calc_002dincrement" id=
+  "index-calc_002dincrement"></a> <a name="index-decr" id=
+  "index-decr"></a> <a name="index-incr" id="index-incr"></a>
+
+  <p>The <kbd>f [</kbd> (<code>calc-decrement</code>)
+  [<code>decr</code>] and <kbd>f ]</kbd>
+  (<code>calc-increment</code>) [<code>incr</code>] functions
+  decrease or increase a number by one unit. For integers, the
+  effect is obvious. For floating-point numbers, the change is by
+  one unit in the last place. For example, incrementing
+  &lsquo;<samp>12.3456</samp>&rsquo; when the current precision is
+  6 digits yields &lsquo;<samp>12.3457</samp>&rsquo;. If the
+  current precision had been 8 digits, the result would have been
+  &lsquo;<samp>12.345601</samp>&rsquo;. Incrementing
+  &lsquo;<samp>0.0</samp>&rsquo; produces
+  &lsquo;<samp>10^-p</samp>&rsquo;, where
+  &lsquo;<samp>p</samp>&rsquo; is the current precision. These
+  operations are defined only on integers and floats. With numeric
+  prefix arguments, they change the number by
+  &lsquo;<samp>n</samp>&rsquo; units.</p>
+
+  <p>Note that incrementing followed by decrementing, or
+  vice-versa, will almost but not quite always cancel out. Suppose
+  the precision is 6 digits and the number
+  &lsquo;<samp>9.99999</samp>&rsquo; is on the stack. Incrementing
+  will produce &lsquo;<samp>10.0000</samp>&rsquo;; decrementing
+  will produce &lsquo;<samp>9.9999</samp>&rsquo;. One digit has
+  been dropped. This is an unavoidable consequence of the way
+  floating-point numbers work.</p>
+
+  <p>Incrementing a date/time form adjusts it by a certain number
+  of seconds. Incrementing a pure date form adjusts it by a certain
+  number of days.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Integer-Truncation.html#Integer-Truncation"
+    accesskey="n" rel="next">Integer Truncation</a>, Previous:
+    <a href="Arithmetic.html#Arithmetic" accesskey="p" rel=
+    "prev">Arithmetic</a>, Up: <a href="Arithmetic.html#Arithmetic"
+    accesskey="u" rel="up">Arithmetic</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,178 +19,264 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Unique File Names</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Unique File Names">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Unique File Names">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="File-Names.html#File-Names" rel="up" title="File Names">
-<link href="File-Name-Completion.html#File-Name-Completion" rel="next" title="File Name Completion">
-<link href="File-Name-Expansion.html#File-Name-Expansion" rel="prev" title="File Name Expansion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Unique File Names</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Unique File Names" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Unique File Names" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="File-Names.html#File-Names" rel="up" title=
+  "File Names" />
+  <link href="File-Name-Completion.html#File-Name-Completion" rel=
+  "next" title="File Name Completion" />
+  <link href="File-Name-Expansion.html#File-Name-Expansion" rel=
+  "prev" title="File Name Expansion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Unique-File-Names" id="Unique-File-Names"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "File-Name-Completion.html#File-Name-Completion" accesskey="n"
+    rel="next">File Name Completion</a>, Previous: <a href=
+    "File-Name-Expansion.html#File-Name-Expansion" accesskey="p"
+    rel="prev">File Name Expansion</a>, Up: <a href=
+    "File-Names.html#File-Names" accesskey="u" rel="up">File
+    Names</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Generating-Unique-File-Names" id=
+  "Generating-Unique-File-Names"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Unique-File-Names"></a>
-<div class="header">
-<p>
-Next: <a href="File-Name-Completion.html#File-Name-Completion" accesskey="n" rel="next">File Name Completion</a>, Previous: <a href="File-Name-Expansion.html#File-Name-Expansion" accesskey="p" rel="prev">File Name Expansion</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Generating-Unique-File-Names"></a>
-<h4 class="subsection">24.8.5 Generating Unique File Names</h4>
-<a name="index-unique-file-names"></a>
-<a name="index-temporary-files"></a>
+  <h4 class="subsection">24.8.5 Generating Unique File
+  Names</h4><a name="index-unique-file-names" id=
+  "index-unique-file-names"></a> <a name="index-temporary-files"
+  id="index-temporary-files"></a>
 
-<p>Some programs need to write temporary files.  Here is the usual way to
-construct a name for such a file:
-</p>
-<div class="example">
-<pre class="example">(make-temp-file <var>name-of-application</var>)
-</pre></div>
+  <p>Some programs need to write temporary files. Here is the usual
+  way to construct a name for such a file:</p>
 
-<p>The job of <code>make-temp-file</code> is to prevent two different users or
-two different jobs from trying to use the exact same file name.
-</p>
-<dl>
-<dt><a name="index-make_002dtemp_002dfile"></a>Function: <strong>make-temp-file</strong> <em>prefix &amp;optional dir-flag suffix</em></dt>
-<dd><p>This function creates a temporary file and returns its name.  Emacs
-creates the temporary file&rsquo;s name by adding to <var>prefix</var> some
-random characters that are different in each Emacs job.  The result is
-guaranteed to be a newly created empty file.  On MS-DOS, this function
-can truncate the <var>string</var> prefix to fit into the 8+3 file-name
-limits.  If <var>prefix</var> is a relative file name, it is expanded
-against <code>temporary-file-directory</code>.
-</p>
-<div class="example">
-<pre class="example">(make-temp-file &quot;foo&quot;)
-     &rArr; &quot;/tmp/foo232J6v&quot;
-</pre></div>
+  <div class="example">
+    <pre class="example">
+(make-temp-file <var>name-of-application</var>)
+</pre>
+  </div>
 
-<p>When <code>make-temp-file</code> returns, the file has been created and is
-empty.  At that point, you should write the intended contents into the
-file.
-</p>
-<p>If <var>dir-flag</var> is non-<code>nil</code>, <code>make-temp-file</code> creates an
-empty directory instead of an empty file.  It returns the file name,
-not the directory name, of that directory.  See <a href="Directory-Names.html#Directory-Names">Directory Names</a>.
-</p>
-<p>If <var>suffix</var> is non-<code>nil</code>, <code>make-temp-file</code> adds it at
-the end of the file name.
-</p>
-<p>To prevent conflicts among different libraries running in the same
-Emacs, each Lisp program that uses <code>make-temp-file</code> should have its
-own <var>prefix</var>.  The number added to the end of <var>prefix</var>
-distinguishes between the same application running in different Emacs
-jobs.  Additional added characters permit a large number of distinct
-names even in one Emacs job.
-</p></dd></dl>
+  <p>The job of <code>make-temp-file</code> is to prevent two
+  different users or two different jobs from trying to use the
+  exact same file name.</p>
 
-<p>The default directory for temporary files is controlled by the
-variable <code>temporary-file-directory</code>.  This variable gives the user
-a uniform way to specify the directory for all temporary files.  Some
-programs use <code>small-temporary-file-directory</code> instead, if that is
-non-<code>nil</code>.  To use it, you should expand the prefix against
-the proper directory before calling <code>make-temp-file</code>.
-</p>
-<dl>
-<dt><a name="index-temporary_002dfile_002ddirectory"></a>User Option: <strong>temporary-file-directory</strong></dt>
-<dd><a name="index-TMPDIR-environment-variable"></a>
-<a name="index-TMP-environment-variable"></a>
-<a name="index-TEMP-environment-variable"></a>
-<p>This variable specifies the directory name for creating temporary files.
-Its value should be a directory name (see <a href="Directory-Names.html#Directory-Names">Directory Names</a>), but it
-is good for Lisp programs to cope if the value is a directory&rsquo;s file
-name instead.  Using the value as the second argument to
-<code>expand-file-name</code> is a good way to achieve that.
-</p>
-<p>The default value is determined in a reasonable way for your operating
-system; it is based on the <code>TMPDIR</code>, <code>TMP</code> and <code>TEMP</code>
-environment variables, with a fall-back to a system-dependent name if
-none of these variables is defined.
-</p>
-<p>Even if you do not use <code>make-temp-file</code> to create the temporary
-file, you should still use this variable to decide which directory to
-put the file in.  However, if you expect the file to be small, you
-should use <code>small-temporary-file-directory</code> first if that is
-non-<code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dtemp_002dfile" id=
+    "index-make_002dtemp_002dfile"></a>Function:
+    <strong>make-temp-file</strong> <em>prefix &amp;optional
+    dir-flag suffix</em></dt>
 
-<dl>
-<dt><a name="index-small_002dtemporary_002dfile_002ddirectory"></a>User Option: <strong>small-temporary-file-directory</strong></dt>
-<dd><p>This variable specifies the directory name for
-creating certain temporary files, which are likely to be small.
-</p>
-<p>If you want to write a temporary file which is likely to be small, you
-should compute the directory like this:
-</p>
-<div class="example">
-<pre class="example">(make-temp-file
+    <dd>
+      <p>This function creates a temporary file and returns its
+      name. Emacs creates the temporary file&rsquo;s name by adding
+      to <var>prefix</var> some random characters that are
+      different in each Emacs job. The result is guaranteed to be a
+      newly created empty file. On MS-DOS, this function can
+      truncate the <var>string</var> prefix to fit into the 8+3
+      file-name limits. If <var>prefix</var> is a relative file
+      name, it is expanded against
+      <code>temporary-file-directory</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(make-temp-file "foo")
+     &rArr; "/tmp/foo232J6v"
+</pre>
+      </div>
+
+      <p>When <code>make-temp-file</code> returns, the file has
+      been created and is empty. At that point, you should write
+      the intended contents into the file.</p>
+
+      <p>If <var>dir-flag</var> is non-<code>nil</code>,
+      <code>make-temp-file</code> creates an empty directory
+      instead of an empty file. It returns the file name, not the
+      directory name, of that directory. See <a href=
+      "Directory-Names.html#Directory-Names">Directory
+      Names</a>.</p>
+
+      <p>If <var>suffix</var> is non-<code>nil</code>,
+      <code>make-temp-file</code> adds it at the end of the file
+      name.</p>
+
+      <p>To prevent conflicts among different libraries running in
+      the same Emacs, each Lisp program that uses
+      <code>make-temp-file</code> should have its own
+      <var>prefix</var>. The number added to the end of
+      <var>prefix</var> distinguishes between the same application
+      running in different Emacs jobs. Additional added characters
+      permit a large number of distinct names even in one Emacs
+      job.</p>
+    </dd>
+  </dl>
+
+  <p>The default directory for temporary files is controlled by the
+  variable <code>temporary-file-directory</code>. This variable
+  gives the user a uniform way to specify the directory for all
+  temporary files. Some programs use
+  <code>small-temporary-file-directory</code> instead, if that is
+  non-<code>nil</code>. To use it, you should expand the prefix
+  against the proper directory before calling
+  <code>make-temp-file</code>.</p>
+
+  <dl>
+    <dt><a name="index-temporary_002dfile_002ddirectory" id=
+    "index-temporary_002dfile_002ddirectory"></a>User Option:
+    <strong>temporary-file-directory</strong></dt>
+
+    <dd>
+      <a name="index-TMPDIR-environment-variable" id=
+      "index-TMPDIR-environment-variable"></a> <a name=
+      "index-TMP-environment-variable" id=
+      "index-TMP-environment-variable"></a> <a name=
+      "index-TEMP-environment-variable" id=
+      "index-TEMP-environment-variable"></a>
+
+      <p>This variable specifies the directory name for creating
+      temporary files. Its value should be a directory name (see
+      <a href="Directory-Names.html#Directory-Names">Directory
+      Names</a>), but it is good for Lisp programs to cope if the
+      value is a directory&rsquo;s file name instead. Using the
+      value as the second argument to <code>expand-file-name</code>
+      is a good way to achieve that.</p>
+
+      <p>The default value is determined in a reasonable way for
+      your operating system; it is based on the
+      <code>TMPDIR</code>, <code>TMP</code> and <code>TEMP</code>
+      environment variables, with a fall-back to a system-dependent
+      name if none of these variables is defined.</p>
+
+      <p>Even if you do not use <code>make-temp-file</code> to
+      create the temporary file, you should still use this variable
+      to decide which directory to put the file in. However, if you
+      expect the file to be small, you should use
+      <code>small-temporary-file-directory</code> first if that is
+      non-<code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-small_002dtemporary_002dfile_002ddirectory"
+    id="index-small_002dtemporary_002dfile_002ddirectory"></a>User
+    Option: <strong>small-temporary-file-directory</strong></dt>
+
+    <dd>
+      <p>This variable specifies the directory name for creating
+      certain temporary files, which are likely to be small.</p>
+
+      <p>If you want to write a temporary file which is likely to
+      be small, you should compute the directory like this:</p>
+
+      <div class="example">
+        <pre class="example">
+(make-temp-file
   (expand-file-name <var>prefix</var>
                     (or small-temporary-file-directory
                         temporary-file-directory)))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-make_002dtemp_002dname"></a>Function: <strong>make-temp-name</strong> <em>base-name</em></dt>
-<dd><p>This function generates a string that can be used as a unique file
-name.  The name starts with <var>base-name</var>, and has several random
-characters appended to it, which are different in each Emacs job.  It
-is like <code>make-temp-file</code> except that (i) it just constructs a
-name, and does not create a file, and (ii) <var>base-name</var> should be
-an absolute file name (on MS-DOS, this function can truncate
-<var>base-name</var> to fit into the 8+3 file-name limits).
-</p>
-<p><strong>Warning:</strong> In most cases, you should not use this function; use
-<code>make-temp-file</code> instead!  This function is susceptible to a race
-condition, between the <code>make-temp-name</code> call and the creation of
-the file, which in some cases may cause a security hole.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dtemp_002dname" id=
+    "index-make_002dtemp_002dname"></a>Function:
+    <strong>make-temp-name</strong> <em>base-name</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="File-Name-Completion.html#File-Name-Completion" accesskey="n" rel="next">File Name Completion</a>, Previous: <a href="File-Name-Expansion.html#File-Name-Expansion" accesskey="p" rel="prev">File Name Expansion</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function generates a string that can be used as a
+      unique file name. The name starts with <var>base-name</var>,
+      and has several random characters appended to it, which are
+      different in each Emacs job. It is like
+      <code>make-temp-file</code> except that (i) it just
+      constructs a name, and does not create a file, and (ii)
+      <var>base-name</var> should be an absolute file name (on
+      MS-DOS, this function can truncate <var>base-name</var> to
+      fit into the 8+3 file-name limits).</p>
 
+      <p><strong>Warning:</strong> In most cases, you should not
+      use this function; use <code>make-temp-file</code> instead!
+      This function is susceptible to a race condition, between the
+      <code>make-temp-name</code> call and the creation of the
+      file, which in some cases may cause a security hole.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "File-Name-Completion.html#File-Name-Completion" accesskey="n"
+    rel="next">File Name Completion</a>, Previous: <a href=
+    "File-Name-Expansion.html#File-Name-Expansion" accesskey="p"
+    rel="prev">File Name Expansion</a>, Up: <a href=
+    "File-Names.html#File-Names" accesskey="u" rel="up">File
+    Names</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

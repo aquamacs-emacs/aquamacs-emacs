@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Minor Display Modes - Speedbar: File/Tag summarizing utility</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Speedbar: File/Tag summarizing utility">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Extending.html#Extending" title="Extending">
-<link rel="prev" href="Extending.html#Extending" title="Extending">
-<link rel="next" href="Major-Display-Modes.html#Major-Display-Modes" title="Major Display Modes">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Minor Display Modes - Speedbar: File/Tag summarizing
+  utility</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Speedbar: File/Tag summarizing utility" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Extending.html#Extending" title=
+  "Extending" />
+  <link rel="prev" href="Extending.html#Extending" title=
+  "Extending" />
+  <link rel="next" href=
+  "Major-Display-Modes.html#Major-Display-Modes" title=
+  "Major Display Modes" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -25,8 +37,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,65 +50,82 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Minor-Display-Modes"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Major-Display-Modes.html#Major-Display-Modes">Major Display Modes</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Extending.html#Extending">Extending</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Extending.html#Extending">Extending</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Minor-Display-Modes" id="Minor-Display-Modes"></a>
 
-<h3 class="section">7.1 Minor Display Modes</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Major-Display-Modes.html#Major-Display-Modes">Major Display
+    Modes</a>, Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Extending.html#Extending">Extending</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="Extending.html#Extending">Extending</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-create-minor-display-mode-67"></a>
-A <dfn>minor display mode</dfn> is a mode useful when using a specific type of
-buffer.  This mode might not be useful for any other kind of data or
-mode, or may just be more useful that a files or buffers based mode when
-working with a specialized mode.
+  <h3 class="section">7.1 Minor Display Modes</h3>
 
-   <p>Examples that already exist for speedbar include RMAIL, Info, and gdb. 
-These modes display information specific to the major mode shown in the
-attached frame.
+  <p><a name="index-create-minor-display-mode-67" id=
+  "index-create-minor-display-mode-67"></a> A <dfn>minor display
+  mode</dfn> is a mode useful when using a specific type of buffer.
+  This mode might not be useful for any other kind of data or mode,
+  or may just be more useful that a files or buffers based mode
+  when working with a specialized mode.</p>
 
-   <p>To enable a minor display mode in your favorite Major mode, follow these
-steps.  The string &lsquo;<samp><var>name</var></samp>&rsquo; is the name of the major mode being
-augmented with speedbar.
+  <p>Examples that already exist for speedbar include RMAIL, Info,
+  and gdb. These modes display information specific to the major
+  mode shown in the attached frame.</p>
 
-     <ol type=1 start=1>
-<li>Create the keymap variable <var>name</var><code>-speedbar-key-map</code>.
+  <p>To enable a minor display mode in your favorite Major mode,
+  follow these steps. The string
+  &lsquo;<samp><var>name</var></samp>&rsquo; is the name of the
+  major mode being augmented with speedbar.</p>
 
-     <li>Create a function, named whatever you like, which assigns values into your
-keymap.  Use this command to create the keymap before assigning
-bindings:
+  <ol type="1" start="1">
+    <li>Create the keymap variable
+    <var>name</var><code>-speedbar-key-map</code>.</li>
 
-     <pre class="smallexample">              (setq <var>name</var>-speedbar-key-map (speedbar-make-specialized-keymap))
+    <li>Create a function, named whatever you like, which assigns
+    values into your keymap. Use this command to create the keymap
+    before assigning bindings:
+      <pre class="smallexample">
+              (setq <var>name</var>-speedbar-key-map (speedbar-make-specialized-keymap))
 </pre>
-     <p>This function creates a special keymap for use in speedbar.
 
-     <li>Call your install function, or assign it to a hook like this:
+      <p>This function creates a special keymap for use in
+      speedbar.</p>
+    </li>
 
-     <pre class="smallexample">          (if (featurep 'speedbar)
+    <li>Call your install function, or assign it to a hook like
+    this:
+      <pre class="smallexample">
+          (if (featurep 'speedbar)
               (<var>name</var>-install-speedbar-variables)
             (add-hook 'speedbar-load-hook '<var>name</var>-install-speedbar-variables))
 </pre>
-     <li>Create an easymenu compatible vector named
-<var>name</var><code>-speedbar-menu-items</code>.  This will be spliced into
-speedbar's control menu.
+    </li>
 
-     <li>Create a function called <var>name</var><code>-speedbar-buttons</code>.  This function
-should take one variable, which is the buffer for which it will create
-buttons.   At this time <code>(current-buffer)</code> will point to the
-uncleared speedbar buffer.
-        </ol>
+    <li>Create an easymenu compatible vector named
+    <var>name</var><code>-speedbar-menu-items</code>. This will be
+    spliced into speedbar's control menu.</li>
 
-   <p>When writing <var>name</var><code>-speedbar-buttons</code>, the first thing you will
-want to do is execute a check to see if you need to re-create your
-display.  If it needs to be cleared, you need to erase the speedbar
-buffer yourself, and start drawing buttons.  See <a href="Creating-a-display.html#Creating-a-display">Creating a display</a>.
+    <li>Create a function called
+    <var>name</var><code>-speedbar-buttons</code>. This function
+    should take one variable, which is the buffer for which it will
+    create buttons. At this time <code>(current-buffer)</code> will
+    point to the uncleared speedbar buffer.</li>
+  </ol>
 
-   </body></html>
-
+  <p>When writing <var>name</var><code>-speedbar-buttons</code>,
+  the first thing you will want to do is execute a check to see if
+  you need to re-create your display. If it needs to be cleared,
+  you need to erase the speedbar buffer yourself, and start drawing
+  buttons. See <a href=
+  "Creating-a-display.html#Creating-a-display">Creating a
+  display</a>.</p>
+</body>
+</html>

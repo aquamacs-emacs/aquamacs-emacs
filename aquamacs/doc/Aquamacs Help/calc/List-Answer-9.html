@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>List Answer 9 - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
-<link rel="prev" href="List-Answer-8.html#List-Answer-8" title="List Answer 8">
-<link rel="next" href="List-Answer-10.html#List-Answer-10" title="List Answer 10">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>List Answer 9 - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Answers-to-Exercises.html#Answers-to-Exercises" title=
+  "Answers to Exercises" />
+  <link rel="prev" href="List-Answer-8.html#List-Answer-8" title=
+  "List Answer 8" />
+  <link rel="next" href="List-Answer-10.html#List-Answer-10" title=
+  "List Answer 10" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +39,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,97 +52,120 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="List-Answer-9"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="List-Answer-10.html#List-Answer-10">List Answer 10</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="List-Answer-8.html#List-Answer-8">List Answer 8</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="List-Answer-9" id="List-Answer-9"></a>
 
-<h4 class="subsection">3.7.27 List Tutorial Exercise 9</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "List-Answer-10.html#List-Answer-10">List Answer 10</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "List-Answer-8.html#List-Answer-8">List Answer 8</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Answers-to-Exercises.html#Answers-to-Exercises">Answers to
+    Exercises</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">Step one is to convert our integer into vector notation.
+  <h4 class="subsection">3.7.27 List Tutorial Exercise 9</h4>
 
-<pre class="smallexample">     1:  25129925999           3:  25129925999
+  <p class="noindent">Step one is to convert our integer into
+  vector notation.</p>
+  <pre class="smallexample">
+     1:  25129925999           3:  25129925999
          .                     2:  10
                                1:  [11, 10, 9, ..., 1, 0]
                                    .
      
          25129925999 &lt;RET&gt;           10 &lt;RET&gt; 12 &lt;RET&gt; v x 12 &lt;RET&gt; -
 </pre>
-   <p class="noindent">
-<pre class="smallexample">     1:  25129925999              1:  [0, 2, 25, 251, 2512, ... ]
+
+  <p class="noindent"></p>
+  <pre class="smallexample">
+     1:  25129925999              1:  [0, 2, 25, 251, 2512, ... ]
      2:  [100000000000, ... ]         .
          .
      
          V M ^   s 1                  V M \
 </pre>
-   <p class="noindent">(Recall, the <kbd>\</kbd> command computes an integer quotient.)
 
-<pre class="smallexample">     1:  [0, 2, 5, 1, 2, 9, 9, 2, 5, 9, 9, 9]
+  <p class="noindent">(Recall, the <kbd>\</kbd> command computes an
+  integer quotient.)</p>
+  <pre class="smallexample">
+     1:  [0, 2, 5, 1, 2, 9, 9, 2, 5, 9, 9, 9]
          .
      
          10 V M %   s 2
 </pre>
-   <p>Next we must increment this number.  This involves adding one to
-the last digit, plus handling carries.  There is a carry to the
-left out of a digit if that digit is a nine and all the digits to
-the right of it are nines.
 
-<pre class="smallexample">     1:  [0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1]   1:  [1, 1, 1, 0, 0, 1, ... ]
+  <p>Next we must increment this number. This involves adding one
+  to the last digit, plus handling carries. There is a carry to the
+  left out of a digit if that digit is a nine and all the digits to
+  the right of it are nines.</p>
+  <pre class="smallexample">
+     1:  [0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1]   1:  [1, 1, 1, 0, 0, 1, ... ]
          .                                          .
      
          9 V M a =                                  v v
 </pre>
-   <p class="noindent">
-<pre class="smallexample">     1:  [1, 1, 1, 0, 0, 0, ... ]   1:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]
+
+  <p class="noindent"></p>
+  <pre class="smallexample">
+     1:  [1, 1, 1, 0, 0, 0, ... ]   1:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]
          .                              .
      
          V U *                          v v 1 |
 </pre>
-   <p class="noindent">Accumulating <kbd>*</kbd> across a vector of ones and zeros will preserve
-only the initial run of ones.  These are the carries into all digits
-except the rightmost digit.  Concatenating a one on the right takes
-care of aligning the carries properly, and also adding one to the
-rightmost digit.
 
-<pre class="smallexample">     2:  [0, 0, 0, 0, ... ]     1:  [0, 0, 2, 5, 1, 2, 9, 9, 2, 6, 0, 0, 0]
+  <p class="noindent">Accumulating <kbd>*</kbd> across a vector of
+  ones and zeros will preserve only the initial run of ones. These
+  are the carries into all digits except the rightmost digit.
+  Concatenating a one on the right takes care of aligning the
+  carries properly, and also adding one to the rightmost digit.</p>
+  <pre class="smallexample">
+     2:  [0, 0, 0, 0, ... ]     1:  [0, 0, 2, 5, 1, 2, 9, 9, 2, 6, 0, 0, 0]
      1:  [0, 0, 2, 5, ... ]         .
          .
      
          0 r 2 |                    V M +  10 V M %
 </pre>
-   <p class="noindent">Here we have concatenated 0 to the <em>left</em> of the original number;
-this takes care of shifting the carries by one with respect to the
-digits that generated them.
 
-   <p>Finally, we must convert this list back into an integer.
+  <p class="noindent">Here we have concatenated 0 to the
+  <em>left</em> of the original number; this takes care of shifting
+  the carries by one with respect to the digits that generated
+  them.</p>
 
-<pre class="smallexample">     3:  [0, 0, 2, 5, ... ]        2:  [0, 0, 2, 5, ... ]
+  <p>Finally, we must convert this list back into an integer.</p>
+  <pre class="smallexample">
+     3:  [0, 0, 2, 5, ... ]        2:  [0, 0, 2, 5, ... ]
      2:  1000000000000             1:  [1000000000000, 100000000000, ... ]
      1:  [100000000000, ... ]          .
          .
      
          10 &lt;RET&gt; 12 ^  r 1              |
 </pre>
-   <p class="noindent">
-<pre class="smallexample">     1:  [0, 0, 20000000000, 5000000000, ... ]    1:  25129926000
+
+  <p class="noindent"></p>
+  <pre class="smallexample">
+     1:  [0, 0, 20000000000, 5000000000, ... ]    1:  25129926000
          .                                            .
      
          V M *                                        V R +
 </pre>
-   <p class="noindent">Another way to do this final step would be to reduce the formula
-&lsquo;<samp><span class="samp">10&nbsp;$$&nbsp;+&nbsp;$</span></samp>&rsquo;<!-- /@w --> across the vector of digits.
 
-<pre class="smallexample">     1:  [0, 0, 2, 5, ... ]        1:  25129926000
+  <p class="noindent">Another way to do this final step would be to
+  reduce the formula &lsquo;<samp><span class=
+  "samp">10&nbsp;$$&nbsp;+&nbsp;$</span></samp>&rsquo;<!-- /@w -->
+  across the vector of digits.</p>
+  <pre class="smallexample">
+     1:  [0, 0, 2, 5, ... ]        1:  25129926000
          .                             .
      
                                        V R ' 10 $$ + $ &lt;RET&gt;
 </pre>
-   </body></html>
-
+</body>
+</html>

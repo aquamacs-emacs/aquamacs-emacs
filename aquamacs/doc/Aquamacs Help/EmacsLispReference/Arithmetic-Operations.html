@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,213 +19,320 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Arithmetic Operations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Arithmetic Operations">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Arithmetic Operations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numbers.html#Numbers" rel="up" title="Numbers">
-<link href="Rounding-Operations.html#Rounding-Operations" rel="next" title="Rounding Operations">
-<link href="Numeric-Conversions.html#Numeric-Conversions" rel="prev" title="Numeric Conversions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Arithmetic
+  Operations</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Arithmetic Operations" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Arithmetic Operations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numbers.html#Numbers" rel="up" title="Numbers" />
+  <link href="Rounding-Operations.html#Rounding-Operations" rel=
+  "next" title="Rounding Operations" />
+  <link href="Numeric-Conversions.html#Numeric-Conversions" rel=
+  "prev" title="Numeric Conversions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Arithmetic-Operations" id="Arithmetic-Operations"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Rounding-Operations.html#Rounding-Operations"
+    accesskey="n" rel="next">Rounding Operations</a>, Previous:
+    <a href="Numeric-Conversions.html#Numeric-Conversions"
+    accesskey="p" rel="prev">Numeric Conversions</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Arithmetic-Operations-1" id=
+  "Arithmetic-Operations-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Arithmetic-Operations"></a>
-<div class="header">
-<p>
-Next: <a href="Rounding-Operations.html#Rounding-Operations" accesskey="n" rel="next">Rounding Operations</a>, Previous: <a href="Numeric-Conversions.html#Numeric-Conversions" accesskey="p" rel="prev">Numeric Conversions</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Arithmetic-Operations-1"></a>
-<h3 class="section">3.6 Arithmetic Operations</h3>
-<a name="index-arithmetic-operations"></a>
+  <h3 class="section">3.6 Arithmetic Operations</h3><a name=
+  "index-arithmetic-operations" id=
+  "index-arithmetic-operations"></a>
 
-<p>Emacs Lisp provides the traditional four arithmetic operations
-(addition, subtraction, multiplication, and division), as well as
-remainder and modulus functions, and functions to add or subtract 1.
-Except for <code>%</code>, each of these functions accepts both integer and
-floating-point arguments, and returns a floating-point number if any
-argument is floating point.
-</p>
-<p>Emacs Lisp arithmetic functions do not check for integer overflow.
-Thus <code>(1+ 536870911)</code> may evaluate to
-−536870912, depending on your hardware.
-</p>
-<dl>
-<dt><a name="index-1_002b"></a>Function: <strong>1+</strong> <em>number-or-marker</em></dt>
-<dd><p>This function returns <var>number-or-marker</var> plus 1.
-For example,
-</p>
-<div class="example">
-<pre class="example">(setq foo 4)
+  <p>Emacs Lisp provides the traditional four arithmetic operations
+  (addition, subtraction, multiplication, and division), as well as
+  remainder and modulus functions, and functions to add or subtract
+  1. Except for <code>%</code>, each of these functions accepts
+  both integer and floating-point arguments, and returns a
+  floating-point number if any argument is floating point.</p>
+
+  <p>Emacs Lisp arithmetic functions do not check for integer
+  overflow. Thus <code>(1+ 536870911)</code> may evaluate to
+  &acirc;&circ;&rsquo;536870912, depending on your hardware.</p>
+
+  <dl>
+    <dt><a name="index-1_002b" id="index-1_002b"></a>Function:
+    <strong>1+</strong> <em>number-or-marker</em></dt>
+
+    <dd>
+      <p>This function returns <var>number-or-marker</var> plus 1.
+      For example,</p>
+
+      <div class="example">
+        <pre class="example">
+(setq foo 4)
      &rArr; 4
 (1+ foo)
      &rArr; 5
-</pre></div>
+</pre>
+      </div>
 
-<p>This function is not analogous to the C operator <code>++</code>&mdash;it does not
-increment a variable.  It just computes a sum.  Thus, if we continue,
-</p>
-<div class="example">
-<pre class="example">foo
+      <p>This function is not analogous to the C operator
+      <code>++</code>&mdash;it does not increment a variable. It
+      just computes a sum. Thus, if we continue,</p>
+
+      <div class="example">
+        <pre class="example">
+foo
      &rArr; 4
-</pre></div>
+</pre>
+      </div>
 
-<p>If you want to increment the variable, you must use <code>setq</code>,
-like this:
-</p>
-<div class="example">
-<pre class="example">(setq foo (1+ foo))
+      <p>If you want to increment the variable, you must use
+      <code>setq</code>, like this:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq foo (1+ foo))
      &rArr; 5
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-1_002d"></a>Function: <strong>1-</strong> <em>number-or-marker</em></dt>
-<dd><p>This function returns <var>number-or-marker</var> minus 1.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-1_002d" id="index-1_002d"></a>Function:
+    <strong>1-</strong> <em>number-or-marker</em></dt>
 
-<dl>
-<dt><a name="index-_002b"></a>Function: <strong>+</strong> <em>&amp;rest numbers-or-markers</em></dt>
-<dd><p>This function adds its arguments together.  When given no arguments,
-<code>+</code> returns 0.
-</p>
-<div class="example">
-<pre class="example">(+)
+    <dd>
+      <p>This function returns <var>number-or-marker</var> minus
+      1.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-_002b" id="index-_002b"></a>Function:
+    <strong>+</strong> <em>&amp;rest numbers-or-markers</em></dt>
+
+    <dd>
+      <p>This function adds its arguments together. When given no
+      arguments, <code>+</code> returns 0.</p>
+
+      <div class="example">
+        <pre class="example">
+(+)
      &rArr; 0
 (+ 1)
      &rArr; 1
 (+ 1 2 3 4)
      &rArr; 10
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-_002d"></a>Function: <strong>-</strong> <em>&amp;optional number-or-marker &amp;rest more-numbers-or-markers</em></dt>
-<dd><p>The <code>-</code> function serves two purposes: negation and subtraction.
-When <code>-</code> has a single argument, the value is the negative of the
-argument.  When there are multiple arguments, <code>-</code> subtracts each of
-the <var>more-numbers-or-markers</var> from <var>number-or-marker</var>,
-cumulatively.  If there are no arguments, the result is 0.
-</p>
-<div class="example">
-<pre class="example">(- 10 1 2 3 4)
+  <dl>
+    <dt><a name="index-_002d" id="index-_002d"></a>Function:
+    <strong>-</strong> <em>&amp;optional number-or-marker &amp;rest
+    more-numbers-or-markers</em></dt>
+
+    <dd>
+      <p>The <code>-</code> function serves two purposes: negation
+      and subtraction. When <code>-</code> has a single argument,
+      the value is the negative of the argument. When there are
+      multiple arguments, <code>-</code> subtracts each of the
+      <var>more-numbers-or-markers</var> from
+      <var>number-or-marker</var>, cumulatively. If there are no
+      arguments, the result is 0.</p>
+
+      <div class="example">
+        <pre class="example">
+(- 10 1 2 3 4)
      &rArr; 0
 (- 10)
      &rArr; -10
 (-)
      &rArr; 0
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-_002a"></a>Function: <strong>*</strong> <em>&amp;rest numbers-or-markers</em></dt>
-<dd><p>This function multiplies its arguments together, and returns the
-product.  When given no arguments, <code>*</code> returns 1.
-</p>
-<div class="example">
-<pre class="example">(*)
+  <dl>
+    <dt><a name="index-_002a" id="index-_002a"></a>Function:
+    <strong>*</strong> <em>&amp;rest numbers-or-markers</em></dt>
+
+    <dd>
+      <p>This function multiplies its arguments together, and
+      returns the product. When given no arguments, <code>*</code>
+      returns 1.</p>
+
+      <div class="example">
+        <pre class="example">
+(*)
      &rArr; 1
 (* 1)
      &rArr; 1
 (* 1 2 3 4)
      &rArr; 24
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-_002f"></a>Function: <strong>/</strong> <em>number &amp;rest divisors</em></dt>
-<dd><p>With one or more <var>divisors</var>, this function divides <var>number</var>
-by each divisor in <var>divisors</var> in turn, and returns the quotient.
-With no <var>divisors</var>, this function returns 1/<var>number</var>, i.e.,
-the multiplicative inverse of <var>number</var>.  Each argument may be a
-number or a marker.
-</p>
-<p>If all the arguments are integers, the result is an integer, obtained
-by rounding the quotient towards zero after each division.
-</p>
-<div class="example">
-<pre class="example">(/ 6 2)
+  <dl>
+    <dt><a name="index-_002f" id="index-_002f"></a>Function:
+    <strong>/</strong> <em>number &amp;rest divisors</em></dt>
+
+    <dd>
+      <p>With one or more <var>divisors</var>, this function
+      divides <var>number</var> by each divisor in
+      <var>divisors</var> in turn, and returns the quotient. With
+      no <var>divisors</var>, this function returns
+      1/<var>number</var>, i.e., the multiplicative inverse of
+      <var>number</var>. Each argument may be a number or a
+      marker.</p>
+
+      <p>If all the arguments are integers, the result is an
+      integer, obtained by rounding the quotient towards zero after
+      each division.</p>
+
+      <div class="example">
+        <pre class="example">
+(/ 6 2)
      &rArr; 3
-</pre><pre class="example">(/ 5 2)
+</pre>
+        <pre class="example">
+(/ 5 2)
      &rArr; 2
-</pre><pre class="example">(/ 5.0 2)
+</pre>
+        <pre class="example">
+(/ 5.0 2)
      &rArr; 2.5
-</pre><pre class="example">(/ 5 2.0)
+</pre>
+        <pre class="example">
+(/ 5 2.0)
      &rArr; 2.5
-</pre><pre class="example">(/ 5.0 2.0)
+</pre>
+        <pre class="example">
+(/ 5.0 2.0)
      &rArr; 2.5
-</pre><pre class="example">(/ 4.0)
+</pre>
+        <pre class="example">
+(/ 4.0)
      &rArr; 0.25
-</pre><pre class="example">(/ 4)
+</pre>
+        <pre class="example">
+(/ 4)
      &rArr; 0
-</pre><pre class="example">(/ 25 3 2)
+</pre>
+        <pre class="example">
+(/ 25 3 2)
      &rArr; 4
-</pre><pre class="example">(/ -17 6)
+</pre>
+        <pre class="example">
+(/ -17 6)
      &rArr; -2
-</pre></div>
+</pre>
+      </div><a name="index-arith_002derror-in-division" id=
+      "index-arith_002derror-in-division"></a>
 
-<a name="index-arith_002derror-in-division"></a>
-<p>If you divide an integer by the integer 0, Emacs signals an
-<code>arith-error</code> error (see <a href="Errors.html#Errors">Errors</a>).  Floating-point division of
-a nonzero number by zero yields either positive or negative infinity
-(see <a href="Float-Basics.html#Float-Basics">Float Basics</a>).
-</p></dd></dl>
+      <p>If you divide an integer by the integer 0, Emacs signals
+      an <code>arith-error</code> error (see <a href=
+      "Errors.html#Errors">Errors</a>). Floating-point division of
+      a nonzero number by zero yields either positive or negative
+      infinity (see <a href="Float-Basics.html#Float-Basics">Float
+      Basics</a>).</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-_0025"></a>Function: <strong>%</strong> <em>dividend divisor</em></dt>
-<dd><a name="index-remainder"></a>
-<p>This function returns the integer remainder after division of <var>dividend</var>
-by <var>divisor</var>.  The arguments must be integers or markers.
-</p>
-<p>For any two integers <var>dividend</var> and <var>divisor</var>,
-</p>
-<div class="example">
-<pre class="example">(+ (% <var>dividend</var> <var>divisor</var>)
+  <dl>
+    <dt><a name="index-_0025" id="index-_0025"></a>Function:
+    <strong>%</strong> <em>dividend divisor</em></dt>
+
+    <dd>
+      <a name="index-remainder" id="index-remainder"></a>
+
+      <p>This function returns the integer remainder after division
+      of <var>dividend</var> by <var>divisor</var>. The arguments
+      must be integers or markers.</p>
+
+      <p>For any two integers <var>dividend</var> and
+      <var>divisor</var>,</p>
+
+      <div class="example">
+        <pre class="example">
+(+ (% <var>dividend</var> <var>divisor</var>)
    (* (/ <var>dividend</var> <var>divisor</var>) <var>divisor</var>))
-</pre></div>
+</pre>
+      </div>
 
-<p>always equals <var>dividend</var> if <var>divisor</var> is nonzero.
-</p>
-<div class="example">
-<pre class="example">(% 9 4)
+      <p>always equals <var>dividend</var> if <var>divisor</var> is
+      nonzero.</p>
+
+      <div class="example">
+        <pre class="example">
+(% 9 4)
      &rArr; 1
 (% -9 4)
      &rArr; -1
@@ -231,56 +340,86 @@ by <var>divisor</var>.  The arguments must be integers or markers.
      &rArr; 1
 (% -9 -4)
      &rArr; -1
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-mod"></a>Function: <strong>mod</strong> <em>dividend divisor</em></dt>
-<dd><a name="index-modulus"></a>
-<p>This function returns the value of <var>dividend</var> modulo <var>divisor</var>;
-in other words, the remainder after division of <var>dividend</var>
-by <var>divisor</var>, but with the same sign as <var>divisor</var>.
-The arguments must be numbers or markers.
-</p>
-<p>Unlike <code>%</code>, <code>mod</code> permits floating-point arguments; it
-rounds the quotient downward (towards minus infinity) to an integer,
-and uses that quotient to compute the remainder.
-</p>
-<p>If <var>divisor</var> is zero, <code>mod</code> signals an <code>arith-error</code>
-error if both arguments are integers, and returns a NaN otherwise.
-</p>
-<div class="example">
-<pre class="example">(mod 9 4)
+  <dl>
+    <dt><a name="index-mod" id="index-mod"></a>Function:
+    <strong>mod</strong> <em>dividend divisor</em></dt>
+
+    <dd>
+      <a name="index-modulus" id="index-modulus"></a>
+
+      <p>This function returns the value of <var>dividend</var>
+      modulo <var>divisor</var>; in other words, the remainder
+      after division of <var>dividend</var> by <var>divisor</var>,
+      but with the same sign as <var>divisor</var>. The arguments
+      must be numbers or markers.</p>
+
+      <p>Unlike <code>%</code>, <code>mod</code> permits
+      floating-point arguments; it rounds the quotient downward
+      (towards minus infinity) to an integer, and uses that
+      quotient to compute the remainder.</p>
+
+      <p>If <var>divisor</var> is zero, <code>mod</code> signals an
+      <code>arith-error</code> error if both arguments are
+      integers, and returns a NaN otherwise.</p>
+
+      <div class="example">
+        <pre class="example">
+(mod 9 4)
      &rArr; 1
-</pre><pre class="example">(mod -9 4)
+</pre>
+        <pre class="example">
+(mod -9 4)
      &rArr; 3
-</pre><pre class="example">(mod 9 -4)
+</pre>
+        <pre class="example">
+(mod 9 -4)
      &rArr; -3
-</pre><pre class="example">(mod -9 -4)
+</pre>
+        <pre class="example">
+(mod -9 -4)
      &rArr; -1
-</pre><pre class="example">(mod 5.5 2.5)
+</pre>
+        <pre class="example">
+(mod 5.5 2.5)
      &rArr; .5
-</pre></div>
+</pre>
+      </div>
 
-<p>For any two numbers <var>dividend</var> and <var>divisor</var>,
-</p>
-<div class="example">
-<pre class="example">(+ (mod <var>dividend</var> <var>divisor</var>)
+      <p>For any two numbers <var>dividend</var> and
+      <var>divisor</var>,</p>
+
+      <div class="example">
+        <pre class="example">
+(+ (mod <var>dividend</var> <var>divisor</var>)
    (* (floor <var>dividend</var> <var>divisor</var>) <var>divisor</var>))
-</pre></div>
+</pre>
+      </div>
 
-<p>always equals <var>dividend</var>, subject to rounding error if either
-argument is floating point and to an <code>arith-error</code> if <var>dividend</var> is an
-integer and <var>divisor</var> is 0.  For <code>floor</code>, see <a href="Numeric-Conversions.html#Numeric-Conversions">Numeric Conversions</a>.
-</p></dd></dl>
+      <p>always equals <var>dividend</var>, subject to rounding
+      error if either argument is floating point and to an
+      <code>arith-error</code> if <var>dividend</var> is an integer
+      and <var>divisor</var> is 0. For <code>floor</code>, see
+      <a href=
+      "Numeric-Conversions.html#Numeric-Conversions">Numeric
+      Conversions</a>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Rounding-Operations.html#Rounding-Operations" accesskey="n" rel="next">Rounding Operations</a>, Previous: <a href="Numeric-Conversions.html#Numeric-Conversions" accesskey="p" rel="prev">Numeric Conversions</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Rounding-Operations.html#Rounding-Operations"
+    accesskey="n" rel="next">Rounding Operations</a>, Previous:
+    <a href="Numeric-Conversions.html#Numeric-Conversions"
+    accesskey="p" rel="prev">Numeric Conversions</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

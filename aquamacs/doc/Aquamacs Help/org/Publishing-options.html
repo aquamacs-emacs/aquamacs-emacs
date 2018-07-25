@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Publishing options - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Configuration.html#Configuration" title="Configuration">
-<link rel="prev" href="Publishing-action.html#Publishing-action" title="Publishing action">
-<link rel="next" href="Publishing-links.html#Publishing-links" title="Publishing links">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Publishing options - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Configuration.html#Configuration" title=
+  "Configuration" />
+  <link rel="prev" href="Publishing-action.html#Publishing-action"
+  title="Publishing action" />
+  <link rel="next" href="Publishing-links.html#Publishing-links"
+  title="Publishing links" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +42,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,87 +55,502 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Publishing-options"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Publishing-links.html#Publishing-links">Publishing links</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Publishing-action.html#Publishing-action">Publishing action</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Publishing-options" id="Publishing-options"></a>
 
-<h4 class="subsection">13.1.5 Options for the HTML/LaTeX exporters</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Publishing-links.html#Publishing-links">Publishing links</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Publishing-action.html#Publishing-action">Publishing
+    action</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Configuration.html#Configuration">Configuration</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-options_002c-for-publishing-1625"></a>
-The property list can be used to set many export options for the HTML
-and LaTeX exporters.  In most cases, these properties correspond to user
-variables in Org.  The table below lists these properties along
-with the variable they belong to.  See the documentation string for the
-respective variable for details.
+  <h4 class="subsection">13.1.5 Options for the HTML/LaTeX
+  exporters</h4>
 
-   <p><a name="index-org_002dexport_002dhtml_002dlink_002dup-1626"></a><a name="index-org_002dexport_002dhtml_002dlink_002dhome-1627"></a><a name="index-org_002dexport_002ddefault_002dlanguage-1628"></a><a name="index-org_002ddisplay_002dcustom_002dtimes-1629"></a><a name="index-org_002dexport_002dheadline_002dlevels-1630"></a><a name="index-org_002dexport_002dwith_002dsection_002dnumbers-1631"></a><a name="index-org_002dexport_002dsection_002dnumber_002dformat-1632"></a><a name="index-org_002dexport_002dwith_002dtoc-1633"></a><a name="index-org_002dexport_002dpreserve_002dbreaks-1634"></a><a name="index-org_002dexport_002dwith_002darchived_002dtrees-1635"></a><a name="index-org_002dexport_002dwith_002demphasize-1636"></a><a name="index-org_002dexport_002dwith_002dsub_002dsuperscripts-1637"></a><a name="index-org_002dexport_002dwith_002dspecial_002dstrings-1638"></a><a name="index-org_002dexport_002dwith_002dfootnotes-1639"></a><a name="index-org_002dexport_002dwith_002ddrawers-1640"></a><a name="index-org_002dexport_002dwith_002dtags-1641"></a><a name="index-org_002dexport_002dwith_002dtodo_002dkeywords-1642"></a><a name="index-org_002dexport_002dwith_002dpriority-1643"></a><a name="index-org_002dexport_002dwith_002dTeX_002dmacros-1644"></a><a name="index-org_002dexport_002dwith_002dLaTeX_002dfragments-1645"></a><a name="index-org_002dexport_002dskip_002dtext_002dbefore_002d1st_002dheading-1646"></a><a name="index-org_002dexport_002dwith_002dfixed_002dwidth-1647"></a><a name="index-org_002dexport_002dwith_002dtimestamps-1648"></a><a name="index-org_002dexport_002dauthor_002dinfo-1649"></a><a name="index-org_002dexport_002demail-1650"></a><a name="index-org_002dexport_002dcreator_002dinfo-1651"></a><a name="index-org_002dexport_002dwith_002dtables-1652"></a><a name="index-org_002dexport_002dhighlight_002dfirst_002dtable_002dline-1653"></a><a name="index-org_002dexport_002dhtml_002dstyle_002dinclude_002ddefault-1654"></a><a name="index-org_002dexport_002dhtml_002dstyle-1655"></a><a name="index-org_002dexport_002dhtml_002dstyle_002dextra-1656"></a><a name="index-org_002dexport_002dhtml_002dlink_002dorg_002dfiles_002das_002dhtml-1657"></a><a name="index-org_002dexport_002dhtml_002dinline_002dimages-1658"></a><a name="index-org_002dexport_002dhtml_002dextension-1659"></a><a name="index-org_002dexport_002dhtml_002dtable_002dtag-1660"></a><a name="index-org_002dexport_002dhtml_002dexpand-1661"></a><a name="index-org_002dexport_002dhtml_002dwith_002dtimestamp-1662"></a><a name="index-org_002dexport_002dpublishing_002ddirectory-1663"></a><a name="index-org_002dexport_002dhtml_002dpreamble-1664"></a><a name="index-org_002dexport_002dhtml_002dpostamble-1665"></a><a name="index-org_002dexport_002dhtml_002dauto_002dpreamble-1666"></a><a name="index-org_002dexport_002dhtml_002dauto_002dpostamble-1667"></a><a name="index-user_002dfull_002dname-1668"></a><a name="index-user_002dmail_002daddress-1669"></a><a name="index-org_002dexport_002dselect_002dtags-1670"></a><a name="index-org_002dexport_002dexclude_002dtags-1671"></a>
-   <p><table summary=""><tr align="left"><td valign="top" width="32%"><code>:link-up</code>               </td><td valign="top" width="68%"><code>org-export-html-link-up</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:link-home</code>             </td><td valign="top" width="68%"><code>org-export-html-link-home</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:language</code>              </td><td valign="top" width="68%"><code>org-export-default-language</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:customtime</code>            </td><td valign="top" width="68%"><code>org-display-custom-times</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:headline-levels</code>       </td><td valign="top" width="68%"><code>org-export-headline-levels</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:section-numbers</code>       </td><td valign="top" width="68%"><code>org-export-with-section-numbers</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:section-number-format</code> </td><td valign="top" width="68%"><code>org-export-section-number-format</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:table-of-contents</code>     </td><td valign="top" width="68%"><code>org-export-with-toc</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:preserve-breaks</code>       </td><td valign="top" width="68%"><code>org-export-preserve-breaks</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:archived-trees</code>        </td><td valign="top" width="68%"><code>org-export-with-archived-trees</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:emphasize</code>             </td><td valign="top" width="68%"><code>org-export-with-emphasize</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:sub-superscript</code>       </td><td valign="top" width="68%"><code>org-export-with-sub-superscripts</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:special-strings</code>       </td><td valign="top" width="68%"><code>org-export-with-special-strings</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:footnotes</code>             </td><td valign="top" width="68%"><code>org-export-with-footnotes</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:drawers</code>               </td><td valign="top" width="68%"><code>org-export-with-drawers</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:tags</code>                  </td><td valign="top" width="68%"><code>org-export-with-tags</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:todo-keywords</code>         </td><td valign="top" width="68%"><code>org-export-with-todo-keywords</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:priority</code>              </td><td valign="top" width="68%"><code>org-export-with-priority</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:TeX-macros</code>            </td><td valign="top" width="68%"><code>org-export-with-TeX-macros</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:LaTeX-fragments</code>       </td><td valign="top" width="68%"><code>org-export-with-LaTeX-fragments</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:latex-listings</code>        </td><td valign="top" width="68%"><code>org-export-latex-listings</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:skip-before-1st-heading</code> </td><td valign="top" width="68%"><code>org-export-skip-text-before-1st-heading</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:fixed-width</code>           </td><td valign="top" width="68%"><code>org-export-with-fixed-width</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:timestamps</code>            </td><td valign="top" width="68%"><code>org-export-with-timestamps</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:author-info</code>           </td><td valign="top" width="68%"><code>org-export-author-info</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:email-info</code>            </td><td valign="top" width="68%"><code>org-export-email-info</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:creator-info</code>          </td><td valign="top" width="68%"><code>org-export-creator-info</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:tables</code>                </td><td valign="top" width="68%"><code>org-export-with-tables</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:table-auto-headline</code>   </td><td valign="top" width="68%"><code>org-export-highlight-first-table-line</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:style-include-default</code> </td><td valign="top" width="68%"><code>org-export-html-style-include-default</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:style</code>                 </td><td valign="top" width="68%"><code>org-export-html-style</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:style-extra</code>           </td><td valign="top" width="68%"><code>org-export-html-style-extra</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:convert-org-links</code>     </td><td valign="top" width="68%"><code>org-export-html-link-org-files-as-html</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:inline-images</code>         </td><td valign="top" width="68%"><code>org-export-html-inline-images</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:html-extension</code>        </td><td valign="top" width="68%"><code>org-export-html-extension</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:xml-declaration</code>       </td><td valign="top" width="68%"><code>org-export-html-xml-declaration</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:html-table-tag</code>        </td><td valign="top" width="68%"><code>org-export-html-table-tag</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:expand-quoted-html</code>    </td><td valign="top" width="68%"><code>org-export-html-expand</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:timestamp</code>             </td><td valign="top" width="68%"><code>org-export-html-with-timestamp</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:publishing-directory</code>  </td><td valign="top" width="68%"><code>org-export-publishing-directory</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:preamble</code>              </td><td valign="top" width="68%"><code>org-export-html-preamble</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:postamble</code>             </td><td valign="top" width="68%"><code>org-export-html-postamble</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:auto-preamble</code>         </td><td valign="top" width="68%"><code>org-export-html-auto-preamble</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:auto-postamble</code>        </td><td valign="top" width="68%"><code>org-export-html-auto-postamble</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:author</code>                </td><td valign="top" width="68%"><code>user-full-name</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:email</code>                 </td><td valign="top" width="68%"><code>user-mail-address</code> : <code>addr;addr;..</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:select-tags</code>           </td><td valign="top" width="68%"><code>org-export-select-tags</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:exclude-tags</code>          </td><td valign="top" width="68%"><code>org-export-exclude-tags</code>
-<br></td></tr><tr align="left"><td valign="top" width="32%"><code>:latex-image-options</code>   </td><td valign="top" width="68%"><code>org-export-latex-image-default-option</code>
-   <br></td></tr></table>
+  <p><a name="index-options_002c-for-publishing-1625" id=
+  "index-options_002c-for-publishing-1625"></a> The property list
+  can be used to set many export options for the HTML and LaTeX
+  exporters. In most cases, these properties correspond to user
+  variables in Org. The table below lists these properties along
+  with the variable they belong to. See the documentation string
+  for the respective variable for details.</p>
 
-   <p>Most of the <code>org-export-with-*</code> variables have the same effect in
-both HTML and LaTeX exporters, except for <code>:TeX-macros</code> and
-<code>:LaTeX-fragments</code>, respectively <code>nil</code> and <code>t</code> in the
-LaTeX export.
+  <p><a name="index-org_002dexport_002dhtml_002dlink_002dup-1626"
+  id=
+  "index-org_002dexport_002dhtml_002dlink_002dup-1626"></a><a name=
+  "index-org_002dexport_002dhtml_002dlink_002dhome-1627" id=
+  "index-org_002dexport_002dhtml_002dlink_002dhome-1627"></a><a name="index-org_002dexport_002ddefault_002dlanguage-1628"
+  id=
+  "index-org_002dexport_002ddefault_002dlanguage-1628"></a><a name=
+  "index-org_002ddisplay_002dcustom_002dtimes-1629" id=
+  "index-org_002ddisplay_002dcustom_002dtimes-1629"></a><a name=
+  "index-org_002dexport_002dheadline_002dlevels-1630" id=
+  "index-org_002dexport_002dheadline_002dlevels-1630"></a><a name=
+  "index-org_002dexport_002dwith_002dsection_002dnumbers-1631" id=
+  "index-org_002dexport_002dwith_002dsection_002dnumbers-1631"></a><a name="index-org_002dexport_002dsection_002dnumber_002dformat-1632"
+  id=
+  "index-org_002dexport_002dsection_002dnumber_002dformat-1632"></a><a name="index-org_002dexport_002dwith_002dtoc-1633"
+  id="index-org_002dexport_002dwith_002dtoc-1633"></a><a name=
+  "index-org_002dexport_002dpreserve_002dbreaks-1634" id=
+  "index-org_002dexport_002dpreserve_002dbreaks-1634"></a><a name=
+  "index-org_002dexport_002dwith_002darchived_002dtrees-1635" id=
+  "index-org_002dexport_002dwith_002darchived_002dtrees-1635"></a><a name="index-org_002dexport_002dwith_002demphasize-1636"
+  id=
+  "index-org_002dexport_002dwith_002demphasize-1636"></a><a name="index-org_002dexport_002dwith_002dsub_002dsuperscripts-1637"
+  id=
+  "index-org_002dexport_002dwith_002dsub_002dsuperscripts-1637"></a><a name="index-org_002dexport_002dwith_002dspecial_002dstrings-1638"
+  id=
+  "index-org_002dexport_002dwith_002dspecial_002dstrings-1638"></a><a name="index-org_002dexport_002dwith_002dfootnotes-1639"
+  id=
+  "index-org_002dexport_002dwith_002dfootnotes-1639"></a><a name="index-org_002dexport_002dwith_002ddrawers-1640"
+  id="index-org_002dexport_002dwith_002ddrawers-1640"></a><a name=
+  "index-org_002dexport_002dwith_002dtags-1641" id=
+  "index-org_002dexport_002dwith_002dtags-1641"></a><a name=
+  "index-org_002dexport_002dwith_002dtodo_002dkeywords-1642" id=
+  "index-org_002dexport_002dwith_002dtodo_002dkeywords-1642"></a><a name="index-org_002dexport_002dwith_002dpriority-1643"
+  id="index-org_002dexport_002dwith_002dpriority-1643"></a><a name=
+  "index-org_002dexport_002dwith_002dTeX_002dmacros-1644" id=
+  "index-org_002dexport_002dwith_002dTeX_002dmacros-1644"></a><a name="index-org_002dexport_002dwith_002dLaTeX_002dfragments-1645"
+  id=
+  "index-org_002dexport_002dwith_002dLaTeX_002dfragments-1645"></a><a name="index-org_002dexport_002dskip_002dtext_002dbefore_002d1st_002dheading-1646"
+  id=
+  "index-org_002dexport_002dskip_002dtext_002dbefore_002d1st_002dheading-1646"></a><a name="index-org_002dexport_002dwith_002dfixed_002dwidth-1647"
+  id=
+  "index-org_002dexport_002dwith_002dfixed_002dwidth-1647"></a><a name="index-org_002dexport_002dwith_002dtimestamps-1648"
+  id=
+  "index-org_002dexport_002dwith_002dtimestamps-1648"></a><a name=
+  "index-org_002dexport_002dauthor_002dinfo-1649" id=
+  "index-org_002dexport_002dauthor_002dinfo-1649"></a><a name=
+  "index-org_002dexport_002demail-1650" id=
+  "index-org_002dexport_002demail-1650"></a><a name=
+  "index-org_002dexport_002dcreator_002dinfo-1651" id=
+  "index-org_002dexport_002dcreator_002dinfo-1651"></a><a name=
+  "index-org_002dexport_002dwith_002dtables-1652" id=
+  "index-org_002dexport_002dwith_002dtables-1652"></a><a name=
+  "index-org_002dexport_002dhighlight_002dfirst_002dtable_002dline-1653"
+  id=
+  "index-org_002dexport_002dhighlight_002dfirst_002dtable_002dline-1653"></a><a name="index-org_002dexport_002dhtml_002dstyle_002dinclude_002ddefault-1654"
+  id=
+  "index-org_002dexport_002dhtml_002dstyle_002dinclude_002ddefault-1654"></a><a name="index-org_002dexport_002dhtml_002dstyle-1655"
+  id="index-org_002dexport_002dhtml_002dstyle-1655"></a><a name=
+  "index-org_002dexport_002dhtml_002dstyle_002dextra-1656" id=
+  "index-org_002dexport_002dhtml_002dstyle_002dextra-1656"></a><a name="index-org_002dexport_002dhtml_002dlink_002dorg_002dfiles_002das_002dhtml-1657"
+  id=
+  "index-org_002dexport_002dhtml_002dlink_002dorg_002dfiles_002das_002dhtml-1657"></a><a name="index-org_002dexport_002dhtml_002dinline_002dimages-1658"
+  id=
+  "index-org_002dexport_002dhtml_002dinline_002dimages-1658"></a><a name="index-org_002dexport_002dhtml_002dextension-1659"
+  id=
+  "index-org_002dexport_002dhtml_002dextension-1659"></a><a name="index-org_002dexport_002dhtml_002dtable_002dtag-1660"
+  id=
+  "index-org_002dexport_002dhtml_002dtable_002dtag-1660"></a><a name="index-org_002dexport_002dhtml_002dexpand-1661"
+  id="index-org_002dexport_002dhtml_002dexpand-1661"></a><a name=
+  "index-org_002dexport_002dhtml_002dwith_002dtimestamp-1662" id=
+  "index-org_002dexport_002dhtml_002dwith_002dtimestamp-1662"></a><a name="index-org_002dexport_002dpublishing_002ddirectory-1663"
+  id=
+  "index-org_002dexport_002dpublishing_002ddirectory-1663"></a><a name="index-org_002dexport_002dhtml_002dpreamble-1664"
+  id="index-org_002dexport_002dhtml_002dpreamble-1664"></a><a name=
+  "index-org_002dexport_002dhtml_002dpostamble-1665" id=
+  "index-org_002dexport_002dhtml_002dpostamble-1665"></a><a name=
+  "index-org_002dexport_002dhtml_002dauto_002dpreamble-1666" id=
+  "index-org_002dexport_002dhtml_002dauto_002dpreamble-1666"></a><a name="index-org_002dexport_002dhtml_002dauto_002dpostamble-1667"
+  id=
+  "index-org_002dexport_002dhtml_002dauto_002dpostamble-1667"></a><a name="index-user_002dfull_002dname-1668"
+  id="index-user_002dfull_002dname-1668"></a><a name=
+  "index-user_002dmail_002daddress-1669" id=
+  "index-user_002dmail_002daddress-1669"></a><a name=
+  "index-org_002dexport_002dselect_002dtags-1670" id=
+  "index-org_002dexport_002dselect_002dtags-1670"></a><a name=
+  "index-org_002dexport_002dexclude_002dtags-1671" id=
+  "index-org_002dexport_002dexclude_002dtags-1671"></a></p>
 
-   <p><a name="index-org_002dpublish_002dproject_002dalist-1672"></a>When a property is given a value in <code>org-publish-project-alist</code>,
-its setting overrides the value of the corresponding user variable (if
-any) during publishing.  Options set within a file (see <a href="Export-options.html#Export-options">Export options</a>), however, override everything.
+  <table summary="">
+    <tr align="left">
+      <td valign="top" width="32%"><code>:link-up</code></td>
 
-   </body></html>
+      <td valign="top" width="68%">
+      <code>org-export-html-link-up</code><br /></td>
+    </tr>
 
+    <tr align="left">
+      <td valign="top" width="32%"><code>:link-home</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-link-home</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:language</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-default-language</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:customtime</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-display-custom-times</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:headline-levels</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-headline-levels</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:section-numbers</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-section-numbers</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:section-number-format</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-section-number-format</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:table-of-contents</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-toc</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:preserve-breaks</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-preserve-breaks</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:archived-trees</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-archived-trees</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:emphasize</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-emphasize</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:sub-superscript</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-sub-superscripts</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:special-strings</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-special-strings</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:footnotes</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-footnotes</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:drawers</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-drawers</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:tags</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-tags</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:todo-keywords</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-todo-keywords</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:priority</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-priority</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:TeX-macros</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-TeX-macros</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:LaTeX-fragments</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-LaTeX-fragments</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:latex-listings</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-latex-listings</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:skip-before-1st-heading</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-skip-text-before-1st-heading</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:fixed-width</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-fixed-width</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:timestamps</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-timestamps</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:author-info</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-author-info</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:email-info</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-email-info</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:creator-info</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-creator-info</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:tables</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-with-tables</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:table-auto-headline</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-highlight-first-table-line</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:style-include-default</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-style-include-default</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:style</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-style</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:style-extra</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-style-extra</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:convert-org-links</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-link-org-files-as-html</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:inline-images</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-inline-images</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:html-extension</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-extension</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:xml-declaration</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-xml-declaration</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:html-table-tag</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-table-tag</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:expand-quoted-html</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-expand</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:timestamp</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-with-timestamp</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:publishing-directory</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-publishing-directory</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:preamble</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-preamble</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:postamble</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-postamble</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:auto-preamble</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-auto-preamble</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:auto-postamble</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-html-auto-postamble</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:author</code></td>
+
+      <td valign="top" width="68%">
+      <code>user-full-name</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:email</code></td>
+
+      <td valign="top" width="68%"><code>user-mail-address</code> :
+      <code>addr;addr;..</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:select-tags</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-select-tags</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%"><code>:exclude-tags</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-exclude-tags</code><br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="32%">
+      <code>:latex-image-options</code></td>
+
+      <td valign="top" width="68%">
+      <code>org-export-latex-image-default-option</code><br /></td>
+    </tr>
+  </table>
+
+  <p>Most of the <code>org-export-with-*</code> variables have the
+  same effect in both HTML and LaTeX exporters, except for
+  <code>:TeX-macros</code> and <code>:LaTeX-fragments</code>,
+  respectively <code>nil</code> and <code>t</code> in the LaTeX
+  export.</p>
+
+  <p><a name="index-org_002dpublish_002dproject_002dalist-1672" id=
+  "index-org_002dpublish_002dproject_002dalist-1672"></a>When a
+  property is given a value in
+  <code>org-publish-project-alist</code>, its setting overrides the
+  value of the corresponding user variable (if any) during
+  publishing. Options set within a file (see <a href=
+  "Export-options.html#Export-options">Export options</a>),
+  however, override everything.</p>
+</body>
+</html>

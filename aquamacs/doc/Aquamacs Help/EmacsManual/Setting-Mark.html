@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,177 +20,249 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Setting Mark</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Setting Mark">
-<meta name="keywords" content="GNU Emacs Manual: Setting Mark">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mark.html#Mark" rel="up" title="Mark">
-<link href="Marking-Objects.html#Marking-Objects" rel="next" title="Marking Objects">
-<link href="Mark.html#Mark" rel="prev" title="Mark">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Setting Mark</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Setting Mark" />
+  <meta name="keywords" content="GNU Emacs Manual: Setting Mark" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mark.html#Mark" rel="up" title="Mark" />
+  <link href="Marking-Objects.html#Marking-Objects" rel="next"
+  title="Marking Objects" />
+  <link href="Mark.html#Mark" rel="prev" title="Mark" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Setting-Mark" id="Setting-Mark"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Marking-Objects.html#Marking-Objects"
+    accesskey="n" rel="next">Marking Objects</a>, Up: <a href=
+    "Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Setting-the-Mark" id="Setting-the-Mark"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Setting-Mark"></a>
-<div class="header">
-<p>
-Next: <a href="Marking-Objects.html#Marking-Objects" accesskey="n" rel="next">Marking Objects</a>, Up: <a href="Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Setting-the-Mark"></a>
-<h3 class="section">11.1 Setting the Mark</h3>
+  <h3 class="section">11.1 Setting the Mark</h3>
 
-<p>Here are some commands for setting the mark:
-</p>
-<dl compact="compact">
-<dt><kbd>C-<span class="key">SPC</span></kbd></dt>
-<dd><p>Set the mark at point, and activate it (<code>set-mark-command</code>).
-</p></dd>
-<dt><kbd>C-@</kbd></dt>
-<dd><p>The same.
-</p></dd>
-<dt><kbd>C-x C-x</kbd></dt>
-<dd><p>Set the mark at point, and activate it; then move point where the mark
-used to be (<code>exchange-point-and-mark</code>).
-</p></dd>
-<dt><kbd>Drag-mouse-1</kbd></dt>
-<dd><p>Set point and the mark around the text you drag across.
-</p></dd>
-<dt><kbd>mouse-3</kbd></dt>
-<dd><p>Set the mark at point, then move point to where you click
-(<code>mouse-save-then-kill</code>).
-</p></dd>
-<dt><kbd>&lsquo;<samp>Shifted cursor motion keys</samp>&rsquo;</kbd></dt>
-<dd><p>Set the mark at point if the mark is inactive, then move point.
-See <a href="Shift-Selection.html#Shift-Selection">Shift Selection</a>.
-</p></dd>
-</dl>
+  <p>Here are some commands for setting the mark:</p>
 
-<a name="index-C_002dSPC"></a>
-<a name="index-C_002d_0040"></a>
-<a name="index-set_002dmark_002dcommand"></a>
-<p>The most common way to set the mark is with <kbd>C-<span class="key">SPC</span></kbd>
-(<code>set-mark-command</code>)<a name="DOCF5" href="#FOOT5"><sup>5</sup></a>.  This sets the mark where point is,
-and activates it.  You can then move point away, leaving the mark
-behind.
-</p>
-<p>For example, suppose you wish to convert part of the buffer to upper
-case.  To accomplish this, go to one end of the desired text, type
-<kbd>C-<span class="key">SPC</span></kbd>, and move point until the desired portion of text is
-highlighted.  Now type <kbd>C-x C-u</kbd> (<code>upcase-region</code>).  This
-converts the text in the region to upper case, and then deactivates
-the mark.
-</p>
-<p>Whenever the mark is active, you can deactivate it by typing
-<kbd>C-g</kbd> (see <a href="Quitting.html#Quitting">Quitting</a>).  Most commands that operate on the
-region also automatically deactivate the mark, like <kbd>C-x C-u</kbd> in
-the above example.
-</p>
-<p>Instead of setting the mark in order to operate on a region, you can
-also use it to remember a position in the buffer (by typing
-<kbd>C-<span class="key">SPC</span> C-<span class="key">SPC</span></kbd>), and later jump back there (by typing
-<kbd>C-u C-<span class="key">SPC</span></kbd>).  See <a href="Mark-Ring.html#Mark-Ring">Mark Ring</a>, for details.
-</p>
-<a name="index-C_002dx-C_002dx"></a>
-<a name="index-exchange_002dpoint_002dand_002dmark"></a>
-<p>The command <kbd>C-x C-x</kbd> (<code>exchange-point-and-mark</code>) exchanges
-the positions of point and the mark.  <kbd>C-x C-x</kbd> is useful when you
-are satisfied with the position of point but want to move the other
-end of the region (where the mark is).  Using <kbd>C-x C-x</kbd> a second
-time, if necessary, puts the mark at the new position with point back
-at its original position.  Normally, if the mark is inactive, this
-command first reactivates the mark wherever it was last set, to ensure
-that the region is left highlighted.  However, if you call it with a
-prefix argument, it leaves the mark inactive and the region
-unhighlighted; you can use this to jump to the mark in a manner
-similar to <kbd>C-u C-<span class="key">SPC</span></kbd>.
-</p>
-<p>You can also set the mark with the mouse.  If you press the left
-mouse button (<kbd>down-mouse-1</kbd>) and drag the mouse across a range of
-text, this sets the mark where you first pressed the mouse button and
-puts point where you release it.  Alternatively, clicking the right
-mouse button (<kbd>mouse-3</kbd>) sets the mark at point and then moves
-point to where you clicked.  See <a href="Mouse-Commands.html#Mouse-Commands">Mouse Commands</a>, for a more
-detailed description of these mouse commands.
-</p>
-<a name="index-shift_002dselection"></a>
-<p>Finally, you can set the mark by holding down the shift key while
-typing certain cursor motion commands (such as <kbd>S-<span class="key">RIGHT</span></kbd>,
-<kbd>S-C-f</kbd>, <kbd>S-C-n</kbd>, etc.).  This is called <em>shift-selection</em>.
-It sets the mark at point before moving point, but only if there is no
-active mark set via shift-selection.  The mark set by mouse commands
-and by shift-selection behaves slightly differently from the usual
-mark: any subsequent unshifted cursor motion command deactivates it
-automatically.  For details, See <a href="Shift-Selection.html#Shift-Selection">Shift Selection</a>.
-</p>
-<p>Many commands that insert text, such as <kbd>C-y</kbd> (<code>yank</code>), set
-the mark at the other end of the inserted text, without activating it.
-This lets you easily return to that position (see <a href="Mark-Ring.html#Mark-Ring">Mark Ring</a>).  You
-can tell that a command does this when it shows &lsquo;<samp>Mark set</samp>&rsquo; in the
-echo area.
-</p>
-<a name="index-primary-selection"></a>
-<p>Under X, every time the active region changes, Emacs saves the text
-in the region to the <em>primary selection</em>.  This lets you insert
-that text into other X applications with <kbd>mouse-2</kbd> clicks.
-See <a href="Primary-Selection.html#Primary-Selection">Primary Selection</a>.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl compact="compact">
+    <dt><kbd>C-<span class="key">SPC</span></kbd></dt>
 
-<h3><a name="FOOT5" href="#DOCF5">(5)</a></h3>
-<p>There is no <kbd>C-<span class="key">SPC</span></kbd>
-character in <acronym>ASCII</acronym>; usually, typing <kbd>C-<span class="key">SPC</span></kbd> on a
-text terminal gives the character <kbd>C-@</kbd>.  This key is also bound
-to <code>set-mark-command</code>, so unless you are unlucky enough to have
-a text terminal that behaves differently, you might as well think of
-<kbd>C-@</kbd> as <kbd>C-<span class="key">SPC</span></kbd>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Marking-Objects.html#Marking-Objects" accesskey="n" rel="next">Marking Objects</a>, Up: <a href="Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Set the mark at point, and activate it
+      (<code>set-mark-command</code>).</p>
+    </dd>
 
+    <dt><kbd>C-@</kbd></dt>
 
+    <dd>
+      <p>The same.</p>
+    </dd>
 
+    <dt><kbd>C-x C-x</kbd></dt>
+
+    <dd>
+      <p>Set the mark at point, and activate it; then move point
+      where the mark used to be
+      (<code>exchange-point-and-mark</code>).</p>
+    </dd>
+
+    <dt><kbd>Drag-mouse-1</kbd></dt>
+
+    <dd>
+      <p>Set point and the mark around the text you drag
+      across.</p>
+    </dd>
+
+    <dt><kbd>mouse-3</kbd></dt>
+
+    <dd>
+      <p>Set the mark at point, then move point to where you click
+      (<code>mouse-save-then-kill</code>).</p>
+    </dd>
+
+    <dt><kbd>&lsquo;<samp>Shifted cursor motion
+    keys</samp>&rsquo;</kbd></dt>
+
+    <dd>
+      <p>Set the mark at point if the mark is inactive, then move
+      point. See <a href=
+      "Shift-Selection.html#Shift-Selection">Shift
+      Selection</a>.</p>
+    </dd>
+  </dl><a name="index-C_002dSPC" id="index-C_002dSPC"></a> <a name=
+  "index-C_002d_0040" id="index-C_002d_0040"></a> <a name=
+  "index-set_002dmark_002dcommand" id=
+  "index-set_002dmark_002dcommand"></a>
+
+  <p>The most common way to set the mark is with
+  <kbd>C-<span class="key">SPC</span></kbd>
+  (<code>set-mark-command</code>)<a name="DOCF5" href="#FOOT5" id=
+  "DOCF5"><sup>5</sup></a>. This sets the mark where point is, and
+  activates it. You can then move point away, leaving the mark
+  behind.</p>
+
+  <p>For example, suppose you wish to convert part of the buffer to
+  upper case. To accomplish this, go to one end of the desired
+  text, type <kbd>C-<span class="key">SPC</span></kbd>, and move
+  point until the desired portion of text is highlighted. Now type
+  <kbd>C-x C-u</kbd> (<code>upcase-region</code>). This converts
+  the text in the region to upper case, and then deactivates the
+  mark.</p>
+
+  <p>Whenever the mark is active, you can deactivate it by typing
+  <kbd>C-g</kbd> (see <a href=
+  "Quitting.html#Quitting">Quitting</a>). Most commands that
+  operate on the region also automatically deactivate the mark,
+  like <kbd>C-x C-u</kbd> in the above example.</p>
+
+  <p>Instead of setting the mark in order to operate on a region,
+  you can also use it to remember a position in the buffer (by
+  typing <kbd>C-<span class="key">SPC</span> C-<span class=
+  "key">SPC</span></kbd>), and later jump back there (by typing
+  <kbd>C-u C-<span class="key">SPC</span></kbd>). See <a href=
+  "Mark-Ring.html#Mark-Ring">Mark Ring</a>, for
+  details.</p><a name="index-C_002dx-C_002dx" id=
+  "index-C_002dx-C_002dx"></a> <a name=
+  "index-exchange_002dpoint_002dand_002dmark" id=
+  "index-exchange_002dpoint_002dand_002dmark"></a>
+
+  <p>The command <kbd>C-x C-x</kbd>
+  (<code>exchange-point-and-mark</code>) exchanges the positions of
+  point and the mark. <kbd>C-x C-x</kbd> is useful when you are
+  satisfied with the position of point but want to move the other
+  end of the region (where the mark is). Using <kbd>C-x C-x</kbd> a
+  second time, if necessary, puts the mark at the new position with
+  point back at its original position. Normally, if the mark is
+  inactive, this command first reactivates the mark wherever it was
+  last set, to ensure that the region is left highlighted. However,
+  if you call it with a prefix argument, it leaves the mark
+  inactive and the region unhighlighted; you can use this to jump
+  to the mark in a manner similar to <kbd>C-u C-<span class=
+  "key">SPC</span></kbd>.</p>
+
+  <p>You can also set the mark with the mouse. If you press the
+  left mouse button (<kbd>down-mouse-1</kbd>) and drag the mouse
+  across a range of text, this sets the mark where you first
+  pressed the mouse button and puts point where you release it.
+  Alternatively, clicking the right mouse button
+  (<kbd>mouse-3</kbd>) sets the mark at point and then moves point
+  to where you clicked. See <a href=
+  "Mouse-Commands.html#Mouse-Commands">Mouse Commands</a>, for a
+  more detailed description of these mouse commands.</p><a name=
+  "index-shift_002dselection" id="index-shift_002dselection"></a>
+
+  <p>Finally, you can set the mark by holding down the shift key
+  while typing certain cursor motion commands (such as
+  <kbd>S-<span class="key">RIGHT</span></kbd>, <kbd>S-C-f</kbd>,
+  <kbd>S-C-n</kbd>, etc.). This is called <em>shift-selection</em>.
+  It sets the mark at point before moving point, but only if there
+  is no active mark set via shift-selection. The mark set by mouse
+  commands and by shift-selection behaves slightly differently from
+  the usual mark: any subsequent unshifted cursor motion command
+  deactivates it automatically. For details, See <a href=
+  "Shift-Selection.html#Shift-Selection">Shift Selection</a>.</p>
+
+  <p>Many commands that insert text, such as <kbd>C-y</kbd>
+  (<code>yank</code>), set the mark at the other end of the
+  inserted text, without activating it. This lets you easily return
+  to that position (see <a href="Mark-Ring.html#Mark-Ring">Mark
+  Ring</a>). You can tell that a command does this when it shows
+  &lsquo;<samp>Mark set</samp>&rsquo; in the echo area.</p><a name=
+  "index-primary-selection" id="index-primary-selection"></a>
+
+  <p>Under X, every time the active region changes, Emacs saves the
+  text in the region to the <em>primary selection</em>. This lets
+  you insert that text into other X applications with
+  <kbd>mouse-2</kbd> clicks. See <a href=
+  "Primary-Selection.html#Primary-Selection">Primary
+  Selection</a>.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT5" href="#DOCF5" id="FOOT5">(5)</a></h3>
+
+    <p>There is no <kbd>C-<span class="key">SPC</span></kbd>
+    character in <acronym>ASCII</acronym>; usually, typing
+    <kbd>C-<span class="key">SPC</span></kbd> on a text terminal
+    gives the character <kbd>C-@</kbd>. This key is also bound to
+    <code>set-mark-command</code>, so unless you are unlucky enough
+    to have a text terminal that behaves differently, you might as
+    well think of <kbd>C-@</kbd> as <kbd>C-<span class=
+    "key">SPC</span></kbd>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Marking-Objects.html#Marking-Objects"
+    accesskey="n" rel="next">Marking Objects</a>, Up: <a href=
+    "Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

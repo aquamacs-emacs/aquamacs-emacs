@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,140 +19,191 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Eval List</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Eval List">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Eval List">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="Printing-in-Edebug.html#Printing-in-Edebug" rel="next" title="Printing in Edebug">
-<link href="Edebug-Eval.html#Edebug-Eval" rel="prev" title="Edebug Eval">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Eval List</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Eval List" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Eval List" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="Printing-in-Edebug.html#Printing-in-Edebug" rel=
+  "next" title="Printing in Edebug" />
+  <link href="Edebug-Eval.html#Edebug-Eval" rel="prev" title=
+  "Edebug Eval" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Eval-List" id="Eval-List"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Printing-in-Edebug.html#Printing-in-Edebug"
+    accesskey="n" rel="next">Printing in Edebug</a>, Previous:
+    <a href="Edebug-Eval.html#Edebug-Eval" accesskey="p" rel=
+    "prev">Edebug Eval</a>, Up: <a href="Edebug.html#Edebug"
+    accesskey="u" rel="up">Edebug</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Evaluation-List-Buffer" id="Evaluation-List-Buffer"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Eval-List"></a>
-<div class="header">
-<p>
-Next: <a href="Printing-in-Edebug.html#Printing-in-Edebug" accesskey="n" rel="next">Printing in Edebug</a>, Previous: <a href="Edebug-Eval.html#Edebug-Eval" accesskey="p" rel="prev">Edebug Eval</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Evaluation-List-Buffer"></a>
-<h4 class="subsection">17.2.10 Evaluation List Buffer</h4>
+  <h4 class="subsection">17.2.10 Evaluation List Buffer</h4>
 
-<p>You can use the <em>evaluation list buffer</em>, called <samp>*edebug*</samp>, to
-evaluate expressions interactively.  You can also set up the
-<em>evaluation list</em> of expressions to be evaluated automatically each
-time Edebug updates the display.
-</p>
-<dl compact="compact">
-<dt><kbd>E</kbd></dt>
-<dd><p>Switch to the evaluation list buffer <samp>*edebug*</samp>
-(<code>edebug-visit-eval-list</code>).
-</p></dd>
-</dl>
+  <p>You can use the <em>evaluation list buffer</em>, called
+  <samp>*edebug*</samp>, to evaluate expressions interactively. You
+  can also set up the <em>evaluation list</em> of expressions to be
+  evaluated automatically each time Edebug updates the display.</p>
 
-<p>In the <samp>*edebug*</samp> buffer you can use the commands of Lisp
-Interaction mode (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Lisp-Interaction.html#Lisp-Interaction">Lisp Interaction</a> in <cite>The GNU Emacs
-Manual</cite>) as well as these special commands:
-</p>
-<dl compact="compact">
-<dt><kbd>C-j</kbd></dt>
-<dd><p>Evaluate the expression before point, in the outside context, and insert
-the value in the buffer (<code>edebug-eval-print-last-sexp</code>).
-</p>
-</dd>
-<dt><kbd>C-x C-e</kbd></dt>
-<dd><p>Evaluate the expression before point, in the context outside of Edebug
-(<code>edebug-eval-last-sexp</code>).
-</p>
-</dd>
-<dt><kbd>C-c C-u</kbd></dt>
-<dd><p>Build a new evaluation list from the contents of the buffer
-(<code>edebug-update-eval-list</code>).
-</p>
-</dd>
-<dt><kbd>C-c C-d</kbd></dt>
-<dd><p>Delete the evaluation list group that point is in
-(<code>edebug-delete-eval-item</code>).
-</p>
-</dd>
-<dt><kbd>C-c C-w</kbd></dt>
-<dd><p>Switch back to the source code buffer at the current stop point
-(<code>edebug-where</code>).
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>E</kbd></dt>
 
-<p>You can evaluate expressions in the evaluation list window with
-<kbd>C-j</kbd> or <kbd>C-x C-e</kbd>, just as you would in <samp>*scratch*</samp>;
-but they are evaluated in the context outside of Edebug.
-</p>
-<p>The expressions you enter interactively (and their results) are lost
-when you continue execution; but you can set up an <em>evaluation list</em>
-consisting of expressions to be evaluated each time execution stops.
-</p>
-<a name="index-evaluation-list-group"></a>
-<p>To do this, write one or more <em>evaluation list groups</em> in the
-evaluation list buffer.  An evaluation list group consists of one or
-more Lisp expressions.  Groups are separated by comment lines.
-</p>
-<p>The command <kbd>C-c C-u</kbd> (<code>edebug-update-eval-list</code>) rebuilds the
-evaluation list, scanning the buffer and using the first expression of
-each group.  (The idea is that the second expression of the group is the
-value previously computed and displayed.)
-</p>
-<p>Each entry to Edebug redisplays the evaluation list by inserting each
-expression in the buffer, followed by its current value.  It also
-inserts comment lines so that each expression becomes its own group.
-Thus, if you type <kbd>C-c C-u</kbd> again without changing the buffer text,
-the evaluation list is effectively unchanged.
-</p>
-<p>If an error occurs during an evaluation from the evaluation list,
-the error message is displayed in a string as if it were the result.
-Therefore, expressions using variables that are not currently valid do
-not interrupt your debugging.
-</p>
-<p>Here is an example of what the evaluation list window looks like after
-several expressions have been added to it:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(current-buffer)
+    <dd>
+      <p>Switch to the evaluation list buffer <samp>*edebug*</samp>
+      (<code>edebug-visit-eval-list</code>).</p>
+    </dd>
+  </dl>
+
+  <p>In the <samp>*edebug*</samp> buffer you can use the commands
+  of Lisp Interaction mode (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Lisp-Interaction.html#Lisp-Interaction">
+  Lisp Interaction</a> in <cite>The GNU Emacs Manual</cite>) as
+  well as these special commands:</p>
+
+  <dl compact="compact">
+    <dt><kbd>C-j</kbd></dt>
+
+    <dd>
+      <p>Evaluate the expression before point, in the outside
+      context, and insert the value in the buffer
+      (<code>edebug-eval-print-last-sexp</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x C-e</kbd></dt>
+
+    <dd>
+      <p>Evaluate the expression before point, in the context
+      outside of Edebug (<code>edebug-eval-last-sexp</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-u</kbd></dt>
+
+    <dd>
+      <p>Build a new evaluation list from the contents of the
+      buffer (<code>edebug-update-eval-list</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-d</kbd></dt>
+
+    <dd>
+      <p>Delete the evaluation list group that point is in
+      (<code>edebug-delete-eval-item</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-w</kbd></dt>
+
+    <dd>
+      <p>Switch back to the source code buffer at the current stop
+      point (<code>edebug-where</code>).</p>
+    </dd>
+  </dl>
+
+  <p>You can evaluate expressions in the evaluation list window
+  with <kbd>C-j</kbd> or <kbd>C-x C-e</kbd>, just as you would in
+  <samp>*scratch*</samp>; but they are evaluated in the context
+  outside of Edebug.</p>
+
+  <p>The expressions you enter interactively (and their results)
+  are lost when you continue execution; but you can set up an
+  <em>evaluation list</em> consisting of expressions to be
+  evaluated each time execution stops.</p><a name=
+  "index-evaluation-list-group" id=
+  "index-evaluation-list-group"></a>
+
+  <p>To do this, write one or more <em>evaluation list groups</em>
+  in the evaluation list buffer. An evaluation list group consists
+  of one or more Lisp expressions. Groups are separated by comment
+  lines.</p>
+
+  <p>The command <kbd>C-c C-u</kbd>
+  (<code>edebug-update-eval-list</code>) rebuilds the evaluation
+  list, scanning the buffer and using the first expression of each
+  group. (The idea is that the second expression of the group is
+  the value previously computed and displayed.)</p>
+
+  <p>Each entry to Edebug redisplays the evaluation list by
+  inserting each expression in the buffer, followed by its current
+  value. It also inserts comment lines so that each expression
+  becomes its own group. Thus, if you type <kbd>C-c C-u</kbd> again
+  without changing the buffer text, the evaluation list is
+  effectively unchanged.</p>
+
+  <p>If an error occurs during an evaluation from the evaluation
+  list, the error message is displayed in a string as if it were
+  the result. Therefore, expressions using variables that are not
+  currently valid do not interrupt your debugging.</p>
+
+  <p>Here is an example of what the evaluation list window looks
+  like after several expressions have been added to it:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(current-buffer)
 #&lt;buffer *scratch*&gt;
 ;---------------------------------------------------------------
 (selected-window)
@@ -160,7 +213,7 @@ several expressions have been added to it:
 196
 ;---------------------------------------------------------------
 bad-var
-&quot;Symbol's value as variable is void: bad-var&quot;
+"Symbol's value as variable is void: bad-var"
 ;---------------------------------------------------------------
 (recursion-depth)
 0
@@ -168,26 +221,32 @@ bad-var
 this-command
 eval-last-sexp
 ;---------------------------------------------------------------
-</pre></div>
+</pre>
+  </div>
 
-<p>To delete a group, move point into it and type <kbd>C-c C-d</kbd>, or simply
-delete the text for the group and update the evaluation list with
-<kbd>C-c C-u</kbd>.  To add a new expression to the evaluation list, insert
-the expression at a suitable place, insert a new comment line, then type
-<kbd>C-c C-u</kbd>.  You need not insert dashes in the comment line&mdash;its
-contents don&rsquo;t matter.
-</p>
-<p>After selecting <samp>*edebug*</samp>, you can return to the source code
-buffer with <kbd>C-c C-w</kbd>.  The <samp>*edebug*</samp> buffer is killed when
-you continue execution, and recreated next time it is needed.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Printing-in-Edebug.html#Printing-in-Edebug" accesskey="n" rel="next">Printing in Edebug</a>, Previous: <a href="Edebug-Eval.html#Edebug-Eval" accesskey="p" rel="prev">Edebug Eval</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>To delete a group, move point into it and type <kbd>C-c
+  C-d</kbd>, or simply delete the text for the group and update the
+  evaluation list with <kbd>C-c C-u</kbd>. To add a new expression
+  to the evaluation list, insert the expression at a suitable
+  place, insert a new comment line, then type <kbd>C-c C-u</kbd>.
+  You need not insert dashes in the comment line&mdash;its contents
+  don&rsquo;t matter.</p>
 
+  <p>After selecting <samp>*edebug*</samp>, you can return to the
+  source code buffer with <kbd>C-c C-w</kbd>. The
+  <samp>*edebug*</samp> buffer is killed when you continue
+  execution, and recreated next time it is needed.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Printing-in-Edebug.html#Printing-in-Edebug"
+    accesskey="n" rel="next">Printing in Edebug</a>, Previous:
+    <a href="Edebug-Eval.html#Edebug-Eval" accesskey="p" rel=
+    "prev">Edebug Eval</a>, Up: <a href="Edebug.html#Edebug"
+    accesskey="u" rel="up">Edebug</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

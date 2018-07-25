@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,156 +19,239 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: File Name Completion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: File Name Completion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: File Name Completion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="File-Names.html#File-Names" rel="up" title="File Names">
-<link href="Standard-File-Names.html#Standard-File-Names" rel="next" title="Standard File Names">
-<link href="Unique-File-Names.html#Unique-File-Names" rel="prev" title="Unique File Names">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: File Name
+  Completion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: File Name Completion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: File Name Completion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="File-Names.html#File-Names" rel="up" title=
+  "File Names" />
+  <link href="Standard-File-Names.html#Standard-File-Names" rel=
+  "next" title="Standard File Names" />
+  <link href="Unique-File-Names.html#Unique-File-Names" rel="prev"
+  title="Unique File Names" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="File-Name-Completion" id="File-Name-Completion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Standard-File-Names.html#Standard-File-Names"
+    accesskey="n" rel="next">Standard File Names</a>, Previous:
+    <a href="Unique-File-Names.html#Unique-File-Names" accesskey=
+    "p" rel="prev">Unique File Names</a>, Up: <a href=
+    "File-Names.html#File-Names" accesskey="u" rel="up">File
+    Names</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="File-Name-Completion-1" id="File-Name-Completion-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="File-Name-Completion"></a>
-<div class="header">
-<p>
-Next: <a href="Standard-File-Names.html#Standard-File-Names" accesskey="n" rel="next">Standard File Names</a>, Previous: <a href="Unique-File-Names.html#Unique-File-Names" accesskey="p" rel="prev">Unique File Names</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="File-Name-Completion-1"></a>
-<h4 class="subsection">24.8.6 File Name Completion</h4>
-<a name="index-file-name-completion-subroutines"></a>
-<a name="index-completion_002c-file-name"></a>
+  <h4 class="subsection">24.8.6 File Name Completion</h4><a name=
+  "index-file-name-completion-subroutines" id=
+  "index-file-name-completion-subroutines"></a> <a name=
+  "index-completion_002c-file-name" id=
+  "index-completion_002c-file-name"></a>
 
-<p>This section describes low-level subroutines for completing a file
-name.  For higher level functions, see <a href="Reading-File-Names.html#Reading-File-Names">Reading File Names</a>.
-</p>
-<dl>
-<dt><a name="index-file_002dname_002dall_002dcompletions"></a>Function: <strong>file-name-all-completions</strong> <em>partial-filename directory</em></dt>
-<dd><p>This function returns a list of all possible completions for a file
-whose name starts with <var>partial-filename</var> in directory
-<var>directory</var>.  The order of the completions is the order of the files
-in the directory, which is unpredictable and conveys no useful
-information.
-</p>
-<p>The argument <var>partial-filename</var> must be a file name containing no
-directory part and no slash (or backslash on some systems).  The current
-buffer&rsquo;s default directory is prepended to <var>directory</var>, if
-<var>directory</var> is not absolute.
-</p>
-<p>In the following example, suppose that <samp>~rms/lewis</samp> is the current
-default directory, and has five files whose names begin with &lsquo;<samp>f</samp>&rsquo;:
-<samp>foo</samp>, <samp>file~</samp>, <samp>file.c</samp>, <samp>file.c.~1~</samp>, and
-<samp>file.c.~2~</samp>.
-</p>
-<div class="example">
-<pre class="example">(file-name-all-completions &quot;f&quot; &quot;&quot;)
-     &rArr; (&quot;foo&quot; &quot;file~&quot; &quot;file.c.~2~&quot;
-                &quot;file.c.~1~&quot; &quot;file.c&quot;)
-</pre><pre class="example">
-</pre><pre class="example">(file-name-all-completions &quot;fo&quot; &quot;&quot;)
-     &rArr; (&quot;foo&quot;)
-</pre></div>
-</dd></dl>
+  <p>This section describes low-level subroutines for completing a
+  file name. For higher level functions, see <a href=
+  "Reading-File-Names.html#Reading-File-Names">Reading File
+  Names</a>.</p>
 
-<dl>
-<dt><a name="index-file_002dname_002dcompletion"></a>Function: <strong>file-name-completion</strong> <em>filename directory &amp;optional predicate</em></dt>
-<dd><p>This function completes the file name <var>filename</var> in directory
-<var>directory</var>.  It returns the longest prefix common to all file names
-in directory <var>directory</var> that start with <var>filename</var>.  If
-<var>predicate</var> is non-<code>nil</code> then it ignores possible completions
-that don&rsquo;t satisfy <var>predicate</var>, after calling that function
-with one argument, the expanded absolute file name.
-</p>
-<p>If only one match exists and <var>filename</var> matches it exactly, the
-function returns <code>t</code>.  The function returns <code>nil</code> if directory
-<var>directory</var> contains no name starting with <var>filename</var>.
-</p>
-<p>In the following example, suppose that the current default directory
-has five files whose names begin with &lsquo;<samp>f</samp>&rsquo;: <samp>foo</samp>,
-<samp>file~</samp>, <samp>file.c</samp>, <samp>file.c.~1~</samp>, and
-<samp>file.c.~2~</samp>.
-</p>
-<div class="example">
-<pre class="example">(file-name-completion &quot;fi&quot; &quot;&quot;)
-     &rArr; &quot;file&quot;
-</pre><pre class="example">
-</pre><pre class="example">(file-name-completion &quot;file.c.~1&quot; &quot;&quot;)
-     &rArr; &quot;file.c.~1~&quot;
-</pre><pre class="example">
-</pre><pre class="example">(file-name-completion &quot;file.c.~1~&quot; &quot;&quot;)
+  <dl>
+    <dt><a name="index-file_002dname_002dall_002dcompletions" id=
+    "index-file_002dname_002dall_002dcompletions"></a>Function:
+    <strong>file-name-all-completions</strong> <em>partial-filename
+    directory</em></dt>
+
+    <dd>
+      <p>This function returns a list of all possible completions
+      for a file whose name starts with <var>partial-filename</var>
+      in directory <var>directory</var>. The order of the
+      completions is the order of the files in the directory, which
+      is unpredictable and conveys no useful information.</p>
+
+      <p>The argument <var>partial-filename</var> must be a file
+      name containing no directory part and no slash (or backslash
+      on some systems). The current buffer&rsquo;s default
+      directory is prepended to <var>directory</var>, if
+      <var>directory</var> is not absolute.</p>
+
+      <p>In the following example, suppose that
+      <samp>~rms/lewis</samp> is the current default directory, and
+      has five files whose names begin with
+      &lsquo;<samp>f</samp>&rsquo;: <samp>foo</samp>,
+      <samp>file~</samp>, <samp>file.c</samp>,
+      <samp>file.c.~1~</samp>, and <samp>file.c.~2~</samp>.</p>
+
+      <div class="example">
+        <pre class="example">
+(file-name-all-completions "f" "")
+     &rArr; ("foo" "file~" "file.c.~2~"
+                "file.c.~1~" "file.c")
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(file-name-all-completions "fo" "")
+     &rArr; ("foo")
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-file_002dname_002dcompletion" id=
+    "index-file_002dname_002dcompletion"></a>Function:
+    <strong>file-name-completion</strong> <em>filename directory
+    &amp;optional predicate</em></dt>
+
+    <dd>
+      <p>This function completes the file name <var>filename</var>
+      in directory <var>directory</var>. It returns the longest
+      prefix common to all file names in directory
+      <var>directory</var> that start with <var>filename</var>. If
+      <var>predicate</var> is non-<code>nil</code> then it ignores
+      possible completions that don&rsquo;t satisfy
+      <var>predicate</var>, after calling that function with one
+      argument, the expanded absolute file name.</p>
+
+      <p>If only one match exists and <var>filename</var> matches
+      it exactly, the function returns <code>t</code>. The function
+      returns <code>nil</code> if directory <var>directory</var>
+      contains no name starting with <var>filename</var>.</p>
+
+      <p>In the following example, suppose that the current default
+      directory has five files whose names begin with
+      &lsquo;<samp>f</samp>&rsquo;: <samp>foo</samp>,
+      <samp>file~</samp>, <samp>file.c</samp>,
+      <samp>file.c.~1~</samp>, and <samp>file.c.~2~</samp>.</p>
+
+      <div class="example">
+        <pre class="example">
+(file-name-completion "fi" "")
+     &rArr; "file"
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(file-name-completion "file.c.~1" "")
+     &rArr; "file.c.~1~"
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(file-name-completion "file.c.~1~" "")
      &rArr; t
-</pre><pre class="example">
-</pre><pre class="example">(file-name-completion &quot;file.c.~3&quot; &quot;&quot;)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(file-name-completion "file.c.~3" "")
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-completion_002dignored_002dextensions"></a>User Option: <strong>completion-ignored-extensions</strong></dt>
-<dd><p><code>file-name-completion</code> usually ignores file names that end in any
-string in this list.  It does not ignore them when all the possible
-completions end in one of these suffixes.  This variable has no effect
-on <code>file-name-all-completions</code>.
-</p>
-<p>A typical value might look like this:
-</p>
-<div class="example">
-<pre class="example">completion-ignored-extensions
-     &rArr; (&quot;.o&quot; &quot;.elc&quot; &quot;~&quot; &quot;.dvi&quot;)
-</pre></div>
+  <dl>
+    <dt><a name="index-completion_002dignored_002dextensions" id=
+    "index-completion_002dignored_002dextensions"></a>User Option:
+    <strong>completion-ignored-extensions</strong></dt>
 
-<p>If an element of <code>completion-ignored-extensions</code> ends in a slash
-&lsquo;<samp>/</samp>&rsquo;, it signals a directory.  The elements which do <em>not</em> end
-in a slash will never match a directory; thus, the above value will not
-filter out a directory named <samp>foo.elc</samp>.
-</p></dd></dl>
+    <dd>
+      <p><code>file-name-completion</code> usually ignores file
+      names that end in any string in this list. It does not ignore
+      them when all the possible completions end in one of these
+      suffixes. This variable has no effect on
+      <code>file-name-all-completions</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Standard-File-Names.html#Standard-File-Names" accesskey="n" rel="next">Standard File Names</a>, Previous: <a href="Unique-File-Names.html#Unique-File-Names" accesskey="p" rel="prev">Unique File Names</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>A typical value might look like this:</p>
 
+      <div class="example">
+        <pre class="example">
+completion-ignored-extensions
+     &rArr; (".o" ".elc" "~" ".dvi")
+</pre>
+      </div>
 
+      <p>If an element of
+      <code>completion-ignored-extensions</code> ends in a slash
+      &lsquo;<samp>/</samp>&rsquo;, it signals a directory. The
+      elements which do <em>not</em> end in a slash will never
+      match a directory; thus, the above value will not filter out
+      a directory named <samp>foo.elc</samp>.</p>
+    </dd>
+  </dl>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Standard-File-Names.html#Standard-File-Names"
+    accesskey="n" rel="next">Standard File Names</a>, Previous:
+    <a href="Unique-File-Names.html#Unique-File-Names" accesskey=
+    "p" rel="prev">Unique File Names</a>, Up: <a href=
+    "File-Names.html#File-Names" accesskey="u" rel="up">File
+    Names</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

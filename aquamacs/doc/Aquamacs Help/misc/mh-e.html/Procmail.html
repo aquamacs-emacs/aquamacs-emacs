@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is version 8.6 of The MH-E
 Manual, last updated 2016-04-29.
 
@@ -25,85 +27,120 @@ copy of the license is included in the section entitled "GNU General
 Public License."
  -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The MH-E Manual: Procmail</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The MH-E Manual: Procmail">
-<meta name="keywords" content="The MH-E Manual: Procmail">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Odds-and-Ends.html#Odds-and-Ends" rel="next" title="Odds and Ends">
-<link href="Scan-Line-Formats.html#Scan-Line-Formats" rel="prev" title="Scan Line Formats">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The MH-E Manual: Procmail</title>
+  <meta name="description" content="The MH-E Manual: Procmail" />
+  <meta name="keywords" content="The MH-E Manual: Procmail" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Odds-and-Ends.html#Odds-and-Ends" rel="next" title=
+  "Odds and Ends" />
+  <link href="Scan-Line-Formats.html#Scan-Line-Formats" rel="prev"
+  title="Scan Line Formats" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Procmail"></a>
-<div class="header">
-<p>
-Next: <a href="Odds-and-Ends.html#Odds-and-Ends" accesskey="n" rel="next">Odds and Ends</a>, Previous: <a href="Scan-Line-Formats.html#Scan-Line-Formats" accesskey="p" rel="prev">Scan Line Formats</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Reading-Mailing-Lists-Effectively"></a>
-<h2 class="appendix">Appendix B Reading Mailing Lists Effectively</h2>
+<body lang="en" xml:lang="en">
+  <a name="Procmail" id="Procmail"></a>
 
-<a name="index-procmail-3"></a>
-<a name="index-slocal"></a>
-<a name="index-Gnus-2"></a>
-<a name="index-MH-commands_002c-slocal"></a>
-<a name="index-Unix-commands_002c-procmail-3"></a>
-<a name="index-mailing-lists_002c-reading"></a>
+  <div class="header">
+    <p>Next: <a href="Odds-and-Ends.html#Odds-and-Ends" accesskey=
+    "n" rel="next">Odds and Ends</a>, Previous: <a href=
+    "Scan-Line-Formats.html#Scan-Line-Formats" accesskey="p" rel=
+    "prev">Scan Line Formats</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Reading-Mailing-Lists-Effectively" id=
+  "Reading-Mailing-Lists-Effectively"></a>
 
-<p>This appendix explains how to use <a href="http://www.procmail.org/">procmail</a> to file mail from mailing lists into folders which can then
-be read easily with MH-E<a name="DOCF57" href="#FOOT57"><sup>57</sup></a>. Some mailing lists have such
-high traffic that Gnus must be used and I discuss how to use Gnus
-side-by-side with MH-E.
-</p>
-<a name="index-_002eprocmailrc-2"></a>
-<a name="index-files_002c-_002eprocmailrc-2"></a>
+  <h2 class="appendix">Appendix B Reading Mailing Lists
+  Effectively</h2><a name="index-procmail-3" id=
+  "index-procmail-3"></a> <a name="index-slocal" id=
+  "index-slocal"></a> <a name="index-Gnus-2" id="index-Gnus-2"></a>
+  <a name="index-MH-commands_002c-slocal" id=
+  "index-MH-commands_002c-slocal"></a> <a name=
+  "index-Unix-commands_002c-procmail-3" id=
+  "index-Unix-commands_002c-procmail-3"></a> <a name=
+  "index-mailing-lists_002c-reading" id=
+  "index-mailing-lists_002c-reading"></a>
 
-<p>First, I&rsquo;ll describe how to put mail from your mailing lists directly
-into an MH folder using <code>procmail</code>. First, add the following
-to <samp>~/.procmailrc</samp>. While the logging variables aren&rsquo;t strictly
-necessary, they are extremely useful.
-</p>
-<div class="smallexample">
-<pre class="smallexample">[1]  # Update PATH so procmail can find myrcvstore, rcvstore and mhparam.
+  <p>This appendix explains how to use <a href=
+  "http://www.procmail.org/">procmail</a> to file mail from mailing
+  lists into folders which can then be read easily with
+  MH-E<a name="DOCF57" href="#FOOT57" id=
+  "DOCF57"><sup>57</sup></a>. Some mailing lists have such high
+  traffic that Gnus must be used and I discuss how to use Gnus
+  side-by-side with MH-E.</p><a name="index-_002eprocmailrc-2" id=
+  "index-_002eprocmailrc-2"></a> <a name=
+  "index-files_002c-_002eprocmailrc-2" id=
+  "index-files_002c-_002eprocmailrc-2"></a>
+
+  <p>First, I&rsquo;ll describe how to put mail from your mailing
+  lists directly into an MH folder using <code>procmail</code>.
+  First, add the following to <samp>~/.procmailrc</samp>. While the
+  logging variables aren&rsquo;t strictly necessary, they are
+  extremely useful.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+[1]  # Update PATH so procmail can find myrcvstore, rcvstore and mhparam.
 [2]  PATH=$PATH:/usr/lib/mh:/usr/bin/mh:$HOME/bin
 [3]
 [4]  # Point LOGFILE at the actual log file.
@@ -119,36 +156,41 @@ necessary, they are extremely useful.
 [14] :0 w: mh-e$LOCKEXT
 [15] * ^TO.*mh-e-.*@.*sourceforge.net
 [16] | myrcvstore -create +mh-e
-</pre></div>
+</pre>
+  </div><a name="index-rcvstore" id="index-rcvstore"></a> <a name=
+  "index-MH-commands_002c-rcvstore" id=
+  "index-MH-commands_002c-rcvstore"></a>
 
-<a name="index-rcvstore"></a>
-<a name="index-MH-commands_002c-rcvstore"></a>
+  <p>Line 14 creates a lock file in your mail directory based upon
+  the name of the folder. This is done because
+  <code>rcvstore</code> does not perform locking. While this lock
+  file will prevent <code>procmail</code> from writing to a folder
+  concurrently, there is a slight chance that you might lose a
+  message if you&rsquo;re performing operations on a folder at the
+  same time <code>rcvstore</code> is placing a message there. You
+  have been warned. Now that that disclaimer is out of the way,
+  note that I&rsquo;ve been using this set-up for over a decade and
+  haven&rsquo;t lost anything to my knowledge<a name="DOCF58" href=
+  "#FOOT58" id="DOCF58"><sup>58</sup></a>.</p><a name=
+  "index-Unseen_002dSequence-MH-profile-component-2" id=
+  "index-Unseen_002dSequence-MH-profile-component-2"></a> <a name=
+  "index-MH-profile-component_002c-Unseen_002dSequence-2" id=
+  "index-MH-profile-component_002c-Unseen_002dSequence-2"></a>
 
-<p>Line 14 creates a lock file in your mail directory based upon the name
-of the folder. This is done because <code>rcvstore</code> does not
-perform locking. While this lock file will prevent <code>procmail</code>
-from writing to a folder concurrently, there is a slight chance that
-you might lose a message if you&rsquo;re performing operations on a folder
-at the same time <code>rcvstore</code> is placing a message there. You
-have been warned. Now that that disclaimer is out of the way, note
-that I&rsquo;ve been using this set-up for over a decade and haven&rsquo;t lost
-anything to my knowledge<a name="DOCF58" href="#FOOT58"><sup>58</sup></a>.
-</p>
-<a name="index-Unseen_002dSequence-MH-profile-component-2"></a>
-<a name="index-MH-profile-component_002c-Unseen_002dSequence-2"></a>
+  <p>Line 16 uses the following script, <code>myrcvstore</code>, to
+  massage the message as described in the comment and file the
+  message in the given folder<a name="DOCF59" href="#FOOT59" id=
+  "DOCF59"><sup>59</sup></a>.</p>
 
-<p>Line 16 uses the following script, <code>myrcvstore</code>, to massage the
-message as described in the comment and file the message in the given
-folder<a name="DOCF59" href="#FOOT59"><sup>59</sup></a>.
-</p>
-<div class="smallexample">
-<pre class="smallexample">#! /bin/sh
+  <div class="smallexample">
+    <pre class="smallexample">
+#! /bin/sh
 
 # Accepts a message on standard input and passes it through rcvstore
 # after first passing it through any filters. All arguments are passed
 # on to rcvstore.
 
-# Force the &quot;From user date&quot; to become part of header. One reason this
+# Force the "From user date" to become part of header. One reason this
 # is done is because the presence of the From field confuses dist so
 # that dist adds a new header, rather than using the existing header.
 # Note that this should not be done for any message that goes into a
@@ -157,110 +199,147 @@ folder<a name="DOCF59" href="#FOOT59"><sup>59</sup></a>.
 # entire mailbox will be incorporated as a single message.
 formail -c -z -R 'From ' X-Envelope-From: |
 rcvstore $@
-</pre></div>
+</pre>
+  </div>
 
-<p>If your version of <code>rcvstore</code> doesn&rsquo;t add messages to the
-&lsquo;<samp>unseen</samp>&rsquo; sequence by default, add the following line to your MH
-profile:
-</p>
-<div class="smallexample">
-<pre class="smallexample">Unseen-Sequence: unseen
-</pre></div>
+  <p>If your version of <code>rcvstore</code> doesn&rsquo;t add
+  messages to the &lsquo;<samp>unseen</samp>&rsquo; sequence by
+  default, add the following line to your MH profile:</p>
 
-<p>Now view your new messages with the speedbar (see <a href="Speedbar.html#Speedbar">Speedbar</a>) or with
-<kbd>F n</kbd> (<code>mh-index-new-messages</code>). See <a href="Folders.html#Folders">Folders</a>.
-</p>
-<p>If you&rsquo;re on a mailing list that is so voluminous that it is
-impossible to read every message, it usually better to read the
-mailing list like a newsgroup in a news reader. Emacs has a built-in
-newsreader called Gnus. The remainder of this appendix talks about how
-to use Gnus with an MH message store. The version of Gnus that was
-used to prepare this manual was 5.10. Versions 5.8 through 5.10 should
-work but versions prior to 5.8 use different options.
-</p>
-<p>This table contains a list of Gnus options that you will have to
-modify. Note that for them to become accessible, you&rsquo;ll have to load
-<samp>nnml.el</samp> first. This can be done with <kbd>M-x load-library
-<span class="key">RET</span> nnml <span class="key">RET</span></kbd>.
-</p>
-<dl compact="compact">
-<dt><code>gnus-secondary-select-methods</code>
-<a name="index-gnus_002dsecondary_002dselect_002dmethods"></a>
-</dt>
-<dd><p>Select the &lsquo;<samp>nnml</samp>&rsquo; value. This select method uses directories for
-folders and individual files for messages, just like MH. You do not
-have to set an address.
-</p></dd>
-<dt><code>mail-sources</code>
-<a name="index-mail_002dsources"></a>
-</dt>
-<dd><p>Select the &lsquo;<samp>Several files in a directory</samp>&rsquo; value, check the
-&lsquo;<samp>Path</samp>&rsquo; box and enter <samp>~/Mail</samp> to tell Gnus where to find
-your mail.
-<a name="index-mail_002duser_002dagent-1"></a>
-</p></dd>
-<dt><code>message-mail-user-agent</code>
-<a name="index-message_002dmail_002duser_002dagent"></a>
-</dt>
-<dd><p>In order to send mail within Gnus using MH-E, set this option to
-&lsquo;<samp>mail-user-agent</samp>&rsquo; and set the <code>mail-user-agent</code> option to
-&lsquo;<samp>Emacs interface to MH</samp>&rsquo;.
-</p></dd>
-<dt><code>nnmail-keep-last-article</code>
-<a name="index-nnmail_002dkeep_002dlast_002darticle"></a>
-</dt>
-<dd><p>Since Gnus keeps track of which messages you have read, it would be
-bad if Gnus expired the last message, for example, message 100, and
-<code>rcvstore</code> gave the next new message number 1. Gnus would then
-ignore it since it thinks that you&rsquo;ve read messages 1&ndash;100. Turning on
-this option ensures that the last message is never removed thereby
-eliminating this problem.
-</p></dd>
-</dl>
+  <div class="smallexample">
+    <pre class="smallexample">
+Unseen-Sequence: unseen
+</pre>
+  </div>
 
-<p>Next add the following to <samp>~/.procmailrc</samp>. If you don&rsquo;t subscribe
-to the GnuCash mailing list, substitute one to which you are
-subscribed.
-</p>
-<div class="smallexample">
-<pre class="smallexample">PATH=$PATH:/usr/bin/mh
+  <p>Now view your new messages with the speedbar (see <a href=
+  "Speedbar.html#Speedbar">Speedbar</a>) or with <kbd>F n</kbd>
+  (<code>mh-index-new-messages</code>). See <a href=
+  "Folders.html#Folders">Folders</a>.</p>
+
+  <p>If you&rsquo;re on a mailing list that is so voluminous that
+  it is impossible to read every message, it usually better to read
+  the mailing list like a newsgroup in a news reader. Emacs has a
+  built-in newsreader called Gnus. The remainder of this appendix
+  talks about how to use Gnus with an MH message store. The version
+  of Gnus that was used to prepare this manual was 5.10. Versions
+  5.8 through 5.10 should work but versions prior to 5.8 use
+  different options.</p>
+
+  <p>This table contains a list of Gnus options that you will have
+  to modify. Note that for them to become accessible, you&rsquo;ll
+  have to load <samp>nnml.el</samp> first. This can be done with
+  <kbd>M-x load-library <span class="key">RET</span> nnml
+  <span class="key">RET</span></kbd>.</p>
+
+  <dl compact="compact">
+    <dt><code>gnus-secondary-select-methods</code> <a name=
+    "index-gnus_002dsecondary_002dselect_002dmethods" id=
+    "index-gnus_002dsecondary_002dselect_002dmethods"></a></dt>
+
+    <dd>
+      <p>Select the &lsquo;<samp>nnml</samp>&rsquo; value. This
+      select method uses directories for folders and individual
+      files for messages, just like MH. You do not have to set an
+      address.</p>
+    </dd>
+
+    <dt><code>mail-sources</code> <a name="index-mail_002dsources"
+    id="index-mail_002dsources"></a></dt>
+
+    <dd>
+      <p>Select the &lsquo;<samp>Several files in a
+      directory</samp>&rsquo; value, check the
+      &lsquo;<samp>Path</samp>&rsquo; box and enter
+      <samp>~/Mail</samp> to tell Gnus where to find your mail.
+      <a name="index-mail_002duser_002dagent-1" id=
+      "index-mail_002duser_002dagent-1"></a></p>
+    </dd>
+
+    <dt><code>message-mail-user-agent</code> <a name=
+    "index-message_002dmail_002duser_002dagent" id=
+    "index-message_002dmail_002duser_002dagent"></a></dt>
+
+    <dd>
+      <p>In order to send mail within Gnus using MH-E, set this
+      option to &lsquo;<samp>mail-user-agent</samp>&rsquo; and set
+      the <code>mail-user-agent</code> option to &lsquo;<samp>Emacs
+      interface to MH</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><code>nnmail-keep-last-article</code> <a name=
+    "index-nnmail_002dkeep_002dlast_002darticle" id=
+    "index-nnmail_002dkeep_002dlast_002darticle"></a></dt>
+
+    <dd>
+      <p>Since Gnus keeps track of which messages you have read, it
+      would be bad if Gnus expired the last message, for example,
+      message 100, and <code>rcvstore</code> gave the next new
+      message number 1. Gnus would then ignore it since it thinks
+      that you&rsquo;ve read messages 1&ndash;100. Turning on this
+      option ensures that the last message is never removed thereby
+      eliminating this problem.</p>
+    </dd>
+  </dl>
+
+  <p>Next add the following to <samp>~/.procmailrc</samp>. If you
+  don&rsquo;t subscribe to the GnuCash mailing list, substitute one
+  to which you are subscribed.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+PATH=$PATH:/usr/bin/mh
 MAILDIR=$HOME/`mhparam Path`
 # Place mail sent to the GnuCash mailing list in gnucash.spool, where
 # Gnus will pick it up.
 :0:
 * ^TO.*gnucash.*@.*gnucash.org
 gnucash.spool
-</pre></div>
+</pre>
+  </div>
 
-<p>Wait for some messages to appear in <samp>gnucash.spool</samp> and run Gnus
-with <kbd>M-x gnus <span class="key">RET</span></kbd>. To view the folder created in the
-example above, you would tell Gnus about it the first time only with
-<kbd>G m gnucash <span class="key">RET</span> nnml <span class="key">RET</span></kbd>. In MH-E, this folder is
-known as &lsquo;<samp>+gnucash</samp>&rsquo;.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>Wait for some messages to appear in <samp>gnucash.spool</samp>
+  and run Gnus with <kbd>M-x gnus <span class=
+  "key">RET</span></kbd>. To view the folder created in the example
+  above, you would tell Gnus about it the first time only with
+  <kbd>G m gnucash <span class="key">RET</span> nnml <span class=
+  "key">RET</span></kbd>. In MH-E, this folder is known as
+  &lsquo;<samp>+gnucash</samp>&rsquo;.</p>
 
-<h3><a name="FOOT57" href="#DOCF57">(57)</a></h3>
-<p>The MH equivalent, <code>slocal</code>,
-can be used as well, but procmail is more flexible and more packages
-exist for procmail than for slocal.</p>
-<h3><a name="FOOT58" href="#DOCF58">(58)</a></h3>
-<p>See
-<a href="https://savannah.nongnu.org/bugs/?func=detailbug&amp;bug_id=4361&amp;group_id=2166">Savannah issue #4361</a> to see if <code>rcvstore</code> locking is still an
-issue.</p>
-<h3><a name="FOOT59" href="#DOCF59">(59)</a></h3>
-<p>The &lsquo;<samp>-create</samp>&rsquo; argument wasn&rsquo;t always the default
-to <code>rcvstore</code>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Odds-and-Ends.html#Odds-and-Ends" accesskey="n" rel="next">Odds and Ends</a>, Previous: <a href="Scan-Line-Formats.html#Scan-Line-Formats" accesskey="p" rel="prev">Scan Line Formats</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT57" href="#DOCF57" id="FOOT57">(57)</a></h3>
 
+    <p>The MH equivalent, <code>slocal</code>, can be used as well,
+    but procmail is more flexible and more packages exist for
+    procmail than for slocal.</p>
+
+    <h3><a name="FOOT58" href="#DOCF58" id="FOOT58">(58)</a></h3>
+
+    <p>See <a href=
+    "https://savannah.nongnu.org/bugs/?func=detailbug&amp;bug_id=4361&amp;group_id=2166">
+    Savannah issue #4361</a> to see if <code>rcvstore</code>
+    locking is still an issue.</p>
+
+    <h3><a name="FOOT59" href="#DOCF59" id="FOOT59">(59)</a></h3>
+
+    <p>The &lsquo;<samp>-create</samp>&rsquo; argument wasn&rsquo;t
+    always the default to <code>rcvstore</code>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Odds-and-Ends.html#Odds-and-Ends" accesskey=
+    "n" rel="next">Odds and Ends</a>, Previous: <a href=
+    "Scan-Line-Formats.html#Scan-Line-Formats" accesskey="p" rel=
+    "prev">Scan Line Formats</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

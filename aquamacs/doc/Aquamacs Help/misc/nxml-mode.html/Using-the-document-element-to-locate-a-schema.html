@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents nXML mode, an Emacs major mode for editing
 XML with RELAX NG support.
 
@@ -15,88 +17,131 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>nXML Mode: Using the document element to locate a schema</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="nXML Mode: Using the document element to locate a schema">
-<meta name="keywords" content="nXML Mode: Using the document element to locate a schema">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Schema-locating-files.html#Schema-locating-files" rel="up" title="Schema locating files">
-<link href="Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files" rel="next" title="Using type identifiers in schema locating files">
-<link href="Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema" rel="prev" title="Using the document's URI to locate a schema">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>nXML Mode: Using the document element to locate a
+  schema</title>
+  <meta name="description" content=
+  "nXML Mode: Using the document element to locate a schema" />
+  <meta name="keywords" content=
+  "nXML Mode: Using the document element to locate a schema" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Schema-locating-files.html#Schema-locating-files"
+  rel="up" title="Schema locating files" />
+  <link href=
+  "Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files"
+  rel="next" title=
+  "Using type identifiers in schema locating files" />
+  <link href=
+  "Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema"
+  rel="prev" title="Using the document's URI to locate a schema" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-the-document-element-to-locate-a-schema"></a>
-<div class="header">
-<p>
-Next: <a href="Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files" accesskey="n" rel="next">Using type identifiers in schema locating files</a>, Previous: <a href="Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema" accesskey="p" rel="prev">Using the document's URI to locate a schema</a>, Up: <a href="Schema-locating-files.html#Schema-locating-files" accesskey="u" rel="up">Schema locating files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Using-the-document-element-to-locate-a-schema-1"></a>
-<h4 class="subsection">6.2.3 Using the document element to locate a schema</h4>
+<body lang="en" xml:lang="en">
+  <a name="Using-the-document-element-to-locate-a-schema" id=
+  "Using-the-document-element-to-locate-a-schema"></a>
 
-<p>A &lsquo;<samp>documentElement</samp>&rsquo; rule locates a schema based on
-the local name and prefix of the document element. For example, a rule
-</p>
-<div class="example">
-<pre class="example">&lt;documentElement prefix=&quot;xsl&quot; localName=&quot;stylesheet&quot; uri=&quot;xslt.rnc&quot;/&gt;
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files"
+    accesskey="n" rel="next">Using type identifiers in schema
+    locating files</a>, Previous: <a href=
+    "Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema"
+    accesskey="p" rel="prev">Using the document's URI to locate a
+    schema</a>, Up: <a href=
+    "Schema-locating-files.html#Schema-locating-files" accesskey=
+    "u" rel="up">Schema locating files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-the-document-element-to-locate-a-schema-1" id=
+  "Using-the-document-element-to-locate-a-schema-1"></a>
 
-<p>specifies that when the name of the document element is
-&lsquo;<samp>xsl:stylesheet</samp>&rsquo;, then &lsquo;<samp>xslt.rnc</samp>&rsquo; should be used
-as the schema. Either the &lsquo;<samp>prefix</samp>&rsquo; or
-&lsquo;<samp>localName</samp>&rsquo; attribute may be omitted to allow any prefix or
-local name.
-</p>
-<p>A &lsquo;<samp>namespace</samp>&rsquo; rule locates a schema based on the
-namespace URI of the document element. For example, a rule
-</p>
-<div class="example">
-<pre class="example">&lt;namespace ns=&quot;http://www.w3.org/1999/XSL/Transform&quot; uri=&quot;xslt.rnc&quot;/&gt;
-</pre></div>
+  <h4 class="subsection">6.2.3 Using the document element to locate
+  a schema</h4>
 
-<p>specifies that when the namespace URI of the document is
-&lsquo;<samp>http://www.w3.org/1999/XSL/Transform</samp>&rsquo;, then
-&lsquo;<samp>xslt.rnc</samp>&rsquo; should be used as the schema.
-</p>
+  <p>A &lsquo;<samp>documentElement</samp>&rsquo; rule locates a
+  schema based on the local name and prefix of the document
+  element. For example, a rule</p>
 
+  <div class="example">
+    <pre class="example">
+&lt;documentElement prefix="xsl" localName="stylesheet" uri="xslt.rnc"/&gt;
+</pre>
+  </div>
 
+  <p>specifies that when the name of the document element is
+  &lsquo;<samp>xsl:stylesheet</samp>&rsquo;, then
+  &lsquo;<samp>xslt.rnc</samp>&rsquo; should be used as the schema.
+  Either the &lsquo;<samp>prefix</samp>&rsquo; or
+  &lsquo;<samp>localName</samp>&rsquo; attribute may be omitted to
+  allow any prefix or local name.</p>
 
+  <p>A &lsquo;<samp>namespace</samp>&rsquo; rule locates a schema
+  based on the namespace URI of the document element. For example,
+  a rule</p>
+
+  <div class="example">
+    <pre class="example">
+&lt;namespace ns="http://www.w3.org/1999/XSL/Transform" uri="xslt.rnc"/&gt;
+</pre>
+  </div>
+
+  <p>specifies that when the namespace URI of the document is
+  &lsquo;<samp>http://www.w3.org/1999/XSL/Transform</samp>&rsquo;,
+  then &lsquo;<samp>xslt.rnc</samp>&rsquo; should be used as the
+  schema.</p>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,95 +18,130 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Saving Into Registers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Saving Into Registers">
-<meta name="keywords" content="GNU Emacs Calc Manual: Saving Into Registers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Kill-and-Yank.html#Kill-and-Yank" rel="up" title="Kill and Yank">
-<link href="Inserting-From-Registers.html#Inserting-From-Registers" rel="next" title="Inserting From Registers">
-<link href="Yanking-Into-Stack.html#Yanking-Into-Stack" rel="prev" title="Yanking Into Stack">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Saving Into Registers</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Saving Into Registers" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Saving Into Registers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Kill-and-Yank.html#Kill-and-Yank" rel="up" title=
+  "Kill and Yank" />
+  <link href=
+  "Inserting-From-Registers.html#Inserting-From-Registers" rel=
+  "next" title="Inserting From Registers" />
+  <link href="Yanking-Into-Stack.html#Yanking-Into-Stack" rel=
+  "prev" title="Yanking Into Stack" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Saving-Into-Registers"></a>
-<div class="header">
-<p>
-Next: <a href="Inserting-From-Registers.html#Inserting-From-Registers" accesskey="n" rel="next">Inserting From Registers</a>, Previous: <a href="Yanking-Into-Stack.html#Yanking-Into-Stack" accesskey="p" rel="prev">Yanking Into Stack</a>, Up: <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Saving-into-Registers"></a>
-<h3 class="section">14.3 Saving into Registers</h3>
+<body lang="en" xml:lang="en">
+  <a name="Saving-Into-Registers" id="Saving-Into-Registers"></a>
 
-<a name="index-r-s"></a>
-<a name="index-calc_002dcopy_002dto_002dregister"></a>
-<a name="index-calc_002dprepend_002dto_002dregister"></a>
-<a name="index-calc_002dappend_002dto_002dregister"></a>
-<a name="index-Registers"></a>
-<p>An alternative to killing and yanking stack entries is using
-registers in Calc.  Saving stack entries in registers is like
-saving text in normal Emacs registers; although, like Calc&rsquo;s kill
-commands, register commands always operate on whole stack
-entries.
-</p>
-<p>Registers in Calc are places to store stack entries for later use;
-each register is indexed by a single character.  To store the current
-region (rounded up, of course, to include full stack entries) into a
-register, use the command <kbd>r s</kbd> (<code>calc-copy-to-register</code>).
-You will then be prompted for a register to use, the next character
-you type will be the index for the register.  To store the region in
-register <var>r</var>, the full command will be <kbd>r s <var>r</var></kbd>.  With an
-argument, <kbd>C-u r s <var>r</var></kbd>, the region being copied to the
-register will be deleted from the Calc buffer.
-</p>
-<p>It is possible to add additional stack entries to a register.  The
-command <kbd>M-x calc-append-to-register</kbd> will prompt for a register,
-then add the stack entries in the region to the end of the register
-contents. The command <kbd>M-x calc-prepend-to-register</kbd> will
-similarly prompt for a register and add  the stack entries in the
-region to the beginning of the register contents.  Both commands take
-<kbd>C-u</kbd> arguments, which will cause the region to be deleted after being
-added to the register.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Inserting-From-Registers.html#Inserting-From-Registers"
+    accesskey="n" rel="next">Inserting From Registers</a>,
+    Previous: <a href="Yanking-Into-Stack.html#Yanking-Into-Stack"
+    accesskey="p" rel="prev">Yanking Into Stack</a>, Up: <a href=
+    "Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill
+    and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Saving-into-Registers" id="Saving-into-Registers"></a>
 
+  <h3 class="section">14.3 Saving into Registers</h3><a name=
+  "index-r-s" id="index-r-s"></a> <a name=
+  "index-calc_002dcopy_002dto_002dregister" id=
+  "index-calc_002dcopy_002dto_002dregister"></a> <a name=
+  "index-calc_002dprepend_002dto_002dregister" id=
+  "index-calc_002dprepend_002dto_002dregister"></a> <a name=
+  "index-calc_002dappend_002dto_002dregister" id=
+  "index-calc_002dappend_002dto_002dregister"></a> <a name=
+  "index-Registers" id="index-Registers"></a>
 
+  <p>An alternative to killing and yanking stack entries is using
+  registers in Calc. Saving stack entries in registers is like
+  saving text in normal Emacs registers; although, like
+  Calc&rsquo;s kill commands, register commands always operate on
+  whole stack entries.</p>
 
+  <p>Registers in Calc are places to store stack entries for later
+  use; each register is indexed by a single character. To store the
+  current region (rounded up, of course, to include full stack
+  entries) into a register, use the command <kbd>r s</kbd>
+  (<code>calc-copy-to-register</code>). You will then be prompted
+  for a register to use, the next character you type will be the
+  index for the register. To store the region in register
+  <var>r</var>, the full command will be <kbd>r s
+  <var>r</var></kbd>. With an argument, <kbd>C-u r s
+  <var>r</var></kbd>, the region being copied to the register will
+  be deleted from the Calc buffer.</p>
+
+  <p>It is possible to add additional stack entries to a register.
+  The command <kbd>M-x calc-append-to-register</kbd> will prompt
+  for a register, then add the stack entries in the region to the
+  end of the register contents. The command <kbd>M-x
+  calc-prepend-to-register</kbd> will similarly prompt for a
+  register and add the stack entries in the region to the beginning
+  of the register contents. Both commands take <kbd>C-u</kbd>
+  arguments, which will cause the region to be deleted after being
+  added to the register.</p>
 </body>
 </html>

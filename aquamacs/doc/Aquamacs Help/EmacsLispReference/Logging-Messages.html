@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,122 +19,183 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Logging Messages</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Logging Messages">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Logging Messages">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-Echo-Area.html#The-Echo-Area" rel="up" title="The Echo Area">
-<link href="Echo-Area-Customization.html#Echo-Area-Customization" rel="next" title="Echo Area Customization">
-<link href="Progress.html#Progress" rel="prev" title="Progress">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Logging Messages</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Logging Messages" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Logging Messages" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-Echo-Area.html#The-Echo-Area" rel="up" title=
+  "The Echo Area" />
+  <link href="Echo-Area-Customization.html#Echo-Area-Customization"
+  rel="next" title="Echo Area Customization" />
+  <link href="Progress.html#Progress" rel="prev" title=
+  "Progress" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Logging-Messages" id="Logging-Messages"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Echo-Area-Customization.html#Echo-Area-Customization"
+    accesskey="n" rel="next">Echo Area Customization</a>, Previous:
+    <a href="Progress.html#Progress" accesskey="p" rel=
+    "prev">Progress</a>, Up: <a href=
+    "The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The
+    Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Logging-Messages-in-_002aMessages_002a" id=
+  "Logging-Messages-in-_002aMessages_002a"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Logging-Messages"></a>
-<div class="header">
-<p>
-Next: <a href="Echo-Area-Customization.html#Echo-Area-Customization" accesskey="n" rel="next">Echo Area Customization</a>, Previous: <a href="Progress.html#Progress" accesskey="p" rel="prev">Progress</a>, Up: <a href="The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Logging-Messages-in-_002aMessages_002a"></a>
-<h4 class="subsection">37.4.3 Logging Messages in <samp>*Messages*</samp></h4>
-<a name="index-logging-echo_002darea-messages"></a>
+  <h4 class="subsection">37.4.3 Logging Messages in
+  <samp>*Messages*</samp></h4><a name=
+  "index-logging-echo_002darea-messages" id=
+  "index-logging-echo_002darea-messages"></a>
 
-<p>Almost all the messages displayed in the echo area are also recorded
-in the <samp>*Messages*</samp> buffer so that the user can refer back to
-them.  This includes all the messages that are output with
-<code>message</code>.  By default, this buffer is read-only and uses the major
-mode <code>messages-buffer-mode</code>.  Nothing prevents the user from
-killing the <samp>*Messages*</samp> buffer, but the next display of a message
-recreates it.  Any Lisp code that needs to access the
-<samp>*Messages*</samp> buffer directly and wants to ensure that it exists
-should use the function <code>messages-buffer</code>.
-</p>
-<dl>
-<dt><a name="index-messages_002dbuffer"></a>Function: <strong>messages-buffer</strong></dt>
-<dd><p>This function returns the <samp>*Messages*</samp> buffer.  If it does not
-exist, it creates it, and switches it to <code>messages-buffer-mode</code>.
-</p></dd></dl>
+  <p>Almost all the messages displayed in the echo area are also
+  recorded in the <samp>*Messages*</samp> buffer so that the user
+  can refer back to them. This includes all the messages that are
+  output with <code>message</code>. By default, this buffer is
+  read-only and uses the major mode
+  <code>messages-buffer-mode</code>. Nothing prevents the user from
+  killing the <samp>*Messages*</samp> buffer, but the next display
+  of a message recreates it. Any Lisp code that needs to access the
+  <samp>*Messages*</samp> buffer directly and wants to ensure that
+  it exists should use the function
+  <code>messages-buffer</code>.</p>
 
-<dl>
-<dt><a name="index-message_002dlog_002dmax"></a>User Option: <strong>message-log-max</strong></dt>
-<dd><p>This variable specifies how many lines to keep in the <samp>*Messages*</samp>
-buffer.  The value <code>t</code> means there is no limit on how many lines to
-keep.  The value <code>nil</code> disables message logging entirely.  Here&rsquo;s
-how to display a message and prevent it from being logged:
-</p>
-<div class="example">
-<pre class="example">(let (message-log-max)
+  <dl>
+    <dt><a name="index-messages_002dbuffer" id=
+    "index-messages_002dbuffer"></a>Function:
+    <strong>messages-buffer</strong></dt>
+
+    <dd>
+      <p>This function returns the <samp>*Messages*</samp> buffer.
+      If it does not exist, it creates it, and switches it to
+      <code>messages-buffer-mode</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-message_002dlog_002dmax" id=
+    "index-message_002dlog_002dmax"></a>User Option:
+    <strong>message-log-max</strong></dt>
+
+    <dd>
+      <p>This variable specifies how many lines to keep in the
+      <samp>*Messages*</samp> buffer. The value <code>t</code>
+      means there is no limit on how many lines to keep. The value
+      <code>nil</code> disables message logging entirely.
+      Here&rsquo;s how to display a message and prevent it from
+      being logged:</p>
+
+      <div class="example">
+        <pre class="example">
+(let (message-log-max)
   (message &hellip;))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>To make <samp>*Messages*</samp> more convenient for the user, the logging
-facility combines successive identical messages.  It also combines
-successive related messages for the sake of two cases: question
-followed by answer, and a series of progress messages.
-</p>
-<p>A question followed by an answer has two messages like the
-ones produced by <code>y-or-n-p</code>: the first is &lsquo;<samp><var>question</var></samp>&rsquo;,
-and the second is &lsquo;<samp><var>question</var>...<var>answer</var></samp>&rsquo;.  The first
-message conveys no additional information beyond what&rsquo;s in the second,
-so logging the second message discards the first from the log.
-</p>
-<p>A series of progress messages has successive messages like
-those produced by <code>make-progress-reporter</code>.  They have the form
-&lsquo;<samp><var>base</var>...<var>how-far</var></samp>&rsquo;, where <var>base</var> is the same each
-time, while <var>how-far</var> varies.  Logging each message in the series
-discards the previous one, provided they are consecutive.
-</p>
-<p>The functions <code>make-progress-reporter</code> and <code>y-or-n-p</code>
-don&rsquo;t have to do anything special to activate the message log
-combination feature.  It operates whenever two consecutive messages
-are logged that share a common prefix ending in &lsquo;<samp>...</samp>&rsquo;.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Echo-Area-Customization.html#Echo-Area-Customization" accesskey="n" rel="next">Echo Area Customization</a>, Previous: <a href="Progress.html#Progress" accesskey="p" rel="prev">Progress</a>, Up: <a href="The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>To make <samp>*Messages*</samp> more convenient for the user,
+  the logging facility combines successive identical messages. It
+  also combines successive related messages for the sake of two
+  cases: question followed by answer, and a series of progress
+  messages.</p>
 
+  <p>A question followed by an answer has two messages like the
+  ones produced by <code>y-or-n-p</code>: the first is
+  &lsquo;<samp><var>question</var></samp>&rsquo;, and the second is
+  &lsquo;<samp><var>question</var>...<var>answer</var></samp>&rsquo;.
+  The first message conveys no additional information beyond
+  what&rsquo;s in the second, so logging the second message
+  discards the first from the log.</p>
 
+  <p>A series of progress messages has successive messages like
+  those produced by <code>make-progress-reporter</code>. They have
+  the form
+  &lsquo;<samp><var>base</var>...<var>how-far</var></samp>&rsquo;,
+  where <var>base</var> is the same each time, while
+  <var>how-far</var> varies. Logging each message in the series
+  discards the previous one, provided they are consecutive.</p>
 
+  <p>The functions <code>make-progress-reporter</code> and
+  <code>y-or-n-p</code> don&rsquo;t have to do anything special to
+  activate the message log combination feature. It operates
+  whenever two consecutive messages are logged that share a common
+  prefix ending in &lsquo;<samp>...</samp>&rsquo;.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Echo-Area-Customization.html#Echo-Area-Customization"
+    accesskey="n" rel="next">Echo Area Customization</a>, Previous:
+    <a href="Progress.html#Progress" accesskey="p" rel=
+    "prev">Progress</a>, Up: <a href=
+    "The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The
+    Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

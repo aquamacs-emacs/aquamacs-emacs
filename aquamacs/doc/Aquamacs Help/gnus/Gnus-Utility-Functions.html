@@ -1,14 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Gnus Utility Functions - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" title="Gnus Reference Guide">
-<link rel="next" href="Back-End-Interface.html#Back-End-Interface" title="Back End Interface">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Gnus Utility Functions - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Gnus-Reference-Guide.html#Gnus-Reference-Guide" title=
+  "Gnus Reference Guide" />
+  <link rel="next" href=
+  "Back-End-Interface.html#Back-End-Interface" title=
+  "Back End Interface" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +35,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,83 +48,198 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Gnus-Utility-Functions"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Back-End-Interface.html#Back-End-Interface">Back End Interface</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference Guide</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Gnus-Utility-Functions" id=
+    "Gnus-Utility-Functions"></a>
 
-<h4 class="subsection">11.7.1 Gnus Utility Functions</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Back-End-Interface.html#Back-End-Interface">Back End
+    Interface</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference
+    Guide</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Gnus-utility-functions-3017"></a><a name="index-utility-functions-3018"></a><a name="index-functions-3019"></a><a name="index-internal-variables-3020"></a>
-When writing small functions to be run from hooks (and stuff), it's
-vital to have access to the Gnus internal functions and variables. 
-Below is a list of the most common ones.
+  <h4 class="subsection">11.7.1 Gnus Utility Functions</h4>
 
-     <dl>
-<dt><code>gnus-newsgroup-name</code><dd><a name="index-gnus_002dnewsgroup_002dname-3021"></a>This variable holds the name of the current newsgroup.
+  <p><a name="index-Gnus-utility-functions-3017" id=
+  "index-Gnus-utility-functions-3017"></a><a name=
+  "index-utility-functions-3018" id=
+  "index-utility-functions-3018"></a><a name="index-functions-3019"
+  id="index-functions-3019"></a><a name=
+  "index-internal-variables-3020" id=
+  "index-internal-variables-3020"></a> When writing small functions
+  to be run from hooks (and stuff), it's vital to have access to
+  the Gnus internal functions and variables. Below is a list of the
+  most common ones.</p>
 
-     <br><dt><code>gnus-find-method-for-group</code><dd><a name="index-gnus_002dfind_002dmethod_002dfor_002dgroup-3022"></a>A function that returns the select method for <var>group</var>.
+  <dl>
+    <dt><code>gnus-newsgroup-name</code></dt>
 
-     <br><dt><code>gnus-group-real-name</code><dd><a name="index-gnus_002dgroup_002dreal_002dname-3023"></a>Takes a full (prefixed) Gnus group name, and returns the unprefixed
-name.
+    <dd><a name="index-gnus_002dnewsgroup_002dname-3021" id=
+    "index-gnus_002dnewsgroup_002dname-3021"></a>This variable
+    holds the name of the current newsgroup.<br /></dd>
 
-     <br><dt><code>gnus-group-prefixed-name</code><dd><a name="index-gnus_002dgroup_002dprefixed_002dname-3024"></a>Takes an unprefixed group name and a select method, and returns the full
-(prefixed) Gnus group name.
+    <dt><code>gnus-find-method-for-group</code></dt>
 
-     <br><dt><code>gnus-get-info</code><dd><a name="index-gnus_002dget_002dinfo-3025"></a>Returns the group info list for <var>group</var>.
+    <dd><a name=
+    "index-gnus_002dfind_002dmethod_002dfor_002dgroup-3022" id=
+    "index-gnus_002dfind_002dmethod_002dfor_002dgroup-3022"></a>A
+    function that returns the select method for
+    <var>group</var>.<br /></dd>
 
-     <br><dt><code>gnus-group-unread</code><dd><a name="index-gnus_002dgroup_002dunread-3026"></a>The number of unread articles in <var>group</var>, or <code>t</code> if that is
-unknown.
+    <dt><code>gnus-group-real-name</code></dt>
 
-     <br><dt><code>gnus-active</code><dd><a name="index-gnus_002dactive-3027"></a>The active entry for <var>group</var>.
+    <dd><a name="index-gnus_002dgroup_002dreal_002dname-3023" id=
+    "index-gnus_002dgroup_002dreal_002dname-3023"></a>Takes a full
+    (prefixed) Gnus group name, and returns the unprefixed
+    name.<br /></dd>
 
-     <br><dt><code>gnus-set-active</code><dd><a name="index-gnus_002dset_002dactive-3028"></a>Set the active entry for <var>group</var>.
+    <dt><code>gnus-group-prefixed-name</code></dt>
 
-     <br><dt><code>gnus-add-current-to-buffer-list</code><dd><a name="index-gnus_002dadd_002dcurrent_002dto_002dbuffer_002dlist-3029"></a>Adds the current buffer to the list of buffers to be killed on Gnus
-exit.
+    <dd><a name="index-gnus_002dgroup_002dprefixed_002dname-3024"
+    id="index-gnus_002dgroup_002dprefixed_002dname-3024"></a>Takes
+    an unprefixed group name and a select method, and returns the
+    full (prefixed) Gnus group name.<br /></dd>
 
-     <br><dt><code>gnus-continuum-version</code><dd><a name="index-gnus_002dcontinuum_002dversion-3030"></a>Takes a Gnus version string as a parameter and returns a floating point
-number.  Earlier versions will always get a lower number than later
-versions.
+    <dt><code>gnus-get-info</code></dt>
 
-     <br><dt><code>gnus-group-read-only-p</code><dd><a name="index-gnus_002dgroup_002dread_002donly_002dp-3031"></a>Says whether <var>group</var> is read-only or not.
+    <dd><a name="index-gnus_002dget_002dinfo-3025" id=
+    "index-gnus_002dget_002dinfo-3025"></a>Returns the group info
+    list for <var>group</var>.<br /></dd>
 
-     <br><dt><code>gnus-news-group-p</code><dd><a name="index-gnus_002dnews_002dgroup_002dp-3032"></a>Says whether <var>group</var> came from a news back end.
+    <dt><code>gnus-group-unread</code></dt>
 
-     <br><dt><code>gnus-ephemeral-group-p</code><dd><a name="index-gnus_002dephemeral_002dgroup_002dp-3033"></a>Says whether <var>group</var> is ephemeral or not.
+    <dd><a name="index-gnus_002dgroup_002dunread-3026" id=
+    "index-gnus_002dgroup_002dunread-3026"></a>The number of unread
+    articles in <var>group</var>, or <code>t</code> if that is
+    unknown.<br /></dd>
 
-     <br><dt><code>gnus-server-to-method</code><dd><a name="index-gnus_002dserver_002dto_002dmethod-3034"></a>Returns the select method corresponding to <var>server</var>.
+    <dt><code>gnus-active</code></dt>
 
-     <br><dt><code>gnus-server-equal</code><dd><a name="index-gnus_002dserver_002dequal-3035"></a>Says whether two virtual servers are equal.
+    <dd><a name="index-gnus_002dactive-3027" id=
+    "index-gnus_002dactive-3027"></a>The active entry for
+    <var>group</var>.<br /></dd>
 
-     <br><dt><code>gnus-group-native-p</code><dd><a name="index-gnus_002dgroup_002dnative_002dp-3036"></a>Says whether <var>group</var> is native or not.
+    <dt><code>gnus-set-active</code></dt>
 
-     <br><dt><code>gnus-group-secondary-p</code><dd><a name="index-gnus_002dgroup_002dsecondary_002dp-3037"></a>Says whether <var>group</var> is secondary or not.
+    <dd><a name="index-gnus_002dset_002dactive-3028" id=
+    "index-gnus_002dset_002dactive-3028"></a>Set the active entry
+    for <var>group</var>.<br /></dd>
 
-     <br><dt><code>gnus-group-foreign-p</code><dd><a name="index-gnus_002dgroup_002dforeign_002dp-3038"></a>Says whether <var>group</var> is foreign or not.
+    <dt><code>gnus-add-current-to-buffer-list</code></dt>
 
-     <br><dt><code>gnus-group-find-parameter</code><dd><a name="index-gnus_002dgroup_002dfind_002dparameter-3039"></a>Returns the parameter list of <var>group</var>.  If given a second parameter,
-returns the value of that parameter for <var>group</var>.
+    <dd><a name=
+    "index-gnus_002dadd_002dcurrent_002dto_002dbuffer_002dlist-3029"
+    id=
+    "index-gnus_002dadd_002dcurrent_002dto_002dbuffer_002dlist-3029">
+    </a>Adds the current buffer to the list of buffers to be killed
+    on Gnus exit.<br /></dd>
 
-     <br><dt><code>gnus-group-set-parameter</code><dd><a name="index-gnus_002dgroup_002dset_002dparameter-3040"></a>Takes three parameters; <var>group</var>, <var>parameter</var> and <var>value</var>.
+    <dt><code>gnus-continuum-version</code></dt>
 
-     <br><dt><code>gnus-narrow-to-body</code><dd><a name="index-gnus_002dnarrow_002dto_002dbody-3041"></a>Narrows the current buffer to the body of the article.
+    <dd><a name="index-gnus_002dcontinuum_002dversion-3030" id=
+    "index-gnus_002dcontinuum_002dversion-3030"></a>Takes a Gnus
+    version string as a parameter and returns a floating point
+    number. Earlier versions will always get a lower number than
+    later versions.<br /></dd>
 
-     <br><dt><code>gnus-check-backend-function</code><dd><a name="index-gnus_002dcheck_002dbackend_002dfunction-3042"></a>Takes two parameters, <var>function</var> and <var>group</var>.  If the back end
-<var>group</var> comes from supports <var>function</var>, return non-<code>nil</code>.
+    <dt><code>gnus-group-read-only-p</code></dt>
 
-     <pre class="lisp">          (gnus-check-backend-function "request-scan" "nnml:misc")
+    <dd><a name="index-gnus_002dgroup_002dread_002donly_002dp-3031"
+    id="index-gnus_002dgroup_002dread_002donly_002dp-3031"></a>Says
+    whether <var>group</var> is read-only or not.<br /></dd>
+
+    <dt><code>gnus-news-group-p</code></dt>
+
+    <dd><a name="index-gnus_002dnews_002dgroup_002dp-3032" id=
+    "index-gnus_002dnews_002dgroup_002dp-3032"></a>Says whether
+    <var>group</var> came from a news back end.<br /></dd>
+
+    <dt><code>gnus-ephemeral-group-p</code></dt>
+
+    <dd><a name="index-gnus_002dephemeral_002dgroup_002dp-3033" id=
+    "index-gnus_002dephemeral_002dgroup_002dp-3033"></a>Says
+    whether <var>group</var> is ephemeral or not.<br /></dd>
+
+    <dt><code>gnus-server-to-method</code></dt>
+
+    <dd><a name="index-gnus_002dserver_002dto_002dmethod-3034" id=
+    "index-gnus_002dserver_002dto_002dmethod-3034"></a>Returns the
+    select method corresponding to <var>server</var>.<br /></dd>
+
+    <dt><code>gnus-server-equal</code></dt>
+
+    <dd><a name="index-gnus_002dserver_002dequal-3035" id=
+    "index-gnus_002dserver_002dequal-3035"></a>Says whether two
+    virtual servers are equal.<br /></dd>
+
+    <dt><code>gnus-group-native-p</code></dt>
+
+    <dd><a name="index-gnus_002dgroup_002dnative_002dp-3036" id=
+    "index-gnus_002dgroup_002dnative_002dp-3036"></a>Says whether
+    <var>group</var> is native or not.<br /></dd>
+
+    <dt><code>gnus-group-secondary-p</code></dt>
+
+    <dd><a name="index-gnus_002dgroup_002dsecondary_002dp-3037" id=
+    "index-gnus_002dgroup_002dsecondary_002dp-3037"></a>Says
+    whether <var>group</var> is secondary or not.<br /></dd>
+
+    <dt><code>gnus-group-foreign-p</code></dt>
+
+    <dd><a name="index-gnus_002dgroup_002dforeign_002dp-3038" id=
+    "index-gnus_002dgroup_002dforeign_002dp-3038"></a>Says whether
+    <var>group</var> is foreign or not.<br /></dd>
+
+    <dt><code>gnus-group-find-parameter</code></dt>
+
+    <dd><a name="index-gnus_002dgroup_002dfind_002dparameter-3039"
+    id=
+    "index-gnus_002dgroup_002dfind_002dparameter-3039"></a>Returns
+    the parameter list of <var>group</var>. If given a second
+    parameter, returns the value of that parameter for
+    <var>group</var>.<br /></dd>
+
+    <dt><code>gnus-group-set-parameter</code></dt>
+
+    <dd><a name="index-gnus_002dgroup_002dset_002dparameter-3040"
+    id="index-gnus_002dgroup_002dset_002dparameter-3040"></a>Takes
+    three parameters; <var>group</var>, <var>parameter</var> and
+    <var>value</var>.<br /></dd>
+
+    <dt><code>gnus-narrow-to-body</code></dt>
+
+    <dd><a name="index-gnus_002dnarrow_002dto_002dbody-3041" id=
+    "index-gnus_002dnarrow_002dto_002dbody-3041"></a>Narrows the
+    current buffer to the body of the article.<br /></dd>
+
+    <dt><code>gnus-check-backend-function</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dcheck_002dbackend_002dfunction-3042"
+      id=
+      "index-gnus_002dcheck_002dbackend_002dfunction-3042"></a>Takes
+      two parameters, <var>function</var> and <var>group</var>. If
+      the back end <var>group</var> comes from supports
+      <var>function</var>, return non-<code>nil</code>.
+      <pre class="lisp">
+          (gnus-check-backend-function "request-scan" "nnml:misc")
           &rArr; t
-</pre>
-     <br><dt><code>gnus-read-method</code><dd><a name="index-gnus_002dread_002dmethod-3043"></a>Prompts the user for a select method.
+</pre><br />
+    </dd>
 
-   </dl>
+    <dt><code>gnus-read-method</code></dt>
 
-   </body></html>
-
+    <dd><a name="index-gnus_002dread_002dmethod-3043" id=
+    "index-gnus_002dread_002dmethod-3043"></a>Prompts the user for
+    a select method.</dd>
+  </dl>
+</body>
+</html>

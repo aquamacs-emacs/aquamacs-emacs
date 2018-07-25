@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,93 +29,143 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: Replacing text across multiple files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: Replacing text across multiple files">
-<meta name="keywords" content="GNU Emacs FAQ: Replacing text across multiple files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Common-requests.html#Common-requests" rel="up" title="Common requests">
-<link href="Documentation-for-etags.html#Documentation-for-etags" rel="next" title="Documentation for etags">
-<link href="Using-regular-expressions.html#Using-regular-expressions" rel="prev" title="Using regular expressions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: Replacing text across multiple
+  files</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: Replacing text across multiple files" />
+  <meta name="keywords" content=
+  "GNU Emacs FAQ: Replacing text across multiple files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Common-requests.html#Common-requests" rel="up" title=
+  "Common requests" />
+  <link href="Documentation-for-etags.html#Documentation-for-etags"
+  rel="next" title="Documentation for etags" />
+  <link href=
+  "Using-regular-expressions.html#Using-regular-expressions" rel=
+  "prev" title="Using regular expressions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Replacing-text-across-multiple-files"></a>
-<div class="header">
-<p>
-Next: <a href="Documentation-for-etags.html#Documentation-for-etags" accesskey="n" rel="next">Documentation for etags</a>, Previous: <a href="Using-regular-expressions.html#Using-regular-expressions" accesskey="p" rel="prev">Using regular expressions</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-do-I-perform-a-replace-operation-across-more-than-one-file_003f"></a>
-<h3 class="section">5.37 How do I perform a replace operation across more than one file?</h3>
-<a name="index-Replacing-strings-across-files"></a>
-<a name="index-Multiple-files_002c-replacing-across"></a>
-<a name="index-Files_002c-replacing-strings-across-multiple"></a>
-<a name="index-Recursive-search_002freplace-operations"></a>
+<body lang="en" xml:lang="en">
+  <a name="Replacing-text-across-multiple-files" id=
+  "Replacing-text-across-multiple-files"></a>
 
-<p>Dired mode (<kbd>M-x dired <span class="key">RET</span></kbd>, or <kbd>C-x d</kbd>) supports the
-command <code>dired-do-find-regexp-and-replace</code> (<kbd>Q</kbd>), which allows
-users to replace regular expressions in multiple files.
-</p>
-<p>You can use this command to perform search/replace operations on
-multiple files by following the following steps:
-</p>
-<ul>
-<li> Assemble a list of files you want to operate on with either
-<code>find-dired</code>, <code>find-name-dired</code> or <code>find-grep-dired</code>.
+  <div class="header">
+    <p>Next: <a href=
+    "Documentation-for-etags.html#Documentation-for-etags"
+    accesskey="n" rel="next">Documentation for etags</a>, Previous:
+    <a href=
+    "Using-regular-expressions.html#Using-regular-expressions"
+    accesskey="p" rel="prev">Using regular expressions</a>, Up:
+    <a href="Common-requests.html#Common-requests" accesskey="u"
+    rel="up">Common requests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name=
+  "How-do-I-perform-a-replace-operation-across-more-than-one-file_003f"
+  id=
+  "How-do-I-perform-a-replace-operation-across-more-than-one-file_003f"></a>
 
-</li><li> Mark all files in the resulting Dired buffer using <kbd>t</kbd>.
+  <h3 class="section">5.37 How do I perform a replace operation
+  across more than one file?</h3><a name=
+  "index-Replacing-strings-across-files" id=
+  "index-Replacing-strings-across-files"></a> <a name=
+  "index-Multiple-files_002c-replacing-across" id=
+  "index-Multiple-files_002c-replacing-across"></a> <a name=
+  "index-Files_002c-replacing-strings-across-multiple" id=
+  "index-Files_002c-replacing-strings-across-multiple"></a>
+  <a name="index-Recursive-search_002freplace-operations" id=
+  "index-Recursive-search_002freplace-operations"></a>
 
-</li><li> Use <kbd>Q</kbd> to start a <code>query-replace-regexp</code> session on the marked
-files.
+  <p>Dired mode (<kbd>M-x dired <span class="key">RET</span></kbd>,
+  or <kbd>C-x d</kbd>) supports the command
+  <code>dired-do-find-regexp-and-replace</code> (<kbd>Q</kbd>),
+  which allows users to replace regular expressions in multiple
+  files.</p>
 
-</li><li> To accept all replacements in each file, hit <kbd>!</kbd>.
-</li></ul>
+  <p>You can use this command to perform search/replace operations
+  on multiple files by following the following steps:</p>
 
-<p>Another way to do the same thing is to use the &ldquo;tags&rdquo; feature of
-Emacs: it includes the command <code>tags-query-replace</code> which performs
-a query-replace across all the files mentioned in the <samp>TAGS</samp> file.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Identifier-Search.html#Identifier-Search">Identifier Search</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
+  <ul>
+    <li>Assemble a list of files you want to operate on with either
+    <code>find-dired</code>, <code>find-name-dired</code> or
+    <code>find-grep-dired</code>.</li>
 
+    <li>Mark all files in the resulting Dired buffer using
+    <kbd>t</kbd>.</li>
 
+    <li>Use <kbd>Q</kbd> to start a
+    <code>query-replace-regexp</code> session on the marked
+    files.</li>
 
+    <li>To accept all replacements in each file, hit
+    <kbd>!</kbd>.</li>
+  </ul>
+
+  <p>Another way to do the same thing is to use the
+  &ldquo;tags&rdquo; feature of Emacs: it includes the command
+  <code>tags-query-replace</code> which performs a query-replace
+  across all the files mentioned in the <samp>TAGS</samp> file. See
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Identifier-Search.html#Identifier-Search">
+  Identifier Search</a> in <cite>The GNU Emacs Manual</cite>.</p>
 </body>
 </html>

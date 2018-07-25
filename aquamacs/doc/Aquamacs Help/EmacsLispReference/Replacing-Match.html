@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,156 +19,235 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Replacing Match</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Replacing Match">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Replacing Match">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Match-Data.html#Match-Data" rel="up" title="Match Data">
-<link href="Simple-Match-Data.html#Simple-Match-Data" rel="next" title="Simple Match Data">
-<link href="Match-Data.html#Match-Data" rel="prev" title="Match Data">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Replacing Match</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Replacing Match" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Replacing Match" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Match-Data.html#Match-Data" rel="up" title=
+  "Match Data" />
+  <link href="Simple-Match-Data.html#Simple-Match-Data" rel="next"
+  title="Simple Match Data" />
+  <link href="Match-Data.html#Match-Data" rel="prev" title=
+  "Match Data" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Replacing-Match" id="Replacing-Match"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Simple-Match-Data.html#Simple-Match-Data"
+    accesskey="n" rel="next">Simple Match Data</a>, Up: <a href=
+    "Match-Data.html#Match-Data" accesskey="u" rel="up">Match
+    Data</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Replacing-the-Text-that-Matched" id=
+  "Replacing-the-Text-that-Matched"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Replacing-Match"></a>
-<div class="header">
-<p>
-Next: <a href="Simple-Match-Data.html#Simple-Match-Data" accesskey="n" rel="next">Simple Match Data</a>, Up: <a href="Match-Data.html#Match-Data" accesskey="u" rel="up">Match Data</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Replacing-the-Text-that-Matched"></a>
-<h4 class="subsection">33.6.1 Replacing the Text that Matched</h4>
-<a name="index-replace-matched-text"></a>
+  <h4 class="subsection">33.6.1 Replacing the Text that
+  Matched</h4><a name="index-replace-matched-text" id=
+  "index-replace-matched-text"></a>
 
-<p>This function replaces all or part of the text matched by the last
-search.  It works by means of the match data.
-</p>
-<a name="index-case-in-replacements"></a>
-<dl>
-<dt><a name="index-replace_002dmatch"></a>Function: <strong>replace-match</strong> <em>replacement &amp;optional fixedcase literal string subexp</em></dt>
-<dd><p>This function performs a replacement operation on a buffer or string.
-</p>
-<p>If you did the last search in a buffer, you should omit the
-<var>string</var> argument or specify <code>nil</code> for it, and make sure that
-the current buffer is the one in which you performed the last search.
-Then this function edits the buffer, replacing the matched text with
-<var>replacement</var>.  It leaves point at the end of the replacement
-text.
-</p>
-<p>If you performed the last search on a string, pass the same string as
-<var>string</var>.  Then this function returns a new string, in which the
-matched text is replaced by <var>replacement</var>.
-</p>
-<p>If <var>fixedcase</var> is non-<code>nil</code>, then <code>replace-match</code> uses
-the replacement text without case conversion; otherwise, it converts
-the replacement text depending upon the capitalization of the text to
-be replaced.  If the original text is all upper case, this converts
-the replacement text to upper case.  If all words of the original text
-are capitalized, this capitalizes all the words of the replacement
-text.  If all the words are one-letter and they are all upper case,
-they are treated as capitalized words rather than all-upper-case
-words.
-</p>
-<p>If <var>literal</var> is non-<code>nil</code>, then <var>replacement</var> is inserted
-exactly as it is, the only alterations being case changes as needed.
-If it is <code>nil</code> (the default), then the character &lsquo;<samp>\</samp>&rsquo; is treated
-specially.  If a &lsquo;<samp>\</samp>&rsquo; appears in <var>replacement</var>, then it must be
-part of one of the following sequences:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>\&amp;</samp>&rsquo;</dt>
-<dd><a name="index-_0026-in-replacement"></a>
-<p>This stands for the entire text being replaced.
-</p>
-</dd>
-<dt>&lsquo;<samp>\<var>n</var></samp>&rsquo;, where <var>n</var> is a digit</dt>
-<dd><a name="index-_005cn-in-replacement"></a>
-<p>This stands for the text that matched the <var>n</var>th subexpression in
-the original regexp.  Subexpressions are those expressions grouped
-inside &lsquo;<samp>\(&hellip;\)</samp>&rsquo;.  If the <var>n</var>th subexpression never
-matched, an empty string is substituted.
-</p>
-</dd>
-<dt>&lsquo;<samp>\\</samp>&rsquo;</dt>
-<dd><a name="index-_005c-in-replacement"></a>
-<p>This stands for a single &lsquo;<samp>\</samp>&rsquo; in the replacement text.
-</p>
-</dd>
-<dt>&lsquo;<samp>\?</samp>&rsquo;</dt>
-<dd><p>This stands for itself (for compatibility with <code>replace-regexp</code>
-and related commands; see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Regexp-Replace.html#Regexp-Replace">Regexp Replace</a> in <cite>The GNU
-Emacs Manual</cite>).
-</p></dd>
-</dl>
+  <p>This function replaces all or part of the text matched by the
+  last search. It works by means of the match data.</p><a name=
+  "index-case-in-replacements" id="index-case-in-replacements"></a>
 
-<p>Any other character following &lsquo;<samp>\</samp>&rsquo; signals an error.
-</p>
-<p>The substitutions performed by &lsquo;<samp>\&amp;</samp>&rsquo; and &lsquo;<samp>\<var>n</var></samp>&rsquo; occur
-after case conversion, if any.  Therefore, the strings they substitute
-are never case-converted.
-</p>
-<p>If <var>subexp</var> is non-<code>nil</code>, that says to replace just
-subexpression number <var>subexp</var> of the regexp that was matched, not
-the entire match.  For example, after matching &lsquo;<samp>foo \(ba*r\)</samp>&rsquo;,
-calling <code>replace-match</code> with 1 as <var>subexp</var> means to replace
-just the text that matched &lsquo;<samp>\(ba*r\)</samp>&rsquo;.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-replace_002dmatch" id=
+    "index-replace_002dmatch"></a>Function:
+    <strong>replace-match</strong> <em>replacement &amp;optional
+    fixedcase literal string subexp</em></dt>
 
-<dl>
-<dt><a name="index-match_002dsubstitute_002dreplacement"></a>Function: <strong>match-substitute-replacement</strong> <em>replacement &amp;optional fixedcase literal string subexp</em></dt>
-<dd><p>This function returns the text that would be inserted into the buffer
-by <code>replace-match</code>, but without modifying the buffer.  It is
-useful if you want to present the user with actual replacement result,
-with constructs like &lsquo;<samp>\<var>n</var></samp>&rsquo; or &lsquo;<samp>\&amp;</samp>&rsquo; substituted with
-matched groups.  Arguments <var>replacement</var> and optional
-<var>fixedcase</var>, <var>literal</var>, <var>string</var> and <var>subexp</var> have the
-same meaning as for <code>replace-match</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function performs a replacement operation on a buffer
+      or string.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Simple-Match-Data.html#Simple-Match-Data" accesskey="n" rel="next">Simple Match Data</a>, Up: <a href="Match-Data.html#Match-Data" accesskey="u" rel="up">Match Data</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If you did the last search in a buffer, you should omit
+      the <var>string</var> argument or specify <code>nil</code>
+      for it, and make sure that the current buffer is the one in
+      which you performed the last search. Then this function edits
+      the buffer, replacing the matched text with
+      <var>replacement</var>. It leaves point at the end of the
+      replacement text.</p>
 
+      <p>If you performed the last search on a string, pass the
+      same string as <var>string</var>. Then this function returns
+      a new string, in which the matched text is replaced by
+      <var>replacement</var>.</p>
 
+      <p>If <var>fixedcase</var> is non-<code>nil</code>, then
+      <code>replace-match</code> uses the replacement text without
+      case conversion; otherwise, it converts the replacement text
+      depending upon the capitalization of the text to be replaced.
+      If the original text is all upper case, this converts the
+      replacement text to upper case. If all words of the original
+      text are capitalized, this capitalizes all the words of the
+      replacement text. If all the words are one-letter and they
+      are all upper case, they are treated as capitalized words
+      rather than all-upper-case words.</p>
 
+      <p>If <var>literal</var> is non-<code>nil</code>, then
+      <var>replacement</var> is inserted exactly as it is, the only
+      alterations being case changes as needed. If it is
+      <code>nil</code> (the default), then the character
+      &lsquo;<samp>\</samp>&rsquo; is treated specially. If a
+      &lsquo;<samp>\</samp>&rsquo; appears in
+      <var>replacement</var>, then it must be part of one of the
+      following sequences:</p>
+
+      <dl compact="compact">
+        <dt>&lsquo;<samp>\&amp;</samp>&rsquo;</dt>
+
+        <dd>
+          <a name="index-_0026-in-replacement" id=
+          "index-_0026-in-replacement"></a>
+
+          <p>This stands for the entire text being replaced.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>\<var>n</var></samp>&rsquo;, where
+        <var>n</var> is a digit</dt>
+
+        <dd>
+          <a name="index-_005cn-in-replacement" id=
+          "index-_005cn-in-replacement"></a>
+
+          <p>This stands for the text that matched the
+          <var>n</var>th subexpression in the original regexp.
+          Subexpressions are those expressions grouped inside
+          &lsquo;<samp>\(&hellip;\)</samp>&rsquo;. If the
+          <var>n</var>th subexpression never matched, an empty
+          string is substituted.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>\\</samp>&rsquo;</dt>
+
+        <dd>
+          <a name="index-_005c-in-replacement" id=
+          "index-_005c-in-replacement"></a>
+
+          <p>This stands for a single &lsquo;<samp>\</samp>&rsquo;
+          in the replacement text.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>\?</samp>&rsquo;</dt>
+
+        <dd>
+          <p>This stands for itself (for compatibility with
+          <code>replace-regexp</code> and related commands; see
+          <a href=
+          "http://www.gnu.org/software/emacs/manual/html_node/emacs/Regexp-Replace.html#Regexp-Replace">
+          Regexp Replace</a> in <cite>The GNU Emacs
+          Manual</cite>).</p>
+        </dd>
+      </dl>
+
+      <p>Any other character following &lsquo;<samp>\</samp>&rsquo;
+      signals an error.</p>
+
+      <p>The substitutions performed by
+      &lsquo;<samp>\&amp;</samp>&rsquo; and
+      &lsquo;<samp>\<var>n</var></samp>&rsquo; occur after case
+      conversion, if any. Therefore, the strings they substitute
+      are never case-converted.</p>
+
+      <p>If <var>subexp</var> is non-<code>nil</code>, that says to
+      replace just subexpression number <var>subexp</var> of the
+      regexp that was matched, not the entire match. For example,
+      after matching &lsquo;<samp>foo \(ba*r\)</samp>&rsquo;,
+      calling <code>replace-match</code> with 1 as
+      <var>subexp</var> means to replace just the text that matched
+      &lsquo;<samp>\(ba*r\)</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-match_002dsubstitute_002dreplacement" id=
+    "index-match_002dsubstitute_002dreplacement"></a>Function:
+    <strong>match-substitute-replacement</strong> <em>replacement
+    &amp;optional fixedcase literal string subexp</em></dt>
+
+    <dd>
+      <p>This function returns the text that would be inserted into
+      the buffer by <code>replace-match</code>, but without
+      modifying the buffer. It is useful if you want to present the
+      user with actual replacement result, with constructs like
+      &lsquo;<samp>\<var>n</var></samp>&rsquo; or
+      &lsquo;<samp>\&amp;</samp>&rsquo; substituted with matched
+      groups. Arguments <var>replacement</var> and optional
+      <var>fixedcase</var>, <var>literal</var>, <var>string</var>
+      and <var>subexp</var> have the same meaning as for
+      <code>replace-match</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Simple-Match-Data.html#Simple-Match-Data"
+    accesskey="n" rel="next">Simple Match Data</a>, Up: <a href=
+    "Match-Data.html#Match-Data" accesskey="u" rel="up">Match
+    Data</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

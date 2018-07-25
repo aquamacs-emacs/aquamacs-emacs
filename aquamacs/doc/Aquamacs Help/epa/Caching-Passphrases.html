@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Caching Passphrases - EasyPG Assistant User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="EasyPG Assistant User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Commands.html#Commands" title="Commands">
-<link rel="next" href="Bug-Reports.html#Bug-Reports" title="Bug Reports">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Caching Passphrases - EasyPG Assistant User's
+  Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "EasyPG Assistant User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Commands.html#Commands" title=
+  "Commands" />
+  <link rel="next" href="Bug-Reports.html#Bug-Reports" title=
+  "Bug Reports" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file describes EasyPG Assistant 1.0.0.
 
 Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -31,8 +41,10 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,52 +54,145 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Caching-Passphrases"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Bug-Reports.html#Bug-Reports">Bug Reports</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Commands.html#Commands">Commands</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Caching-Passphrases" id="Caching-Passphrases"></a>
 
-<h2 class="chapter">4 Caching Passphrases</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Bug-Reports.html#Bug-Reports">Bug Reports</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Commands.html#Commands">Commands</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>Typing passphrases is an irritating task if you frequently open and
-close the same file.  GnuPG and EasyPG Assistant provide mechanisms to
-remember your passphrases.  However, the configuration is a bit
-confusing since it depends on your GnuPG installation (GnuPG version 1 or
-GnuPG version 2), encryption method (symmetric or public key), and whether or
-not you want to use gpg-agent.  Here are some questions:
+  <h2 class="chapter">4 Caching Passphrases</h2>
 
-     <ol type=1 start=1>
-<li>Do you use GnuPG version 2 instead of GnuPG version 1? 
-<li>Do you use symmetric encryption rather than public key encryption? 
-<li>Do you want to use gpg-agent?
-        </ol>
+  <p>Typing passphrases is an irritating task if you frequently
+  open and close the same file. GnuPG and EasyPG Assistant provide
+  mechanisms to remember your passphrases. However, the
+  configuration is a bit confusing since it depends on your GnuPG
+  installation (GnuPG version 1 or GnuPG version 2), encryption
+  method (symmetric or public key), and whether or not you want to
+  use gpg-agent. Here are some questions:</p>
 
-   <p>Here are configurations depending on your answers:
+  <ol type="1" start="1">
+    <li>Do you use GnuPG version 2 instead of GnuPG version 1?</li>
 
-   <p><table summary=""><tr align="left"><td valign="top"><b>1</b> </td><td valign="top"><b>2</b> </td><td valign="top"><b>3</b> </td><td valign="top">Configuration
-<br></td></tr><tr align="left"><td valign="top">Yes </td><td valign="top">Yes </td><td valign="top">Yes </td><td valign="top">Set up gpg-agent. 
-<br></td></tr><tr align="left"><td valign="top">Yes </td><td valign="top">Yes </td><td valign="top">No </td><td valign="top">You can't, without gpg-agent. 
-<br></td></tr><tr align="left"><td valign="top">Yes </td><td valign="top">No </td><td valign="top">Yes </td><td valign="top">Set up gpg-agent. 
-<br></td></tr><tr align="left"><td valign="top">Yes </td><td valign="top">No </td><td valign="top">No </td><td valign="top">You can't, without gpg-agent. 
-<br></td></tr><tr align="left"><td valign="top">No </td><td valign="top">Yes </td><td valign="top">Yes </td><td valign="top">Set up elisp passphrase cache. 
-<br></td></tr><tr align="left"><td valign="top">No </td><td valign="top">Yes </td><td valign="top">No </td><td valign="top">Set up elisp passphrase cache. 
-<br></td></tr><tr align="left"><td valign="top">No </td><td valign="top">No </td><td valign="top">Yes </td><td valign="top">Set up gpg-agent. 
-<br></td></tr><tr align="left"><td valign="top">No </td><td valign="top">No </td><td valign="top">No </td><td valign="top">You can't, without gpg-agent.
-   <br></td></tr></table>
+    <li>Do you use symmetric encryption rather than public key
+    encryption?</li>
 
-   <p>To set up gpg-agent, follow the instruction in GnuPG manual. 
-see <a href="../gnupg/Invoking-GPG_002dAGENT.html#Invoking-GPG_002dAGENT">Invoking GPG-AGENT</a>.
+    <li>Do you want to use gpg-agent?</li>
+  </ol>
 
-   <p>To set up elisp passphrase cache, set
-<code>epa-file-cache-passphrase-for-symmetric-encryption</code>. 
-See <a href="Encrypting_002fdecrypting-_002a_002egpg-files.html#Encrypting_002fdecrypting-_002a_002egpg-files">Encrypting/decrypting *.gpg files</a>.
+  <p>Here are configurations depending on your answers:</p>
 
-   </body></html>
+  <table summary="">
+    <tr align="left">
+      <td valign="top"><b>1</b></td>
 
+      <td valign="top"><b>2</b></td>
+
+      <td valign="top"><b>3</b></td>
+
+      <td valign="top">Configuration<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top">Yes</td>
+
+      <td valign="top">Yes</td>
+
+      <td valign="top">Yes</td>
+
+      <td valign="top">Set up gpg-agent.<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top">Yes</td>
+
+      <td valign="top">Yes</td>
+
+      <td valign="top">No</td>
+
+      <td valign="top">You can't, without gpg-agent.<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top">Yes</td>
+
+      <td valign="top">No</td>
+
+      <td valign="top">Yes</td>
+
+      <td valign="top">Set up gpg-agent.<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top">Yes</td>
+
+      <td valign="top">No</td>
+
+      <td valign="top">No</td>
+
+      <td valign="top">You can't, without gpg-agent.<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top">No</td>
+
+      <td valign="top">Yes</td>
+
+      <td valign="top">Yes</td>
+
+      <td valign="top">Set up elisp passphrase cache.<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top">No</td>
+
+      <td valign="top">Yes</td>
+
+      <td valign="top">No</td>
+
+      <td valign="top">Set up elisp passphrase cache.<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top">No</td>
+
+      <td valign="top">No</td>
+
+      <td valign="top">Yes</td>
+
+      <td valign="top">Set up gpg-agent.<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top">No</td>
+
+      <td valign="top">No</td>
+
+      <td valign="top">No</td>
+
+      <td valign="top">You can't, without gpg-agent.<br /></td>
+    </tr>
+  </table>
+
+  <p>To set up gpg-agent, follow the instruction in GnuPG manual.
+  see <a href=
+  "../gnupg/Invoking-GPG_002dAGENT.html#Invoking-GPG_002dAGENT">Invoking
+  GPG-AGENT</a>.</p>
+
+  <p>To set up elisp passphrase cache, set
+  <code>epa-file-cache-passphrase-for-symmetric-encryption</code>.
+  See <a href=
+  "Encrypting_002fdecrypting-_002a_002egpg-files.html#Encrypting_002fdecrypting-_002a_002egpg-files">
+  Encrypting/decrypting *.gpg files</a>.</p>
+</body>
+</html>

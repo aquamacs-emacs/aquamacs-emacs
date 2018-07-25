@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,159 +19,260 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Faces for Font Lock</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Faces for Font Lock">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Faces for Font Lock">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="up" title="Font Lock Mode">
-<link href="Syntactic-Font-Lock.html#Syntactic-Font-Lock" rel="next" title="Syntactic Font Lock">
-<link href="Precalculated-Fontification.html#Precalculated-Fontification" rel="prev" title="Precalculated Fontification">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Faces for Font
+  Lock</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Faces for Font Lock" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Faces for Font Lock" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="up" title=
+  "Font Lock Mode" />
+  <link href="Syntactic-Font-Lock.html#Syntactic-Font-Lock" rel=
+  "next" title="Syntactic Font Lock" />
+  <link href=
+  "Precalculated-Fontification.html#Precalculated-Fontification"
+  rel="prev" title="Precalculated Fontification" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Faces-for-Font-Lock" id="Faces-for-Font-Lock"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Syntactic-Font-Lock.html#Syntactic-Font-Lock"
+    accesskey="n" rel="next">Syntactic Font Lock</a>, Previous:
+    <a href=
+    "Precalculated-Fontification.html#Precalculated-Fontification"
+    accesskey="p" rel="prev">Precalculated Fontification</a>, Up:
+    <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel=
+    "up">Font Lock Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Faces-for-Font-Lock-1" id="Faces-for-Font-Lock-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Faces-for-Font-Lock"></a>
-<div class="header">
-<p>
-Next: <a href="Syntactic-Font-Lock.html#Syntactic-Font-Lock" accesskey="n" rel="next">Syntactic Font Lock</a>, Previous: <a href="Precalculated-Fontification.html#Precalculated-Fontification" accesskey="p" rel="prev">Precalculated Fontification</a>, Up: <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel="up">Font Lock Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Faces-for-Font-Lock-1"></a>
-<h4 class="subsection">22.6.7 Faces for Font Lock</h4>
-<a name="index-faces-for-font-lock"></a>
-<a name="index-font-lock-faces"></a>
+  <h4 class="subsection">22.6.7 Faces for Font Lock</h4><a name=
+  "index-faces-for-font-lock" id="index-faces-for-font-lock"></a>
+  <a name="index-font-lock-faces" id="index-font-lock-faces"></a>
 
-<p>Font Lock mode can highlight using any face, but Emacs defines several
-faces specifically for Font Lock to use to highlight text.  These
-<em>Font Lock faces</em> are listed below.  They can also be used by major
-modes for syntactic highlighting outside of Font Lock mode (see <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>).
-</p>
-<p>Each of these symbols is both a face name, and a variable whose
-default value is the symbol itself.  Thus, the default value of
-<code>font-lock-comment-face</code> is <code>font-lock-comment-face</code>.
-</p>
-<p>The faces are listed with descriptions of their typical usage, and in
-order of greater to lesser prominence.  If a mode&rsquo;s syntactic
-categories do not fit well with the usage descriptions, the faces can be
-assigned using the ordering as a guide.
-</p>
-<dl compact="compact">
-<dt><code>font-lock-warning-face</code></dt>
-<dd><a name="index-font_002dlock_002dwarning_002dface"></a>
-<p>for a construct that is peculiar, or that greatly changes the meaning of
-other text, like &lsquo;<samp>;;;###autoload</samp>&rsquo; in Emacs Lisp and &lsquo;<samp>#error</samp>&rsquo;
-in C.
-</p>
-</dd>
-<dt><code>font-lock-function-name-face</code></dt>
-<dd><a name="index-font_002dlock_002dfunction_002dname_002dface"></a>
-<p>for the name of a function being defined or declared.
-</p>
-</dd>
-<dt><code>font-lock-variable-name-face</code></dt>
-<dd><a name="index-font_002dlock_002dvariable_002dname_002dface"></a>
-<p>for the name of a variable being defined or declared.
-</p>
-</dd>
-<dt><code>font-lock-keyword-face</code></dt>
-<dd><a name="index-font_002dlock_002dkeyword_002dface"></a>
-<p>for a keyword with special syntactic significance, like &lsquo;<samp>for</samp>&rsquo; and
-&lsquo;<samp>if</samp>&rsquo; in C.
-</p>
-</dd>
-<dt><code>font-lock-comment-face</code></dt>
-<dd><a name="index-font_002dlock_002dcomment_002dface"></a>
-<p>for comments.
-</p>
-</dd>
-<dt><code>font-lock-comment-delimiter-face</code></dt>
-<dd><a name="index-font_002dlock_002dcomment_002ddelimiter_002dface"></a>
-<p>for comments delimiters, like &lsquo;<samp>/*</samp>&rsquo; and &lsquo;<samp>*/</samp>&rsquo; in C.  On most
-terminals, this inherits from <code>font-lock-comment-face</code>.
-</p>
-</dd>
-<dt><code>font-lock-type-face</code></dt>
-<dd><a name="index-font_002dlock_002dtype_002dface"></a>
-<p>for the names of user-defined data types.
-</p>
-</dd>
-<dt><code>font-lock-constant-face</code></dt>
-<dd><a name="index-font_002dlock_002dconstant_002dface"></a>
-<p>for the names of constants, like &lsquo;<samp>NULL</samp>&rsquo; in C.
-</p>
-</dd>
-<dt><code>font-lock-builtin-face</code></dt>
-<dd><a name="index-font_002dlock_002dbuiltin_002dface"></a>
-<p>for the names of built-in functions.
-</p>
-</dd>
-<dt><code>font-lock-preprocessor-face</code></dt>
-<dd><a name="index-font_002dlock_002dpreprocessor_002dface"></a>
-<p>for preprocessor commands.  This inherits, by default, from
-<code>font-lock-builtin-face</code>.
-</p>
-</dd>
-<dt><code>font-lock-string-face</code></dt>
-<dd><a name="index-font_002dlock_002dstring_002dface"></a>
-<p>for string constants.
-</p>
-</dd>
-<dt><code>font-lock-doc-face</code></dt>
-<dd><a name="index-font_002dlock_002ddoc_002dface"></a>
-<p>for documentation strings in the code.  This inherits, by default, from
-<code>font-lock-string-face</code>.
-</p>
-</dd>
-<dt><code>font-lock-negation-char-face</code></dt>
-<dd><a name="index-font_002dlock_002dnegation_002dchar_002dface"></a>
-<p>for easily-overlooked negation characters.
-</p></dd>
-</dl>
+  <p>Font Lock mode can highlight using any face, but Emacs defines
+  several faces specifically for Font Lock to use to highlight
+  text. These <em>Font Lock faces</em> are listed below. They can
+  also be used by major modes for syntactic highlighting outside of
+  Font Lock mode (see <a href=
+  "Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode
+  Conventions</a>).</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Syntactic-Font-Lock.html#Syntactic-Font-Lock" accesskey="n" rel="next">Syntactic Font Lock</a>, Previous: <a href="Precalculated-Fontification.html#Precalculated-Fontification" accesskey="p" rel="prev">Precalculated Fontification</a>, Up: <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel="up">Font Lock Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Each of these symbols is both a face name, and a variable
+  whose default value is the symbol itself. Thus, the default value
+  of <code>font-lock-comment-face</code> is
+  <code>font-lock-comment-face</code>.</p>
 
+  <p>The faces are listed with descriptions of their typical usage,
+  and in order of greater to lesser prominence. If a mode&rsquo;s
+  syntactic categories do not fit well with the usage descriptions,
+  the faces can be assigned using the ordering as a guide.</p>
 
+  <dl compact="compact">
+    <dt><code>font-lock-warning-face</code></dt>
 
+    <dd>
+      <a name="index-font_002dlock_002dwarning_002dface" id=
+      "index-font_002dlock_002dwarning_002dface"></a>
+
+      <p>for a construct that is peculiar, or that greatly changes
+      the meaning of other text, like
+      &lsquo;<samp>;;;###autoload</samp>&rsquo; in Emacs Lisp and
+      &lsquo;<samp>#error</samp>&rsquo; in C.</p>
+    </dd>
+
+    <dt><code>font-lock-function-name-face</code></dt>
+
+    <dd>
+      <a name="index-font_002dlock_002dfunction_002dname_002dface"
+      id="index-font_002dlock_002dfunction_002dname_002dface"></a>
+
+      <p>for the name of a function being defined or declared.</p>
+    </dd>
+
+    <dt><code>font-lock-variable-name-face</code></dt>
+
+    <dd>
+      <a name="index-font_002dlock_002dvariable_002dname_002dface"
+      id="index-font_002dlock_002dvariable_002dname_002dface"></a>
+
+      <p>for the name of a variable being defined or declared.</p>
+    </dd>
+
+    <dt><code>font-lock-keyword-face</code></dt>
+
+    <dd>
+      <a name="index-font_002dlock_002dkeyword_002dface" id=
+      "index-font_002dlock_002dkeyword_002dface"></a>
+
+      <p>for a keyword with special syntactic significance, like
+      &lsquo;<samp>for</samp>&rsquo; and
+      &lsquo;<samp>if</samp>&rsquo; in C.</p>
+    </dd>
+
+    <dt><code>font-lock-comment-face</code></dt>
+
+    <dd>
+      <a name="index-font_002dlock_002dcomment_002dface" id=
+      "index-font_002dlock_002dcomment_002dface"></a>
+
+      <p>for comments.</p>
+    </dd>
+
+    <dt><code>font-lock-comment-delimiter-face</code></dt>
+
+    <dd>
+      <a name=
+      "index-font_002dlock_002dcomment_002ddelimiter_002dface" id=
+      "index-font_002dlock_002dcomment_002ddelimiter_002dface"></a>
+
+      <p>for comments delimiters, like
+      &lsquo;<samp>/*</samp>&rsquo; and
+      &lsquo;<samp>*/</samp>&rsquo; in C. On most terminals, this
+      inherits from <code>font-lock-comment-face</code>.</p>
+    </dd>
+
+    <dt><code>font-lock-type-face</code></dt>
+
+    <dd>
+      <a name="index-font_002dlock_002dtype_002dface" id=
+      "index-font_002dlock_002dtype_002dface"></a>
+
+      <p>for the names of user-defined data types.</p>
+    </dd>
+
+    <dt><code>font-lock-constant-face</code></dt>
+
+    <dd>
+      <a name="index-font_002dlock_002dconstant_002dface" id=
+      "index-font_002dlock_002dconstant_002dface"></a>
+
+      <p>for the names of constants, like
+      &lsquo;<samp>NULL</samp>&rsquo; in C.</p>
+    </dd>
+
+    <dt><code>font-lock-builtin-face</code></dt>
+
+    <dd>
+      <a name="index-font_002dlock_002dbuiltin_002dface" id=
+      "index-font_002dlock_002dbuiltin_002dface"></a>
+
+      <p>for the names of built-in functions.</p>
+    </dd>
+
+    <dt><code>font-lock-preprocessor-face</code></dt>
+
+    <dd>
+      <a name="index-font_002dlock_002dpreprocessor_002dface" id=
+      "index-font_002dlock_002dpreprocessor_002dface"></a>
+
+      <p>for preprocessor commands. This inherits, by default, from
+      <code>font-lock-builtin-face</code>.</p>
+    </dd>
+
+    <dt><code>font-lock-string-face</code></dt>
+
+    <dd>
+      <a name="index-font_002dlock_002dstring_002dface" id=
+      "index-font_002dlock_002dstring_002dface"></a>
+
+      <p>for string constants.</p>
+    </dd>
+
+    <dt><code>font-lock-doc-face</code></dt>
+
+    <dd>
+      <a name="index-font_002dlock_002ddoc_002dface" id=
+      "index-font_002dlock_002ddoc_002dface"></a>
+
+      <p>for documentation strings in the code. This inherits, by
+      default, from <code>font-lock-string-face</code>.</p>
+    </dd>
+
+    <dt><code>font-lock-negation-char-face</code></dt>
+
+    <dd>
+      <a name="index-font_002dlock_002dnegation_002dchar_002dface"
+      id="index-font_002dlock_002dnegation_002dchar_002dface"></a>
+
+      <p>for easily-overlooked negation characters.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Syntactic-Font-Lock.html#Syntactic-Font-Lock"
+    accesskey="n" rel="next">Syntactic Font Lock</a>, Previous:
+    <a href=
+    "Precalculated-Fontification.html#Precalculated-Fontification"
+    accesskey="p" rel="prev">Precalculated Fontification</a>, Up:
+    <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel=
+    "up">Font Lock Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

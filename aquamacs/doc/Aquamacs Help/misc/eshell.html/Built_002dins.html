@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Eshell, the Emacs shell.
 
 Copyright (C) 1999-2016 Free Software Foundation, Inc.
@@ -14,274 +16,413 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Eshell: The Emacs Shell: Built-ins</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Eshell: The Emacs Shell: Built-ins">
-<meta name="keywords" content="Eshell: The Emacs Shell: Built-ins">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="Variables.html#Variables" rel="next" title="Variables">
-<link href="Arguments.html#Arguments" rel="prev" title="Arguments">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Eshell: The Emacs Shell: Built-ins</title>
+  <meta name="description" content=
+  "Eshell: The Emacs Shell: Built-ins" />
+  <meta name="keywords" content=
+  "Eshell: The Emacs Shell: Built-ins" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="Variables.html#Variables" rel="next" title=
+  "Variables" />
+  <link href="Arguments.html#Arguments" rel="prev" title=
+  "Arguments" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Built_002dins"></a>
-<div class="header">
-<p>
-Next: <a href="Variables.html#Variables" accesskey="n" rel="next">Variables</a>, Previous: <a href="Arguments.html#Arguments" accesskey="p" rel="prev">Arguments</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
+<body lang="en" xml:lang="en">
+  <a name="Built_002dins" id="Built_002dins"></a>
 
-<a name="Built_002din-commands"></a>
-<h3 class="section">2.3 Built-in commands</h3>
-<p>Several commands are built-in in Eshell.  In order to call the
-external variant of a built-in command <code>foo</code>, you could call
-<code>*foo</code>.  Usually, this should not be necessary.  You can check
-what will be applied by the <code>which</code> command:
-</p>
-<div class="example">
-<pre class="example">~ $ which ls
+  <div class="header">
+    <p>Next: <a href="Variables.html#Variables" accesskey="n" rel=
+    "next">Variables</a>, Previous: <a href=
+    "Arguments.html#Arguments" accesskey="p" rel=
+    "prev">Arguments</a>, Up: <a href="Commands.html#Commands"
+    accesskey="u" rel="up">Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Built_002din-commands" id="Built_002din-commands"></a>
+
+  <h3 class="section">2.3 Built-in commands</h3>
+
+  <p>Several commands are built-in in Eshell. In order to call the
+  external variant of a built-in command <code>foo</code>, you
+  could call <code>*foo</code>. Usually, this should not be
+  necessary. You can check what will be applied by the
+  <code>which</code> command:</p>
+
+  <div class="example">
+    <pre class="example">
+~ $ which ls
 eshell/ls is a compiled Lisp function in `em-ls.el'
 ~ $ which *ls
 /bin/ls
-</pre></div>
+</pre>
+  </div>
 
-<p>If you want to discard a given built-in command, you could declare an
-alias, <a href="Aliases.html#Aliases">Aliases</a>.  Example:
-</p>
-<div class="example">
-<pre class="example">~ $ which sudo
+  <p>If you want to discard a given built-in command, you could
+  declare an alias, <a href="Aliases.html#Aliases">Aliases</a>.
+  Example:</p>
+
+  <div class="example">
+    <pre class="example">
+~ $ which sudo
 eshell/sudo is a compiled Lisp function in `em-unix.el'
 ~ $ alias sudo '*sudo $*'
 ~ $ which sudo
-sudo is an alias, defined as &quot;*sudo $*&quot;
-</pre></div>
+sudo is an alias, defined as "*sudo $*"
+</pre>
+  </div><a name="index-eshell_002dprefer_002dlisp_002dfunctions"
+  id="index-eshell_002dprefer_002dlisp_002dfunctions"></a>
 
-<a name="index-eshell_002dprefer_002dlisp_002dfunctions"></a>
-<p>If you would prefer to use the built-in commands instead of the external
-commands, set <code>eshell-prefer-lisp-functions</code> to <code>t</code>.
-</p>
-<p>Some of the built-in commands have different behavior from their
-external counterparts, and some have no external counterpart.  Most of
-these will print a usage message when given the <code>--help</code> option.
-</p>
-<dl compact="compact">
-<dt><code>addpath</code></dt>
-<dd><a name="index-addpath"></a>
-<p>Adds a given path or set of paths to the PATH environment variable, or,
-with no arguments, prints the current paths in this variable.
-</p>
-</dd>
-<dt><code>alias</code></dt>
-<dd><a name="index-alias"></a>
-<p>Define an alias (see <a href="Aliases.html#Aliases">Aliases</a>).  This does not add it to the aliases
-file.
-</p>
-</dd>
-<dt><code>clear</code></dt>
-<dd><a name="index-clear"></a>
-<p>Scrolls the contents of the eshell window out of sight, leaving a blank window.
-If provided with an optional non-nil argument, the scrollback contents are
-cleared instead.
-</p>
-</dd>
-<dt><code>date</code></dt>
-<dd><a name="index-date"></a>
-<p>Similar to, but slightly different from, the GNU Coreutils
-<code>date</code> command.
-</p>
-</dd>
-<dt><code>define</code></dt>
-<dd><a name="index-define"></a>
-<p>Define a varalias.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Variable-Aliases.html#Variable-Aliases">Variable Aliases</a> in <cite>The Emacs Lisp Reference Manual</cite>.
-</p>
-</dd>
-<dt><code>diff</code></dt>
-<dd><a name="index-diff"></a>
-<p>Use Emacs&rsquo;s internal <code>diff</code> (not to be confused with
-<code>ediff</code>).  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Comparing-Files.html#Comparing-Files">Comparing Files</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-</dd>
-<dt><code>grep</code></dt>
-<dd><a name="index-grep"></a>
-</dd>
-<dt><code>agrep</code></dt>
-<dd><a name="index-agrep"></a>
-</dd>
-<dt><code>egrep</code></dt>
-<dd><a name="index-egrep"></a>
-</dd>
-<dt><code>fgrep</code></dt>
-<dd><a name="index-fgrep"></a>
-</dd>
-<dt><code>glimpse</code></dt>
-<dd><a name="index-glimpse"></a>
-<p>The <code>grep</code> commands are compatible with GNU <code>grep</code>, but
-use Emacs&rsquo;s internal <code>grep</code> instead.
-</p>
-</dd>
-<dt><code>info</code></dt>
-<dd><a name="index-info"></a>
-<p>Same as the external <code>info</code> command, but uses Emacs&rsquo;s internal
-Info reader.
-</p>
-</dd>
-<dt><code>jobs</code></dt>
-<dd><a name="index-jobs"></a>
-<p>List subprocesses of the Emacs process, if any, using the function
-<code>list-processes</code>.
-</p>
-</dd>
-<dt><code>kill</code></dt>
-<dd><a name="index-kill"></a>
-<p>Kill processes.  Takes a PID or a process object and an optional
-signal specifier.
-</p>
-</dd>
-<dt><code>listify</code></dt>
-<dd><a name="index-listify"></a>
-<p>Eshell version of <code>list</code>.  Allows you to create a list using Eshell
-syntax, rather than Elisp syntax.  For example, &lsquo;<samp>listify foo bar</samp>&rsquo;
-and <code>(&quot;foo&quot; &quot;bar&quot;)</code> both evaluate to <code>(&quot;foo&quot; &quot;bar&quot;)</code>.
-</p>
-</dd>
-<dt><code>locate</code></dt>
-<dd><a name="index-locate"></a>
-<p>Alias to Emacs&rsquo;s <code>locate</code> function, which simply runs the external
-<code>locate</code> command and parses the results.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Dired-and-Find.html#Dired-and-Find">Dired and Find</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-</dd>
-<dt><code>make</code></dt>
-<dd><a name="index-make"></a>
-<p>Run <code>make</code> through <code>compile</code>.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Compilation.html#Compilation">Compilation</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-</dd>
-<dt><code>occur</code></dt>
-<dd><a name="index-occur"></a>
-<p>Alias to Emacs&rsquo;s <code>occur</code>.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Other-Repeating-Search.html#Other-Repeating-Search">Other Repeating Search</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-</dd>
-<dt><code>printnl</code></dt>
-<dd><a name="index-printnl"></a>
-<p>Print the arguments separated by newlines.
-</p>
-</dd>
-<dt><code>cd</code></dt>
-<dd><a name="index-cd"></a>
-<p>This command changes the current working directory.  Usually, it is
-invoked as &lsquo;<samp>cd foo</samp>&rsquo; where <samp>foo</samp> is the new working directory.
-But <code>cd</code> knows about a few special arguments:
-</p>
-<p>When it receives no argument at all, it changes to the home directory.
-</p>
-<p>Giving the command &lsquo;<samp>cd -</samp>&rsquo; changes back to the previous working
-directory (this is the same as &lsquo;<samp>cd $-</samp>&rsquo;).
-</p>
-<p>The command &lsquo;<samp>cd =</samp>&rsquo; shows the directory stack.  Each line is
-numbered.
-</p>
-<p>With &lsquo;<samp>cd =foo</samp>&rsquo;, Eshell searches the directory stack for a directory
-matching the regular expression &lsquo;<samp>foo</samp>&rsquo; and changes to that
-directory.
-</p>
-<p>With &lsquo;<samp>cd -42</samp>&rsquo;, you can access the directory stack by number.
-</p>
-</dd>
-<dt><code>su</code></dt>
-<dd><a name="index-su"></a>
-</dd>
-<dt><code>sudo</code></dt>
-<dd><a name="index-sudo"></a>
-<p>Uses TRAMP&rsquo;s <code>su</code> or <code>sudo</code> method see <a href="http://www.gnu.org/software/emacs/manual/html_node/tramp/Inline-methods.html#Inline-methods">(tramp)Inline methods</a>
-to run a command via <code>su</code> or <code>sudo</code>.  These commands
-are in the eshell-tramp module, which is disabled by default.
-</p>
-</dd>
-</dl>
+  <p>If you would prefer to use the built-in commands instead of
+  the external commands, set
+  <code>eshell-prefer-lisp-functions</code> to <code>t</code>.</p>
 
-<a name="Built_002din-variables"></a>
-<h4 class="subsection">2.3.1 Built-in variables</h4>
-<p>Eshell knows a few built-in variables:
-</p>
-<dl compact="compact">
-<dt><code>$+</code></dt>
-<dd><a name="index-_0024_002b"></a>
-<p>This variable always contains the current working directory.
-</p>
-</dd>
-<dt><code>$-</code></dt>
-<dd><a name="index-_0024_002d"></a>
-<p>This variable always contains the previous working directory (the
-current working directory from before the last <code>cd</code> command).
-</p>
-</dd>
-<dt><code>$_</code></dt>
-<dd><a name="index-_0024_005f"></a>
-<p>It refers to the last argument of the last command.
-</p>
-</dd>
-<dt><code>$$</code></dt>
-<dd><a name="index-_0024_0024"></a>
-<p>This is the result of the last command.  In case of an external
-command, it is <code>t</code> or <code>nil</code>.
-</p>
-</dd>
-<dt><code>$?</code></dt>
-<dd><a name="index-_0024_003f"></a>
-<p>This variable contains the exit code of the last command (0 or 1 for
-Lisp functions, based on successful completion).
-</p>
-</dd>
-</dl>
+  <p>Some of the built-in commands have different behavior from
+  their external counterparts, and some have no external
+  counterpart. Most of these will print a usage message when given
+  the <code>--help</code> option.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Variables.html#Variables" accesskey="n" rel="next">Variables</a>, Previous: <a href="Arguments.html#Arguments" accesskey="p" rel="prev">Arguments</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><code>addpath</code></dt>
 
+    <dd>
+      <a name="index-addpath" id="index-addpath"></a>
 
+      <p>Adds a given path or set of paths to the PATH environment
+      variable, or, with no arguments, prints the current paths in
+      this variable.</p>
+    </dd>
 
+    <dt><code>alias</code></dt>
+
+    <dd>
+      <a name="index-alias" id="index-alias"></a>
+
+      <p>Define an alias (see <a href=
+      "Aliases.html#Aliases">Aliases</a>). This does not add it to
+      the aliases file.</p>
+    </dd>
+
+    <dt><code>clear</code></dt>
+
+    <dd>
+      <a name="index-clear" id="index-clear"></a>
+
+      <p>Scrolls the contents of the eshell window out of sight,
+      leaving a blank window. If provided with an optional non-nil
+      argument, the scrollback contents are cleared instead.</p>
+    </dd>
+
+    <dt><code>date</code></dt>
+
+    <dd>
+      <a name="index-date" id="index-date"></a>
+
+      <p>Similar to, but slightly different from, the GNU Coreutils
+      <code>date</code> command.</p>
+    </dd>
+
+    <dt><code>define</code></dt>
+
+    <dd>
+      <a name="index-define" id="index-define"></a>
+
+      <p>Define a varalias. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/elisp/Variable-Aliases.html#Variable-Aliases">
+      Variable Aliases</a> in <cite>The Emacs Lisp Reference
+      Manual</cite>.</p>
+    </dd>
+
+    <dt><code>diff</code></dt>
+
+    <dd>
+      <a name="index-diff" id="index-diff"></a>
+
+      <p>Use Emacs&rsquo;s internal <code>diff</code> (not to be
+      confused with <code>ediff</code>). See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Comparing-Files.html#Comparing-Files">
+      Comparing Files</a> in <cite>The GNU Emacs Manual</cite>.</p>
+    </dd>
+
+    <dt><code>grep</code></dt>
+
+    <dd><a name="index-grep" id="index-grep"></a></dd>
+
+    <dt><code>agrep</code></dt>
+
+    <dd><a name="index-agrep" id="index-agrep"></a></dd>
+
+    <dt><code>egrep</code></dt>
+
+    <dd><a name="index-egrep" id="index-egrep"></a></dd>
+
+    <dt><code>fgrep</code></dt>
+
+    <dd><a name="index-fgrep" id="index-fgrep"></a></dd>
+
+    <dt><code>glimpse</code></dt>
+
+    <dd>
+      <a name="index-glimpse" id="index-glimpse"></a>
+
+      <p>The <code>grep</code> commands are compatible with GNU
+      <code>grep</code>, but use Emacs&rsquo;s internal
+      <code>grep</code> instead.</p>
+    </dd>
+
+    <dt><code>info</code></dt>
+
+    <dd>
+      <a name="index-info" id="index-info"></a>
+
+      <p>Same as the external <code>info</code> command, but uses
+      Emacs&rsquo;s internal Info reader.</p>
+    </dd>
+
+    <dt><code>jobs</code></dt>
+
+    <dd>
+      <a name="index-jobs" id="index-jobs"></a>
+
+      <p>List subprocesses of the Emacs process, if any, using the
+      function <code>list-processes</code>.</p>
+    </dd>
+
+    <dt><code>kill</code></dt>
+
+    <dd>
+      <a name="index-kill" id="index-kill"></a>
+
+      <p>Kill processes. Takes a PID or a process object and an
+      optional signal specifier.</p>
+    </dd>
+
+    <dt><code>listify</code></dt>
+
+    <dd>
+      <a name="index-listify" id="index-listify"></a>
+
+      <p>Eshell version of <code>list</code>. Allows you to create
+      a list using Eshell syntax, rather than Elisp syntax. For
+      example, &lsquo;<samp>listify foo bar</samp>&rsquo; and
+      <code>("foo" "bar")</code> both evaluate to <code>("foo"
+      "bar")</code>.</p>
+    </dd>
+
+    <dt><code>locate</code></dt>
+
+    <dd>
+      <a name="index-locate" id="index-locate"></a>
+
+      <p>Alias to Emacs&rsquo;s <code>locate</code> function, which
+      simply runs the external <code>locate</code> command and
+      parses the results. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Dired-and-Find.html#Dired-and-Find">
+      Dired and Find</a> in <cite>The GNU Emacs Manual</cite>.</p>
+    </dd>
+
+    <dt><code>make</code></dt>
+
+    <dd>
+      <a name="index-make" id="index-make"></a>
+
+      <p>Run <code>make</code> through <code>compile</code>. See
+      <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Compilation.html#Compilation">
+      Compilation</a> in <cite>The GNU Emacs Manual</cite>.</p>
+    </dd>
+
+    <dt><code>occur</code></dt>
+
+    <dd>
+      <a name="index-occur" id="index-occur"></a>
+
+      <p>Alias to Emacs&rsquo;s <code>occur</code>. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Other-Repeating-Search.html#Other-Repeating-Search">
+      Other Repeating Search</a> in <cite>The GNU Emacs
+      Manual</cite>.</p>
+    </dd>
+
+    <dt><code>printnl</code></dt>
+
+    <dd>
+      <a name="index-printnl" id="index-printnl"></a>
+
+      <p>Print the arguments separated by newlines.</p>
+    </dd>
+
+    <dt><code>cd</code></dt>
+
+    <dd>
+      <a name="index-cd" id="index-cd"></a>
+
+      <p>This command changes the current working directory.
+      Usually, it is invoked as &lsquo;<samp>cd foo</samp>&rsquo;
+      where <samp>foo</samp> is the new working directory. But
+      <code>cd</code> knows about a few special arguments:</p>
+
+      <p>When it receives no argument at all, it changes to the
+      home directory.</p>
+
+      <p>Giving the command &lsquo;<samp>cd -</samp>&rsquo; changes
+      back to the previous working directory (this is the same as
+      &lsquo;<samp>cd $-</samp>&rsquo;).</p>
+
+      <p>The command &lsquo;<samp>cd =</samp>&rsquo; shows the
+      directory stack. Each line is numbered.</p>
+
+      <p>With &lsquo;<samp>cd =foo</samp>&rsquo;, Eshell searches
+      the directory stack for a directory matching the regular
+      expression &lsquo;<samp>foo</samp>&rsquo; and changes to that
+      directory.</p>
+
+      <p>With &lsquo;<samp>cd -42</samp>&rsquo;, you can access the
+      directory stack by number.</p>
+    </dd>
+
+    <dt><code>su</code></dt>
+
+    <dd><a name="index-su" id="index-su"></a></dd>
+
+    <dt><code>sudo</code></dt>
+
+    <dd>
+      <a name="index-sudo" id="index-sudo"></a>
+
+      <p>Uses TRAMP&rsquo;s <code>su</code> or <code>sudo</code>
+      method see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/tramp/Inline-methods.html#Inline-methods">
+      (tramp)Inline methods</a> to run a command via
+      <code>su</code> or <code>sudo</code>. These commands are in
+      the eshell-tramp module, which is disabled by default.</p>
+    </dd>
+  </dl><a name="Built_002din-variables" id=
+  "Built_002din-variables"></a>
+
+  <h4 class="subsection">2.3.1 Built-in variables</h4>
+
+  <p>Eshell knows a few built-in variables:</p>
+
+  <dl compact="compact">
+    <dt><code>$+</code></dt>
+
+    <dd>
+      <a name="index-_0024_002b" id="index-_0024_002b"></a>
+
+      <p>This variable always contains the current working
+      directory.</p>
+    </dd>
+
+    <dt><code>$-</code></dt>
+
+    <dd>
+      <a name="index-_0024_002d" id="index-_0024_002d"></a>
+
+      <p>This variable always contains the previous working
+      directory (the current working directory from before the last
+      <code>cd</code> command).</p>
+    </dd>
+
+    <dt><code>$_</code></dt>
+
+    <dd>
+      <a name="index-_0024_005f" id="index-_0024_005f"></a>
+
+      <p>It refers to the last argument of the last command.</p>
+    </dd>
+
+    <dt><code>$$</code></dt>
+
+    <dd>
+      <a name="index-_0024_0024" id="index-_0024_0024"></a>
+
+      <p>This is the result of the last command. In case of an
+      external command, it is <code>t</code> or
+      <code>nil</code>.</p>
+    </dd>
+
+    <dt><code>$?</code></dt>
+
+    <dd>
+      <a name="index-_0024_003f" id="index-_0024_003f"></a>
+
+      <p>This variable contains the exit code of the last command
+      (0 or 1 for Lisp functions, based on successful
+      completion).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Variables.html#Variables" accesskey="n" rel=
+    "next">Variables</a>, Previous: <a href=
+    "Arguments.html#Arguments" accesskey="p" rel=
+    "prev">Arguments</a>, Up: <a href="Commands.html#Commands"
+    accesskey="u" rel="up">Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

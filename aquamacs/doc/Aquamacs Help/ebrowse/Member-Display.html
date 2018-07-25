@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Member Display - A Class Browser for C++</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="A Class Browser for C++">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Tree-Buffers.html#Tree-Buffers" title="Tree Buffers">
-<link rel="prev" href="Source-Display.html#Source-Display" title="Source Display">
-<link rel="next" href="Go-to-Class.html#Go-to-Class" title="Go to Class">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Member Display - A Class Browser for C++</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="A Class Browser for C++" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Tree-Buffers.html#Tree-Buffers" title=
+  "Tree Buffers" />
+  <link rel="prev" href="Source-Display.html#Source-Display" title=
+  "Source Display" />
+  <link rel="next" href="Go-to-Class.html#Go-to-Class" title=
+  "Go to Class" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Ebrowse, a C++ class browser for GNU Emacs.
 
 Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -27,8 +36,10 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,63 +49,114 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Member-Display"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Go-to-Class.html#Go-to-Class">Go to Class</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Source-Display.html#Source-Display">Source Display</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Tree-Buffers.html#Tree-Buffers">Tree Buffers</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Member-Display" id="Member-Display"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h3 class="section">4.2 Displaying Members</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Go-to-Class.html#Go-to-Class">Go to Class</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Source-Display.html#Source-Display">Source Display</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Tree-Buffers.html#Tree-Buffers">Tree Buffers</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-<p><a name="index-g_t_0040samp_007b_002aMembers_002a_007d-buffer-42"></a><a name="index-g_t_0040samp_007b_002aGlobals_002a_007d-43"></a><a name="index-freezing-a-member-buffer-44"></a><a name="index-member-lists_002c-in-tree-buffers-45"></a>
-Ebrowse distinguishes six different kinds of members, each of
-which is displayed as a separate <dfn>member list</dfn>: instance variables,
-instance functions, static variables, static functions, friend
-functions, and types.
+  <h3 class="section">4.2 Displaying Members</h3>
 
-   <p>Each of these lists can be displayed in a member buffer with a command
-starting with <kbd>L</kbd> when the cursor is on a class name.  By default,
-there is only one member buffer named <dfn>*Members*</dfn> that is reused
-each time you display a member list&mdash;this has proven to be more
-practical than to clutter up the buffer list with dozens of member
-buffers.
+  <p><a name=
+  "index-g_t_0040samp_007b_002aMembers_002a_007d-buffer-42" id=
+  "index-g_t_0040samp_007b_002aMembers_002a_007d-buffer-42"></a><a name="index-g_t_0040samp_007b_002aGlobals_002a_007d-43"
+  id=
+  "index-g_t_0040samp_007b_002aGlobals_002a_007d-43"></a><a name="index-freezing-a-member-buffer-44"
+  id="index-freezing-a-member-buffer-44"></a><a name=
+  "index-member-lists_002c-in-tree-buffers-45" id=
+  "index-member-lists_002c-in-tree-buffers-45"></a> Ebrowse
+  distinguishes six different kinds of members, each of which is
+  displayed as a separate <dfn>member list</dfn>: instance
+  variables, instance functions, static variables, static
+  functions, friend functions, and types.</p>
 
-   <p>If you want to display more than one member list at a time you can
-<dfn>freeze</dfn> its member buffer. Freezing a member buffer prevents it
-from being overwritten the next time you display a member list. You can
-toggle this buffer status at any time.
+  <p>Each of these lists can be displayed in a member buffer with a
+  command starting with <kbd>L</kbd> when the cursor is on a class
+  name. By default, there is only one member buffer named
+  <dfn>*Members*</dfn> that is reused each time you display a
+  member list&mdash;this has proven to be more practical than to
+  clutter up the buffer list with dozens of member buffers.</p>
 
-   <p>Every member list display command in the tree buffer can be used with a
-prefix argument (<kbd>C-u</kbd>).  Without a prefix argument, the command will
-pop to a member buffer displaying the member list.  With prefix argument,
-the member buffer will additionally be <dfn>frozen</dfn>.
+  <p>If you want to display more than one member list at a time you
+  can <dfn>freeze</dfn> its member buffer. Freezing a member buffer
+  prevents it from being overwritten the next time you display a
+  member list. You can toggle this buffer status at any time.</p>
 
-     
-<a name="index-instance-member-variables_002c-list-46"></a>
-<dl><dt><kbd>L v</kbd><dd>This command displays the list of instance member variables.
+  <p>Every member list display command in the tree buffer can be
+  used with a prefix argument (<kbd>C-u</kbd>). Without a prefix
+  argument, the command will pop to a member buffer displaying the
+  member list. With prefix argument, the member buffer will
+  additionally be <dfn>frozen</dfn>. <a name=
+  "index-instance-member-variables_002c-list-46" id=
+  "index-instance-member-variables_002c-list-46"></a></p>
 
-     <p><a name="index-static-variables_002c-list-47"></a><br><dt><kbd>L V</kbd><dd>Display the list of static variables.
+  <dl>
+    <dt><kbd>L v</kbd></dt>
 
-     <p><a name="index-friend-functions_002c-list-48"></a><br><dt><kbd>L d</kbd><dd>Display the list of friend functions.  This list is used for defines if
-you are viewing the class &lsquo;<samp><span class="samp">*Globals*</span></samp>&rsquo; which is a place holder for
-global symbols.
+    <dd>
+      This command displays the list of instance member variables.
 
-     <p><a name="index-member-functions_002c-list-49"></a><br><dt><kbd>L f</kbd><dd>Display the list of member functions.
+      <p><a name="index-static-variables_002c-list-47" id=
+      "index-static-variables_002c-list-47"></a><br /></p>
+    </dd>
 
-     <p><a name="index-static-member-functions_002c-list-50"></a><br><dt><kbd>L F</kbd><dd>Display the list of static member functions.
+    <dt><kbd>L V</kbd></dt>
 
-     <p><a name="index-types_002c-list-51"></a><br><dt><kbd>L t</kbd><dd>Display a list of types. 
-</dl>
+    <dd>
+      Display the list of static variables.
 
-   <p>These lists are also available from the class' context menu invoked with
-<kbd>Mouse-3</kbd> on the class name.
+      <p><a name="index-friend-functions_002c-list-48" id=
+      "index-friend-functions_002c-list-48"></a><br /></p>
+    </dd>
 
-   </body></html>
+    <dt><kbd>L d</kbd></dt>
 
+    <dd>
+      Display the list of friend functions. This list is used for
+      defines if you are viewing the class
+      &lsquo;<samp><span class="samp">*Globals*</span></samp>&rsquo;
+      which is a place holder for global symbols.
+
+      <p><a name="index-member-functions_002c-list-49" id=
+      "index-member-functions_002c-list-49"></a><br /></p>
+    </dd>
+
+    <dt><kbd>L f</kbd></dt>
+
+    <dd>
+      Display the list of member functions.
+
+      <p><a name="index-static-member-functions_002c-list-50" id=
+      "index-static-member-functions_002c-list-50"></a><br /></p>
+    </dd>
+
+    <dt><kbd>L F</kbd></dt>
+
+    <dd>
+      Display the list of static member functions.
+
+      <p><a name="index-types_002c-list-51" id=
+      "index-types_002c-list-51"></a><br /></p>
+    </dd>
+
+    <dt><kbd>L t</kbd></dt>
+
+    <dd>Display a list of types.</dd>
+  </dl>
+
+  <p>These lists are also available from the class' context menu
+  invoked with <kbd>Mouse-3</kbd> on the class name.</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,130 +20,170 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Adaptive Fill</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Adaptive Fill">
-<meta name="keywords" content="GNU Emacs Manual: Adaptive Fill">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Filling.html#Filling" rel="up" title="Filling">
-<link href="Case.html#Case" rel="next" title="Case">
-<link href="Fill-Prefix.html#Fill-Prefix" rel="prev" title="Fill Prefix">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Adaptive Fill</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Adaptive Fill" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Adaptive Fill" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Filling.html#Filling" rel="up" title="Filling" />
+  <link href="Case.html#Case" rel="next" title="Case" />
+  <link href="Fill-Prefix.html#Fill-Prefix" rel="prev" title=
+  "Fill Prefix" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Adaptive-Fill" id="Adaptive-Fill"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Fill-Prefix.html#Fill-Prefix" accesskey=
+    "p" rel="prev">Fill Prefix</a>, Up: <a href=
+    "Filling.html#Filling" accesskey="u" rel="up">Filling</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Adaptive-Filling" id="Adaptive-Filling"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Adaptive-Fill"></a>
-<div class="header">
-<p>
-Previous: <a href="Fill-Prefix.html#Fill-Prefix" accesskey="p" rel="prev">Fill Prefix</a>, Up: <a href="Filling.html#Filling" accesskey="u" rel="up">Filling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Adaptive-Filling"></a>
-<h4 class="subsection">25.6.4 Adaptive Filling</h4>
+  <h4 class="subsection">25.6.4 Adaptive Filling</h4><a name=
+  "index-adaptive-filling" id="index-adaptive-filling"></a>
 
-<a name="index-adaptive-filling"></a>
-<p>The fill commands can deduce the proper fill prefix for a paragraph
-automatically in certain cases: either whitespace or certain punctuation
-characters at the beginning of a line are propagated to all lines of the
-paragraph.
-</p>
-<p>If the paragraph has two or more lines, the fill prefix is taken from
-the paragraph&rsquo;s second line, but only if it appears on the first line as
-well.
-</p>
-<p>If a paragraph has just one line, fill commands <em>may</em> take a
-prefix from that line.  The decision is complicated because there are
-three reasonable things to do in such a case:
-</p>
-<ul>
-<li> Use the first line&rsquo;s prefix on all the lines of the paragraph.
+  <p>The fill commands can deduce the proper fill prefix for a
+  paragraph automatically in certain cases: either whitespace or
+  certain punctuation characters at the beginning of a line are
+  propagated to all lines of the paragraph.</p>
 
-</li><li> Indent subsequent lines with whitespace, so that they line up under the
-text that follows the prefix on the first line, but don&rsquo;t actually copy
-the prefix from the first line.
+  <p>If the paragraph has two or more lines, the fill prefix is
+  taken from the paragraph&rsquo;s second line, but only if it
+  appears on the first line as well.</p>
 
-</li><li> Don&rsquo;t do anything special with the second and following lines.
-</li></ul>
+  <p>If a paragraph has just one line, fill commands <em>may</em>
+  take a prefix from that line. The decision is complicated because
+  there are three reasonable things to do in such a case:</p>
 
-<p>All three of these styles of formatting are commonly used.  So the
-fill commands try to determine what you would like, based on the prefix
-that appears and on the major mode.  Here is how.
-</p>
-<a name="index-adaptive_002dfill_002dfirst_002dline_002dregexp"></a>
-<p>If the prefix found on the first line matches
-<code>adaptive-fill-first-line-regexp</code>, or if it appears to be a
-comment-starting sequence (this depends on the major mode), then the
-prefix found is used for filling the paragraph, provided it would not
-act as a paragraph starter on subsequent lines.
-</p>
-<p>Otherwise, the prefix found is converted to an equivalent number of
-spaces, and those spaces are used as the fill prefix for the rest of the
-lines, provided they would not act as a paragraph starter on subsequent
-lines.
-</p>
-<p>In Text mode, and other modes where only blank lines and page
-delimiters separate paragraphs, the prefix chosen by adaptive filling
-never acts as a paragraph starter, so it can always be used for filling.
-</p>
-<a name="index-adaptive_002dfill_002dmode"></a>
-<a name="index-adaptive_002dfill_002dregexp"></a>
-<p>The variable <code>adaptive-fill-regexp</code> determines what kinds of line
-beginnings can serve as a fill prefix: any characters at the start of
-the line that match this regular expression are used.  If you set the
-variable <code>adaptive-fill-mode</code> to <code>nil</code>, the fill prefix is
-never chosen automatically.
-</p>
-<a name="index-adaptive_002dfill_002dfunction"></a>
-<p>You can specify more complex ways of choosing a fill prefix
-automatically by setting the variable <code>adaptive-fill-function</code> to a
-function.  This function is called with point after the left margin of a
-line, and it should return the appropriate fill prefix based on that
-line.  If it returns <code>nil</code>, <code>adaptive-fill-regexp</code> gets
-a chance to find a prefix.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Fill-Prefix.html#Fill-Prefix" accesskey="p" rel="prev">Fill Prefix</a>, Up: <a href="Filling.html#Filling" accesskey="u" rel="up">Filling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <ul>
+    <li>Use the first line&rsquo;s prefix on all the lines of the
+    paragraph.</li>
 
+    <li>Indent subsequent lines with whitespace, so that they line
+    up under the text that follows the prefix on the first line,
+    but don&rsquo;t actually copy the prefix from the first
+    line.</li>
 
+    <li>Don&rsquo;t do anything special with the second and
+    following lines.</li>
+  </ul>
 
+  <p>All three of these styles of formatting are commonly used. So
+  the fill commands try to determine what you would like, based on
+  the prefix that appears and on the major mode. Here is
+  how.</p><a name=
+  "index-adaptive_002dfill_002dfirst_002dline_002dregexp" id=
+  "index-adaptive_002dfill_002dfirst_002dline_002dregexp"></a>
+
+  <p>If the prefix found on the first line matches
+  <code>adaptive-fill-first-line-regexp</code>, or if it appears to
+  be a comment-starting sequence (this depends on the major mode),
+  then the prefix found is used for filling the paragraph, provided
+  it would not act as a paragraph starter on subsequent lines.</p>
+
+  <p>Otherwise, the prefix found is converted to an equivalent
+  number of spaces, and those spaces are used as the fill prefix
+  for the rest of the lines, provided they would not act as a
+  paragraph starter on subsequent lines.</p>
+
+  <p>In Text mode, and other modes where only blank lines and page
+  delimiters separate paragraphs, the prefix chosen by adaptive
+  filling never acts as a paragraph starter, so it can always be
+  used for filling.</p><a name="index-adaptive_002dfill_002dmode"
+  id="index-adaptive_002dfill_002dmode"></a> <a name=
+  "index-adaptive_002dfill_002dregexp" id=
+  "index-adaptive_002dfill_002dregexp"></a>
+
+  <p>The variable <code>adaptive-fill-regexp</code> determines what
+  kinds of line beginnings can serve as a fill prefix: any
+  characters at the start of the line that match this regular
+  expression are used. If you set the variable
+  <code>adaptive-fill-mode</code> to <code>nil</code>, the fill
+  prefix is never chosen automatically.</p><a name=
+  "index-adaptive_002dfill_002dfunction" id=
+  "index-adaptive_002dfill_002dfunction"></a>
+
+  <p>You can specify more complex ways of choosing a fill prefix
+  automatically by setting the variable
+  <code>adaptive-fill-function</code> to a function. This function
+  is called with point after the left margin of a line, and it
+  should return the appropriate fill prefix based on that line. If
+  it returns <code>nil</code>, <code>adaptive-fill-regexp</code>
+  gets a chance to find a prefix.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Fill-Prefix.html#Fill-Prefix" accesskey=
+    "p" rel="prev">Fill Prefix</a>, Up: <a href=
+    "Filling.html#Filling" accesskey="u" rel="up">Filling</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

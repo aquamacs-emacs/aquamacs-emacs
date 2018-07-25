@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,131 +16,218 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Building Classes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Building Classes">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Building Classes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Inheritance.html#Inheritance" rel="next" title="Inheritance">
-<link href="Introduction.html#Introduction" rel="prev" title="Introduction">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Building Classes</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Building Classes" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Building Classes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Inheritance.html#Inheritance" rel="next" title=
+  "Inheritance" />
+  <link href="Introduction.html#Introduction" rel="prev" title=
+  "Introduction" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Building-Classes"></a>
-<div class="header">
-<p>
-Next: <a href="Making-New-Objects.html#Making-New-Objects" accesskey="n" rel="next">Making New Objects</a>, Previous: <a href="Introduction.html#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Building-Classes-1"></a>
-<h2 class="chapter">3 Building Classes</h2>
+<body lang="en" xml:lang="en">
+  <a name="Building-Classes" id="Building-Classes"></a>
 
-<p>A <em>class</em> is a definition for organizing data and methods
-together.  An <i>EIEIO</i> class has structures similar to the classes
-found in other object-oriented (OO) languages.
-</p>
-<p>To create a new class, use the <code>defclass</code> macro:
-</p>
-<dl>
-<dt><a name="index-defclass"></a>Macro: <strong>defclass</strong> <em>class-name superclass-list slot-list &amp;rest options-and-doc</em></dt>
-<dd>
-<p>Create a new class named <var>class-name</var>.  The class is represented
-by a symbol with the name <var>class-name</var>.  <i>EIEIO</i> stores the structure of
-the class as a symbol property of <var>class-name</var> (see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Symbol-Components.html#Symbol-Components">Symbol
-Components</a> in <cite>GNU Emacs Lisp Reference Manual</cite>).
-</p>
-<p>The <var>class-name</var> symbol&rsquo;s variable documentation string is a
-modified version of the doc string found in <var>options-and-doc</var>.
-Each time a method is defined, the symbol&rsquo;s documentation string is
-updated to include the methods documentation as well.
-</p>
-<p>The parent classes for <var>class-name</var> is <var>superclass-list</var>.
-Each element of <var>superclass-list</var> must be a class.  These classes
-are the parents of the class being created.  Every slot that appears
-in each parent class is replicated in the new class.
-</p>
-<p>If two parents share the same slot name, the parent which appears in
-the <var>superclass-list</var> first sets the tags for that slot.  If the
-new class has a slot with the same name as the parent, the new slot
-overrides the parent&rsquo;s slot.
-</p>
-<p>When overriding a slot, some slot attributes cannot be overridden
-because they break basic OO rules.  You cannot override <code>:type</code>
-or <code>:protection</code>.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Making-New-Objects.html#Making-New-Objects"
+    accesskey="n" rel="next">Making New Objects</a>, Previous:
+    <a href="Introduction.html#Introduction" accesskey="p" rel=
+    "prev">Introduction</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Building-Classes-1" id="Building-Classes-1"></a>
 
-<p>Whenever defclass is used to create a new class, a predicate is
-created for it, named <code><var>CLASS-NAME</var>-p</code>:
-</p>
-<dl>
-<dt><a name="index-CLASS_002dNAME_002dp"></a>Function: <strong>CLASS-NAME-p</strong> <em>object</em></dt>
-<dd><p>Return non-<code>nil</code> if and only if <var>OBJECT</var> is of the class
-<var>CLASS-NAME</var>.
-</p></dd></dl>
+  <h2 class="chapter">3 Building Classes</h2>
 
-<dl>
-<dt><a name="index-eieio_002derror_002dunsupported_002dclass_002dtags"></a>Variable: <strong>eieio-error-unsupported-class-tags</strong></dt>
-<dd><p>If non-<code>nil</code>, <code>defclass</code> signals an error if a tag in a slot
-specifier is unsupported.
-</p>
-<p>This option is here to support programs written with older versions of
-<i>EIEIO</i>, which did not produce such errors.
-</p></dd></dl>
+  <p>A <em>class</em> is a definition for organizing data and
+  methods together. An <i>EIEIO</i> class has structures similar to
+  the classes found in other object-oriented (OO) languages.</p>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Inheritance.html#Inheritance" accesskey="1">Inheritance</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to specify parents classes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Slot-Options.html#Slot-Options" accesskey="2">Slot Options</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to specify features of a slot.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Class-Options.html#Class-Options" accesskey="3">Class Options</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to specify features for this class.
-</td></tr>
-</table>
+  <p>To create a new class, use the <code>defclass</code>
+  macro:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Making-New-Objects.html#Making-New-Objects" accesskey="n" rel="next">Making New Objects</a>, Previous: <a href="Introduction.html#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-defclass" id="index-defclass"></a>Macro:
+    <strong>defclass</strong> <em>class-name superclass-list
+    slot-list &amp;rest options-and-doc</em></dt>
 
+    <dd>
+      <p>Create a new class named <var>class-name</var>. The class
+      is represented by a symbol with the name
+      <var>class-name</var>. <i>EIEIO</i> stores the structure of
+      the class as a symbol property of <var>class-name</var> (see
+      <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/elisp/Symbol-Components.html#Symbol-Components">
+      Symbol Components</a> in <cite>GNU Emacs Lisp Reference
+      Manual</cite>).</p>
 
+      <p>The <var>class-name</var> symbol&rsquo;s variable
+      documentation string is a modified version of the doc string
+      found in <var>options-and-doc</var>. Each time a method is
+      defined, the symbol&rsquo;s documentation string is updated
+      to include the methods documentation as well.</p>
 
+      <p>The parent classes for <var>class-name</var> is
+      <var>superclass-list</var>. Each element of
+      <var>superclass-list</var> must be a class. These classes are
+      the parents of the class being created. Every slot that
+      appears in each parent class is replicated in the new
+      class.</p>
+
+      <p>If two parents share the same slot name, the parent which
+      appears in the <var>superclass-list</var> first sets the tags
+      for that slot. If the new class has a slot with the same name
+      as the parent, the new slot overrides the parent&rsquo;s
+      slot.</p>
+
+      <p>When overriding a slot, some slot attributes cannot be
+      overridden because they break basic OO rules. You cannot
+      override <code>:type</code> or <code>:protection</code>.</p>
+    </dd>
+  </dl>
+
+  <p>Whenever defclass is used to create a new class, a predicate
+  is created for it, named
+  <code><var>CLASS-NAME</var>-p</code>:</p>
+
+  <dl>
+    <dt><a name="index-CLASS_002dNAME_002dp" id=
+    "index-CLASS_002dNAME_002dp"></a>Function:
+    <strong>CLASS-NAME-p</strong> <em>object</em></dt>
+
+    <dd>
+      <p>Return non-<code>nil</code> if and only if
+      <var>OBJECT</var> is of the class <var>CLASS-NAME</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-eieio_002derror_002dunsupported_002dclass_002dtags" id=
+    "index-eieio_002derror_002dunsupported_002dclass_002dtags"></a>Variable:
+    <strong>eieio-error-unsupported-class-tags</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, <code>defclass</code> signals an
+      error if a tag in a slot specifier is unsupported.</p>
+
+      <p>This option is here to support programs written with older
+      versions of <i>EIEIO</i>, which did not produce such
+      errors.</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Inheritance.html#Inheritance" accesskey=
+      "1">Inheritance</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to specify parents
+      classes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Slot-Options.html#Slot-Options" accesskey="2">Slot
+      Options</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to specify features of a
+      slot.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Class-Options.html#Class-Options" accesskey="3">Class
+      Options</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to specify features for
+      this class.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Making-New-Objects.html#Making-New-Objects"
+    accesskey="n" rel="next">Making New Objects</a>, Previous:
+    <a href="Introduction.html#Introduction" accesskey="p" rel=
+    "prev">Introduction</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

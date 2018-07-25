@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,119 +20,162 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: External Lisp</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: External Lisp">
-<meta name="keywords" content="GNU Emacs Manual: External Lisp">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Building.html#Building" rel="up" title="Building">
-<link href="Maintaining.html#Maintaining" rel="next" title="Maintaining">
-<link href="Lisp-Interaction.html#Lisp-Interaction" rel="prev" title="Lisp Interaction">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: External Lisp</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: External Lisp" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: External Lisp" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Building.html#Building" rel="up" title="Building" />
+  <link href="Maintaining.html#Maintaining" rel="next" title=
+  "Maintaining" />
+  <link href="Lisp-Interaction.html#Lisp-Interaction" rel="prev"
+  title="Lisp Interaction" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="External-Lisp" id="External-Lisp"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Lisp-Interaction.html#Lisp-Interaction"
+    accesskey="p" rel="prev">Lisp Interaction</a>, Up: <a href=
+    "Building.html#Building" accesskey="u" rel="up">Building</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Running-an-External-Lisp" id=
+  "Running-an-External-Lisp"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="External-Lisp"></a>
-<div class="header">
-<p>
-Previous: <a href="Lisp-Interaction.html#Lisp-Interaction" accesskey="p" rel="prev">Lisp Interaction</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Running-an-External-Lisp"></a>
-<h3 class="section">27.11 Running an External Lisp</h3>
-<a name="index-Lisp-mode"></a>
-<a name="index-mode_002c-Lisp"></a>
-<a name="index-Common-Lisp"></a>
+  <h3 class="section">27.11 Running an External Lisp</h3><a name=
+  "index-Lisp-mode" id="index-Lisp-mode"></a> <a name=
+  "index-mode_002c-Lisp" id="index-mode_002c-Lisp"></a> <a name=
+  "index-Common-Lisp" id="index-Common-Lisp"></a>
 
-<p>Lisp mode is the major mode for editing programs written in
-general-purpose Lisp dialects, such as Common Lisp.  Its mode command
-is <kbd>M-x lisp-mode</kbd>.  Emacs uses Lisp mode automatically for files
-whose names end in <samp>.l</samp>, <samp>.lsp</samp>, or <samp>.lisp</samp>.
-</p>
-<a name="index-run_002dlisp"></a>
-<a name="index-inferior_002dlisp_002dprogram"></a>
-<a name="index-C_002dx-C_002dz"></a>
-<p>You can run an external Lisp session as a subprocess or
-<em>inferior process</em> of Emacs, and pass expressions to it to be
-evaluated.  To begin an external Lisp session, type <kbd>M-x
-run-lisp</kbd>.  This runs the program named <code>lisp</code>, and sets it up
-so that both input and output go through an Emacs buffer named
-<samp>*inferior-lisp*</samp>.  To change the name of the Lisp program run by
-<kbd>M-x run-lisp</kbd>, change the variable <code>inferior-lisp-program</code>.
-</p>
-<p>The major mode for the <samp>*lisp*</samp> buffer is Inferior Lisp mode,
-which combines the characteristics of Lisp mode and Shell mode
-(see <a href="Shell-Mode.html#Shell-Mode">Shell Mode</a>).  To send input to the Lisp session, go to the
-end of the <samp>*lisp*</samp> buffer and type the input, followed by
-<tt class="key">RET</tt>.  Terminal output from the Lisp session is automatically
-inserted in the buffer.
-</p>
-<a name="index-C_002dM_002dx-_0028Lisp-mode_0029"></a>
-<a name="index-lisp_002deval_002ddefun"></a>
-<p>When you edit a Lisp program in Lisp mode, you can type <kbd>C-M-x</kbd>
-(<code>lisp-eval-defun</code>) to send an expression from the Lisp mode
-buffer to a Lisp session that you had started with <kbd>M-x run-lisp</kbd>.
-The expression sent is the top-level Lisp expression at or following
-point.  The resulting value goes as usual into the
-<samp>*inferior-lisp*</samp> buffer.  Note that the effect of <kbd>C-M-x</kbd> in
-Lisp mode is thus very similar to its effect in Emacs Lisp mode
-(see <a href="Lisp-Eval.html#Lisp-Eval">Lisp Eval</a>), except that the expression is sent to a different
-Lisp environment instead of being evaluated in Emacs.
-</p>
-<a name="index-scheme_002dmode"></a>
-<a name="index-run_002dscheme"></a>
-<a name="index-Scheme-mode"></a>
-<a name="index-mode_002c-Scheme"></a>
-<a name="index-C_002dM_002dx-_0028Scheme-mode_0029"></a>
-<p>The facilities for editing Scheme code, and for sending expressions
-to a Scheme subprocess, are very similar.  Scheme source files are
-edited in Scheme mode, which can be explicitly enabled with <kbd>M-x
-scheme-mode</kbd>.  You can initiate a Scheme session by typing <kbd>M-x
-run-scheme</kbd> (the buffer for interacting with Scheme is named
-<samp>*scheme*</samp>), and send expressions to it by typing <kbd>C-M-x</kbd>.
-</p><hr>
-<div class="header">
-<p>
-Previous: <a href="Lisp-Interaction.html#Lisp-Interaction" accesskey="p" rel="prev">Lisp Interaction</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Lisp mode is the major mode for editing programs written in
+  general-purpose Lisp dialects, such as Common Lisp. Its mode
+  command is <kbd>M-x lisp-mode</kbd>. Emacs uses Lisp mode
+  automatically for files whose names end in <samp>.l</samp>,
+  <samp>.lsp</samp>, or <samp>.lisp</samp>.</p><a name=
+  "index-run_002dlisp" id="index-run_002dlisp"></a> <a name=
+  "index-inferior_002dlisp_002dprogram" id=
+  "index-inferior_002dlisp_002dprogram"></a> <a name=
+  "index-C_002dx-C_002dz" id="index-C_002dx-C_002dz"></a>
 
+  <p>You can run an external Lisp session as a subprocess or
+  <em>inferior process</em> of Emacs, and pass expressions to it to
+  be evaluated. To begin an external Lisp session, type <kbd>M-x
+  run-lisp</kbd>. This runs the program named <code>lisp</code>,
+  and sets it up so that both input and output go through an Emacs
+  buffer named <samp>*inferior-lisp*</samp>. To change the name of
+  the Lisp program run by <kbd>M-x run-lisp</kbd>, change the
+  variable <code>inferior-lisp-program</code>.</p>
 
+  <p>The major mode for the <samp>*lisp*</samp> buffer is Inferior
+  Lisp mode, which combines the characteristics of Lisp mode and
+  Shell mode (see <a href="Shell-Mode.html#Shell-Mode">Shell
+  Mode</a>). To send input to the Lisp session, go to the end of
+  the <samp>*lisp*</samp> buffer and type the input, followed by
+  <tt class="key">RET</tt>. Terminal output from the Lisp session
+  is automatically inserted in the buffer.</p><a name=
+  "index-C_002dM_002dx-_0028Lisp-mode_0029" id=
+  "index-C_002dM_002dx-_0028Lisp-mode_0029"></a> <a name=
+  "index-lisp_002deval_002ddefun" id=
+  "index-lisp_002deval_002ddefun"></a>
 
+  <p>When you edit a Lisp program in Lisp mode, you can type
+  <kbd>C-M-x</kbd> (<code>lisp-eval-defun</code>) to send an
+  expression from the Lisp mode buffer to a Lisp session that you
+  had started with <kbd>M-x run-lisp</kbd>. The expression sent is
+  the top-level Lisp expression at or following point. The
+  resulting value goes as usual into the
+  <samp>*inferior-lisp*</samp> buffer. Note that the effect of
+  <kbd>C-M-x</kbd> in Lisp mode is thus very similar to its effect
+  in Emacs Lisp mode (see <a href="Lisp-Eval.html#Lisp-Eval">Lisp
+  Eval</a>), except that the expression is sent to a different Lisp
+  environment instead of being evaluated in Emacs.</p><a name=
+  "index-scheme_002dmode" id="index-scheme_002dmode"></a> <a name=
+  "index-run_002dscheme" id="index-run_002dscheme"></a> <a name=
+  "index-Scheme-mode" id="index-Scheme-mode"></a> <a name=
+  "index-mode_002c-Scheme" id="index-mode_002c-Scheme"></a>
+  <a name="index-C_002dM_002dx-_0028Scheme-mode_0029" id=
+  "index-C_002dM_002dx-_0028Scheme-mode_0029"></a>
+
+  <p>The facilities for editing Scheme code, and for sending
+  expressions to a Scheme subprocess, are very similar. Scheme
+  source files are edited in Scheme mode, which can be explicitly
+  enabled with <kbd>M-x scheme-mode</kbd>. You can initiate a
+  Scheme session by typing <kbd>M-x run-scheme</kbd> (the buffer
+  for interacting with Scheme is named <samp>*scheme*</samp>), and
+  send expressions to it by typing <kbd>C-M-x</kbd>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Lisp-Interaction.html#Lisp-Interaction"
+    accesskey="p" rel="prev">Lisp Interaction</a>, Up: <a href=
+    "Building.html#Building" accesskey="u" rel="up">Building</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

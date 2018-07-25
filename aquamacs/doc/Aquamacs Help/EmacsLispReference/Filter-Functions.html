@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,194 +19,277 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Filter Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Filter Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Filter Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Output-from-Processes.html#Output-from-Processes" rel="up" title="Output from Processes">
-<link href="Decoding-Output.html#Decoding-Output" rel="next" title="Decoding Output">
-<link href="Process-Buffers.html#Process-Buffers" rel="prev" title="Process Buffers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Filter Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Filter Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Filter Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Output-from-Processes.html#Output-from-Processes"
+  rel="up" title="Output from Processes" />
+  <link href="Decoding-Output.html#Decoding-Output" rel="next"
+  title="Decoding Output" />
+  <link href="Process-Buffers.html#Process-Buffers" rel="prev"
+  title="Process Buffers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Filter-Functions" id="Filter-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Decoding-Output.html#Decoding-Output"
+    accesskey="n" rel="next">Decoding Output</a>, Previous:
+    <a href="Process-Buffers.html#Process-Buffers" accesskey="p"
+    rel="prev">Process Buffers</a>, Up: <a href=
+    "Output-from-Processes.html#Output-from-Processes" accesskey=
+    "u" rel="up">Output from Processes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Process-Filter-Functions" id=
+  "Process-Filter-Functions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Filter-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Decoding-Output.html#Decoding-Output" accesskey="n" rel="next">Decoding Output</a>, Previous: <a href="Process-Buffers.html#Process-Buffers" accesskey="p" rel="prev">Process Buffers</a>, Up: <a href="Output-from-Processes.html#Output-from-Processes" accesskey="u" rel="up">Output from Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Process-Filter-Functions"></a>
-<h4 class="subsection">36.9.2 Process Filter Functions</h4>
-<a name="index-filter-function"></a>
-<a name="index-process-filter"></a>
+  <h4 class="subsection">36.9.2 Process Filter
+  Functions</h4><a name="index-filter-function" id=
+  "index-filter-function"></a> <a name="index-process-filter" id=
+  "index-process-filter"></a> <a name=
+  "index-default-filter-function-of-a-process" id=
+  "index-default-filter-function-of-a-process"></a>
 
-<a name="index-default-filter-function-of-a-process"></a>
-<p>A process <em>filter function</em> is a function that receives the
-standard output from the associated process.  <em>All</em> output from
-that process is passed to the filter.  The default filter simply
-outputs directly to the process buffer.
-</p>
-<p>By default, the error output from the process, if any, is also
-passed to the filter function, unless the destination for the standard
-error stream of the process was separated from the standard output
-when the process was created (see <a href="Output-from-Processes.html#Output-from-Processes">Output from Processes</a>).
-</p>
-<p>The filter function can only be called when Emacs is waiting for
-something, because process output arrives only at such times.  Emacs
-waits when reading terminal input (see the function
-<code>waiting-for-user-input-p</code>), in <code>sit-for</code> and
-<code>sleep-for</code> (see <a href="Waiting.html#Waiting">Waiting</a>), and in
-<code>accept-process-output</code> (see <a href="Accepting-Output.html#Accepting-Output">Accepting Output</a>).
-</p>
-<p>A filter function must accept two arguments: the associated process
-and a string, which is output just received from it.  The function is
-then free to do whatever it chooses with the output.
-</p>
-<p>Quitting is normally inhibited within a filter function&mdash;otherwise,
-the effect of typing <kbd>C-g</kbd> at command level or to quit a user
-command would be unpredictable.  If you want to permit quitting inside
-a filter function, bind <code>inhibit-quit</code> to <code>nil</code>.  In most
-cases, the right way to do this is with the macro
-<code>with-local-quit</code>.  See <a href="Quitting.html#Quitting">Quitting</a>.
-</p>
-<p>If an error happens during execution of a filter function, it is
-caught automatically, so that it doesn&rsquo;t stop the execution of whatever
-program was running when the filter function was started.  However, if
-<code>debug-on-error</code> is non-<code>nil</code>, errors are not caught.
-This makes it possible to use the Lisp debugger to debug filter
-functions.  See <a href="Debugger.html#Debugger">Debugger</a>.
-</p>
-<p>Many filter functions sometimes (or always) insert the output in the
-process&rsquo;s buffer, mimicking the actions of the default filter.
-Such filter functions need to make sure that they save the
-current buffer, select the correct buffer (if different) before
-inserting output, and then restore the original buffer.
-They should also check whether the buffer is still alive, update the
-process marker, and in some cases update the value of point.  Here is
-how to do these things:
-</p>
-<a name="Process-Filter-Example"></a><div class="smallexample">
-<pre class="smallexample">(defun ordinary-insertion-filter (proc string)
+  <p>A process <em>filter function</em> is a function that receives
+  the standard output from the associated process. <em>All</em>
+  output from that process is passed to the filter. The default
+  filter simply outputs directly to the process buffer.</p>
+
+  <p>By default, the error output from the process, if any, is also
+  passed to the filter function, unless the destination for the
+  standard error stream of the process was separated from the
+  standard output when the process was created (see <a href=
+  "Output-from-Processes.html#Output-from-Processes">Output from
+  Processes</a>).</p>
+
+  <p>The filter function can only be called when Emacs is waiting
+  for something, because process output arrives only at such times.
+  Emacs waits when reading terminal input (see the function
+  <code>waiting-for-user-input-p</code>), in <code>sit-for</code>
+  and <code>sleep-for</code> (see <a href=
+  "Waiting.html#Waiting">Waiting</a>), and in
+  <code>accept-process-output</code> (see <a href=
+  "Accepting-Output.html#Accepting-Output">Accepting
+  Output</a>).</p>
+
+  <p>A filter function must accept two arguments: the associated
+  process and a string, which is output just received from it. The
+  function is then free to do whatever it chooses with the
+  output.</p>
+
+  <p>Quitting is normally inhibited within a filter
+  function&mdash;otherwise, the effect of typing <kbd>C-g</kbd> at
+  command level or to quit a user command would be unpredictable.
+  If you want to permit quitting inside a filter function, bind
+  <code>inhibit-quit</code> to <code>nil</code>. In most cases, the
+  right way to do this is with the macro
+  <code>with-local-quit</code>. See <a href=
+  "Quitting.html#Quitting">Quitting</a>.</p>
+
+  <p>If an error happens during execution of a filter function, it
+  is caught automatically, so that it doesn&rsquo;t stop the
+  execution of whatever program was running when the filter
+  function was started. However, if <code>debug-on-error</code> is
+  non-<code>nil</code>, errors are not caught. This makes it
+  possible to use the Lisp debugger to debug filter functions. See
+  <a href="Debugger.html#Debugger">Debugger</a>.</p>
+
+  <p>Many filter functions sometimes (or always) insert the output
+  in the process&rsquo;s buffer, mimicking the actions of the
+  default filter. Such filter functions need to make sure that they
+  save the current buffer, select the correct buffer (if different)
+  before inserting output, and then restore the original buffer.
+  They should also check whether the buffer is still alive, update
+  the process marker, and in some cases update the value of point.
+  Here is how to do these things:</p><a name=
+  "Process-Filter-Example" id="Process-Filter-Example"></a>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defun ordinary-insertion-filter (proc string)
   (when (buffer-live-p (process-buffer proc))
     (with-current-buffer (process-buffer proc)
       (let ((moving (= (point) (process-mark proc))))
-</pre><pre class="smallexample">        (save-excursion
-          ;; <span class="roman">Insert the text, advancing the process marker.</span>
+</pre>
+    <pre class="smallexample">
+        (save-excursion
+          ;; <span class=
+"roman">Insert the text, advancing the process marker.</span>
           (goto-char (process-mark proc))
           (insert string)
           (set-marker (process-mark proc) (point)))
         (if moving (goto-char (process-mark proc)))))))
-</pre></div>
+</pre>
+  </div>
 
-<p>To make the filter force the process buffer to be visible whenever new
-text arrives, you could insert a line like the following just before the
-<code>with-current-buffer</code> construct:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(display-buffer (process-buffer proc))
-</pre></div>
+  <p>To make the filter force the process buffer to be visible
+  whenever new text arrives, you could insert a line like the
+  following just before the <code>with-current-buffer</code>
+  construct:</p>
 
-<p>To force point to the end of the new output, no matter where it was
-previously, eliminate the variable <code>moving</code> from the example and
-call <code>goto-char</code> unconditionally.
-</p>
-<p>Note that Emacs automatically saves and restores the match data
-while executing filter functions.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
-</p>
-<p>The output to the filter may come in chunks of any size.  A program
-that produces the same output twice in a row may send it as one batch of
-200 characters one time, and five batches of 40 characters the next.  If
-the filter looks for certain text strings in the subprocess output, make
-sure to handle the case where one of these strings is split across two
-or more batches of output; one way to do this is to insert the
-received text into a temporary buffer, which can then be searched.
-</p>
-<dl>
-<dt><a name="index-set_002dprocess_002dfilter"></a>Function: <strong>set-process-filter</strong> <em>process filter</em></dt>
-<dd><p>This function gives <var>process</var> the filter function <var>filter</var>.  If
-<var>filter</var> is <code>nil</code>, it gives the process the default filter,
-which inserts the process output into the process buffer.
-</p></dd></dl>
+  <div class="smallexample">
+    <pre class="smallexample">
+(display-buffer (process-buffer proc))
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-process_002dfilter"></a>Function: <strong>process-filter</strong> <em>process</em></dt>
-<dd><p>This function returns the filter function of <var>process</var>.
-</p></dd></dl>
+  <p>To force point to the end of the new output, no matter where
+  it was previously, eliminate the variable <code>moving</code>
+  from the example and call <code>goto-char</code>
+  unconditionally.</p>
 
-<p>In case the process&rsquo;s output needs to be passed to several filters, you can
-use <code>add-function</code> to combine an existing filter with a new one.
-See <a href="Advising-Functions.html#Advising-Functions">Advising Functions</a>.
-</p>
-<p>Here is an example of the use of a filter function:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun keep-output (process output)
+  <p>Note that Emacs automatically saves and restores the match
+  data while executing filter functions. See <a href=
+  "Match-Data.html#Match-Data">Match Data</a>.</p>
+
+  <p>The output to the filter may come in chunks of any size. A
+  program that produces the same output twice in a row may send it
+  as one batch of 200 characters one time, and five batches of 40
+  characters the next. If the filter looks for certain text strings
+  in the subprocess output, make sure to handle the case where one
+  of these strings is split across two or more batches of output;
+  one way to do this is to insert the received text into a
+  temporary buffer, which can then be searched.</p>
+
+  <dl>
+    <dt><a name="index-set_002dprocess_002dfilter" id=
+    "index-set_002dprocess_002dfilter"></a>Function:
+    <strong>set-process-filter</strong> <em>process
+    filter</em></dt>
+
+    <dd>
+      <p>This function gives <var>process</var> the filter function
+      <var>filter</var>. If <var>filter</var> is <code>nil</code>,
+      it gives the process the default filter, which inserts the
+      process output into the process buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-process_002dfilter" id=
+    "index-process_002dfilter"></a>Function:
+    <strong>process-filter</strong> <em>process</em></dt>
+
+    <dd>
+      <p>This function returns the filter function of
+      <var>process</var>.</p>
+    </dd>
+  </dl>
+
+  <p>In case the process&rsquo;s output needs to be passed to
+  several filters, you can use <code>add-function</code> to combine
+  an existing filter with a new one. See <a href=
+  "Advising-Functions.html#Advising-Functions">Advising
+  Functions</a>.</p>
+
+  <p>Here is an example of the use of a filter function:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defun keep-output (process output)
    (setq kept (cons output kept)))
      &rArr; keep-output
-</pre><pre class="smallexample">(setq kept nil)
+</pre>
+    <pre class="smallexample">
+(setq kept nil)
      &rArr; nil
-</pre><pre class="smallexample">(set-process-filter (get-process &quot;shell&quot;) 'keep-output)
+</pre>
+    <pre class="smallexample">
+(set-process-filter (get-process "shell") 'keep-output)
      &rArr; keep-output
-</pre><pre class="smallexample">(process-send-string &quot;shell&quot; &quot;ls ~/other\n&quot;)
+</pre>
+    <pre class="smallexample">
+(process-send-string "shell" "ls ~/other\n")
      &rArr; nil
 kept
-     &rArr; (&quot;lewis@slug:$ &quot;
-</pre><pre class="smallexample">&quot;FINAL-W87-SHORT.MSS    backup.otl              kolstad.mss~
+     &rArr; ("lewis@slug:$ "
+</pre>
+    <pre class="smallexample">
+"FINAL-W87-SHORT.MSS    backup.otl              kolstad.mss~
 address.txt             backup.psf              kolstad.psf
 backup.bib~             david.mss               resume-Dec-86.mss~
 backup.err              david.psf               resume-Dec.psf
 backup.mss              dland                   syllabus.mss
-&quot;
-&quot;#backups.mss#          backup.mss~             kolstad.mss
-&quot;)
-</pre></div>
+"
+"#backups.mss#          backup.mss~             kolstad.mss
+")
+</pre>
+  </div>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Decoding-Output.html#Decoding-Output" accesskey="n" rel="next">Decoding Output</a>, Previous: <a href="Process-Buffers.html#Process-Buffers" accesskey="p" rel="prev">Process Buffers</a>, Up: <a href="Output-from-Processes.html#Output-from-Processes" accesskey="u" rel="up">Output from Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Decoding-Output.html#Decoding-Output"
+    accesskey="n" rel="next">Decoding Output</a>, Previous:
+    <a href="Process-Buffers.html#Process-Buffers" accesskey="p"
+    rel="prev">Process Buffers</a>, Up: <a href=
+    "Output-from-Processes.html#Output-from-Processes" accesskey=
+    "u" rel="up">Output from Processes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

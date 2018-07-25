@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,220 +20,302 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Coding Systems</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Coding Systems">
-<meta name="keywords" content="GNU Emacs Manual: Coding Systems">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="International.html#International" rel="up" title="International">
-<link href="Recognize-Coding.html#Recognize-Coding" rel="next" title="Recognize Coding">
-<link href="Select-Input-Method.html#Select-Input-Method" rel="prev" title="Select Input Method">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Coding Systems</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Coding Systems" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Coding Systems" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="International.html#International" rel="up" title=
+  "International" />
+  <link href="Recognize-Coding.html#Recognize-Coding" rel="next"
+  title="Recognize Coding" />
+  <link href="Select-Input-Method.html#Select-Input-Method" rel=
+  "prev" title="Select Input Method" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Coding-Systems" id="Coding-Systems"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Recognize-Coding.html#Recognize-Coding"
+    accesskey="n" rel="next">Recognize Coding</a>, Previous:
+    <a href="Select-Input-Method.html#Select-Input-Method"
+    accesskey="p" rel="prev">Select Input Method</a>, Up: <a href=
+    "International.html#International" accesskey="u" rel=
+    "up">International</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Coding-Systems-1" id="Coding-Systems-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Coding-Systems"></a>
-<div class="header">
-<p>
-Next: <a href="Recognize-Coding.html#Recognize-Coding" accesskey="n" rel="next">Recognize Coding</a>, Previous: <a href="Select-Input-Method.html#Select-Input-Method" accesskey="p" rel="prev">Select Input Method</a>, Up: <a href="International.html#International" accesskey="u" rel="up">International</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Coding-Systems-1"></a>
-<h3 class="section">22.5 Coding Systems</h3>
-<a name="index-coding-systems"></a>
+  <h3 class="section">22.5 Coding Systems</h3><a name=
+  "index-coding-systems" id="index-coding-systems"></a>
 
-<p>Users of various languages have established many more-or-less standard
-coding systems for representing them.  Emacs does not use these coding
-systems internally; instead, it converts from various coding systems to
-its own system when reading data, and converts the internal coding
-system to other coding systems when writing data.  Conversion is
-possible in reading or writing files, in sending or receiving from the
-terminal, and in exchanging data with subprocesses.
-</p>
-<p>Emacs assigns a name to each coding system.  Most coding systems are
-used for one language, and the name of the coding system starts with
-the language name.  Some coding systems are used for several
-languages; their names usually start with &lsquo;<samp>iso</samp>&rsquo;.  There are also
-special coding systems, such as <code>no-conversion</code>, <code>raw-text</code>,
-and <code>emacs-internal</code>.
-</p>
-<a name="index-international-files-from-DOS_002fWindows-systems"></a>
-<p>A special class of coding systems, collectively known as
-<em>codepages</em>, is designed to support text encoded by MS-Windows and
-MS-DOS software.  The names of these coding systems are
-<code>cp<var>nnnn</var></code>, where <var>nnnn</var> is a 3- or 4-digit number of the
-codepage.  You can use these encodings just like any other coding
-system; for example, to visit a file encoded in codepage 850, type
-<kbd>C-x <span class="key">RET</span> c cp850 <span class="key">RET</span> C-x C-f <var>filename</var>
-<span class="key">RET</span></kbd>.
-</p>
-<p>In addition to converting various representations of non-<acronym>ASCII</acronym>
-characters, a coding system can perform end-of-line conversion.  Emacs
-handles three different conventions for how to separate lines in a file:
-newline (Unix), carriage-return linefeed (DOS), and just
-carriage-return (Mac).
-</p>
-<dl compact="compact">
-<dt><kbd>C-h C <var>coding</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Describe coding system <var>coding</var> (<code>describe-coding-system</code>).
-</p>
-</dd>
-<dt><kbd>C-h C <span class="key">RET</span></kbd></dt>
-<dd><p>Describe the coding systems currently in use.
-</p>
-</dd>
-<dt><kbd>M-x list-coding-systems</kbd></dt>
-<dd><p>Display a list of all the supported coding systems.
-</p></dd>
-</dl>
+  <p>Users of various languages have established many more-or-less
+  standard coding systems for representing them. Emacs does not use
+  these coding systems internally; instead, it converts from
+  various coding systems to its own system when reading data, and
+  converts the internal coding system to other coding systems when
+  writing data. Conversion is possible in reading or writing files,
+  in sending or receiving from the terminal, and in exchanging data
+  with subprocesses.</p>
 
-<a name="index-C_002dh-C"></a>
-<a name="index-describe_002dcoding_002dsystem"></a>
-<p>The command <kbd>C-h C</kbd> (<code>describe-coding-system</code>) displays
-information about particular coding systems, including the end-of-line
-conversion specified by those coding systems.  You can specify a coding
-system name as the argument; alternatively, with an empty argument, it
-describes the coding systems currently selected for various purposes,
-both in the current buffer and as the defaults, and the priority list
-for recognizing coding systems (see <a href="Recognize-Coding.html#Recognize-Coding">Recognize Coding</a>).
-</p>
-<a name="index-list_002dcoding_002dsystems"></a>
-<p>To display a list of all the supported coding systems, type <kbd>M-x
-list-coding-systems</kbd>.  The list gives information about each coding
-system, including the letter that stands for it in the mode line
-(see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).
-</p>
-<a name="index-end_002dof_002dline-conversion"></a>
-<a name="index-line-endings"></a>
-<a name="index-MS_002dDOS-end_002dof_002dline-conversion"></a>
-<a name="index-Macintosh-end_002dof_002dline-conversion"></a>
-<p>Each of the coding systems that appear in this list&mdash;except for
-<code>no-conversion</code>, which means no conversion of any kind&mdash;specifies
-how and whether to convert printing characters, but leaves the choice of
-end-of-line conversion to be decided based on the contents of each file.
-For example, if the file appears to use the sequence carriage-return
-linefeed to separate lines, DOS end-of-line conversion will be used.
-</p>
-<p>Each of the listed coding systems has three variants, which specify
-exactly what to do for end-of-line conversion:
-</p>
-<dl compact="compact">
-<dt><code>&hellip;-unix</code></dt>
-<dd><p>Don&rsquo;t do any end-of-line conversion; assume the file uses
-newline to separate lines.  (This is the convention normally used
-on Unix and GNU systems, and Mac OS X.)
-</p>
-</dd>
-<dt><code>&hellip;-dos</code></dt>
-<dd><p>Assume the file uses carriage-return linefeed to separate lines, and do
-the appropriate conversion.  (This is the convention normally used on
-Microsoft systems.<a name="DOCF8" href="#FOOT8"><sup>8</sup></a>)
-</p>
-</dd>
-<dt><code>&hellip;-mac</code></dt>
-<dd><p>Assume the file uses carriage-return to separate lines, and do the
-appropriate conversion.  (This was the convention used on the
-Macintosh system prior to OS X.)
-</p></dd>
-</dl>
+  <p>Emacs assigns a name to each coding system. Most coding
+  systems are used for one language, and the name of the coding
+  system starts with the language name. Some coding systems are
+  used for several languages; their names usually start with
+  &lsquo;<samp>iso</samp>&rsquo;. There are also special coding
+  systems, such as <code>no-conversion</code>,
+  <code>raw-text</code>, and
+  <code>emacs-internal</code>.</p><a name=
+  "index-international-files-from-DOS_002fWindows-systems" id=
+  "index-international-files-from-DOS_002fWindows-systems"></a>
 
-<p>These variant coding systems are omitted from the
-<code>list-coding-systems</code> display for brevity, since they are entirely
-predictable.  For example, the coding system <code>iso-latin-1</code> has
-variants <code>iso-latin-1-unix</code>, <code>iso-latin-1-dos</code> and
-<code>iso-latin-1-mac</code>.
-</p>
-<a name="index-undecided_002c-coding-system"></a>
-<p>The coding systems <code>unix</code>, <code>dos</code>, and <code>mac</code> are
-aliases for <code>undecided-unix</code>, <code>undecided-dos</code>, and
-<code>undecided-mac</code>, respectively.  These coding systems specify only
-the end-of-line conversion, and leave the character code conversion to
-be deduced from the text itself.
-</p>
-<a name="index-raw_002dtext_002c-coding-system"></a>
-<p>The coding system <code>raw-text</code> is good for a file which is mainly
-<acronym>ASCII</acronym> text, but may contain byte values above 127 that are
-not meant to encode non-<acronym>ASCII</acronym> characters.  With
-<code>raw-text</code>, Emacs copies those byte values unchanged, and sets
-<code>enable-multibyte-characters</code> to <code>nil</code> in the current buffer
-so that they will be interpreted properly.  <code>raw-text</code> handles
-end-of-line conversion in the usual way, based on the data
-encountered, and has the usual three variants to specify the kind of
-end-of-line conversion to use.
-</p>
-<a name="index-no_002dconversion_002c-coding-system"></a>
-<p>In contrast, the coding system <code>no-conversion</code> specifies no
-character code conversion at all&mdash;none for non-<acronym>ASCII</acronym> byte values and
-none for end of line.  This is useful for reading or writing binary
-files, tar files, and other files that must be examined verbatim.  It,
-too, sets <code>enable-multibyte-characters</code> to <code>nil</code>.
-</p>
-<p>The easiest way to edit a file with no conversion of any kind is with
-the <kbd>M-x find-file-literally</kbd> command.  This uses
-<code>no-conversion</code>, and also suppresses other Emacs features that
-might convert the file contents before you see them.  See <a href="Visiting.html#Visiting">Visiting</a>.
-</p>
-<a name="index-emacs_002dinternal_002c-coding-system"></a>
-<p>The coding system <code>emacs-internal</code> (or <code>utf-8-emacs</code>,
-which is equivalent) means that the file contains non-<acronym>ASCII</acronym>
-characters stored with the internal Emacs encoding.  This coding
-system handles end-of-line conversion based on the data encountered,
-and has the usual three variants to specify the kind of end-of-line
-conversion.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>A special class of coding systems, collectively known as
+  <em>codepages</em>, is designed to support text encoded by
+  MS-Windows and MS-DOS software. The names of these coding systems
+  are <code>cp<var>nnnn</var></code>, where <var>nnnn</var> is a 3-
+  or 4-digit number of the codepage. You can use these encodings
+  just like any other coding system; for example, to visit a file
+  encoded in codepage 850, type <kbd>C-x <span class=
+  "key">RET</span> c cp850 <span class="key">RET</span> C-x C-f
+  <var>filename</var> <span class="key">RET</span></kbd>.</p>
 
-<h3><a name="FOOT8" href="#DOCF8">(8)</a></h3>
-<p>It is also specified for MIME &lsquo;<samp>text/*</samp>&rsquo;
-bodies and in other network transport contexts.  It is different
-from the SGML reference syntax record-start/record-end format, which
-Emacs doesn&rsquo;t support directly.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Recognize-Coding.html#Recognize-Coding" accesskey="n" rel="next">Recognize Coding</a>, Previous: <a href="Select-Input-Method.html#Select-Input-Method" accesskey="p" rel="prev">Select Input Method</a>, Up: <a href="International.html#International" accesskey="u" rel="up">International</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In addition to converting various representations of
+  non-<acronym>ASCII</acronym> characters, a coding system can
+  perform end-of-line conversion. Emacs handles three different
+  conventions for how to separate lines in a file: newline (Unix),
+  carriage-return linefeed (DOS), and just carriage-return
+  (Mac).</p>
 
+  <dl compact="compact">
+    <dt><kbd>C-h C <var>coding</var> <span class=
+    "key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Describe coding system <var>coding</var>
+      (<code>describe-coding-system</code>).</p>
+    </dd>
 
+    <dt><kbd>C-h C <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Describe the coding systems currently in use.</p>
+    </dd>
+
+    <dt><kbd>M-x list-coding-systems</kbd></dt>
+
+    <dd>
+      <p>Display a list of all the supported coding systems.</p>
+    </dd>
+  </dl><a name="index-C_002dh-C" id="index-C_002dh-C"></a> <a name=
+  "index-describe_002dcoding_002dsystem" id=
+  "index-describe_002dcoding_002dsystem"></a>
+
+  <p>The command <kbd>C-h C</kbd>
+  (<code>describe-coding-system</code>) displays information about
+  particular coding systems, including the end-of-line conversion
+  specified by those coding systems. You can specify a coding
+  system name as the argument; alternatively, with an empty
+  argument, it describes the coding systems currently selected for
+  various purposes, both in the current buffer and as the defaults,
+  and the priority list for recognizing coding systems (see
+  <a href="Recognize-Coding.html#Recognize-Coding">Recognize
+  Coding</a>).</p><a name="index-list_002dcoding_002dsystems" id=
+  "index-list_002dcoding_002dsystems"></a>
+
+  <p>To display a list of all the supported coding systems, type
+  <kbd>M-x list-coding-systems</kbd>. The list gives information
+  about each coding system, including the letter that stands for it
+  in the mode line (see <a href="Mode-Line.html#Mode-Line">Mode
+  Line</a>).</p><a name="index-end_002dof_002dline-conversion" id=
+  "index-end_002dof_002dline-conversion"></a> <a name=
+  "index-line-endings" id="index-line-endings"></a> <a name=
+  "index-MS_002dDOS-end_002dof_002dline-conversion" id=
+  "index-MS_002dDOS-end_002dof_002dline-conversion"></a> <a name=
+  "index-Macintosh-end_002dof_002dline-conversion" id=
+  "index-Macintosh-end_002dof_002dline-conversion"></a>
+
+  <p>Each of the coding systems that appear in this
+  list&mdash;except for <code>no-conversion</code>, which means no
+  conversion of any kind&mdash;specifies how and whether to convert
+  printing characters, but leaves the choice of end-of-line
+  conversion to be decided based on the contents of each file. For
+  example, if the file appears to use the sequence carriage-return
+  linefeed to separate lines, DOS end-of-line conversion will be
+  used.</p>
+
+  <p>Each of the listed coding systems has three variants, which
+  specify exactly what to do for end-of-line conversion:</p>
+
+  <dl compact="compact">
+    <dt><code>&hellip;-unix</code></dt>
+
+    <dd>
+      <p>Don&rsquo;t do any end-of-line conversion; assume the file
+      uses newline to separate lines. (This is the convention
+      normally used on Unix and GNU systems, and Mac OS X.)</p>
+    </dd>
+
+    <dt><code>&hellip;-dos</code></dt>
+
+    <dd>
+      <p>Assume the file uses carriage-return linefeed to separate
+      lines, and do the appropriate conversion. (This is the
+      convention normally used on Microsoft systems.<a name="DOCF8"
+      href="#FOOT8" id="DOCF8"><sup>8</sup></a>)</p>
+    </dd>
+
+    <dt><code>&hellip;-mac</code></dt>
+
+    <dd>
+      <p>Assume the file uses carriage-return to separate lines,
+      and do the appropriate conversion. (This was the convention
+      used on the Macintosh system prior to OS X.)</p>
+    </dd>
+  </dl>
+
+  <p>These variant coding systems are omitted from the
+  <code>list-coding-systems</code> display for brevity, since they
+  are entirely predictable. For example, the coding system
+  <code>iso-latin-1</code> has variants
+  <code>iso-latin-1-unix</code>, <code>iso-latin-1-dos</code> and
+  <code>iso-latin-1-mac</code>.</p><a name=
+  "index-undecided_002c-coding-system" id=
+  "index-undecided_002c-coding-system"></a>
+
+  <p>The coding systems <code>unix</code>, <code>dos</code>, and
+  <code>mac</code> are aliases for <code>undecided-unix</code>,
+  <code>undecided-dos</code>, and <code>undecided-mac</code>,
+  respectively. These coding systems specify only the end-of-line
+  conversion, and leave the character code conversion to be deduced
+  from the text itself.</p><a name=
+  "index-raw_002dtext_002c-coding-system" id=
+  "index-raw_002dtext_002c-coding-system"></a>
+
+  <p>The coding system <code>raw-text</code> is good for a file
+  which is mainly <acronym>ASCII</acronym> text, but may contain
+  byte values above 127 that are not meant to encode
+  non-<acronym>ASCII</acronym> characters. With
+  <code>raw-text</code>, Emacs copies those byte values unchanged,
+  and sets <code>enable-multibyte-characters</code> to
+  <code>nil</code> in the current buffer so that they will be
+  interpreted properly. <code>raw-text</code> handles end-of-line
+  conversion in the usual way, based on the data encountered, and
+  has the usual three variants to specify the kind of end-of-line
+  conversion to use.</p><a name=
+  "index-no_002dconversion_002c-coding-system" id=
+  "index-no_002dconversion_002c-coding-system"></a>
+
+  <p>In contrast, the coding system <code>no-conversion</code>
+  specifies no character code conversion at all&mdash;none for
+  non-<acronym>ASCII</acronym> byte values and none for end of
+  line. This is useful for reading or writing binary files, tar
+  files, and other files that must be examined verbatim. It, too,
+  sets <code>enable-multibyte-characters</code> to
+  <code>nil</code>.</p>
+
+  <p>The easiest way to edit a file with no conversion of any kind
+  is with the <kbd>M-x find-file-literally</kbd> command. This uses
+  <code>no-conversion</code>, and also suppresses other Emacs
+  features that might convert the file contents before you see
+  them. See <a href=
+  "Visiting.html#Visiting">Visiting</a>.</p><a name=
+  "index-emacs_002dinternal_002c-coding-system" id=
+  "index-emacs_002dinternal_002c-coding-system"></a>
+
+  <p>The coding system <code>emacs-internal</code> (or
+  <code>utf-8-emacs</code>, which is equivalent) means that the
+  file contains non-<acronym>ASCII</acronym> characters stored with
+  the internal Emacs encoding. This coding system handles
+  end-of-line conversion based on the data encountered, and has the
+  usual three variants to specify the kind of end-of-line
+  conversion.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT8" href="#DOCF8" id="FOOT8">(8)</a></h3>
+
+    <p>It is also specified for MIME
+    &lsquo;<samp>text/*</samp>&rsquo; bodies and in other network
+    transport contexts. It is different from the SGML reference
+    syntax record-start/record-end format, which Emacs
+    doesn&rsquo;t support directly.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Recognize-Coding.html#Recognize-Coding"
+    accesskey="n" rel="next">Recognize Coding</a>, Previous:
+    <a href="Select-Input-Method.html#Select-Input-Method"
+    accesskey="p" rel="prev">Select Input Method</a>, Up: <a href=
+    "International.html#International" accesskey="u" rel=
+    "up">International</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

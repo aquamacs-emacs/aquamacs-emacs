@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,300 +18,364 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Single-Variable Statistics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Single-Variable Statistics">
-<meta name="keywords" content="GNU Emacs Calc Manual: Single-Variable Statistics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Statistical-Operations.html#Statistical-Operations" rel="up" title="Statistical Operations">
-<link href="Paired_002dSample-Statistics.html#Paired_002dSample-Statistics" rel="next" title="Paired-Sample Statistics">
-<link href="Statistical-Operations.html#Statistical-Operations" rel="prev" title="Statistical Operations">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Single-Variable Statistics</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Single-Variable Statistics" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Single-Variable Statistics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Statistical-Operations.html#Statistical-Operations"
+  rel="up" title="Statistical Operations" />
+  <link href=
+  "Paired_002dSample-Statistics.html#Paired_002dSample-Statistics"
+  rel="next" title="Paired-Sample Statistics" />
+  <link href="Statistical-Operations.html#Statistical-Operations"
+  rel="prev" title="Statistical Operations" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Single_002dVariable-Statistics"></a>
-<div class="header">
-<p>
-Next: <a href="Paired_002dSample-Statistics.html#Paired_002dSample-Statistics" accesskey="n" rel="next">Paired-Sample Statistics</a>, Previous: <a href="Statistical-Operations.html#Statistical-Operations" accesskey="p" rel="prev">Statistical Operations</a>, Up: <a href="Statistical-Operations.html#Statistical-Operations" accesskey="u" rel="up">Statistical Operations</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Single_002dVariable-Statistics-1"></a>
-<h4 class="subsection">9.7.1 Single-Variable Statistics</h4>
+<body lang="en" xml:lang="en">
+  <a name="Single_002dVariable-Statistics" id=
+  "Single_002dVariable-Statistics"></a>
 
-<p>These functions do various statistical computations on single
-vectors.  Given a numeric prefix argument, they actually pop
-<var>n</var> objects from the stack and combine them into a data
-vector.  Each object may be either a number or a vector; if a
-vector, any sub-vectors inside it are &ldquo;flattened&rdquo; as if by
-<kbd>v a 0</kbd>; see <a href="Manipulating-Vectors.html#Manipulating-Vectors">Manipulating Vectors</a>.  By default one object
-is popped, which (in order to be useful) is usually a vector.
-</p>
-<p>If an argument is a variable name, and the value stored in that
-variable is a vector, then the stored vector is used.  This method
-has the advantage that if your data vector is large, you can avoid
-the slow process of manipulating it directly on the stack.
-</p>
-<p>These functions are left in symbolic form if any of their arguments
-are not numbers or vectors, e.g., if an argument is a formula, or
-a non-vector variable.  However, formulas embedded within vector
-arguments are accepted; the result is a symbolic representation
-of the computation, based on the assumption that the formula does
-not itself represent a vector.  All varieties of numbers such as
-error forms and interval forms are acceptable.
-</p>
-<p>Some of the functions in this section also accept a single error form
-or interval as an argument.  They then describe a property of the
-normal or uniform (respectively) statistical distribution described
-by the argument.  The arguments are interpreted in the same way as
-the <var>M</var> argument of the random number function <kbd>k r</kbd>.  In
-particular, an interval with integer limits is considered an integer
-distribution, so that &lsquo;<samp>[2 .. 6)</samp>&rsquo; is the same as &lsquo;<samp>[2 .. 5]</samp>&rsquo;.
-An interval with at least one floating-point limit is a continuous
-distribution:  &lsquo;<samp>[2.0 .. 6.0)</samp>&rsquo; is <em>not</em> the same as
-&lsquo;<samp>[2.0 .. 5.0]</samp>&rsquo;!
-</p>
-<a name="index-u-_0023"></a>
-<a name="index-calc_002dvector_002dcount"></a>
-<a name="index-vcount"></a>
-<p>The <kbd>u #</kbd> (<code>calc-vector-count</code>) [<code>vcount</code>] command
-computes the number of data values represented by the inputs.
-For example, &lsquo;<samp>vcount(1, [2, 3], [[4, 5], [], x, y])</samp>&rsquo; returns 7.
-If the argument is a single vector with no sub-vectors, this
-simply computes the length of the vector.
-</p>
-<a name="index-u-_002b"></a>
-<a name="index-u-_002a"></a>
-<a name="index-calc_002dvector_002dsum"></a>
-<a name="index-calc_002dvector_002dprod"></a>
-<a name="index-vsum"></a>
-<a name="index-vprod"></a>
-<a name="index-Summations-_0028statistical_0029"></a>
-<p>The <kbd>u +</kbd> (<code>calc-vector-sum</code>) [<code>vsum</code>] command
-computes the sum of the data values.  The <kbd>u *</kbd>
-(<code>calc-vector-prod</code>) [<code>vprod</code>] command computes the
-product of the data values.  If the input is a single flat vector,
-these are the same as <kbd>V R +</kbd> and <kbd>V R *</kbd>
-(see <a href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>).
-</p>
-<a name="index-u-X"></a>
-<a name="index-u-N"></a>
-<a name="index-calc_002dvector_002dmax"></a>
-<a name="index-calc_002dvector_002dmin"></a>
-<a name="index-vmax"></a>
-<a name="index-vmin"></a>
-<p>The <kbd>u X</kbd> (<code>calc-vector-max</code>) [<code>vmax</code>] command
-computes the maximum of the data values, and the <kbd>u N</kbd>
-(<code>calc-vector-min</code>) [<code>vmin</code>] command computes the minimum.
-If the argument is an interval, this finds the minimum or maximum
-value in the interval.  (Note that &lsquo;<samp>vmax([2..6)) = 5</samp>&rsquo; as
-described above.)  If the argument is an error form, this returns
-plus or minus infinity.
-</p>
-<a name="index-u-M"></a>
-<a name="index-calc_002dvector_002dmean"></a>
-<a name="index-vmean"></a>
-<a name="index-Mean-of-data-values"></a>
-<p>The <kbd>u M</kbd> (<code>calc-vector-mean</code>) [<code>vmean</code>] command
-computes the average (arithmetic mean) of the data values.
-If the inputs are error forms
-&lsquo;<samp>x +/- s</samp>&rsquo;,
-this is the weighted mean of the &lsquo;<samp>x</samp>&rsquo; values with weights
-&lsquo;<samp>1 / s^2</samp>&rsquo;.
-If the inputs are not error forms, this is simply the sum of the
-values divided by the count of the values.
-</p>
-<p>Note that a plain number can be considered an error form with
-error
-&lsquo;<samp>s = 0</samp>&rsquo;.
-If the input to <kbd>u M</kbd> is a mixture of
-plain numbers and error forms, the result is the mean of the
-plain numbers, ignoring all values with non-zero errors.  (By the
-above definitions it&rsquo;s clear that a plain number effectively
-has an infinite weight, next to which an error form with a finite
-weight is completely negligible.)
-</p>
-<p>This function also works for distributions (error forms or
-intervals).  The mean of an error form &lsquo;<var>a</var> <tt>+/-</tt> <var>b</var>&rsquo; is simply
-&lsquo;<samp>a</samp>&rsquo;.  The mean of an interval is the mean of the minimum
-and maximum values of the interval.
-</p>
-<a name="index-I-u-M"></a>
-<a name="index-calc_002dvector_002dmean_002derror"></a>
-<a name="index-vmeane"></a>
-<p>The <kbd>I u M</kbd> (<code>calc-vector-mean-error</code>) [<code>vmeane</code>]
-command computes the mean of the data points expressed as an
-error form.  This includes the estimated error associated with
-the mean.  If the inputs are error forms, the error is the square
-root of the reciprocal of the sum of the reciprocals of the squares
-of the input errors.  (I.e., the variance is the reciprocal of the
-sum of the reciprocals of the variances.)
-If the inputs are plain
-numbers, the error is equal to the standard deviation of the values
-divided by the square root of the number of values.  (This works
-out to be equivalent to calculating the standard deviation and
-then assuming each value&rsquo;s error is equal to this standard
-deviation.)
-</p>
-<a name="index-H-u-M"></a>
-<a name="index-calc_002dvector_002dmedian"></a>
-<a name="index-vmedian"></a>
-<a name="index-Median-of-data-values"></a>
-<p>The <kbd>H u M</kbd> (<code>calc-vector-median</code>) [<code>vmedian</code>]
-command computes the median of the data values.  The values are
-first sorted into numerical order; the median is the middle
-value after sorting.  (If the number of data values is even,
-the median is taken to be the average of the two middle values.)
-The median function is different from the other functions in
-this section in that the arguments must all be real numbers;
-variables are not accepted even when nested inside vectors.
-(Otherwise it is not possible to sort the data values.)  If
-any of the input values are error forms, their error parts are
-ignored.
-</p>
-<p>The median function also accepts distributions.  For both normal
-(error form) and uniform (interval) distributions, the median is
-the same as the mean.
-</p>
-<a name="index-H-I-u-M"></a>
-<a name="index-calc_002dvector_002dharmonic_002dmean"></a>
-<a name="index-vhmean"></a>
-<a name="index-Harmonic-mean"></a>
-<p>The <kbd>H I u M</kbd> (<code>calc-vector-harmonic-mean</code>) [<code>vhmean</code>]
-command computes the harmonic mean of the data values.  This is
-defined as the reciprocal of the arithmetic mean of the reciprocals
-of the values.
-</p>
-<a name="index-u-G"></a>
-<a name="index-calc_002dvector_002dgeometric_002dmean"></a>
-<a name="index-vgmean"></a>
-<a name="index-Geometric-mean-1"></a>
-<p>The <kbd>u G</kbd> (<code>calc-vector-geometric-mean</code>) [<code>vgmean</code>]
-command computes the geometric mean of the data values.  This
-is the <var>n</var>th root of the product of the values.  This is also
-equal to the <code>exp</code> of the arithmetic mean of the logarithms
-of the data values.
-</p>
-<a name="index-H-u-G"></a>
-<a name="index-agmean"></a>
-<p>The <kbd>H u G</kbd> [<code>agmean</code>] command computes the &ldquo;arithmetic-geometric
-mean&rdquo; of two numbers taken from the stack.  This is computed by
-replacing the two numbers with their arithmetic mean and geometric
-mean, then repeating until the two values converge.
-</p>
-<a name="index-u-R"></a>
-<a name="index-Root_002dmean_002dsquare"></a>
-<a name="index-rms"></a>
-<p>The <kbd>u R</kbd> (<code>calc-vector-rms</code>) [<code>rms</code>]
-command computes the RMS (root-mean-square) of the data values.
-As its name suggests, this is the square root of the mean of the
-squares of the data values.
-</p>
-<a name="index-u-S"></a>
-<a name="index-calc_002dvector_002dsdev"></a>
-<a name="index-vsdev"></a>
-<a name="index-Standard-deviation"></a>
-<a name="index-Sample-statistics"></a>
-<p>The <kbd>u S</kbd> (<code>calc-vector-sdev</code>) [<code>vsdev</code>] command
-computes the standard
-deviation
-of the data values.  If the values are error forms, the errors are used
-as weights just as for <kbd>u M</kbd>.  This is the <em>sample</em> standard
-deviation, whose value is the square root of the sum of the squares of
-the differences between the values and the mean of the &lsquo;<samp>N</samp>&rsquo; values,
-divided by &lsquo;<samp>N-1</samp>&rsquo;.
-</p>
-<p>This function also applies to distributions.  The standard deviation
-of a single error form is simply the error part.  The standard deviation
-of a continuous interval happens to equal the difference between the
-limits, divided by
-&lsquo;<samp>sqrt(12)</samp>&rsquo;.
-The standard deviation of an integer interval is the same as the
-standard deviation of a vector of those integers.
-</p>
-<a name="index-I-u-S"></a>
-<a name="index-calc_002dvector_002dpop_002dsdev"></a>
-<a name="index-vpsdev"></a>
-<a name="index-Population-statistics"></a>
-<p>The <kbd>I u S</kbd> (<code>calc-vector-pop-sdev</code>) [<code>vpsdev</code>]
-command computes the <em>population</em> standard deviation.
-It is defined by the same formula as above but dividing
-by &lsquo;<samp>N</samp>&rsquo; instead of by &lsquo;<samp>N-1</samp>&rsquo;.  The population standard
-deviation is used when the input represents the entire set of
-data values in the distribution; the sample standard deviation
-is used when the input represents a sample of the set of all
-data values, so that the mean computed from the input is itself
-only an estimate of the true mean.
-</p>
-<p>For error forms and continuous intervals, <code>vpsdev</code> works
-exactly like <code>vsdev</code>.  For integer intervals, it computes the
-population standard deviation of the equivalent vector of integers.
-</p>
-<a name="index-H-u-S"></a>
-<a name="index-H-I-u-S"></a>
-<a name="index-calc_002dvector_002dvariance"></a>
-<a name="index-calc_002dvector_002dpop_002dvariance"></a>
-<a name="index-vvar"></a>
-<a name="index-vpvar"></a>
-<a name="index-Variance-of-data-values"></a>
-<p>The <kbd>H u S</kbd> (<code>calc-vector-variance</code>) [<code>vvar</code>] and
-<kbd>H I u S</kbd> (<code>calc-vector-pop-variance</code>) [<code>vpvar</code>]
-commands compute the variance of the data values.  The variance
-is the
-square
-of the standard deviation, i.e., the sum of the
-squares of the deviations of the data values from the mean.
-(This definition also applies when the argument is a distribution.)
-</p>
-<a name="index-vflat"></a>
-<p>The <code>vflat</code> algebraic function returns a vector of its
-arguments, interpreted in the same way as the other functions
-in this section.  For example, &lsquo;<samp>vflat(1, [2, [3, 4]], 5)</samp>&rsquo;
-returns &lsquo;<samp>[1, 2, 3, 4, 5]</samp>&rsquo;.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Paired_002dSample-Statistics.html#Paired_002dSample-Statistics" accesskey="n" rel="next">Paired-Sample Statistics</a>, Previous: <a href="Statistical-Operations.html#Statistical-Operations" accesskey="p" rel="prev">Statistical Operations</a>, Up: <a href="Statistical-Operations.html#Statistical-Operations" accesskey="u" rel="up">Statistical Operations</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Paired_002dSample-Statistics.html#Paired_002dSample-Statistics"
+    accesskey="n" rel="next">Paired-Sample Statistics</a>,
+    Previous: <a href=
+    "Statistical-Operations.html#Statistical-Operations" accesskey=
+    "p" rel="prev">Statistical Operations</a>, Up: <a href=
+    "Statistical-Operations.html#Statistical-Operations" accesskey=
+    "u" rel="up">Statistical Operations</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Single_002dVariable-Statistics-1" id=
+  "Single_002dVariable-Statistics-1"></a>
 
+  <h4 class="subsection">9.7.1 Single-Variable Statistics</h4>
 
+  <p>These functions do various statistical computations on single
+  vectors. Given a numeric prefix argument, they actually pop
+  <var>n</var> objects from the stack and combine them into a data
+  vector. Each object may be either a number or a vector; if a
+  vector, any sub-vectors inside it are &ldquo;flattened&rdquo; as
+  if by <kbd>v a 0</kbd>; see <a href=
+  "Manipulating-Vectors.html#Manipulating-Vectors">Manipulating
+  Vectors</a>. By default one object is popped, which (in order to
+  be useful) is usually a vector.</p>
 
+  <p>If an argument is a variable name, and the value stored in
+  that variable is a vector, then the stored vector is used. This
+  method has the advantage that if your data vector is large, you
+  can avoid the slow process of manipulating it directly on the
+  stack.</p>
+
+  <p>These functions are left in symbolic form if any of their
+  arguments are not numbers or vectors, e.g., if an argument is a
+  formula, or a non-vector variable. However, formulas embedded
+  within vector arguments are accepted; the result is a symbolic
+  representation of the computation, based on the assumption that
+  the formula does not itself represent a vector. All varieties of
+  numbers such as error forms and interval forms are
+  acceptable.</p>
+
+  <p>Some of the functions in this section also accept a single
+  error form or interval as an argument. They then describe a
+  property of the normal or uniform (respectively) statistical
+  distribution described by the argument. The arguments are
+  interpreted in the same way as the <var>M</var> argument of the
+  random number function <kbd>k r</kbd>. In particular, an interval
+  with integer limits is considered an integer distribution, so
+  that &lsquo;<samp>[2 .. 6)</samp>&rsquo; is the same as
+  &lsquo;<samp>[2 .. 5]</samp>&rsquo;. An interval with at least
+  one floating-point limit is a continuous distribution:
+  &lsquo;<samp>[2.0 .. 6.0)</samp>&rsquo; is <em>not</em> the same
+  as &lsquo;<samp>[2.0 .. 5.0]</samp>&rsquo;!</p><a name=
+  "index-u-_0023" id="index-u-_0023"></a> <a name=
+  "index-calc_002dvector_002dcount" id=
+  "index-calc_002dvector_002dcount"></a> <a name="index-vcount" id=
+  "index-vcount"></a>
+
+  <p>The <kbd>u #</kbd> (<code>calc-vector-count</code>)
+  [<code>vcount</code>] command computes the number of data values
+  represented by the inputs. For example, &lsquo;<samp>vcount(1,
+  [2, 3], [[4, 5], [], x, y])</samp>&rsquo; returns 7. If the
+  argument is a single vector with no sub-vectors, this simply
+  computes the length of the vector.</p><a name="index-u-_002b" id=
+  "index-u-_002b"></a> <a name="index-u-_002a" id=
+  "index-u-_002a"></a> <a name="index-calc_002dvector_002dsum" id=
+  "index-calc_002dvector_002dsum"></a> <a name=
+  "index-calc_002dvector_002dprod" id=
+  "index-calc_002dvector_002dprod"></a> <a name="index-vsum" id=
+  "index-vsum"></a> <a name="index-vprod" id="index-vprod"></a>
+  <a name="index-Summations-_0028statistical_0029" id=
+  "index-Summations-_0028statistical_0029"></a>
+
+  <p>The <kbd>u +</kbd> (<code>calc-vector-sum</code>)
+  [<code>vsum</code>] command computes the sum of the data values.
+  The <kbd>u *</kbd> (<code>calc-vector-prod</code>)
+  [<code>vprod</code>] command computes the product of the data
+  values. If the input is a single flat vector, these are the same
+  as <kbd>V R +</kbd> and <kbd>V R *</kbd> (see <a href=
+  "Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and
+  Mapping</a>).</p><a name="index-u-X" id="index-u-X"></a> <a name=
+  "index-u-N" id="index-u-N"></a> <a name=
+  "index-calc_002dvector_002dmax" id=
+  "index-calc_002dvector_002dmax"></a> <a name=
+  "index-calc_002dvector_002dmin" id=
+  "index-calc_002dvector_002dmin"></a> <a name="index-vmax" id=
+  "index-vmax"></a> <a name="index-vmin" id="index-vmin"></a>
+
+  <p>The <kbd>u X</kbd> (<code>calc-vector-max</code>)
+  [<code>vmax</code>] command computes the maximum of the data
+  values, and the <kbd>u N</kbd> (<code>calc-vector-min</code>)
+  [<code>vmin</code>] command computes the minimum. If the argument
+  is an interval, this finds the minimum or maximum value in the
+  interval. (Note that &lsquo;<samp>vmax([2..6)) = 5</samp>&rsquo;
+  as described above.) If the argument is an error form, this
+  returns plus or minus infinity.</p><a name="index-u-M" id=
+  "index-u-M"></a> <a name="index-calc_002dvector_002dmean" id=
+  "index-calc_002dvector_002dmean"></a> <a name="index-vmean" id=
+  "index-vmean"></a> <a name="index-Mean-of-data-values" id=
+  "index-Mean-of-data-values"></a>
+
+  <p>The <kbd>u M</kbd> (<code>calc-vector-mean</code>)
+  [<code>vmean</code>] command computes the average (arithmetic
+  mean) of the data values. If the inputs are error forms
+  &lsquo;<samp>x +/- s</samp>&rsquo;, this is the weighted mean of
+  the &lsquo;<samp>x</samp>&rsquo; values with weights
+  &lsquo;<samp>1 / s^2</samp>&rsquo;. If the inputs are not error
+  forms, this is simply the sum of the values divided by the count
+  of the values.</p>
+
+  <p>Note that a plain number can be considered an error form with
+  error &lsquo;<samp>s = 0</samp>&rsquo;. If the input to <kbd>u
+  M</kbd> is a mixture of plain numbers and error forms, the result
+  is the mean of the plain numbers, ignoring all values with
+  non-zero errors. (By the above definitions it&rsquo;s clear that
+  a plain number effectively has an infinite weight, next to which
+  an error form with a finite weight is completely negligible.)</p>
+
+  <p>This function also works for distributions (error forms or
+  intervals). The mean of an error form &lsquo;<var>a</var>
+  <tt>+/-</tt> <var>b</var>&rsquo; is simply
+  &lsquo;<samp>a</samp>&rsquo;. The mean of an interval is the mean
+  of the minimum and maximum values of the interval.</p><a name=
+  "index-I-u-M" id="index-I-u-M"></a> <a name=
+  "index-calc_002dvector_002dmean_002derror" id=
+  "index-calc_002dvector_002dmean_002derror"></a> <a name=
+  "index-vmeane" id="index-vmeane"></a>
+
+  <p>The <kbd>I u M</kbd> (<code>calc-vector-mean-error</code>)
+  [<code>vmeane</code>] command computes the mean of the data
+  points expressed as an error form. This includes the estimated
+  error associated with the mean. If the inputs are error forms,
+  the error is the square root of the reciprocal of the sum of the
+  reciprocals of the squares of the input errors. (I.e., the
+  variance is the reciprocal of the sum of the reciprocals of the
+  variances.) If the inputs are plain numbers, the error is equal
+  to the standard deviation of the values divided by the square
+  root of the number of values. (This works out to be equivalent to
+  calculating the standard deviation and then assuming each
+  value&rsquo;s error is equal to this standard
+  deviation.)</p><a name="index-H-u-M" id="index-H-u-M"></a>
+  <a name="index-calc_002dvector_002dmedian" id=
+  "index-calc_002dvector_002dmedian"></a> <a name="index-vmedian"
+  id="index-vmedian"></a> <a name="index-Median-of-data-values" id=
+  "index-Median-of-data-values"></a>
+
+  <p>The <kbd>H u M</kbd> (<code>calc-vector-median</code>)
+  [<code>vmedian</code>] command computes the median of the data
+  values. The values are first sorted into numerical order; the
+  median is the middle value after sorting. (If the number of data
+  values is even, the median is taken to be the average of the two
+  middle values.) The median function is different from the other
+  functions in this section in that the arguments must all be real
+  numbers; variables are not accepted even when nested inside
+  vectors. (Otherwise it is not possible to sort the data values.)
+  If any of the input values are error forms, their error parts are
+  ignored.</p>
+
+  <p>The median function also accepts distributions. For both
+  normal (error form) and uniform (interval) distributions, the
+  median is the same as the mean.</p><a name="index-H-I-u-M" id=
+  "index-H-I-u-M"></a> <a name=
+  "index-calc_002dvector_002dharmonic_002dmean" id=
+  "index-calc_002dvector_002dharmonic_002dmean"></a> <a name=
+  "index-vhmean" id="index-vhmean"></a> <a name=
+  "index-Harmonic-mean" id="index-Harmonic-mean"></a>
+
+  <p>The <kbd>H I u M</kbd>
+  (<code>calc-vector-harmonic-mean</code>) [<code>vhmean</code>]
+  command computes the harmonic mean of the data values. This is
+  defined as the reciprocal of the arithmetic mean of the
+  reciprocals of the values.</p><a name="index-u-G" id=
+  "index-u-G"></a> <a name=
+  "index-calc_002dvector_002dgeometric_002dmean" id=
+  "index-calc_002dvector_002dgeometric_002dmean"></a> <a name=
+  "index-vgmean" id="index-vgmean"></a> <a name=
+  "index-Geometric-mean-1" id="index-Geometric-mean-1"></a>
+
+  <p>The <kbd>u G</kbd> (<code>calc-vector-geometric-mean</code>)
+  [<code>vgmean</code>] command computes the geometric mean of the
+  data values. This is the <var>n</var>th root of the product of
+  the values. This is also equal to the <code>exp</code> of the
+  arithmetic mean of the logarithms of the data values.</p><a name=
+  "index-H-u-G" id="index-H-u-G"></a> <a name="index-agmean" id=
+  "index-agmean"></a>
+
+  <p>The <kbd>H u G</kbd> [<code>agmean</code>] command computes
+  the &ldquo;arithmetic-geometric mean&rdquo; of two numbers taken
+  from the stack. This is computed by replacing the two numbers
+  with their arithmetic mean and geometric mean, then repeating
+  until the two values converge.</p><a name="index-u-R" id=
+  "index-u-R"></a> <a name="index-Root_002dmean_002dsquare" id=
+  "index-Root_002dmean_002dsquare"></a> <a name="index-rms" id=
+  "index-rms"></a>
+
+  <p>The <kbd>u R</kbd> (<code>calc-vector-rms</code>)
+  [<code>rms</code>] command computes the RMS (root-mean-square) of
+  the data values. As its name suggests, this is the square root of
+  the mean of the squares of the data values.</p><a name=
+  "index-u-S" id="index-u-S"></a> <a name=
+  "index-calc_002dvector_002dsdev" id=
+  "index-calc_002dvector_002dsdev"></a> <a name="index-vsdev" id=
+  "index-vsdev"></a> <a name="index-Standard-deviation" id=
+  "index-Standard-deviation"></a> <a name="index-Sample-statistics"
+  id="index-Sample-statistics"></a>
+
+  <p>The <kbd>u S</kbd> (<code>calc-vector-sdev</code>)
+  [<code>vsdev</code>] command computes the standard deviation of
+  the data values. If the values are error forms, the errors are
+  used as weights just as for <kbd>u M</kbd>. This is the
+  <em>sample</em> standard deviation, whose value is the square
+  root of the sum of the squares of the differences between the
+  values and the mean of the &lsquo;<samp>N</samp>&rsquo; values,
+  divided by &lsquo;<samp>N-1</samp>&rsquo;.</p>
+
+  <p>This function also applies to distributions. The standard
+  deviation of a single error form is simply the error part. The
+  standard deviation of a continuous interval happens to equal the
+  difference between the limits, divided by
+  &lsquo;<samp>sqrt(12)</samp>&rsquo;. The standard deviation of an
+  integer interval is the same as the standard deviation of a
+  vector of those integers.</p><a name="index-I-u-S" id=
+  "index-I-u-S"></a> <a name=
+  "index-calc_002dvector_002dpop_002dsdev" id=
+  "index-calc_002dvector_002dpop_002dsdev"></a> <a name=
+  "index-vpsdev" id="index-vpsdev"></a> <a name=
+  "index-Population-statistics" id=
+  "index-Population-statistics"></a>
+
+  <p>The <kbd>I u S</kbd> (<code>calc-vector-pop-sdev</code>)
+  [<code>vpsdev</code>] command computes the <em>population</em>
+  standard deviation. It is defined by the same formula as above
+  but dividing by &lsquo;<samp>N</samp>&rsquo; instead of by
+  &lsquo;<samp>N-1</samp>&rsquo;. The population standard deviation
+  is used when the input represents the entire set of data values
+  in the distribution; the sample standard deviation is used when
+  the input represents a sample of the set of all data values, so
+  that the mean computed from the input is itself only an estimate
+  of the true mean.</p>
+
+  <p>For error forms and continuous intervals, <code>vpsdev</code>
+  works exactly like <code>vsdev</code>. For integer intervals, it
+  computes the population standard deviation of the equivalent
+  vector of integers.</p><a name="index-H-u-S" id=
+  "index-H-u-S"></a> <a name="index-H-I-u-S" id=
+  "index-H-I-u-S"></a> <a name="index-calc_002dvector_002dvariance"
+  id="index-calc_002dvector_002dvariance"></a> <a name=
+  "index-calc_002dvector_002dpop_002dvariance" id=
+  "index-calc_002dvector_002dpop_002dvariance"></a> <a name=
+  "index-vvar" id="index-vvar"></a> <a name="index-vpvar" id=
+  "index-vpvar"></a> <a name="index-Variance-of-data-values" id=
+  "index-Variance-of-data-values"></a>
+
+  <p>The <kbd>H u S</kbd> (<code>calc-vector-variance</code>)
+  [<code>vvar</code>] and <kbd>H I u S</kbd>
+  (<code>calc-vector-pop-variance</code>) [<code>vpvar</code>]
+  commands compute the variance of the data values. The variance is
+  the square of the standard deviation, i.e., the sum of the
+  squares of the deviations of the data values from the mean. (This
+  definition also applies when the argument is a
+  distribution.)</p><a name="index-vflat" id="index-vflat"></a>
+
+  <p>The <code>vflat</code> algebraic function returns a vector of
+  its arguments, interpreted in the same way as the other functions
+  in this section. For example, &lsquo;<samp>vflat(1, [2, [3, 4]],
+  5)</samp>&rsquo; returns &lsquo;<samp>[1, 2, 3, 4,
+  5]</samp>&rsquo;.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Paired_002dSample-Statistics.html#Paired_002dSample-Statistics"
+    accesskey="n" rel="next">Paired-Sample Statistics</a>,
+    Previous: <a href=
+    "Statistical-Operations.html#Statistical-Operations" accesskey=
+    "p" rel="prev">Statistical Operations</a>, Up: <a href=
+    "Statistical-Operations.html#Statistical-Operations" accesskey=
+    "u" rel="up">Statistical Operations</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

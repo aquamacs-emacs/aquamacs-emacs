@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>The Active File - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Starting-Up.html#Starting-Up" title="Starting Up">
-<link rel="prev" href="Auto-Save.html#Auto-Save" title="Auto Save">
-<link rel="next" href="Startup-Variables.html#Startup-Variables" title="Startup Variables">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>The Active File - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Starting-Up.html#Starting-Up" title=
+  "Starting Up" />
+  <link rel="prev" href="Auto-Save.html#Auto-Save" title=
+  "Auto Save" />
+  <link rel="next" href="Startup-Variables.html#Startup-Variables"
+  title="Startup Variables" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +35,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,74 +48,94 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="The-Active-File"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Startup-Variables.html#Startup-Variables">Startup Variables</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto-Save.html#Auto-Save">Auto Save</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting Up</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="The-Active-File" id="The-Active-File"></a>
 
-<h3 class="section">1.8 The Active File</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Startup-Variables.html#Startup-Variables">Startup
+    Variables</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Auto-Save.html#Auto-Save">Auto Save</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting
+    Up</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-active-file-61"></a><a name="index-ignored-groups-62"></a>
-When Gnus starts, or indeed whenever it tries to determine whether new
-articles have arrived, it reads the active file.  This is a very large
-file that lists all the active groups and articles on the server.
+  <h3 class="section">1.8 The Active File</h3>
 
-   <p><a name="index-gnus_002dignored_002dnewsgroups-63"></a>Before examining the active file, Gnus deletes all lines that match the
-regexp <code>gnus-ignored-newsgroups</code>.  This is done primarily to reject
-any groups with bogus names, but you can use this variable to make Gnus
-ignore hierarchies you aren't ever interested in.  However, this is not
-recommended.  In fact, it's highly discouraged.  Instead, see <a href="New-Groups.html#New-Groups">New Groups</a> for an overview of other variables that can be used instead.
+  <p><a name="index-active-file-61" id=
+  "index-active-file-61"></a><a name="index-ignored-groups-62" id=
+  "index-ignored-groups-62"></a> When Gnus starts, or indeed
+  whenever it tries to determine whether new articles have arrived,
+  it reads the active file. This is a very large file that lists
+  all the active groups and articles on the server.</p>
 
-<!-- This variable is -->
-<!-- @code{nil} by default, and will slow down active file handling somewhat -->
-<!-- if you set it to anything else. -->
-   <p><a name="index-gnus_002dread_002dactive_002dfile-64"></a><!-- @head -->
-The active file can be rather Huge, so if you have a slow network, you
-can set <code>gnus-read-active-file</code> to <code>nil</code> to prevent Gnus from
-reading the active file.  This variable is <code>some</code> by default.
+  <p><a name="index-gnus_002dignored_002dnewsgroups-63" id=
+  "index-gnus_002dignored_002dnewsgroups-63"></a>Before examining
+  the active file, Gnus deletes all lines that match the regexp
+  <code>gnus-ignored-newsgroups</code>. This is done primarily to
+  reject any groups with bogus names, but you can use this variable
+  to make Gnus ignore hierarchies you aren't ever interested in.
+  However, this is not recommended. In fact, it's highly
+  discouraged. Instead, see <a href=
+  "New-Groups.html#New-Groups">New Groups</a> for an overview of
+  other variables that can be used instead. 
+  <!-- This variable is -->
+  <!-- @code{nil} by default, and will slow down active file handling somewhat -->
+  <!-- if you set it to anything else. --></p>
 
-   <p>Gnus will try to make do by getting information just on the groups that
-you actually subscribe to.
+  <p><a name="index-gnus_002dread_002dactive_002dfile-64" id=
+  "index-gnus_002dread_002dactive_002dfile-64"></a><!-- @head -->
+  The active file can be rather Huge, so if you have a slow
+  network, you can set <code>gnus-read-active-file</code> to
+  <code>nil</code> to prevent Gnus from reading the active file.
+  This variable is <code>some</code> by default.</p>
 
-   <p>Note that if you subscribe to lots and lots of groups, setting this
-variable to <code>nil</code> will probably make Gnus slower, not faster.  At
-present, having this variable <code>nil</code> will slow Gnus down
-considerably, unless you read news over a 2400 baud modem.
+  <p>Gnus will try to make do by getting information just on the
+  groups that you actually subscribe to.</p>
 
-   <p>This variable can also have the value <code>some</code>.  Gnus will then
-attempt to read active info only on the subscribed groups.  On some
-servers this is quite fast (on sparkling, brand new INN servers that
-support the <code>LIST ACTIVE group</code> command), on others this isn't fast
-at all.  In any case, <code>some</code> should be faster than <code>nil</code>, and
-is certainly faster than <code>t</code> over slow lines.
+  <p>Note that if you subscribe to lots and lots of groups, setting
+  this variable to <code>nil</code> will probably make Gnus slower,
+  not faster. At present, having this variable <code>nil</code>
+  will slow Gnus down considerably, unless you read news over a
+  2400 baud modem.</p>
 
-   <p>Some news servers (old versions of Leafnode and old versions of INN, for
-instance) do not support the <code>LIST ACTIVE group</code>.  For these
-servers, <code>nil</code> is probably the most efficient value for this
-variable.
+  <p>This variable can also have the value <code>some</code>. Gnus
+  will then attempt to read active info only on the subscribed
+  groups. On some servers this is quite fast (on sparkling, brand
+  new INN servers that support the <code>LIST ACTIVE group</code>
+  command), on others this isn't fast at all. In any case,
+  <code>some</code> should be faster than <code>nil</code>, and is
+  certainly faster than <code>t</code> over slow lines.</p>
 
-   <p>If this variable is <code>nil</code>, Gnus will ask for group info in total
-lock-step, which isn't very fast.  If it is <code>some</code> and you use an
-<acronym>NNTP</acronym> server, Gnus will pump out commands as fast as it can, and
-read all the replies in one swoop.  This will normally result in better
-performance, but if the server does not support the aforementioned
-<code>LIST ACTIVE group</code> command, this isn't very nice to the server.
+  <p>Some news servers (old versions of Leafnode and old versions
+  of INN, for instance) do not support the <code>LIST ACTIVE
+  group</code>. For these servers, <code>nil</code> is probably the
+  most efficient value for this variable.</p>
 
-   <p>If you think that starting up Gnus takes too long, try all the three
-different values for this variable and see what works best for you.
+  <p>If this variable is <code>nil</code>, Gnus will ask for group
+  info in total lock-step, which isn't very fast. If it is
+  <code>some</code> and you use an <acronym>NNTP</acronym> server,
+  Gnus will pump out commands as fast as it can, and read all the
+  replies in one swoop. This will normally result in better
+  performance, but if the server does not support the
+  aforementioned <code>LIST ACTIVE group</code> command, this isn't
+  very nice to the server.</p>
 
-   <p>In any case, if you use <code>some</code> or <code>nil</code>, you should definitely
-kill all groups that you aren't interested in to speed things up.
+  <p>If you think that starting up Gnus takes too long, try all the
+  three different values for this variable and see what works best
+  for you.</p>
 
-   <p>Note that this variable also affects active file retrieval from
-secondary select methods.
+  <p>In any case, if you use <code>some</code> or <code>nil</code>,
+  you should definitely kill all groups that you aren't interested
+  in to speed things up.</p>
 
-   </body></html>
-
+  <p>Note that this variable also affects active file retrieval
+  from secondary select methods.</p>
+</body>
+</html>

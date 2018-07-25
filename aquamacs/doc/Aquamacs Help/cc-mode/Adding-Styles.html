@@ -1,15 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Adding Styles - CC Mode Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="CC Mode Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Styles.html#Styles" title="Styles">
-<link rel="prev" href="Choosing-a-Style.html#Choosing-a-Style" title="Choosing a Style">
-<link rel="next" href="File-Styles.html#File-Styles" title="File Styles">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Adding Styles - CC Mode Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="CC Mode Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Styles.html#Styles" title="Styles" />
+  <link rel="prev" href="Choosing-a-Style.html#Choosing-a-Style"
+  title="Choosing a Style" />
+  <link rel="next" href="File-Styles.html#File-Styles" title=
+  "File Styles" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
@@ -28,8 +36,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -39,106 +49,167 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Adding-Styles"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="File-Styles.html#File-Styles">File Styles</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Choosing-a-Style.html#Choosing-a-Style">Choosing a Style</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Styles.html#Styles">Styles</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Adding-Styles" id="Adding-Styles"></a>
 
-<!-- node-name, next, previous, up -->
-<h4 class="subsection">6.3.3 Adding and Amending Styles</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "File-Styles.html#File-Styles">File Styles</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Choosing-a-Style.html#Choosing-a-Style">Choosing a Style</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Styles.html#Styles">Styles</a></p>
+    <hr />
+  </div><!-- node-name, next, previous, up -->
 
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p>If none of the built-in styles is appropriate, you'll probably want to
-create a new <dfn>style definition</dfn>, possibly based on an existing
-style.  To do this, put the new style's settings into a list with the
-following format - the list can then be passed as an argument to the
-function <code>c-add-style</code>.  You can see an example of a style
-definition in <a href="Sample-_002eemacs-File.html#Sample-_002eemacs-File">Sample .emacs File</a>.
+  <h4 class="subsection">6.3.3 Adding and Amending Styles</h4>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
-   <p><a name="index-style-definition-299"></a><!-- @defvr {List} style definition -->
-     <dl>
-<dt>Structure of a Style Definition List<dd>([<var>base-style</var>] [(<var>variable</var> . <var>value</var>) <small class="dots">...</small>])
+  <p>If none of the built-in styles is appropriate, you'll probably
+  want to create a new <dfn>style definition</dfn>, possibly based
+  on an existing style. To do this, put the new style's settings
+  into a list with the following format - the list can then be
+  passed as an argument to the function <code>c-add-style</code>.
+  You can see an example of a style definition in <a href=
+  "Sample-_002eemacs-File.html#Sample-_002eemacs-File">Sample
+  .emacs File</a>.</p>
 
-     <p>Optional <var>base-style</var>, if present, must be a string which is the
-name of the <dfn>base style</dfn> from which this style inherits.  At most
-one <var>base-style</var> is allowed in a style definition.  If
-<var>base-style</var> is not specified, the style inherits from the table
-of factory default values<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> instead.  All styles eventually
-inherit from this internal table.  Style loops generate errors.  The
-list of pre-existing styles can be seen in <a href="Built_002din-Styles.html#Built_002din-Styles">Built-in Styles</a>.
+  <p><a name="index-style-definition-299" id=
+  "index-style-definition-299"></a>
+  <!-- @defvr {List} style definition --></p>
 
-     <p>The dotted pairs (<var>variable</var> . <var>value</var>) each consist of a
-variable and the value it is to be set to when the style is later
-activated.<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> The variable can be either a
-CC Mode style variable or an arbitrary Emacs variable.  In the
-latter case, it is <em>not</em> made buffer-local by the CC Mode style
-system. 
-<!-- @end defvr -->
+  <dl>
+    <dt>Structure of a Style Definition List</dt>
 
-     <p>Two variables are treated specially in the dotted pair list:
+    <dd>
+      ([<var>base-style</var>] [(<var>variable</var> .
+      <var>value</var>) <small class="dots">...</small>])
 
-          <dl>
-<dt><code>c-offsets-alist</code><dd>The value is in turn a list of dotted pairs of the form
+      <p>Optional <var>base-style</var>, if present, must be a
+      string which is the name of the <dfn>base style</dfn> from
+      which this style inherits. At most one <var>base-style</var>
+      is allowed in a style definition. If <var>base-style</var> is
+      not specified, the style inherits from the table of factory
+      default values<a rel="footnote" href="#fn-1" name="fnd-1" id=
+      "fnd-1"><sup>1</sup></a> instead. All styles eventually
+      inherit from this internal table. Style loops generate
+      errors. The list of pre-existing styles can be seen in
+      <a href=
+      "Built_002din-Styles.html#Built_002din-Styles">Built-in
+      Styles</a>.</p>
 
-          <pre class="example">               (<var>syntactic-symbol</var> . <var>offset</var>)
+      <p>The dotted pairs (<var>variable</var> . <var>value</var>)
+      each consist of a variable and the value it is to be set to
+      when the style is later activated.<a rel="footnote" href=
+      "#fn-2" name="fnd-2" id="fnd-2"><sup>2</sup></a> The variable
+      can be either a CC Mode style variable or an arbitrary Emacs
+      variable. In the latter case, it is <em>not</em> made
+      buffer-local by the CC Mode style system. 
+      <!-- @end defvr --></p>
+
+      <p>Two variables are treated specially in the dotted pair
+      list:</p>
+
+      <dl>
+        <dt><code>c-offsets-alist</code></dt>
+
+        <dd>
+          The value is in turn a list of dotted pairs of the form
+          <pre class="example">
+               (<var>syntactic-symbol</var> . <var>offset</var>)
 </pre>
-          <p>as described in <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>.  These are passed to
-<code>c-set-offset</code> so there is no need to set every syntactic symbol
-in your style, only those that are different from the inherited style.
 
-          <br><dt><code>c-special-indent-hook</code><dd>The value is added to <code>c-special-indent-hook</code> using
-<code>add-hook</code>, so any functions already on it are kept.  If the value
-is a list, each element of the list is added with <code>add-hook</code>. 
-</dl>
-     </dl>
+          <p>as described in <a href=
+          "c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>.
+          These are passed to <code>c-set-offset</code> so there is
+          no need to set every syntactic symbol in your style, only
+          those that are different from the inherited
+          style.<br /></p>
+        </dd>
 
-   <p>Styles are kept in the <code>c-style-alist</code> variable, but you
-should never modify this variable directly.  Instead, CC Mode
-provides the function <code>c-add-style</code> for this purpose.
+        <dt><code>c-special-indent-hook</code></dt>
 
-<div class="defun">
-&mdash; Function: <b>c-add-style</b><var> stylename description &amp;optional set-p<a name="index-c_002dadd_002dstyle-300"></a></var><br>
-<blockquote><p><a name="index-add_002dstyle-_0028c_002d_0029-301"></a>Add or update a style called <var>stylename</var>, a string. 
-<var>description</var> is the new style definition in the form described
-above.  If <var>stylename</var> already exists in <code>c-style-alist</code> then
-it is replaced by <var>description</var>.  (Note, this replacement is
-total.  The old style is <em>not</em> merged into the new one.) 
-Otherwise, a new style is added.
+        <dd>The value is added to
+        <code>c-special-indent-hook</code> using
+        <code>add-hook</code>, so any functions already on it are
+        kept. If the value is a list, each element of the list is
+        added with <code>add-hook</code>.</dd>
+      </dl>
+    </dd>
+  </dl>
 
-        <p>If the optional <var>set-p</var> is non-<code>nil</code> then the new style is
-applied to the current buffer as well.  The use of this facility is
-deprecated and it might be removed from CC Mode in a future release. 
-You should use <code>c-set-style</code> instead.
+  <p>Styles are kept in the <code>c-style-alist</code> variable,
+  but you should never modify this variable directly. Instead, CC
+  Mode provides the function <code>c-add-style</code> for this
+  purpose.</p>
 
-        <p>The sample <samp><span class="file">.emacs</span></samp> file provides a concrete example of how a new
-style can be added and automatically set.  See <a href="Sample-_002eemacs-File.html#Sample-_002eemacs-File">Sample .emacs File</a>. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Function: <b>c-add-style</b> <var>stylename description
+    &amp;optional set-p<a name="index-c_002dadd_002dstyle-300" id=
+    "index-c_002dadd_002dstyle-300"></a></var><br />
 
-<div class="defun">
-&mdash; Variable: <b>c-style-alist</b><var><a name="index-c_002dstyle_002dalist-302"></a></var><br>
-<blockquote><p><a name="index-style_002dalist-_0028c_002d_0029-303"></a>This is the variable that holds the definitions for the styles.  It
-should not be changed directly; use <code>c-add-style</code> instead. 
-</p></blockquote></div>
+    <blockquote>
+      <p><a name="index-add_002dstyle-_0028c_002d_0029-301" id=
+      "index-add_002dstyle-_0028c_002d_0029-301"></a>Add or update
+      a style called <var>stylename</var>, a string.
+      <var>description</var> is the new style definition in the
+      form described above. If <var>stylename</var> already exists
+      in <code>c-style-alist</code> then it is replaced by
+      <var>description</var>. (Note, this replacement is total. The
+      old style is <em>not</em> merged into the new one.)
+      Otherwise, a new style is added.</p>
 
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> This table is stored internally in
-the variable c-fallback-style.</p>
+      <p>If the optional <var>set-p</var> is non-<code>nil</code>
+      then the new style is applied to the current buffer as well.
+      The use of this facility is deprecated and it might be
+      removed from CC Mode in a future release. You should use
+      <code>c-set-style</code> instead.</p>
 
-   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Note that if the variable has been given a value
-by the Customization interface or a <code>setq</code> at the top level of
-your <samp><span class="file">.emacs</span></samp>, this value will override the one the style system
-tries to give it. See <a href="Config-Basics.html#Config-Basics">Config Basics</a>.</p>
+      <p>The sample <samp><span class="file">.emacs</span></samp>
+      file provides a concrete example of how a new style can be
+      added and automatically set. See <a href=
+      "Sample-_002eemacs-File.html#Sample-_002eemacs-File">Sample
+      .emacs File</a>.</p>
+    </blockquote>
+  </div>
 
-   <hr></div>
+  <div class="defun">
+    &mdash; Variable: <b>c-style-alist</b><var><a name=
+    "index-c_002dstyle_002dalist-302" id=
+    "index-c_002dstyle_002dalist-302"></a></var><br />
 
-   </body></html>
+    <blockquote>
+      <p><a name="index-style_002dalist-_0028c_002d_0029-303" id=
+      "index-style_002dalist-_0028c_002d_0029-303"></a>This is the
+      variable that holds the definitions for the styles. It should
+      not be changed directly; use <code>c-add-style</code>
+      instead.</p>
+    </blockquote>
+  </div>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
+  <div class="footnote">
+    <hr />
+
+    <h4>Footnotes</h4>
+
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> This table is stored internally in the
+    variable c-fallback-style.</p>
+
+    <p class="footnote"><small>[<a name="fn-2" href="#fnd-2" id=
+    "fn-2">2</a>]</small> Note that if the variable has been given
+    a value by the Customization interface or a <code>setq</code>
+    at the top level of your <samp><span class=
+    "file">.emacs</span></samp>, this value will override the one
+    the style system tries to give it. See <a href=
+    "Config-Basics.html#Config-Basics">Config Basics</a>.</p>
+    <hr />
+  </div>
+</body>
+</html>

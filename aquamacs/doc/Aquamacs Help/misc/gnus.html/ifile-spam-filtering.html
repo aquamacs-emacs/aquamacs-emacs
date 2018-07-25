@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,107 +14,155 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: ifile spam filtering</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: ifile spam filtering">
-<meta name="keywords" content="Gnus Manual: ifile spam filtering">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title="Spam Back Ends">
-<link href="Spam-Statistics-Filtering.html#Spam-Statistics-Filtering" rel="next" title="Spam Statistics Filtering">
-<link href="SpamAssassin-back-end.html#SpamAssassin-back-end" rel="prev" title="SpamAssassin back end">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: ifile spam filtering</title>
+  <meta name="description" content=
+  "Gnus Manual: ifile spam filtering" />
+  <meta name="keywords" content=
+  "Gnus Manual: ifile spam filtering" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title=
+  "Spam Back Ends" />
+  <link href=
+  "Spam-Statistics-Filtering.html#Spam-Statistics-Filtering" rel=
+  "next" title="Spam Statistics Filtering" />
+  <link href="SpamAssassin-back-end.html#SpamAssassin-back-end"
+  rel="prev" title="SpamAssassin back end" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="ifile-spam-filtering"></a>
-<div class="header">
-<p>
-Next: <a href="Spam-Statistics-Filtering.html#Spam-Statistics-Filtering" accesskey="n" rel="next">Spam Statistics Filtering</a>, Previous: <a href="SpamAssassin-back-end.html#SpamAssassin-back-end" accesskey="p" rel="prev">SpamAssassin back end</a>, Up: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel="up">Spam Back Ends</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="ifile-spam-filtering-1"></a>
-<h4 class="subsubsection">9.17.6.9 ifile spam filtering</h4>
-<a name="index-spam-filtering-12"></a>
-<a name="index-ifile_002c-spam-filtering"></a>
-<a name="index-spam-15"></a>
+<body lang="en" xml:lang="en">
+  <a name="ifile-spam-filtering" id="ifile-spam-filtering"></a>
 
-<dl>
-<dt><a name="index-spam_002duse_002difile"></a>Variable: <strong>spam-use-ifile</strong></dt>
-<dd>
-<p>Enable this variable if you want <code>spam-split</code> to use <code>ifile</code>, a
-statistical analyzer similar to Bogofilter.
-</p>
-</dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Spam-Statistics-Filtering.html#Spam-Statistics-Filtering"
+    accesskey="n" rel="next">Spam Statistics Filtering</a>,
+    Previous: <a href=
+    "SpamAssassin-back-end.html#SpamAssassin-back-end" accesskey=
+    "p" rel="prev">SpamAssassin back end</a>, Up: <a href=
+    "Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel=
+    "up">Spam Back Ends</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="ifile-spam-filtering-1" id="ifile-spam-filtering-1"></a>
 
-<dl>
-<dt><a name="index-spam_002difile_002dall_002dcategories"></a>Variable: <strong>spam-ifile-all-categories</strong></dt>
-<dd>
-<p>Enable this variable if you want <code>spam-use-ifile</code> to give you all
-the ifile categories, not just spam/non-spam.  If you use this, make
-sure you train ifile as described in its documentation.
-</p>
-</dd></dl>
+  <h4 class="subsubsection">9.17.6.9 ifile spam
+  filtering</h4><a name="index-spam-filtering-12" id=
+  "index-spam-filtering-12"></a> <a name=
+  "index-ifile_002c-spam-filtering" id=
+  "index-ifile_002c-spam-filtering"></a> <a name="index-spam-15"
+  id="index-spam-15"></a>
 
-<dl>
-<dt><a name="index-spam_002difile_002dspam_002dcategory"></a>Variable: <strong>spam-ifile-spam-category</strong></dt>
-<dd>
-<p>This is the category of spam messages as far as ifile is concerned.
-The actual string used is irrelevant, but you probably want to leave
-the default value of &lsquo;<samp>spam</samp>&rsquo;.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-spam_002duse_002difile" id=
+    "index-spam_002duse_002difile"></a>Variable:
+    <strong>spam-use-ifile</strong></dt>
 
-<dl>
-<dt><a name="index-spam_002difile_002ddatabase"></a>Variable: <strong>spam-ifile-database</strong></dt>
-<dd>
-<p>This is the filename for the ifile database.  It is not specified by
-default, so ifile will use its own default database name.
-</p>
-</dd></dl>
+    <dd>
+      <p>Enable this variable if you want <code>spam-split</code>
+      to use <code>ifile</code>, a statistical analyzer similar to
+      Bogofilter.</p>
+    </dd>
+  </dl>
 
-<p>The ifile mail classifier is similar to Bogofilter in intent and
-purpose.  A ham and a spam processor are provided, plus the
-<code>spam-use-ifile</code> variable to indicate to spam-split that ifile
-should be used.  The 1.2.1 version of ifile was used to test this
-functionality.
-</p>
+  <dl>
+    <dt><a name="index-spam_002difile_002dall_002dcategories" id=
+    "index-spam_002difile_002dall_002dcategories"></a>Variable:
+    <strong>spam-ifile-all-categories</strong></dt>
 
+    <dd>
+      <p>Enable this variable if you want
+      <code>spam-use-ifile</code> to give you all the ifile
+      categories, not just spam/non-spam. If you use this, make
+      sure you train ifile as described in its documentation.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-spam_002difile_002dspam_002dcategory" id=
+    "index-spam_002difile_002dspam_002dcategory"></a>Variable:
+    <strong>spam-ifile-spam-category</strong></dt>
 
+    <dd>
+      <p>This is the category of spam messages as far as ifile is
+      concerned. The actual string used is irrelevant, but you
+      probably want to leave the default value of
+      &lsquo;<samp>spam</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-spam_002difile_002ddatabase" id=
+    "index-spam_002difile_002ddatabase"></a>Variable:
+    <strong>spam-ifile-database</strong></dt>
+
+    <dd>
+      <p>This is the filename for the ifile database. It is not
+      specified by default, so ifile will use its own default
+      database name.</p>
+    </dd>
+  </dl>
+
+  <p>The ifile mail classifier is similar to Bogofilter in intent
+  and purpose. A ham and a spam processor are provided, plus the
+  <code>spam-use-ifile</code> variable to indicate to spam-split
+  that ifile should be used. The 1.2.1 version of ifile was used to
+  test this functionality.</p>
 </body>
 </html>

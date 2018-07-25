@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,106 +16,166 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Formula syntax for Lisp</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Formula syntax for Lisp">
-<meta name="keywords" content="The Org Manual: Formula syntax for Lisp">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-spreadsheet.html#The-spreadsheet" rel="up" title="The spreadsheet">
-<link href="Durations-and-time-values.html#Durations-and-time-values" rel="next" title="Durations and time values">
-<link href="Formula-syntax-for-Calc.html#Formula-syntax-for-Calc" rel="prev" title="Formula syntax for Calc">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Formula syntax for Lisp</title>
+  <meta name="description" content=
+  "The Org Manual: Formula syntax for Lisp" />
+  <meta name="keywords" content=
+  "The Org Manual: Formula syntax for Lisp" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-spreadsheet.html#The-spreadsheet" rel="up" title=
+  "The spreadsheet" />
+  <link href=
+  "Durations-and-time-values.html#Durations-and-time-values" rel=
+  "next" title="Durations and time values" />
+  <link href="Formula-syntax-for-Calc.html#Formula-syntax-for-Calc"
+  rel="prev" title="Formula syntax for Calc" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Formula-syntax-for-Lisp"></a>
-<div class="header">
-<p>
-Next: <a href="Durations-and-time-values.html#Durations-and-time-values" accesskey="n" rel="next">Durations and time values</a>, Previous: <a href="Formula-syntax-for-Calc.html#Formula-syntax-for-Calc" accesskey="p" rel="prev">Formula syntax for Calc</a>, Up: <a href="The-spreadsheet.html#The-spreadsheet" accesskey="u" rel="up">The spreadsheet</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Emacs-Lisp-forms-as-formulas"></a>
-<h4 class="subsection">3.5.3 Emacs Lisp forms as formulas</h4>
-<a name="index-Lisp-forms_002c-as-table-formulas"></a>
+<body lang="en" xml:lang="en">
+  <a name="Formula-syntax-for-Lisp" id=
+  "Formula-syntax-for-Lisp"></a>
 
-<p>It is also possible to write a formula in Emacs Lisp.  This can be useful
-for string manipulation and control structures, if Calc&rsquo;s functionality is
-not enough.
-</p>
-<p>If a formula starts with an apostrophe followed by an opening parenthesis,
-then it is evaluated as a Lisp form.  The evaluation should return either a
-string or a number.  Just as with <samp>calc</samp> formulas, you can specify modes
-and a printf format after a semicolon.
-</p>
-<p>With Emacs Lisp forms, you need to be conscious about the way field
-references are interpolated into the form.  By default, a reference will be
-interpolated as a Lisp string (in double-quotes) containing the field.  If
-you provide the &lsquo;<samp>N</samp>&rsquo; mode switch, all referenced elements will be numbers
-(non-number fields will be zero) and interpolated as Lisp numbers, without
-quotes.  If you provide the &lsquo;<samp>L</samp>&rsquo; flag, all fields will be interpolated
-literally, without quotes.  I.e., if you want a reference to be interpreted
-as a string by the Lisp form, enclose the reference operator itself in
-double-quotes, like <code>&quot;$3&quot;</code>.  Ranges are inserted as space-separated
-fields, so you can embed them in list or vector syntax.
-</p>
-<p>Here are a few examples&mdash;note how the &lsquo;<samp>N</samp>&rsquo; mode is used when we do
-computations in Lisp:
-</p>
-<dl compact="compact">
-<dt><code>'(concat (substring $1 1 2) (substring $1 0 1) (substring $1 2))</code></dt>
-<dd><p>Swap the first two characters of the content of column 1.
-</p></dd>
-<dt><code>'(+ $1 $2);N</code></dt>
-<dd><p>Add columns 1 and 2, equivalent to Calc&rsquo;s <code>$1+$2</code>.
-</p></dd>
-<dt><code>'(apply '+ '($1..$4));N</code></dt>
-<dd><p>Compute the sum of columns 1 to 4, like Calc&rsquo;s <code>vsum($1..$4)</code>.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Durations-and-time-values.html#Durations-and-time-values"
+    accesskey="n" rel="next">Durations and time values</a>,
+    Previous: <a href=
+    "Formula-syntax-for-Calc.html#Formula-syntax-for-Calc"
+    accesskey="p" rel="prev">Formula syntax for Calc</a>, Up:
+    <a href="The-spreadsheet.html#The-spreadsheet" accesskey="u"
+    rel="up">The spreadsheet</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Emacs-Lisp-forms-as-formulas" id=
+  "Emacs-Lisp-forms-as-formulas"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Durations-and-time-values.html#Durations-and-time-values" accesskey="n" rel="next">Durations and time values</a>, Previous: <a href="Formula-syntax-for-Calc.html#Formula-syntax-for-Calc" accesskey="p" rel="prev">Formula syntax for Calc</a>, Up: <a href="The-spreadsheet.html#The-spreadsheet" accesskey="u" rel="up">The spreadsheet</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h4 class="subsection">3.5.3 Emacs Lisp forms as
+  formulas</h4><a name="index-Lisp-forms_002c-as-table-formulas"
+  id="index-Lisp-forms_002c-as-table-formulas"></a>
 
+  <p>It is also possible to write a formula in Emacs Lisp. This can
+  be useful for string manipulation and control structures, if
+  Calc&rsquo;s functionality is not enough.</p>
 
+  <p>If a formula starts with an apostrophe followed by an opening
+  parenthesis, then it is evaluated as a Lisp form. The evaluation
+  should return either a string or a number. Just as with
+  <samp>calc</samp> formulas, you can specify modes and a printf
+  format after a semicolon.</p>
 
+  <p>With Emacs Lisp forms, you need to be conscious about the way
+  field references are interpolated into the form. By default, a
+  reference will be interpolated as a Lisp string (in
+  double-quotes) containing the field. If you provide the
+  &lsquo;<samp>N</samp>&rsquo; mode switch, all referenced elements
+  will be numbers (non-number fields will be zero) and interpolated
+  as Lisp numbers, without quotes. If you provide the
+  &lsquo;<samp>L</samp>&rsquo; flag, all fields will be
+  interpolated literally, without quotes. I.e., if you want a
+  reference to be interpreted as a string by the Lisp form, enclose
+  the reference operator itself in double-quotes, like
+  <code>"$3"</code>. Ranges are inserted as space-separated fields,
+  so you can embed them in list or vector syntax.</p>
+
+  <p>Here are a few examples&mdash;note how the
+  &lsquo;<samp>N</samp>&rsquo; mode is used when we do computations
+  in Lisp:</p>
+
+  <dl compact="compact">
+    <dt><code>'(concat (substring $1 1 2) (substring $1 0 1)
+    (substring $1 2))</code></dt>
+
+    <dd>
+      <p>Swap the first two characters of the content of column
+      1.</p>
+    </dd>
+
+    <dt><code>'(+ $1 $2);N</code></dt>
+
+    <dd>
+      <p>Add columns 1 and 2, equivalent to Calc&rsquo;s
+      <code>$1+$2</code>.</p>
+    </dd>
+
+    <dt><code>'(apply '+ '($1..$4));N</code></dt>
+
+    <dd>
+      <p>Compute the sum of columns 1 to 4, like Calc&rsquo;s
+      <code>vsum($1..$4)</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Durations-and-time-values.html#Durations-and-time-values"
+    accesskey="n" rel="next">Durations and time values</a>,
+    Previous: <a href=
+    "Formula-syntax-for-Calc.html#Formula-syntax-for-Calc"
+    accesskey="p" rel="prev">Formula syntax for Calc</a>, Up:
+    <a href="The-spreadsheet.html#The-spreadsheet" accesskey="u"
+    rel="up">The spreadsheet</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

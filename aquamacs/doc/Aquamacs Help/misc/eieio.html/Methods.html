@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,177 +16,252 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Methods</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Methods">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Methods">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Writing-Methods.html#Writing-Methods" rel="up" title="Writing Methods">
-<link href="Static-Methods.html#Static-Methods" rel="next" title="Static Methods">
-<link href="Generics.html#Generics" rel="prev" title="Generics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Methods</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Methods" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Methods" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="Writing-Methods.html#Writing-Methods" rel="up" title=
+  "Writing Methods" />
+  <link href="Static-Methods.html#Static-Methods" rel="next" title=
+  "Static Methods" />
+  <link href="Generics.html#Generics" rel="prev" title=
+  "Generics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Methods"></a>
-<div class="header">
-<p>
-Next: <a href="Static-Methods.html#Static-Methods" accesskey="n" rel="next">Static Methods</a>, Previous: <a href="Generics.html#Generics" accesskey="p" rel="prev">Generics</a>, Up: <a href="Writing-Methods.html#Writing-Methods" accesskey="u" rel="up">Writing Methods</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Methods-1"></a>
-<h3 class="section">6.2 Methods</h3>
+<body lang="en" xml:lang="en">
+  <a name="Methods" id="Methods"></a>
 
-<p>A method is a function that is executed if the first argument passed
-to it matches the method&rsquo;s class.  Different <i>EIEIO</i> classes may
-share the same method names.
-</p>
-<p>Methods are created with the <code>defmethod</code> macro, which is similar
-to <code>defun</code>.
-</p>
-<dl>
-<dt><a name="index-defmethod"></a>Macro: <strong>defmethod</strong> <em>method [:before | :primary | :after | :static ] arglist [doc-string] forms</em></dt>
-<dd>
-<p><var>method</var> is the name of the function to create.
-</p>
-<p><code>:before</code> and <code>:after</code> specify execution order (i.e., when
-this form is called).  If neither of these symbols are present, the
-default priority is used (before <code>:after</code> and after
-<code>:before</code>); this default priority is represented in CLOS as
-<code>:primary</code>.
-</p>
-<p><b>Note:</b> The <code>:BEFORE</code>, <code>:PRIMARY</code>, <code>:AFTER</code>, and
-<code>:STATIC</code> method tags were in all capital letters in previous
-versions of <i>EIEIO</i>.
-</p>
-<p><var>arglist</var> is the list of arguments to this method.  The first
-argument in this list&mdash;and <em>only</em> the first argument&mdash;may have
-a type specifier (see the example below).  If no type specifier is
-supplied, the method applies to any object.
-</p>
-<p><var>doc-string</var> is the documentation attached to the implementation.
-All method doc-strings are incorporated into the generic method&rsquo;s
-function documentation.
-</p>
-<p><var>forms</var> is the body of the function.
-</p>
-</dd></dl>
+  <div class="header">
+    <p>Next: <a href="Static-Methods.html#Static-Methods"
+    accesskey="n" rel="next">Static Methods</a>, Previous: <a href=
+    "Generics.html#Generics" accesskey="p" rel="prev">Generics</a>,
+    Up: <a href="Writing-Methods.html#Writing-Methods" accesskey=
+    "u" rel="up">Writing Methods</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Methods-1" id="Methods-1"></a>
 
-<p>In the following example, we create a method <code>mymethod</code> for the
-<code>classname</code> class:
-</p>
-<div class="example">
-<pre class="example">(defmethod mymethod ((obj classname) secondarg)
-  &quot;Doc string&quot; )
-</pre></div>
+  <h3 class="section">6.2 Methods</h3>
 
-<p>This method only executes if the <var>obj</var> argument passed to it is an
-<i>EIEIO</i> object of class <code>classname</code>.
-</p>
-<p>A method with no type specifier is a <em>default method</em>.  If a given
-class has no implementation, then the default method is called when
-that method is used on a given object of that class.
-</p>
-<p>Only one default method per execution specifier (<code>:before</code>,
-<code>:primary</code>, or <code>:after</code>) is allowed.  If two
-<code>defmethod</code>s appear with <var>arglist</var>s lacking a type specifier,
-and having the same execution specifier, then the first implementation
-is replaced.
-</p>
-<p>When a method is called on an object, but there is no method specified
-for that object, but there is a method specified for object&rsquo;s parent
-class, the parent class&rsquo; method is called.  If there is a method
-defined for both, only the child&rsquo;s method is called.  A child method
-may call a parent&rsquo;s method using <code>call-next-method</code>, described
-below.
-</p>
-<p>If multiple methods and default methods are defined for the same
-method and class, they are executed in this order:
-</p>
-<ol>
-<li> method :before
-</li><li> default :before
-</li><li> method :primary
-</li><li> default :primary
-</li><li> method :after
-</li><li> default :after
-</li></ol>
+  <p>A method is a function that is executed if the first argument
+  passed to it matches the method&rsquo;s class. Different
+  <i>EIEIO</i> classes may share the same method names.</p>
 
-<p>If no methods exist, Emacs signals a <code>no-method-definition</code>
-error.  See <a href="Signals.html#Signals">Signals</a>.
-</p>
-<dl>
-<dt><a name="index-call_002dnext_002dmethod"></a>Function: <strong>call-next-method</strong> <em>&amp;rest replacement-args</em></dt>
-<dd><a name="call_002dnext_002dmethod"></a>
-<p>This function calls the superclass method from a subclass method.
-This is the &ldquo;next method&rdquo; specified in the current method list.
-</p>
-<p>If <var>replacement-args</var> is non-<code>nil</code>, then use them instead of
-<code>eieio-generic-call-arglst</code>.  At the top level, the generic
-argument list is passed in.
-</p>
-<p>Use <code>next-method-p</code> to find out if there is a next method to
-call.
-</p></dd></dl>
+  <p>Methods are created with the <code>defmethod</code> macro,
+  which is similar to <code>defun</code>.</p>
 
-<dl>
-<dt><a name="index-next_002dmethod_002dp"></a>Function: <strong>next-method-p</strong></dt>
-<dd><a name="next_002dmethod_002dp"></a><p>Non-<code>nil</code> if there is a next method.
-Returns a list of lambda expressions which is the <code>next-method</code>
-order.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-defmethod" id="index-defmethod"></a>Macro:
+    <strong>defmethod</strong> <em>method [:before | :primary |
+    :after | :static ] arglist [doc-string] forms</em></dt>
 
-<p>At present, <i>EIEIO</i> does not implement all the features of CLOS:
-</p>
-<ol>
-<li> There is currently no <code>:around</code> tag.
-</li><li> CLOS allows multiple sets of type-cast arguments, but <i>EIEIO</i> only
-allows the first argument to be cast.
-</li></ol>
+    <dd>
+      <p><var>method</var> is the name of the function to
+      create.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Static-Methods.html#Static-Methods" accesskey="n" rel="next">Static Methods</a>, Previous: <a href="Generics.html#Generics" accesskey="p" rel="prev">Generics</a>, Up: <a href="Writing-Methods.html#Writing-Methods" accesskey="u" rel="up">Writing Methods</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p><code>:before</code> and <code>:after</code> specify
+      execution order (i.e., when this form is called). If neither
+      of these symbols are present, the default priority is used
+      (before <code>:after</code> and after <code>:before</code>);
+      this default priority is represented in CLOS as
+      <code>:primary</code>.</p>
 
+      <p><b>Note:</b> The <code>:BEFORE</code>,
+      <code>:PRIMARY</code>, <code>:AFTER</code>, and
+      <code>:STATIC</code> method tags were in all capital letters
+      in previous versions of <i>EIEIO</i>.</p>
 
+      <p><var>arglist</var> is the list of arguments to this
+      method. The first argument in this list&mdash;and
+      <em>only</em> the first argument&mdash;may have a type
+      specifier (see the example below). If no type specifier is
+      supplied, the method applies to any object.</p>
 
+      <p><var>doc-string</var> is the documentation attached to the
+      implementation. All method doc-strings are incorporated into
+      the generic method&rsquo;s function documentation.</p>
+
+      <p><var>forms</var> is the body of the function.</p>
+    </dd>
+  </dl>
+
+  <p>In the following example, we create a method
+  <code>mymethod</code> for the <code>classname</code> class:</p>
+
+  <div class="example">
+    <pre class="example">
+(defmethod mymethod ((obj classname) secondarg)
+  "Doc string" )
+</pre>
+  </div>
+
+  <p>This method only executes if the <var>obj</var> argument
+  passed to it is an <i>EIEIO</i> object of class
+  <code>classname</code>.</p>
+
+  <p>A method with no type specifier is a <em>default method</em>.
+  If a given class has no implementation, then the default method
+  is called when that method is used on a given object of that
+  class.</p>
+
+  <p>Only one default method per execution specifier
+  (<code>:before</code>, <code>:primary</code>, or
+  <code>:after</code>) is allowed. If two <code>defmethod</code>s
+  appear with <var>arglist</var>s lacking a type specifier, and
+  having the same execution specifier, then the first
+  implementation is replaced.</p>
+
+  <p>When a method is called on an object, but there is no method
+  specified for that object, but there is a method specified for
+  object&rsquo;s parent class, the parent class&rsquo; method is
+  called. If there is a method defined for both, only the
+  child&rsquo;s method is called. A child method may call a
+  parent&rsquo;s method using <code>call-next-method</code>,
+  described below.</p>
+
+  <p>If multiple methods and default methods are defined for the
+  same method and class, they are executed in this order:</p>
+
+  <ol>
+    <li>method :before</li>
+
+    <li>default :before</li>
+
+    <li>method :primary</li>
+
+    <li>default :primary</li>
+
+    <li>method :after</li>
+
+    <li>default :after</li>
+  </ol>
+
+  <p>If no methods exist, Emacs signals a
+  <code>no-method-definition</code> error. See <a href=
+  "Signals.html#Signals">Signals</a>.</p>
+
+  <dl>
+    <dt><a name="index-call_002dnext_002dmethod" id=
+    "index-call_002dnext_002dmethod"></a>Function:
+    <strong>call-next-method</strong> <em>&amp;rest
+    replacement-args</em></dt>
+
+    <dd>
+      <a name="call_002dnext_002dmethod" id=
+      "call_002dnext_002dmethod"></a>
+
+      <p>This function calls the superclass method from a subclass
+      method. This is the &ldquo;next method&rdquo; specified in
+      the current method list.</p>
+
+      <p>If <var>replacement-args</var> is non-<code>nil</code>,
+      then use them instead of
+      <code>eieio-generic-call-arglst</code>. At the top level, the
+      generic argument list is passed in.</p>
+
+      <p>Use <code>next-method-p</code> to find out if there is a
+      next method to call.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-next_002dmethod_002dp" id=
+    "index-next_002dmethod_002dp"></a>Function:
+    <strong>next-method-p</strong></dt>
+
+    <dd>
+      <a name="next_002dmethod_002dp" id=
+      "next_002dmethod_002dp"></a>
+
+      <p>Non-<code>nil</code> if there is a next method. Returns a
+      list of lambda expressions which is the
+      <code>next-method</code> order.</p>
+    </dd>
+  </dl>
+
+  <p>At present, <i>EIEIO</i> does not implement all the features
+  of CLOS:</p>
+
+  <ol>
+    <li>There is currently no <code>:around</code> tag.</li>
+
+    <li>CLOS allows multiple sets of type-cast arguments, but
+    <i>EIEIO</i> only allows the first argument to be cast.</li>
+  </ol>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Static-Methods.html#Static-Methods"
+    accesskey="n" rel="next">Static Methods</a>, Previous: <a href=
+    "Generics.html#Generics" accesskey="p" rel="prev">Generics</a>,
+    Up: <a href="Writing-Methods.html#Writing-Methods" accesskey=
+    "u" rel="up">Writing Methods</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

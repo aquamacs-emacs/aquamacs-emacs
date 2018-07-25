@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-1997, 2001-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,96 +14,124 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Viper Is a Package for Emacs Rebels: Undo and Backups</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Viper Is a Package for Emacs Rebels: Undo and Backups">
-<meta name="keywords" content="Viper Is a Package for Emacs Rebels: Undo and Backups">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Improvements-over-Vi.html#Improvements-over-Vi" rel="up" title="Improvements over Vi">
-<link href="History.html#History" rel="next" title="History">
-<link href="Basics.html#Basics" rel="prev" title="Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Viper Is a Package for Emacs Rebels: Undo and
+  Backups</title>
+  <meta name="description" content=
+  "Viper Is a Package for Emacs Rebels: Undo and Backups" />
+  <meta name="keywords" content=
+  "Viper Is a Package for Emacs Rebels: Undo and Backups" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Improvements-over-Vi.html#Improvements-over-Vi" rel=
+  "up" title="Improvements over Vi" />
+  <link href="History.html#History" rel="next" title="History" />
+  <link href="Basics.html#Basics" rel="prev" title="Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Undo-and-Backups"></a>
-<div class="header">
-<p>
-Next: <a href="History.html#History" accesskey="n" rel="next">History</a>, Previous: <a href="Basics.html#Basics" accesskey="p" rel="prev">Basics</a>, Up: <a href="Improvements-over-Vi.html#Improvements-over-Vi" accesskey="u" rel="up">Improvements over Vi</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Undo-and-Backups-1"></a>
-<h3 class="section">2.2 Undo and Backups</h3>
+<body lang="en" xml:lang="en">
+  <a name="Undo-and-Backups" id="Undo-and-Backups"></a>
 
-<a name="index-undo-1"></a>
+  <div class="header">
+    <p>Next: <a href="History.html#History" accesskey="n" rel=
+    "next">History</a>, Previous: <a href="Basics.html#Basics"
+    accesskey="p" rel="prev">Basics</a>, Up: <a href=
+    "Improvements-over-Vi.html#Improvements-over-Vi" accesskey="u"
+    rel="up">Improvements over Vi</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Undo-and-Backups-1" id="Undo-and-Backups-1"></a>
 
-<p>Viper provides multiple undo.  The number of undo&rsquo;s and the size is limited
-by the machine.  The Viper command <kbd>u</kbd> does an undo.  Undo can be
-repeated by typing <kbd>.</kbd> (a period).  Another <kbd>u</kbd> will undo the undo,
-and further
-<kbd>.</kbd> will repeat it.  Typing <kbd>u</kbd> does the first undo, and changes the
-direction.
-</p>
-<a name="index-backup-files"></a>
-<a name="index-auto-save"></a>
+  <h3 class="section">2.2 Undo and Backups</h3><a name=
+  "index-undo-1" id="index-undo-1"></a>
 
-<p>Since the undo size is limited, Viper can create backup files and
-auto-save files.  It will normally do this automatically.  It is possible
-to have numbered backups, etc.  For details, see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Backup.html#Backup">Backup and
-Auto-Save</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<a name="index-viewing-registers-and-markers"></a>
-<a name="index-registers-1"></a>
-<a name="index-markers-1"></a>
-<a name="index-textmarkers-1"></a>
+  <p>Viper provides multiple undo. The number of undo&rsquo;s and
+  the size is limited by the machine. The Viper command
+  <kbd>u</kbd> does an undo. Undo can be repeated by typing
+  <kbd>.</kbd> (a period). Another <kbd>u</kbd> will undo the undo,
+  and further <kbd>.</kbd> will repeat it. Typing <kbd>u</kbd> does
+  the first undo, and changes the direction.</p><a name=
+  "index-backup-files" id="index-backup-files"></a> <a name=
+  "index-auto-save" id="index-auto-save"></a>
 
-<p>The results of the 9 previous changes are available in the 9 numeric
-registers, as in Vi.  The extra goody is the ability to <em>view</em> these
-registers, in addition to being able to access them through <kbd>p</kbd> and
-<kbd>M-y</kbd> (See <a href="Insert-State.html#Insert-State">Insert State</a>, for details.)
-The Viper command <kbd>] register</kbd> will display the contents of any
-register, numeric or alphabetical.  The related command <kbd>[ textmarker</kbd>
-will show the text around the textmarker.  &lsquo;<samp>register</samp>&rsquo; and &lsquo;<samp>textmarker</samp>&rsquo;
-can be any letters from a through z.
-</p>
+  <p>Since the undo size is limited, Viper can create backup files
+  and auto-save files. It will normally do this automatically. It
+  is possible to have numbered backups, etc. For details, see
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Backup.html#Backup">
+  Backup and Auto-Save</a> in <cite>The GNU Emacs
+  Manual</cite>.</p><a name="index-viewing-registers-and-markers"
+  id="index-viewing-registers-and-markers"></a> <a name=
+  "index-registers-1" id="index-registers-1"></a> <a name=
+  "index-markers-1" id="index-markers-1"></a> <a name=
+  "index-textmarkers-1" id="index-textmarkers-1"></a>
 
-
-
+  <p>The results of the 9 previous changes are available in the 9
+  numeric registers, as in Vi. The extra goody is the ability to
+  <em>view</em> these registers, in addition to being able to
+  access them through <kbd>p</kbd> and <kbd>M-y</kbd> (See <a href=
+  "Insert-State.html#Insert-State">Insert State</a>, for details.)
+  The Viper command <kbd>] register</kbd> will display the contents
+  of any register, numeric or alphabetical. The related command
+  <kbd>[ textmarker</kbd> will show the text around the textmarker.
+  &lsquo;<samp>register</samp>&rsquo; and
+  &lsquo;<samp>textmarker</samp>&rsquo; can be any letters from a
+  through z.</p>
 </body>
 </html>

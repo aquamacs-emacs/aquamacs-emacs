@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,141 +19,311 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Edebug</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Edebug">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Edebug">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugging.html#Debugging" rel="up" title="Debugging">
-<link href="Using-Edebug.html#Using-Edebug" rel="next" title="Using Edebug">
-<link href="Internals-of-Debugger.html#Internals-of-Debugger" rel="prev" title="Internals of Debugger">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Edebug</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Edebug" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Edebug" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugging.html#Debugging" rel="up" title=
+  "Debugging" />
+  <link href="Using-Edebug.html#Using-Edebug" rel="next" title=
+  "Using Edebug" />
+  <link href="Internals-of-Debugger.html#Internals-of-Debugger"
+  rel="prev" title="Internals of Debugger" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Edebug" id="Edebug"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Syntax-Errors.html#Syntax-Errors" accesskey=
+    "n" rel="next">Syntax Errors</a>, Previous: <a href=
+    "Debugger.html#Debugger" accesskey="p" rel="prev">Debugger</a>,
+    Up: <a href="Debugging.html#Debugging" accesskey="u" rel=
+    "up">Debugging</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Edebug-1" id="Edebug-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Edebug"></a>
-<div class="header">
-<p>
-Next: <a href="Syntax-Errors.html#Syntax-Errors" accesskey="n" rel="next">Syntax Errors</a>, Previous: <a href="Debugger.html#Debugger" accesskey="p" rel="prev">Debugger</a>, Up: <a href="Debugging.html#Debugging" accesskey="u" rel="up">Debugging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Edebug-1"></a>
-<h3 class="section">17.2 Edebug</h3>
-<a name="index-Edebug-debugging-facility"></a>
+  <h3 class="section">17.2 Edebug</h3><a name=
+  "index-Edebug-debugging-facility" id=
+  "index-Edebug-debugging-facility"></a>
 
-<p>Edebug is a source-level debugger for Emacs Lisp programs, with which
-you can:
-</p>
-<ul>
-<li> Step through evaluation, stopping before and after each expression.
+  <p>Edebug is a source-level debugger for Emacs Lisp programs,
+  with which you can:</p>
 
-</li><li> Set conditional or unconditional breakpoints.
+  <ul>
+    <li>Step through evaluation, stopping before and after each
+    expression.</li>
 
-</li><li> Stop when a specified condition is true (the global break event).
+    <li>Set conditional or unconditional breakpoints.</li>
 
-</li><li> Trace slow or fast, stopping briefly at each stop point, or
-at each breakpoint.
+    <li>Stop when a specified condition is true (the global break
+    event).</li>
 
-</li><li> Display expression results and evaluate expressions as if outside of
-Edebug.
+    <li>Trace slow or fast, stopping briefly at each stop point, or
+    at each breakpoint.</li>
 
-</li><li> Automatically re-evaluate a list of expressions and
-display their results each time Edebug updates the display.
+    <li>Display expression results and evaluate expressions as if
+    outside of Edebug.</li>
 
-</li><li> Output trace information on function calls and returns.
+    <li>Automatically re-evaluate a list of expressions and display
+    their results each time Edebug updates the display.</li>
 
-</li><li> Stop when an error occurs.
+    <li>Output trace information on function calls and
+    returns.</li>
 
-</li><li> Display a backtrace, omitting Edebug&rsquo;s own frames.
+    <li>Stop when an error occurs.</li>
 
-</li><li> Specify argument evaluation for macros and defining forms.
+    <li>Display a backtrace, omitting Edebug&rsquo;s own
+    frames.</li>
 
-</li><li> Obtain rudimentary coverage testing and frequency counts.
-</li></ul>
+    <li>Specify argument evaluation for macros and defining
+    forms.</li>
 
-<p>The first three sections below should tell you enough about Edebug to
-start using it.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Using-Edebug.html#Using-Edebug" accesskey="1">Using Edebug</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Introduction to use of Edebug.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Instrumenting.html#Instrumenting" accesskey="2">Instrumenting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You must instrument your code
-                                  in order to debug it with Edebug.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes" accesskey="3">Modes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Execution modes, stopping more or less often.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Jumping.html#Jumping" accesskey="4">Jumping</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Commands to jump to a specified place.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Edebug-Misc.html#Edebug-Misc" accesskey="5">Misc</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Miscellaneous commands.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Breaks.html#Breaks" accesskey="6">Breaks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Setting breakpoints to make the program stop.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Trapping-Errors.html#Trapping-Errors" accesskey="7">Trapping Errors</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Trapping errors with Edebug.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Edebug-Views.html#Edebug-Views" accesskey="8">Views</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Views inside and outside of Edebug.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Edebug-Eval.html#Edebug-Eval" accesskey="9">Eval</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Evaluating expressions within Edebug.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Eval-List.html#Eval-List">Eval List</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Expressions whose values are displayed
-                                  each time you enter Edebug.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Printing-in-Edebug.html#Printing-in-Edebug">Printing in Edebug</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Customization of printing.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Trace-Buffer.html#Trace-Buffer">Trace Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to produce trace output in a buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Coverage-Testing.html#Coverage-Testing">Coverage Testing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to test evaluation coverage.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="The-Outside-Context.html#The-Outside-Context">The Outside Context</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Data that Edebug saves and restores.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Edebug-and-Macros.html#Edebug-and-Macros">Edebug and Macros</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying how to handle macro calls.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Edebug-Options.html#Edebug-Options">Options</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Option variables for customizing Edebug.
-</td></tr>
-</table>
+    <li>Obtain rudimentary coverage testing and frequency
+    counts.</li>
+  </ul>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Syntax-Errors.html#Syntax-Errors" accesskey="n" rel="next">Syntax Errors</a>, Previous: <a href="Debugger.html#Debugger" accesskey="p" rel="prev">Debugger</a>, Up: <a href="Debugging.html#Debugging" accesskey="u" rel="up">Debugging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The first three sections below should tell you enough about
+  Edebug to start using it.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Using-Edebug.html#Using-Edebug" accesskey="1">Using
+      Edebug</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Introduction to use of
+      Edebug.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Instrumenting.html#Instrumenting" accesskey=
+      "2">Instrumenting</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">You must instrument your code
+      in order to debug it with Edebug.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Edebug-Execution-Modes.html#Edebug-Execution-Modes"
+      accesskey="3">Modes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Execution modes, stopping more
+      or less often.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Jumping.html#Jumping" accesskey="4">Jumping</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Commands to jump to a specified
+      place.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Edebug-Misc.html#Edebug-Misc" accesskey="5">Misc</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Miscellaneous commands.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Breaks.html#Breaks" accesskey="6">Breaks</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Setting breakpoints to make the
+      program stop.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Trapping-Errors.html#Trapping-Errors" accesskey="7">Trapping
+      Errors</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Trapping errors with
+      Edebug.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Edebug-Views.html#Edebug-Views" accesskey=
+      "8">Views</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Views inside and outside of
+      Edebug.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Edebug-Eval.html#Edebug-Eval" accesskey="9">Eval</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Evaluating expressions within
+      Edebug.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Eval-List.html#Eval-List">Eval List</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Expressions whose values are
+      displayed each time you enter Edebug.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Printing-in-Edebug.html#Printing-in-Edebug">Printing in
+      Edebug</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Customization of printing.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Trace-Buffer.html#Trace-Buffer">Trace Buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to produce trace output in
+      a buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Coverage-Testing.html#Coverage-Testing">Coverage
+      Testing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to test evaluation
+      coverage.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "The-Outside-Context.html#The-Outside-Context">The Outside
+      Context</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Data that Edebug saves and
+      restores.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Edebug-and-Macros.html#Edebug-and-Macros">Edebug and
+      Macros</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Specifying how to handle macro
+      calls.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Edebug-Options.html#Edebug-Options">Options</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Option variables for
+      customizing Edebug.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Syntax-Errors.html#Syntax-Errors" accesskey=
+    "n" rel="next">Syntax Errors</a>, Previous: <a href=
+    "Debugger.html#Debugger" accesskey="p" rel="prev">Debugger</a>,
+    Up: <a href="Debugging.html#Debugging" accesskey="u" rel=
+    "up">Debugging</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

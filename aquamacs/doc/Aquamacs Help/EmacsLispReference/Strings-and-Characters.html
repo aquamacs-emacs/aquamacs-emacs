@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,100 +19,207 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Strings and Characters</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Strings and Characters">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Strings and Characters">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="String-Basics.html#String-Basics" rel="next" title="String Basics">
-<link href="Random-Numbers.html#Random-Numbers" rel="prev" title="Random Numbers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Strings and
+  Characters</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Strings and Characters" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Strings and Characters" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="String-Basics.html#String-Basics" rel="next" title=
+  "String Basics" />
+  <link href="Random-Numbers.html#Random-Numbers" rel="prev" title=
+  "Random Numbers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Strings-and-Characters" id="Strings-and-Characters"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Lists.html#Lists" accesskey="n" rel=
+    "next">Lists</a>, Previous: <a href="Numbers.html#Numbers"
+    accesskey="p" rel="prev">Numbers</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Strings-and-Characters-1" id=
+  "Strings-and-Characters-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Strings-and-Characters"></a>
-<div class="header">
-<p>
-Next: <a href="Lists.html#Lists" accesskey="n" rel="next">Lists</a>, Previous: <a href="Numbers.html#Numbers" accesskey="p" rel="prev">Numbers</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Strings-and-Characters-1"></a>
-<h2 class="chapter">4 Strings and Characters</h2>
-<a name="index-strings"></a>
-<a name="index-character-arrays"></a>
-<a name="index-characters"></a>
-<a name="index-bytes"></a>
+  <h2 class="chapter">4 Strings and Characters</h2><a name=
+  "index-strings" id="index-strings"></a> <a name=
+  "index-character-arrays" id="index-character-arrays"></a>
+  <a name="index-characters" id="index-characters"></a> <a name=
+  "index-bytes" id="index-bytes"></a>
 
-<p>A string in Emacs Lisp is an array that contains an ordered sequence
-of characters.  Strings are used as names of symbols, buffers, and
-files; to send messages to users; to hold text being copied between
-buffers; and for many other purposes.  Because strings are so important,
-Emacs Lisp has many functions expressly for manipulating them.  Emacs
-Lisp programs use strings more often than individual characters.
-</p>
-<p>See <a href="Strings-of-Events.html#Strings-of-Events">Strings of Events</a>, for special considerations for strings of
-keyboard character events.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="String-Basics.html#String-Basics" accesskey="1">Basics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic properties of strings and characters.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Predicates-for-Strings.html#Predicates-for-Strings" accesskey="2">Predicates for Strings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Testing whether an object is a string or char.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Creating-Strings.html#Creating-Strings" accesskey="3">Creating Strings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions to allocate new strings.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Modifying-Strings.html#Modifying-Strings" accesskey="4">Modifying Strings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Altering the contents of an existing string.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Text-Comparison.html#Text-Comparison" accesskey="5">Text Comparison</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Comparing characters or strings.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="String-Conversion.html#String-Conversion" accesskey="6">String Conversion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Converting to and from characters and strings.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Formatting-Strings.html#Formatting-Strings" accesskey="7">Formatting Strings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top"><code>format</code>: Emacs&rsquo;s analogue of <code>printf</code>.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Case-Conversion.html#Case-Conversion" accesskey="8">Case Conversion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Case conversion functions.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Case-Tables.html#Case-Tables" accesskey="9">Case Tables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Customizing case conversion.
-</td></tr>
-</table>
+  <p>A string in Emacs Lisp is an array that contains an ordered
+  sequence of characters. Strings are used as names of symbols,
+  buffers, and files; to send messages to users; to hold text being
+  copied between buffers; and for many other purposes. Because
+  strings are so important, Emacs Lisp has many functions expressly
+  for manipulating them. Emacs Lisp programs use strings more often
+  than individual characters.</p>
 
+  <p>See <a href="Strings-of-Events.html#Strings-of-Events">Strings
+  of Events</a>, for special considerations for strings of keyboard
+  character events.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "String-Basics.html#String-Basics" accesskey=
+      "1">Basics</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Basic properties of strings and
+      characters.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Predicates-for-Strings.html#Predicates-for-Strings"
+      accesskey="2">Predicates for Strings</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Testing whether an object is a
+      string or char.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Creating-Strings.html#Creating-Strings" accesskey=
+      "3">Creating Strings</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions to allocate new
+      strings.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Modifying-Strings.html#Modifying-Strings" accesskey=
+      "4">Modifying Strings</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Altering the contents of an
+      existing string.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Text-Comparison.html#Text-Comparison" accesskey="5">Text
+      Comparison</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Comparing characters or
+      strings.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "String-Conversion.html#String-Conversion" accesskey=
+      "6">String Conversion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Converting to and from
+      characters and strings.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Formatting-Strings.html#Formatting-Strings" accesskey=
+      "7">Formatting Strings</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"><code>format</code>:
+      Emacs&rsquo;s analogue of <code>printf</code>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Case-Conversion.html#Case-Conversion" accesskey="8">Case
+      Conversion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Case conversion functions.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Case-Tables.html#Case-Tables" accesskey="9">Case
+      Tables</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Customizing case
+      conversion.</td>
+    </tr>
+  </table>
 </body>
 </html>

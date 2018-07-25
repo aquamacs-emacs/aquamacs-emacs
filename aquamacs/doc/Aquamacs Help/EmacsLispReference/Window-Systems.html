@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,126 +19,200 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Window Systems</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Window Systems">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Window Systems">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="Tooltips.html#Tooltips" rel="next" title="Tooltips">
-<link href="Beeping.html#Beeping" rel="prev" title="Beeping">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Window Systems</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Window Systems" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Window Systems" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="Tooltips.html#Tooltips" rel="next" title=
+  "Tooltips" />
+  <link href="Beeping.html#Beeping" rel="prev" title="Beeping" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Window-Systems" id="Window-Systems"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Tooltips.html#Tooltips" accesskey="n" rel=
+    "next">Tooltips</a>, Previous: <a href="Beeping.html#Beeping"
+    accesskey="p" rel="prev">Beeping</a>, Up: <a href=
+    "Display.html#Display" accesskey="u" rel="up">Display</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Window-Systems-1" id="Window-Systems-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Window-Systems"></a>
-<div class="header">
-<p>
-Next: <a href="Tooltips.html#Tooltips" accesskey="n" rel="next">Tooltips</a>, Previous: <a href="Beeping.html#Beeping" accesskey="p" rel="prev">Beeping</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Window-Systems-1"></a>
-<h3 class="section">37.24 Window Systems</h3>
+  <h3 class="section">37.24 Window Systems</h3>
 
-<p>Emacs works with several window systems, most notably the X Window
-System.  Both Emacs and X use the term &ldquo;window&rdquo;, but use it
-differently.  An Emacs frame is a single window as far as X is
-concerned; the individual Emacs windows are not known to X at all.
-</p>
-<dl>
-<dt><a name="index-window_002dsystem-1"></a>Variable: <strong>window-system</strong></dt>
-<dd><p>This terminal-local variable tells Lisp programs what window system
-Emacs is using for displaying the frame.  The possible values are
-</p>
-<dl compact="compact">
-<dt><code>x</code></dt>
-<dd><a name="index-X-Window-System"></a>
-<p>Emacs is displaying the frame using X.
-</p></dd>
-<dt><code>w32</code></dt>
-<dd><p>Emacs is displaying the frame using native MS-Windows GUI.
-</p></dd>
-<dt><code>ns</code></dt>
-<dd><p>Emacs is displaying the frame using the Nextstep interface (used on
-GNUstep and Mac OS X).
-</p></dd>
-<dt><code>pc</code></dt>
-<dd><p>Emacs is displaying the frame using MS-DOS direct screen writes.
-</p></dd>
-<dt><code>nil</code></dt>
-<dd><p>Emacs is displaying the frame on a character-based terminal.
-</p></dd>
-</dl>
-</dd></dl>
+  <p>Emacs works with several window systems, most notably the X
+  Window System. Both Emacs and X use the term
+  &ldquo;window&rdquo;, but use it differently. An Emacs frame is a
+  single window as far as X is concerned; the individual Emacs
+  windows are not known to X at all.</p>
 
-<dl>
-<dt><a name="index-initial_002dwindow_002dsystem"></a>Variable: <strong>initial-window-system</strong></dt>
-<dd><p>This variable holds the value of <code>window-system</code> used for the
-first frame created by Emacs during startup.  (When Emacs is invoked
-with the <samp>--daemon</samp> option, it does not create any initial
-frames, so <code>initial-window-system</code> is <code>nil</code>, except on
-MS-Windows, where it is still <code>w32</code>.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Initial-Options.html#Initial-Options">daemon</a> in <cite>The GNU Emacs Manual</cite>.)
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-window_002dsystem-1" id=
+    "index-window_002dsystem-1"></a>Variable:
+    <strong>window-system</strong></dt>
 
-<dl>
-<dt><a name="index-window_002dsystem"></a>Function: <strong>window-system</strong> <em>&amp;optional frame</em></dt>
-<dd><p>This function returns a symbol whose name tells what window system is
-used for displaying <var>frame</var> (which defaults to the currently
-selected frame).  The list of possible symbols it returns is the same
-one documented for the variable <code>window-system</code> above.
-</p></dd></dl>
+    <dd>
+      <p>This terminal-local variable tells Lisp programs what
+      window system Emacs is using for displaying the frame. The
+      possible values are</p>
 
-<p>Do <em>not</em> use <code>window-system</code> and
-<code>initial-window-system</code> as predicates or boolean flag variables,
-if you want to write code that works differently on text terminals and
-graphic displays.  That is because <code>window-system</code> is not a good
-indicator of Emacs capabilities on a given display type.  Instead, use
-<code>display-graphic-p</code> or any of the other <code>display-*-p</code>
-predicates described in <a href="Display-Feature-Testing.html#Display-Feature-Testing">Display Feature Testing</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Tooltips.html#Tooltips" accesskey="n" rel="next">Tooltips</a>, Previous: <a href="Beeping.html#Beeping" accesskey="p" rel="prev">Beeping</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <dl compact="compact">
+        <dt><code>x</code></dt>
 
+        <dd>
+          <a name="index-X-Window-System" id=
+          "index-X-Window-System"></a>
 
+          <p>Emacs is displaying the frame using X.</p>
+        </dd>
 
+        <dt><code>w32</code></dt>
+
+        <dd>
+          <p>Emacs is displaying the frame using native MS-Windows
+          GUI.</p>
+        </dd>
+
+        <dt><code>ns</code></dt>
+
+        <dd>
+          <p>Emacs is displaying the frame using the Nextstep
+          interface (used on GNUstep and Mac OS X).</p>
+        </dd>
+
+        <dt><code>pc</code></dt>
+
+        <dd>
+          <p>Emacs is displaying the frame using MS-DOS direct
+          screen writes.</p>
+        </dd>
+
+        <dt><code>nil</code></dt>
+
+        <dd>
+          <p>Emacs is displaying the frame on a character-based
+          terminal.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-initial_002dwindow_002dsystem" id=
+    "index-initial_002dwindow_002dsystem"></a>Variable:
+    <strong>initial-window-system</strong></dt>
+
+    <dd>
+      <p>This variable holds the value of
+      <code>window-system</code> used for the first frame created
+      by Emacs during startup. (When Emacs is invoked with the
+      <samp>--daemon</samp> option, it does not create any initial
+      frames, so <code>initial-window-system</code> is
+      <code>nil</code>, except on MS-Windows, where it is still
+      <code>w32</code>. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Initial-Options.html#Initial-Options">
+      daemon</a> in <cite>The GNU Emacs Manual</cite>.)</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-window_002dsystem" id=
+    "index-window_002dsystem"></a>Function:
+    <strong>window-system</strong> <em>&amp;optional
+    frame</em></dt>
+
+    <dd>
+      <p>This function returns a symbol whose name tells what
+      window system is used for displaying <var>frame</var> (which
+      defaults to the currently selected frame). The list of
+      possible symbols it returns is the same one documented for
+      the variable <code>window-system</code> above.</p>
+    </dd>
+  </dl>
+
+  <p>Do <em>not</em> use <code>window-system</code> and
+  <code>initial-window-system</code> as predicates or boolean flag
+  variables, if you want to write code that works differently on
+  text terminals and graphic displays. That is because
+  <code>window-system</code> is not a good indicator of Emacs
+  capabilities on a given display type. Instead, use
+  <code>display-graphic-p</code> or any of the other
+  <code>display-*-p</code> predicates described in <a href=
+  "Display-Feature-Testing.html#Display-Feature-Testing">Display
+  Feature Testing</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Tooltips.html#Tooltips" accesskey="n" rel=
+    "next">Tooltips</a>, Previous: <a href="Beeping.html#Beeping"
+    accesskey="p" rel="prev">Beeping</a>, Up: <a href=
+    "Display.html#Display" accesskey="u" rel="up">Display</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

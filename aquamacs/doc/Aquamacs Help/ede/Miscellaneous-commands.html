@@ -1,14 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Miscellaneous commands - Emacs Development Environment</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Emacs Development Environment">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Building-and-Debugging.html#Building-and-Debugging" title="Building and Debugging">
-<link rel="next" href="Simple-projects.html#Simple-projects" title="Simple projects">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Miscellaneous commands - Emacs Development
+  Environment</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Emacs Development Environment" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Building-and-Debugging.html#Building-and-Debugging" title=
+  "Building and Debugging" />
+  <link rel="next" href="Simple-projects.html#Simple-projects"
+  title="Simple projects" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file describes EDE, the Emacs Development Environment.
 
 Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
@@ -26,8 +37,10 @@ Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,49 +50,66 @@ Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Miscellaneous-commands"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Simple-projects.html#Simple-projects">Simple projects</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Building-and-Debugging.html#Building-and-Debugging">Building and Debugging</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Miscellaneous-commands" id=
+    "Miscellaneous-commands"></a>
 
-<h2 class="chapter">6 Miscellaneous commands</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Simple-projects.html#Simple-projects">Simple projects</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Building-and-Debugging.html#Building-and-Debugging">Building
+    and Debugging</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>If you opt to go in and edit <i>EDE</i> project files directly&mdash;for
-instance, by using <kbd>C-c . e</kbd> (see <a href="Customize-Features.html#Customize-Features">Customize Features</a>)&mdash;you
-must then &ldquo;rescan&rdquo; the project files to update the internal data
-structures.  To rescan the current project, type <kbd>C-c . g</kbd>
-(<code>ede-rescan-toplevel</code>).
+  <h2 class="chapter">6 Miscellaneous commands</h2>
 
-   <p><i>EDE</i> can help you find files in your project, via the command
-<kbd>C-c . f</kbd> (<code>ede-find-file</code>).  This prompts for a file name;
-you need not specify the directory.  EDE then tries to visit a file
-with that name somewhere in your project.
+  <p>If you opt to go in and edit <i>EDE</i> project files
+  directly&mdash;for instance, by using <kbd>C-c . e</kbd> (see
+  <a href="Customize-Features.html#Customize-Features">Customize
+  Features</a>)&mdash;you must then &ldquo;rescan&rdquo; the
+  project files to update the internal data structures. To rescan
+  the current project, type <kbd>C-c . g</kbd>
+  (<code>ede-rescan-toplevel</code>).</p>
 
-   <p><i>EDE</i> can use external tools to help with file finding.  To do this,
-customize <code>ede-locate-setup-options</code>.
+  <p><i>EDE</i> can help you find files in your project, via the
+  command <kbd>C-c . f</kbd> (<code>ede-find-file</code>). This
+  prompts for a file name; you need not specify the directory. EDE
+  then tries to visit a file with that name somewhere in your
+  project.</p>
 
-<div class="defun">
-&mdash; Variable: <b>ede-locate-setup-options</b><var><a name="index-ede_002dlocate_002dsetup_002doptions-1"></a></var><br>
-<blockquote><p><a name="ede_002dlocate_002dsetup_002doptions"></a>List of locate objects to try out by default. 
-Listed in order of preference.  If the first item cannot be used in
-a particular project, then the next one is tried. 
-It is always assumed that <dfn>ede-locate-base</dfn> is at end of the list. 
-</p></blockquote></div>
+  <p><i>EDE</i> can use external tools to help with file finding.
+  To do this, customize <code>ede-locate-setup-options</code>.</p>
 
-   <p><i>EDE</i> also provides a project display mode for the speedbar
-(see <a href="../emacs/Speedbar.html#Speedbar">Speedbar</a>).  This allows you to view
-your source files as they are structured in your project: as a
-hierarchical tree, grouped according to target.
+  <div class="defun">
+    &mdash; Variable: <b>ede-locate-setup-options</b><var><a name=
+    "index-ede_002dlocate_002dsetup_002doptions-1" id=
+    "index-ede_002dlocate_002dsetup_002doptions-1"></a></var><br />
 
-   <p>To activate the speedbar in this mode, type <kbd>C-c . s</kbd>
-(<code>ede-speedbar</code>).
+    <blockquote>
+      <p><a name="ede_002dlocate_002dsetup_002doptions" id=
+      "ede_002dlocate_002dsetup_002doptions"></a>List of locate
+      objects to try out by default. Listed in order of preference.
+      If the first item cannot be used in a particular project,
+      then the next one is tried. It is always assumed that
+      <dfn>ede-locate-base</dfn> is at end of the list.</p>
+    </blockquote>
+  </div>
 
-   </body></html>
+  <p><i>EDE</i> also provides a project display mode for the
+  speedbar (see <a href=
+  "../emacs/Speedbar.html#Speedbar">Speedbar</a>). This allows you
+  to view your source files as they are structured in your project:
+  as a hierarchical tree, grouped according to target.</p>
 
+  <p>To activate the speedbar in this mode, type <kbd>C-c . s</kbd>
+  (<code>ede-speedbar</code>).</p>
+</body>
+</html>

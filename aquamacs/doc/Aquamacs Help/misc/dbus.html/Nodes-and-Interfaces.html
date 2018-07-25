@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,181 +14,261 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Using of D-Bus: Nodes and Interfaces</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Using of D-Bus: Nodes and Interfaces">
-<meta name="keywords" content="Using of D-Bus: Nodes and Interfaces">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Inspection.html#Inspection" rel="up" title="Inspection">
-<link href="Methods-and-Signal.html#Methods-and-Signal" rel="next" title="Methods and Signal">
-<link href="Introspection.html#Introspection" rel="prev" title="Introspection">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Using of D-Bus: Nodes and Interfaces</title>
+  <meta name="description" content=
+  "Using of D-Bus: Nodes and Interfaces" />
+  <meta name="keywords" content=
+  "Using of D-Bus: Nodes and Interfaces" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Inspection.html#Inspection" rel="up" title=
+  "Inspection" />
+  <link href="Methods-and-Signal.html#Methods-and-Signal" rel=
+  "next" title="Methods and Signal" />
+  <link href="Introspection.html#Introspection" rel="prev" title=
+  "Introspection" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Nodes-and-Interfaces"></a>
-<div class="header">
-<p>
-Next: <a href="Methods-and-Signal.html#Methods-and-Signal" accesskey="n" rel="next">Methods and Signal</a>, Previous: <a href="Introspection.html#Introspection" accesskey="p" rel="prev">Introspection</a>, Up: <a href="Inspection.html#Inspection" accesskey="u" rel="up">Inspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Detecting-object-paths-and-interfaces_002e"></a>
-<h3 class="section">2.4 Detecting object paths and interfaces.</h3>
+<body lang="en" xml:lang="en">
+  <a name="Nodes-and-Interfaces" id="Nodes-and-Interfaces"></a>
 
-<p>The first elements, to be introspected for a D-Bus object, are further
-object paths and interfaces.
-</p>
-<dl>
-<dt><a name="index-dbus_002dintrospect_002dget_002dnode_002dnames"></a>Function: <strong>dbus-introspect-get-node-names</strong> <em>bus service path</em></dt>
-<dd><p>All node names of <var>service</var> in D-Bus <var>bus</var> at object path
-<var>path</var> are returned as list of strings.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-introspect-get-node-names
-  :session &quot;org.gnome.seahorse&quot; &quot;/org/gnome/seahorse&quot;)
+  <div class="header">
+    <p>Next: <a href="Methods-and-Signal.html#Methods-and-Signal"
+    accesskey="n" rel="next">Methods and Signal</a>, Previous:
+    <a href="Introspection.html#Introspection" accesskey="p" rel=
+    "prev">Introspection</a>, Up: <a href=
+    "Inspection.html#Inspection" accesskey="u" rel=
+    "up">Inspection</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Detecting-object-paths-and-interfaces_002e" id=
+  "Detecting-object-paths-and-interfaces_002e"></a>
 
-&rArr; (&quot;crypto&quot; &quot;keys&quot;)
-</pre></div>
+  <h3 class="section">2.4 Detecting object paths and
+  interfaces.</h3>
 
-<p>The node names stand for further object paths of the D-Bus
-<var>service</var>, relative to <var>path</var>.  In the example,
-&lsquo;<samp>/org/gnome/seahorse/crypto</samp>&rsquo; and &lsquo;<samp>/org/gnome/seahorse/keys</samp>&rsquo;
-are also object paths of the D-Bus service &lsquo;<samp>org.gnome.seahorse</samp>&rsquo;.
-</p></dd></dl>
+  <p>The first elements, to be introspected for a D-Bus object, are
+  further object paths and interfaces.</p>
 
-<dl>
-<dt><a name="index-dbus_002dintrospect_002dget_002dall_002dnodes"></a>Function: <strong>dbus-introspect-get-all-nodes</strong> <em>bus service path</em></dt>
-<dd><p>This function returns all node names of <var>service</var> in D-Bus
-<var>bus</var> at object path <var>path</var>.  It returns a list of strings
-with all object paths of <var>service</var>, starting at <var>path</var>.
-Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-introspect-get-all-nodes :session &quot;org.gnome.seahorse&quot; &quot;/&quot;)
+  <dl>
+    <dt><a name=
+    "index-dbus_002dintrospect_002dget_002dnode_002dnames" id=
+    "index-dbus_002dintrospect_002dget_002dnode_002dnames"></a>Function:
+    <strong>dbus-introspect-get-node-names</strong> <em>bus service
+    path</em></dt>
 
-&rArr; (&quot;/&quot; &quot;/org&quot; &quot;/org/gnome&quot; &quot;/org/gnome/seahorse&quot;
-    &quot;/org/gnome/seahorse/crypto&quot;
-    &quot;/org/gnome/seahorse/keys&quot;
-    &quot;/org/gnome/seahorse/keys/openpgp&quot;
-    &quot;/org/gnome/seahorse/keys/openpgp/local&quot;
-    &quot;/org/gnome/seahorse/keys/openssh&quot;
-    &quot;/org/gnome/seahorse/keys/openssh/local&quot;)
-</pre></div>
-</dd></dl>
+    <dd>
+      <p>All node names of <var>service</var> in D-Bus
+      <var>bus</var> at object path <var>path</var> are returned as
+      list of strings. Example:</p>
 
-<dl>
-<dt><a name="index-dbus_002dintrospect_002dget_002dinterface_002dnames"></a>Function: <strong>dbus-introspect-get-interface-names</strong> <em>bus service path</em></dt>
-<dd><p>There will be returned a list strings of all interface names of
-<var>service</var> in D-Bus <var>bus</var> at object path <var>path</var>.  This list
-will contain the default interface &lsquo;<samp>org.freedesktop.DBus.Introspectable</samp>&rsquo;.
-</p>
-<p>Another default interface is &lsquo;<samp>org.freedesktop.DBus.Properties</samp>&rsquo;.
-If present, <code>interface</code> elements can also have <code>property</code>
-children.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-introspect-get-interface-names
-  :system &quot;org.freedesktop.Hal&quot;
-  &quot;/org/freedesktop/Hal/devices/computer&quot;)
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-introspect-get-node-names
+  :session "org.gnome.seahorse" "/org/gnome/seahorse")
 
-&rArr; (&quot;org.freedesktop.DBus.Introspectable&quot;
-    &quot;org.freedesktop.Hal.Device&quot;
-    &quot;org.freedesktop.Hal.Device.SystemPowerManagement&quot;
-    &quot;org.freedesktop.Hal.Device.CPUFreq&quot;)
-</pre></div>
-</dd></dl>
+&rArr; ("crypto" "keys")
+</pre>
+      </div>
 
-<dl>
-<dt><a name="index-dbus_002dintrospect_002dget_002dinterface"></a>Function: <strong>dbus-introspect-get-interface</strong> <em>bus service path interface</em></dt>
-<dd><p>Return <var>interface</var> of <var>service</var> in D-Bus <var>bus</var> at object
-path <var>path</var>.  The return value is an XML element.  <var>interface</var>
-must be a string, element of the list returned by
-<code>dbus-introspect-get-interface-names</code>.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-introspect-get-interface
-  :session &quot;org.freedesktop.xesam.searcher&quot;
-  &quot;/org/freedesktop/xesam/searcher/main&quot;
-  &quot;org.freedesktop.xesam.Search&quot;)
+      <p>The node names stand for further object paths of the D-Bus
+      <var>service</var>, relative to <var>path</var>. In the
+      example,
+      &lsquo;<samp>/org/gnome/seahorse/crypto</samp>&rsquo; and
+      &lsquo;<samp>/org/gnome/seahorse/keys</samp>&rsquo; are also
+      object paths of the D-Bus service
+      &lsquo;<samp>org.gnome.seahorse</samp>&rsquo;.</p>
+    </dd>
+  </dl>
 
-&rArr; (interface ((name . &quot;org.freedesktop.xesam.Search&quot;))
-     (method ((name . &quot;GetHitData&quot;))
-       (arg ((name . &quot;search&quot;) (type . &quot;s&quot;) (direction . &quot;in&quot;)))
-       (arg ((name . &quot;hit_ids&quot;) (type . &quot;au&quot;) (direction . &quot;in&quot;)))
-       (arg ((name . &quot;fields&quot;) (type . &quot;as&quot;) (direction . &quot;in&quot;)))
-       (arg ((name . &quot;hit_data&quot;) (type . &quot;aav&quot;) (direction . &quot;out&quot;)))
+  <dl>
+    <dt><a name=
+    "index-dbus_002dintrospect_002dget_002dall_002dnodes" id=
+    "index-dbus_002dintrospect_002dget_002dall_002dnodes"></a>Function:
+    <strong>dbus-introspect-get-all-nodes</strong> <em>bus service
+    path</em></dt>
+
+    <dd>
+      <p>This function returns all node names of <var>service</var>
+      in D-Bus <var>bus</var> at object path <var>path</var>. It
+      returns a list of strings with all object paths of
+      <var>service</var>, starting at <var>path</var>. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-introspect-get-all-nodes :session "org.gnome.seahorse" "/")
+
+&rArr; ("/" "/org" "/org/gnome" "/org/gnome/seahorse"
+    "/org/gnome/seahorse/crypto"
+    "/org/gnome/seahorse/keys"
+    "/org/gnome/seahorse/keys/openpgp"
+    "/org/gnome/seahorse/keys/openpgp/local"
+    "/org/gnome/seahorse/keys/openssh"
+    "/org/gnome/seahorse/keys/openssh/local")
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-dbus_002dintrospect_002dget_002dinterface_002dnames" id=
+    "index-dbus_002dintrospect_002dget_002dinterface_002dnames"></a>Function:
+    <strong>dbus-introspect-get-interface-names</strong> <em>bus
+    service path</em></dt>
+
+    <dd>
+      <p>There will be returned a list strings of all interface
+      names of <var>service</var> in D-Bus <var>bus</var> at object
+      path <var>path</var>. This list will contain the default
+      interface
+      &lsquo;<samp>org.freedesktop.DBus.Introspectable</samp>&rsquo;.</p>
+
+      <p>Another default interface is
+      &lsquo;<samp>org.freedesktop.DBus.Properties</samp>&rsquo;.
+      If present, <code>interface</code> elements can also have
+      <code>property</code> children. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-introspect-get-interface-names
+  :system "org.freedesktop.Hal"
+  "/org/freedesktop/Hal/devices/computer")
+
+&rArr; ("org.freedesktop.DBus.Introspectable"
+    "org.freedesktop.Hal.Device"
+    "org.freedesktop.Hal.Device.SystemPowerManagement"
+    "org.freedesktop.Hal.Device.CPUFreq")
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dbus_002dintrospect_002dget_002dinterface"
+    id=
+    "index-dbus_002dintrospect_002dget_002dinterface"></a>Function:
+    <strong>dbus-introspect-get-interface</strong> <em>bus service
+    path interface</em></dt>
+
+    <dd>
+      <p>Return <var>interface</var> of <var>service</var> in D-Bus
+      <var>bus</var> at object path <var>path</var>. The return
+      value is an XML element. <var>interface</var> must be a
+      string, element of the list returned by
+      <code>dbus-introspect-get-interface-names</code>.
+      Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-introspect-get-interface
+  :session "org.freedesktop.xesam.searcher"
+  "/org/freedesktop/xesam/searcher/main"
+  "org.freedesktop.xesam.Search")
+
+&rArr; (interface ((name . "org.freedesktop.xesam.Search"))
+     (method ((name . "GetHitData"))
+       (arg ((name . "search") (type . "s") (direction . "in")))
+       (arg ((name . "hit_ids") (type . "au") (direction . "in")))
+       (arg ((name . "fields") (type . "as") (direction . "in")))
+       (arg ((name . "hit_data") (type . "aav") (direction . "out")))
      )
      &hellip;
-     (signal ((name . &quot;HitsAdded&quot;))
-       (arg ((name . &quot;search&quot;) (type . &quot;s&quot;)))
-       (arg ((name . &quot;count&quot;) (type . &quot;u&quot;)))
+     (signal ((name . "HitsAdded"))
+       (arg ((name . "search") (type . "s")))
+       (arg ((name . "count") (type . "u")))
      )
    )
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>With these functions, it is possible to retrieve all introspection
-data from a running system:
-</p>
-<div class="lisp">
-<pre class="lisp">(with-current-buffer (switch-to-buffer &quot;*introspect*&quot;)
+  <p>With these functions, it is possible to retrieve all
+  introspection data from a running system:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(with-current-buffer (switch-to-buffer "*introspect*")
   (erase-buffer)
   (dolist (service (dbus-list-known-names :session))
-    (dolist (path (dbus-introspect-get-all-nodes :session service &quot;/&quot;))
+    (dolist (path (dbus-introspect-get-all-nodes :session service "/"))
       ;; We want to introspect only elements, which have more than
-      ;; the default interface &quot;org.freedesktop.DBus.Introspectable&quot;.
+      ;; the default interface "org.freedesktop.DBus.Introspectable".
       (when (delete
-             &quot;org.freedesktop.DBus.Introspectable&quot;
+             "org.freedesktop.DBus.Introspectable"
              (dbus-introspect-get-interface-names :session service path))
-        (insert (message &quot;\nservice: \&quot;%s\&quot; path: \&quot;%s\&quot;\n&quot; service path)
+        (insert (message "\nservice: \"%s\" path: \"%s\"\n" service path)
                 (dbus-introspect :session service path))
         (redisplay t)))))
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Methods-and-Signal.html#Methods-and-Signal" accesskey="n" rel="next">Methods and Signal</a>, Previous: <a href="Introspection.html#Introspection" accesskey="p" rel="prev">Introspection</a>, Up: <a href="Inspection.html#Inspection" accesskey="u" rel="up">Inspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Methods-and-Signal.html#Methods-and-Signal"
+    accesskey="n" rel="next">Methods and Signal</a>, Previous:
+    <a href="Introspection.html#Introspection" accesskey="p" rel=
+    "prev">Introspection</a>, Up: <a href=
+    "Inspection.html#Inspection" accesskey="u" rel=
+    "up">Inspection</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

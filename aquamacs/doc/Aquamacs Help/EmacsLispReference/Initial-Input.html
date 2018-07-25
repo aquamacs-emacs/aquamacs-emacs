@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,105 +19,144 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Initial Input</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Initial Input">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Initial Input">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Minibuffers.html#Minibuffers" rel="up" title="Minibuffers">
-<link href="Completion.html#Completion" rel="next" title="Completion">
-<link href="Minibuffer-History.html#Minibuffer-History" rel="prev" title="Minibuffer History">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Initial Input</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Initial Input" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Initial Input" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Minibuffers.html#Minibuffers" rel="up" title=
+  "Minibuffers" />
+  <link href="Completion.html#Completion" rel="next" title=
+  "Completion" />
+  <link href="Minibuffer-History.html#Minibuffer-History" rel=
+  "prev" title="Minibuffer History" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Initial-Input" id="Initial-Input"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Completion.html#Completion" accesskey="n"
+    rel="next">Completion</a>, Previous: <a href=
+    "Minibuffer-History.html#Minibuffer-History" accesskey="p" rel=
+    "prev">Minibuffer History</a>, Up: <a href=
+    "Minibuffers.html#Minibuffers" accesskey="u" rel=
+    "up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Initial-Input-1" id="Initial-Input-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Initial-Input"></a>
-<div class="header">
-<p>
-Next: <a href="Completion.html#Completion" accesskey="n" rel="next">Completion</a>, Previous: <a href="Minibuffer-History.html#Minibuffer-History" accesskey="p" rel="prev">Minibuffer History</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Initial-Input-1"></a>
-<h3 class="section">19.5 Initial Input</h3>
+  <h3 class="section">19.5 Initial Input</h3>
 
-<p>Several of the functions for minibuffer input have an argument called
-<var>initial</var>.  This is a mostly-deprecated
-feature for specifying that the minibuffer should start out with
-certain text, instead of empty as usual.
-</p>
-<p>If <var>initial</var> is a string, the minibuffer starts out containing the
-text of the string, with point at the end, when the user starts to
-edit the text.  If the user simply types <tt class="key">RET</tt> to exit the
-minibuffer, it will use the initial input string to determine the
-value to return.
-</p>
-<p><strong>We discourage use of a non-<code>nil</code> value for
-<var>initial</var></strong>, because initial input is an intrusive interface.
-History lists and default values provide a much more convenient method
-to offer useful default inputs to the user.
-</p>
-<p>There is just one situation where you should specify a string for an
-<var>initial</var> argument.  This is when you specify a cons cell for the
-<var>history</var> argument.  See <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>.
-</p>
-<p><var>initial</var> can also be a cons cell of the form <code>(<var>string</var>
-. <var>position</var>)</code>.  This means to insert <var>string</var> in the
-minibuffer but put point at <var>position</var> within the string&rsquo;s text.
-</p>
-<p>As a historical accident, <var>position</var> was implemented
-inconsistently in different functions.  In <code>completing-read</code>,
-<var>position</var>&rsquo;s value is interpreted as origin-zero; that is, a value
-of 0 means the beginning of the string, 1 means after the first
-character, etc.  In <code>read-minibuffer</code>, and the other
-non-completion minibuffer input functions that support this argument,
-1 means the beginning of the string, 2 means after the first character,
-etc.
-</p>
-<p>Use of a cons cell as the value for <var>initial</var> arguments is deprecated.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Completion.html#Completion" accesskey="n" rel="next">Completion</a>, Previous: <a href="Minibuffer-History.html#Minibuffer-History" accesskey="p" rel="prev">Minibuffer History</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Several of the functions for minibuffer input have an argument
+  called <var>initial</var>. This is a mostly-deprecated feature
+  for specifying that the minibuffer should start out with certain
+  text, instead of empty as usual.</p>
 
+  <p>If <var>initial</var> is a string, the minibuffer starts out
+  containing the text of the string, with point at the end, when
+  the user starts to edit the text. If the user simply types
+  <tt class="key">RET</tt> to exit the minibuffer, it will use the
+  initial input string to determine the value to return.</p>
 
+  <p><strong>We discourage use of a non-<code>nil</code> value for
+  <var>initial</var></strong>, because initial input is an
+  intrusive interface. History lists and default values provide a
+  much more convenient method to offer useful default inputs to the
+  user.</p>
 
+  <p>There is just one situation where you should specify a string
+  for an <var>initial</var> argument. This is when you specify a
+  cons cell for the <var>history</var> argument. See <a href=
+  "Minibuffer-History.html#Minibuffer-History">Minibuffer
+  History</a>.</p>
+
+  <p><var>initial</var> can also be a cons cell of the form
+  <code>(<var>string</var> . <var>position</var>)</code>. This
+  means to insert <var>string</var> in the minibuffer but put point
+  at <var>position</var> within the string&rsquo;s text.</p>
+
+  <p>As a historical accident, <var>position</var> was implemented
+  inconsistently in different functions. In
+  <code>completing-read</code>, <var>position</var>&rsquo;s value
+  is interpreted as origin-zero; that is, a value of 0 means the
+  beginning of the string, 1 means after the first character, etc.
+  In <code>read-minibuffer</code>, and the other non-completion
+  minibuffer input functions that support this argument, 1 means
+  the beginning of the string, 2 means after the first character,
+  etc.</p>
+
+  <p>Use of a cons cell as the value for <var>initial</var>
+  arguments is deprecated.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Completion.html#Completion" accesskey="n"
+    rel="next">Completion</a>, Previous: <a href=
+    "Minibuffer-History.html#Minibuffer-History" accesskey="p" rel=
+    "prev">Minibuffer History</a>, Up: <a href=
+    "Minibuffers.html#Minibuffers" accesskey="u" rel=
+    "up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

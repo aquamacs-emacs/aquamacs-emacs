@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,219 +19,338 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Compilation Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Compilation Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Compilation Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Byte-Compilation.html#Byte-Compilation" rel="up" title="Byte Compilation">
-<link href="Docs-and-Compilation.html#Docs-and-Compilation" rel="next" title="Docs and Compilation">
-<link href="Speed-of-Byte_002dCode.html#Speed-of-Byte_002dCode" rel="prev" title="Speed of Byte-Code">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Compilation
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Compilation Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Compilation Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Byte-Compilation.html#Byte-Compilation" rel="up"
+  title="Byte Compilation" />
+  <link href="Docs-and-Compilation.html#Docs-and-Compilation" rel=
+  "next" title="Docs and Compilation" />
+  <link href="Speed-of-Byte_002dCode.html#Speed-of-Byte_002dCode"
+  rel="prev" title="Speed of Byte-Code" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Compilation-Functions" id="Compilation-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Docs-and-Compilation.html#Docs-and-Compilation" accesskey="n"
+    rel="next">Docs and Compilation</a>, Previous: <a href=
+    "Speed-of-Byte_002dCode.html#Speed-of-Byte_002dCode" accesskey=
+    "p" rel="prev">Speed of Byte-Code</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Byte_002dCompilation-Functions" id=
+  "Byte_002dCompilation-Functions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Compilation-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Docs-and-Compilation.html#Docs-and-Compilation" accesskey="n" rel="next">Docs and Compilation</a>, Previous: <a href="Speed-of-Byte_002dCode.html#Speed-of-Byte_002dCode" accesskey="p" rel="prev">Speed of Byte-Code</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Byte_002dCompilation-Functions"></a>
-<h3 class="section">16.2 Byte-Compilation Functions</h3>
-<a name="index-compilation-functions"></a>
+  <h3 class="section">16.2 Byte-Compilation Functions</h3><a name=
+  "index-compilation-functions" id=
+  "index-compilation-functions"></a>
 
-<p>You can byte-compile an individual function or macro definition with
-the <code>byte-compile</code> function.  You can compile a whole file with
-<code>byte-compile-file</code>, or several files with
-<code>byte-recompile-directory</code> or <code>batch-byte-compile</code>.
-</p>
-<p>Sometimes, the byte compiler produces warning and/or error messages
-(see <a href="Compiler-Errors.html#Compiler-Errors">Compiler Errors</a>, for details).  These messages are recorded
-in a buffer called <samp>*Compile-Log*</samp>, which uses Compilation mode.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Compilation-Mode.html#Compilation-Mode">Compilation Mode</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<a name="index-macro-compilation"></a>
-<p>Be careful when writing macro calls in files that you intend to
-byte-compile.  Since macro calls are expanded when they are compiled,
-the macros need to be loaded into Emacs or the byte compiler will not
-do the right thing.  The usual way to handle this is with
-<code>require</code> forms which specify the files containing the needed
-macro definitions (see <a href="Named-Features.html#Named-Features">Named Features</a>).  Normally, the
-byte compiler does not evaluate the code that it is compiling, but it
-handles <code>require</code> forms specially, by loading the specified
-libraries.  To avoid loading the macro definition files when someone
-<em>runs</em> the compiled program, write <code>eval-when-compile</code>
-around the <code>require</code> calls (see <a href="Eval-During-Compile.html#Eval-During-Compile">Eval During Compile</a>).  For
-more details, See <a href="Compiling-Macros.html#Compiling-Macros">Compiling Macros</a>.
-</p>
-<p>Inline (<code>defsubst</code>) functions are less troublesome; if you
-compile a call to such a function before its definition is known, the
-call will still work right, it will just run slower.
-</p>
-<dl>
-<dt><a name="index-byte_002dcompile"></a>Function: <strong>byte-compile</strong> <em>symbol</em></dt>
-<dd><p>This function byte-compiles the function definition of <var>symbol</var>,
-replacing the previous definition with the compiled one.  The function
-definition of <var>symbol</var> must be the actual code for the function;
-<code>byte-compile</code> does not handle function indirection.  The return
-value is the byte-code function object which is the compiled
-definition of <var>symbol</var> (see <a href="Byte_002dCode-Objects.html#Byte_002dCode-Objects">Byte-Code Objects</a>).
-</p>
-<div class="example">
-<pre class="example">(defun factorial (integer)
-  &quot;Compute factorial of INTEGER.&quot;
+  <p>You can byte-compile an individual function or macro
+  definition with the <code>byte-compile</code> function. You can
+  compile a whole file with <code>byte-compile-file</code>, or
+  several files with <code>byte-recompile-directory</code> or
+  <code>batch-byte-compile</code>.</p>
+
+  <p>Sometimes, the byte compiler produces warning and/or error
+  messages (see <a href=
+  "Compiler-Errors.html#Compiler-Errors">Compiler Errors</a>, for
+  details). These messages are recorded in a buffer called
+  <samp>*Compile-Log*</samp>, which uses Compilation mode. See
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Compilation-Mode.html#Compilation-Mode">
+  Compilation Mode</a> in <cite>The GNU Emacs
+  Manual</cite>.</p><a name="index-macro-compilation" id=
+  "index-macro-compilation"></a>
+
+  <p>Be careful when writing macro calls in files that you intend
+  to byte-compile. Since macro calls are expanded when they are
+  compiled, the macros need to be loaded into Emacs or the byte
+  compiler will not do the right thing. The usual way to handle
+  this is with <code>require</code> forms which specify the files
+  containing the needed macro definitions (see <a href=
+  "Named-Features.html#Named-Features">Named Features</a>).
+  Normally, the byte compiler does not evaluate the code that it is
+  compiling, but it handles <code>require</code> forms specially,
+  by loading the specified libraries. To avoid loading the macro
+  definition files when someone <em>runs</em> the compiled program,
+  write <code>eval-when-compile</code> around the
+  <code>require</code> calls (see <a href=
+  "Eval-During-Compile.html#Eval-During-Compile">Eval During
+  Compile</a>). For more details, See <a href=
+  "Compiling-Macros.html#Compiling-Macros">Compiling
+  Macros</a>.</p>
+
+  <p>Inline (<code>defsubst</code>) functions are less troublesome;
+  if you compile a call to such a function before its definition is
+  known, the call will still work right, it will just run
+  slower.</p>
+
+  <dl>
+    <dt><a name="index-byte_002dcompile" id=
+    "index-byte_002dcompile"></a>Function:
+    <strong>byte-compile</strong> <em>symbol</em></dt>
+
+    <dd>
+      <p>This function byte-compiles the function definition of
+      <var>symbol</var>, replacing the previous definition with the
+      compiled one. The function definition of <var>symbol</var>
+      must be the actual code for the function;
+      <code>byte-compile</code> does not handle function
+      indirection. The return value is the byte-code function
+      object which is the compiled definition of <var>symbol</var>
+      (see <a href=
+      "Byte_002dCode-Objects.html#Byte_002dCode-Objects">Byte-Code
+      Objects</a>).</p>
+
+      <div class="example">
+        <pre class="example">
+(defun factorial (integer)
+  "Compute factorial of INTEGER."
   (if (= 1 integer) 1
     (* integer (factorial (1- integer)))))
 &rArr; factorial
-</pre><pre class="example">
-</pre><pre class="example">(byte-compile 'factorial)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(byte-compile 'factorial)
 &rArr;
 #[(integer)
-  &quot;^H\301U\203^H^@\301\207\302^H\303^HS!\&quot;\207&quot;
+  "^H\301U\203^H^@\301\207\302^H\303^HS!\"\207"
   [integer 1 * factorial]
-  4 &quot;Compute factorial of INTEGER.&quot;]
-</pre></div>
+  4 "Compute factorial of INTEGER."]
+</pre>
+      </div>
 
-<p>If <var>symbol</var>&rsquo;s definition is a byte-code function object,
-<code>byte-compile</code> does nothing and returns <code>nil</code>.  It does not
-compile the symbol&rsquo;s definition again, since the original
-(non-compiled) code has already been replaced in the symbol&rsquo;s function
-cell by the byte-compiled code.
-</p>
-<p>The argument to <code>byte-compile</code> can also be a <code>lambda</code>
-expression.  In that case, the function returns the corresponding
-compiled code but does not store it anywhere.
-</p></dd></dl>
+      <p>If <var>symbol</var>&rsquo;s definition is a byte-code
+      function object, <code>byte-compile</code> does nothing and
+      returns <code>nil</code>. It does not compile the
+      symbol&rsquo;s definition again, since the original
+      (non-compiled) code has already been replaced in the
+      symbol&rsquo;s function cell by the byte-compiled code.</p>
 
-<dl>
-<dt><a name="index-compile_002ddefun"></a>Command: <strong>compile-defun</strong> <em>&amp;optional arg</em></dt>
-<dd><p>This command reads the defun containing point, compiles it, and
-evaluates the result.  If you use this on a defun that is actually a
-function definition, the effect is to install a compiled version of that
-function.
-</p>
-<p><code>compile-defun</code> normally displays the result of evaluation in the
-echo area, but if <var>arg</var> is non-<code>nil</code>, it inserts the result
-in the current buffer after the form it compiled.
-</p></dd></dl>
+      <p>The argument to <code>byte-compile</code> can also be a
+      <code>lambda</code> expression. In that case, the function
+      returns the corresponding compiled code but does not store it
+      anywhere.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-byte_002dcompile_002dfile"></a>Command: <strong>byte-compile-file</strong> <em>filename &amp;optional load</em></dt>
-<dd><p>This function compiles a file of Lisp code named <var>filename</var> into a
-file of byte-code.  The output file&rsquo;s name is made by changing the
-&lsquo;<samp>.el</samp>&rsquo; suffix into &lsquo;<samp>.elc</samp>&rsquo;; if <var>filename</var> does not end in
-&lsquo;<samp>.el</samp>&rsquo;, it adds &lsquo;<samp>.elc</samp>&rsquo; to the end of <var>filename</var>.
-</p>
-<p>Compilation works by reading the input file one form at a time.  If it
-is a definition of a function or macro, the compiled function or macro
-definition is written out.  Other forms are batched together, then each
-batch is compiled, and written so that its compiled code will be
-executed when the file is read.  All comments are discarded when the
-input file is read.
-</p>
-<p>This command returns <code>t</code> if there were no errors and <code>nil</code>
-otherwise.  When called interactively, it prompts for the file name.
-</p>
-<p>If <var>load</var> is non-<code>nil</code>, this command loads the compiled file
-after compiling it.  Interactively, <var>load</var> is the prefix argument.
-</p>
-<div class="example">
-<pre class="example">$ ls -l push*
+  <dl>
+    <dt><a name="index-compile_002ddefun" id=
+    "index-compile_002ddefun"></a>Command:
+    <strong>compile-defun</strong> <em>&amp;optional arg</em></dt>
+
+    <dd>
+      <p>This command reads the defun containing point, compiles
+      it, and evaluates the result. If you use this on a defun that
+      is actually a function definition, the effect is to install a
+      compiled version of that function.</p>
+
+      <p><code>compile-defun</code> normally displays the result of
+      evaluation in the echo area, but if <var>arg</var> is
+      non-<code>nil</code>, it inserts the result in the current
+      buffer after the form it compiled.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-byte_002dcompile_002dfile" id=
+    "index-byte_002dcompile_002dfile"></a>Command:
+    <strong>byte-compile-file</strong> <em>filename &amp;optional
+    load</em></dt>
+
+    <dd>
+      <p>This function compiles a file of Lisp code named
+      <var>filename</var> into a file of byte-code. The output
+      file&rsquo;s name is made by changing the
+      &lsquo;<samp>.el</samp>&rsquo; suffix into
+      &lsquo;<samp>.elc</samp>&rsquo;; if <var>filename</var> does
+      not end in &lsquo;<samp>.el</samp>&rsquo;, it adds
+      &lsquo;<samp>.elc</samp>&rsquo; to the end of
+      <var>filename</var>.</p>
+
+      <p>Compilation works by reading the input file one form at a
+      time. If it is a definition of a function or macro, the
+      compiled function or macro definition is written out. Other
+      forms are batched together, then each batch is compiled, and
+      written so that its compiled code will be executed when the
+      file is read. All comments are discarded when the input file
+      is read.</p>
+
+      <p>This command returns <code>t</code> if there were no
+      errors and <code>nil</code> otherwise. When called
+      interactively, it prompts for the file name.</p>
+
+      <p>If <var>load</var> is non-<code>nil</code>, this command
+      loads the compiled file after compiling it. Interactively,
+      <var>load</var> is the prefix argument.</p>
+
+      <div class="example">
+        <pre class="example">
+$ ls -l push*
 -rw-r--r-- 1 lewis lewis 791 Oct  5 20:31 push.el
-</pre><pre class="example">
-</pre><pre class="example">(byte-compile-file &quot;~/emacs/push.el&quot;)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(byte-compile-file "~/emacs/push.el")
      &rArr; t
-</pre><pre class="example">
-</pre><pre class="example">$ ls -l push*
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+$ ls -l push*
 -rw-r--r-- 1 lewis lewis 791 Oct  5 20:31 push.el
 -rw-rw-rw- 1 lewis lewis 638 Oct  8 20:25 push.elc
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-byte_002drecompile_002ddirectory"></a>Command: <strong>byte-recompile-directory</strong> <em>directory &amp;optional flag force</em></dt>
-<dd><a name="index-library-compilation"></a>
-<p>This command recompiles every &lsquo;<samp>.el</samp>&rsquo; file in <var>directory</var> (or
-its subdirectories) that needs recompilation.  A file needs
-recompilation if a &lsquo;<samp>.elc</samp>&rsquo; file exists but is older than the
-&lsquo;<samp>.el</samp>&rsquo; file.
-</p>
-<p>When a &lsquo;<samp>.el</samp>&rsquo; file has no corresponding &lsquo;<samp>.elc</samp>&rsquo; file,
-<var>flag</var> says what to do.  If it is <code>nil</code>, this command ignores
-these files.  If <var>flag</var> is 0, it compiles them.  If it is neither
-<code>nil</code> nor 0, it asks the user whether to compile each such file,
-and asks about each subdirectory as well.
-</p>
-<p>Interactively, <code>byte-recompile-directory</code> prompts for
-<var>directory</var> and <var>flag</var> is the prefix argument.
-</p>
-<p>If <var>force</var> is non-<code>nil</code>, this command recompiles every
-&lsquo;<samp>.el</samp>&rsquo; file that has a &lsquo;<samp>.elc</samp>&rsquo; file.
-</p>
-<p>The returned value is unpredictable.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-byte_002drecompile_002ddirectory" id=
+    "index-byte_002drecompile_002ddirectory"></a>Command:
+    <strong>byte-recompile-directory</strong> <em>directory
+    &amp;optional flag force</em></dt>
 
-<dl>
-<dt><a name="index-batch_002dbyte_002dcompile"></a>Function: <strong>batch-byte-compile</strong> <em>&amp;optional noforce</em></dt>
-<dd><p>This function runs <code>byte-compile-file</code> on files specified on the
-command line.  This function must be used only in a batch execution of
-Emacs, as it kills Emacs on completion.  An error in one file does not
-prevent processing of subsequent files, but no output file will be
-generated for it, and the Emacs process will terminate with a nonzero
-status code.
-</p>
-<p>If <var>noforce</var> is non-<code>nil</code>, this function does not recompile
-files that have an up-to-date &lsquo;<samp>.elc</samp>&rsquo; file.
-</p>
-<div class="example">
-<pre class="example">$ emacs -batch -f batch-byte-compile *.el
-</pre></div>
-</dd></dl>
+    <dd>
+      <a name="index-library-compilation" id=
+      "index-library-compilation"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Docs-and-Compilation.html#Docs-and-Compilation" accesskey="n" rel="next">Docs and Compilation</a>, Previous: <a href="Speed-of-Byte_002dCode.html#Speed-of-Byte_002dCode" accesskey="p" rel="prev">Speed of Byte-Code</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This command recompiles every
+      &lsquo;<samp>.el</samp>&rsquo; file in <var>directory</var>
+      (or its subdirectories) that needs recompilation. A file
+      needs recompilation if a &lsquo;<samp>.elc</samp>&rsquo; file
+      exists but is older than the &lsquo;<samp>.el</samp>&rsquo;
+      file.</p>
 
+      <p>When a &lsquo;<samp>.el</samp>&rsquo; file has no
+      corresponding &lsquo;<samp>.elc</samp>&rsquo; file,
+      <var>flag</var> says what to do. If it is <code>nil</code>,
+      this command ignores these files. If <var>flag</var> is 0, it
+      compiles them. If it is neither <code>nil</code> nor 0, it
+      asks the user whether to compile each such file, and asks
+      about each subdirectory as well.</p>
 
+      <p>Interactively, <code>byte-recompile-directory</code>
+      prompts for <var>directory</var> and <var>flag</var> is the
+      prefix argument.</p>
 
+      <p>If <var>force</var> is non-<code>nil</code>, this command
+      recompiles every &lsquo;<samp>.el</samp>&rsquo; file that has
+      a &lsquo;<samp>.elc</samp>&rsquo; file.</p>
+
+      <p>The returned value is unpredictable.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-batch_002dbyte_002dcompile" id=
+    "index-batch_002dbyte_002dcompile"></a>Function:
+    <strong>batch-byte-compile</strong> <em>&amp;optional
+    noforce</em></dt>
+
+    <dd>
+      <p>This function runs <code>byte-compile-file</code> on files
+      specified on the command line. This function must be used
+      only in a batch execution of Emacs, as it kills Emacs on
+      completion. An error in one file does not prevent processing
+      of subsequent files, but no output file will be generated for
+      it, and the Emacs process will terminate with a nonzero
+      status code.</p>
+
+      <p>If <var>noforce</var> is non-<code>nil</code>, this
+      function does not recompile files that have an up-to-date
+      &lsquo;<samp>.elc</samp>&rsquo; file.</p>
+
+      <div class="example">
+        <pre class="example">
+$ emacs -batch -f batch-byte-compile *.el
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Docs-and-Compilation.html#Docs-and-Compilation" accesskey="n"
+    rel="next">Docs and Compilation</a>, Previous: <a href=
+    "Speed-of-Byte_002dCode.html#Speed-of-Byte_002dCode" accesskey=
+    "p" rel="prev">Speed of Byte-Code</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

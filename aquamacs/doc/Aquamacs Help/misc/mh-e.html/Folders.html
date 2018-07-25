@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is version 8.6 of The MH-E
 Manual, last updated 2016-04-29.
 
@@ -25,768 +27,1115 @@ copy of the license is included in the section entitled "GNU General
 Public License."
  -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The MH-E Manual: Folders</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The MH-E Manual: Folders">
-<meta name="keywords" content="The MH-E Manual: Folders">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Sending-Mail.html#Sending-Mail" rel="next" title="Sending Mail">
-<link href="Miscellaneous-Commands-and-Options.html#Miscellaneous-Commands-and-Options" rel="prev" title="Miscellaneous Commands and Options">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The MH-E Manual: Folders</title>
+  <meta name="description" content="The MH-E Manual: Folders" />
+  <meta name="keywords" content="The MH-E Manual: Folders" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Sending-Mail.html#Sending-Mail" rel="next" title=
+  "Sending Mail" />
+  <link href=
+  "Miscellaneous-Commands-and-Options.html#Miscellaneous-Commands-and-Options"
+  rel="prev" title="Miscellaneous Commands and Options" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  div.c1 {text-align: center}
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Folders"></a>
-<div class="header">
-<p>
-Next: <a href="Sending-Mail.html#Sending-Mail" accesskey="n" rel="next">Sending Mail</a>, Previous: <a href="Reading-Mail.html#Reading-Mail" accesskey="p" rel="prev">Reading Mail</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Organizing-Your-Mail-with-Folders"></a>
-<h2 class="chapter">7 Organizing Your Mail with Folders</h2>
+<body lang="en" xml:lang="en">
+  <a name="Folders" id="Folders"></a>
 
-<a name="index-Folder-menu-1"></a>
-<a name="index-Message-menu-1"></a>
-<a name="index-folders-1"></a>
-<a name="index-menu_002c-Folder-1"></a>
-<a name="index-menu_002c-Message-1"></a>
-<a name="index-using-folders"></a>
+  <div class="header">
+    <p>Next: <a href="Sending-Mail.html#Sending-Mail" accesskey="n"
+    rel="next">Sending Mail</a>, Previous: <a href=
+    "Reading-Mail.html#Reading-Mail" accesskey="p" rel=
+    "prev">Reading Mail</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Organizing-Your-Mail-with-Folders" id=
+  "Organizing-Your-Mail-with-Folders"></a>
 
-<p>This chapter discusses the things you can do with folders within MH-E.
-The commands in this chapter are also found in the &lsquo;<samp>Folder</samp>&rsquo; and
-&lsquo;<samp>Message</samp>&rsquo; menus.
-</p>
-<dl compact="compact">
-<dd><a name="index-_003f-3"></a>
-<a name="index-mh_002dhelp-2"></a>
-</dd>
-<dt><kbd>?</kbd></dt>
-<dd><p>Display cheat sheet for the MH-E commands (<code>mh-help</code>).
-<a name="index-_0021-1"></a>
-<a name="index-mh_002drefile_002dor_002dwrite_002dagain-1"></a>
-</p></dd>
-<dt><kbd>!</kbd></dt>
-<dd><p>Repeat last output command (<code>mh-refile-or-write-again</code>).
-<a name="index-Message-_003e-Copy-Message-to-Folder_002e_002e_002e-menu-item"></a>
-<a name="index-menu-item_002c-Message-_003e-Copy-Message-to-Folder_002e_002e_002e"></a>
-<a name="index-c"></a>
-<a name="index-mh_002dcopy_002dmsg"></a>
-</p></dd>
-<dt><kbd>c</kbd></dt>
-<dd><p>Copy range to folder (<code>mh-copy-msg</code>).
-<a name="index-F-_003f-1"></a>
-<a name="index-mh_002dprefix_002dhelp-4"></a>
-</p></dd>
-<dt><kbd>F ?</kbd></dt>
-<dd><p>Display cheat sheet for the commands of the current prefix in
-minibuffer (<code>mh-prefix-help</code>).
-<a name="index-F-_0027"></a>
-<a name="index-mh_002dindex_002dticked_002dmessages"></a>
-</p></dd>
-<dt><kbd>F '</kbd></dt>
-<dd><p>Display ticked messages (<code>mh-index-ticked-messages</code>).
-<a name="index-F-c"></a>
-<a name="index-mh_002dcatchup"></a>
-</p></dd>
-<dt><kbd>F c</kbd></dt>
-<dd><p>Delete range from the &lsquo;<samp>unseen</samp>&rsquo; sequence (<code>mh-catchup</code>).
-<a name="index-F-k"></a>
-<a name="index-mh_002dkill_002dfolder-1"></a>
-</p></dd>
-<dt><kbd>F k</kbd></dt>
-<dd><p>Remove folder (<code>mh-kill-folder</code>).
-<a name="index-Folder-_003e-List-Folders-menu-item"></a>
-<a name="index-menu-item_002c-Folder-_003e-List-Folders"></a>
-<a name="index-F-l"></a>
-<a name="index-mh_002dlist_002dfolders"></a>
-</p></dd>
-<dt><kbd>F l</kbd></dt>
-<dd><p>List all folders (<code>mh-list-folders</code>).
-<a name="index-Folder-_003e-View-New-Messages-menu-item"></a>
-<a name="index-menu-item_002c-Folder-_003e-View-New-Messages"></a>
-<a name="index-F-n"></a>
-<a name="index-mh_002dindex_002dnew_002dmessages"></a>
-</p></dd>
-<dt><kbd>F n</kbd></dt>
-<dd><p>Display unseen messages (<code>mh-index-new-messages</code>).
-<a name="index-Folder-_003e-Pack-Folder-menu-item"></a>
-<a name="index-menu-item_002c-Folder-_003e-Pack-Folder"></a>
-<a name="index-F-p"></a>
-<a name="index-mh_002dpack_002dfolder-1"></a>
-</p></dd>
-<dt><kbd>F p</kbd></dt>
-<dd><p>Pack folder (<code>mh-pack-folder</code>).
-<a name="index-F-q"></a>
-<a name="index-mh_002dindex_002dsequenced_002dmessages"></a>
-</p></dd>
-<dt><kbd>F q</kbd></dt>
-<dd><p>Display messages in any sequence (<code>mh-index-sequenced-messages</code>).
-<a name="index-Folder-_003e-Rescan-Folder-menu-item"></a>
-<a name="index-menu-item_002c-Folder-_003e-Rescan-Folder"></a>
-<a name="index-F-r-2"></a>
-<a name="index-mh_002drescan_002dfolder"></a>
-</p></dd>
-<dt><kbd>F r</kbd></dt>
-<dd><p>Rescan folder (<code>mh-rescan-folder</code>).
-<a name="index-Folder-_003e-Search_002e_002e_002e-menu-item"></a>
-<a name="index-menu-item_002c-Folder-_003e-Search_002e_002e_002e"></a>
-<a name="index-F-s"></a>
-<a name="index-mh_002dsearch"></a>
-</p></dd>
-<dt><kbd>F s</kbd></dt>
-<dd><p>Search your MH mail (<code>mh-search</code>).
-<a name="index-Folder-_003e-Sort-Folder-menu-item"></a>
-<a name="index-menu-item_002c-Folder-_003e-Sort-Folder"></a>
-<a name="index-F-S"></a>
-<a name="index-mh_002dsort_002dfolder"></a>
-</p></dd>
-<dt><kbd>F S</kbd></dt>
-<dd><p>Sort folder (<code>mh-sort-folder</code>).
-<a name="index-F-u"></a>
-<a name="index-mh_002dundo_002dfolder"></a>
-</p></dd>
-<dt><kbd>F u</kbd></dt>
-<dd><p>Undo all refiles and deletes in the current folder (<code>mh-undo-folder</code>).
-<a name="index-Folder-_003e-Visit-a-Folder_002e_002e_002e-menu-item"></a>
-<a name="index-menu-item_002c-Folder-_003e-Visit-a-Folder_002e_002e_002e"></a>
-<a name="index-F-v-1"></a>
-<a name="index-mh_002dvisit_002dfolder"></a>
-</p></dd>
-<dt><kbd>F v</kbd></dt>
-<dd><p>Visit folder (<code>mh-visit-folder</code>).
-<a name="index-Message-_003e-Refile-Message-menu-item"></a>
-<a name="index-menu-item_002c-Message-_003e-Refile-Message"></a>
-<a name="index-o-1"></a>
-<a name="index-mh_002drefile_002dmsg"></a>
-</p></dd>
-<dt><kbd>o</kbd></dt>
-<dd><p>Refile (output) range into folder (<code>mh-refile-msg</code>).
-<a name="index-Folder-_003e-Quit-MH_002dE-menu-item"></a>
-<a name="index-menu-item_002c-Folder-_003e-Quit-MH_002dE"></a>
-<a name="index-q-1"></a>
-<a name="index-mh_002dquit"></a>
-</p></dd>
-<dt><kbd>q</kbd></dt>
-<dd><p>Quit the current MH-E folder (<code>mh-quit</code>).
-<a name="index-Folder-_003e-Toggle-Show_002fFolder-menu-item"></a>
-<a name="index-menu-item_002c-Folder-_003e-Toggle-Show_002fFolder"></a>
-<a name="index-t-2"></a>
-<a name="index-mh_002dtoggle_002dshowing"></a>
-</p></dd>
-<dt><kbd>t</kbd></dt>
-<dd><p>Toggle between MH-Folder and MH-Folder Show modes
-(<code>mh-toggle-showing</code>).
-<a name="index-Message-_003e-Undo-Delete_002fRefile-menu-item"></a>
-<a name="index-menu-item_002c-Message-_003e-Undo-Delete_002fRefile"></a>
-<a name="index-u-1"></a>
-<a name="index-mh_002dundo-1"></a>
-</p></dd>
-<dt><kbd>u</kbd></dt>
-<dd><p>Undo pending deletes or refiles in range (<code>mh-undo</code>).
-<a name="index-Message-_003e-Execute-Delete_002fRefile-menu-item"></a>
-<a name="index-menu-item_002c-Message-_003e-Execute-Delete_002fRefile"></a>
-<a name="index-x-3"></a>
-<a name="index-mh_002dexecute_002dcommands-2"></a>
-</p></dd>
-<dt><kbd>x</kbd></dt>
-<dd><p>Process outstanding delete and refile requests
-(<code>mh-execute-commands</code>).
-</p></dd>
-</dl>
+  <h2 class="chapter">7 Organizing Your Mail with
+  Folders</h2><a name="index-Folder-menu-1" id=
+  "index-Folder-menu-1"></a> <a name="index-Message-menu-1" id=
+  "index-Message-menu-1"></a> <a name="index-folders-1" id=
+  "index-folders-1"></a> <a name="index-menu_002c-Folder-1" id=
+  "index-menu_002c-Folder-1"></a> <a name=
+  "index-menu_002c-Message-1" id="index-menu_002c-Message-1"></a>
+  <a name="index-using-folders" id="index-using-folders"></a>
 
-<a name="index-mh_002dfolder-customization-group"></a>
-<a name="index-customization-group_002c-mh_002dfolder"></a>
+  <p>This chapter discusses the things you can do with folders
+  within MH-E. The commands in this chapter are also found in the
+  &lsquo;<samp>Folder</samp>&rsquo; and
+  &lsquo;<samp>Message</samp>&rsquo; menus.</p>
 
-<p>The &lsquo;<samp>mh-folder</samp>&rsquo; customization group is used to tune these
-commands.
-</p>
-<dl compact="compact">
-<dt><code>mh-new-messages-folders</code>
-<a name="index-mh_002dnew_002dmessages_002dfolders"></a>
-</dt>
-<dd><p>Folders searched for the &lsquo;<samp>unseen</samp>&rsquo; sequence (default:
-<code>Inbox</code>).
-</p></dd>
-<dt><code>mh-ticked-messages-folders</code>
-<a name="index-mh_002dticked_002dmessages_002dfolders"></a>
-</dt>
-<dd><p>Folders searched for <code>mh-tick-seq</code> (default: <code>t</code>).
-</p></dd>
-<dt><code>mh-large-folder</code>
-<a name="index-mh_002dlarge_002dfolder"></a>
-</dt>
-<dd><p>The number of messages that indicates a large folder (default: 200).
-</p></dd>
-<dt><code>mh-recenter-summary-flag</code>
-<a name="index-mh_002drecenter_002dsummary_002dflag"></a>
-</dt>
-<dd><p>On means to recenter the summary window (default: &lsquo;<samp>off</samp>&rsquo;).
-</p></dd>
-<dt><code>mh-recursive-folders-flag</code>
-<a name="index-mh_002drecursive_002dfolders_002dflag"></a>
-</dt>
-<dd><p>On means that commands which operate on folders do so recursively
-(default: &lsquo;<samp>off</samp>&rsquo;).
-</p></dd>
-<dt><code>mh-sortm-args</code>
-<a name="index-mh_002dsortm_002dargs"></a>
-</dt>
-<dd><p>Additional arguments for <code>sortm</code> (default: <code>nil</code>).
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dd><a name="index-_003f-3" id="index-_003f-3"></a> <a name=
+    "index-mh_002dhelp-2" id="index-mh_002dhelp-2"></a></dd>
 
-<p>The following hooks are available.
-</p>
-<dl compact="compact">
-<dt><code>mh-after-commands-processed-hook</code>
-<a name="index-mh_002dafter_002dcommands_002dprocessed_002dhook"></a>
-</dt>
-<dd><p>Hook run by <kbd>x</kbd> after performing outstanding refile and delete
-requests (default: <code>nil</code>).
-</p></dd>
-<dt><code>mh-before-commands-processed-hook</code>
-<a name="index-mh_002dbefore_002dcommands_002dprocessed_002dhook"></a>
-</dt>
-<dd><p>Hook run by <kbd>x</kbd> before performing outstanding refile and delete
-requests (default: <code>nil</code>).
-</p></dd>
-<dt><code>mh-before-quit-hook</code>
-<a name="index-mh_002dbefore_002dquit_002dhook"></a>
-</dt>
-<dd><p>Hook run by q before quitting MH-E (default: <code>nil</code>).
-</p></dd>
-<dt><code>mh-folder-mode-hook</code>
-<a name="index-mh_002dfolder_002dmode_002dhook"></a>
-</dt>
-<dd><p>Hook run by <code>mh-folder-mode</code> when visiting a new folder (default:
-<code>nil</code>).
-</p></dd>
-<dt><code>mh-kill-folder-suppress-prompt-hook</code>
-<a name="index-mh_002dkill_002dfolder_002dsuppress_002dprompt_002dhook"></a>
-</dt>
-<dd><p>Abnormal hook run at the beginning of <code>mh-kill-folder</code> (default:
-<code>'mh-search-p</code>).
-</p></dd>
-<dt><code>mh-pack-folder-hook</code>
-<a name="index-mh_002dpack_002dfolder_002dhook"></a>
-</dt>
-<dd><p>Hook run by <code>mh-pack-folder</code> after renumbering the messages
-(default: <code>nil</code>).
-</p></dd>
-<dt><code>mh-quit-hook</code>
-<a name="index-mh_002dquit_002dhook"></a>
-</dt>
-<dd><p>Hook run by q after quitting MH-E (default: <code>nil</code>).
-</p></dd>
-<dt><code>mh-refile-msg-hook</code>
-<a name="index-mh_002drefile_002dmsg_002dhook"></a>
-</dt>
-<dd><p>Hook run by o after marking each message for refiling (default:
-<code>nil</code>).
-</p></dd>
-</dl>
+    <dt><kbd>?</kbd></dt>
 
-<p>The following faces are available for customizing the appearance of
-the MH-Folder buffer. See <a href="Scan-Line-Formats.html#Scan-Line-Formats">Scan Line Formats</a>.
-</p>
-<dl compact="compact">
-<dt><code>mh-folder-address</code>
-<a name="index-mh_002dfolder_002daddress"></a>
-</dt>
-<dd><p>Recipient face.
-</p></dd>
-<dt><code>mh-folder-body</code>
-<a name="index-mh_002dfolder_002dbody"></a>
-</dt>
-<dd><p>Body text face.
-</p></dd>
-<dt><code>mh-folder-cur-msg-number</code>
-<a name="index-mh_002dfolder_002dcur_002dmsg_002dnumber"></a>
-</dt>
-<dd><p>Current message number face.
-</p></dd>
-<dt><code>mh-folder-date</code>
-<a name="index-mh_002dfolder_002ddate"></a>
-</dt>
-<dd><p>Date face.
-</p></dd>
-<dt><code>mh-folder-deleted</code>
-<a name="index-mh_002dfolder_002ddeleted"></a>
-</dt>
-<dd><p>Deleted message face.
-</p></dd>
-<dt><code>mh-folder-followup</code>
-<a name="index-mh_002dfolder_002dfollowup"></a>
-</dt>
-<dd><p>&lsquo;<samp>Re:</samp>&rsquo; face.
-</p></dd>
-<dt><code>mh-folder-msg-number</code>
-<a name="index-mh_002dfolder_002dmsg_002dnumber"></a>
-</dt>
-<dd><p>Message number face.
-</p></dd>
-<dt><code>mh-folder-refiled</code>
-<a name="index-mh_002dfolder_002drefiled"></a>
-</dt>
-<dd><p>Refiled message face.
-<a name="index-mh_002dscan_002dformat_002dnmh"></a>
-<a name="index-mh_002dscan_002dsent_002dto_002dme_002dsender_002dregexp"></a>
-</p></dd>
-<dt><code>mh-folder-sent-to-me-hint</code>
-<a name="index-mh_002dfolder_002dsent_002dto_002dme_002dhint"></a>
-</dt>
-<dd><p>Fontification hint face in messages sent directly to us. The detection
-of messages sent to us is governed by the scan format
-<code>mh-scan-format-nmh</code> and regular expression
-<code>mh-scan-sent-to-me-sender-regexp</code>.
-<a name="index-mh_002dscan_002dformat_002dnmh-1"></a>
-<a name="index-mh_002dscan_002dsent_002dto_002dme_002dsender_002dregexp-1"></a>
-</p></dd>
-<dt><code>mh-folder-scan-format</code>
-<a name="index-mh_002dfolder_002dscan_002dformat"></a>
-</dt>
-<dd><p>Sender face in messages sent directly to us. The detection of messages
-sent to us is governed by the scan format <code>mh-scan-format-nmh</code>
-and regular expression <code>mh-scan-sent-to-me-sender-regexp</code>.
-</p></dd>
-<dt><code>mh-folder-subject</code>
-<a name="index-mh_002dfolder_002dsubject"></a>
-</dt>
-<dd><p>Subject face.
-</p></dd>
-<dt><code>mh-folder-tick</code>
-<a name="index-mh_002dfolder_002dtick"></a>
-</dt>
-<dd><p>Ticked message face.
-</p></dd>
-<dt><code>mh-folder-to</code>
-<a name="index-mh_002dfolder_002dto"></a>
-</dt>
-<dd><p>&lsquo;<samp>To:</samp>&rsquo; face.
-</p></dd>
-</dl>
+    <dd>
+      <p>Display cheat sheet for the MH-E commands
+      (<code>mh-help</code>). <a name="index-_0021-1" id=
+      "index-_0021-1"></a> <a name=
+      "index-mh_002drefile_002dor_002dwrite_002dagain-1" id=
+      "index-mh_002drefile_002dor_002dwrite_002dagain-1"></a></p>
+    </dd>
 
-<a name="index-mh_002dfolder_002dmode_002dhook-1"></a>
+    <dt><kbd>!</kbd></dt>
 
-<p>The hook <code>mh-folder-mode-hook</code> is called when visiting a new
-folder in MH-Folder mode. This could be used to set your own key
-bindings, for example:
-</p>
-<a name="index-mh_002dfolder_002dmode_002dhook_002c-example"></a>
+    <dd>
+      <p>Repeat last output command
+      (<code>mh-refile-or-write-again</code>). <a name=
+      "index-Message-_003e-Copy-Message-to-Folder_002e_002e_002e-menu-item"
+      id=
+      "index-Message-_003e-Copy-Message-to-Folder_002e_002e_002e-menu-item">
+      </a> <a name=
+      "index-menu-item_002c-Message-_003e-Copy-Message-to-Folder_002e_002e_002e"
+      id=
+      "index-menu-item_002c-Message-_003e-Copy-Message-to-Folder_002e_002e_002e">
+      </a> <a name="index-c" id="index-c"></a> <a name=
+      "index-mh_002dcopy_002dmsg" id=
+      "index-mh_002dcopy_002dmsg"></a></p>
+    </dd>
 
-<div class="smalllisp">
-<pre class="smalllisp">(defvar my-mh-init-done nil
-  &quot;Non-nil when one-time MH-E settings made.&quot;)
+    <dt><kbd>c</kbd></dt>
+
+    <dd>
+      <p>Copy range to folder (<code>mh-copy-msg</code>). <a name=
+      "index-F-_003f-1" id="index-F-_003f-1"></a> <a name=
+      "index-mh_002dprefix_002dhelp-4" id=
+      "index-mh_002dprefix_002dhelp-4"></a></p>
+    </dd>
+
+    <dt><kbd>F ?</kbd></dt>
+
+    <dd>
+      <p>Display cheat sheet for the commands of the current prefix
+      in minibuffer (<code>mh-prefix-help</code>). <a name=
+      "index-F-_0027" id="index-F-_0027"></a> <a name=
+      "index-mh_002dindex_002dticked_002dmessages" id=
+      "index-mh_002dindex_002dticked_002dmessages"></a></p>
+    </dd>
+
+    <dt><kbd>F '</kbd></dt>
+
+    <dd>
+      <p>Display ticked messages
+      (<code>mh-index-ticked-messages</code>). <a name="index-F-c"
+      id="index-F-c"></a> <a name="index-mh_002dcatchup" id=
+      "index-mh_002dcatchup"></a></p>
+    </dd>
+
+    <dt><kbd>F c</kbd></dt>
+
+    <dd>
+      <p>Delete range from the &lsquo;<samp>unseen</samp>&rsquo;
+      sequence (<code>mh-catchup</code>). <a name="index-F-k" id=
+      "index-F-k"></a> <a name="index-mh_002dkill_002dfolder-1" id=
+      "index-mh_002dkill_002dfolder-1"></a></p>
+    </dd>
+
+    <dt><kbd>F k</kbd></dt>
+
+    <dd>
+      <p>Remove folder (<code>mh-kill-folder</code>). <a name=
+      "index-Folder-_003e-List-Folders-menu-item" id=
+      "index-Folder-_003e-List-Folders-menu-item"></a> <a name=
+      "index-menu-item_002c-Folder-_003e-List-Folders" id=
+      "index-menu-item_002c-Folder-_003e-List-Folders"></a>
+      <a name="index-F-l" id="index-F-l"></a> <a name=
+      "index-mh_002dlist_002dfolders" id=
+      "index-mh_002dlist_002dfolders"></a></p>
+    </dd>
+
+    <dt><kbd>F l</kbd></dt>
+
+    <dd>
+      <p>List all folders (<code>mh-list-folders</code>). <a name=
+      "index-Folder-_003e-View-New-Messages-menu-item" id=
+      "index-Folder-_003e-View-New-Messages-menu-item"></a>
+      <a name="index-menu-item_002c-Folder-_003e-View-New-Messages"
+      id="index-menu-item_002c-Folder-_003e-View-New-Messages"></a>
+      <a name="index-F-n" id="index-F-n"></a> <a name=
+      "index-mh_002dindex_002dnew_002dmessages" id=
+      "index-mh_002dindex_002dnew_002dmessages"></a></p>
+    </dd>
+
+    <dt><kbd>F n</kbd></dt>
+
+    <dd>
+      <p>Display unseen messages
+      (<code>mh-index-new-messages</code>). <a name=
+      "index-Folder-_003e-Pack-Folder-menu-item" id=
+      "index-Folder-_003e-Pack-Folder-menu-item"></a> <a name=
+      "index-menu-item_002c-Folder-_003e-Pack-Folder" id=
+      "index-menu-item_002c-Folder-_003e-Pack-Folder"></a> <a name=
+      "index-F-p" id="index-F-p"></a> <a name=
+      "index-mh_002dpack_002dfolder-1" id=
+      "index-mh_002dpack_002dfolder-1"></a></p>
+    </dd>
+
+    <dt><kbd>F p</kbd></dt>
+
+    <dd>
+      <p>Pack folder (<code>mh-pack-folder</code>). <a name=
+      "index-F-q" id="index-F-q"></a> <a name=
+      "index-mh_002dindex_002dsequenced_002dmessages" id=
+      "index-mh_002dindex_002dsequenced_002dmessages"></a></p>
+    </dd>
+
+    <dt><kbd>F q</kbd></dt>
+
+    <dd>
+      <p>Display messages in any sequence
+      (<code>mh-index-sequenced-messages</code>). <a name=
+      "index-Folder-_003e-Rescan-Folder-menu-item" id=
+      "index-Folder-_003e-Rescan-Folder-menu-item"></a> <a name=
+      "index-menu-item_002c-Folder-_003e-Rescan-Folder" id=
+      "index-menu-item_002c-Folder-_003e-Rescan-Folder"></a>
+      <a name="index-F-r-2" id="index-F-r-2"></a> <a name=
+      "index-mh_002drescan_002dfolder" id=
+      "index-mh_002drescan_002dfolder"></a></p>
+    </dd>
+
+    <dt><kbd>F r</kbd></dt>
+
+    <dd>
+      <p>Rescan folder (<code>mh-rescan-folder</code>). <a name=
+      "index-Folder-_003e-Search_002e_002e_002e-menu-item" id=
+      "index-Folder-_003e-Search_002e_002e_002e-menu-item"></a>
+      <a name=
+      "index-menu-item_002c-Folder-_003e-Search_002e_002e_002e" id=
+      "index-menu-item_002c-Folder-_003e-Search_002e_002e_002e"></a>
+      <a name="index-F-s" id="index-F-s"></a> <a name=
+      "index-mh_002dsearch" id="index-mh_002dsearch"></a></p>
+    </dd>
+
+    <dt><kbd>F s</kbd></dt>
+
+    <dd>
+      <p>Search your MH mail (<code>mh-search</code>). <a name=
+      "index-Folder-_003e-Sort-Folder-menu-item" id=
+      "index-Folder-_003e-Sort-Folder-menu-item"></a> <a name=
+      "index-menu-item_002c-Folder-_003e-Sort-Folder" id=
+      "index-menu-item_002c-Folder-_003e-Sort-Folder"></a> <a name=
+      "index-F-S" id="index-F-S"></a> <a name=
+      "index-mh_002dsort_002dfolder" id=
+      "index-mh_002dsort_002dfolder"></a></p>
+    </dd>
+
+    <dt><kbd>F S</kbd></dt>
+
+    <dd>
+      <p>Sort folder (<code>mh-sort-folder</code>). <a name=
+      "index-F-u" id="index-F-u"></a> <a name=
+      "index-mh_002dundo_002dfolder" id=
+      "index-mh_002dundo_002dfolder"></a></p>
+    </dd>
+
+    <dt><kbd>F u</kbd></dt>
+
+    <dd>
+      <p>Undo all refiles and deletes in the current folder
+      (<code>mh-undo-folder</code>). <a name=
+      "index-Folder-_003e-Visit-a-Folder_002e_002e_002e-menu-item"
+      id=
+      "index-Folder-_003e-Visit-a-Folder_002e_002e_002e-menu-item"></a>
+      <a name=
+      "index-menu-item_002c-Folder-_003e-Visit-a-Folder_002e_002e_002e"
+      id=
+      "index-menu-item_002c-Folder-_003e-Visit-a-Folder_002e_002e_002e">
+      </a> <a name="index-F-v-1" id="index-F-v-1"></a> <a name=
+      "index-mh_002dvisit_002dfolder" id=
+      "index-mh_002dvisit_002dfolder"></a></p>
+    </dd>
+
+    <dt><kbd>F v</kbd></dt>
+
+    <dd>
+      <p>Visit folder (<code>mh-visit-folder</code>). <a name=
+      "index-Message-_003e-Refile-Message-menu-item" id=
+      "index-Message-_003e-Refile-Message-menu-item"></a> <a name=
+      "index-menu-item_002c-Message-_003e-Refile-Message" id=
+      "index-menu-item_002c-Message-_003e-Refile-Message"></a>
+      <a name="index-o-1" id="index-o-1"></a> <a name=
+      "index-mh_002drefile_002dmsg" id=
+      "index-mh_002drefile_002dmsg"></a></p>
+    </dd>
+
+    <dt><kbd>o</kbd></dt>
+
+    <dd>
+      <p>Refile (output) range into folder
+      (<code>mh-refile-msg</code>). <a name=
+      "index-Folder-_003e-Quit-MH_002dE-menu-item" id=
+      "index-Folder-_003e-Quit-MH_002dE-menu-item"></a> <a name=
+      "index-menu-item_002c-Folder-_003e-Quit-MH_002dE" id=
+      "index-menu-item_002c-Folder-_003e-Quit-MH_002dE"></a>
+      <a name="index-q-1" id="index-q-1"></a> <a name=
+      "index-mh_002dquit" id="index-mh_002dquit"></a></p>
+    </dd>
+
+    <dt><kbd>q</kbd></dt>
+
+    <dd>
+      <p>Quit the current MH-E folder (<code>mh-quit</code>).
+      <a name="index-Folder-_003e-Toggle-Show_002fFolder-menu-item"
+      id="index-Folder-_003e-Toggle-Show_002fFolder-menu-item"></a>
+      <a name=
+      "index-menu-item_002c-Folder-_003e-Toggle-Show_002fFolder"
+      id="index-menu-item_002c-Folder-_003e-Toggle-Show_002fFolder">
+      </a> <a name="index-t-2" id="index-t-2"></a> <a name=
+      "index-mh_002dtoggle_002dshowing" id=
+      "index-mh_002dtoggle_002dshowing"></a></p>
+    </dd>
+
+    <dt><kbd>t</kbd></dt>
+
+    <dd>
+      <p>Toggle between MH-Folder and MH-Folder Show modes
+      (<code>mh-toggle-showing</code>). <a name=
+      "index-Message-_003e-Undo-Delete_002fRefile-menu-item" id=
+      "index-Message-_003e-Undo-Delete_002fRefile-menu-item"></a>
+      <a name=
+      "index-menu-item_002c-Message-_003e-Undo-Delete_002fRefile"
+      id=
+      "index-menu-item_002c-Message-_003e-Undo-Delete_002fRefile"></a>
+      <a name="index-u-1" id="index-u-1"></a> <a name=
+      "index-mh_002dundo-1" id="index-mh_002dundo-1"></a></p>
+    </dd>
+
+    <dt><kbd>u</kbd></dt>
+
+    <dd>
+      <p>Undo pending deletes or refiles in range
+      (<code>mh-undo</code>). <a name=
+      "index-Message-_003e-Execute-Delete_002fRefile-menu-item" id=
+      "index-Message-_003e-Execute-Delete_002fRefile-menu-item"></a>
+      <a name=
+      "index-menu-item_002c-Message-_003e-Execute-Delete_002fRefile"
+      id=
+      "index-menu-item_002c-Message-_003e-Execute-Delete_002fRefile">
+      </a> <a name="index-x-3" id="index-x-3"></a> <a name=
+      "index-mh_002dexecute_002dcommands-2" id=
+      "index-mh_002dexecute_002dcommands-2"></a></p>
+    </dd>
+
+    <dt><kbd>x</kbd></dt>
+
+    <dd>
+      <p>Process outstanding delete and refile requests
+      (<code>mh-execute-commands</code>).</p>
+    </dd>
+  </dl><a name="index-mh_002dfolder-customization-group" id=
+  "index-mh_002dfolder-customization-group"></a> <a name=
+  "index-customization-group_002c-mh_002dfolder" id=
+  "index-customization-group_002c-mh_002dfolder"></a>
+
+  <p>The &lsquo;<samp>mh-folder</samp>&rsquo; customization group
+  is used to tune these commands.</p>
+
+  <dl compact="compact">
+    <dt><code>mh-new-messages-folders</code> <a name=
+    "index-mh_002dnew_002dmessages_002dfolders" id=
+    "index-mh_002dnew_002dmessages_002dfolders"></a></dt>
+
+    <dd>
+      <p>Folders searched for the &lsquo;<samp>unseen</samp>&rsquo;
+      sequence (default: <code>Inbox</code>).</p>
+    </dd>
+
+    <dt><code>mh-ticked-messages-folders</code> <a name=
+    "index-mh_002dticked_002dmessages_002dfolders" id=
+    "index-mh_002dticked_002dmessages_002dfolders"></a></dt>
+
+    <dd>
+      <p>Folders searched for <code>mh-tick-seq</code> (default:
+      <code>t</code>).</p>
+    </dd>
+
+    <dt><code>mh-large-folder</code> <a name=
+    "index-mh_002dlarge_002dfolder" id=
+    "index-mh_002dlarge_002dfolder"></a></dt>
+
+    <dd>
+      <p>The number of messages that indicates a large folder
+      (default: 200).</p>
+    </dd>
+
+    <dt><code>mh-recenter-summary-flag</code> <a name=
+    "index-mh_002drecenter_002dsummary_002dflag" id=
+    "index-mh_002drecenter_002dsummary_002dflag"></a></dt>
+
+    <dd>
+      <p>On means to recenter the summary window (default:
+      &lsquo;<samp>off</samp>&rsquo;).</p>
+    </dd>
+
+    <dt><code>mh-recursive-folders-flag</code> <a name=
+    "index-mh_002drecursive_002dfolders_002dflag" id=
+    "index-mh_002drecursive_002dfolders_002dflag"></a></dt>
+
+    <dd>
+      <p>On means that commands which operate on folders do so
+      recursively (default: &lsquo;<samp>off</samp>&rsquo;).</p>
+    </dd>
+
+    <dt><code>mh-sortm-args</code> <a name=
+    "index-mh_002dsortm_002dargs" id=
+    "index-mh_002dsortm_002dargs"></a></dt>
+
+    <dd>
+      <p>Additional arguments for <code>sortm</code> (default:
+      <code>nil</code>).</p>
+    </dd>
+  </dl>
+
+  <p>The following hooks are available.</p>
+
+  <dl compact="compact">
+    <dt><code>mh-after-commands-processed-hook</code> <a name=
+    "index-mh_002dafter_002dcommands_002dprocessed_002dhook" id=
+    "index-mh_002dafter_002dcommands_002dprocessed_002dhook"></a></dt>
+
+    <dd>
+      <p>Hook run by <kbd>x</kbd> after performing outstanding
+      refile and delete requests (default: <code>nil</code>).</p>
+    </dd>
+
+    <dt><code>mh-before-commands-processed-hook</code> <a name=
+    "index-mh_002dbefore_002dcommands_002dprocessed_002dhook" id=
+    "index-mh_002dbefore_002dcommands_002dprocessed_002dhook"></a></dt>
+
+    <dd>
+      <p>Hook run by <kbd>x</kbd> before performing outstanding
+      refile and delete requests (default: <code>nil</code>).</p>
+    </dd>
+
+    <dt><code>mh-before-quit-hook</code> <a name=
+    "index-mh_002dbefore_002dquit_002dhook" id=
+    "index-mh_002dbefore_002dquit_002dhook"></a></dt>
+
+    <dd>
+      <p>Hook run by q before quitting MH-E (default:
+      <code>nil</code>).</p>
+    </dd>
+
+    <dt><code>mh-folder-mode-hook</code> <a name=
+    "index-mh_002dfolder_002dmode_002dhook" id=
+    "index-mh_002dfolder_002dmode_002dhook"></a></dt>
+
+    <dd>
+      <p>Hook run by <code>mh-folder-mode</code> when visiting a
+      new folder (default: <code>nil</code>).</p>
+    </dd>
+
+    <dt><code>mh-kill-folder-suppress-prompt-hook</code> <a name=
+    "index-mh_002dkill_002dfolder_002dsuppress_002dprompt_002dhook"
+    id=
+    "index-mh_002dkill_002dfolder_002dsuppress_002dprompt_002dhook">
+    </a></dt>
+
+    <dd>
+      <p>Abnormal hook run at the beginning of
+      <code>mh-kill-folder</code> (default:
+      <code>'mh-search-p</code>).</p>
+    </dd>
+
+    <dt><code>mh-pack-folder-hook</code> <a name=
+    "index-mh_002dpack_002dfolder_002dhook" id=
+    "index-mh_002dpack_002dfolder_002dhook"></a></dt>
+
+    <dd>
+      <p>Hook run by <code>mh-pack-folder</code> after renumbering
+      the messages (default: <code>nil</code>).</p>
+    </dd>
+
+    <dt><code>mh-quit-hook</code> <a name=
+    "index-mh_002dquit_002dhook" id=
+    "index-mh_002dquit_002dhook"></a></dt>
+
+    <dd>
+      <p>Hook run by q after quitting MH-E (default:
+      <code>nil</code>).</p>
+    </dd>
+
+    <dt><code>mh-refile-msg-hook</code> <a name=
+    "index-mh_002drefile_002dmsg_002dhook" id=
+    "index-mh_002drefile_002dmsg_002dhook"></a></dt>
+
+    <dd>
+      <p>Hook run by o after marking each message for refiling
+      (default: <code>nil</code>).</p>
+    </dd>
+  </dl>
+
+  <p>The following faces are available for customizing the
+  appearance of the MH-Folder buffer. See <a href=
+  "Scan-Line-Formats.html#Scan-Line-Formats">Scan Line
+  Formats</a>.</p>
+
+  <dl compact="compact">
+    <dt><code>mh-folder-address</code> <a name=
+    "index-mh_002dfolder_002daddress" id=
+    "index-mh_002dfolder_002daddress"></a></dt>
+
+    <dd>
+      <p>Recipient face.</p>
+    </dd>
+
+    <dt><code>mh-folder-body</code> <a name=
+    "index-mh_002dfolder_002dbody" id=
+    "index-mh_002dfolder_002dbody"></a></dt>
+
+    <dd>
+      <p>Body text face.</p>
+    </dd>
+
+    <dt><code>mh-folder-cur-msg-number</code> <a name=
+    "index-mh_002dfolder_002dcur_002dmsg_002dnumber" id=
+    "index-mh_002dfolder_002dcur_002dmsg_002dnumber"></a></dt>
+
+    <dd>
+      <p>Current message number face.</p>
+    </dd>
+
+    <dt><code>mh-folder-date</code> <a name=
+    "index-mh_002dfolder_002ddate" id=
+    "index-mh_002dfolder_002ddate"></a></dt>
+
+    <dd>
+      <p>Date face.</p>
+    </dd>
+
+    <dt><code>mh-folder-deleted</code> <a name=
+    "index-mh_002dfolder_002ddeleted" id=
+    "index-mh_002dfolder_002ddeleted"></a></dt>
+
+    <dd>
+      <p>Deleted message face.</p>
+    </dd>
+
+    <dt><code>mh-folder-followup</code> <a name=
+    "index-mh_002dfolder_002dfollowup" id=
+    "index-mh_002dfolder_002dfollowup"></a></dt>
+
+    <dd>
+      <p>&lsquo;<samp>Re:</samp>&rsquo; face.</p>
+    </dd>
+
+    <dt><code>mh-folder-msg-number</code> <a name=
+    "index-mh_002dfolder_002dmsg_002dnumber" id=
+    "index-mh_002dfolder_002dmsg_002dnumber"></a></dt>
+
+    <dd>
+      <p>Message number face.</p>
+    </dd>
+
+    <dt><code>mh-folder-refiled</code> <a name=
+    "index-mh_002dfolder_002drefiled" id=
+    "index-mh_002dfolder_002drefiled"></a></dt>
+
+    <dd>
+      <p>Refiled message face. <a name=
+      "index-mh_002dscan_002dformat_002dnmh" id=
+      "index-mh_002dscan_002dformat_002dnmh"></a> <a name=
+      "index-mh_002dscan_002dsent_002dto_002dme_002dsender_002dregexp"
+      id=
+      "index-mh_002dscan_002dsent_002dto_002dme_002dsender_002dregexp">
+      </a></p>
+    </dd>
+
+    <dt><code>mh-folder-sent-to-me-hint</code> <a name=
+    "index-mh_002dfolder_002dsent_002dto_002dme_002dhint" id=
+    "index-mh_002dfolder_002dsent_002dto_002dme_002dhint"></a></dt>
+
+    <dd>
+      <p>Fontification hint face in messages sent directly to us.
+      The detection of messages sent to us is governed by the scan
+      format <code>mh-scan-format-nmh</code> and regular expression
+      <code>mh-scan-sent-to-me-sender-regexp</code>. <a name=
+      "index-mh_002dscan_002dformat_002dnmh-1" id=
+      "index-mh_002dscan_002dformat_002dnmh-1"></a> <a name=
+      "index-mh_002dscan_002dsent_002dto_002dme_002dsender_002dregexp-1"
+      id=
+      "index-mh_002dscan_002dsent_002dto_002dme_002dsender_002dregexp-1">
+      </a></p>
+    </dd>
+
+    <dt><code>mh-folder-scan-format</code> <a name=
+    "index-mh_002dfolder_002dscan_002dformat" id=
+    "index-mh_002dfolder_002dscan_002dformat"></a></dt>
+
+    <dd>
+      <p>Sender face in messages sent directly to us. The detection
+      of messages sent to us is governed by the scan format
+      <code>mh-scan-format-nmh</code> and regular expression
+      <code>mh-scan-sent-to-me-sender-regexp</code>.</p>
+    </dd>
+
+    <dt><code>mh-folder-subject</code> <a name=
+    "index-mh_002dfolder_002dsubject" id=
+    "index-mh_002dfolder_002dsubject"></a></dt>
+
+    <dd>
+      <p>Subject face.</p>
+    </dd>
+
+    <dt><code>mh-folder-tick</code> <a name=
+    "index-mh_002dfolder_002dtick" id=
+    "index-mh_002dfolder_002dtick"></a></dt>
+
+    <dd>
+      <p>Ticked message face.</p>
+    </dd>
+
+    <dt><code>mh-folder-to</code> <a name=
+    "index-mh_002dfolder_002dto" id=
+    "index-mh_002dfolder_002dto"></a></dt>
+
+    <dd>
+      <p>&lsquo;<samp>To:</samp>&rsquo; face.</p>
+    </dd>
+  </dl><a name="index-mh_002dfolder_002dmode_002dhook-1" id=
+  "index-mh_002dfolder_002dmode_002dhook-1"></a>
+
+  <p>The hook <code>mh-folder-mode-hook</code> is called when
+  visiting a new folder in MH-Folder mode. This could be used to
+  set your own key bindings, for example:</p><a name=
+  "index-mh_002dfolder_002dmode_002dhook_002c-example" id=
+  "index-mh_002dfolder_002dmode_002dhook_002c-example"></a>
+
+  <div class="smalllisp">
+    <pre class="smalllisp">
+(defvar my-mh-init-done nil
+  "Non-nil when one-time MH-E settings made.")
 
 (defun my-mh-folder-mode-hook ()
-  &quot;Hook to set key bindings in MH-Folder mode.&quot;
-  (if (not my-mh-init-done)             ; <span class="roman">only need to bind the keys once </span>
+  "Hook to set key bindings in MH-Folder mode."
+  (if (not my-mh-init-done)             ; <span class=
+"roman">only need to bind the keys once </span>
       (progn
-        (local-set-key &quot;//&quot; 'my-search-msg)
-        (local-set-key &quot;b&quot; 'mh-burst-digest)    ; <span class="roman">better use of <kbd>b</kbd></span>
+        (local-set-key "//" 'my-search-msg)
+        (local-set-key "b" 'mh-burst-digest)    ; <span class=
+"roman">better use of <kbd>b</kbd></span>
         (setq my-mh-init-done t))))
 
 (add-hook 'mh-folder-mode-hook 'my-mh-folder-mode-hook)
 
 (defun my-search-msg ()
-  &quot;Search for a regexp in the current message.&quot;
-  (interactive)                         ; <span class="roman">user function</span>
+  "Search for a regexp in the current message."
+  (interactive)                         ; <span class=
+"roman">user function</span>
   (save-window-excursion
-    (other-window 1)                    ; <span class="roman">go to next window</span>
-    (isearch-forward-regexp)))          ; <span class="roman">string search; hit return</span>
-                                        ; <span class="roman">  when done</span>
+    (other-window 1)                    ; <span class=
+"roman">go to next window</span>
+    (isearch-forward-regexp)))          ; <span class=
+"roman">string search; hit return</span>
+                                        ; <span class=
+"roman">  when done</span>
 
 <i>Create additional key bindings via mh-folder-mode-hook</i>
 
-</pre></div>
+</pre>
+  </div><a name="index-folder" id="index-folder"></a> <a name=
+  "index-refile-1" id="index-refile-1"></a> <a name=
+  "index-MH-commands_002c-folder" id=
+  "index-MH-commands_002c-folder"></a> <a name=
+  "index-MH-commands_002c-refile-1" id=
+  "index-MH-commands_002c-refile-1"></a> <a name=
+  "index-mh_002drefile_002dmsg-1" id=
+  "index-mh_002drefile_002dmsg-1"></a> <a name="index-o-2" id=
+  "index-o-2"></a> <a name="index-mh_002drefile_002dmsg_002dhook-1"
+  id="index-mh_002drefile_002dmsg_002dhook-1"></a>
 
-<a name="index-folder"></a>
-<a name="index-refile-1"></a>
-<a name="index-MH-commands_002c-folder"></a>
-<a name="index-MH-commands_002c-refile-1"></a>
-<a name="index-mh_002drefile_002dmsg-1"></a>
-<a name="index-o-2"></a>
-<a name="index-mh_002drefile_002dmsg_002dhook-1"></a>
+  <p>MH-E has analogies for each of the MH <code>folder</code> and
+  <code>refile</code> commands<a name="DOCF27" href="#FOOT27" id=
+  "DOCF27"><sup>27</sup></a>. To refile a message in another
+  folder, use the command <kbd>o</kbd> (<code>mh-refile-msg</code>)
+  (mnemonic: &ldquo;output&rdquo;). You are prompted for the folder
+  name (see <a href="Folder-Selection.html#Folder-Selection">Folder
+  Selection</a>). Note that this command can also be used to create
+  folders. If you specify a folder that does not exist, you will be
+  prompted to create it. The hook <code>mh-refile-msg-hook</code>
+  is called after a message is marked to be refiled.</p><a name=
+  "index-mh_002dwrite_002dmsg_002dto_002dfile-2" id=
+  "index-mh_002dwrite_002dmsg_002dto_002dfile-2"></a> <a name=
+  "index-_0021-2" id="index-_0021-2"></a>
 
-<p>MH-E has analogies for each of the MH <code>folder</code> and
-<code>refile</code> commands<a name="DOCF27" href="#FOOT27"><sup>27</sup></a>. To refile a message in
-another folder, use the command <kbd>o</kbd> (<code>mh-refile-msg</code>)
-(mnemonic: &ldquo;output&rdquo;). You are prompted for the folder name
-(see <a href="Folder-Selection.html#Folder-Selection">Folder Selection</a>). Note that this command can also be used to
-create folders. If you specify a folder that does not exist, you will
-be prompted to create it. The hook <code>mh-refile-msg-hook</code> is called
-after a message is marked to be refiled.
-</p>
-<a name="index-mh_002dwrite_002dmsg_002dto_002dfile-2"></a>
-<a name="index-_0021-2"></a>
+  <p>If you are refiling several messages into the same folder, you
+  can use the command <kbd>!</kbd>
+  (<code>mh-refile-or-write-again</code>) to repeat the last refile
+  or write (for the description of <kbd>&gt;</kbd>
+  (<code>mh-write-msg-to-file</code>), see <a href=
+  "Files-and-Pipes.html#Files-and-Pipes">Files and Pipes</a>). You
+  can use a range in either case (for example, <kbd>C-u o 1 3 5-7
+  last:5 frombob <span class="key">RET</span></kbd>, see <a href=
+  "Ranges.html#Ranges">Ranges</a>).</p><a name=
+  "index-expunging-refiles-and-deletes" id=
+  "index-expunging-refiles-and-deletes"></a> <a name=
+  "index-undoing-refiles-and-deletes" id=
+  "index-undoing-refiles-and-deletes"></a> <a name=
+  "index-mh_002dundo-2" id="index-mh_002dundo-2"></a> <a name=
+  "index-u-2" id="index-u-2"></a>
 
-<p>If you are refiling several messages into the same folder, you can use
-the command <kbd>!</kbd> (<code>mh-refile-or-write-again</code>) to repeat the
-last refile or write (for the description of <kbd>&gt;</kbd>
-(<code>mh-write-msg-to-file</code>), see <a href="Files-and-Pipes.html#Files-and-Pipes">Files and Pipes</a>). You can use a
-range in either case (for example, <kbd>C-u o 1 3 5-7 last:5 frombob
-<span class="key">RET</span></kbd>, see <a href="Ranges.html#Ranges">Ranges</a>).
-</p>
-<a name="index-expunging-refiles-and-deletes"></a>
-<a name="index-undoing-refiles-and-deletes"></a>
-<a name="index-mh_002dundo-2"></a>
-<a name="index-u-2"></a>
+  <p>If you&rsquo;ve deleted a message or refiled it, but changed
+  your mind, you can cancel the action before you&rsquo;ve executed
+  it. Use <kbd>u</kbd> (<code>mh-undo</code>) to undo a refile on
+  or deletion of a single message. You can also undo refiles and
+  deletes for messages that are found in a given range (see
+  <a href="Ranges.html#Ranges">Ranges</a>).</p><a name=
+  "index-mh_002dundo_002dfolder-1" id=
+  "index-mh_002dundo_002dfolder-1"></a> <a name="index-F-u-1" id=
+  "index-F-u-1"></a>
 
-<p>If you&rsquo;ve deleted a message or refiled it, but changed your mind, you
-can cancel the action before you&rsquo;ve executed it. Use <kbd>u</kbd>
-(<code>mh-undo</code>) to undo a refile on or deletion of a single message.
-You can also undo refiles and deletes for messages that are found in a
-given range (see <a href="Ranges.html#Ranges">Ranges</a>).
-</p>
-<a name="index-mh_002dundo_002dfolder-1"></a>
-<a name="index-F-u-1"></a>
+  <p>Alternatively, you can use <kbd>F u</kbd>
+  (<code>mh-undo-folder</code>) to undo all refiles and deletes in
+  the current folder.</p><a name=
+  "index-mh_002dexecute_002dcommands-3" id=
+  "index-mh_002dexecute_002dcommands-3"></a> <a name="index-x-4"
+  id="index-x-4"></a>
 
-<p>Alternatively, you can use <kbd>F u</kbd> (<code>mh-undo-folder</code>) to undo
-all refiles and deletes in the current folder.
-</p>
-<a name="index-mh_002dexecute_002dcommands-3"></a>
-<a name="index-x-4"></a>
+  <p>If you&rsquo;ve marked messages to be deleted or refiled and
+  you want to go ahead and delete or refile the messages, use
+  <kbd>x</kbd> (<code>mh-execute-commands</code>). Many MH-E
+  commands that may affect the numbering of the messages (such as
+  <kbd>F r</kbd> or <kbd>F p</kbd>) will ask if you want to process
+  refiles or deletes first and then either run <kbd>x</kbd> for you
+  or undo the pending refiles and deletes.</p><a name="index-x-5"
+  id="index-x-5"></a> <a name=
+  "index-mh_002dafter_002dcommands_002dprocessed_002dhook-1" id=
+  "index-mh_002dafter_002dcommands_002dprocessed_002dhook-1"></a>
+  <a name=
+  "index-mh_002dbefore_002dcommands_002dprocessed_002dhook-1" id=
+  "index-mh_002dbefore_002dcommands_002dprocessed_002dhook-1"></a>
+  <a name="index-mh_002dcurrent_002dfolder" id=
+  "index-mh_002dcurrent_002dfolder"></a>
 
-<p>If you&rsquo;ve marked messages to be deleted or refiled and you want to go
-ahead and delete or refile the messages, use <kbd>x</kbd>
-(<code>mh-execute-commands</code>). Many MH-E commands that may affect the
-numbering of the messages (such as <kbd>F r</kbd> or <kbd>F p</kbd>) will ask if
-you want to process refiles or deletes first and then either run
-<kbd>x</kbd> for you or undo the pending refiles and deletes.
-</p>
-<a name="index-x-5"></a>
-<a name="index-mh_002dafter_002dcommands_002dprocessed_002dhook-1"></a>
-<a name="index-mh_002dbefore_002dcommands_002dprocessed_002dhook-1"></a>
-<a name="index-mh_002dcurrent_002dfolder"></a>
+  <p>The command <kbd>x</kbd> runs
+  <code>mh-before-commands-processed-hook</code> before the
+  commands are processed and
+  <code>mh-after-commands-processed-hook</code> after the commands
+  are processed. Variables that are useful with the former hook
+  include <code>mh-delete-list</code> and
+  <code>mh-refile-list</code> which can be used to see which
+  changes will be made to the current folder,
+  <code>mh-current-folder</code>. Variables that are useful with
+  the latter hook include <code>mh-folders-changed</code>, which
+  lists which folders were affected by deletes and refiles. This
+  list will always include the current folder
+  <code>mh-current-folder</code>.</p><a name=
+  "index-mh_002dcopy_002dmsg-1" id=
+  "index-mh_002dcopy_002dmsg-1"></a> <a name="index-c-1" id=
+  "index-c-1"></a> <a name="index-o-3" id="index-o-3"></a>
 
-<p>The command <kbd>x</kbd> runs <code>mh-before-commands-processed-hook</code>
-before the commands are processed and
-<code>mh-after-commands-processed-hook</code> after the commands are
-processed. Variables that are useful with the former hook include
-<code>mh-delete-list</code> and <code>mh-refile-list</code> which can be used to
-see which changes will be made to the current folder,
-<code>mh-current-folder</code>. Variables that are useful with the latter
-hook include <code>mh-folders-changed</code>, which lists which folders were
-affected by deletes and refiles. This list will always include the
-current folder <code>mh-current-folder</code>.
-</p>
-<a name="index-mh_002dcopy_002dmsg-1"></a>
-<a name="index-c-1"></a>
-<a name="index-o-3"></a>
+  <p>If you wish to copy a message to another folder, you can use
+  the command <kbd>c</kbd> (<code>mh-copy-msg</code>) (see the
+  <samp>-link</samp> argument to <code>refile</code>(1)). Like the
+  command <kbd>o</kbd>, this command prompts you for the name of
+  the target folder and you can specify a range (see <a href=
+  "Ranges.html#Ranges">Ranges</a>). Note that unlike the command
+  <kbd>o</kbd>, the copy takes place immediately. The original copy
+  remains in the current folder.</p><a name="index-junk-mail" id=
+  "index-junk-mail"></a> <a name="index-MH_002dFolder-mode-5" id=
+  "index-MH_002dFolder-mode-5"></a> <a name=
+  "index-MH_002dFolder-Show-mode-1" id=
+  "index-MH_002dFolder-Show-mode-1"></a> <a name=
+  "index-modes_002c-MH_002dFolder-5" id=
+  "index-modes_002c-MH_002dFolder-5"></a> <a name=
+  "index-modes_002c-MH_002dFolder-Show-1" id=
+  "index-modes_002c-MH_002dFolder-Show-1"></a> <a name="index-spam"
+  id="index-spam"></a> <a name="index-mh_002dtoggle_002dshowing-1"
+  id="index-mh_002dtoggle_002dshowing-1"></a> <a name="index-t-3"
+  id="index-t-3"></a>
 
-<p>If you wish to copy a message to another folder, you can use the
-command <kbd>c</kbd> (<code>mh-copy-msg</code>) (see the <samp>-link</samp> argument
-to <code>refile</code>(1)). Like the command <kbd>o</kbd>, this command
-prompts you for the name of the target folder and you can specify a
-range (see <a href="Ranges.html#Ranges">Ranges</a>). Note that unlike the command <kbd>o</kbd>, the copy
-takes place immediately. The original copy remains in the current
-folder.
-</p>
-<a name="index-junk-mail"></a>
-<a name="index-MH_002dFolder-mode-5"></a>
-<a name="index-MH_002dFolder-Show-mode-1"></a>
-<a name="index-modes_002c-MH_002dFolder-5"></a>
-<a name="index-modes_002c-MH_002dFolder-Show-1"></a>
-<a name="index-spam"></a>
-<a name="index-mh_002dtoggle_002dshowing-1"></a>
-<a name="index-t-3"></a>
+  <p>The command <kbd>t</kbd> (<code>mh-toggle-showing</code>)
+  switches between MH-Folder mode and MH-Folder Show mode<a name=
+  "DOCF28" href="#FOOT28" id="DOCF28"><sup>28</sup></a>. MH-Folder
+  mode turns off the associated show buffer so that you can perform
+  operations on the messages quickly without reading them. This is
+  an excellent way to prune out your junk mail or to refile a group
+  of messages to another folder for later examination.</p><a name=
+  "index-MH_002dFolder-mode-6" id="index-MH_002dFolder-mode-6"></a>
+  <a name="index-MH_002dShow-mode-2" id=
+  "index-MH_002dShow-mode-2"></a> <a name=
+  "index-modes_002c-MH_002dFolder-6" id=
+  "index-modes_002c-MH_002dFolder-6"></a> <a name=
+  "index-modes_002c-MH_002dShow-2" id=
+  "index-modes_002c-MH_002dShow-2"></a> <a name=
+  "index-moving-between-messages-1" id=
+  "index-moving-between-messages-1"></a> <a name="index-t-4" id=
+  "index-t-4"></a> <a name=
+  "index-mh_002drecenter_002dsummary_002dflag-1" id=
+  "index-mh_002drecenter_002dsummary_002dflag-1"></a>
 
-<p>The command <kbd>t</kbd> (<code>mh-toggle-showing</code>) switches between
-MH-Folder mode and MH-Folder Show mode<a name="DOCF28" href="#FOOT28"><sup>28</sup></a>. MH-Folder mode turns off
-the associated show buffer so that you can perform operations on the
-messages quickly without reading them. This is an excellent way to
-prune out your junk mail or to refile a group of messages to another
-folder for later examination.
-</p>
-<a name="index-MH_002dFolder-mode-6"></a>
-<a name="index-MH_002dShow-mode-2"></a>
-<a name="index-modes_002c-MH_002dFolder-6"></a>
-<a name="index-modes_002c-MH_002dShow-2"></a>
-<a name="index-moving-between-messages-1"></a>
-<a name="index-t-4"></a>
-<a name="index-mh_002drecenter_002dsummary_002dflag-1"></a>
+  <p>When you use <kbd>t</kbd> to toggle from MH-Folder Show mode
+  to MH-Folder mode, the MH-Show buffer is hidden and the MH-Folder
+  buffer is left alone. Setting
+  <code>mh-recenter-summary-flag</code> to a non-<code>nil</code>
+  value causes the toggle to display as many scan lines as
+  possible, with the cursor at the middle. The effect of
+  <code>mh-recenter-summary-flag</code> is rather useful, but it
+  can be annoying on a slow network connection.</p><a name=
+  "index-mh_002dvisit_002dfolder-1" id=
+  "index-mh_002dvisit_002dfolder-1"></a> <a name="index-F-v-2" id=
+  "index-F-v-2"></a> <a name="index-mh_002dlarge_002dfolder-1" id=
+  "index-mh_002dlarge_002dfolder-1"></a>
 
-<p>When you use <kbd>t</kbd> to toggle from MH-Folder Show mode to MH-Folder
-mode, the MH-Show buffer is hidden and the MH-Folder buffer is left
-alone. Setting <code>mh-recenter-summary-flag</code> to a non-<code>nil</code>
-value causes the toggle to display as many scan lines as possible,
-with the cursor at the middle. The effect of
-<code>mh-recenter-summary-flag</code> is rather useful, but it can be
-annoying on a slow network connection.
-</p>
-<a name="index-mh_002dvisit_002dfolder-1"></a>
-<a name="index-F-v-2"></a>
-<a name="index-mh_002dlarge_002dfolder-1"></a>
+  <p>When you want to read the messages that you have refiled into
+  folders, use the command <kbd>F v</kbd>
+  (<code>mh-visit-folder</code>) to visit the folder. You are
+  prompted for the folder name. The folder buffer will show just
+  unseen messages if there are any; otherwise, it will show all the
+  messages in the buffer as long there are fewer than
+  <code>mh-large-folder</code> messages. If there are more, then
+  you are prompted for a range of messages to scan. You can provide
+  a prefix argument in order to specify a range of messages to show
+  when you visit the folder (see <a href=
+  "Ranges.html#Ranges">Ranges</a>). In this case, regions are not
+  used to specify the range and <code>mh-large-folder</code> is
+  ignored. Note that this command can also be used to create
+  folders. If you specify a folder that does not exist, you will be
+  prompted to create it.</p><a name="index-mh_002dsearch-1" id=
+  "index-mh_002dsearch-1"></a> <a name="index-F-s-1" id=
+  "index-F-s-1"></a>
 
-<p>When you want to read the messages that you have refiled into folders,
-use the command <kbd>F v</kbd> (<code>mh-visit-folder</code>) to visit the
-folder. You are prompted for the folder name. The folder buffer will
-show just unseen messages if there are any; otherwise, it will show
-all the messages in the buffer as long there are fewer than
-<code>mh-large-folder</code> messages. If there are more, then you are
-prompted for a range of messages to scan. You can provide a prefix
-argument in order to specify a range of messages to show when you
-visit the folder (see <a href="Ranges.html#Ranges">Ranges</a>). In this case, regions are not used
-to specify the range and <code>mh-large-folder</code> is ignored. Note that
-this command can also be used to create folders. If you specify a
-folder that does not exist, you will be prompted to create it.
-</p>
-<a name="index-mh_002dsearch-1"></a>
-<a name="index-F-s-1"></a>
+  <p>If you forget where you&rsquo;ve refiled your messages, you
+  can find them using <kbd>F s</kbd> (<code>mh-search</code>). See
+  <a href="Searching.html#Searching">Searching</a>.</p><a name=
+  "index-procmail-1" id="index-procmail-1"></a> <a name=
+  "index-unseen-sequence" id="index-unseen-sequence"></a> <a name=
+  "index-sequence_002c-unseen" id="index-sequence_002c-unseen"></a>
+  <a name="index-Unix-commands_002c-procmail-1" id=
+  "index-Unix-commands_002c-procmail-1"></a> <a name=
+  "index-unseen-messages_002c-viewing" id=
+  "index-unseen-messages_002c-viewing"></a> <a name=
+  "index-mh_002dindex_002dnew_002dmessages-1" id=
+  "index-mh_002dindex_002dnew_002dmessages-1"></a> <a name=
+  "index-F-n-1" id="index-F-n-1"></a> <a name=
+  "index-mh_002dnew_002dmessages_002dfolders-1" id=
+  "index-mh_002dnew_002dmessages_002dfolders-1"></a>
 
-<p>If you forget where you&rsquo;ve refiled your messages, you can find them
-using <kbd>F s</kbd> (<code>mh-search</code>). See <a href="Searching.html#Searching">Searching</a>.
-</p>
-<a name="index-procmail-1"></a>
-<a name="index-unseen-sequence"></a>
-<a name="index-sequence_002c-unseen"></a>
-<a name="index-Unix-commands_002c-procmail-1"></a>
-<a name="index-unseen-messages_002c-viewing"></a>
-<a name="index-mh_002dindex_002dnew_002dmessages-1"></a>
-<a name="index-F-n-1"></a>
-<a name="index-mh_002dnew_002dmessages_002dfolders-1"></a>
+  <p>If you use a program such as <code>procmail</code> to file
+  your incoming mail automatically, you can display new, unseen,
+  messages using the command <kbd>F n</kbd>
+  (<code>mh-index-new-messages</code>). All messages in the
+  &lsquo;<samp>unseen</samp>&rsquo; sequence from the folders in
+  <code>mh-new-messages-folders</code> are listed. However, this
+  list of folders can be overridden with a prefix argument: with a
+  prefix argument, enter a space-separated list of folders, or
+  nothing to search all folders.</p><a name="index-tick-sequence"
+  id="index-tick-sequence"></a> <a name="index-sequence_002c-tick"
+  id="index-sequence_002c-tick"></a> <a name=
+  "index-ticked-messages_002c-viewing" id=
+  "index-ticked-messages_002c-viewing"></a> <a name=
+  "index-mh_002dindex_002dticked_002dmessages-1" id=
+  "index-mh_002dindex_002dticked_002dmessages-1"></a> <a name=
+  "index-F-_0027-1" id="index-F-_0027-1"></a> <a name=
+  "index-mh_002dticked_002dmessages_002dfolders-1" id=
+  "index-mh_002dticked_002dmessages_002dfolders-1"></a>
 
-<p>If you use a program such as <code>procmail</code> to file your incoming
-mail automatically, you can display new, unseen, messages using the
-command <kbd>F n</kbd> (<code>mh-index-new-messages</code>). All messages in the
-&lsquo;<samp>unseen</samp>&rsquo; sequence from the folders in
-<code>mh-new-messages-folders</code> are listed. However, this list of
-folders can be overridden with a prefix argument: with a prefix
-argument, enter a space-separated list of folders, or nothing to
-search all folders.
-</p>
-<a name="index-tick-sequence"></a>
-<a name="index-sequence_002c-tick"></a>
-<a name="index-ticked-messages_002c-viewing"></a>
-<a name="index-mh_002dindex_002dticked_002dmessages-1"></a>
-<a name="index-F-_0027-1"></a>
-<a name="index-mh_002dticked_002dmessages_002dfolders-1"></a>
+  <p>If you have ticked messages (see <a href=
+  "Sequences.html#Sequences">Sequences</a>), you can display them
+  using the command <kbd>F '</kbd>
+  (<code>mh-index-ticked-messages</code>). All messages in the
+  &lsquo;<samp>tick</samp>&rsquo; sequence from the folders in
+  <code>mh-ticked-messages-folders</code> are listed. With a prefix
+  argument, enter a space-separated list of folders, or nothing to
+  search all folders.</p><a name=
+  "index-mh_002dindex_002dsequenced_002dmessages-1" id=
+  "index-mh_002dindex_002dsequenced_002dmessages-1"></a> <a name=
+  "index-F-q-1" id="index-F-q-1"></a> <a name=
+  "index-mh_002dnew_002dmessages_002dfolders-2" id=
+  "index-mh_002dnew_002dmessages_002dfolders-2"></a>
 
-<p>If you have ticked messages (see <a href="Sequences.html#Sequences">Sequences</a>), you can display them
-using the command <kbd>F '</kbd> (<code>mh-index-ticked-messages</code>). All
-messages in the &lsquo;<samp>tick</samp>&rsquo; sequence from the folders in
-<code>mh-ticked-messages-folders</code> are listed. With a prefix argument,
-enter a space-separated list of folders, or nothing to search all
-folders.
-</p>
-<a name="index-mh_002dindex_002dsequenced_002dmessages-1"></a>
-<a name="index-F-q-1"></a>
-<a name="index-mh_002dnew_002dmessages_002dfolders-2"></a>
+  <p>You can display messages in any sequence with the command
+  <kbd>F q</kbd> (<code>mh-index-sequenced-messages</code>). All
+  messages from the folders in <code>mh-new-messages-folders</code>
+  in the sequence you provide are listed. With a prefix argument,
+  enter a space-separated list of folders at the prompt, or nothing
+  to search all folders.</p><a name=
+  "index-mh_002dnew_002dmessages_002dfolders-3" id=
+  "index-mh_002dnew_002dmessages_002dfolders-3"></a> <a name=
+  "index-mh_002drecursive_002dfolders_002dflag-1" id=
+  "index-mh_002drecursive_002dfolders_002dflag-1"></a> <a name=
+  "index-mh_002dticked_002dmessages_002dfolders-2" id=
+  "index-mh_002dticked_002dmessages_002dfolders-2"></a>
 
-<p>You can display messages in any sequence with the command <kbd>F q</kbd>
-(<code>mh-index-sequenced-messages</code>). All messages from the folders in
-<code>mh-new-messages-folders</code> in the sequence you provide are listed.
-With a prefix argument, enter a space-separated list of folders at the
-prompt, or nothing to search all folders.
-</p>
-<a name="index-mh_002dnew_002dmessages_002dfolders-3"></a>
-<a name="index-mh_002drecursive_002dfolders_002dflag-1"></a>
-<a name="index-mh_002dticked_002dmessages_002dfolders-2"></a>
+  <p>Set the options <code>mh-new-messages-folders</code> and
+  <code>mh-ticked-messages-folders</code> to
+  &lsquo;<samp>Inbox</samp>&rsquo; to search the
+  &lsquo;<samp>+inbox</samp>&rsquo; folder or
+  &lsquo;<samp>All</samp>&rsquo; to search all of the top level
+  folders. Otherwise, list the folders that should be searched with
+  the &lsquo;<samp>Choose Folders</samp>&rsquo; menu item. See
+  <code>mh-recursive-folders-flag</code>.</p><a name=
+  "index-buffers_002c-_002aMH_002dE-Folders_002a" id=
+  "index-buffers_002c-_002aMH_002dE-Folders_002a"></a> <a name=
+  "index-_002aMH_002dE-Folders_002a" id=
+  "index-_002aMH_002dE-Folders_002a"></a> <a name=
+  "index-mh_002dkill_002dfolder-2" id=
+  "index-mh_002dkill_002dfolder-2"></a> <a name=
+  "index-mh_002dlist_002dfolders-1" id=
+  "index-mh_002dlist_002dfolders-1"></a> <a name=
+  "index-mh_002dpack_002dfolder-2" id=
+  "index-mh_002dpack_002dfolder-2"></a> <a name=
+  "index-mh_002drescan_002dfolder-1" id=
+  "index-mh_002drescan_002dfolder-1"></a> <a name=
+  "index-mh_002dsort_002dfolder-1" id=
+  "index-mh_002dsort_002dfolder-1"></a> <a name="index-F-k-1" id=
+  "index-F-k-1"></a> <a name="index-F-l-1" id="index-F-l-1"></a>
+  <a name="index-F-p-1" id="index-F-p-1"></a> <a name="index-F-r-3"
+  id="index-F-r-3"></a> <a name="index-F-S-1" id="index-F-S-1"></a>
 
-<p>Set the options <code>mh-new-messages-folders</code> and
-<code>mh-ticked-messages-folders</code> to &lsquo;<samp>Inbox</samp>&rsquo; to search the
-&lsquo;<samp>+inbox</samp>&rsquo; folder or &lsquo;<samp>All</samp>&rsquo; to search all of the top level
-folders. Otherwise, list the folders that should be searched with the
-&lsquo;<samp>Choose Folders</samp>&rsquo; menu item. See <code>mh-recursive-folders-flag</code>.
-</p>
-<a name="index-buffers_002c-_002aMH_002dE-Folders_002a"></a>
-<a name="index-_002aMH_002dE-Folders_002a"></a>
-<a name="index-mh_002dkill_002dfolder-2"></a>
-<a name="index-mh_002dlist_002dfolders-1"></a>
-<a name="index-mh_002dpack_002dfolder-2"></a>
-<a name="index-mh_002drescan_002dfolder-1"></a>
-<a name="index-mh_002dsort_002dfolder-1"></a>
-<a name="index-F-k-1"></a>
-<a name="index-F-l-1"></a>
-<a name="index-F-p-1"></a>
-<a name="index-F-r-3"></a>
-<a name="index-F-S-1"></a>
+  <p>Other commands you can perform on folders include: <kbd>F
+  l</kbd> (<code>mh-list-folders</code>), to place a listing of all
+  the folders in your mail directory in a buffer called <samp>*MH-E
+  Folders*</samp> (see <a href=
+  "Miscellaneous.html#Miscellaneous">Miscellaneous</a>); <kbd>F
+  k</kbd> (<code>mh-kill-folder</code>), to remove a folder; <kbd>F
+  S</kbd> (<code>mh-sort-folder</code>), to sort the messages by
+  date (see <code>sortm</code>(1) to see how to sort by other
+  criteria); <kbd>F p</kbd> (<code>mh-pack-folder</code>), to pack
+  a folder, removing gaps from the numbering sequence; and <kbd>F
+  r</kbd> (<code>mh-rescan-folder</code>), to rescan the folder,
+  which is useful to grab all messages in your
+  &lsquo;<samp>+inbox</samp>&rsquo; after processing your new mail
+  for the first time. If you don&rsquo;t want to rescan the entire
+  folder, the commands <kbd>F r</kbd> or <kbd>F p</kbd> will accept
+  a range (see <a href=
+  "Ranges.html#Ranges">Ranges</a>).</p><a name="index-F-p-2" id=
+  "index-F-p-2"></a> <a name=
+  "index-mh_002dpack_002dfolder_002dhook-1" id=
+  "index-mh_002dpack_002dfolder_002dhook-1"></a>
 
-<p>Other commands you can perform on folders include: <kbd>F l</kbd>
-(<code>mh-list-folders</code>), to place a listing of all the folders in
-your mail directory in a buffer called <samp>*MH-E Folders*</samp>
-(see <a href="Miscellaneous.html#Miscellaneous">Miscellaneous</a>); <kbd>F k</kbd> (<code>mh-kill-folder</code>), to remove
-a folder; <kbd>F S</kbd> (<code>mh-sort-folder</code>), to sort the messages by
-date (see <code>sortm</code>(1) to see how to sort by other criteria);
-<kbd>F p</kbd> (<code>mh-pack-folder</code>), to pack a folder, removing gaps
-from the numbering sequence; and <kbd>F r</kbd> (<code>mh-rescan-folder</code>),
-to rescan the folder, which is useful to grab all messages in your
-&lsquo;<samp>+inbox</samp>&rsquo; after processing your new mail for the first time. If
-you don&rsquo;t want to rescan the entire folder, the commands <kbd>F r</kbd> or
-<kbd>F p</kbd> will accept a range (see <a href="Ranges.html#Ranges">Ranges</a>).
-</p>
-<a name="index-F-p-2"></a>
-<a name="index-mh_002dpack_002dfolder_002dhook-1"></a>
+  <p>The command <kbd>F p</kbd> runs
+  <code>mh-pack-folder-hook</code> after renumbering the messages.
+  A variable that is useful with this hook is
+  <code>mh-current-folder</code>.</p><a name="index-TAB-1" id=
+  "index-TAB-1"></a> <a name=
+  "index-mh_002drecursive_002dfolders_002dflag-2" id=
+  "index-mh_002drecursive_002dfolders_002dflag-2"></a>
 
-<p>The command <kbd>F p</kbd> runs <code>mh-pack-folder-hook</code> after
-renumbering the messages. A variable that is useful with this hook
-is <code>mh-current-folder</code>.
-</p>
-<a name="index-TAB-1"></a>
-<a name="index-mh_002drecursive_002dfolders_002dflag-2"></a>
+  <p>By default, operations on folders work only one level at a
+  time. Set <code>mh-recursive-folders-flag</code> to
+  non-<code>nil</code> to operate on all folders. This mostly means
+  that you&rsquo;ll be able to see all your folders when you press
+  <tt class="key">TAB</tt> when prompted for a folder
+  name.</p><a name="index-mh_002dsearch_002dp" id=
+  "index-mh_002dsearch_002dp"></a> <a name="index-k-2" id=
+  "index-k-2"></a> <a name=
+  "index-mh_002dkill_002dfolder_002dsuppress_002dprompt_002dfunctions"
+  id=
+  "index-mh_002dkill_002dfolder_002dsuppress_002dprompt_002dfunctions">
+  </a>
 
-<p>By default, operations on folders work only one level at a time. Set
-<code>mh-recursive-folders-flag</code> to non-<code>nil</code> to operate on all
-folders. This mostly means that you&rsquo;ll be able to see all your folders
-when you press <tt class="key">TAB</tt> when prompted for a folder name.
-</p>
-<a name="index-mh_002dsearch_002dp"></a>
-<a name="index-k-2"></a>
-<a name="index-mh_002dkill_002dfolder_002dsuppress_002dprompt_002dfunctions"></a>
+  <p>The hook <code>mh-kill-folder-suppress-prompt-functions</code>
+  is an abnormal hook run at the beginning of the command
+  <kbd>k</kbd>. The hook functions are called with no arguments and
+  should return a non-<code>nil</code> value to suppress the normal
+  prompt when you remove a folder. This is useful for folders that
+  are easily regenerated. The default value of
+  <code>mh-search-p</code> suppresses the prompt on folders
+  generated by searching.</p><br />
 
-<p>The hook <code>mh-kill-folder-suppress-prompt-functions</code> is an abnormal
-hook run at the beginning of the command <kbd>k</kbd>. The hook functions
-are called with no arguments and should return a non-<code>nil</code> value to
-suppress the normal prompt when you remove a folder. This is useful
-for folders that are easily regenerated. The default value of
-<code>mh-search-p</code> suppresses the prompt on folders generated by
-searching.
-</p>
-<br>
-<div align="center"><strong>NOTE</strong>
-</div>
-<blockquote>
-<p>Use this hook with care. If there is a bug in your hook which returns
-<code>t</code> on &lsquo;<samp>+inbox</samp>&rsquo; and you press <kbd>k</kbd> by accident in the
-<code>+inbox</code> folder, you will not be happy.
-</p></blockquote>
-<br>
+  <div class="c1">
+    <strong>NOTE</strong>
+  </div>
 
-<a name="index-sortm"></a>
-<a name="index-_002emh_005fprofile"></a>
-<a name="index-files_002c-_002emh_005fprofile"></a>
-<a name="index-MH-commands_002c-sortm"></a>
-<a name="index-MH-profile-component_002c-sortm"></a>
-<a name="index-sortm-MH-profile-component"></a>
-<a name="index-F-S-2"></a>
-<a name="index-mh_002dsortm_002dargs-1"></a>
+  <blockquote>
+    <p>Use this hook with care. If there is a bug in your hook
+    which returns <code>t</code> on
+    &lsquo;<samp>+inbox</samp>&rsquo; and you press <kbd>k</kbd> by
+    accident in the <code>+inbox</code> folder, you will not be
+    happy.</p>
+  </blockquote><br />
+  <a name="index-sortm" id="index-sortm"></a> <a name=
+  "index-_002emh_005fprofile" id="index-_002emh_005fprofile"></a>
+  <a name="index-files_002c-_002emh_005fprofile" id=
+  "index-files_002c-_002emh_005fprofile"></a> <a name=
+  "index-MH-commands_002c-sortm" id=
+  "index-MH-commands_002c-sortm"></a> <a name=
+  "index-MH-profile-component_002c-sortm" id=
+  "index-MH-profile-component_002c-sortm"></a> <a name=
+  "index-sortm-MH-profile-component" id=
+  "index-sortm-MH-profile-component"></a> <a name="index-F-S-2" id=
+  "index-F-S-2"></a> <a name="index-mh_002dsortm_002dargs-1" id=
+  "index-mh_002dsortm_002dargs-1"></a>
 
-<p>The option <code>mh-sortm-args</code> holds extra arguments to pass on to
-the command <code>sortm</code><a name="DOCF29" href="#FOOT29"><sup>29</sup></a> when a prefix argument is used with <kbd>F S</kbd>. Normally
-default arguments to <code>sortm</code> are specified in the MH profile.
-This option may be used to provide an alternate view. For example,
-&lsquo;<samp>'(\&quot;-nolimit\&quot; \&quot;-textfield\&quot; \&quot;subject\&quot;)</samp>&rsquo; is a useful setting.
-</p>
-<a name="index-exiting"></a>
-<a name="index-quitting-2"></a>
-<a name="index-mh_002dquit-1"></a>
-<a name="index-q-2"></a>
+  <p>The option <code>mh-sortm-args</code> holds extra arguments to
+  pass on to the command <code>sortm</code><a name="DOCF29" href=
+  "#FOOT29" id="DOCF29"><sup>29</sup></a> when a prefix argument is
+  used with <kbd>F S</kbd>. Normally default arguments to
+  <code>sortm</code> are specified in the MH profile. This option
+  may be used to provide an alternate view. For example,
+  &lsquo;<samp>'(\"-nolimit\" \"-textfield\"
+  \"subject\")</samp>&rsquo; is a useful setting.</p><a name=
+  "index-exiting" id="index-exiting"></a> <a name=
+  "index-quitting-2" id="index-quitting-2"></a> <a name=
+  "index-mh_002dquit-1" id="index-mh_002dquit-1"></a> <a name=
+  "index-q-2" id="index-q-2"></a>
 
-<p>When you want to quit using MH-E and go back to editing, you can use
-the <kbd>q</kbd> (<code>mh-quit</code>) command. This buries the buffers of the
-current MH-E folder and restores the buffers that were present when
-you first ran <kbd>M-x mh-rmail</kbd>. It also removes any MH-E working
-buffers whose name begins with &lsquo;<samp> *mh-</samp>&rsquo; or <samp>*MH-E </samp>
-(see <a href="Miscellaneous.html#Miscellaneous">Miscellaneous</a>). You can later restore your MH-E session by
-selecting the &lsquo;<samp>+inbox</samp>&rsquo; buffer or by running <kbd>M-x mh-rmail</kbd>
-again.
-</p>
-<a name="index-mh_002dexecute_002dcommands-4"></a>
-<a name="index-q-3"></a>
-<a name="index-mh_002dbefore_002dquit_002dhook-1"></a>
-<a name="index-mh_002dbefore_002dquit_002dhook_002c-example"></a>
-<a name="index-mh_002dquit_002dhook-1"></a>
-<a name="index-mh_002dquit_002dhook_002c-example"></a>
+  <p>When you want to quit using MH-E and go back to editing, you
+  can use the <kbd>q</kbd> (<code>mh-quit</code>) command. This
+  buries the buffers of the current MH-E folder and restores the
+  buffers that were present when you first ran <kbd>M-x
+  mh-rmail</kbd>. It also removes any MH-E working buffers whose
+  name begins with &lsquo; <samp>*mh-</samp>&rsquo; or
+  <samp>*MH-E</samp> (see <a href=
+  "Miscellaneous.html#Miscellaneous">Miscellaneous</a>). You can
+  later restore your MH-E session by selecting the
+  &lsquo;<samp>+inbox</samp>&rsquo; buffer or by running <kbd>M-x
+  mh-rmail</kbd> again.</p><a name=
+  "index-mh_002dexecute_002dcommands-4" id=
+  "index-mh_002dexecute_002dcommands-4"></a> <a name="index-q-3"
+  id="index-q-3"></a> <a name=
+  "index-mh_002dbefore_002dquit_002dhook-1" id=
+  "index-mh_002dbefore_002dquit_002dhook-1"></a> <a name=
+  "index-mh_002dbefore_002dquit_002dhook_002c-example" id=
+  "index-mh_002dbefore_002dquit_002dhook_002c-example"></a>
+  <a name="index-mh_002dquit_002dhook-1" id=
+  "index-mh_002dquit_002dhook-1"></a> <a name=
+  "index-mh_002dquit_002dhook_002c-example" id=
+  "index-mh_002dquit_002dhook_002c-example"></a>
 
-<p>The two hooks <code>mh-before-quit-hook</code> and <code>mh-quit-hook</code> are
-called by <kbd>q</kbd>. The former one is called before the quit occurs, so
-you might use it to perform any MH-E operations; you could perform
-some query and abort the quit or call <code>mh-execute-commands</code>, for
-example. The latter is not run in an MH-E context, so you might use it
-to modify the window setup. If you find that <kbd>q</kbd> buries a lot of
-buffers that you would rather remove, you can use both
-<code>mh-before-quit-hook</code> and <code>mh-quit-hook</code> to accomplish that.
-</p>
-<div class="smalllisp">
-<pre class="smalllisp">(defvar my-mh-folder-buffer-to-delete nil
-  &quot;Folder buffer that is being quit.&quot;)
+  <p>The two hooks <code>mh-before-quit-hook</code> and
+  <code>mh-quit-hook</code> are called by <kbd>q</kbd>. The former
+  one is called before the quit occurs, so you might use it to
+  perform any MH-E operations; you could perform some query and
+  abort the quit or call <code>mh-execute-commands</code>, for
+  example. The latter is not run in an MH-E context, so you might
+  use it to modify the window setup. If you find that <kbd>q</kbd>
+  buries a lot of buffers that you would rather remove, you can use
+  both <code>mh-before-quit-hook</code> and
+  <code>mh-quit-hook</code> to accomplish that.</p>
+
+  <div class="smalllisp">
+    <pre class="smalllisp">
+(defvar my-mh-folder-buffer-to-delete nil
+  "Folder buffer that is being quit.")
 
 (defun my-mh-before-quit-hook ()
-  &quot;Save folder buffer that is to be deleted.&quot;
+  "Save folder buffer that is to be deleted."
   (setq my-mh-folder-buffer-to-delete (current-buffer)))
 
 (defun my-mh-quit-hook ()
-  &quot;Kill folder buffer rather than just bury it.&quot;
+  "Kill folder buffer rather than just bury it."
   (set-buffer my-mh-folder-buffer-to-delete)
   (if (get-buffer mh-show-buffer)
       (kill-buffer mh-show-buffer))
   (kill-buffer (current-buffer)))
 
 <i>Kill MH-Folder buffer instead of burying it</i>
-</pre></div>
+</pre>
+  </div><a name="index-folders_002c-renaming" id=
+  "index-folders_002c-renaming"></a> <a name=
+  "index-renaming-folders" id="index-renaming-folders"></a>
+  <a name="index-dired" id="index-dired"></a> <a name=
+  "index-dired_002ddo_002drename" id=
+  "index-dired_002ddo_002drename"></a>
 
-<a name="index-folders_002c-renaming"></a>
-<a name="index-renaming-folders"></a>
-<a name="index-dired"></a>
-<a name="index-dired_002ddo_002drename"></a>
+  <p>You can use dired to manipulate the folders themselves. For
+  example, I renamed my &lsquo;<samp>+out</samp>&rsquo; folder to
+  the more common &lsquo;<samp>+outbox</samp>&rsquo; by running
+  dired on my mail directory (<kbd>M-x dired RET ~/Mail RET</kbd>),
+  moving my cursor to &lsquo;<samp>out</samp>&rsquo; and using the
+  command <kbd>R</kbd> (<code>dired-do-rename</code>).</p>
 
-<p>You can use dired to manipulate the folders themselves. For example, I
-renamed my &lsquo;<samp>+out</samp>&rsquo; folder to the more common &lsquo;<samp>+outbox</samp>&rsquo; by
-running dired on my mail directory (<kbd>M-x dired RET ~/Mail RET</kbd>),
-moving my cursor to &lsquo;<samp>out</samp>&rsquo; and using the command <kbd>R</kbd>
-(<code>dired-do-rename</code>).
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <div class="footnote">
+    <hr />
 
-<h3><a name="FOOT27" href="#DOCF27">(27)</a></h3>
-<p>See the sections
-<a href="http://rand-mh.sourceforge.net/book/mh/fol.html#Youfol">Your Current Folder:
-folder</a> and <a href="http://rand-mh.sourceforge.net/book/mh/fol.html#Movref">Moving and
-Linking Messages: refile</a> in the MH book.</p>
-<h3><a name="FOOT28" href="#DOCF28">(28)</a></h3>
-<p>For you Emacs wizards,
-this is implemented as an Emacs minor mode.</p>
-<h3><a name="FOOT29" href="#DOCF29">(29)</a></h3>
-<p>See the section
-<a href="http://rand-mh.sourceforge.net/book/mh/sorsor.html">Sorting Messages: sortm</a> in the
-MH book.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Sending-Mail.html#Sending-Mail" accesskey="n" rel="next">Sending Mail</a>, Previous: <a href="Reading-Mail.html#Reading-Mail" accesskey="p" rel="prev">Reading Mail</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT27" href="#DOCF27" id="FOOT27">(27)</a></h3>
 
+    <p>See the sections <a href=
+    "http://rand-mh.sourceforge.net/book/mh/fol.html#Youfol">Your
+    Current Folder: folder</a> and <a href=
+    "http://rand-mh.sourceforge.net/book/mh/fol.html#Movref">Moving
+    and Linking Messages: refile</a> in the MH book.</p>
 
+    <h3><a name="FOOT28" href="#DOCF28" id="FOOT28">(28)</a></h3>
+
+    <p>For you Emacs wizards, this is implemented as an Emacs minor
+    mode.</p>
+
+    <h3><a name="FOOT29" href="#DOCF29" id="FOOT29">(29)</a></h3>
+
+    <p>See the section <a href=
+    "http://rand-mh.sourceforge.net/book/mh/sorsor.html">Sorting
+    Messages: sortm</a> in the MH book.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Sending-Mail.html#Sending-Mail" accesskey="n"
+    rel="next">Sending Mail</a>, Previous: <a href=
+    "Reading-Mail.html#Reading-Mail" accesskey="p" rel=
+    "prev">Reading Mail</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

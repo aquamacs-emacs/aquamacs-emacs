@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,221 +19,327 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: What Is a Function</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: What Is a Function">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: What Is a Function">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Lambda-Expressions.html#Lambda-Expressions" rel="next" title="Lambda Expressions">
-<link href="Functions.html#Functions" rel="prev" title="Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: What Is a
+  Function</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: What Is a Function" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: What Is a Function" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href="Lambda-Expressions.html#Lambda-Expressions" rel=
+  "next" title="Lambda Expressions" />
+  <link href="Functions.html#Functions" rel="prev" title=
+  "Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="What-Is-a-Function" id="What-Is-a-Function"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Lambda-Expressions.html#Lambda-Expressions"
+    accesskey="n" rel="next">Lambda Expressions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="What-Is-a-Function_003f" id=
+  "What-Is-a-Function_003f"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="What-Is-a-Function"></a>
-<div class="header">
-<p>
-Next: <a href="Lambda-Expressions.html#Lambda-Expressions" accesskey="n" rel="next">Lambda Expressions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="What-Is-a-Function_003f"></a>
-<h3 class="section">12.1 What Is a Function?</h3>
+  <h3 class="section">12.1 What Is a Function?</h3><a name=
+  "index-return-value" id="index-return-value"></a> <a name=
+  "index-value-of-function" id="index-value-of-function"></a>
+  <a name="index-argument" id="index-argument"></a>
 
-<a name="index-return-value"></a>
-<a name="index-value-of-function"></a>
-<a name="index-argument"></a>
-<p>In a general sense, a function is a rule for carrying out a
-computation given input values called <em>arguments</em>.  The result of
-the computation is called the <em>value</em> or <em>return value</em> of the
-function.  The computation can also have side effects, such as lasting
-changes in the values of variables or the contents of data structures.
-</p>
-<p>In most computer languages, every function has a name.  But in Lisp,
-a function in the strictest sense has no name: it is an object which
-can <em>optionally</em> be associated with a symbol (e.g., <code>car</code>)
-that serves as the function name.  See <a href="Function-Names.html#Function-Names">Function Names</a>.  When a
-function has been given a name, we usually also refer to that symbol
-as a &ldquo;function&rdquo; (e.g., we refer to &ldquo;the function <code>car</code>&rdquo;).
-In this manual, the distinction between a function name and the
-function object itself is usually unimportant, but we will take note
-wherever it is relevant.
-</p>
-<p>Certain function-like objects, called <em>special forms</em> and
-<em>macros</em>, also accept arguments to carry out computations.
-However, as explained below, these are not considered functions in
-Emacs Lisp.
-</p>
-<p>Here are important terms for functions and function-like objects:
-</p>
-<dl compact="compact">
-<dt><em>lambda expression</em></dt>
-<dd><p>A function (in the strict sense, i.e., a function object) which is
-written in Lisp.  These are described in the following section.
-See <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>.
-</p>
-</dd>
-<dt><em>primitive</em></dt>
-<dd><a name="index-primitive"></a>
-<a name="index-subr"></a>
-<a name="index-built_002din-function"></a>
-<p>A function which is callable from Lisp but is actually written in C.
-Primitives are also called <em>built-in functions</em>, or <em>subrs</em>.
-Examples include functions like <code>car</code> and <code>append</code>.  In
-addition, all special forms (see below) are also considered
-primitives.
-</p>
-<p>Usually, a function is implemented as a primitive because it is a
-fundamental part of Lisp (e.g., <code>car</code>), or because it provides a
-low-level interface to operating system services, or because it needs
-to run fast.  Unlike functions defined in Lisp, primitives can be
-modified or added only by changing the C sources and recompiling
-Emacs.  See <a href="Writing-Emacs-Primitives.html#Writing-Emacs-Primitives">Writing Emacs Primitives</a>.
-</p>
-</dd>
-<dt><em>special form</em></dt>
-<dd><p>A primitive that is like a function but does not evaluate all of its
-arguments in the usual way.  It may evaluate only some of the
-arguments, or may evaluate them in an unusual order, or several times.
-Examples include <code>if</code>, <code>and</code>, and <code>while</code>.
-See <a href="Special-Forms.html#Special-Forms">Special Forms</a>.
-</p>
-</dd>
-<dt><em>macro</em></dt>
-<dd><a name="index-macro"></a>
-<p>A construct defined in Lisp, which differs from a function in that it
-translates a Lisp expression into another expression which is to be
-evaluated instead of the original expression.  Macros enable Lisp
-programmers to do the sorts of things that special forms can do.
-See <a href="Macros.html#Macros">Macros</a>.
-</p>
-</dd>
-<dt><em>command</em></dt>
-<dd><a name="index-command"></a>
-<p>An object which can be invoked via the <code>command-execute</code>
-primitive, usually due to the user typing in a key sequence
-<em>bound</em> to that command.  See <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>.  A command is
-usually a function; if the function is written in Lisp, it is made
-into a command by an <code>interactive</code> form in the function
-definition (see <a href="Defining-Commands.html#Defining-Commands">Defining Commands</a>).  Commands that are functions
-can also be called from Lisp expressions, just like other functions.
-</p>
-<p>Keyboard macros (strings and vectors) are commands also, even though
-they are not functions.  See <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>.  We say that a symbol
-is a command if its function cell contains a command (see <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>); such a <em>named command</em> can be invoked with
-<kbd>M-x</kbd>.
-</p>
-</dd>
-<dt><em>closure</em></dt>
-<dd><p>A function object that is much like a lambda expression, except that
-it also encloses an environment of lexical variable bindings.
-See <a href="Closures.html#Closures">Closures</a>.
-</p>
-</dd>
-<dt><em>byte-code function</em></dt>
-<dd><p>A function that has been compiled by the byte compiler.
-See <a href="Byte_002dCode-Type.html#Byte_002dCode-Type">Byte-Code Type</a>.
-</p>
-</dd>
-<dt><em>autoload object</em></dt>
-<dd><a name="index-autoload-object"></a>
-<p>A place-holder for a real function.  If the autoload object is called,
-Emacs loads the file containing the definition of the real function,
-and then calls the real function.  See <a href="Autoload.html#Autoload">Autoload</a>.
-</p></dd>
-</dl>
+  <p>In a general sense, a function is a rule for carrying out a
+  computation given input values called <em>arguments</em>. The
+  result of the computation is called the <em>value</em> or
+  <em>return value</em> of the function. The computation can also
+  have side effects, such as lasting changes in the values of
+  variables or the contents of data structures.</p>
 
-<p>You can use the function <code>functionp</code> to test if an object is a
-function:
-</p>
-<dl>
-<dt><a name="index-functionp"></a>Function: <strong>functionp</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is any kind of
-function, i.e., can be passed to <code>funcall</code>.  Note that
-<code>functionp</code> returns <code>t</code> for symbols that are function names,
-and returns <code>nil</code> for special forms.
-</p></dd></dl>
+  <p>In most computer languages, every function has a name. But in
+  Lisp, a function in the strictest sense has no name: it is an
+  object which can <em>optionally</em> be associated with a symbol
+  (e.g., <code>car</code>) that serves as the function name. See
+  <a href="Function-Names.html#Function-Names">Function Names</a>.
+  When a function has been given a name, we usually also refer to
+  that symbol as a &ldquo;function&rdquo; (e.g., we refer to
+  &ldquo;the function <code>car</code>&rdquo;). In this manual, the
+  distinction between a function name and the function object
+  itself is usually unimportant, but we will take note wherever it
+  is relevant.</p>
 
-<p>Unlike <code>functionp</code>, the next three functions do <em>not</em> treat
-a symbol as its function definition.
-</p>
-<dl>
-<dt><a name="index-subrp"></a>Function: <strong>subrp</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a built-in function
-(i.e., a Lisp primitive).
-</p>
-<div class="example">
-<pre class="example">(subrp 'message)            ; <span class="roman"><code>message</code> is a symbol,</span>
-     &rArr; nil                 ;   <span class="roman">not a subr object.</span>
-</pre><pre class="example">(subrp (symbol-function 'message))
+  <p>Certain function-like objects, called <em>special forms</em>
+  and <em>macros</em>, also accept arguments to carry out
+  computations. However, as explained below, these are not
+  considered functions in Emacs Lisp.</p>
+
+  <p>Here are important terms for functions and function-like
+  objects:</p>
+
+  <dl compact="compact">
+    <dt><em>lambda expression</em></dt>
+
+    <dd>
+      <p>A function (in the strict sense, i.e., a function object)
+      which is written in Lisp. These are described in the
+      following section. See <a href=
+      "Lambda-Expressions.html#Lambda-Expressions">Lambda
+      Expressions</a>.</p>
+    </dd>
+
+    <dt><em>primitive</em></dt>
+
+    <dd>
+      <a name="index-primitive" id="index-primitive"></a> <a name=
+      "index-subr" id="index-subr"></a> <a name=
+      "index-built_002din-function" id=
+      "index-built_002din-function"></a>
+
+      <p>A function which is callable from Lisp but is actually
+      written in C. Primitives are also called <em>built-in
+      functions</em>, or <em>subrs</em>. Examples include functions
+      like <code>car</code> and <code>append</code>. In addition,
+      all special forms (see below) are also considered
+      primitives.</p>
+
+      <p>Usually, a function is implemented as a primitive because
+      it is a fundamental part of Lisp (e.g., <code>car</code>), or
+      because it provides a low-level interface to operating system
+      services, or because it needs to run fast. Unlike functions
+      defined in Lisp, primitives can be modified or added only by
+      changing the C sources and recompiling Emacs. See <a href=
+      "Writing-Emacs-Primitives.html#Writing-Emacs-Primitives">Writing
+      Emacs Primitives</a>.</p>
+    </dd>
+
+    <dt><em>special form</em></dt>
+
+    <dd>
+      <p>A primitive that is like a function but does not evaluate
+      all of its arguments in the usual way. It may evaluate only
+      some of the arguments, or may evaluate them in an unusual
+      order, or several times. Examples include <code>if</code>,
+      <code>and</code>, and <code>while</code>. See <a href=
+      "Special-Forms.html#Special-Forms">Special Forms</a>.</p>
+    </dd>
+
+    <dt><em>macro</em></dt>
+
+    <dd>
+      <a name="index-macro" id="index-macro"></a>
+
+      <p>A construct defined in Lisp, which differs from a function
+      in that it translates a Lisp expression into another
+      expression which is to be evaluated instead of the original
+      expression. Macros enable Lisp programmers to do the sorts of
+      things that special forms can do. See <a href=
+      "Macros.html#Macros">Macros</a>.</p>
+    </dd>
+
+    <dt><em>command</em></dt>
+
+    <dd>
+      <a name="index-command" id="index-command"></a>
+
+      <p>An object which can be invoked via the
+      <code>command-execute</code> primitive, usually due to the
+      user typing in a key sequence <em>bound</em> to that command.
+      See <a href=
+      "Interactive-Call.html#Interactive-Call">Interactive
+      Call</a>. A command is usually a function; if the function is
+      written in Lisp, it is made into a command by an
+      <code>interactive</code> form in the function definition (see
+      <a href="Defining-Commands.html#Defining-Commands">Defining
+      Commands</a>). Commands that are functions can also be called
+      from Lisp expressions, just like other functions.</p>
+
+      <p>Keyboard macros (strings and vectors) are commands also,
+      even though they are not functions. See <a href=
+      "Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>.
+      We say that a symbol is a command if its function cell
+      contains a command (see <a href=
+      "Symbol-Components.html#Symbol-Components">Symbol
+      Components</a>); such a <em>named command</em> can be invoked
+      with <kbd>M-x</kbd>.</p>
+    </dd>
+
+    <dt><em>closure</em></dt>
+
+    <dd>
+      <p>A function object that is much like a lambda expression,
+      except that it also encloses an environment of lexical
+      variable bindings. See <a href=
+      "Closures.html#Closures">Closures</a>.</p>
+    </dd>
+
+    <dt><em>byte-code function</em></dt>
+
+    <dd>
+      <p>A function that has been compiled by the byte compiler.
+      See <a href=
+      "Byte_002dCode-Type.html#Byte_002dCode-Type">Byte-Code
+      Type</a>.</p>
+    </dd>
+
+    <dt><em>autoload object</em></dt>
+
+    <dd>
+      <a name="index-autoload-object" id=
+      "index-autoload-object"></a>
+
+      <p>A place-holder for a real function. If the autoload object
+      is called, Emacs loads the file containing the definition of
+      the real function, and then calls the real function. See
+      <a href="Autoload.html#Autoload">Autoload</a>.</p>
+    </dd>
+  </dl>
+
+  <p>You can use the function <code>functionp</code> to test if an
+  object is a function:</p>
+
+  <dl>
+    <dt><a name="index-functionp" id=
+    "index-functionp"></a>Function: <strong>functionp</strong>
+    <em>object</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is any kind of function, i.e., can be passed to
+      <code>funcall</code>. Note that <code>functionp</code>
+      returns <code>t</code> for symbols that are function names,
+      and returns <code>nil</code> for special forms.</p>
+    </dd>
+  </dl>
+
+  <p>Unlike <code>functionp</code>, the next three functions do
+  <em>not</em> treat a symbol as its function definition.</p>
+
+  <dl>
+    <dt><a name="index-subrp" id="index-subrp"></a>Function:
+    <strong>subrp</strong> <em>object</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a built-in function (i.e., a Lisp primitive).</p>
+
+      <div class="example">
+        <pre class="example">
+(subrp 'message)            ; <span class=
+"roman"><code>message</code> is a symbol,</span>
+     &rArr; nil                 ;   <span class=
+"roman">not a subr object.</span>
+</pre>
+        <pre class="example">
+(subrp (symbol-function 'message))
      &rArr; t
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-byte_002dcode_002dfunction_002dp"></a>Function: <strong>byte-code-function-p</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a byte-code
-function.  For example:
-</p>
-<div class="example">
-<pre class="example">(byte-code-function-p (symbol-function 'next-line))
+  <dl>
+    <dt><a name="index-byte_002dcode_002dfunction_002dp" id=
+    "index-byte_002dcode_002dfunction_002dp"></a>Function:
+    <strong>byte-code-function-p</strong> <em>object</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a byte-code function. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(byte-code-function-p (symbol-function 'next-line))
      &rArr; t
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-subr_002darity"></a>Function: <strong>subr-arity</strong> <em>subr</em></dt>
-<dd><p>This function provides information about the argument list of a
-primitive, <var>subr</var>.  The returned value is a pair
-<code>(<var>min</var> . <var>max</var>)</code>.  <var>min</var> is the minimum number of
-args.  <var>max</var> is the maximum number or the symbol <code>many</code>, for a
-function with <code>&amp;rest</code> arguments, or the symbol <code>unevalled</code> if
-<var>subr</var> is a special form.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-subr_002darity" id=
+    "index-subr_002darity"></a>Function:
+    <strong>subr-arity</strong> <em>subr</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Lambda-Expressions.html#Lambda-Expressions" accesskey="n" rel="next">Lambda Expressions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function provides information about the argument list
+      of a primitive, <var>subr</var>. The returned value is a pair
+      <code>(<var>min</var> . <var>max</var>)</code>.
+      <var>min</var> is the minimum number of args. <var>max</var>
+      is the maximum number or the symbol <code>many</code>, for a
+      function with <code>&amp;rest</code> arguments, or the symbol
+      <code>unevalled</code> if <var>subr</var> is a special
+      form.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Lambda-Expressions.html#Lambda-Expressions"
+    accesskey="n" rel="next">Lambda Expressions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

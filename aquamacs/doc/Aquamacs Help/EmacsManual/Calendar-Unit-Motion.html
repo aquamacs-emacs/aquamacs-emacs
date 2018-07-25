@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,144 +20,232 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Calendar Unit Motion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Calendar Unit Motion">
-<meta name="keywords" content="GNU Emacs Manual: Calendar Unit Motion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Calendar-Motion.html#Calendar-Motion" rel="up" title="Calendar Motion">
-<link href="Move-to-Beginning-or-End.html#Move-to-Beginning-or-End" rel="next" title="Move to Beginning or End">
-<link href="Calendar-Motion.html#Calendar-Motion" rel="prev" title="Calendar Motion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Calendar Unit Motion</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Calendar Unit Motion" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Calendar Unit Motion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Calendar-Motion.html#Calendar-Motion" rel="up" title=
+  "Calendar Motion" />
+  <link href=
+  "Move-to-Beginning-or-End.html#Move-to-Beginning-or-End" rel=
+  "next" title="Move to Beginning or End" />
+  <link href="Calendar-Motion.html#Calendar-Motion" rel="prev"
+  title="Calendar Motion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Calendar-Unit-Motion" id="Calendar-Unit-Motion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Move-to-Beginning-or-End.html#Move-to-Beginning-or-End"
+    accesskey="n" rel="next">Move to Beginning or End</a>, Up:
+    <a href="Calendar-Motion.html#Calendar-Motion" accesskey="u"
+    rel="up">Calendar Motion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Motion-by-Standard-Lengths-of-Time" id=
+  "Motion-by-Standard-Lengths-of-Time"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Calendar-Unit-Motion"></a>
-<div class="header">
-<p>
-Next: <a href="Move-to-Beginning-or-End.html#Move-to-Beginning-or-End" accesskey="n" rel="next">Move to Beginning or End</a>, Up: <a href="Calendar-Motion.html#Calendar-Motion" accesskey="u" rel="up">Calendar Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Motion-by-Standard-Lengths-of-Time"></a>
-<h4 class="subsection">31.1.1 Motion by Standard Lengths of Time</h4>
+  <h4 class="subsection">31.1.1 Motion by Standard Lengths of
+  Time</h4>
 
-<p>The commands for movement in the calendar buffer parallel the
-commands for movement in text.  You can move forward and backward by
-days, weeks, months, and years.
-</p>
-<dl compact="compact">
-<dt><kbd>C-f</kbd></dt>
-<dd><p>Move point one day forward (<code>calendar-forward-day</code>).
-</p></dd>
-<dt><kbd>C-b</kbd></dt>
-<dd><p>Move point one day backward (<code>calendar-backward-day</code>).
-</p></dd>
-<dt><kbd>C-n</kbd></dt>
-<dd><p>Move point one week forward (<code>calendar-forward-week</code>).
-</p></dd>
-<dt><kbd>C-p</kbd></dt>
-<dd><p>Move point one week backward (<code>calendar-backward-week</code>).
-</p></dd>
-<dt><kbd>M-}</kbd></dt>
-<dd><p>Move point one month forward (<code>calendar-forward-month</code>).
-</p></dd>
-<dt><kbd>M-{</kbd></dt>
-<dd><p>Move point one month backward (<code>calendar-backward-month</code>).
-</p></dd>
-<dt><kbd>C-x ]</kbd></dt>
-<dd><p>Move point one year forward (<code>calendar-forward-year</code>).
-</p></dd>
-<dt><kbd>C-x [</kbd></dt>
-<dd><p>Move point one year backward (<code>calendar-backward-year</code>).
-</p></dd>
-</dl>
+  <p>The commands for movement in the calendar buffer parallel the
+  commands for movement in text. You can move forward and backward
+  by days, weeks, months, and years.</p>
 
-<a name="index-C_002df-_0028Calendar-mode_0029"></a>
-<a name="index-calendar_002dforward_002dday"></a>
-<a name="index-C_002db-_0028Calendar-mode_0029"></a>
-<a name="index-calendar_002dbackward_002dday"></a>
-<a name="index-C_002dn-_0028Calendar-mode_0029"></a>
-<a name="index-calendar_002dforward_002dweek"></a>
-<a name="index-C_002dp-_0028Calendar-mode_0029"></a>
-<a name="index-calendar_002dbackward_002dweek"></a>
-<p>The day and week commands are natural analogues of the usual Emacs
-commands for moving by characters and by lines.  Just as <kbd>C-n</kbd>
-usually moves to the same column in the following line, in Calendar
-mode it moves to the same day in the following week.  And <kbd>C-p</kbd>
-moves to the same day in the previous week.
-</p>
-<p>The arrow keys are equivalent to <kbd>C-f</kbd>, <kbd>C-b</kbd>, <kbd>C-n</kbd> and
-<kbd>C-p</kbd>, just as they normally are in other modes.
-</p>
-<a name="index-M_002d_007d-_0028Calendar-mode_0029"></a>
-<a name="index-calendar_002dforward_002dmonth"></a>
-<a name="index-M_002d_007b-_0028Calendar-mode_0029"></a>
-<a name="index-calendar_002dbackward_002dmonth"></a>
-<a name="index-C_002dx-_005d-_0028Calendar-mode_0029"></a>
-<a name="index-calendar_002dforward_002dyear"></a>
-<a name="index-C_002dx-_005b-_0028Calendar-mode_0029"></a>
-<a name="index-calendar_002dforward_002dyear-1"></a>
-<p>The commands for motion by months and years work like those for
-weeks, but move a larger distance.  The month commands <kbd>M-}</kbd> and
-<kbd>M-{</kbd> move forward or backward by an entire month.  The year
-commands <kbd>C-x ]</kbd> and <kbd><span class="nolinebreak">C-x</span>&nbsp;[</kbd><!-- /@w --> move forward or backward a
-whole year.
-</p>
-<p>The easiest way to remember these commands is to consider months and
-years analogous to paragraphs and pages of text, respectively.  But
-the commands themselves are not quite analogous.  The ordinary Emacs
-paragraph commands move to the beginning or end of a paragraph,
-whereas these month and year commands move by an entire month or an
-entire year, keeping the same date within the month or year.
-</p>
-<p>All these commands accept a numeric argument as a repeat count.
-For convenience, the digit keys and the minus sign specify numeric
-arguments in Calendar mode even without the Meta modifier.  For example,
-<kbd>100 C-f</kbd> moves point 100 days forward from its present location.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Move-to-Beginning-or-End.html#Move-to-Beginning-or-End" accesskey="n" rel="next">Move to Beginning or End</a>, Up: <a href="Calendar-Motion.html#Calendar-Motion" accesskey="u" rel="up">Calendar Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>C-f</kbd></dt>
 
+    <dd>
+      <p>Move point one day forward
+      (<code>calendar-forward-day</code>).</p>
+    </dd>
 
+    <dt><kbd>C-b</kbd></dt>
 
+    <dd>
+      <p>Move point one day backward
+      (<code>calendar-backward-day</code>).</p>
+    </dd>
+
+    <dt><kbd>C-n</kbd></dt>
+
+    <dd>
+      <p>Move point one week forward
+      (<code>calendar-forward-week</code>).</p>
+    </dd>
+
+    <dt><kbd>C-p</kbd></dt>
+
+    <dd>
+      <p>Move point one week backward
+      (<code>calendar-backward-week</code>).</p>
+    </dd>
+
+    <dt><kbd>M-}</kbd></dt>
+
+    <dd>
+      <p>Move point one month forward
+      (<code>calendar-forward-month</code>).</p>
+    </dd>
+
+    <dt><kbd>M-{</kbd></dt>
+
+    <dd>
+      <p>Move point one month backward
+      (<code>calendar-backward-month</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x ]</kbd></dt>
+
+    <dd>
+      <p>Move point one year forward
+      (<code>calendar-forward-year</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x [</kbd></dt>
+
+    <dd>
+      <p>Move point one year backward
+      (<code>calendar-backward-year</code>).</p>
+    </dd>
+  </dl><a name="index-C_002df-_0028Calendar-mode_0029" id=
+  "index-C_002df-_0028Calendar-mode_0029"></a> <a name=
+  "index-calendar_002dforward_002dday" id=
+  "index-calendar_002dforward_002dday"></a> <a name=
+  "index-C_002db-_0028Calendar-mode_0029" id=
+  "index-C_002db-_0028Calendar-mode_0029"></a> <a name=
+  "index-calendar_002dbackward_002dday" id=
+  "index-calendar_002dbackward_002dday"></a> <a name=
+  "index-C_002dn-_0028Calendar-mode_0029" id=
+  "index-C_002dn-_0028Calendar-mode_0029"></a> <a name=
+  "index-calendar_002dforward_002dweek" id=
+  "index-calendar_002dforward_002dweek"></a> <a name=
+  "index-C_002dp-_0028Calendar-mode_0029" id=
+  "index-C_002dp-_0028Calendar-mode_0029"></a> <a name=
+  "index-calendar_002dbackward_002dweek" id=
+  "index-calendar_002dbackward_002dweek"></a>
+
+  <p>The day and week commands are natural analogues of the usual
+  Emacs commands for moving by characters and by lines. Just as
+  <kbd>C-n</kbd> usually moves to the same column in the following
+  line, in Calendar mode it moves to the same day in the following
+  week. And <kbd>C-p</kbd> moves to the same day in the previous
+  week.</p>
+
+  <p>The arrow keys are equivalent to <kbd>C-f</kbd>,
+  <kbd>C-b</kbd>, <kbd>C-n</kbd> and <kbd>C-p</kbd>, just as they
+  normally are in other modes.</p><a name=
+  "index-M_002d_007d-_0028Calendar-mode_0029" id=
+  "index-M_002d_007d-_0028Calendar-mode_0029"></a> <a name=
+  "index-calendar_002dforward_002dmonth" id=
+  "index-calendar_002dforward_002dmonth"></a> <a name=
+  "index-M_002d_007b-_0028Calendar-mode_0029" id=
+  "index-M_002d_007b-_0028Calendar-mode_0029"></a> <a name=
+  "index-calendar_002dbackward_002dmonth" id=
+  "index-calendar_002dbackward_002dmonth"></a> <a name=
+  "index-C_002dx-_005d-_0028Calendar-mode_0029" id=
+  "index-C_002dx-_005d-_0028Calendar-mode_0029"></a> <a name=
+  "index-calendar_002dforward_002dyear" id=
+  "index-calendar_002dforward_002dyear"></a> <a name=
+  "index-C_002dx-_005b-_0028Calendar-mode_0029" id=
+  "index-C_002dx-_005b-_0028Calendar-mode_0029"></a> <a name=
+  "index-calendar_002dforward_002dyear-1" id=
+  "index-calendar_002dforward_002dyear-1"></a>
+
+  <p>The commands for motion by months and years work like those
+  for weeks, but move a larger distance. The month commands
+  <kbd>M-}</kbd> and <kbd>M-{</kbd> move forward or backward by an
+  entire month. The year commands <kbd>C-x ]</kbd> and
+  <kbd><span class="nolinebreak">C-x</span>&nbsp;[</kbd>
+  <!-- /@w --> move forward or backward a whole year.</p>
+
+  <p>The easiest way to remember these commands is to consider
+  months and years analogous to paragraphs and pages of text,
+  respectively. But the commands themselves are not quite
+  analogous. The ordinary Emacs paragraph commands move to the
+  beginning or end of a paragraph, whereas these month and year
+  commands move by an entire month or an entire year, keeping the
+  same date within the month or year.</p>
+
+  <p>All these commands accept a numeric argument as a repeat
+  count. For convenience, the digit keys and the minus sign specify
+  numeric arguments in Calendar mode even without the Meta
+  modifier. For example, <kbd>100 C-f</kbd> moves point 100 days
+  forward from its present location.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Move-to-Beginning-or-End.html#Move-to-Beginning-or-End"
+    accesskey="n" rel="next">Move to Beginning or End</a>, Up:
+    <a href="Calendar-Motion.html#Calendar-Motion" accesskey="u"
+    rel="up">Calendar Motion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

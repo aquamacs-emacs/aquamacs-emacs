@@ -1,13 +1,20 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Known problems - Eshell: The Emacs Shell</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Eshell: The Emacs Shell">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Bugs-and-ideas.html#Bugs-and-ideas" title="Bugs and ideas">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Known problems - Eshell: The Emacs Shell</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Eshell: The Emacs Shell" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Bugs-and-ideas.html#Bugs-and-ideas" title=
+  "Bugs and ideas" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Eshell, the Emacs shell.
 
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
@@ -25,8 +32,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,361 +45,678 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Known-problems"></a>
-<p>
-Up:&nbsp;<a rel="up" accesskey="u" href="Bugs-and-ideas.html#Bugs-and-ideas">Bugs and ideas</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Known-problems" id="Known-problems"></a>
 
-<h3 class="section">9.1 Known problems</h3>
+    <p>Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Bugs-and-ideas.html#Bugs-and-ideas">Bugs and ideas</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-known-bugs-20"></a><a name="index-bugs_002c-known-21"></a>
-Below is complete list of known problems with Eshell version 2.4.2,
-which is the version included with Emacs 22.
+  <h3 class="section">9.1 Known problems</h3>
 
-     <dl>
-<dt>Documentation incomplete
-<br><dt>Differentiate between aliases and functions<dd>
-Allow for a bash-compatible syntax, such as:
+  <p><a name="index-known-bugs-20" id=
+  "index-known-bugs-20"></a><a name="index-bugs_002c-known-21" id=
+  "index-bugs_002c-known-21"></a> Below is complete list of known
+  problems with Eshell version 2.4.2, which is the version included
+  with Emacs 22.</p>
 
-     <pre class="example">          alias arg=blah
+  <dl>
+    <dt>Documentation incomplete<br /></dt>
+
+    <dt>Differentiate between aliases and functions</dt>
+
+    <dd>
+      Allow for a bash-compatible syntax, such as:
+      <pre class="example">
+          alias arg=blah
           function arg () { blah $* }
+</pre><br />
+    </dd>
+
+    <dt>&lsquo;<samp><span class="samp">for i in 1 2 3 { grep -q a
+    b &amp;&amp; *echo has it } | wc -l</span></samp>&rsquo;
+    outputs result after prompt</dt>
+
+    <dd>In fact, piping to a process from a looping construct
+    doesn't work in general. If I change the call to
+    <code>eshell-copy-handles</code> in
+    <code>eshell-rewrite-for-command</code> to use
+    <code>eshell-protect</code>, it seems to work, but the output
+    occurs after the prompt is displayed. The whole structured
+    command thing is too complicated at present.<br /></dd>
+
+    <dt>Error with <samp><span class="command">bc</span></samp> in
+    <code>eshell-test</code></dt>
+
+    <dd>On some XEmacs system, the subprocess interaction test
+    fails inexplicably, although <samp><span class=
+    "command">bc</span></samp> works fine at the command
+    prompt.<br /></dd>
+
+    <dt>Eshell does not delete <samp><span class=
+    "file">*Help*</span></samp> buffers in XEmacs 21.1.8+</dt>
+
+    <dd>In XEmacs 21.1.8, the <samp><span class=
+    "file">*Help*</span></samp> buffer has been renamed such that
+    multiple instances of the <samp><span class=
+    "file">*Help*</span></samp> buffer can exist.<br /></dd>
+
+    <dt>Pcomplete sometimes gets stuck</dt>
+
+    <dd>You press &lt;TAB&gt;, but no completions appear, even
+    though the directory has matching files. This behavior is
+    rare.<br /></dd>
+
+    <dt>&lsquo;<samp><span class="samp">grep python $&lt;rpm
+    -qa&gt;</span></samp>&rsquo; doesn't work, but using
+    &lsquo;<samp><span class="samp">*grep</span></samp>&rsquo;
+    does</dt>
+
+    <dd>This happens because the <code>grep</code> Lisp function
+    returns immediately, and then the asynchronous
+    <samp><span class="command">grep</span></samp> process expects
+    to examine the temporary file, which has since been
+    deleted.<br /></dd>
+
+    <dt>Problem with C-r repeating text</dt>
+
+    <dd>If the text <em>before point</em> reads "./run", and you
+    type <kbd>C-r r u n</kbd>, it will repeat the line for every
+    character typed.<br /></dd>
+
+    <dt>Backspace doesn't scroll back after continuing (in smart
+    mode)</dt>
+
+    <dd>Hitting space during a process invocation, such as
+    <samp><span class="command">make</span></samp>, will cause it
+    to track the bottom of the output; but backspace no longer
+    scrolls back.<br /></dd>
+
+    <dt>It's not possible to fully <code>unload-feature</code>
+    Eshell<br /></dt>
+
+    <dt>Menu support was removed, but never put back<br /></dt>
+
+    <dt>Using C-p and C-n with rebind gets into a locked state</dt>
+
+    <dd>This happened a few times in Emacs 21, but has been
+    unreproducible since.<br /></dd>
+
+    <dt>If an interactive process is currently running,
+    <kbd>M-!</kbd> doesn't work<br /></dt>
+
+    <dt>Use a timer instead of <code>sleep-for</code> when killing
+    child processes<br /></dt>
+
+    <dt>Piping to a Lisp function is not supported</dt>
+
+    <dd>Make it so that the Lisp command on the right of the pipe
+    is repeatedly called with the input strings as arguments. This
+    will require changing <code>eshell-do-pipeline</code> to handle
+    non-process targets.<br /></dd>
+
+    <dt>Input redirection is not supported</dt>
+
+    <dd>See the above entry.<br /></dd>
+
+    <dt>Problem running <samp><span class=
+    "command">less</span></samp> without arguments on Windows</dt>
+
+    <dd>
+      The result in the Eshell buffer is:
+      <pre class="example">
+          Spawning child process: invalid argument
 </pre>
-     <br><dt>&lsquo;<samp><span class="samp">for i in 1 2 3 { grep -q a b &amp;&amp; *echo has it } | wc -l</span></samp>&rsquo; outputs result after prompt<dd>
-In fact, piping to a process from a looping construct doesn't work in
-general.  If I change the call to <code>eshell-copy-handles</code> in
-<code>eshell-rewrite-for-command</code> to use <code>eshell-protect</code>, it seems
-to work, but the output occurs after the prompt is displayed.  The whole
-structured command thing is too complicated at present.
 
-     <br><dt>Error with <samp><span class="command">bc</span></samp> in <code>eshell-test</code><dd>
-On some XEmacs system, the subprocess interaction test fails
-inexplicably, although <samp><span class="command">bc</span></samp> works fine at the command prompt.
+      <p>Also a new <samp><span class="command">less</span></samp>
+      buffer was created with nothing in it<small class=
+      "dots">...</small> (presumably this holds the output of
+      <samp><span class="command">less</span></samp>).</p>
 
-     <br><dt>Eshell does not delete <samp><span class="file">*Help*</span></samp> buffers in XEmacs 21.1.8+<dd>
-In XEmacs 21.1.8, the <samp><span class="file">*Help*</span></samp> buffer has been renamed such that
-multiple instances of the <samp><span class="file">*Help*</span></samp> buffer can exist.
+      <p>If <samp><span class="command">less.exe</span></samp> is
+      invoked from the Eshell command line, the expected output is
+      written to the buffer.</p>
 
-     <br><dt>Pcomplete sometimes gets stuck<dd>
-You press &lt;TAB&gt;, but no completions appear, even though the
-directory has matching files.  This behavior is rare.
+      <p>Note that this happens on NT-Emacs 20.6.1 on Windows 2000.
+      The term.el package and the supplied shell both use the
+      <samp><span class="command">cmdproxy</span></samp> program
+      for running shells.<br /></p>
+    </dd>
 
-     <br><dt>&lsquo;<samp><span class="samp">grep python $&lt;rpm -qa&gt;</span></samp>&rsquo; doesn't work, but using &lsquo;<samp><span class="samp">*grep</span></samp>&rsquo; does<dd>
-This happens because the <code>grep</code> Lisp function returns immediately,
-and then the asynchronous <samp><span class="command">grep</span></samp> process expects to examine the
-temporary file, which has since been deleted.
+    <dt>Implement &lsquo;<samp><span class=
+    "samp">-r</span></samp>&rsquo;, &lsquo;<samp><span class=
+    "samp">-n</span></samp>&rsquo; and &lsquo;<samp><span class=
+    "samp">-s</span></samp>&rsquo; switches for <samp><span class=
+    "command">cp</span></samp><br /></dt>
 
-     <br><dt>Problem with C-r repeating text<dd>
-If the text <em>before point</em> reads "./run", and you type <kbd>C-r r u
-n</kbd>, it will repeat the line for every character typed.
+    <dt>Make <kbd>M-5 M-x eshell</kbd> switch to
+    &ldquo;*eshell&lt;5&gt;*&rdquo;, creating if need be<br /></dt>
 
-     <br><dt>Backspace doesn't scroll back after continuing (in smart mode)<dd>
-Hitting space during a process invocation, such as <samp><span class="command">make</span></samp>, will
-cause it to track the bottom of the output; but backspace no longer
-scrolls back.
+    <dt>&lsquo;<samp><span class="samp">mv</span> <var>dir</var>
+    <var>file</var><span class="samp">.tar</span></samp>&rsquo;
+    does not remove directories</dt>
 
-     <br><dt>It's not possible to fully <code>unload-feature</code> Eshell
-<br><dt>Menu support was removed, but never put back
-<br><dt>Using C-p and C-n with rebind gets into a locked state<dd>
-This happened a few times in Emacs 21, but has been unreproducible
-since.
+    <dd>This is because the tar option &ndash;remove-files doesn't
+    do so. Should it be Eshell's job?<br /></dd>
 
-     <br><dt>If an interactive process is currently running, <kbd>M-!</kbd> doesn't work
-<br><dt>Use a timer instead of <code>sleep-for</code> when killing child processes
-<br><dt>Piping to a Lisp function is not supported<dd>
-Make it so that the Lisp command on the right of the pipe is repeatedly
-called with the input strings as arguments.  This will require changing
-<code>eshell-do-pipeline</code> to handle non-process targets.
+    <dt>Bind <code>standard-output</code> and
+    <code>standard-error</code></dt>
 
-     <br><dt>Input redirection is not supported<dd>
-See the above entry.
+    <dd>This would be so that if a Lisp function calls
+    <code>print</code>, everything will happen as it should (albeit
+    slowly).<br /></dd>
 
-     <br><dt>Problem running <samp><span class="command">less</span></samp> without arguments on Windows<dd>
-The result in the Eshell buffer is:
+    <dt>When an extension module fails to load,
+    &lsquo;<samp><span class="samp">cd /</span></samp>&rsquo; gives
+    a Lisp error<br /></dt>
 
-     <pre class="example">          Spawning child process: invalid argument
-</pre>
-     <p>Also a new <samp><span class="command">less</span></samp> buffer was created with nothing in it<small class="dots">...</small>
-(presumably this holds the output of <samp><span class="command">less</span></samp>).
+    <dt>If a globbing pattern returns one match, should it be a
+    list?<br /></dt>
 
-     <p>If <samp><span class="command">less.exe</span></samp> is invoked from the Eshell command line, the
-expected output is written to the buffer.
+    <dt>Make sure syntax table is correct in Eshell mode</dt>
 
-     <p>Note that this happens on NT-Emacs 20.6.1 on Windows 2000. The term.el
-package and the supplied shell both use the <samp><span class="command">cmdproxy</span></samp> program
-for running shells.
+    <dd>So that <kbd>M-DEL</kbd> acts in a predictable manner,
+    etc.<br /></dd>
 
-     <br><dt>Implement &lsquo;<samp><span class="samp">-r</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-n</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-s</span></samp>&rsquo; switches for <samp><span class="command">cp</span></samp>
-<br><dt>Make <kbd>M-5 M-x eshell</kbd> switch to &ldquo;*eshell&lt;5&gt;*&rdquo;, creating if need be
-<br><dt>&lsquo;<samp><span class="samp">mv </span><var>dir</var> <var>file</var><span class="samp">.tar</span></samp>&rsquo; does not remove directories<dd>
-This is because the tar option &ndash;remove-files doesn't do so.  Should it
-be Eshell's job?
+    <dt>Allow all Eshell buffers to share the same history and
+    list-dir<br /></dt>
 
-     <br><dt>Bind <code>standard-output</code> and <code>standard-error</code><dd>
-This would be so that if a Lisp function calls <code>print</code>, everything
-will happen as it should (albeit slowly).
+    <dt>There is a problem with script commands that output to
+    <samp><span class="file">/dev/null</span></samp></dt>
 
-     <br><dt>When an extension module fails to load, &lsquo;<samp><span class="samp">cd /</span></samp>&rsquo; gives a Lisp error
-<br><dt>If a globbing pattern returns one match, should it be a list?
-<br><dt>Make sure syntax table is correct in Eshell mode<dd>
-So that <kbd>M-DEL</kbd> acts in a predictable manner, etc.
+    <dd>If a script file, somewhere in the middle, uses
+    &lsquo;<samp><span class="samp">&gt;
+    /dev/null</span></samp>&rsquo;, output from all subsequent
+    commands is swallowed.<br /></dd>
 
-     <br><dt>Allow all Eshell buffers to share the same history and list-dir
-<br><dt>There is a problem with script commands that output to <samp><span class="file">/dev/null</span></samp><dd>
-If a script file, somewhere in the middle, uses &lsquo;<samp><span class="samp">&gt; /dev/null</span></samp>&rsquo;,
-output from all subsequent commands is swallowed.
+    <dt>Split up parsing of text after &lsquo;<samp><span class=
+    "samp">$</span></samp>&rsquo; in <samp><span class=
+    "file">esh-var.el</span></samp></dt>
 
-     <br><dt>Split up parsing of text after &lsquo;<samp><span class="samp">$</span></samp>&rsquo; in <samp><span class="file">esh-var.el</span></samp><dd>
-Make it similar to the way that <samp><span class="file">esh-arg.el</span></samp> is structured. 
-Then add parsing of &lsquo;<samp><span class="samp">$[?\n]</span></samp>&rsquo;.
+    <dd>Make it similar to the way that <samp><span class=
+    "file">esh-arg.el</span></samp> is structured. Then add parsing
+    of &lsquo;<samp><span class=
+    "samp">$[?\n]</span></samp>&rsquo;.<br /></dd>
 
-     <br><dt>After pressing <kbd>M-RET</kbd>, redisplay before running the next command
-<br><dt>Argument predicates and modifiers should work anywhere in a path<dd>
-     <pre class="example">          /usr/local/src/editors/vim $ vi **/CVS(/)/Root(.)
+    <dt>After pressing <kbd>M-RET</kbd>, redisplay before running
+    the next command<br /></dt>
+
+    <dt>Argument predicates and modifiers should work anywhere in a
+    path</dt>
+
+    <dd>
+      <pre class="example">
+          /usr/local/src/editors/vim $ vi **/CVS(/)/Root(.)
           Invalid regexp: "Unmatched ( or \\("
 </pre>
-     <p>With <samp><span class="command">zsh</span></samp>, the glob above expands to all files named
-<samp><span class="file">Root</span></samp> in directories named <samp><span class="file">CVS</span></samp>.
 
-     <br><dt>Typing &lsquo;<samp><span class="samp">echo ${locate locate}/bin&lt;TAB&gt;</span></samp>&rsquo; results in a Lisp error<dd>
-Perhaps it should interpolate all permutations, and make that the
-globbing result, since otherwise hitting return here will result in
-&ldquo;(list of filenames)/bin&rdquo;, which is never valuable.  Thus, one could
-<samp><span class="command">cat</span></samp> only C backup files by using &lsquo;<samp><span class="samp">ls ${identity *.c}~</span></samp>&rsquo;. 
-In that case, having an alias command name <samp><span class="command">glob</span></samp> for
-<samp><span class="command">identity</span></samp> would be useful.
+      <p>With <samp><span class="command">zsh</span></samp>, the
+      glob above expands to all files named <samp><span class=
+      "file">Root</span></samp> in directories named
+      <samp><span class="file">CVS</span></samp>.<br /></p>
+    </dd>
 
-     <br><dt>Once symbolic mode is supported for <samp><span class="command">umask</span></samp>, implement <samp><span class="command">chmod</span></samp> in Lisp
-<br><dt>Create <code>eshell-expand-file-name</code><dd>
-This would use a data table to transform things such as &lsquo;<samp><span class="samp">~+</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">...</span></samp>&rsquo;, etc.
+    <dt>Typing &lsquo;<samp><span class="samp">echo ${locate
+    locate}/bin&lt;TAB&gt;</span></samp>&rsquo; results in a Lisp
+    error</dt>
 
-     <br><dt>Abstract <samp><span class="file">em-smart.el</span></samp> into <samp><span class="file">smart-scroll.el</span></samp><dd>
-It only really needs: to be hooked onto the output filter and the
-pre-command hook, and to have the input-end and input-start markers. 
-And to know whether the last output group was &ldquo;successful.&rdquo;
+    <dd>Perhaps it should interpolate all permutations, and make
+    that the globbing result, since otherwise hitting return here
+    will result in &ldquo;(list of filenames)/bin&rdquo;, which is
+    never valuable. Thus, one could <samp><span class=
+    "command">cat</span></samp> only C backup files by using
+    &lsquo;<samp><span class="samp">ls ${identity
+    *.c}~</span></samp>&rsquo;. In that case, having an alias
+    command name <samp><span class="command">glob</span></samp> for
+    <samp><span class="command">identity</span></samp> would be
+    useful.<br /></dd>
 
-     <br><dt>Allow for fully persisting the state of Eshell<dd>
-This would include: variables, history, buffer, input, dir stack, etc.
+    <dt>Once symbolic mode is supported for <samp><span class=
+    "command">umask</span></samp>, implement <samp><span class=
+    "command">chmod</span></samp> in Lisp<br /></dt>
 
-     <br><dt>Implement D as an argument predicate<dd>
-It means that files beginning with a dot should be included in the
-glob match.
+    <dt>Create <code>eshell-expand-file-name</code></dt>
 
-     <br><dt>A comma in a predicate list should mean OR<dd>
-At the moment, this is not supported.
+    <dd>This would use a data table to transform things such as
+    &lsquo;<samp><span class="samp">~+</span></samp>&rsquo;,
+    &lsquo;<samp><span class="samp">...</span></samp>&rsquo;,
+    etc.<br /></dd>
 
-     <br><dt>Error if a glob doesn't expand due to a predicate<dd>
-An error should be generated only if <code>eshell-error-if-no-glob</code> is
-non-<code>nil</code>.
+    <dt>Abstract <samp><span class="file">em-smart.el</span></samp>
+    into <samp><span class=
+    "file">smart-scroll.el</span></samp></dt>
 
-     <br><dt>&lsquo;<samp><span class="samp">(+ RET SPC TAB</span></samp>&rsquo; does not cause <code>indent-according-to-mode</code> to occur
-<br><dt>Create <code>eshell-auto-accumulate-list</code><dd>
-This is a list of commands for which, if the user presses <kbd>RET</kbd>, the
-text is staged as the next Eshell command, rather than being sent to the
-current interactive process.
+    <dd>It only really needs: to be hooked onto the output filter
+    and the pre-command hook, and to have the input-end and
+    input-start markers. And to know whether the last output group
+    was &ldquo;successful.&rdquo;<br /></dd>
 
-     <br><dt>Display file and line number if an error occurs in a script
-<br><dt><samp><span class="command">wait</span></samp> doesn't work with process ids at the moment
-<br><dt>Enable the direct-to-process input code in <samp><span class="file">em-term.el</span></samp>
-<br><dt>Problem with repeating &lsquo;<samp><span class="samp">echo ${find /tmp}</span></samp>&rsquo;<dd>
-With smart display active, if <kbd>RET</kbd> is held down, after a while it
-can't keep up anymore and starts outputting blank lines.  It only
-happens if an asynchronous process is involved<small class="dots">...</small>
+    <dt>Allow for fully persisting the state of Eshell</dt>
 
-     <p>I think the problem is that <code>eshell-send-input</code> is resetting the
-input target location, so that if the asynchronous process is not done
-by the time the next <kbd>RET</kbd> is received, the input processor thinks
-that the input is meant for the process; which, when smart display is
-enabled, will be the text of the last command line!  That is a bug in
-itself.
+    <dd>This would include: variables, history, buffer, input, dir
+    stack, etc.<br /></dd>
 
-     <p>In holding down <kbd>RET</kbd> while an asynchronous process is running,
-there will be a point in between termination of the process, and the
-running of <code>eshell-post-command-hook</code>, which would cause
-<code>eshell-send-input</code> to call <code>eshell-copy-old-input</code>, and then
-process that text as a command to be run after the process.  Perhaps
-there should be a way of killing pending input between the death of the
-process, and the <code>post-command-hook</code>.
+    <dt>Implement D as an argument predicate</dt>
 
-     <br><dt>Allow for a more aggressive smart display mode<dd>
-Perhaps toggled by a command, that makes each output block a smart
-display block.
+    <dd>It means that files beginning with a dot should be included
+    in the glob match.<br /></dd>
 
-     <br><dt>Create more meta variables<dd>
-          <dl>
-<dt>&lsquo;<samp><span class="samp">$!</span></samp>&rsquo;<dd>The reason for the failure of the last disk command, or the text of the
-last Lisp error.
+    <dt>A comma in a predicate list should mean OR</dt>
 
-          <br><dt>&lsquo;<samp><span class="samp">$=</span></samp>&rsquo;<dd>A special associate array, which can take references of the form
-&lsquo;<samp><span class="samp">$=[REGEXP]</span></samp>&rsquo;.  It indexes into the directory ring. 
-</dl>
+    <dd>At the moment, this is not supported.<br /></dd>
 
-     <br><dt>Eshell scripts can't execute in the background
-<br><dt>Support zsh's &ldquo;Parameter Expansion&rdquo; syntax, i.e. &lsquo;<samp><span class="samp">${</span><var>name</var><span class="samp">:-</span><var>val</var><span class="samp">}</span></samp>&rsquo;
-<br><dt>Write an <samp><span class="command">info</span></samp> alias that can take arguments<dd>
-So that the user can enter &lsquo;<samp><span class="samp">info chmod</span></samp>&rsquo;, for example.
+    <dt>Error if a glob doesn't expand due to a predicate</dt>
 
-     <br><dt>Create a mode <code>eshell-browse</code><dd>
-It would treat the Eshell buffer as a outline.  Collapsing the outline
-hides all of the output text.  Collapsing again would show only the
-first command run in each directory
+    <dd>An error should be generated only if
+    <code>eshell-error-if-no-glob</code> is
+    non-<code>nil</code>.<br /></dd>
 
-     <br><dt>Allow other revisions of a file to be referenced using &lsquo;<samp><span class="samp">file{rev}</span></samp>&rsquo;<dd>
-This would be expanded by <code>eshell-expand-file-name</code> (see above).
+    <dt>&lsquo;<samp><span class="samp">(+ RET SPC
+    TAB</span></samp>&rsquo; does not cause
+    <code>indent-according-to-mode</code> to occur<br /></dt>
 
-     <br><dt>Print &ldquo;You have new mail&rdquo; when the &ldquo;Mail&rdquo; icon is turned on
-<br><dt>Implement <kbd>M-|</kbd> for Eshell
-<br><dt>Implement input redirection<dd>
-If it's a Lisp function, input redirection implies <samp><span class="command">xargs</span></samp> (in a
-way<small class="dots">...</small>).  If input redirection is added, also update the
-<code>file-name-quote-list</code>, and the delimiter list.
+    <dt>Create <code>eshell-auto-accumulate-list</code></dt>
 
-     <br><dt>Allow &lsquo;<samp><span class="samp">#&lt;</span><var>word</var> <var>arg</var><span class="samp">&gt;</span></samp>&rsquo; as a generic syntax<dd>
-With the handling of <em>word</em> specified by an
-<code>eshell-special-alist</code>.
+    <dd>This is a list of commands for which, if the user presses
+    <kbd>RET</kbd>, the text is staged as the next Eshell command,
+    rather than being sent to the current interactive
+    process.<br /></dd>
 
-     <br><dt>In <code>eshell-veal-using-options</code>, allow a <code>:complete</code> tag<dd>
-It would be used to provide completion rules for that command.  Then the
-macro will automagically define the completion function.
+    <dt>Display file and line number if an error occurs in a
+    script<br /></dt>
 
-     <br><dt>For <code>eshell-command-on-region</code>, apply redirections to the result<dd>
-So that &lsquo;<samp><span class="samp">+ &gt; 'blah</span></samp>&rsquo; would cause the result of the <code>+</code> (using
-input from the current region) to be inserting into the symbol
-<code>blah</code>.
+    <dt><samp><span class="command">wait</span></samp> doesn't work
+    with process ids at the moment<br /></dt>
 
-     <p>If an external command is being invoked, the input is sent as standard
-input, as if a &lsquo;<samp><span class="samp">cat &lt;region&gt; |</span></samp>&rsquo; had been invoked.
+    <dt>Enable the direct-to-process input code in
+    <samp><span class="file">em-term.el</span></samp><br /></dt>
 
-     <p>If a Lisp command, or an alias, is invoked, then if the line has no
-newline characters, it is divided by whitespace and passed as arguments
-to the Lisp function.  Otherwise, it is divided at the newline
-characters.  Thus, invoking <code>+</code> on a series of numbers will add
-them; <code>min</code> would display the smallest figure, etc.
+    <dt>Problem with repeating &lsquo;<samp><span class="samp">echo
+    ${find /tmp}</span></samp>&rsquo;</dt>
 
-     <br><dt>Write <code>eshell-script-mode</code> as a minor mode<dd>
-It would provide syntax, abbrev, highlighting and indenting support like
-<code>emacs-lisp-mode</code> and <code>shell-mode</code>.
+    <dd>
+      With smart display active, if <kbd>RET</kbd> is held down,
+      after a while it can't keep up anymore and starts outputting
+      blank lines. It only happens if an asynchronous process is
+      involved<small class="dots">...</small>
 
-     <br><dt>In the history mechanism, finish the <samp><span class="command">bash</span></samp>-style support<dd>
-This means &lsquo;<samp><span class="samp">!n</span></samp>&rsquo;, &lsquo;<samp><span class="samp">!#</span></samp>&rsquo;, &lsquo;<samp><span class="samp">!:%</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">!:1-</span></samp>&rsquo; as separate
-from &lsquo;<samp><span class="samp">!:1*</span></samp>&rsquo;.
+      <p>I think the problem is that <code>eshell-send-input</code>
+      is resetting the input target location, so that if the
+      asynchronous process is not done by the time the next
+      <kbd>RET</kbd> is received, the input processor thinks that
+      the input is meant for the process; which, when smart display
+      is enabled, will be the text of the last command line! That
+      is a bug in itself.</p>
 
-     <br><dt>Support the -n command line option for <samp><span class="command">history</span></samp>
-<br><dt>Implement <samp><span class="command">fc</span></samp> in Lisp
-<br><dt>Specifying a frame as a redirection target should imply the currently active window's buffer
-<br><dt>Implement &lsquo;<samp><span class="samp">&gt;</span><var>func-or-func-list</var></samp>&rsquo;<dd>
-This would allow for an &ldquo;output translators&rdquo;, that take a function to
-modify output with, and a target.  Devise a syntax that works well with
-pipes, and can accommodate multiple functions (i.e., &lsquo;<samp><span class="samp">&gt;'(upcase
-regexp-quote)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">&gt;'upcase</span></samp>&rsquo;).
+      <p>In holding down <kbd>RET</kbd> while an asynchronous
+      process is running, there will be a point in between
+      termination of the process, and the running of
+      <code>eshell-post-command-hook</code>, which would cause
+      <code>eshell-send-input</code> to call
+      <code>eshell-copy-old-input</code>, and then process that
+      text as a command to be run after the process. Perhaps there
+      should be a way of killing pending input between the death of
+      the process, and the
+      <code>post-command-hook</code>.<br /></p>
+    </dd>
 
-     <br><dt>Allow Eshell to read/write to/from standard input and output<dd>
-This would be optional, rather than always using the Eshell buffer. 
-This would allow it to be run from the command line (perhaps).
+    <dt>Allow for a more aggressive smart display mode</dt>
 
-     <br><dt>Write a <samp><span class="command">help</span></samp> command<dd>
-It would call subcommands with <samp><span class="option">--help</span></samp>, or <samp><span class="option">-h</span></samp> or
-<samp><span class="option">/?</span></samp>, as appropriate.
+    <dd>Perhaps toggled by a command, that makes each output block
+    a smart display block.<br /></dd>
 
-     <br><dt>Implement <samp><span class="command">stty</span></samp> in Lisp
-<br><dt>Support <samp><span class="command">rc</span></samp>'s matching operator, e.g. &lsquo;<samp><span class="samp">~ (</span><var>list</var><span class="samp">) </span><var>regexp</var></samp>&rsquo;
-<br><dt>Implement <samp><span class="command">bg</span></samp> and <samp><span class="command">fg</span></samp> as editors of <code>eshell-process-list</code><dd>
-Using <samp><span class="command">bg</span></samp> on a process that is already in the background does
-nothing.  Specifying redirection targets replaces (or adds) to the list
-current being used.
+    <dt>Create more meta variables</dt>
 
-     <br><dt>Have <samp><span class="command">jobs</span></samp> print only the processes for the current shell
-<br><dt>How can Eshell learn if a background process has requested input?
-<br><dt>Support &lsquo;<samp><span class="samp">2&gt;&amp;1</span></samp>&rsquo; and &lsquo;<samp><span class="samp">&gt;&amp;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">2&gt;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">|&amp;</span></samp>&rsquo;<dd>
-The syntax table for parsing these should be customizable, such that the
-user could change it to use rc syntax: &lsquo;<samp><span class="samp">&gt;[2=1]</span></samp>&rsquo;.
+    <dd>
+      <dl>
+        <dt>&lsquo;<samp><span class=
+        "samp">$!</span></samp>&rsquo;</dt>
 
-     <br><dt>Allow &lsquo;<samp><span class="samp">$_[-1]</span></samp>&rsquo;, which would indicate the last element of the array
-<br><dt>Make &lsquo;<samp><span class="samp">$x[*]</span></samp>&rsquo; equal to listing out the full contents of &lsquo;<samp><span class="samp">x</span></samp>&rsquo;<dd>
-Return them as a list, so that &lsquo;<samp><span class="samp">$_[*]</span></samp>&rsquo; is all the arguments of the
-last command.
+        <dd>The reason for the failure of the last disk command, or
+        the text of the last Lisp error.<br /></dd>
 
-     <br><dt>Copy ANSI code handling from <samp><span class="file">term.el</span></samp> into <samp><span class="file">em-term.el</span></samp><dd>
-Make it possible for the user to send char-by-char to the underlying
-process.  Ultimately, I should be able to move away from using term.el
-altogether, since everything but the ANSI code handling is already part
-of Eshell.  Then, things would work correctly on MS-Windows as well
-(which doesn't have <samp><span class="file">/bin/sh</span></samp>, although <samp><span class="file">term.el</span></samp> tries to use
-it).
+        <dt>&lsquo;<samp><span class=
+        "samp">$=</span></samp>&rsquo;</dt>
 
-     <br><dt>Make the shell spawning commands be visual<dd>
-That is, make (<samp><span class="command">su</span></samp>, <samp><span class="command">bash</span></samp>, <samp><span class="command">telnet</span></samp>,
-<samp><span class="command">rlogin</span></samp>, <samp><span class="command">rsh</span></samp>, etc.) be part of
-<code>eshell-visual-commands</code>.  The only exception is if the shell is
-being used to invoke a single command.  Then, the behavior should be
-based on what that command is.
+        <dd>A special associate array, which can take references of
+        the form &lsquo;<samp><span class=
+        "samp">$=[REGEXP]</span></samp>&rsquo;. It indexes into the
+        directory ring.</dd>
+      </dl><br />
+    </dd>
 
-     <br><dt>Create a smart viewing command named <samp><span class="command">open</span></samp><dd>
-This would search for some way to open its argument (similar to opening
-a file in the Windows Explorer).
+    <dt>Eshell scripts can't execute in the background<br /></dt>
 
-     <br><dt>Alias <samp><span class="command">read</span></samp> to be the same as <samp><span class="command">open</span></samp>, only read-only
-<br><dt>Write a <samp><span class="command">tail</span></samp> command which uses <code>view-file</code><dd>
-It would move point to the end of the buffer, and then turns on
-auto-revert mode in that buffer at frequent intervals&mdash;and a
-<samp><span class="command">head</span></samp> alias which assumes an upper limit of
-<code>eshell-maximum-line-length</code> characters per line.
+    <dt>Support zsh's &ldquo;Parameter Expansion&rdquo; syntax,
+    i.e. &lsquo;<samp><span class=
+    "samp">${</span><var>name</var><span class=
+    "samp">:-</span><var>val</var><span class=
+    "samp">}</span></samp>&rsquo;<br /></dt>
 
-     <br><dt>Make <samp><span class="command">dgrep</span></samp> load <code>dired</code>, mark everything, then invoke <code>dired-do-search</code>
-<br><dt>Write mesh.c<dd>
-This would run Emacs with the appropriate arguments to invoke Eshell
-only.  That way, it could be listed as a login shell.
+    <dt>Write an <samp><span class="command">info</span></samp>
+    alias that can take arguments</dt>
 
-     <br><dt>Use an intangible <code>PS2</code> string for multi-line input prompts
-<br><dt>Auto-detect when a command is visual, by checking <code>TERMCAP</code> usage
-<br><dt>The first keypress after <kbd>M-x watson</kbd> triggers `eshell-send-input'
-<br><dt>Make <kbd>/</kbd> electric<dd>
-So that it automatically expands and corrects pathnames.  Or make
-pathname completion for Pcomplete auto-expand &lsquo;<samp><span class="samp">/u/i/std&lt;TAB&gt;</span></samp>&rsquo; to
-&lsquo;<samp><span class="samp">/usr/include/std&lt;TAB&gt;</span></samp>&rsquo;.
+    <dd>So that the user can enter &lsquo;<samp><span class=
+    "samp">info chmod</span></samp>&rsquo;, for example.<br /></dd>
 
-     <br><dt>Write the <samp><span class="command">pushd</span></samp> stack to disk along with <code>last-dir-ring</code>
-<br><dt>Add options to <code>eshell/cat</code> which would allow it to sort and uniq
-<br><dt>Implement <samp><span class="command">wc</span></samp> in Lisp<dd>
-Add support for counting sentences, paragraphs, pages, etc.
+    <dt>Create a mode <code>eshell-browse</code></dt>
 
-     <br><dt>Once piping is added, implement <samp><span class="command">sort</span></samp> and <samp><span class="command">uniq</span></samp> in Lisp
-<br><dt>Implement <samp><span class="command">touch</span></samp> in Lisp
-<br><dt>Implement <samp><span class="command">comm</span></samp> in Lisp
-<br><dt>Implement an <samp><span class="command">epatch</span></samp> command in Lisp<dd>
-This would call <code>ediff-patch-file</code>, or <code>ediff-patch-buffer</code>,
-depending on its argument.
+    <dd>It would treat the Eshell buffer as a outline. Collapsing
+    the outline hides all of the output text. Collapsing again
+    would show only the first command run in each
+    directory<br /></dd>
 
-     <br><dt>Have an option such that &lsquo;<samp><span class="samp">ls -l</span></samp>&rsquo; generates a dired buffer
-<br><dt>Write a version of <samp><span class="command">xargs</span></samp> based on command rewriting<dd>
-That is, &lsquo;<samp><span class="samp">find X | xargs Y</span></samp>&rsquo; would be indicated using &lsquo;<samp><span class="samp">Y
-${find X}</span></samp>&rsquo;.  Maybe <code>eshell-do-pipelines</code> could be changed to
-perform this on-thy-fly rewriting.
+    <dt>Allow other revisions of a file to be referenced using
+    &lsquo;<samp><span class=
+    "samp">file{rev}</span></samp>&rsquo;</dt>
 
-     <br><dt>Write an alias for <samp><span class="command">less</span></samp> that brings up a <code>view-mode</code> buffer<dd>
-Such that the user can press &lt;SPC&gt; and &lt;DEL&gt;, and then &lt;q&gt;
-to return to Eshell.  It would be equivalent to:
-&lsquo;<samp><span class="samp">X &gt; #&lt;buffer Y&gt;; view-buffer #&lt;buffer Y&gt;</span></samp>&rsquo;.
+    <dd>This would be expanded by
+    <code>eshell-expand-file-name</code> (see above).<br /></dd>
 
-     <br><dt>Make <code>eshell-mode</code> as much a full citizen as <code>shell-mode</code><dd>
-Everywhere in Emacs where <code>shell-mode</code> is specially noticed, add
-<code>eshell-mode</code> there.
+    <dt>Print &ldquo;You have new mail&rdquo; when the
+    &ldquo;Mail&rdquo; icon is turned on<br /></dt>
 
-     <br><dt>Permit the umask to be selectively set on a <samp><span class="command">cp</span></samp> target
-<br><dt>Problem using <kbd>M-x eshell</kbd> after using <code>eshell-command</code><dd>
-If the first thing that I do after entering Emacs is to run
-<code>eshell-command</code> and invoke <samp><span class="command">ls</span></samp>, and then use <kbd>M-x
-eshell</kbd>, it doesn't display anything.
+    <dt>Implement <kbd>M-|</kbd> for Eshell<br /></dt>
 
-     <br><dt><kbd>M-RET</kbd> during a long command (using smart display) doesn't work<dd>
-Since it keeps the cursor up where the command was invoked.
+    <dt>Implement input redirection</dt>
 
-   </dl>
+    <dd>If it's a Lisp function, input redirection implies
+    <samp><span class="command">xargs</span></samp> (in a
+    way<small class="dots">...</small>). If input redirection is
+    added, also update the <code>file-name-quote-list</code>, and
+    the delimiter list.<br /></dd>
 
-   </body></html>
+    <dt>Allow &lsquo;<samp><span class=
+    "samp">#&lt;</span><var>word</var> <var>arg</var><span class=
+    "samp">&gt;</span></samp>&rsquo; as a generic syntax</dt>
 
+    <dd>With the handling of <em>word</em> specified by an
+    <code>eshell-special-alist</code>.<br /></dd>
+
+    <dt>In <code>eshell-veal-using-options</code>, allow a
+    <code>:complete</code> tag</dt>
+
+    <dd>It would be used to provide completion rules for that
+    command. Then the macro will automagically define the
+    completion function.<br /></dd>
+
+    <dt>For <code>eshell-command-on-region</code>, apply
+    redirections to the result</dt>
+
+    <dd>
+      So that &lsquo;<samp><span class="samp">+ &gt;
+      'blah</span></samp>&rsquo; would cause the result of the
+      <code>+</code> (using input from the current region) to be
+      inserting into the symbol <code>blah</code>.
+
+      <p>If an external command is being invoked, the input is sent
+      as standard input, as if a &lsquo;<samp><span class=
+      "samp">cat &lt;region&gt; |</span></samp>&rsquo; had been
+      invoked.</p>
+
+      <p>If a Lisp command, or an alias, is invoked, then if the
+      line has no newline characters, it is divided by whitespace
+      and passed as arguments to the Lisp function. Otherwise, it
+      is divided at the newline characters. Thus, invoking
+      <code>+</code> on a series of numbers will add them;
+      <code>min</code> would display the smallest figure,
+      etc.<br /></p>
+    </dd>
+
+    <dt>Write <code>eshell-script-mode</code> as a minor mode</dt>
+
+    <dd>It would provide syntax, abbrev, highlighting and indenting
+    support like <code>emacs-lisp-mode</code> and
+    <code>shell-mode</code>.<br /></dd>
+
+    <dt>In the history mechanism, finish the <samp><span class=
+    "command">bash</span></samp>-style support</dt>
+
+    <dd>This means &lsquo;<samp><span class=
+    "samp">!n</span></samp>&rsquo;, &lsquo;<samp><span class=
+    "samp">!#</span></samp>&rsquo;, &lsquo;<samp><span class=
+    "samp">!:%</span></samp>&rsquo;, and &lsquo;<samp><span class=
+    "samp">!:1-</span></samp>&rsquo; as separate from
+    &lsquo;<samp><span class=
+    "samp">!:1*</span></samp>&rsquo;.<br /></dd>
+
+    <dt>Support the -n command line option for <samp><span class=
+    "command">history</span></samp><br /></dt>
+
+    <dt>Implement <samp><span class="command">fc</span></samp> in
+    Lisp<br /></dt>
+
+    <dt>Specifying a frame as a redirection target should imply the
+    currently active window's buffer<br /></dt>
+
+    <dt>Implement &lsquo;<samp><span class=
+    "samp">&gt;</span><var>func-or-func-list</var></samp>&rsquo;</dt>
+
+    <dd>This would allow for an &ldquo;output translators&rdquo;,
+    that take a function to modify output with, and a target.
+    Devise a syntax that works well with pipes, and can accommodate
+    multiple functions (i.e., &lsquo;<samp><span class=
+    "samp">&gt;'(upcase regexp-quote)</span></samp>&rsquo; or
+    &lsquo;<samp><span class=
+    "samp">&gt;'upcase</span></samp>&rsquo;).<br /></dd>
+
+    <dt>Allow Eshell to read/write to/from standard input and
+    output</dt>
+
+    <dd>This would be optional, rather than always using the Eshell
+    buffer. This would allow it to be run from the command line
+    (perhaps).<br /></dd>
+
+    <dt>Write a <samp><span class="command">help</span></samp>
+    command</dt>
+
+    <dd>It would call subcommands with <samp><span class=
+    "option">--help</span></samp>, or <samp><span class=
+    "option">-h</span></samp> or <samp><span class=
+    "option">/?</span></samp>, as appropriate.<br /></dd>
+
+    <dt>Implement <samp><span class="command">stty</span></samp> in
+    Lisp<br /></dt>
+
+    <dt>Support <samp><span class="command">rc</span></samp>'s
+    matching operator, e.g. &lsquo;<samp><span class="samp">~
+    (</span><var>list</var><span class="samp">)</span>
+    <var>regexp</var></samp>&rsquo;<br /></dt>
+
+    <dt>Implement <samp><span class="command">bg</span></samp> and
+    <samp><span class="command">fg</span></samp> as editors of
+    <code>eshell-process-list</code></dt>
+
+    <dd>Using <samp><span class="command">bg</span></samp> on a
+    process that is already in the background does nothing.
+    Specifying redirection targets replaces (or adds) to the list
+    current being used.<br /></dd>
+
+    <dt>Have <samp><span class="command">jobs</span></samp> print
+    only the processes for the current shell<br /></dt>
+
+    <dt>How can Eshell learn if a background process has requested
+    input?<br /></dt>
+
+    <dt>Support &lsquo;<samp><span class=
+    "samp">2&gt;&amp;1</span></samp>&rsquo; and
+    &lsquo;<samp><span class="samp">&gt;&amp;</span></samp>&rsquo;
+    and &lsquo;<samp><span class="samp">2&gt;</span></samp>&rsquo;
+    and &lsquo;<samp><span class=
+    "samp">|&amp;</span></samp>&rsquo;</dt>
+
+    <dd>The syntax table for parsing these should be customizable,
+    such that the user could change it to use rc syntax:
+    &lsquo;<samp><span class=
+    "samp">&gt;[2=1]</span></samp>&rsquo;.<br /></dd>
+
+    <dt>Allow &lsquo;<samp><span class=
+    "samp">$_[-1]</span></samp>&rsquo;, which would indicate the
+    last element of the array<br /></dt>
+
+    <dt>Make &lsquo;<samp><span class=
+    "samp">$x[*]</span></samp>&rsquo; equal to listing out the full
+    contents of &lsquo;<samp><span class=
+    "samp">x</span></samp>&rsquo;</dt>
+
+    <dd>Return them as a list, so that &lsquo;<samp><span class=
+    "samp">$_[*]</span></samp>&rsquo; is all the arguments of the
+    last command.<br /></dd>
+
+    <dt>Copy ANSI code handling from <samp><span class=
+    "file">term.el</span></samp> into <samp><span class=
+    "file">em-term.el</span></samp></dt>
+
+    <dd>Make it possible for the user to send char-by-char to the
+    underlying process. Ultimately, I should be able to move away
+    from using term.el altogether, since everything but the ANSI
+    code handling is already part of Eshell. Then, things would
+    work correctly on MS-Windows as well (which doesn't have
+    <samp><span class="file">/bin/sh</span></samp>, although
+    <samp><span class="file">term.el</span></samp> tries to use
+    it).<br /></dd>
+
+    <dt>Make the shell spawning commands be visual</dt>
+
+    <dd>That is, make (<samp><span class=
+    "command">su</span></samp>, <samp><span class=
+    "command">bash</span></samp>, <samp><span class=
+    "command">telnet</span></samp>, <samp><span class=
+    "command">rlogin</span></samp>, <samp><span class=
+    "command">rsh</span></samp>, etc.) be part of
+    <code>eshell-visual-commands</code>. The only exception is if
+    the shell is being used to invoke a single command. Then, the
+    behavior should be based on what that command is.<br /></dd>
+
+    <dt>Create a smart viewing command named <samp><span class=
+    "command">open</span></samp></dt>
+
+    <dd>This would search for some way to open its argument
+    (similar to opening a file in the Windows Explorer).<br /></dd>
+
+    <dt>Alias <samp><span class="command">read</span></samp> to be
+    the same as <samp><span class="command">open</span></samp>,
+    only read-only<br /></dt>
+
+    <dt>Write a <samp><span class="command">tail</span></samp>
+    command which uses <code>view-file</code></dt>
+
+    <dd>It would move point to the end of the buffer, and then
+    turns on auto-revert mode in that buffer at frequent
+    intervals&mdash;and a <samp><span class=
+    "command">head</span></samp> alias which assumes an upper limit
+    of <code>eshell-maximum-line-length</code> characters per
+    line.<br /></dd>
+
+    <dt>Make <samp><span class="command">dgrep</span></samp> load
+    <code>dired</code>, mark everything, then invoke
+    <code>dired-do-search</code><br /></dt>
+
+    <dt>Write mesh.c</dt>
+
+    <dd>This would run Emacs with the appropriate arguments to
+    invoke Eshell only. That way, it could be listed as a login
+    shell.<br /></dd>
+
+    <dt>Use an intangible <code>PS2</code> string for multi-line
+    input prompts<br /></dt>
+
+    <dt>Auto-detect when a command is visual, by checking
+    <code>TERMCAP</code> usage<br /></dt>
+
+    <dt>The first keypress after <kbd>M-x watson</kbd> triggers
+    `eshell-send-input'<br /></dt>
+
+    <dt>Make <kbd>/</kbd> electric</dt>
+
+    <dd>So that it automatically expands and corrects pathnames. Or
+    make pathname completion for Pcomplete auto-expand
+    &lsquo;<samp><span class=
+    "samp">/u/i/std&lt;TAB&gt;</span></samp>&rsquo; to
+    &lsquo;<samp><span class=
+    "samp">/usr/include/std&lt;TAB&gt;</span></samp>&rsquo;.<br /></dd>
+
+    <dt>Write the <samp><span class="command">pushd</span></samp>
+    stack to disk along with <code>last-dir-ring</code><br /></dt>
+
+    <dt>Add options to <code>eshell/cat</code> which would allow it
+    to sort and uniq<br /></dt>
+
+    <dt>Implement <samp><span class="command">wc</span></samp> in
+    Lisp</dt>
+
+    <dd>Add support for counting sentences, paragraphs, pages,
+    etc.<br /></dd>
+
+    <dt>Once piping is added, implement <samp><span class=
+    "command">sort</span></samp> and <samp><span class=
+    "command">uniq</span></samp> in Lisp<br /></dt>
+
+    <dt>Implement <samp><span class="command">touch</span></samp>
+    in Lisp<br /></dt>
+
+    <dt>Implement <samp><span class="command">comm</span></samp> in
+    Lisp<br /></dt>
+
+    <dt>Implement an <samp><span class=
+    "command">epatch</span></samp> command in Lisp</dt>
+
+    <dd>This would call <code>ediff-patch-file</code>, or
+    <code>ediff-patch-buffer</code>, depending on its
+    argument.<br /></dd>
+
+    <dt>Have an option such that &lsquo;<samp><span class="samp">ls
+    -l</span></samp>&rsquo; generates a dired buffer<br /></dt>
+
+    <dt>Write a version of <samp><span class=
+    "command">xargs</span></samp> based on command rewriting</dt>
+
+    <dd>That is, &lsquo;<samp><span class="samp">find X | xargs
+    Y</span></samp>&rsquo; would be indicated using
+    &lsquo;<samp><span class="samp">Y ${find
+    X}</span></samp>&rsquo;. Maybe <code>eshell-do-pipelines</code>
+    could be changed to perform this on-thy-fly
+    rewriting.<br /></dd>
+
+    <dt>Write an alias for <samp><span class=
+    "command">less</span></samp> that brings up a
+    <code>view-mode</code> buffer</dt>
+
+    <dd>Such that the user can press &lt;SPC&gt; and &lt;DEL&gt;,
+    and then &lt;q&gt; to return to Eshell. It would be equivalent
+    to: &lsquo;<samp><span class="samp">X &gt; #&lt;buffer Y&gt;;
+    view-buffer #&lt;buffer Y&gt;</span></samp>&rsquo;.<br /></dd>
+
+    <dt>Make <code>eshell-mode</code> as much a full citizen as
+    <code>shell-mode</code></dt>
+
+    <dd>Everywhere in Emacs where <code>shell-mode</code> is
+    specially noticed, add <code>eshell-mode</code>
+    there.<br /></dd>
+
+    <dt>Permit the umask to be selectively set on a
+    <samp><span class="command">cp</span></samp> target<br /></dt>
+
+    <dt>Problem using <kbd>M-x eshell</kbd> after using
+    <code>eshell-command</code></dt>
+
+    <dd>If the first thing that I do after entering Emacs is to run
+    <code>eshell-command</code> and invoke <samp><span class=
+    "command">ls</span></samp>, and then use <kbd>M-x eshell</kbd>,
+    it doesn't display anything.<br /></dd>
+
+    <dt><kbd>M-RET</kbd> during a long command (using smart
+    display) doesn't work</dt>
+
+    <dd>Since it keeps the cursor up where the command was
+    invoked.</dd>
+  </dl>
+</body>
+</html>

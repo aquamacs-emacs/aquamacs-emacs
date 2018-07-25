@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,282 +19,482 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Standard Errors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Standard Errors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Standard Errors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Standard-Keymaps.html#Standard-Keymaps" rel="next" title="Standard Keymaps">
-<link href="C-Integer-Types.html#C-Integer-Types" rel="prev" title="C Integer Types">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Standard Errors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Standard Errors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Standard Errors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Standard-Keymaps.html#Standard-Keymaps" rel="next"
+  title="Standard Keymaps" />
+  <link href="C-Integer-Types.html#C-Integer-Types" rel="prev"
+  title="C Integer Types" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Standard-Errors" id="Standard-Errors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Standard-Keymaps.html#Standard-Keymaps"
+    accesskey="n" rel="next">Standard Keymaps</a>, Previous:
+    <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals"
+    accesskey="p" rel="prev">GNU Emacs Internals</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Standard-Errors-1" id="Standard-Errors-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Standard-Errors"></a>
-<div class="header">
-<p>
-Next: <a href="Standard-Keymaps.html#Standard-Keymaps" accesskey="n" rel="next">Standard Keymaps</a>, Previous: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="p" rel="prev">GNU Emacs Internals</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Standard-Errors-1"></a>
-<h2 class="appendix">Appendix F Standard Errors</h2>
-<a name="index-standard-errors"></a>
+  <h2 class="appendix">Appendix F Standard Errors</h2><a name=
+  "index-standard-errors" id="index-standard-errors"></a>
 
-<p>Here is a list of the more important error symbols in standard Emacs, grouped
-by concept.  The list includes each symbol&rsquo;s message and a cross reference
-to a description of how the error can occur.
-</p>
-<p>Each error symbol has an set of parent error conditions that is a
-list of symbols.  Normally this list includes the error symbol itself
-and the symbol <code>error</code>.  Occasionally it includes additional
-symbols, which are intermediate classifications, narrower than
-<code>error</code> but broader than a single error symbol.  For example, all
-the errors in accessing files have the condition <code>file-error</code>.  If
-we do not say here that a certain error symbol has additional error
-conditions, that means it has none.
-</p>
-<p>As a special exception, the error symbol <code>quit</code> does not have the
-condition <code>error</code>, because quitting is not considered an error.
-</p>
-<p>Most of these error symbols are defined in C (mainly <samp>data.c</samp>),
-but some are defined in Lisp.  For example, the file <samp>userlock.el</samp>
-defines the <code>file-locked</code> and <code>file-supersession</code> errors.
-Several of the specialized Lisp libraries distributed with Emacs
-define their own error symbols.  We do not attempt to list of all
-those here.
-</p>
-<p>See <a href="Errors.html#Errors">Errors</a>, for an explanation of how errors are generated and
-handled.
-</p>
-<dl compact="compact">
-<dt><code>error</code></dt>
-<dd><p>The message is &lsquo;<samp>error</samp>&rsquo;.  See <a href="Errors.html#Errors">Errors</a>.
-</p>
-</dd>
-<dt><code>quit</code></dt>
-<dd><p>The message is &lsquo;<samp>Quit</samp>&rsquo;.  See <a href="Quitting.html#Quitting">Quitting</a>.
-</p>
-</dd>
-<dt><code>args-out-of-range</code></dt>
-<dd><p>The message is &lsquo;<samp>Args out of range</samp>&rsquo;.  This happens when trying to
-access an element beyond the range of a sequence, buffer, or other
-container-like object.  See <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>, and
-See <a href="Text.html#Text">Text</a>.
-</p>
-</dd>
-<dt><code>arith-error</code></dt>
-<dd><p>The message is &lsquo;<samp>Arithmetic error</samp>&rsquo;.  This occurs when trying to
-perform integer division by zero.  See <a href="Numeric-Conversions.html#Numeric-Conversions">Numeric Conversions</a>, and
-See <a href="Arithmetic-Operations.html#Arithmetic-Operations">Arithmetic Operations</a>.
-</p>
-</dd>
-<dt><code>beginning-of-buffer</code></dt>
-<dd><p>The message is &lsquo;<samp>Beginning of buffer</samp>&rsquo;.  See <a href="Character-Motion.html#Character-Motion">Character Motion</a>.
-</p>
-</dd>
-<dt><code>buffer-read-only</code></dt>
-<dd><p>The message is &lsquo;<samp>Buffer is read-only</samp>&rsquo;.  See <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>.
-</p>
-</dd>
-<dt><code>circular-list</code></dt>
-<dd><p>The message is &lsquo;<samp>List contains a loop</samp>&rsquo;.  This happens when a
-circular structure is encountered.  See <a href="Circular-Objects.html#Circular-Objects">Circular Objects</a>.
-</p>
-</dd>
-<dt><code>cl-assertion-failed</code></dt>
-<dd><p>The message is &lsquo;<samp>Assertion failed</samp>&rsquo;.  This happens when the
-<code>cl-assert</code> macro fails a test.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/cl/Assertions.html#Assertions">Assertions</a> in <cite>Common Lisp
-Extensions</cite>.
-</p>
-</dd>
-<dt><code>coding-system-error</code></dt>
-<dd><p>The message is &lsquo;<samp>Invalid coding system</samp>&rsquo;.  See <a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">Lisp and Coding Systems</a>.
-</p>
-</dd>
-<dt><code>cyclic-function-indirection</code></dt>
-<dd><p>The message is &lsquo;<samp>Symbol's chain of function indirections contains
-a loop</samp>&rsquo;.  See <a href="Function-Indirection.html#Function-Indirection">Function Indirection</a>.
-</p>
-</dd>
-<dt><code>cyclic-variable-indirection</code></dt>
-<dd><p>The message is &lsquo;<samp>Symbol's chain of variable indirections contains
-a loop</samp>&rsquo;.  See <a href="Variable-Aliases.html#Variable-Aliases">Variable Aliases</a>.
-</p>
-</dd>
-<dt><code>dbus-error</code></dt>
-<dd><p>The message is &lsquo;<samp>D-Bus error</samp>&rsquo;.  This is only defined if Emacs was
-compiled with D-Bus support.  See <a href="../dbus/Errors-and-Events.html#Errors-and-Events">Errors and Events</a> in <cite>D-Bus
-integration in Emacs</cite>.
-</p>
-</dd>
-<dt><code>end-of-buffer</code></dt>
-<dd><p>The message is &lsquo;<samp>End of buffer</samp>&rsquo;.  See <a href="Character-Motion.html#Character-Motion">Character Motion</a>.
-</p>
-</dd>
-<dt><code>end-of-file</code></dt>
-<dd><p>The message is &lsquo;<samp>End of file during parsing</samp>&rsquo;.  Note that this is
-not a subcategory of <code>file-error</code>, because it pertains to the
-Lisp reader, not to file I/O.  See <a href="Input-Functions.html#Input-Functions">Input Functions</a>.
-</p>
-</dd>
-<dt><code>file-already-exists</code></dt>
-<dd><p>This is a subcategory of <code>file-error</code>.  See <a href="Writing-to-Files.html#Writing-to-Files">Writing to Files</a>.
-</p>
-</dd>
-<dt><code>file-date-error</code></dt>
-<dd><p>This is a subcategory of <code>file-error</code>.  It occurs when
-<code>copy-file</code> tries and fails to set the last-modification time of
-the output file.  See <a href="Changing-Files.html#Changing-Files">Changing Files</a>.
-</p>
-</dd>
-<dt><code>file-error</code></dt>
-<dd><p>We do not list the error-strings of this error and its subcategories,
-because the error message is normally constructed from the data items
-alone when the error condition <code>file-error</code> is present.  Thus,
-the error-strings are not very relevant.  However, these error symbols
-do have <code>error-message</code> properties, and if no data is provided,
-the <code>error-message</code> property <em>is</em> used.  See <a href="Files.html#Files">Files</a>.
-</p>
-</dd>
-<dt><code>compression-error</code></dt>
-<dd><p>This is a subcategory of <code>file-error</code>, which results from
-problems handling a compressed file.  See <a href="How-Programs-Do-Loading.html#How-Programs-Do-Loading">How Programs Do Loading</a>.
-</p>
-</dd>
-<dt><code>file-locked</code></dt>
-<dd><p>This is a subcategory of <code>file-error</code>.  See <a href="File-Locks.html#File-Locks">File Locks</a>.
-</p>
-</dd>
-<dt><code>file-supersession</code></dt>
-<dd><p>This is a subcategory of <code>file-error</code>.  See <a href="Modification-Time.html#Modification-Time">Modification Time</a>.
-</p>
-</dd>
-<dt><code>file-notify-error</code></dt>
-<dd><p>This is a subcategory of <code>file-error</code>.  It happens, when a file
-could not be watched for changes.  See <a href="File-Notifications.html#File-Notifications">File Notifications</a>.
-</p>
-</dd>
-<dt><code>ftp-error</code></dt>
-<dd><p>This is a subcategory of <code>file-error</code>, which results from
-problems in accessing a remote file using ftp.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Remote-Files.html#Remote-Files">Remote Files</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-</dd>
-<dt><code>invalid-function</code></dt>
-<dd><p>The message is &lsquo;<samp>Invalid function</samp>&rsquo;.  See <a href="Function-Indirection.html#Function-Indirection">Function Indirection</a>.
-</p>
-</dd>
-<dt><code>invalid-read-syntax</code></dt>
-<dd><p>The message is &lsquo;<samp>Invalid read syntax</samp>&rsquo;.  See <a href="Printed-Representation.html#Printed-Representation">Printed Representation</a>.
-</p>
-</dd>
-<dt><code>invalid-regexp</code></dt>
-<dd><p>The message is &lsquo;<samp>Invalid regexp</samp>&rsquo;.  See <a href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>.
-</p>
-</dd>
-<dt><code>mark-inactive</code></dt>
-<dd><p>The message is &lsquo;<samp>The mark is not active now</samp>&rsquo;.  See <a href="The-Mark.html#The-Mark">The Mark</a>.
-</p>
-</dd>
-<dt><code>no-catch</code></dt>
-<dd><p>The message is &lsquo;<samp>No catch for tag</samp>&rsquo;.  See <a href="Catch-and-Throw.html#Catch-and-Throw">Catch and Throw</a>.
-</p>
+  <p>Here is a list of the more important error symbols in standard
+  Emacs, grouped by concept. The list includes each symbol&rsquo;s
+  message and a cross reference to a description of how the error
+  can occur.</p>
 
-</dd>
-<dt><code>scan-error</code></dt>
-<dd><p>The message is &lsquo;<samp>Scan error</samp>&rsquo;.  This happens when certain
-syntax-parsing functions find invalid syntax or mismatched
-parentheses.  Conventionally raised with three argument: a
-human-readable error message, the start of the obstacle that cannot be
-moved over, and the end of the obstacle.  See <a href="List-Motion.html#List-Motion">List Motion</a>, and
-See <a href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>.
-</p>
-</dd>
-<dt><code>search-failed</code></dt>
-<dd><p>The message is &lsquo;<samp>Search failed</samp>&rsquo;.  See <a href="Searching-and-Matching.html#Searching-and-Matching">Searching and Matching</a>.
-</p>
-</dd>
-<dt><code>setting-constant</code></dt>
-<dd><p>The message is &lsquo;<samp>Attempt to set a constant symbol</samp>&rsquo;.  This happens
-when attempting to assign values to <code>nil</code>, <code>t</code>, and keyword
-symbols.  See <a href="Constant-Variables.html#Constant-Variables">Constant Variables</a>.
-</p>
-</dd>
-<dt><code>text-read-only</code></dt>
-<dd><p>The message is &lsquo;<samp>Text is read-only</samp>&rsquo;.  This is a subcategory of
-<code>buffer-read-only</code>.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>.
-</p>
-</dd>
-<dt><code>undefined-color</code></dt>
-<dd><p>The message is &lsquo;<samp>Undefined color</samp>&rsquo;.  See <a href="Color-Names.html#Color-Names">Color Names</a>.
-</p>
-</dd>
-<dt><code>user-error</code></dt>
-<dd><p>The message is the empty string.  See <a href="Signaling-Errors.html#Signaling-Errors">Signaling Errors</a>.
-</p>
-</dd>
-<dt><code>void-function</code></dt>
-<dd><p>The message is &lsquo;<samp>Symbol's function definition is void</samp>&rsquo;.
-See <a href="Function-Cells.html#Function-Cells">Function Cells</a>.
-</p>
-</dd>
-<dt><code>void-variable</code></dt>
-<dd><p>The message is &lsquo;<samp>Symbol's value as variable is void</samp>&rsquo;.
-See <a href="Accessing-Variables.html#Accessing-Variables">Accessing Variables</a>.
-</p>
-</dd>
-<dt><code>wrong-number-of-arguments</code></dt>
-<dd><p>The message is &lsquo;<samp>Wrong number of arguments</samp>&rsquo;.  See <a href="Classifying-Lists.html#Classifying-Lists">Classifying Lists</a>.
-</p>
-</dd>
-<dt><code>wrong-type-argument</code></dt>
-<dd><p>The message is &lsquo;<samp>Wrong type argument</samp>&rsquo;.  See <a href="Type-Predicates.html#Type-Predicates">Type Predicates</a>.
-</p></dd>
-</dl>
+  <p>Each error symbol has an set of parent error conditions that
+  is a list of symbols. Normally this list includes the error
+  symbol itself and the symbol <code>error</code>. Occasionally it
+  includes additional symbols, which are intermediate
+  classifications, narrower than <code>error</code> but broader
+  than a single error symbol. For example, all the errors in
+  accessing files have the condition <code>file-error</code>. If we
+  do not say here that a certain error symbol has additional error
+  conditions, that means it has none.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Standard-Keymaps.html#Standard-Keymaps" accesskey="n" rel="next">Standard Keymaps</a>, Previous: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="p" rel="prev">GNU Emacs Internals</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>As a special exception, the error symbol <code>quit</code>
+  does not have the condition <code>error</code>, because quitting
+  is not considered an error.</p>
 
+  <p>Most of these error symbols are defined in C (mainly
+  <samp>data.c</samp>), but some are defined in Lisp. For example,
+  the file <samp>userlock.el</samp> defines the
+  <code>file-locked</code> and <code>file-supersession</code>
+  errors. Several of the specialized Lisp libraries distributed
+  with Emacs define their own error symbols. We do not attempt to
+  list of all those here.</p>
 
+  <p>See <a href="Errors.html#Errors">Errors</a>, for an
+  explanation of how errors are generated and handled.</p>
 
+  <dl compact="compact">
+    <dt><code>error</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>error</samp>&rsquo;. See
+      <a href="Errors.html#Errors">Errors</a>.</p>
+    </dd>
+
+    <dt><code>quit</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Quit</samp>&rsquo;. See
+      <a href="Quitting.html#Quitting">Quitting</a>.</p>
+    </dd>
+
+    <dt><code>args-out-of-range</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Args out of
+      range</samp>&rsquo;. This happens when trying to access an
+      element beyond the range of a sequence, buffer, or other
+      container-like object. See <a href=
+      "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences
+      Arrays Vectors</a>, and See <a href=
+      "Text.html#Text">Text</a>.</p>
+    </dd>
+
+    <dt><code>arith-error</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Arithmetic
+      error</samp>&rsquo;. This occurs when trying to perform
+      integer division by zero. See <a href=
+      "Numeric-Conversions.html#Numeric-Conversions">Numeric
+      Conversions</a>, and See <a href=
+      "Arithmetic-Operations.html#Arithmetic-Operations">Arithmetic
+      Operations</a>.</p>
+    </dd>
+
+    <dt><code>beginning-of-buffer</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Beginning of
+      buffer</samp>&rsquo;. See <a href=
+      "Character-Motion.html#Character-Motion">Character
+      Motion</a>.</p>
+    </dd>
+
+    <dt><code>buffer-read-only</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Buffer is
+      read-only</samp>&rsquo;. See <a href=
+      "Read-Only-Buffers.html#Read-Only-Buffers">Read Only
+      Buffers</a>.</p>
+    </dd>
+
+    <dt><code>circular-list</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>List contains a
+      loop</samp>&rsquo;. This happens when a circular structure is
+      encountered. See <a href=
+      "Circular-Objects.html#Circular-Objects">Circular
+      Objects</a>.</p>
+    </dd>
+
+    <dt><code>cl-assertion-failed</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Assertion
+      failed</samp>&rsquo;. This happens when the
+      <code>cl-assert</code> macro fails a test. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/cl/Assertions.html#Assertions">
+      Assertions</a> in <cite>Common Lisp Extensions</cite>.</p>
+    </dd>
+
+    <dt><code>coding-system-error</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Invalid coding
+      system</samp>&rsquo;. See <a href=
+      "Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">Lisp
+      and Coding Systems</a>.</p>
+    </dd>
+
+    <dt><code>cyclic-function-indirection</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Symbol's chain of function
+      indirections contains a loop</samp>&rsquo;. See <a href=
+      "Function-Indirection.html#Function-Indirection">Function
+      Indirection</a>.</p>
+    </dd>
+
+    <dt><code>cyclic-variable-indirection</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Symbol's chain of variable
+      indirections contains a loop</samp>&rsquo;. See <a href=
+      "Variable-Aliases.html#Variable-Aliases">Variable
+      Aliases</a>.</p>
+    </dd>
+
+    <dt><code>dbus-error</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>D-Bus error</samp>&rsquo;.
+      This is only defined if Emacs was compiled with D-Bus
+      support. See <a href=
+      "../dbus/Errors-and-Events.html#Errors-and-Events">Errors and
+      Events</a> in <cite>D-Bus integration in Emacs</cite>.</p>
+    </dd>
+
+    <dt><code>end-of-buffer</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>End of buffer</samp>&rsquo;.
+      See <a href=
+      "Character-Motion.html#Character-Motion">Character
+      Motion</a>.</p>
+    </dd>
+
+    <dt><code>end-of-file</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>End of file during
+      parsing</samp>&rsquo;. Note that this is not a subcategory of
+      <code>file-error</code>, because it pertains to the Lisp
+      reader, not to file I/O. See <a href=
+      "Input-Functions.html#Input-Functions">Input
+      Functions</a>.</p>
+    </dd>
+
+    <dt><code>file-already-exists</code></dt>
+
+    <dd>
+      <p>This is a subcategory of <code>file-error</code>. See
+      <a href="Writing-to-Files.html#Writing-to-Files">Writing to
+      Files</a>.</p>
+    </dd>
+
+    <dt><code>file-date-error</code></dt>
+
+    <dd>
+      <p>This is a subcategory of <code>file-error</code>. It
+      occurs when <code>copy-file</code> tries and fails to set the
+      last-modification time of the output file. See <a href=
+      "Changing-Files.html#Changing-Files">Changing Files</a>.</p>
+    </dd>
+
+    <dt><code>file-error</code></dt>
+
+    <dd>
+      <p>We do not list the error-strings of this error and its
+      subcategories, because the error message is normally
+      constructed from the data items alone when the error
+      condition <code>file-error</code> is present. Thus, the
+      error-strings are not very relevant. However, these error
+      symbols do have <code>error-message</code> properties, and if
+      no data is provided, the <code>error-message</code> property
+      <em>is</em> used. See <a href=
+      "Files.html#Files">Files</a>.</p>
+    </dd>
+
+    <dt><code>compression-error</code></dt>
+
+    <dd>
+      <p>This is a subcategory of <code>file-error</code>, which
+      results from problems handling a compressed file. See
+      <a href="How-Programs-Do-Loading.html#How-Programs-Do-Loading">
+      How Programs Do Loading</a>.</p>
+    </dd>
+
+    <dt><code>file-locked</code></dt>
+
+    <dd>
+      <p>This is a subcategory of <code>file-error</code>. See
+      <a href="File-Locks.html#File-Locks">File Locks</a>.</p>
+    </dd>
+
+    <dt><code>file-supersession</code></dt>
+
+    <dd>
+      <p>This is a subcategory of <code>file-error</code>. See
+      <a href=
+      "Modification-Time.html#Modification-Time">Modification
+      Time</a>.</p>
+    </dd>
+
+    <dt><code>file-notify-error</code></dt>
+
+    <dd>
+      <p>This is a subcategory of <code>file-error</code>. It
+      happens, when a file could not be watched for changes. See
+      <a href="File-Notifications.html#File-Notifications">File
+      Notifications</a>.</p>
+    </dd>
+
+    <dt><code>ftp-error</code></dt>
+
+    <dd>
+      <p>This is a subcategory of <code>file-error</code>, which
+      results from problems in accessing a remote file using ftp.
+      See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Remote-Files.html#Remote-Files">
+      Remote Files</a> in <cite>The GNU Emacs Manual</cite>.</p>
+    </dd>
+
+    <dt><code>invalid-function</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Invalid
+      function</samp>&rsquo;. See <a href=
+      "Function-Indirection.html#Function-Indirection">Function
+      Indirection</a>.</p>
+    </dd>
+
+    <dt><code>invalid-read-syntax</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Invalid read
+      syntax</samp>&rsquo;. See <a href=
+      "Printed-Representation.html#Printed-Representation">Printed
+      Representation</a>.</p>
+    </dd>
+
+    <dt><code>invalid-regexp</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Invalid regexp</samp>&rsquo;.
+      See <a href=
+      "Regular-Expressions.html#Regular-Expressions">Regular
+      Expressions</a>.</p>
+    </dd>
+
+    <dt><code>mark-inactive</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>The mark is not active
+      now</samp>&rsquo;. See <a href="The-Mark.html#The-Mark">The
+      Mark</a>.</p>
+    </dd>
+
+    <dt><code>no-catch</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>No catch for
+      tag</samp>&rsquo;. See <a href=
+      "Catch-and-Throw.html#Catch-and-Throw">Catch and
+      Throw</a>.</p>
+    </dd>
+
+    <dt><code>scan-error</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Scan error</samp>&rsquo;. This
+      happens when certain syntax-parsing functions find invalid
+      syntax or mismatched parentheses. Conventionally raised with
+      three argument: a human-readable error message, the start of
+      the obstacle that cannot be moved over, and the end of the
+      obstacle. See <a href="List-Motion.html#List-Motion">List
+      Motion</a>, and See <a href=
+      "Parsing-Expressions.html#Parsing-Expressions">Parsing
+      Expressions</a>.</p>
+    </dd>
+
+    <dt><code>search-failed</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Search failed</samp>&rsquo;.
+      See <a href=
+      "Searching-and-Matching.html#Searching-and-Matching">Searching
+      and Matching</a>.</p>
+    </dd>
+
+    <dt><code>setting-constant</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Attempt to set a constant
+      symbol</samp>&rsquo;. This happens when attempting to assign
+      values to <code>nil</code>, <code>t</code>, and keyword
+      symbols. See <a href=
+      "Constant-Variables.html#Constant-Variables">Constant
+      Variables</a>.</p>
+    </dd>
+
+    <dt><code>text-read-only</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Text is
+      read-only</samp>&rsquo;. This is a subcategory of
+      <code>buffer-read-only</code>. See <a href=
+      "Special-Properties.html#Special-Properties">Special
+      Properties</a>.</p>
+    </dd>
+
+    <dt><code>undefined-color</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Undefined color</samp>&rsquo;.
+      See <a href="Color-Names.html#Color-Names">Color
+      Names</a>.</p>
+    </dd>
+
+    <dt><code>user-error</code></dt>
+
+    <dd>
+      <p>The message is the empty string. See <a href=
+      "Signaling-Errors.html#Signaling-Errors">Signaling
+      Errors</a>.</p>
+    </dd>
+
+    <dt><code>void-function</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Symbol's function definition
+      is void</samp>&rsquo;. See <a href=
+      "Function-Cells.html#Function-Cells">Function Cells</a>.</p>
+    </dd>
+
+    <dt><code>void-variable</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Symbol's value as variable is
+      void</samp>&rsquo;. See <a href=
+      "Accessing-Variables.html#Accessing-Variables">Accessing
+      Variables</a>.</p>
+    </dd>
+
+    <dt><code>wrong-number-of-arguments</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Wrong number of
+      arguments</samp>&rsquo;. See <a href=
+      "Classifying-Lists.html#Classifying-Lists">Classifying
+      Lists</a>.</p>
+    </dd>
+
+    <dt><code>wrong-type-argument</code></dt>
+
+    <dd>
+      <p>The message is &lsquo;<samp>Wrong type
+      argument</samp>&rsquo;. See <a href=
+      "Type-Predicates.html#Type-Predicates">Type
+      Predicates</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Standard-Keymaps.html#Standard-Keymaps"
+    accesskey="n" rel="next">Standard Keymaps</a>, Previous:
+    <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals"
+    accesskey="p" rel="prev">GNU Emacs Internals</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

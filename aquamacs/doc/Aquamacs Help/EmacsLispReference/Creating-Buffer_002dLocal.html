@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,291 +19,458 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Creating Buffer-Local</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Creating Buffer-Local">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Creating Buffer-Local">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" rel="up" title="Buffer-Local Variables">
-<link href="Default-Value.html#Default-Value" rel="next" title="Default Value">
-<link href="Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal" rel="prev" title="Intro to Buffer-Local">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Creating
+  Buffer-Local</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Creating Buffer-Local" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Creating Buffer-Local" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" rel=
+  "up" title="Buffer-Local Variables" />
+  <link href="Default-Value.html#Default-Value" rel="next" title=
+  "Default Value" />
+  <link href=
+  "Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal" rel=
+  "prev" title="Intro to Buffer-Local" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Creating-Buffer_002dLocal" id=
+  "Creating-Buffer_002dLocal"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Default-Value.html#Default-Value" accesskey=
+    "n" rel="next">Default Value</a>, Previous: <a href=
+    "Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal"
+    accesskey="p" rel="prev">Intro to Buffer-Local</a>, Up:
+    <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables"
+    accesskey="u" rel="up">Buffer-Local Variables</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-and-Deleting-Buffer_002dLocal-Bindings" id=
+  "Creating-and-Deleting-Buffer_002dLocal-Bindings"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-Buffer_002dLocal"></a>
-<div class="header">
-<p>
-Next: <a href="Default-Value.html#Default-Value" accesskey="n" rel="next">Default Value</a>, Previous: <a href="Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal" accesskey="p" rel="prev">Intro to Buffer-Local</a>, Up: <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" accesskey="u" rel="up">Buffer-Local Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-and-Deleting-Buffer_002dLocal-Bindings"></a>
-<h4 class="subsection">11.10.2 Creating and Deleting Buffer-Local Bindings</h4>
+  <h4 class="subsection">11.10.2 Creating and Deleting Buffer-Local
+  Bindings</h4>
 
-<dl>
-<dt><a name="index-make_002dlocal_002dvariable"></a>Command: <strong>make-local-variable</strong> <em>variable</em></dt>
-<dd><p>This function creates a buffer-local binding in the current buffer for
-<var>variable</var> (a symbol).  Other buffers are not affected.  The value
-returned is <var>variable</var>.
-</p>
-<p>The buffer-local value of <var>variable</var> starts out as the same value
-<var>variable</var> previously had.  If <var>variable</var> was void, it remains
-void.
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">In buffer &lsquo;<samp>b1</samp>&rsquo;:</span>
-(setq foo 5)                ; <span class="roman">Affects all buffers.</span>
+  <dl>
+    <dt><a name="index-make_002dlocal_002dvariable" id=
+    "index-make_002dlocal_002dvariable"></a>Command:
+    <strong>make-local-variable</strong> <em>variable</em></dt>
+
+    <dd>
+      <p>This function creates a buffer-local binding in the
+      current buffer for <var>variable</var> (a symbol). Other
+      buffers are not affected. The value returned is
+      <var>variable</var>.</p>
+
+      <p>The buffer-local value of <var>variable</var> starts out
+      as the same value <var>variable</var> previously had. If
+      <var>variable</var> was void, it remains void.</p>
+
+      <div class="example">
+        <pre class="example">
+;; <span class=
+"roman">In buffer &lsquo;<samp>b1</samp>&rsquo;:</span>
+(setq foo 5)                ; <span class=
+"roman">Affects all buffers.</span>
      &rArr; 5
-</pre><pre class="example">(make-local-variable 'foo)  ; <span class="roman">Now it is local in &lsquo;<samp>b1</samp>&rsquo;.</span>
+</pre>
+        <pre class="example">
+(make-local-variable 'foo)  ; <span class=
+"roman">Now it is local in &lsquo;<samp>b1</samp>&rsquo;.</span>
      &rArr; foo
-</pre><pre class="example">foo                         ; <span class="roman">That did not change</span>
-     &rArr; 5                   ;   <span class="roman">the value.</span>
-</pre><pre class="example">(setq foo 6)                ; <span class="roman">Change the value</span>
-     &rArr; 6                   ;   <span class="roman">in &lsquo;<samp>b1</samp>&rsquo;.</span>
-</pre><pre class="example">foo
+</pre>
+        <pre class="example">
+foo                         ; <span class=
+"roman">That did not change</span>
+     &rArr; 5                   ;   <span class=
+"roman">the value.</span>
+</pre>
+        <pre class="example">
+(setq foo 6)                ; <span class=
+"roman">Change the value</span>
+     &rArr; 6                   ;   <span class=
+"roman">in &lsquo;<samp>b1</samp>&rsquo;.</span>
+</pre>
+        <pre class="example">
+foo
      &rArr; 6
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">In buffer &lsquo;<samp>b2</samp>&rsquo;, the value hasn&rsquo;t changed.</span>
-(with-current-buffer &quot;b2&quot;
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">In buffer &lsquo;<samp>b2</samp>&rsquo;, the value hasn&rsquo;t changed.</span>
+(with-current-buffer "b2"
   foo)
      &rArr; 5
-</pre></div>
+</pre>
+      </div>
 
-<p>Making a variable buffer-local within a <code>let</code>-binding for that
-variable does not work reliably, unless the buffer in which you do this
-is not current either on entry to or exit from the <code>let</code>.  This is
-because <code>let</code> does not distinguish between different kinds of
-bindings; it knows only which variable the binding was made for.
-</p>
-<p>If the variable is terminal-local (see <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>), this
-function signals an error.  Such variables cannot have buffer-local
-bindings as well.
-</p>
-<p><strong>Warning:</strong> do not use <code>make-local-variable</code> for a hook
-variable.  The hook variables are automatically made buffer-local as
-needed if you use the <var>local</var> argument to <code>add-hook</code> or
-<code>remove-hook</code>.
-</p></dd></dl>
+      <p>Making a variable buffer-local within a
+      <code>let</code>-binding for that variable does not work
+      reliably, unless the buffer in which you do this is not
+      current either on entry to or exit from the <code>let</code>.
+      This is because <code>let</code> does not distinguish between
+      different kinds of bindings; it knows only which variable the
+      binding was made for.</p>
 
-<dl>
-<dt><a name="index-setq_002dlocal"></a>Macro: <strong>setq-local</strong> <em>variable value</em></dt>
-<dd><p>This macro creates a buffer-local binding in the current buffer for
-<var>variable</var>, and gives it the buffer-local value <var>value</var>.  It
-is equivalent to calling <code>make-local-variable</code> followed by
-<code>setq</code>.  <var>variable</var> should be an unquoted symbol.
-</p></dd></dl>
+      <p>If the variable is terminal-local (see <a href=
+      "Multiple-Terminals.html#Multiple-Terminals">Multiple
+      Terminals</a>), this function signals an error. Such
+      variables cannot have buffer-local bindings as well.</p>
 
-<dl>
-<dt><a name="index-make_002dvariable_002dbuffer_002dlocal"></a>Command: <strong>make-variable-buffer-local</strong> <em>variable</em></dt>
-<dd><p>This function marks <var>variable</var> (a symbol) automatically
-buffer-local, so that any subsequent attempt to set it will make it
-local to the current buffer at the time.  Unlike
-<code>make-local-variable</code>, with which it is often confused, this
-cannot be undone, and affects the behavior of the variable in all
-buffers.
-</p>
-<p>A peculiar wrinkle of this feature is that binding the variable (with
-<code>let</code> or other binding constructs) does not create a buffer-local
-binding for it.  Only setting the variable (with <code>set</code> or
-<code>setq</code>), while the variable does not have a <code>let</code>-style
-binding that was made in the current buffer, does so.
-</p>
-<p>If <var>variable</var> does not have a default value, then calling this
-command will give it a default value of <code>nil</code>.  If <var>variable</var>
-already has a default value, that value remains unchanged.
-Subsequently calling <code>makunbound</code> on <var>variable</var> will result
-in a void buffer-local value and leave the default value unaffected.
-</p>
-<p>The value returned is <var>variable</var>.
-</p>
-<p><strong>Warning:</strong> Don&rsquo;t assume that you should use
-<code>make-variable-buffer-local</code> for user-option variables, simply
-because users <em>might</em> want to customize them differently in
-different buffers.  Users can make any variable local, when they wish
-to.  It is better to leave the choice to them.
-</p>
-<p>The time to use <code>make-variable-buffer-local</code> is when it is crucial
-that no two buffers ever share the same binding.  For example, when a
-variable is used for internal purposes in a Lisp program which depends
-on having separate values in separate buffers, then using
-<code>make-variable-buffer-local</code> can be the best solution.
-</p></dd></dl>
+      <p><strong>Warning:</strong> do not use
+      <code>make-local-variable</code> for a hook variable. The
+      hook variables are automatically made buffer-local as needed
+      if you use the <var>local</var> argument to
+      <code>add-hook</code> or <code>remove-hook</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-defvar_002dlocal"></a>Macro: <strong>defvar-local</strong> <em>variable value &amp;optional docstring</em></dt>
-<dd><p>This macro defines <var>variable</var> as a variable with initial value
-<var>value</var> and <var>docstring</var>, and marks it as automatically
-buffer-local.  It is equivalent to calling <code>defvar</code> followed by
-<code>make-variable-buffer-local</code>.  <var>variable</var> should be an
-unquoted symbol.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-setq_002dlocal" id=
+    "index-setq_002dlocal"></a>Macro: <strong>setq-local</strong>
+    <em>variable value</em></dt>
 
-<dl>
-<dt><a name="index-local_002dvariable_002dp"></a>Function: <strong>local-variable-p</strong> <em>variable &amp;optional buffer</em></dt>
-<dd><p>This returns <code>t</code> if <var>variable</var> is buffer-local in buffer
-<var>buffer</var> (which defaults to the current buffer); otherwise,
-<code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>This macro creates a buffer-local binding in the current
+      buffer for <var>variable</var>, and gives it the buffer-local
+      value <var>value</var>. It is equivalent to calling
+      <code>make-local-variable</code> followed by
+      <code>setq</code>. <var>variable</var> should be an unquoted
+      symbol.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-local_002dvariable_002dif_002dset_002dp"></a>Function: <strong>local-variable-if-set-p</strong> <em>variable &amp;optional buffer</em></dt>
-<dd><p>This returns <code>t</code> if <var>variable</var> either has a buffer-local
-value in buffer <var>buffer</var>, or is automatically buffer-local.
-Otherwise, it returns <code>nil</code>.  If omitted or <code>nil</code>,
-<var>buffer</var> defaults to the current buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dvariable_002dbuffer_002dlocal" id=
+    "index-make_002dvariable_002dbuffer_002dlocal"></a>Command:
+    <strong>make-variable-buffer-local</strong>
+    <em>variable</em></dt>
 
-<dl>
-<dt><a name="index-buffer_002dlocal_002dvalue"></a>Function: <strong>buffer-local-value</strong> <em>variable buffer</em></dt>
-<dd><p>This function returns the buffer-local binding of <var>variable</var> (a
-symbol) in buffer <var>buffer</var>.  If <var>variable</var> does not have a
-buffer-local binding in buffer <var>buffer</var>, it returns the default
-value (see <a href="Default-Value.html#Default-Value">Default Value</a>) of <var>variable</var> instead.
-</p></dd></dl>
+    <dd>
+      <p>This function marks <var>variable</var> (a symbol)
+      automatically buffer-local, so that any subsequent attempt to
+      set it will make it local to the current buffer at the time.
+      Unlike <code>make-local-variable</code>, with which it is
+      often confused, this cannot be undone, and affects the
+      behavior of the variable in all buffers.</p>
 
-<dl>
-<dt><a name="index-buffer_002dlocal_002dvariables"></a>Function: <strong>buffer-local-variables</strong> <em>&amp;optional buffer</em></dt>
-<dd><p>This function returns a list describing the buffer-local variables in
-buffer <var>buffer</var>.  (If <var>buffer</var> is omitted, the current buffer
-is used.)  Normally, each list element has the form
-<code>(<var>sym</var>&nbsp;.&nbsp;<var>val</var>)</code><!-- /@w -->, where <var>sym</var> is a buffer-local
-variable (a symbol) and <var>val</var> is its buffer-local value.  But when
-a variable&rsquo;s buffer-local binding in <var>buffer</var> is void, its list
-element is just <var>sym</var>.
-</p>
-<div class="example">
-<pre class="example">(make-local-variable 'foobar)
+      <p>A peculiar wrinkle of this feature is that binding the
+      variable (with <code>let</code> or other binding constructs)
+      does not create a buffer-local binding for it. Only setting
+      the variable (with <code>set</code> or <code>setq</code>),
+      while the variable does not have a <code>let</code>-style
+      binding that was made in the current buffer, does so.</p>
+
+      <p>If <var>variable</var> does not have a default value, then
+      calling this command will give it a default value of
+      <code>nil</code>. If <var>variable</var> already has a
+      default value, that value remains unchanged. Subsequently
+      calling <code>makunbound</code> on <var>variable</var> will
+      result in a void buffer-local value and leave the default
+      value unaffected.</p>
+
+      <p>The value returned is <var>variable</var>.</p>
+
+      <p><strong>Warning:</strong> Don&rsquo;t assume that you
+      should use <code>make-variable-buffer-local</code> for
+      user-option variables, simply because users <em>might</em>
+      want to customize them differently in different buffers.
+      Users can make any variable local, when they wish to. It is
+      better to leave the choice to them.</p>
+
+      <p>The time to use <code>make-variable-buffer-local</code> is
+      when it is crucial that no two buffers ever share the same
+      binding. For example, when a variable is used for internal
+      purposes in a Lisp program which depends on having separate
+      values in separate buffers, then using
+      <code>make-variable-buffer-local</code> can be the best
+      solution.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-defvar_002dlocal" id=
+    "index-defvar_002dlocal"></a>Macro:
+    <strong>defvar-local</strong> <em>variable value &amp;optional
+    docstring</em></dt>
+
+    <dd>
+      <p>This macro defines <var>variable</var> as a variable with
+      initial value <var>value</var> and <var>docstring</var>, and
+      marks it as automatically buffer-local. It is equivalent to
+      calling <code>defvar</code> followed by
+      <code>make-variable-buffer-local</code>. <var>variable</var>
+      should be an unquoted symbol.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-local_002dvariable_002dp" id=
+    "index-local_002dvariable_002dp"></a>Function:
+    <strong>local-variable-p</strong> <em>variable &amp;optional
+    buffer</em></dt>
+
+    <dd>
+      <p>This returns <code>t</code> if <var>variable</var> is
+      buffer-local in buffer <var>buffer</var> (which defaults to
+      the current buffer); otherwise, <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-local_002dvariable_002dif_002dset_002dp" id=
+    "index-local_002dvariable_002dif_002dset_002dp"></a>Function:
+    <strong>local-variable-if-set-p</strong> <em>variable
+    &amp;optional buffer</em></dt>
+
+    <dd>
+      <p>This returns <code>t</code> if <var>variable</var> either
+      has a buffer-local value in buffer <var>buffer</var>, or is
+      automatically buffer-local. Otherwise, it returns
+      <code>nil</code>. If omitted or <code>nil</code>,
+      <var>buffer</var> defaults to the current buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-buffer_002dlocal_002dvalue" id=
+    "index-buffer_002dlocal_002dvalue"></a>Function:
+    <strong>buffer-local-value</strong> <em>variable
+    buffer</em></dt>
+
+    <dd>
+      <p>This function returns the buffer-local binding of
+      <var>variable</var> (a symbol) in buffer <var>buffer</var>.
+      If <var>variable</var> does not have a buffer-local binding
+      in buffer <var>buffer</var>, it returns the default value
+      (see <a href="Default-Value.html#Default-Value">Default
+      Value</a>) of <var>variable</var> instead.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-buffer_002dlocal_002dvariables" id=
+    "index-buffer_002dlocal_002dvariables"></a>Function:
+    <strong>buffer-local-variables</strong> <em>&amp;optional
+    buffer</em></dt>
+
+    <dd>
+      <p>This function returns a list describing the buffer-local
+      variables in buffer <var>buffer</var>. (If <var>buffer</var>
+      is omitted, the current buffer is used.) Normally, each list
+      element has the form
+      <code>(<var>sym</var>&nbsp;.&nbsp;<var>val</var>)</code>
+      <!-- /@w -->, where <var>sym</var> is a buffer-local variable
+      (a symbol) and <var>val</var> is its buffer-local value. But
+      when a variable&rsquo;s buffer-local binding in
+      <var>buffer</var> is void, its list element is just
+      <var>sym</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(make-local-variable 'foobar)
 (makunbound 'foobar)
 (make-local-variable 'bind-me)
 (setq bind-me 69)
-</pre><pre class="example">(setq lcl (buffer-local-variables))
-    ;; <span class="roman">First, built-in variables local in all buffers:</span>
+</pre>
+        <pre class="example">
+(setq lcl (buffer-local-variables))
+    ;; <span class=
+"roman">First, built-in variables local in all buffers:</span>
 &rArr; ((mark-active . nil)
     (buffer-undo-list . nil)
-    (mode-name . &quot;Fundamental&quot;)
+    (mode-name . "Fundamental")
     &hellip;
-</pre><pre class="example">    ;; <span class="roman">Next, non-built-in buffer-local variables.</span>
-    ;; <span class="roman">This one is buffer-local and void:</span>
+</pre>
+        <pre class="example">
+    ;; <span class=
+"roman">Next, non-built-in buffer-local variables.</span>
+    ;; <span class=
+"roman">This one is buffer-local and void:</span>
     foobar
-    ;; <span class="roman">This one is buffer-local and nonvoid:</span>
+    ;; <span class=
+"roman">This one is buffer-local and nonvoid:</span>
     (bind-me . 69))
-</pre></div>
+</pre>
+      </div>
 
-<p>Note that storing new values into the <small>CDR</small>s of cons cells in this
-list does <em>not</em> change the buffer-local values of the variables.
-</p></dd></dl>
+      <p>Note that storing new values into the <small>CDR</small>s
+      of cons cells in this list does <em>not</em> change the
+      buffer-local values of the variables.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-kill_002dlocal_002dvariable"></a>Command: <strong>kill-local-variable</strong> <em>variable</em></dt>
-<dd><p>This function deletes the buffer-local binding (if any) for
-<var>variable</var> (a symbol) in the current buffer.  As a result, the
-default binding of <var>variable</var> becomes visible in this buffer.  This
-typically results in a change in the value of <var>variable</var>, since the
-default value is usually different from the buffer-local value just
-eliminated.
-</p>
-<p>If you kill the buffer-local binding of a variable that automatically
-becomes buffer-local when set, this makes the default value visible in
-the current buffer.  However, if you set the variable again, that will
-once again create a buffer-local binding for it.
-</p>
-<p><code>kill-local-variable</code> returns <var>variable</var>.
-</p>
-<p>This function is a command because it is sometimes useful to kill one
-buffer-local variable interactively, just as it is useful to create
-buffer-local variables interactively.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-kill_002dlocal_002dvariable" id=
+    "index-kill_002dlocal_002dvariable"></a>Command:
+    <strong>kill-local-variable</strong> <em>variable</em></dt>
 
-<a name="index-local-variables_002c-killed-by-major-mode"></a>
-<dl>
-<dt><a name="index-kill_002dall_002dlocal_002dvariables"></a>Function: <strong>kill-all-local-variables</strong></dt>
-<dd><p>This function eliminates all the buffer-local variable bindings of the
-current buffer except for variables marked as permanent and local
-hook functions that have a non-<code>nil</code> <code>permanent-local-hook</code>
-property (see <a href="Setting-Hooks.html#Setting-Hooks">Setting Hooks</a>).  As a result, the buffer will see
-the default values of most variables.
-</p>
-<p>This function also resets certain other information pertaining to the
-buffer: it sets the local keymap to <code>nil</code>, the syntax table to the
-value of <code>(standard-syntax-table)</code>, the case table to
-<code>(standard-case-table)</code>, and the abbrev table to the value of
-<code>fundamental-mode-abbrev-table</code>.
-</p>
-<p>The very first thing this function does is run the normal hook
-<code>change-major-mode-hook</code> (see below).
-</p>
-<p>Every major mode command begins by calling this function, which has the
-effect of switching to Fundamental mode and erasing most of the effects
-of the previous major mode.  To ensure that this does its job, the
-variables that major modes set should not be marked permanent.
-</p>
-<p><code>kill-all-local-variables</code> returns <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function deletes the buffer-local binding (if any)
+      for <var>variable</var> (a symbol) in the current buffer. As
+      a result, the default binding of <var>variable</var> becomes
+      visible in this buffer. This typically results in a change in
+      the value of <var>variable</var>, since the default value is
+      usually different from the buffer-local value just
+      eliminated.</p>
 
-<dl>
-<dt><a name="index-change_002dmajor_002dmode_002dhook"></a>Variable: <strong>change-major-mode-hook</strong></dt>
-<dd><p>The function <code>kill-all-local-variables</code> runs this normal hook
-before it does anything else.  This gives major modes a way to arrange
-for something special to be done if the user switches to a different
-major mode.  It is also useful for buffer-specific minor modes
-that should be forgotten if the user changes the major mode.
-</p>
-<p>For best results, make this variable buffer-local, so that it will
-disappear after doing its job and will not interfere with the
-subsequent major mode.  See <a href="Hooks.html#Hooks">Hooks</a>.
-</p></dd></dl>
+      <p>If you kill the buffer-local binding of a variable that
+      automatically becomes buffer-local when set, this makes the
+      default value visible in the current buffer. However, if you
+      set the variable again, that will once again create a
+      buffer-local binding for it.</p>
 
-<a name="index-permanent-local-variable"></a>
-<p>A buffer-local variable is <em>permanent</em> if the variable name (a
-symbol) has a <code>permanent-local</code> property that is non-<code>nil</code>.
-Such variables are unaffected by <code>kill-all-local-variables</code>, and
-their local bindings are therefore not cleared by changing major modes.
-Permanent locals are appropriate for data pertaining to where the file
-came from or how to save it, rather than with how to edit the contents.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Default-Value.html#Default-Value" accesskey="n" rel="next">Default Value</a>, Previous: <a href="Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal" accesskey="p" rel="prev">Intro to Buffer-Local</a>, Up: <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" accesskey="u" rel="up">Buffer-Local Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p><code>kill-local-variable</code> returns
+      <var>variable</var>.</p>
 
+      <p>This function is a command because it is sometimes useful
+      to kill one buffer-local variable interactively, just as it
+      is useful to create buffer-local variables interactively.</p>
+    </dd>
+  </dl><a name="index-local-variables_002c-killed-by-major-mode"
+  id="index-local-variables_002c-killed-by-major-mode"></a>
 
+  <dl>
+    <dt><a name="index-kill_002dall_002dlocal_002dvariables" id=
+    "index-kill_002dall_002dlocal_002dvariables"></a>Function:
+    <strong>kill-all-local-variables</strong></dt>
 
+    <dd>
+      <p>This function eliminates all the buffer-local variable
+      bindings of the current buffer except for variables marked as
+      permanent and local hook functions that have a
+      non-<code>nil</code> <code>permanent-local-hook</code>
+      property (see <a href=
+      "Setting-Hooks.html#Setting-Hooks">Setting Hooks</a>). As a
+      result, the buffer will see the default values of most
+      variables.</p>
+
+      <p>This function also resets certain other information
+      pertaining to the buffer: it sets the local keymap to
+      <code>nil</code>, the syntax table to the value of
+      <code>(standard-syntax-table)</code>, the case table to
+      <code>(standard-case-table)</code>, and the abbrev table to
+      the value of <code>fundamental-mode-abbrev-table</code>.</p>
+
+      <p>The very first thing this function does is run the normal
+      hook <code>change-major-mode-hook</code> (see below).</p>
+
+      <p>Every major mode command begins by calling this function,
+      which has the effect of switching to Fundamental mode and
+      erasing most of the effects of the previous major mode. To
+      ensure that this does its job, the variables that major modes
+      set should not be marked permanent.</p>
+
+      <p><code>kill-all-local-variables</code> returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-change_002dmajor_002dmode_002dhook" id=
+    "index-change_002dmajor_002dmode_002dhook"></a>Variable:
+    <strong>change-major-mode-hook</strong></dt>
+
+    <dd>
+      <p>The function <code>kill-all-local-variables</code> runs
+      this normal hook before it does anything else. This gives
+      major modes a way to arrange for something special to be done
+      if the user switches to a different major mode. It is also
+      useful for buffer-specific minor modes that should be
+      forgotten if the user changes the major mode.</p>
+
+      <p>For best results, make this variable buffer-local, so that
+      it will disappear after doing its job and will not interfere
+      with the subsequent major mode. See <a href=
+      "Hooks.html#Hooks">Hooks</a>.</p>
+    </dd>
+  </dl><a name="index-permanent-local-variable" id=
+  "index-permanent-local-variable"></a>
+
+  <p>A buffer-local variable is <em>permanent</em> if the variable
+  name (a symbol) has a <code>permanent-local</code> property that
+  is non-<code>nil</code>. Such variables are unaffected by
+  <code>kill-all-local-variables</code>, and their local bindings
+  are therefore not cleared by changing major modes. Permanent
+  locals are appropriate for data pertaining to where the file came
+  from or how to save it, rather than with how to edit the
+  contents.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Default-Value.html#Default-Value" accesskey=
+    "n" rel="next">Default Value</a>, Previous: <a href=
+    "Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal"
+    accesskey="p" rel="prev">Intro to Buffer-Local</a>, Up:
+    <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables"
+    accesskey="u" rel="up">Buffer-Local Variables</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

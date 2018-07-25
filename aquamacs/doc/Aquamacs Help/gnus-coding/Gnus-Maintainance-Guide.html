@@ -1,13 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Gnus Maintainance Guide - Gnus Coding Style and Maintainance Guide</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Gnus Coding Style and Maintainance Guide">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Gnus-Coding-Style.html#Gnus-Coding-Style" title="Gnus Coding Style">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Gnus Maintainance Guide - Gnus Coding Style and
+  Maintainance Guide</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Gnus Coding Style and Maintainance Guide" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Gnus-Coding-Style.html#Gnus-Coding-Style"
+  title="Gnus Coding Style" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 2004, 2005, 2007, 2008, 2009, 2010  Free Software
 Foundation, Inc.
 
@@ -29,8 +38,10 @@ Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,143 +51,170 @@ Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Gnus-Maintainance-Guide"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Gnus-Coding-Style.html#Gnus-Coding-Style">Gnus Coding Style</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Gnus-Maintainance-Guide" id=
+    "Gnus-Maintainance-Guide"></a>
 
-<h2 class="chapter">2 Gnus Maintainance Guide</h2>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Gnus-Coding-Style.html#Gnus-Coding-Style">Gnus Coding
+    Style</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<h3 class="section">2.1 Stable and development versions</h3>
+  <h2 class="chapter">2 Gnus Maintainance Guide</h2>
 
-<p>The development of Gnus normally is done on the Git repository trunk
-as of April 19, 2010 (formerly it was done in CVS; the repository is
-at http://git.gnus.org), i.e. there are no separate branches to
-develop and test new features.  Most of the time, the trunk is
-developed quite actively with more or less daily changes.  Only after
-a new major release, e.g. 5.10.1, there's usually a feature period of
-several months.  After the release of Gnus 5.10.6 the development of
-new features started again on the trunk while the 5.10 series is
-continued on the stable branch (v5-10) from which more stable releases
-will be done when needed (5.10.8, <small class="dots">...</small>).  <a href="../gnus/Gnus-Development.html#Gnus-Development">Gnus Development</a>
+  <h3 class="section">2.1 Stable and development versions</h3>
 
-   <p>Stable releases of Gnus finally become part of Emacs.  E.g. Gnus 5.8
-became a part of Emacs 21 (relabeled to Gnus 5.9).  The 5.10 series
-became part of Emacs 22 as Gnus 5.11.
+  <p>The development of Gnus normally is done on the Git repository
+  trunk as of April 19, 2010 (formerly it was done in CVS; the
+  repository is at http://git.gnus.org), i.e. there are no separate
+  branches to develop and test new features. Most of the time, the
+  trunk is developed quite actively with more or less daily
+  changes. Only after a new major release, e.g. 5.10.1, there's
+  usually a feature period of several months. After the release of
+  Gnus 5.10.6 the development of new features started again on the
+  trunk while the 5.10 series is continued on the stable branch
+  (v5-10) from which more stable releases will be done when needed
+  (5.10.8, <small class="dots">...</small>). <a href=
+  "../gnus/Gnus-Development.html#Gnus-Development">Gnus
+  Development</a></p>
 
-<h3 class="section">2.2 Syncing</h3>
+  <p>Stable releases of Gnus finally become part of Emacs. E.g.
+  Gnus 5.8 became a part of Emacs 21 (relabeled to Gnus 5.9). The
+  5.10 series became part of Emacs 22 as Gnus 5.11.</p>
 
-<!-- Some MIDs related to this follow.  Use http://thread.gmane.org/MID -->
-<!-- (and click on the subject) to get the thread on Gmane. -->
-<!-- Some quotes from Miles Bader follow... -->
-<!-- <v9eklyke6b.fsf@marauder.physik.uni-ulm.de> -->
-<!-- <buovfd71nkk.fsf@mctpc71.ucom.lsi.nec.co.jp> -->
-<p>In the past, the inclusion of Gnus into Emacs was quite cumbersome.  For
-each change made to Gnus in Emacs repository, it had to be checked that
-it was applied to the new Gnus version, too.  Else, bug fixes done in
-Emacs repository might have been lost.
+  <h3 class="section">2.2 Syncing</h3>
+  <!-- Some MIDs related to this follow.  Use http://thread.gmane.org/MID -->
+  <!-- (and click on the subject) to get the thread on Gmane. -->
+  <!-- Some quotes from Miles Bader follow... -->
+  <!-- <v9eklyke6b.fsf@marauder.physik.uni-ulm.de> -->
+  <!-- <buovfd71nkk.fsf@mctpc71.ucom.lsi.nec.co.jp> -->
 
-   <p>With the inclusion of Gnus 5.10, Miles Bader has set up an Emacs-Gnus
-gateway to ensure the bug fixes from Emacs CVS are propagated to Gnus
-CVS semi-automatically.
+  <p>In the past, the inclusion of Gnus into Emacs was quite
+  cumbersome. For each change made to Gnus in Emacs repository, it
+  had to be checked that it was applied to the new Gnus version,
+  too. Else, bug fixes done in Emacs repository might have been
+  lost.</p>
 
-   <p>After Emacs moved to bzr and Gnus moved to git, Katsumi Yamaoka has
-taken over the chore of keeping Emacs and Gnus in sync.  In general,
-changes made to one repository will usually be replicated in the other
-within a few days.
+  <p>With the inclusion of Gnus 5.10, Miles Bader has set up an
+  Emacs-Gnus gateway to ensure the bug fixes from Emacs CVS are
+  propagated to Gnus CVS semi-automatically.</p>
 
-   <p>Basically the idea is that the gateway will cause all common files in
-Emacs and Gnus v5-13 to be identical except when there's a very good
-reason (e.g., the Gnus version string in Emacs says &lsquo;<samp><span class="samp">5.11</span></samp>&rsquo;, but
-the v5-13 version string remains &lsquo;<samp><span class="samp">5.13.x</span></samp>&rsquo;).  Furthermore, all
-changes in these files in either Emacs or the v5-13 branch will be
-installed into the Gnus git trunk, again except where there's a good
-reason.
+  <p>After Emacs moved to bzr and Gnus moved to git, Katsumi
+  Yamaoka has taken over the chore of keeping Emacs and Gnus in
+  sync. In general, changes made to one repository will usually be
+  replicated in the other within a few days.</p>
 
-<!-- (typically so far the only exception has been that the changes -->
-<!-- already exist in the trunk in modified form). -->
-   <p>Because of this, when the next major version of Gnus will be included in
-Emacs, it should be very easy &ndash; just plonk in the files from the Gnus
-trunk without worrying about lost changes from the Emacs tree.
+  <p>Basically the idea is that the gateway will cause all common
+  files in Emacs and Gnus v5-13 to be identical except when there's
+  a very good reason (e.g., the Gnus version string in Emacs says
+  &lsquo;<samp><span class="samp">5.11</span></samp>&rsquo;, but
+  the v5-13 version string remains &lsquo;<samp><span class=
+  "samp">5.13.x</span></samp>&rsquo;). Furthermore, all changes in
+  these files in either Emacs or the v5-13 branch will be installed
+  into the Gnus git trunk, again except where there's a good
+  reason. 
+  <!-- (typically so far the only exception has been that the changes -->
+  <!-- already exist in the trunk in modified form). --></p>
 
-   <p>The effect of this is that as hacker, you should generally only have to
-make changes in one place:
+  <p>Because of this, when the next major version of Gnus will be
+  included in Emacs, it should be very easy &ndash; just plonk in
+  the files from the Gnus trunk without worrying about lost changes
+  from the Emacs tree.</p>
 
-     <ul>
-<li>If it's a file which is thought of as being outside of Gnus (e.g., the
-new <samp><span class="file">encrypt.el</span></samp>), you should probably make the change in the Emacs
-tree, and it will show up in the Gnus tree a few days later.
+  <p>The effect of this is that as hacker, you should generally
+  only have to make changes in one place:</p>
 
-     <p>If you don't have Emacs bzr access (or it's inconvenient), you can
-change such a file in the v5-10 branch, and it should propagate to Emacs
-bzr &ndash; however, it will get some extra scrutiny (by Miles) to see if the
-changes are possibly controversial and need discussion on the mailing
-list.  Many changes are obvious bug-fixes however, so often there won't
-be any problem.
+  <ul>
+    <li>If it's a file which is thought of as being outside of Gnus
+    (e.g., the new <samp><span class=
+    "file">encrypt.el</span></samp>), you should probably make the
+    change in the Emacs tree, and it will show up in the Gnus tree
+    a few days later.
 
-     <li>If it's to a Gnus file, and it's important enough that it should be part
-of Emacs and the v5-10 branch, then you can make the change on the v5-10
-branch, and it will go into Emacs bzr and the Gnus git trunk (a few days
-later).  The most prominent examples for such changes are bug-fixed
-including improvements on the documentation.
+      <p>If you don't have Emacs bzr access (or it's inconvenient),
+      you can change such a file in the v5-10 branch, and it should
+      propagate to Emacs bzr &ndash; however, it will get some
+      extra scrutiny (by Miles) to see if the changes are possibly
+      controversial and need discussion on the mailing list. Many
+      changes are obvious bug-fixes however, so often there won't
+      be any problem.</p>
+    </li>
 
-     <p>If you know that there will be conflicts (perhaps because the affected
-source code is different in v5-10 and the Gnus git trunk), then you can
-install your change in both places, and when I try to sync them, there
-will be a conflict &ndash; however, since in most such cases there would be a
-conflict <em>anyway</em>, it's often easier for me to resolve it simply if
-I see two &lsquo;<samp><span class="samp">identical</span></samp>&rsquo; changes, and can just choose the proper one,
-rather than having to actually fix the code.
+    <li>If it's to a Gnus file, and it's important enough that it
+    should be part of Emacs and the v5-10 branch, then you can make
+    the change on the v5-10 branch, and it will go into Emacs bzr
+    and the Gnus git trunk (a few days later). The most prominent
+    examples for such changes are bug-fixed including improvements
+    on the documentation.
 
-     <li>For general Gnus development changes, of course you just make the
-change on the Gnus Git trunk and it goes into Emacs a few years
-later... :-)
+      <p>If you know that there will be conflicts (perhaps because
+      the affected source code is different in v5-10 and the Gnus
+      git trunk), then you can install your change in both places,
+      and when I try to sync them, there will be a conflict &ndash;
+      however, since in most such cases there would be a conflict
+      <em>anyway</em>, it's often easier for me to resolve it
+      simply if I see two &lsquo;<samp><span class=
+      "samp">identical</span></samp>&rsquo; changes, and can just
+      choose the proper one, rather than having to actually fix the
+      code.</p>
+    </li>
 
-   </ul>
+    <li>For general Gnus development changes, of course you just
+    make the change on the Gnus Git trunk and it goes into Emacs a
+    few years later... :-)</li>
+  </ul>
 
-   <p>Of course in any case, if you just can't wait for me to sync your
-change, you can commit it in more than one place and probably there will
-be no problem; usually the changes are textually identical anyway, so
-can be easily resolved automatically (sometimes I notice silly things in
-such multiple commits, like whitespace differences, and unify those ;-).
+  <p>Of course in any case, if you just can't wait for me to sync
+  your change, you can commit it in more than one place and
+  probably there will be no problem; usually the changes are
+  textually identical anyway, so can be easily resolved
+  automatically (sometimes I notice silly things in such multiple
+  commits, like whitespace differences, and unify those ;-). 
+  <!-- I do Emacs->Gnus less often (than Gnus->Emacs) because it tends to -->
+  <!-- require more manual work. -->
+  <!-- By default I sync about once a week.  I also try to follow any Gnus -->
+  <!-- threads on the mailing lists and make sure any changes being discussed -->
+  <!-- are kept more up-to-date (so say 1-2 days delay for "topical" changes). -->
+  <!-- <buovfd71nkk.fsf@mctpc71.ucom.lsi.nec.co.jp> -->
+  <!-- BTW, just to add even more verbose explanation about the syncing thing: --></p>
 
-<!-- I do Emacs->Gnus less often (than Gnus->Emacs) because it tends to -->
-<!-- require more manual work. -->
-<!-- By default I sync about once a week.  I also try to follow any Gnus -->
-<!-- threads on the mailing lists and make sure any changes being discussed -->
-<!-- are kept more up-to-date (so say 1-2 days delay for "topical" changes). -->
-<!-- <buovfd71nkk.fsf@mctpc71.ucom.lsi.nec.co.jp> -->
-<!-- BTW, just to add even more verbose explanation about the syncing thing: -->
-<h3 class="section">2.3 Miscellanea</h3>
+  <h3 class="section">2.3 Miscellanea</h3>
 
-<h3 class="heading"><samp><span class="file">GNUS-NEWS</span></samp></h3>
+  <h3 class="heading"><samp><span class=
+  "file">GNUS-NEWS</span></samp></h3>
 
-<p>Starting from No Gnus, the <samp><span class="file">GNUS-NEWS</span></samp> is created from
-<samp><span class="file">texi/gnus-news.texi</span></samp>.  Don't edit <samp><span class="file">GNUS-NEWS</span></samp>.  Edit
-<samp><span class="file">texi/gnus-news.texi</span></samp>, type <samp><span class="command">make GNUS-NEWS</span></samp> in the
-<samp><span class="file">texi</span></samp> directory and commit <samp><span class="file">GNUS-NEWS</span></samp> and
-<samp><span class="file">texi/gnus-news.texi</span></samp>.
+  <p>Starting from No Gnus, the <samp><span class=
+  "file">GNUS-NEWS</span></samp> is created from <samp><span class=
+  "file">texi/gnus-news.texi</span></samp>. Don't edit
+  <samp><span class="file">GNUS-NEWS</span></samp>. Edit
+  <samp><span class="file">texi/gnus-news.texi</span></samp>, type
+  <samp><span class="command">make GNUS-NEWS</span></samp> in the
+  <samp><span class="file">texi</span></samp> directory and commit
+  <samp><span class="file">GNUS-NEWS</span></samp> and
+  <samp><span class="file">texi/gnus-news.texi</span></samp>.</p>
 
-<h3 class="heading">Conventions for version information in defcustoms</h3>
+  <h3 class="heading">Conventions for version information in
+  defcustoms</h3>
 
-<p>For new customizable variables introduced in Oort Gnus (including the
-v5-10 branch) use <code>:version "22.1" ;; Oort Gnus</code> (including the
-comment) or e.g. <code>:version "22.2" ;; Gnus 5.10.10</code> if the feature
-was added for Emacs 22.2 and Gnus 5.10.10. 
-If the variable is new in No Gnus use <code>:version "23.1" ;; No Gnus</code>.
+  <p>For new customizable variables introduced in Oort Gnus
+  (including the v5-10 branch) use <code>:version "22.1" ;; Oort
+  Gnus</code> (including the comment) or e.g. <code>:version "22.2"
+  ;; Gnus 5.10.10</code> if the feature was added for Emacs 22.2
+  and Gnus 5.10.10. If the variable is new in No Gnus use
+  <code>:version "23.1" ;; No Gnus</code>.</p>
 
-   <p>The same applies for customizable variables when its default value was
-changed.
-
-<!-- Local Variables: -->
-<!-- mode: texinfo -->
-<!-- coding: iso-8859-1 -->
-<!-- End: -->
-</body></html>
-
+  <p>The same applies for customizable variables when its default
+  value was changed. <!-- Local Variables: -->
+  <!-- mode: texinfo -->
+  <!-- coding: iso-8859-1 -->
+  <!-- End: --></p>
+</body>
+</html>

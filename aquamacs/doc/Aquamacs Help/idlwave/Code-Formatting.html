@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Code Formatting - IDLWAVE User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="IDLWAVE User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" title="The IDLWAVE Major Mode">
-<link rel="prev" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" title="The IDLWAVE Major Mode">
-<link rel="next" href="Routine-Info.html#Routine-Info" title="Routine Info">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Code Formatting - IDLWAVE User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="IDLWAVE User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" title=
+  "The IDLWAVE Major Mode" />
+  <link rel="prev" href=
+  "The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" title=
+  "The IDLWAVE Major Mode" />
+  <link rel="next" href="Routine-Info.html#Routine-Info" title=
+  "Routine Info" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -31,8 +42,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,43 +55,70 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Code-Formatting"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Routine-Info.html#Routine-Info">Routine Info</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The IDLWAVE Major Mode</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The IDLWAVE Major Mode</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Code-Formatting" id="Code-Formatting"></a>
 
-<h3 class="section">4.1 Code Formatting</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Routine-Info.html#Routine-Info">Routine Info</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The
+    IDLWAVE Major Mode</a>, Up:&nbsp;<a rel="up" accesskey="u"
+    href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The
+    IDLWAVE Major Mode</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Code-formatting-18"></a><a name="index-Formatting_002c-of-code-19"></a>
+  <h3 class="section">4.1 Code Formatting</h3>
 
-<ul class="menu">
-<li><a accesskey="1" href="Code-Indentation.html#Code-Indentation">Code Indentation</a>:             Reflecting the logical structure
-<li><a accesskey="2" href="Continued-Statement-Indentation.html#Continued-Statement-Indentation">Continued Statement Indentation</a>
-<li><a accesskey="3" href="Comment-Indentation.html#Comment-Indentation">Comment Indentation</a>:          Special indentation for comment lines
-<li><a accesskey="4" href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a>:           Splitting statements over lines
-<li><a accesskey="5" href="Syntax-Highlighting.html#Syntax-Highlighting">Syntax Highlighting</a>:          Font-lock support
-<li><a accesskey="6" href="Octals-and-Highlighting.html#Octals-and-Highlighting">Octals and Highlighting</a>:      Why "123 causes problems
-</ul>
+  <p><a name="index-Code-formatting-18" id=
+  "index-Code-formatting-18"></a><a name=
+  "index-Formatting_002c-of-code-19" id=
+  "index-Formatting_002c-of-code-19"></a></p>
 
-   <p>The IDL language, with its early roots in FORTRAN, modern
-implementation in C, and liberal borrowing of features of many vector
-and other languages along its 25+ year history, has inherited an
-unusual mix of syntax elements.  Left to his or her own devices, a
-novice IDL programmer will often conjure code which is very difficult
-to read and impossible to adapt.  Much can be gleaned from studying
-available IDL code libraries for coding style pointers, but, due to
-the variety of IDL syntax elements, replicating this style can be
-challenging at best.  Luckily, IDLWAVE understands the structure of
-IDL code very well, and takes care of almost all formatting issues for
-you.  After configuring it to match your coding standards, you can
-rely on it to help keep your code neat and organized.
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Code-Indentation.html#Code-Indentation">Code Indentation</a>:
+    Reflecting the logical structure</li>
 
-   </body></html>
+    <li><a accesskey="2" href=
+    "Continued-Statement-Indentation.html#Continued-Statement-Indentation">
+    Continued Statement Indentation</a></li>
 
+    <li><a accesskey="3" href=
+    "Comment-Indentation.html#Comment-Indentation">Comment
+    Indentation</a>: Special indentation for comment lines</li>
+
+    <li><a accesskey="4" href=
+    "Continuation-Lines.html#Continuation-Lines">Continuation
+    Lines</a>: Splitting statements over lines</li>
+
+    <li><a accesskey="5" href=
+    "Syntax-Highlighting.html#Syntax-Highlighting">Syntax
+    Highlighting</a>: Font-lock support</li>
+
+    <li><a accesskey="6" href=
+    "Octals-and-Highlighting.html#Octals-and-Highlighting">Octals
+    and Highlighting</a>: Why "123 causes problems</li>
+  </ul>
+
+  <p>The IDL language, with its early roots in FORTRAN, modern
+  implementation in C, and liberal borrowing of features of many
+  vector and other languages along its 25+ year history, has
+  inherited an unusual mix of syntax elements. Left to his or her
+  own devices, a novice IDL programmer will often conjure code
+  which is very difficult to read and impossible to adapt. Much can
+  be gleaned from studying available IDL code libraries for coding
+  style pointers, but, due to the variety of IDL syntax elements,
+  replicating this style can be challenging at best. Luckily,
+  IDLWAVE understands the structure of IDL code very well, and
+  takes care of almost all formatting issues for you. After
+  configuring it to match your coding standards, you can rely on it
+  to help keep your code neat and organized.</p>
+</body>
+</html>

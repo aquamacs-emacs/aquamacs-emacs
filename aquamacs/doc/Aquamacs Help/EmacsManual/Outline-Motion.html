@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,112 +20,166 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Outline Motion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Outline Motion">
-<meta name="keywords" content="GNU Emacs Manual: Outline Motion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Outline-Mode.html#Outline-Mode" rel="up" title="Outline Mode">
-<link href="Outline-Visibility.html#Outline-Visibility" rel="next" title="Outline Visibility">
-<link href="Outline-Format.html#Outline-Format" rel="prev" title="Outline Format">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Outline Motion</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Outline Motion" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Outline Motion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Outline-Mode.html#Outline-Mode" rel="up" title=
+  "Outline Mode" />
+  <link href="Outline-Visibility.html#Outline-Visibility" rel=
+  "next" title="Outline Visibility" />
+  <link href="Outline-Format.html#Outline-Format" rel="prev" title=
+  "Outline Format" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Outline-Motion" id="Outline-Motion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Outline-Visibility.html#Outline-Visibility"
+    accesskey="n" rel="next">Outline Visibility</a>, Previous:
+    <a href="Outline-Format.html#Outline-Format" accesskey="p" rel=
+    "prev">Outline Format</a>, Up: <a href=
+    "Outline-Mode.html#Outline-Mode" accesskey="u" rel="up">Outline
+    Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Outline-Motion-Commands" id=
+  "Outline-Motion-Commands"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Outline-Motion"></a>
-<div class="header">
-<p>
-Next: <a href="Outline-Visibility.html#Outline-Visibility" accesskey="n" rel="next">Outline Visibility</a>, Previous: <a href="Outline-Format.html#Outline-Format" accesskey="p" rel="prev">Outline Format</a>, Up: <a href="Outline-Mode.html#Outline-Mode" accesskey="u" rel="up">Outline Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Outline-Motion-Commands"></a>
-<h4 class="subsection">25.9.2 Outline Motion Commands</h4>
+  <h4 class="subsection">25.9.2 Outline Motion Commands</h4>
 
-<p>Outline mode provides special motion commands that move backward and
-forward to heading lines.
-</p>
-<dl compact="compact">
-<dt><kbd>C-c C-n</kbd></dt>
-<dd><p>Move point to the next visible heading line
-(<code>outline-next-visible-heading</code>).
-</p></dd>
-<dt><kbd>C-c C-p</kbd></dt>
-<dd><p>Move point to the previous visible heading line
-(<code>outline-previous-visible-heading</code>).
-</p></dd>
-<dt><kbd>C-c C-f</kbd></dt>
-<dd><p>Move point to the next visible heading line at the same level
-as the one point is on (<code>outline-forward-same-level</code>).
-</p></dd>
-<dt><kbd>C-c C-b</kbd></dt>
-<dd><p>Move point to the previous visible heading line at the same level
-(<code>outline-backward-same-level</code>).
-</p></dd>
-<dt><kbd>C-c C-u</kbd></dt>
-<dd><p>Move point up to a lower-level (more inclusive) visible heading line
-(<code>outline-up-heading</code>).
-</p></dd>
-</dl>
+  <p>Outline mode provides special motion commands that move
+  backward and forward to heading lines.</p>
 
-<a name="index-outline_002dnext_002dvisible_002dheading"></a>
-<a name="index-outline_002dprevious_002dvisible_002dheading"></a>
-<a name="index-C_002dc-C_002dn-_0028Outline-mode_0029"></a>
-<a name="index-C_002dc-C_002dp-_0028Outline-mode_0029"></a>
-<p><kbd>C-c C-n</kbd> (<code>outline-next-visible-heading</code>) moves down to
-the next heading line.  <kbd>C-c C-p</kbd>
-(<code>outline-previous-visible-heading</code>) moves similarly backward.
-Both accept numeric arguments as repeat counts.
-</p>
-<a name="index-outline_002dup_002dheading"></a>
-<a name="index-outline_002dforward_002dsame_002dlevel"></a>
-<a name="index-outline_002dbackward_002dsame_002dlevel"></a>
-<a name="index-C_002dc-C_002df-_0028Outline-mode_0029"></a>
-<a name="index-C_002dc-C_002db-_0028Outline-mode_0029"></a>
-<a name="index-C_002dc-C_002du-_0028Outline-mode_0029"></a>
-<p><kbd>C-c C-f</kbd> (<code>outline-forward-same-level</code>) and <kbd>C-c C-b</kbd>
-(<code>outline-backward-same-level</code>) move from one heading line to
-another visible heading at the same depth in the outline.  <kbd>C-c
-C-u</kbd> (<code>outline-up-heading</code>) moves backward to another heading
-that is less deeply nested.
-</p>
+  <dl compact="compact">
+    <dt><kbd>C-c C-n</kbd></dt>
 
+    <dd>
+      <p>Move point to the next visible heading line
+      (<code>outline-next-visible-heading</code>).</p>
+    </dd>
 
+    <dt><kbd>C-c C-p</kbd></dt>
 
+    <dd>
+      <p>Move point to the previous visible heading line
+      (<code>outline-previous-visible-heading</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-f</kbd></dt>
+
+    <dd>
+      <p>Move point to the next visible heading line at the same
+      level as the one point is on
+      (<code>outline-forward-same-level</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-b</kbd></dt>
+
+    <dd>
+      <p>Move point to the previous visible heading line at the
+      same level (<code>outline-backward-same-level</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-u</kbd></dt>
+
+    <dd>
+      <p>Move point up to a lower-level (more inclusive) visible
+      heading line (<code>outline-up-heading</code>).</p>
+    </dd>
+  </dl><a name="index-outline_002dnext_002dvisible_002dheading" id=
+  "index-outline_002dnext_002dvisible_002dheading"></a> <a name=
+  "index-outline_002dprevious_002dvisible_002dheading" id=
+  "index-outline_002dprevious_002dvisible_002dheading"></a>
+  <a name="index-C_002dc-C_002dn-_0028Outline-mode_0029" id=
+  "index-C_002dc-C_002dn-_0028Outline-mode_0029"></a> <a name=
+  "index-C_002dc-C_002dp-_0028Outline-mode_0029" id=
+  "index-C_002dc-C_002dp-_0028Outline-mode_0029"></a>
+
+  <p><kbd>C-c C-n</kbd> (<code>outline-next-visible-heading</code>)
+  moves down to the next heading line. <kbd>C-c C-p</kbd>
+  (<code>outline-previous-visible-heading</code>) moves similarly
+  backward. Both accept numeric arguments as repeat
+  counts.</p><a name="index-outline_002dup_002dheading" id=
+  "index-outline_002dup_002dheading"></a> <a name=
+  "index-outline_002dforward_002dsame_002dlevel" id=
+  "index-outline_002dforward_002dsame_002dlevel"></a> <a name=
+  "index-outline_002dbackward_002dsame_002dlevel" id=
+  "index-outline_002dbackward_002dsame_002dlevel"></a> <a name=
+  "index-C_002dc-C_002df-_0028Outline-mode_0029" id=
+  "index-C_002dc-C_002df-_0028Outline-mode_0029"></a> <a name=
+  "index-C_002dc-C_002db-_0028Outline-mode_0029" id=
+  "index-C_002dc-C_002db-_0028Outline-mode_0029"></a> <a name=
+  "index-C_002dc-C_002du-_0028Outline-mode_0029" id=
+  "index-C_002dc-C_002du-_0028Outline-mode_0029"></a>
+
+  <p><kbd>C-c C-f</kbd> (<code>outline-forward-same-level</code>)
+  and <kbd>C-c C-b</kbd> (<code>outline-backward-same-level</code>)
+  move from one heading line to another visible heading at the same
+  depth in the outline. <kbd>C-c C-u</kbd>
+  (<code>outline-up-heading</code>) moves backward to another
+  heading that is less deeply nested.</p>
 </body>
 </html>

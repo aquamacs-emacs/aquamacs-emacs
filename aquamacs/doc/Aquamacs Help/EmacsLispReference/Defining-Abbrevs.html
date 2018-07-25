@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,125 +19,179 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Defining Abbrevs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Defining Abbrevs">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Defining Abbrevs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Abbrevs.html#Abbrevs" rel="up" title="Abbrevs">
-<link href="Abbrev-Files.html#Abbrev-Files" rel="next" title="Abbrev Files">
-<link href="Abbrev-Tables.html#Abbrev-Tables" rel="prev" title="Abbrev Tables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Defining Abbrevs</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Defining Abbrevs" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Defining Abbrevs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Abbrevs.html#Abbrevs" rel="up" title="Abbrevs" />
+  <link href="Abbrev-Files.html#Abbrev-Files" rel="next" title=
+  "Abbrev Files" />
+  <link href="Abbrev-Tables.html#Abbrev-Tables" rel="prev" title=
+  "Abbrev Tables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Defining-Abbrevs" id="Defining-Abbrevs"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Abbrev-Files.html#Abbrev-Files" accesskey="n"
+    rel="next">Abbrev Files</a>, Previous: <a href=
+    "Abbrev-Tables.html#Abbrev-Tables" accesskey="p" rel=
+    "prev">Abbrev Tables</a>, Up: <a href="Abbrevs.html#Abbrevs"
+    accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Abbrevs-1" id="Defining-Abbrevs-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Abbrevs"></a>
-<div class="header">
-<p>
-Next: <a href="Abbrev-Files.html#Abbrev-Files" accesskey="n" rel="next">Abbrev Files</a>, Previous: <a href="Abbrev-Tables.html#Abbrev-Tables" accesskey="p" rel="prev">Abbrev Tables</a>, Up: <a href="Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Abbrevs-1"></a>
-<h3 class="section">35.2 Defining Abbrevs</h3>
-<a name="index-defining-abbrevs"></a>
+  <h3 class="section">35.2 Defining Abbrevs</h3><a name=
+  "index-defining-abbrevs" id="index-defining-abbrevs"></a>
 
-<p><code>define-abbrev</code> is the low-level basic function for defining an
-abbrev in an abbrev table.
-</p>
-<p>When a major mode defines a system abbrev, it should call
-<code>define-abbrev</code> and specify <code>t</code> for the <code>:system</code>
-property.  Be aware that any saved non-system abbrevs are restored
-at startup, i.e., before some major modes are loaded.  Therefore, major
-modes should not assume that their abbrev tables are empty when they
-are first loaded.
-</p>
-<dl>
-<dt><a name="index-define_002dabbrev"></a>Function: <strong>define-abbrev</strong> <em>abbrev-table name expansion &amp;optional hook &amp;rest props</em></dt>
-<dd><p>This function defines an abbrev named <var>name</var>, in
-<var>abbrev-table</var>, to expand to <var>expansion</var> and call <var>hook</var>,
-with properties <var>props</var> (see <a href="Abbrev-Properties.html#Abbrev-Properties">Abbrev Properties</a>).  The return
-value is <var>name</var>.  The <code>:system</code> property in <var>props</var> is
-treated specially here: if it has the value <code>force</code>, then it will
-overwrite an existing definition even for a non-system abbrev of
-the same name.
-</p>
-<p><var>name</var> should be a string.  The argument <var>expansion</var> is
-normally the desired expansion (a string), or <code>nil</code> to undefine
-the abbrev.  If it is anything but a string or <code>nil</code>, then the
-abbreviation expands solely by running <var>hook</var>.
-</p>
-<p>The argument <var>hook</var> is a function or <code>nil</code>.  If <var>hook</var> is
-non-<code>nil</code>, then it is called with no arguments after the abbrev is
-replaced with <var>expansion</var>; point is located at the end of
-<var>expansion</var> when <var>hook</var> is called.
-</p>
-<a name="index-no_002dself_002dinsert-property"></a>
-<p>If <var>hook</var> is a non-<code>nil</code> symbol whose <code>no-self-insert</code>
-property is non-<code>nil</code>, <var>hook</var> can explicitly control whether
-to insert the self-inserting input character that triggered the
-expansion.  If <var>hook</var> returns non-<code>nil</code> in this case, that
-inhibits insertion of the character.  By contrast, if <var>hook</var>
-returns <code>nil</code>, <code>expand-abbrev</code> (or <code>abbrev-insert</code>)
-also returns <code>nil</code>, as if expansion had not really occurred.
-</p>
-<p>Normally, <code>define-abbrev</code> sets the variable
-<code>abbrevs-changed</code> to <code>t</code>, if it actually changes the abbrev.
-This is so that some commands will offer to save the abbrevs.  It
-does not do this for a system abbrev, since those aren&rsquo;t saved anyway.
-</p></dd></dl>
+  <p><code>define-abbrev</code> is the low-level basic function for
+  defining an abbrev in an abbrev table.</p>
 
-<dl>
-<dt><a name="index-only_002dglobal_002dabbrevs"></a>User Option: <strong>only-global-abbrevs</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, it means that the user plans to use
-global abbrevs only.  This tells the commands that define mode-specific
-abbrevs to define global ones instead.  This variable does not alter the
-behavior of the functions in this section; it is examined by their
-callers.
-</p></dd></dl>
+  <p>When a major mode defines a system abbrev, it should call
+  <code>define-abbrev</code> and specify <code>t</code> for the
+  <code>:system</code> property. Be aware that any saved non-system
+  abbrevs are restored at startup, i.e., before some major modes
+  are loaded. Therefore, major modes should not assume that their
+  abbrev tables are empty when they are first loaded.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Abbrev-Files.html#Abbrev-Files" accesskey="n" rel="next">Abbrev Files</a>, Previous: <a href="Abbrev-Tables.html#Abbrev-Tables" accesskey="p" rel="prev">Abbrev Tables</a>, Up: <a href="Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-define_002dabbrev" id=
+    "index-define_002dabbrev"></a>Function:
+    <strong>define-abbrev</strong> <em>abbrev-table name expansion
+    &amp;optional hook &amp;rest props</em></dt>
 
+    <dd>
+      <p>This function defines an abbrev named <var>name</var>, in
+      <var>abbrev-table</var>, to expand to <var>expansion</var>
+      and call <var>hook</var>, with properties <var>props</var>
+      (see <a href=
+      "Abbrev-Properties.html#Abbrev-Properties">Abbrev
+      Properties</a>). The return value is <var>name</var>. The
+      <code>:system</code> property in <var>props</var> is treated
+      specially here: if it has the value <code>force</code>, then
+      it will overwrite an existing definition even for a
+      non-system abbrev of the same name.</p>
 
+      <p><var>name</var> should be a string. The argument
+      <var>expansion</var> is normally the desired expansion (a
+      string), or <code>nil</code> to undefine the abbrev. If it is
+      anything but a string or <code>nil</code>, then the
+      abbreviation expands solely by running <var>hook</var>.</p>
 
+      <p>The argument <var>hook</var> is a function or
+      <code>nil</code>. If <var>hook</var> is non-<code>nil</code>,
+      then it is called with no arguments after the abbrev is
+      replaced with <var>expansion</var>; point is located at the
+      end of <var>expansion</var> when <var>hook</var> is
+      called.</p><a name="index-no_002dself_002dinsert-property"
+      id="index-no_002dself_002dinsert-property"></a>
+
+      <p>If <var>hook</var> is a non-<code>nil</code> symbol whose
+      <code>no-self-insert</code> property is non-<code>nil</code>,
+      <var>hook</var> can explicitly control whether to insert the
+      self-inserting input character that triggered the expansion.
+      If <var>hook</var> returns non-<code>nil</code> in this case,
+      that inhibits insertion of the character. By contrast, if
+      <var>hook</var> returns <code>nil</code>,
+      <code>expand-abbrev</code> (or <code>abbrev-insert</code>)
+      also returns <code>nil</code>, as if expansion had not really
+      occurred.</p>
+
+      <p>Normally, <code>define-abbrev</code> sets the variable
+      <code>abbrevs-changed</code> to <code>t</code>, if it
+      actually changes the abbrev. This is so that some commands
+      will offer to save the abbrevs. It does not do this for a
+      system abbrev, since those aren&rsquo;t saved anyway.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-only_002dglobal_002dabbrevs" id=
+    "index-only_002dglobal_002dabbrevs"></a>User Option:
+    <strong>only-global-abbrevs</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, it means that
+      the user plans to use global abbrevs only. This tells the
+      commands that define mode-specific abbrevs to define global
+      ones instead. This variable does not alter the behavior of
+      the functions in this section; it is examined by their
+      callers.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Abbrev-Files.html#Abbrev-Files" accesskey="n"
+    rel="next">Abbrev Files</a>, Previous: <a href=
+    "Abbrev-Tables.html#Abbrev-Tables" accesskey="p" rel=
+    "prev">Abbrev Tables</a>, Up: <a href="Abbrevs.html#Abbrevs"
+    accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Archiving Mail - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Browsing-the-Web.html#Browsing-the-Web" title="Browsing the Web">
-<link rel="next" href="Web-Searches.html#Web-Searches" title="Web Searches">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Archiving Mail - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Browsing-the-Web.html#Browsing-the-Web"
+  title="Browsing the Web" />
+  <link rel="next" href="Web-Searches.html#Web-Searches" title=
+  "Web Searches" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +33,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,47 +46,62 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Archiving-Mail"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Web-Searches.html#Web-Searches">Web Searches</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Browsing-the-Web.html#Browsing-the-Web">Browsing the Web</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Archiving-Mail" id="Archiving-Mail"></a>
 
-<h4 class="subsection">6.5.1 Archiving Mail</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Web-Searches.html#Web-Searches">Web Searches</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Browsing-the-Web.html#Browsing-the-Web">Browsing the
+    Web</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-archiving-mail-2228"></a><a name="index-backup-of-mail-2229"></a>
-Some of the back ends, notably <code>nnml</code>, <code>nnfolder</code>, and
-<code>nnmaildir</code>, now actually store the article marks with each group. 
-For these servers, archiving and restoring a group while preserving
-marks is fairly simple.
+  <h4 class="subsection">6.5.1 Archiving Mail</h4>
 
-   <p>(Preserving the group level and group parameters as well still
-requires ritual dancing and sacrifices to the <samp><span class="file">.newsrc.eld</span></samp> deity
-though.)
+  <p><a name="index-archiving-mail-2228" id=
+  "index-archiving-mail-2228"></a><a name=
+  "index-backup-of-mail-2229" id="index-backup-of-mail-2229"></a>
+  Some of the back ends, notably <code>nnml</code>,
+  <code>nnfolder</code>, and <code>nnmaildir</code>, now actually
+  store the article marks with each group. For these servers,
+  archiving and restoring a group while preserving marks is fairly
+  simple.</p>
 
-   <p>To archive an entire <code>nnml</code>, <code>nnfolder</code>, or <code>nnmaildir</code>
-server, take a recursive copy of the server directory.  There is no need
-to shut down Gnus, so archiving may be invoked by <code>cron</code> or
-similar.  You restore the data by restoring the directory tree, and
-adding a server definition pointing to that directory in Gnus.  The
-<a href="Article-Backlog.html#Article-Backlog">Article Backlog</a>, <a href="Asynchronous-Fetching.html#Asynchronous-Fetching">Asynchronous Fetching</a> and other things
-might interfere with overwriting data, so you may want to shut down Gnus
-before you restore the data.
+  <p>(Preserving the group level and group parameters as well still
+  requires ritual dancing and sacrifices to the <samp><span class=
+  "file">.newsrc.eld</span></samp> deity though.)</p>
 
-   <p>It is also possible to archive individual <code>nnml</code>,
-<code>nnfolder</code>, or <code>nnmaildir</code> groups, while preserving marks. 
-For <code>nnml</code> or <code>nnmaildir</code>, you copy all files in the group's
-directory.  For <code>nnfolder</code> you need to copy both the base folder
-file itself (<samp><span class="file">FOO</span></samp>, say), and the marks file (<samp><span class="file">FOO.mrk</span></samp> in
-this example).  Restoring the group is done with <kbd>G m</kbd> from the Group
-buffer.  The last step makes Gnus notice the new directory. 
-<code>nnmaildir</code> notices the new directory automatically, so <kbd>G m</kbd>
-is unnecessary in that case.
+  <p>To archive an entire <code>nnml</code>, <code>nnfolder</code>,
+  or <code>nnmaildir</code> server, take a recursive copy of the
+  server directory. There is no need to shut down Gnus, so
+  archiving may be invoked by <code>cron</code> or similar. You
+  restore the data by restoring the directory tree, and adding a
+  server definition pointing to that directory in Gnus. The
+  <a href="Article-Backlog.html#Article-Backlog">Article
+  Backlog</a>, <a href=
+  "Asynchronous-Fetching.html#Asynchronous-Fetching">Asynchronous
+  Fetching</a> and other things might interfere with overwriting
+  data, so you may want to shut down Gnus before you restore the
+  data.</p>
 
-   </body></html>
-
+  <p>It is also possible to archive individual <code>nnml</code>,
+  <code>nnfolder</code>, or <code>nnmaildir</code> groups, while
+  preserving marks. For <code>nnml</code> or
+  <code>nnmaildir</code>, you copy all files in the group's
+  directory. For <code>nnfolder</code> you need to copy both the
+  base folder file itself (<samp><span class=
+  "file">FOO</span></samp>, say), and the marks file
+  (<samp><span class="file">FOO.mrk</span></samp> in this example).
+  Restoring the group is done with <kbd>G m</kbd> from the Group
+  buffer. The last step makes Gnus notice the new directory.
+  <code>nnmaildir</code> notices the new directory automatically,
+  so <kbd>G m</kbd> is unnecessary in that case.</p>
+</body>
+</html>

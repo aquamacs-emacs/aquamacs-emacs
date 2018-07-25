@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,226 +19,325 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Fontsets</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Fontsets">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Fontsets">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Faces.html#Faces" rel="up" title="Faces">
-<link href="Low_002dLevel-Font.html#Low_002dLevel-Font" rel="next" title="Low-Level Font">
-<link href="Font-Lookup.html#Font-Lookup" rel="prev" title="Font Lookup">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Fontsets</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Fontsets" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Fontsets" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Faces.html#Faces" rel="up" title="Faces" />
+  <link href="Low_002dLevel-Font.html#Low_002dLevel-Font" rel=
+  "next" title="Low-Level Font" />
+  <link href="Font-Lookup.html#Font-Lookup" rel="prev" title=
+  "Font Lookup" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Fontsets" id="Fontsets"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Low_002dLevel-Font.html#Low_002dLevel-Font"
+    accesskey="n" rel="next">Low-Level Font</a>, Previous: <a href=
+    "Font-Lookup.html#Font-Lookup" accesskey="p" rel="prev">Font
+    Lookup</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel=
+    "up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Fontsets-1" id="Fontsets-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Fontsets"></a>
-<div class="header">
-<p>
-Next: <a href="Low_002dLevel-Font.html#Low_002dLevel-Font" accesskey="n" rel="next">Low-Level Font</a>, Previous: <a href="Font-Lookup.html#Font-Lookup" accesskey="p" rel="prev">Font Lookup</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Fontsets-1"></a>
-<h4 class="subsection">37.12.11 Fontsets</h4>
-<a name="index-fontset"></a>
+  <h4 class="subsection">37.12.11 Fontsets</h4><a name=
+  "index-fontset" id="index-fontset"></a>
 
-<p>A <em>fontset</em> is a list of fonts, each assigned to a range of
-character codes.  An individual font cannot display the whole range of
-characters that Emacs supports, but a fontset can.  Fontsets have names,
-just as fonts do, and you can use a fontset name in place of a font name
-when you specify the font for a frame or a face.  Here is
-information about defining a fontset under Lisp program control.
-</p>
-<dl>
-<dt><a name="index-create_002dfontset_002dfrom_002dfontset_002dspec"></a>Function: <strong>create-fontset-from-fontset-spec</strong> <em>fontset-spec &amp;optional style-variant-p noerror</em></dt>
-<dd><p>This function defines a new fontset according to the specification
-string <var>fontset-spec</var>.  The string should have this format:
-</p>
-<div class="smallexample">
-<pre class="smallexample"><var>fontpattern</var>, <span class="roman">[</span><var>charset</var>:<var>font</var><span class="roman">]&hellip;</span>
-</pre></div>
+  <p>A <em>fontset</em> is a list of fonts, each assigned to a
+  range of character codes. An individual font cannot display the
+  whole range of characters that Emacs supports, but a fontset can.
+  Fontsets have names, just as fonts do, and you can use a fontset
+  name in place of a font name when you specify the font for a
+  frame or a face. Here is information about defining a fontset
+  under Lisp program control.</p>
 
-<p>Whitespace characters before and after the commas are ignored.
-</p>
-<p>The first part of the string, <var>fontpattern</var>, should have the form of
-a standard X font name, except that the last two fields should be
-&lsquo;<samp>fontset-<var>alias</var></samp>&rsquo;.
-</p>
-<p>The new fontset has two names, one long and one short.  The long name is
-<var>fontpattern</var> in its entirety.  The short name is
-&lsquo;<samp>fontset-<var>alias</var></samp>&rsquo;.  You can refer to the fontset by either
-name.  If a fontset with the same name already exists, an error is
-signaled, unless <var>noerror</var> is non-<code>nil</code>, in which case this
-function does nothing.
-</p>
-<p>If optional argument <var>style-variant-p</var> is non-<code>nil</code>, that says
-to create bold, italic and bold-italic variants of the fontset as well.
-These variant fontsets do not have a short name, only a long one, which
-is made by altering <var>fontpattern</var> to indicate the bold and/or italic
-status.
-</p>
-<p>The specification string also says which fonts to use in the fontset.
-See below for the details.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-create_002dfontset_002dfrom_002dfontset_002dspec" id=
+    "index-create_002dfontset_002dfrom_002dfontset_002dspec"></a>Function:
+    <strong>create-fontset-from-fontset-spec</strong>
+    <em>fontset-spec &amp;optional style-variant-p
+    noerror</em></dt>
 
-<p>The construct &lsquo;<samp><var>charset</var>:<var>font</var></samp>&rsquo; specifies which font to
-use (in this fontset) for one particular character set.  Here,
-<var>charset</var> is the name of a character set, and <var>font</var> is the font
-to use for that character set.  You can use this construct any number of
-times in the specification string.
-</p>
-<p>For the remaining character sets, those that you don&rsquo;t specify
-explicitly, Emacs chooses a font based on <var>fontpattern</var>: it replaces
-&lsquo;<samp>fontset-<var>alias</var></samp>&rsquo; with a value that names one character set.
-For the <acronym>ASCII</acronym> character set, &lsquo;<samp>fontset-<var>alias</var></samp>&rsquo; is replaced
-with &lsquo;<samp>ISO8859-1</samp>&rsquo;.
-</p>
-<p>In addition, when several consecutive fields are wildcards, Emacs
-collapses them into a single wildcard.  This is to prevent use of
-auto-scaled fonts.  Fonts made by scaling larger fonts are not usable
-for editing, and scaling a smaller font is not useful because it is
-better to use the smaller font in its own size, which Emacs does.
-</p>
-<p>Thus if <var>fontpattern</var> is this,
-</p>
-<div class="example">
-<pre class="example">-*-fixed-medium-r-normal-*-24-*-*-*-*-*-fontset-24
-</pre></div>
+    <dd>
+      <p>This function defines a new fontset according to the
+      specification string <var>fontset-spec</var>. The string
+      should have this format:</p>
 
-<p>the font specification for <acronym>ASCII</acronym> characters would be this:
-</p>
-<div class="example">
-<pre class="example">-*-fixed-medium-r-normal-*-24-*-ISO8859-1
-</pre></div>
+      <div class="smallexample">
+        <pre class="smallexample">
+<var>fontpattern</var>, <span class=
+"roman">[</span><var>charset</var>:<var>font</var><span class=
+"roman">]&hellip;</span>
+</pre>
+      </div>
 
-<p>and the font specification for Chinese GB2312 characters would be this:
-</p>
-<div class="example">
-<pre class="example">-*-fixed-medium-r-normal-*-24-*-gb2312*-*
-</pre></div>
+      <p>Whitespace characters before and after the commas are
+      ignored.</p>
 
-<p>You may not have any Chinese font matching the above font
-specification.  Most X distributions include only Chinese fonts that
-have &lsquo;<samp>song ti</samp>&rsquo; or &lsquo;<samp>fangsong ti</samp>&rsquo; in the <var>family</var> field.  In
-such a case, &lsquo;<samp>Fontset-<var>n</var></samp>&rsquo; can be specified as below:
-</p>
-<div class="smallexample">
-<pre class="smallexample">Emacs.Fontset-0: -*-fixed-medium-r-normal-*-24-*-*-*-*-*-fontset-24,\
+      <p>The first part of the string, <var>fontpattern</var>,
+      should have the form of a standard X font name, except that
+      the last two fields should be
+      &lsquo;<samp>fontset-<var>alias</var></samp>&rsquo;.</p>
+
+      <p>The new fontset has two names, one long and one short. The
+      long name is <var>fontpattern</var> in its entirety. The
+      short name is
+      &lsquo;<samp>fontset-<var>alias</var></samp>&rsquo;. You can
+      refer to the fontset by either name. If a fontset with the
+      same name already exists, an error is signaled, unless
+      <var>noerror</var> is non-<code>nil</code>, in which case
+      this function does nothing.</p>
+
+      <p>If optional argument <var>style-variant-p</var> is
+      non-<code>nil</code>, that says to create bold, italic and
+      bold-italic variants of the fontset as well. These variant
+      fontsets do not have a short name, only a long one, which is
+      made by altering <var>fontpattern</var> to indicate the bold
+      and/or italic status.</p>
+
+      <p>The specification string also says which fonts to use in
+      the fontset. See below for the details.</p>
+    </dd>
+  </dl>
+
+  <p>The construct
+  &lsquo;<samp><var>charset</var>:<var>font</var></samp>&rsquo;
+  specifies which font to use (in this fontset) for one particular
+  character set. Here, <var>charset</var> is the name of a
+  character set, and <var>font</var> is the font to use for that
+  character set. You can use this construct any number of times in
+  the specification string.</p>
+
+  <p>For the remaining character sets, those that you don&rsquo;t
+  specify explicitly, Emacs chooses a font based on
+  <var>fontpattern</var>: it replaces
+  &lsquo;<samp>fontset-<var>alias</var></samp>&rsquo; with a value
+  that names one character set. For the <acronym>ASCII</acronym>
+  character set,
+  &lsquo;<samp>fontset-<var>alias</var></samp>&rsquo; is replaced
+  with &lsquo;<samp>ISO8859-1</samp>&rsquo;.</p>
+
+  <p>In addition, when several consecutive fields are wildcards,
+  Emacs collapses them into a single wildcard. This is to prevent
+  use of auto-scaled fonts. Fonts made by scaling larger fonts are
+  not usable for editing, and scaling a smaller font is not useful
+  because it is better to use the smaller font in its own size,
+  which Emacs does.</p>
+
+  <p>Thus if <var>fontpattern</var> is this,</p>
+
+  <div class="example">
+    <pre class="example">
+-*-fixed-medium-r-normal-*-24-*-*-*-*-*-fontset-24
+</pre>
+  </div>
+
+  <p>the font specification for <acronym>ASCII</acronym> characters
+  would be this:</p>
+
+  <div class="example">
+    <pre class="example">
+-*-fixed-medium-r-normal-*-24-*-ISO8859-1
+</pre>
+  </div>
+
+  <p>and the font specification for Chinese GB2312 characters would
+  be this:</p>
+
+  <div class="example">
+    <pre class="example">
+-*-fixed-medium-r-normal-*-24-*-gb2312*-*
+</pre>
+  </div>
+
+  <p>You may not have any Chinese font matching the above font
+  specification. Most X distributions include only Chinese fonts
+  that have &lsquo;<samp>song ti</samp>&rsquo; or
+  &lsquo;<samp>fangsong ti</samp>&rsquo; in the <var>family</var>
+  field. In such a case,
+  &lsquo;<samp>Fontset-<var>n</var></samp>&rsquo; can be specified
+  as below:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+Emacs.Fontset-0: -*-fixed-medium-r-normal-*-24-*-*-*-*-*-fontset-24,\
         chinese-gb2312:-*-*-medium-r-normal-*-24-*-gb2312*-*
-</pre></div>
+</pre>
+  </div>
 
-<p>Then, the font specifications for all but Chinese GB2312 characters have
-&lsquo;<samp>fixed</samp>&rsquo; in the <var>family</var> field, and the font specification for
-Chinese GB2312 characters has a wild card &lsquo;<samp>*</samp>&rsquo; in the <var>family</var>
-field.
-</p>
-<dl>
-<dt><a name="index-set_002dfontset_002dfont"></a>Function: <strong>set-fontset-font</strong> <em>name character font-spec &amp;optional frame add</em></dt>
-<dd><p>This function modifies the existing fontset <var>name</var> to use the font
-matching with <var>font-spec</var> for the specified <var>character</var>.
-</p>
-<p>If <var>name</var> is <code>nil</code>, this function modifies the fontset of the
-selected frame or that of <var>frame</var> if <var>frame</var> is not
-<code>nil</code>.
-</p>
-<p>If <var>name</var> is <code>t</code>, this function modifies the default
-fontset, whose short name is &lsquo;<samp>fontset-default</samp>&rsquo;.
-</p>
-<p>In addition to specifying a single codepoint, <var>character</var> may be a
-cons <code>(<var>from</var> . <var>to</var>)</code>, where <var>from</var> and <var>to</var> are
-character codepoints.  In that case, use <var>font-spec</var> for all the
-characters in the range <var>from</var> and <var>to</var> (inclusive).
-</p>
-<p><var>character</var> may be a charset.  In that case, use
-<var>font-spec</var> for all character in the charsets.
-</p>
-<p><var>character</var> may be a script name.  In that case, use
-<var>font-spec</var> for all character in the charsets.
-</p>
-<p><var>font-spec</var> may be a font-spec object created by the function
-<code>font-spec</code> (see <a href="Low_002dLevel-Font.html#Low_002dLevel-Font">Low-Level Font</a>).
-</p>
-<p><var>font-spec</var> may be a cons; <code>(<var>family</var> . <var>registry</var>)</code>,
-where <var>family</var> is a family name of a font (possibly including a
-foundry name at the head), <var>registry</var> is a registry name of a font
-(possibly including an encoding name at the tail).
-</p>
-<p><var>font-spec</var> may be a font name string.
-</p>
-<p><var>font-spec</var> may be <code>nil</code>, which explicitly specifies that
-there&rsquo;s no font for the specified <var>character</var>.  This is useful,
-for example, to avoid expensive system-wide search for fonts for
-characters that have no glyphs, like those from the Unicode Private
-Use Area (PUA).
-</p>
-<p>The optional argument <var>add</var>, if non-<code>nil</code>, specifies how to
-add <var>font-spec</var> to the font specifications previously set.  If it
-is <code>prepend</code>, <var>font-spec</var> is prepended.  If it is
-<code>append</code>, <var>font-spec</var> is appended.  By default,
-<var>font-spec</var> overrides the previous settings.
-</p>
-<p>For instance, this changes the default fontset to use a font of which
-family name is &lsquo;<samp>Kochi Gothic</samp>&rsquo; for all characters belonging to
-the charset <code>japanese-jisx0208</code>.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(set-fontset-font t 'japanese-jisx0208
-                  (font-spec :family &quot;Kochi Gothic&quot;))
-</pre></div>
-</dd></dl>
+  <p>Then, the font specifications for all but Chinese GB2312
+  characters have &lsquo;<samp>fixed</samp>&rsquo; in the
+  <var>family</var> field, and the font specification for Chinese
+  GB2312 characters has a wild card &lsquo;<samp>*</samp>&rsquo; in
+  the <var>family</var> field.</p>
 
-<dl>
-<dt><a name="index-char_002ddisplayable_002dp"></a>Function: <strong>char-displayable-p</strong> <em>char</em></dt>
-<dd><p>This function returns <code>t</code> if Emacs ought to be able to display
-<var>char</var>.  More precisely, if the selected frame&rsquo;s fontset has a
-font to display the character set that <var>char</var> belongs to.
-</p>
-<p>Fontsets can specify a font on a per-character basis; when the fontset
-does that, this function&rsquo;s value may not be accurate.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dfontset_002dfont" id=
+    "index-set_002dfontset_002dfont"></a>Function:
+    <strong>set-fontset-font</strong> <em>name character font-spec
+    &amp;optional frame add</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Low_002dLevel-Font.html#Low_002dLevel-Font" accesskey="n" rel="next">Low-Level Font</a>, Previous: <a href="Font-Lookup.html#Font-Lookup" accesskey="p" rel="prev">Font Lookup</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function modifies the existing fontset
+      <var>name</var> to use the font matching with
+      <var>font-spec</var> for the specified
+      <var>character</var>.</p>
 
+      <p>If <var>name</var> is <code>nil</code>, this function
+      modifies the fontset of the selected frame or that of
+      <var>frame</var> if <var>frame</var> is not
+      <code>nil</code>.</p>
 
+      <p>If <var>name</var> is <code>t</code>, this function
+      modifies the default fontset, whose short name is
+      &lsquo;<samp>fontset-default</samp>&rsquo;.</p>
 
+      <p>In addition to specifying a single codepoint,
+      <var>character</var> may be a cons <code>(<var>from</var> .
+      <var>to</var>)</code>, where <var>from</var> and
+      <var>to</var> are character codepoints. In that case, use
+      <var>font-spec</var> for all the characters in the range
+      <var>from</var> and <var>to</var> (inclusive).</p>
+
+      <p><var>character</var> may be a charset. In that case, use
+      <var>font-spec</var> for all character in the charsets.</p>
+
+      <p><var>character</var> may be a script name. In that case,
+      use <var>font-spec</var> for all character in the
+      charsets.</p>
+
+      <p><var>font-spec</var> may be a font-spec object created by
+      the function <code>font-spec</code> (see <a href=
+      "Low_002dLevel-Font.html#Low_002dLevel-Font">Low-Level
+      Font</a>).</p>
+
+      <p><var>font-spec</var> may be a cons;
+      <code>(<var>family</var> . <var>registry</var>)</code>, where
+      <var>family</var> is a family name of a font (possibly
+      including a foundry name at the head), <var>registry</var> is
+      a registry name of a font (possibly including an encoding
+      name at the tail).</p>
+
+      <p><var>font-spec</var> may be a font name string.</p>
+
+      <p><var>font-spec</var> may be <code>nil</code>, which
+      explicitly specifies that there&rsquo;s no font for the
+      specified <var>character</var>. This is useful, for example,
+      to avoid expensive system-wide search for fonts for
+      characters that have no glyphs, like those from the Unicode
+      Private Use Area (PUA).</p>
+
+      <p>The optional argument <var>add</var>, if
+      non-<code>nil</code>, specifies how to add
+      <var>font-spec</var> to the font specifications previously
+      set. If it is <code>prepend</code>, <var>font-spec</var> is
+      prepended. If it is <code>append</code>, <var>font-spec</var>
+      is appended. By default, <var>font-spec</var> overrides the
+      previous settings.</p>
+
+      <p>For instance, this changes the default fontset to use a
+      font of which family name is &lsquo;<samp>Kochi
+      Gothic</samp>&rsquo; for all characters belonging to the
+      charset <code>japanese-jisx0208</code>.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(set-fontset-font t 'japanese-jisx0208
+                  (font-spec :family "Kochi Gothic"))
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-char_002ddisplayable_002dp" id=
+    "index-char_002ddisplayable_002dp"></a>Function:
+    <strong>char-displayable-p</strong> <em>char</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if Emacs ought to be
+      able to display <var>char</var>. More precisely, if the
+      selected frame&rsquo;s fontset has a font to display the
+      character set that <var>char</var> belongs to.</p>
+
+      <p>Fontsets can specify a font on a per-character basis; when
+      the fontset does that, this function&rsquo;s value may not be
+      accurate.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Low_002dLevel-Font.html#Low_002dLevel-Font"
+    accesskey="n" rel="next">Low-Level Font</a>, Previous: <a href=
+    "Font-Lookup.html#Font-Lookup" accesskey="p" rel="prev">Font
+    Lookup</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel=
+    "up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,105 +19,155 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Quoted Character Input</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Quoted Character Input">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Quoted Character Input">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Reading-Input.html#Reading-Input" rel="up" title="Reading Input">
-<link href="Event-Input-Misc.html#Event-Input-Misc" rel="next" title="Event Input Misc">
-<link href="Invoking-the-Input-Method.html#Invoking-the-Input-Method" rel="prev" title="Invoking the Input Method">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Quoted Character
+  Input</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Quoted Character Input" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Quoted Character Input" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Reading-Input.html#Reading-Input" rel="up" title=
+  "Reading Input" />
+  <link href="Event-Input-Misc.html#Event-Input-Misc" rel="next"
+  title="Event Input Misc" />
+  <link href=
+  "Invoking-the-Input-Method.html#Invoking-the-Input-Method" rel=
+  "prev" title="Invoking the Input Method" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Quoted-Character-Input" id="Quoted-Character-Input"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Event-Input-Misc.html#Event-Input-Misc"
+    accesskey="n" rel="next">Event Input Misc</a>, Previous:
+    <a href=
+    "Invoking-the-Input-Method.html#Invoking-the-Input-Method"
+    accesskey="p" rel="prev">Invoking the Input Method</a>, Up:
+    <a href="Reading-Input.html#Reading-Input" accesskey="u" rel=
+    "up">Reading Input</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Quoted-Character-Input-1" id=
+  "Quoted-Character-Input-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Quoted-Character-Input"></a>
-<div class="header">
-<p>
-Next: <a href="Event-Input-Misc.html#Event-Input-Misc" accesskey="n" rel="next">Event Input Misc</a>, Previous: <a href="Invoking-the-Input-Method.html#Invoking-the-Input-Method" accesskey="p" rel="prev">Invoking the Input Method</a>, Up: <a href="Reading-Input.html#Reading-Input" accesskey="u" rel="up">Reading Input</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Quoted-Character-Input-1"></a>
-<h4 class="subsection">20.8.5 Quoted Character Input</h4>
-<a name="index-quoted-character-input"></a>
+  <h4 class="subsection">20.8.5 Quoted Character Input</h4><a name=
+  "index-quoted-character-input" id=
+  "index-quoted-character-input"></a>
 
-<p>You can use the function <code>read-quoted-char</code> to ask the user to
-specify a character, and allow the user to specify a control or meta
-character conveniently, either literally or as an octal character code.
-The command <code>quoted-insert</code> uses this function.
-</p>
-<dl>
-<dt><a name="index-read_002dquoted_002dchar"></a>Function: <strong>read-quoted-char</strong> <em>&amp;optional prompt</em></dt>
-<dd><a name="index-octal-character-input"></a>
-<a name="index-control-characters_002c-reading"></a>
-<a name="index-nonprinting-characters_002c-reading"></a>
-<p>This function is like <code>read-char</code>, except that if the first
-character read is an octal digit (0&ndash;7), it reads any number of octal
-digits (but stopping if a non-octal digit is found), and returns the
-character represented by that numeric character code.  If the
-character that terminates the sequence of octal digits is <tt class="key">RET</tt>,
-it is discarded.  Any other terminating character is used as input
-after this function returns.
-</p>
-<p>Quitting is suppressed when the first character is read, so that the
-user can enter a <kbd>C-g</kbd>.  See <a href="Quitting.html#Quitting">Quitting</a>.
-</p>
-<p>If <var>prompt</var> is supplied, it specifies a string for prompting the
-user.  The prompt string is always displayed in the echo area, followed
-by a single &lsquo;<samp>-</samp>&rsquo;.
-</p>
-<p>In the following example, the user types in the octal number 177 (which
-is 127 in decimal).
-</p>
-<div class="example">
-<pre class="example">(read-quoted-char &quot;What character&quot;)
+  <p>You can use the function <code>read-quoted-char</code> to ask
+  the user to specify a character, and allow the user to specify a
+  control or meta character conveniently, either literally or as an
+  octal character code. The command <code>quoted-insert</code> uses
+  this function.</p>
 
-</pre><pre class="example">---------- Echo Area ----------
+  <dl>
+    <dt><a name="index-read_002dquoted_002dchar" id=
+    "index-read_002dquoted_002dchar"></a>Function:
+    <strong>read-quoted-char</strong> <em>&amp;optional
+    prompt</em></dt>
+
+    <dd>
+      <a name="index-octal-character-input" id=
+      "index-octal-character-input"></a> <a name=
+      "index-control-characters_002c-reading" id=
+      "index-control-characters_002c-reading"></a> <a name=
+      "index-nonprinting-characters_002c-reading" id=
+      "index-nonprinting-characters_002c-reading"></a>
+
+      <p>This function is like <code>read-char</code>, except that
+      if the first character read is an octal digit (0&ndash;7), it
+      reads any number of octal digits (but stopping if a non-octal
+      digit is found), and returns the character represented by
+      that numeric character code. If the character that terminates
+      the sequence of octal digits is <tt class="key">RET</tt>, it
+      is discarded. Any other terminating character is used as
+      input after this function returns.</p>
+
+      <p>Quitting is suppressed when the first character is read,
+      so that the user can enter a <kbd>C-g</kbd>. See <a href=
+      "Quitting.html#Quitting">Quitting</a>.</p>
+
+      <p>If <var>prompt</var> is supplied, it specifies a string
+      for prompting the user. The prompt string is always displayed
+      in the echo area, followed by a single
+      &lsquo;<samp>-</samp>&rsquo;.</p>
+
+      <p>In the following example, the user types in the octal
+      number 177 (which is 127 in decimal).</p>
+
+      <div class="example">
+        <pre class="example">
+(read-quoted-char "What character")
+
+</pre>
+        <pre class="example">
+---------- Echo Area ----------
 What character <kbd>1 7 7</kbd>-
 ---------- Echo Area ----------
 
      &rArr; 127
-</pre></div>
-</dd></dl>
-
-
-
-
+</pre>
+      </div>
+    </dd>
+  </dl>
 </body>
 </html>

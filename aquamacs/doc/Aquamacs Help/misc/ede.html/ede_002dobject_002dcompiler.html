@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes EDE, the Emacs Development Environment.
 
 Copyright (C) 1998-2001, 2004-2005, 2008-2016
@@ -15,114 +17,168 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Development Environment: ede-object-compiler</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Development Environment: ede-object-compiler">
-<meta name="keywords" content="Emacs Development Environment: ede-object-compiler">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Compilers.html#Compilers" rel="up" title="Compilers">
-<link href="ede_002dlinker.html#ede_002dlinker" rel="next" title="ede-linker">
-<link href="ede_002dcompiler.html#ede_002dcompiler" rel="prev" title="ede-compiler">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Development Environment: ede-object-compiler</title>
+  <meta name="description" content=
+  "Emacs Development Environment: ede-object-compiler" />
+  <meta name="keywords" content=
+  "Emacs Development Environment: ede-object-compiler" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Compilers.html#Compilers" rel="up" title=
+  "Compilers" />
+  <link href="ede_002dlinker.html#ede_002dlinker" rel="next" title=
+  "ede-linker" />
+  <link href="ede_002dcompiler.html#ede_002dcompiler" rel="prev"
+  title="ede-compiler" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="ede_002dobject_002dcompiler"></a>
-<div class="header">
-<p>
-Next: <a href="ede_002dlinker.html#ede_002dlinker" accesskey="n" rel="next">ede-linker</a>, Previous: <a href="ede_002dcompiler.html#ede_002dcompiler" accesskey="p" rel="prev">ede-compiler</a>, Up: <a href="Compilers.html#Compilers" accesskey="u" rel="up">Compilers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="ede_002dobject_002dcompiler-1"></a>
-<h4 class="subsection">8.10.3 ede-object-compiler</h4>
-<a name="index-ede_002dobject_002dcompiler"></a>
+<body lang="en" xml:lang="en">
+  <a name="ede_002dobject_002dcompiler" id=
+  "ede_002dobject_002dcompiler"></a>
 
-<dl compact="compact">
-<dt>Inheritance Tree:</dt>
-<dd><dl compact="compact">
-<dt><code>eieio-instance-inheritor</code></dt>
-<dd><dl compact="compact">
-<dt><code>See&nbsp;<a href="ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram">ede-compilation-program</a>.<!-- /@w --></code></dt>
-<dd><dl compact="compact">
-<dt><code>See&nbsp;<a href="ede_002dcompiler.html#ede_002dcompiler">ede-compiler</a>.<!-- /@w --></code></dt>
-<dd><dl compact="compact">
-<dt><code>ede-object-compiler</code></dt>
-<dd><p>No children
-</p></dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="ede_002dlinker.html#ede_002dlinker"
+    accesskey="n" rel="next">ede-linker</a>, Previous: <a href=
+    "ede_002dcompiler.html#ede_002dcompiler" accesskey="p" rel=
+    "prev">ede-compiler</a>, Up: <a href="Compilers.html#Compilers"
+    accesskey="u" rel="up">Compilers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="ede_002dobject_002dcompiler-1" id=
+  "ede_002dobject_002dcompiler-1"></a>
 
-<dl compact="compact">
-<dt>Slots:</dt>
-<dd>
-<dl compact="compact">
-<dt><code>:uselinker</code></dt>
-<dd><p>Type: <code>boolean</code> <br>
-Default Value: <code>t</code>
-</p>
-<p>See <a href="ede_002dcompiler.html#ede_002dcompiler">ede-compiler</a>.
-</p></dd>
-<dt><code>:dependencyvar</code></dt>
-<dd><p>Type: <code>list</code>
-</p>
-<p>A variable dedicated to dependency generation.
-</p></dd>
-</dl>
-</dd>
-</dl>
+  <h4 class="subsection">8.10.3 ede-object-compiler</h4><a name=
+  "index-ede_002dobject_002dcompiler" id=
+  "index-ede_002dobject_002dcompiler"></a>
 
-<a name="Specialized-Methods-30"></a>
-<h4 class="subsubsection">8.10.3.1 Specialized Methods</h4>
+  <dl compact="compact">
+    <dt>Inheritance Tree:</dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dinsert_002dvariables-5"></a>Method: <strong>ede-proj-makefile-insert-variables</strong> <em>:AFTER this</em></dt>
-<dd><p>Insert variables needed by the compiler <var>THIS</var>.
-</p></dd></dl>
+    <dd>
+      <dl compact="compact">
+        <dt><code>eieio-instance-inheritor</code></dt>
 
+        <dd>
+          <dl compact="compact">
+            <dt><code>See&nbsp;<a href=
+            "ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram">ede-compilation-program</a>.<!-- /@w --></code></dt>
 
+            <dd>
+              <dl compact="compact">
+                <dt><code>See&nbsp;<a href=
+                "ede_002dcompiler.html#ede_002dcompiler">ede-compiler</a>.<!-- /@w --></code></dt>
 
+                <dd>
+                  <dl compact="compact">
+                    <dt><code>ede-object-compiler</code></dt>
 
+                    <dd>
+                      <p>No children</p>
+                    </dd>
+                  </dl>
+                </dd>
+              </dl>
+            </dd>
+          </dl>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <dl compact="compact">
+    <dt>Slots:</dt>
+
+    <dd>
+      <dl compact="compact">
+        <dt><code>:uselinker</code></dt>
+
+        <dd>
+          <p>Type: <code>boolean</code><br />
+          Default Value: <code>t</code></p>
+
+          <p>See <a href=
+          "ede_002dcompiler.html#ede_002dcompiler">ede-compiler</a>.</p>
+        </dd>
+
+        <dt><code>:dependencyvar</code></dt>
+
+        <dd>
+          <p>Type: <code>list</code></p>
+
+          <p>A variable dedicated to dependency generation.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl><a name="Specialized-Methods-30" id=
+  "Specialized-Methods-30"></a>
+
+  <h4 class="subsubsection">8.10.3.1 Specialized Methods</h4>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dinsert_002dvariables-5"
+    id="index-ede_002dproj_002dmakefile_002dinsert_002dvariables-5">
+    </a>Method: <strong>ede-proj-makefile-insert-variables</strong>
+    <em>:AFTER this</em></dt>
+
+    <dd>
+      <p>Insert variables needed by the compiler
+      <var>THIS</var>.</p>
+    </dd>
+  </dl>
 </body>
 </html>

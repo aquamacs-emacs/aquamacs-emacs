@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,130 +14,184 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Sieve Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Sieve Commands">
-<meta name="keywords" content="Gnus Manual: Sieve Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Misc-Group-Stuff.html#Misc-Group-Stuff" rel="up" title="Misc Group Stuff">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="next" title="Summary Buffer">
-<link href="File-Commands.html#File-Commands" rel="prev" title="File Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Sieve Commands</title>
+  <meta name="description" content="Gnus Manual: Sieve Commands" />
+  <meta name="keywords" content="Gnus Manual: Sieve Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Misc-Group-Stuff.html#Misc-Group-Stuff" rel="up"
+  title="Misc Group Stuff" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="next" title=
+  "Summary Buffer" />
+  <link href="File-Commands.html#File-Commands" rel="prev" title=
+  "File Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sieve-Commands"></a>
-<div class="header">
-<p>
-Previous: <a href="File-Commands.html#File-Commands" accesskey="p" rel="prev">File Commands</a>, Up: <a href="Misc-Group-Stuff.html#Misc-Group-Stuff" accesskey="u" rel="up">Misc Group Stuff</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sieve-Commands-1"></a>
-<h4 class="subsection">2.18.5 Sieve Commands</h4>
-<a name="index-group-sieve-commands"></a>
+<body lang="en" xml:lang="en">
+  <a name="Sieve-Commands" id="Sieve-Commands"></a>
 
-<p>Sieve is a server-side mail filtering language.  In Gnus you can use
-the <code>sieve</code> group parameter (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) to specify
-sieve rules that should apply to each group.  Gnus provides two
-commands to translate all these group parameters into a proper Sieve
-script that can be transferred to the server somehow.
-</p>
-<a name="index-gnus_002dsieve_002dfile"></a>
-<a name="index-gnus_002dsieve_002dregion_002dstart"></a>
-<a name="index-gnus_002dsieve_002dregion_002dend"></a>
-<p>The generated Sieve script is placed in <code>gnus-sieve-file</code> (by
-default <samp>~/.sieve</samp>).  The Sieve code that Gnus generate is placed
-between two delimiters, <code>gnus-sieve-region-start</code> and
-<code>gnus-sieve-region-end</code>, so you may write additional Sieve code
-outside these delimiters that will not be removed the next time you
-regenerate the Sieve script.
-</p>
-<a name="index-gnus_002dsieve_002dcrosspost"></a>
-<p>The variable <code>gnus-sieve-crosspost</code> controls how the Sieve script
-is generated.  If it is non-<code>nil</code> (the default) articles is
-placed in all groups that have matching rules, otherwise the article
-is only placed in the group with the first matching rule.  For
-example, the group parameter &lsquo;<samp>(sieve address &quot;sender&quot;
-&quot;owner-ding@hpc.uh.edu&quot;)</samp>&rsquo; will generate the following piece of Sieve
-code if <code>gnus-sieve-crosspost</code> is <code>nil</code>.  (When
-<code>gnus-sieve-crosspost</code> is non-<code>nil</code>, it looks the same
-except that the line containing the call to <code>stop</code> is removed.)
-</p>
-<div class="example">
-<pre class="example">if address &quot;sender&quot; &quot;owner-ding@hpc.uh.edu&quot; {
-        fileinto &quot;INBOX.ding&quot;;
+  <div class="header">
+    <p>Previous: <a href="File-Commands.html#File-Commands"
+    accesskey="p" rel="prev">File Commands</a>, Up: <a href=
+    "Misc-Group-Stuff.html#Misc-Group-Stuff" accesskey="u" rel=
+    "up">Misc Group Stuff</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sieve-Commands-1" id="Sieve-Commands-1"></a>
+
+  <h4 class="subsection">2.18.5 Sieve Commands</h4><a name=
+  "index-group-sieve-commands" id="index-group-sieve-commands"></a>
+
+  <p>Sieve is a server-side mail filtering language. In Gnus you
+  can use the <code>sieve</code> group parameter (see <a href=
+  "Group-Parameters.html#Group-Parameters">Group Parameters</a>) to
+  specify sieve rules that should apply to each group. Gnus
+  provides two commands to translate all these group parameters
+  into a proper Sieve script that can be transferred to the server
+  somehow.</p><a name="index-gnus_002dsieve_002dfile" id=
+  "index-gnus_002dsieve_002dfile"></a> <a name=
+  "index-gnus_002dsieve_002dregion_002dstart" id=
+  "index-gnus_002dsieve_002dregion_002dstart"></a> <a name=
+  "index-gnus_002dsieve_002dregion_002dend" id=
+  "index-gnus_002dsieve_002dregion_002dend"></a>
+
+  <p>The generated Sieve script is placed in
+  <code>gnus-sieve-file</code> (by default <samp>~/.sieve</samp>).
+  The Sieve code that Gnus generate is placed between two
+  delimiters, <code>gnus-sieve-region-start</code> and
+  <code>gnus-sieve-region-end</code>, so you may write additional
+  Sieve code outside these delimiters that will not be removed the
+  next time you regenerate the Sieve script.</p><a name=
+  "index-gnus_002dsieve_002dcrosspost" id=
+  "index-gnus_002dsieve_002dcrosspost"></a>
+
+  <p>The variable <code>gnus-sieve-crosspost</code> controls how
+  the Sieve script is generated. If it is non-<code>nil</code> (the
+  default) articles is placed in all groups that have matching
+  rules, otherwise the article is only placed in the group with the
+  first matching rule. For example, the group parameter
+  &lsquo;<samp>(sieve address "sender"
+  "owner-ding@hpc.uh.edu")</samp>&rsquo; will generate the
+  following piece of Sieve code if
+  <code>gnus-sieve-crosspost</code> is <code>nil</code>. (When
+  <code>gnus-sieve-crosspost</code> is non-<code>nil</code>, it
+  looks the same except that the line containing the call to
+  <code>stop</code> is removed.)</p>
+
+  <div class="example">
+    <pre class="example">
+if address "sender" "owner-ding@hpc.uh.edu" {
+        fileinto "INBOX.ding";
         stop;
 }
-</pre></div>
+</pre>
+  </div>
 
-<p>See <a href="../sieve/index.html#Top">Top</a> in <cite>Emacs Sieve</cite>.
-</p>
-<dl compact="compact">
-<dt><kbd>D g</kbd></dt>
-<dd><a name="index-D-g-_0028Group_0029"></a>
-<a name="index-gnus_002dsieve_002dgenerate"></a>
-<a name="index-gnus_002dsieve_002dfile-1"></a>
-<a name="index-generating-sieve-script"></a>
-<p>Regenerate a Sieve script from the <code>sieve</code> group parameters and
-put you into the <code>gnus-sieve-file</code> without saving it.
-</p>
-</dd>
-<dt><kbd>D u</kbd></dt>
-<dd><a name="index-D-u-_0028Group_0029"></a>
-<a name="index-gnus_002dsieve_002dupdate"></a>
-<a name="index-gnus_002dsieve_002dfile-2"></a>
-<a name="index-updating-sieve-script"></a>
-<p>Regenerates the Gnus managed part of <code>gnus-sieve-file</code> using the
-<code>sieve</code> group parameters, save the file and upload it to the
-server using the <code>sieveshell</code> program.
-</p>
-</dd>
-</dl>
+  <p>See <a href="../sieve/index.html#Top">Top</a> in <cite>Emacs
+  Sieve</cite>.</p>
 
+  <dl compact="compact">
+    <dt><kbd>D g</kbd></dt>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="File-Commands.html#File-Commands" accesskey="p" rel="prev">File Commands</a>, Up: <a href="Misc-Group-Stuff.html#Misc-Group-Stuff" accesskey="u" rel="up">Misc Group Stuff</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name="index-D-g-_0028Group_0029" id=
+      "index-D-g-_0028Group_0029"></a> <a name=
+      "index-gnus_002dsieve_002dgenerate" id=
+      "index-gnus_002dsieve_002dgenerate"></a> <a name=
+      "index-gnus_002dsieve_002dfile-1" id=
+      "index-gnus_002dsieve_002dfile-1"></a> <a name=
+      "index-generating-sieve-script" id=
+      "index-generating-sieve-script"></a>
 
+      <p>Regenerate a Sieve script from the <code>sieve</code>
+      group parameters and put you into the
+      <code>gnus-sieve-file</code> without saving it.</p>
+    </dd>
 
+    <dt><kbd>D u</kbd></dt>
 
+    <dd>
+      <a name="index-D-u-_0028Group_0029" id=
+      "index-D-u-_0028Group_0029"></a> <a name=
+      "index-gnus_002dsieve_002dupdate" id=
+      "index-gnus_002dsieve_002dupdate"></a> <a name=
+      "index-gnus_002dsieve_002dfile-2" id=
+      "index-gnus_002dsieve_002dfile-2"></a> <a name=
+      "index-updating-sieve-script" id=
+      "index-updating-sieve-script"></a>
+
+      <p>Regenerates the Gnus managed part of
+      <code>gnus-sieve-file</code> using the <code>sieve</code>
+      group parameters, save the file and upload it to the server
+      using the <code>sieveshell</code> program.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="File-Commands.html#File-Commands"
+    accesskey="p" rel="prev">File Commands</a>, Up: <a href=
+    "Misc-Group-Stuff.html#Misc-Group-Stuff" accesskey="u" rel=
+    "up">Misc Group Stuff</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1994-1995, 1999, 2001-2016
 Free Software Foundation, Inc.
 
@@ -13,177 +15,271 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Dired Extra User&rsquo;s Manual: Shell Command Guessing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Dired Extra User&rsquo;s Manual: Shell Command Guessing">
-<meta name="keywords" content="Dired Extra User&rsquo;s Manual: Shell Command Guessing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Virtual-Dired.html#Virtual-Dired" rel="next" title="Virtual Dired">
-<link href="Local-Variables.html#Local-Variables" rel="prev" title="Local Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Dired Extra User&rsquo;s Manual: Shell Command
+  Guessing</title>
+  <meta name="description" content=
+  "Dired Extra User&rsquo;s Manual: Shell Command Guessing" />
+  <meta name="keywords" content=
+  "Dired Extra User&rsquo;s Manual: Shell Command Guessing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Virtual-Dired.html#Virtual-Dired" rel="next" title=
+  "Virtual Dired" />
+  <link href="Local-Variables.html#Local-Variables" rel="prev"
+  title="Local Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Shell-Command-Guessing"></a>
-<div class="header">
-<p>
-Next: <a href="Virtual-Dired.html#Virtual-Dired" accesskey="n" rel="next">Virtual Dired</a>, Previous: <a href="Local-Variables.html#Local-Variables" accesskey="p" rel="prev">Local Variables</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Shell-Command-Guessing-1"></a>
-<h2 class="chapter">5 Shell Command Guessing</h2>
-<a name="index-Guessing-shell-commands-for-files_002e"></a>
+<body lang="en" xml:lang="en">
+  <a name="Shell-Command-Guessing" id="Shell-Command-Guessing"></a>
 
-<p>Based upon the name of a file, Dired tries to guess what shell
-command you might want to apply to it.  For example, if you have point
-on a file named <samp>foo.tar</samp> and you press <kbd>!</kbd>, Dired will guess
-you want to &lsquo;<samp>tar xvf</samp>&rsquo; it and suggest that as the default shell
-command.
-</p>
-<p>The default is mentioned in brackets and you can type <kbd>M-n</kbd> to get
-the default into the minibuffer and then edit it, e.g., to change
-&lsquo;<samp>tar xvf</samp>&rsquo; to &lsquo;<samp>tar tvf</samp>&rsquo;.  If there are several commands for a given
-file, e.g., &lsquo;<samp>xtex</samp>&rsquo; and &lsquo;<samp>dvips</samp>&rsquo; for a <samp>.dvi</samp> file, you can type
-<kbd>M-n</kbd> several times to see each of the matching commands.
-</p>
-<p>Dired only tries to guess a command for a single file, never for a list
-of marked files.
-</p>
-<dl compact="compact">
-<dt><code>dired-guess-shell-alist-default</code></dt>
-<dd><a name="index-dired_002dguess_002dshell_002dalist_002ddefault"></a>
-<p>Predefined rules for shell commands.  Set this to <code>nil</code> to turn guessing off.
-The elements of <code>dired-guess-shell-alist-user</code> (defined by the
-user) will override these rules.
-</p>
-</dd>
-<dt><code>dired-guess-shell-alist-user</code></dt>
-<dd><a name="index-dired_002dguess_002dshell_002dalist_002duser"></a>
-<p>If non-<code>nil</code>, a user-defined alist of file regexps and their suggested
-commands.  These rules take precedence over the predefined rules in the
-variable <code>dired-guess-shell-alist-default</code> (to which they are prepended)
-when <code>dired-do-shell-command</code> is run).
-</p>
-<p>Each element of the alist looks like
-</p>
-<div class="example">
-<pre class="example">(<var>regexp</var> <var>command</var>&hellip;)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Virtual-Dired.html#Virtual-Dired" accesskey=
+    "n" rel="next">Virtual Dired</a>, Previous: <a href=
+    "Local-Variables.html#Local-Variables" accesskey="p" rel=
+    "prev">Local Variables</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Shell-Command-Guessing-1" id=
+  "Shell-Command-Guessing-1"></a>
 
-<p>where each <var>command</var> can either be a string or a Lisp expression
-that evaluates to a string.  If several commands are given, all of
-them will temporarily be pushed onto the history.
-</p>
-<p>If &lsquo;<samp>*</samp>&rsquo; in the shell command, that means to substitute the file
-name.
-</p>
-<p>You can set this variable in your <samp>~/.emacs</samp>.  For example,
-to add rules for &lsquo;<samp>.foo</samp>&rsquo; and &lsquo;<samp>.bar</samp>&rsquo; file extensions, write
-</p>
-<div class="example">
-<pre class="example">(setq dired-guess-shell-alist-user
+  <h2 class="chapter">5 Shell Command Guessing</h2><a name=
+  "index-Guessing-shell-commands-for-files_002e" id=
+  "index-Guessing-shell-commands-for-files_002e"></a>
+
+  <p>Based upon the name of a file, Dired tries to guess what shell
+  command you might want to apply to it. For example, if you have
+  point on a file named <samp>foo.tar</samp> and you press
+  <kbd>!</kbd>, Dired will guess you want to &lsquo;<samp>tar
+  xvf</samp>&rsquo; it and suggest that as the default shell
+  command.</p>
+
+  <p>The default is mentioned in brackets and you can type
+  <kbd>M-n</kbd> to get the default into the minibuffer and then
+  edit it, e.g., to change &lsquo;<samp>tar xvf</samp>&rsquo; to
+  &lsquo;<samp>tar tvf</samp>&rsquo;. If there are several commands
+  for a given file, e.g., &lsquo;<samp>xtex</samp>&rsquo; and
+  &lsquo;<samp>dvips</samp>&rsquo; for a <samp>.dvi</samp> file,
+  you can type <kbd>M-n</kbd> several times to see each of the
+  matching commands.</p>
+
+  <p>Dired only tries to guess a command for a single file, never
+  for a list of marked files.</p>
+
+  <dl compact="compact">
+    <dt><code>dired-guess-shell-alist-default</code></dt>
+
+    <dd>
+      <a name=
+      "index-dired_002dguess_002dshell_002dalist_002ddefault" id=
+      "index-dired_002dguess_002dshell_002dalist_002ddefault"></a>
+
+      <p>Predefined rules for shell commands. Set this to
+      <code>nil</code> to turn guessing off. The elements of
+      <code>dired-guess-shell-alist-user</code> (defined by the
+      user) will override these rules.</p>
+    </dd>
+
+    <dt><code>dired-guess-shell-alist-user</code></dt>
+
+    <dd>
+      <a name="index-dired_002dguess_002dshell_002dalist_002duser"
+      id="index-dired_002dguess_002dshell_002dalist_002duser"></a>
+
+      <p>If non-<code>nil</code>, a user-defined alist of file
+      regexps and their suggested commands. These rules take
+      precedence over the predefined rules in the variable
+      <code>dired-guess-shell-alist-default</code> (to which they
+      are prepended) when <code>dired-do-shell-command</code> is
+      run).</p>
+
+      <p>Each element of the alist looks like</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>regexp</var> <var>command</var>&hellip;)
+</pre>
+      </div>
+
+      <p>where each <var>command</var> can either be a string or a
+      Lisp expression that evaluates to a string. If several
+      commands are given, all of them will temporarily be pushed
+      onto the history.</p>
+
+      <p>If &lsquo;<samp>*</samp>&rsquo; in the shell command, that
+      means to substitute the file name.</p>
+
+      <p>You can set this variable in your <samp>~/.emacs</samp>.
+      For example, to add rules for &lsquo;<samp>.foo</samp>&rsquo;
+      and &lsquo;<samp>.bar</samp>&rsquo; file extensions,
+      write</p>
+
+      <div class="example">
+        <pre class="example">
+(setq dired-guess-shell-alist-user
       (list
-       (list &quot;\\.foo$&quot; &quot;<var>foo-command</var>&quot;);; fixed rule
+       (list "\\.foo$" "<var>foo-command</var>");; fixed rule
        ;; possibly more rules...
-       (list &quot;\\.bar$&quot;;; rule with condition test
+       (list "\\.bar$";; rule with condition test
               '(if <var>condition</var>
-                   &quot;<var>bar-command-1</var>&quot;
-                 &quot;<var>bar-command-2</var>&quot;))))
-</pre></div>
+                   "<var>bar-command-1</var>"
+                 "<var>bar-command-2</var>"))))
+</pre>
+      </div>
 
-<p>This will override any predefined rules for the same extensions.
-</p>
-</dd>
-<dt><code>dired-guess-shell-case-fold-search</code></dt>
-<dd><a name="index-dired_002dguess_002dshell_002dcase_002dfold_002dsearch"></a>
-<p>Default: <code>t</code>
-</p>
-<p>Non-<code>nil</code> means <code>dired-guess-shell-alist-default</code> and
-<code>dired-guess-shell-alist-user</code> are matched case-insensitively.
-</p>
-</dd>
-<dt><code>dired-guess-shell-gnutar</code></dt>
-<dd><a name="index-dired_002dguess_002dshell_002dgnutar"></a>
-<a name="index-Passing-GNU-Tar-its-z-switch_002e"></a>
-<p>Default: <code>nil</code>
-</p>
-<p>If non-<code>nil</code>, this is the name of the GNU Tar executable (e.g.,
-&lsquo;<samp>tar</samp>&rsquo; or &lsquo;<samp>gnutar</samp>&rsquo;).  GNU Tar&rsquo;s &lsquo;<samp>z</samp>&rsquo; switch is used for
-compressed tar files.
-If you don&rsquo;t have GNU tar, set this to <code>nil</code>: a pipe using &lsquo;<samp>zcat</samp>&rsquo; is
-then used.
-</p>
-</dd>
-<dt><code>dired-guess-shell-gzip-quiet</code></dt>
-<dd><a name="index-dired_002dguess_002dshell_002dgzip_002dquiet"></a>
-<a name="index-gzip"></a>
-<p>Default: <code>t</code>
-</p>
-<p>A non-<code>nil</code> value means that &lsquo;<samp>-q</samp>&rsquo; is passed to <code>gzip</code>
-overriding a verbose option in the <code>GZIP</code> environment variable.
-</p>
-</dd>
-<dt><code>dired-guess-shell-znew-switches nil</code></dt>
-<dd><a name="index-dired_002dguess_002dshell_002dznew_002dswitches-nil"></a>
-<a name="index-znew"></a>
-<p>Default: <code>nil</code>
-</p>
-<p>A string of switches passed to <code>znew</code>.  An example is
-&lsquo;<samp>-K</samp>&rsquo; which will make <code>znew</code> keep a <samp>.Z</samp> file when it is
-smaller than the <samp>.gz</samp> file.
-</p>
-</dd>
-<dt><code>dired-shell-command-history nil</code></dt>
-<dd><a name="index-dired_002dshell_002dcommand_002dhistory-nil"></a>
+      <p>This will override any predefined rules for the same
+      extensions.</p>
+    </dd>
 
-<p>History list for commands that read dired-shell commands.
-</p></dd>
-</dl>
+    <dt><code>dired-guess-shell-case-fold-search</code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Virtual-Dired.html#Virtual-Dired" accesskey="n" rel="next">Virtual Dired</a>, Previous: <a href="Local-Variables.html#Local-Variables" accesskey="p" rel="prev">Local Variables</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name=
+      "index-dired_002dguess_002dshell_002dcase_002dfold_002dsearch"
+      id=
+      "index-dired_002dguess_002dshell_002dcase_002dfold_002dsearch">
+      </a>
 
+      <p>Default: <code>t</code></p>
 
+      <p>Non-<code>nil</code> means
+      <code>dired-guess-shell-alist-default</code> and
+      <code>dired-guess-shell-alist-user</code> are matched
+      case-insensitively.</p>
+    </dd>
 
+    <dt><code>dired-guess-shell-gnutar</code></dt>
+
+    <dd>
+      <a name="index-dired_002dguess_002dshell_002dgnutar" id=
+      "index-dired_002dguess_002dshell_002dgnutar"></a> <a name=
+      "index-Passing-GNU-Tar-its-z-switch_002e" id=
+      "index-Passing-GNU-Tar-its-z-switch_002e"></a>
+
+      <p>Default: <code>nil</code></p>
+
+      <p>If non-<code>nil</code>, this is the name of the GNU Tar
+      executable (e.g., &lsquo;<samp>tar</samp>&rsquo; or
+      &lsquo;<samp>gnutar</samp>&rsquo;). GNU Tar&rsquo;s
+      &lsquo;<samp>z</samp>&rsquo; switch is used for compressed
+      tar files. If you don&rsquo;t have GNU tar, set this to
+      <code>nil</code>: a pipe using
+      &lsquo;<samp>zcat</samp>&rsquo; is then used.</p>
+    </dd>
+
+    <dt><code>dired-guess-shell-gzip-quiet</code></dt>
+
+    <dd>
+      <a name="index-dired_002dguess_002dshell_002dgzip_002dquiet"
+      id="index-dired_002dguess_002dshell_002dgzip_002dquiet"></a>
+      <a name="index-gzip" id="index-gzip"></a>
+
+      <p>Default: <code>t</code></p>
+
+      <p>A non-<code>nil</code> value means that
+      &lsquo;<samp>-q</samp>&rsquo; is passed to <code>gzip</code>
+      overriding a verbose option in the <code>GZIP</code>
+      environment variable.</p>
+    </dd>
+
+    <dt><code>dired-guess-shell-znew-switches nil</code></dt>
+
+    <dd>
+      <a name=
+      "index-dired_002dguess_002dshell_002dznew_002dswitches-nil"
+      id=
+      "index-dired_002dguess_002dshell_002dznew_002dswitches-nil"></a>
+      <a name="index-znew" id="index-znew"></a>
+
+      <p>Default: <code>nil</code></p>
+
+      <p>A string of switches passed to <code>znew</code>. An
+      example is &lsquo;<samp>-K</samp>&rsquo; which will make
+      <code>znew</code> keep a <samp>.Z</samp> file when it is
+      smaller than the <samp>.gz</samp> file.</p>
+    </dd>
+
+    <dt><code>dired-shell-command-history nil</code></dt>
+
+    <dd>
+      <a name="index-dired_002dshell_002dcommand_002dhistory-nil"
+      id="index-dired_002dshell_002dcommand_002dhistory-nil"></a>
+
+      <p>History list for commands that read dired-shell
+      commands.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Virtual-Dired.html#Virtual-Dired" accesskey=
+    "n" rel="next">Virtual Dired</a>, Previous: <a href=
+    "Local-Variables.html#Local-Variables" accesskey="p" rel=
+    "prev">Local Variables</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

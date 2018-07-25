@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,206 +14,312 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Using of D-Bus: Errors and Events</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Using of D-Bus: Errors and Events">
-<meta name="keywords" content="Using of D-Bus: Errors and Events">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Index.html#Index" rel="next" title="Index">
-<link href="Alternative-Buses.html#Alternative-Buses" rel="prev" title="Alternative Buses">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Using of D-Bus: Errors and Events</title>
+  <meta name="description" content=
+  "Using of D-Bus: Errors and Events" />
+  <meta name="keywords" content=
+  "Using of D-Bus: Errors and Events" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Index.html#Index" rel="next" title="Index" />
+  <link href="Alternative-Buses.html#Alternative-Buses" rel="prev"
+  title="Alternative Buses" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Errors-and-Events"></a>
-<div class="header">
-<p>
-Next: <a href="Index.html#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="Alternative-Buses.html#Alternative-Buses" accesskey="p" rel="prev">Alternative Buses</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Errors-and-events_002e"></a>
-<h2 class="chapter">9 Errors and events.</h2>
-<a name="index-debugging"></a>
-<a name="index-errors"></a>
-<a name="index-events"></a>
+<body lang="en" xml:lang="en">
+  <a name="Errors-and-Events" id="Errors-and-Events"></a>
 
-<p>The internal actions can be traced by running in a debug mode.
-</p>
-<dl>
-<dt><a name="index-dbus_002ddebug"></a>Variable: <strong>dbus-debug</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, D-Bus specific debug messages are raised.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Index.html#Index" accesskey="n" rel=
+    "next">Index</a>, Previous: <a href=
+    "Alternative-Buses.html#Alternative-Buses" accesskey="p" rel=
+    "prev">Alternative Buses</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Errors-and-events_002e" id="Errors-and-events_002e"></a>
 
-<p>Input parameters of <code>dbus-call-method</code>,
-<code>dbus-call-method-asynchronously</code>, <code>dbus-send-signal</code>,
-<code>dbus-register-method</code>, <code>dbus-register-property</code> and
-<code>dbus-register-signal</code> are checked for correct D-Bus types. If
-there is a type mismatch, the Lisp error <code>wrong-type-argument</code>
-<code>D-Bus ARG</code> is raised.
-</p>
-<p>All errors raised by D-Bus are signaled with the error symbol
-<code>dbus-error</code>.  If possible, error messages from D-Bus are
-appended to the <code>dbus-error</code>.
-</p>
-<dl>
-<dt><a name="index-dbus_002dignore_002derrors"></a>Special Form: <strong>dbus-ignore-errors</strong> <em>forms&hellip;</em></dt>
-<dd><p>This executes <var>forms</var> exactly like a <code>progn</code>, except that
-<code>dbus-error</code> errors are ignored during the <var>forms</var>.  These
-errors can be made visible when <code>dbus-debug</code> is set to <code>t</code>.
-</p></dd></dl>
+  <h2 class="chapter">9 Errors and events.</h2><a name=
+  "index-debugging" id="index-debugging"></a> <a name=
+  "index-errors" id="index-errors"></a> <a name="index-events" id=
+  "index-events"></a>
 
-<p>Incoming D-Bus messages are handled as Emacs events, see see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Misc-Events.html#Misc-Events">(elisp)Misc
-Events</a>.  They are retrieved only, when Emacs runs in
-interactive mode.  The generated event has this form:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-event <var>bus</var> <var>type</var> <var>serial</var> <var>service</var> <var>path</var> <var>interface</var> <var>member</var> <var>handler</var>
+  <p>The internal actions can be traced by running in a debug
+  mode.</p>
+
+  <dl>
+    <dt><a name="index-dbus_002ddebug" id=
+    "index-dbus_002ddebug"></a>Variable:
+    <strong>dbus-debug</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, D-Bus specific
+      debug messages are raised.</p>
+    </dd>
+  </dl>
+
+  <p>Input parameters of <code>dbus-call-method</code>,
+  <code>dbus-call-method-asynchronously</code>,
+  <code>dbus-send-signal</code>, <code>dbus-register-method</code>,
+  <code>dbus-register-property</code> and
+  <code>dbus-register-signal</code> are checked for correct D-Bus
+  types. If there is a type mismatch, the Lisp error
+  <code>wrong-type-argument</code> <code>D-Bus ARG</code> is
+  raised.</p>
+
+  <p>All errors raised by D-Bus are signaled with the error symbol
+  <code>dbus-error</code>. If possible, error messages from D-Bus
+  are appended to the <code>dbus-error</code>.</p>
+
+  <dl>
+    <dt><a name="index-dbus_002dignore_002derrors" id=
+    "index-dbus_002dignore_002derrors"></a>Special Form:
+    <strong>dbus-ignore-errors</strong> <em>forms&hellip;</em></dt>
+
+    <dd>
+      <p>This executes <var>forms</var> exactly like a
+      <code>progn</code>, except that <code>dbus-error</code>
+      errors are ignored during the <var>forms</var>. These errors
+      can be made visible when <code>dbus-debug</code> is set to
+      <code>t</code>.</p>
+    </dd>
+  </dl>
+
+  <p>Incoming D-Bus messages are handled as Emacs events, see see
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Misc-Events.html#Misc-Events">
+  (elisp)Misc Events</a>. They are retrieved only, when Emacs runs
+  in interactive mode. The generated event has this form:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(dbus-event <var>bus</var> <var>type</var> <var>serial</var> <var>service</var> <var>path</var> <var>interface</var> <var>member</var> <var>handler</var>
         &amp;rest <var>args</var>)
-</pre></div>
+</pre>
+  </div>
 
-<p><var>bus</var> identifies the D-Bus the message is coming from.  It is
-either the symbol <code>:system</code> or the symbol <code>:session</code>.
-</p>
-<p><var>type</var> is the D-Bus message type which has caused the event.  It
-can be <code>dbus-message-type-invalid</code>,
-<code>dbus-message-type-method-call</code>,
-<code>dbus-message-type-method-return</code>,
-<code>dbus-message-type-error</code>, or <code>dbus-message-type-signal</code>.
-<var>serial</var> is the serial number of the received D-Bus message.
-</p>
-<p><var>service</var> and <var>path</var> are the unique name and the object path
-of the D-Bus object emitting the message.  <var>interface</var> and
-<var>member</var> denote the message which has been sent.
-</p>
-<p><var>handler</var> is the callback function which has been registered for
-this message (see see <a href="Signals.html#Signals">Signals</a>).  When a <code>dbus-event</code> event
-arrives, <var>handler</var> is called with <var>args</var> as arguments.
-</p>
-<p>In order to inspect the <code>dbus-event</code> data, you could extend the
-definition of the callback function in <a href="Signals.html#Signals">Signals</a>:
-</p>
-<div class="lisp">
-<pre class="lisp">(defun my-dbus-signal-handler (&amp;rest args)
-  (message &quot;my-dbus-signal-handler: %S&quot; last-input-event))
-</pre></div>
+  <p><var>bus</var> identifies the D-Bus the message is coming
+  from. It is either the symbol <code>:system</code> or the symbol
+  <code>:session</code>.</p>
 
-<p>There exist convenience functions which could be called inside a
-callback function in order to retrieve the information from the event.
-</p>
-<dl>
-<dt><a name="index-dbus_002devent_002dbus_002dname"></a>Function: <strong>dbus-event-bus-name</strong> <em>event</em></dt>
-<dd><p>Returns the bus name <var>event</var> is coming from.
-The result is either the symbol <code>:system</code> or the symbol <code>:session</code>.
-</p></dd></dl>
+  <p><var>type</var> is the D-Bus message type which has caused the
+  event. It can be <code>dbus-message-type-invalid</code>,
+  <code>dbus-message-type-method-call</code>,
+  <code>dbus-message-type-method-return</code>,
+  <code>dbus-message-type-error</code>, or
+  <code>dbus-message-type-signal</code>. <var>serial</var> is the
+  serial number of the received D-Bus message.</p>
 
-<dl>
-<dt><a name="index-dbus_002devent_002dmessage_002dtype"></a>Function: <strong>dbus-event-message-type</strong> <em>event</em></dt>
-<dd><p>Returns the message type of the corresponding D-Bus message.  The
-result is a natural number.
-</p></dd></dl>
+  <p><var>service</var> and <var>path</var> are the unique name and
+  the object path of the D-Bus object emitting the message.
+  <var>interface</var> and <var>member</var> denote the message
+  which has been sent.</p>
 
-<dl>
-<dt><a name="index-dbus_002devent_002dserial_002dnumber"></a>Function: <strong>dbus-event-serial-number</strong> <em>event</em></dt>
-<dd><p>Returns the serial number of the corresponding D-Bus message.
-The result is a natural number.
-</p></dd></dl>
+  <p><var>handler</var> is the callback function which has been
+  registered for this message (see see <a href=
+  "Signals.html#Signals">Signals</a>). When a
+  <code>dbus-event</code> event arrives, <var>handler</var> is
+  called with <var>args</var> as arguments.</p>
 
-<dl>
-<dt><a name="index-dbus_002devent_002dservice_002dname"></a>Function: <strong>dbus-event-service-name</strong> <em>event</em></dt>
-<dd><p>Returns the unique name of the D-Bus object <var>event</var> is coming from.
-</p></dd></dl>
+  <p>In order to inspect the <code>dbus-event</code> data, you
+  could extend the definition of the callback function in <a href=
+  "Signals.html#Signals">Signals</a>:</p>
 
-<dl>
-<dt><a name="index-dbus_002devent_002dpath_002dname"></a>Function: <strong>dbus-event-path-name</strong> <em>event</em></dt>
-<dd><p>Returns the object path of the D-Bus object <var>event</var> is coming from.
-</p></dd></dl>
+  <div class="lisp">
+    <pre class="lisp">
+(defun my-dbus-signal-handler (&amp;rest args)
+  (message "my-dbus-signal-handler: %S" last-input-event))
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-dbus_002devent_002dinterface_002dname"></a>Function: <strong>dbus-event-interface-name</strong> <em>event</em></dt>
-<dd><p>Returns the interface name of the D-Bus object <var>event</var> is coming from.
-</p></dd></dl>
+  <p>There exist convenience functions which could be called inside
+  a callback function in order to retrieve the information from the
+  event.</p>
 
-<dl>
-<dt><a name="index-dbus_002devent_002dmember_002dname"></a>Function: <strong>dbus-event-member-name</strong> <em>event</em></dt>
-<dd><p>Returns the member name of the D-Bus object <var>event</var> is coming
-from.  It is either a signal name or a method name.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-dbus_002devent_002dbus_002dname" id=
+    "index-dbus_002devent_002dbus_002dname"></a>Function:
+    <strong>dbus-event-bus-name</strong> <em>event</em></dt>
 
-<p>D-Bus errors are not propagated during event handling, because it is
-usually not desired.  D-Bus errors in events can be made visible by
-setting the variable <code>dbus-debug</code> to <code>t</code>.  They can also be
-handled by a hook function.
-</p>
-<dl>
-<dt><a name="index-dbus_002devent_002derror_002dfunctions"></a>Variable: <strong>dbus-event-error-functions</strong></dt>
-<dd><p>This hook variable keeps a list of functions, which are called when a
-D-Bus error happens in the event handler.  Every function must accept
-two arguments, the event and the error variable caught in
-<code>condition-case</code> by <code>dbus-error</code>.
-</p>
-<p>Such functions can be used the adapt the error signal to be raised.
-Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(defun my-dbus-event-error-handler (event error)
-  (when (string-equal (concat dbus-interface-emacs &quot;.FileManager&quot;)
+    <dd>
+      <p>Returns the bus name <var>event</var> is coming from. The
+      result is either the symbol <code>:system</code> or the
+      symbol <code>:session</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dbus_002devent_002dmessage_002dtype" id=
+    "index-dbus_002devent_002dmessage_002dtype"></a>Function:
+    <strong>dbus-event-message-type</strong> <em>event</em></dt>
+
+    <dd>
+      <p>Returns the message type of the corresponding D-Bus
+      message. The result is a natural number.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dbus_002devent_002dserial_002dnumber" id=
+    "index-dbus_002devent_002dserial_002dnumber"></a>Function:
+    <strong>dbus-event-serial-number</strong> <em>event</em></dt>
+
+    <dd>
+      <p>Returns the serial number of the corresponding D-Bus
+      message. The result is a natural number.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dbus_002devent_002dservice_002dname" id=
+    "index-dbus_002devent_002dservice_002dname"></a>Function:
+    <strong>dbus-event-service-name</strong> <em>event</em></dt>
+
+    <dd>
+      <p>Returns the unique name of the D-Bus object
+      <var>event</var> is coming from.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dbus_002devent_002dpath_002dname" id=
+    "index-dbus_002devent_002dpath_002dname"></a>Function:
+    <strong>dbus-event-path-name</strong> <em>event</em></dt>
+
+    <dd>
+      <p>Returns the object path of the D-Bus object
+      <var>event</var> is coming from.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dbus_002devent_002dinterface_002dname" id=
+    "index-dbus_002devent_002dinterface_002dname"></a>Function:
+    <strong>dbus-event-interface-name</strong> <em>event</em></dt>
+
+    <dd>
+      <p>Returns the interface name of the D-Bus object
+      <var>event</var> is coming from.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dbus_002devent_002dmember_002dname" id=
+    "index-dbus_002devent_002dmember_002dname"></a>Function:
+    <strong>dbus-event-member-name</strong> <em>event</em></dt>
+
+    <dd>
+      <p>Returns the member name of the D-Bus object
+      <var>event</var> is coming from. It is either a signal name
+      or a method name.</p>
+    </dd>
+  </dl>
+
+  <p>D-Bus errors are not propagated during event handling, because
+  it is usually not desired. D-Bus errors in events can be made
+  visible by setting the variable <code>dbus-debug</code> to
+  <code>t</code>. They can also be handled by a hook function.</p>
+
+  <dl>
+    <dt><a name="index-dbus_002devent_002derror_002dfunctions" id=
+    "index-dbus_002devent_002derror_002dfunctions"></a>Variable:
+    <strong>dbus-event-error-functions</strong></dt>
+
+    <dd>
+      <p>This hook variable keeps a list of functions, which are
+      called when a D-Bus error happens in the event handler. Every
+      function must accept two arguments, the event and the error
+      variable caught in <code>condition-case</code> by
+      <code>dbus-error</code>.</p>
+
+      <p>Such functions can be used the adapt the error signal to
+      be raised. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(defun my-dbus-event-error-handler (event error)
+  (when (string-equal (concat dbus-interface-emacs ".FileManager")
                       (dbus-event-interface-name event))
-    (message &quot;my-dbus-event-error-handler: %S %S&quot; event error)
+    (message "my-dbus-event-error-handler: %S %S" event error)
     (signal 'file-error (cdr error))))
 
 (add-hook 'dbus-event-error-functions 'my-dbus-event-error-handler)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>Hook functions shall take into account, that there might be other
-D-Bus applications running.  Therefore, they shall check carefully,
-whether a given D-Bus error is related to them.
-</p>
+  <p>Hook functions shall take into account, that there might be
+  other D-Bus applications running. Therefore, they shall check
+  carefully, whether a given D-Bus error is related to them.</p>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Index.html#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="Alternative-Buses.html#Alternative-Buses" accesskey="p" rel="prev">Alternative Buses</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Index.html#Index" accesskey="n" rel=
+    "next">Index</a>, Previous: <a href=
+    "Alternative-Buses.html#Alternative-Buses" accesskey="p" rel=
+    "prev">Alternative Buses</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

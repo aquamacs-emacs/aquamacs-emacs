@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Scoring Tips - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Scoring.html#Scoring" title="Scoring">
-<link rel="prev" href="Scoring-On-Other-Headers.html#Scoring-On-Other-Headers" title="Scoring On Other Headers">
-<link rel="next" href="Reverse-Scoring.html#Reverse-Scoring" title="Reverse Scoring">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Scoring Tips - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Scoring.html#Scoring" title="Scoring" />
+  <link rel="prev" href=
+  "Scoring-On-Other-Headers.html#Scoring-On-Other-Headers" title=
+  "Scoring On Other Headers" />
+  <link rel="next" href="Reverse-Scoring.html#Reverse-Scoring"
+  title="Reverse Scoring" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +35,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,52 +48,90 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Scoring-Tips"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Reverse-Scoring.html#Reverse-Scoring">Reverse Scoring</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Scoring-On-Other-Headers.html#Scoring-On-Other-Headers">Scoring On Other Headers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Scoring.html#Scoring">Scoring</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Scoring-Tips" id="Scoring-Tips"></a>
 
-<h3 class="section">7.10 Scoring Tips</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Reverse-Scoring.html#Reverse-Scoring">Reverse Scoring</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Scoring-On-Other-Headers.html#Scoring-On-Other-Headers">Scoring
+    On Other Headers</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Scoring.html#Scoring">Scoring</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-scoring-tips-2510"></a>
-     <dl>
-<dt><dfn>Crossposts</dfn><dd><a name="index-crossposts-2511"></a><a name="index-scoring-crossposts-2512"></a>If you want to lower the score of crossposts, the line to match on is
-the <code>Xref</code> header.
-     <pre class="lisp">          ("xref" (" talk.politics.misc:" -1000))
-</pre>
-     <br><dt><dfn>Multiple crossposts</dfn><dd>If you want to lower the score of articles that have been crossposted to
-more than, say, 3 groups:
-     <pre class="lisp">          ("xref"
+  <h3 class="section">7.10 Scoring Tips</h3>
+
+  <p><a name="index-scoring-tips-2510" id=
+  "index-scoring-tips-2510"></a></p>
+
+  <dl>
+    <dt><dfn>Crossposts</dfn></dt>
+
+    <dd>
+      <a name="index-crossposts-2511" id=
+      "index-crossposts-2511"></a><a name=
+      "index-scoring-crossposts-2512" id=
+      "index-scoring-crossposts-2512"></a>If you want to lower the
+      score of crossposts, the line to match on is the
+      <code>Xref</code> header.
+      <pre class="lisp">
+          ("xref" (" talk.politics.misc:" -1000))
+</pre><br />
+    </dd>
+
+    <dt><dfn>Multiple crossposts</dfn></dt>
+
+    <dd>
+      If you want to lower the score of articles that have been
+      crossposted to more than, say, 3 groups:
+      <pre class="lisp">
+          ("xref"
             ("[^:\n]+:[0-9]+ +[^:\n]+:[0-9]+ +[^:\n]+:[0-9]+"
              -1000 nil r))
+</pre><br />
+    </dd>
+
+    <dt><dfn>Matching on the body</dfn></dt>
+
+    <dd>This is generally not a very good idea&mdash;it takes a
+    very long time. Gnus actually has to fetch each individual
+    article from the server. But you might want to anyway, I guess.
+    Even though there are three match keys (<code>Head</code>,
+    <code>Body</code> and <code>All</code>), you should choose one
+    and stick with it in each score file. If you use any two, each
+    article will be fetched <em>twice</em>. If you want to match a
+    bit on the <code>Head</code> and a bit on the
+    <code>Body</code>, just use <code>All</code> for all the
+    matches.<br /></dd>
+
+    <dt><dfn>Marking as read</dfn></dt>
+
+    <dd>
+      You will probably want to mark articles that have scores
+      below a certain number as read. This is most easily achieved
+      by putting the following in your <samp><span class=
+      "file">all.SCORE</span></samp> file:
+      <pre class="lisp">
+          ((mark -100))
 </pre>
-     <br><dt><dfn>Matching on the body</dfn><dd>This is generally not a very good idea&mdash;it takes a very long time. 
-Gnus actually has to fetch each individual article from the server.  But
-you might want to anyway, I guess.  Even though there are three match
-keys (<code>Head</code>, <code>Body</code> and <code>All</code>), you should choose one
-and stick with it in each score file.  If you use any two, each article
-will be fetched <em>twice</em>.  If you want to match a bit on the
-<code>Head</code> and a bit on the <code>Body</code>, just use <code>All</code> for all
-the matches.
 
-     <br><dt><dfn>Marking as read</dfn><dd>You will probably want to mark articles that have scores below a certain
-number as read.  This is most easily achieved by putting the following
-in your <samp><span class="file">all.SCORE</span></samp> file:
-     <pre class="lisp">          ((mark -100))
-</pre>
-     <p>You may also consider doing something similar with <code>expunge</code>.
+      <p>You may also consider doing something similar with
+      <code>expunge</code>.<br /></p>
+    </dd>
 
-     <br><dt><dfn>Negated character classes</dfn><dd>If you say stuff like <code>[^abcd]*</code>, you may get unexpected results. 
-That will match newlines, which might lead to, well, The Unknown.  Say
-<code>[^abcd\n]*</code> instead. 
-</dl>
+    <dt><dfn>Negated character classes</dfn></dt>
 
-   </body></html>
-
+    <dd>If you say stuff like <code>[^abcd]*</code>, you may get
+    unexpected results. That will match newlines, which might lead
+    to, well, The Unknown. Say <code>[^abcd\n]*</code>
+    instead.</dd>
+  </dl>
+</body>
+</html>

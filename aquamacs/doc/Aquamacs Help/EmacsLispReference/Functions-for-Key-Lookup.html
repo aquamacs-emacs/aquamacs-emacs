@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,199 +19,320 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Functions for Key Lookup</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Functions for Key Lookup">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Functions for Key Lookup">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
-<link href="Changing-Key-Bindings.html#Changing-Key-Bindings" rel="next" title="Changing Key Bindings">
-<link href="Key-Lookup.html#Key-Lookup" rel="prev" title="Key Lookup">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Functions for Key
+  Lookup</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Functions for Key Lookup" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Functions for Key Lookup" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keymaps.html#Keymaps" rel="up" title="Keymaps" />
+  <link href="Changing-Key-Bindings.html#Changing-Key-Bindings"
+  rel="next" title="Changing Key Bindings" />
+  <link href="Key-Lookup.html#Key-Lookup" rel="prev" title=
+  "Key Lookup" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Functions-for-Key-Lookup" id=
+  "Functions-for-Key-Lookup"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Changing-Key-Bindings.html#Changing-Key-Bindings" accesskey=
+    "n" rel="next">Changing Key Bindings</a>, Previous: <a href=
+    "Key-Lookup.html#Key-Lookup" accesskey="p" rel="prev">Key
+    Lookup</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u"
+    rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Functions-for-Key-Lookup-1" id=
+  "Functions-for-Key-Lookup-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Functions-for-Key-Lookup"></a>
-<div class="header">
-<p>
-Next: <a href="Changing-Key-Bindings.html#Changing-Key-Bindings" accesskey="n" rel="next">Changing Key Bindings</a>, Previous: <a href="Key-Lookup.html#Key-Lookup" accesskey="p" rel="prev">Key Lookup</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Functions-for-Key-Lookup-1"></a>
-<h3 class="section">21.11 Functions for Key Lookup</h3>
+  <h3 class="section">21.11 Functions for Key Lookup</h3>
 
-<p>Here are the functions and variables pertaining to key lookup.
-</p>
-<dl>
-<dt><a name="index-lookup_002dkey"></a>Function: <strong>lookup-key</strong> <em>keymap key &amp;optional accept-defaults</em></dt>
-<dd><p>This function returns the definition of <var>key</var> in <var>keymap</var>.  All
-the other functions described in this chapter that look up keys use
-<code>lookup-key</code>.  Here are examples:
-</p>
-<div class="example">
-<pre class="example">(lookup-key (current-global-map) &quot;\C-x\C-f&quot;)
+  <p>Here are the functions and variables pertaining to key
+  lookup.</p>
+
+  <dl>
+    <dt><a name="index-lookup_002dkey" id=
+    "index-lookup_002dkey"></a>Function:
+    <strong>lookup-key</strong> <em>keymap key &amp;optional
+    accept-defaults</em></dt>
+
+    <dd>
+      <p>This function returns the definition of <var>key</var> in
+      <var>keymap</var>. All the other functions described in this
+      chapter that look up keys use <code>lookup-key</code>. Here
+      are examples:</p>
+
+      <div class="example">
+        <pre class="example">
+(lookup-key (current-global-map) "\C-x\C-f")
     &rArr; find-file
-</pre><pre class="example">(lookup-key (current-global-map) (kbd &quot;C-x C-f&quot;))
+</pre>
+        <pre class="example">
+(lookup-key (current-global-map) (kbd "C-x C-f"))
     &rArr; find-file
-</pre><pre class="example">(lookup-key (current-global-map) &quot;\C-x\C-f12345&quot;)
+</pre>
+        <pre class="example">
+(lookup-key (current-global-map) "\C-x\C-f12345")
     &rArr; 2
-</pre></div>
+</pre>
+      </div>
 
-<p>If the string or vector <var>key</var> is not a valid key sequence according
-to the prefix keys specified in <var>keymap</var>, it must be too long
-and have extra events at the end that do not fit into a single key
-sequence.  Then the value is a number, the number of events at the front
-of <var>key</var> that compose a complete key.
-</p>
-<p>If <var>accept-defaults</var> is non-<code>nil</code>, then <code>lookup-key</code>
-considers default bindings as well as bindings for the specific events
-in <var>key</var>.  Otherwise, <code>lookup-key</code> reports only bindings for
-the specific sequence <var>key</var>, ignoring default bindings except when
-you explicitly ask about them.  (To do this, supply <code>t</code> as an
-element of <var>key</var>; see <a href="Format-of-Keymaps.html#Format-of-Keymaps">Format of Keymaps</a>.)
-</p>
-<p>If <var>key</var> contains a meta character (not a function key), that
-character is implicitly replaced by a two-character sequence: the value
-of <code>meta-prefix-char</code>, followed by the corresponding non-meta
-character.  Thus, the first example below is handled by conversion into
-the second example.
-</p>
-<div class="example">
-<pre class="example">(lookup-key (current-global-map) &quot;\M-f&quot;)
+      <p>If the string or vector <var>key</var> is not a valid key
+      sequence according to the prefix keys specified in
+      <var>keymap</var>, it must be too long and have extra events
+      at the end that do not fit into a single key sequence. Then
+      the value is a number, the number of events at the front of
+      <var>key</var> that compose a complete key.</p>
+
+      <p>If <var>accept-defaults</var> is non-<code>nil</code>,
+      then <code>lookup-key</code> considers default bindings as
+      well as bindings for the specific events in <var>key</var>.
+      Otherwise, <code>lookup-key</code> reports only bindings for
+      the specific sequence <var>key</var>, ignoring default
+      bindings except when you explicitly ask about them. (To do
+      this, supply <code>t</code> as an element of <var>key</var>;
+      see <a href="Format-of-Keymaps.html#Format-of-Keymaps">Format
+      of Keymaps</a>.)</p>
+
+      <p>If <var>key</var> contains a meta character (not a
+      function key), that character is implicitly replaced by a
+      two-character sequence: the value of
+      <code>meta-prefix-char</code>, followed by the corresponding
+      non-meta character. Thus, the first example below is handled
+      by conversion into the second example.</p>
+
+      <div class="example">
+        <pre class="example">
+(lookup-key (current-global-map) "\M-f")
     &rArr; forward-word
-</pre><pre class="example">(lookup-key (current-global-map) &quot;\ef&quot;)
+</pre>
+        <pre class="example">
+(lookup-key (current-global-map) "\ef")
     &rArr; forward-word
-</pre></div>
+</pre>
+      </div>
 
-<p>Unlike <code>read-key-sequence</code>, this function does not modify the
-specified events in ways that discard information (see <a href="Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence Input</a>).  In particular, it does not convert letters to lower case and
-it does not change drag events to clicks.
-</p></dd></dl>
+      <p>Unlike <code>read-key-sequence</code>, this function does
+      not modify the specified events in ways that discard
+      information (see <a href=
+      "Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence
+      Input</a>). In particular, it does not convert letters to
+      lower case and it does not change drag events to clicks.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-undefined"></a>Command: <strong>undefined</strong></dt>
-<dd><p>Used in keymaps to undefine keys.  It calls <code>ding</code>, but does
-not cause an error.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-undefined" id="index-undefined"></a>Command:
+    <strong>undefined</strong></dt>
 
-<dl>
-<dt><a name="index-local_002dkey_002dbinding"></a>Function: <strong>local-key-binding</strong> <em>key &amp;optional accept-defaults</em></dt>
-<dd><p>This function returns the binding for <var>key</var> in the current
-local keymap, or <code>nil</code> if it is undefined there.
-</p>
-<p>The argument <var>accept-defaults</var> controls checking for default bindings,
-as in <code>lookup-key</code> (above).
-</p></dd></dl>
+    <dd>
+      <p>Used in keymaps to undefine keys. It calls
+      <code>ding</code>, but does not cause an error.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-global_002dkey_002dbinding"></a>Function: <strong>global-key-binding</strong> <em>key &amp;optional accept-defaults</em></dt>
-<dd><p>This function returns the binding for command <var>key</var> in the
-current global keymap, or <code>nil</code> if it is undefined there.
-</p>
-<p>The argument <var>accept-defaults</var> controls checking for default bindings,
-as in <code>lookup-key</code> (above).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-local_002dkey_002dbinding" id=
+    "index-local_002dkey_002dbinding"></a>Function:
+    <strong>local-key-binding</strong> <em>key &amp;optional
+    accept-defaults</em></dt>
 
-<dl>
-<dt><a name="index-minor_002dmode_002dkey_002dbinding"></a>Function: <strong>minor-mode-key-binding</strong> <em>key &amp;optional accept-defaults</em></dt>
-<dd><p>This function returns a list of all the active minor mode bindings of
-<var>key</var>.  More precisely, it returns an alist of pairs
-<code>(<var>modename</var> . <var>binding</var>)</code>, where <var>modename</var> is the
-variable that enables the minor mode, and <var>binding</var> is <var>key</var>&rsquo;s
-binding in that mode.  If <var>key</var> has no minor-mode bindings, the
-value is <code>nil</code>.
-</p>
-<p>If the first binding found is not a prefix definition (a keymap or a
-symbol defined as a keymap), all subsequent bindings from other minor
-modes are omitted, since they would be completely shadowed.  Similarly,
-the list omits non-prefix bindings that follow prefix bindings.
-</p>
-<p>The argument <var>accept-defaults</var> controls checking for default
-bindings, as in <code>lookup-key</code> (above).
-</p></dd></dl>
+    <dd>
+      <p>This function returns the binding for <var>key</var> in
+      the current local keymap, or <code>nil</code> if it is
+      undefined there.</p>
 
-<dl>
-<dt><a name="index-meta_002dprefix_002dchar"></a>User Option: <strong>meta-prefix-char</strong></dt>
-<dd><a name="index-ESC"></a>
-<p>This variable is the meta-prefix character code.  It is used for
-translating a meta character to a two-character sequence so it can be
-looked up in a keymap.  For useful results, the value should be a
-prefix event (see <a href="Prefix-Keys.html#Prefix-Keys">Prefix Keys</a>).  The default value is 27, which is
-the <acronym>ASCII</acronym> code for <tt class="key">ESC</tt>.
-</p>
-<p>As long as the value of <code>meta-prefix-char</code> remains 27, key lookup
-translates <kbd>M-b</kbd> into <kbd><span class="key">ESC</span> b</kbd>, which is normally defined
-as the <code>backward-word</code> command.  However, if you were to set
-<code>meta-prefix-char</code> to 24, the code for <kbd>C-x</kbd>, then Emacs will
-translate <kbd>M-b</kbd> into <kbd>C-x b</kbd>, whose standard binding is the
-<code>switch-to-buffer</code> command.  (Don&rsquo;t actually do this!)  Here is an
-illustration of what would happen:
-</p>
-<div class="smallexample">
-<pre class="smallexample">meta-prefix-char                    ; <span class="roman">The default value.</span>
+      <p>The argument <var>accept-defaults</var> controls checking
+      for default bindings, as in <code>lookup-key</code>
+      (above).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-global_002dkey_002dbinding" id=
+    "index-global_002dkey_002dbinding"></a>Function:
+    <strong>global-key-binding</strong> <em>key &amp;optional
+    accept-defaults</em></dt>
+
+    <dd>
+      <p>This function returns the binding for command
+      <var>key</var> in the current global keymap, or
+      <code>nil</code> if it is undefined there.</p>
+
+      <p>The argument <var>accept-defaults</var> controls checking
+      for default bindings, as in <code>lookup-key</code>
+      (above).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-minor_002dmode_002dkey_002dbinding" id=
+    "index-minor_002dmode_002dkey_002dbinding"></a>Function:
+    <strong>minor-mode-key-binding</strong> <em>key &amp;optional
+    accept-defaults</em></dt>
+
+    <dd>
+      <p>This function returns a list of all the active minor mode
+      bindings of <var>key</var>. More precisely, it returns an
+      alist of pairs <code>(<var>modename</var> .
+      <var>binding</var>)</code>, where <var>modename</var> is the
+      variable that enables the minor mode, and <var>binding</var>
+      is <var>key</var>&rsquo;s binding in that mode. If
+      <var>key</var> has no minor-mode bindings, the value is
+      <code>nil</code>.</p>
+
+      <p>If the first binding found is not a prefix definition (a
+      keymap or a symbol defined as a keymap), all subsequent
+      bindings from other minor modes are omitted, since they would
+      be completely shadowed. Similarly, the list omits non-prefix
+      bindings that follow prefix bindings.</p>
+
+      <p>The argument <var>accept-defaults</var> controls checking
+      for default bindings, as in <code>lookup-key</code>
+      (above).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-meta_002dprefix_002dchar" id=
+    "index-meta_002dprefix_002dchar"></a>User Option:
+    <strong>meta-prefix-char</strong></dt>
+
+    <dd>
+      <a name="index-ESC" id="index-ESC"></a>
+
+      <p>This variable is the meta-prefix character code. It is
+      used for translating a meta character to a two-character
+      sequence so it can be looked up in a keymap. For useful
+      results, the value should be a prefix event (see <a href=
+      "Prefix-Keys.html#Prefix-Keys">Prefix Keys</a>). The default
+      value is 27, which is the <acronym>ASCII</acronym> code for
+      <tt class="key">ESC</tt>.</p>
+
+      <p>As long as the value of <code>meta-prefix-char</code>
+      remains 27, key lookup translates <kbd>M-b</kbd> into
+      <kbd><span class="key">ESC</span> b</kbd>, which is normally
+      defined as the <code>backward-word</code> command. However,
+      if you were to set <code>meta-prefix-char</code> to 24, the
+      code for <kbd>C-x</kbd>, then Emacs will translate
+      <kbd>M-b</kbd> into <kbd>C-x b</kbd>, whose standard binding
+      is the <code>switch-to-buffer</code> command. (Don&rsquo;t
+      actually do this!) Here is an illustration of what would
+      happen:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+meta-prefix-char                    ; <span class=
+"roman">The default value.</span>
      &rArr; 27
-</pre><pre class="smallexample">(key-binding &quot;\M-b&quot;)
+</pre>
+        <pre class="smallexample">
+(key-binding "\M-b")
      &rArr; backward-word
-</pre><pre class="smallexample">?\C-x                               ; <span class="roman">The print representation</span>
-     &rArr; 24                          ;   <span class="roman">of a character.</span>
-</pre><pre class="smallexample">(setq meta-prefix-char 24)
+</pre>
+        <pre class="smallexample">
+?\C-x                               ; <span class=
+"roman">The print representation</span>
+     &rArr; 24                          ;   <span class=
+"roman">of a character.</span>
+</pre>
+        <pre class="smallexample">
+(setq meta-prefix-char 24)
      &rArr; 24
-</pre><pre class="smallexample">(key-binding &quot;\M-b&quot;)
-     &rArr; switch-to-buffer            ; <span class="roman">Now, typing <kbd>M-b</kbd> is</span>
-                                    ;   <span class="roman">like typing <kbd>C-x b</kbd>.</span>
+</pre>
+        <pre class="smallexample">
+(key-binding "\M-b")
+     &rArr; switch-to-buffer            ; <span class=
+"roman">Now, typing <kbd>M-b</kbd> is</span>
+                                    ;   <span class=
+"roman">like typing <kbd>C-x b</kbd>.</span>
 
-(setq meta-prefix-char 27)          ; <span class="roman">Avoid confusion!</span>
-     &rArr; 27                          ; <span class="roman">Restore the default value!</span>
-</pre></div>
+(setq meta-prefix-char 27)          ; <span class=
+"roman">Avoid confusion!</span>
+     &rArr; 27                          ; <span class=
+"roman">Restore the default value!</span>
+</pre>
+      </div>
 
-<p>This translation of one event into two happens only for characters, not
-for other kinds of input events.  Thus, <kbd>M-<span class="key">F1</span></kbd>, a function
-key, is not converted into <kbd><span class="key">ESC</span> <span class="key">F1</span></kbd>.
-</p></dd></dl>
+      <p>This translation of one event into two happens only for
+      characters, not for other kinds of input events. Thus,
+      <kbd>M-<span class="key">F1</span></kbd>, a function key, is
+      not converted into <kbd><span class="key">ESC</span>
+      <span class="key">F1</span></kbd>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Changing-Key-Bindings.html#Changing-Key-Bindings" accesskey="n" rel="next">Changing Key Bindings</a>, Previous: <a href="Key-Lookup.html#Key-Lookup" accesskey="p" rel="prev">Key Lookup</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Changing-Key-Bindings.html#Changing-Key-Bindings" accesskey=
+    "n" rel="next">Changing Key Bindings</a>, Previous: <a href=
+    "Key-Lookup.html#Key-Lookup" accesskey="p" rel="prev">Key
+    Lookup</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u"
+    rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

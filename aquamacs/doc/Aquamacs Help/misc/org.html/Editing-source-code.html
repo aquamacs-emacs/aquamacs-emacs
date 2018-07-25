@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,117 +16,188 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Editing source code</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Editing source code">
-<meta name="keywords" content="The Org Manual: Editing source code">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Working-With-Source-Code.html#Working-With-Source-Code" rel="up" title="Working With Source Code">
-<link href="Exporting-code-blocks.html#Exporting-code-blocks" rel="next" title="Exporting code blocks">
-<link href="Structure-of-code-blocks.html#Structure-of-code-blocks" rel="prev" title="Structure of code blocks">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Editing source code</title>
+  <meta name="description" content=
+  "The Org Manual: Editing source code" />
+  <meta name="keywords" content=
+  "The Org Manual: Editing source code" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Working-With-Source-Code.html#Working-With-Source-Code" rel="up"
+  title="Working With Source Code" />
+  <link href="Exporting-code-blocks.html#Exporting-code-blocks"
+  rel="next" title="Exporting code blocks" />
+  <link href=
+  "Structure-of-code-blocks.html#Structure-of-code-blocks" rel=
+  "prev" title="Structure of code blocks" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Editing-source-code"></a>
-<div class="header">
-<p>
-Next: <a href="Exporting-code-blocks.html#Exporting-code-blocks" accesskey="n" rel="next">Exporting code blocks</a>, Previous: <a href="Structure-of-code-blocks.html#Structure-of-code-blocks" accesskey="p" rel="prev">Structure of code blocks</a>, Up: <a href="Working-With-Source-Code.html#Working-With-Source-Code" accesskey="u" rel="up">Working With Source Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Editing-source-code-1"></a>
-<h3 class="section">14.2 Editing source code</h3>
-<a name="index-code-block_002c-editing"></a>
-<a name="index-source-code_002c-editing"></a>
+<body lang="en" xml:lang="en">
+  <a name="Editing-source-code" id="Editing-source-code"></a>
 
-<a name="index-org_002dedit_002dsrc_002dauto_002dsave_002didle_002ddelay"></a>
-<a name="index-org_002dedit_002dsrc_002dturn_002don_002dauto_002dsave"></a>
-<a name="index-C_002dc-_0027-3"></a>
-<p>Use <kbd>C-c '</kbd> to edit the current code block.  This brings up a language
-major-mode edit buffer containing the body of the code block.  Manually
-saving this buffer with <tt class="key">C-x C-s</tt> will write the contents back to the Org
-buffer.  You can also set <code>org-edit-src-auto-save-idle-delay</code> to save the
-base buffer after some idle delay, or <code>org-edit-src-turn-on-auto-save</code>
-to auto-save this buffer into a separate file using <code>auto-save-mode</code>.
-Use <kbd>C-c '</kbd> again to exit.
-</p>
-<p>The <code>org-src-mode</code> minor mode will be active in the edit buffer.  The
-following variables can be used to configure the behavior of the edit
-buffer.  See also the customization group <code>org-edit-structure</code> for
-further configuration options.
-</p>
-<dl compact="compact">
-<dt><code>org-src-lang-modes</code></dt>
-<dd><p>If an Emacs major-mode named <code>&lt;lang&gt;-mode</code> exists, where
-<code>&lt;lang&gt;</code> is the language named in the header line of the code block,
-then the edit buffer will be placed in that major-mode.  This variable
-can be used to map arbitrary language names to existing major modes.
-</p></dd>
-<dt><code>org-src-window-setup</code></dt>
-<dd><p>Controls the way Emacs windows are rearranged when the edit buffer is created.
-</p></dd>
-<dt><code>org-src-preserve-indentation</code></dt>
-<dd><p>By default, the value is <code>nil</code>, which means that when code blocks are
-evaluated during export or tangled, they are re-inserted into the code block,
-which may replace sequences of spaces with tab characters.  When non-nil,
-whitespace in code blocks will be preserved during export or tangling,
-exactly as it appears.  This variable is especially useful for tangling
-languages such as Python, in which whitespace indentation in the output is
-critical.
-</p></dd>
-<dt><code>org-src-ask-before-returning-to-edit-buffer</code></dt>
-<dd><p>By default, Org will ask before returning to an open edit buffer.  Set this
-variable to <code>nil</code> to switch without asking.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Exporting-code-blocks.html#Exporting-code-blocks" accesskey=
+    "n" rel="next">Exporting code blocks</a>, Previous: <a href=
+    "Structure-of-code-blocks.html#Structure-of-code-blocks"
+    accesskey="p" rel="prev">Structure of code blocks</a>, Up:
+    <a href=
+    "Working-With-Source-Code.html#Working-With-Source-Code"
+    accesskey="u" rel="up">Working With Source Code</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Editing-source-code-1" id="Editing-source-code-1"></a>
 
-<p>To turn on native code fontification in the <em>Org</em> buffer, configure the
-variable <code>org-src-fontify-natively</code>.
-</p>
+  <h3 class="section">14.2 Editing source code</h3><a name=
+  "index-code-block_002c-editing" id=
+  "index-code-block_002c-editing"></a> <a name=
+  "index-source-code_002c-editing" id=
+  "index-source-code_002c-editing"></a> <a name=
+  "index-org_002dedit_002dsrc_002dauto_002dsave_002didle_002ddelay"
+  id=
+  "index-org_002dedit_002dsrc_002dauto_002dsave_002didle_002ddelay">
+  </a> <a name=
+  "index-org_002dedit_002dsrc_002dturn_002don_002dauto_002dsave"
+  id="index-org_002dedit_002dsrc_002dturn_002don_002dauto_002dsave">
+  </a> <a name="index-C_002dc-_0027-3" id=
+  "index-C_002dc-_0027-3"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Exporting-code-blocks.html#Exporting-code-blocks" accesskey="n" rel="next">Exporting code blocks</a>, Previous: <a href="Structure-of-code-blocks.html#Structure-of-code-blocks" accesskey="p" rel="prev">Structure of code blocks</a>, Up: <a href="Working-With-Source-Code.html#Working-With-Source-Code" accesskey="u" rel="up">Working With Source Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Use <kbd>C-c '</kbd> to edit the current code block. This
+  brings up a language major-mode edit buffer containing the body
+  of the code block. Manually saving this buffer with <tt class=
+  "key">C-x C-s</tt> will write the contents back to the Org
+  buffer. You can also set
+  <code>org-edit-src-auto-save-idle-delay</code> to save the base
+  buffer after some idle delay, or
+  <code>org-edit-src-turn-on-auto-save</code> to auto-save this
+  buffer into a separate file using <code>auto-save-mode</code>.
+  Use <kbd>C-c '</kbd> again to exit.</p>
 
+  <p>The <code>org-src-mode</code> minor mode will be active in the
+  edit buffer. The following variables can be used to configure the
+  behavior of the edit buffer. See also the customization group
+  <code>org-edit-structure</code> for further configuration
+  options.</p>
 
+  <dl compact="compact">
+    <dt><code>org-src-lang-modes</code></dt>
 
+    <dd>
+      <p>If an Emacs major-mode named
+      <code>&lt;lang&gt;-mode</code> exists, where
+      <code>&lt;lang&gt;</code> is the language named in the header
+      line of the code block, then the edit buffer will be placed
+      in that major-mode. This variable can be used to map
+      arbitrary language names to existing major modes.</p>
+    </dd>
+
+    <dt><code>org-src-window-setup</code></dt>
+
+    <dd>
+      <p>Controls the way Emacs windows are rearranged when the
+      edit buffer is created.</p>
+    </dd>
+
+    <dt><code>org-src-preserve-indentation</code></dt>
+
+    <dd>
+      <p>By default, the value is <code>nil</code>, which means
+      that when code blocks are evaluated during export or tangled,
+      they are re-inserted into the code block, which may replace
+      sequences of spaces with tab characters. When non-nil,
+      whitespace in code blocks will be preserved during export or
+      tangling, exactly as it appears. This variable is especially
+      useful for tangling languages such as Python, in which
+      whitespace indentation in the output is critical.</p>
+    </dd>
+
+    <dt>
+    <code>org-src-ask-before-returning-to-edit-buffer</code></dt>
+
+    <dd>
+      <p>By default, Org will ask before returning to an open edit
+      buffer. Set this variable to <code>nil</code> to switch
+      without asking.</p>
+    </dd>
+  </dl>
+
+  <p>To turn on native code fontification in the <em>Org</em>
+  buffer, configure the variable
+  <code>org-src-fontify-natively</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Exporting-code-blocks.html#Exporting-code-blocks" accesskey=
+    "n" rel="next">Exporting code blocks</a>, Previous: <a href=
+    "Structure-of-code-blocks.html#Structure-of-code-blocks"
+    accesskey="p" rel="prev">Structure of code blocks</a>, Up:
+    <a href=
+    "Working-With-Source-Code.html#Working-With-Source-Code"
+    accesskey="u" rel="up">Working With Source Code</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

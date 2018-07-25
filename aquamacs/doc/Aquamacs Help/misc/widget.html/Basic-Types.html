@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2000-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,357 +14,625 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Emacs Widget Library: Basic Types</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Emacs Widget Library: Basic Types">
-<meta name="keywords" content="The Emacs Widget Library: Basic Types">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="link.html#link" rel="next" title="link">
-<link href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer" rel="prev" title="Setting Up the Buffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Emacs Widget Library: Basic Types</title>
+  <meta name="description" content=
+  "The Emacs Widget Library: Basic Types" />
+  <meta name="keywords" content=
+  "The Emacs Widget Library: Basic Types" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="link.html#link" rel="next" title="link" />
+  <link href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer"
+  rel="prev" title="Setting Up the Buffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Types"></a>
-<div class="header">
-<p>
-Next: <a href="Sexp-Types.html#Sexp-Types" accesskey="n" rel="next">Sexp Types</a>, Previous: <a href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer" accesskey="p" rel="prev">Setting Up the Buffer</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Types-1"></a>
-<h2 class="chapter">5 Basic Types</h2>
+<body lang="en" xml:lang="en">
+  <a name="Basic-Types" id="Basic-Types"></a>
 
-<p>This is the general syntax of a type specification:
-</p>
-<div class="example">
-<pre class="example"><var>name</var> ::= (<var>name</var> [<var>keyword</var> <var>argument</var>]... <var>args</var>)
+  <div class="header">
+    <p>Next: <a href="Sexp-Types.html#Sexp-Types" accesskey="n"
+    rel="next">Sexp Types</a>, Previous: <a href=
+    "Setting-Up-the-Buffer.html#Setting-Up-the-Buffer" accesskey=
+    "p" rel="prev">Setting Up the Buffer</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Types-1" id="Basic-Types-1"></a>
+
+  <h2 class="chapter">5 Basic Types</h2>
+
+  <p>This is the general syntax of a type specification:</p>
+
+  <div class="example">
+    <pre class="example">
+<var>name</var> ::= (<var>name</var> [<var>keyword</var> <var>argument</var>]... <var>args</var>)
      |   <var>name</var>
-</pre></div>
+</pre>
+  </div>
 
-<p>Where, <var>name</var> is a widget name, <var>keyword</var> is the name of a
-property, <var>argument</var> is the value of the property, and <var>args</var>
-are interpreted in a widget specific way.
-</p>
-<a name="index-keyword-arguments"></a>
-<p>The following keyword arguments apply to all widgets:
-</p>
-<dl compact="compact">
-<dd><a name="index-value-keyword"></a>
-</dd>
-<dt><code>:value</code></dt>
-<dd><p>The initial value for widgets of this type.
-</p>
-<a name="index-format-keyword"></a>
-</dd>
-<dt><code>:format</code></dt>
-<dd><p>This string will be inserted in the buffer when you create a widget.
-The following &lsquo;<samp>%</samp>&rsquo; escapes are available:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>%[</samp>&rsquo;</dt>
-<dt>&lsquo;<samp>%]</samp>&rsquo;</dt>
-<dd><p>The text inside will be marked as a button.
-</p>
-<p>By default, the text will be shown in <code>widget-button-face</code>, and
-surrounded by brackets.
-</p>
-<dl>
-<dt><a name="index-widget_002dbutton_002dprefix"></a>User Option: <strong>widget-button-prefix</strong></dt>
-<dd><p>String to prefix buttons.
-</p></dd></dl>
+  <p>Where, <var>name</var> is a widget name, <var>keyword</var> is
+  the name of a property, <var>argument</var> is the value of the
+  property, and <var>args</var> are interpreted in a widget
+  specific way.</p><a name="index-keyword-arguments" id=
+  "index-keyword-arguments"></a>
 
-<dl>
-<dt><a name="index-widget_002dbutton_002dsuffix"></a>User Option: <strong>widget-button-suffix</strong></dt>
-<dd><p>String to suffix buttons.
-</p></dd></dl>
+  <p>The following keyword arguments apply to all widgets:</p>
 
-</dd>
-<dt>&lsquo;<samp>%{</samp>&rsquo;</dt>
-<dt>&lsquo;<samp>%}</samp>&rsquo;</dt>
-<dd><p>The text inside will be displayed with the face specified by
-<code>:sample-face</code>.
-</p>
-</dd>
-<dt>&lsquo;<samp>%v</samp>&rsquo;</dt>
-<dd><p>This will be replaced with the buffer representation of the widget&rsquo;s
-value.  What this is depends on the widget type.
-</p>
-<p><strong>Warning:</strong> In an <code>editable-field</code> widget, the &lsquo;<samp>%v</samp>&rsquo; escape
-must be preceded by some other text in the format string (if specified).
-</p>
-</dd>
-<dt>&lsquo;<samp>%d</samp>&rsquo;</dt>
-<dd><p>Insert the string specified by <code>:doc</code> here.
-</p>
-</dd>
-<dt>&lsquo;<samp>%h</samp>&rsquo;</dt>
-<dd><p>Like &lsquo;<samp>%d</samp>&rsquo;, with the following modifications: If the documentation
-string is more than one line, it will add a button which will toggle
-between showing only the first line, and showing the full text.
-Furthermore, if there is no <code>:doc</code> property in the widget, it will
-instead examine the <code>:documentation-property</code> property.  If it is a
-lambda expression, it will be called with the widget&rsquo;s value as an
-argument, and the result will be used as the documentation text.
-</p>
-</dd>
-<dt>&lsquo;<samp>%t</samp>&rsquo;</dt>
-<dd><p>Insert the string specified by <code>:tag</code> here, or the <code>princ</code>
-representation of the value if there is no tag.
-</p>
-</dd>
-<dt>&lsquo;<samp>%%</samp>&rsquo;</dt>
-<dd><p>Insert a literal &lsquo;<samp>%</samp>&rsquo;.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dd><a name="index-value-keyword" id=
+    "index-value-keyword"></a></dd>
 
-<a name="index-button_002dface-keyword"></a>
-</dd>
-<dt><code>:button-face</code></dt>
-<dd><p>Face used to highlight text inside %[ %] in the format.
-</p>
-<a name="index-button_002dprefix-keyword"></a>
-<a name="index-button_002dsuffix-keyword"></a>
-</dd>
-<dt><code>:button-prefix</code></dt>
-<dt><code>:button-suffix</code></dt>
-<dd><p>Text around %[ %] in the format.
-</p>
-<p>These can be
-</p><dl compact="compact">
-<dt><em>nil</em></dt>
-<dd><p>No text is inserted.
-</p>
-</dd>
-<dt><em>a string</em></dt>
-<dd><p>The string is inserted literally.
-</p>
-</dd>
-<dt><em>a symbol</em></dt>
-<dd><p>The value of the symbol is expanded according to this table.
-</p></dd>
-</dl>
+    <dt><code>:value</code></dt>
 
-<a name="index-doc-keyword"></a>
-</dd>
-<dt><code>:doc</code></dt>
-<dd><p>The string inserted by the &lsquo;<samp>%d</samp>&rsquo; escape in the format
-string.
-</p>
-<a name="index-tag-keyword"></a>
-</dd>
-<dt><code>:tag</code></dt>
-<dd><p>The string inserted by the &lsquo;<samp>%t</samp>&rsquo; escape in the format
-string.
-</p>
-<a name="index-tag_002dglyph-keyword"></a>
-</dd>
-<dt><code>:tag-glyph</code></dt>
-<dd><p>Name of image to use instead of the string specified by <code>:tag</code> on
-Emacsen that supports it.
-</p>
-<a name="index-help_002decho-keyword"></a>
-</dd>
-<dt><code>:help-echo</code></dt>
-<dd><p>Specifies how to display a message whenever you move to the widget with
-either <code>widget-forward</code> or <code>widget-backward</code> or move the mouse
-over it (using the standard <code>help-echo</code> mechanism).  The argument
-is either a string to display, a function of one argument, the widget,
-which should return a string to display, or a form that evaluates to
-such a string.
-</p>
-<a name="index-follow_002dlink-keyword"></a>
-</dd>
-<dt><code>:follow-link</code></dt>
-<dd><p>Specifies how to interpret a <tt class="key">mouse-1</tt> click on the widget.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Clickable-Text.html#Clickable-Text">Defining Clickable Text</a> in <cite>the Emacs Lisp Reference Manual</cite>.
-</p>
-<a name="index-indent-keyword"></a>
-</dd>
-<dt><code>:indent</code></dt>
-<dd><p>An integer indicating the absolute number of spaces to indent children
-of this widget.
-</p>
-<a name="index-offset-keyword"></a>
-</dd>
-<dt><code>:offset</code></dt>
-<dd><p>An integer indicating how many extra spaces to add to the widget&rsquo;s
-grandchildren compared to this widget.
-</p>
-<a name="index-extra_002doffset-keyword"></a>
-</dd>
-<dt><code>:extra-offset</code></dt>
-<dd><p>An integer indicating how many extra spaces to add to the widget&rsquo;s
-children compared to this widget.
-</p>
-<a name="index-notify-keyword"></a>
-</dd>
-<dt><code>:notify</code></dt>
-<dd><p>A function called each time the widget or a nested widget is changed.
-The function is called with two or three arguments.  The first argument
-is the widget itself, the second argument is the widget that was
-changed, and the third argument is the event leading to the change, if
-any.
-</p>
-<a name="index-menu_002dtag-keyword"></a>
-</dd>
-<dt><code>:menu-tag</code></dt>
-<dd><p>Tag used in the menu when the widget is used as an option in a
-<code>menu-choice</code> widget.
-</p>
-<a name="index-menu_002dtag_002dget-keyword"></a>
-</dd>
-<dt><code>:menu-tag-get</code></dt>
-<dd><p>Function used for finding the tag when the widget is used as an option
-in a <code>menu-choice</code> widget.  By default, the tag used will be either the
-<code>:menu-tag</code> or <code>:tag</code> property if present, or the <code>princ</code>
-representation of the <code>:value</code> property if not.
-</p>
-<a name="index-match-keyword"></a>
-</dd>
-<dt><code>:match</code></dt>
-<dd><p>Should be a function called with two arguments, the widget and a value,
-and returning non-<code>nil</code> if the widget can represent the specified value.
-</p>
-<a name="index-validate-keyword"></a>
-</dd>
-<dt><code>:validate</code></dt>
-<dd><p>A function which takes a widget as an argument, and returns <code>nil</code>
-if the widget&rsquo;s current value is valid for the widget.  Otherwise it
-should return the widget containing the invalid data, and set that
-widget&rsquo;s <code>:error</code> property to a string explaining the error.
-</p>
-<p>The following predefined function can be used:
-</p>
-<dl>
-<dt><a name="index-widget_002dchildren_002dvalidate"></a>Function: <strong>widget-children-validate</strong> <em>widget</em></dt>
-<dd><p>All the <code>:children</code> of <var>widget</var> must be valid.
-</p></dd></dl>
+    <dd>
+      <p>The initial value for widgets of this type.</p><a name=
+      "index-format-keyword" id="index-format-keyword"></a>
+    </dd>
 
-<a name="index-tab_002dorder-keyword"></a>
-</dd>
-<dt><code>:tab-order</code></dt>
-<dd><p>Specify the order in which widgets are traversed with
-<code>widget-forward</code> or <code>widget-backward</code>.  This is only partially
-implemented.
-</p>
-<ol>
-<li> Widgets with tabbing order <code>-1</code> are ignored.
+    <dt><code>:format</code></dt>
 
-</li><li> (Unimplemented) When on a widget with tabbing order <var>n</var>, go to the
-next widget in the buffer with tabbing order <var>n+1</var> or <code>nil</code>,
-whichever comes first.
+    <dd>
+      <p>This string will be inserted in the buffer when you create
+      a widget. The following &lsquo;<samp>%</samp>&rsquo; escapes
+      are available:</p>
 
-</li><li> When on a widget with no tabbing order specified, go to the next widget
-in the buffer with a positive tabbing order, or <code>nil</code>
-</li></ol>
+      <dl compact="compact">
+        <dt>&lsquo;<samp>%[</samp>&rsquo;</dt>
 
-<a name="index-parent-keyword"></a>
-</dd>
-<dt><code>:parent</code></dt>
-<dd><p>The parent of a nested widget (e.g., a <code>menu-choice</code> item or an
-element of a <code>editable-list</code> widget).
-</p>
-<a name="index-sibling_002dargs-keyword"></a>
-</dd>
-<dt><code>:sibling-args</code></dt>
-<dd><p>This keyword is only used for members of a <code>radio-button-choice</code> or
-<code>checklist</code>.  The value should be a list of extra keyword
-arguments, which will be used when creating the <code>radio-button</code> or
-<code>checkbox</code> associated with this item.
-</p>
-</dd>
-</dl>
+        <dt>&lsquo;<samp>%]</samp>&rsquo;</dt>
 
-<dl>
-<dt><a name="index-widget_002dglyph_002ddirectory"></a>User Option: <strong>widget-glyph-directory</strong></dt>
-<dd><p>Directory where glyphs are found.
-Widget will look here for a file with the same name as specified for the
-image, with either a <samp>.xpm</samp> (if supported) or <samp>.xbm</samp> extension.
-</p></dd></dl>
+        <dd>
+          <p>The text inside will be marked as a button.</p>
 
-<dl>
-<dt><a name="index-widget_002dglyph_002denable"></a>User Option: <strong>widget-glyph-enable</strong></dt>
-<dd><p>If non-<code>nil</code>, allow glyphs to appear on displays where they are supported.
-</p></dd></dl>
+          <p>By default, the text will be shown in
+          <code>widget-button-face</code>, and surrounded by
+          brackets.</p>
 
+          <dl>
+            <dt><a name="index-widget_002dbutton_002dprefix" id=
+            "index-widget_002dbutton_002dprefix"></a>User Option:
+            <strong>widget-button-prefix</strong></dt>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="link.html#link" accesskey="1">link</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="url_002dlink.html#url_002dlink" accesskey="2">url-link</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="info_002dlink.html#info_002dlink" accesskey="3">info-link</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="push_002dbutton.html#push_002dbutton" accesskey="4">push-button</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="editable_002dfield.html#editable_002dfield" accesskey="5">editable-field</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="text.html#text" accesskey="6">text</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="menu_002dchoice.html#menu_002dchoice" accesskey="7">menu-choice</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="radio_002dbutton_002dchoice.html#radio_002dbutton_002dchoice" accesskey="8">radio-button-choice</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="item.html#item" accesskey="9">item</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="choice_002ditem.html#choice_002ditem">choice-item</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="toggle.html#toggle">toggle</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="checkbox.html#checkbox">checkbox</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="checklist.html#checklist">checklist</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="editable_002dlist.html#editable_002dlist">editable-list</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="group.html#group">group</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+            <dd>
+              <p>String to prefix buttons.</p>
+            </dd>
+          </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Sexp-Types.html#Sexp-Types" accesskey="n" rel="next">Sexp Types</a>, Previous: <a href="Setting-Up-the-Buffer.html#Setting-Up-the-Buffer" accesskey="p" rel="prev">Setting Up the Buffer</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+          <dl>
+            <dt><a name="index-widget_002dbutton_002dsuffix" id=
+            "index-widget_002dbutton_002dsuffix"></a>User Option:
+            <strong>widget-button-suffix</strong></dt>
 
+            <dd>
+              <p>String to suffix buttons.</p>
+            </dd>
+          </dl>
+        </dd>
 
+        <dt>&lsquo;<samp>%{</samp>&rsquo;</dt>
 
+        <dt>&lsquo;<samp>%}</samp>&rsquo;</dt>
+
+        <dd>
+          <p>The text inside will be displayed with the face
+          specified by <code>:sample-face</code>.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>%v</samp>&rsquo;</dt>
+
+        <dd>
+          <p>This will be replaced with the buffer representation
+          of the widget&rsquo;s value. What this is depends on the
+          widget type.</p>
+
+          <p><strong>Warning:</strong> In an
+          <code>editable-field</code> widget, the
+          &lsquo;<samp>%v</samp>&rsquo; escape must be preceded by
+          some other text in the format string (if specified).</p>
+        </dd>
+
+        <dt>&lsquo;<samp>%d</samp>&rsquo;</dt>
+
+        <dd>
+          <p>Insert the string specified by <code>:doc</code>
+          here.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>%h</samp>&rsquo;</dt>
+
+        <dd>
+          <p>Like &lsquo;<samp>%d</samp>&rsquo;, with the following
+          modifications: If the documentation string is more than
+          one line, it will add a button which will toggle between
+          showing only the first line, and showing the full text.
+          Furthermore, if there is no <code>:doc</code> property in
+          the widget, it will instead examine the
+          <code>:documentation-property</code> property. If it is a
+          lambda expression, it will be called with the
+          widget&rsquo;s value as an argument, and the result will
+          be used as the documentation text.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>%t</samp>&rsquo;</dt>
+
+        <dd>
+          <p>Insert the string specified by <code>:tag</code> here,
+          or the <code>princ</code> representation of the value if
+          there is no tag.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>%%</samp>&rsquo;</dt>
+
+        <dd>
+          <p>Insert a literal &lsquo;<samp>%</samp>&rsquo;.</p>
+        </dd>
+      </dl><a name="index-button_002dface-keyword" id=
+      "index-button_002dface-keyword"></a>
+    </dd>
+
+    <dt><code>:button-face</code></dt>
+
+    <dd>
+      <p>Face used to highlight text inside %[ %] in the
+      format.</p><a name="index-button_002dprefix-keyword" id=
+      "index-button_002dprefix-keyword"></a> <a name=
+      "index-button_002dsuffix-keyword" id=
+      "index-button_002dsuffix-keyword"></a>
+    </dd>
+
+    <dt><code>:button-prefix</code></dt>
+
+    <dt><code>:button-suffix</code></dt>
+
+    <dd>
+      <p>Text around %[ %] in the format.</p>
+
+      <p>These can be</p>
+
+      <dl compact="compact">
+        <dt><em>nil</em></dt>
+
+        <dd>
+          <p>No text is inserted.</p>
+        </dd>
+
+        <dt><em>a string</em></dt>
+
+        <dd>
+          <p>The string is inserted literally.</p>
+        </dd>
+
+        <dt><em>a symbol</em></dt>
+
+        <dd>
+          <p>The value of the symbol is expanded according to this
+          table.</p>
+        </dd>
+      </dl><a name="index-doc-keyword" id="index-doc-keyword"></a>
+    </dd>
+
+    <dt><code>:doc</code></dt>
+
+    <dd>
+      <p>The string inserted by the &lsquo;<samp>%d</samp>&rsquo;
+      escape in the format string.</p><a name="index-tag-keyword"
+      id="index-tag-keyword"></a>
+    </dd>
+
+    <dt><code>:tag</code></dt>
+
+    <dd>
+      <p>The string inserted by the &lsquo;<samp>%t</samp>&rsquo;
+      escape in the format string.</p><a name=
+      "index-tag_002dglyph-keyword" id=
+      "index-tag_002dglyph-keyword"></a>
+    </dd>
+
+    <dt><code>:tag-glyph</code></dt>
+
+    <dd>
+      <p>Name of image to use instead of the string specified by
+      <code>:tag</code> on Emacsen that supports it.</p><a name=
+      "index-help_002decho-keyword" id=
+      "index-help_002decho-keyword"></a>
+    </dd>
+
+    <dt><code>:help-echo</code></dt>
+
+    <dd>
+      <p>Specifies how to display a message whenever you move to
+      the widget with either <code>widget-forward</code> or
+      <code>widget-backward</code> or move the mouse over it (using
+      the standard <code>help-echo</code> mechanism). The argument
+      is either a string to display, a function of one argument,
+      the widget, which should return a string to display, or a
+      form that evaluates to such a string.</p><a name=
+      "index-follow_002dlink-keyword" id=
+      "index-follow_002dlink-keyword"></a>
+    </dd>
+
+    <dt><code>:follow-link</code></dt>
+
+    <dd>
+      <p>Specifies how to interpret a <tt class="key">mouse-1</tt>
+      click on the widget. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/elisp/Clickable-Text.html#Clickable-Text">
+      Defining Clickable Text</a> in <cite>the Emacs Lisp Reference
+      Manual</cite>.</p><a name="index-indent-keyword" id=
+      "index-indent-keyword"></a>
+    </dd>
+
+    <dt><code>:indent</code></dt>
+
+    <dd>
+      <p>An integer indicating the absolute number of spaces to
+      indent children of this widget.</p><a name=
+      "index-offset-keyword" id="index-offset-keyword"></a>
+    </dd>
+
+    <dt><code>:offset</code></dt>
+
+    <dd>
+      <p>An integer indicating how many extra spaces to add to the
+      widget&rsquo;s grandchildren compared to this
+      widget.</p><a name="index-extra_002doffset-keyword" id=
+      "index-extra_002doffset-keyword"></a>
+    </dd>
+
+    <dt><code>:extra-offset</code></dt>
+
+    <dd>
+      <p>An integer indicating how many extra spaces to add to the
+      widget&rsquo;s children compared to this widget.</p><a name=
+      "index-notify-keyword" id="index-notify-keyword"></a>
+    </dd>
+
+    <dt><code>:notify</code></dt>
+
+    <dd>
+      <p>A function called each time the widget or a nested widget
+      is changed. The function is called with two or three
+      arguments. The first argument is the widget itself, the
+      second argument is the widget that was changed, and the third
+      argument is the event leading to the change, if
+      any.</p><a name="index-menu_002dtag-keyword" id=
+      "index-menu_002dtag-keyword"></a>
+    </dd>
+
+    <dt><code>:menu-tag</code></dt>
+
+    <dd>
+      <p>Tag used in the menu when the widget is used as an option
+      in a <code>menu-choice</code> widget.</p><a name=
+      "index-menu_002dtag_002dget-keyword" id=
+      "index-menu_002dtag_002dget-keyword"></a>
+    </dd>
+
+    <dt><code>:menu-tag-get</code></dt>
+
+    <dd>
+      <p>Function used for finding the tag when the widget is used
+      as an option in a <code>menu-choice</code> widget. By
+      default, the tag used will be either the
+      <code>:menu-tag</code> or <code>:tag</code> property if
+      present, or the <code>princ</code> representation of the
+      <code>:value</code> property if not.</p><a name=
+      "index-match-keyword" id="index-match-keyword"></a>
+    </dd>
+
+    <dt><code>:match</code></dt>
+
+    <dd>
+      <p>Should be a function called with two arguments, the widget
+      and a value, and returning non-<code>nil</code> if the widget
+      can represent the specified value.</p><a name=
+      "index-validate-keyword" id="index-validate-keyword"></a>
+    </dd>
+
+    <dt><code>:validate</code></dt>
+
+    <dd>
+      <p>A function which takes a widget as an argument, and
+      returns <code>nil</code> if the widget&rsquo;s current value
+      is valid for the widget. Otherwise it should return the
+      widget containing the invalid data, and set that
+      widget&rsquo;s <code>:error</code> property to a string
+      explaining the error.</p>
+
+      <p>The following predefined function can be used:</p>
+
+      <dl>
+        <dt><a name="index-widget_002dchildren_002dvalidate" id=
+        "index-widget_002dchildren_002dvalidate"></a>Function:
+        <strong>widget-children-validate</strong>
+        <em>widget</em></dt>
+
+        <dd>
+          <p>All the <code>:children</code> of <var>widget</var>
+          must be valid.</p>
+        </dd>
+      </dl><a name="index-tab_002dorder-keyword" id=
+      "index-tab_002dorder-keyword"></a>
+    </dd>
+
+    <dt><code>:tab-order</code></dt>
+
+    <dd>
+      <p>Specify the order in which widgets are traversed with
+      <code>widget-forward</code> or <code>widget-backward</code>.
+      This is only partially implemented.</p>
+
+      <ol>
+        <li>Widgets with tabbing order <code>-1</code> are
+        ignored.</li>
+
+        <li>(Unimplemented) When on a widget with tabbing order
+        <var>n</var>, go to the next widget in the buffer with
+        tabbing order <var>n+1</var> or <code>nil</code>, whichever
+        comes first.</li>
+
+        <li>When on a widget with no tabbing order specified, go to
+        the next widget in the buffer with a positive tabbing
+        order, or <code>nil</code></li>
+      </ol><a name="index-parent-keyword" id=
+      "index-parent-keyword"></a>
+    </dd>
+
+    <dt><code>:parent</code></dt>
+
+    <dd>
+      <p>The parent of a nested widget (e.g., a
+      <code>menu-choice</code> item or an element of a
+      <code>editable-list</code> widget).</p><a name=
+      "index-sibling_002dargs-keyword" id=
+      "index-sibling_002dargs-keyword"></a>
+    </dd>
+
+    <dt><code>:sibling-args</code></dt>
+
+    <dd>
+      <p>This keyword is only used for members of a
+      <code>radio-button-choice</code> or <code>checklist</code>.
+      The value should be a list of extra keyword arguments, which
+      will be used when creating the <code>radio-button</code> or
+      <code>checkbox</code> associated with this item.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-widget_002dglyph_002ddirectory" id=
+    "index-widget_002dglyph_002ddirectory"></a>User Option:
+    <strong>widget-glyph-directory</strong></dt>
+
+    <dd>
+      <p>Directory where glyphs are found. Widget will look here
+      for a file with the same name as specified for the image,
+      with either a <samp>.xpm</samp> (if supported) or
+      <samp>.xbm</samp> extension.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-widget_002dglyph_002denable" id=
+    "index-widget_002dglyph_002denable"></a>User Option:
+    <strong>widget-glyph-enable</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, allow glyphs to appear on
+      displays where they are supported.</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href="link.html#link"
+      accesskey="1">link</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "url_002dlink.html#url_002dlink" accesskey=
+      "2">url-link</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "info_002dlink.html#info_002dlink" accesskey=
+      "3">info-link</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "push_002dbutton.html#push_002dbutton" accesskey=
+      "4">push-button</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "editable_002dfield.html#editable_002dfield" accesskey=
+      "5">editable-field</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href="text.html#text"
+      accesskey="6">text</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "menu_002dchoice.html#menu_002dchoice" accesskey=
+      "7">menu-choice</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "radio_002dbutton_002dchoice.html#radio_002dbutton_002dchoice"
+      accesskey="8">radio-button-choice</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href="item.html#item"
+      accesskey="9">item</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "choice_002ditem.html#choice_002ditem">choice-item</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "toggle.html#toggle">toggle</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "checkbox.html#checkbox">checkbox</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "checklist.html#checklist">checklist</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "editable_002dlist.html#editable_002dlist">editable-list</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "group.html#group">group</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Sexp-Types.html#Sexp-Types" accesskey="n"
+    rel="next">Sexp Types</a>, Previous: <a href=
+    "Setting-Up-the-Buffer.html#Setting-Up-the-Buffer" accesskey=
+    "p" rel="prev">Setting Up the Buffer</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

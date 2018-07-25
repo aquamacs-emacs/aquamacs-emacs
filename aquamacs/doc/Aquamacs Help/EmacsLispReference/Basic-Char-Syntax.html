@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,159 +19,232 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Basic Char Syntax</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Basic Char Syntax">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Basic Char Syntax">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Character-Type.html#Character-Type" rel="up" title="Character Type">
-<link href="General-Escape-Syntax.html#General-Escape-Syntax" rel="next" title="General Escape Syntax">
-<link href="Character-Type.html#Character-Type" rel="prev" title="Character Type">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Basic Char Syntax</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Basic Char Syntax" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Basic Char Syntax" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Character-Type.html#Character-Type" rel="up" title=
+  "Character Type" />
+  <link href="General-Escape-Syntax.html#General-Escape-Syntax"
+  rel="next" title="General Escape Syntax" />
+  <link href="Character-Type.html#Character-Type" rel="prev" title=
+  "Character Type" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Basic-Char-Syntax" id="Basic-Char-Syntax"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "General-Escape-Syntax.html#General-Escape-Syntax" accesskey=
+    "n" rel="next">General Escape Syntax</a>, Up: <a href=
+    "Character-Type.html#Character-Type" accesskey="u" rel=
+    "up">Character Type</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Char-Syntax-1" id="Basic-Char-Syntax-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Char-Syntax"></a>
-<div class="header">
-<p>
-Next: <a href="General-Escape-Syntax.html#General-Escape-Syntax" accesskey="n" rel="next">General Escape Syntax</a>, Up: <a href="Character-Type.html#Character-Type" accesskey="u" rel="up">Character Type</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Char-Syntax-1"></a>
-<h4 class="subsubsection">2.3.3.1 Basic Char Syntax</h4>
-<a name="index-read-syntax-for-characters"></a>
-<a name="index-printed-representation-for-characters"></a>
-<a name="index-syntax-for-characters"></a>
-<a name="index-_003f-in-character-constant"></a>
-<a name="index-question-mark-in-character-constant"></a>
+  <h4 class="subsubsection">2.3.3.1 Basic Char Syntax</h4><a name=
+  "index-read-syntax-for-characters" id=
+  "index-read-syntax-for-characters"></a> <a name=
+  "index-printed-representation-for-characters" id=
+  "index-printed-representation-for-characters"></a> <a name=
+  "index-syntax-for-characters" id=
+  "index-syntax-for-characters"></a> <a name=
+  "index-_003f-in-character-constant" id=
+  "index-_003f-in-character-constant"></a> <a name=
+  "index-question-mark-in-character-constant" id=
+  "index-question-mark-in-character-constant"></a>
 
-<p>Since characters are really integers, the printed representation of
-a character is a decimal number.  This is also a possible read syntax
-for a character, but writing characters that way in Lisp programs is
-not clear programming.  You should <em>always</em> use the special read
-syntax formats that Emacs Lisp provides for characters.  These syntax
-formats start with a question mark.
-</p>
-<p>The usual read syntax for alphanumeric characters is a question mark
-followed by the character; thus, &lsquo;<samp>?A</samp>&rsquo; for the character
-<kbd>A</kbd>, &lsquo;<samp>?B</samp>&rsquo; for the character <kbd>B</kbd>, and &lsquo;<samp>?a</samp>&rsquo; for the
-character <kbd>a</kbd>.
-</p>
-<p>For example:
-</p>
-<div class="example">
-<pre class="example">?Q &rArr; 81     ?q &rArr; 113
-</pre></div>
+  <p>Since characters are really integers, the printed
+  representation of a character is a decimal number. This is also a
+  possible read syntax for a character, but writing characters that
+  way in Lisp programs is not clear programming. You should
+  <em>always</em> use the special read syntax formats that Emacs
+  Lisp provides for characters. These syntax formats start with a
+  question mark.</p>
 
-<p>You can use the same syntax for punctuation characters, but it is
-often a good idea to add a &lsquo;<samp>\</samp>&rsquo; so that the Emacs commands for
-editing Lisp code don&rsquo;t get confused.  For example, &lsquo;<samp>?\(</samp>&rsquo; is the
-way to write the open-paren character.  If the character is &lsquo;<samp>\</samp>&rsquo;,
-you <em>must</em> use a second &lsquo;<samp>\</samp>&rsquo; to quote it: &lsquo;<samp>?\\</samp>&rsquo;.
-</p>
-<a name="index-whitespace"></a>
-<a name="index-bell-character"></a>
-<a name="index-_005ca"></a>
-<a name="index-backspace"></a>
-<a name="index-_005cb"></a>
-<a name="index-tab-_0028ASCII-character_0029"></a>
-<a name="index-_005ct"></a>
-<a name="index-vertical-tab"></a>
-<a name="index-_005cv"></a>
-<a name="index-formfeed"></a>
-<a name="index-_005cf"></a>
-<a name="index-newline"></a>
-<a name="index-_005cn"></a>
-<a name="index-return-_0028ASCII-character_0029"></a>
-<a name="index-_005cr"></a>
-<a name="index-escape-_0028ASCII-character_0029"></a>
-<a name="index-_005ce"></a>
-<a name="index-space-_0028ASCII-character_0029"></a>
-<a name="index-_005cs"></a>
-<p>You can express the characters control-g, backspace, tab, newline,
-vertical tab, formfeed, space, return, del, and escape as &lsquo;<samp>?\a</samp>&rsquo;,
-&lsquo;<samp>?\b</samp>&rsquo;, &lsquo;<samp>?\t</samp>&rsquo;, &lsquo;<samp>?\n</samp>&rsquo;, &lsquo;<samp>?\v</samp>&rsquo;, &lsquo;<samp>?\f</samp>&rsquo;,
-&lsquo;<samp>?\s</samp>&rsquo;, &lsquo;<samp>?\r</samp>&rsquo;, &lsquo;<samp>?\d</samp>&rsquo;, and &lsquo;<samp>?\e</samp>&rsquo;, respectively.
-(&lsquo;<samp>?\s</samp>&rsquo; followed by a dash has a different meaning&mdash;it applies
-the Super modifier to the following character.)  Thus,
-</p>
-<div class="example">
-<pre class="example">?\a &rArr; 7                 ; <span class="roman">control-g, <kbd>C-g</kbd></span>
-?\b &rArr; 8                 ; <span class="roman">backspace, <tt class="key">BS</tt>, <kbd>C-h</kbd></span>
-?\t &rArr; 9                 ; <span class="roman">tab, <tt class="key">TAB</tt>, <kbd>C-i</kbd></span>
-?\n &rArr; 10                ; <span class="roman">newline, <kbd>C-j</kbd></span>
-?\v &rArr; 11                ; <span class="roman">vertical tab, <kbd>C-k</kbd></span>
-?\f &rArr; 12                ; <span class="roman">formfeed character, <kbd>C-l</kbd></span>
-?\r &rArr; 13                ; <span class="roman">carriage return, <tt class="key">RET</tt>, <kbd>C-m</kbd></span>
-?\e &rArr; 27                ; <span class="roman">escape character, <tt class="key">ESC</tt>, <kbd>C-[</kbd></span>
-?\s &rArr; 32                ; <span class="roman">space character, <tt class="key">SPC</tt></span>
-?\\ &rArr; 92                ; <span class="roman">backslash character, <kbd>\</kbd></span>
-?\d &rArr; 127               ; <span class="roman">delete character, <tt class="key">DEL</tt></span>
-</pre></div>
+  <p>The usual read syntax for alphanumeric characters is a
+  question mark followed by the character; thus,
+  &lsquo;<samp>?A</samp>&rsquo; for the character <kbd>A</kbd>,
+  &lsquo;<samp>?B</samp>&rsquo; for the character <kbd>B</kbd>, and
+  &lsquo;<samp>?a</samp>&rsquo; for the character <kbd>a</kbd>.</p>
 
-<a name="index-escape-sequence"></a>
-<p>These sequences which start with backslash are also known as
-<em>escape sequences</em>, because backslash plays the role of an
-escape character; this has nothing to do with the
-character <tt class="key">ESC</tt>.  &lsquo;<samp>\s</samp>&rsquo; is meant for use in character
-constants; in string constants, just write the space.
-</p>
-<p>A backslash is allowed, and harmless, preceding any character without
-a special escape meaning; thus, &lsquo;<samp>?\+</samp>&rsquo; is equivalent to &lsquo;<samp>?+</samp>&rsquo;.
-There is no reason to add a backslash before most characters.  However,
-you should add a backslash before any of the characters
-&lsquo;<samp>()\|;'`&quot;#.,</samp>&rsquo; to avoid confusing the Emacs commands for editing
-Lisp code.  You can also add a backslash before whitespace characters such as
-space, tab, newline and formfeed.  However, it is cleaner to use one of
-the easily readable escape sequences, such as &lsquo;<samp>\t</samp>&rsquo; or &lsquo;<samp>\s</samp>&rsquo;,
-instead of an actual whitespace character such as a tab or a space.
-(If you do write backslash followed by a space, you should write
-an extra space after the character constant to separate it from the
-following text.)
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="General-Escape-Syntax.html#General-Escape-Syntax" accesskey="n" rel="next">General Escape Syntax</a>, Up: <a href="Character-Type.html#Character-Type" accesskey="u" rel="up">Character Type</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>For example:</p>
 
+  <div class="example">
+    <pre class="example">
+?Q &rArr; 81     ?q &rArr; 113
+</pre>
+  </div>
 
+  <p>You can use the same syntax for punctuation characters, but it
+  is often a good idea to add a &lsquo;<samp>\</samp>&rsquo; so
+  that the Emacs commands for editing Lisp code don&rsquo;t get
+  confused. For example, &lsquo;<samp>?\(</samp>&rsquo; is the way
+  to write the open-paren character. If the character is
+  &lsquo;<samp>\</samp>&rsquo;, you <em>must</em> use a second
+  &lsquo;<samp>\</samp>&rsquo; to quote it:
+  &lsquo;<samp>?\\</samp>&rsquo;.</p><a name="index-whitespace" id=
+  "index-whitespace"></a> <a name="index-bell-character" id=
+  "index-bell-character"></a> <a name="index-_005ca" id=
+  "index-_005ca"></a> <a name="index-backspace" id=
+  "index-backspace"></a> <a name="index-_005cb" id=
+  "index-_005cb"></a> <a name="index-tab-_0028ASCII-character_0029"
+  id="index-tab-_0028ASCII-character_0029"></a> <a name=
+  "index-_005ct" id="index-_005ct"></a> <a name=
+  "index-vertical-tab" id="index-vertical-tab"></a> <a name=
+  "index-_005cv" id="index-_005cv"></a> <a name="index-formfeed"
+  id="index-formfeed"></a> <a name="index-_005cf" id=
+  "index-_005cf"></a> <a name="index-newline" id=
+  "index-newline"></a> <a name="index-_005cn" id=
+  "index-_005cn"></a> <a name=
+  "index-return-_0028ASCII-character_0029" id=
+  "index-return-_0028ASCII-character_0029"></a> <a name=
+  "index-_005cr" id="index-_005cr"></a> <a name=
+  "index-escape-_0028ASCII-character_0029" id=
+  "index-escape-_0028ASCII-character_0029"></a> <a name=
+  "index-_005ce" id="index-_005ce"></a> <a name=
+  "index-space-_0028ASCII-character_0029" id=
+  "index-space-_0028ASCII-character_0029"></a> <a name=
+  "index-_005cs" id="index-_005cs"></a>
 
+  <p>You can express the characters control-g, backspace, tab,
+  newline, vertical tab, formfeed, space, return, del, and escape
+  as &lsquo;<samp>?\a</samp>&rsquo;,
+  &lsquo;<samp>?\b</samp>&rsquo;, &lsquo;<samp>?\t</samp>&rsquo;,
+  &lsquo;<samp>?\n</samp>&rsquo;, &lsquo;<samp>?\v</samp>&rsquo;,
+  &lsquo;<samp>?\f</samp>&rsquo;, &lsquo;<samp>?\s</samp>&rsquo;,
+  &lsquo;<samp>?\r</samp>&rsquo;, &lsquo;<samp>?\d</samp>&rsquo;,
+  and &lsquo;<samp>?\e</samp>&rsquo;, respectively.
+  (&lsquo;<samp>?\s</samp>&rsquo; followed by a dash has a
+  different meaning&mdash;it applies the Super modifier to the
+  following character.) Thus,</p>
+
+  <div class="example">
+    <pre class="example">
+?\a &rArr; 7                 ; <span class=
+"roman">control-g, <kbd>C-g</kbd></span>
+?\b &rArr; 8                 ; <span class=
+"roman">backspace, <tt class="key">BS</tt>, <kbd>C-h</kbd></span>
+?\t &rArr; 9                 ; <span class="roman">tab, <tt class=
+"key">TAB</tt>, <kbd>C-i</kbd></span>
+?\n &rArr; 10                ; <span class=
+"roman">newline, <kbd>C-j</kbd></span>
+?\v &rArr; 11                ; <span class=
+"roman">vertical tab, <kbd>C-k</kbd></span>
+?\f &rArr; 12                ; <span class=
+"roman">formfeed character, <kbd>C-l</kbd></span>
+?\r &rArr; 13                ; <span class=
+"roman">carriage return, <tt class=
+"key">RET</tt>, <kbd>C-m</kbd></span>
+?\e &rArr; 27                ; <span class=
+"roman">escape character, <tt class=
+"key">ESC</tt>, <kbd>C-[</kbd></span>
+?\s &rArr; 32                ; <span class=
+"roman">space character, <tt class="key">SPC</tt></span>
+?\\ &rArr; 92                ; <span class=
+"roman">backslash character, <kbd>\</kbd></span>
+?\d &rArr; 127               ; <span class=
+"roman">delete character, <tt class="key">DEL</tt></span>
+</pre>
+  </div><a name="index-escape-sequence" id=
+  "index-escape-sequence"></a>
+
+  <p>These sequences which start with backslash are also known as
+  <em>escape sequences</em>, because backslash plays the role of an
+  escape character; this has nothing to do with the character
+  <tt class="key">ESC</tt>. &lsquo;<samp>\s</samp>&rsquo; is meant
+  for use in character constants; in string constants, just write
+  the space.</p>
+
+  <p>A backslash is allowed, and harmless, preceding any character
+  without a special escape meaning; thus,
+  &lsquo;<samp>?\+</samp>&rsquo; is equivalent to
+  &lsquo;<samp>?+</samp>&rsquo;. There is no reason to add a
+  backslash before most characters. However, you should add a
+  backslash before any of the characters
+  &lsquo;<samp>()\|;'`"#.,</samp>&rsquo; to avoid confusing the
+  Emacs commands for editing Lisp code. You can also add a
+  backslash before whitespace characters such as space, tab,
+  newline and formfeed. However, it is cleaner to use one of the
+  easily readable escape sequences, such as
+  &lsquo;<samp>\t</samp>&rsquo; or &lsquo;<samp>\s</samp>&rsquo;,
+  instead of an actual whitespace character such as a tab or a
+  space. (If you do write backslash followed by a space, you should
+  write an extra space after the character constant to separate it
+  from the following text.)</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "General-Escape-Syntax.html#General-Escape-Syntax" accesskey=
+    "n" rel="next">General Escape Syntax</a>, Up: <a href=
+    "Character-Type.html#Character-Type" accesskey="u" rel=
+    "up">Character Type</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

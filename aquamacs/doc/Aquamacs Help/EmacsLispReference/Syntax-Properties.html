@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,136 +19,215 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Syntax Properties</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Syntax Properties">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Syntax Properties">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Syntax-Tables.html#Syntax-Tables" rel="up" title="Syntax Tables">
-<link href="Motion-and-Syntax.html#Motion-and-Syntax" rel="next" title="Motion and Syntax">
-<link href="Syntax-Table-Functions.html#Syntax-Table-Functions" rel="prev" title="Syntax Table Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Syntax Properties</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Syntax Properties" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Syntax Properties" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Syntax-Tables.html#Syntax-Tables" rel="up" title=
+  "Syntax Tables" />
+  <link href="Motion-and-Syntax.html#Motion-and-Syntax" rel="next"
+  title="Motion and Syntax" />
+  <link href="Syntax-Table-Functions.html#Syntax-Table-Functions"
+  rel="prev" title="Syntax Table Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Syntax-Properties" id="Syntax-Properties"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Motion-and-Syntax.html#Motion-and-Syntax"
+    accesskey="n" rel="next">Motion and Syntax</a>, Previous:
+    <a href="Syntax-Table-Functions.html#Syntax-Table-Functions"
+    accesskey="p" rel="prev">Syntax Table Functions</a>, Up:
+    <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Syntax-Properties-1" id="Syntax-Properties-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Syntax-Properties"></a>
-<div class="header">
-<p>
-Next: <a href="Motion-and-Syntax.html#Motion-and-Syntax" accesskey="n" rel="next">Motion and Syntax</a>, Previous: <a href="Syntax-Table-Functions.html#Syntax-Table-Functions" accesskey="p" rel="prev">Syntax Table Functions</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Syntax-Properties-1"></a>
-<h3 class="section">34.4 Syntax Properties</h3>
-<a name="index-syntax_002dtable-_0028text-property_0029"></a>
+  <h3 class="section">34.4 Syntax Properties</h3><a name=
+  "index-syntax_002dtable-_0028text-property_0029" id=
+  "index-syntax_002dtable-_0028text-property_0029"></a>
 
-<p>When the syntax table is not flexible enough to specify the syntax of
-a language, you can override the syntax table for specific character
-occurrences in the buffer, by applying a <code>syntax-table</code> text
-property.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>, for how to apply text properties.
-</p>
-<p>The valid values of <code>syntax-table</code> text property are:
-</p>
-<dl compact="compact">
-<dt><var>syntax-table</var></dt>
-<dd><p>If the property value is a syntax table, that table is used instead of
-the current buffer&rsquo;s syntax table to determine the syntax for the
-underlying text character.
-</p>
-</dd>
-<dt><code>(<var>syntax-code</var> . <var>matching-char</var>)</code></dt>
-<dd><p>A cons cell of this format is a raw syntax descriptor (see <a href="Syntax-Table-Internals.html#Syntax-Table-Internals">Syntax Table Internals</a>), which directly specifies a syntax class for the
-underlying text character.
-</p>
-</dd>
-<dt><code>nil</code></dt>
-<dd><p>If the property is <code>nil</code>, the character&rsquo;s syntax is determined from
-the current syntax table in the usual way.
-</p></dd>
-</dl>
+  <p>When the syntax table is not flexible enough to specify the
+  syntax of a language, you can override the syntax table for
+  specific character occurrences in the buffer, by applying a
+  <code>syntax-table</code> text property. See <a href=
+  "Text-Properties.html#Text-Properties">Text Properties</a>, for
+  how to apply text properties.</p>
 
-<dl>
-<dt><a name="index-parse_002dsexp_002dlookup_002dproperties"></a>Variable: <strong>parse-sexp-lookup-properties</strong></dt>
-<dd><p>If this is non-<code>nil</code>, the syntax scanning functions, like
-<code>forward-sexp</code>, pay attention to syntax text properties.
-Otherwise they use only the current syntax table.
-</p></dd></dl>
+  <p>The valid values of <code>syntax-table</code> text property
+  are:</p>
 
-<dl>
-<dt><a name="index-syntax_002dpropertize_002dfunction"></a>Variable: <strong>syntax-propertize-function</strong></dt>
-<dd><p>This variable, if non-<code>nil</code>, should store a function for applying
-<code>syntax-table</code> properties to a specified stretch of text.  It is
-intended to be used by major modes to install a function which applies
-<code>syntax-table</code> properties in some mode-appropriate way.
-</p>
-<p>The function is called by <code>syntax-ppss</code> (see <a href="Position-Parse.html#Position-Parse">Position Parse</a>),
-and by Font Lock mode during syntactic fontification (see <a href="Syntactic-Font-Lock.html#Syntactic-Font-Lock">Syntactic Font Lock</a>).  It is called with two arguments, <var>start</var> and
-<var>end</var>, which are the starting and ending positions of the text on
-which it should act.  It is allowed to call <code>syntax-ppss</code> on any
-position before <var>end</var>.  However, it should not call
-<code>syntax-ppss-flush-cache</code>; so, it is not allowed to call
-<code>syntax-ppss</code> on some position and later modify the buffer at an
-earlier position.
-</p></dd></dl>
+  <dl compact="compact">
+    <dt><var>syntax-table</var></dt>
 
-<dl>
-<dt><a name="index-syntax_002dpropertize_002dextend_002dregion_002dfunctions"></a>Variable: <strong>syntax-propertize-extend-region-functions</strong></dt>
-<dd><p>This abnormal hook is run by the syntax parsing code prior to calling
-<code>syntax-propertize-function</code>.  Its role is to help locate safe
-starting and ending buffer positions for passing to
-<code>syntax-propertize-function</code>.  For example, a major mode can add
-a function to this hook to identify multi-line syntactic constructs,
-and ensure that the boundaries do not fall in the middle of one.
-</p>
-<p>Each function in this hook should accept two arguments, <var>start</var>
-and <var>end</var>.  It should return either a cons cell of two adjusted
-buffer positions, <code>(<var>new-start</var> . <var>new-end</var>)</code>, or
-<code>nil</code> if no adjustment is necessary.  The hook functions are run
-in turn, repeatedly, until they all return <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>If the property value is a syntax table, that table is
+      used instead of the current buffer&rsquo;s syntax table to
+      determine the syntax for the underlying text character.</p>
+    </dd>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Motion-and-Syntax.html#Motion-and-Syntax" accesskey="n" rel="next">Motion and Syntax</a>, Previous: <a href="Syntax-Table-Functions.html#Syntax-Table-Functions" accesskey="p" rel="prev">Syntax Table Functions</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><code>(<var>syntax-code</var> .
+    <var>matching-char</var>)</code></dt>
 
+    <dd>
+      <p>A cons cell of this format is a raw syntax descriptor (see
+      <a href=
+      "Syntax-Table-Internals.html#Syntax-Table-Internals">Syntax
+      Table Internals</a>), which directly specifies a syntax class
+      for the underlying text character.</p>
+    </dd>
 
+    <dt><code>nil</code></dt>
 
+    <dd>
+      <p>If the property is <code>nil</code>, the character&rsquo;s
+      syntax is determined from the current syntax table in the
+      usual way.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-parse_002dsexp_002dlookup_002dproperties"
+    id="index-parse_002dsexp_002dlookup_002dproperties"></a>Variable:
+    <strong>parse-sexp-lookup-properties</strong></dt>
+
+    <dd>
+      <p>If this is non-<code>nil</code>, the syntax scanning
+      functions, like <code>forward-sexp</code>, pay attention to
+      syntax text properties. Otherwise they use only the current
+      syntax table.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-syntax_002dpropertize_002dfunction" id=
+    "index-syntax_002dpropertize_002dfunction"></a>Variable:
+    <strong>syntax-propertize-function</strong></dt>
+
+    <dd>
+      <p>This variable, if non-<code>nil</code>, should store a
+      function for applying <code>syntax-table</code> properties to
+      a specified stretch of text. It is intended to be used by
+      major modes to install a function which applies
+      <code>syntax-table</code> properties in some mode-appropriate
+      way.</p>
+
+      <p>The function is called by <code>syntax-ppss</code> (see
+      <a href="Position-Parse.html#Position-Parse">Position
+      Parse</a>), and by Font Lock mode during syntactic
+      fontification (see <a href=
+      "Syntactic-Font-Lock.html#Syntactic-Font-Lock">Syntactic Font
+      Lock</a>). It is called with two arguments, <var>start</var>
+      and <var>end</var>, which are the starting and ending
+      positions of the text on which it should act. It is allowed
+      to call <code>syntax-ppss</code> on any position before
+      <var>end</var>. However, it should not call
+      <code>syntax-ppss-flush-cache</code>; so, it is not allowed
+      to call <code>syntax-ppss</code> on some position and later
+      modify the buffer at an earlier position.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-syntax_002dpropertize_002dextend_002dregion_002dfunctions"
+    id=
+    "index-syntax_002dpropertize_002dextend_002dregion_002dfunctions">
+    </a>Variable:
+    <strong>syntax-propertize-extend-region-functions</strong></dt>
+
+    <dd>
+      <p>This abnormal hook is run by the syntax parsing code prior
+      to calling <code>syntax-propertize-function</code>. Its role
+      is to help locate safe starting and ending buffer positions
+      for passing to <code>syntax-propertize-function</code>. For
+      example, a major mode can add a function to this hook to
+      identify multi-line syntactic constructs, and ensure that the
+      boundaries do not fall in the middle of one.</p>
+
+      <p>Each function in this hook should accept two arguments,
+      <var>start</var> and <var>end</var>. It should return either
+      a cons cell of two adjusted buffer positions,
+      <code>(<var>new-start</var> . <var>new-end</var>)</code>, or
+      <code>nil</code> if no adjustment is necessary. The hook
+      functions are run in turn, repeatedly, until they all return
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Motion-and-Syntax.html#Motion-and-Syntax"
+    accesskey="n" rel="next">Motion and Syntax</a>, Previous:
+    <a href="Syntax-Table-Functions.html#Syntax-Table-Functions"
+    accesskey="p" rel="prev">Syntax Table Functions</a>, Up:
+    <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

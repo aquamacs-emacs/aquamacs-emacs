@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,126 +20,190 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Indirect Buffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Indirect Buffers">
-<meta name="keywords" content="GNU Emacs Manual: Indirect Buffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffers.html#Buffers" rel="up" title="Buffers">
-<link href="Buffer-Convenience.html#Buffer-Convenience" rel="next" title="Buffer Convenience">
-<link href="Several-Buffers.html#Several-Buffers" rel="prev" title="Several Buffers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Indirect Buffers</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Indirect Buffers" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Indirect Buffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffers.html#Buffers" rel="up" title="Buffers" />
+  <link href="Buffer-Convenience.html#Buffer-Convenience" rel=
+  "next" title="Buffer Convenience" />
+  <link href="Several-Buffers.html#Several-Buffers" rel="prev"
+  title="Several Buffers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Indirect-Buffers" id="Indirect-Buffers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Buffer-Convenience.html#Buffer-Convenience"
+    accesskey="n" rel="next">Buffer Convenience</a>, Previous:
+    <a href="Several-Buffers.html#Several-Buffers" accesskey="p"
+    rel="prev">Several Buffers</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Indirect-Buffers-1" id="Indirect-Buffers-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Indirect-Buffers"></a>
-<div class="header">
-<p>
-Next: <a href="Buffer-Convenience.html#Buffer-Convenience" accesskey="n" rel="next">Buffer Convenience</a>, Previous: <a href="Several-Buffers.html#Several-Buffers" accesskey="p" rel="prev">Several Buffers</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Indirect-Buffers-1"></a>
-<h3 class="section">19.6 Indirect Buffers</h3>
-<a name="index-indirect-buffer"></a>
-<a name="index-base-buffer"></a>
+  <h3 class="section">19.6 Indirect Buffers</h3><a name=
+  "index-indirect-buffer" id="index-indirect-buffer"></a> <a name=
+  "index-base-buffer" id="index-base-buffer"></a>
 
-<p>An <em>indirect buffer</em> shares the text of some other buffer, which
-is called the <em>base buffer</em> of the indirect buffer.  In some ways it
-is a buffer analogue of a symbolic link between files.
-</p>
-<dl compact="compact">
-<dd><a name="index-make_002dindirect_002dbuffer"></a>
-</dd>
-<dt><kbd>M-x make-indirect-buffer <span class="key">RET</span> <var>base-buffer</var> <span class="key">RET</span> <var>indirect-name</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Create an indirect buffer named <var>indirect-name</var> with base buffer
-<var>base-buffer</var>.
-<a name="index-clone_002dindirect_002dbuffer"></a>
-</p></dd>
-<dt><kbd>M-x clone-indirect-buffer <span class="key">RET</span></kbd></dt>
-<dd><p>Create an indirect buffer that is a twin copy of the current buffer.
-</p></dd>
-<dt><kbd>C-x 4 c</kbd></dt>
-<dd><a name="index-C_002dx-4-c"></a>
-<a name="index-clone_002dindirect_002dbuffer_002dother_002dwindow"></a>
-<p>Create an indirect buffer that is a twin copy of the current buffer, and
-select it in another window (<code>clone-indirect-buffer-other-window</code>).
-</p></dd>
-</dl>
+  <p>An <em>indirect buffer</em> shares the text of some other
+  buffer, which is called the <em>base buffer</em> of the indirect
+  buffer. In some ways it is a buffer analogue of a symbolic link
+  between files.</p>
 
-<p>The text of the indirect buffer is always identical to the text of its
-base buffer; changes made by editing either one are visible immediately
-in the other.  But in all other respects, the indirect buffer and its
-base buffer are completely separate.  They can have different names,
-different values of point, different narrowing, different markers,
-different major modes, and different local variables.
-</p>
-<p>An indirect buffer cannot visit a file, but its base buffer can.  If
-you try to save the indirect buffer, that actually works by saving the
-base buffer.  Killing the base buffer effectively kills the indirect
-buffer, but killing an indirect buffer has no effect on its base buffer.
-</p>
-<p>One way to use indirect buffers is to display multiple views of an
-outline.  See <a href="Outline-Views.html#Outline-Views">Outline Views</a>.
-</p>
-<a name="index-clone_002dindirect_002dbuffer_002dhook"></a>
-<p>A quick and handy way to make an indirect buffer is with the command
-<kbd>M-x clone-indirect-buffer</kbd>.  It creates and selects an indirect
-buffer whose base buffer is the current buffer.  With a numeric
-argument, it prompts for the name of the indirect buffer; otherwise it
-uses the name of the current buffer, with a &lsquo;<samp>&lt;<var>n</var>&gt;</samp>&rsquo; suffix
-added.  <kbd>C-x 4 c</kbd> (<code>clone-indirect-buffer-other-window</code>)
-works like <kbd>M-x clone-indirect-buffer</kbd>, but it selects the new
-buffer in another window.  These functions run the hook
-<code>clone-indirect-buffer-hook</code> after creating the indirect buffer.
-</p>
-<p>The more general way to make an indirect buffer is with the command
-<kbd>M-x make-indirect-buffer</kbd>.  It creates an indirect buffer
-named <var>indirect-name</var> from a buffer <var>base-buffer</var>, prompting for
-both using the minibuffer.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Buffer-Convenience.html#Buffer-Convenience" accesskey="n" rel="next">Buffer Convenience</a>, Previous: <a href="Several-Buffers.html#Several-Buffers" accesskey="p" rel="prev">Several Buffers</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dd><a name="index-make_002dindirect_002dbuffer" id=
+    "index-make_002dindirect_002dbuffer"></a></dd>
 
+    <dt><kbd>M-x make-indirect-buffer <span class="key">RET</span>
+    <var>base-buffer</var> <span class="key">RET</span>
+    <var>indirect-name</var> <span class=
+    "key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Create an indirect buffer named <var>indirect-name</var>
+      with base buffer <var>base-buffer</var>. <a name=
+      "index-clone_002dindirect_002dbuffer" id=
+      "index-clone_002dindirect_002dbuffer"></a></p>
+    </dd>
 
+    <dt><kbd>M-x clone-indirect-buffer <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Create an indirect buffer that is a twin copy of the
+      current buffer.</p>
+    </dd>
+
+    <dt><kbd>C-x 4 c</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dx-4-c" id="index-C_002dx-4-c"></a>
+      <a name=
+      "index-clone_002dindirect_002dbuffer_002dother_002dwindow"
+      id="index-clone_002dindirect_002dbuffer_002dother_002dwindow">
+      </a>
+
+      <p>Create an indirect buffer that is a twin copy of the
+      current buffer, and select it in another window
+      (<code>clone-indirect-buffer-other-window</code>).</p>
+    </dd>
+  </dl>
+
+  <p>The text of the indirect buffer is always identical to the
+  text of its base buffer; changes made by editing either one are
+  visible immediately in the other. But in all other respects, the
+  indirect buffer and its base buffer are completely separate. They
+  can have different names, different values of point, different
+  narrowing, different markers, different major modes, and
+  different local variables.</p>
+
+  <p>An indirect buffer cannot visit a file, but its base buffer
+  can. If you try to save the indirect buffer, that actually works
+  by saving the base buffer. Killing the base buffer effectively
+  kills the indirect buffer, but killing an indirect buffer has no
+  effect on its base buffer.</p>
+
+  <p>One way to use indirect buffers is to display multiple views
+  of an outline. See <a href=
+  "Outline-Views.html#Outline-Views">Outline Views</a>.</p><a name=
+  "index-clone_002dindirect_002dbuffer_002dhook" id=
+  "index-clone_002dindirect_002dbuffer_002dhook"></a>
+
+  <p>A quick and handy way to make an indirect buffer is with the
+  command <kbd>M-x clone-indirect-buffer</kbd>. It creates and
+  selects an indirect buffer whose base buffer is the current
+  buffer. With a numeric argument, it prompts for the name of the
+  indirect buffer; otherwise it uses the name of the current
+  buffer, with a &lsquo;<samp>&lt;<var>n</var>&gt;</samp>&rsquo;
+  suffix added. <kbd>C-x 4 c</kbd>
+  (<code>clone-indirect-buffer-other-window</code>) works like
+  <kbd>M-x clone-indirect-buffer</kbd>, but it selects the new
+  buffer in another window. These functions run the hook
+  <code>clone-indirect-buffer-hook</code> after creating the
+  indirect buffer.</p>
+
+  <p>The more general way to make an indirect buffer is with the
+  command <kbd>M-x make-indirect-buffer</kbd>. It creates an
+  indirect buffer named <var>indirect-name</var> from a buffer
+  <var>base-buffer</var>, prompting for both using the
+  minibuffer.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Buffer-Convenience.html#Buffer-Convenience"
+    accesskey="n" rel="next">Buffer Convenience</a>, Previous:
+    <a href="Several-Buffers.html#Several-Buffers" accesskey="p"
+    rel="prev">Several Buffers</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

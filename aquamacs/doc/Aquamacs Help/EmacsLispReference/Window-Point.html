@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,127 +19,189 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Window Point</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Window Point">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Window Point">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Window-Start-and-End.html#Window-Start-and-End" rel="next" title="Window Start and End">
-<link href="Quitting-Windows.html#Quitting-Windows" rel="prev" title="Quitting Windows">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Window Point</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Window Point" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Window Point" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Window-Start-and-End.html#Window-Start-and-End" rel=
+  "next" title="Window Start and End" />
+  <link href="Quitting-Windows.html#Quitting-Windows" rel="prev"
+  title="Quitting Windows" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Window-Point" id="Window-Point"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Window-Start-and-End.html#Window-Start-and-End" accesskey="n"
+    rel="next">Window Start and End</a>, Previous: <a href=
+    "Quitting-Windows.html#Quitting-Windows" accesskey="p" rel=
+    "prev">Quitting Windows</a>, Up: <a href="Windows.html#Windows"
+    accesskey="u" rel="up">Windows</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Windows-and-Point" id="Windows-and-Point"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Window-Point"></a>
-<div class="header">
-<p>
-Next: <a href="Window-Start-and-End.html#Window-Start-and-End" accesskey="n" rel="next">Window Start and End</a>, Previous: <a href="Quitting-Windows.html#Quitting-Windows" accesskey="p" rel="prev">Quitting Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Windows-and-Point"></a>
-<h3 class="section">27.19 Windows and Point</h3>
-<a name="index-window-position"></a>
-<a name="index-window-point"></a>
-<a name="index-position-in-window"></a>
-<a name="index-point-in-window"></a>
+  <h3 class="section">27.19 Windows and Point</h3><a name=
+  "index-window-position" id="index-window-position"></a> <a name=
+  "index-window-point" id="index-window-point"></a> <a name=
+  "index-position-in-window" id="index-position-in-window"></a>
+  <a name="index-point-in-window" id="index-point-in-window"></a>
 
-<p>Each window has its own value of point (see <a href="Point.html#Point">Point</a>), independent of
-the value of point in other windows displaying the same buffer.  This
-makes it useful to have multiple windows showing one buffer.
-</p>
-<ul>
-<li> The window point is established when a window is first created; it is
-initialized from the buffer&rsquo;s point, or from the window point of another
-window opened on the buffer if such a window exists.
+  <p>Each window has its own value of point (see <a href=
+  "Point.html#Point">Point</a>), independent of the value of point
+  in other windows displaying the same buffer. This makes it useful
+  to have multiple windows showing one buffer.</p>
 
-</li><li> Selecting a window sets the value of point in its buffer from the
-window&rsquo;s value of point.  Conversely, deselecting a window sets the
-window&rsquo;s value of point from that of the buffer.  Thus, when you switch
-between windows that display a given buffer, the point value for the
-selected window is in effect in the buffer, while the point values for
-the other windows are stored in those windows.
+  <ul>
+    <li>The window point is established when a window is first
+    created; it is initialized from the buffer&rsquo;s point, or
+    from the window point of another window opened on the buffer if
+    such a window exists.</li>
 
-</li><li> As long as the selected window displays the current buffer, the window&rsquo;s
-point and the buffer&rsquo;s point always move together; they remain equal.
-</li></ul>
+    <li>Selecting a window sets the value of point in its buffer
+    from the window&rsquo;s value of point. Conversely, deselecting
+    a window sets the window&rsquo;s value of point from that of
+    the buffer. Thus, when you switch between windows that display
+    a given buffer, the point value for the selected window is in
+    effect in the buffer, while the point values for the other
+    windows are stored in those windows.</li>
 
-<a name="index-cursor"></a>
-<p>As far as the user is concerned, point is where the cursor is, and
-when the user switches to another buffer, the cursor jumps to the
-position of point in that buffer.
-</p>
-<dl>
-<dt><a name="index-window_002dpoint"></a>Function: <strong>window-point</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function returns the current position of point in <var>window</var>.
-For a nonselected window, this is the value point would have (in that
-window&rsquo;s buffer) if that window were selected.  The default for
-<var>window</var> is the selected window.
-</p>
-<p>When <var>window</var> is the selected window, the value returned is the
-value of point in that window&rsquo;s buffer.  Strictly speaking, it would be
-more correct to return the top-level value of point, outside of any
-<code>save-excursion</code> forms.  But that value is hard to find.
-</p></dd></dl>
+    <li>As long as the selected window displays the current buffer,
+    the window&rsquo;s point and the buffer&rsquo;s point always
+    move together; they remain equal.</li>
+  </ul><a name="index-cursor" id="index-cursor"></a>
 
-<dl>
-<dt><a name="index-set_002dwindow_002dpoint"></a>Function: <strong>set-window-point</strong> <em>window position</em></dt>
-<dd><p>This function positions point in <var>window</var> at position
-<var>position</var> in <var>window</var>&rsquo;s buffer.  It returns <var>position</var>.
-</p>
-<p>If <var>window</var> is selected, this simply does <code>goto-char</code> in
-<var>window</var>&rsquo;s buffer.
-</p></dd></dl>
+  <p>As far as the user is concerned, point is where the cursor is,
+  and when the user switches to another buffer, the cursor jumps to
+  the position of point in that buffer.</p>
 
-<dl>
-<dt><a name="index-window_002dpoint_002dinsertion_002dtype"></a>Variable: <strong>window-point-insertion-type</strong></dt>
-<dd><p>This variable specifies the marker insertion type (see <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>) of <code>window-point</code>.  The default is <code>nil</code>,
-so <code>window-point</code> will stay behind text inserted there.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-window_002dpoint" id=
+    "index-window_002dpoint"></a>Function:
+    <strong>window-point</strong> <em>&amp;optional
+    window</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Window-Start-and-End.html#Window-Start-and-End" accesskey="n" rel="next">Window Start and End</a>, Previous: <a href="Quitting-Windows.html#Quitting-Windows" accesskey="p" rel="prev">Quitting Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns the current position of point in
+      <var>window</var>. For a nonselected window, this is the
+      value point would have (in that window&rsquo;s buffer) if
+      that window were selected. The default for <var>window</var>
+      is the selected window.</p>
 
+      <p>When <var>window</var> is the selected window, the value
+      returned is the value of point in that window&rsquo;s buffer.
+      Strictly speaking, it would be more correct to return the
+      top-level value of point, outside of any
+      <code>save-excursion</code> forms. But that value is hard to
+      find.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-set_002dwindow_002dpoint" id=
+    "index-set_002dwindow_002dpoint"></a>Function:
+    <strong>set-window-point</strong> <em>window position</em></dt>
 
+    <dd>
+      <p>This function positions point in <var>window</var> at
+      position <var>position</var> in <var>window</var>&rsquo;s
+      buffer. It returns <var>position</var>.</p>
+
+      <p>If <var>window</var> is selected, this simply does
+      <code>goto-char</code> in <var>window</var>&rsquo;s
+      buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-window_002dpoint_002dinsertion_002dtype" id=
+    "index-window_002dpoint_002dinsertion_002dtype"></a>Variable:
+    <strong>window-point-insertion-type</strong></dt>
+
+    <dd>
+      <p>This variable specifies the marker insertion type (see
+      <a href=
+      "Marker-Insertion-Types.html#Marker-Insertion-Types">Marker
+      Insertion Types</a>) of <code>window-point</code>. The
+      default is <code>nil</code>, so <code>window-point</code>
+      will stay behind text inserted there.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Window-Start-and-End.html#Window-Start-and-End" accesskey="n"
+    rel="next">Window Start and End</a>, Previous: <a href=
+    "Quitting-Windows.html#Quitting-Windows" accesskey="p" rel=
+    "prev">Quitting Windows</a>, Up: <a href="Windows.html#Windows"
+    accesskey="u" rel="up">Windows</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,93 +20,121 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Creating Branches</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Creating Branches">
-<meta name="keywords" content="GNU Emacs Manual: Creating Branches">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Branches.html#Branches" rel="up" title="Branches">
-<link href="Miscellaneous-VC.html#Miscellaneous-VC" rel="next" title="Miscellaneous VC">
-<link href="Merging.html#Merging" rel="prev" title="Merging">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Creating Branches</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Creating Branches" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Creating Branches" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Branches.html#Branches" rel="up" title="Branches" />
+  <link href="Miscellaneous-VC.html#Miscellaneous-VC" rel="next"
+  title="Miscellaneous VC" />
+  <link href="Merging.html#Merging" rel="prev" title="Merging" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Creating-Branches" id="Creating-Branches"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Merging.html#Merging" accesskey="p" rel=
+    "prev">Merging</a>, Up: <a href="Branches.html#Branches"
+    accesskey="u" rel="up">Branches</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-New-Branches" id="Creating-New-Branches"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-Branches"></a>
-<div class="header">
-<p>
-Previous: <a href="Merging.html#Merging" accesskey="p" rel="prev">Merging</a>, Up: <a href="Branches.html#Branches" accesskey="u" rel="up">Branches</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-New-Branches"></a>
-<h4 class="subsubsection">28.1.11.4 Creating New Branches</h4>
+  <h4 class="subsubsection">28.1.11.4 Creating New Branches</h4>
 
-<p>On centralized version control systems like CVS, Emacs supports
-creating new branches as part of a commit operation.  When committing
-a modified VC fileset, type <kbd>C-u C-x v v</kbd> (<code>vc-next-action</code>
-with a prefix argument; see <a href="Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v">Advanced C-x v v</a>).  Then Emacs prompts
-for a revision ID for the new revision.  You should specify a suitable
-branch ID for a branch starting at the current revision.  For example,
-if the current revision is 2.5, the branch ID should be 2.5.1, 2.5.2,
-and so on, depending on the number of existing branches at that point.
-</p>
-<p>To create a new branch at an older revision (one that is no longer
-the head of a branch), first select that revision (see <a href="Switching-Branches.html#Switching-Branches">Switching Branches</a>).  Your procedure will then differ depending on whether you
-are using a locking or merging-based VCS.
-</p>
-<p>On a locking VCS, you will need to lock the old revision branch with
-<kbd>C-x v v</kbd>.  You&rsquo;ll be asked to confirm, when you lock the old
-revision, that you really mean to create a new branch&mdash;if you say no,
-you&rsquo;ll be offered a chance to lock the latest revision instead.  On a
-merging-based VCS you will skip this step.
-</p>
-<p>Then make your changes and type <kbd>C-x v v</kbd> again to commit a new
-revision.  This creates a new branch starting from the selected
-revision.
-</p>
-<p>After the branch is created, subsequent commits create new revisions
-on that branch.  To leave the branch, you must explicitly select a
-different revision with <kbd>C-u C-x v v</kbd>.
-</p>
+  <p>On centralized version control systems like CVS, Emacs
+  supports creating new branches as part of a commit operation.
+  When committing a modified VC fileset, type <kbd>C-u C-x v
+  v</kbd> (<code>vc-next-action</code> with a prefix argument; see
+  <a href="Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v">Advanced
+  C-x v v</a>). Then Emacs prompts for a revision ID for the new
+  revision. You should specify a suitable branch ID for a branch
+  starting at the current revision. For example, if the current
+  revision is 2.5, the branch ID should be 2.5.1, 2.5.2, and so on,
+  depending on the number of existing branches at that point.</p>
 
+  <p>To create a new branch at an older revision (one that is no
+  longer the head of a branch), first select that revision (see
+  <a href="Switching-Branches.html#Switching-Branches">Switching
+  Branches</a>). Your procedure will then differ depending on
+  whether you are using a locking or merging-based VCS.</p>
 
+  <p>On a locking VCS, you will need to lock the old revision
+  branch with <kbd>C-x v v</kbd>. You&rsquo;ll be asked to confirm,
+  when you lock the old revision, that you really mean to create a
+  new branch&mdash;if you say no, you&rsquo;ll be offered a chance
+  to lock the latest revision instead. On a merging-based VCS you
+  will skip this step.</p>
 
+  <p>Then make your changes and type <kbd>C-x v v</kbd> again to
+  commit a new revision. This creates a new branch starting from
+  the selected revision.</p>
 
+  <p>After the branch is created, subsequent commits create new
+  revisions on that branch. To leave the branch, you must
+  explicitly select a different revision with <kbd>C-u C-x v
+  v</kbd>.</p>
 </body>
 </html>

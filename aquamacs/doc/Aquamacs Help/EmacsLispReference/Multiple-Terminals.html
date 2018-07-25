@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,332 +19,505 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Multiple Terminals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Multiple Terminals">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Multiple Terminals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Frames.html#Frames" rel="up" title="Frames">
-<link href="Frame-Geometry.html#Frame-Geometry" rel="next" title="Frame Geometry">
-<link href="Creating-Frames.html#Creating-Frames" rel="prev" title="Creating Frames">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Multiple
+  Terminals</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Multiple Terminals" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Multiple Terminals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Frames.html#Frames" rel="up" title="Frames" />
+  <link href="Frame-Geometry.html#Frame-Geometry" rel="next" title=
+  "Frame Geometry" />
+  <link href="Creating-Frames.html#Creating-Frames" rel="prev"
+  title="Creating Frames" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Multiple-Terminals" id="Multiple-Terminals"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Frame-Geometry.html#Frame-Geometry"
+    accesskey="n" rel="next">Frame Geometry</a>, Previous: <a href=
+    "Creating-Frames.html#Creating-Frames" accesskey="p" rel=
+    "prev">Creating Frames</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Multiple-Terminals-1" id="Multiple-Terminals-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Multiple-Terminals"></a>
-<div class="header">
-<p>
-Next: <a href="Frame-Geometry.html#Frame-Geometry" accesskey="n" rel="next">Frame Geometry</a>, Previous: <a href="Creating-Frames.html#Creating-Frames" accesskey="p" rel="prev">Creating Frames</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Multiple-Terminals-1"></a>
-<h3 class="section">28.2 Multiple Terminals</h3>
-<a name="index-multiple-terminals"></a>
-<a name="index-multi_002dtty"></a>
-<a name="index-multiple-X-displays"></a>
-<a name="index-displays_002c-multiple"></a>
+  <h3 class="section">28.2 Multiple Terminals</h3><a name=
+  "index-multiple-terminals" id="index-multiple-terminals"></a>
+  <a name="index-multi_002dtty" id="index-multi_002dtty"></a>
+  <a name="index-multiple-X-displays" id=
+  "index-multiple-X-displays"></a> <a name=
+  "index-displays_002c-multiple" id=
+  "index-displays_002c-multiple"></a>
 
-<p>Emacs represents each terminal as a <em>terminal object</em> data type
-(see <a href="Terminal-Type.html#Terminal-Type">Terminal Type</a>).  On GNU and Unix systems, Emacs can use
-multiple terminals simultaneously in each session.  On other systems,
-it can only use a single terminal.  Each terminal object has the
-following attributes:
-</p>
-<ul>
-<li> The name of the device used by the terminal (e.g., &lsquo;<samp>:0.0</samp>&rsquo; or
-<samp>/dev/tty</samp>).
+  <p>Emacs represents each terminal as a <em>terminal object</em>
+  data type (see <a href=
+  "Terminal-Type.html#Terminal-Type">Terminal Type</a>). On GNU and
+  Unix systems, Emacs can use multiple terminals simultaneously in
+  each session. On other systems, it can only use a single
+  terminal. Each terminal object has the following attributes:</p>
 
-</li><li> The terminal and keyboard coding systems used on the terminal.
-See <a href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding">Terminal I/O Encoding</a>.
+  <ul>
+    <li>The name of the device used by the terminal (e.g.,
+    &lsquo;<samp>:0.0</samp>&rsquo; or <samp>/dev/tty</samp>).</li>
 
-</li><li> The kind of display associated with the terminal.  This is the symbol
-returned by the function <code>terminal-live-p</code> (i.e., <code>x</code>,
-<code>t</code>, <code>w32</code>, <code>ns</code>, or <code>pc</code>).  See <a href="Frames.html#Frames">Frames</a>.
+    <li>The terminal and keyboard coding systems used on the
+    terminal. See <a href=
+    "Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding">Terminal
+    I/O Encoding</a>.</li>
 
-</li><li> A list of terminal parameters.  See <a href="Terminal-Parameters.html#Terminal-Parameters">Terminal Parameters</a>.
-</li></ul>
+    <li>The kind of display associated with the terminal. This is
+    the symbol returned by the function
+    <code>terminal-live-p</code> (i.e., <code>x</code>,
+    <code>t</code>, <code>w32</code>, <code>ns</code>, or
+    <code>pc</code>). See <a href=
+    "Frames.html#Frames">Frames</a>.</li>
 
-<p>There is no primitive for creating terminal objects.  Emacs creates
-them as needed, such as when you call <code>make-frame-on-display</code>
-(described below).
-</p>
-<dl>
-<dt><a name="index-terminal_002dname"></a>Function: <strong>terminal-name</strong> <em>&amp;optional terminal</em></dt>
-<dd><p>This function returns the file name of the device used by
-<var>terminal</var>.  If <var>terminal</var> is omitted or <code>nil</code>, it
-defaults to the selected frame&rsquo;s terminal.  <var>terminal</var> can also be
-a frame, meaning that frame&rsquo;s terminal.
-</p></dd></dl>
+    <li>A list of terminal parameters. See <a href=
+    "Terminal-Parameters.html#Terminal-Parameters">Terminal
+    Parameters</a>.</li>
+  </ul>
 
-<dl>
-<dt><a name="index-terminal_002dlist"></a>Function: <strong>terminal-list</strong></dt>
-<dd><p>This function returns a list of all live terminal objects.
-</p></dd></dl>
+  <p>There is no primitive for creating terminal objects. Emacs
+  creates them as needed, such as when you call
+  <code>make-frame-on-display</code> (described below).</p>
 
-<dl>
-<dt><a name="index-get_002ddevice_002dterminal"></a>Function: <strong>get-device-terminal</strong> <em>device</em></dt>
-<dd><p>This function returns a terminal whose device name is given by
-<var>device</var>.  If <var>device</var> is a string, it can be either the file
-name of a terminal device, or the name of an X display of the form
-&lsquo;<samp><var>host</var>:<var>server</var>.<var>screen</var></samp>&rsquo;.  If <var>device</var> is a
-frame, this function returns that frame&rsquo;s terminal; <code>nil</code> means
-the selected frame.  Finally, if <var>device</var> is a terminal object
-that represents a live terminal, that terminal is returned.  The
-function signals an error if its argument is none of the above.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-terminal_002dname" id=
+    "index-terminal_002dname"></a>Function:
+    <strong>terminal-name</strong> <em>&amp;optional
+    terminal</em></dt>
 
-<dl>
-<dt><a name="index-delete_002dterminal"></a>Function: <strong>delete-terminal</strong> <em>&amp;optional terminal force</em></dt>
-<dd><p>This function deletes all frames on <var>terminal</var> and frees the
-resources used by it.  It runs the abnormal hook
-<code>delete-terminal-functions</code>, passing <var>terminal</var> as the
-argument to each function.
-</p>
-<p>If <var>terminal</var> is omitted or <code>nil</code>, it defaults to the
-selected frame&rsquo;s terminal.  <var>terminal</var> can also be a frame,
-meaning that frame&rsquo;s terminal.
-</p>
-<p>Normally, this function signals an error if you attempt to delete the
-sole active terminal, but if <var>force</var> is non-<code>nil</code>, you are
-allowed to do so.  Emacs automatically calls this function when the
-last frame on a terminal is deleted (see <a href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>).
-</p></dd></dl>
+    <dd>
+      <p>This function returns the file name of the device used by
+      <var>terminal</var>. If <var>terminal</var> is omitted or
+      <code>nil</code>, it defaults to the selected frame&rsquo;s
+      terminal. <var>terminal</var> can also be a frame, meaning
+      that frame&rsquo;s terminal.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-delete_002dterminal_002dfunctions"></a>Variable: <strong>delete-terminal-functions</strong></dt>
-<dd><p>An abnormal hook run by <code>delete-terminal</code>.  Each function
-receives one argument, the <var>terminal</var> argument passed to
-<code>delete-terminal</code>.  Due to technical details, the functions may
-be called either just before the terminal is deleted, or just
-afterwards.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-terminal_002dlist" id=
+    "index-terminal_002dlist"></a>Function:
+    <strong>terminal-list</strong></dt>
 
-<a name="index-terminal_002dlocal-variables"></a>
-<p>A few Lisp variables are <em>terminal-local</em>; that is, they have a
-separate binding for each terminal.  The binding in effect at any time
-is the one for the terminal that the currently selected frame belongs
-to.  These variables include <code>default-minibuffer-frame</code>,
-<code>defining-kbd-macro</code>, <code>last-kbd-macro</code>, and
-<code>system-key-alist</code>.  They are always terminal-local, and can
-never be buffer-local (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>).
-</p>
-<p>On GNU and Unix systems, each X display is a separate graphical
-terminal.  When Emacs is started from within the X window system, it
-uses the X display specified by the <code>DISPLAY</code> environment
-variable, or by the &lsquo;<samp>--display</samp>&rsquo; option (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Initial-Options.html#Initial-Options">Initial Options</a> in <cite>The GNU Emacs Manual</cite>).  Emacs can connect to other X displays
-via the command <code>make-frame-on-display</code>.  Each X display has its
-own selected frame and its own minibuffer windows; however, only one
-of those frames is <em>the</em> selected frame at any given moment
-(see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).  Emacs can even connect to other text
-terminals, by interacting with the <code>emacsclient</code> program.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html#Emacs-Server">Emacs Server</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<a name="index-X-display-names"></a>
-<a name="index-display-name-on-X"></a>
-<p>A single X server can handle more than one display.  Each X display
-has a three-part name,
-&lsquo;<samp><var>hostname</var>:<var>displaynumber</var>.<var>screennumber</var></samp>&rsquo;.  The
-first part, <var>hostname</var>, specifies the name of the machine to which
-the display is physically connected.  The second part,
-<var>displaynumber</var>, is a zero-based number that identifies one or
-more monitors connected to that machine that share a common keyboard
-and pointing device (mouse, tablet, etc.).  The third part,
-<var>screennumber</var>, identifies a zero-based screen number (a separate
-monitor) that is part of a single monitor collection on that X server.
-When you use two or more screens belonging to one server, Emacs knows
-by the similarity in their names that they share a single keyboard.
-</p>
-<p>Systems that don&rsquo;t use the X window system, such as MS-Windows,
-don&rsquo;t support the notion of X displays, and have only one display on
-each host.  The display name on these systems doesn&rsquo;t follow the above
-3-part format; for example, the display name on MS-Windows systems is
-a constant string &lsquo;<samp>w32</samp>&rsquo;, and exists for compatibility, so that
-you could pass it to functions that expect a display name.
-</p>
-<dl>
-<dt><a name="index-make_002dframe_002don_002ddisplay"></a>Command: <strong>make-frame-on-display</strong> <em>display &amp;optional parameters</em></dt>
-<dd><p>This function creates and returns a new frame on <var>display</var>, taking
-the other frame parameters from the alist <var>parameters</var>.
-<var>display</var> should be the name of an X display (a string).
-</p>
-<p>Before creating the frame, this function ensures that Emacs is set
-up to display graphics.  For instance, if Emacs has not processed X
-resources (e.g., if it was started on a text terminal), it does so at
-this time.  In all other respects, this function behaves like
-<code>make-frame</code> (see <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>).
-</p></dd></dl>
+    <dd>
+      <p>This function returns a list of all live terminal
+      objects.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-x_002ddisplay_002dlist"></a>Function: <strong>x-display-list</strong></dt>
-<dd><p>This function returns a list that indicates which X displays Emacs has
-a connection to.  The elements of the list are strings, and each one
-is a display name.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-get_002ddevice_002dterminal" id=
+    "index-get_002ddevice_002dterminal"></a>Function:
+    <strong>get-device-terminal</strong> <em>device</em></dt>
 
-<dl>
-<dt><a name="index-x_002dopen_002dconnection"></a>Function: <strong>x-open-connection</strong> <em>display &amp;optional xrm-string must-succeed</em></dt>
-<dd><p>This function opens a connection to the X display <var>display</var>,
-without creating a frame on that display.  Normally, Emacs Lisp
-programs need not call this function, as <code>make-frame-on-display</code>
-calls it automatically.  The only reason for calling it is to check
-whether communication can be established with a given X display.
-</p>
-<p>The optional argument <var>xrm-string</var>, if not <code>nil</code>, is a string
-of resource names and values, in the same format used in the
-<samp>.Xresources</samp> file.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/X-Resources.html#X-Resources">X Resources</a> in <cite>The
-GNU Emacs Manual</cite>.  These values apply to all Emacs frames created on
-this display, overriding the resource values recorded in the X server.
-Here&rsquo;s an example of what this string might look like:
-</p>
-<div class="example">
-<pre class="example">&quot;*BorderWidth: 3\n*InternalBorder: 2\n&quot;
-</pre></div>
+    <dd>
+      <p>This function returns a terminal whose device name is
+      given by <var>device</var>. If <var>device</var> is a string,
+      it can be either the file name of a terminal device, or the
+      name of an X display of the form
+      &lsquo;<samp><var>host</var>:<var>server</var>.<var>screen</var></samp>&rsquo;.
+      If <var>device</var> is a frame, this function returns that
+      frame&rsquo;s terminal; <code>nil</code> means the selected
+      frame. Finally, if <var>device</var> is a terminal object
+      that represents a live terminal, that terminal is returned.
+      The function signals an error if its argument is none of the
+      above.</p>
+    </dd>
+  </dl>
 
-<p>If <var>must-succeed</var> is non-<code>nil</code>, failure to open the connection
-terminates Emacs.  Otherwise, it is an ordinary Lisp error.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-delete_002dterminal" id=
+    "index-delete_002dterminal"></a>Function:
+    <strong>delete-terminal</strong> <em>&amp;optional terminal
+    force</em></dt>
 
-<dl>
-<dt><a name="index-x_002dclose_002dconnection"></a>Function: <strong>x-close-connection</strong> <em>display</em></dt>
-<dd><p>This function closes the connection to display <var>display</var>.  Before
-you can do this, you must first delete all the frames that were open
-on that display (see <a href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>).
-</p></dd></dl>
+    <dd>
+      <p>This function deletes all frames on <var>terminal</var>
+      and frees the resources used by it. It runs the abnormal hook
+      <code>delete-terminal-functions</code>, passing
+      <var>terminal</var> as the argument to each function.</p>
 
-<a name="index-multi_002dmonitor"></a>
-<p>On some multi-monitor setups, a single X display outputs to more
-than one physical monitor.  You can use the functions
-<code>display-monitor-attributes-list</code> and <code>frame-monitor-attributes</code>
-to obtain information about such setups.
-</p>
-<dl>
-<dt><a name="index-display_002dmonitor_002dattributes_002dlist"></a>Function: <strong>display-monitor-attributes-list</strong> <em>&amp;optional display</em></dt>
-<dd><p>This function returns a list of physical monitor attributes on
-<var>display</var>, which can be a display name (a string), a terminal, or
-a frame; if omitted or <code>nil</code>, it defaults to the selected frame&rsquo;s
-display.  Each element of the list is an association list,
-representing the attributes of a physical monitor.  The first element
-corresponds to the primary monitor.  The attribute keys and values
-are:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>geometry</samp>&rsquo;</dt>
-<dd><p>Position of the top-left corner of the monitor&rsquo;s screen and its size,
-in pixels, as &lsquo;<samp>(<var>x</var> <var>y</var> <var>width</var> <var>height</var>)</samp>&rsquo;.  Note
-that, if the monitor is not the primary monitor, some of the
-coordinates might be negative.
-</p>
-</dd>
-<dt>&lsquo;<samp>workarea</samp>&rsquo;</dt>
-<dd><p>Position of the top-left corner and size of the work area (usable
-space) in pixels as &lsquo;<samp>(<var>x</var> <var>y</var> <var>width</var> <var>height</var>)</samp>&rsquo;.
-This may be different from &lsquo;<samp>geometry</samp>&rsquo; in that space occupied by
-various window manager features (docks, taskbars, etc.) may be
-excluded from the work area.  Whether or not such features actually
-subtract from the work area depends on the platform and environment.
-Again, if the monitor is not the primary monitor, some of the
-coordinates might be negative.
-</p>
-</dd>
-<dt>&lsquo;<samp>mm-size</samp>&rsquo;</dt>
-<dd><p>Width and height in millimeters as &lsquo;<samp>(<var>width</var> <var>height</var>)</samp>&rsquo;
-</p>
-</dd>
-<dt>&lsquo;<samp>frames</samp>&rsquo;</dt>
-<dd><p>List of frames that this physical monitor dominates (see below).
-</p>
-</dd>
-<dt>&lsquo;<samp>name</samp>&rsquo;</dt>
-<dd><p>Name of the physical monitor as <var>string</var>.
-</p>
-</dd>
-<dt>&lsquo;<samp>source</samp>&rsquo;</dt>
-<dd><p>Source of the multi-monitor information as <var>string</var>;
-e.g., &lsquo;<samp>XRandr</samp>&rsquo; or &lsquo;<samp>Xinerama</samp>&rsquo;.
-</p></dd>
-</dl>
+      <p>If <var>terminal</var> is omitted or <code>nil</code>, it
+      defaults to the selected frame&rsquo;s terminal.
+      <var>terminal</var> can also be a frame, meaning that
+      frame&rsquo;s terminal.</p>
 
-<p><var>x</var>, <var>y</var>, <var>width</var>, and <var>height</var> are integers.
-&lsquo;<samp>name</samp>&rsquo; and &lsquo;<samp>source</samp>&rsquo; may be absent.
-</p>
-<p>A frame is <em>dominated</em> by a physical monitor when either the
-largest area of the frame resides in that monitor, or (if the frame
-does not intersect any physical monitors) that monitor is the closest
-to the frame.  Every (non-tooltip) frame (whether visible or not) in a
-graphical display is dominated by exactly one physical monitor at a
-time, though the frame can span multiple (or no) physical monitors.
-</p>
-<p>Here&rsquo;s an example of the data produced by this function on a 2-monitor
-display:
-</p>
-<div class="lisp">
-<pre class="lisp">  (display-monitor-attributes-list)
+      <p>Normally, this function signals an error if you attempt to
+      delete the sole active terminal, but if <var>force</var> is
+      non-<code>nil</code>, you are allowed to do so. Emacs
+      automatically calls this function when the last frame on a
+      terminal is deleted (see <a href=
+      "Deleting-Frames.html#Deleting-Frames">Deleting
+      Frames</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-delete_002dterminal_002dfunctions" id=
+    "index-delete_002dterminal_002dfunctions"></a>Variable:
+    <strong>delete-terminal-functions</strong></dt>
+
+    <dd>
+      <p>An abnormal hook run by <code>delete-terminal</code>. Each
+      function receives one argument, the <var>terminal</var>
+      argument passed to <code>delete-terminal</code>. Due to
+      technical details, the functions may be called either just
+      before the terminal is deleted, or just afterwards.</p>
+    </dd>
+  </dl><a name="index-terminal_002dlocal-variables" id=
+  "index-terminal_002dlocal-variables"></a>
+
+  <p>A few Lisp variables are <em>terminal-local</em>; that is,
+  they have a separate binding for each terminal. The binding in
+  effect at any time is the one for the terminal that the currently
+  selected frame belongs to. These variables include
+  <code>default-minibuffer-frame</code>,
+  <code>defining-kbd-macro</code>, <code>last-kbd-macro</code>, and
+  <code>system-key-alist</code>. They are always terminal-local,
+  and can never be buffer-local (see <a href=
+  "Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local
+  Variables</a>).</p>
+
+  <p>On GNU and Unix systems, each X display is a separate
+  graphical terminal. When Emacs is started from within the X
+  window system, it uses the X display specified by the
+  <code>DISPLAY</code> environment variable, or by the
+  &lsquo;<samp>--display</samp>&rsquo; option (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Initial-Options.html#Initial-Options">
+  Initial Options</a> in <cite>The GNU Emacs Manual</cite>). Emacs
+  can connect to other X displays via the command
+  <code>make-frame-on-display</code>. Each X display has its own
+  selected frame and its own minibuffer windows; however, only one
+  of those frames is <em>the</em> selected frame at any given
+  moment (see <a href="Input-Focus.html#Input-Focus">Input
+  Focus</a>). Emacs can even connect to other text terminals, by
+  interacting with the <code>emacsclient</code> program. See
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html#Emacs-Server">
+  Emacs Server</a> in <cite>The GNU Emacs
+  Manual</cite>.</p><a name="index-X-display-names" id=
+  "index-X-display-names"></a> <a name="index-display-name-on-X"
+  id="index-display-name-on-X"></a>
+
+  <p>A single X server can handle more than one display. Each X
+  display has a three-part name,
+  &lsquo;<samp><var>hostname</var>:<var>displaynumber</var>.<var>screennumber</var></samp>&rsquo;.
+  The first part, <var>hostname</var>, specifies the name of the
+  machine to which the display is physically connected. The second
+  part, <var>displaynumber</var>, is a zero-based number that
+  identifies one or more monitors connected to that machine that
+  share a common keyboard and pointing device (mouse, tablet,
+  etc.). The third part, <var>screennumber</var>, identifies a
+  zero-based screen number (a separate monitor) that is part of a
+  single monitor collection on that X server. When you use two or
+  more screens belonging to one server, Emacs knows by the
+  similarity in their names that they share a single keyboard.</p>
+
+  <p>Systems that don&rsquo;t use the X window system, such as
+  MS-Windows, don&rsquo;t support the notion of X displays, and
+  have only one display on each host. The display name on these
+  systems doesn&rsquo;t follow the above 3-part format; for
+  example, the display name on MS-Windows systems is a constant
+  string &lsquo;<samp>w32</samp>&rsquo;, and exists for
+  compatibility, so that you could pass it to functions that expect
+  a display name.</p>
+
+  <dl>
+    <dt><a name="index-make_002dframe_002don_002ddisplay" id=
+    "index-make_002dframe_002don_002ddisplay"></a>Command:
+    <strong>make-frame-on-display</strong> <em>display
+    &amp;optional parameters</em></dt>
+
+    <dd>
+      <p>This function creates and returns a new frame on
+      <var>display</var>, taking the other frame parameters from
+      the alist <var>parameters</var>. <var>display</var> should be
+      the name of an X display (a string).</p>
+
+      <p>Before creating the frame, this function ensures that
+      Emacs is set up to display graphics. For instance, if Emacs
+      has not processed X resources (e.g., if it was started on a
+      text terminal), it does so at this time. In all other
+      respects, this function behaves like <code>make-frame</code>
+      (see <a href="Creating-Frames.html#Creating-Frames">Creating
+      Frames</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-x_002ddisplay_002dlist" id=
+    "index-x_002ddisplay_002dlist"></a>Function:
+    <strong>x-display-list</strong></dt>
+
+    <dd>
+      <p>This function returns a list that indicates which X
+      displays Emacs has a connection to. The elements of the list
+      are strings, and each one is a display name.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-x_002dopen_002dconnection" id=
+    "index-x_002dopen_002dconnection"></a>Function:
+    <strong>x-open-connection</strong> <em>display &amp;optional
+    xrm-string must-succeed</em></dt>
+
+    <dd>
+      <p>This function opens a connection to the X display
+      <var>display</var>, without creating a frame on that display.
+      Normally, Emacs Lisp programs need not call this function, as
+      <code>make-frame-on-display</code> calls it automatically.
+      The only reason for calling it is to check whether
+      communication can be established with a given X display.</p>
+
+      <p>The optional argument <var>xrm-string</var>, if not
+      <code>nil</code>, is a string of resource names and values,
+      in the same format used in the <samp>.Xresources</samp> file.
+      See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/X-Resources.html#X-Resources">
+      X Resources</a> in <cite>The GNU Emacs Manual</cite>. These
+      values apply to all Emacs frames created on this display,
+      overriding the resource values recorded in the X server.
+      Here&rsquo;s an example of what this string might look
+      like:</p>
+
+      <div class="example">
+        <pre class="example">
+"*BorderWidth: 3\n*InternalBorder: 2\n"
+</pre>
+      </div>
+
+      <p>If <var>must-succeed</var> is non-<code>nil</code>,
+      failure to open the connection terminates Emacs. Otherwise,
+      it is an ordinary Lisp error.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-x_002dclose_002dconnection" id=
+    "index-x_002dclose_002dconnection"></a>Function:
+    <strong>x-close-connection</strong> <em>display</em></dt>
+
+    <dd>
+      <p>This function closes the connection to display
+      <var>display</var>. Before you can do this, you must first
+      delete all the frames that were open on that display (see
+      <a href="Deleting-Frames.html#Deleting-Frames">Deleting
+      Frames</a>).</p>
+    </dd>
+  </dl><a name="index-multi_002dmonitor" id=
+  "index-multi_002dmonitor"></a>
+
+  <p>On some multi-monitor setups, a single X display outputs to
+  more than one physical monitor. You can use the functions
+  <code>display-monitor-attributes-list</code> and
+  <code>frame-monitor-attributes</code> to obtain information about
+  such setups.</p>
+
+  <dl>
+    <dt><a name="index-display_002dmonitor_002dattributes_002dlist"
+    id=
+    "index-display_002dmonitor_002dattributes_002dlist"></a>Function:
+    <strong>display-monitor-attributes-list</strong>
+    <em>&amp;optional display</em></dt>
+
+    <dd>
+      <p>This function returns a list of physical monitor
+      attributes on <var>display</var>, which can be a display name
+      (a string), a terminal, or a frame; if omitted or
+      <code>nil</code>, it defaults to the selected frame&rsquo;s
+      display. Each element of the list is an association list,
+      representing the attributes of a physical monitor. The first
+      element corresponds to the primary monitor. The attribute
+      keys and values are:</p>
+
+      <dl compact="compact">
+        <dt>&lsquo;<samp>geometry</samp>&rsquo;</dt>
+
+        <dd>
+          <p>Position of the top-left corner of the monitor&rsquo;s
+          screen and its size, in pixels, as
+          &lsquo;<samp>(<var>x</var> <var>y</var> <var>width</var>
+          <var>height</var>)</samp>&rsquo;. Note that, if the
+          monitor is not the primary monitor, some of the
+          coordinates might be negative.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>workarea</samp>&rsquo;</dt>
+
+        <dd>
+          <p>Position of the top-left corner and size of the work
+          area (usable space) in pixels as
+          &lsquo;<samp>(<var>x</var> <var>y</var> <var>width</var>
+          <var>height</var>)</samp>&rsquo;. This may be different
+          from &lsquo;<samp>geometry</samp>&rsquo; in that space
+          occupied by various window manager features (docks,
+          taskbars, etc.) may be excluded from the work area.
+          Whether or not such features actually subtract from the
+          work area depends on the platform and environment. Again,
+          if the monitor is not the primary monitor, some of the
+          coordinates might be negative.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>mm-size</samp>&rsquo;</dt>
+
+        <dd>
+          <p>Width and height in millimeters as
+          &lsquo;<samp>(<var>width</var>
+          <var>height</var>)</samp>&rsquo;</p>
+        </dd>
+
+        <dt>&lsquo;<samp>frames</samp>&rsquo;</dt>
+
+        <dd>
+          <p>List of frames that this physical monitor dominates
+          (see below).</p>
+        </dd>
+
+        <dt>&lsquo;<samp>name</samp>&rsquo;</dt>
+
+        <dd>
+          <p>Name of the physical monitor as <var>string</var>.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>source</samp>&rsquo;</dt>
+
+        <dd>
+          <p>Source of the multi-monitor information as
+          <var>string</var>; e.g.,
+          &lsquo;<samp>XRandr</samp>&rsquo; or
+          &lsquo;<samp>Xinerama</samp>&rsquo;.</p>
+        </dd>
+      </dl>
+
+      <p><var>x</var>, <var>y</var>, <var>width</var>, and
+      <var>height</var> are integers.
+      &lsquo;<samp>name</samp>&rsquo; and
+      &lsquo;<samp>source</samp>&rsquo; may be absent.</p>
+
+      <p>A frame is <em>dominated</em> by a physical monitor when
+      either the largest area of the frame resides in that monitor,
+      or (if the frame does not intersect any physical monitors)
+      that monitor is the closest to the frame. Every (non-tooltip)
+      frame (whether visible or not) in a graphical display is
+      dominated by exactly one physical monitor at a time, though
+      the frame can span multiple (or no) physical monitors.</p>
+
+      <p>Here&rsquo;s an example of the data produced by this
+      function on a 2-monitor display:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+  (display-monitor-attributes-list)
   &rArr;
-  (((geometry 0 0 1920 1080) ;; <span class="roman">Left-hand, primary monitor</span>
-    (workarea 0 0 1920 1050) ;; <span class="roman">A taskbar occupies some of the height</span>
+  (((geometry 0 0 1920 1080) ;; <span class=
+"roman">Left-hand, primary monitor</span>
+    (workarea 0 0 1920 1050) ;; <span class=
+"roman">A taskbar occupies some of the height</span>
     (mm-size 677 381)
-    (name . &quot;DISPLAY1&quot;)
+    (name . "DISPLAY1")
     (frames #&lt;frame emacs@host *Messages* 0x11578c0&gt;
             #&lt;frame emacs@host *scratch* 0x114b838&gt;))
-   ((geometry 1920 0 1680 1050) ;; <span class="roman">Right-hand monitor</span>
-    (workarea 1920 0 1680 1050) ;; <span class="roman">Whole screen can be used</span>
+   ((geometry 1920 0 1680 1050) ;; <span class=
+"roman">Right-hand monitor</span>
+    (workarea 1920 0 1680 1050) ;; <span class=
+"roman">Whole screen can be used</span>
     (mm-size 593 370)
-    (name . &quot;DISPLAY2&quot;)
+    (name . "DISPLAY2")
     (frames)))
-</pre></div>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-</dd></dl>
+  <dl>
+    <dt><a name="index-frame_002dmonitor_002dattributes" id=
+    "index-frame_002dmonitor_002dattributes"></a>Function:
+    <strong>frame-monitor-attributes</strong> <em>&amp;optional
+    frame</em></dt>
 
-<dl>
-<dt><a name="index-frame_002dmonitor_002dattributes"></a>Function: <strong>frame-monitor-attributes</strong> <em>&amp;optional frame</em></dt>
-<dd><p>This function returns the attributes of the physical monitor
-dominating (see above) <var>frame</var>, which defaults to the selected frame.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the attributes of the physical
+      monitor dominating (see above) <var>frame</var>, which
+      defaults to the selected frame.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Frame-Geometry.html#Frame-Geometry" accesskey="n" rel="next">Frame Geometry</a>, Previous: <a href="Creating-Frames.html#Creating-Frames" accesskey="p" rel="prev">Creating Frames</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Frame-Geometry.html#Frame-Geometry"
+    accesskey="n" rel="next">Frame Geometry</a>, Previous: <a href=
+    "Creating-Frames.html#Creating-Frames" accesskey="p" rel=
+    "prev">Creating Frames</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,160 +14,227 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Blacklists and Whitelists</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Blacklists and Whitelists">
-<meta name="keywords" content="Gnus Manual: Blacklists and Whitelists">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title="Spam Back Ends">
-<link href="BBDB-Whitelists.html#BBDB-Whitelists" rel="next" title="BBDB Whitelists">
-<link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="prev" title="Spam Back Ends">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Blacklists and Whitelists</title>
+  <meta name="description" content=
+  "Gnus Manual: Blacklists and Whitelists" />
+  <meta name="keywords" content=
+  "Gnus Manual: Blacklists and Whitelists" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title=
+  "Spam Back Ends" />
+  <link href="BBDB-Whitelists.html#BBDB-Whitelists" rel="next"
+  title="BBDB Whitelists" />
+  <link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="prev" title=
+  "Spam Back Ends" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Blacklists-and-Whitelists"></a>
-<div class="header">
-<p>
-Next: <a href="BBDB-Whitelists.html#BBDB-Whitelists" accesskey="n" rel="next">BBDB Whitelists</a>, Up: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel="up">Spam Back Ends</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Blacklists-and-Whitelists-1"></a>
-<h4 class="subsubsection">9.17.6.1 Blacklists and Whitelists</h4>
-<a name="index-spam-filtering-5"></a>
-<a name="index-whitelists_002c-spam-filtering"></a>
-<a name="index-blacklists_002c-spam-filtering"></a>
-<a name="index-spam-7"></a>
+<body lang="en" xml:lang="en">
+  <a name="Blacklists-and-Whitelists" id=
+  "Blacklists-and-Whitelists"></a>
 
-<dl>
-<dt><a name="index-spam_002duse_002dblacklist"></a>Variable: <strong>spam-use-blacklist</strong></dt>
-<dd>
-<p>Set this variable to <code>t</code> if you want to use blacklists when
-splitting incoming mail.  Messages whose senders are in the blacklist
-will be sent to the <code>spam-split-group</code>.  This is an explicit
-filter, meaning that it acts only on mail senders <em>declared</em> to
-be spammers.
-</p>
-</dd></dl>
+  <div class="header">
+    <p>Next: <a href="BBDB-Whitelists.html#BBDB-Whitelists"
+    accesskey="n" rel="next">BBDB Whitelists</a>, Up: <a href=
+    "Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel=
+    "up">Spam Back Ends</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Blacklists-and-Whitelists-1" id=
+  "Blacklists-and-Whitelists-1"></a>
 
-<dl>
-<dt><a name="index-spam_002duse_002dwhitelist"></a>Variable: <strong>spam-use-whitelist</strong></dt>
-<dd>
-<p>Set this variable to <code>t</code> if you want to use whitelists when
-splitting incoming mail.  Messages whose senders are not in the
-whitelist will be sent to the next spam-split rule.  This is an
-explicit filter, meaning that unless someone is in the whitelist, their
-messages are not assumed to be spam or ham.
-</p>
-</dd></dl>
+  <h4 class="subsubsection">9.17.6.1 Blacklists and
+  Whitelists</h4><a name="index-spam-filtering-5" id=
+  "index-spam-filtering-5"></a> <a name=
+  "index-whitelists_002c-spam-filtering" id=
+  "index-whitelists_002c-spam-filtering"></a> <a name=
+  "index-blacklists_002c-spam-filtering" id=
+  "index-blacklists_002c-spam-filtering"></a> <a name=
+  "index-spam-7" id="index-spam-7"></a>
 
-<dl>
-<dt><a name="index-spam_002duse_002dwhitelist_002dexclusive"></a>Variable: <strong>spam-use-whitelist-exclusive</strong></dt>
-<dd>
-<p>Set this variable to <code>t</code> if you want to use whitelists as an
-implicit filter, meaning that every message will be considered spam
-unless the sender is in the whitelist.  Use with care.
-</p>
-</dd></dl>
+  <dl>
+    <dt><a name="index-spam_002duse_002dblacklist" id=
+    "index-spam_002duse_002dblacklist"></a>Variable:
+    <strong>spam-use-blacklist</strong></dt>
 
-<dl>
-<dt><a name="index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dblacklist"></a>Variable: <strong>gnus-group-spam-exit-processor-blacklist</strong></dt>
-<dd>
-<p>Add this symbol to a group&rsquo;s <code>spam-process</code> parameter by
-customizing the group parameters or the
-<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is
-added to a group&rsquo;s <code>spam-process</code> parameter, the senders of
-spam-marked articles will be added to the blacklist.
-</p>
-<p><em>WARNING</em>
-</p>
-<p>Instead of the obsolete
-<code>gnus-group-spam-exit-processor-blacklist</code>, it is recommended
-that you use <code>(spam spam-use-blacklist)</code>.  Everything will work
-the same way, we promise.
-</p>
-</dd></dl>
+    <dd>
+      <p>Set this variable to <code>t</code> if you want to use
+      blacklists when splitting incoming mail. Messages whose
+      senders are in the blacklist will be sent to the
+      <code>spam-split-group</code>. This is an explicit filter,
+      meaning that it acts only on mail senders <em>declared</em>
+      to be spammers.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dwhitelist"></a>Variable: <strong>gnus-group-ham-exit-processor-whitelist</strong></dt>
-<dd>
-<p>Add this symbol to a group&rsquo;s <code>spam-process</code> parameter by
-customizing the group parameters or the
-<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is
-added to a group&rsquo;s <code>spam-process</code> parameter, the senders of
-ham-marked articles in <em>ham</em> groups will be added to the
-whitelist.
-</p>
-<p><em>WARNING</em>
-</p>
-<p>Instead of the obsolete
-<code>gnus-group-ham-exit-processor-whitelist</code>, it is recommended
-that you use <code>(ham spam-use-whitelist)</code>.  Everything will work
-the same way, we promise.
-</p>
-</dd></dl>
+  <dl>
+    <dt><a name="index-spam_002duse_002dwhitelist" id=
+    "index-spam_002duse_002dwhitelist"></a>Variable:
+    <strong>spam-use-whitelist</strong></dt>
 
-<p>Blacklists are lists of regular expressions matching addresses you
-consider to be spam senders.  For instance, to block mail from any
-sender at &lsquo;<samp>vmadmin.com</samp>&rsquo;, you can put &lsquo;<samp>vmadmin.com</samp>&rsquo; in your
-blacklist.  You start out with an empty blacklist.  Blacklist entries
-use the Emacs regular expression syntax.
-</p>
-<p>Conversely, whitelists tell Gnus what addresses are considered
-legitimate.  All messages from whitelisted addresses are considered
-non-spam.  Also see <a href="BBDB-Whitelists.html#BBDB-Whitelists">BBDB Whitelists</a>.  Whitelist entries use the
-Emacs regular expression syntax.
-</p>
-<p>The blacklist and whitelist file locations can be customized with the
-<code>spam-directory</code> variable (<samp>~/News/spam</samp> by default), or
-the <code>spam-whitelist</code> and <code>spam-blacklist</code> variables
-directly.  The whitelist and blacklist files will by default be in the
-<code>spam-directory</code> directory, named <samp>whitelist</samp> and
-<samp>blacklist</samp> respectively.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="BBDB-Whitelists.html#BBDB-Whitelists" accesskey="n" rel="next">BBDB Whitelists</a>, Up: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel="up">Spam Back Ends</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Set this variable to <code>t</code> if you want to use
+      whitelists when splitting incoming mail. Messages whose
+      senders are not in the whitelist will be sent to the next
+      spam-split rule. This is an explicit filter, meaning that
+      unless someone is in the whitelist, their messages are not
+      assumed to be spam or ham.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-spam_002duse_002dwhitelist_002dexclusive"
+    id="index-spam_002duse_002dwhitelist_002dexclusive"></a>Variable:
+    <strong>spam-use-whitelist-exclusive</strong></dt>
 
+    <dd>
+      <p>Set this variable to <code>t</code> if you want to use
+      whitelists as an implicit filter, meaning that every message
+      will be considered spam unless the sender is in the
+      whitelist. Use with care.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dblacklist"
+    id=
+    "index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dblacklist">
+    </a>Variable:
+    <strong>gnus-group-spam-exit-processor-blacklist</strong></dt>
+
+    <dd>
+      <p>Add this symbol to a group&rsquo;s
+      <code>spam-process</code> parameter by customizing the group
+      parameters or the <code>gnus-spam-process-newsgroups</code>
+      variable. When this symbol is added to a group&rsquo;s
+      <code>spam-process</code> parameter, the senders of
+      spam-marked articles will be added to the blacklist.</p>
+
+      <p><em>WARNING</em></p>
+
+      <p>Instead of the obsolete
+      <code>gnus-group-spam-exit-processor-blacklist</code>, it is
+      recommended that you use <code>(spam
+      spam-use-blacklist)</code>. Everything will work the same
+      way, we promise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dwhitelist"
+    id=
+    "index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dwhitelist">
+    </a>Variable:
+    <strong>gnus-group-ham-exit-processor-whitelist</strong></dt>
+
+    <dd>
+      <p>Add this symbol to a group&rsquo;s
+      <code>spam-process</code> parameter by customizing the group
+      parameters or the <code>gnus-spam-process-newsgroups</code>
+      variable. When this symbol is added to a group&rsquo;s
+      <code>spam-process</code> parameter, the senders of
+      ham-marked articles in <em>ham</em> groups will be added to
+      the whitelist.</p>
+
+      <p><em>WARNING</em></p>
+
+      <p>Instead of the obsolete
+      <code>gnus-group-ham-exit-processor-whitelist</code>, it is
+      recommended that you use <code>(ham
+      spam-use-whitelist)</code>. Everything will work the same
+      way, we promise.</p>
+    </dd>
+  </dl>
+
+  <p>Blacklists are lists of regular expressions matching addresses
+  you consider to be spam senders. For instance, to block mail from
+  any sender at &lsquo;<samp>vmadmin.com</samp>&rsquo;, you can put
+  &lsquo;<samp>vmadmin.com</samp>&rsquo; in your blacklist. You
+  start out with an empty blacklist. Blacklist entries use the
+  Emacs regular expression syntax.</p>
+
+  <p>Conversely, whitelists tell Gnus what addresses are considered
+  legitimate. All messages from whitelisted addresses are
+  considered non-spam. Also see <a href=
+  "BBDB-Whitelists.html#BBDB-Whitelists">BBDB Whitelists</a>.
+  Whitelist entries use the Emacs regular expression syntax.</p>
+
+  <p>The blacklist and whitelist file locations can be customized
+  with the <code>spam-directory</code> variable
+  (<samp>~/News/spam</samp> by default), or the
+  <code>spam-whitelist</code> and <code>spam-blacklist</code>
+  variables directly. The whitelist and blacklist files will by
+  default be in the <code>spam-directory</code> directory, named
+  <samp>whitelist</samp> and <samp>blacklist</samp>
+  respectively.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="BBDB-Whitelists.html#BBDB-Whitelists"
+    accesskey="n" rel="next">BBDB Whitelists</a>, Up: <a href=
+    "Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel=
+    "up">Spam Back Ends</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

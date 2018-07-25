@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Message, the Emacs message composition mode.
 
 Copyright (C) 1996-2016 Free Software Foundation, Inc.
@@ -14,161 +16,233 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Message Manual: Signing and encryption</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Message Manual: Signing and encryption">
-<meta name="keywords" content="Message Manual: Signing and encryption">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Security.html#Security" rel="up" title="Security">
-<link href="Using-S_002fMIME.html#Using-S_002fMIME" rel="next" title="Using S/MIME">
-<link href="Security.html#Security" rel="prev" title="Security">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Message Manual: Signing and encryption</title>
+  <meta name="description" content=
+  "Message Manual: Signing and encryption" />
+  <meta name="keywords" content=
+  "Message Manual: Signing and encryption" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Security.html#Security" rel="up" title="Security" />
+  <link href="Using-S_002fMIME.html#Using-S_002fMIME" rel="next"
+  title="Using S/MIME" />
+  <link href="Security.html#Security" rel="prev" title=
+  "Security" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Signing-and-encryption"></a>
-<div class="header">
-<p>
-Next: <a href="Using-S_002fMIME.html#Using-S_002fMIME" accesskey="n" rel="next">Using S/MIME</a>, Up: <a href="Security.html#Security" accesskey="u" rel="up">Security</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Signing-and-encrypting-commands"></a>
-<h4 class="subsection">2.7.1 Signing and encrypting commands</h4>
+<body lang="en" xml:lang="en">
+  <a name="Signing-and-encryption" id="Signing-and-encryption"></a>
 
-<p>Instructing <acronym>MML</acronym> to perform security operations on a
-<acronym>MIME</acronym> part is done using the <kbd>C-c C-m s</kbd> key map for
-signing and the <kbd>C-c C-m c</kbd> key map for encryption, as follows.
-</p><dl compact="compact">
-<dt><kbd>C-c C-m s s</kbd></dt>
-<dd><a name="index-C_002dc-C_002dm-s-s"></a>
-<a name="index-mml_002dsecure_002dmessage_002dsign_002dsmime"></a>
+  <div class="header">
+    <p>Next: <a href="Using-S_002fMIME.html#Using-S_002fMIME"
+    accesskey="n" rel="next">Using S/MIME</a>, Up: <a href=
+    "Security.html#Security" accesskey="u" rel="up">Security</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Signing-and-encrypting-commands" id=
+  "Signing-and-encrypting-commands"></a>
 
-<p>Digitally sign current message using <acronym>S/MIME</acronym>.
-</p>
-</dd>
-<dt><kbd>C-c C-m s o</kbd></dt>
-<dd><a name="index-C_002dc-C_002dm-s-o"></a>
-<a name="index-mml_002dsecure_002dmessage_002dsign_002dpgp"></a>
+  <h4 class="subsection">2.7.1 Signing and encrypting commands</h4>
 
-<p>Digitally sign current message using <acronym>PGP</acronym>.
-</p>
-</dd>
-<dt><kbd>C-c C-m s p</kbd></dt>
-<dd><a name="index-C_002dc-C_002dm-s-p"></a>
-<a name="index-mml_002dsecure_002dmessage_002dsign_002dpgpmime"></a>
+  <p>Instructing <acronym>MML</acronym> to perform security
+  operations on a <acronym>MIME</acronym> part is done using the
+  <kbd>C-c C-m s</kbd> key map for signing and the <kbd>C-c C-m
+  c</kbd> key map for encryption, as follows.</p>
 
-<p>Digitally sign current message using <acronym>PGP/MIME</acronym>.
-</p>
-</dd>
-<dt><kbd>C-c C-m c s</kbd></dt>
-<dd><a name="index-C_002dc-C_002dm-c-s"></a>
-<a name="index-mml_002dsecure_002dmessage_002dencrypt_002dsmime"></a>
+  <dl compact="compact">
+    <dt><kbd>C-c C-m s s</kbd></dt>
 
-<p>Digitally encrypt current message using <acronym>S/MIME</acronym>.
-</p>
-</dd>
-<dt><kbd>C-c C-m c o</kbd></dt>
-<dd><a name="index-C_002dc-C_002dm-c-o"></a>
-<a name="index-mml_002dsecure_002dmessage_002dencrypt_002dpgp"></a>
+    <dd>
+      <a name="index-C_002dc-C_002dm-s-s" id=
+      "index-C_002dc-C_002dm-s-s"></a> <a name=
+      "index-mml_002dsecure_002dmessage_002dsign_002dsmime" id=
+      "index-mml_002dsecure_002dmessage_002dsign_002dsmime"></a>
 
-<p>Digitally encrypt current message using <acronym>PGP</acronym>.
-</p>
-</dd>
-<dt><kbd>C-c C-m c p</kbd></dt>
-<dd><a name="index-C_002dc-C_002dm-c-p"></a>
-<a name="index-mml_002dsecure_002dmessage_002dencrypt_002dpgpmime"></a>
+      <p>Digitally sign current message using
+      <acronym>S/MIME</acronym>.</p>
+    </dd>
 
-<p>Digitally encrypt current message using <acronym>PGP/MIME</acronym>.
-</p>
-</dd>
-<dt><kbd>C-c C-m C-n</kbd></dt>
-<dd><a name="index-C_002dc-C_002dm-C_002dn"></a>
-<a name="index-mml_002dunsecure_002dmessage"></a>
-<p>Remove security related <acronym>MML</acronym> tags from message.
-</p>
-</dd>
-</dl>
+    <dt><kbd>C-c C-m s o</kbd></dt>
 
-<p>These commands do not immediately sign or encrypt the message, they
-merely insert the proper <acronym>MML</acronym> secure tag to instruct the
-<acronym>MML</acronym> engine to perform that operation when the message is
-actually sent.  They may perform other operations too, such as locating
-and retrieving a <acronym>S/MIME</acronym> certificate of the person you wish to
-send encrypted mail to.  When the mml parsing engine converts your
-<acronym>MML</acronym> into a properly encoded <acronym>MIME</acronym> message, the secure
-tag will be replaced with either a part or a multipart tag.  If your
-message contains other mml parts, a multipart tag will be used; if no
-other parts are present in your message a single part tag will be used.
-This way, message mode will do the Right Thing (TM) with
-signed/encrypted multipart messages.
-</p>
-<p>Since signing and especially encryption often is used when sensitive
-information is sent, you may want to have some way to ensure that your
-mail is actually signed or encrypted.  After invoking the above
-sign/encrypt commands, it is possible to preview the raw article by
-using <kbd>C-u C-c RET P</kbd> (<code>mml-preview</code>).  Then you can
-verify that your long rant about what your ex-significant other or
-whomever actually did with that funny looking person at that strange
-party the other night, actually will be sent encrypted.
-</p>
-<p><em>Note!</em>  Neither <acronym>PGP/MIME</acronym> nor <acronym>S/MIME</acronym> encrypt/signs
-RFC822 headers.  They only operate on the <acronym>MIME</acronym> object.  Keep this
-in mind before sending mail with a sensitive Subject line.
-</p>
-<p>By default, when encrypting a message, Gnus will use the
-&ldquo;signencrypt&rdquo; mode, which means the message is both signed and
-encrypted.  If you would like to disable this for a particular
-message, give the <code>mml-secure-message-encrypt-*</code> command a prefix
-argument, e.g., <kbd>C-u C-c C-m c p</kbd>.
-</p>
-<p>Actually using the security commands above is not very difficult.  At
-least not compared with making sure all involved programs talk with each
-other properly.  Thus, we now describe what external libraries or
-programs are required to make things work, and some small general hints.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Using-S_002fMIME.html#Using-S_002fMIME" accesskey="n" rel="next">Using S/MIME</a>, Up: <a href="Security.html#Security" accesskey="u" rel="up">Security</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name="index-C_002dc-C_002dm-s-o" id=
+      "index-C_002dc-C_002dm-s-o"></a> <a name=
+      "index-mml_002dsecure_002dmessage_002dsign_002dpgp" id=
+      "index-mml_002dsecure_002dmessage_002dsign_002dpgp"></a>
 
+      <p>Digitally sign current message using
+      <acronym>PGP</acronym>.</p>
+    </dd>
 
+    <dt><kbd>C-c C-m s p</kbd></dt>
 
+    <dd>
+      <a name="index-C_002dc-C_002dm-s-p" id=
+      "index-C_002dc-C_002dm-s-p"></a> <a name=
+      "index-mml_002dsecure_002dmessage_002dsign_002dpgpmime" id=
+      "index-mml_002dsecure_002dmessage_002dsign_002dpgpmime"></a>
+
+      <p>Digitally sign current message using
+      <acronym>PGP/MIME</acronym>.</p>
+    </dd>
+
+    <dt><kbd>C-c C-m c s</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dm-c-s" id=
+      "index-C_002dc-C_002dm-c-s"></a> <a name=
+      "index-mml_002dsecure_002dmessage_002dencrypt_002dsmime" id=
+      "index-mml_002dsecure_002dmessage_002dencrypt_002dsmime"></a>
+
+      <p>Digitally encrypt current message using
+      <acronym>S/MIME</acronym>.</p>
+    </dd>
+
+    <dt><kbd>C-c C-m c o</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dm-c-o" id=
+      "index-C_002dc-C_002dm-c-o"></a> <a name=
+      "index-mml_002dsecure_002dmessage_002dencrypt_002dpgp" id=
+      "index-mml_002dsecure_002dmessage_002dencrypt_002dpgp"></a>
+
+      <p>Digitally encrypt current message using
+      <acronym>PGP</acronym>.</p>
+    </dd>
+
+    <dt><kbd>C-c C-m c p</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dm-c-p" id=
+      "index-C_002dc-C_002dm-c-p"></a> <a name=
+      "index-mml_002dsecure_002dmessage_002dencrypt_002dpgpmime"
+      id="index-mml_002dsecure_002dmessage_002dencrypt_002dpgpmime">
+      </a>
+
+      <p>Digitally encrypt current message using
+      <acronym>PGP/MIME</acronym>.</p>
+    </dd>
+
+    <dt><kbd>C-c C-m C-n</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dm-C_002dn" id=
+      "index-C_002dc-C_002dm-C_002dn"></a> <a name=
+      "index-mml_002dunsecure_002dmessage" id=
+      "index-mml_002dunsecure_002dmessage"></a>
+
+      <p>Remove security related <acronym>MML</acronym> tags from
+      message.</p>
+    </dd>
+  </dl>
+
+  <p>These commands do not immediately sign or encrypt the message,
+  they merely insert the proper <acronym>MML</acronym> secure tag
+  to instruct the <acronym>MML</acronym> engine to perform that
+  operation when the message is actually sent. They may perform
+  other operations too, such as locating and retrieving a
+  <acronym>S/MIME</acronym> certificate of the person you wish to
+  send encrypted mail to. When the mml parsing engine converts your
+  <acronym>MML</acronym> into a properly encoded
+  <acronym>MIME</acronym> message, the secure tag will be replaced
+  with either a part or a multipart tag. If your message contains
+  other mml parts, a multipart tag will be used; if no other parts
+  are present in your message a single part tag will be used. This
+  way, message mode will do the Right Thing (TM) with
+  signed/encrypted multipart messages.</p>
+
+  <p>Since signing and especially encryption often is used when
+  sensitive information is sent, you may want to have some way to
+  ensure that your mail is actually signed or encrypted. After
+  invoking the above sign/encrypt commands, it is possible to
+  preview the raw article by using <kbd>C-u C-c RET P</kbd>
+  (<code>mml-preview</code>). Then you can verify that your long
+  rant about what your ex-significant other or whomever actually
+  did with that funny looking person at that strange party the
+  other night, actually will be sent encrypted.</p>
+
+  <p><em>Note!</em> Neither <acronym>PGP/MIME</acronym> nor
+  <acronym>S/MIME</acronym> encrypt/signs RFC822 headers. They only
+  operate on the <acronym>MIME</acronym> object. Keep this in mind
+  before sending mail with a sensitive Subject line.</p>
+
+  <p>By default, when encrypting a message, Gnus will use the
+  &ldquo;signencrypt&rdquo; mode, which means the message is both
+  signed and encrypted. If you would like to disable this for a
+  particular message, give the
+  <code>mml-secure-message-encrypt-*</code> command a prefix
+  argument, e.g., <kbd>C-u C-c C-m c p</kbd>.</p>
+
+  <p>Actually using the security commands above is not very
+  difficult. At least not compared with making sure all involved
+  programs talk with each other properly. Thus, we now describe
+  what external libraries or programs are required to make things
+  work, and some small general hints.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Using-S_002fMIME.html#Using-S_002fMIME"
+    accesskey="n" rel="next">Using S/MIME</a>, Up: <a href=
+    "Security.html#Security" accesskey="u" rel="up">Security</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

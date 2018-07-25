@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Forms mode, a form-editing major mode for GNU Emacs.
 
 Copyright (C) 1989, 1997, 2001-2016 Free Software Foundation, Inc.
@@ -14,175 +16,235 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Forms Mode User&rsquo;s Manual: Format Description</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Forms Mode User&rsquo;s Manual: Format Description">
-<meta name="keywords" content="Forms Mode User&rsquo;s Manual: Format Description">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Modifying-Forms-Contents.html#Modifying-Forms-Contents" rel="next" title="Modifying Forms Contents">
-<link href="Control-File-Format.html#Control-File-Format" rel="prev" title="Control File Format">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Forms Mode User&rsquo;s Manual: Format Description</title>
+  <meta name="description" content=
+  "Forms Mode User&rsquo;s Manual: Format Description" />
+  <meta name="keywords" content=
+  "Forms Mode User&rsquo;s Manual: Format Description" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href=
+  "Modifying-Forms-Contents.html#Modifying-Forms-Contents" rel=
+  "next" title="Modifying Forms Contents" />
+  <link href="Control-File-Format.html#Control-File-Format" rel=
+  "prev" title="Control File Format" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Format-Description"></a>
-<div class="header">
-<p>
-Next: <a href="Modifying-Forms-Contents.html#Modifying-Forms-Contents" accesskey="n" rel="next">Modifying Forms Contents</a>, Previous: <a href="Control-File-Format.html#Control-File-Format" accesskey="p" rel="prev">Control File Format</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Format-Description"></a>
-<h2 class="chapter">6 The Format Description</h2>
+<body lang="en" xml:lang="en">
+  <a name="Format-Description" id="Format-Description"></a>
 
-<a name="index-forms_002dformat_002dlist-1"></a>
-<p>The variable <code>forms-format-list</code> specifies the format of the data
-in the data file, and how to convert the data for display in Forms mode.
-Its value must be a list of Forms mode <em>formatting elements</em>, each
-of which can be a string, a number, a Lisp list, or a Lisp symbol that
-evaluates to one of those.  The formatting elements are processed in the
-order they appear in the list.
-</p>
-<dl compact="compact">
-<dt><var>string</var></dt>
-<dd><p>A string formatting element is inserted in the forms &ldquo;as is,&rdquo; as text
-that the user cannot alter.
-</p>
-</dd>
-<dt><var>number</var></dt>
-<dd><p>A number element selects a field of the record.  The contents of this
-field are inserted in the display at this point.  Field numbers count
-starting from 1 (one).
-</p>
-</dd>
-<dt><var>list</var></dt>
-<dd><p>A formatting element that is a list specifies a function call.  This
-function is called every time a record is displayed, and its result,
-which must be a string, is inserted in the display text.  The function
-should do nothing but returning a string.
-</p>
-<a name="index-forms_002dfields"></a>
-<p>The function you call can access the fields of the record as a list in
-the variable
-<code>forms-fields</code>.
-</p>
-</dd>
-<dt><var>symbol</var></dt>
-<dd><p>A symbol used as a formatting element should evaluate to a string, number,
-or list; the value is interpreted as a formatting element, as described
-above.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Modifying-Forms-Contents.html#Modifying-Forms-Contents"
+    accesskey="n" rel="next">Modifying Forms Contents</a>,
+    Previous: <a href=
+    "Control-File-Format.html#Control-File-Format" accesskey="p"
+    rel="prev">Control File Format</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Format-Description" id="The-Format-Description"></a>
 
-<p>If a record does not contain the number of fields as specified in
-<code>forms-number-of-fields</code>, a warning message will be printed.  Excess
-fields are ignored, missing fields are set to empty.
-</p>
-<p>The control file which displays <samp>/etc/passwd</samp> file as demonstrated
-in the beginning of this manual might look as follows:
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">This demo visits <samp>/etc/passwd</samp>.</span>
+  <h2 class="chapter">6 The Format Description</h2><a name=
+  "index-forms_002dformat_002dlist-1" id=
+  "index-forms_002dformat_002dlist-1"></a>
 
-(setq forms-file &quot;/etc/passwd&quot;)
+  <p>The variable <code>forms-format-list</code> specifies the
+  format of the data in the data file, and how to convert the data
+  for display in Forms mode. Its value must be a list of Forms mode
+  <em>formatting elements</em>, each of which can be a string, a
+  number, a Lisp list, or a Lisp symbol that evaluates to one of
+  those. The formatting elements are processed in the order they
+  appear in the list.</p>
+
+  <dl compact="compact">
+    <dt><var>string</var></dt>
+
+    <dd>
+      <p>A string formatting element is inserted in the forms
+      &ldquo;as is,&rdquo; as text that the user cannot alter.</p>
+    </dd>
+
+    <dt><var>number</var></dt>
+
+    <dd>
+      <p>A number element selects a field of the record. The
+      contents of this field are inserted in the display at this
+      point. Field numbers count starting from 1 (one).</p>
+    </dd>
+
+    <dt><var>list</var></dt>
+
+    <dd>
+      <p>A formatting element that is a list specifies a function
+      call. This function is called every time a record is
+      displayed, and its result, which must be a string, is
+      inserted in the display text. The function should do nothing
+      but returning a string.</p><a name="index-forms_002dfields"
+      id="index-forms_002dfields"></a>
+
+      <p>The function you call can access the fields of the record
+      as a list in the variable <code>forms-fields</code>.</p>
+    </dd>
+
+    <dt><var>symbol</var></dt>
+
+    <dd>
+      <p>A symbol used as a formatting element should evaluate to a
+      string, number, or list; the value is interpreted as a
+      formatting element, as described above.</p>
+    </dd>
+  </dl>
+
+  <p>If a record does not contain the number of fields as specified
+  in <code>forms-number-of-fields</code>, a warning message will be
+  printed. Excess fields are ignored, missing fields are set to
+  empty.</p>
+
+  <p>The control file which displays <samp>/etc/passwd</samp> file
+  as demonstrated in the beginning of this manual might look as
+  follows:</p>
+
+  <div class="example">
+    <pre class="example">
+;; <span class=
+"roman">This demo visits <samp>/etc/passwd</samp>.</span>
+
+(setq forms-file "/etc/passwd")
 (setq forms-number-of-fields 7)
-(setq forms-read-only t)                 ; <span class="roman">to make sure</span>
-(setq forms-field-sep &quot;:&quot;)
+(setq forms-read-only t)                 ; <span class=
+"roman">to make sure</span>
+(setq forms-field-sep ":")
 ;; <span class="roman">Don&rsquo;t allow multi-line fields.</span>
 (setq forms-multi-line nil)
 
 (setq forms-format-list
       (list
-       &quot;====== /etc/passwd ======\n\n&quot;
-       &quot;User : &quot;    1
-       &quot;   Uid: &quot;   3
-       &quot;   Gid: &quot;   4
-       &quot;\n\n&quot;
-       &quot;Name : &quot;    5
-       &quot;\n\n&quot;
-       &quot;Home : &quot;    6
-       &quot;\n\n&quot;
-       &quot;Shell: &quot;    7
-       &quot;\n&quot;))
-</pre></div>
+       "====== /etc/passwd ======\n\n"
+       "User : "    1
+       "   Uid: "   3
+       "   Gid: "   4
+       "\n\n"
+       "Name : "    5
+       "\n\n"
+       "Home : "    6
+       "\n\n"
+       "Shell: "    7
+       "\n"))
+</pre>
+  </div>
 
-<p>When you construct the value of  <code>forms-format-list</code>, you should
-usually either quote the whole value, like this,
-</p>
-<div class="example">
-<pre class="example">(setq forms-format-list
+  <p>When you construct the value of
+  <code>forms-format-list</code>, you should usually either quote
+  the whole value, like this,</p>
+
+  <div class="example">
+    <pre class="example">
+(setq forms-format-list
      '(
-       &quot;====== &quot; forms-file &quot; ======\n\n&quot;
-       &quot;User : &quot;    1
+       "====== " forms-file " ======\n\n"
+       "User : "    1
        (make-string 20 ?-)
        &hellip;
       ))
-</pre></div>
+</pre>
+  </div>
 
-<p>or quote the elements which are lists, like this:
-</p>
-<div class="example">
-<pre class="example">(setq forms-format-list
+  <p>or quote the elements which are lists, like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(setq forms-format-list
       (list
-       &quot;====== &quot; forms-file &quot; ======\n\n&quot;
-       &quot;User : &quot;    1
+       "====== " forms-file " ======\n\n"
+       "User : "    1
        '(make-string 20 ?-)
        &hellip;
       ))
-</pre></div>
+</pre>
+  </div>
 
-<p>Forms mode validates the contents of <code>forms-format-list</code> when you
-visit a database.  If there are errors, processing is aborted with an
-error message which includes a descriptive text.  See <a href="Error-Messages.html#Error-Messages">Error Messages</a>,
-for a detailed list of error messages.
-</p>
-<p>If no <code>forms-format-list</code> is specified, Forms mode will supply a
-default format list.  This list contains the name of the file being
-visited, and a simple label for each field indicating the field number.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Modifying-Forms-Contents.html#Modifying-Forms-Contents" accesskey="n" rel="next">Modifying Forms Contents</a>, Previous: <a href="Control-File-Format.html#Control-File-Format" accesskey="p" rel="prev">Control File Format</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Forms mode validates the contents of
+  <code>forms-format-list</code> when you visit a database. If
+  there are errors, processing is aborted with an error message
+  which includes a descriptive text. See <a href=
+  "Error-Messages.html#Error-Messages">Error Messages</a>, for a
+  detailed list of error messages.</p>
 
+  <p>If no <code>forms-format-list</code> is specified, Forms mode
+  will supply a default format list. This list contains the name of
+  the file being visited, and a simple label for each field
+  indicating the field number.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Modifying-Forms-Contents.html#Modifying-Forms-Contents"
+    accesskey="n" rel="next">Modifying Forms Contents</a>,
+    Previous: <a href=
+    "Control-File-Format.html#Control-File-Format" accesskey="p"
+    rel="prev">Control File Format</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

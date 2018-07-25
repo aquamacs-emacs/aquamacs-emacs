@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,206 +19,323 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Reading One Event</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Reading One Event">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Reading One Event">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Reading-Input.html#Reading-Input" rel="up" title="Reading Input">
-<link href="Event-Mod.html#Event-Mod" rel="next" title="Event Mod">
-<link href="Key-Sequence-Input.html#Key-Sequence-Input" rel="prev" title="Key Sequence Input">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Reading One Event</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Reading One Event" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Reading One Event" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Reading-Input.html#Reading-Input" rel="up" title=
+  "Reading Input" />
+  <link href="Event-Mod.html#Event-Mod" rel="next" title=
+  "Event Mod" />
+  <link href="Key-Sequence-Input.html#Key-Sequence-Input" rel=
+  "prev" title="Key Sequence Input" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Reading-One-Event" id="Reading-One-Event"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Event-Mod.html#Event-Mod" accesskey="n" rel=
+    "next">Event Mod</a>, Previous: <a href=
+    "Key-Sequence-Input.html#Key-Sequence-Input" accesskey="p" rel=
+    "prev">Key Sequence Input</a>, Up: <a href=
+    "Reading-Input.html#Reading-Input" accesskey="u" rel=
+    "up">Reading Input</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Reading-One-Event-1" id="Reading-One-Event-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Reading-One-Event"></a>
-<div class="header">
-<p>
-Next: <a href="Event-Mod.html#Event-Mod" accesskey="n" rel="next">Event Mod</a>, Previous: <a href="Key-Sequence-Input.html#Key-Sequence-Input" accesskey="p" rel="prev">Key Sequence Input</a>, Up: <a href="Reading-Input.html#Reading-Input" accesskey="u" rel="up">Reading Input</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Reading-One-Event-1"></a>
-<h4 class="subsection">20.8.2 Reading One Event</h4>
-<a name="index-reading-a-single-event"></a>
-<a name="index-event_002c-reading-only-one"></a>
+  <h4 class="subsection">20.8.2 Reading One Event</h4><a name=
+  "index-reading-a-single-event" id=
+  "index-reading-a-single-event"></a> <a name=
+  "index-event_002c-reading-only-one" id=
+  "index-event_002c-reading-only-one"></a>
 
-<p>The lowest level functions for command input are <code>read-event</code>,
-<code>read-char</code>, and <code>read-char-exclusive</code>.
-</p>
-<dl>
-<dt><a name="index-read_002devent"></a>Function: <strong>read-event</strong> <em>&amp;optional prompt inherit-input-method seconds</em></dt>
-<dd><p>This function reads and returns the next event of command input,
-waiting if necessary until an event is available.
-</p>
-<p>The returned event may come directly from the user, or from a keyboard
-macro.  It is not decoded by the keyboard&rsquo;s input coding system
-(see <a href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding">Terminal I/O Encoding</a>).
-</p>
-<p>If the optional argument <var>prompt</var> is non-<code>nil</code>, it should be a
-string to display in the echo area as a prompt.  Otherwise,
-<code>read-event</code> does not display any message to indicate it is waiting
-for input; instead, it prompts by echoing: it displays descriptions of
-the events that led to or were read by the current command.  See <a href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>.
-</p>
-<p>If <var>inherit-input-method</var> is non-<code>nil</code>, then the current input
-method (if any) is employed to make it possible to enter a
-non-<acronym>ASCII</acronym> character.  Otherwise, input method handling is disabled
-for reading this event.
-</p>
-<p>If <code>cursor-in-echo-area</code> is non-<code>nil</code>, then <code>read-event</code>
-moves the cursor temporarily to the echo area, to the end of any message
-displayed there.  Otherwise <code>read-event</code> does not move the cursor.
-</p>
-<p>If <var>seconds</var> is non-<code>nil</code>, it should be a number specifying
-the maximum time to wait for input, in seconds.  If no input arrives
-within that time, <code>read-event</code> stops waiting and returns
-<code>nil</code>.  A floating point <var>seconds</var> means to wait
-for a fractional number of seconds.  Some systems support only a whole
-number of seconds; on these systems, <var>seconds</var> is rounded down.
-If <var>seconds</var> is <code>nil</code>, <code>read-event</code> waits as long as
-necessary for input to arrive.
-</p>
-<p>If <var>seconds</var> is <code>nil</code>, Emacs is considered idle while waiting
-for user input to arrive.  Idle timers&mdash;those created with
-<code>run-with-idle-timer</code> (see <a href="Idle-Timers.html#Idle-Timers">Idle Timers</a>)&mdash;can run during this
-period.  However, if <var>seconds</var> is non-<code>nil</code>, the state of
-idleness remains unchanged.  If Emacs is non-idle when
-<code>read-event</code> is called, it remains non-idle throughout the
-operation of <code>read-event</code>; if Emacs is idle (which can happen if
-the call happens inside an idle timer), it remains idle.
-</p>
-<p>If <code>read-event</code> gets an event that is defined as a help character,
-then in some cases <code>read-event</code> processes the event directly without
-returning.  See <a href="Help-Functions.html#Help-Functions">Help Functions</a>.  Certain other events, called
-<em>special events</em>, are also processed directly within
-<code>read-event</code> (see <a href="Special-Events.html#Special-Events">Special Events</a>).
-</p>
-<p>Here is what happens if you call <code>read-event</code> and then press the
-right-arrow function key:
-</p>
-<div class="example">
-<pre class="example">(read-event)
+  <p>The lowest level functions for command input are
+  <code>read-event</code>, <code>read-char</code>, and
+  <code>read-char-exclusive</code>.</p>
+
+  <dl>
+    <dt><a name="index-read_002devent" id=
+    "index-read_002devent"></a>Function:
+    <strong>read-event</strong> <em>&amp;optional prompt
+    inherit-input-method seconds</em></dt>
+
+    <dd>
+      <p>This function reads and returns the next event of command
+      input, waiting if necessary until an event is available.</p>
+
+      <p>The returned event may come directly from the user, or
+      from a keyboard macro. It is not decoded by the
+      keyboard&rsquo;s input coding system (see <a href=
+      "Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding">Terminal
+      I/O Encoding</a>).</p>
+
+      <p>If the optional argument <var>prompt</var> is
+      non-<code>nil</code>, it should be a string to display in the
+      echo area as a prompt. Otherwise, <code>read-event</code>
+      does not display any message to indicate it is waiting for
+      input; instead, it prompts by echoing: it displays
+      descriptions of the events that led to or were read by the
+      current command. See <a href=
+      "The-Echo-Area.html#The-Echo-Area">The Echo Area</a>.</p>
+
+      <p>If <var>inherit-input-method</var> is
+      non-<code>nil</code>, then the current input method (if any)
+      is employed to make it possible to enter a
+      non-<acronym>ASCII</acronym> character. Otherwise, input
+      method handling is disabled for reading this event.</p>
+
+      <p>If <code>cursor-in-echo-area</code> is
+      non-<code>nil</code>, then <code>read-event</code> moves the
+      cursor temporarily to the echo area, to the end of any
+      message displayed there. Otherwise <code>read-event</code>
+      does not move the cursor.</p>
+
+      <p>If <var>seconds</var> is non-<code>nil</code>, it should
+      be a number specifying the maximum time to wait for input, in
+      seconds. If no input arrives within that time,
+      <code>read-event</code> stops waiting and returns
+      <code>nil</code>. A floating point <var>seconds</var> means
+      to wait for a fractional number of seconds. Some systems
+      support only a whole number of seconds; on these systems,
+      <var>seconds</var> is rounded down. If <var>seconds</var> is
+      <code>nil</code>, <code>read-event</code> waits as long as
+      necessary for input to arrive.</p>
+
+      <p>If <var>seconds</var> is <code>nil</code>, Emacs is
+      considered idle while waiting for user input to arrive. Idle
+      timers&mdash;those created with
+      <code>run-with-idle-timer</code> (see <a href=
+      "Idle-Timers.html#Idle-Timers">Idle Timers</a>)&mdash;can run
+      during this period. However, if <var>seconds</var> is
+      non-<code>nil</code>, the state of idleness remains
+      unchanged. If Emacs is non-idle when <code>read-event</code>
+      is called, it remains non-idle throughout the operation of
+      <code>read-event</code>; if Emacs is idle (which can happen
+      if the call happens inside an idle timer), it remains
+      idle.</p>
+
+      <p>If <code>read-event</code> gets an event that is defined
+      as a help character, then in some cases
+      <code>read-event</code> processes the event directly without
+      returning. See <a href=
+      "Help-Functions.html#Help-Functions">Help Functions</a>.
+      Certain other events, called <em>special events</em>, are
+      also processed directly within <code>read-event</code> (see
+      <a href="Special-Events.html#Special-Events">Special
+      Events</a>).</p>
+
+      <p>Here is what happens if you call <code>read-event</code>
+      and then press the right-arrow function key:</p>
+
+      <div class="example">
+        <pre class="example">
+(read-event)
      &rArr; right
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-read_002dchar"></a>Function: <strong>read-char</strong> <em>&amp;optional prompt inherit-input-method seconds</em></dt>
-<dd><p>This function reads and returns a character of command input.  If the
-user generates an event which is not a character (i.e., a mouse click or
-function key event), <code>read-char</code> signals an error.  The arguments
-work as in <code>read-event</code>.
-</p>
-<p>In the first example, the user types the character <kbd>1</kbd> (<acronym>ASCII</acronym>
-code 49).  The second example shows a keyboard macro definition that
-calls <code>read-char</code> from the minibuffer using <code>eval-expression</code>.
-<code>read-char</code> reads the keyboard macro&rsquo;s very next character, which
-is <kbd>1</kbd>.  Then <code>eval-expression</code> displays its return value in
-the echo area.
-</p>
-<div class="example">
-<pre class="example">(read-char)
+  <dl>
+    <dt><a name="index-read_002dchar" id=
+    "index-read_002dchar"></a>Function: <strong>read-char</strong>
+    <em>&amp;optional prompt inherit-input-method seconds</em></dt>
+
+    <dd>
+      <p>This function reads and returns a character of command
+      input. If the user generates an event which is not a
+      character (i.e., a mouse click or function key event),
+      <code>read-char</code> signals an error. The arguments work
+      as in <code>read-event</code>.</p>
+
+      <p>In the first example, the user types the character
+      <kbd>1</kbd> (<acronym>ASCII</acronym> code 49). The second
+      example shows a keyboard macro definition that calls
+      <code>read-char</code> from the minibuffer using
+      <code>eval-expression</code>. <code>read-char</code> reads
+      the keyboard macro&rsquo;s very next character, which is
+      <kbd>1</kbd>. Then <code>eval-expression</code> displays its
+      return value in the echo area.</p>
+
+      <div class="example">
+        <pre class="example">
+(read-char)
      &rArr; 49
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">We assume here you use <kbd>M-:</kbd> to evaluate this.</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">We assume here you use <kbd>M-:</kbd> to evaluate this.</span>
 (symbol-function 'foo)
-     &rArr; &quot;^[:(read-char)^M1&quot;
-</pre><pre class="example">(execute-kbd-macro 'foo)
-     ⊣ 49
+     &rArr; "^[:(read-char)^M1"
+</pre>
+        <pre class="example">
+(execute-kbd-macro 'foo)
+     &acirc;&Scaron;&pound; 49
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-read_002dchar_002dexclusive"></a>Function: <strong>read-char-exclusive</strong> <em>&amp;optional prompt inherit-input-method seconds</em></dt>
-<dd><p>This function reads and returns a character of command input.  If the
-user generates an event which is not a character,
-<code>read-char-exclusive</code> ignores it and reads another event, until it
-gets a character.  The arguments work as in <code>read-event</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-read_002dchar_002dexclusive" id=
+    "index-read_002dchar_002dexclusive"></a>Function:
+    <strong>read-char-exclusive</strong> <em>&amp;optional prompt
+    inherit-input-method seconds</em></dt>
 
-<p>None of the above functions suppress quitting.
-</p>
-<dl>
-<dt><a name="index-num_002dnonmacro_002dinput_002devents"></a>Variable: <strong>num-nonmacro-input-events</strong></dt>
-<dd><p>This variable holds the total number of input events received so far
-from the terminal&mdash;not counting those generated by keyboard macros.
-</p></dd></dl>
+    <dd>
+      <p>This function reads and returns a character of command
+      input. If the user generates an event which is not a
+      character, <code>read-char-exclusive</code> ignores it and
+      reads another event, until it gets a character. The arguments
+      work as in <code>read-event</code>.</p>
+    </dd>
+  </dl>
 
-<p>We emphasize that, unlike <code>read-key-sequence</code>, the functions
-<code>read-event</code>, <code>read-char</code>, and <code>read-char-exclusive</code> do
-not perform the translations described in <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>.
-If you wish to read a single key taking these translations into
-account, use the function <code>read-key</code>:
-</p>
-<dl>
-<dt><a name="index-read_002dkey"></a>Function: <strong>read-key</strong> <em>&amp;optional prompt</em></dt>
-<dd><p>This function reads a single key.  It is intermediate between
-<code>read-key-sequence</code> and <code>read-event</code>.  Unlike the former, it
-reads a single key, not a key sequence.  Unlike the latter, it does
-not return a raw event, but decodes and translates the user input
-according to <code>input-decode-map</code>, <code>local-function-key-map</code>,
-and <code>key-translation-map</code> (see <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>).
-</p>
-<p>The argument <var>prompt</var> is either a string to be displayed in the
-echo area as a prompt, or <code>nil</code>, meaning not to display a prompt.
-</p></dd></dl>
+  <p>None of the above functions suppress quitting.</p>
 
-<dl>
-<dt><a name="index-read_002dchar_002dchoice"></a>Function: <strong>read-char-choice</strong> <em>prompt chars &amp;optional inhibit-quit</em></dt>
-<dd><p>This function uses <code>read-key</code> to read and return a single
-character.  It ignores any input that is not a member of <var>chars</var>,
-a list of accepted characters.  Optionally, it will also ignore
-keyboard-quit events while it is waiting for valid input.  If you bind
-<code>help-form</code> (see <a href="Help-Functions.html#Help-Functions">Help Functions</a>) to a non-<code>nil</code> value
-while calling <code>read-char-choice</code>, then pressing <code>help-char</code>
-causes it to evaluate <code>help-form</code> and display the result.  It
-then continues to wait for a valid input character, or keyboard-quit.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-num_002dnonmacro_002dinput_002devents" id=
+    "index-num_002dnonmacro_002dinput_002devents"></a>Variable:
+    <strong>num-nonmacro-input-events</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Event-Mod.html#Event-Mod" accesskey="n" rel="next">Event Mod</a>, Previous: <a href="Key-Sequence-Input.html#Key-Sequence-Input" accesskey="p" rel="prev">Key Sequence Input</a>, Up: <a href="Reading-Input.html#Reading-Input" accesskey="u" rel="up">Reading Input</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This variable holds the total number of input events
+      received so far from the terminal&mdash;not counting those
+      generated by keyboard macros.</p>
+    </dd>
+  </dl>
 
+  <p>We emphasize that, unlike <code>read-key-sequence</code>, the
+  functions <code>read-event</code>, <code>read-char</code>, and
+  <code>read-char-exclusive</code> do not perform the translations
+  described in <a href=
+  "Translation-Keymaps.html#Translation-Keymaps">Translation
+  Keymaps</a>. If you wish to read a single key taking these
+  translations into account, use the function
+  <code>read-key</code>:</p>
 
+  <dl>
+    <dt><a name="index-read_002dkey" id=
+    "index-read_002dkey"></a>Function: <strong>read-key</strong>
+    <em>&amp;optional prompt</em></dt>
 
+    <dd>
+      <p>This function reads a single key. It is intermediate
+      between <code>read-key-sequence</code> and
+      <code>read-event</code>. Unlike the former, it reads a single
+      key, not a key sequence. Unlike the latter, it does not
+      return a raw event, but decodes and translates the user input
+      according to <code>input-decode-map</code>,
+      <code>local-function-key-map</code>, and
+      <code>key-translation-map</code> (see <a href=
+      "Translation-Keymaps.html#Translation-Keymaps">Translation
+      Keymaps</a>).</p>
+
+      <p>The argument <var>prompt</var> is either a string to be
+      displayed in the echo area as a prompt, or <code>nil</code>,
+      meaning not to display a prompt.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-read_002dchar_002dchoice" id=
+    "index-read_002dchar_002dchoice"></a>Function:
+    <strong>read-char-choice</strong> <em>prompt chars
+    &amp;optional inhibit-quit</em></dt>
+
+    <dd>
+      <p>This function uses <code>read-key</code> to read and
+      return a single character. It ignores any input that is not a
+      member of <var>chars</var>, a list of accepted characters.
+      Optionally, it will also ignore keyboard-quit events while it
+      is waiting for valid input. If you bind
+      <code>help-form</code> (see <a href=
+      "Help-Functions.html#Help-Functions">Help Functions</a>) to a
+      non-<code>nil</code> value while calling
+      <code>read-char-choice</code>, then pressing
+      <code>help-char</code> causes it to evaluate
+      <code>help-form</code> and display the result. It then
+      continues to wait for a valid input character, or
+      keyboard-quit.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Event-Mod.html#Event-Mod" accesskey="n" rel=
+    "next">Event Mod</a>, Previous: <a href=
+    "Key-Sequence-Input.html#Key-Sequence-Input" accesskey="p" rel=
+    "prev">Key Sequence Input</a>, Up: <a href=
+    "Reading-Input.html#Reading-Input" accesskey="u" rel=
+    "up">Reading Input</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

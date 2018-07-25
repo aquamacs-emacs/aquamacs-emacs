@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,94 +19,193 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Coding Systems</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Coding Systems">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Coding Systems">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up" title="Non-ASCII Characters">
-<link href="Coding-System-Basics.html#Coding-System-Basics" rel="next" title="Coding System Basics">
-<link href="Translation-of-Characters.html#Translation-of-Characters" rel="prev" title="Translation of Characters">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Coding Systems</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Coding Systems" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Coding Systems" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up"
+  title="Non-ASCII Characters" />
+  <link href="Coding-System-Basics.html#Coding-System-Basics" rel=
+  "next" title="Coding System Basics" />
+  <link href=
+  "Translation-of-Characters.html#Translation-of-Characters" rel=
+  "prev" title="Translation of Characters" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Coding-Systems" id="Coding-Systems"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Input-Methods.html#Input-Methods" accesskey=
+    "n" rel="next">Input Methods</a>, Previous: <a href=
+    "Translation-of-Characters.html#Translation-of-Characters"
+    accesskey="p" rel="prev">Translation of Characters</a>, Up:
+    <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Coding-Systems-1" id="Coding-Systems-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Coding-Systems"></a>
-<div class="header">
-<p>
-Next: <a href="Input-Methods.html#Input-Methods" accesskey="n" rel="next">Input Methods</a>, Previous: <a href="Translation-of-Characters.html#Translation-of-Characters" accesskey="p" rel="prev">Translation of Characters</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Coding-Systems-1"></a>
-<h3 class="section">32.10 Coding Systems</h3>
+  <h3 class="section">32.10 Coding Systems</h3><a name=
+  "index-coding-system" id="index-coding-system"></a>
 
-<a name="index-coding-system"></a>
-<p>When Emacs reads or writes a file, and when Emacs sends text to a
-subprocess or receives text from a subprocess, it normally performs
-character code conversion and end-of-line conversion as specified
-by a particular <em>coding system</em>.
-</p>
-<p>How to define a coding system is an arcane matter, and is not
-documented here.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Coding-System-Basics.html#Coding-System-Basics" accesskey="1">Coding System Basics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic concepts.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Encoding-and-I_002fO.html#Encoding-and-I_002fO" accesskey="2">Encoding and I/O</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How file I/O functions handle coding systems.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems" accesskey="3">Lisp and Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions to operate on coding system names.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems" accesskey="4">User-Chosen Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Asking the user to choose a coding system.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Default-Coding-Systems.html#Default-Coding-Systems" accesskey="5">Default Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling the default choices.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Specifying-Coding-Systems.html#Specifying-Coding-Systems" accesskey="6">Specifying Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Requesting a particular coding system
-                                    for a single file operation.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Explicit-Encoding.html#Explicit-Encoding" accesskey="7">Explicit Encoding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Encoding or decoding text without doing I/O.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding" accesskey="8">Terminal I/O Encoding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Use of encoding for terminal I/O.
-</td></tr>
-</table>
+  <p>When Emacs reads or writes a file, and when Emacs sends text
+  to a subprocess or receives text from a subprocess, it normally
+  performs character code conversion and end-of-line conversion as
+  specified by a particular <em>coding system</em>.</p>
 
+  <p>How to define a coding system is an arcane matter, and is not
+  documented here.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Coding-System-Basics.html#Coding-System-Basics" accesskey=
+      "1">Coding System Basics</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Basic concepts.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Encoding-and-I_002fO.html#Encoding-and-I_002fO" accesskey=
+      "2">Encoding and I/O</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How file I/O functions handle
+      coding systems.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems"
+      accesskey="3">Lisp and Coding Systems</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions to operate on coding
+      system names.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems"
+      accesskey="4">User-Chosen Coding Systems</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Asking the user to choose a
+      coding system.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Default-Coding-Systems.html#Default-Coding-Systems"
+      accesskey="5">Default Coding Systems</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Controlling the default
+      choices.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Specifying-Coding-Systems.html#Specifying-Coding-Systems"
+      accesskey="6">Specifying Coding Systems</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Requesting a particular coding
+      system for a single file operation.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Explicit-Encoding.html#Explicit-Encoding" accesskey=
+      "7">Explicit Encoding</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Encoding or decoding text
+      without doing I/O.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding"
+      accesskey="8">Terminal I/O Encoding</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Use of encoding for terminal
+      I/O.</td>
+    </tr>
+  </table>
 </body>
 </html>

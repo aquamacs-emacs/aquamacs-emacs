@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,117 +18,239 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Algebra</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Algebra">
-<meta name="keywords" content="GNU Emacs Calc Manual: Algebra">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Selecting-Subformulas.html#Selecting-Subformulas" rel="next" title="Selecting Subformulas">
-<link href="Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats" rel="prev" title="Vector and Matrix Formats">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Algebra</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Algebra" />
+  <meta name="keywords" content="GNU Emacs Calc Manual: Algebra" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Selecting-Subformulas.html#Selecting-Subformulas"
+  rel="next" title="Selecting Subformulas" />
+  <link href=
+  "Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats" rel=
+  "prev" title="Vector and Matrix Formats" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Algebra"></a>
-<div class="header">
-<p>
-Next: <a href="Units.html#Units" accesskey="n" rel="next">Units</a>, Previous: <a href="Matrix-Functions.html#Matrix-Functions" accesskey="p" rel="prev">Matrix Functions</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Algebra-1"></a>
-<h2 class="chapter">10 Algebra</h2>
+<body lang="en" xml:lang="en">
+  <a name="Algebra" id="Algebra"></a>
 
-<p>This section covers the Calc features that help you work with
-algebraic formulas.  First, the general sub-formula selection
-mechanism is described; this works in conjunction with any Calc
-commands.  Then, commands for specific algebraic operations are
-described.  Finally, the flexible <em>rewrite rule</em> mechanism
-is discussed.
-</p>
-<p>The algebraic commands use the <kbd>a</kbd> key prefix; selection
-commands use the <kbd>j</kbd> (for &ldquo;just a letter that wasn&rsquo;t used
-for anything else&rdquo;) prefix.
-</p>
-<p>See <a href="Editing-Stack-Entries.html#Editing-Stack-Entries">Editing Stack Entries</a>, to see how to manipulate formulas
-using regular Emacs editing commands.
-</p>
-<p>When doing algebraic work, you may find several of the Calculator&rsquo;s
-modes to be helpful, including Algebraic Simplification mode (<kbd>m A</kbd>)
-or No-Simplification mode (<kbd>m O</kbd>),
-Algebraic entry mode (<kbd>m a</kbd>), Fraction mode (<kbd>m f</kbd>), and
-Symbolic mode (<kbd>m s</kbd>).  See <a href="Mode-Settings.html#Mode-Settings">Mode Settings</a>, for discussions
-of these modes.  You may also wish to select Big display mode (<kbd>d B</kbd>).
-See <a href="Normal-Language-Modes.html#Normal-Language-Modes">Normal Language Modes</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Selecting-Subformulas.html#Selecting-Subformulas" accesskey="1">Selecting Subformulas</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Algebraic-Manipulation.html#Algebraic-Manipulation" accesskey="2">Algebraic Manipulation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Simplifying-Formulas.html#Simplifying-Formulas" accesskey="3">Simplifying Formulas</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Polynomials.html#Polynomials" accesskey="4">Polynomials</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Calculus.html#Calculus" accesskey="5">Calculus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Solving-Equations.html#Solving-Equations" accesskey="6">Solving Equations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Numerical-Solutions.html#Numerical-Solutions" accesskey="7">Numerical Solutions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Curve-Fitting.html#Curve-Fitting" accesskey="8">Curve Fitting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Summations.html#Summations" accesskey="9">Summations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Logical-Operations.html#Logical-Operations">Logical Operations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Units.html#Units" accesskey="n" rel=
+    "next">Units</a>, Previous: <a href=
+    "Matrix-Functions.html#Matrix-Functions" accesskey="p" rel=
+    "prev">Matrix Functions</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Algebra-1" id="Algebra-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Units.html#Units" accesskey="n" rel="next">Units</a>, Previous: <a href="Matrix-Functions.html#Matrix-Functions" accesskey="p" rel="prev">Matrix Functions</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h2 class="chapter">10 Algebra</h2>
 
+  <p>This section covers the Calc features that help you work with
+  algebraic formulas. First, the general sub-formula selection
+  mechanism is described; this works in conjunction with any Calc
+  commands. Then, commands for specific algebraic operations are
+  described. Finally, the flexible <em>rewrite rule</em> mechanism
+  is discussed.</p>
 
+  <p>The algebraic commands use the <kbd>a</kbd> key prefix;
+  selection commands use the <kbd>j</kbd> (for &ldquo;just a letter
+  that wasn&rsquo;t used for anything else&rdquo;) prefix.</p>
 
+  <p>See <a href=
+  "Editing-Stack-Entries.html#Editing-Stack-Entries">Editing Stack
+  Entries</a>, to see how to manipulate formulas using regular
+  Emacs editing commands.</p>
+
+  <p>When doing algebraic work, you may find several of the
+  Calculator&rsquo;s modes to be helpful, including Algebraic
+  Simplification mode (<kbd>m A</kbd>) or No-Simplification mode
+  (<kbd>m O</kbd>), Algebraic entry mode (<kbd>m a</kbd>), Fraction
+  mode (<kbd>m f</kbd>), and Symbolic mode (<kbd>m s</kbd>). See
+  <a href="Mode-Settings.html#Mode-Settings">Mode Settings</a>, for
+  discussions of these modes. You may also wish to select Big
+  display mode (<kbd>d B</kbd>). See <a href=
+  "Normal-Language-Modes.html#Normal-Language-Modes">Normal
+  Language Modes</a>.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Selecting-Subformulas.html#Selecting-Subformulas" accesskey=
+      "1">Selecting Subformulas</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Algebraic-Manipulation.html#Algebraic-Manipulation"
+      accesskey="2">Algebraic Manipulation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Simplifying-Formulas.html#Simplifying-Formulas" accesskey=
+      "3">Simplifying Formulas</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Polynomials.html#Polynomials" accesskey=
+      "4">Polynomials</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Calculus.html#Calculus" accesskey="5">Calculus</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Solving-Equations.html#Solving-Equations" accesskey=
+      "6">Solving Equations</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Numerical-Solutions.html#Numerical-Solutions" accesskey=
+      "7">Numerical Solutions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Curve-Fitting.html#Curve-Fitting" accesskey="8">Curve
+      Fitting</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Summations.html#Summations" accesskey=
+      "9">Summations</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Logical-Operations.html#Logical-Operations">Logical
+      Operations</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Units.html#Units" accesskey="n" rel=
+    "next">Units</a>, Previous: <a href=
+    "Matrix-Functions.html#Matrix-Functions" accesskey="p" rel=
+    "prev">Matrix Functions</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

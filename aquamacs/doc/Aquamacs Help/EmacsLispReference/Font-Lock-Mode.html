@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,108 +19,219 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Font Lock Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Font Lock Mode">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Font Lock Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Modes.html#Modes" rel="up" title="Modes">
-<link href="Font-Lock-Basics.html#Font-Lock-Basics" rel="next" title="Font Lock Basics">
-<link href="Imenu.html#Imenu" rel="prev" title="Imenu">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Font Lock Mode</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Font Lock Mode" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Font Lock Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Modes.html#Modes" rel="up" title="Modes" />
+  <link href="Font-Lock-Basics.html#Font-Lock-Basics" rel="next"
+  title="Font Lock Basics" />
+  <link href="Imenu.html#Imenu" rel="prev" title="Imenu" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Font-Lock-Mode" id="Font-Lock-Mode"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Auto_002dIndentation.html#Auto_002dIndentation" accesskey="n"
+    rel="next">Auto-Indentation</a>, Previous: <a href=
+    "Imenu.html#Imenu" accesskey="p" rel="prev">Imenu</a>, Up:
+    <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Font-Lock-Mode-1" id="Font-Lock-Mode-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Font-Lock-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="Auto_002dIndentation.html#Auto_002dIndentation" accesskey="n" rel="next">Auto-Indentation</a>, Previous: <a href="Imenu.html#Imenu" accesskey="p" rel="prev">Imenu</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Font-Lock-Mode-1"></a>
-<h3 class="section">22.6 Font Lock Mode</h3>
-<a name="index-Font-Lock-mode"></a>
+  <h3 class="section">22.6 Font Lock Mode</h3><a name=
+  "index-Font-Lock-mode" id="index-Font-Lock-mode"></a>
 
-<p><em>Font Lock mode</em> is a buffer-local minor mode that automatically
-attaches <code>face</code> properties to certain parts of the buffer based on
-their syntactic role.  How it parses the buffer depends on the major
-mode; most major modes define syntactic criteria for which faces to use
-in which contexts.  This section explains how to customize Font Lock for
-a particular major mode.
-</p>
-<p>Font Lock mode finds text to highlight in two ways: through
-syntactic parsing based on the syntax table, and through searching
-(usually for regular expressions).  Syntactic fontification happens
-first; it finds comments and string constants and highlights them.
-Search-based fontification happens second.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Font-Lock-Basics.html#Font-Lock-Basics" accesskey="1">Font Lock Basics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Overview of customizing Font Lock.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Search_002dbased-Fontification.html#Search_002dbased-Fontification" accesskey="2">Search-based Fontification</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Fontification based on regexps.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Customizing-Keywords.html#Customizing-Keywords" accesskey="3">Customizing Keywords</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Customizing search-based fontification.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables" accesskey="4">Other Font Lock Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Additional customization facilities.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Levels-of-Font-Lock.html#Levels-of-Font-Lock" accesskey="5">Levels of Font Lock</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Each mode can define alternative levels
-                                  so that the user can select more or less.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Precalculated-Fontification.html#Precalculated-Fontification" accesskey="6">Precalculated Fontification</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Lisp programs that produce the buffer
-                                  contents can also specify how to fontify it.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Faces-for-Font-Lock.html#Faces-for-Font-Lock" accesskey="7">Faces for Font Lock</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special faces specifically for Font Lock.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Syntactic-Font-Lock.html#Syntactic-Font-Lock" accesskey="8">Syntactic Font Lock</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Fontification based on syntax tables.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Multiline-Font-Lock.html#Multiline-Font-Lock" accesskey="9">Multiline Font Lock</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to coerce Font Lock into properly
-                                  highlighting multiline constructs.
-</td></tr>
-</table>
+  <p><em>Font Lock mode</em> is a buffer-local minor mode that
+  automatically attaches <code>face</code> properties to certain
+  parts of the buffer based on their syntactic role. How it parses
+  the buffer depends on the major mode; most major modes define
+  syntactic criteria for which faces to use in which contexts. This
+  section explains how to customize Font Lock for a particular
+  major mode.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Auto_002dIndentation.html#Auto_002dIndentation" accesskey="n" rel="next">Auto-Indentation</a>, Previous: <a href="Imenu.html#Imenu" accesskey="p" rel="prev">Imenu</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Font Lock mode finds text to highlight in two ways: through
+  syntactic parsing based on the syntax table, and through
+  searching (usually for regular expressions). Syntactic
+  fontification happens first; it finds comments and string
+  constants and highlights them. Search-based fontification happens
+  second.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Font-Lock-Basics.html#Font-Lock-Basics" accesskey="1">Font
+      Lock Basics</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Overview of customizing Font
+      Lock.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Search_002dbased-Fontification.html#Search_002dbased-Fontification"
+      accesskey="2">Search-based Fontification</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Fontification based on
+      regexps.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Customizing-Keywords.html#Customizing-Keywords" accesskey=
+      "3">Customizing Keywords</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Customizing search-based
+      fontification.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Other-Font-Lock-Variables.html#Other-Font-Lock-Variables"
+      accesskey="4">Other Font Lock Variables</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Additional customization
+      facilities.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Levels-of-Font-Lock.html#Levels-of-Font-Lock" accesskey=
+      "5">Levels of Font Lock</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Each mode can define
+      alternative levels so that the user can select more or
+      less.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Precalculated-Fontification.html#Precalculated-Fontification"
+      accesskey="6">Precalculated Fontification</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How Lisp programs that produce
+      the buffer contents can also specify how to fontify it.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Faces-for-Font-Lock.html#Faces-for-Font-Lock" accesskey=
+      "7">Faces for Font Lock</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Special faces specifically for
+      Font Lock.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Syntactic-Font-Lock.html#Syntactic-Font-Lock" accesskey=
+      "8">Syntactic Font Lock</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Fontification based on syntax
+      tables.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Multiline-Font-Lock.html#Multiline-Font-Lock" accesskey=
+      "9">Multiline Font Lock</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to coerce Font Lock into
+      properly highlighting multiline constructs.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Auto_002dIndentation.html#Auto_002dIndentation" accesskey="n"
+    rel="next">Auto-Indentation</a>, Previous: <a href=
+    "Imenu.html#Imenu" accesskey="p" rel="prev">Imenu</a>, Up:
+    <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

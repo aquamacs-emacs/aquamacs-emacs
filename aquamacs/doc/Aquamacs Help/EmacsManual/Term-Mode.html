@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,124 +20,168 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Term Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Term Mode">
-<meta name="keywords" content="GNU Emacs Manual: Term Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Shell.html#Shell" rel="up" title="Shell">
-<link href="Remote-Host.html#Remote-Host" rel="next" title="Remote Host">
-<link href="Terminal-emulator.html#Terminal-emulator" rel="prev" title="Terminal emulator">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Term Mode</title>
+  <meta name="description" content="GNU Emacs Manual: Term Mode" />
+  <meta name="keywords" content="GNU Emacs Manual: Term Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Shell.html#Shell" rel="up" title="Shell" />
+  <link href="Remote-Host.html#Remote-Host" rel="next" title=
+  "Remote Host" />
+  <link href="Terminal-emulator.html#Terminal-emulator" rel="prev"
+  title="Terminal emulator" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Term-Mode" id="Term-Mode"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Remote-Host.html#Remote-Host" accesskey="n"
+    rel="next">Remote Host</a>, Previous: <a href=
+    "Terminal-emulator.html#Terminal-emulator" accesskey="p" rel=
+    "prev">Terminal emulator</a>, Up: <a href="Shell.html#Shell"
+    accesskey="u" rel="up">Shell</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Term-Mode-1" id="Term-Mode-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Term-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="Remote-Host.html#Remote-Host" accesskey="n" rel="next">Remote Host</a>, Previous: <a href="Terminal-emulator.html#Terminal-emulator" accesskey="p" rel="prev">Terminal emulator</a>, Up: <a href="Shell.html#Shell" accesskey="u" rel="up">Shell</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Term-Mode-1"></a>
-<h3 class="section">40.9 Term Mode</h3>
-<a name="index-Term-mode"></a>
-<a name="index-mode_002c-Term"></a>
+  <h3 class="section">40.9 Term Mode</h3><a name="index-Term-mode"
+  id="index-Term-mode"></a> <a name="index-mode_002c-Term" id=
+  "index-mode_002c-Term"></a>
 
-<p>The terminal emulator uses Term mode, which has two input modes.  In
-line mode, Term basically acts like Shell mode (see <a href="Shell-Mode.html#Shell-Mode">Shell Mode</a>).
-In char mode, each character is sent directly to the subshell, except
-for the Term escape character, normally <kbd>C-c</kbd>.
-</p>
-<p>To switch between line and char mode, use these commands:
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002dc-C_002dj-_0028Term-mode_0029"></a>
-<a name="index-term_002dline_002dmode"></a>
-</dd>
-<dt><kbd>C-c C-j</kbd></dt>
-<dd><p>Switch to line mode (<code>term-line-mode</code>).  Do nothing if already in
-line mode.
-</p>
-<a name="index-C_002dc-C_002dk-_0028Term-mode_0029"></a>
-<a name="index-term_002dchar_002dmode"></a>
-</dd>
-<dt><kbd>C-c C-k</kbd></dt>
-<dd><p>Switch to char mode (<code>term-char-mode</code>).  Do nothing if already in
-char mode.
-</p></dd>
-</dl>
+  <p>The terminal emulator uses Term mode, which has two input
+  modes. In line mode, Term basically acts like Shell mode (see
+  <a href="Shell-Mode.html#Shell-Mode">Shell Mode</a>). In char
+  mode, each character is sent directly to the subshell, except for
+  the Term escape character, normally <kbd>C-c</kbd>.</p>
 
-<p>The following commands are only available in char mode:
-</p>
-<dl compact="compact">
-<dt><kbd>C-c C-c</kbd></dt>
-<dd><p>Send a literal <kbd>C-c</kbd> to the sub-shell.
-</p>
-</dd>
-<dt><kbd>C-c <var>char</var></kbd></dt>
-<dd><p>This is equivalent to <kbd>C-x <var>char</var></kbd> in normal Emacs.  For
-example, <kbd>C-c o</kbd> invokes the global binding of <kbd>C-x o</kbd>, which
-is normally &lsquo;<samp>other-window</samp>&rsquo;.
-</p></dd>
-</dl>
+  <p>To switch between line and char mode, use these commands:</p>
 
-<a name="index-paging-in-Term-mode"></a>
-<p>Term mode has a page-at-a-time feature.  When enabled, it makes
-output pause at the end of each screenful:
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002dc-C_002dq-_0028Term-mode_0029"></a>
-<a name="index-term_002dpager_002dtoggle"></a>
-</dd>
-<dt><kbd>C-c C-q</kbd></dt>
-<dd><p>Toggle the page-at-a-time feature.  This command works in both line
-and char modes.  When the feature is enabled, the mode-line displays
-the word &lsquo;<samp>page</samp>&rsquo;, and each time Term receives more than a
-screenful of output, it pauses and displays &lsquo;<samp>**MORE**</samp>&rsquo; in the
-mode-line.  Type <tt class="key">SPC</tt> to display the next screenful of output, or
-<kbd>?</kbd> to see your other options.  The interface is similar to the
-<code>more</code> program.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-C_002dj-_0028Term-mode_0029" id=
+    "index-C_002dc-C_002dj-_0028Term-mode_0029"></a> <a name=
+    "index-term_002dline_002dmode" id=
+    "index-term_002dline_002dmode"></a></dd>
 
+    <dt><kbd>C-c C-j</kbd></dt>
 
+    <dd>
+      <p>Switch to line mode (<code>term-line-mode</code>). Do
+      nothing if already in line mode.</p><a name=
+      "index-C_002dc-C_002dk-_0028Term-mode_0029" id=
+      "index-C_002dc-C_002dk-_0028Term-mode_0029"></a> <a name=
+      "index-term_002dchar_002dmode" id=
+      "index-term_002dchar_002dmode"></a>
+    </dd>
 
+    <dt><kbd>C-c C-k</kbd></dt>
 
+    <dd>
+      <p>Switch to char mode (<code>term-char-mode</code>). Do
+      nothing if already in char mode.</p>
+    </dd>
+  </dl>
+
+  <p>The following commands are only available in char mode:</p>
+
+  <dl compact="compact">
+    <dt><kbd>C-c C-c</kbd></dt>
+
+    <dd>
+      <p>Send a literal <kbd>C-c</kbd> to the sub-shell.</p>
+    </dd>
+
+    <dt><kbd>C-c <var>char</var></kbd></dt>
+
+    <dd>
+      <p>This is equivalent to <kbd>C-x <var>char</var></kbd> in
+      normal Emacs. For example, <kbd>C-c o</kbd> invokes the
+      global binding of <kbd>C-x o</kbd>, which is normally
+      &lsquo;<samp>other-window</samp>&rsquo;.</p>
+    </dd>
+  </dl><a name="index-paging-in-Term-mode" id=
+  "index-paging-in-Term-mode"></a>
+
+  <p>Term mode has a page-at-a-time feature. When enabled, it makes
+  output pause at the end of each screenful:</p>
+
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-C_002dq-_0028Term-mode_0029" id=
+    "index-C_002dc-C_002dq-_0028Term-mode_0029"></a> <a name=
+    "index-term_002dpager_002dtoggle" id=
+    "index-term_002dpager_002dtoggle"></a></dd>
+
+    <dt><kbd>C-c C-q</kbd></dt>
+
+    <dd>
+      <p>Toggle the page-at-a-time feature. This command works in
+      both line and char modes. When the feature is enabled, the
+      mode-line displays the word &lsquo;<samp>page</samp>&rsquo;,
+      and each time Term receives more than a screenful of output,
+      it pauses and displays &lsquo;<samp>**MORE**</samp>&rsquo; in
+      the mode-line. Type <tt class="key">SPC</tt> to display the
+      next screenful of output, or <kbd>?</kbd> to see your other
+      options. The interface is similar to the <code>more</code>
+      program.</p>
+    </dd>
+  </dl>
 </body>
 </html>

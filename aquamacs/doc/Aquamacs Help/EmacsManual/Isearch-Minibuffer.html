@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,86 +20,120 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Isearch Minibuffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Isearch Minibuffer">
-<meta name="keywords" content="GNU Emacs Manual: Isearch Minibuffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Incremental-Search.html#Incremental-Search" rel="up" title="Incremental Search">
-<link href="Nonincremental-Search.html#Nonincremental-Search" rel="next" title="Nonincremental Search">
-<link href="Not-Exiting-Isearch.html#Not-Exiting-Isearch" rel="prev" title="Not Exiting Isearch">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Isearch Minibuffer</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Isearch Minibuffer" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Isearch Minibuffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Incremental-Search.html#Incremental-Search" rel="up"
+  title="Incremental Search" />
+  <link href="Nonincremental-Search.html#Nonincremental-Search"
+  rel="next" title="Nonincremental Search" />
+  <link href="Not-Exiting-Isearch.html#Not-Exiting-Isearch" rel=
+  "prev" title="Not Exiting Isearch" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Isearch-Minibuffer" id="Isearch-Minibuffer"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Not-Exiting-Isearch.html#Not-Exiting-Isearch" accesskey="p"
+    rel="prev">Not Exiting Isearch</a>, Up: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="u" rel=
+    "up">Incremental Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Searching-the-Minibuffer" id=
+  "Searching-the-Minibuffer"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Isearch-Minibuffer"></a>
-<div class="header">
-<p>
-Previous: <a href="Not-Exiting-Isearch.html#Not-Exiting-Isearch" accesskey="p" rel="prev">Not Exiting Isearch</a>, Up: <a href="Incremental-Search.html#Incremental-Search" accesskey="u" rel="up">Incremental Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Searching-the-Minibuffer"></a>
-<h4 class="subsection">15.1.7 Searching the Minibuffer</h4>
-<a name="index-minibuffer-history_002c-searching"></a>
+  <h4 class="subsection">15.1.7 Searching the
+  Minibuffer</h4><a name="index-minibuffer-history_002c-searching"
+  id="index-minibuffer-history_002c-searching"></a>
 
-<p>If you start an incremental search while the minibuffer is active,
-Emacs searches the contents of the minibuffer.  Unlike searching an
-ordinary buffer, the search string is not shown in the echo area,
-because that is used to display the minibuffer.
-</p>
-<p>If an incremental search fails in the minibuffer, it tries searching
-the minibuffer history.  See <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>.  You can visualize
-the minibuffer and its history as a series of pages, with the
-earliest history element on the first page and the current minibuffer
-on the last page.  A forward search, <kbd>C-s</kbd>, searches forward to
-later pages; a reverse search, <kbd>C-r</kbd>, searches backwards to
-earlier pages.  Like in ordinary buffer search, a failing search can
-wrap around, going from the last page to the first page or vice versa.
-</p>
-<p>When the current match is on a history element, that history element
-is pulled into the minibuffer.  If you exit the incremental search
-normally (e.g., by typing <tt class="key">RET</tt>), it remains in the minibuffer
-afterwards.  Canceling the search, with <kbd>C-g</kbd>, restores the
-contents of the minibuffer when you began the search.
-</p>
+  <p>If you start an incremental search while the minibuffer is
+  active, Emacs searches the contents of the minibuffer. Unlike
+  searching an ordinary buffer, the search string is not shown in
+  the echo area, because that is used to display the
+  minibuffer.</p>
 
+  <p>If an incremental search fails in the minibuffer, it tries
+  searching the minibuffer history. See <a href=
+  "Minibuffer-History.html#Minibuffer-History">Minibuffer
+  History</a>. You can visualize the minibuffer and its history as
+  a series of pages, with the earliest history element on the first
+  page and the current minibuffer on the last page. A forward
+  search, <kbd>C-s</kbd>, searches forward to later pages; a
+  reverse search, <kbd>C-r</kbd>, searches backwards to earlier
+  pages. Like in ordinary buffer search, a failing search can wrap
+  around, going from the last page to the first page or vice
+  versa.</p>
 
-
+  <p>When the current match is on a history element, that history
+  element is pulled into the minibuffer. If you exit the
+  incremental search normally (e.g., by typing <tt class=
+  "key">RET</tt>), it remains in the minibuffer afterwards.
+  Canceling the search, with <kbd>C-g</kbd>, restores the contents
+  of the minibuffer when you began the search.</p>
 </body>
 </html>

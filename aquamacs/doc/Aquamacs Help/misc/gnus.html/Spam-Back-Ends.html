@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,96 +14,216 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Spam Back Ends</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Spam Back Ends">
-<meta name="keywords" content="Gnus Manual: Spam Back Ends">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Package.html#Spam-Package" rel="up" title="Spam Package">
-<link href="Blacklists-and-Whitelists.html#Blacklists-and-Whitelists" rel="next" title="Blacklists and Whitelists">
-<link href="Spam-Package-Configuration-Examples.html#Spam-Package-Configuration-Examples" rel="prev" title="Spam Package Configuration Examples">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Spam Back Ends</title>
+  <meta name="description" content="Gnus Manual: Spam Back Ends" />
+  <meta name="keywords" content="Gnus Manual: Spam Back Ends" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Package.html#Spam-Package" rel="up" title=
+  "Spam Package" />
+  <link href=
+  "Blacklists-and-Whitelists.html#Blacklists-and-Whitelists" rel=
+  "next" title="Blacklists and Whitelists" />
+  <link href=
+  "Spam-Package-Configuration-Examples.html#Spam-Package-Configuration-Examples"
+  rel="prev" title="Spam Package Configuration Examples" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Spam-Back-Ends"></a>
-<div class="header">
-<p>
-Next: <a href="Extending-the-Spam-package.html#Extending-the-Spam-package" accesskey="n" rel="next">Extending the Spam package</a>, Previous: <a href="Spam-Package-Configuration-Examples.html#Spam-Package-Configuration-Examples" accesskey="p" rel="prev">Spam Package Configuration Examples</a>, Up: <a href="Spam-Package.html#Spam-Package" accesskey="u" rel="up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Spam-Back-Ends-1"></a>
-<h4 class="subsection">9.17.6 Spam Back Ends</h4>
-<a name="index-spam-back-ends-1"></a>
+<body lang="en" xml:lang="en">
+  <a name="Spam-Back-Ends" id="Spam-Back-Ends"></a>
 
-<p>The spam package offers a variety of back ends for detecting spam.
-Each back end defines a set of methods for detecting spam
-(see <a href="Filtering-Incoming-Mail.html#Filtering-Incoming-Mail">Filtering Incoming Mail</a>, see <a href="Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups">Detecting Spam in Groups</a>),
-and a pair of spam and ham processors (see <a href="Spam-and-Ham-Processors.html#Spam-and-Ham-Processors">Spam and Ham Processors</a>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Blacklists-and-Whitelists.html#Blacklists-and-Whitelists" accesskey="1">Blacklists and Whitelists</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="BBDB-Whitelists.html#BBDB-Whitelists" accesskey="2">BBDB Whitelists</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Gmane-Spam-Reporting.html#Gmane-Spam-Reporting" accesskey="3">Gmane Spam Reporting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments" accesskey="4">Anti-spam Hashcash Payments</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Blackholes.html#Blackholes" accesskey="5">Blackholes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching" accesskey="6">Regular Expressions Header Matching</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Bogofilter.html#Bogofilter" accesskey="7">Bogofilter</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="SpamAssassin-back-end.html#SpamAssassin-back-end" accesskey="8">SpamAssassin back end</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="ifile-spam-filtering.html#ifile-spam-filtering" accesskey="9">ifile spam filtering</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Spam-Statistics-Filtering.html#Spam-Statistics-Filtering">Spam Statistics Filtering</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="SpamOracle.html#SpamOracle">SpamOracle</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href=
+    "Extending-the-Spam-package.html#Extending-the-Spam-package"
+    accesskey="n" rel="next">Extending the Spam package</a>,
+    Previous: <a href=
+    "Spam-Package-Configuration-Examples.html#Spam-Package-Configuration-Examples"
+    accesskey="p" rel="prev">Spam Package Configuration
+    Examples</a>, Up: <a href="Spam-Package.html#Spam-Package"
+    accesskey="u" rel="up">Spam Package</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Spam-Back-Ends-1" id="Spam-Back-Ends-1"></a>
 
+  <h4 class="subsection">9.17.6 Spam Back Ends</h4><a name=
+  "index-spam-back-ends-1" id="index-spam-back-ends-1"></a>
 
+  <p>The spam package offers a variety of back ends for detecting
+  spam. Each back end defines a set of methods for detecting spam
+  (see <a href=
+  "Filtering-Incoming-Mail.html#Filtering-Incoming-Mail">Filtering
+  Incoming Mail</a>, see <a href=
+  "Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups">Detecting
+  Spam in Groups</a>), and a pair of spam and ham processors (see
+  <a href=
+  "Spam-and-Ham-Processors.html#Spam-and-Ham-Processors">Spam and
+  Ham Processors</a>).</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Blacklists-and-Whitelists.html#Blacklists-and-Whitelists"
+      accesskey="1">Blacklists and Whitelists</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "BBDB-Whitelists.html#BBDB-Whitelists" accesskey="2">BBDB
+      Whitelists</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Gmane-Spam-Reporting.html#Gmane-Spam-Reporting" accesskey=
+      "3">Gmane Spam Reporting</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments"
+      accesskey="4">Anti-spam Hashcash Payments</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Blackholes.html#Blackholes" accesskey=
+      "5">Blackholes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching"
+      accesskey="6">Regular Expressions Header Matching</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Bogofilter.html#Bogofilter" accesskey=
+      "7">Bogofilter</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "SpamAssassin-back-end.html#SpamAssassin-back-end" accesskey=
+      "8">SpamAssassin back end</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "ifile-spam-filtering.html#ifile-spam-filtering" accesskey=
+      "9">ifile spam filtering</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Spam-Statistics-Filtering.html#Spam-Statistics-Filtering">Spam
+      Statistics Filtering</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "SpamOracle.html#SpamOracle">SpamOracle</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

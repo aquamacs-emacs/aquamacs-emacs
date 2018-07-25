@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,147 +19,226 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Read Only Buffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Read Only Buffers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Read Only Buffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffers.html#Buffers" rel="up" title="Buffers">
-<link href="Buffer-List.html#Buffer-List" rel="next" title="Buffer List">
-<link href="Modification-Time.html#Modification-Time" rel="prev" title="Modification Time">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Read Only Buffers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Read Only Buffers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Read Only Buffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffers.html#Buffers" rel="up" title="Buffers" />
+  <link href="Buffer-List.html#Buffer-List" rel="next" title=
+  "Buffer List" />
+  <link href="Modification-Time.html#Modification-Time" rel="prev"
+  title="Modification Time" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Read-Only-Buffers" id="Read-Only-Buffers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Buffer-List.html#Buffer-List" accesskey="n"
+    rel="next">Buffer List</a>, Previous: <a href=
+    "Modification-Time.html#Modification-Time" accesskey="p" rel=
+    "prev">Modification Time</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Read_002dOnly-Buffers" id="Read_002dOnly-Buffers"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Read-Only-Buffers"></a>
-<div class="header">
-<p>
-Next: <a href="Buffer-List.html#Buffer-List" accesskey="n" rel="next">Buffer List</a>, Previous: <a href="Modification-Time.html#Modification-Time" accesskey="p" rel="prev">Modification Time</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Read_002dOnly-Buffers"></a>
-<h3 class="section">26.7 Read-Only Buffers</h3>
-<a name="index-read_002donly-buffer"></a>
-<a name="index-buffer_002c-read_002donly"></a>
+  <h3 class="section">26.7 Read-Only Buffers</h3><a name=
+  "index-read_002donly-buffer" id="index-read_002donly-buffer"></a>
+  <a name="index-buffer_002c-read_002donly" id=
+  "index-buffer_002c-read_002donly"></a>
 
-<p>If a buffer is <em>read-only</em>, then you cannot change its contents,
-although you may change your view of the contents by scrolling and
-narrowing.
-</p>
-<p>Read-only buffers are used in two kinds of situations:
-</p>
-<ul>
-<li> A buffer visiting a write-protected file is normally read-only.
+  <p>If a buffer is <em>read-only</em>, then you cannot change its
+  contents, although you may change your view of the contents by
+  scrolling and narrowing.</p>
 
-<p>Here, the purpose is to inform the user that editing the buffer with the
-aim of saving it in the file may be futile or undesirable.  The user who
-wants to change the buffer text despite this can do so after clearing
-the read-only flag with <kbd>C-x C-q</kbd>.
-</p>
-</li><li> Modes such as Dired and Rmail make buffers read-only when altering the
-contents with the usual editing commands would probably be a mistake.
+  <p>Read-only buffers are used in two kinds of situations:</p>
 
-<p>The special commands of these modes bind <code>buffer-read-only</code> to
-<code>nil</code> (with <code>let</code>) or bind <code>inhibit-read-only</code> to
-<code>t</code> around the places where they themselves change the text.
-</p></li></ul>
+  <ul>
+    <li>A buffer visiting a write-protected file is normally
+    read-only.
 
-<dl>
-<dt><a name="index-buffer_002dread_002donly"></a>Variable: <strong>buffer-read-only</strong></dt>
-<dd><p>This buffer-local variable specifies whether the buffer is read-only.
-The buffer is read-only if this variable is non-<code>nil</code>.  However,
-characters that have the <code>inhibit-read-only</code> text property can
-still be modified.  See <a href="Special-Properties.html#Special-Properties">inhibit-read-only</a>.
-</p></dd></dl>
+      <p>Here, the purpose is to inform the user that editing the
+      buffer with the aim of saving it in the file may be futile or
+      undesirable. The user who wants to change the buffer text
+      despite this can do so after clearing the read-only flag with
+      <kbd>C-x C-q</kbd>.</p>
+    </li>
 
-<dl>
-<dt><a name="index-inhibit_002dread_002donly"></a>Variable: <strong>inhibit-read-only</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, then read-only buffers and,
-depending on the actual value, some or all read-only characters may be
-modified.  Read-only characters in a buffer are those that have a
-non-<code>nil</code> <code>read-only</code> text property.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>, for more information about text properties.
-</p>
-<p>If <code>inhibit-read-only</code> is <code>t</code>, all <code>read-only</code> character
-properties have no effect.  If <code>inhibit-read-only</code> is a list, then
-<code>read-only</code> character properties have no effect if they are members
-of the list (comparison is done with <code>eq</code>).
-</p></dd></dl>
+    <li>Modes such as Dired and Rmail make buffers read-only when
+    altering the contents with the usual editing commands would
+    probably be a mistake.
 
-<dl>
-<dt><a name="index-read_002donly_002dmode"></a>Command: <strong>read-only-mode</strong> <em>&amp;optional arg</em></dt>
-<dd><p>This is the mode command for Read Only minor mode, a buffer-local
-minor mode.  When the mode is enabled, <code>buffer-read-only</code> is
-non-<code>nil</code> in the buffer; when disabled, <code>buffer-read-only</code>
-is <code>nil</code> in the buffer.  The calling convention is the same as
-for other minor mode commands (see <a href="Minor-Mode-Conventions.html#Minor-Mode-Conventions">Minor Mode Conventions</a>).
-</p>
-<p>This minor mode mainly serves as a wrapper for
-<code>buffer-read-only</code>; unlike most minor modes, there is no separate
-<code>read-only-mode</code> variable.  Even when Read Only mode is disabled,
-characters with non-<code>nil</code> <code>read-only</code> text properties remain
-read-only.  To temporarily ignore all read-only states, bind
-<code>inhibit-read-only</code>, as described above.
-</p>
-<p>When enabling Read Only mode, this mode command also enables View mode
-if the option <code>view-read-only</code> is non-<code>nil</code>.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Misc-Buffer.html#Misc-Buffer">Miscellaneous Buffer Operations</a> in <cite>The GNU Emacs Manual</cite>.
-When disabling Read Only mode, it disables View mode if View mode was
-enabled.
-</p></dd></dl>
+      <p>The special commands of these modes bind
+      <code>buffer-read-only</code> to <code>nil</code> (with
+      <code>let</code>) or bind <code>inhibit-read-only</code> to
+      <code>t</code> around the places where they themselves change
+      the text.</p>
+    </li>
+  </ul>
 
-<dl>
-<dt><a name="index-barf_002dif_002dbuffer_002dread_002donly"></a>Function: <strong>barf-if-buffer-read-only</strong> <em>&amp;optional position</em></dt>
-<dd><p>This function signals a <code>buffer-read-only</code> error if the current
-buffer is read-only.  If the text at <var>position</var> (which defaults to
-point) has the <code>inhibit-read-only</code> text property set, the error
-will not be raised.
-</p>
-<p>See <a href="Using-Interactive.html#Using-Interactive">Using Interactive</a>, for another way to signal an error if the
-current buffer is read-only.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-buffer_002dread_002donly" id=
+    "index-buffer_002dread_002donly"></a>Variable:
+    <strong>buffer-read-only</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Buffer-List.html#Buffer-List" accesskey="n" rel="next">Buffer List</a>, Previous: <a href="Modification-Time.html#Modification-Time" accesskey="p" rel="prev">Modification Time</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This buffer-local variable specifies whether the buffer is
+      read-only. The buffer is read-only if this variable is
+      non-<code>nil</code>. However, characters that have the
+      <code>inhibit-read-only</code> text property can still be
+      modified. See <a href=
+      "Special-Properties.html#Special-Properties">inhibit-read-only</a>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-inhibit_002dread_002donly" id=
+    "index-inhibit_002dread_002donly"></a>Variable:
+    <strong>inhibit-read-only</strong></dt>
 
+    <dd>
+      <p>If this variable is non-<code>nil</code>, then read-only
+      buffers and, depending on the actual value, some or all
+      read-only characters may be modified. Read-only characters in
+      a buffer are those that have a non-<code>nil</code>
+      <code>read-only</code> text property. See <a href=
+      "Special-Properties.html#Special-Properties">Special
+      Properties</a>, for more information about text
+      properties.</p>
 
+      <p>If <code>inhibit-read-only</code> is <code>t</code>, all
+      <code>read-only</code> character properties have no effect.
+      If <code>inhibit-read-only</code> is a list, then
+      <code>read-only</code> character properties have no effect if
+      they are members of the list (comparison is done with
+      <code>eq</code>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-read_002donly_002dmode" id=
+    "index-read_002donly_002dmode"></a>Command:
+    <strong>read-only-mode</strong> <em>&amp;optional arg</em></dt>
+
+    <dd>
+      <p>This is the mode command for Read Only minor mode, a
+      buffer-local minor mode. When the mode is enabled,
+      <code>buffer-read-only</code> is non-<code>nil</code> in the
+      buffer; when disabled, <code>buffer-read-only</code> is
+      <code>nil</code> in the buffer. The calling convention is the
+      same as for other minor mode commands (see <a href=
+      "Minor-Mode-Conventions.html#Minor-Mode-Conventions">Minor
+      Mode Conventions</a>).</p>
+
+      <p>This minor mode mainly serves as a wrapper for
+      <code>buffer-read-only</code>; unlike most minor modes, there
+      is no separate <code>read-only-mode</code> variable. Even
+      when Read Only mode is disabled, characters with
+      non-<code>nil</code> <code>read-only</code> text properties
+      remain read-only. To temporarily ignore all read-only states,
+      bind <code>inhibit-read-only</code>, as described above.</p>
+
+      <p>When enabling Read Only mode, this mode command also
+      enables View mode if the option <code>view-read-only</code>
+      is non-<code>nil</code>. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Misc-Buffer.html#Misc-Buffer">
+      Miscellaneous Buffer Operations</a> in <cite>The GNU Emacs
+      Manual</cite>. When disabling Read Only mode, it disables
+      View mode if View mode was enabled.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-barf_002dif_002dbuffer_002dread_002donly"
+    id="index-barf_002dif_002dbuffer_002dread_002donly"></a>Function:
+    <strong>barf-if-buffer-read-only</strong> <em>&amp;optional
+    position</em></dt>
+
+    <dd>
+      <p>This function signals a <code>buffer-read-only</code>
+      error if the current buffer is read-only. If the text at
+      <var>position</var> (which defaults to point) has the
+      <code>inhibit-read-only</code> text property set, the error
+      will not be raised.</p>
+
+      <p>See <a href=
+      "Using-Interactive.html#Using-Interactive">Using
+      Interactive</a>, for another way to signal an error if the
+      current buffer is read-only.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Buffer-List.html#Buffer-List" accesskey="n"
+    rel="next">Buffer List</a>, Previous: <a href=
+    "Modification-Time.html#Modification-Time" accesskey="p" rel=
+    "prev">Modification Time</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

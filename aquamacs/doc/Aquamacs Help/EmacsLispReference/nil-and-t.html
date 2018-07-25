@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,116 +19,166 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: nil and t</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: nil and t">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: nil and t">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Conventions.html#Conventions" rel="up" title="Conventions">
-<link href="Evaluation-Notation.html#Evaluation-Notation" rel="next" title="Evaluation Notation">
-<link href="Some-Terms.html#Some-Terms" rel="prev" title="Some Terms">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: nil and t</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: nil and t" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: nil and t" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Conventions.html#Conventions" rel="up" title=
+  "Conventions" />
+  <link href="Evaluation-Notation.html#Evaluation-Notation" rel=
+  "next" title="Evaluation Notation" />
+  <link href="Some-Terms.html#Some-Terms" rel="prev" title=
+  "Some Terms" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="nil-and-t" id="nil-and-t"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Evaluation-Notation.html#Evaluation-Notation"
+    accesskey="n" rel="next">Evaluation Notation</a>, Previous:
+    <a href="Some-Terms.html#Some-Terms" accesskey="p" rel=
+    "prev">Some Terms</a>, Up: <a href=
+    "Conventions.html#Conventions" accesskey="u" rel=
+    "up">Conventions</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="nil-and-t-1" id="nil-and-t-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="nil-and-t"></a>
-<div class="header">
-<p>
-Next: <a href="Evaluation-Notation.html#Evaluation-Notation" accesskey="n" rel="next">Evaluation Notation</a>, Previous: <a href="Some-Terms.html#Some-Terms" accesskey="p" rel="prev">Some Terms</a>, Up: <a href="Conventions.html#Conventions" accesskey="u" rel="up">Conventions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="nil-and-t-1"></a>
-<h4 class="subsection">1.3.2 <code>nil</code> and <code>t</code></h4>
-<a name="index-truth-value"></a>
-<a name="index-boolean"></a>
+  <h4 class="subsection">1.3.2 <code>nil</code> and
+  <code>t</code></h4><a name="index-truth-value" id=
+  "index-truth-value"></a> <a name="index-boolean" id=
+  "index-boolean"></a> <a name="index-nil" id="index-nil"></a>
+  <a name="index-false" id="index-false"></a>
 
-<a name="index-nil"></a>
-<a name="index-false"></a>
-<p>In Emacs Lisp, the symbol <code>nil</code> has three separate meanings: it
-is a symbol with the name &lsquo;<samp>nil</samp>&rsquo;; it is the logical truth value
-<var>false</var>; and it is the empty list&mdash;the list of zero elements.
-When used as a variable, <code>nil</code> always has the value <code>nil</code>.
-</p>
-<p>As far as the Lisp reader is concerned, &lsquo;<samp>()</samp>&rsquo; and &lsquo;<samp>nil</samp>&rsquo; are
-identical: they stand for the same object, the symbol <code>nil</code>.  The
-different ways of writing the symbol are intended entirely for human
-readers.  After the Lisp reader has read either &lsquo;<samp>()</samp>&rsquo; or &lsquo;<samp>nil</samp>&rsquo;,
-there is no way to determine which representation was actually written
-by the programmer.
-</p>
-<p>In this manual, we write <code>()</code> when we wish to emphasize that it
-means the empty list, and we write <code>nil</code> when we wish to emphasize
-that it means the truth value <var>false</var>.  That is a good convention to use
-in Lisp programs also.
-</p>
-<div class="example">
-<pre class="example">(cons 'foo ())                ; <span class="roman">Emphasize the empty list</span>
-(setq foo-flag nil)           ; <span class="roman">Emphasize the truth value <var>false</var></span>
-</pre></div>
+  <p>In Emacs Lisp, the symbol <code>nil</code> has three separate
+  meanings: it is a symbol with the name
+  &lsquo;<samp>nil</samp>&rsquo;; it is the logical truth value
+  <var>false</var>; and it is the empty list&mdash;the list of zero
+  elements. When used as a variable, <code>nil</code> always has
+  the value <code>nil</code>.</p>
 
-<a name="index-t"></a>
-<a name="index-true"></a>
-<p>In contexts where a truth value is expected, any non-<code>nil</code> value
-is considered to be <var>true</var>.  However, <code>t</code> is the preferred way
-to represent the truth value <var>true</var>.  When you need to choose a
-value that represents <var>true</var>, and there is no other basis for
-choosing, use <code>t</code>.  The symbol <code>t</code> always has the value
-<code>t</code>.
-</p>
-<p>In Emacs Lisp, <code>nil</code> and <code>t</code> are special symbols that always
-evaluate to themselves.  This is so that you do not need to quote them
-to use them as constants in a program.  An attempt to change their
-values results in a <code>setting-constant</code> error.  See <a href="Constant-Variables.html#Constant-Variables">Constant Variables</a>.
-</p>
-<dl>
-<dt><a name="index-booleanp"></a>Function: <strong>booleanp</strong> <em>object</em></dt>
-<dd><p>Return non-<code>nil</code> if <var>object</var> is one of the two canonical
-boolean values: <code>t</code> or <code>nil</code>.
-</p></dd></dl>
+  <p>As far as the Lisp reader is concerned,
+  &lsquo;<samp>()</samp>&rsquo; and &lsquo;<samp>nil</samp>&rsquo;
+  are identical: they stand for the same object, the symbol
+  <code>nil</code>. The different ways of writing the symbol are
+  intended entirely for human readers. After the Lisp reader has
+  read either &lsquo;<samp>()</samp>&rsquo; or
+  &lsquo;<samp>nil</samp>&rsquo;, there is no way to determine
+  which representation was actually written by the programmer.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Evaluation-Notation.html#Evaluation-Notation" accesskey="n" rel="next">Evaluation Notation</a>, Previous: <a href="Some-Terms.html#Some-Terms" accesskey="p" rel="prev">Some Terms</a>, Up: <a href="Conventions.html#Conventions" accesskey="u" rel="up">Conventions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In this manual, we write <code>()</code> when we wish to
+  emphasize that it means the empty list, and we write
+  <code>nil</code> when we wish to emphasize that it means the
+  truth value <var>false</var>. That is a good convention to use in
+  Lisp programs also.</p>
 
+  <div class="example">
+    <pre class="example">
+(cons 'foo ())                ; <span class=
+"roman">Emphasize the empty list</span>
+(setq foo-flag nil)           ; <span class=
+"roman">Emphasize the truth value <var>false</var></span>
+</pre>
+  </div><a name="index-t" id="index-t"></a> <a name="index-true"
+  id="index-true"></a>
 
+  <p>In contexts where a truth value is expected, any
+  non-<code>nil</code> value is considered to be <var>true</var>.
+  However, <code>t</code> is the preferred way to represent the
+  truth value <var>true</var>. When you need to choose a value that
+  represents <var>true</var>, and there is no other basis for
+  choosing, use <code>t</code>. The symbol <code>t</code> always
+  has the value <code>t</code>.</p>
 
+  <p>In Emacs Lisp, <code>nil</code> and <code>t</code> are special
+  symbols that always evaluate to themselves. This is so that you
+  do not need to quote them to use them as constants in a program.
+  An attempt to change their values results in a
+  <code>setting-constant</code> error. See <a href=
+  "Constant-Variables.html#Constant-Variables">Constant
+  Variables</a>.</p>
+
+  <dl>
+    <dt><a name="index-booleanp" id="index-booleanp"></a>Function:
+    <strong>booleanp</strong> <em>object</em></dt>
+
+    <dd>
+      <p>Return non-<code>nil</code> if <var>object</var> is one of
+      the two canonical boolean values: <code>t</code> or
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Evaluation-Notation.html#Evaluation-Notation"
+    accesskey="n" rel="next">Evaluation Notation</a>, Previous:
+    <a href="Some-Terms.html#Some-Terms" accesskey="p" rel=
+    "prev">Some Terms</a>, Up: <a href=
+    "Conventions.html#Conventions" accesskey="u" rel=
+    "up">Conventions</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

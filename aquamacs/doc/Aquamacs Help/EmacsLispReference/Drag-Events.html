@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,99 +19,134 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Drag Events</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Drag Events">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Drag Events">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Input-Events.html#Input-Events" rel="up" title="Input Events">
-<link href="Button_002dDown-Events.html#Button_002dDown-Events" rel="next" title="Button-Down Events">
-<link href="Click-Events.html#Click-Events" rel="prev" title="Click Events">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Drag Events</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Drag Events" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Drag Events" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Input-Events.html#Input-Events" rel="up" title=
+  "Input Events" />
+  <link href="Button_002dDown-Events.html#Button_002dDown-Events"
+  rel="next" title="Button-Down Events" />
+  <link href="Click-Events.html#Click-Events" rel="prev" title=
+  "Click Events" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Drag-Events" id="Drag-Events"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Button_002dDown-Events.html#Button_002dDown-Events" accesskey=
+    "n" rel="next">Button-Down Events</a>, Previous: <a href=
+    "Click-Events.html#Click-Events" accesskey="p" rel="prev">Click
+    Events</a>, Up: <a href="Input-Events.html#Input-Events"
+    accesskey="u" rel="up">Input Events</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Drag-Events-1" id="Drag-Events-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Drag-Events"></a>
-<div class="header">
-<p>
-Next: <a href="Button_002dDown-Events.html#Button_002dDown-Events" accesskey="n" rel="next">Button-Down Events</a>, Previous: <a href="Click-Events.html#Click-Events" accesskey="p" rel="prev">Click Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Drag-Events-1"></a>
-<h4 class="subsection">20.7.5 Drag Events</h4>
-<a name="index-drag-event"></a>
-<a name="index-mouse-drag-event"></a>
+  <h4 class="subsection">20.7.5 Drag Events</h4><a name=
+  "index-drag-event" id="index-drag-event"></a> <a name=
+  "index-mouse-drag-event" id="index-mouse-drag-event"></a>
 
-<p>With Emacs, you can have a drag event without even changing your
-clothes.  A <em>drag event</em> happens every time the user presses a mouse
-button and then moves the mouse to a different character position before
-releasing the button.  Like all mouse events, drag events are
-represented in Lisp as lists.  The lists record both the starting mouse
-position and the final position, like this:
-</p>
-<div class="example">
-<pre class="example">(<var>event-type</var>
+  <p>With Emacs, you can have a drag event without even changing
+  your clothes. A <em>drag event</em> happens every time the user
+  presses a mouse button and then moves the mouse to a different
+  character position before releasing the button. Like all mouse
+  events, drag events are represented in Lisp as lists. The lists
+  record both the starting mouse position and the final position,
+  like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(<var>event-type</var>
  (<var>window1</var> START-POSITION)
  (<var>window2</var> END-POSITION))
-</pre></div>
+</pre>
+  </div>
 
-<p>For a drag event, the name of the symbol <var>event-type</var> contains the
-prefix &lsquo;<samp>drag-</samp>&rsquo;.  For example, dragging the mouse with button 2
-held down generates a <code>drag-mouse-2</code> event.  The second and third
-elements of the event give the starting and ending position of the
-drag, as mouse position lists (see <a href="Click-Events.html#Click-Events">Click Events</a>).  You can access
-the second element of any mouse event in the same way.  However, the
-drag event may end outside the boundaries of the frame that was
-initially selected.  In that case, the third element&rsquo;s position list
-contains that frame in place of a window.
-</p>
-<p>The &lsquo;<samp>drag-</samp>&rsquo; prefix follows the modifier key prefixes such as
-&lsquo;<samp>C-</samp>&rsquo; and &lsquo;<samp>M-</samp>&rsquo;.
-</p>
-<p>If <code>read-key-sequence</code> receives a drag event that has no key
-binding, and the corresponding click event does have a binding, it
-changes the drag event into a click event at the drag&rsquo;s starting
-position.  This means that you don&rsquo;t have to distinguish between click
-and drag events unless you want to.
-</p>
+  <p>For a drag event, the name of the symbol <var>event-type</var>
+  contains the prefix &lsquo;<samp>drag-</samp>&rsquo;. For
+  example, dragging the mouse with button 2 held down generates a
+  <code>drag-mouse-2</code> event. The second and third elements of
+  the event give the starting and ending position of the drag, as
+  mouse position lists (see <a href=
+  "Click-Events.html#Click-Events">Click Events</a>). You can
+  access the second element of any mouse event in the same way.
+  However, the drag event may end outside the boundaries of the
+  frame that was initially selected. In that case, the third
+  element&rsquo;s position list contains that frame in place of a
+  window.</p>
 
+  <p>The &lsquo;<samp>drag-</samp>&rsquo; prefix follows the
+  modifier key prefixes such as &lsquo;<samp>C-</samp>&rsquo; and
+  &lsquo;<samp>M-</samp>&rsquo;.</p>
 
-
+  <p>If <code>read-key-sequence</code> receives a drag event that
+  has no key binding, and the corresponding click event does have a
+  binding, it changes the drag event into a click event at the
+  drag&rsquo;s starting position. This means that you don&rsquo;t
+  have to distinguish between click and drag events unless you want
+  to.</p>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,156 +19,241 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Math Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Math Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Math Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numbers.html#Numbers" rel="up" title="Numbers">
-<link href="Random-Numbers.html#Random-Numbers" rel="next" title="Random Numbers">
-<link href="Bitwise-Operations.html#Bitwise-Operations" rel="prev" title="Bitwise Operations">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Math Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Math Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Math Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numbers.html#Numbers" rel="up" title="Numbers" />
+  <link href="Random-Numbers.html#Random-Numbers" rel="next" title=
+  "Random Numbers" />
+  <link href="Bitwise-Operations.html#Bitwise-Operations" rel=
+  "prev" title="Bitwise Operations" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Math-Functions" id="Math-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Random-Numbers.html#Random-Numbers"
+    accesskey="n" rel="next">Random Numbers</a>, Previous: <a href=
+    "Bitwise-Operations.html#Bitwise-Operations" accesskey="p" rel=
+    "prev">Bitwise Operations</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Standard-Mathematical-Functions" id=
+  "Standard-Mathematical-Functions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Math-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Random-Numbers.html#Random-Numbers" accesskey="n" rel="next">Random Numbers</a>, Previous: <a href="Bitwise-Operations.html#Bitwise-Operations" accesskey="p" rel="prev">Bitwise Operations</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Standard-Mathematical-Functions"></a>
-<h3 class="section">3.9 Standard Mathematical Functions</h3>
-<a name="index-transcendental-functions"></a>
-<a name="index-mathematical-functions"></a>
-<a name="index-floating_002dpoint-functions"></a>
+  <h3 class="section">3.9 Standard Mathematical
+  Functions</h3><a name="index-transcendental-functions" id=
+  "index-transcendental-functions"></a> <a name=
+  "index-mathematical-functions" id=
+  "index-mathematical-functions"></a> <a name=
+  "index-floating_002dpoint-functions" id=
+  "index-floating_002dpoint-functions"></a>
 
-<p>These mathematical functions allow integers as well as floating-point
-numbers as arguments.
-</p>
-<dl>
-<dt><a name="index-sin"></a>Function: <strong>sin</strong> <em>arg</em></dt>
-<dt><a name="index-cos"></a>Function: <strong>cos</strong> <em>arg</em></dt>
-<dt><a name="index-tan"></a>Function: <strong>tan</strong> <em>arg</em></dt>
-<dd><p>These are the basic trigonometric functions, with argument <var>arg</var>
-measured in radians.
-</p></dd></dl>
+  <p>These mathematical functions allow integers as well as
+  floating-point numbers as arguments.</p>
 
-<dl>
-<dt><a name="index-asin"></a>Function: <strong>asin</strong> <em>arg</em></dt>
-<dd><p>The value of <code>(asin <var>arg</var>)</code> is a number between
-−pi/2
-and
-pi/2
-(inclusive) whose sine is <var>arg</var>.  If <var>arg</var> is out of range
-(outside [−1, 1]), <code>asin</code> returns a NaN.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-sin" id="index-sin"></a>Function:
+    <strong>sin</strong> <em>arg</em></dt>
 
-<dl>
-<dt><a name="index-acos"></a>Function: <strong>acos</strong> <em>arg</em></dt>
-<dd><p>The value of <code>(acos <var>arg</var>)</code> is a number between 0 and
-pi
-(inclusive) whose cosine is <var>arg</var>.  If <var>arg</var> is out of range
-(outside [−1, 1]), <code>acos</code> returns a NaN.
-</p></dd></dl>
+    <dt><a name="index-cos" id="index-cos"></a>Function:
+    <strong>cos</strong> <em>arg</em></dt>
 
-<dl>
-<dt><a name="index-atan"></a>Function: <strong>atan</strong> <em>y &amp;optional x</em></dt>
-<dd><p>The value of <code>(atan <var>y</var>)</code> is a number between
-−pi/2
-and
-pi/2
-(exclusive) whose tangent is <var>y</var>.  If the optional second
-argument <var>x</var> is given, the value of <code>(atan y x)</code> is the
-angle in radians between the vector <code>[<var>x</var>, <var>y</var>]</code> and the
-<code>X</code> axis.
-</p></dd></dl>
+    <dt><a name="index-tan" id="index-tan"></a>Function:
+    <strong>tan</strong> <em>arg</em></dt>
 
-<dl>
-<dt><a name="index-exp"></a>Function: <strong>exp</strong> <em>arg</em></dt>
-<dd><p>This is the exponential function; it returns <em>e</em> to the power
-<var>arg</var>.
-</p></dd></dl>
+    <dd>
+      <p>These are the basic trigonometric functions, with argument
+      <var>arg</var> measured in radians.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-log"></a>Function: <strong>log</strong> <em>arg &amp;optional base</em></dt>
-<dd><p>This function returns the logarithm of <var>arg</var>, with base
-<var>base</var>.  If you don&rsquo;t specify <var>base</var>, the natural base
-<em>e</em> is used.  If <var>arg</var> or <var>base</var> is negative, <code>log</code>
-returns a NaN.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-asin" id="index-asin"></a>Function:
+    <strong>asin</strong> <em>arg</em></dt>
 
-<dl>
-<dt><a name="index-expt"></a>Function: <strong>expt</strong> <em>x y</em></dt>
-<dd><p>This function returns <var>x</var> raised to power <var>y</var>.  If both
-arguments are integers and <var>y</var> is positive, the result is an
-integer; in this case, overflow causes truncation, so watch out.
-If <var>x</var> is a finite negative number and <var>y</var> is a finite
-non-integer, <code>expt</code> returns a NaN.
-</p></dd></dl>
+    <dd>
+      <p>The value of <code>(asin <var>arg</var>)</code> is a
+      number between &acirc;&circ;&rsquo;pi/2 and pi/2 (inclusive)
+      whose sine is <var>arg</var>. If <var>arg</var> is out of
+      range (outside [&acirc;&circ;&rsquo;1, 1]), <code>asin</code>
+      returns a NaN.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-sqrt"></a>Function: <strong>sqrt</strong> <em>arg</em></dt>
-<dd><p>This returns the square root of <var>arg</var>.  If <var>arg</var> is finite
-and less than zero, <code>sqrt</code> returns a NaN.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-acos" id="index-acos"></a>Function:
+    <strong>acos</strong> <em>arg</em></dt>
 
-<p>In addition, Emacs defines the following common mathematical
-constants:
-</p>
-<dl>
-<dt><a name="index-float_002de"></a>Variable: <strong>float-e</strong></dt>
-<dd><p>The mathematical constant <em>e</em> (2.71828&hellip;).
-</p></dd></dl>
+    <dd>
+      <p>The value of <code>(acos <var>arg</var>)</code> is a
+      number between 0 and pi (inclusive) whose cosine is
+      <var>arg</var>. If <var>arg</var> is out of range (outside
+      [&acirc;&circ;&rsquo;1, 1]), <code>acos</code> returns a
+      NaN.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-float_002dpi"></a>Variable: <strong>float-pi</strong></dt>
-<dd><p>The mathematical constant <em>pi</em> (3.14159&hellip;).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-atan" id="index-atan"></a>Function:
+    <strong>atan</strong> <em>y &amp;optional x</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Random-Numbers.html#Random-Numbers" accesskey="n" rel="next">Random Numbers</a>, Previous: <a href="Bitwise-Operations.html#Bitwise-Operations" accesskey="p" rel="prev">Bitwise Operations</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>The value of <code>(atan <var>y</var>)</code> is a number
+      between &acirc;&circ;&rsquo;pi/2 and pi/2 (exclusive) whose
+      tangent is <var>y</var>. If the optional second argument
+      <var>x</var> is given, the value of <code>(atan y x)</code>
+      is the angle in radians between the vector
+      <code>[<var>x</var>, <var>y</var>]</code> and the
+      <code>X</code> axis.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-exp" id="index-exp"></a>Function:
+    <strong>exp</strong> <em>arg</em></dt>
 
+    <dd>
+      <p>This is the exponential function; it returns <em>e</em> to
+      the power <var>arg</var>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-log" id="index-log"></a>Function:
+    <strong>log</strong> <em>arg &amp;optional base</em></dt>
+
+    <dd>
+      <p>This function returns the logarithm of <var>arg</var>,
+      with base <var>base</var>. If you don&rsquo;t specify
+      <var>base</var>, the natural base <em>e</em> is used. If
+      <var>arg</var> or <var>base</var> is negative,
+      <code>log</code> returns a NaN.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-expt" id="index-expt"></a>Function:
+    <strong>expt</strong> <em>x y</em></dt>
+
+    <dd>
+      <p>This function returns <var>x</var> raised to power
+      <var>y</var>. If both arguments are integers and <var>y</var>
+      is positive, the result is an integer; in this case, overflow
+      causes truncation, so watch out. If <var>x</var> is a finite
+      negative number and <var>y</var> is a finite non-integer,
+      <code>expt</code> returns a NaN.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-sqrt" id="index-sqrt"></a>Function:
+    <strong>sqrt</strong> <em>arg</em></dt>
+
+    <dd>
+      <p>This returns the square root of <var>arg</var>. If
+      <var>arg</var> is finite and less than zero,
+      <code>sqrt</code> returns a NaN.</p>
+    </dd>
+  </dl>
+
+  <p>In addition, Emacs defines the following common mathematical
+  constants:</p>
+
+  <dl>
+    <dt><a name="index-float_002de" id=
+    "index-float_002de"></a>Variable: <strong>float-e</strong></dt>
+
+    <dd>
+      <p>The mathematical constant <em>e</em>
+      (2.71828&hellip;).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-float_002dpi" id=
+    "index-float_002dpi"></a>Variable:
+    <strong>float-pi</strong></dt>
+
+    <dd>
+      <p>The mathematical constant <em>pi</em>
+      (3.14159&hellip;).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Random-Numbers.html#Random-Numbers"
+    accesskey="n" rel="next">Random Numbers</a>, Previous: <a href=
+    "Bitwise-Operations.html#Bitwise-Operations" accesskey="p" rel=
+    "prev">Bitwise Operations</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

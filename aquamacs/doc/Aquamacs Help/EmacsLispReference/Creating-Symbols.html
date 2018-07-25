@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,242 +19,351 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Creating Symbols</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Creating Symbols">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Creating Symbols">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Symbols.html#Symbols" rel="up" title="Symbols">
-<link href="Symbol-Properties.html#Symbol-Properties" rel="next" title="Symbol Properties">
-<link href="Definitions.html#Definitions" rel="prev" title="Definitions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Creating Symbols</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Creating Symbols" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Creating Symbols" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Symbols.html#Symbols" rel="up" title="Symbols" />
+  <link href="Symbol-Properties.html#Symbol-Properties" rel="next"
+  title="Symbol Properties" />
+  <link href="Definitions.html#Definitions" rel="prev" title=
+  "Definitions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Creating-Symbols" id="Creating-Symbols"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Symbol-Properties.html#Symbol-Properties"
+    accesskey="n" rel="next">Symbol Properties</a>, Previous:
+    <a href="Definitions.html#Definitions" accesskey="p" rel=
+    "prev">Definitions</a>, Up: <a href="Symbols.html#Symbols"
+    accesskey="u" rel="up">Symbols</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-and-Interning-Symbols" id=
+  "Creating-and-Interning-Symbols"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-Symbols"></a>
-<div class="header">
-<p>
-Next: <a href="Symbol-Properties.html#Symbol-Properties" accesskey="n" rel="next">Symbol Properties</a>, Previous: <a href="Definitions.html#Definitions" accesskey="p" rel="prev">Definitions</a>, Up: <a href="Symbols.html#Symbols" accesskey="u" rel="up">Symbols</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-and-Interning-Symbols"></a>
-<h3 class="section">8.3 Creating and Interning Symbols</h3>
-<a name="index-reading-symbols"></a>
+  <h3 class="section">8.3 Creating and Interning
+  Symbols</h3><a name="index-reading-symbols" id=
+  "index-reading-symbols"></a>
 
-<p>To understand how symbols are created in GNU Emacs Lisp, you must know
-how Lisp reads them.  Lisp must ensure that it finds the same symbol
-every time it reads the same set of characters.  Failure to do so would
-cause complete confusion.
-</p>
-<a name="index-symbol-name-hashing"></a>
-<a name="index-hashing"></a>
-<a name="index-obarray"></a>
-<a name="index-bucket-_0028in-obarray_0029"></a>
-<p>When the Lisp reader encounters a symbol, it reads all the characters
-of the name.  Then it hashes those characters to find an index in a
-table called an <em>obarray</em>.  Hashing is an efficient method of
-looking something up.  For example, instead of searching a telephone
-book cover to cover when looking up Jan Jones, you start with the J&rsquo;s
-and go from there.  That is a simple version of hashing.  Each element
-of the obarray is a <em>bucket</em> which holds all the symbols with a
-given hash code; to look for a given name, it is sufficient to look
-through all the symbols in the bucket for that name&rsquo;s hash code.  (The
-same idea is used for general Emacs hash tables, but they are a
-different data type; see <a href="Hash-Tables.html#Hash-Tables">Hash Tables</a>.)
-</p>
-<a name="index-interning"></a>
-<p>If a symbol with the desired name is found, the reader uses that
-symbol.  If the obarray does not contain a symbol with that name, the
-reader makes a new symbol and adds it to the obarray.  Finding or adding
-a symbol with a certain name is called <em>interning</em> it, and the
-symbol is then called an <em>interned symbol</em>.
-</p>
-<p>Interning ensures that each obarray has just one symbol with any
-particular name.  Other like-named symbols may exist, but not in the
-same obarray.  Thus, the reader gets the same symbols for the same
-names, as long as you keep reading with the same obarray.
-</p>
-<p>Interning usually happens automatically in the reader, but sometimes
-other programs need to do it.  For example, after the <kbd>M-x</kbd> command
-obtains the command name as a string using the minibuffer, it then
-interns the string, to get the interned symbol with that name.
-</p>
-<a name="index-symbol-equality"></a>
-<a name="index-uninterned-symbol"></a>
-<p>No obarray contains all symbols; in fact, some symbols are not in any
-obarray.  They are called <em>uninterned symbols</em>.  An uninterned
-symbol has the same four cells as other symbols; however, the only way
-to gain access to it is by finding it in some other object or as the
-value of a variable.
-</p>
-<p>Creating an uninterned symbol is useful in generating Lisp code,
-because an uninterned symbol used as a variable in the code you generate
-cannot clash with any variables used in other Lisp programs.
-</p>
-<p>In Emacs Lisp, an obarray is actually a vector.  Each element of the
-vector is a bucket; its value is either an interned symbol whose name
-hashes to that bucket, or 0 if the bucket is empty.  Each interned
-symbol has an internal link (invisible to the user) to the next symbol
-in the bucket.  Because these links are invisible, there is no way to
-find all the symbols in an obarray except using <code>mapatoms</code> (below).
-The order of symbols in a bucket is not significant.
-</p>
-<p>In an empty obarray, every element is 0, so you can create an obarray
-with <code>(make-vector <var>length</var> 0)</code>.  <strong>This is the only
-valid way to create an obarray.</strong>  Prime numbers as lengths tend
-to result in good hashing; lengths one less than a power of two are also
-good.
-</p>
-<p><strong>Do not try to put symbols in an obarray yourself.</strong>  This does
-not work&mdash;only <code>intern</code> can enter a symbol in an obarray properly.
-</p>
-<a name="index-CL-note_002d_002d_002dsymbol-in-obarrays"></a>
-<blockquote>
-<p><b>Common Lisp note:</b> Unlike Common Lisp, Emacs Lisp does not provide
-for interning a single symbol in several obarrays.
-</p></blockquote>
+  <p>To understand how symbols are created in GNU Emacs Lisp, you
+  must know how Lisp reads them. Lisp must ensure that it finds the
+  same symbol every time it reads the same set of characters.
+  Failure to do so would cause complete confusion.</p><a name=
+  "index-symbol-name-hashing" id="index-symbol-name-hashing"></a>
+  <a name="index-hashing" id="index-hashing"></a> <a name=
+  "index-obarray" id="index-obarray"></a> <a name=
+  "index-bucket-_0028in-obarray_0029" id=
+  "index-bucket-_0028in-obarray_0029"></a>
 
-<p>Most of the functions below take a name and sometimes an obarray as
-arguments.  A <code>wrong-type-argument</code> error is signaled if the name
-is not a string, or if the obarray is not a vector.
-</p>
-<dl>
-<dt><a name="index-symbol_002dname"></a>Function: <strong>symbol-name</strong> <em>symbol</em></dt>
-<dd><p>This function returns the string that is <var>symbol</var>&rsquo;s name.  For example:
-</p>
-<div class="example">
-<pre class="example">(symbol-name 'foo)
-     &rArr; &quot;foo&quot;
-</pre></div>
+  <p>When the Lisp reader encounters a symbol, it reads all the
+  characters of the name. Then it hashes those characters to find
+  an index in a table called an <em>obarray</em>. Hashing is an
+  efficient method of looking something up. For example, instead of
+  searching a telephone book cover to cover when looking up Jan
+  Jones, you start with the J&rsquo;s and go from there. That is a
+  simple version of hashing. Each element of the obarray is a
+  <em>bucket</em> which holds all the symbols with a given hash
+  code; to look for a given name, it is sufficient to look through
+  all the symbols in the bucket for that name&rsquo;s hash code.
+  (The same idea is used for general Emacs hash tables, but they
+  are a different data type; see <a href=
+  "Hash-Tables.html#Hash-Tables">Hash Tables</a>.)</p><a name=
+  "index-interning" id="index-interning"></a>
 
-<p><strong>Warning:</strong> Changing the string by substituting characters does
-change the name of the symbol, but fails to update the obarray, so don&rsquo;t
-do it!
-</p></dd></dl>
+  <p>If a symbol with the desired name is found, the reader uses
+  that symbol. If the obarray does not contain a symbol with that
+  name, the reader makes a new symbol and adds it to the obarray.
+  Finding or adding a symbol with a certain name is called
+  <em>interning</em> it, and the symbol is then called an
+  <em>interned symbol</em>.</p>
 
-<dl>
-<dt><a name="index-make_002dsymbol"></a>Function: <strong>make-symbol</strong> <em>name</em></dt>
-<dd><p>This function returns a newly-allocated, uninterned symbol whose name is
-<var>name</var> (which must be a string).  Its value and function definition
-are void, and its property list is <code>nil</code>.  In the example below,
-the value of <code>sym</code> is not <code>eq</code> to <code>foo</code> because it is a
-distinct uninterned symbol whose name is also &lsquo;<samp>foo</samp>&rsquo;.
-</p>
-<div class="example">
-<pre class="example">(setq sym (make-symbol &quot;foo&quot;))
+  <p>Interning ensures that each obarray has just one symbol with
+  any particular name. Other like-named symbols may exist, but not
+  in the same obarray. Thus, the reader gets the same symbols for
+  the same names, as long as you keep reading with the same
+  obarray.</p>
+
+  <p>Interning usually happens automatically in the reader, but
+  sometimes other programs need to do it. For example, after the
+  <kbd>M-x</kbd> command obtains the command name as a string using
+  the minibuffer, it then interns the string, to get the interned
+  symbol with that name.</p><a name="index-symbol-equality" id=
+  "index-symbol-equality"></a> <a name="index-uninterned-symbol"
+  id="index-uninterned-symbol"></a>
+
+  <p>No obarray contains all symbols; in fact, some symbols are not
+  in any obarray. They are called <em>uninterned symbols</em>. An
+  uninterned symbol has the same four cells as other symbols;
+  however, the only way to gain access to it is by finding it in
+  some other object or as the value of a variable.</p>
+
+  <p>Creating an uninterned symbol is useful in generating Lisp
+  code, because an uninterned symbol used as a variable in the code
+  you generate cannot clash with any variables used in other Lisp
+  programs.</p>
+
+  <p>In Emacs Lisp, an obarray is actually a vector. Each element
+  of the vector is a bucket; its value is either an interned symbol
+  whose name hashes to that bucket, or 0 if the bucket is empty.
+  Each interned symbol has an internal link (invisible to the user)
+  to the next symbol in the bucket. Because these links are
+  invisible, there is no way to find all the symbols in an obarray
+  except using <code>mapatoms</code> (below). The order of symbols
+  in a bucket is not significant.</p>
+
+  <p>In an empty obarray, every element is 0, so you can create an
+  obarray with <code>(make-vector <var>length</var> 0)</code>.
+  <strong>This is the only valid way to create an obarray.</strong>
+  Prime numbers as lengths tend to result in good hashing; lengths
+  one less than a power of two are also good.</p>
+
+  <p><strong>Do not try to put symbols in an obarray
+  yourself.</strong> This does not work&mdash;only
+  <code>intern</code> can enter a symbol in an obarray
+  properly.</p><a name=
+  "index-CL-note_002d_002d_002dsymbol-in-obarrays" id=
+  "index-CL-note_002d_002d_002dsymbol-in-obarrays"></a>
+
+  <blockquote>
+    <p><b>Common Lisp note:</b> Unlike Common Lisp, Emacs Lisp does
+    not provide for interning a single symbol in several
+    obarrays.</p>
+  </blockquote>
+
+  <p>Most of the functions below take a name and sometimes an
+  obarray as arguments. A <code>wrong-type-argument</code> error is
+  signaled if the name is not a string, or if the obarray is not a
+  vector.</p>
+
+  <dl>
+    <dt><a name="index-symbol_002dname" id=
+    "index-symbol_002dname"></a>Function:
+    <strong>symbol-name</strong> <em>symbol</em></dt>
+
+    <dd>
+      <p>This function returns the string that is
+      <var>symbol</var>&rsquo;s name. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(symbol-name 'foo)
+     &rArr; "foo"
+</pre>
+      </div>
+
+      <p><strong>Warning:</strong> Changing the string by
+      substituting characters does change the name of the symbol,
+      but fails to update the obarray, so don&rsquo;t do it!</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-make_002dsymbol" id=
+    "index-make_002dsymbol"></a>Function:
+    <strong>make-symbol</strong> <em>name</em></dt>
+
+    <dd>
+      <p>This function returns a newly-allocated, uninterned symbol
+      whose name is <var>name</var> (which must be a string). Its
+      value and function definition are void, and its property list
+      is <code>nil</code>. In the example below, the value of
+      <code>sym</code> is not <code>eq</code> to <code>foo</code>
+      because it is a distinct uninterned symbol whose name is also
+      &lsquo;<samp>foo</samp>&rsquo;.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq sym (make-symbol "foo"))
      &rArr; foo
 (eq sym 'foo)
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-intern"></a>Function: <strong>intern</strong> <em>name &amp;optional obarray</em></dt>
-<dd><p>This function returns the interned symbol whose name is <var>name</var>.  If
-there is no such symbol in the obarray <var>obarray</var>, <code>intern</code>
-creates a new one, adds it to the obarray, and returns it.  If
-<var>obarray</var> is omitted, the value of the global variable
-<code>obarray</code> is used.
-</p>
-<div class="example">
-<pre class="example">(setq sym (intern &quot;foo&quot;))
+  <dl>
+    <dt><a name="index-intern" id="index-intern"></a>Function:
+    <strong>intern</strong> <em>name &amp;optional
+    obarray</em></dt>
+
+    <dd>
+      <p>This function returns the interned symbol whose name is
+      <var>name</var>. If there is no such symbol in the obarray
+      <var>obarray</var>, <code>intern</code> creates a new one,
+      adds it to the obarray, and returns it. If <var>obarray</var>
+      is omitted, the value of the global variable
+      <code>obarray</code> is used.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq sym (intern "foo"))
      &rArr; foo
 (eq sym 'foo)
      &rArr; t
 
-(setq sym1 (intern &quot;foo&quot; other-obarray))
+(setq sym1 (intern "foo" other-obarray))
      &rArr; foo
 (eq sym1 'foo)
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl><a name=
+  "index-CL-note_002d_002d_002dinterning-existing-symbol" id=
+  "index-CL-note_002d_002d_002dinterning-existing-symbol"></a>
 
-<a name="index-CL-note_002d_002d_002dinterning-existing-symbol"></a>
-<blockquote>
-<p><b>Common Lisp note:</b> In Common Lisp, you can intern an existing symbol
-in an obarray.  In Emacs Lisp, you cannot do this, because the argument
-to <code>intern</code> must be a string, not a symbol.
-</p></blockquote>
+  <blockquote>
+    <p><b>Common Lisp note:</b> In Common Lisp, you can intern an
+    existing symbol in an obarray. In Emacs Lisp, you cannot do
+    this, because the argument to <code>intern</code> must be a
+    string, not a symbol.</p>
+  </blockquote>
 
-<dl>
-<dt><a name="index-intern_002dsoft"></a>Function: <strong>intern-soft</strong> <em>name &amp;optional obarray</em></dt>
-<dd><p>This function returns the symbol in <var>obarray</var> whose name is
-<var>name</var>, or <code>nil</code> if <var>obarray</var> has no symbol with that name.
-Therefore, you can use <code>intern-soft</code> to test whether a symbol with
-a given name is already interned.  If <var>obarray</var> is omitted, the
-value of the global variable <code>obarray</code> is used.
-</p>
-<p>The argument <var>name</var> may also be a symbol; in that case,
-the function returns <var>name</var> if <var>name</var> is interned
-in the specified obarray, and otherwise <code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(intern-soft &quot;frazzle&quot;)        ; <span class="roman">No such symbol exists.</span>
+  <dl>
+    <dt><a name="index-intern_002dsoft" id=
+    "index-intern_002dsoft"></a>Function:
+    <strong>intern-soft</strong> <em>name &amp;optional
+    obarray</em></dt>
+
+    <dd>
+      <p>This function returns the symbol in <var>obarray</var>
+      whose name is <var>name</var>, or <code>nil</code> if
+      <var>obarray</var> has no symbol with that name. Therefore,
+      you can use <code>intern-soft</code> to test whether a symbol
+      with a given name is already interned. If <var>obarray</var>
+      is omitted, the value of the global variable
+      <code>obarray</code> is used.</p>
+
+      <p>The argument <var>name</var> may also be a symbol; in that
+      case, the function returns <var>name</var> if <var>name</var>
+      is interned in the specified obarray, and otherwise
+      <code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(intern-soft "frazzle")        ; <span class=
+"roman">No such symbol exists.</span>
      &rArr; nil
-(make-symbol &quot;frazzle&quot;)        ; <span class="roman">Create an uninterned one.</span>
+(make-symbol "frazzle")        ; <span class=
+"roman">Create an uninterned one.</span>
      &rArr; frazzle
-</pre><pre class="example">(intern-soft &quot;frazzle&quot;)        ; <span class="roman">That one cannot be found.</span>
+</pre>
+        <pre class="example">
+(intern-soft "frazzle")        ; <span class=
+"roman">That one cannot be found.</span>
      &rArr; nil
-</pre><pre class="example">(setq sym (intern &quot;frazzle&quot;))  ; <span class="roman">Create an interned one.</span>
+</pre>
+        <pre class="example">
+(setq sym (intern "frazzle"))  ; <span class=
+"roman">Create an interned one.</span>
      &rArr; frazzle
-</pre><pre class="example">(intern-soft &quot;frazzle&quot;)        ; <span class="roman">That one can be found!</span>
+</pre>
+        <pre class="example">
+(intern-soft "frazzle")        ; <span class=
+"roman">That one can be found!</span>
      &rArr; frazzle
-</pre><pre class="example">(eq sym 'frazzle)              ; <span class="roman">And it is the same one.</span>
+</pre>
+        <pre class="example">
+(eq sym 'frazzle)              ; <span class=
+"roman">And it is the same one.</span>
      &rArr; t
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-obarray-1"></a>Variable: <strong>obarray</strong></dt>
-<dd><p>This variable is the standard obarray for use by <code>intern</code> and
-<code>read</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-obarray-1" id=
+    "index-obarray-1"></a>Variable: <strong>obarray</strong></dt>
 
-<dl>
-<dt><a name="index-mapatoms"></a>Function: <strong>mapatoms</strong> <em>function &amp;optional obarray</em></dt>
-<dd><a name="Definition-of-mapatoms"></a><p>This function calls <var>function</var> once with each symbol in the obarray
-<var>obarray</var>.  Then it returns <code>nil</code>.  If <var>obarray</var> is
-omitted, it defaults to the value of <code>obarray</code>, the standard
-obarray for ordinary symbols.
-</p>
-<div class="example">
-<pre class="example">(setq count 0)
+    <dd>
+      <p>This variable is the standard obarray for use by
+      <code>intern</code> and <code>read</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-mapatoms" id="index-mapatoms"></a>Function:
+    <strong>mapatoms</strong> <em>function &amp;optional
+    obarray</em></dt>
+
+    <dd>
+      <a name="Definition-of-mapatoms" id=
+      "Definition-of-mapatoms"></a>
+
+      <p>This function calls <var>function</var> once with each
+      symbol in the obarray <var>obarray</var>. Then it returns
+      <code>nil</code>. If <var>obarray</var> is omitted, it
+      defaults to the value of <code>obarray</code>, the standard
+      obarray for ordinary symbols.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq count 0)
      &rArr; 0
 (defun count-syms (s)
   (setq count (1+ count)))
@@ -261,34 +372,48 @@ obarray for ordinary symbols.
      &rArr; nil
 count
      &rArr; 1871
-</pre></div>
+</pre>
+      </div>
 
-<p>See <code>documentation</code> in <a href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>, for another
-example using <code>mapatoms</code>.
-</p></dd></dl>
+      <p>See <code>documentation</code> in <a href=
+      "Accessing-Documentation.html#Accessing-Documentation">Accessing
+      Documentation</a>, for another example using
+      <code>mapatoms</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-unintern"></a>Function: <strong>unintern</strong> <em>symbol obarray</em></dt>
-<dd><p>This function deletes <var>symbol</var> from the obarray <var>obarray</var>.  If
-<code>symbol</code> is not actually in the obarray, <code>unintern</code> does
-nothing.  If <var>obarray</var> is <code>nil</code>, the current obarray is used.
-</p>
-<p>If you provide a string instead of a symbol as <var>symbol</var>, it stands
-for a symbol name.  Then <code>unintern</code> deletes the symbol (if any) in
-the obarray which has that name.  If there is no such symbol,
-<code>unintern</code> does nothing.
-</p>
-<p>If <code>unintern</code> does delete a symbol, it returns <code>t</code>.  Otherwise
-it returns <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-unintern" id="index-unintern"></a>Function:
+    <strong>unintern</strong> <em>symbol obarray</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Symbol-Properties.html#Symbol-Properties" accesskey="n" rel="next">Symbol Properties</a>, Previous: <a href="Definitions.html#Definitions" accesskey="p" rel="prev">Definitions</a>, Up: <a href="Symbols.html#Symbols" accesskey="u" rel="up">Symbols</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function deletes <var>symbol</var> from the obarray
+      <var>obarray</var>. If <code>symbol</code> is not actually in
+      the obarray, <code>unintern</code> does nothing. If
+      <var>obarray</var> is <code>nil</code>, the current obarray
+      is used.</p>
 
+      <p>If you provide a string instead of a symbol as
+      <var>symbol</var>, it stands for a symbol name. Then
+      <code>unintern</code> deletes the symbol (if any) in the
+      obarray which has that name. If there is no such symbol,
+      <code>unintern</code> does nothing.</p>
 
+      <p>If <code>unintern</code> does delete a symbol, it returns
+      <code>t</code>. Otherwise it returns <code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Symbol-Properties.html#Symbol-Properties"
+    accesskey="n" rel="next">Symbol Properties</a>, Previous:
+    <a href="Definitions.html#Definitions" accesskey="p" rel=
+    "prev">Definitions</a>, Up: <a href="Symbols.html#Symbols"
+    accesskey="u" rel="up">Symbols</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,166 +20,228 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Lisp Libraries</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Lisp Libraries">
-<meta name="keywords" content="GNU Emacs Manual: Lisp Libraries">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Building.html#Building" rel="up" title="Building">
-<link href="Lisp-Eval.html#Lisp-Eval" rel="next" title="Lisp Eval">
-<link href="Executing-Lisp.html#Executing-Lisp" rel="prev" title="Executing Lisp">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Lisp Libraries</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Lisp Libraries" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Lisp Libraries" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Building.html#Building" rel="up" title="Building" />
+  <link href="Lisp-Eval.html#Lisp-Eval" rel="next" title=
+  "Lisp Eval" />
+  <link href="Executing-Lisp.html#Executing-Lisp" rel="prev" title=
+  "Executing Lisp" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Lisp-Libraries" id="Lisp-Libraries"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Lisp-Eval.html#Lisp-Eval" accesskey="n" rel=
+    "next">Lisp Eval</a>, Previous: <a href=
+    "Executing-Lisp.html#Executing-Lisp" accesskey="p" rel=
+    "prev">Executing Lisp</a>, Up: <a href="Building.html#Building"
+    accesskey="u" rel="up">Building</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Libraries-of-Lisp-Code-for-Emacs" id=
+  "Libraries-of-Lisp-Code-for-Emacs"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Lisp-Libraries"></a>
-<div class="header">
-<p>
-Next: <a href="Lisp-Eval.html#Lisp-Eval" accesskey="n" rel="next">Lisp Eval</a>, Previous: <a href="Executing-Lisp.html#Executing-Lisp" accesskey="p" rel="prev">Executing Lisp</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Libraries-of-Lisp-Code-for-Emacs"></a>
-<h3 class="section">27.8 Libraries of Lisp Code for Emacs</h3>
-<a name="index-libraries"></a>
-<a name="index-loading-Lisp-code"></a>
+  <h3 class="section">27.8 Libraries of Lisp Code for
+  Emacs</h3><a name="index-libraries" id="index-libraries"></a>
+  <a name="index-loading-Lisp-code" id=
+  "index-loading-Lisp-code"></a>
 
-<p>Emacs Lisp code is stored in files whose names conventionally end in
-<samp>.el</samp>.  Such files are automatically visited in Emacs Lisp mode.
-</p>
-<a name="index-byte-code"></a>
-<p>Emacs Lisp code can be compiled into byte-code, which loads faster,
-takes up less space, and executes faster.  By convention, compiled
-Emacs Lisp code goes in a separate file whose name ends in
-&lsquo;<samp>.elc</samp>&rsquo;.  For example, the compiled code for <samp>foo.el</samp> goes in
-<samp>foo.elc</samp>.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Byte-Compilation.html#Byte-Compilation">Byte Compilation</a> in <cite>the
-Emacs Lisp Reference Manual</cite>.
-</p>
-<a name="index-load_002dfile"></a>
-<p>To <em>load</em> an Emacs Lisp file, type <kbd>M-x load-file</kbd>.  This
-command reads a file name using the minibuffer, and executes the
-contents of that file as Emacs Lisp code.  It is not necessary to
-visit the file first; this command reads the file directly from disk,
-not from an existing Emacs buffer.
-</p>
-<a name="index-load"></a>
-<a name="index-load_002dlibrary"></a>
-<a name="index-load_002dprefer_002dnewer"></a>
-<a name="index-load-path-for-Emacs-Lisp"></a>
-<p>If an Emacs Lisp file is installed in the Emacs Lisp <em>load path</em>
-(defined below), you can load it by typing <kbd>M-x load-library</kbd>,
-instead of using <kbd>M-x load-file</kbd>.  The <kbd>M-x load-library</kbd>
-command prompts for a <em>library name</em> rather than a file name; it
-searches through each directory in the Emacs Lisp load path, trying to
-find a file matching that library name.  If the library name is
-&lsquo;<samp><var>foo</var></samp>&rsquo;, it tries looking for files named
-<samp><var>foo</var>.elc</samp>, <samp><var>foo</var>.el</samp>, and <samp><var>foo</var></samp>.  The
-default behavior is to load the first file found.  This command
-prefers <samp>.elc</samp> files over <samp>.el</samp> files because compiled files
-load and run faster.  If it finds that <samp><var>lib</var>.el</samp> is newer
-than <samp><var>lib</var>.elc</samp>, it issues a warning, in case someone made
-changes to the <samp>.el</samp> file and forgot to recompile it, but loads
-the <samp>.elc</samp> file anyway.  (Due to this behavior, you can save
-unfinished edits to Emacs Lisp source files, and not recompile until
-your changes are ready for use.)  If you set the option
-<code>load-prefer-newer</code> to a non-<code>nil</code> value, however, then
-rather than the procedure described above, Emacs loads whichever
-version of the file is newest.
-</p>
-<p>Emacs Lisp programs usually load Emacs Lisp files using the
-<code>load</code> function.  This is similar to <code>load-library</code>, but is
-lower-level and accepts additional arguments.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/How-Programs-Do-Loading.html#How-Programs-Do-Loading">How Programs Do
-Loading</a> in <cite>the Emacs Lisp Reference Manual</cite>.
-</p>
-<a name="index-load_002dpath"></a>
-<p>The Emacs Lisp load path is specified by the variable
-<code>load-path</code>.  Its value should be a list of directory names
-(strings).  These directories are searched, in the specified order, by
-the <kbd>M-x load-library</kbd> command, the lower-level <code>load</code>
-function, and other Emacs functions that find Emacs Lisp libraries.  A
-list entry in <code>load-path</code> can also have the special value
-<code>nil</code>, which stands for the current default directory, but it is
-almost always a bad idea to use this.  (If you find yourself wishing
-that <code>nil</code> were in the list, most likely what you really want is
-to use <kbd>M-x load-file</kbd>.)
-</p>
-<p>The default value of <code>load-path</code> is a list of directories where
-the Lisp code for Emacs itself is stored.  If you have libraries of
-your own in another directory, you can add that directory to the load
-path.  Unlike most other variables described in this manual,
-<code>load-path</code> cannot be changed via the Customize interface
-(see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>), but you can add a directory to it by
-putting a line like this in your init file (see <a href="Init-File.html#Init-File">Init File</a>):
-</p>
-<div class="example">
-<pre class="example">(add-to-list 'load-path &quot;/path/to/my/lisp/library&quot;)
-</pre></div>
+  <p>Emacs Lisp code is stored in files whose names conventionally
+  end in <samp>.el</samp>. Such files are automatically visited in
+  Emacs Lisp mode.</p><a name="index-byte-code" id=
+  "index-byte-code"></a>
 
-<a name="index-autoload"></a>
-<p>Some commands are <em>autoloaded</em>; when you run them, Emacs
-automatically loads the associated library first.  For instance, the
-<kbd>M-x compile</kbd> command (see <a href="Compilation.html#Compilation">Compilation</a>) is autoloaded; if you
-call it, Emacs automatically loads the <code>compile</code> library first.
-In contrast, the command <kbd>M-x recompile</kbd> is not autoloaded, so it
-is unavailable until you load the <code>compile</code> library.
-</p>
-<a name="index-help_002denable_002dauto_002dload"></a>
-<p>Automatic loading can also occur when you look up the documentation
-of an autoloaded command (see <a href="Name-Help.html#Name-Help">Name Help</a>), if the documentation
-refers to other functions and variables in its library (loading the
-library lets Emacs properly set up the hyperlinks in the <samp>*Help*</samp>
-buffer).  To disable this feature, change the variable
-<code>help-enable-auto-load</code> to <code>nil</code>.
-</p>
-<a name="index-load_002ddangerous_002dlibraries"></a>
-<a name="index-Lisp-files-byte_002dcompiled-by-XEmacs"></a>
-<p>By default, Emacs refuses to load compiled Lisp files which were
-compiled with XEmacs, a modified versions of Emacs&mdash;they can cause
-Emacs to crash.  Set the variable <code>load-dangerous-libraries</code> to
-<code>t</code> if you want to try loading them.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Lisp-Eval.html#Lisp-Eval" accesskey="n" rel="next">Lisp Eval</a>, Previous: <a href="Executing-Lisp.html#Executing-Lisp" accesskey="p" rel="prev">Executing Lisp</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Emacs Lisp code can be compiled into byte-code, which loads
+  faster, takes up less space, and executes faster. By convention,
+  compiled Emacs Lisp code goes in a separate file whose name ends
+  in &lsquo;<samp>.elc</samp>&rsquo;. For example, the compiled
+  code for <samp>foo.el</samp> goes in <samp>foo.elc</samp>. See
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Byte-Compilation.html#Byte-Compilation">
+  Byte Compilation</a> in <cite>the Emacs Lisp Reference
+  Manual</cite>.</p><a name="index-load_002dfile" id=
+  "index-load_002dfile"></a>
 
+  <p>To <em>load</em> an Emacs Lisp file, type <kbd>M-x
+  load-file</kbd>. This command reads a file name using the
+  minibuffer, and executes the contents of that file as Emacs Lisp
+  code. It is not necessary to visit the file first; this command
+  reads the file directly from disk, not from an existing Emacs
+  buffer.</p><a name="index-load" id="index-load"></a> <a name=
+  "index-load_002dlibrary" id="index-load_002dlibrary"></a>
+  <a name="index-load_002dprefer_002dnewer" id=
+  "index-load_002dprefer_002dnewer"></a> <a name=
+  "index-load-path-for-Emacs-Lisp" id=
+  "index-load-path-for-Emacs-Lisp"></a>
 
+  <p>If an Emacs Lisp file is installed in the Emacs Lisp <em>load
+  path</em> (defined below), you can load it by typing <kbd>M-x
+  load-library</kbd>, instead of using <kbd>M-x load-file</kbd>.
+  The <kbd>M-x load-library</kbd> command prompts for a <em>library
+  name</em> rather than a file name; it searches through each
+  directory in the Emacs Lisp load path, trying to find a file
+  matching that library name. If the library name is
+  &lsquo;<samp><var>foo</var></samp>&rsquo;, it tries looking for
+  files named <samp><var>foo</var>.elc</samp>,
+  <samp><var>foo</var>.el</samp>, and <samp><var>foo</var></samp>.
+  The default behavior is to load the first file found. This
+  command prefers <samp>.elc</samp> files over <samp>.el</samp>
+  files because compiled files load and run faster. If it finds
+  that <samp><var>lib</var>.el</samp> is newer than
+  <samp><var>lib</var>.elc</samp>, it issues a warning, in case
+  someone made changes to the <samp>.el</samp> file and forgot to
+  recompile it, but loads the <samp>.elc</samp> file anyway. (Due
+  to this behavior, you can save unfinished edits to Emacs Lisp
+  source files, and not recompile until your changes are ready for
+  use.) If you set the option <code>load-prefer-newer</code> to a
+  non-<code>nil</code> value, however, then rather than the
+  procedure described above, Emacs loads whichever version of the
+  file is newest.</p>
 
+  <p>Emacs Lisp programs usually load Emacs Lisp files using the
+  <code>load</code> function. This is similar to
+  <code>load-library</code>, but is lower-level and accepts
+  additional arguments. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/How-Programs-Do-Loading.html#How-Programs-Do-Loading">
+  How Programs Do Loading</a> in <cite>the Emacs Lisp Reference
+  Manual</cite>.</p><a name="index-load_002dpath" id=
+  "index-load_002dpath"></a>
+
+  <p>The Emacs Lisp load path is specified by the variable
+  <code>load-path</code>. Its value should be a list of directory
+  names (strings). These directories are searched, in the specified
+  order, by the <kbd>M-x load-library</kbd> command, the
+  lower-level <code>load</code> function, and other Emacs functions
+  that find Emacs Lisp libraries. A list entry in
+  <code>load-path</code> can also have the special value
+  <code>nil</code>, which stands for the current default directory,
+  but it is almost always a bad idea to use this. (If you find
+  yourself wishing that <code>nil</code> were in the list, most
+  likely what you really want is to use <kbd>M-x
+  load-file</kbd>.)</p>
+
+  <p>The default value of <code>load-path</code> is a list of
+  directories where the Lisp code for Emacs itself is stored. If
+  you have libraries of your own in another directory, you can add
+  that directory to the load path. Unlike most other variables
+  described in this manual, <code>load-path</code> cannot be
+  changed via the Customize interface (see <a href=
+  "Easy-Customization.html#Easy-Customization">Easy
+  Customization</a>), but you can add a directory to it by putting
+  a line like this in your init file (see <a href=
+  "Init-File.html#Init-File">Init File</a>):</p>
+
+  <div class="example">
+    <pre class="example">
+(add-to-list 'load-path "/path/to/my/lisp/library")
+</pre>
+  </div><a name="index-autoload" id="index-autoload"></a>
+
+  <p>Some commands are <em>autoloaded</em>; when you run them,
+  Emacs automatically loads the associated library first. For
+  instance, the <kbd>M-x compile</kbd> command (see <a href=
+  "Compilation.html#Compilation">Compilation</a>) is autoloaded; if
+  you call it, Emacs automatically loads the <code>compile</code>
+  library first. In contrast, the command <kbd>M-x recompile</kbd>
+  is not autoloaded, so it is unavailable until you load the
+  <code>compile</code> library.</p><a name=
+  "index-help_002denable_002dauto_002dload" id=
+  "index-help_002denable_002dauto_002dload"></a>
+
+  <p>Automatic loading can also occur when you look up the
+  documentation of an autoloaded command (see <a href=
+  "Name-Help.html#Name-Help">Name Help</a>), if the documentation
+  refers to other functions and variables in its library (loading
+  the library lets Emacs properly set up the hyperlinks in the
+  <samp>*Help*</samp> buffer). To disable this feature, change the
+  variable <code>help-enable-auto-load</code> to
+  <code>nil</code>.</p><a name=
+  "index-load_002ddangerous_002dlibraries" id=
+  "index-load_002ddangerous_002dlibraries"></a> <a name=
+  "index-Lisp-files-byte_002dcompiled-by-XEmacs" id=
+  "index-Lisp-files-byte_002dcompiled-by-XEmacs"></a>
+
+  <p>By default, Emacs refuses to load compiled Lisp files which
+  were compiled with XEmacs, a modified versions of
+  Emacs&mdash;they can cause Emacs to crash. Set the variable
+  <code>load-dangerous-libraries</code> to <code>t</code> if you
+  want to try loading them.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Lisp-Eval.html#Lisp-Eval" accesskey="n" rel=
+    "next">Lisp Eval</a>, Previous: <a href=
+    "Executing-Lisp.html#Executing-Lisp" accesskey="p" rel=
+    "prev">Executing Lisp</a>, Up: <a href="Building.html#Building"
+    accesskey="u" rel="up">Building</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

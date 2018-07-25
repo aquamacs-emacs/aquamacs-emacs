@@ -1,14 +1,21 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Analyzer Debug - Semantic Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Semantic Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Analyzer.html#Analyzer" title="Analyzer">
-<link rel="prev" href="Smart-Jump.html#Smart-Jump" title="Smart Jump">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Analyzer Debug - Semantic Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Semantic Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Analyzer.html#Analyzer" title="Analyzer" />
+  <link rel="prev" href="Smart-Jump.html#Smart-Jump" title=
+  "Smart Jump" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual documents the Semantic library and utilities.
 
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
@@ -26,8 +33,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,49 +46,67 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Analyzer-Debug"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Smart-Jump.html#Smart-Jump">Smart Jump</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Analyzer.html#Analyzer">Analyzer</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Analyzer-Debug" id="Analyzer-Debug"></a>
 
-<h4 class="subsection">2.4.4 Debugging the Semantic Analyzer</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Smart-Jump.html#Smart-Jump">Smart Jump</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href=
+    "Analyzer.html#Analyzer">Analyzer</a></p>
+    <hr />
+  </div>
 
-<p>If the Semantic Analyzer does not analyze your code properly, you can
-take steps to identify and solve the problem.  This section was
-written with C/C++ in mind, but should be relevant for any typed
-language.
+  <h4 class="subsection">2.4.4 Debugging the Semantic Analyzer</h4>
 
-<h5 class="subsubsection">2.4.4.1 Step 1: Check the context</h5>
+  <p>If the Semantic Analyzer does not analyze your code properly,
+  you can take steps to identify and solve the problem. This
+  section was written with C/C++ in mind, but should be relevant
+  for any typed language.</p>
 
-<p>To check the current context, type <kbd>M-x
-semantic-analyze-current-context</kbd>.
+  <h5 class="subsubsection">2.4.4.1 Step 1: Check the context</h5>
 
-<div class="defun">
-&mdash; Command: <b>semantic-analyze-current-context</b><var> pos<a name="index-semantic_002danalyze_002dcurrent_002dcontext-53"></a></var><br>
-<blockquote><p>Analyze the context at <var>pos</var>.  This function is used by most of
-the other Semantic Analyzer commands to obtain the context of the code
-at a given buffer position.  The return value is an EIEIO object
-describing the context at <var>pos</var> (see <a href="../eieio/index.html#Top">Top</a>).
+  <p>To check the current context, type <kbd>M-x
+  semantic-analyze-current-context</kbd>.</p>
 
-        <p>When called interactively, this displays a &lsquo;<samp><span class="samp">*Semantic Context
-Analysis*</span></samp>&rsquo; buffer containing a summary of the context at point. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Command: <b>semantic-analyze-current-context</b>
+    <var>pos<a name=
+    "index-semantic_002danalyze_002dcurrent_002dcontext-53" id=
+    "index-semantic_002danalyze_002dcurrent_002dcontext-53"></a></var><br />
 
-<p class="noindent">The Prefix section of the &lsquo;<samp><span class="samp">*Semantic Context Analysis*</span></samp>&rsquo; buffer
-lists the tags based on the text at point.  If it shows only a simple
-string, the Semantic was unable to identify what the data type was.
 
-   <p>The first item in the list of the prefix is the first lookup failure
-in the chain, and that is the item to focus debugging effort on.  For
-example:
+    <blockquote>
+      <p>Analyze the context at <var>pos</var>. This function is
+      used by most of the other Semantic Analyzer commands to
+      obtain the context of the code at a given buffer position.
+      The return value is an EIEIO object describing the context at
+      <var>pos</var> (see <a href=
+      "../eieio/index.html#Top">Top</a>).</p>
 
-<pre class="example">     Context Type: #&lt;semantic-analyze-context context&gt;
+      <p>When called interactively, this displays a
+      &lsquo;<samp><span class="samp">*Semantic Context
+      Analysis*</span></samp>&rsquo; buffer containing a summary of
+      the context at point.</p>
+    </blockquote>
+  </div>
+
+  <p class="noindent">The Prefix section of the
+  &lsquo;<samp><span class="samp">*Semantic Context
+  Analysis*</span></samp>&rsquo; buffer lists the tags based on the
+  text at point. If it shows only a simple string, the Semantic was
+  unable to identify what the data type was.</p>
+
+  <p>The first item in the list of the prefix is the first lookup
+  failure in the chain, and that is the item to focus debugging
+  effort on. For example:</p>
+  <pre class="example">
+     Context Type: #&lt;semantic-analyze-context context&gt;
      Bounds: (182 . 185)
      Prefix: Foo* bar
              int bbb (const char* y)
@@ -88,11 +115,12 @@ example:
      -&gt; Local Vars: int argc
                     char** argv
 </pre>
-   <p>In this example you can see that the prefix has two fully found tags. 
-In the following example, the symbol &ldquo;bbb&rdquo; is incomplete, and could
-not be found:
 
-<pre class="example">     Context Type: #&lt;semantic-analyze-context context&gt;
+  <p>In this example you can see that the prefix has two fully
+  found tags. In the following example, the symbol
+  &ldquo;bbb&rdquo; is incomplete, and could not be found:</p>
+  <pre class="example">
+     Context Type: #&lt;semantic-analyze-context context&gt;
      Bounds: (182 . 184)
      Prefix: Foo* bar
              "bb"
@@ -103,47 +131,57 @@ not be found:
      -&gt; Local Vars: int argc
                     char** argv
 </pre>
-   <h5 class="subsubsection">2.4.4.2 Step 2 : Check your include path</h5>
 
-<p>Once you know the missing symbol, check your include path.  The header
-or include file containing the needed definition may not be in the
-list of headers <i>Semantic</i> is searching through.  To get a basic
-list, you can use <kbd>M-x semanticdb-find-test-translate-path</kbd>. 
-See <a href="Semanticdb-search-debugging-commands.html#Semanticdb-search-debugging-commands">Semanticdb search debugging commands</a>.
+  <h5 class="subsubsection">2.4.4.2 Step 2 : Check your include
+  path</h5>
 
-   <p>If items should be loaded but aren't, or if you see some tables that
-have no tags in them, then you you may have an incorrectly-set search
-throttle (see <a href="Search-Throttle.html#Search-Throttle">Search Throttle</a>).  For example,
+  <p>Once you know the missing symbol, check your include path. The
+  header or include file containing the needed definition may not
+  be in the list of headers <i>Semantic</i> is searching through.
+  To get a basic list, you can use <kbd>M-x
+  semanticdb-find-test-translate-path</kbd>. See <a href=
+  "Semanticdb-search-debugging-commands.html#Semanticdb-search-debugging-commands">
+  Semanticdb search debugging commands</a>.</p>
 
-<pre class="example">     *#&lt;semanticdb-table main.cpp (4 tags DIRTY)&gt;
+  <p>If items should be loaded but aren't, or if you see some
+  tables that have no tags in them, then you you may have an
+  incorrectly-set search throttle (see <a href=
+  "Search-Throttle.html#Search-Throttle">Search Throttle</a>). For
+  example,</p>
+  <pre class="example">
+     *#&lt;semanticdb-table main.cpp (4 tags DIRTY)&gt;
      *#&lt;semanticdb-table foo.hh (0 tags DIRTY)&gt;
 </pre>
-   <p>Here, <i>Semantic</i> found <samp><span class="file">foo.hh</span></samp>, but there are 0 tags.  This may
-be because you had set the throttle to avoid reading and parsing files
-that Emacs has not visited.  To fix this, visit the file and let
-<i>Semantic</i> parse it.
 
-   <p>For C++, check also that the &lsquo;<samp><span class="samp">#include</span></samp>&rsquo; statements for your
-project-level files use quotes, not angle brackets; angle brackets are
-for system files.
+  <p>Here, <i>Semantic</i> found <samp><span class=
+  "file">foo.hh</span></samp>, but there are 0 tags. This may be
+  because you had set the throttle to avoid reading and parsing
+  files that Emacs has not visited. To fix this, visit the file and
+  let <i>Semantic</i> parse it.</p>
 
-<h5 class="subsubsection">2.4.4.3 Step 3: Check the local scope</h5>
+  <p>For C++, check also that the &lsquo;<samp><span class=
+  "samp">#include</span></samp>&rsquo; statements for your
+  project-level files use quotes, not angle brackets; angle
+  brackets are for system files.</p>
 
-<p>If your data type is somehow abbreviated based on scope, such as from
-a <code>using</code> statement, you should make sure that the symbol you
-want is in the local scope.  Examine the scope with <kbd>M-x
-semantic-calculate-scope</kbd>.  The scope structure is displayed in ADEBUG
-mode, so use <kbd>SPC</kbd> to expand different elements and looking for
-your symbol.
+  <h5 class="subsubsection">2.4.4.3 Step 3: Check the local
+  scope</h5>
 
-   <p>If your symbol should be in the scope, but you cannot find it, then
-you may have found a language support bug in the local-variable
-parser, or using statement parser.
+  <p>If your data type is somehow abbreviated based on scope, such
+  as from a <code>using</code> statement, you should make sure that
+  the symbol you want is in the local scope. Examine the scope with
+  <kbd>M-x semantic-calculate-scope</kbd>. The scope structure is
+  displayed in ADEBUG mode, so use <kbd>SPC</kbd> to expand
+  different elements and looking for your symbol.</p>
 
-   <p>Calling <kbd>M-x bovinte</kbd> should force a reset on the scope in case
-there is merely some bad state.
+  <p>If your symbol should be in the scope, but you cannot find it,
+  then you may have found a language support bug in the
+  local-variable parser, or using statement parser.</p>
 
-<pre class="example">      ] Name: Cache
+  <p>Calling <kbd>M-x bovinte</kbd> should force a reset on the
+  scope in case there is merely some bad state.</p>
+  <pre class="example">
+      ] Name: Cache
       ] Class: #'semantic-scope-cache
       ] :table #&lt;semanticdb-table testsubclass.cpp (13 tags DIRTY)&gt;
       ] tag createMoose : class moose
@@ -153,26 +191,30 @@ there is merely some bad state.
       ] fullscope #&lt;TAG LIST: 23 entries&gt;
       ] localvar #&lt;TAG LIST: 6 entries&gt;
 </pre>
-   <p>In the above sample output, the <code>tag</code> slot specifies where within
-you source this scope is relevant.  <code>Parents</code> should contain any
-in scope parents, such as the class a method belongs to. 
-<code>Localvar</code> should contain your local variables.  <code>Scope</code>
-should contain datatypes in scope due to a <code>using</code> statement or
-the like.
 
-<h5 class="subsubsection">2.4.4.4 Step 4: Check the typecache</h5>
+  <p>In the above sample output, the <code>tag</code> slot
+  specifies where within you source this scope is relevant.
+  <code>Parents</code> should contain any in scope parents, such as
+  the class a method belongs to. <code>Localvar</code> should
+  contain your local variables. <code>Scope</code> should contain
+  datatypes in scope due to a <code>using</code> statement or the
+  like.</p>
 
-<p>For complex typed languages like C++, <i>Semantic</i> creates a typecache,
-or an optimized search table with all the various data types in it. 
-Elements in the typecache do not obey local scope.  It only contains
-fully qualified names.  You can examine the typecache with
-<kbd>M-x semanticdb-typecache-dump</kbd>.
+  <h5 class="subsubsection">2.4.4.4 Step 4: Check the
+  typecache</h5>
 
-   <p>If your data types are not in the typecache, there may be some parsing
-error or other bug.  Calling <kbd>M-x bovinte</kbd> should force a reset on
-the typecache in case there is merely some bad state.
+  <p>For complex typed languages like C++, <i>Semantic</i> creates
+  a typecache, or an optimized search table with all the various
+  data types in it. Elements in the typecache do not obey local
+  scope. It only contains fully qualified names. You can examine
+  the typecache with <kbd>M-x semanticdb-typecache-dump</kbd>.</p>
 
-<pre class="example">     ]#&lt;semanticdb-typecache /home/zappo/cedet/semantic/tests/testsubclass.cpp&gt;
+  <p>If your data types are not in the typecache, there may be some
+  parsing error or other bug. Calling <kbd>M-x bovinte</kbd> should
+  force a reset on the typecache in case there is merely some bad
+  state.</p>
+  <pre class="example">
+     ]#&lt;semanticdb-typecache /home/zappo/cedet/semantic/tests/testsubclass.cpp&gt;
         ] Name: /home/zappo/cedet/semantic/tests/testsubclass.cpp
         ] Class: #'semanticdb-typecache
         ] filestream 'nil
@@ -180,35 +222,39 @@ the typecache in case there is merely some bad state.
         ] stream 'nil
         ] dependants 'nil
 </pre>
-   <p>In the above example, the output of <kbd>M-x semanticdb-typecache-dump</kbd>
-was expanded one level.  The <code>filestream</code> slot should contain
-datatypes in the current file.  The <code>includestream</code> should
-contain all the datatypes in all included header files.
 
-   <p>The <code>dependants</code> slot will specify other files that depend on
-this one.
+  <p>In the above example, the output of <kbd>M-x
+  semanticdb-typecache-dump</kbd> was expanded one level. The
+  <code>filestream</code> slot should contain datatypes in the
+  current file. The <code>includestream</code> should contain all
+  the datatypes in all included header files.</p>
 
-<h5 class="subsubsection">2.4.4.5 Step 5: Check the parser</h5>
+  <p>The <code>dependants</code> slot will specify other files that
+  depend on this one.</p>
 
-<p>Go to the location where your unfound tag should be.  You can call
-<kbd>M-x bovinate</kbd>, and see a dump of the raw tag structure.  To see a
-navigable tree, use <kbd>M-x semantic-adebug-bovinate</kbd> instead.  You
-can then look to make sure your tag has been properly parsed.
+  <h5 class="subsubsection">2.4.4.5 Step 5: Check the parser</h5>
 
-   <p>If it has not, then you may have found a parser bug.  To get a feel
-how <i>Semantic</i> treats your file, type <kbd>M-x
-global-semantic-show-unmatched-syntax-mode</kbd>.  This causes any syntax
-it cannot parse to be underlined in red.
+  <p>Go to the location where your unfound tag should be. You can
+  call <kbd>M-x bovinate</kbd>, and see a dump of the raw tag
+  structure. To see a navigable tree, use <kbd>M-x
+  semantic-adebug-bovinate</kbd> instead. You can then look to make
+  sure your tag has been properly parsed.</p>
 
-   <p>If your type is not parsable, it could be for a couple of reasons:
+  <p>If it has not, then you may have found a parser bug. To get a
+  feel how <i>Semantic</i> treats your file, type <kbd>M-x
+  global-semantic-show-unmatched-syntax-mode</kbd>. This causes any
+  syntax it cannot parse to be underlined in red.</p>
 
-     <ol type=1 start=1>
-<li>If there is a MACRO keyword used in the definition of the type, you
-may need to update the <code>semantic-lex-c-preprocessor-symbol-map</code>
-to account for it.
+  <p>If your type is not parsable, it could be for a couple of
+  reasons:</p>
 
-     <li>Or perhaps the parser needs to be fixed.
-        </ol>
+  <ol type="1" start="1">
+    <li>If there is a MACRO keyword used in the definition of the
+    type, you may need to update the
+    <code>semantic-lex-c-preprocessor-symbol-map</code> to account
+    for it.</li>
 
-   </body></html>
-
+    <li>Or perhaps the parser needs to be fixed.</li>
+  </ol>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,121 +16,182 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Report errors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Report errors">
-<meta name="keywords" content="Wisent Parser Development: Report errors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Wisent-Parsing.html#Wisent-Parsing" rel="up" title="Wisent Parsing">
-<link href="Error-recovery.html#Error-recovery" rel="next" title="Error recovery">
-<link href="Actions-goodies.html#Actions-goodies" rel="prev" title="Actions goodies">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Report errors</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Report errors" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Report errors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Wisent-Parsing.html#Wisent-Parsing" rel="up" title=
+  "Wisent Parsing" />
+  <link href="Error-recovery.html#Error-recovery" rel="next" title=
+  "Error recovery" />
+  <link href="Actions-goodies.html#Actions-goodies" rel="prev"
+  title="Actions goodies" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Report-errors"></a>
-<div class="header">
-<p>
-Next: <a href="Error-recovery.html#Error-recovery" accesskey="n" rel="next">Error recovery</a>, Previous: <a href="Actions-goodies.html#Actions-goodies" accesskey="p" rel="prev">Actions goodies</a>, Up: <a href="Wisent-Parsing.html#Wisent-Parsing" accesskey="u" rel="up">Wisent Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-error-reporting-function"></a>
-<h3 class="section">3.3 The error reporting function</h3>
+<body lang="en" xml:lang="en">
+  <a name="Report-errors" id="Report-errors"></a>
 
-<a name="index-error-reporting"></a>
-<p>When the parser encounters a syntax error it calls a user-defined
-function.  It must be an Emacs Lisp function with one argument: a
-string containing the message to report.
-</p>
-<p>By default the parser uses this function to report error messages:
-</p>
-<a name="index-wisent_002dmessage"></a>
-<dl>
-<dt><a name="index-wisent_002dmessage-1"></a>Function: <strong>wisent-message</strong> <em>string &amp;rest args</em></dt>
-<dd><p>Print a one-line message if <code>wisent-parse-verbose-flag</code> is set.
-Pass <var>string</var> and <var>args</var> arguments to <em>message</em>.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Error-recovery.html#Error-recovery"
+    accesskey="n" rel="next">Error recovery</a>, Previous: <a href=
+    "Actions-goodies.html#Actions-goodies" accesskey="p" rel=
+    "prev">Actions goodies</a>, Up: <a href=
+    "Wisent-Parsing.html#Wisent-Parsing" accesskey="u" rel=
+    "up">Wisent Parsing</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-error-reporting-function" id=
+  "The-error-reporting-function"></a>
 
-<dl compact="compact">
-<dt><strong>Please Note:</strong></dt>
-<dd><p><code>wisent-message</code> uses the following function to print lexical
-tokens:
-</p>
-<dl>
-<dt><a name="index-wisent_002dtoken_002dto_002dstring"></a>Function: <strong>wisent-token-to-string</strong> <em>token</em></dt>
-<dd><p>Return a printed representation of lexical token <var>token</var>.
-</p></dd></dl>
+  <h3 class="section">3.3 The error reporting function</h3><a name=
+  "index-error-reporting" id="index-error-reporting"></a>
 
-<p>The general printed form of a lexical token is:
-</p>
-<p><code><var>token</var>(<var>value</var>)@<var>location</var></code><!-- /@w -->
-</p></dd>
-</dl>
+  <p>When the parser encounters a syntax error it calls a
+  user-defined function. It must be an Emacs Lisp function with one
+  argument: a string containing the message to report.</p>
 
-<p>To control the verbosity of the parser you can set to non-<code>nil</code>
-this variable:
-</p>
-<a name="index-wisent_002dparse_002dverbose_002dflag-1"></a>
-<dl>
-<dt><a name="index-wisent_002dparse_002dverbose_002dflag"></a>Option: <strong>wisent-parse-verbose-flag</strong></dt>
-<dd><p>non-<code>nil</code> means to issue more messages while parsing.
-</p></dd></dl>
+  <p>By default the parser uses this function to report error
+  messages:</p><a name="index-wisent_002dmessage" id=
+  "index-wisent_002dmessage"></a>
 
-<p>Or interactively use the command:
-</p>
-<a name="index-wisent_002dparse_002dtoggle_002dverbose_002dflag"></a>
-<dl>
-<dt><a name="index-wisent_002dparse_002dtoggle_002dverbose_002dflag-1"></a>Command: <strong>wisent-parse-toggle-verbose-flag</strong></dt>
-<dd><p>Toggle whether to issue more messages while parsing.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-wisent_002dmessage-1" id=
+    "index-wisent_002dmessage-1"></a>Function:
+    <strong>wisent-message</strong> <em>string &amp;rest
+    args</em></dt>
 
-<p>When the error reporting function is entered the variable
-<code>wisent-input</code> contains the unexpected token as returned by the
-lexer.
-</p>
-<p>The error reporting function can be called from a semantic action too
-using the special macro <code>wisent-error</code>.  When called from a
-semantic action entered by error recovery (see <a href="Error-recovery.html#Error-recovery">Error recovery</a>) the
-value of the variable <code>wisent-recovering</code> is non-<code>nil</code>.
-</p>
+    <dd>
+      <p>Print a one-line message if
+      <code>wisent-parse-verbose-flag</code> is set. Pass
+      <var>string</var> and <var>args</var> arguments to
+      <em>message</em>.</p>
+    </dd>
+  </dl>
 
+  <dl compact="compact">
+    <dt><strong>Please Note:</strong></dt>
 
+    <dd>
+      <p><code>wisent-message</code> uses the following function to
+      print lexical tokens:</p>
 
+      <dl>
+        <dt><a name="index-wisent_002dtoken_002dto_002dstring" id=
+        "index-wisent_002dtoken_002dto_002dstring"></a>Function:
+        <strong>wisent-token-to-string</strong> <em>token</em></dt>
+
+        <dd>
+          <p>Return a printed representation of lexical token
+          <var>token</var>.</p>
+        </dd>
+      </dl>
+
+      <p>The general printed form of a lexical token is:</p>
+
+      <p>
+      <code><var>token</var>(<var>value</var>)@<var>location</var></code><!-- /@w --></p>
+    </dd>
+  </dl>
+
+  <p>To control the verbosity of the parser you can set to
+  non-<code>nil</code> this variable:</p><a name=
+  "index-wisent_002dparse_002dverbose_002dflag-1" id=
+  "index-wisent_002dparse_002dverbose_002dflag-1"></a>
+
+  <dl>
+    <dt><a name="index-wisent_002dparse_002dverbose_002dflag" id=
+    "index-wisent_002dparse_002dverbose_002dflag"></a>Option:
+    <strong>wisent-parse-verbose-flag</strong></dt>
+
+    <dd>
+      <p>non-<code>nil</code> means to issue more messages while
+      parsing.</p>
+    </dd>
+  </dl>
+
+  <p>Or interactively use the command:</p><a name=
+  "index-wisent_002dparse_002dtoggle_002dverbose_002dflag" id=
+  "index-wisent_002dparse_002dtoggle_002dverbose_002dflag"></a>
+
+  <dl>
+    <dt><a name=
+    "index-wisent_002dparse_002dtoggle_002dverbose_002dflag-1" id=
+    "index-wisent_002dparse_002dtoggle_002dverbose_002dflag-1"></a>Command:
+    <strong>wisent-parse-toggle-verbose-flag</strong></dt>
+
+    <dd>
+      <p>Toggle whether to issue more messages while parsing.</p>
+    </dd>
+  </dl>
+
+  <p>When the error reporting function is entered the variable
+  <code>wisent-input</code> contains the unexpected token as
+  returned by the lexer.</p>
+
+  <p>The error reporting function can be called from a semantic
+  action too using the special macro <code>wisent-error</code>.
+  When called from a semantic action entered by error recovery (see
+  <a href="Error-recovery.html#Error-recovery">Error recovery</a>)
+  the value of the variable <code>wisent-recovering</code> is
+  non-<code>nil</code>.</p>
 </body>
 </html>

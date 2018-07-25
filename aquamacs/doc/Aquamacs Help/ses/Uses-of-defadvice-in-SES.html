@@ -1,14 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Uses of defadvice in SES - SES: Simple Emacs Spreadsheet</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="SES: Simple Emacs Spreadsheet">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="For-Gurus.html#For-Gurus" title="For Gurus">
-<link rel="prev" href="Buffer_002dlocal-variables-in-spreadsheets.html#Buffer_002dlocal-variables-in-spreadsheets" title="Buffer-local variables in spreadsheets">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Uses of defadvice in SES - SES: Simple Emacs
+  Spreadsheet</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "SES: Simple Emacs Spreadsheet" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="For-Gurus.html#For-Gurus" title=
+  "For Gurus" />
+  <link rel="prev" href=
+  "Buffer_002dlocal-variables-in-spreadsheets.html#Buffer_002dlocal-variables-in-spreadsheets"
+  title="Buffer-local variables in spreadsheets" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents SES: the Simple Emacs Spreadsheet.
 
 Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
@@ -26,8 +37,10 @@ Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,36 +50,54 @@ Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Uses-of-defadvice-in-SES"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer_002dlocal-variables-in-spreadsheets.html#Buffer_002dlocal-variables-in-spreadsheets">Buffer-local variables in spreadsheets</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="For-Gurus.html#For-Gurus">For Gurus</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Uses-of-defadvice-in-SES" id=
+    "Uses-of-defadvice-in-SES"></a>
 
-<h3 class="section">4.5 Uses of defadvice in SES</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Buffer_002dlocal-variables-in-spreadsheets.html#Buffer_002dlocal-variables-in-spreadsheets">Buffer-local
+    variables in spreadsheets</a>, Up:&nbsp;<a rel="up" accesskey=
+    "u" href="For-Gurus.html#For-Gurus">For Gurus</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-defadvice-95"></a><a name="index-undo_002dmore-96"></a><a name="index-copy_002dregion_002das_002dkill-97"></a><a name="index-yank-98"></a>
-     <dl>
-<dt><code>undo-more</code><dd>Defines a new undo element format (<var>fun</var> . <var>args</var>), which
-means &ldquo;undo by applying <var>fun</var> to <var>args</var>&rdquo;.  For spreadsheet
-buffers, it allows undos in the data area even though that's outside
-the narrowing.
+  <h3 class="section">4.5 Uses of defadvice in SES</h3>
 
-     <br><dt><code>copy-region-as-kill</code><dd>When copying from the print area of a spreadsheet, treat the region as
-a rectangle and attach each cell's formula and printer as 'ses
-properties.
+  <p><a name="index-defadvice-95" id=
+  "index-defadvice-95"></a><a name="index-undo_002dmore-96" id=
+  "index-undo_002dmore-96"></a><a name=
+  "index-copy_002dregion_002das_002dkill-97" id=
+  "index-copy_002dregion_002das_002dkill-97"></a><a name=
+  "index-yank-98" id="index-yank-98"></a></p>
 
-     <br><dt><code>yank</code><dd>When yanking into the print area of a spreadsheet, first try to yank
-as cells (if the yank text has 'ses properties), then as tab-separated
-formulas, then (if all else fails) as a single formula for the current
-cell. 
-</dl>
+  <dl>
+    <dt><code>undo-more</code></dt>
 
-<!-- =================================================================== -->
-   </body></html>
+    <dd>Defines a new undo element format (<var>fun</var> .
+    <var>args</var>), which means &ldquo;undo by applying
+    <var>fun</var> to <var>args</var>&rdquo;. For spreadsheet
+    buffers, it allows undos in the data area even though that's
+    outside the narrowing.<br /></dd>
 
+    <dt><code>copy-region-as-kill</code></dt>
+
+    <dd>When copying from the print area of a spreadsheet, treat
+    the region as a rectangle and attach each cell's formula and
+    printer as 'ses properties.<br /></dd>
+
+    <dt><code>yank</code></dt>
+
+    <dd>When yanking into the print area of a spreadsheet, first
+    try to yank as cells (if the yank text has 'ses properties),
+    then as tab-separated formulas, then (if all else fails) as a
+    single formula for the current cell.</dd>
+  </dl>
+  <!-- =================================================================== -->
+</body>
+</html>

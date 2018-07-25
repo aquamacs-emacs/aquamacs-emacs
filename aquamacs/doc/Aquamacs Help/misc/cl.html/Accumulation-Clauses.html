@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,144 +16,208 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Accumulation Clauses</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Accumulation Clauses">
-<meta name="keywords" content="Common Lisp Extensions: Accumulation Clauses">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Loop-Facility.html#Loop-Facility" rel="up" title="Loop Facility">
-<link href="Other-Clauses.html#Other-Clauses" rel="next" title="Other Clauses">
-<link href="Iteration-Clauses.html#Iteration-Clauses" rel="prev" title="Iteration Clauses">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Accumulation Clauses</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Accumulation Clauses" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Accumulation Clauses" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Loop-Facility.html#Loop-Facility" rel="up" title=
+  "Loop Facility" />
+  <link href="Other-Clauses.html#Other-Clauses" rel="next" title=
+  "Other Clauses" />
+  <link href="Iteration-Clauses.html#Iteration-Clauses" rel="prev"
+  title="Iteration Clauses" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Accumulation-Clauses"></a>
-<div class="header">
-<p>
-Next: <a href="Other-Clauses.html#Other-Clauses" accesskey="n" rel="next">Other Clauses</a>, Previous: <a href="Iteration-Clauses.html#Iteration-Clauses" accesskey="p" rel="prev">Iteration Clauses</a>, Up: <a href="Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Accumulation-Clauses-1"></a>
-<h4 class="subsection">4.7.5 Accumulation Clauses</h4>
+<body lang="en" xml:lang="en">
+  <a name="Accumulation-Clauses" id="Accumulation-Clauses"></a>
 
-<p>These clauses cause the loop to accumulate information about the
-specified Lisp <var>form</var>.  The accumulated result is returned
-from the loop unless overridden, say, by a <code>return</code> clause.
-</p>
-<dl compact="compact">
-<dt><code>collect <var>form</var></code></dt>
-<dd><p>This clause collects the values of <var>form</var> into a list.  Several
-examples of <code>collect</code> appear elsewhere in this manual.
-</p>
-<p>The word <code>collecting</code> is a synonym for <code>collect</code>, and
-likewise for the other accumulation clauses.
-</p>
-</dd>
-<dt><code>append <var>form</var></code></dt>
-<dd><p>This clause collects lists of values into a result list using
-<code>append</code>.
-</p>
-</dd>
-<dt><code>nconc <var>form</var></code></dt>
-<dd><p>This clause collects lists of values into a result list by
-destructively modifying the lists rather than copying them.
-</p>
-</dd>
-<dt><code>concat <var>form</var></code></dt>
-<dd><p>This clause concatenates the values of the specified <var>form</var>
-into a string.  (It and the following clause are extensions to
-standard Common Lisp.)
-</p>
-</dd>
-<dt><code>vconcat <var>form</var></code></dt>
-<dd><p>This clause concatenates the values of the specified <var>form</var>
-into a vector.
-</p>
-</dd>
-<dt><code>count <var>form</var></code></dt>
-<dd><p>This clause counts the number of times the specified <var>form</var>
-evaluates to a non-<code>nil</code> value.
-</p>
-</dd>
-<dt><code>sum <var>form</var></code></dt>
-<dd><p>This clause accumulates the sum of the values of the specified
-<var>form</var>, which must evaluate to a number.
-</p>
-</dd>
-<dt><code>maximize <var>form</var></code></dt>
-<dd><p>This clause accumulates the maximum value of the specified <var>form</var>,
-which must evaluate to a number.  The return value is undefined if
-<code>maximize</code> is executed zero times.
-</p>
-</dd>
-<dt><code>minimize <var>form</var></code></dt>
-<dd><p>This clause accumulates the minimum value of the specified <var>form</var>.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Other-Clauses.html#Other-Clauses" accesskey=
+    "n" rel="next">Other Clauses</a>, Previous: <a href=
+    "Iteration-Clauses.html#Iteration-Clauses" accesskey="p" rel=
+    "prev">Iteration Clauses</a>, Up: <a href=
+    "Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop
+    Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Accumulation-Clauses-1" id="Accumulation-Clauses-1"></a>
 
-<p>Accumulation clauses can be followed by &lsquo;<samp>into <var>var</var></samp>&rsquo; to
-cause the data to be collected into variable <var>var</var> (which is
-automatically <code>let</code>-bound during the loop) rather than an
-unnamed temporary variable.  Also, <code>into</code> accumulations do
-not automatically imply a return value.  The loop must use some
-explicit mechanism, such as <code>finally return</code>, to return
-the accumulated result.
-</p>
-<p>It is valid for several accumulation clauses of the same type to
-accumulate into the same place.  From Steele:
-</p>
-<div class="example">
-<pre class="example">(cl-loop for name in '(fred sue alice joe june)
+  <h4 class="subsection">4.7.5 Accumulation Clauses</h4>
+
+  <p>These clauses cause the loop to accumulate information about
+  the specified Lisp <var>form</var>. The accumulated result is
+  returned from the loop unless overridden, say, by a
+  <code>return</code> clause.</p>
+
+  <dl compact="compact">
+    <dt><code>collect <var>form</var></code></dt>
+
+    <dd>
+      <p>This clause collects the values of <var>form</var> into a
+      list. Several examples of <code>collect</code> appear
+      elsewhere in this manual.</p>
+
+      <p>The word <code>collecting</code> is a synonym for
+      <code>collect</code>, and likewise for the other accumulation
+      clauses.</p>
+    </dd>
+
+    <dt><code>append <var>form</var></code></dt>
+
+    <dd>
+      <p>This clause collects lists of values into a result list
+      using <code>append</code>.</p>
+    </dd>
+
+    <dt><code>nconc <var>form</var></code></dt>
+
+    <dd>
+      <p>This clause collects lists of values into a result list by
+      destructively modifying the lists rather than copying
+      them.</p>
+    </dd>
+
+    <dt><code>concat <var>form</var></code></dt>
+
+    <dd>
+      <p>This clause concatenates the values of the specified
+      <var>form</var> into a string. (It and the following clause
+      are extensions to standard Common Lisp.)</p>
+    </dd>
+
+    <dt><code>vconcat <var>form</var></code></dt>
+
+    <dd>
+      <p>This clause concatenates the values of the specified
+      <var>form</var> into a vector.</p>
+    </dd>
+
+    <dt><code>count <var>form</var></code></dt>
+
+    <dd>
+      <p>This clause counts the number of times the specified
+      <var>form</var> evaluates to a non-<code>nil</code>
+      value.</p>
+    </dd>
+
+    <dt><code>sum <var>form</var></code></dt>
+
+    <dd>
+      <p>This clause accumulates the sum of the values of the
+      specified <var>form</var>, which must evaluate to a
+      number.</p>
+    </dd>
+
+    <dt><code>maximize <var>form</var></code></dt>
+
+    <dd>
+      <p>This clause accumulates the maximum value of the specified
+      <var>form</var>, which must evaluate to a number. The return
+      value is undefined if <code>maximize</code> is executed zero
+      times.</p>
+    </dd>
+
+    <dt><code>minimize <var>form</var></code></dt>
+
+    <dd>
+      <p>This clause accumulates the minimum value of the specified
+      <var>form</var>.</p>
+    </dd>
+  </dl>
+
+  <p>Accumulation clauses can be followed by &lsquo;<samp>into
+  <var>var</var></samp>&rsquo; to cause the data to be collected
+  into variable <var>var</var> (which is automatically
+  <code>let</code>-bound during the loop) rather than an unnamed
+  temporary variable. Also, <code>into</code> accumulations do not
+  automatically imply a return value. The loop must use some
+  explicit mechanism, such as <code>finally return</code>, to
+  return the accumulated result.</p>
+
+  <p>It is valid for several accumulation clauses of the same type
+  to accumulate into the same place. From Steele:</p>
+
+  <div class="example">
+    <pre class="example">
+(cl-loop for name in '(fred sue alice joe june)
          for kids in '((bob ken) () () (kris sunshine) ())
          collect name
          append kids)
         &rArr; (fred bob ken sue alice joe kris sunshine june)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Other-Clauses.html#Other-Clauses" accesskey="n" rel="next">Other Clauses</a>, Previous: <a href="Iteration-Clauses.html#Iteration-Clauses" accesskey="p" rel="prev">Iteration Clauses</a>, Up: <a href="Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Other-Clauses.html#Other-Clauses" accesskey=
+    "n" rel="next">Other Clauses</a>, Previous: <a href=
+    "Iteration-Clauses.html#Iteration-Clauses" accesskey="p" rel=
+    "prev">Iteration Clauses</a>, Up: <a href=
+    "Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop
+    Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

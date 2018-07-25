@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,104 +19,151 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Processing of Errors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Processing of Errors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Processing of Errors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Errors.html#Errors" rel="up" title="Errors">
-<link href="Handling-Errors.html#Handling-Errors" rel="next" title="Handling Errors">
-<link href="Signaling-Errors.html#Signaling-Errors" rel="prev" title="Signaling Errors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Processing of
+  Errors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Processing of Errors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Processing of Errors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Errors.html#Errors" rel="up" title="Errors" />
+  <link href="Handling-Errors.html#Handling-Errors" rel="next"
+  title="Handling Errors" />
+  <link href="Signaling-Errors.html#Signaling-Errors" rel="prev"
+  title="Signaling Errors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Processing-of-Errors" id="Processing-of-Errors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Handling-Errors.html#Handling-Errors"
+    accesskey="n" rel="next">Handling Errors</a>, Previous:
+    <a href="Signaling-Errors.html#Signaling-Errors" accesskey="p"
+    rel="prev">Signaling Errors</a>, Up: <a href=
+    "Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="How-Emacs-Processes-Errors" id=
+  "How-Emacs-Processes-Errors"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Processing-of-Errors"></a>
-<div class="header">
-<p>
-Next: <a href="Handling-Errors.html#Handling-Errors" accesskey="n" rel="next">Handling Errors</a>, Previous: <a href="Signaling-Errors.html#Signaling-Errors" accesskey="p" rel="prev">Signaling Errors</a>, Up: <a href="Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-Emacs-Processes-Errors"></a>
-<h4 class="subsubsection">10.6.3.2 How Emacs Processes Errors</h4>
-<a name="index-processing-of-errors"></a>
+  <h4 class="subsubsection">10.6.3.2 How Emacs Processes
+  Errors</h4><a name="index-processing-of-errors" id=
+  "index-processing-of-errors"></a>
 
-<p>When an error is signaled, <code>signal</code> searches for an active
-<em>handler</em> for the error.  A handler is a sequence of Lisp
-expressions designated to be executed if an error happens in part of the
-Lisp program.  If the error has an applicable handler, the handler is
-executed, and control resumes following the handler.  The handler
-executes in the environment of the <code>condition-case</code> that
-established it; all functions called within that <code>condition-case</code>
-have already been exited, and the handler cannot return to them.
-</p>
-<p>If there is no applicable handler for the error, it terminates the
-current command and returns control to the editor command loop.  (The
-command loop has an implicit handler for all kinds of errors.)  The
-command loop&rsquo;s handler uses the error symbol and associated data to
-print an error message.  You can use the variable
-<code>command-error-function</code> to control how this is done:
-</p>
-<dl>
-<dt><a name="index-command_002derror_002dfunction"></a>Variable: <strong>command-error-function</strong></dt>
-<dd><p>This variable, if non-<code>nil</code>, specifies a function to use to
-handle errors that return control to the Emacs command loop.  The
-function should take three arguments: <var>data</var>, a list of the same
-form that <code>condition-case</code> would bind to its variable;
-<var>context</var>, a string describing the situation in which the error
-occurred, or (more often) <code>nil</code>; and <var>caller</var>, the Lisp
-function which called the primitive that signaled the error.
-</p></dd></dl>
+  <p>When an error is signaled, <code>signal</code> searches for an
+  active <em>handler</em> for the error. A handler is a sequence of
+  Lisp expressions designated to be executed if an error happens in
+  part of the Lisp program. If the error has an applicable handler,
+  the handler is executed, and control resumes following the
+  handler. The handler executes in the environment of the
+  <code>condition-case</code> that established it; all functions
+  called within that <code>condition-case</code> have already been
+  exited, and the handler cannot return to them.</p>
 
-<a name="index-debug_002don_002derror-use"></a>
-<p>An error that has no explicit handler may call the Lisp debugger.  The
-debugger is enabled if the variable <code>debug-on-error</code> (see <a href="Error-Debugging.html#Error-Debugging">Error Debugging</a>) is non-<code>nil</code>.  Unlike error handlers, the debugger runs
-in the environment of the error, so that you can examine values of
-variables precisely as they were at the time of the error.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Handling-Errors.html#Handling-Errors" accesskey="n" rel="next">Handling Errors</a>, Previous: <a href="Signaling-Errors.html#Signaling-Errors" accesskey="p" rel="prev">Signaling Errors</a>, Up: <a href="Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If there is no applicable handler for the error, it terminates
+  the current command and returns control to the editor command
+  loop. (The command loop has an implicit handler for all kinds of
+  errors.) The command loop&rsquo;s handler uses the error symbol
+  and associated data to print an error message. You can use the
+  variable <code>command-error-function</code> to control how this
+  is done:</p>
 
+  <dl>
+    <dt><a name="index-command_002derror_002dfunction" id=
+    "index-command_002derror_002dfunction"></a>Variable:
+    <strong>command-error-function</strong></dt>
 
+    <dd>
+      <p>This variable, if non-<code>nil</code>, specifies a
+      function to use to handle errors that return control to the
+      Emacs command loop. The function should take three arguments:
+      <var>data</var>, a list of the same form that
+      <code>condition-case</code> would bind to its variable;
+      <var>context</var>, a string describing the situation in
+      which the error occurred, or (more often) <code>nil</code>;
+      and <var>caller</var>, the Lisp function which called the
+      primitive that signaled the error.</p>
+    </dd>
+  </dl><a name="index-debug_002don_002derror-use" id=
+  "index-debug_002don_002derror-use"></a>
 
+  <p>An error that has no explicit handler may call the Lisp
+  debugger. The debugger is enabled if the variable
+  <code>debug-on-error</code> (see <a href=
+  "Error-Debugging.html#Error-Debugging">Error Debugging</a>) is
+  non-<code>nil</code>. Unlike error handlers, the debugger runs in
+  the environment of the error, so that you can examine values of
+  variables precisely as they were at the time of the error.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Handling-Errors.html#Handling-Errors"
+    accesskey="n" rel="next">Handling Errors</a>, Previous:
+    <a href="Signaling-Errors.html#Signaling-Errors" accesskey="p"
+    rel="prev">Signaling Errors</a>, Up: <a href=
+    "Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

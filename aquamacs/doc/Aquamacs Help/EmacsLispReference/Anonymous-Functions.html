@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,164 +19,237 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Anonymous Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Anonymous Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Anonymous Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Generic-Functions.html#Generic-Functions" rel="next" title="Generic Functions">
-<link href="Mapping-Functions.html#Mapping-Functions" rel="prev" title="Mapping Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Anonymous
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Anonymous Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Anonymous Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href="Generic-Functions.html#Generic-Functions" rel="next"
+  title="Generic Functions" />
+  <link href="Mapping-Functions.html#Mapping-Functions" rel="prev"
+  title="Mapping Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Anonymous-Functions" id="Anonymous-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Generic-Functions.html#Generic-Functions"
+    accesskey="n" rel="next">Generic Functions</a>, Previous:
+    <a href="Mapping-Functions.html#Mapping-Functions" accesskey=
+    "p" rel="prev">Mapping Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Anonymous-Functions-1" id="Anonymous-Functions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Anonymous-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Generic-Functions.html#Generic-Functions" accesskey="n" rel="next">Generic Functions</a>, Previous: <a href="Mapping-Functions.html#Mapping-Functions" accesskey="p" rel="prev">Mapping Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Anonymous-Functions-1"></a>
-<h3 class="section">12.7 Anonymous Functions</h3>
-<a name="index-anonymous-function"></a>
+  <h3 class="section">12.7 Anonymous Functions</h3><a name=
+  "index-anonymous-function" id="index-anonymous-function"></a>
 
-<p>Although functions are usually defined with <code>defun</code> and given
-names at the same time, it is sometimes convenient to use an explicit
-lambda expression&mdash;an <em>anonymous function</em>.  Anonymous functions
-are valid wherever function names are.  They are often assigned as
-variable values, or as arguments to functions; for instance, you might
-pass one as the <var>function</var> argument to <code>mapcar</code>, which
-applies that function to each element of a list (see <a href="Mapping-Functions.html#Mapping-Functions">Mapping Functions</a>).  See <a href="Accessing-Documentation.html#describe_002dsymbols-example">describe-symbols example</a>, for a realistic example
-of this.
-</p>
-<p>When defining a lambda expression that is to be used as an anonymous
-function, you can in principle use any method to construct the list.
-But typically you should use the <code>lambda</code> macro, or the
-<code>function</code> special form, or the <code>#'</code> read syntax:
-</p>
-<dl>
-<dt><a name="index-lambda"></a>Macro: <strong>lambda</strong> <em>args [doc] [interactive] body&hellip;</em></dt>
-<dd><p>This macro returns an anonymous function with argument list
-<var>args</var>, documentation string <var>doc</var> (if any), interactive spec
-<var>interactive</var> (if any), and body forms given by <var>body</var>.
-</p>
-<p>In effect, this macro makes <code>lambda</code> forms self-quoting:
-evaluating a form whose <small>CAR</small> is <code>lambda</code> yields the form
-itself:
-</p>
-<div class="example">
-<pre class="example">(lambda (x) (* x x))
+  <p>Although functions are usually defined with <code>defun</code>
+  and given names at the same time, it is sometimes convenient to
+  use an explicit lambda expression&mdash;an <em>anonymous
+  function</em>. Anonymous functions are valid wherever function
+  names are. They are often assigned as variable values, or as
+  arguments to functions; for instance, you might pass one as the
+  <var>function</var> argument to <code>mapcar</code>, which
+  applies that function to each element of a list (see <a href=
+  "Mapping-Functions.html#Mapping-Functions">Mapping
+  Functions</a>). See <a href=
+  "Accessing-Documentation.html#describe_002dsymbols-example">describe-symbols
+  example</a>, for a realistic example of this.</p>
+
+  <p>When defining a lambda expression that is to be used as an
+  anonymous function, you can in principle use any method to
+  construct the list. But typically you should use the
+  <code>lambda</code> macro, or the <code>function</code> special
+  form, or the <code>#'</code> read syntax:</p>
+
+  <dl>
+    <dt><a name="index-lambda" id="index-lambda"></a>Macro:
+    <strong>lambda</strong> <em>args [doc] [interactive]
+    body&hellip;</em></dt>
+
+    <dd>
+      <p>This macro returns an anonymous function with argument
+      list <var>args</var>, documentation string <var>doc</var> (if
+      any), interactive spec <var>interactive</var> (if any), and
+      body forms given by <var>body</var>.</p>
+
+      <p>In effect, this macro makes <code>lambda</code> forms
+      self-quoting: evaluating a form whose <small>CAR</small> is
+      <code>lambda</code> yields the form itself:</p>
+
+      <div class="example">
+        <pre class="example">
+(lambda (x) (* x x))
      &rArr; (lambda (x) (* x x))
-</pre></div>
+</pre>
+      </div>
 
-<p>The <code>lambda</code> form has one other effect: it tells the Emacs
-evaluator and byte-compiler that its argument is a function, by using
-<code>function</code> as a subroutine (see below).
-</p></dd></dl>
+      <p>The <code>lambda</code> form has one other effect: it
+      tells the Emacs evaluator and byte-compiler that its argument
+      is a function, by using <code>function</code> as a subroutine
+      (see below).</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-function"></a>Special Form: <strong>function</strong> <em>function-object</em></dt>
-<dd><a name="index-function-quoting"></a>
-<p>This special form returns <var>function-object</var> without evaluating it.
-In this, it is similar to <code>quote</code> (see <a href="Quoting.html#Quoting">Quoting</a>).  But unlike
-<code>quote</code>, it also serves as a note to the Emacs evaluator and
-byte-compiler that <var>function-object</var> is intended to be used as a
-function.  Assuming <var>function-object</var> is a valid lambda
-expression, this has two effects:
-</p>
-<ul>
-<li> When the code is byte-compiled, <var>function-object</var> is compiled into
-a byte-code function object (see <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>).
+  <dl>
+    <dt><a name="index-function" id="index-function"></a>Special
+    Form: <strong>function</strong> <em>function-object</em></dt>
 
-</li><li> When lexical binding is enabled, <var>function-object</var> is converted
-into a closure.  See <a href="Closures.html#Closures">Closures</a>.
-</li></ul>
-</dd></dl>
+    <dd>
+      <a name="index-function-quoting" id=
+      "index-function-quoting"></a>
 
-<a name="index-_0023_0027-syntax"></a>
-<p>The read syntax <code>#'</code> is a short-hand for using <code>function</code>.
-The following forms are all equivalent:
-</p>
-<div class="example">
-<pre class="example">(lambda (x) (* x x))
+      <p>This special form returns <var>function-object</var>
+      without evaluating it. In this, it is similar to
+      <code>quote</code> (see <a href=
+      "Quoting.html#Quoting">Quoting</a>). But unlike
+      <code>quote</code>, it also serves as a note to the Emacs
+      evaluator and byte-compiler that <var>function-object</var>
+      is intended to be used as a function. Assuming
+      <var>function-object</var> is a valid lambda expression, this
+      has two effects:</p>
+
+      <ul>
+        <li>When the code is byte-compiled,
+        <var>function-object</var> is compiled into a byte-code
+        function object (see <a href=
+        "Byte-Compilation.html#Byte-Compilation">Byte
+        Compilation</a>).</li>
+
+        <li>When lexical binding is enabled,
+        <var>function-object</var> is converted into a closure. See
+        <a href="Closures.html#Closures">Closures</a>.</li>
+      </ul>
+    </dd>
+  </dl><a name="index-_0023_0027-syntax" id=
+  "index-_0023_0027-syntax"></a>
+
+  <p>The read syntax <code>#'</code> is a short-hand for using
+  <code>function</code>. The following forms are all
+  equivalent:</p>
+
+  <div class="example">
+    <pre class="example">
+(lambda (x) (* x x))
 (function (lambda (x) (* x x)))
 #'(lambda (x) (* x x))
-</pre></div>
+</pre>
+  </div>
 
-<p>In the following example, we define a <code>change-property</code>
-function that takes a function as its third argument, followed by a
-<code>double-property</code> function that makes use of
-<code>change-property</code> by passing it an anonymous function:
-</p>
-<div class="example">
-<pre class="example">(defun change-property (symbol prop function)
+  <p>In the following example, we define a
+  <code>change-property</code> function that takes a function as
+  its third argument, followed by a <code>double-property</code>
+  function that makes use of <code>change-property</code> by
+  passing it an anonymous function:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun change-property (symbol prop function)
   (let ((value (get symbol prop)))
     (put symbol prop (funcall function value))))
-</pre><pre class="example">
-</pre><pre class="example">(defun double-property (symbol prop)
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(defun double-property (symbol prop)
   (change-property symbol prop (lambda (x) (* 2 x))))
-</pre></div>
+</pre>
+  </div>
 
-<p>Note that we do not quote the <code>lambda</code> form.
-</p>
-<p>If you compile the above code, the anonymous function is also
-compiled.  This would not happen if, say, you had constructed the
-anonymous function by quoting it as a list:
-</p>
-<div class="example">
-<pre class="example">(defun double-property (symbol prop)
+  <p>Note that we do not quote the <code>lambda</code> form.</p>
+
+  <p>If you compile the above code, the anonymous function is also
+  compiled. This would not happen if, say, you had constructed the
+  anonymous function by quoting it as a list:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun double-property (symbol prop)
   (change-property symbol prop '(lambda (x) (* 2 x))))
-</pre></div>
+</pre>
+  </div>
 
-<p>In that case, the anonymous function is kept as a lambda expression in
-the compiled code.  The byte-compiler cannot assume this list is a
-function, even though it looks like one, since it does not know that
-<code>change-property</code> intends to use it as a function.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Generic-Functions.html#Generic-Functions" accesskey="n" rel="next">Generic Functions</a>, Previous: <a href="Mapping-Functions.html#Mapping-Functions" accesskey="p" rel="prev">Mapping Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In that case, the anonymous function is kept as a lambda
+  expression in the compiled code. The byte-compiler cannot assume
+  this list is a function, even though it looks like one, since it
+  does not know that <code>change-property</code> intends to use it
+  as a function.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Generic-Functions.html#Generic-Functions"
+    accesskey="n" rel="next">Generic Functions</a>, Previous:
+    <a href="Mapping-Functions.html#Mapping-Functions" accesskey=
+    "p" rel="prev">Mapping Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

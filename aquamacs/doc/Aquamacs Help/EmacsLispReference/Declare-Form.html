@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,167 +19,256 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Declare Form</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Declare Form">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Declare Form">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Declaring-Functions.html#Declaring-Functions" rel="next" title="Declaring Functions">
-<link href="Inline-Functions.html#Inline-Functions" rel="prev" title="Inline Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Declare Form</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Declare Form" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Declare Form" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href="Declaring-Functions.html#Declaring-Functions" rel=
+  "next" title="Declaring Functions" />
+  <link href="Inline-Functions.html#Inline-Functions" rel="prev"
+  title="Inline Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Declare-Form" id="Declare-Form"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Declaring-Functions.html#Declaring-Functions"
+    accesskey="n" rel="next">Declaring Functions</a>, Previous:
+    <a href="Inline-Functions.html#Inline-Functions" accesskey="p"
+    rel="prev">Inline Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-declare-Form" id="The-declare-Form"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Declare-Form"></a>
-<div class="header">
-<p>
-Next: <a href="Declaring-Functions.html#Declaring-Functions" accesskey="n" rel="next">Declaring Functions</a>, Previous: <a href="Inline-Functions.html#Inline-Functions" accesskey="p" rel="prev">Inline Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-declare-Form"></a>
-<h3 class="section">12.14 The <code>declare</code> Form</h3>
-<a name="index-declare"></a>
+  <h3 class="section">12.14 The <code>declare</code>
+  Form</h3><a name="index-declare" id="index-declare"></a>
 
-<p><code>declare</code> is a special macro which can be used to add meta
-properties to a function or macro: for example, marking it as
-obsolete, or giving its forms a special <tt class="key">TAB</tt> indentation
-convention in Emacs Lisp mode.
-</p>
-<a name="Definition-of-declare"></a><dl>
-<dt><a name="index-declare-1"></a>Macro: <strong>declare</strong> <em>specs&hellip;</em></dt>
-<dd><p>This macro ignores its arguments and evaluates to <code>nil</code>; it has
-no run-time effect.  However, when a <code>declare</code> form occurs in the
-<var>declare</var> argument of a <code>defun</code> or <code>defsubst</code> function
-definition (see <a href="Defining-Functions.html#Defining-Functions">Defining Functions</a>) or a <code>defmacro</code> macro
-definition (see <a href="Defining-Macros.html#Defining-Macros">Defining Macros</a>), it appends the properties
-specified by <var>specs</var> to the function or macro.  This work is
-specially performed by <code>defun</code>, <code>defsubst</code>, and
-<code>defmacro</code>.
-</p>
-<p>Each element in <var>specs</var> should have the form <code>(<var>property</var>
-<var>args</var>&hellip;)</code>, which should not be quoted.  These have the
-following effects:
-</p>
-<dl compact="compact">
-<dt><code>(advertised-calling-convention <var>signature</var> <var>when</var>)</code></dt>
-<dd><p>This acts like a call to <code>set-advertised-calling-convention</code>
-(see <a href="Obsolete-Functions.html#Obsolete-Functions">Obsolete Functions</a>); <var>signature</var> specifies the correct
-argument list for calling the function or macro, and <var>when</var> should
-be a string indicating when the old argument list was first made obsolete.
-</p>
-</dd>
-<dt><code>(debug <var>edebug-form-spec</var>)</code></dt>
-<dd><p>This is valid for macros only.  When stepping through the macro with
-Edebug, use <var>edebug-form-spec</var>.  See <a href="Instrumenting-Macro-Calls.html#Instrumenting-Macro-Calls">Instrumenting Macro Calls</a>.
-</p>
-</dd>
-<dt><code>(doc-string <var>n</var>)</code></dt>
-<dd><p>This is used when defining a function or macro which itself will be used to
-define entities like functions, macros, or variables.  It indicates that
-the <var>n</var>th argument, if any, should be considered
-as a documentation string.
-</p>
-</dd>
-<dt><code>(indent <var>indent-spec</var>)</code></dt>
-<dd><p>Indent calls to this function or macro according to <var>indent-spec</var>.
-This is typically used for macros, though it works for functions too.
-See <a href="Indenting-Macros.html#Indenting-Macros">Indenting Macros</a>.
-</p>
-</dd>
-<dt><code>(interactive-only <var>value</var>)</code></dt>
-<dd><p>Set the function&rsquo;s <code>interactive-only</code> property to <var>value</var>.
-See <a href="Defining-Commands.html#The-interactive_002donly-property">The interactive-only property</a>.
-</p>
-</dd>
-<dt><code>(obsolete <var>current-name</var> <var>when</var>)</code></dt>
-<dd><p>Mark the function or macro as obsolete, similar to a call to
-<code>make-obsolete</code> (see <a href="Obsolete-Functions.html#Obsolete-Functions">Obsolete Functions</a>).  <var>current-name</var>
-should be a symbol (in which case the warning message says to use that
-instead), a string (specifying the warning message), or <code>nil</code> (in
-which case the warning message gives no extra details).  <var>when</var>
-should be a string indicating when the function or macro was first
-made obsolete.
-</p>
-</dd>
-<dt><code>(compiler-macro <var>expander</var>)</code></dt>
-<dd><p>This can only be used for functions, and tells the compiler to use
-<var>expander</var> as an optimization function.  When encountering a call to the
-function, of the form <code>(<var>function</var> <var>args</var>&hellip;)</code>, the macro
-expander will call <var>expander</var> with that form as well as with
-<var>args</var>&hellip;, and <var>expander</var> can either return a new expression to use
-instead of the function call, or it can return just the form unchanged,
-to indicate that the function call should be left alone.  <var>expander</var> can
-be a symbol, or it can be a form <code>(lambda (<var>arg</var>) <var>body</var>)</code> in
-which case <var>arg</var> will hold the original function call expression, and the
-(unevaluated) arguments to the function can be accessed using the function&rsquo;s
-formal arguments.
-</p>
-</dd>
-<dt><code>(gv-expander <var>expander</var>)</code></dt>
-<dd><p>Declare <var>expander</var> to be the function to handle calls to the macro (or
-function) as a generalized variable, similarly to <code>gv-define-expander</code>.
-<var>expander</var> can be a symbol or it can be of the form <code>(lambda
-(<var>arg</var>) <var>body</var>)</code> in which case that function will additionally have
-access to the macro (or function)&rsquo;s arguments.
-</p>
-</dd>
-<dt><code>(gv-setter <var>setter</var>)</code></dt>
-<dd><p>Declare <var>setter</var> to be the function to handle calls to the macro (or
-function) as a generalized variable.  <var>setter</var> can be a symbol in which
-case it will be passed to <code>gv-define-simple-setter</code>, or it can be of the
-form <code>(lambda (<var>arg</var>) <var>body</var>)</code> in which case that function will
-additionally have access to the macro (or function)&rsquo;s arguments and it will
-passed to <code>gv-define-setter</code>.
-</p>
-</dd>
-</dl>
+  <p><code>declare</code> is a special macro which can be used to
+  add meta properties to a function or macro: for example, marking
+  it as obsolete, or giving its forms a special <tt class=
+  "key">TAB</tt> indentation convention in Emacs Lisp
+  mode.</p><a name="Definition-of-declare" id=
+  "Definition-of-declare"></a>
 
-</dd></dl>
+  <dl>
+    <dt><a name="index-declare-1" id="index-declare-1"></a>Macro:
+    <strong>declare</strong> <em>specs&hellip;</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Declaring-Functions.html#Declaring-Functions" accesskey="n" rel="next">Declaring Functions</a>, Previous: <a href="Inline-Functions.html#Inline-Functions" accesskey="p" rel="prev">Inline Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This macro ignores its arguments and evaluates to
+      <code>nil</code>; it has no run-time effect. However, when a
+      <code>declare</code> form occurs in the <var>declare</var>
+      argument of a <code>defun</code> or <code>defsubst</code>
+      function definition (see <a href=
+      "Defining-Functions.html#Defining-Functions">Defining
+      Functions</a>) or a <code>defmacro</code> macro definition
+      (see <a href="Defining-Macros.html#Defining-Macros">Defining
+      Macros</a>), it appends the properties specified by
+      <var>specs</var> to the function or macro. This work is
+      specially performed by <code>defun</code>,
+      <code>defsubst</code>, and <code>defmacro</code>.</p>
 
+      <p>Each element in <var>specs</var> should have the form
+      <code>(<var>property</var> <var>args</var>&hellip;)</code>,
+      which should not be quoted. These have the following
+      effects:</p>
 
+      <dl compact="compact">
+        <dt><code>(advertised-calling-convention
+        <var>signature</var> <var>when</var>)</code></dt>
 
+        <dd>
+          <p>This acts like a call to
+          <code>set-advertised-calling-convention</code> (see
+          <a href=
+          "Obsolete-Functions.html#Obsolete-Functions">Obsolete
+          Functions</a>); <var>signature</var> specifies the
+          correct argument list for calling the function or macro,
+          and <var>when</var> should be a string indicating when
+          the old argument list was first made obsolete.</p>
+        </dd>
+
+        <dt><code>(debug <var>edebug-form-spec</var>)</code></dt>
+
+        <dd>
+          <p>This is valid for macros only. When stepping through
+          the macro with Edebug, use <var>edebug-form-spec</var>.
+          See <a href=
+          "Instrumenting-Macro-Calls.html#Instrumenting-Macro-Calls">
+          Instrumenting Macro Calls</a>.</p>
+        </dd>
+
+        <dt><code>(doc-string <var>n</var>)</code></dt>
+
+        <dd>
+          <p>This is used when defining a function or macro which
+          itself will be used to define entities like functions,
+          macros, or variables. It indicates that the
+          <var>n</var>th argument, if any, should be considered as
+          a documentation string.</p>
+        </dd>
+
+        <dt><code>(indent <var>indent-spec</var>)</code></dt>
+
+        <dd>
+          <p>Indent calls to this function or macro according to
+          <var>indent-spec</var>. This is typically used for
+          macros, though it works for functions too. See <a href=
+          "Indenting-Macros.html#Indenting-Macros">Indenting
+          Macros</a>.</p>
+        </dd>
+
+        <dt><code>(interactive-only <var>value</var>)</code></dt>
+
+        <dd>
+          <p>Set the function&rsquo;s <code>interactive-only</code>
+          property to <var>value</var>. See <a href=
+          "Defining-Commands.html#The-interactive_002donly-property">
+          The interactive-only property</a>.</p>
+        </dd>
+
+        <dt><code>(obsolete <var>current-name</var>
+        <var>when</var>)</code></dt>
+
+        <dd>
+          <p>Mark the function or macro as obsolete, similar to a
+          call to <code>make-obsolete</code> (see <a href=
+          "Obsolete-Functions.html#Obsolete-Functions">Obsolete
+          Functions</a>). <var>current-name</var> should be a
+          symbol (in which case the warning message says to use
+          that instead), a string (specifying the warning message),
+          or <code>nil</code> (in which case the warning message
+          gives no extra details). <var>when</var> should be a
+          string indicating when the function or macro was first
+          made obsolete.</p>
+        </dd>
+
+        <dt><code>(compiler-macro <var>expander</var>)</code></dt>
+
+        <dd>
+          <p>This can only be used for functions, and tells the
+          compiler to use <var>expander</var> as an optimization
+          function. When encountering a call to the function, of
+          the form <code>(<var>function</var>
+          <var>args</var>&hellip;)</code>, the macro expander will
+          call <var>expander</var> with that form as well as with
+          <var>args</var>&hellip;, and <var>expander</var> can
+          either return a new expression to use instead of the
+          function call, or it can return just the form unchanged,
+          to indicate that the function call should be left alone.
+          <var>expander</var> can be a symbol, or it can be a form
+          <code>(lambda (<var>arg</var>) <var>body</var>)</code> in
+          which case <var>arg</var> will hold the original function
+          call expression, and the (unevaluated) arguments to the
+          function can be accessed using the function&rsquo;s
+          formal arguments.</p>
+        </dd>
+
+        <dt><code>(gv-expander <var>expander</var>)</code></dt>
+
+        <dd>
+          <p>Declare <var>expander</var> to be the function to
+          handle calls to the macro (or function) as a generalized
+          variable, similarly to <code>gv-define-expander</code>.
+          <var>expander</var> can be a symbol or it can be of the
+          form <code>(lambda (<var>arg</var>)
+          <var>body</var>)</code> in which case that function will
+          additionally have access to the macro (or
+          function)&rsquo;s arguments.</p>
+        </dd>
+
+        <dt><code>(gv-setter <var>setter</var>)</code></dt>
+
+        <dd>
+          <p>Declare <var>setter</var> to be the function to handle
+          calls to the macro (or function) as a generalized
+          variable. <var>setter</var> can be a symbol in which case
+          it will be passed to
+          <code>gv-define-simple-setter</code>, or it can be of the
+          form <code>(lambda (<var>arg</var>)
+          <var>body</var>)</code> in which case that function will
+          additionally have access to the macro (or
+          function)&rsquo;s arguments and it will passed to
+          <code>gv-define-setter</code>.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Declaring-Functions.html#Declaring-Functions"
+    accesskey="n" rel="next">Declaring Functions</a>, Previous:
+    <a href="Inline-Functions.html#Inline-Functions" accesskey="p"
+    rel="prev">Inline Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

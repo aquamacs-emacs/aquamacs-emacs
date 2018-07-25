@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,146 +16,213 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Extracting agenda information</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Extracting agenda information">
-<meta name="keywords" content="The Org Manual: Extracting agenda information">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Hacking.html#Hacking" rel="up" title="Hacking">
-<link href="Using-the-property-API.html#Using-the-property-API" rel="next" title="Using the property API">
-<link href="Speeding-up-your-agendas.html#Speeding-up-your-agendas" rel="prev" title="Speeding up your agendas">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Extracting agenda information</title>
+  <meta name="description" content=
+  "The Org Manual: Extracting agenda information" />
+  <meta name="keywords" content=
+  "The Org Manual: Extracting agenda information" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Hacking.html#Hacking" rel="up" title="Hacking" />
+  <link href="Using-the-property-API.html#Using-the-property-API"
+  rel="next" title="Using the property API" />
+  <link href=
+  "Speeding-up-your-agendas.html#Speeding-up-your-agendas" rel=
+  "prev" title="Speeding up your agendas" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Extracting-agenda-information"></a>
-<div class="header">
-<p>
-Next: <a href="Using-the-property-API.html#Using-the-property-API" accesskey="n" rel="next">Using the property API</a>, Previous: <a href="Speeding-up-your-agendas.html#Speeding-up-your-agendas" accesskey="p" rel="prev">Speeding up your agendas</a>, Up: <a href="Hacking.html#Hacking" accesskey="u" rel="up">Hacking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Extracting-agenda-information-1"></a>
-<h3 class="section">A.10 Extracting agenda information</h3>
-<a name="index-agenda_002c-pipe"></a>
-<a name="index-Scripts_002c-for-agenda-processing"></a>
+<body lang="en" xml:lang="en">
+  <a name="Extracting-agenda-information" id=
+  "Extracting-agenda-information"></a>
 
-<a name="index-org_002dagenda_002dcustom_002dcommands-4"></a>
-<p>Org provides commands to access agenda information for the command
-line in Emacs batch mode.  This extracted information can be sent
-directly to a printer, or it can be read by a program that does further
-processing of the data.  The first of these commands is the function
-<code>org-batch-agenda</code>, that produces an agenda view and sends it as
-ASCII text to STDOUT.  The command takes a single string as parameter.
-If the string has length 1, it is used as a key to one of the commands
-you have configured in <code>org-agenda-custom-commands</code>, basically any
-key you can use after <kbd>C-c a</kbd>.  For example, to directly print the
-current TODO list, you could use
-</p>
-<div class="example">
-<pre class="example">emacs -batch -l ~/.emacs -eval '(org-batch-agenda &quot;t&quot;)' | lpr
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Using-the-property-API.html#Using-the-property-API" accesskey=
+    "n" rel="next">Using the property API</a>, Previous: <a href=
+    "Speeding-up-your-agendas.html#Speeding-up-your-agendas"
+    accesskey="p" rel="prev">Speeding up your agendas</a>, Up:
+    <a href="Hacking.html#Hacking" accesskey="u" rel=
+    "up">Hacking</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Extracting-agenda-information-1" id=
+  "Extracting-agenda-information-1"></a>
 
-<p>If the parameter is a string with 2 or more characters, it is used as a
-tags/TODO match string.  For example, to print your local shopping list
-(all items with the tag &lsquo;<samp>shop</samp>&rsquo;, but excluding the tag
-&lsquo;<samp>NewYork</samp>&rsquo;), you could use
-</p>
-<div class="example">
-<pre class="example">emacs -batch -l ~/.emacs                                      \
-      -eval '(org-batch-agenda &quot;+shop-NewYork&quot;)' | lpr
-</pre></div>
+  <h3 class="section">A.10 Extracting agenda
+  information</h3><a name="index-agenda_002c-pipe" id=
+  "index-agenda_002c-pipe"></a> <a name=
+  "index-Scripts_002c-for-agenda-processing" id=
+  "index-Scripts_002c-for-agenda-processing"></a> <a name=
+  "index-org_002dagenda_002dcustom_002dcommands-4" id=
+  "index-org_002dagenda_002dcustom_002dcommands-4"></a>
 
-<p>You may also modify parameters on the fly like this:
-</p>
-<div class="example">
-<pre class="example">emacs -batch -l ~/.emacs                                      \
-   -eval '(org-batch-agenda &quot;a&quot;                               \
+  <p>Org provides commands to access agenda information for the
+  command line in Emacs batch mode. This extracted information can
+  be sent directly to a printer, or it can be read by a program
+  that does further processing of the data. The first of these
+  commands is the function <code>org-batch-agenda</code>, that
+  produces an agenda view and sends it as ASCII text to STDOUT. The
+  command takes a single string as parameter. If the string has
+  length 1, it is used as a key to one of the commands you have
+  configured in <code>org-agenda-custom-commands</code>, basically
+  any key you can use after <kbd>C-c a</kbd>. For example, to
+  directly print the current TODO list, you could use</p>
+
+  <div class="example">
+    <pre class="example">
+emacs -batch -l ~/.emacs -eval '(org-batch-agenda "t")' | lpr
+</pre>
+  </div>
+
+  <p>If the parameter is a string with 2 or more characters, it is
+  used as a tags/TODO match string. For example, to print your
+  local shopping list (all items with the tag
+  &lsquo;<samp>shop</samp>&rsquo;, but excluding the tag
+  &lsquo;<samp>NewYork</samp>&rsquo;), you could use</p>
+
+  <div class="example">
+    <pre class="example">
+emacs -batch -l ~/.emacs                                      \
+      -eval '(org-batch-agenda "+shop-NewYork")' | lpr
+</pre>
+  </div>
+
+  <p>You may also modify parameters on the fly like this:</p>
+
+  <div class="example">
+    <pre class="example">
+emacs -batch -l ~/.emacs                                      \
+   -eval '(org-batch-agenda "a"                               \
             org-agenda-span (quote month)                     \
             org-agenda-include-diary nil                      \
-            org-agenda-files (quote (&quot;~/org/project.org&quot;)))'  \
+            org-agenda-files (quote ("~/org/project.org")))'  \
    | lpr
-</pre></div>
+</pre>
+  </div>
 
-<p>which will produce a 30-day agenda, fully restricted to the Org file
-<samp>~/org/projects.org</samp>, not even including the diary.
-</p>
-<p>If you want to process the agenda data in more sophisticated ways, you
-can use the command <code>org-batch-agenda-csv</code> to get a comma-separated
-list of values for each agenda item.  Each line in the output will
-contain a number of fields separated by commas.  The fields in a line
-are:
-</p>
-<div class="example">
-<pre class="example">category     <span class="roman">The category of the item</span>
-head         <span class="roman">The headline, without TODO keyword, TAGS and PRIORITY</span>
-type         <span class="roman">The type of the agenda entry, can be</span>
-                todo               <span class="roman">selected in TODO match</span>
-                tagsmatch          <span class="roman">selected in tags match</span>
-                diary              <span class="roman">imported from diary</span>
-                deadline           <span class="roman">a deadline</span>
-                scheduled          <span class="roman">scheduled</span>
-                timestamp          <span class="roman">appointment, selected by timestamp</span>
-                closed             <span class="roman">entry was closed on date</span>
-                upcoming-deadline  <span class="roman">warning about nearing deadline</span>
-                past-scheduled     <span class="roman">forwarded scheduled item</span>
-                block              <span class="roman">entry has date block including date</span>
+  <p>which will produce a 30-day agenda, fully restricted to the
+  Org file <samp>~/org/projects.org</samp>, not even including the
+  diary.</p>
+
+  <p>If you want to process the agenda data in more sophisticated
+  ways, you can use the command <code>org-batch-agenda-csv</code>
+  to get a comma-separated list of values for each agenda item.
+  Each line in the output will contain a number of fields separated
+  by commas. The fields in a line are:</p>
+
+  <div class="example">
+    <pre class="example">
+category     <span class="roman">The category of the item</span>
+head         <span class=
+"roman">The headline, without TODO keyword, TAGS and PRIORITY</span>
+type         <span class=
+"roman">The type of the agenda entry, can be</span>
+                todo               <span class=
+"roman">selected in TODO match</span>
+                tagsmatch          <span class=
+"roman">selected in tags match</span>
+                diary              <span class=
+"roman">imported from diary</span>
+                deadline           <span class=
+"roman">a deadline</span>
+                scheduled          <span class=
+"roman">scheduled</span>
+                timestamp          <span class=
+"roman">appointment, selected by timestamp</span>
+                closed             <span class=
+"roman">entry was closed on date</span>
+                upcoming-deadline  <span class=
+"roman">warning about nearing deadline</span>
+                past-scheduled     <span class=
+"roman">forwarded scheduled item</span>
+                block              <span class=
+"roman">entry has date block including date</span>
 todo         <span class="roman">The TODO keyword, if any</span>
-tags         <span class="roman">All tags including inherited ones, separated by colons</span>
-date         <span class="roman">The relevant date, like 2007-2-14</span>
+tags         <span class=
+"roman">All tags including inherited ones, separated by colons</span>
+date         <span class=
+"roman">The relevant date, like 2007-2-14</span>
 time         <span class="roman">The time, like 15:00-16:50</span>
-extra        <span class="roman">String with extra planning info</span>
-priority-l   <span class="roman">The priority letter if any was given</span>
-priority-n   <span class="roman">The computed numerical priority</span>
-</pre></div>
+extra        <span class=
+"roman">String with extra planning info</span>
+priority-l   <span class=
+"roman">The priority letter if any was given</span>
+priority-n   <span class=
+"roman">The computed numerical priority</span>
+</pre>
+  </div>
 
-<p>Time and date will only be given if a timestamp (or deadline/scheduled)
-led to the selection of the item.
-</p>
-<p>A CSV list like this is very easy to use in a post-processing script.
-For example, here is a Perl program that gets the TODO list from
-Emacs/Org and prints all the items, preceded by a checkbox:
-</p>
-<div class="example">
-<pre class="example">#!/usr/bin/perl
+  <p>Time and date will only be given if a timestamp (or
+  deadline/scheduled) led to the selection of the item.</p>
+
+  <p>A CSV list like this is very easy to use in a post-processing
+  script. For example, here is a Perl program that gets the TODO
+  list from Emacs/Org and prints all the items, preceded by a
+  checkbox:</p>
+
+  <div class="example">
+    <pre class="example">
+#!/usr/bin/perl
 
 # define the Emacs command to run
-$cmd = &quot;emacs -batch -l ~/.emacs -eval '(org-batch-agenda-csv \&quot;t\&quot;)'&quot;;
+$cmd = "emacs -batch -l ~/.emacs -eval '(org-batch-agenda-csv \"t\")'";
 
 # run it and capture the output
 $agenda = qx{$cmd 2&gt;/dev/null};
@@ -164,17 +233,23 @@ foreach $line (split(/\n/,$agenda)) {
   ($category,$head,$type,$todo,$tags,$date,$time,$extra,
    $priority_l,$priority_n) = split(/,/,$line);
   # process and print
-  print &quot;[ ] $head\n&quot;;
+  print "[ ] $head\n";
 }
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Using-the-property-API.html#Using-the-property-API" accesskey="n" rel="next">Using the property API</a>, Previous: <a href="Speeding-up-your-agendas.html#Speeding-up-your-agendas" accesskey="p" rel="prev">Speeding up your agendas</a>, Up: <a href="Hacking.html#Hacking" accesskey="u" rel="up">Hacking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Using-the-property-API.html#Using-the-property-API" accesskey=
+    "n" rel="next">Using the property API</a>, Previous: <a href=
+    "Speeding-up-your-agendas.html#Speeding-up-your-agendas"
+    accesskey="p" rel="prev">Speeding up your agendas</a>, Up:
+    <a href="Hacking.html#Hacking" accesskey="u" rel=
+    "up">Hacking</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

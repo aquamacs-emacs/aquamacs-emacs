@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,185 +20,262 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Quitting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Quitting">
-<meta name="keywords" content="GNU Emacs Manual: Quitting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Lossage.html#Lossage" rel="next" title="Lossage">
-<link href="Init-Non_002dASCII.html#Init-Non_002dASCII" rel="prev" title="Init Non-ASCII">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Quitting</title>
+  <meta name="description" content="GNU Emacs Manual: Quitting" />
+  <meta name="keywords" content="GNU Emacs Manual: Quitting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Lossage.html#Lossage" rel="next" title="Lossage" />
+  <link href="Init-Non_002dASCII.html#Init-Non_002dASCII" rel=
+  "prev" title="Init Non-ASCII" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Quitting" id="Quitting"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Lossage.html#Lossage" accesskey="n" rel=
+    "next">Lossage</a>, Previous: <a href=
+    "Customization.html#Customization" accesskey="p" rel=
+    "prev">Customization</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Quitting-and-Aborting" id="Quitting-and-Aborting"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Quitting"></a>
-<div class="header">
-<p>
-Next: <a href="Lossage.html#Lossage" accesskey="n" rel="next">Lossage</a>, Previous: <a href="Customization.html#Customization" accesskey="p" rel="prev">Customization</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Quitting-and-Aborting"></a>
-<h2 class="chapter">52 Quitting and Aborting</h2>
-<a name="index-quitting"></a>
+  <h2 class="chapter">52 Quitting and Aborting</h2><a name=
+  "index-quitting" id="index-quitting"></a>
 
-<dl compact="compact">
-<dt><kbd>C-g</kbd></dt>
-<dt><kbd>C-<span class="key">Break</span> <span class="roman">(MS-DOS only)</span></kbd></dt>
-<dd><p>Quit: cancel running or partially typed command.
-</p></dd>
-<dt><kbd>C-]</kbd></dt>
-<dd><p>Abort innermost recursive editing level and cancel the command which
-invoked it (<code>abort-recursive-edit</code>).
-</p></dd>
-<dt><kbd><span class="key">ESC</span> <span class="key">ESC</span> <span class="key">ESC</span></kbd></dt>
-<dd><p>Either quit or abort, whichever makes sense (<code>keyboard-escape-quit</code>).
-</p></dd>
-<dt><kbd>M-x top-level</kbd></dt>
-<dd><p>Abort all recursive editing levels that are currently executing.
-</p></dd>
-<dt><kbd>C-/</kbd></dt>
-<dt><kbd>C-x u</kbd></dt>
-<dt><kbd>C-_</kbd></dt>
-<dd><p>Cancel a previously made change in the buffer contents (<code>undo</code>).
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>C-g</kbd></dt>
 
-<p>There are two ways of canceling a command before it has finished:
-<em>quitting</em> with <kbd>C-g</kbd>, and <em>aborting</em> with <kbd>C-]</kbd> or
-<kbd>M-x top-level</kbd>.  Quitting cancels a partially typed command, or
-one which is still running.  Aborting exits a recursive editing level
-and cancels the command that invoked the recursive edit
-(see <a href="Recursive-Edit.html#Recursive-Edit">Recursive Edit</a>).
-</p>
-<a name="index-quitting-1"></a>
-<a name="index-C_002dg"></a>
-<p>Quitting with <kbd>C-g</kbd> is the way to get rid of a partially typed
-command, or a numeric argument that you don&rsquo;t want.  Furthermore, if
-you are in the middle of a command that is running, <kbd>C-g</kbd> stops
-the command in a relatively safe way.  For example, if you quit out of
-a kill command that is taking a long time, either your text will
-<em>all</em> still be in the buffer, or it will <em>all</em> be in the
-kill ring, or maybe both.  If the region is active, <kbd>C-g</kbd>
-deactivates the mark, unless Transient Mark mode is off
-(see <a href="Disabled-Transient-Mark.html#Disabled-Transient-Mark">Disabled Transient Mark</a>).  If you are in the middle of an
-incremental search, <kbd>C-g</kbd> behaves specially; it may take two
-successive <kbd>C-g</kbd> characters to get out of a search.
-See <a href="Incremental-Search.html#Incremental-Search">Incremental Search</a>, for details.
-</p>
-<p>On MS-DOS, the character <kbd>C-<span class="key">Break</span></kbd> serves as a quit character
-like <kbd>C-g</kbd>.  The reason is that it is not feasible, on MS-DOS, to
-recognize <kbd>C-g</kbd> while a command is running, between interactions
-with the user.  By contrast, it <em>is</em> feasible to recognize
-<kbd>C-<span class="key">Break</span></kbd> at all times.
-See <a href="MS_002dDOS-Keyboard.html#MS_002dDOS-Keyboard">MS-DOS Keyboard</a>.
-</p>
-<a name="index-keyboard_002dquit"></a>
-<p><kbd>C-g</kbd> works by setting the variable <code>quit-flag</code> to <code>t</code>
-the instant <kbd>C-g</kbd> is typed; Emacs Lisp checks this variable
-frequently, and quits if it is non-<code>nil</code>.  <kbd>C-g</kbd> is only
-actually executed as a command if you type it while Emacs is waiting for
-input.  In that case, the command it runs is <code>keyboard-quit</code>.
-</p>
-<p>On a text terminal, if you quit with <kbd>C-g</kbd> a second time before
-the first <kbd>C-g</kbd> is recognized, you activate the emergency-escape
-feature and return to the shell.  See <a href="Emergency-Escape.html#Emergency-Escape">Emergency Escape</a>.
-</p>
-<a name="index-NFS-and-quitting"></a>
-<p>There are some situations where you cannot quit.  When Emacs is
-waiting for the operating system to do something, quitting is
-impossible unless special pains are taken for the particular system
-call within Emacs where the waiting occurs.  We have done this for the
-system calls that users are likely to want to quit from, but it&rsquo;s
-possible you will encounter a case not handled.  In one very common
-case&mdash;waiting for file input or output using NFS&mdash;Emacs itself knows
-how to quit, but many NFS implementations simply do not allow user
-programs to stop waiting for NFS when the NFS server is hung.
-</p>
-<a name="index-aborting-recursive-edit"></a>
-<a name="index-abort_002drecursive_002dedit"></a>
-<a name="index-C_002d_005d"></a>
-<p>Aborting with <kbd>C-]</kbd> (<code>abort-recursive-edit</code>) is used to get
-out of a recursive editing level and cancel the command which invoked
-it.  Quitting with <kbd>C-g</kbd> does not do this, and could not do this,
-because it is used to cancel a partially typed command <em>within</em> the
-recursive editing level.  Both operations are useful.  For example, if
-you are in a recursive edit and type <kbd>C-u 8</kbd> to enter a numeric
-argument, you can cancel that argument with <kbd>C-g</kbd> and remain in the
-recursive edit.
-</p>
-<a name="index-keyboard_002descape_002dquit"></a>
-<a name="index-ESC-ESC-ESC"></a>
-<p>The sequence <kbd><span class="key">ESC</span> <span class="key">ESC</span> <span class="key">ESC</span></kbd>
-(<code>keyboard-escape-quit</code>) can either quit or abort.  (We defined
-it this way because <tt class="key">ESC</tt> means &ldquo;get out&rdquo; in many PC programs.)
-It can cancel a prefix argument, clear a selected region, or get out
-of a Query Replace, like <kbd>C-g</kbd>.  It can get out of the minibuffer
-or a recursive edit, like <kbd>C-]</kbd>.  It can also get out of splitting
-the frame into multiple windows, as with <kbd>C-x 1</kbd>.  One thing it
-cannot do, however, is stop a command that is running.  That&rsquo;s because
-it executes as an ordinary command, and Emacs doesn&rsquo;t notice it until
-it is ready for the next command.
-</p>
-<a name="index-top_002dlevel"></a>
-<p>The command <kbd>M-x top-level</kbd> is equivalent to enough
-<kbd>C-]</kbd> commands to get you out of all the levels of recursive edits
-that you are in; it also exits the minibuffer if it is active.
-<kbd>C-]</kbd> gets you out one level at a time, but <kbd>M-x top-level</kbd>
-goes out all levels at once.  Both <kbd>C-]</kbd> and <kbd>M-x top-level</kbd>
-are like all other commands, and unlike <kbd>C-g</kbd>, in that they take
-effect only when Emacs is ready for a command.  <kbd>C-]</kbd> is an
-ordinary key and has its meaning only because of its binding in the
-keymap.  See <a href="Recursive-Edit.html#Recursive-Edit">Recursive Edit</a>.
-</p>
-<p><kbd>C-/</kbd> (<code>undo</code>) is not strictly speaking a way of canceling
-a command, but you can think of it as canceling a command that already
-finished executing.  See <a href="Undo.html#Undo">Undo</a>, for more information about the undo
-facility.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Lossage.html#Lossage" accesskey="n" rel="next">Lossage</a>, Previous: <a href="Customization.html#Customization" accesskey="p" rel="prev">Customization</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><kbd>C-<span class="key">Break</span> <span class=
+    "roman">(MS-DOS only)</span></kbd></dt>
 
+    <dd>
+      <p>Quit: cancel running or partially typed command.</p>
+    </dd>
 
+    <dt><kbd>C-]</kbd></dt>
 
+    <dd>
+      <p>Abort innermost recursive editing level and cancel the
+      command which invoked it
+      (<code>abort-recursive-edit</code>).</p>
+    </dd>
+
+    <dt><kbd><span class="key">ESC</span> <span class=
+    "key">ESC</span> <span class="key">ESC</span></kbd></dt>
+
+    <dd>
+      <p>Either quit or abort, whichever makes sense
+      (<code>keyboard-escape-quit</code>).</p>
+    </dd>
+
+    <dt><kbd>M-x top-level</kbd></dt>
+
+    <dd>
+      <p>Abort all recursive editing levels that are currently
+      executing.</p>
+    </dd>
+
+    <dt><kbd>C-/</kbd></dt>
+
+    <dt><kbd>C-x u</kbd></dt>
+
+    <dt><kbd>C-_</kbd></dt>
+
+    <dd>
+      <p>Cancel a previously made change in the buffer contents
+      (<code>undo</code>).</p>
+    </dd>
+  </dl>
+
+  <p>There are two ways of canceling a command before it has
+  finished: <em>quitting</em> with <kbd>C-g</kbd>, and
+  <em>aborting</em> with <kbd>C-]</kbd> or <kbd>M-x
+  top-level</kbd>. Quitting cancels a partially typed command, or
+  one which is still running. Aborting exits a recursive editing
+  level and cancels the command that invoked the recursive edit
+  (see <a href="Recursive-Edit.html#Recursive-Edit">Recursive
+  Edit</a>).</p><a name="index-quitting-1" id=
+  "index-quitting-1"></a> <a name="index-C_002dg" id=
+  "index-C_002dg"></a>
+
+  <p>Quitting with <kbd>C-g</kbd> is the way to get rid of a
+  partially typed command, or a numeric argument that you
+  don&rsquo;t want. Furthermore, if you are in the middle of a
+  command that is running, <kbd>C-g</kbd> stops the command in a
+  relatively safe way. For example, if you quit out of a kill
+  command that is taking a long time, either your text will
+  <em>all</em> still be in the buffer, or it will <em>all</em> be
+  in the kill ring, or maybe both. If the region is active,
+  <kbd>C-g</kbd> deactivates the mark, unless Transient Mark mode
+  is off (see <a href=
+  "Disabled-Transient-Mark.html#Disabled-Transient-Mark">Disabled
+  Transient Mark</a>). If you are in the middle of an incremental
+  search, <kbd>C-g</kbd> behaves specially; it may take two
+  successive <kbd>C-g</kbd> characters to get out of a search. See
+  <a href="Incremental-Search.html#Incremental-Search">Incremental
+  Search</a>, for details.</p>
+
+  <p>On MS-DOS, the character <kbd>C-<span class=
+  "key">Break</span></kbd> serves as a quit character like
+  <kbd>C-g</kbd>. The reason is that it is not feasible, on MS-DOS,
+  to recognize <kbd>C-g</kbd> while a command is running, between
+  interactions with the user. By contrast, it <em>is</em> feasible
+  to recognize <kbd>C-<span class="key">Break</span></kbd> at all
+  times. See <a href=
+  "MS_002dDOS-Keyboard.html#MS_002dDOS-Keyboard">MS-DOS
+  Keyboard</a>.</p><a name="index-keyboard_002dquit" id=
+  "index-keyboard_002dquit"></a>
+
+  <p><kbd>C-g</kbd> works by setting the variable
+  <code>quit-flag</code> to <code>t</code> the instant
+  <kbd>C-g</kbd> is typed; Emacs Lisp checks this variable
+  frequently, and quits if it is non-<code>nil</code>.
+  <kbd>C-g</kbd> is only actually executed as a command if you type
+  it while Emacs is waiting for input. In that case, the command it
+  runs is <code>keyboard-quit</code>.</p>
+
+  <p>On a text terminal, if you quit with <kbd>C-g</kbd> a second
+  time before the first <kbd>C-g</kbd> is recognized, you activate
+  the emergency-escape feature and return to the shell. See
+  <a href="Emergency-Escape.html#Emergency-Escape">Emergency
+  Escape</a>.</p><a name="index-NFS-and-quitting" id=
+  "index-NFS-and-quitting"></a>
+
+  <p>There are some situations where you cannot quit. When Emacs is
+  waiting for the operating system to do something, quitting is
+  impossible unless special pains are taken for the particular
+  system call within Emacs where the waiting occurs. We have done
+  this for the system calls that users are likely to want to quit
+  from, but it&rsquo;s possible you will encounter a case not
+  handled. In one very common case&mdash;waiting for file input or
+  output using NFS&mdash;Emacs itself knows how to quit, but many
+  NFS implementations simply do not allow user programs to stop
+  waiting for NFS when the NFS server is hung.</p><a name=
+  "index-aborting-recursive-edit" id=
+  "index-aborting-recursive-edit"></a> <a name=
+  "index-abort_002drecursive_002dedit" id=
+  "index-abort_002drecursive_002dedit"></a> <a name=
+  "index-C_002d_005d" id="index-C_002d_005d"></a>
+
+  <p>Aborting with <kbd>C-]</kbd>
+  (<code>abort-recursive-edit</code>) is used to get out of a
+  recursive editing level and cancel the command which invoked it.
+  Quitting with <kbd>C-g</kbd> does not do this, and could not do
+  this, because it is used to cancel a partially typed command
+  <em>within</em> the recursive editing level. Both operations are
+  useful. For example, if you are in a recursive edit and type
+  <kbd>C-u 8</kbd> to enter a numeric argument, you can cancel that
+  argument with <kbd>C-g</kbd> and remain in the recursive
+  edit.</p><a name="index-keyboard_002descape_002dquit" id=
+  "index-keyboard_002descape_002dquit"></a> <a name=
+  "index-ESC-ESC-ESC" id="index-ESC-ESC-ESC"></a>
+
+  <p>The sequence <kbd><span class="key">ESC</span> <span class=
+  "key">ESC</span> <span class="key">ESC</span></kbd>
+  (<code>keyboard-escape-quit</code>) can either quit or abort. (We
+  defined it this way because <tt class="key">ESC</tt> means
+  &ldquo;get out&rdquo; in many PC programs.) It can cancel a
+  prefix argument, clear a selected region, or get out of a Query
+  Replace, like <kbd>C-g</kbd>. It can get out of the minibuffer or
+  a recursive edit, like <kbd>C-]</kbd>. It can also get out of
+  splitting the frame into multiple windows, as with <kbd>C-x
+  1</kbd>. One thing it cannot do, however, is stop a command that
+  is running. That&rsquo;s because it executes as an ordinary
+  command, and Emacs doesn&rsquo;t notice it until it is ready for
+  the next command.</p><a name="index-top_002dlevel" id=
+  "index-top_002dlevel"></a>
+
+  <p>The command <kbd>M-x top-level</kbd> is equivalent to enough
+  <kbd>C-]</kbd> commands to get you out of all the levels of
+  recursive edits that you are in; it also exits the minibuffer if
+  it is active. <kbd>C-]</kbd> gets you out one level at a time,
+  but <kbd>M-x top-level</kbd> goes out all levels at once. Both
+  <kbd>C-]</kbd> and <kbd>M-x top-level</kbd> are like all other
+  commands, and unlike <kbd>C-g</kbd>, in that they take effect
+  only when Emacs is ready for a command. <kbd>C-]</kbd> is an
+  ordinary key and has its meaning only because of its binding in
+  the keymap. See <a href=
+  "Recursive-Edit.html#Recursive-Edit">Recursive Edit</a>.</p>
+
+  <p><kbd>C-/</kbd> (<code>undo</code>) is not strictly speaking a
+  way of canceling a command, but you can think of it as canceling
+  a command that already finished executing. See <a href=
+  "Undo.html#Undo">Undo</a>, for more information about the undo
+  facility.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Lossage.html#Lossage" accesskey="n" rel=
+    "next">Lossage</a>, Previous: <a href=
+    "Customization.html#Customization" accesskey="p" rel=
+    "prev">Customization</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

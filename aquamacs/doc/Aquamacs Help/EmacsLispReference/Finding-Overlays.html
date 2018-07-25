@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,78 +19,117 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Finding Overlays</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Finding Overlays">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Finding Overlays">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Overlays.html#Overlays" rel="up" title="Overlays">
-<link href="Size-of-Displayed-Text.html#Size-of-Displayed-Text" rel="next" title="Size of Displayed Text">
-<link href="Overlay-Properties.html#Overlay-Properties" rel="prev" title="Overlay Properties">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Finding Overlays</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Finding Overlays" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Finding Overlays" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Overlays.html#Overlays" rel="up" title="Overlays" />
+  <link href="Size-of-Displayed-Text.html#Size-of-Displayed-Text"
+  rel="next" title="Size of Displayed Text" />
+  <link href="Overlay-Properties.html#Overlay-Properties" rel=
+  "prev" title="Overlay Properties" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Finding-Overlays" id="Finding-Overlays"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Overlay-Properties.html#Overlay-Properties" accesskey="p" rel=
+    "prev">Overlay Properties</a>, Up: <a href=
+    "Overlays.html#Overlays" accesskey="u" rel="up">Overlays</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Searching-for-Overlays" id="Searching-for-Overlays"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Finding-Overlays"></a>
-<div class="header">
-<p>
-Previous: <a href="Overlay-Properties.html#Overlay-Properties" accesskey="p" rel="prev">Overlay Properties</a>, Up: <a href="Overlays.html#Overlays" accesskey="u" rel="up">Overlays</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Searching-for-Overlays"></a>
-<h4 class="subsection">37.9.3 Searching for Overlays</h4>
-<a name="index-searching-for-overlays"></a>
-<a name="index-overlays_002c-searching-for"></a>
+  <h4 class="subsection">37.9.3 Searching for Overlays</h4><a name=
+  "index-searching-for-overlays" id=
+  "index-searching-for-overlays"></a> <a name=
+  "index-overlays_002c-searching-for" id=
+  "index-overlays_002c-searching-for"></a>
 
-<dl>
-<dt><a name="index-overlays_002dat"></a>Function: <strong>overlays-at</strong> <em>pos &amp;optional sorted</em></dt>
-<dd><p>This function returns a list of all the overlays that cover the character at
-position <var>pos</var> in the current buffer.  If <var>sorted</var> is non-<code>nil</code>,
-the list is in decreasing order of priority, otherwise it is in no particular
-order.  An overlay contains position <var>pos</var> if it begins at or before
-<var>pos</var>, and ends after <var>pos</var>.
-</p>
-<p>To illustrate usage, here is a Lisp function that returns a list of the
-overlays that specify property <var>prop</var> for the character at point:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun find-overlays-specifying (prop)
+  <dl>
+    <dt><a name="index-overlays_002dat" id=
+    "index-overlays_002dat"></a>Function:
+    <strong>overlays-at</strong> <em>pos &amp;optional
+    sorted</em></dt>
+
+    <dd>
+      <p>This function returns a list of all the overlays that
+      cover the character at position <var>pos</var> in the current
+      buffer. If <var>sorted</var> is non-<code>nil</code>, the
+      list is in decreasing order of priority, otherwise it is in
+      no particular order. An overlay contains position
+      <var>pos</var> if it begins at or before <var>pos</var>, and
+      ends after <var>pos</var>.</p>
+
+      <p>To illustrate usage, here is a Lisp function that returns
+      a list of the overlays that specify property <var>prop</var>
+      for the character at point:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(defun find-overlays-specifying (prop)
   (let ((overlays (overlays-at (point)))
         found)
     (while overlays
@@ -97,42 +138,64 @@ overlays that specify property <var>prop</var> for the character at point:
             (setq found (cons overlay found))))
       (setq overlays (cdr overlays)))
     found))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-overlays_002din"></a>Function: <strong>overlays-in</strong> <em>beg end</em></dt>
-<dd><p>This function returns a list of the overlays that overlap the region
-<var>beg</var> through <var>end</var>.  An overlay overlaps with a region if it
-contains one or more characters in the region; empty overlays
-(see <a href="Managing-Overlays.html#Managing-Overlays">empty overlay</a>) overlap if they are at
-<var>beg</var>, strictly between <var>beg</var> and <var>end</var>, or at <var>end</var>
-when <var>end</var> denotes the position at the end of the buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-overlays_002din" id=
+    "index-overlays_002din"></a>Function:
+    <strong>overlays-in</strong> <em>beg end</em></dt>
 
-<dl>
-<dt><a name="index-next_002doverlay_002dchange"></a>Function: <strong>next-overlay-change</strong> <em>pos</em></dt>
-<dd><p>This function returns the buffer position of the next beginning or end
-of an overlay, after <var>pos</var>.  If there is none, it returns
-<code>(point-max)</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function returns a list of the overlays that overlap
+      the region <var>beg</var> through <var>end</var>. An overlay
+      overlaps with a region if it contains one or more characters
+      in the region; empty overlays (see <a href=
+      "Managing-Overlays.html#Managing-Overlays">empty overlay</a>)
+      overlap if they are at <var>beg</var>, strictly between
+      <var>beg</var> and <var>end</var>, or at <var>end</var> when
+      <var>end</var> denotes the position at the end of the
+      buffer.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-previous_002doverlay_002dchange"></a>Function: <strong>previous-overlay-change</strong> <em>pos</em></dt>
-<dd><p>This function returns the buffer position of the previous beginning or
-end of an overlay, before <var>pos</var>.  If there is none, it returns
-<code>(point-min)</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-next_002doverlay_002dchange" id=
+    "index-next_002doverlay_002dchange"></a>Function:
+    <strong>next-overlay-change</strong> <em>pos</em></dt>
 
-<p>As an example, here&rsquo;s a simplified (and inefficient) version of the
-primitive function <code>next-single-char-property-change</code>
-(see <a href="Property-Search.html#Property-Search">Property Search</a>).  It searches forward from position
-<var>pos</var> for the next position where the value of a given property
-<code>prop</code>, as obtained from either overlays or text properties,
-changes.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun next-single-char-property-change (position prop)
+    <dd>
+      <p>This function returns the buffer position of the next
+      beginning or end of an overlay, after <var>pos</var>. If
+      there is none, it returns <code>(point-max)</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-previous_002doverlay_002dchange" id=
+    "index-previous_002doverlay_002dchange"></a>Function:
+    <strong>previous-overlay-change</strong> <em>pos</em></dt>
+
+    <dd>
+      <p>This function returns the buffer position of the previous
+      beginning or end of an overlay, before <var>pos</var>. If
+      there is none, it returns <code>(point-min)</code>.</p>
+    </dd>
+  </dl>
+
+  <p>As an example, here&rsquo;s a simplified (and inefficient)
+  version of the primitive function
+  <code>next-single-char-property-change</code> (see <a href=
+  "Property-Search.html#Property-Search">Property Search</a>). It
+  searches forward from position <var>pos</var> for the next
+  position where the value of a given property <code>prop</code>,
+  as obtained from either overlays or text properties, changes.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defun next-single-char-property-change (position prop)
   (save-excursion
     (goto-char position)
     (let ((propval (get-char-property (point) prop)))
@@ -141,15 +204,18 @@ changes.
         (goto-char (min (next-overlay-change (point))
                         (next-single-property-change (point) prop)))))
     (point)))
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Overlay-Properties.html#Overlay-Properties" accesskey="p" rel="prev">Overlay Properties</a>, Up: <a href="Overlays.html#Overlays" accesskey="u" rel="up">Overlays</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Previous: <a href=
+    "Overlay-Properties.html#Overlay-Properties" accesskey="p" rel=
+    "prev">Overlay Properties</a>, Up: <a href=
+    "Overlays.html#Overlays" accesskey="u" rel="up">Overlays</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

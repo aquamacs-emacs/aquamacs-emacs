@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2004, 2012-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,107 +14,152 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Bovine parser development: Grammar-to-Lisp Details</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Bovine parser development: Grammar-to-Lisp Details">
-<meta name="keywords" content="Bovine parser development: Grammar-to-Lisp Details">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Bovine-Grammar-Rules.html#Bovine-Grammar-Rules" rel="up" title="Bovine Grammar Rules">
-<link href="Order-of-components-in-rules.html#Order-of-components-in-rules" rel="next" title="Order of components in rules">
-<link href="How-Lexical-Tokens-Match.html#How-Lexical-Tokens-Match" rel="prev" title="How Lexical Tokens Match">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Bovine parser development: Grammar-to-Lisp Details</title>
+  <meta name="description" content=
+  "Bovine parser development: Grammar-to-Lisp Details" />
+  <meta name="keywords" content=
+  "Bovine parser development: Grammar-to-Lisp Details" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Bovine-Grammar-Rules.html#Bovine-Grammar-Rules" rel=
+  "up" title="Bovine Grammar Rules" />
+  <link href=
+  "Order-of-components-in-rules.html#Order-of-components-in-rules"
+  rel="next" title="Order of components in rules" />
+  <link href=
+  "How-Lexical-Tokens-Match.html#How-Lexical-Tokens-Match" rel=
+  "prev" title="How Lexical Tokens Match" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Grammar_002dto_002dLisp-Details"></a>
-<div class="header">
-<p>
-Next: <a href="Order-of-components-in-rules.html#Order-of-components-in-rules" accesskey="n" rel="next">Order of components in rules</a>, Previous: <a href="How-Lexical-Tokens-Match.html#How-Lexical-Tokens-Match" accesskey="p" rel="prev">How Lexical Tokens Match</a>, Up: <a href="Bovine-Grammar-Rules.html#Bovine-Grammar-Rules" accesskey="u" rel="up">Bovine Grammar Rules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Grammar_002dto_002dLisp-Details-1"></a>
-<h3 class="section">2.2 Grammar-to-Lisp Details</h3>
+<body lang="en" xml:lang="en">
+  <a name="Grammar_002dto_002dLisp-Details" id=
+  "Grammar_002dto_002dLisp-Details"></a>
 
-<p>For the bovinator, lexical token matching patterns are <em>inlined</em>.
-When the grammar-to-lisp converter encounters a lexical token
-declaration of the form:
-</p>
-<div class="example">
-<pre class="example">%token &lt;<var>type</var>&gt; <var>token-name</var> <var>match-value</var>
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Order-of-components-in-rules.html#Order-of-components-in-rules"
+    accesskey="n" rel="next">Order of components in rules</a>,
+    Previous: <a href=
+    "How-Lexical-Tokens-Match.html#How-Lexical-Tokens-Match"
+    accesskey="p" rel="prev">How Lexical Tokens Match</a>, Up:
+    <a href="Bovine-Grammar-Rules.html#Bovine-Grammar-Rules"
+    accesskey="u" rel="up">Bovine Grammar Rules</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Grammar_002dto_002dLisp-Details-1" id=
+  "Grammar_002dto_002dLisp-Details-1"></a>
 
-<p>It substitutes every occurrences of <var>token-name</var> in rules, by its
-expanded form:
-</p>
-<div class="example">
-<pre class="example"><var>type</var> <var>match-value</var>
-</pre></div>
+  <h3 class="section">2.2 Grammar-to-Lisp Details</h3>
 
-<p>For example:
-</p>
-<div class="example">
-<pre class="example">%token &lt;symbol&gt; MOOSE &quot;moose&quot;
+  <p>For the bovinator, lexical token matching patterns are
+  <em>inlined</em>. When the grammar-to-lisp converter encounters a
+  lexical token declaration of the form:</p>
+
+  <div class="example">
+    <pre class="example">
+%token &lt;<var>type</var>&gt; <var>token-name</var> <var>match-value</var>
+</pre>
+  </div>
+
+  <p>It substitutes every occurrences of <var>token-name</var> in
+  rules, by its expanded form:</p>
+
+  <div class="example">
+    <pre class="example">
+<var>type</var> <var>match-value</var>
+</pre>
+  </div>
+
+  <p>For example:</p>
+
+  <div class="example">
+    <pre class="example">
+%token &lt;symbol&gt; MOOSE "moose"
 
 find_a_moose: MOOSE
             ;
-</pre></div>
+</pre>
+  </div>
 
-<p>Will generate this pseudo equivalent-rule:
-</p>
-<div class="example">
-<pre class="example">find_a_moose: symbol &quot;moose&quot;   ;; invalid syntax!
+  <p>Will generate this pseudo equivalent-rule:</p>
+
+  <div class="example">
+    <pre class="example">
+find_a_moose: symbol "moose"   ;; invalid syntax!
             ;
-</pre></div>
+</pre>
+  </div>
 
-<p>Thus, from the bovinator point of view, the <var>components</var> part of a
-rule is made up of symbols and strings.  A string in the mix means
-that the previous symbol must have the additional constraint of
-exactly matching it, as described in <a href="How-Lexical-Tokens-Match.html#How-Lexical-Tokens-Match">How Lexical Tokens Match</a>.
-</p>
-<dl compact="compact">
-<dt><strong>Please Note:</strong></dt>
-<dd><p>For the bovinator, this task was mixed into the language definition to
-simplify implementation, though Bison&rsquo;s technique is more efficient.
-</p></dd>
-</dl>
+  <p>Thus, from the bovinator point of view, the
+  <var>components</var> part of a rule is made up of symbols and
+  strings. A string in the mix means that the previous symbol must
+  have the additional constraint of exactly matching it, as
+  described in <a href=
+  "How-Lexical-Tokens-Match.html#How-Lexical-Tokens-Match">How
+  Lexical Tokens Match</a>.</p>
 
+  <dl compact="compact">
+    <dt><strong>Please Note:</strong></dt>
 
-
-
+    <dd>
+      <p>For the bovinator, this task was mixed into the language
+      definition to simplify implementation, though Bison&rsquo;s
+      technique is more efficient.</p>
+    </dd>
+  </dl>
 </body>
 </html>

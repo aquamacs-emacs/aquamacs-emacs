@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,189 +19,292 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Text Lines</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Text Lines">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Text Lines">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Motion.html#Motion" rel="up" title="Motion">
-<link href="Screen-Lines.html#Screen-Lines" rel="next" title="Screen Lines">
-<link href="Buffer-End-Motion.html#Buffer-End-Motion" rel="prev" title="Buffer End Motion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Text Lines</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Text Lines" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Text Lines" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Motion.html#Motion" rel="up" title="Motion" />
+  <link href="Screen-Lines.html#Screen-Lines" rel="next" title=
+  "Screen Lines" />
+  <link href="Buffer-End-Motion.html#Buffer-End-Motion" rel="prev"
+  title="Buffer End Motion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Text-Lines" id="Text-Lines"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Screen-Lines.html#Screen-Lines" accesskey="n"
+    rel="next">Screen Lines</a>, Previous: <a href=
+    "Buffer-End-Motion.html#Buffer-End-Motion" accesskey="p" rel=
+    "prev">Buffer End Motion</a>, Up: <a href="Motion.html#Motion"
+    accesskey="u" rel="up">Motion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Motion-by-Text-Lines" id="Motion-by-Text-Lines"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Text-Lines"></a>
-<div class="header">
-<p>
-Next: <a href="Screen-Lines.html#Screen-Lines" accesskey="n" rel="next">Screen Lines</a>, Previous: <a href="Buffer-End-Motion.html#Buffer-End-Motion" accesskey="p" rel="prev">Buffer End Motion</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Motion-by-Text-Lines"></a>
-<h4 class="subsection">29.2.4 Motion by Text Lines</h4>
-<a name="index-lines"></a>
+  <h4 class="subsection">29.2.4 Motion by Text Lines</h4><a name=
+  "index-lines" id="index-lines"></a>
 
-<p>Text lines are portions of the buffer delimited by newline characters,
-which are regarded as part of the previous line.  The first text line
-begins at the beginning of the buffer, and the last text line ends at
-the end of the buffer whether or not the last character is a newline.
-The division of the buffer into text lines is not affected by the width
-of the window, by line continuation in display, or by how tabs and
-control characters are displayed.
-</p>
-<dl>
-<dt><a name="index-beginning_002dof_002dline"></a>Command: <strong>beginning-of-line</strong> <em>&amp;optional count</em></dt>
-<dd><p>This function moves point to the beginning of the current line.  With an
-argument <var>count</var> not <code>nil</code> or 1, it moves forward
-<var>count</var>−1 lines and then to the beginning of the line.
-</p>
-<p>This function does not move point across a field boundary
-(see <a href="Fields.html#Fields">Fields</a>) unless doing so would move beyond there to a
-different line; therefore, if <var>count</var> is <code>nil</code> or 1, and
-point starts at a field boundary, point does not move.  To ignore
-field boundaries, either bind <code>inhibit-field-text-motion</code> to
-<code>t</code>, or use the <code>forward-line</code> function instead.  For
-instance, <code>(forward-line 0)</code> does the same thing as
-<code>(beginning-of-line)</code>, except that it ignores field boundaries.
-</p>
-<p>If this function reaches the end of the buffer (or of the accessible
-portion, if narrowing is in effect), it positions point there.  No error
-is signaled.
-</p></dd></dl>
+  <p>Text lines are portions of the buffer delimited by newline
+  characters, which are regarded as part of the previous line. The
+  first text line begins at the beginning of the buffer, and the
+  last text line ends at the end of the buffer whether or not the
+  last character is a newline. The division of the buffer into text
+  lines is not affected by the width of the window, by line
+  continuation in display, or by how tabs and control characters
+  are displayed.</p>
 
-<dl>
-<dt><a name="index-line_002dbeginning_002dposition"></a>Function: <strong>line-beginning-position</strong> <em>&amp;optional count</em></dt>
-<dd><p>Return the position that <code>(beginning-of-line <var>count</var>)</code>
-would move to.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-beginning_002dof_002dline" id=
+    "index-beginning_002dof_002dline"></a>Command:
+    <strong>beginning-of-line</strong> <em>&amp;optional
+    count</em></dt>
 
-<dl>
-<dt><a name="index-end_002dof_002dline"></a>Command: <strong>end-of-line</strong> <em>&amp;optional count</em></dt>
-<dd><p>This function moves point to the end of the current line.  With an
-argument <var>count</var> not <code>nil</code> or 1, it moves forward
-<var>count</var>−1 lines and then to the end of the line.
-</p>
-<p>This function does not move point across a field boundary
-(see <a href="Fields.html#Fields">Fields</a>) unless doing so would move beyond there to a
-different line; therefore, if <var>count</var> is <code>nil</code> or 1, and
-point starts at a field boundary, point does not move.  To ignore
-field boundaries, bind <code>inhibit-field-text-motion</code> to <code>t</code>.
-</p>
-<p>If this function reaches the end of the buffer (or of the accessible
-portion, if narrowing is in effect), it positions point there.  No error
-is signaled.
-</p></dd></dl>
+    <dd>
+      <p>This function moves point to the beginning of the current
+      line. With an argument <var>count</var> not <code>nil</code>
+      or 1, it moves forward <var>count</var>&acirc;&circ;&rsquo;1
+      lines and then to the beginning of the line.</p>
 
-<dl>
-<dt><a name="index-line_002dend_002dposition"></a>Function: <strong>line-end-position</strong> <em>&amp;optional count</em></dt>
-<dd><p>Return the position that <code>(end-of-line <var>count</var>)</code>
-would move to.
-</p></dd></dl>
+      <p>This function does not move point across a field boundary
+      (see <a href="Fields.html#Fields">Fields</a>) unless doing so
+      would move beyond there to a different line; therefore, if
+      <var>count</var> is <code>nil</code> or 1, and point starts
+      at a field boundary, point does not move. To ignore field
+      boundaries, either bind
+      <code>inhibit-field-text-motion</code> to <code>t</code>, or
+      use the <code>forward-line</code> function instead. For
+      instance, <code>(forward-line 0)</code> does the same thing
+      as <code>(beginning-of-line)</code>, except that it ignores
+      field boundaries.</p>
 
-<dl>
-<dt><a name="index-forward_002dline"></a>Command: <strong>forward-line</strong> <em>&amp;optional count</em></dt>
-<dd><a name="index-beginning-of-line"></a>
-<p>This function moves point forward <var>count</var> lines, to the beginning of
-the line following that.  If <var>count</var> is negative, it moves point
-−<var>count</var> lines backward, to the beginning of a line
-preceding that.  If <var>count</var> is zero, it moves point to the
-beginning of the current line.  If <var>count</var> is <code>nil</code>, that
-means 1.
-</p>
-<p>If <code>forward-line</code> encounters the beginning or end of the buffer (or
-of the accessible portion) before finding that many lines, it sets point
-there.  No error is signaled.
-</p>
-<p><code>forward-line</code> returns the difference between <var>count</var> and the
-number of lines actually moved.  If you attempt to move down five lines
-from the beginning of a buffer that has only three lines, point stops at
-the end of the last line, and the value will be 2.  As an explicit
-exception, if the last accessible line is non-empty, but has no
-newline (e.g., if the buffer ends without a newline), the function
-sets point to the end of that line, and the value returned by the
-function counts that line as one line successfully moved.
-</p>
-<p>In an interactive call, <var>count</var> is the numeric prefix argument.
-</p></dd></dl>
+      <p>If this function reaches the end of the buffer (or of the
+      accessible portion, if narrowing is in effect), it positions
+      point there. No error is signaled.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-count_002dlines"></a>Function: <strong>count-lines</strong> <em>start end</em></dt>
-<dd><a name="index-lines-in-region"></a>
-<a name="Definition-of-count_002dlines"></a><p>This function returns the number of lines between the positions
-<var>start</var> and <var>end</var> in the current buffer.  If <var>start</var> and
-<var>end</var> are equal, then it returns 0.  Otherwise it returns at least
-1, even if <var>start</var> and <var>end</var> are on the same line.  This is
-because the text between them, considered in isolation, must contain at
-least one line unless it is empty.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-line_002dbeginning_002dposition" id=
+    "index-line_002dbeginning_002dposition"></a>Function:
+    <strong>line-beginning-position</strong> <em>&amp;optional
+    count</em></dt>
 
-<dl>
-<dt><a name="index-count_002dwords"></a>Command: <strong>count-words</strong> <em>start end</em></dt>
-<dd><a name="index-words-in-region"></a>
-<p>This function returns the number of words between the positions
-<var>start</var> and <var>end</var> in the current buffer.
-</p>
-<p>This function can also be called interactively.  In that case, it
-prints a message reporting the number of lines, words, and characters
-in the buffer, or in the region if the region is active.
-</p></dd></dl>
+    <dd>
+      <p>Return the position that <code>(beginning-of-line
+      <var>count</var>)</code> would move to.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-line_002dnumber_002dat_002dpos"></a>Function: <strong>line-number-at-pos</strong> <em>&amp;optional pos</em></dt>
-<dd><a name="index-line-number"></a>
-<p>This function returns the line number in the current buffer
-corresponding to the buffer position <var>pos</var>.  If <var>pos</var> is <code>nil</code>
-or omitted, the current buffer position is used.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-end_002dof_002dline" id=
+    "index-end_002dof_002dline"></a>Command:
+    <strong>end-of-line</strong> <em>&amp;optional count</em></dt>
 
+    <dd>
+      <p>This function moves point to the end of the current line.
+      With an argument <var>count</var> not <code>nil</code> or 1,
+      it moves forward <var>count</var>&acirc;&circ;&rsquo;1 lines
+      and then to the end of the line.</p>
 
-<p>Also see the functions <code>bolp</code> and <code>eolp</code> in <a href="Near-Point.html#Near-Point">Near Point</a>.
-These functions do not move point, but test whether it is already at the
-beginning or end of a line.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Screen-Lines.html#Screen-Lines" accesskey="n" rel="next">Screen Lines</a>, Previous: <a href="Buffer-End-Motion.html#Buffer-End-Motion" accesskey="p" rel="prev">Buffer End Motion</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This function does not move point across a field boundary
+      (see <a href="Fields.html#Fields">Fields</a>) unless doing so
+      would move beyond there to a different line; therefore, if
+      <var>count</var> is <code>nil</code> or 1, and point starts
+      at a field boundary, point does not move. To ignore field
+      boundaries, bind <code>inhibit-field-text-motion</code> to
+      <code>t</code>.</p>
 
+      <p>If this function reaches the end of the buffer (or of the
+      accessible portion, if narrowing is in effect), it positions
+      point there. No error is signaled.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-line_002dend_002dposition" id=
+    "index-line_002dend_002dposition"></a>Function:
+    <strong>line-end-position</strong> <em>&amp;optional
+    count</em></dt>
 
+    <dd>
+      <p>Return the position that <code>(end-of-line
+      <var>count</var>)</code> would move to.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-forward_002dline" id=
+    "index-forward_002dline"></a>Command:
+    <strong>forward-line</strong> <em>&amp;optional count</em></dt>
+
+    <dd>
+      <a name="index-beginning-of-line" id=
+      "index-beginning-of-line"></a>
+
+      <p>This function moves point forward <var>count</var> lines,
+      to the beginning of the line following that. If
+      <var>count</var> is negative, it moves point
+      &acirc;&circ;&rsquo;<var>count</var> lines backward, to the
+      beginning of a line preceding that. If <var>count</var> is
+      zero, it moves point to the beginning of the current line. If
+      <var>count</var> is <code>nil</code>, that means 1.</p>
+
+      <p>If <code>forward-line</code> encounters the beginning or
+      end of the buffer (or of the accessible portion) before
+      finding that many lines, it sets point there. No error is
+      signaled.</p>
+
+      <p><code>forward-line</code> returns the difference between
+      <var>count</var> and the number of lines actually moved. If
+      you attempt to move down five lines from the beginning of a
+      buffer that has only three lines, point stops at the end of
+      the last line, and the value will be 2. As an explicit
+      exception, if the last accessible line is non-empty, but has
+      no newline (e.g., if the buffer ends without a newline), the
+      function sets point to the end of that line, and the value
+      returned by the function counts that line as one line
+      successfully moved.</p>
+
+      <p>In an interactive call, <var>count</var> is the numeric
+      prefix argument.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-count_002dlines" id=
+    "index-count_002dlines"></a>Function:
+    <strong>count-lines</strong> <em>start end</em></dt>
+
+    <dd>
+      <a name="index-lines-in-region" id=
+      "index-lines-in-region"></a> <a name=
+      "Definition-of-count_002dlines" id=
+      "Definition-of-count_002dlines"></a>
+
+      <p>This function returns the number of lines between the
+      positions <var>start</var> and <var>end</var> in the current
+      buffer. If <var>start</var> and <var>end</var> are equal,
+      then it returns 0. Otherwise it returns at least 1, even if
+      <var>start</var> and <var>end</var> are on the same line.
+      This is because the text between them, considered in
+      isolation, must contain at least one line unless it is
+      empty.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-count_002dwords" id=
+    "index-count_002dwords"></a>Command:
+    <strong>count-words</strong> <em>start end</em></dt>
+
+    <dd>
+      <a name="index-words-in-region" id=
+      "index-words-in-region"></a>
+
+      <p>This function returns the number of words between the
+      positions <var>start</var> and <var>end</var> in the current
+      buffer.</p>
+
+      <p>This function can also be called interactively. In that
+      case, it prints a message reporting the number of lines,
+      words, and characters in the buffer, or in the region if the
+      region is active.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-line_002dnumber_002dat_002dpos" id=
+    "index-line_002dnumber_002dat_002dpos"></a>Function:
+    <strong>line-number-at-pos</strong> <em>&amp;optional
+    pos</em></dt>
+
+    <dd>
+      <a name="index-line-number" id="index-line-number"></a>
+
+      <p>This function returns the line number in the current
+      buffer corresponding to the buffer position <var>pos</var>.
+      If <var>pos</var> is <code>nil</code> or omitted, the current
+      buffer position is used.</p>
+    </dd>
+  </dl>
+
+  <p>Also see the functions <code>bolp</code> and <code>eolp</code>
+  in <a href="Near-Point.html#Near-Point">Near Point</a>. These
+  functions do not move point, but test whether it is already at
+  the beginning or end of a line.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Screen-Lines.html#Screen-Lines" accesskey="n"
+    rel="next">Screen Lines</a>, Previous: <a href=
+    "Buffer-End-Motion.html#Buffer-End-Motion" accesskey="p" rel=
+    "prev">Buffer End Motion</a>, Up: <a href="Motion.html#Motion"
+    accesskey="u" rel="up">Motion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

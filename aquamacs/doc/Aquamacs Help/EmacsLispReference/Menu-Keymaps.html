@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,91 +19,181 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Menu Keymaps</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Menu Keymaps">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Menu Keymaps">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
-<link href="Defining-Menus.html#Defining-Menus" rel="next" title="Defining Menus">
-<link href="Scanning-Keymaps.html#Scanning-Keymaps" rel="prev" title="Scanning Keymaps">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Menu Keymaps</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Menu Keymaps" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Menu Keymaps" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keymaps.html#Keymaps" rel="up" title="Keymaps" />
+  <link href="Defining-Menus.html#Defining-Menus" rel="next" title=
+  "Defining Menus" />
+  <link href="Scanning-Keymaps.html#Scanning-Keymaps" rel="prev"
+  title="Scanning Keymaps" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Menu-Keymaps" id="Menu-Keymaps"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Scanning-Keymaps.html#Scanning-Keymaps"
+    accesskey="p" rel="prev">Scanning Keymaps</a>, Up: <a href=
+    "Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Menu-Keymaps-1" id="Menu-Keymaps-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Menu-Keymaps"></a>
-<div class="header">
-<p>
-Previous: <a href="Scanning-Keymaps.html#Scanning-Keymaps" accesskey="p" rel="prev">Scanning Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Menu-Keymaps-1"></a>
-<h3 class="section">21.17 Menu Keymaps</h3>
-<a name="index-menu-keymaps"></a>
+  <h3 class="section">21.17 Menu Keymaps</h3><a name=
+  "index-menu-keymaps" id="index-menu-keymaps"></a>
 
-<p>A keymap can operate as a menu as well as defining bindings for
-keyboard keys and mouse buttons.  Menus are usually actuated with the
-mouse, but they can function with the keyboard also.  If a menu keymap
-is active for the next input event, that activates the keyboard menu
-feature.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Defining-Menus.html#Defining-Menus" accesskey="1">Defining Menus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to make a keymap that defines a menu.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mouse-Menus.html#Mouse-Menus" accesskey="2">Mouse Menus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How users actuate the menu with the mouse.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Keyboard-Menus.html#Keyboard-Menus" accesskey="3">Keyboard Menus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How users actuate the menu with the keyboard.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Menu-Example.html#Menu-Example" accesskey="4">Menu Example</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Making a simple menu.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Menu-Bar.html#Menu-Bar" accesskey="5">Menu Bar</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to customize the menu bar.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Tool-Bar.html#Tool-Bar" accesskey="6">Tool Bar</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A tool bar is a row of images.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Modifying-Menus.html#Modifying-Menus" accesskey="7">Modifying Menus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to add new items to a menu.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Easy-Menu.html#Easy-Menu" accesskey="8">Easy Menu</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A convenience macro for making menus.
-</td></tr>
-</table>
+  <p>A keymap can operate as a menu as well as defining bindings
+  for keyboard keys and mouse buttons. Menus are usually actuated
+  with the mouse, but they can function with the keyboard also. If
+  a menu keymap is active for the next input event, that activates
+  the keyboard menu feature.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Defining-Menus.html#Defining-Menus" accesskey="1">Defining
+      Menus</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">How to make a keymap that
+      defines a menu.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mouse-Menus.html#Mouse-Menus" accesskey="2">Mouse
+      Menus</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How users actuate the menu with
+      the mouse.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Keyboard-Menus.html#Keyboard-Menus" accesskey="3">Keyboard
+      Menus</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How users actuate the menu with
+      the keyboard.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Menu-Example.html#Menu-Example" accesskey="4">Menu
+      Example</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Making a simple menu.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Menu-Bar.html#Menu-Bar" accesskey="5">Menu Bar</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to customize the menu
+      bar.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Tool-Bar.html#Tool-Bar" accesskey="6">Tool Bar</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A tool bar is a row of
+      images.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Modifying-Menus.html#Modifying-Menus" accesskey=
+      "7">Modifying Menus</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to add new items to a
+      menu.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Easy-Menu.html#Easy-Menu" accesskey="8">Easy Menu</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A convenience macro for making
+      menus.</td>
+    </tr>
+  </table>
 </body>
 </html>

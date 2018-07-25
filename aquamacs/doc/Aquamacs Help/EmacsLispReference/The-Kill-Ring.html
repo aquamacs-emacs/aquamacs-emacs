@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,118 +19,205 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: The Kill Ring</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: The Kill Ring">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: The Kill Ring">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Kill-Ring-Concepts.html#Kill-Ring-Concepts" rel="next" title="Kill Ring Concepts">
-<link href="User_002dLevel-Deletion.html#User_002dLevel-Deletion" rel="prev" title="User-Level Deletion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: The Kill Ring</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: The Kill Ring" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: The Kill Ring" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Kill-Ring-Concepts.html#Kill-Ring-Concepts" rel=
+  "next" title="Kill Ring Concepts" />
+  <link href="User_002dLevel-Deletion.html#User_002dLevel-Deletion"
+  rel="prev" title="User-Level Deletion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="The-Kill-Ring" id="The-Kill-Ring"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Undo.html#Undo" accesskey="n" rel=
+    "next">Undo</a>, Previous: <a href=
+    "User_002dLevel-Deletion.html#User_002dLevel-Deletion"
+    accesskey="p" rel="prev">User-Level Deletion</a>, Up: <a href=
+    "Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Kill-Ring-1" id="The-Kill-Ring-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-Kill-Ring"></a>
-<div class="header">
-<p>
-Next: <a href="Undo.html#Undo" accesskey="n" rel="next">Undo</a>, Previous: <a href="User_002dLevel-Deletion.html#User_002dLevel-Deletion" accesskey="p" rel="prev">User-Level Deletion</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Kill-Ring-1"></a>
-<h3 class="section">31.8 The Kill Ring</h3>
-<a name="index-kill-ring"></a>
+  <h3 class="section">31.8 The Kill Ring</h3><a name=
+  "index-kill-ring" id="index-kill-ring"></a>
 
-<p><em>Kill functions</em> delete text like the deletion functions, but save
-it so that the user can reinsert it by <em>yanking</em>.  Most of these
-functions have &lsquo;<samp>kill-</samp>&rsquo; in their name.  By contrast, the functions
-whose names start with &lsquo;<samp>delete-</samp>&rsquo; normally do not save text for
-yanking (though they can still be undone); these are deletion
-functions.
-</p>
-<p>Most of the kill commands are primarily for interactive use, and are
-not described here.  What we do describe are the functions provided for
-use in writing such commands.  You can use these functions to write
-commands for killing text.  When you need to delete text for internal
-purposes within a Lisp function, you should normally use deletion
-functions, so as not to disturb the kill ring contents.
-See <a href="Deletion.html#Deletion">Deletion</a>.
-</p>
-<p>Killed text is saved for later yanking in the <em>kill ring</em>.  This
-is a list that holds a number of recent kills, not just the last text
-kill.  We call this a &ldquo;ring&rdquo; because yanking treats it as having
-elements in a cyclic order.  The list is kept in the variable
-<code>kill-ring</code>, and can be operated on with the usual functions for
-lists; there are also specialized functions, described in this section,
-that treat it as a ring.
-</p>
-<p>Some people think this use of the word &ldquo;kill&rdquo; is unfortunate, since
-it refers to operations that specifically <em>do not</em> destroy the
-entities killed.  This is in sharp contrast to ordinary life, in
-which death is permanent and killed entities do not come back to
-life.  Therefore, other metaphors have been proposed.  For example, the
-term &ldquo;cut ring&rdquo; makes sense to people who, in pre-computer days, used
-scissors and paste to cut up and rearrange manuscripts.  However, it
-would be difficult to change the terminology now.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Kill-Ring-Concepts.html#Kill-Ring-Concepts" accesskey="1">Kill Ring Concepts</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What text looks like in the kill ring.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Kill-Functions.html#Kill-Functions" accesskey="2">Kill Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions that kill text.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Yanking.html#Yanking" accesskey="3">Yanking</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How yanking is done.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Yank-Commands.html#Yank-Commands" accesskey="4">Yank Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Commands that access the kill ring.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring" accesskey="5">Low-Level Kill Ring</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions and variables for kill ring access.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Internals-of-Kill-Ring.html#Internals-of-Kill-Ring" accesskey="6">Internals of Kill Ring</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Variables that hold kill ring data.
-</td></tr>
-</table>
+  <p><em>Kill functions</em> delete text like the deletion
+  functions, but save it so that the user can reinsert it by
+  <em>yanking</em>. Most of these functions have
+  &lsquo;<samp>kill-</samp>&rsquo; in their name. By contrast, the
+  functions whose names start with
+  &lsquo;<samp>delete-</samp>&rsquo; normally do not save text for
+  yanking (though they can still be undone); these are deletion
+  functions.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Undo.html#Undo" accesskey="n" rel="next">Undo</a>, Previous: <a href="User_002dLevel-Deletion.html#User_002dLevel-Deletion" accesskey="p" rel="prev">User-Level Deletion</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Most of the kill commands are primarily for interactive use,
+  and are not described here. What we do describe are the functions
+  provided for use in writing such commands. You can use these
+  functions to write commands for killing text. When you need to
+  delete text for internal purposes within a Lisp function, you
+  should normally use deletion functions, so as not to disturb the
+  kill ring contents. See <a href=
+  "Deletion.html#Deletion">Deletion</a>.</p>
 
+  <p>Killed text is saved for later yanking in the <em>kill
+  ring</em>. This is a list that holds a number of recent kills,
+  not just the last text kill. We call this a &ldquo;ring&rdquo;
+  because yanking treats it as having elements in a cyclic order.
+  The list is kept in the variable <code>kill-ring</code>, and can
+  be operated on with the usual functions for lists; there are also
+  specialized functions, described in this section, that treat it
+  as a ring.</p>
 
+  <p>Some people think this use of the word &ldquo;kill&rdquo; is
+  unfortunate, since it refers to operations that specifically
+  <em>do not</em> destroy the entities killed. This is in sharp
+  contrast to ordinary life, in which death is permanent and killed
+  entities do not come back to life. Therefore, other metaphors
+  have been proposed. For example, the term &ldquo;cut ring&rdquo;
+  makes sense to people who, in pre-computer days, used scissors
+  and paste to cut up and rearrange manuscripts. However, it would
+  be difficult to change the terminology now.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Kill-Ring-Concepts.html#Kill-Ring-Concepts" accesskey=
+      "1">Kill Ring Concepts</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What text looks like in the
+      kill ring.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Kill-Functions.html#Kill-Functions" accesskey="2">Kill
+      Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions that kill text.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Yanking.html#Yanking" accesskey="3">Yanking</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How yanking is done.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Yank-Commands.html#Yank-Commands" accesskey="4">Yank
+      Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Commands that access the kill
+      ring.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring"
+      accesskey="5">Low-Level Kill Ring</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions and variables for
+      kill ring access.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Internals-of-Kill-Ring.html#Internals-of-Kill-Ring"
+      accesskey="6">Internals of Kill Ring</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Variables that hold kill ring
+      data.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Undo.html#Undo" accesskey="n" rel=
+    "next">Undo</a>, Previous: <a href=
+    "User_002dLevel-Deletion.html#User_002dLevel-Deletion"
+    accesskey="p" rel="prev">User-Level Deletion</a>, Up: <a href=
+    "Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

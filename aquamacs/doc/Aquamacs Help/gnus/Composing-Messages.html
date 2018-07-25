@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Composing Messages - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Article-Buffer.html#Article-Buffer" title="Article Buffer">
-<link rel="next" href="Select-Methods.html#Select-Methods" title="Select Methods">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Composing Messages - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Article-Buffer.html#Article-Buffer" title=
+  "Article Buffer" />
+  <link rel="next" href="Select-Methods.html#Select-Methods" title=
+  "Select Methods" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +33,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,40 +46,86 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Composing-Messages"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Select-Methods.html#Select-Methods">Select Methods</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Article-Buffer.html#Article-Buffer">Article Buffer</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Composing-Messages" id="Composing-Messages"></a>
 
-<h2 class="chapter">5 Composing Messages</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Select-Methods.html#Select-Methods">Select Methods</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Article-Buffer.html#Article-Buffer">Article Buffer</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-composing-messages-1861"></a><a name="index-messages-1862"></a><a name="index-mail-1863"></a><a name="index-sending-mail-1864"></a><a name="index-reply-1865"></a><a name="index-followup-1866"></a><a name="index-post-1867"></a><a name="index-using-gpg-1868"></a><a name="index-using-s_002fmime-1869"></a><a name="index-using-smime-1870"></a>
-<a name="index-C_002dc-C_002dc-_0028Post_0029-1871"></a>All commands for posting and mailing will put you in a message buffer
-where you can edit the article all you like, before you send the
-article by pressing <kbd>C-c C-c</kbd>.  See <a href="../message/index.html#Top">Overview</a>.  Where the message will be posted/mailed to depends
-on your setup (see <a href="Posting-Server.html#Posting-Server">Posting Server</a>).
+  <h2 class="chapter">5 Composing Messages</h2>
 
-<ul class="menu">
-<li><a accesskey="1" href="Mail.html#Mail">Mail</a>:                         Mailing and replying. 
-<li><a accesskey="2" href="Posting-Server.html#Posting-Server">Posting Server</a>:               What server should you post and mail via? 
-<li><a accesskey="3" href="POP-before-SMTP.html#POP-before-SMTP">POP before SMTP</a>:              You cannot send a mail unless you read a mail. 
-<li><a accesskey="4" href="Mail-and-Post.html#Mail-and-Post">Mail and Post</a>:                Mailing and posting at the same time. 
-<li><a accesskey="5" href="Archived-Messages.html#Archived-Messages">Archived Messages</a>:            Where Gnus stores the messages you've sent. 
-<li><a accesskey="6" href="Posting-Styles.html#Posting-Styles">Posting Styles</a>:               An easier way to specify who you are. 
-<li><a accesskey="7" href="Drafts.html#Drafts">Drafts</a>:                       Postponing messages and rejected messages. 
-<li><a accesskey="8" href="Rejected-Articles.html#Rejected-Articles">Rejected Articles</a>:            What happens if the server doesn't like your article? 
-<li><a accesskey="9" href="Signing-and-encrypting.html#Signing-and-encrypting">Signing and encrypting</a>:       How to compose secure messages. 
-</ul>
+  <p><a name="index-composing-messages-1861" id=
+  "index-composing-messages-1861"></a><a name="index-messages-1862"
+  id="index-messages-1862"></a><a name="index-mail-1863" id=
+  "index-mail-1863"></a><a name="index-sending-mail-1864" id=
+  "index-sending-mail-1864"></a><a name="index-reply-1865" id=
+  "index-reply-1865"></a><a name="index-followup-1866" id=
+  "index-followup-1866"></a><a name="index-post-1867" id=
+  "index-post-1867"></a><a name="index-using-gpg-1868" id=
+  "index-using-gpg-1868"></a><a name="index-using-s_002fmime-1869"
+  id="index-using-s_002fmime-1869"></a><a name=
+  "index-using-smime-1870" id="index-using-smime-1870"></a>
+  <a name="index-C_002dc-C_002dc-_0028Post_0029-1871" id=
+  "index-C_002dc-C_002dc-_0028Post_0029-1871"></a>All commands for
+  posting and mailing will put you in a message buffer where you
+  can edit the article all you like, before you send the article by
+  pressing <kbd>C-c C-c</kbd>. See <a href=
+  "../message/index.html#Top">Overview</a>. Where the message will
+  be posted/mailed to depends on your setup (see <a href=
+  "Posting-Server.html#Posting-Server">Posting Server</a>).</p>
 
-   <p>Also see <a href="Canceling-and-Superseding.html#Canceling-and-Superseding">Canceling and Superseding</a> for information on how to
-remove articles you shouldn't have posted.
+  <ul class="menu">
+    <li><a accesskey="1" href="Mail.html#Mail">Mail</a>: Mailing
+    and replying.</li>
 
-   </body></html>
+    <li><a accesskey="2" href=
+    "Posting-Server.html#Posting-Server">Posting Server</a>: What
+    server should you post and mail via?</li>
 
+    <li><a accesskey="3" href=
+    "POP-before-SMTP.html#POP-before-SMTP">POP before SMTP</a>: You
+    cannot send a mail unless you read a mail.</li>
+
+    <li><a accesskey="4" href=
+    "Mail-and-Post.html#Mail-and-Post">Mail and Post</a>: Mailing
+    and posting at the same time.</li>
+
+    <li><a accesskey="5" href=
+    "Archived-Messages.html#Archived-Messages">Archived
+    Messages</a>: Where Gnus stores the messages you've sent.</li>
+
+    <li><a accesskey="6" href=
+    "Posting-Styles.html#Posting-Styles">Posting Styles</a>: An
+    easier way to specify who you are.</li>
+
+    <li><a accesskey="7" href="Drafts.html#Drafts">Drafts</a>:
+    Postponing messages and rejected messages.</li>
+
+    <li><a accesskey="8" href=
+    "Rejected-Articles.html#Rejected-Articles">Rejected
+    Articles</a>: What happens if the server doesn't like your
+    article?</li>
+
+    <li><a accesskey="9" href=
+    "Signing-and-encrypting.html#Signing-and-encrypting">Signing
+    and encrypting</a>: How to compose secure messages.</li>
+  </ul>
+
+  <p>Also see <a href=
+  "Canceling-and-Superseding.html#Canceling-and-Superseding">Canceling
+  and Superseding</a> for information on how to remove articles you
+  shouldn't have posted.</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,79 +20,110 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Stack Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Stack Buffer">
-<meta name="keywords" content="GNU Emacs Manual: Stack Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" rel="up" title="GDB Graphical Interface">
-<link href="Other-GDB-Buffers.html#Other-GDB-Buffers" rel="next" title="Other GDB Buffers">
-<link href="Threads-Buffer.html#Threads-Buffer" rel="prev" title="Threads Buffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Stack Buffer</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Stack Buffer" />
+  <meta name="keywords" content="GNU Emacs Manual: Stack Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+  rel="up" title="GDB Graphical Interface" />
+  <link href="Other-GDB-Buffers.html#Other-GDB-Buffers" rel="next"
+  title="Other GDB Buffers" />
+  <link href="Threads-Buffer.html#Threads-Buffer" rel="prev" title=
+  "Threads Buffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Stack-Buffer" id="Stack-Buffer"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Other-GDB-Buffers.html#Other-GDB-Buffers"
+    accesskey="n" rel="next">Other GDB Buffers</a>, Previous:
+    <a href="Threads-Buffer.html#Threads-Buffer" accesskey="p" rel=
+    "prev">Threads Buffer</a>, Up: <a href=
+    "GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+    accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Stack-Buffer-1" id="Stack-Buffer-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Stack-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Other-GDB-Buffers.html#Other-GDB-Buffers" accesskey="n" rel="next">Other GDB Buffers</a>, Previous: <a href="Threads-Buffer.html#Threads-Buffer" accesskey="p" rel="prev">Threads Buffer</a>, Up: <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Stack-Buffer-1"></a>
-<h4 class="subsubsection">27.6.5.5 Stack Buffer</h4>
+  <h4 class="subsubsection">27.6.5.5 Stack Buffer</h4>
 
-<p>The GDB Stack buffer displays a <em>call stack</em>, with one line for
-each of the nested subroutine calls (<em>stack frames</em>) in the
-debugger session.  See <a href="http://sourceware.org/gdb/current/onlinedocs/gdb/Backtrace.html#Backtrace">Backtraces</a> in <cite>The GNU
-debugger</cite>.
-</p>
-<a name="index-gdb_002dframes_002dselect"></a>
-<p>On graphical displays, the selected stack frame is indicated by an
-arrow in the fringe.  On text terminals, or when fringes are disabled,
-the selected stack frame is displayed in reverse contrast.  To select
-a stack frame, move point in its line and type <tt class="key">RET</tt>
-(<code>gdb-frames-select</code>), or click <kbd>mouse-2</kbd> on it.  Doing so
-also updates the Locals buffer
-(see <a href="Other-GDB-Buffers.html#Other-GDB-Buffers">Other GDB Buffers</a>).
-</p>
+  <p>The GDB Stack buffer displays a <em>call stack</em>, with one
+  line for each of the nested subroutine calls (<em>stack
+  frames</em>) in the debugger session. See <a href=
+  "http://sourceware.org/gdb/current/onlinedocs/gdb/Backtrace.html#Backtrace">
+  Backtraces</a> in <cite>The GNU debugger</cite>.</p><a name=
+  "index-gdb_002dframes_002dselect" id=
+  "index-gdb_002dframes_002dselect"></a>
 
-
-
+  <p>On graphical displays, the selected stack frame is indicated
+  by an arrow in the fringe. On text terminals, or when fringes are
+  disabled, the selected stack frame is displayed in reverse
+  contrast. To select a stack frame, move point in its line and
+  type <tt class="key">RET</tt> (<code>gdb-frames-select</code>),
+  or click <kbd>mouse-2</kbd> on it. Doing so also updates the
+  Locals buffer (see <a href=
+  "Other-GDB-Buffers.html#Other-GDB-Buffers">Other GDB
+  Buffers</a>).</p>
 </body>
 </html>

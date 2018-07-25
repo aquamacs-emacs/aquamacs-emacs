@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,398 +14,525 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Category Syntax</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Category Syntax">
-<meta name="keywords" content="Gnus Manual: Category Syntax">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Agent-Categories.html#Agent-Categories" rel="up" title="Agent Categories">
-<link href="Category-Buffer.html#Category-Buffer" rel="next" title="Category Buffer">
-<link href="Agent-Categories.html#Agent-Categories" rel="prev" title="Agent Categories">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Category Syntax</title>
+  <meta name="description" content=
+  "Gnus Manual: Category Syntax" />
+  <meta name="keywords" content="Gnus Manual: Category Syntax" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Agent-Categories.html#Agent-Categories" rel="up"
+  title="Agent Categories" />
+  <link href="Category-Buffer.html#Category-Buffer" rel="next"
+  title="Category Buffer" />
+  <link href="Agent-Categories.html#Agent-Categories" rel="prev"
+  title="Agent Categories" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Category-Syntax"></a>
-<div class="header">
-<p>
-Next: <a href="Category-Buffer.html#Category-Buffer" accesskey="n" rel="next">Category Buffer</a>, Up: <a href="Agent-Categories.html#Agent-Categories" accesskey="u" rel="up">Agent Categories</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Category-Syntax-1"></a>
-<h4 class="subsubsection">6.9.2.1 Category Syntax</h4>
+<body lang="en" xml:lang="en">
+  <a name="Category-Syntax" id="Category-Syntax"></a>
 
-<p>A category consists of a name, the list of groups belonging to the
-category, and a number of optional parameters that override the
-customizable variables.  The complete list of agent parameters are
-listed below.
-</p>
-<a name="index-Agent-Parameters"></a>
-<dl compact="compact">
-<dt><code>agent-groups</code></dt>
-<dd><p>The list of groups that are in this category.
-</p>
-</dd>
-<dt><code>agent-predicate</code></dt>
-<dd><p>A predicate which (generally) gives a rough outline of which articles
-are eligible for downloading; and
-</p>
-</dd>
-<dt><code>agent-score</code></dt>
-<dd><p>a score rule which (generally) gives you a finer granularity when
-deciding what articles to download.  (Note that this <em>download
-score</em> is not necessarily related to normal scores.)
-</p>
-</dd>
-<dt><code>agent-enable-expiration</code></dt>
-<dd><p>a boolean indicating whether the agent should expire old articles in
-this group.  Most groups should be expired to conserve disk space.  In
-fact, its probably safe to say that the gnus.* hierarchy contains the
-only groups that should not be expired.
-</p>
-</dd>
-<dt><code>agent-days-until-old</code></dt>
-<dd><p>an integer indicating the number of days that the agent should wait
-before deciding that a read article is safe to expire.
-</p>
-</dd>
-<dt><code>agent-low-score</code></dt>
-<dd><p>an integer that overrides the value of <code>gnus-agent-low-score</code>.
-</p>
-</dd>
-<dt><code>agent-high-score</code></dt>
-<dd><p>an integer that overrides the value of <code>gnus-agent-high-score</code>.
-</p>
-</dd>
-<dt><code>agent-short-article</code></dt>
-<dd><p>an integer that overrides the value of
-<code>gnus-agent-short-article</code>.
-</p>
-</dd>
-<dt><code>agent-long-article</code></dt>
-<dd><p>an integer that overrides the value of <code>gnus-agent-long-article</code>.
-</p>
-</dd>
-<dt><code>agent-enable-undownloaded-faces</code></dt>
-<dd><p>a symbol indicating whether the summary buffer should display
-undownloaded articles using the <code>gnus-summary-*-undownloaded-face</code>
-faces.  Any symbol other than <code>nil</code> will enable the use of
-undownloaded faces.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Category-Buffer.html#Category-Buffer"
+    accesskey="n" rel="next">Category Buffer</a>, Up: <a href=
+    "Agent-Categories.html#Agent-Categories" accesskey="u" rel=
+    "up">Agent Categories</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Category-Syntax-1" id="Category-Syntax-1"></a>
 
-<p>The name of a category can not be changed once the category has been
-created.
-</p>
-<p>Each category maintains a list of groups that are exclusive members of
-that category.  The exclusivity rule is automatically enforced, add a
-group to a new category and it is automatically removed from its old
-category.
-</p>
-<p>A predicate in its simplest form can be a single predicate such as
-<code>true</code> or <code>false</code>.  These two will download every available
-article or nothing respectively.  In the case of these two special
-predicates an additional score rule is superfluous.
-</p>
-<p>Predicates of <code>high</code> or <code>low</code> download articles in respect of
-their scores in relationship to <code>gnus-agent-high-score</code> and
-<code>gnus-agent-low-score</code> as described below.
-</p>
-<p>To gain even finer control of what is to be regarded eligible for
-download a predicate can consist of a number of predicates with logical
-operators sprinkled in between.
-</p>
-<p>Perhaps some examples are in order.
-</p>
-<p>Here&rsquo;s a simple predicate.  (It&rsquo;s the default predicate, in fact, used
-for all groups that don&rsquo;t belong to any other category.)
-</p>
-<div class="lisp">
-<pre class="lisp">short
-</pre></div>
+  <h4 class="subsubsection">6.9.2.1 Category Syntax</h4>
 
-<p>Quite simple, eh?  This predicate is true if and only if the article is
-short (for some value of &ldquo;short&rdquo;).
-</p>
-<p>Here&rsquo;s a more complex predicate:
-</p>
-<div class="lisp">
-<pre class="lisp">(or high
+  <p>A category consists of a name, the list of groups belonging to
+  the category, and a number of optional parameters that override
+  the customizable variables. The complete list of agent parameters
+  are listed below.</p><a name="index-Agent-Parameters" id=
+  "index-Agent-Parameters"></a>
+
+  <dl compact="compact">
+    <dt><code>agent-groups</code></dt>
+
+    <dd>
+      <p>The list of groups that are in this category.</p>
+    </dd>
+
+    <dt><code>agent-predicate</code></dt>
+
+    <dd>
+      <p>A predicate which (generally) gives a rough outline of
+      which articles are eligible for downloading; and</p>
+    </dd>
+
+    <dt><code>agent-score</code></dt>
+
+    <dd>
+      <p>a score rule which (generally) gives you a finer
+      granularity when deciding what articles to download. (Note
+      that this <em>download score</em> is not necessarily related
+      to normal scores.)</p>
+    </dd>
+
+    <dt><code>agent-enable-expiration</code></dt>
+
+    <dd>
+      <p>a boolean indicating whether the agent should expire old
+      articles in this group. Most groups should be expired to
+      conserve disk space. In fact, its probably safe to say that
+      the gnus.* hierarchy contains the only groups that should not
+      be expired.</p>
+    </dd>
+
+    <dt><code>agent-days-until-old</code></dt>
+
+    <dd>
+      <p>an integer indicating the number of days that the agent
+      should wait before deciding that a read article is safe to
+      expire.</p>
+    </dd>
+
+    <dt><code>agent-low-score</code></dt>
+
+    <dd>
+      <p>an integer that overrides the value of
+      <code>gnus-agent-low-score</code>.</p>
+    </dd>
+
+    <dt><code>agent-high-score</code></dt>
+
+    <dd>
+      <p>an integer that overrides the value of
+      <code>gnus-agent-high-score</code>.</p>
+    </dd>
+
+    <dt><code>agent-short-article</code></dt>
+
+    <dd>
+      <p>an integer that overrides the value of
+      <code>gnus-agent-short-article</code>.</p>
+    </dd>
+
+    <dt><code>agent-long-article</code></dt>
+
+    <dd>
+      <p>an integer that overrides the value of
+      <code>gnus-agent-long-article</code>.</p>
+    </dd>
+
+    <dt><code>agent-enable-undownloaded-faces</code></dt>
+
+    <dd>
+      <p>a symbol indicating whether the summary buffer should
+      display undownloaded articles using the
+      <code>gnus-summary-*-undownloaded-face</code> faces. Any
+      symbol other than <code>nil</code> will enable the use of
+      undownloaded faces.</p>
+    </dd>
+  </dl>
+
+  <p>The name of a category can not be changed once the category
+  has been created.</p>
+
+  <p>Each category maintains a list of groups that are exclusive
+  members of that category. The exclusivity rule is automatically
+  enforced, add a group to a new category and it is automatically
+  removed from its old category.</p>
+
+  <p>A predicate in its simplest form can be a single predicate
+  such as <code>true</code> or <code>false</code>. These two will
+  download every available article or nothing respectively. In the
+  case of these two special predicates an additional score rule is
+  superfluous.</p>
+
+  <p>Predicates of <code>high</code> or <code>low</code> download
+  articles in respect of their scores in relationship to
+  <code>gnus-agent-high-score</code> and
+  <code>gnus-agent-low-score</code> as described below.</p>
+
+  <p>To gain even finer control of what is to be regarded eligible
+  for download a predicate can consist of a number of predicates
+  with logical operators sprinkled in between.</p>
+
+  <p>Perhaps some examples are in order.</p>
+
+  <p>Here&rsquo;s a simple predicate. (It&rsquo;s the default
+  predicate, in fact, used for all groups that don&rsquo;t belong
+  to any other category.)</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+short
+</pre>
+  </div>
+
+  <p>Quite simple, eh? This predicate is true if and only if the
+  article is short (for some value of &ldquo;short&rdquo;).</p>
+
+  <p>Here&rsquo;s a more complex predicate:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(or high
     (and
      (not low)
      (not long)))
-</pre></div>
+</pre>
+  </div>
 
-<p>This means that an article should be downloaded if it has a high score,
-or if the score is not low and the article is not long.  You get the
-drift.
-</p>
-<p>The available logical operators are <code>or</code>, <code>and</code> and
-<code>not</code>.  (If you prefer, you can use the more &ldquo;C&rdquo;-ish operators
-&lsquo;<samp>|</samp>&rsquo;, <code>&amp;</code> and <code>!</code> instead.)
-</p>
-<p>The following predicates are pre-defined, but if none of these fit what
-you want to do, you can write your own.
-</p>
-<p>When evaluating each of these predicates, the named constant will be
-bound to the value determined by calling
-<code>gnus-agent-find-parameter</code> on the appropriate parameter.  For
-example, gnus-agent-short-article will be bound to
-<code>(gnus-agent-find-parameter group 'agent-short-article)</code>.  This
-means that you can specify a predicate in your category then tune that
-predicate to individual groups.
-</p>
-<dl compact="compact">
-<dt><code>short</code></dt>
-<dd><p>True if the article is shorter than <code>gnus-agent-short-article</code>
-lines; default 100.
-</p>
-</dd>
-<dt><code>long</code></dt>
-<dd><p>True if the article is longer than <code>gnus-agent-long-article</code>
-lines; default 200.
-</p>
-</dd>
-<dt><code>low</code></dt>
-<dd><p>True if the article has a download score less than
-<code>gnus-agent-low-score</code>; default 0.
-</p>
-</dd>
-<dt><code>high</code></dt>
-<dd><p>True if the article has a download score greater than
-<code>gnus-agent-high-score</code>; default 0.
-</p>
-</dd>
-<dt><code>spam</code></dt>
-<dd><p>True if the Gnus Agent guesses that the article is spam.  The
-heuristics may change over time, but at present it just computes a
-checksum and sees whether articles match.
-</p>
-</dd>
-<dt><code>true</code></dt>
-<dd><p>Always true.
-</p>
-</dd>
-<dt><code>false</code></dt>
-<dd><p>Always false.
-</p></dd>
-</dl>
+  <p>This means that an article should be downloaded if it has a
+  high score, or if the score is not low and the article is not
+  long. You get the drift.</p>
 
-<p>If you want to create your own predicate function, here&rsquo;s what you have
-to know:  The functions are called with no parameters, but the
-<code>gnus-headers</code> and <code>gnus-score</code> dynamic variables are bound to
-useful values.
-</p>
-<p>For example, you could decide that you don&rsquo;t want to download articles
-that were posted more than a certain number of days ago (e.g., posted
-more than <code>gnus-agent-expire-days</code> ago) you might write a function
-something along the lines of the following:
-</p>
-<div class="lisp">
-<pre class="lisp">(defun my-article-old-p ()
-  &quot;Say whether an article is old.&quot;
+  <p>The available logical operators are <code>or</code>,
+  <code>and</code> and <code>not</code>. (If you prefer, you can
+  use the more &ldquo;C&rdquo;-ish operators
+  &lsquo;<samp>|</samp>&rsquo;, <code>&amp;</code> and
+  <code>!</code> instead.)</p>
+
+  <p>The following predicates are pre-defined, but if none of these
+  fit what you want to do, you can write your own.</p>
+
+  <p>When evaluating each of these predicates, the named constant
+  will be bound to the value determined by calling
+  <code>gnus-agent-find-parameter</code> on the appropriate
+  parameter. For example, gnus-agent-short-article will be bound to
+  <code>(gnus-agent-find-parameter group
+  'agent-short-article)</code>. This means that you can specify a
+  predicate in your category then tune that predicate to individual
+  groups.</p>
+
+  <dl compact="compact">
+    <dt><code>short</code></dt>
+
+    <dd>
+      <p>True if the article is shorter than
+      <code>gnus-agent-short-article</code> lines; default 100.</p>
+    </dd>
+
+    <dt><code>long</code></dt>
+
+    <dd>
+      <p>True if the article is longer than
+      <code>gnus-agent-long-article</code> lines; default 200.</p>
+    </dd>
+
+    <dt><code>low</code></dt>
+
+    <dd>
+      <p>True if the article has a download score less than
+      <code>gnus-agent-low-score</code>; default 0.</p>
+    </dd>
+
+    <dt><code>high</code></dt>
+
+    <dd>
+      <p>True if the article has a download score greater than
+      <code>gnus-agent-high-score</code>; default 0.</p>
+    </dd>
+
+    <dt><code>spam</code></dt>
+
+    <dd>
+      <p>True if the Gnus Agent guesses that the article is spam.
+      The heuristics may change over time, but at present it just
+      computes a checksum and sees whether articles match.</p>
+    </dd>
+
+    <dt><code>true</code></dt>
+
+    <dd>
+      <p>Always true.</p>
+    </dd>
+
+    <dt><code>false</code></dt>
+
+    <dd>
+      <p>Always false.</p>
+    </dd>
+  </dl>
+
+  <p>If you want to create your own predicate function,
+  here&rsquo;s what you have to know: The functions are called with
+  no parameters, but the <code>gnus-headers</code> and
+  <code>gnus-score</code> dynamic variables are bound to useful
+  values.</p>
+
+  <p>For example, you could decide that you don&rsquo;t want to
+  download articles that were posted more than a certain number of
+  days ago (e.g., posted more than
+  <code>gnus-agent-expire-days</code> ago) you might write a
+  function something along the lines of the following:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(defun my-article-old-p ()
+  "Say whether an article is old."
   (&lt; (time-to-days (date-to-time (mail-header-date gnus-headers)))
      (- (time-to-days (current-time)) gnus-agent-expire-days)))
-</pre></div>
+</pre>
+  </div>
 
-<p>with the predicate then defined as:
-</p>
-<div class="lisp">
-<pre class="lisp">(not my-article-old-p)
-</pre></div>
+  <p>with the predicate then defined as:</p>
 
-<p>or you could append your predicate to the predefined
-<code>gnus-category-predicate-alist</code> in your <samp>~/.gnus.el</samp> or
-wherever.
-</p>
-<div class="lisp">
-<pre class="lisp">(require 'gnus-agent)
+  <div class="lisp">
+    <pre class="lisp">
+(not my-article-old-p)
+</pre>
+  </div>
+
+  <p>or you could append your predicate to the predefined
+  <code>gnus-category-predicate-alist</code> in your
+  <samp>~/.gnus.el</samp> or wherever.</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(require 'gnus-agent)
 (setq  gnus-category-predicate-alist
   (append gnus-category-predicate-alist
          '((old . my-article-old-p))))
-</pre></div>
+</pre>
+  </div>
 
-<p>and simply specify your predicate as:
-</p>
-<div class="lisp">
-<pre class="lisp">(not old)
-</pre></div>
+  <p>and simply specify your predicate as:</p>
 
-<p>If/when using something like the above, be aware that there are many
-misconfigured systems/mailers out there and so an article&rsquo;s date is not
-always a reliable indication of when it was posted.  Hell, some people
-just don&rsquo;t give a damn.
-</p>
-<p>The above predicates apply to <em>all</em> the groups which belong to the
-category.  However, if you wish to have a specific predicate for an
-individual group within a category, or you&rsquo;re just too lazy to set up a
-new category, you can enter a group&rsquo;s individual predicate in its group
-parameters like so:
-</p>
-<div class="lisp">
-<pre class="lisp">(agent-predicate . short)
-</pre></div>
+  <div class="lisp">
+    <pre class="lisp">
+(not old)
+</pre>
+  </div>
 
-<p>This is the group/topic parameter equivalent of the agent category default.
-Note that when specifying a single word predicate like this, the
-<code>agent-predicate</code> specification must be in dotted pair notation.
-</p>
-<p>The equivalent of the longer example from above would be:
-</p>
-<div class="lisp">
-<pre class="lisp">(agent-predicate or high (and (not low) (not long)))
-</pre></div>
+  <p>If/when using something like the above, be aware that there
+  are many misconfigured systems/mailers out there and so an
+  article&rsquo;s date is not always a reliable indication of when
+  it was posted. Hell, some people just don&rsquo;t give a
+  damn.</p>
 
-<p>The outer parenthesis required in the category specification are not
-entered here as, not being in dotted pair notation, the value of the
-predicate is assumed to be a list.
-</p>
+  <p>The above predicates apply to <em>all</em> the groups which
+  belong to the category. However, if you wish to have a specific
+  predicate for an individual group within a category, or
+  you&rsquo;re just too lazy to set up a new category, you can
+  enter a group&rsquo;s individual predicate in its group
+  parameters like so:</p>
 
-<p>Now, the syntax of the download score is the same as the syntax of
-normal score files, except that all elements that require actually
-seeing the article itself are verboten.  This means that only the
-following headers can be scored on: <code>Subject</code>, <code>From</code>,
-<code>Date</code>, <code>Message-ID</code>, <code>References</code>, <code>Chars</code>,
-<code>Lines</code>, and <code>Xref</code>.
-</p>
-<p>As with predicates, the specification of the <code>download score rule</code>
-to use in respect of a group can be in either the category definition if
-it&rsquo;s to be applicable to all groups in therein, or a group&rsquo;s parameters
-if it&rsquo;s to be specific to that group.
-</p>
-<p>In both of these places the <code>download score rule</code> can take one of
-three forms:
-</p>
-<ol>
-<li> Score rule
+  <div class="lisp">
+    <pre class="lisp">
+(agent-predicate . short)
+</pre>
+  </div>
 
-<p>This has the same syntax as a normal Gnus score file except only a
-subset of scoring keywords are available as mentioned above.
-</p>
-<p>example:
-</p>
-<ul>
-<li> Category specification
+  <p>This is the group/topic parameter equivalent of the agent
+  category default. Note that when specifying a single word
+  predicate like this, the <code>agent-predicate</code>
+  specification must be in dotted pair notation.</p>
 
-<div class="lisp">
-<pre class="lisp">((&quot;from&quot;
-       (&quot;Lars Ingebrigtsen&quot; 1000000 nil s))
-(&quot;lines&quot;
+  <p>The equivalent of the longer example from above would be:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(agent-predicate or high (and (not low) (not long)))
+</pre>
+  </div>
+
+  <p>The outer parenthesis required in the category specification
+  are not entered here as, not being in dotted pair notation, the
+  value of the predicate is assumed to be a list.</p>
+
+  <p>Now, the syntax of the download score is the same as the
+  syntax of normal score files, except that all elements that
+  require actually seeing the article itself are verboten. This
+  means that only the following headers can be scored on:
+  <code>Subject</code>, <code>From</code>, <code>Date</code>,
+  <code>Message-ID</code>, <code>References</code>,
+  <code>Chars</code>, <code>Lines</code>, and
+  <code>Xref</code>.</p>
+
+  <p>As with predicates, the specification of the <code>download
+  score rule</code> to use in respect of a group can be in either
+  the category definition if it&rsquo;s to be applicable to all
+  groups in therein, or a group&rsquo;s parameters if it&rsquo;s to
+  be specific to that group.</p>
+
+  <p>In both of these places the <code>download score rule</code>
+  can take one of three forms:</p>
+
+  <ol>
+    <li>Score rule
+
+      <p>This has the same syntax as a normal Gnus score file
+      except only a subset of scoring keywords are available as
+      mentioned above.</p>
+
+      <p>example:</p>
+
+      <ul>
+        <li>Category specification
+
+          <div class="lisp">
+            <pre class="lisp">
+(("from"
+       ("Lars Ingebrigtsen" 1000000 nil s))
+("lines"
        (500 -100 nil &lt;)))
-</pre></div>
+</pre>
+          </div>
+        </li>
 
-</li><li> Group/Topic Parameter specification
+        <li>Group/Topic Parameter specification
 
-<div class="lisp">
-<pre class="lisp">(agent-score (&quot;from&quot;
-                   (&quot;Lars Ingebrigtsen&quot; 1000000 nil s))
-             (&quot;lines&quot;
+          <div class="lisp">
+            <pre class="lisp">
+(agent-score ("from"
+                   ("Lars Ingebrigtsen" 1000000 nil s))
+             ("lines"
                    (500 -100 nil &lt;)))
-</pre></div>
+</pre>
+          </div>
 
-<p>Again, note the omission of the outermost parenthesis here.
-</p></li></ul>
+          <p>Again, note the omission of the outermost parenthesis
+          here.</p>
+        </li>
+      </ul>
+    </li>
 
-</li><li> Agent score file
+    <li>Agent score file
 
-<p>These score files must <em>only</em> contain the permitted scoring
-keywords stated above.
-</p>
-<p>example:
-</p>
-<ul>
-<li> Category specification
+      <p>These score files must <em>only</em> contain the permitted
+      scoring keywords stated above.</p>
 
-<div class="lisp">
-<pre class="lisp">(&quot;~/News/agent.SCORE&quot;)
-</pre></div>
+      <p>example:</p>
 
-<p>or perhaps
-</p>
-<div class="lisp">
-<pre class="lisp">(&quot;~/News/agent.SCORE&quot; &quot;~/News/agent.group.SCORE&quot;)
-</pre></div>
+      <ul>
+        <li>Category specification
 
-</li><li> Group Parameter specification
+          <div class="lisp">
+            <pre class="lisp">
+("~/News/agent.SCORE")
+</pre>
+          </div>
 
-<div class="lisp">
-<pre class="lisp">(agent-score &quot;~/News/agent.SCORE&quot;)
-</pre></div>
+          <p>or perhaps</p>
 
-<p>Additional score files can be specified as above.  Need I say anything
-about parenthesis?
-</p></li></ul>
+          <div class="lisp">
+            <pre class="lisp">
+("~/News/agent.SCORE" "~/News/agent.group.SCORE")
+</pre>
+          </div>
+        </li>
 
-</li><li> Use <code>normal</code> score files
+        <li>Group Parameter specification
 
-<p>If you don&rsquo;t want to maintain two sets of scoring rules for a group, and
-your desired <code>downloading</code> criteria for a group are the same as your
-<code>reading</code> criteria then you can tell the agent to refer to your
-<code>normal</code> score files when deciding what to download.
-</p>
-<p>These directives in either the category definition or a group&rsquo;s
-parameters will cause the agent to read in all the applicable score
-files for a group, <em>filtering out</em> those sections that do not
-relate to one of the permitted subset of scoring keywords.
-</p>
-<ul>
-<li> Category Specification
+          <div class="lisp">
+            <pre class="lisp">
+(agent-score "~/News/agent.SCORE")
+</pre>
+          </div>
 
-<div class="lisp">
-<pre class="lisp">file
-</pre></div>
+          <p>Additional score files can be specified as above. Need
+          I say anything about parenthesis?</p>
+        </li>
+      </ul>
+    </li>
 
-</li><li> Group Parameter specification
+    <li>Use <code>normal</code> score files
 
-<div class="lisp">
-<pre class="lisp">(agent-score . file)
-</pre></div>
-</li></ul>
-</li></ol>
+      <p>If you don&rsquo;t want to maintain two sets of scoring
+      rules for a group, and your desired <code>downloading</code>
+      criteria for a group are the same as your
+      <code>reading</code> criteria then you can tell the agent to
+      refer to your <code>normal</code> score files when deciding
+      what to download.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Category-Buffer.html#Category-Buffer" accesskey="n" rel="next">Category Buffer</a>, Up: <a href="Agent-Categories.html#Agent-Categories" accesskey="u" rel="up">Agent Categories</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>These directives in either the category definition or a
+      group&rsquo;s parameters will cause the agent to read in all
+      the applicable score files for a group, <em>filtering
+      out</em> those sections that do not relate to one of the
+      permitted subset of scoring keywords.</p>
 
+      <ul>
+        <li>Category Specification
 
+          <div class="lisp">
+            <pre class="lisp">
+file
+</pre>
+          </div>
+        </li>
 
+        <li>Group Parameter specification
+
+          <div class="lisp">
+            <pre class="lisp">
+(agent-score . file)
+</pre>
+          </div>
+        </li>
+      </ul>
+    </li>
+  </ol>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Category-Buffer.html#Category-Buffer"
+    accesskey="n" rel="next">Category Buffer</a>, Up: <a href=
+    "Agent-Categories.html#Agent-Categories" accesskey="u" rel=
+    "up">Agent Categories</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

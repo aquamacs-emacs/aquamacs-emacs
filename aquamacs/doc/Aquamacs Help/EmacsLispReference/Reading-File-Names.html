@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,279 +19,427 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Reading File Names</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Reading File Names">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Reading File Names">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Completion.html#Completion" rel="up" title="Completion">
-<link href="Completion-Variables.html#Completion-Variables" rel="next" title="Completion Variables">
-<link href="High_002dLevel-Completion.html#High_002dLevel-Completion" rel="prev" title="High-Level Completion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Reading File
+  Names</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Reading File Names" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Reading File Names" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Completion.html#Completion" rel="up" title=
+  "Completion" />
+  <link href="Completion-Variables.html#Completion-Variables" rel=
+  "next" title="Completion Variables" />
+  <link href=
+  "High_002dLevel-Completion.html#High_002dLevel-Completion" rel=
+  "prev" title="High-Level Completion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Reading-File-Names" id="Reading-File-Names"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Completion-Variables.html#Completion-Variables" accesskey="n"
+    rel="next">Completion Variables</a>, Previous: <a href=
+    "High_002dLevel-Completion.html#High_002dLevel-Completion"
+    accesskey="p" rel="prev">High-Level Completion</a>, Up:
+    <a href="Completion.html#Completion" accesskey="u" rel=
+    "up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Reading-File-Names-1" id="Reading-File-Names-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Reading-File-Names"></a>
-<div class="header">
-<p>
-Next: <a href="Completion-Variables.html#Completion-Variables" accesskey="n" rel="next">Completion Variables</a>, Previous: <a href="High_002dLevel-Completion.html#High_002dLevel-Completion" accesskey="p" rel="prev">High-Level Completion</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Reading-File-Names-1"></a>
-<h4 class="subsection">19.6.5 Reading File Names</h4>
-<a name="index-read-file-names"></a>
-<a name="index-prompt-for-file-name"></a>
+  <h4 class="subsection">19.6.5 Reading File Names</h4><a name=
+  "index-read-file-names" id="index-read-file-names"></a> <a name=
+  "index-prompt-for-file-name" id="index-prompt-for-file-name"></a>
 
-<p>The high-level completion functions <code>read-file-name</code>,
-<code>read-directory-name</code>, and <code>read-shell-command</code> are designed
-to read file names, directory names, and shell commands, respectively.
-They provide special features, including automatic insertion of the
-default directory.
-</p>
-<dl>
-<dt><a name="index-read_002dfile_002dname"></a>Function: <strong>read-file-name</strong> <em>prompt &amp;optional directory default require-match initial predicate</em></dt>
-<dd><p>This function reads a file name, prompting with <var>prompt</var> and
-providing completion.
-</p>
-<p>As an exception, this function reads a file name using a graphical
-file dialog instead of the minibuffer, if all of the following are
-true:
-</p>
-<ol>
-<li> It is invoked via a mouse command.
+  <p>The high-level completion functions
+  <code>read-file-name</code>, <code>read-directory-name</code>,
+  and <code>read-shell-command</code> are designed to read file
+  names, directory names, and shell commands, respectively. They
+  provide special features, including automatic insertion of the
+  default directory.</p>
 
-</li><li> The selected frame is on a graphical display supporting such dialogs.
+  <dl>
+    <dt><a name="index-read_002dfile_002dname" id=
+    "index-read_002dfile_002dname"></a>Function:
+    <strong>read-file-name</strong> <em>prompt &amp;optional
+    directory default require-match initial predicate</em></dt>
 
-</li><li> The variable <code>use-dialog-box</code> is non-<code>nil</code>.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Dialog-Boxes.html#Dialog-Boxes">Dialog Boxes</a> in <cite>The GNU Emacs Manual</cite>.
+    <dd>
+      <p>This function reads a file name, prompting with
+      <var>prompt</var> and providing completion.</p>
 
-</li><li> The <var>directory</var> argument, described below, does not specify a
-remote file.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Remote-Files.html#Remote-Files">Remote Files</a> in <cite>The GNU Emacs Manual</cite>.
-</li></ol>
+      <p>As an exception, this function reads a file name using a
+      graphical file dialog instead of the minibuffer, if all of
+      the following are true:</p>
 
-<p>The exact behavior when using a graphical file dialog is
-platform-dependent.  Here, we simply document the behavior when using
-the minibuffer.
-</p>
-<p><code>read-file-name</code> does not automatically expand the returned file
-name.  You must call <code>expand-file-name</code> yourself if an absolute
-file name is required.
-</p>
-<p>The optional argument <var>require-match</var> has the same meaning as in
-<code>completing-read</code>.  See <a href="Minibuffer-Completion.html#Minibuffer-Completion">Minibuffer Completion</a>.
-</p>
-<p>The argument <var>directory</var> specifies the directory to use for
-completing relative file names.  It should be an absolute directory
-name.  If the variable <code>insert-default-directory</code> is non-<code>nil</code>,
-<var>directory</var> is also inserted in the minibuffer as initial input.
-It defaults to the current buffer&rsquo;s value of <code>default-directory</code>.
-</p>
-<p>If you specify <var>initial</var>, that is an initial file name to insert
-in the buffer (after <var>directory</var>, if that is inserted).  In this
-case, point goes at the beginning of <var>initial</var>.  The default for
-<var>initial</var> is <code>nil</code>&mdash;don&rsquo;t insert any file name.  To see what
-<var>initial</var> does, try the command <kbd>C-x C-v</kbd> in a buffer visiting
-a file.  <strong>Please note:</strong> we recommend using <var>default</var> rather
-than <var>initial</var> in most cases.
-</p>
-<p>If <var>default</var> is non-<code>nil</code>, then the function returns
-<var>default</var> if the user exits the minibuffer with the same non-empty
-contents that <code>read-file-name</code> inserted initially.  The initial
-minibuffer contents are always non-empty if
-<code>insert-default-directory</code> is non-<code>nil</code>, as it is by
-default.  <var>default</var> is not checked for validity, regardless of the
-value of <var>require-match</var>.  However, if <var>require-match</var> is
-non-<code>nil</code>, the initial minibuffer contents should be a valid file
-(or directory) name.  Otherwise <code>read-file-name</code> attempts
-completion if the user exits without any editing, and does not return
-<var>default</var>.  <var>default</var> is also available through the history
-commands.
-</p>
-<p>If <var>default</var> is <code>nil</code>, <code>read-file-name</code> tries to find a
-substitute default to use in its place, which it treats in exactly the
-same way as if it had been specified explicitly.  If <var>default</var> is
-<code>nil</code>, but <var>initial</var> is non-<code>nil</code>, then the default is
-the absolute file name obtained from <var>directory</var> and
-<var>initial</var>.  If both <var>default</var> and <var>initial</var> are <code>nil</code>
-and the buffer is visiting a file, <code>read-file-name</code> uses the
-absolute file name of that file as default.  If the buffer is not
-visiting a file, then there is no default.  In that case, if the user
-types <tt class="key">RET</tt> without any editing, <code>read-file-name</code> simply
-returns the pre-inserted contents of the minibuffer.
-</p>
-<p>If the user types <tt class="key">RET</tt> in an empty minibuffer, this function
-returns an empty string, regardless of the value of
-<var>require-match</var>.  This is, for instance, how the user can make the
-current buffer visit no file using <kbd>M-x set-visited-file-name</kbd>.
-</p>
-<p>If <var>predicate</var> is non-<code>nil</code>, it specifies a function of one
-argument that decides which file names are acceptable completion
-alternatives.  A file name is an acceptable value if <var>predicate</var>
-returns non-<code>nil</code> for it.
-</p>
-<p>Here is an example of using <code>read-file-name</code>:
-</p>
-<div class="example">
-<pre class="example">(read-file-name &quot;The file is &quot;)
+      <ol>
+        <li>It is invoked via a mouse command.</li>
 
-;; <span class="roman">After evaluation of the preceding expression,</span>
-;;   <span class="roman">the following appears in the minibuffer:</span>
-</pre><pre class="example">
-</pre><pre class="example">---------- Buffer: Minibuffer ----------
+        <li>The selected frame is on a graphical display supporting
+        such dialogs.</li>
+
+        <li>The variable <code>use-dialog-box</code> is
+        non-<code>nil</code>. See <a href=
+        "http://www.gnu.org/software/emacs/manual/html_node/emacs/Dialog-Boxes.html#Dialog-Boxes">
+        Dialog Boxes</a> in <cite>The GNU Emacs Manual</cite>.</li>
+
+        <li>The <var>directory</var> argument, described below,
+        does not specify a remote file. See <a href=
+        "http://www.gnu.org/software/emacs/manual/html_node/emacs/Remote-Files.html#Remote-Files">
+        Remote Files</a> in <cite>The GNU Emacs Manual</cite>.</li>
+      </ol>
+
+      <p>The exact behavior when using a graphical file dialog is
+      platform-dependent. Here, we simply document the behavior
+      when using the minibuffer.</p>
+
+      <p><code>read-file-name</code> does not automatically expand
+      the returned file name. You must call
+      <code>expand-file-name</code> yourself if an absolute file
+      name is required.</p>
+
+      <p>The optional argument <var>require-match</var> has the
+      same meaning as in <code>completing-read</code>. See <a href=
+      "Minibuffer-Completion.html#Minibuffer-Completion">Minibuffer
+      Completion</a>.</p>
+
+      <p>The argument <var>directory</var> specifies the directory
+      to use for completing relative file names. It should be an
+      absolute directory name. If the variable
+      <code>insert-default-directory</code> is
+      non-<code>nil</code>, <var>directory</var> is also inserted
+      in the minibuffer as initial input. It defaults to the
+      current buffer&rsquo;s value of
+      <code>default-directory</code>.</p>
+
+      <p>If you specify <var>initial</var>, that is an initial file
+      name to insert in the buffer (after <var>directory</var>, if
+      that is inserted). In this case, point goes at the beginning
+      of <var>initial</var>. The default for <var>initial</var> is
+      <code>nil</code>&mdash;don&rsquo;t insert any file name. To
+      see what <var>initial</var> does, try the command <kbd>C-x
+      C-v</kbd> in a buffer visiting a file. <strong>Please
+      note:</strong> we recommend using <var>default</var> rather
+      than <var>initial</var> in most cases.</p>
+
+      <p>If <var>default</var> is non-<code>nil</code>, then the
+      function returns <var>default</var> if the user exits the
+      minibuffer with the same non-empty contents that
+      <code>read-file-name</code> inserted initially. The initial
+      minibuffer contents are always non-empty if
+      <code>insert-default-directory</code> is
+      non-<code>nil</code>, as it is by default. <var>default</var>
+      is not checked for validity, regardless of the value of
+      <var>require-match</var>. However, if
+      <var>require-match</var> is non-<code>nil</code>, the initial
+      minibuffer contents should be a valid file (or directory)
+      name. Otherwise <code>read-file-name</code> attempts
+      completion if the user exits without any editing, and does
+      not return <var>default</var>. <var>default</var> is also
+      available through the history commands.</p>
+
+      <p>If <var>default</var> is <code>nil</code>,
+      <code>read-file-name</code> tries to find a substitute
+      default to use in its place, which it treats in exactly the
+      same way as if it had been specified explicitly. If
+      <var>default</var> is <code>nil</code>, but
+      <var>initial</var> is non-<code>nil</code>, then the default
+      is the absolute file name obtained from <var>directory</var>
+      and <var>initial</var>. If both <var>default</var> and
+      <var>initial</var> are <code>nil</code> and the buffer is
+      visiting a file, <code>read-file-name</code> uses the
+      absolute file name of that file as default. If the buffer is
+      not visiting a file, then there is no default. In that case,
+      if the user types <tt class="key">RET</tt> without any
+      editing, <code>read-file-name</code> simply returns the
+      pre-inserted contents of the minibuffer.</p>
+
+      <p>If the user types <tt class="key">RET</tt> in an empty
+      minibuffer, this function returns an empty string, regardless
+      of the value of <var>require-match</var>. This is, for
+      instance, how the user can make the current buffer visit no
+      file using <kbd>M-x set-visited-file-name</kbd>.</p>
+
+      <p>If <var>predicate</var> is non-<code>nil</code>, it
+      specifies a function of one argument that decides which file
+      names are acceptable completion alternatives. A file name is
+      an acceptable value if <var>predicate</var> returns
+      non-<code>nil</code> for it.</p>
+
+      <p>Here is an example of using
+      <code>read-file-name</code>:</p>
+
+      <div class="example">
+        <pre class="example">
+(read-file-name "The file is ")
+
+;; <span class=
+"roman">After evaluation of the preceding expression,</span>
+;;   <span class=
+"roman">the following appears in the minibuffer:</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+---------- Buffer: Minibuffer ----------
 The file is /gp/gnu/elisp/&lowast;
 ---------- Buffer: Minibuffer ----------
-</pre></div>
+</pre>
+      </div>
 
-<p>Typing <kbd>manual <span class="key">TAB</span></kbd> results in the following:
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: Minibuffer ----------
+      <p>Typing <kbd>manual <span class="key">TAB</span></kbd>
+      results in the following:</p>
+
+      <div class="example">
+        <pre class="example">
+---------- Buffer: Minibuffer ----------
 The file is /gp/gnu/elisp/manual.texi&lowast;
 ---------- Buffer: Minibuffer ----------
-</pre></div>
+</pre>
+      </div>
 
-<p>If the user types <tt class="key">RET</tt>, <code>read-file-name</code> returns the file name
-as the string <code>&quot;/gp/gnu/elisp/manual.texi&quot;</code>.
-</p></dd></dl>
+      <p>If the user types <tt class="key">RET</tt>,
+      <code>read-file-name</code> returns the file name as the
+      string <code>"/gp/gnu/elisp/manual.texi"</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-read_002dfile_002dname_002dfunction"></a>Variable: <strong>read-file-name-function</strong></dt>
-<dd><p>If non-<code>nil</code>, this should be a function that accepts the same
-arguments as <code>read-file-name</code>.  When <code>read-file-name</code> is
-called, it calls this function with the supplied arguments instead of
-doing its usual work.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-read_002dfile_002dname_002dfunction" id=
+    "index-read_002dfile_002dname_002dfunction"></a>Variable:
+    <strong>read-file-name-function</strong></dt>
 
-<dl>
-<dt><a name="index-read_002dfile_002dname_002dcompletion_002dignore_002dcase"></a>User Option: <strong>read-file-name-completion-ignore-case</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, <code>read-file-name</code> ignores case
-when performing completion.
-</p></dd></dl>
+    <dd>
+      <p>If non-<code>nil</code>, this should be a function that
+      accepts the same arguments as <code>read-file-name</code>.
+      When <code>read-file-name</code> is called, it calls this
+      function with the supplied arguments instead of doing its
+      usual work.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-read_002ddirectory_002dname"></a>Function: <strong>read-directory-name</strong> <em>prompt &amp;optional directory default require-match initial</em></dt>
-<dd><p>This function is like <code>read-file-name</code> but allows only directory
-names as completion alternatives.
-</p>
-<p>If <var>default</var> is <code>nil</code> and <var>initial</var> is non-<code>nil</code>,
-<code>read-directory-name</code> constructs a substitute default by
-combining <var>directory</var> (or the current buffer&rsquo;s default directory
-if <var>directory</var> is <code>nil</code>) and <var>initial</var>.  If both
-<var>default</var> and <var>initial</var> are <code>nil</code>, this function uses
-<var>directory</var> as substitute default, or the current buffer&rsquo;s default
-directory if <var>directory</var> is <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-read_002dfile_002dname_002dcompletion_002dignore_002dcase"
+    id=
+    "index-read_002dfile_002dname_002dcompletion_002dignore_002dcase">
+    </a>User Option:
+    <strong>read-file-name-completion-ignore-case</strong></dt>
 
-<dl>
-<dt><a name="index-insert_002ddefault_002ddirectory"></a>User Option: <strong>insert-default-directory</strong></dt>
-<dd><p>This variable is used by <code>read-file-name</code>, and thus, indirectly,
-by most commands reading file names.  (This includes all commands that
-use the code letters &lsquo;<samp>f</samp>&rsquo; or &lsquo;<samp>F</samp>&rsquo; in their interactive form.
-See <a href="Interactive-Codes.html#Interactive-Codes">Code Characters for interactive</a>.)  Its
-value controls whether <code>read-file-name</code> starts by placing the
-name of the default directory in the minibuffer, plus the initial file
-name, if any.  If the value of this variable is <code>nil</code>, then
-<code>read-file-name</code> does not place any initial input in the
-minibuffer (unless you specify initial input with the <var>initial</var>
-argument).  In that case, the default directory is still used for
-completion of relative file names, but is not displayed.
-</p>
-<p>If this variable is <code>nil</code> and the initial minibuffer contents are
-empty, the user may have to explicitly fetch the next history element
-to access a default value.  If the variable is non-<code>nil</code>, the
-initial minibuffer contents are always non-empty and the user can
-always request a default value by immediately typing <tt class="key">RET</tt> in an
-unedited minibuffer.  (See above.)
-</p>
-<p>For example:
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Here the minibuffer starts out with the default directory.</span>
+    <dd>
+      <p>If this variable is non-<code>nil</code>,
+      <code>read-file-name</code> ignores case when performing
+      completion.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-read_002ddirectory_002dname" id=
+    "index-read_002ddirectory_002dname"></a>Function:
+    <strong>read-directory-name</strong> <em>prompt &amp;optional
+    directory default require-match initial</em></dt>
+
+    <dd>
+      <p>This function is like <code>read-file-name</code> but
+      allows only directory names as completion alternatives.</p>
+
+      <p>If <var>default</var> is <code>nil</code> and
+      <var>initial</var> is non-<code>nil</code>,
+      <code>read-directory-name</code> constructs a substitute
+      default by combining <var>directory</var> (or the current
+      buffer&rsquo;s default directory if <var>directory</var> is
+      <code>nil</code>) and <var>initial</var>. If both
+      <var>default</var> and <var>initial</var> are
+      <code>nil</code>, this function uses <var>directory</var> as
+      substitute default, or the current buffer&rsquo;s default
+      directory if <var>directory</var> is <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-insert_002ddefault_002ddirectory" id=
+    "index-insert_002ddefault_002ddirectory"></a>User Option:
+    <strong>insert-default-directory</strong></dt>
+
+    <dd>
+      <p>This variable is used by <code>read-file-name</code>, and
+      thus, indirectly, by most commands reading file names. (This
+      includes all commands that use the code letters
+      &lsquo;<samp>f</samp>&rsquo; or &lsquo;<samp>F</samp>&rsquo;
+      in their interactive form. See <a href=
+      "Interactive-Codes.html#Interactive-Codes">Code Characters
+      for interactive</a>.) Its value controls whether
+      <code>read-file-name</code> starts by placing the name of the
+      default directory in the minibuffer, plus the initial file
+      name, if any. If the value of this variable is
+      <code>nil</code>, then <code>read-file-name</code> does not
+      place any initial input in the minibuffer (unless you specify
+      initial input with the <var>initial</var> argument). In that
+      case, the default directory is still used for completion of
+      relative file names, but is not displayed.</p>
+
+      <p>If this variable is <code>nil</code> and the initial
+      minibuffer contents are empty, the user may have to
+      explicitly fetch the next history element to access a default
+      value. If the variable is non-<code>nil</code>, the initial
+      minibuffer contents are always non-empty and the user can
+      always request a default value by immediately typing
+      <tt class="key">RET</tt> in an unedited minibuffer. (See
+      above.)</p>
+
+      <p>For example:</p>
+
+      <div class="example">
+        <pre class="example">
+;; <span class=
+"roman">Here the minibuffer starts out with the default directory.</span>
 (let ((insert-default-directory t))
-  (read-file-name &quot;The file is &quot;))
-</pre><pre class="example">
-</pre><pre class="example">---------- Buffer: Minibuffer ----------
+  (read-file-name "The file is "))
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+---------- Buffer: Minibuffer ----------
 The file is ~lewis/manual/&lowast;
 ---------- Buffer: Minibuffer ----------
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Here the minibuffer is empty and only the prompt</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">Here the minibuffer is empty and only the prompt</span>
 ;;   <span class="roman">appears on its line.</span>
 (let ((insert-default-directory nil))
-  (read-file-name &quot;The file is &quot;))
-</pre><pre class="example">
-</pre><pre class="example">---------- Buffer: Minibuffer ----------
+  (read-file-name "The file is "))
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+---------- Buffer: Minibuffer ----------
 The file is &lowast;
 ---------- Buffer: Minibuffer ----------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-read_002dshell_002dcommand"></a>Function: <strong>read-shell-command</strong> <em>prompt &amp;optional initial history &amp;rest args</em></dt>
-<dd><p>This function reads a shell command from the minibuffer, prompting
-with <var>prompt</var> and providing intelligent completion.  It completes
-the first word of the command using candidates that are appropriate
-for command names, and the rest of the command words as file names.
-</p>
-<p>This function uses <code>minibuffer-local-shell-command-map</code> as the
-keymap for minibuffer input.  The <var>history</var> argument specifies the
-history list to use; if is omitted or <code>nil</code>, it defaults to
-<code>shell-command-history</code> (see <a href="Minibuffer-History.html#Minibuffer-History">shell-command-history</a>).  The optional argument <var>initial</var>
-specifies the initial content of the minibuffer (see <a href="Initial-Input.html#Initial-Input">Initial Input</a>).  The rest of <var>args</var>, if present, are used as the
-<var>default</var> and <var>inherit-input-method</var> arguments in
-<code>read-from-minibuffer</code> (see <a href="Text-from-Minibuffer.html#Text-from-Minibuffer">Text from Minibuffer</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-read_002dshell_002dcommand" id=
+    "index-read_002dshell_002dcommand"></a>Function:
+    <strong>read-shell-command</strong> <em>prompt &amp;optional
+    initial history &amp;rest args</em></dt>
 
-<dl>
-<dt><a name="index-minibuffer_002dlocal_002dshell_002dcommand_002dmap"></a>Variable: <strong>minibuffer-local-shell-command-map</strong></dt>
-<dd><p>This keymap is used by <code>read-shell-command</code> for completing
-command and file names that are part of a shell command.  It uses
-<code>minibuffer-local-map</code> as its parent keymap, and binds <tt class="key">TAB</tt>
-to <code>completion-at-point</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function reads a shell command from the minibuffer,
+      prompting with <var>prompt</var> and providing intelligent
+      completion. It completes the first word of the command using
+      candidates that are appropriate for command names, and the
+      rest of the command words as file names.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Completion-Variables.html#Completion-Variables" accesskey="n" rel="next">Completion Variables</a>, Previous: <a href="High_002dLevel-Completion.html#High_002dLevel-Completion" accesskey="p" rel="prev">High-Level Completion</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This function uses
+      <code>minibuffer-local-shell-command-map</code> as the keymap
+      for minibuffer input. The <var>history</var> argument
+      specifies the history list to use; if is omitted or
+      <code>nil</code>, it defaults to
+      <code>shell-command-history</code> (see <a href=
+      "Minibuffer-History.html#Minibuffer-History">shell-command-history</a>).
+      The optional argument <var>initial</var> specifies the
+      initial content of the minibuffer (see <a href=
+      "Initial-Input.html#Initial-Input">Initial Input</a>). The
+      rest of <var>args</var>, if present, are used as the
+      <var>default</var> and <var>inherit-input-method</var>
+      arguments in <code>read-from-minibuffer</code> (see <a href=
+      "Text-from-Minibuffer.html#Text-from-Minibuffer">Text from
+      Minibuffer</a>).</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-minibuffer_002dlocal_002dshell_002dcommand_002dmap" id=
+    "index-minibuffer_002dlocal_002dshell_002dcommand_002dmap"></a>Variable:
+    <strong>minibuffer-local-shell-command-map</strong></dt>
 
+    <dd>
+      <p>This keymap is used by <code>read-shell-command</code> for
+      completing command and file names that are part of a shell
+      command. It uses <code>minibuffer-local-map</code> as its
+      parent keymap, and binds <tt class="key">TAB</tt> to
+      <code>completion-at-point</code>.</p>
+    </dd>
+  </dl>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href=
+    "Completion-Variables.html#Completion-Variables" accesskey="n"
+    rel="next">Completion Variables</a>, Previous: <a href=
+    "High_002dLevel-Completion.html#High_002dLevel-Completion"
+    accesskey="p" rel="prev">High-Level Completion</a>, Up:
+    <a href="Completion.html#Completion" accesskey="u" rel=
+    "up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,111 +16,172 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Signals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Signals">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Signals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Naming-Conventions.html#Naming-Conventions" rel="next" title="Naming Conventions">
-<link href="Signal-Handling.html#Signal-Handling" rel="prev" title="Signal Handling">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Signals</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Signals" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Signals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Naming-Conventions.html#Naming-Conventions" rel=
+  "next" title="Naming Conventions" />
+  <link href="Signal-Handling.html#Signal-Handling" rel="prev"
+  title="Signal Handling" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Signals"></a>
-<div class="header">
-<p>
-Next: <a href="Naming-Conventions.html#Naming-Conventions" accesskey="n" rel="next">Naming Conventions</a>, Previous: <a href="Default-Superclass.html#Default-Superclass" accesskey="p" rel="prev">Default Superclass</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Signals-1"></a>
-<h2 class="chapter">16 Signals</h2>
+<body lang="en" xml:lang="en">
+  <a name="Signals" id="Signals"></a>
 
-<p>There are new condition names (signals) that can be caught when using
-<i>EIEIO</i>.
-</p>
-<dl>
-<dt><a name="index-invalid_002dslot_002dname"></a>Signal: <strong>invalid-slot-name</strong> <em>obj-or-class slot</em></dt>
-<dd><p>This signal is called when an attempt to reference a slot in an
-<var>obj-or-class</var> is made, and the <var>slot</var> is not defined for
-it.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Naming-Conventions.html#Naming-Conventions"
+    accesskey="n" rel="next">Naming Conventions</a>, Previous:
+    <a href="Default-Superclass.html#Default-Superclass" accesskey=
+    "p" rel="prev">Default Superclass</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="Function-Index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Signals-1" id="Signals-1"></a>
 
-<dl>
-<dt><a name="index-no_002dmethod_002ddefinition"></a>Signal: <strong>no-method-definition</strong> <em>method arguments</em></dt>
-<dd><p>This signal is called when <var>method</var> is called, with <var>arguments</var>
-and nothing is resolved.  This occurs when <var>method</var> has been
-defined, but the arguments make it impossible for <i>EIEIO</i> to determine
-which method body to run.
-</p>
-<p>To prevent this signal from occurring in your class, implement the
-method <code>no-applicable-method</code> for your class.  This method is
-called when to throw this signal, so implementing this for your class
-allows you block the signal, and perform some work.
-</p></dd></dl>
+  <h2 class="chapter">16 Signals</h2>
 
-<dl>
-<dt><a name="index-no_002dnext_002dmethod-1"></a>Signal: <strong>no-next-method</strong> <em>class arguments</em></dt>
-<dd><p>This signal is called if the function <code>call-next-method</code> is called
-and there is no next method to be called.
-</p>
-<p>Overload the method <code>no-next-method</code> to protect against this signal.
-</p></dd></dl>
+  <p>There are new condition names (signals) that can be caught
+  when using <i>EIEIO</i>.</p>
 
-<dl>
-<dt><a name="index-invalid_002dslot_002dtype"></a>Signal: <strong>invalid-slot-type</strong> <em>slot spec value</em></dt>
-<dd><p>This signal is called when an attempt to set <var>slot</var> is made, and
-<var>value</var> doesn&rsquo;t match the specified type <var>spec</var>.
-</p>
-<p>In <i>EIEIO</i>, this is also used if a slot specifier has an invalid value
-during a <code>defclass</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-invalid_002dslot_002dname" id=
+    "index-invalid_002dslot_002dname"></a>Signal:
+    <strong>invalid-slot-name</strong> <em>obj-or-class
+    slot</em></dt>
 
-<dl>
-<dt><a name="index-unbound_002dslot"></a>Signal: <strong>unbound-slot</strong> <em>object class slot</em></dt>
-<dd><p>This signal is called when an attempt to reference <var>slot</var> in
-<var>object</var> is made, and that instance is currently unbound.
-</p></dd></dl>
+    <dd>
+      <p>This signal is called when an attempt to reference a slot
+      in an <var>obj-or-class</var> is made, and the
+      <var>slot</var> is not defined for it.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-no_002dmethod_002ddefinition" id=
+    "index-no_002dmethod_002ddefinition"></a>Signal:
+    <strong>no-method-definition</strong> <em>method
+    arguments</em></dt>
 
+    <dd>
+      <p>This signal is called when <var>method</var> is called,
+      with <var>arguments</var> and nothing is resolved. This
+      occurs when <var>method</var> has been defined, but the
+      arguments make it impossible for <i>EIEIO</i> to determine
+      which method body to run.</p>
 
+      <p>To prevent this signal from occurring in your class,
+      implement the method <code>no-applicable-method</code> for
+      your class. This method is called when to throw this signal,
+      so implementing this for your class allows you block the
+      signal, and perform some work.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-no_002dnext_002dmethod-1" id=
+    "index-no_002dnext_002dmethod-1"></a>Signal:
+    <strong>no-next-method</strong> <em>class arguments</em></dt>
+
+    <dd>
+      <p>This signal is called if the function
+      <code>call-next-method</code> is called and there is no next
+      method to be called.</p>
+
+      <p>Overload the method <code>no-next-method</code> to protect
+      against this signal.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-invalid_002dslot_002dtype" id=
+    "index-invalid_002dslot_002dtype"></a>Signal:
+    <strong>invalid-slot-type</strong> <em>slot spec
+    value</em></dt>
+
+    <dd>
+      <p>This signal is called when an attempt to set
+      <var>slot</var> is made, and <var>value</var> doesn&rsquo;t
+      match the specified type <var>spec</var>.</p>
+
+      <p>In <i>EIEIO</i>, this is also used if a slot specifier has
+      an invalid value during a <code>defclass</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-unbound_002dslot" id=
+    "index-unbound_002dslot"></a>Signal:
+    <strong>unbound-slot</strong> <em>object class slot</em></dt>
+
+    <dd>
+      <p>This signal is called when an attempt to reference
+      <var>slot</var> in <var>object</var> is made, and that
+      instance is currently unbound.</p>
+    </dd>
+  </dl>
 </body>
 </html>

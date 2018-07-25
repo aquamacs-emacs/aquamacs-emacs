@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,191 +20,270 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Lax Search</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Lax Search">
-<meta name="keywords" content="GNU Emacs Manual: Lax Search">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Search.html#Search" rel="up" title="Search">
-<link href="Replace.html#Replace" rel="next" title="Replace">
-<link href="Regexp-Example.html#Regexp-Example" rel="prev" title="Regexp Example">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Lax Search</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Lax Search" />
+  <meta name="keywords" content="GNU Emacs Manual: Lax Search" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Search.html#Search" rel="up" title="Search" />
+  <link href="Replace.html#Replace" rel="next" title="Replace" />
+  <link href="Regexp-Example.html#Regexp-Example" rel="prev" title=
+  "Regexp Example" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Lax-Search" id="Lax-Search"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Replace.html#Replace" accesskey="n" rel=
+    "next">Replace</a>, Previous: <a href=
+    "Regexp-Example.html#Regexp-Example" accesskey="p" rel=
+    "prev">Regexp Example</a>, Up: <a href="Search.html#Search"
+    accesskey="u" rel="up">Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Lax-Matching-During-Searching" id=
+  "Lax-Matching-During-Searching"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Lax-Search"></a>
-<div class="header">
-<p>
-Next: <a href="Replace.html#Replace" accesskey="n" rel="next">Replace</a>, Previous: <a href="Regexp-Example.html#Regexp-Example" accesskey="p" rel="prev">Regexp Example</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Lax-Matching-During-Searching"></a>
-<h3 class="section">15.9 Lax Matching During Searching</h3>
+  <h3 class="section">15.9 Lax Matching During
+  Searching</h3><a name="index-lax-search" id=
+  "index-lax-search"></a> <a name=
+  "index-character-equivalence-in-search" id=
+  "index-character-equivalence-in-search"></a>
 
-<a name="index-lax-search"></a>
-<a name="index-character-equivalence-in-search"></a>
-<p>Normally, you&rsquo;d want search commands to disregard certain minor
-differences between the search string you type and the text being
-searched.  For example, sequences of whitespace characters of
-different length are usually perceived as equivalent; letter-case
-differences usually don&rsquo;t matter; etc.  This is known as
-<em>character equivalence</em>.
-</p>
-<p>This section describes the Emacs lax search features, and how to
-tailor them to your needs.
-</p>
-<a name="index-lax-space-matching-in-search"></a>
-<a name="index-M_002ds-SPC-_0028Incremental-search_0029"></a>
-<a name="index-SPC-_0028Incremental-search_0029"></a>
-<a name="index-isearch_002dtoggle_002dlax_002dwhitespace"></a>
-<a name="index-search_002dwhitespace_002dregexp"></a>
-<p>By default, search commands perform <em>lax space matching</em>:
-each space, or sequence of spaces, matches any sequence of one or more
-whitespace characters in the text.  (Incremental regexp search has a
-separate default; see <a href="Regexp-Search.html#Regexp-Search">Regexp Search</a>.)  Hence, &lsquo;<samp>foo bar</samp>&rsquo;
-matches &lsquo;<samp>foo bar</samp>&rsquo;, &lsquo;<samp>foo&nbsp;&nbsp;<!-- /@w -->bar</samp>&rsquo;, &lsquo;<samp>foo&nbsp;&nbsp;&nbsp;<!-- /@w -->bar</samp>&rsquo;, and
-so on (but not &lsquo;<samp>foobar</samp>&rsquo;).  More precisely, Emacs matches each
-sequence of space characters in the search string to a regular
-expression specified by the variable <code>search-whitespace-regexp</code>.
-For example, to make spaces match sequences of newlines as well as
-spaces, set it to &lsquo;<samp>&quot;[[:space:]\n]+&quot;</samp>&rsquo;.  The default value of this
-variable depends on the buffer&rsquo;s major mode; most major modes classify
-spaces, tabs, and formfeed characters as whitespace.
-</p>
-<p>If you want whitespace characters to match exactly, you can turn lax
-space matching off by typing <kbd>M-s <span class="key">SPC</span></kbd>
-(<code>isearch-toggle-lax-whitespace</code>) within an incremental search.
-Another <kbd>M-s <span class="key">SPC</span></kbd> turns lax space matching back on.  To
-disable lax whitespace matching for all searches, change
-<code>search-whitespace-regexp</code> to <code>nil</code>; then each space in the
-search string matches exactly one space.
-</p>
-<a name="index-case-folding-in-search"></a>
-<a name="index-case_002dsensitivity-and-search"></a>
-<p>Searches in Emacs by default ignore the case of the text they are
-searching through, if you specify the search string in lower case.
-Thus, if you specify searching for &lsquo;<samp>foo</samp>&rsquo;, then &lsquo;<samp>Foo</samp>&rsquo; and
-&lsquo;<samp>foo</samp>&rsquo; also match.  Regexps, and in particular character sets,
-behave likewise: &lsquo;<samp>[ab]</samp>&rsquo; matches &lsquo;<samp>a</samp>&rsquo; or &lsquo;<samp>A</samp>&rsquo; or &lsquo;<samp>b</samp>&rsquo;
-or &lsquo;<samp>B</samp>&rsquo;.  This feature is known as <em>case folding</em>, and it is
-supported in both incremental and non-incremental search modes.
-</p>
-<a name="index-search_002dupper_002dcase"></a>
-<p>An upper-case letter anywhere in the search string makes the search
-case-sensitive.  Thus, searching for &lsquo;<samp>Foo</samp>&rsquo; does not find
-&lsquo;<samp>foo</samp>&rsquo; or &lsquo;<samp>FOO</samp>&rsquo;.  This applies to regular expression search
-as well as to literal string search.  The effect ceases if you delete
-the upper-case letter from the search string.  The variable
-<code>search-upper-case</code> controls this: if it is non-<code>nil</code> (the
-default), an upper-case character in the search string make the search
-case-sensitive; setting it to <code>nil</code> disables this effect of
-upper-case characters.
-</p>
-<a name="index-case_002dfold_002dsearch"></a>
-<p>If you set the variable <code>case-fold-search</code> to <code>nil</code>, then
-all letters must match exactly, including case.  This is a per-buffer
-variable; altering the variable normally affects only the current buffer,
-unless you change its default value.  See <a href="Locals.html#Locals">Locals</a>.
-This variable applies to nonincremental searches also, including those
-performed by the replace commands (see <a href="Replace.html#Replace">Replace</a>) and the minibuffer
-history matching commands (see <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>).
-</p>
-<a name="index-M_002dc-_0028Incremental-search_0029"></a>
-<a name="index-M_002ds-c-_0028Incremental-search_0029"></a>
-<a name="index-isearch_002dtoggle_002dcase_002dfold"></a>
-<p>Typing <kbd>M-c</kbd> or <kbd>M-s c</kbd> (<code>isearch-toggle-case-fold</code>)
-within an incremental search toggles the case sensitivity of that
-search.  The effect does not extend beyond the current incremental
-search, but it does override the effect of adding or removing an
-upper-case letter in the current search.
-</p>
-<p>Several related variables control case-sensitivity of searching and
-matching for specific commands or activities.  For instance,
-<code>tags-case-fold-search</code> controls case sensitivity for
-<code>find-tag</code>.  To find these variables, do <kbd>M-x
-apropos-variable <span class="key">RET</span> case-fold-search <span class="key">RET</span></kbd>.
-</p>
-<a name="index-character-folding-in-search"></a>
-<a name="index-equivalent-character-sequences"></a>
-<p>Case folding disregards case distinctions among characters, making
-upper-case characters match lower-case variants, and vice versa.  A
-generalization of case folding is <em>character folding</em>, which
-disregards wider classes of distinctions among similar characters.
-For instance, under character folding the letter <code>a</code> matches all
-of its accented cousins like <code>ä</code> and <code>á</code>, i.e., the
-match disregards the diacritics that distinguish these
-variants.  In addition, <code>a</code> matches other characters that
-resemble it, or have it as part of their graphical representation,
-such as <small>U+249C PARENTHESIZED LATIN SMALL LETTER A</small> and <small>U+2100
-ACCOUNT OF</small> (which looks like a small <code>a</code> over <code>c</code>).
-Similarly, the <acronym>ASCII</acronym> double-quote character <code>&quot;</code> matches
-all the other variants of double quotes defined by the Unicode
-standard.  Finally, character folding can make a sequence of one or
-more characters match another sequence of a different length: for
-example, the sequence of two characters <code>ff</code> matches <small>U+FB00
-LATIN SMALL LIGATURE FF</small>.  Character sequences that are not identical,
-but match under character folding are known as <em>equivalent
-character sequences</em>.
-</p>
-<a name="index-M_002ds-_0027-_0028Incremental-Search_0029"></a>
-<a name="index-isearch_002dtoggle_002dchar_002dfold"></a>
-<p>Generally, search commands in Emacs do not by default perform
-character folding in order to match equivalent character sequences.
-You can enable this behavior by customizing the variable
-<code>search-default-mode</code> to <code>char-fold-to-regexp</code>.
-See <a href="Search-Customizations.html#Search-Customizations">Search Customizations</a>.  Within an incremental search, typing
-<kbd>M-s '</kbd> (<code>isearch-toggle-char-fold</code>) toggles character
-folding, but only for that search.  (Replace commands have a different
-default, controlled by a separate option; see <a href="Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches">Replacement and Lax Matches</a>.)
-</p>
-<p>Like with case folding, typing an explicit variant of a character,
-such as <code>ä</code>, as part of the search string disables character
-folding for that search.  If you delete such a character from the
-search string, this effect ceases.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Replace.html#Replace" accesskey="n" rel="next">Replace</a>, Previous: <a href="Regexp-Example.html#Regexp-Example" accesskey="p" rel="prev">Regexp Example</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Normally, you&rsquo;d want search commands to disregard
+  certain minor differences between the search string you type and
+  the text being searched. For example, sequences of whitespace
+  characters of different length are usually perceived as
+  equivalent; letter-case differences usually don&rsquo;t matter;
+  etc. This is known as <em>character equivalence</em>.</p>
 
+  <p>This section describes the Emacs lax search features, and how
+  to tailor them to your needs.</p><a name=
+  "index-lax-space-matching-in-search" id=
+  "index-lax-space-matching-in-search"></a> <a name=
+  "index-M_002ds-SPC-_0028Incremental-search_0029" id=
+  "index-M_002ds-SPC-_0028Incremental-search_0029"></a> <a name=
+  "index-SPC-_0028Incremental-search_0029" id=
+  "index-SPC-_0028Incremental-search_0029"></a> <a name=
+  "index-isearch_002dtoggle_002dlax_002dwhitespace" id=
+  "index-isearch_002dtoggle_002dlax_002dwhitespace"></a> <a name=
+  "index-search_002dwhitespace_002dregexp" id=
+  "index-search_002dwhitespace_002dregexp"></a>
 
+  <p>By default, search commands perform <em>lax space
+  matching</em>: each space, or sequence of spaces, matches any
+  sequence of one or more whitespace characters in the text.
+  (Incremental regexp search has a separate default; see <a href=
+  "Regexp-Search.html#Regexp-Search">Regexp Search</a>.) Hence,
+  &lsquo;<samp>foo bar</samp>&rsquo; matches &lsquo;<samp>foo
+  bar</samp>&rsquo;, &lsquo;<samp>foo&nbsp;&nbsp;
+  <!-- /@w -->bar</samp>&rsquo;, &lsquo;<samp>foo&nbsp;&nbsp;&nbsp;
+  <!-- /@w -->bar</samp>&rsquo;, and so on (but not
+  &lsquo;<samp>foobar</samp>&rsquo;). More precisely, Emacs matches
+  each sequence of space characters in the search string to a
+  regular expression specified by the variable
+  <code>search-whitespace-regexp</code>. For example, to make
+  spaces match sequences of newlines as well as spaces, set it to
+  &lsquo;<samp>"[[:space:]\n]+"</samp>&rsquo;. The default value of
+  this variable depends on the buffer&rsquo;s major mode; most
+  major modes classify spaces, tabs, and formfeed characters as
+  whitespace.</p>
 
+  <p>If you want whitespace characters to match exactly, you can
+  turn lax space matching off by typing <kbd>M-s <span class=
+  "key">SPC</span></kbd>
+  (<code>isearch-toggle-lax-whitespace</code>) within an
+  incremental search. Another <kbd>M-s <span class=
+  "key">SPC</span></kbd> turns lax space matching back on. To
+  disable lax whitespace matching for all searches, change
+  <code>search-whitespace-regexp</code> to <code>nil</code>; then
+  each space in the search string matches exactly one
+  space.</p><a name="index-case-folding-in-search" id=
+  "index-case-folding-in-search"></a> <a name=
+  "index-case_002dsensitivity-and-search" id=
+  "index-case_002dsensitivity-and-search"></a>
+
+  <p>Searches in Emacs by default ignore the case of the text they
+  are searching through, if you specify the search string in lower
+  case. Thus, if you specify searching for
+  &lsquo;<samp>foo</samp>&rsquo;, then
+  &lsquo;<samp>Foo</samp>&rsquo; and &lsquo;<samp>foo</samp>&rsquo;
+  also match. Regexps, and in particular character sets, behave
+  likewise: &lsquo;<samp>[ab]</samp>&rsquo; matches
+  &lsquo;<samp>a</samp>&rsquo; or &lsquo;<samp>A</samp>&rsquo; or
+  &lsquo;<samp>b</samp>&rsquo; or &lsquo;<samp>B</samp>&rsquo;.
+  This feature is known as <em>case folding</em>, and it is
+  supported in both incremental and non-incremental search
+  modes.</p><a name="index-search_002dupper_002dcase" id=
+  "index-search_002dupper_002dcase"></a>
+
+  <p>An upper-case letter anywhere in the search string makes the
+  search case-sensitive. Thus, searching for
+  &lsquo;<samp>Foo</samp>&rsquo; does not find
+  &lsquo;<samp>foo</samp>&rsquo; or &lsquo;<samp>FOO</samp>&rsquo;.
+  This applies to regular expression search as well as to literal
+  string search. The effect ceases if you delete the upper-case
+  letter from the search string. The variable
+  <code>search-upper-case</code> controls this: if it is
+  non-<code>nil</code> (the default), an upper-case character in
+  the search string make the search case-sensitive; setting it to
+  <code>nil</code> disables this effect of upper-case
+  characters.</p><a name="index-case_002dfold_002dsearch" id=
+  "index-case_002dfold_002dsearch"></a>
+
+  <p>If you set the variable <code>case-fold-search</code> to
+  <code>nil</code>, then all letters must match exactly, including
+  case. This is a per-buffer variable; altering the variable
+  normally affects only the current buffer, unless you change its
+  default value. See <a href="Locals.html#Locals">Locals</a>. This
+  variable applies to nonincremental searches also, including those
+  performed by the replace commands (see <a href=
+  "Replace.html#Replace">Replace</a>) and the minibuffer history
+  matching commands (see <a href=
+  "Minibuffer-History.html#Minibuffer-History">Minibuffer
+  History</a>).</p><a name=
+  "index-M_002dc-_0028Incremental-search_0029" id=
+  "index-M_002dc-_0028Incremental-search_0029"></a> <a name=
+  "index-M_002ds-c-_0028Incremental-search_0029" id=
+  "index-M_002ds-c-_0028Incremental-search_0029"></a> <a name=
+  "index-isearch_002dtoggle_002dcase_002dfold" id=
+  "index-isearch_002dtoggle_002dcase_002dfold"></a>
+
+  <p>Typing <kbd>M-c</kbd> or <kbd>M-s c</kbd>
+  (<code>isearch-toggle-case-fold</code>) within an incremental
+  search toggles the case sensitivity of that search. The effect
+  does not extend beyond the current incremental search, but it
+  does override the effect of adding or removing an upper-case
+  letter in the current search.</p>
+
+  <p>Several related variables control case-sensitivity of
+  searching and matching for specific commands or activities. For
+  instance, <code>tags-case-fold-search</code> controls case
+  sensitivity for <code>find-tag</code>. To find these variables,
+  do <kbd>M-x apropos-variable <span class="key">RET</span>
+  case-fold-search <span class="key">RET</span></kbd>.</p><a name=
+  "index-character-folding-in-search" id=
+  "index-character-folding-in-search"></a> <a name=
+  "index-equivalent-character-sequences" id=
+  "index-equivalent-character-sequences"></a>
+
+  <p>Case folding disregards case distinctions among characters,
+  making upper-case characters match lower-case variants, and vice
+  versa. A generalization of case folding is <em>character
+  folding</em>, which disregards wider classes of distinctions
+  among similar characters. For instance, under character folding
+  the letter <code>a</code> matches all of its accented cousins
+  like <code>&Atilde;&curren;</code> and
+  <code>&Atilde;&iexcl;</code>, i.e., the match disregards the
+  diacritics that distinguish these variants. In addition,
+  <code>a</code> matches other characters that resemble it, or have
+  it as part of their graphical representation, such as
+  <small>U+249C PARENTHESIZED LATIN SMALL LETTER A</small> and
+  <small>U+2100 ACCOUNT OF</small> (which looks like a small
+  <code>a</code> over <code>c</code>). Similarly, the
+  <acronym>ASCII</acronym> double-quote character <code>"</code>
+  matches all the other variants of double quotes defined by the
+  Unicode standard. Finally, character folding can make a sequence
+  of one or more characters match another sequence of a different
+  length: for example, the sequence of two characters
+  <code>ff</code> matches <small>U+FB00 LATIN SMALL LIGATURE
+  FF</small>. Character sequences that are not identical, but match
+  under character folding are known as <em>equivalent character
+  sequences</em>.</p><a name=
+  "index-M_002ds-_0027-_0028Incremental-Search_0029" id=
+  "index-M_002ds-_0027-_0028Incremental-Search_0029"></a> <a name=
+  "index-isearch_002dtoggle_002dchar_002dfold" id=
+  "index-isearch_002dtoggle_002dchar_002dfold"></a>
+
+  <p>Generally, search commands in Emacs do not by default perform
+  character folding in order to match equivalent character
+  sequences. You can enable this behavior by customizing the
+  variable <code>search-default-mode</code> to
+  <code>char-fold-to-regexp</code>. See <a href=
+  "Search-Customizations.html#Search-Customizations">Search
+  Customizations</a>. Within an incremental search, typing <kbd>M-s
+  '</kbd> (<code>isearch-toggle-char-fold</code>) toggles character
+  folding, but only for that search. (Replace commands have a
+  different default, controlled by a separate option; see <a href=
+  "Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches">Replacement
+  and Lax Matches</a>.)</p>
+
+  <p>Like with case folding, typing an explicit variant of a
+  character, such as <code>&Atilde;&curren;</code>, as part of the
+  search string disables character folding for that search. If you
+  delete such a character from the search string, this effect
+  ceases.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Replace.html#Replace" accesskey="n" rel=
+    "next">Replace</a>, Previous: <a href=
+    "Regexp-Example.html#Regexp-Example" accesskey="p" rel=
+    "prev">Regexp Example</a>, Up: <a href="Search.html#Search"
+    accesskey="u" rel="up">Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

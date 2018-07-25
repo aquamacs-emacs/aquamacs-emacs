@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,210 +19,311 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Conditionals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Conditionals">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Conditionals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Control-Structures.html#Control-Structures" rel="up" title="Control Structures">
-<link href="Pattern-matching-case-statement.html#Pattern-matching-case-statement" rel="next" title="Pattern matching case statement">
-<link href="Sequencing.html#Sequencing" rel="prev" title="Sequencing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Conditionals</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Conditionals" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Conditionals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Control-Structures.html#Control-Structures" rel="up"
+  title="Control Structures" />
+  <link href=
+  "Pattern-matching-case-statement.html#Pattern-matching-case-statement"
+  rel="next" title="Pattern matching case statement" />
+  <link href="Sequencing.html#Sequencing" rel="prev" title=
+  "Sequencing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Conditionals" id="Conditionals"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Combining-Conditions.html#Combining-Conditions" accesskey="n"
+    rel="next">Combining Conditions</a>, Previous: <a href=
+    "Sequencing.html#Sequencing" accesskey="p" rel=
+    "prev">Sequencing</a>, Up: <a href=
+    "Control-Structures.html#Control-Structures" accesskey="u" rel=
+    "up">Control Structures</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Conditionals-1" id="Conditionals-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Conditionals"></a>
-<div class="header">
-<p>
-Next: <a href="Combining-Conditions.html#Combining-Conditions" accesskey="n" rel="next">Combining Conditions</a>, Previous: <a href="Sequencing.html#Sequencing" accesskey="p" rel="prev">Sequencing</a>, Up: <a href="Control-Structures.html#Control-Structures" accesskey="u" rel="up">Control Structures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Conditionals-1"></a>
-<h3 class="section">10.2 Conditionals</h3>
-<a name="index-conditional-evaluation"></a>
+  <h3 class="section">10.2 Conditionals</h3><a name=
+  "index-conditional-evaluation" id=
+  "index-conditional-evaluation"></a>
 
-<p>Conditional control structures choose among alternatives.  Emacs Lisp
-has four conditional forms: <code>if</code>, which is much the same as in
-other languages; <code>when</code> and <code>unless</code>, which are variants of
-<code>if</code>; and <code>cond</code>, which is a generalized case statement.
-</p>
-<dl>
-<dt><a name="index-if"></a>Special Form: <strong>if</strong> <em>condition then-form else-forms&hellip;</em></dt>
-<dd><p><code>if</code> chooses between the <var>then-form</var> and the <var>else-forms</var>
-based on the value of <var>condition</var>.  If the evaluated <var>condition</var> is
-non-<code>nil</code>, <var>then-form</var> is evaluated and the result returned.
-Otherwise, the <var>else-forms</var> are evaluated in textual order, and the
-value of the last one is returned.  (The <var>else</var> part of <code>if</code> is
-an example of an implicit <code>progn</code>.  See <a href="Sequencing.html#Sequencing">Sequencing</a>.)
-</p>
-<p>If <var>condition</var> has the value <code>nil</code>, and no <var>else-forms</var> are
-given, <code>if</code> returns <code>nil</code>.
-</p>
-<p><code>if</code> is a special form because the branch that is not selected is
-never evaluated&mdash;it is ignored.  Thus, in this example,
-<code>true</code> is not printed because <code>print</code> is never called:
-</p>
-<div class="example">
-<pre class="example">(if nil
+  <p>Conditional control structures choose among alternatives.
+  Emacs Lisp has four conditional forms: <code>if</code>, which is
+  much the same as in other languages; <code>when</code> and
+  <code>unless</code>, which are variants of <code>if</code>; and
+  <code>cond</code>, which is a generalized case statement.</p>
+
+  <dl>
+    <dt><a name="index-if" id="index-if"></a>Special Form:
+    <strong>if</strong> <em>condition then-form
+    else-forms&hellip;</em></dt>
+
+    <dd>
+      <p><code>if</code> chooses between the <var>then-form</var>
+      and the <var>else-forms</var> based on the value of
+      <var>condition</var>. If the evaluated <var>condition</var>
+      is non-<code>nil</code>, <var>then-form</var> is evaluated
+      and the result returned. Otherwise, the <var>else-forms</var>
+      are evaluated in textual order, and the value of the last one
+      is returned. (The <var>else</var> part of <code>if</code> is
+      an example of an implicit <code>progn</code>. See <a href=
+      "Sequencing.html#Sequencing">Sequencing</a>.)</p>
+
+      <p>If <var>condition</var> has the value <code>nil</code>,
+      and no <var>else-forms</var> are given, <code>if</code>
+      returns <code>nil</code>.</p>
+
+      <p><code>if</code> is a special form because the branch that
+      is not selected is never evaluated&mdash;it is ignored. Thus,
+      in this example, <code>true</code> is not printed because
+      <code>print</code> is never called:</p>
+
+      <div class="example">
+        <pre class="example">
+(if nil
     (print 'true)
   'very-false)
 &rArr; very-false
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-when"></a>Macro: <strong>when</strong> <em>condition then-forms&hellip;</em></dt>
-<dd><p>This is a variant of <code>if</code> where there are no <var>else-forms</var>,
-and possibly several <var>then-forms</var>.  In particular,
-</p>
-<div class="example">
-<pre class="example">(when <var>condition</var> <var>a</var> <var>b</var> <var>c</var>)
-</pre></div>
+  <dl>
+    <dt><a name="index-when" id="index-when"></a>Macro:
+    <strong>when</strong> <em>condition
+    then-forms&hellip;</em></dt>
 
-<p>is entirely equivalent to
-</p>
-<div class="example">
-<pre class="example">(if <var>condition</var> (progn <var>a</var> <var>b</var> <var>c</var>) nil)
-</pre></div>
-</dd></dl>
+    <dd>
+      <p>This is a variant of <code>if</code> where there are no
+      <var>else-forms</var>, and possibly several
+      <var>then-forms</var>. In particular,</p>
 
-<dl>
-<dt><a name="index-unless"></a>Macro: <strong>unless</strong> <em>condition forms&hellip;</em></dt>
-<dd><p>This is a variant of <code>if</code> where there is no <var>then-form</var>:
-</p>
-<div class="example">
-<pre class="example">(unless <var>condition</var> <var>a</var> <var>b</var> <var>c</var>)
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(when <var>condition</var> <var>a</var> <var>b</var> <var>c</var>)
+</pre>
+      </div>
 
-<p>is entirely equivalent to
-</p>
-<div class="example">
-<pre class="example">(if <var>condition</var> nil
+      <p>is entirely equivalent to</p>
+
+      <div class="example">
+        <pre class="example">
+(if <var>condition</var> (progn <var>a</var> <var>b</var> <var>c</var>) nil)
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-unless" id="index-unless"></a>Macro:
+    <strong>unless</strong> <em>condition forms&hellip;</em></dt>
+
+    <dd>
+      <p>This is a variant of <code>if</code> where there is no
+      <var>then-form</var>:</p>
+
+      <div class="example">
+        <pre class="example">
+(unless <var>condition</var> <var>a</var> <var>b</var> <var>c</var>)
+</pre>
+      </div>
+
+      <p>is entirely equivalent to</p>
+
+      <div class="example">
+        <pre class="example">
+(if <var>condition</var> nil
    <var>a</var> <var>b</var> <var>c</var>)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cond"></a>Special Form: <strong>cond</strong> <em>clause&hellip;</em></dt>
-<dd><p><code>cond</code> chooses among an arbitrary number of alternatives.  Each
-<var>clause</var> in the <code>cond</code> must be a list.  The <small>CAR</small> of this
-list is the <var>condition</var>; the remaining elements, if any, the
-<var>body-forms</var>.  Thus, a clause looks like this:
-</p>
-<div class="example">
-<pre class="example">(<var>condition</var> <var>body-forms</var>&hellip;)
-</pre></div>
+  <dl>
+    <dt><a name="index-cond" id="index-cond"></a>Special Form:
+    <strong>cond</strong> <em>clause&hellip;</em></dt>
 
-<p><code>cond</code> tries the clauses in textual order, by evaluating the
-<var>condition</var> of each clause.  If the value of <var>condition</var> is
-non-<code>nil</code>, the clause succeeds; then <code>cond</code> evaluates its
-<var>body-forms</var>, and returns the value of the last of <var>body-forms</var>.
-Any remaining clauses are ignored.
-</p>
-<p>If the value of <var>condition</var> is <code>nil</code>, the clause fails, so
-the <code>cond</code> moves on to the following clause, trying its <var>condition</var>.
-</p>
-<p>A clause may also look like this:
-</p>
-<div class="example">
-<pre class="example">(<var>condition</var>)
-</pre></div>
+    <dd>
+      <p><code>cond</code> chooses among an arbitrary number of
+      alternatives. Each <var>clause</var> in the <code>cond</code>
+      must be a list. The <small>CAR</small> of this list is the
+      <var>condition</var>; the remaining elements, if any, the
+      <var>body-forms</var>. Thus, a clause looks like this:</p>
 
-<p>Then, if <var>condition</var> is non-<code>nil</code> when tested, the <code>cond</code>
-form returns the value of <var>condition</var>.
-</p>
-<p>If every <var>condition</var> evaluates to <code>nil</code>, so that every clause
-fails, <code>cond</code> returns <code>nil</code>.
-</p>
-<p>The following example has four clauses, which test for the cases where
-the value of <code>x</code> is a number, string, buffer and symbol,
-respectively:
-</p>
-<div class="example">
-<pre class="example">(cond ((numberp x) x)
+      <div class="example">
+        <pre class="example">
+(<var>condition</var> <var>body-forms</var>&hellip;)
+</pre>
+      </div>
+
+      <p><code>cond</code> tries the clauses in textual order, by
+      evaluating the <var>condition</var> of each clause. If the
+      value of <var>condition</var> is non-<code>nil</code>, the
+      clause succeeds; then <code>cond</code> evaluates its
+      <var>body-forms</var>, and returns the value of the last of
+      <var>body-forms</var>. Any remaining clauses are ignored.</p>
+
+      <p>If the value of <var>condition</var> is <code>nil</code>,
+      the clause fails, so the <code>cond</code> moves on to the
+      following clause, trying its <var>condition</var>.</p>
+
+      <p>A clause may also look like this:</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>condition</var>)
+</pre>
+      </div>
+
+      <p>Then, if <var>condition</var> is non-<code>nil</code> when
+      tested, the <code>cond</code> form returns the value of
+      <var>condition</var>.</p>
+
+      <p>If every <var>condition</var> evaluates to
+      <code>nil</code>, so that every clause fails,
+      <code>cond</code> returns <code>nil</code>.</p>
+
+      <p>The following example has four clauses, which test for the
+      cases where the value of <code>x</code> is a number, string,
+      buffer and symbol, respectively:</p>
+
+      <div class="example">
+        <pre class="example">
+(cond ((numberp x) x)
       ((stringp x) x)
       ((bufferp x)
-       (setq temporary-hack x) ; <span class="roman">multiple body-forms</span>
-       (buffer-name x))        ; <span class="roman">in one clause</span>
+       (setq temporary-hack x) ; <span class=
+"roman">multiple body-forms</span>
+       (buffer-name x))        ; <span class=
+"roman">in one clause</span>
       ((symbolp x) (symbol-value x)))
-</pre></div>
+</pre>
+      </div>
 
-<p>Often we want to execute the last clause whenever none of the previous
-clauses was successful.  To do this, we use <code>t</code> as the
-<var>condition</var> of the last clause, like this: <code>(t
-<var>body-forms</var>)</code>.  The form <code>t</code> evaluates to <code>t</code>, which is
-never <code>nil</code>, so this clause never fails, provided the <code>cond</code>
-gets to it at all.  For example:
-</p>
-<div class="example">
-<pre class="example">(setq a 5)
+      <p>Often we want to execute the last clause whenever none of
+      the previous clauses was successful. To do this, we use
+      <code>t</code> as the <var>condition</var> of the last
+      clause, like this: <code>(t <var>body-forms</var>)</code>.
+      The form <code>t</code> evaluates to <code>t</code>, which is
+      never <code>nil</code>, so this clause never fails, provided
+      the <code>cond</code> gets to it at all. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq a 5)
 (cond ((eq a 'hack) 'foo)
-      (t &quot;default&quot;))
-&rArr; &quot;default&quot;
-</pre></div>
+      (t "default"))
+&rArr; "default"
+</pre>
+      </div>
 
-<p>This <code>cond</code> expression returns <code>foo</code> if the value of <code>a</code>
-is <code>hack</code>, and returns the string <code>&quot;default&quot;</code> otherwise.
-</p></dd></dl>
+      <p>This <code>cond</code> expression returns <code>foo</code>
+      if the value of <code>a</code> is <code>hack</code>, and
+      returns the string <code>"default"</code> otherwise.</p>
+    </dd>
+  </dl>
 
-<p>Any conditional construct can be expressed with <code>cond</code> or with
-<code>if</code>.  Therefore, the choice between them is a matter of style.
-For example:
-</p>
-<div class="example">
-<pre class="example">(if <var>a</var> <var>b</var> <var>c</var>)
+  <p>Any conditional construct can be expressed with
+  <code>cond</code> or with <code>if</code>. Therefore, the choice
+  between them is a matter of style. For example:</p>
+
+  <div class="example">
+    <pre class="example">
+(if <var>a</var> <var>b</var> <var>c</var>)
 &equiv;
 (cond (<var>a</var> <var>b</var>) (t <var>c</var>))
-</pre></div>
+</pre>
+  </div>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Pattern-matching-case-statement.html#Pattern-matching-case-statement" accesskey="1">Pattern matching case statement</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Pattern-matching-case-statement.html#Pattern-matching-case-statement"
+      accesskey="1">Pattern matching case statement</a>:</td>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Combining-Conditions.html#Combining-Conditions" accesskey="n" rel="next">Combining Conditions</a>, Previous: <a href="Sequencing.html#Sequencing" accesskey="p" rel="prev">Sequencing</a>, Up: <a href="Control-Structures.html#Control-Structures" accesskey="u" rel="up">Control Structures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Combining-Conditions.html#Combining-Conditions" accesskey="n"
+    rel="next">Combining Conditions</a>, Previous: <a href=
+    "Sequencing.html#Sequencing" accesskey="p" rel=
+    "prev">Sequencing</a>, Up: <a href=
+    "Control-Structures.html#Control-Structures" accesskey="u" rel=
+    "up">Control Structures</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

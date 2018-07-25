@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,107 +14,150 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Persistent Articles</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Persistent Articles">
-<meta name="keywords" content="Gnus Manual: Persistent Articles">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Sticky-Articles.html#Sticky-Articles" rel="next" title="Sticky Articles">
-<link href="Article-Caching.html#Article-Caching" rel="prev" title="Article Caching">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Persistent Articles</title>
+  <meta name="description" content=
+  "Gnus Manual: Persistent Articles" />
+  <meta name="keywords" content=
+  "Gnus Manual: Persistent Articles" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Sticky-Articles.html#Sticky-Articles" rel="next"
+  title="Sticky Articles" />
+  <link href="Article-Caching.html#Article-Caching" rel="prev"
+  title="Article Caching" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Persistent-Articles"></a>
-<div class="header">
-<p>
-Next: <a href="Sticky-Articles.html#Sticky-Articles" accesskey="n" rel="next">Sticky Articles</a>, Previous: <a href="Article-Caching.html#Article-Caching" accesskey="p" rel="prev">Article Caching</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Persistent-Articles-1"></a>
-<h3 class="section">3.13 Persistent Articles</h3>
-<a name="index-persistent-articles"></a>
+<body lang="en" xml:lang="en">
+  <a name="Persistent-Articles" id="Persistent-Articles"></a>
 
-<p>Closely related to article caching, we have <em>persistent articles</em>.
-In fact, it&rsquo;s just a different way of looking at caching, and much more
-useful in my opinion.
-</p>
-<p>Say you&rsquo;re reading a newsgroup, and you happen on to some valuable gem
-that you want to keep and treasure forever.  You&rsquo;d normally just save it
-(using one of the many saving commands) in some file.  The problem with
-that is that it&rsquo;s just, well, yucky.  Ideally you&rsquo;d prefer just having
-the article remain in the group where you found it forever; untouched by
-the expiry going on at the news server.
-</p>
-<p>This is what a <em>persistent article</em> is&mdash;an article that just won&rsquo;t
-be deleted.  It&rsquo;s implemented using the normal cache functions, but
-you use two explicit commands for managing persistent articles:
-</p>
-<dl compact="compact">
-<dt><kbd>*</kbd></dt>
-<dd><a name="index-_002a-_0028Summary_0029"></a>
-<a name="index-gnus_002dcache_002denter_002darticle"></a>
-<p>Make the current article persistent (<code>gnus-cache-enter-article</code>).
-</p>
-</dd>
-<dt><kbd>M-*</kbd></dt>
-<dd><a name="index-M_002d_002a-_0028Summary_0029"></a>
-<a name="index-gnus_002dcache_002dremove_002darticle"></a>
-<p>Remove the current article from the persistent articles
-(<code>gnus-cache-remove-article</code>).  This will normally delete the
-article.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Sticky-Articles.html#Sticky-Articles"
+    accesskey="n" rel="next">Sticky Articles</a>, Previous:
+    <a href="Article-Caching.html#Article-Caching" accesskey="p"
+    rel="prev">Article Caching</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Persistent-Articles-1" id="Persistent-Articles-1"></a>
 
-<p>Both these commands understand the process/prefix convention.
-</p>
-<p>To avoid having all ticked articles (and stuff) entered into the cache,
-you should set <code>gnus-use-cache</code> to <code>passive</code> if you&rsquo;re just
-interested in persistent articles:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-use-cache 'passive)
-</pre></div>
+  <h3 class="section">3.13 Persistent Articles</h3><a name=
+  "index-persistent-articles" id="index-persistent-articles"></a>
 
+  <p>Closely related to article caching, we have <em>persistent
+  articles</em>. In fact, it&rsquo;s just a different way of
+  looking at caching, and much more useful in my opinion.</p>
 
+  <p>Say you&rsquo;re reading a newsgroup, and you happen on to
+  some valuable gem that you want to keep and treasure forever.
+  You&rsquo;d normally just save it (using one of the many saving
+  commands) in some file. The problem with that is that it&rsquo;s
+  just, well, yucky. Ideally you&rsquo;d prefer just having the
+  article remain in the group where you found it forever; untouched
+  by the expiry going on at the news server.</p>
 
+  <p>This is what a <em>persistent article</em> is&mdash;an article
+  that just won&rsquo;t be deleted. It&rsquo;s implemented using
+  the normal cache functions, but you use two explicit commands for
+  managing persistent articles:</p>
 
+  <dl compact="compact">
+    <dt><kbd>*</kbd></dt>
+
+    <dd>
+      <a name="index-_002a-_0028Summary_0029" id=
+      "index-_002a-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dcache_002denter_002darticle" id=
+      "index-gnus_002dcache_002denter_002darticle"></a>
+
+      <p>Make the current article persistent
+      (<code>gnus-cache-enter-article</code>).</p>
+    </dd>
+
+    <dt><kbd>M-*</kbd></dt>
+
+    <dd>
+      <a name="index-M_002d_002a-_0028Summary_0029" id=
+      "index-M_002d_002a-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dcache_002dremove_002darticle" id=
+      "index-gnus_002dcache_002dremove_002darticle"></a>
+
+      <p>Remove the current article from the persistent articles
+      (<code>gnus-cache-remove-article</code>). This will normally
+      delete the article.</p>
+    </dd>
+  </dl>
+
+  <p>Both these commands understand the process/prefix
+  convention.</p>
+
+  <p>To avoid having all ticked articles (and stuff) entered into
+  the cache, you should set <code>gnus-use-cache</code> to
+  <code>passive</code> if you&rsquo;re just interested in
+  persistent articles:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-use-cache 'passive)
+</pre>
+  </div>
 </body>
 </html>

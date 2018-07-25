@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,110 +14,163 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Gmane Spam Reporting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Gmane Spam Reporting">
-<meta name="keywords" content="Gnus Manual: Gmane Spam Reporting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title="Spam Back Ends">
-<link href="Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments" rel="next" title="Anti-spam Hashcash Payments">
-<link href="BBDB-Whitelists.html#BBDB-Whitelists" rel="prev" title="BBDB Whitelists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Gmane Spam Reporting</title>
+  <meta name="description" content=
+  "Gnus Manual: Gmane Spam Reporting" />
+  <meta name="keywords" content=
+  "Gnus Manual: Gmane Spam Reporting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title=
+  "Spam Back Ends" />
+  <link href=
+  "Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments"
+  rel="next" title="Anti-spam Hashcash Payments" />
+  <link href="BBDB-Whitelists.html#BBDB-Whitelists" rel="prev"
+  title="BBDB Whitelists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Gmane-Spam-Reporting"></a>
-<div class="header">
-<p>
-Next: <a href="Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments" accesskey="n" rel="next">Anti-spam Hashcash Payments</a>, Previous: <a href="BBDB-Whitelists.html#BBDB-Whitelists" accesskey="p" rel="prev">BBDB Whitelists</a>, Up: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel="up">Spam Back Ends</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Gmane-Spam-Reporting-1"></a>
-<h4 class="subsubsection">9.17.6.3 Gmane Spam Reporting</h4>
-<a name="index-spam-reporting"></a>
-<a name="index-Gmane_002c-spam-reporting"></a>
-<a name="index-Gmane_002c-spam-reporting-1"></a>
-<a name="index-spam-9"></a>
+<body lang="en" xml:lang="en">
+  <a name="Gmane-Spam-Reporting" id="Gmane-Spam-Reporting"></a>
 
-<dl>
-<dt><a name="index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dreport_002dgmane"></a>Variable: <strong>gnus-group-spam-exit-processor-report-gmane</strong></dt>
-<dd>
-<p>Add this symbol to a group&rsquo;s <code>spam-process</code> parameter by
-customizing the group parameters or the
-<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is
-added to a group&rsquo;s <code>spam-process</code> parameter, the spam-marked
-articles groups will be reported to the Gmane administrators via a
-HTTP request.
-</p>
-<p>Gmane can be found at <a href="http://gmane.org">http://gmane.org</a>.
-</p>
-<p><em>WARNING</em>
-</p>
-<p>Instead of the obsolete
-<code>gnus-group-spam-exit-processor-report-gmane</code>, it is recommended
-that you use <code>(spam spam-use-gmane)</code>.  Everything will work the
-same way, we promise.
-</p>
-</dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments"
+    accesskey="n" rel="next">Anti-spam Hashcash Payments</a>,
+    Previous: <a href="BBDB-Whitelists.html#BBDB-Whitelists"
+    accesskey="p" rel="prev">BBDB Whitelists</a>, Up: <a href=
+    "Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel=
+    "up">Spam Back Ends</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Gmane-Spam-Reporting-1" id="Gmane-Spam-Reporting-1"></a>
 
-<dl>
-<dt><a name="index-spam_002dreport_002dgmane_002duse_002darticle_002dnumber"></a>Variable: <strong>spam-report-gmane-use-article-number</strong></dt>
-<dd>
-<p>This variable is <code>t</code> by default.  Set it to <code>nil</code> if you are
-running your own news server, for instance, and the local article
-numbers don&rsquo;t correspond to the Gmane article numbers.  When
-<code>spam-report-gmane-use-article-number</code> is <code>nil</code>,
-<code>spam-report.el</code> will fetch the number from the article headers.
-</p>
-</dd></dl>
+  <h4 class="subsubsection">9.17.6.3 Gmane Spam
+  Reporting</h4><a name="index-spam-reporting" id=
+  "index-spam-reporting"></a> <a name=
+  "index-Gmane_002c-spam-reporting" id=
+  "index-Gmane_002c-spam-reporting"></a> <a name=
+  "index-Gmane_002c-spam-reporting-1" id=
+  "index-Gmane_002c-spam-reporting-1"></a> <a name="index-spam-9"
+  id="index-spam-9"></a>
 
-<dl>
-<dt><a name="index-spam_002dreport_002duser_002dmail_002daddress"></a>Variable: <strong>spam-report-user-mail-address</strong></dt>
-<dd>
-<p>Mail address exposed in the User-Agent spam reports to Gmane.  It allows
-the Gmane administrators to contact you in case of misreports.  The
-default is <code>user-mail-address</code>.
-</p>
-</dd></dl>
+  <dl>
+    <dt><a name=
+    "index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dreport_002dgmane"
+    id=
+    "index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dreport_002dgmane">
+    </a>Variable:
+    <strong>gnus-group-spam-exit-processor-report-gmane</strong></dt>
 
+    <dd>
+      <p>Add this symbol to a group&rsquo;s
+      <code>spam-process</code> parameter by customizing the group
+      parameters or the <code>gnus-spam-process-newsgroups</code>
+      variable. When this symbol is added to a group&rsquo;s
+      <code>spam-process</code> parameter, the spam-marked articles
+      groups will be reported to the Gmane administrators via a
+      HTTP request.</p>
 
+      <p>Gmane can be found at <a href=
+      "http://gmane.org">http://gmane.org</a>.</p>
 
+      <p><em>WARNING</em></p>
 
+      <p>Instead of the obsolete
+      <code>gnus-group-spam-exit-processor-report-gmane</code>, it
+      is recommended that you use <code>(spam
+      spam-use-gmane)</code>. Everything will work the same way, we
+      promise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-spam_002dreport_002dgmane_002duse_002darticle_002dnumber"
+    id=
+    "index-spam_002dreport_002dgmane_002duse_002darticle_002dnumber">
+    </a>Variable:
+    <strong>spam-report-gmane-use-article-number</strong></dt>
+
+    <dd>
+      <p>This variable is <code>t</code> by default. Set it to
+      <code>nil</code> if you are running your own news server, for
+      instance, and the local article numbers don&rsquo;t
+      correspond to the Gmane article numbers. When
+      <code>spam-report-gmane-use-article-number</code> is
+      <code>nil</code>, <code>spam-report.el</code> will fetch the
+      number from the article headers.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-spam_002dreport_002duser_002dmail_002daddress" id=
+    "index-spam_002dreport_002duser_002dmail_002daddress"></a>Variable:
+    <strong>spam-report-user-mail-address</strong></dt>
+
+    <dd>
+      <p>Mail address exposed in the User-Agent spam reports to
+      Gmane. It allows the Gmane administrators to contact you in
+      case of misreports. The default is
+      <code>user-mail-address</code>.</p>
+    </dd>
+  </dl>
 </body>
 </html>

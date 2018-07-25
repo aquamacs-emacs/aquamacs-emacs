@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,133 +19,184 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Dynamic Binding</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Dynamic Binding">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Dynamic Binding">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variable-Scoping.html#Variable-Scoping" rel="up" title="Variable Scoping">
-<link href="Dynamic-Binding-Tips.html#Dynamic-Binding-Tips" rel="next" title="Dynamic Binding Tips">
-<link href="Variable-Scoping.html#Variable-Scoping" rel="prev" title="Variable Scoping">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Dynamic Binding</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Dynamic Binding" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Dynamic Binding" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variable-Scoping.html#Variable-Scoping" rel="up"
+  title="Variable Scoping" />
+  <link href="Dynamic-Binding-Tips.html#Dynamic-Binding-Tips" rel=
+  "next" title="Dynamic Binding Tips" />
+  <link href="Variable-Scoping.html#Variable-Scoping" rel="prev"
+  title="Variable Scoping" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Dynamic-Binding" id="Dynamic-Binding"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Dynamic-Binding-Tips.html#Dynamic-Binding-Tips" accesskey="n"
+    rel="next">Dynamic Binding Tips</a>, Up: <a href=
+    "Variable-Scoping.html#Variable-Scoping" accesskey="u" rel=
+    "up">Variable Scoping</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Dynamic-Binding-1" id="Dynamic-Binding-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dynamic-Binding"></a>
-<div class="header">
-<p>
-Next: <a href="Dynamic-Binding-Tips.html#Dynamic-Binding-Tips" accesskey="n" rel="next">Dynamic Binding Tips</a>, Up: <a href="Variable-Scoping.html#Variable-Scoping" accesskey="u" rel="up">Variable Scoping</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Dynamic-Binding-1"></a>
-<h4 class="subsection">11.9.1 Dynamic Binding</h4>
+  <h4 class="subsection">11.9.1 Dynamic Binding</h4>
 
-<p>By default, the local variable bindings made by Emacs are dynamic
-bindings.  When a variable is dynamically bound, its current binding
-at any point in the execution of the Lisp program is simply the most
-recently-created dynamic local binding for that symbol, or the global
-binding if there is no such local binding.
-</p>
-<p>Dynamic bindings have dynamic scope and extent, as shown by the
-following example:
-</p>
-<div class="example">
-<pre class="example">(defvar x -99)  ; <span class="roman"><code>x</code> receives an initial value of −99.</span>
+  <p>By default, the local variable bindings made by Emacs are
+  dynamic bindings. When a variable is dynamically bound, its
+  current binding at any point in the execution of the Lisp program
+  is simply the most recently-created dynamic local binding for
+  that symbol, or the global binding if there is no such local
+  binding.</p>
+
+  <p>Dynamic bindings have dynamic scope and extent, as shown by
+  the following example:</p>
+
+  <div class="example">
+    <pre class="example">
+(defvar x -99)  ; <span class=
+"roman"><code>x</code> receives an initial value of &acirc;&circ;&rsquo;99.</span>
 
 (defun getx ()
-  x)            ; <span class="roman"><code>x</code> is used free in this function.</span>
+  x)            ; <span class=
+"roman"><code>x</code> is used free in this function.</span>
 
-(let ((x 1))    ; <span class="roman"><code>x</code> is dynamically bound.</span>
+(let ((x 1))    ; <span class=
+"roman"><code>x</code> is dynamically bound.</span>
   (getx))
      &rArr; 1
 
-;; <span class="roman">After the <code>let</code> form finishes, <code>x</code> reverts to its</span>
-;; <span class="roman">previous value, which is −99.</span>
+;; <span class=
+"roman">After the <code>let</code> form finishes, <code>x</code> reverts to its</span>
+;; <span class=
+"roman">previous value, which is &acirc;&circ;&rsquo;99.</span>
 
 (getx)
      &rArr; -99
-</pre></div>
+</pre>
+  </div>
 
-<p>The function <code>getx</code> refers to <code>x</code>.  This is a <em>free</em>
-reference, in the sense that there is no binding for <code>x</code> within
-that <code>defun</code> construct itself.  When we call <code>getx</code> from
-within a <code>let</code> form in which <code>x</code> is (dynamically) bound, it
-retrieves the local value (i.e., 1).  But when we call <code>getx</code>
-outside the <code>let</code> form, it retrieves the global value (i.e.,
-−99).
-</p>
-<p>Here is another example, which illustrates setting a dynamically
-bound variable using <code>setq</code>:
-</p>
-<div class="example">
-<pre class="example">(defvar x -99)      ; <span class="roman"><code>x</code> receives an initial value of −99.</span>
+  <p>The function <code>getx</code> refers to <code>x</code>. This
+  is a <em>free</em> reference, in the sense that there is no
+  binding for <code>x</code> within that <code>defun</code>
+  construct itself. When we call <code>getx</code> from within a
+  <code>let</code> form in which <code>x</code> is (dynamically)
+  bound, it retrieves the local value (i.e., 1). But when we call
+  <code>getx</code> outside the <code>let</code> form, it retrieves
+  the global value (i.e., &acirc;&circ;&rsquo;99).</p>
+
+  <p>Here is another example, which illustrates setting a
+  dynamically bound variable using <code>setq</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(defvar x -99)      ; <span class=
+"roman"><code>x</code> receives an initial value of &acirc;&circ;&rsquo;99.</span>
 
 (defun addx ()
-  (setq x (1+ x)))  ; <span class="roman">Add 1 to <code>x</code> and return its new value.</span>
+  (setq x (1+ x)))  ; <span class=
+"roman">Add 1 to <code>x</code> and return its new value.</span>
 
 (let ((x 1))
   (addx)
   (addx))
-     &rArr; 3           ; <span class="roman">The two <code>addx</code> calls add to <code>x</code> twice.</span>
+     &rArr; 3           ; <span class=
+"roman">The two <code>addx</code> calls add to <code>x</code> twice.</span>
 
-;; <span class="roman">After the <code>let</code> form finishes, <code>x</code> reverts to its</span>
-;; <span class="roman">previous value, which is −99.</span>
+;; <span class=
+"roman">After the <code>let</code> form finishes, <code>x</code> reverts to its</span>
+;; <span class=
+"roman">previous value, which is &acirc;&circ;&rsquo;99.</span>
 
 (addx)
      &rArr; -98
-</pre></div>
+</pre>
+  </div>
 
-<p>Dynamic binding is implemented in Emacs Lisp in a simple way.  Each
-symbol has a value cell, which specifies its current dynamic value (or
-absence of value).  See <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>.  When a symbol is given
-a dynamic local binding, Emacs records the contents of the value cell
-(or absence thereof) in a stack, and stores the new local value in the
-value cell.  When the binding construct finishes executing, Emacs pops
-the old value off the stack, and puts it in the value cell.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Dynamic-Binding-Tips.html#Dynamic-Binding-Tips" accesskey="n" rel="next">Dynamic Binding Tips</a>, Up: <a href="Variable-Scoping.html#Variable-Scoping" accesskey="u" rel="up">Variable Scoping</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Dynamic binding is implemented in Emacs Lisp in a simple way.
+  Each symbol has a value cell, which specifies its current dynamic
+  value (or absence of value). See <a href=
+  "Symbol-Components.html#Symbol-Components">Symbol Components</a>.
+  When a symbol is given a dynamic local binding, Emacs records the
+  contents of the value cell (or absence thereof) in a stack, and
+  stores the new local value in the value cell. When the binding
+  construct finishes executing, Emacs pops the old value off the
+  stack, and puts it in the value cell.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Dynamic-Binding-Tips.html#Dynamic-Binding-Tips" accesskey="n"
+    rel="next">Dynamic Binding Tips</a>, Up: <a href=
+    "Variable-Scoping.html#Variable-Scoping" accesskey="u" rel=
+    "up">Variable Scoping</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

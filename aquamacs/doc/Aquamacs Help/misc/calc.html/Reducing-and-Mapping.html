@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,96 +18,168 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Reducing and Mapping</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Reducing and Mapping">
-<meta name="keywords" content="GNU Emacs Calc Manual: Reducing and Mapping">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Matrix-Functions.html#Matrix-Functions" rel="up" title="Matrix Functions">
-<link href="Specifying-Operators.html#Specifying-Operators" rel="next" title="Specifying Operators">
-<link href="Paired_002dSample-Statistics.html#Paired_002dSample-Statistics" rel="prev" title="Paired-Sample Statistics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Reducing and Mapping</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Reducing and Mapping" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Reducing and Mapping" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Matrix-Functions.html#Matrix-Functions" rel="up"
+  title="Matrix Functions" />
+  <link href="Specifying-Operators.html#Specifying-Operators" rel=
+  "next" title="Specifying Operators" />
+  <link href=
+  "Paired_002dSample-Statistics.html#Paired_002dSample-Statistics"
+  rel="prev" title="Paired-Sample Statistics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Reducing-and-Mapping"></a>
-<div class="header">
-<p>
-Next: <a href="Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats" accesskey="n" rel="next">Vector and Matrix Formats</a>, Previous: <a href="Statistical-Operations.html#Statistical-Operations" accesskey="p" rel="prev">Statistical Operations</a>, Up: <a href="Matrix-Functions.html#Matrix-Functions" accesskey="u" rel="up">Matrix Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Reducing-and-Mapping-Vectors"></a>
-<h3 class="section">9.8 Reducing and Mapping Vectors</h3>
+<body lang="en" xml:lang="en">
+  <a name="Reducing-and-Mapping" id="Reducing-and-Mapping"></a>
 
-<p>The commands in this section allow for more general operations on the
-elements of vectors.
-</p>
-<a name="index-v-A"></a>
-<a name="index-V-A"></a>
-<a name="index-calc_002dapply"></a>
-<a name="index-apply"></a>
-<p>The simplest of these operations is <kbd>V A</kbd> (<code>calc-apply</code>)
-[<code>apply</code>], which applies a given operator to the elements of a vector.
-For example, applying the hypothetical function <code>f</code> to the vector
-&lsquo;<samp>[1,&nbsp;2,&nbsp;3]</samp>&rsquo;<!-- /@w --> would produce the function call &lsquo;<samp>f(1, 2, 3)</samp>&rsquo;.
-Applying the <code>+</code> function to the vector &lsquo;<samp>[a, b]</samp>&rsquo; gives
-&lsquo;<samp>a + b</samp>&rsquo;.  Applying <code>+</code> to the vector &lsquo;<samp>[a, b, c]</samp>&rsquo; is an
-error, since the <code>+</code> function expects exactly two arguments.
-</p>
-<p>While <kbd>V A</kbd> is useful in some cases, you will usually find that either
-<kbd>V R</kbd> or <kbd>V M</kbd>, described below, is closer to what you want.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Specifying-Operators.html#Specifying-Operators" accesskey="1">Specifying Operators</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mapping.html#Mapping" accesskey="2">Mapping</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Reducing.html#Reducing" accesskey="3">Reducing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points" accesskey="4">Nesting and Fixed Points</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Generalized-Products.html#Generalized-Products" accesskey="5">Generalized Products</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href=
+    "Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats"
+    accesskey="n" rel="next">Vector and Matrix Formats</a>,
+    Previous: <a href=
+    "Statistical-Operations.html#Statistical-Operations" accesskey=
+    "p" rel="prev">Statistical Operations</a>, Up: <a href=
+    "Matrix-Functions.html#Matrix-Functions" accesskey="u" rel=
+    "up">Matrix Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Reducing-and-Mapping-Vectors" id=
+  "Reducing-and-Mapping-Vectors"></a>
 
+  <h3 class="section">9.8 Reducing and Mapping Vectors</h3>
 
+  <p>The commands in this section allow for more general operations
+  on the elements of vectors.</p><a name="index-v-A" id=
+  "index-v-A"></a> <a name="index-V-A" id="index-V-A"></a> <a name=
+  "index-calc_002dapply" id="index-calc_002dapply"></a> <a name=
+  "index-apply" id="index-apply"></a>
 
+  <p>The simplest of these operations is <kbd>V A</kbd>
+  (<code>calc-apply</code>) [<code>apply</code>], which applies a
+  given operator to the elements of a vector. For example, applying
+  the hypothetical function <code>f</code> to the vector
+  &lsquo;<samp>[1,&nbsp;2,&nbsp;3]</samp>&rsquo;<!-- /@w --> would
+  produce the function call &lsquo;<samp>f(1, 2, 3)</samp>&rsquo;.
+  Applying the <code>+</code> function to the vector
+  &lsquo;<samp>[a, b]</samp>&rsquo; gives &lsquo;<samp>a +
+  b</samp>&rsquo;. Applying <code>+</code> to the vector
+  &lsquo;<samp>[a, b, c]</samp>&rsquo; is an error, since the
+  <code>+</code> function expects exactly two arguments.</p>
 
+  <p>While <kbd>V A</kbd> is useful in some cases, you will usually
+  find that either <kbd>V R</kbd> or <kbd>V M</kbd>, described
+  below, is closer to what you want.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Specifying-Operators.html#Specifying-Operators" accesskey=
+      "1">Specifying Operators</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mapping.html#Mapping" accesskey="2">Mapping</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Reducing.html#Reducing" accesskey="3">Reducing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points"
+      accesskey="4">Nesting and Fixed Points</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Generalized-Products.html#Generalized-Products" accesskey=
+      "5">Generalized Products</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

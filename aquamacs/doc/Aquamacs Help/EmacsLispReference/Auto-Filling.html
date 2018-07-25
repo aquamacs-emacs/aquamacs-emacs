@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,102 +19,148 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Auto Filling</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Auto Filling">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Auto Filling">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Sorting.html#Sorting" rel="next" title="Sorting">
-<link href="Adaptive-Fill.html#Adaptive-Fill" rel="prev" title="Adaptive Fill">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Auto Filling</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Auto Filling" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Auto Filling" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Sorting.html#Sorting" rel="next" title="Sorting" />
+  <link href="Adaptive-Fill.html#Adaptive-Fill" rel="prev" title=
+  "Adaptive Fill" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Auto-Filling" id="Auto-Filling"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Sorting.html#Sorting" accesskey="n" rel=
+    "next">Sorting</a>, Previous: <a href=
+    "Adaptive-Fill.html#Adaptive-Fill" accesskey="p" rel=
+    "prev">Adaptive Fill</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Auto-Filling-1" id="Auto-Filling-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Auto-Filling"></a>
-<div class="header">
-<p>
-Next: <a href="Sorting.html#Sorting" accesskey="n" rel="next">Sorting</a>, Previous: <a href="Adaptive-Fill.html#Adaptive-Fill" accesskey="p" rel="prev">Adaptive Fill</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Auto-Filling-1"></a>
-<h3 class="section">31.14 Auto Filling</h3>
-<a name="index-filling_002c-automatic"></a>
-<a name="index-Auto-Fill-mode"></a>
+  <h3 class="section">31.14 Auto Filling</h3><a name=
+  "index-filling_002c-automatic" id=
+  "index-filling_002c-automatic"></a> <a name=
+  "index-Auto-Fill-mode" id="index-Auto-Fill-mode"></a>
 
-<p>Auto Fill mode is a minor mode that fills lines automatically as text
-is inserted.  This section describes the hook used by Auto Fill mode.
-For a description of functions that you can call explicitly to fill and
-justify existing text, see <a href="Filling.html#Filling">Filling</a>.
-</p>
-<p>Auto Fill mode also enables the functions that change the margins and
-justification style to refill portions of the text.  See <a href="Margins.html#Margins">Margins</a>.
-</p>
-<dl>
-<dt><a name="index-auto_002dfill_002dfunction"></a>Variable: <strong>auto-fill-function</strong></dt>
-<dd><p>The value of this buffer-local variable should be a function (of no
-arguments) to be called after self-inserting a character from the table
-<code>auto-fill-chars</code>.  It may be <code>nil</code>, in which case nothing
-special is done in that case.
-</p>
-<p>The value of <code>auto-fill-function</code> is <code>do-auto-fill</code> when
-Auto-Fill mode is enabled.  That is a function whose sole purpose is to
-implement the usual strategy for breaking a line.
-</p></dd></dl>
+  <p>Auto Fill mode is a minor mode that fills lines automatically
+  as text is inserted. This section describes the hook used by Auto
+  Fill mode. For a description of functions that you can call
+  explicitly to fill and justify existing text, see <a href=
+  "Filling.html#Filling">Filling</a>.</p>
 
-<dl>
-<dt><a name="index-normal_002dauto_002dfill_002dfunction"></a>Variable: <strong>normal-auto-fill-function</strong></dt>
-<dd><p>This variable specifies the function to use for
-<code>auto-fill-function</code>, if and when Auto Fill is turned on.  Major
-modes can set buffer-local values for this variable to alter how Auto
-Fill works.
-</p></dd></dl>
+  <p>Auto Fill mode also enables the functions that change the
+  margins and justification style to refill portions of the text.
+  See <a href="Margins.html#Margins">Margins</a>.</p>
 
-<dl>
-<dt><a name="index-auto_002dfill_002dchars"></a>Variable: <strong>auto-fill-chars</strong></dt>
-<dd><p>A char table of characters which invoke <code>auto-fill-function</code> when
-self-inserted&mdash;space and newline in most language environments.  They
-have an entry <code>t</code> in the table.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-auto_002dfill_002dfunction" id=
+    "index-auto_002dfill_002dfunction"></a>Variable:
+    <strong>auto-fill-function</strong></dt>
 
+    <dd>
+      <p>The value of this buffer-local variable should be a
+      function (of no arguments) to be called after self-inserting
+      a character from the table <code>auto-fill-chars</code>. It
+      may be <code>nil</code>, in which case nothing special is
+      done in that case.</p>
 
+      <p>The value of <code>auto-fill-function</code> is
+      <code>do-auto-fill</code> when Auto-Fill mode is enabled.
+      That is a function whose sole purpose is to implement the
+      usual strategy for breaking a line.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-normal_002dauto_002dfill_002dfunction" id=
+    "index-normal_002dauto_002dfill_002dfunction"></a>Variable:
+    <strong>normal-auto-fill-function</strong></dt>
 
+    <dd>
+      <p>This variable specifies the function to use for
+      <code>auto-fill-function</code>, if and when Auto Fill is
+      turned on. Major modes can set buffer-local values for this
+      variable to alter how Auto Fill works.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-auto_002dfill_002dchars" id=
+    "index-auto_002dfill_002dchars"></a>Variable:
+    <strong>auto-fill-chars</strong></dt>
+
+    <dd>
+      <p>A char table of characters which invoke
+      <code>auto-fill-function</code> when
+      self-inserted&mdash;space and newline in most language
+      environments. They have an entry <code>t</code> in the
+      table.</p>
+    </dd>
+  </dl>
 </body>
 </html>

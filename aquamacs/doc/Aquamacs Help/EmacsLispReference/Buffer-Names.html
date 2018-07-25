@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,171 +19,264 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Buffer Names</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Buffer Names">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Buffer Names">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffers.html#Buffers" rel="up" title="Buffers">
-<link href="Buffer-File-Name.html#Buffer-File-Name" rel="next" title="Buffer File Name">
-<link href="Current-Buffer.html#Current-Buffer" rel="prev" title="Current Buffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Buffer Names</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Buffer Names" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Buffer Names" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffers.html#Buffers" rel="up" title="Buffers" />
+  <link href="Buffer-File-Name.html#Buffer-File-Name" rel="next"
+  title="Buffer File Name" />
+  <link href="Current-Buffer.html#Current-Buffer" rel="prev" title=
+  "Current Buffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Buffer-Names" id="Buffer-Names"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Buffer-File-Name.html#Buffer-File-Name"
+    accesskey="n" rel="next">Buffer File Name</a>, Previous:
+    <a href="Current-Buffer.html#Current-Buffer" accesskey="p" rel=
+    "prev">Current Buffer</a>, Up: <a href="Buffers.html#Buffers"
+    accesskey="u" rel="up">Buffers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Buffer-Names-1" id="Buffer-Names-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Buffer-Names"></a>
-<div class="header">
-<p>
-Next: <a href="Buffer-File-Name.html#Buffer-File-Name" accesskey="n" rel="next">Buffer File Name</a>, Previous: <a href="Current-Buffer.html#Current-Buffer" accesskey="p" rel="prev">Current Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Buffer-Names-1"></a>
-<h3 class="section">26.3 Buffer Names</h3>
-<a name="index-buffer-names"></a>
+  <h3 class="section">26.3 Buffer Names</h3><a name=
+  "index-buffer-names" id="index-buffer-names"></a>
 
-<p>Each buffer has a unique name, which is a string.  Many of the
-functions that work on buffers accept either a buffer or a buffer name
-as an argument.  Any argument called <var>buffer-or-name</var> is of this
-sort, and an error is signaled if it is neither a string nor a buffer.
-Any argument called <var>buffer</var> must be an actual buffer
-object, not a name.
-</p>
-<a name="index-hidden-buffers"></a>
-<a name="index-buffers-without-undo-information"></a>
-<p>Buffers that are ephemeral and generally uninteresting to the user
-have names starting with a space, so that the <code>list-buffers</code> and
-<code>buffer-menu</code> commands don&rsquo;t mention them (but if such a buffer
-visits a file, it <strong>is</strong> mentioned).  A name starting with
-space also initially disables recording undo information; see
-<a href="Undo.html#Undo">Undo</a>.
-</p>
-<dl>
-<dt><a name="index-buffer_002dname"></a>Function: <strong>buffer-name</strong> <em>&amp;optional buffer</em></dt>
-<dd><p>This function returns the name of <var>buffer</var> as a string.
-<var>buffer</var> defaults to the current buffer.
-</p>
-<p>If <code>buffer-name</code> returns <code>nil</code>, it means that <var>buffer</var>
-has been killed.  See <a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>.
-</p>
-<div class="example">
-<pre class="example">(buffer-name)
-     &rArr; &quot;buffers.texi&quot;
-</pre><pre class="example">
-</pre><pre class="example">(setq foo (get-buffer &quot;temp&quot;))
+  <p>Each buffer has a unique name, which is a string. Many of the
+  functions that work on buffers accept either a buffer or a buffer
+  name as an argument. Any argument called
+  <var>buffer-or-name</var> is of this sort, and an error is
+  signaled if it is neither a string nor a buffer. Any argument
+  called <var>buffer</var> must be an actual buffer object, not a
+  name.</p><a name="index-hidden-buffers" id=
+  "index-hidden-buffers"></a> <a name=
+  "index-buffers-without-undo-information" id=
+  "index-buffers-without-undo-information"></a>
+
+  <p>Buffers that are ephemeral and generally uninteresting to the
+  user have names starting with a space, so that the
+  <code>list-buffers</code> and <code>buffer-menu</code> commands
+  don&rsquo;t mention them (but if such a buffer visits a file, it
+  <strong>is</strong> mentioned). A name starting with space also
+  initially disables recording undo information; see <a href=
+  "Undo.html#Undo">Undo</a>.</p>
+
+  <dl>
+    <dt><a name="index-buffer_002dname" id=
+    "index-buffer_002dname"></a>Function:
+    <strong>buffer-name</strong> <em>&amp;optional buffer</em></dt>
+
+    <dd>
+      <p>This function returns the name of <var>buffer</var> as a
+      string. <var>buffer</var> defaults to the current buffer.</p>
+
+      <p>If <code>buffer-name</code> returns <code>nil</code>, it
+      means that <var>buffer</var> has been killed. See <a href=
+      "Killing-Buffers.html#Killing-Buffers">Killing
+      Buffers</a>.</p>
+
+      <div class="example">
+        <pre class="example">
+(buffer-name)
+     &rArr; "buffers.texi"
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(setq foo (get-buffer "temp"))
      &rArr; #&lt;buffer temp&gt;
-</pre><pre class="example">(kill-buffer foo)
+</pre>
+        <pre class="example">
+(kill-buffer foo)
      &rArr; nil
-</pre><pre class="example">(buffer-name foo)
+</pre>
+        <pre class="example">
+(buffer-name foo)
      &rArr; nil
-</pre><pre class="example">foo
+</pre>
+        <pre class="example">
+foo
      &rArr; #&lt;killed buffer&gt;
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-rename_002dbuffer"></a>Command: <strong>rename-buffer</strong> <em>newname &amp;optional unique</em></dt>
-<dd><p>This function renames the current buffer to <var>newname</var>.  An error
-is signaled if <var>newname</var> is not a string.
-</p>
-<p>Ordinarily, <code>rename-buffer</code> signals an error if <var>newname</var> is
-already in use.  However, if <var>unique</var> is non-<code>nil</code>, it modifies
-<var>newname</var> to make a name that is not in use.  Interactively, you can
-make <var>unique</var> non-<code>nil</code> with a numeric prefix argument.
-(This is how the command <code>rename-uniquely</code> is implemented.)
-</p>
-<p>This function returns the name actually given to the buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-rename_002dbuffer" id=
+    "index-rename_002dbuffer"></a>Command:
+    <strong>rename-buffer</strong> <em>newname &amp;optional
+    unique</em></dt>
 
-<dl>
-<dt><a name="index-get_002dbuffer"></a>Function: <strong>get-buffer</strong> <em>buffer-or-name</em></dt>
-<dd><p>This function returns the buffer specified by <var>buffer-or-name</var>.
-If <var>buffer-or-name</var> is a string and there is no buffer with that
-name, the value is <code>nil</code>.  If <var>buffer-or-name</var> is a buffer, it
-is returned as given; that is not very useful, so the argument is usually
-a name.  For example:
-</p>
-<div class="example">
-<pre class="example">(setq b (get-buffer &quot;lewis&quot;))
+    <dd>
+      <p>This function renames the current buffer to
+      <var>newname</var>. An error is signaled if
+      <var>newname</var> is not a string.</p>
+
+      <p>Ordinarily, <code>rename-buffer</code> signals an error if
+      <var>newname</var> is already in use. However, if
+      <var>unique</var> is non-<code>nil</code>, it modifies
+      <var>newname</var> to make a name that is not in use.
+      Interactively, you can make <var>unique</var>
+      non-<code>nil</code> with a numeric prefix argument. (This is
+      how the command <code>rename-uniquely</code> is
+      implemented.)</p>
+
+      <p>This function returns the name actually given to the
+      buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-get_002dbuffer" id=
+    "index-get_002dbuffer"></a>Function:
+    <strong>get-buffer</strong> <em>buffer-or-name</em></dt>
+
+    <dd>
+      <p>This function returns the buffer specified by
+      <var>buffer-or-name</var>. If <var>buffer-or-name</var> is a
+      string and there is no buffer with that name, the value is
+      <code>nil</code>. If <var>buffer-or-name</var> is a buffer,
+      it is returned as given; that is not very useful, so the
+      argument is usually a name. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq b (get-buffer "lewis"))
      &rArr; #&lt;buffer lewis&gt;
-</pre><pre class="example">(get-buffer b)
+</pre>
+        <pre class="example">
+(get-buffer b)
      &rArr; #&lt;buffer lewis&gt;
-</pre><pre class="example">(get-buffer &quot;Frazzle-nots&quot;)
+</pre>
+        <pre class="example">
+(get-buffer "Frazzle-nots")
      &rArr; nil
-</pre></div>
+</pre>
+      </div>
 
-<p>See also the function <code>get-buffer-create</code> in <a href="Creating-Buffers.html#Creating-Buffers">Creating Buffers</a>.
-</p></dd></dl>
+      <p>See also the function <code>get-buffer-create</code> in
+      <a href="Creating-Buffers.html#Creating-Buffers">Creating
+      Buffers</a>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-generate_002dnew_002dbuffer_002dname"></a>Function: <strong>generate-new-buffer-name</strong> <em>starting-name &amp;optional ignore</em></dt>
-<dd><p>This function returns a name that would be unique for a new buffer&mdash;but
-does not create the buffer.  It starts with <var>starting-name</var>, and
-produces a name not currently in use for any buffer by appending a
-number inside of &lsquo;<samp>&lt;&hellip;&gt;</samp>&rsquo;.  It starts at 2 and keeps
-incrementing the number until it is not the name of an existing buffer.
-</p>
-<p>If the optional second argument <var>ignore</var> is non-<code>nil</code>, it
-should be a string, a potential buffer name.  It means to consider
-that potential buffer acceptable, if it is tried, even it is the name
-of an existing buffer (which would normally be rejected).  Thus, if
-buffers named &lsquo;<samp>foo</samp>&rsquo;, &lsquo;<samp>foo&lt;2&gt;</samp>&rsquo;, &lsquo;<samp>foo&lt;3&gt;</samp>&rsquo; and
-&lsquo;<samp>foo&lt;4&gt;</samp>&rsquo; exist,
-</p>
-<div class="example">
-<pre class="example">(generate-new-buffer-name &quot;foo&quot;)
-     &rArr; &quot;foo&lt;5&gt;&quot;
-(generate-new-buffer-name &quot;foo&quot; &quot;foo&lt;3&gt;&quot;)
-     &rArr; &quot;foo&lt;3&gt;&quot;
-(generate-new-buffer-name &quot;foo&quot; &quot;foo&lt;6&gt;&quot;)
-     &rArr; &quot;foo&lt;5&gt;&quot;
-</pre></div>
+  <dl>
+    <dt><a name="index-generate_002dnew_002dbuffer_002dname" id=
+    "index-generate_002dnew_002dbuffer_002dname"></a>Function:
+    <strong>generate-new-buffer-name</strong> <em>starting-name
+    &amp;optional ignore</em></dt>
 
-<p>See the related function <code>generate-new-buffer</code> in <a href="Creating-Buffers.html#Creating-Buffers">Creating Buffers</a>.
-</p></dd></dl>
+    <dd>
+      <p>This function returns a name that would be unique for a
+      new buffer&mdash;but does not create the buffer. It starts
+      with <var>starting-name</var>, and produces a name not
+      currently in use for any buffer by appending a number inside
+      of &lsquo;<samp>&lt;&hellip;&gt;</samp>&rsquo;. It starts at
+      2 and keeps incrementing the number until it is not the name
+      of an existing buffer.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Buffer-File-Name.html#Buffer-File-Name" accesskey="n" rel="next">Buffer File Name</a>, Previous: <a href="Current-Buffer.html#Current-Buffer" accesskey="p" rel="prev">Current Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If the optional second argument <var>ignore</var> is
+      non-<code>nil</code>, it should be a string, a potential
+      buffer name. It means to consider that potential buffer
+      acceptable, if it is tried, even it is the name of an
+      existing buffer (which would normally be rejected). Thus, if
+      buffers named &lsquo;<samp>foo</samp>&rsquo;,
+      &lsquo;<samp>foo&lt;2&gt;</samp>&rsquo;,
+      &lsquo;<samp>foo&lt;3&gt;</samp>&rsquo; and
+      &lsquo;<samp>foo&lt;4&gt;</samp>&rsquo; exist,</p>
 
+      <div class="example">
+        <pre class="example">
+(generate-new-buffer-name "foo")
+     &rArr; "foo&lt;5&gt;"
+(generate-new-buffer-name "foo" "foo&lt;3&gt;")
+     &rArr; "foo&lt;3&gt;"
+(generate-new-buffer-name "foo" "foo&lt;6&gt;")
+     &rArr; "foo&lt;5&gt;"
+</pre>
+      </div>
 
+      <p>See the related function <code>generate-new-buffer</code>
+      in <a href="Creating-Buffers.html#Creating-Buffers">Creating
+      Buffers</a>.</p>
+    </dd>
+  </dl>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Buffer-File-Name.html#Buffer-File-Name"
+    accesskey="n" rel="next">Buffer File Name</a>, Previous:
+    <a href="Current-Buffer.html#Current-Buffer" accesskey="p" rel=
+    "prev">Current Buffer</a>, Up: <a href="Buffers.html#Buffers"
+    accesskey="u" rel="up">Buffers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

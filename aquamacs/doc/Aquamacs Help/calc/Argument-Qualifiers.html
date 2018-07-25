@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Argument Qualifiers - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Lisp-Definitions.html#Lisp-Definitions" title="Lisp Definitions">
-<link rel="prev" href="Defining-Stack-Commands.html#Defining-Stack-Commands" title="Defining Stack Commands">
-<link rel="next" href="Example-Definitions.html#Example-Definitions" title="Example Definitions">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Argument Qualifiers - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Lisp-Definitions.html#Lisp-Definitions"
+  title="Lisp Definitions" />
+  <link rel="prev" href=
+  "Defining-Stack-Commands.html#Defining-Stack-Commands" title=
+  "Defining Stack Commands" />
+  <link rel="next" href=
+  "Example-Definitions.html#Example-Definitions" title=
+  "Example Definitions" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +40,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,69 +53,116 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Argument-Qualifiers"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Example-Definitions.html#Example-Definitions">Example Definitions</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Stack-Commands.html#Defining-Stack-Commands">Defining Stack Commands</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Lisp-Definitions.html#Lisp-Definitions">Lisp Definitions</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Argument-Qualifiers" id="Argument-Qualifiers"></a>
 
-<h4 class="subsection">18.5.4 Argument Qualifiers</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Example-Definitions.html#Example-Definitions">Example
+    Definitions</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href=
+    "Defining-Stack-Commands.html#Defining-Stack-Commands">Defining
+    Stack Commands</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Lisp-Definitions.html#Lisp-Definitions">Lisp
+    Definitions</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">Anywhere a parameter name can appear in the parameter list you can also use
-an <dfn>argument qualifier</dfn>.  Thus the general form of a definition is:
+  <h4 class="subsection">18.5.4 Argument Qualifiers</h4>
 
-<pre class="example">     (defmath <var>name</var> (<var>param</var> <var>param...</var>
+  <p class="noindent">Anywhere a parameter name can appear in the
+  parameter list you can also use an <dfn>argument qualifier</dfn>.
+  Thus the general form of a definition is:</p>
+  <pre class="example">
+     (defmath <var>name</var> (<var>param</var> <var>param...</var>
                     &amp;optional <var>param</var> <var>param...</var>
                     &amp;rest <var>param</var>)
        <var>body</var>)
 </pre>
-   <p class="noindent">where each <var>param</var> is either a symbol or a list of the form
 
-<pre class="example">     (<var>qual</var> <var>param</var>)
+  <p class="noindent">where each <var>param</var> is either a
+  symbol or a list of the form</p>
+  <pre class="example">
+     (<var>qual</var> <var>param</var>)
 </pre>
-   <p>The following qualifiers are recognized:
 
-     <dl>
-<dt>&lsquo;<samp><span class="samp">complete</span></samp>&rsquo;<dd><a name="index-complete-2335"></a>The argument must not be an incomplete vector, interval, or complex number. 
-(This is rarely needed since the Calculator itself will never call your
-function with an incomplete argument.  But there is nothing stopping your
-own Lisp code from calling your function with an incomplete argument.)
+  <p>The following qualifiers are recognized:</p>
 
-     <br><dt>&lsquo;<samp><span class="samp">integer</span></samp>&rsquo;<dd><a name="index-integer-2336"></a>The argument must be an integer.  If it is an integer-valued float
-it will be accepted but converted to integer form.  Non-integers and
-formulas are rejected.
+  <dl>
+    <dt>&lsquo;<samp><span class=
+    "samp">complete</span></samp>&rsquo;</dt>
 
-     <br><dt>&lsquo;<samp><span class="samp">natnum</span></samp>&rsquo;<dd><a name="index-natnum-2337"></a>Like &lsquo;<samp><span class="samp">integer</span></samp>&rsquo;, but the argument must be non-negative.
+    <dd><a name="index-complete-2335" id=
+    "index-complete-2335"></a>The argument must not be an
+    incomplete vector, interval, or complex number. (This is rarely
+    needed since the Calculator itself will never call your
+    function with an incomplete argument. But there is nothing
+    stopping your own Lisp code from calling your function with an
+    incomplete argument.)<br /></dd>
 
-     <br><dt>&lsquo;<samp><span class="samp">fixnum</span></samp>&rsquo;<dd><a name="index-fixnum-2338"></a>Like &lsquo;<samp><span class="samp">integer</span></samp>&rsquo;, but the argument must fit into a native Lisp integer,
-which on most systems means less than 2^23 in absolute value.  The
-argument is converted into Lisp-integer form if necessary.
+    <dt>&lsquo;<samp><span class=
+    "samp">integer</span></samp>&rsquo;</dt>
 
-     <br><dt>&lsquo;<samp><span class="samp">float</span></samp>&rsquo;<dd><a name="index-float-2339"></a>The argument is converted to floating-point format if it is a number or
-vector.  If it is a formula it is left alone.  (The argument is never
-actually rejected by this qualifier.)
+    <dd><a name="index-integer-2336" id=
+    "index-integer-2336"></a>The argument must be an integer. If it
+    is an integer-valued float it will be accepted but converted to
+    integer form. Non-integers and formulas are
+    rejected.<br /></dd>
 
-     <br><dt>&lsquo;<samp><var>pred</var></samp>&rsquo;<dd>The argument must satisfy predicate <var>pred</var>, which is one of the
-standard Calculator predicates.  See <a href="Predicates.html#Predicates">Predicates</a>.
+    <dt>&lsquo;<samp><span class=
+    "samp">natnum</span></samp>&rsquo;</dt>
 
-     <br><dt>&lsquo;<samp><span class="samp">not-</span><var>pred</var></samp>&rsquo;<dd>The argument must <em>not</em> satisfy predicate <var>pred</var>. 
-</dl>
+    <dd><a name="index-natnum-2337" id="index-natnum-2337"></a>Like
+    &lsquo;<samp><span class="samp">integer</span></samp>&rsquo;,
+    but the argument must be non-negative.<br /></dd>
 
-   <p>For example,
+    <dt>&lsquo;<samp><span class=
+    "samp">fixnum</span></samp>&rsquo;</dt>
 
-<pre class="example">     (defmath foo (a (constp (not-matrixp b)) &amp;optional (float c)
+    <dd><a name="index-fixnum-2338" id="index-fixnum-2338"></a>Like
+    &lsquo;<samp><span class="samp">integer</span></samp>&rsquo;,
+    but the argument must fit into a native Lisp integer, which on
+    most systems means less than 2^23 in absolute value. The
+    argument is converted into Lisp-integer form if
+    necessary.<br /></dd>
+
+    <dt>&lsquo;<samp><span class=
+    "samp">float</span></samp>&rsquo;</dt>
+
+    <dd><a name="index-float-2339" id="index-float-2339"></a>The
+    argument is converted to floating-point format if it is a
+    number or vector. If it is a formula it is left alone. (The
+    argument is never actually rejected by this
+    qualifier.)<br /></dd>
+
+    <dt>&lsquo;<samp><var>pred</var></samp>&rsquo;</dt>
+
+    <dd>The argument must satisfy predicate <var>pred</var>, which
+    is one of the standard Calculator predicates. See <a href=
+    "Predicates.html#Predicates">Predicates</a>.<br /></dd>
+
+    <dt>&lsquo;<samp><span class=
+    "samp">not-</span><var>pred</var></samp>&rsquo;</dt>
+
+    <dd>The argument must <em>not</em> satisfy predicate
+    <var>pred</var>.</dd>
+  </dl>
+
+  <p>For example,</p>
+  <pre class="example">
+     (defmath foo (a (constp (not-matrixp b)) &amp;optional (float c)
                    &amp;rest (integer d))
        <var>body</var>)
 </pre>
-   <p class="noindent">expands to
 
-<pre class="example">     (defun calcFunc-foo (a b &amp;optional c &amp;rest d)
+  <p class="noindent">expands to</p>
+  <pre class="example">
+     (defun calcFunc-foo (a b &amp;optional c &amp;rest d)
        (and (math-matrixp b)
             (math-reject-arg b 'not-matrixp))
        (or (math-constp b)
@@ -111,8 +171,8 @@ standard Calculator predicates.  See <a href="Predicates.html#Predicates">Predic
        (setq d (mapcar 'math-check-integer d))
        <var>body</var>)
 </pre>
-   <p class="noindent">which performs the necessary checks and conversions before executing the
-body of the function.
 
-   </body></html>
-
+  <p class="noindent">which performs the necessary checks and
+  conversions before executing the body of the function.</p>
+</body>
+</html>

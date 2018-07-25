@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,145 +19,214 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Distinguish Interactive</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Distinguish Interactive">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Distinguish Interactive">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Command-Loop-Info.html#Command-Loop-Info" rel="next" title="Command Loop Info">
-<link href="Interactive-Call.html#Interactive-Call" rel="prev" title="Interactive Call">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Distinguish
+  Interactive</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Distinguish Interactive" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Distinguish Interactive" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Command-Loop-Info.html#Command-Loop-Info" rel="next"
+  title="Command Loop Info" />
+  <link href="Interactive-Call.html#Interactive-Call" rel="prev"
+  title="Interactive Call" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Distinguish-Interactive" id=
+  "Distinguish-Interactive"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Command-Loop-Info.html#Command-Loop-Info"
+    accesskey="n" rel="next">Command Loop Info</a>, Previous:
+    <a href="Interactive-Call.html#Interactive-Call" accesskey="p"
+    rel="prev">Interactive Call</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Distinguish-Interactive-Calls" id=
+  "Distinguish-Interactive-Calls"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Distinguish-Interactive"></a>
-<div class="header">
-<p>
-Next: <a href="Command-Loop-Info.html#Command-Loop-Info" accesskey="n" rel="next">Command Loop Info</a>, Previous: <a href="Interactive-Call.html#Interactive-Call" accesskey="p" rel="prev">Interactive Call</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Distinguish-Interactive-Calls"></a>
-<h3 class="section">20.4 Distinguish Interactive Calls</h3>
-<a name="index-distinguish-interactive-calls"></a>
-<a name="index-is-this-call-interactive"></a>
+  <h3 class="section">20.4 Distinguish Interactive
+  Calls</h3><a name="index-distinguish-interactive-calls" id=
+  "index-distinguish-interactive-calls"></a> <a name=
+  "index-is-this-call-interactive" id=
+  "index-is-this-call-interactive"></a>
 
-<p>Sometimes a command should display additional visual feedback (such
-as an informative message in the echo area) for interactive calls
-only.  There are three ways to do this.  The recommended way to test
-whether the function was called using <code>call-interactively</code> is to
-give it an optional argument <code>print-message</code> and use the
-<code>interactive</code> spec to make it non-<code>nil</code> in interactive
-calls.  Here&rsquo;s an example:
-</p>
-<div class="example">
-<pre class="example">(defun foo (&amp;optional print-message)
-  (interactive &quot;p&quot;)
+  <p>Sometimes a command should display additional visual feedback
+  (such as an informative message in the echo area) for interactive
+  calls only. There are three ways to do this. The recommended way
+  to test whether the function was called using
+  <code>call-interactively</code> is to give it an optional
+  argument <code>print-message</code> and use the
+  <code>interactive</code> spec to make it non-<code>nil</code> in
+  interactive calls. Here&rsquo;s an example:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun foo (&amp;optional print-message)
+  (interactive "p")
   (when print-message
-    (message &quot;foo&quot;)))
-</pre></div>
+    (message "foo")))
+</pre>
+  </div>
 
-<p>We use <code>&quot;p&quot;</code> because the numeric prefix argument is never
-<code>nil</code>.  Defined in this way, the function does display the
-message when called from a keyboard macro.
-</p>
-<p>The above method with the additional argument is usually best,
-because it allows callers to say &ldquo;treat this call as interactive&rdquo;.
-But you can also do the job by testing <code>called-interactively-p</code>.
-</p>
-<dl>
-<dt><a name="index-called_002dinteractively_002dp"></a>Function: <strong>called-interactively-p</strong> <em>kind</em></dt>
-<dd><p>This function returns <code>t</code> when the calling function was called
-using <code>call-interactively</code>.
-</p>
-<p>The argument <var>kind</var> should be either the symbol <code>interactive</code>
-or the symbol <code>any</code>.  If it is <code>interactive</code>, then
-<code>called-interactively-p</code> returns <code>t</code> only if the call was
-made directly by the user&mdash;e.g., if the user typed a key sequence
-bound to the calling function, but <em>not</em> if the user ran a
-keyboard macro that called the function (see <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>).  If
-<var>kind</var> is <code>any</code>, <code>called-interactively-p</code> returns
-<code>t</code> for any kind of interactive call, including keyboard macros.
-</p>
-<p>If in doubt, use <code>any</code>; the only known proper use of
-<code>interactive</code> is if you need to decide whether to display a
-helpful message while a function is running.
-</p>
-<p>A function is never considered to be called interactively if it was
-called via Lisp evaluation (or with <code>apply</code> or <code>funcall</code>).
-</p></dd></dl>
+  <p>We use <code>"p"</code> because the numeric prefix argument is
+  never <code>nil</code>. Defined in this way, the function does
+  display the message when called from a keyboard macro.</p>
 
-<p>Here is an example of using <code>called-interactively-p</code>:
-</p>
-<div class="example">
-<pre class="example">(defun foo ()
+  <p>The above method with the additional argument is usually best,
+  because it allows callers to say &ldquo;treat this call as
+  interactive&rdquo;. But you can also do the job by testing
+  <code>called-interactively-p</code>.</p>
+
+  <dl>
+    <dt><a name="index-called_002dinteractively_002dp" id=
+    "index-called_002dinteractively_002dp"></a>Function:
+    <strong>called-interactively-p</strong> <em>kind</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> when the calling
+      function was called using
+      <code>call-interactively</code>.</p>
+
+      <p>The argument <var>kind</var> should be either the symbol
+      <code>interactive</code> or the symbol <code>any</code>. If
+      it is <code>interactive</code>, then
+      <code>called-interactively-p</code> returns <code>t</code>
+      only if the call was made directly by the user&mdash;e.g., if
+      the user typed a key sequence bound to the calling function,
+      but <em>not</em> if the user ran a keyboard macro that called
+      the function (see <a href=
+      "Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>).
+      If <var>kind</var> is <code>any</code>,
+      <code>called-interactively-p</code> returns <code>t</code>
+      for any kind of interactive call, including keyboard
+      macros.</p>
+
+      <p>If in doubt, use <code>any</code>; the only known proper
+      use of <code>interactive</code> is if you need to decide
+      whether to display a helpful message while a function is
+      running.</p>
+
+      <p>A function is never considered to be called interactively
+      if it was called via Lisp evaluation (or with
+      <code>apply</code> or <code>funcall</code>).</p>
+    </dd>
+  </dl>
+
+  <p>Here is an example of using
+  <code>called-interactively-p</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun foo ()
   (interactive)
   (when (called-interactively-p 'any)
-    (message &quot;Interactive!&quot;)
+    (message "Interactive!")
     'foo-called-interactively))
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Type <kbd>M-x foo</kbd>.</span>
-     ⊣ Interactive!
-</pre><pre class="example">
-</pre><pre class="example">(foo)
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+;; <span class="roman">Type <kbd>M-x foo</kbd>.</span>
+     &acirc;&Scaron;&pound; Interactive!
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(foo)
      &rArr; nil
-</pre></div>
+</pre>
+  </div>
 
-<p>Here is another example that contrasts direct and indirect calls to
-<code>called-interactively-p</code>.
-</p>
-<div class="example">
-<pre class="example">(defun bar ()
+  <p>Here is another example that contrasts direct and indirect
+  calls to <code>called-interactively-p</code>.</p>
+
+  <div class="example">
+    <pre class="example">
+(defun bar ()
   (interactive)
-  (message &quot;%s&quot; (list (foo) (called-interactively-p 'any))))
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Type <kbd>M-x bar</kbd>.</span>
-     ⊣ (nil t)
-</pre></div>
+  (message "%s" (list (foo) (called-interactively-p 'any))))
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+;; <span class="roman">Type <kbd>M-x bar</kbd>.</span>
+     &acirc;&Scaron;&pound; (nil t)
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Command-Loop-Info.html#Command-Loop-Info" accesskey="n" rel="next">Command Loop Info</a>, Previous: <a href="Interactive-Call.html#Interactive-Call" accesskey="p" rel="prev">Interactive Call</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Command-Loop-Info.html#Command-Loop-Info"
+    accesskey="n" rel="next">Command Loop Info</a>, Previous:
+    <a href="Interactive-Call.html#Interactive-Call" accesskey="p"
+    rel="prev">Interactive Call</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

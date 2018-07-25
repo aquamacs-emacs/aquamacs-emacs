@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,119 +19,159 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Keymap Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Keymap Basics">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Keymap Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
-<link href="Format-of-Keymaps.html#Format-of-Keymaps" rel="next" title="Format of Keymaps">
-<link href="Key-Sequences.html#Key-Sequences" rel="prev" title="Key Sequences">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Keymap Basics</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Keymap Basics" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Keymap Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keymaps.html#Keymaps" rel="up" title="Keymaps" />
+  <link href="Format-of-Keymaps.html#Format-of-Keymaps" rel="next"
+  title="Format of Keymaps" />
+  <link href="Key-Sequences.html#Key-Sequences" rel="prev" title=
+  "Key Sequences" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Keymap-Basics" id="Keymap-Basics"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Format-of-Keymaps.html#Format-of-Keymaps"
+    accesskey="n" rel="next">Format of Keymaps</a>, Previous:
+    <a href="Key-Sequences.html#Key-Sequences" accesskey="p" rel=
+    "prev">Key Sequences</a>, Up: <a href="Keymaps.html#Keymaps"
+    accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Keymap-Basics-1" id="Keymap-Basics-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Keymap-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Format-of-Keymaps.html#Format-of-Keymaps" accesskey="n" rel="next">Format of Keymaps</a>, Previous: <a href="Key-Sequences.html#Key-Sequences" accesskey="p" rel="prev">Key Sequences</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Keymap-Basics-1"></a>
-<h3 class="section">21.2 Keymap Basics</h3>
-<a name="index-key-binding"></a>
-<a name="index-binding-of-a-key"></a>
-<a name="index-complete-key"></a>
-<a name="index-undefined-key"></a>
+  <h3 class="section">21.2 Keymap Basics</h3><a name=
+  "index-key-binding" id="index-key-binding"></a> <a name=
+  "index-binding-of-a-key" id="index-binding-of-a-key"></a>
+  <a name="index-complete-key" id="index-complete-key"></a>
+  <a name="index-undefined-key" id="index-undefined-key"></a>
 
-<p>A keymap is a Lisp data structure that specifies <em>key bindings</em>
-for various key sequences.
-</p>
-<p>A single keymap directly specifies definitions for individual
-events.  When a key sequence consists of a single event, its binding
-in a keymap is the keymap&rsquo;s definition for that event.  The binding of
-a longer key sequence is found by an iterative process: first find the
-definition of the first event (which must itself be a keymap); then
-find the second event&rsquo;s definition in that keymap, and so on until all
-the events in the key sequence have been processed.
-</p>
-<p>If the binding of a key sequence is a keymap, we call the key sequence
-a <em>prefix key</em>.  Otherwise, we call it a <em>complete key</em> (because
-no more events can be added to it).  If the binding is <code>nil</code>,
-we call the key <em>undefined</em>.  Examples of prefix keys are <kbd>C-c</kbd>,
-<kbd>C-x</kbd>, and <kbd>C-x 4</kbd>.  Examples of defined complete keys are
-<kbd>X</kbd>, <tt class="key">RET</tt>, and <kbd>C-x 4 C-f</kbd>.  Examples of undefined complete
-keys are <kbd>C-x C-g</kbd>, and <kbd>C-c 3</kbd>.  See <a href="Prefix-Keys.html#Prefix-Keys">Prefix Keys</a>, for more
-details.
-</p>
-<p>The rule for finding the binding of a key sequence assumes that the
-intermediate bindings (found for the events before the last) are all
-keymaps; if this is not so, the sequence of events does not form a
-unit&mdash;it is not really one key sequence.  In other words, removing one
-or more events from the end of any valid key sequence must always yield
-a prefix key.  For example, <kbd>C-f C-n</kbd> is not a key sequence;
-<kbd>C-f</kbd> is not a prefix key, so a longer sequence starting with
-<kbd>C-f</kbd> cannot be a key sequence.
-</p>
-<p>The set of possible multi-event key sequences depends on the bindings
-for prefix keys; therefore, it can be different for different keymaps,
-and can change when bindings are changed.  However, a one-event sequence
-is always a key sequence, because it does not depend on any prefix keys
-for its well-formedness.
-</p>
-<p>At any time, several primary keymaps are <em>active</em>&mdash;that is, in
-use for finding key bindings.  These are the <em>global map</em>, which is
-shared by all buffers; the <em>local keymap</em>, which is usually
-associated with a specific major mode; and zero or more <em>minor mode
-keymaps</em>, which belong to currently enabled minor modes.  (Not all minor
-modes have keymaps.)  The local keymap bindings shadow (i.e., take
-precedence over) the corresponding global bindings.  The minor mode
-keymaps shadow both local and global keymaps.  See <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>,
-for details.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Format-of-Keymaps.html#Format-of-Keymaps" accesskey="n" rel="next">Format of Keymaps</a>, Previous: <a href="Key-Sequences.html#Key-Sequences" accesskey="p" rel="prev">Key Sequences</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A keymap is a Lisp data structure that specifies <em>key
+  bindings</em> for various key sequences.</p>
 
+  <p>A single keymap directly specifies definitions for individual
+  events. When a key sequence consists of a single event, its
+  binding in a keymap is the keymap&rsquo;s definition for that
+  event. The binding of a longer key sequence is found by an
+  iterative process: first find the definition of the first event
+  (which must itself be a keymap); then find the second
+  event&rsquo;s definition in that keymap, and so on until all the
+  events in the key sequence have been processed.</p>
 
+  <p>If the binding of a key sequence is a keymap, we call the key
+  sequence a <em>prefix key</em>. Otherwise, we call it a
+  <em>complete key</em> (because no more events can be added to
+  it). If the binding is <code>nil</code>, we call the key
+  <em>undefined</em>. Examples of prefix keys are <kbd>C-c</kbd>,
+  <kbd>C-x</kbd>, and <kbd>C-x 4</kbd>. Examples of defined
+  complete keys are <kbd>X</kbd>, <tt class="key">RET</tt>, and
+  <kbd>C-x 4 C-f</kbd>. Examples of undefined complete keys are
+  <kbd>C-x C-g</kbd>, and <kbd>C-c 3</kbd>. See <a href=
+  "Prefix-Keys.html#Prefix-Keys">Prefix Keys</a>, for more
+  details.</p>
 
+  <p>The rule for finding the binding of a key sequence assumes
+  that the intermediate bindings (found for the events before the
+  last) are all keymaps; if this is not so, the sequence of events
+  does not form a unit&mdash;it is not really one key sequence. In
+  other words, removing one or more events from the end of any
+  valid key sequence must always yield a prefix key. For example,
+  <kbd>C-f C-n</kbd> is not a key sequence; <kbd>C-f</kbd> is not a
+  prefix key, so a longer sequence starting with <kbd>C-f</kbd>
+  cannot be a key sequence.</p>
+
+  <p>The set of possible multi-event key sequences depends on the
+  bindings for prefix keys; therefore, it can be different for
+  different keymaps, and can change when bindings are changed.
+  However, a one-event sequence is always a key sequence, because
+  it does not depend on any prefix keys for its
+  well-formedness.</p>
+
+  <p>At any time, several primary keymaps are
+  <em>active</em>&mdash;that is, in use for finding key bindings.
+  These are the <em>global map</em>, which is shared by all
+  buffers; the <em>local keymap</em>, which is usually associated
+  with a specific major mode; and zero or more <em>minor mode
+  keymaps</em>, which belong to currently enabled minor modes. (Not
+  all minor modes have keymaps.) The local keymap bindings shadow
+  (i.e., take precedence over) the corresponding global bindings.
+  The minor mode keymaps shadow both local and global keymaps. See
+  <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>,
+  for details.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Format-of-Keymaps.html#Format-of-Keymaps"
+    accesskey="n" rel="next">Format of Keymaps</a>, Previous:
+    <a href="Key-Sequences.html#Key-Sequences" accesskey="p" rel=
+    "prev">Key Sequences</a>, Up: <a href="Keymaps.html#Keymaps"
+    accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,14 +1,21 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>AUCTeX-RefTeX Interface - RefTeX User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="RefTeX User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="AUCTeX.html#AUCTeX" title="AUCTeX">
-<link rel="next" href="Style-Files.html#Style-Files" title="Style Files">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>AUCTeX-RefTeX Interface - RefTeX User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="RefTeX User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="AUCTeX.html#AUCTeX" title="AUCTeX" />
+  <link rel="next" href="Style-Files.html#Style-Files" title=
+  "Style Files" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents RefTeX, a package to do labels, references,
 citations and indices for LaTeX documents with Emacs.
 
@@ -30,8 +37,10 @@ Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -41,82 +50,145 @@ Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="AUCTeX-RefTeX-Interface"></a>
-<a name="AUCTeX_002dRefTeX-Interface"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Style-Files.html#Style-Files">Style Files</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="AUCTeX.html#AUCTeX">AUCTeX</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="AUCTeX-RefTeX-Interface" id=
+    "AUCTeX-RefTeX-Interface"></a> <a name=
+    "AUCTeX_002dRefTeX-Interface" id=
+    "AUCTeX_002dRefTeX-Interface"></a>
 
-<h4 class="subsection">6.8.1 The AUCTeX-<b>RefTeX</b> Interface</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Style-Files.html#Style-Files">Style Files</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "AUCTeX.html#AUCTeX">AUCTeX</a></p>
+    <hr />
+  </div>
 
-<p><b>RefTeX</b> contains code to interface with AUCTeX.  When this
-interface is turned on, both packages will interact closely.  Instead of
-using <b>RefTeX</b>'s commands directly, you can then also use them
-indirectly as part of the AUCTeX
-environment<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  The interface is turned on with
+  <h4 class="subsection">6.8.1 The AUCTeX-<b>RefTeX</b>
+  Interface</h4>
 
-<pre class="lisp">     (setq reftex-plug-into-AUCTeX t)
+  <p><b>RefTeX</b> contains code to interface with AUCTeX. When
+  this interface is turned on, both packages will interact closely.
+  Instead of using <b>RefTeX</b>'s commands directly, you can then
+  also use them indirectly as part of the AUCTeX environment<a rel=
+  "footnote" href="#fn-1" name="fnd-1" id="fnd-1"><sup>1</sup></a>.
+  The interface is turned on with</p>
+  <pre class="lisp">
+     (setq reftex-plug-into-AUCTeX t)
 </pre>
-   <p>If you need finer control about which parts of the interface are used
-and which not, read the docstring of the variable
-<code>reftex-plug-into-AUCTeX</code> or customize it with <kbd>M-x
-customize-variable &lt;RET&gt; reftex-plug-into-AUCTeX &lt;RET&gt;</kbd>.
 
-   <p>The following list describes the individual parts of the interface.
+  <p>If you need finer control about which parts of the interface
+  are used and which not, read the docstring of the variable
+  <code>reftex-plug-into-AUCTeX</code> or customize it with
+  <kbd>M-x customize-variable &lt;RET&gt; reftex-plug-into-AUCTeX
+  &lt;RET&gt;</kbd>.</p>
 
-     <ul>
-<li><a name="index-reftex_002dlabel-353"></a><a name="index-LaTeX_002dlabel_002dfunction_002c-_0040r_007bAUCTeX_007d-354"></a><a name="index-C_002dc-C_002de-355"></a><a name="index-C_002dc-C_002ds-356"></a><a name="index-LaTeX_002dsection_002c-_0040r_007bAUCTeX_007d-357"></a><a name="index-TeX_002dinsert_002dmacro_002c-_0040r_007bAUCTeX_007d-358"></a><b>AUCTeX calls </b><code>reftex-label</code><b> to insert labels</b><br>
-When a new section is created with <kbd>C-c C-s</kbd>, or a new environment
-is inserted with <kbd>C-c C-e</kbd>, AUCTeX normally prompts for a label to
-go with it.  With the interface, <code>reftex-label</code> is called instead. 
-For example, if you type <kbd>C-c C-e equation &lt;RET&gt;</kbd>, AUCTeX and
-<b>RefTeX</b> will insert
+  <p>The following list describes the individual parts of the
+  interface.</p>
 
-     <pre class="example">          \begin{equation}
+  <ul>
+    <li>
+      <a name="index-reftex_002dlabel-353" id=
+      "index-reftex_002dlabel-353"></a><a name=
+      "index-LaTeX_002dlabel_002dfunction_002c-_0040r_007bAUCTeX_007d-354"
+      id=
+      "index-LaTeX_002dlabel_002dfunction_002c-_0040r_007bAUCTeX_007d-354"></a><a name="index-C_002dc-C_002de-355"
+      id="index-C_002dc-C_002de-355"></a><a name=
+      "index-C_002dc-C_002ds-356" id=
+      "index-C_002dc-C_002ds-356"></a><a name=
+      "index-LaTeX_002dsection_002c-_0040r_007bAUCTeX_007d-357" id=
+      "index-LaTeX_002dsection_002c-_0040r_007bAUCTeX_007d-357"></a><a name="index-TeX_002dinsert_002dmacro_002c-_0040r_007bAUCTeX_007d-358"
+      id=
+      "index-TeX_002dinsert_002dmacro_002c-_0040r_007bAUCTeX_007d-358"></a><b>AUCTeX
+      calls</b> <code>reftex-label</code> <b>to insert
+      labels</b><br />
+      When a new section is created with <kbd>C-c C-s</kbd>, or a
+      new environment is inserted with <kbd>C-c C-e</kbd>, AUCTeX
+      normally prompts for a label to go with it. With the
+      interface, <code>reftex-label</code> is called instead. For
+      example, if you type <kbd>C-c C-e equation &lt;RET&gt;</kbd>,
+      AUCTeX and <b>RefTeX</b> will insert
+      <pre class="example">
+          \begin{equation}
           \label{eq:1}
           
           \end{equation}
 </pre>
-     <p class="noindent">without further prompts.
 
-     <p>Similarly, when you type <kbd>C-c C-s section &lt;RET&gt;</kbd>, <b>RefTeX</b>
-will offer its default label which is derived from the section title.
+      <p class="noindent">without further prompts.</p>
 
-     <li><b>AUCTeX tells RefTeX about new sections</b><br>
-When creating a new section with <kbd>C-c C-s</kbd>, <b>RefTeX</b> will not
-have to rescan the buffer in order to see it.
+      <p>Similarly, when you type <kbd>C-c C-s section
+      &lt;RET&gt;</kbd>, <b>RefTeX</b> will offer its default label
+      which is derived from the section title.</p>
+    </li>
 
-     <li><a name="index-reftex_002darg_002dlabel-359"></a><a name="index-TeX_002darg_002dlabel_002c-_0040r_007bAUCTeX-function_007d-360"></a><a name="index-reftex_002darg_002dref-361"></a><a name="index-TeX_002darg_002dref_002c-_0040r_007bAUCTeX-function_007d-362"></a><a name="index-reftex_002darg_002dcite-363"></a><a name="index-TeX_002darg_002dcite_002c-_0040r_007bAUCTeX-function_007d-364"></a><a name="index-reftex_002darg_002dindex-365"></a><a name="index-TeX_002darg_002dindex_002c-_0040r_007bAUCTeX-function_007d-366"></a><a name="index-TeX_002dinsert_002dmacro_002c-_0040r_007bAUCTeX-function_007d-367"></a><a name="index-C_002dc-_0040key_007bRET_007d-368"></a><b>RefTeX supplies macro arguments</b><br> When you insert a macro
-interactively with <kbd>C-c &lt;RET&gt;</kbd>, AUCTeX normally prompts for
-macro arguments.  Internally, it uses the functions
-<code>TeX-arg-label</code>, <code>TeX-arg-cite</code>, and <code>TeX-arg-index</code> to
-prompt for arguments which are labels, citation keys and index entries. 
-The interface takes over these functions<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> and
-supplies the macro arguments with <b>RefTeX's</b> mechanisms.  For
-example, when you type <kbd>C-c &lt;RET&gt; ref &lt;RET&gt;</kbd>, <b>RefTeX</b>
-will supply its label selection process (see <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a>).
+    <li><b>AUCTeX tells RefTeX about new sections</b><br />
+    When creating a new section with <kbd>C-c C-s</kbd>,
+    <b>RefTeX</b> will not have to rescan the buffer in order to
+    see it.</li>
 
-     <li><b>RefTeX tells AUCTeX about new labels, citation&ndash; and index keys</b><br>
-<b>RefTeX</b> will add all newly created labels to AUCTeX's completion list. 
-</ul>
+    <li><a name="index-reftex_002darg_002dlabel-359" id=
+    "index-reftex_002darg_002dlabel-359"></a><a name=
+    "index-TeX_002darg_002dlabel_002c-_0040r_007bAUCTeX-function_007d-360"
+    id=
+    "index-TeX_002darg_002dlabel_002c-_0040r_007bAUCTeX-function_007d-360"></a><a name="index-reftex_002darg_002dref-361"
+    id="index-reftex_002darg_002dref-361"></a><a name=
+    "index-TeX_002darg_002dref_002c-_0040r_007bAUCTeX-function_007d-362"
+    id=
+    "index-TeX_002darg_002dref_002c-_0040r_007bAUCTeX-function_007d-362"></a><a name="index-reftex_002darg_002dcite-363"
+    id="index-reftex_002darg_002dcite-363"></a><a name=
+    "index-TeX_002darg_002dcite_002c-_0040r_007bAUCTeX-function_007d-364"
+    id=
+    "index-TeX_002darg_002dcite_002c-_0040r_007bAUCTeX-function_007d-364"></a><a name="index-reftex_002darg_002dindex-365"
+    id="index-reftex_002darg_002dindex-365"></a><a name=
+    "index-TeX_002darg_002dindex_002c-_0040r_007bAUCTeX-function_007d-366"
+    id=
+    "index-TeX_002darg_002dindex_002c-_0040r_007bAUCTeX-function_007d-366"></a><a name="index-TeX_002dinsert_002dmacro_002c-_0040r_007bAUCTeX-function_007d-367"
+    id=
+    "index-TeX_002dinsert_002dmacro_002c-_0040r_007bAUCTeX-function_007d-367"></a><a name="index-C_002dc-_0040key_007bRET_007d-368"
+    id="index-C_002dc-_0040key_007bRET_007d-368"></a><b>RefTeX
+    supplies macro arguments</b><br />
+    When you insert a macro interactively with <kbd>C-c
+    &lt;RET&gt;</kbd>, AUCTeX normally prompts for macro arguments.
+    Internally, it uses the functions <code>TeX-arg-label</code>,
+    <code>TeX-arg-cite</code>, and <code>TeX-arg-index</code> to
+    prompt for arguments which are labels, citation keys and index
+    entries. The interface takes over these functions<a rel=
+    "footnote" href="#fn-2" name="fnd-2" id=
+    "fnd-2"><sup>2</sup></a> and supplies the macro arguments with
+    <b>RefTeX's</b> mechanisms. For example, when you type <kbd>C-c
+    &lt;RET&gt; ref &lt;RET&gt;</kbd>, <b>RefTeX</b> will supply
+    its label selection process (see <a href=
+    "Referencing-Labels.html#Referencing-Labels">Referencing
+    Labels</a>).</li>
 
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> <b>RefTeX</b> 4.0 and AUCTeX 9.10c will be
-needed for all of this to work.  Parts of it work also with earlier
-versions.</p>
+    <li><b>RefTeX tells AUCTeX about new labels, citation&ndash;
+    and index keys</b><br />
+    <b>RefTeX</b> will add all newly created labels to AUCTeX's
+    completion list.</li>
+  </ul>
 
-   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> <code>fset</code> is used to
-do this, which is not reversible.  However, <b>RefTeX</b> implements the
-old functionality when you later decide to turn off the interface.</p>
+  <div class="footnote">
+    <hr />
 
-   <hr></div>
+    <h4>Footnotes</h4>
 
-   </body></html>
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> <b>RefTeX</b> 4.0 and AUCTeX 9.10c will
+    be needed for all of this to work. Parts of it work also with
+    earlier versions.</p>
 
+    <p class="footnote"><small>[<a name="fn-2" href="#fnd-2" id=
+    "fn-2">2</a>]</small> <code>fset</code> is used to do this,
+    which is not reversible. However, <b>RefTeX</b> implements the
+    old functionality when you later decide to turn off the
+    interface.</p>
+    <hr />
+  </div>
+</body>
+</html>

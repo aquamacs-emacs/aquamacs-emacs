@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Stack Basics - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Introduction.html#Introduction" title="Introduction">
-<link rel="prev" href="Help-Commands.html#Help-Commands" title="Help Commands">
-<link rel="next" href="Numeric-Entry.html#Numeric-Entry" title="Numeric Entry">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Stack Basics - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Introduction.html#Introduction" title=
+  "Introduction" />
+  <link rel="prev" href="Help-Commands.html#Help-Commands" title=
+  "Help Commands" />
+  <link rel="next" href="Numeric-Entry.html#Numeric-Entry" title=
+  "Numeric Entry" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +38,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,61 +51,84 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Stack-Basics"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Numeric-Entry.html#Numeric-Entry">Numeric Entry</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Help-Commands.html#Help-Commands">Help Commands</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Introduction.html#Introduction">Introduction</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Stack-Basics" id="Stack-Basics"></a>
 
-<h3 class="section">4.3 Stack Basics</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Numeric-Entry.html#Numeric-Entry">Numeric Entry</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Help-Commands.html#Help-Commands">Help Commands</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Introduction.html#Introduction">Introduction</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-Stack-basics-170"></a><!-- [fix-tut RPN Calculations and the Stack] -->
-Calc uses RPN notation.  If you are not familiar with RPN, see <a href="RPN-Tutorial.html#RPN-Tutorial">RPN Tutorial</a>.
+  <h3 class="section">4.3 Stack Basics</h3>
 
-   <p>To add the numbers 1 and 2 in Calc you would type the keys:
-<kbd>1 &lt;RET&gt; 2 +</kbd>. 
-(&lt;RET&gt; corresponds to the &lt;ENTER&gt; key on most calculators.) 
-The first three keystrokes &ldquo;push&rdquo; the numbers 1 and 2 onto the stack.  The
-<kbd>+</kbd> key always &ldquo;pops&rdquo; the top two numbers from the stack, adds them,
-and pushes the result (3) back onto the stack.  This number is ready for
-further calculations:  <kbd>5 -</kbd> pushes 5 onto the stack, then pops the
-3 and 5, subtracts them, and pushes the result (<i>-2</i>).
+  <p class="noindent"><a name="index-Stack-basics-170" id=
+  "index-Stack-basics-170"></a>
+  <!-- [fix-tut RPN Calculations and the Stack] -->
+  Calc uses RPN notation. If you are not familiar with RPN, see
+  <a href="RPN-Tutorial.html#RPN-Tutorial">RPN Tutorial</a>.</p>
 
-   <p>Note that the &ldquo;top&rdquo; of the stack actually appears at the <em>bottom</em>
-of the buffer.  A line containing a single &lsquo;<samp><span class="samp">.</span></samp>&rsquo; character signifies
-the end of the buffer; Calculator commands operate on the number(s)
-directly above this line.  The <kbd>d t</kbd> (<code>calc-truncate-stack</code>)
-command allows you to move the &lsquo;<samp><span class="samp">.</span></samp>&rsquo; marker up and down in the stack;
-see <a href="Truncating-the-Stack.html#Truncating-the-Stack">Truncating the Stack</a>.
+  <p>To add the numbers 1 and 2 in Calc you would type the keys:
+  <kbd>1 &lt;RET&gt; 2 +</kbd>. (&lt;RET&gt; corresponds to the
+  &lt;ENTER&gt; key on most calculators.) The first three
+  keystrokes &ldquo;push&rdquo; the numbers 1 and 2 onto the stack.
+  The <kbd>+</kbd> key always &ldquo;pops&rdquo; the top two
+  numbers from the stack, adds them, and pushes the result (3) back
+  onto the stack. This number is ready for further calculations:
+  <kbd>5 -</kbd> pushes 5 onto the stack, then pops the 3 and 5,
+  subtracts them, and pushes the result (<i>-2</i>).</p>
 
-   <p><a name="index-d-l-171"></a><a name="index-calc_002dline_002dnumbering-172"></a>Stack elements are numbered consecutively, with number 1 being the top of
-the stack.  These line numbers are ordinarily displayed on the lefthand side
-of the window.  The <kbd>d l</kbd> (<code>calc-line-numbering</code>) command controls
-whether these numbers appear.  (Line numbers may be turned off since they
-slow the Calculator down a bit and also clutter the display.)
+  <p>Note that the &ldquo;top&rdquo; of the stack actually appears
+  at the <em>bottom</em> of the buffer. A line containing a single
+  &lsquo;<samp><span class="samp">.</span></samp>&rsquo; character
+  signifies the end of the buffer; Calculator commands operate on
+  the number(s) directly above this line. The <kbd>d t</kbd>
+  (<code>calc-truncate-stack</code>) command allows you to move the
+  &lsquo;<samp><span class="samp">.</span></samp>&rsquo; marker up
+  and down in the stack; see <a href=
+  "Truncating-the-Stack.html#Truncating-the-Stack">Truncating the
+  Stack</a>.</p>
 
-   <p><a name="index-o-173"></a><a name="index-calc_002drealign-174"></a>The unshifted letter <kbd>o</kbd> (<code>calc-realign</code>) command repositions
-the cursor to its top-of-stack &ldquo;home&rdquo; position.  It also undoes any
-horizontal scrolling in the window.  If you give it a numeric prefix
-argument, it instead moves the cursor to the specified stack element.
+  <p><a name="index-d-l-171" id="index-d-l-171"></a><a name=
+  "index-calc_002dline_002dnumbering-172" id=
+  "index-calc_002dline_002dnumbering-172"></a>Stack elements are
+  numbered consecutively, with number 1 being the top of the stack.
+  These line numbers are ordinarily displayed on the lefthand side
+  of the window. The <kbd>d l</kbd>
+  (<code>calc-line-numbering</code>) command controls whether these
+  numbers appear. (Line numbers may be turned off since they slow
+  the Calculator down a bit and also clutter the display.)</p>
 
-   <p>The &lt;RET&gt; (or equivalent &lt;SPC&gt;) key is only required to separate
-two consecutive numbers. 
-(After all, if you typed <kbd>1 2</kbd> by themselves the Calculator
-would enter the number 12.)  If you press &lt;RET&gt; or &lt;SPC&gt; <em>not</em>
-right after typing a number, the key duplicates the number on the top of
-the stack.  <kbd>&lt;RET&gt; *</kbd> is thus a handy way to square a number.
+  <p><a name="index-o-173" id="index-o-173"></a><a name=
+  "index-calc_002drealign-174" id=
+  "index-calc_002drealign-174"></a>The unshifted letter
+  <kbd>o</kbd> (<code>calc-realign</code>) command repositions the
+  cursor to its top-of-stack &ldquo;home&rdquo; position. It also
+  undoes any horizontal scrolling in the window. If you give it a
+  numeric prefix argument, it instead moves the cursor to the
+  specified stack element.</p>
 
-   <p>The &lt;DEL&gt; key pops and throws away the top number on the stack. 
-The &lt;TAB&gt; key swaps the top two objects on the stack. 
-See <a href="Stack-and-Trail.html#Stack-and-Trail">Stack and Trail</a>, for descriptions of these and other stack-related
-commands.
+  <p>The &lt;RET&gt; (or equivalent &lt;SPC&gt;) key is only
+  required to separate two consecutive numbers. (After all, if you
+  typed <kbd>1 2</kbd> by themselves the Calculator would enter the
+  number 12.) If you press &lt;RET&gt; or &lt;SPC&gt; <em>not</em>
+  right after typing a number, the key duplicates the number on the
+  top of the stack. <kbd>&lt;RET&gt; *</kbd> is thus a handy way to
+  square a number.</p>
 
-   </body></html>
-
+  <p>The &lt;DEL&gt; key pops and throws away the top number on the
+  stack. The &lt;TAB&gt; key swaps the top two objects on the
+  stack. See <a href="Stack-and-Trail.html#Stack-and-Trail">Stack
+  and Trail</a>, for descriptions of these and other stack-related
+  commands.</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,185 +20,396 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Using the Shell</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Using the Shell">
-<meta name="keywords" content="IDLWAVE User Manual: Using the Shell">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" rel="up" title="The IDLWAVE Shell">
-<link href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell" rel="next" title="Commands Sent to the Shell">
-<link href="Starting-the-Shell.html#Starting-the-Shell" rel="prev" title="Starting the Shell">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Using the Shell</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Using the Shell" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Using the Shell" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" rel="up"
+  title="The IDLWAVE Shell" />
+  <link href=
+  "Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell" rel=
+  "next" title="Commands Sent to the Shell" />
+  <link href="Starting-the-Shell.html#Starting-the-Shell" rel=
+  "prev" title="Starting the Shell" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-the-Shell"></a>
-<div class="header">
-<p>
-Next: <a href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell" accesskey="n" rel="next">Commands Sent to the Shell</a>, Previous: <a href="Starting-the-Shell.html#Starting-the-Shell" accesskey="p" rel="prev">Starting the Shell</a>, Up: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" accesskey="u" rel="up">The IDLWAVE Shell</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-the-Shell-1"></a>
-<h3 class="section">5.2 Using the Shell</h3>
-<a name="index-Comint"></a>
-<a name="index-Shell_002c-basic-commands"></a>
+<body lang="en" xml:lang="en">
+  <a name="Using-the-Shell" id="Using-the-Shell"></a>
 
-<p>The IDLWAVE shell works in the same fashion as other shell modes in
-Emacs.  It provides command history, command line editing and job
-control.  The <tt class="key">UP</tt> and <tt class="key">DOWN</tt> arrows cycle through the input
-history just like in an X terminal<a name="DOCF3" href="#FOOT3"><sup>3</sup></a>.  The history is preserved
-between emacs and IDL sessions.  Here is a list of commonly used
-commands:
-</p>
-<table>
-<tr><td width="12%"><tt class="key">UP</tt>, <tt class="key">M-p</tt></td><td width="88%">Cycle backwards in input history</td></tr>
-<tr><td width="12%"><tt class="key">DOWN</tt>, <tt class="key">M-n</tt></td><td width="88%">Cycle forwards in input history</td></tr>
-<tr><td width="12%"><kbd>M-r</kbd></td><td width="88%">Previous input matching a regexp</td></tr>
-<tr><td width="12%"><kbd>M-s</kbd></td><td width="88%">Next input matching a regexp</td></tr>
-<tr><td width="12%"><kbd>return</kbd></td><td width="88%">Send input or copy line to current prompt</td></tr>
-<tr><td width="12%"><kbd>C-c C-a</kbd></td><td width="88%">Beginning of line; skip prompt</td></tr>
-<tr><td width="12%"><kbd>C-c C-u</kbd></td><td width="88%">Kill input to beginning of line</td></tr>
-<tr><td width="12%"><kbd>C-c C-w</kbd></td><td width="88%">Kill word before cursor</td></tr>
-<tr><td width="12%"><kbd>C-c C-c</kbd></td><td width="88%">Send ^C</td></tr>
-<tr><td width="12%"><kbd>C-c C-z</kbd></td><td width="88%">Send ^Z</td></tr>
-<tr><td width="12%"><kbd>C-c C-\</kbd></td><td width="88%">Send ^\</td></tr>
-<tr><td width="12%"><kbd>C-c C-o</kbd></td><td width="88%">Delete last batch of process output</td></tr>
-<tr><td width="12%"><kbd>C-c C-r</kbd></td><td width="88%">Show last batch of process output</td></tr>
-<tr><td width="12%"><kbd>C-c C-l</kbd></td><td width="88%">List input history</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href=
+    "Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell"
+    accesskey="n" rel="next">Commands Sent to the Shell</a>,
+    Previous: <a href="Starting-the-Shell.html#Starting-the-Shell"
+    accesskey="p" rel="prev">Starting the Shell</a>, Up: <a href=
+    "The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" accesskey="u" rel=
+    "up">The IDLWAVE Shell</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-the-Shell-1" id="Using-the-Shell-1"></a>
 
-<p>In addition to these standard <samp>comint</samp> commands,
-<code>idlwave-shell-mode</code> provides many of the same commands which
-simplify writing IDL code available in IDLWAVE buffers.  This includes
-abbreviations, online help, and completion.  See <a href="Routine-Info.html#Routine-Info">Routine Info</a> and
-<a href="Online-Help.html#Online-Help">Online Help</a> and <a href="Completion.html#Completion">Completion</a> for more information on these
-commands.
-</p>
-<a name="index-Completion_002c-in-the-shell"></a>
-<a name="index-Routine-info_002c-in-the-shell"></a>
-<a name="index-Online-Help_002c-in-the-shell"></a>
-<table>
-<tr><td width="12%"><kbd><span class="key">TAB</span></kbd></td><td width="88%">Completion of file names (between quotes and after executive
-commands &lsquo;<samp>.run</samp>&rsquo; and &lsquo;<samp>.compile</samp>&rsquo;), routine names, class names,
-keywords, system variables, system variable tags etc.
-(<code>idlwave-shell-complete</code>).</td></tr>
-<tr><td width="12%"><kbd>M-<span class="key">TAB</span></kbd></td><td width="88%">Same as <tt class="key">TAB</tt></td></tr>
-<tr><td width="12%"><kbd>C-c ?</kbd></td><td width="88%">Routine Info display (<code>idlwave-routine-info</code>)</td></tr>
-<tr><td width="12%"><kbd>M-?</kbd></td><td width="88%">IDL online help on routine (<code>idlwave-routine-info-from-idlhelp</code>)</td></tr>
-<tr><td width="12%"><kbd>C-c C-i</kbd></td><td width="88%">Update routine info from buffers and shell
-(<code>idlwave-update-routine-info</code>)</td></tr>
-<tr><td width="12%"><kbd>C-c C-v</kbd></td><td width="88%">Find the source file of a routine (<code>idlwave-find-module</code>)</td></tr>
-<tr><td width="12%"><kbd>C-c C-t</kbd></td><td width="88%">Find the source file of a routine in the currently visited file
-(<code>idlwave-find-module-this-file</code>).</td></tr>
-<tr><td width="12%"><kbd>C-c =</kbd></td><td width="88%">Compile a library routine (<code>idlwave-resolve</code>)</td></tr>
-</table>
+  <h3 class="section">5.2 Using the Shell</h3><a name=
+  "index-Comint" id="index-Comint"></a> <a name=
+  "index-Shell_002c-basic-commands" id=
+  "index-Shell_002c-basic-commands"></a>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002darrows_002ddo_002dhistory"></a>User Option: <strong>idlwave-shell-arrows-do-history</strong> <em>(<code>t</code>)</em></dt>
-<dd><p>Non-<code>nil</code> means <tt class="key">UP</tt> and <tt class="key">DOWN</tt> arrows move through command
-history like xterm.
-</p></dd></dl>
+  <p>The IDLWAVE shell works in the same fashion as other shell
+  modes in Emacs. It provides command history, command line editing
+  and job control. The <tt class="key">UP</tt> and <tt class=
+  "key">DOWN</tt> arrows cycle through the input history just like
+  in an X terminal<a name="DOCF3" href="#FOOT3" id=
+  "DOCF3"><sup>3</sup></a>. The history is preserved between emacs
+  and IDL sessions. Here is a list of commonly used commands:</p>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002dcomint_002dsettings"></a>User Option: <strong>idlwave-shell-comint-settings</strong></dt>
-<dd><p>Alist of special settings for the comint variables in the IDLWAVE Shell.
-</p></dd></dl>
+  <table>
+    <tr>
+      <td width="12%"><tt class="key">UP</tt>, <tt class=
+      "key">M-p</tt></td>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002dfile_002dname_002dchars"></a>User Option: <strong>idlwave-shell-file-name-chars</strong></dt>
-<dd><p>The characters allowed in file names, as a string.  Used for file name
-completion.
-</p></dd></dl>
+      <td width="88%">Cycle backwards in input history</td>
+    </tr>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002dgraphics_002dwindow_002dsize"></a>User Option: <strong>idlwave-shell-graphics-window-size</strong></dt>
-<dd><p>Size of IDL graphics windows popped up by special IDLWAVE command.
-</p></dd></dl>
+    <tr>
+      <td width="12%"><tt class="key">DOWN</tt>, <tt class=
+      "key">M-n</tt></td>
 
-<a name="index-Input-mode"></a>
-<a name="index-Character-input-mode-_0028Shell_0029"></a>
-<a name="index-Line-input-mode-_0028Shell_0029"></a>
-<a name="index-Magic-spells_002c-for-input-mode"></a>
-<a name="index-Spells_002c-magic"></a>
-<p>IDLWAVE works in line input mode: You compose a full command line, using
-all the power Emacs gives you to do this.  When you press <tt class="key">RET</tt>, the
-whole line is sent to IDL.  Sometimes it is necessary to send single
-characters (without a newline), for example when an IDL program is
-waiting for single character input with the <code>GET_KBRD</code> function.
-You can send a single character to IDL with the command <kbd>C-c C-x</kbd>
-(<code>idlwave-shell-send-char</code>).  When you press <kbd>C-c C-y</kbd>
-(<code>idlwave-shell-char-mode-loop</code>), IDLWAVE runs a blocking loop
-which accepts characters and immediately sends them to IDL.  The loop
-can be exited with <kbd>C-g</kbd>.  It terminates also automatically when the
-current IDL command is finished.  Check the documentation of the two
-variables described below for a way to make IDL programs trigger
-automatic switches of the input mode.
-</p>
-<dl>
-<dt><a name="index-idlwave_002dshell_002duse_002dinput_002dmode_002dmagic"></a>User Option: <strong>idlwave-shell-use-input-mode-magic</strong> <em>(<code>nil</code>)</em></dt>
-<dd><p>Non-<code>nil</code> means IDLWAVE should check for input mode spells in
-output.
-</p></dd></dl>
+      <td width="88%">Cycle forwards in input history</td>
+    </tr>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002dinput_002dmode_002dspells"></a>User Option: <strong>idlwave-shell-input-mode-spells</strong></dt>
-<dd><p>The three regular expressions which match the magic spells for input
-modes.
-</p></dd></dl>
+    <tr>
+      <td width="12%"><kbd>M-r</kbd></td>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+      <td width="88%">Previous input matching a regexp</td>
+    </tr>
 
-<h3><a name="FOOT3" href="#DOCF3">(3)</a></h3>
-<p>This is different from
-normal Emacs/Comint behavior, but more like an xterm.  If you prefer the
-default comint functionality, check the variable
-<code>idlwave-shell-arrows-do-history</code>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell" accesskey="n" rel="next">Commands Sent to the Shell</a>, Previous: <a href="Starting-the-Shell.html#Starting-the-Shell" accesskey="p" rel="prev">Starting the Shell</a>, Up: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" accesskey="u" rel="up">The IDLWAVE Shell</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <tr>
+      <td width="12%"><kbd>M-s</kbd></td>
 
+      <td width="88%">Next input matching a regexp</td>
+    </tr>
 
+    <tr>
+      <td width="12%"><kbd>return</kbd></td>
 
+      <td width="88%">Send input or copy line to current
+      prompt</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-a</kbd></td>
+
+      <td width="88%">Beginning of line; skip prompt</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-u</kbd></td>
+
+      <td width="88%">Kill input to beginning of line</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-w</kbd></td>
+
+      <td width="88%">Kill word before cursor</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-c</kbd></td>
+
+      <td width="88%">Send ^C</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-z</kbd></td>
+
+      <td width="88%">Send ^Z</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-\</kbd></td>
+
+      <td width="88%">Send ^\</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-o</kbd></td>
+
+      <td width="88%">Delete last batch of process output</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-r</kbd></td>
+
+      <td width="88%">Show last batch of process output</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-l</kbd></td>
+
+      <td width="88%">List input history</td>
+    </tr>
+  </table>
+
+  <p>In addition to these standard <samp>comint</samp> commands,
+  <code>idlwave-shell-mode</code> provides many of the same
+  commands which simplify writing IDL code available in IDLWAVE
+  buffers. This includes abbreviations, online help, and
+  completion. See <a href="Routine-Info.html#Routine-Info">Routine
+  Info</a> and <a href="Online-Help.html#Online-Help">Online
+  Help</a> and <a href="Completion.html#Completion">Completion</a>
+  for more information on these commands.</p><a name=
+  "index-Completion_002c-in-the-shell" id=
+  "index-Completion_002c-in-the-shell"></a> <a name=
+  "index-Routine-info_002c-in-the-shell" id=
+  "index-Routine-info_002c-in-the-shell"></a> <a name=
+  "index-Online-Help_002c-in-the-shell" id=
+  "index-Online-Help_002c-in-the-shell"></a>
+
+  <table>
+    <tr>
+      <td width="12%"><kbd><span class="key">TAB</span></kbd></td>
+
+      <td width="88%">Completion of file names (between quotes and
+      after executive commands &lsquo;<samp>.run</samp>&rsquo; and
+      &lsquo;<samp>.compile</samp>&rsquo;), routine names, class
+      names, keywords, system variables, system variable tags etc.
+      (<code>idlwave-shell-complete</code>).</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>M-<span class=
+      "key">TAB</span></kbd></td>
+
+      <td width="88%">Same as <tt class="key">TAB</tt></td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c ?</kbd></td>
+
+      <td width="88%">Routine Info display
+      (<code>idlwave-routine-info</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>M-?</kbd></td>
+
+      <td width="88%">IDL online help on routine
+      (<code>idlwave-routine-info-from-idlhelp</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-i</kbd></td>
+
+      <td width="88%">Update routine info from buffers and shell
+      (<code>idlwave-update-routine-info</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-v</kbd></td>
+
+      <td width="88%">Find the source file of a routine
+      (<code>idlwave-find-module</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c C-t</kbd></td>
+
+      <td width="88%">Find the source file of a routine in the
+      currently visited file
+      (<code>idlwave-find-module-this-file</code>).</td>
+    </tr>
+
+    <tr>
+      <td width="12%"><kbd>C-c =</kbd></td>
+
+      <td width="88%">Compile a library routine
+      (<code>idlwave-resolve</code>)</td>
+    </tr>
+  </table>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002darrows_002ddo_002dhistory" id=
+    "index-idlwave_002dshell_002darrows_002ddo_002dhistory"></a>User
+    Option: <strong>idlwave-shell-arrows-do-history</strong>
+    <em>(<code>t</code>)</em></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means <tt class="key">UP</tt> and
+      <tt class="key">DOWN</tt> arrows move through command history
+      like xterm.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-idlwave_002dshell_002dcomint_002dsettings"
+    id="index-idlwave_002dshell_002dcomint_002dsettings"></a>User
+    Option: <strong>idlwave-shell-comint-settings</strong></dt>
+
+    <dd>
+      <p>Alist of special settings for the comint variables in the
+      IDLWAVE Shell.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002dfile_002dname_002dchars" id=
+    "index-idlwave_002dshell_002dfile_002dname_002dchars"></a>User
+    Option: <strong>idlwave-shell-file-name-chars</strong></dt>
+
+    <dd>
+      <p>The characters allowed in file names, as a string. Used
+      for file name completion.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002dgraphics_002dwindow_002dsize" id=
+    "index-idlwave_002dshell_002dgraphics_002dwindow_002dsize"></a>User
+    Option:
+    <strong>idlwave-shell-graphics-window-size</strong></dt>
+
+    <dd>
+      <p>Size of IDL graphics windows popped up by special IDLWAVE
+      command.</p>
+    </dd>
+  </dl><a name="index-Input-mode" id="index-Input-mode"></a>
+  <a name="index-Character-input-mode-_0028Shell_0029" id=
+  "index-Character-input-mode-_0028Shell_0029"></a> <a name=
+  "index-Line-input-mode-_0028Shell_0029" id=
+  "index-Line-input-mode-_0028Shell_0029"></a> <a name=
+  "index-Magic-spells_002c-for-input-mode" id=
+  "index-Magic-spells_002c-for-input-mode"></a> <a name=
+  "index-Spells_002c-magic" id="index-Spells_002c-magic"></a>
+
+  <p>IDLWAVE works in line input mode: You compose a full command
+  line, using all the power Emacs gives you to do this. When you
+  press <tt class="key">RET</tt>, the whole line is sent to IDL.
+  Sometimes it is necessary to send single characters (without a
+  newline), for example when an IDL program is waiting for single
+  character input with the <code>GET_KBRD</code> function. You can
+  send a single character to IDL with the command <kbd>C-c
+  C-x</kbd> (<code>idlwave-shell-send-char</code>). When you press
+  <kbd>C-c C-y</kbd> (<code>idlwave-shell-char-mode-loop</code>),
+  IDLWAVE runs a blocking loop which accepts characters and
+  immediately sends them to IDL. The loop can be exited with
+  <kbd>C-g</kbd>. It terminates also automatically when the current
+  IDL command is finished. Check the documentation of the two
+  variables described below for a way to make IDL programs trigger
+  automatic switches of the input mode.</p>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002duse_002dinput_002dmode_002dmagic"
+    id=
+    "index-idlwave_002dshell_002duse_002dinput_002dmode_002dmagic"></a>User
+    Option: <strong>idlwave-shell-use-input-mode-magic</strong>
+    <em>(<code>nil</code>)</em></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means IDLWAVE should check for input
+      mode spells in output.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002dinput_002dmode_002dspells" id=
+    "index-idlwave_002dshell_002dinput_002dmode_002dspells"></a>User
+    Option: <strong>idlwave-shell-input-mode-spells</strong></dt>
+
+    <dd>
+      <p>The three regular expressions which match the magic spells
+      for input modes.</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT3" href="#DOCF3" id="FOOT3">(3)</a></h3>
+
+    <p>This is different from normal Emacs/Comint behavior, but
+    more like an xterm. If you prefer the default comint
+    functionality, check the variable
+    <code>idlwave-shell-arrows-do-history</code>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell"
+    accesskey="n" rel="next">Commands Sent to the Shell</a>,
+    Previous: <a href="Starting-the-Shell.html#Starting-the-Shell"
+    accesskey="p" rel="prev">Starting the Shell</a>, Up: <a href=
+    "The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" accesskey="u" rel=
+    "up">The IDLWAVE Shell</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

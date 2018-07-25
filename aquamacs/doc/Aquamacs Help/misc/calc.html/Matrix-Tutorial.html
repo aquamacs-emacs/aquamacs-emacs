@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,299 +18,383 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Matrix Tutorial</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Matrix Tutorial">
-<meta name="keywords" content="GNU Emacs Calc Manual: Matrix Tutorial">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" rel="up" title="Vector/Matrix Tutorial">
-<link href="List-Tutorial.html#List-Tutorial" rel="next" title="List Tutorial">
-<link href="Vector-Analysis-Tutorial.html#Vector-Analysis-Tutorial" rel="prev" title="Vector Analysis Tutorial">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Matrix Tutorial</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Matrix Tutorial" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Matrix Tutorial" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" rel=
+  "up" title="Vector/Matrix Tutorial" />
+  <link href="List-Tutorial.html#List-Tutorial" rel="next" title=
+  "List Tutorial" />
+  <link href=
+  "Vector-Analysis-Tutorial.html#Vector-Analysis-Tutorial" rel=
+  "prev" title="Vector Analysis Tutorial" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Matrix-Tutorial"></a>
-<div class="header">
-<p>
-Next: <a href="List-Tutorial.html#List-Tutorial" accesskey="n" rel="next">List Tutorial</a>, Previous: <a href="Vector-Analysis-Tutorial.html#Vector-Analysis-Tutorial" accesskey="p" rel="prev">Vector Analysis Tutorial</a>, Up: <a href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" accesskey="u" rel="up">Vector/Matrix Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Matrices"></a>
-<h4 class="subsection">2.3.2 Matrices</h4>
+<body lang="en" xml:lang="en">
+  <a name="Matrix-Tutorial" id="Matrix-Tutorial"></a>
 
-<p>A <em>matrix</em> is just a vector of vectors, all the same length.
-This means you can enter a matrix using nested brackets.  You can
-also use the semicolon character to enter a matrix.  We&rsquo;ll show
-both methods here:
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  [ [ 1, 2, 3 ]             1:  [ [ 1, 2, 3 ]
+  <div class="header">
+    <p>Next: <a href="List-Tutorial.html#List-Tutorial" accesskey=
+    "n" rel="next">List Tutorial</a>, Previous: <a href=
+    "Vector-Analysis-Tutorial.html#Vector-Analysis-Tutorial"
+    accesskey="p" rel="prev">Vector Analysis Tutorial</a>, Up:
+    <a href=
+    "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial"
+    accesskey="u" rel="up">Vector/Matrix Tutorial</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Matrices" id="Matrices"></a>
+
+  <h4 class="subsection">2.3.2 Matrices</h4>
+
+  <p>A <em>matrix</em> is just a vector of vectors, all the same
+  length. This means you can enter a matrix using nested brackets.
+  You can also use the semicolon character to enter a matrix.
+  We&rsquo;ll show both methods here:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  [ [ 1, 2, 3 ]             1:  [ [ 1, 2, 3 ]
       [ 4, 5, 6 ] ]                 [ 4, 5, 6 ] ]
     .                             .
 
-  [[1 2 3] [4 5 6]]             ' [1 2 3; 4 5 6] <span class="key">RET</span>
-</pre></div>
+  [[1 2 3] [4 5 6]]             ' [1 2 3; 4 5 6] <span class=
+"key">RET</span>
+</pre>
+  </div>
 
-<p>We&rsquo;ll be using this matrix again, so type <kbd>s 4</kbd> to save it now.
-</p>
-<p>Note that semicolons work with incomplete vectors, but they work
-better in algebraic entry.  That&rsquo;s why we use the apostrophe in
-the second example.
-</p>
-<p>When two matrices are multiplied, the lefthand matrix must have
-the same number of columns as the righthand matrix has rows.
-Row &lsquo;<samp>i</samp>&rsquo;, column &lsquo;<samp>j</samp>&rsquo; of the result is effectively the
-dot product of row &lsquo;<samp>i</samp>&rsquo; of the left matrix by column &lsquo;<samp>j</samp>&rsquo;
-of the right matrix.
-</p>
-<p>If we try to duplicate this matrix and multiply it by itself,
-the dimensions are wrong and the multiplication cannot take place:
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  [ [ 1, 2, 3 ]   * [ [ 1, 2, 3 ]
+  <p>We&rsquo;ll be using this matrix again, so type <kbd>s 4</kbd>
+  to save it now.</p>
+
+  <p>Note that semicolons work with incomplete vectors, but they
+  work better in algebraic entry. That&rsquo;s why we use the
+  apostrophe in the second example.</p>
+
+  <p>When two matrices are multiplied, the lefthand matrix must
+  have the same number of columns as the righthand matrix has rows.
+  Row &lsquo;<samp>i</samp>&rsquo;, column
+  &lsquo;<samp>j</samp>&rsquo; of the result is effectively the dot
+  product of row &lsquo;<samp>i</samp>&rsquo; of the left matrix by
+  column &lsquo;<samp>j</samp>&rsquo; of the right matrix.</p>
+
+  <p>If we try to duplicate this matrix and multiply it by itself,
+  the dimensions are wrong and the multiplication cannot take
+  place:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  [ [ 1, 2, 3 ]   * [ [ 1, 2, 3 ]
       [ 4, 5, 6 ] ]     [ 4, 5, 6 ] ]
     .
 
     <span class="key">RET</span> *
-</pre></div>
+</pre>
+  </div>
 
-<p>Though rather hard to read, this is a formula which shows the product
-of two matrices.  The &lsquo;<samp>*</samp>&rsquo; function, having invalid arguments, has
-been left in symbolic form.
-</p>
-<p>We can multiply the matrices if we <em>transpose</em> one of them first.
-</p>
-<div class="smallexample">
-<pre class="smallexample">2:  [ [ 1, 2, 3 ]       1:  [ [ 14, 32 ]      1:  [ [ 17, 22, 27 ]
+  <p>Though rather hard to read, this is a formula which shows the
+  product of two matrices. The &lsquo;<samp>*</samp>&rsquo;
+  function, having invalid arguments, has been left in symbolic
+  form.</p>
+
+  <p>We can multiply the matrices if we <em>transpose</em> one of
+  them first.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+2:  [ [ 1, 2, 3 ]       1:  [ [ 14, 32 ]      1:  [ [ 17, 22, 27 ]
       [ 4, 5, 6 ] ]           [ 32, 77 ] ]          [ 22, 29, 36 ]
 1:  [ [ 1, 4 ]              .                       [ 27, 36, 45 ] ]
       [ 2, 5 ]                                    .
       [ 3, 6 ] ]
     .
 
-    U v t                   *                     U <span class="key">TAB</span> *
-</pre></div>
+    U v t                   *                     U <span class=
+"key">TAB</span> *
+</pre>
+  </div>
 
-<p>Matrix multiplication is not commutative; indeed, switching the
-order of the operands can even change the dimensions of the result
-matrix, as happened here!
-</p>
-<p>If you multiply a plain vector by a matrix, it is treated as a
-single row or column depending on which side of the matrix it is
-on.  The result is a plain vector which should also be interpreted
-as a row or column as appropriate.
-</p>
-<div class="smallexample">
-<pre class="smallexample">2:  [ [ 1, 2, 3 ]      1:  [14, 32]
+  <p>Matrix multiplication is not commutative; indeed, switching
+  the order of the operands can even change the dimensions of the
+  result matrix, as happened here!</p>
+
+  <p>If you multiply a plain vector by a matrix, it is treated as a
+  single row or column depending on which side of the matrix it is
+  on. The result is a plain vector which should also be interpreted
+  as a row or column as appropriate.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+2:  [ [ 1, 2, 3 ]      1:  [14, 32]
       [ 4, 5, 6 ] ]        .
 1:  [1, 2, 3]
     .
 
     r 4 r 1                *
-</pre></div>
+</pre>
+  </div>
 
-<p>Multiplying in the other order wouldn&rsquo;t work because the number of
-rows in the matrix is different from the number of elements in the
-vector.
-</p>
-<p>(&bull;) <strong>Exercise 1.</strong>  Use &lsquo;<samp>*</samp>&rsquo; to sum along the rows
-of the above
-2x3
-matrix to get &lsquo;<samp>[6, 15]</samp>&rsquo;.  Now use &lsquo;<samp>*</samp>&rsquo; to sum along the columns
-to get &lsquo;<samp>[5, 7, 9]</samp>&rsquo;.
-See <a href="Matrix-Answer-1.html#Matrix-Answer-1">1</a>. (&bull;)
-</p>
-<a name="index-Identity-matrix"></a>
-<p>An <em>identity matrix</em> is a square matrix with ones along the
-diagonal and zeros elsewhere.  It has the property that multiplication
-by an identity matrix, on the left or on the right, always produces
-the original matrix.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  [ [ 1, 2, 3 ]      2:  [ [ 1, 2, 3 ]      1:  [ [ 1, 2, 3 ]
+  <p>Multiplying in the other order wouldn&rsquo;t work because the
+  number of rows in the matrix is different from the number of
+  elements in the vector.</p>
+
+  <p>(&bull;) <strong>Exercise 1.</strong> Use
+  &lsquo;<samp>*</samp>&rsquo; to sum along the rows of the above
+  2x3 matrix to get &lsquo;<samp>[6, 15]</samp>&rsquo;. Now use
+  &lsquo;<samp>*</samp>&rsquo; to sum along the columns to get
+  &lsquo;<samp>[5, 7, 9]</samp>&rsquo;. See <a href=
+  "Matrix-Answer-1.html#Matrix-Answer-1">1</a>.
+  (&bull;)</p><a name="index-Identity-matrix" id=
+  "index-Identity-matrix"></a>
+
+  <p>An <em>identity matrix</em> is a square matrix with ones along
+  the diagonal and zeros elsewhere. It has the property that
+  multiplication by an identity matrix, on the left or on the
+  right, always produces the original matrix.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  [ [ 1, 2, 3 ]      2:  [ [ 1, 2, 3 ]      1:  [ [ 1, 2, 3 ]
       [ 4, 5, 6 ] ]          [ 4, 5, 6 ] ]          [ 4, 5, 6 ] ]
     .                  1:  [ [ 1, 0, 0 ]          .
                              [ 0, 1, 0 ]
                              [ 0, 0, 1 ] ]
                            .
 
-    r 4                    v i 3 <span class="key">RET</span>              *
-</pre></div>
+    r 4                    v i 3 <span class=
+"key">RET</span>              *
+</pre>
+  </div>
 
-<p>If a matrix is square, it is often possible to find its <em>inverse</em>,
-that is, a matrix which, when multiplied by the original matrix, yields
-an identity matrix.  The <kbd>&amp;</kbd> (reciprocal) key also computes the
-inverse of a matrix.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  [ [ 1, 2, 3 ]      1:  [ [   -2.4,     1.2,   -0.2 ]
+  <p>If a matrix is square, it is often possible to find its
+  <em>inverse</em>, that is, a matrix which, when multiplied by the
+  original matrix, yields an identity matrix. The <kbd>&amp;</kbd>
+  (reciprocal) key also computes the inverse of a matrix.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  [ [ 1, 2, 3 ]      1:  [ [   -2.4,     1.2,   -0.2 ]
       [ 4, 5, 6 ]            [    2.8,    -1.4,    0.4 ]
       [ 7, 6, 0 ] ]          [ -0.73333, 0.53333, -0.2 ] ]
     .                      .
 
     r 4 r 2 |  s 5         &amp;
-</pre></div>
+</pre>
+  </div>
 
-<p>The vertical bar <kbd>|</kbd> <em>concatenates</em> numbers, vectors, and
-matrices together.  Here we have used it to add a new row onto
-our matrix to make it square.
-</p>
-<p>We can multiply these two matrices in either order to get an identity.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  [ [ 1., 0., 0. ]      1:  [ [ 1., 0., 0. ]
+  <p>The vertical bar <kbd>|</kbd> <em>concatenates</em> numbers,
+  vectors, and matrices together. Here we have used it to add a new
+  row onto our matrix to make it square.</p>
+
+  <p>We can multiply these two matrices in either order to get an
+  identity.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  [ [ 1., 0., 0. ]      1:  [ [ 1., 0., 0. ]
       [ 0., 1., 0. ]            [ 0., 1., 0. ]
       [ 0., 0., 1. ] ]          [ 0., 0., 1. ] ]
     .                         .
 
-    M-<span class="key">RET</span>  *                  U <span class="key">TAB</span> *
-</pre></div>
+    M-<span class=
+"key">RET</span>  *                  U <span class=
+"key">TAB</span> *
+</pre>
+  </div><a name="index-Systems-of-linear-equations" id=
+  "index-Systems-of-linear-equations"></a> <a name=
+  "index-Linear-equations_002c-systems-of" id=
+  "index-Linear-equations_002c-systems-of"></a>
 
-<a name="index-Systems-of-linear-equations"></a>
-<a name="index-Linear-equations_002c-systems-of"></a>
-<p>Matrix inverses are related to systems of linear equations in algebra.
-Suppose we had the following set of equations:
-</p>
-<div class="example">
-<pre class="example">    a + 2b + 3c = 6
+  <p>Matrix inverses are related to systems of linear equations in
+  algebra. Suppose we had the following set of equations:</p>
+
+  <div class="example">
+    <pre class="example">
+    a + 2b + 3c = 6
    4a + 5b + 6c = 2
    7a + 6b      = 3
-</pre></div>
+</pre>
+  </div>
 
-<p>This can be cast into the matrix equation,
-</p>
-<div class="example">
-<pre class="example">   [ [ 1, 2, 3 ]     [ [ a ]     [ [ 6 ]
+  <p>This can be cast into the matrix equation,</p>
+
+  <div class="example">
+    <pre class="example">
+   [ [ 1, 2, 3 ]     [ [ a ]     [ [ 6 ]
      [ 4, 5, 6 ]   *   [ b ]   =   [ 2 ]
      [ 7, 6, 0 ] ]     [ c ] ]     [ 3 ] ]
-</pre></div>
+</pre>
+  </div>
 
-<p>We can solve this system of equations by multiplying both sides by the
-inverse of the matrix.  Calc can do this all in one step:
-</p>
-<div class="smallexample">
-<pre class="smallexample">2:  [6, 2, 3]          1:  [-12.6, 15.2, -3.93333]
+  <p>We can solve this system of equations by multiplying both
+  sides by the inverse of the matrix. Calc can do this all in one
+  step:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+2:  [6, 2, 3]          1:  [-12.6, 15.2, -3.93333]
 1:  [ [ 1, 2, 3 ]          .
       [ 4, 5, 6 ]
       [ 7, 6, 0 ] ]
     .
 
     [6,2,3] r 5            /
-</pre></div>
+</pre>
+  </div>
 
-<p>The result is the &lsquo;<samp>[a, b, c]</samp>&rsquo; vector that solves the equations.
-(Dividing by a square matrix is equivalent to multiplying by its
-inverse.)
-</p>
-<p>Let&rsquo;s verify this solution:
-</p>
-<div class="smallexample">
-<pre class="smallexample">2:  [ [ 1, 2, 3 ]                1:  [6., 2., 3.]
+  <p>The result is the &lsquo;<samp>[a, b, c]</samp>&rsquo; vector
+  that solves the equations. (Dividing by a square matrix is
+  equivalent to multiplying by its inverse.)</p>
+
+  <p>Let&rsquo;s verify this solution:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+2:  [ [ 1, 2, 3 ]                1:  [6., 2., 3.]
       [ 4, 5, 6 ]                    .
       [ 7, 6, 0 ] ]
 1:  [-12.6, 15.2, -3.93333]
     .
 
     r 5  <span class="key">TAB</span>                         *
-</pre></div>
+</pre>
+  </div>
 
-<p>Note that we had to be careful about the order in which we multiplied
-the matrix and vector.  If we multiplied in the other order, Calc would
-assume the vector was a row vector in order to make the dimensions
-come out right, and the answer would be incorrect.  If you
-don&rsquo;t feel safe letting Calc take either interpretation of your
-vectors, use explicit
-Nx1
-or
-1xN
-matrices instead.  In this case, you would enter the original column
-vector as &lsquo;<samp>[[6], [2], [3]]</samp>&rsquo; or &lsquo;<samp>[6; 2; 3]</samp>&rsquo;.
-</p>
-<p>(&bull;) <strong>Exercise 2.</strong>  Algebraic entry allows you to make
-vectors and matrices that include variables.  Solve the following
-system of equations to get expressions for &lsquo;<samp>x</samp>&rsquo; and &lsquo;<samp>y</samp>&rsquo;
-in terms of &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo;.
-</p>
-<div class="example">
-<pre class="example">   x + a y = 6
+  <p>Note that we had to be careful about the order in which we
+  multiplied the matrix and vector. If we multiplied in the other
+  order, Calc would assume the vector was a row vector in order to
+  make the dimensions come out right, and the answer would be
+  incorrect. If you don&rsquo;t feel safe letting Calc take either
+  interpretation of your vectors, use explicit Nx1 or 1xN matrices
+  instead. In this case, you would enter the original column vector
+  as &lsquo;<samp>[[6], [2], [3]]</samp>&rsquo; or &lsquo;<samp>[6;
+  2; 3]</samp>&rsquo;.</p>
+
+  <p>(&bull;) <strong>Exercise 2.</strong> Algebraic entry allows
+  you to make vectors and matrices that include variables. Solve
+  the following system of equations to get expressions for
+  &lsquo;<samp>x</samp>&rsquo; and &lsquo;<samp>y</samp>&rsquo; in
+  terms of &lsquo;<samp>a</samp>&rsquo; and
+  &lsquo;<samp>b</samp>&rsquo;.</p>
+
+  <div class="example">
+    <pre class="example">
+   x + a y = 6
    x + b y = 10
-</pre></div>
+</pre>
+  </div>
 
-<p>See <a href="Matrix-Answer-2.html#Matrix-Answer-2">2</a>. (&bull;)
-</p>
-<a name="index-Least_002dsquares-for-over_002ddetermined-systems"></a>
-<a name="index-Over_002ddetermined-systems-of-equations"></a>
-<p>(&bull;) <strong>Exercise 3.</strong>  A system of equations is &ldquo;over-determined&rdquo;
-if it has more equations than variables.  It is often the case that
-there are no values for the variables that will satisfy all the
-equations at once, but it is still useful to find a set of values
-which &ldquo;nearly&rdquo; satisfy all the equations.  In terms of matrix equations,
-you can&rsquo;t solve &lsquo;<samp>A X = B</samp>&rsquo; directly because the matrix &lsquo;<samp>A</samp>&rsquo;
-is not square for an over-determined system.  Matrix inversion works
-only for square matrices.  One common trick is to multiply both sides
-on the left by the transpose of &lsquo;<samp>A</samp>&rsquo;:
-&lsquo;<samp>trn(A)*A*X = trn(A)*B</samp>&rsquo;.
-Now
-&lsquo;<samp>trn(A)*A</samp>&rsquo;
-is a square matrix so a solution is possible.  It turns out that the
-&lsquo;<samp>X</samp>&rsquo; vector you compute in this way will be a &ldquo;least-squares&rdquo;
-solution, which can be regarded as the &ldquo;closest&rdquo; solution to the set
-of equations.  Use Calc to solve the following over-determined
-system:
-</p>
-<div class="example">
-<pre class="example">    a + 2b + 3c = 6
+  <p>See <a href="Matrix-Answer-2.html#Matrix-Answer-2">2</a>.
+  (&bull;)</p><a name=
+  "index-Least_002dsquares-for-over_002ddetermined-systems" id=
+  "index-Least_002dsquares-for-over_002ddetermined-systems"></a>
+  <a name="index-Over_002ddetermined-systems-of-equations" id=
+  "index-Over_002ddetermined-systems-of-equations"></a>
+
+  <p>(&bull;) <strong>Exercise 3.</strong> A system of equations is
+  &ldquo;over-determined&rdquo; if it has more equations than
+  variables. It is often the case that there are no values for the
+  variables that will satisfy all the equations at once, but it is
+  still useful to find a set of values which &ldquo;nearly&rdquo;
+  satisfy all the equations. In terms of matrix equations, you
+  can&rsquo;t solve &lsquo;<samp>A X = B</samp>&rsquo; directly
+  because the matrix &lsquo;<samp>A</samp>&rsquo; is not square for
+  an over-determined system. Matrix inversion works only for square
+  matrices. One common trick is to multiply both sides on the left
+  by the transpose of &lsquo;<samp>A</samp>&rsquo;:
+  &lsquo;<samp>trn(A)*A*X = trn(A)*B</samp>&rsquo;. Now
+  &lsquo;<samp>trn(A)*A</samp>&rsquo; is a square matrix so a
+  solution is possible. It turns out that the
+  &lsquo;<samp>X</samp>&rsquo; vector you compute in this way will
+  be a &ldquo;least-squares&rdquo; solution, which can be regarded
+  as the &ldquo;closest&rdquo; solution to the set of equations.
+  Use Calc to solve the following over-determined system:</p>
+
+  <div class="example">
+    <pre class="example">
+    a + 2b + 3c = 6
    4a + 5b + 6c = 2
    7a + 6b      = 3
    2a + 4b + 6c = 11
-</pre></div>
+</pre>
+  </div>
 
-<p>See <a href="Matrix-Answer-3.html#Matrix-Answer-3">3</a>. (&bull;)
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="List-Tutorial.html#List-Tutorial" accesskey="n" rel="next">List Tutorial</a>, Previous: <a href="Vector-Analysis-Tutorial.html#Vector-Analysis-Tutorial" accesskey="p" rel="prev">Vector Analysis Tutorial</a>, Up: <a href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" accesskey="u" rel="up">Vector/Matrix Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>See <a href="Matrix-Answer-3.html#Matrix-Answer-3">3</a>.
+  (&bull;)</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="List-Tutorial.html#List-Tutorial" accesskey=
+    "n" rel="next">List Tutorial</a>, Previous: <a href=
+    "Vector-Analysis-Tutorial.html#Vector-Analysis-Tutorial"
+    accesskey="p" rel="prev">Vector Analysis Tutorial</a>, Up:
+    <a href=
+    "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial"
+    accesskey="u" rel="up">Vector/Matrix Tutorial</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

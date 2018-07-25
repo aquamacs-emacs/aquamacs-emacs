@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,72 +16,105 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Understanding the automaton</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Understanding the automaton">
-<meta name="keywords" content="Wisent Parser Development: Understanding the automaton">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Conflicts.html#Conflicts" rel="up" title="Conflicts">
-<link href="Wisent-Parsing.html#Wisent-Parsing" rel="next" title="Wisent Parsing">
-<link href="Grammar-Debugging.html#Grammar-Debugging" rel="prev" title="Grammar Debugging">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Understanding the
+  automaton</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Understanding the automaton" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Understanding the automaton" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Conflicts.html#Conflicts" rel="up" title=
+  "Conflicts" />
+  <link href="Wisent-Parsing.html#Wisent-Parsing" rel="next" title=
+  "Wisent Parsing" />
+  <link href="Grammar-Debugging.html#Grammar-Debugging" rel="prev"
+  title="Grammar Debugging" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Understanding-the-automaton"></a>
-<div class="header">
-<p>
-Previous: <a href="Grammar-Debugging.html#Grammar-Debugging" accesskey="p" rel="prev">Grammar Debugging</a>, Up: <a href="Conflicts.html#Conflicts" accesskey="u" rel="up">Conflicts</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Understanding-the-automaton-1"></a>
-<h4 class="subsection">2.4.2 Understanding the automaton</h4>
+<body lang="en" xml:lang="en">
+  <a name="Understanding-the-automaton" id=
+  "Understanding-the-automaton"></a>
 
-<a name="index-understanding-the-automaton"></a>
-<p>This section (took from the manual of Bison 1.49) describes how to use
-the verbose report printed by <code>wisent-compile-grammar</code> to
-understand the generated automaton, to tune or fix a grammar.
-</p>
-<p>We will use the following example:
-</p>
-<div class="example">
-<pre class="example">(let ((wisent-verbose-flag t)) ;; Print a verbose report!
+  <div class="header">
+    <p>Previous: <a href="Grammar-Debugging.html#Grammar-Debugging"
+    accesskey="p" rel="prev">Grammar Debugging</a>, Up: <a href=
+    "Conflicts.html#Conflicts" accesskey="u" rel="up">Conflicts</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Understanding-the-automaton-1" id=
+  "Understanding-the-automaton-1"></a>
+
+  <h4 class="subsection">2.4.2 Understanding the
+  automaton</h4><a name="index-understanding-the-automaton" id=
+  "index-understanding-the-automaton"></a>
+
+  <p>This section (took from the manual of Bison 1.49) describes
+  how to use the verbose report printed by
+  <code>wisent-compile-grammar</code> to understand the generated
+  automaton, to tune or fix a grammar.</p>
+
+  <p>We will use the following example:</p>
+
+  <div class="example">
+    <pre class="example">
+(let ((wisent-verbose-flag t)) ;; Print a verbose report!
   (wisent-compile-grammar
    '((NUM STR)                          ; %token NUM STR
 
@@ -100,23 +135,27 @@ understand the generated automaton, to tune or fix a grammar.
      )
    'nil)                                ; no %start declarations
   )
-</pre></div>
+</pre>
+  </div>
 
-<p>When evaluating the above expression, grammar compilation first issues
-the following two clear messages:
-</p>
-<div class="example">
-<pre class="example">Grammar contains 1 useless nonterminals and 1 useless rules
+  <p>When evaluating the above expression, grammar compilation
+  first issues the following two clear messages:</p>
+
+  <div class="example">
+    <pre class="example">
+Grammar contains 1 useless nonterminals and 1 useless rules
 Grammar contains 7 shift/reduce conflicts
-</pre></div>
+</pre>
+  </div>
 
-<p>The <samp>*wisent-log*</samp> buffer details things!
-</p>
-<p>The first section reports conflicts that were solved using precedence
-and/or associativity:
-</p>
-<div class="example">
-<pre class="example">Conflict in state 7 between rule 1 and token '+' resolved as reduce.
+  <p>The <samp>*wisent-log*</samp> buffer details things!</p>
+
+  <p>The first section reports conflicts that were solved using
+  precedence and/or associativity:</p>
+
+  <div class="example">
+    <pre class="example">
+Conflict in state 7 between rule 1 and token '+' resolved as reduce.
 Conflict in state 7 between rule 1 and token '-' resolved as reduce.
 Conflict in state 7 between rule 1 and token '*' resolved as shift.
 Conflict in state 8 between rule 2 and token '+' resolved as reduce.
@@ -125,13 +164,15 @@ Conflict in state 8 between rule 2 and token '*' resolved as shift.
 Conflict in state 9 between rule 3 and token '+' resolved as reduce.
 Conflict in state 9 between rule 3 and token '-' resolved as reduce.
 Conflict in state 9 between rule 3 and token '*' resolved as reduce.
-</pre></div>
+</pre>
+  </div>
 
-<p>The next section reports useless tokens, nonterminal and rules (note
-that useless tokens might be used by the scanner):
-</p>
-<div class="example">
-<pre class="example">Useless nonterminals:
+  <p>The next section reports useless tokens, nonterminal and rules
+  (note that useless tokens might be used by the scanner):</p>
+
+  <div class="example">
+    <pre class="example">
+Useless nonterminals:
 
    useless
 
@@ -144,21 +185,25 @@ Terminals which are not used:
 Useless rules:
 
 #6     useless: STR;
-</pre></div>
+</pre>
+  </div>
 
-<p>The next section lists states that still have conflicts:
-</p>
-<div class="example">
-<pre class="example">State 7 contains 1 shift/reduce conflict.
+  <p>The next section lists states that still have conflicts:</p>
+
+  <div class="example">
+    <pre class="example">
+State 7 contains 1 shift/reduce conflict.
 State 8 contains 1 shift/reduce conflict.
 State 9 contains 1 shift/reduce conflict.
 State 10 contains 4 shift/reduce conflicts.
-</pre></div>
+</pre>
+  </div>
 
-<p>The next section reproduces the grammar used:
-</p>
-<div class="example">
-<pre class="example">Grammar
+  <p>The next section reproduces the grammar used:</p>
+
+  <div class="example">
+    <pre class="example">
+Grammar
 
   Number, Rule
   1       exp -&gt; exp '+' exp
@@ -166,12 +211,14 @@ State 10 contains 4 shift/reduce conflicts.
   3       exp -&gt; exp '*' exp
   4       exp -&gt; exp '/' exp
   5       exp -&gt; NUM
-</pre></div>
+</pre>
+  </div>
 
-<p>And reports the uses of the symbols:
-</p>
-<div class="example">
-<pre class="example">Terminals, with rules where they appear
+  <p>And reports the uses of the symbols:</p>
+
+  <div class="example">
+    <pre class="example">
+Terminals, with rules where they appear
 
 $EOI (-1)
 error (1)
@@ -187,46 +234,57 @@ Nonterminals, with rules where they appear
 
 exp (8)
     on left: 1 2 3 4 5, on right: 1 2 3 4
-</pre></div>
+</pre>
+  </div>
 
-<p>The report then details the automaton itself, describing each state
-with it set of <em>items</em>, also known as <em>pointed rules</em>.  Each
-item is a production rule together with a point (marked by &lsquo;<samp>.</samp>&rsquo;)
-that the input cursor.
-</p>
-<div class="example">
-<pre class="example">state 0
+  <p>The report then details the automaton itself, describing each
+  state with it set of <em>items</em>, also known as <em>pointed
+  rules</em>. Each item is a production rule together with a point
+  (marked by &lsquo;<samp>.</samp>&rsquo;) that the input
+  cursor.</p>
+
+  <div class="example">
+    <pre class="example">
+state 0
 
     NUM shift, and go to state 1
 
     exp go to state 2
-</pre></div>
+</pre>
+  </div>
 
-<p>State 0 corresponds to being at the very beginning of the parsing, in
-the initial rule, right before the start symbol (&lsquo;<samp>exp</samp>&rsquo;).  When
-the parser returns to this state right after having reduced a rule
-that produced an &lsquo;<samp>exp</samp>&rsquo;, it jumps to state 2.  If there is no such
-transition on a nonterminal symbol, and the lookahead is a &lsquo;<samp>NUM</samp>&rsquo;,
-then this token is shifted on the parse stack, and the control flow
-jumps to state 1.  Any other lookahead triggers a parse error.
-</p>
-<p>In the state 1...
-</p>
-<div class="example">
-<pre class="example">state 1
+  <p>State 0 corresponds to being at the very beginning of the
+  parsing, in the initial rule, right before the start symbol
+  (&lsquo;<samp>exp</samp>&rsquo;). When the parser returns to this
+  state right after having reduced a rule that produced an
+  &lsquo;<samp>exp</samp>&rsquo;, it jumps to state 2. If there is
+  no such transition on a nonterminal symbol, and the lookahead is
+  a &lsquo;<samp>NUM</samp>&rsquo;, then this token is shifted on
+  the parse stack, and the control flow jumps to state 1. Any other
+  lookahead triggers a parse error.</p>
+
+  <p>In the state 1...</p>
+
+  <div class="example">
+    <pre class="example">
+state 1
 
     exp  -&gt;  NUM .   (rule 5)
 
     $default    reduce using rule 5 (exp)
-</pre></div>
+</pre>
+  </div>
 
-<p>the rule 5, &lsquo;<samp>exp: NUM;</samp>&rsquo;, is completed.  Whatever the lookahead
-(&lsquo;<samp>$default</samp>&rsquo;), the parser will reduce it.  If it was coming from
-state 0, then, after this reduction it will return to state 0, and
-will jump to state 2 (&lsquo;<samp>exp: go to state 2</samp>&rsquo;).
-</p>
-<div class="example">
-<pre class="example">state 2
+  <p>the rule 5, &lsquo;<samp>exp: NUM;</samp>&rsquo;, is
+  completed. Whatever the lookahead
+  (&lsquo;<samp>$default</samp>&rsquo;), the parser will reduce it.
+  If it was coming from state 0, then, after this reduction it will
+  return to state 0, and will jump to state 2 (&lsquo;<samp>exp: go
+  to state 2</samp>&rsquo;).</p>
+
+  <div class="example">
+    <pre class="example">
+state 2
 
     exp  -&gt;  exp . '+' exp   (rule 1)
     exp  -&gt;  exp . '-' exp   (rule 2)
@@ -238,31 +296,37 @@ will jump to state 2 (&lsquo;<samp>exp: go to state 2</samp>&rsquo;).
     '-' shift, and go to state 4
     '*' shift, and go to state 5
     '/' shift, and go to state 6
-</pre></div>
+</pre>
+  </div>
 
-<p>In state 2, the automaton can only shift a symbol.  For instance,
-because of the item &lsquo;<samp>exp -&gt; exp . '+' exp</samp>&rsquo;, if the lookahead if
-&lsquo;<samp>+</samp>&rsquo;, it will be shifted on the parse stack, and the automaton
-control will jump to state 3, corresponding to the item
-&lsquo;<samp>exp -&gt; exp . '+' exp</samp>&rsquo;:
-</p>
-<div class="example">
-<pre class="example">state 3
+  <p>In state 2, the automaton can only shift a symbol. For
+  instance, because of the item &lsquo;<samp>exp -&gt; exp . '+'
+  exp</samp>&rsquo;, if the lookahead if
+  &lsquo;<samp>+</samp>&rsquo;, it will be shifted on the parse
+  stack, and the automaton control will jump to state 3,
+  corresponding to the item &lsquo;<samp>exp -&gt; exp . '+'
+  exp</samp>&rsquo;:</p>
+
+  <div class="example">
+    <pre class="example">
+state 3
 
     exp  -&gt;  exp '+' . exp   (rule 1)
 
     NUM shift, and go to state 1
 
     exp go to state 7
-</pre></div>
+</pre>
+  </div>
 
-<p>Since there is no default action, any other token than those listed
-above will trigger a parse error.
-</p>
-<p>The interpretation of states 4 to 6 is straightforward:
-</p>
-<div class="example">
-<pre class="example">state 4
+  <p>Since there is no default action, any other token than those
+  listed above will trigger a parse error.</p>
+
+  <p>The interpretation of states 4 to 6 is straightforward:</p>
+
+  <div class="example">
+    <pre class="example">
+state 4
 
     exp  -&gt;  exp '-' . exp   (rule 2)
 
@@ -289,13 +353,16 @@ state 6
     NUM shift, and go to state 1
 
     exp go to state 10
-</pre></div>
+</pre>
+  </div>
 
-<p>As was announced in beginning of the report, &lsquo;<samp>State 7 contains 1
-shift/reduce conflict.</samp>&rsquo;:
-</p>
-<div class="example">
-<pre class="example">state 7
+  <p>As was announced in beginning of the report,
+  &lsquo;<samp>State 7 contains 1 shift/reduce
+  conflict.</samp>&rsquo;:</p>
+
+  <div class="example">
+    <pre class="example">
+state 7
 
     exp  -&gt;  exp . '+' exp   (rule 1)
     exp  -&gt;  exp '+' exp .   (rule 1)
@@ -308,38 +375,46 @@ shift/reduce conflict.</samp>&rsquo;:
 
     '/' [reduce using rule 1 (exp)]
     $default    reduce using rule 1 (exp)
-</pre></div>
+</pre>
+  </div>
 
-<p>Indeed, there are two actions associated to the lookahead &lsquo;<samp>/</samp>&rsquo;:
-either shifting (and going to state 6), or reducing rule 1.  The
-conflict means that either the grammar is ambiguous, or the parser
-lacks information to make the right decision.  Indeed the grammar is
-ambiguous, as, since we did not specify the precedence of &lsquo;<samp>/</samp>&rsquo;,
-the sentence &lsquo;<samp>NUM + NUM / NUM</samp>&rsquo; can be parsed as &lsquo;<samp>NUM + (NUM
-/ NUM)</samp>&rsquo;, which corresponds to shifting &lsquo;<samp>/</samp>&rsquo;, or as &lsquo;<samp>(NUM +
-NUM) / NUM</samp>&rsquo;, which corresponds to reducing rule 1.
-</p>
-<p>Because in <acronym>LALR(1)</acronym> parsing a single decision can be made,
-Wisent arbitrarily chose to disable the reduction, see
-<a href="Conflicts.html#Conflicts">Conflicts</a>.  Discarded actions are reported in between square
-brackets.
-</p>
-<p>Note that all the previous states had a single possible action: either
-shifting the next token and going to the corresponding state, or
-reducing a single rule.  In the other cases, i.e., when shifting
-<em>and</em> reducing is possible or when <em>several</em> reductions are
-possible, the lookahead is required to select the action.  State 7 is
-one such state: if the lookahead is &lsquo;<samp>*</samp>&rsquo; or &lsquo;<samp>/</samp>&rsquo; then the
-action is shifting, otherwise the action is reducing rule 1.  In other
-words, the first two items, corresponding to rule 1, are not eligible
-when the lookahead is &lsquo;<samp>*</samp>&rsquo;, since we specified that &lsquo;<samp>*</samp>&rsquo; has
-higher precedence that &lsquo;<samp>+</samp>&rsquo;.  More generally, some items are
-eligible only with some set of possible lookaheads.
-</p>
-<p>States 8 to 10 are similar:
-</p>
-<div class="example">
-<pre class="example">state 8
+  <p>Indeed, there are two actions associated to the lookahead
+  &lsquo;<samp>/</samp>&rsquo;: either shifting (and going to state
+  6), or reducing rule 1. The conflict means that either the
+  grammar is ambiguous, or the parser lacks information to make the
+  right decision. Indeed the grammar is ambiguous, as, since we did
+  not specify the precedence of &lsquo;<samp>/</samp>&rsquo;, the
+  sentence &lsquo;<samp>NUM + NUM / NUM</samp>&rsquo; can be parsed
+  as &lsquo;<samp>NUM + (NUM / NUM)</samp>&rsquo;, which
+  corresponds to shifting &lsquo;<samp>/</samp>&rsquo;, or as
+  &lsquo;<samp>(NUM + NUM) / NUM</samp>&rsquo;, which corresponds
+  to reducing rule 1.</p>
+
+  <p>Because in <acronym>LALR(1)</acronym> parsing a single
+  decision can be made, Wisent arbitrarily chose to disable the
+  reduction, see <a href="Conflicts.html#Conflicts">Conflicts</a>.
+  Discarded actions are reported in between square brackets.</p>
+
+  <p>Note that all the previous states had a single possible
+  action: either shifting the next token and going to the
+  corresponding state, or reducing a single rule. In the other
+  cases, i.e., when shifting <em>and</em> reducing is possible or
+  when <em>several</em> reductions are possible, the lookahead is
+  required to select the action. State 7 is one such state: if the
+  lookahead is &lsquo;<samp>*</samp>&rsquo; or
+  &lsquo;<samp>/</samp>&rsquo; then the action is shifting,
+  otherwise the action is reducing rule 1. In other words, the
+  first two items, corresponding to rule 1, are not eligible when
+  the lookahead is &lsquo;<samp>*</samp>&rsquo;, since we specified
+  that &lsquo;<samp>*</samp>&rsquo; has higher precedence that
+  &lsquo;<samp>+</samp>&rsquo;. More generally, some items are
+  eligible only with some set of possible lookaheads.</p>
+
+  <p>States 8 to 10 are similar:</p>
+
+  <div class="example">
+    <pre class="example">
+state 8
 
     exp  -&gt;  exp . '+' exp   (rule 1)
     exp  -&gt;  exp . '-' exp   (rule 2)
@@ -386,17 +461,21 @@ state 10
     '*' [reduce using rule 4 (exp)]
     '/' [reduce using rule 4 (exp)]
     $default    reduce using rule 4 (exp)
-</pre></div>
+</pre>
+  </div>
 
-<p>Observe that state 10 contains conflicts due to the lack of precedence
-of &lsquo;<samp>/</samp>&rsquo; wrt &lsquo;<samp>+</samp>&rsquo;, &lsquo;<samp>-</samp>&rsquo;, and &lsquo;<samp>*</samp>&rsquo;, but also because the
-associativity of &lsquo;<samp>/</samp>&rsquo; is not specified.
-</p>
-<p>Finally, the state 11 (plus 12) is named the <em>final state</em>, or the
-<em>accepting state</em>:
-</p>
-<div class="example">
-<pre class="example">state 11
+  <p>Observe that state 10 contains conflicts due to the lack of
+  precedence of &lsquo;<samp>/</samp>&rsquo; wrt
+  &lsquo;<samp>+</samp>&rsquo;, &lsquo;<samp>-</samp>&rsquo;, and
+  &lsquo;<samp>*</samp>&rsquo;, but also because the associativity
+  of &lsquo;<samp>/</samp>&rsquo; is not specified.</p>
+
+  <p>Finally, the state 11 (plus 12) is named the <em>final
+  state</em>, or the <em>accepting state</em>:</p>
+
+  <div class="example">
+    <pre class="example">
+state 11
 
     $EOI        shift, and go to state 12
 
@@ -405,18 +484,21 @@ associativity of &lsquo;<samp>/</samp>&rsquo; is not specified.
 state 12
 
     $default    accept
-</pre></div>
+</pre>
+  </div>
 
-<p>The end of input is shifted &lsquo;<samp>$EOI shift,</samp>&rsquo; and the parser exits
-successfully (&lsquo;<samp>go to state 12</samp>&rsquo;, that terminates).
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Grammar-Debugging.html#Grammar-Debugging" accesskey="p" rel="prev">Grammar Debugging</a>, Up: <a href="Conflicts.html#Conflicts" accesskey="u" rel="up">Conflicts</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The end of input is shifted &lsquo;<samp>$EOI
+  shift,</samp>&rsquo; and the parser exits successfully
+  (&lsquo;<samp>go to state 12</samp>&rsquo;, that terminates).</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Previous: <a href="Grammar-Debugging.html#Grammar-Debugging"
+    accesskey="p" rel="prev">Grammar Debugging</a>, Up: <a href=
+    "Conflicts.html#Conflicts" accesskey="u" rel="up">Conflicts</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

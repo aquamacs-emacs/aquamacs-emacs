@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is version 8.6 of The MH-E
 Manual, last updated 2016-04-29.
 
@@ -25,127 +27,166 @@ copy of the license is included in the section entitled "GNU General
 Public License."
  -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The MH-E Manual: Files and Pipes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The MH-E Manual: Files and Pipes">
-<meta name="keywords" content="The MH-E Manual: Files and Pipes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Reading-Mail.html#Reading-Mail" rel="up" title="Reading Mail">
-<link href="Navigating.html#Navigating" rel="next" title="Navigating">
-<link href="Printing.html#Printing" rel="prev" title="Printing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The MH-E Manual: Files and Pipes</title>
+  <meta name="description" content=
+  "The MH-E Manual: Files and Pipes" />
+  <meta name="keywords" content=
+  "The MH-E Manual: Files and Pipes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Reading-Mail.html#Reading-Mail" rel="up" title=
+  "Reading Mail" />
+  <link href="Navigating.html#Navigating" rel="next" title=
+  "Navigating" />
+  <link href="Printing.html#Printing" rel="prev" title=
+  "Printing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Files-and-Pipes"></a>
-<div class="header">
-<p>
-Next: <a href="Navigating.html#Navigating" accesskey="n" rel="next">Navigating</a>, Previous: <a href="Printing.html#Printing" accesskey="p" rel="prev">Printing</a>, Up: <a href="Reading-Mail.html#Reading-Mail" accesskey="u" rel="up">Reading Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Files-and-Pipes-1"></a>
-<h3 class="section">6.7 Files and Pipes</h3>
+<body lang="en" xml:lang="en">
+  <a name="Files-and-Pipes" id="Files-and-Pipes"></a>
 
-<a name="index-files"></a>
-<a name="index-pipes"></a>
-<a name="index-mh_002drefile_002dor_002dwrite_002dagain"></a>
-<a name="index-mh_002dwrite_002dmsg_002dto_002dfile-1"></a>
-<a name="index-_003e-1"></a>
-<a name="index-_0021"></a>
+  <div class="header">
+    <p>Next: <a href="Navigating.html#Navigating" accesskey="n"
+    rel="next">Navigating</a>, Previous: <a href=
+    "Printing.html#Printing" accesskey="p" rel="prev">Printing</a>,
+    Up: <a href="Reading-Mail.html#Reading-Mail" accesskey="u" rel=
+    "up">Reading Mail</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Files-and-Pipes-1" id="Files-and-Pipes-1"></a>
 
-<p>MH-E does offer a couple of commands that are not a part of MH. The
-first one, <kbd>&gt;</kbd> (<code>mh-write-msg-to-file</code>), writes a message to
-a file. You are prompted for the filename. If the file already exists,
-the message is appended to it. You can also write the message to the
-file without the header by specifying a prefix argument (such as
-<kbd>C-u &gt; /tmp/foobar <span class="key">RET</span></kbd>). Subsequent writes to the same file
-can be made with the command <kbd>!</kbd>
-(<code>mh-refile-or-write-again</code>).
-</p>
-<a name="index-mh_002dpipe_002dmsg-1"></a>
-<a name="index-_007c-1"></a>
-<a name="index-l"></a>
+  <h3 class="section">6.7 Files and Pipes</h3><a name="index-files"
+  id="index-files"></a> <a name="index-pipes" id="index-pipes"></a>
+  <a name="index-mh_002drefile_002dor_002dwrite_002dagain" id=
+  "index-mh_002drefile_002dor_002dwrite_002dagain"></a> <a name=
+  "index-mh_002dwrite_002dmsg_002dto_002dfile-1" id=
+  "index-mh_002dwrite_002dmsg_002dto_002dfile-1"></a> <a name=
+  "index-_003e-1" id="index-_003e-1"></a> <a name="index-_0021" id=
+  "index-_0021"></a>
 
-<p>You can also pipe the message through a Unix shell command with the
-command <kbd>|</kbd> (<code>mh-pipe-msg</code>). You are prompted for the Unix
-command through which you wish to run your message. If you give a
-prefix argument to this command, the message header is included in the
-text passed to the command (the contrived example <kbd>C-u | lpr</kbd>
-would be done with the <kbd>l</kbd> command instead).
-</p>
-<a name="index-shar"></a>
-<a name="index-uuencode"></a>
-<a name="index-Unix-commands_002c-shar"></a>
-<a name="index-Unix-commands_002c-uuencode"></a>
-<a name="index-mh_002dstore_002dmsg-1"></a>
-<a name="index-X-s-1"></a>
-<a name="index-mh_002dstore_002ddefault_002ddirectory-1"></a>
+  <p>MH-E does offer a couple of commands that are not a part of
+  MH. The first one, <kbd>&gt;</kbd>
+  (<code>mh-write-msg-to-file</code>), writes a message to a file.
+  You are prompted for the filename. If the file already exists,
+  the message is appended to it. You can also write the message to
+  the file without the header by specifying a prefix argument (such
+  as <kbd>C-u &gt; /tmp/foobar <span class="key">RET</span></kbd>).
+  Subsequent writes to the same file can be made with the command
+  <kbd>!</kbd> (<code>mh-refile-or-write-again</code>).</p><a name=
+  "index-mh_002dpipe_002dmsg-1" id=
+  "index-mh_002dpipe_002dmsg-1"></a> <a name="index-_007c-1" id=
+  "index-_007c-1"></a> <a name="index-l" id="index-l"></a>
 
-<p>If the message is a shell archive <code>shar</code> or has been run
-through <code>uuencode</code> use <kbd>X s</kbd> (<code>mh-store-msg</code>) to
-extract the body of the message. The default directory for extraction
-is the current directory; however, you have a chance to specify a
-different extraction directory. The next time you use this command,
-the default directory is the last directory you used. If you would
-like to change the initial default directory, customize the option
-<code>mh-store-default-directory</code>, change the value from
-&lsquo;<samp>Current</samp>&rsquo; to &lsquo;<samp>Directory</samp>&rsquo;, and then enter the name of the
-directory for storing the content of these messages.
-</p>
-<a name="index-mh_002dstore_002dbuffer"></a>
-<a name="index-RET-7"></a>
-<a name="index-X-s-2"></a>
+  <p>You can also pipe the message through a Unix shell command
+  with the command <kbd>|</kbd> (<code>mh-pipe-msg</code>). You are
+  prompted for the Unix command through which you wish to run your
+  message. If you give a prefix argument to this command, the
+  message header is included in the text passed to the command (the
+  contrived example <kbd>C-u | lpr</kbd> would be done with the
+  <kbd>l</kbd> command instead).</p><a name="index-shar" id=
+  "index-shar"></a> <a name="index-uuencode" id=
+  "index-uuencode"></a> <a name="index-Unix-commands_002c-shar" id=
+  "index-Unix-commands_002c-shar"></a> <a name=
+  "index-Unix-commands_002c-uuencode" id=
+  "index-Unix-commands_002c-uuencode"></a> <a name=
+  "index-mh_002dstore_002dmsg-1" id=
+  "index-mh_002dstore_002dmsg-1"></a> <a name="index-X-s-1" id=
+  "index-X-s-1"></a> <a name=
+  "index-mh_002dstore_002ddefault_002ddirectory-1" id=
+  "index-mh_002dstore_002ddefault_002ddirectory-1"></a>
 
-<p>By the way, <kbd>X s</kbd> calls the Emacs Lisp function
-<code>mh-store-buffer</code>. I mention this because you can use it directly
-if you&rsquo;re editing a buffer that contains a file that has been run
-through <code>uuencode</code> or <code>shar</code>. For example, you can
-extract the contents of the current buffer in your home directory by
-typing <kbd>M-x mh-store-buffer <span class="key">RET</span> ~ <span class="key">RET</span></kbd>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Navigating.html#Navigating" accesskey="n" rel="next">Navigating</a>, Previous: <a href="Printing.html#Printing" accesskey="p" rel="prev">Printing</a>, Up: <a href="Reading-Mail.html#Reading-Mail" accesskey="u" rel="up">Reading Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If the message is a shell archive <code>shar</code> or has
+  been run through <code>uuencode</code> use <kbd>X s</kbd>
+  (<code>mh-store-msg</code>) to extract the body of the message.
+  The default directory for extraction is the current directory;
+  however, you have a chance to specify a different extraction
+  directory. The next time you use this command, the default
+  directory is the last directory you used. If you would like to
+  change the initial default directory, customize the option
+  <code>mh-store-default-directory</code>, change the value from
+  &lsquo;<samp>Current</samp>&rsquo; to
+  &lsquo;<samp>Directory</samp>&rsquo;, and then enter the name of
+  the directory for storing the content of these
+  messages.</p><a name="index-mh_002dstore_002dbuffer" id=
+  "index-mh_002dstore_002dbuffer"></a> <a name="index-RET-7" id=
+  "index-RET-7"></a> <a name="index-X-s-2" id="index-X-s-2"></a>
 
+  <p>By the way, <kbd>X s</kbd> calls the Emacs Lisp function
+  <code>mh-store-buffer</code>. I mention this because you can use
+  it directly if you&rsquo;re editing a buffer that contains a file
+  that has been run through <code>uuencode</code> or
+  <code>shar</code>. For example, you can extract the contents of
+  the current buffer in your home directory by typing <kbd>M-x
+  mh-store-buffer <span class="key">RET</span> ~ <span class=
+  "key">RET</span></kbd>.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Navigating.html#Navigating" accesskey="n"
+    rel="next">Navigating</a>, Previous: <a href=
+    "Printing.html#Printing" accesskey="p" rel="prev">Printing</a>,
+    Up: <a href="Reading-Mail.html#Reading-Mail" accesskey="u" rel=
+    "up">Reading Mail</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,131 +19,198 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Input Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Input Modes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Input Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Terminal-Input.html#Terminal-Input" rel="up" title="Terminal Input">
-<link href="Recording-Input.html#Recording-Input" rel="next" title="Recording Input">
-<link href="Terminal-Input.html#Terminal-Input" rel="prev" title="Terminal Input">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Input Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Input Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Input Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Terminal-Input.html#Terminal-Input" rel="up" title=
+  "Terminal Input" />
+  <link href="Recording-Input.html#Recording-Input" rel="next"
+  title="Recording Input" />
+  <link href="Terminal-Input.html#Terminal-Input" rel="prev" title=
+  "Terminal Input" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Input-Modes" id="Input-Modes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Recording-Input.html#Recording-Input"
+    accesskey="n" rel="next">Recording Input</a>, Up: <a href=
+    "Terminal-Input.html#Terminal-Input" accesskey="u" rel=
+    "up">Terminal Input</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Input-Modes-1" id="Input-Modes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Input-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Recording-Input.html#Recording-Input" accesskey="n" rel="next">Recording Input</a>, Up: <a href="Terminal-Input.html#Terminal-Input" accesskey="u" rel="up">Terminal Input</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Input-Modes-1"></a>
-<h4 class="subsection">38.13.1 Input Modes</h4>
-<a name="index-input-modes"></a>
-<a name="index-terminal-input-modes"></a>
+  <h4 class="subsection">38.13.1 Input Modes</h4><a name=
+  "index-input-modes" id="index-input-modes"></a> <a name=
+  "index-terminal-input-modes" id="index-terminal-input-modes"></a>
 
-<dl>
-<dt><a name="index-set_002dinput_002dmode"></a>Function: <strong>set-input-mode</strong> <em>interrupt flow meta &amp;optional quit-char</em></dt>
-<dd><p>This function sets the mode for reading keyboard input.  If
-<var>interrupt</var> is non-<code>nil</code>, then Emacs uses input interrupts.
-If it is <code>nil</code>, then it uses <small>CBREAK</small> mode.  The default
-setting is system-dependent.  Some systems always use <small>CBREAK</small> mode
-regardless of what is specified.
-</p>
-<p>When Emacs communicates directly with X, it ignores this argument and
-uses interrupts if that is the way it knows how to communicate.
-</p>
-<p>If <var>flow</var> is non-<code>nil</code>, then Emacs uses <small>XON/XOFF</small>
-(<kbd>C-q</kbd>, <kbd>C-s</kbd>) flow control for output to the terminal.  This
-has no effect except in <small>CBREAK</small> mode.
-</p>
-<p>The argument <var>meta</var> controls support for input character codes
-above 127.  If <var>meta</var> is <code>t</code>, Emacs converts characters with
-the 8th bit set into Meta characters.  If <var>meta</var> is <code>nil</code>,
-Emacs disregards the 8th bit; this is necessary when the terminal uses
-it as a parity bit.  If <var>meta</var> is neither <code>t</code> nor <code>nil</code>,
-Emacs uses all 8 bits of input unchanged.  This is good for terminals
-that use 8-bit character sets.
-</p>
-<p>If <var>quit-char</var> is non-<code>nil</code>, it specifies the character to
-use for quitting.  Normally this character is <kbd>C-g</kbd>.
-See <a href="Quitting.html#Quitting">Quitting</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dinput_002dmode" id=
+    "index-set_002dinput_002dmode"></a>Function:
+    <strong>set-input-mode</strong> <em>interrupt flow meta
+    &amp;optional quit-char</em></dt>
 
-<p>The <code>current-input-mode</code> function returns the input mode settings
-Emacs is currently using.
-</p>
-<dl>
-<dt><a name="index-current_002dinput_002dmode"></a>Function: <strong>current-input-mode</strong></dt>
-<dd><p>This function returns the current mode for reading keyboard input.  It
-returns a list, corresponding to the arguments of <code>set-input-mode</code>,
-of the form <code>(<var>interrupt</var> <var>flow</var> <var>meta</var> <var>quit</var>)</code> in
-which:
-</p><dl compact="compact">
-<dt><var>interrupt</var></dt>
-<dd><p>is non-<code>nil</code> when Emacs is using interrupt-driven input.  If
-<code>nil</code>, Emacs is using <small>CBREAK</small> mode.
-</p></dd>
-<dt><var>flow</var></dt>
-<dd><p>is non-<code>nil</code> if Emacs uses <small>XON/XOFF</small> (<kbd>C-q</kbd>, <kbd>C-s</kbd>)
-flow control for output to the terminal.  This value is meaningful only
-when <var>interrupt</var> is <code>nil</code>.
-</p></dd>
-<dt><var>meta</var></dt>
-<dd><p>is <code>t</code> if Emacs treats the eighth bit of input characters as
-the meta bit; <code>nil</code> means Emacs clears the eighth bit of every
-input character; any other value means Emacs uses all eight bits as the
-basic character code.
-</p></dd>
-<dt><var>quit</var></dt>
-<dd><p>is the character Emacs currently uses for quitting, usually <kbd>C-g</kbd>.
-</p></dd>
-</dl>
-</dd></dl>
+    <dd>
+      <p>This function sets the mode for reading keyboard input. If
+      <var>interrupt</var> is non-<code>nil</code>, then Emacs uses
+      input interrupts. If it is <code>nil</code>, then it uses
+      <small>CBREAK</small> mode. The default setting is
+      system-dependent. Some systems always use
+      <small>CBREAK</small> mode regardless of what is
+      specified.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Recording-Input.html#Recording-Input" accesskey="n" rel="next">Recording Input</a>, Up: <a href="Terminal-Input.html#Terminal-Input" accesskey="u" rel="up">Terminal Input</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>When Emacs communicates directly with X, it ignores this
+      argument and uses interrupts if that is the way it knows how
+      to communicate.</p>
 
+      <p>If <var>flow</var> is non-<code>nil</code>, then Emacs
+      uses <small>XON/XOFF</small> (<kbd>C-q</kbd>, <kbd>C-s</kbd>)
+      flow control for output to the terminal. This has no effect
+      except in <small>CBREAK</small> mode.</p>
 
+      <p>The argument <var>meta</var> controls support for input
+      character codes above 127. If <var>meta</var> is
+      <code>t</code>, Emacs converts characters with the 8th bit
+      set into Meta characters. If <var>meta</var> is
+      <code>nil</code>, Emacs disregards the 8th bit; this is
+      necessary when the terminal uses it as a parity bit. If
+      <var>meta</var> is neither <code>t</code> nor
+      <code>nil</code>, Emacs uses all 8 bits of input unchanged.
+      This is good for terminals that use 8-bit character sets.</p>
 
+      <p>If <var>quit-char</var> is non-<code>nil</code>, it
+      specifies the character to use for quitting. Normally this
+      character is <kbd>C-g</kbd>. See <a href=
+      "Quitting.html#Quitting">Quitting</a>.</p>
+    </dd>
+  </dl>
+
+  <p>The <code>current-input-mode</code> function returns the input
+  mode settings Emacs is currently using.</p>
+
+  <dl>
+    <dt><a name="index-current_002dinput_002dmode" id=
+    "index-current_002dinput_002dmode"></a>Function:
+    <strong>current-input-mode</strong></dt>
+
+    <dd>
+      <p>This function returns the current mode for reading
+      keyboard input. It returns a list, corresponding to the
+      arguments of <code>set-input-mode</code>, of the form
+      <code>(<var>interrupt</var> <var>flow</var> <var>meta</var>
+      <var>quit</var>)</code> in which:</p>
+
+      <dl compact="compact">
+        <dt><var>interrupt</var></dt>
+
+        <dd>
+          <p>is non-<code>nil</code> when Emacs is using
+          interrupt-driven input. If <code>nil</code>, Emacs is
+          using <small>CBREAK</small> mode.</p>
+        </dd>
+
+        <dt><var>flow</var></dt>
+
+        <dd>
+          <p>is non-<code>nil</code> if Emacs uses
+          <small>XON/XOFF</small> (<kbd>C-q</kbd>, <kbd>C-s</kbd>)
+          flow control for output to the terminal. This value is
+          meaningful only when <var>interrupt</var> is
+          <code>nil</code>.</p>
+        </dd>
+
+        <dt><var>meta</var></dt>
+
+        <dd>
+          <p>is <code>t</code> if Emacs treats the eighth bit of
+          input characters as the meta bit; <code>nil</code> means
+          Emacs clears the eighth bit of every input character; any
+          other value means Emacs uses all eight bits as the basic
+          character code.</p>
+        </dd>
+
+        <dt><var>quit</var></dt>
+
+        <dd>
+          <p>is the character Emacs currently uses for quitting,
+          usually <kbd>C-g</kbd>.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Recording-Input.html#Recording-Input"
+    accesskey="n" rel="next">Recording Input</a>, Up: <a href=
+    "Terminal-Input.html#Terminal-Input" accesskey="u" rel=
+    "up">Terminal Input</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

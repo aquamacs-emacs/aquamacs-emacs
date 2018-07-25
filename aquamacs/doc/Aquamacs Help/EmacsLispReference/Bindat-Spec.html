@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,257 +19,367 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Bindat Spec</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Bindat Spec">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Bindat Spec">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Byte-Packing.html#Byte-Packing" rel="up" title="Byte Packing">
-<link href="Bindat-Functions.html#Bindat-Functions" rel="next" title="Bindat Functions">
-<link href="Byte-Packing.html#Byte-Packing" rel="prev" title="Byte Packing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Bindat Spec</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Bindat Spec" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Bindat Spec" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Byte-Packing.html#Byte-Packing" rel="up" title=
+  "Byte Packing" />
+  <link href="Bindat-Functions.html#Bindat-Functions" rel="next"
+  title="Bindat Functions" />
+  <link href="Byte-Packing.html#Byte-Packing" rel="prev" title=
+  "Byte Packing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Bindat-Spec" id="Bindat-Spec"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Bindat-Functions.html#Bindat-Functions"
+    accesskey="n" rel="next">Bindat Functions</a>, Up: <a href=
+    "Byte-Packing.html#Byte-Packing" accesskey="u" rel="up">Byte
+    Packing</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Describing-Data-Layout" id="Describing-Data-Layout"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Bindat-Spec"></a>
-<div class="header">
-<p>
-Next: <a href="Bindat-Functions.html#Bindat-Functions" accesskey="n" rel="next">Bindat Functions</a>, Up: <a href="Byte-Packing.html#Byte-Packing" accesskey="u" rel="up">Byte Packing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Describing-Data-Layout"></a>
-<h4 class="subsection">36.20.1 Describing Data Layout</h4>
+  <h4 class="subsection">36.20.1 Describing Data Layout</h4>
 
-<p>To control unpacking and packing, you write a <em>data layout
-specification</em>, a special nested list describing named and typed
-<em>fields</em>.  This specification controls the length of each field to be
-processed, and how to pack or unpack it.  We normally keep bindat specs
-in variables whose names end in &lsquo;<samp>-bindat-spec</samp>&rsquo;; that kind of name
-is automatically recognized as risky.
-</p>
-<a name="index-endianness"></a>
-<a name="index-big-endian"></a>
-<a name="index-little-endian"></a>
-<a name="index-network-byte-ordering"></a>
-<p>A field&rsquo;s <em>type</em> describes the size (in bytes) of the object
-that the field represents and, in the case of multibyte fields, how
-the bytes are ordered within the field.  The two possible orderings
-are <em>big endian</em> (also known as &ldquo;network byte ordering&rdquo;) and
-<em>little endian</em>.  For instance, the number <code>#x23cd</code> (decimal
-9165) in big endian would be the two bytes <code>#x23</code> <code>#xcd</code>;
-and in little endian, <code>#xcd</code> <code>#x23</code>.  Here are the possible
-type values:
-</p>
-<dl compact="compact">
-<dt><code>u8</code></dt>
-<dt><code>byte</code></dt>
-<dd><p>Unsigned byte, with length 1.
-</p>
-</dd>
-<dt><code>u16</code></dt>
-<dt><code>word</code></dt>
-<dt><code>short</code></dt>
-<dd><p>Unsigned integer in network byte order, with length 2.
-</p>
-</dd>
-<dt><code>u24</code></dt>
-<dd><p>Unsigned integer in network byte order, with length 3.
-</p>
-</dd>
-<dt><code>u32</code></dt>
-<dt><code>dword</code></dt>
-<dt><code>long</code></dt>
-<dd><p>Unsigned integer in network byte order, with length 4.
-Note: These values may be limited by Emacs&rsquo;s integer implementation limits.
-</p>
-</dd>
-<dt><code>u16r</code></dt>
-<dt><code>u24r</code></dt>
-<dt><code>u32r</code></dt>
-<dd><p>Unsigned integer in little endian order, with length 2, 3 and 4, respectively.
-</p>
-</dd>
-<dt><code>str <var>len</var></code></dt>
-<dd><p>String of length <var>len</var>.
-</p>
-</dd>
-<dt><code>strz <var>len</var></code></dt>
-<dd><p>Zero-terminated string, in a fixed-size field with length <var>len</var>.
-</p>
-</dd>
-<dt><code>vec <var>len</var> [<var>type</var>]</code></dt>
-<dd><p>Vector of <var>len</var> elements of type <var>type</var>, defaulting to bytes.
-The <var>type</var> is any of the simple types above, or another vector
-specified as a list of the form <code>(vec <var>len</var> [<var>type</var>])</code>.
-</p>
-</dd>
-<dt><code>ip</code></dt>
-<dd><p>Four-byte vector representing an Internet address.  For example:
-<code>[127 0 0 1]</code> for localhost.
-</p>
-</dd>
-<dt><code>bits <var>len</var></code></dt>
-<dd><p>List of set bits in <var>len</var> bytes.  The bytes are taken in big
-endian order and the bits are numbered starting with <code>8 *
-<var>len</var> − 1</code> and ending with zero.  For example: <code>bits
-2</code> unpacks <code>#x28</code> <code>#x1c</code> to <code>(2 3 4 11 13)</code> and
-<code>#x1c</code> <code>#x28</code> to <code>(3 5 10 11 12)</code>.
-</p>
-</dd>
-<dt><code>(eval <var>form</var>)</code></dt>
-<dd><p><var>form</var> is a Lisp expression evaluated at the moment the field is
-unpacked or packed.  The result of the evaluation should be one of the
-above-listed type specifications.
-</p></dd>
-</dl>
+  <p>To control unpacking and packing, you write a <em>data layout
+  specification</em>, a special nested list describing named and
+  typed <em>fields</em>. This specification controls the length of
+  each field to be processed, and how to pack or unpack it. We
+  normally keep bindat specs in variables whose names end in
+  &lsquo;<samp>-bindat-spec</samp>&rsquo;; that kind of name is
+  automatically recognized as risky.</p><a name="index-endianness"
+  id="index-endianness"></a> <a name="index-big-endian" id=
+  "index-big-endian"></a> <a name="index-little-endian" id=
+  "index-little-endian"></a> <a name="index-network-byte-ordering"
+  id="index-network-byte-ordering"></a>
 
-<p>For a fixed-size field, the length <var>len</var> is given as an integer
-specifying the number of bytes in the field.
-</p>
-<p>When the length of a field is not fixed, it typically depends on the
-value of a preceding field.  In this case, the length <var>len</var> can be
-given either as a list <code>(<var>name</var> ...)</code> identifying a
-<em>field name</em> in the format specified for <code>bindat-get-field</code>
-below, or by an expression <code>(eval <var>form</var>)</code> where <var>form</var>
-should evaluate to an integer, specifying the field length.
-</p>
-<p>A field specification generally has the form <code>([<var>name</var>]
-<var>handler</var>)</code>, where <var>name</var> is optional.  Don&rsquo;t use names that
-are symbols meaningful as type specifications (above) or handler
-specifications (below), since that would be ambiguous.  <var>name</var> can
-be a symbol or an expression <code>(eval <var>form</var>)</code>, in which case
-<var>form</var> should evaluate to a symbol.
-</p>
-<p><var>handler</var> describes how to unpack or pack the field and can be one
-of the following:
-</p>
-<dl compact="compact">
-<dt><code><var>type</var></code></dt>
-<dd><p>Unpack/pack this field according to the type specification <var>type</var>.
-</p>
-</dd>
-<dt><code>eval <var>form</var></code></dt>
-<dd><p>Evaluate <var>form</var>, a Lisp expression, for side-effect only.  If the
-field name is specified, the value is bound to that field name.
-</p>
-</dd>
-<dt><code>fill <var>len</var></code></dt>
-<dd><p>Skip <var>len</var> bytes.  In packing, this leaves them unchanged,
-which normally means they remain zero.  In unpacking, this means
-they are ignored.
-</p>
-</dd>
-<dt><code>align <var>len</var></code></dt>
-<dd><p>Skip to the next multiple of <var>len</var> bytes.
-</p>
-</dd>
-<dt><code>struct <var>spec-name</var></code></dt>
-<dd><p>Process <var>spec-name</var> as a sub-specification.  This describes a
-structure nested within another structure.
-</p>
-</dd>
-<dt><code>union <var>form</var> (<var>tag</var> <var>spec</var>)&hellip;</code></dt>
-<dd><p>Evaluate <var>form</var>, a Lisp expression, find the first <var>tag</var>
-that matches it, and process its associated data layout specification
-<var>spec</var>.  Matching can occur in one of three ways:
-</p>
-<ul>
-<li> If a <var>tag</var> has the form <code>(eval <var>expr</var>)</code>, evaluate
-<var>expr</var> with the variable <code>tag</code> dynamically bound to the value
-of <var>form</var>.  A non-<code>nil</code> result indicates a match.
+  <p>A field&rsquo;s <em>type</em> describes the size (in bytes) of
+  the object that the field represents and, in the case of
+  multibyte fields, how the bytes are ordered within the field. The
+  two possible orderings are <em>big endian</em> (also known as
+  &ldquo;network byte ordering&rdquo;) and <em>little endian</em>.
+  For instance, the number <code>#x23cd</code> (decimal 9165) in
+  big endian would be the two bytes <code>#x23</code>
+  <code>#xcd</code>; and in little endian, <code>#xcd</code>
+  <code>#x23</code>. Here are the possible type values:</p>
 
-</li><li> <var>tag</var> matches if it is <code>equal</code> to the value of <var>form</var>.
+  <dl compact="compact">
+    <dt><code>u8</code></dt>
 
-</li><li> <var>tag</var> matches unconditionally if it is <code>t</code>.
-</li></ul>
+    <dt><code>byte</code></dt>
 
-</dd>
-<dt><code>repeat <var>count</var> <var>field-specs</var>&hellip;</code></dt>
-<dd><p>Process the <var>field-specs</var> recursively, in order, then repeat
-starting from the first one, processing all the specifications <var>count</var>
-times overall.  The <var>count</var> is given using the same formats as a
-field length&mdash;if an <code>eval</code> form is used, it is evaluated just once.
-For correct operation, each specification in <var>field-specs</var> must
-include a name.
-</p></dd>
-</dl>
+    <dd>
+      <p>Unsigned byte, with length 1.</p>
+    </dd>
 
-<p>For the <code>(eval <var>form</var>)</code> forms used in a bindat specification,
-the <var>form</var> can access and update these dynamically bound variables
-during evaluation:
-</p>
-<dl compact="compact">
-<dt><code>last</code></dt>
-<dd><p>Value of the last field processed.
-</p>
-</dd>
-<dt><code>bindat-raw</code></dt>
-<dd><p>The data as a byte array.
-</p>
-</dd>
-<dt><code>bindat-idx</code></dt>
-<dd><p>Current index (within <code>bindat-raw</code>) for unpacking or packing.
-</p>
-</dd>
-<dt><code>struct</code></dt>
-<dd><p>The alist containing the structured data that have been unpacked so
-far, or the entire structure being packed.  You can use
-<code>bindat-get-field</code> to access specific fields of this structure.
-</p>
-</dd>
-<dt><code>count</code></dt>
-<dt><code>index</code></dt>
-<dd><p>Inside a <code>repeat</code> block, these contain the maximum number of
-repetitions (as specified by the <var>count</var> parameter), and the
-current repetition number (counting from 0).  Setting <code>count</code> to
-zero will terminate the inner-most repeat block after the current
-repetition has completed.
-</p></dd>
-</dl>
+    <dt><code>u16</code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Bindat-Functions.html#Bindat-Functions" accesskey="n" rel="next">Bindat Functions</a>, Up: <a href="Byte-Packing.html#Byte-Packing" accesskey="u" rel="up">Byte Packing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><code>word</code></dt>
 
+    <dt><code>short</code></dt>
 
+    <dd>
+      <p>Unsigned integer in network byte order, with length 2.</p>
+    </dd>
 
+    <dt><code>u24</code></dt>
+
+    <dd>
+      <p>Unsigned integer in network byte order, with length 3.</p>
+    </dd>
+
+    <dt><code>u32</code></dt>
+
+    <dt><code>dword</code></dt>
+
+    <dt><code>long</code></dt>
+
+    <dd>
+      <p>Unsigned integer in network byte order, with length 4.
+      Note: These values may be limited by Emacs&rsquo;s integer
+      implementation limits.</p>
+    </dd>
+
+    <dt><code>u16r</code></dt>
+
+    <dt><code>u24r</code></dt>
+
+    <dt><code>u32r</code></dt>
+
+    <dd>
+      <p>Unsigned integer in little endian order, with length 2, 3
+      and 4, respectively.</p>
+    </dd>
+
+    <dt><code>str <var>len</var></code></dt>
+
+    <dd>
+      <p>String of length <var>len</var>.</p>
+    </dd>
+
+    <dt><code>strz <var>len</var></code></dt>
+
+    <dd>
+      <p>Zero-terminated string, in a fixed-size field with length
+      <var>len</var>.</p>
+    </dd>
+
+    <dt><code>vec <var>len</var> [<var>type</var>]</code></dt>
+
+    <dd>
+      <p>Vector of <var>len</var> elements of type <var>type</var>,
+      defaulting to bytes. The <var>type</var> is any of the simple
+      types above, or another vector specified as a list of the
+      form <code>(vec <var>len</var> [<var>type</var>])</code>.</p>
+    </dd>
+
+    <dt><code>ip</code></dt>
+
+    <dd>
+      <p>Four-byte vector representing an Internet address. For
+      example: <code>[127 0 0 1]</code> for localhost.</p>
+    </dd>
+
+    <dt><code>bits <var>len</var></code></dt>
+
+    <dd>
+      <p>List of set bits in <var>len</var> bytes. The bytes are
+      taken in big endian order and the bits are numbered starting
+      with <code>8 * <var>len</var> &acirc;&circ;&rsquo; 1</code>
+      and ending with zero. For example: <code>bits 2</code>
+      unpacks <code>#x28</code> <code>#x1c</code> to <code>(2 3 4
+      11 13)</code> and <code>#x1c</code> <code>#x28</code> to
+      <code>(3 5 10 11 12)</code>.</p>
+    </dd>
+
+    <dt><code>(eval <var>form</var>)</code></dt>
+
+    <dd>
+      <p><var>form</var> is a Lisp expression evaluated at the
+      moment the field is unpacked or packed. The result of the
+      evaluation should be one of the above-listed type
+      specifications.</p>
+    </dd>
+  </dl>
+
+  <p>For a fixed-size field, the length <var>len</var> is given as
+  an integer specifying the number of bytes in the field.</p>
+
+  <p>When the length of a field is not fixed, it typically depends
+  on the value of a preceding field. In this case, the length
+  <var>len</var> can be given either as a list
+  <code>(<var>name</var> ...)</code> identifying a <em>field
+  name</em> in the format specified for
+  <code>bindat-get-field</code> below, or by an expression
+  <code>(eval <var>form</var>)</code> where <var>form</var> should
+  evaluate to an integer, specifying the field length.</p>
+
+  <p>A field specification generally has the form
+  <code>([<var>name</var>] <var>handler</var>)</code>, where
+  <var>name</var> is optional. Don&rsquo;t use names that are
+  symbols meaningful as type specifications (above) or handler
+  specifications (below), since that would be ambiguous.
+  <var>name</var> can be a symbol or an expression <code>(eval
+  <var>form</var>)</code>, in which case <var>form</var> should
+  evaluate to a symbol.</p>
+
+  <p><var>handler</var> describes how to unpack or pack the field
+  and can be one of the following:</p>
+
+  <dl compact="compact">
+    <dt><code><var>type</var></code></dt>
+
+    <dd>
+      <p>Unpack/pack this field according to the type specification
+      <var>type</var>.</p>
+    </dd>
+
+    <dt><code>eval <var>form</var></code></dt>
+
+    <dd>
+      <p>Evaluate <var>form</var>, a Lisp expression, for
+      side-effect only. If the field name is specified, the value
+      is bound to that field name.</p>
+    </dd>
+
+    <dt><code>fill <var>len</var></code></dt>
+
+    <dd>
+      <p>Skip <var>len</var> bytes. In packing, this leaves them
+      unchanged, which normally means they remain zero. In
+      unpacking, this means they are ignored.</p>
+    </dd>
+
+    <dt><code>align <var>len</var></code></dt>
+
+    <dd>
+      <p>Skip to the next multiple of <var>len</var> bytes.</p>
+    </dd>
+
+    <dt><code>struct <var>spec-name</var></code></dt>
+
+    <dd>
+      <p>Process <var>spec-name</var> as a sub-specification. This
+      describes a structure nested within another structure.</p>
+    </dd>
+
+    <dt><code>union <var>form</var> (<var>tag</var>
+    <var>spec</var>)&hellip;</code></dt>
+
+    <dd>
+      <p>Evaluate <var>form</var>, a Lisp expression, find the
+      first <var>tag</var> that matches it, and process its
+      associated data layout specification <var>spec</var>.
+      Matching can occur in one of three ways:</p>
+
+      <ul>
+        <li>If a <var>tag</var> has the form <code>(eval
+        <var>expr</var>)</code>, evaluate <var>expr</var> with the
+        variable <code>tag</code> dynamically bound to the value of
+        <var>form</var>. A non-<code>nil</code> result indicates a
+        match.</li>
+
+        <li><var>tag</var> matches if it is <code>equal</code> to
+        the value of <var>form</var>.</li>
+
+        <li><var>tag</var> matches unconditionally if it is
+        <code>t</code>.</li>
+      </ul>
+    </dd>
+
+    <dt><code>repeat <var>count</var>
+    <var>field-specs</var>&hellip;</code></dt>
+
+    <dd>
+      <p>Process the <var>field-specs</var> recursively, in order,
+      then repeat starting from the first one, processing all the
+      specifications <var>count</var> times overall. The
+      <var>count</var> is given using the same formats as a field
+      length&mdash;if an <code>eval</code> form is used, it is
+      evaluated just once. For correct operation, each
+      specification in <var>field-specs</var> must include a
+      name.</p>
+    </dd>
+  </dl>
+
+  <p>For the <code>(eval <var>form</var>)</code> forms used in a
+  bindat specification, the <var>form</var> can access and update
+  these dynamically bound variables during evaluation:</p>
+
+  <dl compact="compact">
+    <dt><code>last</code></dt>
+
+    <dd>
+      <p>Value of the last field processed.</p>
+    </dd>
+
+    <dt><code>bindat-raw</code></dt>
+
+    <dd>
+      <p>The data as a byte array.</p>
+    </dd>
+
+    <dt><code>bindat-idx</code></dt>
+
+    <dd>
+      <p>Current index (within <code>bindat-raw</code>) for
+      unpacking or packing.</p>
+    </dd>
+
+    <dt><code>struct</code></dt>
+
+    <dd>
+      <p>The alist containing the structured data that have been
+      unpacked so far, or the entire structure being packed. You
+      can use <code>bindat-get-field</code> to access specific
+      fields of this structure.</p>
+    </dd>
+
+    <dt><code>count</code></dt>
+
+    <dt><code>index</code></dt>
+
+    <dd>
+      <p>Inside a <code>repeat</code> block, these contain the
+      maximum number of repetitions (as specified by the
+      <var>count</var> parameter), and the current repetition
+      number (counting from 0). Setting <code>count</code> to zero
+      will terminate the inner-most repeat block after the current
+      repetition has completed.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Bindat-Functions.html#Bindat-Functions"
+    accesskey="n" rel="next">Bindat Functions</a>, Up: <a href=
+    "Byte-Packing.html#Byte-Packing" accesskey="u" rel="up">Byte
+    Packing</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

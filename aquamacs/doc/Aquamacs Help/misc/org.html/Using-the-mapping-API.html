@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,183 +16,288 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Using the mapping API</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Using the mapping API">
-<meta name="keywords" content="The Org Manual: Using the mapping API">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Hacking.html#Hacking" rel="up" title="Hacking">
-<link href="MobileOrg.html#MobileOrg" rel="next" title="MobileOrg">
-<link href="Using-the-property-API.html#Using-the-property-API" rel="prev" title="Using the property API">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Using the mapping API</title>
+  <meta name="description" content=
+  "The Org Manual: Using the mapping API" />
+  <meta name="keywords" content=
+  "The Org Manual: Using the mapping API" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Hacking.html#Hacking" rel="up" title="Hacking" />
+  <link href="MobileOrg.html#MobileOrg" rel="next" title=
+  "MobileOrg" />
+  <link href="Using-the-property-API.html#Using-the-property-API"
+  rel="prev" title="Using the property API" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-the-mapping-API"></a>
-<div class="header">
-<p>
-Previous: <a href="Using-the-property-API.html#Using-the-property-API" accesskey="p" rel="prev">Using the property API</a>, Up: <a href="Hacking.html#Hacking" accesskey="u" rel="up">Hacking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-the-mapping-API-1"></a>
-<h3 class="section">A.12 Using the mapping API</h3>
-<a name="index-API_002c-for-mapping"></a>
-<a name="index-mapping-entries_002c-API"></a>
+<body lang="en" xml:lang="en">
+  <a name="Using-the-mapping-API" id="Using-the-mapping-API"></a>
 
-<p>Org has sophisticated mapping capabilities to find all entries satisfying
-certain criteria.  Internally, this functionality is used to produce agenda
-views, but there is also an API that can be used to execute arbitrary
-functions for each or selected entries.  The main entry point for this API
-is:
-</p>
-<dl>
-<dt><a name="index-org_002dmap_002dentries"></a>Function: <strong>org-map-entries</strong> <em>func &amp;optional match scope &amp;rest skip</em></dt>
-<dd><p>Call <code>FUNC</code> at each headline selected by <code>MATCH</code> in <code>SCOPE</code>.
-</p>
-<p><code>FUNC</code> is a function or a Lisp form.  The function will be called
-without arguments, with the cursor positioned at the beginning of the
-headline.  The return values of all calls to the function will be collected
-and returned as a list.
-</p>
-<p>The call to <code>FUNC</code> will be wrapped into a save-excursion form, so
-<code>FUNC</code> does not need to preserve point.  After evaluation, the cursor
-will be moved to the end of the line (presumably of the headline of the
-processed entry) and search continues from there.  Under some circumstances,
-this may not produce the wanted results.  For example, if you have removed
-(e.g., archived) the current (sub)tree it could mean that the next entry will
-be skipped entirely.  In such cases, you can specify the position from where
-search should continue by making <code>FUNC</code> set the variable
-<code>org-map-continue-from</code> to the desired buffer position.
-</p>
-<p><code>MATCH</code> is a tags/property/todo match as it is used in the agenda match
-view.  Only headlines that are matched by this query will be considered
-during the iteration.  When <code>MATCH</code> is <code>nil</code> or <code>t</code>, all
-headlines will be visited by the iteration.
-</p>
-<p><code>SCOPE</code> determines the scope of this command.  It can be any of:
-</p>
-<div class="example">
-<pre class="example">nil     <span class="roman">the current buffer, respecting the restriction if any</span>
-tree    <span class="roman">the subtree started with the entry at point</span>
-region  <span class="roman">The entries within the active region, if any</span>
-file    <span class="roman">the current buffer, without restriction</span>
+  <div class="header">
+    <p>Previous: <a href=
+    "Using-the-property-API.html#Using-the-property-API" accesskey=
+    "p" rel="prev">Using the property API</a>, Up: <a href=
+    "Hacking.html#Hacking" accesskey="u" rel="up">Hacking</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-the-mapping-API-1" id=
+  "Using-the-mapping-API-1"></a>
+
+  <h3 class="section">A.12 Using the mapping API</h3><a name=
+  "index-API_002c-for-mapping" id="index-API_002c-for-mapping"></a>
+  <a name="index-mapping-entries_002c-API" id=
+  "index-mapping-entries_002c-API"></a>
+
+  <p>Org has sophisticated mapping capabilities to find all entries
+  satisfying certain criteria. Internally, this functionality is
+  used to produce agenda views, but there is also an API that can
+  be used to execute arbitrary functions for each or selected
+  entries. The main entry point for this API is:</p>
+
+  <dl>
+    <dt><a name="index-org_002dmap_002dentries" id=
+    "index-org_002dmap_002dentries"></a>Function:
+    <strong>org-map-entries</strong> <em>func &amp;optional match
+    scope &amp;rest skip</em></dt>
+
+    <dd>
+      <p>Call <code>FUNC</code> at each headline selected by
+      <code>MATCH</code> in <code>SCOPE</code>.</p>
+
+      <p><code>FUNC</code> is a function or a Lisp form. The
+      function will be called without arguments, with the cursor
+      positioned at the beginning of the headline. The return
+      values of all calls to the function will be collected and
+      returned as a list.</p>
+
+      <p>The call to <code>FUNC</code> will be wrapped into a
+      save-excursion form, so <code>FUNC</code> does not need to
+      preserve point. After evaluation, the cursor will be moved to
+      the end of the line (presumably of the headline of the
+      processed entry) and search continues from there. Under some
+      circumstances, this may not produce the wanted results. For
+      example, if you have removed (e.g., archived) the current
+      (sub)tree it could mean that the next entry will be skipped
+      entirely. In such cases, you can specify the position from
+      where search should continue by making <code>FUNC</code> set
+      the variable <code>org-map-continue-from</code> to the
+      desired buffer position.</p>
+
+      <p><code>MATCH</code> is a tags/property/todo match as it is
+      used in the agenda match view. Only headlines that are
+      matched by this query will be considered during the
+      iteration. When <code>MATCH</code> is <code>nil</code> or
+      <code>t</code>, all headlines will be visited by the
+      iteration.</p>
+
+      <p><code>SCOPE</code> determines the scope of this command.
+      It can be any of:</p>
+
+      <div class="example">
+        <pre class="example">
+nil     <span class=
+"roman">the current buffer, respecting the restriction if any</span>
+tree    <span class=
+"roman">the subtree started with the entry at point</span>
+region  <span class=
+"roman">The entries within the active region, if any</span>
+file    <span class=
+"roman">the current buffer, without restriction</span>
 file-with-archives
-        <span class="roman">the current buffer, and any archives associated with it</span>
+        <span class=
+"roman">the current buffer, and any archives associated with it</span>
 agenda  <span class="roman">all agenda files</span>
 agenda-with-archives
-        <span class="roman">all agenda files with any archive files associated with them</span>
+        <span class=
+"roman">all agenda files with any archive files associated with them</span>
 (file1 file2 ...)
-        <span class="roman">if this is a list, all files in the list will be scanned</span>
-</pre></div>
-<p>The remaining args are treated as settings for the skipping facilities of
-the scanner.  The following items can be given here:
-</p>
-<a name="index-org_002dagenda_002dskip_002dfunction-2"></a>
-<div class="example">
-<pre class="example">archive   <span class="roman">skip trees with the archive tag</span>
-comment   <span class="roman">skip trees with the COMMENT keyword</span>
+        <span class=
+"roman">if this is a list, all files in the list will be scanned</span>
+</pre>
+      </div>
+
+      <p>The remaining args are treated as settings for the
+      skipping facilities of the scanner. The following items can
+      be given here:</p><a name=
+      "index-org_002dagenda_002dskip_002dfunction-2" id=
+      "index-org_002dagenda_002dskip_002dfunction-2"></a>
+
+      <div class="example">
+        <pre class="example">
+archive   <span class=
+"roman">skip trees with the archive tag</span>
+comment   <span class=
+"roman">skip trees with the COMMENT keyword</span>
 function or Lisp form
-          <span class="roman">will be used as value for <code>org-agenda-skip-function</code>,</span>
-          <span class="roman">so whenever the function returns t, FUNC</span>
-          <span class="roman">will not be called for that entry and search will</span>
-          <span class="roman">continue from the point where the function leaves it</span>
-</pre></div>
-</dd></dl>
+          <span class=
+"roman">will be used as value for <code>org-agenda-skip-function</code>,</span>
+          <span class=
+"roman">so whenever the function returns t, FUNC</span>
+          <span class=
+"roman">will not be called for that entry and search will</span>
+          <span class=
+"roman">continue from the point where the function leaves it</span>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>The function given to that mapping routine can really do anything you like.
-It can use the property API (see <a href="Using-the-property-API.html#Using-the-property-API">Using the property API</a>) to gather more
-information about the entry, or in order to change metadata in the entry.
-Here are a couple of functions that might be handy:
-</p>
-<dl>
-<dt><a name="index-org_002dtodo-2"></a>Function: <strong>org-todo</strong> <em>&amp;optional arg</em></dt>
-<dd><p>Change the TODO state of the entry.  See the docstring of the functions for
-the many possible values for the argument <code>ARG</code>.
-</p></dd></dl>
+  <p>The function given to that mapping routine can really do
+  anything you like. It can use the property API (see <a href=
+  "Using-the-property-API.html#Using-the-property-API">Using the
+  property API</a>) to gather more information about the entry, or
+  in order to change metadata in the entry. Here are a couple of
+  functions that might be handy:</p>
 
-<dl>
-<dt><a name="index-org_002dpriority-1"></a>Function: <strong>org-priority</strong> <em>&amp;optional action</em></dt>
-<dd><p>Change the priority of the entry.  See the docstring of this function for the
-possible values for <code>ACTION</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-org_002dtodo-2" id=
+    "index-org_002dtodo-2"></a>Function: <strong>org-todo</strong>
+    <em>&amp;optional arg</em></dt>
 
-<dl>
-<dt><a name="index-org_002dtoggle_002dtag"></a>Function: <strong>org-toggle-tag</strong> <em>tag &amp;optional onoff</em></dt>
-<dd><p>Toggle the tag <code>TAG</code> in the current entry.  Setting <code>ONOFF</code> to
-either <code>on</code> or <code>off</code> will not toggle tag, but ensure that it is
-either on or off.
-</p></dd></dl>
+    <dd>
+      <p>Change the TODO state of the entry. See the docstring of
+      the functions for the many possible values for the argument
+      <code>ARG</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-org_002dpromote"></a>Function: <strong>org-promote</strong></dt>
-<dd><p>Promote the current entry.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-org_002dpriority-1" id=
+    "index-org_002dpriority-1"></a>Function:
+    <strong>org-priority</strong> <em>&amp;optional
+    action</em></dt>
 
-<dl>
-<dt><a name="index-org_002ddemote"></a>Function: <strong>org-demote</strong></dt>
-<dd><p>Demote the current entry.
-</p></dd></dl>
+    <dd>
+      <p>Change the priority of the entry. See the docstring of
+      this function for the possible values for
+      <code>ACTION</code>.</p>
+    </dd>
+  </dl>
 
-<p>Here is a simple example that will turn all entries in the current file with
-a tag <code>TOMORROW</code> into TODO entries with the keyword <code>UPCOMING</code>.
-Entries in comment trees and in archive trees will be ignored.
-</p>
-<div class="lisp">
-<pre class="lisp">(org-map-entries
- '(org-todo &quot;UPCOMING&quot;)
- &quot;+TOMORROW&quot; 'file 'archive 'comment)
-</pre></div>
+  <dl>
+    <dt><a name="index-org_002dtoggle_002dtag" id=
+    "index-org_002dtoggle_002dtag"></a>Function:
+    <strong>org-toggle-tag</strong> <em>tag &amp;optional
+    onoff</em></dt>
 
-<p>The following example counts the number of entries with TODO keyword
-<code>WAITING</code>, in all agenda files.
-</p>
-<div class="lisp">
-<pre class="lisp">(length (org-map-entries t &quot;/+WAITING&quot; 'agenda))
-</pre></div>
+    <dd>
+      <p>Toggle the tag <code>TAG</code> in the current entry.
+      Setting <code>ONOFF</code> to either <code>on</code> or
+      <code>off</code> will not toggle tag, but ensure that it is
+      either on or off.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Using-the-property-API.html#Using-the-property-API" accesskey="p" rel="prev">Using the property API</a>, Up: <a href="Hacking.html#Hacking" accesskey="u" rel="up">Hacking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-org_002dpromote" id=
+    "index-org_002dpromote"></a>Function:
+    <strong>org-promote</strong></dt>
 
+    <dd>
+      <p>Promote the current entry.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-org_002ddemote" id=
+    "index-org_002ddemote"></a>Function:
+    <strong>org-demote</strong></dt>
 
+    <dd>
+      <p>Demote the current entry.</p>
+    </dd>
+  </dl>
+
+  <p>Here is a simple example that will turn all entries in the
+  current file with a tag <code>TOMORROW</code> into TODO entries
+  with the keyword <code>UPCOMING</code>. Entries in comment trees
+  and in archive trees will be ignored.</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(org-map-entries
+ '(org-todo "UPCOMING")
+ "+TOMORROW" 'file 'archive 'comment)
+</pre>
+  </div>
+
+  <p>The following example counts the number of entries with TODO
+  keyword <code>WAITING</code>, in all agenda files.</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(length (org-map-entries t "/+WAITING" 'agenda))
+</pre>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Using-the-property-API.html#Using-the-property-API" accesskey=
+    "p" rel="prev">Using the property API</a>, Up: <a href=
+    "Hacking.html#Hacking" accesskey="u" rel="up">Hacking</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

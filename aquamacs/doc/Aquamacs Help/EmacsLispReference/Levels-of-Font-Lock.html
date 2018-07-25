@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,91 +19,128 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Levels of Font Lock</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Levels of Font Lock">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Levels of Font Lock">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="up" title="Font Lock Mode">
-<link href="Precalculated-Fontification.html#Precalculated-Fontification" rel="next" title="Precalculated Fontification">
-<link href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables" rel="prev" title="Other Font Lock Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Levels of Font
+  Lock</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Levels of Font Lock" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Levels of Font Lock" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="up" title=
+  "Font Lock Mode" />
+  <link href=
+  "Precalculated-Fontification.html#Precalculated-Fontification"
+  rel="next" title="Precalculated Fontification" />
+  <link href=
+  "Other-Font-Lock-Variables.html#Other-Font-Lock-Variables" rel=
+  "prev" title="Other Font Lock Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Levels-of-Font-Lock" id="Levels-of-Font-Lock"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Precalculated-Fontification.html#Precalculated-Fontification"
+    accesskey="n" rel="next">Precalculated Fontification</a>,
+    Previous: <a href=
+    "Other-Font-Lock-Variables.html#Other-Font-Lock-Variables"
+    accesskey="p" rel="prev">Other Font Lock Variables</a>, Up:
+    <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel=
+    "up">Font Lock Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Levels-of-Font-Lock-1" id="Levels-of-Font-Lock-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Levels-of-Font-Lock"></a>
-<div class="header">
-<p>
-Next: <a href="Precalculated-Fontification.html#Precalculated-Fontification" accesskey="n" rel="next">Precalculated Fontification</a>, Previous: <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables" accesskey="p" rel="prev">Other Font Lock Variables</a>, Up: <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel="up">Font Lock Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Levels-of-Font-Lock-1"></a>
-<h4 class="subsection">22.6.5 Levels of Font Lock</h4>
+  <h4 class="subsection">22.6.5 Levels of Font Lock</h4>
 
-<p>Some major modes offer three different levels of fontification.  You
-can define multiple levels by using a list of symbols for <var>keywords</var>
-in <code>font-lock-defaults</code>.  Each symbol specifies one level of
-fontification; it is up to the user to choose one of these levels,
-normally by setting <code>font-lock-maximum-decoration</code> (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Font-Lock.html#Font-Lock">Font
-Lock</a> in <cite>the GNU Emacs Manual</cite>).  The chosen level&rsquo;s symbol value
-is used to initialize <code>font-lock-keywords</code>.
-</p>
-<p>Here are the conventions for how to define the levels of
-fontification:
-</p>
-<ul>
-<li> Level 1: highlight function declarations, file directives (such as include or
-import directives), strings and comments.  The idea is speed, so only
-the most important and top-level components are fontified.
+  <p>Some major modes offer three different levels of
+  fontification. You can define multiple levels by using a list of
+  symbols for <var>keywords</var> in
+  <code>font-lock-defaults</code>. Each symbol specifies one level
+  of fontification; it is up to the user to choose one of these
+  levels, normally by setting
+  <code>font-lock-maximum-decoration</code> (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Font-Lock.html#Font-Lock">
+  Font Lock</a> in <cite>the GNU Emacs Manual</cite>). The chosen
+  level&rsquo;s symbol value is used to initialize
+  <code>font-lock-keywords</code>.</p>
 
-</li><li> Level 2: in addition to level 1, highlight all language keywords,
-including type names that act like keywords, as well as named constant
-values.  The idea is that all keywords (either syntactic or semantic)
-should be fontified appropriately.
+  <p>Here are the conventions for how to define the levels of
+  fontification:</p>
 
-</li><li> Level 3: in addition to level 2, highlight the symbols being defined in
-function and variable declarations, and all builtin function names,
-wherever they appear.
-</li></ul>
+  <ul>
+    <li>Level 1: highlight function declarations, file directives
+    (such as include or import directives), strings and comments.
+    The idea is speed, so only the most important and top-level
+    components are fontified.</li>
 
+    <li>Level 2: in addition to level 1, highlight all language
+    keywords, including type names that act like keywords, as well
+    as named constant values. The idea is that all keywords (either
+    syntactic or semantic) should be fontified appropriately.</li>
 
-
-
+    <li>Level 3: in addition to level 2, highlight the symbols
+    being defined in function and variable declarations, and all
+    builtin function names, wherever they appear.</li>
+  </ul>
 </body>
 </html>

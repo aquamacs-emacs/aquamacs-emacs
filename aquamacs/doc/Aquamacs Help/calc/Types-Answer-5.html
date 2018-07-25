@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Types Answer 5 - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
-<link rel="prev" href="Types-Answer-4.html#Types-Answer-4" title="Types Answer 4">
-<link rel="next" href="Types-Answer-6.html#Types-Answer-6" title="Types Answer 6">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Types Answer 5 - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Answers-to-Exercises.html#Answers-to-Exercises" title=
+  "Answers to Exercises" />
+  <link rel="prev" href="Types-Answer-4.html#Types-Answer-4" title=
+  "Types Answer 4" />
+  <link rel="next" href="Types-Answer-6.html#Types-Answer-6" title=
+  "Types Answer 6" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +39,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,52 +52,66 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Types-Answer-5"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Types-Answer-6.html#Types-Answer-6">Types Answer 6</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Types-Answer-4.html#Types-Answer-4">Types Answer 4</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Types-Answer-5" id="Types-Answer-5"></a>
 
-<h4 class="subsection">3.7.37 Types Tutorial Exercise 5</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Types-Answer-6.html#Types-Answer-6">Types Answer 6</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Types-Answer-4.html#Types-Answer-4">Types Answer 4</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Answers-to-Exercises.html#Answers-to-Exercises">Answers to
+    Exercises</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">Let's suppose it's January 14, 1991.  The easiest thing to do is
-to keep trying 13ths of months until Calc reports a Friday. 
-We can do this by manually entering dates, or by using <kbd>t I</kbd>:
+  <h4 class="subsection">3.7.37 Types Tutorial Exercise 5</h4>
 
-<pre class="smallexample">     1:  &lt;Wed Feb 13, 1991&gt;    1:  &lt;Wed Mar 13, 1991&gt;   1:  &lt;Sat Apr 13, 1991&gt;
+  <p class="noindent">Let's suppose it's January 14, 1991. The
+  easiest thing to do is to keep trying 13ths of months until Calc
+  reports a Friday. We can do this by manually entering dates, or
+  by using <kbd>t I</kbd>:</p>
+  <pre class="smallexample">
+     1:  &lt;Wed Feb 13, 1991&gt;    1:  &lt;Wed Mar 13, 1991&gt;   1:  &lt;Sat Apr 13, 1991&gt;
          .                         .                        .
      
          ' &lt;2/13&gt; &lt;RET&gt;       &lt;DEL&gt;    ' &lt;3/13&gt; &lt;RET&gt;             t I
 </pre>
-   <p class="noindent">(Calc assumes the current year if you don't say otherwise.)
 
-   <p>This is getting tedious&mdash;we can keep advancing the date by typing
-<kbd>t I</kbd> over and over again, but let's automate the job by using
-vector mapping.  The <kbd>t I</kbd> command actually takes a second
-&ldquo;how-many-months&rdquo; argument, which defaults to one.  This
-argument is exactly what we want to map over:
+  <p class="noindent">(Calc assumes the current year if you don't
+  say otherwise.)</p>
 
-<pre class="smallexample">     2:  &lt;Sat Apr 13, 1991&gt;     1:  [&lt;Mon May 13, 1991&gt;, &lt;Thu Jun 13, 1991&gt;,
+  <p>This is getting tedious&mdash;we can keep advancing the date
+  by typing <kbd>t I</kbd> over and over again, but let's automate
+  the job by using vector mapping. The <kbd>t I</kbd> command
+  actually takes a second &ldquo;how-many-months&rdquo; argument,
+  which defaults to one. This argument is exactly what we want to
+  map over:</p>
+  <pre class="smallexample">
+     2:  &lt;Sat Apr 13, 1991&gt;     1:  [&lt;Mon May 13, 1991&gt;, &lt;Thu Jun 13, 1991&gt;,
      1:  [1, 2, 3, 4, 5, 6]          &lt;Sat Jul 13, 1991&gt;, &lt;Tue Aug 13, 1991&gt;,
          .                           &lt;Fri Sep 13, 1991&gt;, &lt;Sun Oct 13, 1991&gt;]
                                     .
      
          v x 6 &lt;RET&gt;                  V M t I
 </pre>
-   <p class="noindent">Et voil&agrave;, September 13, 1991 is a Friday.
 
-<pre class="smallexample">     1:  242
+  <p class="noindent">Et voil&agrave;, September 13, 1991 is a
+  Friday.</p>
+  <pre class="smallexample">
+     1:  242
          .
      
      ' &lt;sep 13&gt; - &lt;jan 14&gt; &lt;RET&gt;
 </pre>
-   <p class="noindent">And the answer to our original question:  242 days to go.
 
-   </body></html>
-
+  <p class="noindent">And the answer to our original question: 242
+  days to go.</p>
+</body>
+</html>

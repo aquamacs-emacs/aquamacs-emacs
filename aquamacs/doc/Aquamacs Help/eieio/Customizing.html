@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Customizing - Enhanced Implementation of Emacs Interpreted Objects</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Association-Lists.html#Association-Lists" title="Association Lists">
-<link rel="next" href="Introspection.html#Introspection" title="Introspection">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Customizing - Enhanced Implementation of Emacs Interpreted
+  Objects</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Association-Lists.html#Association-Lists"
+  title="Association Lists" />
+  <link rel="next" href="Introspection.html#Introspection" title=
+  "Introspection" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -25,8 +35,10 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,77 +48,101 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Customizing"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Introspection.html#Introspection">Introspection</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Association-Lists.html#Association-Lists">Association Lists</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Customizing" id="Customizing"></a>
 
-<!-- node-name, next, previous, up -->
-<h2 class="chapter">9 Customizing Objects</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Introspection.html#Introspection">Introspection</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Association-Lists.html#Association-Lists">Association
+    Lists</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div><!-- node-name, next, previous, up -->
 
-<p><i>EIEIO</i> supports the Custom facility through two new widget types. 
-If a variable is declared as type <code>object</code>, then full editing of
-slots via the widgets is made possible.  This should be used
-carefully, however, because modified objects are cloned, so if there
-are other references to these objects, they will no longer be linked
-together.
+  <h2 class="chapter">9 Customizing Objects</h2>
 
-   <p>If you want in place editing of objects, use the following methods:
+  <p><i>EIEIO</i> supports the Custom facility through two new
+  widget types. If a variable is declared as type
+  <code>object</code>, then full editing of slots via the widgets
+  is made possible. This should be used carefully, however, because
+  modified objects are cloned, so if there are other references to
+  these objects, they will no longer be linked together.</p>
 
-<div class="defun">
-&mdash; Function: <b>eieio-customize-object</b><var> object<a name="index-eieio_002dcustomize_002dobject-47"></a></var><br>
-<blockquote><p>Create a custom buffer and insert a widget for editing <var>object</var>.  At
-the end, an <code>Apply</code> and <code>Reset</code> button are available.  This
-will edit the object "in place" so references to it are also changed. 
-There is no effort to prevent multiple edits of a singular object, so
-care must be taken by the user of this function. 
-</p></blockquote></div>
+  <p>If you want in place editing of objects, use the following
+  methods:</p>
 
-<div class="defun">
-&mdash; Function: <b>eieio-custom-widget-insert</b><var> object flags<a name="index-eieio_002dcustom_002dwidget_002dinsert-48"></a></var><br>
-<blockquote><p>This method inserts an edit object into the current buffer in place. 
-It is implemented as <code>(widget-create 'object-edit :value object)</code>. 
-This method is provided as a locale for adding tracking, or
-specializing the widget insert procedure for any object. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Function: <b>eieio-customize-object</b>
+    <var>object<a name="index-eieio_002dcustomize_002dobject-47"
+    id="index-eieio_002dcustomize_002dobject-47"></a></var><br />
 
-   <p>To define a slot with an object in it, use the <code>object</code> tag.  This
-widget type will be automatically converted to <code>object-edit</code> if you
-do in place editing of you object.
+    <blockquote>
+      <p>Create a custom buffer and insert a widget for editing
+      <var>object</var>. At the end, an <code>Apply</code> and
+      <code>Reset</code> button are available. This will edit the
+      object "in place" so references to it are also changed. There
+      is no effort to prevent multiple edits of a singular object,
+      so care must be taken by the user of this function.</p>
+    </blockquote>
+  </div>
 
-   <p>If you want to have additional actions taken when a user clicks on the
-<code>Apply</code> button, then overload the method <code>eieio-done-customizing</code>. 
-This method does nothing by default, but that may change in the future. 
-This would be the best way to make your objects persistent when using
-in-place editing.
+  <div class="defun">
+    &mdash; Function: <b>eieio-custom-widget-insert</b> <var>object
+    flags<a name="index-eieio_002dcustom_002dwidget_002dinsert-48"
+    id=
+    "index-eieio_002dcustom_002dwidget_002dinsert-48"></a></var><br />
 
-<h3 class="section">9.1 Widget extention</h3>
 
-<p>When widgets are being created, one new widget extention has been added,
-called the <code>:slotofchoices</code>.  When this occurs in a widget
-definition, all elements after it are removed, and the slot is specifies
-is queried and converted into a series of constants.
+    <blockquote>
+      <p>This method inserts an edit object into the current buffer
+      in place. It is implemented as <code>(widget-create
+      'object-edit :value object)</code>. This method is provided
+      as a locale for adding tracking, or specializing the widget
+      insert procedure for any object.</p>
+    </blockquote>
+  </div>
 
-<pre class="example">     (choice (const :tag "None" nil)
+  <p>To define a slot with an object in it, use the
+  <code>object</code> tag. This widget type will be automatically
+  converted to <code>object-edit</code> if you do in place editing
+  of you object.</p>
+
+  <p>If you want to have additional actions taken when a user
+  clicks on the <code>Apply</code> button, then overload the method
+  <code>eieio-done-customizing</code>. This method does nothing by
+  default, but that may change in the future. This would be the
+  best way to make your objects persistent when using in-place
+  editing.</p>
+
+  <h3 class="section">9.1 Widget extention</h3>
+
+  <p>When widgets are being created, one new widget extention has
+  been added, called the <code>:slotofchoices</code>. When this
+  occurs in a widget definition, all elements after it are removed,
+  and the slot is specifies is queried and converted into a series
+  of constants.</p>
+  <pre class="example">
+     (choice (const :tag "None" nil)
              :slotofchoices morestuff)
 </pre>
-   <p>and if the slot <code>morestuff</code> contains <code>(sym1 sym2 sym3)</code>, the
-above example is converted into:
 
-<pre class="example">     (choice (const :tag "None" nil)
+  <p>and if the slot <code>morestuff</code> contains <code>(sym1
+  sym2 sym3)</code>, the above example is converted into:</p>
+  <pre class="example">
+     (choice (const :tag "None" nil)
              (const sym1)
              (const sym2)
              (const sym3))
 </pre>
-   <p>This is useful when a given item needs to be selected from a list of
-items defined in this second slot.
 
-   </body></html>
-
+  <p>This is useful when a given item needs to be selected from a
+  list of items defined in this second slot.</p>
+</body>
+</html>

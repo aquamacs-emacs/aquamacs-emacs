@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,115 +14,186 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Searching for Articles</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Searching for Articles">
-<meta name="keywords" content="Gnus Manual: Searching for Articles">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Various-Summary-Stuff.html#Various-Summary-Stuff" rel="up" title="Various Summary Stuff">
-<link href="Summary-Generation-Commands.html#Summary-Generation-Commands" rel="next" title="Summary Generation Commands">
-<link href="Summary-Group-Information.html#Summary-Group-Information" rel="prev" title="Summary Group Information">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Searching for Articles</title>
+  <meta name="description" content=
+  "Gnus Manual: Searching for Articles" />
+  <meta name="keywords" content=
+  "Gnus Manual: Searching for Articles" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Various-Summary-Stuff.html#Various-Summary-Stuff"
+  rel="up" title="Various Summary Stuff" />
+  <link href=
+  "Summary-Generation-Commands.html#Summary-Generation-Commands"
+  rel="next" title="Summary Generation Commands" />
+  <link href=
+  "Summary-Group-Information.html#Summary-Group-Information" rel=
+  "prev" title="Summary Group Information" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Searching-for-Articles"></a>
-<div class="header">
-<p>
-Next: <a href="Summary-Generation-Commands.html#Summary-Generation-Commands" accesskey="n" rel="next">Summary Generation Commands</a>, Previous: <a href="Summary-Group-Information.html#Summary-Group-Information" accesskey="p" rel="prev">Summary Group Information</a>, Up: <a href="Various-Summary-Stuff.html#Various-Summary-Stuff" accesskey="u" rel="up">Various Summary Stuff</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Searching-for-Articles-1"></a>
-<h4 class="subsection">3.27.2 Searching for Articles</h4>
+<body lang="en" xml:lang="en">
+  <a name="Searching-for-Articles" id="Searching-for-Articles"></a>
 
-<dl compact="compact">
-<dt><kbd>M-s</kbd></dt>
-<dd><a name="index-M_002ds-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dsearch_002darticle_002dforward"></a>
-<p>Search through all subsequent (raw) articles for a regexp
-(<code>gnus-summary-search-article-forward</code>).
-</p>
-</dd>
-<dt><kbd>M-r</kbd></dt>
-<dd><a name="index-M_002dr-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dsearch_002darticle_002dbackward"></a>
-<p>Search through all previous (raw) articles for a regexp
-(<code>gnus-summary-search-article-backward</code>).
-</p>
-</dd>
-<dt><kbd>M-S</kbd></dt>
-<dd><a name="index-M_002dS-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002drepeat_002dsearch_002darticle_002dforward"></a>
-<p>Repeat the previous search forwards
-(<code>gnus-summary-repeat-search-article-forward</code>).
-</p>
-</dd>
-<dt><kbd>M-R</kbd></dt>
-<dd><a name="index-M_002dR-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002drepeat_002dsearch_002darticle_002dbackward"></a>
-<p>Repeat the previous search backwards
-(<code>gnus-summary-repeat-search-article-backward</code>).
-</p>
-</dd>
-<dt><kbd>&amp;</kbd></dt>
-<dd><a name="index-_0026-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dexecute_002dcommand"></a>
-<p>This command will prompt you for a header, a regular expression to match
-on this field, and a command to be executed if the match is made
-(<code>gnus-summary-execute-command</code>).  If the header is an empty
-string, the match is done on the entire article.  If given a prefix,
-search backward instead.
-</p>
-<p>For instance, <kbd>&amp; RET some.*string RET #</kbd> will put the process mark on
-all articles that have heads or bodies that match &lsquo;<samp>some.*string</samp>&rsquo;.
-</p>
-</dd>
-<dt><kbd>M-&amp;</kbd></dt>
-<dd><a name="index-M_002d_0026-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002duniversal_002dargument"></a>
-<p>Perform any operation on all articles that have been marked with
-the process mark (<code>gnus-summary-universal-argument</code>).
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Summary-Generation-Commands.html#Summary-Generation-Commands"
+    accesskey="n" rel="next">Summary Generation Commands</a>,
+    Previous: <a href=
+    "Summary-Group-Information.html#Summary-Group-Information"
+    accesskey="p" rel="prev">Summary Group Information</a>, Up:
+    <a href="Various-Summary-Stuff.html#Various-Summary-Stuff"
+    accesskey="u" rel="up">Various Summary Stuff</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Searching-for-Articles-1" id=
+  "Searching-for-Articles-1"></a>
 
+  <h4 class="subsection">3.27.2 Searching for Articles</h4>
 
+  <dl compact="compact">
+    <dt><kbd>M-s</kbd></dt>
 
+    <dd>
+      <a name="index-M_002ds-_0028Summary_0029" id=
+      "index-M_002ds-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dsearch_002darticle_002dforward"
+      id=
+      "index-gnus_002dsummary_002dsearch_002darticle_002dforward"></a>
 
+      <p>Search through all subsequent (raw) articles for a regexp
+      (<code>gnus-summary-search-article-forward</code>).</p>
+    </dd>
+
+    <dt><kbd>M-r</kbd></dt>
+
+    <dd>
+      <a name="index-M_002dr-_0028Summary_0029" id=
+      "index-M_002dr-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dsearch_002darticle_002dbackward"
+      id=
+      "index-gnus_002dsummary_002dsearch_002darticle_002dbackward"></a>
+
+      <p>Search through all previous (raw) articles for a regexp
+      (<code>gnus-summary-search-article-backward</code>).</p>
+    </dd>
+
+    <dt><kbd>M-S</kbd></dt>
+
+    <dd>
+      <a name="index-M_002dS-_0028Summary_0029" id=
+      "index-M_002dS-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002drepeat_002dsearch_002darticle_002dforward"
+      id=
+      "index-gnus_002dsummary_002drepeat_002dsearch_002darticle_002dforward">
+      </a>
+
+      <p>Repeat the previous search forwards
+      (<code>gnus-summary-repeat-search-article-forward</code>).</p>
+    </dd>
+
+    <dt><kbd>M-R</kbd></dt>
+
+    <dd>
+      <a name="index-M_002dR-_0028Summary_0029" id=
+      "index-M_002dR-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002drepeat_002dsearch_002darticle_002dbackward"
+      id=
+      "index-gnus_002dsummary_002drepeat_002dsearch_002darticle_002dbackward">
+      </a>
+
+      <p>Repeat the previous search backwards
+      (<code>gnus-summary-repeat-search-article-backward</code>).</p>
+    </dd>
+
+    <dt><kbd>&amp;</kbd></dt>
+
+    <dd>
+      <a name="index-_0026-_0028Summary_0029" id=
+      "index-_0026-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dexecute_002dcommand" id=
+      "index-gnus_002dsummary_002dexecute_002dcommand"></a>
+
+      <p>This command will prompt you for a header, a regular
+      expression to match on this field, and a command to be
+      executed if the match is made
+      (<code>gnus-summary-execute-command</code>). If the header is
+      an empty string, the match is done on the entire article. If
+      given a prefix, search backward instead.</p>
+
+      <p>For instance, <kbd>&amp; RET some.*string RET #</kbd> will
+      put the process mark on all articles that have heads or
+      bodies that match
+      &lsquo;<samp>some.*string</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><kbd>M-&amp;</kbd></dt>
+
+    <dd>
+      <a name="index-M_002d_0026-_0028Summary_0029" id=
+      "index-M_002d_0026-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002duniversal_002dargument" id=
+      "index-gnus_002dsummary_002duniversal_002dargument"></a>
+
+      <p>Perform any operation on all articles that have been
+      marked with the process mark
+      (<code>gnus-summary-universal-argument</code>).</p>
+    </dd>
+  </dl>
 </body>
 </html>

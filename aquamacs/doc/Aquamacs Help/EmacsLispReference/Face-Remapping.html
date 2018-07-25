@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,183 +19,272 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Face Remapping</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Face Remapping">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Face Remapping">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Faces.html#Faces" rel="up" title="Faces">
-<link href="Face-Functions.html#Face-Functions" rel="next" title="Face Functions">
-<link href="Displaying-Faces.html#Displaying-Faces" rel="prev" title="Displaying Faces">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Face Remapping</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Face Remapping" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Face Remapping" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Faces.html#Faces" rel="up" title="Faces" />
+  <link href="Face-Functions.html#Face-Functions" rel="next" title=
+  "Face Functions" />
+  <link href="Displaying-Faces.html#Displaying-Faces" rel="prev"
+  title="Displaying Faces" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Face-Remapping" id="Face-Remapping"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Face-Functions.html#Face-Functions"
+    accesskey="n" rel="next">Face Functions</a>, Previous: <a href=
+    "Displaying-Faces.html#Displaying-Faces" accesskey="p" rel=
+    "prev">Displaying Faces</a>, Up: <a href="Faces.html#Faces"
+    accesskey="u" rel="up">Faces</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Face-Remapping-1" id="Face-Remapping-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Face-Remapping"></a>
-<div class="header">
-<p>
-Next: <a href="Face-Functions.html#Face-Functions" accesskey="n" rel="next">Face Functions</a>, Previous: <a href="Displaying-Faces.html#Displaying-Faces" accesskey="p" rel="prev">Displaying Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Face-Remapping-1"></a>
-<h4 class="subsection">37.12.5 Face Remapping</h4>
-<a name="index-face-remapping"></a>
+  <h4 class="subsection">37.12.5 Face Remapping</h4><a name=
+  "index-face-remapping" id="index-face-remapping"></a>
 
-<p>The variable <code>face-remapping-alist</code> is used for buffer-local or
-global changes in the appearance of a face.  For instance, it is used
-to implement the <code>text-scale-adjust</code> command (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Scale.html#Text-Scale">Text
-Scale</a> in <cite>The GNU Emacs Manual</cite>).
-</p>
-<dl>
-<dt><a name="index-face_002dremapping_002dalist"></a>Variable: <strong>face-remapping-alist</strong></dt>
-<dd><p>The value of this variable is an alist whose elements have the form
-<code>(<var>face</var> . <var>remapping</var>)</code>.  This causes Emacs to display
-any text having the face <var>face</var> with <var>remapping</var>, rather than
-the ordinary definition of <var>face</var>.
-</p>
-<p><var>remapping</var> may be any face spec suitable for a <code>face</code> text
-property: either a face (i.e., a face name or a property list of
-attribute/value pairs), or a list of faces.  For details, see the
-description of the <code>face</code> text property in <a href="Special-Properties.html#Special-Properties">Special Properties</a>.  <var>remapping</var> serves as the complete specification for
-the remapped face&mdash;it replaces the normal definition of <var>face</var>,
-instead of modifying it.
-</p>
-<p>If <code>face-remapping-alist</code> is buffer-local, its local value takes
-effect only within that buffer.
-</p>
-<p>Note: face remapping is non-recursive.  If <var>remapping</var> references
-the same face name <var>face</var>, either directly or via the
-<code>:inherit</code> attribute of some other face in <var>remapping</var>, that
-reference uses the normal definition of <var>face</var>.  For instance, if
-the <code>mode-line</code> face is remapped using this entry in
-<code>face-remapping-alist</code>:
-</p>
-<div class="example">
-<pre class="example">(mode-line italic mode-line)
-</pre></div>
+  <p>The variable <code>face-remapping-alist</code> is used for
+  buffer-local or global changes in the appearance of a face. For
+  instance, it is used to implement the
+  <code>text-scale-adjust</code> command (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Scale.html#Text-Scale">
+  Text Scale</a> in <cite>The GNU Emacs Manual</cite>).</p>
 
-<p>then the new definition of the <code>mode-line</code> face inherits from the
-<code>italic</code> face, and the <em>normal</em> (non-remapped) definition of
-<code>mode-line</code> face.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-face_002dremapping_002dalist" id=
+    "index-face_002dremapping_002dalist"></a>Variable:
+    <strong>face-remapping-alist</strong></dt>
 
-<a name="index-relative-remapping_002c-faces"></a>
-<a name="index-base-remapping_002c-faces"></a>
-<p>The following functions implement a higher-level interface to
-<code>face-remapping-alist</code>.  Most Lisp code should use these
-functions instead of setting <code>face-remapping-alist</code> directly, to
-avoid trampling on remappings applied elsewhere.  These functions are
-intended for buffer-local remappings, so they all make
-<code>face-remapping-alist</code> buffer-local as a side-effect.  They manage
-<code>face-remapping-alist</code> entries of the form
-</p>
-<div class="example">
-<pre class="example">  (<var>face</var> <var>relative-spec-1</var> <var>relative-spec-2</var> <var>...</var> <var>base-spec</var>)
-</pre></div>
+    <dd>
+      <p>The value of this variable is an alist whose elements have
+      the form <code>(<var>face</var> .
+      <var>remapping</var>)</code>. This causes Emacs to display
+      any text having the face <var>face</var> with
+      <var>remapping</var>, rather than the ordinary definition of
+      <var>face</var>.</p>
 
-<p>where, as explained above, each of the <var>relative-spec-N</var> and
-<var>base-spec</var> is either a face name, or a property list of
-attribute/value pairs.  Each of the <em>relative remapping</em> entries,
-<var>relative-spec-N</var>, is managed by the
-<code>face-remap-add-relative</code> and <code>face-remap-remove-relative</code>
-functions; these are intended for simple modifications like changing
-the text size.  The <em>base remapping</em> entry, <var>base-spec</var>, has
-the lowest priority and is managed by the <code>face-remap-set-base</code>
-and <code>face-remap-reset-base</code> functions; it is intended for major
-modes to remap faces in the buffers they control.
-</p>
-<dl>
-<dt><a name="index-face_002dremap_002dadd_002drelative"></a>Function: <strong>face-remap-add-relative</strong> <em>face &amp;rest specs</em></dt>
-<dd><p>This function adds the face spec in <var>specs</var> as relative
-remappings for face <var>face</var> in the current buffer.  The remaining
-arguments, <var>specs</var>, should form either a list of face names, or a
-property list of attribute/value pairs.
-</p>
-<p>The return value is a Lisp object that serves as a cookie; you can
-pass this object as an argument to <code>face-remap-remove-relative</code>
-if you need to remove the remapping later.
-</p>
-<div class="example">
-<pre class="example">;; Remap the 'escape-glyph' face into a combination
+      <p><var>remapping</var> may be any face spec suitable for a
+      <code>face</code> text property: either a face (i.e., a face
+      name or a property list of attribute/value pairs), or a list
+      of faces. For details, see the description of the
+      <code>face</code> text property in <a href=
+      "Special-Properties.html#Special-Properties">Special
+      Properties</a>. <var>remapping</var> serves as the complete
+      specification for the remapped face&mdash;it replaces the
+      normal definition of <var>face</var>, instead of modifying
+      it.</p>
+
+      <p>If <code>face-remapping-alist</code> is buffer-local, its
+      local value takes effect only within that buffer.</p>
+
+      <p>Note: face remapping is non-recursive. If
+      <var>remapping</var> references the same face name
+      <var>face</var>, either directly or via the
+      <code>:inherit</code> attribute of some other face in
+      <var>remapping</var>, that reference uses the normal
+      definition of <var>face</var>. For instance, if the
+      <code>mode-line</code> face is remapped using this entry in
+      <code>face-remapping-alist</code>:</p>
+
+      <div class="example">
+        <pre class="example">
+(mode-line italic mode-line)
+</pre>
+      </div>
+
+      <p>then the new definition of the <code>mode-line</code> face
+      inherits from the <code>italic</code> face, and the
+      <em>normal</em> (non-remapped) definition of
+      <code>mode-line</code> face.</p>
+    </dd>
+  </dl><a name="index-relative-remapping_002c-faces" id=
+  "index-relative-remapping_002c-faces"></a> <a name=
+  "index-base-remapping_002c-faces" id=
+  "index-base-remapping_002c-faces"></a>
+
+  <p>The following functions implement a higher-level interface to
+  <code>face-remapping-alist</code>. Most Lisp code should use
+  these functions instead of setting
+  <code>face-remapping-alist</code> directly, to avoid trampling on
+  remappings applied elsewhere. These functions are intended for
+  buffer-local remappings, so they all make
+  <code>face-remapping-alist</code> buffer-local as a side-effect.
+  They manage <code>face-remapping-alist</code> entries of the
+  form</p>
+
+  <div class="example">
+    <pre class="example">
+  (<var>face</var> <var>relative-spec-1</var> <var>relative-spec-2</var> <var>...</var> <var>base-spec</var>)
+</pre>
+  </div>
+
+  <p>where, as explained above, each of the
+  <var>relative-spec-N</var> and <var>base-spec</var> is either a
+  face name, or a property list of attribute/value pairs. Each of
+  the <em>relative remapping</em> entries,
+  <var>relative-spec-N</var>, is managed by the
+  <code>face-remap-add-relative</code> and
+  <code>face-remap-remove-relative</code> functions; these are
+  intended for simple modifications like changing the text size.
+  The <em>base remapping</em> entry, <var>base-spec</var>, has the
+  lowest priority and is managed by the
+  <code>face-remap-set-base</code> and
+  <code>face-remap-reset-base</code> functions; it is intended for
+  major modes to remap faces in the buffers they control.</p>
+
+  <dl>
+    <dt><a name="index-face_002dremap_002dadd_002drelative" id=
+    "index-face_002dremap_002dadd_002drelative"></a>Function:
+    <strong>face-remap-add-relative</strong> <em>face &amp;rest
+    specs</em></dt>
+
+    <dd>
+      <p>This function adds the face spec in <var>specs</var> as
+      relative remappings for face <var>face</var> in the current
+      buffer. The remaining arguments, <var>specs</var>, should
+      form either a list of face names, or a property list of
+      attribute/value pairs.</p>
+
+      <p>The return value is a Lisp object that serves as a cookie;
+      you can pass this object as an argument to
+      <code>face-remap-remove-relative</code> if you need to remove
+      the remapping later.</p>
+
+      <div class="example">
+        <pre class="example">
+;; Remap the 'escape-glyph' face into a combination
 ;; of the 'highlight' and 'italic' faces:
 (face-remap-add-relative 'escape-glyph 'highlight 'italic)
 
 ;; Increase the size of the 'default' face by 50%:
 (face-remap-add-relative 'default :height 1.5)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-face_002dremap_002dremove_002drelative"></a>Function: <strong>face-remap-remove-relative</strong> <em>cookie</em></dt>
-<dd><p>This function removes a relative remapping previously added by
-<code>face-remap-add-relative</code>.  <var>cookie</var> should be the Lisp
-object returned by <code>face-remap-add-relative</code> when the remapping
-was added.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-face_002dremap_002dremove_002drelative" id=
+    "index-face_002dremap_002dremove_002drelative"></a>Function:
+    <strong>face-remap-remove-relative</strong>
+    <em>cookie</em></dt>
 
-<dl>
-<dt><a name="index-face_002dremap_002dset_002dbase"></a>Function: <strong>face-remap-set-base</strong> <em>face &amp;rest specs</em></dt>
-<dd><p>This function sets the base remapping of <var>face</var> in the current
-buffer to <var>specs</var>.  If <var>specs</var> is empty, the default base
-remapping is restored, similar to calling <code>face-remap-reset-base</code>
-(see below); note that this is different from <var>specs</var> containing a
-single value <code>nil</code>, which has the opposite result (the global
-definition of <var>face</var> is ignored).
-</p>
-<p>This overwrites the default <var>base-spec</var>, which inherits the global
-face definition, so it is up to the caller to add such inheritance if
-so desired.
-</p></dd></dl>
+    <dd>
+      <p>This function removes a relative remapping previously
+      added by <code>face-remap-add-relative</code>.
+      <var>cookie</var> should be the Lisp object returned by
+      <code>face-remap-add-relative</code> when the remapping was
+      added.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-face_002dremap_002dreset_002dbase"></a>Function: <strong>face-remap-reset-base</strong> <em>face</em></dt>
-<dd><p>This function sets the base remapping of <var>face</var> to its default
-value, which inherits from <var>face</var>&rsquo;s global definition.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-face_002dremap_002dset_002dbase" id=
+    "index-face_002dremap_002dset_002dbase"></a>Function:
+    <strong>face-remap-set-base</strong> <em>face &amp;rest
+    specs</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Face-Functions.html#Face-Functions" accesskey="n" rel="next">Face Functions</a>, Previous: <a href="Displaying-Faces.html#Displaying-Faces" accesskey="p" rel="prev">Displaying Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function sets the base remapping of <var>face</var>
+      in the current buffer to <var>specs</var>. If
+      <var>specs</var> is empty, the default base remapping is
+      restored, similar to calling
+      <code>face-remap-reset-base</code> (see below); note that
+      this is different from <var>specs</var> containing a single
+      value <code>nil</code>, which has the opposite result (the
+      global definition of <var>face</var> is ignored).</p>
 
+      <p>This overwrites the default <var>base-spec</var>, which
+      inherits the global face definition, so it is up to the
+      caller to add such inheritance if so desired.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-face_002dremap_002dreset_002dbase" id=
+    "index-face_002dremap_002dreset_002dbase"></a>Function:
+    <strong>face-remap-reset-base</strong> <em>face</em></dt>
 
+    <dd>
+      <p>This function sets the base remapping of <var>face</var>
+      to its default value, which inherits from
+      <var>face</var>&rsquo;s global definition.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Face-Functions.html#Face-Functions"
+    accesskey="n" rel="next">Face Functions</a>, Previous: <a href=
+    "Displaying-Faces.html#Displaying-Faces" accesskey="p" rel=
+    "prev">Displaying Faces</a>, Up: <a href="Faces.html#Faces"
+    accesskey="u" rel="up">Faces</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

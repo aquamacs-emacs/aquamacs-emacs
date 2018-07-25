@@ -1,14 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Definitions of Financial Functions - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Financial-Functions.html#Financial-Functions" title="Financial Functions">
-<link rel="prev" href="Depreciation-Functions.html#Depreciation-Functions" title="Depreciation Functions">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Definitions of Financial Functions - GNU Emacs Calc
+  Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Financial-Functions.html#Financial-Functions" title=
+  "Financial Functions" />
+  <link rel="prev" href=
+  "Depreciation-Functions.html#Depreciation-Functions" title=
+  "Depreciation Functions" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -28,8 +39,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -39,34 +52,44 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Definitions-of-Financial-Functions"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Depreciation-Functions.html#Depreciation-Functions">Depreciation Functions</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Financial-Functions.html#Financial-Functions">Financial Functions</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Definitions-of-Financial-Functions" id=
+    "Definitions-of-Financial-Functions"></a>
 
-<h4 class="subsection">8.6.6 Definitions</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Depreciation-Functions.html#Depreciation-Functions">Depreciation
+    Functions</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Financial-Functions.html#Financial-Functions">Financial
+    Functions</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">For your reference, here are the actual formulas used to compute
-Calc's financial functions.
+  <h4 class="subsection">8.6.6 Definitions</h4>
 
-   <p>Calc will not evaluate a financial function unless the <var>rate</var> or
-<var>n</var> argument is known.  However, <var>payment</var> or <var>amount</var> can
-be a variable.  Calc expands these functions according to the
-formulas below for symbolic arguments only when you use the <kbd>a "</kbd>
-(<code>calc-expand-formula</code>) command, or when taking derivatives or
-integrals or solving equations involving the functions.
+  <p class="noindent">For your reference, here are the actual
+  formulas used to compute Calc's financial functions.</p>
 
-   <p>These formulas are shown using the conventions of Big display
-mode (<kbd>d B</kbd>); for example, the formula for <code>fv</code> written
-linearly is &lsquo;<samp><span class="samp">pmt * ((1 + rate)^n) - 1) / rate</span></samp>&rsquo;.
+  <p>Calc will not evaluate a financial function unless the
+  <var>rate</var> or <var>n</var> argument is known. However,
+  <var>payment</var> or <var>amount</var> can be a variable. Calc
+  expands these functions according to the formulas below for
+  symbolic arguments only when you use the <kbd>a "</kbd>
+  (<code>calc-expand-formula</code>) command, or when taking
+  derivatives or integrals or solving equations involving the
+  functions.</p>
 
-<pre class="example">                                             n
+  <p>These formulas are shown using the conventions of Big display
+  mode (<kbd>d B</kbd>); for example, the formula for
+  <code>fv</code> written linearly is &lsquo;<samp><span class=
+  "samp">pmt * ((1 + rate)^n) - 1) / rate</span></samp>&rsquo;.</p>
+  <pre class="example">
+                                             n
                                    (1 + rate)  - 1
      fv(rate, n, pmt) =      pmt * ---------------
                                         rate
@@ -140,42 +163,57 @@ linearly is &lsquo;<samp><span class="samp">pmt * ((1 + rate)^n) - 1) / rate</sp
      ddb(cost, salv, life, per) = --------,  book = cost - depreciation so far
                                     life
 </pre>
-   <p class="noindent">In <code>pmt</code> and <code>pmtb</code>, &lsquo;<samp><span class="samp">x=0</span></samp>&rsquo; if omitted.
 
-   <p>These functions accept any numeric objects, including error forms,
-intervals, and even (though not very usefully) complex numbers.  The
-above formulas specify exactly the behavior of these functions with
-all sorts of inputs.
+  <p class="noindent">In <code>pmt</code> and <code>pmtb</code>,
+  &lsquo;<samp><span class="samp">x=0</span></samp>&rsquo; if
+  omitted.</p>
 
-   <p>Note that if the first argument to the <code>log</code> in <code>nper</code> is
-negative, <code>nper</code> leaves itself in symbolic form rather than
-returning a (financially meaningless) complex number.
+  <p>These functions accept any numeric objects, including error
+  forms, intervals, and even (though not very usefully) complex
+  numbers. The above formulas specify exactly the behavior of these
+  functions with all sorts of inputs.</p>
 
-   <p>&lsquo;<samp><span class="samp">rate(num, pmt, amt)</span></samp>&rsquo; solves the equation
-&lsquo;<samp><span class="samp">pv(rate, num, pmt) = amt</span></samp>&rsquo; for &lsquo;<samp><span class="samp">rate</span></samp>&rsquo; using <kbd>H a R</kbd>
-(<code>calc-find-root</code>), with the interval &lsquo;<samp><span class="samp">[.01% .. 100%]</span></samp>&rsquo;
-for an initial guess.  The <code>rateb</code> function is the same except
-that it uses <code>pvb</code>.  Note that <code>ratel</code> can be solved
-directly; its formula is shown in the above list.
+  <p>Note that if the first argument to the <code>log</code> in
+  <code>nper</code> is negative, <code>nper</code> leaves itself in
+  symbolic form rather than returning a (financially meaningless)
+  complex number.</p>
 
-   <p>Similarly, &lsquo;<samp><span class="samp">irr(pmts)</span></samp>&rsquo; solves the equation &lsquo;<samp><span class="samp">npv(rate, pmts) = 0</span></samp>&rsquo;
-for &lsquo;<samp><span class="samp">rate</span></samp>&rsquo;.
+  <p>&lsquo;<samp><span class="samp">rate(num, pmt,
+  amt)</span></samp>&rsquo; solves the equation
+  &lsquo;<samp><span class="samp">pv(rate, num, pmt) =
+  amt</span></samp>&rsquo; for &lsquo;<samp><span class=
+  "samp">rate</span></samp>&rsquo; using <kbd>H a R</kbd>
+  (<code>calc-find-root</code>), with the interval
+  &lsquo;<samp><span class="samp">[.01% ..
+  100%]</span></samp>&rsquo; for an initial guess. The
+  <code>rateb</code> function is the same except that it uses
+  <code>pvb</code>. Note that <code>ratel</code> can be solved
+  directly; its formula is shown in the above list.</p>
 
-   <p>If you give a fourth argument to <code>nper</code> or <code>nperb</code>, Calc
-will also use <kbd>H a R</kbd> to solve the equation using an initial
-guess interval of &lsquo;<samp><span class="samp">[0 .. 100]</span></samp>&rsquo;.
+  <p>Similarly, &lsquo;<samp><span class=
+  "samp">irr(pmts)</span></samp>&rsquo; solves the equation
+  &lsquo;<samp><span class="samp">npv(rate, pmts) =
+  0</span></samp>&rsquo; for &lsquo;<samp><span class=
+  "samp">rate</span></samp>&rsquo;.</p>
 
-   <p>A fourth argument to <code>fv</code> simply sums the two components
-calculated from the above formulas for <code>fv</code> and <code>fvl</code>. 
-The same is true of <code>fvb</code>, <code>pv</code>, and <code>pvb</code>.
+  <p>If you give a fourth argument to <code>nper</code> or
+  <code>nperb</code>, Calc will also use <kbd>H a R</kbd> to solve
+  the equation using an initial guess interval of
+  &lsquo;<samp><span class="samp">[0 ..
+  100]</span></samp>&rsquo;.</p>
 
-   <p>The <kbd>ddb</kbd> function is computed iteratively; the &ldquo;book&rdquo; value
-starts out equal to <var>cost</var>, and decreases according to the above
-formula for the specified number of periods.  If the book value
-would decrease below <var>salvage</var>, it only decreases to <var>salvage</var>
-and the depreciation is zero for all subsequent periods.  The <code>ddb</code>
-function returns the amount the book value decreased in the specified
-period.
+  <p>A fourth argument to <code>fv</code> simply sums the two
+  components calculated from the above formulas for <code>fv</code>
+  and <code>fvl</code>. The same is true of <code>fvb</code>,
+  <code>pv</code>, and <code>pvb</code>.</p>
 
-   </body></html>
-
+  <p>The <kbd>ddb</kbd> function is computed iteratively; the
+  &ldquo;book&rdquo; value starts out equal to <var>cost</var>, and
+  decreases according to the above formula for the specified number
+  of periods. If the book value would decrease below
+  <var>salvage</var>, it only decreases to <var>salvage</var> and
+  the depreciation is zero for all subsequent periods. The
+  <code>ddb</code> function returns the amount the book value
+  decreased in the specified period.</p>
+</body>
+</html>

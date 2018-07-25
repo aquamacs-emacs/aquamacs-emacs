@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,141 +19,289 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Faces</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Faces">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Faces">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="Face-Attributes.html#Face-Attributes" rel="next" title="Face Attributes">
-<link href="Line-Height.html#Line-Height" rel="prev" title="Line Height">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Faces</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Faces" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Faces" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="Face-Attributes.html#Face-Attributes" rel="next"
+  title="Face Attributes" />
+  <link href="Line-Height.html#Line-Height" rel="prev" title=
+  "Line Height" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Faces" id="Faces"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Fringes.html#Fringes" accesskey="n" rel=
+    "next">Fringes</a>, Previous: <a href=
+    "Line-Height.html#Line-Height" accesskey="p" rel="prev">Line
+    Height</a>, Up: <a href="Display.html#Display" accesskey="u"
+    rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Faces-1" id="Faces-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Faces"></a>
-<div class="header">
-<p>
-Next: <a href="Fringes.html#Fringes" accesskey="n" rel="next">Fringes</a>, Previous: <a href="Line-Height.html#Line-Height" accesskey="p" rel="prev">Line Height</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Faces-1"></a>
-<h3 class="section">37.12 Faces</h3>
-<a name="index-faces"></a>
+  <h3 class="section">37.12 Faces</h3><a name="index-faces" id=
+  "index-faces"></a>
 
-<p>A <em>face</em> is a collection of graphical attributes for displaying
-text: font, foreground color, background color, optional underlining,
-etc.  Faces control how Emacs displays text in buffers, as well as
-other parts of the frame such as the mode line.
-</p>
-<a name="index-anonymous-face"></a>
-<p>One way to represent a face is as a property list of attributes,
-like <code>(:foreground &quot;red&quot; :weight bold)</code>.  Such a list is called
-an <em>anonymous face</em>.  For example, you can assign an anonymous
-face as the value of the <code>face</code> text property, and Emacs will
-display the underlying text with the specified attributes.
-See <a href="Special-Properties.html#Special-Properties">Special Properties</a>.
-</p>
-<a name="index-face-name"></a>
-<p>More commonly, a face is referred to via a <em>face name</em>: a Lisp
-symbol associated with a set of face attributes<a name="DOCF19" href="#FOOT19"><sup>19</sup></a>.  Named faces are
-defined using the <code>defface</code> macro (see <a href="Defining-Faces.html#Defining-Faces">Defining Faces</a>).
-Emacs comes with several standard named faces (see <a href="Basic-Faces.html#Basic-Faces">Basic Faces</a>).
-</p>
-<p>Many parts of Emacs required named faces, and do not accept
-anonymous faces.  These include the functions documented in
-<a href="Attribute-Functions.html#Attribute-Functions">Attribute Functions</a>, and the variable <code>font-lock-keywords</code>
-(see <a href="Search_002dbased-Fontification.html#Search_002dbased-Fontification">Search-based Fontification</a>).  Unless otherwise stated, we
-will use the term <em>face</em> to refer only to named faces.
-</p>
-<dl>
-<dt><a name="index-facep"></a>Function: <strong>facep</strong> <em>object</em></dt>
-<dd><p>This function returns a non-<code>nil</code> value if <var>object</var> is a
-named face: a Lisp symbol or string which serves as a face name.
-Otherwise, it returns <code>nil</code>.
-</p></dd></dl>
+  <p>A <em>face</em> is a collection of graphical attributes for
+  displaying text: font, foreground color, background color,
+  optional underlining, etc. Faces control how Emacs displays text
+  in buffers, as well as other parts of the frame such as the mode
+  line.</p><a name="index-anonymous-face" id=
+  "index-anonymous-face"></a>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Face-Attributes.html#Face-Attributes" accesskey="1">Face Attributes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What is in a face?
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Defining-Faces.html#Defining-Faces" accesskey="2">Defining Faces</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to define a face.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Attribute-Functions.html#Attribute-Functions" accesskey="3">Attribute Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions to examine and set face attributes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Displaying-Faces.html#Displaying-Faces" accesskey="4">Displaying Faces</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Emacs combines the faces specified for a character.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Face-Remapping.html#Face-Remapping" accesskey="5">Face Remapping</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Remapping faces to alternative definitions.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Face-Functions.html#Face-Functions" accesskey="6">Face Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to define and examine faces.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Auto-Faces.html#Auto-Faces" accesskey="7">Auto Faces</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Hook for automatic face assignment.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Basic-Faces.html#Basic-Faces" accesskey="8">Basic Faces</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Faces that are defined by default.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Font-Selection.html#Font-Selection" accesskey="9">Font Selection</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Finding the best available font for a face.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Font-Lookup.html#Font-Lookup">Font Lookup</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Looking up the names of available fonts
-                          and information about them.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Fontsets.html#Fontsets">Fontsets</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A fontset is a collection of fonts
-                          that handle a range of character sets.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Low_002dLevel-Font.html#Low_002dLevel-Font">Low-Level Font</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Lisp representation for character display fonts.
-</td></tr>
-</table>
+  <p>One way to represent a face is as a property list of
+  attributes, like <code>(:foreground "red" :weight bold)</code>.
+  Such a list is called an <em>anonymous face</em>. For example,
+  you can assign an anonymous face as the value of the
+  <code>face</code> text property, and Emacs will display the
+  underlying text with the specified attributes. See <a href=
+  "Special-Properties.html#Special-Properties">Special
+  Properties</a>.</p><a name="index-face-name" id=
+  "index-face-name"></a>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>More commonly, a face is referred to via a <em>face name</em>:
+  a Lisp symbol associated with a set of face attributes<a name=
+  "DOCF19" href="#FOOT19" id="DOCF19"><sup>19</sup></a>. Named
+  faces are defined using the <code>defface</code> macro (see
+  <a href="Defining-Faces.html#Defining-Faces">Defining Faces</a>).
+  Emacs comes with several standard named faces (see <a href=
+  "Basic-Faces.html#Basic-Faces">Basic Faces</a>).</p>
 
-<h3><a name="FOOT19" href="#DOCF19">(19)</a></h3>
-<p>For backward
-compatibility, you can also use a string to specify a face name; that
-is equivalent to a Lisp symbol with the same name.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Fringes.html#Fringes" accesskey="n" rel="next">Fringes</a>, Previous: <a href="Line-Height.html#Line-Height" accesskey="p" rel="prev">Line Height</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Many parts of Emacs required named faces, and do not accept
+  anonymous faces. These include the functions documented in
+  <a href="Attribute-Functions.html#Attribute-Functions">Attribute
+  Functions</a>, and the variable <code>font-lock-keywords</code>
+  (see <a href=
+  "Search_002dbased-Fontification.html#Search_002dbased-Fontification">
+  Search-based Fontification</a>). Unless otherwise stated, we will
+  use the term <em>face</em> to refer only to named faces.</p>
 
+  <dl>
+    <dt><a name="index-facep" id="index-facep"></a>Function:
+    <strong>facep</strong> <em>object</em></dt>
 
+    <dd>
+      <p>This function returns a non-<code>nil</code> value if
+      <var>object</var> is a named face: a Lisp symbol or string
+      which serves as a face name. Otherwise, it returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Face-Attributes.html#Face-Attributes" accesskey="1">Face
+      Attributes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What is in a face?</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Defining-Faces.html#Defining-Faces" accesskey="2">Defining
+      Faces</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to define a face.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Attribute-Functions.html#Attribute-Functions" accesskey=
+      "3">Attribute Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions to examine and set
+      face attributes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Displaying-Faces.html#Displaying-Faces" accesskey=
+      "4">Displaying Faces</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How Emacs combines the faces
+      specified for a character.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Face-Remapping.html#Face-Remapping" accesskey="5">Face
+      Remapping</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Remapping faces to alternative
+      definitions.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Face-Functions.html#Face-Functions" accesskey="6">Face
+      Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to define and examine
+      faces.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Auto-Faces.html#Auto-Faces" accesskey="7">Auto
+      Faces</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Hook for automatic face
+      assignment.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Basic-Faces.html#Basic-Faces" accesskey="8">Basic
+      Faces</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Faces that are defined by
+      default.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Font-Selection.html#Font-Selection" accesskey="9">Font
+      Selection</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Finding the best available font
+      for a face.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Font-Lookup.html#Font-Lookup">Font Lookup</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Looking up the names of
+      available fonts and information about them.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Fontsets.html#Fontsets">Fontsets</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A fontset is a collection of
+      fonts that handle a range of character sets.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Low_002dLevel-Font.html#Low_002dLevel-Font">Low-Level
+      Font</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Lisp representation for
+      character display fonts.</td>
+    </tr>
+  </table>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT19" href="#DOCF19" id="FOOT19">(19)</a></h3>
+
+    <p>For backward compatibility, you can also use a string to
+    specify a face name; that is equivalent to a Lisp symbol with
+    the same name.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Fringes.html#Fringes" accesskey="n" rel=
+    "next">Fringes</a>, Previous: <a href=
+    "Line-Height.html#Line-Height" accesskey="p" rel="prev">Line
+    Height</a>, Up: <a href="Display.html#Display" accesskey="u"
+    rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

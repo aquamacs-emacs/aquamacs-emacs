@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,90 +20,124 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: VC Undo</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: VC Undo">
-<meta name="keywords" content="GNU Emacs Manual: VC Undo">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Version-Control.html#Version-Control" rel="up" title="Version Control">
-<link href="VC-Ignore.html#VC-Ignore" rel="next" title="VC Ignore">
-<link href="VC-Change-Log.html#VC-Change-Log" rel="prev" title="VC Change Log">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: VC Undo</title>
+  <meta name="description" content="GNU Emacs Manual: VC Undo" />
+  <meta name="keywords" content="GNU Emacs Manual: VC Undo" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Version-Control.html#Version-Control" rel="up" title=
+  "Version Control" />
+  <link href="VC-Ignore.html#VC-Ignore" rel="next" title=
+  "VC Ignore" />
+  <link href="VC-Change-Log.html#VC-Change-Log" rel="prev" title=
+  "VC Change Log" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="VC-Undo" id="VC-Undo"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="VC-Ignore.html#VC-Ignore" accesskey="n" rel=
+    "next">VC Ignore</a>, Previous: <a href=
+    "VC-Change-Log.html#VC-Change-Log" accesskey="p" rel="prev">VC
+    Change Log</a>, Up: <a href=
+    "Version-Control.html#Version-Control" accesskey="u" rel=
+    "up">Version Control</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Undoing-Version-Control-Actions" id=
+  "Undoing-Version-Control-Actions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="VC-Undo"></a>
-<div class="header">
-<p>
-Next: <a href="VC-Ignore.html#VC-Ignore" accesskey="n" rel="next">VC Ignore</a>, Previous: <a href="VC-Change-Log.html#VC-Change-Log" accesskey="p" rel="prev">VC Change Log</a>, Up: <a href="Version-Control.html#Version-Control" accesskey="u" rel="up">Version Control</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Undoing-Version-Control-Actions"></a>
-<h4 class="subsection">28.1.8 Undoing Version Control Actions</h4>
+  <h4 class="subsection">28.1.8 Undoing Version Control
+  Actions</h4>
 
-<dl compact="compact">
-<dt><kbd>C-x v u</kbd></dt>
-<dd><p>Revert the work file(s) in the current VC fileset to the last revision
-(<code>vc-revert</code>).
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>C-x v u</kbd></dt>
 
-<a name="index-C_002dx-v-u"></a>
-<a name="index-vc_002drevert"></a>
-<a name="index-vc_002drevert_002dshow_002ddiff"></a>
-<p>If you want to discard all the changes you have made to the current
-VC fileset, type <kbd>C-x v u</kbd> (<code>vc-revert-buffer</code>).  This shows
-you a diff between the work file(s) and the revision from which you
-started editing, and asks for confirmation for discarding the changes.
-If you agree, the fileset is reverted.  If you don&rsquo;t want <kbd>C-x v
-u</kbd> to show a diff, set the variable <code>vc-revert-show-diff</code> to
-<code>nil</code> (you can still view the diff directly with <kbd>C-x v =</kbd>;
-see <a href="Old-Revisions.html#Old-Revisions">Old Revisions</a>).  Note that <kbd>C-x v u</kbd> cannot be reversed
-with the usual undo commands (see <a href="Undo.html#Undo">Undo</a>), so use it with care.
-</p>
-<p>On locking-based version control systems, <kbd>C-x v u</kbd> leaves files
-unlocked; you must lock again to resume editing.  You can also use
-<kbd>C-x v u</kbd> to unlock a file if you lock it and then decide not to
-change it.
-</p>
+    <dd>
+      <p>Revert the work file(s) in the current VC fileset to the
+      last revision (<code>vc-revert</code>).</p>
+    </dd>
+  </dl><a name="index-C_002dx-v-u" id="index-C_002dx-v-u"></a>
+  <a name="index-vc_002drevert" id="index-vc_002drevert"></a>
+  <a name="index-vc_002drevert_002dshow_002ddiff" id=
+  "index-vc_002drevert_002dshow_002ddiff"></a>
 
+  <p>If you want to discard all the changes you have made to the
+  current VC fileset, type <kbd>C-x v u</kbd>
+  (<code>vc-revert-buffer</code>). This shows you a diff between
+  the work file(s) and the revision from which you started editing,
+  and asks for confirmation for discarding the changes. If you
+  agree, the fileset is reverted. If you don&rsquo;t want <kbd>C-x
+  v u</kbd> to show a diff, set the variable
+  <code>vc-revert-show-diff</code> to <code>nil</code> (you can
+  still view the diff directly with <kbd>C-x v =</kbd>; see
+  <a href="Old-Revisions.html#Old-Revisions">Old Revisions</a>).
+  Note that <kbd>C-x v u</kbd> cannot be reversed with the usual
+  undo commands (see <a href="Undo.html#Undo">Undo</a>), so use it
+  with care.</p>
 
-
+  <p>On locking-based version control systems, <kbd>C-x v u</kbd>
+  leaves files unlocked; you must lock again to resume editing. You
+  can also use <kbd>C-x v u</kbd> to unlock a file if you lock it
+  and then decide not to change it.</p>
 </body>
 </html>

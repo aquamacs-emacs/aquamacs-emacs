@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents the Semantic library and utilities.
 
 Copyright (C) 1999-2005, 2007, 2009-2016 Free Software
@@ -15,134 +17,185 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Semantic Manual: Tools</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Semantic Manual: Tools">
-<meta name="keywords" content="Semantic Manual: Tools">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Semantic-Internals.html#Semantic-Internals" rel="up" title="Semantic Internals">
-<link href="Tests.html#Tests" rel="next" title="Tests">
-<link href="Analyzer-Internals.html#Analyzer-Internals" rel="prev" title="Analyzer Internals">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Semantic Manual: Tools</title>
+  <meta name="description" content="Semantic Manual: Tools" />
+  <meta name="keywords" content="Semantic Manual: Tools" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Semantic-Internals.html#Semantic-Internals" rel="up"
+  title="Semantic Internals" />
+  <link href="Tests.html#Tests" rel="next" title="Tests" />
+  <link href="Analyzer-Internals.html#Analyzer-Internals" rel=
+  "prev" title="Analyzer Internals" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Tools"></a>
-<div class="header">
-<p>
-Next: <a href="Tests.html#Tests" accesskey="n" rel="next">Tests</a>, Previous: <a href="Analyzer-Internals.html#Analyzer-Internals" accesskey="p" rel="prev">Analyzer Internals</a>, Up: <a href="Semantic-Internals.html#Semantic-Internals" accesskey="u" rel="up">Semantic Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Tools-1"></a>
-<h3 class="section">3.5 Tools</h3>
+<body lang="en" xml:lang="en">
+  <a name="Tools" id="Tools"></a>
 
-<p>These files contain various tools a user can use.
-</p>
-<dl compact="compact">
-<dt><samp>semantic-idle.el</samp></dt>
-<dd><p>Idle scheduler for <i>Semantic</i>.  Manages reparsing buffers after
-edits, and large work tasks in idle time.  Includes modes for showing
-summary help and pop-up completion.
-</p>
-</dd>
-<dt><samp>senator.el</samp></dt>
-<dd><p>The <i>Semantic</i> navigator.  Provides many ways to move through a
-buffer based on the active tag table.
-</p>
-</dd>
-<dt><samp>semantic-decorate.el</samp></dt>
-<dd><p>A minor mode for decorating tags based on details from the parser.
-Includes overlines for functions, or coloring class fields based on
-protection.
-</p>
-</dd>
-<dt><samp>semantic-decorate-include.el</samp></dt>
-<dd><p>A decoration mode for include files, which assists users in setting up
-parsing for their includes.
-</p>
-</dd>
-<dt><samp>semantic-complete.el</samp></dt>
-<dd><p>Advanced completion prompts for reading tag names in the minibuffer, or
-inline in a buffer.
-</p>
-</dd>
-<dt><samp>semantic-imenu.el</samp></dt>
-<dd><p>Imenu support for using <i>Semantic</i> tags in imenu.
-</p>
-</dd>
-<dt><samp>semantic-mru-bookmark.el</samp></dt>
-<dd><p>Automatic bookmarking based on tags.  Jump to locations you&rsquo;ve been
-before based on tag name.
-</p>
-</dd>
-<dt><samp>semantic-sb.el</samp></dt>
-<dd><p>Support for <i>Semantic</i> tag usage in Speedbar.
-</p>
-</dd>
-<dt><samp>semantic-util-modes.el</samp></dt>
-<dd><p>A bunch of small minor-modes that exposes aspects of the semantic
-parser state.  Includes <code>semantic-stickyfunc-mode</code>.
-</p>
-</dd>
-<dt><samp>document.el</samp></dt>
-<dt><samp>document-vars.el</samp></dt>
-<dd><p>Create an update comments for tags.
-</p>
-</dd>
-<dt><samp>semantic-adebug.el</samp></dt>
-<dd><p>Extensions of <samp>data-debug.el</samp> for <i>Semantic</i>.
-</p>
-</dd>
-<dt><samp>semantic-chart.el</samp></dt>
-<dd><p>Draw some charts from stats generated from parsing.
-</p>
+  <div class="header">
+    <p>Next: <a href="Tests.html#Tests" accesskey="n" rel=
+    "next">Tests</a>, Previous: <a href=
+    "Analyzer-Internals.html#Analyzer-Internals" accesskey="p" rel=
+    "prev">Analyzer Internals</a>, Up: <a href=
+    "Semantic-Internals.html#Semantic-Internals" accesskey="u" rel=
+    "up">Semantic Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Tools-1" id="Tools-1"></a>
 
-</dd>
-<dt><samp>semantic-elp.el</samp></dt>
-<dd><p>Profiler for helping to optimize the <i>Semantic</i> analyzer.
-</p>
+  <h3 class="section">3.5 Tools</h3>
 
-</dd>
-</dl>
+  <p>These files contain various tools a user can use.</p>
 
+  <dl compact="compact">
+    <dt><samp>semantic-idle.el</samp></dt>
 
+    <dd>
+      <p>Idle scheduler for <i>Semantic</i>. Manages reparsing
+      buffers after edits, and large work tasks in idle time.
+      Includes modes for showing summary help and pop-up
+      completion.</p>
+    </dd>
 
+    <dt><samp>senator.el</samp></dt>
 
+    <dd>
+      <p>The <i>Semantic</i> navigator. Provides many ways to move
+      through a buffer based on the active tag table.</p>
+    </dd>
+
+    <dt><samp>semantic-decorate.el</samp></dt>
+
+    <dd>
+      <p>A minor mode for decorating tags based on details from the
+      parser. Includes overlines for functions, or coloring class
+      fields based on protection.</p>
+    </dd>
+
+    <dt><samp>semantic-decorate-include.el</samp></dt>
+
+    <dd>
+      <p>A decoration mode for include files, which assists users
+      in setting up parsing for their includes.</p>
+    </dd>
+
+    <dt><samp>semantic-complete.el</samp></dt>
+
+    <dd>
+      <p>Advanced completion prompts for reading tag names in the
+      minibuffer, or inline in a buffer.</p>
+    </dd>
+
+    <dt><samp>semantic-imenu.el</samp></dt>
+
+    <dd>
+      <p>Imenu support for using <i>Semantic</i> tags in imenu.</p>
+    </dd>
+
+    <dt><samp>semantic-mru-bookmark.el</samp></dt>
+
+    <dd>
+      <p>Automatic bookmarking based on tags. Jump to locations
+      you&rsquo;ve been before based on tag name.</p>
+    </dd>
+
+    <dt><samp>semantic-sb.el</samp></dt>
+
+    <dd>
+      <p>Support for <i>Semantic</i> tag usage in Speedbar.</p>
+    </dd>
+
+    <dt><samp>semantic-util-modes.el</samp></dt>
+
+    <dd>
+      <p>A bunch of small minor-modes that exposes aspects of the
+      semantic parser state. Includes
+      <code>semantic-stickyfunc-mode</code>.</p>
+    </dd>
+
+    <dt><samp>document.el</samp></dt>
+
+    <dt><samp>document-vars.el</samp></dt>
+
+    <dd>
+      <p>Create an update comments for tags.</p>
+    </dd>
+
+    <dt><samp>semantic-adebug.el</samp></dt>
+
+    <dd>
+      <p>Extensions of <samp>data-debug.el</samp> for
+      <i>Semantic</i>.</p>
+    </dd>
+
+    <dt><samp>semantic-chart.el</samp></dt>
+
+    <dd>
+      <p>Draw some charts from stats generated from parsing.</p>
+    </dd>
+
+    <dt><samp>semantic-elp.el</samp></dt>
+
+    <dd>
+      <p>Profiler for helping to optimize the <i>Semantic</i>
+      analyzer.</p>
+    </dd>
+  </dl>
 </body>
 </html>

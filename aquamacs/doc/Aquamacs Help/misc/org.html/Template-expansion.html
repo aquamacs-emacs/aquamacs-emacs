@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,155 +16,250 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Template expansion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Template expansion">
-<meta name="keywords" content="The Org Manual: Template expansion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Capture-templates.html#Capture-templates" rel="up" title="Capture templates">
-<link href="Templates-in-contexts.html#Templates-in-contexts" rel="next" title="Templates in contexts">
-<link href="Template-elements.html#Template-elements" rel="prev" title="Template elements">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Template expansion</title>
+  <meta name="description" content=
+  "The Org Manual: Template expansion" />
+  <meta name="keywords" content=
+  "The Org Manual: Template expansion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Capture-templates.html#Capture-templates" rel="up"
+  title="Capture templates" />
+  <link href="Templates-in-contexts.html#Templates-in-contexts"
+  rel="next" title="Templates in contexts" />
+  <link href="Template-elements.html#Template-elements" rel="prev"
+  title="Template elements" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Template-expansion"></a>
-<div class="header">
-<p>
-Next: <a href="Templates-in-contexts.html#Templates-in-contexts" accesskey="n" rel="next">Templates in contexts</a>, Previous: <a href="Template-elements.html#Template-elements" accesskey="p" rel="prev">Template elements</a>, Up: <a href="Capture-templates.html#Capture-templates" accesskey="u" rel="up">Capture templates</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Template-expansion-1"></a>
-<h4 class="subsubsection">9.1.3.2 Template expansion</h4>
+<body lang="en" xml:lang="en">
+  <a name="Template-expansion" id="Template-expansion"></a>
 
-<p>In the template itself, special <kbd>%</kbd>-escapes<a name="DOCF92" href="#FOOT92"><sup>92</sup></a> allow
-dynamic insertion of content.  The templates are expanded in the order given here:
-</p>
-<div class="smallexample">
-<pre class="smallexample">%[<var>file</var>]     <span class="roman">Insert the contents of the file given by <var>file</var>.</span>
-%(<var>sexp</var>)     <span class="roman">Evaluate Elisp <var>sexp</var> and replace with the result.</span>
-                  <span class="roman">For convenience, %:keyword (see below) placeholders</span>
-                  <span class="roman">within the expression will be expanded prior to this.</span>
-                  <span class="roman">The sexp must return a string.</span>
-%&lt;...&gt;      <span class="roman">The result of format-time-string on the ... format specification.</span>
+  <div class="header">
+    <p>Next: <a href=
+    "Templates-in-contexts.html#Templates-in-contexts" accesskey=
+    "n" rel="next">Templates in contexts</a>, Previous: <a href=
+    "Template-elements.html#Template-elements" accesskey="p" rel=
+    "prev">Template elements</a>, Up: <a href=
+    "Capture-templates.html#Capture-templates" accesskey="u" rel=
+    "up">Capture templates</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Template-expansion-1" id="Template-expansion-1"></a>
+
+  <h4 class="subsubsection">9.1.3.2 Template expansion</h4>
+
+  <p>In the template itself, special <kbd>%</kbd>-escapes<a name=
+  "DOCF92" href="#FOOT92" id="DOCF92"><sup>92</sup></a> allow
+  dynamic insertion of content. The templates are expanded in the
+  order given here:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+%[<var>file</var>]     <span class=
+"roman">Insert the contents of the file given by <var>file</var>.</span>
+%(<var>sexp</var>)     <span class=
+"roman">Evaluate Elisp <var>sexp</var> and replace with the result.</span>
+                  <span class=
+"roman">For convenience, %:keyword (see below) placeholders</span>
+                  <span class=
+"roman">within the expression will be expanded prior to this.</span>
+                  <span class=
+"roman">The sexp must return a string.</span>
+%&lt;...&gt;      <span class=
+"roman">The result of format-time-string on the ... format specification.</span>
 %t          <span class="roman">Timestamp, date only.</span>
-%T          <span class="roman">Timestamp, with date and time.</span>
-%u, %U      <span class="roman">Like the above, but inactive timestamps.</span>
-%i          <span class="roman">Initial content, the region when capture is called while the</span>
+%T          <span class=
+"roman">Timestamp, with date and time.</span>
+%u, %U      <span class=
+"roman">Like the above, but inactive timestamps.</span>
+%i          <span class=
+"roman">Initial content, the region when capture is called while the</span>
             <span class="roman">region is active.</span>
-            <span class="roman">The entire text will be indented like <code>%i</code> itself.</span>
-%a          <span class="roman">Annotation, normally the link created with <code>org-store-link</code>.</span>
-%A          <span class="roman">Like <code>%a</code>, but prompt for the description part.</span>
-%l          <span class="roman">Like %a, but only insert the literal link.</span>
+            <span class=
+"roman">The entire text will be indented like <code>%i</code> itself.</span>
+%a          <span class=
+"roman">Annotation, normally the link created with <code>org-store-link</code>.</span>
+%A          <span class=
+"roman">Like <code>%a</code>, but prompt for the description part.</span>
+%l          <span class=
+"roman">Like %a, but only insert the literal link.</span>
 %c          <span class="roman">Current kill ring head.</span>
 %x          <span class="roman">Content of the X clipboard.</span>
-%k          <span class="roman">Title of the currently clocked task.</span>
-%K          <span class="roman">Link to the currently clocked task.</span>
-%n          <span class="roman">User name (taken from <code>user-full-name</code>).</span>
-%f          <span class="roman">File visited by current buffer when org-capture was called.</span>
-%F          <span class="roman">Full path of the file or directory visited by current buffer.</span>
-%:keyword   <span class="roman">Specific information for certain link types, see below.</span>
-%^g         <span class="roman">Prompt for tags, with completion on tags in target file.</span>
-%^G         <span class="roman">Prompt for tags, with completion all tags in all agenda files.</span>
-%^t         <span class="roman">Like <code>%t</code>, but prompt for date.  Similarly <code>%^T</code>, <code>%^u</code>, <code>%^U</code>.</span>
-            <span class="roman">You may define a prompt like <code>%^{Birthday}t</code>.</span>
-%^C         <span class="roman">Interactive selection of which kill or clip to use.</span>
-%^L         <span class="roman">Like <code>%^C</code>, but insert as link.</span>
-%^{<var>prop</var>}p   <span class="roman">Prompt the user for a value for property <var>prop</var>.</span>
-%^{<var>prompt</var>}  <span class="roman">prompt the user for a string and replace this sequence with it.</span>
-            <span class="roman">You may specify a default value and a completion table with</span>
-            <span class="roman">%^{prompt|default|completion2|completion3...}.</span>
-            <span class="roman">The arrow keys access a prompt-specific history.</span>
-%\n         <span class="roman">Insert the text entered at the nth %^{<var>prompt</var>}, where <code>n</code> is</span>
+%k          <span class=
+"roman">Title of the currently clocked task.</span>
+%K          <span class=
+"roman">Link to the currently clocked task.</span>
+%n          <span class=
+"roman">User name (taken from <code>user-full-name</code>).</span>
+%f          <span class=
+"roman">File visited by current buffer when org-capture was called.</span>
+%F          <span class=
+"roman">Full path of the file or directory visited by current buffer.</span>
+%:keyword   <span class=
+"roman">Specific information for certain link types, see below.</span>
+%^g         <span class=
+"roman">Prompt for tags, with completion on tags in target file.</span>
+%^G         <span class=
+"roman">Prompt for tags, with completion all tags in all agenda files.</span>
+%^t         <span class=
+"roman">Like <code>%t</code>, but prompt for date.  Similarly <code>%^T</code>, <code>%^u</code>, <code>%^U</code>.</span>
+            <span class=
+"roman">You may define a prompt like <code>%^{Birthday}t</code>.</span>
+%^C         <span class=
+"roman">Interactive selection of which kill or clip to use.</span>
+%^L         <span class=
+"roman">Like <code>%^C</code>, but insert as link.</span>
+%^{<var>prop</var>}p   <span class=
+"roman">Prompt the user for a value for property <var>prop</var>.</span>
+%^{<var>prompt</var>}  <span class=
+"roman">prompt the user for a string and replace this sequence with it.</span>
+            <span class=
+"roman">You may specify a default value and a completion table with</span>
+            <span class=
+"roman">%^{prompt|default|completion2|completion3...}.</span>
+            <span class=
+"roman">The arrow keys access a prompt-specific history.</span>
+%\n         <span class=
+"roman">Insert the text entered at the nth %^{<var>prompt</var>}, where <code>n</code> is</span>
             <span class="roman">a number, starting from 1.</span>
-%?          <span class="roman">After completing the template, position cursor here.</span>
-</pre></div>
+%?          <span class=
+"roman">After completing the template, position cursor here.</span>
+</pre>
+  </div>
 
-<p>For specific link types, the following keywords will be
-defined<a name="DOCF93" href="#FOOT93"><sup>93</sup></a>:
-</p>
-<a name="index-org_002dfrom_002dis_002duser_002dregexp"></a>
-<div class="smallexample">
-<pre class="smallexample">Link type                        |  Available keywords
+  <p>For specific link types, the following keywords will be
+  defined<a name="DOCF93" href="#FOOT93" id=
+  "DOCF93"><sup>93</sup></a>:</p><a name=
+  "index-org_002dfrom_002dis_002duser_002dregexp" id=
+  "index-org_002dfrom_002dis_002duser_002dregexp"></a>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+Link type                        |  Available keywords
 ---------------------------------+----------------------------------------------
 bbdb                             |  %:name %:company
 irc                              |  %:server %:port %:nick
 vm, vm-imap, wl, mh, mew, rmail  |  %:type %:subject %:message-id
                                  |  %:from %:fromname %:fromaddress
                                  |  %:to   %:toname   %:toaddress
-                                 |  %:date <span class="roman">(message date header field)</span>
-                                 |  %:date-timestamp <span class="roman">(date as active timestamp)</span>
+                                 |  %:date <span class=
+"roman">(message date header field)</span>
+                                 |  %:date-timestamp <span class=
+"roman">(date as active timestamp)</span>
                                  |  %:date-timestamp-inactive <span class="roman">(date as inactive timestamp)</span>
-                                 |  %:fromto <span class="roman">(either &quot;to NAME&quot; or &quot;from NAME&quot;)<a name="DOCF94" href="#FOOT94">(94)</a></span>
-gnus                             |  %:group, <span class="roman">for messages also all email fields</span>
+                                 |  %:fromto <span class=
+"roman">(either "to NAME" or "from NAME")<a name="DOCF94" href=
+"#FOOT94" id="DOCF94">(94)</a></span>
+gnus                             |  %:group, <span class=
+"roman">for messages also all email fields</span>
 w3, w3m                          |  %:url
 info                             |  %:file %:node
 calendar                         |  %:date
-</pre></div>
+</pre>
+  </div>
 
-<p>To place the cursor after template expansion use:
-</p>
-<div class="smallexample">
-<pre class="smallexample">%?          <span class="roman">After completing the template, position cursor here.</span>
-</pre></div>
+  <p>To place the cursor after template expansion use:</p>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <div class="smallexample">
+    <pre class="smallexample">
+%?          <span class=
+"roman">After completing the template, position cursor here.</span>
+</pre>
+  </div>
 
-<h3><a name="FOOT92" href="#DOCF92">(92)</a></h3>
-<p>If you need one of
-these sequences literally, escape the <kbd>%</kbd> with a backslash.</p>
-<h3><a name="FOOT93" href="#DOCF93">(93)</a></h3>
-<p>If you define your own link types (see <a href="Adding-hyperlink-types.html#Adding-hyperlink-types">Adding hyperlink types</a>), any property you store with
-<code>org-store-link-props</code> can be accessed in capture templates in a
-similar way.</p>
-<h3><a name="FOOT94" href="#DOCF94">(94)</a></h3>
-<p>This will always be the other, not the user.  See the variable <code>org-from-is-user-regexp</code>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Templates-in-contexts.html#Templates-in-contexts" accesskey="n" rel="next">Templates in contexts</a>, Previous: <a href="Template-elements.html#Template-elements" accesskey="p" rel="prev">Template elements</a>, Up: <a href="Capture-templates.html#Capture-templates" accesskey="u" rel="up">Capture templates</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT92" href="#DOCF92" id="FOOT92">(92)</a></h3>
 
+    <p>If you need one of these sequences literally, escape the
+    <kbd>%</kbd> with a backslash.</p>
+
+    <h3><a name="FOOT93" href="#DOCF93" id="FOOT93">(93)</a></h3>
+
+    <p>If you define your own link types (see <a href=
+    "Adding-hyperlink-types.html#Adding-hyperlink-types">Adding
+    hyperlink types</a>), any property you store with
+    <code>org-store-link-props</code> can be accessed in capture
+    templates in a similar way.</p>
+
+    <h3><a name="FOOT94" href="#DOCF94" id="FOOT94">(94)</a></h3>
+
+    <p>This will always be the other, not the user. See the
+    variable <code>org-from-is-user-regexp</code>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Templates-in-contexts.html#Templates-in-contexts" accesskey=
+    "n" rel="next">Templates in contexts</a>, Previous: <a href=
+    "Template-elements.html#Template-elements" accesskey="p" rel=
+    "prev">Template elements</a>, Up: <a href=
+    "Capture-templates.html#Capture-templates" accesskey="u" rel=
+    "up">Capture templates</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

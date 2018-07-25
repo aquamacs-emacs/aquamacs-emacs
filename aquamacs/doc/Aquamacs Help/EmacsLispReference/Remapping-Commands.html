@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,128 +19,180 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Remapping Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Remapping Commands">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Remapping Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
-<link href="Translation-Keymaps.html#Translation-Keymaps" rel="next" title="Translation Keymaps">
-<link href="Changing-Key-Bindings.html#Changing-Key-Bindings" rel="prev" title="Changing Key Bindings">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Remapping
+  Commands</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Remapping Commands" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Remapping Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keymaps.html#Keymaps" rel="up" title="Keymaps" />
+  <link href="Translation-Keymaps.html#Translation-Keymaps" rel=
+  "next" title="Translation Keymaps" />
+  <link href="Changing-Key-Bindings.html#Changing-Key-Bindings"
+  rel="prev" title="Changing Key Bindings" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Remapping-Commands" id="Remapping-Commands"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Translation-Keymaps.html#Translation-Keymaps"
+    accesskey="n" rel="next">Translation Keymaps</a>, Previous:
+    <a href="Changing-Key-Bindings.html#Changing-Key-Bindings"
+    accesskey="p" rel="prev">Changing Key Bindings</a>, Up:
+    <a href="Keymaps.html#Keymaps" accesskey="u" rel=
+    "up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Remapping-Commands-1" id="Remapping-Commands-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Remapping-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Translation-Keymaps.html#Translation-Keymaps" accesskey="n" rel="next">Translation Keymaps</a>, Previous: <a href="Changing-Key-Bindings.html#Changing-Key-Bindings" accesskey="p" rel="prev">Changing Key Bindings</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Remapping-Commands-1"></a>
-<h3 class="section">21.13 Remapping Commands</h3>
-<a name="index-remapping-commands"></a>
+  <h3 class="section">21.13 Remapping Commands</h3><a name=
+  "index-remapping-commands" id="index-remapping-commands"></a>
 
-<p>A special kind of key binding can be used to <em>remap</em> one command
-to another, without having to refer to the key sequence(s) bound to
-the original command.  To use this feature, make a key binding for a
-key sequence that starts with the dummy event <code>remap</code>, followed
-by the command name you want to remap; for the binding, specify the
-new definition (usually a command name, but possibly any other valid
-definition for a key binding).
-</p>
-<p>For example, suppose My mode provides a special command
-<code>my-kill-line</code>, which should be invoked instead of
-<code>kill-line</code>.  To establish this, its mode keymap should contain
-the following remapping:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(define-key my-mode-map [remap kill-line] 'my-kill-line)
-</pre></div>
+  <p>A special kind of key binding can be used to <em>remap</em>
+  one command to another, without having to refer to the key
+  sequence(s) bound to the original command. To use this feature,
+  make a key binding for a key sequence that starts with the dummy
+  event <code>remap</code>, followed by the command name you want
+  to remap; for the binding, specify the new definition (usually a
+  command name, but possibly any other valid definition for a key
+  binding).</p>
 
-<p>Then, whenever <code>my-mode-map</code> is active, if the user types
-<kbd>C-k</kbd> (the default global key sequence for <code>kill-line</code>) Emacs
-will instead run <code>my-kill-line</code>.
-</p>
-<p>Note that remapping only takes place through active keymaps; for
-example, putting a remapping in a prefix keymap like <code>ctl-x-map</code>
-typically has no effect, as such keymaps are not themselves active.
-In addition, remapping only works through a single level; in the
-following example,
-</p>
-<div class="smallexample">
-<pre class="smallexample">(define-key my-mode-map [remap kill-line] 'my-kill-line)
+  <p>For example, suppose My mode provides a special command
+  <code>my-kill-line</code>, which should be invoked instead of
+  <code>kill-line</code>. To establish this, its mode keymap should
+  contain the following remapping:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(define-key my-mode-map [remap kill-line] 'my-kill-line)
+</pre>
+  </div>
+
+  <p>Then, whenever <code>my-mode-map</code> is active, if the user
+  types <kbd>C-k</kbd> (the default global key sequence for
+  <code>kill-line</code>) Emacs will instead run
+  <code>my-kill-line</code>.</p>
+
+  <p>Note that remapping only takes place through active keymaps;
+  for example, putting a remapping in a prefix keymap like
+  <code>ctl-x-map</code> typically has no effect, as such keymaps
+  are not themselves active. In addition, remapping only works
+  through a single level; in the following example,</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(define-key my-mode-map [remap kill-line] 'my-kill-line)
 (define-key my-mode-map [remap my-kill-line] 'my-other-kill-line)
-</pre></div>
+</pre>
+  </div>
 
-<p><code>kill-line</code> is <em>not</em> remapped to <code>my-other-kill-line</code>.
-Instead, if an ordinary key binding specifies <code>kill-line</code>, it is
-remapped to <code>my-kill-line</code>; if an ordinary binding specifies
-<code>my-kill-line</code>, it is remapped to <code>my-other-kill-line</code>.
-</p>
-<p>To undo the remapping of a command, remap it to <code>nil</code>; e.g.,
-</p>
-<div class="smallexample">
-<pre class="smallexample">(define-key my-mode-map [remap kill-line] nil)
-</pre></div>
+  <p><code>kill-line</code> is <em>not</em> remapped to
+  <code>my-other-kill-line</code>. Instead, if an ordinary key
+  binding specifies <code>kill-line</code>, it is remapped to
+  <code>my-kill-line</code>; if an ordinary binding specifies
+  <code>my-kill-line</code>, it is remapped to
+  <code>my-other-kill-line</code>.</p>
 
-<dl>
-<dt><a name="index-command_002dremapping"></a>Function: <strong>command-remapping</strong> <em>command &amp;optional position keymaps</em></dt>
-<dd><p>This function returns the remapping for <var>command</var> (a symbol),
-given the current active keymaps.  If <var>command</var> is not remapped
-(which is the usual situation), or not a symbol, the function returns
-<code>nil</code>.  <code>position</code> can optionally specify a buffer position
-or an event position to determine the keymaps to use, as in
-<code>key-binding</code>.
-</p>
-<p>If the optional argument <code>keymaps</code> is non-<code>nil</code>, it
-specifies a list of keymaps to search in.  This argument is ignored if
-<code>position</code> is non-<code>nil</code>.
-</p></dd></dl>
+  <p>To undo the remapping of a command, remap it to
+  <code>nil</code>; e.g.,</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Translation-Keymaps.html#Translation-Keymaps" accesskey="n" rel="next">Translation Keymaps</a>, Previous: <a href="Changing-Key-Bindings.html#Changing-Key-Bindings" accesskey="p" rel="prev">Changing Key Bindings</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="smallexample">
+    <pre class="smallexample">
+(define-key my-mode-map [remap kill-line] nil)
+</pre>
+  </div>
 
+  <dl>
+    <dt><a name="index-command_002dremapping" id=
+    "index-command_002dremapping"></a>Function:
+    <strong>command-remapping</strong> <em>command &amp;optional
+    position keymaps</em></dt>
 
+    <dd>
+      <p>This function returns the remapping for <var>command</var>
+      (a symbol), given the current active keymaps. If
+      <var>command</var> is not remapped (which is the usual
+      situation), or not a symbol, the function returns
+      <code>nil</code>. <code>position</code> can optionally
+      specify a buffer position or an event position to determine
+      the keymaps to use, as in <code>key-binding</code>.</p>
 
+      <p>If the optional argument <code>keymaps</code> is
+      non-<code>nil</code>, it specifies a list of keymaps to
+      search in. This argument is ignored if <code>position</code>
+      is non-<code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Translation-Keymaps.html#Translation-Keymaps"
+    accesskey="n" rel="next">Translation Keymaps</a>, Previous:
+    <a href="Changing-Key-Bindings.html#Changing-Key-Bindings"
+    accesskey="p" rel="prev">Changing Key Bindings</a>, Up:
+    <a href="Keymaps.html#Keymaps" accesskey="u" rel=
+    "up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,130 +18,176 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Minimization</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Minimization">
-<meta name="keywords" content="GNU Emacs Calc Manual: Minimization">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numerical-Solutions.html#Numerical-Solutions" rel="up" title="Numerical Solutions">
-<link href="Numerical-Systems-of-Equations.html#Numerical-Systems-of-Equations" rel="next" title="Numerical Systems of Equations">
-<link href="Root-Finding.html#Root-Finding" rel="prev" title="Root Finding">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Minimization</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Minimization" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Minimization" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numerical-Solutions.html#Numerical-Solutions" rel=
+  "up" title="Numerical Solutions" />
+  <link href=
+  "Numerical-Systems-of-Equations.html#Numerical-Systems-of-Equations"
+  rel="next" title="Numerical Systems of Equations" />
+  <link href="Root-Finding.html#Root-Finding" rel="prev" title=
+  "Root Finding" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Minimization"></a>
-<div class="header">
-<p>
-Next: <a href="Numerical-Systems-of-Equations.html#Numerical-Systems-of-Equations" accesskey="n" rel="next">Numerical Systems of Equations</a>, Previous: <a href="Root-Finding.html#Root-Finding" accesskey="p" rel="prev">Root Finding</a>, Up: <a href="Numerical-Solutions.html#Numerical-Solutions" accesskey="u" rel="up">Numerical Solutions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Minimization-1"></a>
-<h4 class="subsection">10.7.2 Minimization</h4>
+<body lang="en" xml:lang="en">
+  <a name="Minimization" id="Minimization"></a>
 
-<a name="index-a-N"></a>
-<a name="index-H-a-N"></a>
-<a name="index-a-X"></a>
-<a name="index-H-a-X"></a>
-<a name="index-calc_002dfind_002dminimum"></a>
-<a name="index-calc_002dfind_002dmaximum"></a>
-<a name="index-minimize"></a>
-<a name="index-maximize"></a>
-<a name="index-Minimization_002c-numerical"></a>
-<p>The <kbd>a N</kbd> (<code>calc-find-minimum</code>) [<code>minimize</code>] command
-finds a minimum value for a formula.  It is very similar in operation
-to <kbd>a R</kbd> (<code>calc-find-root</code>):  You give the formula and an initial
-guess on the stack, and are prompted for the name of a variable.  The guess
-may be either a number near the desired minimum, or an interval enclosing
-the desired minimum.  The function returns a vector containing the
-value of the variable which minimizes the formula&rsquo;s value, along
-with the minimum value itself.
-</p>
-<p>Note that this command looks for a <em>local</em> minimum.  Many functions
-have more than one minimum; some, like
-&lsquo;<samp>x sin(x)</samp>&rsquo;,
-have infinitely many.  In fact, there is no easy way to define the
-&ldquo;global&rdquo; minimum of
-&lsquo;<samp>x sin(x)</samp>&rsquo;
-but Calc can still locate any particular local minimum
-for you.  Calc basically goes downhill from the initial guess until it
-finds a point at which the function&rsquo;s value is greater both to the left
-and to the right.  Calc does not use derivatives when minimizing a function.
-</p>
-<p>If your initial guess is an interval and it looks like the minimum
-occurs at one or the other endpoint of the interval, Calc will return
-that endpoint only if that endpoint is closed; thus, minimizing &lsquo;<samp>17 x</samp>&rsquo;
-over &lsquo;<samp>[2..3]</samp>&rsquo; will return &lsquo;<samp>[2, 38]</samp>&rsquo;, but minimizing over
-&lsquo;<samp>(2..3]</samp>&rsquo; would report no minimum found.  In general, you should
-use closed intervals to find literally the minimum value in that
-range of &lsquo;<samp>x</samp>&rsquo;, or open intervals to find the local minimum, if
-any, that happens to lie in that range.
-</p>
-<p>Most functions are smooth and flat near their minimum values.  Because
-of this flatness, if the current precision is, say, 12 digits, the
-variable can only be determined meaningfully to about six digits.  Thus
-you should set the precision to twice as many digits as you need in your
-answer.
-</p>
-<a name="index-wminimize"></a>
-<a name="index-wmaximize"></a>
-<p>The <kbd>H a N</kbd> [<code>wminimize</code>] command, analogously to <kbd>H a R</kbd>,
-expands the guess interval to enclose a minimum rather than requiring
-that the minimum lie inside the interval you supply.
-</p>
-<p>The <kbd>a X</kbd> (<code>calc-find-maximum</code>) [<code>maximize</code>] and
-<kbd>H a X</kbd> [<code>wmaximize</code>] commands effectively minimize the
-negative of the formula you supply.
-</p>
-<p>The formula must evaluate to a real number at all points inside the
-interval (or near the initial guess if the guess is a number).  If
-the initial guess is a complex number the variable will be minimized
-over the complex numbers; if it is real or an interval it will
-be minimized over the reals.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Numerical-Systems-of-Equations.html#Numerical-Systems-of-Equations" accesskey="n" rel="next">Numerical Systems of Equations</a>, Previous: <a href="Root-Finding.html#Root-Finding" accesskey="p" rel="prev">Root Finding</a>, Up: <a href="Numerical-Solutions.html#Numerical-Solutions" accesskey="u" rel="up">Numerical Solutions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Numerical-Systems-of-Equations.html#Numerical-Systems-of-Equations"
+    accesskey="n" rel="next">Numerical Systems of Equations</a>,
+    Previous: <a href="Root-Finding.html#Root-Finding" accesskey=
+    "p" rel="prev">Root Finding</a>, Up: <a href=
+    "Numerical-Solutions.html#Numerical-Solutions" accesskey="u"
+    rel="up">Numerical Solutions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Minimization-1" id="Minimization-1"></a>
 
+  <h4 class="subsection">10.7.2 Minimization</h4><a name=
+  "index-a-N" id="index-a-N"></a> <a name="index-H-a-N" id=
+  "index-H-a-N"></a> <a name="index-a-X" id="index-a-X"></a>
+  <a name="index-H-a-X" id="index-H-a-X"></a> <a name=
+  "index-calc_002dfind_002dminimum" id=
+  "index-calc_002dfind_002dminimum"></a> <a name=
+  "index-calc_002dfind_002dmaximum" id=
+  "index-calc_002dfind_002dmaximum"></a> <a name="index-minimize"
+  id="index-minimize"></a> <a name="index-maximize" id=
+  "index-maximize"></a> <a name="index-Minimization_002c-numerical"
+  id="index-Minimization_002c-numerical"></a>
 
+  <p>The <kbd>a N</kbd> (<code>calc-find-minimum</code>)
+  [<code>minimize</code>] command finds a minimum value for a
+  formula. It is very similar in operation to <kbd>a R</kbd>
+  (<code>calc-find-root</code>): You give the formula and an
+  initial guess on the stack, and are prompted for the name of a
+  variable. The guess may be either a number near the desired
+  minimum, or an interval enclosing the desired minimum. The
+  function returns a vector containing the value of the variable
+  which minimizes the formula&rsquo;s value, along with the minimum
+  value itself.</p>
 
+  <p>Note that this command looks for a <em>local</em> minimum.
+  Many functions have more than one minimum; some, like
+  &lsquo;<samp>x sin(x)</samp>&rsquo;, have infinitely many. In
+  fact, there is no easy way to define the &ldquo;global&rdquo;
+  minimum of &lsquo;<samp>x sin(x)</samp>&rsquo; but Calc can still
+  locate any particular local minimum for you. Calc basically goes
+  downhill from the initial guess until it finds a point at which
+  the function&rsquo;s value is greater both to the left and to the
+  right. Calc does not use derivatives when minimizing a
+  function.</p>
+
+  <p>If your initial guess is an interval and it looks like the
+  minimum occurs at one or the other endpoint of the interval, Calc
+  will return that endpoint only if that endpoint is closed; thus,
+  minimizing &lsquo;<samp>17 x</samp>&rsquo; over
+  &lsquo;<samp>[2..3]</samp>&rsquo; will return &lsquo;<samp>[2,
+  38]</samp>&rsquo;, but minimizing over
+  &lsquo;<samp>(2..3]</samp>&rsquo; would report no minimum found.
+  In general, you should use closed intervals to find literally the
+  minimum value in that range of &lsquo;<samp>x</samp>&rsquo;, or
+  open intervals to find the local minimum, if any, that happens to
+  lie in that range.</p>
+
+  <p>Most functions are smooth and flat near their minimum values.
+  Because of this flatness, if the current precision is, say, 12
+  digits, the variable can only be determined meaningfully to about
+  six digits. Thus you should set the precision to twice as many
+  digits as you need in your answer.</p><a name="index-wminimize"
+  id="index-wminimize"></a> <a name="index-wmaximize" id=
+  "index-wmaximize"></a>
+
+  <p>The <kbd>H a N</kbd> [<code>wminimize</code>] command,
+  analogously to <kbd>H a R</kbd>, expands the guess interval to
+  enclose a minimum rather than requiring that the minimum lie
+  inside the interval you supply.</p>
+
+  <p>The <kbd>a X</kbd> (<code>calc-find-maximum</code>)
+  [<code>maximize</code>] and <kbd>H a X</kbd>
+  [<code>wmaximize</code>] commands effectively minimize the
+  negative of the formula you supply.</p>
+
+  <p>The formula must evaluate to a real number at all points
+  inside the interval (or near the initial guess if the guess is a
+  number). If the initial guess is a complex number the variable
+  will be minimized over the complex numbers; if it is real or an
+  interval it will be minimized over the reals.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Numerical-Systems-of-Equations.html#Numerical-Systems-of-Equations"
+    accesskey="n" rel="next">Numerical Systems of Equations</a>,
+    Previous: <a href="Root-Finding.html#Root-Finding" accesskey=
+    "p" rel="prev">Root Finding</a>, Up: <a href=
+    "Numerical-Solutions.html#Numerical-Solutions" accesskey="u"
+    rel="up">Numerical Solutions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

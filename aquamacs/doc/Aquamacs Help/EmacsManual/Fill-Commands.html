@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,164 +20,226 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Fill Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Fill Commands">
-<meta name="keywords" content="GNU Emacs Manual: Fill Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Filling.html#Filling" rel="up" title="Filling">
-<link href="Fill-Prefix.html#Fill-Prefix" rel="next" title="Fill Prefix">
-<link href="Auto-Fill.html#Auto-Fill" rel="prev" title="Auto Fill">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Fill Commands</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Fill Commands" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Fill Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Filling.html#Filling" rel="up" title="Filling" />
+  <link href="Fill-Prefix.html#Fill-Prefix" rel="next" title=
+  "Fill Prefix" />
+  <link href="Auto-Fill.html#Auto-Fill" rel="prev" title=
+  "Auto Fill" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Fill-Commands" id="Fill-Commands"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Fill-Prefix.html#Fill-Prefix" accesskey="n"
+    rel="next">Fill Prefix</a>, Previous: <a href=
+    "Auto-Fill.html#Auto-Fill" accesskey="p" rel="prev">Auto
+    Fill</a>, Up: <a href="Filling.html#Filling" accesskey="u" rel=
+    "up">Filling</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Explicit-Fill-Commands" id="Explicit-Fill-Commands"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Fill-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Fill-Prefix.html#Fill-Prefix" accesskey="n" rel="next">Fill Prefix</a>, Previous: <a href="Auto-Fill.html#Auto-Fill" accesskey="p" rel="prev">Auto Fill</a>, Up: <a href="Filling.html#Filling" accesskey="u" rel="up">Filling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Explicit-Fill-Commands"></a>
-<h4 class="subsection">25.6.2 Explicit Fill Commands</h4>
+  <h4 class="subsection">25.6.2 Explicit Fill Commands</h4>
 
-<dl compact="compact">
-<dt><kbd>M-q</kbd></dt>
-<dd><p>Fill current paragraph (<code>fill-paragraph</code>).
-</p></dd>
-<dt><kbd>C-x f</kbd></dt>
-<dd><p>Set the fill column (<code>set-fill-column</code>).
-</p></dd>
-<dt><kbd>M-x fill-region</kbd></dt>
-<dd><p>Fill each paragraph in the region (<code>fill-region</code>).
-</p></dd>
-<dt><kbd>M-x fill-region-as-paragraph</kbd></dt>
-<dd><p>Fill the region, considering it as one paragraph.
-</p></dd>
-<dt><kbd>M-o M-s</kbd></dt>
-<dd><p>Center a line.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>M-q</kbd></dt>
 
-<a name="index-M_002dq"></a>
-<a name="index-fill_002dparagraph"></a>
-<p>The command <kbd>M-q</kbd> (<code>fill-paragraph</code>) <em>fills</em> the
-current paragraph.  It redistributes the line breaks within the
-paragraph, and deletes any excess space and tab characters occurring
-within the paragraph, in such a way that the lines end up fitting
-within a certain maximum width.
-</p>
-<a name="index-fill_002dregion"></a>
-<p>Normally, <kbd>M-q</kbd> acts on the paragraph where point is, but if
-point is between paragraphs, it acts on the paragraph after point.  If
-the region is active, it acts instead on the text in the region.  You
-can also call <kbd>M-x fill-region</kbd> to specifically fill the text in
-the region.
-</p>
-<a name="index-fill_002dregion_002das_002dparagraph"></a>
-<p><kbd>M-q</kbd> and <code>fill-region</code> use the usual Emacs criteria for
-finding paragraph boundaries (see <a href="Paragraphs.html#Paragraphs">Paragraphs</a>).  For more control,
-you can use <kbd>M-x fill-region-as-paragraph</kbd>, which refills
-everything between point and mark as a single paragraph.  This command
-deletes any blank lines within the region, so separate blocks of text
-end up combined into one block.
-</p>
-<a name="index-justification"></a>
-<p>A numeric argument to <kbd>M-q</kbd> tells it to <em>justify</em> the text
-as well as filling it.  This means that extra spaces are inserted to
-make the right margin line up exactly at the fill column.  To remove
-the extra spaces, use <kbd>M-q</kbd> with no argument.  (Likewise for
-<code>fill-region</code>.)
-</p>
-<a name="index-fill_002dcolumn"></a>
-<a name="index-C_002dx-f"></a>
-<a name="index-set_002dfill_002dcolumn"></a>
-<p>The maximum line width for filling is specified by the buffer-local
-variable <code>fill-column</code>.  The default value (see <a href="Locals.html#Locals">Locals</a>) is
-70.  The easiest way to set <code>fill-column</code> in the current buffer
-is to use the command <kbd>C-x f</kbd> (<code>set-fill-column</code>).  With a
-numeric argument, it uses that as the new fill column.  With just
-<kbd>C-u</kbd> as argument, it sets <code>fill-column</code> to the current
-horizontal position of point.
-</p>
-<a name="index-M_002do-M_002ds-_0028Text-mode_0029"></a>
-<a name="index-centering"></a>
-<a name="index-center_002dline"></a>
-<p>The command <kbd>M-o M-s</kbd> (<code>center-line</code>) centers the current line
-within the current fill column.  With an argument <var>n</var>, it centers
-<var>n</var> lines individually and moves past them.  This binding is
-made by Text mode and is available only in that and related modes
-(see <a href="Text-Mode.html#Text-Mode">Text Mode</a>).
-</p>
-<p>By default, Emacs considers a period followed by two spaces or by a
-newline as the end of a sentence; a period followed by just one space
-indicates an abbreviation, not the end of a sentence.  Accordingly,
-the fill commands will not break a line after a period followed by
-just one space.  If you set the variable
-<code>sentence-end-double-space</code> to <code>nil</code>, the fill commands will
-break a line after a period followed by one space, and put just one
-space after each period.  See <a href="Sentences.html#Sentences">Sentences</a>, for other effects and
-possible drawbacks of this.
-</p>
-<a name="index-colon_002ddouble_002dspace"></a>
-<p>If the variable <code>colon-double-space</code> is non-<code>nil</code>, the
-fill commands put two spaces after a colon.
-</p>
-<a name="index-fill_002dnobreak_002dpredicate"></a>
-<p>To specify additional conditions where line-breaking is not allowed,
-customize the abnormal hook variable <code>fill-nobreak-predicate</code>
-(see <a href="Hooks.html#Hooks">Hooks</a>).  Each function in this hook is called with no
-arguments, with point positioned where Emacs is considering breaking a
-line.  If a function returns a non-<code>nil</code> value, Emacs will not
-break the line there.  Functions you can use there include:
-<code>fill-single-word-nobreak-p</code> (don&rsquo;t break after the first word of
-a sentence or before the last); <code>fill-single-char-nobreak-p</code>
-(don&rsquo;t break after a one-letter word); and <code>fill-french-nobreak-p</code>
-(don&rsquo;t break after &lsquo;<samp>(</samp>&rsquo; or before &lsquo;<samp>)</samp>&rsquo;, &lsquo;<samp>:</samp>&rsquo; or &lsquo;<samp>?</samp>&rsquo;).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Fill-Prefix.html#Fill-Prefix" accesskey="n" rel="next">Fill Prefix</a>, Previous: <a href="Auto-Fill.html#Auto-Fill" accesskey="p" rel="prev">Auto Fill</a>, Up: <a href="Filling.html#Filling" accesskey="u" rel="up">Filling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Fill current paragraph (<code>fill-paragraph</code>).</p>
+    </dd>
 
+    <dt><kbd>C-x f</kbd></dt>
 
+    <dd>
+      <p>Set the fill column (<code>set-fill-column</code>).</p>
+    </dd>
 
+    <dt><kbd>M-x fill-region</kbd></dt>
+
+    <dd>
+      <p>Fill each paragraph in the region
+      (<code>fill-region</code>).</p>
+    </dd>
+
+    <dt><kbd>M-x fill-region-as-paragraph</kbd></dt>
+
+    <dd>
+      <p>Fill the region, considering it as one paragraph.</p>
+    </dd>
+
+    <dt><kbd>M-o M-s</kbd></dt>
+
+    <dd>
+      <p>Center a line.</p>
+    </dd>
+  </dl><a name="index-M_002dq" id="index-M_002dq"></a> <a name=
+  "index-fill_002dparagraph" id="index-fill_002dparagraph"></a>
+
+  <p>The command <kbd>M-q</kbd> (<code>fill-paragraph</code>)
+  <em>fills</em> the current paragraph. It redistributes the line
+  breaks within the paragraph, and deletes any excess space and tab
+  characters occurring within the paragraph, in such a way that the
+  lines end up fitting within a certain maximum width.</p><a name=
+  "index-fill_002dregion" id="index-fill_002dregion"></a>
+
+  <p>Normally, <kbd>M-q</kbd> acts on the paragraph where point is,
+  but if point is between paragraphs, it acts on the paragraph
+  after point. If the region is active, it acts instead on the text
+  in the region. You can also call <kbd>M-x fill-region</kbd> to
+  specifically fill the text in the region.</p><a name=
+  "index-fill_002dregion_002das_002dparagraph" id=
+  "index-fill_002dregion_002das_002dparagraph"></a>
+
+  <p><kbd>M-q</kbd> and <code>fill-region</code> use the usual
+  Emacs criteria for finding paragraph boundaries (see <a href=
+  "Paragraphs.html#Paragraphs">Paragraphs</a>). For more control,
+  you can use <kbd>M-x fill-region-as-paragraph</kbd>, which
+  refills everything between point and mark as a single paragraph.
+  This command deletes any blank lines within the region, so
+  separate blocks of text end up combined into one
+  block.</p><a name="index-justification" id=
+  "index-justification"></a>
+
+  <p>A numeric argument to <kbd>M-q</kbd> tells it to
+  <em>justify</em> the text as well as filling it. This means that
+  extra spaces are inserted to make the right margin line up
+  exactly at the fill column. To remove the extra spaces, use
+  <kbd>M-q</kbd> with no argument. (Likewise for
+  <code>fill-region</code>.)</p><a name="index-fill_002dcolumn" id=
+  "index-fill_002dcolumn"></a> <a name="index-C_002dx-f" id=
+  "index-C_002dx-f"></a> <a name="index-set_002dfill_002dcolumn"
+  id="index-set_002dfill_002dcolumn"></a>
+
+  <p>The maximum line width for filling is specified by the
+  buffer-local variable <code>fill-column</code>. The default value
+  (see <a href="Locals.html#Locals">Locals</a>) is 70. The easiest
+  way to set <code>fill-column</code> in the current buffer is to
+  use the command <kbd>C-x f</kbd> (<code>set-fill-column</code>).
+  With a numeric argument, it uses that as the new fill column.
+  With just <kbd>C-u</kbd> as argument, it sets
+  <code>fill-column</code> to the current horizontal position of
+  point.</p><a name="index-M_002do-M_002ds-_0028Text-mode_0029" id=
+  "index-M_002do-M_002ds-_0028Text-mode_0029"></a> <a name=
+  "index-centering" id="index-centering"></a> <a name=
+  "index-center_002dline" id="index-center_002dline"></a>
+
+  <p>The command <kbd>M-o M-s</kbd> (<code>center-line</code>)
+  centers the current line within the current fill column. With an
+  argument <var>n</var>, it centers <var>n</var> lines individually
+  and moves past them. This binding is made by Text mode and is
+  available only in that and related modes (see <a href=
+  "Text-Mode.html#Text-Mode">Text Mode</a>).</p>
+
+  <p>By default, Emacs considers a period followed by two spaces or
+  by a newline as the end of a sentence; a period followed by just
+  one space indicates an abbreviation, not the end of a sentence.
+  Accordingly, the fill commands will not break a line after a
+  period followed by just one space. If you set the variable
+  <code>sentence-end-double-space</code> to <code>nil</code>, the
+  fill commands will break a line after a period followed by one
+  space, and put just one space after each period. See <a href=
+  "Sentences.html#Sentences">Sentences</a>, for other effects and
+  possible drawbacks of this.</p><a name=
+  "index-colon_002ddouble_002dspace" id=
+  "index-colon_002ddouble_002dspace"></a>
+
+  <p>If the variable <code>colon-double-space</code> is
+  non-<code>nil</code>, the fill commands put two spaces after a
+  colon.</p><a name="index-fill_002dnobreak_002dpredicate" id=
+  "index-fill_002dnobreak_002dpredicate"></a>
+
+  <p>To specify additional conditions where line-breaking is not
+  allowed, customize the abnormal hook variable
+  <code>fill-nobreak-predicate</code> (see <a href=
+  "Hooks.html#Hooks">Hooks</a>). Each function in this hook is
+  called with no arguments, with point positioned where Emacs is
+  considering breaking a line. If a function returns a
+  non-<code>nil</code> value, Emacs will not break the line there.
+  Functions you can use there include:
+  <code>fill-single-word-nobreak-p</code> (don&rsquo;t break after
+  the first word of a sentence or before the last);
+  <code>fill-single-char-nobreak-p</code> (don&rsquo;t break after
+  a one-letter word); and <code>fill-french-nobreak-p</code>
+  (don&rsquo;t break after &lsquo;<samp>(</samp>&rsquo; or before
+  &lsquo;<samp>)</samp>&rsquo;, &lsquo;<samp>:</samp>&rsquo; or
+  &lsquo;<samp>?</samp>&rsquo;).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Fill-Prefix.html#Fill-Prefix" accesskey="n"
+    rel="next">Fill Prefix</a>, Previous: <a href=
+    "Auto-Fill.html#Auto-Fill" accesskey="p" rel="prev">Auto
+    Fill</a>, Up: <a href="Filling.html#Filling" accesskey="u" rel=
+    "up">Filling</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

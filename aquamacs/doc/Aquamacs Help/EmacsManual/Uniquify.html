@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,110 +20,157 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Uniquify</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Uniquify">
-<meta name="keywords" content="GNU Emacs Manual: Uniquify">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffer-Convenience.html#Buffer-Convenience" rel="up" title="Buffer Convenience">
-<link href="Icomplete.html#Icomplete" rel="next" title="Icomplete">
-<link href="Buffer-Convenience.html#Buffer-Convenience" rel="prev" title="Buffer Convenience">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Uniquify</title>
+  <meta name="description" content="GNU Emacs Manual: Uniquify" />
+  <meta name="keywords" content="GNU Emacs Manual: Uniquify" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffer-Convenience.html#Buffer-Convenience" rel="up"
+  title="Buffer Convenience" />
+  <link href="Icomplete.html#Icomplete" rel="next" title=
+  "Icomplete" />
+  <link href="Buffer-Convenience.html#Buffer-Convenience" rel=
+  "prev" title="Buffer Convenience" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Uniquify" id="Uniquify"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Icomplete.html#Icomplete" accesskey="n" rel=
+    "next">Icomplete</a>, Up: <a href=
+    "Buffer-Convenience.html#Buffer-Convenience" accesskey="u" rel=
+    "up">Buffer Convenience</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Making-Buffer-Names-Unique" id=
+  "Making-Buffer-Names-Unique"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Uniquify"></a>
-<div class="header">
-<p>
-Next: <a href="Icomplete.html#Icomplete" accesskey="n" rel="next">Icomplete</a>, Up: <a href="Buffer-Convenience.html#Buffer-Convenience" accesskey="u" rel="up">Buffer Convenience</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Making-Buffer-Names-Unique"></a>
-<h4 class="subsection">19.7.1 Making Buffer Names Unique</h4>
+  <h4 class="subsection">19.7.1 Making Buffer Names
+  Unique</h4><a name="index-unique-buffer-names" id=
+  "index-unique-buffer-names"></a> <a name=
+  "index-directories-in-buffer-names" id=
+  "index-directories-in-buffer-names"></a>
 
-<a name="index-unique-buffer-names"></a>
-<a name="index-directories-in-buffer-names"></a>
-<p>When several buffers visit identically-named files, Emacs must give
-the buffers distinct names.  The default method adds a suffix based on
-the names of the directories that contain the files.  For example, if
-you visit files <samp>/foo/bar/mumble/name</samp> and
-<samp>/baz/quux/mumble/name</samp> at the same time, their buffers will be
-named &lsquo;<samp>name&lt;bar/mumble&gt;</samp>&rsquo; and &lsquo;<samp>name&lt;quux/mumble&gt;</samp>&rsquo;, respectively.
-Emacs adds as many directory parts as are needed to make a unique name.
-</p>
-<a name="index-uniquify_002dbuffer_002dname_002dstyle"></a>
-<p>You can choose from several different styles for constructing unique
-buffer names, by customizing the option <code>uniquify-buffer-name-style</code>.
-</p>
-<p>The <code>forward</code> naming method includes part of the file&rsquo;s
-directory name at the beginning of the buffer name; using this method,
-buffers visiting the files <samp>/u/rms/tmp/Makefile</samp> and
-<samp>/usr/projects/zaphod/Makefile</samp> would be named
-&lsquo;<samp>tmp/Makefile</samp>&rsquo; and &lsquo;<samp>zaphod/Makefile</samp>&rsquo;.
-</p>
-<p>In contrast, the <code>post-forward</code> naming method would call the
-buffers &lsquo;<samp>Makefile|tmp</samp>&rsquo; and &lsquo;<samp>Makefile|zaphod</samp>&rsquo;.  The default
-method <code>post-forward-angle-brackets</code> is like <code>post-forward</code>,
-except that it encloses the unique path in angle brackets.  The
-<code>reverse</code> naming method would call them &lsquo;<samp>Makefile\tmp</samp>&rsquo; and
-&lsquo;<samp>Makefile\zaphod</samp>&rsquo;.  The nontrivial difference between
-<code>post-forward</code> and <code>reverse</code> occurs when just one directory
-name is not enough to distinguish two files; then <code>reverse</code> puts
-the directory names in reverse order, so that <samp>/top/middle/file</samp>
-becomes &lsquo;<samp>file\middle\top</samp>&rsquo;, while <code>post-forward</code> puts them in
-forward order after the file name, as in &lsquo;<samp>file|top/middle</samp>&rsquo;.  If
-<code>uniquify-buffer-name-style</code> is set to <code>nil</code>, the buffer
-names simply get &lsquo;<samp>&lt;2&gt;</samp>&rsquo;, &lsquo;<samp>&lt;3&gt;</samp>&rsquo;, etc. appended.
-</p>
-<p>Which rule to follow for putting the directory names in the buffer
-name is not very important if you are going to <em>look</em> at the
-buffer names before you type one.  But as an experienced user, if you
-know the rule, you won&rsquo;t have to look.  And then you may find that one
-rule or another is easier for you to remember and apply quickly.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Icomplete.html#Icomplete" accesskey="n" rel="next">Icomplete</a>, Up: <a href="Buffer-Convenience.html#Buffer-Convenience" accesskey="u" rel="up">Buffer Convenience</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When several buffers visit identically-named files, Emacs must
+  give the buffers distinct names. The default method adds a suffix
+  based on the names of the directories that contain the files. For
+  example, if you visit files <samp>/foo/bar/mumble/name</samp> and
+  <samp>/baz/quux/mumble/name</samp> at the same time, their
+  buffers will be named
+  &lsquo;<samp>name&lt;bar/mumble&gt;</samp>&rsquo; and
+  &lsquo;<samp>name&lt;quux/mumble&gt;</samp>&rsquo;, respectively.
+  Emacs adds as many directory parts as are needed to make a unique
+  name.</p><a name="index-uniquify_002dbuffer_002dname_002dstyle"
+  id="index-uniquify_002dbuffer_002dname_002dstyle"></a>
 
+  <p>You can choose from several different styles for constructing
+  unique buffer names, by customizing the option
+  <code>uniquify-buffer-name-style</code>.</p>
 
+  <p>The <code>forward</code> naming method includes part of the
+  file&rsquo;s directory name at the beginning of the buffer name;
+  using this method, buffers visiting the files
+  <samp>/u/rms/tmp/Makefile</samp> and
+  <samp>/usr/projects/zaphod/Makefile</samp> would be named
+  &lsquo;<samp>tmp/Makefile</samp>&rsquo; and
+  &lsquo;<samp>zaphod/Makefile</samp>&rsquo;.</p>
 
+  <p>In contrast, the <code>post-forward</code> naming method would
+  call the buffers &lsquo;<samp>Makefile|tmp</samp>&rsquo; and
+  &lsquo;<samp>Makefile|zaphod</samp>&rsquo;. The default method
+  <code>post-forward-angle-brackets</code> is like
+  <code>post-forward</code>, except that it encloses the unique
+  path in angle brackets. The <code>reverse</code> naming method
+  would call them &lsquo;<samp>Makefile\tmp</samp>&rsquo; and
+  &lsquo;<samp>Makefile\zaphod</samp>&rsquo;. The nontrivial
+  difference between <code>post-forward</code> and
+  <code>reverse</code> occurs when just one directory name is not
+  enough to distinguish two files; then <code>reverse</code> puts
+  the directory names in reverse order, so that
+  <samp>/top/middle/file</samp> becomes
+  &lsquo;<samp>file\middle\top</samp>&rsquo;, while
+  <code>post-forward</code> puts them in forward order after the
+  file name, as in &lsquo;<samp>file|top/middle</samp>&rsquo;. If
+  <code>uniquify-buffer-name-style</code> is set to
+  <code>nil</code>, the buffer names simply get
+  &lsquo;<samp>&lt;2&gt;</samp>&rsquo;,
+  &lsquo;<samp>&lt;3&gt;</samp>&rsquo;, etc. appended.</p>
+
+  <p>Which rule to follow for putting the directory names in the
+  buffer name is not very important if you are going to
+  <em>look</em> at the buffer names before you type one. But as an
+  experienced user, if you know the rule, you won&rsquo;t have to
+  look. And then you may find that one rule or another is easier
+  for you to remember and apply quickly.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Icomplete.html#Icomplete" accesskey="n" rel=
+    "next">Icomplete</a>, Up: <a href=
+    "Buffer-Convenience.html#Buffer-Convenience" accesskey="u" rel=
+    "up">Buffer Convenience</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,181 +19,260 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Basic Windows</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Basic Windows">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Basic Windows">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Windows-and-Frames.html#Windows-and-Frames" rel="next" title="Windows and Frames">
-<link href="Windows.html#Windows" rel="prev" title="Windows">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Basic Windows</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Basic Windows" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Basic Windows" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Windows-and-Frames.html#Windows-and-Frames" rel=
+  "next" title="Windows and Frames" />
+  <link href="Windows.html#Windows" rel="prev" title="Windows" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Basic-Windows" id="Basic-Windows"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Windows-and-Frames.html#Windows-and-Frames"
+    accesskey="n" rel="next">Windows and Frames</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Concepts-of-Emacs-Windows" id=
+  "Basic-Concepts-of-Emacs-Windows"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Windows"></a>
-<div class="header">
-<p>
-Next: <a href="Windows-and-Frames.html#Windows-and-Frames" accesskey="n" rel="next">Windows and Frames</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Concepts-of-Emacs-Windows"></a>
-<h3 class="section">27.1 Basic Concepts of Emacs Windows</h3>
-<a name="index-window"></a>
+  <h3 class="section">27.1 Basic Concepts of Emacs
+  Windows</h3><a name="index-window" id="index-window"></a>
 
-<p>A <em>window</em> is an area of the screen that is used to display a buffer
-(see <a href="Buffers.html#Buffers">Buffers</a>).  In Emacs Lisp, windows are represented by a special
-Lisp object type.
-</p>
-<a name="index-multiple-windows"></a>
-<p>Windows are grouped into frames (see <a href="Frames.html#Frames">Frames</a>).  Each frame
-contains at least one window; the user can subdivide it into multiple,
-non-overlapping windows to view several buffers at once.  Lisp
-programs can use multiple windows for a variety of purposes.  In
-Rmail, for example, you can view a summary of message titles in one
-window, and the contents of the selected message in another window.
-</p>
-<a name="index-terminal-screen"></a>
-<a name="index-screen-of-terminal"></a>
-<p>Emacs uses the word &ldquo;window&rdquo; with a different meaning than in
-graphical desktop environments and window systems, such as the X
-Window System.  When Emacs is run on X, each of its graphical X
-windows is an Emacs frame (containing one or more Emacs windows).
-When Emacs is run on a text terminal, the frame fills the entire
-terminal screen.
-</p>
-<a name="index-tiled-windows"></a>
-<p>Unlike X windows, Emacs windows are <em>tiled</em>; they never overlap
-within the area of the frame.  When a window is created, resized, or
-deleted, the change in window space is taken from or given to the
-adjacent windows, so that the total area of the frame is unchanged.
-</p>
-<dl>
-<dt><a name="index-windowp"></a>Function: <strong>windowp</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a window (whether or
-not it displays a buffer).  Otherwise, it returns <code>nil</code>.
-</p></dd></dl>
+  <p>A <em>window</em> is an area of the screen that is used to
+  display a buffer (see <a href=
+  "Buffers.html#Buffers">Buffers</a>). In Emacs Lisp, windows are
+  represented by a special Lisp object type.</p><a name=
+  "index-multiple-windows" id="index-multiple-windows"></a>
 
-<a name="index-live-windows"></a>
-<p>A <em>live window</em> is one that is actually displaying a buffer in a
-frame.
-</p>
-<dl>
-<dt><a name="index-window_002dlive_002dp"></a>Function: <strong>window-live-p</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a live window and
-<code>nil</code> otherwise.  A live window is one that displays a buffer.
-</p></dd></dl>
+  <p>Windows are grouped into frames (see <a href=
+  "Frames.html#Frames">Frames</a>). Each frame contains at least
+  one window; the user can subdivide it into multiple,
+  non-overlapping windows to view several buffers at once. Lisp
+  programs can use multiple windows for a variety of purposes. In
+  Rmail, for example, you can view a summary of message titles in
+  one window, and the contents of the selected message in another
+  window.</p><a name="index-terminal-screen" id=
+  "index-terminal-screen"></a> <a name="index-screen-of-terminal"
+  id="index-screen-of-terminal"></a>
 
-<a name="index-internal-windows"></a>
-<p>The windows in each frame are organized into a <em>window tree</em>.
-See <a href="Windows-and-Frames.html#Windows-and-Frames">Windows and Frames</a>.  The leaf nodes of each window tree are live
-windows&mdash;the ones actually displaying buffers.  The internal nodes of
-the window tree are <em>internal windows</em>, which are not live.
-</p>
-<a name="index-valid-windows"></a>
-<p>A <em>valid window</em> is one that is either live or internal.  A valid
-window can be <em>deleted</em>, i.e., removed from its frame
-(see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>); then it is no longer valid, but the Lisp
-object representing it might be still referenced from other Lisp
-objects.  A deleted window may be made valid again by restoring a saved
-window configuration (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).
-</p>
-<p>You can distinguish valid windows from deleted windows with
-<code>window-valid-p</code>.
-</p>
-<dl>
-<dt><a name="index-window_002dvalid_002dp"></a>Function: <strong>window-valid-p</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a live window, or an
-internal window in a window tree.  Otherwise, it returns <code>nil</code>,
-including for the case where <var>object</var> is a deleted window.
-</p></dd></dl>
+  <p>Emacs uses the word &ldquo;window&rdquo; with a different
+  meaning than in graphical desktop environments and window
+  systems, such as the X Window System. When Emacs is run on X,
+  each of its graphical X windows is an Emacs frame (containing one
+  or more Emacs windows). When Emacs is run on a text terminal, the
+  frame fills the entire terminal screen.</p><a name=
+  "index-tiled-windows" id="index-tiled-windows"></a>
 
-<a name="index-selected-window"></a>
-<a name="index-window-selected-within-a-frame"></a>
-<p>In each frame, at any time, exactly one Emacs window is designated
-as <em>selected within the frame</em>.  For the selected frame, that
-window is called the <em>selected window</em>&mdash;the one in which most
-editing takes place, and in which the cursor for selected windows
-appears (see <a href="Cursor-Parameters.html#Cursor-Parameters">Cursor Parameters</a>).  The selected window&rsquo;s buffer is
-usually also the current buffer, except when <code>set-buffer</code> has
-been used (see <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>).  As for non-selected frames, the
-window selected within the frame becomes the selected window if the
-frame is ever selected.  See <a href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>.
-</p>
-<dl>
-<dt><a name="index-selected_002dwindow"></a>Function: <strong>selected-window</strong></dt>
-<dd><p>This function returns the selected window (which is always a live
-window).
-</p></dd></dl>
+  <p>Unlike X windows, Emacs windows are <em>tiled</em>; they never
+  overlap within the area of the frame. When a window is created,
+  resized, or deleted, the change in window space is taken from or
+  given to the adjacent windows, so that the total area of the
+  frame is unchanged.</p>
 
-<a name="Window-Group"></a><p>Sometimes several windows collectively and
-cooperatively display a buffer, for example, under the management of
-Follow Mode (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Follow-Mode.html#Follow-Mode">(emacs)Follow Mode</a>), where the windows together
-display a bigger portion of the buffer than one window could alone.
-It is often useful to consider such a <em>window group</em> as a single
-entity.  Several functions such as <code>window-group-start</code>
-(see <a href="Window-Start-and-End.html#Window-Start-and-End">Window Start and End</a>) allow you to do this by supplying, as
-an argument, one of the windows as a stand in for the whole group.
-</p>
-<dl>
-<dt><a name="index-selected_002dwindow_002dgroup"></a>Function: <strong>selected-window-group</strong></dt>
-<dd><a name="index-selected_002dwindow_002dgroup_002dfunction"></a>
-<p>When the selected window is a member of a group of windows, this
-function returns a list of the windows in the group, ordered such that
-the first window in the list is displaying the earliest part of the
-buffer, and so on.  Otherwise the function returns a list containing
-just the selected window.
-</p>
-<p>The selected window is considered part of a group when the buffer
-local variable <code>selected-window-group-function</code> is set to a
-function.  In this case, <code>selected-window-group</code> calls it with no
-arguments and returns its result (which should be the list of windows
-in the group).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-windowp" id="index-windowp"></a>Function:
+    <strong>windowp</strong> <em>object</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Windows-and-Frames.html#Windows-and-Frames" accesskey="n" rel="next">Windows and Frames</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a window (whether or not it displays a buffer). Otherwise,
+      it returns <code>nil</code>.</p>
+    </dd>
+  </dl><a name="index-live-windows" id="index-live-windows"></a>
 
+  <p>A <em>live window</em> is one that is actually displaying a
+  buffer in a frame.</p>
 
+  <dl>
+    <dt><a name="index-window_002dlive_002dp" id=
+    "index-window_002dlive_002dp"></a>Function:
+    <strong>window-live-p</strong> <em>object</em></dt>
 
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a live window and <code>nil</code> otherwise. A live
+      window is one that displays a buffer.</p>
+    </dd>
+  </dl><a name="index-internal-windows" id=
+  "index-internal-windows"></a>
+
+  <p>The windows in each frame are organized into a <em>window
+  tree</em>. See <a href=
+  "Windows-and-Frames.html#Windows-and-Frames">Windows and
+  Frames</a>. The leaf nodes of each window tree are live
+  windows&mdash;the ones actually displaying buffers. The internal
+  nodes of the window tree are <em>internal windows</em>, which are
+  not live.</p><a name="index-valid-windows" id=
+  "index-valid-windows"></a>
+
+  <p>A <em>valid window</em> is one that is either live or
+  internal. A valid window can be <em>deleted</em>, i.e., removed
+  from its frame (see <a href=
+  "Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>);
+  then it is no longer valid, but the Lisp object representing it
+  might be still referenced from other Lisp objects. A deleted
+  window may be made valid again by restoring a saved window
+  configuration (see <a href=
+  "Window-Configurations.html#Window-Configurations">Window
+  Configurations</a>).</p>
+
+  <p>You can distinguish valid windows from deleted windows with
+  <code>window-valid-p</code>.</p>
+
+  <dl>
+    <dt><a name="index-window_002dvalid_002dp" id=
+    "index-window_002dvalid_002dp"></a>Function:
+    <strong>window-valid-p</strong> <em>object</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a live window, or an internal window in a window tree.
+      Otherwise, it returns <code>nil</code>, including for the
+      case where <var>object</var> is a deleted window.</p>
+    </dd>
+  </dl><a name="index-selected-window" id=
+  "index-selected-window"></a> <a name=
+  "index-window-selected-within-a-frame" id=
+  "index-window-selected-within-a-frame"></a>
+
+  <p>In each frame, at any time, exactly one Emacs window is
+  designated as <em>selected within the frame</em>. For the
+  selected frame, that window is called the <em>selected
+  window</em>&mdash;the one in which most editing takes place, and
+  in which the cursor for selected windows appears (see <a href=
+  "Cursor-Parameters.html#Cursor-Parameters">Cursor
+  Parameters</a>). The selected window&rsquo;s buffer is usually
+  also the current buffer, except when <code>set-buffer</code> has
+  been used (see <a href=
+  "Current-Buffer.html#Current-Buffer">Current Buffer</a>). As for
+  non-selected frames, the window selected within the frame becomes
+  the selected window if the frame is ever selected. See <a href=
+  "Selecting-Windows.html#Selecting-Windows">Selecting
+  Windows</a>.</p>
+
+  <dl>
+    <dt><a name="index-selected_002dwindow" id=
+    "index-selected_002dwindow"></a>Function:
+    <strong>selected-window</strong></dt>
+
+    <dd>
+      <p>This function returns the selected window (which is always
+      a live window).</p>
+    </dd>
+  </dl><a name="Window-Group" id="Window-Group"></a>
+
+  <p>Sometimes several windows collectively and cooperatively
+  display a buffer, for example, under the management of Follow
+  Mode (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Follow-Mode.html#Follow-Mode">
+  (emacs)Follow Mode</a>), where the windows together display a
+  bigger portion of the buffer than one window could alone. It is
+  often useful to consider such a <em>window group</em> as a single
+  entity. Several functions such as <code>window-group-start</code>
+  (see <a href=
+  "Window-Start-and-End.html#Window-Start-and-End">Window Start and
+  End</a>) allow you to do this by supplying, as an argument, one
+  of the windows as a stand in for the whole group.</p>
+
+  <dl>
+    <dt><a name="index-selected_002dwindow_002dgroup" id=
+    "index-selected_002dwindow_002dgroup"></a>Function:
+    <strong>selected-window-group</strong></dt>
+
+    <dd>
+      <a name="index-selected_002dwindow_002dgroup_002dfunction"
+      id="index-selected_002dwindow_002dgroup_002dfunction"></a>
+
+      <p>When the selected window is a member of a group of
+      windows, this function returns a list of the windows in the
+      group, ordered such that the first window in the list is
+      displaying the earliest part of the buffer, and so on.
+      Otherwise the function returns a list containing just the
+      selected window.</p>
+
+      <p>The selected window is considered part of a group when the
+      buffer local variable
+      <code>selected-window-group-function</code> is set to a
+      function. In this case, <code>selected-window-group</code>
+      calls it with no arguments and returns its result (which
+      should be the list of windows in the group).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Windows-and-Frames.html#Windows-and-Frames"
+    accesskey="n" rel="next">Windows and Frames</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,364 +18,505 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Basic Simplifications</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Basic Simplifications">
-<meta name="keywords" content="GNU Emacs Calc Manual: Basic Simplifications">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Simplifying-Formulas.html#Simplifying-Formulas" rel="up" title="Simplifying Formulas">
-<link href="Algebraic-Simplifications.html#Algebraic-Simplifications" rel="next" title="Algebraic Simplifications">
-<link href="Simplifying-Formulas.html#Simplifying-Formulas" rel="prev" title="Simplifying Formulas">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Basic Simplifications</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Basic Simplifications" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Basic Simplifications" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Simplifying-Formulas.html#Simplifying-Formulas" rel=
+  "up" title="Simplifying Formulas" />
+  <link href=
+  "Algebraic-Simplifications.html#Algebraic-Simplifications" rel=
+  "next" title="Algebraic Simplifications" />
+  <link href="Simplifying-Formulas.html#Simplifying-Formulas" rel=
+  "prev" title="Simplifying Formulas" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Simplifications"></a>
-<div class="header">
-<p>
-Next: <a href="Algebraic-Simplifications.html#Algebraic-Simplifications" accesskey="n" rel="next">Algebraic Simplifications</a>, Previous: <a href="Simplifying-Formulas.html#Simplifying-Formulas" accesskey="p" rel="prev">Simplifying Formulas</a>, Up: <a href="Simplifying-Formulas.html#Simplifying-Formulas" accesskey="u" rel="up">Simplifying Formulas</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Simplifications-1"></a>
-<h4 class="subsection">10.3.1 Basic Simplifications</h4>
+<body lang="en" xml:lang="en">
+  <a name="Basic-Simplifications" id="Basic-Simplifications"></a>
 
-<a name="index-Basic-simplifications"></a>
-<p>This section describes basic simplifications which Calc performs in many
-situations.  For example, both binary simplifications and algebraic
-simplifications begin by performing these basic simplifications.  You
-can type <kbd>m I</kbd> to restrict the simplifications done on the stack to
-these simplifications.
-</p>
-<p>The most basic simplification is the evaluation of functions.
-For example, &lsquo;<samp>2 + 3</samp>&rsquo; is evaluated to &lsquo;<samp>5</samp>&rsquo;, and &lsquo;<samp><tt>sqrt</tt>(9)</samp>&rsquo;
-is evaluated to &lsquo;<samp>3</samp>&rsquo;.  Evaluation does not occur if the arguments
-to a function are somehow of the wrong type &lsquo;<samp><tt>tan</tt>([2,3,4])</samp>&rsquo;),
-range (&lsquo;<samp><tt>tan</tt>(90)</samp>&rsquo;), or number (&lsquo;<samp><tt>tan</tt>(3,5)</samp>&rsquo;),
-or if the function name is not recognized (&lsquo;<samp><tt>f</tt>(5)</samp>&rsquo;), or if
-Symbolic mode (see <a href="Symbolic-Mode.html#Symbolic-Mode">Symbolic Mode</a>) prevents evaluation
-(&lsquo;<samp><tt>sqrt</tt>(2)</samp>&rsquo;).
-</p>
-<p>Calc simplifies (evaluates) the arguments to a function before it
-simplifies the function itself.  Thus &lsquo;<samp><tt>sqrt</tt>(5+4)</samp>&rsquo; is
-simplified to &lsquo;<samp><tt>sqrt</tt>(9)</samp>&rsquo; before the <code>sqrt</code> function
-itself is applied.  There are very few exceptions to this rule:
-<code>quote</code>, <code>lambda</code>, and <code>condition</code> (the <code>::</code>
-operator) do not evaluate their arguments, <code>if</code> (the <code>? :</code>
-operator) does not evaluate all of its arguments, and <code>evalto</code>
-does not evaluate its lefthand argument.
-</p>
-<p>Most commands apply at least these basic simplifications to all
-arguments they take from the stack, perform a particular operation,
-then simplify the result before pushing it back on the stack.  In the
-common special case of regular arithmetic commands like <kbd>+</kbd> and
-<kbd>Q</kbd> [<code>sqrt</code>], the arguments are simply popped from the stack
-and collected into a suitable function call, which is then simplified
-(the arguments being simplified first as part of the process, as
-described above).
-</p>
-<p>Even the basic set of simplifications are too numerous to describe
-completely here, but this section will describe the ones that apply to the
-major arithmetic operators.  This list will be rather technical in
-nature, and will probably be interesting to you only if you are
-a serious user of Calc&rsquo;s algebra facilities.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Algebraic-Simplifications.html#Algebraic-Simplifications"
+    accesskey="n" rel="next">Algebraic Simplifications</a>,
+    Previous: <a href=
+    "Simplifying-Formulas.html#Simplifying-Formulas" accesskey="p"
+    rel="prev">Simplifying Formulas</a>, Up: <a href=
+    "Simplifying-Formulas.html#Simplifying-Formulas" accesskey="u"
+    rel="up">Simplifying Formulas</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Simplifications-1" id=
+  "Basic-Simplifications-1"></a>
 
-<p>As well as the simplifications described here, if you have stored
-any rewrite rules in the variable <code>EvalRules</code> then these rules
-will also be applied before any of the basic simplifications.
-See <a href="Automatic-Rewrites.html#Automatic-Rewrites">Automatic Rewrites</a>, for details.
-</p>
+  <h4 class="subsection">10.3.1 Basic Simplifications</h4><a name=
+  "index-Basic-simplifications" id=
+  "index-Basic-simplifications"></a>
 
-<p>And now, on with the basic simplifications:
-</p>
-<p>Arithmetic operators like <kbd>+</kbd> and <kbd>*</kbd> always take two
-arguments in Calc&rsquo;s internal form.  Sums and products of three or
-more terms are arranged by the associative law of algebra into
-a left-associative form for sums, &lsquo;<samp>((a + b) + c) + d</samp>&rsquo;, and
-(by default) a right-associative form for products,
-&lsquo;<samp>a * (b * (c * d))</samp>&rsquo;.  Formulas like &lsquo;<samp>(a + b) + (c + d)</samp>&rsquo; are
-rearranged to left-associative form, though this rarely matters since
-Calc&rsquo;s algebra commands are designed to hide the inner structure of sums
-and products as much as possible.  Sums and products in their proper
-associative form will be written without parentheses in the examples
-below.
-</p>
-<p>Sums and products are <em>not</em> rearranged according to the
-commutative law (&lsquo;<samp>a + b</samp>&rsquo; to &lsquo;<samp>b + a</samp>&rsquo;) except in a few
-special cases described below.  Some algebra programs always
-rearrange terms into a canonical order, which enables them to
-see that &lsquo;<samp>a b + b a</samp>&rsquo; can be simplified to &lsquo;<samp>2 a b</samp>&rsquo;.
-If you are using Basic Simplification mode, Calc assumes you have put
-the terms into the order you want and generally leaves that order alone,
-with the consequence that formulas like the above will only be
-simplified if you explicitly give the <kbd>a s</kbd> command.
-See <a href="Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic Simplifications</a>.
-</p>
-<p>Differences &lsquo;<samp>a - b</samp>&rsquo; are treated like sums &lsquo;<samp>a + (-b)</samp>&rsquo;
-for purposes of simplification; one of the default simplifications
-is to rewrite &lsquo;<samp>a + (-b)</samp>&rsquo; or &lsquo;<samp>(-b) + a</samp>&rsquo;, where &lsquo;<samp>-b</samp>&rsquo;
-represents a &ldquo;negative-looking&rdquo; term, into &lsquo;<samp>a - b</samp>&rsquo; form.
-&ldquo;Negative-looking&rdquo; means negative numbers, negated formulas like
-&lsquo;<samp>-x</samp>&rsquo;, and products or quotients in which either term is
-negative-looking.
-</p>
-<p>Other simplifications involving negation are &lsquo;<samp>-(-x)</samp>&rsquo; to &lsquo;<samp>x</samp>&rsquo;;
-&lsquo;<samp>-(a b)</samp>&rsquo; or &lsquo;<samp>-(a/b)</samp>&rsquo; where either &lsquo;<samp>a</samp>&rsquo; or &lsquo;<samp>b</samp>&rsquo; is
-negative-looking, simplified by negating that term, or else where
-&lsquo;<samp>a</samp>&rsquo; or &lsquo;<samp>b</samp>&rsquo; is any number, by negating that number;
-&lsquo;<samp>-(a + b)</samp>&rsquo; to &lsquo;<samp>-a - b</samp>&rsquo;, and &lsquo;<samp>-(b - a)</samp>&rsquo; to &lsquo;<samp>a - b</samp>&rsquo;.
-(This, and rewriting &lsquo;<samp>(-b) + a</samp>&rsquo; to &lsquo;<samp>a - b</samp>&rsquo;, are the only
-cases where the order of terms in a sum is changed by the default
-simplifications.)
-</p>
-<p>The distributive law is used to simplify sums in some cases:
-&lsquo;<samp>a x + b x</samp>&rsquo; to &lsquo;<samp>(a + b) x</samp>&rsquo;, where &lsquo;<samp>a</samp>&rsquo; represents
-a number or an implicit 1 or <i>-1</i> (as in &lsquo;<samp>x</samp>&rsquo; or &lsquo;<samp>-x</samp>&rsquo;)
-and similarly for &lsquo;<samp>b</samp>&rsquo;.  Use the <kbd>a c</kbd>, <kbd>a&nbsp;f</kbd><!-- /@w -->, or
-<kbd>j M</kbd> commands to merge sums with non-numeric coefficients
-using the distributive law.
-</p>
-<p>The distributive law is only used for sums of two terms, or
-for adjacent terms in a larger sum.  Thus &lsquo;<samp>a + b + b + c</samp>&rsquo;
-is simplified to &lsquo;<samp>a + 2 b + c</samp>&rsquo;, but &lsquo;<samp>a + b + c + b</samp>&rsquo;
-is not simplified.  The reason is that comparing all terms of a
-sum with one another would require time proportional to the
-square of the number of terms; Calc omits potentially slow
-operations like this in basic simplification mode.
-</p>
-<p>Finally, &lsquo;<samp>a + 0</samp>&rsquo; and &lsquo;<samp>0 + a</samp>&rsquo; are simplified to &lsquo;<samp>a</samp>&rsquo;.
-A consequence of the above rules is that &lsquo;<samp>0 - a</samp>&rsquo; is simplified
-to &lsquo;<samp>-a</samp>&rsquo;.
-</p>
+  <p>This section describes basic simplifications which Calc
+  performs in many situations. For example, both binary
+  simplifications and algebraic simplifications begin by performing
+  these basic simplifications. You can type <kbd>m I</kbd> to
+  restrict the simplifications done on the stack to these
+  simplifications.</p>
 
-<p>The products &lsquo;<samp>1 a</samp>&rsquo; and &lsquo;<samp>a 1</samp>&rsquo; are simplified to &lsquo;<samp>a</samp>&rsquo;;
-&lsquo;<samp>(-1) a</samp>&rsquo; and &lsquo;<samp>a (-1)</samp>&rsquo; are simplified to &lsquo;<samp>-a</samp>&rsquo;;
-&lsquo;<samp>0 a</samp>&rsquo; and &lsquo;<samp>a 0</samp>&rsquo; are simplified to &lsquo;<samp>0</samp>&rsquo;, except that
-in Matrix mode where &lsquo;<samp>a</samp>&rsquo; is not provably scalar the result
-is the generic zero matrix &lsquo;<samp>idn(0)</samp>&rsquo;, and that if &lsquo;<samp>a</samp>&rsquo; is
-infinite the result is &lsquo;<samp>nan</samp>&rsquo;.
-</p>
-<p>Also, &lsquo;<samp>(-a) b</samp>&rsquo; and &lsquo;<samp>a (-b)</samp>&rsquo; are simplified to &lsquo;<samp>-(a b)</samp>&rsquo;,
-where this occurs for negated formulas but not for regular negative
-numbers.
-</p>
-<p>Products are commuted only to move numbers to the front:
-&lsquo;<samp>a b 2</samp>&rsquo; is commuted to &lsquo;<samp>2 a b</samp>&rsquo;.
-</p>
-<p>The product &lsquo;<samp>a (b + c)</samp>&rsquo; is distributed over the sum only if
-&lsquo;<samp>a</samp>&rsquo; and at least one of &lsquo;<samp>b</samp>&rsquo; and &lsquo;<samp>c</samp>&rsquo; are numbers:
-&lsquo;<samp>2 (x + 3)</samp>&rsquo; goes to &lsquo;<samp>2 x + 6</samp>&rsquo;.  The formula
-&lsquo;<samp>(-a) (b - c)</samp>&rsquo;, where &lsquo;<samp>-a</samp>&rsquo; is a negative number, is
-rewritten to &lsquo;<samp>a (c - b)</samp>&rsquo;.
-</p>
-<p>The distributive law of products and powers is used for adjacent
-terms of the product: &lsquo;<samp>x^a x^b</samp>&rsquo; goes to
-&lsquo;<samp>x^(a+b)</samp>&rsquo;
-where &lsquo;<samp>a</samp>&rsquo; is a number, or an implicit 1 (as in &lsquo;<samp>x</samp>&rsquo;),
-or the implicit one-half of &lsquo;<samp><tt>sqrt</tt>(x)</samp>&rsquo;, and similarly for
-&lsquo;<samp>b</samp>&rsquo;.  The result is written using &lsquo;<samp>sqrt</samp>&rsquo; or &lsquo;<samp>1/sqrt</samp>&rsquo;
-if the sum of the powers is &lsquo;<samp>1/2</samp>&rsquo; or &lsquo;<samp>-1/2</samp>&rsquo;, respectively.
-If the sum of the powers is zero, the product is simplified to
-&lsquo;<samp>1</samp>&rsquo; or to &lsquo;<samp>idn(1)</samp>&rsquo; if Matrix mode is enabled.
-</p>
-<p>The product of a negative power times anything but another negative
-power is changed to use division:
-&lsquo;<samp>x^(-2) y</samp>&rsquo;
-goes to &lsquo;<samp>y / x^2</samp>&rsquo; unless Matrix mode is
-in effect and neither &lsquo;<samp>x</samp>&rsquo; nor &lsquo;<samp>y</samp>&rsquo; are scalar (in which
-case it is considered unsafe to rearrange the order of the terms).
-</p>
-<p>Finally, &lsquo;<samp>a (b/c)</samp>&rsquo; is rewritten to &lsquo;<samp>(a b)/c</samp>&rsquo;, and also
-&lsquo;<samp>(a/b) c</samp>&rsquo; is changed to &lsquo;<samp>(a c)/b</samp>&rsquo; unless in Matrix mode.
-</p>
+  <p>The most basic simplification is the evaluation of functions.
+  For example, &lsquo;<samp>2 + 3</samp>&rsquo; is evaluated to
+  &lsquo;<samp>5</samp>&rsquo;, and
+  &lsquo;<samp><tt>sqrt</tt>(9)</samp>&rsquo; is evaluated to
+  &lsquo;<samp>3</samp>&rsquo;. Evaluation does not occur if the
+  arguments to a function are somehow of the wrong type
+  &lsquo;<samp><tt>tan</tt>([2,3,4])</samp>&rsquo;), range
+  (&lsquo;<samp><tt>tan</tt>(90)</samp>&rsquo;), or number
+  (&lsquo;<samp><tt>tan</tt>(3,5)</samp>&rsquo;), or if the
+  function name is not recognized
+  (&lsquo;<samp><tt>f</tt>(5)</samp>&rsquo;), or if Symbolic mode
+  (see <a href="Symbolic-Mode.html#Symbolic-Mode">Symbolic
+  Mode</a>) prevents evaluation
+  (&lsquo;<samp><tt>sqrt</tt>(2)</samp>&rsquo;).</p>
 
-<p>Simplifications for quotients are analogous to those for products.
-The quotient &lsquo;<samp>0 / x</samp>&rsquo; is simplified to &lsquo;<samp>0</samp>&rsquo;, with the same
-exceptions that were noted for &lsquo;<samp>0 x</samp>&rsquo;.  Likewise, &lsquo;<samp>x / 1</samp>&rsquo;
-and &lsquo;<samp>x / (-1)</samp>&rsquo; are simplified to &lsquo;<samp>x</samp>&rsquo; and &lsquo;<samp>-x</samp>&rsquo;,
-respectively.
-</p>
-<p>The quotient &lsquo;<samp>x / 0</samp>&rsquo; is left unsimplified or changed to an
-infinite quantity, as directed by the current infinite mode.
-See <a href="Infinite-Mode.html#Infinite-Mode">Infinite Mode</a>.
-</p>
-<p>The expression
-&lsquo;<samp>a / b^(-c)</samp>&rsquo;
-is changed to &lsquo;<samp>a b^c</samp>&rsquo;, where &lsquo;<samp>-c</samp>&rsquo; is any negative-looking
-power.  Also, &lsquo;<samp>1 / b^c</samp>&rsquo; is changed to
-&lsquo;<samp>b^(-c)</samp>&rsquo;
-for any power &lsquo;<samp>c</samp>&rsquo;.
-</p>
-<p>Also, &lsquo;<samp>(-a) / b</samp>&rsquo; and &lsquo;<samp>a / (-b)</samp>&rsquo; go to &lsquo;<samp>-(a/b)</samp>&rsquo;;
-&lsquo;<samp>(a/b) / c</samp>&rsquo; goes to &lsquo;<samp>a / (b c)</samp>&rsquo;; and &lsquo;<samp>a / (b/c)</samp>&rsquo;
-goes to &lsquo;<samp>(a c) / b</samp>&rsquo; unless Matrix mode prevents this
-rearrangement.  Similarly, &lsquo;<samp>a / (b:c)</samp>&rsquo; is simplified to
-&lsquo;<samp>(c:b) a</samp>&rsquo; for any fraction &lsquo;<samp>b:c</samp>&rsquo;.
-</p>
-<p>The distributive law is applied to &lsquo;<samp>(a + b) / c</samp>&rsquo; only if
-&lsquo;<samp>c</samp>&rsquo; and at least one of &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo; are numbers.
-Quotients of powers and square roots are distributed just as
-described for multiplication.
-</p>
-<p>Quotients of products cancel only in the leading terms of the
-numerator and denominator.  In other words, &lsquo;<samp>a x b / a y b</samp>&rsquo;
-is canceled to &lsquo;<samp>x b / y b</samp>&rsquo; but not to &lsquo;<samp>x / y</samp>&rsquo;.  Once
-again this is because full cancellation can be slow; use <kbd>a s</kbd>
-to cancel all terms of the quotient.
-</p>
-<p>Quotients of negative-looking values are simplified according
-to &lsquo;<samp>(-a) / (-b)</samp>&rsquo; to &lsquo;<samp>a / b</samp>&rsquo;, &lsquo;<samp>(-a) / (b - c)</samp>&rsquo;
-to &lsquo;<samp>a / (c - b)</samp>&rsquo;, and &lsquo;<samp>(a - b) / (-c)</samp>&rsquo; to &lsquo;<samp>(b - a) / c</samp>&rsquo;.
-</p>
+  <p>Calc simplifies (evaluates) the arguments to a function before
+  it simplifies the function itself. Thus
+  &lsquo;<samp><tt>sqrt</tt>(5+4)</samp>&rsquo; is simplified to
+  &lsquo;<samp><tt>sqrt</tt>(9)</samp>&rsquo; before the
+  <code>sqrt</code> function itself is applied. There are very few
+  exceptions to this rule: <code>quote</code>, <code>lambda</code>,
+  and <code>condition</code> (the <code>::</code> operator) do not
+  evaluate their arguments, <code>if</code> (the <code>? :</code>
+  operator) does not evaluate all of its arguments, and
+  <code>evalto</code> does not evaluate its lefthand argument.</p>
 
-<p>The formula &lsquo;<samp>x^0</samp>&rsquo; is simplified to &lsquo;<samp>1</samp>&rsquo;, or to &lsquo;<samp>idn(1)</samp>&rsquo;
-in Matrix mode.  The formula &lsquo;<samp>0^x</samp>&rsquo; is simplified to &lsquo;<samp>0</samp>&rsquo;
-unless &lsquo;<samp>x</samp>&rsquo; is a negative number, complex number or zero.
-If &lsquo;<samp>x</samp>&rsquo; is negative, complex or &lsquo;<samp>0.0</samp>&rsquo;, &lsquo;<samp>0^x</samp>&rsquo; is an
-infinity or an unsimplified formula according to the current infinite
-mode.  The expression &lsquo;<samp>0^0</samp>&rsquo; is simplified to &lsquo;<samp>1</samp>&rsquo;.
-</p>
-<p>Powers of products or quotients &lsquo;<samp>(a b)^c</samp>&rsquo;, &lsquo;<samp>(a/b)^c</samp>&rsquo;
-are distributed to &lsquo;<samp>a^c b^c</samp>&rsquo;, &lsquo;<samp>a^c / b^c</samp>&rsquo; only if &lsquo;<samp>c</samp>&rsquo;
-is an integer, or if either &lsquo;<samp>a</samp>&rsquo; or &lsquo;<samp>b</samp>&rsquo; are nonnegative
-real numbers.  Powers of powers &lsquo;<samp>(a^b)^c</samp>&rsquo; are simplified to
-&lsquo;<samp>a^(b c)</samp>&rsquo;
-only when &lsquo;<samp>c</samp>&rsquo; is an integer and &lsquo;<samp>b c</samp>&rsquo; also
-evaluates to an integer.  Without these restrictions these simplifications
-would not be safe because of problems with principal values.
-(In other words,
-&lsquo;<samp>((-3)^1:2)^2</samp>&rsquo;
-is safe to simplify, but
-&lsquo;<samp>((-3)^2)^1:2</samp>&rsquo;
-is not.)  See <a href="Declarations.html#Declarations">Declarations</a>, for ways to inform Calc that your
-variables satisfy these requirements.
-</p>
-<p>As a special case of this rule, &lsquo;<samp><tt>sqrt</tt>(x)^n</samp>&rsquo; is simplified to
-&lsquo;<samp>x^(n/2)</samp>&rsquo;
-only for even integers &lsquo;<samp>n</samp>&rsquo;.
-</p>
-<p>If &lsquo;<samp>a</samp>&rsquo; is known to be real, &lsquo;<samp>b</samp>&rsquo; is an even integer, and
-&lsquo;<samp>c</samp>&rsquo; is a half- or quarter-integer, then &lsquo;<samp>(a^b)^c</samp>&rsquo; is
-simplified to &lsquo;<samp><tt>abs</tt>(a^(b c))</samp>&rsquo;.
-</p>
-<p>Also, &lsquo;<samp>(-a)^b</samp>&rsquo; is simplified to &lsquo;<samp>a^b</samp>&rsquo; if &lsquo;<samp>b</samp>&rsquo; is an
-even integer, or to &lsquo;<samp>-(a^b)</samp>&rsquo; if &lsquo;<samp>b</samp>&rsquo; is an odd integer,
-for any negative-looking expression &lsquo;<samp>-a</samp>&rsquo;.
-</p>
-<p>Square roots &lsquo;<samp><tt>sqrt</tt>(x)</samp>&rsquo; generally act like one-half powers
-&lsquo;<samp>x^1:2</samp>&rsquo;
-for the purposes of the above-listed simplifications.
-</p>
-<p>Also, note that
-&lsquo;<samp>1 / x^1:2</samp>&rsquo;
-is changed to
-&lsquo;<samp>x^(-1:2)</samp>&rsquo;,
-but &lsquo;<samp>1 / <tt>sqrt</tt>(x)</samp>&rsquo; is left alone.
-</p>
+  <p>Most commands apply at least these basic simplifications to
+  all arguments they take from the stack, perform a particular
+  operation, then simplify the result before pushing it back on the
+  stack. In the common special case of regular arithmetic commands
+  like <kbd>+</kbd> and <kbd>Q</kbd> [<code>sqrt</code>], the
+  arguments are simply popped from the stack and collected into a
+  suitable function call, which is then simplified (the arguments
+  being simplified first as part of the process, as described
+  above).</p>
 
-<p>Generic identity matrices (see <a href="Matrix-Mode.html#Matrix-Mode">Matrix Mode</a>) are simplified by the
-following rules:  &lsquo;<samp><tt>idn</tt>(a) + b</samp>&rsquo; to &lsquo;<samp>a + b</samp>&rsquo; if &lsquo;<samp>b</samp>&rsquo;
-is provably scalar, or expanded out if &lsquo;<samp>b</samp>&rsquo; is a matrix;
-&lsquo;<samp><tt>idn</tt>(a) + <tt>idn</tt>(b)</samp>&rsquo; to &lsquo;<samp><tt>idn</tt>(a + b)</samp>&rsquo;;
-&lsquo;<samp>-<tt>idn</tt>(a)</samp>&rsquo; to &lsquo;<samp><tt>idn</tt>(-a)</samp>&rsquo;; &lsquo;<samp>a <tt>idn</tt>(b)</samp>&rsquo; to
-&lsquo;<samp><tt>idn</tt>(a b)</samp>&rsquo; if &lsquo;<samp>a</samp>&rsquo; is provably scalar, or to &lsquo;<samp>a b</samp>&rsquo;
-if &lsquo;<samp>a</samp>&rsquo; is provably non-scalar;  &lsquo;<samp><tt>idn</tt>(a) <tt>idn</tt>(b)</samp>&rsquo; to
-&lsquo;<samp><tt>idn</tt>(a b)</samp>&rsquo;; analogous simplifications for quotients involving
-<code>idn</code>; and &lsquo;<samp><tt>idn</tt>(a)^n</samp>&rsquo; to &lsquo;<samp><tt>idn</tt>(a^n)</samp>&rsquo; where
-&lsquo;<samp>n</samp>&rsquo; is an integer.
-</p>
+  <p>Even the basic set of simplifications are too numerous to
+  describe completely here, but this section will describe the ones
+  that apply to the major arithmetic operators. This list will be
+  rather technical in nature, and will probably be interesting to
+  you only if you are a serious user of Calc&rsquo;s algebra
+  facilities.</p>
 
-<p>The <code>floor</code> function and other integer truncation functions
-vanish if the argument is provably integer-valued, so that
-&lsquo;<samp><tt>floor</tt>(<tt>round</tt>(x))</samp>&rsquo; simplifies to &lsquo;<samp><tt>round</tt>(x)</samp>&rsquo;.
-Also, combinations of <code>float</code>, <code>floor</code> and its friends,
-and <code>ffloor</code> and its friends, are simplified in appropriate
-ways.  See <a href="Integer-Truncation.html#Integer-Truncation">Integer Truncation</a>.
-</p>
-<p>The expression &lsquo;<samp><tt>abs</tt>(-x)</samp>&rsquo; changes to &lsquo;<samp><tt>abs</tt>(x)</samp>&rsquo;.
-The expression &lsquo;<samp><tt>abs</tt>(<tt>abs</tt>(x))</samp>&rsquo; changes to
-&lsquo;<samp><tt>abs</tt>(x)</samp>&rsquo;;  in fact, &lsquo;<samp><tt>abs</tt>(x)</samp>&rsquo; changes to &lsquo;<samp>x</samp>&rsquo; or
-&lsquo;<samp>-x</samp>&rsquo; if &lsquo;<samp>x</samp>&rsquo; is provably nonnegative or nonpositive
-(see <a href="Declarations.html#Declarations">Declarations</a>).
-</p>
-<p>While most functions do not recognize the variable <code>i</code> as an
-imaginary number, the <code>arg</code> function does handle the two cases
-&lsquo;<samp><tt>arg</tt>(<tt>i</tt>)</samp>&rsquo; and &lsquo;<samp><tt>arg</tt>(-<tt>i</tt>)</samp>&rsquo; just for convenience.
-</p>
-<p>The expression &lsquo;<samp><tt>conj</tt>(<tt>conj</tt>(x))</samp>&rsquo; simplifies to &lsquo;<samp>x</samp>&rsquo;.
-Various other expressions involving <code>conj</code>, <code>re</code>, and
-<code>im</code> are simplified, especially if some of the arguments are
-provably real or involve the constant <code>i</code>.  For example,
-&lsquo;<samp><tt>conj</tt>(a + b i)</samp>&rsquo; is changed to
-&lsquo;<samp><tt>conj</tt>(a) - <tt>conj</tt>(b) i</samp>&rsquo;,  or to &lsquo;<samp>a - b i</samp>&rsquo; if &lsquo;<samp>a</samp>&rsquo;
-and &lsquo;<samp>b</samp>&rsquo; are known to be real.
-</p>
-<p>Functions like <code>sin</code> and <code>arctan</code> generally don&rsquo;t have
-any default simplifications beyond simply evaluating the functions
-for suitable numeric arguments and infinity.  The algebraic
-simplifications described in the next section do provide some
-simplifications for these functions, though.
-</p>
-<p>One important simplification that does occur is that
-&lsquo;<samp><tt>ln</tt>(<tt>e</tt>)</samp>&rsquo; is simplified to 1, and &lsquo;<samp><tt>ln</tt>(<tt>e</tt>^x)</samp>&rsquo; is
-simplified to &lsquo;<samp>x</samp>&rsquo; for any &lsquo;<samp>x</samp>&rsquo;.  This occurs even if you have
-stored a different value in the Calc variable &lsquo;<samp>e</samp>&rsquo;; but this would
-be a bad idea in any case if you were also using natural logarithms!
-</p>
-<p>Among the logical functions, <tt>!(<var>a</var> &lt;= <var>b</var>)</tt> changes to
-<tt><var>a</var> &gt; <var>b</var></tt> and so on.  Equations and inequalities where both sides
-are either negative-looking or zero are simplified by negating both sides
-and reversing the inequality.  While it might seem reasonable to simplify
-&lsquo;<samp>!!x</samp>&rsquo; to &lsquo;<samp>x</samp>&rsquo;, this would not be valid in general because
-&lsquo;<samp>!!2</samp>&rsquo; is 1, not 2.
-</p>
-<p>Most other Calc functions have few if any basic simplifications
-defined, aside of course from evaluation when the arguments are
-suitable numbers.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Algebraic-Simplifications.html#Algebraic-Simplifications" accesskey="n" rel="next">Algebraic Simplifications</a>, Previous: <a href="Simplifying-Formulas.html#Simplifying-Formulas" accesskey="p" rel="prev">Simplifying Formulas</a>, Up: <a href="Simplifying-Formulas.html#Simplifying-Formulas" accesskey="u" rel="up">Simplifying Formulas</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>As well as the simplifications described here, if you have
+  stored any rewrite rules in the variable <code>EvalRules</code>
+  then these rules will also be applied before any of the basic
+  simplifications. See <a href=
+  "Automatic-Rewrites.html#Automatic-Rewrites">Automatic
+  Rewrites</a>, for details.</p>
 
+  <p>And now, on with the basic simplifications:</p>
 
+  <p>Arithmetic operators like <kbd>+</kbd> and <kbd>*</kbd> always
+  take two arguments in Calc&rsquo;s internal form. Sums and
+  products of three or more terms are arranged by the associative
+  law of algebra into a left-associative form for sums,
+  &lsquo;<samp>((a + b) + c) + d</samp>&rsquo;, and (by default) a
+  right-associative form for products, &lsquo;<samp>a * (b * (c *
+  d))</samp>&rsquo;. Formulas like &lsquo;<samp>(a + b) + (c +
+  d)</samp>&rsquo; are rearranged to left-associative form, though
+  this rarely matters since Calc&rsquo;s algebra commands are
+  designed to hide the inner structure of sums and products as much
+  as possible. Sums and products in their proper associative form
+  will be written without parentheses in the examples below.</p>
 
+  <p>Sums and products are <em>not</em> rearranged according to the
+  commutative law (&lsquo;<samp>a + b</samp>&rsquo; to
+  &lsquo;<samp>b + a</samp>&rsquo;) except in a few special cases
+  described below. Some algebra programs always rearrange terms
+  into a canonical order, which enables them to see that
+  &lsquo;<samp>a b + b a</samp>&rsquo; can be simplified to
+  &lsquo;<samp>2 a b</samp>&rsquo;. If you are using Basic
+  Simplification mode, Calc assumes you have put the terms into the
+  order you want and generally leaves that order alone, with the
+  consequence that formulas like the above will only be simplified
+  if you explicitly give the <kbd>a s</kbd> command. See <a href=
+  "Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic
+  Simplifications</a>.</p>
+
+  <p>Differences &lsquo;<samp>a - b</samp>&rsquo; are treated like
+  sums &lsquo;<samp>a + (-b)</samp>&rsquo; for purposes of
+  simplification; one of the default simplifications is to rewrite
+  &lsquo;<samp>a + (-b)</samp>&rsquo; or &lsquo;<samp>(-b) +
+  a</samp>&rsquo;, where &lsquo;<samp>-b</samp>&rsquo; represents a
+  &ldquo;negative-looking&rdquo; term, into &lsquo;<samp>a -
+  b</samp>&rsquo; form. &ldquo;Negative-looking&rdquo; means
+  negative numbers, negated formulas like
+  &lsquo;<samp>-x</samp>&rsquo;, and products or quotients in which
+  either term is negative-looking.</p>
+
+  <p>Other simplifications involving negation are
+  &lsquo;<samp>-(-x)</samp>&rsquo; to &lsquo;<samp>x</samp>&rsquo;;
+  &lsquo;<samp>-(a b)</samp>&rsquo; or
+  &lsquo;<samp>-(a/b)</samp>&rsquo; where either
+  &lsquo;<samp>a</samp>&rsquo; or &lsquo;<samp>b</samp>&rsquo; is
+  negative-looking, simplified by negating that term, or else where
+  &lsquo;<samp>a</samp>&rsquo; or &lsquo;<samp>b</samp>&rsquo; is
+  any number, by negating that number; &lsquo;<samp>-(a +
+  b)</samp>&rsquo; to &lsquo;<samp>-a - b</samp>&rsquo;, and
+  &lsquo;<samp>-(b - a)</samp>&rsquo; to &lsquo;<samp>a -
+  b</samp>&rsquo;. (This, and rewriting &lsquo;<samp>(-b) +
+  a</samp>&rsquo; to &lsquo;<samp>a - b</samp>&rsquo;, are the only
+  cases where the order of terms in a sum is changed by the default
+  simplifications.)</p>
+
+  <p>The distributive law is used to simplify sums in some cases:
+  &lsquo;<samp>a x + b x</samp>&rsquo; to &lsquo;<samp>(a + b)
+  x</samp>&rsquo;, where &lsquo;<samp>a</samp>&rsquo; represents a
+  number or an implicit 1 or <i>-1</i> (as in
+  &lsquo;<samp>x</samp>&rsquo; or &lsquo;<samp>-x</samp>&rsquo;)
+  and similarly for &lsquo;<samp>b</samp>&rsquo;. Use the <kbd>a
+  c</kbd>, <kbd>a&nbsp;f</kbd><!-- /@w -->, or <kbd>j M</kbd>
+  commands to merge sums with non-numeric coefficients using the
+  distributive law.</p>
+
+  <p>The distributive law is only used for sums of two terms, or
+  for adjacent terms in a larger sum. Thus &lsquo;<samp>a + b + b +
+  c</samp>&rsquo; is simplified to &lsquo;<samp>a + 2 b +
+  c</samp>&rsquo;, but &lsquo;<samp>a + b + c + b</samp>&rsquo; is
+  not simplified. The reason is that comparing all terms of a sum
+  with one another would require time proportional to the square of
+  the number of terms; Calc omits potentially slow operations like
+  this in basic simplification mode.</p>
+
+  <p>Finally, &lsquo;<samp>a + 0</samp>&rsquo; and &lsquo;<samp>0 +
+  a</samp>&rsquo; are simplified to &lsquo;<samp>a</samp>&rsquo;. A
+  consequence of the above rules is that &lsquo;<samp>0 -
+  a</samp>&rsquo; is simplified to
+  &lsquo;<samp>-a</samp>&rsquo;.</p>
+
+  <p>The products &lsquo;<samp>1 a</samp>&rsquo; and &lsquo;<samp>a
+  1</samp>&rsquo; are simplified to &lsquo;<samp>a</samp>&rsquo;;
+  &lsquo;<samp>(-1) a</samp>&rsquo; and &lsquo;<samp>a
+  (-1)</samp>&rsquo; are simplified to
+  &lsquo;<samp>-a</samp>&rsquo;; &lsquo;<samp>0 a</samp>&rsquo; and
+  &lsquo;<samp>a 0</samp>&rsquo; are simplified to
+  &lsquo;<samp>0</samp>&rsquo;, except that in Matrix mode where
+  &lsquo;<samp>a</samp>&rsquo; is not provably scalar the result is
+  the generic zero matrix &lsquo;<samp>idn(0)</samp>&rsquo;, and
+  that if &lsquo;<samp>a</samp>&rsquo; is infinite the result is
+  &lsquo;<samp>nan</samp>&rsquo;.</p>
+
+  <p>Also, &lsquo;<samp>(-a) b</samp>&rsquo; and &lsquo;<samp>a
+  (-b)</samp>&rsquo; are simplified to &lsquo;<samp>-(a
+  b)</samp>&rsquo;, where this occurs for negated formulas but not
+  for regular negative numbers.</p>
+
+  <p>Products are commuted only to move numbers to the front:
+  &lsquo;<samp>a b 2</samp>&rsquo; is commuted to &lsquo;<samp>2 a
+  b</samp>&rsquo;.</p>
+
+  <p>The product &lsquo;<samp>a (b + c)</samp>&rsquo; is
+  distributed over the sum only if &lsquo;<samp>a</samp>&rsquo; and
+  at least one of &lsquo;<samp>b</samp>&rsquo; and
+  &lsquo;<samp>c</samp>&rsquo; are numbers: &lsquo;<samp>2 (x +
+  3)</samp>&rsquo; goes to &lsquo;<samp>2 x + 6</samp>&rsquo;. The
+  formula &lsquo;<samp>(-a) (b - c)</samp>&rsquo;, where
+  &lsquo;<samp>-a</samp>&rsquo; is a negative number, is rewritten
+  to &lsquo;<samp>a (c - b)</samp>&rsquo;.</p>
+
+  <p>The distributive law of products and powers is used for
+  adjacent terms of the product: &lsquo;<samp>x^a x^b</samp>&rsquo;
+  goes to &lsquo;<samp>x^(a+b)</samp>&rsquo; where
+  &lsquo;<samp>a</samp>&rsquo; is a number, or an implicit 1 (as in
+  &lsquo;<samp>x</samp>&rsquo;), or the implicit one-half of
+  &lsquo;<samp><tt>sqrt</tt>(x)</samp>&rsquo;, and similarly for
+  &lsquo;<samp>b</samp>&rsquo;. The result is written using
+  &lsquo;<samp>sqrt</samp>&rsquo; or
+  &lsquo;<samp>1/sqrt</samp>&rsquo; if the sum of the powers is
+  &lsquo;<samp>1/2</samp>&rsquo; or
+  &lsquo;<samp>-1/2</samp>&rsquo;, respectively. If the sum of the
+  powers is zero, the product is simplified to
+  &lsquo;<samp>1</samp>&rsquo; or to
+  &lsquo;<samp>idn(1)</samp>&rsquo; if Matrix mode is enabled.</p>
+
+  <p>The product of a negative power times anything but another
+  negative power is changed to use division: &lsquo;<samp>x^(-2)
+  y</samp>&rsquo; goes to &lsquo;<samp>y / x^2</samp>&rsquo; unless
+  Matrix mode is in effect and neither &lsquo;<samp>x</samp>&rsquo;
+  nor &lsquo;<samp>y</samp>&rsquo; are scalar (in which case it is
+  considered unsafe to rearrange the order of the terms).</p>
+
+  <p>Finally, &lsquo;<samp>a (b/c)</samp>&rsquo; is rewritten to
+  &lsquo;<samp>(a b)/c</samp>&rsquo;, and also &lsquo;<samp>(a/b)
+  c</samp>&rsquo; is changed to &lsquo;<samp>(a c)/b</samp>&rsquo;
+  unless in Matrix mode.</p>
+
+  <p>Simplifications for quotients are analogous to those for
+  products. The quotient &lsquo;<samp>0 / x</samp>&rsquo; is
+  simplified to &lsquo;<samp>0</samp>&rsquo;, with the same
+  exceptions that were noted for &lsquo;<samp>0 x</samp>&rsquo;.
+  Likewise, &lsquo;<samp>x / 1</samp>&rsquo; and &lsquo;<samp>x /
+  (-1)</samp>&rsquo; are simplified to &lsquo;<samp>x</samp>&rsquo;
+  and &lsquo;<samp>-x</samp>&rsquo;, respectively.</p>
+
+  <p>The quotient &lsquo;<samp>x / 0</samp>&rsquo; is left
+  unsimplified or changed to an infinite quantity, as directed by
+  the current infinite mode. See <a href=
+  "Infinite-Mode.html#Infinite-Mode">Infinite Mode</a>.</p>
+
+  <p>The expression &lsquo;<samp>a / b^(-c)</samp>&rsquo; is
+  changed to &lsquo;<samp>a b^c</samp>&rsquo;, where
+  &lsquo;<samp>-c</samp>&rsquo; is any negative-looking power.
+  Also, &lsquo;<samp>1 / b^c</samp>&rsquo; is changed to
+  &lsquo;<samp>b^(-c)</samp>&rsquo; for any power
+  &lsquo;<samp>c</samp>&rsquo;.</p>
+
+  <p>Also, &lsquo;<samp>(-a) / b</samp>&rsquo; and &lsquo;<samp>a /
+  (-b)</samp>&rsquo; go to &lsquo;<samp>-(a/b)</samp>&rsquo;;
+  &lsquo;<samp>(a/b) / c</samp>&rsquo; goes to &lsquo;<samp>a / (b
+  c)</samp>&rsquo;; and &lsquo;<samp>a / (b/c)</samp>&rsquo; goes
+  to &lsquo;<samp>(a c) / b</samp>&rsquo; unless Matrix mode
+  prevents this rearrangement. Similarly, &lsquo;<samp>a /
+  (b:c)</samp>&rsquo; is simplified to &lsquo;<samp>(c:b)
+  a</samp>&rsquo; for any fraction
+  &lsquo;<samp>b:c</samp>&rsquo;.</p>
+
+  <p>The distributive law is applied to &lsquo;<samp>(a + b) /
+  c</samp>&rsquo; only if &lsquo;<samp>c</samp>&rsquo; and at least
+  one of &lsquo;<samp>a</samp>&rsquo; and
+  &lsquo;<samp>b</samp>&rsquo; are numbers. Quotients of powers and
+  square roots are distributed just as described for
+  multiplication.</p>
+
+  <p>Quotients of products cancel only in the leading terms of the
+  numerator and denominator. In other words, &lsquo;<samp>a x b / a
+  y b</samp>&rsquo; is canceled to &lsquo;<samp>x b / y
+  b</samp>&rsquo; but not to &lsquo;<samp>x / y</samp>&rsquo;. Once
+  again this is because full cancellation can be slow; use <kbd>a
+  s</kbd> to cancel all terms of the quotient.</p>
+
+  <p>Quotients of negative-looking values are simplified according
+  to &lsquo;<samp>(-a) / (-b)</samp>&rsquo; to &lsquo;<samp>a /
+  b</samp>&rsquo;, &lsquo;<samp>(-a) / (b - c)</samp>&rsquo; to
+  &lsquo;<samp>a / (c - b)</samp>&rsquo;, and &lsquo;<samp>(a - b)
+  / (-c)</samp>&rsquo; to &lsquo;<samp>(b - a) /
+  c</samp>&rsquo;.</p>
+
+  <p>The formula &lsquo;<samp>x^0</samp>&rsquo; is simplified to
+  &lsquo;<samp>1</samp>&rsquo;, or to
+  &lsquo;<samp>idn(1)</samp>&rsquo; in Matrix mode. The formula
+  &lsquo;<samp>0^x</samp>&rsquo; is simplified to
+  &lsquo;<samp>0</samp>&rsquo; unless &lsquo;<samp>x</samp>&rsquo;
+  is a negative number, complex number or zero. If
+  &lsquo;<samp>x</samp>&rsquo; is negative, complex or
+  &lsquo;<samp>0.0</samp>&rsquo;, &lsquo;<samp>0^x</samp>&rsquo; is
+  an infinity or an unsimplified formula according to the current
+  infinite mode. The expression &lsquo;<samp>0^0</samp>&rsquo; is
+  simplified to &lsquo;<samp>1</samp>&rsquo;.</p>
+
+  <p>Powers of products or quotients &lsquo;<samp>(a
+  b)^c</samp>&rsquo;, &lsquo;<samp>(a/b)^c</samp>&rsquo; are
+  distributed to &lsquo;<samp>a^c b^c</samp>&rsquo;,
+  &lsquo;<samp>a^c / b^c</samp>&rsquo; only if
+  &lsquo;<samp>c</samp>&rsquo; is an integer, or if either
+  &lsquo;<samp>a</samp>&rsquo; or &lsquo;<samp>b</samp>&rsquo; are
+  nonnegative real numbers. Powers of powers
+  &lsquo;<samp>(a^b)^c</samp>&rsquo; are simplified to
+  &lsquo;<samp>a^(b c)</samp>&rsquo; only when
+  &lsquo;<samp>c</samp>&rsquo; is an integer and &lsquo;<samp>b
+  c</samp>&rsquo; also evaluates to an integer. Without these
+  restrictions these simplifications would not be safe because of
+  problems with principal values. (In other words,
+  &lsquo;<samp>((-3)^1:2)^2</samp>&rsquo; is safe to simplify, but
+  &lsquo;<samp>((-3)^2)^1:2</samp>&rsquo; is not.) See <a href=
+  "Declarations.html#Declarations">Declarations</a>, for ways to
+  inform Calc that your variables satisfy these requirements.</p>
+
+  <p>As a special case of this rule,
+  &lsquo;<samp><tt>sqrt</tt>(x)^n</samp>&rsquo; is simplified to
+  &lsquo;<samp>x^(n/2)</samp>&rsquo; only for even integers
+  &lsquo;<samp>n</samp>&rsquo;.</p>
+
+  <p>If &lsquo;<samp>a</samp>&rsquo; is known to be real,
+  &lsquo;<samp>b</samp>&rsquo; is an even integer, and
+  &lsquo;<samp>c</samp>&rsquo; is a half- or quarter-integer, then
+  &lsquo;<samp>(a^b)^c</samp>&rsquo; is simplified to
+  &lsquo;<samp><tt>abs</tt>(a^(b c))</samp>&rsquo;.</p>
+
+  <p>Also, &lsquo;<samp>(-a)^b</samp>&rsquo; is simplified to
+  &lsquo;<samp>a^b</samp>&rsquo; if &lsquo;<samp>b</samp>&rsquo; is
+  an even integer, or to &lsquo;<samp>-(a^b)</samp>&rsquo; if
+  &lsquo;<samp>b</samp>&rsquo; is an odd integer, for any
+  negative-looking expression &lsquo;<samp>-a</samp>&rsquo;.</p>
+
+  <p>Square roots &lsquo;<samp><tt>sqrt</tt>(x)</samp>&rsquo;
+  generally act like one-half powers
+  &lsquo;<samp>x^1:2</samp>&rsquo; for the purposes of the
+  above-listed simplifications.</p>
+
+  <p>Also, note that &lsquo;<samp>1 / x^1:2</samp>&rsquo; is
+  changed to &lsquo;<samp>x^(-1:2)</samp>&rsquo;, but
+  &lsquo;<samp>1 / <tt>sqrt</tt>(x)</samp>&rsquo; is left
+  alone.</p>
+
+  <p>Generic identity matrices (see <a href=
+  "Matrix-Mode.html#Matrix-Mode">Matrix Mode</a>) are simplified by
+  the following rules: &lsquo;<samp><tt>idn</tt>(a) +
+  b</samp>&rsquo; to &lsquo;<samp>a + b</samp>&rsquo; if
+  &lsquo;<samp>b</samp>&rsquo; is provably scalar, or expanded out
+  if &lsquo;<samp>b</samp>&rsquo; is a matrix;
+  &lsquo;<samp><tt>idn</tt>(a) + <tt>idn</tt>(b)</samp>&rsquo; to
+  &lsquo;<samp><tt>idn</tt>(a + b)</samp>&rsquo;;
+  &lsquo;<samp>-<tt>idn</tt>(a)</samp>&rsquo; to
+  &lsquo;<samp><tt>idn</tt>(-a)</samp>&rsquo;; &lsquo;<samp>a
+  <tt>idn</tt>(b)</samp>&rsquo; to &lsquo;<samp><tt>idn</tt>(a
+  b)</samp>&rsquo; if &lsquo;<samp>a</samp>&rsquo; is provably
+  scalar, or to &lsquo;<samp>a b</samp>&rsquo; if
+  &lsquo;<samp>a</samp>&rsquo; is provably non-scalar;
+  &lsquo;<samp><tt>idn</tt>(a) <tt>idn</tt>(b)</samp>&rsquo; to
+  &lsquo;<samp><tt>idn</tt>(a b)</samp>&rsquo;; analogous
+  simplifications for quotients involving <code>idn</code>; and
+  &lsquo;<samp><tt>idn</tt>(a)^n</samp>&rsquo; to
+  &lsquo;<samp><tt>idn</tt>(a^n)</samp>&rsquo; where
+  &lsquo;<samp>n</samp>&rsquo; is an integer.</p>
+
+  <p>The <code>floor</code> function and other integer truncation
+  functions vanish if the argument is provably integer-valued, so
+  that &lsquo;<samp><tt>floor</tt>(<tt>round</tt>(x))</samp>&rsquo;
+  simplifies to &lsquo;<samp><tt>round</tt>(x)</samp>&rsquo;. Also,
+  combinations of <code>float</code>, <code>floor</code> and its
+  friends, and <code>ffloor</code> and its friends, are simplified
+  in appropriate ways. See <a href=
+  "Integer-Truncation.html#Integer-Truncation">Integer
+  Truncation</a>.</p>
+
+  <p>The expression &lsquo;<samp><tt>abs</tt>(-x)</samp>&rsquo;
+  changes to &lsquo;<samp><tt>abs</tt>(x)</samp>&rsquo;. The
+  expression
+  &lsquo;<samp><tt>abs</tt>(<tt>abs</tt>(x))</samp>&rsquo; changes
+  to &lsquo;<samp><tt>abs</tt>(x)</samp>&rsquo;; in fact,
+  &lsquo;<samp><tt>abs</tt>(x)</samp>&rsquo; changes to
+  &lsquo;<samp>x</samp>&rsquo; or &lsquo;<samp>-x</samp>&rsquo; if
+  &lsquo;<samp>x</samp>&rsquo; is provably nonnegative or
+  nonpositive (see <a href=
+  "Declarations.html#Declarations">Declarations</a>).</p>
+
+  <p>While most functions do not recognize the variable
+  <code>i</code> as an imaginary number, the <code>arg</code>
+  function does handle the two cases
+  &lsquo;<samp><tt>arg</tt>(<tt>i</tt>)</samp>&rsquo; and
+  &lsquo;<samp><tt>arg</tt>(-<tt>i</tt>)</samp>&rsquo; just for
+  convenience.</p>
+
+  <p>The expression
+  &lsquo;<samp><tt>conj</tt>(<tt>conj</tt>(x))</samp>&rsquo;
+  simplifies to &lsquo;<samp>x</samp>&rsquo;. Various other
+  expressions involving <code>conj</code>, <code>re</code>, and
+  <code>im</code> are simplified, especially if some of the
+  arguments are provably real or involve the constant
+  <code>i</code>. For example, &lsquo;<samp><tt>conj</tt>(a + b
+  i)</samp>&rsquo; is changed to &lsquo;<samp><tt>conj</tt>(a) -
+  <tt>conj</tt>(b) i</samp>&rsquo;, or to &lsquo;<samp>a - b
+  i</samp>&rsquo; if &lsquo;<samp>a</samp>&rsquo; and
+  &lsquo;<samp>b</samp>&rsquo; are known to be real.</p>
+
+  <p>Functions like <code>sin</code> and <code>arctan</code>
+  generally don&rsquo;t have any default simplifications beyond
+  simply evaluating the functions for suitable numeric arguments
+  and infinity. The algebraic simplifications described in the next
+  section do provide some simplifications for these functions,
+  though.</p>
+
+  <p>One important simplification that does occur is that
+  &lsquo;<samp><tt>ln</tt>(<tt>e</tt>)</samp>&rsquo; is simplified
+  to 1, and &lsquo;<samp><tt>ln</tt>(<tt>e</tt>^x)</samp>&rsquo; is
+  simplified to &lsquo;<samp>x</samp>&rsquo; for any
+  &lsquo;<samp>x</samp>&rsquo;. This occurs even if you have stored
+  a different value in the Calc variable
+  &lsquo;<samp>e</samp>&rsquo;; but this would be a bad idea in any
+  case if you were also using natural logarithms!</p>
+
+  <p>Among the logical functions, <tt>!(<var>a</var> &lt;=
+  <var>b</var>)</tt> changes to <tt><var>a</var> &gt;
+  <var>b</var></tt> and so on. Equations and inequalities where
+  both sides are either negative-looking or zero are simplified by
+  negating both sides and reversing the inequality. While it might
+  seem reasonable to simplify &lsquo;<samp>!!x</samp>&rsquo; to
+  &lsquo;<samp>x</samp>&rsquo;, this would not be valid in general
+  because &lsquo;<samp>!!2</samp>&rsquo; is 1, not 2.</p>
+
+  <p>Most other Calc functions have few if any basic
+  simplifications defined, aside of course from evaluation when the
+  arguments are suitable numbers.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Algebraic-Simplifications.html#Algebraic-Simplifications"
+    accesskey="n" rel="next">Algebraic Simplifications</a>,
+    Previous: <a href=
+    "Simplifying-Formulas.html#Simplifying-Formulas" accesskey="p"
+    rel="prev">Simplifying Formulas</a>, Up: <a href=
+    "Simplifying-Formulas.html#Simplifying-Formulas" accesskey="u"
+    rel="up">Simplifying Formulas</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

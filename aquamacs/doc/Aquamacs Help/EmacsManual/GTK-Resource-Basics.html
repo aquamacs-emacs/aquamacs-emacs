@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,118 +20,161 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: GTK Resource Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: GTK Resource Basics">
-<meta name="keywords" content="GNU Emacs Manual: GTK Resource Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="GTK-resources.html#GTK-resources" rel="up" title="GTK resources">
-<link href="GTK-Widget-Names.html#GTK-Widget-Names" rel="next" title="GTK Widget Names">
-<link href="GTK-resources.html#GTK-resources" rel="prev" title="GTK resources">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: GTK Resource Basics</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: GTK Resource Basics" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: GTK Resource Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="GTK-resources.html#GTK-resources" rel="up" title=
+  "GTK resources" />
+  <link href="GTK-Widget-Names.html#GTK-Widget-Names" rel="next"
+  title="GTK Widget Names" />
+  <link href="GTK-resources.html#GTK-resources" rel="prev" title=
+  "GTK resources" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="GTK-Resource-Basics" id="GTK-Resource-Basics"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="GTK-Widget-Names.html#GTK-Widget-Names"
+    accesskey="n" rel="next">GTK Widget Names</a>, Up: <a href=
+    "GTK-resources.html#GTK-resources" accesskey="u" rel="up">GTK
+    resources</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="GTK-Resource-Basics-1" id="GTK-Resource-Basics-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="GTK-Resource-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="GTK-Widget-Names.html#GTK-Widget-Names" accesskey="n" rel="next">GTK Widget Names</a>, Up: <a href="GTK-resources.html#GTK-resources" accesskey="u" rel="up">GTK resources</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="GTK-Resource-Basics-1"></a>
-<h4 class="appendixsubsec">D.5.1 GTK Resource Basics</h4>
+  <h4 class="appendixsubsec">D.5.1 GTK Resource Basics</h4>
 
-<p>In a GTK+ 2 resource file (usually <samp>~/.emacs.d/gtkrc</samp>), the
-simplest kinds of resource settings simply assign a value to a
-variable.  For example, putting the following line in the resource
-file changes the font on all GTK+ widgets to &lsquo;<samp>courier-12</samp>&rsquo;:
-</p>
-<div class="smallexample">
-<pre class="smallexample">gtk-font-name = &quot;courier 12&quot;
-</pre></div>
+  <p>In a GTK+ 2 resource file (usually
+  <samp>~/.emacs.d/gtkrc</samp>), the simplest kinds of resource
+  settings simply assign a value to a variable. For example,
+  putting the following line in the resource file changes the font
+  on all GTK+ widgets to &lsquo;<samp>courier-12</samp>&rsquo;:</p>
 
-<p>Note that in this case the font name must be supplied as a GTK font
-pattern (also called a <em>Pango font name</em>), not as a
-Fontconfig-style font name or XLFD.  See <a href="Fonts.html#Fonts">Fonts</a>.
-</p>
-<p>To customize widgets you first define a <em>style</em>, and then apply
-the style to the widgets.  Here is an example that sets the font for
-menus (&lsquo;<samp>#</samp>&rsquo; characters indicate comments):
-</p>
-<div class="smallexample">
-<pre class="smallexample"># <span class="roman">Define the style &lsquo;<samp>my_style</samp>&rsquo;.</span>
-style &quot;my_style&quot;
+  <div class="smallexample">
+    <pre class="smallexample">
+gtk-font-name = "courier 12"
+</pre>
+  </div>
+
+  <p>Note that in this case the font name must be supplied as a GTK
+  font pattern (also called a <em>Pango font name</em>), not as a
+  Fontconfig-style font name or XLFD. See <a href=
+  "Fonts.html#Fonts">Fonts</a>.</p>
+
+  <p>To customize widgets you first define a <em>style</em>, and
+  then apply the style to the widgets. Here is an example that sets
+  the font for menus (&lsquo;<samp>#</samp>&rsquo; characters
+  indicate comments):</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+# <span class=
+"roman">Define the style &lsquo;<samp>my_style</samp>&rsquo;.</span>
+style "my_style"
 {
-  font_name = &quot;helvetica bold 14&quot;
+  font_name = "helvetica bold 14"
 }
 
-# <span class="roman">Specify that widget type &lsquo;<samp>*emacs-menuitem*</samp>&rsquo; uses &lsquo;<samp>my_style</samp>&rsquo;.</span>
-widget &quot;*emacs-menuitem*&quot; style &quot;my_style&quot;
-</pre></div>
+# <span class=
+"roman">Specify that widget type &lsquo;<samp>*emacs-menuitem*</samp>&rsquo; uses &lsquo;<samp>my_style</samp>&rsquo;.</span>
+widget "*emacs-menuitem*" style "my_style"
+</pre>
+  </div>
 
-<p>The widget name in this example contains wildcards, so the style is
-applied to all widgets matching &lsquo;<samp>*emacs-menuitem*</samp>&rsquo;.  The widgets
-are named by the way they are contained, from the outer widget to the
-inner widget.  Here is another example that applies &lsquo;<samp>my_style</samp>&rsquo;
-specifically to the Emacs menu bar:
-</p>
-<div class="smallexample">
-<pre class="smallexample">widget &quot;Emacs.pane.menubar.*&quot; style &quot;my_style&quot;
-</pre></div>
+  <p>The widget name in this example contains wildcards, so the
+  style is applied to all widgets matching
+  &lsquo;<samp>*emacs-menuitem*</samp>&rsquo;. The widgets are
+  named by the way they are contained, from the outer widget to the
+  inner widget. Here is another example that applies
+  &lsquo;<samp>my_style</samp>&rsquo; specifically to the Emacs
+  menu bar:</p>
 
-<p>Here is a more elaborate example, showing how to change the parts of
-the scroll bar:
-</p>
-<div class="smallexample">
-<pre class="smallexample">style &quot;scroll&quot;
+  <div class="smallexample">
+    <pre class="smallexample">
+widget "Emacs.pane.menubar.*" style "my_style"
+</pre>
+  </div>
+
+  <p>Here is a more elaborate example, showing how to change the
+  parts of the scroll bar:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+style "scroll"
 {
-  fg[NORMAL] = &quot;red&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="roman">Arrow color.</span>
-  bg[NORMAL] = &quot;yellow&quot;&nbsp;&nbsp;# <span class="roman">Thumb and background around arrow.</span>
-  bg[ACTIVE] = &quot;blue&quot;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="roman">Trough color.</span>
-  bg[PRELIGHT] = &quot;white&quot;&nbsp;# <span class="roman">Thumb color when the mouse is over it.</span>
+  fg[NORMAL] = "red"     # <span class="roman">Arrow color.</span>
+  bg[NORMAL] = "yellow"  # <span class=
+"roman">Thumb and background around arrow.</span>
+  bg[ACTIVE] = "blue"    # <span class="roman">Trough color.</span>
+  bg[PRELIGHT] = "white" # <span class=
+"roman">Thumb color when the mouse is over it.</span>
 }
 
-widget &quot;*verticalScrollBar*&quot; style &quot;scroll&quot;
-</pre></div>
-
-
-
-
+widget "*verticalScrollBar*" style "scroll"
+</pre>
+  </div>
 </body>
 </html>

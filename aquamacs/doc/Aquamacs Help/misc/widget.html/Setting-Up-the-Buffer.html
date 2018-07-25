@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2000-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,120 +14,184 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Emacs Widget Library: Setting Up the Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Emacs Widget Library: Setting Up the Buffer">
-<meta name="keywords" content="The Emacs Widget Library: Setting Up the Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Basic-Types.html#Basic-Types" rel="next" title="Basic Types">
-<link href="Programming-Example.html#Programming-Example" rel="prev" title="Programming Example">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Emacs Widget Library: Setting Up the Buffer</title>
+  <meta name="description" content=
+  "The Emacs Widget Library: Setting Up the Buffer" />
+  <meta name="keywords" content=
+  "The Emacs Widget Library: Setting Up the Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Basic-Types.html#Basic-Types" rel="next" title=
+  "Basic Types" />
+  <link href="Programming-Example.html#Programming-Example" rel=
+  "prev" title="Programming Example" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Setting-Up-the-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Basic-Types.html#Basic-Types" accesskey="n" rel="next">Basic Types</a>, Previous: <a href="Programming-Example.html#Programming-Example" accesskey="p" rel="prev">Programming Example</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Setting-Up-the-Buffer-1"></a>
-<h2 class="chapter">4 Setting Up the Buffer</h2>
+<body lang="en" xml:lang="en">
+  <a name="Setting-Up-the-Buffer" id="Setting-Up-the-Buffer"></a>
 
-<p>Widgets are created with <code>widget-create</code>, which returns a
-<em>widget</em> object.  This object can be queried and manipulated by
-other widget functions, until it is deleted with <code>widget-delete</code>.
-After the widgets have been created, <code>widget-setup</code> must be called
-to enable them.
-</p>
-<dl>
-<dt><a name="index-widget_002dcreate"></a>Function: <strong>widget-create</strong> <em>type [ keyword argument ]&hellip;</em></dt>
-<dd><p>Create and return a widget of type <var>type</var>.
-The syntax for the <var>type</var> argument is described in <a href="Basic-Types.html#Basic-Types">Basic Types</a>.
-</p>
-<p>The keyword arguments can be used to overwrite the keyword arguments
-that are part of <var>type</var>.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Basic-Types.html#Basic-Types" accesskey="n"
+    rel="next">Basic Types</a>, Previous: <a href=
+    "Programming-Example.html#Programming-Example" accesskey="p"
+    rel="prev">Programming Example</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Setting-Up-the-Buffer-1" id=
+  "Setting-Up-the-Buffer-1"></a>
 
-<dl>
-<dt><a name="index-widget_002ddelete"></a>Function: <strong>widget-delete</strong> <em>widget</em></dt>
-<dd><p>Delete <var>widget</var> and remove it from the buffer.
-</p></dd></dl>
+  <h2 class="chapter">4 Setting Up the Buffer</h2>
 
-<dl>
-<dt><a name="index-widget_002dsetup"></a>Function: <strong>widget-setup</strong></dt>
-<dd><p>Set up a buffer to support widgets.
-</p>
-<p>This should be called after creating all the widgets and before allowing
-the user to edit them.
-</p></dd></dl>
+  <p>Widgets are created with <code>widget-create</code>, which
+  returns a <em>widget</em> object. This object can be queried and
+  manipulated by other widget functions, until it is deleted with
+  <code>widget-delete</code>. After the widgets have been created,
+  <code>widget-setup</code> must be called to enable them.</p>
 
-<p>If you want to insert text outside the widgets in the form, the
-recommended way to do that is with <code>widget-insert</code>.
-</p>
-<dl>
-<dt><a name="index-widget_002dinsert"></a>Function: <strong>widget-insert</strong></dt>
-<dd><p>Insert the arguments, either strings or characters, at point.
-The inserted text will be read-only.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-widget_002dcreate" id=
+    "index-widget_002dcreate"></a>Function:
+    <strong>widget-create</strong> <em>type [ keyword argument
+    ]&hellip;</em></dt>
 
-<p>There is a standard widget keymap which you might find useful.
-</p>
-<a name="index-widget_002dbutton_002dpress-1"></a>
-<a name="index-widget_002dbutton_002dclick-1"></a>
-<dl>
-<dt><a name="index-widget_002dkeymap"></a>Const: <strong>widget-keymap</strong></dt>
-<dd><p><tt class="key">TAB</tt> and <kbd>C-<span class="key">TAB</span></kbd> are bound to <code>widget-forward</code> and
-<code>widget-backward</code>, respectively.  <tt class="key">RET</tt> and <kbd>mouse-2</kbd>
-are bound to <code>widget-button-press</code> and
-<code>widget-button-click</code>.
-</p></dd></dl>
+    <dd>
+      <p>Create and return a widget of type <var>type</var>. The
+      syntax for the <var>type</var> argument is described in
+      <a href="Basic-Types.html#Basic-Types">Basic Types</a>.</p>
 
-<dl>
-<dt><a name="index-widget_002dglobal_002dmap"></a>Variable: <strong>widget-global-map</strong></dt>
-<dd><p>Keymap used by <code>widget-button-press</code> and <code>widget-button-click</code>
-when not on a button.  By default this is <code>global-map</code>.
-</p></dd></dl>
+      <p>The keyword arguments can be used to overwrite the keyword
+      arguments that are part of <var>type</var>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-widget_002ddelete" id=
+    "index-widget_002ddelete"></a>Function:
+    <strong>widget-delete</strong> <em>widget</em></dt>
 
+    <dd>
+      <p>Delete <var>widget</var> and remove it from the
+      buffer.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-widget_002dsetup" id=
+    "index-widget_002dsetup"></a>Function:
+    <strong>widget-setup</strong></dt>
 
+    <dd>
+      <p>Set up a buffer to support widgets.</p>
+
+      <p>This should be called after creating all the widgets and
+      before allowing the user to edit them.</p>
+    </dd>
+  </dl>
+
+  <p>If you want to insert text outside the widgets in the form,
+  the recommended way to do that is with
+  <code>widget-insert</code>.</p>
+
+  <dl>
+    <dt><a name="index-widget_002dinsert" id=
+    "index-widget_002dinsert"></a>Function:
+    <strong>widget-insert</strong></dt>
+
+    <dd>
+      <p>Insert the arguments, either strings or characters, at
+      point. The inserted text will be read-only.</p>
+    </dd>
+  </dl>
+
+  <p>There is a standard widget keymap which you might find
+  useful.</p><a name="index-widget_002dbutton_002dpress-1" id=
+  "index-widget_002dbutton_002dpress-1"></a> <a name=
+  "index-widget_002dbutton_002dclick-1" id=
+  "index-widget_002dbutton_002dclick-1"></a>
+
+  <dl>
+    <dt><a name="index-widget_002dkeymap" id=
+    "index-widget_002dkeymap"></a>Const:
+    <strong>widget-keymap</strong></dt>
+
+    <dd>
+      <p><tt class="key">TAB</tt> and <kbd>C-<span class=
+      "key">TAB</span></kbd> are bound to
+      <code>widget-forward</code> and <code>widget-backward</code>,
+      respectively. <tt class="key">RET</tt> and <kbd>mouse-2</kbd>
+      are bound to <code>widget-button-press</code> and
+      <code>widget-button-click</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-widget_002dglobal_002dmap" id=
+    "index-widget_002dglobal_002dmap"></a>Variable:
+    <strong>widget-global-map</strong></dt>
+
+    <dd>
+      <p>Keymap used by <code>widget-button-press</code> and
+      <code>widget-button-click</code> when not on a button. By
+      default this is <code>global-map</code>.</p>
+    </dd>
+  </dl>
 </body>
 </html>

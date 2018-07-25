@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,145 +14,230 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Creating a spam-stat dictionary</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Creating a spam-stat dictionary">
-<meta name="keywords" content="Gnus Manual: Creating a spam-stat dictionary">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Statistics-Package.html#Spam-Statistics-Package" rel="up" title="Spam Statistics Package">
-<link href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat" rel="next" title="Splitting mail using spam-stat">
-<link href="Spam-Statistics-Package.html#Spam-Statistics-Package" rel="prev" title="Spam Statistics Package">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Creating a spam-stat dictionary</title>
+  <meta name="description" content=
+  "Gnus Manual: Creating a spam-stat dictionary" />
+  <meta name="keywords" content=
+  "Gnus Manual: Creating a spam-stat dictionary" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Statistics-Package.html#Spam-Statistics-Package"
+  rel="up" title="Spam Statistics Package" />
+  <link href=
+  "Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat"
+  rel="next" title="Splitting mail using spam-stat" />
+  <link href="Spam-Statistics-Package.html#Spam-Statistics-Package"
+  rel="prev" title="Spam Statistics Package" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-a-spam_002dstat-dictionary"></a>
-<div class="header">
-<p>
-Next: <a href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat" accesskey="n" rel="next">Splitting mail using spam-stat</a>, Up: <a href="Spam-Statistics-Package.html#Spam-Statistics-Package" accesskey="u" rel="up">Spam Statistics Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-a-spam_002dstat-dictionary-1"></a>
-<h4 class="subsubsection">9.17.8.1 Creating a spam-stat dictionary</h4>
+<body lang="en" xml:lang="en">
+  <a name="Creating-a-spam_002dstat-dictionary" id=
+  "Creating-a-spam_002dstat-dictionary"></a>
 
-<p>Before you can begin to filter spam based on statistics, you must
-create these statistics based on two mail collections, one with spam,
-one with non-spam.  These statistics are then stored in a dictionary
-for later use.  In order for these statistics to be meaningful, you
-need several hundred emails in both collections.
-</p>
-<p>Gnus currently supports only the nnml back end for automated dictionary
-creation.  The nnml back end stores all mails in a directory, one file
-per mail.  Use the following:
-</p>
-<dl>
-<dt><a name="index-spam_002dstat_002dprocess_002dspam_002ddirectory"></a>Function: <strong>spam-stat-process-spam-directory</strong></dt>
-<dd><p>Create spam statistics for every file in this directory.  Every file
-is treated as one spam mail.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat"
+    accesskey="n" rel="next">Splitting mail using spam-stat</a>,
+    Up: <a href=
+    "Spam-Statistics-Package.html#Spam-Statistics-Package"
+    accesskey="u" rel="up">Spam Statistics Package</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-a-spam_002dstat-dictionary-1" id=
+  "Creating-a-spam_002dstat-dictionary-1"></a>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dprocess_002dnon_002dspam_002ddirectory"></a>Function: <strong>spam-stat-process-non-spam-directory</strong></dt>
-<dd><p>Create non-spam statistics for every file in this directory.  Every
-file is treated as one non-spam mail.
-</p></dd></dl>
+  <h4 class="subsubsection">9.17.8.1 Creating a spam-stat
+  dictionary</h4>
 
-<p>Usually you would call <code>spam-stat-process-spam-directory</code> on a
-directory such as <samp>~/Mail/mail/spam</samp> (this usually corresponds to
-the group &lsquo;<samp>nnml:mail.spam</samp>&rsquo;), and you would call
-<code>spam-stat-process-non-spam-directory</code> on a directory such as
-<samp>~/Mail/mail/misc</samp> (this usually corresponds to the group
-&lsquo;<samp>nnml:mail.misc</samp>&rsquo;).
-</p>
-<p>When you are using <acronym>IMAP</acronym>, you won&rsquo;t have the mails available
-locally, so that will not work.  One solution is to use the Gnus Agent
-to cache the articles.  Then you can use directories such as
-<samp>&quot;~/News/agent/nnimap/mail.yourisp.com/personal_spam&quot;</samp> for
-<code>spam-stat-process-spam-directory</code>.  See <a href="Agent-as-Cache.html#Agent-as-Cache">Agent as Cache</a>.
-</p>
-<dl>
-<dt><a name="index-spam_002dstat-1"></a>Variable: <strong>spam-stat</strong></dt>
-<dd><p>This variable holds the hash-table with all the statistics&mdash;the
-dictionary we have been talking about.  For every word in either
-collection, this hash-table stores a vector describing how often the
-word appeared in spam and often it appeared in non-spam mails.
-</p></dd></dl>
+  <p>Before you can begin to filter spam based on statistics, you
+  must create these statistics based on two mail collections, one
+  with spam, one with non-spam. These statistics are then stored in
+  a dictionary for later use. In order for these statistics to be
+  meaningful, you need several hundred emails in both
+  collections.</p>
 
-<p>If you want to regenerate the statistics from scratch, you need to
-reset the dictionary.
-</p>
-<dl>
-<dt><a name="index-spam_002dstat_002dreset"></a>Function: <strong>spam-stat-reset</strong></dt>
-<dd><p>Reset the <code>spam-stat</code> hash-table, deleting all the statistics.
-</p></dd></dl>
+  <p>Gnus currently supports only the nnml back end for automated
+  dictionary creation. The nnml back end stores all mails in a
+  directory, one file per mail. Use the following:</p>
 
-<p>When you are done, you must save the dictionary.  The dictionary may
-be rather large.  If you will not update the dictionary incrementally
-(instead, you will recreate it once a month, for example), then you
-can reduce the size of the dictionary by deleting all words that did
-not appear often enough or that do not clearly belong to only spam or
-only non-spam mails.
-</p>
-<dl>
-<dt><a name="index-spam_002dstat_002dreduce_002dsize"></a>Function: <strong>spam-stat-reduce-size</strong></dt>
-<dd><p>Reduce the size of the dictionary.  Use this only if you do not want
-to update the dictionary incrementally.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-spam_002dstat_002dprocess_002dspam_002ddirectory" id=
+    "index-spam_002dstat_002dprocess_002dspam_002ddirectory"></a>Function:
+    <strong>spam-stat-process-spam-directory</strong></dt>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dsave"></a>Function: <strong>spam-stat-save</strong></dt>
-<dd><p>Save the dictionary.
-</p></dd></dl>
+    <dd>
+      <p>Create spam statistics for every file in this directory.
+      Every file is treated as one spam mail.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dfile"></a>Variable: <strong>spam-stat-file</strong></dt>
-<dd><p>The filename used to store the dictionary.  This defaults to
-<samp>~/.spam-stat.el</samp>.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-spam_002dstat_002dprocess_002dnon_002dspam_002ddirectory"
+    id=
+    "index-spam_002dstat_002dprocess_002dnon_002dspam_002ddirectory">
+    </a>Function:
+    <strong>spam-stat-process-non-spam-directory</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat" accesskey="n" rel="next">Splitting mail using spam-stat</a>, Up: <a href="Spam-Statistics-Package.html#Spam-Statistics-Package" accesskey="u" rel="up">Spam Statistics Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Create non-spam statistics for every file in this
+      directory. Every file is treated as one non-spam mail.</p>
+    </dd>
+  </dl>
 
+  <p>Usually you would call
+  <code>spam-stat-process-spam-directory</code> on a directory such
+  as <samp>~/Mail/mail/spam</samp> (this usually corresponds to the
+  group &lsquo;<samp>nnml:mail.spam</samp>&rsquo;), and you would
+  call <code>spam-stat-process-non-spam-directory</code> on a
+  directory such as <samp>~/Mail/mail/misc</samp> (this usually
+  corresponds to the group
+  &lsquo;<samp>nnml:mail.misc</samp>&rsquo;).</p>
 
+  <p>When you are using <acronym>IMAP</acronym>, you won&rsquo;t
+  have the mails available locally, so that will not work. One
+  solution is to use the Gnus Agent to cache the articles. Then you
+  can use directories such as
+  <samp>"~/News/agent/nnimap/mail.yourisp.com/personal_spam"</samp>
+  for <code>spam-stat-process-spam-directory</code>. See <a href=
+  "Agent-as-Cache.html#Agent-as-Cache">Agent as Cache</a>.</p>
 
+  <dl>
+    <dt><a name="index-spam_002dstat-1" id=
+    "index-spam_002dstat-1"></a>Variable:
+    <strong>spam-stat</strong></dt>
+
+    <dd>
+      <p>This variable holds the hash-table with all the
+      statistics&mdash;the dictionary we have been talking about.
+      For every word in either collection, this hash-table stores a
+      vector describing how often the word appeared in spam and
+      often it appeared in non-spam mails.</p>
+    </dd>
+  </dl>
+
+  <p>If you want to regenerate the statistics from scratch, you
+  need to reset the dictionary.</p>
+
+  <dl>
+    <dt><a name="index-spam_002dstat_002dreset" id=
+    "index-spam_002dstat_002dreset"></a>Function:
+    <strong>spam-stat-reset</strong></dt>
+
+    <dd>
+      <p>Reset the <code>spam-stat</code> hash-table, deleting all
+      the statistics.</p>
+    </dd>
+  </dl>
+
+  <p>When you are done, you must save the dictionary. The
+  dictionary may be rather large. If you will not update the
+  dictionary incrementally (instead, you will recreate it once a
+  month, for example), then you can reduce the size of the
+  dictionary by deleting all words that did not appear often enough
+  or that do not clearly belong to only spam or only non-spam
+  mails.</p>
+
+  <dl>
+    <dt><a name="index-spam_002dstat_002dreduce_002dsize" id=
+    "index-spam_002dstat_002dreduce_002dsize"></a>Function:
+    <strong>spam-stat-reduce-size</strong></dt>
+
+    <dd>
+      <p>Reduce the size of the dictionary. Use this only if you do
+      not want to update the dictionary incrementally.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-spam_002dstat_002dsave" id=
+    "index-spam_002dstat_002dsave"></a>Function:
+    <strong>spam-stat-save</strong></dt>
+
+    <dd>
+      <p>Save the dictionary.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-spam_002dstat_002dfile" id=
+    "index-spam_002dstat_002dfile"></a>Variable:
+    <strong>spam-stat-file</strong></dt>
+
+    <dd>
+      <p>The filename used to store the dictionary. This defaults
+      to <samp>~/.spam-stat.el</samp>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat"
+    accesskey="n" rel="next">Splitting mail using spam-stat</a>,
+    Up: <a href=
+    "Spam-Statistics-Package.html#Spam-Statistics-Package"
+    accesskey="u" rel="up">Spam Statistics Package</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

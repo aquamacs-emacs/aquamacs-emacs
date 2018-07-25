@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,77 +19,116 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Plist Access</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Plist Access">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Plist Access">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Property-Lists.html#Property-Lists" rel="up" title="Property Lists">
-<link href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="next" title="Sequences Arrays Vectors">
-<link href="Plists-and-Alists.html#Plists-and-Alists" rel="prev" title="Plists and Alists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Plist Access</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Plist Access" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Plist Access" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Property-Lists.html#Property-Lists" rel="up" title=
+  "Property Lists" />
+  <link href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel=
+  "next" title="Sequences Arrays Vectors" />
+  <link href="Plists-and-Alists.html#Plists-and-Alists" rel="prev"
+  title="Plists and Alists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Plist-Access" id="Plist-Access"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Plists-and-Alists.html#Plists-and-Alists"
+    accesskey="p" rel="prev">Plists and Alists</a>, Up: <a href=
+    "Property-Lists.html#Property-Lists" accesskey="u" rel=
+    "up">Property Lists</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Property-Lists-Outside-Symbols" id=
+  "Property-Lists-Outside-Symbols"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Plist-Access"></a>
-<div class="header">
-<p>
-Previous: <a href="Plists-and-Alists.html#Plists-and-Alists" accesskey="p" rel="prev">Plists and Alists</a>, Up: <a href="Property-Lists.html#Property-Lists" accesskey="u" rel="up">Property Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Property-Lists-Outside-Symbols"></a>
-<h4 class="subsection">5.9.2 Property Lists Outside Symbols</h4>
-<a name="index-plist-access"></a>
-<a name="index-accessing-plist-properties"></a>
+  <h4 class="subsection">5.9.2 Property Lists Outside
+  Symbols</h4><a name="index-plist-access" id=
+  "index-plist-access"></a> <a name=
+  "index-accessing-plist-properties" id=
+  "index-accessing-plist-properties"></a>
 
-<p>The following functions can be used to manipulate property lists.
-They all compare property names using <code>eq</code>.
-</p>
-<dl>
-<dt><a name="index-plist_002dget"></a>Function: <strong>plist-get</strong> <em>plist property</em></dt>
-<dd><p>This returns the value of the <var>property</var> property stored in the
-property list <var>plist</var>.  It accepts a malformed <var>plist</var>
-argument.  If <var>property</var> is not found in the <var>plist</var>, it
-returns <code>nil</code>.  For example,
-</p>
-<div class="example">
-<pre class="example">(plist-get '(foo 4) 'foo)
+  <p>The following functions can be used to manipulate property
+  lists. They all compare property names using <code>eq</code>.</p>
+
+  <dl>
+    <dt><a name="index-plist_002dget" id=
+    "index-plist_002dget"></a>Function: <strong>plist-get</strong>
+    <em>plist property</em></dt>
+
+    <dd>
+      <p>This returns the value of the <var>property</var> property
+      stored in the property list <var>plist</var>. It accepts a
+      malformed <var>plist</var> argument. If <var>property</var>
+      is not found in the <var>plist</var>, it returns
+      <code>nil</code>. For example,</p>
+
+      <div class="example">
+        <pre class="example">
+(plist-get '(foo 4) 'foo)
      &rArr; 4
 (plist-get '(foo 4 bad) 'foo)
      &rArr; 4
@@ -95,54 +136,88 @@ returns <code>nil</code>.  For example,
      &rArr; nil
 (plist-get '(foo 4 bad) 'bar)
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-plist_002dput"></a>Function: <strong>plist-put</strong> <em>plist property value</em></dt>
-<dd><p>This stores <var>value</var> as the value of the <var>property</var> property in
-the property list <var>plist</var>.  It may modify <var>plist</var> destructively,
-or it may construct a new list structure without altering the old.  The
-function returns the modified property list, so you can store that back
-in the place where you got <var>plist</var>.  For example,
-</p>
-<div class="example">
-<pre class="example">(setq my-plist '(bar t foo 4))
+  <dl>
+    <dt><a name="index-plist_002dput" id=
+    "index-plist_002dput"></a>Function: <strong>plist-put</strong>
+    <em>plist property value</em></dt>
+
+    <dd>
+      <p>This stores <var>value</var> as the value of the
+      <var>property</var> property in the property list
+      <var>plist</var>. It may modify <var>plist</var>
+      destructively, or it may construct a new list structure
+      without altering the old. The function returns the modified
+      property list, so you can store that back in the place where
+      you got <var>plist</var>. For example,</p>
+
+      <div class="example">
+        <pre class="example">
+(setq my-plist '(bar t foo 4))
      &rArr; (bar t foo 4)
 (setq my-plist (plist-put my-plist 'foo 69))
      &rArr; (bar t foo 69)
 (setq my-plist (plist-put my-plist 'quux '(a)))
      &rArr; (bar t foo 69 quux (a))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-lax_002dplist_002dget"></a>Function: <strong>lax-plist-get</strong> <em>plist property</em></dt>
-<dd><p>Like <code>plist-get</code> except that it compares properties
-using <code>equal</code> instead of <code>eq</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-lax_002dplist_002dget" id=
+    "index-lax_002dplist_002dget"></a>Function:
+    <strong>lax-plist-get</strong> <em>plist property</em></dt>
 
-<dl>
-<dt><a name="index-lax_002dplist_002dput"></a>Function: <strong>lax-plist-put</strong> <em>plist property value</em></dt>
-<dd><p>Like <code>plist-put</code> except that it compares properties
-using <code>equal</code> instead of <code>eq</code>.
-</p></dd></dl>
+    <dd>
+      <p>Like <code>plist-get</code> except that it compares
+      properties using <code>equal</code> instead of
+      <code>eq</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-plist_002dmember"></a>Function: <strong>plist-member</strong> <em>plist property</em></dt>
-<dd><p>This returns non-<code>nil</code> if <var>plist</var> contains the given
-<var>property</var>.  Unlike <code>plist-get</code>, this allows you to distinguish
-between a missing property and a property with the value <code>nil</code>.
-The value is actually the tail of <var>plist</var> whose <code>car</code> is
-<var>property</var>.
-</p></dd></dl>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Plists-and-Alists.html#Plists-and-Alists" accesskey="p" rel="prev">Plists and Alists</a>, Up: <a href="Property-Lists.html#Property-Lists" accesskey="u" rel="up">Property Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-lax_002dplist_002dput" id=
+    "index-lax_002dplist_002dput"></a>Function:
+    <strong>lax-plist-put</strong> <em>plist property
+    value</em></dt>
 
+    <dd>
+      <p>Like <code>plist-put</code> except that it compares
+      properties using <code>equal</code> instead of
+      <code>eq</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-plist_002dmember" id=
+    "index-plist_002dmember"></a>Function:
+    <strong>plist-member</strong> <em>plist property</em></dt>
 
+    <dd>
+      <p>This returns non-<code>nil</code> if <var>plist</var>
+      contains the given <var>property</var>. Unlike
+      <code>plist-get</code>, this allows you to distinguish
+      between a missing property and a property with the value
+      <code>nil</code>. The value is actually the tail of
+      <var>plist</var> whose <code>car</code> is
+      <var>property</var>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Plists-and-Alists.html#Plists-and-Alists"
+    accesskey="p" rel="prev">Plists and Alists</a>, Up: <a href=
+    "Property-Lists.html#Property-Lists" accesskey="u" rel=
+    "up">Property Lists</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,150 +20,232 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Gnus Group Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Gnus Group Buffer">
-<meta name="keywords" content="GNU Emacs Manual: Gnus Group Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Gnus.html#Gnus" rel="up" title="Gnus">
-<link href="Gnus-Summary-Buffer.html#Gnus-Summary-Buffer" rel="next" title="Gnus Summary Buffer">
-<link href="Gnus-Startup.html#Gnus-Startup" rel="prev" title="Gnus Startup">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Gnus Group Buffer</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Gnus Group Buffer" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Gnus Group Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Gnus.html#Gnus" rel="up" title="Gnus" />
+  <link href="Gnus-Summary-Buffer.html#Gnus-Summary-Buffer" rel=
+  "next" title="Gnus Summary Buffer" />
+  <link href="Gnus-Startup.html#Gnus-Startup" rel="prev" title=
+  "Gnus Startup" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Gnus-Group-Buffer" id="Gnus-Group-Buffer"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Gnus-Summary-Buffer.html#Gnus-Summary-Buffer"
+    accesskey="n" rel="next">Gnus Summary Buffer</a>, Previous:
+    <a href="Gnus-Startup.html#Gnus-Startup" accesskey="p" rel=
+    "prev">Gnus Startup</a>, Up: <a href="Gnus.html#Gnus"
+    accesskey="u" rel="up">Gnus</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-the-Gnus-Group-Buffer" id=
+  "Using-the-Gnus-Group-Buffer"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Gnus-Group-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Gnus-Summary-Buffer.html#Gnus-Summary-Buffer" accesskey="n" rel="next">Gnus Summary Buffer</a>, Previous: <a href="Gnus-Startup.html#Gnus-Startup" accesskey="p" rel="prev">Gnus Startup</a>, Up: <a href="Gnus.html#Gnus" accesskey="u" rel="up">Gnus</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-the-Gnus-Group-Buffer"></a>
-<h3 class="section">34.3 Using the Gnus Group Buffer</h3>
+  <h3 class="section">34.3 Using the Gnus Group Buffer</h3>
 
-<p>The following commands are available in the Gnus group buffer:
-</p>
-<dl compact="compact">
-<dd><a name="index-SPC-_0028Gnus-Group-mode_0029"></a>
-<a name="index-gnus_002dgroup_002dread_002dgroup"></a>
-</dd>
-<dt><kbd><span class="key">SPC</span></kbd></dt>
-<dd><p>Switch to the summary buffer for the group on the current line.
-</p>
-<a name="index-l-_0028Gnus-Group-mode_0029"></a>
-<a name="index-A-s-_0028Gnus-Group-mode_0029"></a>
-<a name="index-gnus_002dgroup_002dlist_002dgroups"></a>
-</dd>
-<dt><kbd>l</kbd></dt>
-<dt><kbd>A s</kbd></dt>
-<dd><p>In the group buffer, list only the groups to which you subscribe and
-which contain unread articles (this is the default listing).
-</p>
-<a name="index-L-_0028Gnus-Group-mode_0029"></a>
-<a name="index-A-u-_0028Gnus-Group-mode_0029"></a>
-<a name="index-gnus_002dgroup_002dlist_002dall_002dgroups"></a>
-</dd>
-<dt><kbd>L</kbd></dt>
-<dt><kbd>A u</kbd></dt>
-<dd><p>List all subscribed and unsubscribed groups, but not killed or zombie
-groups.
-</p>
-<a name="index-A-k-_0028Gnus-Group-mode_0029"></a>
-<a name="index-gnus_002dgroup_002dlist_002dall_002dgroups-1"></a>
-</dd>
-<dt><kbd>A k</kbd></dt>
-<dd><p>List killed groups.
-</p>
-<a name="index-A-z-_0028Gnus-Group-mode_0029"></a>
-<a name="index-gnus_002dgroup_002dlist_002dall_002dgroups-2"></a>
-</dd>
-<dt><kbd>A z</kbd></dt>
-<dd><p>List zombie groups.
-</p>
-<a name="index-u-_0028Gnus-Group-mode_0029"></a>
-<a name="index-gnus_002dgroup_002dunsubscribe_002dcurrent_002dgroup"></a>
-<a name="index-subscribe-groups"></a>
-<a name="index-unsubscribe-groups"></a>
-</dd>
-<dt><kbd>u</kbd></dt>
-<dd><p>Toggle the subscription status of the group on the current line
-(i.e., turn a subscribed group into an unsubscribed group, or vice
-versa).  Invoking this on a killed or zombie group turns it into an
-unsubscribed group.
-</p>
-<a name="index-C_002dk-_0028Gnus-Group-mode_0029"></a>
-<a name="index-gnus_002dgroup_002dkill_002dgroup"></a>
-</dd>
-<dt><kbd>C-k</kbd></dt>
-<dd><p>Kill the group on the current line.  Killed groups are not recorded in
-the <samp>.newsrc</samp> file, and they are not shown in the <kbd>l</kbd> or
-<kbd>L</kbd> listings.
-</p>
-<a name="index-DEL-_0028Gnus-Group-mode_0029"></a>
-</dd>
-<dt><kbd><span class="key">DEL</span></kbd></dt>
-<dd><p>Move point to the previous group containing unread articles.
-</p>
-<a name="index-n-_0028Gnus-Group-mode_0029"></a>
-<a name="index-gnus_002dgroup_002dnext_002dunread_002dgroup"></a>
-<a name="index-gnus_002dsummary_002dnext_002dunread_002darticle"></a>
-</dd>
-<dt><kbd>n</kbd></dt>
-<dd><p>Move point to the next unread group.
-</p>
-<a name="index-p-_0028Gnus-Group-mode_0029"></a>
-<a name="index-gnus_002dgroup_002dprev_002dunread_002dgroup"></a>
-<a name="index-gnus_002dsummary_002dprev_002dunread_002darticle"></a>
-</dd>
-<dt><kbd>p</kbd></dt>
-<dd><p>Move point to the previous unread group.
-</p>
-<a name="index-q-_0028Gnus-Group-mode_0029"></a>
-<a name="index-gnus_002dgroup_002dexit"></a>
-</dd>
-<dt><kbd>q</kbd></dt>
-<dd><p>Update your Gnus settings, and quit Gnus.
-</p></dd>
-</dl>
+  <p>The following commands are available in the Gnus group
+  buffer:</p>
 
+  <dl compact="compact">
+    <dd><a name="index-SPC-_0028Gnus-Group-mode_0029" id=
+    "index-SPC-_0028Gnus-Group-mode_0029"></a> <a name=
+    "index-gnus_002dgroup_002dread_002dgroup" id=
+    "index-gnus_002dgroup_002dread_002dgroup"></a></dd>
 
+    <dt><kbd><span class="key">SPC</span></kbd></dt>
 
+    <dd>
+      <p>Switch to the summary buffer for the group on the current
+      line.</p><a name="index-l-_0028Gnus-Group-mode_0029" id=
+      "index-l-_0028Gnus-Group-mode_0029"></a> <a name=
+      "index-A-s-_0028Gnus-Group-mode_0029" id=
+      "index-A-s-_0028Gnus-Group-mode_0029"></a> <a name=
+      "index-gnus_002dgroup_002dlist_002dgroups" id=
+      "index-gnus_002dgroup_002dlist_002dgroups"></a>
+    </dd>
 
+    <dt><kbd>l</kbd></dt>
+
+    <dt><kbd>A s</kbd></dt>
+
+    <dd>
+      <p>In the group buffer, list only the groups to which you
+      subscribe and which contain unread articles (this is the
+      default listing).</p><a name=
+      "index-L-_0028Gnus-Group-mode_0029" id=
+      "index-L-_0028Gnus-Group-mode_0029"></a> <a name=
+      "index-A-u-_0028Gnus-Group-mode_0029" id=
+      "index-A-u-_0028Gnus-Group-mode_0029"></a> <a name=
+      "index-gnus_002dgroup_002dlist_002dall_002dgroups" id=
+      "index-gnus_002dgroup_002dlist_002dall_002dgroups"></a>
+    </dd>
+
+    <dt><kbd>L</kbd></dt>
+
+    <dt><kbd>A u</kbd></dt>
+
+    <dd>
+      <p>List all subscribed and unsubscribed groups, but not
+      killed or zombie groups.</p><a name=
+      "index-A-k-_0028Gnus-Group-mode_0029" id=
+      "index-A-k-_0028Gnus-Group-mode_0029"></a> <a name=
+      "index-gnus_002dgroup_002dlist_002dall_002dgroups-1" id=
+      "index-gnus_002dgroup_002dlist_002dall_002dgroups-1"></a>
+    </dd>
+
+    <dt><kbd>A k</kbd></dt>
+
+    <dd>
+      <p>List killed groups.</p><a name=
+      "index-A-z-_0028Gnus-Group-mode_0029" id=
+      "index-A-z-_0028Gnus-Group-mode_0029"></a> <a name=
+      "index-gnus_002dgroup_002dlist_002dall_002dgroups-2" id=
+      "index-gnus_002dgroup_002dlist_002dall_002dgroups-2"></a>
+    </dd>
+
+    <dt><kbd>A z</kbd></dt>
+
+    <dd>
+      <p>List zombie groups.</p><a name=
+      "index-u-_0028Gnus-Group-mode_0029" id=
+      "index-u-_0028Gnus-Group-mode_0029"></a> <a name=
+      "index-gnus_002dgroup_002dunsubscribe_002dcurrent_002dgroup"
+      id=
+      "index-gnus_002dgroup_002dunsubscribe_002dcurrent_002dgroup"></a>
+      <a name="index-subscribe-groups" id=
+      "index-subscribe-groups"></a> <a name=
+      "index-unsubscribe-groups" id="index-unsubscribe-groups"></a>
+    </dd>
+
+    <dt><kbd>u</kbd></dt>
+
+    <dd>
+      <p>Toggle the subscription status of the group on the current
+      line (i.e., turn a subscribed group into an unsubscribed
+      group, or vice versa). Invoking this on a killed or zombie
+      group turns it into an unsubscribed group.</p><a name=
+      "index-C_002dk-_0028Gnus-Group-mode_0029" id=
+      "index-C_002dk-_0028Gnus-Group-mode_0029"></a> <a name=
+      "index-gnus_002dgroup_002dkill_002dgroup" id=
+      "index-gnus_002dgroup_002dkill_002dgroup"></a>
+    </dd>
+
+    <dt><kbd>C-k</kbd></dt>
+
+    <dd>
+      <p>Kill the group on the current line. Killed groups are not
+      recorded in the <samp>.newsrc</samp> file, and they are not
+      shown in the <kbd>l</kbd> or <kbd>L</kbd>
+      listings.</p><a name="index-DEL-_0028Gnus-Group-mode_0029"
+      id="index-DEL-_0028Gnus-Group-mode_0029"></a>
+    </dd>
+
+    <dt><kbd><span class="key">DEL</span></kbd></dt>
+
+    <dd>
+      <p>Move point to the previous group containing unread
+      articles.</p><a name="index-n-_0028Gnus-Group-mode_0029" id=
+      "index-n-_0028Gnus-Group-mode_0029"></a> <a name=
+      "index-gnus_002dgroup_002dnext_002dunread_002dgroup" id=
+      "index-gnus_002dgroup_002dnext_002dunread_002dgroup"></a>
+      <a name=
+      "index-gnus_002dsummary_002dnext_002dunread_002darticle" id=
+      "index-gnus_002dsummary_002dnext_002dunread_002darticle"></a>
+    </dd>
+
+    <dt><kbd>n</kbd></dt>
+
+    <dd>
+      <p>Move point to the next unread group.</p><a name=
+      "index-p-_0028Gnus-Group-mode_0029" id=
+      "index-p-_0028Gnus-Group-mode_0029"></a> <a name=
+      "index-gnus_002dgroup_002dprev_002dunread_002dgroup" id=
+      "index-gnus_002dgroup_002dprev_002dunread_002dgroup"></a>
+      <a name=
+      "index-gnus_002dsummary_002dprev_002dunread_002darticle" id=
+      "index-gnus_002dsummary_002dprev_002dunread_002darticle"></a>
+    </dd>
+
+    <dt><kbd>p</kbd></dt>
+
+    <dd>
+      <p>Move point to the previous unread group.</p><a name=
+      "index-q-_0028Gnus-Group-mode_0029" id=
+      "index-q-_0028Gnus-Group-mode_0029"></a> <a name=
+      "index-gnus_002dgroup_002dexit" id=
+      "index-gnus_002dgroup_002dexit"></a>
+    </dd>
+
+    <dt><kbd>q</kbd></dt>
+
+    <dd>
+      <p>Update your Gnus settings, and quit Gnus.</p>
+    </dd>
+  </dl>
 </body>
 </html>

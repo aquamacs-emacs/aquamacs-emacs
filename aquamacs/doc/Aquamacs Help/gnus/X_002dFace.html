@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>X-Face - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Image-Enhancements.html#Image-Enhancements" title="Image Enhancements">
-<link rel="next" href="Face.html#Face" title="Face">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>X-Face - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Image-Enhancements.html#Image-Enhancements"
+  title="Image Enhancements" />
+  <link rel="next" href="Face.html#Face" title="Face" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +32,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,71 +45,102 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="X-Face"></a>
-<a name="X_002dFace"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Face.html#Face">Face</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Image-Enhancements.html#Image-Enhancements">Image Enhancements</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="X-Face" id="X-Face"></a> <a name="X_002dFace" id=
+    "X_002dFace"></a>
 
-<h4 class="subsection">9.15.1 X-Face</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Face.html#Face">Face</a>, Up:&nbsp;<a rel="up" accesskey="u"
+    href="Image-Enhancements.html#Image-Enhancements">Image
+    Enhancements</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-x_002dface-2664"></a>
-<code>X-Face</code> headers describe a 48x48 pixel black-and-white (1 bit
-depth) image that's supposed to represent the author of the message. 
-It seems to be supported by an ever-growing number of mail and news
-readers.
+  <h4 class="subsection">9.15.1 X-Face</h4>
 
-   <p><a name="index-x_002dface-2665"></a><a name="index-gnus_002darticle_002ddisplay_002dx_002dface-2666"></a><a name="index-gnus_002darticle_002dx_002dface_002dcommand-2667"></a><a name="index-gnus_002darticle_002dx_002dface_002dtoo_002dugly-2668"></a><!-- @anchor{X-Face} -->
+  <p><a name="index-x_002dface-2664" id=
+  "index-x_002dface-2664"></a> <code>X-Face</code> headers describe
+  a 48x48 pixel black-and-white (1 bit depth) image that's supposed
+  to represent the author of the message. It seems to be supported
+  by an ever-growing number of mail and news readers.</p>
 
-   <p>Viewing an <code>X-Face</code> header either requires an Emacs that has
-&lsquo;<samp><span class="samp">compface</span></samp>&rsquo; support (which most XEmacs versions have), or that you
-have suitable conversion or display programs installed.  If your Emacs
-has image support the default action is to display the face before the
-<code>From</code> header.  If there's no native <code>X-Face</code> support, Gnus
-will try to convert the <code>X-Face</code> header using external programs
-from the <code>pbmplus</code> package and friends, see below.  For XEmacs it's
-faster if XEmacs has been compiled with <code>X-Face</code> support.  The
-default action under Emacs without image support is to fork off the
-<code>display</code> program.
+  <p><a name="index-x_002dface-2665" id=
+  "index-x_002dface-2665"></a><a name=
+  "index-gnus_002darticle_002ddisplay_002dx_002dface-2666" id=
+  "index-gnus_002darticle_002ddisplay_002dx_002dface-2666"></a><a name="index-gnus_002darticle_002dx_002dface_002dcommand-2667"
+  id=
+  "index-gnus_002darticle_002dx_002dface_002dcommand-2667"></a><a name="index-gnus_002darticle_002dx_002dface_002dtoo_002dugly-2668"
+  id=
+  "index-gnus_002darticle_002dx_002dface_002dtoo_002dugly-2668"></a><!-- @anchor{X-Face} --></p>
 
-   <p>On a GNU/Linux system, the <code>display</code> program is included in the
-ImageMagick package.  For external conversion programs look for packages
-with names like <code>netpbm</code>, <code>libgr-progs</code> and <code>compface</code>. 
-On Windows, you may use the packages <code>netpbm</code> and <code>compface</code>
-from <a href="http://gnuwin32.sourceforge.net">http://gnuwin32.sourceforge.net</a>.  You need to add the
-<code>bin</code> directory to your <code>PATH</code> environment variable. 
-<!-- In fact only the following DLLs and binaries seem to be required: -->
-<!-- compface1.dll uncompface.exe libnetpbm10.dll icontopbm.exe -->
+  <p>Viewing an <code>X-Face</code> header either requires an Emacs
+  that has &lsquo;<samp><span class=
+  "samp">compface</span></samp>&rsquo; support (which most XEmacs
+  versions have), or that you have suitable conversion or display
+  programs installed. If your Emacs has image support the default
+  action is to display the face before the <code>From</code>
+  header. If there's no native <code>X-Face</code> support, Gnus
+  will try to convert the <code>X-Face</code> header using external
+  programs from the <code>pbmplus</code> package and friends, see
+  below. For XEmacs it's faster if XEmacs has been compiled with
+  <code>X-Face</code> support. The default action under Emacs
+  without image support is to fork off the <code>display</code>
+  program.</p>
 
-   <p>The variable <code>gnus-article-x-face-command</code> controls which programs
-are used to display the <code>X-Face</code> header.  If this variable is a
-string, this string will be executed in a sub-shell.  If it is a
-function, this function will be called with the face as the argument. 
-If <code>gnus-article-x-face-too-ugly</code> (which is a regexp) matches the
-<code>From</code> header, the face will not be shown.
+  <p>On a GNU/Linux system, the <code>display</code> program is
+  included in the ImageMagick package. For external conversion
+  programs look for packages with names like <code>netpbm</code>,
+  <code>libgr-progs</code> and <code>compface</code>. On Windows,
+  you may use the packages <code>netpbm</code> and
+  <code>compface</code> from <a href=
+  "http://gnuwin32.sourceforge.net">http://gnuwin32.sourceforge.net</a>.
+  You need to add the <code>bin</code> directory to your
+  <code>PATH</code> environment variable. 
+  <!-- In fact only the following DLLs and binaries seem to be required: -->
+  <!-- compface1.dll uncompface.exe libnetpbm10.dll icontopbm.exe --></p>
 
-   <p>(Note: <code>x-face</code> is used in the variable/function names, not
-<code>xface</code>).
+  <p>The variable <code>gnus-article-x-face-command</code> controls
+  which programs are used to display the <code>X-Face</code>
+  header. If this variable is a string, this string will be
+  executed in a sub-shell. If it is a function, this function will
+  be called with the face as the argument. If
+  <code>gnus-article-x-face-too-ugly</code> (which is a regexp)
+  matches the <code>From</code> header, the face will not be
+  shown.</p>
 
-<p class="noindent">Face and variable:
+  <p>(Note: <code>x-face</code> is used in the variable/function
+  names, not <code>xface</code>).</p>
 
-     <dl>
-<dt><code>gnus-x-face</code><dd><a name="index-gnus_002dx_002dface-2669"></a>Face to show X-Face.  The colors from this face are used as the
-foreground and background colors of the displayed X-Faces.  The
-default colors are black and white.
+  <p class="noindent">Face and variable:</p>
 
-     <br><dt><code>gnus-face-properties-alist</code><dd><a name="index-gnus_002dface_002dproperties_002dalist-2670"></a>Alist of image types and properties applied to Face (see <a href="Face.html#Face">Face</a>) and
-X-Face images.  The default value is <code>((pbm . (:face gnus-x-face))
-(png . nil))</code> for Emacs or <code>((xface . (:face gnus-x-face)))</code> for
-XEmacs.  Here are examples:
+  <dl>
+    <dt><code>gnus-x-face</code></dt>
 
-     <pre class="lisp">          ;; Specify the altitude of Face and X-Face images in the From header.
+    <dd><a name="index-gnus_002dx_002dface-2669" id=
+    "index-gnus_002dx_002dface-2669"></a>Face to show X-Face. The
+    colors from this face are used as the foreground and background
+    colors of the displayed X-Faces. The default colors are black
+    and white.<br /></dd>
+
+    <dt><code>gnus-face-properties-alist</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dface_002dproperties_002dalist-2670"
+      id=
+      "index-gnus_002dface_002dproperties_002dalist-2670"></a>Alist
+      of image types and properties applied to Face (see <a href=
+      "Face.html#Face">Face</a>) and X-Face images. The default
+      value is <code>((pbm . (:face gnus-x-face)) (png .
+      nil))</code> for Emacs or <code>((xface . (:face
+      gnus-x-face)))</code> for XEmacs. Here are examples:
+      <pre class="lisp">
+          ;; Specify the altitude of Face and X-Face images in the From header.
           (setq gnus-face-properties-alist
                 '((pbm . (:face gnus-x-face :ascent 80))
                   (png . (:ascent 80))))
@@ -109,49 +150,80 @@ XEmacs.  Here are examples:
                 '((pbm . (:face gnus-x-face :relief -2))
                   (png . (:relief -2))))
 </pre>
-     <p>see <a href="../elisp/Image-Descriptors.html#Image-Descriptors">Image Descriptors</a> for the valid properties for various image types. 
-Currently, <code>pbm</code> is used for X-Face images and <code>png</code> is used
-for Face images in Emacs.  Only the <code>:face</code> property is effective
-on the <code>xface</code> image type in XEmacs if it is built with the
-&lsquo;<samp><span class="samp">libcompface</span></samp>&rsquo; library. 
-</dl>
 
-   <p>If you use posting styles, you can use an <code>x-face-file</code> entry in
-<code>gnus-posting-styles</code>, See <a href="Posting-Styles.html#Posting-Styles">Posting Styles</a>.  If you don't, Gnus
-provides a few convenience functions and variables to allow easier
-insertion of X-Face headers in outgoing messages.  You also need the
-above mentioned ImageMagick, netpbm or other image conversion packages
-(depending the values of the variables below) for these functions.
+      <p>see <a href=
+      "../elisp/Image-Descriptors.html#Image-Descriptors">Image
+      Descriptors</a> for the valid properties for various image
+      types. Currently, <code>pbm</code> is used for X-Face images
+      and <code>png</code> is used for Face images in Emacs. Only
+      the <code>:face</code> property is effective on the
+      <code>xface</code> image type in XEmacs if it is built with
+      the &lsquo;<samp><span class=
+      "samp">libcompface</span></samp>&rsquo; library.</p>
+    </dd>
+  </dl>
 
-   <p><a name="index-gnus_002drandom_002dx_002dface-2671"></a><a name="index-gnus_002dconvert_002dpbm_002dto_002dx_002dface_002dcommand-2672"></a><a name="index-gnus_002dx_002dface_002ddirectory-2673"></a><code>gnus-random-x-face</code> goes through all the &lsquo;<samp><span class="samp">pbm</span></samp>&rsquo; files in
-<code>gnus-x-face-directory</code> and picks one at random, and then
-converts it to the X-Face format by using the
-<code>gnus-convert-pbm-to-x-face-command</code> shell command.  The
-&lsquo;<samp><span class="samp">pbm</span></samp>&rsquo; files should be 48x48 pixels big.  It returns the X-Face
-header data as a string.
+  <p>If you use posting styles, you can use an
+  <code>x-face-file</code> entry in
+  <code>gnus-posting-styles</code>, See <a href=
+  "Posting-Styles.html#Posting-Styles">Posting Styles</a>. If you
+  don't, Gnus provides a few convenience functions and variables to
+  allow easier insertion of X-Face headers in outgoing messages.
+  You also need the above mentioned ImageMagick, netpbm or other
+  image conversion packages (depending the values of the variables
+  below) for these functions.</p>
 
-   <p><a name="index-gnus_002dinsert_002drandom_002dx_002dface_002dheader-2674"></a><code>gnus-insert-random-x-face-header</code> calls
-<code>gnus-random-x-face</code> and inserts a &lsquo;<samp><span class="samp">X-Face</span></samp>&rsquo; header with the
-randomly generated data.
+  <p><a name="index-gnus_002drandom_002dx_002dface-2671" id=
+  "index-gnus_002drandom_002dx_002dface-2671"></a><a name=
+  "index-gnus_002dconvert_002dpbm_002dto_002dx_002dface_002dcommand-2672"
+  id=
+  "index-gnus_002dconvert_002dpbm_002dto_002dx_002dface_002dcommand-2672"></a><a name="index-gnus_002dx_002dface_002ddirectory-2673"
+  id=
+  "index-gnus_002dx_002dface_002ddirectory-2673"></a><code>gnus-random-x-face</code>
+  goes through all the &lsquo;<samp><span class=
+  "samp">pbm</span></samp>&rsquo; files in
+  <code>gnus-x-face-directory</code> and picks one at random, and
+  then converts it to the X-Face format by using the
+  <code>gnus-convert-pbm-to-x-face-command</code> shell command.
+  The &lsquo;<samp><span class="samp">pbm</span></samp>&rsquo;
+  files should be 48x48 pixels big. It returns the X-Face header
+  data as a string.</p>
 
-   <p><a name="index-gnus_002dx_002dface_002dfrom_002dfile-2675"></a><a name="index-gnus_002dconvert_002dimage_002dto_002dx_002dface_002dcommand-2676"></a><code>gnus-x-face-from-file</code> takes a GIF file as the parameter, and then
-converts the file to X-Face format by using the
-<code>gnus-convert-image-to-x-face-command</code> shell command.
+  <p><a name=
+  "index-gnus_002dinsert_002drandom_002dx_002dface_002dheader-2674"
+  id=
+  "index-gnus_002dinsert_002drandom_002dx_002dface_002dheader-2674">
+  </a><code>gnus-insert-random-x-face-header</code> calls
+  <code>gnus-random-x-face</code> and inserts a
+  &lsquo;<samp><span class="samp">X-Face</span></samp>&rsquo;
+  header with the randomly generated data.</p>
 
-   <p>Here's how you would typically use the first function.  Put something
-like the following in your <samp><span class="file">~/.gnus.el</span></samp> file:
+  <p><a name="index-gnus_002dx_002dface_002dfrom_002dfile-2675" id=
+  "index-gnus_002dx_002dface_002dfrom_002dfile-2675"></a><a name=
+  "index-gnus_002dconvert_002dimage_002dto_002dx_002dface_002dcommand-2676"
+  id=
+  "index-gnus_002dconvert_002dimage_002dto_002dx_002dface_002dcommand-2676"></a><code>gnus-x-face-from-file</code>
+  takes a GIF file as the parameter, and then converts the file to
+  X-Face format by using the
+  <code>gnus-convert-image-to-x-face-command</code> shell
+  command.</p>
 
-<pre class="lisp">     (setq message-required-news-headers
+  <p>Here's how you would typically use the first function. Put
+  something like the following in your <samp><span class=
+  "file">~/.gnus.el</span></samp> file:</p>
+  <pre class="lisp">
+     (setq message-required-news-headers
            (nconc message-required-news-headers
                   (list '(X-Face . gnus-random-x-face))))
 </pre>
-   <p>Using the last function would be something like this:
 
-<pre class="lisp">     (setq message-required-news-headers
+  <p>Using the last function would be something like this:</p>
+  <pre class="lisp">
+     (setq message-required-news-headers
            (nconc message-required-news-headers
                   (list '(X-Face . (lambda ()
                                      (gnus-x-face-from-file
                                       "~/My-face.gif"))))))
 </pre>
-   </body></html>
-
+</body>
+</html>

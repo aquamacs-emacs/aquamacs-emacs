@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,103 +20,149 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Basic Indent</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Basic Indent">
-<meta name="keywords" content="GNU Emacs Manual: Basic Indent">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Program-Indent.html#Program-Indent" rel="up" title="Program Indent">
-<link href="Multi_002dline-Indent.html#Multi_002dline-Indent" rel="next" title="Multi-line Indent">
-<link href="Program-Indent.html#Program-Indent" rel="prev" title="Program Indent">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Basic Indent</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Basic Indent" />
+  <meta name="keywords" content="GNU Emacs Manual: Basic Indent" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Program-Indent.html#Program-Indent" rel="up" title=
+  "Program Indent" />
+  <link href="Multi_002dline-Indent.html#Multi_002dline-Indent"
+  rel="next" title="Multi-line Indent" />
+  <link href="Program-Indent.html#Program-Indent" rel="prev" title=
+  "Program Indent" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Basic-Indent" id="Basic-Indent"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Multi_002dline-Indent.html#Multi_002dline-Indent" accesskey=
+    "n" rel="next">Multi-line Indent</a>, Up: <a href=
+    "Program-Indent.html#Program-Indent" accesskey="u" rel=
+    "up">Program Indent</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Program-Indentation-Commands" id=
+  "Basic-Program-Indentation-Commands"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Indent"></a>
-<div class="header">
-<p>
-Next: <a href="Multi_002dline-Indent.html#Multi_002dline-Indent" accesskey="n" rel="next">Multi-line Indent</a>, Up: <a href="Program-Indent.html#Program-Indent" accesskey="u" rel="up">Program Indent</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Program-Indentation-Commands"></a>
-<h4 class="subsection">26.3.1 Basic Program Indentation Commands</h4>
+  <h4 class="subsection">26.3.1 Basic Program Indentation
+  Commands</h4>
 
-<dl compact="compact">
-<dt><kbd><span class="key">TAB</span></kbd></dt>
-<dd><p>Adjust indentation of current line (<code>indent-for-tab-command</code>).
-</p></dd>
-<dt><kbd><span class="key">RET</span></kbd></dt>
-<dd><p>Insert a newline, then adjust indentation of following line
-(<code>newline</code>).
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd><span class="key">TAB</span></kbd></dt>
 
-<a name="index-TAB-_0028programming-modes_0029"></a>
-<a name="index-c_002dindent_002dcommand"></a>
-<a name="index-indent_002dline_002dfunction"></a>
-<a name="index-indent_002dfor_002dtab_002dcommand-1"></a>
-<p>The basic indentation command is <tt class="key">TAB</tt>
-(<code>indent-for-tab-command</code>), which was documented in
-<a href="Indentation.html#Indentation">Indentation</a>.  In programming language modes, <tt class="key">TAB</tt> indents
-the current line, based on the indentation and syntactic content of
-the preceding lines; if the region is active, <tt class="key">TAB</tt> indents each
-line within the region, not just the current line.
-</p>
-<p>The command <tt class="key">RET</tt> (<code>newline</code>), which was documented in
-<a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>, does the same as <kbd>C-j</kbd> followed by
-<tt class="key">TAB</tt>: it inserts a new line, then adjusts the line&rsquo;s indentation.
-</p>
-<p>When indenting a line that starts within a parenthetical grouping,
-Emacs usually places the start of the line under the preceding line
-within the group, or under the text after the parenthesis.  If you
-manually give one of these lines a nonstandard indentation (e.g., for
-aesthetic purposes), the lines below will follow it.
-</p>
-<p>The indentation commands for most programming language modes assume
-that a open-parenthesis, open-brace or other opening delimiter at the
-left margin is the start of a function.  If the code you are editing
-violates this assumption&mdash;even if the delimiters occur in strings or
-comments&mdash;you must set <code>open-paren-in-column-0-is-defun-start</code>
-to <code>nil</code> for indentation to work properly.  See <a href="Left-Margin-Paren.html#Left-Margin-Paren">Left Margin Paren</a>.
-</p>
+    <dd>
+      <p>Adjust indentation of current line
+      (<code>indent-for-tab-command</code>).</p>
+    </dd>
 
+    <dt><kbd><span class="key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Insert a newline, then adjust indentation of following
+      line (<code>newline</code>).</p>
+    </dd>
+  </dl><a name="index-TAB-_0028programming-modes_0029" id=
+  "index-TAB-_0028programming-modes_0029"></a> <a name=
+  "index-c_002dindent_002dcommand" id=
+  "index-c_002dindent_002dcommand"></a> <a name=
+  "index-indent_002dline_002dfunction" id=
+  "index-indent_002dline_002dfunction"></a> <a name=
+  "index-indent_002dfor_002dtab_002dcommand-1" id=
+  "index-indent_002dfor_002dtab_002dcommand-1"></a>
 
+  <p>The basic indentation command is <tt class="key">TAB</tt>
+  (<code>indent-for-tab-command</code>), which was documented in
+  <a href="Indentation.html#Indentation">Indentation</a>. In
+  programming language modes, <tt class="key">TAB</tt> indents the
+  current line, based on the indentation and syntactic content of
+  the preceding lines; if the region is active, <tt class=
+  "key">TAB</tt> indents each line within the region, not just the
+  current line.</p>
+
+  <p>The command <tt class="key">RET</tt> (<code>newline</code>),
+  which was documented in <a href=
+  "Inserting-Text.html#Inserting-Text">Inserting Text</a>, does the
+  same as <kbd>C-j</kbd> followed by <tt class="key">TAB</tt>: it
+  inserts a new line, then adjusts the line&rsquo;s
+  indentation.</p>
+
+  <p>When indenting a line that starts within a parenthetical
+  grouping, Emacs usually places the start of the line under the
+  preceding line within the group, or under the text after the
+  parenthesis. If you manually give one of these lines a
+  nonstandard indentation (e.g., for aesthetic purposes), the lines
+  below will follow it.</p>
+
+  <p>The indentation commands for most programming language modes
+  assume that a open-parenthesis, open-brace or other opening
+  delimiter at the left margin is the start of a function. If the
+  code you are editing violates this assumption&mdash;even if the
+  delimiters occur in strings or comments&mdash;you must set
+  <code>open-paren-in-column-0-is-defun-start</code> to
+  <code>nil</code> for indentation to work properly. See <a href=
+  "Left-Margin-Paren.html#Left-Margin-Paren">Left Margin
+  Paren</a>.</p>
 </body>
 </html>

@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Recursion Depth - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Troubleshooting-Commands.html#Troubleshooting-Commands" title="Troubleshooting Commands">
-<link rel="prev" href="Autoloading-Problems.html#Autoloading-Problems" title="Autoloading Problems">
-<link rel="next" href="Caches.html#Caches" title="Caches">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Recursion Depth - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Troubleshooting-Commands.html#Troubleshooting-Commands" title=
+  "Troubleshooting Commands" />
+  <link rel="prev" href=
+  "Autoloading-Problems.html#Autoloading-Problems" title=
+  "Autoloading Problems" />
+  <link rel="next" href="Caches.html#Caches" title="Caches" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +39,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,35 +52,61 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Recursion-Depth"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Caches.html#Caches">Caches</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Autoloading-Problems.html#Autoloading-Problems">Autoloading Problems</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Troubleshooting-Commands.html#Troubleshooting-Commands">Troubleshooting Commands</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Recursion-Depth" id="Recursion-Depth"></a>
 
-<h4 class="subsection">4.11.2 Recursion Depth</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Caches.html#Caches">Caches</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Autoloading-Problems.html#Autoloading-Problems">Autoloading
+    Problems</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Troubleshooting-Commands.html#Troubleshooting-Commands">Troubleshooting
+    Commands</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-M-223"></a><a name="index-I-M-224"></a><a name="index-calc_002dmore_002drecursion_002ddepth-225"></a><a name="index-calc_002dless_002drecursion_002ddepth-226"></a><a name="index-Recursion-depth-227"></a><a name="index-g_t_0060_0060Computation-got-stuck_0027_0027-message-228"></a><a name="index-g_t_0040code_007bmax_002dlisp_002deval_002ddepth_007d-229"></a><a name="index-g_t_0040code_007bmax_002dspecpdl_002dsize_007d-230"></a>Calc uses recursion in many of its calculations.  Emacs Lisp keeps a
-variable <code>max-lisp-eval-depth</code> which limits the amount of recursion
-possible in an attempt to recover from program bugs.  If a calculation
-ever halts incorrectly with the message &ldquo;Computation got stuck or
-ran too long,&rdquo; use the <kbd>M</kbd> command (<code>calc-more-recursion-depth</code>)
-to increase this limit.  (Of course, this will not help if the
-calculation really did get stuck due to some problem inside Calc.)
+  <h4 class="subsection">4.11.2 Recursion Depth</h4>
 
-   <p>The limit is always increased (multiplied) by a factor of two.  There
-is also an <kbd>I M</kbd> (<code>calc-less-recursion-depth</code>) command which
-decreases this limit by a factor of two, down to a minimum value of 200. 
-The default value is 1000.
+  <p class="noindent"><a name="index-M-223" id=
+  "index-M-223"></a><a name="index-I-M-224" id=
+  "index-I-M-224"></a><a name=
+  "index-calc_002dmore_002drecursion_002ddepth-225" id=
+  "index-calc_002dmore_002drecursion_002ddepth-225"></a><a name=
+  "index-calc_002dless_002drecursion_002ddepth-226" id=
+  "index-calc_002dless_002drecursion_002ddepth-226"></a><a name=
+  "index-Recursion-depth-227" id=
+  "index-Recursion-depth-227"></a><a name=
+  "index-g_t_0060_0060Computation-got-stuck_0027_0027-message-228"
+  id=
+  "index-g_t_0060_0060Computation-got-stuck_0027_0027-message-228"></a><a name="index-g_t_0040code_007bmax_002dlisp_002deval_002ddepth_007d-229"
+  id=
+  "index-g_t_0040code_007bmax_002dlisp_002deval_002ddepth_007d-229"></a><a name="index-g_t_0040code_007bmax_002dspecpdl_002dsize_007d-230"
+  id=
+  "index-g_t_0040code_007bmax_002dspecpdl_002dsize_007d-230"></a>Calc
+  uses recursion in many of its calculations. Emacs Lisp keeps a
+  variable <code>max-lisp-eval-depth</code> which limits the amount
+  of recursion possible in an attempt to recover from program bugs.
+  If a calculation ever halts incorrectly with the message
+  &ldquo;Computation got stuck or ran too long,&rdquo; use the
+  <kbd>M</kbd> command (<code>calc-more-recursion-depth</code>) to
+  increase this limit. (Of course, this will not help if the
+  calculation really did get stuck due to some problem inside
+  Calc.)</p>
 
-   <p>These commands also double or halve <code>max-specpdl-size</code>, another
-internal Lisp recursion limit.  The minimum value for this limit is 600.
+  <p>The limit is always increased (multiplied) by a factor of two.
+  There is also an <kbd>I M</kbd>
+  (<code>calc-less-recursion-depth</code>) command which decreases
+  this limit by a factor of two, down to a minimum value of 200.
+  The default value is 1000.</p>
 
-   </body></html>
-
+  <p>These commands also double or halve
+  <code>max-specpdl-size</code>, another internal Lisp recursion
+  limit. The minimum value for this limit is 600.</p>
+</body>
+</html>

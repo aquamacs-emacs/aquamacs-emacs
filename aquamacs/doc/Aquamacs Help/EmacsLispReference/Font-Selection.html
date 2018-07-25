@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,186 +19,270 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Font Selection</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Font Selection">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Font Selection">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Faces.html#Faces" rel="up" title="Faces">
-<link href="Font-Lookup.html#Font-Lookup" rel="next" title="Font Lookup">
-<link href="Basic-Faces.html#Basic-Faces" rel="prev" title="Basic Faces">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Font Selection</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Font Selection" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Font Selection" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Faces.html#Faces" rel="up" title="Faces" />
+  <link href="Font-Lookup.html#Font-Lookup" rel="next" title=
+  "Font Lookup" />
+  <link href="Basic-Faces.html#Basic-Faces" rel="prev" title=
+  "Basic Faces" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Font-Selection" id="Font-Selection"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Font-Lookup.html#Font-Lookup" accesskey="n"
+    rel="next">Font Lookup</a>, Previous: <a href=
+    "Basic-Faces.html#Basic-Faces" accesskey="p" rel="prev">Basic
+    Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel=
+    "up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Font-Selection-1" id="Font-Selection-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Font-Selection"></a>
-<div class="header">
-<p>
-Next: <a href="Font-Lookup.html#Font-Lookup" accesskey="n" rel="next">Font Lookup</a>, Previous: <a href="Basic-Faces.html#Basic-Faces" accesskey="p" rel="prev">Basic Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Font-Selection-1"></a>
-<h4 class="subsection">37.12.9 Font Selection</h4>
-<a name="index-font-selection"></a>
-<a name="index-selecting-a-font"></a>
+  <h4 class="subsection">37.12.9 Font Selection</h4><a name=
+  "index-font-selection" id="index-font-selection"></a> <a name=
+  "index-selecting-a-font" id="index-selecting-a-font"></a>
 
-<p>Before Emacs can draw a character on a graphical display, it must
-select a <em>font</em> for that character<a name="DOCF20" href="#FOOT20"><sup>20</sup></a>.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Fonts.html#Fonts">Fonts</a> in <cite>The GNU Emacs Manual</cite>.  Normally,
-Emacs automatically chooses a font based on the faces assigned to that
-character&mdash;specifically, the face attributes <code>:family</code>,
-<code>:weight</code>, <code>:slant</code>, and <code>:width</code> (see <a href="Face-Attributes.html#Face-Attributes">Face Attributes</a>).  The choice of font also depends on the character to be
-displayed; some fonts can only display a limited set of characters.
-If no available font exactly fits the requirements, Emacs looks for
-the <em>closest matching font</em>.  The variables in this section
-control how Emacs makes this selection.
-</p>
-<dl>
-<dt><a name="index-face_002dfont_002dfamily_002dalternatives"></a>User Option: <strong>face-font-family-alternatives</strong></dt>
-<dd><p>If a given family is specified but does not exist, this variable
-specifies alternative font families to try.  Each element should have
-this form:
-</p>
-<div class="example">
-<pre class="example">(<var>family</var> <var>alternate-families</var>&hellip;)
-</pre></div>
+  <p>Before Emacs can draw a character on a graphical display, it
+  must select a <em>font</em> for that character<a name="DOCF20"
+  href="#FOOT20" id="DOCF20"><sup>20</sup></a>. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Fonts.html#Fonts">
+  Fonts</a> in <cite>The GNU Emacs Manual</cite>. Normally, Emacs
+  automatically chooses a font based on the faces assigned to that
+  character&mdash;specifically, the face attributes
+  <code>:family</code>, <code>:weight</code>, <code>:slant</code>,
+  and <code>:width</code> (see <a href=
+  "Face-Attributes.html#Face-Attributes">Face Attributes</a>). The
+  choice of font also depends on the character to be displayed;
+  some fonts can only display a limited set of characters. If no
+  available font exactly fits the requirements, Emacs looks for the
+  <em>closest matching font</em>. The variables in this section
+  control how Emacs makes this selection.</p>
 
-<p>If <var>family</var> is specified but not available, Emacs will try the other
-families given in <var>alternate-families</var>, one by one, until it finds a
-family that does exist.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-face_002dfont_002dfamily_002dalternatives"
+    id="index-face_002dfont_002dfamily_002dalternatives"></a>User
+    Option: <strong>face-font-family-alternatives</strong></dt>
 
-<dl>
-<dt><a name="index-face_002dfont_002dselection_002dorder"></a>User Option: <strong>face-font-selection-order</strong></dt>
-<dd><p>If there is no font that exactly matches all desired face attributes
-(<code>:width</code>, <code>:height</code>, <code>:weight</code>, and <code>:slant</code>),
-this variable specifies the order in which these attributes should be
-considered when selecting the closest matching font.  The value should
-be a list containing those four attribute symbols, in order of
-decreasing importance.  The default is <code>(:width :height :weight
-:slant)</code>.
-</p>
-<p>Font selection first finds the best available matches for the first
-attribute in the list; then, among the fonts which are best in that
-way, it searches for the best matches in the second attribute, and so
-on.
-</p>
-<p>The attributes <code>:weight</code> and <code>:width</code> have symbolic values in
-a range centered around <code>normal</code>.  Matches that are more extreme
-(farther from <code>normal</code>) are somewhat preferred to matches that are
-less extreme (closer to <code>normal</code>); this is designed to ensure that
-non-normal faces contrast with normal ones, whenever possible.
-</p>
-<p>One example of a case where this variable makes a difference is when the
-default font has no italic equivalent.  With the default ordering, the
-<code>italic</code> face will use a non-italic font that is similar to the
-default one.  But if you put <code>:slant</code> before <code>:height</code>, the
-<code>italic</code> face will use an italic font, even if its height is not
-quite right.
-</p></dd></dl>
+    <dd>
+      <p>If a given family is specified but does not exist, this
+      variable specifies alternative font families to try. Each
+      element should have this form:</p>
 
-<dl>
-<dt><a name="index-face_002dfont_002dregistry_002dalternatives"></a>User Option: <strong>face-font-registry-alternatives</strong></dt>
-<dd><p>This variable lets you specify alternative font registries to try, if a
-given registry is specified and doesn&rsquo;t exist.  Each element should have
-this form:
-</p>
-<div class="example">
-<pre class="example">(<var>registry</var> <var>alternate-registries</var>&hellip;)
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(<var>family</var> <var>alternate-families</var>&hellip;)
+</pre>
+      </div>
 
-<p>If <var>registry</var> is specified but not available, Emacs will try the
-other registries given in <var>alternate-registries</var>, one by one,
-until it finds a registry that does exist.
-</p></dd></dl>
+      <p>If <var>family</var> is specified but not available, Emacs
+      will try the other families given in
+      <var>alternate-families</var>, one by one, until it finds a
+      family that does exist.</p>
+    </dd>
+  </dl>
 
-<a name="index-scalable-fonts"></a>
-<p>Emacs can make use of scalable fonts, but by default it does not use
-them.
-</p>
-<dl>
-<dt><a name="index-scalable_002dfonts_002dallowed"></a>User Option: <strong>scalable-fonts-allowed</strong></dt>
-<dd><p>This variable controls which scalable fonts to use.  A value of
-<code>nil</code>, the default, means do not use scalable fonts.  <code>t</code>
-means to use any scalable font that seems appropriate for the text.
-</p>
-<p>Otherwise, the value must be a list of regular expressions.  Then a
-scalable font is enabled for use if its name matches any regular
-expression in the list.  For example,
-</p>
-<div class="example">
-<pre class="example">(setq scalable-fonts-allowed '(&quot;iso10646-1$&quot;))
-</pre></div>
+  <dl>
+    <dt><a name="index-face_002dfont_002dselection_002dorder" id=
+    "index-face_002dfont_002dselection_002dorder"></a>User Option:
+    <strong>face-font-selection-order</strong></dt>
 
-<p>allows the use of scalable fonts with registry <code>iso10646-1</code>.
-</p></dd></dl>
+    <dd>
+      <p>If there is no font that exactly matches all desired face
+      attributes (<code>:width</code>, <code>:height</code>,
+      <code>:weight</code>, and <code>:slant</code>), this variable
+      specifies the order in which these attributes should be
+      considered when selecting the closest matching font. The
+      value should be a list containing those four attribute
+      symbols, in order of decreasing importance. The default is
+      <code>(:width :height :weight :slant)</code>.</p>
 
-<dl>
-<dt><a name="index-face_002dfont_002drescale_002dalist"></a>Variable: <strong>face-font-rescale-alist</strong></dt>
-<dd><p>This variable specifies scaling for certain faces.  Its value should
-be a list of elements of the form
-</p>
-<div class="example">
-<pre class="example">(<var>fontname-regexp</var> . <var>scale-factor</var>)
-</pre></div>
+      <p>Font selection first finds the best available matches for
+      the first attribute in the list; then, among the fonts which
+      are best in that way, it searches for the best matches in the
+      second attribute, and so on.</p>
 
-<p>If <var>fontname-regexp</var> matches the font name that is about to be
-used, this says to choose a larger similar font according to the
-factor <var>scale-factor</var>.  You would use this feature to normalize
-the font size if certain fonts are bigger or smaller than their
-nominal heights and widths would suggest.
-</p></dd></dl>
+      <p>The attributes <code>:weight</code> and
+      <code>:width</code> have symbolic values in a range centered
+      around <code>normal</code>. Matches that are more extreme
+      (farther from <code>normal</code>) are somewhat preferred to
+      matches that are less extreme (closer to
+      <code>normal</code>); this is designed to ensure that
+      non-normal faces contrast with normal ones, whenever
+      possible.</p>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+      <p>One example of a case where this variable makes a
+      difference is when the default font has no italic equivalent.
+      With the default ordering, the <code>italic</code> face will
+      use a non-italic font that is similar to the default one. But
+      if you put <code>:slant</code> before <code>:height</code>,
+      the <code>italic</code> face will use an italic font, even if
+      its height is not quite right.</p>
+    </dd>
+  </dl>
 
-<h3><a name="FOOT20" href="#DOCF20">(20)</a></h3>
-<p>In this context, the
-term <em>font</em> has nothing to do with Font Lock (see <a href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>).</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Font-Lookup.html#Font-Lookup" accesskey="n" rel="next">Font Lookup</a>, Previous: <a href="Basic-Faces.html#Basic-Faces" accesskey="p" rel="prev">Basic Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-face_002dfont_002dregistry_002dalternatives"
+    id="index-face_002dfont_002dregistry_002dalternatives"></a>User
+    Option: <strong>face-font-registry-alternatives</strong></dt>
 
+    <dd>
+      <p>This variable lets you specify alternative font registries
+      to try, if a given registry is specified and doesn&rsquo;t
+      exist. Each element should have this form:</p>
 
+      <div class="example">
+        <pre class="example">
+(<var>registry</var> <var>alternate-registries</var>&hellip;)
+</pre>
+      </div>
 
+      <p>If <var>registry</var> is specified but not available,
+      Emacs will try the other registries given in
+      <var>alternate-registries</var>, one by one, until it finds a
+      registry that does exist.</p>
+    </dd>
+  </dl><a name="index-scalable-fonts" id=
+  "index-scalable-fonts"></a>
+
+  <p>Emacs can make use of scalable fonts, but by default it does
+  not use them.</p>
+
+  <dl>
+    <dt><a name="index-scalable_002dfonts_002dallowed" id=
+    "index-scalable_002dfonts_002dallowed"></a>User Option:
+    <strong>scalable-fonts-allowed</strong></dt>
+
+    <dd>
+      <p>This variable controls which scalable fonts to use. A
+      value of <code>nil</code>, the default, means do not use
+      scalable fonts. <code>t</code> means to use any scalable font
+      that seems appropriate for the text.</p>
+
+      <p>Otherwise, the value must be a list of regular
+      expressions. Then a scalable font is enabled for use if its
+      name matches any regular expression in the list. For
+      example,</p>
+
+      <div class="example">
+        <pre class="example">
+(setq scalable-fonts-allowed '("iso10646-1$"))
+</pre>
+      </div>
+
+      <p>allows the use of scalable fonts with registry
+      <code>iso10646-1</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-face_002dfont_002drescale_002dalist" id=
+    "index-face_002dfont_002drescale_002dalist"></a>Variable:
+    <strong>face-font-rescale-alist</strong></dt>
+
+    <dd>
+      <p>This variable specifies scaling for certain faces. Its
+      value should be a list of elements of the form</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>fontname-regexp</var> . <var>scale-factor</var>)
+</pre>
+      </div>
+
+      <p>If <var>fontname-regexp</var> matches the font name that
+      is about to be used, this says to choose a larger similar
+      font according to the factor <var>scale-factor</var>. You
+      would use this feature to normalize the font size if certain
+      fonts are bigger or smaller than their nominal heights and
+      widths would suggest.</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT20" href="#DOCF20" id="FOOT20">(20)</a></h3>
+
+    <p>In this context, the term <em>font</em> has nothing to do
+    with Font Lock (see <a href=
+    "Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>).</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Font-Lookup.html#Font-Lookup" accesskey="n"
+    rel="next">Font Lookup</a>, Previous: <a href=
+    "Basic-Faces.html#Basic-Faces" accesskey="p" rel="prev">Basic
+    Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel=
+    "up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

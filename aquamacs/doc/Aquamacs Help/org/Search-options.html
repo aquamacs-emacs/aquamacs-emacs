@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Search options - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Hyperlinks.html#Hyperlinks" title="Hyperlinks">
-<link rel="prev" href="Link-abbreviations.html#Link-abbreviations" title="Link abbreviations">
-<link rel="next" href="Custom-searches.html#Custom-searches" title="Custom searches">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Search options - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Hyperlinks.html#Hyperlinks" title=
+  "Hyperlinks" />
+  <link rel="prev" href=
+  "Link-abbreviations.html#Link-abbreviations" title=
+  "Link abbreviations" />
+  <link rel="next" href="Custom-searches.html#Custom-searches"
+  title="Custom searches" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +43,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,65 +56,103 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Search-options"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Custom-searches.html#Custom-searches">Custom searches</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Link-abbreviations.html#Link-abbreviations">Link abbreviations</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Hyperlinks.html#Hyperlinks">Hyperlinks</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Search-options" id="Search-options"></a>
 
-<h3 class="section">4.7 Search options in file links</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Custom-searches.html#Custom-searches">Custom searches</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Link-abbreviations.html#Link-abbreviations">Link
+    abbreviations</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Hyperlinks.html#Hyperlinks">Hyperlinks</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-search-option-in-file-links-473"></a><a name="index-file-links_002c-searching-474"></a>
-File links can contain additional information to make Emacs jump to a
-particular location in the file when following a link.  This can be a
-line number or a search option after a double<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> colon. For
-example, when the command <kbd>C-c l</kbd> creates a link (see <a href="Handling-links.html#Handling-links">Handling links</a>) to a file, it encodes the words in the current line as a search
-string that can be used to find this line back later when following the
-link with <kbd>C-c C-o</kbd>.
+  <h3 class="section">4.7 Search options in file links</h3>
 
-   <p>Here is the syntax of the different ways to attach a search to a file
-link, together with an explanation:
+  <p><a name="index-search-option-in-file-links-473" id=
+  "index-search-option-in-file-links-473"></a><a name=
+  "index-file-links_002c-searching-474" id=
+  "index-file-links_002c-searching-474"></a> File links can contain
+  additional information to make Emacs jump to a particular
+  location in the file when following a link. This can be a line
+  number or a search option after a double<a rel="footnote" href=
+  "#fn-1" name="fnd-1" id="fnd-1"><sup>1</sup></a> colon. For
+  example, when the command <kbd>C-c l</kbd> creates a link (see
+  <a href="Handling-links.html#Handling-links">Handling links</a>)
+  to a file, it encodes the words in the current line as a search
+  string that can be used to find this line back later when
+  following the link with <kbd>C-c C-o</kbd>.</p>
 
-<pre class="example">     [[file:~/code/main.c::255]]
+  <p>Here is the syntax of the different ways to attach a search to
+  a file link, together with an explanation:</p>
+  <pre class="example">
+     [[file:~/code/main.c::255]]
      [[file:~/xx.org::My Target]]
      [[file:~/xx.org::*My Target]]
      [[file:~/xx.org::#my-custom-id]]
      [[file:~/xx.org::/regexp/]]
 </pre>
-     <dl>
-<dt><code>255</code><dd>Jump to line 255. 
-<br><dt><code>My Target</code><dd>Search for a link target &lsquo;<samp><span class="samp">&lt;&lt;My Target&gt;&gt;</span></samp>&rsquo;, or do a text search for
-&lsquo;<samp><span class="samp">my target</span></samp>&rsquo;, similar to the search in internal links, see
-<a href="Internal-links.html#Internal-links">Internal links</a>.  In HTML export (see <a href="HTML-export.html#HTML-export">HTML export</a>), such a file
-link will become an HTML reference to the corresponding named anchor in
-the linked file. 
-<br><dt><code>*My Target</code><dd>In an Org file, restrict search to headlines. 
-<br><dt><code>#my-custom-id</code><dd>Link to a heading with a <code>CUSTOM_ID</code> property
-<br><dt><code>/regexp/</code><dd>Do a regular expression search for <code>regexp</code>.  This uses the Emacs
-command <code>occur</code> to list all matches in a separate window.  If the
-target file is in Org-mode, <code>org-occur</code> is used to create a
-sparse tree with the matches. 
-<!-- If the target file is a directory, -->
-<!-- @code{grep} will be used to search all files in the directory. -->
-</dl>
 
-   <p>As a degenerate case, a file link with an empty file name can be used
-to search the current file.  For example, <code>[[file:::find me]]</code> does
-a search for &lsquo;<samp><span class="samp">find me</span></samp>&rsquo; in the current file, just as
-&lsquo;<samp><span class="samp">[[find me]]</span></samp>&rsquo; would.
+  <dl>
+    <dt><code>255</code></dt>
 
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> For backward
-compatibility, line numbers can also follow a single colon.</p>
+    <dd>Jump to line 255.<br /></dd>
 
-   <hr></div>
+    <dt><code>My Target</code></dt>
 
-   </body></html>
+    <dd>Search for a link target &lsquo;<samp><span class=
+    "samp">&lt;&lt;My Target&gt;&gt;</span></samp>&rsquo;, or do a
+    text search for &lsquo;<samp><span class="samp">my
+    target</span></samp>&rsquo;, similar to the search in internal
+    links, see <a href=
+    "Internal-links.html#Internal-links">Internal links</a>. In
+    HTML export (see <a href="HTML-export.html#HTML-export">HTML
+    export</a>), such a file link will become an HTML reference to
+    the corresponding named anchor in the linked file.<br /></dd>
 
+    <dt><code>*My Target</code></dt>
+
+    <dd>In an Org file, restrict search to headlines.<br /></dd>
+
+    <dt><code>#my-custom-id</code></dt>
+
+    <dd>Link to a heading with a <code>CUSTOM_ID</code>
+    property<br /></dd>
+
+    <dt><code>/regexp/</code></dt>
+
+    <dd>Do a regular expression search for <code>regexp</code>.
+    This uses the Emacs command <code>occur</code> to list all
+    matches in a separate window. If the target file is in
+    Org-mode, <code>org-occur</code> is used to create a sparse
+    tree with the matches. 
+    <!-- If the target file is a directory, -->
+    <!-- @code{grep} will be used to search all files in the directory. --></dd>
+  </dl>
+
+  <p>As a degenerate case, a file link with an empty file name can
+  be used to search the current file. For example,
+  <code>[[file:::find me]]</code> does a search for
+  &lsquo;<samp><span class="samp">find me</span></samp>&rsquo; in
+  the current file, just as &lsquo;<samp><span class="samp">[[find
+  me]]</span></samp>&rsquo; would.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4>Footnotes</h4>
+
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> For backward compatibility, line numbers
+    can also follow a single colon.</p>
+    <hr />
+  </div>
+</body>
+</html>

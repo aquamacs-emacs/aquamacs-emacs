@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,153 +19,225 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Event Mod</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Event Mod">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Event Mod">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Reading-Input.html#Reading-Input" rel="up" title="Reading Input">
-<link href="Invoking-the-Input-Method.html#Invoking-the-Input-Method" rel="next" title="Invoking the Input Method">
-<link href="Reading-One-Event.html#Reading-One-Event" rel="prev" title="Reading One Event">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Event Mod</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Event Mod" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Event Mod" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Reading-Input.html#Reading-Input" rel="up" title=
+  "Reading Input" />
+  <link href=
+  "Invoking-the-Input-Method.html#Invoking-the-Input-Method" rel=
+  "next" title="Invoking the Input Method" />
+  <link href="Reading-One-Event.html#Reading-One-Event" rel="prev"
+  title="Reading One Event" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Event-Mod" id="Event-Mod"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Invoking-the-Input-Method.html#Invoking-the-Input-Method"
+    accesskey="n" rel="next">Invoking the Input Method</a>,
+    Previous: <a href="Reading-One-Event.html#Reading-One-Event"
+    accesskey="p" rel="prev">Reading One Event</a>, Up: <a href=
+    "Reading-Input.html#Reading-Input" accesskey="u" rel=
+    "up">Reading Input</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Modifying-and-Translating-Input-Events" id=
+  "Modifying-and-Translating-Input-Events"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Event-Mod"></a>
-<div class="header">
-<p>
-Next: <a href="Invoking-the-Input-Method.html#Invoking-the-Input-Method" accesskey="n" rel="next">Invoking the Input Method</a>, Previous: <a href="Reading-One-Event.html#Reading-One-Event" accesskey="p" rel="prev">Reading One Event</a>, Up: <a href="Reading-Input.html#Reading-Input" accesskey="u" rel="up">Reading Input</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Modifying-and-Translating-Input-Events"></a>
-<h4 class="subsection">20.8.3 Modifying and Translating Input Events</h4>
-<a name="index-modifiers-of-events"></a>
-<a name="index-translating-input-events"></a>
-<a name="index-event-translation"></a>
+  <h4 class="subsection">20.8.3 Modifying and Translating Input
+  Events</h4><a name="index-modifiers-of-events" id=
+  "index-modifiers-of-events"></a> <a name=
+  "index-translating-input-events" id=
+  "index-translating-input-events"></a> <a name=
+  "index-event-translation" id="index-event-translation"></a>
 
-<p>Emacs modifies every event it reads according to
-<code>extra-keyboard-modifiers</code>, then translates it through
-<code>keyboard-translate-table</code> (if applicable), before returning it
-from <code>read-event</code>.
-</p>
-<dl>
-<dt><a name="index-extra_002dkeyboard_002dmodifiers"></a>Variable: <strong>extra-keyboard-modifiers</strong></dt>
-<dd><p>This variable lets Lisp programs &ldquo;press&rdquo; the modifier keys on the
-keyboard.  The value is a character.  Only the modifiers of the
-character matter.  Each time the user types a keyboard key, it is
-altered as if those modifier keys were held down.  For instance, if
-you bind <code>extra-keyboard-modifiers</code> to <code>?\C-\M-a</code>, then all
-keyboard input characters typed during the scope of the binding will
-have the control and meta modifiers applied to them.  The character
-<code>?\C-@</code>, equivalent to the integer 0, does not count as a control
-character for this purpose, but as a character with no modifiers.
-Thus, setting <code>extra-keyboard-modifiers</code> to zero cancels any
-modification.
-</p>
-<p>When using a window system, the program can press any of the
-modifier keys in this way.  Otherwise, only the <tt class="key">CTL</tt> and <tt class="key">META</tt>
-keys can be virtually pressed.
-</p>
-<p>Note that this variable applies only to events that really come from
-the keyboard, and has no effect on mouse events or any other events.
-</p></dd></dl>
+  <p>Emacs modifies every event it reads according to
+  <code>extra-keyboard-modifiers</code>, then translates it through
+  <code>keyboard-translate-table</code> (if applicable), before
+  returning it from <code>read-event</code>.</p>
 
-<dl>
-<dt><a name="index-keyboard_002dtranslate_002dtable"></a>Variable: <strong>keyboard-translate-table</strong></dt>
-<dd><p>This terminal-local variable is the translate table for keyboard
-characters.  It lets you reshuffle the keys on the keyboard without
-changing any command bindings.  Its value is normally a char-table, or
-else <code>nil</code>.  (It can also be a string or vector, but this is
-considered obsolete.)
-</p>
-<p>If <code>keyboard-translate-table</code> is a char-table
-(see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>), then each character read from the keyboard is
-looked up in this char-table.  If the value found there is
-non-<code>nil</code>, then it is used instead of the actual input character.
-</p>
-<p>Note that this translation is the first thing that happens to a
-character after it is read from the terminal.  Record-keeping features
-such as <code>recent-keys</code> and dribble files record the characters after
-translation.
-</p>
-<p>Note also that this translation is done before the characters are
-supplied to input methods (see <a href="Input-Methods.html#Input-Methods">Input Methods</a>).  Use
-<code>translation-table-for-input</code> (see <a href="Translation-of-Characters.html#Translation-of-Characters">Translation of Characters</a>),
-if you want to translate characters after input methods operate.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-extra_002dkeyboard_002dmodifiers" id=
+    "index-extra_002dkeyboard_002dmodifiers"></a>Variable:
+    <strong>extra-keyboard-modifiers</strong></dt>
 
-<dl>
-<dt><a name="index-keyboard_002dtranslate"></a>Function: <strong>keyboard-translate</strong> <em>from to</em></dt>
-<dd><p>This function modifies <code>keyboard-translate-table</code> to translate
-character code <var>from</var> into character code <var>to</var>.  It creates
-the keyboard translate table if necessary.
-</p></dd></dl>
+    <dd>
+      <p>This variable lets Lisp programs &ldquo;press&rdquo; the
+      modifier keys on the keyboard. The value is a character. Only
+      the modifiers of the character matter. Each time the user
+      types a keyboard key, it is altered as if those modifier keys
+      were held down. For instance, if you bind
+      <code>extra-keyboard-modifiers</code> to
+      <code>?\C-\M-a</code>, then all keyboard input characters
+      typed during the scope of the binding will have the control
+      and meta modifiers applied to them. The character
+      <code>?\C-@</code>, equivalent to the integer 0, does not
+      count as a control character for this purpose, but as a
+      character with no modifiers. Thus, setting
+      <code>extra-keyboard-modifiers</code> to zero cancels any
+      modification.</p>
 
-<p>Here&rsquo;s an example of using the <code>keyboard-translate-table</code> to
-make <kbd>C-x</kbd>, <kbd>C-c</kbd> and <kbd>C-v</kbd> perform the cut, copy and paste
-operations:
-</p>
-<div class="example">
-<pre class="example">(keyboard-translate ?\C-x 'control-x)
+      <p>When using a window system, the program can press any of
+      the modifier keys in this way. Otherwise, only the <tt class=
+      "key">CTL</tt> and <tt class="key">META</tt> keys can be
+      virtually pressed.</p>
+
+      <p>Note that this variable applies only to events that really
+      come from the keyboard, and has no effect on mouse events or
+      any other events.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-keyboard_002dtranslate_002dtable" id=
+    "index-keyboard_002dtranslate_002dtable"></a>Variable:
+    <strong>keyboard-translate-table</strong></dt>
+
+    <dd>
+      <p>This terminal-local variable is the translate table for
+      keyboard characters. It lets you reshuffle the keys on the
+      keyboard without changing any command bindings. Its value is
+      normally a char-table, or else <code>nil</code>. (It can also
+      be a string or vector, but this is considered obsolete.)</p>
+
+      <p>If <code>keyboard-translate-table</code> is a char-table
+      (see <a href=
+      "Char_002dTables.html#Char_002dTables">Char-Tables</a>), then
+      each character read from the keyboard is looked up in this
+      char-table. If the value found there is non-<code>nil</code>,
+      then it is used instead of the actual input character.</p>
+
+      <p>Note that this translation is the first thing that happens
+      to a character after it is read from the terminal.
+      Record-keeping features such as <code>recent-keys</code> and
+      dribble files record the characters after translation.</p>
+
+      <p>Note also that this translation is done before the
+      characters are supplied to input methods (see <a href=
+      "Input-Methods.html#Input-Methods">Input Methods</a>). Use
+      <code>translation-table-for-input</code> (see <a href=
+      "Translation-of-Characters.html#Translation-of-Characters">Translation
+      of Characters</a>), if you want to translate characters after
+      input methods operate.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-keyboard_002dtranslate" id=
+    "index-keyboard_002dtranslate"></a>Function:
+    <strong>keyboard-translate</strong> <em>from to</em></dt>
+
+    <dd>
+      <p>This function modifies
+      <code>keyboard-translate-table</code> to translate character
+      code <var>from</var> into character code <var>to</var>. It
+      creates the keyboard translate table if necessary.</p>
+    </dd>
+  </dl>
+
+  <p>Here&rsquo;s an example of using the
+  <code>keyboard-translate-table</code> to make <kbd>C-x</kbd>,
+  <kbd>C-c</kbd> and <kbd>C-v</kbd> perform the cut, copy and paste
+  operations:</p>
+
+  <div class="example">
+    <pre class="example">
+(keyboard-translate ?\C-x 'control-x)
 (keyboard-translate ?\C-c 'control-c)
 (keyboard-translate ?\C-v 'control-v)
 (global-set-key [control-x] 'kill-region)
 (global-set-key [control-c] 'kill-ring-save)
 (global-set-key [control-v] 'yank)
-</pre></div>
+</pre>
+  </div>
 
-<p>On a graphical terminal that supports extended <acronym>ASCII</acronym> input,
-you can still get the standard Emacs meanings of one of those
-characters by typing it with the shift key.  That makes it a different
-character as far as keyboard translation is concerned, but it has the
-same usual meaning.
-</p>
-<p>See <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>, for mechanisms that translate event sequences
-at the level of <code>read-key-sequence</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Invoking-the-Input-Method.html#Invoking-the-Input-Method" accesskey="n" rel="next">Invoking the Input Method</a>, Previous: <a href="Reading-One-Event.html#Reading-One-Event" accesskey="p" rel="prev">Reading One Event</a>, Up: <a href="Reading-Input.html#Reading-Input" accesskey="u" rel="up">Reading Input</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>On a graphical terminal that supports extended
+  <acronym>ASCII</acronym> input, you can still get the standard
+  Emacs meanings of one of those characters by typing it with the
+  shift key. That makes it a different character as far as keyboard
+  translation is concerned, but it has the same usual meaning.</p>
 
+  <p>See <a href=
+  "Translation-Keymaps.html#Translation-Keymaps">Translation
+  Keymaps</a>, for mechanisms that translate event sequences at the
+  level of <code>read-key-sequence</code>.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Invoking-the-Input-Method.html#Invoking-the-Input-Method"
+    accesskey="n" rel="next">Invoking the Input Method</a>,
+    Previous: <a href="Reading-One-Event.html#Reading-One-Event"
+    accesskey="p" rel="prev">Reading One Event</a>, Up: <a href=
+    "Reading-Input.html#Reading-Input" accesskey="u" rel=
+    "up">Reading Input</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

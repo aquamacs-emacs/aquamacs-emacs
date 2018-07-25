@@ -1,14 +1,21 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>edt-user.el - EDT Emulation for Emacs</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="EDT Emulation for Emacs">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Customizing.html#Customizing" title="Customizing">
-<link rel="next" href="Words.html#Words" title="Words">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>edt-user.el - EDT Emulation for Emacs</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="EDT Emulation for Emacs" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Customizing.html#Customizing" title=
+  "Customizing" />
+  <link rel="next" href="Words.html#Words" title="Words" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the EDT emulation package for Emacs.
 
 Copyright (C) 1986, 1992, 1994, 1995, 1999, 2000, 2001, 2002,
@@ -27,8 +34,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,69 +47,84 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="edt-user.el"></a>
-<a name="edt_002duser_002eel"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Words.html#Words">Words</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Customizing.html#Customizing">Customizing</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="edt-user.el" id="edt-user.el"></a> <a name=
+    "edt_002duser_002eel" id="edt_002duser_002eel"></a>
 
-<h3 class="section">7.1 Creating your own <samp><span class="file">edt-user.el</span></samp> File</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Words.html#Words">Words</a>, Up:&nbsp;<a rel="up" accesskey=
+    "u" href="Customizing.html#Customizing">Customizing</a></p>
+    <hr />
+  </div>
 
-<p>A sample <samp><span class="file">edt-user.el</span></samp> file is provided in the Emacs <samp><span class="file">etc/</span></samp>
-directory.  You should use it as a guide to learn how you can customize
-EDT emulation bindings to your own liking.  Names used to identify the
-set of LK-201 keypad and function keys are:
+  <h3 class="section">7.1 Creating your own <samp><span class=
+  "file">edt-user.el</span></samp> File</h3>
 
-<pre class="example">     Keypad Keys:
+  <p>A sample <samp><span class="file">edt-user.el</span></samp>
+  file is provided in the Emacs <samp><span class=
+  "file">etc/</span></samp> directory. You should use it as a guide
+  to learn how you can customize EDT emulation bindings to your own
+  liking. Names used to identify the set of LK-201 keypad and
+  function keys are:</p>
+  <pre class="example">
+     Keypad Keys:
                      PF1 PF2 PF3 PF4
                      KP7 KP8 KP9 KP-
                      KP4 KP5 KP6 KP,
                      KP1 KP2 KP3
                      KP0     KPP KPE
 </pre>
-   <pre class="example">     Arrow Keys:
+  <pre class="example">
+     Arrow Keys:
                      LEFT RIGHT DOWN UP
 </pre>
-   <pre class="example">     Function Keys:
+  <pre class="example">
+     Function Keys:
                      F1 F2 F3 F4 F5  F6 F7 F8 F9 F10  F11 F12 F13 F14
                      HELP DO  F17 F18 F19 F20
      
                      FIND   INSERT   REMOVE
                      SELECT PREVIOUS NEXT
 </pre>
-   <p>Note: Many VT-200 terminals, and above, steal function keys &lt;F1&gt;
-through &lt;F5&gt; for terminal setup control and don't send anything to
-the host if pressed.  So customizing bindings to these keys may not work
-for you.
 
-   <p>There are three basic functions that do the EDT emulation custom
-bindings: <code>edt-bind-key</code>, <code>edt-bind-gold-key</code>, and
-<code>edt-bind-function-key</code>.
+  <p>Note: Many VT-200 terminals, and above, steal function keys
+  &lt;F1&gt; through &lt;F5&gt; for terminal setup control and
+  don't send anything to the host if pressed. So customizing
+  bindings to these keys may not work for you.</p>
 
-   <p>The first two are for binding functions to keys which are standard
-across most keyboards.  This makes them keyboard independent, making it
-possible to define these key bindings for all terminals in the file
-<samp><span class="file">edt.el</span></samp>.
+  <p>There are three basic functions that do the EDT emulation
+  custom bindings: <code>edt-bind-key</code>,
+  <code>edt-bind-gold-key</code>, and
+  <code>edt-bind-function-key</code>.</p>
 
-   <p>The first, <code>edt-bind-key</code>, is used typically to bind emacs commands
-to control keys, although some people use it to bind commands to other
-keys, as well.  (For example, some people use it to bind the VT200
-seldom used back-tick key (&lsquo;<samp><span class="samp">`</span></samp>&rsquo;) to the function &lsquo;<samp><span class="samp">ESC-prefix</span></samp>&rsquo;
-so it will behave like an &lt;ESC&gt; key.)  The second function,
-<code>edt-bind-gold-key</code>, is used to bind emacs commands to gold key
-sequences involving alpha-numeric keys, special character keys, and
-control keys.
+  <p>The first two are for binding functions to keys which are
+  standard across most keyboards. This makes them keyboard
+  independent, making it possible to define these key bindings for
+  all terminals in the file <samp><span class=
+  "file">edt.el</span></samp>.</p>
 
-   <p>The third function, <code>edt-bind-function-key</code>, is terminal dependent
-and is defined in a terminal specific file (see <samp><span class="file">edt-vt100.el</span></samp> for
-example).  It is used to bind emacs commands to LK-201 function keys, to
-keypad keys, and to gold sequences of those keys.
+  <p>The first, <code>edt-bind-key</code>, is used typically to
+  bind emacs commands to control keys, although some people use it
+  to bind commands to other keys, as well. (For example, some
+  people use it to bind the VT200 seldom used back-tick key
+  (&lsquo;<samp><span class="samp">`</span></samp>&rsquo;) to the
+  function &lsquo;<samp><span class=
+  "samp">ESC-prefix</span></samp>&rsquo; so it will behave like an
+  &lt;ESC&gt; key.) The second function,
+  <code>edt-bind-gold-key</code>, is used to bind emacs commands to
+  gold key sequences involving alpha-numeric keys, special
+  character keys, and control keys.</p>
 
-   </body></html>
-
+  <p>The third function, <code>edt-bind-function-key</code>, is
+  terminal dependent and is defined in a terminal specific file
+  (see <samp><span class="file">edt-vt100.el</span></samp> for
+  example). It is used to bind emacs commands to LK-201 function
+  keys, to keypad keys, and to gold sequences of those keys.</p>
+</body>
+</html>

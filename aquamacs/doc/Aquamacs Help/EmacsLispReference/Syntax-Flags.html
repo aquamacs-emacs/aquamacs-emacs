@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,173 +19,251 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Syntax Flags</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Syntax Flags">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Syntax Flags">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Syntax-Descriptors.html#Syntax-Descriptors" rel="up" title="Syntax Descriptors">
-<link href="Syntax-Table-Functions.html#Syntax-Table-Functions" rel="next" title="Syntax Table Functions">
-<link href="Syntax-Class-Table.html#Syntax-Class-Table" rel="prev" title="Syntax Class Table">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Syntax Flags</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Syntax Flags" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Syntax Flags" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Syntax-Descriptors.html#Syntax-Descriptors" rel="up"
+  title="Syntax Descriptors" />
+  <link href="Syntax-Table-Functions.html#Syntax-Table-Functions"
+  rel="next" title="Syntax Table Functions" />
+  <link href="Syntax-Class-Table.html#Syntax-Class-Table" rel=
+  "prev" title="Syntax Class Table" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Syntax-Flags" id="Syntax-Flags"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Syntax-Class-Table.html#Syntax-Class-Table" accesskey="p" rel=
+    "prev">Syntax Class Table</a>, Up: <a href=
+    "Syntax-Descriptors.html#Syntax-Descriptors" accesskey="u" rel=
+    "up">Syntax Descriptors</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Syntax-Flags-1" id="Syntax-Flags-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Syntax-Flags"></a>
-<div class="header">
-<p>
-Previous: <a href="Syntax-Class-Table.html#Syntax-Class-Table" accesskey="p" rel="prev">Syntax Class Table</a>, Up: <a href="Syntax-Descriptors.html#Syntax-Descriptors" accesskey="u" rel="up">Syntax Descriptors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Syntax-Flags-1"></a>
-<h4 class="subsection">34.2.2 Syntax Flags</h4>
-<a name="index-syntax-flags"></a>
+  <h4 class="subsection">34.2.2 Syntax Flags</h4><a name=
+  "index-syntax-flags" id="index-syntax-flags"></a>
 
-<p>In addition to the classes, entries for characters in a syntax table
-can specify flags.  There are eight possible flags, represented by the
-characters &lsquo;<samp>1</samp>&rsquo;, &lsquo;<samp>2</samp>&rsquo;, &lsquo;<samp>3</samp>&rsquo;, &lsquo;<samp>4</samp>&rsquo;, &lsquo;<samp>b</samp>&rsquo;, &lsquo;<samp>c</samp>&rsquo;,
-&lsquo;<samp>n</samp>&rsquo;, and &lsquo;<samp>p</samp>&rsquo;.
-</p>
-<p>All the flags except &lsquo;<samp>p</samp>&rsquo; are used to describe comment
-delimiters.  The digit flags are used for comment delimiters made up
-of 2 characters.  They indicate that a character can <em>also</em> be
-part of a comment sequence, in addition to the syntactic properties
-associated with its character class.  The flags are independent of the
-class and each other for the sake of characters such as &lsquo;<samp>*</samp>&rsquo; in
-C mode, which is a punctuation character, <em>and</em> the second
-character of a start-of-comment sequence (&lsquo;<samp>/*</samp>&rsquo;), <em>and</em> the
-first character of an end-of-comment sequence (&lsquo;<samp>*/</samp>&rsquo;).  The flags
-&lsquo;<samp>b</samp>&rsquo;, &lsquo;<samp>c</samp>&rsquo;, and &lsquo;<samp>n</samp>&rsquo; are used to qualify the corresponding
-comment delimiter.
-</p>
-<p>Here is a table of the possible flags for a character <var>c</var>,
-and what they mean:
-</p>
-<ul>
-<li> &lsquo;<samp>1</samp>&rsquo; means <var>c</var> is the start of a two-character comment-start
-sequence.
+  <p>In addition to the classes, entries for characters in a syntax
+  table can specify flags. There are eight possible flags,
+  represented by the characters &lsquo;<samp>1</samp>&rsquo;,
+  &lsquo;<samp>2</samp>&rsquo;, &lsquo;<samp>3</samp>&rsquo;,
+  &lsquo;<samp>4</samp>&rsquo;, &lsquo;<samp>b</samp>&rsquo;,
+  &lsquo;<samp>c</samp>&rsquo;, &lsquo;<samp>n</samp>&rsquo;, and
+  &lsquo;<samp>p</samp>&rsquo;.</p>
 
-</li><li> &lsquo;<samp>2</samp>&rsquo; means <var>c</var> is the second character of such a sequence.
+  <p>All the flags except &lsquo;<samp>p</samp>&rsquo; are used to
+  describe comment delimiters. The digit flags are used for comment
+  delimiters made up of 2 characters. They indicate that a
+  character can <em>also</em> be part of a comment sequence, in
+  addition to the syntactic properties associated with its
+  character class. The flags are independent of the class and each
+  other for the sake of characters such as
+  &lsquo;<samp>*</samp>&rsquo; in C mode, which is a punctuation
+  character, <em>and</em> the second character of a
+  start-of-comment sequence (&lsquo;<samp>/*</samp>&rsquo;),
+  <em>and</em> the first character of an end-of-comment sequence
+  (&lsquo;<samp>*/</samp>&rsquo;). The flags
+  &lsquo;<samp>b</samp>&rsquo;, &lsquo;<samp>c</samp>&rsquo;, and
+  &lsquo;<samp>n</samp>&rsquo; are used to qualify the
+  corresponding comment delimiter.</p>
 
-</li><li> &lsquo;<samp>3</samp>&rsquo; means <var>c</var> is the start of a two-character comment-end
-sequence.
+  <p>Here is a table of the possible flags for a character
+  <var>c</var>, and what they mean:</p>
 
-</li><li> &lsquo;<samp>4</samp>&rsquo; means <var>c</var> is the second character of such a sequence.
+  <ul>
+    <li>&lsquo;<samp>1</samp>&rsquo; means <var>c</var> is the
+    start of a two-character comment-start sequence.</li>
 
-</li><li> &lsquo;<samp>b</samp>&rsquo; means that <var>c</var> as a comment delimiter belongs to the
-alternative &ldquo;b&rdquo; comment style.  For a two-character comment starter,
-this flag is only significant on the second char, and for a 2-character
-comment ender it is only significant on the first char.
+    <li>&lsquo;<samp>2</samp>&rsquo; means <var>c</var> is the
+    second character of such a sequence.</li>
 
-</li><li> &lsquo;<samp>c</samp>&rsquo; means that <var>c</var> as a comment delimiter belongs to the
-alternative &ldquo;c&rdquo; comment style.  For a two-character comment
-delimiter, &lsquo;<samp>c</samp>&rsquo; on either character makes it of style &ldquo;c&rdquo;.
+    <li>&lsquo;<samp>3</samp>&rsquo; means <var>c</var> is the
+    start of a two-character comment-end sequence.</li>
 
-</li><li> &lsquo;<samp>n</samp>&rsquo; on a comment delimiter character specifies
-that this kind of comment can be nested.  For a two-character
-comment delimiter, &lsquo;<samp>n</samp>&rsquo; on either character makes it
-nestable.
+    <li>&lsquo;<samp>4</samp>&rsquo; means <var>c</var> is the
+    second character of such a sequence.</li>
 
-<a name="index-comment-style"></a>
-<p>Emacs supports several comment styles simultaneously in any one syntax
-table.  A comment style is a set of flags &lsquo;<samp>b</samp>&rsquo;, &lsquo;<samp>c</samp>&rsquo;, and
-&lsquo;<samp>n</samp>&rsquo;, so there can be up to 8 different comment styles.
-Each comment delimiter has a style and only matches comment delimiters
-of the same style.  Thus if a comment starts with the comment-start
-sequence of style &ldquo;bn&rdquo;, it will extend until the next matching
-comment-end sequence of style &ldquo;bn&rdquo;.
-</p>
-<p>The appropriate comment syntax settings for C++ can be as follows:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>/</samp>&rsquo;</dt>
-<dd><p>&lsquo;<samp>124</samp>&rsquo;
-</p></dd>
-<dt>&lsquo;<samp>*</samp>&rsquo;</dt>
-<dd><p>&lsquo;<samp>23b</samp>&rsquo;
-</p></dd>
-<dt>newline</dt>
-<dd><p>&lsquo;<samp>&gt;</samp>&rsquo;
-</p></dd>
-</dl>
+    <li>&lsquo;<samp>b</samp>&rsquo; means that <var>c</var> as a
+    comment delimiter belongs to the alternative &ldquo;b&rdquo;
+    comment style. For a two-character comment starter, this flag
+    is only significant on the second char, and for a 2-character
+    comment ender it is only significant on the first char.</li>
 
-<p>This defines four comment-delimiting sequences:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>/*</samp>&rsquo;</dt>
-<dd><p>This is a comment-start sequence for &ldquo;b&rdquo; style because the
-second character, &lsquo;<samp>*</samp>&rsquo;, has the &lsquo;<samp>b</samp>&rsquo; flag.
-</p>
-</dd>
-<dt>&lsquo;<samp>//</samp>&rsquo;</dt>
-<dd><p>This is a comment-start sequence for &ldquo;a&rdquo; style because the second
-character, &lsquo;<samp>/</samp>&rsquo;, does not have the &lsquo;<samp>b</samp>&rsquo; flag.
-</p>
-</dd>
-<dt>&lsquo;<samp>*/</samp>&rsquo;</dt>
-<dd><p>This is a comment-end sequence for &ldquo;b&rdquo; style because the first
-character, &lsquo;<samp>*</samp>&rsquo;, has the &lsquo;<samp>b</samp>&rsquo; flag.
-</p>
-</dd>
-<dt>newline</dt>
-<dd><p>This is a comment-end sequence for &ldquo;a&rdquo; style, because the newline
-character does not have the &lsquo;<samp>b</samp>&rsquo; flag.
-</p></dd>
-</dl>
+    <li>&lsquo;<samp>c</samp>&rsquo; means that <var>c</var> as a
+    comment delimiter belongs to the alternative &ldquo;c&rdquo;
+    comment style. For a two-character comment delimiter,
+    &lsquo;<samp>c</samp>&rsquo; on either character makes it of
+    style &ldquo;c&rdquo;.</li>
 
-</li><li> &lsquo;<samp>p</samp>&rsquo; identifies an additional prefix character for Lisp syntax.
-These characters are treated as whitespace when they appear between
-expressions.  When they appear within an expression, they are handled
-according to their usual syntax classes.
+    <li>&lsquo;<samp>n</samp>&rsquo; on a comment delimiter
+    character specifies that this kind of comment can be nested.
+    For a two-character comment delimiter,
+    &lsquo;<samp>n</samp>&rsquo; on either character makes it
+    nestable. <a name="index-comment-style" id=
+    "index-comment-style"></a>
 
-<p>The function <code>backward-prefix-chars</code> moves back over these
-characters, as well as over characters whose primary syntax class is
-prefix (&lsquo;<samp>'</samp>&rsquo;).  See <a href="Motion-and-Syntax.html#Motion-and-Syntax">Motion and Syntax</a>.
-</p></li></ul>
+      <p>Emacs supports several comment styles simultaneously in
+      any one syntax table. A comment style is a set of flags
+      &lsquo;<samp>b</samp>&rsquo;, &lsquo;<samp>c</samp>&rsquo;,
+      and &lsquo;<samp>n</samp>&rsquo;, so there can be up to 8
+      different comment styles. Each comment delimiter has a style
+      and only matches comment delimiters of the same style. Thus
+      if a comment starts with the comment-start sequence of style
+      &ldquo;bn&rdquo;, it will extend until the next matching
+      comment-end sequence of style &ldquo;bn&rdquo;.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Syntax-Class-Table.html#Syntax-Class-Table" accesskey="p" rel="prev">Syntax Class Table</a>, Up: <a href="Syntax-Descriptors.html#Syntax-Descriptors" accesskey="u" rel="up">Syntax Descriptors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>The appropriate comment syntax settings for C++ can be as
+      follows:</p>
 
+      <dl compact="compact">
+        <dt>&lsquo;<samp>/</samp>&rsquo;</dt>
 
+        <dd>
+          <p>&lsquo;<samp>124</samp>&rsquo;</p>
+        </dd>
 
+        <dt>&lsquo;<samp>*</samp>&rsquo;</dt>
+
+        <dd>
+          <p>&lsquo;<samp>23b</samp>&rsquo;</p>
+        </dd>
+
+        <dt>newline</dt>
+
+        <dd>
+          <p>&lsquo;<samp>&gt;</samp>&rsquo;</p>
+        </dd>
+      </dl>
+
+      <p>This defines four comment-delimiting sequences:</p>
+
+      <dl compact="compact">
+        <dt>&lsquo;<samp>/*</samp>&rsquo;</dt>
+
+        <dd>
+          <p>This is a comment-start sequence for &ldquo;b&rdquo;
+          style because the second character,
+          &lsquo;<samp>*</samp>&rsquo;, has the
+          &lsquo;<samp>b</samp>&rsquo; flag.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>//</samp>&rsquo;</dt>
+
+        <dd>
+          <p>This is a comment-start sequence for &ldquo;a&rdquo;
+          style because the second character,
+          &lsquo;<samp>/</samp>&rsquo;, does not have the
+          &lsquo;<samp>b</samp>&rsquo; flag.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>*/</samp>&rsquo;</dt>
+
+        <dd>
+          <p>This is a comment-end sequence for &ldquo;b&rdquo;
+          style because the first character,
+          &lsquo;<samp>*</samp>&rsquo;, has the
+          &lsquo;<samp>b</samp>&rsquo; flag.</p>
+        </dd>
+
+        <dt>newline</dt>
+
+        <dd>
+          <p>This is a comment-end sequence for &ldquo;a&rdquo;
+          style, because the newline character does not have the
+          &lsquo;<samp>b</samp>&rsquo; flag.</p>
+        </dd>
+      </dl>
+    </li>
+
+    <li>&lsquo;<samp>p</samp>&rsquo; identifies an additional
+    prefix character for Lisp syntax. These characters are treated
+    as whitespace when they appear between expressions. When they
+    appear within an expression, they are handled according to
+    their usual syntax classes.
+
+      <p>The function <code>backward-prefix-chars</code> moves back
+      over these characters, as well as over characters whose
+      primary syntax class is prefix
+      (&lsquo;<samp>'</samp>&rsquo;). See <a href=
+      "Motion-and-Syntax.html#Motion-and-Syntax">Motion and
+      Syntax</a>.</p>
+    </li>
+  </ul>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Syntax-Class-Table.html#Syntax-Class-Table" accesskey="p" rel=
+    "prev">Syntax Class Table</a>, Up: <a href=
+    "Syntax-Descriptors.html#Syntax-Descriptors" accesskey="u" rel=
+    "up">Syntax Descriptors</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

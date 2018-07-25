@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,185 +19,240 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Example Major Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Example Major Modes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Example Major Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Major-Modes.html#Major-Modes" rel="up" title="Major Modes">
-<link href="Minor-Modes.html#Minor-Modes" rel="next" title="Minor Modes">
-<link href="Generic-Modes.html#Generic-Modes" rel="prev" title="Generic Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Example Major
+  Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Example Major Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Example Major Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Major-Modes.html#Major-Modes" rel="up" title=
+  "Major Modes" />
+  <link href="Minor-Modes.html#Minor-Modes" rel="next" title=
+  "Minor Modes" />
+  <link href="Generic-Modes.html#Generic-Modes" rel="prev" title=
+  "Generic Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Example-Major-Modes" id="Example-Major-Modes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Generic-Modes.html#Generic-Modes"
+    accesskey="p" rel="prev">Generic Modes</a>, Up: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major
+    Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Major-Mode-Examples" id="Major-Mode-Examples"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Example-Major-Modes"></a>
-<div class="header">
-<p>
-Previous: <a href="Generic-Modes.html#Generic-Modes" accesskey="p" rel="prev">Generic Modes</a>, Up: <a href="Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Major-Mode-Examples"></a>
-<h4 class="subsection">22.2.9 Major Mode Examples</h4>
+  <h4 class="subsection">22.2.9 Major Mode Examples</h4>
 
-<p>Text mode is perhaps the simplest mode besides Fundamental mode.
-Here are excerpts from  <samp>text-mode.el</samp> that illustrate many of
-the conventions listed above:
-</p>
-<div class="smallexample">
-<pre class="smallexample">;; <span class="roman">Create the syntax table for this mode.</span>
+  <p>Text mode is perhaps the simplest mode besides Fundamental
+  mode. Here are excerpts from <samp>text-mode.el</samp> that
+  illustrate many of the conventions listed above:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+;; <span class=
+"roman">Create the syntax table for this mode.</span>
 (defvar text-mode-syntax-table
   (let ((st (make-syntax-table)))
-    (modify-syntax-entry ?\&quot; &quot;.   &quot; st)
-    (modify-syntax-entry ?\\ &quot;.   &quot; st)
+    (modify-syntax-entry ?\" ".   " st)
+    (modify-syntax-entry ?\\ ".   " st)
     ;; Add 'p' so M-c on 'hello' leads to 'Hello', not 'hello'.
-    (modify-syntax-entry ?' &quot;w p&quot; st)
+    (modify-syntax-entry ?' "w p" st)
     st)
-  &quot;Syntax table used while in `text-mode'.&quot;)
-</pre><pre class="smallexample">
+  "Syntax table used while in `text-mode'.")
+</pre>
+    <pre class="smallexample">
 ;; <span class="roman">Create the keymap for this mode.</span>
-</pre><pre class="smallexample">(defvar text-mode-map
+</pre>
+    <pre class="smallexample">
+(defvar text-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map &quot;\e\t&quot; 'ispell-complete-word)
+    (define-key map "\e\t" 'ispell-complete-word)
     map)
-  &quot;Keymap for `text-mode'.
+  "Keymap for `text-mode'.
 Many other modes, such as `mail-mode', `outline-mode' and
-`indented-text-mode', inherit all the commands defined in this map.&quot;)
-</pre></div>
+`indented-text-mode', inherit all the commands defined in this map.")
+</pre>
+  </div>
 
-<p>Here is how the actual mode command is defined now:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(define-derived-mode text-mode nil &quot;Text&quot;
-  &quot;Major mode for editing text written for humans to read.
+  <p>Here is how the actual mode command is defined now:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(define-derived-mode text-mode nil "Text"
+  "Major mode for editing text written for humans to read.
 In this mode, paragraphs are delimited only by blank or white lines.
 You can thus get the full benefit of adaptive filling
  (see the variable `adaptive-fill-mode').
 \\{text-mode-map}
-Turning on Text mode runs the normal hook `text-mode-hook'.&quot;
-</pre><pre class="smallexample">  (set (make-local-variable 'text-mode-variant) t)
+Turning on Text mode runs the normal hook `text-mode-hook'."
+</pre>
+    <pre class="smallexample">
+  (set (make-local-variable 'text-mode-variant) t)
   (set (make-local-variable 'require-final-newline)
        mode-require-final-newline)
   (set (make-local-variable 'indent-line-function) 'indent-relative))
-</pre></div>
+</pre>
+  </div>
 
-<p>(The last line is redundant nowadays, since <code>indent-relative</code> is
-the default value, and we&rsquo;ll delete it in a future version.)
-</p>
-<a name="index-lisp_002dmode_002eel"></a>
-<p>The three Lisp modes (Lisp mode, Emacs Lisp mode, and Lisp Interaction
-mode) have more features than Text mode and the code is correspondingly
-more complicated.  Here are excerpts from <samp>lisp-mode.el</samp> that
-illustrate how these modes are written.
-</p>
-<p>Here is how the Lisp mode syntax and abbrev tables are defined:
-</p>
-<a name="index-syntax-table-example"></a>
-<div class="smallexample">
-<pre class="smallexample">;; <span class="roman">Create mode-specific table variables.</span>
+  <p>(The last line is redundant nowadays, since
+  <code>indent-relative</code> is the default value, and
+  we&rsquo;ll delete it in a future version.)</p><a name=
+  "index-lisp_002dmode_002eel" id="index-lisp_002dmode_002eel"></a>
+
+  <p>The three Lisp modes (Lisp mode, Emacs Lisp mode, and Lisp
+  Interaction mode) have more features than Text mode and the code
+  is correspondingly more complicated. Here are excerpts from
+  <samp>lisp-mode.el</samp> that illustrate how these modes are
+  written.</p>
+
+  <p>Here is how the Lisp mode syntax and abbrev tables are
+  defined:</p><a name="index-syntax-table-example" id=
+  "index-syntax-table-example"></a>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+;; <span class="roman">Create mode-specific table variables.</span>
 (defvar lisp-mode-abbrev-table nil)
 (define-abbrev-table 'lisp-mode-abbrev-table ())
 
 (defvar lisp-mode-syntax-table
   (let ((table (copy-syntax-table emacs-lisp-mode-syntax-table)))
-    (modify-syntax-entry ?\[ &quot;_   &quot; table)
-    (modify-syntax-entry ?\] &quot;_   &quot; table)
-    (modify-syntax-entry ?# &quot;' 14&quot; table)
-    (modify-syntax-entry ?| &quot;\&quot; 23bn&quot; table)
+    (modify-syntax-entry ?\[ "_   " table)
+    (modify-syntax-entry ?\] "_   " table)
+    (modify-syntax-entry ?# "' 14" table)
+    (modify-syntax-entry ?| "\" 23bn" table)
     table)
-  &quot;Syntax table used in `lisp-mode'.&quot;)
-</pre></div>
+  "Syntax table used in `lisp-mode'.")
+</pre>
+  </div>
 
-<p>The three modes for Lisp share much of their code.  For instance,
-each calls the following function to set various variables:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun lisp-mode-variables (&amp;optional syntax keywords-case-insensitive)
+  <p>The three modes for Lisp share much of their code. For
+  instance, each calls the following function to set various
+  variables:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defun lisp-mode-variables (&amp;optional syntax keywords-case-insensitive)
   (when syntax
     (set-syntax-table lisp-mode-syntax-table))
   (setq local-abbrev-table lisp-mode-abbrev-table)
   &hellip;
-</pre></div>
+</pre>
+  </div>
 
-<p>Amongst other things, this function sets up the <code>comment-start</code>
-variable to handle Lisp comments:
-</p>
-<div class="smallexample">
-<pre class="smallexample">  (make-local-variable 'comment-start)
-  (setq comment-start &quot;;&quot;)
+  <p>Amongst other things, this function sets up the
+  <code>comment-start</code> variable to handle Lisp comments:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+  (make-local-variable 'comment-start)
+  (setq comment-start ";")
   &hellip;
-</pre></div>
+</pre>
+  </div>
 
-<p>Each of the different Lisp modes has a slightly different keymap.  For
-example, Lisp mode binds <kbd>C-c C-z</kbd> to <code>run-lisp</code>, but the other
-Lisp modes do not.  However, all Lisp modes have some commands in
-common.  The following code sets up the common commands:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defvar lisp-mode-shared-map
+  <p>Each of the different Lisp modes has a slightly different
+  keymap. For example, Lisp mode binds <kbd>C-c C-z</kbd> to
+  <code>run-lisp</code>, but the other Lisp modes do not. However,
+  all Lisp modes have some commands in common. The following code
+  sets up the common commands:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defvar lisp-mode-shared-map
   (let ((map (make-sparse-keymap)))
-    (define-key map &quot;\e\C-q&quot; 'indent-sexp)
-    (define-key map &quot;\177&quot; 'backward-delete-char-untabify)
+    (define-key map "\e\C-q" 'indent-sexp)
+    (define-key map "\177" 'backward-delete-char-untabify)
     map)
-  &quot;Keymap for commands shared by all sorts of Lisp modes.&quot;)
-</pre></div>
+  "Keymap for commands shared by all sorts of Lisp modes.")
+</pre>
+  </div>
 
-<p>And here is the code to set up the keymap for Lisp mode:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defvar lisp-mode-map
+  <p>And here is the code to set up the keymap for Lisp mode:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defvar lisp-mode-map
   (let ((map (make-sparse-keymap))
-	(menu-map (make-sparse-keymap &quot;Lisp&quot;)))
+        (menu-map (make-sparse-keymap "Lisp")))
     (set-keymap-parent map lisp-mode-shared-map)
-    (define-key map &quot;\e\C-x&quot; 'lisp-eval-defun)
-    (define-key map &quot;\C-c\C-z&quot; 'run-lisp)
+    (define-key map "\e\C-x" 'lisp-eval-defun)
+    (define-key map "\C-c\C-z" 'run-lisp)
     &hellip;
     map)
-  &quot;Keymap for ordinary Lisp mode.
-All commands in `lisp-mode-shared-map' are inherited by this map.&quot;)
-</pre></div>
+  "Keymap for ordinary Lisp mode.
+All commands in `lisp-mode-shared-map' are inherited by this map.")
+</pre>
+  </div>
 
-<p>Finally, here is the major mode command for Lisp mode:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(define-derived-mode lisp-mode prog-mode &quot;Lisp&quot;
-  &quot;Major mode for editing Lisp code for Lisps other than GNU Emacs Lisp.
+  <p>Finally, here is the major mode command for Lisp mode:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(define-derived-mode lisp-mode prog-mode "Lisp"
+  "Major mode for editing Lisp code for Lisps other than GNU Emacs Lisp.
 Commands:
 Delete converts tabs to spaces as it moves back.
 Blank lines separate paragraphs.  Semicolons start comments.
@@ -203,24 +260,29 @@ Blank lines separate paragraphs.  Semicolons start comments.
 \\{lisp-mode-map}
 Note that `run-lisp' may be used either to start an inferior Lisp job
 or to switch back to an existing one.
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">Entry to this mode calls the value of `lisp-mode-hook'
-if that value is non-nil.&quot;
+</pre>
+    <pre class="smallexample">
+</pre>
+    <pre class="smallexample">
+Entry to this mode calls the value of `lisp-mode-hook'
+if that value is non-nil."
   (lisp-mode-variables nil t)
   (set (make-local-variable 'find-tag-default-function)
        'lisp-find-tag-default)
   (set (make-local-variable 'comment-start-skip)
-       &quot;\\(\\(^\\|[^\\\\\n]\\)\\(\\\\\\\\\\)*\\)\\(;+\\|#|\\) *&quot;)
+       "\\(\\(^\\|[^\\\\\n]\\)\\(\\\\\\\\\\)*\\)\\(;+\\|#|\\) *")
   (setq imenu-case-fold-search t))
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Generic-Modes.html#Generic-Modes" accesskey="p" rel="prev">Generic Modes</a>, Up: <a href="Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Previous: <a href="Generic-Modes.html#Generic-Modes"
+    accesskey="p" rel="prev">Generic Modes</a>, Up: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major
+    Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

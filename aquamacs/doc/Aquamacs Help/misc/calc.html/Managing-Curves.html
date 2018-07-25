@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,224 +18,291 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Managing Curves</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Managing Curves">
-<meta name="keywords" content="GNU Emacs Calc Manual: Managing Curves">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Graphics.html#Graphics" rel="up" title="Graphics">
-<link href="Graphics-Options.html#Graphics-Options" rel="next" title="Graphics Options">
-<link href="Three-Dimensional-Graphics.html#Three-Dimensional-Graphics" rel="prev" title="Three Dimensional Graphics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Managing Curves</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Managing Curves" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Managing Curves" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Graphics.html#Graphics" rel="up" title="Graphics" />
+  <link href="Graphics-Options.html#Graphics-Options" rel="next"
+  title="Graphics Options" />
+  <link href=
+  "Three-Dimensional-Graphics.html#Three-Dimensional-Graphics" rel=
+  "prev" title="Three Dimensional Graphics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Managing-Curves"></a>
-<div class="header">
-<p>
-Next: <a href="Graphics-Options.html#Graphics-Options" accesskey="n" rel="next">Graphics Options</a>, Previous: <a href="Three-Dimensional-Graphics.html#Three-Dimensional-Graphics" accesskey="p" rel="prev">Three Dimensional Graphics</a>, Up: <a href="Graphics.html#Graphics" accesskey="u" rel="up">Graphics</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Managing-Curves-1"></a>
-<h3 class="section">13.3 Managing Curves</h3>
+<body lang="en" xml:lang="en">
+  <a name="Managing-Curves" id="Managing-Curves"></a>
 
-<p>The <kbd>g f</kbd> command is really shorthand for the following commands:
-<kbd>C-u g d  g a  g p</kbd>.  Likewise, <kbd>g&nbsp;F</kbd><!-- /@w --> is shorthand for
-<kbd>C-u g d  g A  g p</kbd>.  You can gain more control over your graph
-by using these commands directly.
-</p>
-<a name="index-g-a"></a>
-<a name="index-calc_002dgraph_002dadd"></a>
-<p>The <kbd>g a</kbd> (<code>calc-graph-add</code>) command adds the &ldquo;curve&rdquo;
-represented by the two values on the top of the stack to the current
-graph.  You can have any number of curves in the same graph.  When
-you give the <kbd>g p</kbd> command, all the curves will be drawn superimposed
-on the same axes.
-</p>
-<p>The <kbd>g a</kbd> command (and many others that affect the current graph)
-will cause a special buffer, <samp>*Gnuplot Commands*</samp>, to be displayed
-in another window.  This buffer is a template of the commands that will
-be sent to GNUPLOT when it is time to draw the graph.  The first
-<kbd>g a</kbd> command adds a <code>plot</code> command to this buffer.  Succeeding
-<kbd>g a</kbd> commands add extra curves onto that <code>plot</code> command.
-Other graph-related commands put other GNUPLOT commands into this
-buffer.  In normal usage you never need to work with this buffer
-directly, but you can if you wish.  The only constraint is that there
-must be only one <code>plot</code> command, and it must be the last command
-in the buffer.  If you want to save and later restore a complete graph
-configuration, you can use regular Emacs commands to save and restore
-the contents of the <samp>*Gnuplot Commands*</samp> buffer.
-</p>
-<a name="index-PlotData1"></a>
-<a name="index-PlotData2"></a>
-<p>If the values on the stack are not variable names, <kbd>g a</kbd> will invent
-variable names for them (of the form &lsquo;<samp>PlotData<var>n</var></samp>&rsquo;) and store
-the values in those variables.  The &ldquo;x&rdquo; and &ldquo;y&rdquo; variables are what
-go into the <code>plot</code> command in the template.  If you add a curve
-that uses a certain variable and then later change that variable, you
-can replot the graph without having to delete and re-add the curve.
-That&rsquo;s because the variable name, not the vector, interval or formula
-itself, is what was added by <kbd>g a</kbd>.
-</p>
-<p>A numeric prefix argument on <kbd>g a</kbd> or <kbd>g f</kbd> changes the way
-stack entries are interpreted as curves.  With a positive prefix
-argument &lsquo;<samp>n</samp>&rsquo;, the top &lsquo;<samp>n</samp>&rsquo; stack entries are &ldquo;y&rdquo; values
-for &lsquo;<samp>n</samp>&rsquo; different curves which share a common &ldquo;x&rdquo; value in
-the &lsquo;<samp>n+1</samp>&rsquo;st stack entry.  (Thus <kbd>g a</kbd> with no prefix
-argument is equivalent to <kbd>C-u 1 g a</kbd>.)
-</p>
-<p>A prefix of zero or plain <kbd>C-u</kbd> means to take two stack entries,
-&ldquo;x&rdquo; and &ldquo;y&rdquo; as usual, but to interpret &ldquo;y&rdquo; as a vector of
-&ldquo;y&rdquo; values for several curves that share a common &ldquo;x&rdquo;.
-</p>
-<p>A negative prefix argument tells Calc to read &lsquo;<samp>n</samp>&rsquo; vectors from
-the stack; each vector &lsquo;<samp>[x, y]</samp>&rsquo; describes an independent curve.
-This is the only form of <kbd>g a</kbd> that creates several curves at once
-that don&rsquo;t have common &ldquo;x&rdquo; values.  (Of course, the range of &ldquo;x&rdquo;
-values covered by all the curves ought to be roughly the same if
-they are to look nice on the same graph.)
-</p>
-<p>For example, to plot
-&lsquo;<samp>sin(n x)</samp>&rsquo;
-for integers &lsquo;<samp>n</samp>&rsquo;
-from 1 to 5, you could use <kbd>v x</kbd> to create a vector of integers
-(&lsquo;<samp>n</samp>&rsquo;), then <kbd>V M '</kbd> or <kbd>V M $</kbd> to map &lsquo;<samp>sin(n x)</samp>&rsquo;
-across this vector.  The resulting vector of formulas is suitable
-for use as the &ldquo;y&rdquo; argument to a <kbd>C-u g a</kbd> or <kbd>C-u g f</kbd>
-command.
-</p>
-<a name="index-g-A"></a>
-<a name="index-calc_002dgraph_002dadd_002d3d"></a>
-<p>The <kbd>g A</kbd> (<code>calc-graph-add-3d</code>) command adds a 3D curve
-to the graph.  It is not valid to intermix 2D and 3D curves in a
-single graph.  This command takes three arguments, &ldquo;x&rdquo;, &ldquo;y&rdquo;,
-and &ldquo;z&rdquo;, from the stack.  With a positive prefix &lsquo;<samp>n</samp>&rsquo;, it
-takes &lsquo;<samp>n+2</samp>&rsquo; arguments (common &ldquo;x&rdquo; and &ldquo;y&rdquo;, plus &lsquo;<samp>n</samp>&rsquo;
-separate &ldquo;z&rdquo;s).  With a zero prefix, it takes three stack entries
-but the &ldquo;z&rdquo; entry is a vector of curve values.  With a negative
-prefix &lsquo;<samp>-n</samp>&rsquo;, it takes &lsquo;<samp>n</samp>&rsquo; vectors of the form &lsquo;<samp>[x, y, z]</samp>&rsquo;.
-The <kbd>g A</kbd> command works by adding a <code>splot</code> (surface-plot)
-command to the <samp>*Gnuplot Commands*</samp> buffer.
-</p>
-<p>(Although <kbd>g a</kbd> adds a 2D <code>plot</code> command to the
-<samp>*Gnuplot Commands*</samp> buffer, Calc changes this to <code>splot</code>
-before sending it to GNUPLOT if it notices that the data points are
-evaluating to <code>xyz</code> calls.  It will not work to mix 2D and 3D
-<kbd>g a</kbd> curves in a single graph, although Calc does not currently
-check for this.)
-</p>
-<a name="index-g-d"></a>
-<a name="index-calc_002dgraph_002ddelete"></a>
-<p>The <kbd>g d</kbd> (<code>calc-graph-delete</code>) command deletes the most
-recently added curve from the graph.  It has no effect if there are
-no curves in the graph.  With a numeric prefix argument of any kind,
-it deletes all of the curves from the graph.
-</p>
-<a name="index-g-H"></a>
-<a name="index-calc_002dgraph_002dhide"></a>
-<p>The <kbd>g H</kbd> (<code>calc-graph-hide</code>) command &ldquo;hides&rdquo; or &ldquo;unhides&rdquo;
-the most recently added curve.  A hidden curve will not appear in
-the actual plot, but information about it such as its name and line and
-point styles will be retained.
-</p>
-<a name="index-g-j"></a>
-<a name="index-calc_002dgraph_002djuggle"></a>
-<p>The <kbd>g j</kbd> (<code>calc-graph-juggle</code>) command moves the curve
-at the end of the list (the &ldquo;most recently added curve&rdquo;) to the
-front of the list.  The next-most-recent curve is thus exposed for
-<kbd>g&nbsp;d</kbd><!-- /@w --> or similar commands to use.  With <kbd>g j</kbd> you can work
-with any curve in the graph even though curve-related commands only
-affect the last curve in the list.
-</p>
-<a name="index-g-p"></a>
-<a name="index-calc_002dgraph_002dplot"></a>
-<p>The <kbd>g p</kbd> (<code>calc-graph-plot</code>) command uses GNUPLOT to draw
-the graph described in the <samp>*Gnuplot Commands*</samp> buffer.  Any
-GNUPLOT parameters which are not defined by commands in this buffer
-are reset to their default values.  The variables named in the <code>plot</code>
-command are written to a temporary data file and the variable names
-are then replaced by the file name in the template.  The resulting
-plotting commands are fed to the GNUPLOT program.  See the documentation
-for the GNUPLOT program for more specific information.  All temporary
-files are removed when Emacs or GNUPLOT exits.
-</p>
-<p>If you give a formula for &ldquo;y&rdquo;, Calc will remember all the values that
-it calculates for the formula so that later plots can reuse these values.
-Calc throws out these saved values when you change any circumstances
-that may affect the data, such as switching from Degrees to Radians
-mode, or changing the value of a parameter in the formula.  You can
-force Calc to recompute the data from scratch by giving a negative
-numeric prefix argument to <kbd>g p</kbd>.
-</p>
-<p>Calc uses a fairly rough step size when graphing formulas over intervals.
-This is to ensure quick response.  You can &ldquo;refine&rdquo; a plot by giving
-a positive numeric prefix argument to <kbd>g p</kbd>.  Calc goes through
-the data points it has computed and saved from previous plots of the
-function, and computes and inserts a new data point midway between
-each of the existing points.  You can refine a plot any number of times,
-but beware that the amount of calculation involved doubles each time.
-</p>
-<p>Calc does not remember computed values for 3D graphs.  This means the
-numerix prefix argument, if any, to <kbd>g p</kbd> is effectively ignored if
-the current graph is three-dimensional.
-</p>
-<a name="index-g-P"></a>
-<a name="index-calc_002dgraph_002dprint"></a>
-<p>The <kbd>g P</kbd> (<code>calc-graph-print</code>) command is like <kbd>g p</kbd>,
-except that it sends the output to a printer instead of to the
-screen.  More precisely, <kbd>g p</kbd> looks for &lsquo;<samp>set terminal</samp>&rsquo;
-or &lsquo;<samp>set output</samp>&rsquo; commands in the <samp>*Gnuplot Commands*</samp> buffer;
-lacking these it uses the default settings.  However, <kbd>g P</kbd>
-ignores &lsquo;<samp>set terminal</samp>&rsquo; and &lsquo;<samp>set output</samp>&rsquo; commands and
-uses a different set of default values.  All of these values are
-controlled by the <kbd>g D</kbd> and <kbd>g O</kbd> commands discussed below.
-Provided everything is set up properly, <kbd>g p</kbd> will plot to
-the screen unless you have specified otherwise and <kbd>g P</kbd> will
-always plot to the printer.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Graphics-Options.html#Graphics-Options" accesskey="n" rel="next">Graphics Options</a>, Previous: <a href="Three-Dimensional-Graphics.html#Three-Dimensional-Graphics" accesskey="p" rel="prev">Three Dimensional Graphics</a>, Up: <a href="Graphics.html#Graphics" accesskey="u" rel="up">Graphics</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Graphics-Options.html#Graphics-Options"
+    accesskey="n" rel="next">Graphics Options</a>, Previous:
+    <a href=
+    "Three-Dimensional-Graphics.html#Three-Dimensional-Graphics"
+    accesskey="p" rel="prev">Three Dimensional Graphics</a>, Up:
+    <a href="Graphics.html#Graphics" accesskey="u" rel=
+    "up">Graphics</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Managing-Curves-1" id="Managing-Curves-1"></a>
 
+  <h3 class="section">13.3 Managing Curves</h3>
 
+  <p>The <kbd>g f</kbd> command is really shorthand for the
+  following commands: <kbd>C-u g d g a g p</kbd>. Likewise,
+  <kbd>g&nbsp;F</kbd><!-- /@w --> is shorthand for <kbd>C-u g d g A
+  g p</kbd>. You can gain more control over your graph by using
+  these commands directly.</p><a name="index-g-a" id=
+  "index-g-a"></a> <a name="index-calc_002dgraph_002dadd" id=
+  "index-calc_002dgraph_002dadd"></a>
 
+  <p>The <kbd>g a</kbd> (<code>calc-graph-add</code>) command adds
+  the &ldquo;curve&rdquo; represented by the two values on the top
+  of the stack to the current graph. You can have any number of
+  curves in the same graph. When you give the <kbd>g p</kbd>
+  command, all the curves will be drawn superimposed on the same
+  axes.</p>
+
+  <p>The <kbd>g a</kbd> command (and many others that affect the
+  current graph) will cause a special buffer, <samp>*Gnuplot
+  Commands*</samp>, to be displayed in another window. This buffer
+  is a template of the commands that will be sent to GNUPLOT when
+  it is time to draw the graph. The first <kbd>g a</kbd> command
+  adds a <code>plot</code> command to this buffer. Succeeding
+  <kbd>g a</kbd> commands add extra curves onto that
+  <code>plot</code> command. Other graph-related commands put other
+  GNUPLOT commands into this buffer. In normal usage you never need
+  to work with this buffer directly, but you can if you wish. The
+  only constraint is that there must be only one <code>plot</code>
+  command, and it must be the last command in the buffer. If you
+  want to save and later restore a complete graph configuration,
+  you can use regular Emacs commands to save and restore the
+  contents of the <samp>*Gnuplot Commands*</samp>
+  buffer.</p><a name="index-PlotData1" id="index-PlotData1"></a>
+  <a name="index-PlotData2" id="index-PlotData2"></a>
+
+  <p>If the values on the stack are not variable names, <kbd>g
+  a</kbd> will invent variable names for them (of the form
+  &lsquo;<samp>PlotData<var>n</var></samp>&rsquo;) and store the
+  values in those variables. The &ldquo;x&rdquo; and
+  &ldquo;y&rdquo; variables are what go into the <code>plot</code>
+  command in the template. If you add a curve that uses a certain
+  variable and then later change that variable, you can replot the
+  graph without having to delete and re-add the curve. That&rsquo;s
+  because the variable name, not the vector, interval or formula
+  itself, is what was added by <kbd>g a</kbd>.</p>
+
+  <p>A numeric prefix argument on <kbd>g a</kbd> or <kbd>g f</kbd>
+  changes the way stack entries are interpreted as curves. With a
+  positive prefix argument &lsquo;<samp>n</samp>&rsquo;, the top
+  &lsquo;<samp>n</samp>&rsquo; stack entries are &ldquo;y&rdquo;
+  values for &lsquo;<samp>n</samp>&rsquo; different curves which
+  share a common &ldquo;x&rdquo; value in the
+  &lsquo;<samp>n+1</samp>&rsquo;st stack entry. (Thus <kbd>g
+  a</kbd> with no prefix argument is equivalent to <kbd>C-u 1 g
+  a</kbd>.)</p>
+
+  <p>A prefix of zero or plain <kbd>C-u</kbd> means to take two
+  stack entries, &ldquo;x&rdquo; and &ldquo;y&rdquo; as usual, but
+  to interpret &ldquo;y&rdquo; as a vector of &ldquo;y&rdquo;
+  values for several curves that share a common
+  &ldquo;x&rdquo;.</p>
+
+  <p>A negative prefix argument tells Calc to read
+  &lsquo;<samp>n</samp>&rsquo; vectors from the stack; each vector
+  &lsquo;<samp>[x, y]</samp>&rsquo; describes an independent curve.
+  This is the only form of <kbd>g a</kbd> that creates several
+  curves at once that don&rsquo;t have common &ldquo;x&rdquo;
+  values. (Of course, the range of &ldquo;x&rdquo; values covered
+  by all the curves ought to be roughly the same if they are to
+  look nice on the same graph.)</p>
+
+  <p>For example, to plot &lsquo;<samp>sin(n x)</samp>&rsquo; for
+  integers &lsquo;<samp>n</samp>&rsquo; from 1 to 5, you could use
+  <kbd>v x</kbd> to create a vector of integers
+  (&lsquo;<samp>n</samp>&rsquo;), then <kbd>V M '</kbd> or <kbd>V M
+  $</kbd> to map &lsquo;<samp>sin(n x)</samp>&rsquo; across this
+  vector. The resulting vector of formulas is suitable for use as
+  the &ldquo;y&rdquo; argument to a <kbd>C-u g a</kbd> or <kbd>C-u
+  g f</kbd> command.</p><a name="index-g-A" id="index-g-A"></a>
+  <a name="index-calc_002dgraph_002dadd_002d3d" id=
+  "index-calc_002dgraph_002dadd_002d3d"></a>
+
+  <p>The <kbd>g A</kbd> (<code>calc-graph-add-3d</code>) command
+  adds a 3D curve to the graph. It is not valid to intermix 2D and
+  3D curves in a single graph. This command takes three arguments,
+  &ldquo;x&rdquo;, &ldquo;y&rdquo;, and &ldquo;z&rdquo;, from the
+  stack. With a positive prefix &lsquo;<samp>n</samp>&rsquo;, it
+  takes &lsquo;<samp>n+2</samp>&rsquo; arguments (common
+  &ldquo;x&rdquo; and &ldquo;y&rdquo;, plus
+  &lsquo;<samp>n</samp>&rsquo; separate &ldquo;z&rdquo;s). With a
+  zero prefix, it takes three stack entries but the &ldquo;z&rdquo;
+  entry is a vector of curve values. With a negative prefix
+  &lsquo;<samp>-n</samp>&rsquo;, it takes
+  &lsquo;<samp>n</samp>&rsquo; vectors of the form &lsquo;<samp>[x,
+  y, z]</samp>&rsquo;. The <kbd>g A</kbd> command works by adding a
+  <code>splot</code> (surface-plot) command to the <samp>*Gnuplot
+  Commands*</samp> buffer.</p>
+
+  <p>(Although <kbd>g a</kbd> adds a 2D <code>plot</code> command
+  to the <samp>*Gnuplot Commands*</samp> buffer, Calc changes this
+  to <code>splot</code> before sending it to GNUPLOT if it notices
+  that the data points are evaluating to <code>xyz</code> calls. It
+  will not work to mix 2D and 3D <kbd>g a</kbd> curves in a single
+  graph, although Calc does not currently check for
+  this.)</p><a name="index-g-d" id="index-g-d"></a> <a name=
+  "index-calc_002dgraph_002ddelete" id=
+  "index-calc_002dgraph_002ddelete"></a>
+
+  <p>The <kbd>g d</kbd> (<code>calc-graph-delete</code>) command
+  deletes the most recently added curve from the graph. It has no
+  effect if there are no curves in the graph. With a numeric prefix
+  argument of any kind, it deletes all of the curves from the
+  graph.</p><a name="index-g-H" id="index-g-H"></a> <a name=
+  "index-calc_002dgraph_002dhide" id=
+  "index-calc_002dgraph_002dhide"></a>
+
+  <p>The <kbd>g H</kbd> (<code>calc-graph-hide</code>) command
+  &ldquo;hides&rdquo; or &ldquo;unhides&rdquo; the most recently
+  added curve. A hidden curve will not appear in the actual plot,
+  but information about it such as its name and line and point
+  styles will be retained.</p><a name="index-g-j" id=
+  "index-g-j"></a> <a name="index-calc_002dgraph_002djuggle" id=
+  "index-calc_002dgraph_002djuggle"></a>
+
+  <p>The <kbd>g j</kbd> (<code>calc-graph-juggle</code>) command
+  moves the curve at the end of the list (the &ldquo;most recently
+  added curve&rdquo;) to the front of the list. The
+  next-most-recent curve is thus exposed for <kbd>g&nbsp;d</kbd>
+  <!-- /@w --> or similar commands to use. With <kbd>g j</kbd> you
+  can work with any curve in the graph even though curve-related
+  commands only affect the last curve in the list.</p><a name=
+  "index-g-p" id="index-g-p"></a> <a name=
+  "index-calc_002dgraph_002dplot" id=
+  "index-calc_002dgraph_002dplot"></a>
+
+  <p>The <kbd>g p</kbd> (<code>calc-graph-plot</code>) command uses
+  GNUPLOT to draw the graph described in the <samp>*Gnuplot
+  Commands*</samp> buffer. Any GNUPLOT parameters which are not
+  defined by commands in this buffer are reset to their default
+  values. The variables named in the <code>plot</code> command are
+  written to a temporary data file and the variable names are then
+  replaced by the file name in the template. The resulting plotting
+  commands are fed to the GNUPLOT program. See the documentation
+  for the GNUPLOT program for more specific information. All
+  temporary files are removed when Emacs or GNUPLOT exits.</p>
+
+  <p>If you give a formula for &ldquo;y&rdquo;, Calc will remember
+  all the values that it calculates for the formula so that later
+  plots can reuse these values. Calc throws out these saved values
+  when you change any circumstances that may affect the data, such
+  as switching from Degrees to Radians mode, or changing the value
+  of a parameter in the formula. You can force Calc to recompute
+  the data from scratch by giving a negative numeric prefix
+  argument to <kbd>g p</kbd>.</p>
+
+  <p>Calc uses a fairly rough step size when graphing formulas over
+  intervals. This is to ensure quick response. You can
+  &ldquo;refine&rdquo; a plot by giving a positive numeric prefix
+  argument to <kbd>g p</kbd>. Calc goes through the data points it
+  has computed and saved from previous plots of the function, and
+  computes and inserts a new data point midway between each of the
+  existing points. You can refine a plot any number of times, but
+  beware that the amount of calculation involved doubles each
+  time.</p>
+
+  <p>Calc does not remember computed values for 3D graphs. This
+  means the numerix prefix argument, if any, to <kbd>g p</kbd> is
+  effectively ignored if the current graph is
+  three-dimensional.</p><a name="index-g-P" id="index-g-P"></a>
+  <a name="index-calc_002dgraph_002dprint" id=
+  "index-calc_002dgraph_002dprint"></a>
+
+  <p>The <kbd>g P</kbd> (<code>calc-graph-print</code>) command is
+  like <kbd>g p</kbd>, except that it sends the output to a printer
+  instead of to the screen. More precisely, <kbd>g p</kbd> looks
+  for &lsquo;<samp>set terminal</samp>&rsquo; or &lsquo;<samp>set
+  output</samp>&rsquo; commands in the <samp>*Gnuplot
+  Commands*</samp> buffer; lacking these it uses the default
+  settings. However, <kbd>g P</kbd> ignores &lsquo;<samp>set
+  terminal</samp>&rsquo; and &lsquo;<samp>set output</samp>&rsquo;
+  commands and uses a different set of default values. All of these
+  values are controlled by the <kbd>g D</kbd> and <kbd>g O</kbd>
+  commands discussed below. Provided everything is set up properly,
+  <kbd>g p</kbd> will plot to the screen unless you have specified
+  otherwise and <kbd>g P</kbd> will always plot to the printer.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Graphics-Options.html#Graphics-Options"
+    accesskey="n" rel="next">Graphics Options</a>, Previous:
+    <a href=
+    "Three-Dimensional-Graphics.html#Three-Dimensional-Graphics"
+    accesskey="p" rel="prev">Three Dimensional Graphics</a>, Up:
+    <a href="Graphics.html#Graphics" accesskey="u" rel=
+    "up">Graphics</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

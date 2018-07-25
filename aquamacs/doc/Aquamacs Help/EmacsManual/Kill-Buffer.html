@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,147 +20,204 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Kill Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Kill Buffer">
-<meta name="keywords" content="GNU Emacs Manual: Kill Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffers.html#Buffers" rel="up" title="Buffers">
-<link href="Several-Buffers.html#Several-Buffers" rel="next" title="Several Buffers">
-<link href="Misc-Buffer.html#Misc-Buffer" rel="prev" title="Misc Buffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Kill Buffer</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Kill Buffer" />
+  <meta name="keywords" content="GNU Emacs Manual: Kill Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffers.html#Buffers" rel="up" title="Buffers" />
+  <link href="Several-Buffers.html#Several-Buffers" rel="next"
+  title="Several Buffers" />
+  <link href="Misc-Buffer.html#Misc-Buffer" rel="prev" title=
+  "Misc Buffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Kill-Buffer" id="Kill-Buffer"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Several-Buffers.html#Several-Buffers"
+    accesskey="n" rel="next">Several Buffers</a>, Previous:
+    <a href="Misc-Buffer.html#Misc-Buffer" accesskey="p" rel=
+    "prev">Misc Buffer</a>, Up: <a href="Buffers.html#Buffers"
+    accesskey="u" rel="up">Buffers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Killing-Buffers" id="Killing-Buffers"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Kill-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Several-Buffers.html#Several-Buffers" accesskey="n" rel="next">Several Buffers</a>, Previous: <a href="Misc-Buffer.html#Misc-Buffer" accesskey="p" rel="prev">Misc Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Killing-Buffers"></a>
-<h3 class="section">19.4 Killing Buffers</h3>
+  <h3 class="section">19.4 Killing Buffers</h3><a name=
+  "index-killing-buffers" id="index-killing-buffers"></a> <a name=
+  "index-close-buffer" id="index-close-buffer"></a> <a name=
+  "index-close-file" id="index-close-file"></a>
 
-<a name="index-killing-buffers"></a>
-<a name="index-close-buffer"></a>
-<a name="index-close-file"></a>
-<p>If you continue an Emacs session for a while, you may accumulate a
-large number of buffers.  You may then find it convenient to <em>kill</em>
-the buffers you no longer need.  (Some other editors call this
-operation <em>close</em>, and talk about &ldquo;closing the buffer&rdquo; or
-&ldquo;closing the file&rdquo; visited in the buffer.)  On most operating
-systems, killing a buffer releases its space back to the operating
-system so that other programs can use it.  Here are some commands for
-killing buffers:
-</p>
-<dl compact="compact">
-<dt><kbd>C-x k <var>bufname</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Kill buffer <var>bufname</var> (<code>kill-buffer</code>).
-</p></dd>
-<dt><kbd>M-x kill-some-buffers</kbd></dt>
-<dd><p>Offer to kill each buffer, one by one.
-</p></dd>
-<dt><kbd>M-x kill-matching-buffers</kbd></dt>
-<dd><p>Offer to kill all buffers matching a regular expression.
-</p></dd>
-</dl>
+  <p>If you continue an Emacs session for a while, you may
+  accumulate a large number of buffers. You may then find it
+  convenient to <em>kill</em> the buffers you no longer need. (Some
+  other editors call this operation <em>close</em>, and talk about
+  &ldquo;closing the buffer&rdquo; or &ldquo;closing the
+  file&rdquo; visited in the buffer.) On most operating systems,
+  killing a buffer releases its space back to the operating system
+  so that other programs can use it. Here are some commands for
+  killing buffers:</p>
 
-<a name="index-kill_002dbuffer"></a>
-<a name="index-C_002dx-k"></a>
-<p><kbd>C-x k</kbd> (<code>kill-buffer</code>) kills one buffer, whose name you
-specify in the minibuffer.  The default, used if you type just
-<tt class="key">RET</tt> in the minibuffer, is to kill the current buffer.  If you
-kill the current buffer, another buffer becomes current: one that was
-current in the recent past but is not displayed in any window now.  If
-you ask to kill a file-visiting buffer that is modified, then you must
-confirm with <kbd>yes</kbd> before the buffer is killed.
-</p>
-<a name="index-kill_002dsome_002dbuffers"></a>
-<p>The command <kbd>M-x kill-some-buffers</kbd> asks about each buffer, one
-by one.  An answer of <kbd>y</kbd> means to kill the buffer, just like
-<code>kill-buffer</code>.  This command ignores buffers whose names begin
-with a space, which are used internally by Emacs.
-</p>
-<a name="index-kill_002dmatching_002dbuffers"></a>
-<p>The command <kbd>M-x kill-matching-buffers</kbd> prompts for a regular
-expression and kills all buffers whose names match that expression.
-See <a href="Regexps.html#Regexps">Regexps</a>.  Like <code>kill-some-buffers</code>, it asks for
-confirmation before each kill.  This command normally ignores buffers
-whose names begin with a space, which are used internally by Emacs.
-To kill internal buffers as well, call <code>kill-matching-buffers</code>
-with a prefix argument.
-</p>
-<p>The Buffer Menu feature is also convenient for killing various
-buffers.  See <a href="Several-Buffers.html#Several-Buffers">Several Buffers</a>.
-</p>
-<a name="index-kill_002dbuffer_002dhook"></a>
-<p>If you want to do something special every time a buffer is killed, you
-can add hook functions to the hook <code>kill-buffer-hook</code> (see <a href="Hooks.html#Hooks">Hooks</a>).
-</p>
-<a name="index-clean_002dbuffer_002dlist"></a>
-<p>If you run one Emacs session for a period of days, as many people do,
-it can fill up with buffers that you used several days ago.  The command
-<kbd>M-x clean-buffer-list</kbd> is a convenient way to purge them; it kills
-all the unmodified buffers that you have not used for a long time.  An
-ordinary buffer is killed if it has not been displayed for three days;
-however, you can specify certain buffers that should never be killed
-automatically, and others that should be killed if they have been unused
-for a mere hour.
-</p>
-<a name="index-Midnight-mode"></a>
-<a name="index-midnight_002dmode"></a>
-<a name="index-midnight_002dhook"></a>
-<p>You can also have this buffer purging done for you, once a day,
-by enabling Midnight mode.  Midnight mode operates each day
-at midnight; at that time, it runs <code>clean-buffer-list</code>, or
-whichever functions you have placed in the normal hook
-<code>midnight-hook</code> (see <a href="Hooks.html#Hooks">Hooks</a>).  To enable Midnight mode, use
-the Customization buffer to set the variable <code>midnight-mode</code> to
-<code>t</code>.  See <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Several-Buffers.html#Several-Buffers" accesskey="n" rel="next">Several Buffers</a>, Previous: <a href="Misc-Buffer.html#Misc-Buffer" accesskey="p" rel="prev">Misc Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>C-x k <var>bufname</var> <span class=
+    "key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Kill buffer <var>bufname</var>
+      (<code>kill-buffer</code>).</p>
+    </dd>
 
+    <dt><kbd>M-x kill-some-buffers</kbd></dt>
 
+    <dd>
+      <p>Offer to kill each buffer, one by one.</p>
+    </dd>
+
+    <dt><kbd>M-x kill-matching-buffers</kbd></dt>
+
+    <dd>
+      <p>Offer to kill all buffers matching a regular
+      expression.</p>
+    </dd>
+  </dl><a name="index-kill_002dbuffer" id=
+  "index-kill_002dbuffer"></a> <a name="index-C_002dx-k" id=
+  "index-C_002dx-k"></a>
+
+  <p><kbd>C-x k</kbd> (<code>kill-buffer</code>) kills one buffer,
+  whose name you specify in the minibuffer. The default, used if
+  you type just <tt class="key">RET</tt> in the minibuffer, is to
+  kill the current buffer. If you kill the current buffer, another
+  buffer becomes current: one that was current in the recent past
+  but is not displayed in any window now. If you ask to kill a
+  file-visiting buffer that is modified, then you must confirm with
+  <kbd>yes</kbd> before the buffer is killed.</p><a name=
+  "index-kill_002dsome_002dbuffers" id=
+  "index-kill_002dsome_002dbuffers"></a>
+
+  <p>The command <kbd>M-x kill-some-buffers</kbd> asks about each
+  buffer, one by one. An answer of <kbd>y</kbd> means to kill the
+  buffer, just like <code>kill-buffer</code>. This command ignores
+  buffers whose names begin with a space, which are used internally
+  by Emacs.</p><a name="index-kill_002dmatching_002dbuffers" id=
+  "index-kill_002dmatching_002dbuffers"></a>
+
+  <p>The command <kbd>M-x kill-matching-buffers</kbd> prompts for a
+  regular expression and kills all buffers whose names match that
+  expression. See <a href="Regexps.html#Regexps">Regexps</a>. Like
+  <code>kill-some-buffers</code>, it asks for confirmation before
+  each kill. This command normally ignores buffers whose names
+  begin with a space, which are used internally by Emacs. To kill
+  internal buffers as well, call <code>kill-matching-buffers</code>
+  with a prefix argument.</p>
+
+  <p>The Buffer Menu feature is also convenient for killing various
+  buffers. See <a href=
+  "Several-Buffers.html#Several-Buffers">Several
+  Buffers</a>.</p><a name="index-kill_002dbuffer_002dhook" id=
+  "index-kill_002dbuffer_002dhook"></a>
+
+  <p>If you want to do something special every time a buffer is
+  killed, you can add hook functions to the hook
+  <code>kill-buffer-hook</code> (see <a href=
+  "Hooks.html#Hooks">Hooks</a>).</p><a name=
+  "index-clean_002dbuffer_002dlist" id=
+  "index-clean_002dbuffer_002dlist"></a>
+
+  <p>If you run one Emacs session for a period of days, as many
+  people do, it can fill up with buffers that you used several days
+  ago. The command <kbd>M-x clean-buffer-list</kbd> is a convenient
+  way to purge them; it kills all the unmodified buffers that you
+  have not used for a long time. An ordinary buffer is killed if it
+  has not been displayed for three days; however, you can specify
+  certain buffers that should never be killed automatically, and
+  others that should be killed if they have been unused for a mere
+  hour.</p><a name="index-Midnight-mode" id=
+  "index-Midnight-mode"></a> <a name="index-midnight_002dmode" id=
+  "index-midnight_002dmode"></a> <a name="index-midnight_002dhook"
+  id="index-midnight_002dhook"></a>
+
+  <p>You can also have this buffer purging done for you, once a
+  day, by enabling Midnight mode. Midnight mode operates each day
+  at midnight; at that time, it runs
+  <code>clean-buffer-list</code>, or whichever functions you have
+  placed in the normal hook <code>midnight-hook</code> (see
+  <a href="Hooks.html#Hooks">Hooks</a>). To enable Midnight mode,
+  use the Customization buffer to set the variable
+  <code>midnight-mode</code> to <code>t</code>. See <a href=
+  "Easy-Customization.html#Easy-Customization">Easy
+  Customization</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Several-Buffers.html#Several-Buffers"
+    accesskey="n" rel="next">Several Buffers</a>, Previous:
+    <a href="Misc-Buffer.html#Misc-Buffer" accesskey="p" rel=
+    "prev">Misc Buffer</a>, Up: <a href="Buffers.html#Buffers"
+    accesskey="u" rel="up">Buffers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

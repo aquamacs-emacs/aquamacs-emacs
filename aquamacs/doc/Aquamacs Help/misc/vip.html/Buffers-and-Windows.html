@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1987, 2001-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,142 +14,238 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>VIP: Buffers and Windows</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="VIP: Buffers and Windows">
-<meta name="keywords" content="VIP: Buffers and Windows">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" rel="index" title="GNU Free Documentation License">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Vi-Commands.html#Vi-Commands" rel="up" title="Vi Commands">
-<link href="Files.html#Files" rel="next" title="Files">
-<link href="Important-Keys.html#Important-Keys" rel="prev" title="Important Keys">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>VIP: Buffers and Windows</title>
+  <meta name="description" content="VIP: Buffers and Windows" />
+  <meta name="keywords" content="VIP: Buffers and Windows" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+  rel="index" title="GNU Free Documentation License" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Vi-Commands.html#Vi-Commands" rel="up" title=
+  "Vi Commands" />
+  <link href="Files.html#Files" rel="next" title="Files" />
+  <link href="Important-Keys.html#Important-Keys" rel="prev" title=
+  "Important Keys" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Buffers-and-Windows"></a>
-<div class="header">
-<p>
-Next: <a href="Files.html#Files" accesskey="n" rel="next">Files</a>, Previous: <a href="Important-Keys.html#Important-Keys" accesskey="p" rel="prev">Important Keys</a>, Up: <a href="Vi-Commands.html#Vi-Commands" accesskey="u" rel="up">Vi Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Buffers-and-Windows-1"></a>
-<h3 class="section">2.3 Buffers and Windows</h3>
+<body lang="en" xml:lang="en">
+  <a name="Buffers-and-Windows" id="Buffers-and-Windows"></a>
 
-<a name="index-buffer-1"></a>
-<a name="index-selected-buffer"></a>
-<a name="index-current-buffer"></a>
+  <div class="header">
+    <p>Next: <a href="Files.html#Files" accesskey="n" rel=
+    "next">Files</a>, Previous: <a href=
+    "Important-Keys.html#Important-Keys" accesskey="p" rel=
+    "prev">Important Keys</a>, Up: <a href=
+    "Vi-Commands.html#Vi-Commands" accesskey="u" rel="up">Vi
+    Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Buffers-and-Windows-1" id="Buffers-and-Windows-1"></a>
 
-<p>In Emacs the text you edit is stored in a <em>buffer</em>.
-See GNU Emacs Manual, for details.  There is always one <em>current</em>
-buffer, also called the <em>selected buffer</em>.
-</p>
-<a name="index-window-1"></a>
-<a name="index-modified-_0028buffer_0029"></a>
+  <h3 class="section">2.3 Buffers and Windows</h3><a name=
+  "index-buffer-1" id="index-buffer-1"></a> <a name=
+  "index-selected-buffer" id="index-selected-buffer"></a> <a name=
+  "index-current-buffer" id="index-current-buffer"></a>
 
-<p>You can see the contents of buffers through <em>windows</em> created by Emacs.
-When you have multiple windows on the screen only one of them is selected.
-Each buffer has a unique name, and each window has a mode line which shows
-the name of the buffer associated with the window and other information
-about the status of the buffer.  You can change the format of the mode
-line, but normally if you see &lsquo;<samp>**</samp>&rsquo; at the beginning of a mode line it
-means that the buffer is <em>modified</em>.  If you write out the content of
-the buffer to a file, then the buffer will become not modified.  Also if
-you see &lsquo;<samp>%%</samp>&rsquo; at the beginning of the mode line, it means that the file
-associated with the buffer is write protected.
-</p>
-<p>We have the following commands related to windows and buffers.
-</p>
-<dl compact="compact">
-<dt><kbd>C-n</kbd></dt>
-<dd><a name="index-016-C_002dn-_0028vip_002dnext_002dwindow_0029-2"></a>
-<p>Move cursor to the next-window (<code>vip-next-window</code>).
-</p></dd>
-<dt><kbd>X 1</kbd></dt>
-<dd><a name="index-1301-X-1-_0028delete_002dother_002dwindows_0029-1"></a>
-<p>Delete other windows and make the selected window fill the screen
-<br>(<code>delete-other-windows</code>).
-</p></dd>
-<dt><kbd>X 2</kbd></dt>
-<dd><a name="index-1301-X-2-_0028split_002dwindow_002dvertically_0029-1"></a>
-<p>Split current window into two windows (<code>split-window-vertically</code>).
-</p></dd>
-<dt><kbd>X 3</kbd></dt>
-<dd><a name="index-1301-X-3-_0028vip_002dbuffer_002din_002dtwo_002dwindows_0029-2"></a>
-<p>Show current buffer in two windows.
-</p></dd>
-<dt><kbd>s <var>buffer</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-163-s-_0028vip_002dswitch_002dto_002dbuffer_0029-2"></a>
-<p>Select or create a buffer named <var>buffer</var> (<code>vip-switch-to-buffer</code>).
-</p></dd>
-<dt><kbd>S <var>buffer</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-123-S-_0028vip_002dswitch_002dto_002dbuffer_002dother_002dwindow_0029-2"></a>
-<p>Similar but select a buffer named <var>buffer</var> in another window
-<br>(<code>vip-switch-to-buffer-other-window</code>).
-</p></dd>
-<dt><kbd>K</kbd></dt>
-<dd><a name="index-113-K-_0028vip_002dkill_002dbuffer_0029-2"></a>
-<p>Kill the current buffer if it is not modified or if it is not associated
-with a file <br>(<code>vip-kill-buffer</code>).
-</p></dd>
-<dt><kbd>X B</kbd></dt>
-<dd><a name="index-1302-X-B-_0028list_002dbuffers_0029"></a>
-<p>List the existing buffers (<code>list-buffers</code>).
-</p></dd>
-</dl>
+  <p>In Emacs the text you edit is stored in a <em>buffer</em>. See
+  GNU Emacs Manual, for details. There is always one
+  <em>current</em> buffer, also called the <em>selected
+  buffer</em>.</p><a name="index-window-1" id="index-window-1"></a>
+  <a name="index-modified-_0028buffer_0029" id=
+  "index-modified-_0028buffer_0029"></a>
 
-<a name="index-buffer-name-completion"></a>
+  <p>You can see the contents of buffers through <em>windows</em>
+  created by Emacs. When you have multiple windows on the screen
+  only one of them is selected. Each buffer has a unique name, and
+  each window has a mode line which shows the name of the buffer
+  associated with the window and other information about the status
+  of the buffer. You can change the format of the mode line, but
+  normally if you see &lsquo;<samp>**</samp>&rsquo; at the
+  beginning of a mode line it means that the buffer is
+  <em>modified</em>. If you write out the content of the buffer to
+  a file, then the buffer will become not modified. Also if you see
+  &lsquo;<samp>%%</samp>&rsquo; at the beginning of the mode line,
+  it means that the file associated with the buffer is write
+  protected.</p>
 
-<p>As <em>buffer name completion</em> is provided, you have only to type in
-initial substring of the buffer name which is sufficient to identify it
-among names of existing buffers.  After that, if you hit <tt class="key">TAB</tt> the rest
-of the buffer name will be supplied by the system, and you can confirm it
-by <tt class="key">RET</tt>.  The default buffer name to switch to will also be prompted,
-and you can select it by giving a simple <tt class="key">RET</tt>.  See GNU Emacs Manual
-for details of completion.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Files.html#Files" accesskey="n" rel="next">Files</a>, Previous: <a href="Important-Keys.html#Important-Keys" accesskey="p" rel="prev">Important Keys</a>, Up: <a href="Vi-Commands.html#Vi-Commands" accesskey="u" rel="up">Vi Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>We have the following commands related to windows and
+  buffers.</p>
 
+  <dl compact="compact">
+    <dt><kbd>C-n</kbd></dt>
 
+    <dd>
+      <a name=
+      "index-016-C_002dn-_0028vip_002dnext_002dwindow_0029-2" id=
+      "index-016-C_002dn-_0028vip_002dnext_002dwindow_0029-2"></a>
 
+      <p>Move cursor to the next-window
+      (<code>vip-next-window</code>).</p>
+    </dd>
+
+    <dt><kbd>X 1</kbd></dt>
+
+    <dd>
+      <a name=
+      "index-1301-X-1-_0028delete_002dother_002dwindows_0029-1" id=
+      "index-1301-X-1-_0028delete_002dother_002dwindows_0029-1"></a>
+
+      <p>Delete other windows and make the selected window fill the
+      screen<br />
+      (<code>delete-other-windows</code>).</p>
+    </dd>
+
+    <dt><kbd>X 2</kbd></dt>
+
+    <dd>
+      <a name=
+      "index-1301-X-2-_0028split_002dwindow_002dvertically_0029-1"
+      id=
+      "index-1301-X-2-_0028split_002dwindow_002dvertically_0029-1"></a>
+
+      <p>Split current window into two windows
+      (<code>split-window-vertically</code>).</p>
+    </dd>
+
+    <dt><kbd>X 3</kbd></dt>
+
+    <dd>
+      <a name=
+      "index-1301-X-3-_0028vip_002dbuffer_002din_002dtwo_002dwindows_0029-2"
+      id=
+      "index-1301-X-3-_0028vip_002dbuffer_002din_002dtwo_002dwindows_0029-2">
+      </a>
+
+      <p>Show current buffer in two windows.</p>
+    </dd>
+
+    <dt><kbd>s <var>buffer</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <a name=
+      "index-163-s-_0028vip_002dswitch_002dto_002dbuffer_0029-2"
+      id="index-163-s-_0028vip_002dswitch_002dto_002dbuffer_0029-2">
+      </a>
+
+      <p>Select or create a buffer named <var>buffer</var>
+      (<code>vip-switch-to-buffer</code>).</p>
+    </dd>
+
+    <dt><kbd>S <var>buffer</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <a name=
+      "index-123-S-_0028vip_002dswitch_002dto_002dbuffer_002dother_002dwindow_0029-2"
+      id=
+      "index-123-S-_0028vip_002dswitch_002dto_002dbuffer_002dother_002dwindow_0029-2">
+      </a>
+
+      <p>Similar but select a buffer named <var>buffer</var> in
+      another window<br />
+      (<code>vip-switch-to-buffer-other-window</code>).</p>
+    </dd>
+
+    <dt><kbd>K</kbd></dt>
+
+    <dd>
+      <a name="index-113-K-_0028vip_002dkill_002dbuffer_0029-2" id=
+      "index-113-K-_0028vip_002dkill_002dbuffer_0029-2"></a>
+
+      <p>Kill the current buffer if it is not modified or if it is
+      not associated with a file<br />
+      (<code>vip-kill-buffer</code>).</p>
+    </dd>
+
+    <dt><kbd>X B</kbd></dt>
+
+    <dd>
+      <a name="index-1302-X-B-_0028list_002dbuffers_0029" id=
+      "index-1302-X-B-_0028list_002dbuffers_0029"></a>
+
+      <p>List the existing buffers (<code>list-buffers</code>).</p>
+    </dd>
+  </dl><a name="index-buffer-name-completion" id=
+  "index-buffer-name-completion"></a>
+
+  <p>As <em>buffer name completion</em> is provided, you have only
+  to type in initial substring of the buffer name which is
+  sufficient to identify it among names of existing buffers. After
+  that, if you hit <tt class="key">TAB</tt> the rest of the buffer
+  name will be supplied by the system, and you can confirm it by
+  <tt class="key">RET</tt>. The default buffer name to switch to
+  will also be prompted, and you can select it by giving a simple
+  <tt class="key">RET</tt>. See GNU Emacs Manual for details of
+  completion.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Files.html#Files" accesskey="n" rel=
+    "next">Files</a>, Previous: <a href=
+    "Important-Keys.html#Important-Keys" accesskey="p" rel=
+    "prev">Important Keys</a>, Up: <a href=
+    "Vi-Commands.html#Vi-Commands" accesskey="u" rel="up">Vi
+    Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

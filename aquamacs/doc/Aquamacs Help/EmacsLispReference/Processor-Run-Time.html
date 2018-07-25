@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,108 +19,163 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Processor Run Time</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Processor Run Time">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Processor Run Time">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="System-Interface.html#System-Interface" rel="up" title="System Interface">
-<link href="Time-Calculations.html#Time-Calculations" rel="next" title="Time Calculations">
-<link href="Time-Parsing.html#Time-Parsing" rel="prev" title="Time Parsing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Processor Run
+  Time</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Processor Run Time" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Processor Run Time" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="System-Interface.html#System-Interface" rel="up"
+  title="System Interface" />
+  <link href="Time-Calculations.html#Time-Calculations" rel="next"
+  title="Time Calculations" />
+  <link href="Time-Parsing.html#Time-Parsing" rel="prev" title=
+  "Time Parsing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Processor-Run-Time" id="Processor-Run-Time"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Time-Calculations.html#Time-Calculations"
+    accesskey="n" rel="next">Time Calculations</a>, Previous:
+    <a href="Time-Parsing.html#Time-Parsing" accesskey="p" rel=
+    "prev">Time Parsing</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Processor-Run-time" id="Processor-Run-time"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Processor-Run-Time"></a>
-<div class="header">
-<p>
-Next: <a href="Time-Calculations.html#Time-Calculations" accesskey="n" rel="next">Time Calculations</a>, Previous: <a href="Time-Parsing.html#Time-Parsing" accesskey="p" rel="prev">Time Parsing</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Processor-Run-time"></a>
-<h3 class="section">38.9 Processor Run time</h3>
-<a name="index-processor-run-time"></a>
-<a name="index-Emacs-process-run-time"></a>
+  <h3 class="section">38.9 Processor Run time</h3><a name=
+  "index-processor-run-time" id="index-processor-run-time"></a>
+  <a name="index-Emacs-process-run-time" id=
+  "index-Emacs-process-run-time"></a>
 
-<p>Emacs provides several functions and primitives that return time,
-both elapsed and processor time, used by the Emacs process.
-</p>
-<dl>
-<dt><a name="index-emacs_002duptime"></a>Command: <strong>emacs-uptime</strong> <em>&amp;optional format</em></dt>
-<dd><a name="index-uptime-of-Emacs"></a>
-<p>This function returns a string representing the Emacs
-<em>uptime</em>&mdash;the elapsed wall-clock time this instance of Emacs is
-running.  The string is formatted by <code>format-seconds</code> according
-to the optional argument <var>format</var>.  For the available format
-descriptors, see <a href="Time-Parsing.html#Time-Parsing">format-seconds</a>.  If <var>format</var>
-is <code>nil</code> or omitted, it defaults to <code>&quot;%Y, %D, %H, %M,
-%z%S&quot;</code>.
-</p>
-<p>When called interactively, it prints the uptime in the echo area.
-</p></dd></dl>
+  <p>Emacs provides several functions and primitives that return
+  time, both elapsed and processor time, used by the Emacs
+  process.</p>
 
-<dl>
-<dt><a name="index-get_002dinternal_002drun_002dtime"></a>Function: <strong>get-internal-run-time</strong></dt>
-<dd><p>This function returns the processor run time used by Emacs as a list
-of four integers: <code>(<var>sec-high</var> <var>sec-low</var> <var>microsec</var>
-<var>picosec</var>)</code>, using the same format as <code>current-time</code>
-(see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>).
-</p>
-<p>Note that the time returned by this function excludes the time Emacs
-was not using the processor, and if the Emacs process has several
-threads, the returned value is the sum of the processor times used up
-by all Emacs threads.
-</p>
-<p>If the system doesn&rsquo;t provide a way to determine the processor run
-time, <code>get-internal-run-time</code> returns the same time as
-<code>current-time</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-emacs_002duptime" id=
+    "index-emacs_002duptime"></a>Command:
+    <strong>emacs-uptime</strong> <em>&amp;optional
+    format</em></dt>
 
-<dl>
-<dt><a name="index-emacs_002dinit_002dtime"></a>Command: <strong>emacs-init-time</strong></dt>
-<dd><p>This function returns the duration of the Emacs initialization
-(see <a href="Startup-Summary.html#Startup-Summary">Startup Summary</a>) in seconds, as a string.  When called
-interactively, it prints the duration in the echo area.
-</p></dd></dl>
+    <dd>
+      <a name="index-uptime-of-Emacs" id=
+      "index-uptime-of-Emacs"></a>
 
+      <p>This function returns a string representing the Emacs
+      <em>uptime</em>&mdash;the elapsed wall-clock time this
+      instance of Emacs is running. The string is formatted by
+      <code>format-seconds</code> according to the optional
+      argument <var>format</var>. For the available format
+      descriptors, see <a href=
+      "Time-Parsing.html#Time-Parsing">format-seconds</a>. If
+      <var>format</var> is <code>nil</code> or omitted, it defaults
+      to <code>"%Y, %D, %H, %M, %z%S"</code>.</p>
 
+      <p>When called interactively, it prints the uptime in the
+      echo area.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-get_002dinternal_002drun_002dtime" id=
+    "index-get_002dinternal_002drun_002dtime"></a>Function:
+    <strong>get-internal-run-time</strong></dt>
 
+    <dd>
+      <p>This function returns the processor run time used by Emacs
+      as a list of four integers: <code>(<var>sec-high</var>
+      <var>sec-low</var> <var>microsec</var>
+      <var>picosec</var>)</code>, using the same format as
+      <code>current-time</code> (see <a href=
+      "Time-of-Day.html#Time-of-Day">Time of Day</a>).</p>
+
+      <p>Note that the time returned by this function excludes the
+      time Emacs was not using the processor, and if the Emacs
+      process has several threads, the returned value is the sum of
+      the processor times used up by all Emacs threads.</p>
+
+      <p>If the system doesn&rsquo;t provide a way to determine the
+      processor run time, <code>get-internal-run-time</code>
+      returns the same time as <code>current-time</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-emacs_002dinit_002dtime" id=
+    "index-emacs_002dinit_002dtime"></a>Command:
+    <strong>emacs-init-time</strong></dt>
+
+    <dd>
+      <p>This function returns the duration of the Emacs
+      initialization (see <a href=
+      "Startup-Summary.html#Startup-Summary">Startup Summary</a>)
+      in seconds, as a string. When called interactively, it prints
+      the duration in the echo area.</p>
+    </dd>
+  </dl>
 </body>
 </html>

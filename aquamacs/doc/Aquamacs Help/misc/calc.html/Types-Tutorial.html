@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,524 +18,694 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Types Tutorial</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Types Tutorial">
-<meta name="keywords" content="GNU Emacs Calc Manual: Types Tutorial">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Tutorial.html#Tutorial" rel="up" title="Tutorial">
-<link href="Algebra-Tutorial.html#Algebra-Tutorial" rel="next" title="Algebra Tutorial">
-<link href="List-Tutorial.html#List-Tutorial" rel="prev" title="List Tutorial">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Types Tutorial</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Types Tutorial" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Types Tutorial" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Tutorial.html#Tutorial" rel="up" title="Tutorial" />
+  <link href="Algebra-Tutorial.html#Algebra-Tutorial" rel="next"
+  title="Algebra Tutorial" />
+  <link href="List-Tutorial.html#List-Tutorial" rel="prev" title=
+  "List Tutorial" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Types-Tutorial"></a>
-<div class="header">
-<p>
-Next: <a href="Algebra-Tutorial.html#Algebra-Tutorial" accesskey="n" rel="next">Algebra Tutorial</a>, Previous: <a href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" accesskey="p" rel="prev">Vector/Matrix Tutorial</a>, Up: <a href="Tutorial.html#Tutorial" accesskey="u" rel="up">Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Types-Tutorial-1"></a>
-<h3 class="section">2.4 Types Tutorial</h3>
+<body lang="en" xml:lang="en">
+  <a name="Types-Tutorial" id="Types-Tutorial"></a>
 
-<p>Calc understands a variety of data types as well as simple numbers.
-In this section, we&rsquo;ll experiment with each of these types in turn.
-</p>
-<p>The numbers we&rsquo;ve been using so far have mainly been either <em>integers</em>
-or <em>floats</em>.  We saw that floats are usually a good approximation to
-the mathematical concept of real numbers, but they are only approximations
-and are susceptible to roundoff error.  Calc also supports <em>fractions</em>,
-which can exactly represent any rational number.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  3628800    2:  3628800    1:  518400:7   1:  518414:7   1:  7:518414
+  <div class="header">
+    <p>Next: <a href="Algebra-Tutorial.html#Algebra-Tutorial"
+    accesskey="n" rel="next">Algebra Tutorial</a>, Previous:
+    <a href=
+    "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial"
+    accesskey="p" rel="prev">Vector/Matrix Tutorial</a>, Up:
+    <a href="Tutorial.html#Tutorial" accesskey="u" rel=
+    "up">Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Types-Tutorial-1" id="Types-Tutorial-1"></a>
+
+  <h3 class="section">2.4 Types Tutorial</h3>
+
+  <p>Calc understands a variety of data types as well as simple
+  numbers. In this section, we&rsquo;ll experiment with each of
+  these types in turn.</p>
+
+  <p>The numbers we&rsquo;ve been using so far have mainly been
+  either <em>integers</em> or <em>floats</em>. We saw that floats
+  are usually a good approximation to the mathematical concept of
+  real numbers, but they are only approximations and are
+  susceptible to roundoff error. Calc also supports
+  <em>fractions</em>, which can exactly represent any rational
+  number.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  3628800    2:  3628800    1:  518400:7   1:  518414:7   1:  7:518414
     .          1:  49             .              .              .
                    .
 
-    10 !           49 <span class="key">RET</span>         :              2 +            &amp;
-</pre></div>
+    10 !           49 <span class=
+"key">RET</span>         :              2 +            &amp;
+</pre>
+  </div>
 
-<p>The <kbd>:</kbd> command divides two integers to get a fraction; <kbd>/</kbd>
-would normally divide integers to get a floating-point result.
-Notice we had to type <tt class="key">RET</tt> between the <kbd>49</kbd> and the <kbd>:</kbd>
-since the <kbd>:</kbd> would otherwise be interpreted as part of a
-fraction beginning with 49.
-</p>
-<p>You can convert between floating-point and fractional format using
-<kbd>c f</kbd> and <kbd>c F</kbd>:
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  1.35027217629e-5    1:  7:518414
+  <p>The <kbd>:</kbd> command divides two integers to get a
+  fraction; <kbd>/</kbd> would normally divide integers to get a
+  floating-point result. Notice we had to type <tt class=
+  "key">RET</tt> between the <kbd>49</kbd> and the <kbd>:</kbd>
+  since the <kbd>:</kbd> would otherwise be interpreted as part of
+  a fraction beginning with 49.</p>
+
+  <p>You can convert between floating-point and fractional format
+  using <kbd>c f</kbd> and <kbd>c F</kbd>:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  1.35027217629e-5    1:  7:518414
     .                       .
 
     c f                     c F
-</pre></div>
+</pre>
+  </div>
 
-<p>The <kbd>c F</kbd> command replaces a floating-point number with the
-&ldquo;simplest&rdquo; fraction whose floating-point representation is the
-same, to within the current precision.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  3.14159265359   1:  1146408:364913   1:  3.1416   1:  355:113
+  <p>The <kbd>c F</kbd> command replaces a floating-point number
+  with the &ldquo;simplest&rdquo; fraction whose floating-point
+  representation is the same, to within the current precision.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  3.14159265359   1:  1146408:364913   1:  3.1416   1:  355:113
     .                   .                    .            .
 
-    P                   c F      <span class="key">DEL</span>       p 5 <span class="key">RET</span> P      c F
-</pre></div>
+    P                   c F      <span class=
+"key">DEL</span>       p 5 <span class="key">RET</span> P      c F
+</pre>
+  </div>
 
-<p>(&bull;) <strong>Exercise 1.</strong>  A calculation has produced the
-result 1.26508260337.  You suspect it is the square root of the
-product of &lsquo;<samp>pi</samp>&rsquo; and some rational number.  Is it?  (Be sure
-to allow for roundoff error!)  See <a href="Types-Answer-1.html#Types-Answer-1">1</a>. (&bull;)
-</p>
-<p><em>Complex numbers</em> can be stored in both rectangular and polar form.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  -9     1:  (0, 3)    1:  (3; 90.)   1:  (6; 90.)   1:  (2.4495; 45.)
+  <p>(&bull;) <strong>Exercise 1.</strong> A calculation has
+  produced the result 1.26508260337. You suspect it is the square
+  root of the product of &lsquo;<samp>pi</samp>&rsquo; and some
+  rational number. Is it? (Be sure to allow for roundoff error!)
+  See <a href="Types-Answer-1.html#Types-Answer-1">1</a>.
+  (&bull;)</p>
+
+  <p><em>Complex numbers</em> can be stored in both rectangular and
+  polar form.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  -9     1:  (0, 3)    1:  (3; 90.)   1:  (6; 90.)   1:  (2.4495; 45.)
     .          .             .              .              .
 
     9 n        Q             c p            2 *            Q
-</pre></div>
+</pre>
+  </div>
 
-<p>The square root of <i>-9</i> is by default rendered in rectangular form
-(&lsquo;<samp>0&nbsp;+&nbsp;3i</samp>&rsquo;<!-- /@w -->), but we can convert it to polar form (3 with a
-phase angle of 90 degrees).  All the usual arithmetic and scientific
-operations are defined on both types of complex numbers.
-</p>
-<p>Another generalized kind of number is <em>infinity</em>.  Infinity
-isn&rsquo;t really a number, but it can sometimes be treated like one.
-Calc uses the symbol <code>inf</code> to represent positive infinity,
-i.e., a value greater than any real number.  Naturally, you can
-also write &lsquo;<samp>-inf</samp>&rsquo; for minus infinity, a value less than any
-real number.  The word <code>inf</code> can only be input using
-algebraic entry.
-</p>
-<div class="smallexample">
-<pre class="smallexample">2:  inf        2:  -inf       2:  -inf       2:  -inf       1:  nan
+  <p>The square root of <i>-9</i> is by default rendered in
+  rectangular form (&lsquo;<samp>0&nbsp;+&nbsp;3i</samp>&rsquo;
+  <!-- /@w -->), but we can convert it to polar form (3 with a
+  phase angle of 90 degrees). All the usual arithmetic and
+  scientific operations are defined on both types of complex
+  numbers.</p>
+
+  <p>Another generalized kind of number is <em>infinity</em>.
+  Infinity isn&rsquo;t really a number, but it can sometimes be
+  treated like one. Calc uses the symbol <code>inf</code> to
+  represent positive infinity, i.e., a value greater than any real
+  number. Naturally, you can also write
+  &lsquo;<samp>-inf</samp>&rsquo; for minus infinity, a value less
+  than any real number. The word <code>inf</code> can only be input
+  using algebraic entry.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+2:  inf        2:  -inf       2:  -inf       2:  -inf       1:  nan
 1:  -17        1:  -inf       1:  -inf       1:  inf            .
     .              .              .              .
 
-' inf <span class="key">RET</span> 17 n     *  <span class="key">RET</span>         72 +           A              +
-</pre></div>
+' inf <span class="key">RET</span> 17 n     *  <span class=
+"key">RET</span>         72 +           A              +
+</pre>
+  </div>
 
-<p>Since infinity is infinitely large, multiplying it by any finite
-number (like <i>-17</i>) has no effect, except that since <i>-17</i>
-is negative, it changes a plus infinity to a minus infinity.
-(&ldquo;A huge positive number, multiplied by <i>-17</i>, yields a huge
-negative number.&rdquo;)  Adding any finite number to infinity also
-leaves it unchanged.  Taking an absolute value gives us plus
-infinity again.  Finally, we add this plus infinity to the minus
-infinity we had earlier.  If you work it out, you might expect
-the answer to be <i>-72</i> for this.  But the 72 has been completely
-lost next to the infinities; by the time we compute &lsquo;<samp>inf&nbsp;<span class="nolinebreak">-</span>&nbsp;inf</samp>&rsquo;<!-- /@w -->
-the finite difference between them, if any, is undetectable.
-So we say the result is <em>indeterminate</em>, which Calc writes
-with the symbol <code>nan</code> (for Not A Number).
-</p>
-<p>Dividing by zero is normally treated as an error, but you can get
-Calc to write an answer in terms of infinity by pressing <kbd>m i</kbd>
-to turn on Infinite mode.
-</p>
-<div class="smallexample">
-<pre class="smallexample">3:  nan        2:  nan        2:  nan        2:  nan        1:  nan
+  <p>Since infinity is infinitely large, multiplying it by any
+  finite number (like <i>-17</i>) has no effect, except that since
+  <i>-17</i> is negative, it changes a plus infinity to a minus
+  infinity. (&ldquo;A huge positive number, multiplied by
+  <i>-17</i>, yields a huge negative number.&rdquo;) Adding any
+  finite number to infinity also leaves it unchanged. Taking an
+  absolute value gives us plus infinity again. Finally, we add this
+  plus infinity to the minus infinity we had earlier. If you work
+  it out, you might expect the answer to be <i>-72</i> for this.
+  But the 72 has been completely lost next to the infinities; by
+  the time we compute &lsquo;<samp>inf&nbsp;<span class=
+  "nolinebreak">-</span>&nbsp;inf</samp>&rsquo;<!-- /@w -->
+  the finite difference between them, if any, is undetectable. So
+  we say the result is <em>indeterminate</em>, which Calc writes
+  with the symbol <code>nan</code> (for Not A Number).</p>
+
+  <p>Dividing by zero is normally treated as an error, but you can
+  get Calc to write an answer in terms of infinity by pressing
+  <kbd>m i</kbd> to turn on Infinite mode.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+3:  nan        2:  nan        2:  nan        2:  nan        1:  nan
 2:  1          1:  1 / 0      1:  uinf       1:  uinf           .
 1:  0              .              .              .
     .
 
-  1 <span class="key">RET</span> 0          /       m i    U /            17 n *         +
-</pre></div>
+  1 <span class=
+"key">RET</span> 0          /       m i    U /            17 n *         +
+</pre>
+  </div>
 
-<p>Dividing by zero normally is left unevaluated, but after <kbd>m i</kbd>
-it instead gives an infinite result.  The answer is actually
-<code>uinf</code>, &ldquo;undirected infinity.&rdquo;  If you look at a graph of
-&lsquo;<samp>1 / x</samp>&rsquo; around &lsquo;<samp>x&nbsp;=&nbsp;0</samp>&rsquo;<!-- /@w -->, you&rsquo;ll see that it goes toward
-plus infinity as you approach zero from above, but toward minus
-infinity as you approach from below.  Since we said only &lsquo;<samp>1 / 0</samp>&rsquo;,
-Calc knows that the answer is infinite but not in which direction.
-That&rsquo;s what <code>uinf</code> means.  Notice that multiplying <code>uinf</code>
-by a negative number still leaves plain <code>uinf</code>; there&rsquo;s no
-point in saying &lsquo;<samp>-uinf</samp>&rsquo; because the sign of <code>uinf</code> is
-unknown anyway.  Finally, we add <code>uinf</code> to our <code>nan</code>,
-yielding <code>nan</code> again.  It&rsquo;s easy to see that, because
-<code>nan</code> means &ldquo;totally unknown&rdquo; while <code>uinf</code> means
-&ldquo;unknown sign but known to be infinite,&rdquo; the more mysterious
-<code>nan</code> wins out when it is combined with <code>uinf</code>, or, for
-that matter, with anything else.
-</p>
-<p>(&bull;) <strong>Exercise 2.</strong>  Predict what Calc will answer
-for each of these formulas:  &lsquo;<samp>inf / inf</samp>&rsquo;, &lsquo;<samp>exp(inf)</samp>&rsquo;,
-&lsquo;<samp>exp(-inf)</samp>&rsquo;, &lsquo;<samp>sqrt(-inf)</samp>&rsquo;, &lsquo;<samp>sqrt(uinf)</samp>&rsquo;,
-&lsquo;<samp>abs(uinf)</samp>&rsquo;, &lsquo;<samp>ln(0)</samp>&rsquo;.
-See <a href="Types-Answer-2.html#Types-Answer-2">2</a>. (&bull;)
-</p>
-<p>(&bull;) <strong>Exercise 3.</strong>  We saw that &lsquo;<samp>inf - inf = nan</samp>&rsquo;,
-which stands for an unknown value.  Can <code>nan</code> stand for
-a complex number?  Can it stand for infinity?
-See <a href="Types-Answer-3.html#Types-Answer-3">3</a>. (&bull;)
-</p>
-<p><em>HMS forms</em> represent a value in terms of hours, minutes, and
-seconds.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  2@ 30' 0&quot;     1:  3@ 30' 0&quot;     2:  3@ 30' 0&quot;     1:  2.
-    .                 .             1:  1@ 45' 0.&quot;        .
+  <p>Dividing by zero normally is left unevaluated, but after
+  <kbd>m i</kbd> it instead gives an infinite result. The answer is
+  actually <code>uinf</code>, &ldquo;undirected infinity.&rdquo; If
+  you look at a graph of &lsquo;<samp>1 / x</samp>&rsquo; around
+  &lsquo;<samp>x&nbsp;=&nbsp;0</samp>&rsquo;<!-- /@w -->,
+  you&rsquo;ll see that it goes toward plus infinity as you
+  approach zero from above, but toward minus infinity as you
+  approach from below. Since we said only &lsquo;<samp>1 /
+  0</samp>&rsquo;, Calc knows that the answer is infinite but not
+  in which direction. That&rsquo;s what <code>uinf</code> means.
+  Notice that multiplying <code>uinf</code> by a negative number
+  still leaves plain <code>uinf</code>; there&rsquo;s no point in
+  saying &lsquo;<samp>-uinf</samp>&rsquo; because the sign of
+  <code>uinf</code> is unknown anyway. Finally, we add
+  <code>uinf</code> to our <code>nan</code>, yielding
+  <code>nan</code> again. It&rsquo;s easy to see that, because
+  <code>nan</code> means &ldquo;totally unknown&rdquo; while
+  <code>uinf</code> means &ldquo;unknown sign but known to be
+  infinite,&rdquo; the more mysterious <code>nan</code> wins out
+  when it is combined with <code>uinf</code>, or, for that matter,
+  with anything else.</p>
+
+  <p>(&bull;) <strong>Exercise 2.</strong> Predict what Calc will
+  answer for each of these formulas: &lsquo;<samp>inf /
+  inf</samp>&rsquo;, &lsquo;<samp>exp(inf)</samp>&rsquo;,
+  &lsquo;<samp>exp(-inf)</samp>&rsquo;,
+  &lsquo;<samp>sqrt(-inf)</samp>&rsquo;,
+  &lsquo;<samp>sqrt(uinf)</samp>&rsquo;,
+  &lsquo;<samp>abs(uinf)</samp>&rsquo;,
+  &lsquo;<samp>ln(0)</samp>&rsquo;. See <a href=
+  "Types-Answer-2.html#Types-Answer-2">2</a>. (&bull;)</p>
+
+  <p>(&bull;) <strong>Exercise 3.</strong> We saw that
+  &lsquo;<samp>inf - inf = nan</samp>&rsquo;, which stands for an
+  unknown value. Can <code>nan</code> stand for a complex number?
+  Can it stand for infinity? See <a href=
+  "Types-Answer-3.html#Types-Answer-3">3</a>. (&bull;)</p>
+
+  <p><em>HMS forms</em> represent a value in terms of hours,
+  minutes, and seconds.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  2@ 30' 0"     1:  3@ 30' 0"     2:  3@ 30' 0"     1:  2.
+    .                 .             1:  1@ 45' 0."        .
                                         .
 
-  2@ 30' <span class="key">RET</span>          1 +               <span class="key">RET</span> 2 /           /
-</pre></div>
+  2@ 30' <span class=
+"key">RET</span>          1 +               <span class=
+"key">RET</span> 2 /           /
+</pre>
+  </div>
 
-<p>HMS forms can also be used to hold angles in degrees, minutes, and
-seconds.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  0.5        1:  26.56505   1:  26@ 33' 54.18&quot;    1:  0.44721
+  <p>HMS forms can also be used to hold angles in degrees, minutes,
+  and seconds.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  0.5        1:  26.56505   1:  26@ 33' 54.18"    1:  0.44721
     .              .              .                     .
 
     0.5            I T            c h                   S
-</pre></div>
+</pre>
+  </div>
 
-<p>First we convert the inverse tangent of 0.5 to degrees-minutes-seconds
-form, then we take the sine of that angle.  Note that the trigonometric
-functions will accept HMS forms directly as input.
-</p>
-<a name="index-Beatles"></a>
-<p>(&bull;) <strong>Exercise 4.</strong>  The Beatles&rsquo; <em>Abbey Road</em> is
-47 minutes and 26 seconds long, and contains 17 songs.  What is the
-average length of a song on <em>Abbey Road</em>?  If the Extended Disco
-Version of <em>Abbey Road</em> added 20 seconds to the length of each
-song, how long would the album be?  See <a href="Types-Answer-4.html#Types-Answer-4">4</a>. (&bull;)
-</p>
-<p>A <em>date form</em> represents a date, or a date and time.  Dates must
-be entered using algebraic entry.  Date forms are surrounded by
-&lsquo;<samp>&lt; &gt;</samp>&rsquo; symbols; most standard formats for dates are recognized.
-</p>
-<div class="smallexample">
-<pre class="smallexample">2:  &lt;Sun Jan 13, 1991&gt;                    1:  2.25
+  <p>First we convert the inverse tangent of 0.5 to
+  degrees-minutes-seconds form, then we take the sine of that
+  angle. Note that the trigonometric functions will accept HMS
+  forms directly as input.</p><a name="index-Beatles" id=
+  "index-Beatles"></a>
+
+  <p>(&bull;) <strong>Exercise 4.</strong> The Beatles&rsquo;
+  <em>Abbey Road</em> is 47 minutes and 26 seconds long, and
+  contains 17 songs. What is the average length of a song on
+  <em>Abbey Road</em>? If the Extended Disco Version of <em>Abbey
+  Road</em> added 20 seconds to the length of each song, how long
+  would the album be? See <a href=
+  "Types-Answer-4.html#Types-Answer-4">4</a>. (&bull;)</p>
+
+  <p>A <em>date form</em> represents a date, or a date and time.
+  Dates must be entered using algebraic entry. Date forms are
+  surrounded by &lsquo;<samp>&lt; &gt;</samp>&rsquo; symbols; most
+  standard formats for dates are recognized.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+2:  &lt;Sun Jan 13, 1991&gt;                    1:  2.25
 1:  &lt;6:00pm Thu Jan 10, 1991&gt;                 .
     .
 
-' &lt;13 Jan 1991&gt;, &lt;1/10/91, 6pm&gt; <span class="key">RET</span>           -
-</pre></div>
+' &lt;13 Jan 1991&gt;, &lt;1/10/91, 6pm&gt; <span class=
+"key">RET</span>           -
+</pre>
+  </div>
 
-<p>In this example, we enter two dates, then subtract to find the
-number of days between them.  It is also possible to add an
-HMS form or a number (of days) to a date form to get another
-date form.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  &lt;4:45:59pm Mon Jan 14, 1991&gt;     1:  &lt;2:50:59am Thu Jan 17, 1991&gt;
+  <p>In this example, we enter two dates, then subtract to find the
+  number of days between them. It is also possible to add an HMS
+  form or a number (of days) to a date form to get another date
+  form.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  &lt;4:45:59pm Mon Jan 14, 1991&gt;     1:  &lt;2:50:59am Thu Jan 17, 1991&gt;
     .                                    .
 
     t N                                  2 + 10@ 5' +
-</pre></div>
+</pre>
+  </div>
 
-<p>The <kbd>t N</kbd> (&ldquo;now&rdquo;) command pushes the current date and time on the
-stack; then we add two days, ten hours and five minutes to the date and
-time.  Other date-and-time related commands include <kbd>t J</kbd>, which
-does Julian day conversions, <kbd>t W</kbd>, which finds the beginning of
-the week in which a date form lies, and <kbd>t I</kbd>, which increments a
-date by one or several months.  See <a href="Date-Arithmetic.html#Date-Arithmetic">Date Arithmetic</a>, for more.
-</p>
-<p>(&bull;) <strong>Exercise 5.</strong>  How many days until the next
-Friday the 13th?  See <a href="Types-Answer-5.html#Types-Answer-5">5</a>. (&bull;)
-</p>
-<p>(&bull;) <strong>Exercise 6.</strong>  How many leap years will there be
-between now and the year 10001 AD?  See <a href="Types-Answer-6.html#Types-Answer-6">6</a>. (&bull;)
-</p>
-<a name="index-Slope-and-angle-of-a-line"></a>
-<a name="index-Angle-and-slope-of-a-line"></a>
-<p>An <em>error form</em> represents a mean value with an attached standard
-deviation, or error estimate.  Suppose our measurements indicate that
-a certain telephone pole is about 30 meters away, with an estimated
-error of 1 meter, and 8 meters tall, with an estimated error of 0.2
-meters.  What is the slope of a line from here to the top of the
-pole, and what is the equivalent angle in degrees?
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  8 +/- 0.2    2:  8 +/- 0.2   1:  0.266 +/- 0.011   1:  14.93 +/- 0.594
+  <p>The <kbd>t N</kbd> (&ldquo;now&rdquo;) command pushes the
+  current date and time on the stack; then we add two days, ten
+  hours and five minutes to the date and time. Other date-and-time
+  related commands include <kbd>t J</kbd>, which does Julian day
+  conversions, <kbd>t W</kbd>, which finds the beginning of the
+  week in which a date form lies, and <kbd>t I</kbd>, which
+  increments a date by one or several months. See <a href=
+  "Date-Arithmetic.html#Date-Arithmetic">Date Arithmetic</a>, for
+  more.</p>
+
+  <p>(&bull;) <strong>Exercise 5.</strong> How many days until the
+  next Friday the 13th? See <a href=
+  "Types-Answer-5.html#Types-Answer-5">5</a>. (&bull;)</p>
+
+  <p>(&bull;) <strong>Exercise 6.</strong> How many leap years will
+  there be between now and the year 10001 AD? See <a href=
+  "Types-Answer-6.html#Types-Answer-6">6</a>. (&bull;)</p><a name=
+  "index-Slope-and-angle-of-a-line" id=
+  "index-Slope-and-angle-of-a-line"></a> <a name=
+  "index-Angle-and-slope-of-a-line" id=
+  "index-Angle-and-slope-of-a-line"></a>
+
+  <p>An <em>error form</em> represents a mean value with an
+  attached standard deviation, or error estimate. Suppose our
+  measurements indicate that a certain telephone pole is about 30
+  meters away, with an estimated error of 1 meter, and 8 meters
+  tall, with an estimated error of 0.2 meters. What is the slope of
+  a line from here to the top of the pole, and what is the
+  equivalent angle in degrees?</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  8 +/- 0.2    2:  8 +/- 0.2   1:  0.266 +/- 0.011   1:  14.93 +/- 0.594
     .            1:  30 +/- 1        .                     .
                      .
 
-    8 p .2 <span class="key">RET</span>       30 p 1          /                     I T
-</pre></div>
+    8 p .2 <span class=
+"key">RET</span>       30 p 1          /                     I T
+</pre>
+  </div>
 
-<p>This means that the angle is about 15 degrees, and, assuming our
-original error estimates were valid standard deviations, there is about
-a 60% chance that the result is correct within 0.59 degrees.
-</p>
-<a name="index-Torus_002c-volume-of"></a>
-<p>(&bull;) <strong>Exercise 7.</strong>  The volume of a torus (a donut shape) is
-&lsquo;<samp>2&nbsp;pi^2&nbsp;R&nbsp;r^2</samp>&rsquo;<!-- /@w -->
-where &lsquo;<samp>R</samp>&rsquo; is the radius of the circle that
-defines the center of the tube and &lsquo;<samp>r</samp>&rsquo; is the radius of the tube
-itself.  Suppose &lsquo;<samp>R</samp>&rsquo; is 20 cm and &lsquo;<samp>r</samp>&rsquo; is 4 cm, each known to
-within 5 percent.  What is the volume and the relative uncertainty of
-the volume?  See <a href="Types-Answer-7.html#Types-Answer-7">7</a>. (&bull;)
-</p>
-<p>An <em>interval form</em> represents a range of values.  While an
-error form is best for making statistical estimates, intervals give
-you exact bounds on an answer.  Suppose we additionally know that
-our telephone pole is definitely between 28 and 31 meters away,
-and that it is between 7.7 and 8.1 meters tall.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  [7.7 .. 8.1]  2:  [7.7 .. 8.1]  1:  [0.24 .. 0.28]  1:  [13.9 .. 16.1]
+  <p>This means that the angle is about 15 degrees, and, assuming
+  our original error estimates were valid standard deviations,
+  there is about a 60% chance that the result is correct within
+  0.59 degrees.</p><a name="index-Torus_002c-volume-of" id=
+  "index-Torus_002c-volume-of"></a>
+
+  <p>(&bull;) <strong>Exercise 7.</strong> The volume of a torus (a
+  donut shape) is
+  &lsquo;<samp>2&nbsp;pi^2&nbsp;R&nbsp;r^2</samp>&rsquo;<!-- /@w -->
+  where &lsquo;<samp>R</samp>&rsquo; is the radius of the circle
+  that defines the center of the tube and
+  &lsquo;<samp>r</samp>&rsquo; is the radius of the tube itself.
+  Suppose &lsquo;<samp>R</samp>&rsquo; is 20 cm and
+  &lsquo;<samp>r</samp>&rsquo; is 4 cm, each known to within 5
+  percent. What is the volume and the relative uncertainty of the
+  volume? See <a href="Types-Answer-7.html#Types-Answer-7">7</a>.
+  (&bull;)</p>
+
+  <p>An <em>interval form</em> represents a range of values. While
+  an error form is best for making statistical estimates, intervals
+  give you exact bounds on an answer. Suppose we additionally know
+  that our telephone pole is definitely between 28 and 31 meters
+  away, and that it is between 7.7 and 8.1 meters tall.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  [7.7 .. 8.1]  2:  [7.7 .. 8.1]  1:  [0.24 .. 0.28]  1:  [13.9 .. 16.1]
     .             1:  [28 .. 31]        .                   .
                       .
 
   [ 7.7 .. 8.1 ]    [ 28 .. 31 ]        /                   I T
-</pre></div>
+</pre>
+  </div>
 
-<p>If our bounds were correct, then the angle to the top of the pole
-is sure to lie in the range shown.
-</p>
-<p>The square brackets around these intervals indicate that the endpoints
-themselves are allowable values.  In other words, the distance to the
-telephone pole is between 28 and 31, <em>inclusive</em>.  You can also
-make an interval that is exclusive of its endpoints by writing
-parentheses instead of square brackets.  You can even make an interval
-which is inclusive (&ldquo;closed&rdquo;) on one end and exclusive (&ldquo;open&rdquo;) on
-the other.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  [1 .. 10)    1:  (0.1 .. 1]   2:  (0.1 .. 1]   1:  (0.2 .. 3)
+  <p>If our bounds were correct, then the angle to the top of the
+  pole is sure to lie in the range shown.</p>
+
+  <p>The square brackets around these intervals indicate that the
+  endpoints themselves are allowable values. In other words, the
+  distance to the telephone pole is between 28 and 31,
+  <em>inclusive</em>. You can also make an interval that is
+  exclusive of its endpoints by writing parentheses instead of
+  square brackets. You can even make an interval which is inclusive
+  (&ldquo;closed&rdquo;) on one end and exclusive
+  (&ldquo;open&rdquo;) on the other.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  [1 .. 10)    1:  (0.1 .. 1]   2:  (0.1 .. 1]   1:  (0.2 .. 3)
     .                .            1:  [2 .. 3)         .
                                       .
 
   [ 1 .. 10 )        &amp;              [ 2 .. 3 )         *
-</pre></div>
+</pre>
+  </div>
 
-<p>The Calculator automatically keeps track of which end values should
-be open and which should be closed.  You can also make infinite or
-semi-infinite intervals by using &lsquo;<samp>-inf</samp>&rsquo; or &lsquo;<samp>inf</samp>&rsquo; for one
-or both endpoints.
-</p>
-<p>(&bull;) <strong>Exercise 8.</strong>  What answer would you expect from
-&lsquo;<samp>1&nbsp;/<!-- /@w --> (0&nbsp;..&nbsp;10)<!-- /@w --></samp>&rsquo;?  What about &lsquo;<samp>1&nbsp;/<!-- /@w --> <span class="nolinebreak">(-10</span>&nbsp;..&nbsp;0)<!-- /@w --></samp>&rsquo;?  What
-about &lsquo;<samp>1&nbsp;/<!-- /@w --> [0&nbsp;..&nbsp;10]<!-- /@w --></samp>&rsquo; (where the interval actually includes
-zero)?  What about &lsquo;<samp>1&nbsp;/<!-- /@w --> <span class="nolinebreak">(-10</span>&nbsp;..&nbsp;10)<!-- /@w --></samp>&rsquo;?
-See <a href="Types-Answer-8.html#Types-Answer-8">8</a>. (&bull;)
-</p>
-<p>(&bull;) <strong>Exercise 9.</strong>  Two easy ways of squaring a number
-are <kbd><span class="key">RET</span> *</kbd> and <kbd>2&nbsp;^</kbd><!-- /@w -->.  Normally these produce the same
-answer.  Would you expect this still to hold true for interval forms?
-If not, which of these will result in a larger interval?
-See <a href="Types-Answer-9.html#Types-Answer-9">9</a>. (&bull;)
-</p>
-<p>A <em>modulo form</em> is used for performing arithmetic modulo <var>m</var>.
-For example, arithmetic involving time is generally done modulo 12
-or 24 hours.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  17 mod 24    1:  3 mod 24     1:  21 mod 24    1:  9 mod 24
+  <p>The Calculator automatically keeps track of which end values
+  should be open and which should be closed. You can also make
+  infinite or semi-infinite intervals by using
+  &lsquo;<samp>-inf</samp>&rsquo; or &lsquo;<samp>inf</samp>&rsquo;
+  for one or both endpoints.</p>
+
+  <p>(&bull;) <strong>Exercise 8.</strong> What answer would you
+  expect from &lsquo;<samp>1&nbsp;/<!-- /@w --> (0&nbsp;..&nbsp;10)
+  <!-- /@w --></samp>&rsquo;? What about &lsquo;<samp>1&nbsp;/
+  <!-- /@w --> <span class=
+  "nolinebreak">(-10</span>&nbsp;..&nbsp;0)<!-- /@w --></samp>&rsquo;?
+  What about &lsquo;<samp>1&nbsp;/<!-- /@w --> [0&nbsp;..&nbsp;10]
+  <!-- /@w --></samp>&rsquo; (where the interval actually includes
+  zero)? What about &lsquo;<samp>1&nbsp;/<!-- /@w --> <span class=
+  "nolinebreak">(-10</span>&nbsp;..&nbsp;10)
+  <!-- /@w --></samp>&rsquo;? See <a href=
+  "Types-Answer-8.html#Types-Answer-8">8</a>. (&bull;)</p>
+
+  <p>(&bull;) <strong>Exercise 9.</strong> Two easy ways of
+  squaring a number are <kbd><span class="key">RET</span> *</kbd>
+  and <kbd>2&nbsp;^</kbd><!-- /@w -->. Normally these produce the
+  same answer. Would you expect this still to hold true for
+  interval forms? If not, which of these will result in a larger
+  interval? See <a href="Types-Answer-9.html#Types-Answer-9">9</a>.
+  (&bull;)</p>
+
+  <p>A <em>modulo form</em> is used for performing arithmetic
+  modulo <var>m</var>. For example, arithmetic involving time is
+  generally done modulo 12 or 24 hours.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  17 mod 24    1:  3 mod 24     1:  21 mod 24    1:  9 mod 24
     .                .                .                .
 
-    17 M 24 <span class="key">RET</span>      10 +             n                5 /
-</pre></div>
+    17 M 24 <span class=
+"key">RET</span>      10 +             n                5 /
+</pre>
+  </div>
 
-<p>In this last step, Calc has divided by 5 modulo 24; i.e., it has found a
-new number which, when multiplied by 5 modulo 24, produces the original
-number, 21.  If <var>m</var> is prime and the divisor is not a multiple of
-<var>m</var>, it is always possible to find such a number.  For non-prime
-<var>m</var> like 24, it is only sometimes possible.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  10 mod 24    1:  16 mod 24    1:  1000000...   1:  16
+  <p>In this last step, Calc has divided by 5 modulo 24; i.e., it
+  has found a new number which, when multiplied by 5 modulo 24,
+  produces the original number, 21. If <var>m</var> is prime and
+  the divisor is not a multiple of <var>m</var>, it is always
+  possible to find such a number. For non-prime <var>m</var> like
+  24, it is only sometimes possible.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  10 mod 24    1:  16 mod 24    1:  1000000...   1:  16
     .                .                .                .
 
-    10 M 24 <span class="key">RET</span>      100 ^            10 <span class="key">RET</span> 100 ^     24 %
-</pre></div>
+    10 M 24 <span class=
+"key">RET</span>      100 ^            10 <span class=
+"key">RET</span> 100 ^     24 %
+</pre>
+  </div>
 
-<p>These two calculations get the same answer, but the first one is
-much more efficient because it avoids the huge intermediate value
-that arises in the second one.
-</p>
-<a name="index-Fermat_002c-primality-test-of"></a>
-<p>(&bull;) <strong>Exercise 10.</strong>  A theorem of Pierre de Fermat
-says that
-&lsquo;<samp>x^(n-1) mod n = 1</samp>&rsquo;
-if &lsquo;<samp>n</samp>&rsquo; is a prime number and &lsquo;<samp>x</samp>&rsquo; is an integer less than
-&lsquo;<samp>n</samp>&rsquo;.  If &lsquo;<samp>n</samp>&rsquo; is <em>not</em> a prime number, this will
-<em>not</em> be true for most values of &lsquo;<samp>x</samp>&rsquo;.  Thus we can test
-informally if a number is prime by trying this formula for several
-values of &lsquo;<samp>x</samp>&rsquo;.  Use this test to tell whether the following numbers
-are prime: 811749613, 15485863.  See <a href="Types-Answer-10.html#Types-Answer-10">10</a>. (&bull;)
-</p>
-<p>It is possible to use HMS forms as parts of error forms, intervals,
-modulo forms, or as the phase part of a polar complex number.
-For example, the <code>calc-time</code> command pushes the current time
-of day on the stack as an HMS/modulo form.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  17@ 34' 45&quot; mod 24@ 0' 0&quot;     1:  6@ 22' 15&quot; mod 24@ 0' 0&quot;
+  <p>These two calculations get the same answer, but the first one
+  is much more efficient because it avoids the huge intermediate
+  value that arises in the second one.</p><a name=
+  "index-Fermat_002c-primality-test-of" id=
+  "index-Fermat_002c-primality-test-of"></a>
+
+  <p>(&bull;) <strong>Exercise 10.</strong> A theorem of Pierre de
+  Fermat says that &lsquo;<samp>x^(n-1) mod n = 1</samp>&rsquo; if
+  &lsquo;<samp>n</samp>&rsquo; is a prime number and
+  &lsquo;<samp>x</samp>&rsquo; is an integer less than
+  &lsquo;<samp>n</samp>&rsquo;. If &lsquo;<samp>n</samp>&rsquo; is
+  <em>not</em> a prime number, this will <em>not</em> be true for
+  most values of &lsquo;<samp>x</samp>&rsquo;. Thus we can test
+  informally if a number is prime by trying this formula for
+  several values of &lsquo;<samp>x</samp>&rsquo;. Use this test to
+  tell whether the following numbers are prime: 811749613,
+  15485863. See <a href=
+  "Types-Answer-10.html#Types-Answer-10">10</a>. (&bull;)</p>
+
+  <p>It is possible to use HMS forms as parts of error forms,
+  intervals, modulo forms, or as the phase part of a polar complex
+  number. For example, the <code>calc-time</code> command pushes
+  the current time of day on the stack as an HMS/modulo form.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  17@ 34' 45" mod 24@ 0' 0"     1:  6@ 22' 15" mod 24@ 0' 0"
     .                                 .
 
     x time <span class="key">RET</span>                        n
-</pre></div>
+</pre>
+  </div>
 
-<p>This calculation tells me it is six hours and 22 minutes until midnight.
-</p>
-<p>(&bull;) <strong>Exercise 11.</strong>  A rule of thumb is that one year
-is about
-&lsquo;<samp>pi&nbsp;*&nbsp;10^7</samp>&rsquo;<!-- /@w -->
-seconds.  What time will it be that many seconds from right now?
-See <a href="Types-Answer-11.html#Types-Answer-11">11</a>. (&bull;)
-</p>
-<p>(&bull;) <strong>Exercise 12.</strong>  You are preparing to order packaging
-for the CD release of the Extended Disco Version of <em>Abbey Road</em>.
-You are told that the songs will actually be anywhere from 20 to 60
-seconds longer than the originals.  One CD can hold about 75 minutes
-of music.  Should you order single or double packages?
-See <a href="Types-Answer-12.html#Types-Answer-12">12</a>. (&bull;)
-</p>
-<p>Another kind of data the Calculator can manipulate is numbers with
-<em>units</em>.  This isn&rsquo;t strictly a new data type; it&rsquo;s simply an
-application of algebraic expressions, where we use variables with
-suggestive names like &lsquo;<samp>cm</samp>&rsquo; and &lsquo;<samp>in</samp>&rsquo; to represent units
-like centimeters and inches.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  2 in        1:  5.08 cm      1:  0.027778 fath   1:  0.0508 m
+  <p>This calculation tells me it is six hours and 22 minutes until
+  midnight.</p>
+
+  <p>(&bull;) <strong>Exercise 11.</strong> A rule of thumb is that
+  one year is about &lsquo;<samp>pi&nbsp;*&nbsp;10^7</samp>&rsquo;
+  <!-- /@w -->
+  seconds. What time will it be that many seconds from right now?
+  See <a href="Types-Answer-11.html#Types-Answer-11">11</a>.
+  (&bull;)</p>
+
+  <p>(&bull;) <strong>Exercise 12.</strong> You are preparing to
+  order packaging for the CD release of the Extended Disco Version
+  of <em>Abbey Road</em>. You are told that the songs will actually
+  be anywhere from 20 to 60 seconds longer than the originals. One
+  CD can hold about 75 minutes of music. Should you order single or
+  double packages? See <a href=
+  "Types-Answer-12.html#Types-Answer-12">12</a>. (&bull;)</p>
+
+  <p>Another kind of data the Calculator can manipulate is numbers
+  with <em>units</em>. This isn&rsquo;t strictly a new data type;
+  it&rsquo;s simply an application of algebraic expressions, where
+  we use variables with suggestive names like
+  &lsquo;<samp>cm</samp>&rsquo; and &lsquo;<samp>in</samp>&rsquo;
+  to represent units like centimeters and inches.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  2 in        1:  5.08 cm      1:  0.027778 fath   1:  0.0508 m
     .               .                .                   .
 
-    ' 2in <span class="key">RET</span>       u c cm <span class="key">RET</span>       u c fath <span class="key">RET</span>        u b
-</pre></div>
+    ' 2in <span class="key">RET</span>       u c cm <span class=
+"key">RET</span>       u c fath <span class=
+"key">RET</span>        u b
+</pre>
+  </div>
 
-<p>We enter the quantity &ldquo;2 inches&rdquo; (actually an algebraic expression
-which means two times the variable &lsquo;<samp>in</samp>&rsquo;), then we convert it
-first to centimeters, then to fathoms, then finally to &ldquo;base&rdquo; units,
-which in this case means meters.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  9 acre     1:  3 sqrt(acre)   1:  190.84 m   1:  190.84 m + 30 cm
+  <p>We enter the quantity &ldquo;2 inches&rdquo; (actually an
+  algebraic expression which means two times the variable
+  &lsquo;<samp>in</samp>&rsquo;), then we convert it first to
+  centimeters, then to fathoms, then finally to &ldquo;base&rdquo;
+  units, which in this case means meters.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  9 acre     1:  3 sqrt(acre)   1:  190.84 m   1:  190.84 m + 30 cm
     .              .                  .              .
 
- ' 9 acre <span class="key">RET</span>      Q                  u s            ' $+30 cm <span class="key">RET</span>
+ ' 9 acre <span class=
+"key">RET</span>      Q                  u s            ' $+30 cm <span class="key">RET</span>
 
-</pre></div>
-<div class="smallexample">
-<pre class="smallexample">1:  191.14 m     1:  36536.3046 m^2    1:  365363046 cm^2
+</pre>
+  </div>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  191.14 m     1:  36536.3046 m^2    1:  365363046 cm^2
     .                .                     .
 
     u s              2 ^                   u c cgs
-</pre></div>
+</pre>
+  </div>
 
-<p>Since units expressions are really just formulas, taking the square
-root of &lsquo;<samp>acre</samp>&rsquo; is undefined.  After all, <code>acre</code> might be an
-algebraic variable that you will someday assign a value.  We use the
-&ldquo;units-simplify&rdquo; command to simplify the expression with variables
-being interpreted as unit names.
-</p>
-<p>In the final step, we have converted not to a particular unit, but to a
-units system.  The &ldquo;cgs&rdquo; system uses centimeters instead of meters
-as its standard unit of length.
-</p>
-<p>There is a wide variety of units defined in the Calculator.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  55 mph     1:  88.5139 kph   1:   88.5139 km / hr   1:  8.201407e-8 c
+  <p>Since units expressions are really just formulas, taking the
+  square root of &lsquo;<samp>acre</samp>&rsquo; is undefined.
+  After all, <code>acre</code> might be an algebraic variable that
+  you will someday assign a value. We use the
+  &ldquo;units-simplify&rdquo; command to simplify the expression
+  with variables being interpreted as unit names.</p>
+
+  <p>In the final step, we have converted not to a particular unit,
+  but to a units system. The &ldquo;cgs&rdquo; system uses
+  centimeters instead of meters as its standard unit of length.</p>
+
+  <p>There is a wide variety of units defined in the
+  Calculator.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  55 mph     1:  88.5139 kph   1:   88.5139 km / hr   1:  8.201407e-8 c
     .              .                  .                     .
 
- ' 55 mph <span class="key">RET</span>      u c kph <span class="key">RET</span>        u c km/hr <span class="key">RET</span>         u c c <span class="key">RET</span>
-</pre></div>
+ ' 55 mph <span class="key">RET</span>      u c kph <span class=
+"key">RET</span>        u c km/hr <span class=
+"key">RET</span>         u c c <span class="key">RET</span>
+</pre>
+  </div>
 
-<p>We express a speed first in miles per hour, then in kilometers per
-hour, then again using a slightly more explicit notation, then
-finally in terms of fractions of the speed of light.
-</p>
-<p>Temperature conversions are a bit more tricky.  There are two ways to
-interpret &ldquo;20 degrees Fahrenheit&rdquo;&mdash;it could mean an actual
-temperature, or it could mean a change in temperature.  For normal
-units there is no difference, but temperature units have an offset
-as well as a scale factor and so there must be two explicit commands
-for them.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  20 degF       1:  11.1111 degC     1:  -6.666 degC
+  <p>We express a speed first in miles per hour, then in kilometers
+  per hour, then again using a slightly more explicit notation,
+  then finally in terms of fractions of the speed of light.</p>
+
+  <p>Temperature conversions are a bit more tricky. There are two
+  ways to interpret &ldquo;20 degrees Fahrenheit&rdquo;&mdash;it
+  could mean an actual temperature, or it could mean a change in
+  temperature. For normal units there is no difference, but
+  temperature units have an offset as well as a scale factor and so
+  there must be two explicit commands for them.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  20 degF       1:  11.1111 degC     1:  -6.666 degC
     .                 .                    .                 .
 
-  ' 20 degF <span class="key">RET</span>       u c degC <span class="key">RET</span>         U u t degC <span class="key">RET</span>
-</pre></div>
+  ' 20 degF <span class=
+"key">RET</span>       u c degC <span class="key">RET</span>         U u t degC <span class="key">RET</span>
+</pre>
+  </div>
 
-<p>First we convert a change of 20 degrees Fahrenheit into an equivalent
-change in degrees Celsius (or Centigrade).  Then, we convert the
-absolute temperature 20 degrees Fahrenheit into Celsius.
-</p>
-<p>For simple unit conversions, you can put a plain number on the stack.
-Then <kbd>u c</kbd> and <kbd>u t</kbd> will prompt for both old and new units.
-When you use this method, you&rsquo;re responsible for remembering which
-numbers are in which units:
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  55         1:  88.5139              1:  8.201407e-8
+  <p>First we convert a change of 20 degrees Fahrenheit into an
+  equivalent change in degrees Celsius (or Centigrade). Then, we
+  convert the absolute temperature 20 degrees Fahrenheit into
+  Celsius.</p>
+
+  <p>For simple unit conversions, you can put a plain number on the
+  stack. Then <kbd>u c</kbd> and <kbd>u t</kbd> will prompt for
+  both old and new units. When you use this method, you&rsquo;re
+  responsible for remembering which numbers are in which units:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  55         1:  88.5139              1:  8.201407e-8
     .              .                        .
 
-    55             u c mph <span class="key">RET</span> kph <span class="key">RET</span>      u c km/hr <span class="key">RET</span> c <span class="key">RET</span>
-</pre></div>
+    55             u c mph <span class=
+"key">RET</span> kph <span class=
+"key">RET</span>      u c km/hr <span class=
+"key">RET</span> c <span class="key">RET</span>
+</pre>
+  </div>
 
-<p>To see a complete list of built-in units, type <kbd>u v</kbd>.  Press
-<kbd><span class="nolinebreak">C-x</span>&nbsp;*&nbsp;c</kbd><!-- /@w --> again to re-enter the Calculator when you&rsquo;re done looking
-at the units table.
-</p>
-<p>(&bull;) <strong>Exercise 13.</strong>  How many seconds are there really
-in a year?  See <a href="Types-Answer-13.html#Types-Answer-13">13</a>. (&bull;)
-</p>
-<a name="index-Speed-of-light"></a>
-<p>(&bull;) <strong>Exercise 14.</strong>  Supercomputer designs are limited by
-the speed of light (and of electricity, which is nearly as fast).
-Suppose a computer has a 4.1 ns (nanosecond) clock cycle, and its
-cabinet is one meter across.  Is speed of light going to be a
-significant factor in its design?  See <a href="Types-Answer-14.html#Types-Answer-14">14</a>. (&bull;)
-</p>
-<p>(&bull;) <strong>Exercise 15.</strong>  Sam the Slug normally travels about
-five yards in an hour.  He has obtained a supply of Power Pills; each
-Power Pill he eats doubles his speed.  How many Power Pills can he
-swallow and still travel legally on most US highways?
-See <a href="Types-Answer-15.html#Types-Answer-15">15</a>. (&bull;)
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Algebra-Tutorial.html#Algebra-Tutorial" accesskey="n" rel="next">Algebra Tutorial</a>, Previous: <a href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" accesskey="p" rel="prev">Vector/Matrix Tutorial</a>, Up: <a href="Tutorial.html#Tutorial" accesskey="u" rel="up">Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>To see a complete list of built-in units, type <kbd>u v</kbd>.
+  Press <kbd><span class=
+  "nolinebreak">C-x</span>&nbsp;*&nbsp;c</kbd><!-- /@w --> again to
+  re-enter the Calculator when you&rsquo;re done looking at the
+  units table.</p>
 
+  <p>(&bull;) <strong>Exercise 13.</strong> How many seconds are
+  there really in a year? See <a href=
+  "Types-Answer-13.html#Types-Answer-13">13</a>.
+  (&bull;)</p><a name="index-Speed-of-light" id=
+  "index-Speed-of-light"></a>
 
+  <p>(&bull;) <strong>Exercise 14.</strong> Supercomputer designs
+  are limited by the speed of light (and of electricity, which is
+  nearly as fast). Suppose a computer has a 4.1 ns (nanosecond)
+  clock cycle, and its cabinet is one meter across. Is speed of
+  light going to be a significant factor in its design? See
+  <a href="Types-Answer-14.html#Types-Answer-14">14</a>.
+  (&bull;)</p>
 
+  <p>(&bull;) <strong>Exercise 15.</strong> Sam the Slug normally
+  travels about five yards in an hour. He has obtained a supply of
+  Power Pills; each Power Pill he eats doubles his speed. How many
+  Power Pills can he swallow and still travel legally on most US
+  highways? See <a href=
+  "Types-Answer-15.html#Types-Answer-15">15</a>. (&bull;)</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Algebra-Tutorial.html#Algebra-Tutorial"
+    accesskey="n" rel="next">Algebra Tutorial</a>, Previous:
+    <a href=
+    "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial"
+    accesskey="p" rel="prev">Vector/Matrix Tutorial</a>, Up:
+    <a href="Tutorial.html#Tutorial" accesskey="u" rel=
+    "up">Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

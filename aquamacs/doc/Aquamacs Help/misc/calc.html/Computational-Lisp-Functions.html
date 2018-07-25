@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,453 +18,777 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Computational Lisp Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Computational Lisp Functions">
-<meta name="keywords" content="GNU Emacs Calc Manual: Computational Lisp Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Internals.html#Internals" rel="up" title="Internals">
-<link href="Vector-Lisp-Functions.html#Vector-Lisp-Functions" rel="next" title="Vector Lisp Functions">
-<link href="Predicates.html#Predicates" rel="prev" title="Predicates">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Computational Lisp
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Computational Lisp Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Computational Lisp Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Internals.html#Internals" rel="up" title=
+  "Internals" />
+  <link href="Vector-Lisp-Functions.html#Vector-Lisp-Functions"
+  rel="next" title="Vector Lisp Functions" />
+  <link href="Predicates.html#Predicates" rel="prev" title=
+  "Predicates" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Computational-Lisp-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Vector-Lisp-Functions.html#Vector-Lisp-Functions" accesskey="n" rel="next">Vector Lisp Functions</a>, Previous: <a href="Predicates.html#Predicates" accesskey="p" rel="prev">Predicates</a>, Up: <a href="Internals.html#Internals" accesskey="u" rel="up">Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Computational-Functions"></a>
-<h4 class="subsubsection">17.5.7.5 Computational Functions</h4>
+<body lang="en" xml:lang="en">
+  <a name="Computational-Lisp-Functions" id=
+  "Computational-Lisp-Functions"></a>
 
-<p>The functions described here do the actual computational work of the
-Calculator.  In addition to these, note that any function described in
-the main body of this manual may be called from Lisp; for example, if
-the documentation refers to the <code>calc-sqrt</code> [<code>sqrt</code>] command,
-this means <code>calc-sqrt</code> is an interactive stack-based square-root
-command and <code>sqrt</code> (which <code>defmath</code> expands to <code>calcFunc-sqrt</code>)
-is the actual Lisp function for taking square roots.
-</p>
-<p>The functions <code>math-add</code>, <code>math-sub</code>, <code>math-mul</code>,
-<code>math-div</code>, <code>math-mod</code>, and <code>math-neg</code> are not included
-in this list, since <code>defmath</code> allows you to write native Lisp
-<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, and unary <code>-</code>,
-respectively, instead.
-</p>
-<dl>
-<dt><a name="index-normalize"></a>Function: <strong>normalize</strong> <em>val</em></dt>
-<dd><p>(Full form: <code>math-normalize</code>.)
-Reduce the value <var>val</var> to standard form.  For example, if <var>val</var>
-is a fixnum, it will be converted to a bignum if it is too large, and
-if <var>val</var> is a bignum it will be normalized by clipping off trailing
-(i.e., most-significant) zero digits and converting to a fixnum if it is
-small.  All the various data types are similarly converted to their standard
-forms.  Variables are left alone, but function calls are actually evaluated
-in formulas.  For example, normalizing &lsquo;<samp>(+ 2 (calcFunc-abs -4))</samp>&rsquo; will
-return 6.
-</p>
-<p>If a function call fails, because the function is void or has the wrong
-number of parameters, or because it returns <code>nil</code> or calls
-<code>reject-arg</code> or <code>inexact-result</code>, <code>normalize</code> returns
-the formula still in symbolic form.
-</p>
-<p>If the current simplification mode is &ldquo;none&rdquo; or &ldquo;numeric arguments
-only,&rdquo; <code>normalize</code> will act appropriately.  However, the more
-powerful simplification modes (like Algebraic Simplification) are
-not handled by <code>normalize</code>.  They are handled by <code>calc-normalize</code>,
-which calls <code>normalize</code> and possibly some other routines, such
-as <code>simplify</code> or <code>simplify-units</code>.  Programs generally will
-never call <code>calc-normalize</code> except when popping or pushing values
-on the stack.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Vector-Lisp-Functions.html#Vector-Lisp-Functions" accesskey=
+    "n" rel="next">Vector Lisp Functions</a>, Previous: <a href=
+    "Predicates.html#Predicates" accesskey="p" rel=
+    "prev">Predicates</a>, Up: <a href="Internals.html#Internals"
+    accesskey="u" rel="up">Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Computational-Functions" id=
+  "Computational-Functions"></a>
 
-<dl>
-<dt><a name="index-evaluate_002dexpr"></a>Function: <strong>evaluate-expr</strong> <em>expr</em></dt>
-<dd><p>Replace all variables in <var>expr</var> that have values with their values,
-then use <code>normalize</code> to simplify the result.  This is what happens
-when you press the <kbd>=</kbd> key interactively.
-</p></dd></dl>
+  <h4 class="subsubsection">17.5.7.5 Computational Functions</h4>
 
-<dl>
-<dt><a name="index-with_002dextra_002dprec"></a>Macro: <strong>with-extra-prec</strong> <em>n body</em></dt>
-<dd><p>Evaluate the Lisp forms in <var>body</var> with precision increased by <var>n</var>
-digits.  This is a macro which expands to
-</p>
-<div class="smallexample">
-<pre class="smallexample">(math-normalize
+  <p>The functions described here do the actual computational work
+  of the Calculator. In addition to these, note that any function
+  described in the main body of this manual may be called from
+  Lisp; for example, if the documentation refers to the
+  <code>calc-sqrt</code> [<code>sqrt</code>] command, this means
+  <code>calc-sqrt</code> is an interactive stack-based square-root
+  command and <code>sqrt</code> (which <code>defmath</code> expands
+  to <code>calcFunc-sqrt</code>) is the actual Lisp function for
+  taking square roots.</p>
+
+  <p>The functions <code>math-add</code>, <code>math-sub</code>,
+  <code>math-mul</code>, <code>math-div</code>,
+  <code>math-mod</code>, and <code>math-neg</code> are not included
+  in this list, since <code>defmath</code> allows you to write
+  native Lisp <code>+</code>, <code>-</code>, <code>*</code>,
+  <code>/</code>, <code>%</code>, and unary <code>-</code>,
+  respectively, instead.</p>
+
+  <dl>
+    <dt><a name="index-normalize" id=
+    "index-normalize"></a>Function: <strong>normalize</strong>
+    <em>val</em></dt>
+
+    <dd>
+      <p>(Full form: <code>math-normalize</code>.) Reduce the value
+      <var>val</var> to standard form. For example, if
+      <var>val</var> is a fixnum, it will be converted to a bignum
+      if it is too large, and if <var>val</var> is a bignum it will
+      be normalized by clipping off trailing (i.e.,
+      most-significant) zero digits and converting to a fixnum if
+      it is small. All the various data types are similarly
+      converted to their standard forms. Variables are left alone,
+      but function calls are actually evaluated in formulas. For
+      example, normalizing &lsquo;<samp>(+ 2 (calcFunc-abs
+      -4))</samp>&rsquo; will return 6.</p>
+
+      <p>If a function call fails, because the function is void or
+      has the wrong number of parameters, or because it returns
+      <code>nil</code> or calls <code>reject-arg</code> or
+      <code>inexact-result</code>, <code>normalize</code> returns
+      the formula still in symbolic form.</p>
+
+      <p>If the current simplification mode is &ldquo;none&rdquo;
+      or &ldquo;numeric arguments only,&rdquo;
+      <code>normalize</code> will act appropriately. However, the
+      more powerful simplification modes (like Algebraic
+      Simplification) are not handled by <code>normalize</code>.
+      They are handled by <code>calc-normalize</code>, which calls
+      <code>normalize</code> and possibly some other routines, such
+      as <code>simplify</code> or <code>simplify-units</code>.
+      Programs generally will never call
+      <code>calc-normalize</code> except when popping or pushing
+      values on the stack.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-evaluate_002dexpr" id=
+    "index-evaluate_002dexpr"></a>Function:
+    <strong>evaluate-expr</strong> <em>expr</em></dt>
+
+    <dd>
+      <p>Replace all variables in <var>expr</var> that have values
+      with their values, then use <code>normalize</code> to
+      simplify the result. This is what happens when you press the
+      <kbd>=</kbd> key interactively.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-with_002dextra_002dprec" id=
+    "index-with_002dextra_002dprec"></a>Macro:
+    <strong>with-extra-prec</strong> <em>n body</em></dt>
+
+    <dd>
+      <p>Evaluate the Lisp forms in <var>body</var> with precision
+      increased by <var>n</var> digits. This is a macro which
+      expands to</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(math-normalize
   (let ((calc-internal-prec (+ calc-internal-prec <var>n</var>)))
     <var>body</var>))
-</pre></div>
+</pre>
+      </div>
 
-<p>The surrounding call to <code>math-normalize</code> causes a floating-point
-result to be rounded down to the original precision afterwards.  This
-is important because some arithmetic operations assume a number&rsquo;s
-mantissa contains no more digits than the current precision allows.
-</p></dd></dl>
+      <p>The surrounding call to <code>math-normalize</code> causes
+      a floating-point result to be rounded down to the original
+      precision afterwards. This is important because some
+      arithmetic operations assume a number&rsquo;s mantissa
+      contains no more digits than the current precision
+      allows.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-make_002dfrac"></a>Function: <strong>make-frac</strong> <em>n d</em></dt>
-<dd><p>Build a fraction &lsquo;<samp><var>n</var>:<var>d</var></samp>&rsquo;.  This is equivalent to calling
-&lsquo;<samp>(normalize (list 'frac <var>n</var> <var>d</var>))</samp>&rsquo;, but more efficient.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dfrac" id=
+    "index-make_002dfrac"></a>Function: <strong>make-frac</strong>
+    <em>n d</em></dt>
 
-<dl>
-<dt><a name="index-make_002dfloat"></a>Function: <strong>make-float</strong> <em>mant exp</em></dt>
-<dd><p>Build a floating-point value out of <var>mant</var> and <var>exp</var>, both
-of which are arbitrary integers.  This function will return a
-properly normalized float value, or signal an overflow or underflow
-if <var>exp</var> is out of range.
-</p></dd></dl>
+    <dd>
+      <p>Build a fraction
+      &lsquo;<samp><var>n</var>:<var>d</var></samp>&rsquo;. This is
+      equivalent to calling &lsquo;<samp>(normalize (list 'frac
+      <var>n</var> <var>d</var>))</samp>&rsquo;, but more
+      efficient.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-make_002dsdev"></a>Function: <strong>make-sdev</strong> <em>x sigma</em></dt>
-<dd><p>Build an error form out of <var>x</var> and the absolute value of <var>sigma</var>.
-If <var>sigma</var> is zero, the result is the number <var>x</var> directly.
-If <var>sigma</var> is negative or complex, its absolute value is used.
-If <var>x</var> or <var>sigma</var> is not a valid type of object for use in
-error forms, this calls <code>reject-arg</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dfloat" id=
+    "index-make_002dfloat"></a>Function:
+    <strong>make-float</strong> <em>mant exp</em></dt>
 
-<dl>
-<dt><a name="index-make_002dintv"></a>Function: <strong>make-intv</strong> <em>mask lo hi</em></dt>
-<dd><p>Build an interval form out of <var>mask</var> (which is assumed to be an
-integer from 0 to 3), and the limits <var>lo</var> and <var>hi</var>.  If
-<var>lo</var> is greater than <var>hi</var>, an empty interval form is returned.
-This calls <code>reject-arg</code> if <var>lo</var> or <var>hi</var> is unsuitable.
-</p></dd></dl>
+    <dd>
+      <p>Build a floating-point value out of <var>mant</var> and
+      <var>exp</var>, both of which are arbitrary integers. This
+      function will return a properly normalized float value, or
+      signal an overflow or underflow if <var>exp</var> is out of
+      range.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-sort_002dintv"></a>Function: <strong>sort-intv</strong> <em>mask lo hi</em></dt>
-<dd><p>Build an interval form, similar to <code>make-intv</code>, except that if
-<var>lo</var> is less than <var>hi</var> they are simply exchanged, and the
-bits of <var>mask</var> are swapped accordingly.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dsdev" id=
+    "index-make_002dsdev"></a>Function: <strong>make-sdev</strong>
+    <em>x sigma</em></dt>
 
-<dl>
-<dt><a name="index-make_002dmod"></a>Function: <strong>make-mod</strong> <em>n m</em></dt>
-<dd><p>Build a modulo form out of <var>n</var> and the modulus <var>m</var>.  Since modulo
-forms do not allow formulas as their components, if <var>n</var> or <var>m</var>
-is not a real number or HMS form the result will be a formula which
-is a call to <code>makemod</code>, the algebraic version of this function.
-</p></dd></dl>
+    <dd>
+      <p>Build an error form out of <var>x</var> and the absolute
+      value of <var>sigma</var>. If <var>sigma</var> is zero, the
+      result is the number <var>x</var> directly. If
+      <var>sigma</var> is negative or complex, its absolute value
+      is used. If <var>x</var> or <var>sigma</var> is not a valid
+      type of object for use in error forms, this calls
+      <code>reject-arg</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-float-1"></a>Function: <strong>float</strong> <em>x</em></dt>
-<dd><p>Convert <var>x</var> to floating-point form.  Integers and fractions are
-converted to numerically equivalent floats; components of complex
-numbers, vectors, HMS forms, date forms, error forms, intervals, and
-modulo forms are recursively floated.  If the argument is a variable
-or formula, this calls <code>reject-arg</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dintv" id=
+    "index-make_002dintv"></a>Function: <strong>make-intv</strong>
+    <em>mask lo hi</em></dt>
 
-<dl>
-<dt><a name="index-compare"></a>Function: <strong>compare</strong> <em>x y</em></dt>
-<dd><p>Compare the numbers <var>x</var> and <var>y</var>, and return <i>-1</i> if
-&lsquo;<samp>(lessp <var>x</var> <var>y</var>)</samp>&rsquo;, 1 if &lsquo;<samp>(lessp <var>y</var> <var>x</var>)</samp>&rsquo;,
-0 if &lsquo;<samp>(math-equal <var>x</var> <var>y</var>)</samp>&rsquo;, or 2 if the order is
-undefined or cannot be determined.
-</p></dd></dl>
+    <dd>
+      <p>Build an interval form out of <var>mask</var> (which is
+      assumed to be an integer from 0 to 3), and the limits
+      <var>lo</var> and <var>hi</var>. If <var>lo</var> is greater
+      than <var>hi</var>, an empty interval form is returned. This
+      calls <code>reject-arg</code> if <var>lo</var> or
+      <var>hi</var> is unsuitable.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-numdigs"></a>Function: <strong>numdigs</strong> <em>n</em></dt>
-<dd><p>Return the number of digits of integer <var>n</var>, effectively
-&lsquo;<samp>ceil(log10(<var>n</var>))</samp>&rsquo;, but much more efficient.  Zero is
-considered to have zero digits.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-sort_002dintv" id=
+    "index-sort_002dintv"></a>Function: <strong>sort-intv</strong>
+    <em>mask lo hi</em></dt>
 
-<dl>
-<dt><a name="index-scale_002dint"></a>Function: <strong>scale-int</strong> <em>x n</em></dt>
-<dd><p>Shift integer <var>x</var> left <var>n</var> decimal digits, or right <i>-<var>n</var></i>
-digits with truncation toward zero.
-</p></dd></dl>
+    <dd>
+      <p>Build an interval form, similar to <code>make-intv</code>,
+      except that if <var>lo</var> is less than <var>hi</var> they
+      are simply exchanged, and the bits of <var>mask</var> are
+      swapped accordingly.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-scale_002drounding"></a>Function: <strong>scale-rounding</strong> <em>x n</em></dt>
-<dd><p>Like <code>scale-int</code>, except that a right shift rounds to the nearest
-integer rather than truncating.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dmod" id=
+    "index-make_002dmod"></a>Function: <strong>make-mod</strong>
+    <em>n m</em></dt>
 
-<dl>
-<dt><a name="index-fixnum-1"></a>Function: <strong>fixnum</strong> <em>n</em></dt>
-<dd><p>Return the integer <var>n</var> as a fixnum, i.e., a native Lisp integer.
-If <var>n</var> is outside the permissible range for Lisp integers (usually
-24 binary bits) the result is undefined.
-</p></dd></dl>
+    <dd>
+      <p>Build a modulo form out of <var>n</var> and the modulus
+      <var>m</var>. Since modulo forms do not allow formulas as
+      their components, if <var>n</var> or <var>m</var> is not a
+      real number or HMS form the result will be a formula which is
+      a call to <code>makemod</code>, the algebraic version of this
+      function.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-sqr"></a>Function: <strong>sqr</strong> <em>x</em></dt>
-<dd><p>Compute the square of <var>x</var>; short for &lsquo;<samp>(* <var>x</var> <var>x</var>)</samp>&rsquo;.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-float-1" id="index-float-1"></a>Function:
+    <strong>float</strong> <em>x</em></dt>
 
-<dl>
-<dt><a name="index-quotient"></a>Function: <strong>quotient</strong> <em>x y</em></dt>
-<dd><p>Divide integer <var>x</var> by integer <var>y</var>; return an integer quotient
-and discard the remainder.  If <var>x</var> or <var>y</var> is negative, the
-direction of rounding is undefined.
-</p></dd></dl>
+    <dd>
+      <p>Convert <var>x</var> to floating-point form. Integers and
+      fractions are converted to numerically equivalent floats;
+      components of complex numbers, vectors, HMS forms, date
+      forms, error forms, intervals, and modulo forms are
+      recursively floated. If the argument is a variable or
+      formula, this calls <code>reject-arg</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-idiv"></a>Function: <strong>idiv</strong> <em>x y</em></dt>
-<dd><p>Perform an integer division; if <var>x</var> and <var>y</var> are both nonnegative
-integers, this uses the <code>quotient</code> function, otherwise it computes
-&lsquo;<samp>floor(<var>x</var>/<var>y</var>)</samp>&rsquo;.  Thus the result is well-defined but
-slower than for <code>quotient</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-compare" id="index-compare"></a>Function:
+    <strong>compare</strong> <em>x y</em></dt>
 
-<dl>
-<dt><a name="index-imod"></a>Function: <strong>imod</strong> <em>x y</em></dt>
-<dd><p>Divide integer <var>x</var> by integer <var>y</var>; return the integer remainder
-and discard the quotient.  Like <code>quotient</code>, this works only for
-integer arguments and is not well-defined for negative arguments.
-For a more well-defined result, use &lsquo;<samp>(% <var>x</var> <var>y</var>)</samp>&rsquo;.
-</p></dd></dl>
+    <dd>
+      <p>Compare the numbers <var>x</var> and <var>y</var>, and
+      return <i>-1</i> if &lsquo;<samp>(lessp <var>x</var>
+      <var>y</var>)</samp>&rsquo;, 1 if &lsquo;<samp>(lessp
+      <var>y</var> <var>x</var>)</samp>&rsquo;, 0 if
+      &lsquo;<samp>(math-equal <var>x</var>
+      <var>y</var>)</samp>&rsquo;, or 2 if the order is undefined
+      or cannot be determined.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-idivmod"></a>Function: <strong>idivmod</strong> <em>x y</em></dt>
-<dd><p>Divide integer <var>x</var> by integer <var>y</var>; return a cons cell whose
-<code>car</code> is &lsquo;<samp>(quotient <var>x</var> <var>y</var>)</samp>&rsquo; and whose <code>cdr</code>
-is &lsquo;<samp>(imod <var>x</var> <var>y</var>)</samp>&rsquo;.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-numdigs" id="index-numdigs"></a>Function:
+    <strong>numdigs</strong> <em>n</em></dt>
 
-<dl>
-<dt><a name="index-pow"></a>Function: <strong>pow</strong> <em>x y</em></dt>
-<dd><p>Compute <var>x</var> to the power <var>y</var>.  In <code>defmath</code> code, this can
-also be written &lsquo;<samp>(^ <var>x</var> <var>y</var>)</samp>&rsquo; or
-&lsquo;<samp>(expt&nbsp;<var>x</var>&nbsp;<var>y</var>)</samp>&rsquo;<!-- /@w -->.
-</p></dd></dl>
+    <dd>
+      <p>Return the number of digits of integer <var>n</var>,
+      effectively
+      &lsquo;<samp>ceil(log10(<var>n</var>))</samp>&rsquo;, but
+      much more efficient. Zero is considered to have zero
+      digits.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-abs_002dapprox"></a>Function: <strong>abs-approx</strong> <em>x</em></dt>
-<dd><p>Compute a fast approximation to the absolute value of <var>x</var>.  For
-example, for a rectangular complex number the result is the sum of
-the absolute values of the components.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-scale_002dint" id=
+    "index-scale_002dint"></a>Function: <strong>scale-int</strong>
+    <em>x n</em></dt>
 
-<a name="index-e"></a>
-<a name="index-gamma_002dconst"></a>
-<a name="index-ln_002d2"></a>
-<a name="index-ln_002d10"></a>
-<a name="index-phi"></a>
-<a name="index-pi_002dover_002d2"></a>
-<a name="index-pi_002dover_002d4"></a>
-<a name="index-pi_002dover_002d180"></a>
-<a name="index-sqrt_002dtwo_002dpi"></a>
-<a name="index-sqrt_002de"></a>
-<a name="index-two_002dpi"></a>
-<dl>
-<dt><a name="index-pi"></a>Function: <strong>pi</strong></dt>
-<dd><p>The function &lsquo;<samp>(pi)</samp>&rsquo; computes &lsquo;<samp>pi</samp>&rsquo; to the current precision.
-Other related constant-generating functions are <code>two-pi</code>,
-<code>pi-over-2</code>, <code>pi-over-4</code>, <code>pi-over-180</code>, <code>sqrt-two-pi</code>,
-<code>e</code>, <code>sqrt-e</code>, <code>ln-2</code>, <code>ln-10</code>, <code>phi</code> and
-<code>gamma-const</code>.  Each function returns a floating-point value in the
-current precision, and each uses caching so that all calls after the
-first are essentially free.
-</p></dd></dl>
+    <dd>
+      <p>Shift integer <var>x</var> left <var>n</var> decimal
+      digits, or right <i>-<var>n</var></i> digits with truncation
+      toward zero.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-math_002ddefcache"></a>Macro: <strong>math-defcache</strong> <em><var>func</var> <var>initial</var> <var>form</var></em></dt>
-<dd><p>This macro, usually used as a top-level call like <code>defun</code> or
-<code>defvar</code>, defines a new cached constant analogous to <code>pi</code>, etc.
-It defines a function <code>func</code> which returns the requested value;
-if <var>initial</var> is non-<code>nil</code> it must be a &lsquo;<samp>(float &hellip;)</samp>&rsquo;
-form which serves as an initial value for the cache.  If <var>func</var>
-is called when the cache is empty or does not have enough digits to
-satisfy the current precision, the Lisp expression <var>form</var> is evaluated
-with the current precision increased by four, and the result minus its
-two least significant digits is stored in the cache.  For example,
-calling &lsquo;<samp>(pi)</samp>&rsquo; with a precision of 30 computes &lsquo;<samp>pi</samp>&rsquo; to 34
-digits, rounds it down to 32 digits for future use, then rounds it
-again to 30 digits for use in the present request.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-scale_002drounding" id=
+    "index-scale_002drounding"></a>Function:
+    <strong>scale-rounding</strong> <em>x n</em></dt>
 
-<a name="index-half_002dcircle"></a>
-<a name="index-quarter_002dcircle"></a>
-<dl>
-<dt><a name="index-full_002dcircle"></a>Function: <strong>full-circle</strong> <em>symb</em></dt>
-<dd><p>If the current angular mode is Degrees or HMS, this function returns the
-integer 360.  In Radians mode, this function returns either the
-corresponding value in radians to the current precision, or the formula
-&lsquo;<samp>2*pi</samp>&rsquo;, depending on the Symbolic mode.  There are also similar
-function <code>half-circle</code> and <code>quarter-circle</code>.
-</p></dd></dl>
+    <dd>
+      <p>Like <code>scale-int</code>, except that a right shift
+      rounds to the nearest integer rather than truncating.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-power_002dof_002d2"></a>Function: <strong>power-of-2</strong> <em>n</em></dt>
-<dd><p>Compute two to the integer power <var>n</var>, as a (potentially very large)
-integer.  Powers of two are cached, so only the first call for a
-particular <var>n</var> is expensive.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-fixnum-1" id="index-fixnum-1"></a>Function:
+    <strong>fixnum</strong> <em>n</em></dt>
 
-<dl>
-<dt><a name="index-integer_002dlog2"></a>Function: <strong>integer-log2</strong> <em>n</em></dt>
-<dd><p>Compute the base-2 logarithm of <var>n</var>, which must be an integer which
-is a power of two.  If <var>n</var> is not a power of two, this function will
-return <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>Return the integer <var>n</var> as a fixnum, i.e., a
+      native Lisp integer. If <var>n</var> is outside the
+      permissible range for Lisp integers (usually 24 binary bits)
+      the result is undefined.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-div_002dmod"></a>Function: <strong>div-mod</strong> <em>a b m</em></dt>
-<dd><p>Divide <var>a</var> by <var>b</var>, modulo <var>m</var>.  This returns <code>nil</code> if
-there is no solution, or if any of the arguments are not integers.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-sqr" id="index-sqr"></a>Function:
+    <strong>sqr</strong> <em>x</em></dt>
 
-<dl>
-<dt><a name="index-pow_002dmod"></a>Function: <strong>pow-mod</strong> <em>a b m</em></dt>
-<dd><p>Compute <var>a</var> to the power <var>b</var>, modulo <var>m</var>.  If <var>a</var>,
-<var>b</var>, and <var>m</var> are integers, this uses an especially efficient
-algorithm.  Otherwise, it simply computes &lsquo;<samp>(% (^ a b) m)</samp>&rsquo;.
-</p></dd></dl>
+    <dd>
+      <p>Compute the square of <var>x</var>; short for
+      &lsquo;<samp>(* <var>x</var> <var>x</var>)</samp>&rsquo;.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-isqrt"></a>Function: <strong>isqrt</strong> <em>n</em></dt>
-<dd><p>Compute the integer square root of <var>n</var>.  This is the square root
-of <var>n</var> rounded down toward zero, i.e., &lsquo;<samp>floor(sqrt(<var>n</var>))</samp>&rsquo;.
-If <var>n</var> is itself an integer, the computation is especially efficient.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-quotient" id="index-quotient"></a>Function:
+    <strong>quotient</strong> <em>x y</em></dt>
 
-<dl>
-<dt><a name="index-to_002dhms"></a>Function: <strong>to-hms</strong> <em>a ang</em></dt>
-<dd><p>Convert the argument <var>a</var> into an HMS form.  If <var>ang</var> is specified,
-it is the angular mode in which to interpret <var>a</var>, either <code>deg</code>
-or <code>rad</code>.  Otherwise, the current angular mode is used.  If <var>a</var>
-is already an HMS form it is returned as-is.
-</p></dd></dl>
+    <dd>
+      <p>Divide integer <var>x</var> by integer <var>y</var>;
+      return an integer quotient and discard the remainder. If
+      <var>x</var> or <var>y</var> is negative, the direction of
+      rounding is undefined.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-from_002dhms"></a>Function: <strong>from-hms</strong> <em>a ang</em></dt>
-<dd><p>Convert the HMS form <var>a</var> into a real number.  If <var>ang</var> is specified,
-it is the angular mode in which to express the result, otherwise the
-current angular mode is used.  If <var>a</var> is already a real number, it
-is returned as-is.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-idiv" id="index-idiv"></a>Function:
+    <strong>idiv</strong> <em>x y</em></dt>
 
-<dl>
-<dt><a name="index-to_002dradians"></a>Function: <strong>to-radians</strong> <em>a</em></dt>
-<dd><p>Convert the number or HMS form <var>a</var> to radians from the current
-angular mode.
-</p></dd></dl>
+    <dd>
+      <p>Perform an integer division; if <var>x</var> and
+      <var>y</var> are both nonnegative integers, this uses the
+      <code>quotient</code> function, otherwise it computes
+      &lsquo;<samp>floor(<var>x</var>/<var>y</var>)</samp>&rsquo;.
+      Thus the result is well-defined but slower than for
+      <code>quotient</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-from_002dradians"></a>Function: <strong>from-radians</strong> <em>a</em></dt>
-<dd><p>Convert the number <var>a</var> from radians to the current angular mode.
-If <var>a</var> is a formula, this returns the formula &lsquo;<samp>deg(<var>a</var>)</samp>&rsquo;.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-imod" id="index-imod"></a>Function:
+    <strong>imod</strong> <em>x y</em></dt>
 
-<dl>
-<dt><a name="index-to_002dradians_002d2"></a>Function: <strong>to-radians-2</strong> <em>a</em></dt>
-<dd><p>Like <code>to-radians</code>, except that in Symbolic mode a degrees to
-radians conversion yields a formula like &lsquo;<samp><var>a</var>*pi/180</samp>&rsquo;.
-</p></dd></dl>
+    <dd>
+      <p>Divide integer <var>x</var> by integer <var>y</var>;
+      return the integer remainder and discard the quotient. Like
+      <code>quotient</code>, this works only for integer arguments
+      and is not well-defined for negative arguments. For a more
+      well-defined result, use &lsquo;<samp>(% <var>x</var>
+      <var>y</var>)</samp>&rsquo;.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-from_002dradians_002d2"></a>Function: <strong>from-radians-2</strong> <em>a</em></dt>
-<dd><p>Like <code>from-radians</code>, except that in Symbolic mode a radians to
-degrees conversion yields a formula like &lsquo;<samp><var>a</var>*180/pi</samp>&rsquo;.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-idivmod" id="index-idivmod"></a>Function:
+    <strong>idivmod</strong> <em>x y</em></dt>
 
-<dl>
-<dt><a name="index-random_002ddigit"></a>Function: <strong>random-digit</strong></dt>
-<dd><p>Produce a random base-1000 digit in the range 0 to 999.
-</p></dd></dl>
+    <dd>
+      <p>Divide integer <var>x</var> by integer <var>y</var>;
+      return a cons cell whose <code>car</code> is
+      &lsquo;<samp>(quotient <var>x</var>
+      <var>y</var>)</samp>&rsquo; and whose <code>cdr</code> is
+      &lsquo;<samp>(imod <var>x</var>
+      <var>y</var>)</samp>&rsquo;.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-random_002ddigits"></a>Function: <strong>random-digits</strong> <em>n</em></dt>
-<dd><p>Produce a random <var>n</var>-digit integer; this will be an integer
-in the interval &lsquo;<samp>[0, 10^<var>n</var>)</samp>&rsquo;.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-pow" id="index-pow"></a>Function:
+    <strong>pow</strong> <em>x y</em></dt>
 
-<dl>
-<dt><a name="index-random_002dfloat"></a>Function: <strong>random-float</strong></dt>
-<dd><p>Produce a random float in the interval &lsquo;<samp>[0, 1)</samp>&rsquo;.
-</p></dd></dl>
+    <dd>
+      <p>Compute <var>x</var> to the power <var>y</var>. In
+      <code>defmath</code> code, this can also be written
+      &lsquo;<samp>(^ <var>x</var> <var>y</var>)</samp>&rsquo; or
+      &lsquo;<samp>(expt&nbsp;<var>x</var>&nbsp;<var>y</var>)</samp>&rsquo;<!-- /@w -->.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-prime_002dtest"></a>Function: <strong>prime-test</strong> <em>n iters</em></dt>
-<dd><p>Determine whether the integer <var>n</var> is prime.  Return a list which has
-one of these forms: &lsquo;<samp>(nil <var>f</var>)</samp>&rsquo; means the number is non-prime
-because it was found to be divisible by <var>f</var>; &lsquo;<samp>(nil)</samp>&rsquo; means it
-was found to be non-prime by table look-up (so no factors are known);
-&lsquo;<samp>(nil unknown)</samp>&rsquo; means it is definitely non-prime but no factors
-are known because <var>n</var> was large enough that Fermat&rsquo;s probabilistic
-test had to be used; &lsquo;<samp>(t)</samp>&rsquo; means the number is definitely prime;
-and &lsquo;<samp>(maybe <var>i</var> <var>p</var>)</samp>&rsquo; means that Fermat&rsquo;s test, after <var>i</var>
-iterations, is <var>p</var> percent sure that the number is prime.  The
-<var>iters</var> parameter is the number of Fermat iterations to use, in the
-case that this is necessary.  If <code>prime-test</code> returns &ldquo;maybe,&rdquo;
-you can call it again with the same <var>n</var> to get a greater certainty;
-<code>prime-test</code> remembers where it left off.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-abs_002dapprox" id=
+    "index-abs_002dapprox"></a>Function:
+    <strong>abs-approx</strong> <em>x</em></dt>
 
-<dl>
-<dt><a name="index-to_002dsimple_002dfraction"></a>Function: <strong>to-simple-fraction</strong> <em>f</em></dt>
-<dd><p>If <var>f</var> is a floating-point number which can be represented exactly
-as a small rational number, return that number, else return <var>f</var>.
-For example, 0.75 would be converted to 3:4.  This function is very
-fast.
-</p></dd></dl>
+    <dd>
+      <p>Compute a fast approximation to the absolute value of
+      <var>x</var>. For example, for a rectangular complex number
+      the result is the sum of the absolute values of the
+      components.</p>
+    </dd>
+  </dl><a name="index-e" id="index-e"></a> <a name=
+  "index-gamma_002dconst" id="index-gamma_002dconst"></a> <a name=
+  "index-ln_002d2" id="index-ln_002d2"></a> <a name=
+  "index-ln_002d10" id="index-ln_002d10"></a> <a name="index-phi"
+  id="index-phi"></a> <a name="index-pi_002dover_002d2" id=
+  "index-pi_002dover_002d2"></a> <a name="index-pi_002dover_002d4"
+  id="index-pi_002dover_002d4"></a> <a name=
+  "index-pi_002dover_002d180" id="index-pi_002dover_002d180"></a>
+  <a name="index-sqrt_002dtwo_002dpi" id=
+  "index-sqrt_002dtwo_002dpi"></a> <a name="index-sqrt_002de" id=
+  "index-sqrt_002de"></a> <a name="index-two_002dpi" id=
+  "index-two_002dpi"></a>
 
-<dl>
-<dt><a name="index-to_002dfraction"></a>Function: <strong>to-fraction</strong> <em>f tol</em></dt>
-<dd><p>Find a rational approximation to floating-point number <var>f</var> to within
-a specified tolerance <var>tol</var>; this corresponds to the algebraic
-function <code>frac</code>, and can be rather slow.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-pi" id="index-pi"></a>Function:
+    <strong>pi</strong></dt>
 
-<dl>
-<dt><a name="index-quarter_002dinteger"></a>Function: <strong>quarter-integer</strong> <em>n</em></dt>
-<dd><p>If <var>n</var> is an integer or integer-valued float, this function
-returns zero.  If <var>n</var> is a half-integer (i.e., an integer plus
-<i>1:2</i> or 0.5), it returns 2.  If <var>n</var> is a quarter-integer,
-it returns 1 or 3.  If <var>n</var> is anything else, this function
-returns <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>The function &lsquo;<samp>(pi)</samp>&rsquo; computes
+      &lsquo;<samp>pi</samp>&rsquo; to the current precision. Other
+      related constant-generating functions are
+      <code>two-pi</code>, <code>pi-over-2</code>,
+      <code>pi-over-4</code>, <code>pi-over-180</code>,
+      <code>sqrt-two-pi</code>, <code>e</code>,
+      <code>sqrt-e</code>, <code>ln-2</code>, <code>ln-10</code>,
+      <code>phi</code> and <code>gamma-const</code>. Each function
+      returns a floating-point value in the current precision, and
+      each uses caching so that all calls after the first are
+      essentially free.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Vector-Lisp-Functions.html#Vector-Lisp-Functions" accesskey="n" rel="next">Vector Lisp Functions</a>, Previous: <a href="Predicates.html#Predicates" accesskey="p" rel="prev">Predicates</a>, Up: <a href="Internals.html#Internals" accesskey="u" rel="up">Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-math_002ddefcache" id=
+    "index-math_002ddefcache"></a>Macro:
+    <strong>math-defcache</strong> <em><var>func</var>
+    <var>initial</var> <var>form</var></em></dt>
 
+    <dd>
+      <p>This macro, usually used as a top-level call like
+      <code>defun</code> or <code>defvar</code>, defines a new
+      cached constant analogous to <code>pi</code>, etc. It defines
+      a function <code>func</code> which returns the requested
+      value; if <var>initial</var> is non-<code>nil</code> it must
+      be a &lsquo;<samp>(float &hellip;)</samp>&rsquo; form which
+      serves as an initial value for the cache. If <var>func</var>
+      is called when the cache is empty or does not have enough
+      digits to satisfy the current precision, the Lisp expression
+      <var>form</var> is evaluated with the current precision
+      increased by four, and the result minus its two least
+      significant digits is stored in the cache. For example,
+      calling &lsquo;<samp>(pi)</samp>&rsquo; with a precision of
+      30 computes &lsquo;<samp>pi</samp>&rsquo; to 34 digits,
+      rounds it down to 32 digits for future use, then rounds it
+      again to 30 digits for use in the present request.</p>
+    </dd>
+  </dl><a name="index-half_002dcircle" id=
+  "index-half_002dcircle"></a> <a name="index-quarter_002dcircle"
+  id="index-quarter_002dcircle"></a>
 
+  <dl>
+    <dt><a name="index-full_002dcircle" id=
+    "index-full_002dcircle"></a>Function:
+    <strong>full-circle</strong> <em>symb</em></dt>
 
+    <dd>
+      <p>If the current angular mode is Degrees or HMS, this
+      function returns the integer 360. In Radians mode, this
+      function returns either the corresponding value in radians to
+      the current precision, or the formula
+      &lsquo;<samp>2*pi</samp>&rsquo;, depending on the Symbolic
+      mode. There are also similar function
+      <code>half-circle</code> and <code>quarter-circle</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-power_002dof_002d2" id=
+    "index-power_002dof_002d2"></a>Function:
+    <strong>power-of-2</strong> <em>n</em></dt>
+
+    <dd>
+      <p>Compute two to the integer power <var>n</var>, as a
+      (potentially very large) integer. Powers of two are cached,
+      so only the first call for a particular <var>n</var> is
+      expensive.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-integer_002dlog2" id=
+    "index-integer_002dlog2"></a>Function:
+    <strong>integer-log2</strong> <em>n</em></dt>
+
+    <dd>
+      <p>Compute the base-2 logarithm of <var>n</var>, which must
+      be an integer which is a power of two. If <var>n</var> is not
+      a power of two, this function will return
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-div_002dmod" id=
+    "index-div_002dmod"></a>Function: <strong>div-mod</strong>
+    <em>a b m</em></dt>
+
+    <dd>
+      <p>Divide <var>a</var> by <var>b</var>, modulo <var>m</var>.
+      This returns <code>nil</code> if there is no solution, or if
+      any of the arguments are not integers.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pow_002dmod" id=
+    "index-pow_002dmod"></a>Function: <strong>pow-mod</strong>
+    <em>a b m</em></dt>
+
+    <dd>
+      <p>Compute <var>a</var> to the power <var>b</var>, modulo
+      <var>m</var>. If <var>a</var>, <var>b</var>, and <var>m</var>
+      are integers, this uses an especially efficient algorithm.
+      Otherwise, it simply computes &lsquo;<samp>(% (^ a b)
+      m)</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-isqrt" id="index-isqrt"></a>Function:
+    <strong>isqrt</strong> <em>n</em></dt>
+
+    <dd>
+      <p>Compute the integer square root of <var>n</var>. This is
+      the square root of <var>n</var> rounded down toward zero,
+      i.e., &lsquo;<samp>floor(sqrt(<var>n</var>))</samp>&rsquo;.
+      If <var>n</var> is itself an integer, the computation is
+      especially efficient.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-to_002dhms" id=
+    "index-to_002dhms"></a>Function: <strong>to-hms</strong> <em>a
+    ang</em></dt>
+
+    <dd>
+      <p>Convert the argument <var>a</var> into an HMS form. If
+      <var>ang</var> is specified, it is the angular mode in which
+      to interpret <var>a</var>, either <code>deg</code> or
+      <code>rad</code>. Otherwise, the current angular mode is
+      used. If <var>a</var> is already an HMS form it is returned
+      as-is.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-from_002dhms" id=
+    "index-from_002dhms"></a>Function: <strong>from-hms</strong>
+    <em>a ang</em></dt>
+
+    <dd>
+      <p>Convert the HMS form <var>a</var> into a real number. If
+      <var>ang</var> is specified, it is the angular mode in which
+      to express the result, otherwise the current angular mode is
+      used. If <var>a</var> is already a real number, it is
+      returned as-is.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-to_002dradians" id=
+    "index-to_002dradians"></a>Function:
+    <strong>to-radians</strong> <em>a</em></dt>
+
+    <dd>
+      <p>Convert the number or HMS form <var>a</var> to radians
+      from the current angular mode.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-from_002dradians" id=
+    "index-from_002dradians"></a>Function:
+    <strong>from-radians</strong> <em>a</em></dt>
+
+    <dd>
+      <p>Convert the number <var>a</var> from radians to the
+      current angular mode. If <var>a</var> is a formula, this
+      returns the formula
+      &lsquo;<samp>deg(<var>a</var>)</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-to_002dradians_002d2" id=
+    "index-to_002dradians_002d2"></a>Function:
+    <strong>to-radians-2</strong> <em>a</em></dt>
+
+    <dd>
+      <p>Like <code>to-radians</code>, except that in Symbolic mode
+      a degrees to radians conversion yields a formula like
+      &lsquo;<samp><var>a</var>*pi/180</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-from_002dradians_002d2" id=
+    "index-from_002dradians_002d2"></a>Function:
+    <strong>from-radians-2</strong> <em>a</em></dt>
+
+    <dd>
+      <p>Like <code>from-radians</code>, except that in Symbolic
+      mode a radians to degrees conversion yields a formula like
+      &lsquo;<samp><var>a</var>*180/pi</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-random_002ddigit" id=
+    "index-random_002ddigit"></a>Function:
+    <strong>random-digit</strong></dt>
+
+    <dd>
+      <p>Produce a random base-1000 digit in the range 0 to
+      999.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-random_002ddigits" id=
+    "index-random_002ddigits"></a>Function:
+    <strong>random-digits</strong> <em>n</em></dt>
+
+    <dd>
+      <p>Produce a random <var>n</var>-digit integer; this will be
+      an integer in the interval &lsquo;<samp>[0,
+      10^<var>n</var>)</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-random_002dfloat" id=
+    "index-random_002dfloat"></a>Function:
+    <strong>random-float</strong></dt>
+
+    <dd>
+      <p>Produce a random float in the interval &lsquo;<samp>[0,
+      1)</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-prime_002dtest" id=
+    "index-prime_002dtest"></a>Function:
+    <strong>prime-test</strong> <em>n iters</em></dt>
+
+    <dd>
+      <p>Determine whether the integer <var>n</var> is prime.
+      Return a list which has one of these forms: &lsquo;<samp>(nil
+      <var>f</var>)</samp>&rsquo; means the number is non-prime
+      because it was found to be divisible by <var>f</var>;
+      &lsquo;<samp>(nil)</samp>&rsquo; means it was found to be
+      non-prime by table look-up (so no factors are known);
+      &lsquo;<samp>(nil unknown)</samp>&rsquo; means it is
+      definitely non-prime but no factors are known because
+      <var>n</var> was large enough that Fermat&rsquo;s
+      probabilistic test had to be used;
+      &lsquo;<samp>(t)</samp>&rsquo; means the number is definitely
+      prime; and &lsquo;<samp>(maybe <var>i</var>
+      <var>p</var>)</samp>&rsquo; means that Fermat&rsquo;s test,
+      after <var>i</var> iterations, is <var>p</var> percent sure
+      that the number is prime. The <var>iters</var> parameter is
+      the number of Fermat iterations to use, in the case that this
+      is necessary. If <code>prime-test</code> returns
+      &ldquo;maybe,&rdquo; you can call it again with the same
+      <var>n</var> to get a greater certainty;
+      <code>prime-test</code> remembers where it left off.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-to_002dsimple_002dfraction" id=
+    "index-to_002dsimple_002dfraction"></a>Function:
+    <strong>to-simple-fraction</strong> <em>f</em></dt>
+
+    <dd>
+      <p>If <var>f</var> is a floating-point number which can be
+      represented exactly as a small rational number, return that
+      number, else return <var>f</var>. For example, 0.75 would be
+      converted to 3:4. This function is very fast.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-to_002dfraction" id=
+    "index-to_002dfraction"></a>Function:
+    <strong>to-fraction</strong> <em>f tol</em></dt>
+
+    <dd>
+      <p>Find a rational approximation to floating-point number
+      <var>f</var> to within a specified tolerance <var>tol</var>;
+      this corresponds to the algebraic function <code>frac</code>,
+      and can be rather slow.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-quarter_002dinteger" id=
+    "index-quarter_002dinteger"></a>Function:
+    <strong>quarter-integer</strong> <em>n</em></dt>
+
+    <dd>
+      <p>If <var>n</var> is an integer or integer-valued float,
+      this function returns zero. If <var>n</var> is a half-integer
+      (i.e., an integer plus <i>1:2</i> or 0.5), it returns 2. If
+      <var>n</var> is a quarter-integer, it returns 1 or 3. If
+      <var>n</var> is anything else, this function returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Vector-Lisp-Functions.html#Vector-Lisp-Functions" accesskey=
+    "n" rel="next">Vector Lisp Functions</a>, Previous: <a href=
+    "Predicates.html#Predicates" accesskey="p" rel=
+    "prev">Predicates</a>, Up: <a href="Internals.html#Internals"
+    accesskey="u" rel="up">Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

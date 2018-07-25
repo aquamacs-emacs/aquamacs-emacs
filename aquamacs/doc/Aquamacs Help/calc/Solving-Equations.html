@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Solving Equations - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Algebra.html#Algebra" title="Algebra">
-<link rel="prev" href="Calculus.html#Calculus" title="Calculus">
-<link rel="next" href="Numerical-Solutions.html#Numerical-Solutions" title="Numerical Solutions">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Solving Equations - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Algebra.html#Algebra" title="Algebra" />
+  <link rel="prev" href="Calculus.html#Calculus" title=
+  "Calculus" />
+  <link rel="next" href=
+  "Numerical-Solutions.html#Numerical-Solutions" title=
+  "Numerical Solutions" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +38,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,54 +51,88 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Solving-Equations"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Numerical-Solutions.html#Numerical-Solutions">Numerical Solutions</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Calculus.html#Calculus">Calculus</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Algebra.html#Algebra">Algebra</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Solving-Equations" id="Solving-Equations"></a>
 
-<h3 class="section">11.6 Solving Equations</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Numerical-Solutions.html#Numerical-Solutions">Numerical
+    Solutions</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Calculus.html#Calculus">Calculus</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href="Algebra.html#Algebra">Algebra</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-a-S-1757"></a><a name="index-calc_002dsolve_002dfor-1758"></a><a name="index-solve-1759"></a><a name="index-Equations_002c-solving-1760"></a><a name="index-Solving-equations-1761"></a>The <kbd>a S</kbd> (<code>calc-solve-for</code>) [<code>solve</code>] command rearranges
-an equation to solve for a specific variable.  An equation is an
-expression of the form &lsquo;<samp><span class="samp">L = R</span></samp>&rsquo;.  For example, the command <kbd>a S x</kbd>
-will rearrange &lsquo;<samp><span class="samp">y = 3x + 6</span></samp>&rsquo; to the form, &lsquo;<samp><span class="samp">x = y/3 - 2</span></samp>&rsquo;.  If the
-input is not an equation, it is treated like an equation of the
-form &lsquo;<samp><span class="samp">X = 0</span></samp>&rsquo;.
+  <h3 class="section">11.6 Solving Equations</h3>
 
-   <p>This command also works for inequalities, as in &lsquo;<samp><span class="samp">y &lt; 3x + 6</span></samp>&rsquo;. 
-Some inequalities cannot be solved where the analogous equation could
-be; for example, solving
-<!-- @math{a < b \, c} -->
-&lsquo;<samp><span class="samp">a &lt; b c</span></samp>&rsquo;
-for &lsquo;<samp><span class="samp">b</span></samp>&rsquo; is impossible
-without knowing the sign of &lsquo;<samp><span class="samp">c</span></samp>&rsquo;.  In this case, <kbd>a S</kbd> will
-produce the result
-<!-- @math{b \mathbin{\hbox{\code{!=}}} a/c} -->
-&lsquo;<samp><span class="samp">b != a/c</span></samp>&rsquo;
-(using the not-equal-to operator) to signify that the direction of the
-inequality is now unknown.  The inequality
-<!-- @math{a \le b \, c} -->
-&lsquo;<samp><span class="samp">a &lt;= b c</span></samp>&rsquo;
-is not even partially solved.  See <a href="Declarations.html#Declarations">Declarations</a>, for a way to tell
-Calc that the signs of the variables in a formula are in fact known.
+  <p class="noindent"><a name="index-a-S-1757" id=
+  "index-a-S-1757"></a><a name="index-calc_002dsolve_002dfor-1758"
+  id="index-calc_002dsolve_002dfor-1758"></a><a name=
+  "index-solve-1759" id="index-solve-1759"></a><a name=
+  "index-Equations_002c-solving-1760" id=
+  "index-Equations_002c-solving-1760"></a><a name=
+  "index-Solving-equations-1761" id=
+  "index-Solving-equations-1761"></a>The <kbd>a S</kbd>
+  (<code>calc-solve-for</code>) [<code>solve</code>] command
+  rearranges an equation to solve for a specific variable. An
+  equation is an expression of the form &lsquo;<samp><span class=
+  "samp">L = R</span></samp>&rsquo;. For example, the command
+  <kbd>a S x</kbd> will rearrange &lsquo;<samp><span class="samp">y
+  = 3x + 6</span></samp>&rsquo; to the form,
+  &lsquo;<samp><span class="samp">x = y/3 - 2</span></samp>&rsquo;.
+  If the input is not an equation, it is treated like an equation
+  of the form &lsquo;<samp><span class="samp">X =
+  0</span></samp>&rsquo;.</p>
 
-   <p>Two useful commands for working with the result of <kbd>a S</kbd> are
-<kbd>a .</kbd> (see <a href="Logical-Operations.html#Logical-Operations">Logical Operations</a>), which converts &lsquo;<samp><span class="samp">x = y/3 - 2</span></samp>&rsquo;
-to &lsquo;<samp><span class="samp">y/3 - 2</span></samp>&rsquo;, and <kbd>s l</kbd> (see <a href="Let-Command.html#Let-Command">Let Command</a>) which evaluates
-another formula with &lsquo;<samp><span class="samp">x</span></samp>&rsquo; set equal to &lsquo;<samp><span class="samp">y/3 - 2</span></samp>&rsquo;.
+  <p>This command also works for inequalities, as in
+  &lsquo;<samp><span class="samp">y &lt; 3x +
+  6</span></samp>&rsquo;. Some inequalities cannot be solved where
+  the analogous equation could be; for example, solving 
+  <!-- @math{a < b \, c} -->
+  &lsquo;<samp><span class="samp">a &lt; b c</span></samp>&rsquo;
+  for &lsquo;<samp><span class="samp">b</span></samp>&rsquo; is
+  impossible without knowing the sign of &lsquo;<samp><span class=
+  "samp">c</span></samp>&rsquo;. In this case, <kbd>a S</kbd> will
+  produce the result 
+  <!-- @math{b \mathbin{\hbox{\code{!=}}} a/c} -->
+  &lsquo;<samp><span class="samp">b != a/c</span></samp>&rsquo;
+  (using the not-equal-to operator) to signify that the direction
+  of the inequality is now unknown. The inequality 
+  <!-- @math{a \le b \, c} -->
+  &lsquo;<samp><span class="samp">a &lt;= b c</span></samp>&rsquo;
+  is not even partially solved. See <a href=
+  "Declarations.html#Declarations">Declarations</a>, for a way to
+  tell Calc that the signs of the variables in a formula are in
+  fact known.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Multiple-Solutions.html#Multiple-Solutions">Multiple Solutions</a>
-<li><a accesskey="2" href="Solving-Systems-of-Equations.html#Solving-Systems-of-Equations">Solving Systems of Equations</a>
-<li><a accesskey="3" href="Decomposing-Polynomials.html#Decomposing-Polynomials">Decomposing Polynomials</a>
-</ul>
+  <p>Two useful commands for working with the result of <kbd>a
+  S</kbd> are <kbd>a .</kbd> (see <a href=
+  "Logical-Operations.html#Logical-Operations">Logical
+  Operations</a>), which converts &lsquo;<samp><span class="samp">x
+  = y/3 - 2</span></samp>&rsquo; to &lsquo;<samp><span class=
+  "samp">y/3 - 2</span></samp>&rsquo;, and <kbd>s l</kbd> (see
+  <a href="Let-Command.html#Let-Command">Let Command</a>) which
+  evaluates another formula with &lsquo;<samp><span class=
+  "samp">x</span></samp>&rsquo; set equal to
+  &lsquo;<samp><span class="samp">y/3 - 2</span></samp>&rsquo;.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Multiple-Solutions.html#Multiple-Solutions">Multiple
+    Solutions</a></li>
 
+    <li><a accesskey="2" href=
+    "Solving-Systems-of-Equations.html#Solving-Systems-of-Equations">
+    Solving Systems of Equations</a></li>
+
+    <li><a accesskey="3" href=
+    "Decomposing-Polynomials.html#Decomposing-Polynomials">Decomposing
+    Polynomials</a></li>
+  </ul>
+</body>
+</html>

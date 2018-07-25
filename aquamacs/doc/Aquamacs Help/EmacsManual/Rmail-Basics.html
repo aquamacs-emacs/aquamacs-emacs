@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,116 +20,160 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Rmail Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Rmail Basics">
-<meta name="keywords" content="GNU Emacs Manual: Rmail Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Rmail.html#Rmail" rel="up" title="Rmail">
-<link href="Rmail-Scrolling.html#Rmail-Scrolling" rel="next" title="Rmail Scrolling">
-<link href="Rmail.html#Rmail" rel="prev" title="Rmail">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Rmail Basics</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Rmail Basics" />
+  <meta name="keywords" content="GNU Emacs Manual: Rmail Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Rmail.html#Rmail" rel="up" title="Rmail" />
+  <link href="Rmail-Scrolling.html#Rmail-Scrolling" rel="next"
+  title="Rmail Scrolling" />
+  <link href="Rmail.html#Rmail" rel="prev" title="Rmail" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Rmail-Basics" id="Rmail-Basics"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Rmail-Scrolling.html#Rmail-Scrolling"
+    accesskey="n" rel="next">Rmail Scrolling</a>, Up: <a href=
+    "Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Concepts-of-Rmail" id=
+  "Basic-Concepts-of-Rmail"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Rmail-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Rmail-Scrolling.html#Rmail-Scrolling" accesskey="n" rel="next">Rmail Scrolling</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Concepts-of-Rmail"></a>
-<h3 class="section">33.1 Basic Concepts of Rmail</h3>
+  <h3 class="section">33.1 Basic Concepts of Rmail</h3><a name=
+  "index-primary-Rmail-file" id="index-primary-Rmail-file"></a>
+  <a name="index-rmail_002dfile_002dname" id=
+  "index-rmail_002dfile_002dname"></a>
 
-<a name="index-primary-Rmail-file"></a>
-<a name="index-rmail_002dfile_002dname"></a>
-<p>Using Rmail in the simplest fashion, you have one Rmail file
-<samp>~/RMAIL</samp> in which all of your mail is saved.  It is called your
-<em>primary Rmail file</em>.  The command <kbd>M-x rmail</kbd> reads your primary
-Rmail file, merges new mail in from your inboxes, displays the first
-message you haven&rsquo;t read yet, and lets you begin reading.  The variable
-<code>rmail-file-name</code> specifies the name of the primary Rmail file.
-</p>
-<p>Rmail displays only one message in the Rmail file at a time.
-The message that is shown is called the <em>current message</em>.  Rmail
-mode&rsquo;s special commands can do such things as delete the current
-message, copy it into another file, send a reply, or move to another
-message.  You can also create multiple Rmail files and use Rmail to move
-messages between them.
-</p>
-<a name="index-message-number"></a>
-<p>Within the Rmail file, messages are normally arranged sequentially in
-order of receipt; you can specify other ways to sort them (see <a href="Rmail-Sorting.html#Rmail-Sorting">Rmail Sorting</a>).  Messages are identified by consecutive integers which are
-their <em>message numbers</em>.  The number of the current message is
-displayed in Rmail&rsquo;s mode line, followed by the total number of messages
-in the file.  You can move to a message by specifying its message number
-with the <kbd>j</kbd> key (see <a href="Rmail-Motion.html#Rmail-Motion">Rmail Motion</a>).
-</p>
-<a name="index-s-_0028Rmail_0029"></a>
-<a name="index-rmail_002dexpunge_002dand_002dsave"></a>
-<p>Following the usual conventions of Emacs, changes in an Rmail file
-become permanent only when you save the file.  You can save it with
-<kbd>s</kbd> (<code>rmail-expunge-and-save</code>), which also expunges deleted
-messages from the file first (see <a href="Rmail-Deletion.html#Rmail-Deletion">Rmail Deletion</a>).  To save the
-file without expunging, use <kbd>C-x C-s</kbd>.  Rmail also saves the Rmail
-file after merging new mail from an inbox file (see <a href="Rmail-Inbox.html#Rmail-Inbox">Rmail Inbox</a>).
-</p>
-<a name="index-q-_0028Rmail_0029"></a>
-<a name="index-rmail_002dquit"></a>
-<a name="index-b-_0028Rmail_0029"></a>
-<a name="index-rmail_002dbury"></a>
-<p>You can exit Rmail with <kbd>q</kbd> (<code>rmail-quit</code>); this expunges
-and saves the Rmail file, then buries the Rmail buffer as well as its
-summary buffer, if present (see <a href="Rmail-Summary.html#Rmail-Summary">Rmail Summary</a>).  But there is no
-need to exit formally.  If you switch from Rmail to editing in
-other buffers, and never switch back, you have exited.  Just make sure
-to save the Rmail file eventually (like any other file you have
-changed).  <kbd>C-x s</kbd> is a suitable way to do this (see <a href="Save-Commands.html#Save-Commands">Save Commands</a>).  The Rmail command <kbd>b</kbd>, <code>rmail-bury</code>, buries the
-Rmail buffer and its summary without expunging and saving the Rmail file.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Rmail-Scrolling.html#Rmail-Scrolling" accesskey="n" rel="next">Rmail Scrolling</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Using Rmail in the simplest fashion, you have one Rmail file
+  <samp>~/RMAIL</samp> in which all of your mail is saved. It is
+  called your <em>primary Rmail file</em>. The command <kbd>M-x
+  rmail</kbd> reads your primary Rmail file, merges new mail in
+  from your inboxes, displays the first message you haven&rsquo;t
+  read yet, and lets you begin reading. The variable
+  <code>rmail-file-name</code> specifies the name of the primary
+  Rmail file.</p>
 
+  <p>Rmail displays only one message in the Rmail file at a time.
+  The message that is shown is called the <em>current message</em>.
+  Rmail mode&rsquo;s special commands can do such things as delete
+  the current message, copy it into another file, send a reply, or
+  move to another message. You can also create multiple Rmail files
+  and use Rmail to move messages between them.</p><a name=
+  "index-message-number" id="index-message-number"></a>
 
+  <p>Within the Rmail file, messages are normally arranged
+  sequentially in order of receipt; you can specify other ways to
+  sort them (see <a href="Rmail-Sorting.html#Rmail-Sorting">Rmail
+  Sorting</a>). Messages are identified by consecutive integers
+  which are their <em>message numbers</em>. The number of the
+  current message is displayed in Rmail&rsquo;s mode line, followed
+  by the total number of messages in the file. You can move to a
+  message by specifying its message number with the <kbd>j</kbd>
+  key (see <a href="Rmail-Motion.html#Rmail-Motion">Rmail
+  Motion</a>).</p><a name="index-s-_0028Rmail_0029" id=
+  "index-s-_0028Rmail_0029"></a> <a name=
+  "index-rmail_002dexpunge_002dand_002dsave" id=
+  "index-rmail_002dexpunge_002dand_002dsave"></a>
 
+  <p>Following the usual conventions of Emacs, changes in an Rmail
+  file become permanent only when you save the file. You can save
+  it with <kbd>s</kbd> (<code>rmail-expunge-and-save</code>), which
+  also expunges deleted messages from the file first (see <a href=
+  "Rmail-Deletion.html#Rmail-Deletion">Rmail Deletion</a>). To save
+  the file without expunging, use <kbd>C-x C-s</kbd>. Rmail also
+  saves the Rmail file after merging new mail from an inbox file
+  (see <a href="Rmail-Inbox.html#Rmail-Inbox">Rmail
+  Inbox</a>).</p><a name="index-q-_0028Rmail_0029" id=
+  "index-q-_0028Rmail_0029"></a> <a name="index-rmail_002dquit" id=
+  "index-rmail_002dquit"></a> <a name="index-b-_0028Rmail_0029" id=
+  "index-b-_0028Rmail_0029"></a> <a name="index-rmail_002dbury" id=
+  "index-rmail_002dbury"></a>
+
+  <p>You can exit Rmail with <kbd>q</kbd>
+  (<code>rmail-quit</code>); this expunges and saves the Rmail
+  file, then buries the Rmail buffer as well as its summary buffer,
+  if present (see <a href="Rmail-Summary.html#Rmail-Summary">Rmail
+  Summary</a>). But there is no need to exit formally. If you
+  switch from Rmail to editing in other buffers, and never switch
+  back, you have exited. Just make sure to save the Rmail file
+  eventually (like any other file you have changed). <kbd>C-x
+  s</kbd> is a suitable way to do this (see <a href=
+  "Save-Commands.html#Save-Commands">Save Commands</a>). The Rmail
+  command <kbd>b</kbd>, <code>rmail-bury</code>, buries the Rmail
+  buffer and its summary without expunging and saving the Rmail
+  file.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Rmail-Scrolling.html#Rmail-Scrolling"
+    accesskey="n" rel="next">Rmail Scrolling</a>, Up: <a href=
+    "Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

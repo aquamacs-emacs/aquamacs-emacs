@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,100 +18,201 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Defining Label Environments</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Defining Label Environments">
-<meta name="keywords" content="RefTeX User Manual: Defining Label Environments">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Labels-and-References.html#Labels-and-References" rel="up" title="Labels and References">
-<link href="Theorem-and-Axiom.html#Theorem-and-Axiom" rel="next" title="Theorem and Axiom">
-<link href="Builtin-Label-Environments.html#Builtin-Label-Environments" rel="prev" title="Builtin Label Environments">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Defining Label Environments</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Defining Label Environments" />
+  <meta name="keywords" content=
+  "RefTeX User Manual: Defining Label Environments" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Labels-and-References.html#Labels-and-References"
+  rel="up" title="Labels and References" />
+  <link href="Theorem-and-Axiom.html#Theorem-and-Axiom" rel="next"
+  title="Theorem and Axiom" />
+  <link href=
+  "Builtin-Label-Environments.html#Builtin-Label-Environments" rel=
+  "prev" title="Builtin Label Environments" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Label-Environments"></a>
-<div class="header">
-<p>
-Next: <a href="Reference-Info.html#Reference-Info" accesskey="n" rel="next">Reference Info</a>, Previous: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments" accesskey="p" rel="prev">Builtin Label Environments</a>, Up: <a href="Labels-and-References.html#Labels-and-References" accesskey="u" rel="up">Labels and References</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Label-Environments-1"></a>
-<h3 class="section">3.4 Defining Label Environments</h3>
-<a name="index-Label-environments_002c-defining"></a>
+<body lang="en" xml:lang="en">
+  <a name="Defining-Label-Environments" id=
+  "Defining-Label-Environments"></a>
 
-<a name="index-reftex_002dlabel_002dalist-1"></a>
-<p>RefTeX can be configured to recognize additional labeled
-environments and macros.  This is done with the variable
-<code>reftex-label-alist</code> (see <a href="Options-_002d-Defining-Label-Environments.html#Options-_002d-Defining-Label-Environments">Options - Defining Label Environments</a>).  If you are not familiar with Lisp, you can use the
-<code>custom</code> library to configure this rather complex variable.  To do
-this, use
-</p>
-<div class="example">
-<pre class="example"><kbd>M-x customize-variable <span class="key">RET</span> reftex-label-alist <span class="key">RET</span></kbd>
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Reference-Info.html#Reference-Info"
+    accesskey="n" rel="next">Reference Info</a>, Previous: <a href=
+    "Builtin-Label-Environments.html#Builtin-Label-Environments"
+    accesskey="p" rel="prev">Builtin Label Environments</a>, Up:
+    <a href="Labels-and-References.html#Labels-and-References"
+    accesskey="u" rel="up">Labels and References</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Label-Environments-1" id=
+  "Defining-Label-Environments-1"></a>
 
-<a name="index-reftex_002dlabel_002dalist_002dbuiltin-1"></a>
-<p>Here we will discuss a few examples, in order to make things clearer.
-It can also be instructive to look at the constant
-<code>reftex-label-alist-builtin</code> which contains the entries for
-all the builtin environments and macros (see <a href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Theorem-and-Axiom.html#Theorem-and-Axiom" accesskey="1">Theorem and Axiom</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defined with <code>\newenvironment</code>.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Quick-Equation.html#Quick-Equation" accesskey="2">Quick Equation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">When a macro sets the label type.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Figure-Wrapper.html#Figure-Wrapper" accesskey="3">Figure Wrapper</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">When a macro argument is a label.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Adding-Magic-Words.html#Adding-Magic-Words" accesskey="4">Adding Magic Words</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Other words for other languages.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Using-_005ceqref.html#Using-_005ceqref" accesskey="5">Using \eqref</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to switch to this AMS-LaTeX macro.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Non_002dStandard-Environments.html#Non_002dStandard-Environments" accesskey="6">Non-Standard Environments</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Environments without \begin and \end
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Putting-it-Together.html#Putting-it-Together" accesskey="7">Putting it Together</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to combine many entries.
-</td></tr>
-</table>
+  <h3 class="section">3.4 Defining Label Environments</h3><a name=
+  "index-Label-environments_002c-defining" id=
+  "index-Label-environments_002c-defining"></a> <a name=
+  "index-reftex_002dlabel_002dalist-1" id=
+  "index-reftex_002dlabel_002dalist-1"></a>
 
+  <p>RefTeX can be configured to recognize additional labeled
+  environments and macros. This is done with the variable
+  <code>reftex-label-alist</code> (see <a href=
+  "Options-_002d-Defining-Label-Environments.html#Options-_002d-Defining-Label-Environments">
+  Options - Defining Label Environments</a>). If you are not
+  familiar with Lisp, you can use the <code>custom</code> library
+  to configure this rather complex variable. To do this, use</p>
 
+  <div class="example">
+    <pre class="example">
+<kbd>M-x customize-variable <span class=
+"key">RET</span> reftex-label-alist <span class=
+"key">RET</span></kbd>
+</pre>
+  </div><a name="index-reftex_002dlabel_002dalist_002dbuiltin-1"
+  id="index-reftex_002dlabel_002dalist_002dbuiltin-1"></a>
 
+  <p>Here we will discuss a few examples, in order to make things
+  clearer. It can also be instructive to look at the constant
+  <code>reftex-label-alist-builtin</code> which contains the
+  entries for all the builtin environments and macros (see <a href=
+  "Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin
+  Label Environments</a>).</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Theorem-and-Axiom.html#Theorem-and-Axiom" accesskey=
+      "1">Theorem and Axiom</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Defined with
+      <code>\newenvironment</code>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Quick-Equation.html#Quick-Equation" accesskey="2">Quick
+      Equation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">When a macro sets the label
+      type.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Figure-Wrapper.html#Figure-Wrapper" accesskey="3">Figure
+      Wrapper</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">When a macro argument is a
+      label.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Adding-Magic-Words.html#Adding-Magic-Words" accesskey=
+      "4">Adding Magic Words</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Other words for other
+      languages.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Using-_005ceqref.html#Using-_005ceqref" accesskey="5">Using
+      \eqref</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to switch to this AMS-LaTeX
+      macro.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Non_002dStandard-Environments.html#Non_002dStandard-Environments"
+      accesskey="6">Non-Standard Environments</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Environments without \begin and
+      \end</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Putting-it-Together.html#Putting-it-Together" accesskey=
+      "7">Putting it Together</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to combine many
+      entries.</td>
+    </tr>
+  </table>
 </body>
 </html>

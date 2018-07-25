@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,277 +18,375 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Defining Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Defining Functions">
-<meta name="keywords" content="GNU Emacs Calc Manual: Defining Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lisp-Definitions.html#Lisp-Definitions" rel="up" title="Lisp Definitions">
-<link href="Defining-Simple-Commands.html#Defining-Simple-Commands" rel="next" title="Defining Simple Commands">
-<link href="Lisp-Definitions.html#Lisp-Definitions" rel="prev" title="Lisp Definitions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Defining Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Defining Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Defining Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lisp-Definitions.html#Lisp-Definitions" rel="up"
+  title="Lisp Definitions" />
+  <link href=
+  "Defining-Simple-Commands.html#Defining-Simple-Commands" rel=
+  "next" title="Defining Simple Commands" />
+  <link href="Lisp-Definitions.html#Lisp-Definitions" rel="prev"
+  title="Lisp Definitions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Defining-Simple-Commands.html#Defining-Simple-Commands" accesskey="n" rel="next">Defining Simple Commands</a>, Previous: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="p" rel="prev">Lisp Definitions</a>, Up: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel="up">Lisp Definitions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-New-Functions"></a>
-<h4 class="subsection">17.5.1 Defining New Functions</h4>
+<body lang="en" xml:lang="en">
+  <a name="Defining-Functions" id="Defining-Functions"></a>
 
-<a name="index-defmath"></a>
-<p>The <code>defmath</code> function (actually a Lisp macro) is like <code>defun</code>
-except that code in the body of the definition can make use of the full
-range of Calculator data types.  The prefix &lsquo;<samp>calcFunc-</samp>&rsquo; is added
-to the specified name to get the actual Lisp function name.  As a simple
-example,
-</p>
-<div class="example">
-<pre class="example">(defmath myfact (n)
+  <div class="header">
+    <p>Next: <a href=
+    "Defining-Simple-Commands.html#Defining-Simple-Commands"
+    accesskey="n" rel="next">Defining Simple Commands</a>,
+    Previous: <a href="Lisp-Definitions.html#Lisp-Definitions"
+    accesskey="p" rel="prev">Lisp Definitions</a>, Up: <a href=
+    "Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel=
+    "up">Lisp Definitions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-New-Functions" id="Defining-New-Functions"></a>
+
+  <h4 class="subsection">17.5.1 Defining New Functions</h4><a name=
+  "index-defmath" id="index-defmath"></a>
+
+  <p>The <code>defmath</code> function (actually a Lisp macro) is
+  like <code>defun</code> except that code in the body of the
+  definition can make use of the full range of Calculator data
+  types. The prefix &lsquo;<samp>calcFunc-</samp>&rsquo; is added
+  to the specified name to get the actual Lisp function name. As a
+  simple example,</p>
+
+  <div class="example">
+    <pre class="example">
+(defmath myfact (n)
   (if (&gt; n 0)
       (* n (myfact (1- n)))
     1))
-</pre></div>
+</pre>
+  </div>
 
-<p>This actually expands to the code,
-</p>
-<div class="example">
-<pre class="example">(defun calcFunc-myfact (n)
+  <p>This actually expands to the code,</p>
+
+  <div class="example">
+    <pre class="example">
+(defun calcFunc-myfact (n)
   (if (math-posp n)
       (math-mul n (calcFunc-myfact (math-add n -1)))
     1))
-</pre></div>
+</pre>
+  </div>
 
-<p>This function can be used in algebraic expressions, e.g., &lsquo;<samp>myfact(5)</samp>&rsquo;.
-</p>
-<p>The &lsquo;<samp>myfact</samp>&rsquo; function as it is defined above has the bug that an
-expression &lsquo;<samp>myfact(a+b)</samp>&rsquo; will be simplified to 1 because the
-formula &lsquo;<samp>a+b</samp>&rsquo; is not considered to be <code>posp</code>.  A robust
-factorial function would be written along the following lines:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defmath myfact (n)
+  <p>This function can be used in algebraic expressions, e.g.,
+  &lsquo;<samp>myfact(5)</samp>&rsquo;.</p>
+
+  <p>The &lsquo;<samp>myfact</samp>&rsquo; function as it is
+  defined above has the bug that an expression
+  &lsquo;<samp>myfact(a+b)</samp>&rsquo; will be simplified to 1
+  because the formula &lsquo;<samp>a+b</samp>&rsquo; is not
+  considered to be <code>posp</code>. A robust factorial function
+  would be written along the following lines:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defmath myfact (n)
   (if (&gt; n 0)
       (* n (myfact (1- n)))
     (if (= n 0)
         1
       nil)))    ; this could be simplified as: (and (= n 0) 1)
-</pre></div>
+</pre>
+  </div>
 
-<p>If a function returns <code>nil</code>, it is left unsimplified by the Calculator
-(except that its arguments will be simplified).  Thus, &lsquo;<samp>myfact(a+1+2)</samp>&rsquo;
-will be simplified to &lsquo;<samp>myfact(a+3)</samp>&rsquo; but no further.  Beware that every
-time the Calculator reexamines this formula it will attempt to resimplify
-it, so your function ought to detect the returning-<code>nil</code> case as
-efficiently as possible.
-</p>
-<p>The following standard Lisp functions are treated by <code>defmath</code>:
-<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>^</code> or
-<code>expt</code>, <code>=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>,
-<code>/=</code>, <code>1+</code>, <code>1-</code>, <code>logand</code>, <code>logior</code>, <code>logxor</code>,
-<code>logandc2</code>, <code>lognot</code>.  Also, <code>~=</code> is an abbreviation for
-<code>math-nearly-equal</code>, which is useful in implementing Taylor series.
-</p>
-<p>For other functions <var>func</var>, if a function by the name
-&lsquo;<samp>calcFunc-<var>func</var></samp>&rsquo; exists it is used, otherwise if a function by the
-name &lsquo;<samp>math-<var>func</var></samp>&rsquo; exists it is used, otherwise if <var>func</var> itself
-is defined as a function it is used, otherwise &lsquo;<samp>calcFunc-<var>func</var></samp>&rsquo; is
-used on the assumption that this is a to-be-defined math function.  Also, if
-the function name is quoted as in &lsquo;<samp>('integerp a)</samp>&rsquo; the function name is
-always used exactly as written (but not quoted).
-</p>
-<p>Variable names have &lsquo;<samp>var-</samp>&rsquo; prepended to them unless they appear in
-the function&rsquo;s argument list or in an enclosing <code>let</code>, <code>let*</code>,
-<code>for</code>, or <code>foreach</code> form,
-or their names already contain a &lsquo;<samp>-</samp>&rsquo; character.  Thus a reference to
-&lsquo;<samp>foo</samp>&rsquo; is the same as a reference to &lsquo;<samp>var-foo</samp>&rsquo;.
-</p>
-<p>A few other Lisp extensions are available in <code>defmath</code> definitions:
-</p>
-<ul>
-<li> The <code>elt</code> function accepts any number of index variables.
-Note that Calc vectors are stored as Lisp lists whose first
-element is the symbol <code>vec</code>; thus, &lsquo;<samp>(elt v 2)</samp>&rsquo; yields
-the second element of vector <code>v</code>, and &lsquo;<samp>(elt m i j)</samp>&rsquo;
-yields one element of a Calc matrix.
+  <p>If a function returns <code>nil</code>, it is left
+  unsimplified by the Calculator (except that its arguments will be
+  simplified). Thus, &lsquo;<samp>myfact(a+1+2)</samp>&rsquo; will
+  be simplified to &lsquo;<samp>myfact(a+3)</samp>&rsquo; but no
+  further. Beware that every time the Calculator reexamines this
+  formula it will attempt to resimplify it, so your function ought
+  to detect the returning-<code>nil</code> case as efficiently as
+  possible.</p>
 
-</li><li> The <code>setq</code> function has been extended to act like the Common
-Lisp <code>setf</code> function.  (The name <code>setf</code> is recognized as
-a synonym of <code>setq</code>.)  Specifically, the first argument of
-<code>setq</code> can be an <code>nth</code>, <code>elt</code>, <code>car</code>, or <code>cdr</code> form,
-in which case the effect is to store into the specified
-element of a list.  Thus, &lsquo;<samp>(setq (elt m i j) x)</samp>&rsquo; stores &lsquo;<samp>x</samp>&rsquo;
-into one element of a matrix.
+  <p>The following standard Lisp functions are treated by
+  <code>defmath</code>: <code>+</code>, <code>-</code>,
+  <code>*</code>, <code>/</code>, <code>%</code>, <code>^</code> or
+  <code>expt</code>, <code>=</code>, <code>&lt;</code>,
+  <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>,
+  <code>/=</code>, <code>1+</code>, <code>1-</code>,
+  <code>logand</code>, <code>logior</code>, <code>logxor</code>,
+  <code>logandc2</code>, <code>lognot</code>. Also, <code>~=</code>
+  is an abbreviation for <code>math-nearly-equal</code>, which is
+  useful in implementing Taylor series.</p>
 
-</li><li> A <code>for</code> looping construct is available.  For example,
-&lsquo;<samp>(for ((i 0 10)) body)</samp>&rsquo; executes <code>body</code> once for each
-binding of &lsquo;<samp>i</samp>&rsquo; from zero to 10.  This is like a <code>let</code>
-form in that &lsquo;<samp>i</samp>&rsquo; is temporarily bound to the loop count
-without disturbing its value outside the <code>for</code> construct.
-Nested loops, as in &lsquo;<samp>(for ((i 0 10) (j 0 (1- i) 2)) body)</samp>&rsquo;,
-are also available.  For each value of &lsquo;<samp>i</samp>&rsquo; from zero to 10,
-&lsquo;<samp>j</samp>&rsquo; counts from 0 to &lsquo;<samp>i-1</samp>&rsquo; in steps of two.  Note that
-<code>for</code> has the same general outline as <code>let*</code>, except
-that each element of the header is a list of three or four
-things, not just two.
+  <p>For other functions <var>func</var>, if a function by the name
+  &lsquo;<samp>calcFunc-<var>func</var></samp>&rsquo; exists it is
+  used, otherwise if a function by the name
+  &lsquo;<samp>math-<var>func</var></samp>&rsquo; exists it is
+  used, otherwise if <var>func</var> itself is defined as a
+  function it is used, otherwise
+  &lsquo;<samp>calcFunc-<var>func</var></samp>&rsquo; is used on
+  the assumption that this is a to-be-defined math function. Also,
+  if the function name is quoted as in &lsquo;<samp>('integerp
+  a)</samp>&rsquo; the function name is always used exactly as
+  written (but not quoted).</p>
 
-</li><li> The <code>foreach</code> construct loops over elements of a list.
-For example, &lsquo;<samp>(foreach ((x (cdr v))) body)</samp>&rsquo; executes
-<code>body</code> with &lsquo;<samp>x</samp>&rsquo; bound to each element of Calc vector
-&lsquo;<samp>v</samp>&rsquo; in turn.  The purpose of <code>cdr</code> here is to skip over
-the initial <code>vec</code> symbol in the vector.
+  <p>Variable names have &lsquo;<samp>var-</samp>&rsquo; prepended
+  to them unless they appear in the function&rsquo;s argument list
+  or in an enclosing <code>let</code>, <code>let*</code>,
+  <code>for</code>, or <code>foreach</code> form, or their names
+  already contain a &lsquo;<samp>-</samp>&rsquo; character. Thus a
+  reference to &lsquo;<samp>foo</samp>&rsquo; is the same as a
+  reference to &lsquo;<samp>var-foo</samp>&rsquo;.</p>
 
-</li><li> The <code>break</code> function breaks out of the innermost enclosing
-<code>while</code>, <code>for</code>, or <code>foreach</code> loop.  If given a
-value, as in &lsquo;<samp>(break x)</samp>&rsquo;, this value is returned by the
-loop.  (Lisp loops otherwise always return <code>nil</code>.)
+  <p>A few other Lisp extensions are available in
+  <code>defmath</code> definitions:</p>
 
-</li><li> The <code>return</code> function prematurely returns from the enclosing
-function.  For example, &lsquo;<samp>(return (+ x y))</samp>&rsquo; returns &lsquo;<samp>x+y</samp>&rsquo;
-as the value of a function.  You can use <code>return</code> anywhere
-inside the body of the function.
-</li></ul>
+  <ul>
+    <li>The <code>elt</code> function accepts any number of index
+    variables. Note that Calc vectors are stored as Lisp lists
+    whose first element is the symbol <code>vec</code>; thus,
+    &lsquo;<samp>(elt v 2)</samp>&rsquo; yields the second element
+    of vector <code>v</code>, and &lsquo;<samp>(elt m i
+    j)</samp>&rsquo; yields one element of a Calc matrix.</li>
 
-<p>Non-integer numbers (and extremely large integers) cannot be included
-directly into a <code>defmath</code> definition.  This is because the Lisp
-reader will fail to parse them long before <code>defmath</code> ever gets control.
-Instead, use the notation, &lsquo;<samp>:&quot;3.1415&quot;</samp>&rsquo;.  In fact, any algebraic
-formula can go between the quotes.  For example,
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defmath sqexp (x)     ; sqexp(x) == sqrt(exp(x)) == exp(x*0.5)
+    <li>The <code>setq</code> function has been extended to act
+    like the Common Lisp <code>setf</code> function. (The name
+    <code>setf</code> is recognized as a synonym of
+    <code>setq</code>.) Specifically, the first argument of
+    <code>setq</code> can be an <code>nth</code>, <code>elt</code>,
+    <code>car</code>, or <code>cdr</code> form, in which case the
+    effect is to store into the specified element of a list. Thus,
+    &lsquo;<samp>(setq (elt m i j) x)</samp>&rsquo; stores
+    &lsquo;<samp>x</samp>&rsquo; into one element of a matrix.</li>
+
+    <li>A <code>for</code> looping construct is available. For
+    example, &lsquo;<samp>(for ((i 0 10)) body)</samp>&rsquo;
+    executes <code>body</code> once for each binding of
+    &lsquo;<samp>i</samp>&rsquo; from zero to 10. This is like a
+    <code>let</code> form in that &lsquo;<samp>i</samp>&rsquo; is
+    temporarily bound to the loop count without disturbing its
+    value outside the <code>for</code> construct. Nested loops, as
+    in &lsquo;<samp>(for ((i 0 10) (j 0 (1- i) 2))
+    body)</samp>&rsquo;, are also available. For each value of
+    &lsquo;<samp>i</samp>&rsquo; from zero to 10,
+    &lsquo;<samp>j</samp>&rsquo; counts from 0 to
+    &lsquo;<samp>i-1</samp>&rsquo; in steps of two. Note that
+    <code>for</code> has the same general outline as
+    <code>let*</code>, except that each element of the header is a
+    list of three or four things, not just two.</li>
+
+    <li>The <code>foreach</code> construct loops over elements of a
+    list. For example, &lsquo;<samp>(foreach ((x (cdr v)))
+    body)</samp>&rsquo; executes <code>body</code> with
+    &lsquo;<samp>x</samp>&rsquo; bound to each element of Calc
+    vector &lsquo;<samp>v</samp>&rsquo; in turn. The purpose of
+    <code>cdr</code> here is to skip over the initial
+    <code>vec</code> symbol in the vector.</li>
+
+    <li>The <code>break</code> function breaks out of the innermost
+    enclosing <code>while</code>, <code>for</code>, or
+    <code>foreach</code> loop. If given a value, as in
+    &lsquo;<samp>(break x)</samp>&rsquo;, this value is returned by
+    the loop. (Lisp loops otherwise always return
+    <code>nil</code>.)</li>
+
+    <li>The <code>return</code> function prematurely returns from
+    the enclosing function. For example, &lsquo;<samp>(return (+ x
+    y))</samp>&rsquo; returns &lsquo;<samp>x+y</samp>&rsquo; as the
+    value of a function. You can use <code>return</code> anywhere
+    inside the body of the function.</li>
+  </ul>
+
+  <p>Non-integer numbers (and extremely large integers) cannot be
+  included directly into a <code>defmath</code> definition. This is
+  because the Lisp reader will fail to parse them long before
+  <code>defmath</code> ever gets control. Instead, use the
+  notation, &lsquo;<samp>:"3.1415"</samp>&rsquo;. In fact, any
+  algebraic formula can go between the quotes. For example,</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defmath sqexp (x)     ; sqexp(x) == sqrt(exp(x)) == exp(x*0.5)
   (and (numberp x)
-       (exp :&quot;x * 0.5&quot;)))
-</pre></div>
+       (exp :"x * 0.5")))
+</pre>
+  </div>
 
-<p>expands to
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun calcFunc-sqexp (x)
+  <p>expands to</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defun calcFunc-sqexp (x)
   (and (math-numberp x)
        (calcFunc-exp (math-mul x '(float 5 -1)))))
-</pre></div>
+</pre>
+  </div>
 
-<p>Note the use of <code>numberp</code> as a guard to ensure that the argument is
-a number first, returning <code>nil</code> if not.  The exponential function
-could itself have been included in the expression, if we had preferred:
-&lsquo;<samp>:&quot;exp(x * 0.5)&quot;</samp>&rsquo;.  As another example, the multiplication-and-recursion
-step of <code>myfact</code> could have been written
-</p>
-<div class="example">
-<pre class="example">:&quot;n * myfact(n-1)&quot;
-</pre></div>
+  <p>Note the use of <code>numberp</code> as a guard to ensure that
+  the argument is a number first, returning <code>nil</code> if
+  not. The exponential function could itself have been included in
+  the expression, if we had preferred: &lsquo;<samp>:"exp(x *
+  0.5)"</samp>&rsquo;. As another example, the
+  multiplication-and-recursion step of <code>myfact</code> could
+  have been written</p>
 
-<p>A good place to put your <code>defmath</code> commands is your Calc init file
-(the file given by <code>calc-settings-file</code>, typically
-<samp>~/.emacs.d/calc.el</samp>), which will not be loaded until Calc starts.
-If a file named <samp>.emacs</samp> exists in your home directory, Emacs reads
-and executes the Lisp forms in this file as it starts up.  While it may
-seem reasonable to put your favorite <code>defmath</code> commands there,
-this has the unfortunate side-effect that parts of the Calculator must be
-loaded in to process the <code>defmath</code> commands whether or not you will
-actually use the Calculator!  If you want to put the <code>defmath</code>
-commands there (for example, if you redefine <code>calc-settings-file</code>
-to be <samp>.emacs</samp>), a better effect can be had by writing
-</p>
-<div class="example">
-<pre class="example">(put 'calc-define 'thing '(progn
+  <div class="example">
+    <pre class="example">
+:"n * myfact(n-1)"
+</pre>
+  </div>
+
+  <p>A good place to put your <code>defmath</code> commands is your
+  Calc init file (the file given by
+  <code>calc-settings-file</code>, typically
+  <samp>~/.emacs.d/calc.el</samp>), which will not be loaded until
+  Calc starts. If a file named <samp>.emacs</samp> exists in your
+  home directory, Emacs reads and executes the Lisp forms in this
+  file as it starts up. While it may seem reasonable to put your
+  favorite <code>defmath</code> commands there, this has the
+  unfortunate side-effect that parts of the Calculator must be
+  loaded in to process the <code>defmath</code> commands whether or
+  not you will actually use the Calculator! If you want to put the
+  <code>defmath</code> commands there (for example, if you redefine
+  <code>calc-settings-file</code> to be <samp>.emacs</samp>), a
+  better effect can be had by writing</p>
+
+  <div class="example">
+    <pre class="example">
+(put 'calc-define 'thing '(progn
  (defmath ... )
  (defmath ... )
 ))
-</pre></div>
+</pre>
+  </div><a name="index-calc_002ddefine" id=
+  "index-calc_002ddefine"></a>
 
-<a name="index-calc_002ddefine"></a>
-<p>The <code>put</code> function adds a <em>property</em> to a symbol.  Each Lisp
-symbol has a list of properties associated with it.  Here we add a
-property with a name of <code>thing</code> and a &lsquo;<samp>(progn ...)</samp>&rsquo; form as
-its value.  When Calc starts up, and at the start of every Calc command,
-the property list for the symbol <code>calc-define</code> is checked and the
-values of any properties found are evaluated as Lisp forms.  The
-properties are removed as they are evaluated.  The property names
-(like <code>thing</code>) are not used; you should choose something like the
-name of your project so as not to conflict with other properties.
-</p>
-<p>The net effect is that you can put the above code in your <samp>.emacs</samp>
-file and it will not be executed until Calc is loaded.  Or, you can put
-that same code in another file which you load by hand either before or
-after Calc itself is loaded.
-</p>
-<p>The properties of <code>calc-define</code> are evaluated in the same order
-that they were added.  They can assume that the Calc modules <samp>calc.el</samp>,
-<samp>calc-ext.el</samp>, and <samp>calc-macs.el</samp> have been fully loaded, and
-that the <samp>*Calculator*</samp> buffer will be the current buffer.
-</p>
-<p>If your <code>calc-define</code> property only defines algebraic functions,
-you can be sure that it will have been evaluated before Calc tries to
-call your function, even if the file defining the property is loaded
-after Calc is loaded.  But if the property defines commands or key
-sequences, it may not be evaluated soon enough.  (Suppose it defines the
-new command <code>tweak-calc</code>; the user can load your file, then type
-<kbd>M-x tweak-calc</kbd> before Calc has had chance to do anything.)  To
-protect against this situation, you can put
-</p>
-<div class="example">
-<pre class="example">(run-hooks 'calc-check-defines)
-</pre></div>
+  <p>The <code>put</code> function adds a <em>property</em> to a
+  symbol. Each Lisp symbol has a list of properties associated with
+  it. Here we add a property with a name of <code>thing</code> and
+  a &lsquo;<samp>(progn ...)</samp>&rsquo; form as its value. When
+  Calc starts up, and at the start of every Calc command, the
+  property list for the symbol <code>calc-define</code> is checked
+  and the values of any properties found are evaluated as Lisp
+  forms. The properties are removed as they are evaluated. The
+  property names (like <code>thing</code>) are not used; you should
+  choose something like the name of your project so as not to
+  conflict with other properties.</p>
 
-<a name="index-calc_002dcheck_002ddefines"></a>
-<p>at the end of your file.  The <code>calc-check-defines</code> function is what
-looks for and evaluates properties on <code>calc-define</code>; <code>run-hooks</code>
-has the advantage that it is quietly ignored if <code>calc-check-defines</code>
-is not yet defined because Calc has not yet been loaded.
-</p>
-<p>Examples of things that ought to be enclosed in a <code>calc-define</code>
-property are <code>defmath</code> calls, <code>define-key</code> calls that modify
-the Calc key map, and any calls that redefine things defined inside Calc.
-Ordinary <code>defun</code>s need not be enclosed with <code>calc-define</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Defining-Simple-Commands.html#Defining-Simple-Commands" accesskey="n" rel="next">Defining Simple Commands</a>, Previous: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="p" rel="prev">Lisp Definitions</a>, Up: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel="up">Lisp Definitions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The net effect is that you can put the above code in your
+  <samp>.emacs</samp> file and it will not be executed until Calc
+  is loaded. Or, you can put that same code in another file which
+  you load by hand either before or after Calc itself is
+  loaded.</p>
 
+  <p>The properties of <code>calc-define</code> are evaluated in
+  the same order that they were added. They can assume that the
+  Calc modules <samp>calc.el</samp>, <samp>calc-ext.el</samp>, and
+  <samp>calc-macs.el</samp> have been fully loaded, and that the
+  <samp>*Calculator*</samp> buffer will be the current buffer.</p>
 
+  <p>If your <code>calc-define</code> property only defines
+  algebraic functions, you can be sure that it will have been
+  evaluated before Calc tries to call your function, even if the
+  file defining the property is loaded after Calc is loaded. But if
+  the property defines commands or key sequences, it may not be
+  evaluated soon enough. (Suppose it defines the new command
+  <code>tweak-calc</code>; the user can load your file, then type
+  <kbd>M-x tweak-calc</kbd> before Calc has had chance to do
+  anything.) To protect against this situation, you can put</p>
 
+  <div class="example">
+    <pre class="example">
+(run-hooks 'calc-check-defines)
+</pre>
+  </div><a name="index-calc_002dcheck_002ddefines" id=
+  "index-calc_002dcheck_002ddefines"></a>
+
+  <p>at the end of your file. The <code>calc-check-defines</code>
+  function is what looks for and evaluates properties on
+  <code>calc-define</code>; <code>run-hooks</code> has the
+  advantage that it is quietly ignored if
+  <code>calc-check-defines</code> is not yet defined because Calc
+  has not yet been loaded.</p>
+
+  <p>Examples of things that ought to be enclosed in a
+  <code>calc-define</code> property are <code>defmath</code> calls,
+  <code>define-key</code> calls that modify the Calc key map, and
+  any calls that redefine things defined inside Calc. Ordinary
+  <code>defun</code>s need not be enclosed with
+  <code>calc-define</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Defining-Simple-Commands.html#Defining-Simple-Commands"
+    accesskey="n" rel="next">Defining Simple Commands</a>,
+    Previous: <a href="Lisp-Definitions.html#Lisp-Definitions"
+    accesskey="p" rel="prev">Lisp Definitions</a>, Up: <a href=
+    "Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel=
+    "up">Lisp Definitions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

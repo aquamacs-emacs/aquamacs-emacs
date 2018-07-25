@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,333 +20,533 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Operating on Files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Operating on Files">
-<meta name="keywords" content="GNU Emacs Manual: Operating on Files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Dired.html#Dired" rel="up" title="Dired">
-<link href="Shell-Commands-in-Dired.html#Shell-Commands-in-Dired" rel="next" title="Shell Commands in Dired">
-<link href="Marks-vs-Flags.html#Marks-vs-Flags" rel="prev" title="Marks vs Flags">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Operating on Files</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Operating on Files" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Operating on Files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Dired.html#Dired" rel="up" title="Dired" />
+  <link href="Shell-Commands-in-Dired.html#Shell-Commands-in-Dired"
+  rel="next" title="Shell Commands in Dired" />
+  <link href="Marks-vs-Flags.html#Marks-vs-Flags" rel="prev" title=
+  "Marks vs Flags" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Operating-on-Files" id="Operating-on-Files"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Shell-Commands-in-Dired.html#Shell-Commands-in-Dired"
+    accesskey="n" rel="next">Shell Commands in Dired</a>, Previous:
+    <a href="Marks-vs-Flags.html#Marks-vs-Flags" accesskey="p" rel=
+    "prev">Marks vs Flags</a>, Up: <a href="Dired.html#Dired"
+    accesskey="u" rel="up">Dired</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Operating-on-Files-1" id="Operating-on-Files-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Operating-on-Files"></a>
-<div class="header">
-<p>
-Next: <a href="Shell-Commands-in-Dired.html#Shell-Commands-in-Dired" accesskey="n" rel="next">Shell Commands in Dired</a>, Previous: <a href="Marks-vs-Flags.html#Marks-vs-Flags" accesskey="p" rel="prev">Marks vs Flags</a>, Up: <a href="Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Operating-on-Files-1"></a>
-<h3 class="section">30.7 Operating on Files</h3>
-<a name="index-operating-on-files-in-Dired"></a>
+  <h3 class="section">30.7 Operating on Files</h3><a name=
+  "index-operating-on-files-in-Dired" id=
+  "index-operating-on-files-in-Dired"></a>
 
-<p>This section describes the basic Dired commands to operate on one file
-or several files.  All of these commands are capital letters; all of
-them use the minibuffer, either to read an argument or to ask for
-confirmation, before they act.  All of them let you specify the
-files to manipulate in these ways:
-</p>
-<ul>
-<li> If you give the command a numeric prefix argument <var>n</var>, it operates
-on the next <var>n</var> files, starting with the current file.  (If <var>n</var>
-is negative, the command operates on the −<var>n</var> files preceding
-the current line.)
+  <p>This section describes the basic Dired commands to operate on
+  one file or several files. All of these commands are capital
+  letters; all of them use the minibuffer, either to read an
+  argument or to ask for confirmation, before they act. All of them
+  let you specify the files to manipulate in these ways:</p>
 
-</li><li> Otherwise, if some files are marked with &lsquo;<samp>*</samp>&rsquo;, the command operates
-on all those files.
+  <ul>
+    <li>If you give the command a numeric prefix argument
+    <var>n</var>, it operates on the next <var>n</var> files,
+    starting with the current file. (If <var>n</var> is negative,
+    the command operates on the &acirc;&circ;&rsquo;<var>n</var>
+    files preceding the current line.)</li>
 
-</li><li> Otherwise, the command operates on the current file only.
-</li></ul>
+    <li>Otherwise, if some files are marked with
+    &lsquo;<samp>*</samp>&rsquo;, the command operates on all those
+    files.</li>
 
-<p>Certain other Dired commands, such as <kbd>!</kbd> and the &lsquo;<samp>%</samp>&rsquo;
-commands, use the same conventions to decide which files to work on.
-</p>
-<a name="index-dired_002ddwim_002dtarget"></a>
-<a name="index-two-directories-_0028in-Dired_0029"></a>
-<p>Commands which ask for a destination directory, such as those which
-copy and rename files or create links for them, try to guess the default
-target directory for the operation.  Normally, they suggest the Dired
-buffer&rsquo;s default directory, but if the variable <code>dired-dwim-target</code>
-is non-<code>nil</code>, and if there is another Dired buffer displayed in the
-next window, that other buffer&rsquo;s directory is suggested instead.
-</p>
-<p>Here are the file-manipulating Dired commands that operate on files.
-</p>
-<dl compact="compact">
-<dd><a name="index-dired_002ddo_002dcopy"></a>
-<a name="index-C-_0028Dired_0029"></a>
-<a name="index-copying-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>C <var>new</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Copy the specified files (<code>dired-do-copy</code>).  The argument <var>new</var>
-is the directory to copy into, or (if copying a single file) the new
-name.  This is like the shell command <code>cp</code>.
-</p>
-<a name="index-dired_002dcopy_002dpreserve_002dtime"></a>
-<p>If <code>dired-copy-preserve-time</code> is non-<code>nil</code>, then copying
-with this command preserves the modification time of the old file in
-the copy, like &lsquo;<samp>cp -p</samp>&rsquo;.
-</p>
-<a name="index-dired_002drecursive_002dcopies"></a>
-<a name="index-recursive-copying"></a>
-<p>The variable <code>dired-recursive-copies</code> controls whether to copy
-directories recursively (like &lsquo;<samp>cp -r</samp>&rsquo;).  The default is
-<code>top</code>, which means to ask before recursively copying a directory.
-</p>
-</dd>
-<dt><kbd>D</kbd></dt>
-<dd><a name="index-dired_002ddo_002ddelete"></a>
-<a name="index-D-_0028Dired_0029"></a>
-<p>Delete the specified files (<code>dired-do-delete</code>).  This is like the
-shell command <code>rm</code>.
-</p>
-<p>Like the other commands in this section, this command operates on the
-<em>marked</em> files, or the next <var>n</var> files.  By contrast, <kbd>x</kbd>
-(<code>dired-do-flagged-delete</code>) deletes all <em>flagged</em> files.
-</p>
-<a name="index-dired_002ddo_002drename"></a>
-<a name="index-R-_0028Dired_0029"></a>
-<a name="index-renaming-files-_0028in-Dired_0029"></a>
-<a name="index-moving-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>R <var>new</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Rename the specified files (<code>dired-do-rename</code>).  If you rename a
-single file, the argument <var>new</var> is the new name of the file.  If
-you rename several files, the argument <var>new</var> is the directory into
-which to move the files (this is like the shell command <code>mv</code>).
-</p>
-<p>Dired automatically changes the visited file name of buffers associated
-with renamed files so that they refer to the new names.
-</p>
-<a name="index-dired_002ddo_002dhardlink"></a>
-<a name="index-H-_0028Dired_0029"></a>
-<a name="index-hard-links-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>H <var>new</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Make hard links to the specified files (<code>dired-do-hardlink</code>).
-This is like the shell command <code>ln</code>.  The argument <var>new</var> is
-the directory to make the links in, or (if making just one link) the
-name to give the link.
-</p>
-<a name="index-dired_002ddo_002dsymlink"></a>
-<a name="index-S-_0028Dired_0029"></a>
-<a name="index-symbolic-links-_0028creation-in-Dired_0029"></a>
-</dd>
-<dt><kbd>S <var>new</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Make symbolic links to the specified files (<code>dired-do-symlink</code>).
-This is like &lsquo;<samp>ln -s</samp>&rsquo;.  The argument <var>new</var> is the directory to
-make the links in, or (if making just one link) the name to give the
-link.
-</p>
-<a name="index-dired_002ddo_002dchmod"></a>
-<a name="index-M-_0028Dired_0029"></a>
-<a name="index-changing-file-permissions-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>M <var>modespec</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Change the mode (also called <em>permission bits</em>) of the specified
-files (<code>dired-do-chmod</code>).  <var>modespec</var> can be in octal or
-symbolic notation, like arguments handled by the <code>chmod</code>
-program.
-</p>
-<a name="index-dired_002ddo_002dchgrp"></a>
-<a name="index-G-_0028Dired_0029"></a>
-<a name="index-changing-file-group-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>G <var>newgroup</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Change the group of the specified files to <var>newgroup</var>
-(<code>dired-do-chgrp</code>).
-</p>
-<a name="index-dired_002ddo_002dchown"></a>
-<a name="index-O-_0028Dired_0029"></a>
-<a name="index-changing-file-owner-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>O <var>newowner</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Change the owner of the specified files to <var>newowner</var>
-(<code>dired-do-chown</code>).  (On most systems, only the superuser can do
-this.)
-</p>
-<a name="index-dired_002dchown_002dprogram"></a>
-<p>The variable <code>dired-chown-program</code> specifies the name of the
-program to use to do the work (different systems put <code>chown</code>
-in different places).
-</p>
-<a name="index-dired_002ddo_002dtouch"></a>
-<a name="index-T-_0028Dired_0029"></a>
-<a name="index-changing-file-time-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>T <var>timestamp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Touch the specified files (<code>dired-do-touch</code>).  This means
-updating their modification times to the present time.  This is like
-the shell command <code>touch</code>.
-</p>
-<a name="index-dired_002ddo_002dprint"></a>
-<a name="index-P-_0028Dired_0029"></a>
-<a name="index-printing-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>P <var>command</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Print the specified files (<code>dired-do-print</code>).  You must specify the
-command to print them with, but the minibuffer starts out with a
-suitable guess made using the variables <code>lpr-command</code> and
-<code>lpr-switches</code> (the same variables that <code>lpr-buffer</code> uses;
-see <a href="Printing.html#Printing">Printing</a>).
-</p>
-<a name="index-dired_002ddo_002dcompress"></a>
-<a name="index-Z-_0028Dired_0029"></a>
-<a name="index-compressing-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>Z</kbd></dt>
-<dd><p>Compress the specified files (<code>dired-do-compress</code>).  If the file
-appears to be a compressed file already, uncompress it instead.  Each
-marked file is compressed into its own archive.
-</p>
-<a name="index-dired_002ddo_002dcompress_002dto"></a>
-<a name="index-c-_0028Dired_0029"></a>
-<a name="index-compressing-files-_0028in-Dired_0029-1"></a>
-</dd>
-<dt><kbd>c</kbd></dt>
-<dd><p>Compress the specified files (<code>dired-do-compress-to</code>) into a
-single archive anywhere on the file system. The compression algorithm
-is determined by the extension of the archive, see
-<code>dired-compress-files-alist</code>.
-</p>
-<a name="index-epa_002ddired_002ddo_002ddecrypt"></a>
-<a name="index-_003ad-_0028Dired_0029"></a>
-<a name="index-decrypting-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>:d</kbd></dt>
-<dd><p>Decrypt the specified files (<code>epa-dired-do-decrypt</code>).
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/epa/Dired-integration.html#Dired-integration">Dired integration</a> in <cite>EasyPG Assistant User&rsquo;s Manual</cite>.
-</p>
-<a name="index-epa_002ddired_002ddo_002dverify"></a>
-<a name="index-_003av-_0028Dired_0029"></a>
-<a name="index-verifying-digital-signatures-on-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>:v</kbd></dt>
-<dd><p>Verify digital signatures on the specified files (<code>epa-dired-do-verify</code>).
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/epa/Dired-integration.html#Dired-integration">Dired integration</a> in <cite>EasyPG Assistant User&rsquo;s Manual</cite>.
-</p>
-<a name="index-epa_002ddired_002ddo_002dsign"></a>
-<a name="index-_003as-_0028Dired_0029"></a>
-<a name="index-signing-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>:s</kbd></dt>
-<dd><p>Digitally sign the specified files (<code>epa-dired-do-sign</code>).
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/epa/Dired-integration.html#Dired-integration">Dired integration</a> in <cite>EasyPG Assistant User&rsquo;s Manual</cite>.
-</p>
-<a name="index-epa_002ddired_002ddo_002dencrypt"></a>
-<a name="index-_003ae-_0028Dired_0029"></a>
-<a name="index-encrypting-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>:e</kbd></dt>
-<dd><p>Encrypt the specified files (<code>epa-dired-do-encrypt</code>).
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/epa/Dired-integration.html#Dired-integration">Dired integration</a> in <cite>EasyPG Assistant User&rsquo;s Manual</cite>.
-</p>
-<a name="index-dired_002ddo_002dload"></a>
-<a name="index-L-_0028Dired_0029"></a>
-<a name="index-loading-several-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>L</kbd></dt>
-<dd><p>Load the specified Emacs Lisp files (<code>dired-do-load</code>).
-See <a href="Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>.
-</p>
-<a name="index-dired_002ddo_002dbyte_002dcompile"></a>
-<a name="index-B-_0028Dired_0029"></a>
-<a name="index-byte_002dcompiling-several-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>B</kbd></dt>
-<dd><p>Byte compile the specified Emacs Lisp files
-(<code>dired-do-byte-compile</code>).  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Byte-Compilation.html#Byte-Compilation">Byte
-Compilation</a> in <cite>The Emacs Lisp Reference Manual</cite>.
-</p>
-<a name="index-A-_0028Dired_0029"></a>
-<a name="index-dired_002ddo_002dfind_002dregexp"></a>
-<a name="index-search-multiple-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>A <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Search all the specified files for the regular expression <var>regexp</var>
-(<code>dired-do-find-regexp</code>).
-</p>
-<p>This command is a variant of <code>xref-find-references</code>
-(see <a href="Identifier-Search.html#Identifier-Search">Identifier Search</a>), it displays the <samp>*xref*</samp> buffer,
-where you can navigate between matches and display them as needed
-using the commands described in <a href="Xref-Commands.html#Xref-Commands">Xref Commands</a>.
-</p>
-<a name="index-grep_002dfind_002dignored_002dfiles-_0028Dired_0029"></a>
-<a name="index-grep_002dfind_002dignored_002ddirectories-_0028Dired_0029"></a>
-<p>If any of the marked files are directories, then this command searches
-all of the files in those directories, and any of their
-subdirectories, recursively, except files whose names match
-<code>grep-find-ignored-files</code> and subdirectories whose names match
-<code>grep-find-ignored-directories</code>.
-</p>
-<a name="index-Q-_0028Dired_0029"></a>
-<a name="index-dired_002ddo_002dfind_002dregexp_002dand_002dreplace"></a>
-<a name="index-search-and-replace-in-multiple-files-_0028in-Dired_0029"></a>
-</dd>
-<dt><kbd>Q <var>regexp</var> <span class="key">RET</span> <var>to</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Perform <code>query-replace-regexp</code> on each of the specified files,
-replacing matches for <var>regexp</var> with the string
-<var>to</var> (<code>dired-do-find-regexp-and-replace</code>).
-</p>
-<p>This command is a variant of <code>xref-query-replace-in-results</code>.  It
-presents an <samp>*xref*</samp> buffer that lists all the matches of <var>regexp</var>,
-and you can use the special commands in that buffer (see <a href="Xref-Commands.html#Xref-Commands">Xref Commands</a>).  In particular, if you exit the query replace loop, you
-can use <kbd>r</kbd> in that buffer to replace more matches.
-See <a href="Identifier-Search.html#Identifier-Search">Identifier Search</a>.
-</p>
-<p>Like with <code>dired-do-find-regexp</code>, if any of the marked files are
-directories, this command performs replacements in all of the files in
-those directories, and in any of their subdirectories, recursively,
-except for files whose names match <code>grep-find-ignored-files</code> and
-subdirectories whose names match <code>grep-find-ignored-directories</code>.
-</p></dd>
-</dl>
+    <li>Otherwise, the command operates on the current file
+    only.</li>
+  </ul>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Shell-Commands-in-Dired.html#Shell-Commands-in-Dired" accesskey="n" rel="next">Shell Commands in Dired</a>, Previous: <a href="Marks-vs-Flags.html#Marks-vs-Flags" accesskey="p" rel="prev">Marks vs Flags</a>, Up: <a href="Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Certain other Dired commands, such as <kbd>!</kbd> and the
+  &lsquo;<samp>%</samp>&rsquo; commands, use the same conventions
+  to decide which files to work on.</p><a name=
+  "index-dired_002ddwim_002dtarget" id=
+  "index-dired_002ddwim_002dtarget"></a> <a name=
+  "index-two-directories-_0028in-Dired_0029" id=
+  "index-two-directories-_0028in-Dired_0029"></a>
 
+  <p>Commands which ask for a destination directory, such as those
+  which copy and rename files or create links for them, try to
+  guess the default target directory for the operation. Normally,
+  they suggest the Dired buffer&rsquo;s default directory, but if
+  the variable <code>dired-dwim-target</code> is
+  non-<code>nil</code>, and if there is another Dired buffer
+  displayed in the next window, that other buffer&rsquo;s directory
+  is suggested instead.</p>
 
+  <p>Here are the file-manipulating Dired commands that operate on
+  files.</p>
 
+  <dl compact="compact">
+    <dd><a name="index-dired_002ddo_002dcopy" id=
+    "index-dired_002ddo_002dcopy"></a> <a name=
+    "index-C-_0028Dired_0029" id="index-C-_0028Dired_0029"></a>
+    <a name="index-copying-files-_0028in-Dired_0029" id=
+    "index-copying-files-_0028in-Dired_0029"></a></dd>
+
+    <dt><kbd>C <var>new</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Copy the specified files (<code>dired-do-copy</code>). The
+      argument <var>new</var> is the directory to copy into, or (if
+      copying a single file) the new name. This is like the shell
+      command <code>cp</code>.</p><a name=
+      "index-dired_002dcopy_002dpreserve_002dtime" id=
+      "index-dired_002dcopy_002dpreserve_002dtime"></a>
+
+      <p>If <code>dired-copy-preserve-time</code> is
+      non-<code>nil</code>, then copying with this command
+      preserves the modification time of the old file in the copy,
+      like &lsquo;<samp>cp -p</samp>&rsquo;.</p><a name=
+      "index-dired_002drecursive_002dcopies" id=
+      "index-dired_002drecursive_002dcopies"></a> <a name=
+      "index-recursive-copying" id="index-recursive-copying"></a>
+
+      <p>The variable <code>dired-recursive-copies</code> controls
+      whether to copy directories recursively (like &lsquo;<samp>cp
+      -r</samp>&rsquo;). The default is <code>top</code>, which
+      means to ask before recursively copying a directory.</p>
+    </dd>
+
+    <dt><kbd>D</kbd></dt>
+
+    <dd>
+      <a name="index-dired_002ddo_002ddelete" id=
+      "index-dired_002ddo_002ddelete"></a> <a name=
+      "index-D-_0028Dired_0029" id="index-D-_0028Dired_0029"></a>
+
+      <p>Delete the specified files (<code>dired-do-delete</code>).
+      This is like the shell command <code>rm</code>.</p>
+
+      <p>Like the other commands in this section, this command
+      operates on the <em>marked</em> files, or the next
+      <var>n</var> files. By contrast, <kbd>x</kbd>
+      (<code>dired-do-flagged-delete</code>) deletes all
+      <em>flagged</em> files.</p><a name=
+      "index-dired_002ddo_002drename" id=
+      "index-dired_002ddo_002drename"></a> <a name=
+      "index-R-_0028Dired_0029" id="index-R-_0028Dired_0029"></a>
+      <a name="index-renaming-files-_0028in-Dired_0029" id=
+      "index-renaming-files-_0028in-Dired_0029"></a> <a name=
+      "index-moving-files-_0028in-Dired_0029" id=
+      "index-moving-files-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>R <var>new</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Rename the specified files (<code>dired-do-rename</code>).
+      If you rename a single file, the argument <var>new</var> is
+      the new name of the file. If you rename several files, the
+      argument <var>new</var> is the directory into which to move
+      the files (this is like the shell command
+      <code>mv</code>).</p>
+
+      <p>Dired automatically changes the visited file name of
+      buffers associated with renamed files so that they refer to
+      the new names.</p><a name="index-dired_002ddo_002dhardlink"
+      id="index-dired_002ddo_002dhardlink"></a> <a name=
+      "index-H-_0028Dired_0029" id="index-H-_0028Dired_0029"></a>
+      <a name="index-hard-links-_0028in-Dired_0029" id=
+      "index-hard-links-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>H <var>new</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Make hard links to the specified files
+      (<code>dired-do-hardlink</code>). This is like the shell
+      command <code>ln</code>. The argument <var>new</var> is the
+      directory to make the links in, or (if making just one link)
+      the name to give the link.</p><a name=
+      "index-dired_002ddo_002dsymlink" id=
+      "index-dired_002ddo_002dsymlink"></a> <a name=
+      "index-S-_0028Dired_0029" id="index-S-_0028Dired_0029"></a>
+      <a name="index-symbolic-links-_0028creation-in-Dired_0029"
+      id="index-symbolic-links-_0028creation-in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>S <var>new</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Make symbolic links to the specified files
+      (<code>dired-do-symlink</code>). This is like &lsquo;<samp>ln
+      -s</samp>&rsquo;. The argument <var>new</var> is the
+      directory to make the links in, or (if making just one link)
+      the name to give the link.</p><a name=
+      "index-dired_002ddo_002dchmod" id=
+      "index-dired_002ddo_002dchmod"></a> <a name=
+      "index-M-_0028Dired_0029" id="index-M-_0028Dired_0029"></a>
+      <a name="index-changing-file-permissions-_0028in-Dired_0029"
+      id="index-changing-file-permissions-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>M <var>modespec</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Change the mode (also called <em>permission bits</em>) of
+      the specified files (<code>dired-do-chmod</code>).
+      <var>modespec</var> can be in octal or symbolic notation,
+      like arguments handled by the <code>chmod</code>
+      program.</p><a name="index-dired_002ddo_002dchgrp" id=
+      "index-dired_002ddo_002dchgrp"></a> <a name=
+      "index-G-_0028Dired_0029" id="index-G-_0028Dired_0029"></a>
+      <a name="index-changing-file-group-_0028in-Dired_0029" id=
+      "index-changing-file-group-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>G <var>newgroup</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Change the group of the specified files to
+      <var>newgroup</var>
+      (<code>dired-do-chgrp</code>).</p><a name="index-dired_002ddo_002dchown"
+      id="index-dired_002ddo_002dchown"></a> <a name=
+      "index-O-_0028Dired_0029" id="index-O-_0028Dired_0029"></a>
+      <a name="index-changing-file-owner-_0028in-Dired_0029" id=
+      "index-changing-file-owner-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>O <var>newowner</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Change the owner of the specified files to
+      <var>newowner</var> (<code>dired-do-chown</code>). (On most
+      systems, only the superuser can do this.)</p><a name=
+      "index-dired_002dchown_002dprogram" id=
+      "index-dired_002dchown_002dprogram"></a>
+
+      <p>The variable <code>dired-chown-program</code> specifies
+      the name of the program to use to do the work (different
+      systems put <code>chown</code> in different
+      places).</p><a name="index-dired_002ddo_002dtouch" id=
+      "index-dired_002ddo_002dtouch"></a> <a name=
+      "index-T-_0028Dired_0029" id="index-T-_0028Dired_0029"></a>
+      <a name="index-changing-file-time-_0028in-Dired_0029" id=
+      "index-changing-file-time-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>T <var>timestamp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Touch the specified files (<code>dired-do-touch</code>).
+      This means updating their modification times to the present
+      time. This is like the shell command
+      <code>touch</code>.</p><a name="index-dired_002ddo_002dprint"
+      id="index-dired_002ddo_002dprint"></a> <a name=
+      "index-P-_0028Dired_0029" id="index-P-_0028Dired_0029"></a>
+      <a name="index-printing-files-_0028in-Dired_0029" id=
+      "index-printing-files-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>P <var>command</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Print the specified files (<code>dired-do-print</code>).
+      You must specify the command to print them with, but the
+      minibuffer starts out with a suitable guess made using the
+      variables <code>lpr-command</code> and
+      <code>lpr-switches</code> (the same variables that
+      <code>lpr-buffer</code> uses; see <a href=
+      "Printing.html#Printing">Printing</a>).</p><a name=
+      "index-dired_002ddo_002dcompress" id=
+      "index-dired_002ddo_002dcompress"></a> <a name=
+      "index-Z-_0028Dired_0029" id="index-Z-_0028Dired_0029"></a>
+      <a name="index-compressing-files-_0028in-Dired_0029" id=
+      "index-compressing-files-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>Z</kbd></dt>
+
+    <dd>
+      <p>Compress the specified files
+      (<code>dired-do-compress</code>). If the file appears to be a
+      compressed file already, uncompress it instead. Each marked
+      file is compressed into its own archive.</p><a name=
+      "index-dired_002ddo_002dcompress_002dto" id=
+      "index-dired_002ddo_002dcompress_002dto"></a> <a name=
+      "index-c-_0028Dired_0029" id="index-c-_0028Dired_0029"></a>
+      <a name="index-compressing-files-_0028in-Dired_0029-1" id=
+      "index-compressing-files-_0028in-Dired_0029-1"></a>
+    </dd>
+
+    <dt><kbd>c</kbd></dt>
+
+    <dd>
+      <p>Compress the specified files
+      (<code>dired-do-compress-to</code>) into a single archive
+      anywhere on the file system. The compression algorithm is
+      determined by the extension of the archive, see
+      <code>dired-compress-files-alist</code>.</p><a name=
+      "index-epa_002ddired_002ddo_002ddecrypt" id=
+      "index-epa_002ddired_002ddo_002ddecrypt"></a> <a name=
+      "index-_003ad-_0028Dired_0029" id=
+      "index-_003ad-_0028Dired_0029"></a> <a name=
+      "index-decrypting-files-_0028in-Dired_0029" id=
+      "index-decrypting-files-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>:d</kbd></dt>
+
+    <dd>
+      <p>Decrypt the specified files
+      (<code>epa-dired-do-decrypt</code>). See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/epa/Dired-integration.html#Dired-integration">
+      Dired integration</a> in <cite>EasyPG Assistant User&rsquo;s
+      Manual</cite>.</p><a name=
+      "index-epa_002ddired_002ddo_002dverify" id=
+      "index-epa_002ddired_002ddo_002dverify"></a> <a name=
+      "index-_003av-_0028Dired_0029" id=
+      "index-_003av-_0028Dired_0029"></a> <a name=
+      "index-verifying-digital-signatures-on-files-_0028in-Dired_0029"
+      id=
+      "index-verifying-digital-signatures-on-files-_0028in-Dired_0029">
+      </a>
+    </dd>
+
+    <dt><kbd>:v</kbd></dt>
+
+    <dd>
+      <p>Verify digital signatures on the specified files
+      (<code>epa-dired-do-verify</code>). See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/epa/Dired-integration.html#Dired-integration">
+      Dired integration</a> in <cite>EasyPG Assistant User&rsquo;s
+      Manual</cite>.</p><a name=
+      "index-epa_002ddired_002ddo_002dsign" id=
+      "index-epa_002ddired_002ddo_002dsign"></a> <a name=
+      "index-_003as-_0028Dired_0029" id=
+      "index-_003as-_0028Dired_0029"></a> <a name=
+      "index-signing-files-_0028in-Dired_0029" id=
+      "index-signing-files-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>:s</kbd></dt>
+
+    <dd>
+      <p>Digitally sign the specified files
+      (<code>epa-dired-do-sign</code>). See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/epa/Dired-integration.html#Dired-integration">
+      Dired integration</a> in <cite>EasyPG Assistant User&rsquo;s
+      Manual</cite>.</p><a name=
+      "index-epa_002ddired_002ddo_002dencrypt" id=
+      "index-epa_002ddired_002ddo_002dencrypt"></a> <a name=
+      "index-_003ae-_0028Dired_0029" id=
+      "index-_003ae-_0028Dired_0029"></a> <a name=
+      "index-encrypting-files-_0028in-Dired_0029" id=
+      "index-encrypting-files-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>:e</kbd></dt>
+
+    <dd>
+      <p>Encrypt the specified files
+      (<code>epa-dired-do-encrypt</code>). See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/epa/Dired-integration.html#Dired-integration">
+      Dired integration</a> in <cite>EasyPG Assistant User&rsquo;s
+      Manual</cite>.</p><a name="index-dired_002ddo_002dload" id=
+      "index-dired_002ddo_002dload"></a> <a name=
+      "index-L-_0028Dired_0029" id="index-L-_0028Dired_0029"></a>
+      <a name="index-loading-several-files-_0028in-Dired_0029" id=
+      "index-loading-several-files-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>L</kbd></dt>
+
+    <dd>
+      <p>Load the specified Emacs Lisp files
+      (<code>dired-do-load</code>). See <a href=
+      "Lisp-Libraries.html#Lisp-Libraries">Lisp
+      Libraries</a>.</p><a name=
+      "index-dired_002ddo_002dbyte_002dcompile" id=
+      "index-dired_002ddo_002dbyte_002dcompile"></a> <a name=
+      "index-B-_0028Dired_0029" id="index-B-_0028Dired_0029"></a>
+      <a name=
+      "index-byte_002dcompiling-several-files-_0028in-Dired_0029"
+      id=
+      "index-byte_002dcompiling-several-files-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>B</kbd></dt>
+
+    <dd>
+      <p>Byte compile the specified Emacs Lisp files
+      (<code>dired-do-byte-compile</code>). See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/elisp/Byte-Compilation.html#Byte-Compilation">
+      Byte Compilation</a> in <cite>The Emacs Lisp Reference
+      Manual</cite>.</p><a name="index-A-_0028Dired_0029" id=
+      "index-A-_0028Dired_0029"></a> <a name=
+      "index-dired_002ddo_002dfind_002dregexp" id=
+      "index-dired_002ddo_002dfind_002dregexp"></a> <a name=
+      "index-search-multiple-files-_0028in-Dired_0029" id=
+      "index-search-multiple-files-_0028in-Dired_0029"></a>
+    </dd>
+
+    <dt><kbd>A <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Search all the specified files for the regular expression
+      <var>regexp</var> (<code>dired-do-find-regexp</code>).</p>
+
+      <p>This command is a variant of
+      <code>xref-find-references</code> (see <a href=
+      "Identifier-Search.html#Identifier-Search">Identifier
+      Search</a>), it displays the <samp>*xref*</samp> buffer,
+      where you can navigate between matches and display them as
+      needed using the commands described in <a href=
+      "Xref-Commands.html#Xref-Commands">Xref
+      Commands</a>.</p><a name=
+      "index-grep_002dfind_002dignored_002dfiles-_0028Dired_0029"
+      id=
+      "index-grep_002dfind_002dignored_002dfiles-_0028Dired_0029"></a>
+      <a name=
+      "index-grep_002dfind_002dignored_002ddirectories-_0028Dired_0029"
+      id=
+      "index-grep_002dfind_002dignored_002ddirectories-_0028Dired_0029">
+      </a>
+
+      <p>If any of the marked files are directories, then this
+      command searches all of the files in those directories, and
+      any of their subdirectories, recursively, except files whose
+      names match <code>grep-find-ignored-files</code> and
+      subdirectories whose names match
+      <code>grep-find-ignored-directories</code>.</p><a name=
+      "index-Q-_0028Dired_0029" id="index-Q-_0028Dired_0029"></a>
+      <a name=
+      "index-dired_002ddo_002dfind_002dregexp_002dand_002dreplace"
+      id=
+      "index-dired_002ddo_002dfind_002dregexp_002dand_002dreplace"></a>
+      <a name=
+      "index-search-and-replace-in-multiple-files-_0028in-Dired_0029"
+      id=
+      "index-search-and-replace-in-multiple-files-_0028in-Dired_0029">
+      </a>
+    </dd>
+
+    <dt><kbd>Q <var>regexp</var> <span class="key">RET</span>
+    <var>to</var> <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Perform <code>query-replace-regexp</code> on each of the
+      specified files, replacing matches for <var>regexp</var> with
+      the string <var>to</var>
+      (<code>dired-do-find-regexp-and-replace</code>).</p>
+
+      <p>This command is a variant of
+      <code>xref-query-replace-in-results</code>. It presents an
+      <samp>*xref*</samp> buffer that lists all the matches of
+      <var>regexp</var>, and you can use the special commands in
+      that buffer (see <a href=
+      "Xref-Commands.html#Xref-Commands">Xref Commands</a>). In
+      particular, if you exit the query replace loop, you can use
+      <kbd>r</kbd> in that buffer to replace more matches. See
+      <a href="Identifier-Search.html#Identifier-Search">Identifier
+      Search</a>.</p>
+
+      <p>Like with <code>dired-do-find-regexp</code>, if any of the
+      marked files are directories, this command performs
+      replacements in all of the files in those directories, and in
+      any of their subdirectories, recursively, except for files
+      whose names match <code>grep-find-ignored-files</code> and
+      subdirectories whose names match
+      <code>grep-find-ignored-directories</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Shell-Commands-in-Dired.html#Shell-Commands-in-Dired"
+    accesskey="n" rel="next">Shell Commands in Dired</a>, Previous:
+    <a href="Marks-vs-Flags.html#Marks-vs-Flags" accesskey="p" rel=
+    "prev">Marks vs Flags</a>, Up: <a href="Dired.html#Dired"
+    accesskey="u" rel="up">Dired</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,142 +18,197 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Conditionals in Macros</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Conditionals in Macros">
-<meta name="keywords" content="GNU Emacs Calc Manual: Conditionals in Macros">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title="Keyboard Macros">
-<link href="Loops-in-Macros.html#Loops-in-Macros" rel="next" title="Loops in Macros">
-<link href="Naming-Keyboard-Macros.html#Naming-Keyboard-Macros" rel="prev" title="Naming Keyboard Macros">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Conditionals in Macros</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Conditionals in Macros" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Conditionals in Macros" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title=
+  "Keyboard Macros" />
+  <link href="Loops-in-Macros.html#Loops-in-Macros" rel="next"
+  title="Loops in Macros" />
+  <link href="Naming-Keyboard-Macros.html#Naming-Keyboard-Macros"
+  rel="prev" title="Naming Keyboard Macros" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Conditionals-in-Macros"></a>
-<div class="header">
-<p>
-Next: <a href="Loops-in-Macros.html#Loops-in-Macros" accesskey="n" rel="next">Loops in Macros</a>, Previous: <a href="Naming-Keyboard-Macros.html#Naming-Keyboard-Macros" accesskey="p" rel="prev">Naming Keyboard Macros</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Conditionals-in-Keyboard-Macros"></a>
-<h4 class="subsection">17.2.2 Conditionals in Keyboard Macros</h4>
+<body lang="en" xml:lang="en">
+  <a name="Conditionals-in-Macros" id="Conditionals-in-Macros"></a>
 
-<a name="index-Z-_005b"></a>
-<a name="index-Z-_005d"></a>
-<a name="index-calc_002dkbd_002dif"></a>
-<a name="index-calc_002dkbd_002delse"></a>
-<a name="index-calc_002dkbd_002delse_002dif"></a>
-<a name="index-calc_002dkbd_002dend_002dif"></a>
-<a name="index-Conditional-structures"></a>
-<p>The <kbd>Z [</kbd> (<code>calc-kbd-if</code>) and <kbd>Z ]</kbd> (<code>calc-kbd-end-if</code>)
-commands allow you to put simple tests in a keyboard macro.  When Calc
-sees the <kbd>Z [</kbd>, it pops an object from the stack and, if the object is
-a non-zero value, continues executing keystrokes.  But if the object is
-zero, or if it is not provably nonzero, Calc skips ahead to the matching
-<kbd>Z ]</kbd> keystroke.  See <a href="Logical-Operations.html#Logical-Operations">Logical Operations</a>, for a set of commands for
-performing tests which conveniently produce 1 for true and 0 for false.
-</p>
-<p>For example, <kbd><span class="key">RET</span> 0 a &lt; Z [ n Z ]</kbd> implements an absolute-value
-function in the form of a keyboard macro.  This macro duplicates the
-number on the top of the stack, pushes zero and compares using <kbd>a &lt;</kbd>
-(<code>calc-less-than</code>), then, if the number was less than zero,
-executes <kbd>n</kbd> (<code>calc-change-sign</code>).  Otherwise, the change-sign
-command is skipped.
-</p>
-<p>To program this macro, type <kbd>C-x (</kbd>, type the above sequence of
-keystrokes, then type <kbd>C-x )</kbd>.  Note that the keystrokes will be
-executed while you are making the definition as well as when you later
-re-execute the macro by typing <kbd>X</kbd>.  Thus you should make sure a
-suitable number is on the stack before defining the macro so that you
-don&rsquo;t get a stack-underflow error during the definition process.
-</p>
-<p>Conditionals can be nested arbitrarily.  However, there should be exactly
-one <kbd>Z ]</kbd> for each <kbd>Z [</kbd> in a keyboard macro.
-</p>
-<a name="index-Z-_003a"></a>
-<p>The <kbd>Z :</kbd> (<code>calc-kbd-else</code>) command allows you to choose between
-two keystroke sequences.  The general format is <kbd><var>cond</var> Z [
-<var>then-part</var> Z : <var>else-part</var> Z ]</kbd>.  If <var>cond</var> is true
-(i.e., if the top of stack contains a non-zero number after <var>cond</var>
-has been executed), the <var>then-part</var> will be executed and the
-<var>else-part</var> will be skipped.  Otherwise, the <var>then-part</var> will
-be skipped and the <var>else-part</var> will be executed.
-</p>
-<a name="index-Z-_007c"></a>
-<p>The <kbd>Z |</kbd> (<code>calc-kbd-else-if</code>) command allows you to choose
-between any number of alternatives.  For example,
-<kbd><var>cond1</var> Z [ <var>part1</var> Z : <var>cond2</var> Z | <var>part2</var> Z :
-<var>part3</var> Z ]</kbd> will execute <var>part1</var> if <var>cond1</var> is true,
-otherwise it will execute <var>part2</var> if <var>cond2</var> is true, otherwise
-it will execute <var>part3</var>.
-</p>
-<p>More precisely, <kbd>Z [</kbd> pops a number and conditionally skips to the
-next matching <kbd>Z :</kbd> or <kbd>Z ]</kbd> key.  <kbd>Z&nbsp;]</kbd><!-- /@w --> has no effect when
-actually executed.  <kbd>Z :</kbd> skips to the next matching <kbd>Z ]</kbd>.
-<kbd>Z |</kbd> pops a number and conditionally skips to the next matching
-<kbd>Z :</kbd> or <kbd>Z ]</kbd>; thus, <kbd>Z [</kbd> and <kbd>Z |</kbd> are functionally
-equivalent except that <kbd>Z [</kbd> participates in nesting but <kbd>Z |</kbd>
-does not.
-</p>
-<p>Calc&rsquo;s conditional and looping constructs work by scanning the
-keyboard macro for occurrences of character sequences like &lsquo;<samp>Z:</samp>&rsquo;
-and &lsquo;<samp>Z]</samp>&rsquo;.  One side-effect of this is that if you use these
-constructs you must be careful that these character pairs do not
-occur by accident in other parts of the macros.  Since Calc rarely
-uses shift-<kbd>Z</kbd> for any purpose except as a prefix character, this
-is not likely to be a problem.  Another side-effect is that it will
-not work to define your own custom key bindings for these commands.
-Only the standard shift-<kbd>Z</kbd> bindings will work correctly.
-</p>
-<a name="index-Z-C_002dg"></a>
-<p>If Calc gets stuck while skipping characters during the definition of a
-macro, type <kbd>Z C-g</kbd> to cancel the definition.  (Typing plain <kbd>C-g</kbd>
-actually adds a <kbd>C-g</kbd> keystroke to the macro.)
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Loops-in-Macros.html#Loops-in-Macros" accesskey="n" rel="next">Loops in Macros</a>, Previous: <a href="Naming-Keyboard-Macros.html#Naming-Keyboard-Macros" accesskey="p" rel="prev">Naming Keyboard Macros</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Loops-in-Macros.html#Loops-in-Macros"
+    accesskey="n" rel="next">Loops in Macros</a>, Previous:
+    <a href="Naming-Keyboard-Macros.html#Naming-Keyboard-Macros"
+    accesskey="p" rel="prev">Naming Keyboard Macros</a>, Up:
+    <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u"
+    rel="up">Keyboard Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Conditionals-in-Keyboard-Macros" id=
+  "Conditionals-in-Keyboard-Macros"></a>
 
+  <h4 class="subsection">17.2.2 Conditionals in Keyboard
+  Macros</h4><a name="index-Z-_005b" id="index-Z-_005b"></a>
+  <a name="index-Z-_005d" id="index-Z-_005d"></a> <a name=
+  "index-calc_002dkbd_002dif" id="index-calc_002dkbd_002dif"></a>
+  <a name="index-calc_002dkbd_002delse" id=
+  "index-calc_002dkbd_002delse"></a> <a name=
+  "index-calc_002dkbd_002delse_002dif" id=
+  "index-calc_002dkbd_002delse_002dif"></a> <a name=
+  "index-calc_002dkbd_002dend_002dif" id=
+  "index-calc_002dkbd_002dend_002dif"></a> <a name=
+  "index-Conditional-structures" id=
+  "index-Conditional-structures"></a>
 
+  <p>The <kbd>Z [</kbd> (<code>calc-kbd-if</code>) and <kbd>Z
+  ]</kbd> (<code>calc-kbd-end-if</code>) commands allow you to put
+  simple tests in a keyboard macro. When Calc sees the <kbd>Z
+  [</kbd>, it pops an object from the stack and, if the object is a
+  non-zero value, continues executing keystrokes. But if the object
+  is zero, or if it is not provably nonzero, Calc skips ahead to
+  the matching <kbd>Z ]</kbd> keystroke. See <a href=
+  "Logical-Operations.html#Logical-Operations">Logical
+  Operations</a>, for a set of commands for performing tests which
+  conveniently produce 1 for true and 0 for false.</p>
 
+  <p>For example, <kbd><span class="key">RET</span> 0 a &lt; Z [ n
+  Z ]</kbd> implements an absolute-value function in the form of a
+  keyboard macro. This macro duplicates the number on the top of
+  the stack, pushes zero and compares using <kbd>a &lt;</kbd>
+  (<code>calc-less-than</code>), then, if the number was less than
+  zero, executes <kbd>n</kbd> (<code>calc-change-sign</code>).
+  Otherwise, the change-sign command is skipped.</p>
+
+  <p>To program this macro, type <kbd>C-x (</kbd>, type the above
+  sequence of keystrokes, then type <kbd>C-x )</kbd>. Note that the
+  keystrokes will be executed while you are making the definition
+  as well as when you later re-execute the macro by typing
+  <kbd>X</kbd>. Thus you should make sure a suitable number is on
+  the stack before defining the macro so that you don&rsquo;t get a
+  stack-underflow error during the definition process.</p>
+
+  <p>Conditionals can be nested arbitrarily. However, there should
+  be exactly one <kbd>Z ]</kbd> for each <kbd>Z [</kbd> in a
+  keyboard macro.</p><a name="index-Z-_003a" id=
+  "index-Z-_003a"></a>
+
+  <p>The <kbd>Z :</kbd> (<code>calc-kbd-else</code>) command allows
+  you to choose between two keystroke sequences. The general format
+  is <kbd><var>cond</var> Z [ <var>then-part</var> Z :
+  <var>else-part</var> Z ]</kbd>. If <var>cond</var> is true (i.e.,
+  if the top of stack contains a non-zero number after
+  <var>cond</var> has been executed), the <var>then-part</var> will
+  be executed and the <var>else-part</var> will be skipped.
+  Otherwise, the <var>then-part</var> will be skipped and the
+  <var>else-part</var> will be executed.</p><a name="index-Z-_007c"
+  id="index-Z-_007c"></a>
+
+  <p>The <kbd>Z |</kbd> (<code>calc-kbd-else-if</code>) command
+  allows you to choose between any number of alternatives. For
+  example, <kbd><var>cond1</var> Z [ <var>part1</var> Z :
+  <var>cond2</var> Z | <var>part2</var> Z : <var>part3</var> Z
+  ]</kbd> will execute <var>part1</var> if <var>cond1</var> is
+  true, otherwise it will execute <var>part2</var> if
+  <var>cond2</var> is true, otherwise it will execute
+  <var>part3</var>.</p>
+
+  <p>More precisely, <kbd>Z [</kbd> pops a number and conditionally
+  skips to the next matching <kbd>Z :</kbd> or <kbd>Z ]</kbd> key.
+  <kbd>Z&nbsp;]</kbd><!-- /@w --> has no effect when actually
+  executed. <kbd>Z :</kbd> skips to the next matching <kbd>Z
+  ]</kbd>. <kbd>Z |</kbd> pops a number and conditionally skips to
+  the next matching <kbd>Z :</kbd> or <kbd>Z ]</kbd>; thus, <kbd>Z
+  [</kbd> and <kbd>Z |</kbd> are functionally equivalent except
+  that <kbd>Z [</kbd> participates in nesting but <kbd>Z |</kbd>
+  does not.</p>
+
+  <p>Calc&rsquo;s conditional and looping constructs work by
+  scanning the keyboard macro for occurrences of character
+  sequences like &lsquo;<samp>Z:</samp>&rsquo; and
+  &lsquo;<samp>Z]</samp>&rsquo;. One side-effect of this is that if
+  you use these constructs you must be careful that these character
+  pairs do not occur by accident in other parts of the macros.
+  Since Calc rarely uses shift-<kbd>Z</kbd> for any purpose except
+  as a prefix character, this is not likely to be a problem.
+  Another side-effect is that it will not work to define your own
+  custom key bindings for these commands. Only the standard
+  shift-<kbd>Z</kbd> bindings will work correctly.</p><a name=
+  "index-Z-C_002dg" id="index-Z-C_002dg"></a>
+
+  <p>If Calc gets stuck while skipping characters during the
+  definition of a macro, type <kbd>Z C-g</kbd> to cancel the
+  definition. (Typing plain <kbd>C-g</kbd> actually adds a
+  <kbd>C-g</kbd> keystroke to the macro.)</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Loops-in-Macros.html#Loops-in-Macros"
+    accesskey="n" rel="next">Loops in Macros</a>, Previous:
+    <a href="Naming-Keyboard-Macros.html#Naming-Keyboard-Macros"
+    accesskey="p" rel="prev">Naming Keyboard Macros</a>, Up:
+    <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u"
+    rel="up">Keyboard Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

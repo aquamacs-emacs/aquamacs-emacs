@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,150 +18,212 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Unsafe Simplifications</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Unsafe Simplifications">
-<meta name="keywords" content="GNU Emacs Calc Manual: Unsafe Simplifications">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Simplifying-Formulas.html#Simplifying-Formulas" rel="up" title="Simplifying Formulas">
-<link href="Simplification-of-Units.html#Simplification-of-Units" rel="next" title="Simplification of Units">
-<link href="Algebraic-Simplifications.html#Algebraic-Simplifications" rel="prev" title="Algebraic Simplifications">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Unsafe Simplifications</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Unsafe Simplifications" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Unsafe Simplifications" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Simplifying-Formulas.html#Simplifying-Formulas" rel=
+  "up" title="Simplifying Formulas" />
+  <link href="Simplification-of-Units.html#Simplification-of-Units"
+  rel="next" title="Simplification of Units" />
+  <link href=
+  "Algebraic-Simplifications.html#Algebraic-Simplifications" rel=
+  "prev" title="Algebraic Simplifications" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Unsafe-Simplifications"></a>
-<div class="header">
-<p>
-Next: <a href="Simplification-of-Units.html#Simplification-of-Units" accesskey="n" rel="next">Simplification of Units</a>, Previous: <a href="Algebraic-Simplifications.html#Algebraic-Simplifications" accesskey="p" rel="prev">Algebraic Simplifications</a>, Up: <a href="Simplifying-Formulas.html#Simplifying-Formulas" accesskey="u" rel="up">Simplifying Formulas</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="g_t_0060_0060Unsafe_0027_0027-Simplifications"></a>
-<h4 class="subsection">10.3.3 &ldquo;Unsafe&rdquo; Simplifications</h4>
+<body lang="en" xml:lang="en">
+  <a name="Unsafe-Simplifications" id="Unsafe-Simplifications"></a>
 
-<a name="index-Unsafe-simplifications"></a>
-<a name="index-Extended-simplification"></a>
-<a name="index-a-e"></a>
-<a name="index-m-E-1"></a>
-<a name="index-calc_002dsimplify_002dextended"></a>
-<a name="index-esimplify"></a>
-<p>Calc is capable of performing some simplifications which may sometimes
-be desired but which are not &ldquo;safe&rdquo; in all cases.  The <kbd>a e</kbd>
-(<code>calc-simplify-extended</code>) [<code>esimplify</code>] command
-applies the algebraic simplifications as well as these extended, or
-&ldquo;unsafe&rdquo;, simplifications.  Use this only if you know the values in
-your formula lie in the restricted ranges for which these
-simplifications are valid.  You can use Extended Simplification mode
-(<kbd>m E</kbd>) to have these simplifications done automatically.
-</p>
-<p>The symbolic integrator uses these extended simplifications; one effect
-of this is that the integrator&rsquo;s results must be used with caution.
-Where an integral table will often attach conditions like &ldquo;for positive
-&lsquo;<samp>a</samp>&rsquo; only,&rdquo; Calc (like most other symbolic integration programs)
-will simply produce an unqualified result.
-</p>
-<p>Because <kbd>a e</kbd>&rsquo;s simplifications are unsafe, it is sometimes better
-to type <kbd>C-u -3 a v</kbd>, which does extended simplification only
-on the top level of the formula without affecting the sub-formulas.
-In fact, <kbd>C-u -3 j v</kbd> allows you to target extended simplification
-to any specific part of a formula.
-</p>
-<p>The variable <code>ExtSimpRules</code> contains rewrites to be applied when
-the extended simplifications are used.  These are applied in addition to
-<code>EvalRules</code> and <code>AlgSimpRules</code>.  (The <kbd>a r AlgSimpRules</kbd>
-step described above is simply followed by an <kbd>a r ExtSimpRules</kbd> step.)
-</p>
-<p>Following is a complete list of the &ldquo;unsafe&rdquo; simplifications.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Simplification-of-Units.html#Simplification-of-Units"
+    accesskey="n" rel="next">Simplification of Units</a>, Previous:
+    <a href=
+    "Algebraic-Simplifications.html#Algebraic-Simplifications"
+    accesskey="p" rel="prev">Algebraic Simplifications</a>, Up:
+    <a href="Simplifying-Formulas.html#Simplifying-Formulas"
+    accesskey="u" rel="up">Simplifying Formulas</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="g_t_0060_0060Unsafe_0027_0027-Simplifications" id=
+  "g_t_0060_0060Unsafe_0027_0027-Simplifications"></a>
 
-<p>Inverse trigonometric or hyperbolic functions, called with their
-corresponding non-inverse functions as arguments, are simplified.
-For example, &lsquo;<samp><tt>arcsin</tt>(<tt>sin</tt>(x))</samp>&rsquo; changes
-to &lsquo;<samp>x</samp>&rsquo;.  Also, &lsquo;<samp><tt>arcsin</tt>(<tt>cos</tt>(x))</samp>&rsquo; and
-&lsquo;<samp><tt>arccos</tt>(<tt>sin</tt>(x))</samp>&rsquo; both change to &lsquo;<samp><tt>pi</tt>/2 - x</samp>&rsquo;.
-These simplifications are unsafe because they are valid only for
-values of &lsquo;<samp>x</samp>&rsquo; in a certain range; outside that range, values
-are folded down to the 360-degree range that the inverse trigonometric
-functions always produce.
-</p>
-<p>Powers of powers &lsquo;<samp>(x^a)^b</samp>&rsquo; are simplified to
-&lsquo;<samp>x^(a b)</samp>&rsquo;
-for all &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo;.  These results will be valid only
-in a restricted range of &lsquo;<samp>x</samp>&rsquo;; for example, in
-&lsquo;<samp>(x^2)^1:2</samp>&rsquo;
-the powers cancel to get &lsquo;<samp>x</samp>&rsquo;, which is valid for positive values
-of &lsquo;<samp>x</samp>&rsquo; but not for negative or complex values.
-</p>
-<p>Similarly, &lsquo;<samp><tt>sqrt</tt>(x^a)</samp>&rsquo; and &lsquo;<samp><tt>sqrt</tt>(x)^a</samp>&rsquo; are both
-simplified (possibly unsafely) to
-&lsquo;<samp>x^(a/2)</samp>&rsquo;.
-</p>
-<p>Forms like &lsquo;<samp><tt>sqrt</tt>(1 - sin(x)^2)</samp>&rsquo; are simplified to, e.g.,
-&lsquo;<samp><tt>cos</tt>(x)</samp>&rsquo;.  Calc has identities of this sort for <code>sin</code>,
-<code>cos</code>, <code>tan</code>, <code>sinh</code>, and <code>cosh</code>.
-</p>
-<p>Arguments of square roots are partially factored to look for
-squared terms that can be extracted.  For example,
-&lsquo;<samp><tt>sqrt</tt>(a^2 b^3 + a^3 b^2)</samp>&rsquo; simplifies to
-&lsquo;<samp>a b <tt>sqrt</tt>(a+b)</samp>&rsquo;.
-</p>
-<p>The simplifications of &lsquo;<samp><tt>ln</tt>(<tt>exp</tt>(x))</samp>&rsquo;,
-&lsquo;<samp><tt>ln</tt>(<tt>e</tt>^x)</samp>&rsquo;, and &lsquo;<samp><tt>log10</tt>(10^x)</samp>&rsquo; to &lsquo;<samp>x</samp>&rsquo; are also
-unsafe because of problems with principal values (although these
-simplifications are safe if &lsquo;<samp>x</samp>&rsquo; is known to be real).
-</p>
-<p>Common factors are canceled from products on both sides of an
-equation, even if those factors may be zero:  &lsquo;<samp>a x / b x</samp>&rsquo;
-to &lsquo;<samp>a / b</samp>&rsquo;.  Such factors are never canceled from
-inequalities:  Even the extended simplifications are not bold enough to
-reduce &lsquo;<samp>a x &lt; b x</samp>&rsquo; to &lsquo;<samp>a &lt; b</samp>&rsquo; (or &lsquo;<samp>a &gt; b</samp>&rsquo;, depending
-on whether you believe &lsquo;<samp>x</samp>&rsquo; is positive or negative).
-The <kbd>a M /</kbd> command can be used to divide a factor out of
-both sides of an inequality.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Simplification-of-Units.html#Simplification-of-Units" accesskey="n" rel="next">Simplification of Units</a>, Previous: <a href="Algebraic-Simplifications.html#Algebraic-Simplifications" accesskey="p" rel="prev">Algebraic Simplifications</a>, Up: <a href="Simplifying-Formulas.html#Simplifying-Formulas" accesskey="u" rel="up">Simplifying Formulas</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h4 class="subsection">10.3.3 &ldquo;Unsafe&rdquo;
+  Simplifications</h4><a name="index-Unsafe-simplifications" id=
+  "index-Unsafe-simplifications"></a> <a name=
+  "index-Extended-simplification" id=
+  "index-Extended-simplification"></a> <a name="index-a-e" id=
+  "index-a-e"></a> <a name="index-m-E-1" id="index-m-E-1"></a>
+  <a name="index-calc_002dsimplify_002dextended" id=
+  "index-calc_002dsimplify_002dextended"></a> <a name=
+  "index-esimplify" id="index-esimplify"></a>
 
+  <p>Calc is capable of performing some simplifications which may
+  sometimes be desired but which are not &ldquo;safe&rdquo; in all
+  cases. The <kbd>a e</kbd> (<code>calc-simplify-extended</code>)
+  [<code>esimplify</code>] command applies the algebraic
+  simplifications as well as these extended, or
+  &ldquo;unsafe&rdquo;, simplifications. Use this only if you know
+  the values in your formula lie in the restricted ranges for which
+  these simplifications are valid. You can use Extended
+  Simplification mode (<kbd>m E</kbd>) to have these
+  simplifications done automatically.</p>
 
+  <p>The symbolic integrator uses these extended simplifications;
+  one effect of this is that the integrator&rsquo;s results must be
+  used with caution. Where an integral table will often attach
+  conditions like &ldquo;for positive &lsquo;<samp>a</samp>&rsquo;
+  only,&rdquo; Calc (like most other symbolic integration programs)
+  will simply produce an unqualified result.</p>
 
+  <p>Because <kbd>a e</kbd>&rsquo;s simplifications are unsafe, it
+  is sometimes better to type <kbd>C-u -3 a v</kbd>, which does
+  extended simplification only on the top level of the formula
+  without affecting the sub-formulas. In fact, <kbd>C-u -3 j
+  v</kbd> allows you to target extended simplification to any
+  specific part of a formula.</p>
+
+  <p>The variable <code>ExtSimpRules</code> contains rewrites to be
+  applied when the extended simplifications are used. These are
+  applied in addition to <code>EvalRules</code> and
+  <code>AlgSimpRules</code>. (The <kbd>a r AlgSimpRules</kbd> step
+  described above is simply followed by an <kbd>a r
+  ExtSimpRules</kbd> step.)</p>
+
+  <p>Following is a complete list of the &ldquo;unsafe&rdquo;
+  simplifications.</p>
+
+  <p>Inverse trigonometric or hyperbolic functions, called with
+  their corresponding non-inverse functions as arguments, are
+  simplified. For example,
+  &lsquo;<samp><tt>arcsin</tt>(<tt>sin</tt>(x))</samp>&rsquo;
+  changes to &lsquo;<samp>x</samp>&rsquo;. Also,
+  &lsquo;<samp><tt>arcsin</tt>(<tt>cos</tt>(x))</samp>&rsquo; and
+  &lsquo;<samp><tt>arccos</tt>(<tt>sin</tt>(x))</samp>&rsquo; both
+  change to &lsquo;<samp><tt>pi</tt>/2 - x</samp>&rsquo;. These
+  simplifications are unsafe because they are valid only for values
+  of &lsquo;<samp>x</samp>&rsquo; in a certain range; outside that
+  range, values are folded down to the 360-degree range that the
+  inverse trigonometric functions always produce.</p>
+
+  <p>Powers of powers &lsquo;<samp>(x^a)^b</samp>&rsquo; are
+  simplified to &lsquo;<samp>x^(a b)</samp>&rsquo; for all
+  &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo;.
+  These results will be valid only in a restricted range of
+  &lsquo;<samp>x</samp>&rsquo;; for example, in
+  &lsquo;<samp>(x^2)^1:2</samp>&rsquo; the powers cancel to get
+  &lsquo;<samp>x</samp>&rsquo;, which is valid for positive values
+  of &lsquo;<samp>x</samp>&rsquo; but not for negative or complex
+  values.</p>
+
+  <p>Similarly, &lsquo;<samp><tt>sqrt</tt>(x^a)</samp>&rsquo; and
+  &lsquo;<samp><tt>sqrt</tt>(x)^a</samp>&rsquo; are both simplified
+  (possibly unsafely) to &lsquo;<samp>x^(a/2)</samp>&rsquo;.</p>
+
+  <p>Forms like &lsquo;<samp><tt>sqrt</tt>(1 -
+  sin(x)^2)</samp>&rsquo; are simplified to, e.g.,
+  &lsquo;<samp><tt>cos</tt>(x)</samp>&rsquo;. Calc has identities
+  of this sort for <code>sin</code>, <code>cos</code>,
+  <code>tan</code>, <code>sinh</code>, and <code>cosh</code>.</p>
+
+  <p>Arguments of square roots are partially factored to look for
+  squared terms that can be extracted. For example,
+  &lsquo;<samp><tt>sqrt</tt>(a^2 b^3 + a^3 b^2)</samp>&rsquo;
+  simplifies to &lsquo;<samp>a b
+  <tt>sqrt</tt>(a+b)</samp>&rsquo;.</p>
+
+  <p>The simplifications of
+  &lsquo;<samp><tt>ln</tt>(<tt>exp</tt>(x))</samp>&rsquo;,
+  &lsquo;<samp><tt>ln</tt>(<tt>e</tt>^x)</samp>&rsquo;, and
+  &lsquo;<samp><tt>log10</tt>(10^x)</samp>&rsquo; to
+  &lsquo;<samp>x</samp>&rsquo; are also unsafe because of problems
+  with principal values (although these simplifications are safe if
+  &lsquo;<samp>x</samp>&rsquo; is known to be real).</p>
+
+  <p>Common factors are canceled from products on both sides of an
+  equation, even if those factors may be zero: &lsquo;<samp>a x / b
+  x</samp>&rsquo; to &lsquo;<samp>a / b</samp>&rsquo;. Such factors
+  are never canceled from inequalities: Even the extended
+  simplifications are not bold enough to reduce &lsquo;<samp>a x
+  &lt; b x</samp>&rsquo; to &lsquo;<samp>a &lt; b</samp>&rsquo; (or
+  &lsquo;<samp>a &gt; b</samp>&rsquo;, depending on whether you
+  believe &lsquo;<samp>x</samp>&rsquo; is positive or negative).
+  The <kbd>a M /</kbd> command can be used to divide a factor out
+  of both sides of an inequality.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Simplification-of-Units.html#Simplification-of-Units"
+    accesskey="n" rel="next">Simplification of Units</a>, Previous:
+    <a href=
+    "Algebraic-Simplifications.html#Algebraic-Simplifications"
+    accesskey="p" rel="prev">Algebraic Simplifications</a>, Up:
+    <a href="Simplifying-Formulas.html#Simplifying-Formulas"
+    accesskey="u" rel="up">Simplifying Formulas</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

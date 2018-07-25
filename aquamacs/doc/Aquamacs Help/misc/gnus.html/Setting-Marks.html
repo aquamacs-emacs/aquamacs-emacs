@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,235 +14,397 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Setting Marks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Setting Marks">
-<meta name="keywords" content="Gnus Manual: Setting Marks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Marking-Articles.html#Marking-Articles" rel="up" title="Marking Articles">
-<link href="Generic-Marking-Commands.html#Generic-Marking-Commands" rel="next" title="Generic Marking Commands">
-<link href="Other-Marks.html#Other-Marks" rel="prev" title="Other Marks">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Setting Marks</title>
+  <meta name="description" content="Gnus Manual: Setting Marks" />
+  <meta name="keywords" content="Gnus Manual: Setting Marks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Marking-Articles.html#Marking-Articles" rel="up"
+  title="Marking Articles" />
+  <link href=
+  "Generic-Marking-Commands.html#Generic-Marking-Commands" rel=
+  "next" title="Generic Marking Commands" />
+  <link href="Other-Marks.html#Other-Marks" rel="prev" title=
+  "Other Marks" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Setting-Marks"></a>
-<div class="header">
-<p>
-Next: <a href="Generic-Marking-Commands.html#Generic-Marking-Commands" accesskey="n" rel="next">Generic Marking Commands</a>, Previous: <a href="Other-Marks.html#Other-Marks" accesskey="p" rel="prev">Other Marks</a>, Up: <a href="Marking-Articles.html#Marking-Articles" accesskey="u" rel="up">Marking Articles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Setting-Marks-1"></a>
-<h4 class="subsection">3.7.4 Setting Marks</h4>
-<a name="index-setting-marks"></a>
+<body lang="en" xml:lang="en">
+  <a name="Setting-Marks" id="Setting-Marks"></a>
 
-<p>All the marking commands understand the numeric prefix.
-</p>
-<dl compact="compact">
-<dt><kbd>M c</kbd></dt>
-<dt><kbd>M-u</kbd></dt>
-<dd><a name="index-M-c-_0028Summary_0029"></a>
-<a name="index-M_002du-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dclear_002dmark_002dforward"></a>
-<a name="index-mark-as-unread"></a>
-<p>Clear all readedness-marks from the current article
-(<code>gnus-summary-clear-mark-forward</code>).  In other words, mark the
-article as unread.
-</p>
-</dd>
-<dt><kbd>M t</kbd></dt>
-<dt><kbd>!</kbd></dt>
-<dd><a name="index-_0021-_0028Summary_0029"></a>
-<a name="index-M-t-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dtick_002darticle_002dforward"></a>
-<p>Tick the current article (<code>gnus-summary-tick-article-forward</code>).
-See <a href="Article-Caching.html#Article-Caching">Article Caching</a>.
-</p>
-</dd>
-<dt><kbd>M ?</kbd></dt>
-<dt><kbd>?</kbd></dt>
-<dd><a name="index-_003f-_0028Summary_0029"></a>
-<a name="index-M-_003f-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dmark_002das_002ddormant"></a>
-<p>Mark the current article as dormant
-(<code>gnus-summary-mark-as-dormant</code>).  See <a href="Article-Caching.html#Article-Caching">Article Caching</a>.
-</p>
-</dd>
-<dt><kbd>M d</kbd></dt>
-<dt><kbd>d</kbd></dt>
-<dd><a name="index-M-d-_0028Summary_0029"></a>
-<a name="index-d-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dmark_002das_002dread_002dforward"></a>
-<p>Mark the current article as read
-(<code>gnus-summary-mark-as-read-forward</code>).
-</p>
-</dd>
-<dt><kbd>D</kbd></dt>
-<dd><a name="index-D-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dmark_002das_002dread_002dbackward"></a>
-<p>Mark the current article as read and move point to the previous line
-(<code>gnus-summary-mark-as-read-backward</code>).
-</p>
-</dd>
-<dt><kbd>M k</kbd></dt>
-<dt><kbd>k</kbd></dt>
-<dd><a name="index-k-_0028Summary_0029"></a>
-<a name="index-M-k-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dkill_002dsame_002dsubject_002dand_002dselect"></a>
-<p>Mark all articles that have the same subject as the current one as read,
-and then select the next unread article
-(<code>gnus-summary-kill-same-subject-and-select</code>).
-</p>
-</dd>
-<dt><kbd>M K</kbd></dt>
-<dt><kbd>C-k</kbd></dt>
-<dd><a name="index-M-K-_0028Summary_0029"></a>
-<a name="index-C_002dk-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dkill_002dsame_002dsubject"></a>
-<p>Mark all articles that have the same subject as the current one as read
-(<code>gnus-summary-kill-same-subject</code>).
-</p>
-</dd>
-<dt><kbd>M C</kbd></dt>
-<dd><a name="index-M-C-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dcatchup"></a>
-<p>Mark all unread articles as read (<code>gnus-summary-catchup</code>).
-</p>
-</dd>
-<dt><kbd>M C-c</kbd></dt>
-<dd><a name="index-M-C_002dc-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dcatchup_002dall"></a>
-<p>Mark all articles in the group as read&mdash;even the ticked and dormant
-articles (<code>gnus-summary-catchup-all</code>).
-</p>
-</dd>
-<dt><kbd>M H</kbd></dt>
-<dd><a name="index-M-H-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dcatchup_002dto_002dhere"></a>
-<p>Catchup the current group to point (before the point)
-(<code>gnus-summary-catchup-to-here</code>).
-</p>
-</dd>
-<dt><kbd>M h</kbd></dt>
-<dd><a name="index-M-h-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dcatchup_002dfrom_002dhere"></a>
-<p>Catchup the current group from point (after the point)
-(<code>gnus-summary-catchup-from-here</code>).
-</p>
-</dd>
-<dt><kbd>C-w</kbd></dt>
-<dd><a name="index-C_002dw-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dmark_002dregion_002das_002dread"></a>
-<p>Mark all articles between point and mark as read
-(<code>gnus-summary-mark-region-as-read</code>).
-</p>
-</dd>
-<dt><kbd>M V k</kbd></dt>
-<dd><a name="index-M-V-k-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dkill_002dbelow"></a>
-<p>Kill all articles with scores below the default score (or below the
-numeric prefix) (<code>gnus-summary-kill-below</code>).
-</p>
-</dd>
-<dt><kbd>M e</kbd></dt>
-<dt><kbd>E</kbd></dt>
-<dd><a name="index-M-e-_0028Summary_0029"></a>
-<a name="index-E-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dmark_002das_002dexpirable"></a>
-<p>Mark the current article as expirable
-(<code>gnus-summary-mark-as-expirable</code>).
-</p>
-</dd>
-<dt><kbd>M b</kbd></dt>
-<dd><a name="index-M-b-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dset_002dbookmark"></a>
-<p>Set a bookmark in the current article
-(<code>gnus-summary-set-bookmark</code>).
-</p>
-</dd>
-<dt><kbd>M B</kbd></dt>
-<dd><a name="index-M-B-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dremove_002dbookmark"></a>
-<p>Remove the bookmark from the current article
-(<code>gnus-summary-remove-bookmark</code>).
-</p>
-</dd>
-<dt><kbd>M V c</kbd></dt>
-<dd><a name="index-M-V-c-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dclear_002dabove"></a>
-<p>Clear all marks from articles with scores over the default score (or
-over the numeric prefix) (<code>gnus-summary-clear-above</code>).
-</p>
-</dd>
-<dt><kbd>M V u</kbd></dt>
-<dd><a name="index-M-V-u-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dtick_002dabove"></a>
-<p>Tick all articles with scores over the default score (or over the
-numeric prefix) (<code>gnus-summary-tick-above</code>).
-</p>
-</dd>
-<dt><kbd>M V m</kbd></dt>
-<dd><a name="index-M-V-m-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dmark_002dabove"></a>
-<p>Prompt for a mark, and mark all articles with scores over the default
-score (or over the numeric prefix) with this mark
-(<code>gnus-summary-clear-above</code>).
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Generic-Marking-Commands.html#Generic-Marking-Commands"
+    accesskey="n" rel="next">Generic Marking Commands</a>,
+    Previous: <a href="Other-Marks.html#Other-Marks" accesskey="p"
+    rel="prev">Other Marks</a>, Up: <a href=
+    "Marking-Articles.html#Marking-Articles" accesskey="u" rel=
+    "up">Marking Articles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Setting-Marks-1" id="Setting-Marks-1"></a>
 
-<a name="index-gnus_002dsummary_002dgoto_002dunread"></a>
-<p>The <code>gnus-summary-goto-unread</code> variable controls what action should
-be taken after setting a mark.  If non-<code>nil</code>, point will move to
-the next/previous unread article.  If <code>nil</code>, point will just move
-one line up or down.  As a special case, if this variable is
-<code>never</code>, all the marking commands as well as other commands (like
-<kbd>SPACE</kbd>) will move to the next article, whether it is unread or not.
-The default is <code>t</code>.
-</p>
+  <h4 class="subsection">3.7.4 Setting Marks</h4><a name=
+  "index-setting-marks" id="index-setting-marks"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Generic-Marking-Commands.html#Generic-Marking-Commands" accesskey="n" rel="next">Generic Marking Commands</a>, Previous: <a href="Other-Marks.html#Other-Marks" accesskey="p" rel="prev">Other Marks</a>, Up: <a href="Marking-Articles.html#Marking-Articles" accesskey="u" rel="up">Marking Articles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>All the marking commands understand the numeric prefix.</p>
 
+  <dl compact="compact">
+    <dt><kbd>M c</kbd></dt>
 
+    <dt><kbd>M-u</kbd></dt>
 
+    <dd>
+      <a name="index-M-c-_0028Summary_0029" id=
+      "index-M-c-_0028Summary_0029"></a> <a name=
+      "index-M_002du-_0028Summary_0029" id=
+      "index-M_002du-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dclear_002dmark_002dforward" id=
+      "index-gnus_002dsummary_002dclear_002dmark_002dforward"></a>
+      <a name="index-mark-as-unread" id="index-mark-as-unread"></a>
+
+      <p>Clear all readedness-marks from the current article
+      (<code>gnus-summary-clear-mark-forward</code>). In other
+      words, mark the article as unread.</p>
+    </dd>
+
+    <dt><kbd>M t</kbd></dt>
+
+    <dt><kbd>!</kbd></dt>
+
+    <dd>
+      <a name="index-_0021-_0028Summary_0029" id=
+      "index-_0021-_0028Summary_0029"></a> <a name=
+      "index-M-t-_0028Summary_0029" id=
+      "index-M-t-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dtick_002darticle_002dforward" id=
+      "index-gnus_002dsummary_002dtick_002darticle_002dforward"></a>
+
+      <p>Tick the current article
+      (<code>gnus-summary-tick-article-forward</code>). See
+      <a href="Article-Caching.html#Article-Caching">Article
+      Caching</a>.</p>
+    </dd>
+
+    <dt><kbd>M ?</kbd></dt>
+
+    <dt><kbd>?</kbd></dt>
+
+    <dd>
+      <a name="index-_003f-_0028Summary_0029" id=
+      "index-_003f-_0028Summary_0029"></a> <a name=
+      "index-M-_003f-_0028Summary_0029" id=
+      "index-M-_003f-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dmark_002das_002ddormant" id=
+      "index-gnus_002dsummary_002dmark_002das_002ddormant"></a>
+
+      <p>Mark the current article as dormant
+      (<code>gnus-summary-mark-as-dormant</code>). See <a href=
+      "Article-Caching.html#Article-Caching">Article
+      Caching</a>.</p>
+    </dd>
+
+    <dt><kbd>M d</kbd></dt>
+
+    <dt><kbd>d</kbd></dt>
+
+    <dd>
+      <a name="index-M-d-_0028Summary_0029" id=
+      "index-M-d-_0028Summary_0029"></a> <a name=
+      "index-d-_0028Summary_0029" id=
+      "index-d-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dmark_002das_002dread_002dforward"
+      id=
+      "index-gnus_002dsummary_002dmark_002das_002dread_002dforward">
+      </a>
+
+      <p>Mark the current article as read
+      (<code>gnus-summary-mark-as-read-forward</code>).</p>
+    </dd>
+
+    <dt><kbd>D</kbd></dt>
+
+    <dd>
+      <a name="index-D-_0028Summary_0029" id=
+      "index-D-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dmark_002das_002dread_002dbackward"
+      id=
+      "index-gnus_002dsummary_002dmark_002das_002dread_002dbackward">
+      </a>
+
+      <p>Mark the current article as read and move point to the
+      previous line
+      (<code>gnus-summary-mark-as-read-backward</code>).</p>
+    </dd>
+
+    <dt><kbd>M k</kbd></dt>
+
+    <dt><kbd>k</kbd></dt>
+
+    <dd>
+      <a name="index-k-_0028Summary_0029" id=
+      "index-k-_0028Summary_0029"></a> <a name=
+      "index-M-k-_0028Summary_0029" id=
+      "index-M-k-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dkill_002dsame_002dsubject_002dand_002dselect"
+      id=
+      "index-gnus_002dsummary_002dkill_002dsame_002dsubject_002dand_002dselect">
+      </a>
+
+      <p>Mark all articles that have the same subject as the
+      current one as read, and then select the next unread article
+      (<code>gnus-summary-kill-same-subject-and-select</code>).</p>
+    </dd>
+
+    <dt><kbd>M K</kbd></dt>
+
+    <dt><kbd>C-k</kbd></dt>
+
+    <dd>
+      <a name="index-M-K-_0028Summary_0029" id=
+      "index-M-K-_0028Summary_0029"></a> <a name=
+      "index-C_002dk-_0028Summary_0029" id=
+      "index-C_002dk-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dkill_002dsame_002dsubject" id=
+      "index-gnus_002dsummary_002dkill_002dsame_002dsubject"></a>
+
+      <p>Mark all articles that have the same subject as the
+      current one as read
+      (<code>gnus-summary-kill-same-subject</code>).</p>
+    </dd>
+
+    <dt><kbd>M C</kbd></dt>
+
+    <dd>
+      <a name="index-M-C-_0028Summary_0029" id=
+      "index-M-C-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dcatchup" id=
+      "index-gnus_002dsummary_002dcatchup"></a>
+
+      <p>Mark all unread articles as read
+      (<code>gnus-summary-catchup</code>).</p>
+    </dd>
+
+    <dt><kbd>M C-c</kbd></dt>
+
+    <dd>
+      <a name="index-M-C_002dc-_0028Summary_0029" id=
+      "index-M-C_002dc-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dcatchup_002dall" id=
+      "index-gnus_002dsummary_002dcatchup_002dall"></a>
+
+      <p>Mark all articles in the group as read&mdash;even the
+      ticked and dormant articles
+      (<code>gnus-summary-catchup-all</code>).</p>
+    </dd>
+
+    <dt><kbd>M H</kbd></dt>
+
+    <dd>
+      <a name="index-M-H-_0028Summary_0029" id=
+      "index-M-H-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dcatchup_002dto_002dhere" id=
+      "index-gnus_002dsummary_002dcatchup_002dto_002dhere"></a>
+
+      <p>Catchup the current group to point (before the point)
+      (<code>gnus-summary-catchup-to-here</code>).</p>
+    </dd>
+
+    <dt><kbd>M h</kbd></dt>
+
+    <dd>
+      <a name="index-M-h-_0028Summary_0029" id=
+      "index-M-h-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dcatchup_002dfrom_002dhere" id=
+      "index-gnus_002dsummary_002dcatchup_002dfrom_002dhere"></a>
+
+      <p>Catchup the current group from point (after the point)
+      (<code>gnus-summary-catchup-from-here</code>).</p>
+    </dd>
+
+    <dt><kbd>C-w</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dw-_0028Summary_0029" id=
+      "index-C_002dw-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dmark_002dregion_002das_002dread"
+      id=
+      "index-gnus_002dsummary_002dmark_002dregion_002das_002dread"></a>
+
+      <p>Mark all articles between point and mark as read
+      (<code>gnus-summary-mark-region-as-read</code>).</p>
+    </dd>
+
+    <dt><kbd>M V k</kbd></dt>
+
+    <dd>
+      <a name="index-M-V-k-_0028Summary_0029" id=
+      "index-M-V-k-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dkill_002dbelow" id=
+      "index-gnus_002dsummary_002dkill_002dbelow"></a>
+
+      <p>Kill all articles with scores below the default score (or
+      below the numeric prefix)
+      (<code>gnus-summary-kill-below</code>).</p>
+    </dd>
+
+    <dt><kbd>M e</kbd></dt>
+
+    <dt><kbd>E</kbd></dt>
+
+    <dd>
+      <a name="index-M-e-_0028Summary_0029" id=
+      "index-M-e-_0028Summary_0029"></a> <a name=
+      "index-E-_0028Summary_0029" id=
+      "index-E-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dmark_002das_002dexpirable" id=
+      "index-gnus_002dsummary_002dmark_002das_002dexpirable"></a>
+
+      <p>Mark the current article as expirable
+      (<code>gnus-summary-mark-as-expirable</code>).</p>
+    </dd>
+
+    <dt><kbd>M b</kbd></dt>
+
+    <dd>
+      <a name="index-M-b-_0028Summary_0029" id=
+      "index-M-b-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dset_002dbookmark" id=
+      "index-gnus_002dsummary_002dset_002dbookmark"></a>
+
+      <p>Set a bookmark in the current article
+      (<code>gnus-summary-set-bookmark</code>).</p>
+    </dd>
+
+    <dt><kbd>M B</kbd></dt>
+
+    <dd>
+      <a name="index-M-B-_0028Summary_0029" id=
+      "index-M-B-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dremove_002dbookmark" id=
+      "index-gnus_002dsummary_002dremove_002dbookmark"></a>
+
+      <p>Remove the bookmark from the current article
+      (<code>gnus-summary-remove-bookmark</code>).</p>
+    </dd>
+
+    <dt><kbd>M V c</kbd></dt>
+
+    <dd>
+      <a name="index-M-V-c-_0028Summary_0029" id=
+      "index-M-V-c-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dclear_002dabove" id=
+      "index-gnus_002dsummary_002dclear_002dabove"></a>
+
+      <p>Clear all marks from articles with scores over the default
+      score (or over the numeric prefix)
+      (<code>gnus-summary-clear-above</code>).</p>
+    </dd>
+
+    <dt><kbd>M V u</kbd></dt>
+
+    <dd>
+      <a name="index-M-V-u-_0028Summary_0029" id=
+      "index-M-V-u-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dtick_002dabove" id=
+      "index-gnus_002dsummary_002dtick_002dabove"></a>
+
+      <p>Tick all articles with scores over the default score (or
+      over the numeric prefix)
+      (<code>gnus-summary-tick-above</code>).</p>
+    </dd>
+
+    <dt><kbd>M V m</kbd></dt>
+
+    <dd>
+      <a name="index-M-V-m-_0028Summary_0029" id=
+      "index-M-V-m-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dmark_002dabove" id=
+      "index-gnus_002dsummary_002dmark_002dabove"></a>
+
+      <p>Prompt for a mark, and mark all articles with scores over
+      the default score (or over the numeric prefix) with this mark
+      (<code>gnus-summary-clear-above</code>).</p>
+    </dd>
+  </dl><a name="index-gnus_002dsummary_002dgoto_002dunread" id=
+  "index-gnus_002dsummary_002dgoto_002dunread"></a>
+
+  <p>The <code>gnus-summary-goto-unread</code> variable controls
+  what action should be taken after setting a mark. If
+  non-<code>nil</code>, point will move to the next/previous unread
+  article. If <code>nil</code>, point will just move one line up or
+  down. As a special case, if this variable is <code>never</code>,
+  all the marking commands as well as other commands (like
+  <kbd>SPACE</kbd>) will move to the next article, whether it is
+  unread or not. The default is <code>t</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Generic-Marking-Commands.html#Generic-Marking-Commands"
+    accesskey="n" rel="next">Generic Marking Commands</a>,
+    Previous: <a href="Other-Marks.html#Other-Marks" accesskey="p"
+    rel="prev">Other Marks</a>, Up: <a href=
+    "Marking-Articles.html#Marking-Articles" accesskey="u" rel=
+    "up">Marking Articles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,156 +19,234 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Mapping Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Mapping Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Mapping Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Anonymous-Functions.html#Anonymous-Functions" rel="next" title="Anonymous Functions">
-<link href="Calling-Functions.html#Calling-Functions" rel="prev" title="Calling Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Mapping Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Mapping Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Mapping Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href="Anonymous-Functions.html#Anonymous-Functions" rel=
+  "next" title="Anonymous Functions" />
+  <link href="Calling-Functions.html#Calling-Functions" rel="prev"
+  title="Calling Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Mapping-Functions" id="Mapping-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Anonymous-Functions.html#Anonymous-Functions"
+    accesskey="n" rel="next">Anonymous Functions</a>, Previous:
+    <a href="Calling-Functions.html#Calling-Functions" accesskey=
+    "p" rel="prev">Calling Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Mapping-Functions-1" id="Mapping-Functions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Mapping-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Anonymous-Functions.html#Anonymous-Functions" accesskey="n" rel="next">Anonymous Functions</a>, Previous: <a href="Calling-Functions.html#Calling-Functions" accesskey="p" rel="prev">Calling Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Mapping-Functions-1"></a>
-<h3 class="section">12.6 Mapping Functions</h3>
-<a name="index-mapping-functions"></a>
+  <h3 class="section">12.6 Mapping Functions</h3><a name=
+  "index-mapping-functions" id="index-mapping-functions"></a>
 
-<p>A <em>mapping function</em> applies a given function (<em>not</em> a
-special form or macro) to each element of a list or other collection.
-Emacs Lisp has several such functions; this section describes
-<code>mapcar</code>, <code>mapc</code>, and <code>mapconcat</code>, which map over a
-list.  See <a href="Creating-Symbols.html#Definition-of-mapatoms">Definition of mapatoms</a>, for the function <code>mapatoms</code>
-which maps over the symbols in an obarray.  See <a href="Hash-Access.html#Definition-of-maphash">Definition of maphash</a>, for the function <code>maphash</code> which maps over key/value
-associations in a hash table.
-</p>
-<p>These mapping functions do not allow char-tables because a char-table
-is a sparse array whose nominal range of indices is very large.  To map
-over a char-table in a way that deals properly with its sparse nature,
-use the function <code>map-char-table</code> (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>).
-</p>
-<dl>
-<dt><a name="index-mapcar"></a>Function: <strong>mapcar</strong> <em>function sequence</em></dt>
-<dd><a name="Definition-of-mapcar"></a><p><code>mapcar</code> applies <var>function</var> to each element of <var>sequence</var>
-in turn, and returns a list of the results.
-</p>
-<p>The argument <var>sequence</var> can be any kind of sequence except a
-char-table; that is, a list, a vector, a bool-vector, or a string.  The
-result is always a list.  The length of the result is the same as the
-length of <var>sequence</var>.  For example:
-</p>
-<div class="example">
-<pre class="example">(mapcar 'car '((a b) (c d) (e f)))
+  <p>A <em>mapping function</em> applies a given function
+  (<em>not</em> a special form or macro) to each element of a list
+  or other collection. Emacs Lisp has several such functions; this
+  section describes <code>mapcar</code>, <code>mapc</code>, and
+  <code>mapconcat</code>, which map over a list. See <a href=
+  "Creating-Symbols.html#Definition-of-mapatoms">Definition of
+  mapatoms</a>, for the function <code>mapatoms</code> which maps
+  over the symbols in an obarray. See <a href=
+  "Hash-Access.html#Definition-of-maphash">Definition of
+  maphash</a>, for the function <code>maphash</code> which maps
+  over key/value associations in a hash table.</p>
+
+  <p>These mapping functions do not allow char-tables because a
+  char-table is a sparse array whose nominal range of indices is
+  very large. To map over a char-table in a way that deals properly
+  with its sparse nature, use the function
+  <code>map-char-table</code> (see <a href=
+  "Char_002dTables.html#Char_002dTables">Char-Tables</a>).</p>
+
+  <dl>
+    <dt><a name="index-mapcar" id="index-mapcar"></a>Function:
+    <strong>mapcar</strong> <em>function sequence</em></dt>
+
+    <dd>
+      <a name="Definition-of-mapcar" id="Definition-of-mapcar"></a>
+
+      <p><code>mapcar</code> applies <var>function</var> to each
+      element of <var>sequence</var> in turn, and returns a list of
+      the results.</p>
+
+      <p>The argument <var>sequence</var> can be any kind of
+      sequence except a char-table; that is, a list, a vector, a
+      bool-vector, or a string. The result is always a list. The
+      length of the result is the same as the length of
+      <var>sequence</var>. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(mapcar 'car '((a b) (c d) (e f)))
      &rArr; (a c e)
 (mapcar '1+ [1 2 3])
      &rArr; (2 3 4)
-(mapcar 'string &quot;abc&quot;)
-     &rArr; (&quot;a&quot; &quot;b&quot; &quot;c&quot;)
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Call each function in <code>my-hooks</code>.</span>
+(mapcar 'string "abc")
+     &rArr; ("a" "b" "c")
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">Call each function in <code>my-hooks</code>.</span>
 (mapcar 'funcall my-hooks)
-</pre><pre class="example">
-</pre><pre class="example">(defun mapcar* (function &amp;rest args)
-  &quot;Apply FUNCTION to successive cars of all ARGS.
-Return the list of results.&quot;
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(defun mapcar* (function &amp;rest args)
+  "Apply FUNCTION to successive cars of all ARGS.
+Return the list of results."
   ;; <span class="roman">If no list is exhausted,</span>
   (if (not (memq nil args))
       ;; <span class="roman">apply function to CARs.</span>
       (cons (apply function (mapcar 'car args))
             (apply 'mapcar* function
-                   ;; <span class="roman">Recurse for rest of elements.</span>
+                   ;; <span class=
+"roman">Recurse for rest of elements.</span>
                    (mapcar 'cdr args)))))
-</pre><pre class="example">
-</pre><pre class="example">(mapcar* 'cons '(a b c) '(1 2 3 4))
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(mapcar* 'cons '(a b c) '(1 2 3 4))
      &rArr; ((a . 1) (b . 2) (c . 3))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-mapc"></a>Function: <strong>mapc</strong> <em>function sequence</em></dt>
-<dd><p><code>mapc</code> is like <code>mapcar</code> except that <var>function</var> is used for
-side-effects only&mdash;the values it returns are ignored, not collected
-into a list.  <code>mapc</code> always returns <var>sequence</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-mapc" id="index-mapc"></a>Function:
+    <strong>mapc</strong> <em>function sequence</em></dt>
 
-<dl>
-<dt><a name="index-mapconcat"></a>Function: <strong>mapconcat</strong> <em>function sequence separator</em></dt>
-<dd><p><code>mapconcat</code> applies <var>function</var> to each element of
-<var>sequence</var>; the results, which must be sequences of characters
-(strings, vectors, or lists), are concatenated into a single string
-return value.  Between each pair of result sequences, <code>mapconcat</code>
-inserts the characters from <var>separator</var>, which also must be a
-string, or a vector or list of characters.  See <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>.
-</p>
-<p>The argument <var>function</var> must be a function that can take one
-argument and returns a sequence of characters: a string, a vector, or
-a list.  The argument <var>sequence</var> can be any kind of sequence
-except a char-table; that is, a list, a vector, a bool-vector, or a
-string.
-</p>
-<div class="example">
-<pre class="example">(mapconcat 'symbol-name
+    <dd>
+      <p><code>mapc</code> is like <code>mapcar</code> except that
+      <var>function</var> is used for side-effects only&mdash;the
+      values it returns are ignored, not collected into a list.
+      <code>mapc</code> always returns <var>sequence</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-mapconcat" id=
+    "index-mapconcat"></a>Function: <strong>mapconcat</strong>
+    <em>function sequence separator</em></dt>
+
+    <dd>
+      <p><code>mapconcat</code> applies <var>function</var> to each
+      element of <var>sequence</var>; the results, which must be
+      sequences of characters (strings, vectors, or lists), are
+      concatenated into a single string return value. Between each
+      pair of result sequences, <code>mapconcat</code> inserts the
+      characters from <var>separator</var>, which also must be a
+      string, or a vector or list of characters. See <a href=
+      "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences
+      Arrays Vectors</a>.</p>
+
+      <p>The argument <var>function</var> must be a function that
+      can take one argument and returns a sequence of characters: a
+      string, a vector, or a list. The argument <var>sequence</var>
+      can be any kind of sequence except a char-table; that is, a
+      list, a vector, a bool-vector, or a string.</p>
+
+      <div class="example">
+        <pre class="example">
+(mapconcat 'symbol-name
            '(The cat in the hat)
-           &quot; &quot;)
-     &rArr; &quot;The cat in the hat&quot;
-</pre><pre class="example">
-</pre><pre class="example">(mapconcat (function (lambda (x) (format &quot;%c&quot; (1+ x))))
-           &quot;HAL-8000&quot;
-           &quot;&quot;)
-     &rArr; &quot;IBM.9111&quot;
-</pre></div>
-</dd></dl>
+           " ")
+     &rArr; "The cat in the hat"
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(mapconcat (function (lambda (x) (format "%c" (1+ x))))
+           "HAL-8000"
+           "")
+     &rArr; "IBM.9111"
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Anonymous-Functions.html#Anonymous-Functions" accesskey="n" rel="next">Anonymous Functions</a>, Previous: <a href="Calling-Functions.html#Calling-Functions" accesskey="p" rel="prev">Calling Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Anonymous-Functions.html#Anonymous-Functions"
+    accesskey="n" rel="next">Anonymous Functions</a>, Previous:
+    <a href="Calling-Functions.html#Calling-Functions" accesskey=
+    "p" rel="prev">Calling Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Locating the buildfile - GNU Flymake 0.3</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Flymake 0.3">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Flymake-Implementation.html#Flymake-Implementation" title="Flymake Implementation">
-<link rel="prev" href="Getting-the-include-directories.html#Getting-the-include-directories" title="Getting the include directories">
-<link rel="next" href="Starting-the-syntax-check-process.html#Starting-the-syntax-check-process" title="Starting the syntax check process">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Locating the buildfile - GNU Flymake 0.3</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Flymake 0.3" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Flymake-Implementation.html#Flymake-Implementation" title=
+  "Flymake Implementation" />
+  <link rel="prev" href=
+  "Getting-the-include-directories.html#Getting-the-include-directories"
+  title="Getting the include directories" />
+  <link rel="next" href=
+  "Starting-the-syntax-check-process.html#Starting-the-syntax-check-process"
+  title="Starting the syntax check process" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -28,8 +40,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -39,44 +53,62 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Locating-the-buildfile"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Starting-the-syntax-check-process.html#Starting-the-syntax-check-process">Starting the syntax check process</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Getting-the-include-directories.html#Getting-the-include-directories">Getting the include directories</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Flymake-Implementation.html#Flymake-Implementation">Flymake Implementation</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Locating-the-buildfile" id=
+    "Locating-the-buildfile"></a>
 
-<h3 class="section">5.5 Locating the buildfile</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Starting-the-syntax-check-process.html#Starting-the-syntax-check-process">Starting
+    the syntax check process</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Getting-the-include-directories.html#Getting-the-include-directories">Getting
+    the include directories</a>, Up:&nbsp;<a rel="up" accesskey="u"
+    href=
+    "Flymake-Implementation.html#Flymake-Implementation">Flymake
+    Implementation</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Locating-the-buildfile-23"></a><a name="index-buildfile_002c-locating-24"></a><a name="index-Makefile_002c-locating-25"></a>
-Flymake can be configured to use different tools for performing syntax
-checks. For example, it can use direct compiler call to syntax check a perl
-script or a call to <code>make</code> for a more complicated case of a
-<code>C/C++</code> source. The general idea is that simple files, like perl
-scripts and html pages, can be checked by directly invoking a
-corresponding tool. Files that are usually more complex and generally
-used as part of larger projects, might require non-trivial options to
-be passed to the syntax check tool, like include directories for
-C++. The latter files are syntax checked using some build tool, like
-<code>make</code> or <code>Ant</code>.
+  <h3 class="section">5.5 Locating the buildfile</h3>
 
-   <p>All <code>make</code> configuration data is usually stored in a file called
-<code>Makefile</code>. To allow for future extensions, flymake uses a notion of
-buildfile to reference the 'project configuration' file.
+  <p><a name="index-Locating-the-buildfile-23" id=
+  "index-Locating-the-buildfile-23"></a><a name=
+  "index-buildfile_002c-locating-24" id=
+  "index-buildfile_002c-locating-24"></a><a name=
+  "index-Makefile_002c-locating-25" id=
+  "index-Makefile_002c-locating-25"></a> Flymake can be configured
+  to use different tools for performing syntax checks. For example,
+  it can use direct compiler call to syntax check a perl script or
+  a call to <code>make</code> for a more complicated case of a
+  <code>C/C++</code> source. The general idea is that simple files,
+  like perl scripts and html pages, can be checked by directly
+  invoking a corresponding tool. Files that are usually more
+  complex and generally used as part of larger projects, might
+  require non-trivial options to be passed to the syntax check
+  tool, like include directories for C++. The latter files are
+  syntax checked using some build tool, like <code>make</code> or
+  <code>Ant</code>.</p>
 
-   <p>Special function, <code>flymake-find-buildfile</code> is provided for locating buildfiles. 
-Searching for a buildfile is done in a manner similar to that of searching
-for possible master files. A customizable variable
-<code>flymake-buildfile-dirs</code> holds a list of relative paths to the
-buildfile. They are checked sequentially until a buildfile is found. In case
-there's no build file, syntax check is aborted.
+  <p>All <code>make</code> configuration data is usually stored in
+  a file called <code>Makefile</code>. To allow for future
+  extensions, flymake uses a notion of buildfile to reference the
+  'project configuration' file.</p>
 
-   <p>Buildfile values are also cached.
+  <p>Special function, <code>flymake-find-buildfile</code> is
+  provided for locating buildfiles. Searching for a buildfile is
+  done in a manner similar to that of searching for possible master
+  files. A customizable variable
+  <code>flymake-buildfile-dirs</code> holds a list of relative
+  paths to the buildfile. They are checked sequentially until a
+  buildfile is found. In case there's no build file, syntax check
+  is aborted.</p>
 
-   </body></html>
-
+  <p>Buildfile values are also cached.</p>
+</body>
+</html>

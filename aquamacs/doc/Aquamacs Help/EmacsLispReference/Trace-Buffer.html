@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,116 +19,170 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Trace Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Trace Buffer">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Trace Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="Coverage-Testing.html#Coverage-Testing" rel="next" title="Coverage Testing">
-<link href="Printing-in-Edebug.html#Printing-in-Edebug" rel="prev" title="Printing in Edebug">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Trace Buffer</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Trace Buffer" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Trace Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="Coverage-Testing.html#Coverage-Testing" rel="next"
+  title="Coverage Testing" />
+  <link href="Printing-in-Edebug.html#Printing-in-Edebug" rel=
+  "prev" title="Printing in Edebug" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Trace-Buffer" id="Trace-Buffer"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Coverage-Testing.html#Coverage-Testing"
+    accesskey="n" rel="next">Coverage Testing</a>, Previous:
+    <a href="Printing-in-Edebug.html#Printing-in-Edebug" accesskey=
+    "p" rel="prev">Printing in Edebug</a>, Up: <a href=
+    "Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Trace-Buffer-1" id="Trace-Buffer-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Trace-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Coverage-Testing.html#Coverage-Testing" accesskey="n" rel="next">Coverage Testing</a>, Previous: <a href="Printing-in-Edebug.html#Printing-in-Edebug" accesskey="p" rel="prev">Printing in Edebug</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Trace-Buffer-1"></a>
-<h4 class="subsection">17.2.12 Trace Buffer</h4>
-<a name="index-trace-buffer"></a>
+  <h4 class="subsection">17.2.12 Trace Buffer</h4><a name=
+  "index-trace-buffer" id="index-trace-buffer"></a>
 
-<p>Edebug can record an execution trace, storing it in a buffer named
-<samp>*edebug-trace*</samp>.  This is a log of function calls and returns,
-showing the function names and their arguments and values.  To enable
-trace recording, set <code>edebug-trace</code> to a non-<code>nil</code> value.
-</p>
-<p>Making a trace buffer is not the same thing as using trace execution
-mode (see <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug Execution Modes</a>).
-</p>
-<p>When trace recording is enabled, each function entry and exit adds
-lines to the trace buffer.  A function entry record consists of
-&lsquo;<samp>::::{</samp>&rsquo;, followed by the function name and argument values.  A
-function exit record consists of &lsquo;<samp>::::}</samp>&rsquo;, followed by the function
-name and result of the function.
-</p>
-<p>The number of &lsquo;<samp>:</samp>&rsquo;s in an entry shows its recursion depth.  You
-can use the braces in the trace buffer to find the matching beginning or
-end of function calls.
-</p>
-<a name="index-edebug_002dprint_002dtrace_002dbefore"></a>
-<a name="index-edebug_002dprint_002dtrace_002dafter"></a>
-<p>You can customize trace recording for function entry and exit by
-redefining the functions <code>edebug-print-trace-before</code> and
-<code>edebug-print-trace-after</code>.
-</p>
-<dl>
-<dt><a name="index-edebug_002dtracing"></a>Macro: <strong>edebug-tracing</strong> <em>string body&hellip;</em></dt>
-<dd><p>This macro requests additional trace information around the execution
-of the <var>body</var> forms.  The argument <var>string</var> specifies text
-to put in the trace buffer, after the &lsquo;<samp>{</samp>&rsquo; or &lsquo;<samp>}</samp>&rsquo;.  All
-the arguments are evaluated, and <code>edebug-tracing</code> returns the
-value of the last form in <var>body</var>.
-</p></dd></dl>
+  <p>Edebug can record an execution trace, storing it in a buffer
+  named <samp>*edebug-trace*</samp>. This is a log of function
+  calls and returns, showing the function names and their arguments
+  and values. To enable trace recording, set
+  <code>edebug-trace</code> to a non-<code>nil</code> value.</p>
 
-<dl>
-<dt><a name="index-edebug_002dtrace"></a>Function: <strong>edebug-trace</strong> <em>format-string &amp;rest format-args</em></dt>
-<dd><p>This function inserts text in the trace buffer.  It computes the text
-with <code>(apply 'format <var>format-string</var> <var>format-args</var>)</code>.
-It also appends a newline to separate entries.
-</p></dd></dl>
+  <p>Making a trace buffer is not the same thing as using trace
+  execution mode (see <a href=
+  "Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug
+  Execution Modes</a>).</p>
 
-<p><code>edebug-tracing</code> and <code>edebug-trace</code> insert lines in the
-trace buffer whenever they are called, even if Edebug is not active.
-Adding text to the trace buffer also scrolls its window to show the last
-lines inserted.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Coverage-Testing.html#Coverage-Testing" accesskey="n" rel="next">Coverage Testing</a>, Previous: <a href="Printing-in-Edebug.html#Printing-in-Edebug" accesskey="p" rel="prev">Printing in Edebug</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When trace recording is enabled, each function entry and exit
+  adds lines to the trace buffer. A function entry record consists
+  of &lsquo;<samp>::::{</samp>&rsquo;, followed by the function
+  name and argument values. A function exit record consists of
+  &lsquo;<samp>::::}</samp>&rsquo;, followed by the function name
+  and result of the function.</p>
 
+  <p>The number of &lsquo;<samp>:</samp>&rsquo;s in an entry shows
+  its recursion depth. You can use the braces in the trace buffer
+  to find the matching beginning or end of function
+  calls.</p><a name="index-edebug_002dprint_002dtrace_002dbefore"
+  id="index-edebug_002dprint_002dtrace_002dbefore"></a> <a name=
+  "index-edebug_002dprint_002dtrace_002dafter" id=
+  "index-edebug_002dprint_002dtrace_002dafter"></a>
 
+  <p>You can customize trace recording for function entry and exit
+  by redefining the functions
+  <code>edebug-print-trace-before</code> and
+  <code>edebug-print-trace-after</code>.</p>
 
+  <dl>
+    <dt><a name="index-edebug_002dtracing" id=
+    "index-edebug_002dtracing"></a>Macro:
+    <strong>edebug-tracing</strong> <em>string
+    body&hellip;</em></dt>
+
+    <dd>
+      <p>This macro requests additional trace information around
+      the execution of the <var>body</var> forms. The argument
+      <var>string</var> specifies text to put in the trace buffer,
+      after the &lsquo;<samp>{</samp>&rsquo; or
+      &lsquo;<samp>}</samp>&rsquo;. All the arguments are
+      evaluated, and <code>edebug-tracing</code> returns the value
+      of the last form in <var>body</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-edebug_002dtrace" id=
+    "index-edebug_002dtrace"></a>Function:
+    <strong>edebug-trace</strong> <em>format-string &amp;rest
+    format-args</em></dt>
+
+    <dd>
+      <p>This function inserts text in the trace buffer. It
+      computes the text with <code>(apply 'format
+      <var>format-string</var> <var>format-args</var>)</code>. It
+      also appends a newline to separate entries.</p>
+    </dd>
+  </dl>
+
+  <p><code>edebug-tracing</code> and <code>edebug-trace</code>
+  insert lines in the trace buffer whenever they are called, even
+  if Edebug is not active. Adding text to the trace buffer also
+  scrolls its window to show the last lines inserted.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Coverage-Testing.html#Coverage-Testing"
+    accesskey="n" rel="next">Coverage Testing</a>, Previous:
+    <a href="Printing-in-Edebug.html#Printing-in-Edebug" accesskey=
+    "p" rel="prev">Printing in Edebug</a>, Up: <a href=
+    "Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

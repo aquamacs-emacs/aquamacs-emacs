@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,137 +20,184 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Recursive Edit</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Recursive Edit">
-<meta name="keywords" content="GNU Emacs Manual: Recursive Edit">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Hyperlinking.html#Hyperlinking" rel="next" title="Hyperlinking">
-<link href="Saving-Emacs-Sessions.html#Saving-Emacs-Sessions" rel="prev" title="Saving Emacs Sessions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Recursive Edit</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Recursive Edit" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Recursive Edit" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Hyperlinking.html#Hyperlinking" rel="next" title=
+  "Hyperlinking" />
+  <link href="Saving-Emacs-Sessions.html#Saving-Emacs-Sessions"
+  rel="prev" title="Saving Emacs Sessions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Recursive-Edit" id="Recursive-Edit"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Hyperlinking.html#Hyperlinking" accesskey="n"
+    rel="next">Hyperlinking</a>, Previous: <a href=
+    "Saving-Emacs-Sessions.html#Saving-Emacs-Sessions" accesskey=
+    "p" rel="prev">Saving Emacs Sessions</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Recursive-Editing-Levels" id=
+  "Recursive-Editing-Levels"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Recursive-Edit"></a>
-<div class="header">
-<p>
-Next: <a href="Hyperlinking.html#Hyperlinking" accesskey="n" rel="next">Hyperlinking</a>, Previous: <a href="Saving-Emacs-Sessions.html#Saving-Emacs-Sessions" accesskey="p" rel="prev">Saving Emacs Sessions</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Recursive-Editing-Levels"></a>
-<h2 class="chapter">47 Recursive Editing Levels</h2>
-<a name="index-recursive-editing-level"></a>
-<a name="index-editing-level_002c-recursive"></a>
+  <h2 class="chapter">47 Recursive Editing Levels</h2><a name=
+  "index-recursive-editing-level" id=
+  "index-recursive-editing-level"></a> <a name=
+  "index-editing-level_002c-recursive" id=
+  "index-editing-level_002c-recursive"></a>
 
-<p>A <em>recursive edit</em> is a situation in which you are using Emacs
-commands to perform arbitrary editing while in the middle of another
-Emacs command.  For example, when you type <kbd>C-r</kbd> inside of a
-<code>query-replace</code>, you enter a recursive edit in which you can change
-the current buffer.  On exiting from the recursive edit, you go back to
-the <code>query-replace</code>.  See <a href="Query-Replace.html#Query-Replace">Query Replace</a>.
-</p>
-<a name="index-C_002dM_002dc"></a>
-<a name="index-exit_002drecursive_002dedit"></a>
-<a name="index-exiting-recursive-edit"></a>
-<p><em>Exiting</em> the recursive edit means returning to the unfinished
-command, which continues execution.  The command to exit is <kbd>C-M-c</kbd>
-(<code>exit-recursive-edit</code>).
-</p>
-<p>You can also <em>abort</em> the recursive edit.  This is like exiting,
-but also quits the unfinished command immediately.  Use the command
-<kbd>C-]</kbd> (<code>abort-recursive-edit</code>) to do this.  See <a href="Quitting.html#Quitting">Quitting</a>.
-</p>
-<p>The mode line shows you when you are in a recursive edit by displaying
-square brackets around the parentheses that always surround the major and
-minor mode names.  Every window&rsquo;s mode line shows this in the same way,
-since being in a recursive edit is true of Emacs as a whole rather than
-any particular window or buffer.
-</p>
-<p>It is possible to be in recursive edits within recursive edits.  For
-example, after typing <kbd>C-r</kbd> in a <code>query-replace</code>, you may type a
-command that enters the debugger.  This begins a recursive editing level
-for the debugger, within the recursive editing level for <kbd>C-r</kbd>.
-Mode lines display a pair of square brackets for each recursive editing
-level currently in progress.
-</p>
-<p>Exiting the inner recursive edit (such as with the debugger <kbd>c</kbd>
-command) resumes the command running in the next level up.  When that
-command finishes, you can then use <kbd>C-M-c</kbd> to exit another recursive
-editing level, and so on.  Exiting applies to the innermost level only.
-Aborting also gets out of only one level of recursive edit; it returns
-immediately to the command level of the previous recursive edit.  If you
-wish, you can then abort the next recursive editing level.
-</p>
-<p>Alternatively, the command <kbd>M-x top-level</kbd> aborts all levels of
-recursive edits, returning immediately to the top-level command
-reader.  It also exits the minibuffer, if it is active.
-</p>
-<p>The text being edited inside the recursive edit need not be the same text
-that you were editing at top level.  It depends on what the recursive edit
-is for.  If the command that invokes the recursive edit selects a different
-buffer first, that is the buffer you will edit recursively.  In any case,
-you can switch buffers within the recursive edit in the normal manner (as
-long as the buffer-switching keys have not been rebound).  You could
-probably do all the rest of your editing inside the recursive edit,
-visiting files and all.  But this could have surprising effects (such as
-stack overflow) from time to time.  So remember to exit or abort the
-recursive edit when you no longer need it.
-</p>
-<p>In general, we try to minimize the use of recursive editing levels in
-GNU Emacs.  This is because they constrain you to go back in a
-particular order&mdash;from the innermost level toward the top level.  When
-possible, we present different activities in separate buffers so that
-you can switch between them as you please.  Some commands switch to a
-new major mode which provides a command to switch back.  These
-approaches give you more flexibility to go back to unfinished tasks in
-the order you choose.
-</p>
+  <p>A <em>recursive edit</em> is a situation in which you are
+  using Emacs commands to perform arbitrary editing while in the
+  middle of another Emacs command. For example, when you type
+  <kbd>C-r</kbd> inside of a <code>query-replace</code>, you enter
+  a recursive edit in which you can change the current buffer. On
+  exiting from the recursive edit, you go back to the
+  <code>query-replace</code>. See <a href=
+  "Query-Replace.html#Query-Replace">Query Replace</a>.</p><a name=
+  "index-C_002dM_002dc" id="index-C_002dM_002dc"></a> <a name=
+  "index-exit_002drecursive_002dedit" id=
+  "index-exit_002drecursive_002dedit"></a> <a name=
+  "index-exiting-recursive-edit" id=
+  "index-exiting-recursive-edit"></a>
 
+  <p><em>Exiting</em> the recursive edit means returning to the
+  unfinished command, which continues execution. The command to
+  exit is <kbd>C-M-c</kbd> (<code>exit-recursive-edit</code>).</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Hyperlinking.html#Hyperlinking" accesskey="n" rel="next">Hyperlinking</a>, Previous: <a href="Saving-Emacs-Sessions.html#Saving-Emacs-Sessions" accesskey="p" rel="prev">Saving Emacs Sessions</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>You can also <em>abort</em> the recursive edit. This is like
+  exiting, but also quits the unfinished command immediately. Use
+  the command <kbd>C-]</kbd> (<code>abort-recursive-edit</code>) to
+  do this. See <a href="Quitting.html#Quitting">Quitting</a>.</p>
 
+  <p>The mode line shows you when you are in a recursive edit by
+  displaying square brackets around the parentheses that always
+  surround the major and minor mode names. Every window&rsquo;s
+  mode line shows this in the same way, since being in a recursive
+  edit is true of Emacs as a whole rather than any particular
+  window or buffer.</p>
 
+  <p>It is possible to be in recursive edits within recursive
+  edits. For example, after typing <kbd>C-r</kbd> in a
+  <code>query-replace</code>, you may type a command that enters
+  the debugger. This begins a recursive editing level for the
+  debugger, within the recursive editing level for <kbd>C-r</kbd>.
+  Mode lines display a pair of square brackets for each recursive
+  editing level currently in progress.</p>
 
+  <p>Exiting the inner recursive edit (such as with the debugger
+  <kbd>c</kbd> command) resumes the command running in the next
+  level up. When that command finishes, you can then use
+  <kbd>C-M-c</kbd> to exit another recursive editing level, and so
+  on. Exiting applies to the innermost level only. Aborting also
+  gets out of only one level of recursive edit; it returns
+  immediately to the command level of the previous recursive edit.
+  If you wish, you can then abort the next recursive editing
+  level.</p>
+
+  <p>Alternatively, the command <kbd>M-x top-level</kbd> aborts all
+  levels of recursive edits, returning immediately to the top-level
+  command reader. It also exits the minibuffer, if it is
+  active.</p>
+
+  <p>The text being edited inside the recursive edit need not be
+  the same text that you were editing at top level. It depends on
+  what the recursive edit is for. If the command that invokes the
+  recursive edit selects a different buffer first, that is the
+  buffer you will edit recursively. In any case, you can switch
+  buffers within the recursive edit in the normal manner (as long
+  as the buffer-switching keys have not been rebound). You could
+  probably do all the rest of your editing inside the recursive
+  edit, visiting files and all. But this could have surprising
+  effects (such as stack overflow) from time to time. So remember
+  to exit or abort the recursive edit when you no longer need
+  it.</p>
+
+  <p>In general, we try to minimize the use of recursive editing
+  levels in GNU Emacs. This is because they constrain you to go
+  back in a particular order&mdash;from the innermost level toward
+  the top level. When possible, we present different activities in
+  separate buffers so that you can switch between them as you
+  please. Some commands switch to a new major mode which provides a
+  command to switch back. These approaches give you more
+  flexibility to go back to unfinished tasks in the order you
+  choose.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Hyperlinking.html#Hyperlinking" accesskey="n"
+    rel="next">Hyperlinking</a>, Previous: <a href=
+    "Saving-Emacs-Sessions.html#Saving-Emacs-Sessions" accesskey=
+    "p" rel="prev">Saving Emacs Sessions</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

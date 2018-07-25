@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,166 +16,237 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Resolving idle time</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Resolving idle time">
-<meta name="keywords" content="The Org Manual: Resolving idle time">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Clocking-work-time.html#Clocking-work-time" rel="up" title="Clocking work time">
-<link href="Effort-estimates.html#Effort-estimates" rel="next" title="Effort estimates">
-<link href="The-clock-table.html#The-clock-table" rel="prev" title="The clock table">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Resolving idle time</title>
+  <meta name="description" content=
+  "The Org Manual: Resolving idle time" />
+  <meta name="keywords" content=
+  "The Org Manual: Resolving idle time" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Clocking-work-time.html#Clocking-work-time" rel="up"
+  title="Clocking work time" />
+  <link href="Effort-estimates.html#Effort-estimates" rel="next"
+  title="Effort estimates" />
+  <link href="The-clock-table.html#The-clock-table" rel="prev"
+  title="The clock table" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Resolving-idle-time"></a>
-<div class="header">
-<p>
-Previous: <a href="The-clock-table.html#The-clock-table" accesskey="p" rel="prev">The clock table</a>, Up: <a href="Clocking-work-time.html#Clocking-work-time" accesskey="u" rel="up">Clocking work time</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Resolving-idle-time-and-continuous-clocking"></a>
-<h4 class="subsection">8.4.3 Resolving idle time and continuous clocking</h4>
+<body lang="en" xml:lang="en">
+  <a name="Resolving-idle-time" id="Resolving-idle-time"></a>
 
-<a name="Resolving-idle-time-1"></a>
-<h4 class="subsubheading">Resolving idle time</h4>
-<a name="index-resolve-idle-time"></a>
-<a name="index-org_002dclock_002dx11idle_002dprogram_002dname"></a>
+  <div class="header">
+    <p>Previous: <a href="The-clock-table.html#The-clock-table"
+    accesskey="p" rel="prev">The clock table</a>, Up: <a href=
+    "Clocking-work-time.html#Clocking-work-time" accesskey="u" rel=
+    "up">Clocking work time</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Resolving-idle-time-and-continuous-clocking" id=
+  "Resolving-idle-time-and-continuous-clocking"></a>
 
-<a name="index-idle_002c-resolve_002c-dangling"></a>
-<p>If you clock in on a work item, and then walk away from your
-computer&mdash;perhaps to take a phone call&mdash;you often need to &ldquo;resolve&rdquo; the
-time you were away by either subtracting it from the current clock, or
-applying it to another one.
-</p>
-<a name="index-org_002dclock_002didle_002dtime"></a>
-<p>By customizing the variable <code>org-clock-idle-time</code> to some integer, such
-as 10 or 15, Emacs can alert you when you get back to your computer after
-being idle for that many minutes<a name="DOCF87" href="#FOOT87"><sup>87</sup></a>, and ask what you want to do with the idle time.
-There will be a question waiting for you when you get back, indicating how
-much idle time has passed (constantly updated with the current amount), as
-well as a set of choices to correct the discrepancy:
-</p>
-<dl compact="compact">
-<dt><kbd>k</kbd></dt>
-<dd><p>To keep some or all of the minutes and stay clocked in, press <kbd>k</kbd>.  Org
-will ask how many of the minutes to keep.  Press <tt class="key">RET</tt> to keep them all,
-effectively changing nothing, or enter a number to keep that many minutes.
-</p></dd>
-<dt><kbd>K</kbd></dt>
-<dd><p>If you use the shift key and press <kbd>K</kbd>, it will keep however many minutes
-you request and then immediately clock out of that task.  If you keep all of
-the minutes, this is the same as just clocking out of the current task.
-</p></dd>
-<dt><kbd>s</kbd></dt>
-<dd><p>To keep none of the minutes, use <kbd>s</kbd> to subtract all the away time from
-the clock, and then check back in from the moment you returned.
-</p></dd>
-<dt><kbd>S</kbd></dt>
-<dd><p>To keep none of the minutes and just clock out at the start of the away time,
-use the shift key and press <kbd>S</kbd>.  Remember that using shift will always
-leave you clocked out, no matter which option you choose.
-</p></dd>
-<dt><kbd>C</kbd></dt>
-<dd><p>To cancel the clock altogether, use <kbd>C</kbd>.  Note that if instead of
-canceling you subtract the away time, and the resulting clock amount is less
-than a minute, the clock will still be canceled rather than clutter up the
-log with an empty entry.
-</p></dd>
-</dl>
+  <h4 class="subsection">8.4.3 Resolving idle time and continuous
+  clocking</h4><a name="Resolving-idle-time-1" id=
+  "Resolving-idle-time-1"></a>
 
-<p>What if you subtracted those away minutes from the current clock, and now
-want to apply them to a new clock?  Simply clock in to any task immediately
-after the subtraction.  Org will notice that you have subtracted time &ldquo;on
-the books&rdquo;, so to speak, and will ask if you want to apply those minutes to
-the next task you clock in on.
-</p>
-<p>There is one other instance when this clock resolution magic occurs.  Say you
-were clocked in and hacking away, and suddenly your cat chased a mouse who
-scared a hamster that crashed into your UPS&rsquo;s power button!  You suddenly
-lose all your buffers, but thanks to auto-save you still have your recent Org
-mode changes, including your last clock in.
-</p>
-<p>If you restart Emacs and clock into any task, Org will notice that you have a
-dangling clock which was never clocked out from your last session.  Using
-that clock&rsquo;s starting time as the beginning of the unaccounted-for period,
-Org will ask how you want to resolve that time.  The logic and behavior is
-identical to dealing with away time due to idleness; it is just happening due
-to a recovery event rather than a set amount of idle time.
-</p>
-<p>You can also check all the files visited by your Org agenda for dangling
-clocks at any time using <kbd>M-x org-resolve-clocks RET</kbd> (or <kbd>C-c C-x C-z</kbd>).
-</p>
-<a name="Continuous-clocking"></a>
-<h4 class="subsubheading">Continuous clocking</h4>
-<a name="index-continuous-clocking"></a>
-<a name="index-org_002dclock_002dcontinuously-2"></a>
+  <h4 class="subsubheading">Resolving idle time</h4><a name=
+  "index-resolve-idle-time" id="index-resolve-idle-time"></a>
+  <a name="index-org_002dclock_002dx11idle_002dprogram_002dname"
+  id="index-org_002dclock_002dx11idle_002dprogram_002dname"></a>
+  <a name="index-idle_002c-resolve_002c-dangling" id=
+  "index-idle_002c-resolve_002c-dangling"></a>
 
-<p>You may want to start clocking from the time when you clocked out the
-previous task.  To enable this systematically, set <code>org-clock-continuously</code>
-to <code>t</code>.  Each time you clock in, Org retrieves the clock-out time of the
-last clocked entry for this session, and start the new clock from there.
-</p>
-<p>If you only want this from time to time, use three universal prefix arguments
-with <code>org-clock-in</code> and two <kbd>C-u C-u</kbd> with <code>org-clock-in-last</code>.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>If you clock in on a work item, and then walk away from your
+  computer&mdash;perhaps to take a phone call&mdash;you often need
+  to &ldquo;resolve&rdquo; the time you were away by either
+  subtracting it from the current clock, or applying it to another
+  one.</p><a name="index-org_002dclock_002didle_002dtime" id=
+  "index-org_002dclock_002didle_002dtime"></a>
 
-<h3><a name="FOOT87" href="#DOCF87">(87)</a></h3>
-<p>On computers using Mac OS X,
-idleness is based on actual user idleness, not just Emacs&rsquo; idle time.  For
-X11, you can install a utility program <samp>x11idle.c</samp>, available in the
-<code>contrib/scripts</code> directory of the Org git distribution, or install the
-<samp>xprintidle</samp> package and set it to the variable
-<code>org-clock-x11idle-program-name</code> if you are running Debian, to get the
-same general treatment of idleness.  On other systems, idle time refers to
-Emacs idle time only.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="The-clock-table.html#The-clock-table" accesskey="p" rel="prev">The clock table</a>, Up: <a href="Clocking-work-time.html#Clocking-work-time" accesskey="u" rel="up">Clocking work time</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>By customizing the variable <code>org-clock-idle-time</code>
+  to some integer, such as 10 or 15, Emacs can alert you when you
+  get back to your computer after being idle for that many
+  minutes<a name="DOCF87" href="#FOOT87" id=
+  "DOCF87"><sup>87</sup></a>, and ask what you want to do with the
+  idle time. There will be a question waiting for you when you get
+  back, indicating how much idle time has passed (constantly
+  updated with the current amount), as well as a set of choices to
+  correct the discrepancy:</p>
 
+  <dl compact="compact">
+    <dt><kbd>k</kbd></dt>
 
+    <dd>
+      <p>To keep some or all of the minutes and stay clocked in,
+      press <kbd>k</kbd>. Org will ask how many of the minutes to
+      keep. Press <tt class="key">RET</tt> to keep them all,
+      effectively changing nothing, or enter a number to keep that
+      many minutes.</p>
+    </dd>
 
+    <dt><kbd>K</kbd></dt>
+
+    <dd>
+      <p>If you use the shift key and press <kbd>K</kbd>, it will
+      keep however many minutes you request and then immediately
+      clock out of that task. If you keep all of the minutes, this
+      is the same as just clocking out of the current task.</p>
+    </dd>
+
+    <dt><kbd>s</kbd></dt>
+
+    <dd>
+      <p>To keep none of the minutes, use <kbd>s</kbd> to subtract
+      all the away time from the clock, and then check back in from
+      the moment you returned.</p>
+    </dd>
+
+    <dt><kbd>S</kbd></dt>
+
+    <dd>
+      <p>To keep none of the minutes and just clock out at the
+      start of the away time, use the shift key and press
+      <kbd>S</kbd>. Remember that using shift will always leave you
+      clocked out, no matter which option you choose.</p>
+    </dd>
+
+    <dt><kbd>C</kbd></dt>
+
+    <dd>
+      <p>To cancel the clock altogether, use <kbd>C</kbd>. Note
+      that if instead of canceling you subtract the away time, and
+      the resulting clock amount is less than a minute, the clock
+      will still be canceled rather than clutter up the log with an
+      empty entry.</p>
+    </dd>
+  </dl>
+
+  <p>What if you subtracted those away minutes from the current
+  clock, and now want to apply them to a new clock? Simply clock in
+  to any task immediately after the subtraction. Org will notice
+  that you have subtracted time &ldquo;on the books&rdquo;, so to
+  speak, and will ask if you want to apply those minutes to the
+  next task you clock in on.</p>
+
+  <p>There is one other instance when this clock resolution magic
+  occurs. Say you were clocked in and hacking away, and suddenly
+  your cat chased a mouse who scared a hamster that crashed into
+  your UPS&rsquo;s power button! You suddenly lose all your
+  buffers, but thanks to auto-save you still have your recent Org
+  mode changes, including your last clock in.</p>
+
+  <p>If you restart Emacs and clock into any task, Org will notice
+  that you have a dangling clock which was never clocked out from
+  your last session. Using that clock&rsquo;s starting time as the
+  beginning of the unaccounted-for period, Org will ask how you
+  want to resolve that time. The logic and behavior is identical to
+  dealing with away time due to idleness; it is just happening due
+  to a recovery event rather than a set amount of idle time.</p>
+
+  <p>You can also check all the files visited by your Org agenda
+  for dangling clocks at any time using <kbd>M-x org-resolve-clocks
+  RET</kbd> (or <kbd>C-c C-x C-z</kbd>).</p><a name=
+  "Continuous-clocking" id="Continuous-clocking"></a>
+
+  <h4 class="subsubheading">Continuous clocking</h4><a name=
+  "index-continuous-clocking" id="index-continuous-clocking"></a>
+  <a name="index-org_002dclock_002dcontinuously-2" id=
+  "index-org_002dclock_002dcontinuously-2"></a>
+
+  <p>You may want to start clocking from the time when you clocked
+  out the previous task. To enable this systematically, set
+  <code>org-clock-continuously</code> to <code>t</code>. Each time
+  you clock in, Org retrieves the clock-out time of the last
+  clocked entry for this session, and start the new clock from
+  there.</p>
+
+  <p>If you only want this from time to time, use three universal
+  prefix arguments with <code>org-clock-in</code> and two <kbd>C-u
+  C-u</kbd> with <code>org-clock-in-last</code>.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT87" href="#DOCF87" id="FOOT87">(87)</a></h3>
+
+    <p>On computers using Mac OS X, idleness is based on actual
+    user idleness, not just Emacs&rsquo; idle time. For X11, you
+    can install a utility program <samp>x11idle.c</samp>, available
+    in the <code>contrib/scripts</code> directory of the Org git
+    distribution, or install the <samp>xprintidle</samp> package
+    and set it to the variable
+    <code>org-clock-x11idle-program-name</code> if you are running
+    Debian, to get the same general treatment of idleness. On other
+    systems, idle time refers to Emacs idle time only.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="The-clock-table.html#The-clock-table"
+    accesskey="p" rel="prev">The clock table</a>, Up: <a href=
+    "Clocking-work-time.html#Clocking-work-time" accesskey="u" rel=
+    "up">Clocking work time</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

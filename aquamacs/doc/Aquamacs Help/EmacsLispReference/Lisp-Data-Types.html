@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,130 +19,228 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Lisp Data Types</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Lisp Data Types">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Lisp Data Types">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Printed-Representation.html#Printed-Representation" rel="next" title="Printed Representation">
-<link href="Acknowledgments.html#Acknowledgments" rel="prev" title="Acknowledgments">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Lisp Data Types</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Lisp Data Types" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Lisp Data Types" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Printed-Representation.html#Printed-Representation"
+  rel="next" title="Printed Representation" />
+  <link href="Acknowledgments.html#Acknowledgments" rel="prev"
+  title="Acknowledgments" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Lisp-Data-Types" id="Lisp-Data-Types"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Numbers.html#Numbers" accesskey="n" rel=
+    "next">Numbers</a>, Previous: <a href=
+    "Introduction.html#Introduction" accesskey="p" rel=
+    "prev">Introduction</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Lisp-Data-Types-1" id="Lisp-Data-Types-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Lisp-Data-Types"></a>
-<div class="header">
-<p>
-Next: <a href="Numbers.html#Numbers" accesskey="n" rel="next">Numbers</a>, Previous: <a href="Introduction.html#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Lisp-Data-Types-1"></a>
-<h2 class="chapter">2 Lisp Data Types</h2>
-<a name="index-object"></a>
-<a name="index-Lisp-object"></a>
-<a name="index-type"></a>
-<a name="index-data-type"></a>
+  <h2 class="chapter">2 Lisp Data Types</h2><a name="index-object"
+  id="index-object"></a> <a name="index-Lisp-object" id=
+  "index-Lisp-object"></a> <a name="index-type" id=
+  "index-type"></a> <a name="index-data-type" id=
+  "index-data-type"></a>
 
-<p>A Lisp <em>object</em> is a piece of data used and manipulated by Lisp
-programs.  For our purposes, a <em>type</em> or <em>data type</em> is a set of
-possible objects.
-</p>
-<p>Every object belongs to at least one type.  Objects of the same type
-have similar structures and may usually be used in the same contexts.
-Types can overlap, and objects can belong to two or more types.
-Consequently, we can ask whether an object belongs to a particular type,
-but not for <em>the</em> type of an object.
-</p>
-<a name="index-primitive-type"></a>
-<p>A few fundamental object types are built into Emacs.  These, from
-which all other types are constructed, are called <em>primitive types</em>.
-Each object belongs to one and only one primitive type.  These types
-include <em>integer</em>, <em>float</em>, <em>cons</em>, <em>symbol</em>,
-<em>string</em>, <em>vector</em>, <em>hash-table</em>, <em>subr</em>, and
-<em>byte-code function</em>, plus several special types, such as
-<em>buffer</em>, that are related to editing.  (See <a href="Editing-Types.html#Editing-Types">Editing Types</a>.)
-</p>
-<p>Each primitive type has a corresponding Lisp function that checks
-whether an object is a member of that type.
-</p>
-<p>Lisp is unlike many other languages in that its objects are
-<em>self-typing</em>: the primitive type of each object is implicit in
-the object itself.  For example, if an object is a vector, nothing can
-treat it as a number; Lisp knows it is a vector, not a number.
-</p>
-<p>In most languages, the programmer must declare the data type of each
-variable, and the type is known by the compiler but not represented in
-the data.  Such type declarations do not exist in Emacs Lisp.  A Lisp
-variable can have any type of value, and it remembers whatever value
-you store in it, type and all.  (Actually, a small number of Emacs
-Lisp variables can only take on values of a certain type.
-See <a href="Variables-with-Restricted-Values.html#Variables-with-Restricted-Values">Variables with Restricted Values</a>.)
-</p>
-<p>This chapter describes the purpose, printed representation, and read
-syntax of each of the standard types in GNU Emacs Lisp.  Details on how
-to use these types can be found in later chapters.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Printed-Representation.html#Printed-Representation" accesskey="1">Printed Representation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Lisp objects are represented as text.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Comments.html#Comments" accesskey="2">Comments</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Comments and their formatting conventions.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Programming-Types.html#Programming-Types" accesskey="3">Programming Types</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Types found in all Lisp systems.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Editing-Types.html#Editing-Types" accesskey="4">Editing Types</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Types specific to Emacs.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Circular-Objects.html#Circular-Objects" accesskey="5">Circular Objects</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Read syntax for circular structure.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Type-Predicates.html#Type-Predicates" accesskey="6">Type Predicates</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Tests related to types.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Equality-Predicates.html#Equality-Predicates" accesskey="7">Equality Predicates</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Tests of equality between any two objects.
-</td></tr>
-</table>
+  <p>A Lisp <em>object</em> is a piece of data used and manipulated
+  by Lisp programs. For our purposes, a <em>type</em> or <em>data
+  type</em> is a set of possible objects.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Numbers.html#Numbers" accesskey="n" rel="next">Numbers</a>, Previous: <a href="Introduction.html#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Every object belongs to at least one type. Objects of the same
+  type have similar structures and may usually be used in the same
+  contexts. Types can overlap, and objects can belong to two or
+  more types. Consequently, we can ask whether an object belongs to
+  a particular type, but not for <em>the</em> type of an
+  object.</p><a name="index-primitive-type" id=
+  "index-primitive-type"></a>
 
+  <p>A few fundamental object types are built into Emacs. These,
+  from which all other types are constructed, are called
+  <em>primitive types</em>. Each object belongs to one and only one
+  primitive type. These types include <em>integer</em>,
+  <em>float</em>, <em>cons</em>, <em>symbol</em>, <em>string</em>,
+  <em>vector</em>, <em>hash-table</em>, <em>subr</em>, and
+  <em>byte-code function</em>, plus several special types, such as
+  <em>buffer</em>, that are related to editing. (See <a href=
+  "Editing-Types.html#Editing-Types">Editing Types</a>.)</p>
 
+  <p>Each primitive type has a corresponding Lisp function that
+  checks whether an object is a member of that type.</p>
 
+  <p>Lisp is unlike many other languages in that its objects are
+  <em>self-typing</em>: the primitive type of each object is
+  implicit in the object itself. For example, if an object is a
+  vector, nothing can treat it as a number; Lisp knows it is a
+  vector, not a number.</p>
+
+  <p>In most languages, the programmer must declare the data type
+  of each variable, and the type is known by the compiler but not
+  represented in the data. Such type declarations do not exist in
+  Emacs Lisp. A Lisp variable can have any type of value, and it
+  remembers whatever value you store in it, type and all.
+  (Actually, a small number of Emacs Lisp variables can only take
+  on values of a certain type. See <a href=
+  "Variables-with-Restricted-Values.html#Variables-with-Restricted-Values">
+  Variables with Restricted Values</a>.)</p>
+
+  <p>This chapter describes the purpose, printed representation,
+  and read syntax of each of the standard types in GNU Emacs Lisp.
+  Details on how to use these types can be found in later
+  chapters.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Printed-Representation.html#Printed-Representation"
+      accesskey="1">Printed Representation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How Lisp objects are
+      represented as text.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Comments.html#Comments" accesskey="2">Comments</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Comments and their formatting
+      conventions.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Programming-Types.html#Programming-Types" accesskey=
+      "3">Programming Types</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Types found in all Lisp
+      systems.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Editing-Types.html#Editing-Types" accesskey="4">Editing
+      Types</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Types specific to Emacs.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Circular-Objects.html#Circular-Objects" accesskey=
+      "5">Circular Objects</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Read syntax for circular
+      structure.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Type-Predicates.html#Type-Predicates" accesskey="6">Type
+      Predicates</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Tests related to types.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Equality-Predicates.html#Equality-Predicates" accesskey=
+      "7">Equality Predicates</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Tests of equality between any
+      two objects.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Numbers.html#Numbers" accesskey="n" rel=
+    "next">Numbers</a>, Previous: <a href=
+    "Introduction.html#Introduction" accesskey="p" rel=
+    "prev">Introduction</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

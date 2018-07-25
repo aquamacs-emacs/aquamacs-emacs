@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,144 +14,216 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Splitting mail using spam-stat</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Splitting mail using spam-stat">
-<meta name="keywords" content="Gnus Manual: Splitting mail using spam-stat">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Statistics-Package.html#Spam-Statistics-Package" rel="up" title="Spam Statistics Package">
-<link href="Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary" rel="next" title="Low-level interface to the spam-stat dictionary">
-<link href="Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary" rel="prev" title="Creating a spam-stat dictionary">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Splitting mail using spam-stat</title>
+  <meta name="description" content=
+  "Gnus Manual: Splitting mail using spam-stat" />
+  <meta name="keywords" content=
+  "Gnus Manual: Splitting mail using spam-stat" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Statistics-Package.html#Spam-Statistics-Package"
+  rel="up" title="Spam Statistics Package" />
+  <link href=
+  "Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary"
+  rel="next" title=
+  "Low-level interface to the spam-stat dictionary" />
+  <link href=
+  "Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary"
+  rel="prev" title="Creating a spam-stat dictionary" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Splitting-mail-using-spam_002dstat"></a>
-<div class="header">
-<p>
-Next: <a href="Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary" accesskey="n" rel="next">Low-level interface to the spam-stat dictionary</a>, Previous: <a href="Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary" accesskey="p" rel="prev">Creating a spam-stat dictionary</a>, Up: <a href="Spam-Statistics-Package.html#Spam-Statistics-Package" accesskey="u" rel="up">Spam Statistics Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Splitting-mail-using-spam_002dstat-1"></a>
-<h4 class="subsubsection">9.17.8.2 Splitting mail using spam-stat</h4>
+<body lang="en" xml:lang="en">
+  <a name="Splitting-mail-using-spam_002dstat" id=
+  "Splitting-mail-using-spam_002dstat"></a>
 
-<p>This section describes how to use the Spam statistics
-<em>independently</em> of the See <a href="Spam-Package.html#Spam-Package">Spam Package</a>.
-</p>
-<p>First, add the following to your <samp>~/.gnus.el</samp> file:
-</p>
-<div class="lisp">
-<pre class="lisp">(require 'spam-stat)
+  <div class="header">
+    <p>Next: <a href=
+    "Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary"
+    accesskey="n" rel="next">Low-level interface to the spam-stat
+    dictionary</a>, Previous: <a href=
+    "Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary"
+    accesskey="p" rel="prev">Creating a spam-stat dictionary</a>,
+    Up: <a href=
+    "Spam-Statistics-Package.html#Spam-Statistics-Package"
+    accesskey="u" rel="up">Spam Statistics Package</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Splitting-mail-using-spam_002dstat-1" id=
+  "Splitting-mail-using-spam_002dstat-1"></a>
+
+  <h4 class="subsubsection">9.17.8.2 Splitting mail using
+  spam-stat</h4>
+
+  <p>This section describes how to use the Spam statistics
+  <em>independently</em> of the See <a href=
+  "Spam-Package.html#Spam-Package">Spam Package</a>.</p>
+
+  <p>First, add the following to your <samp>~/.gnus.el</samp>
+  file:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(require 'spam-stat)
 (spam-stat-load)
-</pre></div>
+</pre>
+  </div>
 
-<p>This will load the necessary Gnus code, and the dictionary you
-created.
-</p>
-<p>Next, you need to adapt your fancy splitting rules:  You need to
-determine how to use <code>spam-stat</code>.  The following examples are for
-the nnml back end.  Using the nnimap back end works just as well.  Just
-use <code>nnimap-split-fancy</code> instead of <code>nnmail-split-fancy</code>.
-</p>
-<p>In the simplest case, you only have two groups, &lsquo;<samp>mail.misc</samp>&rsquo; and
-&lsquo;<samp>mail.spam</samp>&rsquo;.  The following expression says that mail is either
-spam or it should go into &lsquo;<samp>mail.misc</samp>&rsquo;.  If it is spam, then
-<code>spam-stat-split-fancy</code> will return &lsquo;<samp>mail.spam</samp>&rsquo;.
-</p>
-<div class="lisp">
-<pre class="lisp">(setq nnmail-split-fancy
+  <p>This will load the necessary Gnus code, and the dictionary you
+  created.</p>
+
+  <p>Next, you need to adapt your fancy splitting rules: You need
+  to determine how to use <code>spam-stat</code>. The following
+  examples are for the nnml back end. Using the nnimap back end
+  works just as well. Just use <code>nnimap-split-fancy</code>
+  instead of <code>nnmail-split-fancy</code>.</p>
+
+  <p>In the simplest case, you only have two groups,
+  &lsquo;<samp>mail.misc</samp>&rsquo; and
+  &lsquo;<samp>mail.spam</samp>&rsquo;. The following expression
+  says that mail is either spam or it should go into
+  &lsquo;<samp>mail.misc</samp>&rsquo;. If it is spam, then
+  <code>spam-stat-split-fancy</code> will return
+  &lsquo;<samp>mail.spam</samp>&rsquo;.</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq nnmail-split-fancy
       `(| (: spam-stat-split-fancy)
-          &quot;mail.misc&quot;))
-</pre></div>
+          "mail.misc"))
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dsplit_002dfancy_002dspam_002dgroup"></a>Variable: <strong>spam-stat-split-fancy-spam-group</strong></dt>
-<dd><p>The group to use for spam.  Default is &lsquo;<samp>mail.spam</samp>&rsquo;.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-spam_002dstat_002dsplit_002dfancy_002dspam_002dgroup"
+    id="index-spam_002dstat_002dsplit_002dfancy_002dspam_002dgroup">
+    </a>Variable:
+    <strong>spam-stat-split-fancy-spam-group</strong></dt>
 
-<p>If you also filter mail with specific subjects into other groups, use
-the following expression.  Only mails not matching the regular
-expression are considered potential spam.
-</p>
-<div class="lisp">
-<pre class="lisp">(setq nnmail-split-fancy
-      `(| (&quot;Subject&quot; &quot;\\bspam-stat\\b&quot; &quot;mail.emacs&quot;)
+    <dd>
+      <p>The group to use for spam. Default is
+      &lsquo;<samp>mail.spam</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <p>If you also filter mail with specific subjects into other
+  groups, use the following expression. Only mails not matching the
+  regular expression are considered potential spam.</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq nnmail-split-fancy
+      `(| ("Subject" "\\bspam-stat\\b" "mail.emacs")
           (: spam-stat-split-fancy)
-          &quot;mail.misc&quot;))
-</pre></div>
+          "mail.misc"))
+</pre>
+  </div>
 
-<p>If you want to filter for spam first, then you must be careful when
-creating the dictionary.  Note that <code>spam-stat-split-fancy</code> must
-consider both mails in &lsquo;<samp>mail.emacs</samp>&rsquo; and in &lsquo;<samp>mail.misc</samp>&rsquo; as
-non-spam, therefore both should be in your collection of non-spam
-mails, when creating the dictionary!
-</p>
-<div class="lisp">
-<pre class="lisp">(setq nnmail-split-fancy
+  <p>If you want to filter for spam first, then you must be careful
+  when creating the dictionary. Note that
+  <code>spam-stat-split-fancy</code> must consider both mails in
+  &lsquo;<samp>mail.emacs</samp>&rsquo; and in
+  &lsquo;<samp>mail.misc</samp>&rsquo; as non-spam, therefore both
+  should be in your collection of non-spam mails, when creating the
+  dictionary!</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq nnmail-split-fancy
       `(| (: spam-stat-split-fancy)
-          (&quot;Subject&quot; &quot;\\bspam-stat\\b&quot; &quot;mail.emacs&quot;)
-          &quot;mail.misc&quot;))
-</pre></div>
+          ("Subject" "\\bspam-stat\\b" "mail.emacs")
+          "mail.misc"))
+</pre>
+  </div>
 
-<p>You can combine this with traditional filtering.  Here, we move all
-HTML-only mails into the &lsquo;<samp>mail.spam.filtered</samp>&rsquo; group.  Note that since
-<code>spam-stat-split-fancy</code> will never see them, the mails in
-&lsquo;<samp>mail.spam.filtered</samp>&rsquo; should be neither in your collection of spam mails,
-nor in your collection of non-spam mails, when creating the
-dictionary!
-</p>
-<div class="lisp">
-<pre class="lisp">(setq nnmail-split-fancy
-      `(| (&quot;Content-Type&quot; &quot;text/html&quot; &quot;mail.spam.filtered&quot;)
+  <p>You can combine this with traditional filtering. Here, we move
+  all HTML-only mails into the
+  &lsquo;<samp>mail.spam.filtered</samp>&rsquo; group. Note that
+  since <code>spam-stat-split-fancy</code> will never see them, the
+  mails in &lsquo;<samp>mail.spam.filtered</samp>&rsquo; should be
+  neither in your collection of spam mails, nor in your collection
+  of non-spam mails, when creating the dictionary!</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq nnmail-split-fancy
+      `(| ("Content-Type" "text/html" "mail.spam.filtered")
           (: spam-stat-split-fancy)
-          (&quot;Subject&quot; &quot;\\bspam-stat\\b&quot; &quot;mail.emacs&quot;)
-          &quot;mail.misc&quot;))
-</pre></div>
+          ("Subject" "\\bspam-stat\\b" "mail.emacs")
+          "mail.misc"))
+</pre>
+  </div>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary" accesskey="n" rel="next">Low-level interface to the spam-stat dictionary</a>, Previous: <a href="Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary" accesskey="p" rel="prev">Creating a spam-stat dictionary</a>, Up: <a href="Spam-Statistics-Package.html#Spam-Statistics-Package" accesskey="u" rel="up">Spam Statistics Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary"
+    accesskey="n" rel="next">Low-level interface to the spam-stat
+    dictionary</a>, Previous: <a href=
+    "Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary"
+    accesskey="p" rel="prev">Creating a spam-stat dictionary</a>,
+    Up: <a href=
+    "Spam-Statistics-Package.html#Spam-Statistics-Package"
+    accesskey="u" rel="up">Spam Statistics Package</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

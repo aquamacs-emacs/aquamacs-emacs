@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,149 +19,223 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Operator Precedence Grammars</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Operator Precedence Grammars">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Operator Precedence Grammars">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="SMIE.html#SMIE" rel="up" title="SMIE">
-<link href="SMIE-Grammar.html#SMIE-Grammar" rel="next" title="SMIE Grammar">
-<link href="SMIE-setup.html#SMIE-setup" rel="prev" title="SMIE setup">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Operator Precedence
+  Grammars</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Operator Precedence Grammars" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Operator Precedence Grammars" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="SMIE.html#SMIE" rel="up" title="SMIE" />
+  <link href="SMIE-Grammar.html#SMIE-Grammar" rel="next" title=
+  "SMIE Grammar" />
+  <link href="SMIE-setup.html#SMIE-setup" rel="prev" title=
+  "SMIE setup" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Operator-Precedence-Grammars" id=
+  "Operator-Precedence-Grammars"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="SMIE-Grammar.html#SMIE-Grammar" accesskey="n"
+    rel="next">SMIE Grammar</a>, Previous: <a href=
+    "SMIE-setup.html#SMIE-setup" accesskey="p" rel="prev">SMIE
+    setup</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel=
+    "up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Operator-Precedence-Grammars-1" id=
+  "Operator-Precedence-Grammars-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Operator-Precedence-Grammars"></a>
-<div class="header">
-<p>
-Next: <a href="SMIE-Grammar.html#SMIE-Grammar" accesskey="n" rel="next">SMIE Grammar</a>, Previous: <a href="SMIE-setup.html#SMIE-setup" accesskey="p" rel="prev">SMIE setup</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Operator-Precedence-Grammars-1"></a>
-<h4 class="subsubsection">22.7.1.2 Operator Precedence Grammars</h4>
+  <h4 class="subsubsection">22.7.1.2 Operator Precedence
+  Grammars</h4>
 
-<p>SMIE&rsquo;s precedence grammars simply give to each token a pair of
-precedences: the left-precedence and the right-precedence.  We say
-<code>T1 &lt; T2</code> if the right-precedence of token <code>T1</code> is less than
-the left-precedence of token <code>T2</code>.  A good way to read this
-<code>&lt;</code> is as a kind of parenthesis: if we find <code>... T1 something
-T2 ...</code>  then that should be parsed as <code>... T1 (something T2 ...</code>
-rather than as <code>... T1 something) T2 ...</code>.  The latter
-interpretation would be the case if we had <code>T1 &gt; T2</code>.  If we have
-<code>T1 = T2</code>, it means that token T2 follows token T1 in the same
-syntactic construction, so typically we have <code>&quot;begin&quot; = &quot;end&quot;</code>.
-Such pairs of precedences are sufficient to express left-associativity
-or right-associativity of infix operators, nesting of tokens like
-parentheses and many other cases.
-</p>
+  <p>SMIE&rsquo;s precedence grammars simply give to each token a
+  pair of precedences: the left-precedence and the
+  right-precedence. We say <code>T1 &lt; T2</code> if the
+  right-precedence of token <code>T1</code> is less than the
+  left-precedence of token <code>T2</code>. A good way to read this
+  <code>&lt;</code> is as a kind of parenthesis: if we find
+  <code>... T1 something T2 ...</code> then that should be parsed
+  as <code>... T1 (something T2 ...</code> rather than as <code>...
+  T1 something) T2 ...</code>. The latter interpretation would be
+  the case if we had <code>T1 &gt; T2</code>. If we have <code>T1 =
+  T2</code>, it means that token T2 follows token T1 in the same
+  syntactic construction, so typically we have <code>"begin" =
+  "end"</code>. Such pairs of precedences are sufficient to express
+  left-associativity or right-associativity of infix operators,
+  nesting of tokens like parentheses and many other cases.</p>
 
-<dl>
-<dt><a name="index-smie_002dprec2_002d_003egrammar"></a>Function: <strong>smie-prec2-&gt;grammar</strong> <em>table</em></dt>
-<dd><p>This function takes a <em>prec2</em> grammar <var>table</var> and returns an
-alist suitable for use in <code>smie-setup</code>.  The <em>prec2</em>
-<var>table</var> is itself meant to be built by one of the functions below.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-smie_002dprec2_002d_003egrammar" id=
+    "index-smie_002dprec2_002d_003egrammar"></a>Function:
+    <strong>smie-prec2-&gt;grammar</strong> <em>table</em></dt>
 
-<dl>
-<dt><a name="index-smie_002dmerge_002dprec2s"></a>Function: <strong>smie-merge-prec2s</strong> <em>&amp;rest tables</em></dt>
-<dd><p>This function takes several <em>prec2</em> <var>tables</var> and merges them
-into a new <em>prec2</em> table.
-</p></dd></dl>
+    <dd>
+      <p>This function takes a <em>prec2</em> grammar
+      <var>table</var> and returns an alist suitable for use in
+      <code>smie-setup</code>. The <em>prec2</em> <var>table</var>
+      is itself meant to be built by one of the functions
+      below.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-smie_002dprecs_002d_003eprec2"></a>Function: <strong>smie-precs-&gt;prec2</strong> <em>precs</em></dt>
-<dd><p>This function builds a <em>prec2</em> table from a table of precedences
-<var>precs</var>.  <var>precs</var> should be a list, sorted by precedence (for
-example <code>&quot;+&quot;</code> will come before <code>&quot;*&quot;</code>), of elements of the form
-<code>(<var>assoc</var> <var>op</var> ...)</code>, where each <var>op</var> is a token that
-acts as an operator; <var>assoc</var> is their associativity, which can be
-either <code>left</code>, <code>right</code>, <code>assoc</code>, or <code>nonassoc</code>.
-All operators in a given element share the same precedence level
-and associativity.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-smie_002dmerge_002dprec2s" id=
+    "index-smie_002dmerge_002dprec2s"></a>Function:
+    <strong>smie-merge-prec2s</strong> <em>&amp;rest
+    tables</em></dt>
 
-<dl>
-<dt><a name="index-smie_002dbnf_002d_003eprec2"></a>Function: <strong>smie-bnf-&gt;prec2</strong> <em>bnf &amp;rest resolvers</em></dt>
-<dd><p>This function lets you specify the grammar using a BNF notation.
-It accepts a <var>bnf</var> description of the grammar along with a set of
-conflict resolution rules <var>resolvers</var>, and
-returns a <em>prec2</em> table.
-</p>
-<p><var>bnf</var> is a list of nonterminal definitions of the form
-<code>(<var>nonterm</var> <var>rhs1</var> <var>rhs2</var> ...)</code> where each <var>rhs</var>
-is a (non-empty) list of terminals (aka tokens) or non-terminals.
-</p>
-<p>Not all grammars are accepted:
-</p><ul>
-<li> An <var>rhs</var> cannot be an empty list (an empty list is never needed,
-since SMIE allows all non-terminals to match the empty string anyway).
-</li><li> An <var>rhs</var> cannot have 2 consecutive non-terminals: each pair of
-non-terminals needs to be separated by a terminal (aka token).
-This is a fundamental limitation of operator precedence grammars.
-</li></ul>
+    <dd>
+      <p>This function takes several <em>prec2</em>
+      <var>tables</var> and merges them into a new <em>prec2</em>
+      table.</p>
+    </dd>
+  </dl>
 
-<p>Additionally, conflicts can occur:
-</p><ul>
-<li> The returned <em>prec2</em> table holds constraints between pairs of tokens, and
-for any given pair only one constraint can be present: T1 &lt; T2,
-T1 = T2, or T1 &gt; T2.
-</li><li> A token can be an <code>opener</code> (something similar to an open-paren),
-a <code>closer</code> (like a close-paren), or <code>neither</code> of the two
-(e.g., an infix operator, or an inner token like <code>&quot;else&quot;</code>).
-</li></ul>
+  <dl>
+    <dt><a name="index-smie_002dprecs_002d_003eprec2" id=
+    "index-smie_002dprecs_002d_003eprec2"></a>Function:
+    <strong>smie-precs-&gt;prec2</strong> <em>precs</em></dt>
 
-<p>Precedence conflicts can be resolved via <var>resolvers</var>, which
-is a list of <em>precs</em> tables (see <code>smie-precs-&gt;prec2</code>): for
-each precedence conflict, if those <code>precs</code> tables
-specify a particular constraint, then the conflict is resolved by using
-this constraint instead, else a conflict is reported and one of the
-conflicting constraints is picked arbitrarily and the others are
-simply ignored.
-</p></dd></dl>
+    <dd>
+      <p>This function builds a <em>prec2</em> table from a table
+      of precedences <var>precs</var>. <var>precs</var> should be a
+      list, sorted by precedence (for example <code>"+"</code> will
+      come before <code>"*"</code>), of elements of the form
+      <code>(<var>assoc</var> <var>op</var> ...)</code>, where each
+      <var>op</var> is a token that acts as an operator;
+      <var>assoc</var> is their associativity, which can be either
+      <code>left</code>, <code>right</code>, <code>assoc</code>, or
+      <code>nonassoc</code>. All operators in a given element share
+      the same precedence level and associativity.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="SMIE-Grammar.html#SMIE-Grammar" accesskey="n" rel="next">SMIE Grammar</a>, Previous: <a href="SMIE-setup.html#SMIE-setup" accesskey="p" rel="prev">SMIE setup</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-smie_002dbnf_002d_003eprec2" id=
+    "index-smie_002dbnf_002d_003eprec2"></a>Function:
+    <strong>smie-bnf-&gt;prec2</strong> <em>bnf &amp;rest
+    resolvers</em></dt>
 
+    <dd>
+      <p>This function lets you specify the grammar using a BNF
+      notation. It accepts a <var>bnf</var> description of the
+      grammar along with a set of conflict resolution rules
+      <var>resolvers</var>, and returns a <em>prec2</em> table.</p>
 
+      <p><var>bnf</var> is a list of nonterminal definitions of the
+      form <code>(<var>nonterm</var> <var>rhs1</var>
+      <var>rhs2</var> ...)</code> where each <var>rhs</var> is a
+      (non-empty) list of terminals (aka tokens) or
+      non-terminals.</p>
 
+      <p>Not all grammars are accepted:</p>
+
+      <ul>
+        <li>An <var>rhs</var> cannot be an empty list (an empty
+        list is never needed, since SMIE allows all non-terminals
+        to match the empty string anyway).</li>
+
+        <li>An <var>rhs</var> cannot have 2 consecutive
+        non-terminals: each pair of non-terminals needs to be
+        separated by a terminal (aka token). This is a fundamental
+        limitation of operator precedence grammars.</li>
+      </ul>
+
+      <p>Additionally, conflicts can occur:</p>
+
+      <ul>
+        <li>The returned <em>prec2</em> table holds constraints
+        between pairs of tokens, and for any given pair only one
+        constraint can be present: T1 &lt; T2, T1 = T2, or T1 &gt;
+        T2.</li>
+
+        <li>A token can be an <code>opener</code> (something
+        similar to an open-paren), a <code>closer</code> (like a
+        close-paren), or <code>neither</code> of the two (e.g., an
+        infix operator, or an inner token like
+        <code>"else"</code>).</li>
+      </ul>
+
+      <p>Precedence conflicts can be resolved via
+      <var>resolvers</var>, which is a list of <em>precs</em>
+      tables (see <code>smie-precs-&gt;prec2</code>): for each
+      precedence conflict, if those <code>precs</code> tables
+      specify a particular constraint, then the conflict is
+      resolved by using this constraint instead, else a conflict is
+      reported and one of the conflicting constraints is picked
+      arbitrarily and the others are simply ignored.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="SMIE-Grammar.html#SMIE-Grammar" accesskey="n"
+    rel="next">SMIE Grammar</a>, Previous: <a href=
+    "SMIE-setup.html#SMIE-setup" accesskey="p" rel="prev">SMIE
+    setup</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel=
+    "up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

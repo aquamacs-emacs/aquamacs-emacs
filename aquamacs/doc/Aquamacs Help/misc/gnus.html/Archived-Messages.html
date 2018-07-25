@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,257 +14,366 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Archived Messages</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Archived Messages">
-<meta name="keywords" content="Gnus Manual: Archived Messages">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Composing-Messages.html#Composing-Messages" rel="up" title="Composing Messages">
-<link href="Posting-Styles.html#Posting-Styles" rel="next" title="Posting Styles">
-<link href="Mail-and-Post.html#Mail-and-Post" rel="prev" title="Mail and Post">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Archived Messages</title>
+  <meta name="description" content=
+  "Gnus Manual: Archived Messages" />
+  <meta name="keywords" content="Gnus Manual: Archived Messages" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Composing-Messages.html#Composing-Messages" rel="up"
+  title="Composing Messages" />
+  <link href="Posting-Styles.html#Posting-Styles" rel="next" title=
+  "Posting Styles" />
+  <link href="Mail-and-Post.html#Mail-and-Post" rel="prev" title=
+  "Mail and Post" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Archived-Messages"></a>
-<div class="header">
-<p>
-Next: <a href="Posting-Styles.html#Posting-Styles" accesskey="n" rel="next">Posting Styles</a>, Previous: <a href="Mail-and-Post.html#Mail-and-Post" accesskey="p" rel="prev">Mail and Post</a>, Up: <a href="Composing-Messages.html#Composing-Messages" accesskey="u" rel="up">Composing Messages</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Archived-Messages-1"></a>
-<h3 class="section">5.5 Archived Messages</h3>
-<a name="index-archived-messages"></a>
-<a name="index-sent-messages"></a>
+<body lang="en" xml:lang="en">
+  <a name="Archived-Messages" id="Archived-Messages"></a>
 
-<p>Gnus provides a few different methods for storing the mail and news you
-send.  The default method is to use the <em>archive virtual server</em> to
-store the messages.  If you want to disable this completely, the
-<code>gnus-message-archive-group</code> variable should be <code>nil</code>.  The
-default is <code>&quot;sent.%Y-%m&quot;</code>, which gives you one archive group per month.
-</p>
-<p>For archiving interesting messages in a group you read, see the
-<kbd>B c</kbd> (<code>gnus-summary-copy-article</code>) command (see <a href="Mail-Group-Commands.html#Mail-Group-Commands">Mail Group Commands</a>).
-</p>
-<a name="index-gnus_002dmessage_002darchive_002dmethod"></a>
-<p><code>gnus-message-archive-method</code> says what virtual server Gnus is to
-use to store sent messages.  The default is <code>&quot;archive&quot;</code>, and when
-actually being used it is expanded into:
-</p>
-<div class="lisp">
-<pre class="lisp">(nnfolder &quot;archive&quot;
-          (nnfolder-directory   &quot;~/Mail/archive&quot;)
-          (nnfolder-active-file &quot;~/Mail/archive/active&quot;)
+  <div class="header">
+    <p>Next: <a href="Posting-Styles.html#Posting-Styles"
+    accesskey="n" rel="next">Posting Styles</a>, Previous: <a href=
+    "Mail-and-Post.html#Mail-and-Post" accesskey="p" rel=
+    "prev">Mail and Post</a>, Up: <a href=
+    "Composing-Messages.html#Composing-Messages" accesskey="u" rel=
+    "up">Composing Messages</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Archived-Messages-1" id="Archived-Messages-1"></a>
+
+  <h3 class="section">5.5 Archived Messages</h3><a name=
+  "index-archived-messages" id="index-archived-messages"></a>
+  <a name="index-sent-messages" id="index-sent-messages"></a>
+
+  <p>Gnus provides a few different methods for storing the mail and
+  news you send. The default method is to use the <em>archive
+  virtual server</em> to store the messages. If you want to disable
+  this completely, the <code>gnus-message-archive-group</code>
+  variable should be <code>nil</code>. The default is
+  <code>"sent.%Y-%m"</code>, which gives you one archive group per
+  month.</p>
+
+  <p>For archiving interesting messages in a group you read, see
+  the <kbd>B c</kbd> (<code>gnus-summary-copy-article</code>)
+  command (see <a href=
+  "Mail-Group-Commands.html#Mail-Group-Commands">Mail Group
+  Commands</a>).</p><a name=
+  "index-gnus_002dmessage_002darchive_002dmethod" id=
+  "index-gnus_002dmessage_002darchive_002dmethod"></a>
+
+  <p><code>gnus-message-archive-method</code> says what virtual
+  server Gnus is to use to store sent messages. The default is
+  <code>"archive"</code>, and when actually being used it is
+  expanded into:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(nnfolder "archive"
+          (nnfolder-directory   "~/Mail/archive")
+          (nnfolder-active-file "~/Mail/archive/active")
           (nnfolder-get-new-mail nil)
           (nnfolder-inhibit-expiry t))
-</pre></div>
+</pre>
+  </div>
 
-<blockquote>
-<a name="index-gnus_002dupdate_002dmessage_002darchive_002dmethod"></a>
-<p>Note: a server like this is saved in the <samp>~/.newsrc.eld</samp> file first
-so that it may be used as a real method of the server which is named
-<code>&quot;archive&quot;</code> (that is, for the case where
-<code>gnus-message-archive-method</code> is set to <code>&quot;archive&quot;</code>) ever
-since.  If it once has been saved, it will never be updated by default
-even if you change the value of <code>gnus-message-archive-method</code>
-afterward.  Therefore, the server <code>&quot;archive&quot;</code> doesn&rsquo;t necessarily
-mean the <code>nnfolder</code> server like this at all times.  If you want the
-saved method to reflect always the value of
-<code>gnus-message-archive-method</code>, set the
-<code>gnus-update-message-archive-method</code> variable to a non-<code>nil</code>
-value.  The default value of this variable is <code>nil</code>.
-</p></blockquote>
+  <blockquote>
+    <a name=
+    "index-gnus_002dupdate_002dmessage_002darchive_002dmethod" id=
+    "index-gnus_002dupdate_002dmessage_002darchive_002dmethod"></a>
 
-<p>You can, however, use any mail select method (<code>nnml</code>,
-<code>nnmbox</code>, etc.).  <code>nnfolder</code> is a quite likable select method
-for doing this sort of thing, though.  If you don&rsquo;t like the default
-directory chosen, you could say something like:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-message-archive-method
-      '(nnfolder &quot;archive&quot;
+    <p>Note: a server like this is saved in the
+    <samp>~/.newsrc.eld</samp> file first so that it may be used as
+    a real method of the server which is named
+    <code>"archive"</code> (that is, for the case where
+    <code>gnus-message-archive-method</code> is set to
+    <code>"archive"</code>) ever since. If it once has been saved,
+    it will never be updated by default even if you change the
+    value of <code>gnus-message-archive-method</code> afterward.
+    Therefore, the server <code>"archive"</code> doesn&rsquo;t
+    necessarily mean the <code>nnfolder</code> server like this at
+    all times. If you want the saved method to reflect always the
+    value of <code>gnus-message-archive-method</code>, set the
+    <code>gnus-update-message-archive-method</code> variable to a
+    non-<code>nil</code> value. The default value of this variable
+    is <code>nil</code>.</p>
+  </blockquote>
+
+  <p>You can, however, use any mail select method
+  (<code>nnml</code>, <code>nnmbox</code>, etc.).
+  <code>nnfolder</code> is a quite likable select method for doing
+  this sort of thing, though. If you don&rsquo;t like the default
+  directory chosen, you could say something like:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-message-archive-method
+      '(nnfolder "archive"
                  (nnfolder-inhibit-expiry t)
-                 (nnfolder-active-file &quot;~/News/sent-mail/active&quot;)
-                 (nnfolder-directory &quot;~/News/sent-mail/&quot;)))
-</pre></div>
+                 (nnfolder-active-file "~/News/sent-mail/active")
+                 (nnfolder-directory "~/News/sent-mail/")))
+</pre>
+  </div><a name="index-gnus_002dmessage_002darchive_002dgroup" id=
+  "index-gnus_002dmessage_002darchive_002dgroup"></a> <a name=
+  "index-Gcc" id="index-Gcc"></a>
 
-<a name="index-gnus_002dmessage_002darchive_002dgroup"></a>
-<a name="index-Gcc"></a>
-<p>Gnus will insert <code>Gcc</code> headers in all outgoing messages that point
-to one or more group(s) on that server.  Which group to use is
-determined by the <code>gnus-message-archive-group</code> variable.
-</p>
-<p>This variable can be used to do the following:
-</p>
-<dl compact="compact">
-<dt>a string</dt>
-<dd><p>Messages will be saved in that group.
-</p>
-<p>Note that you can include a select method in the group name, then the
-message will not be stored in the select method given by
-<code>gnus-message-archive-method</code>, but in the select method specified
-by the group name, instead.  Suppose <code>gnus-message-archive-method</code>
-has the default value shown above.  Then setting
-<code>gnus-message-archive-group</code> to <code>&quot;foo&quot;</code> means that outgoing
-messages are stored in &lsquo;<samp>nnfolder+archive:foo</samp>&rsquo;, but if you use the
-value <code>&quot;nnml:foo&quot;</code>, then outgoing messages will be stored in
-&lsquo;<samp>nnml:foo</samp>&rsquo;.
-</p>
-</dd>
-<dt>a list of strings</dt>
-<dd><p>Messages will be saved in all those groups.
-</p>
-</dd>
-<dt>an alist of regexps, functions and forms</dt>
-<dd><p>When a key &ldquo;matches&rdquo;, the result is used.
-</p>
-</dd>
-<dt><code>nil</code></dt>
-<dd><p>No message archiving will take place.
-</p></dd>
-</dl>
+  <p>Gnus will insert <code>Gcc</code> headers in all outgoing
+  messages that point to one or more group(s) on that server. Which
+  group to use is determined by the
+  <code>gnus-message-archive-group</code> variable.</p>
 
-<p>Let&rsquo;s illustrate:
-</p>
-<p>Just saving to a single group called &lsquo;<samp>MisK</samp>&rsquo;:
-</p><div class="lisp">
-<pre class="lisp">(setq gnus-message-archive-group &quot;MisK&quot;)
-</pre></div>
+  <p>This variable can be used to do the following:</p>
 
-<p>Saving to two groups, &lsquo;<samp>MisK</samp>&rsquo; and &lsquo;<samp>safe</samp>&rsquo;:
-</p><div class="lisp">
-<pre class="lisp">(setq gnus-message-archive-group '(&quot;MisK&quot; &quot;safe&quot;))
-</pre></div>
+  <dl compact="compact">
+    <dt>a string</dt>
 
-<p>Save to different groups based on what group you are in:
-</p><div class="lisp">
-<pre class="lisp">(setq gnus-message-archive-group
-      '((&quot;^alt&quot; &quot;sent-to-alt&quot;)
-        (&quot;mail&quot; &quot;sent-to-mail&quot;)
-        (&quot;.*&quot; &quot;sent-to-misc&quot;)))
-</pre></div>
+    <dd>
+      <p>Messages will be saved in that group.</p>
 
-<p>More complex stuff:
-</p><div class="lisp">
-<pre class="lisp">(setq gnus-message-archive-group
+      <p>Note that you can include a select method in the group
+      name, then the message will not be stored in the select
+      method given by <code>gnus-message-archive-method</code>, but
+      in the select method specified by the group name, instead.
+      Suppose <code>gnus-message-archive-method</code> has the
+      default value shown above. Then setting
+      <code>gnus-message-archive-group</code> to <code>"foo"</code>
+      means that outgoing messages are stored in
+      &lsquo;<samp>nnfolder+archive:foo</samp>&rsquo;, but if you
+      use the value <code>"nnml:foo"</code>, then outgoing messages
+      will be stored in &lsquo;<samp>nnml:foo</samp>&rsquo;.</p>
+    </dd>
+
+    <dt>a list of strings</dt>
+
+    <dd>
+      <p>Messages will be saved in all those groups.</p>
+    </dd>
+
+    <dt>an alist of regexps, functions and forms</dt>
+
+    <dd>
+      <p>When a key &ldquo;matches&rdquo;, the result is used.</p>
+    </dd>
+
+    <dt><code>nil</code></dt>
+
+    <dd>
+      <p>No message archiving will take place.</p>
+    </dd>
+  </dl>
+
+  <p>Let&rsquo;s illustrate:</p>
+
+  <p>Just saving to a single group called
+  &lsquo;<samp>MisK</samp>&rsquo;:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-message-archive-group "MisK")
+</pre>
+  </div>
+
+  <p>Saving to two groups, &lsquo;<samp>MisK</samp>&rsquo; and
+  &lsquo;<samp>safe</samp>&rsquo;:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-message-archive-group '("MisK" "safe"))
+</pre>
+  </div>
+
+  <p>Save to different groups based on what group you are in:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-message-archive-group
+      '(("^alt" "sent-to-alt")
+        ("mail" "sent-to-mail")
+        (".*" "sent-to-misc")))
+</pre>
+  </div>
+
+  <p>More complex stuff:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-message-archive-group
       '((if (message-news-p)
-            &quot;misc-news&quot;
-          &quot;misc-mail&quot;)))
-</pre></div>
+            "misc-news"
+          "misc-mail")))
+</pre>
+  </div>
 
-<p>How about storing all news messages in one file, but storing all mail
-messages in one file per month:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-message-archive-group
+  <p>How about storing all news messages in one file, but storing
+  all mail messages in one file per month:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-message-archive-group
       '((if (message-news-p)
-            &quot;misc-news&quot;
-          (concat &quot;mail.&quot; (format-time-string &quot;%Y-%m&quot;)))))
-</pre></div>
+            "misc-news"
+          (concat "mail." (format-time-string "%Y-%m")))))
+</pre>
+  </div>
 
-<p>Now, when you send a message off, it will be stored in the appropriate
-group.  (If you want to disable storing for just one particular message,
-you can just remove the <code>Gcc</code> header that has been inserted.)  The
-archive group will appear in the group buffer the next time you start
-Gnus, or the next time you press <kbd>F</kbd> in the group buffer.  You can
-enter it and read the articles in it just like you&rsquo;d read any other
-group.  If the group gets really big and annoying, you can simply rename
-if (using <kbd>G r</kbd> in the group buffer) to something
-nice&mdash;&lsquo;<samp>misc-mail-september-1995</samp>&rsquo;, or whatever.  New messages will
-continue to be stored in the old (now empty) group.
-</p>
-<dl compact="compact">
-<dt><code>gnus-gcc-mark-as-read</code></dt>
-<dd><a name="index-gnus_002dgcc_002dmark_002das_002dread"></a>
-<p>If non-<code>nil</code>, automatically mark <code>Gcc</code> articles as read.
-</p>
-</dd>
-<dt><code>gnus-gcc-externalize-attachments</code></dt>
-<dd><a name="index-gnus_002dgcc_002dexternalize_002dattachments"></a>
-<p>If <code>nil</code>, attach files as normal parts in Gcc copies; if a regexp
-and matches the Gcc group name, attach files as external parts; if it is
-<code>all</code>, attach local files as external parts; if it is other
-non-<code>nil</code>, the behavior is the same as <code>all</code>, but it may be
-changed in the future.
-</p>
-</dd>
-<dt><code>gnus-gcc-self-resent-messages</code></dt>
-<dd><a name="index-gnus_002dgcc_002dself_002dresent_002dmessages"></a>
-<p>Like the <code>gcc-self</code> group parameter, applied only for unmodified
-messages that <code>gnus-summary-resend-message</code> (see <a href="Summary-Mail-Commands.html#Summary-Mail-Commands">Summary Mail Commands</a>) resends.  Non-<code>nil</code> value of this variable takes
-precedence over any existing <code>Gcc</code> header.
-</p>
-<p>If this is <code>none</code>, no <code>Gcc</code> copy will be made.  If this is
-<code>t</code>, messages resent will be <code>Gcc</code> copied to the current
-group.  If this is a string, it specifies a group to which resent
-messages will be <code>Gcc</code> copied.  If this is <code>nil</code>, <code>Gcc</code>
-will be done according to existing <code>Gcc</code> header(s), if any.  If
-this is <code>no-gcc-self</code>, that is the default, resent messages will be
-<code>Gcc</code> copied to groups that existing <code>Gcc</code> header specifies,
-except for the current group.
-</p>
-</dd>
-<dt><code>gnus-gcc-pre-body-encode-hook</code></dt>
-<dd><a name="index-gnus_002dgcc_002dpre_002dbody_002dencode_002dhook"></a>
-</dd>
-<dt><code>gnus-gcc-post-body-encode-hook</code></dt>
-<dd><a name="index-gnus_002dgcc_002dpost_002dbody_002dencode_002dhook"></a>
+  <p>Now, when you send a message off, it will be stored in the
+  appropriate group. (If you want to disable storing for just one
+  particular message, you can just remove the <code>Gcc</code>
+  header that has been inserted.) The archive group will appear in
+  the group buffer the next time you start Gnus, or the next time
+  you press <kbd>F</kbd> in the group buffer. You can enter it and
+  read the articles in it just like you&rsquo;d read any other
+  group. If the group gets really big and annoying, you can simply
+  rename if (using <kbd>G r</kbd> in the group buffer) to something
+  nice&mdash;&lsquo;<samp>misc-mail-september-1995</samp>&rsquo;,
+  or whatever. New messages will continue to be stored in the old
+  (now empty) group.</p>
 
-<p>These hooks are run before/after encoding the message body of the Gcc
-copy of a sent message.  The current buffer (when the hook is run)
-contains the message including the message header.  Changes made to
-the message will only affect the Gcc copy, but not the original
-message.  You can use these hooks to edit the copy (and influence
-subsequent transformations), e.g., remove MML secure tags
-(see <a href="Signing-and-encrypting.html#Signing-and-encrypting">Signing and encrypting</a>).
-</p>
-</dd>
-</dl>
+  <dl compact="compact">
+    <dt><code>gnus-gcc-mark-as-read</code></dt>
 
+    <dd>
+      <a name="index-gnus_002dgcc_002dmark_002das_002dread" id=
+      "index-gnus_002dgcc_002dmark_002das_002dread"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Posting-Styles.html#Posting-Styles" accesskey="n" rel="next">Posting Styles</a>, Previous: <a href="Mail-and-Post.html#Mail-and-Post" accesskey="p" rel="prev">Mail and Post</a>, Up: <a href="Composing-Messages.html#Composing-Messages" accesskey="u" rel="up">Composing Messages</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If non-<code>nil</code>, automatically mark
+      <code>Gcc</code> articles as read.</p>
+    </dd>
 
+    <dt><code>gnus-gcc-externalize-attachments</code></dt>
 
+    <dd>
+      <a name="index-gnus_002dgcc_002dexternalize_002dattachments"
+      id="index-gnus_002dgcc_002dexternalize_002dattachments"></a>
 
+      <p>If <code>nil</code>, attach files as normal parts in Gcc
+      copies; if a regexp and matches the Gcc group name, attach
+      files as external parts; if it is <code>all</code>, attach
+      local files as external parts; if it is other
+      non-<code>nil</code>, the behavior is the same as
+      <code>all</code>, but it may be changed in the future.</p>
+    </dd>
+
+    <dt><code>gnus-gcc-self-resent-messages</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgcc_002dself_002dresent_002dmessages"
+      id="index-gnus_002dgcc_002dself_002dresent_002dmessages"></a>
+
+      <p>Like the <code>gcc-self</code> group parameter, applied
+      only for unmodified messages that
+      <code>gnus-summary-resend-message</code> (see <a href=
+      "Summary-Mail-Commands.html#Summary-Mail-Commands">Summary
+      Mail Commands</a>) resends. Non-<code>nil</code> value of
+      this variable takes precedence over any existing
+      <code>Gcc</code> header.</p>
+
+      <p>If this is <code>none</code>, no <code>Gcc</code> copy
+      will be made. If this is <code>t</code>, messages resent will
+      be <code>Gcc</code> copied to the current group. If this is a
+      string, it specifies a group to which resent messages will be
+      <code>Gcc</code> copied. If this is <code>nil</code>,
+      <code>Gcc</code> will be done according to existing
+      <code>Gcc</code> header(s), if any. If this is
+      <code>no-gcc-self</code>, that is the default, resent
+      messages will be <code>Gcc</code> copied to groups that
+      existing <code>Gcc</code> header specifies, except for the
+      current group.</p>
+    </dd>
+
+    <dt><code>gnus-gcc-pre-body-encode-hook</code></dt>
+
+    <dd><a name=
+    "index-gnus_002dgcc_002dpre_002dbody_002dencode_002dhook" id=
+    "index-gnus_002dgcc_002dpre_002dbody_002dencode_002dhook"></a></dd>
+
+    <dt><code>gnus-gcc-post-body-encode-hook</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dgcc_002dpost_002dbody_002dencode_002dhook"
+      id="index-gnus_002dgcc_002dpost_002dbody_002dencode_002dhook">
+      </a>
+
+      <p>These hooks are run before/after encoding the message body
+      of the Gcc copy of a sent message. The current buffer (when
+      the hook is run) contains the message including the message
+      header. Changes made to the message will only affect the Gcc
+      copy, but not the original message. You can use these hooks
+      to edit the copy (and influence subsequent transformations),
+      e.g., remove MML secure tags (see <a href=
+      "Signing-and-encrypting.html#Signing-and-encrypting">Signing
+      and encrypting</a>).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Posting-Styles.html#Posting-Styles"
+    accesskey="n" rel="next">Posting Styles</a>, Previous: <a href=
+    "Mail-and-Post.html#Mail-and-Post" accesskey="p" rel=
+    "prev">Mail and Post</a>, Up: <a href=
+    "Composing-Messages.html#Composing-Messages" accesskey="u" rel=
+    "up">Composing Messages</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

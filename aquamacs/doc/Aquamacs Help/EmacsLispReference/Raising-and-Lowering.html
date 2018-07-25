@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,108 +19,166 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Raising and Lowering</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Raising and Lowering">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Raising and Lowering">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Frames.html#Frames" rel="up" title="Frames">
-<link href="Frame-Configurations.html#Frame-Configurations" rel="next" title="Frame Configurations">
-<link href="Visibility-of-Frames.html#Visibility-of-Frames" rel="prev" title="Visibility of Frames">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Raising and
+  Lowering</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Raising and Lowering" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Raising and Lowering" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Frames.html#Frames" rel="up" title="Frames" />
+  <link href="Frame-Configurations.html#Frame-Configurations" rel=
+  "next" title="Frame Configurations" />
+  <link href="Visibility-of-Frames.html#Visibility-of-Frames" rel=
+  "prev" title="Visibility of Frames" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Raising-and-Lowering" id="Raising-and-Lowering"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Frame-Configurations.html#Frame-Configurations" accesskey="n"
+    rel="next">Frame Configurations</a>, Previous: <a href=
+    "Visibility-of-Frames.html#Visibility-of-Frames" accesskey="p"
+    rel="prev">Visibility of Frames</a>, Up: <a href=
+    "Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Raising-and-Lowering-Frames" id=
+  "Raising-and-Lowering-Frames"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Raising-and-Lowering"></a>
-<div class="header">
-<p>
-Next: <a href="Frame-Configurations.html#Frame-Configurations" accesskey="n" rel="next">Frame Configurations</a>, Previous: <a href="Visibility-of-Frames.html#Visibility-of-Frames" accesskey="p" rel="prev">Visibility of Frames</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Raising-and-Lowering-Frames"></a>
-<h3 class="section">28.12 Raising and Lowering Frames</h3>
+  <h3 class="section">28.12 Raising and Lowering
+  Frames</h3><a name="index-raising-a-frame" id=
+  "index-raising-a-frame"></a> <a name="index-lowering-a-frame" id=
+  "index-lowering-a-frame"></a>
 
-<a name="index-raising-a-frame"></a>
-<a name="index-lowering-a-frame"></a>
-<p>Most window systems use a desktop metaphor.  Part of this metaphor
-is the idea that system-level windows (e.g., Emacs frames) are
-stacked in a notional third dimension perpendicular to the screen
-surface.  Where two overlap, the one higher up covers the one
-underneath.  You can <em>raise</em> or <em>lower</em> a frame using the
-functions <code>raise-frame</code> and <code>lower-frame</code>.
-</p>
-<dl>
-<dt><a name="index-raise_002dframe"></a>Command: <strong>raise-frame</strong> <em>&amp;optional frame</em></dt>
-<dd><p>This function raises frame <var>frame</var> (default, the selected frame).
-If <var>frame</var> is invisible or iconified, this makes it visible.
-</p></dd></dl>
+  <p>Most window systems use a desktop metaphor. Part of this
+  metaphor is the idea that system-level windows (e.g., Emacs
+  frames) are stacked in a notional third dimension perpendicular
+  to the screen surface. Where two overlap, the one higher up
+  covers the one underneath. You can <em>raise</em> or
+  <em>lower</em> a frame using the functions
+  <code>raise-frame</code> and <code>lower-frame</code>.</p>
 
-<dl>
-<dt><a name="index-lower_002dframe"></a>Command: <strong>lower-frame</strong> <em>&amp;optional frame</em></dt>
-<dd><p>This function lowers frame <var>frame</var> (default, the selected frame).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-raise_002dframe" id=
+    "index-raise_002dframe"></a>Command:
+    <strong>raise-frame</strong> <em>&amp;optional frame</em></dt>
 
-<dl>
-<dt><a name="index-minibuffer_002dauto_002draise"></a>User Option: <strong>minibuffer-auto-raise</strong></dt>
-<dd><p>If this is non-<code>nil</code>, activation of the minibuffer raises the frame
-that the minibuffer window is in.
-</p></dd></dl>
+    <dd>
+      <p>This function raises frame <var>frame</var> (default, the
+      selected frame). If <var>frame</var> is invisible or
+      iconified, this makes it visible.</p>
+    </dd>
+  </dl>
 
-<p>On window systems, you can also enable auto-raising (on frame
-selection) or auto-lowering (on frame deselection) using frame
-parameters.  See <a href="Management-Parameters.html#Management-Parameters">Management Parameters</a>.
-</p>
-<a name="index-top-frame"></a>
-<p>The concept of raising and lowering frames also applies to text
-terminal frames.  On each text terminal, only the top frame is
-displayed at any one time.
-</p>
-<dl>
-<dt><a name="index-tty_002dtop_002dframe"></a>Function: <strong>tty-top-frame</strong> <em>&amp;optional terminal</em></dt>
-<dd><p>This function returns the top frame on <var>terminal</var>.  <var>terminal</var>
-should be a terminal object, a frame (meaning that frame&rsquo;s terminal),
-or <code>nil</code> (meaning the selected frame&rsquo;s terminal).  If it does not
-refer to a text terminal, the return value is <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-lower_002dframe" id=
+    "index-lower_002dframe"></a>Command:
+    <strong>lower-frame</strong> <em>&amp;optional frame</em></dt>
 
+    <dd>
+      <p>This function lowers frame <var>frame</var> (default, the
+      selected frame).</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-minibuffer_002dauto_002draise" id=
+    "index-minibuffer_002dauto_002draise"></a>User Option:
+    <strong>minibuffer-auto-raise</strong></dt>
 
+    <dd>
+      <p>If this is non-<code>nil</code>, activation of the
+      minibuffer raises the frame that the minibuffer window is
+      in.</p>
+    </dd>
+  </dl>
 
+  <p>On window systems, you can also enable auto-raising (on frame
+  selection) or auto-lowering (on frame deselection) using frame
+  parameters. See <a href=
+  "Management-Parameters.html#Management-Parameters">Management
+  Parameters</a>.</p><a name="index-top-frame" id=
+  "index-top-frame"></a>
+
+  <p>The concept of raising and lowering frames also applies to
+  text terminal frames. On each text terminal, only the top frame
+  is displayed at any one time.</p>
+
+  <dl>
+    <dt><a name="index-tty_002dtop_002dframe" id=
+    "index-tty_002dtop_002dframe"></a>Function:
+    <strong>tty-top-frame</strong> <em>&amp;optional
+    terminal</em></dt>
+
+    <dd>
+      <p>This function returns the top frame on
+      <var>terminal</var>. <var>terminal</var> should be a terminal
+      object, a frame (meaning that frame&rsquo;s terminal), or
+      <code>nil</code> (meaning the selected frame&rsquo;s
+      terminal). If it does not refer to a text terminal, the
+      return value is <code>nil</code>.</p>
+    </dd>
+  </dl>
 </body>
 </html>

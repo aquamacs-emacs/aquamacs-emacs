@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,149 +18,220 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Conditional Rewrite Rules</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Conditional Rewrite Rules">
-<meta name="keywords" content="GNU Emacs Calc Manual: Conditional Rewrite Rules">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Rewrite-Rules.html#Rewrite-Rules" rel="up" title="Rewrite Rules">
-<link href="Algebraic-Properties-of-Rewrite-Rules.html#Algebraic-Properties-of-Rewrite-Rules" rel="next" title="Algebraic Properties of Rewrite Rules">
-<link href="Basic-Rewrite-Rules.html#Basic-Rewrite-Rules" rel="prev" title="Basic Rewrite Rules">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Conditional Rewrite Rules</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Conditional Rewrite Rules" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Conditional Rewrite Rules" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Rewrite-Rules.html#Rewrite-Rules" rel="up" title=
+  "Rewrite Rules" />
+  <link href=
+  "Algebraic-Properties-of-Rewrite-Rules.html#Algebraic-Properties-of-Rewrite-Rules"
+  rel="next" title="Algebraic Properties of Rewrite Rules" />
+  <link href="Basic-Rewrite-Rules.html#Basic-Rewrite-Rules" rel=
+  "prev" title="Basic Rewrite Rules" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Conditional-Rewrite-Rules"></a>
-<div class="header">
-<p>
-Next: <a href="Algebraic-Properties-of-Rewrite-Rules.html#Algebraic-Properties-of-Rewrite-Rules" accesskey="n" rel="next">Algebraic Properties of Rewrite Rules</a>, Previous: <a href="Basic-Rewrite-Rules.html#Basic-Rewrite-Rules" accesskey="p" rel="prev">Basic Rewrite Rules</a>, Up: <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel="up">Rewrite Rules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Conditional-Rewrite-Rules-1"></a>
-<h4 class="subsection">10.11.3 Conditional Rewrite Rules</h4>
+<body lang="en" xml:lang="en">
+  <a name="Conditional-Rewrite-Rules" id=
+  "Conditional-Rewrite-Rules"></a>
 
-<p>A rewrite rule can also be <em>conditional</em>, written in the form
-&lsquo;<samp><var>old</var> := <var>new</var> :: <var>cond</var></samp>&rsquo;.  (There is also the obsolete
-form &lsquo;<samp>[<var>old</var>, <var>new</var>, <var>cond</var>]</samp>&rsquo;.)  If a <var>cond</var> part
-is present in the
-rule, this is an additional condition that must be satisfied before
-the rule is accepted.  Once <var>old</var> has been successfully matched
-to the target expression, <var>cond</var> is evaluated (with all the
-meta-variables substituted for the values they matched) and simplified
-with Calc&rsquo;s algebraic simplifications.  If the result is a nonzero
-number or any other object known to be nonzero (see <a href="Declarations.html#Declarations">Declarations</a>),
-the rule is accepted.  If the result is zero or if it is a symbolic
-formula that is not known to be nonzero, the rule is rejected.
-See <a href="Logical-Operations.html#Logical-Operations">Logical Operations</a>, for a number of functions that return
-1 or 0 according to the results of various tests.
-</p>
-<p>For example, the formula &lsquo;<samp>n &gt; 0</samp>&rsquo; simplifies to 1 or 0 if &lsquo;<samp>n</samp>&rsquo;
-is replaced by a positive or nonpositive number, respectively (or if
-&lsquo;<samp>n</samp>&rsquo; has been declared to be positive or nonpositive).  Thus,
-the rule &lsquo;<samp>f(x,y) := g(y+x,x) :: x+y &gt; 0</samp>&rsquo; would apply to
-&lsquo;<samp>f(0, 4)</samp>&rsquo; but not to &lsquo;<samp>f(-3, 2)</samp>&rsquo; or &lsquo;<samp>f(12, a+1)</samp>&rsquo;
-(assuming no outstanding declarations for &lsquo;<samp>a</samp>&rsquo;).  In the case of
-&lsquo;<samp>f(-3, 2)</samp>&rsquo;, the condition can be shown not to be satisfied; in
-the case of &lsquo;<samp>f(12, a+1)</samp>&rsquo;, the condition merely cannot be shown
-to be satisfied, but that is enough to reject the rule.
-</p>
-<p>While Calc will use declarations to reason about variables in the
-formula being rewritten, declarations do not apply to meta-variables.
-For example, the rule &lsquo;<samp>f(a) := g(a+1)</samp>&rsquo; will match for any values
-of &lsquo;<samp>a</samp>&rsquo;, such as complex numbers, vectors, or formulas, even if
-&lsquo;<samp>a</samp>&rsquo; has been declared to be real or scalar.  If you want the
-meta-variable &lsquo;<samp>a</samp>&rsquo; to match only literal real numbers, use
-&lsquo;<samp>f(a) := g(a+1) :: real(a)</samp>&rsquo;.  If you want &lsquo;<samp>a</samp>&rsquo; to match only
-reals and formulas which are provably real, use &lsquo;<samp>dreal(a)</samp>&rsquo; as
-the condition.
-</p>
-<p>The &lsquo;<samp>::</samp>&rsquo; operator is a shorthand for the <code>condition</code>
-function; &lsquo;<samp><var>old</var> := <var>new</var> :: <var>cond</var></samp>&rsquo; is equivalent to
-the formula &lsquo;<samp>condition(assign(<var>old</var>, <var>new</var>), <var>cond</var>)</samp>&rsquo;.
-</p>
-<p>If you have several conditions, you can use &lsquo;<samp>... :: c1 :: c2 :: c3</samp>&rsquo;
-or &lsquo;<samp>... :: c1 &amp;&amp; c2 &amp;&amp; c3</samp>&rsquo;.  The two are entirely equivalent.
-</p>
-<p>It is also possible to embed conditions inside the pattern:
-&lsquo;<samp>f(x :: x&gt;0, y) := g(y+x, x)</samp>&rsquo;.  This is purely a notational
-convenience, though; where a condition appears in a rule has no
-effect on when it is tested.  The rewrite-rule compiler automatically
-decides when it is best to test each condition while a rule is being
-matched.
-</p>
-<p>Certain conditions are handled as special cases by the rewrite rule
-system and are tested very efficiently:  Where &lsquo;<samp>x</samp>&rsquo; is any
-meta-variable, these conditions are &lsquo;<samp>integer(x)</samp>&rsquo;, &lsquo;<samp>real(x)</samp>&rsquo;,
-&lsquo;<samp>constant(x)</samp>&rsquo;, &lsquo;<samp>negative(x)</samp>&rsquo;, &lsquo;<samp>x &gt;= y</samp>&rsquo; where &lsquo;<samp>y</samp>&rsquo;
-is either a constant or another meta-variable and &lsquo;<samp>&gt;=</samp>&rsquo; may be
-replaced by any of the six relational operators, and &lsquo;<samp>x % a = b</samp>&rsquo;
-where &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo; are constants.  Other conditions, like
-&lsquo;<samp>x &gt;= y+1</samp>&rsquo; or &lsquo;<samp>dreal(x)</samp>&rsquo;, will be less efficient to check
-since Calc must bring the whole evaluator and simplifier into play.
-</p>
-<p>An interesting property of &lsquo;<samp>::</samp>&rsquo; is that neither of its arguments
-will be touched by Calc&rsquo;s default simplifications.  This is important
-because conditions often are expressions that cannot safely be
-evaluated early.  For example, the <code>typeof</code> function never
-remains in symbolic form; entering &lsquo;<samp>typeof(a)</samp>&rsquo; will put the
-number 100 (the type code for variables like &lsquo;<samp>a</samp>&rsquo;) on the stack.
-But putting the condition &lsquo;<samp>... :: typeof(a) = 6</samp>&rsquo; on the stack
-is safe since &lsquo;<samp>::</samp>&rsquo; prevents the <code>typeof</code> from being
-evaluated until the condition is actually used by the rewrite system.
-</p>
-<p>Since &lsquo;<samp>::</samp>&rsquo; protects its lefthand side, too, you can use a dummy
-condition to protect a rule that must itself not evaluate early.
-For example, it&rsquo;s not safe to put &lsquo;<samp>a(f,x) := apply(f, [x])</samp>&rsquo; on
-the stack because it will immediately evaluate to &lsquo;<samp>a(f,x) := f(x)</samp>&rsquo;,
-where the meta-variable-ness of <code>f</code> on the righthand side has been
-lost.  But &lsquo;<samp>a(f,x) := apply(f, [x]) :: 1</samp>&rsquo; is safe, and of course
-the condition &lsquo;<samp>1</samp>&rsquo; is always true (nonzero) so it has no effect on
-the functioning of the rule.  (The rewrite compiler will ensure that
-it doesn&rsquo;t even impact the speed of matching the rule.)
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Algebraic-Properties-of-Rewrite-Rules.html#Algebraic-Properties-of-Rewrite-Rules" accesskey="n" rel="next">Algebraic Properties of Rewrite Rules</a>, Previous: <a href="Basic-Rewrite-Rules.html#Basic-Rewrite-Rules" accesskey="p" rel="prev">Basic Rewrite Rules</a>, Up: <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel="up">Rewrite Rules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Algebraic-Properties-of-Rewrite-Rules.html#Algebraic-Properties-of-Rewrite-Rules"
+    accesskey="n" rel="next">Algebraic Properties of Rewrite
+    Rules</a>, Previous: <a href=
+    "Basic-Rewrite-Rules.html#Basic-Rewrite-Rules" accesskey="p"
+    rel="prev">Basic Rewrite Rules</a>, Up: <a href=
+    "Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel=
+    "up">Rewrite Rules</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Conditional-Rewrite-Rules-1" id=
+  "Conditional-Rewrite-Rules-1"></a>
 
+  <h4 class="subsection">10.11.3 Conditional Rewrite Rules</h4>
 
+  <p>A rewrite rule can also be <em>conditional</em>, written in
+  the form &lsquo;<samp><var>old</var> := <var>new</var> ::
+  <var>cond</var></samp>&rsquo;. (There is also the obsolete form
+  &lsquo;<samp>[<var>old</var>, <var>new</var>,
+  <var>cond</var>]</samp>&rsquo;.) If a <var>cond</var> part is
+  present in the rule, this is an additional condition that must be
+  satisfied before the rule is accepted. Once <var>old</var> has
+  been successfully matched to the target expression,
+  <var>cond</var> is evaluated (with all the meta-variables
+  substituted for the values they matched) and simplified with
+  Calc&rsquo;s algebraic simplifications. If the result is a
+  nonzero number or any other object known to be nonzero (see
+  <a href="Declarations.html#Declarations">Declarations</a>), the
+  rule is accepted. If the result is zero or if it is a symbolic
+  formula that is not known to be nonzero, the rule is rejected.
+  See <a href="Logical-Operations.html#Logical-Operations">Logical
+  Operations</a>, for a number of functions that return 1 or 0
+  according to the results of various tests.</p>
 
+  <p>For example, the formula &lsquo;<samp>n &gt; 0</samp>&rsquo;
+  simplifies to 1 or 0 if &lsquo;<samp>n</samp>&rsquo; is replaced
+  by a positive or nonpositive number, respectively (or if
+  &lsquo;<samp>n</samp>&rsquo; has been declared to be positive or
+  nonpositive). Thus, the rule &lsquo;<samp>f(x,y) := g(y+x,x) ::
+  x+y &gt; 0</samp>&rsquo; would apply to &lsquo;<samp>f(0,
+  4)</samp>&rsquo; but not to &lsquo;<samp>f(-3, 2)</samp>&rsquo;
+  or &lsquo;<samp>f(12, a+1)</samp>&rsquo; (assuming no outstanding
+  declarations for &lsquo;<samp>a</samp>&rsquo;). In the case of
+  &lsquo;<samp>f(-3, 2)</samp>&rsquo;, the condition can be shown
+  not to be satisfied; in the case of &lsquo;<samp>f(12,
+  a+1)</samp>&rsquo;, the condition merely cannot be shown to be
+  satisfied, but that is enough to reject the rule.</p>
+
+  <p>While Calc will use declarations to reason about variables in
+  the formula being rewritten, declarations do not apply to
+  meta-variables. For example, the rule &lsquo;<samp>f(a) :=
+  g(a+1)</samp>&rsquo; will match for any values of
+  &lsquo;<samp>a</samp>&rsquo;, such as complex numbers, vectors,
+  or formulas, even if &lsquo;<samp>a</samp>&rsquo; has been
+  declared to be real or scalar. If you want the meta-variable
+  &lsquo;<samp>a</samp>&rsquo; to match only literal real numbers,
+  use &lsquo;<samp>f(a) := g(a+1) :: real(a)</samp>&rsquo;. If you
+  want &lsquo;<samp>a</samp>&rsquo; to match only reals and
+  formulas which are provably real, use
+  &lsquo;<samp>dreal(a)</samp>&rsquo; as the condition.</p>
+
+  <p>The &lsquo;<samp>::</samp>&rsquo; operator is a shorthand for
+  the <code>condition</code> function; &lsquo;<samp><var>old</var>
+  := <var>new</var> :: <var>cond</var></samp>&rsquo; is equivalent
+  to the formula &lsquo;<samp>condition(assign(<var>old</var>,
+  <var>new</var>), <var>cond</var>)</samp>&rsquo;.</p>
+
+  <p>If you have several conditions, you can use &lsquo;<samp>...
+  :: c1 :: c2 :: c3</samp>&rsquo; or &lsquo;<samp>... :: c1
+  &amp;&amp; c2 &amp;&amp; c3</samp>&rsquo;. The two are entirely
+  equivalent.</p>
+
+  <p>It is also possible to embed conditions inside the pattern:
+  &lsquo;<samp>f(x :: x&gt;0, y) := g(y+x, x)</samp>&rsquo;. This
+  is purely a notational convenience, though; where a condition
+  appears in a rule has no effect on when it is tested. The
+  rewrite-rule compiler automatically decides when it is best to
+  test each condition while a rule is being matched.</p>
+
+  <p>Certain conditions are handled as special cases by the rewrite
+  rule system and are tested very efficiently: Where
+  &lsquo;<samp>x</samp>&rsquo; is any meta-variable, these
+  conditions are &lsquo;<samp>integer(x)</samp>&rsquo;,
+  &lsquo;<samp>real(x)</samp>&rsquo;,
+  &lsquo;<samp>constant(x)</samp>&rsquo;,
+  &lsquo;<samp>negative(x)</samp>&rsquo;, &lsquo;<samp>x &gt;=
+  y</samp>&rsquo; where &lsquo;<samp>y</samp>&rsquo; is either a
+  constant or another meta-variable and
+  &lsquo;<samp>&gt;=</samp>&rsquo; may be replaced by any of the
+  six relational operators, and &lsquo;<samp>x % a =
+  b</samp>&rsquo; where &lsquo;<samp>a</samp>&rsquo; and
+  &lsquo;<samp>b</samp>&rsquo; are constants. Other conditions,
+  like &lsquo;<samp>x &gt;= y+1</samp>&rsquo; or
+  &lsquo;<samp>dreal(x)</samp>&rsquo;, will be less efficient to
+  check since Calc must bring the whole evaluator and simplifier
+  into play.</p>
+
+  <p>An interesting property of &lsquo;<samp>::</samp>&rsquo; is
+  that neither of its arguments will be touched by Calc&rsquo;s
+  default simplifications. This is important because conditions
+  often are expressions that cannot safely be evaluated early. For
+  example, the <code>typeof</code> function never remains in
+  symbolic form; entering &lsquo;<samp>typeof(a)</samp>&rsquo; will
+  put the number 100 (the type code for variables like
+  &lsquo;<samp>a</samp>&rsquo;) on the stack. But putting the
+  condition &lsquo;<samp>... :: typeof(a) = 6</samp>&rsquo; on the
+  stack is safe since &lsquo;<samp>::</samp>&rsquo; prevents the
+  <code>typeof</code> from being evaluated until the condition is
+  actually used by the rewrite system.</p>
+
+  <p>Since &lsquo;<samp>::</samp>&rsquo; protects its lefthand
+  side, too, you can use a dummy condition to protect a rule that
+  must itself not evaluate early. For example, it&rsquo;s not safe
+  to put &lsquo;<samp>a(f,x) := apply(f, [x])</samp>&rsquo; on the
+  stack because it will immediately evaluate to &lsquo;<samp>a(f,x)
+  := f(x)</samp>&rsquo;, where the meta-variable-ness of
+  <code>f</code> on the righthand side has been lost. But
+  &lsquo;<samp>a(f,x) := apply(f, [x]) :: 1</samp>&rsquo; is safe,
+  and of course the condition &lsquo;<samp>1</samp>&rsquo; is
+  always true (nonzero) so it has no effect on the functioning of
+  the rule. (The rewrite compiler will ensure that it doesn&rsquo;t
+  even impact the speed of matching the rule.)</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Algebraic-Properties-of-Rewrite-Rules.html#Algebraic-Properties-of-Rewrite-Rules"
+    accesskey="n" rel="next">Algebraic Properties of Rewrite
+    Rules</a>, Previous: <a href=
+    "Basic-Rewrite-Rules.html#Basic-Rewrite-Rules" accesskey="p"
+    rel="prev">Basic Rewrite Rules</a>, Up: <a href=
+    "Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel=
+    "up">Rewrite Rules</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,128 +19,180 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Setting Hooks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Setting Hooks">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Setting Hooks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Hooks.html#Hooks" rel="up" title="Hooks">
-<link href="Major-Modes.html#Major-Modes" rel="next" title="Major Modes">
-<link href="Running-Hooks.html#Running-Hooks" rel="prev" title="Running Hooks">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Setting Hooks</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Setting Hooks" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Setting Hooks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Hooks.html#Hooks" rel="up" title="Hooks" />
+  <link href="Major-Modes.html#Major-Modes" rel="next" title=
+  "Major Modes" />
+  <link href="Running-Hooks.html#Running-Hooks" rel="prev" title=
+  "Running Hooks" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Setting-Hooks" id="Setting-Hooks"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Running-Hooks.html#Running-Hooks"
+    accesskey="p" rel="prev">Running Hooks</a>, Up: <a href=
+    "Hooks.html#Hooks" accesskey="u" rel="up">Hooks</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Setting-Hooks-1" id="Setting-Hooks-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Setting-Hooks"></a>
-<div class="header">
-<p>
-Previous: <a href="Running-Hooks.html#Running-Hooks" accesskey="p" rel="prev">Running Hooks</a>, Up: <a href="Hooks.html#Hooks" accesskey="u" rel="up">Hooks</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Setting-Hooks-1"></a>
-<h4 class="subsection">22.1.2 Setting Hooks</h4>
+  <h4 class="subsection">22.1.2 Setting Hooks</h4>
 
-<p>Here&rsquo;s an example that uses a mode hook to turn on Auto Fill mode when
-in Lisp Interaction mode:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'lisp-interaction-mode-hook 'auto-fill-mode)
-</pre></div>
+  <p>Here&rsquo;s an example that uses a mode hook to turn on Auto
+  Fill mode when in Lisp Interaction mode:</p>
 
-<dl>
-<dt><a name="index-add_002dhook"></a>Function: <strong>add-hook</strong> <em>hook function &amp;optional append local</em></dt>
-<dd><p>This function is the handy way to add function <var>function</var> to hook
-variable <var>hook</var>.  You can use it for abnormal hooks as well as for
-normal hooks.  <var>function</var> can be any Lisp function that can accept
-the proper number of arguments for <var>hook</var>.  For example,
-</p>
-<div class="example">
-<pre class="example">(add-hook 'text-mode-hook 'my-text-hook-function)
-</pre></div>
+  <div class="example">
+    <pre class="example">
+(add-hook 'lisp-interaction-mode-hook 'auto-fill-mode)
+</pre>
+  </div>
 
-<p>adds <code>my-text-hook-function</code> to the hook called <code>text-mode-hook</code>.
-</p>
-<p>If <var>function</var> is already present in <var>hook</var> (comparing using
-<code>equal</code>), then <code>add-hook</code> does not add it a second time.
-</p>
-<p>If <var>function</var> has a non-<code>nil</code> property
-<code>permanent-local-hook</code>, then <code>kill-all-local-variables</code> (or
-changing major modes) won&rsquo;t delete it from the hook variable&rsquo;s local
-value.
-</p>
-<p>For a normal hook, hook functions should be designed so that the order
-in which they are executed does not matter.  Any dependence on the order
-is asking for trouble.  However, the order is predictable: normally,
-<var>function</var> goes at the front of the hook list, so it is executed
-first (barring another <code>add-hook</code> call).  If the optional argument
-<var>append</var> is non-<code>nil</code>, the new hook function goes at the end of
-the hook list and is executed last.
-</p>
-<p><code>add-hook</code> can handle the cases where <var>hook</var> is void or its
-value is a single function; it sets or changes the value to a list of
-functions.
-</p>
-<p>If <var>local</var> is non-<code>nil</code>, that says to add <var>function</var> to the
-buffer-local hook list instead of to the global hook list.  This makes
-the hook buffer-local and adds <code>t</code> to the buffer-local value.  The
-latter acts as a flag to run the hook functions in the default value as
-well as in the local value.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-add_002dhook" id=
+    "index-add_002dhook"></a>Function: <strong>add-hook</strong>
+    <em>hook function &amp;optional append local</em></dt>
 
-<dl>
-<dt><a name="index-remove_002dhook"></a>Function: <strong>remove-hook</strong> <em>hook function &amp;optional local</em></dt>
-<dd><p>This function removes <var>function</var> from the hook variable
-<var>hook</var>.  It compares <var>function</var> with elements of <var>hook</var>
-using <code>equal</code>, so it works for both symbols and lambda
-expressions.
-</p>
-<p>If <var>local</var> is non-<code>nil</code>, that says to remove <var>function</var>
-from the buffer-local hook list instead of from the global hook list.
-</p></dd></dl>
+    <dd>
+      <p>This function is the handy way to add function
+      <var>function</var> to hook variable <var>hook</var>. You can
+      use it for abnormal hooks as well as for normal hooks.
+      <var>function</var> can be any Lisp function that can accept
+      the proper number of arguments for <var>hook</var>. For
+      example,</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Running-Hooks.html#Running-Hooks" accesskey="p" rel="prev">Running Hooks</a>, Up: <a href="Hooks.html#Hooks" accesskey="u" rel="up">Hooks</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <div class="example">
+        <pre class="example">
+(add-hook 'text-mode-hook 'my-text-hook-function)
+</pre>
+      </div>
 
+      <p>adds <code>my-text-hook-function</code> to the hook called
+      <code>text-mode-hook</code>.</p>
 
+      <p>If <var>function</var> is already present in
+      <var>hook</var> (comparing using <code>equal</code>), then
+      <code>add-hook</code> does not add it a second time.</p>
 
+      <p>If <var>function</var> has a non-<code>nil</code> property
+      <code>permanent-local-hook</code>, then
+      <code>kill-all-local-variables</code> (or changing major
+      modes) won&rsquo;t delete it from the hook variable&rsquo;s
+      local value.</p>
+
+      <p>For a normal hook, hook functions should be designed so
+      that the order in which they are executed does not matter.
+      Any dependence on the order is asking for trouble. However,
+      the order is predictable: normally, <var>function</var> goes
+      at the front of the hook list, so it is executed first
+      (barring another <code>add-hook</code> call). If the optional
+      argument <var>append</var> is non-<code>nil</code>, the new
+      hook function goes at the end of the hook list and is
+      executed last.</p>
+
+      <p><code>add-hook</code> can handle the cases where
+      <var>hook</var> is void or its value is a single function; it
+      sets or changes the value to a list of functions.</p>
+
+      <p>If <var>local</var> is non-<code>nil</code>, that says to
+      add <var>function</var> to the buffer-local hook list instead
+      of to the global hook list. This makes the hook buffer-local
+      and adds <code>t</code> to the buffer-local value. The latter
+      acts as a flag to run the hook functions in the default value
+      as well as in the local value.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-remove_002dhook" id=
+    "index-remove_002dhook"></a>Function:
+    <strong>remove-hook</strong> <em>hook function &amp;optional
+    local</em></dt>
+
+    <dd>
+      <p>This function removes <var>function</var> from the hook
+      variable <var>hook</var>. It compares <var>function</var>
+      with elements of <var>hook</var> using <code>equal</code>, so
+      it works for both symbols and lambda expressions.</p>
+
+      <p>If <var>local</var> is non-<code>nil</code>, that says to
+      remove <var>function</var> from the buffer-local hook list
+      instead of from the global hook list.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Running-Hooks.html#Running-Hooks"
+    accesskey="p" rel="prev">Running Hooks</a>, Up: <a href=
+    "Hooks.html#Hooks" accesskey="u" rel="up">Hooks</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

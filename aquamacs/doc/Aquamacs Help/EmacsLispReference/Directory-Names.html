@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,184 +19,266 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Directory Names</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Directory Names">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Directory Names">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="File-Names.html#File-Names" rel="up" title="File Names">
-<link href="File-Name-Expansion.html#File-Name-Expansion" rel="next" title="File Name Expansion">
-<link href="Relative-File-Names.html#Relative-File-Names" rel="prev" title="Relative File Names">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Directory Names</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Directory Names" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Directory Names" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="File-Names.html#File-Names" rel="up" title=
+  "File Names" />
+  <link href="File-Name-Expansion.html#File-Name-Expansion" rel=
+  "next" title="File Name Expansion" />
+  <link href="Relative-File-Names.html#Relative-File-Names" rel=
+  "prev" title="Relative File Names" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Directory-Names" id="Directory-Names"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="File-Name-Expansion.html#File-Name-Expansion"
+    accesskey="n" rel="next">File Name Expansion</a>, Previous:
+    <a href="Relative-File-Names.html#Relative-File-Names"
+    accesskey="p" rel="prev">Relative File Names</a>, Up: <a href=
+    "File-Names.html#File-Names" accesskey="u" rel="up">File
+    Names</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Directory-Names-1" id="Directory-Names-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Directory-Names"></a>
-<div class="header">
-<p>
-Next: <a href="File-Name-Expansion.html#File-Name-Expansion" accesskey="n" rel="next">File Name Expansion</a>, Previous: <a href="Relative-File-Names.html#Relative-File-Names" accesskey="p" rel="prev">Relative File Names</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Directory-Names-1"></a>
-<h4 class="subsection">24.8.3 Directory Names</h4>
-<a name="index-directory-name"></a>
-<a name="index-directory-file-name"></a>
-<a name="index-file-name-of-directory"></a>
+  <h4 class="subsection">24.8.3 Directory Names</h4><a name=
+  "index-directory-name" id="index-directory-name"></a> <a name=
+  "index-directory-file-name" id="index-directory-file-name"></a>
+  <a name="index-file-name-of-directory" id=
+  "index-file-name-of-directory"></a>
 
-<p>A <em>directory name</em> is the name of a directory.  A directory is
-actually a kind of file, so it has a file name (called the
-<em>directory file name</em>, which is related to the directory name but
-not identical to it.  (This is not quite the same as the usual Unix
-terminology.)  These two different names for the same entity are
-related by a syntactic transformation.  On GNU and Unix systems, this
-is simple: a directory name ends in a slash, whereas the directory
-file name lacks that slash.  On MS-DOS the relationship is more
-complicated.
-</p>
-<p>The difference between directory name and directory file name is
-subtle but crucial.  When an Emacs variable or function argument is
-described as being a directory name, a directory file name is not
-acceptable.  When <code>file-name-directory</code> returns a string, that is
-always a directory name.
-</p>
-<p>The following two functions convert between directory names and
-directory file names.  They do nothing special with environment
-variable substitutions such as &lsquo;<samp>$HOME</samp>&rsquo;, and the constructs
-&lsquo;<samp>~</samp>&rsquo;, &lsquo;<samp>.</samp>&rsquo; and &lsquo;<samp>..</samp>&rsquo;.
-</p>
-<dl>
-<dt><a name="index-file_002dname_002das_002ddirectory"></a>Function: <strong>file-name-as-directory</strong> <em>filename</em></dt>
-<dd><p>This function returns a string representing <var>filename</var> in a form
-that the operating system will interpret as the name of a directory (a
-directory name).  On most systems, this means appending a slash to the
-string (if it does not already end in one).
-</p>
-<div class="example">
-<pre class="example">(file-name-as-directory &quot;~rms/lewis&quot;)
-     &rArr; &quot;~rms/lewis/&quot;
-</pre></div>
-</dd></dl>
+  <p>A <em>directory name</em> is the name of a directory. A
+  directory is actually a kind of file, so it has a file name
+  (called the <em>directory file name</em>, which is related to the
+  directory name but not identical to it. (This is not quite the
+  same as the usual Unix terminology.) These two different names
+  for the same entity are related by a syntactic transformation. On
+  GNU and Unix systems, this is simple: a directory name ends in a
+  slash, whereas the directory file name lacks that slash. On
+  MS-DOS the relationship is more complicated.</p>
 
-<dl>
-<dt><a name="index-directory_002dname_002dp"></a>Function: <strong>directory-name-p</strong> <em>filename</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>filename</var> ends with a
-directory separator character.  This is the forward slash &lsquo;<samp>/</samp>&rsquo; on
-Unix and GNU systems; MS-Windows and MS-DOS recognize both the forward
-slash and the backslash &lsquo;<samp>\</samp>&rsquo; as directory separators.
-</p></dd></dl>
+  <p>The difference between directory name and directory file name
+  is subtle but crucial. When an Emacs variable or function
+  argument is described as being a directory name, a directory file
+  name is not acceptable. When <code>file-name-directory</code>
+  returns a string, that is always a directory name.</p>
 
-<dl>
-<dt><a name="index-directory_002dfile_002dname"></a>Function: <strong>directory-file-name</strong> <em>dirname</em></dt>
-<dd><p>This function returns a string representing <var>dirname</var> in a form
-that the operating system will interpret as the name of a file (a
-directory file name).  On most systems, this means removing the final
-slash (or backslash) from the string.
-</p>
-<div class="example">
-<pre class="example">(directory-file-name &quot;~lewis/&quot;)
-     &rArr; &quot;~lewis&quot;
-</pre></div>
-</dd></dl>
+  <p>The following two functions convert between directory names
+  and directory file names. They do nothing special with
+  environment variable substitutions such as
+  &lsquo;<samp>$HOME</samp>&rsquo;, and the constructs
+  &lsquo;<samp>~</samp>&rsquo;, &lsquo;<samp>.</samp>&rsquo; and
+  &lsquo;<samp>..</samp>&rsquo;.</p>
 
-<p>Given a directory name, you can combine it with a relative file name
-using <code>concat</code>:
-</p>
-<div class="example">
-<pre class="example">(concat <var>dirname</var> <var>relfile</var>)
-</pre></div>
+  <dl>
+    <dt><a name="index-file_002dname_002das_002ddirectory" id=
+    "index-file_002dname_002das_002ddirectory"></a>Function:
+    <strong>file-name-as-directory</strong> <em>filename</em></dt>
 
-<p>Be sure to verify that the file name is relative before doing that.
-If you use an absolute file name, the results could be syntactically
-invalid or refer to the wrong file.
-</p>
-<p>If you want to use a directory file name in making such a
-combination, you must first convert it to a directory name using
-<code>file-name-as-directory</code>:
-</p>
-<div class="example">
-<pre class="example">(concat (file-name-as-directory <var>dirfile</var>) <var>relfile</var>)
-</pre></div>
+    <dd>
+      <p>This function returns a string representing
+      <var>filename</var> in a form that the operating system will
+      interpret as the name of a directory (a directory name). On
+      most systems, this means appending a slash to the string (if
+      it does not already end in one).</p>
 
-<p>Don&rsquo;t try concatenating a slash by hand, as in
-</p>
-<div class="example">
-<pre class="example">;;; <span class="roman">Wrong!</span>
-(concat <var>dirfile</var> &quot;/&quot; <var>relfile</var>)
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(file-name-as-directory "~rms/lewis")
+     &rArr; "~rms/lewis/"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>because this is not portable.  Always use
-<code>file-name-as-directory</code>.
-</p>
-<p>To avoid the issues mentioned above, or if the <var>dirname</var> value
-might be nil (for example, from an element of <code>load-path</code>), use:
-</p>
-<div class="example">
-<pre class="example">(expand-file-name <var>relfile</var> <var>dirname</var>)
-</pre></div>
+  <dl>
+    <dt><a name="index-directory_002dname_002dp" id=
+    "index-directory_002dname_002dp"></a>Function:
+    <strong>directory-name-p</strong> <em>filename</em></dt>
 
-<p>To convert a directory name to its abbreviation, use this
-function:
-</p>
-<a name="index-file-name-abbreviations"></a>
-<a name="index-abbreviated-file-names"></a>
-<dl>
-<dt><a name="index-abbreviate_002dfile_002dname"></a>Function: <strong>abbreviate-file-name</strong> <em>filename</em></dt>
-<dd><a name="abbreviate_002dfile_002dname"></a><p>This function returns an abbreviated form of <var>filename</var>.  It
-applies the abbreviations specified in <code>directory-abbrev-alist</code>
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Aliases.html#File-Aliases">File Aliases</a> in <cite>The GNU Emacs Manual</cite>),
-then substitutes &lsquo;<samp>~</samp>&rsquo; for the user&rsquo;s home directory if the
-argument names a file in the home directory or one of its
-subdirectories.  If the home directory is a root directory, it is not
-replaced with &lsquo;<samp>~</samp>&rsquo;, because this does not make the result shorter
-on many systems.
-</p>
-<p>You can use this function for directory names and for file names,
-because it recognizes abbreviations even as part of the name.
-</p></dd></dl>
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>filename</var> ends with a directory separator
+      character. This is the forward slash
+      &lsquo;<samp>/</samp>&rsquo; on Unix and GNU systems;
+      MS-Windows and MS-DOS recognize both the forward slash and
+      the backslash &lsquo;<samp>\</samp>&rsquo; as directory
+      separators.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="File-Name-Expansion.html#File-Name-Expansion" accesskey="n" rel="next">File Name Expansion</a>, Previous: <a href="Relative-File-Names.html#Relative-File-Names" accesskey="p" rel="prev">Relative File Names</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-directory_002dfile_002dname" id=
+    "index-directory_002dfile_002dname"></a>Function:
+    <strong>directory-file-name</strong> <em>dirname</em></dt>
 
+    <dd>
+      <p>This function returns a string representing
+      <var>dirname</var> in a form that the operating system will
+      interpret as the name of a file (a directory file name). On
+      most systems, this means removing the final slash (or
+      backslash) from the string.</p>
 
+      <div class="example">
+        <pre class="example">
+(directory-file-name "~lewis/")
+     &rArr; "~lewis"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <p>Given a directory name, you can combine it with a relative
+  file name using <code>concat</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(concat <var>dirname</var> <var>relfile</var>)
+</pre>
+  </div>
+
+  <p>Be sure to verify that the file name is relative before doing
+  that. If you use an absolute file name, the results could be
+  syntactically invalid or refer to the wrong file.</p>
+
+  <p>If you want to use a directory file name in making such a
+  combination, you must first convert it to a directory name using
+  <code>file-name-as-directory</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(concat (file-name-as-directory <var>dirfile</var>) <var>relfile</var>)
+</pre>
+  </div>
+
+  <p>Don&rsquo;t try concatenating a slash by hand, as in</p>
+
+  <div class="example">
+    <pre class="example">
+;;; <span class="roman">Wrong!</span>
+(concat <var>dirfile</var> "/" <var>relfile</var>)
+</pre>
+  </div>
+
+  <p>because this is not portable. Always use
+  <code>file-name-as-directory</code>.</p>
+
+  <p>To avoid the issues mentioned above, or if the
+  <var>dirname</var> value might be nil (for example, from an
+  element of <code>load-path</code>), use:</p>
+
+  <div class="example">
+    <pre class="example">
+(expand-file-name <var>relfile</var> <var>dirname</var>)
+</pre>
+  </div>
+
+  <p>To convert a directory name to its abbreviation, use this
+  function:</p><a name="index-file-name-abbreviations" id=
+  "index-file-name-abbreviations"></a> <a name=
+  "index-abbreviated-file-names" id=
+  "index-abbreviated-file-names"></a>
+
+  <dl>
+    <dt><a name="index-abbreviate_002dfile_002dname" id=
+    "index-abbreviate_002dfile_002dname"></a>Function:
+    <strong>abbreviate-file-name</strong> <em>filename</em></dt>
+
+    <dd>
+      <a name="abbreviate_002dfile_002dname" id=
+      "abbreviate_002dfile_002dname"></a>
+
+      <p>This function returns an abbreviated form of
+      <var>filename</var>. It applies the abbreviations specified
+      in <code>directory-abbrev-alist</code> (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Aliases.html#File-Aliases">
+      File Aliases</a> in <cite>The GNU Emacs Manual</cite>), then
+      substitutes &lsquo;<samp>~</samp>&rsquo; for the user&rsquo;s
+      home directory if the argument names a file in the home
+      directory or one of its subdirectories. If the home directory
+      is a root directory, it is not replaced with
+      &lsquo;<samp>~</samp>&rsquo;, because this does not make the
+      result shorter on many systems.</p>
+
+      <p>You can use this function for directory names and for file
+      names, because it recognizes abbreviations even as part of
+      the name.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="File-Name-Expansion.html#File-Name-Expansion"
+    accesskey="n" rel="next">File Name Expansion</a>, Previous:
+    <a href="Relative-File-Names.html#Relative-File-Names"
+    accesskey="p" rel="prev">Relative File Names</a>, Up: <a href=
+    "File-Names.html#File-Names" accesskey="u" rel="up">File
+    Names</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

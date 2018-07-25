@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,155 +19,423 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Text</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Text">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Text">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Near-Point.html#Near-Point" rel="next" title="Near Point">
-<link href="The-Region.html#The-Region" rel="prev" title="The Region">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Text</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Text" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Text" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Near-Point.html#Near-Point" rel="next" title=
+  "Near Point" />
+  <link href="The-Region.html#The-Region" rel="prev" title=
+  "The Region" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Text" id="Text"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="n" rel="next">Non-ASCII Characters</a>, Previous:
+    <a href="Markers.html#Markers" accesskey="p" rel=
+    "prev">Markers</a>, Up: <a href="index.html#Top" accesskey="u"
+    rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Text-1" id="Text-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Text"></a>
-<div class="header">
-<p>
-Next: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="n" rel="next">Non-ASCII Characters</a>, Previous: <a href="Markers.html#Markers" accesskey="p" rel="prev">Markers</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Text-1"></a>
-<h2 class="chapter">31 Text</h2>
-<a name="index-text"></a>
+  <h2 class="chapter">31 Text</h2><a name="index-text" id=
+  "index-text"></a>
 
-<p>This chapter describes the functions that deal with the text in a
-buffer.  Most examine, insert, or delete text in the current buffer,
-often operating at point or on text adjacent to point.  Many are
-interactive.  All the functions that change the text provide for undoing
-the changes (see <a href="Undo.html#Undo">Undo</a>).
-</p>
-<p>Many text-related functions operate on a region of text defined by two
-buffer positions passed in arguments named <var>start</var> and <var>end</var>.
-These arguments should be either markers (see <a href="Markers.html#Markers">Markers</a>) or numeric
-character positions (see <a href="Positions.html#Positions">Positions</a>).  The order of these arguments
-does not matter; it is all right for <var>start</var> to be the end of the
-region and <var>end</var> the beginning.  For example, <code>(delete-region 1
-10)</code> and <code>(delete-region 10 1)</code> are equivalent.  An
-<code>args-out-of-range</code> error is signaled if either <var>start</var> or
-<var>end</var> is outside the accessible portion of the buffer.  In an
-interactive call, point and the mark are used for these arguments.
-</p>
-<a name="index-buffer-contents"></a>
-<p>Throughout this chapter, &ldquo;text&rdquo; refers to the characters in the
-buffer, together with their properties (when relevant).  Keep in mind
-that point is always between two characters, and the cursor appears on
-the character after point.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Near-Point.html#Near-Point" accesskey="1">Near Point</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Examining text in the vicinity of point.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Buffer-Contents.html#Buffer-Contents" accesskey="2">Buffer Contents</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Examining text in a general fashion.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Comparing-Text.html#Comparing-Text" accesskey="3">Comparing Text</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Comparing substrings of buffers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Insertion.html#Insertion" accesskey="4">Insertion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Adding new text to a buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Commands-for-Insertion.html#Commands-for-Insertion" accesskey="5">Commands for Insertion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">User-level commands to insert text.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Deletion.html#Deletion" accesskey="6">Deletion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Removing text from a buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="User_002dLevel-Deletion.html#User_002dLevel-Deletion" accesskey="7">User-Level Deletion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">User-level commands to delete text.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey="8">The Kill Ring</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Where removed text sometimes is saved for later use.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Undo.html#Undo" accesskey="9">Undo</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Undoing changes to the text of a buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Maintaining-Undo.html#Maintaining-Undo">Maintaining Undo</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to enable and disable undo information.
-                        How to control how much information is kept.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Filling.html#Filling">Filling</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions for explicit filling.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Margins.html#Margins">Margins</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to specify margins for filling commands.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Adaptive Fill mode chooses a fill prefix from context.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Auto-Filling.html#Auto-Filling">Auto Filling</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How auto-fill mode is implemented to break lines.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Sorting.html#Sorting">Sorting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions for sorting parts of the buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Columns.html#Columns">Columns</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Computing horizontal positions, and using them.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Indentation.html#Indentation">Indentation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions to insert or adjust indentation.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Case-Changes.html#Case-Changes">Case Changes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Case conversion of parts of the buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Text-Properties.html#Text-Properties">Text Properties</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Assigning Lisp property lists to text characters.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Substitution.html#Substitution">Substitution</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Replacing a given character wherever it appears.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Registers.html#Registers">Registers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How registers are implemented.  Accessing the text or
-                       position stored in a register.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Transposition.html#Transposition">Transposition</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Swapping two portions of a buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Decompression.html#Decompression">Decompression</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Dealing with compressed data.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Base-64.html#Base-64">Base 64</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Conversion to or from base 64 encoding.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Checksum_002fHash.html#Checksum_002fHash">Checksum/Hash</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Computing cryptographic hashes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML">Parsing HTML/XML</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Parsing HTML and XML.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Atomic-Changes.html#Atomic-Changes">Atomic Changes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Installing several buffer changes atomically.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Change-Hooks.html#Change-Hooks">Change Hooks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Supplying functions to be run when text is changed.
-</td></tr>
-</table>
+  <p>This chapter describes the functions that deal with the text
+  in a buffer. Most examine, insert, or delete text in the current
+  buffer, often operating at point or on text adjacent to point.
+  Many are interactive. All the functions that change the text
+  provide for undoing the changes (see <a href=
+  "Undo.html#Undo">Undo</a>).</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="n" rel="next">Non-ASCII Characters</a>, Previous: <a href="Markers.html#Markers" accesskey="p" rel="prev">Markers</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Many text-related functions operate on a region of text
+  defined by two buffer positions passed in arguments named
+  <var>start</var> and <var>end</var>. These arguments should be
+  either markers (see <a href="Markers.html#Markers">Markers</a>)
+  or numeric character positions (see <a href=
+  "Positions.html#Positions">Positions</a>). The order of these
+  arguments does not matter; it is all right for <var>start</var>
+  to be the end of the region and <var>end</var> the beginning. For
+  example, <code>(delete-region 1 10)</code> and
+  <code>(delete-region 10 1)</code> are equivalent. An
+  <code>args-out-of-range</code> error is signaled if either
+  <var>start</var> or <var>end</var> is outside the accessible
+  portion of the buffer. In an interactive call, point and the mark
+  are used for these arguments.</p><a name="index-buffer-contents"
+  id="index-buffer-contents"></a>
 
+  <p>Throughout this chapter, &ldquo;text&rdquo; refers to the
+  characters in the buffer, together with their properties (when
+  relevant). Keep in mind that point is always between two
+  characters, and the cursor appears on the character after
+  point.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Near-Point.html#Near-Point" accesskey="1">Near
+      Point</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Examining text in the vicinity
+      of point.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Buffer-Contents.html#Buffer-Contents" accesskey="2">Buffer
+      Contents</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Examining text in a general
+      fashion.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Comparing-Text.html#Comparing-Text" accesskey="3">Comparing
+      Text</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Comparing substrings of
+      buffers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Insertion.html#Insertion" accesskey="4">Insertion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Adding new text to a
+      buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Commands-for-Insertion.html#Commands-for-Insertion"
+      accesskey="5">Commands for Insertion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">User-level commands to insert
+      text.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Deletion.html#Deletion" accesskey="6">Deletion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Removing text from a
+      buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "User_002dLevel-Deletion.html#User_002dLevel-Deletion"
+      accesskey="7">User-Level Deletion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">User-level commands to delete
+      text.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "The-Kill-Ring.html#The-Kill-Ring" accesskey="8">The Kill
+      Ring</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Where removed text sometimes is
+      saved for later use.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href="Undo.html#Undo"
+      accesskey="9">Undo</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Undoing changes to the text of
+      a buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Maintaining-Undo.html#Maintaining-Undo">Maintaining
+      Undo</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to enable and disable undo
+      information. How to control how much information is
+      kept.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Filling.html#Filling">Filling</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions for explicit
+      filling.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Margins.html#Margins">Margins</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to specify margins for
+      filling commands.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Adaptive Fill mode chooses a
+      fill prefix from context.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Auto-Filling.html#Auto-Filling">Auto Filling</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How auto-fill mode is
+      implemented to break lines.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Sorting.html#Sorting">Sorting</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions for sorting parts of
+      the buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Columns.html#Columns">Columns</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Computing horizontal positions,
+      and using them.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Indentation.html#Indentation">Indentation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions to insert or adjust
+      indentation.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Case-Changes.html#Case-Changes">Case Changes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Case conversion of parts of the
+      buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Text-Properties.html#Text-Properties">Text
+      Properties</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Assigning Lisp property lists
+      to text characters.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Substitution.html#Substitution">Substitution</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Replacing a given character
+      wherever it appears.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Registers.html#Registers">Registers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How registers are implemented.
+      Accessing the text or position stored in a register.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Transposition.html#Transposition">Transposition</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Swapping two portions of a
+      buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Decompression.html#Decompression">Decompression</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Dealing with compressed
+      data.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Base-64.html#Base-64">Base 64</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Conversion to or from base 64
+      encoding.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Checksum_002fHash.html#Checksum_002fHash">Checksum/Hash</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Computing cryptographic
+      hashes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Parsing-HTML_002fXML.html#Parsing-HTML_002fXML">Parsing
+      HTML/XML</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Parsing HTML and XML.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Atomic-Changes.html#Atomic-Changes">Atomic Changes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Installing several buffer
+      changes atomically.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Change-Hooks.html#Change-Hooks">Change Hooks</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Supplying functions to be run
+      when text is changed.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="n" rel="next">Non-ASCII Characters</a>, Previous:
+    <a href="Markers.html#Markers" accesskey="p" rel=
+    "prev">Markers</a>, Up: <a href="index.html#Top" accesskey="u"
+    rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

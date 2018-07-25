@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,333 +19,502 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: The Mark</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: The Mark">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: The Mark">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Markers.html#Markers" rel="up" title="Markers">
-<link href="The-Region.html#The-Region" rel="next" title="The Region">
-<link href="Moving-Markers.html#Moving-Markers" rel="prev" title="Moving Markers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: The Mark</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: The Mark" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: The Mark" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Markers.html#Markers" rel="up" title="Markers" />
+  <link href="The-Region.html#The-Region" rel="next" title=
+  "The Region" />
+  <link href="Moving-Markers.html#Moving-Markers" rel="prev" title=
+  "Moving Markers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="The-Mark" id="The-Mark"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="The-Region.html#The-Region" accesskey="n"
+    rel="next">The Region</a>, Previous: <a href=
+    "Moving-Markers.html#Moving-Markers" accesskey="p" rel=
+    "prev">Moving Markers</a>, Up: <a href="Markers.html#Markers"
+    accesskey="u" rel="up">Markers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Mark-1" id="The-Mark-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-Mark"></a>
-<div class="header">
-<p>
-Next: <a href="The-Region.html#The-Region" accesskey="n" rel="next">The Region</a>, Previous: <a href="Moving-Markers.html#Moving-Markers" accesskey="p" rel="prev">Moving Markers</a>, Up: <a href="Markers.html#Markers" accesskey="u" rel="up">Markers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Mark-1"></a>
-<h3 class="section">30.7 The Mark</h3>
-<a name="index-mark_002c-the"></a>
+  <h3 class="section">30.7 The Mark</h3><a name=
+  "index-mark_002c-the" id="index-mark_002c-the"></a>
 
-<p>Each buffer has a special marker, which is designated <em>the
-mark</em>.  When a buffer is newly created, this marker exists but does
-not point anywhere; this means that the mark doesn&rsquo;t exist in that
-buffer yet.  Subsequent commands can set the mark.
-</p>
-<p>The mark specifies a position to bound a range of text for many
-commands, such as <code>kill-region</code> and <code>indent-rigidly</code>.  These
-commands typically act on the text between point and the mark, which
-is called the <em>region</em>.  If you are writing a command that
-operates on the region, don&rsquo;t examine the mark directly; instead, use
-<code>interactive</code> with the &lsquo;<samp>r</samp>&rsquo; specification.  This provides the
-values of point and the mark as arguments to the command in an
-interactive call, but permits other Lisp programs to specify arguments
-explicitly.  See <a href="Interactive-Codes.html#Interactive-Codes">Interactive Codes</a>.
-</p>
-<p>Some commands set the mark as a side-effect.  Commands should do
-this only if it has a potential use to the user, and never for their
-own internal purposes.  For example, the <code>replace-regexp</code> command
-sets the mark to the value of point before doing any replacements,
-because this enables the user to move back there conveniently after
-the replace is finished.
-</p>
-<p>Once the mark exists in a buffer, it normally never ceases to
-exist.  However, it may become <em>inactive</em>, if Transient Mark mode
-is enabled.  The buffer-local variable <code>mark-active</code>, if
-non-<code>nil</code>, means that the mark is active.  A command can call the
-function <code>deactivate-mark</code> to deactivate the mark directly, or it
-can request deactivation of the mark upon return to the editor command
-loop by setting the variable <code>deactivate-mark</code> to a
-non-<code>nil</code> value.
-</p>
-<p>If Transient Mark mode is enabled, certain editing commands that
-normally apply to text near point, apply instead to the region when
-the mark is active.  This is the main motivation for using Transient
-Mark mode.  (Another is that this enables highlighting of the region
-when the mark is active.  See <a href="Display.html#Display">Display</a>.)
-</p>
-<a name="index-mark-ring"></a>
-<p>In addition to the mark, each buffer has a <em>mark ring</em> which is a
-list of markers containing previous values of the mark.  When editing
-commands change the mark, they should normally save the old value of the
-mark on the mark ring.  The variable <code>mark-ring-max</code> specifies the
-maximum number of entries in the mark ring; once the list becomes this
-long, adding a new element deletes the last element.
-</p>
-<p>There is also a separate global mark ring, but that is used only in a
-few particular user-level commands, and is not relevant to Lisp
-programming.  So we do not describe it here.
-</p>
-<dl>
-<dt><a name="index-mark"></a>Function: <strong>mark</strong> <em>&amp;optional force</em></dt>
-<dd><a name="index-current-buffer-mark"></a>
-<p>This function returns the current buffer&rsquo;s mark position as an integer,
-or <code>nil</code> if no mark has ever been set in this buffer.
-</p>
-<p>If Transient Mark mode is enabled, and <code>mark-even-if-inactive</code> is
-<code>nil</code>, <code>mark</code> signals an error if the mark is inactive.
-However, if <var>force</var> is non-<code>nil</code>, then <code>mark</code> disregards
-inactivity of the mark, and returns the mark position (or <code>nil</code>)
-anyway.
-</p></dd></dl>
+  <p>Each buffer has a special marker, which is designated <em>the
+  mark</em>. When a buffer is newly created, this marker exists but
+  does not point anywhere; this means that the mark doesn&rsquo;t
+  exist in that buffer yet. Subsequent commands can set the
+  mark.</p>
 
-<dl>
-<dt><a name="index-mark_002dmarker"></a>Function: <strong>mark-marker</strong></dt>
-<dd><p>This function returns the marker that represents the current buffer&rsquo;s
-mark.  It is not a copy, it is the marker used internally.  Therefore,
-changing this marker&rsquo;s position will directly affect the buffer&rsquo;s
-mark.  Don&rsquo;t do that unless that is the effect you want.
-</p>
-<div class="example">
-<pre class="example">(setq m (mark-marker))
+  <p>The mark specifies a position to bound a range of text for
+  many commands, such as <code>kill-region</code> and
+  <code>indent-rigidly</code>. These commands typically act on the
+  text between point and the mark, which is called the
+  <em>region</em>. If you are writing a command that operates on
+  the region, don&rsquo;t examine the mark directly; instead, use
+  <code>interactive</code> with the &lsquo;<samp>r</samp>&rsquo;
+  specification. This provides the values of point and the mark as
+  arguments to the command in an interactive call, but permits
+  other Lisp programs to specify arguments explicitly. See <a href=
+  "Interactive-Codes.html#Interactive-Codes">Interactive
+  Codes</a>.</p>
+
+  <p>Some commands set the mark as a side-effect. Commands should
+  do this only if it has a potential use to the user, and never for
+  their own internal purposes. For example, the
+  <code>replace-regexp</code> command sets the mark to the value of
+  point before doing any replacements, because this enables the
+  user to move back there conveniently after the replace is
+  finished.</p>
+
+  <p>Once the mark exists in a buffer, it normally never ceases to
+  exist. However, it may become <em>inactive</em>, if Transient
+  Mark mode is enabled. The buffer-local variable
+  <code>mark-active</code>, if non-<code>nil</code>, means that the
+  mark is active. A command can call the function
+  <code>deactivate-mark</code> to deactivate the mark directly, or
+  it can request deactivation of the mark upon return to the editor
+  command loop by setting the variable <code>deactivate-mark</code>
+  to a non-<code>nil</code> value.</p>
+
+  <p>If Transient Mark mode is enabled, certain editing commands
+  that normally apply to text near point, apply instead to the
+  region when the mark is active. This is the main motivation for
+  using Transient Mark mode. (Another is that this enables
+  highlighting of the region when the mark is active. See <a href=
+  "Display.html#Display">Display</a>.)</p><a name="index-mark-ring"
+  id="index-mark-ring"></a>
+
+  <p>In addition to the mark, each buffer has a <em>mark ring</em>
+  which is a list of markers containing previous values of the
+  mark. When editing commands change the mark, they should normally
+  save the old value of the mark on the mark ring. The variable
+  <code>mark-ring-max</code> specifies the maximum number of
+  entries in the mark ring; once the list becomes this long, adding
+  a new element deletes the last element.</p>
+
+  <p>There is also a separate global mark ring, but that is used
+  only in a few particular user-level commands, and is not relevant
+  to Lisp programming. So we do not describe it here.</p>
+
+  <dl>
+    <dt><a name="index-mark" id="index-mark"></a>Function:
+    <strong>mark</strong> <em>&amp;optional force</em></dt>
+
+    <dd>
+      <a name="index-current-buffer-mark" id=
+      "index-current-buffer-mark"></a>
+
+      <p>This function returns the current buffer&rsquo;s mark
+      position as an integer, or <code>nil</code> if no mark has
+      ever been set in this buffer.</p>
+
+      <p>If Transient Mark mode is enabled, and
+      <code>mark-even-if-inactive</code> is <code>nil</code>,
+      <code>mark</code> signals an error if the mark is inactive.
+      However, if <var>force</var> is non-<code>nil</code>, then
+      <code>mark</code> disregards inactivity of the mark, and
+      returns the mark position (or <code>nil</code>) anyway.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-mark_002dmarker" id=
+    "index-mark_002dmarker"></a>Function:
+    <strong>mark-marker</strong></dt>
+
+    <dd>
+      <p>This function returns the marker that represents the
+      current buffer&rsquo;s mark. It is not a copy, it is the
+      marker used internally. Therefore, changing this
+      marker&rsquo;s position will directly affect the
+      buffer&rsquo;s mark. Don&rsquo;t do that unless that is the
+      effect you want.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq m (mark-marker))
      &rArr; #&lt;marker at 3420 in markers.texi&gt;
-</pre><pre class="example">(set-marker m 100)
+</pre>
+        <pre class="example">
+(set-marker m 100)
      &rArr; #&lt;marker at 100 in markers.texi&gt;
-</pre><pre class="example">(mark-marker)
+</pre>
+        <pre class="example">
+(mark-marker)
      &rArr; #&lt;marker at 100 in markers.texi&gt;
-</pre></div>
+</pre>
+      </div>
 
-<p>Like any marker, this marker can be set to point at any buffer you
-like.  If you make it point at any buffer other than the one of which
-it is the mark, it will yield perfectly consistent, but rather odd,
-results.  We recommend that you not do it!
-</p></dd></dl>
+      <p>Like any marker, this marker can be set to point at any
+      buffer you like. If you make it point at any buffer other
+      than the one of which it is the mark, it will yield perfectly
+      consistent, but rather odd, results. We recommend that you
+      not do it!</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-set_002dmark"></a>Function: <strong>set-mark</strong> <em>position</em></dt>
-<dd><p>This function sets the mark to <var>position</var>, and activates the mark.
-The old value of the mark is <em>not</em> pushed onto the mark ring.
-</p>
-<p><strong>Please note:</strong> Use this function only if you want the user to
-see that the mark has moved, and you want the previous mark position to
-be lost.  Normally, when a new mark is set, the old one should go on the
-<code>mark-ring</code>.  For this reason, most applications should use
-<code>push-mark</code> and <code>pop-mark</code>, not <code>set-mark</code>.
-</p>
-<p>Novice Emacs Lisp programmers often try to use the mark for the wrong
-purposes.  The mark saves a location for the user&rsquo;s convenience.  An
-editing command should not alter the mark unless altering the mark is
-part of the user-level functionality of the command.  (And, in that
-case, this effect should be documented.)  To remember a location for
-internal use in the Lisp program, store it in a Lisp variable.  For
-example:
-</p>
-<div class="example">
-<pre class="example">(let ((beg (point)))
+  <dl>
+    <dt><a name="index-set_002dmark" id=
+    "index-set_002dmark"></a>Function: <strong>set-mark</strong>
+    <em>position</em></dt>
+
+    <dd>
+      <p>This function sets the mark to <var>position</var>, and
+      activates the mark. The old value of the mark is <em>not</em>
+      pushed onto the mark ring.</p>
+
+      <p><strong>Please note:</strong> Use this function only if
+      you want the user to see that the mark has moved, and you
+      want the previous mark position to be lost. Normally, when a
+      new mark is set, the old one should go on the
+      <code>mark-ring</code>. For this reason, most applications
+      should use <code>push-mark</code> and <code>pop-mark</code>,
+      not <code>set-mark</code>.</p>
+
+      <p>Novice Emacs Lisp programmers often try to use the mark
+      for the wrong purposes. The mark saves a location for the
+      user&rsquo;s convenience. An editing command should not alter
+      the mark unless altering the mark is part of the user-level
+      functionality of the command. (And, in that case, this effect
+      should be documented.) To remember a location for internal
+      use in the Lisp program, store it in a Lisp variable. For
+      example:</p>
+
+      <div class="example">
+        <pre class="example">
+(let ((beg (point)))
   (forward-line 1)
   (delete-region beg (point))).
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-push_002dmark"></a>Function: <strong>push-mark</strong> <em>&amp;optional position nomsg activate</em></dt>
-<dd><p>This function sets the current buffer&rsquo;s mark to <var>position</var>, and
-pushes a copy of the previous mark onto <code>mark-ring</code>.  If
-<var>position</var> is <code>nil</code>, then the value of point is used.
-</p>
-<p>The function <code>push-mark</code> normally <em>does not</em> activate the
-mark.  To do that, specify <code>t</code> for the argument <var>activate</var>.
-</p>
-<p>A &lsquo;<samp>Mark set</samp>&rsquo; message is displayed unless <var>nomsg</var> is
-non-<code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-push_002dmark" id=
+    "index-push_002dmark"></a>Function: <strong>push-mark</strong>
+    <em>&amp;optional position nomsg activate</em></dt>
 
-<dl>
-<dt><a name="index-pop_002dmark"></a>Function: <strong>pop-mark</strong></dt>
-<dd><p>This function pops off the top element of <code>mark-ring</code> and makes
-that mark become the buffer&rsquo;s actual mark.  This does not move point in
-the buffer, and it does nothing if <code>mark-ring</code> is empty.  It
-deactivates the mark.
-</p></dd></dl>
+    <dd>
+      <p>This function sets the current buffer&rsquo;s mark to
+      <var>position</var>, and pushes a copy of the previous mark
+      onto <code>mark-ring</code>. If <var>position</var> is
+      <code>nil</code>, then the value of point is used.</p>
 
-<dl>
-<dt><a name="index-transient_002dmark_002dmode"></a>User Option: <strong>transient-mark-mode</strong></dt>
-<dd><p>This variable, if non-<code>nil</code>, enables Transient Mark mode.  In
-Transient Mark mode, every buffer-modifying primitive sets
-<code>deactivate-mark</code>.  As a consequence, most commands that modify
-the buffer also deactivate the mark.
-</p>
-<p>When Transient Mark mode is enabled and the mark is active, many
-commands that normally apply to the text near point instead apply to
-the region.  Such commands should use the function <code>use-region-p</code>
-to test whether they should operate on the region.  See <a href="The-Region.html#The-Region">The Region</a>.
-</p>
-<p>Lisp programs can set <code>transient-mark-mode</code> to non-<code>nil</code>,
-non-<code>t</code> values to enable Transient Mark mode temporarily.  If the
-value is <code>lambda</code>, Transient Mark mode is automatically turned
-off after any action, such as buffer modification, that would normally
-deactivate the mark.  If the value is <code>(only&nbsp;.&nbsp;<var>oldval</var>)</code><!-- /@w -->,
-then <code>transient-mark-mode</code> is set to the value <var>oldval</var> after
-any subsequent command that moves point and is not shift-translated
-(see <a href="Key-Sequence-Input.html#Key-Sequence-Input">shift-translation</a>), or after any other
-action that would normally deactivate the mark.
-</p></dd></dl>
+      <p>The function <code>push-mark</code> normally <em>does
+      not</em> activate the mark. To do that, specify
+      <code>t</code> for the argument <var>activate</var>.</p>
 
-<dl>
-<dt><a name="index-mark_002deven_002dif_002dinactive"></a>User Option: <strong>mark-even-if-inactive</strong></dt>
-<dd><p>If this is non-<code>nil</code>, Lisp programs and the Emacs user can use the
-mark even when it is inactive.  This option affects the behavior of
-Transient Mark mode.  When the option is non-<code>nil</code>, deactivation of
-the mark turns off region highlighting, but commands that use the mark
-behave as if the mark were still active.
-</p></dd></dl>
+      <p>A &lsquo;<samp>Mark set</samp>&rsquo; message is displayed
+      unless <var>nomsg</var> is non-<code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-deactivate_002dmark-1"></a>Variable: <strong>deactivate-mark</strong></dt>
-<dd><p>If an editor command sets this variable non-<code>nil</code>, then the editor
-command loop deactivates the mark after the command returns (if
-Transient Mark mode is enabled).  All the primitives that change the
-buffer set <code>deactivate-mark</code>, to deactivate the mark when the
-command is finished.  Setting this variable makes it buffer-local.
-</p>
-<p>To write Lisp code that modifies the buffer without causing
-deactivation of the mark at the end of the command, bind
-<code>deactivate-mark</code> to <code>nil</code> around the code that does the
-modification.  For example:
-</p>
-<div class="example">
-<pre class="example">(let (deactivate-mark)
-  (insert &quot; &quot;))
-</pre></div>
-</dd></dl>
+  <dl>
+    <dt><a name="index-pop_002dmark" id=
+    "index-pop_002dmark"></a>Function:
+    <strong>pop-mark</strong></dt>
 
-<dl>
-<dt><a name="index-deactivate_002dmark"></a>Function: <strong>deactivate-mark</strong> <em>&amp;optional force</em></dt>
-<dd><p>If Transient Mark mode is enabled or <var>force</var> is non-<code>nil</code>,
-this function deactivates the mark and runs the normal hook
-<code>deactivate-mark-hook</code>.  Otherwise, it does nothing.
-</p></dd></dl>
+    <dd>
+      <p>This function pops off the top element of
+      <code>mark-ring</code> and makes that mark become the
+      buffer&rsquo;s actual mark. This does not move point in the
+      buffer, and it does nothing if <code>mark-ring</code> is
+      empty. It deactivates the mark.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-mark_002dactive"></a>Variable: <strong>mark-active</strong></dt>
-<dd><p>The mark is active when this variable is non-<code>nil</code>.  This
-variable is always buffer-local in each buffer.  Do <em>not</em> use the
-value of this variable to decide whether a command that normally
-operates on text near point should operate on the region instead.  Use
-the function <code>use-region-p</code> for that (see <a href="The-Region.html#The-Region">The Region</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-transient_002dmark_002dmode" id=
+    "index-transient_002dmark_002dmode"></a>User Option:
+    <strong>transient-mark-mode</strong></dt>
 
-<dl>
-<dt><a name="index-activate_002dmark_002dhook"></a>Variable: <strong>activate-mark-hook</strong></dt>
-<dt><a name="index-deactivate_002dmark_002dhook"></a>Variable: <strong>deactivate-mark-hook</strong></dt>
-<dd><p>These normal hooks are run, respectively, when the mark becomes active
-and when it becomes inactive.  The hook <code>activate-mark-hook</code> is
-also run at the end of the command loop if the mark is active and it
-is possible that the region may have changed.
-</p></dd></dl>
+    <dd>
+      <p>This variable, if non-<code>nil</code>, enables Transient
+      Mark mode. In Transient Mark mode, every buffer-modifying
+      primitive sets <code>deactivate-mark</code>. As a
+      consequence, most commands that modify the buffer also
+      deactivate the mark.</p>
 
-<dl>
-<dt><a name="index-handle_002dshift_002dselection"></a>Function: <strong>handle-shift-selection</strong></dt>
-<dd><p>This function implements the shift-selection behavior of
-point-motion commands.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Shift-Selection.html#Shift-Selection">Shift Selection</a> in <cite>The GNU Emacs
-Manual</cite>.  It is called automatically by the Emacs command loop
-whenever a command with a &lsquo;<samp>^</samp>&rsquo; character in its <code>interactive</code>
-spec is invoked, before the command itself is executed
-(see <a href="Interactive-Codes.html#Interactive-Codes">^</a>).
-</p>
-<p>If <code>shift-select-mode</code> is non-<code>nil</code> and the current command
-was invoked via shift translation (see <a href="Key-Sequence-Input.html#Key-Sequence-Input">shift-translation</a>), this function sets the mark and temporarily
-activates the region, unless the region was already temporarily
-activated in this way.  Otherwise, if the region has been activated
-temporarily, it deactivates the mark and restores the variable
-<code>transient-mark-mode</code> to its earlier value.
-</p></dd></dl>
+      <p>When Transient Mark mode is enabled and the mark is
+      active, many commands that normally apply to the text near
+      point instead apply to the region. Such commands should use
+      the function <code>use-region-p</code> to test whether they
+      should operate on the region. See <a href=
+      "The-Region.html#The-Region">The Region</a>.</p>
 
-<dl>
-<dt><a name="index-mark_002dring"></a>Variable: <strong>mark-ring</strong></dt>
-<dd><p>The value of this buffer-local variable is the list of saved former
-marks of the current buffer, most recent first.
-</p>
-<div class="example">
-<pre class="example">mark-ring
+      <p>Lisp programs can set <code>transient-mark-mode</code> to
+      non-<code>nil</code>, non-<code>t</code> values to enable
+      Transient Mark mode temporarily. If the value is
+      <code>lambda</code>, Transient Mark mode is automatically
+      turned off after any action, such as buffer modification,
+      that would normally deactivate the mark. If the value is
+      <code>(only&nbsp;.&nbsp;<var>oldval</var>)</code>
+      <!-- /@w -->, then <code>transient-mark-mode</code> is set to
+      the value <var>oldval</var> after any subsequent command that
+      moves point and is not shift-translated (see <a href=
+      "Key-Sequence-Input.html#Key-Sequence-Input">shift-translation</a>),
+      or after any other action that would normally deactivate the
+      mark.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-mark_002deven_002dif_002dinactive" id=
+    "index-mark_002deven_002dif_002dinactive"></a>User Option:
+    <strong>mark-even-if-inactive</strong></dt>
+
+    <dd>
+      <p>If this is non-<code>nil</code>, Lisp programs and the
+      Emacs user can use the mark even when it is inactive. This
+      option affects the behavior of Transient Mark mode. When the
+      option is non-<code>nil</code>, deactivation of the mark
+      turns off region highlighting, but commands that use the mark
+      behave as if the mark were still active.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-deactivate_002dmark-1" id=
+    "index-deactivate_002dmark-1"></a>Variable:
+    <strong>deactivate-mark</strong></dt>
+
+    <dd>
+      <p>If an editor command sets this variable
+      non-<code>nil</code>, then the editor command loop
+      deactivates the mark after the command returns (if Transient
+      Mark mode is enabled). All the primitives that change the
+      buffer set <code>deactivate-mark</code>, to deactivate the
+      mark when the command is finished. Setting this variable
+      makes it buffer-local.</p>
+
+      <p>To write Lisp code that modifies the buffer without
+      causing deactivation of the mark at the end of the command,
+      bind <code>deactivate-mark</code> to <code>nil</code> around
+      the code that does the modification. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(let (deactivate-mark)
+  (insert " "))
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-deactivate_002dmark" id=
+    "index-deactivate_002dmark"></a>Function:
+    <strong>deactivate-mark</strong> <em>&amp;optional
+    force</em></dt>
+
+    <dd>
+      <p>If Transient Mark mode is enabled or <var>force</var> is
+      non-<code>nil</code>, this function deactivates the mark and
+      runs the normal hook <code>deactivate-mark-hook</code>.
+      Otherwise, it does nothing.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-mark_002dactive" id=
+    "index-mark_002dactive"></a>Variable:
+    <strong>mark-active</strong></dt>
+
+    <dd>
+      <p>The mark is active when this variable is
+      non-<code>nil</code>. This variable is always buffer-local in
+      each buffer. Do <em>not</em> use the value of this variable
+      to decide whether a command that normally operates on text
+      near point should operate on the region instead. Use the
+      function <code>use-region-p</code> for that (see <a href=
+      "The-Region.html#The-Region">The Region</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-activate_002dmark_002dhook" id=
+    "index-activate_002dmark_002dhook"></a>Variable:
+    <strong>activate-mark-hook</strong></dt>
+
+    <dt><a name="index-deactivate_002dmark_002dhook" id=
+    "index-deactivate_002dmark_002dhook"></a>Variable:
+    <strong>deactivate-mark-hook</strong></dt>
+
+    <dd>
+      <p>These normal hooks are run, respectively, when the mark
+      becomes active and when it becomes inactive. The hook
+      <code>activate-mark-hook</code> is also run at the end of the
+      command loop if the mark is active and it is possible that
+      the region may have changed.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-handle_002dshift_002dselection" id=
+    "index-handle_002dshift_002dselection"></a>Function:
+    <strong>handle-shift-selection</strong></dt>
+
+    <dd>
+      <p>This function implements the shift-selection behavior of
+      point-motion commands. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Shift-Selection.html#Shift-Selection">
+      Shift Selection</a> in <cite>The GNU Emacs Manual</cite>. It
+      is called automatically by the Emacs command loop whenever a
+      command with a &lsquo;<samp>^</samp>&rsquo; character in its
+      <code>interactive</code> spec is invoked, before the command
+      itself is executed (see <a href=
+      "Interactive-Codes.html#Interactive-Codes">^</a>).</p>
+
+      <p>If <code>shift-select-mode</code> is non-<code>nil</code>
+      and the current command was invoked via shift translation
+      (see <a href=
+      "Key-Sequence-Input.html#Key-Sequence-Input">shift-translation</a>),
+      this function sets the mark and temporarily activates the
+      region, unless the region was already temporarily activated
+      in this way. Otherwise, if the region has been activated
+      temporarily, it deactivates the mark and restores the
+      variable <code>transient-mark-mode</code> to its earlier
+      value.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-mark_002dring" id=
+    "index-mark_002dring"></a>Variable:
+    <strong>mark-ring</strong></dt>
+
+    <dd>
+      <p>The value of this buffer-local variable is the list of
+      saved former marks of the current buffer, most recent
+      first.</p>
+
+      <div class="example">
+        <pre class="example">
+mark-ring
 &rArr; (#&lt;marker at 11050 in markers.texi&gt;
     #&lt;marker at 10832 in markers.texi&gt;
     &hellip;)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-mark_002dring_002dmax"></a>User Option: <strong>mark-ring-max</strong></dt>
-<dd><p>The value of this variable is the maximum size of <code>mark-ring</code>.  If
-more marks than this are pushed onto the <code>mark-ring</code>,
-<code>push-mark</code> discards an old mark when it adds a new one.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-mark_002dring_002dmax" id=
+    "index-mark_002dring_002dmax"></a>User Option:
+    <strong>mark-ring-max</strong></dt>
 
+    <dd>
+      <p>The value of this variable is the maximum size of
+      <code>mark-ring</code>. If more marks than this are pushed
+      onto the <code>mark-ring</code>, <code>push-mark</code>
+      discards an old mark when it adds a new one.</p>
+    </dd>
+  </dl><a name="index-delete_002dselection_002c-symbol-property"
+  id="index-delete_002dselection_002c-symbol-property"></a>
+  <a name="index-delete_002dselection_002dhelper" id=
+  "index-delete_002dselection_002dhelper"></a> <a name=
+  "index-delete_002dselection_002dpre_002dhook" id=
+  "index-delete_002dselection_002dpre_002dhook"></a>
 
-<a name="index-delete_002dselection_002c-symbol-property"></a>
-<a name="index-delete_002dselection_002dhelper"></a>
-<a name="index-delete_002dselection_002dpre_002dhook"></a>
-<p>When Delete Selection mode (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Using-Region.html#Using-Region">Delete Selection</a> in <cite>The GNU Emacs Manual</cite>) is enabled, commands that operate on the
-active region (a.k.a. &ldquo;selection&rdquo;) behave slightly differently.
-This works by adding the function <code>delete-selection-pre-hook</code> to
-the <code>pre-command-hook</code> (see <a href="Command-Overview.html#Command-Overview">Command Overview</a>).  That function
-calls <code>delete-selection-helper</code> to delete the selection as
-appropriate for the command.  If you want to adapt a command to Delete
-Selection mode, put the <code>delete-selection</code> property on the
-function&rsquo;s symbol (see <a href="Symbol-Plists.html#Symbol-Plists">Symbol Plists</a>); commands that don&rsquo;t have
-this property on their symbol won&rsquo;t delete the selection.  This
-property can have one of several values to tailor the behavior to what
-the command is supposed to do; see the doc strings of
-<code>delete-selection-pre-hook</code> and <code>delete-selection-helper</code>
-for the details.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="The-Region.html#The-Region" accesskey="n" rel="next">The Region</a>, Previous: <a href="Moving-Markers.html#Moving-Markers" accesskey="p" rel="prev">Moving Markers</a>, Up: <a href="Markers.html#Markers" accesskey="u" rel="up">Markers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When Delete Selection mode (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Using-Region.html#Using-Region">
+  Delete Selection</a> in <cite>The GNU Emacs Manual</cite>) is
+  enabled, commands that operate on the active region (a.k.a.
+  &ldquo;selection&rdquo;) behave slightly differently. This works
+  by adding the function <code>delete-selection-pre-hook</code> to
+  the <code>pre-command-hook</code> (see <a href=
+  "Command-Overview.html#Command-Overview">Command Overview</a>).
+  That function calls <code>delete-selection-helper</code> to
+  delete the selection as appropriate for the command. If you want
+  to adapt a command to Delete Selection mode, put the
+  <code>delete-selection</code> property on the function&rsquo;s
+  symbol (see <a href="Symbol-Plists.html#Symbol-Plists">Symbol
+  Plists</a>); commands that don&rsquo;t have this property on
+  their symbol won&rsquo;t delete the selection. This property can
+  have one of several values to tailor the behavior to what the
+  command is supposed to do; see the doc strings of
+  <code>delete-selection-pre-hook</code> and
+  <code>delete-selection-helper</code> for the details.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="The-Region.html#The-Region" accesskey="n"
+    rel="next">The Region</a>, Previous: <a href=
+    "Moving-Markers.html#Moving-Markers" accesskey="p" rel=
+    "prev">Moving Markers</a>, Up: <a href="Markers.html#Markers"
+    accesskey="u" rel="up">Markers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

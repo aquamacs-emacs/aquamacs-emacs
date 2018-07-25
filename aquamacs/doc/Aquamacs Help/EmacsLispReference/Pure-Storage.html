@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,130 +19,190 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Pure Storage</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Pure Storage">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Pure Storage">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" rel="up" title="GNU Emacs Internals">
-<link href="Garbage-Collection.html#Garbage-Collection" rel="next" title="Garbage Collection">
-<link href="Building-Emacs.html#Building-Emacs" rel="prev" title="Building Emacs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Pure Storage</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Pure Storage" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Pure Storage" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" rel=
+  "up" title="GNU Emacs Internals" />
+  <link href="Garbage-Collection.html#Garbage-Collection" rel=
+  "next" title="Garbage Collection" />
+  <link href="Building-Emacs.html#Building-Emacs" rel="prev" title=
+  "Building Emacs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Pure-Storage" id="Pure-Storage"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Garbage-Collection.html#Garbage-Collection"
+    accesskey="n" rel="next">Garbage Collection</a>, Previous:
+    <a href="Building-Emacs.html#Building-Emacs" accesskey="p" rel=
+    "prev">Building Emacs</a>, Up: <a href=
+    "GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u"
+    rel="up">GNU Emacs Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Pure-Storage-1" id="Pure-Storage-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Pure-Storage"></a>
-<div class="header">
-<p>
-Next: <a href="Garbage-Collection.html#Garbage-Collection" accesskey="n" rel="next">Garbage Collection</a>, Previous: <a href="Building-Emacs.html#Building-Emacs" accesskey="p" rel="prev">Building Emacs</a>, Up: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Pure-Storage-1"></a>
-<h3 class="section">E.2 Pure Storage</h3>
-<a name="index-pure-storage"></a>
+  <h3 class="section">E.2 Pure Storage</h3><a name=
+  "index-pure-storage" id="index-pure-storage"></a>
 
-<p>Emacs Lisp uses two kinds of storage for user-created Lisp objects:
-<em>normal storage</em> and <em>pure storage</em>.  Normal storage is where
-all the new data created during an Emacs session are kept
-(see <a href="Garbage-Collection.html#Garbage-Collection">Garbage Collection</a>).  Pure storage is used for certain data
-in the preloaded standard Lisp files&mdash;data that should never change
-during actual use of Emacs.
-</p>
-<p>Pure storage is allocated only while <code>temacs</code> is loading the
-standard preloaded Lisp libraries.  In the file <samp>emacs</samp>, it is
-marked as read-only (on operating systems that permit this), so that
-the memory space can be shared by all the Emacs jobs running on the
-machine at once.  Pure storage is not expandable; a fixed amount is
-allocated when Emacs is compiled, and if that is not sufficient for
-the preloaded libraries, <samp>temacs</samp> allocates dynamic memory for
-the part that didn&rsquo;t fit.  The resulting image will work, but garbage
-collection (see <a href="Garbage-Collection.html#Garbage-Collection">Garbage Collection</a>) is disabled in this situation,
-causing a memory leak.  Such an overflow normally won&rsquo;t happen unless
-you try to preload additional libraries or add features to the
-standard ones.  Emacs will display a warning about the overflow when
-it starts.  If this happens, you should increase the compilation
-parameter <code>SYSTEM_PURESIZE_EXTRA</code> in the file
-<samp>src/puresize.h</samp> and rebuild Emacs.
-</p>
-<dl>
-<dt><a name="index-purecopy"></a>Function: <strong>purecopy</strong> <em>object</em></dt>
-<dd><p>This function makes a copy in pure storage of <var>object</var>, and returns
-it.  It copies a string by simply making a new string with the same
-characters, but without text properties, in pure storage.  It
-recursively copies the contents of vectors and cons cells.  It does
-not make copies of other objects such as symbols, but just returns
-them unchanged.  It signals an error if asked to copy markers.
-</p>
-<p>This function is a no-op except while Emacs is being built and dumped;
-it is usually called only in preloaded Lisp files.
-</p></dd></dl>
+  <p>Emacs Lisp uses two kinds of storage for user-created Lisp
+  objects: <em>normal storage</em> and <em>pure storage</em>.
+  Normal storage is where all the new data created during an Emacs
+  session are kept (see <a href=
+  "Garbage-Collection.html#Garbage-Collection">Garbage
+  Collection</a>). Pure storage is used for certain data in the
+  preloaded standard Lisp files&mdash;data that should never change
+  during actual use of Emacs.</p>
 
-<dl>
-<dt><a name="index-pure_002dbytes_002dused"></a>Variable: <strong>pure-bytes-used</strong></dt>
-<dd><p>The value of this variable is the number of bytes of pure storage
-allocated so far.  Typically, in a dumped Emacs, this number is very
-close to the total amount of pure storage available&mdash;if it were not,
-we would preallocate less.
-</p></dd></dl>
+  <p>Pure storage is allocated only while <code>temacs</code> is
+  loading the standard preloaded Lisp libraries. In the file
+  <samp>emacs</samp>, it is marked as read-only (on operating
+  systems that permit this), so that the memory space can be shared
+  by all the Emacs jobs running on the machine at once. Pure
+  storage is not expandable; a fixed amount is allocated when Emacs
+  is compiled, and if that is not sufficient for the preloaded
+  libraries, <samp>temacs</samp> allocates dynamic memory for the
+  part that didn&rsquo;t fit. The resulting image will work, but
+  garbage collection (see <a href=
+  "Garbage-Collection.html#Garbage-Collection">Garbage
+  Collection</a>) is disabled in this situation, causing a memory
+  leak. Such an overflow normally won&rsquo;t happen unless you try
+  to preload additional libraries or add features to the standard
+  ones. Emacs will display a warning about the overflow when it
+  starts. If this happens, you should increase the compilation
+  parameter <code>SYSTEM_PURESIZE_EXTRA</code> in the file
+  <samp>src/puresize.h</samp> and rebuild Emacs.</p>
 
-<dl>
-<dt><a name="index-purify_002dflag"></a>Variable: <strong>purify-flag</strong></dt>
-<dd><p>This variable determines whether <code>defun</code> should make a copy of the
-function definition in pure storage.  If it is non-<code>nil</code>, then the
-function definition is copied into pure storage.
-</p>
-<p>This flag is <code>t</code> while loading all of the basic functions for
-building Emacs initially (allowing those functions to be shareable and
-non-collectible).  Dumping Emacs as an executable always writes
-<code>nil</code> in this variable, regardless of the value it actually has
-before and after dumping.
-</p>
-<p>You should not change this flag in a running Emacs.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-purecopy" id="index-purecopy"></a>Function:
+    <strong>purecopy</strong> <em>object</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Garbage-Collection.html#Garbage-Collection" accesskey="n" rel="next">Garbage Collection</a>, Previous: <a href="Building-Emacs.html#Building-Emacs" accesskey="p" rel="prev">Building Emacs</a>, Up: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function makes a copy in pure storage of
+      <var>object</var>, and returns it. It copies a string by
+      simply making a new string with the same characters, but
+      without text properties, in pure storage. It recursively
+      copies the contents of vectors and cons cells. It does not
+      make copies of other objects such as symbols, but just
+      returns them unchanged. It signals an error if asked to copy
+      markers.</p>
 
+      <p>This function is a no-op except while Emacs is being built
+      and dumped; it is usually called only in preloaded Lisp
+      files.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-pure_002dbytes_002dused" id=
+    "index-pure_002dbytes_002dused"></a>Variable:
+    <strong>pure-bytes-used</strong></dt>
 
+    <dd>
+      <p>The value of this variable is the number of bytes of pure
+      storage allocated so far. Typically, in a dumped Emacs, this
+      number is very close to the total amount of pure storage
+      available&mdash;if it were not, we would preallocate
+      less.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-purify_002dflag" id=
+    "index-purify_002dflag"></a>Variable:
+    <strong>purify-flag</strong></dt>
+
+    <dd>
+      <p>This variable determines whether <code>defun</code> should
+      make a copy of the function definition in pure storage. If it
+      is non-<code>nil</code>, then the function definition is
+      copied into pure storage.</p>
+
+      <p>This flag is <code>t</code> while loading all of the basic
+      functions for building Emacs initially (allowing those
+      functions to be shareable and non-collectible). Dumping Emacs
+      as an executable always writes <code>nil</code> in this
+      variable, regardless of the value it actually has before and
+      after dumping.</p>
+
+      <p>You should not change this flag in a running Emacs.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Garbage-Collection.html#Garbage-Collection"
+    accesskey="n" rel="next">Garbage Collection</a>, Previous:
+    <a href="Building-Emacs.html#Building-Emacs" accesskey="p" rel=
+    "prev">Building Emacs</a>, Up: <a href=
+    "GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u"
+    rel="up">GNU Emacs Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

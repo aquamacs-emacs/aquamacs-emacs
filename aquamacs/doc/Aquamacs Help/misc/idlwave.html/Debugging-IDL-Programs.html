@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,107 +20,190 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Debugging IDL Programs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Debugging IDL Programs">
-<meta name="keywords" content="IDLWAVE User Manual: Debugging IDL Programs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" rel="up" title="The IDLWAVE Shell">
-<link href="A-Tale-of-Two-Modes.html#A-Tale-of-Two-Modes" rel="next" title="A Tale of Two Modes">
-<link href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell" rel="prev" title="Commands Sent to the Shell">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Debugging IDL Programs</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Debugging IDL Programs" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Debugging IDL Programs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" rel="up"
+  title="The IDLWAVE Shell" />
+  <link href="A-Tale-of-Two-Modes.html#A-Tale-of-Two-Modes" rel=
+  "next" title="A Tale of Two Modes" />
+  <link href=
+  "Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell" rel=
+  "prev" title="Commands Sent to the Shell" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Debugging-IDL-Programs"></a>
-<div class="header">
-<p>
-Next: <a href="Examining-Variables.html#Examining-Variables" accesskey="n" rel="next">Examining Variables</a>, Previous: <a href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell" accesskey="p" rel="prev">Commands Sent to the Shell</a>, Up: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" accesskey="u" rel="up">The IDLWAVE Shell</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Debugging-IDL-Programs-1"></a>
-<h3 class="section">5.4 Debugging IDL Programs</h3>
-<a name="index-Debugging"></a>
-<a name="index-Keybindings-for-debugging"></a>
-<a name="index-Toolbar"></a>
+<body lang="en" xml:lang="en">
+  <a name="Debugging-IDL-Programs" id="Debugging-IDL-Programs"></a>
 
-<p>Programs can be compiled, run, and debugged directly from the source
-buffer in Emacs, walking through arbitrarily deeply nested code,
-printing expressions and skipping up and down the calling stack along
-the way.  IDLWAVE makes compiling and debugging IDL programs far less
-cumbersome by providing a full-featured, key/menu/toolbar-driven
-interface to commands like <code>breakpoint</code>, <code>.step</code>,
-<code>.run</code>, etc.  It can even perform complex debug operations not
-natively supported by IDL (like continuing to the line at the cursor).
-</p>
-<p>The IDLWAVE shell installs key bindings both in the shell buffer and
-in all IDL code buffers of the current Emacs session, so debug
-commands work in both places (in the shell, commands operate on the
-last file compiled).  On Emacs versions which support it, a debugging
-toolbar is also installed.  The toolbar display can be toggled with
-<kbd>C-c C-d C-t</kbd> (<code>idlwave-shell-toggle-toolbar</code>).
-</p>
+  <div class="header">
+    <p>Next: <a href="Examining-Variables.html#Examining-Variables"
+    accesskey="n" rel="next">Examining Variables</a>, Previous:
+    <a href=
+    "Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell"
+    accesskey="p" rel="prev">Commands Sent to the Shell</a>, Up:
+    <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" accesskey=
+    "u" rel="up">The IDLWAVE Shell</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Debugging-IDL-Programs-1" id=
+  "Debugging-IDL-Programs-1"></a>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002duse_002dtoolbar"></a>User Option: <strong>idlwave-shell-use-toolbar</strong> <em>(<code>t</code>)</em></dt>
-<dd><p>Non-<code>nil</code> means use the debugging toolbar in all IDL related
-buffers.
-</p></dd></dl>
+  <h3 class="section">5.4 Debugging IDL Programs</h3><a name=
+  "index-Debugging" id="index-Debugging"></a> <a name=
+  "index-Keybindings-for-debugging" id=
+  "index-Keybindings-for-debugging"></a> <a name="index-Toolbar"
+  id="index-Toolbar"></a>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="A-Tale-of-Two-Modes.html#A-Tale-of-Two-Modes" accesskey="1">A Tale of Two Modes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Debug-Key-Bindings.html#Debug-Key-Bindings" accesskey="2">Debug Key Bindings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping" accesskey="3">Breakpoints and Stepping</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Compiling-Programs.html#Compiling-Programs" accesskey="4">Compiling Programs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Walking-the-Calling-Stack.html#Walking-the-Calling-Stack" accesskey="5">Walking the Calling Stack</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Electric-Debug-Mode.html#Electric-Debug-Mode" accesskey="6">Electric Debug Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <p>Programs can be compiled, run, and debugged directly from the
+  source buffer in Emacs, walking through arbitrarily deeply nested
+  code, printing expressions and skipping up and down the calling
+  stack along the way. IDLWAVE makes compiling and debugging IDL
+  programs far less cumbersome by providing a full-featured,
+  key/menu/toolbar-driven interface to commands like
+  <code>breakpoint</code>, <code>.step</code>, <code>.run</code>,
+  etc. It can even perform complex debug operations not natively
+  supported by IDL (like continuing to the line at the cursor).</p>
 
+  <p>The IDLWAVE shell installs key bindings both in the shell
+  buffer and in all IDL code buffers of the current Emacs session,
+  so debug commands work in both places (in the shell, commands
+  operate on the last file compiled). On Emacs versions which
+  support it, a debugging toolbar is also installed. The toolbar
+  display can be toggled with <kbd>C-c C-d C-t</kbd>
+  (<code>idlwave-shell-toggle-toolbar</code>).</p>
 
+  <dl>
+    <dt><a name="index-idlwave_002dshell_002duse_002dtoolbar" id=
+    "index-idlwave_002dshell_002duse_002dtoolbar"></a>User Option:
+    <strong>idlwave-shell-use-toolbar</strong>
+    <em>(<code>t</code>)</em></dt>
 
+    <dd>
+      <p>Non-<code>nil</code> means use the debugging toolbar in
+      all IDL related buffers.</p>
+    </dd>
+  </dl>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "A-Tale-of-Two-Modes.html#A-Tale-of-Two-Modes" accesskey=
+      "1">A Tale of Two Modes</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Debug-Key-Bindings.html#Debug-Key-Bindings" accesskey=
+      "2">Debug Key Bindings</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Breakpoints-and-Stepping.html#Breakpoints-and-Stepping"
+      accesskey="3">Breakpoints and Stepping</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Compiling-Programs.html#Compiling-Programs" accesskey=
+      "4">Compiling Programs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Walking-the-Calling-Stack.html#Walking-the-Calling-Stack"
+      accesskey="5">Walking the Calling Stack</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Electric-Debug-Mode.html#Electric-Debug-Mode" accesskey=
+      "6">Electric Debug Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

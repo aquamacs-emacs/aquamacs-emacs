@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,284 +16,482 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Structure editing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Structure editing">
-<meta name="keywords" content="The Org Manual: Structure editing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Document-Structure.html#Document-Structure" rel="up" title="Document Structure">
-<link href="Sparse-trees.html#Sparse-trees" rel="next" title="Sparse trees">
-<link href="Motion.html#Motion" rel="prev" title="Motion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Structure editing</title>
+  <meta name="description" content=
+  "The Org Manual: Structure editing" />
+  <meta name="keywords" content=
+  "The Org Manual: Structure editing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Document-Structure.html#Document-Structure" rel="up"
+  title="Document Structure" />
+  <link href="Sparse-trees.html#Sparse-trees" rel="next" title=
+  "Sparse trees" />
+  <link href="Motion.html#Motion" rel="prev" title="Motion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Structure-editing"></a>
-<div class="header">
-<p>
-Next: <a href="Sparse-trees.html#Sparse-trees" accesskey="n" rel="next">Sparse trees</a>, Previous: <a href="Motion.html#Motion" accesskey="p" rel="prev">Motion</a>, Up: <a href="Document-Structure.html#Document-Structure" accesskey="u" rel="up">Document Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Structure-editing-1"></a>
-<h3 class="section">2.5 Structure editing</h3>
-<a name="index-structure-editing"></a>
-<a name="index-headline_002c-promotion-and-demotion"></a>
-<a name="index-promotion_002c-of-subtrees"></a>
-<a name="index-demotion_002c-of-subtrees"></a>
-<a name="index-subtree_002c-cut-and-paste"></a>
-<a name="index-pasting_002c-of-subtrees"></a>
-<a name="index-cutting_002c-of-subtrees"></a>
-<a name="index-copying_002c-of-subtrees"></a>
-<a name="index-sorting_002c-of-subtrees"></a>
-<a name="index-subtrees_002c-cut-and-paste"></a>
+<body lang="en" xml:lang="en">
+  <a name="Structure-editing" id="Structure-editing"></a>
 
-<dl compact="compact">
-<dd><a name="index-M_002dRET"></a>
-<a name="index-org_002dinsert_002dheading"></a>
-</dd>
-<dt><kbd>M-<span class="key">RET</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-insert-heading</code>)</dt>
-<dd><a name="index-org_002dM_002dRET_002dmay_002dsplit_002dline"></a>
-<p>Insert a new heading/item with the same level than the one at point.
-If the cursor is in a plain list item, a new item is created
-(see <a href="Plain-lists.html#Plain-lists">Plain lists</a>).  To prevent this behavior in lists, call the
-command with a prefix argument.  When this command is used in the
-middle of a line, the line is split and the rest of the line becomes
-the new item or headline<a name="DOCF10" href="#FOOT10"><sup>10</sup></a>.  If
-the command is used at the <em>beginning</em> of a headline, the new
-headline is created before the current line.  If the command is used
-at the <em>end</em> of a folded subtree (i.e., behind the ellipses at
-the end of a headline), then a headline will be
-inserted after the end of the subtree.  Calling this command with
-<kbd>C-u C-u</kbd> will unconditionally respect the headline&rsquo;s content and
-create a new item at the end of the parent subtree.
-<a name="index-C_002dRET"></a>
-<a name="index-org_002dinsert_002dheading_002drespect_002dcontent"></a>
-</p></dd>
-<dt><kbd>C-<span class="key">RET</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-insert-heading-respect-content</code>)</dt>
-<dd><p>Just like <kbd>M-<span class="key">RET</span></kbd>, except when adding a new heading below the
-current heading, the new heading is placed after the body instead of before
-it.  This command works from anywhere in the entry.
-<a name="index-M_002dS_002dRET"></a>
-<a name="index-org_002dinsert_002dtodo_002dheading"></a>
-</p></dd>
-<dt><kbd>M-S-<span class="key">RET</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-insert-todo-heading</code>)</dt>
-<dd><a name="index-org_002dtreat_002dinsert_002dtodo_002dheading_002das_002dstate_002dchange"></a>
-<p>Insert new TODO entry with same level as current heading.  See also the
-variable <code>org-treat-insert-todo-heading-as-state-change</code>.
-<a name="index-C_002dS_002dRET"></a>
-<a name="index-org_002dinsert_002dtodo_002dheading_002drespect_002dcontent"></a>
-</p></dd>
-<dt><kbd>C-S-<span class="key">RET</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-insert-todo-heading-respect-content</code>)</dt>
-<dd><p>Insert new TODO entry with same level as current heading.  Like
-<kbd>C-<span class="key">RET</span></kbd>, the new headline will be inserted after the current
-subtree.
-<a name="index-TAB-1"></a>
-<a name="index-org_002dcycle-1"></a>
-</p></dd>
-<dt><kbd><span class="key">TAB</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-cycle</code>)</dt>
-<dd><p>In a new entry with no text yet, the first <tt class="key">TAB</tt> demotes the entry to
-become a child of the previous one.  The next <tt class="key">TAB</tt> makes it a parent,
-and so on, all the way to top level.  Yet another <tt class="key">TAB</tt>, and you are back
-to the initial level.
-<a name="index-M_002dleft"></a>
-<a name="index-org_002ddo_002dpromote"></a>
-</p></dd>
-<dt><kbd>M-<span class="key">left</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-do-promote</code>)</dt>
-<dd><p>Promote current heading by one level.
-<a name="index-M_002dright"></a>
-<a name="index-org_002ddo_002ddemote"></a>
-</p></dd>
-<dt><kbd>M-<span class="key">right</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-do-demote</code>)</dt>
-<dd><p>Demote current heading by one level.
-<a name="index-M_002dS_002dleft"></a>
-<a name="index-org_002dpromote_002dsubtree"></a>
-</p></dd>
-<dt><kbd>M-S-<span class="key">left</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-promote-subtree</code>)</dt>
-<dd><p>Promote the current subtree by one level.
-<a name="index-M_002dS_002dright"></a>
-<a name="index-org_002ddemote_002dsubtree"></a>
-</p></dd>
-<dt><kbd>M-S-<span class="key">right</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-demote-subtree</code>)</dt>
-<dd><p>Demote the current subtree by one level.
-<a name="index-M_002dS_002dup"></a>
-<a name="index-org_002dmove_002dsubtree_002dup"></a>
-</p></dd>
-<dt><kbd>M-S-<span class="key">up</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-move-subtree-up</code>)</dt>
-<dd><p>Move subtree up (swap with previous subtree of same
-level).
-<a name="index-M_002dS_002ddown"></a>
-<a name="index-org_002dmove_002dsubtree_002ddown"></a>
-</p></dd>
-<dt><kbd>M-S-<span class="key">down</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-move-subtree-down</code>)</dt>
-<dd><p>Move subtree down (swap with next subtree of same level).
-<a name="index-M_002dh"></a>
-<a name="index-org_002dmark_002delement"></a>
-</p></dd>
-<dt><kbd>M-h</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-mark-element</code>)</dt>
-<dd><p>Mark the element at point.  Hitting repeatedly will mark subsequent elements
-of the one just marked.  E.g., hitting <tt class="key">M-h</tt> on a paragraph will mark it,
-hitting <tt class="key">M-h</tt> immediately again will mark the next one.
-<a name="index-C_002dc-_0040"></a>
-<a name="index-org_002dmark_002dsubtree"></a>
-</p></dd>
-<dt><kbd>C-c @</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-mark-subtree</code>)</dt>
-<dd><p>Mark the subtree at point.  Hitting repeatedly will mark subsequent subtrees
-of the same level than the marked subtree.
-<a name="index-C_002dc-C_002dx-C_002dw"></a>
-<a name="index-org_002dcut_002dsubtree"></a>
-</p></dd>
-<dt><kbd>C-c C-x C-w</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-cut-subtree</code>)</dt>
-<dd><p>Kill subtree, i.e., remove it from buffer but save in kill ring.
-With a numeric prefix argument N, kill N sequential subtrees.
-<a name="index-C_002dc-C_002dx-M_002dw"></a>
-<a name="index-org_002dcopy_002dsubtree"></a>
-</p></dd>
-<dt><kbd>C-c C-x M-w</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-copy-subtree</code>)</dt>
-<dd><p>Copy subtree to kill ring.  With a numeric prefix argument N, copy the N
-sequential subtrees.
-<a name="index-C_002dc-C_002dx-C_002dy"></a>
-<a name="index-org_002dpaste_002dsubtree"></a>
-</p></dd>
-<dt><kbd>C-c C-x C-y</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-paste-subtree</code>)</dt>
-<dd><p>Yank subtree from kill ring.  This does modify the level of the subtree to
-make sure the tree fits in nicely at the yank position.  The yank level can
-also be specified with a numeric prefix argument, or by yanking after a
-headline marker like &lsquo;<samp>****</samp>&rsquo;.
-<a name="index-C_002dy"></a>
-<a name="index-org_002dyank"></a>
-</p></dd>
-<dt><kbd>C-y</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-yank</code>)</dt>
-<dd><a name="index-org_002dyank_002dadjusted_002dsubtrees"></a>
-<a name="index-org_002dyank_002dfolded_002dsubtrees"></a>
-<p>Depending on the options <code>org-yank-adjusted-subtrees</code> and
-<code>org-yank-folded-subtrees</code>, Org&rsquo;s internal <code>yank</code> command will
-paste subtrees folded and in a clever way, using the same command as <kbd>C-c
-C-x C-y</kbd>.  With the default settings, no level adjustment will take place,
-but the yanked tree will be folded unless doing so would swallow text
-previously visible.  Any prefix argument to this command will force a normal
-<code>yank</code> to be executed, with the prefix passed along.  A good way to
-force a normal yank is <kbd>C-u C-y</kbd>.  If you use <code>yank-pop</code> after a
-yank, it will yank previous kill items plainly, without adjustment and
-folding.
-<a name="index-C_002dc-C_002dx-c"></a>
-<a name="index-org_002dclone_002dsubtree_002dwith_002dtime_002dshift"></a>
-</p></dd>
-<dt><kbd>C-c C-x c</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clone-subtree-with-time-shift</code>)</dt>
-<dd><p>Clone a subtree by making a number of sibling copies of it.  You will be
-prompted for the number of copies to make, and you can also specify if any
-timestamps in the entry should be shifted.  This can be useful, for example,
-to create a number of tasks related to a series of lectures to prepare.  For
-more details, see the docstring of the command
-<code>org-clone-subtree-with-time-shift</code>.
-<a name="index-C_002dc-C_002dw"></a>
-<a name="index-org_002drefile"></a>
-</p></dd>
-<dt><kbd>C-c C-w</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-refile</code>)</dt>
-<dd><p>Refile entry or region to a different location.  See <a href="Refile-and-copy.html#Refile-and-copy">Refile and copy</a>.
-<a name="index-C_002dc-_005e"></a>
-<a name="index-org_002dsort"></a>
-</p></dd>
-<dt><kbd>C-c ^</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-sort</code>)</dt>
-<dd><p>Sort same-level entries.  When there is an active region, all entries in the
-region will be sorted.  Otherwise the children of the current headline are
-sorted.  The command prompts for the sorting method, which can be
-alphabetically, numerically, by time (first timestamp with active preferred,
-creation time, scheduled time, deadline time), by priority, by TODO keyword
-(in the sequence the keywords have been defined in the setup) or by the value
-of a property.  Reverse sorting is possible as well.  You can also supply
-your own function to extract the sorting key.  With a <kbd>C-u</kbd> prefix,
-sorting will be case-sensitive.
-<a name="index-C_002dx-n-s"></a>
-<a name="index-org_002dnarrow_002dto_002dsubtree"></a>
-</p></dd>
-<dt><kbd>C-x n s</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-narrow-to-subtree</code>)</dt>
-<dd><p>Narrow buffer to current subtree.
-<a name="index-C_002dx-n-b"></a>
-<a name="index-org_002dnarrow_002dto_002dblock"></a>
-</p></dd>
-<dt><kbd>C-x n b</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-narrow-to-block</code>)</dt>
-<dd><p>Narrow buffer to current block.
-<a name="index-C_002dx-n-w"></a>
-<a name="index-widen"></a>
-</p></dd>
-<dt><kbd>C-x n w</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>widen</code>)</dt>
-<dd><p>Widen buffer to remove narrowing.
-<a name="index-C_002dc-_002a"></a>
-<a name="index-org_002dtoggle_002dheading"></a>
-</p></dd>
-<dt><kbd>C-c *</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-toggle-heading</code>)</dt>
-<dd><p>Turn a normal line or plain list item into a headline (so that it becomes a
-subheading at its location).  Also turn a headline into a normal line by
-removing the stars.  If there is an active region, turn all lines in the
-region into headlines.  If the first line in the region was an item, turn
-only the item lines into headlines.  Finally, if the first line is a
-headline, remove the stars from all headlines in the region.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Sparse-trees.html#Sparse-trees" accesskey="n"
+    rel="next">Sparse trees</a>, Previous: <a href=
+    "Motion.html#Motion" accesskey="p" rel="prev">Motion</a>, Up:
+    <a href="Document-Structure.html#Document-Structure" accesskey=
+    "u" rel="up">Document Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Structure-editing-1" id="Structure-editing-1"></a>
 
-<a name="index-region_002c-active"></a>
-<a name="index-active-region"></a>
-<a name="index-transient-mark-mode"></a>
-<p>When there is an active region (Transient Mark mode), promotion and
-demotion work on all headlines in the region.  To select a region of
-headlines, it is best to place both point and mark at the beginning of a
-line, mark at the beginning of the first headline, and point at the line
-just after the last headline to change.  Note that when the cursor is
-inside a table (see <a href="Tables.html#Tables">Tables</a>), the Meta-Cursor keys have different
-functionality.
-</p>
+  <h3 class="section">2.5 Structure editing</h3><a name=
+  "index-structure-editing" id="index-structure-editing"></a>
+  <a name="index-headline_002c-promotion-and-demotion" id=
+  "index-headline_002c-promotion-and-demotion"></a> <a name=
+  "index-promotion_002c-of-subtrees" id=
+  "index-promotion_002c-of-subtrees"></a> <a name=
+  "index-demotion_002c-of-subtrees" id=
+  "index-demotion_002c-of-subtrees"></a> <a name=
+  "index-subtree_002c-cut-and-paste" id=
+  "index-subtree_002c-cut-and-paste"></a> <a name=
+  "index-pasting_002c-of-subtrees" id=
+  "index-pasting_002c-of-subtrees"></a> <a name=
+  "index-cutting_002c-of-subtrees" id=
+  "index-cutting_002c-of-subtrees"></a> <a name=
+  "index-copying_002c-of-subtrees" id=
+  "index-copying_002c-of-subtrees"></a> <a name=
+  "index-sorting_002c-of-subtrees" id=
+  "index-sorting_002c-of-subtrees"></a> <a name=
+  "index-subtrees_002c-cut-and-paste" id=
+  "index-subtrees_002c-cut-and-paste"></a>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl compact="compact">
+    <dd><a name="index-M_002dRET" id="index-M_002dRET"></a>
+    <a name="index-org_002dinsert_002dheading" id=
+    "index-org_002dinsert_002dheading"></a></dd>
 
-<h3><a name="FOOT10" href="#DOCF10">(10)</a></h3>
-<p>If you do not want the line to be
-split, customize the variable <code>org-M-RET-may-split-line</code>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Sparse-trees.html#Sparse-trees" accesskey="n" rel="next">Sparse trees</a>, Previous: <a href="Motion.html#Motion" accesskey="p" rel="prev">Motion</a>, Up: <a href="Document-Structure.html#Document-Structure" accesskey="u" rel="up">Document Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><kbd>M-<span class="key">RET</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-insert-heading</code>)</dt>
 
+    <dd>
+      <a name="index-org_002dM_002dRET_002dmay_002dsplit_002dline"
+      id="index-org_002dM_002dRET_002dmay_002dsplit_002dline"></a>
 
+      <p>Insert a new heading/item with the same level than the one
+      at point. If the cursor is in a plain list item, a new item
+      is created (see <a href="Plain-lists.html#Plain-lists">Plain
+      lists</a>). To prevent this behavior in lists, call the
+      command with a prefix argument. When this command is used in
+      the middle of a line, the line is split and the rest of the
+      line becomes the new item or headline<a name="DOCF10" href=
+      "#FOOT10" id="DOCF10"><sup>10</sup></a>. If the command is
+      used at the <em>beginning</em> of a headline, the new
+      headline is created before the current line. If the command
+      is used at the <em>end</em> of a folded subtree (i.e., behind
+      the ellipses at the end of a headline), then a headline will
+      be inserted after the end of the subtree. Calling this
+      command with <kbd>C-u C-u</kbd> will unconditionally respect
+      the headline&rsquo;s content and create a new item at the end
+      of the parent subtree. <a name="index-C_002dRET" id=
+      "index-C_002dRET"></a> <a name=
+      "index-org_002dinsert_002dheading_002drespect_002dcontent"
+      id="index-org_002dinsert_002dheading_002drespect_002dcontent">
+      </a></p>
+    </dd>
 
+    <dt><kbd>C-<span class="key">RET</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-insert-heading-respect-content</code>)</dt>
+
+    <dd>
+      <p>Just like <kbd>M-<span class="key">RET</span></kbd>,
+      except when adding a new heading below the current heading,
+      the new heading is placed after the body instead of before
+      it. This command works from anywhere in the entry. <a name=
+      "index-M_002dS_002dRET" id="index-M_002dS_002dRET"></a>
+      <a name="index-org_002dinsert_002dtodo_002dheading" id=
+      "index-org_002dinsert_002dtodo_002dheading"></a></p>
+    </dd>
+
+    <dt><kbd>M-S-<span class="key">RET</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-insert-todo-heading</code>)</dt>
+
+    <dd>
+      <a name=
+      "index-org_002dtreat_002dinsert_002dtodo_002dheading_002das_002dstate_002dchange"
+      id=
+      "index-org_002dtreat_002dinsert_002dtodo_002dheading_002das_002dstate_002dchange">
+      </a>
+
+      <p>Insert new TODO entry with same level as current heading.
+      See also the variable
+      <code>org-treat-insert-todo-heading-as-state-change</code>.
+      <a name="index-C_002dS_002dRET" id=
+      "index-C_002dS_002dRET"></a> <a name=
+      "index-org_002dinsert_002dtodo_002dheading_002drespect_002dcontent"
+      id=
+      "index-org_002dinsert_002dtodo_002dheading_002drespect_002dcontent">
+      </a></p>
+    </dd>
+
+    <dt><kbd>C-S-<span class="key">RET</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-insert-todo-heading-respect-content</code>)</dt>
+
+    <dd>
+      <p>Insert new TODO entry with same level as current heading.
+      Like <kbd>C-<span class="key">RET</span></kbd>, the new
+      headline will be inserted after the current subtree. <a name=
+      "index-TAB-1" id="index-TAB-1"></a> <a name=
+      "index-org_002dcycle-1" id="index-org_002dcycle-1"></a></p>
+    </dd>
+
+    <dt><kbd><span class="key">TAB</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-cycle</code>)</dt>
+
+    <dd>
+      <p>In a new entry with no text yet, the first <tt class=
+      "key">TAB</tt> demotes the entry to become a child of the
+      previous one. The next <tt class="key">TAB</tt> makes it a
+      parent, and so on, all the way to top level. Yet another
+      <tt class="key">TAB</tt>, and you are back to the initial
+      level. <a name="index-M_002dleft" id="index-M_002dleft"></a>
+      <a name="index-org_002ddo_002dpromote" id=
+      "index-org_002ddo_002dpromote"></a></p>
+    </dd>
+
+    <dt><kbd>M-<span class="key">left</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-do-promote</code>)</dt>
+
+    <dd>
+      <p>Promote current heading by one level. <a name=
+      "index-M_002dright" id="index-M_002dright"></a> <a name=
+      "index-org_002ddo_002ddemote" id=
+      "index-org_002ddo_002ddemote"></a></p>
+    </dd>
+
+    <dt><kbd>M-<span class="key">right</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-do-demote</code>)</dt>
+
+    <dd>
+      <p>Demote current heading by one level. <a name=
+      "index-M_002dS_002dleft" id="index-M_002dS_002dleft"></a>
+      <a name="index-org_002dpromote_002dsubtree" id=
+      "index-org_002dpromote_002dsubtree"></a></p>
+    </dd>
+
+    <dt><kbd>M-S-<span class="key">left</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-promote-subtree</code>)</dt>
+
+    <dd>
+      <p>Promote the current subtree by one level. <a name=
+      "index-M_002dS_002dright" id="index-M_002dS_002dright"></a>
+      <a name="index-org_002ddemote_002dsubtree" id=
+      "index-org_002ddemote_002dsubtree"></a></p>
+    </dd>
+
+    <dt><kbd>M-S-<span class="key">right</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-demote-subtree</code>)</dt>
+
+    <dd>
+      <p>Demote the current subtree by one level. <a name=
+      "index-M_002dS_002dup" id="index-M_002dS_002dup"></a>
+      <a name="index-org_002dmove_002dsubtree_002dup" id=
+      "index-org_002dmove_002dsubtree_002dup"></a></p>
+    </dd>
+
+    <dt><kbd>M-S-<span class="key">up</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-move-subtree-up</code>)</dt>
+
+    <dd>
+      <p>Move subtree up (swap with previous subtree of same
+      level). <a name="index-M_002dS_002ddown" id=
+      "index-M_002dS_002ddown"></a> <a name=
+      "index-org_002dmove_002dsubtree_002ddown" id=
+      "index-org_002dmove_002dsubtree_002ddown"></a></p>
+    </dd>
+
+    <dt><kbd>M-S-<span class="key">down</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-move-subtree-down</code>)</dt>
+
+    <dd>
+      <p>Move subtree down (swap with next subtree of same level).
+      <a name="index-M_002dh" id="index-M_002dh"></a> <a name=
+      "index-org_002dmark_002delement" id=
+      "index-org_002dmark_002delement"></a></p>
+    </dd>
+
+    <dt><kbd>M-h</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-mark-element</code>)</dt>
+
+    <dd>
+      <p>Mark the element at point. Hitting repeatedly will mark
+      subsequent elements of the one just marked. E.g., hitting
+      <tt class="key">M-h</tt> on a paragraph will mark it, hitting
+      <tt class="key">M-h</tt> immediately again will mark the next
+      one. <a name="index-C_002dc-_0040" id=
+      "index-C_002dc-_0040"></a> <a name=
+      "index-org_002dmark_002dsubtree" id=
+      "index-org_002dmark_002dsubtree"></a></p>
+    </dd>
+
+    <dt><kbd>C-c @</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-mark-subtree</code>)</dt>
+
+    <dd>
+      <p>Mark the subtree at point. Hitting repeatedly will mark
+      subsequent subtrees of the same level than the marked
+      subtree. <a name="index-C_002dc-C_002dx-C_002dw" id=
+      "index-C_002dc-C_002dx-C_002dw"></a> <a name=
+      "index-org_002dcut_002dsubtree" id=
+      "index-org_002dcut_002dsubtree"></a></p>
+    </dd>
+
+    <dt><kbd>C-c C-x C-w</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-cut-subtree</code>)</dt>
+
+    <dd>
+      <p>Kill subtree, i.e., remove it from buffer but save in kill
+      ring. With a numeric prefix argument N, kill N sequential
+      subtrees. <a name="index-C_002dc-C_002dx-M_002dw" id=
+      "index-C_002dc-C_002dx-M_002dw"></a> <a name=
+      "index-org_002dcopy_002dsubtree" id=
+      "index-org_002dcopy_002dsubtree"></a></p>
+    </dd>
+
+    <dt><kbd>C-c C-x M-w</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-copy-subtree</code>)</dt>
+
+    <dd>
+      <p>Copy subtree to kill ring. With a numeric prefix argument
+      N, copy the N sequential subtrees. <a name=
+      "index-C_002dc-C_002dx-C_002dy" id=
+      "index-C_002dc-C_002dx-C_002dy"></a> <a name=
+      "index-org_002dpaste_002dsubtree" id=
+      "index-org_002dpaste_002dsubtree"></a></p>
+    </dd>
+
+    <dt><kbd>C-c C-x C-y</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-paste-subtree</code>)</dt>
+
+    <dd>
+      <p>Yank subtree from kill ring. This does modify the level of
+      the subtree to make sure the tree fits in nicely at the yank
+      position. The yank level can also be specified with a numeric
+      prefix argument, or by yanking after a headline marker like
+      &lsquo;<samp>****</samp>&rsquo;. <a name="index-C_002dy" id=
+      "index-C_002dy"></a> <a name="index-org_002dyank" id=
+      "index-org_002dyank"></a></p>
+    </dd>
+
+    <dt><kbd>C-y</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-yank</code>)</dt>
+
+    <dd>
+      <a name="index-org_002dyank_002dadjusted_002dsubtrees" id=
+      "index-org_002dyank_002dadjusted_002dsubtrees"></a> <a name=
+      "index-org_002dyank_002dfolded_002dsubtrees" id=
+      "index-org_002dyank_002dfolded_002dsubtrees"></a>
+
+      <p>Depending on the options
+      <code>org-yank-adjusted-subtrees</code> and
+      <code>org-yank-folded-subtrees</code>, Org&rsquo;s internal
+      <code>yank</code> command will paste subtrees folded and in a
+      clever way, using the same command as <kbd>C-c C-x C-y</kbd>.
+      With the default settings, no level adjustment will take
+      place, but the yanked tree will be folded unless doing so
+      would swallow text previously visible. Any prefix argument to
+      this command will force a normal <code>yank</code> to be
+      executed, with the prefix passed along. A good way to force a
+      normal yank is <kbd>C-u C-y</kbd>. If you use
+      <code>yank-pop</code> after a yank, it will yank previous
+      kill items plainly, without adjustment and folding. <a name=
+      "index-C_002dc-C_002dx-c" id="index-C_002dc-C_002dx-c"></a>
+      <a name=
+      "index-org_002dclone_002dsubtree_002dwith_002dtime_002dshift"
+      id=
+      "index-org_002dclone_002dsubtree_002dwith_002dtime_002dshift">
+      </a></p>
+    </dd>
+
+    <dt><kbd>C-c C-x c</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clone-subtree-with-time-shift</code>)</dt>
+
+    <dd>
+      <p>Clone a subtree by making a number of sibling copies of
+      it. You will be prompted for the number of copies to make,
+      and you can also specify if any timestamps in the entry
+      should be shifted. This can be useful, for example, to create
+      a number of tasks related to a series of lectures to prepare.
+      For more details, see the docstring of the command
+      <code>org-clone-subtree-with-time-shift</code>. <a name=
+      "index-C_002dc-C_002dw" id="index-C_002dc-C_002dw"></a>
+      <a name="index-org_002drefile" id=
+      "index-org_002drefile"></a></p>
+    </dd>
+
+    <dt><kbd>C-c C-w</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-refile</code>)</dt>
+
+    <dd>
+      <p>Refile entry or region to a different location. See
+      <a href="Refile-and-copy.html#Refile-and-copy">Refile and
+      copy</a>. <a name="index-C_002dc-_005e" id=
+      "index-C_002dc-_005e"></a> <a name="index-org_002dsort" id=
+      "index-org_002dsort"></a></p>
+    </dd>
+
+    <dt><kbd>C-c ^</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-sort</code>)</dt>
+
+    <dd>
+      <p>Sort same-level entries. When there is an active region,
+      all entries in the region will be sorted. Otherwise the
+      children of the current headline are sorted. The command
+      prompts for the sorting method, which can be alphabetically,
+      numerically, by time (first timestamp with active preferred,
+      creation time, scheduled time, deadline time), by priority,
+      by TODO keyword (in the sequence the keywords have been
+      defined in the setup) or by the value of a property. Reverse
+      sorting is possible as well. You can also supply your own
+      function to extract the sorting key. With a <kbd>C-u</kbd>
+      prefix, sorting will be case-sensitive. <a name=
+      "index-C_002dx-n-s" id="index-C_002dx-n-s"></a> <a name=
+      "index-org_002dnarrow_002dto_002dsubtree" id=
+      "index-org_002dnarrow_002dto_002dsubtree"></a></p>
+    </dd>
+
+    <dt><kbd>C-x n s</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-narrow-to-subtree</code>)</dt>
+
+    <dd>
+      <p>Narrow buffer to current subtree. <a name=
+      "index-C_002dx-n-b" id="index-C_002dx-n-b"></a> <a name=
+      "index-org_002dnarrow_002dto_002dblock" id=
+      "index-org_002dnarrow_002dto_002dblock"></a></p>
+    </dd>
+
+    <dt><kbd>C-x n b</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-narrow-to-block</code>)</dt>
+
+    <dd>
+      <p>Narrow buffer to current block. <a name=
+      "index-C_002dx-n-w" id="index-C_002dx-n-w"></a> <a name=
+      "index-widen" id="index-widen"></a></p>
+    </dd>
+
+    <dt><kbd>C-x n w</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>widen</code>)</dt>
+
+    <dd>
+      <p>Widen buffer to remove narrowing. <a name=
+      "index-C_002dc-_002a" id="index-C_002dc-_002a"></a> <a name=
+      "index-org_002dtoggle_002dheading" id=
+      "index-org_002dtoggle_002dheading"></a></p>
+    </dd>
+
+    <dt><kbd>C-c *</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-toggle-heading</code>)</dt>
+
+    <dd>
+      <p>Turn a normal line or plain list item into a headline (so
+      that it becomes a subheading at its location). Also turn a
+      headline into a normal line by removing the stars. If there
+      is an active region, turn all lines in the region into
+      headlines. If the first line in the region was an item, turn
+      only the item lines into headlines. Finally, if the first
+      line is a headline, remove the stars from all headlines in
+      the region.</p>
+    </dd>
+  </dl><a name="index-region_002c-active" id=
+  "index-region_002c-active"></a> <a name="index-active-region" id=
+  "index-active-region"></a> <a name="index-transient-mark-mode"
+  id="index-transient-mark-mode"></a>
+
+  <p>When there is an active region (Transient Mark mode),
+  promotion and demotion work on all headlines in the region. To
+  select a region of headlines, it is best to place both point and
+  mark at the beginning of a line, mark at the beginning of the
+  first headline, and point at the line just after the last
+  headline to change. Note that when the cursor is inside a table
+  (see <a href="Tables.html#Tables">Tables</a>), the Meta-Cursor
+  keys have different functionality.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT10" href="#DOCF10" id="FOOT10">(10)</a></h3>
+
+    <p>If you do not want the line to be split, customize the
+    variable <code>org-M-RET-may-split-line</code>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Sparse-trees.html#Sparse-trees" accesskey="n"
+    rel="next">Sparse trees</a>, Previous: <a href=
+    "Motion.html#Motion" accesskey="p" rel="prev">Motion</a>, Up:
+    <a href="Document-Structure.html#Document-Structure" accesskey=
+    "u" rel="up">Document Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,102 +14,150 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Group Data</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Group Data">
-<meta name="keywords" content="Gnus Manual: Group Data">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Group-Buffer.html#Group-Buffer" rel="up" title="Group Buffer">
-<link href="Group-Levels.html#Group-Levels" rel="next" title="Group Levels">
-<link href="Subscription-Commands.html#Subscription-Commands" rel="prev" title="Subscription Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Group Data</title>
+  <meta name="description" content="Gnus Manual: Group Data" />
+  <meta name="keywords" content="Gnus Manual: Group Data" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Group-Buffer.html#Group-Buffer" rel="up" title=
+  "Group Buffer" />
+  <link href="Group-Levels.html#Group-Levels" rel="next" title=
+  "Group Levels" />
+  <link href="Subscription-Commands.html#Subscription-Commands"
+  rel="prev" title="Subscription Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Group-Data"></a>
-<div class="header">
-<p>
-Next: <a href="Group-Levels.html#Group-Levels" accesskey="n" rel="next">Group Levels</a>, Previous: <a href="Subscription-Commands.html#Subscription-Commands" accesskey="p" rel="prev">Subscription Commands</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Group-Data-1"></a>
-<h3 class="section">2.5 Group Data</h3>
+<body lang="en" xml:lang="en">
+  <a name="Group-Data" id="Group-Data"></a>
 
-<dl compact="compact">
-<dt><kbd>c</kbd></dt>
-<dd><a name="index-c-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dcatchup_002dcurrent"></a>
-<a name="index-gnus_002dgroup_002dcatchup_002dgroup_002dhook"></a>
-<p>Mark all unticked articles in this group as read
-(<code>gnus-group-catchup-current</code>).
-<code>gnus-group-catchup-group-hook</code> is called when catching up a group from
-the group buffer.
-</p>
-</dd>
-<dt><kbd>C</kbd></dt>
-<dd><a name="index-C-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dcatchup_002dcurrent_002dall"></a>
-<p>Mark all articles in this group, even the ticked ones, as read
-(<code>gnus-group-catchup-current-all</code>).
-</p>
-</dd>
-<dt><kbd>M-c</kbd></dt>
-<dd><a name="index-M_002dc-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dclear_002ddata-1"></a>
-<p>Clear the data from the current group&mdash;nix out marks and the list of
-read articles (<code>gnus-group-clear-data</code>).
-</p>
-</dd>
-<dt><kbd>M-x gnus-group-clear-data-on-native-groups</kbd></dt>
-<dd><a name="index-M_002dx-gnus_002dgroup_002dclear_002ddata_002don_002dnative_002dgroups-1"></a>
-<a name="index-gnus_002dgroup_002dclear_002ddata_002don_002dnative_002dgroups-1"></a>
-<p>If you have switched from one <acronym>NNTP</acronym> server to another, all your marks
-and read ranges have become worthless.  You can use this command to
-clear out all data that you have on your native groups.  Use with
-caution.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Group-Levels.html#Group-Levels" accesskey="n"
+    rel="next">Group Levels</a>, Previous: <a href=
+    "Subscription-Commands.html#Subscription-Commands" accesskey=
+    "p" rel="prev">Subscription Commands</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Group-Data-1" id="Group-Data-1"></a>
 
+  <h3 class="section">2.5 Group Data</h3>
 
+  <dl compact="compact">
+    <dt><kbd>c</kbd></dt>
 
+    <dd>
+      <a name="index-c-_0028Group_0029" id=
+      "index-c-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dcatchup_002dcurrent" id=
+      "index-gnus_002dgroup_002dcatchup_002dcurrent"></a> <a name=
+      "index-gnus_002dgroup_002dcatchup_002dgroup_002dhook" id=
+      "index-gnus_002dgroup_002dcatchup_002dgroup_002dhook"></a>
 
+      <p>Mark all unticked articles in this group as read
+      (<code>gnus-group-catchup-current</code>).
+      <code>gnus-group-catchup-group-hook</code> is called when
+      catching up a group from the group buffer.</p>
+    </dd>
 
+    <dt><kbd>C</kbd></dt>
+
+    <dd>
+      <a name="index-C-_0028Group_0029" id=
+      "index-C-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dcatchup_002dcurrent_002dall" id=
+      "index-gnus_002dgroup_002dcatchup_002dcurrent_002dall"></a>
+
+      <p>Mark all articles in this group, even the ticked ones, as
+      read (<code>gnus-group-catchup-current-all</code>).</p>
+    </dd>
+
+    <dt><kbd>M-c</kbd></dt>
+
+    <dd>
+      <a name="index-M_002dc-_0028Group_0029" id=
+      "index-M_002dc-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dclear_002ddata-1" id=
+      "index-gnus_002dgroup_002dclear_002ddata-1"></a>
+
+      <p>Clear the data from the current group&mdash;nix out marks
+      and the list of read articles
+      (<code>gnus-group-clear-data</code>).</p>
+    </dd>
+
+    <dt><kbd>M-x gnus-group-clear-data-on-native-groups</kbd></dt>
+
+    <dd>
+      <a name=
+      "index-M_002dx-gnus_002dgroup_002dclear_002ddata_002don_002dnative_002dgroups-1"
+      id=
+      "index-M_002dx-gnus_002dgroup_002dclear_002ddata_002don_002dnative_002dgroups-1">
+      </a> <a name=
+      "index-gnus_002dgroup_002dclear_002ddata_002don_002dnative_002dgroups-1"
+      id=
+      "index-gnus_002dgroup_002dclear_002ddata_002don_002dnative_002dgroups-1">
+      </a>
+
+      <p>If you have switched from one <acronym>NNTP</acronym>
+      server to another, all your marks and read ranges have become
+      worthless. You can use this command to clear out all data
+      that you have on your native groups. Use with caution.</p>
+    </dd>
+  </dl>
 </body>
 </html>

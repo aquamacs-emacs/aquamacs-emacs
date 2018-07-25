@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,135 +29,204 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: ^M in the shell buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: ^M in the shell buffer">
-<meta name="keywords" content="GNU Emacs FAQ: ^M in the shell buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Bugs-and-problems.html#Bugs-and-problems" rel="up" title="Bugs and problems">
-<link href="Problems-with-Shell-Mode.html#Problems-with-Shell-Mode" rel="next" title="Problems with Shell Mode">
-<link href="Problems-with-very-large-files.html#Problems-with-very-large-files" rel="prev" title="Problems with very large files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: ^M in the shell buffer</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: ^M in the shell buffer" />
+  <meta name="keywords" content=
+  "GNU Emacs FAQ: ^M in the shell buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Bugs-and-problems.html#Bugs-and-problems" rel="up"
+  title="Bugs and problems" />
+  <link href=
+  "Problems-with-Shell-Mode.html#Problems-with-Shell-Mode" rel=
+  "next" title="Problems with Shell Mode" />
+  <link href=
+  "Problems-with-very-large-files.html#Problems-with-very-large-files"
+  rel="prev" title="Problems with very large files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="g_t_005eM-in-the-shell-buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Problems-with-Shell-Mode.html#Problems-with-Shell-Mode" accesskey="n" rel="next">Problems with Shell Mode</a>, Previous: <a href="Problems-with-very-large-files.html#Problems-with-very-large-files" accesskey="p" rel="prev">Problems with very large files</a>, Up: <a href="Bugs-and-problems.html#Bugs-and-problems" accesskey="u" rel="up">Bugs and problems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-do-I-get-rid-of-_005eM-or-echoed-commands-in-my-shell-buffer_003f"></a>
-<h3 class="section">6.2 How do I get rid of &lsquo;<samp>^M</samp>&rsquo; or echoed commands in my shell buffer?</h3>
-<a name="index-Shell-buffer_002c-echoed-commands-and-_005eM-in"></a>
-<a name="index-Echoed-commands-in-shell_002dmode"></a>
+<body lang="en" xml:lang="en">
+  <a name="g_t_005eM-in-the-shell-buffer" id=
+  "g_t_005eM-in-the-shell-buffer"></a>
 
-<p>Try typing <kbd>M-x shell-strip-ctrl-m <span class="key">RET</span></kbd> while in <code>shell-mode</code> to
-make them go away.  If that doesn&rsquo;t work, you have several options:
-</p>
-<p>For <code>tcsh</code>, put this in your <samp>.cshrc</samp> (or <samp>.tcshrc</samp>)
-file:
-</p>
-<div class="example">
-<pre class="example">if ($?INSIDE_EMACS &amp;&amp; $?tcsh)
+  <div class="header">
+    <p>Next: <a href=
+    "Problems-with-Shell-Mode.html#Problems-with-Shell-Mode"
+    accesskey="n" rel="next">Problems with Shell Mode</a>,
+    Previous: <a href=
+    "Problems-with-very-large-files.html#Problems-with-very-large-files"
+    accesskey="p" rel="prev">Problems with very large files</a>,
+    Up: <a href="Bugs-and-problems.html#Bugs-and-problems"
+    accesskey="u" rel="up">Bugs and problems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name=
+  "How-do-I-get-rid-of-_005eM-or-echoed-commands-in-my-shell-buffer_003f"
+  id=
+  "How-do-I-get-rid-of-_005eM-or-echoed-commands-in-my-shell-buffer_003f"></a>
+
+  <h3 class="section">6.2 How do I get rid of
+  &lsquo;<samp>^M</samp>&rsquo; or echoed commands in my shell
+  buffer?</h3><a name=
+  "index-Shell-buffer_002c-echoed-commands-and-_005eM-in" id=
+  "index-Shell-buffer_002c-echoed-commands-and-_005eM-in"></a>
+  <a name="index-Echoed-commands-in-shell_002dmode" id=
+  "index-Echoed-commands-in-shell_002dmode"></a>
+
+  <p>Try typing <kbd>M-x shell-strip-ctrl-m <span class=
+  "key">RET</span></kbd> while in <code>shell-mode</code> to make
+  them go away. If that doesn&rsquo;t work, you have several
+  options:</p>
+
+  <p>For <code>tcsh</code>, put this in your <samp>.cshrc</samp>
+  (or <samp>.tcshrc</samp>) file:</p>
+
+  <div class="example">
+    <pre class="example">
+if ($?INSIDE_EMACS &amp;&amp; $?tcsh)
     unset edit
     stty -icrnl -onlcr -echo susp ^Z
 endif
-</pre></div>
+</pre>
+  </div>
 
-<p>Or put this in your <samp>.emacs_tcsh</samp> or <samp>~/.emacs.d/init_tcsh.sh</samp> file:
-</p>
-<div class="example">
-<pre class="example">unset edit
+  <p>Or put this in your <samp>.emacs_tcsh</samp> or
+  <samp>~/.emacs.d/init_tcsh.sh</samp> file:</p>
+
+  <div class="example">
+    <pre class="example">
+unset edit
 stty -icrnl -onlcr -echo susp ^Z
-</pre></div>
+</pre>
+  </div>
 
-<p>Alternatively, use <code>csh</code> in your shell buffers instead of
-<code>tcsh</code>.  One way is:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq explicit-shell-file-name &quot;/bin/csh&quot;)
-</pre></div>
+  <p>Alternatively, use <code>csh</code> in your shell buffers
+  instead of <code>tcsh</code>. One way is:</p>
 
-<p>and another is to do this in your <samp>.cshrc</samp> (or <samp>.tcshrc</samp>)
-file:
-</p>
-<div class="example">
-<pre class="example">setenv ESHELL /bin/csh
-</pre></div>
+  <div class="lisp">
+    <pre class="lisp">
+(setq explicit-shell-file-name "/bin/csh")
+</pre>
+  </div>
 
-<p>(You must start Emacs over again with the environment variable properly
-set for this to take effect.)
-</p>
-<p>You can also set the <code>ESHELL</code> environment variable in Emacs Lisp
-with the following Lisp form,
-</p>
-<div class="lisp">
-<pre class="lisp">(setenv &quot;ESHELL&quot; &quot;/bin/csh&quot;)
-</pre></div>
+  <p>and another is to do this in your <samp>.cshrc</samp> (or
+  <samp>.tcshrc</samp>) file:</p>
 
-<p>The above solutions try to prevent the shell from producing the
-&lsquo;<samp>^M</samp>&rsquo; characters in the first place.  If this is not possible
-(e.g., if you use a Windows shell), you can get Emacs to remove these
-characters from the buffer by adding this to your <samp>.emacs</samp> init
-file:
-</p>
-<div class="smalllisp">
-<pre class="smalllisp">(add-hook 'comint-output-filter-functions 'shell-strip-ctrl-m)
-</pre></div>
+  <div class="example">
+    <pre class="example">
+setenv ESHELL /bin/csh
+</pre>
+  </div>
 
-<p>On a related note: if your shell is echoing your input line in the shell
-buffer, you might want to customize the <code>comint-process-echoes</code>
-variable in your shell buffers, or try the following command in your
-shell start-up file:
-</p>
-<div class="example">
-<pre class="example">stty -icrnl -onlcr -echo susp ^Z
-</pre></div>
+  <p>(You must start Emacs over again with the environment variable
+  properly set for this to take effect.)</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Problems-with-Shell-Mode.html#Problems-with-Shell-Mode" accesskey="n" rel="next">Problems with Shell Mode</a>, Previous: <a href="Problems-with-very-large-files.html#Problems-with-very-large-files" accesskey="p" rel="prev">Problems with very large files</a>, Up: <a href="Bugs-and-problems.html#Bugs-and-problems" accesskey="u" rel="up">Bugs and problems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>You can also set the <code>ESHELL</code> environment variable
+  in Emacs Lisp with the following Lisp form,</p>
 
+  <div class="lisp">
+    <pre class="lisp">
+(setenv "ESHELL" "/bin/csh")
+</pre>
+  </div>
 
+  <p>The above solutions try to prevent the shell from producing
+  the &lsquo;<samp>^M</samp>&rsquo; characters in the first place.
+  If this is not possible (e.g., if you use a Windows shell), you
+  can get Emacs to remove these characters from the buffer by
+  adding this to your <samp>.emacs</samp> init file:</p>
 
+  <div class="smalllisp">
+    <pre class="smalllisp">
+(add-hook 'comint-output-filter-functions 'shell-strip-ctrl-m)
+</pre>
+  </div>
+
+  <p>On a related note: if your shell is echoing your input line in
+  the shell buffer, you might want to customize the
+  <code>comint-process-echoes</code> variable in your shell
+  buffers, or try the following command in your shell start-up
+  file:</p>
+
+  <div class="example">
+    <pre class="example">
+stty -icrnl -onlcr -echo susp ^Z
+</pre>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Problems-with-Shell-Mode.html#Problems-with-Shell-Mode"
+    accesskey="n" rel="next">Problems with Shell Mode</a>,
+    Previous: <a href=
+    "Problems-with-very-large-files.html#Problems-with-very-large-files"
+    accesskey="p" rel="prev">Problems with very large files</a>,
+    Up: <a href="Bugs-and-problems.html#Bugs-and-problems"
+    accesskey="u" rel="up">Bugs and problems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

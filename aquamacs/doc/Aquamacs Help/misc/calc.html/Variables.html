@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,137 +18,193 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Variables">
-<meta name="keywords" content="GNU Emacs Calc Manual: Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Data-Types.html#Data-Types" rel="up" title="Data Types">
-<link href="Formulas.html#Formulas" rel="next" title="Formulas">
-<link href="Incomplete-Objects.html#Incomplete-Objects" rel="prev" title="Incomplete Objects">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Data-Types.html#Data-Types" rel="up" title=
+  "Data Types" />
+  <link href="Formulas.html#Formulas" rel="next" title=
+  "Formulas" />
+  <link href="Incomplete-Objects.html#Incomplete-Objects" rel=
+  "prev" title="Incomplete Objects" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Variables"></a>
-<div class="header">
-<p>
-Next: <a href="Formulas.html#Formulas" accesskey="n" rel="next">Formulas</a>, Previous: <a href="Incomplete-Objects.html#Incomplete-Objects" accesskey="p" rel="prev">Incomplete Objects</a>, Up: <a href="Data-Types.html#Data-Types" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Variables-1"></a>
-<h3 class="section">4.14 Variables</h3>
+<body lang="en" xml:lang="en">
+  <a name="Variables" id="Variables"></a>
 
-<a name="index-Variables_002c-in-formulas"></a>
-<p>A <em>variable</em> is somewhere between a storage register on a conventional
-calculator, and a variable in a programming language.  (In fact, a Calc
-variable is really just an Emacs Lisp variable that contains a Calc number
-or formula.)  A variable&rsquo;s name is normally composed of letters and digits.
-Calc also allows apostrophes and <code>#</code> signs in variable names.
-(The Calc variable <code>foo</code> corresponds to the Emacs Lisp variable
-<code>var-foo</code>, but unless you access the variable from within Emacs
-Lisp, you don&rsquo;t need to worry about it.  Variable names in algebraic
-formulas implicitly have &lsquo;<samp>var-</samp>&rsquo; prefixed to their names.  The
-&lsquo;<samp>#</samp>&rsquo; character in variable names used in algebraic formulas
-corresponds to a dash &lsquo;<samp>-</samp>&rsquo; in the Lisp variable name.  If the name
-contains any dashes, the prefix &lsquo;<samp>var-</samp>&rsquo; is <em>not</em> automatically
-added.  Thus the two formulas &lsquo;<samp>foo + 1</samp>&rsquo; and &lsquo;<samp>var#foo + 1</samp>&rsquo; both
-refer to the same variable.)
-</p>
-<p>In a command that takes a variable name, you can either type the full
-name of a variable, or type a single digit to use one of the special
-convenience variables <code>q0</code> through <code>q9</code>.  For example,
-<kbd>3 s s 2</kbd> stores the number 3 in variable <code>q2</code>, and
-<kbd>3&nbsp;s&nbsp;s&nbsp;foo&nbsp;<span class="key">RET</span></kbd><!-- /@w --> stores that number in variable
-<code>foo</code>.
-</p>
-<p>To push a variable itself (as opposed to the variable&rsquo;s value) on the
-stack, enter its name as an algebraic expression using the apostrophe
-(<tt class="key">'</tt>) key.
-</p>
-<a name="index-_003d"></a>
-<a name="index-calc_002devaluate"></a>
-<a name="index-Evaluation-of-variables-in-a-formula"></a>
-<a name="index-Variables_002c-evaluation"></a>
-<a name="index-Formulas_002c-evaluation"></a>
-<p>The <kbd>=</kbd> (<code>calc-evaluate</code>) key &ldquo;evaluates&rdquo; a formula by
-replacing all variables in the formula which have been given values by a
-<code>calc-store</code> or <code>calc-let</code> command by their stored values.
-Other variables are left alone.  Thus a variable that has not been
-stored acts like an abstract variable in algebra; a variable that has
-been stored acts more like a register in a traditional calculator.
-With a positive numeric prefix argument, <kbd>=</kbd> evaluates the top
-<var>n</var> stack entries; with a negative argument, <kbd>=</kbd> evaluates
-the <var>n</var>th stack entry.
-</p>
-<a name="index-e-variable"></a>
-<a name="index-pi-variable"></a>
-<a name="index-i-variable"></a>
-<a name="index-phi-variable"></a>
-<a name="index-gamma-variable"></a>
-<a name="index-e-2"></a>
-<a name="index-pi-1"></a>
-<a name="index-i-1"></a>
-<a name="index-phi-1"></a>
-<a name="index-gamma-1"></a>
-<p>A few variables are called <em>special constants</em>.  Their names are
-&lsquo;<samp>e</samp>&rsquo;, &lsquo;<samp>pi</samp>&rsquo;, &lsquo;<samp>i</samp>&rsquo;, &lsquo;<samp>phi</samp>&rsquo;, and &lsquo;<samp>gamma</samp>&rsquo;.
-(See <a href="Scientific-Functions.html#Scientific-Functions">Scientific Functions</a>.)  When they are evaluated with <kbd>=</kbd>,
-their values are calculated if necessary according to the current precision
-or complex polar mode.  If you wish to use these symbols for other purposes,
-simply undefine or redefine them using <code>calc-store</code>.
-</p>
-<p>The variables &lsquo;<samp>inf</samp>&rsquo;, &lsquo;<samp>uinf</samp>&rsquo;, and &lsquo;<samp>nan</samp>&rsquo; stand for
-infinite or indeterminate values.  It&rsquo;s best not to use them as
-regular variables, since Calc uses special algebraic rules when
-it manipulates them.  Calc displays a warning message if you store
-a value into any of these special variables.
-</p>
-<p>See <a href="Store-and-Recall.html#Store-and-Recall">Store and Recall</a>, for a discussion of commands dealing with variables.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Formulas.html#Formulas" accesskey="n" rel="next">Formulas</a>, Previous: <a href="Incomplete-Objects.html#Incomplete-Objects" accesskey="p" rel="prev">Incomplete Objects</a>, Up: <a href="Data-Types.html#Data-Types" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Formulas.html#Formulas" accesskey="n" rel=
+    "next">Formulas</a>, Previous: <a href=
+    "Incomplete-Objects.html#Incomplete-Objects" accesskey="p" rel=
+    "prev">Incomplete Objects</a>, Up: <a href=
+    "Data-Types.html#Data-Types" accesskey="u" rel="up">Data
+    Types</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Variables-1" id="Variables-1"></a>
 
+  <h3 class="section">4.14 Variables</h3><a name=
+  "index-Variables_002c-in-formulas" id=
+  "index-Variables_002c-in-formulas"></a>
 
+  <p>A <em>variable</em> is somewhere between a storage register on
+  a conventional calculator, and a variable in a programming
+  language. (In fact, a Calc variable is really just an Emacs Lisp
+  variable that contains a Calc number or formula.) A
+  variable&rsquo;s name is normally composed of letters and digits.
+  Calc also allows apostrophes and <code>#</code> signs in variable
+  names. (The Calc variable <code>foo</code> corresponds to the
+  Emacs Lisp variable <code>var-foo</code>, but unless you access
+  the variable from within Emacs Lisp, you don&rsquo;t need to
+  worry about it. Variable names in algebraic formulas implicitly
+  have &lsquo;<samp>var-</samp>&rsquo; prefixed to their names. The
+  &lsquo;<samp>#</samp>&rsquo; character in variable names used in
+  algebraic formulas corresponds to a dash
+  &lsquo;<samp>-</samp>&rsquo; in the Lisp variable name. If the
+  name contains any dashes, the prefix
+  &lsquo;<samp>var-</samp>&rsquo; is <em>not</em> automatically
+  added. Thus the two formulas &lsquo;<samp>foo + 1</samp>&rsquo;
+  and &lsquo;<samp>var#foo + 1</samp>&rsquo; both refer to the same
+  variable.)</p>
 
+  <p>In a command that takes a variable name, you can either type
+  the full name of a variable, or type a single digit to use one of
+  the special convenience variables <code>q0</code> through
+  <code>q9</code>. For example, <kbd>3 s s 2</kbd> stores the
+  number 3 in variable <code>q2</code>, and
+  <kbd>3&nbsp;s&nbsp;s&nbsp;foo&nbsp;<span class=
+  "key">RET</span></kbd><!-- /@w --> stores that number in variable
+  <code>foo</code>.</p>
+
+  <p>To push a variable itself (as opposed to the variable&rsquo;s
+  value) on the stack, enter its name as an algebraic expression
+  using the apostrophe (<tt class="key">'</tt>) key.</p><a name=
+  "index-_003d" id="index-_003d"></a> <a name=
+  "index-calc_002devaluate" id="index-calc_002devaluate"></a>
+  <a name="index-Evaluation-of-variables-in-a-formula" id=
+  "index-Evaluation-of-variables-in-a-formula"></a> <a name=
+  "index-Variables_002c-evaluation" id=
+  "index-Variables_002c-evaluation"></a> <a name=
+  "index-Formulas_002c-evaluation" id=
+  "index-Formulas_002c-evaluation"></a>
+
+  <p>The <kbd>=</kbd> (<code>calc-evaluate</code>) key
+  &ldquo;evaluates&rdquo; a formula by replacing all variables in
+  the formula which have been given values by a
+  <code>calc-store</code> or <code>calc-let</code> command by their
+  stored values. Other variables are left alone. Thus a variable
+  that has not been stored acts like an abstract variable in
+  algebra; a variable that has been stored acts more like a
+  register in a traditional calculator. With a positive numeric
+  prefix argument, <kbd>=</kbd> evaluates the top <var>n</var>
+  stack entries; with a negative argument, <kbd>=</kbd> evaluates
+  the <var>n</var>th stack entry.</p><a name="index-e-variable" id=
+  "index-e-variable"></a> <a name="index-pi-variable" id=
+  "index-pi-variable"></a> <a name="index-i-variable" id=
+  "index-i-variable"></a> <a name="index-phi-variable" id=
+  "index-phi-variable"></a> <a name="index-gamma-variable" id=
+  "index-gamma-variable"></a> <a name="index-e-2" id=
+  "index-e-2"></a> <a name="index-pi-1" id="index-pi-1"></a>
+  <a name="index-i-1" id="index-i-1"></a> <a name="index-phi-1" id=
+  "index-phi-1"></a> <a name="index-gamma-1" id=
+  "index-gamma-1"></a>
+
+  <p>A few variables are called <em>special constants</em>. Their
+  names are &lsquo;<samp>e</samp>&rsquo;,
+  &lsquo;<samp>pi</samp>&rsquo;, &lsquo;<samp>i</samp>&rsquo;,
+  &lsquo;<samp>phi</samp>&rsquo;, and
+  &lsquo;<samp>gamma</samp>&rsquo;. (See <a href=
+  "Scientific-Functions.html#Scientific-Functions">Scientific
+  Functions</a>.) When they are evaluated with <kbd>=</kbd>, their
+  values are calculated if necessary according to the current
+  precision or complex polar mode. If you wish to use these symbols
+  for other purposes, simply undefine or redefine them using
+  <code>calc-store</code>.</p>
+
+  <p>The variables &lsquo;<samp>inf</samp>&rsquo;,
+  &lsquo;<samp>uinf</samp>&rsquo;, and
+  &lsquo;<samp>nan</samp>&rsquo; stand for infinite or
+  indeterminate values. It&rsquo;s best not to use them as regular
+  variables, since Calc uses special algebraic rules when it
+  manipulates them. Calc displays a warning message if you store a
+  value into any of these special variables.</p>
+
+  <p>See <a href="Store-and-Recall.html#Store-and-Recall">Store and
+  Recall</a>, for a discussion of commands dealing with
+  variables.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Formulas.html#Formulas" accesskey="n" rel=
+    "next">Formulas</a>, Previous: <a href=
+    "Incomplete-Objects.html#Incomplete-Objects" accesskey="p" rel=
+    "prev">Incomplete Objects</a>, Up: <a href=
+    "Data-Types.html#Data-Types" accesskey="u" rel="up">Data
+    Types</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

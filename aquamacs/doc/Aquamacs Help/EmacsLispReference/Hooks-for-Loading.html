@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,125 +19,181 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Hooks for Loading</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Hooks for Loading">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Hooks for Loading">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Loading.html#Loading" rel="up" title="Loading">
-<link href="Dynamic-Modules.html#Dynamic-Modules" rel="next" title="Dynamic Modules">
-<link href="Unloading.html#Unloading" rel="prev" title="Unloading">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Hooks for Loading</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Hooks for Loading" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Hooks for Loading" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Loading.html#Loading" rel="up" title="Loading" />
+  <link href="Dynamic-Modules.html#Dynamic-Modules" rel="next"
+  title="Dynamic Modules" />
+  <link href="Unloading.html#Unloading" rel="prev" title=
+  "Unloading" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Hooks-for-Loading" id="Hooks-for-Loading"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Dynamic-Modules.html#Dynamic-Modules"
+    accesskey="n" rel="next">Dynamic Modules</a>, Previous:
+    <a href="Unloading.html#Unloading" accesskey="p" rel=
+    "prev">Unloading</a>, Up: <a href="Loading.html#Loading"
+    accesskey="u" rel="up">Loading</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Hooks-for-Loading-1" id="Hooks-for-Loading-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Hooks-for-Loading"></a>
-<div class="header">
-<p>
-Next: <a href="Dynamic-Modules.html#Dynamic-Modules" accesskey="n" rel="next">Dynamic Modules</a>, Previous: <a href="Unloading.html#Unloading" accesskey="p" rel="prev">Unloading</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Hooks-for-Loading-1"></a>
-<h3 class="section">15.10 Hooks for Loading</h3>
-<a name="index-loading-hooks"></a>
-<a name="index-hooks-for-loading"></a>
+  <h3 class="section">15.10 Hooks for Loading</h3><a name=
+  "index-loading-hooks" id="index-loading-hooks"></a> <a name=
+  "index-hooks-for-loading" id="index-hooks-for-loading"></a>
 
-<p>You can ask for code to be executed each time Emacs loads a library,
-by using the variable <code>after-load-functions</code>:
-</p>
-<dl>
-<dt><a name="index-after_002dload_002dfunctions"></a>Variable: <strong>after-load-functions</strong></dt>
-<dd><p>This abnormal hook is run after loading a file.  Each function in the
-hook is called with a single argument, the absolute filename of the
-file that was just loaded.
-</p></dd></dl>
+  <p>You can ask for code to be executed each time Emacs loads a
+  library, by using the variable
+  <code>after-load-functions</code>:</p>
 
-<p>If you want code to be executed when a <em>particular</em> library is
-loaded, use the macro <code>with-eval-after-load</code>:
-</p>
-<dl>
-<dt><a name="index-with_002deval_002dafter_002dload"></a>Macro: <strong>with-eval-after-load</strong> <em>library body&hellip;</em></dt>
-<dd><p>This macro arranges to evaluate <var>body</var> at the end of loading
-the file <var>library</var>, each time <var>library</var> is loaded.  If
-<var>library</var> is already loaded, it evaluates <var>body</var> right away.
-</p>
-<p>You don&rsquo;t need to give a directory or extension in the file name
-<var>library</var>.  Normally, you just give a bare file name, like this:
-</p>
-<div class="example">
-<pre class="example">(with-eval-after-load &quot;edebug&quot; (def-edebug-spec c-point t))
-</pre></div>
+  <dl>
+    <dt><a name="index-after_002dload_002dfunctions" id=
+    "index-after_002dload_002dfunctions"></a>Variable:
+    <strong>after-load-functions</strong></dt>
 
-<p>To restrict which files can trigger the evaluation, include a
-directory or an extension or both in <var>library</var>.  Only a file whose
-absolute true name (i.e., the name with all symbolic links chased out)
-matches all the given name components will match.  In the following
-example, <samp>my_inst.elc</samp> or <samp>my_inst.elc.gz</samp> in some directory
-<code>..../foo/bar</code> will trigger the evaluation, but not
-<samp>my_inst.el</samp>:
-</p>
-<div class="example">
-<pre class="example">(with-eval-after-load &quot;foo/bar/my_inst.elc&quot; &hellip;)
-</pre></div>
+    <dd>
+      <p>This abnormal hook is run after loading a file. Each
+      function in the hook is called with a single argument, the
+      absolute filename of the file that was just loaded.</p>
+    </dd>
+  </dl>
 
-<p><var>library</var> can also be a feature (i.e., a symbol), in which case
-<var>body</var> is evaluated at the end of any file where
-<code>(provide <var>library</var>)</code> is called.
-</p>
-<p>An error in <var>body</var> does not undo the load, but does prevent
-execution of the rest of <var>body</var>.
-</p></dd></dl>
+  <p>If you want code to be executed when a <em>particular</em>
+  library is loaded, use the macro
+  <code>with-eval-after-load</code>:</p>
 
-<p>Normally, well-designed Lisp programs should not use
-<code>with-eval-after-load</code>.  If you need to examine and set the
-variables defined in another library (those meant for outside use),
-you can do it immediately&mdash;there is no need to wait until the library
-is loaded.  If you need to call functions defined by that library, you
-should load the library, preferably with <code>require</code> (see <a href="Named-Features.html#Named-Features">Named Features</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Dynamic-Modules.html#Dynamic-Modules" accesskey="n" rel="next">Dynamic Modules</a>, Previous: <a href="Unloading.html#Unloading" accesskey="p" rel="prev">Unloading</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-with_002deval_002dafter_002dload" id=
+    "index-with_002deval_002dafter_002dload"></a>Macro:
+    <strong>with-eval-after-load</strong> <em>library
+    body&hellip;</em></dt>
 
+    <dd>
+      <p>This macro arranges to evaluate <var>body</var> at the end
+      of loading the file <var>library</var>, each time
+      <var>library</var> is loaded. If <var>library</var> is
+      already loaded, it evaluates <var>body</var> right away.</p>
 
+      <p>You don&rsquo;t need to give a directory or extension in
+      the file name <var>library</var>. Normally, you just give a
+      bare file name, like this:</p>
 
+      <div class="example">
+        <pre class="example">
+(with-eval-after-load "edebug" (def-edebug-spec c-point t))
+</pre>
+      </div>
+
+      <p>To restrict which files can trigger the evaluation,
+      include a directory or an extension or both in
+      <var>library</var>. Only a file whose absolute true name
+      (i.e., the name with all symbolic links chased out) matches
+      all the given name components will match. In the following
+      example, <samp>my_inst.elc</samp> or
+      <samp>my_inst.elc.gz</samp> in some directory
+      <code>..../foo/bar</code> will trigger the evaluation, but
+      not <samp>my_inst.el</samp>:</p>
+
+      <div class="example">
+        <pre class="example">
+(with-eval-after-load "foo/bar/my_inst.elc" &hellip;)
+</pre>
+      </div>
+
+      <p><var>library</var> can also be a feature (i.e., a symbol),
+      in which case <var>body</var> is evaluated at the end of any
+      file where <code>(provide <var>library</var>)</code> is
+      called.</p>
+
+      <p>An error in <var>body</var> does not undo the load, but
+      does prevent execution of the rest of <var>body</var>.</p>
+    </dd>
+  </dl>
+
+  <p>Normally, well-designed Lisp programs should not use
+  <code>with-eval-after-load</code>. If you need to examine and set
+  the variables defined in another library (those meant for outside
+  use), you can do it immediately&mdash;there is no need to wait
+  until the library is loaded. If you need to call functions
+  defined by that library, you should load the library, preferably
+  with <code>require</code> (see <a href=
+  "Named-Features.html#Named-Features">Named Features</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Dynamic-Modules.html#Dynamic-Modules"
+    accesskey="n" rel="next">Dynamic Modules</a>, Previous:
+    <a href="Unloading.html#Unloading" accesskey="p" rel=
+    "prev">Unloading</a>, Up: <a href="Loading.html#Loading"
+    accesskey="u" rel="up">Loading</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

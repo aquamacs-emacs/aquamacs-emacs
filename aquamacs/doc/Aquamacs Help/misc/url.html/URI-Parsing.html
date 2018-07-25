@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the manual for the url Emacs Lisp library.
 
 Copyright (C) 1993-1999, 2002, 2004-2016 Free Software
@@ -15,108 +17,170 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>URL Programmer&rsquo;s Manual: URI Parsing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="URL Programmer&rsquo;s Manual: URI Parsing">
-<meta name="keywords" content="URL Programmer&rsquo;s Manual: URI Parsing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Parsed-URIs.html#Parsed-URIs" rel="next" title="Parsed URIs">
-<link href="Introduction.html#Introduction" rel="prev" title="Introduction">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>URL Programmer&rsquo;s Manual: URI Parsing</title>
+  <meta name="description" content=
+  "URL Programmer&rsquo;s Manual: URI Parsing" />
+  <meta name="keywords" content=
+  "URL Programmer&rsquo;s Manual: URI Parsing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Parsed-URIs.html#Parsed-URIs" rel="next" title=
+  "Parsed URIs" />
+  <link href="Introduction.html#Introduction" rel="prev" title=
+  "Introduction" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="URI-Parsing"></a>
-<div class="header">
-<p>
-Next: <a href="Retrieving-URLs.html#Retrieving-URLs" accesskey="n" rel="next">Retrieving URLs</a>, Previous: <a href="Introduction.html#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="URI-Parsing-1"></a>
-<h2 class="chapter">2 URI Parsing</h2>
+<body lang="en" xml:lang="en">
+  <a name="URI-Parsing" id="URI-Parsing"></a>
 
-<p>A URI consists of several <em>components</em>, each having a different
-meaning.  For example, the URI
-</p>
-<div class="example">
-<pre class="example">http://www.gnu.org/software/emacs/
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Retrieving-URLs.html#Retrieving-URLs"
+    accesskey="n" rel="next">Retrieving URLs</a>, Previous:
+    <a href="Introduction.html#Introduction" accesskey="p" rel=
+    "prev">Introduction</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="URI-Parsing-1" id="URI-Parsing-1"></a>
 
-<p>specifies the scheme component &lsquo;<samp>http</samp>&rsquo;, the hostname component
-&lsquo;<samp>www.gnu.org</samp>&rsquo;, and the path component &lsquo;<samp>/software/emacs/</samp>&rsquo;.
-</p>
-<a name="index-parsed-URIs"></a>
-<p>The format of URIs is specified by RFC 3986.  The <code>url</code> library
-provides the Lisp function <code>url-generic-parse-url</code>, a (mostly)
-standard-compliant URI parser, as well as function
-<code>url-recreate-url</code>, which converts a parsed URI back into a URI
-string.
-</p>
-<dl>
-<dt><a name="index-url_002dgeneric_002dparse_002durl"></a>Function: <strong>url-generic-parse-url</strong> <em>uri-string</em></dt>
-<dd><p>This function returns a parsed version of the string <var>uri-string</var>.
-</p></dd></dl>
+  <h2 class="chapter">2 URI Parsing</h2>
 
-<dl>
-<dt><a name="index-url_002drecreate_002durl"></a>Function: <strong>url-recreate-url</strong> <em>uri-obj</em></dt>
-<dd><a name="index-unparsing-URLs"></a>
-<p>Given a parsed URI, this function returns the corresponding URI string.
-</p></dd></dl>
+  <p>A URI consists of several <em>components</em>, each having a
+  different meaning. For example, the URI</p>
 
-<a name="index-parsed-URI"></a>
-<p>The return value of <code>url-generic-parse-url</code>, and the argument
-expected by <code>url-recreate-url</code>, is a <em>parsed URI</em>: a CL
-structure whose slots hold the various components of the URI.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/cl/index.html#Top">the CL Manual</a> in <cite>GNU Emacs Common Lisp Emulation</cite>, for
-details about CL structures.  Most of the other functions in the
-<code>url</code> library act on parsed URIs.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Parsed-URIs.html#Parsed-URIs" accesskey="1">Parsed URIs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Format of parsed URI structures.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="URI-Encoding.html#URI-Encoding" accesskey="2">URI Encoding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Non-<acronym>ASCII</acronym> characters in URIs.
-</td></tr>
-</table>
+  <div class="example">
+    <pre class="example">
+http://www.gnu.org/software/emacs/
+</pre>
+  </div>
 
+  <p>specifies the scheme component
+  &lsquo;<samp>http</samp>&rsquo;, the hostname component
+  &lsquo;<samp>www.gnu.org</samp>&rsquo;, and the path component
+  &lsquo;<samp>/software/emacs/</samp>&rsquo;.</p><a name=
+  "index-parsed-URIs" id="index-parsed-URIs"></a>
 
+  <p>The format of URIs is specified by RFC 3986. The
+  <code>url</code> library provides the Lisp function
+  <code>url-generic-parse-url</code>, a (mostly) standard-compliant
+  URI parser, as well as function <code>url-recreate-url</code>,
+  which converts a parsed URI back into a URI string.</p>
 
+  <dl>
+    <dt><a name="index-url_002dgeneric_002dparse_002durl" id=
+    "index-url_002dgeneric_002dparse_002durl"></a>Function:
+    <strong>url-generic-parse-url</strong> <em>uri-string</em></dt>
 
+    <dd>
+      <p>This function returns a parsed version of the string
+      <var>uri-string</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-url_002drecreate_002durl" id=
+    "index-url_002drecreate_002durl"></a>Function:
+    <strong>url-recreate-url</strong> <em>uri-obj</em></dt>
+
+    <dd>
+      <a name="index-unparsing-URLs" id="index-unparsing-URLs"></a>
+
+      <p>Given a parsed URI, this function returns the
+      corresponding URI string.</p>
+    </dd>
+  </dl><a name="index-parsed-URI" id="index-parsed-URI"></a>
+
+  <p>The return value of <code>url-generic-parse-url</code>, and
+  the argument expected by <code>url-recreate-url</code>, is a
+  <em>parsed URI</em>: a CL structure whose slots hold the various
+  components of the URI. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/cl/index.html#Top">
+  the CL Manual</a> in <cite>GNU Emacs Common Lisp
+  Emulation</cite>, for details about CL structures. Most of the
+  other functions in the <code>url</code> library act on parsed
+  URIs.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Parsed-URIs.html#Parsed-URIs" accesskey="1">Parsed
+      URIs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Format of parsed URI
+      structures.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "URI-Encoding.html#URI-Encoding" accesskey="2">URI
+      Encoding</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Non-<acronym>ASCII</acronym>
+      characters in URIs.</td>
+    </tr>
+  </table>
 </body>
 </html>

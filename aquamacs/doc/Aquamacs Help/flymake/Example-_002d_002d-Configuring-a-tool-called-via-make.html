@@ -1,14 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Example -- Configuring a tool called via make - GNU Flymake 0.3</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Flymake 0.3">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool" title="Adding support for a new syntax check tool">
-<link rel="prev" href="Example-_002d_002d-Configuring-a-tool-called-directly.html#Example-_002d_002d-Configuring-a-tool-called-directly" title="Example -- Configuring a tool called directly">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Example -- Configuring a tool called via make - GNU
+  Flymake 0.3</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Flymake 0.3" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool"
+  title="Adding support for a new syntax check tool" />
+  <link rel="prev" href=
+  "Example-_002d_002d-Configuring-a-tool-called-directly.html#Example-_002d_002d-Configuring-a-tool-called-directly"
+  title="Example -- Configuring a tool called directly" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -27,8 +38,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,57 +51,73 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Example----Configuring-a-tool-called-via-make"></a>
-<a name="Example-_002d_002d-Configuring-a-tool-called-via-make"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Example-_002d_002d-Configuring-a-tool-called-directly.html#Example-_002d_002d-Configuring-a-tool-called-directly">Example -- Configuring a tool called directly</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool">Adding support for a new syntax check tool</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Example----Configuring-a-tool-called-via-make" id=
+    "Example----Configuring-a-tool-called-via-make"></a> <a name=
+    "Example-_002d_002d-Configuring-a-tool-called-via-make" id=
+    "Example-_002d_002d-Configuring-a-tool-called-via-make"></a>
 
-<h4 class="subsection">4.2.2 Example &ndash; Configuring a tool called via make</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Example-_002d_002d-Configuring-a-tool-called-directly.html#Example-_002d_002d-Configuring-a-tool-called-directly">Example
+    -- Configuring a tool called directly</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool">Adding
+    support for a new syntax check tool</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Adding-support-for-C-_0028gcc_002bmake_0029-15"></a>
-In this example we will add support for C files syntax checked by
-<code>gcc</code> called via <code>make</code>.
+  <h4 class="subsection">4.2.2 Example &ndash; Configuring a tool
+  called via make</h4>
 
-   <p>We're not required to write any new functions, as Flymake already has
-functions for <code>make</code>. We just add a new entry to the
-<code>flymake-allowed-file-name-masks</code>:
+  <p><a name="index-Adding-support-for-C-_0028gcc_002bmake_0029-15"
+  id="index-Adding-support-for-C-_0028gcc_002bmake_0029-15"></a> In
+  this example we will add support for C files syntax checked by
+  <code>gcc</code> called via <code>make</code>.</p>
 
-<pre class="lisp">     (setq flymake-allowed-file-name-masks
+  <p>We're not required to write any new functions, as Flymake
+  already has functions for <code>make</code>. We just add a new
+  entry to the <code>flymake-allowed-file-name-masks</code>:</p>
+  <pre class="lisp">
+     (setq flymake-allowed-file-name-masks
            (cons '(".+\\.c$"
                    flymake-simple-make-init
                    flymake-simple-cleanup
                    flymake-get-real-file-name)
                  flymake-allowed-file-name-masks))
 </pre>
-   <p><code>flymake-simple-make-init</code> builds the following <code>make</code>
-command line:
 
-<pre class="lisp">     (list "make"
+  <p><code>flymake-simple-make-init</code> builds the following
+  <code>make</code> command line:</p>
+  <pre class="lisp">
+     (list "make"
            (list "-s" "-C"
                  base-dir
                  (concat "CHK_SOURCES=" source)
                  "SYNTAX_CHECK_MODE=1"
                  "check-syntax"))
 </pre>
-   <p><code>base-dir</code> is a directory containing <code>Makefile</code>, see <a href="Locating-the-buildfile.html#Locating-the-buildfile">Locating the buildfile</a>.
 
-   <p>Thus, <code>Makefile</code> must contain the <code>check-syntax</code> target. In
-our case this target might look like this:
+  <p><code>base-dir</code> is a directory containing
+  <code>Makefile</code>, see <a href=
+  "Locating-the-buildfile.html#Locating-the-buildfile">Locating the
+  buildfile</a>.</p>
 
-<pre class="verbatim">check-syntax:
-	gcc -o nul -S ${CHK_SOURCES}
+  <p>Thus, <code>Makefile</code> must contain the
+  <code>check-syntax</code> target. In our case this target might
+  look like this:</p>
+  <pre class="verbatim">
+check-syntax:
+        gcc -o nul -S ${CHK_SOURCES}
 </pre>
 
-   <p>The format of error messages reported by <code>gcc</code> is already
-supported by Flymake, so we don't have to add a new entry to
-<code>flymake-err-line-patterns</code>.
-
-   </body></html>
-
+  <p>The format of error messages reported by <code>gcc</code> is
+  already supported by Flymake, so we don't have to add a new entry
+  to <code>flymake-err-line-patterns</code>.</p>
+</body>
+</html>

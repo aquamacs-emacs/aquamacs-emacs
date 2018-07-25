@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,218 +18,289 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Making Selections</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Making Selections">
-<meta name="keywords" content="GNU Emacs Calc Manual: Making Selections">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Selecting-Subformulas.html#Selecting-Subformulas" rel="up" title="Selecting Subformulas">
-<link href="Changing-Selections.html#Changing-Selections" rel="next" title="Changing Selections">
-<link href="Selecting-Subformulas.html#Selecting-Subformulas" rel="prev" title="Selecting Subformulas">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Making Selections</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Making Selections" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Making Selections" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Selecting-Subformulas.html#Selecting-Subformulas"
+  rel="up" title="Selecting Subformulas" />
+  <link href="Changing-Selections.html#Changing-Selections" rel=
+  "next" title="Changing Selections" />
+  <link href="Selecting-Subformulas.html#Selecting-Subformulas"
+  rel="prev" title="Selecting Subformulas" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Making-Selections"></a>
-<div class="header">
-<p>
-Next: <a href="Changing-Selections.html#Changing-Selections" accesskey="n" rel="next">Changing Selections</a>, Previous: <a href="Selecting-Subformulas.html#Selecting-Subformulas" accesskey="p" rel="prev">Selecting Subformulas</a>, Up: <a href="Selecting-Subformulas.html#Selecting-Subformulas" accesskey="u" rel="up">Selecting Subformulas</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Making-Selections-1"></a>
-<h4 class="subsection">10.1.1 Making Selections</h4>
+<body lang="en" xml:lang="en">
+  <a name="Making-Selections" id="Making-Selections"></a>
 
-<a name="index-j-s"></a>
-<a name="index-calc_002dselect_002dhere"></a>
-<p>To select a sub-formula, move the Emacs cursor to any character in that
-sub-formula, and press <kbd>j&nbsp;s</kbd><!-- /@w --> (<code>calc-select-here</code>).  Calc will
-highlight the smallest portion of the formula that contains that
-character.  By default the sub-formula is highlighted by blanking out
-all of the rest of the formula with dots.  Selection works in any
-display mode but is perhaps easiest in Big mode (<kbd>d B</kbd>).
-Suppose you enter the following formula:
-</p>
-<div class="smallexample">
-<pre class="smallexample">           3    ___
+  <div class="header">
+    <p>Next: <a href="Changing-Selections.html#Changing-Selections"
+    accesskey="n" rel="next">Changing Selections</a>, Previous:
+    <a href="Selecting-Subformulas.html#Selecting-Subformulas"
+    accesskey="p" rel="prev">Selecting Subformulas</a>, Up:
+    <a href="Selecting-Subformulas.html#Selecting-Subformulas"
+    accesskey="u" rel="up">Selecting Subformulas</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Making-Selections-1" id="Making-Selections-1"></a>
+
+  <h4 class="subsection">10.1.1 Making Selections</h4><a name=
+  "index-j-s" id="index-j-s"></a> <a name=
+  "index-calc_002dselect_002dhere" id=
+  "index-calc_002dselect_002dhere"></a>
+
+  <p>To select a sub-formula, move the Emacs cursor to any
+  character in that sub-formula, and press <kbd>j&nbsp;s</kbd>
+  <!-- /@w --> (<code>calc-select-here</code>). Calc will highlight
+  the smallest portion of the formula that contains that character.
+  By default the sub-formula is highlighted by blanking out all of
+  the rest of the formula with dots. Selection works in any display
+  mode but is perhaps easiest in Big mode (<kbd>d B</kbd>). Suppose
+  you enter the following formula:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+           3    ___
     (a + b)  + V c
 1:  ---------------
         2 x + 1
-</pre></div>
+</pre>
+  </div>
 
-<p>(by typing <kbd>' ((a+b)^3 + sqrt(c)) / (2x+1)</kbd>).  If you move the
-cursor to the letter &lsquo;<samp>b</samp>&rsquo; and press <kbd>j&nbsp;s</kbd><!-- /@w -->, the display changes
-to
-</p>
-<div class="smallexample">
-<pre class="smallexample">           .    ...
+  <p>(by typing <kbd>' ((a+b)^3 + sqrt(c)) / (2x+1)</kbd>). If you
+  move the cursor to the letter &lsquo;<samp>b</samp>&rsquo; and
+  press <kbd>j&nbsp;s</kbd><!-- /@w -->, the display changes to</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+           .    ...
     .. . b.  . . .
 1*  ...............
         . . . .
-</pre></div>
+</pre>
+  </div>
 
-<p>Every character not part of the sub-formula &lsquo;<samp>b</samp>&rsquo; has been changed
-to a dot. (If the customizable variable
-<code>calc-highlight-selections-with-faces</code> is non-<code>nil</code>, then the characters
-not part of the sub-formula are de-emphasized by using a less
-noticeable face instead of using dots. see <a href="Displaying-Selections.html#Displaying-Selections">Displaying Selections</a>.)
-The &lsquo;<samp>*</samp>&rsquo; next to the line number is to remind you that
-the formula has a portion of it selected.  (In this case, it&rsquo;s very
-obvious, but it might not always be.  If Embedded mode is enabled,
-the word &lsquo;<samp>Sel</samp>&rsquo; also appears in the mode line because the stack
-may not be visible.  see <a href="Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>.)
-</p>
-<p>If you had instead placed the cursor on the parenthesis immediately to
-the right of the &lsquo;<samp>b</samp>&rsquo;, the selection would have been:
-</p>
-<div class="smallexample">
-<pre class="smallexample">           .    ...
+  <p>Every character not part of the sub-formula
+  &lsquo;<samp>b</samp>&rsquo; has been changed to a dot. (If the
+  customizable variable
+  <code>calc-highlight-selections-with-faces</code> is
+  non-<code>nil</code>, then the characters not part of the
+  sub-formula are de-emphasized by using a less noticeable face
+  instead of using dots. see <a href=
+  "Displaying-Selections.html#Displaying-Selections">Displaying
+  Selections</a>.) The &lsquo;<samp>*</samp>&rsquo; next to the
+  line number is to remind you that the formula has a portion of it
+  selected. (In this case, it&rsquo;s very obvious, but it might
+  not always be. If Embedded mode is enabled, the word
+  &lsquo;<samp>Sel</samp>&rsquo; also appears in the mode line
+  because the stack may not be visible. see <a href=
+  "Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>.)</p>
+
+  <p>If you had instead placed the cursor on the parenthesis
+  immediately to the right of the &lsquo;<samp>b</samp>&rsquo;, the
+  selection would have been:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+           .    ...
     (a + b)  . . .
 1*  ...............
         . . . .
-</pre></div>
+</pre>
+  </div>
 
-<p>The portion selected is always large enough to be considered a complete
-formula all by itself, so selecting the parenthesis selects the whole
-formula that it encloses.  Putting the cursor on the &lsquo;<samp>+</samp>&rsquo; sign
-would have had the same effect.
-</p>
-<p>(Strictly speaking, the Emacs cursor is really the manifestation of
-the Emacs &ldquo;point,&rdquo; which is a position <em>between</em> two characters
-in the buffer.  So purists would say that Calc selects the smallest
-sub-formula which contains the character to the right of &ldquo;point.&rdquo;)
-</p>
-<p>If you supply a numeric prefix argument <var>n</var>, the selection is
-expanded to the <var>n</var>th enclosing sub-formula.  Thus, positioning
-the cursor on the &lsquo;<samp>b</samp>&rsquo; and typing <kbd>C-u 1 j s</kbd> will select
-&lsquo;<samp>a + b</samp>&rsquo;; typing <kbd>C-u 2 j s</kbd> will select &lsquo;<samp>(a + b)^3</samp>&rsquo;,
-and so on.
-</p>
-<p>If the cursor is not on any part of the formula, or if you give a
-numeric prefix that is too large, the entire formula is selected.
-</p>
-<p>If the cursor is on the &lsquo;<samp>.</samp>&rsquo; line that marks the top of the stack
-(i.e., its normal &ldquo;rest position&rdquo;), this command selects the entire
-formula at stack level 1.  Most selection commands similarly operate
-on the formula at the top of the stack if you haven&rsquo;t positioned the
-cursor on any stack entry.
-</p>
-<a name="index-j-a"></a>
-<a name="index-calc_002dselect_002dadditional"></a>
-<p>The <kbd>j a</kbd> (<code>calc-select-additional</code>) command enlarges the
-current selection to encompass the cursor.  To select the smallest
-sub-formula defined by two different points, move to the first and
-press <kbd>j s</kbd>, then move to the other and press <kbd>j a</kbd>.  This
-is roughly analogous to using <kbd>C-@</kbd> (<code>set-mark-command</code>) to
-select the two ends of a region of text during normal Emacs editing.
-</p>
-<a name="index-j-o"></a>
-<a name="index-calc_002dselect_002donce"></a>
-<p>The <kbd>j o</kbd> (<code>calc-select-once</code>) command selects a formula in
-exactly the same way as <kbd>j s</kbd>, except that the selection will
-last only as long as the next command that uses it.  For example,
-<kbd>j o 1 +</kbd> is a handy way to add one to the sub-formula indicated
-by the cursor.
-</p>
-<p>(A somewhat more precise definition: The <kbd>j o</kbd> command sets a flag
-such that the next command involving selected stack entries will clear
-the selections on those stack entries afterwards.  All other selection
-commands except <kbd>j a</kbd> and <kbd>j O</kbd> clear this flag.)
-</p>
-<a name="index-j-S"></a>
-<a name="index-j-O"></a>
-<a name="index-calc_002dselect_002dhere_002dmaybe"></a>
-<a name="index-calc_002dselect_002donce_002dmaybe"></a>
-<p>The <kbd>j S</kbd> (<code>calc-select-here-maybe</code>) and <kbd>j O</kbd>
-(<code>calc-select-once-maybe</code>) commands are equivalent to <kbd>j s</kbd>
-and <kbd>j o</kbd>, respectively, except that if the formula already
-has a selection they have no effect.  This is analogous to the
-behavior of some commands such as <kbd>j r</kbd> (<code>calc-rewrite-selection</code>;
-see <a href="Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules">Selections with Rewrite Rules</a>) and is mainly intended to be
-used in keyboard macros that implement your own selection-oriented
-commands.
-</p>
-<p>Selection of sub-formulas normally treats associative terms like
-&lsquo;<samp>a + b - c + d</samp>&rsquo; and &lsquo;<samp>x * y * z</samp>&rsquo; as single levels of the formula.
-If you place the cursor anywhere inside &lsquo;<samp>a + b - c + d</samp>&rsquo; except
-on one of the variable names and use <kbd>j s</kbd>, you will select the
-entire four-term sum.
-</p>
-<a name="index-j-b"></a>
-<a name="index-calc_002dbreak_002dselections"></a>
-<p>The <kbd>j b</kbd> (<code>calc-break-selections</code>) command controls a mode
-in which the &ldquo;deep structure&rdquo; of these associative formulas shows
-through.  Calc actually stores the above formulas as
-&lsquo;<samp>((a + b) - c) + d</samp>&rsquo; and &lsquo;<samp>x * (y * z)</samp>&rsquo;.  (Note that for certain
-obscure reasons, by default Calc treats multiplication as
-right-associative.)  Once you have enabled <kbd>j b</kbd> mode, selecting
-with the cursor on the &lsquo;<samp>-</samp>&rsquo; sign would only select the &lsquo;<samp>a + b -
-c</samp>&rsquo; portion, which makes sense when the deep structure of the sum is
-considered.  There is no way to select the &lsquo;<samp>b - c + d</samp>&rsquo; portion;
-although this might initially look like just as legitimate a sub-formula
-as &lsquo;<samp>a + b - c</samp>&rsquo;, the deep structure shows that it isn&rsquo;t.  The <kbd>d
-U</kbd> command can be used to view the deep structure of any formula
-(see <a href="Normal-Language-Modes.html#Normal-Language-Modes">Normal Language Modes</a>).
-</p>
-<p>When <kbd>j b</kbd> mode has not been enabled, the deep structure is
-generally hidden by the selection commands&mdash;what you see is what
-you get.
-</p>
-<a name="index-j-u"></a>
-<a name="index-calc_002dunselect"></a>
-<p>The <kbd>j u</kbd> (<code>calc-unselect</code>) command unselects the formula
-that the cursor is on.  If there was no selection in the formula,
-this command has no effect.  With a numeric prefix argument, it
-unselects the <var>n</var>th stack element rather than using the cursor
-position.
-</p>
-<a name="index-j-c"></a>
-<a name="index-calc_002dclear_002dselections"></a>
-<p>The <kbd>j c</kbd> (<code>calc-clear-selections</code>) command unselects all
-stack elements.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Changing-Selections.html#Changing-Selections" accesskey="n" rel="next">Changing Selections</a>, Previous: <a href="Selecting-Subformulas.html#Selecting-Subformulas" accesskey="p" rel="prev">Selecting Subformulas</a>, Up: <a href="Selecting-Subformulas.html#Selecting-Subformulas" accesskey="u" rel="up">Selecting Subformulas</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The portion selected is always large enough to be considered a
+  complete formula all by itself, so selecting the parenthesis
+  selects the whole formula that it encloses. Putting the cursor on
+  the &lsquo;<samp>+</samp>&rsquo; sign would have had the same
+  effect.</p>
 
+  <p>(Strictly speaking, the Emacs cursor is really the
+  manifestation of the Emacs &ldquo;point,&rdquo; which is a
+  position <em>between</em> two characters in the buffer. So
+  purists would say that Calc selects the smallest sub-formula
+  which contains the character to the right of
+  &ldquo;point.&rdquo;)</p>
 
+  <p>If you supply a numeric prefix argument <var>n</var>, the
+  selection is expanded to the <var>n</var>th enclosing
+  sub-formula. Thus, positioning the cursor on the
+  &lsquo;<samp>b</samp>&rsquo; and typing <kbd>C-u 1 j s</kbd> will
+  select &lsquo;<samp>a + b</samp>&rsquo;; typing <kbd>C-u 2 j
+  s</kbd> will select &lsquo;<samp>(a + b)^3</samp>&rsquo;, and so
+  on.</p>
 
+  <p>If the cursor is not on any part of the formula, or if you
+  give a numeric prefix that is too large, the entire formula is
+  selected.</p>
+
+  <p>If the cursor is on the &lsquo;<samp>.</samp>&rsquo; line that
+  marks the top of the stack (i.e., its normal &ldquo;rest
+  position&rdquo;), this command selects the entire formula at
+  stack level 1. Most selection commands similarly operate on the
+  formula at the top of the stack if you haven&rsquo;t positioned
+  the cursor on any stack entry.</p><a name="index-j-a" id=
+  "index-j-a"></a> <a name="index-calc_002dselect_002dadditional"
+  id="index-calc_002dselect_002dadditional"></a>
+
+  <p>The <kbd>j a</kbd> (<code>calc-select-additional</code>)
+  command enlarges the current selection to encompass the cursor.
+  To select the smallest sub-formula defined by two different
+  points, move to the first and press <kbd>j s</kbd>, then move to
+  the other and press <kbd>j a</kbd>. This is roughly analogous to
+  using <kbd>C-@</kbd> (<code>set-mark-command</code>) to select
+  the two ends of a region of text during normal Emacs
+  editing.</p><a name="index-j-o" id="index-j-o"></a> <a name=
+  "index-calc_002dselect_002donce" id=
+  "index-calc_002dselect_002donce"></a>
+
+  <p>The <kbd>j o</kbd> (<code>calc-select-once</code>) command
+  selects a formula in exactly the same way as <kbd>j s</kbd>,
+  except that the selection will last only as long as the next
+  command that uses it. For example, <kbd>j o 1 +</kbd> is a handy
+  way to add one to the sub-formula indicated by the cursor.</p>
+
+  <p>(A somewhat more precise definition: The <kbd>j o</kbd>
+  command sets a flag such that the next command involving selected
+  stack entries will clear the selections on those stack entries
+  afterwards. All other selection commands except <kbd>j a</kbd>
+  and <kbd>j O</kbd> clear this flag.)</p><a name="index-j-S" id=
+  "index-j-S"></a> <a name="index-j-O" id="index-j-O"></a> <a name=
+  "index-calc_002dselect_002dhere_002dmaybe" id=
+  "index-calc_002dselect_002dhere_002dmaybe"></a> <a name=
+  "index-calc_002dselect_002donce_002dmaybe" id=
+  "index-calc_002dselect_002donce_002dmaybe"></a>
+
+  <p>The <kbd>j S</kbd> (<code>calc-select-here-maybe</code>) and
+  <kbd>j O</kbd> (<code>calc-select-once-maybe</code>) commands are
+  equivalent to <kbd>j s</kbd> and <kbd>j o</kbd>, respectively,
+  except that if the formula already has a selection they have no
+  effect. This is analogous to the behavior of some commands such
+  as <kbd>j r</kbd> (<code>calc-rewrite-selection</code>; see
+  <a href=
+  "Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules">
+  Selections with Rewrite Rules</a>) and is mainly intended to be
+  used in keyboard macros that implement your own
+  selection-oriented commands.</p>
+
+  <p>Selection of sub-formulas normally treats associative terms
+  like &lsquo;<samp>a + b - c + d</samp>&rsquo; and &lsquo;<samp>x
+  * y * z</samp>&rsquo; as single levels of the formula. If you
+  place the cursor anywhere inside &lsquo;<samp>a + b - c +
+  d</samp>&rsquo; except on one of the variable names and use
+  <kbd>j s</kbd>, you will select the entire four-term
+  sum.</p><a name="index-j-b" id="index-j-b"></a> <a name=
+  "index-calc_002dbreak_002dselections" id=
+  "index-calc_002dbreak_002dselections"></a>
+
+  <p>The <kbd>j b</kbd> (<code>calc-break-selections</code>)
+  command controls a mode in which the &ldquo;deep structure&rdquo;
+  of these associative formulas shows through. Calc actually stores
+  the above formulas as &lsquo;<samp>((a + b) - c) +
+  d</samp>&rsquo; and &lsquo;<samp>x * (y * z)</samp>&rsquo;. (Note
+  that for certain obscure reasons, by default Calc treats
+  multiplication as right-associative.) Once you have enabled
+  <kbd>j b</kbd> mode, selecting with the cursor on the
+  &lsquo;<samp>-</samp>&rsquo; sign would only select the
+  &lsquo;<samp>a + b - c</samp>&rsquo; portion, which makes sense
+  when the deep structure of the sum is considered. There is no way
+  to select the &lsquo;<samp>b - c + d</samp>&rsquo; portion;
+  although this might initially look like just as legitimate a
+  sub-formula as &lsquo;<samp>a + b - c</samp>&rsquo;, the deep
+  structure shows that it isn&rsquo;t. The <kbd>d U</kbd> command
+  can be used to view the deep structure of any formula (see
+  <a href="Normal-Language-Modes.html#Normal-Language-Modes">Normal
+  Language Modes</a>).</p>
+
+  <p>When <kbd>j b</kbd> mode has not been enabled, the deep
+  structure is generally hidden by the selection
+  commands&mdash;what you see is what you get.</p><a name=
+  "index-j-u" id="index-j-u"></a> <a name="index-calc_002dunselect"
+  id="index-calc_002dunselect"></a>
+
+  <p>The <kbd>j u</kbd> (<code>calc-unselect</code>) command
+  unselects the formula that the cursor is on. If there was no
+  selection in the formula, this command has no effect. With a
+  numeric prefix argument, it unselects the <var>n</var>th stack
+  element rather than using the cursor position.</p><a name=
+  "index-j-c" id="index-j-c"></a> <a name=
+  "index-calc_002dclear_002dselections" id=
+  "index-calc_002dclear_002dselections"></a>
+
+  <p>The <kbd>j c</kbd> (<code>calc-clear-selections</code>)
+  command unselects all stack elements.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Changing-Selections.html#Changing-Selections"
+    accesskey="n" rel="next">Changing Selections</a>, Previous:
+    <a href="Selecting-Subformulas.html#Selecting-Subformulas"
+    accesskey="p" rel="prev">Selecting Subformulas</a>, Up:
+    <a href="Selecting-Subformulas.html#Selecting-Subformulas"
+    accesskey="u" rel="up">Selecting Subformulas</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

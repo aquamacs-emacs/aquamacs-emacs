@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2006-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,85 +14,124 @@ included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>rcirc Manual: Defining a new command</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="rcirc Manual: Defining a new command">
-<meta name="keywords" content="rcirc Manual: Defining a new command">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Hacking-and-Tweaking.html#Hacking-and-Tweaking" rel="up" title="Hacking and Tweaking">
-<link href="Reconnecting-after-you-have-lost-the-connection.html#Reconnecting-after-you-have-lost-the-connection" rel="next" title="Reconnecting after you have lost the connection">
-<link href="Changing-the-time-stamp-format.html#Changing-the-time-stamp-format" rel="prev" title="Changing the time stamp format">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>rcirc Manual: Defining a new command</title>
+  <meta name="description" content=
+  "rcirc Manual: Defining a new command" />
+  <meta name="keywords" content=
+  "rcirc Manual: Defining a new command" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Hacking-and-Tweaking.html#Hacking-and-Tweaking" rel=
+  "up" title="Hacking and Tweaking" />
+  <link href=
+  "Reconnecting-after-you-have-lost-the-connection.html#Reconnecting-after-you-have-lost-the-connection"
+  rel="next" title=
+  "Reconnecting after you have lost the connection" />
+  <link href=
+  "Changing-the-time-stamp-format.html#Changing-the-time-stamp-format"
+  rel="prev" title="Changing the time stamp format" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-a-new-command"></a>
-<div class="header">
-<p>
-Next: <a href="Reconnecting-after-you-have-lost-the-connection.html#Reconnecting-after-you-have-lost-the-connection" accesskey="n" rel="next">Reconnecting after you have lost the connection</a>, Previous: <a href="Changing-the-time-stamp-format.html#Changing-the-time-stamp-format" accesskey="p" rel="prev">Changing the time stamp format</a>, Up: <a href="Hacking-and-Tweaking.html#Hacking-and-Tweaking" accesskey="u" rel="up">Hacking and Tweaking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-a-new-command-1"></a>
-<h3 class="section">4.5 Defining a new command</h3>
-<a name="index-defining-commands"></a>
-<a name="index-commands_002c-defining"></a>
-<a name="index-new-commands_002c-defining"></a>
+<body lang="en" xml:lang="en">
+  <a name="Defining-a-new-command" id="Defining-a-new-command"></a>
 
-<p>Here&rsquo;s a simple new command, <code>/sv</code>.  With it, you can boast about
-your IRC client.  It shows how you can use <code>defun-rcirc-command</code> to
-define new commands.
-</p>
-<p>We&rsquo;re waiting for the definition of this command until <code>rcirc</code> is loaded
-because <code>defun-rcirc-command</code> is not yet available, and without
-<code>rcirc</code> loaded, the command wouldn&rsquo;t do us much good anyway.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(with-eval-after-load 'rcirc
+  <div class="header">
+    <p>Next: <a href=
+    "Reconnecting-after-you-have-lost-the-connection.html#Reconnecting-after-you-have-lost-the-connection"
+    accesskey="n" rel="next">Reconnecting after you have lost the
+    connection</a>, Previous: <a href=
+    "Changing-the-time-stamp-format.html#Changing-the-time-stamp-format"
+    accesskey="p" rel="prev">Changing the time stamp format</a>,
+    Up: <a href="Hacking-and-Tweaking.html#Hacking-and-Tweaking"
+    accesskey="u" rel="up">Hacking and Tweaking</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-a-new-command-1" id=
+  "Defining-a-new-command-1"></a>
+
+  <h3 class="section">4.5 Defining a new command</h3><a name=
+  "index-defining-commands" id="index-defining-commands"></a>
+  <a name="index-commands_002c-defining" id=
+  "index-commands_002c-defining"></a> <a name=
+  "index-new-commands_002c-defining" id=
+  "index-new-commands_002c-defining"></a>
+
+  <p>Here&rsquo;s a simple new command, <code>/sv</code>. With it,
+  you can boast about your IRC client. It shows how you can use
+  <code>defun-rcirc-command</code> to define new commands.</p>
+
+  <p>We&rsquo;re waiting for the definition of this command until
+  <code>rcirc</code> is loaded because
+  <code>defun-rcirc-command</code> is not yet available, and
+  without <code>rcirc</code> loaded, the command wouldn&rsquo;t do
+  us much good anyway.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(with-eval-after-load 'rcirc
   (defun-rcirc-command sv (arg)
-    &quot;Boast about rcirc.&quot;
-    (interactive &quot;i&quot;)
+    "Boast about rcirc."
+    (interactive "i")
     (rcirc-send-message process target
-                         (concat &quot;I use &quot; rcirc-id-string))))
-</pre></div>
-
-
-
-
+                         (concat "I use " rcirc-id-string))))
+</pre>
+  </div>
 </body>
 </html>

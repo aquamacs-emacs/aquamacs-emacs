@@ -1,14 +1,20 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Built-ins - Eshell: The Emacs Shell</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Eshell: The Emacs Shell">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Commands.html#Commands" title="Commands">
-<link rel="prev" href="Scripts.html#Scripts" title="Scripts">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Built-ins - Eshell: The Emacs Shell</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Eshell: The Emacs Shell" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Commands.html#Commands" title="Commands" />
+  <link rel="prev" href="Scripts.html#Scripts" title="Scripts" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Eshell, the Emacs shell.
 
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
@@ -26,8 +32,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,90 +45,133 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Built-ins"></a>
-<a name="Built_002dins"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Scripts.html#Scripts">Scripts</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Built-ins" id="Built-ins"></a> <a name="Built_002dins"
+    id="Built_002dins"></a>
 
-<h3 class="section">3.6 Built-in commands</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Scripts.html#Scripts">Scripts</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="Commands.html#Commands">Commands</a></p>
+    <hr />
+  </div>
 
-<p>Several commands are built-in in Eshell.  In order to call the
-external variant of a built-in command <code>foo</code>, you could call
-<code>*foo</code>.  Usually, this should not be necessary.  You can check
-what will be applied by the <code>which</code> command:
+  <h3 class="section">3.6 Built-in commands</h3>
 
-<pre class="example">     ~ $ which ls
+  <p>Several commands are built-in in Eshell. In order to call the
+  external variant of a built-in command <code>foo</code>, you
+  could call <code>*foo</code>. Usually, this should not be
+  necessary. You can check what will be applied by the
+  <code>which</code> command:</p>
+  <pre class="example">
+     ~ $ which ls
      eshell/ls is a compiled Lisp function in `em-ls.el'
      ~ $ which *ls
      /bin/ls
 </pre>
-   <p>If you want to discard a given built-in command, you could declare an
-alias, <a href="Aliases.html#Aliases">Aliases</a>.  Eample:
 
-<pre class="example">     ~ $ which sudo
+  <p>If you want to discard a given built-in command, you could
+  declare an alias, <a href="Aliases.html#Aliases">Aliases</a>.
+  Eample:</p>
+  <pre class="example">
+     ~ $ which sudo
      eshell/sudo is a compiled Lisp function in `em-unix.el'
      ~ $ alias sudo '*sudo $*'
      ~ $ which sudo
      sudo is an alias, defined as "*sudo $*"
 </pre>
-   <p>Some of the built-in commands have a special behaviour in Eshell:
 
-     <dl>
-<dt><code>cd</code><dd><a name="index-cd-10"></a>This command changes the current working directory.  Usually, it is
-invoked as &lsquo;<samp><span class="samp">cd foo</span></samp>&rsquo; where <samp><span class="file">foo</span></samp> is the new working
-directory.  But <code>cd</code> knows about a few special arguments:
+  <p>Some of the built-in commands have a special behaviour in
+  Eshell:</p>
 
-     <p>When it receives no argument at all, it changes to the home directory.
+  <dl>
+    <dt><code>cd</code></dt>
 
-     <p>Giving the command &lsquo;<samp><span class="samp">cd -</span></samp>&rsquo; changes back to the previous working
-directory (this is the same as &lsquo;<samp><span class="samp">cd $-</span></samp>&rsquo;).
+    <dd>
+      <a name="index-cd-10" id="index-cd-10"></a>This command
+      changes the current working directory. Usually, it is invoked
+      as &lsquo;<samp><span class="samp">cd
+      foo</span></samp>&rsquo; where <samp><span class=
+      "file">foo</span></samp> is the new working directory. But
+      <code>cd</code> knows about a few special arguments:
 
-     <p>The command &lsquo;<samp><span class="samp">cd =</span></samp>&rsquo; shows the directory stack.  Each line is
-numbered.
+      <p>When it receives no argument at all, it changes to the
+      home directory.</p>
 
-     <p>With &lsquo;<samp><span class="samp">cd =foo</span></samp>&rsquo;, Eshell searches the directory stack for a
-directory matching the regular expression &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; and changes to
-that directory.
+      <p>Giving the command &lsquo;<samp><span class="samp">cd
+      -</span></samp>&rsquo; changes back to the previous working
+      directory (this is the same as &lsquo;<samp><span class=
+      "samp">cd $-</span></samp>&rsquo;).</p>
 
-     <p>With &lsquo;<samp><span class="samp">cd -42</span></samp>&rsquo;, you can access the directory stack by number.
+      <p>The command &lsquo;<samp><span class="samp">cd
+      =</span></samp>&rsquo; shows the directory stack. Each line
+      is numbered.</p>
 
-     <br><dt><code>history</code><dd><a name="index-history-11"></a>The &lsquo;<samp><span class="samp">history</span></samp>&rsquo; command shows all commands kept in the history ring
-as numbered list.  If the history ring contains
-<code>eshell-history-size</code> commands, those numbers change after every
-command invocation, therefore the &lsquo;<samp><span class="samp">history</span></samp>&rsquo; command shall be
-applied before using the expansion mechanism with history numbers.
+      <p>With &lsquo;<samp><span class="samp">cd
+      =foo</span></samp>&rsquo;, Eshell searches the directory
+      stack for a directory matching the regular expression
+      &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; and
+      changes to that directory.</p>
 
-     <p>The n-th entry of the history ring can be applied with the &lsquo;<samp><span class="samp">!n</span></samp>&rsquo;
-command.  If <code>n</code> is negative, the entry is counted from the end
-of the history ring.
+      <p>With &lsquo;<samp><span class="samp">cd
+      -42</span></samp>&rsquo;, you can access the directory stack
+      by number.<br /></p>
+    </dd>
 
-     <p>&lsquo;<samp><span class="samp">!foo</span></samp>&rsquo; expands to the last command beginning with <code>foo</code>, and
-&lsquo;<samp><span class="samp">!?foo</span></samp>&rsquo; to the last command containing <code>foo</code>.  The n-th
-argument of the last command beginning with <code>foo</code> is accessible
-by <code>!foo:n</code>.
+    <dt><code>history</code></dt>
 
-     <br><dt><code>su</code><dd><a name="index-su-12"></a><dt><code>sudo</code><dd><a name="index-sudo-13"></a><code>su</code> and <code>sudo</code> work as expected: they apply the following
-commands (<code>su</code>), or the command being an argument (<code>sudo</code>)
-under the permissions of somebody else.
+    <dd>
+      <a name="index-history-11" id="index-history-11"></a>The
+      &lsquo;<samp><span class="samp">history</span></samp>&rsquo;
+      command shows all commands kept in the history ring as
+      numbered list. If the history ring contains
+      <code>eshell-history-size</code> commands, those numbers
+      change after every command invocation, therefore the
+      &lsquo;<samp><span class="samp">history</span></samp>&rsquo;
+      command shall be applied before using the expansion mechanism
+      with history numbers.
 
-     <p>This does not work only on
-the local host, but even on a remote one, when
-<code>default-directory</code> is a remote file name.  The necessary
-proxy configuration of Tramp is performed
-automatically. 
-Example:
+      <p>The n-th entry of the history ring can be applied with the
+      &lsquo;<samp><span class="samp">!n</span></samp>&rsquo;
+      command. If <code>n</code> is negative, the entry is counted
+      from the end of the history ring.</p>
 
-     <pre class="example">          ~ $ cd /ssh:otherhost:/etc
+      <p>&lsquo;<samp><span class="samp">!foo</span></samp>&rsquo;
+      expands to the last command beginning with <code>foo</code>,
+      and &lsquo;<samp><span class=
+      "samp">!?foo</span></samp>&rsquo; to the last command
+      containing <code>foo</code>. The n-th argument of the last
+      command beginning with <code>foo</code> is accessible by
+      <code>!foo:n</code>.<br /></p>
+    </dd>
+
+    <dt><code>su</code></dt>
+
+    <dd><a name="index-su-12" id="index-su-12"></a></dd>
+
+    <dt><code>sudo</code></dt>
+
+    <dd>
+      <a name="index-sudo-13" id=
+      "index-sudo-13"></a><code>su</code> and <code>sudo</code>
+      work as expected: they apply the following commands
+      (<code>su</code>), or the command being an argument
+      (<code>sudo</code>) under the permissions of somebody else.
+
+      <p>This does not work only on the local host, but even on a
+      remote one, when <code>default-directory</code> is a remote
+      file name. The necessary proxy configuration of Tramp is
+      performed automatically. Example:</p>
+      <pre class="example">
+          ~ $ cd /ssh:otherhost:/etc
           /ssh:user@otherhost:/etc $ sudo find-file shadow
 </pre>
-     </dl>
-
-   </body></html>
-
+    </dd>
+  </dl>
+</body>
+</html>

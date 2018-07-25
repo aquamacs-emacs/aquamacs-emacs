@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,365 +19,512 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Bidirectional Display</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Bidirectional Display">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Bidirectional Display">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="System-Interface.html#System-Interface" rel="next" title="System Interface">
-<link href="Tooltips.html#Tooltips" rel="prev" title="Tooltips">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Bidirectional
+  Display</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Bidirectional Display" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Bidirectional Display" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="System-Interface.html#System-Interface" rel="next"
+  title="System Interface" />
+  <link href="Tooltips.html#Tooltips" rel="prev" title=
+  "Tooltips" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Bidirectional-Display" id="Bidirectional-Display"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Tooltips.html#Tooltips" accesskey="p"
+    rel="prev">Tooltips</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Bidirectional-Display-1" id=
+  "Bidirectional-Display-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Bidirectional-Display"></a>
-<div class="header">
-<p>
-Previous: <a href="Tooltips.html#Tooltips" accesskey="p" rel="prev">Tooltips</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Bidirectional-Display-1"></a>
-<h3 class="section">37.26 Bidirectional Display</h3>
-<a name="index-bidirectional-display"></a>
-<a name="index-right_002dto_002dleft-text"></a>
+  <h3 class="section">37.26 Bidirectional Display</h3><a name=
+  "index-bidirectional-display" id=
+  "index-bidirectional-display"></a> <a name=
+  "index-right_002dto_002dleft-text" id=
+  "index-right_002dto_002dleft-text"></a>
 
-<p>Emacs can display text written in scripts, such as Arabic, Farsi,
-and Hebrew, whose natural ordering for horizontal text display runs
-from right to left.  Furthermore, segments of Latin script and digits
-embedded in right-to-left text are displayed left-to-right, while
-segments of right-to-left script embedded in left-to-right text
-(e.g., Arabic or Hebrew text in comments or strings in a program
-source file) are appropriately displayed right-to-left.  We call such
-mixtures of left-to-right and right-to-left text <em>bidirectional
-text</em>.  This section describes the facilities and options for editing
-and displaying bidirectional text.
-</p>
-<a name="index-logical-order"></a>
-<a name="index-reading-order"></a>
-<a name="index-visual-order"></a>
-<a name="index-unicode-bidirectional-algorithm"></a>
-<a name="index-UBA"></a>
-<a name="index-bidirectional-reordering"></a>
-<a name="index-reordering_002c-of-bidirectional-text"></a>
-<p>Text is stored in Emacs buffers and strings in <em>logical</em> (or
-<em>reading</em>) order, i.e., the order in which a human would read
-each character.  In right-to-left and bidirectional text, the order in
-which characters are displayed on the screen (called <em>visual
-order</em>) is not the same as logical order; the characters&rsquo; screen
-positions do not increase monotonically with string or buffer
-position.  In performing this <em>bidirectional reordering</em>, Emacs
-follows the Unicode Bidirectional Algorithm (a.k.a. <acronym>UBA</acronym>),
-which is described in Annex #9 of the Unicode standard
-(<a href="http://www.unicode.org/reports/tr9/">http://www.unicode.org/reports/tr9/</a>).  Emacs provides a &ldquo;Full
-Bidirectionality&rdquo; class implementation of the <acronym>UBA</acronym>,
-consistent with the requirements of the Unicode Standard v8.0.
-</p>
-<dl>
-<dt><a name="index-bidi_002ddisplay_002dreordering"></a>Variable: <strong>bidi-display-reordering</strong></dt>
-<dd><p>If the value of this buffer-local variable is non-<code>nil</code> (the
-default), Emacs performs bidirectional reordering for display.  The
-reordering affects buffer text, as well as display strings and overlay
-strings from text and overlay properties in the buffer (see <a href="Overlay-Properties.html#Overlay-Properties">Overlay Properties</a>, and see <a href="Display-Property.html#Display-Property">Display Property</a>).  If the value is
-<code>nil</code>, Emacs does not perform bidirectional reordering in the
-buffer.
-</p>
-<p>The default value of <code>bidi-display-reordering</code> controls the
-reordering of strings which are not directly supplied by a buffer,
-including the text displayed in mode lines (see <a href="Mode-Line-Format.html#Mode-Line-Format">Mode Line Format</a>)
-and header lines (see <a href="Header-Lines.html#Header-Lines">Header Lines</a>).
-</p></dd></dl>
+  <p>Emacs can display text written in scripts, such as Arabic,
+  Farsi, and Hebrew, whose natural ordering for horizontal text
+  display runs from right to left. Furthermore, segments of Latin
+  script and digits embedded in right-to-left text are displayed
+  left-to-right, while segments of right-to-left script embedded in
+  left-to-right text (e.g., Arabic or Hebrew text in comments or
+  strings in a program source file) are appropriately displayed
+  right-to-left. We call such mixtures of left-to-right and
+  right-to-left text <em>bidirectional text</em>. This section
+  describes the facilities and options for editing and displaying
+  bidirectional text.</p><a name="index-logical-order" id=
+  "index-logical-order"></a> <a name="index-reading-order" id=
+  "index-reading-order"></a> <a name="index-visual-order" id=
+  "index-visual-order"></a> <a name=
+  "index-unicode-bidirectional-algorithm" id=
+  "index-unicode-bidirectional-algorithm"></a> <a name="index-UBA"
+  id="index-UBA"></a> <a name="index-bidirectional-reordering" id=
+  "index-bidirectional-reordering"></a> <a name=
+  "index-reordering_002c-of-bidirectional-text" id=
+  "index-reordering_002c-of-bidirectional-text"></a>
 
-<a name="index-unibyte-buffers_002c-and-bidi-reordering"></a>
-<p>Emacs never reorders the text of a unibyte buffer, even if
-<code>bidi-display-reordering</code> is non-<code>nil</code> in the buffer.  This
-is because unibyte buffers contain raw bytes, not characters, and thus
-lack the directionality properties required for reordering.
-Therefore, to test whether text in a buffer will be reordered for
-display, it is not enough to test the value of
-<code>bidi-display-reordering</code> alone.  The correct test is this:
-</p>
-<div class="example">
-<pre class="example"> (if (and enable-multibyte-characters
+  <p>Text is stored in Emacs buffers and strings in
+  <em>logical</em> (or <em>reading</em>) order, i.e., the order in
+  which a human would read each character. In right-to-left and
+  bidirectional text, the order in which characters are displayed
+  on the screen (called <em>visual order</em>) is not the same as
+  logical order; the characters&rsquo; screen positions do not
+  increase monotonically with string or buffer position. In
+  performing this <em>bidirectional reordering</em>, Emacs follows
+  the Unicode Bidirectional Algorithm (a.k.a.
+  <acronym>UBA</acronym>), which is described in Annex #9 of the
+  Unicode standard (<a href=
+  "http://www.unicode.org/reports/tr9/">http://www.unicode.org/reports/tr9/</a>).
+  Emacs provides a &ldquo;Full Bidirectionality&rdquo; class
+  implementation of the <acronym>UBA</acronym>, consistent with the
+  requirements of the Unicode Standard v8.0.</p>
+
+  <dl>
+    <dt><a name="index-bidi_002ddisplay_002dreordering" id=
+    "index-bidi_002ddisplay_002dreordering"></a>Variable:
+    <strong>bidi-display-reordering</strong></dt>
+
+    <dd>
+      <p>If the value of this buffer-local variable is
+      non-<code>nil</code> (the default), Emacs performs
+      bidirectional reordering for display. The reordering affects
+      buffer text, as well as display strings and overlay strings
+      from text and overlay properties in the buffer (see <a href=
+      "Overlay-Properties.html#Overlay-Properties">Overlay
+      Properties</a>, and see <a href=
+      "Display-Property.html#Display-Property">Display
+      Property</a>). If the value is <code>nil</code>, Emacs does
+      not perform bidirectional reordering in the buffer.</p>
+
+      <p>The default value of <code>bidi-display-reordering</code>
+      controls the reordering of strings which are not directly
+      supplied by a buffer, including the text displayed in mode
+      lines (see <a href=
+      "Mode-Line-Format.html#Mode-Line-Format">Mode Line
+      Format</a>) and header lines (see <a href=
+      "Header-Lines.html#Header-Lines">Header Lines</a>).</p>
+    </dd>
+  </dl><a name="index-unibyte-buffers_002c-and-bidi-reordering" id=
+  "index-unibyte-buffers_002c-and-bidi-reordering"></a>
+
+  <p>Emacs never reorders the text of a unibyte buffer, even if
+  <code>bidi-display-reordering</code> is non-<code>nil</code> in
+  the buffer. This is because unibyte buffers contain raw bytes,
+  not characters, and thus lack the directionality properties
+  required for reordering. Therefore, to test whether text in a
+  buffer will be reordered for display, it is not enough to test
+  the value of <code>bidi-display-reordering</code> alone. The
+  correct test is this:</p>
+
+  <div class="example">
+    <pre class="example">
+ (if (and enable-multibyte-characters
           bidi-display-reordering)
      ;; Buffer is being reordered for display
    )
-</pre></div>
+</pre>
+  </div>
 
-<p>However, unibyte display and overlay strings <em>are</em> reordered if
-their parent buffer is reordered.  This is because plain-<small>ASCII</small>
-strings are stored by Emacs as unibyte strings.  If a unibyte display
-or overlay string includes non-<small>ASCII</small> characters, these characters
-are assumed to have left-to-right direction.
-</p>
-<a name="index-display-properties_002c-and-bidi-reordering-of-text"></a>
-<p>Text covered by <code>display</code> text properties, by overlays with
-<code>display</code> properties whose value is a string, and by any other
-properties that replace buffer text, is treated as a single unit when
-it is reordered for display.  That is, the entire chunk of text
-covered by these properties is reordered together.  Moreover, the
-bidirectional properties of the characters in such a chunk of text are
-ignored, and Emacs reorders them as if they were replaced with a
-single character <code>U+FFFC</code>, known as the <em>Object Replacement
-Character</em>.  This means that placing a display property over a portion
-of text may change the way that the surrounding text is reordered for
-display.  To prevent this unexpected effect, always place such
-properties on text whose directionality is identical with text that
-surrounds it.
-</p>
-<a name="index-base-direction-of-a-paragraph"></a>
-<p>Each paragraph of bidirectional text has a <em>base direction</em>,
-either right-to-left or left-to-right.  Left-to-right paragraphs are
-displayed beginning at the left margin of the window, and are
-truncated or continued when the text reaches the right margin.
-Right-to-left paragraphs are displayed beginning at the right margin,
-and are continued or truncated at the left margin.
-</p>
-<p>By default, Emacs determines the base direction of each paragraph by
-looking at the text at its beginning.  The precise method of
-determining the base direction is specified by the <acronym>UBA</acronym>; in a
-nutshell, the first character in a paragraph that has an explicit
-directionality determines the base direction of the paragraph.
-However, sometimes a buffer may need to force a certain base direction
-for its paragraphs.  For example, buffers containing program source
-code should force all paragraphs to be displayed left-to-right.  You
-can use following variable to do this:
-</p>
-<dl>
-<dt><a name="index-bidi_002dparagraph_002ddirection"></a>Variable: <strong>bidi-paragraph-direction</strong></dt>
-<dd><p>If the value of this buffer-local variable is the symbol
-<code>right-to-left</code> or <code>left-to-right</code>, all paragraphs in the
-buffer are assumed to have that specified direction.  Any other value
-is equivalent to <code>nil</code> (the default), which means to determine
-the base direction of each paragraph from its contents.
-</p>
-<a name="index-prog_002dmode_002c-and-bidi_002dparagraph_002ddirection"></a>
-<p>Modes for program source code should set this to <code>left-to-right</code>.
-Prog mode does this by default, so modes derived from Prog mode do not
-need to set this explicitly (see <a href="Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>).
-</p></dd></dl>
+  <p>However, unibyte display and overlay strings <em>are</em>
+  reordered if their parent buffer is reordered. This is because
+  plain-<small>ASCII</small> strings are stored by Emacs as unibyte
+  strings. If a unibyte display or overlay string includes
+  non-<small>ASCII</small> characters, these characters are assumed
+  to have left-to-right direction.</p><a name=
+  "index-display-properties_002c-and-bidi-reordering-of-text" id=
+  "index-display-properties_002c-and-bidi-reordering-of-text"></a>
 
-<dl>
-<dt><a name="index-current_002dbidi_002dparagraph_002ddirection"></a>Function: <strong>current-bidi-paragraph-direction</strong> <em>&amp;optional buffer</em></dt>
-<dd><p>This function returns the paragraph direction at point in the named
-<var>buffer</var>.  The returned value is a symbol, either
-<code>left-to-right</code> or <code>right-to-left</code>.  If <var>buffer</var> is
-omitted or <code>nil</code>, it defaults to the current buffer.  If the
-buffer-local value of the variable <code>bidi-paragraph-direction</code> is
-non-<code>nil</code>, the returned value will be identical to that value;
-otherwise, the returned value reflects the paragraph direction
-determined dynamically by Emacs.  For buffers whose value of
-<code>bidi-display-reordering</code> is <code>nil</code> as well as unibyte
-buffers, this function always returns <code>left-to-right</code>.
-</p></dd></dl>
+  <p>Text covered by <code>display</code> text properties, by
+  overlays with <code>display</code> properties whose value is a
+  string, and by any other properties that replace buffer text, is
+  treated as a single unit when it is reordered for display. That
+  is, the entire chunk of text covered by these properties is
+  reordered together. Moreover, the bidirectional properties of the
+  characters in such a chunk of text are ignored, and Emacs
+  reorders them as if they were replaced with a single character
+  <code>U+FFFC</code>, known as the <em>Object Replacement
+  Character</em>. This means that placing a display property over a
+  portion of text may change the way that the surrounding text is
+  reordered for display. To prevent this unexpected effect, always
+  place such properties on text whose directionality is identical
+  with text that surrounds it.</p><a name=
+  "index-base-direction-of-a-paragraph" id=
+  "index-base-direction-of-a-paragraph"></a>
 
-<a name="index-visual_002dorder-cursor-motion"></a>
-<p>Sometimes there&rsquo;s a need to move point in strict visual order,
-either to the left or to the right of its current screen position.
-Emacs provides a primitive to do that.
-</p>
-<dl>
-<dt><a name="index-move_002dpoint_002dvisually"></a>Function: <strong>move-point-visually</strong> <em>direction</em></dt>
-<dd><p>This function moves point of the currently selected window to the
-buffer position that appears immediately to the right or to the left
-of point on the screen.  If <var>direction</var> is positive, point will
-move one screen position to the right, otherwise it will move one
-screen position to the left.  Note that, depending on the surrounding
-bidirectional context, this could potentially move point many buffer
-positions away.  If invoked at the end of a screen line, the function
-moves point to the rightmost or leftmost screen position of the next
-or previous screen line, as appropriate for the value of
-<var>direction</var>.
-</p>
-<p>The function returns the new buffer position as its value.
-</p></dd></dl>
+  <p>Each paragraph of bidirectional text has a <em>base
+  direction</em>, either right-to-left or left-to-right.
+  Left-to-right paragraphs are displayed beginning at the left
+  margin of the window, and are truncated or continued when the
+  text reaches the right margin. Right-to-left paragraphs are
+  displayed beginning at the right margin, and are continued or
+  truncated at the left margin.</p>
 
-<a name="index-layout-on-display_002c-and-bidirectional-text"></a>
-<a name="index-jumbled-display-of-bidirectional-text"></a>
-<a name="index-concatenating-bidirectional-strings"></a>
-<p>Bidirectional reordering can have surprising and unpleasant effects
-when two strings with bidirectional content are juxtaposed in a
-buffer, or otherwise programmatically concatenated into a string of
-text.  A typical problematic case is when a buffer consists of
-sequences of text fields separated by whitespace or punctuation
-characters, like Buffer Menu mode or Rmail Summary Mode.  Because the
-punctuation characters used as separators have <em>weak
-directionality</em>, they take on the directionality of surrounding text.
-As result, a numeric field that follows a field with bidirectional
-content can be displayed <em>to the left</em> of the preceding field,
-messing up the expected layout.  There are several ways to avoid this
-problem:
-</p>
-<ul class="no-bullet">
-<li>− Append the special character <code>U+200E</code>, LEFT-TO-RIGHT MARK, or
-<acronym>LRM</acronym>, to the end of each field that may have bidirectional
-content, or prepend it to the beginning of the following field.  The
-function <code>bidi-string-mark-left-to-right</code>, described below, comes
-in handy for this purpose.  (In a right-to-left paragraph, use
-<code>U+200F</code>, RIGHT-TO-LEFT MARK, or <acronym>RLM</acronym>, instead.)  This
-is one of the solutions recommended by the UBA.
+  <p>By default, Emacs determines the base direction of each
+  paragraph by looking at the text at its beginning. The precise
+  method of determining the base direction is specified by the
+  <acronym>UBA</acronym>; in a nutshell, the first character in a
+  paragraph that has an explicit directionality determines the base
+  direction of the paragraph. However, sometimes a buffer may need
+  to force a certain base direction for its paragraphs. For
+  example, buffers containing program source code should force all
+  paragraphs to be displayed left-to-right. You can use following
+  variable to do this:</p>
 
-</li><li>− Include the tab character in the field separator.  The tab character
-plays the role of <em>segment separator</em> in bidirectional reordering,
-causing the text on either side to be reordered separately.
+  <dl>
+    <dt><a name="index-bidi_002dparagraph_002ddirection" id=
+    "index-bidi_002dparagraph_002ddirection"></a>Variable:
+    <strong>bidi-paragraph-direction</strong></dt>
 
-</li><li>− <a name="index-space-display-spec_002c-and-bidirectional-text"></a>
-Separate fields with a <code>display</code> property or overlay with a
-property value of the form <code>(space . PROPS)</code> (see <a href="Specified-Space.html#Specified-Space">Specified Space</a>).  Emacs treats this display specification as a <em>paragraph
-separator</em>, and reorders the text on either side separately.
-</li></ul>
+    <dd>
+      <p>If the value of this buffer-local variable is the symbol
+      <code>right-to-left</code> or <code>left-to-right</code>, all
+      paragraphs in the buffer are assumed to have that specified
+      direction. Any other value is equivalent to <code>nil</code>
+      (the default), which means to determine the base direction of
+      each paragraph from its contents.</p><a name=
+      "index-prog_002dmode_002c-and-bidi_002dparagraph_002ddirection"
+      id=
+      "index-prog_002dmode_002c-and-bidi_002dparagraph_002ddirection"></a>
 
-<dl>
-<dt><a name="index-bidi_002dstring_002dmark_002dleft_002dto_002dright"></a>Function: <strong>bidi-string-mark-left-to-right</strong> <em>string</em></dt>
-<dd><p>This function returns its argument <var>string</var>, possibly modified,
-such that the result can be safely concatenated with another string,
-or juxtaposed with another string in a buffer, without disrupting the
-relative layout of this string and the next one on display.  If the
-string returned by this function is displayed as part of a
-left-to-right paragraph, it will always appear on display to the left
-of the text that follows it.  The function works by examining the
-characters of its argument, and if any of those characters could cause
-reordering on display, the function appends the <acronym>LRM</acronym>
-character to the string.  The appended <acronym>LRM</acronym> character is made
-invisible by giving it an <code>invisible</code> text property of <code>t</code>
-(see <a href="Invisible-Text.html#Invisible-Text">Invisible Text</a>).
-</p></dd></dl>
+      <p>Modes for program source code should set this to
+      <code>left-to-right</code>. Prog mode does this by default,
+      so modes derived from Prog mode do not need to set this
+      explicitly (see <a href=
+      "Basic-Major-Modes.html#Basic-Major-Modes">Basic Major
+      Modes</a>).</p>
+    </dd>
+  </dl>
 
-<p>The reordering algorithm uses the bidirectional properties of the
-characters stored as their <code>bidi-class</code> property
-(see <a href="Character-Properties.html#Character-Properties">Character Properties</a>).  Lisp programs can change these
-properties by calling the <code>put-char-code-property</code> function.
-However, doing this requires a thorough understanding of the
-<acronym>UBA</acronym>, and is therefore not recommended.  Any changes to the
-bidirectional properties of a character have global effect: they
-affect all Emacs frames and windows.
-</p>
-<p>Similarly, the <code>mirroring</code> property is used to display the
-appropriate mirrored character in the reordered text.  Lisp programs
-can affect the mirrored display by changing this property.  Again, any
-such changes affect all of Emacs display.
-</p>
-<a name="index-overriding-bidirectional-properties"></a>
-<a name="index-directional-overrides"></a>
-<a name="index-LRO"></a>
-<a name="index-RLO"></a>
-<p>The bidirectional properties of characters can be overridden by
-inserting into the text special directional control characters,
-LEFT-TO-RIGHT OVERRIDE (<acronym>LRO</acronym>) and RIGHT-TO-LEFT OVERRIDE
-(<acronym>RLO</acronym>).  Any characters between a <acronym>RLO</acronym> and the
-following newline or POP DIRECTIONAL FORMATTING (<acronym>PDF</acronym>)
-control character, whichever comes first, will be displayed as if they
-were strong right-to-left characters, i.e. they will be reversed on
-display.  Similarly, any characters between <acronym>LRO</acronym> and
-<acronym>PDF</acronym> or newline will display as if they were strong
-left-to-right, and will <em>not</em> be reversed even if they are strong
-right-to-left characters.
-</p>
-<a name="index-phishing-using-directional-overrides"></a>
-<a name="index-malicious-use-of-directional-overrides"></a>
-<p>These overrides are useful when you want to make some text
-unaffected by the reordering algorithm, and instead directly control
-the display order.  But they can also be used for malicious purposes,
-known as <em>phishing</em>.  Specifically, a URL on a Web page or a link
-in an email message can be manipulated to make its visual appearance
-unrecognizable, or similar to some popular benign location, while the
-real location, interpreted by a browser in the logical order, is very
-different.
-</p>
-<p>Emacs provides a primitive that applications can use to detect
-instances of text whose bidirectional properties were overridden so as
-to make a left-to-right character display as if it were a
-right-to-left character, or vise versa.
-</p>
-<dl>
-<dt><a name="index-bidi_002dfind_002doverridden_002ddirectionality"></a>Function: <strong>bidi-find-overridden-directionality</strong> <em>from to &amp;optional object</em></dt>
-<dd><p>This function looks at the text of the specified <var>object</var> between
-positions <var>from</var> (inclusive) and <var>to</var> (exclusive), and returns
-the first position where it finds a strong left-to-right character
-whose directional properties were forced to display the character as
-right-to-left, or for a strong right-to-left character that was forced
-to display as left-to-right.  If it finds no such characters in the
-specified region of text, it returns <code>nil</code>.
-</p>
-<p>The optional argument <var>object</var> specifies which text to search, and
-defaults to the current buffer.  If <var>object</var> is non-<code>nil</code>, it
-can be some other buffer, or it can be a string or a window.  If it is
-a string, the function searches that string.  If it is a window, the
-function searches the buffer displayed in that window.  If a buffer
-whose text you want to examine is displayed in some window, we
-recommend to specify it by that window, rather than pass the buffer to
-the function.  This is because telling the function about the window
-allows it to correctly account for window-specific overlays, which
-might change the result of the function if some text in the buffer is
-covered by overlays.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-current_002dbidi_002dparagraph_002ddirection" id=
+    "index-current_002dbidi_002dparagraph_002ddirection"></a>Function:
+    <strong>current-bidi-paragraph-direction</strong>
+    <em>&amp;optional buffer</em></dt>
 
-<a name="index-copying-bidirectional-text_002c-preserve-visual-order"></a>
-<a name="index-visual-order_002c-preserve-when-copying-bidirectional-text"></a>
-<p>When text that includes mixed right-to-left and left-to-right
-characters and bidirectional controls is copied into a different
-location, it can change its visual appearance, and also can affect the
-visual appearance of the surrounding text at destination.  This is
-because reordering of bidirectional text specified by the
-<acronym>UBA</acronym> has non-trivial context-dependent effects both on the
-copied text and on the text at copy destination that will surround it.
-</p>
-<p>Sometimes, a Lisp program may need to preserve the exact visual
-appearance of the copied text at destination, and of the text that
-surrounds the copy.  Lisp programs can use the following function to
-achieve that effect.
-</p>
-<dl>
-<dt><a name="index-buffer_002dsubstring_002dwith_002dbidi_002dcontext"></a>Function: <strong>buffer-substring-with-bidi-context</strong> <em>start end &amp;optional no-properties</em></dt>
-<dd><p>This function works similar to <code>buffer-substring</code> (see <a href="Buffer-Contents.html#Buffer-Contents">Buffer Contents</a>), but it prepends and appends to the copied text bidi
-directional control characters necessary to preserve the visual
-appearance of the text when it is inserted at another place.  Optional
-argument <var>no-properties</var>, if non-<code>nil</code>, means remove the text
-properties from the copy of the text.
-</p></dd></dl>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Tooltips.html#Tooltips" accesskey="p" rel="prev">Tooltips</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns the paragraph direction at point in
+      the named <var>buffer</var>. The returned value is a symbol,
+      either <code>left-to-right</code> or
+      <code>right-to-left</code>. If <var>buffer</var> is omitted
+      or <code>nil</code>, it defaults to the current buffer. If
+      the buffer-local value of the variable
+      <code>bidi-paragraph-direction</code> is
+      non-<code>nil</code>, the returned value will be identical to
+      that value; otherwise, the returned value reflects the
+      paragraph direction determined dynamically by Emacs. For
+      buffers whose value of <code>bidi-display-reordering</code>
+      is <code>nil</code> as well as unibyte buffers, this function
+      always returns <code>left-to-right</code>.</p>
+    </dd>
+  </dl><a name="index-visual_002dorder-cursor-motion" id=
+  "index-visual_002dorder-cursor-motion"></a>
 
+  <p>Sometimes there&rsquo;s a need to move point in strict visual
+  order, either to the left or to the right of its current screen
+  position. Emacs provides a primitive to do that.</p>
 
+  <dl>
+    <dt><a name="index-move_002dpoint_002dvisually" id=
+    "index-move_002dpoint_002dvisually"></a>Function:
+    <strong>move-point-visually</strong> <em>direction</em></dt>
 
+    <dd>
+      <p>This function moves point of the currently selected window
+      to the buffer position that appears immediately to the right
+      or to the left of point on the screen. If
+      <var>direction</var> is positive, point will move one screen
+      position to the right, otherwise it will move one screen
+      position to the left. Note that, depending on the surrounding
+      bidirectional context, this could potentially move point many
+      buffer positions away. If invoked at the end of a screen
+      line, the function moves point to the rightmost or leftmost
+      screen position of the next or previous screen line, as
+      appropriate for the value of <var>direction</var>.</p>
+
+      <p>The function returns the new buffer position as its
+      value.</p>
+    </dd>
+  </dl><a name=
+  "index-layout-on-display_002c-and-bidirectional-text" id=
+  "index-layout-on-display_002c-and-bidirectional-text"></a>
+  <a name="index-jumbled-display-of-bidirectional-text" id=
+  "index-jumbled-display-of-bidirectional-text"></a> <a name=
+  "index-concatenating-bidirectional-strings" id=
+  "index-concatenating-bidirectional-strings"></a>
+
+  <p>Bidirectional reordering can have surprising and unpleasant
+  effects when two strings with bidirectional content are
+  juxtaposed in a buffer, or otherwise programmatically
+  concatenated into a string of text. A typical problematic case is
+  when a buffer consists of sequences of text fields separated by
+  whitespace or punctuation characters, like Buffer Menu mode or
+  Rmail Summary Mode. Because the punctuation characters used as
+  separators have <em>weak directionality</em>, they take on the
+  directionality of surrounding text. As result, a numeric field
+  that follows a field with bidirectional content can be displayed
+  <em>to the left</em> of the preceding field, messing up the
+  expected layout. There are several ways to avoid this
+  problem:</p>
+
+  <ul class="no-bullet">
+    <li>&acirc;&circ;&rsquo; Append the special character
+    <code>U+200E</code>, LEFT-TO-RIGHT MARK, or
+    <acronym>LRM</acronym>, to the end of each field that may have
+    bidirectional content, or prepend it to the beginning of the
+    following field. The function
+    <code>bidi-string-mark-left-to-right</code>, described below,
+    comes in handy for this purpose. (In a right-to-left paragraph,
+    use <code>U+200F</code>, RIGHT-TO-LEFT MARK, or
+    <acronym>RLM</acronym>, instead.) This is one of the solutions
+    recommended by the UBA.</li>
+
+    <li>&acirc;&circ;&rsquo; Include the tab character in the field
+    separator. The tab character plays the role of <em>segment
+    separator</em> in bidirectional reordering, causing the text on
+    either side to be reordered separately.</li>
+
+    <li>&acirc;&circ;&rsquo; <a name=
+    "index-space-display-spec_002c-and-bidirectional-text" id=
+    "index-space-display-spec_002c-and-bidirectional-text"></a>
+    Separate fields with a <code>display</code> property or overlay
+    with a property value of the form <code>(space . PROPS)</code>
+    (see <a href="Specified-Space.html#Specified-Space">Specified
+    Space</a>). Emacs treats this display specification as a
+    <em>paragraph separator</em>, and reorders the text on either
+    side separately.</li>
+  </ul>
+
+  <dl>
+    <dt><a name=
+    "index-bidi_002dstring_002dmark_002dleft_002dto_002dright" id=
+    "index-bidi_002dstring_002dmark_002dleft_002dto_002dright"></a>Function:
+    <strong>bidi-string-mark-left-to-right</strong>
+    <em>string</em></dt>
+
+    <dd>
+      <p>This function returns its argument <var>string</var>,
+      possibly modified, such that the result can be safely
+      concatenated with another string, or juxtaposed with another
+      string in a buffer, without disrupting the relative layout of
+      this string and the next one on display. If the string
+      returned by this function is displayed as part of a
+      left-to-right paragraph, it will always appear on display to
+      the left of the text that follows it. The function works by
+      examining the characters of its argument, and if any of those
+      characters could cause reordering on display, the function
+      appends the <acronym>LRM</acronym> character to the string.
+      The appended <acronym>LRM</acronym> character is made
+      invisible by giving it an <code>invisible</code> text
+      property of <code>t</code> (see <a href=
+      "Invisible-Text.html#Invisible-Text">Invisible Text</a>).</p>
+    </dd>
+  </dl>
+
+  <p>The reordering algorithm uses the bidirectional properties of
+  the characters stored as their <code>bidi-class</code> property
+  (see <a href=
+  "Character-Properties.html#Character-Properties">Character
+  Properties</a>). Lisp programs can change these properties by
+  calling the <code>put-char-code-property</code> function.
+  However, doing this requires a thorough understanding of the
+  <acronym>UBA</acronym>, and is therefore not recommended. Any
+  changes to the bidirectional properties of a character have
+  global effect: they affect all Emacs frames and windows.</p>
+
+  <p>Similarly, the <code>mirroring</code> property is used to
+  display the appropriate mirrored character in the reordered text.
+  Lisp programs can affect the mirrored display by changing this
+  property. Again, any such changes affect all of Emacs
+  display.</p><a name="index-overriding-bidirectional-properties"
+  id="index-overriding-bidirectional-properties"></a> <a name=
+  "index-directional-overrides" id=
+  "index-directional-overrides"></a> <a name="index-LRO" id=
+  "index-LRO"></a> <a name="index-RLO" id="index-RLO"></a>
+
+  <p>The bidirectional properties of characters can be overridden
+  by inserting into the text special directional control
+  characters, LEFT-TO-RIGHT OVERRIDE (<acronym>LRO</acronym>) and
+  RIGHT-TO-LEFT OVERRIDE (<acronym>RLO</acronym>). Any characters
+  between a <acronym>RLO</acronym> and the following newline or POP
+  DIRECTIONAL FORMATTING (<acronym>PDF</acronym>) control
+  character, whichever comes first, will be displayed as if they
+  were strong right-to-left characters, i.e. they will be reversed
+  on display. Similarly, any characters between
+  <acronym>LRO</acronym> and <acronym>PDF</acronym> or newline will
+  display as if they were strong left-to-right, and will
+  <em>not</em> be reversed even if they are strong right-to-left
+  characters.</p><a name=
+  "index-phishing-using-directional-overrides" id=
+  "index-phishing-using-directional-overrides"></a> <a name=
+  "index-malicious-use-of-directional-overrides" id=
+  "index-malicious-use-of-directional-overrides"></a>
+
+  <p>These overrides are useful when you want to make some text
+  unaffected by the reordering algorithm, and instead directly
+  control the display order. But they can also be used for
+  malicious purposes, known as <em>phishing</em>. Specifically, a
+  URL on a Web page or a link in an email message can be
+  manipulated to make its visual appearance unrecognizable, or
+  similar to some popular benign location, while the real location,
+  interpreted by a browser in the logical order, is very
+  different.</p>
+
+  <p>Emacs provides a primitive that applications can use to detect
+  instances of text whose bidirectional properties were overridden
+  so as to make a left-to-right character display as if it were a
+  right-to-left character, or vise versa.</p>
+
+  <dl>
+    <dt><a name=
+    "index-bidi_002dfind_002doverridden_002ddirectionality" id=
+    "index-bidi_002dfind_002doverridden_002ddirectionality"></a>Function:
+    <strong>bidi-find-overridden-directionality</strong> <em>from
+    to &amp;optional object</em></dt>
+
+    <dd>
+      <p>This function looks at the text of the specified
+      <var>object</var> between positions <var>from</var>
+      (inclusive) and <var>to</var> (exclusive), and returns the
+      first position where it finds a strong left-to-right
+      character whose directional properties were forced to display
+      the character as right-to-left, or for a strong right-to-left
+      character that was forced to display as left-to-right. If it
+      finds no such characters in the specified region of text, it
+      returns <code>nil</code>.</p>
+
+      <p>The optional argument <var>object</var> specifies which
+      text to search, and defaults to the current buffer. If
+      <var>object</var> is non-<code>nil</code>, it can be some
+      other buffer, or it can be a string or a window. If it is a
+      string, the function searches that string. If it is a window,
+      the function searches the buffer displayed in that window. If
+      a buffer whose text you want to examine is displayed in some
+      window, we recommend to specify it by that window, rather
+      than pass the buffer to the function. This is because telling
+      the function about the window allows it to correctly account
+      for window-specific overlays, which might change the result
+      of the function if some text in the buffer is covered by
+      overlays.</p>
+    </dd>
+  </dl><a name=
+  "index-copying-bidirectional-text_002c-preserve-visual-order" id=
+  "index-copying-bidirectional-text_002c-preserve-visual-order"></a>
+  <a name=
+  "index-visual-order_002c-preserve-when-copying-bidirectional-text"
+  id=
+  "index-visual-order_002c-preserve-when-copying-bidirectional-text">
+  </a>
+
+  <p>When text that includes mixed right-to-left and left-to-right
+  characters and bidirectional controls is copied into a different
+  location, it can change its visual appearance, and also can
+  affect the visual appearance of the surrounding text at
+  destination. This is because reordering of bidirectional text
+  specified by the <acronym>UBA</acronym> has non-trivial
+  context-dependent effects both on the copied text and on the text
+  at copy destination that will surround it.</p>
+
+  <p>Sometimes, a Lisp program may need to preserve the exact
+  visual appearance of the copied text at destination, and of the
+  text that surrounds the copy. Lisp programs can use the following
+  function to achieve that effect.</p>
+
+  <dl>
+    <dt><a name=
+    "index-buffer_002dsubstring_002dwith_002dbidi_002dcontext" id=
+    "index-buffer_002dsubstring_002dwith_002dbidi_002dcontext"></a>Function:
+    <strong>buffer-substring-with-bidi-context</strong> <em>start
+    end &amp;optional no-properties</em></dt>
+
+    <dd>
+      <p>This function works similar to
+      <code>buffer-substring</code> (see <a href=
+      "Buffer-Contents.html#Buffer-Contents">Buffer Contents</a>),
+      but it prepends and appends to the copied text bidi
+      directional control characters necessary to preserve the
+      visual appearance of the text when it is inserted at another
+      place. Optional argument <var>no-properties</var>, if
+      non-<code>nil</code>, means remove the text properties from
+      the copy of the text.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Tooltips.html#Tooltips" accesskey="p"
+    rel="prev">Tooltips</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

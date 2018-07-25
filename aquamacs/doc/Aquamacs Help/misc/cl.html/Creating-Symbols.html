@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,99 +16,136 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Creating Symbols</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Creating Symbols">
-<meta name="keywords" content="Common Lisp Extensions: Creating Symbols">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Symbols.html#Symbols" rel="up" title="Symbols">
-<link href="Numbers.html#Numbers" rel="next" title="Numbers">
-<link href="Property-Lists.html#Property-Lists" rel="prev" title="Property Lists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Creating Symbols</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Creating Symbols" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Creating Symbols" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Symbols.html#Symbols" rel="up" title="Symbols" />
+  <link href="Numbers.html#Numbers" rel="next" title="Numbers" />
+  <link href="Property-Lists.html#Property-Lists" rel="prev" title=
+  "Property Lists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-Symbols"></a>
-<div class="header">
-<p>
-Previous: <a href="Property-Lists.html#Property-Lists" accesskey="p" rel="prev">Property Lists</a>, Up: <a href="Symbols.html#Symbols" accesskey="u" rel="up">Symbols</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-Symbols-1"></a>
-<h3 class="section">7.2 Creating Symbols</h3>
+<body lang="en" xml:lang="en">
+  <a name="Creating-Symbols" id="Creating-Symbols"></a>
 
-<p>These functions create unique symbols, typically for use as
-temporary variables.
-</p>
-<dl>
-<dt><a name="index-cl_002dgensym"></a>Function: <strong>cl-gensym</strong> <em>&amp;optional x</em></dt>
-<dd><p>This function creates a new, uninterned symbol (using <code>make-symbol</code>)
-with a unique name.  (The name of an uninterned symbol is relevant
-only if the symbol is printed.)  By default, the name is generated
-from an increasing sequence of numbers, &lsquo;<samp>G1000</samp>&rsquo;, &lsquo;<samp>G1001</samp>&rsquo;,
-&lsquo;<samp>G1002</samp>&rsquo;, etc.  If the optional argument <var>x</var> is a string, that
-string is used as a prefix instead of &lsquo;<samp>G</samp>&rsquo;.  Uninterned symbols
-are used in macro expansions for temporary variables, to ensure that
-their names will not conflict with &ldquo;real&rdquo; variables in the user&rsquo;s
-code.
-</p>
-<p>(Internally, the variable <code>cl--gensym-counter</code> holds the counter
-used to generate names.  It is initialized with zero and incremented
-after each use.)
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href="Property-Lists.html#Property-Lists"
+    accesskey="p" rel="prev">Property Lists</a>, Up: <a href=
+    "Symbols.html#Symbols" accesskey="u" rel="up">Symbols</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-Symbols-1" id="Creating-Symbols-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dgentemp"></a>Function: <strong>cl-gentemp</strong> <em>&amp;optional x</em></dt>
-<dd><p>This function is like <code>cl-gensym</code>, except that it produces a new
-<em>interned</em> symbol.  If the symbol that is generated already
-exists, the function keeps incrementing the counter and trying
-again until a new symbol is generated.
-</p></dd></dl>
+  <h3 class="section">7.2 Creating Symbols</h3>
 
-<p>This package automatically creates all keywords that are called for by
-<code>&amp;key</code> argument specifiers, and discourages the use of keywords
-as data unrelated to keyword arguments, so the related function
-<code>defkeyword</code> (to create self-quoting keyword symbols) is not
-provided.
-</p>
+  <p>These functions create unique symbols, typically for use as
+  temporary variables.</p>
 
+  <dl>
+    <dt><a name="index-cl_002dgensym" id=
+    "index-cl_002dgensym"></a>Function: <strong>cl-gensym</strong>
+    <em>&amp;optional x</em></dt>
 
+    <dd>
+      <p>This function creates a new, uninterned symbol (using
+      <code>make-symbol</code>) with a unique name. (The name of an
+      uninterned symbol is relevant only if the symbol is printed.)
+      By default, the name is generated from an increasing sequence
+      of numbers, &lsquo;<samp>G1000</samp>&rsquo;,
+      &lsquo;<samp>G1001</samp>&rsquo;,
+      &lsquo;<samp>G1002</samp>&rsquo;, etc. If the optional
+      argument <var>x</var> is a string, that string is used as a
+      prefix instead of &lsquo;<samp>G</samp>&rsquo;. Uninterned
+      symbols are used in macro expansions for temporary variables,
+      to ensure that their names will not conflict with
+      &ldquo;real&rdquo; variables in the user&rsquo;s code.</p>
 
+      <p>(Internally, the variable <code>cl--gensym-counter</code>
+      holds the counter used to generate names. It is initialized
+      with zero and incremented after each use.)</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dgentemp" id=
+    "index-cl_002dgentemp"></a>Function:
+    <strong>cl-gentemp</strong> <em>&amp;optional x</em></dt>
+
+    <dd>
+      <p>This function is like <code>cl-gensym</code>, except that
+      it produces a new <em>interned</em> symbol. If the symbol
+      that is generated already exists, the function keeps
+      incrementing the counter and trying again until a new symbol
+      is generated.</p>
+    </dd>
+  </dl>
+
+  <p>This package automatically creates all keywords that are
+  called for by <code>&amp;key</code> argument specifiers, and
+  discourages the use of keywords as data unrelated to keyword
+  arguments, so the related function <code>defkeyword</code> (to
+  create self-quoting keyword symbols) is not provided.</p>
 </body>
 </html>

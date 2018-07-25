@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,173 +20,251 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Minibuffer History</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Minibuffer History">
-<meta name="keywords" content="GNU Emacs Manual: Minibuffer History">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Minibuffer.html#Minibuffer" rel="up" title="Minibuffer">
-<link href="Repetition.html#Repetition" rel="next" title="Repetition">
-<link href="Completion-Options.html#Completion-Options" rel="prev" title="Completion Options">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Minibuffer History</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Minibuffer History" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Minibuffer History" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Minibuffer.html#Minibuffer" rel="up" title=
+  "Minibuffer" />
+  <link href="Repetition.html#Repetition" rel="next" title=
+  "Repetition" />
+  <link href="Completion-Options.html#Completion-Options" rel=
+  "prev" title="Completion Options" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Minibuffer-History" id="Minibuffer-History"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Repetition.html#Repetition" accesskey="n"
+    rel="next">Repetition</a>, Previous: <a href=
+    "Completion.html#Completion" accesskey="p" rel=
+    "prev">Completion</a>, Up: <a href="Minibuffer.html#Minibuffer"
+    accesskey="u" rel="up">Minibuffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Minibuffer-History-1" id="Minibuffer-History-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Minibuffer-History"></a>
-<div class="header">
-<p>
-Next: <a href="Repetition.html#Repetition" accesskey="n" rel="next">Repetition</a>, Previous: <a href="Completion.html#Completion" accesskey="p" rel="prev">Completion</a>, Up: <a href="Minibuffer.html#Minibuffer" accesskey="u" rel="up">Minibuffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Minibuffer-History-1"></a>
-<h3 class="section">8.5 Minibuffer History</h3>
-<a name="index-minibuffer-history"></a>
-<a name="index-history-of-minibuffer-input"></a>
+  <h3 class="section">8.5 Minibuffer History</h3><a name=
+  "index-minibuffer-history" id="index-minibuffer-history"></a>
+  <a name="index-history-of-minibuffer-input" id=
+  "index-history-of-minibuffer-input"></a>
 
-<p>Every argument that you enter with the minibuffer is saved in a
-<em>minibuffer history list</em> so you can easily use it again later.
-You can use the following arguments to quickly fetch an earlier
-argument into the minibuffer:
-</p>
-<dl compact="compact">
-<dt><kbd>M-p</kbd></dt>
-<dd><p>Move to the previous item in the minibuffer history, an earlier
-argument (<code>previous-history-element</code>).
-</p></dd>
-<dt><kbd>M-n</kbd></dt>
-<dd><p>Move to the next item in the minibuffer history
-(<code>next-history-element</code>).
-</p></dd>
-<dt><kbd><span class="key">UP</span></kbd></dt>
-<dt><kbd><span class="key">DOWN</span></kbd></dt>
-<dd><p>Like <kbd>M-p</kbd> and <kbd>M-n</kbd>, but move to the previous or next line of
-a multi-line item before going to the previous history item
-(<code>previous-line-or-history-element</code> and
-<code>next-line-or-history-element</code>) .
-</p></dd>
-<dt><kbd>M-r <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Move to an earlier item in the minibuffer history that
-matches <var>regexp</var> (<code>previous-matching-history-element</code>).
-</p></dd>
-<dt><kbd>M-s <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Move to a later item in the minibuffer history that matches
-<var>regexp</var> (<code>next-matching-history-element</code>).
-</p></dd>
-</dl>
+  <p>Every argument that you enter with the minibuffer is saved in
+  a <em>minibuffer history list</em> so you can easily use it again
+  later. You can use the following arguments to quickly fetch an
+  earlier argument into the minibuffer:</p>
 
-<a name="index-M_002dp-_0028minibuffer-history_0029"></a>
-<a name="index-M_002dn-_0028minibuffer-history_0029"></a>
-<a name="index-UP-_0028minibuffer-history_0029"></a>
-<a name="index-DOWN-_0028minibuffer-history_0029"></a>
-<a name="index-next_002dhistory_002delement"></a>
-<a name="index-previous_002dhistory_002delement"></a>
-<p>While in the minibuffer, <kbd>M-p</kbd> (<code>previous-history-element</code>)
-moves through the minibuffer history list, one item at a time.  Each
-<kbd>M-p</kbd> fetches an earlier item from the history list into the
-minibuffer, replacing its existing contents.  Typing <kbd>M-n</kbd>
-(<code>next-history-element</code>) moves through the minibuffer history
-list in the opposite direction, fetching later entries into the
-minibuffer.
-</p>
-<p>If you type <kbd>M-n</kbd> in the minibuffer when there are no later
-entries in the minibuffer history (e.g., if you haven&rsquo;t previously
-typed <kbd>M-p</kbd>), Emacs tries fetching from a list of default
-arguments: values that you are likely to enter.  You can think of this
-as moving through the &ldquo;future history&rdquo;.
-</p>
-<a name="index-previous_002dline_002dor_002dhistory_002delement"></a>
-<a name="index-next_002dline_002dor_002dhistory_002delement"></a>
-<p>The arrow keys <kbd><span class="key">UP</span></kbd> and <kbd><span class="key">DOWN</span></kbd> work like
-<kbd>M-p</kbd> and <kbd>M-n</kbd>, but if the current history item is longer
-than a single line, they allow you to move to the previous or next
-line of the current history item before going to the previous or next
-history item.
-</p>
-<p>If you edit the text inserted by the <kbd>M-p</kbd> or <kbd>M-n</kbd>
-minibuffer history commands, this does not change its entry in the
-history list.  However, the edited argument does go at the end of the
-history list when you submit it.
-</p>
-<a name="index-previous_002dmatching_002dhistory_002delement"></a>
-<a name="index-next_002dmatching_002dhistory_002delement"></a>
-<a name="index-M_002dr-_0028minibuffer-history_0029"></a>
-<a name="index-M_002ds-_0028minibuffer-history_0029"></a>
-<p>You can use <kbd>M-r</kbd> (<code>previous-matching-history-element</code>) to
-search through older elements in the history list, and <kbd>M-s</kbd>
-(<code>next-matching-history-element</code>) to search through newer
-entries.  Each of these commands asks for a <em>regular expression</em>
-as an argument, and fetches the first matching entry into the
-minibuffer.  See <a href="Regexps.html#Regexps">Regexps</a>, for an explanation of regular
-expressions.  A numeric prefix argument <var>n</var> means to fetch the
-<var>n</var>th matching entry.  These commands are unusual, in that they
-use the minibuffer to read the regular expression argument, even
-though they are invoked from the minibuffer.  An upper-case letter in
-the regular expression makes the search case-sensitive (see <a href="Lax-Search.html#Lax-Search">Lax Search</a>).
-</p>
-<p>You can also search through the history using an incremental search.
-See <a href="Isearch-Minibuffer.html#Isearch-Minibuffer">Isearch Minibuffer</a>.
-</p>
-<p>Emacs keeps separate history lists for several different kinds of
-arguments.  For example, there is a list for file names, used by all
-the commands that read file names.  Other history lists include buffer
-names, command names (used by <kbd>M-x</kbd>), and command arguments (used
-by commands like <code>query-replace</code>).
-</p>
-<a name="index-history_002dlength"></a>
-<p>The variable <code>history-length</code> specifies the maximum length of a
-minibuffer history list; adding a new element deletes the oldest
-element if the list gets too long.  If the value is <code>t</code>, there is
-no maximum length.
-</p>
-<a name="index-history_002ddelete_002dduplicates"></a>
-<p>The variable <code>history-delete-duplicates</code> specifies whether to
-delete duplicates in history.  If it is non-<code>nil</code>, adding a new
-element deletes from the list all other elements that are equal to it.
-The default is <code>nil</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Repetition.html#Repetition" accesskey="n" rel="next">Repetition</a>, Previous: <a href="Completion.html#Completion" accesskey="p" rel="prev">Completion</a>, Up: <a href="Minibuffer.html#Minibuffer" accesskey="u" rel="up">Minibuffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>M-p</kbd></dt>
 
+    <dd>
+      <p>Move to the previous item in the minibuffer history, an
+      earlier argument (<code>previous-history-element</code>).</p>
+    </dd>
 
+    <dt><kbd>M-n</kbd></dt>
 
+    <dd>
+      <p>Move to the next item in the minibuffer history
+      (<code>next-history-element</code>).</p>
+    </dd>
+
+    <dt><kbd><span class="key">UP</span></kbd></dt>
+
+    <dt><kbd><span class="key">DOWN</span></kbd></dt>
+
+    <dd>
+      <p>Like <kbd>M-p</kbd> and <kbd>M-n</kbd>, but move to the
+      previous or next line of a multi-line item before going to
+      the previous history item
+      (<code>previous-line-or-history-element</code> and
+      <code>next-line-or-history-element</code>) .</p>
+    </dd>
+
+    <dt><kbd>M-r <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Move to an earlier item in the minibuffer history that
+      matches <var>regexp</var>
+      (<code>previous-matching-history-element</code>).</p>
+    </dd>
+
+    <dt><kbd>M-s <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Move to a later item in the minibuffer history that
+      matches <var>regexp</var>
+      (<code>next-matching-history-element</code>).</p>
+    </dd>
+  </dl><a name="index-M_002dp-_0028minibuffer-history_0029" id=
+  "index-M_002dp-_0028minibuffer-history_0029"></a> <a name=
+  "index-M_002dn-_0028minibuffer-history_0029" id=
+  "index-M_002dn-_0028minibuffer-history_0029"></a> <a name=
+  "index-UP-_0028minibuffer-history_0029" id=
+  "index-UP-_0028minibuffer-history_0029"></a> <a name=
+  "index-DOWN-_0028minibuffer-history_0029" id=
+  "index-DOWN-_0028minibuffer-history_0029"></a> <a name=
+  "index-next_002dhistory_002delement" id=
+  "index-next_002dhistory_002delement"></a> <a name=
+  "index-previous_002dhistory_002delement" id=
+  "index-previous_002dhistory_002delement"></a>
+
+  <p>While in the minibuffer, <kbd>M-p</kbd>
+  (<code>previous-history-element</code>) moves through the
+  minibuffer history list, one item at a time. Each <kbd>M-p</kbd>
+  fetches an earlier item from the history list into the
+  minibuffer, replacing its existing contents. Typing
+  <kbd>M-n</kbd> (<code>next-history-element</code>) moves through
+  the minibuffer history list in the opposite direction, fetching
+  later entries into the minibuffer.</p>
+
+  <p>If you type <kbd>M-n</kbd> in the minibuffer when there are no
+  later entries in the minibuffer history (e.g., if you
+  haven&rsquo;t previously typed <kbd>M-p</kbd>), Emacs tries
+  fetching from a list of default arguments: values that you are
+  likely to enter. You can think of this as moving through the
+  &ldquo;future history&rdquo;.</p><a name=
+  "index-previous_002dline_002dor_002dhistory_002delement" id=
+  "index-previous_002dline_002dor_002dhistory_002delement"></a>
+  <a name="index-next_002dline_002dor_002dhistory_002delement" id=
+  "index-next_002dline_002dor_002dhistory_002delement"></a>
+
+  <p>The arrow keys <kbd><span class="key">UP</span></kbd> and
+  <kbd><span class="key">DOWN</span></kbd> work like <kbd>M-p</kbd>
+  and <kbd>M-n</kbd>, but if the current history item is longer
+  than a single line, they allow you to move to the previous or
+  next line of the current history item before going to the
+  previous or next history item.</p>
+
+  <p>If you edit the text inserted by the <kbd>M-p</kbd> or
+  <kbd>M-n</kbd> minibuffer history commands, this does not change
+  its entry in the history list. However, the edited argument does
+  go at the end of the history list when you submit it.</p><a name=
+  "index-previous_002dmatching_002dhistory_002delement" id=
+  "index-previous_002dmatching_002dhistory_002delement"></a>
+  <a name="index-next_002dmatching_002dhistory_002delement" id=
+  "index-next_002dmatching_002dhistory_002delement"></a> <a name=
+  "index-M_002dr-_0028minibuffer-history_0029" id=
+  "index-M_002dr-_0028minibuffer-history_0029"></a> <a name=
+  "index-M_002ds-_0028minibuffer-history_0029" id=
+  "index-M_002ds-_0028minibuffer-history_0029"></a>
+
+  <p>You can use <kbd>M-r</kbd>
+  (<code>previous-matching-history-element</code>) to search
+  through older elements in the history list, and <kbd>M-s</kbd>
+  (<code>next-matching-history-element</code>) to search through
+  newer entries. Each of these commands asks for a <em>regular
+  expression</em> as an argument, and fetches the first matching
+  entry into the minibuffer. See <a href=
+  "Regexps.html#Regexps">Regexps</a>, for an explanation of regular
+  expressions. A numeric prefix argument <var>n</var> means to
+  fetch the <var>n</var>th matching entry. These commands are
+  unusual, in that they use the minibuffer to read the regular
+  expression argument, even though they are invoked from the
+  minibuffer. An upper-case letter in the regular expression makes
+  the search case-sensitive (see <a href=
+  "Lax-Search.html#Lax-Search">Lax Search</a>).</p>
+
+  <p>You can also search through the history using an incremental
+  search. See <a href=
+  "Isearch-Minibuffer.html#Isearch-Minibuffer">Isearch
+  Minibuffer</a>.</p>
+
+  <p>Emacs keeps separate history lists for several different kinds
+  of arguments. For example, there is a list for file names, used
+  by all the commands that read file names. Other history lists
+  include buffer names, command names (used by <kbd>M-x</kbd>), and
+  command arguments (used by commands like
+  <code>query-replace</code>).</p><a name=
+  "index-history_002dlength" id="index-history_002dlength"></a>
+
+  <p>The variable <code>history-length</code> specifies the maximum
+  length of a minibuffer history list; adding a new element deletes
+  the oldest element if the list gets too long. If the value is
+  <code>t</code>, there is no maximum length.</p><a name=
+  "index-history_002ddelete_002dduplicates" id=
+  "index-history_002ddelete_002dduplicates"></a>
+
+  <p>The variable <code>history-delete-duplicates</code> specifies
+  whether to delete duplicates in history. If it is
+  non-<code>nil</code>, adding a new element deletes from the list
+  all other elements that are equal to it. The default is
+  <code>nil</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Repetition.html#Repetition" accesskey="n"
+    rel="next">Repetition</a>, Previous: <a href=
+    "Completion.html#Completion" accesskey="p" rel=
+    "prev">Completion</a>, Up: <a href="Minibuffer.html#Minibuffer"
+    accesskey="u" rel="up">Minibuffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

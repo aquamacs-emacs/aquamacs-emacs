@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Compositions - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Language-Modes.html#Language-Modes" title="Language Modes">
-<link rel="prev" href="Maple-Language-Mode.html#Maple-Language-Mode" title="Maple Language Mode">
-<link rel="next" href="Syntax-Tables.html#Syntax-Tables" title="Syntax Tables">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Compositions - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Language-Modes.html#Language-Modes" title=
+  "Language Modes" />
+  <link rel="prev" href=
+  "Maple-Language-Mode.html#Maple-Language-Mode" title=
+  "Maple Language Mode" />
+  <link rel="next" href="Syntax-Tables.html#Syntax-Tables" title=
+  "Syntax Tables" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +39,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,50 +52,80 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Compositions"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Maple-Language-Mode.html#Maple-Language-Mode">Maple Language Mode</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Language-Modes.html#Language-Modes">Language Modes</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Compositions" id="Compositions"></a>
 
-<h4 class="subsection">7.8.10 Compositions</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Maple-Language-Mode.html#Maple-Language-Mode">Maple Language
+    Mode</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Language-Modes.html#Language-Modes">Language Modes</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-Compositions-615"></a>There are several <dfn>composition functions</dfn> which allow you to get
-displays in a variety of formats similar to those in Big language
-mode.  Most of these functions do not evaluate to anything; they are
-placeholders which are left in symbolic form by Calc's evaluator but
-are recognized by Calc's display formatting routines.
+  <h4 class="subsection">7.8.10 Compositions</h4>
 
-   <p>Two of these, <code>string</code> and <code>bstring</code>, are described elsewhere. 
-See <a href="Strings.html#Strings">Strings</a>.  For example, &lsquo;<samp><span class="samp">string("ABC")</span></samp>&rsquo; is displayed as
-&lsquo;<samp><span class="samp">ABC</span></samp>&rsquo;.  When viewed on the stack it will be indistinguishable from
-the variable <code>ABC</code>, but internally it will be stored as
-&lsquo;<samp><span class="samp">string([65, 66, 67])</span></samp>&rsquo; and can still be manipulated this way; for
-example, the selection and vector commands <kbd>j 1 v v j u</kbd> would
-select the vector portion of this object and reverse the elements, then
-deselect to reveal a string whose characters had been reversed.
+  <p class="noindent"><a name="index-Compositions-615" id=
+  "index-Compositions-615"></a>There are several <dfn>composition
+  functions</dfn> which allow you to get displays in a variety of
+  formats similar to those in Big language mode. Most of these
+  functions do not evaluate to anything; they are placeholders
+  which are left in symbolic form by Calc's evaluator but are
+  recognized by Calc's display formatting routines.</p>
 
-   <p>The composition functions do the same thing in all language modes
-(although their components will of course be formatted in the current
-language mode).  The one exception is Unformatted mode (<kbd>d U</kbd>),
-which does not give the composition functions any special treatment. 
-The functions are discussed here because of their relationship to
-the language modes.
+  <p>Two of these, <code>string</code> and <code>bstring</code>,
+  are described elsewhere. See <a href=
+  "Strings.html#Strings">Strings</a>. For example,
+  &lsquo;<samp><span class=
+  "samp">string("ABC")</span></samp>&rsquo; is displayed as
+  &lsquo;<samp><span class="samp">ABC</span></samp>&rsquo;. When
+  viewed on the stack it will be indistinguishable from the
+  variable <code>ABC</code>, but internally it will be stored as
+  &lsquo;<samp><span class="samp">string([65, 66,
+  67])</span></samp>&rsquo; and can still be manipulated this way;
+  for example, the selection and vector commands <kbd>j 1 v v j
+  u</kbd> would select the vector portion of this object and
+  reverse the elements, then deselect to reveal a string whose
+  characters had been reversed.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Composition-Basics.html#Composition-Basics">Composition Basics</a>
-<li><a accesskey="2" href="Horizontal-Compositions.html#Horizontal-Compositions">Horizontal Compositions</a>
-<li><a accesskey="3" href="Vertical-Compositions.html#Vertical-Compositions">Vertical Compositions</a>
-<li><a accesskey="4" href="Other-Compositions.html#Other-Compositions">Other Compositions</a>
-<li><a accesskey="5" href="Information-about-Compositions.html#Information-about-Compositions">Information about Compositions</a>
-<li><a accesskey="6" href="User_002dDefined-Compositions.html#User_002dDefined-Compositions">User-Defined Compositions</a>
-</ul>
+  <p>The composition functions do the same thing in all language
+  modes (although their components will of course be formatted in
+  the current language mode). The one exception is Unformatted mode
+  (<kbd>d U</kbd>), which does not give the composition functions
+  any special treatment. The functions are discussed here because
+  of their relationship to the language modes.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Composition-Basics.html#Composition-Basics">Composition
+    Basics</a></li>
 
+    <li><a accesskey="2" href=
+    "Horizontal-Compositions.html#Horizontal-Compositions">Horizontal
+    Compositions</a></li>
+
+    <li><a accesskey="3" href=
+    "Vertical-Compositions.html#Vertical-Compositions">Vertical
+    Compositions</a></li>
+
+    <li><a accesskey="4" href=
+    "Other-Compositions.html#Other-Compositions">Other
+    Compositions</a></li>
+
+    <li><a accesskey="5" href=
+    "Information-about-Compositions.html#Information-about-Compositions">
+    Information about Compositions</a></li>
+
+    <li><a accesskey="6" href=
+    "User_002dDefined-Compositions.html#User_002dDefined-Compositions">
+    User-Defined Compositions</a></li>
+  </ul>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,132 +16,187 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Customizing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Customizing">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Customizing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Introspection.html#Introspection" rel="next" title="Introspection">
-<link href="Association-Lists.html#Association-Lists" rel="prev" title="Association Lists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Customizing</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Customizing" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Customizing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Introspection.html#Introspection" rel="next" title=
+  "Introspection" />
+  <link href="Association-Lists.html#Association-Lists" rel="prev"
+  title="Association Lists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Customizing"></a>
-<div class="header">
-<p>
-Next: <a href="Introspection.html#Introspection" accesskey="n" rel="next">Introspection</a>, Previous: <a href="Association-Lists.html#Association-Lists" accesskey="p" rel="prev">Association Lists</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Customizing-Objects"></a>
-<h2 class="chapter">10 Customizing Objects</h2>
+<body lang="en" xml:lang="en">
+  <a name="Customizing" id="Customizing"></a>
 
-<p><i>EIEIO</i> supports the Custom facility through two new widget types.
-If a variable is declared as type <code>object</code>, then full editing of
-slots via the widgets is made possible.  This should be used
-carefully, however, because modified objects are cloned, so if there
-are other references to these objects, they will no longer be linked
-together.
-</p>
-<p>If you want in place editing of objects, use the following methods:
-</p>
-<dl>
-<dt><a name="index-eieio_002dcustomize_002dobject"></a>Function: <strong>eieio-customize-object</strong> <em>object</em></dt>
-<dd><p>Create a custom buffer and insert a widget for editing <var>object</var>.  At
-the end, an <code>Apply</code> and <code>Reset</code> button are available.  This
-will edit the object &quot;in place&quot; so references to it are also changed.
-There is no effort to prevent multiple edits of a singular object, so
-care must be taken by the user of this function.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Introspection.html#Introspection" accesskey=
+    "n" rel="next">Introspection</a>, Previous: <a href=
+    "Association-Lists.html#Association-Lists" accesskey="p" rel=
+    "prev">Association Lists</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Customizing-Objects" id="Customizing-Objects"></a>
 
-<dl>
-<dt><a name="index-eieio_002dcustom_002dwidget_002dinsert"></a>Function: <strong>eieio-custom-widget-insert</strong> <em>object flags</em></dt>
-<dd><p>This method inserts an edit object into the current buffer in place.
-It is implemented as <code>(widget-create 'object-edit :value object)</code>.
-This method is provided as a locale for adding tracking, or
-specializing the widget insert procedure for any object.
-</p></dd></dl>
+  <h2 class="chapter">10 Customizing Objects</h2>
 
-<p>To define a slot with an object in it, use the <code>object</code> tag.  This
-widget type will be automatically converted to <code>object-edit</code> if you
-do in place editing of you object.
-</p>
-<p>If you want to have additional actions taken when a user clicks on the
-<code>Apply</code> button, then overload the method <code>eieio-done-customizing</code>.
-This method does nothing by default, but that may change in the future.
-This would be the best way to make your objects persistent when using
-in-place editing.
-</p>
-<a name="Widget-extension"></a>
-<h3 class="section">10.1 Widget extension</h3>
+  <p><i>EIEIO</i> supports the Custom facility through two new
+  widget types. If a variable is declared as type
+  <code>object</code>, then full editing of slots via the widgets
+  is made possible. This should be used carefully, however, because
+  modified objects are cloned, so if there are other references to
+  these objects, they will no longer be linked together.</p>
 
-<p>When widgets are being created, one new widget extension has been added,
-called the <code>:slotofchoices</code>.  When this occurs in a widget
-definition, all elements after it are removed, and the slot is specifies
-is queried and converted into a series of constants.
-</p>
-<div class="example">
-<pre class="example">(choice (const :tag &quot;None&quot; nil)
+  <p>If you want in place editing of objects, use the following
+  methods:</p>
+
+  <dl>
+    <dt><a name="index-eieio_002dcustomize_002dobject" id=
+    "index-eieio_002dcustomize_002dobject"></a>Function:
+    <strong>eieio-customize-object</strong> <em>object</em></dt>
+
+    <dd>
+      <p>Create a custom buffer and insert a widget for editing
+      <var>object</var>. At the end, an <code>Apply</code> and
+      <code>Reset</code> button are available. This will edit the
+      object "in place" so references to it are also changed. There
+      is no effort to prevent multiple edits of a singular object,
+      so care must be taken by the user of this function.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-eieio_002dcustom_002dwidget_002dinsert" id=
+    "index-eieio_002dcustom_002dwidget_002dinsert"></a>Function:
+    <strong>eieio-custom-widget-insert</strong> <em>object
+    flags</em></dt>
+
+    <dd>
+      <p>This method inserts an edit object into the current buffer
+      in place. It is implemented as <code>(widget-create
+      'object-edit :value object)</code>. This method is provided
+      as a locale for adding tracking, or specializing the widget
+      insert procedure for any object.</p>
+    </dd>
+  </dl>
+
+  <p>To define a slot with an object in it, use the
+  <code>object</code> tag. This widget type will be automatically
+  converted to <code>object-edit</code> if you do in place editing
+  of you object.</p>
+
+  <p>If you want to have additional actions taken when a user
+  clicks on the <code>Apply</code> button, then overload the method
+  <code>eieio-done-customizing</code>. This method does nothing by
+  default, but that may change in the future. This would be the
+  best way to make your objects persistent when using in-place
+  editing.</p><a name="Widget-extension" id="Widget-extension"></a>
+
+  <h3 class="section">10.1 Widget extension</h3>
+
+  <p>When widgets are being created, one new widget extension has
+  been added, called the <code>:slotofchoices</code>. When this
+  occurs in a widget definition, all elements after it are removed,
+  and the slot is specifies is queried and converted into a series
+  of constants.</p>
+
+  <div class="example">
+    <pre class="example">
+(choice (const :tag "None" nil)
         :slotofchoices morestuff)
-</pre></div>
+</pre>
+  </div>
 
-<p>and if the slot <code>morestuff</code> contains <code>(sym1 sym2 sym3)</code>, the
-above example is converted into:
-</p>
-<div class="example">
-<pre class="example">(choice (const :tag &quot;None&quot; nil)
+  <p>and if the slot <code>morestuff</code> contains <code>(sym1
+  sym2 sym3)</code>, the above example is converted into:</p>
+
+  <div class="example">
+    <pre class="example">
+(choice (const :tag "None" nil)
         (const sym1)
         (const sym2)
         (const sym3))
-</pre></div>
+</pre>
+  </div>
 
-<p>This is useful when a given item needs to be selected from a list of
-items defined in this second slot.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Introspection.html#Introspection" accesskey="n" rel="next">Introspection</a>, Previous: <a href="Association-Lists.html#Association-Lists" accesskey="p" rel="prev">Association Lists</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>This is useful when a given item needs to be selected from a
+  list of items defined in this second slot.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Introspection.html#Introspection" accesskey=
+    "n" rel="next">Introspection</a>, Previous: <a href=
+    "Association-Lists.html#Association-Lists" accesskey="p" rel=
+    "prev">Association Lists</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

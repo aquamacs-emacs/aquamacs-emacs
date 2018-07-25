@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,300 +14,496 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Limiting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Limiting">
-<meta name="keywords" content="Gnus Manual: Limiting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Threading.html#Threading" rel="next" title="Threading">
-<link href="Setting-Process-Marks.html#Setting-Process-Marks" rel="prev" title="Setting Process Marks">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Limiting</title>
+  <meta name="description" content="Gnus Manual: Limiting" />
+  <meta name="keywords" content="Gnus Manual: Limiting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Threading.html#Threading" rel="next" title=
+  "Threading" />
+  <link href="Setting-Process-Marks.html#Setting-Process-Marks"
+  rel="prev" title="Setting Process Marks" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Limiting"></a>
-<div class="header">
-<p>
-Next: <a href="Threading.html#Threading" accesskey="n" rel="next">Threading</a>, Previous: <a href="Marking-Articles.html#Marking-Articles" accesskey="p" rel="prev">Marking Articles</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Limiting-1"></a>
-<h3 class="section">3.8 Limiting</h3>
-<a name="index-limiting"></a>
+<body lang="en" xml:lang="en">
+  <a name="Limiting" id="Limiting"></a>
 
-<p>It can be convenient to limit the summary buffer to just show some
-subset of the articles currently in the group.  The effect most limit
-commands have is to remove a few (or many) articles from the summary
-buffer.
-</p>
-<p>Limiting commands work on subsets of the articles already fetched from
-the servers.  These commands don&rsquo;t query the server for additional
-articles.
-</p>
-<dl compact="compact">
-<dt><kbd>/ /</kbd></dt>
-<dt><kbd>/ s</kbd></dt>
-<dd><a name="index-_002f-_002f-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dsubject"></a>
-<p>Limit the summary buffer to articles that match some subject
-(<code>gnus-summary-limit-to-subject</code>).  If given a prefix, exclude
-matching articles.
-</p>
-</dd>
-<dt><kbd>/ a</kbd></dt>
-<dd><a name="index-_002f-a-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dauthor"></a>
-<p>Limit the summary buffer to articles that match some author
-(<code>gnus-summary-limit-to-author</code>).  If given a prefix, exclude
-matching articles.
-</p>
-</dd>
-<dt><kbd>/ R</kbd></dt>
-<dd><a name="index-_002f-R-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002drecipient"></a>
-<p>Limit the summary buffer to articles that match some recipient
-(<code>gnus-summary-limit-to-recipient</code>).  If given a prefix, exclude
-matching articles.
-</p>
-</dd>
-<dt><kbd>/ A</kbd></dt>
-<dd><a name="index-_002f-A-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002daddress"></a>
-<p>Limit the summary buffer to articles in which contents of From, To or Cc
-header match a given address (<code>gnus-summary-limit-to-address</code>).  If
-given a prefix, exclude matching articles.
-</p>
-</dd>
-<dt><kbd>/ S</kbd></dt>
-<dd><a name="index-_002f-S-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dsingletons"></a>
-<p>Limit the summary buffer to articles that aren&rsquo;t part of any displayed
-threads (<code>gnus-summary-limit-to-singletons</code>).  If given a prefix,
-limit to articles that are part of displayed threads.
-</p>
-</dd>
-<dt><kbd>/ x</kbd></dt>
-<dd><a name="index-_002f-x-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dextra"></a>
-<p>Limit the summary buffer to articles that match one of the &ldquo;extra&rdquo;
-headers (see <a href="To-From-Newsgroups.html#To-From-Newsgroups">To From Newsgroups</a>)
-(<code>gnus-summary-limit-to-extra</code>).  If given a prefix, exclude
-matching articles.
-</p>
-</dd>
-<dt><kbd>/ u</kbd></dt>
-<dt><kbd>x</kbd></dt>
-<dd><a name="index-_002f-u-_0028Summary_0029"></a>
-<a name="index-x-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dunread"></a>
-<p>Limit the summary buffer to articles not marked as read
-(<code>gnus-summary-limit-to-unread</code>).  If given a prefix, limit the
-buffer to articles strictly unread.  This means that ticked and
-dormant articles will also be excluded.
-</p>
-</dd>
-<dt><kbd>/ m</kbd></dt>
-<dd><a name="index-_002f-m-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dmarks"></a>
-<p>Ask for a mark and then limit to all articles that have been marked
-with that mark (<code>gnus-summary-limit-to-marks</code>).
-</p>
-</dd>
-<dt><kbd>/ t</kbd></dt>
-<dd><a name="index-_002f-t-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dage"></a>
-<p>Ask for a number and then limit the summary buffer to articles older than (or equal to) that number of days
-(<code>gnus-summary-limit-to-age</code>).  If given a prefix, limit to
-articles younger than that number of days.
-</p>
-</dd>
-<dt><kbd>/ n</kbd></dt>
-<dd><a name="index-_002f-n-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002darticles"></a>
-<p>With prefix &lsquo;<samp>n</samp>&rsquo;, limit the summary buffer to the next &lsquo;<samp>n</samp>&rsquo;
-articles.  If not given a prefix, use the process marked articles
-instead.  (<code>gnus-summary-limit-to-articles</code>).
-</p>
-</dd>
-<dt><kbd>/ w</kbd></dt>
-<dd><a name="index-_002f-w-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dpop_002dlimit"></a>
-<p>Pop the previous limit off the stack and restore it
-(<code>gnus-summary-pop-limit</code>).  If given a prefix, pop all limits off
-the stack.
-</p>
-</dd>
-<dt><kbd>/ .</kbd></dt>
-<dd><a name="index-_002f-_002e-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dunseen"></a>
-<p>Limit the summary buffer to the unseen articles
-(<code>gnus-summary-limit-to-unseen</code>).
-</p>
-</dd>
-<dt><kbd>/ v</kbd></dt>
-<dd><a name="index-_002f-v-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dscore"></a>
-<p>Limit the summary buffer to articles that have a score at or above some
-score (<code>gnus-summary-limit-to-score</code>).
-</p>
-</dd>
-<dt><kbd>/ p</kbd></dt>
-<dd><a name="index-_002f-p-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002ddisplay_002dpredicate"></a>
-<p>Limit the summary buffer to articles that satisfy the <code>display</code>
-group parameter predicate
-(<code>gnus-summary-limit-to-display-predicate</code>).  See <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>, for more on this predicate.
-</p>
-</dd>
-<dt><kbd>/ r</kbd></dt>
-<dd><a name="index-_002f-r-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dreplied"></a>
-<p>Limit the summary buffer to replied articles
-(<code>gnus-summary-limit-to-replied</code>).  If given a prefix, exclude
-replied articles.
-</p>
-</dd>
-<dt><kbd>/ E</kbd></dt>
-<dt><kbd>M S</kbd></dt>
-<dd><a name="index-M-S-_0028Summary_0029"></a>
-<a name="index-_002f-E-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dinclude_002dexpunged"></a>
-<p>Include all expunged articles in the limit
-(<code>gnus-summary-limit-include-expunged</code>).
-</p>
-</dd>
-<dt><kbd>/ D</kbd></dt>
-<dd><a name="index-_002f-D-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dinclude_002ddormant"></a>
-<p>Include all dormant articles in the limit
-(<code>gnus-summary-limit-include-dormant</code>).
-</p>
-</dd>
-<dt><kbd>/ *</kbd></dt>
-<dd><a name="index-_002f-_002a-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dinclude_002dcached"></a>
-<p>Include all cached articles in the limit
-(<code>gnus-summary-limit-include-cached</code>).
-</p>
-</dd>
-<dt><kbd>/ d</kbd></dt>
-<dd><a name="index-_002f-d-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dexclude_002ddormant"></a>
-<p>Exclude all dormant articles from the limit
-(<code>gnus-summary-limit-exclude-dormant</code>).
-</p>
-</dd>
-<dt><kbd>/ M</kbd></dt>
-<dd><a name="index-_002f-M-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dexclude_002dmarks"></a>
-<p>Exclude all marked articles (<code>gnus-summary-limit-exclude-marks</code>).
-</p>
-</dd>
-<dt><kbd>/ T</kbd></dt>
-<dd><a name="index-_002f-T-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dinclude_002dthread"></a>
-<p>Include all the articles in the current thread in the limit.
-</p>
-</dd>
-<dt><kbd>/ c</kbd></dt>
-<dd><a name="index-_002f-c-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dexclude_002dchildless_002ddormant"></a>
-<p>Exclude all dormant articles that have no children from the limit<br>
-(<code>gnus-summary-limit-exclude-childless-dormant</code>).
-</p>
-</dd>
-<dt><kbd>/ C</kbd></dt>
-<dd><a name="index-_002f-C-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dmark_002dexcluded_002das_002dread"></a>
-<p>Mark all excluded unread articles as read
-(<code>gnus-summary-limit-mark-excluded-as-read</code>).  If given a prefix,
-also mark excluded ticked and dormant articles as read.
-</p>
-</dd>
-<dt><kbd>/ b</kbd></dt>
-<dd><a name="index-_002f-b-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dbodies"></a>
-<p>Limit the summary buffer to articles that have bodies that match a
-certain regexp (<code>gnus-summary-limit-to-bodies</code>).  If given a
-prefix, reverse the limit.  This command is quite slow since it
-requires selecting each article to find the matches.
-</p>
-</dd>
-<dt><kbd>/ h</kbd></dt>
-<dd><a name="index-_002f-h-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlimit_002dto_002dheaders"></a>
-<p>Like the previous command, only limit to headers instead
-(<code>gnus-summary-limit-to-headers</code>).
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Threading.html#Threading" accesskey="n" rel=
+    "next">Threading</a>, Previous: <a href=
+    "Marking-Articles.html#Marking-Articles" accesskey="p" rel=
+    "prev">Marking Articles</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Limiting-1" id="Limiting-1"></a>
 
+  <h3 class="section">3.8 Limiting</h3><a name="index-limiting" id=
+  "index-limiting"></a>
 
-<p>The following commands aren&rsquo;t limiting commands, but use the <kbd>/</kbd>
-prefix as well.
-</p>
-<dl compact="compact">
-<dt><kbd>/ N</kbd></dt>
-<dd><a name="index-_002f-N-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dinsert_002dnew_002darticles"></a>
-<p>Insert all new articles in the summary buffer.  It scans for new emails
-if <var>back-end</var><code>-get-new-mail</code> is non-<code>nil</code>.
-</p>
-</dd>
-<dt><kbd>/ o</kbd></dt>
-<dd><a name="index-_002f-o-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dinsert_002dold_002darticles"></a>
-<p>Insert all old articles in the summary buffer.  If given a numbered
-prefix, fetch this number of articles.
-</p>
-</dd>
-</dl>
+  <p>It can be convenient to limit the summary buffer to just show
+  some subset of the articles currently in the group. The effect
+  most limit commands have is to remove a few (or many) articles
+  from the summary buffer.</p>
 
+  <p>Limiting commands work on subsets of the articles already
+  fetched from the servers. These commands don&rsquo;t query the
+  server for additional articles.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Threading.html#Threading" accesskey="n" rel="next">Threading</a>, Previous: <a href="Marking-Articles.html#Marking-Articles" accesskey="p" rel="prev">Marking Articles</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>/ /</kbd></dt>
 
+    <dt><kbd>/ s</kbd></dt>
 
+    <dd>
+      <a name="index-_002f-_002f-_0028Summary_0029" id=
+      "index-_002f-_002f-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dsubject" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dsubject"></a>
 
+      <p>Limit the summary buffer to articles that match some
+      subject (<code>gnus-summary-limit-to-subject</code>). If
+      given a prefix, exclude matching articles.</p>
+    </dd>
+
+    <dt><kbd>/ a</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-a-_0028Summary_0029" id=
+      "index-_002f-a-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dauthor" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dauthor"></a>
+
+      <p>Limit the summary buffer to articles that match some
+      author (<code>gnus-summary-limit-to-author</code>). If given
+      a prefix, exclude matching articles.</p>
+    </dd>
+
+    <dt><kbd>/ R</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-R-_0028Summary_0029" id=
+      "index-_002f-R-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002drecipient" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002drecipient"></a>
+
+      <p>Limit the summary buffer to articles that match some
+      recipient (<code>gnus-summary-limit-to-recipient</code>). If
+      given a prefix, exclude matching articles.</p>
+    </dd>
+
+    <dt><kbd>/ A</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-A-_0028Summary_0029" id=
+      "index-_002f-A-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002daddress" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002daddress"></a>
+
+      <p>Limit the summary buffer to articles in which contents of
+      From, To or Cc header match a given address
+      (<code>gnus-summary-limit-to-address</code>). If given a
+      prefix, exclude matching articles.</p>
+    </dd>
+
+    <dt><kbd>/ S</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-S-_0028Summary_0029" id=
+      "index-_002f-S-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dsingletons" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dsingletons"></a>
+
+      <p>Limit the summary buffer to articles that aren&rsquo;t
+      part of any displayed threads
+      (<code>gnus-summary-limit-to-singletons</code>). If given a
+      prefix, limit to articles that are part of displayed
+      threads.</p>
+    </dd>
+
+    <dt><kbd>/ x</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-x-_0028Summary_0029" id=
+      "index-_002f-x-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dextra" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dextra"></a>
+
+      <p>Limit the summary buffer to articles that match one of the
+      &ldquo;extra&rdquo; headers (see <a href=
+      "To-From-Newsgroups.html#To-From-Newsgroups">To From
+      Newsgroups</a>) (<code>gnus-summary-limit-to-extra</code>).
+      If given a prefix, exclude matching articles.</p>
+    </dd>
+
+    <dt><kbd>/ u</kbd></dt>
+
+    <dt><kbd>x</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-u-_0028Summary_0029" id=
+      "index-_002f-u-_0028Summary_0029"></a> <a name=
+      "index-x-_0028Summary_0029" id=
+      "index-x-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dunread" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dunread"></a>
+
+      <p>Limit the summary buffer to articles not marked as read
+      (<code>gnus-summary-limit-to-unread</code>). If given a
+      prefix, limit the buffer to articles strictly unread. This
+      means that ticked and dormant articles will also be
+      excluded.</p>
+    </dd>
+
+    <dt><kbd>/ m</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-m-_0028Summary_0029" id=
+      "index-_002f-m-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dmarks" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dmarks"></a>
+
+      <p>Ask for a mark and then limit to all articles that have
+      been marked with that mark
+      (<code>gnus-summary-limit-to-marks</code>).</p>
+    </dd>
+
+    <dt><kbd>/ t</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-t-_0028Summary_0029" id=
+      "index-_002f-t-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dage" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dage"></a>
+
+      <p>Ask for a number and then limit the summary buffer to
+      articles older than (or equal to) that number of days
+      (<code>gnus-summary-limit-to-age</code>). If given a prefix,
+      limit to articles younger than that number of days.</p>
+    </dd>
+
+    <dt><kbd>/ n</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-n-_0028Summary_0029" id=
+      "index-_002f-n-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002darticles" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002darticles"></a>
+
+      <p>With prefix &lsquo;<samp>n</samp>&rsquo;, limit the
+      summary buffer to the next &lsquo;<samp>n</samp>&rsquo;
+      articles. If not given a prefix, use the process marked
+      articles instead.
+      (<code>gnus-summary-limit-to-articles</code>).</p>
+    </dd>
+
+    <dt><kbd>/ w</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-w-_0028Summary_0029" id=
+      "index-_002f-w-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dpop_002dlimit" id=
+      "index-gnus_002dsummary_002dpop_002dlimit"></a>
+
+      <p>Pop the previous limit off the stack and restore it
+      (<code>gnus-summary-pop-limit</code>). If given a prefix, pop
+      all limits off the stack.</p>
+    </dd>
+
+    <dt><kbd>/ .</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-_002e-_0028Summary_0029" id=
+      "index-_002f-_002e-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dunseen" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dunseen"></a>
+
+      <p>Limit the summary buffer to the unseen articles
+      (<code>gnus-summary-limit-to-unseen</code>).</p>
+    </dd>
+
+    <dt><kbd>/ v</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-v-_0028Summary_0029" id=
+      "index-_002f-v-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dscore" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dscore"></a>
+
+      <p>Limit the summary buffer to articles that have a score at
+      or above some score
+      (<code>gnus-summary-limit-to-score</code>).</p>
+    </dd>
+
+    <dt><kbd>/ p</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-p-_0028Summary_0029" id=
+      "index-_002f-p-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002ddisplay_002dpredicate"
+      id=
+      "index-gnus_002dsummary_002dlimit_002dto_002ddisplay_002dpredicate">
+      </a>
+
+      <p>Limit the summary buffer to articles that satisfy the
+      <code>display</code> group parameter predicate
+      (<code>gnus-summary-limit-to-display-predicate</code>). See
+      <a href="Group-Parameters.html#Group-Parameters">Group
+      Parameters</a>, for more on this predicate.</p>
+    </dd>
+
+    <dt><kbd>/ r</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-r-_0028Summary_0029" id=
+      "index-_002f-r-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dreplied" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dreplied"></a>
+
+      <p>Limit the summary buffer to replied articles
+      (<code>gnus-summary-limit-to-replied</code>). If given a
+      prefix, exclude replied articles.</p>
+    </dd>
+
+    <dt><kbd>/ E</kbd></dt>
+
+    <dt><kbd>M S</kbd></dt>
+
+    <dd>
+      <a name="index-M-S-_0028Summary_0029" id=
+      "index-M-S-_0028Summary_0029"></a> <a name=
+      "index-_002f-E-_0028Summary_0029" id=
+      "index-_002f-E-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dinclude_002dexpunged"
+      id=
+      "index-gnus_002dsummary_002dlimit_002dinclude_002dexpunged"></a>
+
+      <p>Include all expunged articles in the limit
+      (<code>gnus-summary-limit-include-expunged</code>).</p>
+    </dd>
+
+    <dt><kbd>/ D</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-D-_0028Summary_0029" id=
+      "index-_002f-D-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dinclude_002ddormant"
+      id="index-gnus_002dsummary_002dlimit_002dinclude_002ddormant">
+      </a>
+
+      <p>Include all dormant articles in the limit
+      (<code>gnus-summary-limit-include-dormant</code>).</p>
+    </dd>
+
+    <dt><kbd>/ *</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-_002a-_0028Summary_0029" id=
+      "index-_002f-_002a-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dinclude_002dcached" id=
+      "index-gnus_002dsummary_002dlimit_002dinclude_002dcached"></a>
+
+      <p>Include all cached articles in the limit
+      (<code>gnus-summary-limit-include-cached</code>).</p>
+    </dd>
+
+    <dt><kbd>/ d</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-d-_0028Summary_0029" id=
+      "index-_002f-d-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dexclude_002ddormant"
+      id="index-gnus_002dsummary_002dlimit_002dexclude_002ddormant">
+      </a>
+
+      <p>Exclude all dormant articles from the limit
+      (<code>gnus-summary-limit-exclude-dormant</code>).</p>
+    </dd>
+
+    <dt><kbd>/ M</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-M-_0028Summary_0029" id=
+      "index-_002f-M-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dexclude_002dmarks" id=
+      "index-gnus_002dsummary_002dlimit_002dexclude_002dmarks"></a>
+
+      <p>Exclude all marked articles
+      (<code>gnus-summary-limit-exclude-marks</code>).</p>
+    </dd>
+
+    <dt><kbd>/ T</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-T-_0028Summary_0029" id=
+      "index-_002f-T-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dinclude_002dthread" id=
+      "index-gnus_002dsummary_002dlimit_002dinclude_002dthread"></a>
+
+      <p>Include all the articles in the current thread in the
+      limit.</p>
+    </dd>
+
+    <dt><kbd>/ c</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-c-_0028Summary_0029" id=
+      "index-_002f-c-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dexclude_002dchildless_002ddormant"
+      id=
+      "index-gnus_002dsummary_002dlimit_002dexclude_002dchildless_002ddormant">
+      </a>
+
+      <p>Exclude all dormant articles that have no children from
+      the limit<br />
+      (<code>gnus-summary-limit-exclude-childless-dormant</code>).</p>
+    </dd>
+
+    <dt><kbd>/ C</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-C-_0028Summary_0029" id=
+      "index-_002f-C-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dmark_002dexcluded_002das_002dread"
+      id=
+      "index-gnus_002dsummary_002dlimit_002dmark_002dexcluded_002das_002dread">
+      </a>
+
+      <p>Mark all excluded unread articles as read
+      (<code>gnus-summary-limit-mark-excluded-as-read</code>). If
+      given a prefix, also mark excluded ticked and dormant
+      articles as read.</p>
+    </dd>
+
+    <dt><kbd>/ b</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-b-_0028Summary_0029" id=
+      "index-_002f-b-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dbodies" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dbodies"></a>
+
+      <p>Limit the summary buffer to articles that have bodies that
+      match a certain regexp
+      (<code>gnus-summary-limit-to-bodies</code>). If given a
+      prefix, reverse the limit. This command is quite slow since
+      it requires selecting each article to find the matches.</p>
+    </dd>
+
+    <dt><kbd>/ h</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-h-_0028Summary_0029" id=
+      "index-_002f-h-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlimit_002dto_002dheaders" id=
+      "index-gnus_002dsummary_002dlimit_002dto_002dheaders"></a>
+
+      <p>Like the previous command, only limit to headers instead
+      (<code>gnus-summary-limit-to-headers</code>).</p>
+    </dd>
+  </dl>
+
+  <p>The following commands aren&rsquo;t limiting commands, but use
+  the <kbd>/</kbd> prefix as well.</p>
+
+  <dl compact="compact">
+    <dt><kbd>/ N</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-N-_0028Summary_0029" id=
+      "index-_002f-N-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dinsert_002dnew_002darticles" id=
+      "index-gnus_002dsummary_002dinsert_002dnew_002darticles"></a>
+
+      <p>Insert all new articles in the summary buffer. It scans
+      for new emails if
+      <var>back-end</var><code>-get-new-mail</code> is
+      non-<code>nil</code>.</p>
+    </dd>
+
+    <dt><kbd>/ o</kbd></dt>
+
+    <dd>
+      <a name="index-_002f-o-_0028Summary_0029" id=
+      "index-_002f-o-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dinsert_002dold_002darticles" id=
+      "index-gnus_002dsummary_002dinsert_002dold_002darticles"></a>
+
+      <p>Insert all old articles in the summary buffer. If given a
+      numbered prefix, fetch this number of articles.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Threading.html#Threading" accesskey="n" rel=
+    "next">Threading</a>, Previous: <a href=
+    "Marking-Articles.html#Marking-Articles" accesskey="p" rel=
+    "prev">Marking Articles</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

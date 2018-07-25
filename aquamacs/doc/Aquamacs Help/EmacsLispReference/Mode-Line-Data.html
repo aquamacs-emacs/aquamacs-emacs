@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,166 +19,245 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Mode Line Data</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Mode Line Data">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Mode Line Data">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mode-Line-Format.html#Mode-Line-Format" rel="up" title="Mode Line Format">
-<link href="Mode-Line-Top.html#Mode-Line-Top" rel="next" title="Mode Line Top">
-<link href="Mode-Line-Basics.html#Mode-Line-Basics" rel="prev" title="Mode Line Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Mode Line Data</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Mode Line Data" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Mode Line Data" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mode-Line-Format.html#Mode-Line-Format" rel="up"
+  title="Mode Line Format" />
+  <link href="Mode-Line-Top.html#Mode-Line-Top" rel="next" title=
+  "Mode Line Top" />
+  <link href="Mode-Line-Basics.html#Mode-Line-Basics" rel="prev"
+  title="Mode Line Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Mode-Line-Data" id="Mode-Line-Data"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Mode-Line-Top.html#Mode-Line-Top" accesskey=
+    "n" rel="next">Mode Line Top</a>, Previous: <a href=
+    "Mode-Line-Basics.html#Mode-Line-Basics" accesskey="p" rel=
+    "prev">Mode Line Basics</a>, Up: <a href=
+    "Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel=
+    "up">Mode Line Format</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Data-Structure-of-the-Mode-Line" id=
+  "The-Data-Structure-of-the-Mode-Line"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Mode-Line-Data"></a>
-<div class="header">
-<p>
-Next: <a href="Mode-Line-Top.html#Mode-Line-Top" accesskey="n" rel="next">Mode Line Top</a>, Previous: <a href="Mode-Line-Basics.html#Mode-Line-Basics" accesskey="p" rel="prev">Mode Line Basics</a>, Up: <a href="Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel="up">Mode Line Format</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Data-Structure-of-the-Mode-Line"></a>
-<h4 class="subsection">22.4.2 The Data Structure of the Mode Line</h4>
-<a name="index-mode-line-construct"></a>
+  <h4 class="subsection">22.4.2 The Data Structure of the Mode
+  Line</h4><a name="index-mode-line-construct" id=
+  "index-mode-line-construct"></a>
 
-<p>The mode line contents are controlled by a data structure called a
-<em>mode line construct</em>, made up of lists, strings, symbols, and
-numbers kept in buffer-local variables.  Each data type has a specific
-meaning for the mode line appearance, as described below.  The same data
-structure is used for constructing frame titles (see <a href="Frame-Titles.html#Frame-Titles">Frame Titles</a>)
-and header lines (see <a href="Header-Lines.html#Header-Lines">Header Lines</a>).
-</p>
-<p>A mode line construct may be as simple as a fixed string of text,
-but it usually specifies how to combine fixed strings with variables&rsquo;
-values to construct the text.  Many of these variables are themselves
-defined to have mode line constructs as their values.
-</p>
-<p>Here are the meanings of various data types as mode line constructs:
-</p>
-<dl compact="compact">
-<dd><a name="index-percent-symbol-in-mode-line"></a>
-</dd>
-<dt><code><var>string</var></code></dt>
-<dd><p>A string as a mode line construct appears verbatim except for
-<em><code>%</code>-constructs</em> in it.  These stand for substitution of
-other data; see <a href="_0025_002dConstructs.html#g_t_0025_002dConstructs">%-Constructs</a>.
-</p>
-<p>If parts of the string have <code>face</code> properties, they control
-display of the text just as they would text in the buffer.  Any
-characters which have no <code>face</code> properties are displayed, by
-default, in the face <code>mode-line</code> or <code>mode-line-inactive</code>
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Standard-Faces.html#Standard-Faces">Standard Faces</a> in <cite>The GNU Emacs Manual</cite>).  The
-<code>help-echo</code> and <code>keymap</code> properties in <var>string</var> have
-special meanings.  See <a href="Properties-in-Mode.html#Properties-in-Mode">Properties in Mode</a>.
-</p>
-</dd>
-<dt><code><var>symbol</var></code></dt>
-<dd><p>A symbol as a mode line construct stands for its value.  The value of
-<var>symbol</var> is used as a mode line construct, in place of <var>symbol</var>.
-However, the symbols <code>t</code> and <code>nil</code> are ignored, as is any
-symbol whose value is void.
-</p>
-<p>There is one exception: if the value of <var>symbol</var> is a string, it is
-displayed verbatim: the <code>%</code>-constructs are not recognized.
-</p>
-<p>Unless <var>symbol</var> is marked as risky (i.e., it has a
-non-<code>nil</code> <code>risky-local-variable</code> property), all text
-properties specified in <var>symbol</var>&rsquo;s value are ignored.  This includes
-the text properties of strings in <var>symbol</var>&rsquo;s value, as well as all
-<code>:eval</code> and <code>:propertize</code> forms in it.  (The reason for this
-is security: non-risky variables could be set automatically from file
-variables without prompting the user.)
-</p>
-</dd>
-<dt><code>(<var>string</var> <var>rest</var>&hellip;)</code></dt>
-<dt><code>(<var>list</var> <var>rest</var>&hellip;)</code></dt>
-<dd><p>A list whose first element is a string or list means to process all the
-elements recursively and concatenate the results.  This is the most
-common form of mode line construct.
-</p>
-</dd>
-<dt><code>(:eval <var>form</var>)</code></dt>
-<dd><p>A list whose first element is the symbol <code>:eval</code> says to evaluate
-<var>form</var>, and use the result as a string to display.  Make sure this
-evaluation cannot load any files, as doing so could cause infinite
-recursion.
-</p>
-</dd>
-<dt><code>(:propertize <var>elt</var> <var>props</var>&hellip;)</code></dt>
-<dd><p>A list whose first element is the symbol <code>:propertize</code> says to
-process the mode line construct <var>elt</var> recursively, then add the text
-properties specified by <var>props</var> to the result.  The argument
-<var>props</var> should consist of zero or more pairs <var>text-property</var>
-<var>value</var>.
-</p>
-</dd>
-<dt><code>(<var>symbol</var> <var>then</var> <var>else</var>)</code></dt>
-<dd><p>A list whose first element is a symbol that is not a keyword specifies
-a conditional.  Its meaning depends on the value of <var>symbol</var>.  If
-<var>symbol</var> has a non-<code>nil</code> value, the second element,
-<var>then</var>, is processed recursively as a mode line construct.
-Otherwise, the third element, <var>else</var>, is processed recursively.
-You may omit <var>else</var>; then the mode line construct displays nothing
-if the value of <var>symbol</var> is <code>nil</code> or void.
-</p>
-</dd>
-<dt><code>(<var>width</var> <var>rest</var>&hellip;)</code></dt>
-<dd><p>A list whose first element is an integer specifies truncation or
-padding of the results of <var>rest</var>.  The remaining elements
-<var>rest</var> are processed recursively as mode line constructs and
-concatenated together.  When <var>width</var> is positive, the result is
-space filled on the right if its width is less than <var>width</var>.  When
-<var>width</var> is negative, the result is truncated on the right to
-−<var>width</var> columns if its width exceeds −<var>width</var>.
-</p>
-<p>For example, the usual way to show what percentage of a buffer is above
-the top of the window is to use a list like this: <code>(-3 &quot;%p&quot;)</code>.
-</p></dd>
-</dl>
+  <p>The mode line contents are controlled by a data structure
+  called a <em>mode line construct</em>, made up of lists, strings,
+  symbols, and numbers kept in buffer-local variables. Each data
+  type has a specific meaning for the mode line appearance, as
+  described below. The same data structure is used for constructing
+  frame titles (see <a href="Frame-Titles.html#Frame-Titles">Frame
+  Titles</a>) and header lines (see <a href=
+  "Header-Lines.html#Header-Lines">Header Lines</a>).</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Mode-Line-Top.html#Mode-Line-Top" accesskey="n" rel="next">Mode Line Top</a>, Previous: <a href="Mode-Line-Basics.html#Mode-Line-Basics" accesskey="p" rel="prev">Mode Line Basics</a>, Up: <a href="Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel="up">Mode Line Format</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A mode line construct may be as simple as a fixed string of
+  text, but it usually specifies how to combine fixed strings with
+  variables&rsquo; values to construct the text. Many of these
+  variables are themselves defined to have mode line constructs as
+  their values.</p>
 
+  <p>Here are the meanings of various data types as mode line
+  constructs:</p>
 
+  <dl compact="compact">
+    <dd><a name="index-percent-symbol-in-mode-line" id=
+    "index-percent-symbol-in-mode-line"></a></dd>
 
+    <dt><code><var>string</var></code></dt>
+
+    <dd>
+      <p>A string as a mode line construct appears verbatim except
+      for <em><code>%</code>-constructs</em> in it. These stand for
+      substitution of other data; see <a href=
+      "_0025_002dConstructs.html#g_t_0025_002dConstructs">%-Constructs</a>.</p>
+
+      <p>If parts of the string have <code>face</code> properties,
+      they control display of the text just as they would text in
+      the buffer. Any characters which have no <code>face</code>
+      properties are displayed, by default, in the face
+      <code>mode-line</code> or <code>mode-line-inactive</code>
+      (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Standard-Faces.html#Standard-Faces">
+      Standard Faces</a> in <cite>The GNU Emacs Manual</cite>). The
+      <code>help-echo</code> and <code>keymap</code> properties in
+      <var>string</var> have special meanings. See <a href=
+      "Properties-in-Mode.html#Properties-in-Mode">Properties in
+      Mode</a>.</p>
+    </dd>
+
+    <dt><code><var>symbol</var></code></dt>
+
+    <dd>
+      <p>A symbol as a mode line construct stands for its value.
+      The value of <var>symbol</var> is used as a mode line
+      construct, in place of <var>symbol</var>. However, the
+      symbols <code>t</code> and <code>nil</code> are ignored, as
+      is any symbol whose value is void.</p>
+
+      <p>There is one exception: if the value of <var>symbol</var>
+      is a string, it is displayed verbatim: the
+      <code>%</code>-constructs are not recognized.</p>
+
+      <p>Unless <var>symbol</var> is marked as risky (i.e., it has
+      a non-<code>nil</code> <code>risky-local-variable</code>
+      property), all text properties specified in
+      <var>symbol</var>&rsquo;s value are ignored. This includes
+      the text properties of strings in <var>symbol</var>&rsquo;s
+      value, as well as all <code>:eval</code> and
+      <code>:propertize</code> forms in it. (The reason for this is
+      security: non-risky variables could be set automatically from
+      file variables without prompting the user.)</p>
+    </dd>
+
+    <dt><code>(<var>string</var>
+    <var>rest</var>&hellip;)</code></dt>
+
+    <dt><code>(<var>list</var> <var>rest</var>&hellip;)</code></dt>
+
+    <dd>
+      <p>A list whose first element is a string or list means to
+      process all the elements recursively and concatenate the
+      results. This is the most common form of mode line
+      construct.</p>
+    </dd>
+
+    <dt><code>(:eval <var>form</var>)</code></dt>
+
+    <dd>
+      <p>A list whose first element is the symbol
+      <code>:eval</code> says to evaluate <var>form</var>, and use
+      the result as a string to display. Make sure this evaluation
+      cannot load any files, as doing so could cause infinite
+      recursion.</p>
+    </dd>
+
+    <dt><code>(:propertize <var>elt</var>
+    <var>props</var>&hellip;)</code></dt>
+
+    <dd>
+      <p>A list whose first element is the symbol
+      <code>:propertize</code> says to process the mode line
+      construct <var>elt</var> recursively, then add the text
+      properties specified by <var>props</var> to the result. The
+      argument <var>props</var> should consist of zero or more
+      pairs <var>text-property</var> <var>value</var>.</p>
+    </dd>
+
+    <dt><code>(<var>symbol</var> <var>then</var>
+    <var>else</var>)</code></dt>
+
+    <dd>
+      <p>A list whose first element is a symbol that is not a
+      keyword specifies a conditional. Its meaning depends on the
+      value of <var>symbol</var>. If <var>symbol</var> has a
+      non-<code>nil</code> value, the second element,
+      <var>then</var>, is processed recursively as a mode line
+      construct. Otherwise, the third element, <var>else</var>, is
+      processed recursively. You may omit <var>else</var>; then the
+      mode line construct displays nothing if the value of
+      <var>symbol</var> is <code>nil</code> or void.</p>
+    </dd>
+
+    <dt><code>(<var>width</var>
+    <var>rest</var>&hellip;)</code></dt>
+
+    <dd>
+      <p>A list whose first element is an integer specifies
+      truncation or padding of the results of <var>rest</var>. The
+      remaining elements <var>rest</var> are processed recursively
+      as mode line constructs and concatenated together. When
+      <var>width</var> is positive, the result is space filled on
+      the right if its width is less than <var>width</var>. When
+      <var>width</var> is negative, the result is truncated on the
+      right to &acirc;&circ;&rsquo;<var>width</var> columns if its
+      width exceeds &acirc;&circ;&rsquo;<var>width</var>.</p>
+
+      <p>For example, the usual way to show what percentage of a
+      buffer is above the top of the window is to use a list like
+      this: <code>(-3 "%p")</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Mode-Line-Top.html#Mode-Line-Top" accesskey=
+    "n" rel="next">Mode Line Top</a>, Previous: <a href=
+    "Mode-Line-Basics.html#Mode-Line-Basics" accesskey="p" rel=
+    "prev">Mode Line Basics</a>, Up: <a href=
+    "Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel=
+    "up">Mode Line Format</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

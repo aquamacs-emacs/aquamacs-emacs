@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,131 +19,195 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Create/Delete Dirs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Create/Delete Dirs">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Create/Delete Dirs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="Magic-File-Names.html#Magic-File-Names" rel="next" title="Magic File Names">
-<link href="Contents-of-Directories.html#Contents-of-Directories" rel="prev" title="Contents of Directories">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Create/Delete
+  Dirs</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Create/Delete Dirs" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Create/Delete Dirs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href="Magic-File-Names.html#Magic-File-Names" rel="next"
+  title="Magic File Names" />
+  <link href="Contents-of-Directories.html#Contents-of-Directories"
+  rel="prev" title="Contents of Directories" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Create_002fDelete-Dirs" id="Create_002fDelete-Dirs"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Magic-File-Names.html#Magic-File-Names"
+    accesskey="n" rel="next">Magic File Names</a>, Previous:
+    <a href="Contents-of-Directories.html#Contents-of-Directories"
+    accesskey="p" rel="prev">Contents of Directories</a>, Up:
+    <a href="Files.html#Files" accesskey="u" rel="up">Files</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating_002c-Copying-and-Deleting-Directories" id=
+  "Creating_002c-Copying-and-Deleting-Directories"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Create_002fDelete-Dirs"></a>
-<div class="header">
-<p>
-Next: <a href="Magic-File-Names.html#Magic-File-Names" accesskey="n" rel="next">Magic File Names</a>, Previous: <a href="Contents-of-Directories.html#Contents-of-Directories" accesskey="p" rel="prev">Contents of Directories</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating_002c-Copying-and-Deleting-Directories"></a>
-<h3 class="section">24.10 Creating, Copying and Deleting Directories</h3>
-<a name="index-creating_002c-copying-and-deleting-directories"></a>
+  <h3 class="section">24.10 Creating, Copying and Deleting
+  Directories</h3><a name=
+  "index-creating_002c-copying-and-deleting-directories" id=
+  "index-creating_002c-copying-and-deleting-directories"></a>
 
-<p>Most Emacs Lisp file-manipulation functions get errors when used on
-files that are directories.  For example, you cannot delete a directory
-with <code>delete-file</code>.  These special functions exist to create and
-delete directories.
-</p>
-<a name="index-mkdir"></a>
-<dl>
-<dt><a name="index-make_002ddirectory"></a>Command: <strong>make-directory</strong> <em>dirname &amp;optional parents</em></dt>
-<dd><p>This command creates a directory named <var>dirname</var>.  If
-<var>parents</var> is non-<code>nil</code>, as is always the case in an
-interactive call, that means to create the parent directories first,
-if they don&rsquo;t already exist.
-</p>
-<p><code>mkdir</code> is an alias for this.
-</p></dd></dl>
+  <p>Most Emacs Lisp file-manipulation functions get errors when
+  used on files that are directories. For example, you cannot
+  delete a directory with <code>delete-file</code>. These special
+  functions exist to create and delete directories.</p><a name=
+  "index-mkdir" id="index-mkdir"></a>
 
-<dl>
-<dt><a name="index-copy_002ddirectory"></a>Command: <strong>copy-directory</strong> <em>dirname newname &amp;optional keep-time parents copy-contents</em></dt>
-<dd><p>This command copies the directory named <var>dirname</var> to
-<var>newname</var>.  If <var>newname</var> names an existing directory,
-<var>dirname</var> will be copied to a subdirectory there.
-</p>
-<p>It always sets the file modes of the copied files to match the
-corresponding original file.
-</p>
-<p>The third argument <var>keep-time</var> non-<code>nil</code> means to preserve the
-modification time of the copied files.  A prefix arg makes
-<var>keep-time</var> non-<code>nil</code>.
-</p>
-<p>The fourth argument <var>parents</var> says whether to
-create parent directories if they don&rsquo;t exist.  Interactively,
-this happens by default.
-</p>
-<p>The fifth argument <var>copy-contents</var>, if non-<code>nil</code>, means to
-copy the contents of <var>dirname</var> directly into <var>newname</var> if the
-latter is an existing directory, instead of copying <var>dirname</var> into
-it as a subdirectory.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002ddirectory" id=
+    "index-make_002ddirectory"></a>Command:
+    <strong>make-directory</strong> <em>dirname &amp;optional
+    parents</em></dt>
 
-<a name="index-trash-1"></a>
-<a name="index-delete_002dby_002dmoving_002dto_002dtrash-1"></a>
-<dl>
-<dt><a name="index-delete_002ddirectory"></a>Command: <strong>delete-directory</strong> <em>dirname &amp;optional recursive trash</em></dt>
-<dd><p>This command deletes the directory named <var>dirname</var>.  The function
-<code>delete-file</code> does not work for files that are directories; you
-must use <code>delete-directory</code> for them.  If <var>recursive</var> is
-<code>nil</code>, and the directory contains any files,
-<code>delete-directory</code> signals an error.
-</p>
-<p><code>delete-directory</code> only follows symbolic links at the level of
-parent directories.
-</p>
-<p>If the optional argument <var>trash</var> is non-<code>nil</code> and the
-variable <code>delete-by-moving-to-trash</code> is non-<code>nil</code>, this
-command moves the file into the system Trash instead of deleting it.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Misc-File-Ops.html#Misc-File-Ops">Miscellaneous File Operations</a> in <cite>The GNU
-Emacs Manual</cite>.  When called interactively, <var>trash</var> is <code>t</code> if
-no prefix argument is given, and <code>nil</code> otherwise.
-</p></dd></dl>
+    <dd>
+      <p>This command creates a directory named <var>dirname</var>.
+      If <var>parents</var> is non-<code>nil</code>, as is always
+      the case in an interactive call, that means to create the
+      parent directories first, if they don&rsquo;t already
+      exist.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Magic-File-Names.html#Magic-File-Names" accesskey="n" rel="next">Magic File Names</a>, Previous: <a href="Contents-of-Directories.html#Contents-of-Directories" accesskey="p" rel="prev">Contents of Directories</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p><code>mkdir</code> is an alias for this.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-copy_002ddirectory" id=
+    "index-copy_002ddirectory"></a>Command:
+    <strong>copy-directory</strong> <em>dirname newname
+    &amp;optional keep-time parents copy-contents</em></dt>
 
+    <dd>
+      <p>This command copies the directory named <var>dirname</var>
+      to <var>newname</var>. If <var>newname</var> names an
+      existing directory, <var>dirname</var> will be copied to a
+      subdirectory there.</p>
 
+      <p>It always sets the file modes of the copied files to match
+      the corresponding original file.</p>
+
+      <p>The third argument <var>keep-time</var>
+      non-<code>nil</code> means to preserve the modification time
+      of the copied files. A prefix arg makes <var>keep-time</var>
+      non-<code>nil</code>.</p>
+
+      <p>The fourth argument <var>parents</var> says whether to
+      create parent directories if they don&rsquo;t exist.
+      Interactively, this happens by default.</p>
+
+      <p>The fifth argument <var>copy-contents</var>, if
+      non-<code>nil</code>, means to copy the contents of
+      <var>dirname</var> directly into <var>newname</var> if the
+      latter is an existing directory, instead of copying
+      <var>dirname</var> into it as a subdirectory.</p>
+    </dd>
+  </dl><a name="index-trash-1" id="index-trash-1"></a> <a name=
+  "index-delete_002dby_002dmoving_002dto_002dtrash-1" id=
+  "index-delete_002dby_002dmoving_002dto_002dtrash-1"></a>
+
+  <dl>
+    <dt><a name="index-delete_002ddirectory" id=
+    "index-delete_002ddirectory"></a>Command:
+    <strong>delete-directory</strong> <em>dirname &amp;optional
+    recursive trash</em></dt>
+
+    <dd>
+      <p>This command deletes the directory named
+      <var>dirname</var>. The function <code>delete-file</code>
+      does not work for files that are directories; you must use
+      <code>delete-directory</code> for them. If
+      <var>recursive</var> is <code>nil</code>, and the directory
+      contains any files, <code>delete-directory</code> signals an
+      error.</p>
+
+      <p><code>delete-directory</code> only follows symbolic links
+      at the level of parent directories.</p>
+
+      <p>If the optional argument <var>trash</var> is
+      non-<code>nil</code> and the variable
+      <code>delete-by-moving-to-trash</code> is
+      non-<code>nil</code>, this command moves the file into the
+      system Trash instead of deleting it. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Misc-File-Ops.html#Misc-File-Ops">
+      Miscellaneous File Operations</a> in <cite>The GNU Emacs
+      Manual</cite>. When called interactively, <var>trash</var> is
+      <code>t</code> if no prefix argument is given, and
+      <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Magic-File-Names.html#Magic-File-Names"
+    accesskey="n" rel="next">Magic File Names</a>, Previous:
+    <a href="Contents-of-Directories.html#Contents-of-Directories"
+    accesskey="p" rel="prev">Contents of Directories</a>, Up:
+    <a href="Files.html#Files" accesskey="u" rel="up">Files</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

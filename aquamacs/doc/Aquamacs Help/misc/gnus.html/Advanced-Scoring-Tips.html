@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,104 +14,140 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Advanced Scoring Tips</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Advanced Scoring Tips">
-<meta name="keywords" content="Gnus Manual: Advanced Scoring Tips">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Advanced-Scoring.html#Advanced-Scoring" rel="up" title="Advanced Scoring">
-<link href="Score-Decays.html#Score-Decays" rel="next" title="Score Decays">
-<link href="Advanced-Scoring-Examples.html#Advanced-Scoring-Examples" rel="prev" title="Advanced Scoring Examples">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Advanced Scoring Tips</title>
+  <meta name="description" content=
+  "Gnus Manual: Advanced Scoring Tips" />
+  <meta name="keywords" content=
+  "Gnus Manual: Advanced Scoring Tips" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Advanced-Scoring.html#Advanced-Scoring" rel="up"
+  title="Advanced Scoring" />
+  <link href="Score-Decays.html#Score-Decays" rel="next" title=
+  "Score Decays" />
+  <link href=
+  "Advanced-Scoring-Examples.html#Advanced-Scoring-Examples" rel=
+  "prev" title="Advanced Scoring Examples" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Advanced-Scoring-Tips"></a>
-<div class="header">
-<p>
-Previous: <a href="Advanced-Scoring-Examples.html#Advanced-Scoring-Examples" accesskey="p" rel="prev">Advanced Scoring Examples</a>, Up: <a href="Advanced-Scoring.html#Advanced-Scoring" accesskey="u" rel="up">Advanced Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Advanced-Scoring-Tips-1"></a>
-<h4 class="subsection">7.15.3 Advanced Scoring Tips</h4>
+<body lang="en" xml:lang="en">
+  <a name="Advanced-Scoring-Tips" id="Advanced-Scoring-Tips"></a>
 
-<p>The <code>&amp;</code> and <code>|</code> logical operators do short-circuit logic.
-That is, they stop processing their arguments when it&rsquo;s clear what the
-result of the operation will be.  For instance, if one of the arguments
-of an <code>&amp;</code> evaluates to <code>false</code>, there&rsquo;s no point in evaluating
-the rest of the arguments.  This means that you should put slow matches
-(&lsquo;<samp>body</samp>&rsquo;, &lsquo;<samp>header</samp>&rsquo;) last and quick matches (&lsquo;<samp>from</samp>&rsquo;,
-&lsquo;<samp>subject</samp>&rsquo;) first.
-</p>
-<p>The indirection arguments (<code>1-</code> and so on) will make their
-arguments work on previous generations of the thread.  If you say
-something like:
-</p>
-<div class="example">
-<pre class="example">...
+  <div class="header">
+    <p>Previous: <a href=
+    "Advanced-Scoring-Examples.html#Advanced-Scoring-Examples"
+    accesskey="p" rel="prev">Advanced Scoring Examples</a>, Up:
+    <a href="Advanced-Scoring.html#Advanced-Scoring" accesskey="u"
+    rel="up">Advanced Scoring</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Advanced-Scoring-Tips-1" id=
+  "Advanced-Scoring-Tips-1"></a>
+
+  <h4 class="subsection">7.15.3 Advanced Scoring Tips</h4>
+
+  <p>The <code>&amp;</code> and <code>|</code> logical operators do
+  short-circuit logic. That is, they stop processing their
+  arguments when it&rsquo;s clear what the result of the operation
+  will be. For instance, if one of the arguments of an
+  <code>&amp;</code> evaluates to <code>false</code>, there&rsquo;s
+  no point in evaluating the rest of the arguments. This means that
+  you should put slow matches (&lsquo;<samp>body</samp>&rsquo;,
+  &lsquo;<samp>header</samp>&rsquo;) last and quick matches
+  (&lsquo;<samp>from</samp>&rsquo;,
+  &lsquo;<samp>subject</samp>&rsquo;) first.</p>
+
+  <p>The indirection arguments (<code>1-</code> and so on) will
+  make their arguments work on previous generations of the thread.
+  If you say something like:</p>
+
+  <div class="example">
+    <pre class="example">
+...
 (1-
  (1-
-  (&quot;from&quot; &quot;lars&quot;)))
+  ("from" "lars")))
 ...
-</pre></div>
+</pre>
+  </div>
 
-<p>Then that means &ldquo;score on the from header of the grandparent of the
-current article&rdquo;.  An indirection is quite fast, but it&rsquo;s better to say:
-</p>
-<div class="example">
-<pre class="example">(1-
+  <p>Then that means &ldquo;score on the from header of the
+  grandparent of the current article&rdquo;. An indirection is
+  quite fast, but it&rsquo;s better to say:</p>
+
+  <div class="example">
+    <pre class="example">
+(1-
  (&amp;
-  (&quot;from&quot; &quot;Lars&quot;)
-  (&quot;subject&quot; &quot;Gnus&quot;)))
-</pre></div>
+  ("from" "Lars")
+  ("subject" "Gnus")))
+</pre>
+  </div>
 
-<p>than it is to say:
-</p>
-<div class="example">
-<pre class="example">(&amp;
- (1- (&quot;from&quot; &quot;Lars&quot;))
- (1- (&quot;subject&quot; &quot;Gnus&quot;)))
-</pre></div>
+  <p>than it is to say:</p>
 
-
-
-
-
+  <div class="example">
+    <pre class="example">
+(&amp;
+ (1- ("from" "Lars"))
+ (1- ("subject" "Gnus")))
+</pre>
+  </div>
 </body>
 </html>

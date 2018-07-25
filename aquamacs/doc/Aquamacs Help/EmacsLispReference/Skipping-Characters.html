@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,130 +19,191 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Skipping Characters</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Skipping Characters">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Skipping Characters">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Motion.html#Motion" rel="up" title="Motion">
-<link href="Excursions.html#Excursions" rel="next" title="Excursions">
-<link href="List-Motion.html#List-Motion" rel="prev" title="List Motion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Skipping
+  Characters</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Skipping Characters" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Skipping Characters" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Motion.html#Motion" rel="up" title="Motion" />
+  <link href="Excursions.html#Excursions" rel="next" title=
+  "Excursions" />
+  <link href="List-Motion.html#List-Motion" rel="prev" title=
+  "List Motion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Skipping-Characters" id="Skipping-Characters"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="List-Motion.html#List-Motion" accesskey=
+    "p" rel="prev">List Motion</a>, Up: <a href=
+    "Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Skipping-Characters-1" id="Skipping-Characters-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Skipping-Characters"></a>
-<div class="header">
-<p>
-Previous: <a href="List-Motion.html#List-Motion" accesskey="p" rel="prev">List Motion</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Skipping-Characters-1"></a>
-<h4 class="subsection">29.2.7 Skipping Characters</h4>
-<a name="index-skipping-characters"></a>
+  <h4 class="subsection">29.2.7 Skipping Characters</h4><a name=
+  "index-skipping-characters" id="index-skipping-characters"></a>
 
-<p>The following two functions move point over a specified set of
-characters.  For example, they are often used to skip whitespace.  For
-related functions, see <a href="Motion-and-Syntax.html#Motion-and-Syntax">Motion and Syntax</a>.
-</p>
-<p>These functions convert the set string to multibyte if the buffer is
-multibyte, and they convert it to unibyte if the buffer is unibyte, as
-the search functions do (see <a href="Searching-and-Matching.html#Searching-and-Matching">Searching and Matching</a>).
-</p>
-<dl>
-<dt><a name="index-skip_002dchars_002dforward"></a>Function: <strong>skip-chars-forward</strong> <em>character-set &amp;optional limit</em></dt>
-<dd><p>This function moves point in the current buffer forward, skipping over a
-given set of characters.  It examines the character following point,
-then advances point if the character matches <var>character-set</var>.  This
-continues until it reaches a character that does not match.  The
-function returns the number of characters moved over.
-</p>
-<p>The argument <var>character-set</var> is a string, like the inside of a
-&lsquo;<samp>[&hellip;]</samp>&rsquo; in a regular expression except that &lsquo;<samp>]</samp>&rsquo; does not
-terminate it, and &lsquo;<samp>\</samp>&rsquo; quotes &lsquo;<samp>^</samp>&rsquo;, &lsquo;<samp>-</samp>&rsquo; or &lsquo;<samp>\</samp>&rsquo;.
-Thus, <code>&quot;a-zA-Z&quot;</code> skips over all letters, stopping before the
-first nonletter, and <code>&quot;^a-zA-Z&quot;</code> skips nonletters stopping before
-the first letter.  See See <a href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>.  Character classes
-can also be used, e.g., <code>&quot;[:alnum:]&quot;</code>.  See see <a href="Char-Classes.html#Char-Classes">Char Classes</a>.
-</p>
-<p>If <var>limit</var> is supplied (it must be a number or a marker), it
-specifies the maximum position in the buffer that point can be skipped
-to.  Point will stop at or before <var>limit</var>.
-</p>
-<p>In the following example, point is initially located directly before the
-&lsquo;<samp>T</samp>&rsquo;.  After the form is evaluated, point is located at the end of
-that line (between the &lsquo;<samp>t</samp>&rsquo; of &lsquo;<samp>hat</samp>&rsquo; and the newline).  The
-function skips all letters and spaces, but not newlines.
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
-I read &quot;&lowast;The cat in the hat
-comes back&quot; twice.
+  <p>The following two functions move point over a specified set of
+  characters. For example, they are often used to skip whitespace.
+  For related functions, see <a href=
+  "Motion-and-Syntax.html#Motion-and-Syntax">Motion and
+  Syntax</a>.</p>
+
+  <p>These functions convert the set string to multibyte if the
+  buffer is multibyte, and they convert it to unibyte if the buffer
+  is unibyte, as the search functions do (see <a href=
+  "Searching-and-Matching.html#Searching-and-Matching">Searching
+  and Matching</a>).</p>
+
+  <dl>
+    <dt><a name="index-skip_002dchars_002dforward" id=
+    "index-skip_002dchars_002dforward"></a>Function:
+    <strong>skip-chars-forward</strong> <em>character-set
+    &amp;optional limit</em></dt>
+
+    <dd>
+      <p>This function moves point in the current buffer forward,
+      skipping over a given set of characters. It examines the
+      character following point, then advances point if the
+      character matches <var>character-set</var>. This continues
+      until it reaches a character that does not match. The
+      function returns the number of characters moved over.</p>
+
+      <p>The argument <var>character-set</var> is a string, like
+      the inside of a &lsquo;<samp>[&hellip;]</samp>&rsquo; in a
+      regular expression except that &lsquo;<samp>]</samp>&rsquo;
+      does not terminate it, and &lsquo;<samp>\</samp>&rsquo;
+      quotes &lsquo;<samp>^</samp>&rsquo;,
+      &lsquo;<samp>-</samp>&rsquo; or &lsquo;<samp>\</samp>&rsquo;.
+      Thus, <code>"a-zA-Z"</code> skips over all letters, stopping
+      before the first nonletter, and <code>"^a-zA-Z"</code> skips
+      nonletters stopping before the first letter. See See <a href=
+      "Regular-Expressions.html#Regular-Expressions">Regular
+      Expressions</a>. Character classes can also be used, e.g.,
+      <code>"[:alnum:]"</code>. See see <a href=
+      "Char-Classes.html#Char-Classes">Char Classes</a>.</p>
+
+      <p>If <var>limit</var> is supplied (it must be a number or a
+      marker), it specifies the maximum position in the buffer that
+      point can be skipped to. Point will stop at or before
+      <var>limit</var>.</p>
+
+      <p>In the following example, point is initially located
+      directly before the &lsquo;<samp>T</samp>&rsquo;. After the
+      form is evaluated, point is located at the end of that line
+      (between the &lsquo;<samp>t</samp>&rsquo; of
+      &lsquo;<samp>hat</samp>&rsquo; and the newline). The function
+      skips all letters and spaces, but not newlines.</p>
+
+      <div class="example">
+        <pre class="example">
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(skip-chars-forward &quot;a-zA-Z &quot;)
+I read "&lowast;The cat in the hat
+comes back" twice.
+---------- Buffer: foo ----------
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(skip-chars-forward "a-zA-Z ")
      &rArr; 18
 
 ---------- Buffer: foo ----------
-I read &quot;The cat in the hat&lowast;
-comes back&quot; twice.
+I read "The cat in the hat&lowast;
+comes back" twice.
 ---------- Buffer: foo ----------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-skip_002dchars_002dbackward"></a>Function: <strong>skip-chars-backward</strong> <em>character-set &amp;optional limit</em></dt>
-<dd><p>This function moves point backward, skipping characters that match
-<var>character-set</var>, until <var>limit</var>.  It is just like
-<code>skip-chars-forward</code> except for the direction of motion.
-</p>
-<p>The return value indicates the distance traveled.  It is an integer that
-is zero or less.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-skip_002dchars_002dbackward" id=
+    "index-skip_002dchars_002dbackward"></a>Function:
+    <strong>skip-chars-backward</strong> <em>character-set
+    &amp;optional limit</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="List-Motion.html#List-Motion" accesskey="p" rel="prev">List Motion</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function moves point backward, skipping characters
+      that match <var>character-set</var>, until <var>limit</var>.
+      It is just like <code>skip-chars-forward</code> except for
+      the direction of motion.</p>
 
+      <p>The return value indicates the distance traveled. It is an
+      integer that is zero or less.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
+  <div class="header">
+    <p>Previous: <a href="List-Motion.html#List-Motion" accesskey=
+    "p" rel="prev">List Motion</a>, Up: <a href=
+    "Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

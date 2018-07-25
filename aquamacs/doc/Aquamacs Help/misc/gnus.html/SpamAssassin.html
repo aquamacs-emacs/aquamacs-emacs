@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,150 +14,205 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: SpamAssassin</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: SpamAssassin">
-<meta name="keywords" content="Gnus Manual: SpamAssassin">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" rel="up" title="Thwarting Email Spam">
-<link href="Hashcash.html#Hashcash" rel="next" title="Hashcash">
-<link href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" rel="prev" title="Anti-Spam Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: SpamAssassin</title>
+  <meta name="description" content="Gnus Manual: SpamAssassin" />
+  <meta name="keywords" content="Gnus Manual: SpamAssassin" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" rel=
+  "up" title="Thwarting Email Spam" />
+  <link href="Hashcash.html#Hashcash" rel="next" title=
+  "Hashcash" />
+  <link href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" rel=
+  "prev" title="Anti-Spam Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="SpamAssassin"></a>
-<div class="header">
-<p>
-Next: <a href="Hashcash.html#Hashcash" accesskey="n" rel="next">Hashcash</a>, Previous: <a href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" accesskey="p" rel="prev">Anti-Spam Basics</a>, Up: <a href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u" rel="up">Thwarting Email Spam</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="SpamAssassin_002c-Vipul_0027s-Razor_002c-DCC_002c-etc"></a>
-<h4 class="subsection">9.16.3 SpamAssassin, Vipul&rsquo;s Razor, DCC, etc</h4>
-<a name="index-SpamAssassin"></a>
-<a name="index-Vipul_0027s-Razor"></a>
-<a name="index-DCC"></a>
+<body lang="en" xml:lang="en">
+  <a name="SpamAssassin" id="SpamAssassin"></a>
 
-<p>The days where the hints in the previous section were sufficient in
-avoiding spam are coming to an end.  There are many tools out there
-that claim to reduce the amount of spam you get.  This section could
-easily become outdated fast, as new products replace old, but
-fortunately most of these tools seem to have similar interfaces.  Even
-though this section will use SpamAssassin as an example, it should be
-easy to adapt it to most other tools.
-</p>
-<p>Note that this section does not involve the <code>spam.el</code> package,
-which is discussed in the next section.  If you don&rsquo;t care for all
-the features of <code>spam.el</code>, you can make do with these simple
-recipes.
-</p>
-<p>If the tool you are using is not installed on the mail server, you
-need to invoke it yourself.  Ideas on how to use the
-<code>:postscript</code> mail source parameter (see <a href="Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail Source Specifiers</a>) follow.
-</p>
-<div class="lisp">
-<pre class="lisp">(setq mail-sources
-      '((file :prescript &quot;formail -bs spamassassin &lt; /var/mail/%u&quot;)
-        (pop :user &quot;jrl&quot;
-             :server &quot;pophost&quot;
+  <div class="header">
+    <p>Next: <a href="Hashcash.html#Hashcash" accesskey="n" rel=
+    "next">Hashcash</a>, Previous: <a href=
+    "Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" accesskey="p"
+    rel="prev">Anti-Spam Basics</a>, Up: <a href=
+    "Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u"
+    rel="up">Thwarting Email Spam</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="SpamAssassin_002c-Vipul_0027s-Razor_002c-DCC_002c-etc"
+  id="SpamAssassin_002c-Vipul_0027s-Razor_002c-DCC_002c-etc"></a>
+
+  <h4 class="subsection">9.16.3 SpamAssassin, Vipul&rsquo;s Razor,
+  DCC, etc</h4><a name="index-SpamAssassin" id=
+  "index-SpamAssassin"></a> <a name="index-Vipul_0027s-Razor" id=
+  "index-Vipul_0027s-Razor"></a> <a name="index-DCC" id=
+  "index-DCC"></a>
+
+  <p>The days where the hints in the previous section were
+  sufficient in avoiding spam are coming to an end. There are many
+  tools out there that claim to reduce the amount of spam you get.
+  This section could easily become outdated fast, as new products
+  replace old, but fortunately most of these tools seem to have
+  similar interfaces. Even though this section will use
+  SpamAssassin as an example, it should be easy to adapt it to most
+  other tools.</p>
+
+  <p>Note that this section does not involve the
+  <code>spam.el</code> package, which is discussed in the next
+  section. If you don&rsquo;t care for all the features of
+  <code>spam.el</code>, you can make do with these simple
+  recipes.</p>
+
+  <p>If the tool you are using is not installed on the mail server,
+  you need to invoke it yourself. Ideas on how to use the
+  <code>:postscript</code> mail source parameter (see <a href=
+  "Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail Source
+  Specifiers</a>) follow.</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq mail-sources
+      '((file :prescript "formail -bs spamassassin &lt; /var/mail/%u")
+        (pop :user "jrl"
+             :server "pophost"
              :postscript
-             &quot;mv %t /tmp/foo; formail -bs spamc &lt; /tmp/foo &gt; %t&quot;)))
-</pre></div>
+             "mv %t /tmp/foo; formail -bs spamc &lt; /tmp/foo &gt; %t")))
+</pre>
+  </div>
 
-<p>Once you manage to process your incoming spool somehow, thus making
-the mail contain, e.g., a header indicating it is spam, you are ready to
-filter it out.  Using normal split methods (see <a href="Splitting-Mail.html#Splitting-Mail">Splitting Mail</a>):
-</p>
-<div class="lisp">
-<pre class="lisp">(setq nnmail-split-methods '((&quot;spam&quot;  &quot;^X-Spam-Flag: YES&quot;)
+  <p>Once you manage to process your incoming spool somehow, thus
+  making the mail contain, e.g., a header indicating it is spam,
+  you are ready to filter it out. Using normal split methods (see
+  <a href="Splitting-Mail.html#Splitting-Mail">Splitting
+  Mail</a>):</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq nnmail-split-methods '(("spam"  "^X-Spam-Flag: YES")
                              ...))
-</pre></div>
+</pre>
+  </div>
 
-<p>Or using fancy split methods (see <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>):
-</p>
-<div class="lisp">
-<pre class="lisp">(setq nnmail-split-methods 'nnmail-split-fancy
-      nnmail-split-fancy '(| (&quot;X-Spam-Flag&quot; &quot;YES&quot; &quot;spam&quot;)
+  <p>Or using fancy split methods (see <a href=
+  "Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail
+  Splitting</a>):</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq nnmail-split-methods 'nnmail-split-fancy
+      nnmail-split-fancy '(| ("X-Spam-Flag" "YES" "spam")
                              ...))
-</pre></div>
+</pre>
+  </div>
 
-<p>Some people might not like the idea of piping the mail through various
-programs using a <code>:prescript</code> (if some program is buggy, you
-might lose all mail).  If you are one of them, another solution is to
-call the external tools during splitting.  Example fancy split method:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq nnmail-split-fancy '(| (: kevin-spamassassin)
+  <p>Some people might not like the idea of piping the mail through
+  various programs using a <code>:prescript</code> (if some program
+  is buggy, you might lose all mail). If you are one of them,
+  another solution is to call the external tools during splitting.
+  Example fancy split method:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq nnmail-split-fancy '(| (: kevin-spamassassin)
                              ...))
 (defun kevin-spamassassin ()
   (save-excursion
     (save-restriction
       (widen)
       (if (eq 1 (call-process-region (point-min) (point-max)
-                                     &quot;spamc&quot; nil nil nil &quot;-c&quot;))
-          &quot;spam&quot;))))
-</pre></div>
+                                     "spamc" nil nil nil "-c"))
+          "spam"))))
+</pre>
+  </div>
 
-<p>Note that with the nnimap back end, message bodies will not be
-downloaded by default.  You need to set
-<code>nnimap-split-download-body</code> to <code>t</code> to do that
-(see <a href="Client_002dSide-IMAP-Splitting.html#Client_002dSide-IMAP-Splitting">Client-Side IMAP Splitting</a>).
-</p>
-<p>That is about it.  As some spam is likely to get through anyway, you
-might want to have a nifty function to call when you happen to read
-spam.  And here is the nifty function:
-</p>
-<div class="lisp">
-<pre class="lisp">(defun my-gnus-raze-spam ()
-  &quot;Submit SPAM to Vipul's Razor, then mark it as expirable.&quot;
+  <p>Note that with the nnimap back end, message bodies will not be
+  downloaded by default. You need to set
+  <code>nnimap-split-download-body</code> to <code>t</code> to do
+  that (see <a href=
+  "Client_002dSide-IMAP-Splitting.html#Client_002dSide-IMAP-Splitting">
+  Client-Side IMAP Splitting</a>).</p>
+
+  <p>That is about it. As some spam is likely to get through
+  anyway, you might want to have a nifty function to call when you
+  happen to read spam. And here is the nifty function:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(defun my-gnus-raze-spam ()
+  "Submit SPAM to Vipul's Razor, then mark it as expirable."
   (interactive)
-  (gnus-summary-save-in-pipe &quot;razor-report -f -d&quot; t)
+  (gnus-summary-save-in-pipe "razor-report -f -d" t)
   (gnus-summary-mark-as-expirable 1))
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Hashcash.html#Hashcash" accesskey="n" rel="next">Hashcash</a>, Previous: <a href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" accesskey="p" rel="prev">Anti-Spam Basics</a>, Up: <a href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u" rel="up">Thwarting Email Spam</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Hashcash.html#Hashcash" accesskey="n" rel=
+    "next">Hashcash</a>, Previous: <a href=
+    "Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" accesskey="p"
+    rel="prev">Anti-Spam Basics</a>, Up: <a href=
+    "Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u"
+    rel="up">Thwarting Email Spam</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

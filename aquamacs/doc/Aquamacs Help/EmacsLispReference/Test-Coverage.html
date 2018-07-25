@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,105 +19,147 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Test Coverage</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Test Coverage">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Test Coverage">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugging.html#Debugging" rel="up" title="Debugging">
-<link href="Profiling.html#Profiling" rel="next" title="Profiling">
-<link href="Excess-Close.html#Excess-Close" rel="prev" title="Excess Close">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Test Coverage</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Test Coverage" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Test Coverage" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugging.html#Debugging" rel="up" title=
+  "Debugging" />
+  <link href="Profiling.html#Profiling" rel="next" title=
+  "Profiling" />
+  <link href="Excess-Close.html#Excess-Close" rel="prev" title=
+  "Excess Close" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Test-Coverage" id="Test-Coverage"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Profiling.html#Profiling" accesskey="n" rel=
+    "next">Profiling</a>, Previous: <a href=
+    "Syntax-Errors.html#Syntax-Errors" accesskey="p" rel=
+    "prev">Syntax Errors</a>, Up: <a href=
+    "Debugging.html#Debugging" accesskey="u" rel="up">Debugging</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Test-Coverage-1" id="Test-Coverage-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Test-Coverage"></a>
-<div class="header">
-<p>
-Next: <a href="Profiling.html#Profiling" accesskey="n" rel="next">Profiling</a>, Previous: <a href="Syntax-Errors.html#Syntax-Errors" accesskey="p" rel="prev">Syntax Errors</a>, Up: <a href="Debugging.html#Debugging" accesskey="u" rel="up">Debugging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Test-Coverage-1"></a>
-<h3 class="section">17.4 Test Coverage</h3>
-<a name="index-coverage-testing"></a>
+  <h3 class="section">17.4 Test Coverage</h3><a name=
+  "index-coverage-testing" id="index-coverage-testing"></a>
+  <a name="index-testcover_002dstart" id=
+  "index-testcover_002dstart"></a> <a name=
+  "index-testcover_002dmark_002dall" id=
+  "index-testcover_002dmark_002dall"></a> <a name=
+  "index-testcover_002dnext_002dmark" id=
+  "index-testcover_002dnext_002dmark"></a>
 
-<a name="index-testcover_002dstart"></a>
-<a name="index-testcover_002dmark_002dall"></a>
-<a name="index-testcover_002dnext_002dmark"></a>
-<p>You can do coverage testing for a file of Lisp code by loading the
-<code>testcover</code> library and using the command <kbd>M-x
-testcover-start <span class="key">RET</span> <var>file</var> <span class="key">RET</span></kbd> to instrument the
-code.  Then test your code by calling it one or more times.  Then use
-the command <kbd>M-x testcover-mark-all</kbd> to display colored highlights
-on the code to show where coverage is insufficient.  The command
-<kbd>M-x testcover-next-mark</kbd> will move point forward to the next
-highlighted spot.
-</p>
-<p>Normally, a red highlight indicates the form was never completely
-evaluated; a brown highlight means it always evaluated to the same
-value (meaning there has been little testing of what is done with the
-result).  However, the red highlight is skipped for forms that can&rsquo;t
-possibly complete their evaluation, such as <code>error</code>.  The brown
-highlight is skipped for forms that are expected to always evaluate to
-the same value, such as <code>(setq x 14)</code>.
-</p>
-<p>For difficult cases, you can add do-nothing macros to your code to
-give advice to the test coverage tool.
-</p>
-<dl>
-<dt><a name="index-1value"></a>Macro: <strong>1value</strong> <em>form</em></dt>
-<dd><p>Evaluate <var>form</var> and return its value, but inform coverage testing
-that <var>form</var>&rsquo;s value should always be the same.
-</p></dd></dl>
+  <p>You can do coverage testing for a file of Lisp code by loading
+  the <code>testcover</code> library and using the command <kbd>M-x
+  testcover-start <span class="key">RET</span> <var>file</var>
+  <span class="key">RET</span></kbd> to instrument the code. Then
+  test your code by calling it one or more times. Then use the
+  command <kbd>M-x testcover-mark-all</kbd> to display colored
+  highlights on the code to show where coverage is insufficient.
+  The command <kbd>M-x testcover-next-mark</kbd> will move point
+  forward to the next highlighted spot.</p>
 
-<dl>
-<dt><a name="index-noreturn"></a>Macro: <strong>noreturn</strong> <em>form</em></dt>
-<dd><p>Evaluate <var>form</var>, informing coverage testing that <var>form</var> should
-never return.  If it ever does return, you get a run-time error.
-</p></dd></dl>
+  <p>Normally, a red highlight indicates the form was never
+  completely evaluated; a brown highlight means it always evaluated
+  to the same value (meaning there has been little testing of what
+  is done with the result). However, the red highlight is skipped
+  for forms that can&rsquo;t possibly complete their evaluation,
+  such as <code>error</code>. The brown highlight is skipped for
+  forms that are expected to always evaluate to the same value,
+  such as <code>(setq x 14)</code>.</p>
 
-<p>Edebug also has a coverage testing feature (see <a href="Coverage-Testing.html#Coverage-Testing">Coverage Testing</a>).  These features partly duplicate each other, and it would
-be cleaner to combine them.
-</p>
+  <p>For difficult cases, you can add do-nothing macros to your
+  code to give advice to the test coverage tool.</p>
 
+  <dl>
+    <dt><a name="index-1value" id="index-1value"></a>Macro:
+    <strong>1value</strong> <em>form</em></dt>
 
+    <dd>
+      <p>Evaluate <var>form</var> and return its value, but inform
+      coverage testing that <var>form</var>&rsquo;s value should
+      always be the same.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-noreturn" id="index-noreturn"></a>Macro:
+    <strong>noreturn</strong> <em>form</em></dt>
 
+    <dd>
+      <p>Evaluate <var>form</var>, informing coverage testing that
+      <var>form</var> should never return. If it ever does return,
+      you get a run-time error.</p>
+    </dd>
+  </dl>
+
+  <p>Edebug also has a coverage testing feature (see <a href=
+  "Coverage-Testing.html#Coverage-Testing">Coverage Testing</a>).
+  These features partly duplicate each other, and it would be
+  cleaner to combine them.</p>
 </body>
 </html>

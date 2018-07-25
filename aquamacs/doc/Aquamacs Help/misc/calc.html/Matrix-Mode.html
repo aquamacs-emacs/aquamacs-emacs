@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,138 +18,196 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Matrix Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Matrix Mode">
-<meta name="keywords" content="GNU Emacs Calc Manual: Matrix Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Calculation-Modes.html#Calculation-Modes" rel="up" title="Calculation Modes">
-<link href="Automatic-Recomputation.html#Automatic-Recomputation" rel="next" title="Automatic Recomputation">
-<link href="Symbolic-Mode.html#Symbolic-Mode" rel="prev" title="Symbolic Mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Matrix Mode</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Matrix Mode" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Matrix Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Calculation-Modes.html#Calculation-Modes" rel="up"
+  title="Calculation Modes" />
+  <link href="Automatic-Recomputation.html#Automatic-Recomputation"
+  rel="next" title="Automatic Recomputation" />
+  <link href="Symbolic-Mode.html#Symbolic-Mode" rel="prev" title=
+  "Symbolic Mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Matrix-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="Automatic-Recomputation.html#Automatic-Recomputation" accesskey="n" rel="next">Automatic Recomputation</a>, Previous: <a href="Symbolic-Mode.html#Symbolic-Mode" accesskey="p" rel="prev">Symbolic Mode</a>, Up: <a href="Calculation-Modes.html#Calculation-Modes" accesskey="u" rel="up">Calculation Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Matrix-and-Scalar-Modes"></a>
-<h4 class="subsection">6.4.6 Matrix and Scalar Modes</h4>
+<body lang="en" xml:lang="en">
+  <a name="Matrix-Mode" id="Matrix-Mode"></a>
 
-<a name="index-Matrix-mode"></a>
-<a name="index-Scalar-mode"></a>
-<p>Calc sometimes makes assumptions during algebraic manipulation that
-are awkward or incorrect when vectors and matrices are involved.
-Calc has two modes, <em>Matrix mode</em> and <em>Scalar mode</em>, which
-modify its behavior around vectors in useful ways.
-</p>
-<a name="index-m-v"></a>
-<a name="index-calc_002dmatrix_002dmode"></a>
-<p>Press <kbd>m v</kbd> (<code>calc-matrix-mode</code>) once to enter Matrix mode.
-In this mode, all objects are assumed to be matrices unless provably
-otherwise.  One major effect is that Calc will no longer consider
-multiplication to be commutative.  (Recall that in matrix arithmetic,
-&lsquo;<samp>A*B</samp>&rsquo; is not the same as &lsquo;<samp>B*A</samp>&rsquo;.)  This assumption affects
-rewrite rules and algebraic simplification.  Another effect of this
-mode is that calculations that would normally produce constants like
-0 and 1 (e.g., &lsquo;<samp>a - a</samp>&rsquo; and &lsquo;<samp>a / a</samp>&rsquo;, respectively) will now
-produce function calls that represent &ldquo;generic&rdquo; zero or identity
-matrices: &lsquo;<samp>idn(0)</samp>&rsquo;, &lsquo;<samp>idn(1)</samp>&rsquo;.  The <code>idn</code> function
-&lsquo;<samp>idn(<var>a</var>,<var>n</var>)</samp>&rsquo; returns <var>a</var> times an <var>n</var>x<var>n</var>
-identity matrix; if <var>n</var> is omitted, it doesn&rsquo;t know what
-dimension to use and so the <code>idn</code> call remains in symbolic
-form.  However, if this generic identity matrix is later combined
-with a matrix whose size is known, it will be converted into
-a true identity matrix of the appropriate size.  On the other hand,
-if it is combined with a scalar (as in &lsquo;<samp>idn(1) + 2</samp>&rsquo;), Calc
-will assume it really was a scalar after all and produce, e.g., 3.
-</p>
-<p>Press <kbd>m v</kbd> a second time to get Scalar mode.  Here, objects are
-assumed <em>not</em> to be vectors or matrices unless provably so.
-For example, normally adding a variable to a vector, as in
-&lsquo;<samp>[x, y, z] + a</samp>&rsquo;, will leave the sum in symbolic form because
-as far as Calc knows, &lsquo;<samp>a</samp>&rsquo; could represent either a number or
-another 3-vector.  In Scalar mode, &lsquo;<samp>a</samp>&rsquo; is assumed to be a
-non-vector, and the addition is evaluated to &lsquo;<samp>[x+a, y+a, z+a]</samp>&rsquo;.
-</p>
-<p>Press <kbd>m v</kbd> a third time to return to the normal mode of operation.
-</p>
-<p>If you press <kbd>m v</kbd> with a numeric prefix argument <var>n</var>, you
-get a special &ldquo;dimensioned&rdquo; Matrix mode in which matrices of
-unknown size are assumed to be <var>n</var>x<var>n</var> square matrices.
-Then, the function call &lsquo;<samp>idn(1)</samp>&rsquo; will expand into an actual
-matrix rather than representing a &ldquo;generic&rdquo; matrix.  Simply typing
-<kbd>C-u m v</kbd> will get you a square Matrix mode, in which matrices of
-unknown size are assumed to be square matrices of unspecified size.
-</p>
-<a name="index-Declaring-scalar-variables"></a>
-<p>Of course these modes are approximations to the true state of
-affairs, which is probably that some quantities will be matrices
-and others will be scalars.  One solution is to &ldquo;declare&rdquo;
-certain variables or functions to be scalar-valued.
-See <a href="Declarations.html#Declarations">Declarations</a>, to see how to make declarations in Calc.
-</p>
-<p>There is nothing stopping you from declaring a variable to be
-scalar and then storing a matrix in it; however, if you do, the
-results you get from Calc may not be valid.  Suppose you let Calc
-get the result &lsquo;<samp>[x+a, y+a, z+a]</samp>&rsquo; shown above, and then stored
-&lsquo;<samp>[1, 2, 3]</samp>&rsquo; in &lsquo;<samp>a</samp>&rsquo;.  The result would not be the same as
-for &lsquo;<samp>[x, y, z] + [1, 2, 3]</samp>&rsquo;, but that&rsquo;s because you have broken
-your earlier promise to Calc that &lsquo;<samp>a</samp>&rsquo; would be scalar.
-</p>
-<p>Another way to mix scalars and matrices is to use selections
-(see <a href="Selecting-Subformulas.html#Selecting-Subformulas">Selecting Subformulas</a>).  Use Matrix mode when operating on
-your formula normally; then, to apply Scalar mode to a certain part
-of the formula without affecting the rest just select that part,
-change into Scalar mode and press <kbd>=</kbd> to resimplify the part
-under this mode, then change back to Matrix mode before deselecting.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Automatic-Recomputation.html#Automatic-Recomputation" accesskey="n" rel="next">Automatic Recomputation</a>, Previous: <a href="Symbolic-Mode.html#Symbolic-Mode" accesskey="p" rel="prev">Symbolic Mode</a>, Up: <a href="Calculation-Modes.html#Calculation-Modes" accesskey="u" rel="up">Calculation Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Automatic-Recomputation.html#Automatic-Recomputation"
+    accesskey="n" rel="next">Automatic Recomputation</a>, Previous:
+    <a href="Symbolic-Mode.html#Symbolic-Mode" accesskey="p" rel=
+    "prev">Symbolic Mode</a>, Up: <a href=
+    "Calculation-Modes.html#Calculation-Modes" accesskey="u" rel=
+    "up">Calculation Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Matrix-and-Scalar-Modes" id=
+  "Matrix-and-Scalar-Modes"></a>
 
+  <h4 class="subsection">6.4.6 Matrix and Scalar Modes</h4><a name=
+  "index-Matrix-mode" id="index-Matrix-mode"></a> <a name=
+  "index-Scalar-mode" id="index-Scalar-mode"></a>
 
+  <p>Calc sometimes makes assumptions during algebraic manipulation
+  that are awkward or incorrect when vectors and matrices are
+  involved. Calc has two modes, <em>Matrix mode</em> and <em>Scalar
+  mode</em>, which modify its behavior around vectors in useful
+  ways.</p><a name="index-m-v" id="index-m-v"></a> <a name=
+  "index-calc_002dmatrix_002dmode" id=
+  "index-calc_002dmatrix_002dmode"></a>
 
+  <p>Press <kbd>m v</kbd> (<code>calc-matrix-mode</code>) once to
+  enter Matrix mode. In this mode, all objects are assumed to be
+  matrices unless provably otherwise. One major effect is that Calc
+  will no longer consider multiplication to be commutative. (Recall
+  that in matrix arithmetic, &lsquo;<samp>A*B</samp>&rsquo; is not
+  the same as &lsquo;<samp>B*A</samp>&rsquo;.) This assumption
+  affects rewrite rules and algebraic simplification. Another
+  effect of this mode is that calculations that would normally
+  produce constants like 0 and 1 (e.g., &lsquo;<samp>a -
+  a</samp>&rsquo; and &lsquo;<samp>a / a</samp>&rsquo;,
+  respectively) will now produce function calls that represent
+  &ldquo;generic&rdquo; zero or identity matrices:
+  &lsquo;<samp>idn(0)</samp>&rsquo;,
+  &lsquo;<samp>idn(1)</samp>&rsquo;. The <code>idn</code> function
+  &lsquo;<samp>idn(<var>a</var>,<var>n</var>)</samp>&rsquo; returns
+  <var>a</var> times an <var>n</var>x<var>n</var> identity matrix;
+  if <var>n</var> is omitted, it doesn&rsquo;t know what dimension
+  to use and so the <code>idn</code> call remains in symbolic form.
+  However, if this generic identity matrix is later combined with a
+  matrix whose size is known, it will be converted into a true
+  identity matrix of the appropriate size. On the other hand, if it
+  is combined with a scalar (as in &lsquo;<samp>idn(1) +
+  2</samp>&rsquo;), Calc will assume it really was a scalar after
+  all and produce, e.g., 3.</p>
+
+  <p>Press <kbd>m v</kbd> a second time to get Scalar mode. Here,
+  objects are assumed <em>not</em> to be vectors or matrices unless
+  provably so. For example, normally adding a variable to a vector,
+  as in &lsquo;<samp>[x, y, z] + a</samp>&rsquo;, will leave the
+  sum in symbolic form because as far as Calc knows,
+  &lsquo;<samp>a</samp>&rsquo; could represent either a number or
+  another 3-vector. In Scalar mode, &lsquo;<samp>a</samp>&rsquo; is
+  assumed to be a non-vector, and the addition is evaluated to
+  &lsquo;<samp>[x+a, y+a, z+a]</samp>&rsquo;.</p>
+
+  <p>Press <kbd>m v</kbd> a third time to return to the normal mode
+  of operation.</p>
+
+  <p>If you press <kbd>m v</kbd> with a numeric prefix argument
+  <var>n</var>, you get a special &ldquo;dimensioned&rdquo; Matrix
+  mode in which matrices of unknown size are assumed to be
+  <var>n</var>x<var>n</var> square matrices. Then, the function
+  call &lsquo;<samp>idn(1)</samp>&rsquo; will expand into an actual
+  matrix rather than representing a &ldquo;generic&rdquo; matrix.
+  Simply typing <kbd>C-u m v</kbd> will get you a square Matrix
+  mode, in which matrices of unknown size are assumed to be square
+  matrices of unspecified size.</p><a name=
+  "index-Declaring-scalar-variables" id=
+  "index-Declaring-scalar-variables"></a>
+
+  <p>Of course these modes are approximations to the true state of
+  affairs, which is probably that some quantities will be matrices
+  and others will be scalars. One solution is to
+  &ldquo;declare&rdquo; certain variables or functions to be
+  scalar-valued. See <a href=
+  "Declarations.html#Declarations">Declarations</a>, to see how to
+  make declarations in Calc.</p>
+
+  <p>There is nothing stopping you from declaring a variable to be
+  scalar and then storing a matrix in it; however, if you do, the
+  results you get from Calc may not be valid. Suppose you let Calc
+  get the result &lsquo;<samp>[x+a, y+a, z+a]</samp>&rsquo; shown
+  above, and then stored &lsquo;<samp>[1, 2, 3]</samp>&rsquo; in
+  &lsquo;<samp>a</samp>&rsquo;. The result would not be the same as
+  for &lsquo;<samp>[x, y, z] + [1, 2, 3]</samp>&rsquo;, but
+  that&rsquo;s because you have broken your earlier promise to Calc
+  that &lsquo;<samp>a</samp>&rsquo; would be scalar.</p>
+
+  <p>Another way to mix scalars and matrices is to use selections
+  (see <a href=
+  "Selecting-Subformulas.html#Selecting-Subformulas">Selecting
+  Subformulas</a>). Use Matrix mode when operating on your formula
+  normally; then, to apply Scalar mode to a certain part of the
+  formula without affecting the rest just select that part, change
+  into Scalar mode and press <kbd>=</kbd> to resimplify the part
+  under this mode, then change back to Matrix mode before
+  deselecting.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Automatic-Recomputation.html#Automatic-Recomputation"
+    accesskey="n" rel="next">Automatic Recomputation</a>, Previous:
+    <a href="Symbolic-Mode.html#Symbolic-Mode" accesskey="p" rel=
+    "prev">Symbolic Mode</a>, Up: <a href=
+    "Calculation-Modes.html#Calculation-Modes" accesskey="u" rel=
+    "up">Calculation Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

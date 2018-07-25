@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,263 +18,443 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Options - Creating Citations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Options - Creating Citations">
-<meta name="keywords" content="RefTeX User Manual: Options - Creating Citations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Options.html#Options" rel="up" title="Options">
-<link href="Options-_002d-Index-Support.html#Options-_002d-Index-Support" rel="next" title="Options - Index Support">
-<link href="Options-_002d-Referencing-Labels.html#Options-_002d-Referencing-Labels" rel="prev" title="Options - Referencing Labels">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Options - Creating Citations</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Options - Creating Citations" />
+  <meta name="keywords" content=
+  "RefTeX User Manual: Options - Creating Citations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Options.html#Options" rel="up" title="Options" />
+  <link href=
+  "Options-_002d-Index-Support.html#Options-_002d-Index-Support"
+  rel="next" title="Options - Index Support" />
+  <link href=
+  "Options-_002d-Referencing-Labels.html#Options-_002d-Referencing-Labels"
+  rel="prev" title="Options - Referencing Labels" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Options-_002d-Creating-Citations"></a>
-<div class="header">
-<p>
-Next: <a href="Options-_002d-Index-Support.html#Options-_002d-Index-Support" accesskey="n" rel="next">Options - Index Support</a>, Previous: <a href="Options-_002d-Referencing-Labels.html#Options-_002d-Referencing-Labels" accesskey="p" rel="prev">Options - Referencing Labels</a>, Up: <a href="Options.html#Options" accesskey="u" rel="up">Options</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-Citations-2"></a>
-<h3 class="section">18.5 Creating Citations</h3>
-<a name="index-Options_002c-creating-citations"></a>
-<a name="index-Creating-citations_002c-options"></a>
+<body lang="en" xml:lang="en">
+  <a name="Options-_002d-Creating-Citations" id=
+  "Options-_002d-Creating-Citations"></a>
 
-<dl>
-<dt><a name="index-reftex_002dbibliography_002dcommands"></a>User Option: <strong>reftex-bibliography-commands</strong></dt>
-<dd><p>LaTeX commands which specify the BibTeX databases to use with the document.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Options-_002d-Index-Support.html#Options-_002d-Index-Support"
+    accesskey="n" rel="next">Options - Index Support</a>, Previous:
+    <a href=
+    "Options-_002d-Referencing-Labels.html#Options-_002d-Referencing-Labels"
+    accesskey="p" rel="prev">Options - Referencing Labels</a>, Up:
+    <a href="Options.html#Options" accesskey="u" rel=
+    "up">Options</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-Citations-2" id="Creating-Citations-2"></a>
 
-<dl>
-<dt><a name="index-reftex_002dbibfile_002dignore_002dregexps"></a>User Option: <strong>reftex-bibfile-ignore-regexps</strong></dt>
-<dd><p>List of regular expressions to exclude files in
-<code>\\bibliography{..}</code>.  File names matched by any of these regexps
-will not be parsed.  Intended for files which contain only
-<code>@string</code> macro definitions and the like, which are ignored by
-RefTeX anyway.
-</p></dd></dl>
+  <h3 class="section">18.5 Creating Citations</h3><a name=
+  "index-Options_002c-creating-citations" id=
+  "index-Options_002c-creating-citations"></a> <a name=
+  "index-Creating-citations_002c-options" id=
+  "index-Creating-citations_002c-options"></a>
 
-<dl>
-<dt><a name="index-reftex_002ddefault_002dbibliography-1"></a>User Option: <strong>reftex-default-bibliography</strong></dt>
-<dd><p>List of BibTeX database files which should be used if none are specified.
-When <code>reftex-citation</code> is called from a document with neither
-a &lsquo;<samp>\bibliography{...}</samp>&rsquo; statement nor a <code>thebibliography</code>
-environment, RefTeX will scan these files instead.  Intended for
-using <code>reftex-citation</code> in non-LaTeX files.  The files will be
-searched along the BIBINPUTS or TEXBIB path.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-reftex_002dbibliography_002dcommands" id=
+    "index-reftex_002dbibliography_002dcommands"></a>User Option:
+    <strong>reftex-bibliography-commands</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dsort_002dbibtex_002dmatches"></a>User Option: <strong>reftex-sort-bibtex-matches</strong></dt>
-<dd><p>Sorting of the entries found in BibTeX databases by reftex-citation.
-Possible values:
-</p><div class="example">
-<pre class="example">nil          <span class="roman">Do not sort entries.</span>
-author       <span class="roman">Sort entries by author name.</span>
-year         <span class="roman">Sort entries by increasing year.</span>
-reverse-year <span class="roman">Sort entries by decreasing year.</span>
-</pre></div>
-</dd></dl>
+    <dd>
+      <p>LaTeX commands which specify the BibTeX databases to use
+      with the document.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dcite_002dformat-1"></a>User Option: <strong>reftex-cite-format</strong></dt>
-<dd><p>The format of citations to be inserted into the buffer.  It can be a
-string, an alist or a symbol.  In the simplest case this is just the string
-&lsquo;<samp>\cite{%l}</samp>&rsquo;, which is also the default.  See the definition of
-<code>reftex-cite-format-builtin</code> for more complex examples.
-</p>
-<p>If <code>reftex-cite-format</code> is a string, it will be used as the format.
-In the format, the following percent escapes will be expanded.
-</p>
-<dl compact="compact">
-<dt><code>%l</code></dt>
-<dd><p>The BibTeX label of the citation.
-</p></dd>
-<dt><code>%a</code></dt>
-<dd><p>List of author names, see also <code>reftex-cite-punctuation</code>.
-</p></dd>
-<dt><code>%2a</code></dt>
-<dd><p>Like %a, but abbreviate more than 2 authors like Jones et al.
-</p></dd>
-<dt><code>%A</code></dt>
-<dd><p>First author name only.
-</p></dd>
-<dt><code>%e</code></dt>
-<dd><p>Works like &lsquo;<samp>%a</samp>&rsquo;, but on list of editor names. (&lsquo;<samp>%2e</samp>&rsquo; and
-&lsquo;<samp>%E</samp>&rsquo; work a well).
-</p></dd>
-</dl>
+  <dl>
+    <dt><a name="index-reftex_002dbibfile_002dignore_002dregexps"
+    id="index-reftex_002dbibfile_002dignore_002dregexps"></a>User
+    Option: <strong>reftex-bibfile-ignore-regexps</strong></dt>
 
-<p>It is also possible to access all other BibTeX database fields:
-</p>
-<div class="example">
-<pre class="example">%b booktitle     %c chapter        %d edition    %h howpublished
+    <dd>
+      <p>List of regular expressions to exclude files in
+      <code>\\bibliography{..}</code>. File names matched by any of
+      these regexps will not be parsed. Intended for files which
+      contain only <code>@string</code> macro definitions and the
+      like, which are ignored by RefTeX anyway.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002ddefault_002dbibliography-1" id=
+    "index-reftex_002ddefault_002dbibliography-1"></a>User Option:
+    <strong>reftex-default-bibliography</strong></dt>
+
+    <dd>
+      <p>List of BibTeX database files which should be used if none
+      are specified. When <code>reftex-citation</code> is called
+      from a document with neither a
+      &lsquo;<samp>\bibliography{...}</samp>&rsquo; statement nor a
+      <code>thebibliography</code> environment, RefTeX will scan
+      these files instead. Intended for using
+      <code>reftex-citation</code> in non-LaTeX files. The files
+      will be searched along the BIBINPUTS or TEXBIB path.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dsort_002dbibtex_002dmatches" id=
+    "index-reftex_002dsort_002dbibtex_002dmatches"></a>User Option:
+    <strong>reftex-sort-bibtex-matches</strong></dt>
+
+    <dd>
+      <p>Sorting of the entries found in BibTeX databases by
+      reftex-citation. Possible values:</p>
+
+      <div class="example">
+        <pre class="example">
+nil          <span class="roman">Do not sort entries.</span>
+author       <span class=
+"roman">Sort entries by author name.</span>
+year         <span class=
+"roman">Sort entries by increasing year.</span>
+reverse-year <span class=
+"roman">Sort entries by decreasing year.</span>
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dcite_002dformat-1" id=
+    "index-reftex_002dcite_002dformat-1"></a>User Option:
+    <strong>reftex-cite-format</strong></dt>
+
+    <dd>
+      <p>The format of citations to be inserted into the buffer. It
+      can be a string, an alist or a symbol. In the simplest case
+      this is just the string &lsquo;<samp>\cite{%l}</samp>&rsquo;,
+      which is also the default. See the definition of
+      <code>reftex-cite-format-builtin</code> for more complex
+      examples.</p>
+
+      <p>If <code>reftex-cite-format</code> is a string, it will be
+      used as the format. In the format, the following percent
+      escapes will be expanded.</p>
+
+      <dl compact="compact">
+        <dt><code>%l</code></dt>
+
+        <dd>
+          <p>The BibTeX label of the citation.</p>
+        </dd>
+
+        <dt><code>%a</code></dt>
+
+        <dd>
+          <p>List of author names, see also
+          <code>reftex-cite-punctuation</code>.</p>
+        </dd>
+
+        <dt><code>%2a</code></dt>
+
+        <dd>
+          <p>Like %a, but abbreviate more than 2 authors like Jones
+          et al.</p>
+        </dd>
+
+        <dt><code>%A</code></dt>
+
+        <dd>
+          <p>First author name only.</p>
+        </dd>
+
+        <dt><code>%e</code></dt>
+
+        <dd>
+          <p>Works like &lsquo;<samp>%a</samp>&rsquo;, but on list
+          of editor names. (&lsquo;<samp>%2e</samp>&rsquo; and
+          &lsquo;<samp>%E</samp>&rsquo; work a well).</p>
+        </dd>
+      </dl>
+
+      <p>It is also possible to access all other BibTeX database
+      fields:</p>
+
+      <div class="example">
+        <pre class="example">
+%b booktitle     %c chapter        %d edition    %h howpublished
 %i institution   %j journal        %k key        %m month
 %n number        %o organization   %p pages      %P first page
 %r address       %s school         %u publisher  %t title
 %v volume        %y year
 %B booktitle, abbreviated          %T title, abbreviated
-</pre></div>
+</pre>
+      </div>
 
-<p>Usually, only &lsquo;<samp>%l</samp>&rsquo; is needed.  The other stuff is mainly for the
-echo area display, and for <code>(setq reftex-comment-citations t)</code>.
-</p>
-<p>&lsquo;<samp>%&lt;</samp>&rsquo; as a special operator kills punctuation and space around it
-after the string has been formatted.
-</p>
-<p>A pair of square brackets indicates an optional argument, and RefTeX
-will prompt for the values of these arguments.
-</p>
-<p>Beware that all this only works with BibTeX database files.  When
-citations are made from the <code>\bibitems</code> in an explicit
-<code>thebibliography</code> environment, only &lsquo;<samp>%l</samp>&rsquo; is available.
-</p>
-<p>If <code>reftex-cite-format</code> is an alist of characters and strings, the
-user will be prompted for a character to select one of the possible
-format strings.
-</p>
-<p>In order to configure this variable, you can either set
-<code>reftex-cite-format</code> directly yourself or set it to the
-<em>symbol</em> of one of the predefined styles.  The predefined symbols
-are those which have an association in the constant
-<code>reftex-cite-format-builtin</code>)  E.g.: <code>(setq reftex-cite-format
-'natbib)</code>.
-</p></dd></dl>
+      <p>Usually, only &lsquo;<samp>%l</samp>&rsquo; is needed. The
+      other stuff is mainly for the echo area display, and for
+      <code>(setq reftex-comment-citations t)</code>.</p>
 
-<dl>
-<dt><a name="index-reftex_002dformat_002dcite_002dfunction"></a>Hook: <strong>reftex-format-cite-function</strong></dt>
-<dd><p>If non-<code>nil</code>, should be a function which produces the string to
-insert as a citation.  Note that the citation format can also be changed
-with the variable <code>reftex-cite-format</code>.  The function will be
-called with two arguments, the <var>citation-key</var> and the
-<var>default-format</var> (taken from <code>reftex-cite-format</code>).  It should
-return the string to insert into the buffer.
-</p></dd></dl>
+      <p>&lsquo;<samp>%&lt;</samp>&rsquo; as a special operator
+      kills punctuation and space around it after the string has
+      been formatted.</p>
 
-<dl>
-<dt><a name="index-reftex_002dcite_002dprompt_002doptional_002dargs-1"></a>User Option: <strong>reftex-cite-prompt-optional-args</strong></dt>
-<dd><p>Non-<code>nil</code> means, prompt for empty optional arguments in cite macros.
-When an entry in <code>reftex-cite-format</code> ist given with square brackets to
-indicate optional arguments (for example &lsquo;<samp>\\cite[][]{%l}</samp>&rsquo;), RefTeX can
-prompt for values.  Possible values are:
-</p><div class="example">
-<pre class="example">nil     <span class="roman">Never prompt for optional arguments</span>
+      <p>A pair of square brackets indicates an optional argument,
+      and RefTeX will prompt for the values of these arguments.</p>
+
+      <p>Beware that all this only works with BibTeX database
+      files. When citations are made from the
+      <code>\bibitems</code> in an explicit
+      <code>thebibliography</code> environment, only
+      &lsquo;<samp>%l</samp>&rsquo; is available.</p>
+
+      <p>If <code>reftex-cite-format</code> is an alist of
+      characters and strings, the user will be prompted for a
+      character to select one of the possible format strings.</p>
+
+      <p>In order to configure this variable, you can either set
+      <code>reftex-cite-format</code> directly yourself or set it
+      to the <em>symbol</em> of one of the predefined styles. The
+      predefined symbols are those which have an association in the
+      constant <code>reftex-cite-format-builtin</code>) E.g.:
+      <code>(setq reftex-cite-format 'natbib)</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dformat_002dcite_002dfunction" id=
+    "index-reftex_002dformat_002dcite_002dfunction"></a>Hook:
+    <strong>reftex-format-cite-function</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, should be a function which
+      produces the string to insert as a citation. Note that the
+      citation format can also be changed with the variable
+      <code>reftex-cite-format</code>. The function will be called
+      with two arguments, the <var>citation-key</var> and the
+      <var>default-format</var> (taken from
+      <code>reftex-cite-format</code>). It should return the string
+      to insert into the buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-reftex_002dcite_002dprompt_002doptional_002dargs-1" id=
+    "index-reftex_002dcite_002dprompt_002doptional_002dargs-1"></a>User
+    Option: <strong>reftex-cite-prompt-optional-args</strong></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means, prompt for empty optional
+      arguments in cite macros. When an entry in
+      <code>reftex-cite-format</code> ist given with square
+      brackets to indicate optional arguments (for example
+      &lsquo;<samp>\\cite[][]{%l}</samp>&rsquo;), RefTeX can prompt
+      for values. Possible values are:</p>
+
+      <div class="example">
+        <pre class="example">
+nil     <span class=
+"roman">Never prompt for optional arguments</span>
 t       <span class="roman">Always prompt</span>
-maybe   <span class="roman">Prompt only if <code>reftex-citation</code> was called with C-u prefix arg</span>
-</pre></div>
-<p>Unnecessary empty optional arguments are removed before insertion into
-the buffer.  See <code>reftex-cite-cleanup-optional-args</code>.
-</p></dd></dl>
+maybe   <span class=
+"roman">Prompt only if <code>reftex-citation</code> was called with C-u prefix arg</span>
+</pre>
+      </div>
 
-<dl>
-<dt><a name="index-reftex_002dcite_002dcleanup_002doptional_002dargs"></a>User Option: <strong>reftex-cite-cleanup-optional-args</strong></dt>
-<dd><p>Non-<code>nil</code> means, remove empty optional arguments from cite macros
-if possible.
-</p></dd></dl>
+      <p>Unnecessary empty optional arguments are removed before
+      insertion into the buffer. See
+      <code>reftex-cite-cleanup-optional-args</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dcomment_002dcitations"></a>User Option: <strong>reftex-comment-citations</strong></dt>
-<dd><p>Non-<code>nil</code> means add a comment for each citation describing the full
-entry.  The comment is formatted according to
-<code>reftex-cite-comment-format</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-reftex_002dcite_002dcleanup_002doptional_002dargs" id=
+    "index-reftex_002dcite_002dcleanup_002doptional_002dargs"></a>User
+    Option: <strong>reftex-cite-cleanup-optional-args</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dcite_002dcomment_002dformat"></a>User Option: <strong>reftex-cite-comment-format</strong></dt>
-<dd><p>Citation format used for commented citations.  Must <em>not</em> contain
-&lsquo;<samp>%l</samp>&rsquo;.  See the variable <code>reftex-cite-format</code> for possible
-percent escapes.
-</p></dd></dl>
+    <dd>
+      <p>Non-<code>nil</code> means, remove empty optional
+      arguments from cite macros if possible.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dcite_002dpunctuation-1"></a>User Option: <strong>reftex-cite-punctuation</strong></dt>
-<dd><p>Punctuation for formatting of name lists in citations.  This is a list
-of 3 strings.
-</p><ol>
-<li> normal names separator, like &lsquo;<samp>, </samp>&rsquo; in Jones, Brown and Miller
-</li><li> final names separator, like &lsquo;<samp> and </samp>&rsquo;  in Jones, Brown and Miller
-</li><li> The &lsquo;<samp>et al.</samp>&rsquo; string, like &lsquo;<samp> {\it et al.}</samp>&rsquo; in
-Jones {\it et al.}
-</li></ol>
-</dd></dl>
+  <dl>
+    <dt><a name="index-reftex_002dcomment_002dcitations" id=
+    "index-reftex_002dcomment_002dcitations"></a>User Option:
+    <strong>reftex-comment-citations</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dselect_002dbib_002dmode_002dhook"></a>Normal Hook: <strong>reftex-select-bib-mode-hook</strong></dt>
-<dd><p>Normal hook which is run when a selection buffer enters
-<code>reftex-select-bib-mode</code>.
-</p></dd></dl>
+    <dd>
+      <p>Non-<code>nil</code> means add a comment for each citation
+      describing the full entry. The comment is formatted according
+      to <code>reftex-cite-comment-format</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dselect_002dbib_002dmap"></a>Keymap: <strong>reftex-select-bib-map</strong></dt>
-<dd><p>The keymap which is active in the citation-key selection process
-(see <a href="Creating-Citations.html#Creating-Citations">Creating Citations</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-reftex_002dcite_002dcomment_002dformat" id=
+    "index-reftex_002dcite_002dcomment_002dformat"></a>User Option:
+    <strong>reftex-cite-comment-format</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dcite_002dkey_002dseparator"></a>User Option: <strong>reftex-cite-key-separator</strong></dt>
-<dd><p>String used to separate several keys in a single &lsquo;<samp>\\cite</samp>&rsquo; macro.
-Per default this is &lsquo;<samp>&quot;,&quot;</samp>&rsquo; but if you often have to deal with a lot
-of entries and need to break the macro across several lines you might
-want to change it to &lsquo;<samp>&quot;, &quot;</samp>&rsquo;.
-</p></dd></dl>
+    <dd>
+      <p>Citation format used for commented citations. Must
+      <em>not</em> contain &lsquo;<samp>%l</samp>&rsquo;. See the
+      variable <code>reftex-cite-format</code> for possible percent
+      escapes.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dcreate_002dbibtex_002dheader-1"></a>User Option: <strong>reftex-create-bibtex-header</strong></dt>
-<dd><p>Header to insert in BibTeX files generated by
-<code>reftex-create-bibtex-file</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-reftex_002dcite_002dpunctuation-1" id=
+    "index-reftex_002dcite_002dpunctuation-1"></a>User Option:
+    <strong>reftex-cite-punctuation</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dcreate_002dbibtex_002dfooter-1"></a>User Option: <strong>reftex-create-bibtex-footer</strong></dt>
-<dd><p>Footer to insert in BibTeX files generated by
-<code>reftex-create-bibtex-file</code>.
-</p></dd></dl>
+    <dd>
+      <p>Punctuation for formatting of name lists in citations.
+      This is a list of 3 strings.</p>
 
+      <ol>
+        <li>normal names separator, like &lsquo;<samp>,</samp>
+        &rsquo; in Jones, Brown and Miller</li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Options-_002d-Index-Support.html#Options-_002d-Index-Support" accesskey="n" rel="next">Options - Index Support</a>, Previous: <a href="Options-_002d-Referencing-Labels.html#Options-_002d-Referencing-Labels" accesskey="p" rel="prev">Options - Referencing Labels</a>, Up: <a href="Options.html#Options" accesskey="u" rel="up">Options</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+        <li>final names separator, like &lsquo; <samp>and</samp>
+        &rsquo; in Jones, Brown and Miller</li>
 
+        <li>The &lsquo;<samp>et al.</samp>&rsquo; string, like
+        &lsquo; <samp>{\it et al.}</samp>&rsquo; in Jones {\it et
+        al.}</li>
+      </ol>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-reftex_002dselect_002dbib_002dmode_002dhook"
+    id=
+    "index-reftex_002dselect_002dbib_002dmode_002dhook"></a>Normal
+    Hook: <strong>reftex-select-bib-mode-hook</strong></dt>
 
+    <dd>
+      <p>Normal hook which is run when a selection buffer enters
+      <code>reftex-select-bib-mode</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dselect_002dbib_002dmap" id=
+    "index-reftex_002dselect_002dbib_002dmap"></a>Keymap:
+    <strong>reftex-select-bib-map</strong></dt>
+
+    <dd>
+      <p>The keymap which is active in the citation-key selection
+      process (see <a href=
+      "Creating-Citations.html#Creating-Citations">Creating
+      Citations</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dcite_002dkey_002dseparator" id=
+    "index-reftex_002dcite_002dkey_002dseparator"></a>User Option:
+    <strong>reftex-cite-key-separator</strong></dt>
+
+    <dd>
+      <p>String used to separate several keys in a single
+      &lsquo;<samp>\\cite</samp>&rsquo; macro. Per default this is
+      &lsquo;<samp>","</samp>&rsquo; but if you often have to deal
+      with a lot of entries and need to break the macro across
+      several lines you might want to change it to &lsquo;<samp>",
+      "</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dcreate_002dbibtex_002dheader-1"
+    id="index-reftex_002dcreate_002dbibtex_002dheader-1"></a>User
+    Option: <strong>reftex-create-bibtex-header</strong></dt>
+
+    <dd>
+      <p>Header to insert in BibTeX files generated by
+      <code>reftex-create-bibtex-file</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dcreate_002dbibtex_002dfooter-1"
+    id="index-reftex_002dcreate_002dbibtex_002dfooter-1"></a>User
+    Option: <strong>reftex-create-bibtex-footer</strong></dt>
+
+    <dd>
+      <p>Footer to insert in BibTeX files generated by
+      <code>reftex-create-bibtex-file</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Options-_002d-Index-Support.html#Options-_002d-Index-Support"
+    accesskey="n" rel="next">Options - Index Support</a>, Previous:
+    <a href=
+    "Options-_002d-Referencing-Labels.html#Options-_002d-Referencing-Labels"
+    accesskey="p" rel="prev">Options - Referencing Labels</a>, Up:
+    <a href="Options.html#Options" accesskey="u" rel=
+    "up">Options</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

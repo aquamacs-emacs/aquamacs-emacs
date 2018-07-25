@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1991-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,95 +14,147 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>PCL-CVS&mdash;Emacs Front-End to CVS: Removing handled entries</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="PCL-CVS&mdash;Emacs Front-End to CVS: Removing handled entries">
-<meta name="keywords" content="PCL-CVS&mdash;Emacs Front-End to CVS: Removing handled entries">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-and-Variable-Index.html#Function-and-Variable-Index" rel="index" title="Function and Variable Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="Ignoring-files.html#Ignoring-files" rel="next" title="Ignoring files">
-<link href="Undoing-changes.html#Undoing-changes" rel="prev" title="Undoing changes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>PCL-CVS&mdash;Emacs Front-End to CVS: Removing handled
+  entries</title>
+  <meta name="description" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Removing handled entries" />
+  <meta name="keywords" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Removing handled entries" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Function-and-Variable-Index.html#Function-and-Variable-Index"
+  rel="index" title="Function and Variable Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="Ignoring-files.html#Ignoring-files" rel="next" title=
+  "Ignoring files" />
+  <link href="Undoing-changes.html#Undoing-changes" rel="prev"
+  title="Undoing changes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Removing-handled-entries"></a>
-<div class="header">
-<p>
-Next: <a href="Ignoring-files.html#Ignoring-files" accesskey="n" rel="next">Ignoring files</a>, Previous: <a href="Undoing-changes.html#Undoing-changes" accesskey="p" rel="prev">Undoing changes</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-and-Variable-Index.html#Function-and-Variable-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Removing-handled-entries-1"></a>
-<h3 class="section">5.11 Removing handled entries</h3>
-<a name="index-Expunging-uninteresting-entries"></a>
-<a name="index-Uninteresting-entries_002c-getting-rid-of-them"></a>
-<a name="index-Getting-rid-of-uninteresting-lines"></a>
-<a name="index-Removing-uninteresting-_0028processed_0029-lines"></a>
-<a name="index-Handled-lines_002c-removing-them"></a>
-<a name="index-x_002d_002dremove-processed-entries"></a>
-<a name="index-C_002dk_002d_002dremove-selected-entries"></a>
-<a name="index-cvs_002dmode_002dremove_002dhandled"></a>
-<a name="index-cvs_002dmode_002dacknowledge"></a>
-<a name="index-cvs_002dmode_002dignore"></a>
+<body lang="en" xml:lang="en">
+  <a name="Removing-handled-entries" id=
+  "Removing-handled-entries"></a>
 
-<dl compact="compact">
-<dt><kbd>x</kbd></dt>
-<dd><p>This command allows you to remove all entries that you have processed.
-More specifically, the lines for &lsquo;<samp>Up-to-date</samp>&rsquo; files (see <a href="Buffer-contents.html#Buffer-contents">Buffer contents</a>) are removed from the buffer.  If a directory becomes empty
-the heading for that directory is also removed.  This makes it easier to
-get an overview of what needs to be done.
-</p>
-<a name="index-cvs_002dmode_002dremove_002dhandled-_0028variable_0029"></a>
-<p><kbd>x</kbd> invokes <code>cvs-mode-remove-handled</code>.  If
-&lsquo;<samp>cvs-auto-remove-handled</samp>&rsquo; is set to non-<code>nil</code>, this will
-automatically be performed after every commit.
-</p>
-</dd>
-<dt><kbd>C-k</kbd></dt>
-<dd><p>This command can be used for lines that &lsquo;<samp>cvs-mode-remove-handled</samp>&rsquo; would
-not delete, but that you want to delete (<code>cvs-mode-acknowledge</code>).
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Ignoring-files.html#Ignoring-files"
+    accesskey="n" rel="next">Ignoring files</a>, Previous: <a href=
+    "Undoing-changes.html#Undoing-changes" accesskey="p" rel=
+    "prev">Undoing changes</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-and-Variable-Index.html#Function-and-Variable-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Removing-handled-entries-1" id=
+  "Removing-handled-entries-1"></a>
 
+  <h3 class="section">5.11 Removing handled entries</h3><a name=
+  "index-Expunging-uninteresting-entries" id=
+  "index-Expunging-uninteresting-entries"></a> <a name=
+  "index-Uninteresting-entries_002c-getting-rid-of-them" id=
+  "index-Uninteresting-entries_002c-getting-rid-of-them"></a>
+  <a name="index-Getting-rid-of-uninteresting-lines" id=
+  "index-Getting-rid-of-uninteresting-lines"></a> <a name=
+  "index-Removing-uninteresting-_0028processed_0029-lines" id=
+  "index-Removing-uninteresting-_0028processed_0029-lines"></a>
+  <a name="index-Handled-lines_002c-removing-them" id=
+  "index-Handled-lines_002c-removing-them"></a> <a name=
+  "index-x_002d_002dremove-processed-entries" id=
+  "index-x_002d_002dremove-processed-entries"></a> <a name=
+  "index-C_002dk_002d_002dremove-selected-entries" id=
+  "index-C_002dk_002d_002dremove-selected-entries"></a> <a name=
+  "index-cvs_002dmode_002dremove_002dhandled" id=
+  "index-cvs_002dmode_002dremove_002dhandled"></a> <a name=
+  "index-cvs_002dmode_002dacknowledge" id=
+  "index-cvs_002dmode_002dacknowledge"></a> <a name=
+  "index-cvs_002dmode_002dignore" id=
+  "index-cvs_002dmode_002dignore"></a>
 
+  <dl compact="compact">
+    <dt><kbd>x</kbd></dt>
 
+    <dd>
+      <p>This command allows you to remove all entries that you
+      have processed. More specifically, the lines for
+      &lsquo;<samp>Up-to-date</samp>&rsquo; files (see <a href=
+      "Buffer-contents.html#Buffer-contents">Buffer contents</a>)
+      are removed from the buffer. If a directory becomes empty the
+      heading for that directory is also removed. This makes it
+      easier to get an overview of what needs to be
+      done.</p><a name=
+      "index-cvs_002dmode_002dremove_002dhandled-_0028variable_0029"
+      id=
+      "index-cvs_002dmode_002dremove_002dhandled-_0028variable_0029"></a>
 
+      <p><kbd>x</kbd> invokes <code>cvs-mode-remove-handled</code>.
+      If &lsquo;<samp>cvs-auto-remove-handled</samp>&rsquo; is set
+      to non-<code>nil</code>, this will automatically be performed
+      after every commit.</p>
+    </dd>
 
+    <dt><kbd>C-k</kbd></dt>
+
+    <dd>
+      <p>This command can be used for lines that
+      &lsquo;<samp>cvs-mode-remove-handled</samp>&rsquo; would not
+      delete, but that you want to delete
+      (<code>cvs-mode-acknowledge</code>).</p>
+    </dd>
+  </dl>
 </body>
 </html>

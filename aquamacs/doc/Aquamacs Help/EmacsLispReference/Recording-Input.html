@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,95 +19,139 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Recording Input</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Recording Input">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Recording Input">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Terminal-Input.html#Terminal-Input" rel="up" title="Terminal Input">
-<link href="Terminal-Output.html#Terminal-Output" rel="next" title="Terminal Output">
-<link href="Input-Modes.html#Input-Modes" rel="prev" title="Input Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Recording Input</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Recording Input" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Recording Input" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Terminal-Input.html#Terminal-Input" rel="up" title=
+  "Terminal Input" />
+  <link href="Terminal-Output.html#Terminal-Output" rel="next"
+  title="Terminal Output" />
+  <link href="Input-Modes.html#Input-Modes" rel="prev" title=
+  "Input Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Recording-Input" id="Recording-Input"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Input-Modes.html#Input-Modes" accesskey=
+    "p" rel="prev">Input Modes</a>, Up: <a href=
+    "Terminal-Input.html#Terminal-Input" accesskey="u" rel=
+    "up">Terminal Input</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Recording-Input-1" id="Recording-Input-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Recording-Input"></a>
-<div class="header">
-<p>
-Previous: <a href="Input-Modes.html#Input-Modes" accesskey="p" rel="prev">Input Modes</a>, Up: <a href="Terminal-Input.html#Terminal-Input" accesskey="u" rel="up">Terminal Input</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Recording-Input-1"></a>
-<h4 class="subsection">38.13.2 Recording Input</h4>
-<a name="index-recording-input"></a>
+  <h4 class="subsection">38.13.2 Recording Input</h4><a name=
+  "index-recording-input" id="index-recording-input"></a>
 
-<dl>
-<dt><a name="index-recent_002dkeys"></a>Function: <strong>recent-keys</strong></dt>
-<dd><p>This function returns a vector containing the last 300 input events from
-the keyboard or mouse.  All input events are included, whether or not
-they were used as parts of key sequences.  Thus, you always get the last
-300 input events, not counting events generated by keyboard macros.
-(These are excluded because they are less interesting for debugging; it
-should be enough to see the events that invoked the macros.)
-</p>
-<p>A call to <code>clear-this-command-keys</code> (see <a href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>)
-causes this function to return an empty vector immediately afterward.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-recent_002dkeys" id=
+    "index-recent_002dkeys"></a>Function:
+    <strong>recent-keys</strong></dt>
 
-<dl>
-<dt><a name="index-open_002ddribble_002dfile"></a>Command: <strong>open-dribble-file</strong> <em>filename</em></dt>
-<dd><a name="index-dribble-file"></a>
-<p>This function opens a <em>dribble file</em> named <var>filename</var>.  When a
-dribble file is open, each input event from the keyboard or mouse (but
-not those from keyboard macros) is written in that file.  A
-non-character event is expressed using its printed representation
-surrounded by &lsquo;<samp>&lt;&hellip;&gt;</samp>&rsquo;.  Be aware that sensitive information
-(such as passwords) may end up recorded in the dribble file.
-</p>
-<p>You close the dribble file by calling this function with an argument
-of <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function returns a vector containing the last 300
+      input events from the keyboard or mouse. All input events are
+      included, whether or not they were used as parts of key
+      sequences. Thus, you always get the last 300 input events,
+      not counting events generated by keyboard macros. (These are
+      excluded because they are less interesting for debugging; it
+      should be enough to see the events that invoked the
+      macros.)</p>
 
-<p>See also the <code>open-termscript</code> function (see <a href="Terminal-Output.html#Terminal-Output">Terminal Output</a>).
-</p>
+      <p>A call to <code>clear-this-command-keys</code> (see
+      <a href="Command-Loop-Info.html#Command-Loop-Info">Command
+      Loop Info</a>) causes this function to return an empty vector
+      immediately afterward.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-open_002ddribble_002dfile" id=
+    "index-open_002ddribble_002dfile"></a>Command:
+    <strong>open-dribble-file</strong> <em>filename</em></dt>
 
+    <dd>
+      <a name="index-dribble-file" id="index-dribble-file"></a>
 
+      <p>This function opens a <em>dribble file</em> named
+      <var>filename</var>. When a dribble file is open, each input
+      event from the keyboard or mouse (but not those from keyboard
+      macros) is written in that file. A non-character event is
+      expressed using its printed representation surrounded by
+      &lsquo;<samp>&lt;&hellip;&gt;</samp>&rsquo;. Be aware that
+      sensitive information (such as passwords) may end up recorded
+      in the dribble file.</p>
+
+      <p>You close the dribble file by calling this function with
+      an argument of <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <p>See also the <code>open-termscript</code> function (see
+  <a href="Terminal-Output.html#Terminal-Output">Terminal
+  Output</a>).</p>
 </body>
 </html>

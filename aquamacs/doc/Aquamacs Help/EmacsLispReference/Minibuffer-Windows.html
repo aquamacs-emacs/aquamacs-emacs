@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,141 +19,224 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Minibuffer Windows</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Minibuffer Windows">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Minibuffer Windows">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Minibuffers.html#Minibuffers" rel="up" title="Minibuffers">
-<link href="Minibuffer-Contents.html#Minibuffer-Contents" rel="next" title="Minibuffer Contents">
-<link href="Minibuffer-Commands.html#Minibuffer-Commands" rel="prev" title="Minibuffer Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Minibuffer
+  Windows</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Minibuffer Windows" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Minibuffer Windows" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Minibuffers.html#Minibuffers" rel="up" title=
+  "Minibuffers" />
+  <link href="Minibuffer-Contents.html#Minibuffer-Contents" rel=
+  "next" title="Minibuffer Contents" />
+  <link href="Minibuffer-Commands.html#Minibuffer-Commands" rel=
+  "prev" title="Minibuffer Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Minibuffer-Windows" id="Minibuffer-Windows"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Minibuffer-Contents.html#Minibuffer-Contents"
+    accesskey="n" rel="next">Minibuffer Contents</a>, Previous:
+    <a href="Minibuffer-Commands.html#Minibuffer-Commands"
+    accesskey="p" rel="prev">Minibuffer Commands</a>, Up: <a href=
+    "Minibuffers.html#Minibuffers" accesskey="u" rel=
+    "up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Minibuffer-Windows-1" id="Minibuffer-Windows-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Minibuffer-Windows"></a>
-<div class="header">
-<p>
-Next: <a href="Minibuffer-Contents.html#Minibuffer-Contents" accesskey="n" rel="next">Minibuffer Contents</a>, Previous: <a href="Minibuffer-Commands.html#Minibuffer-Commands" accesskey="p" rel="prev">Minibuffer Commands</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Minibuffer-Windows-1"></a>
-<h3 class="section">19.11 Minibuffer Windows</h3>
-<a name="index-minibuffer-windows"></a>
+  <h3 class="section">19.11 Minibuffer Windows</h3><a name=
+  "index-minibuffer-windows" id="index-minibuffer-windows"></a>
 
-<p>These functions access and select minibuffer windows, test whether they
-are active and control how they get resized.
-</p>
-<dl>
-<dt><a name="index-active_002dminibuffer_002dwindow"></a>Function: <strong>active-minibuffer-window</strong></dt>
-<dd><p>This function returns the currently active minibuffer window, or
-<code>nil</code> if there is none.
-</p></dd></dl>
+  <p>These functions access and select minibuffer windows, test
+  whether they are active and control how they get resized.</p>
 
-<dl>
-<dt><a name="index-minibuffer_002dwindow"></a>Function: <strong>minibuffer-window</strong> <em>&amp;optional frame</em></dt>
-<dd><a name="Definition-of-minibuffer_002dwindow"></a><p>This function returns the minibuffer window used for frame <var>frame</var>.
-If <var>frame</var> is <code>nil</code>, that stands for the current frame.  Note
-that the minibuffer window used by a frame need not be part of that
-frame&mdash;a frame that has no minibuffer of its own necessarily uses some
-other frame&rsquo;s minibuffer window.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-active_002dminibuffer_002dwindow" id=
+    "index-active_002dminibuffer_002dwindow"></a>Function:
+    <strong>active-minibuffer-window</strong></dt>
 
-<dl>
-<dt><a name="index-set_002dminibuffer_002dwindow"></a>Function: <strong>set-minibuffer-window</strong> <em>window</em></dt>
-<dd><p>This function specifies <var>window</var> as the minibuffer window to use.
-This affects where the minibuffer is displayed if you put text in it
-without invoking the usual minibuffer commands.  It has no effect on
-the usual minibuffer input functions because they all start by
-choosing the minibuffer window according to the current frame.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the currently active minibuffer
+      window, or <code>nil</code> if there is none.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-window_002dminibuffer_002dp"></a>Function: <strong>window-minibuffer-p</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>window</var> is a minibuffer
-window.
-<var>window</var> defaults to the selected window.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-minibuffer_002dwindow" id=
+    "index-minibuffer_002dwindow"></a>Function:
+    <strong>minibuffer-window</strong> <em>&amp;optional
+    frame</em></dt>
 
-<p>It is not correct to determine whether a given window is a minibuffer by
-comparing it with the result of <code>(minibuffer-window)</code>, because
-there can be more than one minibuffer window if there is more than one
-frame.
-</p>
-<dl>
-<dt><a name="index-minibuffer_002dwindow_002dactive_002dp"></a>Function: <strong>minibuffer-window-active-p</strong> <em>window</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>window</var> is the currently
-active minibuffer window.
-</p></dd></dl>
+    <dd>
+      <a name="Definition-of-minibuffer_002dwindow" id=
+      "Definition-of-minibuffer_002dwindow"></a>
 
-<p>The following two options control whether minibuffer windows are resized
-automatically and how large they can get in the process.
-</p>
-<dl>
-<dt><a name="index-resize_002dmini_002dwindows"></a>User Option: <strong>resize-mini-windows</strong></dt>
-<dd><p>This option specifies whether minibuffer windows are resized
-automatically.  The default value is <code>grow-only</code>, which means that
-a minibuffer window by default expands automatically to accommodate the
-text it displays and shrinks back to one line as soon as the minibuffer
-gets empty.  If the value is <code>t</code>, Emacs will always try to fit the
-height of a minibuffer window to the text it displays (with a minimum of
-one line).  If the value is <code>nil</code>, a minibuffer window never
-changes size automatically.  In that case the window resizing commands
-(see <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>) can be used to adjust its height.
-</p></dd></dl>
+      <p>This function returns the minibuffer window used for frame
+      <var>frame</var>. If <var>frame</var> is <code>nil</code>,
+      that stands for the current frame. Note that the minibuffer
+      window used by a frame need not be part of that frame&mdash;a
+      frame that has no minibuffer of its own necessarily uses some
+      other frame&rsquo;s minibuffer window.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-max_002dmini_002dwindow_002dheight"></a>User Option: <strong>max-mini-window-height</strong></dt>
-<dd><p>This option provides a maximum height for resizing minibuffer windows
-automatically.  A floating-point number specifies a fraction of the
-frame&rsquo;s height; an integer specifies the maximum number of lines.  The
-default value is 0.25.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dminibuffer_002dwindow" id=
+    "index-set_002dminibuffer_002dwindow"></a>Function:
+    <strong>set-minibuffer-window</strong> <em>window</em></dt>
 
+    <dd>
+      <p>This function specifies <var>window</var> as the
+      minibuffer window to use. This affects where the minibuffer
+      is displayed if you put text in it without invoking the usual
+      minibuffer commands. It has no effect on the usual minibuffer
+      input functions because they all start by choosing the
+      minibuffer window according to the current frame.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Minibuffer-Contents.html#Minibuffer-Contents" accesskey="n" rel="next">Minibuffer Contents</a>, Previous: <a href="Minibuffer-Commands.html#Minibuffer-Commands" accesskey="p" rel="prev">Minibuffer Commands</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-window_002dminibuffer_002dp" id=
+    "index-window_002dminibuffer_002dp"></a>Function:
+    <strong>window-minibuffer-p</strong> <em>&amp;optional
+    window</em></dt>
 
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>window</var> is a minibuffer window. <var>window</var>
+      defaults to the selected window.</p>
+    </dd>
+  </dl>
 
+  <p>It is not correct to determine whether a given window is a
+  minibuffer by comparing it with the result of
+  <code>(minibuffer-window)</code>, because there can be more than
+  one minibuffer window if there is more than one frame.</p>
 
+  <dl>
+    <dt><a name="index-minibuffer_002dwindow_002dactive_002dp" id=
+    "index-minibuffer_002dwindow_002dactive_002dp"></a>Function:
+    <strong>minibuffer-window-active-p</strong>
+    <em>window</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>window</var> is the currently active minibuffer
+      window.</p>
+    </dd>
+  </dl>
+
+  <p>The following two options control whether minibuffer windows
+  are resized automatically and how large they can get in the
+  process.</p>
+
+  <dl>
+    <dt><a name="index-resize_002dmini_002dwindows" id=
+    "index-resize_002dmini_002dwindows"></a>User Option:
+    <strong>resize-mini-windows</strong></dt>
+
+    <dd>
+      <p>This option specifies whether minibuffer windows are
+      resized automatically. The default value is
+      <code>grow-only</code>, which means that a minibuffer window
+      by default expands automatically to accommodate the text it
+      displays and shrinks back to one line as soon as the
+      minibuffer gets empty. If the value is <code>t</code>, Emacs
+      will always try to fit the height of a minibuffer window to
+      the text it displays (with a minimum of one line). If the
+      value is <code>nil</code>, a minibuffer window never changes
+      size automatically. In that case the window resizing commands
+      (see <a href=
+      "Resizing-Windows.html#Resizing-Windows">Resizing
+      Windows</a>) can be used to adjust its height.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-max_002dmini_002dwindow_002dheight" id=
+    "index-max_002dmini_002dwindow_002dheight"></a>User Option:
+    <strong>max-mini-window-height</strong></dt>
+
+    <dd>
+      <p>This option provides a maximum height for resizing
+      minibuffer windows automatically. A floating-point number
+      specifies a fraction of the frame&rsquo;s height; an integer
+      specifies the maximum number of lines. The default value is
+      0.25.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Minibuffer-Contents.html#Minibuffer-Contents"
+    accesskey="n" rel="next">Minibuffer Contents</a>, Previous:
+    <a href="Minibuffer-Commands.html#Minibuffer-Commands"
+    accesskey="p" rel="prev">Minibuffer Commands</a>, Up: <a href=
+    "Minibuffers.html#Minibuffers" accesskey="u" rel=
+    "up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

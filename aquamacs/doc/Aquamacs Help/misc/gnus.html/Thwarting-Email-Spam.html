@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,99 +14,159 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Thwarting Email Spam</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Thwarting Email Spam">
-<meta name="keywords" content="Gnus Manual: Thwarting Email Spam">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Various.html#Various" rel="up" title="Various">
-<link href="The-problem-of-spam.html#The-problem-of-spam" rel="next" title="The problem of spam">
-<link href="Fuzzy-Matching.html#Fuzzy-Matching" rel="prev" title="Fuzzy Matching">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Thwarting Email Spam</title>
+  <meta name="description" content=
+  "Gnus Manual: Thwarting Email Spam" />
+  <meta name="keywords" content=
+  "Gnus Manual: Thwarting Email Spam" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Various.html#Various" rel="up" title="Various" />
+  <link href="The-problem-of-spam.html#The-problem-of-spam" rel=
+  "next" title="The problem of spam" />
+  <link href="Fuzzy-Matching.html#Fuzzy-Matching" rel="prev" title=
+  "Fuzzy Matching" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Thwarting-Email-Spam"></a>
-<div class="header">
-<p>
-Next: <a href="Spam-Package.html#Spam-Package" accesskey="n" rel="next">Spam Package</a>, Previous: <a href="Fuzzy-Matching.html#Fuzzy-Matching" accesskey="p" rel="prev">Fuzzy Matching</a>, Up: <a href="Various.html#Various" accesskey="u" rel="up">Various</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Thwarting-Email-Spam-1"></a>
-<h3 class="section">9.16 Thwarting Email Spam</h3>
-<a name="index-email-spam"></a>
-<a name="index-spam"></a>
-<a name="index-UCE"></a>
-<a name="index-unsolicited-commercial-email"></a>
+<body lang="en" xml:lang="en">
+  <a name="Thwarting-Email-Spam" id="Thwarting-Email-Spam"></a>
 
-<p>In these last days of the Usenet, commercial vultures are hanging about
-and grepping through news like crazy to find email addresses they can
-foist off their scams and products to.  As a reaction to this, many
-people have started putting nonsense addresses into their <code>From</code>
-lines.  I think this is counterproductive&mdash;it makes it difficult for
-people to send you legitimate mail in response to things you write, as
-well as making it difficult to see who wrote what.  This rewriting may
-perhaps be a bigger menace than the unsolicited commercial email itself
-in the end.
-</p>
-<p>The biggest problem I have with email spam is that it comes in under
-false pretenses.  I press <kbd>g</kbd> and Gnus merrily informs me that I
-have 10 new emails.  I say &ldquo;Golly gee!  Happy is me!&rdquo; and select the
-mail group, only to find two pyramid schemes, seven advertisements
-(&ldquo;New!  Miracle tonic for growing full, lustrous hair on your toes!&rdquo;)
-and one mail asking me to repent and find some god.
-</p>
-<p>This is annoying.  Here&rsquo;s what you can do about it.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="The-problem-of-spam.html#The-problem-of-spam" accesskey="1">The problem of spam</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Some background, and some solutions
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" accesskey="2">Anti-Spam Basics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Simple steps to reduce the amount of spam.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="SpamAssassin.html#SpamAssassin" accesskey="3">SpamAssassin</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to use external anti-spam tools.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Hashcash.html#Hashcash" accesskey="4">Hashcash</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reduce spam by burning CPU time.
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Spam-Package.html#Spam-Package" accesskey="n"
+    rel="next">Spam Package</a>, Previous: <a href=
+    "Fuzzy-Matching.html#Fuzzy-Matching" accesskey="p" rel=
+    "prev">Fuzzy Matching</a>, Up: <a href="Various.html#Various"
+    accesskey="u" rel="up">Various</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Thwarting-Email-Spam-1" id="Thwarting-Email-Spam-1"></a>
 
+  <h3 class="section">9.16 Thwarting Email Spam</h3><a name=
+  "index-email-spam" id="index-email-spam"></a> <a name=
+  "index-spam" id="index-spam"></a> <a name="index-UCE" id=
+  "index-UCE"></a> <a name="index-unsolicited-commercial-email" id=
+  "index-unsolicited-commercial-email"></a>
 
+  <p>In these last days of the Usenet, commercial vultures are
+  hanging about and grepping through news like crazy to find email
+  addresses they can foist off their scams and products to. As a
+  reaction to this, many people have started putting nonsense
+  addresses into their <code>From</code> lines. I think this is
+  counterproductive&mdash;it makes it difficult for people to send
+  you legitimate mail in response to things you write, as well as
+  making it difficult to see who wrote what. This rewriting may
+  perhaps be a bigger menace than the unsolicited commercial email
+  itself in the end.</p>
 
+  <p>The biggest problem I have with email spam is that it comes in
+  under false pretenses. I press <kbd>g</kbd> and Gnus merrily
+  informs me that I have 10 new emails. I say &ldquo;Golly gee!
+  Happy is me!&rdquo; and select the mail group, only to find two
+  pyramid schemes, seven advertisements (&ldquo;New! Miracle tonic
+  for growing full, lustrous hair on your toes!&rdquo;) and one
+  mail asking me to repent and find some god.</p>
 
+  <p>This is annoying. Here&rsquo;s what you can do about it.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "The-problem-of-spam.html#The-problem-of-spam" accesskey=
+      "1">The problem of spam</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Some background, and some
+      solutions</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" accesskey=
+      "2">Anti-Spam Basics</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Simple steps to reduce the
+      amount of spam.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "SpamAssassin.html#SpamAssassin" accesskey=
+      "3">SpamAssassin</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to use external anti-spam
+      tools.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Hashcash.html#Hashcash" accesskey="4">Hashcash</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reduce spam by burning CPU
+      time.</td>
+    </tr>
+  </table>
 </body>
 </html>

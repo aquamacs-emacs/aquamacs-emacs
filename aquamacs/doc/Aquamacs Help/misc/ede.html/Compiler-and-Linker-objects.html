@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes EDE, the Emacs Development Environment.
 
 Copyright (C) 1998-2001, 2004-2005, 2008-2016
@@ -15,123 +17,162 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Development Environment: Compiler and Linker objects</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Development Environment: Compiler and Linker objects">
-<meta name="keywords" content="Emacs Development Environment: Compiler and Linker objects">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Extending-EDE.html#Extending-EDE" rel="up" title="Extending EDE">
-<link href="Project.html#Project" rel="next" title="Project">
-<link href="Sourcecode-objects.html#Sourcecode-objects" rel="prev" title="Sourcecode objects">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Development Environment: Compiler and Linker
+  objects</title>
+  <meta name="description" content=
+  "Emacs Development Environment: Compiler and Linker objects" />
+  <meta name="keywords" content=
+  "Emacs Development Environment: Compiler and Linker objects" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Extending-EDE.html#Extending-EDE" rel="up" title=
+  "Extending EDE" />
+  <link href="Project.html#Project" rel="next" title="Project" />
+  <link href="Sourcecode-objects.html#Sourcecode-objects" rel=
+  "prev" title="Sourcecode objects" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Compiler-and-Linker-objects"></a>
-<div class="header">
-<p>
-Next: <a href="Project.html#Project" accesskey="n" rel="next">Project</a>, Previous: <a href="Sourcecode-objects.html#Sourcecode-objects" accesskey="p" rel="prev">Sourcecode objects</a>, Up: <a href="Extending-EDE.html#Extending-EDE" accesskey="u" rel="up">Extending EDE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Compiler-and-Linker-objects-1"></a>
-<h3 class="section">8.6 Compiler and Linker objects</h3>
+<body lang="en" xml:lang="en">
+  <a name="Compiler-and-Linker-objects" id=
+  "Compiler-and-Linker-objects"></a>
 
-<p>In order for a target to create a <samp>Makefile</samp>, it must know how to
-compile the sources into the program or desired data file, and
-possibly link them together.
-</p>
-<p>A compiler object instantiation is used to associate a given target
-with a given source code type.  Some targets can handle many types of
-sources, and thus has many compilers available to it.  Some targets
-may have multiple compilers for a given type of source code.
-</p>
-<p><i>EDE</i> will examine the actual source files in a target, cross reference
-that against the compiler list to come up with the final set of
-compilers that will be inserted into the Makefile.
-</p>
-<p>Compiler instantiations must also insert variables specifying the
-compiler it plans to use, in addition to creating Automake settings for
-<samp>configure.ac</samp> when appropriate.
-</p>
-<p>Compiler objects are stored in the target objects as a list of
-symbols, where the symbols value is the object.  This enables the
-project output mechanism to work more efficiently.
-</p>
-<p>Targets will also have a special &quot;compiler&quot; slot which lets a user
-explicitly choose the compiler they want to use.
-</p>
-<p>Here is an example for texinfo:
-</p>
-<div class="example">
-<pre class="example">(defvar ede-makeinfo-compiler
+  <div class="header">
+    <p>Next: <a href="Project.html#Project" accesskey="n" rel=
+    "next">Project</a>, Previous: <a href=
+    "Sourcecode-objects.html#Sourcecode-objects" accesskey="p" rel=
+    "prev">Sourcecode objects</a>, Up: <a href=
+    "Extending-EDE.html#Extending-EDE" accesskey="u" rel=
+    "up">Extending EDE</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Compiler-and-Linker-objects-1" id=
+  "Compiler-and-Linker-objects-1"></a>
+
+  <h3 class="section">8.6 Compiler and Linker objects</h3>
+
+  <p>In order for a target to create a <samp>Makefile</samp>, it
+  must know how to compile the sources into the program or desired
+  data file, and possibly link them together.</p>
+
+  <p>A compiler object instantiation is used to associate a given
+  target with a given source code type. Some targets can handle
+  many types of sources, and thus has many compilers available to
+  it. Some targets may have multiple compilers for a given type of
+  source code.</p>
+
+  <p><i>EDE</i> will examine the actual source files in a target,
+  cross reference that against the compiler list to come up with
+  the final set of compilers that will be inserted into the
+  Makefile.</p>
+
+  <p>Compiler instantiations must also insert variables specifying
+  the compiler it plans to use, in addition to creating Automake
+  settings for <samp>configure.ac</samp> when appropriate.</p>
+
+  <p>Compiler objects are stored in the target objects as a list of
+  symbols, where the symbols value is the object. This enables the
+  project output mechanism to work more efficiently.</p>
+
+  <p>Targets will also have a special "compiler" slot which lets a
+  user explicitly choose the compiler they want to use.</p>
+
+  <p>Here is an example for texinfo:</p>
+
+  <div class="example">
+    <pre class="example">
+(defvar ede-makeinfo-compiler
   (ede-compiler
-   &quot;ede-makeinfo-compiler&quot;
-   :name &quot;makeinfo&quot;
-   :variables '((&quot;MAKEINFO&quot; . &quot;makeinfo&quot;))
-   :commands '(&quot;makeinfo -o $&nbsp;$&lt;&quot;)
-   :autoconf '((&quot;AC_CHECK_PROG&quot; . &quot;MAKEINFO, makeinfo&quot;))
+   "ede-makeinfo-compiler"
+   :name "makeinfo"
+   :variables '(("MAKEINFO" . "makeinfo"))
+   :commands '("makeinfo -o $ $&lt;")
+   :autoconf '(("AC_CHECK_PROG" . "MAKEINFO, makeinfo"))
    :sourcetype '(ede-makeinfo-source)
    )
-  &quot;Compile texinfo files into info files.&quot;)
-</pre></div>
+  "Compile texinfo files into info files.")
+</pre>
+  </div>
 
-<p>See <a href="Compilers.html#Compilers">Compilers</a>.
-</p>
-<p>When creating compiler instantiations, it may be useful to <code>clone</code>
-an existing compiler variable.  Cloning allows you to only modify
-parts of the original, while keeping the rest of the same.
-Modification of the original will result in the clone also being
-changed for shared value slots.
-</p>
-<p>The second important object is the linker class.  The linker is similar
-to the compiler, except several compilers might be used to create some
-object files, and only one linker is used to link those objects together.
-</p>
-<p>See <samp>ede-proj-obj.el</samp> for examples of the combination.
-</p>
+  <p>See <a href="Compilers.html#Compilers">Compilers</a>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Project.html#Project" accesskey="n" rel="next">Project</a>, Previous: <a href="Sourcecode-objects.html#Sourcecode-objects" accesskey="p" rel="prev">Sourcecode objects</a>, Up: <a href="Extending-EDE.html#Extending-EDE" accesskey="u" rel="up">Extending EDE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+  <p>When creating compiler instantiations, it may be useful to
+  <code>clone</code> an existing compiler variable. Cloning allows
+  you to only modify parts of the original, while keeping the rest
+  of the same. Modification of the original will result in the
+  clone also being changed for shared value slots.</p>
 
+  <p>The second important object is the linker class. The linker is
+  similar to the compiler, except several compilers might be used
+  to create some object files, and only one linker is used to link
+  those objects together.</p>
 
+  <p>See <samp>ede-proj-obj.el</samp> for examples of the
+  combination.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Project.html#Project" accesskey="n" rel=
+    "next">Project</a>, Previous: <a href=
+    "Sourcecode-objects.html#Sourcecode-objects" accesskey="p" rel=
+    "prev">Sourcecode objects</a>, Up: <a href=
+    "Extending-EDE.html#Extending-EDE" accesskey="u" rel=
+    "up">Extending EDE</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

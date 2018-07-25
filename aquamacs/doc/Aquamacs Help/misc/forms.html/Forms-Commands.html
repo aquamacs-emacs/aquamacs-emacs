@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Forms mode, a form-editing major mode for GNU Emacs.
 
 Copyright (C) 1989, 1997, 2001-2016 Free Software Foundation, Inc.
@@ -14,233 +16,340 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Forms Mode User&rsquo;s Manual: Forms Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Forms Mode User&rsquo;s Manual: Forms Commands">
-<meta name="keywords" content="Forms Mode User&rsquo;s Manual: Forms Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Data-File-Format.html#Data-File-Format" rel="next" title="Data File Format">
-<link href="Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode" rel="prev" title="Entering and Exiting Forms Mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Forms Mode User&rsquo;s Manual: Forms Commands</title>
+  <meta name="description" content=
+  "Forms Mode User&rsquo;s Manual: Forms Commands" />
+  <meta name="keywords" content=
+  "Forms Mode User&rsquo;s Manual: Forms Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Data-File-Format.html#Data-File-Format" rel="next"
+  title="Data File Format" />
+  <link href=
+  "Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode"
+  rel="prev" title="Entering and Exiting Forms Mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Forms-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Data-File-Format.html#Data-File-Format" accesskey="n" rel="next">Data File Format</a>, Previous: <a href="Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode" accesskey="p" rel="prev">Entering and Exiting Forms Mode</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Forms-Commands-1"></a>
-<h2 class="chapter">3 Forms Commands</h2>
+<body lang="en" xml:lang="en">
+  <a name="Forms-Commands" id="Forms-Commands"></a>
 
-<p>The commands of Forms mode belong to the <kbd>C-c</kbd> prefix, with one
-exception: <tt class="key">TAB</tt>, which moves to the next field.  Forms mode uses
-different key maps for normal mode and read-only mode.  In read-only
-Forms mode, you can access most of the commands without the <kbd>C-c</kbd>
-prefix, but you must type ordinary letters instead of control
-characters; for example, type <kbd>n</kbd> instead of <kbd>C-c C-n</kbd>.
-</p>
-<p>If your Emacs has been built with X-toolkit support, Forms mode will
-provide its own menu with a number of Forms mode commands.
-</p>
-<dl compact="compact">
-<dd><a name="index-forms_002dnext_002drecord"></a>
-<a name="index-C_002dc-C_002dn"></a>
-</dd>
-<dt><kbd>C-c C-n</kbd></dt>
-<dd><p>Show the next record (<code>forms-next-record</code>).  With a numeric
-argument <var>n</var>, show the <var>n</var>th next record.
-</p>
-<a name="index-forms_002dprev_002drecord"></a>
-<a name="index-C_002dc-C_002dp"></a>
-</dd>
-<dt><kbd>C-c C-p</kbd></dt>
-<dd><p>Show the previous record (<code>forms-prev-record</code>).  With a numeric
-argument <var>n</var>, show the <var>n</var>th previous record.
-</p>
-<a name="index-forms_002djump_002drecord"></a>
-<a name="index-C_002dc-C_002dl"></a>
-</dd>
-<dt><kbd>C-c C-l</kbd></dt>
-<dd><p>Jump to a record by number (<code>forms-jump-record</code>).   Specify
-the record number with a numeric argument.
-</p>
-<a name="index-forms_002dfirst_002drecord"></a>
-<a name="index-C_002dc-_003c"></a>
-</dd>
-<dt><kbd>C-c &lt;</kbd></dt>
-<dd><p>Jump to the first record (<code>forms-first-record</code>).
-</p>
-<a name="index-forms_002dlast_002drecord"></a>
-<a name="index-C_002dc-_003e"></a>
-</dd>
-<dt><kbd>C-c &gt;</kbd></dt>
-<dd><p>Jump to the last record (<code>forms-last-record</code>).  This command also
-recalculates the number of records in the data file.
-</p>
-<a name="index-forms_002dnext_002dfield"></a>
-<a name="index-TAB"></a>
-</dd>
-<dt><kbd><span class="key">TAB</span></kbd></dt>
-<dd><a name="index-C_002dc-TAB"></a>
-</dd>
-<dt><kbd>C-c <span class="key">TAB</span></kbd></dt>
-<dd><p>Jump to the next field in the current record (<code>forms-next-field</code>).
-With a numeric argument <var>n</var>, jump forward <var>n</var> fields.  If this command
-would move past the last field, it wraps around to the first field.
-</p>
-<a name="index-forms_002dtoggle_002dread_002donly"></a>
-<a name="index-C_002dc-C_002dq"></a>
-</dd>
-<dt><kbd>C-c C-q</kbd></dt>
-<dd><p>Toggles read-only mode (<code>forms-toggle-read-only</code>).  In read-only
-Forms mode, you cannot edit the fields; most Forms mode commands can be
-accessed without the prefix <kbd>C-c</kbd> if you use the normal letter
-instead (for example, type <kbd>n</kbd> instead of <kbd>C-c C-n</kbd>).  In edit
-mode, you can edit the fields and thus change the contents of the data
-base; you must begin Forms mode commands with <code>C-c</code>.  Switching
-to edit mode is allowed only if you have write access to the data file.
-</p>
-<a name="index-forms_002dinsert_002drecord"></a>
-<a name="index-C_002dc-C_002do"></a>
-</dd>
-<dt><kbd>C-c C-o</kbd></dt>
-<dd><p>Create a new record and insert it before the current record
-(<code>forms-insert-record</code>).  It starts out with empty (or default)
-contents for its fields; you can then edit the fields.  With a numeric
-argument, the new record is created <em>after</em> the current one.
-See also <code>forms-modified-record-filter</code> in <a href="Modifying-Forms-Contents.html#Modifying-Forms-Contents">Modifying Forms Contents</a>.
-</p>
-<a name="index-forms_002ddelete_002drecord"></a>
-<a name="index-C_002dc-C_002dk"></a>
-</dd>
-<dt><kbd>C-c C-k</kbd></dt>
-<dd><p>Delete the current record (<code>forms-delete-record</code>).  You are
-prompted for confirmation before the record is deleted unless a numeric
-argument has been provided.
-</p>
-<a name="index-forms_002dsearch_002dforward"></a>
-<a name="index-C_002dc-C_002ds-regexp-RET"></a>
-</dd>
-<dt><kbd>C-c C-s <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Search forward for <var>regexp</var> in all records following this one
-(<code>forms-search-forward</code>).  If found, this record is shown.
-If you give an empty argument, the previous regexp is used again.
-</p>
-<a name="index-forms_002dsearch_002dbackward"></a>
-<a name="index-C_002dc-C_002dr-regexp-RET"></a>
-</dd>
-<dt><kbd>C-c C-r <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Search backward for <var>regexp</var> in all records following this one
-(<code>forms-search-backward</code>).  If found, this record is shown.
-If you give an empty argument, the previous regexp is used again.
-</p>
+  <div class="header">
+    <p>Next: <a href="Data-File-Format.html#Data-File-Format"
+    accesskey="n" rel="next">Data File Format</a>, Previous:
+    <a href=
+    "Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode"
+    accesskey="p" rel="prev">Entering and Exiting Forms Mode</a>,
+    Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Forms-Commands-1" id="Forms-Commands-1"></a>
 
-<a name="index-forms_002dprev_002dfield"></a>
-</dd>
-<dt><kbd>M-x forms-prev-field</kbd></dt>
-<dd><p>Similar to <code>forms-next-field</code> but moves backwards.
-</p>
-<a name="index-forms_002dsave_002dbuffer"></a>
-</dd>
-<dt><kbd>M-x forms-save-buffer</kbd></dt>
-<dd><a name="index-C_002dx-C_002ds"></a>
-</dd>
-<dt><kbd>C-x C-s</kbd></dt>
-<dd><p>Forms mode replacement for <code>save-buffer</code>. When executed in the
-forms buffer it will save the contents of the (modified) data buffer
-instead. In Forms mode this function will be bound to <kbd>C-x C-s</kbd>.
-</p>
-<a name="index-forms_002dprint"></a>
-</dd>
-<dt><kbd>M-x forms-print</kbd></dt>
-<dd><p>This command can be used to make a formatted print
-of the contents of the data file.
-</p>
-</dd>
-</dl>
+  <h2 class="chapter">3 Forms Commands</h2>
 
-<p>In addition the command <kbd>M-x revert-buffer</kbd> is useful in Forms mode
-just as in other modes.
-</p>
+  <p>The commands of Forms mode belong to the <kbd>C-c</kbd>
+  prefix, with one exception: <tt class="key">TAB</tt>, which moves
+  to the next field. Forms mode uses different key maps for normal
+  mode and read-only mode. In read-only Forms mode, you can access
+  most of the commands without the <kbd>C-c</kbd> prefix, but you
+  must type ordinary letters instead of control characters; for
+  example, type <kbd>n</kbd> instead of <kbd>C-c C-n</kbd>.</p>
 
-<p>The following function key definitions are set up in Forms mode
-(whether read-only or not):
-</p>
-<dl compact="compact">
-<dd><a name="index-next"></a>
-</dd>
-<dt><kbd>next</kbd></dt>
-<dd><p>forms-next-record
-</p>
-<a name="index-prior"></a>
-</dd>
-<dt><kbd>prior</kbd></dt>
-<dd><p>forms-prev-record
-</p>
-<a name="index-begin"></a>
-</dd>
-<dt><kbd>begin</kbd></dt>
-<dd><p>forms-first-record
-</p>
-<a name="index-end"></a>
-</dd>
-<dt><kbd>end</kbd></dt>
-<dd><p>forms-last-record
-</p>
-<a name="index-S_002dTab"></a>
-<a name="index-forms_002dprev_002dfield-1"></a>
-</dd>
-<dt><kbd>S-Tab</kbd></dt>
-<dd><p>forms-prev-field
-</p></dd>
-</dl>
+  <p>If your Emacs has been built with X-toolkit support, Forms
+  mode will provide its own menu with a number of Forms mode
+  commands.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Data-File-Format.html#Data-File-Format" accesskey="n" rel="next">Data File Format</a>, Previous: <a href="Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode" accesskey="p" rel="prev">Entering and Exiting Forms Mode</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dd><a name="index-forms_002dnext_002drecord" id=
+    "index-forms_002dnext_002drecord"></a> <a name=
+    "index-C_002dc-C_002dn" id="index-C_002dc-C_002dn"></a></dd>
 
+    <dt><kbd>C-c C-n</kbd></dt>
 
+    <dd>
+      <p>Show the next record (<code>forms-next-record</code>).
+      With a numeric argument <var>n</var>, show the <var>n</var>th
+      next record.</p><a name="index-forms_002dprev_002drecord" id=
+      "index-forms_002dprev_002drecord"></a> <a name=
+      "index-C_002dc-C_002dp" id="index-C_002dc-C_002dp"></a>
+    </dd>
 
+    <dt><kbd>C-c C-p</kbd></dt>
+
+    <dd>
+      <p>Show the previous record (<code>forms-prev-record</code>).
+      With a numeric argument <var>n</var>, show the <var>n</var>th
+      previous record.</p><a name="index-forms_002djump_002drecord"
+      id="index-forms_002djump_002drecord"></a> <a name=
+      "index-C_002dc-C_002dl" id="index-C_002dc-C_002dl"></a>
+    </dd>
+
+    <dt><kbd>C-c C-l</kbd></dt>
+
+    <dd>
+      <p>Jump to a record by number
+      (<code>forms-jump-record</code>). Specify the record number
+      with a numeric argument.</p><a name=
+      "index-forms_002dfirst_002drecord" id=
+      "index-forms_002dfirst_002drecord"></a> <a name=
+      "index-C_002dc-_003c" id="index-C_002dc-_003c"></a>
+    </dd>
+
+    <dt><kbd>C-c &lt;</kbd></dt>
+
+    <dd>
+      <p>Jump to the first record
+      (<code>forms-first-record</code>).</p><a name=
+      "index-forms_002dlast_002drecord" id=
+      "index-forms_002dlast_002drecord"></a> <a name=
+      "index-C_002dc-_003e" id="index-C_002dc-_003e"></a>
+    </dd>
+
+    <dt><kbd>C-c &gt;</kbd></dt>
+
+    <dd>
+      <p>Jump to the last record (<code>forms-last-record</code>).
+      This command also recalculates the number of records in the
+      data file.</p><a name="index-forms_002dnext_002dfield" id=
+      "index-forms_002dnext_002dfield"></a> <a name="index-TAB" id=
+      "index-TAB"></a>
+    </dd>
+
+    <dt><kbd><span class="key">TAB</span></kbd></dt>
+
+    <dd><a name="index-C_002dc-TAB" id=
+    "index-C_002dc-TAB"></a></dd>
+
+    <dt><kbd>C-c <span class="key">TAB</span></kbd></dt>
+
+    <dd>
+      <p>Jump to the next field in the current record
+      (<code>forms-next-field</code>). With a numeric argument
+      <var>n</var>, jump forward <var>n</var> fields. If this
+      command would move past the last field, it wraps around to
+      the first field.</p><a name=
+      "index-forms_002dtoggle_002dread_002donly" id=
+      "index-forms_002dtoggle_002dread_002donly"></a> <a name=
+      "index-C_002dc-C_002dq" id="index-C_002dc-C_002dq"></a>
+    </dd>
+
+    <dt><kbd>C-c C-q</kbd></dt>
+
+    <dd>
+      <p>Toggles read-only mode
+      (<code>forms-toggle-read-only</code>). In read-only Forms
+      mode, you cannot edit the fields; most Forms mode commands
+      can be accessed without the prefix <kbd>C-c</kbd> if you use
+      the normal letter instead (for example, type <kbd>n</kbd>
+      instead of <kbd>C-c C-n</kbd>). In edit mode, you can edit
+      the fields and thus change the contents of the data base; you
+      must begin Forms mode commands with <code>C-c</code>.
+      Switching to edit mode is allowed only if you have write
+      access to the data file.</p><a name=
+      "index-forms_002dinsert_002drecord" id=
+      "index-forms_002dinsert_002drecord"></a> <a name=
+      "index-C_002dc-C_002do" id="index-C_002dc-C_002do"></a>
+    </dd>
+
+    <dt><kbd>C-c C-o</kbd></dt>
+
+    <dd>
+      <p>Create a new record and insert it before the current
+      record (<code>forms-insert-record</code>). It starts out with
+      empty (or default) contents for its fields; you can then edit
+      the fields. With a numeric argument, the new record is
+      created <em>after</em> the current one. See also
+      <code>forms-modified-record-filter</code> in <a href=
+      "Modifying-Forms-Contents.html#Modifying-Forms-Contents">Modifying
+      Forms Contents</a>.</p><a name=
+      "index-forms_002ddelete_002drecord" id=
+      "index-forms_002ddelete_002drecord"></a> <a name=
+      "index-C_002dc-C_002dk" id="index-C_002dc-C_002dk"></a>
+    </dd>
+
+    <dt><kbd>C-c C-k</kbd></dt>
+
+    <dd>
+      <p>Delete the current record
+      (<code>forms-delete-record</code>). You are prompted for
+      confirmation before the record is deleted unless a numeric
+      argument has been provided.</p><a name=
+      "index-forms_002dsearch_002dforward" id=
+      "index-forms_002dsearch_002dforward"></a> <a name=
+      "index-C_002dc-C_002ds-regexp-RET" id=
+      "index-C_002dc-C_002ds-regexp-RET"></a>
+    </dd>
+
+    <dt><kbd>C-c C-s <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Search forward for <var>regexp</var> in all records
+      following this one (<code>forms-search-forward</code>). If
+      found, this record is shown. If you give an empty argument,
+      the previous regexp is used again.</p><a name=
+      "index-forms_002dsearch_002dbackward" id=
+      "index-forms_002dsearch_002dbackward"></a> <a name=
+      "index-C_002dc-C_002dr-regexp-RET" id=
+      "index-C_002dc-C_002dr-regexp-RET"></a>
+    </dd>
+
+    <dt><kbd>C-c C-r <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Search backward for <var>regexp</var> in all records
+      following this one (<code>forms-search-backward</code>). If
+      found, this record is shown. If you give an empty argument,
+      the previous regexp is used again.</p><a name=
+      "index-forms_002dprev_002dfield" id=
+      "index-forms_002dprev_002dfield"></a>
+    </dd>
+
+    <dt><kbd>M-x forms-prev-field</kbd></dt>
+
+    <dd>
+      <p>Similar to <code>forms-next-field</code> but moves
+      backwards.</p><a name="index-forms_002dsave_002dbuffer" id=
+      "index-forms_002dsave_002dbuffer"></a>
+    </dd>
+
+    <dt><kbd>M-x forms-save-buffer</kbd></dt>
+
+    <dd><a name="index-C_002dx-C_002ds" id=
+    "index-C_002dx-C_002ds"></a></dd>
+
+    <dt><kbd>C-x C-s</kbd></dt>
+
+    <dd>
+      <p>Forms mode replacement for <code>save-buffer</code>. When
+      executed in the forms buffer it will save the contents of the
+      (modified) data buffer instead. In Forms mode this function
+      will be bound to <kbd>C-x C-s</kbd>.</p><a name=
+      "index-forms_002dprint" id="index-forms_002dprint"></a>
+    </dd>
+
+    <dt><kbd>M-x forms-print</kbd></dt>
+
+    <dd>
+      <p>This command can be used to make a formatted print of the
+      contents of the data file.</p>
+    </dd>
+  </dl>
+
+  <p>In addition the command <kbd>M-x revert-buffer</kbd> is useful
+  in Forms mode just as in other modes.</p>
+
+  <p>The following function key definitions are set up in Forms
+  mode (whether read-only or not):</p>
+
+  <dl compact="compact">
+    <dd><a name="index-next" id="index-next"></a></dd>
+
+    <dt><kbd>next</kbd></dt>
+
+    <dd>
+      <p>forms-next-record</p><a name="index-prior" id=
+      "index-prior"></a>
+    </dd>
+
+    <dt><kbd>prior</kbd></dt>
+
+    <dd>
+      <p>forms-prev-record</p><a name="index-begin" id=
+      "index-begin"></a>
+    </dd>
+
+    <dt><kbd>begin</kbd></dt>
+
+    <dd>
+      <p>forms-first-record</p><a name="index-end" id=
+      "index-end"></a>
+    </dd>
+
+    <dt><kbd>end</kbd></dt>
+
+    <dd>
+      <p>forms-last-record</p><a name="index-S_002dTab" id=
+      "index-S_002dTab"></a> <a name=
+      "index-forms_002dprev_002dfield-1" id=
+      "index-forms_002dprev_002dfield-1"></a>
+    </dd>
+
+    <dt><kbd>S-Tab</kbd></dt>
+
+    <dd>
+      <p>forms-prev-field</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Data-File-Format.html#Data-File-Format"
+    accesskey="n" rel="next">Data File Format</a>, Previous:
+    <a href=
+    "Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode"
+    accesskey="p" rel="prev">Entering and Exiting Forms Mode</a>,
+    Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

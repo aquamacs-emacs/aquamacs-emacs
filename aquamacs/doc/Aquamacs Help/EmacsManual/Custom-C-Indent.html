@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,142 +20,197 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Custom C Indent</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Custom C Indent">
-<meta name="keywords" content="GNU Emacs Manual: Custom C Indent">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Program-Indent.html#Program-Indent" rel="up" title="Program Indent">
-<link href="Parentheses.html#Parentheses" rel="next" title="Parentheses">
-<link href="C-Indent.html#C-Indent" rel="prev" title="C Indent">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Custom C Indent</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Custom C Indent" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Custom C Indent" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Program-Indent.html#Program-Indent" rel="up" title=
+  "Program Indent" />
+  <link href="Parentheses.html#Parentheses" rel="next" title=
+  "Parentheses" />
+  <link href="C-Indent.html#C-Indent" rel="prev" title=
+  "C Indent" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Custom-C-Indent" id="Custom-C-Indent"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="C-Indent.html#C-Indent" accesskey="p"
+    rel="prev">C Indent</a>, Up: <a href=
+    "Program-Indent.html#Program-Indent" accesskey="u" rel=
+    "up">Program Indent</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Customizing-C-Indentation" id=
+  "Customizing-C-Indentation"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Custom-C-Indent"></a>
-<div class="header">
-<p>
-Previous: <a href="C-Indent.html#C-Indent" accesskey="p" rel="prev">C Indent</a>, Up: <a href="Program-Indent.html#Program-Indent" accesskey="u" rel="up">Program Indent</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Customizing-C-Indentation"></a>
-<h4 class="subsection">26.3.5 Customizing C Indentation</h4>
-<a name="index-style-_0028for-indentation_0029"></a>
+  <h4 class="subsection">26.3.5 Customizing C
+  Indentation</h4><a name="index-style-_0028for-indentation_0029"
+  id="index-style-_0028for-indentation_0029"></a>
 
-<p>C mode and related modes use a flexible mechanism for customizing
-indentation.  C mode indents a source line in two steps: first it
-classifies the line syntactically according to its contents and
-context; second, it determines the indentation offset associated by
-your selected <em>style</em> with the syntactic construct and adds this
-onto the indentation of the <em>anchor statement</em>.
-</p>
-<dl compact="compact">
-<dt><kbd>C-c . <var>style</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Select a predefined style <var>style</var> (<code>c-set-style</code>).
-</p></dd>
-</dl>
+  <p>C mode and related modes use a flexible mechanism for
+  customizing indentation. C mode indents a source line in two
+  steps: first it classifies the line syntactically according to
+  its contents and context; second, it determines the indentation
+  offset associated by your selected <em>style</em> with the
+  syntactic construct and adds this onto the indentation of the
+  <em>anchor statement</em>.</p>
 
-<p>A <em>style</em> is a named collection of customizations that can be
-used in C mode and the related modes.  <a href="http://www.gnu.org/software/emacs/manual/html_node/ccmode/Styles.html#Styles">Styles</a> in <cite>The CC
-Mode Manual</cite>, for a complete description.  Emacs comes with several
-predefined styles, including <code>gnu</code>, <code>k&amp;r</code>, <code>bsd</code>,
-<code>stroustrup</code>, <code>linux</code>, <code>python</code>, <code>java</code>,
-<code>whitesmith</code>, <code>ellemtel</code>, and <code>awk</code>.  Some of these
-styles are primarily intended for one language, but any of them can be
-used with any of the languages supported by these modes.  To find out
-what a style looks like, select it and reindent some code, e.g., by
-typing <kbd>C-M-q</kbd> at the start of a function definition.
-</p>
-<a name="index-C_002dc-_002e-_0028C-mode_0029"></a>
-<a name="index-c_002dset_002dstyle"></a>
-<p>To choose a style for the current buffer, use the command <kbd><span class="nolinebreak">C-c</span>&nbsp;.</kbd><!-- /@w -->.  Specify a style name as an argument (case is not significant).
-This command affects the current buffer only, and it affects only
-future invocations of the indentation commands; it does not reindent
-the code already in the buffer.  To reindent the whole buffer in the
-new style, you can type <kbd>C-x h C-M-\</kbd>.
-</p>
-<a name="index-c_002ddefault_002dstyle"></a>
-<p>You can also set the variable <code>c-default-style</code> to specify the
-default style for various major modes.  Its value should be either the
-style&rsquo;s name (a string) or an alist, in which each element specifies
-one major mode and which indentation style to use for it.  For
-example,
-</p>
-<div class="example">
-<pre class="example">(setq c-default-style
-      '((java-mode . &quot;java&quot;)
-        (awk-mode . &quot;awk&quot;)
-        (other . &quot;gnu&quot;)))
-</pre></div>
+  <dl compact="compact">
+    <dt><kbd>C-c . <var>style</var> <span class=
+    "key">RET</span></kbd></dt>
 
-<p>specifies explicit choices for Java and AWK modes, and the default
-&lsquo;<samp>gnu</samp>&rsquo; style for the other C-like modes.  (These settings are
-actually the defaults.)  This variable takes effect when you select
-one of the C-like major modes; thus, if you specify a new default
-style for Java mode, you can make it take effect in an existing Java
-mode buffer by typing <kbd>M-x java-mode</kbd> there.
-</p>
-<p>The <code>gnu</code> style specifies the formatting recommended by the GNU
-Project for C; it is the default, so as to encourage use of our
-recommended style.
-</p>
-<p>See <a href="http://www.gnu.org/software/emacs/manual/html_node/ccmode/Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation Engine Basics</a> in <cite>the CC Mode Manual</cite>, and
-<a href="http://www.gnu.org/software/emacs/manual/html_node/ccmode/Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a> in <cite>the CC Mode Manual</cite>, for more
-information on customizing indentation for C and related modes,
-including how to override parts of an existing style and how to define
-your own styles.
-</p>
-<a name="index-c_002dguess"></a>
-<a name="index-c_002dguess_002dinstall"></a>
-<p>As an alternative to specifying a style, you can tell Emacs to guess
-a style by typing <kbd>M-x c-guess</kbd> in a sample code buffer.  You can
-then apply the guessed style to other buffers with <kbd>M-x
-c-guess-install</kbd>.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/ccmode/Guessing-the-Style.html#Guessing-the-Style">Guessing the Style</a> in <cite>the CC Mode
-Manual</cite>, for details.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="C-Indent.html#C-Indent" accesskey="p" rel="prev">C Indent</a>, Up: <a href="Program-Indent.html#Program-Indent" accesskey="u" rel="up">Program Indent</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Select a predefined style <var>style</var>
+      (<code>c-set-style</code>).</p>
+    </dd>
+  </dl>
 
+  <p>A <em>style</em> is a named collection of customizations that
+  can be used in C mode and the related modes. <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/ccmode/Styles.html#Styles">
+  Styles</a> in <cite>The CC Mode Manual</cite>, for a complete
+  description. Emacs comes with several predefined styles,
+  including <code>gnu</code>, <code>k&amp;r</code>,
+  <code>bsd</code>, <code>stroustrup</code>, <code>linux</code>,
+  <code>python</code>, <code>java</code>, <code>whitesmith</code>,
+  <code>ellemtel</code>, and <code>awk</code>. Some of these styles
+  are primarily intended for one language, but any of them can be
+  used with any of the languages supported by these modes. To find
+  out what a style looks like, select it and reindent some code,
+  e.g., by typing <kbd>C-M-q</kbd> at the start of a function
+  definition.</p><a name="index-C_002dc-_002e-_0028C-mode_0029" id=
+  "index-C_002dc-_002e-_0028C-mode_0029"></a> <a name=
+  "index-c_002dset_002dstyle" id="index-c_002dset_002dstyle"></a>
 
+  <p>To choose a style for the current buffer, use the command
+  <kbd><span class="nolinebreak">C-c</span>&nbsp;.</kbd>
+  <!-- /@w -->. Specify a style name as an argument (case is not
+  significant). This command affects the current buffer only, and
+  it affects only future invocations of the indentation commands;
+  it does not reindent the code already in the buffer. To reindent
+  the whole buffer in the new style, you can type <kbd>C-x h
+  C-M-\</kbd>.</p><a name="index-c_002ddefault_002dstyle" id=
+  "index-c_002ddefault_002dstyle"></a>
 
+  <p>You can also set the variable <code>c-default-style</code> to
+  specify the default style for various major modes. Its value
+  should be either the style&rsquo;s name (a string) or an alist,
+  in which each element specifies one major mode and which
+  indentation style to use for it. For example,</p>
+
+  <div class="example">
+    <pre class="example">
+(setq c-default-style
+      '((java-mode . "java")
+        (awk-mode . "awk")
+        (other . "gnu")))
+</pre>
+  </div>
+
+  <p>specifies explicit choices for Java and AWK modes, and the
+  default &lsquo;<samp>gnu</samp>&rsquo; style for the other C-like
+  modes. (These settings are actually the defaults.) This variable
+  takes effect when you select one of the C-like major modes; thus,
+  if you specify a new default style for Java mode, you can make it
+  take effect in an existing Java mode buffer by typing <kbd>M-x
+  java-mode</kbd> there.</p>
+
+  <p>The <code>gnu</code> style specifies the formatting
+  recommended by the GNU Project for C; it is the default, so as to
+  encourage use of our recommended style.</p>
+
+  <p>See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/ccmode/Indentation-Engine-Basics.html#Indentation-Engine-Basics">
+  Indentation Engine Basics</a> in <cite>the CC Mode Manual</cite>,
+  and <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/ccmode/Customizing-Indentation.html#Customizing-Indentation">
+  Customizing Indentation</a> in <cite>the CC Mode Manual</cite>,
+  for more information on customizing indentation for C and related
+  modes, including how to override parts of an existing style and
+  how to define your own styles.</p><a name="index-c_002dguess" id=
+  "index-c_002dguess"></a> <a name="index-c_002dguess_002dinstall"
+  id="index-c_002dguess_002dinstall"></a>
+
+  <p>As an alternative to specifying a style, you can tell Emacs to
+  guess a style by typing <kbd>M-x c-guess</kbd> in a sample code
+  buffer. You can then apply the guessed style to other buffers
+  with <kbd>M-x c-guess-install</kbd>. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/ccmode/Guessing-the-Style.html#Guessing-the-Style">
+  Guessing the Style</a> in <cite>the CC Mode Manual</cite>, for
+  details.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="C-Indent.html#C-Indent" accesskey="p"
+    rel="prev">C Indent</a>, Up: <a href=
+    "Program-Indent.html#Program-Indent" accesskey="u" rel=
+    "up">Program Indent</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,198 +16,334 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Formula syntax for Calc</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Formula syntax for Calc">
-<meta name="keywords" content="The Org Manual: Formula syntax for Calc">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-spreadsheet.html#The-spreadsheet" rel="up" title="The spreadsheet">
-<link href="Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp" rel="next" title="Formula syntax for Lisp">
-<link href="References.html#References" rel="prev" title="References">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Formula syntax for Calc</title>
+  <meta name="description" content=
+  "The Org Manual: Formula syntax for Calc" />
+  <meta name="keywords" content=
+  "The Org Manual: Formula syntax for Calc" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-spreadsheet.html#The-spreadsheet" rel="up" title=
+  "The spreadsheet" />
+  <link href="Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp"
+  rel="next" title="Formula syntax for Lisp" />
+  <link href="References.html#References" rel="prev" title=
+  "References" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Formula-syntax-for-Calc"></a>
-<div class="header">
-<p>
-Next: <a href="Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp" accesskey="n" rel="next">Formula syntax for Lisp</a>, Previous: <a href="References.html#References" accesskey="p" rel="prev">References</a>, Up: <a href="The-spreadsheet.html#The-spreadsheet" accesskey="u" rel="up">The spreadsheet</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Formula-syntax-for-Calc-1"></a>
-<h4 class="subsection">3.5.2 Formula syntax for Calc</h4>
-<a name="index-formula-syntax_002c-Calc"></a>
-<a name="index-syntax_002c-of-formulas"></a>
+<body lang="en" xml:lang="en">
+  <a name="Formula-syntax-for-Calc" id=
+  "Formula-syntax-for-Calc"></a>
 
-<p>A formula can be any algebraic expression understood by the Emacs <samp>Calc</samp>
-package.  Note that <samp>calc</samp> has the non-standard convention that &lsquo;<samp>/</samp>&rsquo;
-has lower precedence than &lsquo;<samp>*</samp>&rsquo;, so that &lsquo;<samp>a/b*c</samp>&rsquo; is interpreted as
-&lsquo;<samp>a/(b*c)</samp>&rsquo;.  Before evaluation by <code>calc-eval</code> (see <a href="../calc/Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">Calling Calc from Your Lisp Programs</a> in <cite>GNU Emacs Calc Manual</cite>), variable substitution takes place according to the
-rules described above.
-<a name="index-vectors_002c-in-table-calculations"></a>
-The range vectors can be directly fed into the Calc vector functions
-like &lsquo;<samp>vmean</samp>&rsquo; and &lsquo;<samp>vsum</samp>&rsquo;.
-</p>
-<a name="index-format-specifier"></a>
-<a name="index-mode_002c-for-calc"></a>
-<a name="index-org_002dcalc_002ddefault_002dmodes"></a>
-<p>A formula can contain an optional mode string after a semicolon.  This
-string consists of flags to influence Calc and other modes during
-execution.  By default, Org uses the standard Calc modes (precision
-12, angular units degrees, fraction and symbolic modes off).  The display
-format, however, has been changed to <code>(float 8)</code> to keep tables
-compact.  The default settings can be configured using the option
-<code>org-calc-default-modes</code>.
-</p>
-<p>List of modes:
-</p>
-<dl compact="compact">
-<dt><code>p20</code></dt>
-<dd><p>Set the internal Calc calculation precision to 20 digits.
-</p></dd>
-<dt><code>n3</code>, <code>s3</code>, <code>e2</code>, <code>f4</code></dt>
-<dd><p>Normal, scientific, engineering or fixed format of the result of Calc passed
-back to Org.  Calc formatting is unlimited in precision as long as the Calc
-calculation precision is greater.
-</p></dd>
-<dt><code>D</code>, <code>R</code></dt>
-<dd><p>Degree and radian angle modes of Calc.
-</p></dd>
-<dt><code>F</code>, <code>S</code></dt>
-<dd><p>Fraction and symbolic modes of Calc.
-</p></dd>
-<dt><code>T</code>, <code>t</code></dt>
-<dd><p>Duration computations in Calc or Lisp, see <a href="Durations-and-time-values.html#Durations-and-time-values">Durations and time values</a>.
-</p></dd>
-<dt><code>E</code></dt>
-<dd><p>If and how to consider empty fields.  Without &lsquo;<samp>E</samp>&rsquo; empty fields in range
-references are suppressed so that the Calc vector or Lisp list contains only
-the non-empty fields.  With &lsquo;<samp>E</samp>&rsquo; the empty fields are kept.  For empty
-fields in ranges or empty field references the value &lsquo;<samp>nan</samp>&rsquo; (not a
-number) is used in Calc formulas and the empty string is used for Lisp
-formulas.  Add &lsquo;<samp>N</samp>&rsquo; to use 0 instead for both formula types.  For the
-value of a field the mode &lsquo;<samp>N</samp>&rsquo; has higher precedence than &lsquo;<samp>E</samp>&rsquo;.
-</p></dd>
-<dt><code>N</code></dt>
-<dd><p>Interpret all fields as numbers, use 0 for non-numbers.  See the next section
-to see how this is essential for computations with Lisp formulas.  In Calc
-formulas it is used only occasionally because there number strings are
-already interpreted as numbers without &lsquo;<samp>N</samp>&rsquo;.
-</p></dd>
-<dt><code>L</code></dt>
-<dd><p>Literal, for Lisp formulas only.  See the next section.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp"
+    accesskey="n" rel="next">Formula syntax for Lisp</a>, Previous:
+    <a href="References.html#References" accesskey="p" rel=
+    "prev">References</a>, Up: <a href=
+    "The-spreadsheet.html#The-spreadsheet" accesskey="u" rel=
+    "up">The spreadsheet</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Formula-syntax-for-Calc-1" id=
+  "Formula-syntax-for-Calc-1"></a>
 
-<p>Unless you use large integer numbers or high-precision-calculation and
--display for floating point numbers you may alternatively provide a
-&lsquo;<samp>printf</samp>&rsquo; format specifier to reformat the Calc result after it has been
-passed back to Org instead of letting Calc already do the
-formatting<a name="DOCF33" href="#FOOT33"><sup>33</sup></a>.  A
-few examples:
-</p>
-<div class="example">
-<pre class="example">$1+$2                <span class="roman">Sum of first and second field</span>
-$1+$2;%.2f           <span class="roman">Same, format result to two decimals</span>
-exp($2)+exp($1)      <span class="roman">Math functions can be used</span>
-$0;%.1f              <span class="roman">Reformat current cell to 1 decimal</span>
-($3-32)*5/9          <span class="roman">Degrees F -&gt; C conversion</span>
-$c/$1/$cm            <span class="roman">Hz -&gt; cm conversion, using <samp>constants.el</samp></span>
-tan($1);Dp3s1        <span class="roman">Compute in degrees, precision 3, display SCI 1</span>
-sin($1);Dp3%.1e      <span class="roman">Same, but use printf specifier for display</span>
-taylor($3,x=7,2)     <span class="roman">Taylor series of $3, at x=7, second degree</span>
-</pre></div>
+  <h4 class="subsection">3.5.2 Formula syntax for Calc</h4><a name=
+  "index-formula-syntax_002c-Calc" id=
+  "index-formula-syntax_002c-Calc"></a> <a name=
+  "index-syntax_002c-of-formulas" id=
+  "index-syntax_002c-of-formulas"></a>
 
-<p>Calc also contains a complete set of logical operations, (see <a href="../calc/Logical-Operations.html#Logical-Operations">Logical Operations</a> in <cite>GNU Emacs Calc Manual</cite>).  For example
-</p>
-<dl compact="compact">
-<dt><code>if($1 &lt; 20, teen, string(&quot;&quot;))</code></dt>
-<dd><p>&quot;teen&quot; if age $1 is less than 20, else the Org table result field is set to
-empty with the empty string.
-</p></dd>
-<dt><code>if(&quot;$1&quot; == &quot;nan&quot; || &quot;$2&quot; == &quot;nan&quot;, string(&quot;&quot;), $1 + $2); E f-1</code></dt>
-<dd><p>Sum of the first two columns.  When at least one of the input fields is empty
-the Org table result field is set to empty.  &lsquo;<samp>E</samp>&rsquo; is required to not
-convert empty fields to 0.  &lsquo;<samp>f-1</samp>&rsquo; is an optional Calc format string
-similar to &lsquo;<samp>%.1f</samp>&rsquo; but leaves empty results empty.
-</p></dd>
-<dt><code>if(typeof(vmean($1..$7)) == 12, string(&quot;&quot;), vmean($1..$7); E</code></dt>
-<dd><p>Mean value of a range unless there is any empty field.  Every field in the
-range that is empty is replaced by &lsquo;<samp>nan</samp>&rsquo; which lets &lsquo;<samp>vmean</samp>&rsquo; result
-in &lsquo;<samp>nan</samp>&rsquo;.  Then &lsquo;<samp>typeof == 12</samp>&rsquo; detects the &lsquo;<samp>nan</samp>&rsquo; from
-&lsquo;<samp>vmean</samp>&rsquo; and the Org table result field is set to empty.  Use this when
-the sample set is expected to never have missing values.
-</p></dd>
-<dt><code>if(&quot;$1..$7&quot; == &quot;[]&quot;, string(&quot;&quot;), vmean($1..$7))</code></dt>
-<dd><p>Mean value of a range with empty fields skipped.  Every field in the range
-that is empty is skipped.  When all fields in the range are empty the mean
-value is not defined and the Org table result field is set to empty.  Use
-this when the sample set can have a variable size.
-</p></dd>
-<dt><code>vmean($1..$7); EN</code></dt>
-<dd><p>To complete the example before: Mean value of a range with empty fields
-counting as samples with value 0.  Use this only when incomplete sample sets
-should be padded with 0 to the full size.
-</p></dd>
-</dl>
+  <p>A formula can be any algebraic expression understood by the
+  Emacs <samp>Calc</samp> package. Note that <samp>calc</samp> has
+  the non-standard convention that &lsquo;<samp>/</samp>&rsquo; has
+  lower precedence than &lsquo;<samp>*</samp>&rsquo;, so that
+  &lsquo;<samp>a/b*c</samp>&rsquo; is interpreted as
+  &lsquo;<samp>a/(b*c)</samp>&rsquo;. Before evaluation by
+  <code>calc-eval</code> (see <a href=
+  "../calc/Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">
+  Calling Calc from Your Lisp Programs</a> in <cite>GNU Emacs Calc
+  Manual</cite>), variable substitution takes place according to
+  the rules described above. <a name=
+  "index-vectors_002c-in-table-calculations" id=
+  "index-vectors_002c-in-table-calculations"></a> The range vectors
+  can be directly fed into the Calc vector functions like
+  &lsquo;<samp>vmean</samp>&rsquo; and
+  &lsquo;<samp>vsum</samp>&rsquo;.</p><a name=
+  "index-format-specifier" id="index-format-specifier"></a>
+  <a name="index-mode_002c-for-calc" id=
+  "index-mode_002c-for-calc"></a> <a name=
+  "index-org_002dcalc_002ddefault_002dmodes" id=
+  "index-org_002dcalc_002ddefault_002dmodes"></a>
 
-<p>You can add your own Calc functions defined in Emacs Lisp with <code>defmath</code>
-and use them in formula syntax for Calc.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>A formula can contain an optional mode string after a
+  semicolon. This string consists of flags to influence Calc and
+  other modes during execution. By default, Org uses the standard
+  Calc modes (precision 12, angular units degrees, fraction and
+  symbolic modes off). The display format, however, has been
+  changed to <code>(float 8)</code> to keep tables compact. The
+  default settings can be configured using the option
+  <code>org-calc-default-modes</code>.</p>
 
-<h3><a name="FOOT33" href="#DOCF33">(33)</a></h3>
-<p>The &lsquo;<samp>printf</samp>&rsquo; reformatting is limited in precision
-because the value passed to it is converted into an &lsquo;<samp>integer</samp>&rsquo; or
-&lsquo;<samp>double</samp>&rsquo;.  The &lsquo;<samp>integer</samp>&rsquo; is limited in size by truncating the
-signed value to 32 bits.  The &lsquo;<samp>double</samp>&rsquo; is limited in precision to 64
-bits overall which leaves approximately 16 significant decimal digits.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp" accesskey="n" rel="next">Formula syntax for Lisp</a>, Previous: <a href="References.html#References" accesskey="p" rel="prev">References</a>, Up: <a href="The-spreadsheet.html#The-spreadsheet" accesskey="u" rel="up">The spreadsheet</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>List of modes:</p>
 
+  <dl compact="compact">
+    <dt><code>p20</code></dt>
 
+    <dd>
+      <p>Set the internal Calc calculation precision to 20
+      digits.</p>
+    </dd>
 
+    <dt><code>n3</code>, <code>s3</code>, <code>e2</code>,
+    <code>f4</code></dt>
+
+    <dd>
+      <p>Normal, scientific, engineering or fixed format of the
+      result of Calc passed back to Org. Calc formatting is
+      unlimited in precision as long as the Calc calculation
+      precision is greater.</p>
+    </dd>
+
+    <dt><code>D</code>, <code>R</code></dt>
+
+    <dd>
+      <p>Degree and radian angle modes of Calc.</p>
+    </dd>
+
+    <dt><code>F</code>, <code>S</code></dt>
+
+    <dd>
+      <p>Fraction and symbolic modes of Calc.</p>
+    </dd>
+
+    <dt><code>T</code>, <code>t</code></dt>
+
+    <dd>
+      <p>Duration computations in Calc or Lisp, see <a href=
+      "Durations-and-time-values.html#Durations-and-time-values">Durations
+      and time values</a>.</p>
+    </dd>
+
+    <dt><code>E</code></dt>
+
+    <dd>
+      <p>If and how to consider empty fields. Without
+      &lsquo;<samp>E</samp>&rsquo; empty fields in range references
+      are suppressed so that the Calc vector or Lisp list contains
+      only the non-empty fields. With &lsquo;<samp>E</samp>&rsquo;
+      the empty fields are kept. For empty fields in ranges or
+      empty field references the value
+      &lsquo;<samp>nan</samp>&rsquo; (not a number) is used in Calc
+      formulas and the empty string is used for Lisp formulas. Add
+      &lsquo;<samp>N</samp>&rsquo; to use 0 instead for both
+      formula types. For the value of a field the mode
+      &lsquo;<samp>N</samp>&rsquo; has higher precedence than
+      &lsquo;<samp>E</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><code>N</code></dt>
+
+    <dd>
+      <p>Interpret all fields as numbers, use 0 for non-numbers.
+      See the next section to see how this is essential for
+      computations with Lisp formulas. In Calc formulas it is used
+      only occasionally because there number strings are already
+      interpreted as numbers without
+      &lsquo;<samp>N</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><code>L</code></dt>
+
+    <dd>
+      <p>Literal, for Lisp formulas only. See the next section.</p>
+    </dd>
+  </dl>
+
+  <p>Unless you use large integer numbers or
+  high-precision-calculation and -display for floating point
+  numbers you may alternatively provide a
+  &lsquo;<samp>printf</samp>&rsquo; format specifier to reformat
+  the Calc result after it has been passed back to Org instead of
+  letting Calc already do the formatting<a name="DOCF33" href=
+  "#FOOT33" id="DOCF33"><sup>33</sup></a>. A few examples:</p>
+
+  <div class="example">
+    <pre class="example">
+$1+$2                <span class=
+"roman">Sum of first and second field</span>
+$1+$2;%.2f           <span class=
+"roman">Same, format result to two decimals</span>
+exp($2)+exp($1)      <span class=
+"roman">Math functions can be used</span>
+$0;%.1f              <span class=
+"roman">Reformat current cell to 1 decimal</span>
+($3-32)*5/9          <span class=
+"roman">Degrees F -&gt; C conversion</span>
+$c/$1/$cm            <span class=
+"roman">Hz -&gt; cm conversion, using <samp>constants.el</samp></span>
+tan($1);Dp3s1        <span class=
+"roman">Compute in degrees, precision 3, display SCI 1</span>
+sin($1);Dp3%.1e      <span class=
+"roman">Same, but use printf specifier for display</span>
+taylor($3,x=7,2)     <span class=
+"roman">Taylor series of $3, at x=7, second degree</span>
+</pre>
+  </div>
+
+  <p>Calc also contains a complete set of logical operations, (see
+  <a href=
+  "../calc/Logical-Operations.html#Logical-Operations">Logical
+  Operations</a> in <cite>GNU Emacs Calc Manual</cite>). For
+  example</p>
+
+  <dl compact="compact">
+    <dt><code>if($1 &lt; 20, teen, string(""))</code></dt>
+
+    <dd>
+      <p>"teen" if age $1 is less than 20, else the Org table
+      result field is set to empty with the empty string.</p>
+    </dd>
+
+    <dt><code>if("$1" == "nan" || "$2" == "nan", string(""), $1 +
+    $2); E f-1</code></dt>
+
+    <dd>
+      <p>Sum of the first two columns. When at least one of the
+      input fields is empty the Org table result field is set to
+      empty. &lsquo;<samp>E</samp>&rsquo; is required to not
+      convert empty fields to 0. &lsquo;<samp>f-1</samp>&rsquo; is
+      an optional Calc format string similar to
+      &lsquo;<samp>%.1f</samp>&rsquo; but leaves empty results
+      empty.</p>
+    </dd>
+
+    <dt><code>if(typeof(vmean($1..$7)) == 12, string(""),
+    vmean($1..$7); E</code></dt>
+
+    <dd>
+      <p>Mean value of a range unless there is any empty field.
+      Every field in the range that is empty is replaced by
+      &lsquo;<samp>nan</samp>&rsquo; which lets
+      &lsquo;<samp>vmean</samp>&rsquo; result in
+      &lsquo;<samp>nan</samp>&rsquo;. Then &lsquo;<samp>typeof ==
+      12</samp>&rsquo; detects the &lsquo;<samp>nan</samp>&rsquo;
+      from &lsquo;<samp>vmean</samp>&rsquo; and the Org table
+      result field is set to empty. Use this when the sample set is
+      expected to never have missing values.</p>
+    </dd>
+
+    <dt><code>if("$1..$7" == "[]", string(""),
+    vmean($1..$7))</code></dt>
+
+    <dd>
+      <p>Mean value of a range with empty fields skipped. Every
+      field in the range that is empty is skipped. When all fields
+      in the range are empty the mean value is not defined and the
+      Org table result field is set to empty. Use this when the
+      sample set can have a variable size.</p>
+    </dd>
+
+    <dt><code>vmean($1..$7); EN</code></dt>
+
+    <dd>
+      <p>To complete the example before: Mean value of a range with
+      empty fields counting as samples with value 0. Use this only
+      when incomplete sample sets should be padded with 0 to the
+      full size.</p>
+    </dd>
+  </dl>
+
+  <p>You can add your own Calc functions defined in Emacs Lisp with
+  <code>defmath</code> and use them in formula syntax for Calc.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT33" href="#DOCF33" id="FOOT33">(33)</a></h3>
+
+    <p>The &lsquo;<samp>printf</samp>&rsquo; reformatting is
+    limited in precision because the value passed to it is
+    converted into an &lsquo;<samp>integer</samp>&rsquo; or
+    &lsquo;<samp>double</samp>&rsquo;. The
+    &lsquo;<samp>integer</samp>&rsquo; is limited in size by
+    truncating the signed value to 32 bits. The
+    &lsquo;<samp>double</samp>&rsquo; is limited in precision to 64
+    bits overall which leaves approximately 16 significant decimal
+    digits.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp"
+    accesskey="n" rel="next">Formula syntax for Lisp</a>, Previous:
+    <a href="References.html#References" accesskey="p" rel=
+    "prev">References</a>, Up: <a href=
+    "The-spreadsheet.html#The-spreadsheet" accesskey="u" rel=
+    "up">The spreadsheet</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

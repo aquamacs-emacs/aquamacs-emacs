@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,229 +14,375 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Thread Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Thread Commands">
-<meta name="keywords" content="Gnus Manual: Thread Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Threading.html#Threading" rel="up" title="Threading">
-<link href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer" rel="next" title="Sorting the Summary Buffer">
-<link href="Low_002dLevel-Threading.html#Low_002dLevel-Threading" rel="prev" title="Low-Level Threading">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Thread Commands</title>
+  <meta name="description" content=
+  "Gnus Manual: Thread Commands" />
+  <meta name="keywords" content="Gnus Manual: Thread Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Threading.html#Threading" rel="up" title=
+  "Threading" />
+  <link href=
+  "Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer" rel=
+  "next" title="Sorting the Summary Buffer" />
+  <link href="Low_002dLevel-Threading.html#Low_002dLevel-Threading"
+  rel="prev" title="Low-Level Threading" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Thread-Commands"></a>
-<div class="header">
-<p>
-Previous: <a href="Customizing-Threading.html#Customizing-Threading" accesskey="p" rel="prev">Customizing Threading</a>, Up: <a href="Threading.html#Threading" accesskey="u" rel="up">Threading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Thread-Commands-1"></a>
-<h4 class="subsection">3.9.2 Thread Commands</h4>
-<a name="index-thread-commands"></a>
+<body lang="en" xml:lang="en">
+  <a name="Thread-Commands" id="Thread-Commands"></a>
 
-<dl compact="compact">
-<dt><kbd>T k</kbd></dt>
-<dt><kbd>C-M-k</kbd></dt>
-<dd><a name="index-T-k-_0028Summary_0029"></a>
-<a name="index-C_002dM_002dk-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dkill_002dthread"></a>
-<p>Mark all articles in the current (sub-)thread as read
-(<code>gnus-summary-kill-thread</code>).  If the prefix argument is positive,
-remove all marks instead.  If the prefix argument is negative, tick
-articles instead.
-</p>
-</dd>
-<dt><kbd>T l</kbd></dt>
-<dt><kbd>C-M-l</kbd></dt>
-<dd><a name="index-T-l-_0028Summary_0029"></a>
-<a name="index-C_002dM_002dl-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dlower_002dthread"></a>
-<p>Lower the score of the current (sub-)thread
-(<code>gnus-summary-lower-thread</code>).
-</p>
-</dd>
-<dt><kbd>T i</kbd></dt>
-<dd><a name="index-T-i-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002draise_002dthread"></a>
-<p>Increase the score of the current (sub-)thread
-(<code>gnus-summary-raise-thread</code>).
-</p>
-</dd>
-<dt><kbd>T #</kbd></dt>
-<dd><a name="index-T-_0023-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dmark_002dthread-1"></a>
-<p>Set the process mark on the current (sub-)thread
-(<code>gnus-uu-mark-thread</code>).
-</p>
-</dd>
-<dt><kbd>T M-#</kbd></dt>
-<dd><a name="index-T-M_002d_0023-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002dunmark_002dthread-1"></a>
-<p>Remove the process mark from the current (sub-)thread
-(<code>gnus-uu-unmark-thread</code>).
-</p>
-</dd>
-<dt><kbd>T T</kbd></dt>
-<dd><a name="index-T-T-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dtoggle_002dthreads"></a>
-<p>Toggle threading (<code>gnus-summary-toggle-threads</code>).
-</p>
-</dd>
-<dt><kbd>T s</kbd></dt>
-<dd><a name="index-T-s-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dshow_002dthread"></a>
-<p>Expose the (sub-)thread hidden under the current article, if any<br>
-(<code>gnus-summary-show-thread</code>).
-</p>
-</dd>
-<dt><kbd>T h</kbd></dt>
-<dd><a name="index-T-h-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dhide_002dthread"></a>
-<p>Hide the current (sub-)thread (<code>gnus-summary-hide-thread</code>).
-</p>
-</dd>
-<dt><kbd>T S</kbd></dt>
-<dd><a name="index-T-S-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dshow_002dall_002dthreads"></a>
-<p>Expose all hidden threads (<code>gnus-summary-show-all-threads</code>).
-</p>
-</dd>
-<dt><kbd>T H</kbd></dt>
-<dd><a name="index-T-H-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dhide_002dall_002dthreads"></a>
-<p>Hide all threads (<code>gnus-summary-hide-all-threads</code>).
-</p>
-</dd>
-<dt><kbd>T t</kbd></dt>
-<dd><a name="index-T-t-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002drethread_002dcurrent"></a>
-<p>Re-thread the current article&rsquo;s thread
-(<code>gnus-summary-rethread-current</code>).  This works even when the
-summary buffer is otherwise unthreaded.
-</p>
-</dd>
-<dt><kbd>T ^</kbd></dt>
-<dd><a name="index-T-_005e-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dreparent_002dthread"></a>
-<p>Make the current article the child of the marked (or previous) article
-(<code>gnus-summary-reparent-thread</code>).
-</p>
-</dd>
-<dt><kbd>T M-^</kbd></dt>
-<dd><a name="index-T-M_002d_005e-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dreparent_002dchildren"></a>
-<p>Make the current article the parent of the marked articles
-(<code>gnus-summary-reparent-children</code>).
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Previous: <a href=
+    "Customizing-Threading.html#Customizing-Threading" accesskey=
+    "p" rel="prev">Customizing Threading</a>, Up: <a href=
+    "Threading.html#Threading" accesskey="u" rel="up">Threading</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Thread-Commands-1" id="Thread-Commands-1"></a>
 
-<p>The following commands are thread movement commands.  They all
-understand the numeric prefix.
-</p>
-<dl compact="compact">
-<dt><kbd>T n</kbd></dt>
-<dd><a name="index-T-n-_0028Summary_0029"></a>
-</dd>
-<dt><kbd>C-M-f</kbd></dt>
-<dd><a name="index-C_002dM_002dn-_0028Summary_0029"></a>
-</dd>
-<dt><kbd>M-down</kbd></dt>
-<dd><a name="index-M_002ddown-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dnext_002dthread"></a>
-<p>Go to the next thread (<code>gnus-summary-next-thread</code>).
-</p>
-</dd>
-<dt><kbd>T p</kbd></dt>
-<dd><a name="index-T-p-_0028Summary_0029"></a>
-</dd>
-<dt><kbd>C-M-b</kbd></dt>
-<dd><a name="index-C_002dM_002dp-_0028Summary_0029"></a>
-</dd>
-<dt><kbd>M-up</kbd></dt>
-<dd><a name="index-M_002dup-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dprev_002dthread"></a>
-<p>Go to the previous thread (<code>gnus-summary-prev-thread</code>).
-</p>
-</dd>
-<dt><kbd>T d</kbd></dt>
-<dd><a name="index-T-d-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002ddown_002dthread"></a>
-<p>Descend the thread (<code>gnus-summary-down-thread</code>).
-</p>
-</dd>
-<dt><kbd>T u</kbd></dt>
-<dd><a name="index-T-u-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dup_002dthread"></a>
-<p>Ascend the thread (<code>gnus-summary-up-thread</code>).
-</p>
-</dd>
-<dt><kbd>T o</kbd></dt>
-<dd><a name="index-T-o-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dtop_002dthread"></a>
-<p>Go to the top of the thread (<code>gnus-summary-top-thread</code>).
-</p></dd>
-</dl>
+  <h4 class="subsection">3.9.2 Thread Commands</h4><a name=
+  "index-thread-commands" id="index-thread-commands"></a>
 
-<a name="index-gnus_002dthread_002doperation_002dignore_002dsubject"></a>
-<p>If you ignore subject while threading, you&rsquo;ll naturally end up with
-threads that have several different subjects in them.  If you then issue
-a command like <kbd>T k</kbd> (<code>gnus-summary-kill-thread</code>) you might not
-wish to kill the entire thread, but just those parts of the thread that
-have the same subject as the current article.  If you like this idea,
-you can fiddle with <code>gnus-thread-operation-ignore-subject</code>.  If it
-is non-<code>nil</code> (which it is by default), subjects will be ignored
-when doing thread commands.  If this variable is <code>nil</code>, articles in
-the same thread with different subjects will not be included in the
-operation in question.  If this variable is <code>fuzzy</code>, only articles
-that have subjects fuzzily equal will be included (see <a href="Fuzzy-Matching.html#Fuzzy-Matching">Fuzzy Matching</a>).
-</p>
+  <dl compact="compact">
+    <dt><kbd>T k</kbd></dt>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Customizing-Threading.html#Customizing-Threading" accesskey="p" rel="prev">Customizing Threading</a>, Up: <a href="Threading.html#Threading" accesskey="u" rel="up">Threading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><kbd>C-M-k</kbd></dt>
 
+    <dd>
+      <a name="index-T-k-_0028Summary_0029" id=
+      "index-T-k-_0028Summary_0029"></a> <a name=
+      "index-C_002dM_002dk-_0028Summary_0029" id=
+      "index-C_002dM_002dk-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dkill_002dthread" id=
+      "index-gnus_002dsummary_002dkill_002dthread"></a>
 
+      <p>Mark all articles in the current (sub-)thread as read
+      (<code>gnus-summary-kill-thread</code>). If the prefix
+      argument is positive, remove all marks instead. If the prefix
+      argument is negative, tick articles instead.</p>
+    </dd>
 
+    <dt><kbd>T l</kbd></dt>
+
+    <dt><kbd>C-M-l</kbd></dt>
+
+    <dd>
+      <a name="index-T-l-_0028Summary_0029" id=
+      "index-T-l-_0028Summary_0029"></a> <a name=
+      "index-C_002dM_002dl-_0028Summary_0029" id=
+      "index-C_002dM_002dl-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dlower_002dthread" id=
+      "index-gnus_002dsummary_002dlower_002dthread"></a>
+
+      <p>Lower the score of the current (sub-)thread
+      (<code>gnus-summary-lower-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>T i</kbd></dt>
+
+    <dd>
+      <a name="index-T-i-_0028Summary_0029" id=
+      "index-T-i-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002draise_002dthread" id=
+      "index-gnus_002dsummary_002draise_002dthread"></a>
+
+      <p>Increase the score of the current (sub-)thread
+      (<code>gnus-summary-raise-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>T #</kbd></dt>
+
+    <dd>
+      <a name="index-T-_0023-_0028Summary_0029" id=
+      "index-T-_0023-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dmark_002dthread-1" id=
+      "index-gnus_002duu_002dmark_002dthread-1"></a>
+
+      <p>Set the process mark on the current (sub-)thread
+      (<code>gnus-uu-mark-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>T M-#</kbd></dt>
+
+    <dd>
+      <a name="index-T-M_002d_0023-_0028Summary_0029" id=
+      "index-T-M_002d_0023-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002dunmark_002dthread-1" id=
+      "index-gnus_002duu_002dunmark_002dthread-1"></a>
+
+      <p>Remove the process mark from the current (sub-)thread
+      (<code>gnus-uu-unmark-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>T T</kbd></dt>
+
+    <dd>
+      <a name="index-T-T-_0028Summary_0029" id=
+      "index-T-T-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dtoggle_002dthreads" id=
+      "index-gnus_002dsummary_002dtoggle_002dthreads"></a>
+
+      <p>Toggle threading
+      (<code>gnus-summary-toggle-threads</code>).</p>
+    </dd>
+
+    <dt><kbd>T s</kbd></dt>
+
+    <dd>
+      <a name="index-T-s-_0028Summary_0029" id=
+      "index-T-s-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dshow_002dthread" id=
+      "index-gnus_002dsummary_002dshow_002dthread"></a>
+
+      <p>Expose the (sub-)thread hidden under the current article,
+      if any<br />
+      (<code>gnus-summary-show-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>T h</kbd></dt>
+
+    <dd>
+      <a name="index-T-h-_0028Summary_0029" id=
+      "index-T-h-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dhide_002dthread" id=
+      "index-gnus_002dsummary_002dhide_002dthread"></a>
+
+      <p>Hide the current (sub-)thread
+      (<code>gnus-summary-hide-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>T S</kbd></dt>
+
+    <dd>
+      <a name="index-T-S-_0028Summary_0029" id=
+      "index-T-S-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dshow_002dall_002dthreads" id=
+      "index-gnus_002dsummary_002dshow_002dall_002dthreads"></a>
+
+      <p>Expose all hidden threads
+      (<code>gnus-summary-show-all-threads</code>).</p>
+    </dd>
+
+    <dt><kbd>T H</kbd></dt>
+
+    <dd>
+      <a name="index-T-H-_0028Summary_0029" id=
+      "index-T-H-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dhide_002dall_002dthreads" id=
+      "index-gnus_002dsummary_002dhide_002dall_002dthreads"></a>
+
+      <p>Hide all threads
+      (<code>gnus-summary-hide-all-threads</code>).</p>
+    </dd>
+
+    <dt><kbd>T t</kbd></dt>
+
+    <dd>
+      <a name="index-T-t-_0028Summary_0029" id=
+      "index-T-t-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002drethread_002dcurrent" id=
+      "index-gnus_002dsummary_002drethread_002dcurrent"></a>
+
+      <p>Re-thread the current article&rsquo;s thread
+      (<code>gnus-summary-rethread-current</code>). This works even
+      when the summary buffer is otherwise unthreaded.</p>
+    </dd>
+
+    <dt><kbd>T ^</kbd></dt>
+
+    <dd>
+      <a name="index-T-_005e-_0028Summary_0029" id=
+      "index-T-_005e-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dreparent_002dthread" id=
+      "index-gnus_002dsummary_002dreparent_002dthread"></a>
+
+      <p>Make the current article the child of the marked (or
+      previous) article
+      (<code>gnus-summary-reparent-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>T M-^</kbd></dt>
+
+    <dd>
+      <a name="index-T-M_002d_005e-_0028Summary_0029" id=
+      "index-T-M_002d_005e-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dreparent_002dchildren" id=
+      "index-gnus_002dsummary_002dreparent_002dchildren"></a>
+
+      <p>Make the current article the parent of the marked articles
+      (<code>gnus-summary-reparent-children</code>).</p>
+    </dd>
+  </dl>
+
+  <p>The following commands are thread movement commands. They all
+  understand the numeric prefix.</p>
+
+  <dl compact="compact">
+    <dt><kbd>T n</kbd></dt>
+
+    <dd><a name="index-T-n-_0028Summary_0029" id=
+    "index-T-n-_0028Summary_0029"></a></dd>
+
+    <dt><kbd>C-M-f</kbd></dt>
+
+    <dd><a name="index-C_002dM_002dn-_0028Summary_0029" id=
+    "index-C_002dM_002dn-_0028Summary_0029"></a></dd>
+
+    <dt><kbd>M-down</kbd></dt>
+
+    <dd>
+      <a name="index-M_002ddown-_0028Summary_0029" id=
+      "index-M_002ddown-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dnext_002dthread" id=
+      "index-gnus_002dsummary_002dnext_002dthread"></a>
+
+      <p>Go to the next thread
+      (<code>gnus-summary-next-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>T p</kbd></dt>
+
+    <dd><a name="index-T-p-_0028Summary_0029" id=
+    "index-T-p-_0028Summary_0029"></a></dd>
+
+    <dt><kbd>C-M-b</kbd></dt>
+
+    <dd><a name="index-C_002dM_002dp-_0028Summary_0029" id=
+    "index-C_002dM_002dp-_0028Summary_0029"></a></dd>
+
+    <dt><kbd>M-up</kbd></dt>
+
+    <dd>
+      <a name="index-M_002dup-_0028Summary_0029" id=
+      "index-M_002dup-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dprev_002dthread" id=
+      "index-gnus_002dsummary_002dprev_002dthread"></a>
+
+      <p>Go to the previous thread
+      (<code>gnus-summary-prev-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>T d</kbd></dt>
+
+    <dd>
+      <a name="index-T-d-_0028Summary_0029" id=
+      "index-T-d-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002ddown_002dthread" id=
+      "index-gnus_002dsummary_002ddown_002dthread"></a>
+
+      <p>Descend the thread
+      (<code>gnus-summary-down-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>T u</kbd></dt>
+
+    <dd>
+      <a name="index-T-u-_0028Summary_0029" id=
+      "index-T-u-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dup_002dthread" id=
+      "index-gnus_002dsummary_002dup_002dthread"></a>
+
+      <p>Ascend the thread
+      (<code>gnus-summary-up-thread</code>).</p>
+    </dd>
+
+    <dt><kbd>T o</kbd></dt>
+
+    <dd>
+      <a name="index-T-o-_0028Summary_0029" id=
+      "index-T-o-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dtop_002dthread" id=
+      "index-gnus_002dsummary_002dtop_002dthread"></a>
+
+      <p>Go to the top of the thread
+      (<code>gnus-summary-top-thread</code>).</p>
+    </dd>
+  </dl><a name=
+  "index-gnus_002dthread_002doperation_002dignore_002dsubject" id=
+  "index-gnus_002dthread_002doperation_002dignore_002dsubject"></a>
+
+  <p>If you ignore subject while threading, you&rsquo;ll naturally
+  end up with threads that have several different subjects in them.
+  If you then issue a command like <kbd>T k</kbd>
+  (<code>gnus-summary-kill-thread</code>) you might not wish to
+  kill the entire thread, but just those parts of the thread that
+  have the same subject as the current article. If you like this
+  idea, you can fiddle with
+  <code>gnus-thread-operation-ignore-subject</code>. If it is
+  non-<code>nil</code> (which it is by default), subjects will be
+  ignored when doing thread commands. If this variable is
+  <code>nil</code>, articles in the same thread with different
+  subjects will not be included in the operation in question. If
+  this variable is <code>fuzzy</code>, only articles that have
+  subjects fuzzily equal will be included (see <a href=
+  "Fuzzy-Matching.html#Fuzzy-Matching">Fuzzy Matching</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Customizing-Threading.html#Customizing-Threading" accesskey=
+    "p" rel="prev">Customizing Threading</a>, Up: <a href=
+    "Threading.html#Threading" accesskey="u" rel="up">Threading</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

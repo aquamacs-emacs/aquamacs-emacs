@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,136 +19,209 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Creating Keymaps</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Creating Keymaps">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Creating Keymaps">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
-<link href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps" rel="next" title="Inheritance and Keymaps">
-<link href="Format-of-Keymaps.html#Format-of-Keymaps" rel="prev" title="Format of Keymaps">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Creating Keymaps</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Creating Keymaps" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Creating Keymaps" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keymaps.html#Keymaps" rel="up" title="Keymaps" />
+  <link href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps"
+  rel="next" title="Inheritance and Keymaps" />
+  <link href="Format-of-Keymaps.html#Format-of-Keymaps" rel="prev"
+  title="Format of Keymaps" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Creating-Keymaps" id="Creating-Keymaps"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Inheritance-and-Keymaps.html#Inheritance-and-Keymaps"
+    accesskey="n" rel="next">Inheritance and Keymaps</a>, Previous:
+    <a href="Format-of-Keymaps.html#Format-of-Keymaps" accesskey=
+    "p" rel="prev">Format of Keymaps</a>, Up: <a href=
+    "Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-Keymaps-1" id="Creating-Keymaps-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-Keymaps"></a>
-<div class="header">
-<p>
-Next: <a href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps" accesskey="n" rel="next">Inheritance and Keymaps</a>, Previous: <a href="Format-of-Keymaps.html#Format-of-Keymaps" accesskey="p" rel="prev">Format of Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-Keymaps-1"></a>
-<h3 class="section">21.4 Creating Keymaps</h3>
-<a name="index-creating-keymaps"></a>
+  <h3 class="section">21.4 Creating Keymaps</h3><a name=
+  "index-creating-keymaps" id="index-creating-keymaps"></a>
 
-<p>Here we describe the functions for creating keymaps.
-</p>
-<dl>
-<dt><a name="index-make_002dsparse_002dkeymap"></a>Function: <strong>make-sparse-keymap</strong> <em>&amp;optional prompt</em></dt>
-<dd><p>This function creates and returns a new sparse keymap with no entries.
-(A sparse keymap is the kind of keymap you usually want.)  The new
-keymap does not contain a char-table, unlike <code>make-keymap</code>, and
-does not bind any events.
-</p>
-<div class="example">
-<pre class="example">(make-sparse-keymap)
+  <p>Here we describe the functions for creating keymaps.</p>
+
+  <dl>
+    <dt><a name="index-make_002dsparse_002dkeymap" id=
+    "index-make_002dsparse_002dkeymap"></a>Function:
+    <strong>make-sparse-keymap</strong> <em>&amp;optional
+    prompt</em></dt>
+
+    <dd>
+      <p>This function creates and returns a new sparse keymap with
+      no entries. (A sparse keymap is the kind of keymap you
+      usually want.) The new keymap does not contain a char-table,
+      unlike <code>make-keymap</code>, and does not bind any
+      events.</p>
+
+      <div class="example">
+        <pre class="example">
+(make-sparse-keymap)
     &rArr; (keymap)
-</pre></div>
+</pre>
+      </div>
 
-<p>If you specify <var>prompt</var>, that becomes the overall prompt string
-for the keymap.  You should specify this only for menu keymaps
-(see <a href="Defining-Menus.html#Defining-Menus">Defining Menus</a>).  A keymap with an overall prompt string will
-always present a mouse menu or a keyboard menu if it is active for
-looking up the next input event.  Don&rsquo;t specify an overall prompt string
-for the main map of a major or minor mode, because that would cause
-the command loop to present a keyboard menu every time.
-</p></dd></dl>
+      <p>If you specify <var>prompt</var>, that becomes the overall
+      prompt string for the keymap. You should specify this only
+      for menu keymaps (see <a href=
+      "Defining-Menus.html#Defining-Menus">Defining Menus</a>). A
+      keymap with an overall prompt string will always present a
+      mouse menu or a keyboard menu if it is active for looking up
+      the next input event. Don&rsquo;t specify an overall prompt
+      string for the main map of a major or minor mode, because
+      that would cause the command loop to present a keyboard menu
+      every time.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-make_002dkeymap"></a>Function: <strong>make-keymap</strong> <em>&amp;optional prompt</em></dt>
-<dd><p>This function creates and returns a new full keymap.  That keymap
-contains a char-table (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>) with slots for all
-characters without modifiers.  The new keymap initially binds all
-these characters to <code>nil</code>, and does not bind any other kind of
-event.  The argument <var>prompt</var> specifies a
-prompt string, as in <code>make-sparse-keymap</code>.
-</p>
-<div class="example">
-<pre class="example">(make-keymap)
+  <dl>
+    <dt><a name="index-make_002dkeymap" id=
+    "index-make_002dkeymap"></a>Function:
+    <strong>make-keymap</strong> <em>&amp;optional prompt</em></dt>
+
+    <dd>
+      <p>This function creates and returns a new full keymap. That
+      keymap contains a char-table (see <a href=
+      "Char_002dTables.html#Char_002dTables">Char-Tables</a>) with
+      slots for all characters without modifiers. The new keymap
+      initially binds all these characters to <code>nil</code>, and
+      does not bind any other kind of event. The argument
+      <var>prompt</var> specifies a prompt string, as in
+      <code>make-sparse-keymap</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(make-keymap)
     &rArr; (keymap #^[nil nil keymap nil nil nil &hellip;])
-</pre></div>
+</pre>
+      </div>
 
-<p>A full keymap is more efficient than a sparse keymap when it holds
-lots of bindings; for just a few, the sparse keymap is better.
-</p></dd></dl>
+      <p>A full keymap is more efficient than a sparse keymap when
+      it holds lots of bindings; for just a few, the sparse keymap
+      is better.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-copy_002dkeymap"></a>Function: <strong>copy-keymap</strong> <em>keymap</em></dt>
-<dd><p>This function returns a copy of <var>keymap</var>.  Any keymaps that
-appear directly as bindings in <var>keymap</var> are also copied recursively,
-and so on to any number of levels.  However, recursive copying does not
-take place when the definition of a character is a symbol whose function
-definition is a keymap; the same symbol appears in the new copy.
-</p>
-<div class="example">
-<pre class="example">(setq map (copy-keymap (current-local-map)))
+  <dl>
+    <dt><a name="index-copy_002dkeymap" id=
+    "index-copy_002dkeymap"></a>Function:
+    <strong>copy-keymap</strong> <em>keymap</em></dt>
+
+    <dd>
+      <p>This function returns a copy of <var>keymap</var>. Any
+      keymaps that appear directly as bindings in <var>keymap</var>
+      are also copied recursively, and so on to any number of
+      levels. However, recursive copying does not take place when
+      the definition of a character is a symbol whose function
+      definition is a keymap; the same symbol appears in the new
+      copy.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq map (copy-keymap (current-local-map)))
 &rArr; (keymap
-</pre><pre class="example">     ;; <span class="roman">(This implements meta characters.)</span>
+</pre>
+        <pre class="example">
+     ;; <span class=
+"roman">(This implements meta characters.)</span>
      (27 keymap
          (83 . center-paragraph)
          (115 . center-line))
      (9 . tab-to-tab-stop))
-</pre><pre class="example">
-</pre><pre class="example">(eq map (current-local-map))
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(eq map (current-local-map))
     &rArr; nil
-</pre><pre class="example">(equal map (current-local-map))
+</pre>
+        <pre class="example">
+(equal map (current-local-map))
     &rArr; t
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps" accesskey="n" rel="next">Inheritance and Keymaps</a>, Previous: <a href="Format-of-Keymaps.html#Format-of-Keymaps" accesskey="p" rel="prev">Format of Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Inheritance-and-Keymaps.html#Inheritance-and-Keymaps"
+    accesskey="n" rel="next">Inheritance and Keymaps</a>, Previous:
+    <a href="Format-of-Keymaps.html#Format-of-Keymaps" accesskey=
+    "p" rel="prev">Format of Keymaps</a>, Up: <a href=
+    "Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

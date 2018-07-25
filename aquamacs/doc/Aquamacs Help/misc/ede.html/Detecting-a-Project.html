@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes EDE, the Emacs Development Environment.
 
 Copyright (C) 1998-2001, 2004-2005, 2008-2016
@@ -15,135 +17,190 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Development Environment: Detecting a Project</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Development Environment: Detecting a Project">
-<meta name="keywords" content="Emacs Development Environment: Detecting a Project">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Extending-EDE.html#Extending-EDE" rel="up" title="Extending EDE">
-<link href="User-interface-methods.html#User-interface-methods" rel="next" title="User interface methods">
-<link href="Development-Overview.html#Development-Overview" rel="prev" title="Development Overview">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Development Environment: Detecting a Project</title>
+  <meta name="description" content=
+  "Emacs Development Environment: Detecting a Project" />
+  <meta name="keywords" content=
+  "Emacs Development Environment: Detecting a Project" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Extending-EDE.html#Extending-EDE" rel="up" title=
+  "Extending EDE" />
+  <link href="User-interface-methods.html#User-interface-methods"
+  rel="next" title="User interface methods" />
+  <link href="Development-Overview.html#Development-Overview" rel=
+  "prev" title="Development Overview" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Detecting-a-Project"></a>
-<div class="header">
-<p>
-Next: <a href="User-interface-methods.html#User-interface-methods" accesskey="n" rel="next">User interface methods</a>, Previous: <a href="Development-Overview.html#Development-Overview" accesskey="p" rel="prev">Development Overview</a>, Up: <a href="Extending-EDE.html#Extending-EDE" accesskey="u" rel="up">Extending EDE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Detecting-a-Project-1"></a>
-<h3 class="section">8.2 Detecting a Project</h3>
+<body lang="en" xml:lang="en">
+  <a name="Detecting-a-Project" id="Detecting-a-Project"></a>
 
-<p>Project detection happens with the list of <code>ede-project-autoload</code>
-instances stored in <code>ede-project-class-files</code>.  The full project
-detection scheme works like this:
-</p>
-<dl compact="compact">
-<dt>Step 1:</dt>
-<dd><p><code>find-file-hook</code> calls <code>ede-turn-on-hook</code> on BUFFER.
-</p></dd>
-<dt>Step 2:</dt>
-<dd><p><code>ede-turn-on-hook</code> turns on <code>ede-minor-mode</code>
-</p></dd>
-<dt>Step 3:</dt>
-<dd><p><code>ede-minor-mode</code> looks to see if BUFFER is associated with any
-open projects.  If not, it calls <code>ede-load-project-file</code> to find
-a project associated with the current directory BUFFER is in.
-</p></dd>
-<dt>Step 4:</dt>
-<dd><p><code>ede-minor-mode</code> associates the found project with the current
-buffer with a series of variables, such as <code>ede-object</code>, and
-<code>ede-object-project</code> and <code>ede-object-root-project</code>.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "User-interface-methods.html#User-interface-methods" accesskey=
+    "n" rel="next">User interface methods</a>, Previous: <a href=
+    "Development-Overview.html#Development-Overview" accesskey="p"
+    rel="prev">Development Overview</a>, Up: <a href=
+    "Extending-EDE.html#Extending-EDE" accesskey="u" rel=
+    "up">Extending EDE</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Detecting-a-Project-1" id="Detecting-a-Project-1"></a>
 
-<p>Once a buffer is associated, <i>EDE</i> minor mode commands will operate
-on that buffer.
-</p>
-<p>The function <code>ede-load-project-file</code> is at the heart of detecting
-projects, and it works by looping over all the known project autoload
-types in <code>ede-project-autoload</code> using the utility
-<code>ede-directory-project-p</code>.
-</p>
-<p>The function <code>ede-directory-project-p</code> will call
-<code>ede-dir-to-projectfile</code> on every <code>ede-project-autoload</code>
-until one of them returns true.  The method
-<code>ede-dir-to-projectfile</code> in turn gets the <code>:proj-file</code> slot
-from the autoload.  If it is a string (i.e., a project file name), it
-checks to see if that exists in BUFFER&rsquo;s directory.  If it is a
-function, then it calls that function and expects it to return a file
-name or <code>nil</code>.  If the file exists, then this directory is assumed to be
-part of a project, and <code>ede-directory-project-p</code> returns the
-instance of <code>ede-project-autoload</code> that matched.
-</p>
-<p>If the current directory contains the file <code>.ede-ignore</code> then
-that directory is automatically assumed to contain no projects, even
-if there is a matching pattern.  Use this type of file in a directory
-that may contain many other sub projects, but still has a Makefile of
-some sort.
-</p>
-<p>If the current directory is a project, then <i>EDE</i> scans upwards till
-it finds the top of the project.  It does this by calling
-<code>ede-toplevel-project</code>.  If this hasn&rsquo;t already been discovered,
-the directories as scanned upward one at a time until a directory with
-no project is found.  The last found project becomes the project
-root.  If the found instance of <code>ede-project-autoload</code> has a
-valid <code>proj-root</code> slot value, then that function is called instead
-of scanning the project by hand.  Some project types have a short-cut
-for determining the root of a project, so this comes in handy.
-</p>
-<p>Getting back to <code>ede-load-project-file</code>, this now has an instance
-of <code>ede-project-autoload</code>.  It uses the <code>load-type</code> slot to
-both autoload in the project type, and to create a new instance of the
-project type found for the root of the project.  That project is added
-to the global list of all projects.  All subprojects are then created
-and assembled into the project data structures.
-</p>
+  <h3 class="section">8.2 Detecting a Project</h3>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="User-interface-methods.html#User-interface-methods" accesskey="n" rel="next">User interface methods</a>, Previous: <a href="Development-Overview.html#Development-Overview" accesskey="p" rel="prev">Development Overview</a>, Up: <a href="Extending-EDE.html#Extending-EDE" accesskey="u" rel="up">Extending EDE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+  <p>Project detection happens with the list of
+  <code>ede-project-autoload</code> instances stored in
+  <code>ede-project-class-files</code>. The full project detection
+  scheme works like this:</p>
 
+  <dl compact="compact">
+    <dt>Step 1:</dt>
 
+    <dd>
+      <p><code>find-file-hook</code> calls
+      <code>ede-turn-on-hook</code> on BUFFER.</p>
+    </dd>
 
+    <dt>Step 2:</dt>
+
+    <dd>
+      <p><code>ede-turn-on-hook</code> turns on
+      <code>ede-minor-mode</code></p>
+    </dd>
+
+    <dt>Step 3:</dt>
+
+    <dd>
+      <p><code>ede-minor-mode</code> looks to see if BUFFER is
+      associated with any open projects. If not, it calls
+      <code>ede-load-project-file</code> to find a project
+      associated with the current directory BUFFER is in.</p>
+    </dd>
+
+    <dt>Step 4:</dt>
+
+    <dd>
+      <p><code>ede-minor-mode</code> associates the found project
+      with the current buffer with a series of variables, such as
+      <code>ede-object</code>, and <code>ede-object-project</code>
+      and <code>ede-object-root-project</code>.</p>
+    </dd>
+  </dl>
+
+  <p>Once a buffer is associated, <i>EDE</i> minor mode commands
+  will operate on that buffer.</p>
+
+  <p>The function <code>ede-load-project-file</code> is at the
+  heart of detecting projects, and it works by looping over all the
+  known project autoload types in <code>ede-project-autoload</code>
+  using the utility <code>ede-directory-project-p</code>.</p>
+
+  <p>The function <code>ede-directory-project-p</code> will call
+  <code>ede-dir-to-projectfile</code> on every
+  <code>ede-project-autoload</code> until one of them returns true.
+  The method <code>ede-dir-to-projectfile</code> in turn gets the
+  <code>:proj-file</code> slot from the autoload. If it is a string
+  (i.e., a project file name), it checks to see if that exists in
+  BUFFER&rsquo;s directory. If it is a function, then it calls that
+  function and expects it to return a file name or
+  <code>nil</code>. If the file exists, then this directory is
+  assumed to be part of a project, and
+  <code>ede-directory-project-p</code> returns the instance of
+  <code>ede-project-autoload</code> that matched.</p>
+
+  <p>If the current directory contains the file
+  <code>.ede-ignore</code> then that directory is automatically
+  assumed to contain no projects, even if there is a matching
+  pattern. Use this type of file in a directory that may contain
+  many other sub projects, but still has a Makefile of some
+  sort.</p>
+
+  <p>If the current directory is a project, then <i>EDE</i> scans
+  upwards till it finds the top of the project. It does this by
+  calling <code>ede-toplevel-project</code>. If this hasn&rsquo;t
+  already been discovered, the directories as scanned upward one at
+  a time until a directory with no project is found. The last found
+  project becomes the project root. If the found instance of
+  <code>ede-project-autoload</code> has a valid
+  <code>proj-root</code> slot value, then that function is called
+  instead of scanning the project by hand. Some project types have
+  a short-cut for determining the root of a project, so this comes
+  in handy.</p>
+
+  <p>Getting back to <code>ede-load-project-file</code>, this now
+  has an instance of <code>ede-project-autoload</code>. It uses the
+  <code>load-type</code> slot to both autoload in the project type,
+  and to create a new instance of the project type found for the
+  root of the project. That project is added to the global list of
+  all projects. All subprojects are then created and assembled into
+  the project data structures.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "User-interface-methods.html#User-interface-methods" accesskey=
+    "n" rel="next">User interface methods</a>, Previous: <a href=
+    "Development-Overview.html#Development-Overview" accesskey="p"
+    rel="prev">Development Overview</a>, Up: <a href=
+    "Extending-EDE.html#Extending-EDE" accesskey="u" rel=
+    "up">Extending EDE</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

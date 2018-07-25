@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,250 +14,393 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Score Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Score Variables">
-<meta name="keywords" content="Gnus Manual: Score Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Scoring.html#Scoring" rel="up" title="Scoring">
-<link href="Score-File-Format.html#Score-File-Format" rel="next" title="Score File Format">
-<link href="Group-Score-Commands.html#Group-Score-Commands" rel="prev" title="Group Score Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Score Variables</title>
+  <meta name="description" content=
+  "Gnus Manual: Score Variables" />
+  <meta name="keywords" content="Gnus Manual: Score Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Scoring.html#Scoring" rel="up" title="Scoring" />
+  <link href="Score-File-Format.html#Score-File-Format" rel="next"
+  title="Score File Format" />
+  <link href="Group-Score-Commands.html#Group-Score-Commands" rel=
+  "prev" title="Group Score Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Score-Variables"></a>
-<div class="header">
-<p>
-Next: <a href="Score-File-Format.html#Score-File-Format" accesskey="n" rel="next">Score File Format</a>, Previous: <a href="Group-Score-Commands.html#Group-Score-Commands" accesskey="p" rel="prev">Group Score Commands</a>, Up: <a href="Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Score-Variables-1"></a>
-<h3 class="section">7.3 Score Variables</h3>
-<a name="index-score-variables"></a>
+<body lang="en" xml:lang="en">
+  <a name="Score-Variables" id="Score-Variables"></a>
 
-<dl compact="compact">
-<dt><code>gnus-use-scoring</code></dt>
-<dd><a name="index-gnus_002duse_002dscoring"></a>
-<p>If <code>nil</code>, Gnus will not check for score files, and will not, in
-general, do any score-related work.  This is <code>t</code> by default.
-</p>
-</dd>
-<dt><code>gnus-kill-killed</code></dt>
-<dd><a name="index-gnus_002dkill_002dkilled"></a>
-<p>If this variable is <code>nil</code>, Gnus will never apply score files to
-articles that have already been through the kill process.  While this
-may save you lots of time, it also means that if you apply a kill file
-to a group, and then change the kill file and want to run it over you
-group again to kill more articles, it won&rsquo;t work.  You have to set this
-variable to <code>t</code> to do that.  (It is <code>t</code> by default.)
-</p>
-</dd>
-<dt><code>gnus-kill-files-directory</code></dt>
-<dd><a name="index-gnus_002dkill_002dfiles_002ddirectory"></a>
-<p>All kill and score files will be stored in this directory, which is
-initialized from the <code>SAVEDIR</code> environment variable by default.
-This is <samp>~/News/</samp> by default.
-</p>
-</dd>
-<dt><code>gnus-score-file-suffix</code></dt>
-<dd><a name="index-gnus_002dscore_002dfile_002dsuffix"></a>
-<p>Suffix to add to the group name to arrive at the score file name
-(<samp>SCORE</samp> by default.)
-</p>
-</dd>
-<dt><code>gnus-score-uncacheable-files</code></dt>
-<dd><a name="index-gnus_002dscore_002duncacheable_002dfiles"></a>
-<a name="index-score-cache"></a>
-<p>All score files are normally cached to avoid excessive re-loading of
-score files.  However, this might make your Emacs grow big and
-bloated, so this regexp can be used to weed out score files unlikely
-to be needed again.  It would be a bad idea to deny caching of
-<samp>all.SCORE</samp>, while it might be a good idea to not cache
-<samp>comp.infosystems.www.authoring.misc.ADAPT</samp>.  In fact, this
-variable is &lsquo;<samp>ADAPT$</samp>&rsquo; by default, so no adaptive score files will
-be cached.
-</p>
-</dd>
-<dt><code>gnus-save-score</code></dt>
-<dd><a name="index-gnus_002dsave_002dscore"></a>
-<p>If you have really complicated score files, and do lots of batch
-scoring, then you might set this variable to <code>t</code>.  This will make
-Gnus save the scores into the <samp>.newsrc.eld</samp> file.
-</p>
-<p>If you do not set this to <code>t</code>, then manual scores (like those set
-with <kbd>V s</kbd> (<code>gnus-summary-set-score</code>)) will not be preserved
-across group visits.
-</p>
-</dd>
-<dt><code>gnus-score-interactive-default-score</code></dt>
-<dd><a name="index-gnus_002dscore_002dinteractive_002ddefault_002dscore"></a>
-<p>Score used by all the interactive raise/lower commands to raise/lower
-score with.  Default is 1000, which may seem excessive, but this is to
-ensure that the adaptive scoring scheme gets enough room to play with.
-We don&rsquo;t want the small changes from the adaptive scoring to overwrite
-manually entered data.
-</p>
-</dd>
-<dt><code>gnus-summary-default-score</code></dt>
-<dd><a name="index-gnus_002dsummary_002ddefault_002dscore"></a>
-<p>Default score of an article, which is 0 by default.
-</p>
-</dd>
-<dt><code>gnus-summary-expunge-below</code></dt>
-<dd><a name="index-gnus_002dsummary_002dexpunge_002dbelow"></a>
-<p>Don&rsquo;t display the summary lines of articles that have scores lower than
-this variable.  This is <code>nil</code> by default, which means that no
-articles will be hidden.  This variable is local to the summary buffers,
-and has to be set from <code>gnus-summary-mode-hook</code>.
-</p>
-</dd>
-<dt><code>gnus-score-over-mark</code></dt>
-<dd><a name="index-gnus_002dscore_002dover_002dmark"></a>
-<p>Mark (in the third column) used for articles with a score over the
-default.  Default is &lsquo;<samp>+</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>gnus-score-below-mark</code></dt>
-<dd><a name="index-gnus_002dscore_002dbelow_002dmark"></a>
-<p>Mark (in the third column) used for articles with a score below the
-default.  Default is &lsquo;<samp>-</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>gnus-score-find-score-files-function</code></dt>
-<dd><a name="index-gnus_002dscore_002dfind_002dscore_002dfiles_002dfunction"></a>
-<p>Function used to find score files for the current group.  This function
-is called with the name of the group as the argument.
-</p>
-<p>Predefined functions available are:
-</p><dl compact="compact">
-<dt><code>gnus-score-find-single</code></dt>
-<dd><a name="index-gnus_002dscore_002dfind_002dsingle"></a>
-<p>Only apply the group&rsquo;s own score file.
-</p>
-</dd>
-<dt><code>gnus-score-find-bnews</code></dt>
-<dd><a name="index-gnus_002dscore_002dfind_002dbnews"></a>
-<p>Apply all score files that match, using bnews syntax.  This is the
-default.  If the current group is &lsquo;<samp>gnu.emacs.gnus</samp>&rsquo;, for instance,
-<samp>all.emacs.all.SCORE</samp>, <samp>not.alt.all.SCORE</samp> and
-<samp>gnu.all.SCORE</samp> would all apply.  In short, the instances of
-&lsquo;<samp>all</samp>&rsquo; in the score file names are translated into &lsquo;<samp>.*</samp>&rsquo;, and
-then a regexp match is done.
-</p>
-<p>This means that if you have some score entries that you want to apply to
-all groups, then you put those entries in the <samp>all.SCORE</samp> file.
-</p>
-<p>The score files are applied in a semi-random order, although Gnus will
-try to apply the more general score files before the more specific score
-files.  It does this by looking at the number of elements in the score
-file names&mdash;discarding the &lsquo;<samp>all</samp>&rsquo; elements.
-</p>
-</dd>
-<dt><code>gnus-score-find-hierarchical</code></dt>
-<dd><a name="index-gnus_002dscore_002dfind_002dhierarchical"></a>
-<p>Apply all score files from all the parent groups.  This means that you
-can&rsquo;t have score files like <samp>all.SCORE</samp>, but you can have
-<samp>SCORE</samp>, <samp>comp.SCORE</samp> and <samp>comp.emacs.SCORE</samp> for each
-server.
-</p>
-</dd>
-</dl>
-<p>This variable can also be a list of functions.  In that case, all
-these functions will be called with the group name as argument, and
-all the returned lists of score files will be applied.  These
-functions can also return lists of lists of score alists directly.  In
-that case, the functions that return these non-file score alists
-should probably be placed before the &ldquo;real&rdquo; score file functions, to
-ensure that the last score file returned is the local score file.
-Phu.
-</p>
-<p>For example, to do hierarchical scoring but use a non-server-specific
-overall score file, you could use the value
-</p><div class="example">
-<pre class="example">(list (lambda (group) (&quot;all.SCORE&quot;))
+  <div class="header">
+    <p>Next: <a href="Score-File-Format.html#Score-File-Format"
+    accesskey="n" rel="next">Score File Format</a>, Previous:
+    <a href="Group-Score-Commands.html#Group-Score-Commands"
+    accesskey="p" rel="prev">Group Score Commands</a>, Up: <a href=
+    "Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Score-Variables-1" id="Score-Variables-1"></a>
+
+  <h3 class="section">7.3 Score Variables</h3><a name=
+  "index-score-variables" id="index-score-variables"></a>
+
+  <dl compact="compact">
+    <dt><code>gnus-use-scoring</code></dt>
+
+    <dd>
+      <a name="index-gnus_002duse_002dscoring" id=
+      "index-gnus_002duse_002dscoring"></a>
+
+      <p>If <code>nil</code>, Gnus will not check for score files,
+      and will not, in general, do any score-related work. This is
+      <code>t</code> by default.</p>
+    </dd>
+
+    <dt><code>gnus-kill-killed</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dkill_002dkilled" id=
+      "index-gnus_002dkill_002dkilled"></a>
+
+      <p>If this variable is <code>nil</code>, Gnus will never
+      apply score files to articles that have already been through
+      the kill process. While this may save you lots of time, it
+      also means that if you apply a kill file to a group, and then
+      change the kill file and want to run it over you group again
+      to kill more articles, it won&rsquo;t work. You have to set
+      this variable to <code>t</code> to do that. (It is
+      <code>t</code> by default.)</p>
+    </dd>
+
+    <dt><code>gnus-kill-files-directory</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dkill_002dfiles_002ddirectory" id=
+      "index-gnus_002dkill_002dfiles_002ddirectory"></a>
+
+      <p>All kill and score files will be stored in this directory,
+      which is initialized from the <code>SAVEDIR</code>
+      environment variable by default. This is <samp>~/News/</samp>
+      by default.</p>
+    </dd>
+
+    <dt><code>gnus-score-file-suffix</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dscore_002dfile_002dsuffix" id=
+      "index-gnus_002dscore_002dfile_002dsuffix"></a>
+
+      <p>Suffix to add to the group name to arrive at the score
+      file name (<samp>SCORE</samp> by default.)</p>
+    </dd>
+
+    <dt><code>gnus-score-uncacheable-files</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dscore_002duncacheable_002dfiles" id=
+      "index-gnus_002dscore_002duncacheable_002dfiles"></a>
+      <a name="index-score-cache" id="index-score-cache"></a>
+
+      <p>All score files are normally cached to avoid excessive
+      re-loading of score files. However, this might make your
+      Emacs grow big and bloated, so this regexp can be used to
+      weed out score files unlikely to be needed again. It would be
+      a bad idea to deny caching of <samp>all.SCORE</samp>, while
+      it might be a good idea to not cache
+      <samp>comp.infosystems.www.authoring.misc.ADAPT</samp>. In
+      fact, this variable is &lsquo;<samp>ADAPT$</samp>&rsquo; by
+      default, so no adaptive score files will be cached.</p>
+    </dd>
+
+    <dt><code>gnus-save-score</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dsave_002dscore" id=
+      "index-gnus_002dsave_002dscore"></a>
+
+      <p>If you have really complicated score files, and do lots of
+      batch scoring, then you might set this variable to
+      <code>t</code>. This will make Gnus save the scores into the
+      <samp>.newsrc.eld</samp> file.</p>
+
+      <p>If you do not set this to <code>t</code>, then manual
+      scores (like those set with <kbd>V s</kbd>
+      (<code>gnus-summary-set-score</code>)) will not be preserved
+      across group visits.</p>
+    </dd>
+
+    <dt><code>gnus-score-interactive-default-score</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dscore_002dinteractive_002ddefault_002dscore"
+      id=
+      "index-gnus_002dscore_002dinteractive_002ddefault_002dscore"></a>
+
+      <p>Score used by all the interactive raise/lower commands to
+      raise/lower score with. Default is 1000, which may seem
+      excessive, but this is to ensure that the adaptive scoring
+      scheme gets enough room to play with. We don&rsquo;t want the
+      small changes from the adaptive scoring to overwrite manually
+      entered data.</p>
+    </dd>
+
+    <dt><code>gnus-summary-default-score</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dsummary_002ddefault_002dscore" id=
+      "index-gnus_002dsummary_002ddefault_002dscore"></a>
+
+      <p>Default score of an article, which is 0 by default.</p>
+    </dd>
+
+    <dt><code>gnus-summary-expunge-below</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dsummary_002dexpunge_002dbelow" id=
+      "index-gnus_002dsummary_002dexpunge_002dbelow"></a>
+
+      <p>Don&rsquo;t display the summary lines of articles that
+      have scores lower than this variable. This is
+      <code>nil</code> by default, which means that no articles
+      will be hidden. This variable is local to the summary
+      buffers, and has to be set from
+      <code>gnus-summary-mode-hook</code>.</p>
+    </dd>
+
+    <dt><code>gnus-score-over-mark</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dscore_002dover_002dmark" id=
+      "index-gnus_002dscore_002dover_002dmark"></a>
+
+      <p>Mark (in the third column) used for articles with a score
+      over the default. Default is
+      &lsquo;<samp>+</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><code>gnus-score-below-mark</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dscore_002dbelow_002dmark" id=
+      "index-gnus_002dscore_002dbelow_002dmark"></a>
+
+      <p>Mark (in the third column) used for articles with a score
+      below the default. Default is
+      &lsquo;<samp>-</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><code>gnus-score-find-score-files-function</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dscore_002dfind_002dscore_002dfiles_002dfunction"
+      id=
+      "index-gnus_002dscore_002dfind_002dscore_002dfiles_002dfunction">
+      </a>
+
+      <p>Function used to find score files for the current group.
+      This function is called with the name of the group as the
+      argument.</p>
+
+      <p>Predefined functions available are:</p>
+
+      <dl compact="compact">
+        <dt><code>gnus-score-find-single</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dscore_002dfind_002dsingle" id=
+          "index-gnus_002dscore_002dfind_002dsingle"></a>
+
+          <p>Only apply the group&rsquo;s own score file.</p>
+        </dd>
+
+        <dt><code>gnus-score-find-bnews</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dscore_002dfind_002dbnews" id=
+          "index-gnus_002dscore_002dfind_002dbnews"></a>
+
+          <p>Apply all score files that match, using bnews syntax.
+          This is the default. If the current group is
+          &lsquo;<samp>gnu.emacs.gnus</samp>&rsquo;, for instance,
+          <samp>all.emacs.all.SCORE</samp>,
+          <samp>not.alt.all.SCORE</samp> and
+          <samp>gnu.all.SCORE</samp> would all apply. In short, the
+          instances of &lsquo;<samp>all</samp>&rsquo; in the score
+          file names are translated into
+          &lsquo;<samp>.*</samp>&rsquo;, and then a regexp match is
+          done.</p>
+
+          <p>This means that if you have some score entries that
+          you want to apply to all groups, then you put those
+          entries in the <samp>all.SCORE</samp> file.</p>
+
+          <p>The score files are applied in a semi-random order,
+          although Gnus will try to apply the more general score
+          files before the more specific score files. It does this
+          by looking at the number of elements in the score file
+          names&mdash;discarding the &lsquo;<samp>all</samp>&rsquo;
+          elements.</p>
+        </dd>
+
+        <dt><code>gnus-score-find-hierarchical</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dscore_002dfind_002dhierarchical"
+          id="index-gnus_002dscore_002dfind_002dhierarchical"></a>
+
+          <p>Apply all score files from all the parent groups. This
+          means that you can&rsquo;t have score files like
+          <samp>all.SCORE</samp>, but you can have
+          <samp>SCORE</samp>, <samp>comp.SCORE</samp> and
+          <samp>comp.emacs.SCORE</samp> for each server.</p>
+        </dd>
+      </dl>
+
+      <p>This variable can also be a list of functions. In that
+      case, all these functions will be called with the group name
+      as argument, and all the returned lists of score files will
+      be applied. These functions can also return lists of lists of
+      score alists directly. In that case, the functions that
+      return these non-file score alists should probably be placed
+      before the &ldquo;real&rdquo; score file functions, to ensure
+      that the last score file returned is the local score file.
+      Phu.</p>
+
+      <p>For example, to do hierarchical scoring but use a
+      non-server-specific overall score file, you could use the
+      value</p>
+
+      <div class="example">
+        <pre class="example">
+(list (lambda (group) ("all.SCORE"))
       'gnus-score-find-hierarchical)
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>gnus-score-expiry-days</code></dt>
-<dd><a name="index-gnus_002dscore_002dexpiry_002ddays"></a>
-<p>This variable says how many days should pass before an unused score file
-entry is expired.  If this variable is <code>nil</code>, no score file entries
-are expired.  It&rsquo;s 7 by default.
-</p>
-</dd>
-<dt><code>gnus-update-score-entry-dates</code></dt>
-<dd><a name="index-gnus_002dupdate_002dscore_002dentry_002ddates"></a>
-<p>If this variable is non-<code>nil</code>, temporary score entries that have
-been triggered (matched) will have their dates updated.  (This is how Gnus
-controls expiry&mdash;all non-matched-entries will become too old while
-matched entries will stay fresh and young.)  However, if you set this
-variable to <code>nil</code>, even matched entries will grow old and will
-have to face that oh-so grim reaper.
-</p>
-</dd>
-<dt><code>gnus-score-after-write-file-function</code></dt>
-<dd><a name="index-gnus_002dscore_002dafter_002dwrite_002dfile_002dfunction"></a>
-<p>Function called with the name of the score file just written.
-</p>
-</dd>
-<dt><code>gnus-score-thread-simplify</code></dt>
-<dd><a name="index-gnus_002dscore_002dthread_002dsimplify"></a>
-<p>If this variable is non-<code>nil</code>, article subjects will be
-simplified for subject scoring purposes in the same manner as with
-threading&mdash;according to the current value of
-<code>gnus-simplify-subject-functions</code>.  If the scoring entry uses
-<code>substring</code> or <code>exact</code> matching, the match will also be
-simplified in this manner.
-</p>
-</dd>
-</dl>
+    <dt><code>gnus-score-expiry-days</code></dt>
 
+    <dd>
+      <a name="index-gnus_002dscore_002dexpiry_002ddays" id=
+      "index-gnus_002dscore_002dexpiry_002ddays"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Score-File-Format.html#Score-File-Format" accesskey="n" rel="next">Score File Format</a>, Previous: <a href="Group-Score-Commands.html#Group-Score-Commands" accesskey="p" rel="prev">Group Score Commands</a>, Up: <a href="Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This variable says how many days should pass before an
+      unused score file entry is expired. If this variable is
+      <code>nil</code>, no score file entries are expired.
+      It&rsquo;s 7 by default.</p>
+    </dd>
 
+    <dt><code>gnus-update-score-entry-dates</code></dt>
 
+    <dd>
+      <a name="index-gnus_002dupdate_002dscore_002dentry_002ddates"
+      id="index-gnus_002dupdate_002dscore_002dentry_002ddates"></a>
 
+      <p>If this variable is non-<code>nil</code>, temporary score
+      entries that have been triggered (matched) will have their
+      dates updated. (This is how Gnus controls expiry&mdash;all
+      non-matched-entries will become too old while matched entries
+      will stay fresh and young.) However, if you set this variable
+      to <code>nil</code>, even matched entries will grow old and
+      will have to face that oh-so grim reaper.</p>
+    </dd>
+
+    <dt><code>gnus-score-after-write-file-function</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dscore_002dafter_002dwrite_002dfile_002dfunction"
+      id=
+      "index-gnus_002dscore_002dafter_002dwrite_002dfile_002dfunction">
+      </a>
+
+      <p>Function called with the name of the score file just
+      written.</p>
+    </dd>
+
+    <dt><code>gnus-score-thread-simplify</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dscore_002dthread_002dsimplify" id=
+      "index-gnus_002dscore_002dthread_002dsimplify"></a>
+
+      <p>If this variable is non-<code>nil</code>, article subjects
+      will be simplified for subject scoring purposes in the same
+      manner as with threading&mdash;according to the current value
+      of <code>gnus-simplify-subject-functions</code>. If the
+      scoring entry uses <code>substring</code> or
+      <code>exact</code> matching, the match will also be
+      simplified in this manner.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Score-File-Format.html#Score-File-Format"
+    accesskey="n" rel="next">Score File Format</a>, Previous:
+    <a href="Group-Score-Commands.html#Group-Score-Commands"
+    accesskey="p" rel="prev">Group Score Commands</a>, Up: <a href=
+    "Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

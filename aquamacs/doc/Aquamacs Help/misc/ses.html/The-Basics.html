@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents SES: the Simple Emacs Spreadsheet.
 
 Copyright (C) 2002-2016 Free Software Foundation, Inc.
@@ -14,138 +16,234 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>SES: Simple Emacs Spreadsheet: The Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="SES: Simple Emacs Spreadsheet: The Basics">
-<meta name="keywords" content="SES: Simple Emacs Spreadsheet: The Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Formulas.html#Formulas" rel="next" title="Formulas">
-<link href="Quick-Tutorial.html#Quick-Tutorial" rel="prev" title="Quick Tutorial">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>SES: Simple Emacs Spreadsheet: The Basics</title>
+  <meta name="description" content=
+  "SES: Simple Emacs Spreadsheet: The Basics" />
+  <meta name="keywords" content=
+  "SES: Simple Emacs Spreadsheet: The Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Formulas.html#Formulas" rel="next" title=
+  "Formulas" />
+  <link href="Quick-Tutorial.html#Quick-Tutorial" rel="prev" title=
+  "Quick Tutorial" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Advanced-Features.html#Advanced-Features" accesskey="n" rel="next">Advanced Features</a>, Previous: <a href="Quick-Tutorial.html#Quick-Tutorial" accesskey="p" rel="prev">Quick Tutorial</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Basics-1"></a>
-<h2 class="chapter">3 The Basics</h2>
-<a name="index-basic-commands"></a>
-<a name="index-ses_002djump"></a>
-<a name="index-ses_002dmark_002drow"></a>
-<a name="index-ses_002dmark_002dcolumn"></a>
-<a name="index-ses_002dmark_002dwhole_002dbuffer"></a>
-<a name="index-set_002dmark_002dcommand"></a>
-<a name="index-keyboard_002dquit"></a>
+<body lang="en" xml:lang="en">
+  <a name="The-Basics" id="The-Basics"></a>
 
-<p>To create a new spreadsheet, visit a nonexistent file whose name ends
-  with &quot;.ses&quot;.  For example, <kbd>C-x C-f test.ses RET</kbd>.
-</p>
+  <div class="header">
+    <p>Next: <a href="Advanced-Features.html#Advanced-Features"
+    accesskey="n" rel="next">Advanced Features</a>, Previous:
+    <a href="Quick-Tutorial.html#Quick-Tutorial" accesskey="p" rel=
+    "prev">Quick Tutorial</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Basics-1" id="The-Basics-1"></a>
 
-<p>A <em>cell identifier</em> is a symbol with a column letter and a row
-number.  Cell B7 is the 2nd column of the 7th row.  For very wide
-spreadsheets, there are two column letters: cell AB7 is the 28th
-column of the 7th row. Super wide spreadsheets get AAA1, etc.
-You move around with the regular Emacs movement commands.
-</p>
-<dl compact="compact">
-<dt><kbd>j</kbd></dt>
-<dd><p>Moves point to cell, specified by identifier (<code>ses-jump</code>).
-</p></dd>
-</dl>
+  <h2 class="chapter">3 The Basics</h2><a name=
+  "index-basic-commands" id="index-basic-commands"></a> <a name=
+  "index-ses_002djump" id="index-ses_002djump"></a> <a name=
+  "index-ses_002dmark_002drow" id="index-ses_002dmark_002drow"></a>
+  <a name="index-ses_002dmark_002dcolumn" id=
+  "index-ses_002dmark_002dcolumn"></a> <a name=
+  "index-ses_002dmark_002dwhole_002dbuffer" id=
+  "index-ses_002dmark_002dwhole_002dbuffer"></a> <a name=
+  "index-set_002dmark_002dcommand" id=
+  "index-set_002dmark_002dcommand"></a> <a name=
+  "index-keyboard_002dquit" id="index-keyboard_002dquit"></a>
 
-<p>Point is always at the left edge of a cell, or at the empty endline.
-When mark is inactive, the current cell is underlined.  When mark is
-active, the range is the highlighted rectangle of cells (<acronym>SES</acronym> always
-uses transient mark mode).  Drag the mouse from A1 to A3 to create the
-range A1-A2.  Many <acronym>SES</acronym> commands operate only on single cells, not
-ranges.
-</p>
-<dl compact="compact">
-<dt><kbd>C-<span class="key">SPC</span></kbd></dt>
-<dt><kbd>C-@</kbd></dt>
-<dd><p>Set mark at point (<code>set-mark-command</code>).
-</p>
-</dd>
-<dt><kbd>C-g</kbd></dt>
-<dd><p>Turn off the mark (<code>keyboard-quit</code>).
-</p>
-</dd>
-<dt><kbd>M-h</kbd></dt>
-<dd><p>Highlight current row (<code>ses-mark-row</code>).
-</p>
-</dd>
-<dt><kbd>S-M-h</kbd></dt>
-<dd><p>Highlight current column (<code>ses-mark-column</code>).
-</p>
-</dd>
-<dt><kbd>C-x h</kbd></dt>
-<dd><p>Highlight all cells (<code>mark-whole-buffer</code>).
-</p></dd>
-</dl>
+  <p>To create a new spreadsheet, visit a nonexistent file whose
+  name ends with ".ses". For example, <kbd>C-x C-f test.ses
+  RET</kbd>.</p>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Formulas.html#Formulas" accesskey="1">Formulas</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Resizing.html#Resizing" accesskey="2">Resizing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Printer-functions.html#Printer-functions" accesskey="3">Printer functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Clearing-cells.html#Clearing-cells" accesskey="4">Clearing cells</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Copy_002fcut_002fpaste.html#Copy_002fcut_002fpaste" accesskey="5">Copy/cut/paste</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Customizing-SES.html#Customizing-SES" accesskey="6">Customizing <acronym>SES</acronym></a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <p>A <em>cell identifier</em> is a symbol with a column letter
+  and a row number. Cell B7 is the 2nd column of the 7th row. For
+  very wide spreadsheets, there are two column letters: cell AB7 is
+  the 28th column of the 7th row. Super wide spreadsheets get AAA1,
+  etc. You move around with the regular Emacs movement
+  commands.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Advanced-Features.html#Advanced-Features" accesskey="n" rel="next">Advanced Features</a>, Previous: <a href="Quick-Tutorial.html#Quick-Tutorial" accesskey="p" rel="prev">Quick Tutorial</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>j</kbd></dt>
 
+    <dd>
+      <p>Moves point to cell, specified by identifier
+      (<code>ses-jump</code>).</p>
+    </dd>
+  </dl>
 
+  <p>Point is always at the left edge of a cell, or at the empty
+  endline. When mark is inactive, the current cell is underlined.
+  When mark is active, the range is the highlighted rectangle of
+  cells (<acronym>SES</acronym> always uses transient mark mode).
+  Drag the mouse from A1 to A3 to create the range A1-A2. Many
+  <acronym>SES</acronym> commands operate only on single cells, not
+  ranges.</p>
 
+  <dl compact="compact">
+    <dt><kbd>C-<span class="key">SPC</span></kbd></dt>
+
+    <dt><kbd>C-@</kbd></dt>
+
+    <dd>
+      <p>Set mark at point (<code>set-mark-command</code>).</p>
+    </dd>
+
+    <dt><kbd>C-g</kbd></dt>
+
+    <dd>
+      <p>Turn off the mark (<code>keyboard-quit</code>).</p>
+    </dd>
+
+    <dt><kbd>M-h</kbd></dt>
+
+    <dd>
+      <p>Highlight current row (<code>ses-mark-row</code>).</p>
+    </dd>
+
+    <dt><kbd>S-M-h</kbd></dt>
+
+    <dd>
+      <p>Highlight current column
+      (<code>ses-mark-column</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x h</kbd></dt>
+
+    <dd>
+      <p>Highlight all cells (<code>mark-whole-buffer</code>).</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Formulas.html#Formulas" accesskey="1">Formulas</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Resizing.html#Resizing" accesskey="2">Resizing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Printer-functions.html#Printer-functions" accesskey=
+      "3">Printer functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Clearing-cells.html#Clearing-cells" accesskey="4">Clearing
+      cells</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Copy_002fcut_002fpaste.html#Copy_002fcut_002fpaste"
+      accesskey="5">Copy/cut/paste</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Customizing-SES.html#Customizing-SES" accesskey=
+      "6">Customizing <acronym>SES</acronym></a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Advanced-Features.html#Advanced-Features"
+    accesskey="n" rel="next">Advanced Features</a>, Previous:
+    <a href="Quick-Tutorial.html#Quick-Tutorial" accesskey="p" rel=
+    "prev">Quick Tutorial</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

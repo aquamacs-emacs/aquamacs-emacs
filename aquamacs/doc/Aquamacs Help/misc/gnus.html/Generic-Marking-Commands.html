@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,100 +14,133 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Generic Marking Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Generic Marking Commands">
-<meta name="keywords" content="Gnus Manual: Generic Marking Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Marking-Articles.html#Marking-Articles" rel="up" title="Marking Articles">
-<link href="Setting-Process-Marks.html#Setting-Process-Marks" rel="next" title="Setting Process Marks">
-<link href="Setting-Marks.html#Setting-Marks" rel="prev" title="Setting Marks">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Generic Marking Commands</title>
+  <meta name="description" content=
+  "Gnus Manual: Generic Marking Commands" />
+  <meta name="keywords" content=
+  "Gnus Manual: Generic Marking Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Marking-Articles.html#Marking-Articles" rel="up"
+  title="Marking Articles" />
+  <link href="Setting-Process-Marks.html#Setting-Process-Marks"
+  rel="next" title="Setting Process Marks" />
+  <link href="Setting-Marks.html#Setting-Marks" rel="prev" title=
+  "Setting Marks" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Generic-Marking-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Setting-Process-Marks.html#Setting-Process-Marks" accesskey="n" rel="next">Setting Process Marks</a>, Previous: <a href="Setting-Marks.html#Setting-Marks" accesskey="p" rel="prev">Setting Marks</a>, Up: <a href="Marking-Articles.html#Marking-Articles" accesskey="u" rel="up">Marking Articles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Generic-Marking-Commands-1"></a>
-<h4 class="subsection">3.7.5 Generic Marking Commands</h4>
+<body lang="en" xml:lang="en">
+  <a name="Generic-Marking-Commands" id=
+  "Generic-Marking-Commands"></a>
 
-<p>Some people would like the command that ticks an article (<kbd>!</kbd>) to
-go to the next article.  Others would like it to go to the next unread
-article.  Yet others would like it to stay on the current article.
-And even though I haven&rsquo;t heard of anybody wanting it to go to the
-previous (unread) article, I&rsquo;m sure there are people that want that as
-well.
-</p>
-<p>Multiply these five behaviors with five different marking commands, and
-you get a potentially complex set of variable to control what each
-command should do.
-</p>
-<p>To sidestep that mess, Gnus provides commands that do all these
-different things.  They can be found on the <kbd>M M</kbd> map in the summary
-buffer.  Type <kbd>M M C-h</kbd> to see them all&mdash;there are too many of them
-to list in this manual.
-</p>
-<p>While you can use these commands directly, most users would prefer
-altering the summary mode keymap.  For instance, if you would like the
-<kbd>!</kbd> command to go to the next article instead of the next unread
-article, you could say something like:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-hook 'gnus-summary-mode-hook 'my-alter-summary-map)
+  <div class="header">
+    <p>Next: <a href=
+    "Setting-Process-Marks.html#Setting-Process-Marks" accesskey=
+    "n" rel="next">Setting Process Marks</a>, Previous: <a href=
+    "Setting-Marks.html#Setting-Marks" accesskey="p" rel=
+    "prev">Setting Marks</a>, Up: <a href=
+    "Marking-Articles.html#Marking-Articles" accesskey="u" rel=
+    "up">Marking Articles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Generic-Marking-Commands-1" id=
+  "Generic-Marking-Commands-1"></a>
+
+  <h4 class="subsection">3.7.5 Generic Marking Commands</h4>
+
+  <p>Some people would like the command that ticks an article
+  (<kbd>!</kbd>) to go to the next article. Others would like it to
+  go to the next unread article. Yet others would like it to stay
+  on the current article. And even though I haven&rsquo;t heard of
+  anybody wanting it to go to the previous (unread) article,
+  I&rsquo;m sure there are people that want that as well.</p>
+
+  <p>Multiply these five behaviors with five different marking
+  commands, and you get a potentially complex set of variable to
+  control what each command should do.</p>
+
+  <p>To sidestep that mess, Gnus provides commands that do all
+  these different things. They can be found on the <kbd>M M</kbd>
+  map in the summary buffer. Type <kbd>M M C-h</kbd> to see them
+  all&mdash;there are too many of them to list in this manual.</p>
+
+  <p>While you can use these commands directly, most users would
+  prefer altering the summary mode keymap. For instance, if you
+  would like the <kbd>!</kbd> command to go to the next article
+  instead of the next unread article, you could say something
+  like:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(add-hook 'gnus-summary-mode-hook 'my-alter-summary-map)
 (defun my-alter-summary-map ()
-  (local-set-key &quot;!&quot; 'gnus-summary-put-mark-as-ticked-next))
-</pre></div>
+  (local-set-key "!" 'gnus-summary-put-mark-as-ticked-next))
+</pre>
+  </div>
 
-<p>or
-</p>
-<div class="lisp">
-<pre class="lisp">(defun my-alter-summary-map ()
-  (local-set-key &quot;!&quot; &quot;MM!n&quot;))
-</pre></div>
+  <p>or</p>
 
-
-
-
-
+  <div class="lisp">
+    <pre class="lisp">
+(defun my-alter-summary-map ()
+  (local-set-key "!" "MM!n"))
+</pre>
+  </div>
 </body>
 </html>

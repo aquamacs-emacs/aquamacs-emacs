@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Basic Functions - Emacs MIME Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Emacs MIME Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Interface-Functions.html#Interface-Functions" title="Interface Functions">
-<link rel="next" href="Standards.html#Standards" title="Standards">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Basic Functions - Emacs MIME Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Emacs MIME Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Interface-Functions.html#Interface-Functions" title=
+  "Interface Functions" />
+  <link rel="next" href="Standards.html#Standards" title=
+  "Standards" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the Emacs MIME interface functionality.
 
 Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
@@ -26,8 +36,10 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,40 +49,72 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Basic-Functions"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Standards.html#Standards">Standards</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Interface-Functions.html#Interface-Functions">Interface Functions</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Basic-Functions" id="Basic-Functions"></a>
 
-<h2 class="chapter">4 Basic Functions</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Standards.html#Standards">Standards</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Interface-Functions.html#Interface-Functions">Interface
+    Functions</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>This chapter describes the basic, ground-level functions for parsing and
-handling.  Covered here is parsing <code>From</code> lines, removing comments
-from header lines, decoding encoded words, parsing date headers and so
-on.  High-level functionality is dealt with in the first chapter
-(see <a href="Decoding-and-Viewing.html#Decoding-and-Viewing">Decoding and Viewing</a>).
+  <h2 class="chapter">4 Basic Functions</h2>
 
-<ul class="menu">
-<li><a accesskey="1" href="rfc2045.html#rfc2045">rfc2045</a>:       Encoding <code>Content-Type</code> headers. 
-<li><a accesskey="2" href="rfc2231.html#rfc2231">rfc2231</a>:       Parsing <code>Content-Type</code> headers. 
-<li><a accesskey="3" href="ietf_002ddrums.html#ietf_002ddrums">ietf-drums</a>:    Handling mail headers defined by RFC822bis. 
-<li><a accesskey="4" href="rfc2047.html#rfc2047">rfc2047</a>:       En/decoding encoded words in headers. 
-<li><a accesskey="5" href="time_002ddate.html#time_002ddate">time-date</a>:     Functions for parsing dates and manipulating time. 
-<li><a accesskey="6" href="qp.html#qp">qp</a>:            Quoted-Printable en/decoding. 
-<li><a accesskey="7" href="base64.html#base64">base64</a>:        Base64 en/decoding. 
-<li><a accesskey="8" href="binhex.html#binhex">binhex</a>:        Binhex decoding. 
-<li><a accesskey="9" href="uudecode.html#uudecode">uudecode</a>:      Uuencode decoding. 
-<li><a href="yenc.html#yenc">yenc</a>:          Yenc decoding. 
-<li><a href="rfc1843.html#rfc1843">rfc1843</a>:       Decoding HZ-encoded text. 
-<li><a href="mailcap.html#mailcap">mailcap</a>:       How parts are displayed is specified by the <samp><span class="file">.mailcap</span></samp> file
-</ul>
+  <p>This chapter describes the basic, ground-level functions for
+  parsing and handling. Covered here is parsing <code>From</code>
+  lines, removing comments from header lines, decoding encoded
+  words, parsing date headers and so on. High-level functionality
+  is dealt with in the first chapter (see <a href=
+  "Decoding-and-Viewing.html#Decoding-and-Viewing">Decoding and
+  Viewing</a>).</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href="rfc2045.html#rfc2045">rfc2045</a>:
+    Encoding <code>Content-Type</code> headers.</li>
 
+    <li><a accesskey="2" href="rfc2231.html#rfc2231">rfc2231</a>:
+    Parsing <code>Content-Type</code> headers.</li>
+
+    <li><a accesskey="3" href=
+    "ietf_002ddrums.html#ietf_002ddrums">ietf-drums</a>: Handling
+    mail headers defined by RFC822bis.</li>
+
+    <li><a accesskey="4" href="rfc2047.html#rfc2047">rfc2047</a>:
+    En/decoding encoded words in headers.</li>
+
+    <li><a accesskey="5" href=
+    "time_002ddate.html#time_002ddate">time-date</a>: Functions for
+    parsing dates and manipulating time.</li>
+
+    <li><a accesskey="6" href="qp.html#qp">qp</a>: Quoted-Printable
+    en/decoding.</li>
+
+    <li><a accesskey="7" href="base64.html#base64">base64</a>:
+    Base64 en/decoding.</li>
+
+    <li><a accesskey="8" href="binhex.html#binhex">binhex</a>:
+    Binhex decoding.</li>
+
+    <li><a accesskey="9" href=
+    "uudecode.html#uudecode">uudecode</a>: Uuencode decoding.</li>
+
+    <li><a href="yenc.html#yenc">yenc</a>: Yenc decoding.</li>
+
+    <li><a href="rfc1843.html#rfc1843">rfc1843</a>: Decoding
+    HZ-encoded text.</li>
+
+    <li><a href="mailcap.html#mailcap">mailcap</a>: How parts are
+    displayed is specified by the <samp><span class=
+    "file">.mailcap</span></samp> file</li>
+  </ul>
+</body>
+</html>

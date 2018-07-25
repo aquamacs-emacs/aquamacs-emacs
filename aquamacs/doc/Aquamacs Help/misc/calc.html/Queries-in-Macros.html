@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,93 +18,126 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Queries in Macros</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Queries in Macros">
-<meta name="keywords" content="GNU Emacs Calc Manual: Queries in Macros">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title="Keyboard Macros">
-<link href="Invocation-Macros.html#Invocation-Macros" rel="next" title="Invocation Macros">
-<link href="Local-Values-in-Macros.html#Local-Values-in-Macros" rel="prev" title="Local Values in Macros">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Queries in Macros</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Queries in Macros" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Queries in Macros" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title=
+  "Keyboard Macros" />
+  <link href="Invocation-Macros.html#Invocation-Macros" rel="next"
+  title="Invocation Macros" />
+  <link href="Local-Values-in-Macros.html#Local-Values-in-Macros"
+  rel="prev" title="Local Values in Macros" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Queries-in-Macros"></a>
-<div class="header">
-<p>
-Previous: <a href="Local-Values-in-Macros.html#Local-Values-in-Macros" accesskey="p" rel="prev">Local Values in Macros</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Queries-in-Keyboard-Macros"></a>
-<h4 class="subsection">17.2.5 Queries in Keyboard Macros</h4>
+<body lang="en" xml:lang="en">
+  <a name="Queries-in-Macros" id="Queries-in-Macros"></a>
 
+  <div class="header">
+    <p>Previous: <a href=
+    "Local-Values-in-Macros.html#Local-Values-in-Macros" accesskey=
+    "p" rel="prev">Local Values in Macros</a>, Up: <a href=
+    "Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel=
+    "up">Keyboard Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Queries-in-Keyboard-Macros" id=
+  "Queries-in-Keyboard-Macros"></a>
 
-<a name="index-Z-_0023"></a>
-<a name="index-calc_002dkbd_002dquery"></a>
-<p>The <kbd>Z #</kbd> (<code>calc-kbd-query</code>) command prompts for an algebraic
-entry which takes its input from the keyboard, even during macro
-execution.  All the normal conventions of algebraic input, including the
-use of <kbd>$</kbd> characters, are supported.  The prompt message itself is
-taken from the top of the stack, and so must be entered (as a string)
-before the <kbd>Z #</kbd> command.  (Recall, as a string it can be entered by
-pressing the <kbd>&quot;</kbd> key and will appear as a vector when it is put on
-the stack.  The prompt message is only put on the stack to provide a
-prompt for the <kbd>Z #</kbd> command; it will not play any role in any
-subsequent calculations.)  This command allows your keyboard macros to
-accept numbers or formulas as interactive input.
-</p>
-<p>As an example,
-<kbd>2 <span class="key">RET</span> &quot;Power: &quot; <span class="key">RET</span> Z # 3 <span class="key">RET</span> ^</kbd> will prompt for
-input with &ldquo;Power: &rdquo; in the minibuffer, then return 2 to the provided
-power.  (The response to the prompt that&rsquo;s given, 3 in this example,
-will not be part of the macro.)
-</p>
-<p>See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Keyboard-Macro-Query.html#Keyboard-Macro-Query">Keyboard Macro Query</a> in <cite>the Emacs Manual</cite>, for a description of
-<kbd>C-x q</kbd> (<code>kbd-macro-query</code>), the standard Emacs way to accept
-keyboard input during a keyboard macro.  In particular, you can use
-<kbd>C-x q</kbd> to enter a recursive edit, which allows the user to perform
-any Calculator operations interactively before pressing <kbd>C-M-c</kbd> to
-return control to the keyboard macro.
-</p>
+  <h4 class="subsection">17.2.5 Queries in Keyboard
+  Macros</h4><a name="index-Z-_0023" id="index-Z-_0023"></a>
+  <a name="index-calc_002dkbd_002dquery" id=
+  "index-calc_002dkbd_002dquery"></a>
 
+  <p>The <kbd>Z #</kbd> (<code>calc-kbd-query</code>) command
+  prompts for an algebraic entry which takes its input from the
+  keyboard, even during macro execution. All the normal conventions
+  of algebraic input, including the use of <kbd>$</kbd> characters,
+  are supported. The prompt message itself is taken from the top of
+  the stack, and so must be entered (as a string) before the <kbd>Z
+  #</kbd> command. (Recall, as a string it can be entered by
+  pressing the <kbd>"</kbd> key and will appear as a vector when it
+  is put on the stack. The prompt message is only put on the stack
+  to provide a prompt for the <kbd>Z #</kbd> command; it will not
+  play any role in any subsequent calculations.) This command
+  allows your keyboard macros to accept numbers or formulas as
+  interactive input.</p>
 
+  <p>As an example, <kbd>2 <span class="key">RET</span> "Power: "
+  <span class="key">RET</span> Z # 3 <span class="key">RET</span>
+  ^</kbd> will prompt for input with &ldquo;Power: &rdquo; in the
+  minibuffer, then return 2 to the provided power. (The response to
+  the prompt that&rsquo;s given, 3 in this example, will not be
+  part of the macro.)</p>
 
+  <p>See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Keyboard-Macro-Query.html#Keyboard-Macro-Query">
+  Keyboard Macro Query</a> in <cite>the Emacs Manual</cite>, for a
+  description of <kbd>C-x q</kbd> (<code>kbd-macro-query</code>),
+  the standard Emacs way to accept keyboard input during a keyboard
+  macro. In particular, you can use <kbd>C-x q</kbd> to enter a
+  recursive edit, which allows the user to perform any Calculator
+  operations interactively before pressing <kbd>C-M-c</kbd> to
+  return control to the keyboard macro.</p>
 </body>
 </html>

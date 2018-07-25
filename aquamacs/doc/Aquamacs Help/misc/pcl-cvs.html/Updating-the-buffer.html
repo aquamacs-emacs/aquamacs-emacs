@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1991-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,113 +14,163 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>PCL-CVS&mdash;Emacs Front-End to CVS: Updating the buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="PCL-CVS&mdash;Emacs Front-End to CVS: Updating the buffer">
-<meta name="keywords" content="PCL-CVS&mdash;Emacs Front-End to CVS: Updating the buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-and-Variable-Index.html#Function-and-Variable-Index" rel="index" title="Function and Variable Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="Movement-commands.html#Movement-commands" rel="next" title="Movement commands">
-<link href="Setting-flags.html#Setting-flags" rel="prev" title="Setting flags">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>PCL-CVS&mdash;Emacs Front-End to CVS: Updating the
+  buffer</title>
+  <meta name="description" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Updating the buffer" />
+  <meta name="keywords" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Updating the buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Function-and-Variable-Index.html#Function-and-Variable-Index"
+  rel="index" title="Function and Variable Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="Movement-commands.html#Movement-commands" rel="next"
+  title="Movement commands" />
+  <link href="Setting-flags.html#Setting-flags" rel="prev" title=
+  "Setting flags" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Updating-the-buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Movement-commands.html#Movement-commands" accesskey="n" rel="next">Movement commands</a>, Previous: <a href="Setting-flags.html#Setting-flags" accesskey="p" rel="prev">Setting flags</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-and-Variable-Index.html#Function-and-Variable-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Updating-the-_002acvs_002a-buffer"></a>
-<h3 class="section">5.3 Updating the <samp>*cvs*</samp> buffer</h3>
-<a name="index-cvs_002dupdate-1"></a>
-<a name="index-cvs_002dexamine-1"></a>
-<a name="index-cvs_002dstatus-1"></a>
-<a name="index-cvs_002dmode_002dupdate"></a>
-<a name="index-cvs_002dmode_002dexamine"></a>
-<a name="index-cvs_002dmode_002dstatus"></a>
+<body lang="en" xml:lang="en">
+  <a name="Updating-the-buffer" id="Updating-the-buffer"></a>
 
-<p>The following commands can be used from within the <samp>*cvs*</samp> buffer
-to update the display:
-</p>
-<dl compact="compact">
-<dt><kbd>M-u</kbd></dt>
-<dd><p>Runs the command &lsquo;<samp>cvs-update</samp>&rsquo;.
-</p>
-</dd>
-<dt><kbd>M-e</kbd></dt>
-<dd><p>Runs the command &lsquo;<samp>cvs-examine</samp>&rsquo;.
-</p>
-</dd>
-<dt><kbd>M-s</kbd></dt>
-<dd><p>Runs the command &lsquo;<samp>cvs-status</samp>&rsquo;.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Movement-commands.html#Movement-commands"
+    accesskey="n" rel="next">Movement commands</a>, Previous:
+    <a href="Setting-flags.html#Setting-flags" accesskey="p" rel=
+    "prev">Setting flags</a>, Up: <a href="Commands.html#Commands"
+    accesskey="u" rel="up">Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-and-Variable-Index.html#Function-and-Variable-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Updating-the-_002acvs_002a-buffer" id=
+  "Updating-the-_002acvs_002a-buffer"></a>
 
-<p>In addition to the above commands which operate on the whole module,
-you can run the equivalent CVS command on just a subset of the
-files/directories with these keys:
-</p>
-<dl compact="compact">
-<dt><kbd>O</kbd></dt>
-<dd><p>Runs <code>cvs-mode-update</code> on the selected files.  When run on the
-top-level directory, this is equivalent to <kbd>M-u</kbd>.
-</p>
-</dd>
-<dt><kbd>e</kbd></dt>
-<dd><p>Runs <code>cvs-mode-examine</code> on the selected files.  When run on the
-top-level directory, this is equivalent to <kbd>M-e</kbd>.
-</p>
-<a name="index-cvs_002dstatus_002dmode"></a>
-</dd>
-<dt><kbd>s</kbd></dt>
-<dd><p>Runs <code>cvs-mode-status</code> on the selected files.  When run on the
-top-level directory, this is equivalent to <kbd>M-s</kbd>, except that
-CVS output will be shown in a <samp>*cvs-info*</samp> buffer that will be
-put in &lsquo;<samp>cvs-status-mode</samp>&rsquo;.
-</p></dd>
-</dl>
+  <h3 class="section">5.3 Updating the <samp>*cvs*</samp>
+  buffer</h3><a name="index-cvs_002dupdate-1" id=
+  "index-cvs_002dupdate-1"></a> <a name="index-cvs_002dexamine-1"
+  id="index-cvs_002dexamine-1"></a> <a name=
+  "index-cvs_002dstatus-1" id="index-cvs_002dstatus-1"></a>
+  <a name="index-cvs_002dmode_002dupdate" id=
+  "index-cvs_002dmode_002dupdate"></a> <a name=
+  "index-cvs_002dmode_002dexamine" id=
+  "index-cvs_002dmode_002dexamine"></a> <a name=
+  "index-cvs_002dmode_002dstatus" id=
+  "index-cvs_002dmode_002dstatus"></a>
 
+  <p>The following commands can be used from within the
+  <samp>*cvs*</samp> buffer to update the display:</p>
 
+  <dl compact="compact">
+    <dt><kbd>M-u</kbd></dt>
 
+    <dd>
+      <p>Runs the command
+      &lsquo;<samp>cvs-update</samp>&rsquo;.</p>
+    </dd>
 
+    <dt><kbd>M-e</kbd></dt>
 
+    <dd>
+      <p>Runs the command
+      &lsquo;<samp>cvs-examine</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><kbd>M-s</kbd></dt>
+
+    <dd>
+      <p>Runs the command
+      &lsquo;<samp>cvs-status</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <p>In addition to the above commands which operate on the whole
+  module, you can run the equivalent CVS command on just a subset
+  of the files/directories with these keys:</p>
+
+  <dl compact="compact">
+    <dt><kbd>O</kbd></dt>
+
+    <dd>
+      <p>Runs <code>cvs-mode-update</code> on the selected files.
+      When run on the top-level directory, this is equivalent to
+      <kbd>M-u</kbd>.</p>
+    </dd>
+
+    <dt><kbd>e</kbd></dt>
+
+    <dd>
+      <p>Runs <code>cvs-mode-examine</code> on the selected files.
+      When run on the top-level directory, this is equivalent to
+      <kbd>M-e</kbd>.</p><a name="index-cvs_002dstatus_002dmode"
+      id="index-cvs_002dstatus_002dmode"></a>
+    </dd>
+
+    <dt><kbd>s</kbd></dt>
+
+    <dd>
+      <p>Runs <code>cvs-mode-status</code> on the selected files.
+      When run on the top-level directory, this is equivalent to
+      <kbd>M-s</kbd>, except that CVS output will be shown in a
+      <samp>*cvs-info*</samp> buffer that will be put in
+      &lsquo;<samp>cvs-status-mode</samp>&rsquo;.</p>
+    </dd>
+  </dl>
 </body>
 </html>

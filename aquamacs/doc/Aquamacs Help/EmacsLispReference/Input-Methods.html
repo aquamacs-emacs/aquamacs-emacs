@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,144 +19,221 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Input Methods</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Input Methods">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Input Methods">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up" title="Non-ASCII Characters">
-<link href="Locales.html#Locales" rel="next" title="Locales">
-<link href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding" rel="prev" title="Terminal I/O Encoding">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Input Methods</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Input Methods" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Input Methods" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up"
+  title="Non-ASCII Characters" />
+  <link href="Locales.html#Locales" rel="next" title="Locales" />
+  <link href=
+  "Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding" rel=
+  "prev" title="Terminal I/O Encoding" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Input-Methods" id="Input-Methods"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Locales.html#Locales" accesskey="n" rel=
+    "next">Locales</a>, Previous: <a href=
+    "Coding-Systems.html#Coding-Systems" accesskey="p" rel=
+    "prev">Coding Systems</a>, Up: <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Input-Methods-1" id="Input-Methods-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Input-Methods"></a>
-<div class="header">
-<p>
-Next: <a href="Locales.html#Locales" accesskey="n" rel="next">Locales</a>, Previous: <a href="Coding-Systems.html#Coding-Systems" accesskey="p" rel="prev">Coding Systems</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Input-Methods-1"></a>
-<h3 class="section">32.11 Input Methods</h3>
-<a name="index-input-methods"></a>
+  <h3 class="section">32.11 Input Methods</h3><a name=
+  "index-input-methods" id="index-input-methods"></a>
 
-<p><em>Input methods</em> provide convenient ways of entering non-<acronym>ASCII</acronym>
-characters from the keyboard.  Unlike coding systems, which translate
-non-<acronym>ASCII</acronym> characters to and from encodings meant to be read by
-programs, input methods provide human-friendly commands.  (See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Input-Methods.html#Input-Methods">Input
-Methods</a> in <cite>The GNU Emacs Manual</cite>, for information on how users
-use input methods to enter text.)  How to define input methods is not
-yet documented in this manual, but here we describe how to use them.
-</p>
-<p>Each input method has a name, which is currently a string;
-in the future, symbols may also be usable as input method names.
-</p>
-<dl>
-<dt><a name="index-current_002dinput_002dmethod"></a>Variable: <strong>current-input-method</strong></dt>
-<dd><p>This variable holds the name of the input method now active in the
-current buffer.  (It automatically becomes local in each buffer when set
-in any fashion.)  It is <code>nil</code> if no input method is active in the
-buffer now.
-</p></dd></dl>
+  <p><em>Input methods</em> provide convenient ways of entering
+  non-<acronym>ASCII</acronym> characters from the keyboard. Unlike
+  coding systems, which translate non-<acronym>ASCII</acronym>
+  characters to and from encodings meant to be read by programs,
+  input methods provide human-friendly commands. (See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Input-Methods.html#Input-Methods">
+  Input Methods</a> in <cite>The GNU Emacs Manual</cite>, for
+  information on how users use input methods to enter text.) How to
+  define input methods is not yet documented in this manual, but
+  here we describe how to use them.</p>
 
-<dl>
-<dt><a name="index-default_002dinput_002dmethod"></a>User Option: <strong>default-input-method</strong></dt>
-<dd><p>This variable holds the default input method for commands that choose an
-input method.  Unlike <code>current-input-method</code>, this variable is
-normally global.
-</p></dd></dl>
+  <p>Each input method has a name, which is currently a string; in
+  the future, symbols may also be usable as input method names.</p>
 
-<dl>
-<dt><a name="index-set_002dinput_002dmethod"></a>Command: <strong>set-input-method</strong> <em>input-method</em></dt>
-<dd><p>This command activates input method <var>input-method</var> for the current
-buffer.  It also sets <code>default-input-method</code> to <var>input-method</var>.
-If <var>input-method</var> is <code>nil</code>, this command deactivates any input
-method for the current buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-current_002dinput_002dmethod" id=
+    "index-current_002dinput_002dmethod"></a>Variable:
+    <strong>current-input-method</strong></dt>
 
-<dl>
-<dt><a name="index-read_002dinput_002dmethod_002dname"></a>Function: <strong>read-input-method-name</strong> <em>prompt &amp;optional default inhibit-null</em></dt>
-<dd><p>This function reads an input method name with the minibuffer, prompting
-with <var>prompt</var>.  If <var>default</var> is non-<code>nil</code>, that is returned
-by default, if the user enters empty input.  However, if
-<var>inhibit-null</var> is non-<code>nil</code>, empty input signals an error.
-</p>
-<p>The returned value is a string.
-</p></dd></dl>
+    <dd>
+      <p>This variable holds the name of the input method now
+      active in the current buffer. (It automatically becomes local
+      in each buffer when set in any fashion.) It is
+      <code>nil</code> if no input method is active in the buffer
+      now.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-input_002dmethod_002dalist"></a>Variable: <strong>input-method-alist</strong></dt>
-<dd><p>This variable defines all the supported input methods.
-Each element defines one input method, and should have the form:
-</p>
-<div class="example">
-<pre class="example">(<var>input-method</var> <var>language-env</var> <var>activate-func</var>
+  <dl>
+    <dt><a name="index-default_002dinput_002dmethod" id=
+    "index-default_002dinput_002dmethod"></a>User Option:
+    <strong>default-input-method</strong></dt>
+
+    <dd>
+      <p>This variable holds the default input method for commands
+      that choose an input method. Unlike
+      <code>current-input-method</code>, this variable is normally
+      global.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dinput_002dmethod" id=
+    "index-set_002dinput_002dmethod"></a>Command:
+    <strong>set-input-method</strong> <em>input-method</em></dt>
+
+    <dd>
+      <p>This command activates input method
+      <var>input-method</var> for the current buffer. It also sets
+      <code>default-input-method</code> to <var>input-method</var>.
+      If <var>input-method</var> is <code>nil</code>, this command
+      deactivates any input method for the current buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-read_002dinput_002dmethod_002dname" id=
+    "index-read_002dinput_002dmethod_002dname"></a>Function:
+    <strong>read-input-method-name</strong> <em>prompt
+    &amp;optional default inhibit-null</em></dt>
+
+    <dd>
+      <p>This function reads an input method name with the
+      minibuffer, prompting with <var>prompt</var>. If
+      <var>default</var> is non-<code>nil</code>, that is returned
+      by default, if the user enters empty input. However, if
+      <var>inhibit-null</var> is non-<code>nil</code>, empty input
+      signals an error.</p>
+
+      <p>The returned value is a string.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-input_002dmethod_002dalist" id=
+    "index-input_002dmethod_002dalist"></a>Variable:
+    <strong>input-method-alist</strong></dt>
+
+    <dd>
+      <p>This variable defines all the supported input methods.
+      Each element defines one input method, and should have the
+      form:</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>input-method</var> <var>language-env</var> <var>activate-func</var>
  <var>title</var> <var>description</var> <var>args</var>...)
-</pre></div>
+</pre>
+      </div>
 
-<p>Here <var>input-method</var> is the input method name, a string;
-<var>language-env</var> is another string, the name of the language
-environment this input method is recommended for.  (That serves only for
-documentation purposes.)
-</p>
-<p><var>activate-func</var> is a function to call to activate this method.  The
-<var>args</var>, if any, are passed as arguments to <var>activate-func</var>.  All
-told, the arguments to <var>activate-func</var> are <var>input-method</var> and
-the <var>args</var>.
-</p>
-<p><var>title</var> is a string to display in the mode line while this method is
-active.  <var>description</var> is a string describing this method and what
-it is good for.
-</p></dd></dl>
+      <p>Here <var>input-method</var> is the input method name, a
+      string; <var>language-env</var> is another string, the name
+      of the language environment this input method is recommended
+      for. (That serves only for documentation purposes.)</p>
 
-<p>The fundamental interface to input methods is through the
-variable <code>input-method-function</code>.  See <a href="Reading-One-Event.html#Reading-One-Event">Reading One Event</a>,
-and <a href="Invoking-the-Input-Method.html#Invoking-the-Input-Method">Invoking the Input Method</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Locales.html#Locales" accesskey="n" rel="next">Locales</a>, Previous: <a href="Coding-Systems.html#Coding-Systems" accesskey="p" rel="prev">Coding Systems</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p><var>activate-func</var> is a function to call to activate
+      this method. The <var>args</var>, if any, are passed as
+      arguments to <var>activate-func</var>. All told, the
+      arguments to <var>activate-func</var> are
+      <var>input-method</var> and the <var>args</var>.</p>
 
+      <p><var>title</var> is a string to display in the mode line
+      while this method is active. <var>description</var> is a
+      string describing this method and what it is good for.</p>
+    </dd>
+  </dl>
 
+  <p>The fundamental interface to input methods is through the
+  variable <code>input-method-function</code>. See <a href=
+  "Reading-One-Event.html#Reading-One-Event">Reading One Event</a>,
+  and <a href=
+  "Invoking-the-Input-Method.html#Invoking-the-Input-Method">Invoking
+  the Input Method</a>.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Locales.html#Locales" accesskey="n" rel=
+    "next">Locales</a>, Previous: <a href=
+    "Coding-Systems.html#Coding-Systems" accesskey="p" rel=
+    "prev">Coding Systems</a>, Up: <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

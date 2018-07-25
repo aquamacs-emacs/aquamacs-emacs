@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,85 +19,145 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Buffer-Local Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Buffer-Local Variables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Buffer-Local Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variables.html#Variables" rel="up" title="Variables">
-<link href="Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal" rel="next" title="Intro to Buffer-Local">
-<link href="Using-Lexical-Binding.html#Using-Lexical-Binding" rel="prev" title="Using Lexical Binding">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Buffer-Local
+  Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Buffer-Local Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Buffer-Local Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variables.html#Variables" rel="up" title=
+  "Variables" />
+  <link href=
+  "Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal" rel=
+  "next" title="Intro to Buffer-Local" />
+  <link href="Using-Lexical-Binding.html#Using-Lexical-Binding"
+  rel="prev" title="Using Lexical Binding" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Buffer_002dLocal-Variables" id=
+  "Buffer_002dLocal-Variables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "File-Local-Variables.html#File-Local-Variables" accesskey="n"
+    rel="next">File Local Variables</a>, Previous: <a href=
+    "Variable-Scoping.html#Variable-Scoping" accesskey="p" rel=
+    "prev">Variable Scoping</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Buffer_002dLocal-Variables-1" id=
+  "Buffer_002dLocal-Variables-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Buffer_002dLocal-Variables"></a>
-<div class="header">
-<p>
-Next: <a href="File-Local-Variables.html#File-Local-Variables" accesskey="n" rel="next">File Local Variables</a>, Previous: <a href="Variable-Scoping.html#Variable-Scoping" accesskey="p" rel="prev">Variable Scoping</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Buffer_002dLocal-Variables-1"></a>
-<h3 class="section">11.10 Buffer-Local Variables</h3>
-<a name="index-variable_002c-buffer_002dlocal"></a>
-<a name="index-buffer_002dlocal-variables"></a>
+  <h3 class="section">11.10 Buffer-Local Variables</h3><a name=
+  "index-variable_002c-buffer_002dlocal" id=
+  "index-variable_002c-buffer_002dlocal"></a> <a name=
+  "index-buffer_002dlocal-variables" id=
+  "index-buffer_002dlocal-variables"></a>
 
-<p>Global and local variable bindings are found in most programming
-languages in one form or another.  Emacs, however, also supports
-additional, unusual kinds of variable binding, such as
-<em>buffer-local</em> bindings, which apply only in one buffer.  Having
-different values for a variable in different buffers is an important
-customization method.  (Variables can also have bindings that are
-local to each terminal.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.)
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal" accesskey="1">Intro to Buffer-Local</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Introduction and concepts.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal" accesskey="2">Creating Buffer-Local</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating and destroying buffer-local bindings.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Default-Value.html#Default-Value" accesskey="3">Default Value</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The default value is seen in buffers
-                                 that don&rsquo;t have their own buffer-local values.
-</td></tr>
-</table>
+  <p>Global and local variable bindings are found in most
+  programming languages in one form or another. Emacs, however,
+  also supports additional, unusual kinds of variable binding, such
+  as <em>buffer-local</em> bindings, which apply only in one
+  buffer. Having different values for a variable in different
+  buffers is an important customization method. (Variables can also
+  have bindings that are local to each terminal. See <a href=
+  "Multiple-Terminals.html#Multiple-Terminals">Multiple
+  Terminals</a>.)</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal"
+      accesskey="1">Intro to Buffer-Local</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Introduction and concepts.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal"
+      accesskey="2">Creating Buffer-Local</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Creating and destroying
+      buffer-local bindings.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Default-Value.html#Default-Value" accesskey="3">Default
+      Value</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">The default value is seen in
+      buffers that don&rsquo;t have their own buffer-local
+      values.</td>
+    </tr>
+  </table>
 </body>
 </html>

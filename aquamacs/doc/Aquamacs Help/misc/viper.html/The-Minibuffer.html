@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-1997, 2001-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,125 +14,191 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Viper Is a Package for Emacs Rebels: The Minibuffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Viper Is a Package for Emacs Rebels: The Minibuffer">
-<meta name="keywords" content="Viper Is a Package for Emacs Rebels: The Minibuffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Overview.html#Overview" rel="up" title="Overview">
-<link href="Multiple-Files-in-Viper.html#Multiple-Files-in-Viper" rel="next" title="Multiple Files in Viper">
-<link href="Replace-State.html#Replace-State" rel="prev" title="Replace State">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Viper Is a Package for Emacs Rebels: The
+  Minibuffer</title>
+  <meta name="description" content=
+  "Viper Is a Package for Emacs Rebels: The Minibuffer" />
+  <meta name="keywords" content=
+  "Viper Is a Package for Emacs Rebels: The Minibuffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Overview.html#Overview" rel="up" title="Overview" />
+  <link href="Multiple-Files-in-Viper.html#Multiple-Files-in-Viper"
+  rel="next" title="Multiple Files in Viper" />
+  <link href="Replace-State.html#Replace-State" rel="prev" title=
+  "Replace State" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-Minibuffer"></a>
-<div class="header">
-<p>
-Next: <a href="Multiple-Files-in-Viper.html#Multiple-Files-in-Viper" accesskey="n" rel="next">Multiple Files in Viper</a>, Previous: <a href="States-in-Viper.html#States-in-Viper" accesskey="p" rel="prev">States in Viper</a>, Up: <a href="Overview.html#Overview" accesskey="u" rel="up">Overview</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Minibuffer-1"></a>
-<h3 class="section">1.4 The Minibuffer</h3>
+<body lang="en" xml:lang="en">
+  <a name="The-Minibuffer" id="The-Minibuffer"></a>
 
-<a name="index-Minibuffer-1"></a>
+  <div class="header">
+    <p>Next: <a href=
+    "Multiple-Files-in-Viper.html#Multiple-Files-in-Viper"
+    accesskey="n" rel="next">Multiple Files in Viper</a>, Previous:
+    <a href="States-in-Viper.html#States-in-Viper" accesskey="p"
+    rel="prev">States in Viper</a>, Up: <a href=
+    "Overview.html#Overview" accesskey="u" rel="up">Overview</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Minibuffer-1" id="The-Minibuffer-1"></a>
 
-<p>The minibuffer is where commands are entered in.  Editing can be done
-by commands from Insert state, namely:
-</p>
-<dl compact="compact">
-<dt><kbd>C-h</kbd></dt>
-<dd><p>Backspace
-</p></dd>
-<dt><kbd>C-w</kbd></dt>
-<dd><p>Delete Word
-</p></dd>
-<dt><kbd>C-u</kbd></dt>
-<dd><p>Erase line
-</p></dd>
-<dt><kbd>C-v</kbd></dt>
-<dd><p>Quote the following character
-</p></dd>
-<dt><kbd><span class="key">RET</span></kbd></dt>
-<dd><p>Execute command
-</p></dd>
-<dt><kbd>C-g and C-]</kbd></dt>
-<dd><p>Emacs quit and abort keys.  These may be necessary.  See <a href="Vi-State.html#Vi-State">Vi State</a>, for an
-explanation.
-</p></dd>
-<dt><kbd>M-p and M-n</kbd></dt>
-<dd><p>These keys are bound to functions that peruse minibuffer history.  The
-precise history to be perused depends on the context.  It may be the history
-of search strings, Ex commands, file names, etc.
-</p></dd>
-<dt><kbd>C-s</kbd></dt>
-<dd><p>If the minibuffer is entered via the Viper search commands <kbd>/</kbd> or
-<kbd>?</kbd>, then this key inserts the last search string used by the
-Emacs incremental search command
-(which is bound to <kbd>C-s</kbd> everywhere except in this case).
-</p></dd>
-</dl>
+  <h3 class="section">1.4 The Minibuffer</h3><a name=
+  "index-Minibuffer-1" id="index-Minibuffer-1"></a>
 
-<p>Most of the Emacs keys are functional in the minibuffer.  While in the
-minibuffer, Viper tries to make editing resemble Vi&rsquo;s behavior when the
-latter is waiting for the user to type an Ex command.  In particular, you
-can use the regular Vi commands to edit the minibuffer.  You can switch
-between the Vi state and Insert state at will, and even use the replace mode.
-Initially, the minibuffer comes up in Insert state.
-</p>
-<p>Some users prefer plain Emacs bindings in the minibuffer.  To this end, set
-<code>viper-vi-style-in-minibuffer</code> to <code>nil</code> in
-your Viper customization file.  See <a href="Customization.html#Customization">Customization</a>, to learn how to do this.
-</p>
-<p>When the minibuffer changes Viper states, you will notice that the appearance
-of the text there changes as well.  This is useful because the minibuffer
-has no mode line to tell which Vi state it is in.
-The appearance of the text in the minibuffer can be changed.
-See <a href="Viper-Specials.html#Viper-Specials">Viper Specials</a>, for more details.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Multiple-Files-in-Viper.html#Multiple-Files-in-Viper" accesskey="n" rel="next">Multiple Files in Viper</a>, Previous: <a href="States-in-Viper.html#States-in-Viper" accesskey="p" rel="prev">States in Viper</a>, Up: <a href="Overview.html#Overview" accesskey="u" rel="up">Overview</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The minibuffer is where commands are entered in. Editing can
+  be done by commands from Insert state, namely:</p>
 
+  <dl compact="compact">
+    <dt><kbd>C-h</kbd></dt>
 
+    <dd>
+      <p>Backspace</p>
+    </dd>
 
+    <dt><kbd>C-w</kbd></dt>
+
+    <dd>
+      <p>Delete Word</p>
+    </dd>
+
+    <dt><kbd>C-u</kbd></dt>
+
+    <dd>
+      <p>Erase line</p>
+    </dd>
+
+    <dt><kbd>C-v</kbd></dt>
+
+    <dd>
+      <p>Quote the following character</p>
+    </dd>
+
+    <dt><kbd><span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Execute command</p>
+    </dd>
+
+    <dt><kbd>C-g and C-]</kbd></dt>
+
+    <dd>
+      <p>Emacs quit and abort keys. These may be necessary. See
+      <a href="Vi-State.html#Vi-State">Vi State</a>, for an
+      explanation.</p>
+    </dd>
+
+    <dt><kbd>M-p and M-n</kbd></dt>
+
+    <dd>
+      <p>These keys are bound to functions that peruse minibuffer
+      history. The precise history to be perused depends on the
+      context. It may be the history of search strings, Ex
+      commands, file names, etc.</p>
+    </dd>
+
+    <dt><kbd>C-s</kbd></dt>
+
+    <dd>
+      <p>If the minibuffer is entered via the Viper search commands
+      <kbd>/</kbd> or <kbd>?</kbd>, then this key inserts the last
+      search string used by the Emacs incremental search command
+      (which is bound to <kbd>C-s</kbd> everywhere except in this
+      case).</p>
+    </dd>
+  </dl>
+
+  <p>Most of the Emacs keys are functional in the minibuffer. While
+  in the minibuffer, Viper tries to make editing resemble
+  Vi&rsquo;s behavior when the latter is waiting for the user to
+  type an Ex command. In particular, you can use the regular Vi
+  commands to edit the minibuffer. You can switch between the Vi
+  state and Insert state at will, and even use the replace mode.
+  Initially, the minibuffer comes up in Insert state.</p>
+
+  <p>Some users prefer plain Emacs bindings in the minibuffer. To
+  this end, set <code>viper-vi-style-in-minibuffer</code> to
+  <code>nil</code> in your Viper customization file. See <a href=
+  "Customization.html#Customization">Customization</a>, to learn
+  how to do this.</p>
+
+  <p>When the minibuffer changes Viper states, you will notice that
+  the appearance of the text there changes as well. This is useful
+  because the minibuffer has no mode line to tell which Vi state it
+  is in. The appearance of the text in the minibuffer can be
+  changed. See <a href="Viper-Specials.html#Viper-Specials">Viper
+  Specials</a>, for more details.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Multiple-Files-in-Viper.html#Multiple-Files-in-Viper"
+    accesskey="n" rel="next">Multiple Files in Viper</a>, Previous:
+    <a href="States-in-Viper.html#States-in-Viper" accesskey="p"
+    rel="prev">States in Viper</a>, Up: <a href=
+    "Overview.html#Overview" accesskey="u" rel="up">Overview</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Quick Equation - RefTeX User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="RefTeX User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Defining-Label-Environments.html#Defining-Label-Environments" title="Defining Label Environments">
-<link rel="prev" href="Theorem-and-Axiom.html#Theorem-and-Axiom" title="Theorem and Axiom">
-<link rel="next" href="Figure-Wrapper.html#Figure-Wrapper" title="Figure Wrapper">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Quick Equation - RefTeX User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="RefTeX User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Defining-Label-Environments.html#Defining-Label-Environments"
+  title="Defining Label Environments" />
+  <link rel="prev" href="Theorem-and-Axiom.html#Theorem-and-Axiom"
+  title="Theorem and Axiom" />
+  <link rel="next" href="Figure-Wrapper.html#Figure-Wrapper" title=
+  "Figure Wrapper" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents RefTeX, a package to do labels, references,
 citations and indices for LaTeX documents with Emacs.
 
@@ -31,8 +41,10 @@ Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,45 +54,62 @@ Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Quick-Equation"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Figure-Wrapper.html#Figure-Wrapper">Figure Wrapper</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Theorem-and-Axiom.html#Theorem-and-Axiom">Theorem and Axiom</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Quick-Equation" id="Quick-Equation"></a>
 
-<h4 class="subsection">3.4.2 Quick Equation Macro</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Figure-Wrapper.html#Figure-Wrapper">Figure Wrapper</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Theorem-and-Axiom.html#Theorem-and-Axiom">Theorem and
+    Axiom</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Defining-Label-Environments.html#Defining-Label-Environments">Defining
+    Label Environments</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Quick-equation-macro-150"></a><a name="index-Macros-as-environment-wrappers-151"></a>
-Suppose you would like to have a macro for quick equations.  It
-could be defined like this:
+  <h4 class="subsection">3.4.2 Quick Equation Macro</h4>
 
-<pre class="example">     \newcommand{\quickeq}[1]{\begin{equation} #1 \end{equation}}
+  <p><a name="index-Quick-equation-macro-150" id=
+  "index-Quick-equation-macro-150"></a><a name=
+  "index-Macros-as-environment-wrappers-151" id=
+  "index-Macros-as-environment-wrappers-151"></a> Suppose you would
+  like to have a macro for quick equations. It could be defined
+  like this:</p>
+  <pre class="example">
+     \newcommand{\quickeq}[1]{\begin{equation} #1 \end{equation}}
 </pre>
-   <p class="noindent">and used like this:
 
-<pre class="example">     Einstein's equation is \quickeq{E=mc^2 \label{eq:einstein}}.
+  <p class="noindent">and used like this:</p>
+  <pre class="example">
+     Einstein's equation is \quickeq{E=mc^2 \label{eq:einstein}}.
 </pre>
-   <p>We need to tell <b>RefTeX</b> that any label defined in the argument of the
-<code>\quickeq</code> is an equation label.  Here is how to do this with lisp:
 
-<pre class="lisp">     (setq reftex-label-alist '(("\\quickeq{}" ?e nil nil 1 nil)))
+  <p>We need to tell <b>RefTeX</b> that any label defined in the
+  argument of the <code>\quickeq</code> is an equation label. Here
+  is how to do this with lisp:</p>
+  <pre class="lisp">
+     (setq reftex-label-alist '(("\\quickeq{}" ?e nil nil 1 nil)))
 </pre>
-   <p>The first element in this list is now the macro with empty braces as an
-<em>image</em> of the macro arguments.  <code>?e</code> indicates that this is
-an equation label, the different <code>nil</code> elements indicate to use the
-default values for equations.  The &lsquo;<samp><span class="samp">1</span></samp>&rsquo; as the fifth element
-indicates that the context of the label definition should be the 1st
-argument of the macro.
 
-   <p>Here is again how this would look in the customization buffer:
+  <p>The first element in this list is now the macro with empty
+  braces as an <em>image</em> of the macro arguments.
+  <code>?e</code> indicates that this is an equation label, the
+  different <code>nil</code> elements indicate to use the default
+  values for equations. The &lsquo;<samp><span class=
+  "samp">1</span></samp>&rsquo; as the fifth element indicates that
+  the context of the label definition should be the 1st argument of
+  the macro.</p>
 
-<pre class="example">     Reftex Label Alist: [Hide]
+  <p>Here is again how this would look in the customization
+  buffer:</p>
+  <pre class="example">
+     Reftex Label Alist: [Hide]
      [INS] [DEL] Package or Detailed   : [Value Menu] Detailed:
                  Environment or \macro : [Value Menu] String: \quickeq{}
                  Type specification    : [Value Menu] Char  : e
@@ -91,5 +120,5 @@ argument of the macro.
                    [INS]
                  [ ] Make TOC entry    : [Value Menu] No entry
 </pre>
-   </body></html>
-
+</body>
+</html>

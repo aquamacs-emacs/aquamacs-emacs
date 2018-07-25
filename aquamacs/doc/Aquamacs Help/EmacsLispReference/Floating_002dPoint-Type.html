@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,80 +19,117 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Floating-Point Type</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Floating-Point Type">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Floating-Point Type">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Programming-Types.html#Programming-Types" rel="up" title="Programming Types">
-<link href="Character-Type.html#Character-Type" rel="next" title="Character Type">
-<link href="Integer-Type.html#Integer-Type" rel="prev" title="Integer Type">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Floating-Point
+  Type</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Floating-Point Type" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Floating-Point Type" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Programming-Types.html#Programming-Types" rel="up"
+  title="Programming Types" />
+  <link href="Character-Type.html#Character-Type" rel="next" title=
+  "Character Type" />
+  <link href="Integer-Type.html#Integer-Type" rel="prev" title=
+  "Integer Type" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Floating_002dPoint-Type" id=
+  "Floating_002dPoint-Type"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Character-Type.html#Character-Type"
+    accesskey="n" rel="next">Character Type</a>, Previous: <a href=
+    "Integer-Type.html#Integer-Type" accesskey="p" rel=
+    "prev">Integer Type</a>, Up: <a href=
+    "Programming-Types.html#Programming-Types" accesskey="u" rel=
+    "up">Programming Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Floating_002dPoint-Type-1" id=
+  "Floating_002dPoint-Type-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Floating_002dPoint-Type"></a>
-<div class="header">
-<p>
-Next: <a href="Character-Type.html#Character-Type" accesskey="n" rel="next">Character Type</a>, Previous: <a href="Integer-Type.html#Integer-Type" accesskey="p" rel="prev">Integer Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Floating_002dPoint-Type-1"></a>
-<h4 class="subsection">2.3.2 Floating-Point Type</h4>
+  <h4 class="subsection">2.3.2 Floating-Point Type</h4>
 
-<p>Floating-point numbers are the computer equivalent of scientific
-notation; you can think of a floating-point number as a fraction
-together with a power of ten.  The precise number of significant
-figures and the range of possible exponents is machine-specific; Emacs
-uses the C data type <code>double</code> to store the value, and internally
-this records a power of 2 rather than a power of 10.
-</p>
-<p>The printed representation for floating-point numbers requires either
-a decimal point (with at least one digit following), an exponent, or
-both.  For example, &lsquo;<samp>1500.0</samp>&rsquo;, &lsquo;<samp>+15e2</samp>&rsquo;, &lsquo;<samp>15.0e+2</samp>&rsquo;,
-&lsquo;<samp>+1500000e-3</samp>&rsquo;, and &lsquo;<samp>.15e4</samp>&rsquo; are five ways of writing a floating-point
-number whose value is 1500.  They are all equivalent.
-</p>
-<p>See <a href="Numbers.html#Numbers">Numbers</a>, for more information.
-</p>
+  <p>Floating-point numbers are the computer equivalent of
+  scientific notation; you can think of a floating-point number as
+  a fraction together with a power of ten. The precise number of
+  significant figures and the range of possible exponents is
+  machine-specific; Emacs uses the C data type <code>double</code>
+  to store the value, and internally this records a power of 2
+  rather than a power of 10.</p>
 
+  <p>The printed representation for floating-point numbers requires
+  either a decimal point (with at least one digit following), an
+  exponent, or both. For example,
+  &lsquo;<samp>1500.0</samp>&rsquo;,
+  &lsquo;<samp>+15e2</samp>&rsquo;,
+  &lsquo;<samp>15.0e+2</samp>&rsquo;,
+  &lsquo;<samp>+1500000e-3</samp>&rsquo;, and
+  &lsquo;<samp>.15e4</samp>&rsquo; are five ways of writing a
+  floating-point number whose value is 1500. They are all
+  equivalent.</p>
 
-
+  <p>See <a href="Numbers.html#Numbers">Numbers</a>, for more
+  information.</p>
 </body>
 </html>

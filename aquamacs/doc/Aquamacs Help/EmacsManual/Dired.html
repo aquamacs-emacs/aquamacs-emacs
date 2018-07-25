@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,134 +20,330 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Dired</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Dired">
-<meta name="keywords" content="GNU Emacs Manual: Dired">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Dired-Enter.html#Dired-Enter" rel="next" title="Dired Enter">
-<link href="Dabbrev-Customization.html#Dabbrev-Customization" rel="prev" title="Dabbrev Customization">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Dired</title>
+  <meta name="description" content="GNU Emacs Manual: Dired" />
+  <meta name="keywords" content="GNU Emacs Manual: Dired" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Dired-Enter.html#Dired-Enter" rel="next" title=
+  "Dired Enter" />
+  <link href="Dabbrev-Customization.html#Dabbrev-Customization"
+  rel="prev" title="Dabbrev Customization" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Dired" id="Dired"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Calendar_002fDiary.html#Calendar_002fDiary"
+    accesskey="n" rel="next">Calendar/Diary</a>, Previous: <a href=
+    "Abbrevs.html#Abbrevs" accesskey="p" rel="prev">Abbrevs</a>,
+    Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Dired_002c-the-Directory-Editor" id=
+  "Dired_002c-the-Directory-Editor"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dired"></a>
-<div class="header">
-<p>
-Next: <a href="Calendar_002fDiary.html#Calendar_002fDiary" accesskey="n" rel="next">Calendar/Diary</a>, Previous: <a href="Abbrevs.html#Abbrevs" accesskey="p" rel="prev">Abbrevs</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Dired_002c-the-Directory-Editor"></a>
-<h2 class="chapter">30 Dired, the Directory Editor</h2>
-<a name="index-Dired"></a>
-<a name="index-file-management"></a>
+  <h2 class="chapter">30 Dired, the Directory Editor</h2><a name=
+  "index-Dired" id="index-Dired"></a> <a name=
+  "index-file-management" id="index-file-management"></a>
 
-<p>Dired makes an Emacs buffer containing a listing of a directory, and
-optionally some of its subdirectories as well.  You can use the normal
-Emacs commands to move around in this buffer, and special Dired
-commands to operate on the listed files.
-</p>
-<p>The Dired buffer is read-only, and inserting text in it is not
-allowed.  Ordinary printing characters such as <kbd>d</kbd> and <kbd>x</kbd> are
-redefined for special Dired commands.  Some Dired commands <em>mark</em>
-or <em>flag</em> the <em>current file</em> (that is, the file on the current
-line); other commands operate on the marked files or on the flagged
-files.  You first mark certain files in order to operate on all of
-them with one command.
-</p>
-<p>The Dired-X package provides various extra features for Dired mode.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/dired-x/index.html#Top">Dired-X</a> in <cite>Dired Extra User&rsquo;s Manual</cite>.
-</p>
-<p>You can also view a list of files in a directory with <kbd>C-x C-d</kbd>
-(<code>list-directory</code>).  Unlike Dired, this command does not allow
-you to operate on the listed files.  See <a href="Directories.html#Directories">Directories</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Dired-Enter.html#Dired-Enter" accesskey="1">Enter</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to invoke Dired.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dired-Navigation.html#Dired-Navigation" accesskey="2">Navigation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special motion commands in the Dired buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dired-Deletion.html#Dired-Deletion" accesskey="3">Deletion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Deleting files with Dired.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Flagging-Many-Files.html#Flagging-Many-Files" accesskey="4">Flagging Many Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Flagging files based on their names.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dired-Visiting.html#Dired-Visiting" accesskey="5">Visit</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Other file operations through Dired.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Marks-vs-Flags.html#Marks-vs-Flags" accesskey="6">Marks vs Flags</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Flagging for deletion vs marking.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Operating-on-Files.html#Operating-on-Files" accesskey="7">Operating on Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to copy, rename, print, compress, etc.
-                                either one file or several files.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Shell-Commands-in-Dired.html#Shell-Commands-in-Dired" accesskey="8">Shell Commands in Dired</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Running a shell command on the marked files.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Transforming-File-Names.html#Transforming-File-Names" accesskey="9">Transforming File Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using patterns to rename multiple files.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Comparison-in-Dired.html#Comparison-in-Dired">Comparison in Dired</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Running <code>diff</code> by way of Dired.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Subdirectories-in-Dired.html#Subdirectories-in-Dired">Subdirectories in Dired</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Adding subdirectories to the Dired buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Subdir-Switches.html#Subdir-Switches">Subdir Switches</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Subdirectory switches in Dired.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Subdirectory-Motion.html#Subdirectory-Motion">Subdirectory Motion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving across subdirectories, and up and down.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Hiding-Subdirectories.html#Hiding-Subdirectories">Hiding Subdirectories</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Making subdirectories visible or invisible.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dired-Updating.html#Dired-Updating">Updating</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Discarding lines for files of no interest.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dired-and-Find.html#Dired-and-Find">Find</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using <code>find</code> to choose the files for Dired.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Wdired.html#Wdired">Wdired</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Operating on files by editing the Dired buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Image_002dDired.html#Image_002dDired">Image-Dired</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Viewing image thumbnails in Dired.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Misc-Dired-Features.html#Misc-Dired-Features">Misc</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Various other features.
-</td></tr>
-</table>
+  <p>Dired makes an Emacs buffer containing a listing of a
+  directory, and optionally some of its subdirectories as well. You
+  can use the normal Emacs commands to move around in this buffer,
+  and special Dired commands to operate on the listed files.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Calendar_002fDiary.html#Calendar_002fDiary" accesskey="n" rel="next">Calendar/Diary</a>, Previous: <a href="Abbrevs.html#Abbrevs" accesskey="p" rel="prev">Abbrevs</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The Dired buffer is read-only, and inserting text in it is not
+  allowed. Ordinary printing characters such as <kbd>d</kbd> and
+  <kbd>x</kbd> are redefined for special Dired commands. Some Dired
+  commands <em>mark</em> or <em>flag</em> the <em>current file</em>
+  (that is, the file on the current line); other commands operate
+  on the marked files or on the flagged files. You first mark
+  certain files in order to operate on all of them with one
+  command.</p>
 
+  <p>The Dired-X package provides various extra features for Dired
+  mode. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/dired-x/index.html#Top">
+  Dired-X</a> in <cite>Dired Extra User&rsquo;s Manual</cite>.</p>
 
+  <p>You can also view a list of files in a directory with <kbd>C-x
+  C-d</kbd> (<code>list-directory</code>). Unlike Dired, this
+  command does not allow you to operate on the listed files. See
+  <a href="Directories.html#Directories">Directories</a>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dired-Enter.html#Dired-Enter" accesskey="1">Enter</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to invoke Dired.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dired-Navigation.html#Dired-Navigation" accesskey=
+      "2">Navigation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Special motion commands in the
+      Dired buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dired-Deletion.html#Dired-Deletion" accesskey=
+      "3">Deletion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Deleting files with Dired.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Flagging-Many-Files.html#Flagging-Many-Files" accesskey=
+      "4">Flagging Many Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Flagging files based on their
+      names.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dired-Visiting.html#Dired-Visiting" accesskey=
+      "5">Visit</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Other file operations through
+      Dired.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Marks-vs-Flags.html#Marks-vs-Flags" accesskey="6">Marks vs
+      Flags</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Flagging for deletion vs
+      marking.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Operating-on-Files.html#Operating-on-Files" accesskey=
+      "7">Operating on Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to copy, rename, print,
+      compress, etc. either one file or several files.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Shell-Commands-in-Dired.html#Shell-Commands-in-Dired"
+      accesskey="8">Shell Commands in Dired</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Running a shell command on the
+      marked files.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Transforming-File-Names.html#Transforming-File-Names"
+      accesskey="9">Transforming File Names</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Using patterns to rename
+      multiple files.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Comparison-in-Dired.html#Comparison-in-Dired">Comparison in
+      Dired</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Running <code>diff</code> by
+      way of Dired.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Subdirectories-in-Dired.html#Subdirectories-in-Dired">Subdirectories
+      in Dired</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Adding subdirectories to the
+      Dired buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Subdir-Switches.html#Subdir-Switches">Subdir
+      Switches</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Subdirectory switches in
+      Dired.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Subdirectory-Motion.html#Subdirectory-Motion">Subdirectory
+      Motion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Moving across subdirectories,
+      and up and down.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Hiding-Subdirectories.html#Hiding-Subdirectories">Hiding
+      Subdirectories</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Making subdirectories visible
+      or invisible.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dired-Updating.html#Dired-Updating">Updating</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Discarding lines for files of
+      no interest.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dired-and-Find.html#Dired-and-Find">Find</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Using <code>find</code> to
+      choose the files for Dired.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Wdired.html#Wdired">Wdired</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Operating on files by editing
+      the Dired buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Image_002dDired.html#Image_002dDired">Image-Dired</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Viewing image thumbnails in
+      Dired.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Misc-Dired-Features.html#Misc-Dired-Features">Misc</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Various other features.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Calendar_002fDiary.html#Calendar_002fDiary"
+    accesskey="n" rel="next">Calendar/Diary</a>, Previous: <a href=
+    "Abbrevs.html#Abbrevs" accesskey="p" rel="prev">Abbrevs</a>,
+    Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

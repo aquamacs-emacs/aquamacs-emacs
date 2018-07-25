@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,117 +19,187 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Face Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Face Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Face Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Faces.html#Faces" rel="up" title="Faces">
-<link href="Auto-Faces.html#Auto-Faces" rel="next" title="Auto Faces">
-<link href="Face-Remapping.html#Face-Remapping" rel="prev" title="Face Remapping">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Face Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Face Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Face Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Faces.html#Faces" rel="up" title="Faces" />
+  <link href="Auto-Faces.html#Auto-Faces" rel="next" title=
+  "Auto Faces" />
+  <link href="Face-Remapping.html#Face-Remapping" rel="prev" title=
+  "Face Remapping" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Face-Functions" id="Face-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Auto-Faces.html#Auto-Faces" accesskey="n"
+    rel="next">Auto Faces</a>, Previous: <a href=
+    "Face-Remapping.html#Face-Remapping" accesskey="p" rel=
+    "prev">Face Remapping</a>, Up: <a href="Faces.html#Faces"
+    accesskey="u" rel="up">Faces</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Functions-for-Working-with-Faces" id=
+  "Functions-for-Working-with-Faces"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Face-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Auto-Faces.html#Auto-Faces" accesskey="n" rel="next">Auto Faces</a>, Previous: <a href="Face-Remapping.html#Face-Remapping" accesskey="p" rel="prev">Face Remapping</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Functions-for-Working-with-Faces"></a>
-<h4 class="subsection">37.12.6 Functions for Working with Faces</h4>
+  <h4 class="subsection">37.12.6 Functions for Working with
+  Faces</h4>
 
-<p>Here are additional functions for creating and working with faces.
-</p>
-<dl>
-<dt><a name="index-face_002dlist"></a>Function: <strong>face-list</strong></dt>
-<dd><p>This function returns a list of all defined face names.
-</p></dd></dl>
+  <p>Here are additional functions for creating and working with
+  faces.</p>
 
-<dl>
-<dt><a name="index-face_002did"></a>Function: <strong>face-id</strong> <em>face</em></dt>
-<dd><p>This function returns the <em>face number</em> of face <var>face</var>.  This
-is a number that uniquely identifies a face at low levels within
-Emacs.  It is seldom necessary to refer to a face by its face number.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-face_002dlist" id=
+    "index-face_002dlist"></a>Function:
+    <strong>face-list</strong></dt>
 
-<dl>
-<dt><a name="index-face_002ddocumentation-1"></a>Function: <strong>face-documentation</strong> <em>face</em></dt>
-<dd><p>This function returns the documentation string of face <var>face</var>, or
-<code>nil</code> if none was specified for it.
-</p></dd></dl>
+    <dd>
+      <p>This function returns a list of all defined face
+      names.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-face_002dequal"></a>Function: <strong>face-equal</strong> <em>face1 face2 &amp;optional frame</em></dt>
-<dd><p>This returns <code>t</code> if the faces <var>face1</var> and <var>face2</var> have the
-same attributes for display.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-face_002did" id=
+    "index-face_002did"></a>Function: <strong>face-id</strong>
+    <em>face</em></dt>
 
-<dl>
-<dt><a name="index-face_002ddiffers_002dfrom_002ddefault_002dp"></a>Function: <strong>face-differs-from-default-p</strong> <em>face &amp;optional frame</em></dt>
-<dd><p>This returns non-<code>nil</code> if the face <var>face</var> displays
-differently from the default face.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the <em>face number</em> of face
+      <var>face</var>. This is a number that uniquely identifies a
+      face at low levels within Emacs. It is seldom necessary to
+      refer to a face by its face number.</p>
+    </dd>
+  </dl>
 
-<a name="index-face-alias"></a>
-<a name="index-alias_002c-for-faces"></a>
-<p>A <em>face alias</em> provides an equivalent name for a face.  You can
-define a face alias by giving the alias symbol the <code>face-alias</code>
-property, with a value of the target face name.  The following example
-makes <code>modeline</code> an alias for the <code>mode-line</code> face.
-</p>
-<div class="example">
-<pre class="example">(put 'modeline 'face-alias 'mode-line)
-</pre></div>
+  <dl>
+    <dt><a name="index-face_002ddocumentation-1" id=
+    "index-face_002ddocumentation-1"></a>Function:
+    <strong>face-documentation</strong> <em>face</em></dt>
 
-<dl>
-<dt><a name="index-define_002dobsolete_002dface_002dalias"></a>Macro: <strong>define-obsolete-face-alias</strong> <em>obsolete-face current-face when</em></dt>
-<dd><p>This macro defines <code>obsolete-face</code> as an alias for
-<var>current-face</var>, and also marks it as obsolete, indicating that it
-may be removed in future.  <var>when</var> should be a string indicating
-when <code>obsolete-face</code> was made obsolete (usually a version number
-string).
-</p></dd></dl>
+    <dd>
+      <p>This function returns the documentation string of face
+      <var>face</var>, or <code>nil</code> if none was specified
+      for it.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-face_002dequal" id=
+    "index-face_002dequal"></a>Function:
+    <strong>face-equal</strong> <em>face1 face2 &amp;optional
+    frame</em></dt>
 
+    <dd>
+      <p>This returns <code>t</code> if the faces <var>face1</var>
+      and <var>face2</var> have the same attributes for
+      display.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-face_002ddiffers_002dfrom_002ddefault_002dp"
+    id=
+    "index-face_002ddiffers_002dfrom_002ddefault_002dp"></a>Function:
+    <strong>face-differs-from-default-p</strong> <em>face
+    &amp;optional frame</em></dt>
 
+    <dd>
+      <p>This returns non-<code>nil</code> if the face
+      <var>face</var> displays differently from the default
+      face.</p>
+    </dd>
+  </dl><a name="index-face-alias" id="index-face-alias"></a>
+  <a name="index-alias_002c-for-faces" id=
+  "index-alias_002c-for-faces"></a>
+
+  <p>A <em>face alias</em> provides an equivalent name for a face.
+  You can define a face alias by giving the alias symbol the
+  <code>face-alias</code> property, with a value of the target face
+  name. The following example makes <code>modeline</code> an alias
+  for the <code>mode-line</code> face.</p>
+
+  <div class="example">
+    <pre class="example">
+(put 'modeline 'face-alias 'mode-line)
+</pre>
+  </div>
+
+  <dl>
+    <dt><a name="index-define_002dobsolete_002dface_002dalias" id=
+    "index-define_002dobsolete_002dface_002dalias"></a>Macro:
+    <strong>define-obsolete-face-alias</strong> <em>obsolete-face
+    current-face when</em></dt>
+
+    <dd>
+      <p>This macro defines <code>obsolete-face</code> as an alias
+      for <var>current-face</var>, and also marks it as obsolete,
+      indicating that it may be removed in future. <var>when</var>
+      should be a string indicating when <code>obsolete-face</code>
+      was made obsolete (usually a version number string).</p>
+    </dd>
+  </dl>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,253 +19,384 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Saving Buffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Saving Buffers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Saving Buffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="Reading-from-Files.html#Reading-from-Files" rel="next" title="Reading from Files">
-<link href="Subroutines-of-Visiting.html#Subroutines-of-Visiting" rel="prev" title="Subroutines of Visiting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Saving Buffers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Saving Buffers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Saving Buffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href="Reading-from-Files.html#Reading-from-Files" rel=
+  "next" title="Reading from Files" />
+  <link href="Subroutines-of-Visiting.html#Subroutines-of-Visiting"
+  rel="prev" title="Subroutines of Visiting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Saving-Buffers" id="Saving-Buffers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Reading-from-Files.html#Reading-from-Files"
+    accesskey="n" rel="next">Reading from Files</a>, Previous:
+    <a href="Visiting-Files.html#Visiting-Files" accesskey="p" rel=
+    "prev">Visiting Files</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Saving-Buffers-1" id="Saving-Buffers-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Saving-Buffers"></a>
-<div class="header">
-<p>
-Next: <a href="Reading-from-Files.html#Reading-from-Files" accesskey="n" rel="next">Reading from Files</a>, Previous: <a href="Visiting-Files.html#Visiting-Files" accesskey="p" rel="prev">Visiting Files</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Saving-Buffers-1"></a>
-<h3 class="section">24.2 Saving Buffers</h3>
-<a name="index-saving-buffers"></a>
+  <h3 class="section">24.2 Saving Buffers</h3><a name=
+  "index-saving-buffers" id="index-saving-buffers"></a>
 
-<p>When you edit a file in Emacs, you are actually working on a buffer
-that is visiting that file&mdash;that is, the contents of the file are
-copied into the buffer and the copy is what you edit.  Changes to the
-buffer do not change the file until you <em>save</em> the buffer, which
-means copying the contents of the buffer into the file.
-</p>
-<dl>
-<dt><a name="index-save_002dbuffer"></a>Command: <strong>save-buffer</strong> <em>&amp;optional backup-option</em></dt>
-<dd><p>This function saves the contents of the current buffer in its visited
-file if the buffer has been modified since it was last visited or saved.
-Otherwise it does nothing.
-</p>
-<p><code>save-buffer</code> is responsible for making backup files.  Normally,
-<var>backup-option</var> is <code>nil</code>, and <code>save-buffer</code> makes a backup
-file only if this is the first save since visiting the file.  Other
-values for <var>backup-option</var> request the making of backup files in
-other circumstances:
-</p>
-<ul>
-<li> With an argument of 4 or 64, reflecting 1 or 3 <kbd>C-u</kbd>&rsquo;s, the
-<code>save-buffer</code> function marks this version of the file to be
-backed up when the buffer is next saved.
+  <p>When you edit a file in Emacs, you are actually working on a
+  buffer that is visiting that file&mdash;that is, the contents of
+  the file are copied into the buffer and the copy is what you
+  edit. Changes to the buffer do not change the file until you
+  <em>save</em> the buffer, which means copying the contents of the
+  buffer into the file.</p>
 
-</li><li> With an argument of 16 or 64, reflecting 2 or 3 <kbd>C-u</kbd>&rsquo;s, the
-<code>save-buffer</code> function unconditionally backs up the previous
-version of the file before saving it.
+  <dl>
+    <dt><a name="index-save_002dbuffer" id=
+    "index-save_002dbuffer"></a>Command:
+    <strong>save-buffer</strong> <em>&amp;optional
+    backup-option</em></dt>
 
-</li><li> With an argument of 0, unconditionally do <em>not</em> make any backup file.
-</li></ul>
-</dd></dl>
+    <dd>
+      <p>This function saves the contents of the current buffer in
+      its visited file if the buffer has been modified since it was
+      last visited or saved. Otherwise it does nothing.</p>
 
-<dl>
-<dt><a name="index-save_002dsome_002dbuffers"></a>Command: <strong>save-some-buffers</strong> <em>&amp;optional save-silently-p pred</em></dt>
-<dd><a name="Definition-of-save_002dsome_002dbuffers"></a><p>This command saves some modified file-visiting buffers.  Normally it
-asks the user about each buffer.  But if <var>save-silently-p</var> is
-non-<code>nil</code>, it saves all the file-visiting buffers without querying
-the user.
-</p>
-<p>The optional <var>pred</var> argument controls which buffers to ask about
-(or to save silently if <var>save-silently-p</var> is non-<code>nil</code>).
-If it is <code>nil</code>, that means to ask only about file-visiting buffers.
-If it is <code>t</code>, that means also offer to save certain other non-file
-buffers&mdash;those that have a non-<code>nil</code> buffer-local value of
-<code>buffer-offer-save</code> (see <a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>).  A user who says
-&lsquo;<samp>yes</samp>&rsquo; to saving a non-file buffer is asked to specify the file
-name to use.  The <code>save-buffers-kill-emacs</code> function passes the
-value <code>t</code> for <var>pred</var>.
-</p>
-<p>If <var>pred</var> is neither <code>t</code> nor <code>nil</code>, then it should be
-a function of no arguments.  It will be called in each buffer to decide
-whether to offer to save that buffer.  If it returns a non-<code>nil</code>
-value in a certain buffer, that means do offer to save that buffer.
-</p></dd></dl>
+      <p><code>save-buffer</code> is responsible for making backup
+      files. Normally, <var>backup-option</var> is
+      <code>nil</code>, and <code>save-buffer</code> makes a backup
+      file only if this is the first save since visiting the file.
+      Other values for <var>backup-option</var> request the making
+      of backup files in other circumstances:</p>
 
-<dl>
-<dt><a name="index-write_002dfile"></a>Command: <strong>write-file</strong> <em>filename &amp;optional confirm</em></dt>
-<dd><a name="Definition-of-write_002dfile"></a><p>This function writes the current buffer into file <var>filename</var>, makes
-the buffer visit that file, and marks it not modified.  Then it renames
-the buffer based on <var>filename</var>, appending a string like &lsquo;<samp>&lt;2&gt;</samp>&rsquo;
-if necessary to make a unique buffer name.  It does most of this work by
-calling <code>set-visited-file-name</code> (see <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>) and
-<code>save-buffer</code>.
-</p>
-<p>If <var>confirm</var> is non-<code>nil</code>, that means to ask for confirmation
-before overwriting an existing file.  Interactively, confirmation is
-required, unless the user supplies a prefix argument.
-</p>
-<p>If <var>filename</var> is an existing directory, or a symbolic link to one,
-<code>write-file</code> uses the name of the visited file, in directory
-<var>filename</var>.  If the buffer is not visiting a file, it uses the
-buffer name instead.
-</p></dd></dl>
+      <ul>
+        <li>With an argument of 4 or 64, reflecting 1 or 3
+        <kbd>C-u</kbd>&rsquo;s, the <code>save-buffer</code>
+        function marks this version of the file to be backed up
+        when the buffer is next saved.</li>
 
-<p>Saving a buffer runs several hooks.  It also performs format
-conversion (see <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>).
-</p>
-<dl>
-<dt><a name="index-write_002dfile_002dfunctions"></a>Variable: <strong>write-file-functions</strong></dt>
-<dd><p>The value of this variable is a list of functions to be called before
-writing out a buffer to its visited file.  If one of them returns
-non-<code>nil</code>, the file is considered already written and the rest of
-the functions are not called, nor is the usual code for writing the file
-executed.
-</p>
-<p>If a function in <code>write-file-functions</code> returns non-<code>nil</code>, it
-is responsible for making a backup file (if that is appropriate).
-To do so, execute the following code:
-</p>
-<div class="example">
-<pre class="example">(or buffer-backed-up (backup-buffer))
-</pre></div>
+        <li>With an argument of 16 or 64, reflecting 2 or 3
+        <kbd>C-u</kbd>&rsquo;s, the <code>save-buffer</code>
+        function unconditionally backs up the previous version of
+        the file before saving it.</li>
 
-<p>You might wish to save the file modes value returned by
-<code>backup-buffer</code> and use that (if non-<code>nil</code>) to set the mode
-bits of the file that you write.  This is what <code>save-buffer</code>
-normally does.  See <a href="Making-Backups.html#Making-Backups">Making Backup Files</a>.
-</p>
-<p>The hook functions in <code>write-file-functions</code> are also responsible
-for encoding the data (if desired): they must choose a suitable coding
-system and end-of-line conversion (see <a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">Lisp and Coding Systems</a>),
-perform the encoding (see <a href="Explicit-Encoding.html#Explicit-Encoding">Explicit Encoding</a>), and set
-<code>last-coding-system-used</code> to the coding system that was used
-(see <a href="Encoding-and-I_002fO.html#Encoding-and-I_002fO">Encoding and I/O</a>).
-</p>
-<p>If you set this hook locally in a buffer, it is assumed to be
-associated with the file or the way the contents of the buffer were
-obtained.  Thus the variable is marked as a permanent local, so that
-changing the major mode does not alter a buffer-local value.  On the
-other hand, calling <code>set-visited-file-name</code> will reset it.
-If this is not what you want, you might like to use
-<code>write-contents-functions</code> instead.
-</p>
-<p>Even though this is not a normal hook, you can use <code>add-hook</code> and
-<code>remove-hook</code> to manipulate the list.  See <a href="Hooks.html#Hooks">Hooks</a>.
-</p></dd></dl>
+        <li>With an argument of 0, unconditionally do <em>not</em>
+        make any backup file.</li>
+      </ul>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-write_002dcontents_002dfunctions"></a>Variable: <strong>write-contents-functions</strong></dt>
-<dd><p>This works just like <code>write-file-functions</code>, but it is intended
-for hooks that pertain to the buffer&rsquo;s contents, not to the particular
-visited file or its location.  Such hooks are usually set up by major
-modes, as buffer-local bindings for this variable.  This variable
-automatically becomes buffer-local whenever it is set; switching to a
-new major mode always resets this variable, but calling
-<code>set-visited-file-name</code> does not.
-</p>
-<p>If any of the functions in this hook returns non-<code>nil</code>, the file
-is considered already written and the rest are not called and neither
-are the functions in <code>write-file-functions</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-save_002dsome_002dbuffers" id=
+    "index-save_002dsome_002dbuffers"></a>Command:
+    <strong>save-some-buffers</strong> <em>&amp;optional
+    save-silently-p pred</em></dt>
 
-<dl>
-<dt><a name="index-before_002dsave_002dhook"></a>User Option: <strong>before-save-hook</strong></dt>
-<dd><p>This normal hook runs before a buffer is saved in its visited file,
-regardless of whether that is done normally or by one of the hooks
-described above.  For instance, the <samp>copyright.el</samp> program uses
-this hook to make sure the file you are saving has the current year in
-its copyright notice.
-</p></dd></dl>
+    <dd>
+      <a name="Definition-of-save_002dsome_002dbuffers" id=
+      "Definition-of-save_002dsome_002dbuffers"></a>
 
-<dl>
-<dt><a name="index-after_002dsave_002dhook"></a>User Option: <strong>after-save-hook</strong></dt>
-<dd><p>This normal hook runs after a buffer has been saved in its visited file.
-One use of this hook is in Fast Lock mode; it uses this hook to save the
-highlighting information in a cache file.
-</p></dd></dl>
+      <p>This command saves some modified file-visiting buffers.
+      Normally it asks the user about each buffer. But if
+      <var>save-silently-p</var> is non-<code>nil</code>, it saves
+      all the file-visiting buffers without querying the user.</p>
 
-<dl>
-<dt><a name="index-file_002dprecious_002dflag"></a>User Option: <strong>file-precious-flag</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, then <code>save-buffer</code> protects
-against I/O errors while saving by writing the new file to a temporary
-name instead of the name it is supposed to have, and then renaming it to
-the intended name after it is clear there are no errors.  This procedure
-prevents problems such as a lack of disk space from resulting in an
-invalid file.
-</p>
-<p>As a side effect, backups are necessarily made by copying.  See <a href="Rename-or-Copy.html#Rename-or-Copy">Rename or Copy</a>.  Yet, at the same time, saving a precious file always breaks
-all hard links between the file you save and other file names.
-</p>
-<p>Some modes give this variable a non-<code>nil</code> buffer-local value
-in particular buffers.
-</p></dd></dl>
+      <p>The optional <var>pred</var> argument controls which
+      buffers to ask about (or to save silently if
+      <var>save-silently-p</var> is non-<code>nil</code>). If it is
+      <code>nil</code>, that means to ask only about file-visiting
+      buffers. If it is <code>t</code>, that means also offer to
+      save certain other non-file buffers&mdash;those that have a
+      non-<code>nil</code> buffer-local value of
+      <code>buffer-offer-save</code> (see <a href=
+      "Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>).
+      A user who says &lsquo;<samp>yes</samp>&rsquo; to saving a
+      non-file buffer is asked to specify the file name to use. The
+      <code>save-buffers-kill-emacs</code> function passes the
+      value <code>t</code> for <var>pred</var>.</p>
 
-<dl>
-<dt><a name="index-require_002dfinal_002dnewline"></a>User Option: <strong>require-final-newline</strong></dt>
-<dd><p>This variable determines whether files may be written out that do
-<em>not</em> end with a newline.  If the value of the variable is
-<code>t</code>, then <code>save-buffer</code> silently adds a newline at the end
-of the buffer whenever it does not already end in one.  If the value
-is <code>visit</code>, Emacs adds a missing newline just after it visits the
-file.  If the value is <code>visit-save</code>, Emacs adds a missing newline
-both on visiting and on saving.  For any other non-<code>nil</code> value,
-<code>save-buffer</code> asks the user whether to add a newline each time
-the case arises.
-</p>
-<p>If the value of the variable is <code>nil</code>, then <code>save-buffer</code>
-doesn&rsquo;t add newlines at all.  <code>nil</code> is the default value, but a few
-major modes set it to <code>t</code> in particular buffers.
-</p></dd></dl>
+      <p>If <var>pred</var> is neither <code>t</code> nor
+      <code>nil</code>, then it should be a function of no
+      arguments. It will be called in each buffer to decide whether
+      to offer to save that buffer. If it returns a
+      non-<code>nil</code> value in a certain buffer, that means do
+      offer to save that buffer.</p>
+    </dd>
+  </dl>
 
-<p>See also the function <code>set-visited-file-name</code> (see <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Reading-from-Files.html#Reading-from-Files" accesskey="n" rel="next">Reading from Files</a>, Previous: <a href="Visiting-Files.html#Visiting-Files" accesskey="p" rel="prev">Visiting Files</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-write_002dfile" id=
+    "index-write_002dfile"></a>Command: <strong>write-file</strong>
+    <em>filename &amp;optional confirm</em></dt>
 
+    <dd>
+      <a name="Definition-of-write_002dfile" id=
+      "Definition-of-write_002dfile"></a>
 
+      <p>This function writes the current buffer into file
+      <var>filename</var>, makes the buffer visit that file, and
+      marks it not modified. Then it renames the buffer based on
+      <var>filename</var>, appending a string like
+      &lsquo;<samp>&lt;2&gt;</samp>&rsquo; if necessary to make a
+      unique buffer name. It does most of this work by calling
+      <code>set-visited-file-name</code> (see <a href=
+      "Buffer-File-Name.html#Buffer-File-Name">Buffer File
+      Name</a>) and <code>save-buffer</code>.</p>
 
+      <p>If <var>confirm</var> is non-<code>nil</code>, that means
+      to ask for confirmation before overwriting an existing file.
+      Interactively, confirmation is required, unless the user
+      supplies a prefix argument.</p>
+
+      <p>If <var>filename</var> is an existing directory, or a
+      symbolic link to one, <code>write-file</code> uses the name
+      of the visited file, in directory <var>filename</var>. If the
+      buffer is not visiting a file, it uses the buffer name
+      instead.</p>
+    </dd>
+  </dl>
+
+  <p>Saving a buffer runs several hooks. It also performs format
+  conversion (see <a href=
+  "Format-Conversion.html#Format-Conversion">Format
+  Conversion</a>).</p>
+
+  <dl>
+    <dt><a name="index-write_002dfile_002dfunctions" id=
+    "index-write_002dfile_002dfunctions"></a>Variable:
+    <strong>write-file-functions</strong></dt>
+
+    <dd>
+      <p>The value of this variable is a list of functions to be
+      called before writing out a buffer to its visited file. If
+      one of them returns non-<code>nil</code>, the file is
+      considered already written and the rest of the functions are
+      not called, nor is the usual code for writing the file
+      executed.</p>
+
+      <p>If a function in <code>write-file-functions</code> returns
+      non-<code>nil</code>, it is responsible for making a backup
+      file (if that is appropriate). To do so, execute the
+      following code:</p>
+
+      <div class="example">
+        <pre class="example">
+(or buffer-backed-up (backup-buffer))
+</pre>
+      </div>
+
+      <p>You might wish to save the file modes value returned by
+      <code>backup-buffer</code> and use that (if
+      non-<code>nil</code>) to set the mode bits of the file that
+      you write. This is what <code>save-buffer</code> normally
+      does. See <a href="Making-Backups.html#Making-Backups">Making
+      Backup Files</a>.</p>
+
+      <p>The hook functions in <code>write-file-functions</code>
+      are also responsible for encoding the data (if desired): they
+      must choose a suitable coding system and end-of-line
+      conversion (see <a href=
+      "Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">Lisp
+      and Coding Systems</a>), perform the encoding (see <a href=
+      "Explicit-Encoding.html#Explicit-Encoding">Explicit
+      Encoding</a>), and set <code>last-coding-system-used</code>
+      to the coding system that was used (see <a href=
+      "Encoding-and-I_002fO.html#Encoding-and-I_002fO">Encoding and
+      I/O</a>).</p>
+
+      <p>If you set this hook locally in a buffer, it is assumed to
+      be associated with the file or the way the contents of the
+      buffer were obtained. Thus the variable is marked as a
+      permanent local, so that changing the major mode does not
+      alter a buffer-local value. On the other hand, calling
+      <code>set-visited-file-name</code> will reset it. If this is
+      not what you want, you might like to use
+      <code>write-contents-functions</code> instead.</p>
+
+      <p>Even though this is not a normal hook, you can use
+      <code>add-hook</code> and <code>remove-hook</code> to
+      manipulate the list. See <a href=
+      "Hooks.html#Hooks">Hooks</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-write_002dcontents_002dfunctions" id=
+    "index-write_002dcontents_002dfunctions"></a>Variable:
+    <strong>write-contents-functions</strong></dt>
+
+    <dd>
+      <p>This works just like <code>write-file-functions</code>,
+      but it is intended for hooks that pertain to the
+      buffer&rsquo;s contents, not to the particular visited file
+      or its location. Such hooks are usually set up by major
+      modes, as buffer-local bindings for this variable. This
+      variable automatically becomes buffer-local whenever it is
+      set; switching to a new major mode always resets this
+      variable, but calling <code>set-visited-file-name</code> does
+      not.</p>
+
+      <p>If any of the functions in this hook returns
+      non-<code>nil</code>, the file is considered already written
+      and the rest are not called and neither are the functions in
+      <code>write-file-functions</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-before_002dsave_002dhook" id=
+    "index-before_002dsave_002dhook"></a>User Option:
+    <strong>before-save-hook</strong></dt>
+
+    <dd>
+      <p>This normal hook runs before a buffer is saved in its
+      visited file, regardless of whether that is done normally or
+      by one of the hooks described above. For instance, the
+      <samp>copyright.el</samp> program uses this hook to make sure
+      the file you are saving has the current year in its copyright
+      notice.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-after_002dsave_002dhook" id=
+    "index-after_002dsave_002dhook"></a>User Option:
+    <strong>after-save-hook</strong></dt>
+
+    <dd>
+      <p>This normal hook runs after a buffer has been saved in its
+      visited file. One use of this hook is in Fast Lock mode; it
+      uses this hook to save the highlighting information in a
+      cache file.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-file_002dprecious_002dflag" id=
+    "index-file_002dprecious_002dflag"></a>User Option:
+    <strong>file-precious-flag</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, then
+      <code>save-buffer</code> protects against I/O errors while
+      saving by writing the new file to a temporary name instead of
+      the name it is supposed to have, and then renaming it to the
+      intended name after it is clear there are no errors. This
+      procedure prevents problems such as a lack of disk space from
+      resulting in an invalid file.</p>
+
+      <p>As a side effect, backups are necessarily made by copying.
+      See <a href="Rename-or-Copy.html#Rename-or-Copy">Rename or
+      Copy</a>. Yet, at the same time, saving a precious file
+      always breaks all hard links between the file you save and
+      other file names.</p>
+
+      <p>Some modes give this variable a non-<code>nil</code>
+      buffer-local value in particular buffers.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-require_002dfinal_002dnewline" id=
+    "index-require_002dfinal_002dnewline"></a>User Option:
+    <strong>require-final-newline</strong></dt>
+
+    <dd>
+      <p>This variable determines whether files may be written out
+      that do <em>not</em> end with a newline. If the value of the
+      variable is <code>t</code>, then <code>save-buffer</code>
+      silently adds a newline at the end of the buffer whenever it
+      does not already end in one. If the value is
+      <code>visit</code>, Emacs adds a missing newline just after
+      it visits the file. If the value is <code>visit-save</code>,
+      Emacs adds a missing newline both on visiting and on saving.
+      For any other non-<code>nil</code> value,
+      <code>save-buffer</code> asks the user whether to add a
+      newline each time the case arises.</p>
+
+      <p>If the value of the variable is <code>nil</code>, then
+      <code>save-buffer</code> doesn&rsquo;t add newlines at all.
+      <code>nil</code> is the default value, but a few major modes
+      set it to <code>t</code> in particular buffers.</p>
+    </dd>
+  </dl>
+
+  <p>See also the function <code>set-visited-file-name</code> (see
+  <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File
+  Name</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Reading-from-Files.html#Reading-from-Files"
+    accesskey="n" rel="next">Reading from Files</a>, Previous:
+    <a href="Visiting-Files.html#Visiting-Files" accesskey="p" rel=
+    "prev">Visiting Files</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

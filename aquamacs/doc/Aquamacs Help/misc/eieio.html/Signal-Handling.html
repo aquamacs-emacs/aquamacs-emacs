@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,130 +16,211 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Signal Handling</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Signal Handling">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Signal Handling">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Default-Superclass.html#Default-Superclass" rel="up" title="Default Superclass">
-<link href="Signals.html#Signals" rel="next" title="Signals">
-<link href="Basic-Methods.html#Basic-Methods" rel="prev" title="Basic Methods">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Signal Handling</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Signal Handling" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Signal Handling" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="Default-Superclass.html#Default-Superclass" rel="up"
+  title="Default Superclass" />
+  <link href="Signals.html#Signals" rel="next" title="Signals" />
+  <link href="Basic-Methods.html#Basic-Methods" rel="prev" title=
+  "Basic Methods" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Signal-Handling"></a>
-<div class="header">
-<p>
-Previous: <a href="Basic-Methods.html#Basic-Methods" accesskey="p" rel="prev">Basic Methods</a>, Up: <a href="Default-Superclass.html#Default-Superclass" accesskey="u" rel="up">Default Superclass</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Signal-Handling-1"></a>
-<h3 class="section">15.3 Signal Handling</h3>
+<body lang="en" xml:lang="en">
+  <a name="Signal-Handling" id="Signal-Handling"></a>
 
-<p>The default superclass defines methods for managing error conditions.
-These methods all throw a signal for a particular error condition.
-</p>
-<p>By implementing one of these methods for a class, you can change the
-behavior that occurs during one of these error cases, or even ignore
-the error by providing some behavior.
-</p>
-<dl>
-<dt><a name="index-slot_002dmissing"></a>Function: <strong>slot-missing</strong> <em>object slot-name operation &amp;optional new-value</em></dt>
-<dd><a name="slot_002dmissing"></a><p>Method invoked when an attempt to access a slot in <var>object</var> fails.
-<var>slot-name</var> is the name of the failed slot, <var>operation</var> is the type of access
-that was requested, and optional <var>new-value</var> is the value that was desired
-to be set.
-</p>
-<p>This method is called from <code>oref</code>, <code>oset</code>, and other functions which
-directly reference slots in EIEIO objects.
-</p>
-<p>The default method signals an error of type <code>invalid-slot-name</code>.
-See <a href="Signals.html#Signals">Signals</a>.
-</p>
-<p>You may override this behavior, but it is not expected to return in the
-current implementation.
-</p>
-<p>This function takes arguments in a different order than in CLOS.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href="Basic-Methods.html#Basic-Methods"
+    accesskey="p" rel="prev">Basic Methods</a>, Up: <a href=
+    "Default-Superclass.html#Default-Superclass" accesskey="u" rel=
+    "up">Default Superclass</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Signal-Handling-1" id="Signal-Handling-1"></a>
 
-<dl>
-<dt><a name="index-slot_002dunbound-1"></a>Function: <strong>slot-unbound</strong> <em>object class slot-name fn</em></dt>
-<dd><a name="slot_002dunbound"></a><p>Slot unbound is invoked during an attempt to reference an unbound slot.
-<var>object</var> is the instance of the object being reference.  <var>class</var> is the
-class of <var>object</var>, and <var>slot-name</var> is the offending slot.  This function
-throws the signal <code>unbound-slot</code>.  You can overload this function and
-return the value to use in place of the unbound value.
-Argument <var>fn</var> is the function signaling this error.
-Use <em>slot-boundp</em> to determine if a slot is bound or not.
-</p>
-<p>In <var>clos</var>, the argument list is (<var>class</var> <var>object</var> <var>slot-name</var>), but
-<var>eieio</var> can only dispatch on the first argument, so the first two are swapped.
-</p></dd></dl>
+  <h3 class="section">15.3 Signal Handling</h3>
 
-<dl>
-<dt><a name="index-no_002dapplicable_002dmethod"></a>Function: <strong>no-applicable-method</strong> <em>object method &amp;rest args</em></dt>
-<dd><a name="no_002dapplicable_002dmethod"></a><p>Called if there are no implementations for <var>object</var> in <var>method</var>.
-<var>object</var> is the object which has no method implementation.
-<var>args</var> are the arguments that were passed to <var>method</var>.
-</p>
-<p>Implement this for a class to block this signal.  The return
-value becomes the return value of the original method call.
-</p></dd></dl>
+  <p>The default superclass defines methods for managing error
+  conditions. These methods all throw a signal for a particular
+  error condition.</p>
 
-<dl>
-<dt><a name="index-no_002dnext_002dmethod"></a>Function: <strong>no-next-method</strong> <em>object &amp;rest args</em></dt>
-<dd><a name="no_002dnext_002dmethod"></a><p>Called from <em>call-next-method</em> when no additional methods are available.
-<var>object</var> is othe object being called on <em>call-next-method</em>.
-<var>args</var> are the arguments it is called by.
-This method signals <em>no-next-method</em> by default.  Override this
-method to not throw an error, and its return value becomes the
-return value of <em>call-next-method</em>.
-</p></dd></dl>
+  <p>By implementing one of these methods for a class, you can
+  change the behavior that occurs during one of these error cases,
+  or even ignore the error by providing some behavior.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Basic-Methods.html#Basic-Methods" accesskey="p" rel="prev">Basic Methods</a>, Up: <a href="Default-Superclass.html#Default-Superclass" accesskey="u" rel="up">Default Superclass</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-slot_002dmissing" id=
+    "index-slot_002dmissing"></a>Function:
+    <strong>slot-missing</strong> <em>object slot-name operation
+    &amp;optional new-value</em></dt>
 
+    <dd>
+      <a name="slot_002dmissing" id="slot_002dmissing"></a>
 
+      <p>Method invoked when an attempt to access a slot in
+      <var>object</var> fails. <var>slot-name</var> is the name of
+      the failed slot, <var>operation</var> is the type of access
+      that was requested, and optional <var>new-value</var> is the
+      value that was desired to be set.</p>
 
+      <p>This method is called from <code>oref</code>,
+      <code>oset</code>, and other functions which directly
+      reference slots in EIEIO objects.</p>
+
+      <p>The default method signals an error of type
+      <code>invalid-slot-name</code>. See <a href=
+      "Signals.html#Signals">Signals</a>.</p>
+
+      <p>You may override this behavior, but it is not expected to
+      return in the current implementation.</p>
+
+      <p>This function takes arguments in a different order than in
+      CLOS.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-slot_002dunbound-1" id=
+    "index-slot_002dunbound-1"></a>Function:
+    <strong>slot-unbound</strong> <em>object class slot-name
+    fn</em></dt>
+
+    <dd>
+      <a name="slot_002dunbound" id="slot_002dunbound"></a>
+
+      <p>Slot unbound is invoked during an attempt to reference an
+      unbound slot. <var>object</var> is the instance of the object
+      being reference. <var>class</var> is the class of
+      <var>object</var>, and <var>slot-name</var> is the offending
+      slot. This function throws the signal
+      <code>unbound-slot</code>. You can overload this function and
+      return the value to use in place of the unbound value.
+      Argument <var>fn</var> is the function signaling this error.
+      Use <em>slot-boundp</em> to determine if a slot is bound or
+      not.</p>
+
+      <p>In <var>clos</var>, the argument list is (<var>class</var>
+      <var>object</var> <var>slot-name</var>), but <var>eieio</var>
+      can only dispatch on the first argument, so the first two are
+      swapped.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-no_002dapplicable_002dmethod" id=
+    "index-no_002dapplicable_002dmethod"></a>Function:
+    <strong>no-applicable-method</strong> <em>object method
+    &amp;rest args</em></dt>
+
+    <dd>
+      <a name="no_002dapplicable_002dmethod" id=
+      "no_002dapplicable_002dmethod"></a>
+
+      <p>Called if there are no implementations for
+      <var>object</var> in <var>method</var>. <var>object</var> is
+      the object which has no method implementation.
+      <var>args</var> are the arguments that were passed to
+      <var>method</var>.</p>
+
+      <p>Implement this for a class to block this signal. The
+      return value becomes the return value of the original method
+      call.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-no_002dnext_002dmethod" id=
+    "index-no_002dnext_002dmethod"></a>Function:
+    <strong>no-next-method</strong> <em>object &amp;rest
+    args</em></dt>
+
+    <dd>
+      <a name="no_002dnext_002dmethod" id=
+      "no_002dnext_002dmethod"></a>
+
+      <p>Called from <em>call-next-method</em> when no additional
+      methods are available. <var>object</var> is othe object being
+      called on <em>call-next-method</em>. <var>args</var> are the
+      arguments it is called by. This method signals
+      <em>no-next-method</em> by default. Override this method to
+      not throw an error, and its return value becomes the return
+      value of <em>call-next-method</em>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Basic-Methods.html#Basic-Methods"
+    accesskey="p" rel="prev">Basic Methods</a>, Up: <a href=
+    "Default-Superclass.html#Default-Superclass" accesskey="u" rel=
+    "up">Default Superclass</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

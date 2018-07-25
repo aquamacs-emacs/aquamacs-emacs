@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Octals and Highlighting - IDLWAVE User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="IDLWAVE User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Code-Formatting.html#Code-Formatting" title="Code Formatting">
-<link rel="prev" href="Syntax-Highlighting.html#Syntax-Highlighting" title="Syntax Highlighting">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Octals and Highlighting - IDLWAVE User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="IDLWAVE User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Code-Formatting.html#Code-Formatting" title=
+  "Code Formatting" />
+  <link rel="prev" href=
+  "Syntax-Highlighting.html#Syntax-Highlighting" title=
+  "Syntax Highlighting" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -30,8 +39,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -41,40 +52,54 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Octals-and-Highlighting"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax-Highlighting.html#Syntax-Highlighting">Syntax Highlighting</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Code-Formatting.html#Code-Formatting">Code Formatting</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Octals-and-Highlighting" id=
+    "Octals-and-Highlighting"></a>
 
-<h4 class="subsection">4.1.6 Octals and Highlighting</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Syntax-Highlighting.html#Syntax-Highlighting">Syntax
+    Highlighting</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Code-Formatting.html#Code-Formatting">Code Formatting</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Syntax-highlighting_002c-Octals-59"></a><a name="index-Highlighting-of-syntax_002c-Octals-60"></a>
-A rare syntax highlighting problem results from an extremely unfortunate
-notation for octal numbers in IDL: <code>"123</code>.  This unpaired quotation
-mark is very difficult to parse, given that it can be mixed on a single
-line with any number of strings.  Emacs will incorrectly identify this
-as a string, and the highlighting of following lines of code can be
-distorted, since the string is never terminated.
+  <h4 class="subsection">4.1.6 Octals and Highlighting</h4>
 
-   <p>One solution to this involves terminating the mistakenly identified
-string yourself by providing a closing quotation mark in a comment:
+  <p><a name="index-Syntax-highlighting_002c-Octals-59" id=
+  "index-Syntax-highlighting_002c-Octals-59"></a><a name=
+  "index-Highlighting-of-syntax_002c-Octals-60" id=
+  "index-Highlighting-of-syntax_002c-Octals-60"></a> A rare syntax
+  highlighting problem results from an extremely unfortunate
+  notation for octal numbers in IDL: <code>"123</code>. This
+  unpaired quotation mark is very difficult to parse, given that it
+  can be mixed on a single line with any number of strings. Emacs
+  will incorrectly identify this as a string, and the highlighting
+  of following lines of code can be distorted, since the string is
+  never terminated.</p>
 
-<pre class="example">       string("305B) + $ ;" &lt;--- for font-lock
+  <p>One solution to this involves terminating the mistakenly
+  identified string yourself by providing a closing quotation mark
+  in a comment:</p>
+  <pre class="example">
+       string("305B) + $ ;" &lt;--- for font-lock
         ' is an Angstrom.'
 </pre>
-   <p class="noindent">A far better solution is to abandon this notation for octals
-altogether, and use the more sensible alternative IDL provides:
 
-<pre class="example">        string('305'OB) + ' is an Angstrom.'
+  <p class="noindent">A far better solution is to abandon this
+  notation for octals altogether, and use the more sensible
+  alternative IDL provides:</p>
+  <pre class="example">
+        string('305'OB) + ' is an Angstrom.'
 </pre>
-   <p class="noindent">This simultaneously solves the font-lock problem and is more
-consistent with the notation for hexadecimal numbers, e.g. <code>'C5'XB</code>.
 
-   </body></html>
-
+  <p class="noindent">This simultaneously solves the font-lock
+  problem and is more consistent with the notation for hexadecimal
+  numbers, e.g. <code>'C5'XB</code>.</p>
+</body>
+</html>

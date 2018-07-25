@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2003-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,102 +14,140 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs SMTP Library: Server workarounds</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs SMTP Library: Server workarounds">
-<meta name="keywords" content="Emacs SMTP Library: Server workarounds">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Debugging.html#Debugging" rel="next" title="Debugging">
-<link href="Queued-delivery.html#Queued-delivery" rel="prev" title="Queued delivery">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs SMTP Library: Server workarounds</title>
+  <meta name="description" content=
+  "Emacs SMTP Library: Server workarounds" />
+  <meta name="keywords" content=
+  "Emacs SMTP Library: Server workarounds" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Debugging.html#Debugging" rel="next" title=
+  "Debugging" />
+  <link href="Queued-delivery.html#Queued-delivery" rel="prev"
+  title="Queued delivery" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Server-workarounds"></a>
-<div class="header">
-<p>
-Next: <a href="Debugging.html#Debugging" accesskey="n" rel="next">Debugging</a>, Previous: <a href="Queued-delivery.html#Queued-delivery" accesskey="p" rel="prev">Queued delivery</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Server-workarounds-1"></a>
-<h2 class="chapter">6 Server workarounds</h2>
+<body lang="en" xml:lang="en">
+  <a name="Server-workarounds" id="Server-workarounds"></a>
 
-<p>Some SMTP servers have special requirements.  The following variables
-implement support for common requirements.
-</p>
-<dl compact="compact">
-<dt><code>smtpmail-local-domain</code></dt>
-<dd><a name="index-smtpmail_002dlocal_002ddomain"></a>
-<p>The variable <code>smtpmail-local-domain</code> controls the hostname sent
-in the first <code>EHLO</code> or <code>HELO</code> command sent to the server.
-It should be set only if the <code>system-name</code> function returns a
-name that isn&rsquo;t accepted by the server.  Do not set this variable
-unless your server complains.
-</p>
-</dd>
-<dt><code>smtpmail-sendto-domain</code></dt>
-<dd><a name="index-smtpmail_002dsendto_002ddomain"></a>
-<p>The variable <code>smtpmail-sendto-domain</code> makes the SMTP library
-add &lsquo;<samp>@</samp>&rsquo; and the specified value to recipients specified in the
-message when they are sent using the <code>RCPT TO</code> command.  Some
-configurations of sendmail requires this behavior.  Don&rsquo;t bother to
-set this unless you have get an error like:
-</p>
-<div class="example">
-<pre class="example">        Sending failed; SMTP protocol error
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Debugging.html#Debugging" accesskey="n" rel=
+    "next">Debugging</a>, Previous: <a href=
+    "Queued-delivery.html#Queued-delivery" accesskey="p" rel=
+    "prev">Queued delivery</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Server-workarounds-1" id="Server-workarounds-1"></a>
 
-<p>when sending mail, and the debug buffer (see <a href="Debugging.html#Debugging">Debugging</a>)) contains
-an error such as:
-</p>
-<div class="example">
-<pre class="example">        RCPT TO: <var>someone</var>
+  <h2 class="chapter">6 Server workarounds</h2>
+
+  <p>Some SMTP servers have special requirements. The following
+  variables implement support for common requirements.</p>
+
+  <dl compact="compact">
+    <dt><code>smtpmail-local-domain</code></dt>
+
+    <dd>
+      <a name="index-smtpmail_002dlocal_002ddomain" id=
+      "index-smtpmail_002dlocal_002ddomain"></a>
+
+      <p>The variable <code>smtpmail-local-domain</code> controls
+      the hostname sent in the first <code>EHLO</code> or
+      <code>HELO</code> command sent to the server. It should be
+      set only if the <code>system-name</code> function returns a
+      name that isn&rsquo;t accepted by the server. Do not set this
+      variable unless your server complains.</p>
+    </dd>
+
+    <dt><code>smtpmail-sendto-domain</code></dt>
+
+    <dd>
+      <a name="index-smtpmail_002dsendto_002ddomain" id=
+      "index-smtpmail_002dsendto_002ddomain"></a>
+
+      <p>The variable <code>smtpmail-sendto-domain</code> makes the
+      SMTP library add &lsquo;<samp>@</samp>&rsquo; and the
+      specified value to recipients specified in the message when
+      they are sent using the <code>RCPT TO</code> command. Some
+      configurations of sendmail requires this behavior.
+      Don&rsquo;t bother to set this unless you have get an error
+      like:</p>
+
+      <div class="example">
+        <pre class="example">
+        Sending failed; SMTP protocol error
+</pre>
+      </div>
+
+      <p>when sending mail, and the debug buffer (see <a href=
+      "Debugging.html#Debugging">Debugging</a>)) contains an error
+      such as:</p>
+
+      <div class="example">
+        <pre class="example">
+        RCPT TO: <var>someone</var>
         501 <var>someone</var>: recipient address must contain a domain
-</pre></div>
-
-</dd>
-</dl>
-
-
-
-
-
+</pre>
+      </div>
+    </dd>
+  </dl>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the manual for the url Emacs Lisp library.
 
 Copyright (C) 1993-1999, 2002, 2004-2016 Free Software
@@ -15,86 +17,118 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>URL Programmer&rsquo;s Manual: Suppressing network connections</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="URL Programmer&rsquo;s Manual: Suppressing network connections">
-<meta name="keywords" content="URL Programmer&rsquo;s Manual: Suppressing network connections">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Gateways-in-general.html#Gateways-in-general" rel="up" title="Gateways in general">
-<link href="History.html#History" rel="next" title="History">
-<link href="Gateways-in-general.html#Gateways-in-general" rel="prev" title="Gateways in general">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>URL Programmer&rsquo;s Manual: Suppressing network
+  connections</title>
+  <meta name="description" content=
+  "URL Programmer&rsquo;s Manual: Suppressing network connections" />
+  <meta name="keywords" content=
+  "URL Programmer&rsquo;s Manual: Suppressing network connections" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Gateways-in-general.html#Gateways-in-general" rel=
+  "up" title="Gateways in general" />
+  <link href="History.html#History" rel="next" title="History" />
+  <link href="Gateways-in-general.html#Gateways-in-general" rel=
+  "prev" title="Gateways in general" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Suppressing-network-connections"></a>
-<div class="header">
-<p>
-Up: <a href="Gateways-in-general.html#Gateways-in-general" accesskey="u" rel="up">Gateways in general</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Suppressing-Network-Connections"></a>
-<h4 class="subsection">5.3.1 Suppressing Network Connections</h4>
+<body lang="en" xml:lang="en">
+  <a name="Suppressing-network-connections" id=
+  "Suppressing-network-connections"></a>
 
-<a name="index-network-connections_002c-suppressing"></a>
-<a name="index-suppressing-network-connections"></a>
-<a name="index-bugs_002c-HTML"></a>
-<a name="index-HTML-_0060_0060bugs_0027_0027"></a>
-<p>In some circumstances it is desirable to suppress making network
-connections.  A typical case is when rendering HTML in a mail user
-agent, when external URLs should not be activated, particularly to
-avoid &ldquo;bugs&rdquo; which &ldquo;call home&rdquo; by fetch single-pixel images and the
-like.  To arrange this, bind the following variable for the duration
-of such processing.
-</p>
-<dl>
-<dt><a name="index-url_002dgateway_002dunplugged"></a>Variable: <strong>url-gateway-unplugged</strong></dt>
-<dd><p>If this variable is non-<code>nil</code> new network connections are never
-opened by the URL library.
-</p></dd></dl>
+  <div class="header">
+    <p>Up: <a href="Gateways-in-general.html#Gateways-in-general"
+    accesskey="u" rel="up">Gateways in general</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Suppressing-Network-Connections" id=
+  "Suppressing-Network-Connections"></a>
 
+  <h4 class="subsection">5.3.1 Suppressing Network
+  Connections</h4><a name=
+  "index-network-connections_002c-suppressing" id=
+  "index-network-connections_002c-suppressing"></a> <a name=
+  "index-suppressing-network-connections" id=
+  "index-suppressing-network-connections"></a> <a name=
+  "index-bugs_002c-HTML" id="index-bugs_002c-HTML"></a> <a name=
+  "index-HTML-_0060_0060bugs_0027_0027" id=
+  "index-HTML-_0060_0060bugs_0027_0027"></a>
 
+  <p>In some circumstances it is desirable to suppress making
+  network connections. A typical case is when rendering HTML in a
+  mail user agent, when external URLs should not be activated,
+  particularly to avoid &ldquo;bugs&rdquo; which &ldquo;call
+  home&rdquo; by fetch single-pixel images and the like. To arrange
+  this, bind the following variable for the duration of such
+  processing.</p>
 
+  <dl>
+    <dt><a name="index-url_002dgateway_002dunplugged" id=
+    "index-url_002dgateway_002dunplugged"></a>Variable:
+    <strong>url-gateway-unplugged</strong></dt>
 
-
-
-
-
+    <dd>
+      <p>If this variable is non-<code>nil</code> new network
+      connections are never opened by the URL library.</p>
+    </dd>
+  </dl>
 </body>
 </html>

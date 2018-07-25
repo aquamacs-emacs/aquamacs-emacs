@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,246 +20,376 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Regexp Backslash</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Regexp Backslash">
-<meta name="keywords" content="GNU Emacs Manual: Regexp Backslash">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Search.html#Search" rel="up" title="Search">
-<link href="Regexp-Example.html#Regexp-Example" rel="next" title="Regexp Example">
-<link href="Regexps.html#Regexps" rel="prev" title="Regexps">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Regexp Backslash</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Regexp Backslash" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Regexp Backslash" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Search.html#Search" rel="up" title="Search" />
+  <link href="Regexp-Example.html#Regexp-Example" rel="next" title=
+  "Regexp Example" />
+  <link href="Regexps.html#Regexps" rel="prev" title="Regexps" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Regexp-Backslash" id="Regexp-Backslash"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Regexp-Example.html#Regexp-Example"
+    accesskey="n" rel="next">Regexp Example</a>, Previous: <a href=
+    "Regexps.html#Regexps" accesskey="p" rel="prev">Regexps</a>,
+    Up: <a href="Search.html#Search" accesskey="u" rel=
+    "up">Search</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Backslash-in-Regular-Expressions" id=
+  "Backslash-in-Regular-Expressions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Regexp-Backslash"></a>
-<div class="header">
-<p>
-Next: <a href="Regexp-Example.html#Regexp-Example" accesskey="n" rel="next">Regexp Example</a>, Previous: <a href="Regexps.html#Regexps" accesskey="p" rel="prev">Regexps</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Backslash-in-Regular-Expressions"></a>
-<h3 class="section">15.7 Backslash in Regular Expressions</h3>
+  <h3 class="section">15.7 Backslash in Regular Expressions</h3>
 
-<p>For the most part, &lsquo;<samp>\</samp>&rsquo; followed by any character matches only
-that character.  However, there are several exceptions: two-character
-sequences starting with &lsquo;<samp>\</samp>&rsquo; that have special meanings.  The
-second character in the sequence is always an ordinary character when
-used on its own.  Here is a table of &lsquo;<samp>\</samp>&rsquo; constructs.
-</p>
-<dl compact="compact">
-<dt><kbd>\|</kbd></dt>
-<dd><p>specifies an alternative.  Two regular expressions <var>a</var> and <var>b</var>
-with &lsquo;<samp>\|</samp>&rsquo; in between form an expression that matches some text if
-either <var>a</var> matches it or <var>b</var> matches it.  It works by trying to
-match <var>a</var>, and if that fails, by trying to match <var>b</var>.
-</p>
-<p>Thus, &lsquo;<samp>foo\|bar</samp>&rsquo; matches either &lsquo;<samp>foo</samp>&rsquo; or &lsquo;<samp>bar</samp>&rsquo;
-but no other string.
-</p>
-<p>&lsquo;<samp>\|</samp>&rsquo; applies to the largest possible surrounding expressions.  Only a
-surrounding &lsquo;<samp>\( &hellip; \)</samp>&rsquo; grouping can limit the grouping power of
-&lsquo;<samp>\|</samp>&rsquo;.
-</p>
-<p>Full backtracking capability exists to handle multiple uses of &lsquo;<samp>\|</samp>&rsquo;.
-</p>
-</dd>
-<dt><kbd>\( &hellip; \)</kbd></dt>
-<dd><p>is a grouping construct that serves three purposes:
-</p>
-<ol>
-<li> To enclose a set of &lsquo;<samp>\|</samp>&rsquo; alternatives for other operations.
-Thus, &lsquo;<samp>\(foo\|bar\)x</samp>&rsquo; matches either &lsquo;<samp>foox</samp>&rsquo; or &lsquo;<samp>barx</samp>&rsquo;.
+  <p>For the most part, &lsquo;<samp>\</samp>&rsquo; followed by
+  any character matches only that character. However, there are
+  several exceptions: two-character sequences starting with
+  &lsquo;<samp>\</samp>&rsquo; that have special meanings. The
+  second character in the sequence is always an ordinary character
+  when used on its own. Here is a table of
+  &lsquo;<samp>\</samp>&rsquo; constructs.</p>
 
-</li><li> To enclose a complicated expression for the postfix operators &lsquo;<samp>*</samp>&rsquo;,
-&lsquo;<samp>+</samp>&rsquo; and &lsquo;<samp>?</samp>&rsquo; to operate on.  Thus, &lsquo;<samp>ba\(na\)*</samp>&rsquo; matches
-&lsquo;<samp>bananana</samp>&rsquo;, etc., with any (zero or more) number of &lsquo;<samp>na</samp>&rsquo;
-strings.
+  <dl compact="compact">
+    <dt><kbd>\|</kbd></dt>
 
-</li><li> To record a matched substring for future reference.
-</li></ol>
+    <dd>
+      <p>specifies an alternative. Two regular expressions
+      <var>a</var> and <var>b</var> with
+      &lsquo;<samp>\|</samp>&rsquo; in between form an expression
+      that matches some text if either <var>a</var> matches it or
+      <var>b</var> matches it. It works by trying to match
+      <var>a</var>, and if that fails, by trying to match
+      <var>b</var>.</p>
 
-<p>This last application is not a consequence of the idea of a
-parenthetical grouping; it is a separate feature that is assigned as a
-second meaning to the same &lsquo;<samp>\( &hellip; \)</samp>&rsquo; construct.  In practice
-there is usually no conflict between the two meanings; when there is
-a conflict, you can use a shy group.
-</p>
-</dd>
-<dt><kbd>\(?: &hellip; \)</kbd></dt>
-<dd><a name="index-shy-group_002c-in-regexp"></a>
-<p>specifies a shy group that does not record the matched substring;
-you can&rsquo;t refer back to it with &lsquo;<samp>\<var>d</var></samp>&rsquo; (see below).  This is
-useful in mechanically combining regular expressions, so that you can
-add groups for syntactic purposes without interfering with the
-numbering of the groups that are meant to be referred to.
-</p>
-</dd>
-<dt><kbd>\<var>d</var></kbd></dt>
-<dd><a name="index-back-reference_002c-in-regexp"></a>
-<p>matches the same text that matched the <var>d</var>th occurrence of a
-&lsquo;<samp>\( &hellip; \)</samp>&rsquo; construct.  This is called a <em>back
-reference</em>.
-</p>
-<p>After the end of a &lsquo;<samp>\( &hellip; \)</samp>&rsquo; construct, the matcher remembers
-the beginning and end of the text matched by that construct.  Then,
-later on in the regular expression, you can use &lsquo;<samp>\</samp>&rsquo; followed by the
-digit <var>d</var> to mean &ldquo;match the same text matched the <var>d</var>th time
-by the &lsquo;<samp>\( &hellip; \)</samp>&rsquo; construct&rdquo;.
-</p>
-<p>The strings matching the first nine &lsquo;<samp>\( &hellip; \)</samp>&rsquo; constructs
-appearing in a regular expression are assigned numbers 1 through 9 in
-the order that the open-parentheses appear in the regular expression.
-So you can use &lsquo;<samp>\1</samp>&rsquo; through &lsquo;<samp>\9</samp>&rsquo; to refer to the text matched
-by the corresponding &lsquo;<samp>\( &hellip; \)</samp>&rsquo; constructs.
-</p>
-<p>For example, &lsquo;<samp>\(.*\)\1</samp>&rsquo; matches any newline-free string that is
-composed of two identical halves.  The &lsquo;<samp>\(.*\)</samp>&rsquo; matches the first
-half, which may be anything, but the &lsquo;<samp>\1</samp>&rsquo; that follows must match
-the same exact text.
-</p>
-<p>If a particular &lsquo;<samp>\( &hellip; \)</samp>&rsquo; construct matches more than once
-(which can easily happen if it is followed by &lsquo;<samp>*</samp>&rsquo;), only the last
-match is recorded.
-</p>
-</dd>
-<dt><kbd>\`</kbd></dt>
-<dd><p>matches the empty string, but only at the beginning of the string or
-buffer (or its accessible portion) being matched against.
-</p>
-</dd>
-<dt><kbd>\'</kbd></dt>
-<dd><p>matches the empty string, but only at the end of the string or buffer
-(or its accessible portion) being matched against.
-</p>
-</dd>
-<dt><kbd>\=</kbd></dt>
-<dd><p>matches the empty string, but only at point.
-</p>
-</dd>
-<dt><kbd>\b</kbd></dt>
-<dd><p>matches the empty string, but only at the beginning or
-end of a word.  Thus, &lsquo;<samp>\bfoo\b</samp>&rsquo; matches any occurrence of
-&lsquo;<samp>foo</samp>&rsquo; as a separate word.  &lsquo;<samp>\bballs?\b</samp>&rsquo; matches
-&lsquo;<samp>ball</samp>&rsquo; or &lsquo;<samp>balls</samp>&rsquo; as a separate word.
-</p>
-<p>&lsquo;<samp>\b</samp>&rsquo; matches at the beginning or end of the buffer
-regardless of what text appears next to it.
-</p>
-</dd>
-<dt><kbd>\B</kbd></dt>
-<dd><p>matches the empty string, but <em>not</em> at the beginning or
-end of a word.
-</p>
-</dd>
-<dt><kbd>\&lt;</kbd></dt>
-<dd><p>matches the empty string, but only at the beginning of a word.
-&lsquo;<samp>\&lt;</samp>&rsquo; matches at the beginning of the buffer only if a
-word-constituent character follows.
-</p>
-</dd>
-<dt><kbd>\&gt;</kbd></dt>
-<dd><p>matches the empty string, but only at the end of a word.  &lsquo;<samp>\&gt;</samp>&rsquo;
-matches at the end of the buffer only if the contents end with a
-word-constituent character.
-</p>
-</dd>
-<dt><kbd>\w</kbd></dt>
-<dd><p>matches any word-constituent character.  The syntax table determines
-which characters these are.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Syntax-Tables.html#Syntax-Tables">Syntax Tables</a> in <cite>The Emacs Lisp Reference Manual</cite>.
-</p>
-</dd>
-<dt><kbd>\W</kbd></dt>
-<dd><p>matches any character that is not a word-constituent.
-</p>
-</dd>
-<dt><kbd>\_&lt;</kbd></dt>
-<dd><p>matches the empty string, but only at the beginning of a symbol.
-A symbol is a sequence of one or more symbol-constituent characters.
-A symbol-constituent character is a character whose syntax is either
-&lsquo;<samp>w</samp>&rsquo; or &lsquo;<samp>_</samp>&rsquo;.  &lsquo;<samp>\_&lt;</samp>&rsquo; matches at the beginning of the
-buffer only if a symbol-constituent character follows.
-</p>
-</dd>
-<dt><kbd>\_&gt;</kbd></dt>
-<dd><p>matches the empty string, but only at the end of a symbol.  &lsquo;<samp>\_&gt;</samp>&rsquo;
-matches at the end of the buffer only if the contents end with a
-symbol-constituent character.
-</p>
-</dd>
-<dt><kbd>\s<var>c</var></kbd></dt>
-<dd><p>matches any character whose syntax is <var>c</var>.  Here <var>c</var> is a
-character that designates a particular syntax class: thus, &lsquo;<samp>w</samp>&rsquo;
-for word constituent, &lsquo;<samp>-</samp>&rsquo; or &lsquo;<samp> </samp>&rsquo; for whitespace, &lsquo;<samp>.</samp>&rsquo;
-for ordinary punctuation, etc.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Syntax-Tables.html#Syntax-Tables">Syntax Tables</a> in <cite>The Emacs Lisp Reference Manual</cite>.
-</p>
-</dd>
-<dt><kbd>\S<var>c</var></kbd></dt>
-<dd><p>matches any character whose syntax is not <var>c</var>.
-</p>
-<a name="index-categories-of-characters"></a>
-<a name="index-characters-which-belong-to-a-specific-language"></a>
-<a name="index-describe_002dcategories"></a>
-</dd>
-<dt><kbd>\c<var>c</var></kbd></dt>
-<dd><p>matches any character that belongs to the category <var>c</var>.  For
-example, &lsquo;<samp>\cc</samp>&rsquo; matches Chinese characters, &lsquo;<samp>\cg</samp>&rsquo; matches
-Greek characters, etc.  For the description of the known categories,
-type <kbd>M-x describe-categories <span class="key">RET</span></kbd>.
-</p>
-</dd>
-<dt><kbd>\C<var>c</var></kbd></dt>
-<dd><p>matches any character that does <em>not</em> belong to category
-<var>c</var>.
-</p></dd>
-</dl>
+      <p>Thus, &lsquo;<samp>foo\|bar</samp>&rsquo; matches either
+      &lsquo;<samp>foo</samp>&rsquo; or
+      &lsquo;<samp>bar</samp>&rsquo; but no other string.</p>
 
-<p>The constructs that pertain to words and syntax are controlled by
-the setting of the syntax table.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Syntax-Tables.html#Syntax-Tables">Syntax Tables</a> in <cite>The Emacs Lisp Reference Manual</cite>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Regexp-Example.html#Regexp-Example" accesskey="n" rel="next">Regexp Example</a>, Previous: <a href="Regexps.html#Regexps" accesskey="p" rel="prev">Regexps</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>&lsquo;<samp>\|</samp>&rsquo; applies to the largest
+      possible surrounding expressions. Only a surrounding
+      &lsquo;<samp>\( &hellip; \)</samp>&rsquo; grouping can limit
+      the grouping power of &lsquo;<samp>\|</samp>&rsquo;.</p>
 
+      <p>Full backtracking capability exists to handle multiple
+      uses of &lsquo;<samp>\|</samp>&rsquo;.</p>
+    </dd>
 
+    <dt><kbd>\( &hellip; \)</kbd></dt>
 
+    <dd>
+      <p>is a grouping construct that serves three purposes:</p>
+
+      <ol>
+        <li>To enclose a set of &lsquo;<samp>\|</samp>&rsquo;
+        alternatives for other operations. Thus,
+        &lsquo;<samp>\(foo\|bar\)x</samp>&rsquo; matches either
+        &lsquo;<samp>foox</samp>&rsquo; or
+        &lsquo;<samp>barx</samp>&rsquo;.</li>
+
+        <li>To enclose a complicated expression for the postfix
+        operators &lsquo;<samp>*</samp>&rsquo;,
+        &lsquo;<samp>+</samp>&rsquo; and
+        &lsquo;<samp>?</samp>&rsquo; to operate on. Thus,
+        &lsquo;<samp>ba\(na\)*</samp>&rsquo; matches
+        &lsquo;<samp>bananana</samp>&rsquo;, etc., with any (zero
+        or more) number of &lsquo;<samp>na</samp>&rsquo;
+        strings.</li>
+
+        <li>To record a matched substring for future
+        reference.</li>
+      </ol>
+
+      <p>This last application is not a consequence of the idea of
+      a parenthetical grouping; it is a separate feature that is
+      assigned as a second meaning to the same &lsquo;<samp>\(
+      &hellip; \)</samp>&rsquo; construct. In practice there is
+      usually no conflict between the two meanings; when there is a
+      conflict, you can use a shy group.</p>
+    </dd>
+
+    <dt><kbd>\(?: &hellip; \)</kbd></dt>
+
+    <dd>
+      <a name="index-shy-group_002c-in-regexp" id=
+      "index-shy-group_002c-in-regexp"></a>
+
+      <p>specifies a shy group that does not record the matched
+      substring; you can&rsquo;t refer back to it with
+      &lsquo;<samp>\<var>d</var></samp>&rsquo; (see below). This is
+      useful in mechanically combining regular expressions, so that
+      you can add groups for syntactic purposes without interfering
+      with the numbering of the groups that are meant to be
+      referred to.</p>
+    </dd>
+
+    <dt><kbd>\<var>d</var></kbd></dt>
+
+    <dd>
+      <a name="index-back-reference_002c-in-regexp" id=
+      "index-back-reference_002c-in-regexp"></a>
+
+      <p>matches the same text that matched the <var>d</var>th
+      occurrence of a &lsquo;<samp>\( &hellip; \)</samp>&rsquo;
+      construct. This is called a <em>back reference</em>.</p>
+
+      <p>After the end of a &lsquo;<samp>\( &hellip;
+      \)</samp>&rsquo; construct, the matcher remembers the
+      beginning and end of the text matched by that construct.
+      Then, later on in the regular expression, you can use
+      &lsquo;<samp>\</samp>&rsquo; followed by the digit
+      <var>d</var> to mean &ldquo;match the same text matched the
+      <var>d</var>th time by the &lsquo;<samp>\( &hellip;
+      \)</samp>&rsquo; construct&rdquo;.</p>
+
+      <p>The strings matching the first nine &lsquo;<samp>\(
+      &hellip; \)</samp>&rsquo; constructs appearing in a regular
+      expression are assigned numbers 1 through 9 in the order that
+      the open-parentheses appear in the regular expression. So you
+      can use &lsquo;<samp>\1</samp>&rsquo; through
+      &lsquo;<samp>\9</samp>&rsquo; to refer to the text matched by
+      the corresponding &lsquo;<samp>\( &hellip; \)</samp>&rsquo;
+      constructs.</p>
+
+      <p>For example, &lsquo;<samp>\(.*\)\1</samp>&rsquo; matches
+      any newline-free string that is composed of two identical
+      halves. The &lsquo;<samp>\(.*\)</samp>&rsquo; matches the
+      first half, which may be anything, but the
+      &lsquo;<samp>\1</samp>&rsquo; that follows must match the
+      same exact text.</p>
+
+      <p>If a particular &lsquo;<samp>\( &hellip; \)</samp>&rsquo;
+      construct matches more than once (which can easily happen if
+      it is followed by &lsquo;<samp>*</samp>&rsquo;), only the
+      last match is recorded.</p>
+    </dd>
+
+    <dt><kbd>\`</kbd></dt>
+
+    <dd>
+      <p>matches the empty string, but only at the beginning of the
+      string or buffer (or its accessible portion) being matched
+      against.</p>
+    </dd>
+
+    <dt><kbd>\'</kbd></dt>
+
+    <dd>
+      <p>matches the empty string, but only at the end of the
+      string or buffer (or its accessible portion) being matched
+      against.</p>
+    </dd>
+
+    <dt><kbd>\=</kbd></dt>
+
+    <dd>
+      <p>matches the empty string, but only at point.</p>
+    </dd>
+
+    <dt><kbd>\b</kbd></dt>
+
+    <dd>
+      <p>matches the empty string, but only at the beginning or end
+      of a word. Thus, &lsquo;<samp>\bfoo\b</samp>&rsquo; matches
+      any occurrence of &lsquo;<samp>foo</samp>&rsquo; as a
+      separate word. &lsquo;<samp>\bballs?\b</samp>&rsquo; matches
+      &lsquo;<samp>ball</samp>&rsquo; or
+      &lsquo;<samp>balls</samp>&rsquo; as a separate word.</p>
+
+      <p>&lsquo;<samp>\b</samp>&rsquo; matches at the beginning or
+      end of the buffer regardless of what text appears next to
+      it.</p>
+    </dd>
+
+    <dt><kbd>\B</kbd></dt>
+
+    <dd>
+      <p>matches the empty string, but <em>not</em> at the
+      beginning or end of a word.</p>
+    </dd>
+
+    <dt><kbd>\&lt;</kbd></dt>
+
+    <dd>
+      <p>matches the empty string, but only at the beginning of a
+      word. &lsquo;<samp>\&lt;</samp>&rsquo; matches at the
+      beginning of the buffer only if a word-constituent character
+      follows.</p>
+    </dd>
+
+    <dt><kbd>\&gt;</kbd></dt>
+
+    <dd>
+      <p>matches the empty string, but only at the end of a word.
+      &lsquo;<samp>\&gt;</samp>&rsquo; matches at the end of the
+      buffer only if the contents end with a word-constituent
+      character.</p>
+    </dd>
+
+    <dt><kbd>\w</kbd></dt>
+
+    <dd>
+      <p>matches any word-constituent character. The syntax table
+      determines which characters these are. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/elisp/Syntax-Tables.html#Syntax-Tables">
+      Syntax Tables</a> in <cite>The Emacs Lisp Reference
+      Manual</cite>.</p>
+    </dd>
+
+    <dt><kbd>\W</kbd></dt>
+
+    <dd>
+      <p>matches any character that is not a word-constituent.</p>
+    </dd>
+
+    <dt><kbd>\_&lt;</kbd></dt>
+
+    <dd>
+      <p>matches the empty string, but only at the beginning of a
+      symbol. A symbol is a sequence of one or more
+      symbol-constituent characters. A symbol-constituent character
+      is a character whose syntax is either
+      &lsquo;<samp>w</samp>&rsquo; or &lsquo;<samp>_</samp>&rsquo;.
+      &lsquo;<samp>\_&lt;</samp>&rsquo; matches at the beginning of
+      the buffer only if a symbol-constituent character
+      follows.</p>
+    </dd>
+
+    <dt><kbd>\_&gt;</kbd></dt>
+
+    <dd>
+      <p>matches the empty string, but only at the end of a symbol.
+      &lsquo;<samp>\_&gt;</samp>&rsquo; matches at the end of the
+      buffer only if the contents end with a symbol-constituent
+      character.</p>
+    </dd>
+
+    <dt><kbd>\s<var>c</var></kbd></dt>
+
+    <dd>
+      <p>matches any character whose syntax is <var>c</var>. Here
+      <var>c</var> is a character that designates a particular
+      syntax class: thus, &lsquo;<samp>w</samp>&rsquo; for word
+      constituent, &lsquo;<samp>-</samp>&rsquo; or &lsquo; &rsquo;
+      for whitespace, &lsquo;<samp>.</samp>&rsquo; for ordinary
+      punctuation, etc. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/elisp/Syntax-Tables.html#Syntax-Tables">
+      Syntax Tables</a> in <cite>The Emacs Lisp Reference
+      Manual</cite>.</p>
+    </dd>
+
+    <dt><kbd>\S<var>c</var></kbd></dt>
+
+    <dd>
+      <p>matches any character whose syntax is not
+      <var>c</var>.</p><a name="index-categories-of-characters" id=
+      "index-categories-of-characters"></a> <a name=
+      "index-characters-which-belong-to-a-specific-language" id=
+      "index-characters-which-belong-to-a-specific-language"></a>
+      <a name="index-describe_002dcategories" id=
+      "index-describe_002dcategories"></a>
+    </dd>
+
+    <dt><kbd>\c<var>c</var></kbd></dt>
+
+    <dd>
+      <p>matches any character that belongs to the category
+      <var>c</var>. For example, &lsquo;<samp>\cc</samp>&rsquo;
+      matches Chinese characters, &lsquo;<samp>\cg</samp>&rsquo;
+      matches Greek characters, etc. For the description of the
+      known categories, type <kbd>M-x describe-categories
+      <span class="key">RET</span></kbd>.</p>
+    </dd>
+
+    <dt><kbd>\C<var>c</var></kbd></dt>
+
+    <dd>
+      <p>matches any character that does <em>not</em> belong to
+      category <var>c</var>.</p>
+    </dd>
+  </dl>
+
+  <p>The constructs that pertain to words and syntax are controlled
+  by the setting of the syntax table. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Syntax-Tables.html#Syntax-Tables">
+  Syntax Tables</a> in <cite>The Emacs Lisp Reference
+  Manual</cite>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Regexp-Example.html#Regexp-Example"
+    accesskey="n" rel="next">Regexp Example</a>, Previous: <a href=
+    "Regexps.html#Regexps" accesskey="p" rel="prev">Regexps</a>,
+    Up: <a href="Search.html#Search" accesskey="u" rel=
+    "up">Search</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,230 +19,346 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Undo</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Undo">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Undo">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Maintaining-Undo.html#Maintaining-Undo" rel="next" title="Maintaining Undo">
-<link href="Internals-of-Kill-Ring.html#Internals-of-Kill-Ring" rel="prev" title="Internals of Kill Ring">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Undo</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Undo" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Undo" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Maintaining-Undo.html#Maintaining-Undo" rel="next"
+  title="Maintaining Undo" />
+  <link href="Internals-of-Kill-Ring.html#Internals-of-Kill-Ring"
+  rel="prev" title="Internals of Kill Ring" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Undo" id="Undo"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Maintaining-Undo.html#Maintaining-Undo"
+    accesskey="n" rel="next">Maintaining Undo</a>, Previous:
+    <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey="p" rel=
+    "prev">The Kill Ring</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Undo-1" id="Undo-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Undo"></a>
-<div class="header">
-<p>
-Next: <a href="Maintaining-Undo.html#Maintaining-Undo" accesskey="n" rel="next">Maintaining Undo</a>, Previous: <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey="p" rel="prev">The Kill Ring</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Undo-1"></a>
-<h3 class="section">31.9 Undo</h3>
-<a name="index-redo"></a>
+  <h3 class="section">31.9 Undo</h3><a name="index-redo" id=
+  "index-redo"></a>
 
-<p>Most buffers have an <em>undo list</em>, which records all changes made
-to the buffer&rsquo;s text so that they can be undone.  (The buffers that
-don&rsquo;t have one are usually special-purpose buffers for which Emacs
-assumes that undoing is not useful.  In particular, any buffer whose
-name begins with a space has its undo recording off by default;
-see <a href="Buffer-Names.html#Buffer-Names">Buffer Names</a>.)  All the primitives that modify the
-text in the buffer automatically add elements to the front of the undo
-list, which is in the variable <code>buffer-undo-list</code>.
-</p>
-<dl>
-<dt><a name="index-buffer_002dundo_002dlist"></a>Variable: <strong>buffer-undo-list</strong></dt>
-<dd><p>This buffer-local variable&rsquo;s value is the undo list of the current
-buffer.  A value of <code>t</code> disables the recording of undo information.
-</p></dd></dl>
+  <p>Most buffers have an <em>undo list</em>, which records all
+  changes made to the buffer&rsquo;s text so that they can be
+  undone. (The buffers that don&rsquo;t have one are usually
+  special-purpose buffers for which Emacs assumes that undoing is
+  not useful. In particular, any buffer whose name begins with a
+  space has its undo recording off by default; see <a href=
+  "Buffer-Names.html#Buffer-Names">Buffer Names</a>.) All the
+  primitives that modify the text in the buffer automatically add
+  elements to the front of the undo list, which is in the variable
+  <code>buffer-undo-list</code>.</p>
 
-<p>Here are the kinds of elements an undo list can have:
-</p>
-<dl compact="compact">
-<dt><code><var>position</var></code></dt>
-<dd><p>This kind of element records a previous value of point; undoing this
-element moves point to <var>position</var>.  Ordinary cursor motion does not
-make any sort of undo record, but deletion operations use these entries
-to record where point was before the command.
-</p>
-</dd>
-<dt><code>(<var>beg</var> . <var>end</var>)</code></dt>
-<dd><p>This kind of element indicates how to delete text that was inserted.
-Upon insertion, the text occupied the range <var>beg</var>&ndash;<var>end</var> in the
-buffer.
-</p>
-</dd>
-<dt><code>(<var>text</var> . <var>position</var>)</code></dt>
-<dd><p>This kind of element indicates how to reinsert text that was deleted.
-The deleted text itself is the string <var>text</var>.  The place to
-reinsert it is <code>(abs <var>position</var>)</code>.  If <var>position</var> is
-positive, point was at the beginning of the deleted text, otherwise it
-was at the end.  Zero or more (<var>marker</var> . <var>adjustment</var>)
-elements follow immediately after this element.
-</p>
-</dd>
-<dt><code>(t . <var>time-flag</var>)</code></dt>
-<dd><p>This kind of element indicates that an unmodified buffer became
-modified.  A <var>time-flag</var> of the form
-<code>(<var>sec-high</var> <var>sec-low</var> <var>microsec</var>
-<var>picosec</var>)</code> represents the visited file&rsquo;s modification time as of
-when it was previously visited or saved, using the same format as
-<code>current-time</code>; see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>.
-A <var>time-flag</var> of 0 means the buffer does not correspond to any file;
-−1 means the visited file previously did not exist.
-<code>primitive-undo</code> uses these
-values to determine whether to mark the buffer as unmodified once again;
-it does so only if the file&rsquo;s status matches that of <var>time-flag</var>.
-</p>
-</dd>
-<dt><code>(nil <var>property</var> <var>value</var> <var>beg</var> . <var>end</var>)</code></dt>
-<dd><p>This kind of element records a change in a text property.
-Here&rsquo;s how you might undo the change:
-</p>
-<div class="example">
-<pre class="example">(put-text-property <var>beg</var> <var>end</var> <var>property</var> <var>value</var>)
-</pre></div>
+  <dl>
+    <dt><a name="index-buffer_002dundo_002dlist" id=
+    "index-buffer_002dundo_002dlist"></a>Variable:
+    <strong>buffer-undo-list</strong></dt>
 
-</dd>
-<dt><code>(<var>marker</var> . <var>adjustment</var>)</code></dt>
-<dd><p>This kind of element records the fact that the marker <var>marker</var> was
-relocated due to deletion of surrounding text, and that it moved
-<var>adjustment</var> character positions.  If the marker&rsquo;s location is
-consistent with the (<var>text</var> . <var>position</var>) element preceding it
-in the undo list, then undoing this element moves <var>marker</var>
-− <var>adjustment</var> characters.
-</p>
-</dd>
-<dt><code>(apply <var>funname</var> . <var>args</var>)</code></dt>
-<dd><p>This is an extensible undo item, which is undone by calling
-<var>funname</var> with arguments <var>args</var>.
-</p>
-</dd>
-<dt><code>(apply <var>delta</var> <var>beg</var> <var>end</var> <var>funname</var> . <var>args</var>)</code></dt>
-<dd><p>This is an extensible undo item, which records a change limited to the
-range <var>beg</var> to <var>end</var>, which increased the size of the buffer
-by <var>delta</var> characters.  It is undone by calling <var>funname</var> with
-arguments <var>args</var>.
-</p>
-<p>This kind of element enables undo limited to a region to determine
-whether the element pertains to that region.
-</p>
-</dd>
-<dt><code>nil</code></dt>
-<dd><p>This element is a boundary.  The elements between two boundaries are
-called a <em>change group</em>; normally, each change group corresponds to
-one keyboard command, and undo commands normally undo an entire group as
-a unit.
-</p></dd>
-</dl>
+    <dd>
+      <p>This buffer-local variable&rsquo;s value is the undo list
+      of the current buffer. A value of <code>t</code> disables the
+      recording of undo information.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-undo_002dboundary"></a>Function: <strong>undo-boundary</strong></dt>
-<dd><p>This function places a boundary element in the undo list.  The undo
-command stops at such a boundary, and successive undo commands undo
-to earlier and earlier boundaries.  This function returns <code>nil</code>.
-</p>
-<p>Calling this function explicitly is useful for splitting the effects of
-a command into more than one unit.  For example, <code>query-replace</code>
-calls <code>undo-boundary</code> after each replacement, so that the user can
-undo individual replacements one by one.
-</p>
-<p>Mostly, however, this function is called automatically at an
-appropriate time.
-</p></dd></dl>
+  <p>Here are the kinds of elements an undo list can have:</p>
 
-<dl>
-<dt><a name="index-undo_002dauto_002damalgamate"></a>Function: <strong>undo-auto-amalgamate</strong></dt>
-<dd><a name="index-amalgamating-commands_002c-and-undo"></a>
-<p>The editor command loop automatically calls <code>undo-boundary</code> just
-before executing each key sequence, so that each undo normally undoes
-the effects of one command.  A few exceptional commands are
-<em>amalgamating</em>: these commands generally cause small changes to
-buffers, so with these a boundary is inserted only every 20th command,
-allowing the changes to be undone as a group.  By default, the commands
-<code>self-insert-command</code>, which produces self-inserting input
-characters (see <a href="Commands-for-Insertion.html#Commands-for-Insertion">Commands for Insertion</a>), and <code>delete-char</code>,
-which deletes characters (see <a href="Deletion.html#Deletion">Deletion</a>), are amalgamating.
-Where a command affects the contents of several buffers, as may happen,
-for example, when a function on the <code>post-command-hook</code> affects a
-buffer other than the <code>current-buffer</code>, then <code>undo-boundary</code>
-will be called in each of the affected buffers.
-</p></dd></dl>
+  <dl compact="compact">
+    <dt><code><var>position</var></code></dt>
 
-<dl>
-<dt><a name="index-undo_002dauto_002dcurrent_002dboundary_002dtimer"></a>Variable: <strong>undo-auto-current-boundary-timer</strong></dt>
-<dd><p>Some buffers, such as process buffers, can change even when no
-commands are executing.  In these cases, <code>undo-boundary</code> is
-normally called periodically by the timer in this variable.  Setting
-this variable to non-<code>nil</code> prevents this behavior.
-</p></dd></dl>
+    <dd>
+      <p>This kind of element records a previous value of point;
+      undoing this element moves point to <var>position</var>.
+      Ordinary cursor motion does not make any sort of undo record,
+      but deletion operations use these entries to record where
+      point was before the command.</p>
+    </dd>
 
-<dl>
-<dt><a name="index-undo_002din_002dprogress"></a>Variable: <strong>undo-in-progress</strong></dt>
-<dd><p>This variable is normally <code>nil</code>, but the undo commands bind it to
-<code>t</code>.  This is so that various kinds of change hooks can tell when
-they&rsquo;re being called for the sake of undoing.
-</p></dd></dl>
+    <dt><code>(<var>beg</var> . <var>end</var>)</code></dt>
 
-<dl>
-<dt><a name="index-primitive_002dundo"></a>Function: <strong>primitive-undo</strong> <em>count list</em></dt>
-<dd><p>This is the basic function for undoing elements of an undo list.
-It undoes the first <var>count</var> elements of <var>list</var>, returning
-the rest of <var>list</var>.
-</p>
-<p><code>primitive-undo</code> adds elements to the buffer&rsquo;s undo list when it
-changes the buffer.  Undo commands avoid confusion by saving the undo
-list value at the beginning of a sequence of undo operations.  Then the
-undo operations use and update the saved value.  The new elements added
-by undoing are not part of this saved value, so they don&rsquo;t interfere with
-continuing to undo.
-</p>
-<p>This function does not bind <code>undo-in-progress</code>.
-</p></dd></dl>
+    <dd>
+      <p>This kind of element indicates how to delete text that was
+      inserted. Upon insertion, the text occupied the range
+      <var>beg</var>&ndash;<var>end</var> in the buffer.</p>
+    </dd>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Maintaining-Undo.html#Maintaining-Undo" accesskey="n" rel="next">Maintaining Undo</a>, Previous: <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey="p" rel="prev">The Kill Ring</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><code>(<var>text</var> . <var>position</var>)</code></dt>
 
+    <dd>
+      <p>This kind of element indicates how to reinsert text that
+      was deleted. The deleted text itself is the string
+      <var>text</var>. The place to reinsert it is <code>(abs
+      <var>position</var>)</code>. If <var>position</var> is
+      positive, point was at the beginning of the deleted text,
+      otherwise it was at the end. Zero or more (<var>marker</var>
+      . <var>adjustment</var>) elements follow immediately after
+      this element.</p>
+    </dd>
 
+    <dt><code>(t . <var>time-flag</var>)</code></dt>
 
+    <dd>
+      <p>This kind of element indicates that an unmodified buffer
+      became modified. A <var>time-flag</var> of the form
+      <code>(<var>sec-high</var> <var>sec-low</var>
+      <var>microsec</var> <var>picosec</var>)</code> represents the
+      visited file&rsquo;s modification time as of when it was
+      previously visited or saved, using the same format as
+      <code>current-time</code>; see <a href=
+      "Time-of-Day.html#Time-of-Day">Time of Day</a>. A
+      <var>time-flag</var> of 0 means the buffer does not
+      correspond to any file; &acirc;&circ;&rsquo;1 means the
+      visited file previously did not exist.
+      <code>primitive-undo</code> uses these values to determine
+      whether to mark the buffer as unmodified once again; it does
+      so only if the file&rsquo;s status matches that of
+      <var>time-flag</var>.</p>
+    </dd>
+
+    <dt><code>(nil <var>property</var> <var>value</var>
+    <var>beg</var> . <var>end</var>)</code></dt>
+
+    <dd>
+      <p>This kind of element records a change in a text property.
+      Here&rsquo;s how you might undo the change:</p>
+
+      <div class="example">
+        <pre class="example">
+(put-text-property <var>beg</var> <var>end</var> <var>property</var> <var>value</var>)
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>(<var>marker</var> .
+    <var>adjustment</var>)</code></dt>
+
+    <dd>
+      <p>This kind of element records the fact that the marker
+      <var>marker</var> was relocated due to deletion of
+      surrounding text, and that it moved <var>adjustment</var>
+      character positions. If the marker&rsquo;s location is
+      consistent with the (<var>text</var> . <var>position</var>)
+      element preceding it in the undo list, then undoing this
+      element moves <var>marker</var> &acirc;&circ;&rsquo;
+      <var>adjustment</var> characters.</p>
+    </dd>
+
+    <dt><code>(apply <var>funname</var> .
+    <var>args</var>)</code></dt>
+
+    <dd>
+      <p>This is an extensible undo item, which is undone by
+      calling <var>funname</var> with arguments
+      <var>args</var>.</p>
+    </dd>
+
+    <dt><code>(apply <var>delta</var> <var>beg</var> <var>end</var>
+    <var>funname</var> . <var>args</var>)</code></dt>
+
+    <dd>
+      <p>This is an extensible undo item, which records a change
+      limited to the range <var>beg</var> to <var>end</var>, which
+      increased the size of the buffer by <var>delta</var>
+      characters. It is undone by calling <var>funname</var> with
+      arguments <var>args</var>.</p>
+
+      <p>This kind of element enables undo limited to a region to
+      determine whether the element pertains to that region.</p>
+    </dd>
+
+    <dt><code>nil</code></dt>
+
+    <dd>
+      <p>This element is a boundary. The elements between two
+      boundaries are called a <em>change group</em>; normally, each
+      change group corresponds to one keyboard command, and undo
+      commands normally undo an entire group as a unit.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-undo_002dboundary" id=
+    "index-undo_002dboundary"></a>Function:
+    <strong>undo-boundary</strong></dt>
+
+    <dd>
+      <p>This function places a boundary element in the undo list.
+      The undo command stops at such a boundary, and successive
+      undo commands undo to earlier and earlier boundaries. This
+      function returns <code>nil</code>.</p>
+
+      <p>Calling this function explicitly is useful for splitting
+      the effects of a command into more than one unit. For
+      example, <code>query-replace</code> calls
+      <code>undo-boundary</code> after each replacement, so that
+      the user can undo individual replacements one by one.</p>
+
+      <p>Mostly, however, this function is called automatically at
+      an appropriate time.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-undo_002dauto_002damalgamate" id=
+    "index-undo_002dauto_002damalgamate"></a>Function:
+    <strong>undo-auto-amalgamate</strong></dt>
+
+    <dd>
+      <a name="index-amalgamating-commands_002c-and-undo" id=
+      "index-amalgamating-commands_002c-and-undo"></a>
+
+      <p>The editor command loop automatically calls
+      <code>undo-boundary</code> just before executing each key
+      sequence, so that each undo normally undoes the effects of
+      one command. A few exceptional commands are
+      <em>amalgamating</em>: these commands generally cause small
+      changes to buffers, so with these a boundary is inserted only
+      every 20th command, allowing the changes to be undone as a
+      group. By default, the commands
+      <code>self-insert-command</code>, which produces
+      self-inserting input characters (see <a href=
+      "Commands-for-Insertion.html#Commands-for-Insertion">Commands
+      for Insertion</a>), and <code>delete-char</code>, which
+      deletes characters (see <a href=
+      "Deletion.html#Deletion">Deletion</a>), are amalgamating.
+      Where a command affects the contents of several buffers, as
+      may happen, for example, when a function on the
+      <code>post-command-hook</code> affects a buffer other than
+      the <code>current-buffer</code>, then
+      <code>undo-boundary</code> will be called in each of the
+      affected buffers.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-undo_002dauto_002dcurrent_002dboundary_002dtimer" id=
+    "index-undo_002dauto_002dcurrent_002dboundary_002dtimer"></a>Variable:
+    <strong>undo-auto-current-boundary-timer</strong></dt>
+
+    <dd>
+      <p>Some buffers, such as process buffers, can change even
+      when no commands are executing. In these cases,
+      <code>undo-boundary</code> is normally called periodically by
+      the timer in this variable. Setting this variable to
+      non-<code>nil</code> prevents this behavior.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-undo_002din_002dprogress" id=
+    "index-undo_002din_002dprogress"></a>Variable:
+    <strong>undo-in-progress</strong></dt>
+
+    <dd>
+      <p>This variable is normally <code>nil</code>, but the undo
+      commands bind it to <code>t</code>. This is so that various
+      kinds of change hooks can tell when they&rsquo;re being
+      called for the sake of undoing.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-primitive_002dundo" id=
+    "index-primitive_002dundo"></a>Function:
+    <strong>primitive-undo</strong> <em>count list</em></dt>
+
+    <dd>
+      <p>This is the basic function for undoing elements of an undo
+      list. It undoes the first <var>count</var> elements of
+      <var>list</var>, returning the rest of <var>list</var>.</p>
+
+      <p><code>primitive-undo</code> adds elements to the
+      buffer&rsquo;s undo list when it changes the buffer. Undo
+      commands avoid confusion by saving the undo list value at the
+      beginning of a sequence of undo operations. Then the undo
+      operations use and update the saved value. The new elements
+      added by undoing are not part of this saved value, so they
+      don&rsquo;t interfere with continuing to undo.</p>
+
+      <p>This function does not bind
+      <code>undo-in-progress</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Maintaining-Undo.html#Maintaining-Undo"
+    accesskey="n" rel="next">Maintaining Undo</a>, Previous:
+    <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey="p" rel=
+    "prev">The Kill Ring</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

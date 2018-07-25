@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,166 +16,257 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Capturing column view</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Capturing column view">
-<meta name="keywords" content="The Org Manual: Capturing column view">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Column-view.html#Column-view" rel="up" title="Column view">
-<link href="Property-API.html#Property-API" rel="next" title="Property API">
-<link href="Using-column-view.html#Using-column-view" rel="prev" title="Using column view">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Capturing column view</title>
+  <meta name="description" content=
+  "The Org Manual: Capturing column view" />
+  <meta name="keywords" content=
+  "The Org Manual: Capturing column view" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Column-view.html#Column-view" rel="up" title=
+  "Column view" />
+  <link href="Property-API.html#Property-API" rel="next" title=
+  "Property API" />
+  <link href="Using-column-view.html#Using-column-view" rel="prev"
+  title="Using column view" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Capturing-column-view"></a>
-<div class="header">
-<p>
-Previous: <a href="Using-column-view.html#Using-column-view" accesskey="p" rel="prev">Using column view</a>, Up: <a href="Column-view.html#Column-view" accesskey="u" rel="up">Column view</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Capturing-column-view-1"></a>
-<h4 class="subsection">7.5.3 Capturing column view</h4>
+<body lang="en" xml:lang="en">
+  <a name="Capturing-column-view" id="Capturing-column-view"></a>
 
-<p>Since column view is just an overlay over a buffer, it cannot be
-exported or printed directly.  If you want to capture a column view, use
-a <code>columnview</code> dynamic block (see <a href="Dynamic-blocks.html#Dynamic-blocks">Dynamic blocks</a>).  The frame
-of this block looks like this:
-</p>
-<a name="index-_0023_002bBEGIN_002c-columnview"></a>
-<div class="example">
-<pre class="example">* The column view
-#+BEGIN: columnview :hlines 1 :id &quot;label&quot;
+  <div class="header">
+    <p>Previous: <a href="Using-column-view.html#Using-column-view"
+    accesskey="p" rel="prev">Using column view</a>, Up: <a href=
+    "Column-view.html#Column-view" accesskey="u" rel="up">Column
+    view</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Capturing-column-view-1" id=
+  "Capturing-column-view-1"></a>
+
+  <h4 class="subsection">7.5.3 Capturing column view</h4>
+
+  <p>Since column view is just an overlay over a buffer, it cannot
+  be exported or printed directly. If you want to capture a column
+  view, use a <code>columnview</code> dynamic block (see <a href=
+  "Dynamic-blocks.html#Dynamic-blocks">Dynamic blocks</a>). The
+  frame of this block looks like this:</p><a name=
+  "index-_0023_002bBEGIN_002c-columnview" id=
+  "index-_0023_002bBEGIN_002c-columnview"></a>
+
+  <div class="example">
+    <pre class="example">
+* The column view
+#+BEGIN: columnview :hlines 1 :id "label"
 
 #+END:
-</pre></div>
+</pre>
+  </div>
 
-<p>This dynamic block has the following parameters:
-</p>
-<dl compact="compact">
-<dt><code>:id</code></dt>
-<dd><p>This is the most important parameter.  Column view is a feature that is
-often localized to a certain (sub)tree, and the capture block might be
-at a different location in the file.  To identify the tree whose view to
-capture, you can use 4 values:
-<a name="index-property_002c-ID-1"></a>
-</p><div class="example">
-<pre class="example">local     <span class="roman">use the tree in which the capture block is located</span>
-global    <span class="roman">make a global view, including all headings in the file</span>
-&quot;file:<var>path-to-file</var>&quot;
-          <span class="roman">run column view at the top of this file</span>
-&quot;<var>ID</var>&quot;      <span class="roman">call column view in the tree that has an <code>:ID:</code></span>
-          <span class="roman">property with the value <i>label</i>.  You can use</span>
-          <span class="roman"><kbd>M-x org-id-copy RET</kbd> to create a globally unique ID for</span>
-          <span class="roman">the current entry and copy it to the kill-ring.</span>
-</pre></div>
-</dd>
-<dt><code>:hlines</code></dt>
-<dd><p>When <code>t</code>, insert an hline after every line.  When a number <var>N</var>, insert
-an hline before each headline with level <code>&lt;= <var>N</var></code>.
-</p></dd>
-<dt><code>:vlines</code></dt>
-<dd><p>When set to <code>t</code>, force column groups to get vertical lines.
-</p></dd>
-<dt><code>:maxlevel</code></dt>
-<dd><p>When set to a number, don&rsquo;t capture entries below this level.
-</p></dd>
-<dt><code>:skip-empty-rows</code></dt>
-<dd><p>When set to <code>t</code>, skip rows where the only non-empty specifier of the
-column view is <code>ITEM</code>.
-</p>
-</dd>
-</dl>
+  <p>This dynamic block has the following parameters:</p>
 
-<p>The following commands insert or update the dynamic block:
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002dc-C_002dx-i"></a>
-<a name="index-org_002dinsert_002dcolumns_002ddblock"></a>
-</dd>
-<dt><kbd><kbd>C-c C-x i</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-insert-columns-dblock</code>)</kbd></dt>
-<dd><p>Insert a dynamic block capturing a column view.  You will be prompted
-for the scope or ID of the view.
-<a name="index-C_002dc-C_002dc-10"></a>
-<a name="index-C_002dc-C_002dx-C_002du"></a>
-<a name="index-org_002ddblock_002dupdate"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-c</kbd> &nbsp;<span class="roman">or</span> &nbsp;<kbd>C-c C-x C-u</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-dblock-update</code>)</kbd></dt>
-<dd><p>Update dynamic block at point.  The cursor needs to be in the
-<code>#+BEGIN</code> line of the dynamic block.
-<a name="index-C_002du-C_002dc-C_002dx-C_002du"></a>
-<a name="index-org_002dupdate_002dall_002ddblocks"></a>
-</p></dd>
-<dt><kbd><kbd>C-u C-c C-x C-u</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-update-all-dblocks</code>)</kbd></dt>
-<dd><p>Update all dynamic blocks (see <a href="Dynamic-blocks.html#Dynamic-blocks">Dynamic blocks</a>).  This is useful if
-you have several clock table blocks, column-capturing blocks or other dynamic
-blocks in a buffer.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><code>:id</code></dt>
 
-<p>You can add formulas to the column view table and you may add plotting
-instructions in front of the table&mdash;these will survive an update of the
-block.  If there is a <code>#+TBLFM:</code> after the table, the table will
-actually be recalculated automatically after an update.
-</p>
-<p>An alternative way to capture and process property values into a table is
-provided by Eric Schulte&rsquo;s <samp>org-collector.el</samp> which is a contributed
-package<a name="DOCF66" href="#FOOT66"><sup>66</sup></a>.  It provides a general API to collect
-properties from entries in a certain scope, and arbitrary Lisp expressions to
-process these values before inserting them into a table or a dynamic block.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <dd>
+      <p>This is the most important parameter. Column view is a
+      feature that is often localized to a certain (sub)tree, and
+      the capture block might be at a different location in the
+      file. To identify the tree whose view to capture, you can use
+      4 values: <a name="index-property_002c-ID-1" id=
+      "index-property_002c-ID-1"></a></p>
 
-<h3><a name="FOOT66" href="#DOCF66">(66)</a></h3>
-<p>Contributed packages are not part of Emacs, but are
-distributed with the main distribution of Org (visit
-<a href="http://orgmode.org">http://orgmode.org</a>).</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Using-column-view.html#Using-column-view" accesskey="p" rel="prev">Using column view</a>, Up: <a href="Column-view.html#Column-view" accesskey="u" rel="up">Column view</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <div class="example">
+        <pre class="example">
+local     <span class=
+"roman">use the tree in which the capture block is located</span>
+global    <span class=
+"roman">make a global view, including all headings in the file</span>
+"file:<var>path-to-file</var>"
+          <span class=
+"roman">run column view at the top of this file</span>
+"<var>ID</var>"      <span class=
+"roman">call column view in the tree that has an <code>:ID:</code></span>
+          <span class=
+"roman">property with the value <i>label</i>.  You can use</span>
+          <span class=
+"roman"><kbd>M-x org-id-copy RET</kbd> to create a globally unique ID for</span>
+          <span class=
+"roman">the current entry and copy it to the kill-ring.</span>
+</pre>
+      </div>
+    </dd>
 
+    <dt><code>:hlines</code></dt>
 
+    <dd>
+      <p>When <code>t</code>, insert an hline after every line.
+      When a number <var>N</var>, insert an hline before each
+      headline with level <code>&lt;= <var>N</var></code>.</p>
+    </dd>
 
+    <dt><code>:vlines</code></dt>
+
+    <dd>
+      <p>When set to <code>t</code>, force column groups to get
+      vertical lines.</p>
+    </dd>
+
+    <dt><code>:maxlevel</code></dt>
+
+    <dd>
+      <p>When set to a number, don&rsquo;t capture entries below
+      this level.</p>
+    </dd>
+
+    <dt><code>:skip-empty-rows</code></dt>
+
+    <dd>
+      <p>When set to <code>t</code>, skip rows where the only
+      non-empty specifier of the column view is
+      <code>ITEM</code>.</p>
+    </dd>
+  </dl>
+
+  <p>The following commands insert or update the dynamic block:</p>
+
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-C_002dx-i" id=
+    "index-C_002dc-C_002dx-i"></a> <a name=
+    "index-org_002dinsert_002dcolumns_002ddblock" id=
+    "index-org_002dinsert_002dcolumns_002ddblock"></a></dd>
+
+    <dt><kbd><kbd>C-c C-x i</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-insert-columns-dblock</code>)</kbd></dt>
+
+    <dd>
+      <p>Insert a dynamic block capturing a column view. You will
+      be prompted for the scope or ID of the view. <a name=
+      "index-C_002dc-C_002dc-10" id="index-C_002dc-C_002dc-10"></a>
+      <a name="index-C_002dc-C_002dx-C_002du" id=
+      "index-C_002dc-C_002dx-C_002du"></a> <a name=
+      "index-org_002ddblock_002dupdate" id=
+      "index-org_002ddblock_002dupdate"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-c</kbd> &nbsp;<span class="roman">or</span>
+    &nbsp;<kbd>C-c C-x C-u</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-dblock-update</code>)</kbd></dt>
+
+    <dd>
+      <p>Update dynamic block at point. The cursor needs to be in
+      the <code>#+BEGIN</code> line of the dynamic block. <a name=
+      "index-C_002du-C_002dc-C_002dx-C_002du" id=
+      "index-C_002du-C_002dc-C_002dx-C_002du"></a> <a name=
+      "index-org_002dupdate_002dall_002ddblocks" id=
+      "index-org_002dupdate_002dall_002ddblocks"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-u C-c C-x C-u</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-update-all-dblocks</code>)</kbd></dt>
+
+    <dd>
+      <p>Update all dynamic blocks (see <a href=
+      "Dynamic-blocks.html#Dynamic-blocks">Dynamic blocks</a>).
+      This is useful if you have several clock table blocks,
+      column-capturing blocks or other dynamic blocks in a
+      buffer.</p>
+    </dd>
+  </dl>
+
+  <p>You can add formulas to the column view table and you may add
+  plotting instructions in front of the table&mdash;these will
+  survive an update of the block. If there is a
+  <code>#+TBLFM:</code> after the table, the table will actually be
+  recalculated automatically after an update.</p>
+
+  <p>An alternative way to capture and process property values into
+  a table is provided by Eric Schulte&rsquo;s
+  <samp>org-collector.el</samp> which is a contributed
+  package<a name="DOCF66" href="#FOOT66" id=
+  "DOCF66"><sup>66</sup></a>. It provides a general API to collect
+  properties from entries in a certain scope, and arbitrary Lisp
+  expressions to process these values before inserting them into a
+  table or a dynamic block.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT66" href="#DOCF66" id="FOOT66">(66)</a></h3>
+
+    <p>Contributed packages are not part of Emacs, but are
+    distributed with the main distribution of Org (visit <a href=
+    "http://orgmode.org">http://orgmode.org</a>).</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Using-column-view.html#Using-column-view"
+    accesskey="p" rel="prev">Using column view</a>, Up: <a href=
+    "Column-view.html#Column-view" accesskey="u" rel="up">Column
+    view</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

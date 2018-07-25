@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,165 +18,215 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Integer Truncation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Integer Truncation">
-<meta name="keywords" content="GNU Emacs Calc Manual: Integer Truncation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Arithmetic.html#Arithmetic" rel="up" title="Arithmetic">
-<link href="Complex-Number-Functions.html#Complex-Number-Functions" rel="next" title="Complex Number Functions">
-<link href="Basic-Arithmetic.html#Basic-Arithmetic" rel="prev" title="Basic Arithmetic">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Integer Truncation</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Integer Truncation" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Integer Truncation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Arithmetic.html#Arithmetic" rel="up" title=
+  "Arithmetic" />
+  <link href=
+  "Complex-Number-Functions.html#Complex-Number-Functions" rel=
+  "next" title="Complex Number Functions" />
+  <link href="Basic-Arithmetic.html#Basic-Arithmetic" rel="prev"
+  title="Basic Arithmetic" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Integer-Truncation"></a>
-<div class="header">
-<p>
-Next: <a href="Complex-Number-Functions.html#Complex-Number-Functions" accesskey="n" rel="next">Complex Number Functions</a>, Previous: <a href="Basic-Arithmetic.html#Basic-Arithmetic" accesskey="p" rel="prev">Basic Arithmetic</a>, Up: <a href="Arithmetic.html#Arithmetic" accesskey="u" rel="up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Integer-Truncation-1"></a>
-<h3 class="section">7.2 Integer Truncation</h3>
+<body lang="en" xml:lang="en">
+  <a name="Integer-Truncation" id="Integer-Truncation"></a>
 
-<p>There are four commands for truncating a real number to an integer,
-differing mainly in their treatment of negative numbers.  All of these
-commands have the property that if the argument is an integer, the result
-is the same integer.  An integer-valued floating-point argument is converted
-to integer form.
-</p>
-<p>If you press <kbd>H</kbd> (<code>calc-hyperbolic</code>) first, the result will be
-expressed as an integer-valued floating-point number.
-</p>
-<a name="index-Integer-part-of-a-number"></a>
-<a name="index-F"></a>
-<a name="index-calc_002dfloor"></a>
-<a name="index-floor"></a>
-<a name="index-ffloor"></a>
-<a name="index-H-F"></a>
-<p>The <kbd>F</kbd> (<code>calc-floor</code>) [<code>floor</code> or <code>ffloor</code>] command
-truncates a real number to the next lower integer, i.e., toward minus
-infinity.  Thus <kbd>3.6 F</kbd> produces 3, but <kbd>_3.6 F</kbd> produces
-<i>-4</i>.
-</p>
-<a name="index-I-F"></a>
-<a name="index-calc_002dceiling"></a>
-<a name="index-ceil"></a>
-<a name="index-fceil"></a>
-<a name="index-H-I-F"></a>
-<p>The <kbd>I F</kbd> (<code>calc-ceiling</code>) [<code>ceil</code> or <code>fceil</code>]
-command truncates toward positive infinity.  Thus <kbd>3.6 I F</kbd> produces
-4, and <kbd>_3.6 I F</kbd> produces <i>-3</i>.
-</p>
-<a name="index-R"></a>
-<a name="index-calc_002dround"></a>
-<a name="index-round"></a>
-<a name="index-fround"></a>
-<a name="index-H-R"></a>
-<p>The <kbd>R</kbd> (<code>calc-round</code>) [<code>round</code> or <code>fround</code>] command
-rounds to the nearest integer.  When the fractional part is .5 exactly,
-this command rounds away from zero.  (All other rounding in the
-Calculator uses this convention as well.)  Thus <kbd>3.5 R</kbd> produces 4
-but <kbd>3.4 R</kbd> produces 3; <kbd>_3.5 R</kbd> produces <i>-4</i>.
-</p>
-<a name="index-I-R"></a>
-<a name="index-calc_002dtrunc"></a>
-<a name="index-trunc"></a>
-<a name="index-ftrunc"></a>
-<a name="index-H-I-R"></a>
-<p>The <kbd>I R</kbd> (<code>calc-trunc</code>) [<code>trunc</code> or <code>ftrunc</code>]
-command truncates toward zero.  In other words, it &ldquo;chops off&rdquo;
-everything after the decimal point.  Thus <kbd>3.6 I R</kbd> produces 3 and
-<kbd>_3.6 I R</kbd> produces <i>-3</i>.
-</p>
-<p>These functions may not be applied meaningfully to error forms, but they
-do work for intervals.  As a convenience, applying <code>floor</code> to a
-modulo form floors the value part of the form.  Applied to a vector,
-these functions operate on all elements of the vector one by one.
-Applied to a date form, they operate on the internal numerical
-representation of dates, converting a date/time form into a pure date.
-</p>
-<a name="index-rounde"></a>
-<a name="index-roundu"></a>
-<a name="index-frounde"></a>
-<a name="index-froundu"></a>
-<p>There are two more rounding functions which can only be entered in
-algebraic notation.  The <code>roundu</code> function is like <code>round</code>
-except that it rounds up, toward plus infinity, when the fractional
-part is .5.  This distinction matters only for negative arguments.
-Also, <code>rounde</code> rounds to an even number in the case of a tie,
-rounding up or down as necessary.  For example, &lsquo;<samp>rounde(3.5)</samp>&rsquo; and
-&lsquo;<samp>rounde(4.5)</samp>&rsquo; both return 4, but &lsquo;<samp>rounde(5.5)</samp>&rsquo; returns 6.
-The advantage of round-to-even is that the net error due to rounding
-after a long calculation tends to cancel out to zero.  An important
-subtle point here is that the number being fed to <code>rounde</code> will
-already have been rounded to the current precision before <code>rounde</code>
-begins.  For example, &lsquo;<samp>rounde(2.500001)</samp>&rsquo; with a current precision
-of 6 will incorrectly, or at least surprisingly, yield 2 because the
-argument will first have been rounded down to &lsquo;<samp>2.5</samp>&rsquo; (which
-<code>rounde</code> sees as an exact tie between 2 and 3).
-</p>
-<p>Each of these functions, when written in algebraic formulas, allows
-a second argument which specifies the number of digits after the
-decimal point to keep.  For example, &lsquo;<samp>round(123.4567, 2)</samp>&rsquo; will
-produce the answer 123.46, and &lsquo;<samp>round(123.4567, -1)</samp>&rsquo; will
-produce 120 (i.e., the cutoff is one digit to the <em>left</em> of
-the decimal point).  A second argument of zero is equivalent to
-no second argument at all.
-</p>
-<a name="index-Fractional-part-of-a-number"></a>
-<p>To compute the fractional part of a number (i.e., the amount which, when
-added to &lsquo;<tt>floor(</tt><var>n</var><tt>)</tt>&rsquo;, will produce <var>n</var>) just take <var>n</var>
-modulo 1 using the <code>%</code> command.
-</p>
-<p>Note also the <kbd>\</kbd> (integer quotient), <kbd>f I</kbd> (integer logarithm),
-and <kbd>f Q</kbd> (integer square root) commands, which are analogous to
-<kbd>/</kbd>, <kbd>B</kbd>, and <kbd>Q</kbd>, respectively, except that they take integer
-arguments and return the result rounded down to an integer.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Complex-Number-Functions.html#Complex-Number-Functions" accesskey="n" rel="next">Complex Number Functions</a>, Previous: <a href="Basic-Arithmetic.html#Basic-Arithmetic" accesskey="p" rel="prev">Basic Arithmetic</a>, Up: <a href="Arithmetic.html#Arithmetic" accesskey="u" rel="up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Complex-Number-Functions.html#Complex-Number-Functions"
+    accesskey="n" rel="next">Complex Number Functions</a>,
+    Previous: <a href="Basic-Arithmetic.html#Basic-Arithmetic"
+    accesskey="p" rel="prev">Basic Arithmetic</a>, Up: <a href=
+    "Arithmetic.html#Arithmetic" accesskey="u" rel=
+    "up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Integer-Truncation-1" id="Integer-Truncation-1"></a>
 
+  <h3 class="section">7.2 Integer Truncation</h3>
 
+  <p>There are four commands for truncating a real number to an
+  integer, differing mainly in their treatment of negative numbers.
+  All of these commands have the property that if the argument is
+  an integer, the result is the same integer. An integer-valued
+  floating-point argument is converted to integer form.</p>
 
+  <p>If you press <kbd>H</kbd> (<code>calc-hyperbolic</code>)
+  first, the result will be expressed as an integer-valued
+  floating-point number.</p><a name=
+  "index-Integer-part-of-a-number" id=
+  "index-Integer-part-of-a-number"></a> <a name="index-F" id=
+  "index-F"></a> <a name="index-calc_002dfloor" id=
+  "index-calc_002dfloor"></a> <a name="index-floor" id=
+  "index-floor"></a> <a name="index-ffloor" id="index-ffloor"></a>
+  <a name="index-H-F" id="index-H-F"></a>
+
+  <p>The <kbd>F</kbd> (<code>calc-floor</code>) [<code>floor</code>
+  or <code>ffloor</code>] command truncates a real number to the
+  next lower integer, i.e., toward minus infinity. Thus <kbd>3.6
+  F</kbd> produces 3, but <kbd>_3.6 F</kbd> produces
+  <i>-4</i>.</p><a name="index-I-F" id="index-I-F"></a> <a name=
+  "index-calc_002dceiling" id="index-calc_002dceiling"></a>
+  <a name="index-ceil" id="index-ceil"></a> <a name="index-fceil"
+  id="index-fceil"></a> <a name="index-H-I-F" id="index-H-I-F"></a>
+
+  <p>The <kbd>I F</kbd> (<code>calc-ceiling</code>)
+  [<code>ceil</code> or <code>fceil</code>] command truncates
+  toward positive infinity. Thus <kbd>3.6 I F</kbd> produces 4, and
+  <kbd>_3.6 I F</kbd> produces <i>-3</i>.</p><a name="index-R" id=
+  "index-R"></a> <a name="index-calc_002dround" id=
+  "index-calc_002dround"></a> <a name="index-round" id=
+  "index-round"></a> <a name="index-fround" id="index-fround"></a>
+  <a name="index-H-R" id="index-H-R"></a>
+
+  <p>The <kbd>R</kbd> (<code>calc-round</code>) [<code>round</code>
+  or <code>fround</code>] command rounds to the nearest integer.
+  When the fractional part is .5 exactly, this command rounds away
+  from zero. (All other rounding in the Calculator uses this
+  convention as well.) Thus <kbd>3.5 R</kbd> produces 4 but
+  <kbd>3.4 R</kbd> produces 3; <kbd>_3.5 R</kbd> produces
+  <i>-4</i>.</p><a name="index-I-R" id="index-I-R"></a> <a name=
+  "index-calc_002dtrunc" id="index-calc_002dtrunc"></a> <a name=
+  "index-trunc" id="index-trunc"></a> <a name="index-ftrunc" id=
+  "index-ftrunc"></a> <a name="index-H-I-R" id="index-H-I-R"></a>
+
+  <p>The <kbd>I R</kbd> (<code>calc-trunc</code>)
+  [<code>trunc</code> or <code>ftrunc</code>] command truncates
+  toward zero. In other words, it &ldquo;chops off&rdquo;
+  everything after the decimal point. Thus <kbd>3.6 I R</kbd>
+  produces 3 and <kbd>_3.6 I R</kbd> produces <i>-3</i>.</p>
+
+  <p>These functions may not be applied meaningfully to error
+  forms, but they do work for intervals. As a convenience, applying
+  <code>floor</code> to a modulo form floors the value part of the
+  form. Applied to a vector, these functions operate on all
+  elements of the vector one by one. Applied to a date form, they
+  operate on the internal numerical representation of dates,
+  converting a date/time form into a pure date.</p><a name=
+  "index-rounde" id="index-rounde"></a> <a name="index-roundu" id=
+  "index-roundu"></a> <a name="index-frounde" id=
+  "index-frounde"></a> <a name="index-froundu" id=
+  "index-froundu"></a>
+
+  <p>There are two more rounding functions which can only be
+  entered in algebraic notation. The <code>roundu</code> function
+  is like <code>round</code> except that it rounds up, toward plus
+  infinity, when the fractional part is .5. This distinction
+  matters only for negative arguments. Also, <code>rounde</code>
+  rounds to an even number in the case of a tie, rounding up or
+  down as necessary. For example,
+  &lsquo;<samp>rounde(3.5)</samp>&rsquo; and
+  &lsquo;<samp>rounde(4.5)</samp>&rsquo; both return 4, but
+  &lsquo;<samp>rounde(5.5)</samp>&rsquo; returns 6. The advantage
+  of round-to-even is that the net error due to rounding after a
+  long calculation tends to cancel out to zero. An important subtle
+  point here is that the number being fed to <code>rounde</code>
+  will already have been rounded to the current precision before
+  <code>rounde</code> begins. For example,
+  &lsquo;<samp>rounde(2.500001)</samp>&rsquo; with a current
+  precision of 6 will incorrectly, or at least surprisingly, yield
+  2 because the argument will first have been rounded down to
+  &lsquo;<samp>2.5</samp>&rsquo; (which <code>rounde</code> sees as
+  an exact tie between 2 and 3).</p>
+
+  <p>Each of these functions, when written in algebraic formulas,
+  allows a second argument which specifies the number of digits
+  after the decimal point to keep. For example,
+  &lsquo;<samp>round(123.4567, 2)</samp>&rsquo; will produce the
+  answer 123.46, and &lsquo;<samp>round(123.4567, -1)</samp>&rsquo;
+  will produce 120 (i.e., the cutoff is one digit to the
+  <em>left</em> of the decimal point). A second argument of zero is
+  equivalent to no second argument at all.</p><a name=
+  "index-Fractional-part-of-a-number" id=
+  "index-Fractional-part-of-a-number"></a>
+
+  <p>To compute the fractional part of a number (i.e., the amount
+  which, when added to
+  &lsquo;<tt>floor(</tt><var>n</var><tt>)</tt>&rsquo;, will produce
+  <var>n</var>) just take <var>n</var> modulo 1 using the
+  <code>%</code> command.</p>
+
+  <p>Note also the <kbd>\</kbd> (integer quotient), <kbd>f I</kbd>
+  (integer logarithm), and <kbd>f Q</kbd> (integer square root)
+  commands, which are analogous to <kbd>/</kbd>, <kbd>B</kbd>, and
+  <kbd>Q</kbd>, respectively, except that they take integer
+  arguments and return the result rounded down to an integer.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Complex-Number-Functions.html#Complex-Number-Functions"
+    accesskey="n" rel="next">Complex Number Functions</a>,
+    Previous: <a href="Basic-Arithmetic.html#Basic-Arithmetic"
+    accesskey="p" rel="prev">Basic Arithmetic</a>, Up: <a href=
+    "Arithmetic.html#Arithmetic" accesskey="u" rel=
+    "up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

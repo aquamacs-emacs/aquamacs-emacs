@@ -1,15 +1,28 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Diary Headers Generation - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="The-Gnus-Diary-Library.html#The-Gnus-Diary-Library" title="The Gnus Diary Library">
-<link rel="prev" href="Diary-Articles-Sorting.html#Diary-Articles-Sorting" title="Diary Articles Sorting">
-<link rel="next" href="Diary-Group-Parameters.html#Diary-Group-Parameters" title="Diary Group Parameters">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Diary Headers Generation - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "The-Gnus-Diary-Library.html#The-Gnus-Diary-Library" title=
+  "The Gnus Diary Library" />
+  <link rel="prev" href=
+  "Diary-Articles-Sorting.html#Diary-Articles-Sorting" title=
+  "Diary Articles Sorting" />
+  <link rel="next" href=
+  "Diary-Group-Parameters.html#Diary-Group-Parameters" title=
+  "Diary Group Parameters" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +38,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,37 +51,49 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Diary-Headers-Generation"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Diary-Group-Parameters.html#Diary-Group-Parameters">Diary Group Parameters</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Diary-Articles-Sorting.html#Diary-Articles-Sorting">Diary Articles Sorting</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="The-Gnus-Diary-Library.html#The-Gnus-Diary-Library">The Gnus Diary Library</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Diary-Headers-Generation" id=
+    "Diary-Headers-Generation"></a>
 
-<h5 class="subsubsection">6.8.2.3 Diary Headers Generation</h5>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Diary-Group-Parameters.html#Diary-Group-Parameters">Diary
+    Group Parameters</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Diary-Articles-Sorting.html#Diary-Articles-Sorting">Diary
+    Articles Sorting</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "The-Gnus-Diary-Library.html#The-Gnus-Diary-Library">The Gnus
+    Diary Library</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-diary-headers-generation-2311"></a><a name="index-gnus_002ddiary_002dcheck_002dmessage-2312"></a>
-<code>gnus-diary</code> provides a function called
-<code>gnus-diary-check-message</code> to help you handle the <code>X-Diary-*</code>
-headers.  This function ensures that the current message contains all the
-required diary headers, and prompts you for values or corrections if
-needed.
+  <h5 class="subsubsection">6.8.2.3 Diary Headers Generation</h5>
 
-   <p>This function is hooked into the <code>nndiary</code> back end, so that
-moving or copying an article to a diary group will trigger it
-automatically.  It is also bound to <kbd>C-c C-f d</kbd> in
-<code>message-mode</code> and <code>article-edit-mode</code> in order to ease the
-process of converting a usual mail to a diary one.
+  <p><a name="index-diary-headers-generation-2311" id=
+  "index-diary-headers-generation-2311"></a><a name=
+  "index-gnus_002ddiary_002dcheck_002dmessage-2312" id=
+  "index-gnus_002ddiary_002dcheck_002dmessage-2312"></a>
+  <code>gnus-diary</code> provides a function called
+  <code>gnus-diary-check-message</code> to help you handle the
+  <code>X-Diary-*</code> headers. This function ensures that the
+  current message contains all the required diary headers, and
+  prompts you for values or corrections if needed.</p>
 
-   <p>This function takes a prefix argument which will force prompting of
-all diary headers, regardless of their presence or validity.  That way,
-you can very easily reschedule an already valid diary message, for
-instance.
+  <p>This function is hooked into the <code>nndiary</code> back
+  end, so that moving or copying an article to a diary group will
+  trigger it automatically. It is also bound to <kbd>C-c C-f
+  d</kbd> in <code>message-mode</code> and
+  <code>article-edit-mode</code> in order to ease the process of
+  converting a usual mail to a diary one.</p>
 
-   </body></html>
-
+  <p>This function takes a prefix argument which will force
+  prompting of all diary headers, regardless of their presence or
+  validity. That way, you can very easily reschedule an already
+  valid diary message, for instance.</p>
+</body>
+</html>

@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Custom Locate - Emacs Development Environment</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Emacs Development Environment">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Simple-projects.html#Simple-projects" title="Simple projects">
-<link rel="prev" href="ede_002dlinux.html#ede_002dlinux" title="ede-linux">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Custom Locate - Emacs Development Environment</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Emacs Development Environment" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Simple-projects.html#Simple-projects" title=
+  "Simple projects" />
+  <link rel="prev" href="ede_002dlinux.html#ede_002dlinux" title=
+  "ede-linux" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file describes EDE, the Emacs Development Environment.
 
 Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
@@ -26,8 +35,10 @@ Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,52 +48,63 @@ Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Custom-Locate"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="ede_002dlinux.html#ede_002dlinux">ede-linux</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Simple-projects.html#Simple-projects">Simple projects</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Custom-Locate" id="Custom-Locate"></a>
 
-<h4 class="subsection">6.1.5 Custom Locate</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "ede_002dlinux.html#ede_002dlinux">ede-linux</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Simple-projects.html#Simple-projects">Simple projects</a></p>
+    <hr />
+  </div>
 
-<p>The various simple project styles all have one major drawback, which
-is that the files in the project are not completely known to EDE. 
-When the EDE API is used to try and file files by some reference name
-in the project, then that could fail.
+  <h4 class="subsection">6.1.5 Custom Locate</h4>
 
-   <p>@TODO - Add ID Utils and CScope examples
+  <p>The various simple project styles all have one major drawback,
+  which is that the files in the project are not completely known
+  to EDE. When the EDE API is used to try and file files by some
+  reference name in the project, then that could fail.</p>
 
-   <p><i>EDE</i> can therefore use some external locate commands, such as the unix
-&ldquo;locate&rdquo; command, or &ldquo;GNU Global&rdquo;.
+  <p>@TODO - Add ID Utils and CScope examples</p>
 
-   <p>Configuration of the tool you want to use such as <code>locate</code>, or
-<code>global</code> will need to be done without the aid of <i>EDE</i>.  Once
-configured, however, <i>EDE</i> can use it.
+  <p><i>EDE</i> can therefore use some external locate commands,
+  such as the unix &ldquo;locate&rdquo; command, or &ldquo;GNU
+  Global&rdquo;.</p>
 
-   <p>To enable one of these tools, set the variable
-<code>ede-locate-setup-options</code> with the names of different locate
-objects.  <a href="Miscellaneous-commands.html#Miscellaneous-commands">Miscellaneous commands</a>.
+  <p>Configuration of the tool you want to use such as
+  <code>locate</code>, or <code>global</code> will need to be done
+  without the aid of <i>EDE</i>. Once configured, however,
+  <i>EDE</i> can use it.</p>
 
-   <p>Configure this in your <samp><span class="file">.emacs</span></samp> before loading in CEDET or EDE. 
-If you want to add support for GNU Global, your configuration would
-look like this:
+  <p>To enable one of these tools, set the variable
+  <code>ede-locate-setup-options</code> with the names of different
+  locate objects. <a href=
+  "Miscellaneous-commands.html#Miscellaneous-commands">Miscellaneous
+  commands</a>.</p>
 
-<pre class="example">     (setq ede-locate-setup-options '(ede-locate-global ede-locate-base))
+  <p>Configure this in your <samp><span class=
+  "file">.emacs</span></samp> before loading in CEDET or EDE. If
+  you want to add support for GNU Global, your configuration would
+  look like this:</p>
+  <pre class="example">
+     (setq ede-locate-setup-options '(ede-locate-global ede-locate-base))
 </pre>
-   <p>That way, when a search needs to be done, it will first try using
-GLOBAL.  If global is not available for that directory, then it will
-revert to the base locate object.  The base object always fails to
-find a file.
 
-   <p>You can add your own locate tool but subclassing from
-<code>ede-locate-base</code>.  The subclass should also implement two
-methods.  See the code in <samp><span class="file">ede-locate.el</span></samp> for GNU Global as a
-simple example.
+  <p>That way, when a search needs to be done, it will first try
+  using GLOBAL. If global is not available for that directory, then
+  it will revert to the base locate object. The base object always
+  fails to find a file.</p>
 
-   </body></html>
-
+  <p>You can add your own locate tool but subclassing from
+  <code>ede-locate-base</code>. The subclass should also implement
+  two methods. See the code in <samp><span class=
+  "file">ede-locate.el</span></samp> for GNU Global as a simple
+  example.</p>
+</body>
+</html>

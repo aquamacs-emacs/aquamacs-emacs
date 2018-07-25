@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,174 +19,260 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Simple Types</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Simple Types">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Simple Types">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customization-Types.html#Customization-Types" rel="up" title="Customization Types">
-<link href="Composite-Types.html#Composite-Types" rel="next" title="Composite Types">
-<link href="Customization-Types.html#Customization-Types" rel="prev" title="Customization Types">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Simple Types</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Simple Types" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Simple Types" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customization-Types.html#Customization-Types" rel=
+  "up" title="Customization Types" />
+  <link href="Composite-Types.html#Composite-Types" rel="next"
+  title="Composite Types" />
+  <link href="Customization-Types.html#Customization-Types" rel=
+  "prev" title="Customization Types" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Simple-Types" id="Simple-Types"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Composite-Types.html#Composite-Types"
+    accesskey="n" rel="next">Composite Types</a>, Up: <a href=
+    "Customization-Types.html#Customization-Types" accesskey="u"
+    rel="up">Customization Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Simple-Types-1" id="Simple-Types-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Simple-Types"></a>
-<div class="header">
-<p>
-Next: <a href="Composite-Types.html#Composite-Types" accesskey="n" rel="next">Composite Types</a>, Up: <a href="Customization-Types.html#Customization-Types" accesskey="u" rel="up">Customization Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Simple-Types-1"></a>
-<h4 class="subsection">14.4.1 Simple Types</h4>
+  <h4 class="subsection">14.4.1 Simple Types</h4>
 
-<p>This section describes all the simple customization types.  For
-several of these customization types, the customization widget
-provides inline completion with <kbd>C-M-i</kbd> or <kbd>M-<span class="key">TAB</span></kbd>.
-</p>
-<dl compact="compact">
-<dt><code>sexp</code></dt>
-<dd><p>The value may be any Lisp object that can be printed and read back.
-You can use <code>sexp</code> as a fall-back for any option, if you don&rsquo;t
-want to take the time to work out a more specific type to use.
-</p>
-</dd>
-<dt><code>integer</code></dt>
-<dd><p>The value must be an integer.
-</p>
-</dd>
-<dt><code>number</code></dt>
-<dd><p>The value must be a number (floating point or integer).
-</p>
-</dd>
-<dt><code>float</code></dt>
-<dd><p>The value must be floating point.
-</p>
-</dd>
-<dt><code>string</code></dt>
-<dd><p>The value must be a string.  The customization buffer shows the string
-without delimiting &lsquo;<samp>&quot;</samp>&rsquo; characters or &lsquo;<samp>\</samp>&rsquo; quotes.
-</p>
-</dd>
-<dt><code>regexp</code></dt>
-<dd><p>Like <code>string</code> except that the string must be a valid regular
-expression.
-</p>
-</dd>
-<dt><code>character</code></dt>
-<dd><p>The value must be a character code.  A character code is actually an
-integer, but this type shows the value by inserting the character in the
-buffer, rather than by showing the number.
-</p>
-</dd>
-<dt><code>file</code></dt>
-<dd><p>The value must be a file name.  The widget provides completion.
-</p>
-</dd>
-<dt><code>(file :must-match t)</code></dt>
-<dd><p>The value must be a file name for an existing file.  The widget
-provides completion.
-</p>
-</dd>
-<dt><code>directory</code></dt>
-<dd><p>The value must be a directory name.  The widget provides completion.
-</p>
-</dd>
-<dt><code>hook</code></dt>
-<dd><p>The value must be a list of functions.  This customization type is
-used for hook variables.  You can use the <code>:options</code> keyword in a
-hook variable&rsquo;s <code>defcustom</code> to specify a list of functions
-recommended for use in the hook; See <a href="Variable-Definitions.html#Variable-Definitions">Variable Definitions</a>.
-</p>
-</dd>
-<dt><code>symbol</code></dt>
-<dd><p>The value must be a symbol.  It appears in the customization buffer as
-the symbol name.  The widget provides completion.
-</p>
-</dd>
-<dt><code>function</code></dt>
-<dd><p>The value must be either a lambda expression or a function name.  The
-widget provides completion for function names.
-</p>
-</dd>
-<dt><code>variable</code></dt>
-<dd><p>The value must be a variable name.  The widget provides completion.
-</p>
-</dd>
-<dt><code>face</code></dt>
-<dd><p>The value must be a symbol which is a face name.  The widget provides
-completion.
-</p>
-</dd>
-<dt><code>boolean</code></dt>
-<dd><p>The value is boolean&mdash;either <code>nil</code> or <code>t</code>.  Note that by
-using <code>choice</code> and <code>const</code> together (see the next section),
-you can specify that the value must be <code>nil</code> or <code>t</code>, but also
-specify the text to describe each value in a way that fits the specific
-meaning of the alternative.
-</p>
-</dd>
-<dt><code>key-sequence</code></dt>
-<dd><p>The value is a key sequence.  The customization buffer shows the key
-sequence using the same syntax as the <kbd>kbd</kbd> function.  See <a href="Key-Sequences.html#Key-Sequences">Key Sequences</a>.
-</p>
-</dd>
-<dt><code>coding-system</code></dt>
-<dd><p>The value must be a coding-system name, and you can do completion with
-<kbd>M-<span class="key">TAB</span></kbd>.
-</p>
-</dd>
-<dt><code>color</code></dt>
-<dd><p>The value must be a valid color name.  The widget provides completion
-for color names, as well as a sample and a button for selecting a
-color name from a list of color names shown in a <samp>*Colors*</samp>
-buffer.
-</p></dd>
-</dl>
+  <p>This section describes all the simple customization types. For
+  several of these customization types, the customization widget
+  provides inline completion with <kbd>C-M-i</kbd> or
+  <kbd>M-<span class="key">TAB</span></kbd>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Composite-Types.html#Composite-Types" accesskey="n" rel="next">Composite Types</a>, Up: <a href="Customization-Types.html#Customization-Types" accesskey="u" rel="up">Customization Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><code>sexp</code></dt>
 
+    <dd>
+      <p>The value may be any Lisp object that can be printed and
+      read back. You can use <code>sexp</code> as a fall-back for
+      any option, if you don&rsquo;t want to take the time to work
+      out a more specific type to use.</p>
+    </dd>
 
+    <dt><code>integer</code></dt>
 
+    <dd>
+      <p>The value must be an integer.</p>
+    </dd>
+
+    <dt><code>number</code></dt>
+
+    <dd>
+      <p>The value must be a number (floating point or
+      integer).</p>
+    </dd>
+
+    <dt><code>float</code></dt>
+
+    <dd>
+      <p>The value must be floating point.</p>
+    </dd>
+
+    <dt><code>string</code></dt>
+
+    <dd>
+      <p>The value must be a string. The customization buffer shows
+      the string without delimiting &lsquo;<samp>"</samp>&rsquo;
+      characters or &lsquo;<samp>\</samp>&rsquo; quotes.</p>
+    </dd>
+
+    <dt><code>regexp</code></dt>
+
+    <dd>
+      <p>Like <code>string</code> except that the string must be a
+      valid regular expression.</p>
+    </dd>
+
+    <dt><code>character</code></dt>
+
+    <dd>
+      <p>The value must be a character code. A character code is
+      actually an integer, but this type shows the value by
+      inserting the character in the buffer, rather than by showing
+      the number.</p>
+    </dd>
+
+    <dt><code>file</code></dt>
+
+    <dd>
+      <p>The value must be a file name. The widget provides
+      completion.</p>
+    </dd>
+
+    <dt><code>(file :must-match t)</code></dt>
+
+    <dd>
+      <p>The value must be a file name for an existing file. The
+      widget provides completion.</p>
+    </dd>
+
+    <dt><code>directory</code></dt>
+
+    <dd>
+      <p>The value must be a directory name. The widget provides
+      completion.</p>
+    </dd>
+
+    <dt><code>hook</code></dt>
+
+    <dd>
+      <p>The value must be a list of functions. This customization
+      type is used for hook variables. You can use the
+      <code>:options</code> keyword in a hook variable&rsquo;s
+      <code>defcustom</code> to specify a list of functions
+      recommended for use in the hook; See <a href=
+      "Variable-Definitions.html#Variable-Definitions">Variable
+      Definitions</a>.</p>
+    </dd>
+
+    <dt><code>symbol</code></dt>
+
+    <dd>
+      <p>The value must be a symbol. It appears in the
+      customization buffer as the symbol name. The widget provides
+      completion.</p>
+    </dd>
+
+    <dt><code>function</code></dt>
+
+    <dd>
+      <p>The value must be either a lambda expression or a function
+      name. The widget provides completion for function names.</p>
+    </dd>
+
+    <dt><code>variable</code></dt>
+
+    <dd>
+      <p>The value must be a variable name. The widget provides
+      completion.</p>
+    </dd>
+
+    <dt><code>face</code></dt>
+
+    <dd>
+      <p>The value must be a symbol which is a face name. The
+      widget provides completion.</p>
+    </dd>
+
+    <dt><code>boolean</code></dt>
+
+    <dd>
+      <p>The value is boolean&mdash;either <code>nil</code> or
+      <code>t</code>. Note that by using <code>choice</code> and
+      <code>const</code> together (see the next section), you can
+      specify that the value must be <code>nil</code> or
+      <code>t</code>, but also specify the text to describe each
+      value in a way that fits the specific meaning of the
+      alternative.</p>
+    </dd>
+
+    <dt><code>key-sequence</code></dt>
+
+    <dd>
+      <p>The value is a key sequence. The customization buffer
+      shows the key sequence using the same syntax as the
+      <kbd>kbd</kbd> function. See <a href=
+      "Key-Sequences.html#Key-Sequences">Key Sequences</a>.</p>
+    </dd>
+
+    <dt><code>coding-system</code></dt>
+
+    <dd>
+      <p>The value must be a coding-system name, and you can do
+      completion with <kbd>M-<span class=
+      "key">TAB</span></kbd>.</p>
+    </dd>
+
+    <dt><code>color</code></dt>
+
+    <dd>
+      <p>The value must be a valid color name. The widget provides
+      completion for color names, as well as a sample and a button
+      for selecting a color name from a list of color names shown
+      in a <samp>*Colors*</samp> buffer.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Composite-Types.html#Composite-Types"
+    accesskey="n" rel="next">Composite Types</a>, Up: <a href=
+    "Customization-Types.html#Customization-Types" accesskey="u"
+    rel="up">Customization Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

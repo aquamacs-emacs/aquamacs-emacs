@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,120 +19,176 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Setcar</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Setcar">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Setcar">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Modifying-Lists.html#Modifying-Lists" rel="up" title="Modifying Lists">
-<link href="Setcdr.html#Setcdr" rel="next" title="Setcdr">
-<link href="Modifying-Lists.html#Modifying-Lists" rel="prev" title="Modifying Lists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Setcar</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Setcar" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Setcar" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Modifying-Lists.html#Modifying-Lists" rel="up" title=
+  "Modifying Lists" />
+  <link href="Setcdr.html#Setcdr" rel="next" title="Setcdr" />
+  <link href="Modifying-Lists.html#Modifying-Lists" rel="prev"
+  title="Modifying Lists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Setcar" id="Setcar"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Setcdr.html#Setcdr" accesskey="n" rel=
+    "next">Setcdr</a>, Up: <a href=
+    "Modifying-Lists.html#Modifying-Lists" accesskey="u" rel=
+    "up">Modifying Lists</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Altering-List-Elements-with-setcar" id=
+  "Altering-List-Elements-with-setcar"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Setcar"></a>
-<div class="header">
-<p>
-Next: <a href="Setcdr.html#Setcdr" accesskey="n" rel="next">Setcdr</a>, Up: <a href="Modifying-Lists.html#Modifying-Lists" accesskey="u" rel="up">Modifying Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Altering-List-Elements-with-setcar"></a>
-<h4 class="subsection">5.6.1 Altering List Elements with <code>setcar</code></h4>
-<a name="index-replace-list-element"></a>
-<a name="index-list_002c-replace-element"></a>
+  <h4 class="subsection">5.6.1 Altering List Elements with
+  <code>setcar</code></h4><a name="index-replace-list-element" id=
+  "index-replace-list-element"></a> <a name=
+  "index-list_002c-replace-element" id=
+  "index-list_002c-replace-element"></a>
 
-<p>Changing the <small>CAR</small> of a cons cell is done with <code>setcar</code>.  When
-used on a list, <code>setcar</code> replaces one element of a list with a
-different element.
-</p>
-<dl>
-<dt><a name="index-setcar"></a>Function: <strong>setcar</strong> <em>cons object</em></dt>
-<dd><p>This function stores <var>object</var> as the new <small>CAR</small> of <var>cons</var>,
-replacing its previous <small>CAR</small>.  In other words, it changes the
-<small>CAR</small> slot of <var>cons</var> to refer to <var>object</var>.  It returns the
-value <var>object</var>.  For example:
-</p>
-<div class="example">
-<pre class="example">(setq x '(1 2))
+  <p>Changing the <small>CAR</small> of a cons cell is done with
+  <code>setcar</code>. When used on a list, <code>setcar</code>
+  replaces one element of a list with a different element.</p>
+
+  <dl>
+    <dt><a name="index-setcar" id="index-setcar"></a>Function:
+    <strong>setcar</strong> <em>cons object</em></dt>
+
+    <dd>
+      <p>This function stores <var>object</var> as the new
+      <small>CAR</small> of <var>cons</var>, replacing its previous
+      <small>CAR</small>. In other words, it changes the
+      <small>CAR</small> slot of <var>cons</var> to refer to
+      <var>object</var>. It returns the value <var>object</var>.
+      For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq x '(1 2))
      &rArr; (1 2)
-</pre><pre class="example">(setcar x 4)
+</pre>
+        <pre class="example">
+(setcar x 4)
      &rArr; 4
-</pre><pre class="example">x
+</pre>
+        <pre class="example">
+x
      &rArr; (4 2)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>When a cons cell is part of the shared structure of several lists,
-storing a new <small>CAR</small> into the cons changes one element of each of
-these lists.  Here is an example:
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Create two lists that are partly shared.</span>
+  <p>When a cons cell is part of the shared structure of several
+  lists, storing a new <small>CAR</small> into the cons changes one
+  element of each of these lists. Here is an example:</p>
+
+  <div class="example">
+    <pre class="example">
+;; <span class=
+"roman">Create two lists that are partly shared.</span>
 (setq x1 '(a b c))
      &rArr; (a b c)
 (setq x2 (cons 'z (cdr x1)))
      &rArr; (z b c)
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Replace the CAR of a shared link.</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+;; <span class="roman">Replace the CAR of a shared link.</span>
 (setcar (cdr x1) 'foo)
      &rArr; foo
-x1                           ; <span class="roman">Both lists are changed.</span>
+x1                           ; <span class=
+"roman">Both lists are changed.</span>
      &rArr; (a foo c)
 x2
      &rArr; (z foo c)
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Replace the CAR of a link that is not shared.</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+;; <span class=
+"roman">Replace the CAR of a link that is not shared.</span>
 (setcar x1 'baz)
      &rArr; baz
-x1                           ; <span class="roman">Only one list is changed.</span>
+x1                           ; <span class=
+"roman">Only one list is changed.</span>
      &rArr; (baz foo c)
 x2
      &rArr; (z foo c)
-</pre></div>
+</pre>
+  </div>
 
-<p>Here is a graphical depiction of the shared structure of the two lists
-in the variables <code>x1</code> and <code>x2</code>, showing why replacing <code>b</code>
-changes them both:
-</p>
-<div class="example">
-<pre class="example">        --- ---        --- ---      --- ---
+  <p>Here is a graphical depiction of the shared structure of the
+  two lists in the variables <code>x1</code> and <code>x2</code>,
+  showing why replacing <code>b</code> changes them both:</p>
+
+  <div class="example">
+    <pre class="example">
+        --- ---        --- ---      --- ---
 x1---&gt; |   |   |----&gt; |   |   |--&gt; |   |   |--&gt; nil
         --- ---        --- ---      --- ---
          |        --&gt;   |            |
@@ -143,12 +201,15 @@ x2--&gt; |   |   |--
         |
         |
          --&gt; z
-</pre></div>
+</pre>
+  </div>
 
-<p>Here is an alternative form of box diagram, showing the same relationship:
-</p>
-<div class="example">
-<pre class="example">x1:
+  <p>Here is an alternative form of box diagram, showing the same
+  relationship:</p>
+
+  <div class="example">
+    <pre class="example">
+x1:
  --------------       --------------       --------------
 | car   | cdr  |     | car   | cdr  |     | car   | cdr  |
 |   a   |   o-------&gt;|   b   |   o-------&gt;|   c   |  nil |
@@ -161,15 +222,18 @@ x2:              |
 |   z   |   o----
 |       |      |
  --------------
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Setcdr.html#Setcdr" accesskey="n" rel="next">Setcdr</a>, Up: <a href="Modifying-Lists.html#Modifying-Lists" accesskey="u" rel="up">Modifying Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Setcdr.html#Setcdr" accesskey="n" rel=
+    "next">Setcdr</a>, Up: <a href=
+    "Modifying-Lists.html#Modifying-Lists" accesskey="u" rel=
+    "up">Modifying Lists</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

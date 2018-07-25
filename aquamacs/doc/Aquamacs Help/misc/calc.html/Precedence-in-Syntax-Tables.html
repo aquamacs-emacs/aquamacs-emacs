@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,94 +18,138 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Precedence in Syntax Tables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Precedence in Syntax Tables">
-<meta name="keywords" content="GNU Emacs Calc Manual: Precedence in Syntax Tables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Syntax-Tables.html#Syntax-Tables" rel="up" title="Syntax Tables">
-<link href="Advanced-Syntax-Patterns.html#Advanced-Syntax-Patterns" rel="next" title="Advanced Syntax Patterns">
-<link href="Syntax-Table-Basics.html#Syntax-Table-Basics" rel="prev" title="Syntax Table Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Precedence in Syntax Tables</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Precedence in Syntax Tables" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Precedence in Syntax Tables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Syntax-Tables.html#Syntax-Tables" rel="up" title=
+  "Syntax Tables" />
+  <link href=
+  "Advanced-Syntax-Patterns.html#Advanced-Syntax-Patterns" rel=
+  "next" title="Advanced Syntax Patterns" />
+  <link href="Syntax-Table-Basics.html#Syntax-Table-Basics" rel=
+  "prev" title="Syntax Table Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Precedence-in-Syntax-Tables"></a>
-<div class="header">
-<p>
-Next: <a href="Advanced-Syntax-Patterns.html#Advanced-Syntax-Patterns" accesskey="n" rel="next">Advanced Syntax Patterns</a>, Previous: <a href="Syntax-Table-Basics.html#Syntax-Table-Basics" accesskey="p" rel="prev">Syntax Table Basics</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Precedence"></a>
-<h4 class="subsubsection">6.8.11.2 Precedence</h4>
+<body lang="en" xml:lang="en">
+  <a name="Precedence-in-Syntax-Tables" id=
+  "Precedence-in-Syntax-Tables"></a>
 
-<p>Different operators are generally assigned different <em>precedences</em>.
-By default, an operator defined by a rule like
-</p>
-<div class="example">
-<pre class="example"># foo # := foo(#1,#2)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Advanced-Syntax-Patterns.html#Advanced-Syntax-Patterns"
+    accesskey="n" rel="next">Advanced Syntax Patterns</a>,
+    Previous: <a href=
+    "Syntax-Table-Basics.html#Syntax-Table-Basics" accesskey="p"
+    rel="prev">Syntax Table Basics</a>, Up: <a href=
+    "Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Precedence" id="Precedence"></a>
 
-<p>will have an extremely low precedence, so that &lsquo;<samp>2*3+4 foo 5 == 6</samp>&rsquo;
-will be parsed as &lsquo;<samp>(2*3+4) foo (5 == 6)</samp>&rsquo;.  To change the
-precedence of an operator, use the notation &lsquo;<samp>#/<var>p</var></samp>&rsquo; in
-place of &lsquo;<samp>#</samp>&rsquo;, where <var>p</var> is an integer precedence level.
-For example, 185 lies between the precedences for &lsquo;<samp>+</samp>&rsquo; and
-&lsquo;<samp>*</samp>&rsquo;, so if we change this rule to
-</p>
-<div class="example">
-<pre class="example">#/185 foo #/186 := foo(#1,#2)
-</pre></div>
+  <h4 class="subsubsection">6.8.11.2 Precedence</h4>
 
-<p>then &lsquo;<samp>2+3 foo 4*5</samp>&rsquo; will be parsed as &lsquo;<samp>2+(3 foo (4*5))</samp>&rsquo;.
-Also, because we&rsquo;ve given the righthand expression slightly higher
-precedence, our new operator will be left-associative:
-&lsquo;<samp>1 foo 2 foo 3</samp>&rsquo; will be parsed as &lsquo;<samp>(1 foo 2) foo 3</samp>&rsquo;.
-By raising the precedence of the lefthand expression instead, we
-can create a right-associative operator.
-</p>
-<p>See <a href="Composition-Basics.html#Composition-Basics">Composition Basics</a>, for a table of precedences of the
-standard Calc operators.  For the precedences of operators in other
-language modes, look in the Calc source file <samp>calc-lang.el</samp>.
-</p>
+  <p>Different operators are generally assigned different
+  <em>precedences</em>. By default, an operator defined by a rule
+  like</p>
 
+  <div class="example">
+    <pre class="example">
+# foo # := foo(#1,#2)
+</pre>
+  </div>
 
+  <p>will have an extremely low precedence, so that
+  &lsquo;<samp>2*3+4 foo 5 == 6</samp>&rsquo; will be parsed as
+  &lsquo;<samp>(2*3+4) foo (5 == 6)</samp>&rsquo;. To change the
+  precedence of an operator, use the notation
+  &lsquo;<samp>#/<var>p</var></samp>&rsquo; in place of
+  &lsquo;<samp>#</samp>&rsquo;, where <var>p</var> is an integer
+  precedence level. For example, 185 lies between the precedences
+  for &lsquo;<samp>+</samp>&rsquo; and
+  &lsquo;<samp>*</samp>&rsquo;, so if we change this rule to</p>
 
+  <div class="example">
+    <pre class="example">
+#/185 foo #/186 := foo(#1,#2)
+</pre>
+  </div>
+
+  <p>then &lsquo;<samp>2+3 foo 4*5</samp>&rsquo; will be parsed as
+  &lsquo;<samp>2+(3 foo (4*5))</samp>&rsquo;. Also, because
+  we&rsquo;ve given the righthand expression slightly higher
+  precedence, our new operator will be left-associative:
+  &lsquo;<samp>1 foo 2 foo 3</samp>&rsquo; will be parsed as
+  &lsquo;<samp>(1 foo 2) foo 3</samp>&rsquo;. By raising the
+  precedence of the lefthand expression instead, we can create a
+  right-associative operator.</p>
+
+  <p>See <a href=
+  "Composition-Basics.html#Composition-Basics">Composition
+  Basics</a>, for a table of precedences of the standard Calc
+  operators. For the precedences of operators in other language
+  modes, look in the Calc source file
+  <samp>calc-lang.el</samp>.</p>
 </body>
 </html>

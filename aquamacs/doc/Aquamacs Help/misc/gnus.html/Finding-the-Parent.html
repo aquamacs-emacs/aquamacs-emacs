@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,169 +14,248 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Finding the Parent</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Finding the Parent">
-<meta name="keywords" content="Gnus Manual: Finding the Parent">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Alternative-Approaches.html#Alternative-Approaches" rel="next" title="Alternative Approaches">
-<link href="Summary-Sorting.html#Summary-Sorting" rel="prev" title="Summary Sorting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Finding the Parent</title>
+  <meta name="description" content=
+  "Gnus Manual: Finding the Parent" />
+  <meta name="keywords" content=
+  "Gnus Manual: Finding the Parent" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Alternative-Approaches.html#Alternative-Approaches"
+  rel="next" title="Alternative Approaches" />
+  <link href="Summary-Sorting.html#Summary-Sorting" rel="prev"
+  title="Summary Sorting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Finding-the-Parent"></a>
-<div class="header">
-<p>
-Next: <a href="Alternative-Approaches.html#Alternative-Approaches" accesskey="n" rel="next">Alternative Approaches</a>, Previous: <a href="Summary-Sorting.html#Summary-Sorting" accesskey="p" rel="prev">Summary Sorting</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Finding-the-Parent-1"></a>
-<h3 class="section">3.23 Finding the Parent</h3>
-<a name="index-parent-articles"></a>
-<a name="index-referring-articles"></a>
+<body lang="en" xml:lang="en">
+  <a name="Finding-the-Parent" id="Finding-the-Parent"></a>
 
-<dl compact="compact">
-<dt><kbd>^</kbd></dt>
-<dd><a name="index-_005e-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002drefer_002dparent_002darticle"></a>
-<p>If you&rsquo;d like to read the parent of the current article, and it is not
-displayed in the summary buffer, you might still be able to.  That is,
-if the current group is fetched by <acronym>NNTP</acronym>, the parent hasn&rsquo;t expired
-and the <code>References</code> in the current article are not mangled, you
-can just press <kbd>^</kbd> or <kbd>A r</kbd>
-(<code>gnus-summary-refer-parent-article</code>).  If everything goes well,
-you&rsquo;ll get the parent.  If the parent is already displayed in the
-summary buffer, point will just move to this article.
-</p>
-<p>If given a positive numerical prefix, fetch that many articles back into
-the ancestry.  If given a negative numerical prefix, fetch just that
-ancestor.  So if you say <kbd>3 ^</kbd>, Gnus will fetch the parent, the
-grandparent and the great-grandparent of the current article.  If you say
-<kbd>-3 ^</kbd>, Gnus will only fetch the great-grandparent of the current
-article.
-</p>
-</dd>
-<dt><kbd>A R (Summary)</kbd></dt>
-<dd><a name="index-gnus_002dsummary_002drefer_002dreferences"></a>
-<a name="index-A-R-_0028Summary_0029"></a>
-<p>Fetch all articles mentioned in the <code>References</code> header of the
-article (<code>gnus-summary-refer-references</code>).
-</p>
-</dd>
-<dt><kbd>A T (Summary)</kbd></dt>
-<dd><a name="index-gnus_002dsummary_002drefer_002dthread"></a>
-<a name="index-A-T-_0028Summary_0029"></a>
-<p>Display the full thread where the current article appears
-(<code>gnus-summary-refer-thread</code>).  This command has to fetch all the
-headers in the current group to work, so it usually takes a while.  If
-you do it often, you may consider setting <code>gnus-fetch-old-headers</code>
-to <code>invisible</code> (see <a href="Filling-In-Threads.html#Filling-In-Threads">Filling In Threads</a>).  This won&rsquo;t have any
-visible effects normally, but it&rsquo;ll make this command work a whole lot
-faster.  Of course, it&rsquo;ll make group entry somewhat slow.
-</p>
-<a name="index-gnus_002drefer_002dthread_002dlimit"></a>
-<p>The <code>gnus-refer-thread-limit</code> variable says how many old (i.e.,
-articles before the first displayed in the current group) headers to
-fetch when doing this command.  The default is 200.  If <code>t</code>, all
-the available headers will be fetched.  This variable can be overridden
-by giving the <kbd>A T</kbd> command a numerical prefix.
-</p>
-</dd>
-<dt><kbd>M-^ (Summary)</kbd></dt>
-<dd><a name="index-gnus_002dsummary_002drefer_002darticle"></a>
-<a name="index-M_002d_005e-_0028Summary_0029"></a>
-<a name="index-Message_002dID"></a>
-<a name="index-fetching-by-Message_002dID"></a>
-<p>You can also ask Gnus for an arbitrary article, no matter what group it
-belongs to.  <kbd>M-^</kbd> (<code>gnus-summary-refer-article</code>) will ask you
-for a <code>Message-ID</code>, which is one of those long, hard-to-read
-thingies that look something like &lsquo;<samp>&lt;38o6up$6f2@hymir.ifi.uio.no&gt;</samp>&rsquo;.
-You have to get it all exactly right.  No fuzzy searches, I&rsquo;m afraid.
-</p>
-<p>Gnus looks for the <code>Message-ID</code> in the headers that have already
-been fetched, but also tries all the select methods specified by
-<code>gnus-refer-article-method</code> if it is not found.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Alternative-Approaches.html#Alternative-Approaches" accesskey=
+    "n" rel="next">Alternative Approaches</a>, Previous: <a href=
+    "Summary-Sorting.html#Summary-Sorting" accesskey="p" rel=
+    "prev">Summary Sorting</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Finding-the-Parent-1" id="Finding-the-Parent-1"></a>
 
-<a name="index-gnus_002drefer_002darticle_002dmethod"></a>
-<p>If the group you are reading is located on a back end that does not
-support fetching by <code>Message-ID</code> very well (like <code>nnspool</code>),
-you can set <code>gnus-refer-article-method</code> to an <acronym>NNTP</acronym> method.  It
-would, perhaps, be best if the <acronym>NNTP</acronym> server you consult is the one
-updating the spool you are reading from, but that&rsquo;s not really
-necessary.
-</p>
-<p>It can also be a list of select methods, as well as the special symbol
-<code>current</code>, which means to use the current select method.  If it
-is a list, Gnus will try all the methods in the list until it finds a
-match.
-</p>
-<p>Here&rsquo;s an example setting that will first try the current method, and
-then ask Google if that fails:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-refer-article-method
+  <h3 class="section">3.23 Finding the Parent</h3><a name=
+  "index-parent-articles" id="index-parent-articles"></a> <a name=
+  "index-referring-articles" id="index-referring-articles"></a>
+
+  <dl compact="compact">
+    <dt><kbd>^</kbd></dt>
+
+    <dd>
+      <a name="index-_005e-_0028Summary_0029" id=
+      "index-_005e-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002drefer_002dparent_002darticle" id=
+      "index-gnus_002dsummary_002drefer_002dparent_002darticle"></a>
+
+      <p>If you&rsquo;d like to read the parent of the current
+      article, and it is not displayed in the summary buffer, you
+      might still be able to. That is, if the current group is
+      fetched by <acronym>NNTP</acronym>, the parent hasn&rsquo;t
+      expired and the <code>References</code> in the current
+      article are not mangled, you can just press <kbd>^</kbd> or
+      <kbd>A r</kbd>
+      (<code>gnus-summary-refer-parent-article</code>). If
+      everything goes well, you&rsquo;ll get the parent. If the
+      parent is already displayed in the summary buffer, point will
+      just move to this article.</p>
+
+      <p>If given a positive numerical prefix, fetch that many
+      articles back into the ancestry. If given a negative
+      numerical prefix, fetch just that ancestor. So if you say
+      <kbd>3 ^</kbd>, Gnus will fetch the parent, the grandparent
+      and the great-grandparent of the current article. If you say
+      <kbd>-3 ^</kbd>, Gnus will only fetch the great-grandparent
+      of the current article.</p>
+    </dd>
+
+    <dt><kbd>A R (Summary)</kbd></dt>
+
+    <dd>
+      <a name="index-gnus_002dsummary_002drefer_002dreferences" id=
+      "index-gnus_002dsummary_002drefer_002dreferences"></a>
+      <a name="index-A-R-_0028Summary_0029" id=
+      "index-A-R-_0028Summary_0029"></a>
+
+      <p>Fetch all articles mentioned in the
+      <code>References</code> header of the article
+      (<code>gnus-summary-refer-references</code>).</p>
+    </dd>
+
+    <dt><kbd>A T (Summary)</kbd></dt>
+
+    <dd>
+      <a name="index-gnus_002dsummary_002drefer_002dthread" id=
+      "index-gnus_002dsummary_002drefer_002dthread"></a> <a name=
+      "index-A-T-_0028Summary_0029" id=
+      "index-A-T-_0028Summary_0029"></a>
+
+      <p>Display the full thread where the current article appears
+      (<code>gnus-summary-refer-thread</code>). This command has to
+      fetch all the headers in the current group to work, so it
+      usually takes a while. If you do it often, you may consider
+      setting <code>gnus-fetch-old-headers</code> to
+      <code>invisible</code> (see <a href=
+      "Filling-In-Threads.html#Filling-In-Threads">Filling In
+      Threads</a>). This won&rsquo;t have any visible effects
+      normally, but it&rsquo;ll make this command work a whole lot
+      faster. Of course, it&rsquo;ll make group entry somewhat
+      slow.</p><a name="index-gnus_002drefer_002dthread_002dlimit"
+      id="index-gnus_002drefer_002dthread_002dlimit"></a>
+
+      <p>The <code>gnus-refer-thread-limit</code> variable says how
+      many old (i.e., articles before the first displayed in the
+      current group) headers to fetch when doing this command. The
+      default is 200. If <code>t</code>, all the available headers
+      will be fetched. This variable can be overridden by giving
+      the <kbd>A T</kbd> command a numerical prefix.</p>
+    </dd>
+
+    <dt><kbd>M-^ (Summary)</kbd></dt>
+
+    <dd>
+      <a name="index-gnus_002dsummary_002drefer_002darticle" id=
+      "index-gnus_002dsummary_002drefer_002darticle"></a> <a name=
+      "index-M_002d_005e-_0028Summary_0029" id=
+      "index-M_002d_005e-_0028Summary_0029"></a> <a name=
+      "index-Message_002dID" id="index-Message_002dID"></a>
+      <a name="index-fetching-by-Message_002dID" id=
+      "index-fetching-by-Message_002dID"></a>
+
+      <p>You can also ask Gnus for an arbitrary article, no matter
+      what group it belongs to. <kbd>M-^</kbd>
+      (<code>gnus-summary-refer-article</code>) will ask you for a
+      <code>Message-ID</code>, which is one of those long,
+      hard-to-read thingies that look something like
+      &lsquo;<samp>&lt;38o6up$6f2@hymir.ifi.uio.no&gt;</samp>&rsquo;.
+      You have to get it all exactly right. No fuzzy searches,
+      I&rsquo;m afraid.</p>
+
+      <p>Gnus looks for the <code>Message-ID</code> in the headers
+      that have already been fetched, but also tries all the select
+      methods specified by <code>gnus-refer-article-method</code>
+      if it is not found.</p>
+    </dd>
+  </dl><a name="index-gnus_002drefer_002darticle_002dmethod" id=
+  "index-gnus_002drefer_002darticle_002dmethod"></a>
+
+  <p>If the group you are reading is located on a back end that
+  does not support fetching by <code>Message-ID</code> very well
+  (like <code>nnspool</code>), you can set
+  <code>gnus-refer-article-method</code> to an
+  <acronym>NNTP</acronym> method. It would, perhaps, be best if the
+  <acronym>NNTP</acronym> server you consult is the one updating
+  the spool you are reading from, but that&rsquo;s not really
+  necessary.</p>
+
+  <p>It can also be a list of select methods, as well as the
+  special symbol <code>current</code>, which means to use the
+  current select method. If it is a list, Gnus will try all the
+  methods in the list until it finds a match.</p>
+
+  <p>Here&rsquo;s an example setting that will first try the
+  current method, and then ask Google if that fails:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-refer-article-method
       '(current
-        (nnweb &quot;google&quot; (nnweb-type google))))
-</pre></div>
+        (nnweb "google" (nnweb-type google))))
+</pre>
+  </div>
 
-<p>Most of the mail back ends support fetching by <code>Message-ID</code>, but
-do not do a particularly excellent job at it.  That is, <code>nnmbox</code>,
-<code>nnbabyl</code>, <code>nnmaildir</code>, <code>nnml</code>, are able to locate
-articles from any groups, while <code>nnfolder</code>, and <code>nnimap</code> are
-only able to locate articles that have been posted to the current
-group.  <code>nnmh</code> does not support this at all.
-</p>
-<p>Fortunately, the special <code>nnregistry</code> back end is able to locate
-articles in any groups, regardless of their back end (see <a href="Registry-Article-Refer-Method.html#Registry-Article-Refer-Method">fetching by <code>Message-ID</code> using the
-registry</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Alternative-Approaches.html#Alternative-Approaches" accesskey="n" rel="next">Alternative Approaches</a>, Previous: <a href="Summary-Sorting.html#Summary-Sorting" accesskey="p" rel="prev">Summary Sorting</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Most of the mail back ends support fetching by
+  <code>Message-ID</code>, but do not do a particularly excellent
+  job at it. That is, <code>nnmbox</code>, <code>nnbabyl</code>,
+  <code>nnmaildir</code>, <code>nnml</code>, are able to locate
+  articles from any groups, while <code>nnfolder</code>, and
+  <code>nnimap</code> are only able to locate articles that have
+  been posted to the current group. <code>nnmh</code> does not
+  support this at all.</p>
 
+  <p>Fortunately, the special <code>nnregistry</code> back end is
+  able to locate articles in any groups, regardless of their back
+  end (see <a href=
+  "Registry-Article-Refer-Method.html#Registry-Article-Refer-Method">
+  fetching by <code>Message-ID</code> using the registry</a>).</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Alternative-Approaches.html#Alternative-Approaches" accesskey=
+    "n" rel="next">Alternative Approaches</a>, Previous: <a href=
+    "Summary-Sorting.html#Summary-Sorting" accesskey="p" rel=
+    "prev">Summary Sorting</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

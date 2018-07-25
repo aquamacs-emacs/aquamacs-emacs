@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,114 +19,159 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Compilation Tips</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Compilation Tips">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Compilation Tips">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Tips.html#Tips" rel="up" title="Tips">
-<link href="Warning-Tips.html#Warning-Tips" rel="next" title="Warning Tips">
-<link href="Programming-Tips.html#Programming-Tips" rel="prev" title="Programming Tips">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Compilation Tips</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Compilation Tips" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Compilation Tips" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Tips.html#Tips" rel="up" title="Tips" />
+  <link href="Warning-Tips.html#Warning-Tips" rel="next" title=
+  "Warning Tips" />
+  <link href="Programming-Tips.html#Programming-Tips" rel="prev"
+  title="Programming Tips" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Compilation-Tips" id="Compilation-Tips"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Warning-Tips.html#Warning-Tips" accesskey="n"
+    rel="next">Warning Tips</a>, Previous: <a href=
+    "Programming-Tips.html#Programming-Tips" accesskey="p" rel=
+    "prev">Programming Tips</a>, Up: <a href="Tips.html#Tips"
+    accesskey="u" rel="up">Tips</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Tips-for-Making-Compiled-Code-Fast" id=
+  "Tips-for-Making-Compiled-Code-Fast"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Compilation-Tips"></a>
-<div class="header">
-<p>
-Next: <a href="Warning-Tips.html#Warning-Tips" accesskey="n" rel="next">Warning Tips</a>, Previous: <a href="Programming-Tips.html#Programming-Tips" accesskey="p" rel="prev">Programming Tips</a>, Up: <a href="Tips.html#Tips" accesskey="u" rel="up">Tips</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Tips-for-Making-Compiled-Code-Fast"></a>
-<h3 class="section">D.4 Tips for Making Compiled Code Fast</h3>
-<a name="index-execution-speed"></a>
-<a name="index-speedups"></a>
+  <h3 class="section">D.4 Tips for Making Compiled Code
+  Fast</h3><a name="index-execution-speed" id=
+  "index-execution-speed"></a> <a name="index-speedups" id=
+  "index-speedups"></a>
 
-<p>Here are ways of improving the execution speed of byte-compiled
-Lisp programs.
-</p>
-<ul>
-<li> Profile your program, to find out where the time is being spent.
-See <a href="Profiling.html#Profiling">Profiling</a>.
+  <p>Here are ways of improving the execution speed of
+  byte-compiled Lisp programs.</p>
 
-</li><li> Use iteration rather than recursion whenever possible.
-Function calls are slow in Emacs Lisp even when a compiled function
-is calling another compiled function.
+  <ul>
+    <li>Profile your program, to find out where the time is being
+    spent. See <a href=
+    "Profiling.html#Profiling">Profiling</a>.</li>
 
-</li><li> Using the primitive list-searching functions <code>memq</code>, <code>member</code>,
-<code>assq</code>, or <code>assoc</code> is even faster than explicit iteration.  It
-can be worth rearranging a data structure so that one of these primitive
-search functions can be used.
+    <li>Use iteration rather than recursion whenever possible.
+    Function calls are slow in Emacs Lisp even when a compiled
+    function is calling another compiled function.</li>
 
-</li><li> Certain built-in functions are handled specially in byte-compiled code,
-avoiding the need for an ordinary function call.  It is a good idea to
-use these functions rather than alternatives.  To see whether a function
-is handled specially by the compiler, examine its <code>byte-compile</code>
-property.  If the property is non-<code>nil</code>, then the function is
-handled specially.
+    <li>Using the primitive list-searching functions
+    <code>memq</code>, <code>member</code>, <code>assq</code>, or
+    <code>assoc</code> is even faster than explicit iteration. It
+    can be worth rearranging a data structure so that one of these
+    primitive search functions can be used.</li>
 
-<p>For example, the following input will show you that <code>aref</code> is
-compiled specially (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>):
-</p>
-<div class="example">
-<pre class="example">(get 'aref 'byte-compile)
+    <li>Certain built-in functions are handled specially in
+    byte-compiled code, avoiding the need for an ordinary function
+    call. It is a good idea to use these functions rather than
+    alternatives. To see whether a function is handled specially by
+    the compiler, examine its <code>byte-compile</code> property.
+    If the property is non-<code>nil</code>, then the function is
+    handled specially.
+
+      <p>For example, the following input will show you that
+      <code>aref</code> is compiled specially (see <a href=
+      "Array-Functions.html#Array-Functions">Array
+      Functions</a>):</p>
+
+      <div class="example">
+        <pre class="example">
+(get 'aref 'byte-compile)
      &rArr; byte-compile-two-args
-</pre></div>
+</pre>
+      </div>
 
-<p>Note that in this case (and many others), you must first load the
-<samp>bytecomp</samp> library, which defines the <code>byte-compile</code> property.
-</p>
-</li><li> If calling a small function accounts for a substantial part of your
-program&rsquo;s running time, make the function inline.  This eliminates
-the function call overhead.  Since making a function inline reduces
-the flexibility of changing the program, don&rsquo;t do it unless it gives
-a noticeable speedup in something slow enough that users care about
-the speed.  See <a href="Inline-Functions.html#Inline-Functions">Inline Functions</a>.
-</li></ul>
+      <p>Note that in this case (and many others), you must first
+      load the <samp>bytecomp</samp> library, which defines the
+      <code>byte-compile</code> property.</p>
+    </li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Warning-Tips.html#Warning-Tips" accesskey="n" rel="next">Warning Tips</a>, Previous: <a href="Programming-Tips.html#Programming-Tips" accesskey="p" rel="prev">Programming Tips</a>, Up: <a href="Tips.html#Tips" accesskey="u" rel="up">Tips</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>If calling a small function accounts for a substantial part
+    of your program&rsquo;s running time, make the function inline.
+    This eliminates the function call overhead. Since making a
+    function inline reduces the flexibility of changing the
+    program, don&rsquo;t do it unless it gives a noticeable speedup
+    in something slow enough that users care about the speed. See
+    <a href="Inline-Functions.html#Inline-Functions">Inline
+    Functions</a>.</li>
+  </ul>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Warning-Tips.html#Warning-Tips" accesskey="n"
+    rel="next">Warning Tips</a>, Previous: <a href=
+    "Programming-Tips.html#Programming-Tips" accesskey="p" rel=
+    "prev">Programming Tips</a>, Up: <a href="Tips.html#Tips"
+    accesskey="u" rel="up">Tips</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

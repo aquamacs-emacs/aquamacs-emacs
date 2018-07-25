@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,190 +18,256 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Random Numbers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Random Numbers">
-<meta name="keywords" content="GNU Emacs Calc Manual: Random Numbers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Scientific-Functions.html#Scientific-Functions" rel="up" title="Scientific Functions">
-<link href="Random-Number-Generator.html#Random-Number-Generator" rel="next" title="Random Number Generator">
-<link href="Branch-Cuts.html#Branch-Cuts" rel="prev" title="Branch Cuts">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Random Numbers</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Random Numbers" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Random Numbers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Scientific-Functions.html#Scientific-Functions" rel=
+  "up" title="Scientific Functions" />
+  <link href="Random-Number-Generator.html#Random-Number-Generator"
+  rel="next" title="Random Number Generator" />
+  <link href="Branch-Cuts.html#Branch-Cuts" rel="prev" title=
+  "Branch Cuts" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Random-Numbers"></a>
-<div class="header">
-<p>
-Next: <a href="Combinatorial-Functions.html#Combinatorial-Functions" accesskey="n" rel="next">Combinatorial Functions</a>, Previous: <a href="Branch-Cuts.html#Branch-Cuts" accesskey="p" rel="prev">Branch Cuts</a>, Up: <a href="Scientific-Functions.html#Scientific-Functions" accesskey="u" rel="up">Scientific Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Random-Numbers-1"></a>
-<h3 class="section">8.5 Random Numbers</h3>
+<body lang="en" xml:lang="en">
+  <a name="Random-Numbers" id="Random-Numbers"></a>
 
-<a name="index-k-r"></a>
-<a name="index-calc_002drandom"></a>
-<a name="index-random"></a>
-<p>The <kbd>k r</kbd> (<code>calc-random</code>) [<code>random</code>] command produces
-random numbers of various sorts.
-</p>
-<p>Given a positive numeric prefix argument &lsquo;<samp>M</samp>&rsquo;, it produces a random
-integer &lsquo;<samp>N</samp>&rsquo; in the range
-&lsquo;<samp>0 &lt;= N &lt; M</samp>&rsquo;.
-Each possible value &lsquo;<samp>N</samp>&rsquo; appears with equal probability.
-</p>
-<p>With no numeric prefix argument, the <kbd>k r</kbd> command takes its argument
-from the stack instead.  Once again, if this is a positive integer &lsquo;<samp>M</samp>&rsquo;
-the result is a random integer less than &lsquo;<samp>M</samp>&rsquo;.  However, note that
-while numeric prefix arguments are limited to six digits or so, an &lsquo;<samp>M</samp>&rsquo;
-taken from the stack can be arbitrarily large.  If &lsquo;<samp>M</samp>&rsquo; is negative,
-the result is a random integer in the range
-&lsquo;<samp>M &lt; N &lt;= 0</samp>&rsquo;.
-</p>
-<p>If the value on the stack is a floating-point number &lsquo;<samp>M</samp>&rsquo;, the result
-is a random floating-point number &lsquo;<samp>N</samp>&rsquo; in the range
-&lsquo;<samp>0 &lt;= N &lt; M</samp>&rsquo;
-or
-&lsquo;<samp>M &lt; N &lt;= 0</samp>&rsquo;,
-according to the sign of &lsquo;<samp>M</samp>&rsquo;.
-</p>
-<p>If &lsquo;<samp>M</samp>&rsquo; is zero, the result is a Gaussian-distributed random real
-number; the distribution has a mean of zero and a standard deviation
-of one.  The algorithm used generates random numbers in pairs; thus,
-every other call to this function will be especially fast.
-</p>
-<p>If &lsquo;<samp>M</samp>&rsquo; is an error form
-&lsquo;<samp>m +/- s</samp>&rsquo;
-where <var>m</var> and
-<var>s</var>
-are both real numbers, the result uses a Gaussian distribution with mean
-<var>m</var> and standard deviation
-<var>s</var>.
-</p>
-<p>If &lsquo;<samp>M</samp>&rsquo; is an interval form, the lower and upper bounds specify the
-acceptable limits of the random numbers.  If both bounds are integers,
-the result is a random integer in the specified range.  If either bound
-is floating-point, the result is a random real number in the specified
-range.  If the interval is open at either end, the result will be sure
-not to equal that end value.  (This makes a big difference for integer
-intervals, but for floating-point intervals it&rsquo;s relatively minor:
-with a precision of 6, &lsquo;<samp>random([1.0..2.0))</samp>&rsquo; will return any of one
-million numbers from 1.00000 to 1.99999; &lsquo;<samp>random([1.0..2.0])</samp>&rsquo; may
-additionally return 2.00000, but the probability of this happening is
-extremely small.)
-</p>
-<p>If &lsquo;<samp>M</samp>&rsquo; is a vector, the result is one element taken at random from
-the vector.  All elements of the vector are given equal probabilities.
-</p>
-<a name="index-RandSeed"></a>
-<p>The sequence of numbers produced by <kbd>k r</kbd> is completely random by
-default, i.e., the sequence is seeded each time you start Calc using
-the current time and other information.  You can get a reproducible
-sequence by storing a particular &ldquo;seed value&rdquo; in the Calc variable
-<code>RandSeed</code>.  Any integer will do for a seed; integers of from 1
-to 12 digits are good.  If you later store a different integer into
-<code>RandSeed</code>, Calc will switch to a different pseudo-random
-sequence.  If you &ldquo;unstore&rdquo; <code>RandSeed</code>, Calc will re-seed itself
-from the current time.  If you store the same integer that you used
-before back into <code>RandSeed</code>, you will get the exact same sequence
-of random numbers as before.
-</p>
-<a name="index-calc_002drrandom"></a>
-<p>The <code>calc-rrandom</code> command (not on any key) produces a random real
-number between zero and one.  It is equivalent to &lsquo;<samp>random(1.0)</samp>&rsquo;.
-</p>
-<a name="index-k-a"></a>
-<a name="index-calc_002drandom_002dagain"></a>
-<p>The <kbd>k a</kbd> (<code>calc-random-again</code>) command produces another random
-number, re-using the most recent value of &lsquo;<samp>M</samp>&rsquo;.  With a numeric
-prefix argument <var>n</var>, it produces <var>n</var> more random numbers using
-that value of &lsquo;<samp>M</samp>&rsquo;.
-</p>
-<a name="index-k-h"></a>
-<a name="index-calc_002dshuffle"></a>
-<a name="index-shuffle"></a>
-<p>The <kbd>k h</kbd> (<code>calc-shuffle</code>) command produces a vector of several
-random values with no duplicates.  The value on the top of the stack
-specifies the set from which the random values are drawn, and may be any
-of the &lsquo;<samp>M</samp>&rsquo; formats described above.  The numeric prefix argument
-gives the length of the desired list.  (If you do not provide a numeric
-prefix argument, the length of the list is taken from the top of the
-stack, and &lsquo;<samp>M</samp>&rsquo; from second-to-top.)
-</p>
-<p>If &lsquo;<samp>M</samp>&rsquo; is a floating-point number, zero, or an error form (so
-that the random values are being drawn from the set of real numbers)
-there is little practical difference between using <kbd>k h</kbd> and using
-<kbd>k r</kbd> several times.  But if the set of possible values consists
-of just a few integers, or the elements of a vector, then there is
-a very real chance that multiple <kbd>k r</kbd>&rsquo;s will produce the same
-number more than once.  The <kbd>k h</kbd> command produces a vector whose
-elements are always distinct.  (Actually, there is a slight exception:
-If &lsquo;<samp>M</samp>&rsquo; is a vector, no given vector element will be drawn more
-than once, but if several elements of &lsquo;<samp>M</samp>&rsquo; are equal, they may
-each make it into the result vector.)
-</p>
-<p>One use of <kbd>k h</kbd> is to rearrange a list at random.  This happens
-if the prefix argument is equal to the number of values in the list:
-<kbd>[1, 1.5, 2, 2.5, 3] 5 k h</kbd> might produce the permuted list
-&lsquo;<samp>[2.5, 1, 1.5, 3, 2]</samp>&rsquo;.  As a convenient feature, if the argument
-<var>n</var> is negative it is replaced by the size of the set represented
-by &lsquo;<samp>M</samp>&rsquo;.  Naturally, this is allowed only when &lsquo;<samp>M</samp>&rsquo; specifies
-a small discrete set of possibilities.
-</p>
-<p>To do the equivalent of <kbd>k h</kbd> but with duplications allowed,
-given &lsquo;<samp>M</samp>&rsquo; on the stack and with <var>n</var> just entered as a numeric
-prefix, use <kbd>v b</kbd> to build a vector of copies of &lsquo;<samp>M</samp>&rsquo;, then use
-<kbd>V M k r</kbd> to &ldquo;map&rdquo; the normal <kbd>k r</kbd> function over the
-elements of this vector.  See <a href="Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Random-Number-Generator.html#Random-Number-Generator" accesskey="1">Random Number Generator</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">(Complete description of Calc&rsquo;s algorithm)
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href=
+    "Combinatorial-Functions.html#Combinatorial-Functions"
+    accesskey="n" rel="next">Combinatorial Functions</a>, Previous:
+    <a href="Branch-Cuts.html#Branch-Cuts" accesskey="p" rel=
+    "prev">Branch Cuts</a>, Up: <a href=
+    "Scientific-Functions.html#Scientific-Functions" accesskey="u"
+    rel="up">Scientific Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Random-Numbers-1" id="Random-Numbers-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Combinatorial-Functions.html#Combinatorial-Functions" accesskey="n" rel="next">Combinatorial Functions</a>, Previous: <a href="Branch-Cuts.html#Branch-Cuts" accesskey="p" rel="prev">Branch Cuts</a>, Up: <a href="Scientific-Functions.html#Scientific-Functions" accesskey="u" rel="up">Scientific Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">8.5 Random Numbers</h3><a name="index-k-r"
+  id="index-k-r"></a> <a name="index-calc_002drandom" id=
+  "index-calc_002drandom"></a> <a name="index-random" id=
+  "index-random"></a>
 
+  <p>The <kbd>k r</kbd> (<code>calc-random</code>)
+  [<code>random</code>] command produces random numbers of various
+  sorts.</p>
 
+  <p>Given a positive numeric prefix argument
+  &lsquo;<samp>M</samp>&rsquo;, it produces a random integer
+  &lsquo;<samp>N</samp>&rsquo; in the range &lsquo;<samp>0 &lt;= N
+  &lt; M</samp>&rsquo;. Each possible value
+  &lsquo;<samp>N</samp>&rsquo; appears with equal probability.</p>
 
+  <p>With no numeric prefix argument, the <kbd>k r</kbd> command
+  takes its argument from the stack instead. Once again, if this is
+  a positive integer &lsquo;<samp>M</samp>&rsquo; the result is a
+  random integer less than &lsquo;<samp>M</samp>&rsquo;. However,
+  note that while numeric prefix arguments are limited to six
+  digits or so, an &lsquo;<samp>M</samp>&rsquo; taken from the
+  stack can be arbitrarily large. If &lsquo;<samp>M</samp>&rsquo;
+  is negative, the result is a random integer in the range
+  &lsquo;<samp>M &lt; N &lt;= 0</samp>&rsquo;.</p>
+
+  <p>If the value on the stack is a floating-point number
+  &lsquo;<samp>M</samp>&rsquo;, the result is a random
+  floating-point number &lsquo;<samp>N</samp>&rsquo; in the range
+  &lsquo;<samp>0 &lt;= N &lt; M</samp>&rsquo; or &lsquo;<samp>M
+  &lt; N &lt;= 0</samp>&rsquo;, according to the sign of
+  &lsquo;<samp>M</samp>&rsquo;.</p>
+
+  <p>If &lsquo;<samp>M</samp>&rsquo; is zero, the result is a
+  Gaussian-distributed random real number; the distribution has a
+  mean of zero and a standard deviation of one. The algorithm used
+  generates random numbers in pairs; thus, every other call to this
+  function will be especially fast.</p>
+
+  <p>If &lsquo;<samp>M</samp>&rsquo; is an error form
+  &lsquo;<samp>m +/- s</samp>&rsquo; where <var>m</var> and
+  <var>s</var> are both real numbers, the result uses a Gaussian
+  distribution with mean <var>m</var> and standard deviation
+  <var>s</var>.</p>
+
+  <p>If &lsquo;<samp>M</samp>&rsquo; is an interval form, the lower
+  and upper bounds specify the acceptable limits of the random
+  numbers. If both bounds are integers, the result is a random
+  integer in the specified range. If either bound is
+  floating-point, the result is a random real number in the
+  specified range. If the interval is open at either end, the
+  result will be sure not to equal that end value. (This makes a
+  big difference for integer intervals, but for floating-point
+  intervals it&rsquo;s relatively minor: with a precision of 6,
+  &lsquo;<samp>random([1.0..2.0))</samp>&rsquo; will return any of
+  one million numbers from 1.00000 to 1.99999;
+  &lsquo;<samp>random([1.0..2.0])</samp>&rsquo; may additionally
+  return 2.00000, but the probability of this happening is
+  extremely small.)</p>
+
+  <p>If &lsquo;<samp>M</samp>&rsquo; is a vector, the result is one
+  element taken at random from the vector. All elements of the
+  vector are given equal probabilities.</p><a name="index-RandSeed"
+  id="index-RandSeed"></a>
+
+  <p>The sequence of numbers produced by <kbd>k r</kbd> is
+  completely random by default, i.e., the sequence is seeded each
+  time you start Calc using the current time and other information.
+  You can get a reproducible sequence by storing a particular
+  &ldquo;seed value&rdquo; in the Calc variable
+  <code>RandSeed</code>. Any integer will do for a seed; integers
+  of from 1 to 12 digits are good. If you later store a different
+  integer into <code>RandSeed</code>, Calc will switch to a
+  different pseudo-random sequence. If you &ldquo;unstore&rdquo;
+  <code>RandSeed</code>, Calc will re-seed itself from the current
+  time. If you store the same integer that you used before back
+  into <code>RandSeed</code>, you will get the exact same sequence
+  of random numbers as before.</p><a name="index-calc_002drrandom"
+  id="index-calc_002drrandom"></a>
+
+  <p>The <code>calc-rrandom</code> command (not on any key)
+  produces a random real number between zero and one. It is
+  equivalent to &lsquo;<samp>random(1.0)</samp>&rsquo;.</p><a name=
+  "index-k-a" id="index-k-a"></a> <a name=
+  "index-calc_002drandom_002dagain" id=
+  "index-calc_002drandom_002dagain"></a>
+
+  <p>The <kbd>k a</kbd> (<code>calc-random-again</code>) command
+  produces another random number, re-using the most recent value of
+  &lsquo;<samp>M</samp>&rsquo;. With a numeric prefix argument
+  <var>n</var>, it produces <var>n</var> more random numbers using
+  that value of &lsquo;<samp>M</samp>&rsquo;.</p><a name=
+  "index-k-h" id="index-k-h"></a> <a name="index-calc_002dshuffle"
+  id="index-calc_002dshuffle"></a> <a name="index-shuffle" id=
+  "index-shuffle"></a>
+
+  <p>The <kbd>k h</kbd> (<code>calc-shuffle</code>) command
+  produces a vector of several random values with no duplicates.
+  The value on the top of the stack specifies the set from which
+  the random values are drawn, and may be any of the
+  &lsquo;<samp>M</samp>&rsquo; formats described above. The numeric
+  prefix argument gives the length of the desired list. (If you do
+  not provide a numeric prefix argument, the length of the list is
+  taken from the top of the stack, and &lsquo;<samp>M</samp>&rsquo;
+  from second-to-top.)</p>
+
+  <p>If &lsquo;<samp>M</samp>&rsquo; is a floating-point number,
+  zero, or an error form (so that the random values are being drawn
+  from the set of real numbers) there is little practical
+  difference between using <kbd>k h</kbd> and using <kbd>k r</kbd>
+  several times. But if the set of possible values consists of just
+  a few integers, or the elements of a vector, then there is a very
+  real chance that multiple <kbd>k r</kbd>&rsquo;s will produce the
+  same number more than once. The <kbd>k h</kbd> command produces a
+  vector whose elements are always distinct. (Actually, there is a
+  slight exception: If &lsquo;<samp>M</samp>&rsquo; is a vector, no
+  given vector element will be drawn more than once, but if several
+  elements of &lsquo;<samp>M</samp>&rsquo; are equal, they may each
+  make it into the result vector.)</p>
+
+  <p>One use of <kbd>k h</kbd> is to rearrange a list at random.
+  This happens if the prefix argument is equal to the number of
+  values in the list: <kbd>[1, 1.5, 2, 2.5, 3] 5 k h</kbd> might
+  produce the permuted list &lsquo;<samp>[2.5, 1, 1.5, 3,
+  2]</samp>&rsquo;. As a convenient feature, if the argument
+  <var>n</var> is negative it is replaced by the size of the set
+  represented by &lsquo;<samp>M</samp>&rsquo;. Naturally, this is
+  allowed only when &lsquo;<samp>M</samp>&rsquo; specifies a small
+  discrete set of possibilities.</p>
+
+  <p>To do the equivalent of <kbd>k h</kbd> but with duplications
+  allowed, given &lsquo;<samp>M</samp>&rsquo; on the stack and with
+  <var>n</var> just entered as a numeric prefix, use <kbd>v b</kbd>
+  to build a vector of copies of &lsquo;<samp>M</samp>&rsquo;, then
+  use <kbd>V M k r</kbd> to &ldquo;map&rdquo; the normal <kbd>k
+  r</kbd> function over the elements of this vector. See <a href=
+  "Matrix-Functions.html#Matrix-Functions">Matrix
+  Functions</a>.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Random-Number-Generator.html#Random-Number-Generator"
+      accesskey="1">Random Number Generator</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">(Complete description of
+      Calc&rsquo;s algorithm)</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Combinatorial-Functions.html#Combinatorial-Functions"
+    accesskey="n" rel="next">Combinatorial Functions</a>, Previous:
+    <a href="Branch-Cuts.html#Branch-Cuts" accesskey="p" rel=
+    "prev">Branch Cuts</a>, Up: <a href=
+    "Scientific-Functions.html#Scientific-Functions" accesskey="u"
+    rel="up">Scientific Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2008, 2010-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,132 +14,172 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Lisp Regression Testing: Introduction</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Lisp Regression Testing: Introduction">
-<meta name="keywords" content="Emacs Lisp Regression Testing: Introduction">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="How-to-Run-Tests.html#How-to-Run-Tests" rel="next" title="How to Run Tests">
-<link href="index.html#Top" rel="prev" title="Top">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Lisp Regression Testing: Introduction</title>
+  <meta name="description" content=
+  "Emacs Lisp Regression Testing: Introduction" />
+  <meta name="keywords" content=
+  "Emacs Lisp Regression Testing: Introduction" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="How-to-Run-Tests.html#How-to-Run-Tests" rel="next"
+  title="How to Run Tests" />
+  <link href="index.html#Top" rel="prev" title="Top" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Introduction"></a>
-<div class="header">
-<p>
-Next: <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="n" rel="next">How to Run Tests</a>, Previous: <a href="index.html#Top" accesskey="p" rel="prev">Top</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Introduction-1"></a>
-<h2 class="chapter">1 Introduction</h2>
+<body lang="en" xml:lang="en">
+  <a name="Introduction" id="Introduction"></a>
 
-<p>ERT allows you to define <em>tests</em> in addition to functions,
-macros, variables, and the other usual Lisp constructs.  Tests are
-simply Lisp code: code that invokes other code and checks whether
-it behaves as expected.
-</p>
-<p>ERT keeps track of the tests that are defined and provides convenient
-commands to run them to verify whether the definitions that are
-currently loaded in Emacs pass the tests.
-</p>
-<p>Some Lisp files have comments like the following (adapted from the
-package <code>pp.el</code>):
-</p>
-<div class="lisp">
-<pre class="lisp">;; (pp-to-string '(quote quote))          ; expected: &quot;'quote&quot;
-;; (pp-to-string '((quote a) (quote b)))  ; expected: &quot;('a 'b)\n&quot;
+  <div class="header">
+    <p>Next: <a href="How-to-Run-Tests.html#How-to-Run-Tests"
+    accesskey="n" rel="next">How to Run Tests</a>, Previous:
+    <a href="index.html#Top" accesskey="p" rel="prev">Top</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Introduction-1" id="Introduction-1"></a>
+
+  <h2 class="chapter">1 Introduction</h2>
+
+  <p>ERT allows you to define <em>tests</em> in addition to
+  functions, macros, variables, and the other usual Lisp
+  constructs. Tests are simply Lisp code: code that invokes other
+  code and checks whether it behaves as expected.</p>
+
+  <p>ERT keeps track of the tests that are defined and provides
+  convenient commands to run them to verify whether the definitions
+  that are currently loaded in Emacs pass the tests.</p>
+
+  <p>Some Lisp files have comments like the following (adapted from
+  the package <code>pp.el</code>):</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+;; (pp-to-string '(quote quote))          ; expected: "'quote"
+;; (pp-to-string '((quote a) (quote b)))  ; expected: "('a 'b)\n"
 ;; (pp-to-string '('a 'b))                ; same as above
-</pre></div>
+</pre>
+  </div>
 
-<p>The code contained in these comments can be evaluated from time to
-time to compare the output with the expected output.  ERT formalizes
-this and introduces a common convention, which simplifies Emacs
-development, since programmers no longer have to manually find and
-evaluate such comments.
-</p>
-<p>An ERT test definition equivalent to the above comments is this:
-</p>
-<div class="lisp">
-<pre class="lisp">(ert-deftest pp-test-quote ()
-  &quot;Tests the rendering of `quote' symbols in `pp-to-string'.&quot;
-  (should (equal (pp-to-string '(quote quote)) &quot;'quote&quot;))
-  (should (equal (pp-to-string '((quote a) (quote b))) &quot;('a 'b)\n&quot;))
-  (should (equal (pp-to-string '('a 'b)) &quot;('a 'b)\n&quot;)))
-</pre></div>
+  <p>The code contained in these comments can be evaluated from
+  time to time to compare the output with the expected output. ERT
+  formalizes this and introduces a common convention, which
+  simplifies Emacs development, since programmers no longer have to
+  manually find and evaluate such comments.</p>
 
-<p>If you know <code>defun</code>, the syntax of <code>ert-deftest</code> should look
-familiar: This example defines a test named <code>pp-test-quote</code> that
-will pass if the three calls to <code>equal</code> all return non-<code>nil</code>.
-</p>
-<p><code>should</code> is a macro with the same meaning as <code>cl-assert</code> but
-better error reporting.  See <a href="The-should-Macro.html#The-should-Macro">The <code>should</code> Macro</a>.
-</p>
-<p>Each test should have a name that describes what functionality it tests.
-Test names can be chosen arbitrarily&mdash;they are in a
-namespace separate from functions and variables&mdash;but should follow
-the usual Emacs Lisp convention of having a prefix that indicates
-which package they belong to.  Test names are displayed by ERT when
-reporting failures and can be used when selecting which tests to run.
-</p>
-<p>The empty parentheses <code>()</code> in the first line don&rsquo;t currently have
-any meaning and are reserved for future extension.  They also make
-the syntax of <code>ert-deftest</code> more similar to that of <code>defun</code>.
-</p>
-<p>The docstring describes what feature this test tests.  When running
-tests interactively, the first line of the docstring is displayed for
-tests that fail, so it is good if the first line makes sense on its
-own.
-</p>
-<p>The body of a test can be arbitrary Lisp code.  It should have as few
-side effects as possible; each test should be written to clean up
-after itself, leaving Emacs in the same state as it was before the
-test.  Tests should clean up even if they fail.  See <a href="Tests-and-Their-Environment.html#Tests-and-Their-Environment">Tests and Their Environment</a>.
-</p>
+  <p>An ERT test definition equivalent to the above comments is
+  this:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="n" rel="next">How to Run Tests</a>, Previous: <a href="index.html#Top" accesskey="p" rel="prev">Top</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+  <div class="lisp">
+    <pre class="lisp">
+(ert-deftest pp-test-quote ()
+  "Tests the rendering of `quote' symbols in `pp-to-string'."
+  (should (equal (pp-to-string '(quote quote)) "'quote"))
+  (should (equal (pp-to-string '((quote a) (quote b))) "('a 'b)\n"))
+  (should (equal (pp-to-string '('a 'b)) "('a 'b)\n")))
+</pre>
+  </div>
 
+  <p>If you know <code>defun</code>, the syntax of
+  <code>ert-deftest</code> should look familiar: This example
+  defines a test named <code>pp-test-quote</code> that will pass if
+  the three calls to <code>equal</code> all return
+  non-<code>nil</code>.</p>
 
+  <p><code>should</code> is a macro with the same meaning as
+  <code>cl-assert</code> but better error reporting. See <a href=
+  "The-should-Macro.html#The-should-Macro">The <code>should</code>
+  Macro</a>.</p>
 
+  <p>Each test should have a name that describes what functionality
+  it tests. Test names can be chosen arbitrarily&mdash;they are in
+  a namespace separate from functions and variables&mdash;but
+  should follow the usual Emacs Lisp convention of having a prefix
+  that indicates which package they belong to. Test names are
+  displayed by ERT when reporting failures and can be used when
+  selecting which tests to run.</p>
+
+  <p>The empty parentheses <code>()</code> in the first line
+  don&rsquo;t currently have any meaning and are reserved for
+  future extension. They also make the syntax of
+  <code>ert-deftest</code> more similar to that of
+  <code>defun</code>.</p>
+
+  <p>The docstring describes what feature this test tests. When
+  running tests interactively, the first line of the docstring is
+  displayed for tests that fail, so it is good if the first line
+  makes sense on its own.</p>
+
+  <p>The body of a test can be arbitrary Lisp code. It should have
+  as few side effects as possible; each test should be written to
+  clean up after itself, leaving Emacs in the same state as it was
+  before the test. Tests should clean up even if they fail. See
+  <a href=
+  "Tests-and-Their-Environment.html#Tests-and-Their-Environment">Tests
+  and Their Environment</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="How-to-Run-Tests.html#How-to-Run-Tests"
+    accesskey="n" rel="next">How to Run Tests</a>, Previous:
+    <a href="index.html#Top" accesskey="p" rel="prev">Top</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents the Semantic library and utilities.
 
 Copyright (C) 1999-2005, 2007, 2009-2016 Free Software
@@ -15,119 +17,167 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Semantic Manual: Tag handling</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Semantic Manual: Tag handling">
-<meta name="keywords" content="Semantic Manual: Tag handling">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Semantic-Internals.html#Semantic-Internals" rel="up" title="Semantic Internals">
-<link href="Semanticdb-Internals.html#Semanticdb-Internals" rel="next" title="Semanticdb Internals">
-<link href="Parser-code.html#Parser-code" rel="prev" title="Parser code">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Semantic Manual: Tag handling</title>
+  <meta name="description" content=
+  "Semantic Manual: Tag handling" />
+  <meta name="keywords" content="Semantic Manual: Tag handling" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Semantic-Internals.html#Semantic-Internals" rel="up"
+  title="Semantic Internals" />
+  <link href="Semanticdb-Internals.html#Semanticdb-Internals" rel=
+  "next" title="Semanticdb Internals" />
+  <link href="Parser-code.html#Parser-code" rel="prev" title=
+  "Parser code" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Tag-handling"></a>
-<div class="header">
-<p>
-Next: <a href="Semanticdb-Internals.html#Semanticdb-Internals" accesskey="n" rel="next">Semanticdb Internals</a>, Previous: <a href="Parser-code.html#Parser-code" accesskey="p" rel="prev">Parser code</a>, Up: <a href="Semantic-Internals.html#Semantic-Internals" accesskey="u" rel="up">Semantic Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Tag-handling-1"></a>
-<h3 class="section">3.2 Tag handling</h3>
+<body lang="en" xml:lang="en">
+  <a name="Tag-handling" id="Tag-handling"></a>
 
-<p>A tag represents an individual item found in a buffer, such as a
-function or variable.  Tag handling is handled in several source
-files.
-</p>
-<dl compact="compact">
-<dt><samp>semantic-tag.el</samp></dt>
-<dd><p>Basic tag creation, queries, cloning, binding, and unbinding.
-</p>
-</dd>
-<dt><samp>semantic-tag-write.el</samp></dt>
-<dd><p>Write a tag or tag list to a stream.  These routines are used by
-<samp>semanticdb-file.el</samp> when saving a list of tags.
-</p>
-</dd>
-<dt><samp>semantic-tag-file.el</samp></dt>
-<dd><p>Files associated with tags.  Goto-tag, file for include, and file for
-a prototype.
-</p>
-</dd>
-<dt><samp>semantic-tag-ls.el</samp></dt>
-<dd><p>Language dependent features of a tag, such as parent calculation, slot
-protection, and other states like abstract, virtual, static, and leaf.
-</p>
-</dd>
-<dt><samp>semantic-dep.el</samp></dt>
-<dd><p>Include file handling.  Contains the include path concepts, and
-routines for looking up file names in the include path.
-</p>
-</dd>
-<dt><samp>semantic-format.el</samp></dt>
-<dd><p>Convert a tag into a nicely formatted and colored string.  Use
-<code>semantic-test-all-format-tag-functions</code> to test different output
-options.
-</p>
-</dd>
-<dt><samp>semantic-find.el</samp></dt>
-<dd><p>Find tags matching different conditions in a tag table.
-These routines are used by <samp>semanticdb-find.el</samp> once the database
-has been converted into a simpler tag table.
-</p>
-</dd>
-<dt><samp>semantic-sort.el</samp></dt>
-<dd><p>Sorting lists of tags in different ways.  Includes sorting a plain
-list of tags forward or backward.  Includes binning tags based on
-attributes (bucketize), and tag adoption for multiple references to
-the same thing.
-</p>
-</dd>
-<dt><samp>semantic-doc.el</samp></dt>
-<dd><p>Capture documentation comments from near a tag.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Semanticdb-Internals.html#Semanticdb-Internals" accesskey="n"
+    rel="next">Semanticdb Internals</a>, Previous: <a href=
+    "Parser-code.html#Parser-code" accesskey="p" rel="prev">Parser
+    code</a>, Up: <a href=
+    "Semantic-Internals.html#Semantic-Internals" accesskey="u" rel=
+    "up">Semantic Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Tag-handling-1" id="Tag-handling-1"></a>
 
+  <h3 class="section">3.2 Tag handling</h3>
 
+  <p>A tag represents an individual item found in a buffer, such as
+  a function or variable. Tag handling is handled in several source
+  files.</p>
 
+  <dl compact="compact">
+    <dt><samp>semantic-tag.el</samp></dt>
 
+    <dd>
+      <p>Basic tag creation, queries, cloning, binding, and
+      unbinding.</p>
+    </dd>
+
+    <dt><samp>semantic-tag-write.el</samp></dt>
+
+    <dd>
+      <p>Write a tag or tag list to a stream. These routines are
+      used by <samp>semanticdb-file.el</samp> when saving a list of
+      tags.</p>
+    </dd>
+
+    <dt><samp>semantic-tag-file.el</samp></dt>
+
+    <dd>
+      <p>Files associated with tags. Goto-tag, file for include,
+      and file for a prototype.</p>
+    </dd>
+
+    <dt><samp>semantic-tag-ls.el</samp></dt>
+
+    <dd>
+      <p>Language dependent features of a tag, such as parent
+      calculation, slot protection, and other states like abstract,
+      virtual, static, and leaf.</p>
+    </dd>
+
+    <dt><samp>semantic-dep.el</samp></dt>
+
+    <dd>
+      <p>Include file handling. Contains the include path concepts,
+      and routines for looking up file names in the include
+      path.</p>
+    </dd>
+
+    <dt><samp>semantic-format.el</samp></dt>
+
+    <dd>
+      <p>Convert a tag into a nicely formatted and colored string.
+      Use <code>semantic-test-all-format-tag-functions</code> to
+      test different output options.</p>
+    </dd>
+
+    <dt><samp>semantic-find.el</samp></dt>
+
+    <dd>
+      <p>Find tags matching different conditions in a tag table.
+      These routines are used by <samp>semanticdb-find.el</samp>
+      once the database has been converted into a simpler tag
+      table.</p>
+    </dd>
+
+    <dt><samp>semantic-sort.el</samp></dt>
+
+    <dd>
+      <p>Sorting lists of tags in different ways. Includes sorting
+      a plain list of tags forward or backward. Includes binning
+      tags based on attributes (bucketize), and tag adoption for
+      multiple references to the same thing.</p>
+    </dd>
+
+    <dt><samp>semantic-doc.el</samp></dt>
+
+    <dd>
+      <p>Capture documentation comments from near a tag.</p>
+    </dd>
+  </dl>
 </body>
 </html>

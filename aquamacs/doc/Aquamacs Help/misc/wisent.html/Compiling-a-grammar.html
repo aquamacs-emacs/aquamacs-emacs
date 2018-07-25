@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,129 +16,191 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Compiling a grammar</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Compiling a grammar">
-<meta name="keywords" content="Wisent Parser Development: Compiling a grammar">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Wisent-Grammar.html#Wisent-Grammar" rel="up" title="Wisent Grammar">
-<link href="Conflicts.html#Conflicts" rel="next" title="Conflicts">
-<link href="Example.html#Example" rel="prev" title="Example">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Compiling a grammar</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Compiling a grammar" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Compiling a grammar" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Wisent-Grammar.html#Wisent-Grammar" rel="up" title=
+  "Wisent Grammar" />
+  <link href="Conflicts.html#Conflicts" rel="next" title=
+  "Conflicts" />
+  <link href="Example.html#Example" rel="prev" title="Example" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Compiling-a-grammar"></a>
-<div class="header">
-<p>
-Next: <a href="Conflicts.html#Conflicts" accesskey="n" rel="next">Conflicts</a>, Previous: <a href="Example.html#Example" accesskey="p" rel="prev">Example</a>, Up: <a href="Wisent-Grammar.html#Wisent-Grammar" accesskey="u" rel="up">Wisent Grammar</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Compiling-a-grammar-1"></a>
-<h3 class="section">2.3 Compiling a grammar</h3>
+<body lang="en" xml:lang="en">
+  <a name="Compiling-a-grammar" id="Compiling-a-grammar"></a>
 
-<a name="index-automaton"></a>
-<p>After providing a context-free grammar in a suitable format, it must
-be translated into a set of tables (an <em>automaton</em>) that will be
-used to derive the parser.  Like Bison, Wisent translates grammars that
-must be <em>LALR(1)</em>.
-</p>
-<a name="index-LALR_00281_0029-grammar"></a>
-<a name="index-look_002dahead-token"></a>
-<p>A grammar is <acronym>LALR(1)</acronym> if it is possible to tell how to parse
-any portion of an input string with just a single token of look-ahead:
-the <em>look-ahead token</em>.  See <a href="http://www.gnu.org/software/bison/manual/html_node/Language-and-Grammar.html#Language-and-Grammar">(bison)Language and Grammar</a>, in the Bison manual for more information.
-</p>
-<a name="index-grammar-compilation"></a>
-<p>Grammar translation (compilation) is achieved by the function:
-</p>
-<a name="index-compiling-a-grammar"></a>
-<a name="index-wisent_002dsingle_002dstart_002dflag"></a>
-<a name="index-wisent_002dcompile_002dgrammar"></a>
-<dl>
-<dt><a name="index-wisent_002dcompile_002dgrammar-1"></a>Function: <strong>wisent-compile-grammar</strong> <em>grammar &amp;optional start-list</em></dt>
-<dd><p>Compile <var>grammar</var> and return an <acronym>LALR(1)</acronym> automaton.
-</p>
-<p>Optional argument <var>start-list</var> is a list of start symbols
-(nonterminals).  If <code>nil</code> the first nonterminal defined in the
-grammar is the default start symbol.  If <var>start-list</var> contains
-only one element, it defines the start symbol.  If <var>start-list</var>
-contains more than one element, all are defined as potential start
-symbols, unless <code>wisent-single-start-flag</code> is non-<code>nil</code>.  In
-that case the first element of <var>start-list</var> defines the start
-symbol and others are ignored.
-</p>
-<p>The <acronym>LALR(1)</acronym> automaton is a vector of the form:
-</p>
-<p><code>[<var>actions gotos starts functions</var>]</code>
-</p>
-<dl compact="compact">
-<dt><var>actions</var></dt>
-<dd><p>A state/token matrix telling the parser what to do at every state
-based on the current look-ahead token.  That is shift, reduce, accept
-or error.  See also <a href="Wisent-Parsing.html#Wisent-Parsing">Wisent Parsing</a>.
-</p>
-</dd>
-<dt><var>gotos</var></dt>
-<dd><p>A state/nonterminal matrix telling the parser the next state to go to
-after reducing with each rule.
-</p>
-</dd>
-<dt><var>starts</var></dt>
-<dd><p>An alist which maps the allowed start symbols (nonterminals) to
-lexical tokens that will be first shifted into the parser stack.
-</p>
-</dd>
-<dt><var>functions</var></dt>
-<dd><p>An obarray of semantic action symbols.  A semantic action is actually
-an Emacs Lisp function (lambda expression).
-</p></dd>
-</dl>
-</dd></dl>
+  <div class="header">
+    <p>Next: <a href="Conflicts.html#Conflicts" accesskey="n" rel=
+    "next">Conflicts</a>, Previous: <a href="Example.html#Example"
+    accesskey="p" rel="prev">Example</a>, Up: <a href=
+    "Wisent-Grammar.html#Wisent-Grammar" accesskey="u" rel=
+    "up">Wisent Grammar</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Compiling-a-grammar-1" id="Compiling-a-grammar-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Conflicts.html#Conflicts" accesskey="n" rel="next">Conflicts</a>, Previous: <a href="Example.html#Example" accesskey="p" rel="prev">Example</a>, Up: <a href="Wisent-Grammar.html#Wisent-Grammar" accesskey="u" rel="up">Wisent Grammar</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">2.3 Compiling a grammar</h3><a name=
+  "index-automaton" id="index-automaton"></a>
 
+  <p>After providing a context-free grammar in a suitable format,
+  it must be translated into a set of tables (an
+  <em>automaton</em>) that will be used to derive the parser. Like
+  Bison, Wisent translates grammars that must be
+  <em>LALR(1)</em>.</p><a name="index-LALR_00281_0029-grammar" id=
+  "index-LALR_00281_0029-grammar"></a> <a name=
+  "index-look_002dahead-token" id="index-look_002dahead-token"></a>
 
+  <p>A grammar is <acronym>LALR(1)</acronym> if it is possible to
+  tell how to parse any portion of an input string with just a
+  single token of look-ahead: the <em>look-ahead token</em>. See
+  <a href=
+  "http://www.gnu.org/software/bison/manual/html_node/Language-and-Grammar.html#Language-and-Grammar">
+  (bison)Language and Grammar</a>, in the Bison manual for more
+  information.</p><a name="index-grammar-compilation" id=
+  "index-grammar-compilation"></a>
 
+  <p>Grammar translation (compilation) is achieved by the
+  function:</p><a name="index-compiling-a-grammar" id=
+  "index-compiling-a-grammar"></a> <a name=
+  "index-wisent_002dsingle_002dstart_002dflag" id=
+  "index-wisent_002dsingle_002dstart_002dflag"></a> <a name=
+  "index-wisent_002dcompile_002dgrammar" id=
+  "index-wisent_002dcompile_002dgrammar"></a>
+
+  <dl>
+    <dt><a name="index-wisent_002dcompile_002dgrammar-1" id=
+    "index-wisent_002dcompile_002dgrammar-1"></a>Function:
+    <strong>wisent-compile-grammar</strong> <em>grammar
+    &amp;optional start-list</em></dt>
+
+    <dd>
+      <p>Compile <var>grammar</var> and return an
+      <acronym>LALR(1)</acronym> automaton.</p>
+
+      <p>Optional argument <var>start-list</var> is a list of start
+      symbols (nonterminals). If <code>nil</code> the first
+      nonterminal defined in the grammar is the default start
+      symbol. If <var>start-list</var> contains only one element,
+      it defines the start symbol. If <var>start-list</var>
+      contains more than one element, all are defined as potential
+      start symbols, unless <code>wisent-single-start-flag</code>
+      is non-<code>nil</code>. In that case the first element of
+      <var>start-list</var> defines the start symbol and others are
+      ignored.</p>
+
+      <p>The <acronym>LALR(1)</acronym> automaton is a vector of
+      the form:</p>
+
+      <p><code>[<var>actions gotos starts
+      functions</var>]</code></p>
+
+      <dl compact="compact">
+        <dt><var>actions</var></dt>
+
+        <dd>
+          <p>A state/token matrix telling the parser what to do at
+          every state based on the current look-ahead token. That
+          is shift, reduce, accept or error. See also <a href=
+          "Wisent-Parsing.html#Wisent-Parsing">Wisent
+          Parsing</a>.</p>
+        </dd>
+
+        <dt><var>gotos</var></dt>
+
+        <dd>
+          <p>A state/nonterminal matrix telling the parser the next
+          state to go to after reducing with each rule.</p>
+        </dd>
+
+        <dt><var>starts</var></dt>
+
+        <dd>
+          <p>An alist which maps the allowed start symbols
+          (nonterminals) to lexical tokens that will be first
+          shifted into the parser stack.</p>
+        </dd>
+
+        <dt><var>functions</var></dt>
+
+        <dd>
+          <p>An obarray of semantic action symbols. A semantic
+          action is actually an Emacs Lisp function (lambda
+          expression).</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Conflicts.html#Conflicts" accesskey="n" rel=
+    "next">Conflicts</a>, Previous: <a href="Example.html#Example"
+    accesskey="p" rel="prev">Example</a>, Up: <a href=
+    "Wisent-Grammar.html#Wisent-Grammar" accesskey="u" rel=
+    "up">Wisent Grammar</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

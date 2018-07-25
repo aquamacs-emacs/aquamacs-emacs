@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,116 +19,163 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Coverage Testing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Coverage Testing">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Coverage Testing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="The-Outside-Context.html#The-Outside-Context" rel="next" title="The Outside Context">
-<link href="Trace-Buffer.html#Trace-Buffer" rel="prev" title="Trace Buffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Coverage Testing</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Coverage Testing" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Coverage Testing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="The-Outside-Context.html#The-Outside-Context" rel=
+  "next" title="The Outside Context" />
+  <link href="Trace-Buffer.html#Trace-Buffer" rel="prev" title=
+  "Trace Buffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Coverage-Testing" id="Coverage-Testing"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="The-Outside-Context.html#The-Outside-Context"
+    accesskey="n" rel="next">The Outside Context</a>, Previous:
+    <a href="Trace-Buffer.html#Trace-Buffer" accesskey="p" rel=
+    "prev">Trace Buffer</a>, Up: <a href="Edebug.html#Edebug"
+    accesskey="u" rel="up">Edebug</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Coverage-Testing-1" id="Coverage-Testing-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Coverage-Testing"></a>
-<div class="header">
-<p>
-Next: <a href="The-Outside-Context.html#The-Outside-Context" accesskey="n" rel="next">The Outside Context</a>, Previous: <a href="Trace-Buffer.html#Trace-Buffer" accesskey="p" rel="prev">Trace Buffer</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Coverage-Testing-1"></a>
-<h4 class="subsection">17.2.13 Coverage Testing</h4>
+  <h4 class="subsection">17.2.13 Coverage Testing</h4><a name=
+  "index-coverage-testing-_0028Edebug_0029" id=
+  "index-coverage-testing-_0028Edebug_0029"></a> <a name=
+  "index-frequency-counts" id="index-frequency-counts"></a>
+  <a name="index-performance-analysis" id=
+  "index-performance-analysis"></a>
 
-<a name="index-coverage-testing-_0028Edebug_0029"></a>
-<a name="index-frequency-counts"></a>
-<a name="index-performance-analysis"></a>
-<p>Edebug provides rudimentary coverage testing and display of execution
-frequency.
-</p>
-<p>Coverage testing works by comparing the result of each expression with
-the previous result; each form in the program is considered covered
-if it has returned two different values since you began testing coverage
-in the current Emacs session.  Thus, to do coverage testing on your
-program, execute it under various conditions and note whether it behaves
-correctly; Edebug will tell you when you have tried enough different
-conditions that each form has returned two different values.
-</p>
-<p>Coverage testing makes execution slower, so it is only done if
-<code>edebug-test-coverage</code> is non-<code>nil</code>.  Frequency counting is
-performed for all executions of an instrumented function, even if the
-execution mode is Go-nonstop, and regardless of whether coverage testing
-is enabled.
-</p>
-<a name="index-C_002dx-X-_003d"></a>
-<a name="index-edebug_002dtemp_002ddisplay_002dfreq_002dcount"></a>
-<p>Use <kbd>C-x X =</kbd> (<code>edebug-display-freq-count</code>) to display both
-the coverage information and the frequency counts for a definition.
-Just <kbd>=</kbd> (<code>edebug-temp-display-freq-count</code>) displays the same
-information temporarily, only until you type another key.
-</p>
-<dl>
-<dt><a name="index-edebug_002ddisplay_002dfreq_002dcount"></a>Command: <strong>edebug-display-freq-count</strong></dt>
-<dd><p>This command displays the frequency count data for each line of the
-current definition.
-</p>
-<p>It inserts frequency counts as comment lines after each line of code.
-You can undo all insertions with one <code>undo</code> command.  The counts
-appear under the &lsquo;<samp>(</samp>&rsquo; before an expression or the &lsquo;<samp>)</samp>&rsquo; after
-an expression, or on the last character of a variable.  To simplify
-the display, a count is not shown if it is equal to the count of an
-earlier expression on the same line.
-</p>
-<p>The character &lsquo;<samp>=</samp>&rsquo; following the count for an expression says that
-the expression has returned the same value each time it was evaluated.
-In other words, it is not yet covered for coverage testing purposes.
-</p>
-<p>To clear the frequency count and coverage data for a definition,
-simply reinstrument it with <code>eval-defun</code>.
-</p></dd></dl>
+  <p>Edebug provides rudimentary coverage testing and display of
+  execution frequency.</p>
 
-<p>For example, after evaluating <code>(fac 5)</code> with a source
-breakpoint, and setting <code>edebug-test-coverage</code> to <code>t</code>, when
-the breakpoint is reached, the frequency data looks like this:
-</p>
-<div class="example">
-<pre class="example">(defun fac (n)
+  <p>Coverage testing works by comparing the result of each
+  expression with the previous result; each form in the program is
+  considered covered if it has returned two different values since
+  you began testing coverage in the current Emacs session. Thus, to
+  do coverage testing on your program, execute it under various
+  conditions and note whether it behaves correctly; Edebug will
+  tell you when you have tried enough different conditions that
+  each form has returned two different values.</p>
+
+  <p>Coverage testing makes execution slower, so it is only done if
+  <code>edebug-test-coverage</code> is non-<code>nil</code>.
+  Frequency counting is performed for all executions of an
+  instrumented function, even if the execution mode is Go-nonstop,
+  and regardless of whether coverage testing is
+  enabled.</p><a name="index-C_002dx-X-_003d" id=
+  "index-C_002dx-X-_003d"></a> <a name=
+  "index-edebug_002dtemp_002ddisplay_002dfreq_002dcount" id=
+  "index-edebug_002dtemp_002ddisplay_002dfreq_002dcount"></a>
+
+  <p>Use <kbd>C-x X =</kbd>
+  (<code>edebug-display-freq-count</code>) to display both the
+  coverage information and the frequency counts for a definition.
+  Just <kbd>=</kbd> (<code>edebug-temp-display-freq-count</code>)
+  displays the same information temporarily, only until you type
+  another key.</p>
+
+  <dl>
+    <dt><a name="index-edebug_002ddisplay_002dfreq_002dcount" id=
+    "index-edebug_002ddisplay_002dfreq_002dcount"></a>Command:
+    <strong>edebug-display-freq-count</strong></dt>
+
+    <dd>
+      <p>This command displays the frequency count data for each
+      line of the current definition.</p>
+
+      <p>It inserts frequency counts as comment lines after each
+      line of code. You can undo all insertions with one
+      <code>undo</code> command. The counts appear under the
+      &lsquo;<samp>(</samp>&rsquo; before an expression or the
+      &lsquo;<samp>)</samp>&rsquo; after an expression, or on the
+      last character of a variable. To simplify the display, a
+      count is not shown if it is equal to the count of an earlier
+      expression on the same line.</p>
+
+      <p>The character &lsquo;<samp>=</samp>&rsquo; following the
+      count for an expression says that the expression has returned
+      the same value each time it was evaluated. In other words, it
+      is not yet covered for coverage testing purposes.</p>
+
+      <p>To clear the frequency count and coverage data for a
+      definition, simply reinstrument it with
+      <code>eval-defun</code>.</p>
+    </dd>
+  </dl>
+
+  <p>For example, after evaluating <code>(fac 5)</code> with a
+  source breakpoint, and setting <code>edebug-test-coverage</code>
+  to <code>t</code>, when the breakpoint is reached, the frequency
+  data looks like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun fac (n)
   (if (= n 0) (edebug))
 ;#6           1      = =5
   (if (&lt; 0 n)
@@ -135,21 +184,25 @@ the breakpoint is reached, the frequency data looks like this:
 ;#    5               0
     1))
 ;#   0
-</pre></div>
+</pre>
+  </div>
 
-<p>The comment lines show that <code>fac</code> was called 6 times.  The
-first <code>if</code> statement returned 5 times with the same result each
-time; the same is true of the condition on the second <code>if</code>.
-The recursive call of <code>fac</code> did not return at all.
-</p>
+  <p>The comment lines show that <code>fac</code> was called 6
+  times. The first <code>if</code> statement returned 5 times with
+  the same result each time; the same is true of the condition on
+  the second <code>if</code>. The recursive call of
+  <code>fac</code> did not return at all.</p>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="The-Outside-Context.html#The-Outside-Context" accesskey="n" rel="next">The Outside Context</a>, Previous: <a href="Trace-Buffer.html#Trace-Buffer" accesskey="p" rel="prev">Trace Buffer</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="The-Outside-Context.html#The-Outside-Context"
+    accesskey="n" rel="next">The Outside Context</a>, Previous:
+    <a href="Trace-Buffer.html#Trace-Buffer" accesskey="p" rel=
+    "prev">Trace Buffer</a>, Up: <a href="Edebug.html#Edebug"
+    accesskey="u" rel="up">Edebug</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,124 +19,169 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Edebug Views</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Edebug Views">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Edebug Views">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="Edebug-Eval.html#Edebug-Eval" rel="next" title="Edebug Eval">
-<link href="Trapping-Errors.html#Trapping-Errors" rel="prev" title="Trapping Errors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Edebug Views</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Edebug Views" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Edebug Views" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="Edebug-Eval.html#Edebug-Eval" rel="next" title=
+  "Edebug Eval" />
+  <link href="Trapping-Errors.html#Trapping-Errors" rel="prev"
+  title="Trapping Errors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Edebug-Views" id="Edebug-Views"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Edebug-Eval.html#Edebug-Eval" accesskey="n"
+    rel="next">Edebug Eval</a>, Previous: <a href=
+    "Trapping-Errors.html#Trapping-Errors" accesskey="p" rel=
+    "prev">Trapping Errors</a>, Up: <a href="Edebug.html#Edebug"
+    accesskey="u" rel="up">Edebug</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Edebug-Views-1" id="Edebug-Views-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Edebug-Views"></a>
-<div class="header">
-<p>
-Next: <a href="Edebug-Eval.html#Edebug-Eval" accesskey="n" rel="next">Edebug Eval</a>, Previous: <a href="Trapping-Errors.html#Trapping-Errors" accesskey="p" rel="prev">Trapping Errors</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Edebug-Views-1"></a>
-<h4 class="subsection">17.2.8 Edebug Views</h4>
+  <h4 class="subsection">17.2.8 Edebug Views</h4>
 
-<p>These Edebug commands let you view aspects of the buffer and window
-status as they were before entry to Edebug.  The outside window
-configuration is the collection of windows and contents that were in
-effect outside of Edebug.
-</p>
-<dl compact="compact">
-<dt><kbd>v</kbd></dt>
-<dd><p>Switch to viewing the outside window configuration
-(<code>edebug-view-outside</code>).  Type <kbd>C-x X w</kbd> to return to Edebug.
-</p>
-</dd>
-<dt><kbd>p</kbd></dt>
-<dd><p>Temporarily display the outside current buffer with point at its
-outside position (<code>edebug-bounce-point</code>), pausing for one second
-before returning to Edebug.  With a prefix argument <var>n</var>, pause for
-<var>n</var> seconds instead.
-</p>
-</dd>
-<dt><kbd>w</kbd></dt>
-<dd><p>Move point back to the current stop point in the source code buffer
-(<code>edebug-where</code>).
-</p>
-<p>If you use this command in a different window displaying the same
-buffer, that window will be used instead to display the current
-definition in the future.
-</p>
-</dd>
-<dt><kbd>W</kbd></dt>
-<dd><p>Toggle whether Edebug saves and restores the outside window
-configuration (<code>edebug-toggle-save-windows</code>).
-</p>
-<p>With a prefix argument, <code>W</code> only toggles saving and restoring of
-the selected window.  To specify a window that is not displaying the
-source code buffer, you must use <kbd>C-x X W</kbd> from the global keymap.
-</p></dd>
-</dl>
+  <p>These Edebug commands let you view aspects of the buffer and
+  window status as they were before entry to Edebug. The outside
+  window configuration is the collection of windows and contents
+  that were in effect outside of Edebug.</p>
 
-<p>You can view the outside window configuration with <kbd>v</kbd> or just
-bounce to the point in the current buffer with <kbd>p</kbd>, even if
-it is not normally displayed.
-</p>
-<p>After moving point, you may wish to jump back to the stop point.
-You can do that with <kbd>w</kbd> from a source code buffer.  You can jump
-back to the stop point in the source code buffer from any buffer using
-<kbd>C-x X w</kbd>.
-</p>
-<p>Each time you use <kbd>W</kbd> to turn saving <em>off</em>, Edebug forgets the
-saved outside window configuration&mdash;so that even if you turn saving
-back <em>on</em>, the current window configuration remains unchanged when
-you next exit Edebug (by continuing the program).  However, the
-automatic redisplay of <samp>*edebug*</samp> and <samp>*edebug-trace*</samp> may
-conflict with the buffers you wish to see unless you have enough windows
-open.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Edebug-Eval.html#Edebug-Eval" accesskey="n" rel="next">Edebug Eval</a>, Previous: <a href="Trapping-Errors.html#Trapping-Errors" accesskey="p" rel="prev">Trapping Errors</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>v</kbd></dt>
 
+    <dd>
+      <p>Switch to viewing the outside window configuration
+      (<code>edebug-view-outside</code>). Type <kbd>C-x X w</kbd>
+      to return to Edebug.</p>
+    </dd>
 
+    <dt><kbd>p</kbd></dt>
 
+    <dd>
+      <p>Temporarily display the outside current buffer with point
+      at its outside position (<code>edebug-bounce-point</code>),
+      pausing for one second before returning to Edebug. With a
+      prefix argument <var>n</var>, pause for <var>n</var> seconds
+      instead.</p>
+    </dd>
+
+    <dt><kbd>w</kbd></dt>
+
+    <dd>
+      <p>Move point back to the current stop point in the source
+      code buffer (<code>edebug-where</code>).</p>
+
+      <p>If you use this command in a different window displaying
+      the same buffer, that window will be used instead to display
+      the current definition in the future.</p>
+    </dd>
+
+    <dt><kbd>W</kbd></dt>
+
+    <dd>
+      <p>Toggle whether Edebug saves and restores the outside
+      window configuration
+      (<code>edebug-toggle-save-windows</code>).</p>
+
+      <p>With a prefix argument, <code>W</code> only toggles saving
+      and restoring of the selected window. To specify a window
+      that is not displaying the source code buffer, you must use
+      <kbd>C-x X W</kbd> from the global keymap.</p>
+    </dd>
+  </dl>
+
+  <p>You can view the outside window configuration with
+  <kbd>v</kbd> or just bounce to the point in the current buffer
+  with <kbd>p</kbd>, even if it is not normally displayed.</p>
+
+  <p>After moving point, you may wish to jump back to the stop
+  point. You can do that with <kbd>w</kbd> from a source code
+  buffer. You can jump back to the stop point in the source code
+  buffer from any buffer using <kbd>C-x X w</kbd>.</p>
+
+  <p>Each time you use <kbd>W</kbd> to turn saving <em>off</em>,
+  Edebug forgets the saved outside window configuration&mdash;so
+  that even if you turn saving back <em>on</em>, the current window
+  configuration remains unchanged when you next exit Edebug (by
+  continuing the program). However, the automatic redisplay of
+  <samp>*edebug*</samp> and <samp>*edebug-trace*</samp> may
+  conflict with the buffers you wish to see unless you have enough
+  windows open.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Edebug-Eval.html#Edebug-Eval" accesskey="n"
+    rel="next">Edebug Eval</a>, Previous: <a href=
+    "Trapping-Errors.html#Trapping-Errors" accesskey="p" rel=
+    "prev">Trapping Errors</a>, Up: <a href="Edebug.html#Edebug"
+    accesskey="u" rel="up">Edebug</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

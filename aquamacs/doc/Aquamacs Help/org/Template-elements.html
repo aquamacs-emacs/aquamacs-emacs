@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Template elements - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Capture-templates.html#Capture-templates" title="Capture templates">
-<link rel="prev" href="Capture-templates.html#Capture-templates" title="Capture templates">
-<link rel="next" href="Template-expansion.html#Template-expansion" title="Template expansion">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Template elements - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Capture-templates.html#Capture-templates"
+  title="Capture templates" />
+  <link rel="prev" href="Capture-templates.html#Capture-templates"
+  title="Capture templates" />
+  <link rel="next" href=
+  "Template-expansion.html#Template-expansion" title=
+  "Template expansion" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +43,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,116 +56,222 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Template-elements"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Template-expansion.html#Template-expansion">Template expansion</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Capture-templates.html#Capture-templates">Capture templates</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Capture-templates.html#Capture-templates">Capture templates</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Template-elements" id="Template-elements"></a>
 
-<h5 class="subsubsection">9.1.3.1 Template elements</h5>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Template-expansion.html#Template-expansion">Template
+    expansion</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Capture-templates.html#Capture-templates">Capture
+    templates</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Capture-templates.html#Capture-templates">Capture
+    templates</a></p>
+    <hr />
+  </div>
 
-<p>Now lets look at the elements of a template definition.  Each entry in
-<code>org-capture-templates</code> is a list with the following items:
+  <h5 class="subsubsection">9.1.3.1 Template elements</h5>
 
-     <dl>
-<dt><var>keys</var><dd>The keys that will select the template, as a string, characters
-only, for example <code>"a"</code> for a template to be selected with a
-single key, or <code>"bt"</code> for selection with two keys.  When using
-several keys, keys using the same prefix key must be sequential
-in the list and preceded by a 2-element entry explaining the
-prefix key, for example
-     <pre class="example">                   ("b" "Templates for marking stuff to buy")
+  <p>Now lets look at the elements of a template definition. Each
+  entry in <code>org-capture-templates</code> is a list with the
+  following items:</p>
+
+  <dl>
+    <dt><var>keys</var></dt>
+
+    <dd>
+      The keys that will select the template, as a string,
+      characters only, for example <code>"a"</code> for a template
+      to be selected with a single key, or <code>"bt"</code> for
+      selection with two keys. When using several keys, keys using
+      the same prefix key must be sequential in the list and
+      preceded by a 2-element entry explaining the prefix key, for
+      example
+      <pre class="example">
+                   ("b" "Templates for marking stuff to buy")
 </pre>
-     <p class="noindent">If you do not define a template for the <kbd>C</kbd> key, this key will
-be used to open the customize buffer for this complex variable.
 
-     <br><dt><var>description</var><dd>A short string describing the template, which will be shown during
-selection.
+      <p class="noindent">If you do not define a template for the
+      <kbd>C</kbd> key, this key will be used to open the customize
+      buffer for this complex variable.<br /></p>
+    </dd>
 
-     <br><dt><var>type</var><dd>The type of entry, a symbol.  Valid values are:
-          <dl>
-<dt><code>entry</code><dd>An Org-mode node, with a headline. Will be filed as the child of the
-target entry or as a top-level entry.  The target file should be an Org-mode
-file. 
-<br><dt><code>item</code><dd>A plain list item, placed in the first plain  list at the target
-location.  Again the target file should be an Org file. 
-<br><dt><code>checkitem</code><dd>A checkbox item.  This only differs from the plain list item by the
-default template. 
-<br><dt><code>table-line</code><dd>a new line in the first table at the target location.  Where exactly the
-line will be inserted depends on the properties <code>:prepend</code> and
-<code>:table-line-pos</code> (see below). 
-<br><dt><code>plain</code><dd>Text to be inserted as it is. 
-</dl>
+    <dt><var>description</var></dt>
 
-     <br><dt><var>target</var><dd><a name="index-org_002ddefault_002dnotes_002dfile-897"></a>Specification of where the captured item should be placed.  In Org-mode
-files, targets usually define a node.  Entries will become children of this
-node.  Other types will be added to the table or list in the body of this
-node.  Most target specifications contain a file name.  If that file name is
-the empty string, it defaults to <code>org-default-notes-file</code>.
+    <dd>A short string describing the template, which will be shown
+    during selection.<br /></dd>
 
-     <p>Valid values are:
-          <dl>
-<dt><code>(file "path/to/file")</code><dd>Text will be placed at the beginning or end of that file.
+    <dt><var>type</var></dt>
 
-          <br><dt><code>(id "id of existing org entry")</code><dd>Filing as child of this entry, or in the body of the entry.
+    <dd>
+      The type of entry, a symbol. Valid values are:
 
-          <br><dt><code>(file+headline "path/to/file" "node headline")</code><dd>Fast configuration if the target heading is unique in the file.
+      <dl>
+        <dt><code>entry</code></dt>
 
-          <br><dt><code>(file+olp "path/to/file" "Level 1 heading" "Level 2" ...)</code><dd>For non-unique headings, the full path is safer.
+        <dd>An Org-mode node, with a headline. Will be filed as the
+        child of the target entry or as a top-level entry. The
+        target file should be an Org-mode file.<br /></dd>
 
-          <br><dt><code>(file+regexp  "path/to/file" "regexp to find location")</code><dd>Use a regular expression to position the cursor.
+        <dt><code>item</code></dt>
 
-          <br><dt><code>(file+datetree "path/to/file")</code><dd>Will create a heading in a date tree for today's date.
+        <dd>A plain list item, placed in the first plain list at
+        the target location. Again the target file should be an Org
+        file.<br /></dd>
 
-          <br><dt><code>(file+datetree+prompt "path/to/file")</code><dd>Will create a heading in a date tree, but will prompt for the date.
+        <dt><code>checkitem</code></dt>
 
-          <br><dt><code>(file+function "path/to/file" function-finding-location)</code><dd>A function to find the right location in the file.
+        <dd>A checkbox item. This only differs from the plain list
+        item by the default template.<br /></dd>
 
-          <br><dt><code>(clock)</code><dd>File to the entry that is currently being clocked.
+        <dt><code>table-line</code></dt>
 
-          <br><dt><code>(function function-finding-location)</code><dd>Most general way, write your own function to find both
-file and location. 
-</dl>
+        <dd>a new line in the first table at the target location.
+        Where exactly the line will be inserted depends on the
+        properties <code>:prepend</code> and
+        <code>:table-line-pos</code> (see below).<br /></dd>
 
-     <br><dt><var>template</var><dd>The template for creating the capture item.  If you leave this empty, an
-appropriate default template will be used.  Otherwise this is a string with
-escape codes, which will be replaced depending on time and context of the
-capture call.  The string with escapes may be loaded from a template file,
-using the special syntax <code>(file "path/to/template")</code>.  See below for
-more details.
+        <dt><code>plain</code></dt>
 
-     <br><dt><var>properties</var><dd>The rest of the entry is a property list of additional options. 
-Recognized properties are:
-          <dl>
-<dt><code>:prepend</code><dd>Normally new captured information will be appended at
-the target location (last child, last table line, last list item...). 
-Setting this property will change that.
+        <dd>Text to be inserted as it is.</dd>
+      </dl><br />
+    </dd>
 
-          <br><dt><code>:immediate-finish</code><dd>When set, do not offer to edit the information, just
-file it away immediately.  This makes sense if the template only needs
-information that can be added automatically.
+    <dt><var>target</var></dt>
 
-          <br><dt><code>:empty-lines</code><dd>Set this to the number of lines to insert
-before and after the new item.  Default 0, only common other value is 1.
+    <dd>
+      <a name="index-org_002ddefault_002dnotes_002dfile-897" id=
+      "index-org_002ddefault_002dnotes_002dfile-897"></a>Specification
+      of where the captured item should be placed. In Org-mode
+      files, targets usually define a node. Entries will become
+      children of this node. Other types will be added to the table
+      or list in the body of this node. Most target specifications
+      contain a file name. If that file name is the empty string,
+      it defaults to <code>org-default-notes-file</code>.
 
-          <br><dt><code>:clock-in</code><dd>Start the clock in this item.
+      <p>Valid values are:</p>
 
-          <br><dt><code>:clock-resume</code><dd>If starting the capture interrupted a clock, restart that clock when finished
-with the capture.
+      <dl>
+        <dt><code>(file "path/to/file")</code></dt>
 
-          <br><dt><code>:unnarrowed</code><dd>Do not narrow the target buffer, simply show the full buffer.  Default is to
-narrow it so that you only see the new material.
+        <dd>Text will be placed at the beginning or end of that
+        file.<br /></dd>
 
-          <br><dt><code>:kill-buffer</code><dd>If the target file was not yet visited when capture was invoked, kill the
-buffer again after capture is completed. 
-</dl>
-     </dl>
+        <dt><code>(id "id of existing org entry")</code></dt>
 
-   </body></html>
+        <dd>Filing as child of this entry, or in the body of the
+        entry.<br /></dd>
 
+        <dt><code>(file+headline "path/to/file" "node
+        headline")</code></dt>
+
+        <dd>Fast configuration if the target heading is unique in
+        the file.<br /></dd>
+
+        <dt><code>(file+olp "path/to/file" "Level 1 heading" "Level
+        2" ...)</code></dt>
+
+        <dd>For non-unique headings, the full path is
+        safer.<br /></dd>
+
+        <dt><code>(file+regexp "path/to/file" "regexp to find
+        location")</code></dt>
+
+        <dd>Use a regular expression to position the
+        cursor.<br /></dd>
+
+        <dt><code>(file+datetree "path/to/file")</code></dt>
+
+        <dd>Will create a heading in a date tree for today's
+        date.<br /></dd>
+
+        <dt><code>(file+datetree+prompt "path/to/file")</code></dt>
+
+        <dd>Will create a heading in a date tree, but will prompt
+        for the date.<br /></dd>
+
+        <dt><code>(file+function "path/to/file"
+        function-finding-location)</code></dt>
+
+        <dd>A function to find the right location in the
+        file.<br /></dd>
+
+        <dt><code>(clock)</code></dt>
+
+        <dd>File to the entry that is currently being
+        clocked.<br /></dd>
+
+        <dt><code>(function function-finding-location)</code></dt>
+
+        <dd>Most general way, write your own function to find both
+        file and location.</dd>
+      </dl><br />
+    </dd>
+
+    <dt><var>template</var></dt>
+
+    <dd>The template for creating the capture item. If you leave
+    this empty, an appropriate default template will be used.
+    Otherwise this is a string with escape codes, which will be
+    replaced depending on time and context of the capture call. The
+    string with escapes may be loaded from a template file, using
+    the special syntax <code>(file "path/to/template")</code>. See
+    below for more details.<br /></dd>
+
+    <dt><var>properties</var></dt>
+
+    <dd>
+      The rest of the entry is a property list of additional
+      options. Recognized properties are:
+
+      <dl>
+        <dt><code>:prepend</code></dt>
+
+        <dd>Normally new captured information will be appended at
+        the target location (last child, last table line, last list
+        item...). Setting this property will change
+        that.<br /></dd>
+
+        <dt><code>:immediate-finish</code></dt>
+
+        <dd>When set, do not offer to edit the information, just
+        file it away immediately. This makes sense if the template
+        only needs information that can be added
+        automatically.<br /></dd>
+
+        <dt><code>:empty-lines</code></dt>
+
+        <dd>Set this to the number of lines to insert before and
+        after the new item. Default 0, only common other value is
+        1.<br /></dd>
+
+        <dt><code>:clock-in</code></dt>
+
+        <dd>Start the clock in this item.<br /></dd>
+
+        <dt><code>:clock-resume</code></dt>
+
+        <dd>If starting the capture interrupted a clock, restart
+        that clock when finished with the capture.<br /></dd>
+
+        <dt><code>:unnarrowed</code></dt>
+
+        <dd>Do not narrow the target buffer, simply show the full
+        buffer. Default is to narrow it so that you only see the
+        new material.<br /></dd>
+
+        <dt><code>:kill-buffer</code></dt>
+
+        <dd>If the target file was not yet visited when capture was
+        invoked, kill the buffer again after capture is
+        completed.</dd>
+      </dl>
+    </dd>
+  </dl>
+</body>
+</html>

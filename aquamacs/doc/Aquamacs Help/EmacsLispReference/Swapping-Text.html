@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,118 +19,164 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Swapping Text</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Swapping Text">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Swapping Text">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffers.html#Buffers" rel="up" title="Buffers">
-<link href="Buffer-Gap.html#Buffer-Gap" rel="next" title="Buffer Gap">
-<link href="Indirect-Buffers.html#Indirect-Buffers" rel="prev" title="Indirect Buffers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Swapping Text</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Swapping Text" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Swapping Text" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffers.html#Buffers" rel="up" title="Buffers" />
+  <link href="Buffer-Gap.html#Buffer-Gap" rel="next" title=
+  "Buffer Gap" />
+  <link href="Indirect-Buffers.html#Indirect-Buffers" rel="prev"
+  title="Indirect Buffers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Swapping-Text" id="Swapping-Text"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Buffer-Gap.html#Buffer-Gap" accesskey="n"
+    rel="next">Buffer Gap</a>, Previous: <a href=
+    "Indirect-Buffers.html#Indirect-Buffers" accesskey="p" rel=
+    "prev">Indirect Buffers</a>, Up: <a href="Buffers.html#Buffers"
+    accesskey="u" rel="up">Buffers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Swapping-Text-Between-Two-Buffers" id=
+  "Swapping-Text-Between-Two-Buffers"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Swapping-Text"></a>
-<div class="header">
-<p>
-Next: <a href="Buffer-Gap.html#Buffer-Gap" accesskey="n" rel="next">Buffer Gap</a>, Previous: <a href="Indirect-Buffers.html#Indirect-Buffers" accesskey="p" rel="prev">Indirect Buffers</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Swapping-Text-Between-Two-Buffers"></a>
-<h3 class="section">26.12 Swapping Text Between Two Buffers</h3>
-<a name="index-swap-text-between-buffers"></a>
-<a name="index-virtual-buffers"></a>
+  <h3 class="section">26.12 Swapping Text Between Two
+  Buffers</h3><a name="index-swap-text-between-buffers" id=
+  "index-swap-text-between-buffers"></a> <a name=
+  "index-virtual-buffers" id="index-virtual-buffers"></a>
 
-<p>Specialized modes sometimes need to let the user access from the
-same buffer several vastly different types of text.  For example, you
-may need to display a summary of the buffer text, in addition to
-letting the user access the text itself.
-</p>
-<p>This could be implemented with multiple buffers (kept in sync when
-the user edits the text), or with narrowing (see <a href="Narrowing.html#Narrowing">Narrowing</a>).  But
-these alternatives might sometimes become tedious or prohibitively
-expensive, especially if each type of text requires expensive
-buffer-global operations in order to provide correct display and
-editing commands.
-</p>
-<p>Emacs provides another facility for such modes: you can quickly swap
-buffer text between two buffers with <code>buffer-swap-text</code>.  This
-function is very fast because it doesn&rsquo;t move any text, it only
-changes the internal data structures of the buffer object to point to
-a different chunk of text.  Using it, you can pretend that a group of
-two or more buffers are actually a single virtual buffer that holds
-the contents of all the individual buffers together.
-</p>
-<dl>
-<dt><a name="index-buffer_002dswap_002dtext"></a>Function: <strong>buffer-swap-text</strong> <em>buffer</em></dt>
-<dd><p>This function swaps the text of the current buffer and that of its
-argument <var>buffer</var>.  It signals an error if one of the two buffers
-is an indirect buffer (see <a href="Indirect-Buffers.html#Indirect-Buffers">Indirect Buffers</a>) or is a base buffer
-of an indirect buffer.
-</p>
-<p>All the buffer properties that are related to the buffer text are
-swapped as well: the positions of point and mark, all the markers, the
-overlays, the text properties, the undo list, the value of the
-<code>enable-multibyte-characters</code> flag (see <a href="Text-Representations.html#Text-Representations">enable-multibyte-characters</a>), etc.
-</p>
-<p><strong>Warning:</strong> If this function is called from within a
-<code>save-excursion</code> form, the current buffer will be set to
-<var>buffer</var> upon leaving the form, since the marker used by
-<code>save-excursion</code> to save the position and buffer will be swapped
-as well.
-</p></dd></dl>
+  <p>Specialized modes sometimes need to let the user access from
+  the same buffer several vastly different types of text. For
+  example, you may need to display a summary of the buffer text, in
+  addition to letting the user access the text itself.</p>
 
-<p>If you use <code>buffer-swap-text</code> on a file-visiting buffer, you
-should set up a hook to save the buffer&rsquo;s original text rather than
-what it was swapped with.  <code>write-region-annotate-functions</code>
-works for this purpose.  You should probably set
-<code>buffer-saved-size</code> to −2 in the buffer, so that changes
-in the text it is swapped with will not interfere with auto-saving.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Buffer-Gap.html#Buffer-Gap" accesskey="n" rel="next">Buffer Gap</a>, Previous: <a href="Indirect-Buffers.html#Indirect-Buffers" accesskey="p" rel="prev">Indirect Buffers</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>This could be implemented with multiple buffers (kept in sync
+  when the user edits the text), or with narrowing (see <a href=
+  "Narrowing.html#Narrowing">Narrowing</a>). But these alternatives
+  might sometimes become tedious or prohibitively expensive,
+  especially if each type of text requires expensive buffer-global
+  operations in order to provide correct display and editing
+  commands.</p>
 
+  <p>Emacs provides another facility for such modes: you can
+  quickly swap buffer text between two buffers with
+  <code>buffer-swap-text</code>. This function is very fast because
+  it doesn&rsquo;t move any text, it only changes the internal data
+  structures of the buffer object to point to a different chunk of
+  text. Using it, you can pretend that a group of two or more
+  buffers are actually a single virtual buffer that holds the
+  contents of all the individual buffers together.</p>
 
+  <dl>
+    <dt><a name="index-buffer_002dswap_002dtext" id=
+    "index-buffer_002dswap_002dtext"></a>Function:
+    <strong>buffer-swap-text</strong> <em>buffer</em></dt>
 
+    <dd>
+      <p>This function swaps the text of the current buffer and
+      that of its argument <var>buffer</var>. It signals an error
+      if one of the two buffers is an indirect buffer (see <a href=
+      "Indirect-Buffers.html#Indirect-Buffers">Indirect
+      Buffers</a>) or is a base buffer of an indirect buffer.</p>
+
+      <p>All the buffer properties that are related to the buffer
+      text are swapped as well: the positions of point and mark,
+      all the markers, the overlays, the text properties, the undo
+      list, the value of the
+      <code>enable-multibyte-characters</code> flag (see <a href=
+      "Text-Representations.html#Text-Representations">enable-multibyte-characters</a>),
+      etc.</p>
+
+      <p><strong>Warning:</strong> If this function is called from
+      within a <code>save-excursion</code> form, the current buffer
+      will be set to <var>buffer</var> upon leaving the form, since
+      the marker used by <code>save-excursion</code> to save the
+      position and buffer will be swapped as well.</p>
+    </dd>
+  </dl>
+
+  <p>If you use <code>buffer-swap-text</code> on a file-visiting
+  buffer, you should set up a hook to save the buffer&rsquo;s
+  original text rather than what it was swapped with.
+  <code>write-region-annotate-functions</code> works for this
+  purpose. You should probably set <code>buffer-saved-size</code>
+  to &acirc;&circ;&rsquo;2 in the buffer, so that changes in the
+  text it is swapped with will not interfere with auto-saving.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Buffer-Gap.html#Buffer-Gap" accesskey="n"
+    rel="next">Buffer Gap</a>, Previous: <a href=
+    "Indirect-Buffers.html#Indirect-Buffers" accesskey="p" rel=
+    "prev">Indirect Buffers</a>, Up: <a href="Buffers.html#Buffers"
+    accesskey="u" rel="up">Buffers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,105 +14,184 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Decoding Articles</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Decoding Articles">
-<meta name="keywords" content="Gnus Manual: Decoding Articles">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Uuencoded-Articles.html#Uuencoded-Articles" rel="next" title="Uuencoded Articles">
-<link href="Saving-Articles.html#Saving-Articles" rel="prev" title="Saving Articles">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Decoding Articles</title>
+  <meta name="description" content=
+  "Gnus Manual: Decoding Articles" />
+  <meta name="keywords" content="Gnus Manual: Decoding Articles" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Uuencoded-Articles.html#Uuencoded-Articles" rel=
+  "next" title="Uuencoded Articles" />
+  <link href="Saving-Articles.html#Saving-Articles" rel="prev"
+  title="Saving Articles" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Decoding-Articles"></a>
-<div class="header">
-<p>
-Next: <a href="Article-Treatment.html#Article-Treatment" accesskey="n" rel="next">Article Treatment</a>, Previous: <a href="Saving-Articles.html#Saving-Articles" accesskey="p" rel="prev">Saving Articles</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Decoding-Articles-1"></a>
-<h3 class="section">3.17 Decoding Articles</h3>
-<a name="index-decoding-articles"></a>
+<body lang="en" xml:lang="en">
+  <a name="Decoding-Articles" id="Decoding-Articles"></a>
 
-<p>Sometime users post articles (or series of articles) that have been
-encoded in some way or other.  Gnus can decode them for you.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Uuencoded-Articles.html#Uuencoded-Articles" accesskey="1">Uuencoded Articles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Uudecode articles.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Shell-Archives.html#Shell-Archives" accesskey="2">Shell Archives</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Unshar articles.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="PostScript-Files.html#PostScript-Files" accesskey="3">PostScript Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Split PostScript.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Other-Files.html#Other-Files" accesskey="4">Other Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Plain save and binhex.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Decoding-Variables.html#Decoding-Variables" accesskey="5">Decoding Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Variables for a happy decoding.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Viewing-Files.html#Viewing-Files" accesskey="6">Viewing Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You want to look at the result of the decoding?
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Article-Treatment.html#Article-Treatment"
+    accesskey="n" rel="next">Article Treatment</a>, Previous:
+    <a href="Saving-Articles.html#Saving-Articles" accesskey="p"
+    rel="prev">Saving Articles</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Decoding-Articles-1" id="Decoding-Articles-1"></a>
 
-<a name="index-series"></a>
-<a name="index-article-series"></a>
-<p>All these functions use the process/prefix convention
-(see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>) for finding out what articles to work on, with
-the extension that a &ldquo;single article&rdquo; means &ldquo;a single series&rdquo;.  Gnus
-can find out by itself what articles belong to a series, decode all the
-articles and unpack/view/save the resulting file(s).
-</p>
-<p>Gnus guesses what articles are in the series according to the following
-simplish rule: The subjects must be (nearly) identical, except for the
-last two numbers of the line.  (Spaces are largely ignored, however.)
-</p>
-<p>For example: If you choose a subject called &lsquo;<samp>cat.gif (2/3)</samp>&rsquo;, Gnus
-will find all the articles that match the regexp &lsquo;<samp>^cat.gif
-([0-9]+/[0-9]+).*$</samp>&rsquo;.
-</p>
-<p>Subjects that are non-standard, like &lsquo;<samp>cat.gif (2/3) Part 6 of a
-series</samp>&rsquo;, will not be properly recognized by any of the automatic viewing
-commands, and you have to mark the articles manually with <kbd>#</kbd>.
-</p>
+  <h3 class="section">3.17 Decoding Articles</h3><a name=
+  "index-decoding-articles" id="index-decoding-articles"></a>
 
+  <p>Sometime users post articles (or series of articles) that have
+  been encoded in some way or other. Gnus can decode them for
+  you.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Uuencoded-Articles.html#Uuencoded-Articles" accesskey=
+      "1">Uuencoded Articles</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Uudecode articles.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Shell-Archives.html#Shell-Archives" accesskey="2">Shell
+      Archives</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Unshar articles.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "PostScript-Files.html#PostScript-Files" accesskey=
+      "3">PostScript Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Split PostScript.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Other-Files.html#Other-Files" accesskey="4">Other
+      Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Plain save and binhex.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Decoding-Variables.html#Decoding-Variables" accesskey=
+      "5">Decoding Variables</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Variables for a happy
+      decoding.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Viewing-Files.html#Viewing-Files" accesskey="6">Viewing
+      Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">You want to look at the result
+      of the decoding?</td>
+    </tr>
+  </table><a name="index-series" id="index-series"></a> <a name=
+  "index-article-series" id="index-article-series"></a>
+
+  <p>All these functions use the process/prefix convention (see
+  <a href=
+  "Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>)
+  for finding out what articles to work on, with the extension that
+  a &ldquo;single article&rdquo; means &ldquo;a single
+  series&rdquo;. Gnus can find out by itself what articles belong
+  to a series, decode all the articles and unpack/view/save the
+  resulting file(s).</p>
+
+  <p>Gnus guesses what articles are in the series according to the
+  following simplish rule: The subjects must be (nearly) identical,
+  except for the last two numbers of the line. (Spaces are largely
+  ignored, however.)</p>
+
+  <p>For example: If you choose a subject called
+  &lsquo;<samp>cat.gif (2/3)</samp>&rsquo;, Gnus will find all the
+  articles that match the regexp &lsquo;<samp>^cat.gif
+  ([0-9]+/[0-9]+).*$</samp>&rsquo;.</p>
+
+  <p>Subjects that are non-standard, like &lsquo;<samp>cat.gif
+  (2/3) Part 6 of a series</samp>&rsquo;, will not be properly
+  recognized by any of the automatic viewing commands, and you have
+  to mark the articles manually with <kbd>#</kbd>.</p>
 </body>
 </html>

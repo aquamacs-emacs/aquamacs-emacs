@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,137 +18,187 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Creating Labels</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Creating Labels">
-<meta name="keywords" content="RefTeX User Manual: Creating Labels">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Labels-and-References.html#Labels-and-References" rel="up" title="Labels and References">
-<link href="Referencing-Labels.html#Referencing-Labels" rel="next" title="Referencing Labels">
-<link href="Labels-and-References.html#Labels-and-References" rel="prev" title="Labels and References">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Creating Labels</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Creating Labels" />
+  <meta name="keywords" content=
+  "RefTeX User Manual: Creating Labels" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Labels-and-References.html#Labels-and-References"
+  rel="up" title="Labels and References" />
+  <link href="Referencing-Labels.html#Referencing-Labels" rel=
+  "next" title="Referencing Labels" />
+  <link href="Labels-and-References.html#Labels-and-References"
+  rel="prev" title="Labels and References" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-Labels"></a>
-<div class="header">
-<p>
-Next: <a href="Referencing-Labels.html#Referencing-Labels" accesskey="n" rel="next">Referencing Labels</a>, Up: <a href="Labels-and-References.html#Labels-and-References" accesskey="u" rel="up">Labels and References</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-Labels-1"></a>
-<h3 class="section">3.1 Creating Labels</h3>
-<a name="index-Creating-labels"></a>
-<a name="index-Labels_002c-creating"></a>
-<a name="index-Labels_002c-deriving-from-context"></a>
-<a name="index-C_002dc-_0028"></a>
-<a name="index-reftex_002dlabel"></a>
+<body lang="en" xml:lang="en">
+  <a name="Creating-Labels" id="Creating-Labels"></a>
 
-<p>In order to create a label in a LaTeX document, press <kbd>C-c (</kbd>
-(<code>reftex-label</code>).  Just like LaTeX, RefTeX is context sensitive
-and will figure out the environment it currently is in and adapt the
-label to that environment.  A label usually consists of a short prefix
-indicating the type of the label and a unique mark.  RefTeX has
-three different modes to create this mark.
-</p>
-<ol>
-<li> <a name="index-reftex_002dtranslate_002dto_002dascii_002dfunction-1"></a>
-<a name="index-reftex_002dderive_002dlabel_002dparameters"></a>
-<a name="index-reftex_002dlabel_002dillegal_002dre"></a>
-<a name="index-reftex_002dabbrev_002dparameters"></a>
-A label can be derived from context.  This means, RefTeX takes
-the context of the label definition and constructs a label from
-that<a name="DOCF1" href="#FOOT1"><sup>1</sup></a>.  This works best for section labels,
-where the section heading is used to construct a label.  In fact,
-RefTeX&rsquo;s default settings use this method only for section
-labels.  You will be asked to confirm the derived label, or edit
-it.
+  <div class="header">
+    <p>Next: <a href="Referencing-Labels.html#Referencing-Labels"
+    accesskey="n" rel="next">Referencing Labels</a>, Up: <a href=
+    "Labels-and-References.html#Labels-and-References" accesskey=
+    "u" rel="up">Labels and References</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-Labels-1" id="Creating-Labels-1"></a>
 
-</li><li> We may also use a simple unique number to identify a label.  This is
-mostly useful for labels where it is difficult to come up with a very
-good descriptive name.  RefTeX&rsquo;s default settings use this method
-for equations, enumerate items and footnotes.  The author of RefTeX
-tends to write documents with many equations and finds it impossible
-to come up with good names for each of them.  These simple labels are
-inserted without query, and are therefore very fast.  Good descriptive
-names are not really necessary as RefTeX will provide context to
-reference a label (see <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a>).
+  <h3 class="section">3.1 Creating Labels</h3><a name=
+  "index-Creating-labels" id="index-Creating-labels"></a> <a name=
+  "index-Labels_002c-creating" id="index-Labels_002c-creating"></a>
+  <a name="index-Labels_002c-deriving-from-context" id=
+  "index-Labels_002c-deriving-from-context"></a> <a name=
+  "index-C_002dc-_0028" id="index-C_002dc-_0028"></a> <a name=
+  "index-reftex_002dlabel" id="index-reftex_002dlabel"></a>
 
-</li><li> The third method is to ask the user for a label.  This is most
-useful for things which are easy to describe briefly and do not turn up
-too frequently in a document.  RefTeX uses this for figures and
-tables.  Of course, one can enter the label directly by typing the full
-&lsquo;<samp>\label{mark}</samp>&rsquo;.  The advantage of using <code>reftex-label</code>
-anyway is that RefTeX will know that a new label has been defined.
-It will then not be necessary to rescan the document in order to access
-this label later.
-</li></ol>
+  <p>In order to create a label in a LaTeX document, press <kbd>C-c
+  (</kbd> (<code>reftex-label</code>). Just like LaTeX, RefTeX is
+  context sensitive and will figure out the environment it
+  currently is in and adapt the label to that environment. A label
+  usually consists of a short prefix indicating the type of the
+  label and a unique mark. RefTeX has three different modes to
+  create this mark.</p>
 
-<a name="index-reftex_002dinsert_002dlabel_002dflags"></a>
-<p>If you want to change the way certain labels are created, check out the
-variable <code>reftex-insert-label-flags</code> (see <a href="Options-_002d-Creating-Labels.html#Options-_002d-Creating-Labels">Options - Creating Labels</a>).
-</p>
-<p>If you are using AUCTeX to write your LaTeX documents, you can
-set it up to delegate the creation of labels to
-RefTeX. See <a href="AUCTeX.html#AUCTeX">AUCTeX</a>, for more information.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <ol>
+    <li><a name=
+    "index-reftex_002dtranslate_002dto_002dascii_002dfunction-1"
+    id="index-reftex_002dtranslate_002dto_002dascii_002dfunction-1">
+    </a> <a name="index-reftex_002dderive_002dlabel_002dparameters"
+    id="index-reftex_002dderive_002dlabel_002dparameters"></a>
+    <a name="index-reftex_002dlabel_002dillegal_002dre" id=
+    "index-reftex_002dlabel_002dillegal_002dre"></a> <a name=
+    "index-reftex_002dabbrev_002dparameters" id=
+    "index-reftex_002dabbrev_002dparameters"></a> A label can be
+    derived from context. This means, RefTeX takes the context of
+    the label definition and constructs a label from that<a name=
+    "DOCF1" href="#FOOT1" id="DOCF1"><sup>1</sup></a>. This works
+    best for section labels, where the section heading is used to
+    construct a label. In fact, RefTeX&rsquo;s default settings use
+    this method only for section labels. You will be asked to
+    confirm the derived label, or edit it.</li>
 
-<h3><a name="FOOT1" href="#DOCF1">(1)</a></h3>
-<p>Note that the context may contain constructs which are
-invalid in labels.  RefTeX will therefore strip the accent from
-accented Latin-1 characters and remove everything else which is not
-valid in labels.  This mechanism is safe, but may not be satisfactory
-for non-western languages.  Check the following variables if you need to
-change things: <code>reftex-translate-to-ascii-function</code>,
-<code>reftex-derive-label-parameters</code>, <code>reftex-label-illegal-re</code>,
-<code>reftex-abbrev-parameters</code>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Referencing-Labels.html#Referencing-Labels" accesskey="n" rel="next">Referencing Labels</a>, Up: <a href="Labels-and-References.html#Labels-and-References" accesskey="u" rel="up">Labels and References</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>We may also use a simple unique number to identify a label.
+    This is mostly useful for labels where it is difficult to come
+    up with a very good descriptive name. RefTeX&rsquo;s default
+    settings use this method for equations, enumerate items and
+    footnotes. The author of RefTeX tends to write documents with
+    many equations and finds it impossible to come up with good
+    names for each of them. These simple labels are inserted
+    without query, and are therefore very fast. Good descriptive
+    names are not really necessary as RefTeX will provide context
+    to reference a label (see <a href=
+    "Referencing-Labels.html#Referencing-Labels">Referencing
+    Labels</a>).</li>
 
+    <li>The third method is to ask the user for a label. This is
+    most useful for things which are easy to describe briefly and
+    do not turn up too frequently in a document. RefTeX uses this
+    for figures and tables. Of course, one can enter the label
+    directly by typing the full
+    &lsquo;<samp>\label{mark}</samp>&rsquo;. The advantage of using
+    <code>reftex-label</code> anyway is that RefTeX will know that
+    a new label has been defined. It will then not be necessary to
+    rescan the document in order to access this label later.</li>
+  </ol><a name="index-reftex_002dinsert_002dlabel_002dflags" id=
+  "index-reftex_002dinsert_002dlabel_002dflags"></a>
 
+  <p>If you want to change the way certain labels are created,
+  check out the variable <code>reftex-insert-label-flags</code>
+  (see <a href=
+  "Options-_002d-Creating-Labels.html#Options-_002d-Creating-Labels">
+  Options - Creating Labels</a>).</p>
 
+  <p>If you are using AUCTeX to write your LaTeX documents, you can
+  set it up to delegate the creation of labels to RefTeX. See
+  <a href="AUCTeX.html#AUCTeX">AUCTeX</a>, for more
+  information.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT1" href="#DOCF1" id="FOOT1">(1)</a></h3>
+
+    <p>Note that the context may contain constructs which are
+    invalid in labels. RefTeX will therefore strip the accent from
+    accented Latin-1 characters and remove everything else which is
+    not valid in labels. This mechanism is safe, but may not be
+    satisfactory for non-western languages. Check the following
+    variables if you need to change things:
+    <code>reftex-translate-to-ascii-function</code>,
+    <code>reftex-derive-label-parameters</code>,
+    <code>reftex-label-illegal-re</code>,
+    <code>reftex-abbrev-parameters</code>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Referencing-Labels.html#Referencing-Labels"
+    accesskey="n" rel="next">Referencing Labels</a>, Up: <a href=
+    "Labels-and-References.html#Labels-and-References" accesskey=
+    "u" rel="up">Labels and References</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,117 +16,208 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Customizing Indentation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Customizing Indentation">
-<meta name="keywords" content="CC Mode Manual: Customizing Indentation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="c_002doffsets_002dalist.html#c_002doffsets_002dalist" rel="next" title="c-offsets-alist">
-<link href="Indentation-Calculation.html#Indentation-Calculation" rel="prev" title="Indentation Calculation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Customizing Indentation</title>
+  <meta name="description" content=
+  "CC Mode Manual: Customizing Indentation" />
+  <meta name="keywords" content=
+  "CC Mode Manual: Customizing Indentation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="c_002doffsets_002dalist.html#c_002doffsets_002dalist"
+  rel="next" title="c-offsets-alist" />
+  <link href="Indentation-Calculation.html#Indentation-Calculation"
+  rel="prev" title="Indentation Calculation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Customizing-Indentation"></a>
-<div class="header">
-<p>
-Next: <a href="Custom-Macros.html#Custom-Macros" accesskey="n" rel="next">Custom Macros</a>, Previous: <a href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" accesskey="p" rel="prev">Indentation Engine Basics</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Customizing-Indentation-1"></a>
-<h2 class="chapter">11 Customizing Indentation</h2>
-<a name="index-customization_002c-indentation"></a>
-<a name="index-indentation-2"></a>
+<body lang="en" xml:lang="en">
+  <a name="Customizing-Indentation" id=
+  "Customizing-Indentation"></a>
 
-<p>The principal variable for customizing indentation is the style
-variable <code>c-offsets-alist</code>, which gives an <em>offset</em> (an
-indentation rule) for each syntactic symbol.  Its structure and
-semantics are completely described in <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>.  The
-various ways you can set the variable, including the use of the
-CC Mode style system, are described in <a href="Config-Basics.html#Config-Basics">Config Basics</a> and its
-sections, in particular <a href="Style-Variables.html#Style-Variables">Style Variables</a>.
-</p>
-<p>The simplest and most used kind of &ldquo;offset&rdquo; setting in
-<code>c-offsets-alist</code> is in terms of multiples of
-<code>c-basic-offset</code>:
-</p>
-<dl>
-<dt><a name="index-c_002dbasic_002doffset"></a>User Option: <strong>c-basic-offset</strong></dt>
-<dd><a name="index-basic_002doffset-_0028c_002d_0029"></a>
-<p>This style variable holds the basic offset between indentation levels.
-It&rsquo;s factory default is 4, but all the built-in styles set it
-themselves, to some value between 2 (for <code>gnu</code> style) and 8 (for
-<code>bsd</code>, <code>linux</code>, and <code>python</code> styles).
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Custom-Macros.html#Custom-Macros" accesskey=
+    "n" rel="next">Custom Macros</a>, Previous: <a href=
+    "Indentation-Engine-Basics.html#Indentation-Engine-Basics"
+    accesskey="p" rel="prev">Indentation Engine Basics</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Customizing-Indentation-1" id=
+  "Customizing-Indentation-1"></a>
 
-<p>The most flexible &ldquo;offset&rdquo; setting you can make in
-<code>c-offsets-alist</code> is a line-up function (or even a list of them),
-either one supplied by CC Mode (see <a href="Line_002dUp-Functions.html#Line_002dUp-Functions">Line-Up Functions</a>) or one
-you write yourself (see <a href="Custom-Line_002dUp.html#Custom-Line_002dUp">Custom Line-Up</a>).
-</p>
-<p>Finally, in <a href="Other-Indentation.html#Other-Indentation">Other Indentation</a> you&rsquo;ll find the tool of last
-resort: a hook which is called after a line has been indented.  You
-can install functions here to make ad-hoc adjustments to any line&rsquo;s
-indentation.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist" accesskey="1">c-offsets-alist</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Interactive-Customization.html#Interactive-Customization" accesskey="2">Interactive Customization</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey="3">Line-Up Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Custom-Line_002dUp.html#Custom-Line_002dUp" accesskey="4">Custom Line-Up</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Other-Indentation.html#Other-Indentation" accesskey="5">Other Indentation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <h2 class="chapter">11 Customizing Indentation</h2><a name=
+  "index-customization_002c-indentation" id=
+  "index-customization_002c-indentation"></a> <a name=
+  "index-indentation-2" id="index-indentation-2"></a>
 
+  <p>The principal variable for customizing indentation is the
+  style variable <code>c-offsets-alist</code>, which gives an
+  <em>offset</em> (an indentation rule) for each syntactic symbol.
+  Its structure and semantics are completely described in <a href=
+  "c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>.
+  The various ways you can set the variable, including the use of
+  the CC Mode style system, are described in <a href=
+  "Config-Basics.html#Config-Basics">Config Basics</a> and its
+  sections, in particular <a href=
+  "Style-Variables.html#Style-Variables">Style Variables</a>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Custom-Macros.html#Custom-Macros" accesskey="n" rel="next">Custom Macros</a>, Previous: <a href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" accesskey="p" rel="prev">Indentation Engine Basics</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The simplest and most used kind of &ldquo;offset&rdquo;
+  setting in <code>c-offsets-alist</code> is in terms of multiples
+  of <code>c-basic-offset</code>:</p>
 
+  <dl>
+    <dt><a name="index-c_002dbasic_002doffset" id=
+    "index-c_002dbasic_002doffset"></a>User Option:
+    <strong>c-basic-offset</strong></dt>
 
+    <dd>
+      <a name="index-basic_002doffset-_0028c_002d_0029" id=
+      "index-basic_002doffset-_0028c_002d_0029"></a>
 
+      <p>This style variable holds the basic offset between
+      indentation levels. It&rsquo;s factory default is 4, but all
+      the built-in styles set it themselves, to some value between
+      2 (for <code>gnu</code> style) and 8 (for <code>bsd</code>,
+      <code>linux</code>, and <code>python</code> styles).</p>
+    </dd>
+  </dl>
+
+  <p>The most flexible &ldquo;offset&rdquo; setting you can make in
+  <code>c-offsets-alist</code> is a line-up function (or even a
+  list of them), either one supplied by CC Mode (see <a href=
+  "Line_002dUp-Functions.html#Line_002dUp-Functions">Line-Up
+  Functions</a>) or one you write yourself (see <a href=
+  "Custom-Line_002dUp.html#Custom-Line_002dUp">Custom
+  Line-Up</a>).</p>
+
+  <p>Finally, in <a href=
+  "Other-Indentation.html#Other-Indentation">Other Indentation</a>
+  you&rsquo;ll find the tool of last resort: a hook which is called
+  after a line has been indented. You can install functions here to
+  make ad-hoc adjustments to any line&rsquo;s indentation.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "c_002doffsets_002dalist.html#c_002doffsets_002dalist"
+      accesskey="1">c-offsets-alist</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Interactive-Customization.html#Interactive-Customization"
+      accesskey="2">Interactive Customization</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey=
+      "3">Line-Up Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Custom-Line_002dUp.html#Custom-Line_002dUp" accesskey=
+      "4">Custom Line-Up</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Other-Indentation.html#Other-Indentation" accesskey=
+      "5">Other Indentation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Custom-Macros.html#Custom-Macros" accesskey=
+    "n" rel="next">Custom Macros</a>, Previous: <a href=
+    "Indentation-Engine-Basics.html#Indentation-Engine-Basics"
+    accesskey="p" rel="prev">Indentation Engine Basics</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

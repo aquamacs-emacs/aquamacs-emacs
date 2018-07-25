@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Free-Form Dates - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Date-Formats.html#Date-Formats" title="Date Formats">
-<link rel="prev" href="Date-Formatting-Codes.html#Date-Formatting-Codes" title="Date Formatting Codes">
-<link rel="next" href="Standard-Date-Formats.html#Standard-Date-Formats" title="Standard Date Formats">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Free-Form Dates - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Date-Formats.html#Date-Formats" title=
+  "Date Formats" />
+  <link rel="prev" href=
+  "Date-Formatting-Codes.html#Date-Formatting-Codes" title=
+  "Date Formatting Codes" />
+  <link rel="next" href=
+  "Standard-Date-Formats.html#Standard-Date-Formats" title=
+  "Standard Date Formats" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +40,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,76 +53,99 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Free-Form-Dates"></a>
-<a name="Free_002dForm-Dates"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Standard-Date-Formats.html#Standard-Date-Formats">Standard Date Formats</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Date-Formatting-Codes.html#Date-Formatting-Codes">Date Formatting Codes</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Date-Formats.html#Date-Formats">Date Formats</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Free-Form-Dates" id="Free-Form-Dates"></a> <a name=
+    "Free_002dForm-Dates" id="Free_002dForm-Dates"></a>
 
-<h5 class="subsubsection">7.7.7.2 Free-Form Dates</h5>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Standard-Date-Formats.html#Standard-Date-Formats">Standard
+    Date Formats</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href=
+    "Date-Formatting-Codes.html#Date-Formatting-Codes">Date
+    Formatting Codes</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Date-Formats.html#Date-Formats">Date Formats</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">When reading a date form during algebraic entry, Calc falls back
-on the algorithm described here if the input does not exactly
-match the current date format.  This algorithm generally
-&ldquo;does the right thing&rdquo; and you don't have to worry about it,
-but it is described here in full detail for the curious.
+  <h5 class="subsubsection">7.7.7.2 Free-Form Dates</h5>
 
-   <p>Calc does not distinguish between upper- and lower-case letters
-while interpreting dates.
+  <p class="noindent">When reading a date form during algebraic
+  entry, Calc falls back on the algorithm described here if the
+  input does not exactly match the current date format. This
+  algorithm generally &ldquo;does the right thing&rdquo; and you
+  don't have to worry about it, but it is described here in full
+  detail for the curious.</p>
 
-   <p>First, the time portion, if present, is located somewhere in the
-text and then removed.  The remaining text is then interpreted as
-the date.
+  <p>Calc does not distinguish between upper- and lower-case
+  letters while interpreting dates.</p>
 
-   <p>A time is of the form &lsquo;<samp><span class="samp">hh:mm:ss</span></samp>&rsquo;, possibly with the seconds
-part omitted and possibly with an AM/PM indicator added to indicate
-12-hour time.  If the AM/PM is present, the minutes may also be
-omitted.  The AM/PM part may be any of the words &lsquo;<samp><span class="samp">am</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">pm</span></samp>&rsquo;, &lsquo;<samp><span class="samp">noon</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">midnight</span></samp>&rsquo;; each of these may be
-abbreviated to one letter, and the alternate forms &lsquo;<samp><span class="samp">a.m.</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">p.m.</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">mid</span></samp>&rsquo; are also understood.  Obviously
-&lsquo;<samp><span class="samp">noon</span></samp>&rsquo; and &lsquo;<samp><span class="samp">midnight</span></samp>&rsquo; are allowed only on 12:00:00. 
-The words &lsquo;<samp><span class="samp">noon</span></samp>&rsquo;, &lsquo;<samp><span class="samp">mid</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">midnight</span></samp>&rsquo; are also
-recognized with no number attached.
+  <p>First, the time portion, if present, is located somewhere in
+  the text and then removed. The remaining text is then interpreted
+  as the date.</p>
 
-   <p>If there is no AM/PM indicator, the time is interpreted in 24-hour
-format.
+  <p>A time is of the form &lsquo;<samp><span class=
+  "samp">hh:mm:ss</span></samp>&rsquo;, possibly with the seconds
+  part omitted and possibly with an AM/PM indicator added to
+  indicate 12-hour time. If the AM/PM is present, the minutes may
+  also be omitted. The AM/PM part may be any of the words
+  &lsquo;<samp><span class="samp">am</span></samp>&rsquo;,
+  &lsquo;<samp><span class="samp">pm</span></samp>&rsquo;,
+  &lsquo;<samp><span class="samp">noon</span></samp>&rsquo;, or
+  &lsquo;<samp><span class="samp">midnight</span></samp>&rsquo;;
+  each of these may be abbreviated to one letter, and the alternate
+  forms &lsquo;<samp><span class="samp">a.m.</span></samp>&rsquo;,
+  &lsquo;<samp><span class="samp">p.m.</span></samp>&rsquo;, and
+  &lsquo;<samp><span class="samp">mid</span></samp>&rsquo; are also
+  understood. Obviously &lsquo;<samp><span class=
+  "samp">noon</span></samp>&rsquo; and &lsquo;<samp><span class=
+  "samp">midnight</span></samp>&rsquo; are allowed only on
+  12:00:00. The words &lsquo;<samp><span class=
+  "samp">noon</span></samp>&rsquo;, &lsquo;<samp><span class=
+  "samp">mid</span></samp>&rsquo;, and &lsquo;<samp><span class=
+  "samp">midnight</span></samp>&rsquo; are also recognized with no
+  number attached.</p>
 
-   <p>To read the date portion, all words and numbers are isolated
-from the string; other characters are ignored.  All words must
-be either month names or day-of-week names (the latter of which
-are ignored).  Names can be written in full or as three-letter
-abbreviations.
+  <p>If there is no AM/PM indicator, the time is interpreted in
+  24-hour format.</p>
 
-   <p>Large numbers, or numbers with &lsquo;<samp><span class="samp">+</span></samp>&rsquo; or &lsquo;<samp><span class="samp">-</span></samp>&rsquo; signs,
-are interpreted as years.  If one of the other numbers is
-greater than 12, then that must be the day and the remaining
-number in the input is therefore the month.  Otherwise, Calc
-assumes the month, day and year are in the same order that they
-appear in the current date format.  If the year is omitted, the
-current year is taken from the system clock.
+  <p>To read the date portion, all words and numbers are isolated
+  from the string; other characters are ignored. All words must be
+  either month names or day-of-week names (the latter of which are
+  ignored). Names can be written in full or as three-letter
+  abbreviations.</p>
 
-   <p>If there are too many or too few numbers, or any unrecognizable
-words, then the input is rejected.
+  <p>Large numbers, or numbers with &lsquo;<samp><span class=
+  "samp">+</span></samp>&rsquo; or &lsquo;<samp><span class=
+  "samp">-</span></samp>&rsquo; signs, are interpreted as years. If
+  one of the other numbers is greater than 12, then that must be
+  the day and the remaining number in the input is therefore the
+  month. Otherwise, Calc assumes the month, day and year are in the
+  same order that they appear in the current date format. If the
+  year is omitted, the current year is taken from the system
+  clock.</p>
 
-   <p>If there are any large numbers (of five digits or more) other than
-the year, they are ignored on the assumption that they are something
-like Julian dates that were included along with the traditional
-date components when the date was formatted.
+  <p>If there are too many or too few numbers, or any
+  unrecognizable words, then the input is rejected.</p>
 
-   <p>One of the words &lsquo;<samp><span class="samp">ad</span></samp>&rsquo;, &lsquo;<samp><span class="samp">a.d.</span></samp>&rsquo;, &lsquo;<samp><span class="samp">bc</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">b.c.</span></samp>&rsquo;
-may optionally be used; the latter two are equivalent to a
-minus sign on the year value.
+  <p>If there are any large numbers (of five digits or more) other
+  than the year, they are ignored on the assumption that they are
+  something like Julian dates that were included along with the
+  traditional date components when the date was formatted.</p>
 
-   <p>If you always enter a four-digit year, and use a name instead
-of a number for the month, there is no danger of ambiguity.
+  <p>One of the words &lsquo;<samp><span class=
+  "samp">ad</span></samp>&rsquo;, &lsquo;<samp><span class=
+  "samp">a.d.</span></samp>&rsquo;, &lsquo;<samp><span class=
+  "samp">bc</span></samp>&rsquo;, or &lsquo;<samp><span class=
+  "samp">b.c.</span></samp>&rsquo; may optionally be used; the
+  latter two are equivalent to a minus sign on the year value.</p>
 
-   </body></html>
-
+  <p>If you always enter a four-digit year, and use a name instead
+  of a number for the month, there is no danger of ambiguity.</p>
+</body>
+</html>

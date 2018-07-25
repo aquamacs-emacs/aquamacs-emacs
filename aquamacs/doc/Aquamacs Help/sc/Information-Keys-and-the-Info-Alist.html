@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Information Keys and the Info Alist - Supercite User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Supercite User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Miscellaneous-Commands.html#Miscellaneous-Commands" title="Miscellaneous Commands">
-<link rel="next" href="Reference-Headers.html#Reference-Headers" title="Reference Headers">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Information Keys and the Info Alist - Supercite User's
+  Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Supercite User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Miscellaneous-Commands.html#Miscellaneous-Commands" title=
+  "Miscellaneous Commands" />
+  <link rel="next" href="Reference-Headers.html#Reference-Headers"
+  title="Reference Headers" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This document describes Supercite, an Emacs package for citing and
 attributing replies to mail and news messages.
 
@@ -27,8 +37,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,85 +50,214 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Information-Keys-and-the-Info-Alist"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Reference-Headers.html#Reference-Headers">Reference Headers</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Miscellaneous-Commands.html#Miscellaneous-Commands">Miscellaneous Commands</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Information-Keys-and-the-Info-Alist" id=
+    "Information-Keys-and-the-Info-Alist"></a>
 
-   <p><a name="index-information-keys-45"></a><a name="index-Info-Alist-46"></a><a name="index-information-extracted-from-mail-fields-47"></a><a name="index-sc_002dmail_002dfield-48"></a><a name="index-mail_002dfield-_0028sc_002d_0029-49"></a>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Reference-Headers.html#Reference-Headers">Reference
+    Headers</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href=
+    "Miscellaneous-Commands.html#Miscellaneous-Commands">Miscellaneous
+    Commands</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<h2 class="chapter">3 Information Keys and the Info Alist</h2>
+  <p><a name="index-information-keys-45" id=
+  "index-information-keys-45"></a><a name="index-Info-Alist-46" id=
+  "index-Info-Alist-46"></a><a name=
+  "index-information-extracted-from-mail-fields-47" id=
+  "index-information-extracted-from-mail-fields-47"></a><a name=
+  "index-sc_002dmail_002dfield-48" id=
+  "index-sc_002dmail_002dfield-48"></a><a name=
+  "index-mail_002dfield-_0028sc_002d_0029-49" id=
+  "index-mail_002dfield-_0028sc_002d_0029-49"></a></p>
 
-<p><dfn>Mail header information keys</dfn> are nuggets of information that
-Supercite extracts from the various mail headers of the original
-message, placed in the reply buffer by the MUA.  Information is kept in
-the <dfn>Info Alist</dfn> as key-value pairs, and can be retrieved for use in
-various places within Supercite, such as in header rewrite functions and
-attribution selection.  Other bits of data, composed and created by
-Supercite, are also kept as key-value pairs in this alist. In the case
-of mail fields, the key is the name of the field, omitting the trailing
-colon.  Info keys are always case insensitive (as are mail headers), and
-the value for a corresponding key can be retrieved from the alist with
-the <code>sc-mail-field</code> function.  Thus, if the following fields were
-present in the original article:
+  <h2 class="chapter">3 Information Keys and the Info Alist</h2>
 
-<pre class="example">     Date: 08 April 1991, 17:32:09 EST
+  <p><dfn>Mail header information keys</dfn> are nuggets of
+  information that Supercite extracts from the various mail headers
+  of the original message, placed in the reply buffer by the MUA.
+  Information is kept in the <dfn>Info Alist</dfn> as key-value
+  pairs, and can be retrieved for use in various places within
+  Supercite, such as in header rewrite functions and attribution
+  selection. Other bits of data, composed and created by Supercite,
+  are also kept as key-value pairs in this alist. In the case of
+  mail fields, the key is the name of the field, omitting the
+  trailing colon. Info keys are always case insensitive (as are
+  mail headers), and the value for a corresponding key can be
+  retrieved from the alist with the <code>sc-mail-field</code>
+  function. Thus, if the following fields were present in the
+  original article:</p>
+  <pre class="example">
+     Date: 08 April 1991, 17:32:09 EST
      Subject: Better get out your asbestos suit
 </pre>
-   <p><a name="index-sc_002dmumble-50"></a><a name="index-mumble-_0028sc_002d_0029-51"></a>then, the following lisp constructs return:
 
-<pre class="example">     (sc-mail-field "date")
+  <p><a name="index-sc_002dmumble-50" id=
+  "index-sc_002dmumble-50"></a><a name=
+  "index-mumble-_0028sc_002d_0029-51" id=
+  "index-mumble-_0028sc_002d_0029-51"></a>then, the following lisp
+  constructs return:</p>
+  <pre class="example">
+     (sc-mail-field "date")
      ==&gt; "08 April 1991, 17:32:09 EST"
      
      (sc-mail-field "subject")
      ==&gt; "Better get out your asbestos suit"
 </pre>
-   <p>Since the argument to <code>sc-mail-field</code> can be any string, it is
-possible that the mail field will not be present on the info alist
-(possibly because the mail header was not present in the original
-message). In this case, <code>sc-mail-field</code> will return the value of
-the variable <code>sc-mumble</code>.
 
-   <p>Supercite always places all mail fields found in the yanked original
-article into the info alist.  If possible, Supercite will also places
-the following keys into the info alist:
+  <p>Since the argument to <code>sc-mail-field</code> can be any
+  string, it is possible that the mail field will not be present on
+  the info alist (possibly because the mail header was not present
+  in the original message). In this case,
+  <code>sc-mail-field</code> will return the value of the variable
+  <code>sc-mumble</code>.</p>
 
-     
-<a name="index-sc_002dattribution-info-field-52"></a>
-<a name="index-attribution-info-field-_0028sc_002d_0029-53"></a>
-<dl><dt><code>"sc-attribution"</code><dd>the selected attribution string.
+  <p>Supercite always places all mail fields found in the yanked
+  original article into the info alist. If possible, Supercite will
+  also places the following keys into the info alist: <a name=
+  "index-sc_002dattribution-info-field-52" id=
+  "index-sc_002dattribution-info-field-52"></a> <a name=
+  "index-attribution-info-field-_0028sc_002d_0029-53" id=
+  "index-attribution-info-field-_0028sc_002d_0029-53"></a></p>
 
-     <p><a name="index-sc_002dcitation-info-field-54"></a><a name="index-citation-info-field-_0028sc_002d_0029-55"></a><br><dt><code>"sc-citation"</code><dd>the non-nested citation string.
+  <dl>
+    <dt><code>"sc-attribution"</code></dt>
 
-     <p><a name="index-sc_002dfrom_002daddress-info-field-56"></a><a name="index-from_002daddress-info-field-_0028sc_002d_0029-57"></a><br><dt><code>"sc-from-address"</code><dd>email address extracted from the &lsquo;<samp><span class="samp">From:</span></samp>&rsquo; field.
+    <dd>
+      the selected attribution string.
 
-     <p><a name="index-sc_002dreply_002daddress-info-field-58"></a><a name="index-reply_002daddress-info-field-_0028sc_002d_0029-59"></a><br><dt><code>"sc-reply-address"</code><dd>email address extracted from the &lsquo;<samp><span class="samp">Reply-To:</span></samp>&rsquo; field.
+      <p><a name="index-sc_002dcitation-info-field-54" id=
+      "index-sc_002dcitation-info-field-54"></a><a name=
+      "index-citation-info-field-_0028sc_002d_0029-55" id=
+      "index-citation-info-field-_0028sc_002d_0029-55"></a><br /></p>
+    </dd>
 
-     <p><a name="index-sc_002dsender_002daddress-info-field-60"></a><a name="index-sender_002daddress-info-field-_0028sc_002d_0029-61"></a><br><dt><code>"sc-sender-address"</code><dd>email address extracted from the &lsquo;<samp><span class="samp">Sender:</span></samp>&rsquo; field.
+    <dt><code>"sc-citation"</code></dt>
 
-     <p><a name="index-sc_002demailname-info-field-62"></a><a name="index-emailname-info-field-_0028sc_002d_0029-63"></a><br><dt><code>"sc-emailname"</code><dd>email terminus extracted from the &lsquo;<samp><span class="samp">From:</span></samp>&rsquo; field.
+    <dd>
+      the non-nested citation string.
 
-     <p><a name="index-sc_002dinitials-info-field-64"></a><a name="index-initials-info-field-_0028sc_002d_0029-65"></a><br><dt><code>"sc-initials"</code><dd>the author's initials.
+      <p><a name="index-sc_002dfrom_002daddress-info-field-56" id=
+      "index-sc_002dfrom_002daddress-info-field-56"></a><a name=
+      "index-from_002daddress-info-field-_0028sc_002d_0029-57" id=
+      "index-from_002daddress-info-field-_0028sc_002d_0029-57"></a><br />
+      </p>
+    </dd>
 
-     <p><a name="index-sc_002dauthor-info-field-66"></a><a name="index-author-info-field-_0028sc_002d_0029-67"></a><br><dt><code>"sc-author"</code><dd>the author's full name.
+    <dt><code>"sc-from-address"</code></dt>
 
-     <p><a name="index-sc_002dfirstname-info-field-68"></a><a name="index-firstname-info-field-_0028sc_002d_0029-69"></a><br><dt><code>"sc-firstname"</code><dd>the author's first name.
+    <dd>
+      email address extracted from the &lsquo;<samp><span class=
+      "samp">From:</span></samp>&rsquo; field.
 
-     <p><a name="index-sc_002dlastname-info-field-70"></a><a name="index-lastname-info-field-_0028sc_002d_0029-71"></a><br><dt><code>"sc-lastname"</code><dd>the author's last name.
+      <p><a name="index-sc_002dreply_002daddress-info-field-58" id=
+      "index-sc_002dreply_002daddress-info-field-58"></a><a name=
+      "index-reply_002daddress-info-field-_0028sc_002d_0029-59" id=
+      "index-reply_002daddress-info-field-_0028sc_002d_0029-59"></a><br />
+      </p>
+    </dd>
 
-     <p><a name="index-sc_002dmiddlename_002d1-info-field-72"></a><a name="index-middlename_002d1-info-field-_0028sc_002d_0029-73"></a><br><dt><code>"sc-middlename-1"</code><dd>the author's first middle name. 
-</dl>
+    <dt><code>"sc-reply-address"</code></dt>
 
-   <p>If the author's name has more than one middle name, they will appear as
-info keys with the appropriate index (e.g., <code>"sc-middlename-2"</code>,
-<small class="dots">...</small>).  See <a href="Selecting-an-Attribution.html#Selecting-an-Attribution">Selecting an Attribution</a>.
+    <dd>
+      email address extracted from the &lsquo;<samp><span class=
+      "samp">Reply-To:</span></samp>&rsquo; field.
 
-   </body></html>
+      <p><a name="index-sc_002dsender_002daddress-info-field-60"
+      id="index-sc_002dsender_002daddress-info-field-60"></a><a name="index-sender_002daddress-info-field-_0028sc_002d_0029-61"
+      id=
+      "index-sender_002daddress-info-field-_0028sc_002d_0029-61"></a><br />
+      </p>
+    </dd>
 
+    <dt><code>"sc-sender-address"</code></dt>
+
+    <dd>
+      email address extracted from the &lsquo;<samp><span class=
+      "samp">Sender:</span></samp>&rsquo; field.
+
+      <p><a name="index-sc_002demailname-info-field-62" id=
+      "index-sc_002demailname-info-field-62"></a><a name=
+      "index-emailname-info-field-_0028sc_002d_0029-63" id=
+      "index-emailname-info-field-_0028sc_002d_0029-63"></a><br /></p>
+    </dd>
+
+    <dt><code>"sc-emailname"</code></dt>
+
+    <dd>
+      email terminus extracted from the &lsquo;<samp><span class=
+      "samp">From:</span></samp>&rsquo; field.
+
+      <p><a name="index-sc_002dinitials-info-field-64" id=
+      "index-sc_002dinitials-info-field-64"></a><a name=
+      "index-initials-info-field-_0028sc_002d_0029-65" id=
+      "index-initials-info-field-_0028sc_002d_0029-65"></a><br /></p>
+    </dd>
+
+    <dt><code>"sc-initials"</code></dt>
+
+    <dd>
+      the author's initials.
+
+      <p><a name="index-sc_002dauthor-info-field-66" id=
+      "index-sc_002dauthor-info-field-66"></a><a name=
+      "index-author-info-field-_0028sc_002d_0029-67" id=
+      "index-author-info-field-_0028sc_002d_0029-67"></a><br /></p>
+    </dd>
+
+    <dt><code>"sc-author"</code></dt>
+
+    <dd>
+      the author's full name.
+
+      <p><a name="index-sc_002dfirstname-info-field-68" id=
+      "index-sc_002dfirstname-info-field-68"></a><a name=
+      "index-firstname-info-field-_0028sc_002d_0029-69" id=
+      "index-firstname-info-field-_0028sc_002d_0029-69"></a><br /></p>
+    </dd>
+
+    <dt><code>"sc-firstname"</code></dt>
+
+    <dd>
+      the author's first name.
+
+      <p><a name="index-sc_002dlastname-info-field-70" id=
+      "index-sc_002dlastname-info-field-70"></a><a name=
+      "index-lastname-info-field-_0028sc_002d_0029-71" id=
+      "index-lastname-info-field-_0028sc_002d_0029-71"></a><br /></p>
+    </dd>
+
+    <dt><code>"sc-lastname"</code></dt>
+
+    <dd>
+      the author's last name.
+
+      <p><a name="index-sc_002dmiddlename_002d1-info-field-72" id=
+      "index-sc_002dmiddlename_002d1-info-field-72"></a><a name=
+      "index-middlename_002d1-info-field-_0028sc_002d_0029-73" id=
+      "index-middlename_002d1-info-field-_0028sc_002d_0029-73"></a><br />
+      </p>
+    </dd>
+
+    <dt><code>"sc-middlename-1"</code></dt>
+
+    <dd>the author's first middle name.</dd>
+  </dl>
+
+  <p>If the author's name has more than one middle name, they will
+  appear as info keys with the appropriate index (e.g.,
+  <code>"sc-middlename-2"</code>, <small class="dots">...</small>).
+  See <a href=
+  "Selecting-an-Attribution.html#Selecting-an-Attribution">Selecting
+  an Attribution</a>.</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,145 +20,220 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Defining Abbrevs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Defining Abbrevs">
-<meta name="keywords" content="GNU Emacs Manual: Defining Abbrevs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Abbrevs.html#Abbrevs" rel="up" title="Abbrevs">
-<link href="Expanding-Abbrevs.html#Expanding-Abbrevs" rel="next" title="Expanding Abbrevs">
-<link href="Abbrev-Concepts.html#Abbrev-Concepts" rel="prev" title="Abbrev Concepts">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Defining Abbrevs</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Defining Abbrevs" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Defining Abbrevs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Abbrevs.html#Abbrevs" rel="up" title="Abbrevs" />
+  <link href="Expanding-Abbrevs.html#Expanding-Abbrevs" rel="next"
+  title="Expanding Abbrevs" />
+  <link href="Abbrev-Concepts.html#Abbrev-Concepts" rel="prev"
+  title="Abbrev Concepts" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Defining-Abbrevs" id="Defining-Abbrevs"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Expanding-Abbrevs.html#Expanding-Abbrevs"
+    accesskey="n" rel="next">Expanding Abbrevs</a>, Previous:
+    <a href="Abbrev-Concepts.html#Abbrev-Concepts" accesskey="p"
+    rel="prev">Abbrev Concepts</a>, Up: <a href=
+    "Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Abbrevs-1" id="Defining-Abbrevs-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Abbrevs"></a>
-<div class="header">
-<p>
-Next: <a href="Expanding-Abbrevs.html#Expanding-Abbrevs" accesskey="n" rel="next">Expanding Abbrevs</a>, Previous: <a href="Abbrev-Concepts.html#Abbrev-Concepts" accesskey="p" rel="prev">Abbrev Concepts</a>, Up: <a href="Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Abbrevs-1"></a>
-<h3 class="section">29.2 Defining Abbrevs</h3>
+  <h3 class="section">29.2 Defining Abbrevs</h3>
 
-<dl compact="compact">
-<dt><kbd>C-x a g</kbd></dt>
-<dd><p>Define an abbrev, using one or more words before point as its expansion
-(<code>add-global-abbrev</code>).
-</p></dd>
-<dt><kbd>C-x a l</kbd></dt>
-<dd><p>Similar, but define an abbrev specific to the current major mode
-(<code>add-mode-abbrev</code>).
-</p></dd>
-<dt><kbd>C-x a i g</kbd></dt>
-<dd><p>Define a word in the buffer as an abbrev (<code>inverse-add-global-abbrev</code>).
-</p></dd>
-<dt><kbd>C-x a i l</kbd></dt>
-<dd><p>Define a word in the buffer as a mode-specific abbrev
-(<code>inverse-add-mode-abbrev</code>).
-</p></dd>
-<dt><kbd>M-x define-global-abbrev <span class="key">RET</span> <var>abbrev</var> <span class="key">RET</span> <var>exp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Define <var>abbrev</var> as an abbrev expanding into <var>exp</var>.
-</p></dd>
-<dt><kbd>M-x define-mode-abbrev <span class="key">RET</span> <var>abbrev</var> <span class="key">RET</span> <var>exp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Define <var>abbrev</var> as a mode-specific abbrev expanding into <var>exp</var>.
-</p></dd>
-<dt><kbd>M-x kill-all-abbrevs</kbd></dt>
-<dd><p>Discard all abbrev definitions, leaving a blank slate.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>C-x a g</kbd></dt>
 
-<a name="index-C_002dx-a-g"></a>
-<a name="index-add_002dglobal_002dabbrev"></a>
-<p>The usual way to define an abbrev is to enter the text you want the
-abbrev to expand to, position point after it, and type <kbd>C-x a g</kbd>
-(<code>add-global-abbrev</code>).  This reads the abbrev itself using the
-minibuffer, and then defines it as an abbrev for one or more words before
-point.  Use a numeric argument to say how many words before point should be
-taken as the expansion.  For example, to define the abbrev &lsquo;<samp>foo</samp>&rsquo; as
-mentioned above, insert the text &lsquo;<samp>find outer otter</samp>&rsquo; and then type
-<kbd>C-u 3 C-x a g f o o <span class="key">RET</span></kbd>.
-</p>
-<p>An argument of zero to <kbd>C-x a g</kbd> means to use the contents of the
-region as the expansion of the abbrev being defined.
-</p>
-<a name="index-C_002dx-a-l"></a>
-<a name="index-add_002dmode_002dabbrev"></a>
-<p>The command <kbd>C-x a l</kbd> (<code>add-mode-abbrev</code>) is similar, but
-defines a mode-specific abbrev for the current major mode.  The
-arguments work the same as for <kbd>C-x a g</kbd>.
-</p>
-<a name="index-C_002dx-a-i-g"></a>
-<a name="index-inverse_002dadd_002dglobal_002dabbrev"></a>
-<a name="index-C_002dx-a-i-l"></a>
-<a name="index-inverse_002dadd_002dmode_002dabbrev"></a>
-<p><kbd>C-x a i g</kbd> (<code>inverse-add-global-abbrev</code>) and <kbd>C-x a i
-l</kbd> (<code>inverse-add-mode-abbrev</code>) perform the opposite task: if the
-abbrev text is already in the buffer, you use these commands to define
-an abbrev by specifying the expansion in the minibuffer.  These
-commands will expand the abbrev text used for the definition.
-</p>
-<a name="index-define_002dmode_002dabbrev"></a>
-<a name="index-define_002dglobal_002dabbrev"></a>
-<p>You can define an abbrev without inserting either the abbrev or its
-expansion in the buffer using the command <code>define-global-abbrev</code>.
-It reads two arguments&mdash;the abbrev, and its expansion.  The command
-<code>define-mode-abbrev</code> does likewise for a mode-specific abbrev.
-</p>
-<p>To change the definition of an abbrev, just make a new definition.
-When an abbrev has a prior definition, the abbrev definition commands
-ask for confirmation before replacing it.
-</p>
-<a name="index-kill_002dall_002dabbrevs"></a>
-<p>To remove an abbrev definition, give a negative argument to the
-abbrev definition command: <kbd>C-u - C-x a g</kbd> or <kbd>C-u - C-x a l</kbd>.
-The former removes a global definition, while the latter removes a
-mode-specific definition.  <kbd>M-x kill-all-abbrevs</kbd> removes all
-abbrev definitions, both global and local.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Expanding-Abbrevs.html#Expanding-Abbrevs" accesskey="n" rel="next">Expanding Abbrevs</a>, Previous: <a href="Abbrev-Concepts.html#Abbrev-Concepts" accesskey="p" rel="prev">Abbrev Concepts</a>, Up: <a href="Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Define an abbrev, using one or more words before point as
+      its expansion (<code>add-global-abbrev</code>).</p>
+    </dd>
 
+    <dt><kbd>C-x a l</kbd></dt>
 
+    <dd>
+      <p>Similar, but define an abbrev specific to the current
+      major mode (<code>add-mode-abbrev</code>).</p>
+    </dd>
 
+    <dt><kbd>C-x a i g</kbd></dt>
+
+    <dd>
+      <p>Define a word in the buffer as an abbrev
+      (<code>inverse-add-global-abbrev</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x a i l</kbd></dt>
+
+    <dd>
+      <p>Define a word in the buffer as a mode-specific abbrev
+      (<code>inverse-add-mode-abbrev</code>).</p>
+    </dd>
+
+    <dt><kbd>M-x define-global-abbrev <span class="key">RET</span>
+    <var>abbrev</var> <span class="key">RET</span> <var>exp</var>
+    <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Define <var>abbrev</var> as an abbrev expanding into
+      <var>exp</var>.</p>
+    </dd>
+
+    <dt><kbd>M-x define-mode-abbrev <span class="key">RET</span>
+    <var>abbrev</var> <span class="key">RET</span> <var>exp</var>
+    <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Define <var>abbrev</var> as a mode-specific abbrev
+      expanding into <var>exp</var>.</p>
+    </dd>
+
+    <dt><kbd>M-x kill-all-abbrevs</kbd></dt>
+
+    <dd>
+      <p>Discard all abbrev definitions, leaving a blank slate.</p>
+    </dd>
+  </dl><a name="index-C_002dx-a-g" id="index-C_002dx-a-g"></a>
+  <a name="index-add_002dglobal_002dabbrev" id=
+  "index-add_002dglobal_002dabbrev"></a>
+
+  <p>The usual way to define an abbrev is to enter the text you
+  want the abbrev to expand to, position point after it, and type
+  <kbd>C-x a g</kbd> (<code>add-global-abbrev</code>). This reads
+  the abbrev itself using the minibuffer, and then defines it as an
+  abbrev for one or more words before point. Use a numeric argument
+  to say how many words before point should be taken as the
+  expansion. For example, to define the abbrev
+  &lsquo;<samp>foo</samp>&rsquo; as mentioned above, insert the
+  text &lsquo;<samp>find outer otter</samp>&rsquo; and then type
+  <kbd>C-u 3 C-x a g f o o <span class="key">RET</span></kbd>.</p>
+
+  <p>An argument of zero to <kbd>C-x a g</kbd> means to use the
+  contents of the region as the expansion of the abbrev being
+  defined.</p><a name="index-C_002dx-a-l" id=
+  "index-C_002dx-a-l"></a> <a name="index-add_002dmode_002dabbrev"
+  id="index-add_002dmode_002dabbrev"></a>
+
+  <p>The command <kbd>C-x a l</kbd> (<code>add-mode-abbrev</code>)
+  is similar, but defines a mode-specific abbrev for the current
+  major mode. The arguments work the same as for <kbd>C-x a
+  g</kbd>.</p><a name="index-C_002dx-a-i-g" id=
+  "index-C_002dx-a-i-g"></a> <a name=
+  "index-inverse_002dadd_002dglobal_002dabbrev" id=
+  "index-inverse_002dadd_002dglobal_002dabbrev"></a> <a name=
+  "index-C_002dx-a-i-l" id="index-C_002dx-a-i-l"></a> <a name=
+  "index-inverse_002dadd_002dmode_002dabbrev" id=
+  "index-inverse_002dadd_002dmode_002dabbrev"></a>
+
+  <p><kbd>C-x a i g</kbd> (<code>inverse-add-global-abbrev</code>)
+  and <kbd>C-x a i l</kbd> (<code>inverse-add-mode-abbrev</code>)
+  perform the opposite task: if the abbrev text is already in the
+  buffer, you use these commands to define an abbrev by specifying
+  the expansion in the minibuffer. These commands will expand the
+  abbrev text used for the definition.</p><a name=
+  "index-define_002dmode_002dabbrev" id=
+  "index-define_002dmode_002dabbrev"></a> <a name=
+  "index-define_002dglobal_002dabbrev" id=
+  "index-define_002dglobal_002dabbrev"></a>
+
+  <p>You can define an abbrev without inserting either the abbrev
+  or its expansion in the buffer using the command
+  <code>define-global-abbrev</code>. It reads two
+  arguments&mdash;the abbrev, and its expansion. The command
+  <code>define-mode-abbrev</code> does likewise for a mode-specific
+  abbrev.</p>
+
+  <p>To change the definition of an abbrev, just make a new
+  definition. When an abbrev has a prior definition, the abbrev
+  definition commands ask for confirmation before replacing
+  it.</p><a name="index-kill_002dall_002dabbrevs" id=
+  "index-kill_002dall_002dabbrevs"></a>
+
+  <p>To remove an abbrev definition, give a negative argument to
+  the abbrev definition command: <kbd>C-u - C-x a g</kbd> or
+  <kbd>C-u - C-x a l</kbd>. The former removes a global definition,
+  while the latter removes a mode-specific definition. <kbd>M-x
+  kill-all-abbrevs</kbd> removes all abbrev definitions, both
+  global and local.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Expanding-Abbrevs.html#Expanding-Abbrevs"
+    accesskey="n" rel="next">Expanding Abbrevs</a>, Previous:
+    <a href="Abbrev-Concepts.html#Abbrev-Concepts" accesskey="p"
+    rel="prev">Abbrev Concepts</a>, Up: <a href=
+    "Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

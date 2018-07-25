@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Server workarounds - Emacs SMTP Library</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Emacs SMTP Library">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Queued-delivery.html#Queued-delivery" title="Queued delivery">
-<link rel="next" href="Debugging.html#Debugging" title="Debugging">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Server workarounds - Emacs SMTP Library</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Emacs SMTP Library" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Queued-delivery.html#Queued-delivery"
+  title="Queued delivery" />
+  <link rel="next" href="Debugging.html#Debugging" title=
+  "Debugging" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
 Free Software Foundation, Inc.
 
@@ -24,8 +32,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,45 +45,65 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Server-workarounds"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Debugging.html#Debugging">Debugging</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Queued-delivery.html#Queued-delivery">Queued delivery</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Server-workarounds" id="Server-workarounds"></a>
 
-<h2 class="chapter">5 Server workarounds</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Debugging.html#Debugging">Debugging</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Queued-delivery.html#Queued-delivery">Queued delivery</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>Some SMTP servers have special requirements.  The following variables
-implement support for common requirements.
+  <h2 class="chapter">5 Server workarounds</h2>
 
-     <dl>
-<dt><code>smtpmail-local-domain</code><dd><a name="index-smtpmail_002dlocal_002ddomain-26"></a>  The variable <code>smtpmail-local-domain</code> controls the hostname sent
-in the first <code>EHLO</code> or <code>HELO</code> command sent to the server. 
-It should only be set if the <code>system-name</code> function returns a
-name that isn't accepted by the server.  Do not set this variable
-unless your server complains.
+  <p>Some SMTP servers have special requirements. The following
+  variables implement support for common requirements.</p>
 
-     <br><dt><code>smtpmail-sendto-domain</code><dd><a name="index-smtpmail_002dsendto_002ddomain-27"></a>  The variable <code>smtpmail-sendto-domain</code> makes the SMTP library
-add &lsquo;<samp><span class="samp">@</span></samp>&rsquo; and the specified value to recipients specified in the
-message when they are sent using the <code>RCPT TO</code> command.  Some
-configurations of sendmail requires this behavior.  Don't bother to
-set this unless you have get an error like:
+  <dl>
+    <dt><code>smtpmail-local-domain</code></dt>
 
-     <pre class="example">                  Sending failed; SMTP protocol error
+    <dd><a name="index-smtpmail_002dlocal_002ddomain-26" id=
+    "index-smtpmail_002dlocal_002ddomain-26"></a> The variable
+    <code>smtpmail-local-domain</code> controls the hostname sent
+    in the first <code>EHLO</code> or <code>HELO</code> command
+    sent to the server. It should only be set if the
+    <code>system-name</code> function returns a name that isn't
+    accepted by the server. Do not set this variable unless your
+    server complains.<br /></dd>
+
+    <dt><code>smtpmail-sendto-domain</code></dt>
+
+    <dd>
+      <a name="index-smtpmail_002dsendto_002ddomain-27" id=
+      "index-smtpmail_002dsendto_002ddomain-27"></a> The variable
+      <code>smtpmail-sendto-domain</code> makes the SMTP library
+      add &lsquo;<samp><span class="samp">@</span></samp>&rsquo;
+      and the specified value to recipients specified in the
+      message when they are sent using the <code>RCPT TO</code>
+      command. Some configurations of sendmail requires this
+      behavior. Don't bother to set this unless you have get an
+      error like:
+      <pre class="example">
+                  Sending failed; SMTP protocol error
 </pre>
-     <p>when sending mail, and the debug buffer (see <a href="Debugging.html#Debugging">Debugging</a>)) contains
-an error such as:
 
-     <pre class="example">                  RCPT TO: <var>someone</var>
+      <p>when sending mail, and the debug buffer (see <a href=
+      "Debugging.html#Debugging">Debugging</a>)) contains an error
+      such as:</p>
+      <pre class="example">
+                  RCPT TO: <var>someone</var>
                   501 <var>someone</var>: recipient address must contain a domain
 </pre>
-     </dl>
-
-   </body></html>
-
+    </dd>
+  </dl>
+</body>
+</html>

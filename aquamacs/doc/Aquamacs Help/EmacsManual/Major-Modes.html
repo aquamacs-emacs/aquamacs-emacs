@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,164 +20,222 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Major Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Major Modes">
-<meta name="keywords" content="GNU Emacs Manual: Major Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Modes.html#Modes" rel="up" title="Modes">
-<link href="Minor-Modes.html#Minor-Modes" rel="next" title="Minor Modes">
-<link href="Modes.html#Modes" rel="prev" title="Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Major Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Major Modes" />
+  <meta name="keywords" content="GNU Emacs Manual: Major Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Modes.html#Modes" rel="up" title="Modes" />
+  <link href="Minor-Modes.html#Minor-Modes" rel="next" title=
+  "Minor Modes" />
+  <link href="Modes.html#Modes" rel="prev" title="Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Major-Modes" id="Major-Modes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Minor-Modes.html#Minor-Modes" accesskey="n"
+    rel="next">Minor Modes</a>, Up: <a href="Modes.html#Modes"
+    accesskey="u" rel="up">Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Major-Modes-1" id="Major-Modes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Major-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Minor-Modes.html#Minor-Modes" accesskey="n" rel="next">Minor Modes</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Major-Modes-1"></a>
-<h3 class="section">23.1 Major Modes</h3>
-<a name="index-major-modes"></a>
-<a name="index-mode_002c-major"></a>
-<a name="index-TAB-_0028and-major-modes_0029"></a>
-<a name="index-DEL-_0028and-major-modes_0029"></a>
-<a name="index-C_002dj-_0028and-major-modes_0029"></a>
+  <h3 class="section">23.1 Major Modes</h3><a name=
+  "index-major-modes" id="index-major-modes"></a> <a name=
+  "index-mode_002c-major" id="index-mode_002c-major"></a> <a name=
+  "index-TAB-_0028and-major-modes_0029" id=
+  "index-TAB-_0028and-major-modes_0029"></a> <a name=
+  "index-DEL-_0028and-major-modes_0029" id=
+  "index-DEL-_0028and-major-modes_0029"></a> <a name=
+  "index-C_002dj-_0028and-major-modes_0029" id=
+  "index-C_002dj-_0028and-major-modes_0029"></a>
 
-<p>Every buffer possesses a major mode, which determines the editing
-behavior of Emacs while that buffer is current.  The mode line
-normally shows the name of the current major mode, in parentheses
-(see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).
-</p>
-<p>The least specialized major mode is called <em>Fundamental mode</em>.
-This mode has no mode-specific redefinitions or variable settings, so
-that each Emacs command behaves in its most general manner, and each
-user option variable is in its default state.
-</p>
-<p>For editing text of a specific type that Emacs knows about, such as
-Lisp code or English text, you typically use a more specialized major
-mode, such as Lisp mode or Text mode.  Most major modes fall into
-three major groups.  The first group contains modes for normal text,
-either plain or with mark-up.  It includes Text mode, HTML mode, SGML
-mode, TeX mode and Outline mode.  The second group contains modes
-for specific programming languages.  These include Lisp mode (which
-has several variants), C mode, Fortran mode, and others.  The third
-group consists of major modes that are not associated directly with
-files; they are used in buffers created for specific purposes by
-Emacs, such as Dired mode for buffers made by Dired (see <a href="Dired.html#Dired">Dired</a>),
-Message mode for buffers made by <kbd>C-x m</kbd> (see <a href="Sending-Mail.html#Sending-Mail">Sending Mail</a>),
-and Shell mode for buffers used to communicate with an inferior shell
-process (see <a href="Interactive-Shell.html#Interactive-Shell">Interactive Shell</a>).
-</p>
-<p>Usually, the major mode is automatically set by Emacs, when you
-first visit a file or create a buffer (see <a href="Choosing-Modes.html#Choosing-Modes">Choosing Modes</a>).  You
-can explicitly select a new major mode by using an <kbd>M-x</kbd> command.
-Take the name of the mode and add <code>-mode</code> to get the name of the
-command to select that mode (e.g., <kbd>M-x lisp-mode</kbd> enters Lisp mode).
-</p>
-<a name="index-major_002dmode"></a>
-<p>The value of the buffer-local variable <code>major-mode</code> is a symbol
-with the same name as the major mode command (e.g., <code>lisp-mode</code>).
-This variable is set automatically; you should not change it yourself.
-</p>
-<p>The default value of <code>major-mode</code> determines the major mode to
-use for files that do not specify a major mode, and for new buffers
-created with <kbd>C-x b</kbd>.  Normally, this default value is the symbol
-<code>fundamental-mode</code>, which specifies Fundamental mode.  You can
-change this default value via the Customization interface (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>), or by adding a line like this to your init file
-(see <a href="Init-File.html#Init-File">Init File</a>):
-</p>
-<div class="example">
-<pre class="example">(setq-default major-mode 'text-mode)
-</pre></div>
+  <p>Every buffer possesses a major mode, which determines the
+  editing behavior of Emacs while that buffer is current. The mode
+  line normally shows the name of the current major mode, in
+  parentheses (see <a href="Mode-Line.html#Mode-Line">Mode
+  Line</a>).</p>
 
-<p>If the default value of <code>major-mode</code> is <code>nil</code>, the major
-mode is taken from the previously current buffer.
-</p>
-<p>Specialized major modes often change the meanings of certain keys to
-do something more suitable for the mode.  For instance, programming
-language modes bind <tt class="key">TAB</tt> to indent the current line according to
-the rules of the language (see <a href="Indentation.html#Indentation">Indentation</a>).  The keys that are
-commonly changed are <tt class="key">TAB</tt>, <tt class="key">DEL</tt>, and <kbd>C-j</kbd>.  Many modes
-also define special commands of their own, usually bound in the prefix
-key <kbd>C-c</kbd>.  Major modes can also alter user options and variables;
-for instance, programming language modes typically set a buffer-local
-value for the variable <code>comment-start</code>, which determines how
-source code comments are delimited (see <a href="Comments.html#Comments">Comments</a>).
-</p>
-<a name="index-describe_002dmode-1"></a>
-<a name="index-C_002dh-m-1"></a>
-<p>To view the documentation for the current major mode, including a
-list of its key bindings, type <code>C-h m</code> (<code>describe-mode</code>).
-</p>
-<a name="index-mode-hook"></a>
-<a name="index-text_002dmode_002dhook"></a>
-<a name="index-prog_002dmode_002dhook"></a>
-<p>Every major mode, apart from Fundamental mode, defines a <em>mode
-hook</em>, a customizable list of Lisp functions to run each time the mode
-is enabled in a buffer.  See <a href="Hooks.html#Hooks">Hooks</a>, for more information about
-hooks.  Each mode hook is named after its major mode, e.g., Fortran
-mode has <code>fortran-mode-hook</code>.  Furthermore, all text-based major
-modes run <code>text-mode-hook</code>, and all programming language modes
-run <code>prog-mode-hook</code>, prior to running their own mode hooks.
-Hook functions can look at the value of the variable <code>major-mode</code>
-to see which mode is actually being entered.
-</p>
-<p>Mode hooks are commonly used to enable minor modes (see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>).  For example, you can put the following lines in your init
-file to enable Flyspell minor mode in all text-based major modes
-(see <a href="Spelling.html#Spelling">Spelling</a>), and Eldoc minor mode in Emacs Lisp mode
-(see <a href="Lisp-Doc.html#Lisp-Doc">Lisp Doc</a>):
-</p>
-<div class="example">
-<pre class="example">(add-hook 'text-mode-hook 'flyspell-mode)
+  <p>The least specialized major mode is called <em>Fundamental
+  mode</em>. This mode has no mode-specific redefinitions or
+  variable settings, so that each Emacs command behaves in its most
+  general manner, and each user option variable is in its default
+  state.</p>
+
+  <p>For editing text of a specific type that Emacs knows about,
+  such as Lisp code or English text, you typically use a more
+  specialized major mode, such as Lisp mode or Text mode. Most
+  major modes fall into three major groups. The first group
+  contains modes for normal text, either plain or with mark-up. It
+  includes Text mode, HTML mode, SGML mode, TeX mode and Outline
+  mode. The second group contains modes for specific programming
+  languages. These include Lisp mode (which has several variants),
+  C mode, Fortran mode, and others. The third group consists of
+  major modes that are not associated directly with files; they are
+  used in buffers created for specific purposes by Emacs, such as
+  Dired mode for buffers made by Dired (see <a href=
+  "Dired.html#Dired">Dired</a>), Message mode for buffers made by
+  <kbd>C-x m</kbd> (see <a href=
+  "Sending-Mail.html#Sending-Mail">Sending Mail</a>), and Shell
+  mode for buffers used to communicate with an inferior shell
+  process (see <a href=
+  "Interactive-Shell.html#Interactive-Shell">Interactive
+  Shell</a>).</p>
+
+  <p>Usually, the major mode is automatically set by Emacs, when
+  you first visit a file or create a buffer (see <a href=
+  "Choosing-Modes.html#Choosing-Modes">Choosing Modes</a>). You can
+  explicitly select a new major mode by using an <kbd>M-x</kbd>
+  command. Take the name of the mode and add <code>-mode</code> to
+  get the name of the command to select that mode (e.g., <kbd>M-x
+  lisp-mode</kbd> enters Lisp mode).</p><a name=
+  "index-major_002dmode" id="index-major_002dmode"></a>
+
+  <p>The value of the buffer-local variable <code>major-mode</code>
+  is a symbol with the same name as the major mode command (e.g.,
+  <code>lisp-mode</code>). This variable is set automatically; you
+  should not change it yourself.</p>
+
+  <p>The default value of <code>major-mode</code> determines the
+  major mode to use for files that do not specify a major mode, and
+  for new buffers created with <kbd>C-x b</kbd>. Normally, this
+  default value is the symbol <code>fundamental-mode</code>, which
+  specifies Fundamental mode. You can change this default value via
+  the Customization interface (see <a href=
+  "Easy-Customization.html#Easy-Customization">Easy
+  Customization</a>), or by adding a line like this to your init
+  file (see <a href="Init-File.html#Init-File">Init File</a>):</p>
+
+  <div class="example">
+    <pre class="example">
+(setq-default major-mode 'text-mode)
+</pre>
+  </div>
+
+  <p>If the default value of <code>major-mode</code> is
+  <code>nil</code>, the major mode is taken from the previously
+  current buffer.</p>
+
+  <p>Specialized major modes often change the meanings of certain
+  keys to do something more suitable for the mode. For instance,
+  programming language modes bind <tt class="key">TAB</tt> to
+  indent the current line according to the rules of the language
+  (see <a href="Indentation.html#Indentation">Indentation</a>). The
+  keys that are commonly changed are <tt class="key">TAB</tt>,
+  <tt class="key">DEL</tt>, and <kbd>C-j</kbd>. Many modes also
+  define special commands of their own, usually bound in the prefix
+  key <kbd>C-c</kbd>. Major modes can also alter user options and
+  variables; for instance, programming language modes typically set
+  a buffer-local value for the variable <code>comment-start</code>,
+  which determines how source code comments are delimited (see
+  <a href="Comments.html#Comments">Comments</a>).</p><a name=
+  "index-describe_002dmode-1" id="index-describe_002dmode-1"></a>
+  <a name="index-C_002dh-m-1" id="index-C_002dh-m-1"></a>
+
+  <p>To view the documentation for the current major mode,
+  including a list of its key bindings, type <code>C-h m</code>
+  (<code>describe-mode</code>).</p><a name="index-mode-hook" id=
+  "index-mode-hook"></a> <a name="index-text_002dmode_002dhook" id=
+  "index-text_002dmode_002dhook"></a> <a name=
+  "index-prog_002dmode_002dhook" id=
+  "index-prog_002dmode_002dhook"></a>
+
+  <p>Every major mode, apart from Fundamental mode, defines a
+  <em>mode hook</em>, a customizable list of Lisp functions to run
+  each time the mode is enabled in a buffer. See <a href=
+  "Hooks.html#Hooks">Hooks</a>, for more information about hooks.
+  Each mode hook is named after its major mode, e.g., Fortran mode
+  has <code>fortran-mode-hook</code>. Furthermore, all text-based
+  major modes run <code>text-mode-hook</code>, and all programming
+  language modes run <code>prog-mode-hook</code>, prior to running
+  their own mode hooks. Hook functions can look at the value of the
+  variable <code>major-mode</code> to see which mode is actually
+  being entered.</p>
+
+  <p>Mode hooks are commonly used to enable minor modes (see
+  <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>). For
+  example, you can put the following lines in your init file to
+  enable Flyspell minor mode in all text-based major modes (see
+  <a href="Spelling.html#Spelling">Spelling</a>), and Eldoc minor
+  mode in Emacs Lisp mode (see <a href=
+  "Lisp-Doc.html#Lisp-Doc">Lisp Doc</a>):</p>
+
+  <div class="example">
+    <pre class="example">
+(add-hook 'text-mode-hook 'flyspell-mode)
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Minor-Modes.html#Minor-Modes" accesskey="n" rel="next">Minor Modes</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Minor-Modes.html#Minor-Modes" accesskey="n"
+    rel="next">Minor Modes</a>, Up: <a href="Modes.html#Modes"
+    accesskey="u" rel="up">Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

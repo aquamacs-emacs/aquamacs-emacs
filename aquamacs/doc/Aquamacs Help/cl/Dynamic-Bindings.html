@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Dynamic Bindings - Common Lisp Extensions</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Common Lisp Extensions">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Variable-Bindings.html#Variable-Bindings" title="Variable Bindings">
-<link rel="prev" href="Variable-Bindings.html#Variable-Bindings" title="Variable Bindings">
-<link rel="next" href="Lexical-Bindings.html#Lexical-Bindings" title="Lexical Bindings">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Dynamic Bindings - Common Lisp Extensions</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Common Lisp Extensions" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Variable-Bindings.html#Variable-Bindings"
+  title="Variable Bindings" />
+  <link rel="prev" href="Variable-Bindings.html#Variable-Bindings"
+  title="Variable Bindings" />
+  <link rel="next" href="Lexical-Bindings.html#Lexical-Bindings"
+  title="Lexical Bindings" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -27,8 +36,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,36 +49,50 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Dynamic-Bindings"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Lexical-Bindings.html#Lexical-Bindings">Lexical Bindings</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Variable-Bindings.html#Variable-Bindings">Variable Bindings</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Variable-Bindings.html#Variable-Bindings">Variable Bindings</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Dynamic-Bindings" id="Dynamic-Bindings"></a>
 
-<h4 class="subsection">5.3.1 Dynamic Bindings</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Lexical-Bindings.html#Lexical-Bindings">Lexical Bindings</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Variable-Bindings.html#Variable-Bindings">Variable
+    Bindings</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Variable-Bindings.html#Variable-Bindings">Variable
+    Bindings</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">The standard <code>let</code> form binds variables whose names are known
-at compile-time.  The <code>progv</code> form provides an easy way to
-bind variables whose names are computed at run-time.
+  <h4 class="subsection">5.3.1 Dynamic Bindings</h4>
 
-<div class="defun">
-&mdash; Special Form: <b>progv</b><var> symbols values forms<small class="dots">...</small><a name="index-progv-31"></a></var><br>
-<blockquote><p>This form establishes <code>let</code>-style variable bindings on a
-set of variables computed at run-time.  The expressions
-<var>symbols</var> and <var>values</var> are evaluated, and must return lists
-of symbols and values, respectively.  The symbols are bound to the
-corresponding values for the duration of the body <var>form</var>s. 
-If <var>values</var> is shorter than <var>symbols</var>, the last few symbols
-are made unbound (as if by <code>makunbound</code>) inside the body. 
-If <var>symbols</var> is shorter than <var>values</var>, the excess values
-are ignored. 
-</p></blockquote></div>
+  <p class="noindent">The standard <code>let</code> form binds
+  variables whose names are known at compile-time. The
+  <code>progv</code> form provides an easy way to bind variables
+  whose names are computed at run-time.</p>
 
-   </body></html>
+  <div class="defun">
+    &mdash; Special Form: <b>progv</b> <var>symbols values
+    forms<small class="dots">...</small><a name="index-progv-31"
+    id="index-progv-31"></a></var><br />
 
+    <blockquote>
+      <p>This form establishes <code>let</code>-style variable
+      bindings on a set of variables computed at run-time. The
+      expressions <var>symbols</var> and <var>values</var> are
+      evaluated, and must return lists of symbols and values,
+      respectively. The symbols are bound to the corresponding
+      values for the duration of the body <var>form</var>s. If
+      <var>values</var> is shorter than <var>symbols</var>, the
+      last few symbols are made unbound (as if by
+      <code>makunbound</code>) inside the body. If
+      <var>symbols</var> is shorter than <var>values</var>, the
+      excess values are ignored.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

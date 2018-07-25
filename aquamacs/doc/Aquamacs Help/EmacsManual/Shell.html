@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,140 +20,287 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Shell</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Shell">
-<meta name="keywords" content="GNU Emacs Manual: Shell">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Single-Shell.html#Single-Shell" rel="next" title="Single Shell">
-<link href="Embedded-WebKit-Widgets.html#Embedded-WebKit-Widgets" rel="prev" title="Embedded WebKit Widgets">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Shell</title>
+  <meta name="description" content="GNU Emacs Manual: Shell" />
+  <meta name="keywords" content="GNU Emacs Manual: Shell" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Single-Shell.html#Single-Shell" rel="next" title=
+  "Single Shell" />
+  <link href="Embedded-WebKit-Widgets.html#Embedded-WebKit-Widgets"
+  rel="prev" title="Embedded WebKit Widgets" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Shell" id="Shell"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Emacs-Server.html#Emacs-Server" accesskey="n"
+    rel="next">Emacs Server</a>, Previous: <a href=
+    "Embedded-WebKit-Widgets.html#Embedded-WebKit-Widgets"
+    accesskey="p" rel="prev">Embedded WebKit Widgets</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Running-Shell-Commands-from-Emacs" id=
+  "Running-Shell-Commands-from-Emacs"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Shell"></a>
-<div class="header">
-<p>
-Next: <a href="Emacs-Server.html#Emacs-Server" accesskey="n" rel="next">Emacs Server</a>, Previous: <a href="Embedded-WebKit-Widgets.html#Embedded-WebKit-Widgets" accesskey="p" rel="prev">Embedded WebKit Widgets</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Running-Shell-Commands-from-Emacs"></a>
-<h2 class="chapter">40 Running Shell Commands from Emacs</h2>
-<a name="index-subshell"></a>
-<a name="index-shell-commands"></a>
+  <h2 class="chapter">40 Running Shell Commands from
+  Emacs</h2><a name="index-subshell" id="index-subshell"></a>
+  <a name="index-shell-commands" id="index-shell-commands"></a>
 
-<p>Emacs has commands for passing single command lines to shell
-subprocesses, and for running a shell interactively with input and
-output to an Emacs buffer, and for running a shell in a terminal
-emulator window.
-</p>
-<dl compact="compact">
-<dt><kbd>M-! <var>cmd</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Run the shell command <var>cmd</var> and display the output
-(<code>shell-command</code>).
-</p></dd>
-<dt><kbd>M-| <var>cmd</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Run the shell command <var>cmd</var> with region contents as input;
-optionally replace the region with the output
-(<code>shell-command-on-region</code>).
-</p></dd>
-<dt><kbd>M-&amp; <var>cmd</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Run the shell command <var>cmd</var> asynchronously, and display the output
-(<code>async-shell-command</code>).
-</p></dd>
-<dt><kbd>M-x shell</kbd></dt>
-<dd><p>Run a subshell with input and output through an Emacs buffer.  You can
-then give commands interactively.
-</p></dd>
-<dt><kbd>M-x term</kbd></dt>
-<dd><p>Run a subshell with input and output through an Emacs buffer.  You can
-then give commands interactively.  Full terminal emulation is
-available.
-</p></dd>
-</dl>
+  <p>Emacs has commands for passing single command lines to shell
+  subprocesses, and for running a shell interactively with input
+  and output to an Emacs buffer, and for running a shell in a
+  terminal emulator window.</p>
 
-<a name="index-exec_002dpath"></a>
-<p>Whenever you specify a relative file name for an executable program
-(either in the <var>cmd</var> argument to one of the above commands, or in
-other contexts), Emacs searches for the program in the directories
-specified by the variable <code>exec-path</code>.  The value of this
-variable must be a list of directory names; the default value is
-initialized from the environment variable <code>PATH</code> when Emacs is
-started (see <a href="General-Variables.html#General-Variables">General Variables</a>).
-</p>
-<p><kbd>M-x eshell</kbd> invokes a shell implemented entirely in Emacs.  It
-is documented in its own manual.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/eshell/index.html#Top">Eshell</a> in <cite>Eshell: The Emacs Shell</cite>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Single-Shell.html#Single-Shell" accesskey="1">Single Shell</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to run one shell command and return.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Interactive-Shell.html#Interactive-Shell" accesskey="2">Interactive Shell</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Permanent shell taking input via Emacs.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Shell-Mode.html#Shell-Mode" accesskey="3">Shell Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special Emacs commands used with permanent shell.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Shell-Prompts.html#Shell-Prompts" accesskey="4">Shell Prompts</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Two ways to recognize shell prompts.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Shell-History.html#Shell-History" accesskey="5">History</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Repeating previous commands in a shell buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Directory-Tracking.html#Directory-Tracking" accesskey="6">Directory Tracking</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Keeping track when the subshell changes directory.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Shell-Options.html#Shell-Options" accesskey="7">Options</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Options for customizing Shell mode.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Terminal-emulator.html#Terminal-emulator" accesskey="8">Terminal emulator</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An Emacs window as a terminal emulator.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Term-Mode.html#Term-Mode" accesskey="9">Term Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special Emacs commands used in Term mode.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Remote-Host.html#Remote-Host">Remote Host</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Connecting to another computer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Serial-Terminal.html#Serial-Terminal">Serial Terminal</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Connecting to a serial port.
-</td></tr>
-</table>
+  <dl compact="compact">
+    <dt><kbd>M-! <var>cmd</var> <span class=
+    "key">RET</span></kbd></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Emacs-Server.html#Emacs-Server" accesskey="n" rel="next">Emacs Server</a>, Previous: <a href="Embedded-WebKit-Widgets.html#Embedded-WebKit-Widgets" accesskey="p" rel="prev">Embedded WebKit Widgets</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Run the shell command <var>cmd</var> and display the
+      output (<code>shell-command</code>).</p>
+    </dd>
 
+    <dt><kbd>M-| <var>cmd</var> <span class=
+    "key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Run the shell command <var>cmd</var> with region contents
+      as input; optionally replace the region with the output
+      (<code>shell-command-on-region</code>).</p>
+    </dd>
 
+    <dt><kbd>M-&amp; <var>cmd</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Run the shell command <var>cmd</var> asynchronously, and
+      display the output (<code>async-shell-command</code>).</p>
+    </dd>
+
+    <dt><kbd>M-x shell</kbd></dt>
+
+    <dd>
+      <p>Run a subshell with input and output through an Emacs
+      buffer. You can then give commands interactively.</p>
+    </dd>
+
+    <dt><kbd>M-x term</kbd></dt>
+
+    <dd>
+      <p>Run a subshell with input and output through an Emacs
+      buffer. You can then give commands interactively. Full
+      terminal emulation is available.</p>
+    </dd>
+  </dl><a name="index-exec_002dpath" id="index-exec_002dpath"></a>
+
+  <p>Whenever you specify a relative file name for an executable
+  program (either in the <var>cmd</var> argument to one of the
+  above commands, or in other contexts), Emacs searches for the
+  program in the directories specified by the variable
+  <code>exec-path</code>. The value of this variable must be a list
+  of directory names; the default value is initialized from the
+  environment variable <code>PATH</code> when Emacs is started (see
+  <a href="General-Variables.html#General-Variables">General
+  Variables</a>).</p>
+
+  <p><kbd>M-x eshell</kbd> invokes a shell implemented entirely in
+  Emacs. It is documented in its own manual. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/eshell/index.html#Top">
+  Eshell</a> in <cite>Eshell: The Emacs Shell</cite>.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Single-Shell.html#Single-Shell" accesskey="1">Single
+      Shell</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to run one shell command
+      and return.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Interactive-Shell.html#Interactive-Shell" accesskey=
+      "2">Interactive Shell</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Permanent shell taking input
+      via Emacs.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Shell-Mode.html#Shell-Mode" accesskey="3">Shell
+      Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Special Emacs commands used
+      with permanent shell.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Shell-Prompts.html#Shell-Prompts" accesskey="4">Shell
+      Prompts</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Two ways to recognize shell
+      prompts.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Shell-History.html#Shell-History" accesskey=
+      "5">History</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Repeating previous commands in
+      a shell buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Directory-Tracking.html#Directory-Tracking" accesskey=
+      "6">Directory Tracking</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Keeping track when the subshell
+      changes directory.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Shell-Options.html#Shell-Options" accesskey=
+      "7">Options</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Options for customizing Shell
+      mode.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Terminal-emulator.html#Terminal-emulator" accesskey=
+      "8">Terminal emulator</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">An Emacs window as a terminal
+      emulator.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Term-Mode.html#Term-Mode" accesskey="9">Term Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Special Emacs commands used in
+      Term mode.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Remote-Host.html#Remote-Host">Remote Host</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Connecting to another
+      computer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Serial-Terminal.html#Serial-Terminal">Serial
+      Terminal</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Connecting to a serial
+      port.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Emacs-Server.html#Emacs-Server" accesskey="n"
+    rel="next">Emacs Server</a>, Previous: <a href=
+    "Embedded-WebKit-Widgets.html#Embedded-WebKit-Widgets"
+    accesskey="p" rel="prev">Embedded WebKit Widgets</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

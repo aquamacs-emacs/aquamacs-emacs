@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,234 +18,328 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Creating Citations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Creating Citations">
-<meta name="keywords" content="RefTeX User Manual: Creating Citations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Citations.html#Citations" rel="up" title="Citations">
-<link href="Citation-Styles.html#Citation-Styles" rel="next" title="Citation Styles">
-<link href="Citations.html#Citations" rel="prev" title="Citations">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Creating Citations</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Creating Citations" />
+  <meta name="keywords" content=
+  "RefTeX User Manual: Creating Citations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Citations.html#Citations" rel="up" title=
+  "Citations" />
+  <link href="Citation-Styles.html#Citation-Styles" rel="next"
+  title="Citation Styles" />
+  <link href="Citations.html#Citations" rel="prev" title=
+  "Citations" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-Citations"></a>
-<div class="header">
-<p>
-Next: <a href="Citation-Styles.html#Citation-Styles" accesskey="n" rel="next">Citation Styles</a>, Up: <a href="Citations.html#Citations" accesskey="u" rel="up">Citations</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-Citations-1"></a>
-<h3 class="section">4.1 Creating Citations</h3>
-<a name="index-Creating-citations"></a>
-<a name="index-Citations_002c-creating"></a>
-<a name="index-reftex_002dcitation"></a>
-<a name="index-C_002dc-_005b"></a>
-<a name="index-Selection-buffer_002c-citations"></a>
-<a name="index-Selection-process-1"></a>
+<body lang="en" xml:lang="en">
+  <a name="Creating-Citations" id="Creating-Citations"></a>
 
-<p>In order to create a citation, press <kbd>C-c [</kbd>.  RefTeX then
-prompts for a regular expression which will be used to search through
-the database and present the list of matches to choose from in a
-selection process similar to that for selecting labels
-(see <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a>).
-</p>
-<p>The regular expression uses an extended syntax: &lsquo;<samp>&amp;&amp;</samp>&rsquo; defines a
-logic <code>and</code> for regular expressions. For example
-&lsquo;<samp>Einstein&amp;&amp;Bose</samp>&rsquo; will match all articles which mention
-Bose-Einstein condensation, or which are co-authored by Bose and
-Einstein.  When entering the regular expression, you can complete on
-known citation keys.  RefTeX also offers a default when prompting for
-a regular expression.  This default is the word before the cursor or the
-word before the current &lsquo;<samp>\cite</samp>&rsquo; command.  Sometimes this may be a
-good search key.
-</p>
-<a name="index-_005cbibliography"></a>
-<a name="index-thebibliography_002c-LaTeX-environment"></a>
-<a name="index-BIBINPUTS_002c-environment-variable-1"></a>
-<a name="index-TEXBIB_002c-environment-variable"></a>
-<p>RefTeX prefers to use BibTeX database files specified with a
-<code>\bibliography</code> macro to collect its information.  Just like
-BibTeX, it will search for the specified files in the current directory
-and along the path given in the environment variable <code>BIBINPUTS</code>.
-If you do not use BibTeX, but the document contains an explicit
-<code>thebibliography</code> environment, RefTeX will collect its
-information from there.  Note that in this case the information
-presented in the selection buffer will just be a copy of relevant
-<code>\bibitem</code> entries, not the structured listing available with
-BibTeX database files.
-</p>
-<a name="index-_003f-2"></a>
-<p>In the selection buffer, the following keys provide special commands.  A
-summary of this information is always available from the selection
-process by pressing <kbd>?</kbd>.
-</p>
-<dl compact="compact">
-<dt><kbd><b>General</b></kbd></dt>
-<dt><kbd>?</kbd></dt>
-<dd><p>Show a summary of available commands.
-</p>
-</dd>
-<dt><kbd>0-9,-</kbd></dt>
-<dd><p>Prefix argument.
-</p>
-</dd>
-<dt><kbd><b>Moving around</b></kbd></dt>
-<dt><kbd>n</kbd></dt>
-<dd><p>Go to next article.
-</p>
-</dd>
-<dt><kbd>p</kbd></dt>
-<dd><p>Go to previous article.
-</p>
-</dd>
-<dt><kbd><b>Access to full database entries</b></kbd></dt>
-<dt><kbd><span class="key">SPC</span></kbd></dt>
-<dd><p>Show the database entry corresponding to the article at point, in
-another window.  See also the <kbd>f</kbd> key.
-</p>
-</dd>
-<dt><kbd>f</kbd></dt>
-<dd><p>Toggle follow mode.  When follow mode is active, the other window will
-always display the full database entry of the current article.  This is
-equivalent to pressing <tt class="key">SPC</tt> after each cursor motion.  With BibTeX
-entries, follow mode can be rather slow.
-</p>
-</dd>
-<dt><kbd><b>Selecting entries and creating the citation</b></kbd></dt>
-<dt><kbd><span class="key">RET</span></kbd></dt>
-<dd><p>Insert a citation referencing the article at point into the buffer from
-which the selection process was started.
-</p>
-</dd>
-<dt><kbd>mouse-2</kbd></dt>
-<dd><a name="index-reftex_002dhighlight_002dselection-2"></a>
-<p>Clicking with mouse button 2 on a citation will accept it like <tt class="key">RET</tt>
-would.  See also variable <code>reftex-highlight-selection</code>,
-<a href="Options-_002d-Misc.html#Options-_002d-Misc">Options - Misc</a>.
-</p>
-</dd>
-<dt><kbd>m</kbd></dt>
-<dd><p>Mark the current entry.  When one or several entries are marked,
-pressing <kbd>a</kbd> or <kbd>A</kbd> accepts all marked entries.  Also,
-<tt class="key">RET</tt> behaves like the <kbd>a</kbd> key.
-</p>
-</dd>
-<dt><kbd>u</kbd></dt>
-<dd><p>Unmark a marked entry.
-</p>
-</dd>
-<dt><kbd>a</kbd></dt>
-<dd><p>Accept all (marked) entries in the selection buffer and create a single
-<code>\cite</code> macro referring to them.
-</p>
-</dd>
-<dt><kbd>A</kbd></dt>
-<dd><p>Accept all (marked) entries in the selection buffer and create a
-separate <code>\cite</code> macro for each of it.
-</p>
-</dd>
-<dt><kbd>e</kbd></dt>
-<dd><p>Create a new BibTeX database file which contains all <i>marked</i> entries
-in the selection buffer.  If no entries are marked, all entries are
-selected.
-</p>
-</dd>
-<dt><kbd>E</kbd></dt>
-<dd><p>Create a new BibTeX database file which contains all <i>unmarked</i>
-entries in the selection buffer.  If no entries are marked, all entries
-are selected.
-</p>
-</dd>
-<dt><kbd><span class="key">TAB</span></kbd></dt>
-<dd><p>Enter a citation key with completion.  This may also be a key which does
-not yet exist.
-</p>
-</dd>
-<dt><kbd>.</kbd></dt>
-<dd><p>Show insertion point in another window.  This is the point from where you
-called <code>reftex-citation</code>.
-</p>
-</dd>
-<dt><kbd><b>Exiting</b></kbd></dt>
-<dt><kbd>q</kbd></dt>
-<dd><p>Exit the selection process without inserting a citation into the
-buffer.
-</p>
-</dd>
-<dt><kbd><b>Updating the buffer</b></kbd></dt>
-<dt><kbd>g</kbd></dt>
-<dd><p>Start over with a new regular expression.  The full database will be
-rescanned with the new expression (see also <kbd>r</kbd>).
-</p>
-</dd>
-<dt><kbd>r</kbd></dt>
-<dd><p>Refine the current selection with another regular expression.  This will
-<em>not</em> rescan the entire database, but just the already selected
-entries.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Citation-Styles.html#Citation-Styles"
+    accesskey="n" rel="next">Citation Styles</a>, Up: <a href=
+    "Citations.html#Citations" accesskey="u" rel="up">Citations</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-Citations-1" id="Creating-Citations-1"></a>
 
-<a name="index-reftex_002dselect_002dbib_002dmap-1"></a>
-<p>In order to define additional commands for this selection process, the
-keymap <code>reftex-select-bib-map</code> may be used.
-</p>
-<p>Note that if you do not use Emacs to edit the BibTeX database files,
-RefTeX will ask if the related buffers should be updated once it
-detects that the files were changed externally.  If you do not want to
-be bothered by such queries, you can activate Auto Revert mode for these
-buffers by adding the following expression to your init file:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-hook 'bibtex-mode-hook 'turn-on-auto-revert-mode)
-</pre></div>
+  <h3 class="section">4.1 Creating Citations</h3><a name=
+  "index-Creating-citations" id="index-Creating-citations"></a>
+  <a name="index-Citations_002c-creating" id=
+  "index-Citations_002c-creating"></a> <a name=
+  "index-reftex_002dcitation" id="index-reftex_002dcitation"></a>
+  <a name="index-C_002dc-_005b" id="index-C_002dc-_005b"></a>
+  <a name="index-Selection-buffer_002c-citations" id=
+  "index-Selection-buffer_002c-citations"></a> <a name=
+  "index-Selection-process-1" id="index-Selection-process-1"></a>
 
+  <p>In order to create a citation, press <kbd>C-c [</kbd>. RefTeX
+  then prompts for a regular expression which will be used to
+  search through the database and present the list of matches to
+  choose from in a selection process similar to that for selecting
+  labels (see <a href=
+  "Referencing-Labels.html#Referencing-Labels">Referencing
+  Labels</a>).</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Citation-Styles.html#Citation-Styles" accesskey="n" rel="next">Citation Styles</a>, Up: <a href="Citations.html#Citations" accesskey="u" rel="up">Citations</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The regular expression uses an extended syntax:
+  &lsquo;<samp>&amp;&amp;</samp>&rsquo; defines a logic
+  <code>and</code> for regular expressions. For example
+  &lsquo;<samp>Einstein&amp;&amp;Bose</samp>&rsquo; will match all
+  articles which mention Bose-Einstein condensation, or which are
+  co-authored by Bose and Einstein. When entering the regular
+  expression, you can complete on known citation keys. RefTeX also
+  offers a default when prompting for a regular expression. This
+  default is the word before the cursor or the word before the
+  current &lsquo;<samp>\cite</samp>&rsquo; command. Sometimes this
+  may be a good search key.</p><a name="index-_005cbibliography"
+  id="index-_005cbibliography"></a> <a name=
+  "index-thebibliography_002c-LaTeX-environment" id=
+  "index-thebibliography_002c-LaTeX-environment"></a> <a name=
+  "index-BIBINPUTS_002c-environment-variable-1" id=
+  "index-BIBINPUTS_002c-environment-variable-1"></a> <a name=
+  "index-TEXBIB_002c-environment-variable" id=
+  "index-TEXBIB_002c-environment-variable"></a>
 
+  <p>RefTeX prefers to use BibTeX database files specified with a
+  <code>\bibliography</code> macro to collect its information. Just
+  like BibTeX, it will search for the specified files in the
+  current directory and along the path given in the environment
+  variable <code>BIBINPUTS</code>. If you do not use BibTeX, but
+  the document contains an explicit <code>thebibliography</code>
+  environment, RefTeX will collect its information from there. Note
+  that in this case the information presented in the selection
+  buffer will just be a copy of relevant <code>\bibitem</code>
+  entries, not the structured listing available with BibTeX
+  database files.</p><a name="index-_003f-2" id=
+  "index-_003f-2"></a>
 
+  <p>In the selection buffer, the following keys provide special
+  commands. A summary of this information is always available from
+  the selection process by pressing <kbd>?</kbd>.</p>
 
+  <dl compact="compact">
+    <dt><kbd><b>General</b></kbd></dt>
+
+    <dt><kbd>?</kbd></dt>
+
+    <dd>
+      <p>Show a summary of available commands.</p>
+    </dd>
+
+    <dt><kbd>0-9,-</kbd></dt>
+
+    <dd>
+      <p>Prefix argument.</p>
+    </dd>
+
+    <dt><kbd><b>Moving around</b></kbd></dt>
+
+    <dt><kbd>n</kbd></dt>
+
+    <dd>
+      <p>Go to next article.</p>
+    </dd>
+
+    <dt><kbd>p</kbd></dt>
+
+    <dd>
+      <p>Go to previous article.</p>
+    </dd>
+
+    <dt><kbd><b>Access to full database entries</b></kbd></dt>
+
+    <dt><kbd><span class="key">SPC</span></kbd></dt>
+
+    <dd>
+      <p>Show the database entry corresponding to the article at
+      point, in another window. See also the <kbd>f</kbd> key.</p>
+    </dd>
+
+    <dt><kbd>f</kbd></dt>
+
+    <dd>
+      <p>Toggle follow mode. When follow mode is active, the other
+      window will always display the full database entry of the
+      current article. This is equivalent to pressing <tt class=
+      "key">SPC</tt> after each cursor motion. With BibTeX entries,
+      follow mode can be rather slow.</p>
+    </dd>
+
+    <dt><kbd><b>Selecting entries and creating the
+    citation</b></kbd></dt>
+
+    <dt><kbd><span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Insert a citation referencing the article at point into
+      the buffer from which the selection process was started.</p>
+    </dd>
+
+    <dt><kbd>mouse-2</kbd></dt>
+
+    <dd>
+      <a name="index-reftex_002dhighlight_002dselection-2" id=
+      "index-reftex_002dhighlight_002dselection-2"></a>
+
+      <p>Clicking with mouse button 2 on a citation will accept it
+      like <tt class="key">RET</tt> would. See also variable
+      <code>reftex-highlight-selection</code>, <a href=
+      "Options-_002d-Misc.html#Options-_002d-Misc">Options -
+      Misc</a>.</p>
+    </dd>
+
+    <dt><kbd>m</kbd></dt>
+
+    <dd>
+      <p>Mark the current entry. When one or several entries are
+      marked, pressing <kbd>a</kbd> or <kbd>A</kbd> accepts all
+      marked entries. Also, <tt class="key">RET</tt> behaves like
+      the <kbd>a</kbd> key.</p>
+    </dd>
+
+    <dt><kbd>u</kbd></dt>
+
+    <dd>
+      <p>Unmark a marked entry.</p>
+    </dd>
+
+    <dt><kbd>a</kbd></dt>
+
+    <dd>
+      <p>Accept all (marked) entries in the selection buffer and
+      create a single <code>\cite</code> macro referring to
+      them.</p>
+    </dd>
+
+    <dt><kbd>A</kbd></dt>
+
+    <dd>
+      <p>Accept all (marked) entries in the selection buffer and
+      create a separate <code>\cite</code> macro for each of
+      it.</p>
+    </dd>
+
+    <dt><kbd>e</kbd></dt>
+
+    <dd>
+      <p>Create a new BibTeX database file which contains all
+      <i>marked</i> entries in the selection buffer. If no entries
+      are marked, all entries are selected.</p>
+    </dd>
+
+    <dt><kbd>E</kbd></dt>
+
+    <dd>
+      <p>Create a new BibTeX database file which contains all
+      <i>unmarked</i> entries in the selection buffer. If no
+      entries are marked, all entries are selected.</p>
+    </dd>
+
+    <dt><kbd><span class="key">TAB</span></kbd></dt>
+
+    <dd>
+      <p>Enter a citation key with completion. This may also be a
+      key which does not yet exist.</p>
+    </dd>
+
+    <dt><kbd>.</kbd></dt>
+
+    <dd>
+      <p>Show insertion point in another window. This is the point
+      from where you called <code>reftex-citation</code>.</p>
+    </dd>
+
+    <dt><kbd><b>Exiting</b></kbd></dt>
+
+    <dt><kbd>q</kbd></dt>
+
+    <dd>
+      <p>Exit the selection process without inserting a citation
+      into the buffer.</p>
+    </dd>
+
+    <dt><kbd><b>Updating the buffer</b></kbd></dt>
+
+    <dt><kbd>g</kbd></dt>
+
+    <dd>
+      <p>Start over with a new regular expression. The full
+      database will be rescanned with the new expression (see also
+      <kbd>r</kbd>).</p>
+    </dd>
+
+    <dt><kbd>r</kbd></dt>
+
+    <dd>
+      <p>Refine the current selection with another regular
+      expression. This will <em>not</em> rescan the entire
+      database, but just the already selected entries.</p>
+    </dd>
+  </dl><a name="index-reftex_002dselect_002dbib_002dmap-1" id=
+  "index-reftex_002dselect_002dbib_002dmap-1"></a>
+
+  <p>In order to define additional commands for this selection
+  process, the keymap <code>reftex-select-bib-map</code> may be
+  used.</p>
+
+  <p>Note that if you do not use Emacs to edit the BibTeX database
+  files, RefTeX will ask if the related buffers should be updated
+  once it detects that the files were changed externally. If you do
+  not want to be bothered by such queries, you can activate Auto
+  Revert mode for these buffers by adding the following expression
+  to your init file:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(add-hook 'bibtex-mode-hook 'turn-on-auto-revert-mode)
+</pre>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Citation-Styles.html#Citation-Styles"
+    accesskey="n" rel="next">Citation Styles</a>, Up: <a href=
+    "Citations.html#Citations" accesskey="u" rel="up">Citations</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

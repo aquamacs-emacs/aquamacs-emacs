@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,181 +20,231 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Undo</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Undo">
-<meta name="keywords" content="GNU Emacs Manual: Undo">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Fixit.html#Fixit" rel="up" title="Fixit">
-<link href="Transpose.html#Transpose" rel="next" title="Transpose">
-<link href="Fixit.html#Fixit" rel="prev" title="Fixit">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Undo</title>
+  <meta name="description" content="GNU Emacs Manual: Undo" />
+  <meta name="keywords" content="GNU Emacs Manual: Undo" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Fixit.html#Fixit" rel="up" title="Fixit" />
+  <link href="Transpose.html#Transpose" rel="next" title=
+  "Transpose" />
+  <link href="Fixit.html#Fixit" rel="prev" title="Fixit" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Undo" id="Undo"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Transpose.html#Transpose" accesskey="n" rel=
+    "next">Transpose</a>, Up: <a href="Fixit.html#Fixit" accesskey=
+    "u" rel="up">Fixit</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Undo-1" id="Undo-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Undo"></a>
-<div class="header">
-<p>
-Next: <a href="Transpose.html#Transpose" accesskey="n" rel="next">Transpose</a>, Up: <a href="Fixit.html#Fixit" accesskey="u" rel="up">Fixit</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Undo-1"></a>
-<h3 class="section">16.1 Undo</h3>
-<a name="index-undo"></a>
-<a name="index-changes_002c-undoing"></a>
+  <h3 class="section">16.1 Undo</h3><a name="index-undo" id=
+  "index-undo"></a> <a name="index-changes_002c-undoing" id=
+  "index-changes_002c-undoing"></a>
 
-<p>The <em>undo</em> command reverses recent changes in the buffer&rsquo;s text.
-Each buffer records changes individually, and the undo command always
-applies to the current buffer.  You can undo all the changes in a
-buffer for as far back as the buffer&rsquo;s records go.  Usually, each editing
-command makes a separate entry in the undo records, but some commands
-such as <code>query-replace</code> divide their changes into multiple
-entries for flexibility in undoing.  Consecutive character insertion
-commands are usually grouped together into a single undo record, to
-make undoing less tedious.
-</p>
-<dl compact="compact">
-<dt><kbd>C-/</kbd></dt>
-<dt><kbd>C-x u</kbd></dt>
-<dt><kbd>C-_</kbd></dt>
-<dd><p>Undo one entry in the current buffer&rsquo;s undo records (<code>undo</code>).
-</p></dd>
-</dl>
+  <p>The <em>undo</em> command reverses recent changes in the
+  buffer&rsquo;s text. Each buffer records changes individually,
+  and the undo command always applies to the current buffer. You
+  can undo all the changes in a buffer for as far back as the
+  buffer&rsquo;s records go. Usually, each editing command makes a
+  separate entry in the undo records, but some commands such as
+  <code>query-replace</code> divide their changes into multiple
+  entries for flexibility in undoing. Consecutive character
+  insertion commands are usually grouped together into a single
+  undo record, to make undoing less tedious.</p>
 
-<a name="index-C_002dx-u"></a>
-<a name="index-C_002d_005f"></a>
-<a name="index-C_002d_002f"></a>
-<a name="index-undo-1"></a>
-<p>To begin to undo, type <kbd>C-/</kbd> (or its aliases, <kbd>C-_</kbd> or
-<kbd>C-x u</kbd>)<a name="DOCF6" href="#FOOT6"><sup>6</sup></a>.  This undoes the most recent change in the buffer,
-and moves point back to where it was before that change.
-  Consecutive repetitions of <kbd>C-/</kbd> (or its aliases) undo earlier
-and earlier changes in the current buffer.  If all the recorded
-changes have already been undone, the undo command signals an error.
-</p>
-<a name="index-redo"></a>
-<a name="index-undo_002donly"></a>
-<p>Any command other than an undo command breaks the sequence of undo
-commands.  Starting from that moment, the entire sequence of undo
-commands that you have just performed are themselves placed into the
-undo record, as a single set of changes.  Therefore, to re-apply
-changes you have undone, type <kbd>C-f</kbd> or any other command that
-harmlessly breaks the sequence of undoing; then type <kbd>C-/</kbd> to undo
-the undo command.
-</p>
-<p>Alternatively, if you want to resume undoing, without redoing
-previous undo commands, use <kbd>M-x undo-only</kbd>.  This is like
-<code>undo</code>, but will not redo changes you have just undone.
-</p>
-<p>If you notice that a buffer has been modified accidentally, the
-easiest way to recover is to type <kbd>C-/</kbd> repeatedly until the stars
-disappear from the front of the mode line (see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).
-Whenever an undo command makes the stars disappear from the mode line,
-it means that the buffer contents are the same as they were when the
-file was last read in or saved.  If you do not remember whether you
-changed the buffer deliberately, type <kbd>C-/</kbd> once.  When you see
-the last change you made undone, you will see whether it was an
-intentional change.  If it was an accident, leave it undone.  If it
-was deliberate, redo the change as described above.
-</p>
-<a name="index-selective-undo"></a>
-<a name="index-C_002du-C_002d_002f"></a>
-<p>When there is an active region, any use of <code>undo</code> performs
-<em>selective undo</em>: it undoes the most recent change within the
-region, instead of the entire buffer.  However, when Transient Mark
-mode is off (see <a href="Disabled-Transient-Mark.html#Disabled-Transient-Mark">Disabled Transient Mark</a>), <kbd>C-/</kbd> always
-operates on the entire buffer, ignoring the region.  In this case, you
-can perform selective undo by supplying a prefix argument to the
-<code>undo</code> command: <kbd>C-u C-/</kbd>.  To undo further changes in the
-same region, repeat the <code>undo</code> command (no prefix argument is
-needed).
-</p>
-<p>Some specialized buffers do not make undo records.  Buffers whose
-names start with spaces never do; these buffers are used internally by
-Emacs to hold text that users don&rsquo;t normally look at or edit.
-</p>
-<a name="index-undo_002dlimit"></a>
-<a name="index-undo_002dstrong_002dlimit"></a>
-<a name="index-undo_002douter_002dlimit"></a>
-<a name="index-undo-limit"></a>
-<p>When the undo information for a buffer becomes too large, Emacs discards
-the oldest records from time to time (during <em>garbage
-collection</em>).  You can specify how much undo information to keep by
-setting the variables <code>undo-limit</code>, <code>undo-strong-limit</code>, and
-<code>undo-outer-limit</code>.  Their values are expressed in bytes.
-</p>
-<p>The variable <code>undo-limit</code> sets a soft limit: Emacs keeps undo
-data for enough commands to reach this size, and perhaps exceed it,
-but does not keep data for any earlier commands beyond that.  Its
-default value is 80000.  The variable <code>undo-strong-limit</code> sets a
-stricter limit: any previous command (though not the most recent one)
-that pushes the size past this amount is forgotten.  The default value
-of <code>undo-strong-limit</code> is 120000.
-</p>
-<p>Regardless of the values of those variables, the most recent change
-is never discarded unless it gets bigger than <code>undo-outer-limit</code>
-(normally 12,000,000).  At that point, Emacs discards the undo data and
-warns you about it.  This is the only situation in which you cannot
-undo the last command.  If this happens, you can increase the value of
-<code>undo-outer-limit</code> to make it even less likely to happen in the
-future.  But if you didn&rsquo;t expect the command to create such large
-undo data, then it is probably a bug and you should report it.
-See <a href="Bugs.html#Bugs">Reporting Bugs</a>.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl compact="compact">
+    <dt><kbd>C-/</kbd></dt>
 
-<h3><a name="FOOT6" href="#DOCF6">(6)</a></h3>
-<p>Aside from <kbd>C-/</kbd>, the <code>undo</code> command is
-also bound to <kbd>C-x u</kbd> because that is more straightforward for
-beginners to remember: &lsquo;<samp>u</samp>&rsquo; stands for &ldquo;undo&rdquo;.  It is also bound
-to <kbd>C-_</kbd> because typing <kbd>C-/</kbd> on some text terminals actually
-enters <kbd>C-_</kbd>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Transpose.html#Transpose" accesskey="n" rel="next">Transpose</a>, Up: <a href="Fixit.html#Fixit" accesskey="u" rel="up">Fixit</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><kbd>C-x u</kbd></dt>
 
+    <dt><kbd>C-_</kbd></dt>
 
+    <dd>
+      <p>Undo one entry in the current buffer&rsquo;s undo records
+      (<code>undo</code>).</p>
+    </dd>
+  </dl><a name="index-C_002dx-u" id="index-C_002dx-u"></a> <a name=
+  "index-C_002d_005f" id="index-C_002d_005f"></a> <a name=
+  "index-C_002d_002f" id="index-C_002d_002f"></a> <a name=
+  "index-undo-1" id="index-undo-1"></a>
 
+  <p>To begin to undo, type <kbd>C-/</kbd> (or its aliases,
+  <kbd>C-_</kbd> or <kbd>C-x u</kbd>)<a name="DOCF6" href="#FOOT6"
+  id="DOCF6"><sup>6</sup></a>. This undoes the most recent change
+  in the buffer, and moves point back to where it was before that
+  change. Consecutive repetitions of <kbd>C-/</kbd> (or its
+  aliases) undo earlier and earlier changes in the current buffer.
+  If all the recorded changes have already been undone, the undo
+  command signals an error.</p><a name="index-redo" id=
+  "index-redo"></a> <a name="index-undo_002donly" id=
+  "index-undo_002donly"></a>
+
+  <p>Any command other than an undo command breaks the sequence of
+  undo commands. Starting from that moment, the entire sequence of
+  undo commands that you have just performed are themselves placed
+  into the undo record, as a single set of changes. Therefore, to
+  re-apply changes you have undone, type <kbd>C-f</kbd> or any
+  other command that harmlessly breaks the sequence of undoing;
+  then type <kbd>C-/</kbd> to undo the undo command.</p>
+
+  <p>Alternatively, if you want to resume undoing, without redoing
+  previous undo commands, use <kbd>M-x undo-only</kbd>. This is
+  like <code>undo</code>, but will not redo changes you have just
+  undone.</p>
+
+  <p>If you notice that a buffer has been modified accidentally,
+  the easiest way to recover is to type <kbd>C-/</kbd> repeatedly
+  until the stars disappear from the front of the mode line (see
+  <a href="Mode-Line.html#Mode-Line">Mode Line</a>). Whenever an
+  undo command makes the stars disappear from the mode line, it
+  means that the buffer contents are the same as they were when the
+  file was last read in or saved. If you do not remember whether
+  you changed the buffer deliberately, type <kbd>C-/</kbd> once.
+  When you see the last change you made undone, you will see
+  whether it was an intentional change. If it was an accident,
+  leave it undone. If it was deliberate, redo the change as
+  described above.</p><a name="index-selective-undo" id=
+  "index-selective-undo"></a> <a name="index-C_002du-C_002d_002f"
+  id="index-C_002du-C_002d_002f"></a>
+
+  <p>When there is an active region, any use of <code>undo</code>
+  performs <em>selective undo</em>: it undoes the most recent
+  change within the region, instead of the entire buffer. However,
+  when Transient Mark mode is off (see <a href=
+  "Disabled-Transient-Mark.html#Disabled-Transient-Mark">Disabled
+  Transient Mark</a>), <kbd>C-/</kbd> always operates on the entire
+  buffer, ignoring the region. In this case, you can perform
+  selective undo by supplying a prefix argument to the
+  <code>undo</code> command: <kbd>C-u C-/</kbd>. To undo further
+  changes in the same region, repeat the <code>undo</code> command
+  (no prefix argument is needed).</p>
+
+  <p>Some specialized buffers do not make undo records. Buffers
+  whose names start with spaces never do; these buffers are used
+  internally by Emacs to hold text that users don&rsquo;t normally
+  look at or edit.</p><a name="index-undo_002dlimit" id=
+  "index-undo_002dlimit"></a> <a name=
+  "index-undo_002dstrong_002dlimit" id=
+  "index-undo_002dstrong_002dlimit"></a> <a name=
+  "index-undo_002douter_002dlimit" id=
+  "index-undo_002douter_002dlimit"></a> <a name="index-undo-limit"
+  id="index-undo-limit"></a>
+
+  <p>When the undo information for a buffer becomes too large,
+  Emacs discards the oldest records from time to time (during
+  <em>garbage collection</em>). You can specify how much undo
+  information to keep by setting the variables
+  <code>undo-limit</code>, <code>undo-strong-limit</code>, and
+  <code>undo-outer-limit</code>. Their values are expressed in
+  bytes.</p>
+
+  <p>The variable <code>undo-limit</code> sets a soft limit: Emacs
+  keeps undo data for enough commands to reach this size, and
+  perhaps exceed it, but does not keep data for any earlier
+  commands beyond that. Its default value is 80000. The variable
+  <code>undo-strong-limit</code> sets a stricter limit: any
+  previous command (though not the most recent one) that pushes the
+  size past this amount is forgotten. The default value of
+  <code>undo-strong-limit</code> is 120000.</p>
+
+  <p>Regardless of the values of those variables, the most recent
+  change is never discarded unless it gets bigger than
+  <code>undo-outer-limit</code> (normally 12,000,000). At that
+  point, Emacs discards the undo data and warns you about it. This
+  is the only situation in which you cannot undo the last command.
+  If this happens, you can increase the value of
+  <code>undo-outer-limit</code> to make it even less likely to
+  happen in the future. But if you didn&rsquo;t expect the command
+  to create such large undo data, then it is probably a bug and you
+  should report it. See <a href="Bugs.html#Bugs">Reporting
+  Bugs</a>.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT6" href="#DOCF6" id="FOOT6">(6)</a></h3>
+
+    <p>Aside from <kbd>C-/</kbd>, the <code>undo</code> command is
+    also bound to <kbd>C-x u</kbd> because that is more
+    straightforward for beginners to remember:
+    &lsquo;<samp>u</samp>&rsquo; stands for &ldquo;undo&rdquo;. It
+    is also bound to <kbd>C-_</kbd> because typing <kbd>C-/</kbd>
+    on some text terminals actually enters <kbd>C-_</kbd>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Transpose.html#Transpose" accesskey="n" rel=
+    "next">Transpose</a>, Up: <a href="Fixit.html#Fixit" accesskey=
+    "u" rel="up">Fixit</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

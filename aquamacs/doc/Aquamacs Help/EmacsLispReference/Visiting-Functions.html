@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,238 +19,381 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Visiting Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Visiting Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Visiting Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Visiting-Files.html#Visiting-Files" rel="up" title="Visiting Files">
-<link href="Subroutines-of-Visiting.html#Subroutines-of-Visiting" rel="next" title="Subroutines of Visiting">
-<link href="Visiting-Files.html#Visiting-Files" rel="prev" title="Visiting Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Visiting
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Visiting Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Visiting Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Visiting-Files.html#Visiting-Files" rel="up" title=
+  "Visiting Files" />
+  <link href="Subroutines-of-Visiting.html#Subroutines-of-Visiting"
+  rel="next" title="Subroutines of Visiting" />
+  <link href="Visiting-Files.html#Visiting-Files" rel="prev" title=
+  "Visiting Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Visiting-Functions" id="Visiting-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Subroutines-of-Visiting.html#Subroutines-of-Visiting"
+    accesskey="n" rel="next">Subroutines of Visiting</a>, Up:
+    <a href="Visiting-Files.html#Visiting-Files" accesskey="u" rel=
+    "up">Visiting Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Functions-for-Visiting-Files" id=
+  "Functions-for-Visiting-Files"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Visiting-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Subroutines-of-Visiting.html#Subroutines-of-Visiting" accesskey="n" rel="next">Subroutines of Visiting</a>, Up: <a href="Visiting-Files.html#Visiting-Files" accesskey="u" rel="up">Visiting Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Functions-for-Visiting-Files"></a>
-<h4 class="subsection">24.1.1 Functions for Visiting Files</h4>
-<a name="index-visiting-files_002c-functions-for"></a>
-<a name="index-how-to-visit-files"></a>
+  <h4 class="subsection">24.1.1 Functions for Visiting
+  Files</h4><a name="index-visiting-files_002c-functions-for" id=
+  "index-visiting-files_002c-functions-for"></a> <a name=
+  "index-how-to-visit-files" id="index-how-to-visit-files"></a>
 
-<p>This section describes the functions normally used to visit files.
-For historical reasons, these functions have names starting with
-&lsquo;<samp>find-</samp>&rsquo; rather than &lsquo;<samp>visit-</samp>&rsquo;.  See <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>, for
-functions and variables that access the visited file name of a buffer or
-that find an existing buffer by its visited file name.
-</p>
-<p>In a Lisp program, if you want to look at the contents of a file but
-not alter it, the fastest way is to use <code>insert-file-contents</code> in a
-temporary buffer.  Visiting the file is not necessary and takes longer.
-See <a href="Reading-from-Files.html#Reading-from-Files">Reading from Files</a>.
-</p>
-<dl>
-<dt><a name="index-find_002dfile"></a>Command: <strong>find-file</strong> <em>filename &amp;optional wildcards</em></dt>
-<dd><p>This command selects a buffer visiting the file <var>filename</var>,
-using an existing buffer if there is one, and otherwise creating a
-new buffer and reading the file into it.  It also returns that buffer.
-</p>
-<p>Aside from some technical details, the body of the <code>find-file</code>
-function is basically equivalent to:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(switch-to-buffer (find-file-noselect filename nil nil wildcards))
-</pre></div>
+  <p>This section describes the functions normally used to visit
+  files. For historical reasons, these functions have names
+  starting with &lsquo;<samp>find-</samp>&rsquo; rather than
+  &lsquo;<samp>visit-</samp>&rsquo;. See <a href=
+  "Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>,
+  for functions and variables that access the visited file name of
+  a buffer or that find an existing buffer by its visited file
+  name.</p>
 
-<p>(See <code>switch-to-buffer</code> in <a href="Switching-Buffers.html#Switching-Buffers">Switching Buffers</a>.)
-</p>
-<p>If <var>wildcards</var> is non-<code>nil</code>, which is always true in an
-interactive call, then <code>find-file</code> expands wildcard characters in
-<var>filename</var> and visits all the matching files.
-</p>
-<p>When <code>find-file</code> is called interactively, it prompts for
-<var>filename</var> in the minibuffer.
-</p></dd></dl>
+  <p>In a Lisp program, if you want to look at the contents of a
+  file but not alter it, the fastest way is to use
+  <code>insert-file-contents</code> in a temporary buffer. Visiting
+  the file is not necessary and takes longer. See <a href=
+  "Reading-from-Files.html#Reading-from-Files">Reading from
+  Files</a>.</p>
 
-<dl>
-<dt><a name="index-find_002dfile_002dliterally"></a>Command: <strong>find-file-literally</strong> <em>filename</em></dt>
-<dd><p>This command visits <var>filename</var>, like <code>find-file</code> does, but it
-does not perform any format conversions (see <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>),
-character code conversions (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>), or end-of-line
-conversions (see <a href="Coding-System-Basics.html#Coding-System-Basics">End of line conversion</a>).
-The buffer visiting the file is made unibyte, and its major mode is
-Fundamental mode, regardless of the file name.  File local variable
-specifications  in the file (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>) are
-ignored, and automatic decompression and adding a newline at the end
-of the file due to <code>require-final-newline</code> (see <a href="Saving-Buffers.html#Saving-Buffers">require-final-newline</a>) are also disabled.
-</p>
-<p>Note that if Emacs already has a buffer visiting the same file
-non-literally, it will not visit the same file literally, but instead
-just switch to the existing buffer.  If you want to be sure of
-accessing a file&rsquo;s contents literally, you should create a temporary
-buffer and then read the file contents into it using
-<code>insert-file-contents-literally</code> (see <a href="Reading-from-Files.html#Reading-from-Files">Reading from Files</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-find_002dfile" id=
+    "index-find_002dfile"></a>Command: <strong>find-file</strong>
+    <em>filename &amp;optional wildcards</em></dt>
 
-<dl>
-<dt><a name="index-find_002dfile_002dnoselect"></a>Function: <strong>find-file-noselect</strong> <em>filename &amp;optional nowarn rawfile wildcards</em></dt>
-<dd><p>This function is the guts of all the file-visiting functions.  It
-returns a buffer visiting the file <var>filename</var>.  You may make the
-buffer current or display it in a window if you wish, but this
-function does not do so.
-</p>
-<p>The function returns an existing buffer if there is one; otherwise it
-creates a new buffer and reads the file into it.  When
-<code>find-file-noselect</code> uses an existing buffer, it first verifies
-that the file has not changed since it was last visited or saved in
-that buffer.  If the file has changed, this function asks the user
-whether to reread the changed file.  If the user says &lsquo;<samp>yes</samp>&rsquo;, any
-edits previously made in the buffer are lost.
-</p>
-<p>Reading the file involves decoding the file&rsquo;s contents (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>), including end-of-line conversion, and format conversion
-(see <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>).  If <var>wildcards</var> is non-<code>nil</code>,
-then <code>find-file-noselect</code> expands wildcard characters in
-<var>filename</var> and visits all the matching files.
-</p>
-<p>This function displays warning or advisory messages in various peculiar
-cases, unless the optional argument <var>nowarn</var> is non-<code>nil</code>.  For
-example, if it needs to create a buffer, and there is no file named
-<var>filename</var>, it displays the message &lsquo;<samp>(New file)</samp>&rsquo; in the echo
-area, and leaves the buffer empty.
-</p>
-<p>The <code>find-file-noselect</code> function normally calls
-<code>after-find-file</code> after reading the file (see <a href="Subroutines-of-Visiting.html#Subroutines-of-Visiting">Subroutines of Visiting</a>).  That function sets the buffer major mode, parses local
-variables, warns the user if there exists an auto-save file more recent
-than the file just visited, and finishes by running the functions in
-<code>find-file-hook</code>.
-</p>
-<p>If the optional argument <var>rawfile</var> is non-<code>nil</code>, then
-<code>after-find-file</code> is not called, and the
-<code>find-file-not-found-functions</code> are not run in case of failure.
-What&rsquo;s more, a non-<code>nil</code> <var>rawfile</var> value suppresses coding
-system conversion and format conversion.
-</p>
-<p>The <code>find-file-noselect</code> function usually returns the buffer that
-is visiting the file <var>filename</var>.  But, if wildcards are actually
-used and expanded, it returns a list of buffers that are visiting the
-various files.
-</p>
-<div class="example">
-<pre class="example">(find-file-noselect &quot;/etc/fstab&quot;)
+    <dd>
+      <p>This command selects a buffer visiting the file
+      <var>filename</var>, using an existing buffer if there is
+      one, and otherwise creating a new buffer and reading the file
+      into it. It also returns that buffer.</p>
+
+      <p>Aside from some technical details, the body of the
+      <code>find-file</code> function is basically equivalent
+      to:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(switch-to-buffer (find-file-noselect filename nil nil wildcards))
+</pre>
+      </div>
+
+      <p>(See <code>switch-to-buffer</code> in <a href=
+      "Switching-Buffers.html#Switching-Buffers">Switching
+      Buffers</a>.)</p>
+
+      <p>If <var>wildcards</var> is non-<code>nil</code>, which is
+      always true in an interactive call, then
+      <code>find-file</code> expands wildcard characters in
+      <var>filename</var> and visits all the matching files.</p>
+
+      <p>When <code>find-file</code> is called interactively, it
+      prompts for <var>filename</var> in the minibuffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-find_002dfile_002dliterally" id=
+    "index-find_002dfile_002dliterally"></a>Command:
+    <strong>find-file-literally</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This command visits <var>filename</var>, like
+      <code>find-file</code> does, but it does not perform any
+      format conversions (see <a href=
+      "Format-Conversion.html#Format-Conversion">Format
+      Conversion</a>), character code conversions (see <a href=
+      "Coding-Systems.html#Coding-Systems">Coding Systems</a>), or
+      end-of-line conversions (see <a href=
+      "Coding-System-Basics.html#Coding-System-Basics">End of line
+      conversion</a>). The buffer visiting the file is made
+      unibyte, and its major mode is Fundamental mode, regardless
+      of the file name. File local variable specifications in the
+      file (see <a href=
+      "File-Local-Variables.html#File-Local-Variables">File Local
+      Variables</a>) are ignored, and automatic decompression and
+      adding a newline at the end of the file due to
+      <code>require-final-newline</code> (see <a href=
+      "Saving-Buffers.html#Saving-Buffers">require-final-newline</a>)
+      are also disabled.</p>
+
+      <p>Note that if Emacs already has a buffer visiting the same
+      file non-literally, it will not visit the same file
+      literally, but instead just switch to the existing buffer. If
+      you want to be sure of accessing a file&rsquo;s contents
+      literally, you should create a temporary buffer and then read
+      the file contents into it using
+      <code>insert-file-contents-literally</code> (see <a href=
+      "Reading-from-Files.html#Reading-from-Files">Reading from
+      Files</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-find_002dfile_002dnoselect" id=
+    "index-find_002dfile_002dnoselect"></a>Function:
+    <strong>find-file-noselect</strong> <em>filename &amp;optional
+    nowarn rawfile wildcards</em></dt>
+
+    <dd>
+      <p>This function is the guts of all the file-visiting
+      functions. It returns a buffer visiting the file
+      <var>filename</var>. You may make the buffer current or
+      display it in a window if you wish, but this function does
+      not do so.</p>
+
+      <p>The function returns an existing buffer if there is one;
+      otherwise it creates a new buffer and reads the file into it.
+      When <code>find-file-noselect</code> uses an existing buffer,
+      it first verifies that the file has not changed since it was
+      last visited or saved in that buffer. If the file has
+      changed, this function asks the user whether to reread the
+      changed file. If the user says
+      &lsquo;<samp>yes</samp>&rsquo;, any edits previously made in
+      the buffer are lost.</p>
+
+      <p>Reading the file involves decoding the file&rsquo;s
+      contents (see <a href=
+      "Coding-Systems.html#Coding-Systems">Coding Systems</a>),
+      including end-of-line conversion, and format conversion (see
+      <a href="Format-Conversion.html#Format-Conversion">Format
+      Conversion</a>). If <var>wildcards</var> is
+      non-<code>nil</code>, then <code>find-file-noselect</code>
+      expands wildcard characters in <var>filename</var> and visits
+      all the matching files.</p>
+
+      <p>This function displays warning or advisory messages in
+      various peculiar cases, unless the optional argument
+      <var>nowarn</var> is non-<code>nil</code>. For example, if it
+      needs to create a buffer, and there is no file named
+      <var>filename</var>, it displays the message
+      &lsquo;<samp>(New file)</samp>&rsquo; in the echo area, and
+      leaves the buffer empty.</p>
+
+      <p>The <code>find-file-noselect</code> function normally
+      calls <code>after-find-file</code> after reading the file
+      (see <a href=
+      "Subroutines-of-Visiting.html#Subroutines-of-Visiting">Subroutines
+      of Visiting</a>). That function sets the buffer major mode,
+      parses local variables, warns the user if there exists an
+      auto-save file more recent than the file just visited, and
+      finishes by running the functions in
+      <code>find-file-hook</code>.</p>
+
+      <p>If the optional argument <var>rawfile</var> is
+      non-<code>nil</code>, then <code>after-find-file</code> is
+      not called, and the
+      <code>find-file-not-found-functions</code> are not run in
+      case of failure. What&rsquo;s more, a non-<code>nil</code>
+      <var>rawfile</var> value suppresses coding system conversion
+      and format conversion.</p>
+
+      <p>The <code>find-file-noselect</code> function usually
+      returns the buffer that is visiting the file
+      <var>filename</var>. But, if wildcards are actually used and
+      expanded, it returns a list of buffers that are visiting the
+      various files.</p>
+
+      <div class="example">
+        <pre class="example">
+(find-file-noselect "/etc/fstab")
      &rArr; #&lt;buffer fstab&gt;
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-find_002dfile_002dother_002dwindow"></a>Command: <strong>find-file-other-window</strong> <em>filename &amp;optional wildcards</em></dt>
-<dd><p>This command selects a buffer visiting the file <var>filename</var>, but
-does so in a window other than the selected window.  It may use
-another existing window or split a window; see <a href="Switching-Buffers.html#Switching-Buffers">Switching Buffers</a>.
-</p>
-<p>When this command is called interactively, it prompts for
-<var>filename</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-find_002dfile_002dother_002dwindow" id=
+    "index-find_002dfile_002dother_002dwindow"></a>Command:
+    <strong>find-file-other-window</strong> <em>filename
+    &amp;optional wildcards</em></dt>
 
-<dl>
-<dt><a name="index-find_002dfile_002dread_002donly"></a>Command: <strong>find-file-read-only</strong> <em>filename &amp;optional wildcards</em></dt>
-<dd><p>This command selects a buffer visiting the file <var>filename</var>, like
-<code>find-file</code>, but it marks the buffer as read-only.  See <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>, for related functions and variables.
-</p>
-<p>When this command is called interactively, it prompts for
-<var>filename</var>.
-</p></dd></dl>
+    <dd>
+      <p>This command selects a buffer visiting the file
+      <var>filename</var>, but does so in a window other than the
+      selected window. It may use another existing window or split
+      a window; see <a href=
+      "Switching-Buffers.html#Switching-Buffers">Switching
+      Buffers</a>.</p>
 
-<dl>
-<dt><a name="index-find_002dfile_002dwildcards"></a>User Option: <strong>find-file-wildcards</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, then the various <code>find-file</code>
-commands check for wildcard characters and visit all the files that
-match them (when invoked interactively or when their <var>wildcards</var>
-argument is non-<code>nil</code>).  If this option is <code>nil</code>, then
-the <code>find-file</code> commands ignore their <var>wildcards</var> argument
-and never treat wildcard characters specially.
-</p></dd></dl>
+      <p>When this command is called interactively, it prompts for
+      <var>filename</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-find_002dfile_002dhook"></a>User Option: <strong>find-file-hook</strong></dt>
-<dd><p>The value of this variable is a list of functions to be called after a
-file is visited.  The file&rsquo;s local-variables specification (if any) will
-have been processed before the hooks are run.  The buffer visiting the
-file is current when the hook functions are run.
-</p>
-<p>This variable is a normal hook.  See <a href="Hooks.html#Hooks">Hooks</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-find_002dfile_002dread_002donly" id=
+    "index-find_002dfile_002dread_002donly"></a>Command:
+    <strong>find-file-read-only</strong> <em>filename &amp;optional
+    wildcards</em></dt>
 
-<dl>
-<dt><a name="index-find_002dfile_002dnot_002dfound_002dfunctions"></a>Variable: <strong>find-file-not-found-functions</strong></dt>
-<dd><p>The value of this variable is a list of functions to be called when
-<code>find-file</code> or <code>find-file-noselect</code> is passed a nonexistent
-file name.  <code>find-file-noselect</code> calls these functions as soon as
-it detects a nonexistent file.  It calls them in the order of the list,
-until one of them returns non-<code>nil</code>.  <code>buffer-file-name</code> is
-already set up.
-</p>
-<p>This is not a normal hook because the values of the functions are
-used, and in many cases only some of the functions are called.
-</p></dd></dl>
+    <dd>
+      <p>This command selects a buffer visiting the file
+      <var>filename</var>, like <code>find-file</code>, but it
+      marks the buffer as read-only. See <a href=
+      "Read-Only-Buffers.html#Read-Only-Buffers">Read Only
+      Buffers</a>, for related functions and variables.</p>
 
-<dl>
-<dt><a name="index-find_002dfile_002dliterally-1"></a>Variable: <strong>find-file-literally</strong></dt>
-<dd><p>This buffer-local variable, if set to a non-<code>nil</code> value, makes
-<code>save-buffer</code> behave as if the buffer were visiting its file
-literally, i.e., without conversions of any kind.  The command
-<code>find-file-literally</code> sets this variable&rsquo;s local value, but other
-equivalent functions and commands can do that as well, e.g., to avoid
-automatic addition of a newline at the end of the file.  This variable
-is permanent local, so it is unaffected by changes of major modes.
-</p></dd></dl>
+      <p>When this command is called interactively, it prompts for
+      <var>filename</var>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Subroutines-of-Visiting.html#Subroutines-of-Visiting" accesskey="n" rel="next">Subroutines of Visiting</a>, Up: <a href="Visiting-Files.html#Visiting-Files" accesskey="u" rel="up">Visiting Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-find_002dfile_002dwildcards" id=
+    "index-find_002dfile_002dwildcards"></a>User Option:
+    <strong>find-file-wildcards</strong></dt>
 
+    <dd>
+      <p>If this variable is non-<code>nil</code>, then the various
+      <code>find-file</code> commands check for wildcard characters
+      and visit all the files that match them (when invoked
+      interactively or when their <var>wildcards</var> argument is
+      non-<code>nil</code>). If this option is <code>nil</code>,
+      then the <code>find-file</code> commands ignore their
+      <var>wildcards</var> argument and never treat wildcard
+      characters specially.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-find_002dfile_002dhook" id=
+    "index-find_002dfile_002dhook"></a>User Option:
+    <strong>find-file-hook</strong></dt>
 
+    <dd>
+      <p>The value of this variable is a list of functions to be
+      called after a file is visited. The file&rsquo;s
+      local-variables specification (if any) will have been
+      processed before the hooks are run. The buffer visiting the
+      file is current when the hook functions are run.</p>
+
+      <p>This variable is a normal hook. See <a href=
+      "Hooks.html#Hooks">Hooks</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-find_002dfile_002dnot_002dfound_002dfunctions" id=
+    "index-find_002dfile_002dnot_002dfound_002dfunctions"></a>Variable:
+    <strong>find-file-not-found-functions</strong></dt>
+
+    <dd>
+      <p>The value of this variable is a list of functions to be
+      called when <code>find-file</code> or
+      <code>find-file-noselect</code> is passed a nonexistent file
+      name. <code>find-file-noselect</code> calls these functions
+      as soon as it detects a nonexistent file. It calls them in
+      the order of the list, until one of them returns
+      non-<code>nil</code>. <code>buffer-file-name</code> is
+      already set up.</p>
+
+      <p>This is not a normal hook because the values of the
+      functions are used, and in many cases only some of the
+      functions are called.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-find_002dfile_002dliterally-1" id=
+    "index-find_002dfile_002dliterally-1"></a>Variable:
+    <strong>find-file-literally</strong></dt>
+
+    <dd>
+      <p>This buffer-local variable, if set to a
+      non-<code>nil</code> value, makes <code>save-buffer</code>
+      behave as if the buffer were visiting its file literally,
+      i.e., without conversions of any kind. The command
+      <code>find-file-literally</code> sets this variable&rsquo;s
+      local value, but other equivalent functions and commands can
+      do that as well, e.g., to avoid automatic addition of a
+      newline at the end of the file. This variable is permanent
+      local, so it is unaffected by changes of major modes.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Subroutines-of-Visiting.html#Subroutines-of-Visiting"
+    accesskey="n" rel="next">Subroutines of Visiting</a>, Up:
+    <a href="Visiting-Files.html#Visiting-Files" accesskey="u" rel=
+    "up">Visiting Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

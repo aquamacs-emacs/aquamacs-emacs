@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,234 +19,343 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Input Streams</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Input Streams">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Input Streams">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Read-and-Print.html#Read-and-Print" rel="up" title="Read and Print">
-<link href="Input-Functions.html#Input-Functions" rel="next" title="Input Functions">
-<link href="Streams-Intro.html#Streams-Intro" rel="prev" title="Streams Intro">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Input Streams</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Input Streams" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Input Streams" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Read-and-Print.html#Read-and-Print" rel="up" title=
+  "Read and Print" />
+  <link href="Input-Functions.html#Input-Functions" rel="next"
+  title="Input Functions" />
+  <link href="Streams-Intro.html#Streams-Intro" rel="prev" title=
+  "Streams Intro" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Input-Streams" id="Input-Streams"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Input-Functions.html#Input-Functions"
+    accesskey="n" rel="next">Input Functions</a>, Previous:
+    <a href="Streams-Intro.html#Streams-Intro" accesskey="p" rel=
+    "prev">Streams Intro</a>, Up: <a href=
+    "Read-and-Print.html#Read-and-Print" accesskey="u" rel=
+    "up">Read and Print</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Input-Streams-1" id="Input-Streams-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Input-Streams"></a>
-<div class="header">
-<p>
-Next: <a href="Input-Functions.html#Input-Functions" accesskey="n" rel="next">Input Functions</a>, Previous: <a href="Streams-Intro.html#Streams-Intro" accesskey="p" rel="prev">Streams Intro</a>, Up: <a href="Read-and-Print.html#Read-and-Print" accesskey="u" rel="up">Read and Print</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Input-Streams-1"></a>
-<h3 class="section">18.2 Input Streams</h3>
-<a name="index-stream-_0028for-reading_0029"></a>
-<a name="index-input-stream"></a>
+  <h3 class="section">18.2 Input Streams</h3><a name=
+  "index-stream-_0028for-reading_0029" id=
+  "index-stream-_0028for-reading_0029"></a> <a name=
+  "index-input-stream" id="index-input-stream"></a>
 
-<p>Most of the Lisp functions for reading text take an <em>input stream</em>
-as an argument.  The input stream specifies where or how to get the
-characters of the text to be read.  Here are the possible types of input
-stream:
-</p>
-<dl compact="compact">
-<dt><var>buffer</var></dt>
-<dd><a name="index-buffer-input-stream"></a>
-<p>The input characters are read from <var>buffer</var>, starting with the
-character directly after point.  Point advances as characters are read.
-</p>
-</dd>
-<dt><var>marker</var></dt>
-<dd><a name="index-marker-input-stream"></a>
-<p>The input characters are read from the buffer that <var>marker</var> is in,
-starting with the character directly after the marker.  The marker
-position advances as characters are read.  The value of point in the
-buffer has no effect when the stream is a marker.
-</p>
-</dd>
-<dt><var>string</var></dt>
-<dd><a name="index-string-input-stream"></a>
-<p>The input characters are taken from <var>string</var>, starting at the first
-character in the string and using as many characters as required.
-</p>
-</dd>
-<dt><var>function</var></dt>
-<dd><a name="index-function-input-stream"></a>
-<p>The input characters are generated by <var>function</var>, which must support
-two kinds of calls:
-</p>
-<ul>
-<li> When it is called with no arguments, it should return the next character.
+  <p>Most of the Lisp functions for reading text take an <em>input
+  stream</em> as an argument. The input stream specifies where or
+  how to get the characters of the text to be read. Here are the
+  possible types of input stream:</p>
 
-</li><li> When it is called with one argument (always a character), <var>function</var>
-should save the argument and arrange to return it on the next call.
-This is called <em>unreading</em> the character; it happens when the Lisp
-reader reads one character too many and wants to put it back where it
-came from.  In this case, it makes no difference what value
-<var>function</var> returns.
-</li></ul>
+  <dl compact="compact">
+    <dt><var>buffer</var></dt>
 
-</dd>
-<dt><code>t</code></dt>
-<dd><a name="index-t-input-stream"></a>
-<p><code>t</code> used as a stream means that the input is read from the
-minibuffer.  In fact, the minibuffer is invoked once and the text
-given by the user is made into a string that is then used as the
-input stream.  If Emacs is running in batch mode, standard input is used
-instead of the minibuffer.  For example,
-</p><div class="example">
-<pre class="example">(message &quot;%s&quot; (read t))
-</pre></div>
-<p>will read a Lisp expression from standard input and print the result
-to standard output.
-</p>
-</dd>
-<dt><code>nil</code></dt>
-<dd><a name="index-nil-input-stream"></a>
-<p><code>nil</code> supplied as an input stream means to use the value of
-<code>standard-input</code> instead; that value is the <em>default input
-stream</em>, and must be a non-<code>nil</code> input stream.
-</p>
-</dd>
-<dt><var>symbol</var></dt>
-<dd><p>A symbol as input stream is equivalent to the symbol&rsquo;s function
-definition (if any).
-</p></dd>
-</dl>
+    <dd>
+      <a name="index-buffer-input-stream" id=
+      "index-buffer-input-stream"></a>
 
-<p>Here is an example of reading from a stream that is a buffer, showing
-where point is located before and after:
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
+      <p>The input characters are read from <var>buffer</var>,
+      starting with the character directly after point. Point
+      advances as characters are read.</p>
+    </dd>
+
+    <dt><var>marker</var></dt>
+
+    <dd>
+      <a name="index-marker-input-stream" id=
+      "index-marker-input-stream"></a>
+
+      <p>The input characters are read from the buffer that
+      <var>marker</var> is in, starting with the character directly
+      after the marker. The marker position advances as characters
+      are read. The value of point in the buffer has no effect when
+      the stream is a marker.</p>
+    </dd>
+
+    <dt><var>string</var></dt>
+
+    <dd>
+      <a name="index-string-input-stream" id=
+      "index-string-input-stream"></a>
+
+      <p>The input characters are taken from <var>string</var>,
+      starting at the first character in the string and using as
+      many characters as required.</p>
+    </dd>
+
+    <dt><var>function</var></dt>
+
+    <dd>
+      <a name="index-function-input-stream" id=
+      "index-function-input-stream"></a>
+
+      <p>The input characters are generated by <var>function</var>,
+      which must support two kinds of calls:</p>
+
+      <ul>
+        <li>When it is called with no arguments, it should return
+        the next character.</li>
+
+        <li>When it is called with one argument (always a
+        character), <var>function</var> should save the argument
+        and arrange to return it on the next call. This is called
+        <em>unreading</em> the character; it happens when the Lisp
+        reader reads one character too many and wants to put it
+        back where it came from. In this case, it makes no
+        difference what value <var>function</var> returns.</li>
+      </ul>
+    </dd>
+
+    <dt><code>t</code></dt>
+
+    <dd>
+      <a name="index-t-input-stream" id="index-t-input-stream"></a>
+
+      <p><code>t</code> used as a stream means that the input is
+      read from the minibuffer. In fact, the minibuffer is invoked
+      once and the text given by the user is made into a string
+      that is then used as the input stream. If Emacs is running in
+      batch mode, standard input is used instead of the minibuffer.
+      For example,</p>
+
+      <div class="example">
+        <pre class="example">
+(message "%s" (read t))
+</pre>
+      </div>
+
+      <p>will read a Lisp expression from standard input and print
+      the result to standard output.</p>
+    </dd>
+
+    <dt><code>nil</code></dt>
+
+    <dd>
+      <a name="index-nil-input-stream" id=
+      "index-nil-input-stream"></a>
+
+      <p><code>nil</code> supplied as an input stream means to use
+      the value of <code>standard-input</code> instead; that value
+      is the <em>default input stream</em>, and must be a
+      non-<code>nil</code> input stream.</p>
+    </dd>
+
+    <dt><var>symbol</var></dt>
+
+    <dd>
+      <p>A symbol as input stream is equivalent to the
+      symbol&rsquo;s function definition (if any).</p>
+    </dd>
+  </dl>
+
+  <p>Here is an example of reading from a stream that is a buffer,
+  showing where point is located before and after:</p>
+
+  <div class="example">
+    <pre class="example">
+---------- Buffer: foo ----------
 This&lowast; is the contents of foo.
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(read (get-buffer &quot;foo&quot;))
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(read (get-buffer "foo"))
      &rArr; is
-</pre><pre class="example">(read (get-buffer &quot;foo&quot;))
+</pre>
+    <pre class="example">
+(read (get-buffer "foo"))
      &rArr; the
-</pre><pre class="example">
-</pre><pre class="example">---------- Buffer: foo ----------
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+---------- Buffer: foo ----------
 This is the&lowast; contents of foo.
 ---------- Buffer: foo ----------
-</pre></div>
+</pre>
+  </div>
 
-<p>Note that the first read skips a space.  Reading skips any amount of
-whitespace preceding the significant text.
-</p>
-<p>Here is an example of reading from a stream that is a marker,
-initially positioned at the beginning of the buffer shown.  The value
-read is the symbol <code>This</code>.
-</p>
-<div class="example">
-<pre class="example">
+  <p>Note that the first read skips a space. Reading skips any
+  amount of whitespace preceding the significant text.</p>
+
+  <p>Here is an example of reading from a stream that is a marker,
+  initially positioned at the beginning of the buffer shown. The
+  value read is the symbol <code>This</code>.</p>
+
+  <div class="example">
+    <pre class="example">
 ---------- Buffer: foo ----------
 This is the contents of foo.
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(setq m (set-marker (make-marker) 1 (get-buffer &quot;foo&quot;)))
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(setq m (set-marker (make-marker) 1 (get-buffer "foo")))
      &rArr; #&lt;marker at 1 in foo&gt;
-</pre><pre class="example">(read m)
+</pre>
+    <pre class="example">
+(read m)
      &rArr; This
-</pre><pre class="example">m
-     &rArr; #&lt;marker at 5 in foo&gt;   ;; <span class="roman">Before the first space.</span>
-</pre></div>
+</pre>
+    <pre class="example">
+m
+     &rArr; #&lt;marker at 5 in foo&gt;   ;; <span class=
+"roman">Before the first space.</span>
+</pre>
+  </div>
 
-<p>Here we read from the contents of a string:
-</p>
-<div class="example">
-<pre class="example">(read &quot;(When in) the course&quot;)
+  <p>Here we read from the contents of a string:</p>
+
+  <div class="example">
+    <pre class="example">
+(read "(When in) the course")
      &rArr; (When in)
-</pre></div>
+</pre>
+  </div>
 
-<p>The following example reads from the minibuffer.  The
-prompt is: &lsquo;<samp>Lisp&nbsp;expression:&nbsp;</samp>&rsquo;<!-- /@w -->.  (That is always the prompt
-used when you read from the stream <code>t</code>.)  The user&rsquo;s input is shown
-following the prompt.
-</p>
-<div class="example">
-<pre class="example">(read t)
+  <p>The following example reads from the minibuffer. The prompt
+  is: &lsquo;<samp>Lisp&nbsp;expression:&nbsp;</samp>&rsquo;
+  <!-- /@w -->. (That is always the prompt used when you read from
+  the stream <code>t</code>.) The user&rsquo;s input is shown
+  following the prompt.</p>
+
+  <div class="example">
+    <pre class="example">
+(read t)
      &rArr; 23
 ---------- Buffer: Minibuffer ----------
 Lisp expression: <kbd>23 <span class="key">RET</span></kbd>
 ---------- Buffer: Minibuffer ----------
-</pre></div>
+</pre>
+  </div>
 
-<p>Finally, here is an example of a stream that is a function, named
-<code>useless-stream</code>.  Before we use the stream, we initialize the
-variable <code>useless-list</code> to a list of characters.  Then each call to
-the function <code>useless-stream</code> obtains the next character in the list
-or unreads a character by adding it to the front of the list.
-</p>
-<div class="example">
-<pre class="example">(setq useless-list (append &quot;XY()&quot; nil))
+  <p>Finally, here is an example of a stream that is a function,
+  named <code>useless-stream</code>. Before we use the stream, we
+  initialize the variable <code>useless-list</code> to a list of
+  characters. Then each call to the function
+  <code>useless-stream</code> obtains the next character in the
+  list or unreads a character by adding it to the front of the
+  list.</p>
+
+  <div class="example">
+    <pre class="example">
+(setq useless-list (append "XY()" nil))
      &rArr; (88 89 40 41)
-</pre><pre class="example">
-</pre><pre class="example">(defun useless-stream (&amp;optional unread)
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(defun useless-stream (&amp;optional unread)
   (if unread
       (setq useless-list (cons unread useless-list))
     (prog1 (car useless-list)
            (setq useless-list (cdr useless-list)))))
      &rArr; useless-stream
-</pre></div>
+</pre>
+  </div>
 
-<p>Now we read using the stream thus constructed:
-</p>
-<div class="example">
-<pre class="example">(read 'useless-stream)
+  <p>Now we read using the stream thus constructed:</p>
+
+  <div class="example">
+    <pre class="example">
+(read 'useless-stream)
      &rArr; XY
-</pre><pre class="example">
-</pre><pre class="example">useless-list
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+useless-list
      &rArr; (40 41)
-</pre></div>
+</pre>
+  </div>
 
-<p>Note that the open and close parentheses remain in the list.  The Lisp
-reader encountered the open parenthesis, decided that it ended the
-input, and unread it.  Another attempt to read from the stream at this
-point would read &lsquo;<samp>()</samp>&rsquo; and return <code>nil</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Input-Functions.html#Input-Functions" accesskey="n" rel="next">Input Functions</a>, Previous: <a href="Streams-Intro.html#Streams-Intro" accesskey="p" rel="prev">Streams Intro</a>, Up: <a href="Read-and-Print.html#Read-and-Print" accesskey="u" rel="up">Read and Print</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Note that the open and close parentheses remain in the list.
+  The Lisp reader encountered the open parenthesis, decided that it
+  ended the input, and unread it. Another attempt to read from the
+  stream at this point would read &lsquo;<samp>()</samp>&rsquo; and
+  return <code>nil</code>.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Input-Functions.html#Input-Functions"
+    accesskey="n" rel="next">Input Functions</a>, Previous:
+    <a href="Streams-Intro.html#Streams-Intro" accesskey="p" rel=
+    "prev">Streams Intro</a>, Up: <a href=
+    "Read-and-Print.html#Read-and-Print" accesskey="u" rel=
+    "up">Read and Print</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,393 +14,619 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: MIME Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: MIME Commands">
-<meta name="keywords" content="Gnus Manual: MIME Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Charsets.html#Charsets" rel="next" title="Charsets">
-<link href="Article-Miscellanea.html#Article-Miscellanea" rel="prev" title="Article Miscellanea">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: MIME Commands</title>
+  <meta name="description" content="Gnus Manual: MIME Commands" />
+  <meta name="keywords" content="Gnus Manual: MIME Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Charsets.html#Charsets" rel="next" title=
+  "Charsets" />
+  <link href="Article-Miscellanea.html#Article-Miscellanea" rel=
+  "prev" title="Article Miscellanea" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="MIME-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Charsets.html#Charsets" accesskey="n" rel="next">Charsets</a>, Previous: <a href="Article-Treatment.html#Article-Treatment" accesskey="p" rel="prev">Article Treatment</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="MIME-Commands-1"></a>
-<h3 class="section">3.19 MIME Commands</h3>
-<a name="index-MIME-decoding"></a>
-<a name="index-attachments"></a>
-<a name="index-viewing-attachments"></a>
+<body lang="en" xml:lang="en">
+  <a name="MIME-Commands" id="MIME-Commands"></a>
 
-<p>The following commands all understand the numerical prefix.  For
-instance, <kbd>3 K v</kbd> means &ldquo;view the third <acronym>MIME</acronym> part&rdquo;.
-</p>
-<dl compact="compact">
-<dt><kbd>b</kbd></dt>
-<dt><kbd>K v</kbd></dt>
-<dd><a name="index-b-_0028Summary_0029"></a>
-<a name="index-K-v-_0028Summary_0029"></a>
-<p>View the <acronym>MIME</acronym> part.
-</p>
-</dd>
-<dt><kbd>K o</kbd></dt>
-<dd><a name="index-K-o-_0028Summary_0029"></a>
-<p>Save the <acronym>MIME</acronym> part.
-</p>
-</dd>
-<dt><kbd>K O</kbd></dt>
-<dd><a name="index-K-O-_0028Summary_0029"></a>
-<p>Prompt for a file name, then save the <acronym>MIME</acronym> part and strip it
-from the article.  The stripped <acronym>MIME</acronym> object will be referred
-via the message/external-body <acronym>MIME</acronym> type.
-</p>
-</dd>
-<dt><kbd>K r</kbd></dt>
-<dd><a name="index-K-r-_0028Summary_0029"></a>
-<p>Replace the <acronym>MIME</acronym> part with an external body.
-</p>
-</dd>
-<dt><kbd>K d</kbd></dt>
-<dd><a name="index-K-d-_0028Summary_0029"></a>
-<p>Delete the <acronym>MIME</acronym> part and add some information about the
-removed part.
-</p>
-</dd>
-<dt><kbd>K c</kbd></dt>
-<dd><a name="index-K-c-_0028Summary_0029"></a>
-<p>Copy the <acronym>MIME</acronym> part.
-</p>
-</dd>
-<dt><kbd>K e</kbd></dt>
-<dd><a name="index-K-e-_0028Summary_0029"></a>
-<p>View the <acronym>MIME</acronym> part externally.
-</p>
-</dd>
-<dt><kbd>K i</kbd></dt>
-<dd><a name="index-K-i-_0028Summary_0029"></a>
-<p>View the <acronym>MIME</acronym> part internally.
-</p>
-</dd>
-<dt><kbd>K |</kbd></dt>
-<dd><a name="index-K-_007c-_0028Summary_0029"></a>
-<p>Pipe the <acronym>MIME</acronym> part to an external command.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Charsets.html#Charsets" accesskey="n" rel=
+    "next">Charsets</a>, Previous: <a href=
+    "Article-Treatment.html#Article-Treatment" accesskey="p" rel=
+    "prev">Article Treatment</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="MIME-Commands-1" id="MIME-Commands-1"></a>
 
-<p>The rest of these <acronym>MIME</acronym> commands do not use the numerical prefix in
-the same manner:
-</p>
-<dl compact="compact">
-<dt><kbd>K H</kbd></dt>
-<dd><a name="index-K-H-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dbrowse_002dhtml_002darticle"></a>
-<p>View &lsquo;<samp>text/html</samp>&rsquo; parts of the current article with a WWW browser.
-Inline images embedded in a message using the <code>cid</code> scheme, as they
-are generally considered to be safe, will be processed properly.  The
-message header is added to the beginning of every <acronym>HTML</acronym> part
-unless the prefix argument is given.
-</p>
-<p>Warning: Spammers use links to images (using the <code>http</code> scheme) in
-<acronym>HTML</acronym> articles to verify whether you have read the message.  As
-this command passes the <acronym>HTML</acronym> content to the browser without
-eliminating these &ldquo;web bugs&rdquo; you should only use it for mails from
-trusted senders.
-</p>
-<p>If you always want to display <acronym>HTML</acronym> parts in the browser, set
-<code>mm-text-html-renderer</code> to <code>nil</code>.
-</p>
-<p>This command creates temporary files to pass <acronym>HTML</acronym> contents
-including images if any to the browser, and deletes them when exiting
-the group (if you want).
-</p>
-</dd>
-<dt><kbd>K b</kbd></dt>
-<dd><a name="index-K-b-_0028Summary_0029"></a>
-<p>Make all the <acronym>MIME</acronym> parts have buttons in front of them.  This is
-mostly useful if you wish to save (or perform other actions) on inlined
-parts.
-</p>
-</dd>
-<dt><kbd>W M h</kbd></dt>
-<dd><a name="index-W-M-h-_0028Summary_0029"></a>
-<a name="index-gnus_002dmime_002dbuttonize_002dattachments_002din_002dheader"></a>
-<a name="index-gnus_002dmime_002ddisplay_002dattachment_002dbuttons_002din_002dheader"></a>
-<p>Display <acronym>MIME</acronym> part buttons in the end of the header of an
-article (<code>gnus-mime-buttonize-attachments-in-header</code>).  This
-command toggles the display.  Note that buttons to be added to the
-header are only the ones that aren&rsquo;t inlined in the body.  If you want
-those buttons always to be displayed, set
-<code>gnus-mime-display-attachment-buttons-in-header</code> to non-<code>nil</code>.
-The default is <code>t</code>.  To change the appearance of buttons, customize
-<code>gnus-header-face-alist</code>.
-</p>
-</dd>
-<dt><kbd>K m</kbd></dt>
-<dd><a name="index-K-m-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002drepair_002dmultipart"></a>
-<p>Some multipart messages are transmitted with missing or faulty headers.
-This command will attempt to &ldquo;repair&rdquo; these messages so that they can
-be viewed in a more pleasant manner
-(<code>gnus-summary-repair-multipart</code>).
-</p>
-</dd>
-<dt><kbd>X m</kbd></dt>
-<dd><a name="index-X-m-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dsave_002dparts"></a>
-<p>Save all parts matching a <acronym>MIME</acronym> type to a directory
-(<code>gnus-summary-save-parts</code>).  Understands the process/prefix
-convention (see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).
-</p>
-</dd>
-<dt><kbd>M-t</kbd></dt>
-<dd><a name="index-M_002dt-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dtoggle_002ddisplay_002dbuttonized"></a>
-<p>Toggle the buttonized display of the article buffer
-(<code>gnus-summary-toggle-display-buttonized</code>).
-</p>
-</dd>
-<dt><kbd>W M w</kbd></dt>
-<dd><a name="index-W-M-w-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002ddecode_002dmime_002dwords"></a>
-<p>Decode RFC 2047-encoded words in the article headers
-(<code>gnus-article-decode-mime-words</code>).
-</p>
-</dd>
-<dt><kbd>W M c</kbd></dt>
-<dd><a name="index-W-M-c-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002ddecode_002dcharset"></a>
-<p>Decode encoded article bodies as well as charsets
-(<code>gnus-article-decode-charset</code>).
-</p>
-<p>This command looks in the <code>Content-Type</code> header to determine the
-charset.  If there is no such header in the article, you can give it a
-prefix, which will prompt for the charset to decode as.  In regional
-groups where people post using some common encoding (but do not
-include <acronym>MIME</acronym> headers), you can set the <code>charset</code> group/topic
-parameter to the required charset (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>).
-</p>
-</dd>
-<dt><kbd>W M v</kbd></dt>
-<dd><a name="index-W-M-v-_0028Summary_0029"></a>
-<a name="index-gnus_002dmime_002dview_002dall_002dparts"></a>
-<p>View all the <acronym>MIME</acronym> parts in the current article
-(<code>gnus-mime-view-all-parts</code>).
-</p>
-</dd>
-</dl>
+  <h3 class="section">3.19 MIME Commands</h3><a name=
+  "index-MIME-decoding" id="index-MIME-decoding"></a> <a name=
+  "index-attachments" id="index-attachments"></a> <a name=
+  "index-viewing-attachments" id="index-viewing-attachments"></a>
 
-<p>Relevant variables:
-</p>
-<dl compact="compact">
-<dt><code>gnus-ignored-mime-types</code></dt>
-<dd><a name="index-gnus_002dignored_002dmime_002dtypes"></a>
-<p>This is a list of regexps.  <acronym>MIME</acronym> types that match a regexp from
-this list will be completely ignored by Gnus.  The default value is
-<code>nil</code>.
-</p>
-<p>To have all Vcards be ignored, you&rsquo;d say something like this:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-ignored-mime-types
-      '(&quot;text/x-vcard&quot;))
-</pre></div>
+  <p>The following commands all understand the numerical prefix.
+  For instance, <kbd>3 K v</kbd> means &ldquo;view the third
+  <acronym>MIME</acronym> part&rdquo;.</p>
 
-</dd>
-<dt><code>gnus-article-loose-mime</code></dt>
-<dd><a name="index-gnus_002darticle_002dloose_002dmime"></a>
-<p>If non-<code>nil</code>, Gnus won&rsquo;t require the &lsquo;<samp>MIME-Version</samp>&rsquo; header
-before interpreting the message as a <acronym>MIME</acronym> message.  This helps
-when reading messages from certain broken mail user agents.  The
-default is <code>t</code>.
-</p>
-</dd>
-<dt><code>gnus-article-emulate-mime</code></dt>
-<dd><a name="index-gnus_002darticle_002demulate_002dmime"></a>
-<a name="index-uuencode"></a>
-<a name="index-yEnc"></a>
-<p>There are other, non-<acronym>MIME</acronym> encoding methods used.  The most common
-is &lsquo;<samp>uuencode</samp>&rsquo;, but yEncode is also getting to be popular.  If
-this variable is non-<code>nil</code>, Gnus will look in message bodies to
-see if it finds these encodings, and if so, it&rsquo;ll run them through the
-Gnus <acronym>MIME</acronym> machinery.  The default is <code>t</code>.  Only
-single-part yEnc encoded attachments can be decoded.  There&rsquo;s no support
-for encoding in Gnus.
-</p>
-</dd>
-<dt><code>gnus-unbuttonized-mime-types</code></dt>
-<dd><a name="index-gnus_002dunbuttonized_002dmime_002dtypes"></a>
-<p>This is a list of regexps.  <acronym>MIME</acronym> types that match a regexp from
-this list won&rsquo;t have <acronym>MIME</acronym> buttons inserted unless they aren&rsquo;t
-displayed or this variable is overridden by
-<code>gnus-buttonized-mime-types</code>.  The default value is
-<code>(&quot;.*/.*&quot;)</code>.  This variable is only used when
-<code>gnus-inhibit-mime-unbuttonizing</code> is <code>nil</code>.
-</p>
-</dd>
-<dt><code>gnus-buttonized-mime-types</code></dt>
-<dd><a name="index-gnus_002dbuttonized_002dmime_002dtypes"></a>
-<p>This is a list of regexps.  <acronym>MIME</acronym> types that match a regexp from
-this list will have <acronym>MIME</acronym> buttons inserted unless they aren&rsquo;t
-displayed.  This variable overrides
-<code>gnus-unbuttonized-mime-types</code>.  The default value is <code>nil</code>.
-This variable is only used when <code>gnus-inhibit-mime-unbuttonizing</code>
-is <code>nil</code>.
-</p>
-<p>E.g., to see security buttons but no other buttons, you could set this
-variable to <code>(&quot;multipart/signed&quot;)</code> and leave
-<code>gnus-unbuttonized-mime-types</code> at the default value.
-</p>
-<p>You could also add <code>&quot;multipart/alternative&quot;</code> to this list to
-display radio buttons that allow you to choose one of two media types
-those mails include.  See also <code>mm-discouraged-alternatives</code>
-(see <a href="../emacs-mime/Display-Customization.html#Display-Customization">Display Customization</a> in <cite>The
-Emacs MIME Manual</cite>).
-</p>
-</dd>
-<dt><code>gnus-inhibit-mime-unbuttonizing</code></dt>
-<dd><a name="index-gnus_002dinhibit_002dmime_002dunbuttonizing"></a>
-<p>If this is non-<code>nil</code>, then all <acronym>MIME</acronym> parts get buttons.  The
-default value is <code>nil</code>.
-</p>
-</dd>
-<dt><code>gnus-article-mime-part-function</code></dt>
-<dd><a name="index-gnus_002darticle_002dmime_002dpart_002dfunction"></a>
-<p>For each <acronym>MIME</acronym> part, this function will be called with the <acronym>MIME</acronym>
-handle as the parameter.  The function is meant to be used to allow
-users to gather information from the article (e.g., add Vcard info to
-the bbdb database) or to do actions based on parts (e.g., automatically
-save all jpegs into some directory).
-</p>
-<p>Here&rsquo;s an example function the does the latter:
-</p>
-<div class="lisp">
-<pre class="lisp">(defun my-save-all-jpeg-parts (handle)
-  (when (equal (car (mm-handle-type handle)) &quot;image/jpeg&quot;)
+  <dl compact="compact">
+    <dt><kbd>b</kbd></dt>
+
+    <dt><kbd>K v</kbd></dt>
+
+    <dd>
+      <a name="index-b-_0028Summary_0029" id=
+      "index-b-_0028Summary_0029"></a> <a name=
+      "index-K-v-_0028Summary_0029" id=
+      "index-K-v-_0028Summary_0029"></a>
+
+      <p>View the <acronym>MIME</acronym> part.</p>
+    </dd>
+
+    <dt><kbd>K o</kbd></dt>
+
+    <dd>
+      <a name="index-K-o-_0028Summary_0029" id=
+      "index-K-o-_0028Summary_0029"></a>
+
+      <p>Save the <acronym>MIME</acronym> part.</p>
+    </dd>
+
+    <dt><kbd>K O</kbd></dt>
+
+    <dd>
+      <a name="index-K-O-_0028Summary_0029" id=
+      "index-K-O-_0028Summary_0029"></a>
+
+      <p>Prompt for a file name, then save the
+      <acronym>MIME</acronym> part and strip it from the article.
+      The stripped <acronym>MIME</acronym> object will be referred
+      via the message/external-body <acronym>MIME</acronym>
+      type.</p>
+    </dd>
+
+    <dt><kbd>K r</kbd></dt>
+
+    <dd>
+      <a name="index-K-r-_0028Summary_0029" id=
+      "index-K-r-_0028Summary_0029"></a>
+
+      <p>Replace the <acronym>MIME</acronym> part with an external
+      body.</p>
+    </dd>
+
+    <dt><kbd>K d</kbd></dt>
+
+    <dd>
+      <a name="index-K-d-_0028Summary_0029" id=
+      "index-K-d-_0028Summary_0029"></a>
+
+      <p>Delete the <acronym>MIME</acronym> part and add some
+      information about the removed part.</p>
+    </dd>
+
+    <dt><kbd>K c</kbd></dt>
+
+    <dd>
+      <a name="index-K-c-_0028Summary_0029" id=
+      "index-K-c-_0028Summary_0029"></a>
+
+      <p>Copy the <acronym>MIME</acronym> part.</p>
+    </dd>
+
+    <dt><kbd>K e</kbd></dt>
+
+    <dd>
+      <a name="index-K-e-_0028Summary_0029" id=
+      "index-K-e-_0028Summary_0029"></a>
+
+      <p>View the <acronym>MIME</acronym> part externally.</p>
+    </dd>
+
+    <dt><kbd>K i</kbd></dt>
+
+    <dd>
+      <a name="index-K-i-_0028Summary_0029" id=
+      "index-K-i-_0028Summary_0029"></a>
+
+      <p>View the <acronym>MIME</acronym> part internally.</p>
+    </dd>
+
+    <dt><kbd>K |</kbd></dt>
+
+    <dd>
+      <a name="index-K-_007c-_0028Summary_0029" id=
+      "index-K-_007c-_0028Summary_0029"></a>
+
+      <p>Pipe the <acronym>MIME</acronym> part to an external
+      command.</p>
+    </dd>
+  </dl>
+
+  <p>The rest of these <acronym>MIME</acronym> commands do not use
+  the numerical prefix in the same manner:</p>
+
+  <dl compact="compact">
+    <dt><kbd>K H</kbd></dt>
+
+    <dd>
+      <a name="index-K-H-_0028Summary_0029" id=
+      "index-K-H-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dbrowse_002dhtml_002darticle" id=
+      "index-gnus_002darticle_002dbrowse_002dhtml_002darticle"></a>
+
+      <p>View &lsquo;<samp>text/html</samp>&rsquo; parts of the
+      current article with a WWW browser. Inline images embedded in
+      a message using the <code>cid</code> scheme, as they are
+      generally considered to be safe, will be processed properly.
+      The message header is added to the beginning of every
+      <acronym>HTML</acronym> part unless the prefix argument is
+      given.</p>
+
+      <p>Warning: Spammers use links to images (using the
+      <code>http</code> scheme) in <acronym>HTML</acronym> articles
+      to verify whether you have read the message. As this command
+      passes the <acronym>HTML</acronym> content to the browser
+      without eliminating these &ldquo;web bugs&rdquo; you should
+      only use it for mails from trusted senders.</p>
+
+      <p>If you always want to display <acronym>HTML</acronym>
+      parts in the browser, set <code>mm-text-html-renderer</code>
+      to <code>nil</code>.</p>
+
+      <p>This command creates temporary files to pass
+      <acronym>HTML</acronym> contents including images if any to
+      the browser, and deletes them when exiting the group (if you
+      want).</p>
+    </dd>
+
+    <dt><kbd>K b</kbd></dt>
+
+    <dd>
+      <a name="index-K-b-_0028Summary_0029" id=
+      "index-K-b-_0028Summary_0029"></a>
+
+      <p>Make all the <acronym>MIME</acronym> parts have buttons in
+      front of them. This is mostly useful if you wish to save (or
+      perform other actions) on inlined parts.</p>
+    </dd>
+
+    <dt><kbd>W M h</kbd></dt>
+
+    <dd>
+      <a name="index-W-M-h-_0028Summary_0029" id=
+      "index-W-M-h-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dmime_002dbuttonize_002dattachments_002din_002dheader"
+      id=
+      "index-gnus_002dmime_002dbuttonize_002dattachments_002din_002dheader">
+      </a> <a name=
+      "index-gnus_002dmime_002ddisplay_002dattachment_002dbuttons_002din_002dheader"
+      id=
+      "index-gnus_002dmime_002ddisplay_002dattachment_002dbuttons_002din_002dheader">
+      </a>
+
+      <p>Display <acronym>MIME</acronym> part buttons in the end of
+      the header of an article
+      (<code>gnus-mime-buttonize-attachments-in-header</code>).
+      This command toggles the display. Note that buttons to be
+      added to the header are only the ones that aren&rsquo;t
+      inlined in the body. If you want those buttons always to be
+      displayed, set
+      <code>gnus-mime-display-attachment-buttons-in-header</code>
+      to non-<code>nil</code>. The default is <code>t</code>. To
+      change the appearance of buttons, customize
+      <code>gnus-header-face-alist</code>.</p>
+    </dd>
+
+    <dt><kbd>K m</kbd></dt>
+
+    <dd>
+      <a name="index-K-m-_0028Summary_0029" id=
+      "index-K-m-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002drepair_002dmultipart" id=
+      "index-gnus_002dsummary_002drepair_002dmultipart"></a>
+
+      <p>Some multipart messages are transmitted with missing or
+      faulty headers. This command will attempt to
+      &ldquo;repair&rdquo; these messages so that they can be
+      viewed in a more pleasant manner
+      (<code>gnus-summary-repair-multipart</code>).</p>
+    </dd>
+
+    <dt><kbd>X m</kbd></dt>
+
+    <dd>
+      <a name="index-X-m-_0028Summary_0029" id=
+      "index-X-m-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dsave_002dparts" id=
+      "index-gnus_002dsummary_002dsave_002dparts"></a>
+
+      <p>Save all parts matching a <acronym>MIME</acronym> type to
+      a directory (<code>gnus-summary-save-parts</code>).
+      Understands the process/prefix convention (see <a href=
+      "Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).</p>
+    </dd>
+
+    <dt><kbd>M-t</kbd></dt>
+
+    <dd>
+      <a name="index-M_002dt-_0028Summary_0029" id=
+      "index-M_002dt-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dtoggle_002ddisplay_002dbuttonized"
+      id=
+      "index-gnus_002dsummary_002dtoggle_002ddisplay_002dbuttonized">
+      </a>
+
+      <p>Toggle the buttonized display of the article buffer
+      (<code>gnus-summary-toggle-display-buttonized</code>).</p>
+    </dd>
+
+    <dt><kbd>W M w</kbd></dt>
+
+    <dd>
+      <a name="index-W-M-w-_0028Summary_0029" id=
+      "index-W-M-w-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002ddecode_002dmime_002dwords" id=
+      "index-gnus_002darticle_002ddecode_002dmime_002dwords"></a>
+
+      <p>Decode RFC 2047-encoded words in the article headers
+      (<code>gnus-article-decode-mime-words</code>).</p>
+    </dd>
+
+    <dt><kbd>W M c</kbd></dt>
+
+    <dd>
+      <a name="index-W-M-c-_0028Summary_0029" id=
+      "index-W-M-c-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002ddecode_002dcharset" id=
+      "index-gnus_002darticle_002ddecode_002dcharset"></a>
+
+      <p>Decode encoded article bodies as well as charsets
+      (<code>gnus-article-decode-charset</code>).</p>
+
+      <p>This command looks in the <code>Content-Type</code> header
+      to determine the charset. If there is no such header in the
+      article, you can give it a prefix, which will prompt for the
+      charset to decode as. In regional groups where people post
+      using some common encoding (but do not include
+      <acronym>MIME</acronym> headers), you can set the
+      <code>charset</code> group/topic parameter to the required
+      charset (see <a href=
+      "Group-Parameters.html#Group-Parameters">Group
+      Parameters</a>).</p>
+    </dd>
+
+    <dt><kbd>W M v</kbd></dt>
+
+    <dd>
+      <a name="index-W-M-v-_0028Summary_0029" id=
+      "index-W-M-v-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dmime_002dview_002dall_002dparts" id=
+      "index-gnus_002dmime_002dview_002dall_002dparts"></a>
+
+      <p>View all the <acronym>MIME</acronym> parts in the current
+      article (<code>gnus-mime-view-all-parts</code>).</p>
+    </dd>
+  </dl>
+
+  <p>Relevant variables:</p>
+
+  <dl compact="compact">
+    <dt><code>gnus-ignored-mime-types</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dignored_002dmime_002dtypes" id=
+      "index-gnus_002dignored_002dmime_002dtypes"></a>
+
+      <p>This is a list of regexps. <acronym>MIME</acronym> types
+      that match a regexp from this list will be completely ignored
+      by Gnus. The default value is <code>nil</code>.</p>
+
+      <p>To have all Vcards be ignored, you&rsquo;d say something
+      like this:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq gnus-ignored-mime-types
+      '("text/x-vcard"))
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>gnus-article-loose-mime</code></dt>
+
+    <dd>
+      <a name="index-gnus_002darticle_002dloose_002dmime" id=
+      "index-gnus_002darticle_002dloose_002dmime"></a>
+
+      <p>If non-<code>nil</code>, Gnus won&rsquo;t require the
+      &lsquo;<samp>MIME-Version</samp>&rsquo; header before
+      interpreting the message as a <acronym>MIME</acronym>
+      message. This helps when reading messages from certain broken
+      mail user agents. The default is <code>t</code>.</p>
+    </dd>
+
+    <dt><code>gnus-article-emulate-mime</code></dt>
+
+    <dd>
+      <a name="index-gnus_002darticle_002demulate_002dmime" id=
+      "index-gnus_002darticle_002demulate_002dmime"></a> <a name=
+      "index-uuencode" id="index-uuencode"></a> <a name=
+      "index-yEnc" id="index-yEnc"></a>
+
+      <p>There are other, non-<acronym>MIME</acronym> encoding
+      methods used. The most common is
+      &lsquo;<samp>uuencode</samp>&rsquo;, but yEncode is also
+      getting to be popular. If this variable is
+      non-<code>nil</code>, Gnus will look in message bodies to see
+      if it finds these encodings, and if so, it&rsquo;ll run them
+      through the Gnus <acronym>MIME</acronym> machinery. The
+      default is <code>t</code>. Only single-part yEnc encoded
+      attachments can be decoded. There&rsquo;s no support for
+      encoding in Gnus.</p>
+    </dd>
+
+    <dt><code>gnus-unbuttonized-mime-types</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dunbuttonized_002dmime_002dtypes" id=
+      "index-gnus_002dunbuttonized_002dmime_002dtypes"></a>
+
+      <p>This is a list of regexps. <acronym>MIME</acronym> types
+      that match a regexp from this list won&rsquo;t have
+      <acronym>MIME</acronym> buttons inserted unless they
+      aren&rsquo;t displayed or this variable is overridden by
+      <code>gnus-buttonized-mime-types</code>. The default value is
+      <code>(".*/.*")</code>. This variable is only used when
+      <code>gnus-inhibit-mime-unbuttonizing</code> is
+      <code>nil</code>.</p>
+    </dd>
+
+    <dt><code>gnus-buttonized-mime-types</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dbuttonized_002dmime_002dtypes" id=
+      "index-gnus_002dbuttonized_002dmime_002dtypes"></a>
+
+      <p>This is a list of regexps. <acronym>MIME</acronym> types
+      that match a regexp from this list will have
+      <acronym>MIME</acronym> buttons inserted unless they
+      aren&rsquo;t displayed. This variable overrides
+      <code>gnus-unbuttonized-mime-types</code>. The default value
+      is <code>nil</code>. This variable is only used when
+      <code>gnus-inhibit-mime-unbuttonizing</code> is
+      <code>nil</code>.</p>
+
+      <p>E.g., to see security buttons but no other buttons, you
+      could set this variable to <code>("multipart/signed")</code>
+      and leave <code>gnus-unbuttonized-mime-types</code> at the
+      default value.</p>
+
+      <p>You could also add <code>"multipart/alternative"</code> to
+      this list to display radio buttons that allow you to choose
+      one of two media types those mails include. See also
+      <code>mm-discouraged-alternatives</code> (see <a href=
+      "../emacs-mime/Display-Customization.html#Display-Customization">
+      Display Customization</a> in <cite>The Emacs MIME
+      Manual</cite>).</p>
+    </dd>
+
+    <dt><code>gnus-inhibit-mime-unbuttonizing</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dinhibit_002dmime_002dunbuttonizing"
+      id="index-gnus_002dinhibit_002dmime_002dunbuttonizing"></a>
+
+      <p>If this is non-<code>nil</code>, then all
+      <acronym>MIME</acronym> parts get buttons. The default value
+      is <code>nil</code>.</p>
+    </dd>
+
+    <dt><code>gnus-article-mime-part-function</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002darticle_002dmime_002dpart_002dfunction" id=
+      "index-gnus_002darticle_002dmime_002dpart_002dfunction"></a>
+
+      <p>For each <acronym>MIME</acronym> part, this function will
+      be called with the <acronym>MIME</acronym> handle as the
+      parameter. The function is meant to be used to allow users to
+      gather information from the article (e.g., add Vcard info to
+      the bbdb database) or to do actions based on parts (e.g.,
+      automatically save all jpegs into some directory).</p>
+
+      <p>Here&rsquo;s an example function the does the latter:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(defun my-save-all-jpeg-parts (handle)
+  (when (equal (car (mm-handle-type handle)) "image/jpeg")
     (with-temp-buffer
       (insert (mm-get-part handle))
       (write-region (point-min) (point-max)
-                    (read-file-name &quot;Save jpeg to: &quot;)))))
+                    (read-file-name "Save jpeg to: ")))))
 (setq gnus-article-mime-part-function
       'my-save-all-jpeg-parts)
-</pre></div>
+</pre>
+      </div><a name=
+      "index-gnus_002dmime_002dmultipart_002dfunctions" id=
+      "index-gnus_002dmime_002dmultipart_002dfunctions"></a>
+    </dd>
 
-<a name="index-gnus_002dmime_002dmultipart_002dfunctions"></a>
-</dd>
-<dt><code>gnus-mime-multipart-functions</code></dt>
-<dd><p>Alist of <acronym>MIME</acronym> multipart types and functions to handle them.
-</p>
-<a name="index-gnus_002dmime_002ddisplay_002dmultipart_002dalternative_002das_002dmixed"></a>
-</dd>
-<dt><code>gnus-mime-display-multipart-alternative-as-mixed</code></dt>
-<dd><p>Display &quot;multipart/alternative&quot; parts as &quot;multipart/mixed&quot;.
-</p>
-<a name="index-gnus_002dmime_002ddisplay_002dmultipart_002drelated_002das_002dmixed"></a>
-</dd>
-<dt><code>gnus-mime-display-multipart-related-as-mixed</code></dt>
-<dd><p>Display &quot;multipart/related&quot; parts as &quot;multipart/mixed&quot;.
-</p>
-<p>If displaying &lsquo;<samp>text/html</samp>&rsquo; is discouraged, see
-<code>mm-discouraged-alternatives</code>, images or other material inside a
-&quot;multipart/related&quot; part might be overlooked when this variable is
-<code>nil</code>.  <a href="../emacs-mime/Display-Customization.html#Display-Customization">Display Customization</a> in <cite>Emacs-Mime Manual</cite>.
-</p>
-<a name="index-gnus_002dmime_002ddisplay_002dmultipart_002das_002dmixed"></a>
-</dd>
-<dt><code>gnus-mime-display-multipart-as-mixed</code></dt>
-<dd><p>Display &quot;multipart&quot; parts as &quot;multipart/mixed&quot;.  If <code>t</code>, it
-overrides <code>nil</code> values of
-<code>gnus-mime-display-multipart-alternative-as-mixed</code> and
-<code>gnus-mime-display-multipart-related-as-mixed</code>.
-</p>
-<a name="index-mm_002dfile_002dname_002drewrite_002dfunctions"></a>
-</dd>
-<dt><code>mm-file-name-rewrite-functions</code></dt>
-<dd><p>List of functions used for rewriting file names of <acronym>MIME</acronym> parts.
-Each function takes a file name as input and returns a file name.
-</p>
-<p>Ready-made functions include<br>
-<code>mm-file-name-delete-whitespace</code>,
-<code>mm-file-name-trim-whitespace</code>,
-<code>mm-file-name-collapse-whitespace</code>, and
-<code>mm-file-name-replace-whitespace</code>.  The later uses the value of
-the variable <code>mm-file-name-replace-whitespace</code> to replace each
-whitespace character in a file name with that string; default value
-is <code>&quot;_&quot;</code> (a single underscore).
-<a name="index-mm_002dfile_002dname_002ddelete_002dwhitespace"></a>
-<a name="index-mm_002dfile_002dname_002dtrim_002dwhitespace"></a>
-<a name="index-mm_002dfile_002dname_002dcollapse_002dwhitespace"></a>
-<a name="index-mm_002dfile_002dname_002dreplace_002dwhitespace"></a>
-<a name="index-mm_002dfile_002dname_002dreplace_002dwhitespace-1"></a>
-</p>
-<p>The standard functions <code>capitalize</code>, <code>downcase</code>,
-<code>upcase</code>, and <code>upcase-initials</code> may be useful, too.
-</p>
-<p>Everybody knows that whitespace characters in file names are evil,
-except those who don&rsquo;t know.  If you receive lots of attachments from
-such unenlightened users, you can make live easier by adding
-</p>
-<div class="lisp">
-<pre class="lisp">(setq mm-file-name-rewrite-functions
+    <dt><code>gnus-mime-multipart-functions</code></dt>
+
+    <dd>
+      <p>Alist of <acronym>MIME</acronym> multipart types and
+      functions to handle them.</p><a name=
+      "index-gnus_002dmime_002ddisplay_002dmultipart_002dalternative_002das_002dmixed"
+      id=
+      "index-gnus_002dmime_002ddisplay_002dmultipart_002dalternative_002das_002dmixed"></a>
+    </dd>
+
+    <dt>
+    <code>gnus-mime-display-multipart-alternative-as-mixed</code></dt>
+
+    <dd>
+      <p>Display "multipart/alternative" parts as
+      "multipart/mixed".</p><a name=
+      "index-gnus_002dmime_002ddisplay_002dmultipart_002drelated_002das_002dmixed"
+      id=
+      "index-gnus_002dmime_002ddisplay_002dmultipart_002drelated_002das_002dmixed"></a>
+    </dd>
+
+    <dt>
+    <code>gnus-mime-display-multipart-related-as-mixed</code></dt>
+
+    <dd>
+      <p>Display "multipart/related" parts as
+      "multipart/mixed".</p>
+
+      <p>If displaying &lsquo;<samp>text/html</samp>&rsquo; is
+      discouraged, see <code>mm-discouraged-alternatives</code>,
+      images or other material inside a "multipart/related" part
+      might be overlooked when this variable is <code>nil</code>.
+      <a href=
+      "../emacs-mime/Display-Customization.html#Display-Customization">
+      Display Customization</a> in <cite>Emacs-Mime
+      Manual</cite>.</p><a name=
+      "index-gnus_002dmime_002ddisplay_002dmultipart_002das_002dmixed"
+      id=
+      "index-gnus_002dmime_002ddisplay_002dmultipart_002das_002dmixed"></a>
+    </dd>
+
+    <dt><code>gnus-mime-display-multipart-as-mixed</code></dt>
+
+    <dd>
+      <p>Display "multipart" parts as "multipart/mixed". If
+      <code>t</code>, it overrides <code>nil</code> values of
+      <code>gnus-mime-display-multipart-alternative-as-mixed</code>
+      and
+      <code>gnus-mime-display-multipart-related-as-mixed</code>.</p><a name="index-mm_002dfile_002dname_002drewrite_002dfunctions"
+      id=
+      "index-mm_002dfile_002dname_002drewrite_002dfunctions"></a>
+    </dd>
+
+    <dt><code>mm-file-name-rewrite-functions</code></dt>
+
+    <dd>
+      <p>List of functions used for rewriting file names of
+      <acronym>MIME</acronym> parts. Each function takes a file
+      name as input and returns a file name.</p>
+
+      <p>Ready-made functions include<br />
+      <code>mm-file-name-delete-whitespace</code>,
+      <code>mm-file-name-trim-whitespace</code>,
+      <code>mm-file-name-collapse-whitespace</code>, and
+      <code>mm-file-name-replace-whitespace</code>. The later uses
+      the value of the variable
+      <code>mm-file-name-replace-whitespace</code> to replace each
+      whitespace character in a file name with that string; default
+      value is <code>"_"</code> (a single underscore). <a name=
+      "index-mm_002dfile_002dname_002ddelete_002dwhitespace" id=
+      "index-mm_002dfile_002dname_002ddelete_002dwhitespace"></a>
+      <a name="index-mm_002dfile_002dname_002dtrim_002dwhitespace"
+      id="index-mm_002dfile_002dname_002dtrim_002dwhitespace"></a>
+      <a name=
+      "index-mm_002dfile_002dname_002dcollapse_002dwhitespace" id=
+      "index-mm_002dfile_002dname_002dcollapse_002dwhitespace"></a>
+      <a name=
+      "index-mm_002dfile_002dname_002dreplace_002dwhitespace" id=
+      "index-mm_002dfile_002dname_002dreplace_002dwhitespace"></a>
+      <a name=
+      "index-mm_002dfile_002dname_002dreplace_002dwhitespace-1" id=
+      "index-mm_002dfile_002dname_002dreplace_002dwhitespace-1"></a></p>
+
+      <p>The standard functions <code>capitalize</code>,
+      <code>downcase</code>, <code>upcase</code>, and
+      <code>upcase-initials</code> may be useful, too.</p>
+
+      <p>Everybody knows that whitespace characters in file names
+      are evil, except those who don&rsquo;t know. If you receive
+      lots of attachments from such unenlightened users, you can
+      make live easier by adding</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq mm-file-name-rewrite-functions
       '(mm-file-name-trim-whitespace
         mm-file-name-collapse-whitespace
         mm-file-name-replace-whitespace))
-</pre></div>
+</pre>
+      </div>
 
-<p>to your <samp>~/.gnus.el</samp> file.
-</p>
-</dd>
-</dl>
+      <p>to your <samp>~/.gnus.el</samp> file.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Charsets.html#Charsets" accesskey="n" rel="next">Charsets</a>, Previous: <a href="Article-Treatment.html#Article-Treatment" accesskey="p" rel="prev">Article Treatment</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Charsets.html#Charsets" accesskey="n" rel=
+    "next">Charsets</a>, Previous: <a href=
+    "Article-Treatment.html#Article-Treatment" accesskey="p" rel=
+    "prev">Article Treatment</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

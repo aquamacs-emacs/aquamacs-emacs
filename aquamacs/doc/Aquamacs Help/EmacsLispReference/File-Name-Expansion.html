@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,210 +19,316 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: File Name Expansion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: File Name Expansion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: File Name Expansion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="File-Names.html#File-Names" rel="up" title="File Names">
-<link href="Unique-File-Names.html#Unique-File-Names" rel="next" title="Unique File Names">
-<link href="Directory-Names.html#Directory-Names" rel="prev" title="Directory Names">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: File Name
+  Expansion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: File Name Expansion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: File Name Expansion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="File-Names.html#File-Names" rel="up" title=
+  "File Names" />
+  <link href="Unique-File-Names.html#Unique-File-Names" rel="next"
+  title="Unique File Names" />
+  <link href="Directory-Names.html#Directory-Names" rel="prev"
+  title="Directory Names" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="File-Name-Expansion" id="File-Name-Expansion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Unique-File-Names.html#Unique-File-Names"
+    accesskey="n" rel="next">Unique File Names</a>, Previous:
+    <a href="Directory-Names.html#Directory-Names" accesskey="p"
+    rel="prev">Directory Names</a>, Up: <a href=
+    "File-Names.html#File-Names" accesskey="u" rel="up">File
+    Names</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Functions-that-Expand-Filenames" id=
+  "Functions-that-Expand-Filenames"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="File-Name-Expansion"></a>
-<div class="header">
-<p>
-Next: <a href="Unique-File-Names.html#Unique-File-Names" accesskey="n" rel="next">Unique File Names</a>, Previous: <a href="Directory-Names.html#Directory-Names" accesskey="p" rel="prev">Directory Names</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Functions-that-Expand-Filenames"></a>
-<h4 class="subsection">24.8.4 Functions that Expand Filenames</h4>
-<a name="index-expansion-of-file-names"></a>
+  <h4 class="subsection">24.8.4 Functions that Expand
+  Filenames</h4><a name="index-expansion-of-file-names" id=
+  "index-expansion-of-file-names"></a>
 
-<p><em>Expanding</em> a file name means converting a relative file name to
-an absolute one.  Since this is done relative to a default directory,
-you must specify the default directory name as well as the file name
-to be expanded.  It also involves expanding abbreviations like
-<samp>~/</samp>
-(see <a href="Directory-Names.html#abbreviate_002dfile_002dname">abbreviate-file-name</a>),
-and eliminating redundancies like <samp>./</samp> and <samp><var>name</var>/../</samp>.
-</p>
-<dl>
-<dt><a name="index-expand_002dfile_002dname"></a>Function: <strong>expand-file-name</strong> <em>filename &amp;optional directory</em></dt>
-<dd><p>This function converts <var>filename</var> to an absolute file name.  If
-<var>directory</var> is supplied, it is the default directory to start with
-if <var>filename</var> is relative.  (The value of <var>directory</var> should
-itself be an absolute directory name or directory file name; it may
-start with &lsquo;<samp>~</samp>&rsquo;.)  Otherwise, the current buffer&rsquo;s value of
-<code>default-directory</code> is used.  For example:
-</p>
-<div class="example">
-<pre class="example">(expand-file-name &quot;foo&quot;)
-     &rArr; &quot;/xcssun/users/rms/lewis/foo&quot;
-</pre><pre class="example">(expand-file-name &quot;../foo&quot;)
-     &rArr; &quot;/xcssun/users/rms/foo&quot;
-</pre><pre class="example">(expand-file-name &quot;foo&quot; &quot;/usr/spool/&quot;)
-     &rArr; &quot;/usr/spool/foo&quot;
-</pre></div>
+  <p><em>Expanding</em> a file name means converting a relative
+  file name to an absolute one. Since this is done relative to a
+  default directory, you must specify the default directory name as
+  well as the file name to be expanded. It also involves expanding
+  abbreviations like <samp>~/</samp> (see <a href=
+  "Directory-Names.html#abbreviate_002dfile_002dname">abbreviate-file-name</a>),
+  and eliminating redundancies like <samp>./</samp> and
+  <samp><var>name</var>/../</samp>.</p>
 
-<p>If the part of the combined file name before the first slash is
-&lsquo;<samp>~</samp>&rsquo;, it expands to the value of the <code>HOME</code> environment
-variable (usually your home directory).  If the part before the first
-slash is &lsquo;<samp>~<var>user</var></samp>&rsquo; and if <var>user</var> is a valid login name,
-it expands to <var>user</var>&rsquo;s home directory.
-</p>
-<p>Filenames containing &lsquo;<samp>.</samp>&rsquo; or &lsquo;<samp>..</samp>&rsquo; are simplified to their
-canonical form:
-</p>
-<div class="example">
-<pre class="example">(expand-file-name &quot;bar/../foo&quot;)
-     &rArr; &quot;/xcssun/users/rms/lewis/foo&quot;
-</pre></div>
+  <dl>
+    <dt><a name="index-expand_002dfile_002dname" id=
+    "index-expand_002dfile_002dname"></a>Function:
+    <strong>expand-file-name</strong> <em>filename &amp;optional
+    directory</em></dt>
 
-<p>In some cases, a leading &lsquo;<samp>..</samp>&rsquo; component can remain in the output:
-</p>
-<div class="example">
-<pre class="example">(expand-file-name &quot;../home&quot; &quot;/&quot;)
-     &rArr; &quot;/../home&quot;
-</pre></div>
+    <dd>
+      <p>This function converts <var>filename</var> to an absolute
+      file name. If <var>directory</var> is supplied, it is the
+      default directory to start with if <var>filename</var> is
+      relative. (The value of <var>directory</var> should itself be
+      an absolute directory name or directory file name; it may
+      start with &lsquo;<samp>~</samp>&rsquo;.) Otherwise, the
+      current buffer&rsquo;s value of
+      <code>default-directory</code> is used. For example:</p>
 
-<p>This is for the sake of filesystems that have the concept of a
-superroot above the root directory <samp>/</samp>.  On other filesystems,
-<samp>/../</samp> is interpreted exactly the same as <samp>/</samp>.
-</p>
-<p>Note that <code>expand-file-name</code> does <em>not</em> expand environment
-variables; only <code>substitute-in-file-name</code> does that:
-</p>
-<div class="example">
-<pre class="example">(expand-file-name &quot;$HOME/foo&quot;)
-     &rArr; &quot;/xcssun/users/rms/lewis/$HOME/foo&quot;
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(expand-file-name "foo")
+     &rArr; "/xcssun/users/rms/lewis/foo"
+</pre>
+        <pre class="example">
+(expand-file-name "../foo")
+     &rArr; "/xcssun/users/rms/foo"
+</pre>
+        <pre class="example">
+(expand-file-name "foo" "/usr/spool/")
+     &rArr; "/usr/spool/foo"
+</pre>
+      </div>
 
-<p>Note also that <code>expand-file-name</code> does not follow symbolic links
-at any level.  This results in a difference between the way
-<code>file-truename</code> and <code>expand-file-name</code> treat &lsquo;<samp>..</samp>&rsquo;.
-Assuming that &lsquo;<samp>/tmp/bar</samp>&rsquo; is a symbolic link to the directory
-&lsquo;<samp>/tmp/foo/bar</samp>&rsquo; we get:
-</p>
-<div class="example">
-<pre class="example">(file-truename &quot;/tmp/bar/../myfile&quot;)
-     &rArr; &quot;/tmp/foo/myfile&quot;
-</pre><pre class="example">(expand-file-name &quot;/tmp/bar/../myfile&quot;)
-     &rArr; &quot;/tmp/myfile&quot;
-</pre></div>
+      <p>If the part of the combined file name before the first
+      slash is &lsquo;<samp>~</samp>&rsquo;, it expands to the
+      value of the <code>HOME</code> environment variable (usually
+      your home directory). If the part before the first slash is
+      &lsquo;<samp>~<var>user</var></samp>&rsquo; and if
+      <var>user</var> is a valid login name, it expands to
+      <var>user</var>&rsquo;s home directory.</p>
 
-<p>If you may need to follow symbolic links preceding &lsquo;<samp>..</samp>&rsquo;, you
-should make sure to call <code>file-truename</code> without prior direct or
-indirect calls to <code>expand-file-name</code>.  See <a href="Truenames.html#Truenames">Truenames</a>.
-</p></dd></dl>
+      <p>Filenames containing &lsquo;<samp>.</samp>&rsquo; or
+      &lsquo;<samp>..</samp>&rsquo; are simplified to their
+      canonical form:</p>
 
-<dl>
-<dt><a name="index-default_002ddirectory"></a>Variable: <strong>default-directory</strong></dt>
-<dd><p>The value of this buffer-local variable is the default directory for the
-current buffer.  It should be an absolute directory name; it may start
-with &lsquo;<samp>~</samp>&rsquo;.  This variable is buffer-local in every buffer.
-</p>
-<p><code>expand-file-name</code> uses the default directory when its second
-argument is <code>nil</code>.
-</p>
-<p>The value is always a string ending with a slash.
-</p>
-<div class="example">
-<pre class="example">default-directory
-     &rArr; &quot;/user/lewis/manual/&quot;
-</pre></div>
-</dd></dl>
+      <div class="example">
+        <pre class="example">
+(expand-file-name "bar/../foo")
+     &rArr; "/xcssun/users/rms/lewis/foo"
+</pre>
+      </div>
 
-<dl>
-<dt><a name="index-substitute_002din_002dfile_002dname"></a>Function: <strong>substitute-in-file-name</strong> <em>filename</em></dt>
-<dd><a name="Definition-of-substitute_002din_002dfile_002dname"></a><p>This function replaces environment variable references in
-<var>filename</var> with the environment variable values.  Following
-standard Unix shell syntax, &lsquo;<samp>$</samp>&rsquo; is the prefix to substitute an
-environment variable value.  If the input contains &lsquo;<samp>$$</samp>&rsquo;, that is
-converted to &lsquo;<samp>$</samp>&rsquo;; this gives the user a way to quote a
-&lsquo;<samp>$</samp>&rsquo;.
-</p>
-<p>The environment variable name is the series of alphanumeric characters
-(including underscores) that follow the &lsquo;<samp>$</samp>&rsquo;.  If the character following
-the &lsquo;<samp>$</samp>&rsquo; is a &lsquo;<samp>{</samp>&rsquo;, then the variable name is everything up to the
-matching &lsquo;<samp>}</samp>&rsquo;.
-</p>
-<p>Calling <code>substitute-in-file-name</code> on output produced by
-<code>substitute-in-file-name</code> tends to give incorrect results.  For
-instance, use of &lsquo;<samp>$$</samp>&rsquo; to quote a single &lsquo;<samp>$</samp>&rsquo; won&rsquo;t work
-properly, and &lsquo;<samp>$</samp>&rsquo; in an environment variable&rsquo;s value could lead
-to repeated substitution.  Therefore, programs that call this function
-and put the output where it will be passed to this function need to
-double all &lsquo;<samp>$</samp>&rsquo; characters to prevent subsequent incorrect
-results.
-</p>
-<p>Here we assume that the environment variable <code>HOME</code>, which holds
-the user&rsquo;s home directory name, has value &lsquo;<samp>/xcssun/users/rms</samp>&rsquo;.
-</p>
-<div class="example">
-<pre class="example">(substitute-in-file-name &quot;$HOME/foo&quot;)
-     &rArr; &quot;/xcssun/users/rms/foo&quot;
-</pre></div>
+      <p>In some cases, a leading &lsquo;<samp>..</samp>&rsquo;
+      component can remain in the output:</p>
 
-<p>After substitution, if a &lsquo;<samp>~</samp>&rsquo; or a &lsquo;<samp>/</samp>&rsquo; appears immediately
-after another &lsquo;<samp>/</samp>&rsquo;, the function discards everything before it (up
-through the immediately preceding &lsquo;<samp>/</samp>&rsquo;).
-</p>
-<div class="example">
-<pre class="example">(substitute-in-file-name &quot;bar/~/foo&quot;)
-     &rArr; &quot;~/foo&quot;
-</pre><pre class="example">(substitute-in-file-name &quot;/usr/local/$HOME/foo&quot;)
-     &rArr; &quot;/xcssun/users/rms/foo&quot;
-     ;; <span class="roman"><samp>/usr/local/</samp> has been discarded.</span>
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(expand-file-name "../home" "/")
+     &rArr; "/../home"
+</pre>
+      </div>
 
-</dd></dl>
+      <p>This is for the sake of filesystems that have the concept
+      of a superroot above the root directory <samp>/</samp>. On
+      other filesystems, <samp>/../</samp> is interpreted exactly
+      the same as <samp>/</samp>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Unique-File-Names.html#Unique-File-Names" accesskey="n" rel="next">Unique File Names</a>, Previous: <a href="Directory-Names.html#Directory-Names" accesskey="p" rel="prev">Directory Names</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Note that <code>expand-file-name</code> does <em>not</em>
+      expand environment variables; only
+      <code>substitute-in-file-name</code> does that:</p>
 
+      <div class="example">
+        <pre class="example">
+(expand-file-name "$HOME/foo")
+     &rArr; "/xcssun/users/rms/lewis/$HOME/foo"
+</pre>
+      </div>
 
+      <p>Note also that <code>expand-file-name</code> does not
+      follow symbolic links at any level. This results in a
+      difference between the way <code>file-truename</code> and
+      <code>expand-file-name</code> treat
+      &lsquo;<samp>..</samp>&rsquo;. Assuming that
+      &lsquo;<samp>/tmp/bar</samp>&rsquo; is a symbolic link to the
+      directory &lsquo;<samp>/tmp/foo/bar</samp>&rsquo; we get:</p>
 
+      <div class="example">
+        <pre class="example">
+(file-truename "/tmp/bar/../myfile")
+     &rArr; "/tmp/foo/myfile"
+</pre>
+        <pre class="example">
+(expand-file-name "/tmp/bar/../myfile")
+     &rArr; "/tmp/myfile"
+</pre>
+      </div>
+
+      <p>If you may need to follow symbolic links preceding
+      &lsquo;<samp>..</samp>&rsquo;, you should make sure to call
+      <code>file-truename</code> without prior direct or indirect
+      calls to <code>expand-file-name</code>. See <a href=
+      "Truenames.html#Truenames">Truenames</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-default_002ddirectory" id=
+    "index-default_002ddirectory"></a>Variable:
+    <strong>default-directory</strong></dt>
+
+    <dd>
+      <p>The value of this buffer-local variable is the default
+      directory for the current buffer. It should be an absolute
+      directory name; it may start with
+      &lsquo;<samp>~</samp>&rsquo;. This variable is buffer-local
+      in every buffer.</p>
+
+      <p><code>expand-file-name</code> uses the default directory
+      when its second argument is <code>nil</code>.</p>
+
+      <p>The value is always a string ending with a slash.</p>
+
+      <div class="example">
+        <pre class="example">
+default-directory
+     &rArr; "/user/lewis/manual/"
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-substitute_002din_002dfile_002dname" id=
+    "index-substitute_002din_002dfile_002dname"></a>Function:
+    <strong>substitute-in-file-name</strong> <em>filename</em></dt>
+
+    <dd>
+      <a name="Definition-of-substitute_002din_002dfile_002dname"
+      id="Definition-of-substitute_002din_002dfile_002dname"></a>
+
+      <p>This function replaces environment variable references in
+      <var>filename</var> with the environment variable values.
+      Following standard Unix shell syntax,
+      &lsquo;<samp>$</samp>&rsquo; is the prefix to substitute an
+      environment variable value. If the input contains
+      &lsquo;<samp>$$</samp>&rsquo;, that is converted to
+      &lsquo;<samp>$</samp>&rsquo;; this gives the user a way to
+      quote a &lsquo;<samp>$</samp>&rsquo;.</p>
+
+      <p>The environment variable name is the series of
+      alphanumeric characters (including underscores) that follow
+      the &lsquo;<samp>$</samp>&rsquo;. If the character following
+      the &lsquo;<samp>$</samp>&rsquo; is a
+      &lsquo;<samp>{</samp>&rsquo;, then the variable name is
+      everything up to the matching
+      &lsquo;<samp>}</samp>&rsquo;.</p>
+
+      <p>Calling <code>substitute-in-file-name</code> on output
+      produced by <code>substitute-in-file-name</code> tends to
+      give incorrect results. For instance, use of
+      &lsquo;<samp>$$</samp>&rsquo; to quote a single
+      &lsquo;<samp>$</samp>&rsquo; won&rsquo;t work properly, and
+      &lsquo;<samp>$</samp>&rsquo; in an environment
+      variable&rsquo;s value could lead to repeated substitution.
+      Therefore, programs that call this function and put the
+      output where it will be passed to this function need to
+      double all &lsquo;<samp>$</samp>&rsquo; characters to prevent
+      subsequent incorrect results.</p>
+
+      <p>Here we assume that the environment variable
+      <code>HOME</code>, which holds the user&rsquo;s home
+      directory name, has value
+      &lsquo;<samp>/xcssun/users/rms</samp>&rsquo;.</p>
+
+      <div class="example">
+        <pre class="example">
+(substitute-in-file-name "$HOME/foo")
+     &rArr; "/xcssun/users/rms/foo"
+</pre>
+      </div>
+
+      <p>After substitution, if a &lsquo;<samp>~</samp>&rsquo; or a
+      &lsquo;<samp>/</samp>&rsquo; appears immediately after
+      another &lsquo;<samp>/</samp>&rsquo;, the function discards
+      everything before it (up through the immediately preceding
+      &lsquo;<samp>/</samp>&rsquo;).</p>
+
+      <div class="example">
+        <pre class="example">
+(substitute-in-file-name "bar/~/foo")
+     &rArr; "~/foo"
+</pre>
+        <pre class="example">
+(substitute-in-file-name "/usr/local/$HOME/foo")
+     &rArr; "/xcssun/users/rms/foo"
+     ;; <span class=
+"roman"><samp>/usr/local/</samp> has been discarded.</span>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Unique-File-Names.html#Unique-File-Names"
+    accesskey="n" rel="next">Unique File Names</a>, Previous:
+    <a href="Directory-Names.html#Directory-Names" accesskey="p"
+    rel="prev">Directory Names</a>, Up: <a href=
+    "File-Names.html#File-Names" accesskey="u" rel="up">File
+    Names</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

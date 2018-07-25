@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,143 +19,200 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Parser State</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Parser State">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Parser State">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Parsing-Expressions.html#Parsing-Expressions" rel="up" title="Parsing Expressions">
-<link href="Low_002dLevel-Parsing.html#Low_002dLevel-Parsing" rel="next" title="Low-Level Parsing">
-<link href="Position-Parse.html#Position-Parse" rel="prev" title="Position Parse">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Parser State</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Parser State" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Parser State" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Parsing-Expressions.html#Parsing-Expressions" rel=
+  "up" title="Parsing Expressions" />
+  <link href="Low_002dLevel-Parsing.html#Low_002dLevel-Parsing"
+  rel="next" title="Low-Level Parsing" />
+  <link href="Position-Parse.html#Position-Parse" rel="prev" title=
+  "Position Parse" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Parser-State" id="Parser-State"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Low_002dLevel-Parsing.html#Low_002dLevel-Parsing" accesskey=
+    "n" rel="next">Low-Level Parsing</a>, Previous: <a href=
+    "Position-Parse.html#Position-Parse" accesskey="p" rel=
+    "prev">Position Parse</a>, Up: <a href=
+    "Parsing-Expressions.html#Parsing-Expressions" accesskey="u"
+    rel="up">Parsing Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Parser-State-1" id="Parser-State-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Parser-State"></a>
-<div class="header">
-<p>
-Next: <a href="Low_002dLevel-Parsing.html#Low_002dLevel-Parsing" accesskey="n" rel="next">Low-Level Parsing</a>, Previous: <a href="Position-Parse.html#Position-Parse" accesskey="p" rel="prev">Position Parse</a>, Up: <a href="Parsing-Expressions.html#Parsing-Expressions" accesskey="u" rel="up">Parsing Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Parser-State-1"></a>
-<h4 class="subsection">34.6.3 Parser State</h4>
-<a name="index-parser-state"></a>
+  <h4 class="subsection">34.6.3 Parser State</h4><a name=
+  "index-parser-state" id="index-parser-state"></a>
 
-<p>A <em>parser state</em> is a list of ten elements describing the state
-of the syntactic parser, after it parses the text between a specified
-starting point and a specified end point in the buffer.  Parsing
-functions such as <code>syntax-ppss</code>
-(see <a href="Position-Parse.html#Position-Parse">Position Parse</a>)
-return a parser state as the value.  Some parsing functions accept a
-parser state as an argument, for resuming parsing.
-</p>
-<p>Here are the meanings of the elements of the parser state:
-</p>
-<ol>
-<li> The depth in parentheses, counting from 0.  <strong>Warning:</strong> this can
-be negative if there are more close parens than open parens between
-the parser&rsquo;s starting point and end point.
+  <p>A <em>parser state</em> is a list of ten elements describing
+  the state of the syntactic parser, after it parses the text
+  between a specified starting point and a specified end point in
+  the buffer. Parsing functions such as <code>syntax-ppss</code>
+  (see <a href="Position-Parse.html#Position-Parse">Position
+  Parse</a>) return a parser state as the value. Some parsing
+  functions accept a parser state as an argument, for resuming
+  parsing.</p>
 
-</li><li> <a name="index-innermost-containing-parentheses"></a>
-The character position of the start of the innermost parenthetical
-grouping containing the stopping point; <code>nil</code> if none.
+  <p>Here are the meanings of the elements of the parser state:</p>
 
-</li><li> <a name="index-previous-complete-subexpression"></a>
-The character position of the start of the last complete subexpression
-terminated; <code>nil</code> if none.
+  <ol>
+    <li>The depth in parentheses, counting from 0.
+    <strong>Warning:</strong> this can be negative if there are
+    more close parens than open parens between the parser&rsquo;s
+    starting point and end point.</li>
 
-</li><li> <a name="index-inside-string"></a>
-Non-<code>nil</code> if inside a string.  More precisely, this is the
-character that will terminate the string, or <code>t</code> if a generic
-string delimiter character should terminate it.
+    <li><a name="index-innermost-containing-parentheses" id=
+    "index-innermost-containing-parentheses"></a> The character
+    position of the start of the innermost parenthetical grouping
+    containing the stopping point; <code>nil</code> if none.</li>
 
-</li><li> <a name="index-inside-comment"></a>
-<code>t</code> if inside a non-nestable comment (of any comment style;
-see <a href="Syntax-Flags.html#Syntax-Flags">Syntax Flags</a>); or the comment nesting level if inside a
-comment that can be nested.
+    <li><a name="index-previous-complete-subexpression" id=
+    "index-previous-complete-subexpression"></a> The character
+    position of the start of the last complete subexpression
+    terminated; <code>nil</code> if none.</li>
 
-</li><li> <a name="index-quote-character"></a>
-<code>t</code> if the end point is just after a quote character.
+    <li><a name="index-inside-string" id="index-inside-string"></a>
+    Non-<code>nil</code> if inside a string. More precisely, this
+    is the character that will terminate the string, or
+    <code>t</code> if a generic string delimiter character should
+    terminate it.</li>
 
-</li><li> The minimum parenthesis depth encountered during this scan.
+    <li><a name="index-inside-comment" id=
+    "index-inside-comment"></a> <code>t</code> if inside a
+    non-nestable comment (of any comment style; see <a href=
+    "Syntax-Flags.html#Syntax-Flags">Syntax Flags</a>); or the
+    comment nesting level if inside a comment that can be
+    nested.</li>
 
-</li><li> What kind of comment is active: <code>nil</code> if not in a comment or in a
-comment of style &lsquo;<samp>a</samp>&rsquo;; 1 for a comment of style &lsquo;<samp>b</samp>&rsquo;; 2 for a
-comment of style &lsquo;<samp>c</samp>&rsquo;; and <code>syntax-table</code> for a comment that
-should be ended by a generic comment delimiter character.
+    <li><a name="index-quote-character" id=
+    "index-quote-character"></a> <code>t</code> if the end point is
+    just after a quote character.</li>
 
-</li><li> The string or comment start position.  While inside a comment, this is
-the position where the comment began; while inside a string, this is the
-position where the string began.  When outside of strings and comments,
-this element is <code>nil</code>.
+    <li>The minimum parenthesis depth encountered during this
+    scan.</li>
 
-</li><li> Internal data for continuing the parsing.  The meaning of this
-data is subject to change; it is used if you pass this list
-as the <var>state</var> argument to another call.
-</li></ol>
+    <li>What kind of comment is active: <code>nil</code> if not in
+    a comment or in a comment of style
+    &lsquo;<samp>a</samp>&rsquo;; 1 for a comment of style
+    &lsquo;<samp>b</samp>&rsquo;; 2 for a comment of style
+    &lsquo;<samp>c</samp>&rsquo;; and <code>syntax-table</code> for
+    a comment that should be ended by a generic comment delimiter
+    character.</li>
 
-<p>Elements 1, 2, and 6 are ignored in a state which you pass as an
-argument to continue parsing, and elements 8 and 9 are used only in
-trivial cases.  Those elements are mainly used internally by the
-parser code.
-</p>
-<p>One additional piece of useful information is available from a
-parser state using this function:
-</p>
-<dl>
-<dt><a name="index-syntax_002dppss_002dtoplevel_002dpos"></a>Function: <strong>syntax-ppss-toplevel-pos</strong> <em>state</em></dt>
-<dd><p>This function extracts, from parser state <var>state</var>, the last
-position scanned in the parse which was at top level in grammatical
-structure.  &ldquo;At top level&rdquo; means outside of any parentheses,
-comments, or strings.
-</p>
-<p>The value is <code>nil</code> if <var>state</var> represents a parse which has
-arrived at a top level position.
-</p></dd></dl>
+    <li>The string or comment start position. While inside a
+    comment, this is the position where the comment began; while
+    inside a string, this is the position where the string began.
+    When outside of strings and comments, this element is
+    <code>nil</code>.</li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Low_002dLevel-Parsing.html#Low_002dLevel-Parsing" accesskey="n" rel="next">Low-Level Parsing</a>, Previous: <a href="Position-Parse.html#Position-Parse" accesskey="p" rel="prev">Position Parse</a>, Up: <a href="Parsing-Expressions.html#Parsing-Expressions" accesskey="u" rel="up">Parsing Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>Internal data for continuing the parsing. The meaning of
+    this data is subject to change; it is used if you pass this
+    list as the <var>state</var> argument to another call.</li>
+  </ol>
 
+  <p>Elements 1, 2, and 6 are ignored in a state which you pass as
+  an argument to continue parsing, and elements 8 and 9 are used
+  only in trivial cases. Those elements are mainly used internally
+  by the parser code.</p>
 
+  <p>One additional piece of useful information is available from a
+  parser state using this function:</p>
 
+  <dl>
+    <dt><a name="index-syntax_002dppss_002dtoplevel_002dpos" id=
+    "index-syntax_002dppss_002dtoplevel_002dpos"></a>Function:
+    <strong>syntax-ppss-toplevel-pos</strong> <em>state</em></dt>
+
+    <dd>
+      <p>This function extracts, from parser state
+      <var>state</var>, the last position scanned in the parse
+      which was at top level in grammatical structure. &ldquo;At
+      top level&rdquo; means outside of any parentheses, comments,
+      or strings.</p>
+
+      <p>The value is <code>nil</code> if <var>state</var>
+      represents a parse which has arrived at a top level
+      position.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Low_002dLevel-Parsing.html#Low_002dLevel-Parsing" accesskey=
+    "n" rel="next">Low-Level Parsing</a>, Previous: <a href=
+    "Position-Parse.html#Position-Parse" accesskey="p" rel=
+    "prev">Position Parse</a>, Up: <a href=
+    "Parsing-Expressions.html#Parsing-Expressions" accesskey="u"
+    rel="up">Parsing Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,200 +20,284 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Rmail Display</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Rmail Display">
-<meta name="keywords" content="GNU Emacs Manual: Rmail Display">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Rmail.html#Rmail" rel="up" title="Rmail">
-<link href="Rmail-Coding.html#Rmail-Coding" rel="next" title="Rmail Coding">
-<link href="Rmail-Sorting.html#Rmail-Sorting" rel="prev" title="Rmail Sorting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Rmail Display</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Rmail Display" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Rmail Display" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Rmail.html#Rmail" rel="up" title="Rmail" />
+  <link href="Rmail-Coding.html#Rmail-Coding" rel="next" title=
+  "Rmail Coding" />
+  <link href="Rmail-Sorting.html#Rmail-Sorting" rel="prev" title=
+  "Rmail Sorting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Rmail-Display" id="Rmail-Display"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Rmail-Coding.html#Rmail-Coding" accesskey="n"
+    rel="next">Rmail Coding</a>, Previous: <a href=
+    "Rmail-Sorting.html#Rmail-Sorting" accesskey="p" rel=
+    "prev">Rmail Sorting</a>, Up: <a href="Rmail.html#Rmail"
+    accesskey="u" rel="up">Rmail</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Display-of-Messages" id="Display-of-Messages"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Rmail-Display"></a>
-<div class="header">
-<p>
-Next: <a href="Rmail-Coding.html#Rmail-Coding" accesskey="n" rel="next">Rmail Coding</a>, Previous: <a href="Rmail-Sorting.html#Rmail-Sorting" accesskey="p" rel="prev">Rmail Sorting</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Display-of-Messages"></a>
-<h3 class="section">33.13 Display of Messages</h3>
+  <h3 class="section">33.13 Display of Messages</h3>
 
-<p>This section describes how Rmail displays mail headers,
-<acronym>MIME</acronym> sections and attachments, URLs, and encrypted messages.
-</p>
-<dl compact="compact">
-<dt><kbd>t</kbd></dt>
-<dd><p>Toggle display of complete header (<code>rmail-toggle-header</code>).
-</p></dd>
-</dl>
+  <p>This section describes how Rmail displays mail headers,
+  <acronym>MIME</acronym> sections and attachments, URLs, and
+  encrypted messages.</p>
 
-<a name="index-t-_0028Rmail_0029"></a>
-<a name="index-rmail_002dtoggle_002dheader"></a>
-<p>Before displaying each message for the first time, Rmail reformats
-its header, hiding uninteresting header fields to reduce clutter.  The
-<kbd>t</kbd> (<code>rmail-toggle-header</code>) command toggles this, switching
-between showing the reformatted header fields and showing the
-complete, original header.  With a positive prefix argument, the
-command shows the reformatted header; with a zero or negative prefix
-argument, it shows the full header.  Selecting the message again also
-reformats it if necessary.
-</p>
-<a name="index-rmail_002dignored_002dheaders"></a>
-<a name="index-rmail_002ddisplayed_002dheaders"></a>
-<a name="index-rmail_002dnonignored_002dheaders"></a>
-<p>The variable <code>rmail-ignored-headers</code> holds a regular expression
-specifying the header fields to hide; any matching header line will be
-hidden.  The variable <code>rmail-nonignored-headers</code> overrides this:
-any header field matching that regular expression is shown even if it
-matches <code>rmail-ignored-headers</code> too.  The variable
-<code>rmail-displayed-headers</code> is an alternative to these two
-variables; if non-<code>nil</code>, this should be a regular expression
-specifying which headers to display (the default is <code>nil</code>).
-</p>
-<a name="index-rmail_002dhighlighted_002dheaders"></a>
-<p>Rmail highlights certain header fields that are especially
-interesting&mdash;by default, the &lsquo;<samp>From</samp>&rsquo; and &lsquo;<samp>Subject</samp>&rsquo; fields.
-This highlighting uses the <code>rmail-highlight</code> face.  The variable
-<code>rmail-highlighted-headers</code> holds a regular expression specifying
-the header fields to highlight; if it matches the beginning of a
-header field, that whole field is highlighted.  To disable this
-feature, set <code>rmail-highlighted-headers</code> to <code>nil</code>.
-</p>
-<a name="index-MIME-messages-_0028Rmail_0029"></a>
-<a name="index-rmail_002denable_002dmime"></a>
-<p>If a message is in <acronym>MIME</acronym> (Multipurpose Internet Mail
-Extensions) format and contains multiple parts (<acronym>MIME</acronym>
-entities), Rmail displays each part with a <em>tagline</em>.  The tagline
-summarizes the part&rsquo;s index, size, and content type.  Depending on the
-content type, it may also contain one or more buttons; these perform
-actions such as saving the part into a file.
-</p>
-<dl compact="compact">
-<dd><a name="index-rmail_002dmime_002dtoggle_002dhidden"></a>
-</dd>
-<dt><kbd><span class="key">RET</span></kbd></dt>
-<dd><p>Hide or show the <acronym>MIME</acronym> part at point
-(<code>rmail-mime-toggle-hidden</code>).
-</p>
-<a name="index-rmail_002dmime_002dnext_002ditem"></a>
-</dd>
-<dt><kbd><span class="key">TAB</span></kbd></dt>
-<dd><p>Move point to the next <acronym>MIME</acronym> tagline button.
-(<code>rmail-mime-next-item</code>).
-</p>
-<a name="index-rmail_002dmime_002dprevious_002ditem"></a>
-</dd>
-<dt><kbd>S-<span class="key">TAB</span></kbd></dt>
-<dd><p>Move point to the previous <acronym>MIME</acronym> part
-(<code>rmail-mime-previous-item</code>).
-</p>
-<a name="index-rmail_002dmime"></a>
-</dd>
-<dt><kbd>v</kbd></dt>
-<dd><a name="index-v-_0028Rmail_0029"></a>
-<p>Toggle between <acronym>MIME</acronym> display and raw message
-(<code>rmail-mime</code>).
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>t</kbd></dt>
 
-<p>Each plain-text <acronym>MIME</acronym> part is initially displayed
-immediately after its tagline, as part of the Rmail buffer, while
-<acronym>MIME</acronym> parts of other types are represented only by their
-taglines, with their actual contents hidden.  In either case, you can
-toggle a <acronym>MIME</acronym> part between its displayed and hidden
-states by typing <tt class="key">RET</tt> anywhere in the part&mdash;or anywhere in its
-tagline (except for buttons for other actions, if there are any).  Type
-<tt class="key">RET</tt> (or click with the mouse) to activate a tagline button, and
-<tt class="key">TAB</tt> to cycle point between tagline buttons.
-</p>
-<p>The <kbd>v</kbd> (<code>rmail-mime</code>) command toggles between the default
-<acronym>MIME</acronym> display described above, and a raw display showing
-the undecoded <acronym>MIME</acronym> data.  With a prefix argument, this
-command toggles the display of only an entity at point.
-</p>
-<a name="index-rmail_002dmime_002dprefer_002dhtml"></a>
-<p>If the message has an <acronym>HTML</acronym> <acronym>MIME</acronym> part, Rmail
-displays it in preference to the plain-text part, if Emacs can render
-<acronym>HTML</acronym><a name="DOCF15" href="#FOOT15"><sup>15</sup></a>.  To prevent
-that, and have the plain-text part displayed instead, customize the
-variable <code>rmail-mime-prefer-html</code> to a <code>nil</code> value.
-</p>
-<p>To prevent Rmail from handling MIME decoded messages, change the
-variable <code>rmail-enable-mime</code> to <code>nil</code>.  When this is the
-case, the <kbd>v</kbd> (<code>rmail-mime</code>) command instead creates a
-temporary buffer to display the current <acronym>MIME</acronym> message.
-</p>
-<a name="index-rmail_002depa_002ddecrypt"></a>
-<a name="index-encrypted-mails-_0028reading-in-Rmail_0029"></a>
-<p>If the current message is an encrypted one, use the command <kbd>M-x
-rmail-epa-decrypt</kbd> to decrypt it, using the EasyPG library
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/epa/index.html#Top">EasyPG</a> in <cite>EasyPG Assistant User&rsquo;s Manual</cite>).
-</p>
-<p>You can highlight and activate URLs in the Rmail buffer using Goto
-Address mode:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'rmail-show-message-hook 'goto-address-mode)
-</pre></div>
+    <dd>
+      <p>Toggle display of complete header
+      (<code>rmail-toggle-header</code>).</p>
+    </dd>
+  </dl><a name="index-t-_0028Rmail_0029" id=
+  "index-t-_0028Rmail_0029"></a> <a name=
+  "index-rmail_002dtoggle_002dheader" id=
+  "index-rmail_002dtoggle_002dheader"></a>
 
-<p>Then you can browse these URLs by clicking on them with <kbd>mouse-2</kbd>
-(or <kbd>mouse-1</kbd> quickly) or by moving to one and typing <kbd>C-c
-<span class="key">RET</span></kbd>.  See <a href="Goto-Address-mode.html#Goto-Address-mode">Activating URLs</a>.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>Before displaying each message for the first time, Rmail
+  reformats its header, hiding uninteresting header fields to
+  reduce clutter. The <kbd>t</kbd>
+  (<code>rmail-toggle-header</code>) command toggles this,
+  switching between showing the reformatted header fields and
+  showing the complete, original header. With a positive prefix
+  argument, the command shows the reformatted header; with a zero
+  or negative prefix argument, it shows the full header. Selecting
+  the message again also reformats it if necessary.</p><a name=
+  "index-rmail_002dignored_002dheaders" id=
+  "index-rmail_002dignored_002dheaders"></a> <a name=
+  "index-rmail_002ddisplayed_002dheaders" id=
+  "index-rmail_002ddisplayed_002dheaders"></a> <a name=
+  "index-rmail_002dnonignored_002dheaders" id=
+  "index-rmail_002dnonignored_002dheaders"></a>
 
-<h3><a name="FOOT15" href="#DOCF15">(15)</a></h3>
-<p>This capability requires that Emacs be built with <samp>libxml2</samp>
-support or that you have the Lynx browser installed.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Rmail-Coding.html#Rmail-Coding" accesskey="n" rel="next">Rmail Coding</a>, Previous: <a href="Rmail-Sorting.html#Rmail-Sorting" accesskey="p" rel="prev">Rmail Sorting</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The variable <code>rmail-ignored-headers</code> holds a
+  regular expression specifying the header fields to hide; any
+  matching header line will be hidden. The variable
+  <code>rmail-nonignored-headers</code> overrides this: any header
+  field matching that regular expression is shown even if it
+  matches <code>rmail-ignored-headers</code> too. The variable
+  <code>rmail-displayed-headers</code> is an alternative to these
+  two variables; if non-<code>nil</code>, this should be a regular
+  expression specifying which headers to display (the default is
+  <code>nil</code>).</p><a name=
+  "index-rmail_002dhighlighted_002dheaders" id=
+  "index-rmail_002dhighlighted_002dheaders"></a>
 
+  <p>Rmail highlights certain header fields that are especially
+  interesting&mdash;by default, the &lsquo;<samp>From</samp>&rsquo;
+  and &lsquo;<samp>Subject</samp>&rsquo; fields. This highlighting
+  uses the <code>rmail-highlight</code> face. The variable
+  <code>rmail-highlighted-headers</code> holds a regular expression
+  specifying the header fields to highlight; if it matches the
+  beginning of a header field, that whole field is highlighted. To
+  disable this feature, set <code>rmail-highlighted-headers</code>
+  to <code>nil</code>.</p><a name=
+  "index-MIME-messages-_0028Rmail_0029" id=
+  "index-MIME-messages-_0028Rmail_0029"></a> <a name=
+  "index-rmail_002denable_002dmime" id=
+  "index-rmail_002denable_002dmime"></a>
 
+  <p>If a message is in <acronym>MIME</acronym> (Multipurpose
+  Internet Mail Extensions) format and contains multiple parts
+  (<acronym>MIME</acronym> entities), Rmail displays each part with
+  a <em>tagline</em>. The tagline summarizes the part&rsquo;s
+  index, size, and content type. Depending on the content type, it
+  may also contain one or more buttons; these perform actions such
+  as saving the part into a file.</p>
 
+  <dl compact="compact">
+    <dd><a name="index-rmail_002dmime_002dtoggle_002dhidden" id=
+    "index-rmail_002dmime_002dtoggle_002dhidden"></a></dd>
+
+    <dt><kbd><span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Hide or show the <acronym>MIME</acronym> part at point
+      (<code>rmail-mime-toggle-hidden</code>).</p><a name=
+      "index-rmail_002dmime_002dnext_002ditem" id=
+      "index-rmail_002dmime_002dnext_002ditem"></a>
+    </dd>
+
+    <dt><kbd><span class="key">TAB</span></kbd></dt>
+
+    <dd>
+      <p>Move point to the next <acronym>MIME</acronym> tagline
+      button. (<code>rmail-mime-next-item</code>).</p><a name=
+      "index-rmail_002dmime_002dprevious_002ditem" id=
+      "index-rmail_002dmime_002dprevious_002ditem"></a>
+    </dd>
+
+    <dt><kbd>S-<span class="key">TAB</span></kbd></dt>
+
+    <dd>
+      <p>Move point to the previous <acronym>MIME</acronym> part
+      (<code>rmail-mime-previous-item</code>).</p><a name=
+      "index-rmail_002dmime" id="index-rmail_002dmime"></a>
+    </dd>
+
+    <dt><kbd>v</kbd></dt>
+
+    <dd>
+      <a name="index-v-_0028Rmail_0029" id=
+      "index-v-_0028Rmail_0029"></a>
+
+      <p>Toggle between <acronym>MIME</acronym> display and raw
+      message (<code>rmail-mime</code>).</p>
+    </dd>
+  </dl>
+
+  <p>Each plain-text <acronym>MIME</acronym> part is initially
+  displayed immediately after its tagline, as part of the Rmail
+  buffer, while <acronym>MIME</acronym> parts of other types are
+  represented only by their taglines, with their actual contents
+  hidden. In either case, you can toggle a <acronym>MIME</acronym>
+  part between its displayed and hidden states by typing <tt class=
+  "key">RET</tt> anywhere in the part&mdash;or anywhere in its
+  tagline (except for buttons for other actions, if there are any).
+  Type <tt class="key">RET</tt> (or click with the mouse) to
+  activate a tagline button, and <tt class="key">TAB</tt> to cycle
+  point between tagline buttons.</p>
+
+  <p>The <kbd>v</kbd> (<code>rmail-mime</code>) command toggles
+  between the default <acronym>MIME</acronym> display described
+  above, and a raw display showing the undecoded
+  <acronym>MIME</acronym> data. With a prefix argument, this
+  command toggles the display of only an entity at
+  point.</p><a name="index-rmail_002dmime_002dprefer_002dhtml" id=
+  "index-rmail_002dmime_002dprefer_002dhtml"></a>
+
+  <p>If the message has an <acronym>HTML</acronym>
+  <acronym>MIME</acronym> part, Rmail displays it in preference to
+  the plain-text part, if Emacs can render
+  <acronym>HTML</acronym><a name="DOCF15" href="#FOOT15" id=
+  "DOCF15"><sup>15</sup></a>. To prevent that, and have the
+  plain-text part displayed instead, customize the variable
+  <code>rmail-mime-prefer-html</code> to a <code>nil</code>
+  value.</p>
+
+  <p>To prevent Rmail from handling MIME decoded messages, change
+  the variable <code>rmail-enable-mime</code> to <code>nil</code>.
+  When this is the case, the <kbd>v</kbd> (<code>rmail-mime</code>)
+  command instead creates a temporary buffer to display the current
+  <acronym>MIME</acronym> message.</p><a name=
+  "index-rmail_002depa_002ddecrypt" id=
+  "index-rmail_002depa_002ddecrypt"></a> <a name=
+  "index-encrypted-mails-_0028reading-in-Rmail_0029" id=
+  "index-encrypted-mails-_0028reading-in-Rmail_0029"></a>
+
+  <p>If the current message is an encrypted one, use the command
+  <kbd>M-x rmail-epa-decrypt</kbd> to decrypt it, using the EasyPG
+  library (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/epa/index.html#Top">
+  EasyPG</a> in <cite>EasyPG Assistant User&rsquo;s
+  Manual</cite>).</p>
+
+  <p>You can highlight and activate URLs in the Rmail buffer using
+  Goto Address mode:</p>
+
+  <div class="example">
+    <pre class="example">
+(add-hook 'rmail-show-message-hook 'goto-address-mode)
+</pre>
+  </div>
+
+  <p>Then you can browse these URLs by clicking on them with
+  <kbd>mouse-2</kbd> (or <kbd>mouse-1</kbd> quickly) or by moving
+  to one and typing <kbd>C-c <span class="key">RET</span></kbd>.
+  See <a href="Goto-Address-mode.html#Goto-Address-mode">Activating
+  URLs</a>.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT15" href="#DOCF15" id="FOOT15">(15)</a></h3>
+
+    <p>This capability requires that Emacs be built with
+    <samp>libxml2</samp> support or that you have the Lynx browser
+    installed.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Rmail-Coding.html#Rmail-Coding" accesskey="n"
+    rel="next">Rmail Coding</a>, Previous: <a href=
+    "Rmail-Sorting.html#Rmail-Sorting" accesskey="p" rel=
+    "prev">Rmail Sorting</a>, Up: <a href="Rmail.html#Rmail"
+    accesskey="u" rel="up">Rmail</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

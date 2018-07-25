@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,137 +19,198 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Key Binding Conventions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Key Binding Conventions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Key Binding Conventions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Tips.html#Tips" rel="up" title="Tips">
-<link href="Programming-Tips.html#Programming-Tips" rel="next" title="Programming Tips">
-<link href="Coding-Conventions.html#Coding-Conventions" rel="prev" title="Coding Conventions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Key Binding
+  Conventions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Key Binding Conventions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Key Binding Conventions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Tips.html#Tips" rel="up" title="Tips" />
+  <link href="Programming-Tips.html#Programming-Tips" rel="next"
+  title="Programming Tips" />
+  <link href="Coding-Conventions.html#Coding-Conventions" rel=
+  "prev" title="Coding Conventions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Key-Binding-Conventions" id=
+  "Key-Binding-Conventions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Programming-Tips.html#Programming-Tips"
+    accesskey="n" rel="next">Programming Tips</a>, Previous:
+    <a href="Coding-Conventions.html#Coding-Conventions" accesskey=
+    "p" rel="prev">Coding Conventions</a>, Up: <a href=
+    "Tips.html#Tips" accesskey="u" rel="up">Tips</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Key-Binding-Conventions-1" id=
+  "Key-Binding-Conventions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Key-Binding-Conventions"></a>
-<div class="header">
-<p>
-Next: <a href="Programming-Tips.html#Programming-Tips" accesskey="n" rel="next">Programming Tips</a>, Previous: <a href="Coding-Conventions.html#Coding-Conventions" accesskey="p" rel="prev">Coding Conventions</a>, Up: <a href="Tips.html#Tips" accesskey="u" rel="up">Tips</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Key-Binding-Conventions-1"></a>
-<h3 class="section">D.2 Key Binding Conventions</h3>
-<a name="index-key-binding_002c-conventions-for"></a>
+  <h3 class="section">D.2 Key Binding Conventions</h3><a name=
+  "index-key-binding_002c-conventions-for" id=
+  "index-key-binding_002c-conventions-for"></a>
 
-<ul>
-<li> <a name="index-mouse_002d2"></a>
-<a name="index-references_002c-following"></a>
-Many special major modes, like Dired, Info, Compilation, and Occur,
-are designed to handle read-only text that contains <em>hyper-links</em>.
-Such a major mode should redefine <kbd>mouse-2</kbd> and <tt class="key">RET</tt> to
-follow the links.  It should also set up a <code>follow-link</code>
-condition, so that the link obeys <code>mouse-1-click-follows-link</code>.
-See <a href="Clickable-Text.html#Clickable-Text">Clickable Text</a>.  See <a href="Buttons.html#Buttons">Buttons</a>, for an easy method of
-implementing such clickable links.
+  <ul>
+    <li><a name="index-mouse_002d2" id="index-mouse_002d2"></a>
+    <a name="index-references_002c-following" id=
+    "index-references_002c-following"></a> Many special major
+    modes, like Dired, Info, Compilation, and Occur, are designed
+    to handle read-only text that contains <em>hyper-links</em>.
+    Such a major mode should redefine <kbd>mouse-2</kbd> and
+    <tt class="key">RET</tt> to follow the links. It should also
+    set up a <code>follow-link</code> condition, so that the link
+    obeys <code>mouse-1-click-follows-link</code>. See <a href=
+    "Clickable-Text.html#Clickable-Text">Clickable Text</a>. See
+    <a href="Buttons.html#Buttons">Buttons</a>, for an easy method
+    of implementing such clickable links.</li>
 
-</li><li> <a name="index-reserved-keys"></a>
-<a name="index-keys_002c-reserved"></a>
-Don&rsquo;t define <kbd>C-c <var>letter</var></kbd> as a key in Lisp programs.
-Sequences consisting of <kbd>C-c</kbd> and a letter (either upper or lower
-case) are reserved for users; they are the <strong>only</strong> sequences
-reserved for users, so do not block them.
+    <li>
+      <a name="index-reserved-keys" id="index-reserved-keys"></a>
+      <a name="index-keys_002c-reserved" id=
+      "index-keys_002c-reserved"></a> Don&rsquo;t define <kbd>C-c
+      <var>letter</var></kbd> as a key in Lisp programs. Sequences
+      consisting of <kbd>C-c</kbd> and a letter (either upper or
+      lower case) are reserved for users; they are the
+      <strong>only</strong> sequences reserved for users, so do not
+      block them.
 
-<p>Changing all the Emacs major modes to respect this convention was a
-lot of work; abandoning this convention would make that work go to
-waste, and inconvenience users.  Please comply with it.
-</p>
-</li><li> Function keys <tt class="key">F5</tt> through <tt class="key">F9</tt> without modifier keys are
-also reserved for users to define.
+      <p>Changing all the Emacs major modes to respect this
+      convention was a lot of work; abandoning this convention
+      would make that work go to waste, and inconvenience users.
+      Please comply with it.</p>
+    </li>
 
-</li><li> Sequences consisting of <kbd>C-c</kbd> followed by a control character or a
-digit are reserved for major modes.
+    <li>Function keys <tt class="key">F5</tt> through <tt class=
+    "key">F9</tt> without modifier keys are also reserved for users
+    to define.</li>
 
-</li><li> Sequences consisting of <kbd>C-c</kbd> followed by <kbd>{</kbd>, <kbd>}</kbd>,
-<kbd>&lt;</kbd>, <kbd>&gt;</kbd>, <kbd>:</kbd> or <kbd>;</kbd> are also reserved for major modes.
+    <li>Sequences consisting of <kbd>C-c</kbd> followed by a
+    control character or a digit are reserved for major modes.</li>
 
-</li><li> Sequences consisting of <kbd>C-c</kbd> followed by any other
-<acronym>ASCII</acronym> punctuation or symbol character are allocated for
-minor modes.  Using them in a major mode is not absolutely prohibited,
-but if you do that, the major mode binding may be shadowed from time
-to time by minor modes.
+    <li>Sequences consisting of <kbd>C-c</kbd> followed by
+    <kbd>{</kbd>, <kbd>}</kbd>, <kbd>&lt;</kbd>, <kbd>&gt;</kbd>,
+    <kbd>:</kbd> or <kbd>;</kbd> are also reserved for major
+    modes.</li>
 
-</li><li> Don&rsquo;t bind <kbd>C-h</kbd> following any prefix character (including
-<kbd>C-c</kbd>).  If you don&rsquo;t bind <kbd>C-h</kbd>, it is automatically
-available as a help character for listing the subcommands of the
-prefix character.
+    <li>Sequences consisting of <kbd>C-c</kbd> followed by any
+    other <acronym>ASCII</acronym> punctuation or symbol character
+    are allocated for minor modes. Using them in a major mode is
+    not absolutely prohibited, but if you do that, the major mode
+    binding may be shadowed from time to time by minor modes.</li>
 
-</li><li> Don&rsquo;t bind a key sequence ending in <tt class="key">ESC</tt> except following another
-<tt class="key">ESC</tt>.  (That is, it is OK to bind a sequence ending in
-<kbd><span class="key">ESC</span> <span class="key">ESC</span></kbd>.)
+    <li>Don&rsquo;t bind <kbd>C-h</kbd> following any prefix
+    character (including <kbd>C-c</kbd>). If you don&rsquo;t bind
+    <kbd>C-h</kbd>, it is automatically available as a help
+    character for listing the subcommands of the prefix
+    character.</li>
 
-<p>The reason for this rule is that a non-prefix binding for <tt class="key">ESC</tt> in
-any context prevents recognition of escape sequences as function keys in
-that context.
-</p>
-</li><li> Similarly, don&rsquo;t bind a key sequence ending in <tt class="key">C-g</tt>, since that
-is commonly used to cancel a key sequence.
+    <li>Don&rsquo;t bind a key sequence ending in <tt class="key">
+      ESC</tt> except following another <tt class="key">ESC</tt>.
+      (That is, it is OK to bind a sequence ending in
+      <kbd><span class="key">ESC</span> <span class=
+      "key">ESC</span></kbd>.)
 
-</li><li> Anything that acts like a temporary mode or state that the user can
-enter and leave should define <kbd><span class="key">ESC</span> <span class="key">ESC</span></kbd> or
-<kbd><span class="key">ESC</span> <span class="key">ESC</span> <span class="key">ESC</span></kbd> as a way to escape.
+      <p>The reason for this rule is that a non-prefix binding for
+      <tt class="key">ESC</tt> in any context prevents recognition
+      of escape sequences as function keys in that context.</p>
+    </li>
 
-<p>For a state that accepts ordinary Emacs commands, or more generally any
-kind of state in which <tt class="key">ESC</tt> followed by a function key or arrow key
-is potentially meaningful, then you must not define <kbd><span class="key">ESC</span>
-<span class="key">ESC</span></kbd>, since that would preclude recognizing an escape sequence
-after <tt class="key">ESC</tt>.  In these states, you should define <kbd><span class="key">ESC</span>
-<span class="key">ESC</span> <span class="key">ESC</span></kbd> as the way to escape.  Otherwise, define
-<kbd><span class="key">ESC</span> <span class="key">ESC</span></kbd> instead.
-</p></li></ul>
+    <li>Similarly, don&rsquo;t bind a key sequence ending in
+    <tt class="key">C-g</tt>, since that is commonly used to cancel
+    a key sequence.</li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Programming-Tips.html#Programming-Tips" accesskey="n" rel="next">Programming Tips</a>, Previous: <a href="Coding-Conventions.html#Coding-Conventions" accesskey="p" rel="prev">Coding Conventions</a>, Up: <a href="Tips.html#Tips" accesskey="u" rel="up">Tips</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>Anything that acts like a temporary mode or state that the
+    user can enter and leave should define <kbd><span class="key">
+      ESC</span> <span class="key">ESC</span></kbd> or
+      <kbd><span class="key">ESC</span> <span class=
+      "key">ESC</span> <span class="key">ESC</span></kbd> as a way
+      to escape.
 
+      <p>For a state that accepts ordinary Emacs commands, or more
+      generally any kind of state in which <tt class="key">ESC</tt>
+      followed by a function key or arrow key is potentially
+      meaningful, then you must not define <kbd><span class=
+      "key">ESC</span> <span class="key">ESC</span></kbd>, since
+      that would preclude recognizing an escape sequence after
+      <tt class="key">ESC</tt>. In these states, you should define
+      <kbd><span class="key">ESC</span> <span class=
+      "key">ESC</span> <span class="key">ESC</span></kbd> as the
+      way to escape. Otherwise, define <kbd><span class=
+      "key">ESC</span> <span class="key">ESC</span></kbd>
+      instead.</p>
+    </li>
+  </ul>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Programming-Tips.html#Programming-Tips"
+    accesskey="n" rel="next">Programming Tips</a>, Previous:
+    <a href="Coding-Conventions.html#Coding-Conventions" accesskey=
+    "p" rel="prev">Coding Conventions</a>, Up: <a href=
+    "Tips.html#Tips" accesskey="u" rel="up">Tips</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,136 +19,201 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Vertical Scrolling</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Vertical Scrolling">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Vertical Scrolling">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Horizontal-Scrolling.html#Horizontal-Scrolling" rel="next" title="Horizontal Scrolling">
-<link href="Textual-Scrolling.html#Textual-Scrolling" rel="prev" title="Textual Scrolling">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Vertical
+  Scrolling</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Vertical Scrolling" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Vertical Scrolling" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Horizontal-Scrolling.html#Horizontal-Scrolling" rel=
+  "next" title="Horizontal Scrolling" />
+  <link href="Textual-Scrolling.html#Textual-Scrolling" rel="prev"
+  title="Textual Scrolling" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Vertical-Scrolling" id="Vertical-Scrolling"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="n"
+    rel="next">Horizontal Scrolling</a>, Previous: <a href=
+    "Textual-Scrolling.html#Textual-Scrolling" accesskey="p" rel=
+    "prev">Textual Scrolling</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Vertical-Fractional-Scrolling" id=
+  "Vertical-Fractional-Scrolling"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Vertical-Scrolling"></a>
-<div class="header">
-<p>
-Next: <a href="Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="n" rel="next">Horizontal Scrolling</a>, Previous: <a href="Textual-Scrolling.html#Textual-Scrolling" accesskey="p" rel="prev">Textual Scrolling</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Vertical-Fractional-Scrolling"></a>
-<h3 class="section">27.22 Vertical Fractional Scrolling</h3>
-<a name="index-vertical-fractional-scrolling"></a>
-<a name="index-vertical-scroll-position"></a>
+  <h3 class="section">27.22 Vertical Fractional
+  Scrolling</h3><a name="index-vertical-fractional-scrolling" id=
+  "index-vertical-fractional-scrolling"></a> <a name=
+  "index-vertical-scroll-position" id=
+  "index-vertical-scroll-position"></a>
 
-<p><em>Vertical fractional scrolling</em> means shifting text in a window
-up or down by a specified multiple or fraction of a line.  Each window
-has a <em>vertical scroll position</em>, which is a number, never less than
-zero.  It specifies how far to raise the contents of the window.
-Raising the window contents generally makes all or part of some lines
-disappear off the top, and all or part of some other lines appear at the
-bottom.  The usual value is zero.
-</p>
-<p>The vertical scroll position is measured in units of the normal line
-height, which is the height of the default font.  Thus, if the value is
-.5, that means the window contents are scrolled up half the normal line
-height.  If it is 3.3, that means the window contents are scrolled up
-somewhat over three times the normal line height.
-</p>
-<p>What fraction of a line the vertical scrolling covers, or how many
-lines, depends on what the lines contain.  A value of .5 could scroll a
-line whose height is very short off the screen, while a value of 3.3
-could scroll just part of the way through a tall line or an image.
-</p>
-<dl>
-<dt><a name="index-window_002dvscroll"></a>Function: <strong>window-vscroll</strong> <em>&amp;optional window pixels-p</em></dt>
-<dd><p>This function returns the current vertical scroll position of
-<var>window</var>.  The default for <var>window</var> is the selected window.
-If <var>pixels-p</var> is non-<code>nil</code>, the return value is measured in
-pixels, rather than in units of the normal line height.
-</p>
-<div class="example">
-<pre class="example">(window-vscroll)
+  <p><em>Vertical fractional scrolling</em> means shifting text in
+  a window up or down by a specified multiple or fraction of a
+  line. Each window has a <em>vertical scroll position</em>, which
+  is a number, never less than zero. It specifies how far to raise
+  the contents of the window. Raising the window contents generally
+  makes all or part of some lines disappear off the top, and all or
+  part of some other lines appear at the bottom. The usual value is
+  zero.</p>
+
+  <p>The vertical scroll position is measured in units of the
+  normal line height, which is the height of the default font.
+  Thus, if the value is .5, that means the window contents are
+  scrolled up half the normal line height. If it is 3.3, that means
+  the window contents are scrolled up somewhat over three times the
+  normal line height.</p>
+
+  <p>What fraction of a line the vertical scrolling covers, or how
+  many lines, depends on what the lines contain. A value of .5
+  could scroll a line whose height is very short off the screen,
+  while a value of 3.3 could scroll just part of the way through a
+  tall line or an image.</p>
+
+  <dl>
+    <dt><a name="index-window_002dvscroll" id=
+    "index-window_002dvscroll"></a>Function:
+    <strong>window-vscroll</strong> <em>&amp;optional window
+    pixels-p</em></dt>
+
+    <dd>
+      <p>This function returns the current vertical scroll position
+      of <var>window</var>. The default for <var>window</var> is
+      the selected window. If <var>pixels-p</var> is
+      non-<code>nil</code>, the return value is measured in pixels,
+      rather than in units of the normal line height.</p>
+
+      <div class="example">
+        <pre class="example">
+(window-vscroll)
      &rArr; 0
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-set_002dwindow_002dvscroll"></a>Function: <strong>set-window-vscroll</strong> <em>window lines &amp;optional pixels-p</em></dt>
-<dd><p>This function sets <var>window</var>&rsquo;s vertical scroll position to
-<var>lines</var>.  If <var>window</var> is <code>nil</code>, the selected window is
-used.  The argument <var>lines</var> should be zero or positive; if not, it
-is taken as zero.
-</p>
+  <dl>
+    <dt><a name="index-set_002dwindow_002dvscroll" id=
+    "index-set_002dwindow_002dvscroll"></a>Function:
+    <strong>set-window-vscroll</strong> <em>window lines
+    &amp;optional pixels-p</em></dt>
 
-<p>The actual vertical scroll position must always correspond
-to an integral number of pixels, so the value you specify
-is rounded accordingly.
-</p>
-<p>The return value is the result of this rounding.
-</p>
-<div class="example">
-<pre class="example">(set-window-vscroll (selected-window) 1.2)
+    <dd>
+      <p>This function sets <var>window</var>&rsquo;s vertical
+      scroll position to <var>lines</var>. If <var>window</var> is
+      <code>nil</code>, the selected window is used. The argument
+      <var>lines</var> should be zero or positive; if not, it is
+      taken as zero.</p>
+
+      <p>The actual vertical scroll position must always correspond
+      to an integral number of pixels, so the value you specify is
+      rounded accordingly.</p>
+
+      <p>The return value is the result of this rounding.</p>
+
+      <div class="example">
+        <pre class="example">
+(set-window-vscroll (selected-window) 1.2)
      &rArr; 1.13
-</pre></div>
+</pre>
+      </div>
 
-<p>If <var>pixels-p</var> is non-<code>nil</code>, <var>lines</var> specifies a number of
-pixels.  In this case, the return value is <var>lines</var>.
-</p></dd></dl>
+      <p>If <var>pixels-p</var> is non-<code>nil</code>,
+      <var>lines</var> specifies a number of pixels. In this case,
+      the return value is <var>lines</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-auto_002dwindow_002dvscroll"></a>Variable: <strong>auto-window-vscroll</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, the <code>line-move</code>,
-<code>scroll-up</code>, and <code>scroll-down</code> functions will automatically
-modify the vertical scroll position to scroll through display rows
-that are taller than the height of the window, for example in the
-presence of large images.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-auto_002dwindow_002dvscroll" id=
+    "index-auto_002dwindow_002dvscroll"></a>Variable:
+    <strong>auto-window-vscroll</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="n" rel="next">Horizontal Scrolling</a>, Previous: <a href="Textual-Scrolling.html#Textual-Scrolling" accesskey="p" rel="prev">Textual Scrolling</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>If this variable is non-<code>nil</code>, the
+      <code>line-move</code>, <code>scroll-up</code>, and
+      <code>scroll-down</code> functions will automatically modify
+      the vertical scroll position to scroll through display rows
+      that are taller than the height of the window, for example in
+      the presence of large images.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="n"
+    rel="next">Horizontal Scrolling</a>, Previous: <a href=
+    "Textual-Scrolling.html#Textual-Scrolling" accesskey="p" rel=
+    "prev">Textual Scrolling</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

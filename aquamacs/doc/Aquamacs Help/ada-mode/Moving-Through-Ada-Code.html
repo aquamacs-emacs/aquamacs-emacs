@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Moving Through Ada Code - Ada Mode</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Ada Mode">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Compiling-Examples.html#Compiling-Examples" title="Compiling Examples">
-<link rel="next" href="Identifier-completion.html#Identifier-completion" title="Identifier completion">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Moving Through Ada Code - Ada Mode</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Ada Mode" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Compiling-Examples.html#Compiling-Examples" title=
+  "Compiling Examples" />
+  <link rel="next" href=
+  "Identifier-completion.html#Identifier-completion" title=
+  "Identifier completion" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -24,8 +34,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,53 +47,107 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Moving-Through-Ada-Code"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Identifier-completion.html#Identifier-completion">Identifier completion</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Compiling-Examples.html#Compiling-Examples">Compiling Examples</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Moving-Through-Ada-Code" id=
+    "Moving-Through-Ada-Code"></a>
 
-<h2 class="chapter">7 Moving Through Ada Code</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Identifier-completion.html#Identifier-completion">Identifier
+    completion</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Compiling-Examples.html#Compiling-Examples">Compiling
+    Examples</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>There are several easy to use commands to navigate through Ada code. All
-these functions are available through the Ada menu, and you can also
-use the following key bindings or the command names. Some of these
-menu entries are available only if the GNAT compiler is used, since
-the implementation relies on the GNAT cross-referencing information.
+  <h2 class="chapter">7 Moving Through Ada Code</h2>
 
-     <dl>
-<dt><kbd>M-C-e</kbd><dd><a name="index-ada_002dnext_002dprocedure-1"></a>Move to the next function/procedure/task, which ever comes next
-(<code>ada-next-procedure</code>). 
-<br><dt><kbd>M-C-a</kbd><dd><a name="index-ada_002dprevious_002dprocedure-2"></a>Move to previous function/procedure/task
-(<code>ada-previous-procedure</code>). 
-<br><dt><kbd>M-x ada-next-package</kbd><dd><a name="index-ada_002dnext_002dpackage-3"></a>Move to next package. 
-<br><dt><kbd>M-x ada-previous-package</kbd><dd><a name="index-ada_002dprevious_002dpackage-4"></a>Move to previous package. 
-<br><dt><kbd>C-c C-a</kbd><dd><a name="index-ada_002dmove_002dto_002dstart-5"></a>Move to matching start of <code>end</code> (<code>ada-move-to-start</code>).  If
-point is at the end of a subprogram, this command jumps to the
-corresponding <code>begin</code> if the user option
-<code>ada-move-to-declaration</code> is <code>nil</code> (default), otherwise it jumps to
-the subprogram declaration. 
-<br><dt><kbd>C-c C-e</kbd><dd><a name="index-ada_002dmove_002dto_002dend-6"></a>Move point to end of current block (<code>ada-move-to-end</code>). 
-<br><dt><kbd>C-c o</kbd><dd>Switch between corresponding spec and body file
-(<code>ff-find-other-file</code>).  If point is in a subprogram, position
-point on the corresponding declaration or body in the other file. 
-<br><dt><kbd>C-c c-d</kbd><dd><a name="index-ada_002dgoto_002ddeclaration-7"></a>Move from any reference to its declaration, for from a declaration to
-its body (for procedures, tasks, private and incomplete types). 
-<br><dt><kbd>C-c C-r</kbd><dd><a name="index-ada_002dfind_002dreferences-8"></a>Runs the <samp><span class="file">gnatfind</span></samp> command to search for all references to the
-identifier surrounding point (<code>ada-find-references</code>). Use
-<kbd>C-x `</kbd> (<code>next-error</code>) to visit each reference (as for
-compilation errors). 
-</dl>
+  <p>There are several easy to use commands to navigate through Ada
+  code. All these functions are available through the Ada menu, and
+  you can also use the following key bindings or the command names.
+  Some of these menu entries are available only if the GNAT
+  compiler is used, since the implementation relies on the GNAT
+  cross-referencing information.</p>
 
-   <p>If the <code>ada-xref-create-ali</code> variable is non-<code>nil</code>, Emacs
-will try to run GNAT for you whenever cross-reference information is
-needed, and is older than the current source file.
+  <dl>
+    <dt><kbd>M-C-e</kbd></dt>
 
-   </body></html>
+    <dd><a name="index-ada_002dnext_002dprocedure-1" id=
+    "index-ada_002dnext_002dprocedure-1"></a>Move to the next
+    function/procedure/task, which ever comes next
+    (<code>ada-next-procedure</code>).<br /></dd>
 
+    <dt><kbd>M-C-a</kbd></dt>
+
+    <dd><a name="index-ada_002dprevious_002dprocedure-2" id=
+    "index-ada_002dprevious_002dprocedure-2"></a>Move to previous
+    function/procedure/task
+    (<code>ada-previous-procedure</code>).<br /></dd>
+
+    <dt><kbd>M-x ada-next-package</kbd></dt>
+
+    <dd><a name="index-ada_002dnext_002dpackage-3" id=
+    "index-ada_002dnext_002dpackage-3"></a>Move to next
+    package.<br /></dd>
+
+    <dt><kbd>M-x ada-previous-package</kbd></dt>
+
+    <dd><a name="index-ada_002dprevious_002dpackage-4" id=
+    "index-ada_002dprevious_002dpackage-4"></a>Move to previous
+    package.<br /></dd>
+
+    <dt><kbd>C-c C-a</kbd></dt>
+
+    <dd><a name="index-ada_002dmove_002dto_002dstart-5" id=
+    "index-ada_002dmove_002dto_002dstart-5"></a>Move to matching
+    start of <code>end</code> (<code>ada-move-to-start</code>). If
+    point is at the end of a subprogram, this command jumps to the
+    corresponding <code>begin</code> if the user option
+    <code>ada-move-to-declaration</code> is <code>nil</code>
+    (default), otherwise it jumps to the subprogram
+    declaration.<br /></dd>
+
+    <dt><kbd>C-c C-e</kbd></dt>
+
+    <dd><a name="index-ada_002dmove_002dto_002dend-6" id=
+    "index-ada_002dmove_002dto_002dend-6"></a>Move point to end of
+    current block (<code>ada-move-to-end</code>).<br /></dd>
+
+    <dt><kbd>C-c o</kbd></dt>
+
+    <dd>Switch between corresponding spec and body file
+    (<code>ff-find-other-file</code>). If point is in a subprogram,
+    position point on the corresponding declaration or body in the
+    other file.<br /></dd>
+
+    <dt><kbd>C-c c-d</kbd></dt>
+
+    <dd><a name="index-ada_002dgoto_002ddeclaration-7" id=
+    "index-ada_002dgoto_002ddeclaration-7"></a>Move from any
+    reference to its declaration, for from a declaration to its
+    body (for procedures, tasks, private and incomplete
+    types).<br /></dd>
+
+    <dt><kbd>C-c C-r</kbd></dt>
+
+    <dd><a name="index-ada_002dfind_002dreferences-8" id=
+    "index-ada_002dfind_002dreferences-8"></a>Runs the
+    <samp><span class="file">gnatfind</span></samp> command to
+    search for all references to the identifier surrounding point
+    (<code>ada-find-references</code>). Use <kbd>C-x `</kbd>
+    (<code>next-error</code>) to visit each reference (as for
+    compilation errors).</dd>
+  </dl>
+
+  <p>If the <code>ada-xref-create-ali</code> variable is
+  non-<code>nil</code>, Emacs will try to run GNAT for you whenever
+  cross-reference information is needed, and is older than the
+  current source file.</p>
+</body>
+</html>

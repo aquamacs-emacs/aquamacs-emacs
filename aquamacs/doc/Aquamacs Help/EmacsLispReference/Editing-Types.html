@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,98 +19,226 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Editing Types</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Editing Types">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Editing Types">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lisp-Data-Types.html#Lisp-Data-Types" rel="up" title="Lisp Data Types">
-<link href="Buffer-Type.html#Buffer-Type" rel="next" title="Buffer Type">
-<link href="Finalizer-Type.html#Finalizer-Type" rel="prev" title="Finalizer Type">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Editing Types</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Editing Types" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Editing Types" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lisp-Data-Types.html#Lisp-Data-Types" rel="up" title=
+  "Lisp Data Types" />
+  <link href="Buffer-Type.html#Buffer-Type" rel="next" title=
+  "Buffer Type" />
+  <link href="Finalizer-Type.html#Finalizer-Type" rel="prev" title=
+  "Finalizer Type" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Editing-Types" id="Editing-Types"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Circular-Objects.html#Circular-Objects"
+    accesskey="n" rel="next">Circular Objects</a>, Previous:
+    <a href="Programming-Types.html#Programming-Types" accesskey=
+    "p" rel="prev">Programming Types</a>, Up: <a href=
+    "Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel=
+    "up">Lisp Data Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Editing-Types-1" id="Editing-Types-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Editing-Types"></a>
-<div class="header">
-<p>
-Next: <a href="Circular-Objects.html#Circular-Objects" accesskey="n" rel="next">Circular Objects</a>, Previous: <a href="Programming-Types.html#Programming-Types" accesskey="p" rel="prev">Programming Types</a>, Up: <a href="Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel="up">Lisp Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Editing-Types-1"></a>
-<h3 class="section">2.4 Editing Types</h3>
-<a name="index-editing-types"></a>
+  <h3 class="section">2.4 Editing Types</h3><a name=
+  "index-editing-types" id="index-editing-types"></a>
 
-<p>The types in the previous section are used for general programming
-purposes, and most of them are common to most Lisp dialects.  Emacs Lisp
-provides several additional data types for purposes connected with
-editing.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Buffer-Type.html#Buffer-Type" accesskey="1">Buffer Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The basic object of editing.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Marker-Type.html#Marker-Type" accesskey="2">Marker Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A position in a buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Window-Type.html#Window-Type" accesskey="3">Window Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Buffers are displayed in windows.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Frame-Type.html#Frame-Type" accesskey="4">Frame Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Windows subdivide frames.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Terminal-Type.html#Terminal-Type" accesskey="5">Terminal Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A terminal device displays frames.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Window-Configuration-Type.html#Window-Configuration-Type" accesskey="6">Window Configuration Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Recording the way a frame is subdivided.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Frame-Configuration-Type.html#Frame-Configuration-Type" accesskey="7">Frame Configuration Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Recording the status of all frames.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Process-Type.html#Process-Type" accesskey="8">Process Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A subprocess of Emacs running on the underlying OS.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Stream-Type.html#Stream-Type" accesskey="9">Stream Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Receive or send characters.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Keymap-Type.html#Keymap-Type">Keymap Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What function a keystroke invokes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Overlay-Type.html#Overlay-Type">Overlay Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How an overlay is represented.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Font-Type.html#Font-Type">Font Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Fonts for displaying text.
-</td></tr>
-</table>
+  <p>The types in the previous section are used for general
+  programming purposes, and most of them are common to most Lisp
+  dialects. Emacs Lisp provides several additional data types for
+  purposes connected with editing.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Buffer-Type.html#Buffer-Type" accesskey="1">Buffer
+      Type</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">The basic object of
+      editing.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Marker-Type.html#Marker-Type" accesskey="2">Marker
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A position in a buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Window-Type.html#Window-Type" accesskey="3">Window
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Buffers are displayed in
+      windows.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Frame-Type.html#Frame-Type" accesskey="4">Frame
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Windows subdivide frames.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Terminal-Type.html#Terminal-Type" accesskey="5">Terminal
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A terminal device displays
+      frames.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Window-Configuration-Type.html#Window-Configuration-Type"
+      accesskey="6">Window Configuration Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Recording the way a frame is
+      subdivided.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Frame-Configuration-Type.html#Frame-Configuration-Type"
+      accesskey="7">Frame Configuration Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Recording the status of all
+      frames.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Process-Type.html#Process-Type" accesskey="8">Process
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A subprocess of Emacs running
+      on the underlying OS.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Stream-Type.html#Stream-Type" accesskey="9">Stream
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Receive or send
+      characters.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Keymap-Type.html#Keymap-Type">Keymap Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What function a keystroke
+      invokes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Overlay-Type.html#Overlay-Type">Overlay Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How an overlay is
+      represented.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Font-Type.html#Font-Type">Font Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Fonts for displaying text.</td>
+    </tr>
+  </table>
 </body>
 </html>

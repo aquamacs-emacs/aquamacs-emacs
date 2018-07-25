@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,224 +18,374 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Formatting Lisp Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Formatting Lisp Functions">
-<meta name="keywords" content="GNU Emacs Calc Manual: Formatting Lisp Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Internals.html#Internals" rel="up" title="Internals">
-<link href="Hooks.html#Hooks" rel="next" title="Hooks">
-<link href="Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions" rel="prev" title="Symbolic Lisp Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Formatting Lisp Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Formatting Lisp Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Formatting Lisp Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Internals.html#Internals" rel="up" title=
+  "Internals" />
+  <link href="Hooks.html#Hooks" rel="next" title="Hooks" />
+  <link href="Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions"
+  rel="prev" title="Symbolic Lisp Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Formatting-Lisp-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Hooks.html#Hooks" accesskey="n" rel="next">Hooks</a>, Previous: <a href="Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions" accesskey="p" rel="prev">Symbolic Lisp Functions</a>, Up: <a href="Internals.html#Internals" accesskey="u" rel="up">Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="I_002fO-and-Formatting-Functions"></a>
-<h4 class="subsubsection">17.5.7.8 I/O and Formatting Functions</h4>
+<body lang="en" xml:lang="en">
+  <a name="Formatting-Lisp-Functions" id=
+  "Formatting-Lisp-Functions"></a>
 
-<p>The functions described here are responsible for parsing and formatting
-Calc numbers and formulas.
-</p>
-<dl>
-<dt><a name="index-calc_002deval"></a>Function: <strong>calc-eval</strong> <em>str sep arg1 arg2 &hellip;</em></dt>
-<dd><p>This is the simplest interface to the Calculator from another Lisp program.
-See <a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">Calling Calc from Your Programs</a>.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Hooks.html#Hooks" accesskey="n" rel=
+    "next">Hooks</a>, Previous: <a href=
+    "Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions"
+    accesskey="p" rel="prev">Symbolic Lisp Functions</a>, Up:
+    <a href="Internals.html#Internals" accesskey="u" rel=
+    "up">Internals</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="I_002fO-and-Formatting-Functions" id=
+  "I_002fO-and-Formatting-Functions"></a>
 
-<dl>
-<dt><a name="index-read_002dnumber"></a>Function: <strong>read-number</strong> <em>str</em></dt>
-<dd><p>If string <var>str</var> contains a valid Calc number, either integer,
-fraction, float, or HMS form, this function parses and returns that
-number.  Otherwise, it returns <code>nil</code>.
-</p></dd></dl>
+  <h4 class="subsubsection">17.5.7.8 I/O and Formatting
+  Functions</h4>
 
-<dl>
-<dt><a name="index-read_002dexpr"></a>Function: <strong>read-expr</strong> <em>str</em></dt>
-<dd><p>Read an algebraic expression from string <var>str</var>.  If <var>str</var> does
-not have the form of a valid expression, return a list of the form
-&lsquo;<samp>(error <var>pos</var> <var>msg</var>)</samp>&rsquo; where <var>pos</var> is an integer index
-into <var>str</var> of the general location of the error, and <var>msg</var> is
-a string describing the problem.
-</p></dd></dl>
+  <p>The functions described here are responsible for parsing and
+  formatting Calc numbers and formulas.</p>
 
-<dl>
-<dt><a name="index-read_002dexprs"></a>Function: <strong>read-exprs</strong> <em>str</em></dt>
-<dd><p>Read a list of expressions separated by commas, and return it as a
-Lisp list.  If an error occurs in any expressions, an error list as
-shown above is returned instead.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-calc_002deval" id=
+    "index-calc_002deval"></a>Function: <strong>calc-eval</strong>
+    <em>str sep arg1 arg2 &hellip;</em></dt>
 
-<dl>
-<dt><a name="index-calc_002ddo_002dalg_002dentry"></a>Function: <strong>calc-do-alg-entry</strong> <em>initial prompt no-norm</em></dt>
-<dd><p>Read an algebraic formula or formulas using the minibuffer.  All
-conventions of regular algebraic entry are observed.  The return value
-is a list of Calc formulas; there will be more than one if the user
-entered a list of values separated by commas.  The result is <code>nil</code>
-if the user presses Return with a blank line.  If <var>initial</var> is
-given, it is a string which the minibuffer will initially contain.
-If <var>prompt</var> is given, it is the prompt string to use; the default
-is &ldquo;Algebraic:&rdquo;.  If <var>no-norm</var> is <code>t</code>, the formulas will
-be returned exactly as parsed; otherwise, they will be passed through
-<code>calc-normalize</code> first.
-</p>
-<p>To support the use of <kbd>$</kbd> characters in the algebraic entry, use
-<code>let</code> to bind <code>calc-dollar-values</code> to a list of the values
-to be substituted for <kbd>$</kbd>, <kbd>$$</kbd>, and so on, and bind
-<code>calc-dollar-used</code> to 0.  Upon return, <code>calc-dollar-used</code>
-will have been changed to the highest number of consecutive <kbd>$</kbd>s
-that actually appeared in the input.
-</p></dd></dl>
+    <dd>
+      <p>This is the simplest interface to the Calculator from
+      another Lisp program. See <a href=
+      "Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">
+      Calling Calc from Your Programs</a>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-format_002dnumber"></a>Function: <strong>format-number</strong> <em>a</em></dt>
-<dd><p>Convert the real or complex number or HMS form <var>a</var> to string form.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-read_002dnumber" id=
+    "index-read_002dnumber"></a>Function:
+    <strong>read-number</strong> <em>str</em></dt>
 
-<dl>
-<dt><a name="index-format_002dflat_002dexpr"></a>Function: <strong>format-flat-expr</strong> <em>a prec</em></dt>
-<dd><p>Convert the arbitrary Calc number or formula <var>a</var> to string form,
-in the style used by the trail buffer and the <code>calc-edit</code> command.
-This is a simple format designed
-mostly to guarantee the string is of a form that can be re-parsed by
-<code>read-expr</code>.  Most formatting modes, such as digit grouping,
-complex number format, and point character, are ignored to ensure the
-result will be re-readable.  The <var>prec</var> parameter is normally 0; if
-you pass a large integer like 1000 instead, the expression will be
-surrounded by parentheses unless it is a plain number or variable name.
-</p></dd></dl>
+    <dd>
+      <p>If string <var>str</var> contains a valid Calc number,
+      either integer, fraction, float, or HMS form, this function
+      parses and returns that number. Otherwise, it returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-format_002dnice_002dexpr"></a>Function: <strong>format-nice-expr</strong> <em>a width</em></dt>
-<dd><p>This is like <code>format-flat-expr</code> (with <var>prec</var> equal to 0),
-except that newlines will be inserted to keep lines down to the
-specified <var>width</var>, and vectors that look like matrices or rewrite
-rules are written in a pseudo-matrix format.  The <code>calc-edit</code>
-command uses this when only one stack entry is being edited.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-read_002dexpr" id=
+    "index-read_002dexpr"></a>Function: <strong>read-expr</strong>
+    <em>str</em></dt>
 
-<dl>
-<dt><a name="index-format_002dvalue"></a>Function: <strong>format-value</strong> <em>a width</em></dt>
-<dd><p>Convert the Calc number or formula <var>a</var> to string form, using the
-format seen in the stack buffer.  Beware the string returned may
-not be re-readable by <code>read-expr</code>, for example, because of digit
-grouping.  Multi-line objects like matrices produce strings that
-contain newline characters to separate the lines.  The <var>w</var>
-parameter, if given, is the target window size for which to format
-the expressions.  If <var>w</var> is omitted, the width of the Calculator
-window is used.
-</p></dd></dl>
+    <dd>
+      <p>Read an algebraic expression from string <var>str</var>.
+      If <var>str</var> does not have the form of a valid
+      expression, return a list of the form &lsquo;<samp>(error
+      <var>pos</var> <var>msg</var>)</samp>&rsquo; where
+      <var>pos</var> is an integer index into <var>str</var> of the
+      general location of the error, and <var>msg</var> is a string
+      describing the problem.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-compose_002dexpr"></a>Function: <strong>compose-expr</strong> <em>a prec</em></dt>
-<dd><p>Format the Calc number or formula <var>a</var> according to the current
-language mode, returning a &ldquo;composition.&rdquo;  To learn about the
-structure of compositions, see the comments in the Calc source code.
-You can specify the format of a given type of function call by putting
-a <code>math-compose-<var>lang</var></code> property on the function&rsquo;s symbol,
-whose value is a Lisp function that takes <var>a</var> and <var>prec</var> as
-arguments and returns a composition.  Here <var>lang</var> is a language
-mode name, one of <code>normal</code>, <code>big</code>, <code>c</code>, <code>pascal</code>,
-<code>fortran</code>, <code>tex</code>, <code>eqn</code>, <code>math</code>, or <code>maple</code>.
-In Big mode, Calc actually tries <code>math-compose-big</code> first, then
-tries <code>math-compose-normal</code>.  If this property does not exist,
-or if the function returns <code>nil</code>, the function is written in the
-normal function-call notation for that language.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-read_002dexprs" id=
+    "index-read_002dexprs"></a>Function:
+    <strong>read-exprs</strong> <em>str</em></dt>
 
-<dl>
-<dt><a name="index-composition_002dto_002dstring"></a>Function: <strong>composition-to-string</strong> <em>c w</em></dt>
-<dd><p>Convert a composition structure returned by <code>compose-expr</code> into
-a string.  Multi-line compositions convert to strings containing
-newline characters.  The target window size is given by <var>w</var>.
-The <code>format-value</code> function basically calls <code>compose-expr</code>
-followed by <code>composition-to-string</code>.
-</p></dd></dl>
+    <dd>
+      <p>Read a list of expressions separated by commas, and return
+      it as a Lisp list. If an error occurs in any expressions, an
+      error list as shown above is returned instead.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-comp_002dwidth"></a>Function: <strong>comp-width</strong> <em>c</em></dt>
-<dd><p>Compute the width in characters of composition <var>c</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-calc_002ddo_002dalg_002dentry" id=
+    "index-calc_002ddo_002dalg_002dentry"></a>Function:
+    <strong>calc-do-alg-entry</strong> <em>initial prompt
+    no-norm</em></dt>
 
-<dl>
-<dt><a name="index-comp_002dheight"></a>Function: <strong>comp-height</strong> <em>c</em></dt>
-<dd><p>Compute the height in lines of composition <var>c</var>.
-</p></dd></dl>
+    <dd>
+      <p>Read an algebraic formula or formulas using the
+      minibuffer. All conventions of regular algebraic entry are
+      observed. The return value is a list of Calc formulas; there
+      will be more than one if the user entered a list of values
+      separated by commas. The result is <code>nil</code> if the
+      user presses Return with a blank line. If <var>initial</var>
+      is given, it is a string which the minibuffer will initially
+      contain. If <var>prompt</var> is given, it is the prompt
+      string to use; the default is &ldquo;Algebraic:&rdquo;. If
+      <var>no-norm</var> is <code>t</code>, the formulas will be
+      returned exactly as parsed; otherwise, they will be passed
+      through <code>calc-normalize</code> first.</p>
 
-<dl>
-<dt><a name="index-comp_002dascent"></a>Function: <strong>comp-ascent</strong> <em>c</em></dt>
-<dd><p>Compute the portion of the height of composition <var>c</var> which is on or
-above the baseline.  For a one-line composition, this will be one.
-</p></dd></dl>
+      <p>To support the use of <kbd>$</kbd> characters in the
+      algebraic entry, use <code>let</code> to bind
+      <code>calc-dollar-values</code> to a list of the values to be
+      substituted for <kbd>$</kbd>, <kbd>$$</kbd>, and so on, and
+      bind <code>calc-dollar-used</code> to 0. Upon return,
+      <code>calc-dollar-used</code> will have been changed to the
+      highest number of consecutive <kbd>$</kbd>s that actually
+      appeared in the input.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-comp_002ddescent"></a>Function: <strong>comp-descent</strong> <em>c</em></dt>
-<dd><p>Compute the portion of the height of composition <var>c</var> which is below
-the baseline.  For a one-line composition, this will be zero.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-format_002dnumber" id=
+    "index-format_002dnumber"></a>Function:
+    <strong>format-number</strong> <em>a</em></dt>
 
-<dl>
-<dt><a name="index-comp_002dfirst_002dchar"></a>Function: <strong>comp-first-char</strong> <em>c</em></dt>
-<dd><p>If composition <var>c</var> is a &ldquo;flat&rdquo; composition, return the first
-(leftmost) character of the composition as an integer.  Otherwise,
-return <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>Convert the real or complex number or HMS form
+      <var>a</var> to string form.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-comp_002dlast_002dchar"></a>Function: <strong>comp-last-char</strong> <em>c</em></dt>
-<dd><p>If composition <var>c</var> is a &ldquo;flat&rdquo; composition, return the last
-(rightmost) character, otherwise return <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-format_002dflat_002dexpr" id=
+    "index-format_002dflat_002dexpr"></a>Function:
+    <strong>format-flat-expr</strong> <em>a prec</em></dt>
 
+    <dd>
+      <p>Convert the arbitrary Calc number or formula <var>a</var>
+      to string form, in the style used by the trail buffer and the
+      <code>calc-edit</code> command. This is a simple format
+      designed mostly to guarantee the string is of a form that can
+      be re-parsed by <code>read-expr</code>. Most formatting
+      modes, such as digit grouping, complex number format, and
+      point character, are ignored to ensure the result will be
+      re-readable. The <var>prec</var> parameter is normally 0; if
+      you pass a large integer like 1000 instead, the expression
+      will be surrounded by parentheses unless it is a plain number
+      or variable name.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Hooks.html#Hooks" accesskey="n" rel="next">Hooks</a>, Previous: <a href="Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions" accesskey="p" rel="prev">Symbolic Lisp Functions</a>, Up: <a href="Internals.html#Internals" accesskey="u" rel="up">Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-format_002dnice_002dexpr" id=
+    "index-format_002dnice_002dexpr"></a>Function:
+    <strong>format-nice-expr</strong> <em>a width</em></dt>
 
+    <dd>
+      <p>This is like <code>format-flat-expr</code> (with
+      <var>prec</var> equal to 0), except that newlines will be
+      inserted to keep lines down to the specified
+      <var>width</var>, and vectors that look like matrices or
+      rewrite rules are written in a pseudo-matrix format. The
+      <code>calc-edit</code> command uses this when only one stack
+      entry is being edited.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-format_002dvalue" id=
+    "index-format_002dvalue"></a>Function:
+    <strong>format-value</strong> <em>a width</em></dt>
 
+    <dd>
+      <p>Convert the Calc number or formula <var>a</var> to string
+      form, using the format seen in the stack buffer. Beware the
+      string returned may not be re-readable by
+      <code>read-expr</code>, for example, because of digit
+      grouping. Multi-line objects like matrices produce strings
+      that contain newline characters to separate the lines. The
+      <var>w</var> parameter, if given, is the target window size
+      for which to format the expressions. If <var>w</var> is
+      omitted, the width of the Calculator window is used.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-compose_002dexpr" id=
+    "index-compose_002dexpr"></a>Function:
+    <strong>compose-expr</strong> <em>a prec</em></dt>
+
+    <dd>
+      <p>Format the Calc number or formula <var>a</var> according
+      to the current language mode, returning a
+      &ldquo;composition.&rdquo; To learn about the structure of
+      compositions, see the comments in the Calc source code. You
+      can specify the format of a given type of function call by
+      putting a <code>math-compose-<var>lang</var></code> property
+      on the function&rsquo;s symbol, whose value is a Lisp
+      function that takes <var>a</var> and <var>prec</var> as
+      arguments and returns a composition. Here <var>lang</var> is
+      a language mode name, one of <code>normal</code>,
+      <code>big</code>, <code>c</code>, <code>pascal</code>,
+      <code>fortran</code>, <code>tex</code>, <code>eqn</code>,
+      <code>math</code>, or <code>maple</code>. In Big mode, Calc
+      actually tries <code>math-compose-big</code> first, then
+      tries <code>math-compose-normal</code>. If this property does
+      not exist, or if the function returns <code>nil</code>, the
+      function is written in the normal function-call notation for
+      that language.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-composition_002dto_002dstring" id=
+    "index-composition_002dto_002dstring"></a>Function:
+    <strong>composition-to-string</strong> <em>c w</em></dt>
+
+    <dd>
+      <p>Convert a composition structure returned by
+      <code>compose-expr</code> into a string. Multi-line
+      compositions convert to strings containing newline
+      characters. The target window size is given by <var>w</var>.
+      The <code>format-value</code> function basically calls
+      <code>compose-expr</code> followed by
+      <code>composition-to-string</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-comp_002dwidth" id=
+    "index-comp_002dwidth"></a>Function:
+    <strong>comp-width</strong> <em>c</em></dt>
+
+    <dd>
+      <p>Compute the width in characters of composition
+      <var>c</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-comp_002dheight" id=
+    "index-comp_002dheight"></a>Function:
+    <strong>comp-height</strong> <em>c</em></dt>
+
+    <dd>
+      <p>Compute the height in lines of composition
+      <var>c</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-comp_002dascent" id=
+    "index-comp_002dascent"></a>Function:
+    <strong>comp-ascent</strong> <em>c</em></dt>
+
+    <dd>
+      <p>Compute the portion of the height of composition
+      <var>c</var> which is on or above the baseline. For a
+      one-line composition, this will be one.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-comp_002ddescent" id=
+    "index-comp_002ddescent"></a>Function:
+    <strong>comp-descent</strong> <em>c</em></dt>
+
+    <dd>
+      <p>Compute the portion of the height of composition
+      <var>c</var> which is below the baseline. For a one-line
+      composition, this will be zero.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-comp_002dfirst_002dchar" id=
+    "index-comp_002dfirst_002dchar"></a>Function:
+    <strong>comp-first-char</strong> <em>c</em></dt>
+
+    <dd>
+      <p>If composition <var>c</var> is a &ldquo;flat&rdquo;
+      composition, return the first (leftmost) character of the
+      composition as an integer. Otherwise, return
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-comp_002dlast_002dchar" id=
+    "index-comp_002dlast_002dchar"></a>Function:
+    <strong>comp-last-char</strong> <em>c</em></dt>
+
+    <dd>
+      <p>If composition <var>c</var> is a &ldquo;flat&rdquo;
+      composition, return the last (rightmost) character, otherwise
+      return <code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Hooks.html#Hooks" accesskey="n" rel=
+    "next">Hooks</a>, Previous: <a href=
+    "Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions"
+    accesskey="p" rel="prev">Symbolic Lisp Functions</a>, Up:
+    <a href="Internals.html#Internals" accesskey="u" rel=
+    "up">Internals</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

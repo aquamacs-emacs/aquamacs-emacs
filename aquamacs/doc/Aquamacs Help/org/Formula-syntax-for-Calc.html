@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Formula syntax for Calc - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="The-spreadsheet.html#The-spreadsheet" title="The spreadsheet">
-<link rel="prev" href="References.html#References" title="References">
-<link rel="next" href="Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp" title="Formula syntax for Lisp">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Formula syntax for Calc - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="The-spreadsheet.html#The-spreadsheet" title=
+  "The spreadsheet" />
+  <link rel="prev" href="References.html#References" title=
+  "References" />
+  <link rel="next" href=
+  "Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp" title=
+  "Formula syntax for Lisp" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +43,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,83 +56,145 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Formula-syntax-for-Calc"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp">Formula syntax for Lisp</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="References.html#References">References</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="The-spreadsheet.html#The-spreadsheet">The spreadsheet</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Formula-syntax-for-Calc" id=
+    "Formula-syntax-for-Calc"></a>
 
-<h4 class="subsection">3.5.2 Formula syntax for Calc</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Formula-syntax-for-Lisp.html#Formula-syntax-for-Lisp">Formula
+    syntax for Lisp</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href="References.html#References">References</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "The-spreadsheet.html#The-spreadsheet">The spreadsheet</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-formula-syntax_002c-Calc-315"></a><a name="index-syntax_002c-of-formulas-316"></a>
-A formula can be any algebraic expression understood by the Emacs
-<samp><span class="file">Calc</span></samp> package.  <b>Note that </b><samp><span class="file">calc</span></samp><b> has the
-non-standard convention that &lsquo;</b><samp><span class="samp">/</span></samp><b>&rsquo; has lower precedence than
-&lsquo;</b><samp><span class="samp">*</span></samp><b>&rsquo;, so that &lsquo;</b><samp><span class="samp">a/b*c</span></samp><b>&rsquo; is interpreted as &lsquo;</b><samp><span class="samp">a/(b*c)</span></samp><b>&rsquo;.</b>  Before
-evaluation by <code>calc-eval</code> (see <a href="../Calc/Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">calc-eval</a>),
-<!-- FIXME:  The link to the Calc manual in HTML does not work. -->
-variable substitution takes place according to the rules described above. 
-<a name="index-vectors_002c-in-table-calculations-317"></a>The range vectors can be directly fed into the Calc vector functions
-like &lsquo;<samp><span class="samp">vmean</span></samp>&rsquo; and &lsquo;<samp><span class="samp">vsum</span></samp>&rsquo;.
+  <h4 class="subsection">3.5.2 Formula syntax for Calc</h4>
 
-   <p><a name="index-format-specifier-318"></a><a name="index-mode_002c-for-_0040file_007bcalc_007d-319"></a><a name="index-org_002dcalc_002ddefault_002dmodes-320"></a>A formula can contain an optional mode string after a semicolon.  This
-string consists of flags to influence Calc and other modes during
-execution.  By default, Org uses the standard Calc modes (precision
-12, angular units degrees, fraction and symbolic modes off).  The display
-format, however, has been changed to <code>(float 8)</code> to keep tables
-compact.  The default settings can be configured using the variable
-<code>org-calc-default-modes</code>.
+  <p><a name="index-formula-syntax_002c-Calc-315" id=
+  "index-formula-syntax_002c-Calc-315"></a><a name=
+  "index-syntax_002c-of-formulas-316" id=
+  "index-syntax_002c-of-formulas-316"></a> A formula can be any
+  algebraic expression understood by the Emacs <samp><span class=
+  "file">Calc</span></samp> package. <b>Note that</b>
+  <samp><span class="file">calc</span></samp> <b>has the
+  non-standard convention that &lsquo;</b><samp><span class=
+  "samp">/</span></samp><b>&rsquo; has lower precedence than
+  &lsquo;</b><samp><span class="samp">*</span></samp><b>&rsquo;, so
+  that &lsquo;</b><samp><span class=
+  "samp">a/b*c</span></samp><b>&rsquo; is interpreted as
+  &lsquo;</b><samp><span class=
+  "samp">a/(b*c)</span></samp><b>&rsquo;.</b> Before evaluation by
+  <code>calc-eval</code> (see <a href=
+  "../Calc/Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">
+  calc-eval</a>), 
+  <!-- FIXME:  The link to the Calc manual in HTML does not work. -->
+  variable substitution takes place according to the rules
+  described above. <a name=
+  "index-vectors_002c-in-table-calculations-317" id=
+  "index-vectors_002c-in-table-calculations-317"></a>The range
+  vectors can be directly fed into the Calc vector functions like
+  &lsquo;<samp><span class="samp">vmean</span></samp>&rsquo; and
+  &lsquo;<samp><span class="samp">vsum</span></samp>&rsquo;.</p>
 
-<pre class="example">     p20           <span class="roman">set the internal Calc calculation precision to 20 digits</span>
-     n3 s3 e2 f4   <span class="roman">Normal, scientific, engineering, or fixed</span>
-                   <span class="roman">format of the result of Calc passed back to Org.</span>
-                   <span class="roman">Calc formatting is unlimited in precision as</span>
-                   <span class="roman">long as the Calc calculation precision is greater.</span>
-     D R           <span class="roman">angle modes: degrees, radians</span>
-     F S           <span class="roman">fraction and symbolic modes</span>
-     N             <span class="roman">interpret all fields as numbers, use 0 for non-numbers</span>
-     T             <span class="roman">force text interpretation</span>
-     E             <span class="roman">keep empty fields in ranges</span>
+  <p><a name="index-format-specifier-318" id=
+  "index-format-specifier-318"></a><a name=
+  "index-mode_002c-for-_0040file_007bcalc_007d-319" id=
+  "index-mode_002c-for-_0040file_007bcalc_007d-319"></a><a name=
+  "index-org_002dcalc_002ddefault_002dmodes-320" id=
+  "index-org_002dcalc_002ddefault_002dmodes-320"></a>A formula can
+  contain an optional mode string after a semicolon. This string
+  consists of flags to influence Calc and other modes during
+  execution. By default, Org uses the standard Calc modes
+  (precision 12, angular units degrees, fraction and symbolic modes
+  off). The display format, however, has been changed to
+  <code>(float 8)</code> to keep tables compact. The default
+  settings can be configured using the variable
+  <code>org-calc-default-modes</code>.</p>
+  <pre class="example">
+     p20           <span class=
+"roman">set the internal Calc calculation precision to 20 digits</span>
+     n3 s3 e2 f4   <span class=
+"roman">Normal, scientific, engineering, or fixed</span>
+                   <span class=
+"roman">format of the result of Calc passed back to Org.</span>
+                   <span class=
+"roman">Calc formatting is unlimited in precision as</span>
+                   <span class=
+"roman">long as the Calc calculation precision is greater.</span>
+     D R           <span class=
+"roman">angle modes: degrees, radians</span>
+     F S           <span class=
+"roman">fraction and symbolic modes</span>
+     N             <span class=
+"roman">interpret all fields as numbers, use 0 for non-numbers</span>
+     T             <span class=
+"roman">force text interpretation</span>
+     E             <span class=
+"roman">keep empty fields in ranges</span>
      L             <span class="roman">literal</span>
 </pre>
-   <p class="noindent">Unless you use large integer numbers or high-precision-calculation
-and -display for floating point numbers you may alternatively provide a
-<code>printf</code> format specifier to reformat the Calc result after it has been
-passed back to Org instead of letting Calc already do the
-formatting<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. 
-A few examples:
 
-<pre class="example">     $1+$2                <span class="roman">Sum of first and second field</span>
-     $1+$2;%.2f           <span class="roman">Same, format result to two decimals</span>
-     exp($2)+exp($1)      <span class="roman">Math functions can be used</span>
-     $0;%.1f              <span class="roman">Reformat current cell to 1 decimal</span>
-     ($3-32)*5/9          <span class="roman">Degrees F -&gt; C conversion</span>
-     $c/$1/$cm            <span class="roman">Hz -&gt; cm conversion, using </span><samp><span class="file">constants.el</span></samp>
-     tan($1);Dp3s1        <span class="roman">Compute in degrees, precision 3, display SCI 1</span>
-     sin($1);Dp3%.1e      <span class="roman">Same, but use printf specifier for display</span>
-     vmean($2..$7)        <span class="roman">Compute column range mean, using vector function</span>
-     vmean($2..$7);EN     <span class="roman">Same, but treat empty fields as 0</span>
-     taylor($3,x=7,2)     <span class="roman">Taylor series of $3, at x=7, second degree</span>
+  <p class="noindent">Unless you use large integer numbers or
+  high-precision-calculation and -display for floating point
+  numbers you may alternatively provide a <code>printf</code>
+  format specifier to reformat the Calc result after it has been
+  passed back to Org instead of letting Calc already do the
+  formatting<a rel="footnote" href="#fn-1" name="fnd-1" id=
+  "fnd-1"><sup>1</sup></a>. A few examples:</p>
+  <pre class="example">
+     $1+$2                <span class=
+"roman">Sum of first and second field</span>
+     $1+$2;%.2f           <span class=
+"roman">Same, format result to two decimals</span>
+     exp($2)+exp($1)      <span class=
+"roman">Math functions can be used</span>
+     $0;%.1f              <span class=
+"roman">Reformat current cell to 1 decimal</span>
+     ($3-32)*5/9          <span class=
+"roman">Degrees F -&gt; C conversion</span>
+     $c/$1/$cm            <span class=
+"roman">Hz -&gt; cm conversion, using </span><samp><span class=
+"file">constants.el</span></samp>
+     tan($1);Dp3s1        <span class=
+"roman">Compute in degrees, precision 3, display SCI 1</span>
+     sin($1);Dp3%.1e      <span class=
+"roman">Same, but use printf specifier for display</span>
+     vmean($2..$7)        <span class=
+"roman">Compute column range mean, using vector function</span>
+     vmean($2..$7);EN     <span class=
+"roman">Same, but treat empty fields as 0</span>
+     taylor($3,x=7,2)     <span class=
+"roman">Taylor series of $3, at x=7, second degree</span>
 </pre>
-   <p>Calc also contains a complete set of logical operations.  For example
 
-<pre class="example">     if($1&lt;20,teen,string(""))  <span class="roman">``teen'' if age $1 less than 20, else empty</span>
+  <p>Calc also contains a complete set of logical operations. For
+  example</p>
+  <pre class="example">
+     if($1&lt;20,teen,string(""))  <span class=
+"roman">``teen'' if age $1 less than 20, else empty</span>
 </pre>
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The <code>printf</code> reformatting is limited in precision
-because the value passed to it is converted into an <code>integer</code> or
-<code>double</code>.  The <code>integer</code> is limited in size by truncating the
-signed value to 32 bits.  The <code>double</code> is limited in precision to 64
-bits overall which leaves approximately 16 significant decimal digits.</p>
 
-   <hr></div>
+  <div class="footnote">
+    <hr />
 
-   </body></html>
+    <h4>Footnotes</h4>
 
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> The <code>printf</code> reformatting is
+    limited in precision because the value passed to it is
+    converted into an <code>integer</code> or <code>double</code>.
+    The <code>integer</code> is limited in size by truncating the
+    signed value to 32 bits. The <code>double</code> is limited in
+    precision to 64 bits overall which leaves approximately 16
+    significant decimal digits.</p>
+    <hr />
+  </div>
+</body>
+</html>

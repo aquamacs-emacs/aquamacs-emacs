@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,86 +19,130 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Symbol Plists</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Symbol Plists">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Symbol Plists">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Symbol-Properties.html#Symbol-Properties" rel="up" title="Symbol Properties">
-<link href="Standard-Properties.html#Standard-Properties" rel="next" title="Standard Properties">
-<link href="Symbol-Properties.html#Symbol-Properties" rel="prev" title="Symbol Properties">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Symbol Plists</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Symbol Plists" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Symbol Plists" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Symbol-Properties.html#Symbol-Properties" rel="up"
+  title="Symbol Properties" />
+  <link href="Standard-Properties.html#Standard-Properties" rel=
+  "next" title="Standard Properties" />
+  <link href="Symbol-Properties.html#Symbol-Properties" rel="prev"
+  title="Symbol Properties" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Symbol-Plists" id="Symbol-Plists"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Standard-Properties.html#Standard-Properties"
+    accesskey="n" rel="next">Standard Properties</a>, Up: <a href=
+    "Symbol-Properties.html#Symbol-Properties" accesskey="u" rel=
+    "up">Symbol Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Accessing-Symbol-Properties" id=
+  "Accessing-Symbol-Properties"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Symbol-Plists"></a>
-<div class="header">
-<p>
-Next: <a href="Standard-Properties.html#Standard-Properties" accesskey="n" rel="next">Standard Properties</a>, Up: <a href="Symbol-Properties.html#Symbol-Properties" accesskey="u" rel="up">Symbol Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Accessing-Symbol-Properties"></a>
-<h4 class="subsection">8.4.1 Accessing Symbol Properties</h4>
+  <h4 class="subsection">8.4.1 Accessing Symbol Properties</h4>
 
-<p>The following functions can be used to access symbol properties.
-</p>
-<dl>
-<dt><a name="index-get"></a>Function: <strong>get</strong> <em>symbol property</em></dt>
-<dd><p>This function returns the value of the property named <var>property</var>
-in <var>symbol</var>&rsquo;s property list.  If there is no such property, it
-returns <code>nil</code>.  Thus, there is no distinction between a value of
-<code>nil</code> and the absence of the property.
-</p>
-<p>The name <var>property</var> is compared with the existing property names
-using <code>eq</code>, so any object is a legitimate property.
-</p>
-<p>See <code>put</code> for an example.
-</p></dd></dl>
+  <p>The following functions can be used to access symbol
+  properties.</p>
 
-<dl>
-<dt><a name="index-put"></a>Function: <strong>put</strong> <em>symbol property value</em></dt>
-<dd><p>This function puts <var>value</var> onto <var>symbol</var>&rsquo;s property list under
-the property name <var>property</var>, replacing any previous property value.
-The <code>put</code> function returns <var>value</var>.
-</p>
-<div class="example">
-<pre class="example">(put 'fly 'verb 'transitive)
+  <dl>
+    <dt><a name="index-get" id="index-get"></a>Function:
+    <strong>get</strong> <em>symbol property</em></dt>
+
+    <dd>
+      <p>This function returns the value of the property named
+      <var>property</var> in <var>symbol</var>&rsquo;s property
+      list. If there is no such property, it returns
+      <code>nil</code>. Thus, there is no distinction between a
+      value of <code>nil</code> and the absence of the
+      property.</p>
+
+      <p>The name <var>property</var> is compared with the existing
+      property names using <code>eq</code>, so any object is a
+      legitimate property.</p>
+
+      <p>See <code>put</code> for an example.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-put" id="index-put"></a>Function:
+    <strong>put</strong> <em>symbol property value</em></dt>
+
+    <dd>
+      <p>This function puts <var>value</var> onto
+      <var>symbol</var>&rsquo;s property list under the property
+      name <var>property</var>, replacing any previous property
+      value. The <code>put</code> function returns
+      <var>value</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(put 'fly 'verb 'transitive)
      &rArr;'transitive
 (put 'fly 'noun '(a buzzing little bug))
      &rArr; (a buzzing little bug)
@@ -104,70 +150,107 @@ The <code>put</code> function returns <var>value</var>.
      &rArr; transitive
 (symbol-plist 'fly)
      &rArr; (verb transitive noun (a buzzing little bug))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-symbol_002dplist"></a>Function: <strong>symbol-plist</strong> <em>symbol</em></dt>
-<dd><p>This function returns the property list of <var>symbol</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-symbol_002dplist" id=
+    "index-symbol_002dplist"></a>Function:
+    <strong>symbol-plist</strong> <em>symbol</em></dt>
 
-<dl>
-<dt><a name="index-setplist"></a>Function: <strong>setplist</strong> <em>symbol plist</em></dt>
-<dd><p>This function sets <var>symbol</var>&rsquo;s property list to <var>plist</var>.
-Normally, <var>plist</var> should be a well-formed property list, but this is
-not enforced.  The return value is <var>plist</var>.
-</p>
-<div class="example">
-<pre class="example">(setplist 'foo '(a 1 b (2 3) c nil))
+    <dd>
+      <p>This function returns the property list of
+      <var>symbol</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-setplist" id="index-setplist"></a>Function:
+    <strong>setplist</strong> <em>symbol plist</em></dt>
+
+    <dd>
+      <p>This function sets <var>symbol</var>&rsquo;s property list
+      to <var>plist</var>. Normally, <var>plist</var> should be a
+      well-formed property list, but this is not enforced. The
+      return value is <var>plist</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(setplist 'foo '(a 1 b (2 3) c nil))
      &rArr; (a 1 b (2 3) c nil)
 (symbol-plist 'foo)
      &rArr; (a 1 b (2 3) c nil)
-</pre></div>
+</pre>
+      </div>
 
-<p>For symbols in special obarrays, which are not used for ordinary
-purposes, it may make sense to use the property list cell in a
-nonstandard fashion; in fact, the abbrev mechanism does so
-(see <a href="Abbrevs.html#Abbrevs">Abbrevs</a>).
-</p>
-<p>You could define <code>put</code> in terms of <code>setplist</code> and
-<code>plist-put</code>, as follows:
-</p>
-<div class="example">
-<pre class="example">(defun put (symbol prop value)
+      <p>For symbols in special obarrays, which are not used for
+      ordinary purposes, it may make sense to use the property list
+      cell in a nonstandard fashion; in fact, the abbrev mechanism
+      does so (see <a href="Abbrevs.html#Abbrevs">Abbrevs</a>).</p>
+
+      <p>You could define <code>put</code> in terms of
+      <code>setplist</code> and <code>plist-put</code>, as
+      follows:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun put (symbol prop value)
   (setplist symbol
             (plist-put (symbol-plist symbol) prop value)))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-function_002dget"></a>Function: <strong>function-get</strong> <em>symbol property &amp;optional autoload</em></dt>
-<dd><p>This function is identical to <code>get</code>, except that if <var>symbol</var>
-is the name of a function alias, it looks in the property list of the
-symbol naming the actual function.  See <a href="Defining-Functions.html#Defining-Functions">Defining Functions</a>.  If the
-optional argument <var>autoload</var> is non-<code>nil</code>, and <var>symbol</var>
-is auto-loaded, this function will try to autoload it, since
-autoloading might set <var>property</var> of <var>symbol</var>.  If
-<var>autoload</var> is the symbol <code>macro</code>, only try autoloading if
-<var>symbol</var> is an auto-loaded macro.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-function_002dget" id=
+    "index-function_002dget"></a>Function:
+    <strong>function-get</strong> <em>symbol property &amp;optional
+    autoload</em></dt>
 
-<dl>
-<dt><a name="index-function_002dput"></a>Function: <strong>function-put</strong> <em>function property value</em></dt>
-<dd><p>This function sets <var>property</var> of <var>function</var> to <var>value</var>.
-<var>function</var> should be a symbol.  This function is preferred to
-calling <code>put</code> for setting properties of a function, because it
-will allow us some day to implement remapping of old properties to new
-ones.
-</p></dd></dl>
+    <dd>
+      <p>This function is identical to <code>get</code>, except
+      that if <var>symbol</var> is the name of a function alias, it
+      looks in the property list of the symbol naming the actual
+      function. See <a href=
+      "Defining-Functions.html#Defining-Functions">Defining
+      Functions</a>. If the optional argument <var>autoload</var>
+      is non-<code>nil</code>, and <var>symbol</var> is
+      auto-loaded, this function will try to autoload it, since
+      autoloading might set <var>property</var> of
+      <var>symbol</var>. If <var>autoload</var> is the symbol
+      <code>macro</code>, only try autoloading if <var>symbol</var>
+      is an auto-loaded macro.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Standard-Properties.html#Standard-Properties" accesskey="n" rel="next">Standard Properties</a>, Up: <a href="Symbol-Properties.html#Symbol-Properties" accesskey="u" rel="up">Symbol Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-function_002dput" id=
+    "index-function_002dput"></a>Function:
+    <strong>function-put</strong> <em>function property
+    value</em></dt>
 
+    <dd>
+      <p>This function sets <var>property</var> of
+      <var>function</var> to <var>value</var>. <var>function</var>
+      should be a symbol. This function is preferred to calling
+      <code>put</code> for setting properties of a function,
+      because it will allow us some day to implement remapping of
+      old properties to new ones.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Standard-Properties.html#Standard-Properties"
+    accesskey="n" rel="next">Standard Properties</a>, Up: <a href=
+    "Symbol-Properties.html#Symbol-Properties" accesskey="u" rel=
+    "up">Symbol Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,119 +14,162 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Mail-like Back Ends</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Mail-like Back Ends">
-<meta name="keywords" content="Gnus Manual: Mail-like Back Ends">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Back-End-Interface.html#Back-End-Interface" rel="up" title="Back End Interface">
-<link href="Score-File-Syntax.html#Score-File-Syntax" rel="next" title="Score File Syntax">
-<link href="Hooking-New-Back-Ends-Into-Gnus.html#Hooking-New-Back-Ends-Into-Gnus" rel="prev" title="Hooking New Back Ends Into Gnus">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Mail-like Back Ends</title>
+  <meta name="description" content=
+  "Gnus Manual: Mail-like Back Ends" />
+  <meta name="keywords" content=
+  "Gnus Manual: Mail-like Back Ends" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Back-End-Interface.html#Back-End-Interface" rel="up"
+  title="Back End Interface" />
+  <link href="Score-File-Syntax.html#Score-File-Syntax" rel="next"
+  title="Score File Syntax" />
+  <link href=
+  "Hooking-New-Back-Ends-Into-Gnus.html#Hooking-New-Back-Ends-Into-Gnus"
+  rel="prev" title="Hooking New Back Ends Into Gnus" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Mail_002dlike-Back-Ends"></a>
-<div class="header">
-<p>
-Previous: <a href="Hooking-New-Back-Ends-Into-Gnus.html#Hooking-New-Back-Ends-Into-Gnus" accesskey="p" rel="prev">Hooking New Back Ends Into Gnus</a>, Up: <a href="Back-End-Interface.html#Back-End-Interface" accesskey="u" rel="up">Back End Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Mail_002dlike-Back-Ends-1"></a>
-<h4 class="subsubsection">11.7.2.6 Mail-like Back Ends</h4>
+<body lang="en" xml:lang="en">
+  <a name="Mail_002dlike-Back-Ends" id=
+  "Mail_002dlike-Back-Ends"></a>
 
-<p>One of the things that separate the mail back ends from the rest of the
-back ends is the heavy dependence by most of the mail back ends on
-common functions in <samp>nnmail.el</samp>.  For instance, here&rsquo;s the
-definition of <code>nnml-request-scan</code>:
-</p>
-<div class="lisp">
-<pre class="lisp">(deffoo nnml-request-scan (&amp;optional group server)
+  <div class="header">
+    <p>Previous: <a href=
+    "Hooking-New-Back-Ends-Into-Gnus.html#Hooking-New-Back-Ends-Into-Gnus"
+    accesskey="p" rel="prev">Hooking New Back Ends Into Gnus</a>,
+    Up: <a href="Back-End-Interface.html#Back-End-Interface"
+    accesskey="u" rel="up">Back End Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Mail_002dlike-Back-Ends-1" id=
+  "Mail_002dlike-Back-Ends-1"></a>
+
+  <h4 class="subsubsection">11.7.2.6 Mail-like Back Ends</h4>
+
+  <p>One of the things that separate the mail back ends from the
+  rest of the back ends is the heavy dependence by most of the mail
+  back ends on common functions in <samp>nnmail.el</samp>. For
+  instance, here&rsquo;s the definition of
+  <code>nnml-request-scan</code>:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(deffoo nnml-request-scan (&amp;optional group server)
   (setq nnml-article-file-alist nil)
   (nnmail-get-new-mail 'nnml 'nnml-save-nov nnml-directory group))
-</pre></div>
+</pre>
+  </div>
 
-<p>It simply calls <code>nnmail-get-new-mail</code> with a few parameters,
-and <code>nnmail</code> takes care of all the moving and splitting of the
-mail.
-</p>
-<p>This function takes four parameters.
-</p>
-<dl compact="compact">
-<dt><var>method</var></dt>
-<dd><p>This should be a symbol to designate which back end is responsible for
-the call.
-</p>
-</dd>
-<dt><var>exit-function</var></dt>
-<dd><p>This function should be called after the splitting has been performed.
-</p>
-</dd>
-<dt><var>temp-directory</var></dt>
-<dd><p>Where the temporary files should be stored.
-</p>
-</dd>
-<dt><var>group</var></dt>
-<dd><p>This optional argument should be a group name if the splitting is to be
-performed for one group only.
-</p></dd>
-</dl>
+  <p>It simply calls <code>nnmail-get-new-mail</code> with a few
+  parameters, and <code>nnmail</code> takes care of all the moving
+  and splitting of the mail.</p>
 
-<p><code>nnmail-get-new-mail</code> will call <var>back-end</var><code>-save-mail</code> to
-save each article.  <var>back-end</var><code>-active-number</code> will be called to
-find the article number assigned to this article.
-</p>
-<p>The function also uses the following variables:
-<var>back-end</var><code>-get-new-mail</code> (to see whether to get new mail for
-this back end); and <var>back-end</var><code>-group-alist</code> and
-<var>back-end</var><code>-active-file</code> to generate the new active file.
-<var>back-end</var><code>-group-alist</code> should be a group-active alist, like
-this:
-</p>
-<div class="example">
-<pre class="example">((&quot;a-group&quot; (1 . 10))
- (&quot;some-group&quot; (34 . 39)))
-</pre></div>
+  <p>This function takes four parameters.</p>
 
+  <dl compact="compact">
+    <dt><var>method</var></dt>
 
+    <dd>
+      <p>This should be a symbol to designate which back end is
+      responsible for the call.</p>
+    </dd>
 
+    <dt><var>exit-function</var></dt>
 
+    <dd>
+      <p>This function should be called after the splitting has
+      been performed.</p>
+    </dd>
 
+    <dt><var>temp-directory</var></dt>
+
+    <dd>
+      <p>Where the temporary files should be stored.</p>
+    </dd>
+
+    <dt><var>group</var></dt>
+
+    <dd>
+      <p>This optional argument should be a group name if the
+      splitting is to be performed for one group only.</p>
+    </dd>
+  </dl>
+
+  <p><code>nnmail-get-new-mail</code> will call
+  <var>back-end</var><code>-save-mail</code> to save each article.
+  <var>back-end</var><code>-active-number</code> will be called to
+  find the article number assigned to this article.</p>
+
+  <p>The function also uses the following variables:
+  <var>back-end</var><code>-get-new-mail</code> (to see whether to
+  get new mail for this back end); and
+  <var>back-end</var><code>-group-alist</code> and
+  <var>back-end</var><code>-active-file</code> to generate the new
+  active file. <var>back-end</var><code>-group-alist</code> should
+  be a group-active alist, like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(("a-group" (1 . 10))
+ ("some-group" (34 . 39)))
+</pre>
+  </div>
 </body>
 </html>

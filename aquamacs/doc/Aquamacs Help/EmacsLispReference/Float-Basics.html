@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,165 +19,243 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Float Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Float Basics">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Float Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numbers.html#Numbers" rel="up" title="Numbers">
-<link href="Predicates-on-Numbers.html#Predicates-on-Numbers" rel="next" title="Predicates on Numbers">
-<link href="Integer-Basics.html#Integer-Basics" rel="prev" title="Integer Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Float Basics</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Float Basics" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Float Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numbers.html#Numbers" rel="up" title="Numbers" />
+  <link href="Predicates-on-Numbers.html#Predicates-on-Numbers"
+  rel="next" title="Predicates on Numbers" />
+  <link href="Integer-Basics.html#Integer-Basics" rel="prev" title=
+  "Integer Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Float-Basics" id="Float-Basics"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Predicates-on-Numbers.html#Predicates-on-Numbers" accesskey=
+    "n" rel="next">Predicates on Numbers</a>, Previous: <a href=
+    "Integer-Basics.html#Integer-Basics" accesskey="p" rel=
+    "prev">Integer Basics</a>, Up: <a href="Numbers.html#Numbers"
+    accesskey="u" rel="up">Numbers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Floating_002dPoint-Basics" id=
+  "Floating_002dPoint-Basics"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Float-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Predicates-on-Numbers.html#Predicates-on-Numbers" accesskey="n" rel="next">Predicates on Numbers</a>, Previous: <a href="Integer-Basics.html#Integer-Basics" accesskey="p" rel="prev">Integer Basics</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Floating_002dPoint-Basics"></a>
-<h3 class="section">3.2 Floating-Point Basics</h3>
+  <h3 class="section">3.2 Floating-Point Basics</h3><a name=
+  "index-IEEE-floating-point" id="index-IEEE-floating-point"></a>
 
-<a name="index-IEEE-floating-point"></a>
-<p>Floating-point numbers are useful for representing numbers that are
-not integral.  The range of floating-point numbers is
-the same as the range of the C data type <code>double</code> on the machine
-you are using.  On all computers currently supported by Emacs, this is
-double-precision <acronym>IEEE</acronym> floating point.
-</p>
-<p>The read syntax for floating-point numbers requires either a decimal
-point, an exponent, or both.  Optional signs (&lsquo;<samp>+</samp>&rsquo; or &lsquo;<samp>-</samp>&rsquo;)
-precede the number and its exponent.  For example, &lsquo;<samp>1500.0</samp>&rsquo;,
-&lsquo;<samp>+15e2</samp>&rsquo;, &lsquo;<samp>15.0e+2</samp>&rsquo;, &lsquo;<samp>+1500000e-3</samp>&rsquo;, and &lsquo;<samp>.15e4</samp>&rsquo; are
-five ways of writing a floating-point number whose value is 1500.
-They are all equivalent.  Like Common Lisp, Emacs Lisp requires at
-least one digit after any decimal point in a floating-point number;
-&lsquo;<samp>1500.</samp>&rsquo; is an integer, not a floating-point number.
-</p>
-<p>Emacs Lisp treats <code>-0.0</code> as numerically equal to ordinary zero
-with respect to <code>equal</code> and <code>=</code>.  This follows the
-<acronym>IEEE</acronym> floating-point standard, which says <code>-0.0</code> and
-<code>0.0</code> are numerically equal even though other operations can
-distinguish them.
-</p>
-<a name="index-positive-infinity"></a>
-<a name="index-negative-infinity"></a>
-<a name="index-infinity"></a>
-<a name="index-NaN"></a>
-<p>The <acronym>IEEE</acronym> floating-point standard supports positive
-infinity and negative infinity as floating-point values.  It also
-provides for a class of values called NaN, or &ldquo;not a number&rdquo;;
-numerical functions return such values in cases where there is no
-correct answer.  For example, <code>(/ 0.0 0.0)</code> returns a NaN.
-Although NaN values carry a sign, for practical purposes there is no other
-significant difference between different NaN values in Emacs Lisp.
-</p>
-<p>Here are read syntaxes for these special floating-point values:
-</p>
-<dl compact="compact">
-<dt>infinity</dt>
-<dd><p>&lsquo;<samp>1.0e+INF</samp>&rsquo; and &lsquo;<samp>-1.0e+INF</samp>&rsquo;
-</p></dd>
-<dt>not-a-number</dt>
-<dd><p>&lsquo;<samp>0.0e+NaN</samp>&rsquo; and &lsquo;<samp>-0.0e+NaN</samp>&rsquo;
-</p></dd>
-</dl>
+  <p>Floating-point numbers are useful for representing numbers
+  that are not integral. The range of floating-point numbers is the
+  same as the range of the C data type <code>double</code> on the
+  machine you are using. On all computers currently supported by
+  Emacs, this is double-precision <acronym>IEEE</acronym> floating
+  point.</p>
 
-<p>The following functions are specialized for handling floating-point
-numbers:
-</p>
-<dl>
-<dt><a name="index-isnan"></a>Function: <strong>isnan</strong> <em>x</em></dt>
-<dd><p>This predicate returns <code>t</code> if its floating-point argument is a NaN,
-<code>nil</code> otherwise.
-</p></dd></dl>
+  <p>The read syntax for floating-point numbers requires either a
+  decimal point, an exponent, or both. Optional signs
+  (&lsquo;<samp>+</samp>&rsquo; or &lsquo;<samp>-</samp>&rsquo;)
+  precede the number and its exponent. For example,
+  &lsquo;<samp>1500.0</samp>&rsquo;,
+  &lsquo;<samp>+15e2</samp>&rsquo;,
+  &lsquo;<samp>15.0e+2</samp>&rsquo;,
+  &lsquo;<samp>+1500000e-3</samp>&rsquo;, and
+  &lsquo;<samp>.15e4</samp>&rsquo; are five ways of writing a
+  floating-point number whose value is 1500. They are all
+  equivalent. Like Common Lisp, Emacs Lisp requires at least one
+  digit after any decimal point in a floating-point number;
+  &lsquo;<samp>1500.</samp>&rsquo; is an integer, not a
+  floating-point number.</p>
 
-<dl>
-<dt><a name="index-frexp"></a>Function: <strong>frexp</strong> <em>x</em></dt>
-<dd><p>This function returns a cons cell <code>(<var>s</var> . <var>e</var>)</code>,
-where <var>s</var> and <var>e</var> are respectively the significand and
-exponent of the floating-point number <var>x</var>.
-</p>
-<p>If <var>x</var> is finite, then <var>s</var> is a floating-point number between 0.5
-(inclusive) and 1.0 (exclusive), <var>e</var> is an integer, and
-<var>x</var> = <var>s</var> * 2**<var>e</var>.
-If <var>x</var> is zero or infinity, then <var>s</var> is the same as <var>x</var>.
-If <var>x</var> is a NaN, then <var>s</var> is also a NaN.
-If <var>x</var> is zero, then <var>e</var> is 0.
-</p></dd></dl>
+  <p>Emacs Lisp treats <code>-0.0</code> as numerically equal to
+  ordinary zero with respect to <code>equal</code> and
+  <code>=</code>. This follows the <acronym>IEEE</acronym>
+  floating-point standard, which says <code>-0.0</code> and
+  <code>0.0</code> are numerically equal even though other
+  operations can distinguish them.</p><a name=
+  "index-positive-infinity" id="index-positive-infinity"></a>
+  <a name="index-negative-infinity" id=
+  "index-negative-infinity"></a> <a name="index-infinity" id=
+  "index-infinity"></a> <a name="index-NaN" id="index-NaN"></a>
 
-<dl>
-<dt><a name="index-ldexp"></a>Function: <strong>ldexp</strong> <em>s e</em></dt>
-<dd><p>Given a numeric significand <var>s</var> and an integer exponent <var>e</var>,
-this function returns the floating point number
-<var>s</var> * 2**<var>e</var>.
-</p></dd></dl>
+  <p>The <acronym>IEEE</acronym> floating-point standard supports
+  positive infinity and negative infinity as floating-point values.
+  It also provides for a class of values called NaN, or &ldquo;not
+  a number&rdquo;; numerical functions return such values in cases
+  where there is no correct answer. For example, <code>(/ 0.0
+  0.0)</code> returns a NaN. Although NaN values carry a sign, for
+  practical purposes there is no other significant difference
+  between different NaN values in Emacs Lisp.</p>
 
-<dl>
-<dt><a name="index-copysign"></a>Function: <strong>copysign</strong> <em>x1 x2</em></dt>
-<dd><p>This function copies the sign of <var>x2</var> to the value of <var>x1</var>,
-and returns the result.  <var>x1</var> and <var>x2</var> must be floating point.
-</p></dd></dl>
+  <p>Here are read syntaxes for these special floating-point
+  values:</p>
 
-<dl>
-<dt><a name="index-logb"></a>Function: <strong>logb</strong> <em>x</em></dt>
-<dd><p>This function returns the binary exponent of <var>x</var>.  More
-precisely, the value is the logarithm base 2 of <em>|x|</em>, rounded
-down to an integer.
-</p>
-<div class="example">
-<pre class="example">(logb 10)
+  <dl compact="compact">
+    <dt>infinity</dt>
+
+    <dd>
+      <p>&lsquo;<samp>1.0e+INF</samp>&rsquo; and
+      &lsquo;<samp>-1.0e+INF</samp>&rsquo;</p>
+    </dd>
+
+    <dt>not-a-number</dt>
+
+    <dd>
+      <p>&lsquo;<samp>0.0e+NaN</samp>&rsquo; and
+      &lsquo;<samp>-0.0e+NaN</samp>&rsquo;</p>
+    </dd>
+  </dl>
+
+  <p>The following functions are specialized for handling
+  floating-point numbers:</p>
+
+  <dl>
+    <dt><a name="index-isnan" id="index-isnan"></a>Function:
+    <strong>isnan</strong> <em>x</em></dt>
+
+    <dd>
+      <p>This predicate returns <code>t</code> if its
+      floating-point argument is a NaN, <code>nil</code>
+      otherwise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-frexp" id="index-frexp"></a>Function:
+    <strong>frexp</strong> <em>x</em></dt>
+
+    <dd>
+      <p>This function returns a cons cell <code>(<var>s</var> .
+      <var>e</var>)</code>, where <var>s</var> and <var>e</var> are
+      respectively the significand and exponent of the
+      floating-point number <var>x</var>.</p>
+
+      <p>If <var>x</var> is finite, then <var>s</var> is a
+      floating-point number between 0.5 (inclusive) and 1.0
+      (exclusive), <var>e</var> is an integer, and <var>x</var> =
+      <var>s</var> * 2**<var>e</var>. If <var>x</var> is zero or
+      infinity, then <var>s</var> is the same as <var>x</var>. If
+      <var>x</var> is a NaN, then <var>s</var> is also a NaN. If
+      <var>x</var> is zero, then <var>e</var> is 0.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ldexp" id="index-ldexp"></a>Function:
+    <strong>ldexp</strong> <em>s e</em></dt>
+
+    <dd>
+      <p>Given a numeric significand <var>s</var> and an integer
+      exponent <var>e</var>, this function returns the floating
+      point number <var>s</var> * 2**<var>e</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-copysign" id="index-copysign"></a>Function:
+    <strong>copysign</strong> <em>x1 x2</em></dt>
+
+    <dd>
+      <p>This function copies the sign of <var>x2</var> to the
+      value of <var>x1</var>, and returns the result. <var>x1</var>
+      and <var>x2</var> must be floating point.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-logb" id="index-logb"></a>Function:
+    <strong>logb</strong> <em>x</em></dt>
+
+    <dd>
+      <p>This function returns the binary exponent of <var>x</var>.
+      More precisely, the value is the logarithm base 2 of
+      <em>|x|</em>, rounded down to an integer.</p>
+
+      <div class="example">
+        <pre class="example">
+(logb 10)
      &rArr; 3
 (logb 10.0e20)
      &rArr; 69
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Predicates-on-Numbers.html#Predicates-on-Numbers" accesskey="n" rel="next">Predicates on Numbers</a>, Previous: <a href="Integer-Basics.html#Integer-Basics" accesskey="p" rel="prev">Integer Basics</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Predicates-on-Numbers.html#Predicates-on-Numbers" accesskey=
+    "n" rel="next">Predicates on Numbers</a>, Previous: <a href=
+    "Integer-Basics.html#Integer-Basics" accesskey="p" rel=
+    "prev">Integer Basics</a>, Up: <a href="Numbers.html#Numbers"
+    accesskey="u" rel="up">Numbers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

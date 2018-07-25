@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,187 +19,298 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Directory Local Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Directory Local Variables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Directory Local Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variables.html#Variables" rel="up" title="Variables">
-<link href="Variable-Aliases.html#Variable-Aliases" rel="next" title="Variable Aliases">
-<link href="File-Local-Variables.html#File-Local-Variables" rel="prev" title="File Local Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Directory Local
+  Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Directory Local Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Directory Local Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variables.html#Variables" rel="up" title=
+  "Variables" />
+  <link href="Variable-Aliases.html#Variable-Aliases" rel="next"
+  title="Variable Aliases" />
+  <link href="File-Local-Variables.html#File-Local-Variables" rel=
+  "prev" title="File Local Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Directory-Local-Variables" id=
+  "Directory-Local-Variables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Variable-Aliases.html#Variable-Aliases"
+    accesskey="n" rel="next">Variable Aliases</a>, Previous:
+    <a href="File-Local-Variables.html#File-Local-Variables"
+    accesskey="p" rel="prev">File Local Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Directory-Local-Variables-1" id=
+  "Directory-Local-Variables-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Directory-Local-Variables"></a>
-<div class="header">
-<p>
-Next: <a href="Variable-Aliases.html#Variable-Aliases" accesskey="n" rel="next">Variable Aliases</a>, Previous: <a href="File-Local-Variables.html#File-Local-Variables" accesskey="p" rel="prev">File Local Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Directory-Local-Variables-1"></a>
-<h3 class="section">11.12 Directory Local Variables</h3>
-<a name="index-directory-local-variables"></a>
+  <h3 class="section">11.12 Directory Local Variables</h3><a name=
+  "index-directory-local-variables" id=
+  "index-directory-local-variables"></a>
 
-<p>A directory can specify local variable values common to all files in
-that directory; Emacs uses these to create buffer-local bindings for
-those variables in buffers visiting any file in that directory.  This
-is useful when the files in the directory belong to some <em>project</em>
-and therefore share the same local variables.
-</p>
-<p>There are two different methods for specifying directory local
-variables: by putting them in a special file, or by defining a
-<em>project class</em> for that directory.
-</p>
-<dl>
-<dt><a name="index-dir_002dlocals_002dfile"></a>Constant: <strong>dir-locals-file</strong></dt>
-<dd><p>This constant is the name of the file where Emacs expects to find the
-directory-local variables.  The name of the file is
-<samp>.dir-locals.el</samp><a name="DOCF8" href="#FOOT8"><sup>8</sup></a>.  A file by that name in a directory causes Emacs to apply its
-settings to any file in that directory or any of its subdirectories
-(optionally, you can exclude subdirectories; see below).
-If some of the subdirectories have their own <samp>.dir-locals.el</samp>
-files, Emacs uses the settings from the deepest file it finds starting
-from the file&rsquo;s directory and moving up the directory tree.  The file
-specifies local variables as a specially formatted list; see
-<a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables">Per-directory Local Variables</a> in <cite>The
-GNU Emacs Manual</cite>, for more details.
-</p></dd></dl>
+  <p>A directory can specify local variable values common to all
+  files in that directory; Emacs uses these to create buffer-local
+  bindings for those variables in buffers visiting any file in that
+  directory. This is useful when the files in the directory belong
+  to some <em>project</em> and therefore share the same local
+  variables.</p>
 
-<dl>
-<dt><a name="index-hack_002ddir_002dlocal_002dvariables"></a>Function: <strong>hack-dir-local-variables</strong></dt>
-<dd><p>This function reads the <code>.dir-locals.el</code> file and stores the
-directory-local variables in <code>file-local-variables-alist</code> that is
-local to the buffer visiting any file in the directory, without
-applying them.  It also stores the directory-local settings in
-<code>dir-locals-class-alist</code>, where it defines a special class for
-the directory in which <samp>.dir-locals.el</samp> file was found.  This
-function works by calling <code>dir-locals-set-class-variables</code> and
-<code>dir-locals-set-directory-class</code>, described below.
-</p></dd></dl>
+  <p>There are two different methods for specifying directory local
+  variables: by putting them in a special file, or by defining a
+  <em>project class</em> for that directory.</p>
 
-<dl>
-<dt><a name="index-hack_002ddir_002dlocal_002dvariables_002dnon_002dfile_002dbuffer"></a>Function: <strong>hack-dir-local-variables-non-file-buffer</strong></dt>
-<dd><p>This function looks for directory-local variables, and immediately
-applies them in the current buffer.  It is intended to be called in
-the mode commands for non-file buffers, such as Dired buffers, to let
-them obey directory-local variable settings.  For non-file buffers,
-Emacs looks for directory-local variables in <code>default-directory</code>
-and its parent directories.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-dir_002dlocals_002dfile" id=
+    "index-dir_002dlocals_002dfile"></a>Constant:
+    <strong>dir-locals-file</strong></dt>
 
-<dl>
-<dt><a name="index-dir_002dlocals_002dset_002dclass_002dvariables"></a>Function: <strong>dir-locals-set-class-variables</strong> <em>class variables</em></dt>
-<dd><p>This function defines a set of variable settings for the named
-<var>class</var>, which is a symbol.  You can later assign the class to one
-or more directories, and Emacs will apply those variable settings to
-all files in those directories.  The list in <var>variables</var> can be of
-one of the two forms: <code>(<var>major-mode</var> . <var>alist</var>)</code> or
-<code>(<var>directory</var> . <var>list</var>)</code>.  With the first form, if the
-file&rsquo;s buffer turns on a mode that is derived from <var>major-mode</var>,
-then the all the variables in the associated <var>alist</var> are applied;
-<var>alist</var> should be of the form <code>(<var>name</var> . <var>value</var>)</code>.
-A special value <code>nil</code> for <var>major-mode</var> means the settings are
-applicable to any mode.  In <var>alist</var>, you can use a special
-<var>name</var>: <code>subdirs</code>.  If the associated value is
-<code>nil</code>, the alist is only applied to files in the relevant
-directory, not to those in any subdirectories.
-</p>
-<p>With the second form of <var>variables</var>, if <var>directory</var> is the
-initial substring of the file&rsquo;s directory, then <var>list</var> is applied
-recursively by following the above rules; <var>list</var> should be of one
-of the two forms accepted by this function in <var>variables</var>.
-</p></dd></dl>
+    <dd>
+      <p>This constant is the name of the file where Emacs expects
+      to find the directory-local variables. The name of the file
+      is <samp>.dir-locals.el</samp><a name="DOCF8" href="#FOOT8"
+      id="DOCF8"><sup>8</sup></a>. A file by that name in a
+      directory causes Emacs to apply its settings to any file in
+      that directory or any of its subdirectories (optionally, you
+      can exclude subdirectories; see below). If some of the
+      subdirectories have their own <samp>.dir-locals.el</samp>
+      files, Emacs uses the settings from the deepest file it finds
+      starting from the file&rsquo;s directory and moving up the
+      directory tree. The file specifies local variables as a
+      specially formatted list; see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables">
+      Per-directory Local Variables</a> in <cite>The GNU Emacs
+      Manual</cite>, for more details.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-dir_002dlocals_002dset_002ddirectory_002dclass"></a>Function: <strong>dir-locals-set-directory-class</strong> <em>directory class &amp;optional mtime</em></dt>
-<dd><p>This function assigns <var>class</var> to all the files in <code>directory</code>
-and its subdirectories.  Thereafter, all the variable settings
-specified for <var>class</var> will be applied to any visited file in
-<var>directory</var> and its children.  <var>class</var> must have been already
-defined by <code>dir-locals-set-class-variables</code>.
-</p>
-<p>Emacs uses this function internally when it loads directory variables
-from a <code>.dir-locals.el</code> file.  In that case, the optional
-argument <var>mtime</var> holds the file modification time (as returned by
-<code>file-attributes</code>).  Emacs uses this time to check stored
-local variables are still valid.  If you are assigning a class
-directly, not via a file, this argument should be <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-hack_002ddir_002dlocal_002dvariables" id=
+    "index-hack_002ddir_002dlocal_002dvariables"></a>Function:
+    <strong>hack-dir-local-variables</strong></dt>
 
-<dl>
-<dt><a name="index-dir_002dlocals_002dclass_002dalist"></a>Variable: <strong>dir-locals-class-alist</strong></dt>
-<dd><p>This alist holds the class symbols and the associated variable
-settings.  It is updated by <code>dir-locals-set-class-variables</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function reads the <code>.dir-locals.el</code> file
+      and stores the directory-local variables in
+      <code>file-local-variables-alist</code> that is local to the
+      buffer visiting any file in the directory, without applying
+      them. It also stores the directory-local settings in
+      <code>dir-locals-class-alist</code>, where it defines a
+      special class for the directory in which
+      <samp>.dir-locals.el</samp> file was found. This function
+      works by calling <code>dir-locals-set-class-variables</code>
+      and <code>dir-locals-set-directory-class</code>, described
+      below.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-dir_002dlocals_002ddirectory_002dcache"></a>Variable: <strong>dir-locals-directory-cache</strong></dt>
-<dd><p>This alist holds directory names, their assigned class names, and
-modification times of the associated directory local variables file
-(if there is one).  The function <code>dir-locals-set-directory-class</code>
-updates this list.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-hack_002ddir_002dlocal_002dvariables_002dnon_002dfile_002dbuffer"
+    id=
+    "index-hack_002ddir_002dlocal_002dvariables_002dnon_002dfile_002dbuffer">
+    </a>Function:
+    <strong>hack-dir-local-variables-non-file-buffer</strong></dt>
 
-<dl>
-<dt><a name="index-enable_002ddir_002dlocal_002dvariables"></a>Variable: <strong>enable-dir-local-variables</strong></dt>
-<dd><p>If <code>nil</code>, directory-local variables are ignored.  This variable
-may be useful for modes that want to ignore directory-locals while
-still respecting file-local variables (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>).
-</p></dd></dl>
+    <dd>
+      <p>This function looks for directory-local variables, and
+      immediately applies them in the current buffer. It is
+      intended to be called in the mode commands for non-file
+      buffers, such as Dired buffers, to let them obey
+      directory-local variable settings. For non-file buffers,
+      Emacs looks for directory-local variables in
+      <code>default-directory</code> and its parent
+      directories.</p>
+    </dd>
+  </dl>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl>
+    <dt><a name=
+    "index-dir_002dlocals_002dset_002dclass_002dvariables" id=
+    "index-dir_002dlocals_002dset_002dclass_002dvariables"></a>Function:
+    <strong>dir-locals-set-class-variables</strong> <em>class
+    variables</em></dt>
 
-<h3><a name="FOOT8" href="#DOCF8">(8)</a></h3>
-<p>The MS-DOS version of Emacs uses <samp>_dir-locals.el</samp> instead, due to
-limitations of the DOS filesystems.
-</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Variable-Aliases.html#Variable-Aliases" accesskey="n" rel="next">Variable Aliases</a>, Previous: <a href="File-Local-Variables.html#File-Local-Variables" accesskey="p" rel="prev">File Local Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function defines a set of variable settings for the
+      named <var>class</var>, which is a symbol. You can later
+      assign the class to one or more directories, and Emacs will
+      apply those variable settings to all files in those
+      directories. The list in <var>variables</var> can be of one
+      of the two forms: <code>(<var>major-mode</var> .
+      <var>alist</var>)</code> or <code>(<var>directory</var> .
+      <var>list</var>)</code>. With the first form, if the
+      file&rsquo;s buffer turns on a mode that is derived from
+      <var>major-mode</var>, then the all the variables in the
+      associated <var>alist</var> are applied; <var>alist</var>
+      should be of the form <code>(<var>name</var> .
+      <var>value</var>)</code>. A special value <code>nil</code>
+      for <var>major-mode</var> means the settings are applicable
+      to any mode. In <var>alist</var>, you can use a special
+      <var>name</var>: <code>subdirs</code>. If the associated
+      value is <code>nil</code>, the alist is only applied to files
+      in the relevant directory, not to those in any
+      subdirectories.</p>
 
+      <p>With the second form of <var>variables</var>, if
+      <var>directory</var> is the initial substring of the
+      file&rsquo;s directory, then <var>list</var> is applied
+      recursively by following the above rules; <var>list</var>
+      should be of one of the two forms accepted by this function
+      in <var>variables</var>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-dir_002dlocals_002dset_002ddirectory_002dclass" id=
+    "index-dir_002dlocals_002dset_002ddirectory_002dclass"></a>Function:
+    <strong>dir-locals-set-directory-class</strong> <em>directory
+    class &amp;optional mtime</em></dt>
 
+    <dd>
+      <p>This function assigns <var>class</var> to all the files in
+      <code>directory</code> and its subdirectories. Thereafter,
+      all the variable settings specified for <var>class</var> will
+      be applied to any visited file in <var>directory</var> and
+      its children. <var>class</var> must have been already defined
+      by <code>dir-locals-set-class-variables</code>.</p>
+
+      <p>Emacs uses this function internally when it loads
+      directory variables from a <code>.dir-locals.el</code> file.
+      In that case, the optional argument <var>mtime</var> holds
+      the file modification time (as returned by
+      <code>file-attributes</code>). Emacs uses this time to check
+      stored local variables are still valid. If you are assigning
+      a class directly, not via a file, this argument should be
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dir_002dlocals_002dclass_002dalist" id=
+    "index-dir_002dlocals_002dclass_002dalist"></a>Variable:
+    <strong>dir-locals-class-alist</strong></dt>
+
+    <dd>
+      <p>This alist holds the class symbols and the associated
+      variable settings. It is updated by
+      <code>dir-locals-set-class-variables</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dir_002dlocals_002ddirectory_002dcache" id=
+    "index-dir_002dlocals_002ddirectory_002dcache"></a>Variable:
+    <strong>dir-locals-directory-cache</strong></dt>
+
+    <dd>
+      <p>This alist holds directory names, their assigned class
+      names, and modification times of the associated directory
+      local variables file (if there is one). The function
+      <code>dir-locals-set-directory-class</code> updates this
+      list.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-enable_002ddir_002dlocal_002dvariables" id=
+    "index-enable_002ddir_002dlocal_002dvariables"></a>Variable:
+    <strong>enable-dir-local-variables</strong></dt>
+
+    <dd>
+      <p>If <code>nil</code>, directory-local variables are
+      ignored. This variable may be useful for modes that want to
+      ignore directory-locals while still respecting file-local
+      variables (see <a href=
+      "File-Local-Variables.html#File-Local-Variables">File Local
+      Variables</a>).</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT8" href="#DOCF8" id="FOOT8">(8)</a></h3>
+
+    <p>The MS-DOS version of Emacs uses <samp>_dir-locals.el</samp>
+    instead, due to limitations of the DOS filesystems.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Variable-Aliases.html#Variable-Aliases"
+    accesskey="n" rel="next">Variable Aliases</a>, Previous:
+    <a href="File-Local-Variables.html#File-Local-Variables"
+    accesskey="p" rel="prev">File Local Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

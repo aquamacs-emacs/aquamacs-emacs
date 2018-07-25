@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,168 +16,267 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Numerical Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Numerical Functions">
-<meta name="keywords" content="Common Lisp Extensions: Numerical Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numbers.html#Numbers" rel="up" title="Numbers">
-<link href="Random-Numbers.html#Random-Numbers" rel="next" title="Random Numbers">
-<link href="Predicates-on-Numbers.html#Predicates-on-Numbers" rel="prev" title="Predicates on Numbers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Numerical Functions</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Numerical Functions" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Numerical Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numbers.html#Numbers" rel="up" title="Numbers" />
+  <link href="Random-Numbers.html#Random-Numbers" rel="next" title=
+  "Random Numbers" />
+  <link href="Predicates-on-Numbers.html#Predicates-on-Numbers"
+  rel="prev" title="Predicates on Numbers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Numerical-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Random-Numbers.html#Random-Numbers" accesskey="n" rel="next">Random Numbers</a>, Previous: <a href="Predicates-on-Numbers.html#Predicates-on-Numbers" accesskey="p" rel="prev">Predicates on Numbers</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Numerical-Functions-1"></a>
-<h3 class="section">8.2 Numerical Functions</h3>
+<body lang="en" xml:lang="en">
+  <a name="Numerical-Functions" id="Numerical-Functions"></a>
 
-<p>These functions perform various arithmetic operations on numbers.
-</p>
-<dl>
-<dt><a name="index-cl_002dgcd"></a>Function: <strong>cl-gcd</strong> <em>&amp;rest integers</em></dt>
-<dd><p>This function returns the Greatest Common Divisor of the arguments.
-For one argument, it returns the absolute value of that argument.
-For zero arguments, it returns zero.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Random-Numbers.html#Random-Numbers"
+    accesskey="n" rel="next">Random Numbers</a>, Previous: <a href=
+    "Predicates-on-Numbers.html#Predicates-on-Numbers" accesskey=
+    "p" rel="prev">Predicates on Numbers</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Numerical-Functions-1" id="Numerical-Functions-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dlcm"></a>Function: <strong>cl-lcm</strong> <em>&amp;rest integers</em></dt>
-<dd><p>This function returns the Least Common Multiple of the arguments.
-For one argument, it returns the absolute value of that argument.
-For zero arguments, it returns one.
-</p></dd></dl>
+  <h3 class="section">8.2 Numerical Functions</h3>
 
-<dl>
-<dt><a name="index-cl_002disqrt"></a>Function: <strong>cl-isqrt</strong> <em>integer</em></dt>
-<dd><p>This function computes the &ldquo;integer square root&rdquo; of its integer
-argument, i.e., the greatest integer less than or equal to the true
-square root of the argument.
-</p></dd></dl>
+  <p>These functions perform various arithmetic operations on
+  numbers.</p>
 
-<dl>
-<dt><a name="index-cl_002dfloor"></a>Function: <strong>cl-floor</strong> <em>number &amp;optional divisor</em></dt>
-<dd><p>With one argument, <code>cl-floor</code> returns a list of two numbers:
-The argument rounded down (toward minus infinity) to an integer,
-and the &ldquo;remainder&rdquo; which would have to be added back to the
-first return value to yield the argument again.  If the argument
-is an integer <var>x</var>, the result is always the list <code>(<var>x</var> 0)</code>.
-If the argument is a floating-point number, the first
-result is a Lisp integer and the second is a Lisp float between
-0 (inclusive) and 1 (exclusive).
-</p>
-<p>With two arguments, <code>cl-floor</code> divides <var>number</var> by
-<var>divisor</var>, and returns the floor of the quotient and the
-corresponding remainder as a list of two numbers.  If
-<code>(cl-floor <var>x</var> <var>y</var>)</code> returns <code>(<var>q</var> <var>r</var>)</code>,
-then <code><var>q</var>*<var>y</var> + <var>r</var> = <var>x</var></code>, with <var>r</var>
-between 0 (inclusive) and <var>r</var> (exclusive).  Also, note
-that <code>(cl-floor <var>x</var>)</code> is exactly equivalent to
-<code>(cl-floor <var>x</var> 1)</code>.
-</p>
-<p>This function is entirely compatible with Common Lisp&rsquo;s <code>floor</code>
-function, except that it returns the two results in a list since
-Emacs Lisp does not support multiple-valued functions.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dgcd" id=
+    "index-cl_002dgcd"></a>Function: <strong>cl-gcd</strong>
+    <em>&amp;rest integers</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dceiling"></a>Function: <strong>cl-ceiling</strong> <em>number &amp;optional divisor</em></dt>
-<dd><p>This function implements the Common Lisp <code>ceiling</code> function,
-which is analogous to <code>floor</code> except that it rounds the
-argument or quotient of the arguments up toward plus infinity.
-The remainder will be between 0 and minus <var>r</var>.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the Greatest Common Divisor of the
+      arguments. For one argument, it returns the absolute value of
+      that argument. For zero arguments, it returns zero.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dtruncate"></a>Function: <strong>cl-truncate</strong> <em>number &amp;optional divisor</em></dt>
-<dd><p>This function implements the Common Lisp <code>truncate</code> function,
-which is analogous to <code>floor</code> except that it rounds the
-argument or quotient of the arguments toward zero.  Thus it is
-equivalent to <code>cl-floor</code> if the argument or quotient is
-positive, or to <code>cl-ceiling</code> otherwise.  The remainder has
-the same sign as <var>number</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dlcm" id=
+    "index-cl_002dlcm"></a>Function: <strong>cl-lcm</strong>
+    <em>&amp;rest integers</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dround"></a>Function: <strong>cl-round</strong> <em>number &amp;optional divisor</em></dt>
-<dd><p>This function implements the Common Lisp <code>round</code> function,
-which is analogous to <code>floor</code> except that it rounds the
-argument or quotient of the arguments to the nearest integer.
-In the case of a tie (the argument or quotient is exactly
-halfway between two integers), it rounds to the even integer.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the Least Common Multiple of the
+      arguments. For one argument, it returns the absolute value of
+      that argument. For zero arguments, it returns one.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dmod"></a>Function: <strong>cl-mod</strong> <em>number divisor</em></dt>
-<dd><p>This function returns the same value as the second return value
-of <code>cl-floor</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002disqrt" id=
+    "index-cl_002disqrt"></a>Function: <strong>cl-isqrt</strong>
+    <em>integer</em></dt>
 
-<dl>
-<dt><a name="index-cl_002drem"></a>Function: <strong>cl-rem</strong> <em>number divisor</em></dt>
-<dd><p>This function returns the same value as the second return value
-of <code>cl-truncate</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function computes the &ldquo;integer square
+      root&rdquo; of its integer argument, i.e., the greatest
+      integer less than or equal to the true square root of the
+      argument.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dparse_002dinteger"></a>Function: <strong>cl-parse-integer</strong> <em>string &amp;key start end radix junk-allowed</em></dt>
-<dd><p>This function implements the Common Lisp <code>parse-integer</code>
-function.  It parses an integer in the specified <var>radix</var> from the
-substring of <var>string</var> between <var>start</var> and <var>end</var>.  Any
-leading and trailing whitespace chars are ignored.  The function
-signals an error if the substring between <var>start</var> and <var>end</var>
-cannot be parsed as an integer, unless <var>junk-allowed</var> is
-non-<code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dfloor" id=
+    "index-cl_002dfloor"></a>Function: <strong>cl-floor</strong>
+    <em>number &amp;optional divisor</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Random-Numbers.html#Random-Numbers" accesskey="n" rel="next">Random Numbers</a>, Previous: <a href="Predicates-on-Numbers.html#Predicates-on-Numbers" accesskey="p" rel="prev">Predicates on Numbers</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>With one argument, <code>cl-floor</code> returns a list of
+      two numbers: The argument rounded down (toward minus
+      infinity) to an integer, and the &ldquo;remainder&rdquo;
+      which would have to be added back to the first return value
+      to yield the argument again. If the argument is an integer
+      <var>x</var>, the result is always the list
+      <code>(<var>x</var> 0)</code>. If the argument is a
+      floating-point number, the first result is a Lisp integer and
+      the second is a Lisp float between 0 (inclusive) and 1
+      (exclusive).</p>
 
+      <p>With two arguments, <code>cl-floor</code> divides
+      <var>number</var> by <var>divisor</var>, and returns the
+      floor of the quotient and the corresponding remainder as a
+      list of two numbers. If <code>(cl-floor <var>x</var>
+      <var>y</var>)</code> returns <code>(<var>q</var>
+      <var>r</var>)</code>, then <code><var>q</var>*<var>y</var> +
+      <var>r</var> = <var>x</var></code>, with <var>r</var> between
+      0 (inclusive) and <var>r</var> (exclusive). Also, note that
+      <code>(cl-floor <var>x</var>)</code> is exactly equivalent to
+      <code>(cl-floor <var>x</var> 1)</code>.</p>
 
+      <p>This function is entirely compatible with Common
+      Lisp&rsquo;s <code>floor</code> function, except that it
+      returns the two results in a list since Emacs Lisp does not
+      support multiple-valued functions.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dceiling" id=
+    "index-cl_002dceiling"></a>Function:
+    <strong>cl-ceiling</strong> <em>number &amp;optional
+    divisor</em></dt>
+
+    <dd>
+      <p>This function implements the Common Lisp
+      <code>ceiling</code> function, which is analogous to
+      <code>floor</code> except that it rounds the argument or
+      quotient of the arguments up toward plus infinity. The
+      remainder will be between 0 and minus <var>r</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dtruncate" id=
+    "index-cl_002dtruncate"></a>Function:
+    <strong>cl-truncate</strong> <em>number &amp;optional
+    divisor</em></dt>
+
+    <dd>
+      <p>This function implements the Common Lisp
+      <code>truncate</code> function, which is analogous to
+      <code>floor</code> except that it rounds the argument or
+      quotient of the arguments toward zero. Thus it is equivalent
+      to <code>cl-floor</code> if the argument or quotient is
+      positive, or to <code>cl-ceiling</code> otherwise. The
+      remainder has the same sign as <var>number</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dround" id=
+    "index-cl_002dround"></a>Function: <strong>cl-round</strong>
+    <em>number &amp;optional divisor</em></dt>
+
+    <dd>
+      <p>This function implements the Common Lisp
+      <code>round</code> function, which is analogous to
+      <code>floor</code> except that it rounds the argument or
+      quotient of the arguments to the nearest integer. In the case
+      of a tie (the argument or quotient is exactly halfway between
+      two integers), it rounds to the even integer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dmod" id=
+    "index-cl_002dmod"></a>Function: <strong>cl-mod</strong>
+    <em>number divisor</em></dt>
+
+    <dd>
+      <p>This function returns the same value as the second return
+      value of <code>cl-floor</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002drem" id=
+    "index-cl_002drem"></a>Function: <strong>cl-rem</strong>
+    <em>number divisor</em></dt>
+
+    <dd>
+      <p>This function returns the same value as the second return
+      value of <code>cl-truncate</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dparse_002dinteger" id=
+    "index-cl_002dparse_002dinteger"></a>Function:
+    <strong>cl-parse-integer</strong> <em>string &amp;key start end
+    radix junk-allowed</em></dt>
+
+    <dd>
+      <p>This function implements the Common Lisp
+      <code>parse-integer</code> function. It parses an integer in
+      the specified <var>radix</var> from the substring of
+      <var>string</var> between <var>start</var> and
+      <var>end</var>. Any leading and trailing whitespace chars are
+      ignored. The function signals an error if the substring
+      between <var>start</var> and <var>end</var> cannot be parsed
+      as an integer, unless <var>junk-allowed</var> is
+      non-<code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Random-Numbers.html#Random-Numbers"
+    accesskey="n" rel="next">Random Numbers</a>, Previous: <a href=
+    "Predicates-on-Numbers.html#Predicates-on-Numbers" accesskey=
+    "p" rel="prev">Predicates on Numbers</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

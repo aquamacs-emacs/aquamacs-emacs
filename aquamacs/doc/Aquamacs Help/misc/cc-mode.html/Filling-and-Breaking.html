@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,170 +16,256 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Filling and Breaking</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Filling and Breaking">
-<meta name="keywords" content="CC Mode Manual: Filling and Breaking">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="Minor-Modes.html#Minor-Modes" rel="next" title="Minor Modes">
-<link href="Movement-Commands.html#Movement-Commands" rel="prev" title="Movement Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Filling and Breaking</title>
+  <meta name="description" content=
+  "CC Mode Manual: Filling and Breaking" />
+  <meta name="keywords" content=
+  "CC Mode Manual: Filling and Breaking" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="Minor-Modes.html#Minor-Modes" rel="next" title=
+  "Minor Modes" />
+  <link href="Movement-Commands.html#Movement-Commands" rel="prev"
+  title="Movement Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Filling-and-Breaking"></a>
-<div class="header">
-<p>
-Next: <a href="Minor-Modes.html#Minor-Modes" accesskey="n" rel="next">Minor Modes</a>, Previous: <a href="Movement-Commands.html#Movement-Commands" accesskey="p" rel="prev">Movement Commands</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Filling-and-Line-Breaking-Commands"></a>
-<h3 class="section">4.4 Filling and Line Breaking Commands</h3>
-<a name="index-text-filling"></a>
-<a name="index-line-breaking"></a>
-<a name="index-comment-handling"></a>
+<body lang="en" xml:lang="en">
+  <a name="Filling-and-Breaking" id="Filling-and-Breaking"></a>
 
-<p>Since there&rsquo;s a lot of normal text in comments and string literals,
-CC Mode provides features to edit these like in text mode.  The goal
-is to do it seamlessly, i.e., you can use auto fill mode, sentence and
-paragraph movement, paragraph filling, adaptive filling etc. wherever
-there&rsquo;s a piece of normal text without having to think much about it.
-CC Mode keeps the indentation, fixes suitable comment line prefixes,
-and so on.
-</p>
-<p>You can configure the exact way comments get filled and broken, and
-where Emacs does auto-filling (see see <a href="Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking">Custom Filling and Breaking</a>).  Typically, the style system (see <a href="Styles.html#Styles">Styles</a>) will have
-set this up for you, so you probably won&rsquo;t have to bother.
-</p>
-<a name="index-auto_002dfill_002dmode"></a>
-<a name="index-Auto-Fill-mode"></a>
-<a name="index-paragraph-filling"></a>
-<p>Line breaks are by default handled (almost) the same regardless of
-whether they are made by auto fill mode (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Fill.html#Auto-Fill">Auto
-Fill</a> in <cite>GNU Emacs Manual</cite>), by paragraph filling (e.g., with
-<kbd>M-q</kbd>), or explicitly with <kbd>M-j</kbd> or similar methods.  In
-string literals, the new line gets the same indentation as the
-previous nonempty line.<a name="DOCF6" href="#FOOT6"><sup>6</sup></a>.
-</p>
-<dl compact="compact">
-<dt><kbd>M-q</kbd> (<code>c-fill-paragraph</code>)</dt>
-<dd><a name="index-M_002dq"></a>
-<a name="index-c_002dfill_002dparagraph"></a>
-<a name="index-fill_002dparagraph-_0028c_002d_0029"></a>
-<a name="index-Javadoc-markup"></a>
-<a name="index-Pike-autodoc-markup"></a>
-<p>This command fills multiline string literals and both block
-and line style comments.  In Java buffers, the Javadoc markup words
-are recognized as paragraph starters.  The line oriented Pike autodoc
-markup words are recognized in the same way in Pike mode.
-</p>
-<p>The formatting of the starters (<code>/*</code>) and enders (<code>*/</code>) of
-block comments are kept as they were before the filling.  I.e., if
-either the starter or ender were on a line of its own, then it stays
-on its own line; conversely, if the delimiter has comment text on its
-line, it keeps at least one word of that text with it on the line.
-</p>
-<p>This command is the replacement for <code>fill-paragraph</code> in CC Mode
-buffers.
-</p>
-</dd>
-<dt><kbd>M-j</kbd> (<code>c-indent-new-comment-line</code>)</dt>
-<dd><a name="index-M_002dj"></a>
-<a name="index-c_002dindent_002dnew_002dcomment_002dline"></a>
-<a name="index-indent_002dnew_002dcomment_002dline-_0028c_002d_0029"></a>
-<p>This breaks the current line at point and indents the new line.  If
-point was in a comment, the new line gets the proper comment line
-prefix.  If point was inside a macro, a backslash is inserted before
-the line break.  It is the replacement for
-<code>indent-new-comment-line</code>.
-</p>
-</dd>
-<dt><kbd>M-x c-context-line-break</kbd></dt>
-<dd><a name="index-c_002dcontext_002dline_002dbreak"></a>
-<a name="index-context_002dline_002dbreak-_0028c_002d_0029"></a>
-<p>Insert a line break suitable to the context: If the point is inside a
-comment, the new line gets the suitable indentation and comment line
-prefix like <code>c-indent-new-comment-line</code>.  In normal code it&rsquo;s
-indented like <code>newline-and-indent</code> would do.  In macros it acts
-like <code>newline-and-indent</code> but additionally inserts and optionally
-aligns the line ending backslash so that the macro remains unbroken.
-See <a href="Custom-Macros.html#Custom-Macros">Custom Macros</a>, for details about the backslash alignment.  In a
-string, a backslash is inserted only if the string is within a
-macro<a name="DOCF7" href="#FOOT7"><sup>7</sup></a>.
-</p>
-<p>This function is not bound to a key by default, but it&rsquo;s intended to be
-used on the <kbd>RET</kbd> key.  If you like the behavior of
-<code>newline-and-indent</code> on <kbd>RET</kbd>, you should consider switching to
-this function.  See <a href="Sample-Init-File.html#Sample-Init-File">Sample Init File</a>.
-</p>
-</dd>
-<dt><kbd>M-x c-context-open-line</kbd></dt>
-<dd><a name="index-c_002dcontext_002dopen_002dline"></a>
-<a name="index-context_002dopen_002dline-_0028c_002d_0029"></a>
-<p>This is to <kbd>C-o</kbd> (<kbd>M-x open-line</kbd>) as
-<code>c-context-line-break</code> is to <kbd>RET</kbd>.  I.e., it works just like
-<code>c-context-line-break</code> but leaves the point before the inserted
-line break.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Minor-Modes.html#Minor-Modes" accesskey="n"
+    rel="next">Minor Modes</a>, Previous: <a href=
+    "Movement-Commands.html#Movement-Commands" accesskey="p" rel=
+    "prev">Movement Commands</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Filling-and-Line-Breaking-Commands" id=
+  "Filling-and-Line-Breaking-Commands"></a>
 
+  <h3 class="section">4.4 Filling and Line Breaking
+  Commands</h3><a name="index-text-filling" id=
+  "index-text-filling"></a> <a name="index-line-breaking" id=
+  "index-line-breaking"></a> <a name="index-comment-handling" id=
+  "index-comment-handling"></a>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>Since there&rsquo;s a lot of normal text in comments and
+  string literals, CC Mode provides features to edit these like in
+  text mode. The goal is to do it seamlessly, i.e., you can use
+  auto fill mode, sentence and paragraph movement, paragraph
+  filling, adaptive filling etc. wherever there&rsquo;s a piece of
+  normal text without having to think much about it. CC Mode keeps
+  the indentation, fixes suitable comment line prefixes, and so
+  on.</p>
 
-<h3><a name="FOOT6" href="#DOCF6">(6)</a></h3>
-<p>You can change this default by
-setting the <code>string</code> syntactic symbol (see <a href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>
-and see <a href="Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a>)</p>
-<h3><a name="FOOT7" href="#DOCF7">(7)</a></h3>
-<p>In GCC, unescaped line breaks within strings are
-valid.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Minor-Modes.html#Minor-Modes" accesskey="n" rel="next">Minor Modes</a>, Previous: <a href="Movement-Commands.html#Movement-Commands" accesskey="p" rel="prev">Movement Commands</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>You can configure the exact way comments get filled and
+  broken, and where Emacs does auto-filling (see see <a href=
+  "Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking">Custom
+  Filling and Breaking</a>). Typically, the style system (see
+  <a href="Styles.html#Styles">Styles</a>) will have set this up
+  for you, so you probably won&rsquo;t have to bother.</p><a name=
+  "index-auto_002dfill_002dmode" id=
+  "index-auto_002dfill_002dmode"></a> <a name=
+  "index-Auto-Fill-mode" id="index-Auto-Fill-mode"></a> <a name=
+  "index-paragraph-filling" id="index-paragraph-filling"></a>
 
+  <p>Line breaks are by default handled (almost) the same
+  regardless of whether they are made by auto fill mode (see
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Fill.html#Auto-Fill">
+  Auto Fill</a> in <cite>GNU Emacs Manual</cite>), by paragraph
+  filling (e.g., with <kbd>M-q</kbd>), or explicitly with
+  <kbd>M-j</kbd> or similar methods. In string literals, the new
+  line gets the same indentation as the previous nonempty
+  line.<a name="DOCF6" href="#FOOT6" id=
+  "DOCF6"><sup>6</sup></a>.</p>
 
+  <dl compact="compact">
+    <dt><kbd>M-q</kbd> (<code>c-fill-paragraph</code>)</dt>
 
+    <dd>
+      <a name="index-M_002dq" id="index-M_002dq"></a> <a name=
+      "index-c_002dfill_002dparagraph" id=
+      "index-c_002dfill_002dparagraph"></a> <a name=
+      "index-fill_002dparagraph-_0028c_002d_0029" id=
+      "index-fill_002dparagraph-_0028c_002d_0029"></a> <a name=
+      "index-Javadoc-markup" id="index-Javadoc-markup"></a>
+      <a name="index-Pike-autodoc-markup" id=
+      "index-Pike-autodoc-markup"></a>
+
+      <p>This command fills multiline string literals and both
+      block and line style comments. In Java buffers, the Javadoc
+      markup words are recognized as paragraph starters. The line
+      oriented Pike autodoc markup words are recognized in the same
+      way in Pike mode.</p>
+
+      <p>The formatting of the starters (<code>/*</code>) and
+      enders (<code>*/</code>) of block comments are kept as they
+      were before the filling. I.e., if either the starter or ender
+      were on a line of its own, then it stays on its own line;
+      conversely, if the delimiter has comment text on its line, it
+      keeps at least one word of that text with it on the line.</p>
+
+      <p>This command is the replacement for
+      <code>fill-paragraph</code> in CC Mode buffers.</p>
+    </dd>
+
+    <dt><kbd>M-j</kbd>
+    (<code>c-indent-new-comment-line</code>)</dt>
+
+    <dd>
+      <a name="index-M_002dj" id="index-M_002dj"></a> <a name=
+      "index-c_002dindent_002dnew_002dcomment_002dline" id=
+      "index-c_002dindent_002dnew_002dcomment_002dline"></a>
+      <a name=
+      "index-indent_002dnew_002dcomment_002dline-_0028c_002d_0029"
+      id=
+      "index-indent_002dnew_002dcomment_002dline-_0028c_002d_0029"></a>
+
+      <p>This breaks the current line at point and indents the new
+      line. If point was in a comment, the new line gets the proper
+      comment line prefix. If point was inside a macro, a backslash
+      is inserted before the line break. It is the replacement for
+      <code>indent-new-comment-line</code>.</p>
+    </dd>
+
+    <dt><kbd>M-x c-context-line-break</kbd></dt>
+
+    <dd>
+      <a name="index-c_002dcontext_002dline_002dbreak" id=
+      "index-c_002dcontext_002dline_002dbreak"></a> <a name=
+      "index-context_002dline_002dbreak-_0028c_002d_0029" id=
+      "index-context_002dline_002dbreak-_0028c_002d_0029"></a>
+
+      <p>Insert a line break suitable to the context: If the point
+      is inside a comment, the new line gets the suitable
+      indentation and comment line prefix like
+      <code>c-indent-new-comment-line</code>. In normal code
+      it&rsquo;s indented like <code>newline-and-indent</code>
+      would do. In macros it acts like
+      <code>newline-and-indent</code> but additionally inserts and
+      optionally aligns the line ending backslash so that the macro
+      remains unbroken. See <a href=
+      "Custom-Macros.html#Custom-Macros">Custom Macros</a>, for
+      details about the backslash alignment. In a string, a
+      backslash is inserted only if the string is within a
+      macro<a name="DOCF7" href="#FOOT7" id=
+      "DOCF7"><sup>7</sup></a>.</p>
+
+      <p>This function is not bound to a key by default, but
+      it&rsquo;s intended to be used on the <kbd>RET</kbd> key. If
+      you like the behavior of <code>newline-and-indent</code> on
+      <kbd>RET</kbd>, you should consider switching to this
+      function. See <a href=
+      "Sample-Init-File.html#Sample-Init-File">Sample Init
+      File</a>.</p>
+    </dd>
+
+    <dt><kbd>M-x c-context-open-line</kbd></dt>
+
+    <dd>
+      <a name="index-c_002dcontext_002dopen_002dline" id=
+      "index-c_002dcontext_002dopen_002dline"></a> <a name=
+      "index-context_002dopen_002dline-_0028c_002d_0029" id=
+      "index-context_002dopen_002dline-_0028c_002d_0029"></a>
+
+      <p>This is to <kbd>C-o</kbd> (<kbd>M-x open-line</kbd>) as
+      <code>c-context-line-break</code> is to <kbd>RET</kbd>. I.e.,
+      it works just like <code>c-context-line-break</code> but
+      leaves the point before the inserted line break.</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT6" href="#DOCF6" id="FOOT6">(6)</a></h3>
+
+    <p>You can change this default by setting the
+    <code>string</code> syntactic symbol (see <a href=
+    "Syntactic-Symbols.html#Syntactic-Symbols">Syntactic
+    Symbols</a> and see <a href=
+    "Customizing-Indentation.html#Customizing-Indentation">Customizing
+    Indentation</a>)</p>
+
+    <h3><a name="FOOT7" href="#DOCF7" id="FOOT7">(7)</a></h3>
+
+    <p>In GCC, unescaped line breaks within strings are valid.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Minor-Modes.html#Minor-Modes" accesskey="n"
+    rel="next">Minor Modes</a>, Previous: <a href=
+    "Movement-Commands.html#Movement-Commands" accesskey="p" rel=
+    "prev">Movement Commands</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

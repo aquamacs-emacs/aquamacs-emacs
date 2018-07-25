@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,109 +16,166 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Association Lists</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Association Lists">
-<meta name="keywords" content="Common Lisp Extensions: Association Lists">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lists.html#Lists" rel="up" title="Lists">
-<link href="Structures.html#Structures" rel="next" title="Structures">
-<link href="Lists-as-Sets.html#Lists-as-Sets" rel="prev" title="Lists as Sets">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Association Lists</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Association Lists" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Association Lists" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lists.html#Lists" rel="up" title="Lists" />
+  <link href="Structures.html#Structures" rel="next" title=
+  "Structures" />
+  <link href="Lists-as-Sets.html#Lists-as-Sets" rel="prev" title=
+  "Lists as Sets" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Association-Lists"></a>
-<div class="header">
-<p>
-Previous: <a href="Lists-as-Sets.html#Lists-as-Sets" accesskey="p" rel="prev">Lists as Sets</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Association-Lists-1"></a>
-<h3 class="section">10.4 Association Lists</h3>
+<body lang="en" xml:lang="en">
+  <a name="Association-Lists" id="Association-Lists"></a>
 
-<p>An <em>association list</em> is a list representing a mapping from
-one set of values to another; any list whose elements are cons
-cells is an association list.
-</p>
-<dl>
-<dt><a name="index-cl_002dassoc"></a>Function: <strong>cl-assoc</strong> <em>item a-list <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function searches the association list <var>a-list</var> for an
-element whose <small>CAR</small> matches (in the sense of <code>:test</code>,
-<code>:test-not</code>, and <code>:key</code>, or by comparison with <code>eql</code>)
-a given <var>item</var>.  It returns the matching element, if any,
-otherwise <code>nil</code>.  It ignores elements of <var>a-list</var> that
-are not cons cells.  (This corresponds to the behavior of
-<code>assq</code> and <code>assoc</code> in Emacs Lisp; Common Lisp&rsquo;s
-<code>assoc</code> ignores <code>nil</code>s but considers any other non-cons
-elements of <var>a-list</var> to be an error.)
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href="Lists-as-Sets.html#Lists-as-Sets"
+    accesskey="p" rel="prev">Lists as Sets</a>, Up: <a href=
+    "Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Association-Lists-1" id="Association-Lists-1"></a>
 
-<dl>
-<dt><a name="index-cl_002drassoc"></a>Function: <strong>cl-rassoc</strong> <em>item a-list <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function searches for an element whose <small>CDR</small> matches
-<var>item</var>.  If <var>a-list</var> represents a mapping, this applies
-the inverse of the mapping to <var>item</var>.
-</p></dd></dl>
+  <h3 class="section">10.4 Association Lists</h3>
 
-<a name="index-cl_002dassoc_002dif"></a>
-<a name="index-cl_002dassoc_002dif_002dnot"></a>
-<a name="index-cl_002drassoc_002dif"></a>
-<a name="index-cl_002drassoc_002dif_002dnot"></a>
-<p>The <code>cl-assoc-if</code>, <code>cl-assoc-if-not</code>, <code>cl-rassoc-if</code>,
-and <code>cl-rassoc-if-not</code> functions are defined similarly.
-</p>
-<p>Two simple functions for constructing association lists are:
-</p>
-<dl>
-<dt><a name="index-cl_002dacons"></a>Function: <strong>cl-acons</strong> <em>key value alist</em></dt>
-<dd><p>This is equivalent to <code>(cons (cons <var>key</var> <var>value</var>) <var>alist</var>)</code>.
-</p></dd></dl>
+  <p>An <em>association list</em> is a list representing a mapping
+  from one set of values to another; any list whose elements are
+  cons cells is an association list.</p>
 
-<dl>
-<dt><a name="index-cl_002dpairlis"></a>Function: <strong>cl-pairlis</strong> <em>keys values &amp;optional alist</em></dt>
-<dd><p>This is equivalent to <code>(nconc (cl-mapcar 'cons <var>keys</var> <var>values</var>)
-<var>alist</var>)</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dassoc" id=
+    "index-cl_002dassoc"></a>Function: <strong>cl-assoc</strong>
+    <em>item a-list <tt>&amp;key :test :test-not
+    :key</tt></em></dt>
 
+    <dd>
+      <p>This function searches the association list
+      <var>a-list</var> for an element whose <small>CAR</small>
+      matches (in the sense of <code>:test</code>,
+      <code>:test-not</code>, and <code>:key</code>, or by
+      comparison with <code>eql</code>) a given <var>item</var>. It
+      returns the matching element, if any, otherwise
+      <code>nil</code>. It ignores elements of <var>a-list</var>
+      that are not cons cells. (This corresponds to the behavior of
+      <code>assq</code> and <code>assoc</code> in Emacs Lisp;
+      Common Lisp&rsquo;s <code>assoc</code> ignores
+      <code>nil</code>s but considers any other non-cons elements
+      of <var>a-list</var> to be an error.)</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002drassoc" id=
+    "index-cl_002drassoc"></a>Function: <strong>cl-rassoc</strong>
+    <em>item a-list <tt>&amp;key :test :test-not
+    :key</tt></em></dt>
 
+    <dd>
+      <p>This function searches for an element whose
+      <small>CDR</small> matches <var>item</var>. If
+      <var>a-list</var> represents a mapping, this applies the
+      inverse of the mapping to <var>item</var>.</p>
+    </dd>
+  </dl><a name="index-cl_002dassoc_002dif" id=
+  "index-cl_002dassoc_002dif"></a> <a name=
+  "index-cl_002dassoc_002dif_002dnot" id=
+  "index-cl_002dassoc_002dif_002dnot"></a> <a name=
+  "index-cl_002drassoc_002dif" id="index-cl_002drassoc_002dif"></a>
+  <a name="index-cl_002drassoc_002dif_002dnot" id=
+  "index-cl_002drassoc_002dif_002dnot"></a>
 
+  <p>The <code>cl-assoc-if</code>, <code>cl-assoc-if-not</code>,
+  <code>cl-rassoc-if</code>, and <code>cl-rassoc-if-not</code>
+  functions are defined similarly.</p>
+
+  <p>Two simple functions for constructing association lists
+  are:</p>
+
+  <dl>
+    <dt><a name="index-cl_002dacons" id=
+    "index-cl_002dacons"></a>Function: <strong>cl-acons</strong>
+    <em>key value alist</em></dt>
+
+    <dd>
+      <p>This is equivalent to <code>(cons (cons <var>key</var>
+      <var>value</var>) <var>alist</var>)</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dpairlis" id=
+    "index-cl_002dpairlis"></a>Function:
+    <strong>cl-pairlis</strong> <em>keys values &amp;optional
+    alist</em></dt>
+
+    <dd>
+      <p>This is equivalent to <code>(nconc (cl-mapcar 'cons
+      <var>keys</var> <var>values</var>)
+      <var>alist</var>)</code>.</p>
+    </dd>
+  </dl>
 </body>
 </html>

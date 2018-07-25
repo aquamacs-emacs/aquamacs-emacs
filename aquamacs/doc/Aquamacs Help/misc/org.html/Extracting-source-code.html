@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,138 +16,211 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Extracting source code</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Extracting source code">
-<meta name="keywords" content="The Org Manual: Extracting source code">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Working-With-Source-Code.html#Working-With-Source-Code" rel="up" title="Working With Source Code">
-<link href="Evaluating-code-blocks.html#Evaluating-code-blocks" rel="next" title="Evaluating code blocks">
-<link href="Exporting-code-blocks.html#Exporting-code-blocks" rel="prev" title="Exporting code blocks">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Extracting source code</title>
+  <meta name="description" content=
+  "The Org Manual: Extracting source code" />
+  <meta name="keywords" content=
+  "The Org Manual: Extracting source code" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Working-With-Source-Code.html#Working-With-Source-Code" rel="up"
+  title="Working With Source Code" />
+  <link href="Evaluating-code-blocks.html#Evaluating-code-blocks"
+  rel="next" title="Evaluating code blocks" />
+  <link href="Exporting-code-blocks.html#Exporting-code-blocks"
+  rel="prev" title="Exporting code blocks" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Extracting-source-code"></a>
-<div class="header">
-<p>
-Next: <a href="Evaluating-code-blocks.html#Evaluating-code-blocks" accesskey="n" rel="next">Evaluating code blocks</a>, Previous: <a href="Exporting-code-blocks.html#Exporting-code-blocks" accesskey="p" rel="prev">Exporting code blocks</a>, Up: <a href="Working-With-Source-Code.html#Working-With-Source-Code" accesskey="u" rel="up">Working With Source Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Extracting-source-code-1"></a>
-<h3 class="section">14.4 Extracting source code</h3>
-<a name="index-tangling"></a>
-<a name="index-source-code_002c-extracting"></a>
-<a name="index-code-block_002c-extracting-source-code"></a>
+<body lang="en" xml:lang="en">
+  <a name="Extracting-source-code" id="Extracting-source-code"></a>
 
-<p>Creating pure source code files by extracting code from source blocks is
-referred to as &ldquo;tangling&rdquo;&mdash;a term adopted from the literate programming
-community.  During &ldquo;tangling&rdquo; of code blocks their bodies are expanded
-using <code>org-babel-expand-src-block</code> which can expand both variable and
-&ldquo;noweb&rdquo; style references  (see <a href="Noweb-reference-syntax.html#Noweb-reference-syntax">Noweb reference syntax</a>).
-</p>
-<a name="Header-arguments-2"></a>
-<h4 class="subsubheading">Header arguments</h4>
+  <div class="header">
+    <p>Next: <a href=
+    "Evaluating-code-blocks.html#Evaluating-code-blocks" accesskey=
+    "n" rel="next">Evaluating code blocks</a>, Previous: <a href=
+    "Exporting-code-blocks.html#Exporting-code-blocks" accesskey=
+    "p" rel="prev">Exporting code blocks</a>, Up: <a href=
+    "Working-With-Source-Code.html#Working-With-Source-Code"
+    accesskey="u" rel="up">Working With Source Code</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Extracting-source-code-1" id=
+  "Extracting-source-code-1"></a>
 
-<dl compact="compact">
-<dt><code>:tangle no</code></dt>
-<dd><p>The default.  The code block is not included in the tangled output.
-</p></dd>
-<dt><code>:tangle yes</code></dt>
-<dd><p>Include the code block in the tangled output.  The output file name is the
-name of the org file with the extension &lsquo;<samp>.org</samp>&rsquo; replaced by the extension
-for the block language.
-</p></dd>
-<dt><code>:tangle filename</code></dt>
-<dd><p>Include the code block in the tangled output to file &lsquo;<samp>filename</samp>&rsquo;.
-</p></dd>
-</dl>
+  <h3 class="section">14.4 Extracting source code</h3><a name=
+  "index-tangling" id="index-tangling"></a> <a name=
+  "index-source-code_002c-extracting" id=
+  "index-source-code_002c-extracting"></a> <a name=
+  "index-code-block_002c-extracting-source-code" id=
+  "index-code-block_002c-extracting-source-code"></a>
 
-<a name="index-C_002dc-C_002dv-t"></a>
-<a name="Functions"></a>
-<h4 class="subsubheading">Functions</h4>
+  <p>Creating pure source code files by extracting code from source
+  blocks is referred to as &ldquo;tangling&rdquo;&mdash;a term
+  adopted from the literate programming community. During
+  &ldquo;tangling&rdquo; of code blocks their bodies are expanded
+  using <code>org-babel-expand-src-block</code> which can expand
+  both variable and &ldquo;noweb&rdquo; style references (see
+  <a href=
+  "Noweb-reference-syntax.html#Noweb-reference-syntax">Noweb
+  reference syntax</a>).</p><a name="Header-arguments-2" id=
+  "Header-arguments-2"></a>
 
-<dl compact="compact">
-<dt><code>org-babel-tangle</code></dt>
-<dd><p>Tangle the current file.  Bound to <kbd>C-c C-v t</kbd>.
-</p>
-<p>With prefix argument only tangle the current code block.
-</p></dd>
-<dt><code>org-babel-tangle-file</code></dt>
-<dd><p>Choose a file to tangle.  Bound to <kbd>C-c C-v f</kbd>.
-</p></dd>
-</dl>
+  <h4 class="subsubheading">Header arguments</h4>
 
-<a name="Hooks-3"></a>
-<h4 class="subsubheading">Hooks</h4>
+  <dl compact="compact">
+    <dt><code>:tangle no</code></dt>
 
-<dl compact="compact">
-<dt><code>org-babel-post-tangle-hook</code></dt>
-<dd><p>This hook is run from within code files tangled by <code>org-babel-tangle</code>.
-Example applications could include post-processing, compilation or evaluation
-of tangled code files.
-</p></dd>
-</dl>
+    <dd>
+      <p>The default. The code block is not included in the tangled
+      output.</p>
+    </dd>
 
-<a name="Jumping-between-code-and-Org"></a>
-<h4 class="subsubheading">Jumping between code and Org</h4>
+    <dt><code>:tangle yes</code></dt>
 
-<p>When tangling code from an Org-mode buffer to a source code file, you&rsquo;ll
-frequently find yourself viewing the file of tangled source code (e.g., many
-debuggers point to lines of the source code file).  It is useful to be able
-to navigate from the tangled source to the Org-mode buffer from which the
-code originated.
-</p>
-<p>The <code>org-babel-tangle-jump-to-org</code> function provides this jumping from
-code to Org-mode functionality.  Two header arguments are required for
-jumping to work, first the <code>padline</code> (<a href="padline.html#padline">padline</a>) option must be set
-to true (the default setting), second the <code>comments</code> (<a href="comments.html#comments">comments</a>)
-header argument must be set to <code>links</code>, which will insert comments into
-the source code buffer which point back to the original Org-mode file.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Evaluating-code-blocks.html#Evaluating-code-blocks" accesskey="n" rel="next">Evaluating code blocks</a>, Previous: <a href="Exporting-code-blocks.html#Exporting-code-blocks" accesskey="p" rel="prev">Exporting code blocks</a>, Up: <a href="Working-With-Source-Code.html#Working-With-Source-Code" accesskey="u" rel="up">Working With Source Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Include the code block in the tangled output. The output
+      file name is the name of the org file with the extension
+      &lsquo;<samp>.org</samp>&rsquo; replaced by the extension for
+      the block language.</p>
+    </dd>
 
+    <dt><code>:tangle filename</code></dt>
 
+    <dd>
+      <p>Include the code block in the tangled output to file
+      &lsquo;<samp>filename</samp>&rsquo;.</p>
+    </dd>
+  </dl><a name="index-C_002dc-C_002dv-t" id=
+  "index-C_002dc-C_002dv-t"></a> <a name="Functions" id=
+  "Functions"></a>
 
+  <h4 class="subsubheading">Functions</h4>
+
+  <dl compact="compact">
+    <dt><code>org-babel-tangle</code></dt>
+
+    <dd>
+      <p>Tangle the current file. Bound to <kbd>C-c C-v
+      t</kbd>.</p>
+
+      <p>With prefix argument only tangle the current code
+      block.</p>
+    </dd>
+
+    <dt><code>org-babel-tangle-file</code></dt>
+
+    <dd>
+      <p>Choose a file to tangle. Bound to <kbd>C-c C-v
+      f</kbd>.</p>
+    </dd>
+  </dl><a name="Hooks-3" id="Hooks-3"></a>
+
+  <h4 class="subsubheading">Hooks</h4>
+
+  <dl compact="compact">
+    <dt><code>org-babel-post-tangle-hook</code></dt>
+
+    <dd>
+      <p>This hook is run from within code files tangled by
+      <code>org-babel-tangle</code>. Example applications could
+      include post-processing, compilation or evaluation of tangled
+      code files.</p>
+    </dd>
+  </dl><a name="Jumping-between-code-and-Org" id=
+  "Jumping-between-code-and-Org"></a>
+
+  <h4 class="subsubheading">Jumping between code and Org</h4>
+
+  <p>When tangling code from an Org-mode buffer to a source code
+  file, you&rsquo;ll frequently find yourself viewing the file of
+  tangled source code (e.g., many debuggers point to lines of the
+  source code file). It is useful to be able to navigate from the
+  tangled source to the Org-mode buffer from which the code
+  originated.</p>
+
+  <p>The <code>org-babel-tangle-jump-to-org</code> function
+  provides this jumping from code to Org-mode functionality. Two
+  header arguments are required for jumping to work, first the
+  <code>padline</code> (<a href="padline.html#padline">padline</a>)
+  option must be set to true (the default setting), second the
+  <code>comments</code> (<a href=
+  "comments.html#comments">comments</a>) header argument must be
+  set to <code>links</code>, which will insert comments into the
+  source code buffer which point back to the original Org-mode
+  file.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Evaluating-code-blocks.html#Evaluating-code-blocks" accesskey=
+    "n" rel="next">Evaluating code blocks</a>, Previous: <a href=
+    "Exporting-code-blocks.html#Exporting-code-blocks" accesskey=
+    "p" rel="prev">Exporting code blocks</a>, Up: <a href=
+    "Working-With-Source-Code.html#Working-With-Source-Code"
+    accesskey="u" rel="up">Working With Source Code</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

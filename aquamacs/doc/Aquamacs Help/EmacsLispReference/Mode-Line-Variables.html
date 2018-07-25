@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,244 +19,405 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Mode Line Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Mode Line Variables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Mode Line Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mode-Line-Format.html#Mode-Line-Format" rel="up" title="Mode Line Format">
-<link href="_0025_002dConstructs.html#g_t_0025_002dConstructs" rel="next" title="%-Constructs">
-<link href="Mode-Line-Top.html#Mode-Line-Top" rel="prev" title="Mode Line Top">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Mode Line
+  Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Mode Line Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Mode Line Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mode-Line-Format.html#Mode-Line-Format" rel="up"
+  title="Mode Line Format" />
+  <link href="_0025_002dConstructs.html#g_t_0025_002dConstructs"
+  rel="next" title="%-Constructs" />
+  <link href="Mode-Line-Top.html#Mode-Line-Top" rel="prev" title=
+  "Mode Line Top" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Mode-Line-Variables" id="Mode-Line-Variables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "_0025_002dConstructs.html#g_t_0025_002dConstructs" accesskey=
+    "n" rel="next">%-Constructs</a>, Previous: <a href=
+    "Mode-Line-Top.html#Mode-Line-Top" accesskey="p" rel=
+    "prev">Mode Line Top</a>, Up: <a href=
+    "Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel=
+    "up">Mode Line Format</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Variables-Used-in-the-Mode-Line" id=
+  "Variables-Used-in-the-Mode-Line"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Mode-Line-Variables"></a>
-<div class="header">
-<p>
-Next: <a href="_0025_002dConstructs.html#g_t_0025_002dConstructs" accesskey="n" rel="next">%-Constructs</a>, Previous: <a href="Mode-Line-Top.html#Mode-Line-Top" accesskey="p" rel="prev">Mode Line Top</a>, Up: <a href="Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel="up">Mode Line Format</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Variables-Used-in-the-Mode-Line"></a>
-<h4 class="subsection">22.4.4 Variables Used in the Mode Line</h4>
+  <h4 class="subsection">22.4.4 Variables Used in the Mode
+  Line</h4>
 
-<p>This section describes variables incorporated by the standard value of
-<code>mode-line-format</code> into the text of the mode line.  There is
-nothing inherently special about these variables; any other variables
-could have the same effects on the mode line if the value of
-<code>mode-line-format</code> is changed to use them.  However, various parts
-of Emacs set these variables on the understanding that they will control
-parts of the mode line; therefore, practically speaking, it is essential
-for the mode line to use them.  Also see
-<a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Optional-Mode-Line.html#Optional-Mode-Line">Optional Mode Line</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<dl>
-<dt><a name="index-mode_002dline_002dmule_002dinfo"></a>Variable: <strong>mode-line-mule-info</strong></dt>
-<dd><p>This variable holds the value of the mode line construct that displays
-information about the language environment, buffer coding system, and
-current input method.  See <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>.
-</p></dd></dl>
+  <p>This section describes variables incorporated by the standard
+  value of <code>mode-line-format</code> into the text of the mode
+  line. There is nothing inherently special about these variables;
+  any other variables could have the same effects on the mode line
+  if the value of <code>mode-line-format</code> is changed to use
+  them. However, various parts of Emacs set these variables on the
+  understanding that they will control parts of the mode line;
+  therefore, practically speaking, it is essential for the mode
+  line to use them. Also see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Optional-Mode-Line.html#Optional-Mode-Line">
+  Optional Mode Line</a> in <cite>The GNU Emacs Manual</cite>.</p>
 
-<dl>
-<dt><a name="index-mode_002dline_002dmodified"></a>Variable: <strong>mode-line-modified</strong></dt>
-<dd><p>This variable holds the value of the mode line construct that displays
-whether the current buffer is modified.  Its default value displays
-&lsquo;<samp>**</samp>&rsquo; if the buffer is modified, &lsquo;<samp>--</samp>&rsquo; if the buffer is not
-modified, &lsquo;<samp>%%</samp>&rsquo; if the buffer is read only, and &lsquo;<samp>%*</samp>&rsquo; if the
-buffer is read only and modified.
-</p>
-<p>Changing this variable does not force an update of the mode line.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-mode_002dline_002dmule_002dinfo" id=
+    "index-mode_002dline_002dmule_002dinfo"></a>Variable:
+    <strong>mode-line-mule-info</strong></dt>
 
-<dl>
-<dt><a name="index-mode_002dline_002dframe_002didentification"></a>Variable: <strong>mode-line-frame-identification</strong></dt>
-<dd><p>This variable identifies the current frame.  Its default value
-displays <code>&quot; &quot;</code> if you are using a window system which can show
-multiple frames, or <code>&quot;-%F &quot;</code> on an ordinary terminal which shows
-only one frame at a time.
-</p></dd></dl>
+    <dd>
+      <p>This variable holds the value of the mode line construct
+      that displays information about the language environment,
+      buffer coding system, and current input method. See <a href=
+      "Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII
+      Characters</a>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-mode_002dline_002dbuffer_002didentification"></a>Variable: <strong>mode-line-buffer-identification</strong></dt>
-<dd><p>This variable identifies the buffer being displayed in the window.
-Its default value displays the buffer name, padded with spaces to at
-least 12 columns.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-mode_002dline_002dmodified" id=
+    "index-mode_002dline_002dmodified"></a>Variable:
+    <strong>mode-line-modified</strong></dt>
 
-<dl>
-<dt><a name="index-mode_002dline_002dposition"></a>Variable: <strong>mode-line-position</strong></dt>
-<dd><p>This variable indicates the position in the buffer.  Its default value
-displays the buffer percentage and, optionally, the buffer size, the
-line number and the column number.
-</p></dd></dl>
+    <dd>
+      <p>This variable holds the value of the mode line construct
+      that displays whether the current buffer is modified. Its
+      default value displays &lsquo;<samp>**</samp>&rsquo; if the
+      buffer is modified, &lsquo;<samp>--</samp>&rsquo; if the
+      buffer is not modified, &lsquo;<samp>%%</samp>&rsquo; if the
+      buffer is read only, and &lsquo;<samp>%*</samp>&rsquo; if the
+      buffer is read only and modified.</p>
 
-<dl>
-<dt><a name="index-vc_002dmode"></a>Variable: <strong>vc-mode</strong></dt>
-<dd><p>The variable <code>vc-mode</code>, buffer-local in each buffer, records
-whether the buffer&rsquo;s visited file is maintained with version control,
-and, if so, which kind.  Its value is a string that appears in the mode
-line, or <code>nil</code> for no version control.
-</p></dd></dl>
+      <p>Changing this variable does not force an update of the
+      mode line.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-mode_002dline_002dmodes"></a>Variable: <strong>mode-line-modes</strong></dt>
-<dd><p>This variable displays the buffer&rsquo;s major and minor modes.  Its
-default value also displays the recursive editing level, information
-on the process status, and whether narrowing is in effect.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-mode_002dline_002dframe_002didentification"
+    id=
+    "index-mode_002dline_002dframe_002didentification"></a>Variable:
+    <strong>mode-line-frame-identification</strong></dt>
 
-<dl>
-<dt><a name="index-mode_002dline_002dremote"></a>Variable: <strong>mode-line-remote</strong></dt>
-<dd><p>This variable is used to show whether <code>default-directory</code> for the
-current buffer is remote.
-</p></dd></dl>
+    <dd>
+      <p>This variable identifies the current frame. Its default
+      value displays <code>" "</code> if you are using a window
+      system which can show multiple frames, or <code>"-%F "</code>
+      on an ordinary terminal which shows only one frame at a
+      time.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-mode_002dline_002dclient"></a>Variable: <strong>mode-line-client</strong></dt>
-<dd><p>This variable is used to identify <code>emacsclient</code> frames.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-mode_002dline_002dbuffer_002didentification"
+    id=
+    "index-mode_002dline_002dbuffer_002didentification"></a>Variable:
+    <strong>mode-line-buffer-identification</strong></dt>
 
-<p>The following three variables are used in <code>mode-line-modes</code>:
-</p>
-<dl>
-<dt><a name="index-mode_002dname"></a>Variable: <strong>mode-name</strong></dt>
-<dd><p>This buffer-local variable holds the &ldquo;pretty&rdquo; name of the current
-buffer&rsquo;s major mode.  Each major mode should set this variable so that
-the mode name will appear in the mode line.  The value does not have
-to be a string, but can use any of the data types valid in a mode-line
-construct (see <a href="Mode-Line-Data.html#Mode-Line-Data">Mode Line Data</a>).  To compute the string that will
-identify the mode name in the mode line, use <code>format-mode-line</code>
-(see <a href="Emulating-Mode-Line.html#Emulating-Mode-Line">Emulating Mode Line</a>).
-</p></dd></dl>
+    <dd>
+      <p>This variable identifies the buffer being displayed in the
+      window. Its default value displays the buffer name, padded
+      with spaces to at least 12 columns.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-mode_002dline_002dprocess"></a>Variable: <strong>mode-line-process</strong></dt>
-<dd><p>This buffer-local variable contains the mode line information on process
-status in modes used for communicating with subprocesses.  It is
-displayed immediately following the major mode name, with no intervening
-space.  For example, its value in the <samp>*shell*</samp> buffer is
-<code>(&quot;:%s&quot;)</code>, which allows the shell to display its status along
-with the major mode as: &lsquo;<samp>(Shell:run)</samp>&rsquo;.  Normally this variable
-is <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-mode_002dline_002dposition" id=
+    "index-mode_002dline_002dposition"></a>Variable:
+    <strong>mode-line-position</strong></dt>
 
-<dl>
-<dt><a name="index-mode_002dline_002dfront_002dspace"></a>Variable: <strong>mode-line-front-space</strong></dt>
-<dd><p>This variable is displayed at the front of the mode line.  By default,
-this construct is displayed right at the beginning of the mode line,
-except that if there is a memory-full message, it is displayed first.
-</p></dd></dl>
+    <dd>
+      <p>This variable indicates the position in the buffer. Its
+      default value displays the buffer percentage and, optionally,
+      the buffer size, the line number and the column number.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-mode_002dline_002dend_002dspaces"></a>Variable: <strong>mode-line-end-spaces</strong></dt>
-<dd><p>This variable is displayed at the end of the mode line.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-vc_002dmode" id=
+    "index-vc_002dmode"></a>Variable: <strong>vc-mode</strong></dt>
 
-<dl>
-<dt><a name="index-mode_002dline_002dmisc_002dinfo"></a>Variable: <strong>mode-line-misc-info</strong></dt>
-<dd><p>Mode line construct for miscellaneous information.  By default, this
-shows the information specified by <code>global-mode-string</code>.
-</p></dd></dl>
+    <dd>
+      <p>The variable <code>vc-mode</code>, buffer-local in each
+      buffer, records whether the buffer&rsquo;s visited file is
+      maintained with version control, and, if so, which kind. Its
+      value is a string that appears in the mode line, or
+      <code>nil</code> for no version control.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-minor_002dmode_002dalist"></a>Variable: <strong>minor-mode-alist</strong></dt>
-<dd><a name="Definition-of-minor_002dmode_002dalist"></a><p>This variable holds an association list whose elements specify how the
-mode line should indicate that a minor mode is active.  Each element of
-the <code>minor-mode-alist</code> should be a two-element list:
-</p>
-<div class="example">
-<pre class="example">(<var>minor-mode-variable</var> <var>mode-line-string</var>)
-</pre></div>
+  <dl>
+    <dt><a name="index-mode_002dline_002dmodes" id=
+    "index-mode_002dline_002dmodes"></a>Variable:
+    <strong>mode-line-modes</strong></dt>
 
-<p>More generally, <var>mode-line-string</var> can be any mode line construct.
-It appears in the mode line when the value of <var>minor-mode-variable</var>
-is non-<code>nil</code>, and not otherwise.  These strings should begin with
-spaces so that they don&rsquo;t run together.  Conventionally, the
-<var>minor-mode-variable</var> for a specific mode is set to a non-<code>nil</code>
-value when that minor mode is activated.
-</p>
-<p><code>minor-mode-alist</code> itself is not buffer-local.  Each variable
-mentioned in the alist should be buffer-local if its minor mode can be
-enabled separately in each buffer.
-</p></dd></dl>
+    <dd>
+      <p>This variable displays the buffer&rsquo;s major and minor
+      modes. Its default value also displays the recursive editing
+      level, information on the process status, and whether
+      narrowing is in effect.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-global_002dmode_002dstring"></a>Variable: <strong>global-mode-string</strong></dt>
-<dd><p>This variable holds a mode line construct that, by default, appears in
-the mode line just after the <code>which-func-mode</code> minor mode if set,
-else after <code>mode-line-modes</code>.  The command <code>display-time</code> sets
-<code>global-mode-string</code> to refer to the variable
-<code>display-time-string</code>, which holds a string containing the time and
-load information.
-</p>
-<p>The &lsquo;<samp>%M</samp>&rsquo; construct substitutes the value of
-<code>global-mode-string</code>, but that is obsolete, since the variable is
-included in the mode line from <code>mode-line-format</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-mode_002dline_002dremote" id=
+    "index-mode_002dline_002dremote"></a>Variable:
+    <strong>mode-line-remote</strong></dt>
 
-<p>Here is a simplified version of the default value of
-<code>mode-line-format</code>.  The real default value also
-specifies addition of text properties.
-</p>
-<div class="example">
-<pre class="example">(&quot;-&quot;
+    <dd>
+      <p>This variable is used to show whether
+      <code>default-directory</code> for the current buffer is
+      remote.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-mode_002dline_002dclient" id=
+    "index-mode_002dline_002dclient"></a>Variable:
+    <strong>mode-line-client</strong></dt>
+
+    <dd>
+      <p>This variable is used to identify <code>emacsclient</code>
+      frames.</p>
+    </dd>
+  </dl>
+
+  <p>The following three variables are used in
+  <code>mode-line-modes</code>:</p>
+
+  <dl>
+    <dt><a name="index-mode_002dname" id=
+    "index-mode_002dname"></a>Variable:
+    <strong>mode-name</strong></dt>
+
+    <dd>
+      <p>This buffer-local variable holds the &ldquo;pretty&rdquo;
+      name of the current buffer&rsquo;s major mode. Each major
+      mode should set this variable so that the mode name will
+      appear in the mode line. The value does not have to be a
+      string, but can use any of the data types valid in a
+      mode-line construct (see <a href=
+      "Mode-Line-Data.html#Mode-Line-Data">Mode Line Data</a>). To
+      compute the string that will identify the mode name in the
+      mode line, use <code>format-mode-line</code> (see <a href=
+      "Emulating-Mode-Line.html#Emulating-Mode-Line">Emulating Mode
+      Line</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-mode_002dline_002dprocess" id=
+    "index-mode_002dline_002dprocess"></a>Variable:
+    <strong>mode-line-process</strong></dt>
+
+    <dd>
+      <p>This buffer-local variable contains the mode line
+      information on process status in modes used for communicating
+      with subprocesses. It is displayed immediately following the
+      major mode name, with no intervening space. For example, its
+      value in the <samp>*shell*</samp> buffer is
+      <code>(":%s")</code>, which allows the shell to display its
+      status along with the major mode as:
+      &lsquo;<samp>(Shell:run)</samp>&rsquo;. Normally this
+      variable is <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-mode_002dline_002dfront_002dspace" id=
+    "index-mode_002dline_002dfront_002dspace"></a>Variable:
+    <strong>mode-line-front-space</strong></dt>
+
+    <dd>
+      <p>This variable is displayed at the front of the mode line.
+      By default, this construct is displayed right at the
+      beginning of the mode line, except that if there is a
+      memory-full message, it is displayed first.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-mode_002dline_002dend_002dspaces" id=
+    "index-mode_002dline_002dend_002dspaces"></a>Variable:
+    <strong>mode-line-end-spaces</strong></dt>
+
+    <dd>
+      <p>This variable is displayed at the end of the mode
+      line.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-mode_002dline_002dmisc_002dinfo" id=
+    "index-mode_002dline_002dmisc_002dinfo"></a>Variable:
+    <strong>mode-line-misc-info</strong></dt>
+
+    <dd>
+      <p>Mode line construct for miscellaneous information. By
+      default, this shows the information specified by
+      <code>global-mode-string</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-minor_002dmode_002dalist" id=
+    "index-minor_002dmode_002dalist"></a>Variable:
+    <strong>minor-mode-alist</strong></dt>
+
+    <dd>
+      <a name="Definition-of-minor_002dmode_002dalist" id=
+      "Definition-of-minor_002dmode_002dalist"></a>
+
+      <p>This variable holds an association list whose elements
+      specify how the mode line should indicate that a minor mode
+      is active. Each element of the <code>minor-mode-alist</code>
+      should be a two-element list:</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>minor-mode-variable</var> <var>mode-line-string</var>)
+</pre>
+      </div>
+
+      <p>More generally, <var>mode-line-string</var> can be any
+      mode line construct. It appears in the mode line when the
+      value of <var>minor-mode-variable</var> is
+      non-<code>nil</code>, and not otherwise. These strings should
+      begin with spaces so that they don&rsquo;t run together.
+      Conventionally, the <var>minor-mode-variable</var> for a
+      specific mode is set to a non-<code>nil</code> value when
+      that minor mode is activated.</p>
+
+      <p><code>minor-mode-alist</code> itself is not buffer-local.
+      Each variable mentioned in the alist should be buffer-local
+      if its minor mode can be enabled separately in each
+      buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-global_002dmode_002dstring" id=
+    "index-global_002dmode_002dstring"></a>Variable:
+    <strong>global-mode-string</strong></dt>
+
+    <dd>
+      <p>This variable holds a mode line construct that, by
+      default, appears in the mode line just after the
+      <code>which-func-mode</code> minor mode if set, else after
+      <code>mode-line-modes</code>. The command
+      <code>display-time</code> sets
+      <code>global-mode-string</code> to refer to the variable
+      <code>display-time-string</code>, which holds a string
+      containing the time and load information.</p>
+
+      <p>The &lsquo;<samp>%M</samp>&rsquo; construct substitutes
+      the value of <code>global-mode-string</code>, but that is
+      obsolete, since the variable is included in the mode line
+      from <code>mode-line-format</code>.</p>
+    </dd>
+  </dl>
+
+  <p>Here is a simplified version of the default value of
+  <code>mode-line-format</code>. The real default value also
+  specifies addition of text properties.</p>
+
+  <div class="example">
+    <pre class="example">
+("-"
  mode-line-mule-info
  mode-line-modified
  mode-line-frame-identification
  mode-line-buffer-identification
-</pre><pre class="example"> &quot;   &quot;
+</pre>
+    <pre class="example">
+ "   "
  mode-line-position
  (vc-mode vc-mode)
- &quot;   &quot;
-</pre><pre class="example"> mode-line-modes
- (which-func-mode (&quot;&quot; which-func-format &quot;--&quot;))
- (global-mode-string (&quot;--&quot; global-mode-string))
- &quot;-%-&quot;)
-</pre></div>
+ "   "
+</pre>
+    <pre class="example">
+ mode-line-modes
+ (which-func-mode ("" which-func-format "--"))
+ (global-mode-string ("--" global-mode-string))
+ "-%-")
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="_0025_002dConstructs.html#g_t_0025_002dConstructs" accesskey="n" rel="next">%-Constructs</a>, Previous: <a href="Mode-Line-Top.html#Mode-Line-Top" accesskey="p" rel="prev">Mode Line Top</a>, Up: <a href="Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel="up">Mode Line Format</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "_0025_002dConstructs.html#g_t_0025_002dConstructs" accesskey=
+    "n" rel="next">%-Constructs</a>, Previous: <a href=
+    "Mode-Line-Top.html#Mode-Line-Top" accesskey="p" rel=
+    "prev">Mode Line Top</a>, Up: <a href=
+    "Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel=
+    "up">Mode Line Format</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

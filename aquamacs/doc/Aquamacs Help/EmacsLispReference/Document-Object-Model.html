@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,210 +19,309 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Document Object Model</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Document Object Model">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Document Object Model">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" rel="up" title="Parsing HTML/XML">
-<link href="Atomic-Changes.html#Atomic-Changes" rel="next" title="Atomic Changes">
-<link href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" rel="prev" title="Parsing HTML/XML">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Document Object
+  Model</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Document Object Model" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Document Object Model" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" rel=
+  "up" title="Parsing HTML/XML" />
+  <link href="Atomic-Changes.html#Atomic-Changes" rel="next" title=
+  "Atomic Changes" />
+  <link href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" rel=
+  "prev" title="Parsing HTML/XML" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Document-Object-Model" id="Document-Object-Model"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Up: <a href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML"
+    accesskey="u" rel="up">Parsing HTML/XML</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Document-Object-Model-1" id=
+  "Document-Object-Model-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Document-Object-Model"></a>
-<div class="header">
-<p>
-Up: <a href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" accesskey="u" rel="up">Parsing HTML/XML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Document-Object-Model-1"></a>
-<h4 class="subsection">31.26.1 Document Object Model</h4>
-<a name="index-HTML-DOM"></a>
-<a name="index-XML-DOM"></a>
-<a name="index-DOM"></a>
-<a name="index-Document-Object-Model"></a>
+  <h4 class="subsection">31.26.1 Document Object Model</h4><a name=
+  "index-HTML-DOM" id="index-HTML-DOM"></a> <a name="index-XML-DOM"
+  id="index-XML-DOM"></a> <a name="index-DOM" id="index-DOM"></a>
+  <a name="index-Document-Object-Model" id=
+  "index-Document-Object-Model"></a>
 
-<p>The <acronym>DOM</acronym> returned by <code>libxml-parse-html-region</code> (and the
-other <acronym>XML</acronym> parsing functions) is a tree structure where each
-node has a node name (called a <em>tag</em>), and optional key/value
-<em>attribute</em> list, and then a list of <em>child nodes</em>.  The child
-nodes are either strings or <acronym>DOM</acronym> objects.
-</p>
-<div class="example">
-<pre class="example">(body ((width . &quot;101&quot;))
- (div ((class . &quot;thing&quot;))
-  &quot;Foo&quot;
+  <p>The <acronym>DOM</acronym> returned by
+  <code>libxml-parse-html-region</code> (and the other
+  <acronym>XML</acronym> parsing functions) is a tree structure
+  where each node has a node name (called a <em>tag</em>), and
+  optional key/value <em>attribute</em> list, and then a list of
+  <em>child nodes</em>. The child nodes are either strings or
+  <acronym>DOM</acronym> objects.</p>
+
+  <div class="example">
+    <pre class="example">
+(body ((width . "101"))
+ (div ((class . "thing"))
+  "Foo"
   (div nil
-   &quot;Yes&quot;)))
-</pre></div>
+   "Yes")))
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-dom_002dnode"></a>Function: <strong>dom-node</strong> <em>tag &amp;optional attributes &amp;rest children</em></dt>
-<dd><p>This function creates a <acronym>DOM</acronym> node of type <var>tag</var>.  If
-given, <var>attributes</var> should be a key/value pair list.
-If given, <var>children</var> should be <acronym>DOM</acronym> nodes.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-dom_002dnode" id=
+    "index-dom_002dnode"></a>Function: <strong>dom-node</strong>
+    <em>tag &amp;optional attributes &amp;rest children</em></dt>
 
-<p>The following functions can be used to work with this structure.  Each
-function takes a <acronym>DOM</acronym> node, or a list of nodes.  In the
-latter case, only the first node in the list is used.
-</p>
-<p>Simple accessors:
-</p>
-<dl compact="compact">
-<dt><code>dom-tag <var>node</var></code></dt>
-<dd><p>Return the <em>tag</em> (also called &ldquo;node name&rdquo;) of the node.
-</p>
-</dd>
-<dt><code>dom-attr <var>node</var> <var>attribute</var></code></dt>
-<dd><p>Return the value of <var>attribute</var> in the node.  A common usage
-would be:
-</p>
-<div class="lisp">
-<pre class="lisp">(dom-attr img 'href)
-=&gt; &quot;http://fsf.org/logo.png&quot;
-</pre></div>
+    <dd>
+      <p>This function creates a <acronym>DOM</acronym> node of
+      type <var>tag</var>. If given, <var>attributes</var> should
+      be a key/value pair list. If given, <var>children</var>
+      should be <acronym>DOM</acronym> nodes.</p>
+    </dd>
+  </dl>
 
-</dd>
-<dt><code>dom-children <var>node</var></code></dt>
-<dd><p>Return all the children of the node.
-</p>
-</dd>
-<dt><code>dom-non-text-children <var>node</var></code></dt>
-<dd><p>Return all the non-string children of the node.
-</p>
-</dd>
-<dt><code>dom-attributes <var>node</var></code></dt>
-<dd><p>Return the key/value pair list of attributes of the node.
-</p>
-</dd>
-<dt><code>dom-text <var>node</var></code></dt>
-<dd><p>Return all the textual elements of the node as a concatenated string.
-</p>
-</dd>
-<dt><code>dom-texts <var>node</var></code></dt>
-<dd><p>Return all the textual elements of the node, as well as the textual
-elements of all the children of the node, recursively, as a
-concatenated string.  This function also takes an optional separator
-to be inserted between the textual elements.
-</p>
-</dd>
-<dt><code>dom-parent <var>dom</var> <var>node</var></code></dt>
-<dd><p>Return the parent of <var>node</var> in <var>dom</var>.
-</p></dd>
-</dl>
+  <p>The following functions can be used to work with this
+  structure. Each function takes a <acronym>DOM</acronym> node, or
+  a list of nodes. In the latter case, only the first node in the
+  list is used.</p>
 
-<p>The following are functions for altering the <acronym>DOM</acronym>.
-</p>
-<dl compact="compact">
-<dt><code>dom-set-attribute <var>node</var> <var>attribute</var> <var>value</var></code></dt>
-<dd><p>Set the <var>attribute</var> of the node to <var>value</var>.
-</p>
-</dd>
-<dt><code>dom-append-child <var>node</var> <var>child</var></code></dt>
-<dd><p>Append <var>child</var> as the last child of <var>node</var>.
-</p>
-</dd>
-<dt><code>dom-add-child-before <var>node</var> <var>child</var> <var>before</var></code></dt>
-<dd><p>Add <var>child</var> to <var>node</var>&rsquo;s child list before the <var>before</var>
-node.  If <var>before</var> is <code>nil</code>, make <var>child</var> the first child.
-</p>
-</dd>
-<dt><code>dom-set-attributes <var>node</var> <var>attributes</var></code></dt>
-<dd><p>Replace all the attributes of the node with a new key/value list.
-</p></dd>
-</dl>
+  <p>Simple accessors:</p>
 
-<p>The following are functions for searching for elements in the
-<acronym>DOM</acronym>.  They all return lists of matching nodes.
-</p>
-<dl compact="compact">
-<dt><code>dom-by-tag <var>dom</var> <var>tag</var></code></dt>
-<dd><p>Return all nodes in <var>dom</var> that are of type <var>tag</var>.  A typical
-use would be:
-</p>
-<div class="lisp">
-<pre class="lisp">(dom-by-tag dom 'td)
+  <dl compact="compact">
+    <dt><code>dom-tag <var>node</var></code></dt>
+
+    <dd>
+      <p>Return the <em>tag</em> (also called &ldquo;node
+      name&rdquo;) of the node.</p>
+    </dd>
+
+    <dt><code>dom-attr <var>node</var>
+    <var>attribute</var></code></dt>
+
+    <dd>
+      <p>Return the value of <var>attribute</var> in the node. A
+      common usage would be:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dom-attr img 'href)
+=&gt; "http://fsf.org/logo.png"
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>dom-children <var>node</var></code></dt>
+
+    <dd>
+      <p>Return all the children of the node.</p>
+    </dd>
+
+    <dt><code>dom-non-text-children <var>node</var></code></dt>
+
+    <dd>
+      <p>Return all the non-string children of the node.</p>
+    </dd>
+
+    <dt><code>dom-attributes <var>node</var></code></dt>
+
+    <dd>
+      <p>Return the key/value pair list of attributes of the
+      node.</p>
+    </dd>
+
+    <dt><code>dom-text <var>node</var></code></dt>
+
+    <dd>
+      <p>Return all the textual elements of the node as a
+      concatenated string.</p>
+    </dd>
+
+    <dt><code>dom-texts <var>node</var></code></dt>
+
+    <dd>
+      <p>Return all the textual elements of the node, as well as
+      the textual elements of all the children of the node,
+      recursively, as a concatenated string. This function also
+      takes an optional separator to be inserted between the
+      textual elements.</p>
+    </dd>
+
+    <dt><code>dom-parent <var>dom</var> <var>node</var></code></dt>
+
+    <dd>
+      <p>Return the parent of <var>node</var> in
+      <var>dom</var>.</p>
+    </dd>
+  </dl>
+
+  <p>The following are functions for altering the
+  <acronym>DOM</acronym>.</p>
+
+  <dl compact="compact">
+    <dt><code>dom-set-attribute <var>node</var>
+    <var>attribute</var> <var>value</var></code></dt>
+
+    <dd>
+      <p>Set the <var>attribute</var> of the node to
+      <var>value</var>.</p>
+    </dd>
+
+    <dt><code>dom-append-child <var>node</var>
+    <var>child</var></code></dt>
+
+    <dd>
+      <p>Append <var>child</var> as the last child of
+      <var>node</var>.</p>
+    </dd>
+
+    <dt><code>dom-add-child-before <var>node</var> <var>child</var>
+    <var>before</var></code></dt>
+
+    <dd>
+      <p>Add <var>child</var> to <var>node</var>&rsquo;s child list
+      before the <var>before</var> node. If <var>before</var> is
+      <code>nil</code>, make <var>child</var> the first child.</p>
+    </dd>
+
+    <dt><code>dom-set-attributes <var>node</var>
+    <var>attributes</var></code></dt>
+
+    <dd>
+      <p>Replace all the attributes of the node with a new
+      key/value list.</p>
+    </dd>
+  </dl>
+
+  <p>The following are functions for searching for elements in the
+  <acronym>DOM</acronym>. They all return lists of matching
+  nodes.</p>
+
+  <dl compact="compact">
+    <dt><code>dom-by-tag <var>dom</var> <var>tag</var></code></dt>
+
+    <dd>
+      <p>Return all nodes in <var>dom</var> that are of type
+      <var>tag</var>. A typical use would be:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dom-by-tag dom 'td)
 =&gt; '((td ...) (td ...) (td ...))
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>dom-by-class <var>dom</var> <var>match</var></code></dt>
-<dd><p>Return all nodes in <var>dom</var> that have class names that match
-<var>match</var>, which is a regular expression.
-</p>
-</dd>
-<dt><code>dom-by-style <var>dom</var> <var>style</var></code></dt>
-<dd><p>Return all nodes in <var>dom</var> that have styles that match <var>match</var>,
-which is a regular expression.
-</p>
-</dd>
-<dt><code>dom-by-id <var>dom</var> <var>style</var></code></dt>
-<dd><p>Return all nodes in <var>dom</var> that have IDs that match <var>match</var>,
-which is a regular expression.
-</p>
-</dd>
-<dt><code>dom-strings <var>dom</var></code></dt>
-<dd><p>Return all strings in <var>DOM</var>.
-</p>
-</dd>
-</dl>
+    <dt><code>dom-by-class <var>dom</var>
+    <var>match</var></code></dt>
 
-<p>Utility functions:
-</p>
-<dl compact="compact">
-<dt><code>dom-pp <var>dom</var> &amp;optional <var>remove-empty</var></code></dt>
-<dd><p>Pretty-print <var>dom</var> at point.  If <var>remove-empty</var>, don&rsquo;t print
-textual nodes that just contain white-space.
-</p></dd>
-</dl>
+    <dd>
+      <p>Return all nodes in <var>dom</var> that have class names
+      that match <var>match</var>, which is a regular
+      expression.</p>
+    </dd>
 
+    <dt><code>dom-by-style <var>dom</var>
+    <var>style</var></code></dt>
 
-<hr>
-<div class="header">
-<p>
-Up: <a href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" accesskey="u" rel="up">Parsing HTML/XML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Return all nodes in <var>dom</var> that have styles that
+      match <var>match</var>, which is a regular expression.</p>
+    </dd>
 
+    <dt><code>dom-by-id <var>dom</var> <var>style</var></code></dt>
 
+    <dd>
+      <p>Return all nodes in <var>dom</var> that have IDs that
+      match <var>match</var>, which is a regular expression.</p>
+    </dd>
 
+    <dt><code>dom-strings <var>dom</var></code></dt>
+
+    <dd>
+      <p>Return all strings in <var>DOM</var>.</p>
+    </dd>
+  </dl>
+
+  <p>Utility functions:</p>
+
+  <dl compact="compact">
+    <dt><code>dom-pp <var>dom</var> &amp;optional
+    <var>remove-empty</var></code></dt>
+
+    <dd>
+      <p>Pretty-print <var>dom</var> at point. If
+      <var>remove-empty</var>, don&rsquo;t print textual nodes that
+      just contain white-space.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Up: <a href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML"
+    accesskey="u" rel="up">Parsing HTML/XML</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

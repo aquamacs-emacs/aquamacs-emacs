@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Indirect Functions - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="NNTP.html#NNTP" title="NNTP">
-<link rel="prev" href="Direct-Functions.html#Direct-Functions" title="Direct Functions">
-<link rel="next" href="Common-Variables.html#Common-Variables" title="Common Variables">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Indirect Functions - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="NNTP.html#NNTP" title="NNTP" />
+  <link rel="prev" href="Direct-Functions.html#Direct-Functions"
+  title="Direct Functions" />
+  <link rel="next" href="Common-Variables.html#Common-Variables"
+  title="Common Variables" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,108 +47,240 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Indirect-Functions"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Common-Variables.html#Common-Variables">Common Variables</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Direct-Functions.html#Direct-Functions">Direct Functions</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="NNTP.html#NNTP">NNTP</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Indirect-Functions" id="Indirect-Functions"></a>
 
-<h5 class="subsubsection">6.2.1.2 Indirect Functions</h5>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Common-Variables.html#Common-Variables">Common Variables</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Direct-Functions.html#Direct-Functions">Direct Functions</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "NNTP.html#NNTP">NNTP</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-indirect-connection-functions-2021"></a>
-These functions are called indirect because they connect to an
-intermediate host before actually connecting to the <acronym>NNTP</acronym> server. 
-All of these functions and related variables are also said to belong to
-the &ldquo;via&rdquo; family of connection: they're all prefixed with &ldquo;via&rdquo; to make
-things cleaner.  The behavior of these functions is also affected by
-commonly understood variables (see <a href="Common-Variables.html#Common-Variables">Common Variables</a>).
+  <h5 class="subsubsection">6.2.1.2 Indirect Functions</h5>
 
-     <dl>
-<dt><code>nntp-open-via-rlogin-and-netcat</code><dd><a name="index-nntp_002dopen_002dvia_002drlogin_002dand_002dnetcat-2022"></a>Does an &lsquo;<samp><span class="samp">rlogin</span></samp>&rsquo; on a remote system, and then uses <code>netcat</code> to connect
-to the real <acronym>NNTP</acronym> server from there.  This is useful for instance if
-you need to connect to a firewall machine first.
+  <p><a name="index-indirect-connection-functions-2021" id=
+  "index-indirect-connection-functions-2021"></a> These functions
+  are called indirect because they connect to an intermediate host
+  before actually connecting to the <acronym>NNTP</acronym> server.
+  All of these functions and related variables are also said to
+  belong to the &ldquo;via&rdquo; family of connection: they're all
+  prefixed with &ldquo;via&rdquo; to make things cleaner. The
+  behavior of these functions is also affected by commonly
+  understood variables (see <a href=
+  "Common-Variables.html#Common-Variables">Common
+  Variables</a>).</p>
 
-     <p><code>nntp-open-via-rlogin-and-netcat</code>-specific variables:
+  <dl>
+    <dt><code>nntp-open-via-rlogin-and-netcat</code></dt>
 
-          <dl>
-<dt><code>nntp-via-rlogin-command</code><dd><a name="index-nntp_002dvia_002drlogin_002dcommand-2023"></a>Command used to log in on the intermediate host.  The default is
-&lsquo;<samp><span class="samp">rsh</span></samp>&rsquo;, but &lsquo;<samp><span class="samp">ssh</span></samp>&rsquo; is a popular alternative.
+    <dd>
+      <a name=
+      "index-nntp_002dopen_002dvia_002drlogin_002dand_002dnetcat-2022"
+      id=
+      "index-nntp_002dopen_002dvia_002drlogin_002dand_002dnetcat-2022">
+      </a>Does an &lsquo;<samp><span class=
+      "samp">rlogin</span></samp>&rsquo; on a remote system, and
+      then uses <code>netcat</code> to connect to the real
+      <acronym>NNTP</acronym> server from there. This is useful for
+      instance if you need to connect to a firewall machine first.
 
-          <br><dt><code>nntp-via-rlogin-command-switches</code><dd><a name="index-nntp_002dvia_002drlogin_002dcommand_002dswitches-2024"></a>List of strings to be used as the switches to
-<code>nntp-via-rlogin-command</code>.  The default is <code>nil</code>.  If you use
-&lsquo;<samp><span class="samp">ssh</span></samp>&rsquo; for <code>nntp-via-rlogin-command</code>, you may set this to
-&lsquo;<samp><span class="samp">("-C")</span></samp>&rsquo; in order to compress all data connections. 
-</dl>
+      <p><code>nntp-open-via-rlogin-and-netcat</code>-specific
+      variables:</p>
 
-     <br><dt><code>nntp-open-via-rlogin-and-telnet</code><dd><a name="index-nntp_002dopen_002dvia_002drlogin_002dand_002dtelnet-2025"></a>Does essentially the same, but uses <code>telnet</code> instead of &lsquo;<samp><span class="samp">netcat</span></samp>&rsquo;
-to connect to the real <acronym>NNTP</acronym> server from the intermediate host. 
-<code>telnet</code> is a bit less robust because of things like
-line-end-conversion, but sometimes <code>netcat</code> is simply not available.
+      <dl>
+        <dt><code>nntp-via-rlogin-command</code></dt>
 
-     <p><code>nntp-open-via-rlogin-and-telnet</code>-specific variables:
+        <dd><a name=
+        "index-nntp_002dvia_002drlogin_002dcommand-2023" id=
+        "index-nntp_002dvia_002drlogin_002dcommand-2023"></a>Command
+        used to log in on the intermediate host. The default is
+        &lsquo;<samp><span class="samp">rsh</span></samp>&rsquo;,
+        but &lsquo;<samp><span class=
+        "samp">ssh</span></samp>&rsquo; is a popular
+        alternative.<br /></dd>
 
-          <dl>
-<dt><code>nntp-telnet-command</code><dd><a name="index-nntp_002dtelnet_002dcommand-2026"></a>Command used to connect to the real <acronym>NNTP</acronym> server from the
-intermediate host.  The default is &lsquo;<samp><span class="samp">telnet</span></samp>&rsquo;.
+        <dt><code>nntp-via-rlogin-command-switches</code></dt>
 
-          <br><dt><code>nntp-telnet-switches</code><dd><a name="index-nntp_002dtelnet_002dswitches-2027"></a>List of strings to be used as the switches to the
-<code>nntp-telnet-command</code> command.  The default is <code>("-8")</code>.
+        <dd><a name=
+        "index-nntp_002dvia_002drlogin_002dcommand_002dswitches-2024"
+        id=
+        "index-nntp_002dvia_002drlogin_002dcommand_002dswitches-2024">
+        </a>List of strings to be used as the switches to
+        <code>nntp-via-rlogin-command</code>. The default is
+        <code>nil</code>. If you use &lsquo;<samp><span class=
+        "samp">ssh</span></samp>&rsquo; for
+        <code>nntp-via-rlogin-command</code>, you may set this to
+        &lsquo;<samp><span class="samp">("-C")</span></samp>&rsquo;
+        in order to compress all data connections.</dd>
+      </dl><br />
+    </dd>
 
-          <br><dt><code>nntp-via-rlogin-command</code><dd><a name="index-nntp_002dvia_002drlogin_002dcommand-2028"></a>Command used to log in on the intermediate host.  The default is
-&lsquo;<samp><span class="samp">rsh</span></samp>&rsquo;, but &lsquo;<samp><span class="samp">ssh</span></samp>&rsquo; is a popular alternative.
+    <dt><code>nntp-open-via-rlogin-and-telnet</code></dt>
 
-          <br><dt><code>nntp-via-rlogin-command-switches</code><dd><a name="index-nntp_002dvia_002drlogin_002dcommand_002dswitches-2029"></a>List of strings to be used as the switches to
-<code>nntp-via-rlogin-command</code>.  If you use &lsquo;<samp><span class="samp">ssh</span></samp>&rsquo;,  you may need to set
-this to &lsquo;<samp><span class="samp">("-t" "-e" "none")</span></samp>&rsquo; or &lsquo;<samp><span class="samp">("-C" "-t" "-e" "none")</span></samp>&rsquo; if
-the telnet command requires a pseudo-tty allocation on an intermediate
-host.  The default is <code>nil</code>. 
-</dl>
+    <dd>
+      <a name=
+      "index-nntp_002dopen_002dvia_002drlogin_002dand_002dtelnet-2025"
+      id=
+      "index-nntp_002dopen_002dvia_002drlogin_002dand_002dtelnet-2025">
+      </a>Does essentially the same, but uses <code>telnet</code>
+      instead of &lsquo;<samp><span class=
+      "samp">netcat</span></samp>&rsquo; to connect to the real
+      <acronym>NNTP</acronym> server from the intermediate host.
+      <code>telnet</code> is a bit less robust because of things
+      like line-end-conversion, but sometimes <code>netcat</code>
+      is simply not available.
 
-     <p>Note that you may want to change the value for <code>nntp-end-of-line</code>
-to &lsquo;<samp><span class="samp">\n</span></samp>&rsquo; (see <a href="Common-Variables.html#Common-Variables">Common Variables</a>).
+      <p><code>nntp-open-via-rlogin-and-telnet</code>-specific
+      variables:</p>
 
-     <br><dt><code>nntp-open-via-telnet-and-telnet</code><dd><a name="index-nntp_002dopen_002dvia_002dtelnet_002dand_002dtelnet-2030"></a>Does essentially the same, but uses &lsquo;<samp><span class="samp">telnet</span></samp>&rsquo; instead of
-&lsquo;<samp><span class="samp">rlogin</span></samp>&rsquo; to connect to the intermediate host.
+      <dl>
+        <dt><code>nntp-telnet-command</code></dt>
 
-     <p><code>nntp-open-via-telnet-and-telnet</code>-specific variables:
+        <dd><a name="index-nntp_002dtelnet_002dcommand-2026" id=
+        "index-nntp_002dtelnet_002dcommand-2026"></a>Command used
+        to connect to the real <acronym>NNTP</acronym> server from
+        the intermediate host. The default is
+        &lsquo;<samp><span class=
+        "samp">telnet</span></samp>&rsquo;.<br /></dd>
 
-          <dl>
-<dt><code>nntp-via-telnet-command</code><dd><a name="index-nntp_002dvia_002dtelnet_002dcommand-2031"></a>Command used to <code>telnet</code> the intermediate host.  The default is
-&lsquo;<samp><span class="samp">telnet</span></samp>&rsquo;.
+        <dt><code>nntp-telnet-switches</code></dt>
 
-          <br><dt><code>nntp-via-telnet-switches</code><dd><a name="index-nntp_002dvia_002dtelnet_002dswitches-2032"></a>List of strings to be used as the switches to the
-<code>nntp-via-telnet-command</code> command.  The default is &lsquo;<samp><span class="samp">("-8")</span></samp>&rsquo;.
+        <dd><a name="index-nntp_002dtelnet_002dswitches-2027" id=
+        "index-nntp_002dtelnet_002dswitches-2027"></a>List of
+        strings to be used as the switches to the
+        <code>nntp-telnet-command</code> command. The default is
+        <code>("-8")</code>.<br /></dd>
 
-          <br><dt><code>nntp-via-user-password</code><dd><a name="index-nntp_002dvia_002duser_002dpassword-2033"></a>Password to use when logging in on the intermediate host.
+        <dt><code>nntp-via-rlogin-command</code></dt>
 
-          <br><dt><code>nntp-via-envuser</code><dd><a name="index-nntp_002dvia_002denvuser-2034"></a>If non-<code>nil</code>, the intermediate <code>telnet</code> session (client and
-server both) will support the <code>ENVIRON</code> option and not prompt for
-login name.  This works for Solaris <code>telnet</code>, for instance.
+        <dd><a name=
+        "index-nntp_002dvia_002drlogin_002dcommand-2028" id=
+        "index-nntp_002dvia_002drlogin_002dcommand-2028"></a>Command
+        used to log in on the intermediate host. The default is
+        &lsquo;<samp><span class="samp">rsh</span></samp>&rsquo;,
+        but &lsquo;<samp><span class=
+        "samp">ssh</span></samp>&rsquo; is a popular
+        alternative.<br /></dd>
 
-          <br><dt><code>nntp-via-shell-prompt</code><dd><a name="index-nntp_002dvia_002dshell_002dprompt-2035"></a>Regexp matching the shell prompt on the intermediate host.  The default
-is &lsquo;<samp><span class="samp">bash\\|\$ *\r?$\\|&gt; *\r?</span></samp>&rsquo;.
+        <dt><code>nntp-via-rlogin-command-switches</code></dt>
 
-     </dl>
+        <dd><a name=
+        "index-nntp_002dvia_002drlogin_002dcommand_002dswitches-2029"
+        id=
+        "index-nntp_002dvia_002drlogin_002dcommand_002dswitches-2029">
+        </a>List of strings to be used as the switches to
+        <code>nntp-via-rlogin-command</code>. If you use
+        &lsquo;<samp><span class="samp">ssh</span></samp>&rsquo;,
+        you may need to set this to &lsquo;<samp><span class=
+        "samp">("-t" "-e" "none")</span></samp>&rsquo; or
+        &lsquo;<samp><span class="samp">("-C" "-t" "-e"
+        "none")</span></samp>&rsquo; if the telnet command requires
+        a pseudo-tty allocation on an intermediate host. The
+        default is <code>nil</code>.</dd>
+      </dl>
 
-     <p>Note that you may want to change the value for <code>nntp-end-of-line</code>
-to &lsquo;<samp><span class="samp">\n</span></samp>&rsquo; (see <a href="Common-Variables.html#Common-Variables">Common Variables</a>). 
-</dl>
+      <p>Note that you may want to change the value for
+      <code>nntp-end-of-line</code> to &lsquo;<samp><span class=
+      "samp">\n</span></samp>&rsquo; (see <a href=
+      "Common-Variables.html#Common-Variables">Common
+      Variables</a>).<br /></p>
+    </dd>
 
-   <p>Here are some additional variables that are understood by all the above
-functions:
+    <dt><code>nntp-open-via-telnet-and-telnet</code></dt>
 
-     <dl>
-<dt><code>nntp-via-user-name</code><dd><a name="index-nntp_002dvia_002duser_002dname-2036"></a>User name to use when connecting to the intermediate host.
+    <dd>
+      <a name=
+      "index-nntp_002dopen_002dvia_002dtelnet_002dand_002dtelnet-2030"
+      id=
+      "index-nntp_002dopen_002dvia_002dtelnet_002dand_002dtelnet-2030">
+      </a>Does essentially the same, but uses
+      &lsquo;<samp><span class="samp">telnet</span></samp>&rsquo;
+      instead of &lsquo;<samp><span class=
+      "samp">rlogin</span></samp>&rsquo; to connect to the
+      intermediate host.
 
-     <br><dt><code>nntp-via-address</code><dd><a name="index-nntp_002dvia_002daddress-2037"></a>Address of the intermediate host to connect to.
+      <p><code>nntp-open-via-telnet-and-telnet</code>-specific
+      variables:</p>
 
-   </dl>
+      <dl>
+        <dt><code>nntp-via-telnet-command</code></dt>
 
-   </body></html>
+        <dd><a name=
+        "index-nntp_002dvia_002dtelnet_002dcommand-2031" id=
+        "index-nntp_002dvia_002dtelnet_002dcommand-2031"></a>Command
+        used to <code>telnet</code> the intermediate host. The
+        default is &lsquo;<samp><span class=
+        "samp">telnet</span></samp>&rsquo;.<br /></dd>
 
+        <dt><code>nntp-via-telnet-switches</code></dt>
+
+        <dd><a name=
+        "index-nntp_002dvia_002dtelnet_002dswitches-2032" id=
+        "index-nntp_002dvia_002dtelnet_002dswitches-2032"></a>List
+        of strings to be used as the switches to the
+        <code>nntp-via-telnet-command</code> command. The default
+        is &lsquo;<samp><span class=
+        "samp">("-8")</span></samp>&rsquo;.<br /></dd>
+
+        <dt><code>nntp-via-user-password</code></dt>
+
+        <dd><a name="index-nntp_002dvia_002duser_002dpassword-2033"
+        id=
+        "index-nntp_002dvia_002duser_002dpassword-2033"></a>Password
+        to use when logging in on the intermediate host.<br /></dd>
+
+        <dt><code>nntp-via-envuser</code></dt>
+
+        <dd><a name="index-nntp_002dvia_002denvuser-2034" id=
+        "index-nntp_002dvia_002denvuser-2034"></a>If
+        non-<code>nil</code>, the intermediate <code>telnet</code>
+        session (client and server both) will support the
+        <code>ENVIRON</code> option and not prompt for login name.
+        This works for Solaris <code>telnet</code>, for
+        instance.<br /></dd>
+
+        <dt><code>nntp-via-shell-prompt</code></dt>
+
+        <dd><a name="index-nntp_002dvia_002dshell_002dprompt-2035"
+        id=
+        "index-nntp_002dvia_002dshell_002dprompt-2035"></a>Regexp
+        matching the shell prompt on the intermediate host. The
+        default is &lsquo;<samp><span class="samp">bash\\|\$
+        *\r?$\\|&gt; *\r?</span></samp>&rsquo;.</dd>
+      </dl>
+
+      <p>Note that you may want to change the value for
+      <code>nntp-end-of-line</code> to &lsquo;<samp><span class=
+      "samp">\n</span></samp>&rsquo; (see <a href=
+      "Common-Variables.html#Common-Variables">Common
+      Variables</a>).</p>
+    </dd>
+  </dl>
+
+  <p>Here are some additional variables that are understood by all
+  the above functions:</p>
+
+  <dl>
+    <dt><code>nntp-via-user-name</code></dt>
+
+    <dd><a name="index-nntp_002dvia_002duser_002dname-2036" id=
+    "index-nntp_002dvia_002duser_002dname-2036"></a>User name to
+    use when connecting to the intermediate host.<br /></dd>
+
+    <dt><code>nntp-via-address</code></dt>
+
+    <dd><a name="index-nntp_002dvia_002daddress-2037" id=
+    "index-nntp_002dvia_002daddress-2037"></a>Address of the
+    intermediate host to connect to.</dd>
+  </dl>
+</body>
+</html>

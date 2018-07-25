@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,108 +19,159 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Transaction Queues</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Transaction Queues">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Transaction Queues">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Processes.html#Processes" rel="up" title="Processes">
-<link href="Network.html#Network" rel="next" title="Network">
-<link href="System-Processes.html#System-Processes" rel="prev" title="System Processes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Transaction
+  Queues</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Transaction Queues" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Transaction Queues" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Processes.html#Processes" rel="up" title=
+  "Processes" />
+  <link href="Network.html#Network" rel="next" title="Network" />
+  <link href="System-Processes.html#System-Processes" rel="prev"
+  title="System Processes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Transaction-Queues" id="Transaction-Queues"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Network.html#Network" accesskey="n" rel=
+    "next">Network</a>, Previous: <a href=
+    "System-Processes.html#System-Processes" accesskey="p" rel=
+    "prev">System Processes</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Transaction-Queues-1" id="Transaction-Queues-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Transaction-Queues"></a>
-<div class="header">
-<p>
-Next: <a href="Network.html#Network" accesskey="n" rel="next">Network</a>, Previous: <a href="System-Processes.html#System-Processes" accesskey="p" rel="prev">System Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Transaction-Queues-1"></a>
-<h3 class="section">36.13 Transaction Queues</h3>
-<a name="index-transaction-queue"></a>
+  <h3 class="section">36.13 Transaction Queues</h3><a name=
+  "index-transaction-queue" id="index-transaction-queue"></a>
 
-<p>You can use a <em>transaction queue</em> to communicate with a subprocess
-using transactions.  First use <code>tq-create</code> to create a transaction
-queue communicating with a specified process.  Then you can call
-<code>tq-enqueue</code> to send a transaction.
-</p>
-<dl>
-<dt><a name="index-tq_002dcreate"></a>Function: <strong>tq-create</strong> <em>process</em></dt>
-<dd><p>This function creates and returns a transaction queue communicating with
-<var>process</var>.  The argument <var>process</var> should be a subprocess
-capable of sending and receiving streams of bytes.  It may be a child
-process, or it may be a TCP connection to a server, possibly on another
-machine.
-</p></dd></dl>
+  <p>You can use a <em>transaction queue</em> to communicate with a
+  subprocess using transactions. First use <code>tq-create</code>
+  to create a transaction queue communicating with a specified
+  process. Then you can call <code>tq-enqueue</code> to send a
+  transaction.</p>
 
-<dl>
-<dt><a name="index-tq_002denqueue"></a>Function: <strong>tq-enqueue</strong> <em>queue question regexp closure fn &amp;optional delay-question</em></dt>
-<dd><p>This function sends a transaction to queue <var>queue</var>.  Specifying the
-queue has the effect of specifying the subprocess to talk to.
-</p>
-<p>The argument <var>question</var> is the outgoing message that starts the
-transaction.  The argument <var>fn</var> is the function to call when the
-corresponding answer comes back; it is called with two arguments:
-<var>closure</var>, and the answer received.
-</p>
-<p>The argument <var>regexp</var> is a regular expression that should match
-text at the end of the entire answer, but nothing before; that&rsquo;s how
-<code>tq-enqueue</code> determines where the answer ends.
-</p>
-<p>If the argument <var>delay-question</var> is non-<code>nil</code>, delay sending
-this question until the process has finished replying to any previous
-questions.  This produces more reliable results with some processes.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-tq_002dcreate" id=
+    "index-tq_002dcreate"></a>Function: <strong>tq-create</strong>
+    <em>process</em></dt>
 
-<dl>
-<dt><a name="index-tq_002dclose"></a>Function: <strong>tq-close</strong> <em>queue</em></dt>
-<dd><p>Shut down transaction queue <var>queue</var>, waiting for all pending transactions
-to complete, and then terminate the connection or child process.
-</p></dd></dl>
+    <dd>
+      <p>This function creates and returns a transaction queue
+      communicating with <var>process</var>. The argument
+      <var>process</var> should be a subprocess capable of sending
+      and receiving streams of bytes. It may be a child process, or
+      it may be a TCP connection to a server, possibly on another
+      machine.</p>
+    </dd>
+  </dl>
 
-<p>Transaction queues are implemented by means of a filter function.
-See <a href="Filter-Functions.html#Filter-Functions">Filter Functions</a>.
-</p>
+  <dl>
+    <dt><a name="index-tq_002denqueue" id=
+    "index-tq_002denqueue"></a>Function:
+    <strong>tq-enqueue</strong> <em>queue question regexp closure
+    fn &amp;optional delay-question</em></dt>
 
+    <dd>
+      <p>This function sends a transaction to queue
+      <var>queue</var>. Specifying the queue has the effect of
+      specifying the subprocess to talk to.</p>
 
+      <p>The argument <var>question</var> is the outgoing message
+      that starts the transaction. The argument <var>fn</var> is
+      the function to call when the corresponding answer comes
+      back; it is called with two arguments: <var>closure</var>,
+      and the answer received.</p>
 
+      <p>The argument <var>regexp</var> is a regular expression
+      that should match text at the end of the entire answer, but
+      nothing before; that&rsquo;s how <code>tq-enqueue</code>
+      determines where the answer ends.</p>
+
+      <p>If the argument <var>delay-question</var> is
+      non-<code>nil</code>, delay sending this question until the
+      process has finished replying to any previous questions. This
+      produces more reliable results with some processes.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-tq_002dclose" id=
+    "index-tq_002dclose"></a>Function: <strong>tq-close</strong>
+    <em>queue</em></dt>
+
+    <dd>
+      <p>Shut down transaction queue <var>queue</var>, waiting for
+      all pending transactions to complete, and then terminate the
+      connection or child process.</p>
+    </dd>
+  </dl>
+
+  <p>Transaction queues are implemented by means of a filter
+  function. See <a href=
+  "Filter-Functions.html#Filter-Functions">Filter
+  Functions</a>.</p>
 </body>
 </html>

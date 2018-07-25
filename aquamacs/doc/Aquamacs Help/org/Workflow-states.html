@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Workflow states - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="TODO-extensions.html#TODO-extensions" title="TODO extensions">
-<link rel="prev" href="TODO-extensions.html#TODO-extensions" title="TODO extensions">
-<link rel="next" href="TODO-types.html#TODO-types" title="TODO types">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Workflow states - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="TODO-extensions.html#TODO-extensions" title=
+  "TODO extensions" />
+  <link rel="prev" href="TODO-extensions.html#TODO-extensions"
+  title="TODO extensions" />
+  <link rel="next" href="TODO-types.html#TODO-types" title=
+  "TODO types" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +42,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,49 +55,69 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Workflow-states"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="TODO-types.html#TODO-types">TODO types</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="TODO-extensions.html#TODO-extensions">TODO extensions</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="TODO-extensions.html#TODO-extensions">TODO extensions</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Workflow-states" id="Workflow-states"></a>
 
-<h4 class="subsection">5.2.1 TODO keywords as workflow states</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "TODO-types.html#TODO-types">TODO types</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "TODO-extensions.html#TODO-extensions">TODO extensions</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "TODO-extensions.html#TODO-extensions">TODO extensions</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-TODO-workflow-498"></a><a name="index-workflow-states-as-TODO-keywords-499"></a>
-You can use TODO keywords to indicate different <em>sequential</em> states
-in the process of working on an item, for example<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>:
+  <h4 class="subsection">5.2.1 TODO keywords as workflow
+  states</h4>
 
-<pre class="lisp">     (setq org-todo-keywords
+  <p><a name="index-TODO-workflow-498" id=
+  "index-TODO-workflow-498"></a><a name=
+  "index-workflow-states-as-TODO-keywords-499" id=
+  "index-workflow-states-as-TODO-keywords-499"></a> You can use
+  TODO keywords to indicate different <em>sequential</em> states in
+  the process of working on an item, for example<a rel="footnote"
+  href="#fn-1" name="fnd-1" id="fnd-1"><sup>1</sup></a>:</p>
+  <pre class="lisp">
+     (setq org-todo-keywords
        '((sequence "TODO" "FEEDBACK" "VERIFY" "|" "DONE" "DELEGATED")))
 </pre>
-   <p>The vertical bar separates the TODO keywords (states that <em>need
-action</em>) from the DONE states (which need <em>no further action</em>).  If
-you don't provide the separator bar, the last state is used as the DONE
-state. 
-<a name="index-completion_002c-of-TODO-keywords-500"></a>With this setup, the command <kbd>C-c C-t</kbd> will cycle an entry from TODO
-to FEEDBACK, then to VERIFY, and finally to DONE and DELEGATED.  You may
-also use a numeric prefix argument to quickly select a specific state.  For
-example <kbd>C-3 C-c C-t</kbd> will change the state immediately to VERIFY. 
-Or you can use <kbd>S-&lt;left&gt;</kbd> to go backward through the sequence.  If you
-define many keywords, you can use in-buffer completion
-(see <a href="Completion.html#Completion">Completion</a>) or even a special one-key selection scheme
-(see <a href="Fast-access-to-TODO-states.html#Fast-access-to-TODO-states">Fast access to TODO states</a>) to insert these words into the
-buffer.  Changing a TODO state can be logged with a timestamp, see
-<a href="Tracking-TODO-state-changes.html#Tracking-TODO-state-changes">Tracking TODO state changes</a>, for more information.
 
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Changing
-this variable only becomes effective after restarting Org-mode in a
-buffer.</p>
+  <p>The vertical bar separates the TODO keywords (states that
+  <em>need action</em>) from the DONE states (which need <em>no
+  further action</em>). If you don't provide the separator bar, the
+  last state is used as the DONE state. <a name=
+  "index-completion_002c-of-TODO-keywords-500" id=
+  "index-completion_002c-of-TODO-keywords-500"></a>With this setup,
+  the command <kbd>C-c C-t</kbd> will cycle an entry from TODO to
+  FEEDBACK, then to VERIFY, and finally to DONE and DELEGATED. You
+  may also use a numeric prefix argument to quickly select a
+  specific state. For example <kbd>C-3 C-c C-t</kbd> will change
+  the state immediately to VERIFY. Or you can use
+  <kbd>S-&lt;left&gt;</kbd> to go backward through the sequence. If
+  you define many keywords, you can use in-buffer completion (see
+  <a href="Completion.html#Completion">Completion</a>) or even a
+  special one-key selection scheme (see <a href=
+  "Fast-access-to-TODO-states.html#Fast-access-to-TODO-states">Fast
+  access to TODO states</a>) to insert these words into the buffer.
+  Changing a TODO state can be logged with a timestamp, see
+  <a href="Tracking-TODO-state-changes.html#Tracking-TODO-state-changes">
+  Tracking TODO state changes</a>, for more information.</p>
 
-   <hr></div>
+  <div class="footnote">
+    <hr />
 
-   </body></html>
+    <h4>Footnotes</h4>
 
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> Changing this variable only becomes
+    effective after restarting Org-mode in a buffer.</p>
+    <hr />
+  </div>
+</body>
+</html>

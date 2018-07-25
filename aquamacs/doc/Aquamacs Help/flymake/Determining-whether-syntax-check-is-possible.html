@@ -1,14 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Determining whether syntax check is possible - GNU Flymake 0.3</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Flymake 0.3">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Flymake-Implementation.html#Flymake-Implementation" title="Flymake Implementation">
-<link rel="next" href="Making-a-temporary-copy.html#Making-a-temporary-copy" title="Making a temporary copy">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Determining whether syntax check is possible - GNU Flymake
+  0.3</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Flymake 0.3" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Flymake-Implementation.html#Flymake-Implementation" title=
+  "Flymake Implementation" />
+  <link rel="next" href=
+  "Making-a-temporary-copy.html#Making-a-temporary-copy" title=
+  "Making a temporary copy" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -27,8 +38,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,48 +51,59 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Determining-whether-syntax-check-is-possible"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Making-a-temporary-copy.html#Making-a-temporary-copy">Making a temporary copy</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Flymake-Implementation.html#Flymake-Implementation">Flymake Implementation</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Determining-whether-syntax-check-is-possible" id=
+    "Determining-whether-syntax-check-is-possible"></a>
 
-<h3 class="section">5.1 Determining whether syntax check is possible</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Making-a-temporary-copy.html#Making-a-temporary-copy">Making a
+    temporary copy</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Flymake-Implementation.html#Flymake-Implementation">Flymake
+    Implementation</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Syntax-check-models-17"></a><a name="index-Master-file-18"></a>
-Syntax check is considered possible if there's an entry in
-<code>flymake-allowed-file-name-masks</code> matching buffer's filename and
-its <code>init-function</code> returns non-<code>nil</code> value.
+  <h3 class="section">5.1 Determining whether syntax check is
+  possible</h3>
 
-   <p>Two syntax check modes are distinguished:
+  <p><a name="index-Syntax-check-models-17" id=
+  "index-Syntax-check-models-17"></a><a name="index-Master-file-18"
+  id="index-Master-file-18"></a> Syntax check is considered
+  possible if there's an entry in
+  <code>flymake-allowed-file-name-masks</code> matching buffer's
+  filename and its <code>init-function</code> returns
+  non-<code>nil</code> value.</p>
 
-     <ol type=1 start=1>
+  <p>Two syntax check modes are distinguished:</p>
 
-     <li>Buffer can be syntax checked in a standalone fashion, that is, the
-file (its temporary copy, in fact) can be passed over to the compiler to
-do the syntax check. Examples are C/C++ (.c, .cpp) and Java (.java)
-sources.
+  <ol type="1" start="1">
+    <li>Buffer can be syntax checked in a standalone fashion, that
+    is, the file (its temporary copy, in fact) can be passed over
+    to the compiler to do the syntax check. Examples are C/C++ (.c,
+    .cpp) and Java (.java) sources.</li>
 
-     <li>Buffer can be syntax checked, but additional file, called master file,
-is required to perform this operation. A master file is a file that
-includes the current file, so that running a syntax check tool on it
-will also check syntax in the current file. Examples are C/C++ (.h,
-.hpp) headers.
+    <li>Buffer can be syntax checked, but additional file, called
+    master file, is required to perform this operation. A master
+    file is a file that includes the current file, so that running
+    a syntax check tool on it will also check syntax in the current
+    file. Examples are C/C++ (.h, .hpp) headers.</li>
+  </ol>
 
-        </ol>
+  <p>These modes are handled inside init/cleanup/getfname
+  functions, see <a href=
+  "Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool">
+  Adding support for a new syntax check tool</a>.</p>
 
-   <p>These modes are handled inside init/cleanup/getfname functions, see
-<a href="Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool">Adding support for a new syntax check tool</a>.
-
-   <p>Flymake contains implementations of all functionality required to
-support different syntax check modes described above (making
-temporary copies, finding master files, etc.), as well as some
-tool-specific (routines for <code>make</code>, <code>Ant</code>, etc.) code.
-
-   </body></html>
-
+  <p>Flymake contains implementations of all functionality required
+  to support different syntax check modes described above (making
+  temporary copies, finding master files, etc.), as well as some
+  tool-specific (routines for <code>make</code>, <code>Ant</code>,
+  etc.) code.</p>
+</body>
+</html>

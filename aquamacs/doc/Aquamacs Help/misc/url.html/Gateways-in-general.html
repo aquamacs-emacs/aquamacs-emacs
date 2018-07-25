@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the manual for the url Emacs Lisp library.
 
 Copyright (C) 1993-1999, 2002, 2004-2016 Free Software
@@ -15,221 +17,410 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>URL Programmer&rsquo;s Manual: Gateways in general</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="URL Programmer&rsquo;s Manual: Gateways in general">
-<meta name="keywords" content="URL Programmer&rsquo;s Manual: Gateways in general">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="General-Facilities.html#General-Facilities" rel="up" title="General Facilities">
-<link href="Suppressing-network-connections.html#Suppressing-network-connections" rel="next" title="Suppressing network connections">
-<link href="Proxies.html#Proxies" rel="prev" title="Proxies">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>URL Programmer&rsquo;s Manual: Gateways in general</title>
+  <meta name="description" content=
+  "URL Programmer&rsquo;s Manual: Gateways in general" />
+  <meta name="keywords" content=
+  "URL Programmer&rsquo;s Manual: Gateways in general" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="General-Facilities.html#General-Facilities" rel="up"
+  title="General Facilities" />
+  <link href=
+  "Suppressing-network-connections.html#Suppressing-network-connections"
+  rel="next" title="Suppressing network connections" />
+  <link href="Proxies.html#Proxies" rel="prev" title="Proxies" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Gateways-in-general"></a>
-<div class="header">
-<p>
-Next: <a href="History.html#History" accesskey="n" rel="next">History</a>, Previous: <a href="Proxies.html#Proxies" accesskey="p" rel="prev">Proxies</a>, Up: <a href="General-Facilities.html#General-Facilities" accesskey="u" rel="up">General Facilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Gateways-in-General"></a>
-<h3 class="section">5.3 Gateways in General</h3>
-<a name="index-gateways"></a>
-<a name="index-firewalls"></a>
+<body lang="en" xml:lang="en">
+  <a name="Gateways-in-general" id="Gateways-in-general"></a>
 
-<p>The library provides a general gateway layer through which all
-networking passes.  It can both control access to the network and
-provide access through gateways in firewalls.  This may make direct
-connections in some cases and pass through some sort of gateway in
-others.<a name="DOCF1" href="#FOOT1"><sup>1</sup></a>  The library&rsquo;s basic function responsible for
-making connections is <code>url-open-stream</code>.
-</p>
-<dl>
-<dt><a name="index-url_002dopen_002dstream"></a>Function: <strong>url-open-stream</strong> <em>name buffer host service</em></dt>
-<dd><a name="index-opening-a-stream"></a>
-<a name="index-stream_002c-opening"></a>
-<p>Open a stream to <var>host</var>, possibly via a gateway.  The other
-arguments are as for <code>open-network-stream</code>.  This will not make a
-connection if <code>url-gateway-unplugged</code> is non-<code>nil</code>.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="History.html#History" accesskey="n" rel=
+    "next">History</a>, Previous: <a href="Proxies.html#Proxies"
+    accesskey="p" rel="prev">Proxies</a>, Up: <a href=
+    "General-Facilities.html#General-Facilities" accesskey="u" rel=
+    "up">General Facilities</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Gateways-in-General" id="Gateways-in-General"></a>
 
-<dl>
-<dt><a name="index-url_002dgateway_002dlocal_002dhost_002dregexp"></a>Variable: <strong>url-gateway-local-host-regexp</strong></dt>
-<dd><p>This is a regular expression that matches local hosts that do not
-require the use of a gateway.  If <code>nil</code>, all connections are made
-through the gateway.
-</p></dd></dl>
+  <h3 class="section">5.3 Gateways in General</h3><a name=
+  "index-gateways" id="index-gateways"></a> <a name=
+  "index-firewalls" id="index-firewalls"></a>
 
-<dl>
-<dt><a name="index-url_002dgateway_002dmethod"></a>Variable: <strong>url-gateway-method</strong></dt>
-<dd><p>This variable controls which gateway method is used.  It may be useful
-to bind it temporarily in some applications.  It has values taken from
-a list of symbols.  Possible values are:
-</p>
-<dl compact="compact">
-<dt><code>telnet</code></dt>
-<dd><a name="index-telnet-1"></a>
-<p>Use this method if you must first telnet and log into a gateway host,
-and then run telnet from that host to connect to outside machines.
-</p>
-</dd>
-<dt><code>rlogin</code></dt>
-<dd><a name="index-rlogin-1"></a>
-<p>This method is identical to <code>telnet</code>, but uses <code>rlogin</code>
-to log into the remote machine without having to send the username and
-password over the wire every time.
-</p>
-</dd>
-<dt><code>socks</code></dt>
-<dd><a name="index-SOCKS"></a>
-<p>Use if the firewall has a <small>SOCKS</small> gateway running on it.  The
-<small>SOCKS</small> v5 protocol is defined in RFC 1928.
-</p>
+  <p>The library provides a general gateway layer through which all
+  networking passes. It can both control access to the network and
+  provide access through gateways in firewalls. This may make
+  direct connections in some cases and pass through some sort of
+  gateway in others.<a name="DOCF1" href="#FOOT1" id=
+  "DOCF1"><sup>1</sup></a> The library&rsquo;s basic function
+  responsible for making connections is
+  <code>url-open-stream</code>.</p>
 
-</dd>
-<dt><code>native</code></dt>
-<dd><p>This method uses Emacs&rsquo;s builtin networking directly.  This is the
-default.  It can be used only if there is no firewall blocking access.
-</p></dd>
-</dl>
-</dd></dl>
+  <dl>
+    <dt><a name="index-url_002dopen_002dstream" id=
+    "index-url_002dopen_002dstream"></a>Function:
+    <strong>url-open-stream</strong> <em>name buffer host
+    service</em></dt>
 
-<p>The following variables control the gateway methods.
-</p>
-<dl>
-<dt><a name="index-url_002dgateway_002dtelnet_002dhost"></a>User Option: <strong>url-gateway-telnet-host</strong></dt>
-<dd><p>The gateway host to telnet to.  Once logged in there, you then telnet
-out to the hosts you want to connect to.
-</p></dd></dl>
-<dl>
-<dt><a name="index-url_002dgateway_002dtelnet_002dparameters"></a>User Option: <strong>url-gateway-telnet-parameters</strong></dt>
-<dd><p>This should be a list of parameters to pass to the <code>telnet</code> program.
-</p></dd></dl>
-<dl>
-<dt><a name="index-url_002dgateway_002dtelnet_002dpassword_002dprompt"></a>User Option: <strong>url-gateway-telnet-password-prompt</strong></dt>
-<dd><p>This is a regular expression that matches the password prompt when
-logging in.
-</p></dd></dl>
-<dl>
-<dt><a name="index-url_002dgateway_002dtelnet_002dlogin_002dprompt"></a>User Option: <strong>url-gateway-telnet-login-prompt</strong></dt>
-<dd><p>This is a regular expression that matches the username prompt when
-logging in.
-</p></dd></dl>
-<dl>
-<dt><a name="index-url_002dgateway_002dtelnet_002duser_002dname"></a>User Option: <strong>url-gateway-telnet-user-name</strong></dt>
-<dd><p>The username to log in with.
-</p></dd></dl>
-<dl>
-<dt><a name="index-url_002dgateway_002dtelnet_002dpassword"></a>User Option: <strong>url-gateway-telnet-password</strong></dt>
-<dd><p>The password to send when logging in.
-</p></dd></dl>
-<dl>
-<dt><a name="index-url_002dgateway_002dprompt_002dpattern"></a>User Option: <strong>url-gateway-prompt-pattern</strong></dt>
-<dd><p>This is a regular expression that matches the shell prompt.
-</p></dd></dl>
+    <dd>
+      <a name="index-opening-a-stream" id=
+      "index-opening-a-stream"></a> <a name=
+      "index-stream_002c-opening" id=
+      "index-stream_002c-opening"></a>
 
-<dl>
-<dt><a name="index-url_002dgateway_002drlogin_002dhost"></a>User Option: <strong>url-gateway-rlogin-host</strong></dt>
-<dd><p>Host to &lsquo;<samp>rlogin</samp>&rsquo; to before telnetting out.
-</p></dd></dl>
-<dl>
-<dt><a name="index-url_002dgateway_002drlogin_002dparameters"></a>User Option: <strong>url-gateway-rlogin-parameters</strong></dt>
-<dd><p>Parameters to pass to &lsquo;<samp>rsh</samp>&rsquo;.
-</p></dd></dl>
-<dl>
-<dt><a name="index-url_002dgateway_002drlogin_002duser_002dname"></a>User Option: <strong>url-gateway-rlogin-user-name</strong></dt>
-<dd><p>User name to use when logging in to the gateway.
-</p></dd></dl>
-<dl>
-<dt><a name="index-url_002dgateway_002dprompt_002dpattern-1"></a>User Option: <strong>url-gateway-prompt-pattern</strong></dt>
-<dd><p>This is a regular expression that matches the shell prompt.
-</p></dd></dl>
+      <p>Open a stream to <var>host</var>, possibly via a gateway.
+      The other arguments are as for
+      <code>open-network-stream</code>. This will not make a
+      connection if <code>url-gateway-unplugged</code> is
+      non-<code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-socks_002dserver"></a>User Option: <strong>socks-server</strong></dt>
-<dd><p>This specifies the default server, it takes the form
-<code>(&quot;Default&nbsp;server&quot;&nbsp;<var>server</var>&nbsp;<var>port</var>&nbsp;<var>version</var>)</code><!-- /@w -->
-where <var>version</var> can be either 4 or 5.
-</p></dd></dl>
-<dl>
-<dt><a name="index-socks_002dpassword"></a>Variable: <strong>socks-password</strong></dt>
-<dd><p>If this is <code>nil</code> then you will be asked for the password,
-otherwise it will be used as the password for authenticating you to
-the <small>SOCKS</small> server.
-</p></dd></dl>
-<dl>
-<dt><a name="index-socks_002dusername"></a>Variable: <strong>socks-username</strong></dt>
-<dd><p>This is the username to use when authenticating yourself to the
-<small>SOCKS</small> server.  By default this is your login name.
-</p></dd></dl>
-<dl>
-<dt><a name="index-socks_002dtimeout"></a>Variable: <strong>socks-timeout</strong></dt>
-<dd><p>This controls how long, in seconds, to wait for responses from the
-<small>SOCKS</small> server; it is 5 by default.
-</p></dd></dl>
-<dl>
-<dt><a name="index-socks_002dnslookup_002dprogram"></a>User Option: <strong>socks-nslookup-program</strong></dt>
-<dd><a name="index-nslookup"></a>
-<p>This the &lsquo;<samp>nslookup</samp>&rsquo; program.  It is <code>&quot;nslookup&quot;</code> by default.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-url_002dgateway_002dlocal_002dhost_002dregexp" id=
+    "index-url_002dgateway_002dlocal_002dhost_002dregexp"></a>Variable:
+    <strong>url-gateway-local-host-regexp</strong></dt>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Suppressing-network-connections.html#Suppressing-network-connections" accesskey="1">Suppressing network connections</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+    <dd>
+      <p>This is a regular expression that matches local hosts that
+      do not require the use of a gateway. If <code>nil</code>, all
+      connections are made through the gateway.</p>
+    </dd>
+  </dl>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl>
+    <dt><a name="index-url_002dgateway_002dmethod" id=
+    "index-url_002dgateway_002dmethod"></a>Variable:
+    <strong>url-gateway-method</strong></dt>
 
-<h3><a name="FOOT1" href="#DOCF1">(1)</a></h3>
-<p>Proxies (which only operate over HTTP) are
-implemented using this.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="History.html#History" accesskey="n" rel="next">History</a>, Previous: <a href="Proxies.html#Proxies" accesskey="p" rel="prev">Proxies</a>, Up: <a href="General-Facilities.html#General-Facilities" accesskey="u" rel="up">General Facilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This variable controls which gateway method is used. It
+      may be useful to bind it temporarily in some applications. It
+      has values taken from a list of symbols. Possible values
+      are:</p>
 
+      <dl compact="compact">
+        <dt><code>telnet</code></dt>
 
+        <dd>
+          <a name="index-telnet-1" id="index-telnet-1"></a>
 
+          <p>Use this method if you must first telnet and log into
+          a gateway host, and then run telnet from that host to
+          connect to outside machines.</p>
+        </dd>
+
+        <dt><code>rlogin</code></dt>
+
+        <dd>
+          <a name="index-rlogin-1" id="index-rlogin-1"></a>
+
+          <p>This method is identical to <code>telnet</code>, but
+          uses <code>rlogin</code> to log into the remote machine
+          without having to send the username and password over the
+          wire every time.</p>
+        </dd>
+
+        <dt><code>socks</code></dt>
+
+        <dd>
+          <a name="index-SOCKS" id="index-SOCKS"></a>
+
+          <p>Use if the firewall has a <small>SOCKS</small> gateway
+          running on it. The <small>SOCKS</small> v5 protocol is
+          defined in RFC 1928.</p>
+        </dd>
+
+        <dt><code>native</code></dt>
+
+        <dd>
+          <p>This method uses Emacs&rsquo;s builtin networking
+          directly. This is the default. It can be used only if
+          there is no firewall blocking access.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <p>The following variables control the gateway methods.</p>
+
+  <dl>
+    <dt><a name="index-url_002dgateway_002dtelnet_002dhost" id=
+    "index-url_002dgateway_002dtelnet_002dhost"></a>User Option:
+    <strong>url-gateway-telnet-host</strong></dt>
+
+    <dd>
+      <p>The gateway host to telnet to. Once logged in there, you
+      then telnet out to the hosts you want to connect to.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-url_002dgateway_002dtelnet_002dparameters"
+    id="index-url_002dgateway_002dtelnet_002dparameters"></a>User
+    Option: <strong>url-gateway-telnet-parameters</strong></dt>
+
+    <dd>
+      <p>This should be a list of parameters to pass to the
+      <code>telnet</code> program.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-url_002dgateway_002dtelnet_002dpassword_002dprompt" id=
+    "index-url_002dgateway_002dtelnet_002dpassword_002dprompt"></a>User
+    Option:
+    <strong>url-gateway-telnet-password-prompt</strong></dt>
+
+    <dd>
+      <p>This is a regular expression that matches the password
+      prompt when logging in.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-url_002dgateway_002dtelnet_002dlogin_002dprompt" id=
+    "index-url_002dgateway_002dtelnet_002dlogin_002dprompt"></a>User
+    Option: <strong>url-gateway-telnet-login-prompt</strong></dt>
+
+    <dd>
+      <p>This is a regular expression that matches the username
+      prompt when logging in.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-url_002dgateway_002dtelnet_002duser_002dname" id=
+    "index-url_002dgateway_002dtelnet_002duser_002dname"></a>User
+    Option: <strong>url-gateway-telnet-user-name</strong></dt>
+
+    <dd>
+      <p>The username to log in with.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-url_002dgateway_002dtelnet_002dpassword" id=
+    "index-url_002dgateway_002dtelnet_002dpassword"></a>User
+    Option: <strong>url-gateway-telnet-password</strong></dt>
+
+    <dd>
+      <p>The password to send when logging in.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-url_002dgateway_002dprompt_002dpattern" id=
+    "index-url_002dgateway_002dprompt_002dpattern"></a>User Option:
+    <strong>url-gateway-prompt-pattern</strong></dt>
+
+    <dd>
+      <p>This is a regular expression that matches the shell
+      prompt.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-url_002dgateway_002drlogin_002dhost" id=
+    "index-url_002dgateway_002drlogin_002dhost"></a>User Option:
+    <strong>url-gateway-rlogin-host</strong></dt>
+
+    <dd>
+      <p>Host to &lsquo;<samp>rlogin</samp>&rsquo; to before
+      telnetting out.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-url_002dgateway_002drlogin_002dparameters"
+    id="index-url_002dgateway_002drlogin_002dparameters"></a>User
+    Option: <strong>url-gateway-rlogin-parameters</strong></dt>
+
+    <dd>
+      <p>Parameters to pass to &lsquo;<samp>rsh</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-url_002dgateway_002drlogin_002duser_002dname" id=
+    "index-url_002dgateway_002drlogin_002duser_002dname"></a>User
+    Option: <strong>url-gateway-rlogin-user-name</strong></dt>
+
+    <dd>
+      <p>User name to use when logging in to the gateway.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-url_002dgateway_002dprompt_002dpattern-1"
+    id="index-url_002dgateway_002dprompt_002dpattern-1"></a>User
+    Option: <strong>url-gateway-prompt-pattern</strong></dt>
+
+    <dd>
+      <p>This is a regular expression that matches the shell
+      prompt.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-socks_002dserver" id=
+    "index-socks_002dserver"></a>User Option:
+    <strong>socks-server</strong></dt>
+
+    <dd>
+      <p>This specifies the default server, it takes the form
+      <code>("Default&nbsp;server"&nbsp;<var>server</var>&nbsp;<var>port</var>&nbsp;<var>version</var>)</code><!-- /@w -->
+      where <var>version</var> can be either 4 or 5.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-socks_002dpassword" id=
+    "index-socks_002dpassword"></a>Variable:
+    <strong>socks-password</strong></dt>
+
+    <dd>
+      <p>If this is <code>nil</code> then you will be asked for the
+      password, otherwise it will be used as the password for
+      authenticating you to the <small>SOCKS</small> server.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-socks_002dusername" id=
+    "index-socks_002dusername"></a>Variable:
+    <strong>socks-username</strong></dt>
+
+    <dd>
+      <p>This is the username to use when authenticating yourself
+      to the <small>SOCKS</small> server. By default this is your
+      login name.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-socks_002dtimeout" id=
+    "index-socks_002dtimeout"></a>Variable:
+    <strong>socks-timeout</strong></dt>
+
+    <dd>
+      <p>This controls how long, in seconds, to wait for responses
+      from the <small>SOCKS</small> server; it is 5 by default.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-socks_002dnslookup_002dprogram" id=
+    "index-socks_002dnslookup_002dprogram"></a>User Option:
+    <strong>socks-nslookup-program</strong></dt>
+
+    <dd>
+      <a name="index-nslookup" id="index-nslookup"></a>
+
+      <p>This the &lsquo;<samp>nslookup</samp>&rsquo; program. It
+      is <code>"nslookup"</code> by default.</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Suppressing-network-connections.html#Suppressing-network-connections"
+      accesskey="1">Suppressing network connections</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT1" href="#DOCF1" id="FOOT1">(1)</a></h3>
+
+    <p>Proxies (which only operate over HTTP) are implemented using
+    this.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="History.html#History" accesskey="n" rel=
+    "next">History</a>, Previous: <a href="Proxies.html#Proxies"
+    accesskey="p" rel="prev">Proxies</a>, Up: <a href=
+    "General-Facilities.html#General-Facilities" accesskey="u" rel=
+    "up">General Facilities</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,89 +18,119 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Bib-Cite</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Bib-Cite">
-<meta name="keywords" content="RefTeX User Manual: Bib-Cite">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="AUCTeX.html#AUCTeX" rel="up" title="AUCTeX">
-<link href="Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds" rel="next" title="Problems and Work-Arounds">
-<link href="Style-Files.html#Style-Files" rel="prev" title="Style Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Bib-Cite</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Bib-Cite" />
+  <meta name="keywords" content="RefTeX User Manual: Bib-Cite" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="AUCTeX.html#AUCTeX" rel="up" title="AUCTeX" />
+  <link href=
+  "Problems-and-Work_002dArounds.html#Problems-and-Work_002dArounds"
+  rel="next" title="Problems and Work-Arounds" />
+  <link href="Style-Files.html#Style-Files" rel="prev" title=
+  "Style Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Bib_002dCite"></a>
-<div class="header">
-<p>
-Previous: <a href="Style-Files.html#Style-Files" accesskey="p" rel="prev">Style Files</a>, Up: <a href="AUCTeX.html#AUCTeX" accesskey="u" rel="up">AUCTeX</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Bib_002dCite-1"></a>
-<h3 class="section">14.3 Bib-Cite</h3>
-<a name="index-bib_002dcite_002c-Emacs-package"></a>
-<a name="index-Emacs-packages_002c-bib_002dcite"></a>
+<body lang="en" xml:lang="en">
+  <a name="Bib_002dCite" id="Bib_002dCite"></a>
 
-<p>Once you have written a document with labels, references and citations,
-it can be nice to read it like a hypertext document.  RefTeX has
-support for that: <code>reftex-view-crossref</code> (bound to <kbd>C-c
-&amp;</kbd>), <code>reftex-mouse-view-crossref</code> (bound to <kbd>S-mouse-2</kbd>), and
-<code>reftex-search-document</code>.  A somewhat fancier interface with mouse
-highlighting is provided (among other things) by Peter S. Galbraith&rsquo;s
-<samp>bib-cite.el</samp>.  There is some overlap in the functionalities of
-Bib-cite and RefTeX.  Bib-cite.el comes bundled with
-AUCTeX.
-</p>
-<p>Bib-cite version 3.06 and later can be configured so that bib-cite&rsquo;s
-mouse functions use RefTeX for displaying references and citations.
-This can be useful in particular when working with the LaTeX <code>xr</code>
-package or with an explicit <code>thebibliography</code> environment (rather
-than BibTeX).  Bib-cite cannot handle those, but RefTeX does.  To
-make use of this feature, try
-</p>
-<a name="index-bib_002dcite_002duse_002dreftex_002dview_002dcrossref"></a>
-<div class="lisp">
-<pre class="lisp">(setq bib-cite-use-reftex-view-crossref t)
-</pre></div>
+  <div class="header">
+    <p>Previous: <a href="Style-Files.html#Style-Files" accesskey=
+    "p" rel="prev">Style Files</a>, Up: <a href=
+    "AUCTeX.html#AUCTeX" accesskey="u" rel="up">AUCTeX</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Bib_002dCite-1" id="Bib_002dCite-1"></a>
 
+  <h3 class="section">14.3 Bib-Cite</h3><a name=
+  "index-bib_002dcite_002c-Emacs-package" id=
+  "index-bib_002dcite_002c-Emacs-package"></a> <a name=
+  "index-Emacs-packages_002c-bib_002dcite" id=
+  "index-Emacs-packages_002c-bib_002dcite"></a>
 
+  <p>Once you have written a document with labels, references and
+  citations, it can be nice to read it like a hypertext document.
+  RefTeX has support for that: <code>reftex-view-crossref</code>
+  (bound to <kbd>C-c &amp;</kbd>),
+  <code>reftex-mouse-view-crossref</code> (bound to
+  <kbd>S-mouse-2</kbd>), and <code>reftex-search-document</code>. A
+  somewhat fancier interface with mouse highlighting is provided
+  (among other things) by Peter S. Galbraith&rsquo;s
+  <samp>bib-cite.el</samp>. There is some overlap in the
+  functionalities of Bib-cite and RefTeX. Bib-cite.el comes bundled
+  with AUCTeX.</p>
 
+  <p>Bib-cite version 3.06 and later can be configured so that
+  bib-cite&rsquo;s mouse functions use RefTeX for displaying
+  references and citations. This can be useful in particular when
+  working with the LaTeX <code>xr</code> package or with an
+  explicit <code>thebibliography</code> environment (rather than
+  BibTeX). Bib-cite cannot handle those, but RefTeX does. To make
+  use of this feature, try</p><a name=
+  "index-bib_002dcite_002duse_002dreftex_002dview_002dcrossref" id=
+  "index-bib_002dcite_002duse_002dreftex_002dview_002dcrossref"></a>
 
+  <div class="lisp">
+    <pre class="lisp">
+(setq bib-cite-use-reftex-view-crossref t)
+</pre>
+  </div>
 </body>
 </html>

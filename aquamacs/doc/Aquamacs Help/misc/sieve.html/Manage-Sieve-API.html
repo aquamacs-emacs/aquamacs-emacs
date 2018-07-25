@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the Emacs Sieve package, for server-side mail filtering.
 
 Copyright (C) 2001-2016 Free Software Foundation, Inc.
@@ -14,142 +16,215 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Sieve Manual: Manage Sieve API</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Sieve Manual: Manage Sieve API">
-<meta name="keywords" content="Emacs Sieve Manual: Manage Sieve API">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Standards.html#Standards" rel="next" title="Standards">
-<link href="Examples.html#Examples" rel="prev" title="Examples">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Sieve Manual: Manage Sieve API</title>
+  <meta name="description" content=
+  "Emacs Sieve Manual: Manage Sieve API" />
+  <meta name="keywords" content=
+  "Emacs Sieve Manual: Manage Sieve API" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Standards.html#Standards" rel="next" title=
+  "Standards" />
+  <link href="Examples.html#Examples" rel="prev" title=
+  "Examples" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Manage-Sieve-API"></a>
-<div class="header">
-<p>
-Next: <a href="Standards.html#Standards" accesskey="n" rel="next">Standards</a>, Previous: <a href="Examples.html#Examples" accesskey="p" rel="prev">Examples</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Manage-Sieve-API-1"></a>
-<h2 class="chapter">5 Manage Sieve API</h2>
+<body lang="en" xml:lang="en">
+  <a name="Manage-Sieve-API" id="Manage-Sieve-API"></a>
 
-<p>The <samp>sieve-manage.el</samp> library contains low-level functionality
-for talking to a server with the <small>MANAGESIEVE</small> protocol.
-</p>
-<p>A number of user-visible variables exist, which all can be customized
-in the <code>sieve</code> group (<kbd>M-x customize-group RET sieve RET</kbd>):
-</p>
-<dl compact="compact">
-<dt><code>sieve-manage-default-port</code></dt>
-<dd><a name="index-sieve_002dmanage_002ddefault_002dport"></a>
-<p>Sets the default port to use, the suggested port number is <code>2000</code>.
-</p>
-</dd>
-<dt><code>sieve-manage-log</code></dt>
-<dd><a name="index-sieve_002dmanage_002dlog"></a>
-<p>If non-<code>nil</code>, should be a string naming a buffer where a protocol trace
-is dumped (for debugging purposes).
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Standards.html#Standards" accesskey="n" rel=
+    "next">Standards</a>, Previous: <a href=
+    "Examples.html#Examples" accesskey="p" rel="prev">Examples</a>,
+    Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Manage-Sieve-API-1" id="Manage-Sieve-API-1"></a>
 
-<p>The API functions include:
-</p>
-<dl compact="compact">
-<dt><code>sieve-manage-open</code></dt>
-<dd><a name="index-sieve_002dmanage_002dopen"></a>
-<p>Open connection to managesieve server, returning a buffer to be used
-by all other API functions.
-</p>
-</dd>
-<dt><code>sieve-manage-opened</code></dt>
-<dd><a name="index-sieve_002dmanage_002dopened"></a>
-<p>Check if a server is open or not.
-</p>
-</dd>
-<dt><code>sieve-manage-close</code></dt>
-<dd><a name="index-sieve_002dmanage_002dclose"></a>
-<p>Close a server connection.
-</p>
-</dd>
-<dt><code>sieve-manage-authenticate</code></dt>
-<dd><a name="index-sieve_002dmanage_002dauthenticate"></a>
-<p>Authenticate to the server.
-</p>
-</dd>
-<dt><code>sieve-manage-capability</code></dt>
-<dd><a name="index-sieve_002dmanage_002dcapability"></a>
-<p>Return a list of capabilities the server supports.
-</p>
-</dd>
-<dt><code>sieve-manage-listscripts</code></dt>
-<dd><a name="index-sieve_002dmanage_002dlistscripts"></a>
-<p>List scripts on the server.
-</p>
-</dd>
-<dt><code>sieve-manage-havespace</code></dt>
-<dd><a name="index-sieve_002dmanage_002dhavespace"></a>
-<p>Return non-<code>nil</code> if the server has room for a script of given
-size.
-</p>
-</dd>
-<dt><code>sieve-manage-getscript</code></dt>
-<dd><a name="index-sieve_002dmanage_002dgetscript"></a>
-<p>Download script from server.
-</p>
-</dd>
-<dt><code>sieve-manage-putscript</code></dt>
-<dd><a name="index-sieve_002dmanage_002dputscript"></a>
-<p>Upload script to server.
-</p>
-</dd>
-<dt><code>sieve-manage-setactive</code></dt>
-<dd><a name="index-sieve_002dmanage_002dsetactive"></a>
-<p>Indicate which script on the server should be active.
-</p>
-</dd>
-</dl>
+  <h2 class="chapter">5 Manage Sieve API</h2>
 
+  <p>The <samp>sieve-manage.el</samp> library contains low-level
+  functionality for talking to a server with the
+  <small>MANAGESIEVE</small> protocol.</p>
 
+  <p>A number of user-visible variables exist, which all can be
+  customized in the <code>sieve</code> group (<kbd>M-x
+  customize-group RET sieve RET</kbd>):</p>
 
+  <dl compact="compact">
+    <dt><code>sieve-manage-default-port</code></dt>
 
+    <dd>
+      <a name="index-sieve_002dmanage_002ddefault_002dport" id=
+      "index-sieve_002dmanage_002ddefault_002dport"></a>
+
+      <p>Sets the default port to use, the suggested port number is
+      <code>2000</code>.</p>
+    </dd>
+
+    <dt><code>sieve-manage-log</code></dt>
+
+    <dd>
+      <a name="index-sieve_002dmanage_002dlog" id=
+      "index-sieve_002dmanage_002dlog"></a>
+
+      <p>If non-<code>nil</code>, should be a string naming a
+      buffer where a protocol trace is dumped (for debugging
+      purposes).</p>
+    </dd>
+  </dl>
+
+  <p>The API functions include:</p>
+
+  <dl compact="compact">
+    <dt><code>sieve-manage-open</code></dt>
+
+    <dd>
+      <a name="index-sieve_002dmanage_002dopen" id=
+      "index-sieve_002dmanage_002dopen"></a>
+
+      <p>Open connection to managesieve server, returning a buffer
+      to be used by all other API functions.</p>
+    </dd>
+
+    <dt><code>sieve-manage-opened</code></dt>
+
+    <dd>
+      <a name="index-sieve_002dmanage_002dopened" id=
+      "index-sieve_002dmanage_002dopened"></a>
+
+      <p>Check if a server is open or not.</p>
+    </dd>
+
+    <dt><code>sieve-manage-close</code></dt>
+
+    <dd>
+      <a name="index-sieve_002dmanage_002dclose" id=
+      "index-sieve_002dmanage_002dclose"></a>
+
+      <p>Close a server connection.</p>
+    </dd>
+
+    <dt><code>sieve-manage-authenticate</code></dt>
+
+    <dd>
+      <a name="index-sieve_002dmanage_002dauthenticate" id=
+      "index-sieve_002dmanage_002dauthenticate"></a>
+
+      <p>Authenticate to the server.</p>
+    </dd>
+
+    <dt><code>sieve-manage-capability</code></dt>
+
+    <dd>
+      <a name="index-sieve_002dmanage_002dcapability" id=
+      "index-sieve_002dmanage_002dcapability"></a>
+
+      <p>Return a list of capabilities the server supports.</p>
+    </dd>
+
+    <dt><code>sieve-manage-listscripts</code></dt>
+
+    <dd>
+      <a name="index-sieve_002dmanage_002dlistscripts" id=
+      "index-sieve_002dmanage_002dlistscripts"></a>
+
+      <p>List scripts on the server.</p>
+    </dd>
+
+    <dt><code>sieve-manage-havespace</code></dt>
+
+    <dd>
+      <a name="index-sieve_002dmanage_002dhavespace" id=
+      "index-sieve_002dmanage_002dhavespace"></a>
+
+      <p>Return non-<code>nil</code> if the server has room for a
+      script of given size.</p>
+    </dd>
+
+    <dt><code>sieve-manage-getscript</code></dt>
+
+    <dd>
+      <a name="index-sieve_002dmanage_002dgetscript" id=
+      "index-sieve_002dmanage_002dgetscript"></a>
+
+      <p>Download script from server.</p>
+    </dd>
+
+    <dt><code>sieve-manage-putscript</code></dt>
+
+    <dd>
+      <a name="index-sieve_002dmanage_002dputscript" id=
+      "index-sieve_002dmanage_002dputscript"></a>
+
+      <p>Upload script to server.</p>
+    </dd>
+
+    <dt><code>sieve-manage-setactive</code></dt>
+
+    <dd>
+      <a name="index-sieve_002dmanage_002dsetactive" id=
+      "index-sieve_002dmanage_002dsetactive"></a>
+
+      <p>Indicate which script on the server should be active.</p>
+    </dd>
+  </dl>
 </body>
 </html>

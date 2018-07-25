@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Statement Templates - Ada Mode</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Ada Mode">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Automatic-Casing.html#Automatic-Casing" title="Automatic Casing">
-<link rel="next" href="Comment-Handling.html#Comment-Handling" title="Comment Handling">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Statement Templates - Ada Mode</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Ada Mode" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Automatic-Casing.html#Automatic-Casing"
+  title="Automatic Casing" />
+  <link rel="next" href="Comment-Handling.html#Comment-Handling"
+  title="Comment Handling" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -24,8 +32,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,53 +45,190 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Statement-Templates"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Comment-Handling.html#Comment-Handling">Comment Handling</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Automatic-Casing.html#Automatic-Casing">Automatic Casing</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Statement-Templates" id="Statement-Templates"></a>
 
-<h2 class="chapter">12 Statement Templates</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Comment-Handling.html#Comment-Handling">Comment Handling</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Automatic-Casing.html#Automatic-Casing">Automatic Casing</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>Templates are defined for most Ada statements, using the Emacs
-&ldquo;skeleton&rdquo; package. They can be inserted in the buffer using the
-following commands:
+  <h2 class="chapter">12 Statement Templates</h2>
 
-     <dl>
-<dt><kbd>C-c t b</kbd><dd><a name="index-ada_002dexception_002dblock-14"></a>exception Block (<code>ada-exception-block</code>). 
-<br><dt><kbd>C-c t c</kbd><dd><a name="index-ada_002dcase-15"></a>case (<code>ada-case</code>). 
-<br><dt><kbd>C-c t d</kbd><dd><a name="index-ada_002ddeclare_002dblock-16"></a>declare Block (<code>ada-declare-block</code>). 
-<br><dt><kbd>C-c t e</kbd><dd><a name="index-ada_002delse-17"></a>else (<code>ada-else</code>). 
-<br><dt><kbd>C-c t f</kbd><dd><a name="index-ada_002dfor_002dloop-18"></a>for Loop (<code>ada-for-loop</code>). 
-<br><dt><kbd>C-c t h</kbd><dd><a name="index-ada_002dheader-19"></a>Header (<code>ada-header</code>). 
-<br><dt><kbd>C-c t i</kbd><dd><a name="index-ada_002dif-20"></a>if (<code>ada-if</code>). 
-<br><dt><kbd>C-c t k</kbd><dd><a name="index-ada_002dpackage_002dbody-21"></a>package Body (<code>ada-package-body</code>). 
-<br><dt><kbd>C-c t l</kbd><dd><a name="index-ada_002dloop-22"></a>loop (<code>ada-loop</code>). 
-<br><dt><kbd>C-c p</kbd><dd><a name="index-ada_002dsubprogram_002dbody-23"></a>subprogram body (<code>ada-subprogram-body</code>). 
-<br><dt><kbd>C-c t t</kbd><dd><a name="index-ada_002dtask_002dbody-24"></a>task Body (<code>ada-task-body</code>). 
-<br><dt><kbd>C-c t w</kbd><dd><a name="index-ada_002dwhile-25"></a>while Loop (<code>ada-while</code>). 
-<br><dt><kbd>C-c t u</kbd><dd><a name="index-ada_002duse-26"></a>use (<code>ada-use</code>). 
-<br><dt><kbd>C-c t x</kbd><dd><a name="index-ada_002dexit-27"></a>exit (<code>ada-exit</code>). 
-<br><dt><kbd>C-c t C-a</kbd><dd><a name="index-ada_002darray-28"></a>array (<code>ada-array</code>). 
-<br><dt><kbd>C-c t C-e</kbd><dd><a name="index-ada_002delsif-29"></a>elsif (<code>ada-elsif</code>). 
-<br><dt><kbd>C-c t C-f</kbd><dd><a name="index-ada_002dfunction_002dspec-30"></a>function Spec (<code>ada-function-spec</code>). 
-<br><dt><kbd>C-c t C-k</kbd><dd><a name="index-ada_002dpackage_002dspec-31"></a>package Spec (<code>ada-package-spec</code>). 
-<br><dt><kbd>C-c t C-p</kbd><dd><a name="index-ada_002dprocedure_002dspec-32"></a>procedure Spec (<code>ada-package-spec</code>. 
-<br><dt><kbd>C-c t C-r</kbd><dd><a name="index-ada_002drecord-33"></a>record (<code>ada-record</code>). 
-<br><dt><kbd>C-c t C-s</kbd><dd><a name="index-ada_002dsubtype-34"></a>subtype (<code>ada-subtype</code>). 
-<br><dt><kbd>C-c t C-t</kbd><dd><a name="index-ada_002dtask_002dspec-35"></a>task Spec (<code>ada-task-spec</code>). 
-<br><dt><kbd>C-c t C-u</kbd><dd><a name="index-ada_002dwith-36"></a>with (<code>ada-with</code>). 
-<br><dt><kbd>C-c t C-v</kbd><dd><a name="index-ada_002dprivate-37"></a>private (<code>ada-private</code>). 
-<br><dt><kbd>C-c t C-w</kbd><dd><a name="index-ada_002dwhen-38"></a>when (<code>ada-when</code>). 
-<br><dt><kbd>C-c t C-x</kbd><dd><a name="index-ada_002dexception-39"></a>exception (<code>ada-exception</code>). 
-<br><dt><kbd>C-c t C-y</kbd><dd><a name="index-ada_002dtype-40"></a>type (<code>ada-type</code>). 
-</dl>
+  <p>Templates are defined for most Ada statements, using the Emacs
+  &ldquo;skeleton&rdquo; package. They can be inserted in the
+  buffer using the following commands:</p>
 
-   </body></html>
+  <dl>
+    <dt><kbd>C-c t b</kbd></dt>
 
+    <dd><a name="index-ada_002dexception_002dblock-14" id=
+    "index-ada_002dexception_002dblock-14"></a>exception Block
+    (<code>ada-exception-block</code>).<br /></dd>
+
+    <dt><kbd>C-c t c</kbd></dt>
+
+    <dd><a name="index-ada_002dcase-15" id=
+    "index-ada_002dcase-15"></a>case
+    (<code>ada-case</code>).<br /></dd>
+
+    <dt><kbd>C-c t d</kbd></dt>
+
+    <dd><a name="index-ada_002ddeclare_002dblock-16" id=
+    "index-ada_002ddeclare_002dblock-16"></a>declare Block
+    (<code>ada-declare-block</code>).<br /></dd>
+
+    <dt><kbd>C-c t e</kbd></dt>
+
+    <dd><a name="index-ada_002delse-17" id=
+    "index-ada_002delse-17"></a>else
+    (<code>ada-else</code>).<br /></dd>
+
+    <dt><kbd>C-c t f</kbd></dt>
+
+    <dd><a name="index-ada_002dfor_002dloop-18" id=
+    "index-ada_002dfor_002dloop-18"></a>for Loop
+    (<code>ada-for-loop</code>).<br /></dd>
+
+    <dt><kbd>C-c t h</kbd></dt>
+
+    <dd><a name="index-ada_002dheader-19" id=
+    "index-ada_002dheader-19"></a>Header
+    (<code>ada-header</code>).<br /></dd>
+
+    <dt><kbd>C-c t i</kbd></dt>
+
+    <dd><a name="index-ada_002dif-20" id=
+    "index-ada_002dif-20"></a>if (<code>ada-if</code>).<br /></dd>
+
+    <dt><kbd>C-c t k</kbd></dt>
+
+    <dd><a name="index-ada_002dpackage_002dbody-21" id=
+    "index-ada_002dpackage_002dbody-21"></a>package Body
+    (<code>ada-package-body</code>).<br /></dd>
+
+    <dt><kbd>C-c t l</kbd></dt>
+
+    <dd><a name="index-ada_002dloop-22" id=
+    "index-ada_002dloop-22"></a>loop
+    (<code>ada-loop</code>).<br /></dd>
+
+    <dt><kbd>C-c p</kbd></dt>
+
+    <dd><a name="index-ada_002dsubprogram_002dbody-23" id=
+    "index-ada_002dsubprogram_002dbody-23"></a>subprogram body
+    (<code>ada-subprogram-body</code>).<br /></dd>
+
+    <dt><kbd>C-c t t</kbd></dt>
+
+    <dd><a name="index-ada_002dtask_002dbody-24" id=
+    "index-ada_002dtask_002dbody-24"></a>task Body
+    (<code>ada-task-body</code>).<br /></dd>
+
+    <dt><kbd>C-c t w</kbd></dt>
+
+    <dd><a name="index-ada_002dwhile-25" id=
+    "index-ada_002dwhile-25"></a>while Loop
+    (<code>ada-while</code>).<br /></dd>
+
+    <dt><kbd>C-c t u</kbd></dt>
+
+    <dd><a name="index-ada_002duse-26" id=
+    "index-ada_002duse-26"></a>use
+    (<code>ada-use</code>).<br /></dd>
+
+    <dt><kbd>C-c t x</kbd></dt>
+
+    <dd><a name="index-ada_002dexit-27" id=
+    "index-ada_002dexit-27"></a>exit
+    (<code>ada-exit</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-a</kbd></dt>
+
+    <dd><a name="index-ada_002darray-28" id=
+    "index-ada_002darray-28"></a>array
+    (<code>ada-array</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-e</kbd></dt>
+
+    <dd><a name="index-ada_002delsif-29" id=
+    "index-ada_002delsif-29"></a>elsif
+    (<code>ada-elsif</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-f</kbd></dt>
+
+    <dd><a name="index-ada_002dfunction_002dspec-30" id=
+    "index-ada_002dfunction_002dspec-30"></a>function Spec
+    (<code>ada-function-spec</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-k</kbd></dt>
+
+    <dd><a name="index-ada_002dpackage_002dspec-31" id=
+    "index-ada_002dpackage_002dspec-31"></a>package Spec
+    (<code>ada-package-spec</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-p</kbd></dt>
+
+    <dd><a name="index-ada_002dprocedure_002dspec-32" id=
+    "index-ada_002dprocedure_002dspec-32"></a>procedure Spec
+    (<code>ada-package-spec</code>.<br /></dd>
+
+    <dt><kbd>C-c t C-r</kbd></dt>
+
+    <dd><a name="index-ada_002drecord-33" id=
+    "index-ada_002drecord-33"></a>record
+    (<code>ada-record</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-s</kbd></dt>
+
+    <dd><a name="index-ada_002dsubtype-34" id=
+    "index-ada_002dsubtype-34"></a>subtype
+    (<code>ada-subtype</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-t</kbd></dt>
+
+    <dd><a name="index-ada_002dtask_002dspec-35" id=
+    "index-ada_002dtask_002dspec-35"></a>task Spec
+    (<code>ada-task-spec</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-u</kbd></dt>
+
+    <dd><a name="index-ada_002dwith-36" id=
+    "index-ada_002dwith-36"></a>with
+    (<code>ada-with</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-v</kbd></dt>
+
+    <dd><a name="index-ada_002dprivate-37" id=
+    "index-ada_002dprivate-37"></a>private
+    (<code>ada-private</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-w</kbd></dt>
+
+    <dd><a name="index-ada_002dwhen-38" id=
+    "index-ada_002dwhen-38"></a>when
+    (<code>ada-when</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-x</kbd></dt>
+
+    <dd><a name="index-ada_002dexception-39" id=
+    "index-ada_002dexception-39"></a>exception
+    (<code>ada-exception</code>).<br /></dd>
+
+    <dt><kbd>C-c t C-y</kbd></dt>
+
+    <dd><a name="index-ada_002dtype-40" id=
+    "index-ada_002dtype-40"></a>type (<code>ada-type</code>).</dd>
+  </dl>
+</body>
+</html>

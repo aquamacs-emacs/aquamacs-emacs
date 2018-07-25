@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,117 +14,160 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: The imap Engine</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: The imap Engine">
-<meta name="keywords" content="Gnus Manual: The imap Engine">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Setting-up-nnir.html#Setting-up-nnir" rel="up" title="Setting up nnir">
-<link href="The-gmane-Engine.html#The-gmane-Engine" rel="next" title="The gmane Engine">
-<link href="Associating-Engines.html#Associating-Engines" rel="prev" title="Associating Engines">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: The imap Engine</title>
+  <meta name="description" content=
+  "Gnus Manual: The imap Engine" />
+  <meta name="keywords" content="Gnus Manual: The imap Engine" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Setting-up-nnir.html#Setting-up-nnir" rel="up" title=
+  "Setting up nnir" />
+  <link href="The-gmane-Engine.html#The-gmane-Engine" rel="next"
+  title="The gmane Engine" />
+  <link href="Associating-Engines.html#Associating-Engines" rel=
+  "prev" title="Associating Engines" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-imap-Engine"></a>
-<div class="header">
-<p>
-Next: <a href="The-gmane-Engine.html#The-gmane-Engine" accesskey="n" rel="next">The gmane Engine</a>, Previous: <a href="Associating-Engines.html#Associating-Engines" accesskey="p" rel="prev">Associating Engines</a>, Up: <a href="Setting-up-nnir.html#Setting-up-nnir" accesskey="u" rel="up">Setting up nnir</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-imap-Engine-1"></a>
-<h4 class="subsubsection">8.1.3.2 The imap Engine</h4>
+<body lang="en" xml:lang="en">
+  <a name="The-imap-Engine" id="The-imap-Engine"></a>
 
-<p>The <code>imap</code> engine requires no configuration.
-</p>
-<p>Queries using the <code>imap</code> engine follow a simple query language.
-The search is always case-insensitive and supports the following
-features (inspired by the Google search input language):
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>Boolean query operators</samp>&rsquo;</dt>
-<dd><p>AND, OR, and NOT are supported, and parentheses can be used to control
-operator precedence, e.g., (emacs OR xemacs) AND linux.  Note that
-operators must be written with all capital letters to be
-recognized.  Also preceding a term with a - sign is equivalent
-to NOT term.
-</p>
-</dd>
-<dt>&lsquo;<samp>Automatic AND queries</samp>&rsquo;</dt>
-<dd><p>If you specify multiple words then they will be treated as an AND
-expression intended to match all components.
-</p>
-</dd>
-<dt>&lsquo;<samp>Phrase searches</samp>&rsquo;</dt>
-<dd><p>If you wrap your query in double-quotes then it will be treated as a
-literal string.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="The-gmane-Engine.html#The-gmane-Engine"
+    accesskey="n" rel="next">The gmane Engine</a>, Previous:
+    <a href="Associating-Engines.html#Associating-Engines"
+    accesskey="p" rel="prev">Associating Engines</a>, Up: <a href=
+    "Setting-up-nnir.html#Setting-up-nnir" accesskey="u" rel=
+    "up">Setting up nnir</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-imap-Engine-1" id="The-imap-Engine-1"></a>
 
-<p>By default the whole message will be searched.  The query can be limited
-to a specific part of a message by using a prefix-arg.  After inputting
-the query this will prompt (with completion) for a message part.
-Choices include &ldquo;Whole message&rdquo;, &ldquo;Subject&rdquo;, &ldquo;From&rdquo;, and
-&ldquo;To&rdquo;.  Any unrecognized input is interpreted as a header name.  For
-example, typing <kbd>Message-ID</kbd> in response to this prompt will limit
-the query to the Message-ID header.
-</p>
-<p>Finally selecting &ldquo;Imap&rdquo; will interpret the query as a raw
-<acronym>IMAP</acronym> search query.  The format of such queries can be found in
-RFC3501.
-</p>
-<p>If you don&rsquo;t like the default of searching whole messages you can
-customize <code>nnir-imap-default-search-key</code>.  For example to use
-<acronym>IMAP</acronym> queries by default
-</p>
-<div class="lisp">
-<pre class="lisp">(setq nnir-imap-default-search-key &quot;Imap&quot;)
-</pre></div>
+  <h4 class="subsubsection">8.1.3.2 The imap Engine</h4>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="The-gmane-Engine.html#The-gmane-Engine" accesskey="n" rel="next">The gmane Engine</a>, Previous: <a href="Associating-Engines.html#Associating-Engines" accesskey="p" rel="prev">Associating Engines</a>, Up: <a href="Setting-up-nnir.html#Setting-up-nnir" accesskey="u" rel="up">Setting up nnir</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The <code>imap</code> engine requires no configuration.</p>
 
+  <p>Queries using the <code>imap</code> engine follow a simple
+  query language. The search is always case-insensitive and
+  supports the following features (inspired by the Google search
+  input language):</p>
 
+  <dl compact="compact">
+    <dt>&lsquo;<samp>Boolean query operators</samp>&rsquo;</dt>
 
+    <dd>
+      <p>AND, OR, and NOT are supported, and parentheses can be
+      used to control operator precedence, e.g., (emacs OR xemacs)
+      AND linux. Note that operators must be written with all
+      capital letters to be recognized. Also preceding a term with
+      a - sign is equivalent to NOT term.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>Automatic AND queries</samp>&rsquo;</dt>
+
+    <dd>
+      <p>If you specify multiple words then they will be treated as
+      an AND expression intended to match all components.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>Phrase searches</samp>&rsquo;</dt>
+
+    <dd>
+      <p>If you wrap your query in double-quotes then it will be
+      treated as a literal string.</p>
+    </dd>
+  </dl>
+
+  <p>By default the whole message will be searched. The query can
+  be limited to a specific part of a message by using a prefix-arg.
+  After inputting the query this will prompt (with completion) for
+  a message part. Choices include &ldquo;Whole message&rdquo;,
+  &ldquo;Subject&rdquo;, &ldquo;From&rdquo;, and &ldquo;To&rdquo;.
+  Any unrecognized input is interpreted as a header name. For
+  example, typing <kbd>Message-ID</kbd> in response to this prompt
+  will limit the query to the Message-ID header.</p>
+
+  <p>Finally selecting &ldquo;Imap&rdquo; will interpret the query
+  as a raw <acronym>IMAP</acronym> search query. The format of such
+  queries can be found in RFC3501.</p>
+
+  <p>If you don&rsquo;t like the default of searching whole
+  messages you can customize
+  <code>nnir-imap-default-search-key</code>. For example to use
+  <acronym>IMAP</acronym> queries by default</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq nnir-imap-default-search-key "Imap")
+</pre>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="The-gmane-Engine.html#The-gmane-Engine"
+    accesskey="n" rel="next">The gmane Engine</a>, Previous:
+    <a href="Associating-Engines.html#Associating-Engines"
+    accesskey="p" rel="prev">Associating Engines</a>, Up: <a href=
+    "Setting-up-nnir.html#Setting-up-nnir" accesskey="u" rel=
+    "up">Setting up nnir</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

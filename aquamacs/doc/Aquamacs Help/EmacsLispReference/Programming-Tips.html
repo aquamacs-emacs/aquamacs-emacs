@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,176 +19,246 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Programming Tips</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Programming Tips">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Programming Tips">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Tips.html#Tips" rel="up" title="Tips">
-<link href="Compilation-Tips.html#Compilation-Tips" rel="next" title="Compilation Tips">
-<link href="Key-Binding-Conventions.html#Key-Binding-Conventions" rel="prev" title="Key Binding Conventions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Programming Tips</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Programming Tips" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Programming Tips" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Tips.html#Tips" rel="up" title="Tips" />
+  <link href="Compilation-Tips.html#Compilation-Tips" rel="next"
+  title="Compilation Tips" />
+  <link href="Key-Binding-Conventions.html#Key-Binding-Conventions"
+  rel="prev" title="Key Binding Conventions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Programming-Tips" id="Programming-Tips"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Compilation-Tips.html#Compilation-Tips"
+    accesskey="n" rel="next">Compilation Tips</a>, Previous:
+    <a href="Key-Binding-Conventions.html#Key-Binding-Conventions"
+    accesskey="p" rel="prev">Key Binding Conventions</a>, Up:
+    <a href="Tips.html#Tips" accesskey="u" rel="up">Tips</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Emacs-Programming-Tips" id="Emacs-Programming-Tips"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Programming-Tips"></a>
-<div class="header">
-<p>
-Next: <a href="Compilation-Tips.html#Compilation-Tips" accesskey="n" rel="next">Compilation Tips</a>, Previous: <a href="Key-Binding-Conventions.html#Key-Binding-Conventions" accesskey="p" rel="prev">Key Binding Conventions</a>, Up: <a href="Tips.html#Tips" accesskey="u" rel="up">Tips</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Emacs-Programming-Tips"></a>
-<h3 class="section">D.3 Emacs Programming Tips</h3>
-<a name="index-programming-conventions"></a>
+  <h3 class="section">D.3 Emacs Programming Tips</h3><a name=
+  "index-programming-conventions" id=
+  "index-programming-conventions"></a>
 
-<p>Following these conventions will make your program fit better
-into Emacs when it runs.
-</p>
-<ul>
-<li> Don&rsquo;t use <code>next-line</code> or <code>previous-line</code> in programs; nearly
-always, <code>forward-line</code> is more convenient as well as more
-predictable and robust.  See <a href="Text-Lines.html#Text-Lines">Text Lines</a>.
+  <p>Following these conventions will make your program fit better
+  into Emacs when it runs.</p>
 
-</li><li> Don&rsquo;t call functions that set the mark, unless setting the mark is one
-of the intended features of your program.  The mark is a user-level
-feature, so it is incorrect to change the mark except to supply a value
-for the user&rsquo;s benefit.  See <a href="The-Mark.html#The-Mark">The Mark</a>.
+  <ul>
+    <li>Don&rsquo;t use <code>next-line</code> or
+    <code>previous-line</code> in programs; nearly always,
+    <code>forward-line</code> is more convenient as well as more
+    predictable and robust. See <a href=
+    "Text-Lines.html#Text-Lines">Text Lines</a>.</li>
 
-<p>In particular, don&rsquo;t use any of these functions:
-</p>
-<ul>
-<li> <code>beginning-of-buffer</code>, <code>end-of-buffer</code>
-</li><li> <code>replace-string</code>, <code>replace-regexp</code>
-</li><li> <code>insert-file</code>, <code>insert-buffer</code>
-</li></ul>
+    <li>Don&rsquo;t call functions that set the mark, unless
+    setting the mark is one of the intended features of your
+    program. The mark is a user-level feature, so it is incorrect
+    to change the mark except to supply a value for the
+    user&rsquo;s benefit. See <a href="The-Mark.html#The-Mark">The
+    Mark</a>.
 
-<p>If you just want to move point, or replace a certain string, or insert
-a file or buffer&rsquo;s contents, without any of the other features
-intended for interactive users, you can replace these functions with
-one or two lines of simple Lisp code.
-</p>
-</li><li> Use lists rather than vectors, except when there is a particular reason
-to use a vector.  Lisp has more facilities for manipulating lists than
-for vectors, and working with lists is usually more convenient.
+      <p>In particular, don&rsquo;t use any of these functions:</p>
 
-<p>Vectors are advantageous for tables that are substantial in size and are
-accessed in random order (not searched front to back), provided there is
-no need to insert or delete elements (only lists allow that).
-</p>
-</li><li> The recommended way to show a message in the echo area is with
-the <code>message</code> function, not <code>princ</code>.  See <a href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>.
+      <ul>
+        <li><code>beginning-of-buffer</code>,
+        <code>end-of-buffer</code></li>
 
-</li><li> When you encounter an error condition, call the function <code>error</code>
-(or <code>signal</code>).  The function <code>error</code> does not return.
-See <a href="Signaling-Errors.html#Signaling-Errors">Signaling Errors</a>.
+        <li><code>replace-string</code>,
+        <code>replace-regexp</code></li>
 
-<p>Don&rsquo;t use <code>message</code>, <code>throw</code>, <code>sleep-for</code>, or
-<code>beep</code> to report errors.
-</p>
-</li><li> An error message should start with a capital letter but should not end
-with a period.
+        <li><code>insert-file</code>,
+        <code>insert-buffer</code></li>
+      </ul>
 
-</li><li> A question asked in the minibuffer with <code>yes-or-no-p</code> or
-<code>y-or-n-p</code> should start with a capital letter and end with
-&lsquo;<samp>? </samp>&rsquo;.
+      <p>If you just want to move point, or replace a certain
+      string, or insert a file or buffer&rsquo;s contents, without
+      any of the other features intended for interactive users, you
+      can replace these functions with one or two lines of simple
+      Lisp code.</p>
+    </li>
 
-</li><li> When you mention a default value in a minibuffer prompt,
-put it and the word &lsquo;<samp>default</samp>&rsquo; inside parentheses.
-It should look like this:
+    <li>Use lists rather than vectors, except when there is a
+    particular reason to use a vector. Lisp has more facilities for
+    manipulating lists than for vectors, and working with lists is
+    usually more convenient.
 
-<div class="example">
-<pre class="example">Enter the answer (default 42):
-</pre></div>
+      <p>Vectors are advantageous for tables that are substantial
+      in size and are accessed in random order (not searched front
+      to back), provided there is no need to insert or delete
+      elements (only lists allow that).</p>
+    </li>
 
-</li><li> In <code>interactive</code>, if you use a Lisp expression to produce a list
-of arguments, don&rsquo;t try to provide the correct default values for
-region or position arguments.  Instead, provide <code>nil</code> for those
-arguments if they were not specified, and have the function body
-compute the default value when the argument is <code>nil</code>.  For
-instance, write this:
+    <li>The recommended way to show a message in the echo area is
+    with the <code>message</code> function, not <code>princ</code>.
+    See <a href="The-Echo-Area.html#The-Echo-Area">The Echo
+    Area</a>.</li>
 
-<div class="example">
-<pre class="example">(defun foo (pos)
+    <li>When you encounter an error condition, call the function
+    <code>error</code> (or <code>signal</code>). The function
+    <code>error</code> does not return. See <a href=
+    "Signaling-Errors.html#Signaling-Errors">Signaling Errors</a>.
+
+      <p>Don&rsquo;t use <code>message</code>, <code>throw</code>,
+      <code>sleep-for</code>, or <code>beep</code> to report
+      errors.</p>
+    </li>
+
+    <li>An error message should start with a capital letter but
+    should not end with a period.</li>
+
+    <li>A question asked in the minibuffer with
+    <code>yes-or-no-p</code> or <code>y-or-n-p</code> should start
+    with a capital letter and end with &lsquo;<samp>?</samp>
+    &rsquo;.</li>
+
+    <li>When you mention a default value in a minibuffer prompt,
+    put it and the word &lsquo;<samp>default</samp>&rsquo; inside
+    parentheses. It should look like this:
+
+      <div class="example">
+        <pre class="example">
+Enter the answer (default 42):
+</pre>
+      </div>
+    </li>
+
+    <li>In <code>interactive</code>, if you use a Lisp expression
+    to produce a list of arguments, don&rsquo;t try to provide the
+    correct default values for region or position arguments.
+    Instead, provide <code>nil</code> for those arguments if they
+    were not specified, and have the function body compute the
+    default value when the argument is <code>nil</code>. For
+    instance, write this:
+
+      <div class="example">
+        <pre class="example">
+(defun foo (pos)
   (interactive
    (list (if <var>specified</var> <var>specified-pos</var>)))
   (unless pos (setq pos <var>default-pos</var>))
   ...)
-</pre></div>
+</pre>
+      </div>
 
-<p>rather than this:
-</p>
-<div class="example">
-<pre class="example">(defun foo (pos)
+      <p>rather than this:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun foo (pos)
   (interactive
    (list (if <var>specified</var> <var>specified-pos</var>
              <var>default-pos</var>)))
   ...)
-</pre></div>
+</pre>
+      </div>
 
-<p>This is so that repetition of the command will recompute
-these defaults based on the current circumstances.
-</p>
-<p>You do not need to take such precautions when you use interactive
-specs &lsquo;<samp>d</samp>&rsquo;, &lsquo;<samp>m</samp>&rsquo; and &lsquo;<samp>r</samp>&rsquo;, because they make special
-arrangements to recompute the argument values on repetition of the
-command.
-</p>
-</li><li> Many commands that take a long time to execute display a message that
-says something like &lsquo;<samp>Operating...</samp>&rsquo; when they start, and change it
-to &lsquo;<samp>Operating...done</samp>&rsquo; when they finish.  Please keep the style of
-these messages uniform: <em>no</em> space around the ellipsis, and
-<em>no</em> period after &lsquo;<samp>done</samp>&rsquo;.  See <a href="Progress.html#Progress">Progress</a>, for an easy way
-to generate such messages.
+      <p>This is so that repetition of the command will recompute
+      these defaults based on the current circumstances.</p>
 
-</li><li> Try to avoid using recursive edits.  Instead, do what the Rmail <kbd>e</kbd>
-command does: use a new local keymap that contains a command defined
-to switch back to the old local keymap.  Or simply switch to another
-buffer and let the user switch back at will.  See <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>.
-</li></ul>
+      <p>You do not need to take such precautions when you use
+      interactive specs &lsquo;<samp>d</samp>&rsquo;,
+      &lsquo;<samp>m</samp>&rsquo; and
+      &lsquo;<samp>r</samp>&rsquo;, because they make special
+      arrangements to recompute the argument values on repetition
+      of the command.</p>
+    </li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Compilation-Tips.html#Compilation-Tips" accesskey="n" rel="next">Compilation Tips</a>, Previous: <a href="Key-Binding-Conventions.html#Key-Binding-Conventions" accesskey="p" rel="prev">Key Binding Conventions</a>, Up: <a href="Tips.html#Tips" accesskey="u" rel="up">Tips</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>Many commands that take a long time to execute display a
+    message that says something like
+    &lsquo;<samp>Operating...</samp>&rsquo; when they start, and
+    change it to &lsquo;<samp>Operating...done</samp>&rsquo; when
+    they finish. Please keep the style of these messages uniform:
+    <em>no</em> space around the ellipsis, and <em>no</em> period
+    after &lsquo;<samp>done</samp>&rsquo;. See <a href=
+    "Progress.html#Progress">Progress</a>, for an easy way to
+    generate such messages.</li>
 
+    <li>Try to avoid using recursive edits. Instead, do what the
+    Rmail <kbd>e</kbd> command does: use a new local keymap that
+    contains a command defined to switch back to the old local
+    keymap. Or simply switch to another buffer and let the user
+    switch back at will. See <a href=
+    "Recursive-Editing.html#Recursive-Editing">Recursive
+    Editing</a>.</li>
+  </ul>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Compilation-Tips.html#Compilation-Tips"
+    accesskey="n" rel="next">Compilation Tips</a>, Previous:
+    <a href="Key-Binding-Conventions.html#Key-Binding-Conventions"
+    accesskey="p" rel="prev">Key Binding Conventions</a>, Up:
+    <a href="Tips.html#Tips" accesskey="u" rel="up">Tips</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

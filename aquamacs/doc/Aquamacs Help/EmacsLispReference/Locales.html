@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,136 +19,209 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Locales</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Locales">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Locales">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up" title="Non-ASCII Characters">
-<link href="Searching-and-Matching.html#Searching-and-Matching" rel="next" title="Searching and Matching">
-<link href="Input-Methods.html#Input-Methods" rel="prev" title="Input Methods">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Locales</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Locales" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Locales" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up"
+  title="Non-ASCII Characters" />
+  <link href="Searching-and-Matching.html#Searching-and-Matching"
+  rel="next" title="Searching and Matching" />
+  <link href="Input-Methods.html#Input-Methods" rel="prev" title=
+  "Input Methods" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Locales" id="Locales"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Input-Methods.html#Input-Methods"
+    accesskey="p" rel="prev">Input Methods</a>, Up: <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Locales-1" id="Locales-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Locales"></a>
-<div class="header">
-<p>
-Previous: <a href="Input-Methods.html#Input-Methods" accesskey="p" rel="prev">Input Methods</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Locales-1"></a>
-<h3 class="section">32.12 Locales</h3>
-<a name="index-locale"></a>
+  <h3 class="section">32.12 Locales</h3><a name="index-locale" id=
+  "index-locale"></a>
 
-<p>In POSIX, locales control which language
-to use in language-related features.  These Emacs variables control
-how Emacs interacts with these features.
-</p>
-<dl>
-<dt><a name="index-locale_002dcoding_002dsystem"></a>Variable: <strong>locale-coding-system</strong></dt>
-<dd><a name="index-keyboard-input-decoding-on-X"></a>
-<p>This variable specifies the coding system to use for decoding system
-error messages and&mdash;on X Window system only&mdash;keyboard input, for
-sending batch output to the standard output and error streams, for
-encoding the format argument to <code>format-time-string</code>, and for
-decoding the return value of <code>format-time-string</code>.
-</p></dd></dl>
+  <p>In POSIX, locales control which language to use in
+  language-related features. These Emacs variables control how
+  Emacs interacts with these features.</p>
 
-<dl>
-<dt><a name="index-system_002dmessages_002dlocale"></a>Variable: <strong>system-messages-locale</strong></dt>
-<dd><p>This variable specifies the locale to use for generating system error
-messages.  Changing the locale can cause messages to come out in a
-different language or in a different orthography.  If the variable is
-<code>nil</code>, the locale is specified by environment variables in the
-usual POSIX fashion.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-locale_002dcoding_002dsystem" id=
+    "index-locale_002dcoding_002dsystem"></a>Variable:
+    <strong>locale-coding-system</strong></dt>
 
-<dl>
-<dt><a name="index-system_002dtime_002dlocale"></a>Variable: <strong>system-time-locale</strong></dt>
-<dd><p>This variable specifies the locale to use for formatting time values.
-Changing the locale can cause messages to appear according to the
-conventions of a different language.  If the variable is <code>nil</code>, the
-locale is specified by environment variables in the usual POSIX fashion.
-</p></dd></dl>
+    <dd>
+      <a name="index-keyboard-input-decoding-on-X" id=
+      "index-keyboard-input-decoding-on-X"></a>
 
-<dl>
-<dt><a name="index-locale_002dinfo"></a>Function: <strong>locale-info</strong> <em>item</em></dt>
-<dd><p>This function returns locale data <var>item</var> for the current POSIX
-locale, if available.  <var>item</var> should be one of these symbols:
-</p>
-<dl compact="compact">
-<dt><code>codeset</code></dt>
-<dd><p>Return the character set as a string (locale item <code>CODESET</code>).
-</p>
-</dd>
-<dt><code>days</code></dt>
-<dd><p>Return a 7-element vector of day names (locale items
-<code>DAY_1</code> through <code>DAY_7</code>);
-</p>
-</dd>
-<dt><code>months</code></dt>
-<dd><p>Return a 12-element vector of month names (locale items <code>MON_1</code>
-through <code>MON_12</code>).
-</p>
-</dd>
-<dt><code>paper</code></dt>
-<dd><p>Return a list <code>(<var>width</var> <var>height</var>)</code> for the default paper
-size measured in millimeters (locale items <code>PAPER_WIDTH</code> and
-<code>PAPER_HEIGHT</code>).
-</p></dd>
-</dl>
+      <p>This variable specifies the coding system to use for
+      decoding system error messages and&mdash;on X Window system
+      only&mdash;keyboard input, for sending batch output to the
+      standard output and error streams, for encoding the format
+      argument to <code>format-time-string</code>, and for decoding
+      the return value of <code>format-time-string</code>.</p>
+    </dd>
+  </dl>
 
-<p>If the system can&rsquo;t provide the requested information, or if
-<var>item</var> is not one of those symbols, the value is <code>nil</code>.  All
-strings in the return value are decoded using
-<code>locale-coding-system</code>.  See <a href="http://www.gnu.org/software/libc/manual/html_node/Locales.html#Locales">Locales</a> in <cite>The GNU Libc Manual</cite>,
-for more information about locales and locale items.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-system_002dmessages_002dlocale" id=
+    "index-system_002dmessages_002dlocale"></a>Variable:
+    <strong>system-messages-locale</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Input-Methods.html#Input-Methods" accesskey="p" rel="prev">Input Methods</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This variable specifies the locale to use for generating
+      system error messages. Changing the locale can cause messages
+      to come out in a different language or in a different
+      orthography. If the variable is <code>nil</code>, the locale
+      is specified by environment variables in the usual POSIX
+      fashion.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-system_002dtime_002dlocale" id=
+    "index-system_002dtime_002dlocale"></a>Variable:
+    <strong>system-time-locale</strong></dt>
 
+    <dd>
+      <p>This variable specifies the locale to use for formatting
+      time values. Changing the locale can cause messages to appear
+      according to the conventions of a different language. If the
+      variable is <code>nil</code>, the locale is specified by
+      environment variables in the usual POSIX fashion.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-locale_002dinfo" id=
+    "index-locale_002dinfo"></a>Function:
+    <strong>locale-info</strong> <em>item</em></dt>
+
+    <dd>
+      <p>This function returns locale data <var>item</var> for the
+      current POSIX locale, if available. <var>item</var> should be
+      one of these symbols:</p>
+
+      <dl compact="compact">
+        <dt><code>codeset</code></dt>
+
+        <dd>
+          <p>Return the character set as a string (locale item
+          <code>CODESET</code>).</p>
+        </dd>
+
+        <dt><code>days</code></dt>
+
+        <dd>
+          <p>Return a 7-element vector of day names (locale items
+          <code>DAY_1</code> through <code>DAY_7</code>);</p>
+        </dd>
+
+        <dt><code>months</code></dt>
+
+        <dd>
+          <p>Return a 12-element vector of month names (locale
+          items <code>MON_1</code> through
+          <code>MON_12</code>).</p>
+        </dd>
+
+        <dt><code>paper</code></dt>
+
+        <dd>
+          <p>Return a list <code>(<var>width</var>
+          <var>height</var>)</code> for the default paper size
+          measured in millimeters (locale items
+          <code>PAPER_WIDTH</code> and
+          <code>PAPER_HEIGHT</code>).</p>
+        </dd>
+      </dl>
+
+      <p>If the system can&rsquo;t provide the requested
+      information, or if <var>item</var> is not one of those
+      symbols, the value is <code>nil</code>. All strings in the
+      return value are decoded using
+      <code>locale-coding-system</code>. See <a href=
+      "http://www.gnu.org/software/libc/manual/html_node/Locales.html#Locales">
+      Locales</a> in <cite>The GNU Libc Manual</cite>, for more
+      information about locales and locale items.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Input-Methods.html#Input-Methods"
+    accesskey="p" rel="prev">Input Methods</a>, Up: <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

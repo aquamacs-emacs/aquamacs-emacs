@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>The IDLWAVE Shell - IDLWAVE User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="IDLWAVE User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" title="The IDLWAVE Major Mode">
-<link rel="next" href="Acknowledgements.html#Acknowledgements" title="Acknowledgements">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>The IDLWAVE Shell - IDLWAVE User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="IDLWAVE User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" title=
+  "The IDLWAVE Major Mode" />
+  <link rel="next" href="Acknowledgements.html#Acknowledgements"
+  title="Acknowledgements" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -30,8 +39,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -41,39 +52,74 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="The-IDLWAVE-Shell"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Acknowledgements.html#Acknowledgements">Acknowledgements</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The IDLWAVE Major Mode</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="The-IDLWAVE-Shell" id="The-IDLWAVE-Shell"></a>
 
-<h2 class="chapter">5 The IDLWAVE Shell</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Acknowledgements.html#Acknowledgements">Acknowledgements</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The
+    IDLWAVE Major Mode</a>, Up:&nbsp;<a rel="up" accesskey="u"
+    href="index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-IDLWAVE-shell-234"></a><a name="index-Major-mode_002c-_0040code_007bidlwave_002dshell_002dmode_007d-235"></a><a name="index-IDL_002c-as-Emacs-subprocess-236"></a><a name="index-Subprocess-of-Emacs_002c-IDL-237"></a><a name="index-Comint_002c-Emacs-package-238"></a><a name="index-Windows-239"></a><a name="index-MacOS-240"></a>
-The IDLWAVE shell is an Emacs major mode which permits running the IDL
-program as an inferior process of Emacs, and works closely with the
-IDLWAVE major mode in buffers.  It can be used to work with IDL
-interactively, to compile and run IDL programs in Emacs buffers and to
-debug these programs.  The IDLWAVE shell is built on <samp><span class="file">comint</span></samp>, an
-Emacs packages which handles the communication with the IDL program. 
-Unfortunately, IDL for Windows does not have command-prompt versions and
-thus do not allow the interaction with Emacs &mdash; so the IDLWAVE shell
-currently only works under Unix and MacOSX.
+  <h2 class="chapter">5 The IDLWAVE Shell</h2>
 
-<ul class="menu">
-<li><a accesskey="1" href="Starting-the-Shell.html#Starting-the-Shell">Starting the Shell</a>:           How to launch IDL as a subprocess
-<li><a accesskey="2" href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a>:              Interactively working with the Shell
-<li><a accesskey="3" href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell">Commands Sent to the Shell</a>
-<li><a accesskey="4" href="Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging IDL Programs</a>
-<li><a accesskey="5" href="Examining-Variables.html#Examining-Variables">Examining Variables</a>
-<li><a accesskey="6" href="Custom-Expression-Examination.html#Custom-Expression-Examination">Custom Expression Examination</a>
-</ul>
+  <p><a name="index-IDLWAVE-shell-234" id=
+  "index-IDLWAVE-shell-234"></a><a name=
+  "index-Major-mode_002c-_0040code_007bidlwave_002dshell_002dmode_007d-235"
+  id=
+  "index-Major-mode_002c-_0040code_007bidlwave_002dshell_002dmode_007d-235"></a><a name="index-IDL_002c-as-Emacs-subprocess-236"
+  id="index-IDL_002c-as-Emacs-subprocess-236"></a><a name=
+  "index-Subprocess-of-Emacs_002c-IDL-237" id=
+  "index-Subprocess-of-Emacs_002c-IDL-237"></a><a name=
+  "index-Comint_002c-Emacs-package-238" id=
+  "index-Comint_002c-Emacs-package-238"></a><a name=
+  "index-Windows-239" id="index-Windows-239"></a><a name=
+  "index-MacOS-240" id="index-MacOS-240"></a> The IDLWAVE shell is
+  an Emacs major mode which permits running the IDL program as an
+  inferior process of Emacs, and works closely with the IDLWAVE
+  major mode in buffers. It can be used to work with IDL
+  interactively, to compile and run IDL programs in Emacs buffers
+  and to debug these programs. The IDLWAVE shell is built on
+  <samp><span class="file">comint</span></samp>, an Emacs packages
+  which handles the communication with the IDL program.
+  Unfortunately, IDL for Windows does not have command-prompt
+  versions and thus do not allow the interaction with Emacs &mdash;
+  so the IDLWAVE shell currently only works under Unix and
+  MacOSX.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Starting-the-Shell.html#Starting-the-Shell">Starting the
+    Shell</a>: How to launch IDL as a subprocess</li>
 
+    <li><a accesskey="2" href=
+    "Using-the-Shell.html#Using-the-Shell">Using the Shell</a>:
+    Interactively working with the Shell</li>
+
+    <li><a accesskey="3" href=
+    "Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell">Commands
+    Sent to the Shell</a></li>
+
+    <li><a accesskey="4" href=
+    "Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging
+    IDL Programs</a></li>
+
+    <li><a accesskey="5" href=
+    "Examining-Variables.html#Examining-Variables">Examining
+    Variables</a></li>
+
+    <li><a accesskey="6" href=
+    "Custom-Expression-Examination.html#Custom-Expression-Examination">
+    Custom Expression Examination</a></li>
+  </ul>
+</body>
+</html>

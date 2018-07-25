@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,98 +19,136 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Auto Faces</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Auto Faces">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Auto Faces">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Faces.html#Faces" rel="up" title="Faces">
-<link href="Basic-Faces.html#Basic-Faces" rel="next" title="Basic Faces">
-<link href="Face-Functions.html#Face-Functions" rel="prev" title="Face Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Auto Faces</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Auto Faces" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Auto Faces" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Faces.html#Faces" rel="up" title="Faces" />
+  <link href="Basic-Faces.html#Basic-Faces" rel="next" title=
+  "Basic Faces" />
+  <link href="Face-Functions.html#Face-Functions" rel="prev" title=
+  "Face Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Auto-Faces" id="Auto-Faces"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Basic-Faces.html#Basic-Faces" accesskey="n"
+    rel="next">Basic Faces</a>, Previous: <a href=
+    "Face-Functions.html#Face-Functions" accesskey="p" rel=
+    "prev">Face Functions</a>, Up: <a href="Faces.html#Faces"
+    accesskey="u" rel="up">Faces</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Automatic-Face-Assignment" id=
+  "Automatic-Face-Assignment"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Auto-Faces"></a>
-<div class="header">
-<p>
-Next: <a href="Basic-Faces.html#Basic-Faces" accesskey="n" rel="next">Basic Faces</a>, Previous: <a href="Face-Functions.html#Face-Functions" accesskey="p" rel="prev">Face Functions</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Automatic-Face-Assignment"></a>
-<h4 class="subsection">37.12.7 Automatic Face Assignment</h4>
-<a name="index-automatic-face-assignment"></a>
-<a name="index-faces_002c-automatic-choice"></a>
+  <h4 class="subsection">37.12.7 Automatic Face
+  Assignment</h4><a name="index-automatic-face-assignment" id=
+  "index-automatic-face-assignment"></a> <a name=
+  "index-faces_002c-automatic-choice" id=
+  "index-faces_002c-automatic-choice"></a>
 
-<p>This hook is used for automatically assigning faces to text in the
-buffer.  It is part of the implementation of Jit-Lock mode, used by
-Font-Lock.
-</p>
-<dl>
-<dt><a name="index-fontification_002dfunctions"></a>Variable: <strong>fontification-functions</strong></dt>
-<dd><p>This variable holds a list of functions that are called by Emacs
-redisplay as needed, just before doing redisplay.  They are called even
-when Font Lock Mode isn&rsquo;t enabled.  When Font Lock Mode is enabled, this
-variable usually holds just one function, <code>jit-lock-function</code>.
-</p>
-<p>The functions are called in the order listed, with one argument, a
-buffer position <var>pos</var>.  Collectively they should attempt to assign
-faces to the text in the current buffer starting at <var>pos</var>.
-</p>
-<p>The functions should record the faces they assign by setting the
-<code>face</code> property.  They should also add a non-<code>nil</code>
-<code>fontified</code> property to all the text they have assigned faces to.
-That property tells redisplay that faces have been assigned to that text
-already.
-</p>
-<p>It is probably a good idea for the functions to do nothing if the
-character after <var>pos</var> already has a non-<code>nil</code> <code>fontified</code>
-property, but this is not required.  If one function overrides the
-assignments made by a previous one, the properties after the last
-function finishes are the ones that really matter.
-</p>
-<p>For efficiency, we recommend writing these functions so that they
-usually assign faces to around 400 to 600 characters at each call.
-</p></dd></dl>
+  <p>This hook is used for automatically assigning faces to text in
+  the buffer. It is part of the implementation of Jit-Lock mode,
+  used by Font-Lock.</p>
 
+  <dl>
+    <dt><a name="index-fontification_002dfunctions" id=
+    "index-fontification_002dfunctions"></a>Variable:
+    <strong>fontification-functions</strong></dt>
 
+    <dd>
+      <p>This variable holds a list of functions that are called by
+      Emacs redisplay as needed, just before doing redisplay. They
+      are called even when Font Lock Mode isn&rsquo;t enabled. When
+      Font Lock Mode is enabled, this variable usually holds just
+      one function, <code>jit-lock-function</code>.</p>
 
+      <p>The functions are called in the order listed, with one
+      argument, a buffer position <var>pos</var>. Collectively they
+      should attempt to assign faces to the text in the current
+      buffer starting at <var>pos</var>.</p>
 
+      <p>The functions should record the faces they assign by
+      setting the <code>face</code> property. They should also add
+      a non-<code>nil</code> <code>fontified</code> property to all
+      the text they have assigned faces to. That property tells
+      redisplay that faces have been assigned to that text
+      already.</p>
+
+      <p>It is probably a good idea for the functions to do nothing
+      if the character after <var>pos</var> already has a
+      non-<code>nil</code> <code>fontified</code> property, but
+      this is not required. If one function overrides the
+      assignments made by a previous one, the properties after the
+      last function finishes are the ones that really matter.</p>
+
+      <p>For efficiency, we recommend writing these functions so
+      that they usually assign faces to around 400 to 600
+      characters at each call.</p>
+    </dd>
+  </dl>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,188 +19,274 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Signaling Errors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Signaling Errors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Signaling Errors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Errors.html#Errors" rel="up" title="Errors">
-<link href="Processing-of-Errors.html#Processing-of-Errors" rel="next" title="Processing of Errors">
-<link href="Errors.html#Errors" rel="prev" title="Errors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Signaling Errors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Signaling Errors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Signaling Errors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Errors.html#Errors" rel="up" title="Errors" />
+  <link href="Processing-of-Errors.html#Processing-of-Errors" rel=
+  "next" title="Processing of Errors" />
+  <link href="Errors.html#Errors" rel="prev" title="Errors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Signaling-Errors" id="Signaling-Errors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Processing-of-Errors.html#Processing-of-Errors" accesskey="n"
+    rel="next">Processing of Errors</a>, Up: <a href=
+    "Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="How-to-Signal-an-Error" id="How-to-Signal-an-Error"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Signaling-Errors"></a>
-<div class="header">
-<p>
-Next: <a href="Processing-of-Errors.html#Processing-of-Errors" accesskey="n" rel="next">Processing of Errors</a>, Up: <a href="Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-to-Signal-an-Error"></a>
-<h4 class="subsubsection">10.6.3.1 How to Signal an Error</h4>
-<a name="index-signaling-errors"></a>
+  <h4 class="subsubsection">10.6.3.1 How to Signal an
+  Error</h4><a name="index-signaling-errors" id=
+  "index-signaling-errors"></a>
 
-<p><em>Signaling</em> an error means beginning error processing.  Error
-processing normally aborts all or part of the running program and
-returns to a point that is set up to handle the error
-(see <a href="Processing-of-Errors.html#Processing-of-Errors">Processing of Errors</a>).  Here we describe how to signal an
-error.
-</p>
-<p>Most errors are signaled automatically within Lisp primitives
-which you call for other purposes, such as if you try to take the
-<small>CAR</small> of an integer or move forward a character at the end of the
-buffer.  You can also signal errors explicitly with the functions
-<code>error</code> and <code>signal</code>.
-</p>
-<p>Quitting, which happens when the user types <kbd>C-g</kbd>, is not
-considered an error, but it is handled almost like an error.
-See <a href="Quitting.html#Quitting">Quitting</a>.
-</p>
-<p>Every error specifies an error message, one way or another.  The
-message should state what is wrong (&ldquo;File does not exist&rdquo;), not how
-things ought to be (&ldquo;File must exist&rdquo;).  The convention in Emacs
-Lisp is that error messages should start with a capital letter, but
-should not end with any sort of punctuation.
-</p>
-<dl>
-<dt><a name="index-error"></a>Function: <strong>error</strong> <em>format-string &amp;rest args</em></dt>
-<dd><p>This function signals an error with an error message constructed by
-applying <code>format-message</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>) to
-<var>format-string</var> and <var>args</var>.
-</p>
-<p>These examples show typical uses of <code>error</code>:
-</p>
-<div class="example">
-<pre class="example">(error &quot;That is an error -- try something else&quot;)
+  <p><em>Signaling</em> an error means beginning error processing.
+  Error processing normally aborts all or part of the running
+  program and returns to a point that is set up to handle the error
+  (see <a href=
+  "Processing-of-Errors.html#Processing-of-Errors">Processing of
+  Errors</a>). Here we describe how to signal an error.</p>
+
+  <p>Most errors are signaled automatically within Lisp primitives
+  which you call for other purposes, such as if you try to take the
+  <small>CAR</small> of an integer or move forward a character at
+  the end of the buffer. You can also signal errors explicitly with
+  the functions <code>error</code> and <code>signal</code>.</p>
+
+  <p>Quitting, which happens when the user types <kbd>C-g</kbd>, is
+  not considered an error, but it is handled almost like an error.
+  See <a href="Quitting.html#Quitting">Quitting</a>.</p>
+
+  <p>Every error specifies an error message, one way or another.
+  The message should state what is wrong (&ldquo;File does not
+  exist&rdquo;), not how things ought to be (&ldquo;File must
+  exist&rdquo;). The convention in Emacs Lisp is that error
+  messages should start with a capital letter, but should not end
+  with any sort of punctuation.</p>
+
+  <dl>
+    <dt><a name="index-error" id="index-error"></a>Function:
+    <strong>error</strong> <em>format-string &amp;rest
+    args</em></dt>
+
+    <dd>
+      <p>This function signals an error with an error message
+      constructed by applying <code>format-message</code> (see
+      <a href=
+      "Formatting-Strings.html#Formatting-Strings">Formatting
+      Strings</a>) to <var>format-string</var> and
+      <var>args</var>.</p>
+
+      <p>These examples show typical uses of
+      <code>error</code>:</p>
+
+      <div class="example">
+        <pre class="example">
+(error "That is an error -- try something else")
      error&rarr; That is an error -- try something else
-</pre><pre class="example">
-</pre><pre class="example">(error &quot;Invalid name `%s'&quot; &quot;A%%B&quot;)
-     error&rarr; Invalid name ‘A%%B’
-</pre></div>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(error "Invalid name `%s'" "A%%B")
+     error&rarr; Invalid name &acirc;&euro;&tilde;A%%B&acirc;&euro;&trade;
+</pre>
+      </div>
 
-<p><code>error</code> works by calling <code>signal</code> with two arguments: the
-error symbol <code>error</code>, and a list containing the string returned by
-<code>format-message</code>.
-</p>
-<p>The <code>text-quoting-style</code> variable controls what quotes are
-generated; See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.  A call using a format like
-<tt>&quot;Missing `%s'&quot;</tt> with grave accents and apostrophes typically
-generates a message like <tt>&quot;Missing ‘foo’&quot;</tt> with matching curved
-quotes.  In contrast, a call using a format like <tt>&quot;Missing '%s'&quot;</tt>
-with only apostrophes typically generates a message like <tt>&quot;Missing
-’foo’&quot;</tt> with only closing curved quotes, an unusual style in English.
-</p>
-<p><strong>Warning:</strong> If you want to use your own string as an error message
-verbatim, don&rsquo;t just write <code>(error <var>string</var>)</code>.  If <var>string</var>
-<var>string</var> contains &lsquo;<samp>%</samp>&rsquo;, &lsquo;<samp>`</samp>&rsquo;, or &lsquo;<samp>'</samp>&rsquo; it may be
-reformatted, with undesirable results.  Instead, use <code>(error &quot;%s&quot;
-<var>string</var>)</code>.
-</p></dd></dl>
+      <p><code>error</code> works by calling <code>signal</code>
+      with two arguments: the error symbol <code>error</code>, and
+      a list containing the string returned by
+      <code>format-message</code>.</p>
 
-<dl>
-<dt><a name="index-signal"></a>Function: <strong>signal</strong> <em>error-symbol data</em></dt>
-<dd><a name="Definition-of-signal"></a><p>This function signals an error named by <var>error-symbol</var>.  The
-argument <var>data</var> is a list of additional Lisp objects relevant to
-the circumstances of the error.
-</p>
-<p>The argument <var>error-symbol</var> must be an <em>error symbol</em>&mdash;a symbol
-defined with <code>define-error</code>.  This is how Emacs Lisp classifies different
-sorts of errors.  See <a href="Error-Symbols.html#Error-Symbols">Error Symbols</a>, for a description of error symbols,
-error conditions and condition names.
-</p>
-<p>If the error is not handled, the two arguments are used in printing
-the error message.  Normally, this error message is provided by the
-<code>error-message</code> property of <var>error-symbol</var>.  If <var>data</var> is
-non-<code>nil</code>, this is followed by a colon and a comma separated list
-of the unevaluated elements of <var>data</var>.  For <code>error</code>, the
-error message is the <small>CAR</small> of <var>data</var> (that must be a string).
-Subcategories of <code>file-error</code> are handled specially.
-</p>
-<p>The number and significance of the objects in <var>data</var> depends on
-<var>error-symbol</var>.  For example, with a <code>wrong-type-argument</code> error,
-there should be two objects in the list: a predicate that describes the type
-that was expected, and the object that failed to fit that type.
-</p>
-<p>Both <var>error-symbol</var> and <var>data</var> are available to any error
-handlers that handle the error: <code>condition-case</code> binds a local
-variable to a list of the form <code>(<var>error-symbol</var> .
-<var>data</var>)</code> (see <a href="Handling-Errors.html#Handling-Errors">Handling Errors</a>).
-</p>
-<p>The function <code>signal</code> never returns.
-</p>
-<div class="example">
-<pre class="example">(signal 'wrong-number-of-arguments '(x y))
+      <p>The <code>text-quoting-style</code> variable controls what
+      quotes are generated; See <a href=
+      "Keys-in-Documentation.html#Keys-in-Documentation">Keys in
+      Documentation</a>. A call using a format like <tt>"Missing
+      `%s'"</tt> with grave accents and apostrophes typically
+      generates a message like <tt>"Missing
+      &acirc;&euro;&tilde;foo&acirc;&euro;&trade;"</tt> with
+      matching curved quotes. In contrast, a call using a format
+      like <tt>"Missing '%s'"</tt> with only apostrophes typically
+      generates a message like <tt>"Missing
+      &acirc;&euro;&trade;foo&acirc;&euro;&trade;"</tt> with only
+      closing curved quotes, an unusual style in English.</p>
+
+      <p><strong>Warning:</strong> If you want to use your own
+      string as an error message verbatim, don&rsquo;t just write
+      <code>(error <var>string</var>)</code>. If <var>string</var>
+      <var>string</var> contains &lsquo;<samp>%</samp>&rsquo;,
+      &lsquo;<samp>`</samp>&rsquo;, or &lsquo;<samp>'</samp>&rsquo;
+      it may be reformatted, with undesirable results. Instead, use
+      <code>(error "%s" <var>string</var>)</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-signal" id="index-signal"></a>Function:
+    <strong>signal</strong> <em>error-symbol data</em></dt>
+
+    <dd>
+      <a name="Definition-of-signal" id="Definition-of-signal"></a>
+
+      <p>This function signals an error named by
+      <var>error-symbol</var>. The argument <var>data</var> is a
+      list of additional Lisp objects relevant to the circumstances
+      of the error.</p>
+
+      <p>The argument <var>error-symbol</var> must be an <em>error
+      symbol</em>&mdash;a symbol defined with
+      <code>define-error</code>. This is how Emacs Lisp classifies
+      different sorts of errors. See <a href=
+      "Error-Symbols.html#Error-Symbols">Error Symbols</a>, for a
+      description of error symbols, error conditions and condition
+      names.</p>
+
+      <p>If the error is not handled, the two arguments are used in
+      printing the error message. Normally, this error message is
+      provided by the <code>error-message</code> property of
+      <var>error-symbol</var>. If <var>data</var> is
+      non-<code>nil</code>, this is followed by a colon and a comma
+      separated list of the unevaluated elements of
+      <var>data</var>. For <code>error</code>, the error message is
+      the <small>CAR</small> of <var>data</var> (that must be a
+      string). Subcategories of <code>file-error</code> are handled
+      specially.</p>
+
+      <p>The number and significance of the objects in
+      <var>data</var> depends on <var>error-symbol</var>. For
+      example, with a <code>wrong-type-argument</code> error, there
+      should be two objects in the list: a predicate that describes
+      the type that was expected, and the object that failed to fit
+      that type.</p>
+
+      <p>Both <var>error-symbol</var> and <var>data</var> are
+      available to any error handlers that handle the error:
+      <code>condition-case</code> binds a local variable to a list
+      of the form <code>(<var>error-symbol</var> .
+      <var>data</var>)</code> (see <a href=
+      "Handling-Errors.html#Handling-Errors">Handling
+      Errors</a>).</p>
+
+      <p>The function <code>signal</code> never returns.</p>
+
+      <div class="example">
+        <pre class="example">
+(signal 'wrong-number-of-arguments '(x y))
      error&rarr; Wrong number of arguments: x, y
-</pre><pre class="example">
-</pre><pre class="example">(signal 'no-such-error '(&quot;My unknown error condition&quot;))
-     error&rarr; peculiar error: &quot;My unknown error condition&quot;
-</pre></div>
-</dd></dl>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(signal 'no-such-error '("My unknown error condition"))
+     error&rarr; peculiar error: "My unknown error condition"
+</pre>
+      </div>
+    </dd>
+  </dl><a name="index-user-errors_002c-signaling" id=
+  "index-user-errors_002c-signaling"></a>
 
-<a name="index-user-errors_002c-signaling"></a>
-<dl>
-<dt><a name="index-user_002derror"></a>Function: <strong>user-error</strong> <em>format-string &amp;rest args</em></dt>
-<dd><p>This function behaves exactly like <code>error</code>, except that it uses
-the error symbol <code>user-error</code> rather than <code>error</code>.  As the
-name suggests, this is intended to report errors on the part of the
-user, rather than errors in the code itself.  For example,
-if you try to use the command <code>Info-history-back</code> (<kbd>l</kbd>) to
-move back beyond the start of your Info browsing history, Emacs
-signals a <code>user-error</code>.  Such errors do not cause entry to the
-debugger, even when <code>debug-on-error</code> is non-<code>nil</code>.
-See <a href="Error-Debugging.html#Error-Debugging">Error Debugging</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-user_002derror" id=
+    "index-user_002derror"></a>Function:
+    <strong>user-error</strong> <em>format-string &amp;rest
+    args</em></dt>
 
-<a name="index-CL-note_002d_002d_002dno-continuable-errors"></a>
-<blockquote>
-<p><b>Common Lisp note:</b> Emacs Lisp has nothing like the Common Lisp
-concept of continuable errors.
-</p></blockquote>
+    <dd>
+      <p>This function behaves exactly like <code>error</code>,
+      except that it uses the error symbol <code>user-error</code>
+      rather than <code>error</code>. As the name suggests, this is
+      intended to report errors on the part of the user, rather
+      than errors in the code itself. For example, if you try to
+      use the command <code>Info-history-back</code> (<kbd>l</kbd>)
+      to move back beyond the start of your Info browsing history,
+      Emacs signals a <code>user-error</code>. Such errors do not
+      cause entry to the debugger, even when
+      <code>debug-on-error</code> is non-<code>nil</code>. See
+      <a href="Error-Debugging.html#Error-Debugging">Error
+      Debugging</a>.</p>
+    </dd>
+  </dl><a name="index-CL-note_002d_002d_002dno-continuable-errors"
+  id="index-CL-note_002d_002d_002dno-continuable-errors"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Processing-of-Errors.html#Processing-of-Errors" accesskey="n" rel="next">Processing of Errors</a>, Up: <a href="Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <blockquote>
+    <p><b>Common Lisp note:</b> Emacs Lisp has nothing like the
+    Common Lisp concept of continuable errors.</p>
+  </blockquote>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Processing-of-Errors.html#Processing-of-Errors" accesskey="n"
+    rel="next">Processing of Errors</a>, Up: <a href=
+    "Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

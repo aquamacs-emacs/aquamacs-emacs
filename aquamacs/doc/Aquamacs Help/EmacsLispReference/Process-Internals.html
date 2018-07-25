@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,185 +19,273 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Process Internals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Process Internals">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Process Internals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Object-Internals.html#Object-Internals" rel="up" title="Object Internals">
-<link href="C-Integer-Types.html#C-Integer-Types" rel="next" title="C Integer Types">
-<link href="Window-Internals.html#Window-Internals" rel="prev" title="Window Internals">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Process Internals</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Process Internals" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Process Internals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Object-Internals.html#Object-Internals" rel="up"
+  title="Object Internals" />
+  <link href="C-Integer-Types.html#C-Integer-Types" rel="next"
+  title="C Integer Types" />
+  <link href="Window-Internals.html#Window-Internals" rel="prev"
+  title="Window Internals" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Process-Internals" id="Process-Internals"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Window-Internals.html#Window-Internals"
+    accesskey="p" rel="prev">Window Internals</a>, Up: <a href=
+    "Object-Internals.html#Object-Internals" accesskey="u" rel=
+    "up">Object Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Process-Internals-1" id="Process-Internals-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Process-Internals"></a>
-<div class="header">
-<p>
-Previous: <a href="Window-Internals.html#Window-Internals" accesskey="p" rel="prev">Window Internals</a>, Up: <a href="Object-Internals.html#Object-Internals" accesskey="u" rel="up">Object Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Process-Internals-1"></a>
-<h4 class="subsection">E.8.3 Process Internals</h4>
-<a name="index-internals_002c-of-process"></a>
-<a name="index-process-internals"></a>
+  <h4 class="subsection">E.8.3 Process Internals</h4><a name=
+  "index-internals_002c-of-process" id=
+  "index-internals_002c-of-process"></a> <a name=
+  "index-process-internals" id="index-process-internals"></a>
 
-<p>The fields of a process (for a complete list, see the definition of
-<code>struct Lisp_Process</code> in <samp>process.h</samp>) include:
-</p>
-<dl compact="compact">
-<dt><code>name</code></dt>
-<dd><p>A string, the name of the process.
-</p>
-</dd>
-<dt><code>command</code></dt>
-<dd><p>A list containing the command arguments that were used to start this
-process.  For a network or serial process, it is <code>nil</code> if the
-process is running or <code>t</code> if the process is stopped.
-</p>
-</dd>
-<dt><code>filter</code></dt>
-<dd><p>A function used to accept output from the process.
-</p>
-</dd>
-<dt><code>sentinel</code></dt>
-<dd><p>A function called whenever the state of the process changes.
-</p>
-</dd>
-<dt><code>buffer</code></dt>
-<dd><p>The associated buffer of the process.
-</p>
-</dd>
-<dt><code>pid</code></dt>
-<dd><p>An integer, the operating system&rsquo;s process <acronym>ID</acronym>.
-Pseudo-processes such as network or serial connections use a value of 0.
-</p>
-</dd>
-<dt><code>childp</code></dt>
-<dd><p>A flag, <code>t</code> if this is really a child process.  For a network or
-serial connection, it is a plist based on the arguments to
-<code>make-network-process</code> or <code>make-serial-process</code>.
-</p>
-</dd>
-<dt><code>mark</code></dt>
-<dd><p>A marker indicating the position of the end of the last output from this
-process inserted into the buffer.  This is often but not always the end
-of the buffer.
-</p>
-</dd>
-<dt><code>kill_without_query</code></dt>
-<dd><p>If this is non-zero, killing Emacs while this process is still running
-does not ask for confirmation about killing the process.
-</p>
-</dd>
-<dt><code>raw_status</code></dt>
-<dd><p>The raw process status, as returned by the <code>wait</code> system call.
-</p>
-</dd>
-<dt><code>status</code></dt>
-<dd><p>The process status, as <code>process-status</code> should return it.
-</p>
-</dd>
-<dt><code>tick</code></dt>
-<dt><code>update_tick</code></dt>
-<dd><p>If these two fields are not equal, a change in the status of the process
-needs to be reported, either by running the sentinel or by inserting a
-message in the process buffer.
-</p>
-</dd>
-<dt><code>pty_flag</code></dt>
-<dd><p>Non-<code>nil</code> if communication with the subprocess uses a pty;
-<code>nil</code> if it uses a pipe.
-</p>
-</dd>
-<dt><code>infd</code></dt>
-<dd><p>The file descriptor for input from the process.
-</p>
-</dd>
-<dt><code>outfd</code></dt>
-<dd><p>The file descriptor for output to the process.
-</p>
-</dd>
-<dt><code>tty_name</code></dt>
-<dd><p>The name of the terminal that the subprocess is using,
-or <code>nil</code> if it is using pipes.
-</p>
-</dd>
-<dt><code>decode_coding_system</code></dt>
-<dd><p>Coding-system for decoding the input from this process.
-</p>
-</dd>
-<dt><code>decoding_buf</code></dt>
-<dd><p>A working buffer for decoding.
-</p>
-</dd>
-<dt><code>decoding_carryover</code></dt>
-<dd><p>Size of carryover in decoding.
-</p>
-</dd>
-<dt><code>encode_coding_system</code></dt>
-<dd><p>Coding-system for encoding the output to this process.
-</p>
-</dd>
-<dt><code>encoding_buf</code></dt>
-<dd><p>A working buffer for encoding.
-</p>
-</dd>
-<dt><code>inherit_coding_system_flag</code></dt>
-<dd><p>Flag to set <code>coding-system</code> of the process buffer from the
-coding system used to decode process output.
-</p>
-</dd>
-<dt><code>type</code></dt>
-<dd><p>Symbol indicating the type of process: <code>real</code>, <code>network</code>,
-<code>serial</code>.
-</p>
-</dd>
-</dl>
+  <p>The fields of a process (for a complete list, see the
+  definition of <code>struct Lisp_Process</code> in
+  <samp>process.h</samp>) include:</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Window-Internals.html#Window-Internals" accesskey="p" rel="prev">Window Internals</a>, Up: <a href="Object-Internals.html#Object-Internals" accesskey="u" rel="up">Object Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><code>name</code></dt>
 
+    <dd>
+      <p>A string, the name of the process.</p>
+    </dd>
 
+    <dt><code>command</code></dt>
 
+    <dd>
+      <p>A list containing the command arguments that were used to
+      start this process. For a network or serial process, it is
+      <code>nil</code> if the process is running or <code>t</code>
+      if the process is stopped.</p>
+    </dd>
+
+    <dt><code>filter</code></dt>
+
+    <dd>
+      <p>A function used to accept output from the process.</p>
+    </dd>
+
+    <dt><code>sentinel</code></dt>
+
+    <dd>
+      <p>A function called whenever the state of the process
+      changes.</p>
+    </dd>
+
+    <dt><code>buffer</code></dt>
+
+    <dd>
+      <p>The associated buffer of the process.</p>
+    </dd>
+
+    <dt><code>pid</code></dt>
+
+    <dd>
+      <p>An integer, the operating system&rsquo;s process
+      <acronym>ID</acronym>. Pseudo-processes such as network or
+      serial connections use a value of 0.</p>
+    </dd>
+
+    <dt><code>childp</code></dt>
+
+    <dd>
+      <p>A flag, <code>t</code> if this is really a child process.
+      For a network or serial connection, it is a plist based on
+      the arguments to <code>make-network-process</code> or
+      <code>make-serial-process</code>.</p>
+    </dd>
+
+    <dt><code>mark</code></dt>
+
+    <dd>
+      <p>A marker indicating the position of the end of the last
+      output from this process inserted into the buffer. This is
+      often but not always the end of the buffer.</p>
+    </dd>
+
+    <dt><code>kill_without_query</code></dt>
+
+    <dd>
+      <p>If this is non-zero, killing Emacs while this process is
+      still running does not ask for confirmation about killing the
+      process.</p>
+    </dd>
+
+    <dt><code>raw_status</code></dt>
+
+    <dd>
+      <p>The raw process status, as returned by the
+      <code>wait</code> system call.</p>
+    </dd>
+
+    <dt><code>status</code></dt>
+
+    <dd>
+      <p>The process status, as <code>process-status</code> should
+      return it.</p>
+    </dd>
+
+    <dt><code>tick</code></dt>
+
+    <dt><code>update_tick</code></dt>
+
+    <dd>
+      <p>If these two fields are not equal, a change in the status
+      of the process needs to be reported, either by running the
+      sentinel or by inserting a message in the process buffer.</p>
+    </dd>
+
+    <dt><code>pty_flag</code></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> if communication with the subprocess
+      uses a pty; <code>nil</code> if it uses a pipe.</p>
+    </dd>
+
+    <dt><code>infd</code></dt>
+
+    <dd>
+      <p>The file descriptor for input from the process.</p>
+    </dd>
+
+    <dt><code>outfd</code></dt>
+
+    <dd>
+      <p>The file descriptor for output to the process.</p>
+    </dd>
+
+    <dt><code>tty_name</code></dt>
+
+    <dd>
+      <p>The name of the terminal that the subprocess is using, or
+      <code>nil</code> if it is using pipes.</p>
+    </dd>
+
+    <dt><code>decode_coding_system</code></dt>
+
+    <dd>
+      <p>Coding-system for decoding the input from this
+      process.</p>
+    </dd>
+
+    <dt><code>decoding_buf</code></dt>
+
+    <dd>
+      <p>A working buffer for decoding.</p>
+    </dd>
+
+    <dt><code>decoding_carryover</code></dt>
+
+    <dd>
+      <p>Size of carryover in decoding.</p>
+    </dd>
+
+    <dt><code>encode_coding_system</code></dt>
+
+    <dd>
+      <p>Coding-system for encoding the output to this process.</p>
+    </dd>
+
+    <dt><code>encoding_buf</code></dt>
+
+    <dd>
+      <p>A working buffer for encoding.</p>
+    </dd>
+
+    <dt><code>inherit_coding_system_flag</code></dt>
+
+    <dd>
+      <p>Flag to set <code>coding-system</code> of the process
+      buffer from the coding system used to decode process
+      output.</p>
+    </dd>
+
+    <dt><code>type</code></dt>
+
+    <dd>
+      <p>Symbol indicating the type of process: <code>real</code>,
+      <code>network</code>, <code>serial</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Window-Internals.html#Window-Internals"
+    accesskey="p" rel="prev">Window Internals</a>, Up: <a href=
+    "Object-Internals.html#Object-Internals" accesskey="u" rel=
+    "up">Object Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

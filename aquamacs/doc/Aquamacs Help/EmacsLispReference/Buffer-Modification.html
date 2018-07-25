@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,146 +19,229 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Buffer Modification</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Buffer Modification">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Buffer Modification">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffers.html#Buffers" rel="up" title="Buffers">
-<link href="Modification-Time.html#Modification-Time" rel="next" title="Modification Time">
-<link href="Buffer-File-Name.html#Buffer-File-Name" rel="prev" title="Buffer File Name">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Buffer
+  Modification</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Buffer Modification" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Buffer Modification" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffers.html#Buffers" rel="up" title="Buffers" />
+  <link href="Modification-Time.html#Modification-Time" rel="next"
+  title="Modification Time" />
+  <link href="Buffer-File-Name.html#Buffer-File-Name" rel="prev"
+  title="Buffer File Name" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Buffer-Modification" id="Buffer-Modification"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Modification-Time.html#Modification-Time"
+    accesskey="n" rel="next">Modification Time</a>, Previous:
+    <a href="Buffer-File-Name.html#Buffer-File-Name" accesskey="p"
+    rel="prev">Buffer File Name</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Buffer-Modification-1" id="Buffer-Modification-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Buffer-Modification"></a>
-<div class="header">
-<p>
-Next: <a href="Modification-Time.html#Modification-Time" accesskey="n" rel="next">Modification Time</a>, Previous: <a href="Buffer-File-Name.html#Buffer-File-Name" accesskey="p" rel="prev">Buffer File Name</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Buffer-Modification-1"></a>
-<h3 class="section">26.5 Buffer Modification</h3>
-<a name="index-buffer-modification"></a>
-<a name="index-modification-flag-_0028of-buffer_0029"></a>
+  <h3 class="section">26.5 Buffer Modification</h3><a name=
+  "index-buffer-modification" id="index-buffer-modification"></a>
+  <a name="index-modification-flag-_0028of-buffer_0029" id=
+  "index-modification-flag-_0028of-buffer_0029"></a>
 
-<p>Emacs keeps a flag called the <em>modified flag</em> for each buffer, to
-record whether you have changed the text of the buffer.  This flag is
-set to <code>t</code> whenever you alter the contents of the buffer, and
-cleared to <code>nil</code> when you save it.  Thus, the flag shows whether
-there are unsaved changes.  The flag value is normally shown in the mode
-line (see <a href="Mode-Line-Variables.html#Mode-Line-Variables">Mode Line Variables</a>), and controls saving (see <a href="Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>) and auto-saving (see <a href="Auto_002dSaving.html#Auto_002dSaving">Auto-Saving</a>).
-</p>
-<p>Some Lisp programs set the flag explicitly.  For example, the function
-<code>set-visited-file-name</code> sets the flag to <code>t</code>, because the text
-does not match the newly-visited file, even if it is unchanged from the
-file formerly visited.
-</p>
-<p>The functions that modify the contents of buffers are described in
-<a href="Text.html#Text">Text</a>.
-</p>
-<dl>
-<dt><a name="index-buffer_002dmodified_002dp"></a>Function: <strong>buffer-modified-p</strong> <em>&amp;optional buffer</em></dt>
-<dd><p>This function returns <code>t</code> if the buffer <var>buffer</var> has been modified
-since it was last read in from a file or saved, or <code>nil</code>
-otherwise.  If <var>buffer</var> is not supplied, the current buffer
-is tested.
-</p></dd></dl>
+  <p>Emacs keeps a flag called the <em>modified flag</em> for each
+  buffer, to record whether you have changed the text of the
+  buffer. This flag is set to <code>t</code> whenever you alter the
+  contents of the buffer, and cleared to <code>nil</code> when you
+  save it. Thus, the flag shows whether there are unsaved changes.
+  The flag value is normally shown in the mode line (see <a href=
+  "Mode-Line-Variables.html#Mode-Line-Variables">Mode Line
+  Variables</a>), and controls saving (see <a href=
+  "Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>) and
+  auto-saving (see <a href=
+  "Auto_002dSaving.html#Auto_002dSaving">Auto-Saving</a>).</p>
 
-<dl>
-<dt><a name="index-set_002dbuffer_002dmodified_002dp"></a>Function: <strong>set-buffer-modified-p</strong> <em>flag</em></dt>
-<dd><p>This function marks the current buffer as modified if <var>flag</var> is
-non-<code>nil</code>, or as unmodified if the flag is <code>nil</code>.
-</p>
-<p>Another effect of calling this function is to cause unconditional
-redisplay of the mode line for the current buffer.  In fact, the
-function <code>force-mode-line-update</code> works by doing this:
-</p>
-<div class="example">
-<pre class="example">(set-buffer-modified-p (buffer-modified-p))
-</pre></div>
-</dd></dl>
+  <p>Some Lisp programs set the flag explicitly. For example, the
+  function <code>set-visited-file-name</code> sets the flag to
+  <code>t</code>, because the text does not match the newly-visited
+  file, even if it is unchanged from the file formerly visited.</p>
 
-<dl>
-<dt><a name="index-restore_002dbuffer_002dmodified_002dp"></a>Function: <strong>restore-buffer-modified-p</strong> <em>flag</em></dt>
-<dd><p>Like <code>set-buffer-modified-p</code>, but does not force redisplay
-of mode lines.
-</p></dd></dl>
+  <p>The functions that modify the contents of buffers are
+  described in <a href="Text.html#Text">Text</a>.</p>
 
-<dl>
-<dt><a name="index-not_002dmodified"></a>Command: <strong>not-modified</strong> <em>&amp;optional arg</em></dt>
-<dd><p>This command marks the current buffer as unmodified, and not needing
-to be saved.  If <var>arg</var> is non-<code>nil</code>, it marks the buffer as
-modified, so that it will be saved at the next suitable occasion.
-Interactively, <var>arg</var> is the prefix argument.
-</p>
-<p>Don&rsquo;t use this function in programs, since it prints a message in the
-echo area; use <code>set-buffer-modified-p</code> (above) instead.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-buffer_002dmodified_002dp" id=
+    "index-buffer_002dmodified_002dp"></a>Function:
+    <strong>buffer-modified-p</strong> <em>&amp;optional
+    buffer</em></dt>
 
-<dl>
-<dt><a name="index-buffer_002dmodified_002dtick"></a>Function: <strong>buffer-modified-tick</strong> <em>&amp;optional buffer</em></dt>
-<dd><p>This function returns <var>buffer</var>&rsquo;s modification-count.  This is a
-counter that increments every time the buffer is modified.  If
-<var>buffer</var> is <code>nil</code> (or omitted), the current buffer is used.
-The counter can wrap around occasionally.
-</p></dd></dl>
+    <dd>
+      <p>This function returns <code>t</code> if the buffer
+      <var>buffer</var> has been modified since it was last read in
+      from a file or saved, or <code>nil</code> otherwise. If
+      <var>buffer</var> is not supplied, the current buffer is
+      tested.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-buffer_002dchars_002dmodified_002dtick"></a>Function: <strong>buffer-chars-modified-tick</strong> <em>&amp;optional buffer</em></dt>
-<dd><p>This function returns <var>buffer</var>&rsquo;s character-change modification-count.
-Changes to text properties leave this counter unchanged; however, each
-time text is inserted or removed from the buffer, the counter is reset
-to the value that would be returned by <code>buffer-modified-tick</code>.
-By comparing the values returned by two <code>buffer-chars-modified-tick</code>
-calls, you can tell whether a character change occurred in that buffer
-in between the calls.  If <var>buffer</var> is <code>nil</code> (or omitted), the
-current buffer is used.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dbuffer_002dmodified_002dp" id=
+    "index-set_002dbuffer_002dmodified_002dp"></a>Function:
+    <strong>set-buffer-modified-p</strong> <em>flag</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Modification-Time.html#Modification-Time" accesskey="n" rel="next">Modification Time</a>, Previous: <a href="Buffer-File-Name.html#Buffer-File-Name" accesskey="p" rel="prev">Buffer File Name</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function marks the current buffer as modified if
+      <var>flag</var> is non-<code>nil</code>, or as unmodified if
+      the flag is <code>nil</code>.</p>
 
+      <p>Another effect of calling this function is to cause
+      unconditional redisplay of the mode line for the current
+      buffer. In fact, the function
+      <code>force-mode-line-update</code> works by doing this:</p>
 
+      <div class="example">
+        <pre class="example">
+(set-buffer-modified-p (buffer-modified-p))
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-restore_002dbuffer_002dmodified_002dp" id=
+    "index-restore_002dbuffer_002dmodified_002dp"></a>Function:
+    <strong>restore-buffer-modified-p</strong> <em>flag</em></dt>
+
+    <dd>
+      <p>Like <code>set-buffer-modified-p</code>, but does not
+      force redisplay of mode lines.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-not_002dmodified" id=
+    "index-not_002dmodified"></a>Command:
+    <strong>not-modified</strong> <em>&amp;optional arg</em></dt>
+
+    <dd>
+      <p>This command marks the current buffer as unmodified, and
+      not needing to be saved. If <var>arg</var> is
+      non-<code>nil</code>, it marks the buffer as modified, so
+      that it will be saved at the next suitable occasion.
+      Interactively, <var>arg</var> is the prefix argument.</p>
+
+      <p>Don&rsquo;t use this function in programs, since it prints
+      a message in the echo area; use
+      <code>set-buffer-modified-p</code> (above) instead.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-buffer_002dmodified_002dtick" id=
+    "index-buffer_002dmodified_002dtick"></a>Function:
+    <strong>buffer-modified-tick</strong> <em>&amp;optional
+    buffer</em></dt>
+
+    <dd>
+      <p>This function returns <var>buffer</var>&rsquo;s
+      modification-count. This is a counter that increments every
+      time the buffer is modified. If <var>buffer</var> is
+      <code>nil</code> (or omitted), the current buffer is used.
+      The counter can wrap around occasionally.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-buffer_002dchars_002dmodified_002dtick" id=
+    "index-buffer_002dchars_002dmodified_002dtick"></a>Function:
+    <strong>buffer-chars-modified-tick</strong> <em>&amp;optional
+    buffer</em></dt>
+
+    <dd>
+      <p>This function returns <var>buffer</var>&rsquo;s
+      character-change modification-count. Changes to text
+      properties leave this counter unchanged; however, each time
+      text is inserted or removed from the buffer, the counter is
+      reset to the value that would be returned by
+      <code>buffer-modified-tick</code>. By comparing the values
+      returned by two <code>buffer-chars-modified-tick</code>
+      calls, you can tell whether a character change occurred in
+      that buffer in between the calls. If <var>buffer</var> is
+      <code>nil</code> (or omitted), the current buffer is
+      used.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Modification-Time.html#Modification-Time"
+    accesskey="n" rel="next">Modification Time</a>, Previous:
+    <a href="Buffer-File-Name.html#Buffer-File-Name" accesskey="p"
+    rel="prev">Buffer File Name</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,425 +19,591 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Composite Types</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Composite Types">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Composite Types">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customization-Types.html#Customization-Types" rel="up" title="Customization Types">
-<link href="Splicing-into-Lists.html#Splicing-into-Lists" rel="next" title="Splicing into Lists">
-<link href="Simple-Types.html#Simple-Types" rel="prev" title="Simple Types">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Composite Types</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Composite Types" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Composite Types" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customization-Types.html#Customization-Types" rel=
+  "up" title="Customization Types" />
+  <link href="Splicing-into-Lists.html#Splicing-into-Lists" rel=
+  "next" title="Splicing into Lists" />
+  <link href="Simple-Types.html#Simple-Types" rel="prev" title=
+  "Simple Types" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Composite-Types" id="Composite-Types"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Splicing-into-Lists.html#Splicing-into-Lists"
+    accesskey="n" rel="next">Splicing into Lists</a>, Previous:
+    <a href="Simple-Types.html#Simple-Types" accesskey="p" rel=
+    "prev">Simple Types</a>, Up: <a href=
+    "Customization-Types.html#Customization-Types" accesskey="u"
+    rel="up">Customization Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Composite-Types-1" id="Composite-Types-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Composite-Types"></a>
-<div class="header">
-<p>
-Next: <a href="Splicing-into-Lists.html#Splicing-into-Lists" accesskey="n" rel="next">Splicing into Lists</a>, Previous: <a href="Simple-Types.html#Simple-Types" accesskey="p" rel="prev">Simple Types</a>, Up: <a href="Customization-Types.html#Customization-Types" accesskey="u" rel="up">Customization Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Composite-Types-1"></a>
-<h4 class="subsection">14.4.2 Composite Types</h4>
-<a name="index-composite-types-_0028customization_0029"></a>
+  <h4 class="subsection">14.4.2 Composite Types</h4><a name=
+  "index-composite-types-_0028customization_0029" id=
+  "index-composite-types-_0028customization_0029"></a>
 
-<p>When none of the simple types is appropriate, you can use composite
-types, which build new types from other types or from specified data.
-The specified types or data are called the <em>arguments</em> of the
-composite type.  The composite type normally looks like this:
-</p>
-<div class="example">
-<pre class="example">(<var>constructor</var> <var>arguments</var>&hellip;)
-</pre></div>
+  <p>When none of the simple types is appropriate, you can use
+  composite types, which build new types from other types or from
+  specified data. The specified types or data are called the
+  <em>arguments</em> of the composite type. The composite type
+  normally looks like this:</p>
 
-<p>but you can also add keyword-value pairs before the arguments, like
-this:
-</p>
-<div class="example">
-<pre class="example">(<var>constructor</var> <span class="roman">{</span><var>keyword</var> <var>value</var><span class="roman">}</span>&hellip; <var>arguments</var>&hellip;)
-</pre></div>
+  <div class="example">
+    <pre class="example">
+(<var>constructor</var> <var>arguments</var>&hellip;)
+</pre>
+  </div>
 
-<p>Here is a table of constructors and how to use them to write
-composite types:
-</p>
-<dl compact="compact">
-<dt><code>(cons <var>car-type</var> <var>cdr-type</var>)</code></dt>
-<dd><p>The value must be a cons cell, its <small>CAR</small> must fit <var>car-type</var>, and
-its <small>CDR</small> must fit <var>cdr-type</var>.  For example, <code>(cons string
-symbol)</code> is a customization type which matches values such as
-<code>(&quot;foo&quot; . foo)</code>.
-</p>
-<p>In the customization buffer, the <small>CAR</small> and <small>CDR</small> are displayed
-and edited separately, each according to their specified type.
-</p>
-</dd>
-<dt><code>(list <var>element-types</var>&hellip;)</code></dt>
-<dd><p>The value must be a list with exactly as many elements as the
-<var>element-types</var> given; and each element must fit the
-corresponding <var>element-type</var>.
-</p>
-<p>For example, <code>(list integer string function)</code> describes a list of
-three elements; the first element must be an integer, the second a
-string, and the third a function.
-</p>
-<p>In the customization buffer, each element is displayed and edited
-separately, according to the type specified for it.
-</p>
-</dd>
-<dt><code>(group <var>element-types</var>&hellip;)</code></dt>
-<dd><p>This works like <code>list</code> except for the formatting
-of text in the Custom buffer.  <code>list</code> labels each
-element value with its tag; <code>group</code> does not.
-</p>
-</dd>
-<dt><code>(vector <var>element-types</var>&hellip;)</code></dt>
-<dd><p>Like <code>list</code> except that the value must be a vector instead of a
-list.  The elements work the same as in <code>list</code>.
-</p>
-</dd>
-<dt><code>(alist :key-type <var>key-type</var> :value-type <var>value-type</var>)</code></dt>
-<dd><p>The value must be a list of cons-cells, the <small>CAR</small> of each cell
-representing a key of customization type <var>key-type</var>, and the
-<small>CDR</small> of the same cell representing a value of customization type
-<var>value-type</var>.  The user can add and delete key/value pairs, and
-edit both the key and the value of each pair.
-</p>
-<p>If omitted, <var>key-type</var> and <var>value-type</var> default to
-<code>sexp</code>.
-</p>
-<p>The user can add any key matching the specified key type, but you can
-give some keys a preferential treatment by specifying them with the
-<code>:options</code> (see <a href="Variable-Definitions.html#Variable-Definitions">Variable Definitions</a>).  The specified keys
-will always be shown in the customize buffer (together with a suitable
-value), with a checkbox to include or exclude or disable the key/value
-pair from the alist.  The user will not be able to edit the keys
-specified by the <code>:options</code> keyword argument.
-</p>
-<p>The argument to the <code>:options</code> keywords should be a list of
-specifications for reasonable keys in the alist.  Ordinarily, they are
-simply atoms, which stand for themselves.  For example:
-</p>
-<div class="example">
-<pre class="example">:options '(&quot;foo&quot; &quot;bar&quot; &quot;baz&quot;)
-</pre></div>
+  <p>but you can also add keyword-value pairs before the arguments,
+  like this:</p>
 
-<p>specifies that there are three known keys, namely <code>&quot;foo&quot;</code>,
-<code>&quot;bar&quot;</code> and <code>&quot;baz&quot;</code>, which will always be shown first.
-</p>
-<p>You may want to restrict the value type for specific keys, for
-example, the value associated with the <code>&quot;bar&quot;</code> key can only be an
-integer.  You can specify this by using a list instead of an atom in
-the list.  The first element will specify the key, like before, while
-the second element will specify the value type.  For example:
-</p>
-<div class="example">
-<pre class="example">:options '(&quot;foo&quot; (&quot;bar&quot; integer) &quot;baz&quot;)
-</pre></div>
+  <div class="example">
+    <pre class="example">
+(<var>constructor</var> <span class=
+"roman">{</span><var>keyword</var> <var>value</var><span class=
+"roman">}</span>&hellip; <var>arguments</var>&hellip;)
+</pre>
+  </div>
 
-<p>Finally, you may want to change how the key is presented.  By default,
-the key is simply shown as a <code>const</code>, since the user cannot change
-the special keys specified with the <code>:options</code> keyword.  However,
-you may want to use a more specialized type for presenting the key, like
-<code>function-item</code> if you know it is a symbol with a function binding.
-This is done by using a customization type specification instead of a
-symbol for the key.
-</p>
-<div class="example">
-<pre class="example">:options '(&quot;foo&quot;
+  <p>Here is a table of constructors and how to use them to write
+  composite types:</p>
+
+  <dl compact="compact">
+    <dt><code>(cons <var>car-type</var>
+    <var>cdr-type</var>)</code></dt>
+
+    <dd>
+      <p>The value must be a cons cell, its <small>CAR</small> must
+      fit <var>car-type</var>, and its <small>CDR</small> must fit
+      <var>cdr-type</var>. For example, <code>(cons string
+      symbol)</code> is a customization type which matches values
+      such as <code>("foo" . foo)</code>.</p>
+
+      <p>In the customization buffer, the <small>CAR</small> and
+      <small>CDR</small> are displayed and edited separately, each
+      according to their specified type.</p>
+    </dd>
+
+    <dt><code>(list <var>element-types</var>&hellip;)</code></dt>
+
+    <dd>
+      <p>The value must be a list with exactly as many elements as
+      the <var>element-types</var> given; and each element must fit
+      the corresponding <var>element-type</var>.</p>
+
+      <p>For example, <code>(list integer string function)</code>
+      describes a list of three elements; the first element must be
+      an integer, the second a string, and the third a
+      function.</p>
+
+      <p>In the customization buffer, each element is displayed and
+      edited separately, according to the type specified for
+      it.</p>
+    </dd>
+
+    <dt><code>(group <var>element-types</var>&hellip;)</code></dt>
+
+    <dd>
+      <p>This works like <code>list</code> except for the
+      formatting of text in the Custom buffer. <code>list</code>
+      labels each element value with its tag; <code>group</code>
+      does not.</p>
+    </dd>
+
+    <dt><code>(vector <var>element-types</var>&hellip;)</code></dt>
+
+    <dd>
+      <p>Like <code>list</code> except that the value must be a
+      vector instead of a list. The elements work the same as in
+      <code>list</code>.</p>
+    </dd>
+
+    <dt><code>(alist :key-type <var>key-type</var> :value-type
+    <var>value-type</var>)</code></dt>
+
+    <dd>
+      <p>The value must be a list of cons-cells, the
+      <small>CAR</small> of each cell representing a key of
+      customization type <var>key-type</var>, and the
+      <small>CDR</small> of the same cell representing a value of
+      customization type <var>value-type</var>. The user can add
+      and delete key/value pairs, and edit both the key and the
+      value of each pair.</p>
+
+      <p>If omitted, <var>key-type</var> and <var>value-type</var>
+      default to <code>sexp</code>.</p>
+
+      <p>The user can add any key matching the specified key type,
+      but you can give some keys a preferential treatment by
+      specifying them with the <code>:options</code> (see <a href=
+      "Variable-Definitions.html#Variable-Definitions">Variable
+      Definitions</a>). The specified keys will always be shown in
+      the customize buffer (together with a suitable value), with a
+      checkbox to include or exclude or disable the key/value pair
+      from the alist. The user will not be able to edit the keys
+      specified by the <code>:options</code> keyword argument.</p>
+
+      <p>The argument to the <code>:options</code> keywords should
+      be a list of specifications for reasonable keys in the alist.
+      Ordinarily, they are simply atoms, which stand for
+      themselves. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+:options '("foo" "bar" "baz")
+</pre>
+      </div>
+
+      <p>specifies that there are three known keys, namely
+      <code>"foo"</code>, <code>"bar"</code> and
+      <code>"baz"</code>, which will always be shown first.</p>
+
+      <p>You may want to restrict the value type for specific keys,
+      for example, the value associated with the <code>"bar"</code>
+      key can only be an integer. You can specify this by using a
+      list instead of an atom in the list. The first element will
+      specify the key, like before, while the second element will
+      specify the value type. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+:options '("foo" ("bar" integer) "baz")
+</pre>
+      </div>
+
+      <p>Finally, you may want to change how the key is presented.
+      By default, the key is simply shown as a <code>const</code>,
+      since the user cannot change the special keys specified with
+      the <code>:options</code> keyword. However, you may want to
+      use a more specialized type for presenting the key, like
+      <code>function-item</code> if you know it is a symbol with a
+      function binding. This is done by using a customization type
+      specification instead of a symbol for the key.</p>
+
+      <div class="example">
+        <pre class="example">
+:options '("foo"
            ((function-item some-function) integer)
-           &quot;baz&quot;)
-</pre></div>
+           "baz")
+</pre>
+      </div>
 
-<p>Many alists use lists with two elements, instead of cons cells.  For
-example,
-</p>
-<div class="example">
-<pre class="example">(defcustom list-alist
-  '((&quot;foo&quot; 1) (&quot;bar&quot; 2) (&quot;baz&quot; 3))
-  &quot;Each element is a list of the form (KEY VALUE).&quot;)
-</pre></div>
+      <p>Many alists use lists with two elements, instead of cons
+      cells. For example,</p>
 
-<p>instead of
-</p>
-<div class="example">
-<pre class="example">(defcustom cons-alist
-  '((&quot;foo&quot; . 1) (&quot;bar&quot; . 2) (&quot;baz&quot; . 3))
-  &quot;Each element is a cons-cell (KEY . VALUE).&quot;)
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(defcustom list-alist
+  '(("foo" 1) ("bar" 2) ("baz" 3))
+  "Each element is a list of the form (KEY VALUE).")
+</pre>
+      </div>
 
-<p>Because of the way lists are implemented on top of cons cells, you can
-treat <code>list-alist</code> in the example above as a cons cell alist, where
-the value type is a list with a single element containing the real
-value.
-</p>
-<div class="example">
-<pre class="example">(defcustom list-alist '((&quot;foo&quot; 1) (&quot;bar&quot; 2) (&quot;baz&quot; 3))
-  &quot;Each element is a list of the form (KEY VALUE).&quot;
+      <p>instead of</p>
+
+      <div class="example">
+        <pre class="example">
+(defcustom cons-alist
+  '(("foo" . 1) ("bar" . 2) ("baz" . 3))
+  "Each element is a cons-cell (KEY . VALUE).")
+</pre>
+      </div>
+
+      <p>Because of the way lists are implemented on top of cons
+      cells, you can treat <code>list-alist</code> in the example
+      above as a cons cell alist, where the value type is a list
+      with a single element containing the real value.</p>
+
+      <div class="example">
+        <pre class="example">
+(defcustom list-alist '(("foo" 1) ("bar" 2) ("baz" 3))
+  "Each element is a list of the form (KEY VALUE)."
   :type '(alist :value-type (group integer)))
-</pre></div>
+</pre>
+      </div>
 
-<p>The <code>group</code> widget is used here instead of <code>list</code> only because
-the formatting is better suited for the purpose.
-</p>
-<p>Similarly, you can have alists with more values associated with each
-key, using variations of this trick:
-</p>
-<div class="example">
-<pre class="example">(defcustom person-data '((&quot;brian&quot;  50 t)
-                         (&quot;dorith&quot; 55 nil)
-                         (&quot;ken&quot;    52 t))
-  &quot;Alist of basic info about people.
-Each element has the form (NAME AGE MALE-FLAG).&quot;
+      <p>The <code>group</code> widget is used here instead of
+      <code>list</code> only because the formatting is better
+      suited for the purpose.</p>
+
+      <p>Similarly, you can have alists with more values associated
+      with each key, using variations of this trick:</p>
+
+      <div class="example">
+        <pre class="example">
+(defcustom person-data '(("brian"  50 t)
+                         ("dorith" 55 nil)
+                         ("ken"    52 t))
+  "Alist of basic info about people.
+Each element has the form (NAME AGE MALE-FLAG)."
   :type '(alist :value-type (group integer boolean)))
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>(plist :key-type <var>key-type</var> :value-type <var>value-type</var>)</code></dt>
-<dd><p>This customization type is similar to <code>alist</code> (see above), except
-that (i) the information is stored as a property list,
-(see <a href="Property-Lists.html#Property-Lists">Property Lists</a>), and (ii) <var>key-type</var>, if omitted,
-defaults to <code>symbol</code> rather than <code>sexp</code>.
-</p>
-</dd>
-<dt><code>(choice <var>alternative-types</var>&hellip;)</code></dt>
-<dd><p>The value must fit one of <var>alternative-types</var>.  For example,
-<code>(choice integer string)</code> allows either an integer or a string.
-</p>
-<p>In the customization buffer, the user selects an alternative
-using a menu, and can then edit the value in the usual way for that
-alternative.
-</p>
-<p>Normally the strings in this menu are determined automatically from the
-choices; however, you can specify different strings for the menu by
-including the <code>:tag</code> keyword in the alternatives.  For example, if
-an integer stands for a number of spaces, while a string is text to use
-verbatim, you might write the customization type this way,
-</p>
-<div class="example">
-<pre class="example">(choice (integer :tag &quot;Number of spaces&quot;)
-        (string :tag &quot;Literal text&quot;))
-</pre></div>
+    <dt><code>(plist :key-type <var>key-type</var> :value-type
+    <var>value-type</var>)</code></dt>
 
-<p>so that the menu offers &lsquo;<samp>Number of spaces</samp>&rsquo; and &lsquo;<samp>Literal text</samp>&rsquo;.
-</p>
-<p>In any alternative for which <code>nil</code> is not a valid value, other than
-a <code>const</code>, you should specify a valid default for that alternative
-using the <code>:value</code> keyword.  See <a href="Type-Keywords.html#Type-Keywords">Type Keywords</a>.
-</p>
-<p>If some values are covered by more than one of the alternatives,
-customize will choose the first alternative that the value fits.  This
-means you should always list the most specific types first, and the
-most general last.  Here&rsquo;s an example of proper usage:
-</p>
-<div class="example">
-<pre class="example">(choice (const :tag &quot;Off&quot; nil)
-        symbol (sexp :tag &quot;Other&quot;))
-</pre></div>
+    <dd>
+      <p>This customization type is similar to <code>alist</code>
+      (see above), except that (i) the information is stored as a
+      property list, (see <a href=
+      "Property-Lists.html#Property-Lists">Property Lists</a>), and
+      (ii) <var>key-type</var>, if omitted, defaults to
+      <code>symbol</code> rather than <code>sexp</code>.</p>
+    </dd>
 
-<p>This way, the special value <code>nil</code> is not treated like other
-symbols, and symbols are not treated like other Lisp expressions.
-</p>
-<a name="index-radio_002c-customization-types"></a>
-</dd>
-<dt><code>(radio <var>element-types</var>&hellip;)</code></dt>
-<dd><p>This is similar to <code>choice</code>, except that the choices are displayed
-using radio buttons rather than a menu.  This has the advantage of
-displaying documentation for the choices when applicable and so is often
-a good choice for a choice between constant functions
-(<code>function-item</code> customization types).
-</p>
-</dd>
-<dt><code>(const <var>value</var>)</code></dt>
-<dd><p>The value must be <var>value</var>&mdash;nothing else is allowed.
-</p>
-<p>The main use of <code>const</code> is inside of <code>choice</code>.  For example,
-<code>(choice integer (const nil))</code> allows either an integer or
-<code>nil</code>.
-</p>
-<p><code>:tag</code> is often used with <code>const</code>, inside of <code>choice</code>.
-For example,
-</p>
-<div class="example">
-<pre class="example">(choice (const :tag &quot;Yes&quot; t)
-        (const :tag &quot;No&quot; nil)
-        (const :tag &quot;Ask&quot; foo))
-</pre></div>
+    <dt><code>(choice
+    <var>alternative-types</var>&hellip;)</code></dt>
 
-<p>describes a variable for which <code>t</code> means yes, <code>nil</code> means no,
-and <code>foo</code> means &ldquo;ask&rdquo;.
-</p>
-</dd>
-<dt><code>(other <var>value</var>)</code></dt>
-<dd><p>This alternative can match any Lisp value, but if the user chooses this
-alternative, that selects the value <var>value</var>.
-</p>
-<p>The main use of <code>other</code> is as the last element of <code>choice</code>.
-For example,
-</p>
-<div class="example">
-<pre class="example">(choice (const :tag &quot;Yes&quot; t)
-        (const :tag &quot;No&quot; nil)
-        (other :tag &quot;Ask&quot; foo))
-</pre></div>
+    <dd>
+      <p>The value must fit one of <var>alternative-types</var>.
+      For example, <code>(choice integer string)</code> allows
+      either an integer or a string.</p>
 
-<p>describes a variable for which <code>t</code> means yes, <code>nil</code> means no,
-and anything else means &ldquo;ask&rdquo;.  If the user chooses &lsquo;<samp>Ask</samp>&rsquo; from
-the menu of alternatives, that specifies the value <code>foo</code>; but any
-other value (not <code>t</code>, <code>nil</code> or <code>foo</code>) displays as
-&lsquo;<samp>Ask</samp>&rsquo;, just like <code>foo</code>.
-</p>
-</dd>
-<dt><code>(function-item <var>function</var>)</code></dt>
-<dd><p>Like <code>const</code>, but used for values which are functions.  This
-displays the documentation string as well as the function name.
-The documentation string is either the one you specify with
-<code>:doc</code>, or <var>function</var>&rsquo;s own documentation string.
-</p>
-</dd>
-<dt><code>(variable-item <var>variable</var>)</code></dt>
-<dd><p>Like <code>const</code>, but used for values which are variable names.  This
-displays the documentation string as well as the variable name.  The
-documentation string is either the one you specify with <code>:doc</code>, or
-<var>variable</var>&rsquo;s own documentation string.
-</p>
-</dd>
-<dt><code>(set <var>types</var>&hellip;)</code></dt>
-<dd><p>The value must be a list, and each element of the list must match one of
-the <var>types</var> specified.
-</p>
-<p>This appears in the customization buffer as a checklist, so that each of
-<var>types</var> may have either one corresponding element or none.  It is
-not possible to specify two different elements that match the same one
-of <var>types</var>.  For example, <code>(set integer symbol)</code> allows one
-integer and/or one symbol in the list; it does not allow multiple
-integers or multiple symbols.  As a result, it is rare to use
-nonspecific types such as <code>integer</code> in a <code>set</code>.
-</p>
-<p>Most often, the <var>types</var> in a <code>set</code> are <code>const</code> types, as
-shown here:
-</p>
-<div class="example">
-<pre class="example">(set (const :bold) (const :italic))
-</pre></div>
+      <p>In the customization buffer, the user selects an
+      alternative using a menu, and can then edit the value in the
+      usual way for that alternative.</p>
 
-<p>Sometimes they describe possible elements in an alist:
-</p>
-<div class="example">
-<pre class="example">(set (cons :tag &quot;Height&quot; (const height) integer)
-     (cons :tag &quot;Width&quot; (const width) integer))
-</pre></div>
+      <p>Normally the strings in this menu are determined
+      automatically from the choices; however, you can specify
+      different strings for the menu by including the
+      <code>:tag</code> keyword in the alternatives. For example,
+      if an integer stands for a number of spaces, while a string
+      is text to use verbatim, you might write the customization
+      type this way,</p>
 
-<p>That lets the user specify a height value optionally
-and a width value optionally.
-</p>
-</dd>
-<dt><code>(repeat <var>element-type</var>)</code></dt>
-<dd><p>The value must be a list and each element of the list must fit the type
-<var>element-type</var>.  This appears in the customization buffer as a
-list of elements, with &lsquo;<samp>[INS]</samp>&rsquo; and &lsquo;<samp>[DEL]</samp>&rsquo; buttons for adding
-more elements or removing elements.
-</p>
-<a name="index-restricted_002dsexp_002c-customization-types"></a>
-</dd>
-<dt><code>(restricted-sexp :match-alternatives <var>criteria</var>)</code></dt>
-<dd><p>This is the most general composite type construct.  The value may be
-any Lisp object that satisfies one of <var>criteria</var>.  <var>criteria</var>
-should be a list, and each element should be one of these
-possibilities:
-</p>
-<ul>
-<li> A predicate&mdash;that is, a function of one argument that has no side
-effects, and returns either <code>nil</code> or non-<code>nil</code> according to
-the argument.  Using a predicate in the list says that objects for which
-the predicate returns non-<code>nil</code> are acceptable.
+      <div class="example">
+        <pre class="example">
+(choice (integer :tag "Number of spaces")
+        (string :tag "Literal text"))
+</pre>
+      </div>
 
-</li><li> A quoted constant&mdash;that is, <code>'<var>object</var></code>.  This sort of element
-in the list says that <var>object</var> itself is an acceptable value.
-</li></ul>
+      <p>so that the menu offers &lsquo;<samp>Number of
+      spaces</samp>&rsquo; and &lsquo;<samp>Literal
+      text</samp>&rsquo;.</p>
 
-<p>For example,
-</p>
-<div class="example">
-<pre class="example">(restricted-sexp :match-alternatives
+      <p>In any alternative for which <code>nil</code> is not a
+      valid value, other than a <code>const</code>, you should
+      specify a valid default for that alternative using the
+      <code>:value</code> keyword. See <a href=
+      "Type-Keywords.html#Type-Keywords">Type Keywords</a>.</p>
+
+      <p>If some values are covered by more than one of the
+      alternatives, customize will choose the first alternative
+      that the value fits. This means you should always list the
+      most specific types first, and the most general last.
+      Here&rsquo;s an example of proper usage:</p>
+
+      <div class="example">
+        <pre class="example">
+(choice (const :tag "Off" nil)
+        symbol (sexp :tag "Other"))
+</pre>
+      </div>
+
+      <p>This way, the special value <code>nil</code> is not
+      treated like other symbols, and symbols are not treated like
+      other Lisp expressions.</p><a name=
+      "index-radio_002c-customization-types" id=
+      "index-radio_002c-customization-types"></a>
+    </dd>
+
+    <dt><code>(radio <var>element-types</var>&hellip;)</code></dt>
+
+    <dd>
+      <p>This is similar to <code>choice</code>, except that the
+      choices are displayed using radio buttons rather than a menu.
+      This has the advantage of displaying documentation for the
+      choices when applicable and so is often a good choice for a
+      choice between constant functions (<code>function-item</code>
+      customization types).</p>
+    </dd>
+
+    <dt><code>(const <var>value</var>)</code></dt>
+
+    <dd>
+      <p>The value must be <var>value</var>&mdash;nothing else is
+      allowed.</p>
+
+      <p>The main use of <code>const</code> is inside of
+      <code>choice</code>. For example, <code>(choice integer
+      (const nil))</code> allows either an integer or
+      <code>nil</code>.</p>
+
+      <p><code>:tag</code> is often used with <code>const</code>,
+      inside of <code>choice</code>. For example,</p>
+
+      <div class="example">
+        <pre class="example">
+(choice (const :tag "Yes" t)
+        (const :tag "No" nil)
+        (const :tag "Ask" foo))
+</pre>
+      </div>
+
+      <p>describes a variable for which <code>t</code> means yes,
+      <code>nil</code> means no, and <code>foo</code> means
+      &ldquo;ask&rdquo;.</p>
+    </dd>
+
+    <dt><code>(other <var>value</var>)</code></dt>
+
+    <dd>
+      <p>This alternative can match any Lisp value, but if the user
+      chooses this alternative, that selects the value
+      <var>value</var>.</p>
+
+      <p>The main use of <code>other</code> is as the last element
+      of <code>choice</code>. For example,</p>
+
+      <div class="example">
+        <pre class="example">
+(choice (const :tag "Yes" t)
+        (const :tag "No" nil)
+        (other :tag "Ask" foo))
+</pre>
+      </div>
+
+      <p>describes a variable for which <code>t</code> means yes,
+      <code>nil</code> means no, and anything else means
+      &ldquo;ask&rdquo;. If the user chooses
+      &lsquo;<samp>Ask</samp>&rsquo; from the menu of alternatives,
+      that specifies the value <code>foo</code>; but any other
+      value (not <code>t</code>, <code>nil</code> or
+      <code>foo</code>) displays as &lsquo;<samp>Ask</samp>&rsquo;,
+      just like <code>foo</code>.</p>
+    </dd>
+
+    <dt><code>(function-item <var>function</var>)</code></dt>
+
+    <dd>
+      <p>Like <code>const</code>, but used for values which are
+      functions. This displays the documentation string as well as
+      the function name. The documentation string is either the one
+      you specify with <code>:doc</code>, or
+      <var>function</var>&rsquo;s own documentation string.</p>
+    </dd>
+
+    <dt><code>(variable-item <var>variable</var>)</code></dt>
+
+    <dd>
+      <p>Like <code>const</code>, but used for values which are
+      variable names. This displays the documentation string as
+      well as the variable name. The documentation string is either
+      the one you specify with <code>:doc</code>, or
+      <var>variable</var>&rsquo;s own documentation string.</p>
+    </dd>
+
+    <dt><code>(set <var>types</var>&hellip;)</code></dt>
+
+    <dd>
+      <p>The value must be a list, and each element of the list
+      must match one of the <var>types</var> specified.</p>
+
+      <p>This appears in the customization buffer as a checklist,
+      so that each of <var>types</var> may have either one
+      corresponding element or none. It is not possible to specify
+      two different elements that match the same one of
+      <var>types</var>. For example, <code>(set integer
+      symbol)</code> allows one integer and/or one symbol in the
+      list; it does not allow multiple integers or multiple
+      symbols. As a result, it is rare to use nonspecific types
+      such as <code>integer</code> in a <code>set</code>.</p>
+
+      <p>Most often, the <var>types</var> in a <code>set</code> are
+      <code>const</code> types, as shown here:</p>
+
+      <div class="example">
+        <pre class="example">
+(set (const :bold) (const :italic))
+</pre>
+      </div>
+
+      <p>Sometimes they describe possible elements in an alist:</p>
+
+      <div class="example">
+        <pre class="example">
+(set (cons :tag "Height" (const height) integer)
+     (cons :tag "Width" (const width) integer))
+</pre>
+      </div>
+
+      <p>That lets the user specify a height value optionally and a
+      width value optionally.</p>
+    </dd>
+
+    <dt><code>(repeat <var>element-type</var>)</code></dt>
+
+    <dd>
+      <p>The value must be a list and each element of the list must
+      fit the type <var>element-type</var>. This appears in the
+      customization buffer as a list of elements, with
+      &lsquo;<samp>[INS]</samp>&rsquo; and
+      &lsquo;<samp>[DEL]</samp>&rsquo; buttons for adding more
+      elements or removing elements.</p><a name=
+      "index-restricted_002dsexp_002c-customization-types" id=
+      "index-restricted_002dsexp_002c-customization-types"></a>
+    </dd>
+
+    <dt><code>(restricted-sexp :match-alternatives
+    <var>criteria</var>)</code></dt>
+
+    <dd>
+      <p>This is the most general composite type construct. The
+      value may be any Lisp object that satisfies one of
+      <var>criteria</var>. <var>criteria</var> should be a list,
+      and each element should be one of these possibilities:</p>
+
+      <ul>
+        <li>A predicate&mdash;that is, a function of one argument
+        that has no side effects, and returns either
+        <code>nil</code> or non-<code>nil</code> according to the
+        argument. Using a predicate in the list says that objects
+        for which the predicate returns non-<code>nil</code> are
+        acceptable.</li>
+
+        <li>A quoted constant&mdash;that is,
+        <code>'<var>object</var></code>. This sort of element in
+        the list says that <var>object</var> itself is an
+        acceptable value.</li>
+      </ul>
+
+      <p>For example,</p>
+
+      <div class="example">
+        <pre class="example">
+(restricted-sexp :match-alternatives
                  (integerp 't 'nil))
-</pre></div>
+</pre>
+      </div>
 
-<p>allows integers, <code>t</code> and <code>nil</code> as legitimate values.
-</p>
-<p>The customization buffer shows all legitimate values using their read
-syntax, and the user edits them textually.
-</p></dd>
-</dl>
+      <p>allows integers, <code>t</code> and <code>nil</code> as
+      legitimate values.</p>
 
-<p>Here is a table of the keywords you can use in keyword-value pairs
-in a composite type:
-</p>
-<dl compact="compact">
-<dt><code>:tag <var>tag</var></code></dt>
-<dd><p>Use <var>tag</var> as the name of this alternative, for user communication
-purposes.  This is useful for a type that appears inside of a
-<code>choice</code>.
-</p>
-</dd>
-<dt><code>:match-alternatives <var>criteria</var></code></dt>
-<dd><a name="index-match_002dalternatives_002c-customization-keyword"></a>
-<p>Use <var>criteria</var> to match possible values.  This is used only in
-<code>restricted-sexp</code>.
-</p>
-</dd>
-<dt><code>:args <var>argument-list</var></code></dt>
-<dd><a name="index-args_002c-customization-keyword"></a>
-<p>Use the elements of <var>argument-list</var> as the arguments of the type
-construct.  For instance, <code>(const :args (foo))</code> is equivalent to
-<code>(const foo)</code>.  You rarely need to write <code>:args</code> explicitly,
-because normally the arguments are recognized automatically as
-whatever follows the last keyword-value pair.
-</p></dd>
-</dl>
+      <p>The customization buffer shows all legitimate values using
+      their read syntax, and the user edits them textually.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Splicing-into-Lists.html#Splicing-into-Lists" accesskey="n" rel="next">Splicing into Lists</a>, Previous: <a href="Simple-Types.html#Simple-Types" accesskey="p" rel="prev">Simple Types</a>, Up: <a href="Customization-Types.html#Customization-Types" accesskey="u" rel="up">Customization Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Here is a table of the keywords you can use in keyword-value
+  pairs in a composite type:</p>
 
+  <dl compact="compact">
+    <dt><code>:tag <var>tag</var></code></dt>
 
+    <dd>
+      <p>Use <var>tag</var> as the name of this alternative, for
+      user communication purposes. This is useful for a type that
+      appears inside of a <code>choice</code>.</p>
+    </dd>
 
+    <dt><code>:match-alternatives <var>criteria</var></code></dt>
+
+    <dd>
+      <a name=
+      "index-match_002dalternatives_002c-customization-keyword" id=
+      "index-match_002dalternatives_002c-customization-keyword"></a>
+
+      <p>Use <var>criteria</var> to match possible values. This is
+      used only in <code>restricted-sexp</code>.</p>
+    </dd>
+
+    <dt><code>:args <var>argument-list</var></code></dt>
+
+    <dd>
+      <a name="index-args_002c-customization-keyword" id=
+      "index-args_002c-customization-keyword"></a>
+
+      <p>Use the elements of <var>argument-list</var> as the
+      arguments of the type construct. For instance, <code>(const
+      :args (foo))</code> is equivalent to <code>(const
+      foo)</code>. You rarely need to write <code>:args</code>
+      explicitly, because normally the arguments are recognized
+      automatically as whatever follows the last keyword-value
+      pair.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Splicing-into-Lists.html#Splicing-into-Lists"
+    accesskey="n" rel="next">Splicing into Lists</a>, Previous:
+    <a href="Simple-Types.html#Simple-Types" accesskey="p" rel=
+    "prev">Simple Types</a>, Up: <a href=
+    "Customization-Types.html#Customization-Types" accesskey="u"
+    rel="up">Customization Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

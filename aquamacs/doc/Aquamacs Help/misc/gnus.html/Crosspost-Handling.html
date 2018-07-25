@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,118 +14,167 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Crosspost Handling</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Crosspost Handling">
-<meta name="keywords" content="Gnus Manual: Crosspost Handling">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Duplicate-Suppression.html#Duplicate-Suppression" rel="next" title="Duplicate Suppression">
-<link href="Exiting-the-Summary-Buffer.html#Exiting-the-Summary-Buffer" rel="prev" title="Exiting the Summary Buffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Crosspost Handling</title>
+  <meta name="description" content=
+  "Gnus Manual: Crosspost Handling" />
+  <meta name="keywords" content=
+  "Gnus Manual: Crosspost Handling" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Duplicate-Suppression.html#Duplicate-Suppression"
+  rel="next" title="Duplicate Suppression" />
+  <link href=
+  "Exiting-the-Summary-Buffer.html#Exiting-the-Summary-Buffer" rel=
+  "prev" title="Exiting the Summary Buffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Crosspost-Handling"></a>
-<div class="header">
-<p>
-Next: <a href="Duplicate-Suppression.html#Duplicate-Suppression" accesskey="n" rel="next">Duplicate Suppression</a>, Previous: <a href="Exiting-the-Summary-Buffer.html#Exiting-the-Summary-Buffer" accesskey="p" rel="prev">Exiting the Summary Buffer</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Crosspost-Handling-1"></a>
-<h3 class="section">3.29 Crosspost Handling</h3>
+<body lang="en" xml:lang="en">
+  <a name="Crosspost-Handling" id="Crosspost-Handling"></a>
 
-<a name="index-velveeta"></a>
-<a name="index-spamming"></a>
-<p>Marking cross-posted articles as read ensures that you&rsquo;ll never have to
-read the same article more than once.  Unless, of course, somebody has
-posted it to several groups separately.  Posting the same article to
-several groups (not cross-posting) is called <em>spamming</em>, and you are
-by law required to send nasty-grams to anyone who perpetrates such a
-heinous crime.
-</p>
-<p>Remember: Cross-posting is kinda ok, but posting the same article
-separately to several groups is not.  Massive cross-posting (aka.
-<em>velveeta</em>) is to be avoided at all costs, and you can even use the
-<code>gnus-summary-mail-crosspost-complaint</code> command to complain about
-excessive crossposting (see <a href="Summary-Mail-Commands.html#Summary-Mail-Commands">Summary Mail Commands</a>).
-</p>
-<a name="index-cross_002dposting"></a>
-<a name="index-Xref"></a>
-<a name="index-NOV"></a>
-<p>One thing that may cause Gnus to not do the cross-posting thing
-correctly is if you use an <acronym>NNTP</acronym> server that supports <small>XOVER</small>
-(which is very nice, because it speeds things up considerably) which
-does not include the <code>Xref</code> header in its <acronym>NOV</acronym> lines.  This is
-Evil, but all too common, alas, alack.  Gnus tries to Do The Right Thing
-even with <small>XOVER</small> by registering the <code>Xref</code> lines of all
-articles you actually read, but if you kill the articles, or just mark
-them as read without reading them, Gnus will not get a chance to snoop
-the <code>Xref</code> lines out of these articles, and will be unable to use
-the cross reference mechanism.
-</p>
-<a name="index-LIST-overview_002efmt"></a>
-<a name="index-overview_002efmt"></a>
-<p>To check whether your <acronym>NNTP</acronym> server includes the <code>Xref</code> header
-in its overview files, try &lsquo;<samp>telnet your.nntp.server nntp</samp>&rsquo;,
-&lsquo;<samp>MODE READER</samp>&rsquo; on <code>inn</code> servers, and then say &lsquo;<samp>LIST
-overview.fmt</samp>&rsquo;.  This may not work, but if it does, and the last line you
-get does not read &lsquo;<samp>Xref:full</samp>&rsquo;, then you should shout and whine at
-your news admin until she includes the <code>Xref</code> header in the
-overview files.
-</p>
-<p>If you want Gnus to get the <code>Xref</code>s right all the time, you have to
-set <code>nntp-nov-is-evil</code> to <code>t</code>, which slows things down
-considerably.  Also see <a href="Slow_002fExpensive-Connection.html#Slow_002fExpensive-Connection">Slow/Expensive Connection</a>.
-</p>
-<p>C&rsquo;est la vie.
-</p>
-<p>For an alternative approach, see <a href="Duplicate-Suppression.html#Duplicate-Suppression">Duplicate Suppression</a>.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Duplicate-Suppression.html#Duplicate-Suppression" accesskey=
+    "n" rel="next">Duplicate Suppression</a>, Previous: <a href=
+    "Exiting-the-Summary-Buffer.html#Exiting-the-Summary-Buffer"
+    accesskey="p" rel="prev">Exiting the Summary Buffer</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Crosspost-Handling-1" id="Crosspost-Handling-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Duplicate-Suppression.html#Duplicate-Suppression" accesskey="n" rel="next">Duplicate Suppression</a>, Previous: <a href="Exiting-the-Summary-Buffer.html#Exiting-the-Summary-Buffer" accesskey="p" rel="prev">Exiting the Summary Buffer</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">3.29 Crosspost Handling</h3><a name=
+  "index-velveeta" id="index-velveeta"></a> <a name=
+  "index-spamming" id="index-spamming"></a>
 
+  <p>Marking cross-posted articles as read ensures that
+  you&rsquo;ll never have to read the same article more than once.
+  Unless, of course, somebody has posted it to several groups
+  separately. Posting the same article to several groups (not
+  cross-posting) is called <em>spamming</em>, and you are by law
+  required to send nasty-grams to anyone who perpetrates such a
+  heinous crime.</p>
 
+  <p>Remember: Cross-posting is kinda ok, but posting the same
+  article separately to several groups is not. Massive
+  cross-posting (aka. <em>velveeta</em>) is to be avoided at all
+  costs, and you can even use the
+  <code>gnus-summary-mail-crosspost-complaint</code> command to
+  complain about excessive crossposting (see <a href=
+  "Summary-Mail-Commands.html#Summary-Mail-Commands">Summary Mail
+  Commands</a>).</p><a name="index-cross_002dposting" id=
+  "index-cross_002dposting"></a> <a name="index-Xref" id=
+  "index-Xref"></a> <a name="index-NOV" id="index-NOV"></a>
 
+  <p>One thing that may cause Gnus to not do the cross-posting
+  thing correctly is if you use an <acronym>NNTP</acronym> server
+  that supports <small>XOVER</small> (which is very nice, because
+  it speeds things up considerably) which does not include the
+  <code>Xref</code> header in its <acronym>NOV</acronym> lines.
+  This is Evil, but all too common, alas, alack. Gnus tries to Do
+  The Right Thing even with <small>XOVER</small> by registering the
+  <code>Xref</code> lines of all articles you actually read, but if
+  you kill the articles, or just mark them as read without reading
+  them, Gnus will not get a chance to snoop the <code>Xref</code>
+  lines out of these articles, and will be unable to use the cross
+  reference mechanism.</p><a name="index-LIST-overview_002efmt" id=
+  "index-LIST-overview_002efmt"></a> <a name=
+  "index-overview_002efmt" id="index-overview_002efmt"></a>
+
+  <p>To check whether your <acronym>NNTP</acronym> server includes
+  the <code>Xref</code> header in its overview files, try
+  &lsquo;<samp>telnet your.nntp.server nntp</samp>&rsquo;,
+  &lsquo;<samp>MODE READER</samp>&rsquo; on <code>inn</code>
+  servers, and then say &lsquo;<samp>LIST
+  overview.fmt</samp>&rsquo;. This may not work, but if it does,
+  and the last line you get does not read
+  &lsquo;<samp>Xref:full</samp>&rsquo;, then you should shout and
+  whine at your news admin until she includes the <code>Xref</code>
+  header in the overview files.</p>
+
+  <p>If you want Gnus to get the <code>Xref</code>s right all the
+  time, you have to set <code>nntp-nov-is-evil</code> to
+  <code>t</code>, which slows things down considerably. Also see
+  <a href=
+  "Slow_002fExpensive-Connection.html#Slow_002fExpensive-Connection">
+  Slow/Expensive Connection</a>.</p>
+
+  <p>C&rsquo;est la vie.</p>
+
+  <p>For an alternative approach, see <a href=
+  "Duplicate-Suppression.html#Duplicate-Suppression">Duplicate
+  Suppression</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Duplicate-Suppression.html#Duplicate-Suppression" accesskey=
+    "n" rel="next">Duplicate Suppression</a>, Previous: <a href=
+    "Exiting-the-Summary-Buffer.html#Exiting-the-Summary-Buffer"
+    accesskey="p" rel="prev">Exiting the Summary Buffer</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

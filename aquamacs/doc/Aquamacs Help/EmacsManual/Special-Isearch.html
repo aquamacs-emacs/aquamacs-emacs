@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,180 +20,265 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Special Isearch</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Special Isearch">
-<meta name="keywords" content="GNU Emacs Manual: Special Isearch">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Incremental-Search.html#Incremental-Search" rel="up" title="Incremental Search">
-<link href="Not-Exiting-Isearch.html#Not-Exiting-Isearch" rel="next" title="Not Exiting Isearch">
-<link href="Error-in-Isearch.html#Error-in-Isearch" rel="prev" title="Error in Isearch">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Special Isearch</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Special Isearch" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Special Isearch" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Incremental-Search.html#Incremental-Search" rel="up"
+  title="Incremental Search" />
+  <link href="Not-Exiting-Isearch.html#Not-Exiting-Isearch" rel=
+  "next" title="Not Exiting Isearch" />
+  <link href="Error-in-Isearch.html#Error-in-Isearch" rel="prev"
+  title="Error in Isearch" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Special-Isearch" id="Special-Isearch"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Not-Exiting-Isearch.html#Not-Exiting-Isearch"
+    accesskey="n" rel="next">Not Exiting Isearch</a>, Previous:
+    <a href="Error-in-Isearch.html#Error-in-Isearch" accesskey="p"
+    rel="prev">Error in Isearch</a>, Up: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="u" rel=
+    "up">Incremental Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Special-Input-for-Incremental-Search" id=
+  "Special-Input-for-Incremental-Search"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Special-Isearch"></a>
-<div class="header">
-<p>
-Next: <a href="Not-Exiting-Isearch.html#Not-Exiting-Isearch" accesskey="n" rel="next">Not Exiting Isearch</a>, Previous: <a href="Error-in-Isearch.html#Error-in-Isearch" accesskey="p" rel="prev">Error in Isearch</a>, Up: <a href="Incremental-Search.html#Incremental-Search" accesskey="u" rel="up">Incremental Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Special-Input-for-Incremental-Search"></a>
-<h4 class="subsection">15.1.5 Special Input for Incremental Search</h4>
+  <h4 class="subsection">15.1.5 Special Input for Incremental
+  Search</h4>
 
-<p>In addition to characters described in the previous subsections,
-some of the other characters you type during incremental search have
-special effects.  They are described here.
-</p>
-<p>To toggle lax space matching (see <a href="Lax-Search.html#Lax-Search">lax space
-matching</a>), type <kbd>M-s <span class="key">SPC</span></kbd>.
-</p>
-<p>To toggle case sensitivity of the search, type <kbd>M-c</kbd> or
-<kbd>M-s c</kbd>.  See <a href="Lax-Search.html#Lax-Search">case folding</a>.  If the search string
-includes upper-case letters, the search is case-sensitive by default.
-</p>
-<p>To toggle whether or not the search will consider similar and
-equivalent characters as a match, type <kbd>M-s '</kbd>.  See <a href="Lax-Search.html#Lax-Search">character folding</a>.  If the search string includes accented
-characters, that disables character folding during that search.
-</p>
-<a name="index-invisible-text_002c-searching-for"></a>
-<a name="index-M_002ds-i-_0028Incremental-search_0029"></a>
-<a name="index-isearch_002dtoggle_002dinvisible"></a>
-<p>To toggle whether or not invisible text is searched, type
-<kbd>M-s i</kbd> (<code>isearch-toggle-invisible</code>).  See <a href="Outline-Visibility.html#Outline-Search">Outline Search</a>.
-</p>
-<a name="index-M_002dr-_0028Incremental-Search_0029"></a>
-<a name="index-M_002ds-r-_0028Incremental-Search_0029"></a>
-<a name="index-isearch_002dtoggle_002dregexp"></a>
-<p>To toggle between non-regexp and regexp incremental search, type
-<kbd>M-r</kbd> or <kbd>M-s r</kbd> (<code>isearch-toggle-regexp</code>).
-See <a href="Regexp-Search.html#Regexp-Search">Regexp Search</a>.
-</p>
-<p>To toggle symbol mode, type <kbd>M-s _</kbd>.  See <a href="Symbol-Search.html#Symbol-Search">Symbol Search</a>.
-</p>
-<p>To search for a newline character, type <kbd>C-j</kbd> as part of the
-search string.
-</p>
-<p>To search for non-<acronym>ASCII</acronym> characters, use one of the
-following methods:
-</p>
-<ul>
-<li> Type <kbd>C-q</kbd>, followed by a non-graphic character or a sequence of
-octal digits.  This adds a character to the search string, similar to
-inserting into a buffer using <kbd>C-q</kbd> (see <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>).  For
-example, <kbd>C-q C-s</kbd> during incremental search adds the
-&lsquo;<samp>control-S</samp>&rsquo; character to the search string.
+  <p>In addition to characters described in the previous
+  subsections, some of the other characters you type during
+  incremental search have special effects. They are described
+  here.</p>
 
-</li><li> Type <kbd>C-x 8 <span class="key">RET</span></kbd>, followed by a Unicode name or code-point
-in hex.  This adds the specified character into the search string,
-similar to the usual <code>insert-char</code> command (see <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>).
+  <p>To toggle lax space matching (see <a href=
+  "Lax-Search.html#Lax-Search">lax space matching</a>), type
+  <kbd>M-s <span class="key">SPC</span></kbd>.</p>
 
-</li><li> <a name="index-C_002d_005e-_0028Incremental-Search_0029"></a>
-<a name="index-isearch_002dtoggle_002dinput_002dmethod"></a>
-<a name="index-isearch_002dtoggle_002dspecified_002dinput_002dmethod"></a>
-Use an input method (see <a href="Input-Methods.html#Input-Methods">Input Methods</a>).  If an input method is
-enabled in the current buffer when you start the search, the same
-method will be active in the minibuffer when you type the search
-string.  While typing the search string, you can toggle the input
-method with <kbd>C-\</kbd> (<code>isearch-toggle-input-method</code>).  You can
-also turn on a non-default input method with <kbd>C-^</kbd>
-(<code>isearch-toggle-specified-input-method</code>), which prompts for the
-name of the input method.  When an input method is active during
-incremental search, the search prompt includes the input method
-mnemonic, like this:
+  <p>To toggle case sensitivity of the search, type <kbd>M-c</kbd>
+  or <kbd>M-s c</kbd>. See <a href=
+  "Lax-Search.html#Lax-Search">case folding</a>. If the search
+  string includes upper-case letters, the search is case-sensitive
+  by default.</p>
 
-<div class="example">
-<pre class="example">I-search [<var>im</var>]:
-</pre></div>
+  <p>To toggle whether or not the search will consider similar and
+  equivalent characters as a match, type <kbd>M-s '</kbd>. See
+  <a href="Lax-Search.html#Lax-Search">character folding</a>. If
+  the search string includes accented characters, that disables
+  character folding during that search.</p><a name=
+  "index-invisible-text_002c-searching-for" id=
+  "index-invisible-text_002c-searching-for"></a> <a name=
+  "index-M_002ds-i-_0028Incremental-search_0029" id=
+  "index-M_002ds-i-_0028Incremental-search_0029"></a> <a name=
+  "index-isearch_002dtoggle_002dinvisible" id=
+  "index-isearch_002dtoggle_002dinvisible"></a>
 
-<p>where <var>im</var> is the mnemonic of the active input method.  Any input
-method you enable during incremental search remains enabled in the
-current buffer afterwards.
-</p></li></ul>
+  <p>To toggle whether or not invisible text is searched, type
+  <kbd>M-s i</kbd> (<code>isearch-toggle-invisible</code>). See
+  <a href="Outline-Visibility.html#Outline-Search">Outline
+  Search</a>.</p><a name=
+  "index-M_002dr-_0028Incremental-Search_0029" id=
+  "index-M_002dr-_0028Incremental-Search_0029"></a> <a name=
+  "index-M_002ds-r-_0028Incremental-Search_0029" id=
+  "index-M_002ds-r-_0028Incremental-Search_0029"></a> <a name=
+  "index-isearch_002dtoggle_002dregexp" id=
+  "index-isearch_002dtoggle_002dregexp"></a>
 
-<a name="index-M_002ds-o-_0028Incremental-Search_0029"></a>
-<a name="index-isearch_002doccur"></a>
-<p>Typing <kbd>M-s o</kbd> in incremental search invokes
-<code>isearch-occur</code>, which runs <code>occur</code> with the current search
-string.  See <a href="Other-Repeating-Search.html#Other-Repeating-Search">occur</a>.
-</p>
-<a name="index-M_002d_0025-_0028Incremental-search_0029"></a>
-<p>Typing <kbd>M-%</kbd> in incremental search invokes <code>query-replace</code>
-or <code>query-replace-regexp</code> (depending on search mode) with the
-current search string used as the string to replace.  A negative
-prefix argument means to replace backward.  See <a href="Query-Replace.html#Query-Replace">Query Replace</a>.
-</p>
-<a name="index-M_002dTAB-_0028Incremental-search_0029"></a>
-<p>Typing <kbd>M-<span class="key">TAB</span></kbd> in incremental search invokes
-<code>isearch-complete</code>, which attempts to complete the search string
-using the search ring (the previous search strings you used) as a list
-of completion alternatives.  See <a href="Completion.html#Completion">Completion</a>.  In many operating
-systems, the <kbd>M-<span class="key">TAB</span></kbd> key sequence is captured by the window
-manager; you then need to rebind <code>isearch-complete</code> to another
-key sequence if you want to use it (see <a href="Rebinding.html#Rebinding">Rebinding</a>).
-</p>
-<a name="index-M_002ds-h-r-_0028Incremental-Search_0029"></a>
-<a name="index-isearch_002dhighlight_002dregexp"></a>
-<p>You can exit the search while leaving the matches for the last
-search string highlighted on display.  To this end, type <kbd>M-s h r</kbd>
-(<code>isearch-highlight-regexp</code>), which will run
-<code>highlight-regexp</code> (see <a href="Highlight-Interactively.html#Highlight-Interactively">Highlight Interactively</a>) passing
-it the regexp derived from the last search string and prompting you
-for the face to use for highlighting.  To remove the highlighting,
-type <kbd>M-s h u</kbd> (<code>unhighlight-regexp</code>).
-</p>
-<a name="index-incremental-search_002c-help-on-special-keys"></a>
-<a name="index-C_002dh-C_002dh-_0028Incremental-Search_0029"></a>
-<a name="index-isearch_002dhelp_002dmap"></a>
-<a name="index-isearch_002dmode_002dmap"></a>
-<p>When incremental search is active, you can type <kbd>C-h C-h</kbd>
-(<code>isearch-help-map</code>) to access interactive help options,
-including a list of special key bindings.  These key bindings are part
-of the keymap <code>isearch-mode-map</code> (see <a href="Keymaps.html#Keymaps">Keymaps</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Not-Exiting-Isearch.html#Not-Exiting-Isearch" accesskey="n" rel="next">Not Exiting Isearch</a>, Previous: <a href="Error-in-Isearch.html#Error-in-Isearch" accesskey="p" rel="prev">Error in Isearch</a>, Up: <a href="Incremental-Search.html#Incremental-Search" accesskey="u" rel="up">Incremental Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>To toggle between non-regexp and regexp incremental search,
+  type <kbd>M-r</kbd> or <kbd>M-s r</kbd>
+  (<code>isearch-toggle-regexp</code>). See <a href=
+  "Regexp-Search.html#Regexp-Search">Regexp Search</a>.</p>
 
+  <p>To toggle symbol mode, type <kbd>M-s _</kbd>. See <a href=
+  "Symbol-Search.html#Symbol-Search">Symbol Search</a>.</p>
 
+  <p>To search for a newline character, type <kbd>C-j</kbd> as part
+  of the search string.</p>
 
+  <p>To search for non-<acronym>ASCII</acronym> characters, use one
+  of the following methods:</p>
+
+  <ul>
+    <li>Type <kbd>C-q</kbd>, followed by a non-graphic character or
+    a sequence of octal digits. This adds a character to the search
+    string, similar to inserting into a buffer using <kbd>C-q</kbd>
+    (see <a href="Inserting-Text.html#Inserting-Text">Inserting
+    Text</a>). For example, <kbd>C-q C-s</kbd> during incremental
+    search adds the &lsquo;<samp>control-S</samp>&rsquo; character
+    to the search string.</li>
+
+    <li>Type <kbd>C-x 8 <span class="key">RET</span></kbd>,
+    followed by a Unicode name or code-point in hex. This adds the
+    specified character into the search string, similar to the
+    usual <code>insert-char</code> command (see <a href=
+    "Inserting-Text.html#Inserting-Text">Inserting Text</a>).</li>
+
+    <li>
+      <a name="index-C_002d_005e-_0028Incremental-Search_0029" id=
+      "index-C_002d_005e-_0028Incremental-Search_0029"></a>
+      <a name="index-isearch_002dtoggle_002dinput_002dmethod" id=
+      "index-isearch_002dtoggle_002dinput_002dmethod"></a> <a name=
+      "index-isearch_002dtoggle_002dspecified_002dinput_002dmethod"
+      id=
+      "index-isearch_002dtoggle_002dspecified_002dinput_002dmethod">
+      </a> Use an input method (see <a href=
+      "Input-Methods.html#Input-Methods">Input Methods</a>). If an
+      input method is enabled in the current buffer when you start
+      the search, the same method will be active in the minibuffer
+      when you type the search string. While typing the search
+      string, you can toggle the input method with <kbd>C-\</kbd>
+      (<code>isearch-toggle-input-method</code>). You can also turn
+      on a non-default input method with <kbd>C-^</kbd>
+      (<code>isearch-toggle-specified-input-method</code>), which
+      prompts for the name of the input method. When an input
+      method is active during incremental search, the search prompt
+      includes the input method mnemonic, like this:
+
+      <div class="example">
+        <pre class="example">
+I-search [<var>im</var>]:
+</pre>
+      </div>
+
+      <p>where <var>im</var> is the mnemonic of the active input
+      method. Any input method you enable during incremental search
+      remains enabled in the current buffer afterwards.</p>
+    </li>
+  </ul><a name="index-M_002ds-o-_0028Incremental-Search_0029" id=
+  "index-M_002ds-o-_0028Incremental-Search_0029"></a> <a name=
+  "index-isearch_002doccur" id="index-isearch_002doccur"></a>
+
+  <p>Typing <kbd>M-s o</kbd> in incremental search invokes
+  <code>isearch-occur</code>, which runs <code>occur</code> with
+  the current search string. See <a href=
+  "Other-Repeating-Search.html#Other-Repeating-Search">occur</a>.</p><a name="index-M_002d_0025-_0028Incremental-search_0029"
+  id="index-M_002d_0025-_0028Incremental-search_0029"></a>
+
+  <p>Typing <kbd>M-%</kbd> in incremental search invokes
+  <code>query-replace</code> or <code>query-replace-regexp</code>
+  (depending on search mode) with the current search string used as
+  the string to replace. A negative prefix argument means to
+  replace backward. See <a href=
+  "Query-Replace.html#Query-Replace">Query Replace</a>.</p><a name=
+  "index-M_002dTAB-_0028Incremental-search_0029" id=
+  "index-M_002dTAB-_0028Incremental-search_0029"></a>
+
+  <p>Typing <kbd>M-<span class="key">TAB</span></kbd> in
+  incremental search invokes <code>isearch-complete</code>, which
+  attempts to complete the search string using the search ring (the
+  previous search strings you used) as a list of completion
+  alternatives. See <a href=
+  "Completion.html#Completion">Completion</a>. In many operating
+  systems, the <kbd>M-<span class="key">TAB</span></kbd> key
+  sequence is captured by the window manager; you then need to
+  rebind <code>isearch-complete</code> to another key sequence if
+  you want to use it (see <a href=
+  "Rebinding.html#Rebinding">Rebinding</a>).</p><a name=
+  "index-M_002ds-h-r-_0028Incremental-Search_0029" id=
+  "index-M_002ds-h-r-_0028Incremental-Search_0029"></a> <a name=
+  "index-isearch_002dhighlight_002dregexp" id=
+  "index-isearch_002dhighlight_002dregexp"></a>
+
+  <p>You can exit the search while leaving the matches for the last
+  search string highlighted on display. To this end, type <kbd>M-s
+  h r</kbd> (<code>isearch-highlight-regexp</code>), which will run
+  <code>highlight-regexp</code> (see <a href=
+  "Highlight-Interactively.html#Highlight-Interactively">Highlight
+  Interactively</a>) passing it the regexp derived from the last
+  search string and prompting you for the face to use for
+  highlighting. To remove the highlighting, type <kbd>M-s h u</kbd>
+  (<code>unhighlight-regexp</code>).</p><a name=
+  "index-incremental-search_002c-help-on-special-keys" id=
+  "index-incremental-search_002c-help-on-special-keys"></a>
+  <a name="index-C_002dh-C_002dh-_0028Incremental-Search_0029" id=
+  "index-C_002dh-C_002dh-_0028Incremental-Search_0029"></a>
+  <a name="index-isearch_002dhelp_002dmap" id=
+  "index-isearch_002dhelp_002dmap"></a> <a name=
+  "index-isearch_002dmode_002dmap" id=
+  "index-isearch_002dmode_002dmap"></a>
+
+  <p>When incremental search is active, you can type <kbd>C-h
+  C-h</kbd> (<code>isearch-help-map</code>) to access interactive
+  help options, including a list of special key bindings. These key
+  bindings are part of the keymap <code>isearch-mode-map</code>
+  (see <a href="Keymaps.html#Keymaps">Keymaps</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Not-Exiting-Isearch.html#Not-Exiting-Isearch"
+    accesskey="n" rel="next">Not Exiting Isearch</a>, Previous:
+    <a href="Error-in-Isearch.html#Error-in-Isearch" accesskey="p"
+    rel="prev">Error in Isearch</a>, Up: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="u" rel=
+    "up">Incremental Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

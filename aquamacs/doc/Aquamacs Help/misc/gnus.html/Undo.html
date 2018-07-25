@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,104 +14,136 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Undo</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Undo">
-<meta name="keywords" content="Gnus Manual: Undo">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Various.html#Various" rel="up" title="Various">
-<link href="Predicate-Specifiers.html#Predicate-Specifiers" rel="next" title="Predicate Specifiers">
-<link href="Daemons.html#Daemons" rel="prev" title="Daemons">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Undo</title>
+  <meta name="description" content="Gnus Manual: Undo" />
+  <meta name="keywords" content="Gnus Manual: Undo" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Various.html#Various" rel="up" title="Various" />
+  <link href="Predicate-Specifiers.html#Predicate-Specifiers" rel=
+  "next" title="Predicate Specifiers" />
+  <link href="Daemons.html#Daemons" rel="prev" title="Daemons" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Undo"></a>
-<div class="header">
-<p>
-Next: <a href="Predicate-Specifiers.html#Predicate-Specifiers" accesskey="n" rel="next">Predicate Specifiers</a>, Previous: <a href="Daemons.html#Daemons" accesskey="p" rel="prev">Daemons</a>, Up: <a href="Various.html#Various" accesskey="u" rel="up">Various</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Undo-1"></a>
-<h3 class="section">9.10 Undo</h3>
-<a name="index-undo"></a>
+<body lang="en" xml:lang="en">
+  <a name="Undo" id="Undo"></a>
 
-<p>It is very useful to be able to undo actions one has done.  In normal
-Emacs buffers, it&rsquo;s easy enough&mdash;you just push the <code>undo</code> button.
-In Gnus buffers, however, it isn&rsquo;t that simple.
-</p>
-<p>The things Gnus displays in its buffer is of no value whatsoever to
-Gnus&mdash;it&rsquo;s all just data designed to look nice to the user.
-Killing a group in the group buffer with <kbd>C-k</kbd> makes the line
-disappear, but that&rsquo;s just a side-effect of the real action&mdash;the
-removal of the group in question from the internal Gnus structures.
-Undoing something like that can&rsquo;t be done by the normal Emacs
-<code>undo</code> function.
-</p>
-<p>Gnus tries to remedy this somewhat by keeping track of what the user
-does and coming up with actions that would reverse the actions the user
-takes.  When the user then presses the <code>undo</code> key, Gnus will run
-the code to reverse the previous action, or the previous actions.
-However, not all actions are easily reversible, so Gnus currently offers
-a few key functions to be undoable.  These include killing groups,
-yanking groups, and changing the list of read articles of groups.
-That&rsquo;s it, really.  More functions may be added in the future, but each
-added function means an increase in data to be stored, so Gnus will
-never be totally undoable.
-</p>
-<a name="index-gnus_002dundo_002dmode"></a>
-<a name="index-gnus_002duse_002dundo"></a>
-<a name="index-gnus_002dundo"></a>
-<p>The undoability is provided by the <code>gnus-undo-mode</code> minor mode.  It
-is used if <code>gnus-use-undo</code> is non-<code>nil</code>, which is the
-default.  The <kbd>C-M-_</kbd> key performs the <code>gnus-undo</code>
-command, which should feel kinda like the normal Emacs <code>undo</code>
-command.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Predicate-Specifiers.html#Predicate-Specifiers" accesskey="n"
+    rel="next">Predicate Specifiers</a>, Previous: <a href=
+    "Daemons.html#Daemons" accesskey="p" rel="prev">Daemons</a>,
+    Up: <a href="Various.html#Various" accesskey="u" rel=
+    "up">Various</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Undo-1" id="Undo-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Predicate-Specifiers.html#Predicate-Specifiers" accesskey="n" rel="next">Predicate Specifiers</a>, Previous: <a href="Daemons.html#Daemons" accesskey="p" rel="prev">Daemons</a>, Up: <a href="Various.html#Various" accesskey="u" rel="up">Various</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">9.10 Undo</h3><a name="index-undo" id=
+  "index-undo"></a>
 
+  <p>It is very useful to be able to undo actions one has done. In
+  normal Emacs buffers, it&rsquo;s easy enough&mdash;you just push
+  the <code>undo</code> button. In Gnus buffers, however, it
+  isn&rsquo;t that simple.</p>
 
+  <p>The things Gnus displays in its buffer is of no value
+  whatsoever to Gnus&mdash;it&rsquo;s all just data designed to
+  look nice to the user. Killing a group in the group buffer with
+  <kbd>C-k</kbd> makes the line disappear, but that&rsquo;s just a
+  side-effect of the real action&mdash;the removal of the group in
+  question from the internal Gnus structures. Undoing something
+  like that can&rsquo;t be done by the normal Emacs
+  <code>undo</code> function.</p>
 
+  <p>Gnus tries to remedy this somewhat by keeping track of what
+  the user does and coming up with actions that would reverse the
+  actions the user takes. When the user then presses the
+  <code>undo</code> key, Gnus will run the code to reverse the
+  previous action, or the previous actions. However, not all
+  actions are easily reversible, so Gnus currently offers a few key
+  functions to be undoable. These include killing groups, yanking
+  groups, and changing the list of read articles of groups.
+  That&rsquo;s it, really. More functions may be added in the
+  future, but each added function means an increase in data to be
+  stored, so Gnus will never be totally undoable.</p><a name=
+  "index-gnus_002dundo_002dmode" id=
+  "index-gnus_002dundo_002dmode"></a> <a name=
+  "index-gnus_002duse_002dundo" id=
+  "index-gnus_002duse_002dundo"></a> <a name="index-gnus_002dundo"
+  id="index-gnus_002dundo"></a>
+
+  <p>The undoability is provided by the <code>gnus-undo-mode</code>
+  minor mode. It is used if <code>gnus-use-undo</code> is
+  non-<code>nil</code>, which is the default. The <kbd>C-M-_</kbd>
+  key performs the <code>gnus-undo</code> command, which should
+  feel kinda like the normal Emacs <code>undo</code> command.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Predicate-Specifiers.html#Predicate-Specifiers" accesskey="n"
+    rel="next">Predicate Specifiers</a>, Previous: <a href=
+    "Daemons.html#Daemons" accesskey="p" rel="prev">Daemons</a>,
+    Up: <a href="Various.html#Various" accesskey="u" rel=
+    "up">Various</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

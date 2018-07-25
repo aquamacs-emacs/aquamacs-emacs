@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,160 +14,466 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Summary Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Summary Buffer">
-<meta name="keywords" content="Gnus Manual: Summary Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Summary-Buffer-Format.html#Summary-Buffer-Format" rel="next" title="Summary Buffer Format">
-<link href="Sieve-Commands.html#Sieve-Commands" rel="prev" title="Sieve Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Summary Buffer</title>
+  <meta name="description" content="Gnus Manual: Summary Buffer" />
+  <meta name="keywords" content="Gnus Manual: Summary Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Summary-Buffer-Format.html#Summary-Buffer-Format"
+  rel="next" title="Summary Buffer Format" />
+  <link href="Sieve-Commands.html#Sieve-Commands" rel="prev" title=
+  "Sieve Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Summary-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Article-Buffer.html#Article-Buffer" accesskey="n" rel="next">Article Buffer</a>, Previous: <a href="Group-Buffer.html#Group-Buffer" accesskey="p" rel="prev">Group Buffer</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Summary-Buffer-1"></a>
-<h2 class="chapter">3 Summary Buffer</h2>
-<a name="index-summary-buffer"></a>
+<body lang="en" xml:lang="en">
+  <a name="Summary-Buffer" id="Summary-Buffer"></a>
 
-<p>A line for each article is displayed in the summary buffer.  You can
-move around, read articles, post articles and reply to articles.
-</p>
-<p>The most common way to a summary buffer is to select a group from the
-group buffer (see <a href="Selecting-a-Group.html#Selecting-a-Group">Selecting a Group</a>).
-</p>
-<p>You can have as many summary buffers open as you wish.
-</p>
-<p>You can customize the Summary Mode tool bar, see <kbd>M-x
-customize-apropos RET gnus-summary-tool-bar</kbd>.  This feature is only
-available in Emacs.
-</p>
-<a name="index-v-_0028Summary_0029"></a>
-<a name="index-keys_002c-reserved-for-users-_0028Summary_0029"></a>
-<p>The key <kbd>v</kbd> is reserved for users.  You can bind it to some
-command or better use it as a prefix key.  For example:
-</p><div class="lisp">
-<pre class="lisp">(define-key gnus-summary-mode-map (kbd &quot;v -&quot;) &quot;LrS&quot;) ;; lower subthread
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Article-Buffer.html#Article-Buffer"
+    accesskey="n" rel="next">Article Buffer</a>, Previous: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="p" rel="prev">Group
+    Buffer</a>, Up: <a href="index.html#Top" accesskey="u" rel=
+    "up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Summary-Buffer-1" id="Summary-Buffer-1"></a>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Summary-Buffer-Format.html#Summary-Buffer-Format" accesskey="1">Summary Buffer Format</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Deciding how the summary buffer is to look.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Summary-Maneuvering.html#Summary-Maneuvering" accesskey="2">Summary Maneuvering</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving around the summary buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Choosing-Articles.html#Choosing-Articles" accesskey="3">Choosing Articles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading articles.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Paging-the-Article.html#Paging-the-Article" accesskey="4">Paging the Article</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Scrolling the current article.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Reply-Followup-and-Post.html#Reply-Followup-and-Post" accesskey="5">Reply Followup and Post</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Posting articles.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Delayed-Articles.html#Delayed-Articles" accesskey="6">Delayed Articles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Send articles at a later time.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Marking-Articles.html#Marking-Articles" accesskey="7">Marking Articles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Marking articles as read, expirable, etc.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Limiting.html#Limiting" accesskey="8">Limiting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You can limit the summary buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Threading.html#Threading" accesskey="9">Threading</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How threads are made.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer">Sorting the Summary Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How articles and threads are sorted.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Asynchronous-Fetching.html#Asynchronous-Fetching">Asynchronous Fetching</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Gnus might be able to pre-fetch articles.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Article-Caching.html#Article-Caching">Article Caching</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You may store articles in a cache.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Persistent-Articles.html#Persistent-Articles">Persistent Articles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Making articles expiry-resistant.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Sticky-Articles.html#Sticky-Articles">Sticky Articles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Article buffers that are not reused.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Article-Backlog.html#Article-Backlog">Article Backlog</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Having already read articles hang around.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Saving-Articles.html#Saving-Articles">Saving Articles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Ways of customizing article saving.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Decoding-Articles.html#Decoding-Articles">Decoding Articles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Gnus can treat series of (uu)encoded articles.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Article-Treatment.html#Article-Treatment">Article Treatment</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The article buffer can be mangled at will.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="MIME-Commands.html#MIME-Commands">MIME Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Doing MIMEy things with the articles.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Charsets.html#Charsets">Charsets</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Character set issues.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Article-Commands.html#Article-Commands">Article Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Doing various things with the article buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Summary-Sorting.html#Summary-Sorting">Summary Sorting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Sorting the summary buffer in various ways.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Finding-the-Parent.html#Finding-the-Parent">Finding the Parent</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">No child support?  Get the parent.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Alternative-Approaches.html#Alternative-Approaches">Alternative Approaches</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading using non-default summaries.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Tree-Display.html#Tree-Display">Tree Display</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A more visual display of threads.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mail-Group-Commands.html#Mail-Group-Commands">Mail Group Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Some commands can only be used in mail groups.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Various-Summary-Stuff.html#Various-Summary-Stuff">Various Summary Stuff</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What didn&rsquo;t fit anywhere else.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Exiting-the-Summary-Buffer.html#Exiting-the-Summary-Buffer">Exiting the Summary Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Returning to the Group buffer,
-                                or reselecting the current group.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Crosspost-Handling.html#Crosspost-Handling">Crosspost Handling</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How crossposted articles are dealt with.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Duplicate-Suppression.html#Duplicate-Suppression">Duplicate Suppression</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An alternative when crosspost handling fails.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Security.html#Security">Security</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Decrypt and Verify.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mailing-List.html#Mailing-List">Mailing List</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Mailing list minor mode.
-</td></tr>
-</table>
+  <h2 class="chapter">3 Summary Buffer</h2><a name=
+  "index-summary-buffer" id="index-summary-buffer"></a>
 
+  <p>A line for each article is displayed in the summary buffer.
+  You can move around, read articles, post articles and reply to
+  articles.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Article-Buffer.html#Article-Buffer" accesskey="n" rel="next">Article Buffer</a>, Previous: <a href="Group-Buffer.html#Group-Buffer" accesskey="p" rel="prev">Group Buffer</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The most common way to a summary buffer is to select a group
+  from the group buffer (see <a href=
+  "Selecting-a-Group.html#Selecting-a-Group">Selecting a
+  Group</a>).</p>
 
+  <p>You can have as many summary buffers open as you wish.</p>
 
+  <p>You can customize the Summary Mode tool bar, see <kbd>M-x
+  customize-apropos RET gnus-summary-tool-bar</kbd>. This feature
+  is only available in Emacs.</p><a name=
+  "index-v-_0028Summary_0029" id="index-v-_0028Summary_0029"></a>
+  <a name="index-keys_002c-reserved-for-users-_0028Summary_0029"
+  id="index-keys_002c-reserved-for-users-_0028Summary_0029"></a>
 
+  <p>The key <kbd>v</kbd> is reserved for users. You can bind it to
+  some command or better use it as a prefix key. For example:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(define-key gnus-summary-mode-map (kbd "v -") "LrS") ;; lower subthread
+</pre>
+  </div>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Summary-Buffer-Format.html#Summary-Buffer-Format" accesskey=
+      "1">Summary Buffer Format</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Deciding how the summary buffer
+      is to look.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Summary-Maneuvering.html#Summary-Maneuvering" accesskey=
+      "2">Summary Maneuvering</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Moving around the summary
+      buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Choosing-Articles.html#Choosing-Articles" accesskey=
+      "3">Choosing Articles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading articles.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Paging-the-Article.html#Paging-the-Article" accesskey=
+      "4">Paging the Article</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Scrolling the current
+      article.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Reply-Followup-and-Post.html#Reply-Followup-and-Post"
+      accesskey="5">Reply Followup and Post</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Posting articles.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Delayed-Articles.html#Delayed-Articles" accesskey=
+      "6">Delayed Articles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Send articles at a later
+      time.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Marking-Articles.html#Marking-Articles" accesskey=
+      "7">Marking Articles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Marking articles as read,
+      expirable, etc.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Limiting.html#Limiting" accesskey="8">Limiting</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">You can limit the summary
+      buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Threading.html#Threading" accesskey="9">Threading</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How threads are made.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer">Sorting
+      the Summary Buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How articles and threads are
+      sorted.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Asynchronous-Fetching.html#Asynchronous-Fetching">Asynchronous
+      Fetching</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Gnus might be able to pre-fetch
+      articles.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Article-Caching.html#Article-Caching">Article
+      Caching</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">You may store articles in a
+      cache.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Persistent-Articles.html#Persistent-Articles">Persistent
+      Articles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Making articles
+      expiry-resistant.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Sticky-Articles.html#Sticky-Articles">Sticky
+      Articles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Article buffers that are not
+      reused.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Article-Backlog.html#Article-Backlog">Article
+      Backlog</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Having already read articles
+      hang around.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Saving-Articles.html#Saving-Articles">Saving
+      Articles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Ways of customizing article
+      saving.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Decoding-Articles.html#Decoding-Articles">Decoding
+      Articles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Gnus can treat series of
+      (uu)encoded articles.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Article-Treatment.html#Article-Treatment">Article
+      Treatment</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">The article buffer can be
+      mangled at will.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "MIME-Commands.html#MIME-Commands">MIME Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Doing MIMEy things with the
+      articles.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Charsets.html#Charsets">Charsets</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Character set issues.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Article-Commands.html#Article-Commands">Article
+      Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Doing various things with the
+      article buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Summary-Sorting.html#Summary-Sorting">Summary
+      Sorting</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Sorting the summary buffer in
+      various ways.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Finding-the-Parent.html#Finding-the-Parent">Finding the
+      Parent</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">No child support? Get the
+      parent.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Alternative-Approaches.html#Alternative-Approaches">Alternative
+      Approaches</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading using non-default
+      summaries.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Tree-Display.html#Tree-Display">Tree Display</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A more visual display of
+      threads.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mail-Group-Commands.html#Mail-Group-Commands">Mail Group
+      Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Some commands can only be used
+      in mail groups.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Various-Summary-Stuff.html#Various-Summary-Stuff">Various
+      Summary Stuff</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What didn&rsquo;t fit anywhere
+      else.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Exiting-the-Summary-Buffer.html#Exiting-the-Summary-Buffer">Exiting
+      the Summary Buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Returning to the Group buffer,
+      or reselecting the current group.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Crosspost-Handling.html#Crosspost-Handling">Crosspost
+      Handling</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How crossposted articles are
+      dealt with.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Duplicate-Suppression.html#Duplicate-Suppression">Duplicate
+      Suppression</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">An alternative when crosspost
+      handling fails.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Security.html#Security">Security</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Decrypt and Verify.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mailing-List.html#Mailing-List">Mailing List</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Mailing list minor mode.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Article-Buffer.html#Article-Buffer"
+    accesskey="n" rel="next">Article Buffer</a>, Previous: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="p" rel="prev">Group
+    Buffer</a>, Up: <a href="index.html#Top" accesskey="u" rel=
+    "up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

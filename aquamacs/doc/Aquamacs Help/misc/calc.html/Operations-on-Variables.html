@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,203 +18,322 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Operations on Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Operations on Variables">
-<meta name="keywords" content="GNU Emacs Calc Manual: Operations on Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Store-and-Recall.html#Store-and-Recall" rel="up" title="Store and Recall">
-<link href="Let-Command.html#Let-Command" rel="next" title="Let Command">
-<link href="Recalling-Variables.html#Recalling-Variables" rel="prev" title="Recalling Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Operations on Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Operations on Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Operations on Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Store-and-Recall.html#Store-and-Recall" rel="up"
+  title="Store and Recall" />
+  <link href="Let-Command.html#Let-Command" rel="next" title=
+  "Let Command" />
+  <link href="Recalling-Variables.html#Recalling-Variables" rel=
+  "prev" title="Recalling Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Operations-on-Variables"></a>
-<div class="header">
-<p>
-Next: <a href="Let-Command.html#Let-Command" accesskey="n" rel="next">Let Command</a>, Previous: <a href="Recalling-Variables.html#Recalling-Variables" accesskey="p" rel="prev">Recalling Variables</a>, Up: <a href="Store-and-Recall.html#Store-and-Recall" accesskey="u" rel="up">Store and Recall</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Other-Operations-on-Variables"></a>
-<h3 class="section">12.3 Other Operations on Variables</h3>
+<body lang="en" xml:lang="en">
+  <a name="Operations-on-Variables" id=
+  "Operations-on-Variables"></a>
 
-<a name="index-s-e"></a>
-<a name="index-calc_002dedit_002dvariable"></a>
-<p>The <kbd>s e</kbd> (<code>calc-edit-variable</code>) command edits the stored
-value of a variable without ever putting that value on the stack
-or simplifying or evaluating the value.  It prompts for the name of
-the variable to edit.  If the variable has no stored value, the
-editing buffer will start out empty.  If the editing buffer is
-empty when you press <kbd>C-c C-c</kbd> to finish, the variable will
-be made void.  See <a href="Editing-Stack-Entries.html#Editing-Stack-Entries">Editing Stack Entries</a>, for a general
-description of editing.
-</p>
-<p>The <kbd>s e</kbd> command is especially useful for creating and editing
-rewrite rules which are stored in variables.  Sometimes these rules
-contain formulas which must not be evaluated until the rules are
-actually used.  (For example, they may refer to &lsquo;<samp>deriv(x,y)</samp>&rsquo;,
-where <code>x</code> will someday become some expression involving <code>y</code>;
-if you let Calc evaluate the rule while you are defining it, Calc will
-replace &lsquo;<samp>deriv(x,y)</samp>&rsquo; with 0 because the formula <code>x</code> does
-not itself refer to <code>y</code>.)  By contrast, recalling the variable,
-editing with <kbd>`</kbd>, and storing will evaluate the variable&rsquo;s value
-as a side effect of putting the value on the stack.
-</p>
-<a name="index-s-A"></a>
-<a name="index-s-D"></a>
-<a name="index-s-E"></a>
-<a name="index-s-F"></a>
-<a name="index-s-G"></a>
-<a name="index-s-H"></a>
-<a name="index-s-I"></a>
-<a name="index-s-L"></a>
-<a name="index-s-P"></a>
-<a name="index-s-R"></a>
-<a name="index-s-T"></a>
-<a name="index-s-U"></a>
-<a name="index-s-X"></a>
-<a name="index-calc_002dstore_002dAlgSimpRules"></a>
-<a name="index-calc_002dstore_002dDecls"></a>
-<a name="index-calc_002dstore_002dEvalRules"></a>
-<a name="index-calc_002dstore_002dFitRules"></a>
-<a name="index-calc_002dstore_002dGenCount"></a>
-<a name="index-calc_002dstore_002dHolidays"></a>
-<a name="index-calc_002dstore_002dIntegLimit"></a>
-<a name="index-calc_002dstore_002dLineStyles"></a>
-<a name="index-calc_002dstore_002dPointStyles"></a>
-<a name="index-calc_002dstore_002dPlotRejects"></a>
-<a name="index-calc_002dstore_002dTimeZone"></a>
-<a name="index-calc_002dstore_002dUnits"></a>
-<a name="index-calc_002dstore_002dExtSimpRules"></a>
-<p>There are several special-purpose variable-editing commands that
-use the <kbd>s</kbd> prefix followed by a shifted letter:
-</p>
-<dl compact="compact">
-<dt><kbd>s A</kbd></dt>
-<dd><p>Edit <code>AlgSimpRules</code>.  See <a href="Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic Simplifications</a>.
-</p></dd>
-<dt><kbd>s D</kbd></dt>
-<dd><p>Edit <code>Decls</code>.  See <a href="Declarations.html#Declarations">Declarations</a>.
-</p></dd>
-<dt><kbd>s E</kbd></dt>
-<dd><p>Edit <code>EvalRules</code>.  See <a href="Basic-Simplifications.html#Basic-Simplifications">Basic Simplifications</a>.
-</p></dd>
-<dt><kbd>s F</kbd></dt>
-<dd><p>Edit <code>FitRules</code>.  See <a href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>.
-</p></dd>
-<dt><kbd>s G</kbd></dt>
-<dd><p>Edit <code>GenCount</code>.  See <a href="Solving-Equations.html#Solving-Equations">Solving Equations</a>.
-</p></dd>
-<dt><kbd>s H</kbd></dt>
-<dd><p>Edit <code>Holidays</code>.  See <a href="Business-Days.html#Business-Days">Business Days</a>.
-</p></dd>
-<dt><kbd>s I</kbd></dt>
-<dd><p>Edit <code>IntegLimit</code>.  See <a href="Calculus.html#Calculus">Calculus</a>.
-</p></dd>
-<dt><kbd>s L</kbd></dt>
-<dd><p>Edit <code>LineStyles</code>.  See <a href="Graphics.html#Graphics">Graphics</a>.
-</p></dd>
-<dt><kbd>s P</kbd></dt>
-<dd><p>Edit <code>PointStyles</code>.  See <a href="Graphics.html#Graphics">Graphics</a>.
-</p></dd>
-<dt><kbd>s R</kbd></dt>
-<dd><p>Edit <code>PlotRejects</code>.  See <a href="Graphics.html#Graphics">Graphics</a>.
-</p></dd>
-<dt><kbd>s T</kbd></dt>
-<dd><p>Edit <code>TimeZone</code>.  See <a href="Time-Zones.html#Time-Zones">Time Zones</a>.
-</p></dd>
-<dt><kbd>s U</kbd></dt>
-<dd><p>Edit <code>Units</code>.  See <a href="User_002dDefined-Units.html#User_002dDefined-Units">User-Defined Units</a>.
-</p></dd>
-<dt><kbd>s X</kbd></dt>
-<dd><p>Edit <code>ExtSimpRules</code>.  See <a href="Unsafe-Simplifications.html#Unsafe-Simplifications">Unsafe Simplifications</a>.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Let-Command.html#Let-Command" accesskey="n"
+    rel="next">Let Command</a>, Previous: <a href=
+    "Recalling-Variables.html#Recalling-Variables" accesskey="p"
+    rel="prev">Recalling Variables</a>, Up: <a href=
+    "Store-and-Recall.html#Store-and-Recall" accesskey="u" rel=
+    "up">Store and Recall</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Other-Operations-on-Variables" id=
+  "Other-Operations-on-Variables"></a>
 
-<p>These commands are just versions of <kbd>s e</kbd> that use fixed variable
-names rather than prompting for the variable name.
-</p>
-<a name="index-s-p"></a>
-<a name="index-calc_002dpermanent_002dvariable"></a>
-<a name="index-Storing-variables-1"></a>
-<a name="index-Permanent-variables"></a>
-<a name="index-Calc-init-file_002c-variables"></a>
-<p>The <kbd>s p</kbd> (<code>calc-permanent-variable</code>) command saves a
-variable&rsquo;s value permanently in your Calc init file (the file given by
-the variable <code>calc-settings-file</code>, typically <samp>~/.emacs.d/calc.el</samp>), so
-that its value will still be available in future Emacs sessions.  You
-can re-execute <kbd>s&nbsp;p</kbd><!-- /@w --> later on to update the saved value, but the
-only way to remove a saved variable is to edit your calc init file
-by hand.  (See <a href="General-Mode-Commands.html#General-Mode-Commands">General Mode Commands</a>, for a way to tell Calc to
-use a different file for the Calc init file.)
-</p>
-<p>If you do not specify the name of a variable to save (i.e.,
-<kbd>s p <span class="key">RET</span></kbd>), all Calc variables with defined values
-are saved except for the special constants <code>pi</code>, <code>e</code>,
-<code>i</code>, <code>phi</code>, and <code>gamma</code>; the variables <code>TimeZone</code>
-and <code>PlotRejects</code>;
-<code>FitRules</code>, <code>DistribRules</code>, and other built-in rewrite
-rules; and <code>PlotData<var>n</var></code> variables generated
-by the graphics commands.  (You can still save these variables by
-explicitly naming them in an <kbd>s p</kbd> command.)
-</p>
-<a name="index-s-i"></a>
-<a name="index-calc_002dinsert_002dvariables"></a>
-<p>The <kbd>s i</kbd> (<code>calc-insert-variables</code>) command writes
-the values of all Calc variables into a specified buffer.
-The variables are written with the prefix <code>var-</code> in the form of
-Lisp <code>setq</code> commands
-which store the values in string form.  You can place these commands
-in your Calc init file (or <samp>.emacs</samp>) if you wish, though in this case it
-would be easier to use <kbd>s p <span class="key">RET</span></kbd>.  (Note that <kbd>s i</kbd>
-omits the same set of variables as <kbd>s&nbsp;p&nbsp;<span class="key">RET</span></kbd><!-- /@w -->; the difference
-is that <kbd>s i</kbd> will store the variables in any buffer, and it also
-stores in a more human-readable format.)
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Let-Command.html#Let-Command" accesskey="n" rel="next">Let Command</a>, Previous: <a href="Recalling-Variables.html#Recalling-Variables" accesskey="p" rel="prev">Recalling Variables</a>, Up: <a href="Store-and-Recall.html#Store-and-Recall" accesskey="u" rel="up">Store and Recall</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">12.3 Other Operations on
+  Variables</h3><a name="index-s-e" id="index-s-e"></a> <a name=
+  "index-calc_002dedit_002dvariable" id=
+  "index-calc_002dedit_002dvariable"></a>
 
+  <p>The <kbd>s e</kbd> (<code>calc-edit-variable</code>) command
+  edits the stored value of a variable without ever putting that
+  value on the stack or simplifying or evaluating the value. It
+  prompts for the name of the variable to edit. If the variable has
+  no stored value, the editing buffer will start out empty. If the
+  editing buffer is empty when you press <kbd>C-c C-c</kbd> to
+  finish, the variable will be made void. See <a href=
+  "Editing-Stack-Entries.html#Editing-Stack-Entries">Editing Stack
+  Entries</a>, for a general description of editing.</p>
 
+  <p>The <kbd>s e</kbd> command is especially useful for creating
+  and editing rewrite rules which are stored in variables.
+  Sometimes these rules contain formulas which must not be
+  evaluated until the rules are actually used. (For example, they
+  may refer to &lsquo;<samp>deriv(x,y)</samp>&rsquo;, where
+  <code>x</code> will someday become some expression involving
+  <code>y</code>; if you let Calc evaluate the rule while you are
+  defining it, Calc will replace
+  &lsquo;<samp>deriv(x,y)</samp>&rsquo; with 0 because the formula
+  <code>x</code> does not itself refer to <code>y</code>.) By
+  contrast, recalling the variable, editing with <kbd>`</kbd>, and
+  storing will evaluate the variable&rsquo;s value as a side effect
+  of putting the value on the stack.</p><a name="index-s-A" id=
+  "index-s-A"></a> <a name="index-s-D" id="index-s-D"></a> <a name=
+  "index-s-E" id="index-s-E"></a> <a name="index-s-F" id=
+  "index-s-F"></a> <a name="index-s-G" id="index-s-G"></a> <a name=
+  "index-s-H" id="index-s-H"></a> <a name="index-s-I" id=
+  "index-s-I"></a> <a name="index-s-L" id="index-s-L"></a> <a name=
+  "index-s-P" id="index-s-P"></a> <a name="index-s-R" id=
+  "index-s-R"></a> <a name="index-s-T" id="index-s-T"></a> <a name=
+  "index-s-U" id="index-s-U"></a> <a name="index-s-X" id=
+  "index-s-X"></a> <a name="index-calc_002dstore_002dAlgSimpRules"
+  id="index-calc_002dstore_002dAlgSimpRules"></a> <a name=
+  "index-calc_002dstore_002dDecls" id=
+  "index-calc_002dstore_002dDecls"></a> <a name=
+  "index-calc_002dstore_002dEvalRules" id=
+  "index-calc_002dstore_002dEvalRules"></a> <a name=
+  "index-calc_002dstore_002dFitRules" id=
+  "index-calc_002dstore_002dFitRules"></a> <a name=
+  "index-calc_002dstore_002dGenCount" id=
+  "index-calc_002dstore_002dGenCount"></a> <a name=
+  "index-calc_002dstore_002dHolidays" id=
+  "index-calc_002dstore_002dHolidays"></a> <a name=
+  "index-calc_002dstore_002dIntegLimit" id=
+  "index-calc_002dstore_002dIntegLimit"></a> <a name=
+  "index-calc_002dstore_002dLineStyles" id=
+  "index-calc_002dstore_002dLineStyles"></a> <a name=
+  "index-calc_002dstore_002dPointStyles" id=
+  "index-calc_002dstore_002dPointStyles"></a> <a name=
+  "index-calc_002dstore_002dPlotRejects" id=
+  "index-calc_002dstore_002dPlotRejects"></a> <a name=
+  "index-calc_002dstore_002dTimeZone" id=
+  "index-calc_002dstore_002dTimeZone"></a> <a name=
+  "index-calc_002dstore_002dUnits" id=
+  "index-calc_002dstore_002dUnits"></a> <a name=
+  "index-calc_002dstore_002dExtSimpRules" id=
+  "index-calc_002dstore_002dExtSimpRules"></a>
 
+  <p>There are several special-purpose variable-editing commands
+  that use the <kbd>s</kbd> prefix followed by a shifted
+  letter:</p>
+
+  <dl compact="compact">
+    <dt><kbd>s A</kbd></dt>
+
+    <dd>
+      <p>Edit <code>AlgSimpRules</code>. See <a href=
+      "Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic
+      Simplifications</a>.</p>
+    </dd>
+
+    <dt><kbd>s D</kbd></dt>
+
+    <dd>
+      <p>Edit <code>Decls</code>. See <a href=
+      "Declarations.html#Declarations">Declarations</a>.</p>
+    </dd>
+
+    <dt><kbd>s E</kbd></dt>
+
+    <dd>
+      <p>Edit <code>EvalRules</code>. See <a href=
+      "Basic-Simplifications.html#Basic-Simplifications">Basic
+      Simplifications</a>.</p>
+    </dd>
+
+    <dt><kbd>s F</kbd></dt>
+
+    <dd>
+      <p>Edit <code>FitRules</code>. See <a href=
+      "Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>.</p>
+    </dd>
+
+    <dt><kbd>s G</kbd></dt>
+
+    <dd>
+      <p>Edit <code>GenCount</code>. See <a href=
+      "Solving-Equations.html#Solving-Equations">Solving
+      Equations</a>.</p>
+    </dd>
+
+    <dt><kbd>s H</kbd></dt>
+
+    <dd>
+      <p>Edit <code>Holidays</code>. See <a href=
+      "Business-Days.html#Business-Days">Business Days</a>.</p>
+    </dd>
+
+    <dt><kbd>s I</kbd></dt>
+
+    <dd>
+      <p>Edit <code>IntegLimit</code>. See <a href=
+      "Calculus.html#Calculus">Calculus</a>.</p>
+    </dd>
+
+    <dt><kbd>s L</kbd></dt>
+
+    <dd>
+      <p>Edit <code>LineStyles</code>. See <a href=
+      "Graphics.html#Graphics">Graphics</a>.</p>
+    </dd>
+
+    <dt><kbd>s P</kbd></dt>
+
+    <dd>
+      <p>Edit <code>PointStyles</code>. See <a href=
+      "Graphics.html#Graphics">Graphics</a>.</p>
+    </dd>
+
+    <dt><kbd>s R</kbd></dt>
+
+    <dd>
+      <p>Edit <code>PlotRejects</code>. See <a href=
+      "Graphics.html#Graphics">Graphics</a>.</p>
+    </dd>
+
+    <dt><kbd>s T</kbd></dt>
+
+    <dd>
+      <p>Edit <code>TimeZone</code>. See <a href=
+      "Time-Zones.html#Time-Zones">Time Zones</a>.</p>
+    </dd>
+
+    <dt><kbd>s U</kbd></dt>
+
+    <dd>
+      <p>Edit <code>Units</code>. See <a href=
+      "User_002dDefined-Units.html#User_002dDefined-Units">User-Defined
+      Units</a>.</p>
+    </dd>
+
+    <dt><kbd>s X</kbd></dt>
+
+    <dd>
+      <p>Edit <code>ExtSimpRules</code>. See <a href=
+      "Unsafe-Simplifications.html#Unsafe-Simplifications">Unsafe
+      Simplifications</a>.</p>
+    </dd>
+  </dl>
+
+  <p>These commands are just versions of <kbd>s e</kbd> that use
+  fixed variable names rather than prompting for the variable
+  name.</p><a name="index-s-p" id="index-s-p"></a> <a name=
+  "index-calc_002dpermanent_002dvariable" id=
+  "index-calc_002dpermanent_002dvariable"></a> <a name=
+  "index-Storing-variables-1" id="index-Storing-variables-1"></a>
+  <a name="index-Permanent-variables" id=
+  "index-Permanent-variables"></a> <a name=
+  "index-Calc-init-file_002c-variables" id=
+  "index-Calc-init-file_002c-variables"></a>
+
+  <p>The <kbd>s p</kbd> (<code>calc-permanent-variable</code>)
+  command saves a variable&rsquo;s value permanently in your Calc
+  init file (the file given by the variable
+  <code>calc-settings-file</code>, typically
+  <samp>~/.emacs.d/calc.el</samp>), so that its value will still be
+  available in future Emacs sessions. You can re-execute
+  <kbd>s&nbsp;p</kbd><!-- /@w --> later on to update the saved
+  value, but the only way to remove a saved variable is to edit
+  your calc init file by hand. (See <a href=
+  "General-Mode-Commands.html#General-Mode-Commands">General Mode
+  Commands</a>, for a way to tell Calc to use a different file for
+  the Calc init file.)</p>
+
+  <p>If you do not specify the name of a variable to save (i.e.,
+  <kbd>s p <span class="key">RET</span></kbd>), all Calc variables
+  with defined values are saved except for the special constants
+  <code>pi</code>, <code>e</code>, <code>i</code>,
+  <code>phi</code>, and <code>gamma</code>; the variables
+  <code>TimeZone</code> and <code>PlotRejects</code>;
+  <code>FitRules</code>, <code>DistribRules</code>, and other
+  built-in rewrite rules; and <code>PlotData<var>n</var></code>
+  variables generated by the graphics commands. (You can still save
+  these variables by explicitly naming them in an <kbd>s p</kbd>
+  command.)</p><a name="index-s-i" id="index-s-i"></a> <a name=
+  "index-calc_002dinsert_002dvariables" id=
+  "index-calc_002dinsert_002dvariables"></a>
+
+  <p>The <kbd>s i</kbd> (<code>calc-insert-variables</code>)
+  command writes the values of all Calc variables into a specified
+  buffer. The variables are written with the prefix
+  <code>var-</code> in the form of Lisp <code>setq</code> commands
+  which store the values in string form. You can place these
+  commands in your Calc init file (or <samp>.emacs</samp>) if you
+  wish, though in this case it would be easier to use <kbd>s p
+  <span class="key">RET</span></kbd>. (Note that <kbd>s i</kbd>
+  omits the same set of variables as
+  <kbd>s&nbsp;p&nbsp;<span class="key">RET</span></kbd>
+  <!-- /@w -->; the difference is that <kbd>s i</kbd> will store
+  the variables in any buffer, and it also stores in a more
+  human-readable format.)</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Let-Command.html#Let-Command" accesskey="n"
+    rel="next">Let Command</a>, Previous: <a href=
+    "Recalling-Variables.html#Recalling-Variables" accesskey="p"
+    rel="prev">Recalling Variables</a>, Up: <a href=
+    "Store-and-Recall.html#Store-and-Recall" accesskey="u" rel=
+    "up">Store and Recall</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

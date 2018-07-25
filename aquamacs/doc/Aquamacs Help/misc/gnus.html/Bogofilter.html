@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,170 +14,249 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Bogofilter</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Bogofilter">
-<meta name="keywords" content="Gnus Manual: Bogofilter">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title="Spam Back Ends">
-<link href="SpamAssassin-back-end.html#SpamAssassin-back-end" rel="next" title="SpamAssassin back end">
-<link href="Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching" rel="prev" title="Regular Expressions Header Matching">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Bogofilter</title>
+  <meta name="description" content="Gnus Manual: Bogofilter" />
+  <meta name="keywords" content="Gnus Manual: Bogofilter" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title=
+  "Spam Back Ends" />
+  <link href="SpamAssassin-back-end.html#SpamAssassin-back-end"
+  rel="next" title="SpamAssassin back end" />
+  <link href=
+  "Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching"
+  rel="prev" title="Regular Expressions Header Matching" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Bogofilter"></a>
-<div class="header">
-<p>
-Next: <a href="SpamAssassin-back-end.html#SpamAssassin-back-end" accesskey="n" rel="next">SpamAssassin back end</a>, Previous: <a href="Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching" accesskey="p" rel="prev">Regular Expressions Header Matching</a>, Up: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel="up">Spam Back Ends</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Bogofilter-1"></a>
-<h4 class="subsubsection">9.17.6.7 Bogofilter</h4>
-<a name="index-spam-filtering-10"></a>
-<a name="index-bogofilter_002c-spam-filtering"></a>
-<a name="index-spam-13"></a>
+<body lang="en" xml:lang="en">
+  <a name="Bogofilter" id="Bogofilter"></a>
 
-<dl>
-<dt><a name="index-spam_002duse_002dbogofilter"></a>Variable: <strong>spam-use-bogofilter</strong></dt>
-<dd>
-<p>Set this variable if you want <code>spam-split</code> to use Eric Raymond&rsquo;s
-speedy Bogofilter.
-</p>
-<p>With a minimum of care for associating the &lsquo;<samp>$</samp>&rsquo; mark for spam
-articles only, Bogofilter training all gets fairly automatic.  You
-should do this until you get a few hundreds of articles in each
-category, spam or not.  The command <kbd>S t</kbd> in summary mode, either
-for debugging or for curiosity, shows the <em>spamicity</em> score of
-the current article (between 0.0 and 1.0).
-</p>
-<p>Bogofilter determines if a message is spam based on a specific
-threshold.  That threshold can be customized, consult the Bogofilter
-documentation.
-</p>
-<p>If the <code>bogofilter</code> executable is not in your path, Bogofilter
-processing will be turned off.
-</p>
-<p>You should not enable this if you use <code>spam-use-bogofilter-headers</code>.
-</p>
-</dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "SpamAssassin-back-end.html#SpamAssassin-back-end" accesskey=
+    "n" rel="next">SpamAssassin back end</a>, Previous: <a href=
+    "Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching"
+    accesskey="p" rel="prev">Regular Expressions Header
+    Matching</a>, Up: <a href="Spam-Back-Ends.html#Spam-Back-Ends"
+    accesskey="u" rel="up">Spam Back Ends</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Bogofilter-1" id="Bogofilter-1"></a>
 
-<dl compact="compact">
-<dt><kbd>M s t</kbd></dt>
-<dt><kbd>S t</kbd></dt>
-<dd><a name="index-M-s-t"></a>
-<a name="index-S-t"></a>
-<a name="index-spam_002dbogofilter_002dscore"></a>
-<p>Get the Bogofilter spamicity score (<code>spam-bogofilter-score</code>).
-</p></dd>
-</dl>
+  <h4 class="subsubsection">9.17.6.7 Bogofilter</h4><a name=
+  "index-spam-filtering-10" id="index-spam-filtering-10"></a>
+  <a name="index-bogofilter_002c-spam-filtering" id=
+  "index-bogofilter_002c-spam-filtering"></a> <a name=
+  "index-spam-13" id="index-spam-13"></a>
 
-<dl>
-<dt><a name="index-spam_002duse_002dbogofilter_002dheaders"></a>Variable: <strong>spam-use-bogofilter-headers</strong></dt>
-<dd>
-<p>Set this variable if you want <code>spam-split</code> to use Eric Raymond&rsquo;s
-speedy Bogofilter, looking only at the message headers.  It works
-similarly to <code>spam-use-bogofilter</code>, but the <code>X-Bogosity</code> header
-must be in the message already.  Normally you would do this with a
-procmail recipe or something similar; consult the Bogofilter
-installation documents for details.
-</p>
-<p>You should not enable this if you use <code>spam-use-bogofilter</code>.
-</p>
-</dd></dl>
+  <dl>
+    <dt><a name="index-spam_002duse_002dbogofilter" id=
+    "index-spam_002duse_002dbogofilter"></a>Variable:
+    <strong>spam-use-bogofilter</strong></dt>
 
-<dl>
-<dt><a name="index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dbogofilter"></a>Variable: <strong>gnus-group-spam-exit-processor-bogofilter</strong></dt>
-<dd><p>Add this symbol to a group&rsquo;s <code>spam-process</code> parameter by
-customizing the group parameters or the
-<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is
-added to a group&rsquo;s <code>spam-process</code> parameter, spam-marked articles
-will be added to the Bogofilter spam database.
-</p>
-<p><em>WARNING</em>
-</p>
-<p>Instead of the obsolete
-<code>gnus-group-spam-exit-processor-bogofilter</code>, it is recommended
-that you use <code>(spam spam-use-bogofilter)</code>.  Everything will work
-the same way, we promise.
-</p></dd></dl>
+    <dd>
+      <p>Set this variable if you want <code>spam-split</code> to
+      use Eric Raymond&rsquo;s speedy Bogofilter.</p>
 
-<dl>
-<dt><a name="index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dbogofilter"></a>Variable: <strong>gnus-group-ham-exit-processor-bogofilter</strong></dt>
-<dd><p>Add this symbol to a group&rsquo;s <code>spam-process</code> parameter by
-customizing the group parameters or the
-<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is
-added to a group&rsquo;s <code>spam-process</code> parameter, the ham-marked
-articles in <em>ham</em> groups will be added to the Bogofilter database
-of non-spam messages.
-</p>
-<p><em>WARNING</em>
-</p>
-<p>Instead of the obsolete
-<code>gnus-group-ham-exit-processor-bogofilter</code>, it is recommended
-that you use <code>(ham spam-use-bogofilter)</code>.  Everything will work
-the same way, we promise.
-</p></dd></dl>
+      <p>With a minimum of care for associating the
+      &lsquo;<samp>$</samp>&rsquo; mark for spam articles only,
+      Bogofilter training all gets fairly automatic. You should do
+      this until you get a few hundreds of articles in each
+      category, spam or not. The command <kbd>S t</kbd> in summary
+      mode, either for debugging or for curiosity, shows the
+      <em>spamicity</em> score of the current article (between 0.0
+      and 1.0).</p>
 
-<dl>
-<dt><a name="index-spam_002dbogofilter_002ddatabase_002ddirectory"></a>Variable: <strong>spam-bogofilter-database-directory</strong></dt>
-<dd>
-<p>This is the directory where Bogofilter will store its databases.  It
-is not specified by default, so Bogofilter will use its own default
-database directory.
-</p>
-</dd></dl>
+      <p>Bogofilter determines if a message is spam based on a
+      specific threshold. That threshold can be customized, consult
+      the Bogofilter documentation.</p>
 
-<p>The Bogofilter mail classifier is similar to <code>ifile</code> in intent and
-purpose.  A ham and a spam processor are provided, plus the
-<code>spam-use-bogofilter</code> and <code>spam-use-bogofilter-headers</code>
-variables to indicate to spam-split that Bogofilter should either be
-used, or has already been used on the article.  The 0.9.2.1 version of
-Bogofilter was used to test this functionality.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="SpamAssassin-back-end.html#SpamAssassin-back-end" accesskey="n" rel="next">SpamAssassin back end</a>, Previous: <a href="Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching" accesskey="p" rel="prev">Regular Expressions Header Matching</a>, Up: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel="up">Spam Back Ends</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If the <code>bogofilter</code> executable is not in your
+      path, Bogofilter processing will be turned off.</p>
 
+      <p>You should not enable this if you use
+      <code>spam-use-bogofilter-headers</code>.</p>
+    </dd>
+  </dl>
 
+  <dl compact="compact">
+    <dt><kbd>M s t</kbd></dt>
 
+    <dt><kbd>S t</kbd></dt>
+
+    <dd>
+      <a name="index-M-s-t" id="index-M-s-t"></a> <a name=
+      "index-S-t" id="index-S-t"></a> <a name=
+      "index-spam_002dbogofilter_002dscore" id=
+      "index-spam_002dbogofilter_002dscore"></a>
+
+      <p>Get the Bogofilter spamicity score
+      (<code>spam-bogofilter-score</code>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-spam_002duse_002dbogofilter_002dheaders" id=
+    "index-spam_002duse_002dbogofilter_002dheaders"></a>Variable:
+    <strong>spam-use-bogofilter-headers</strong></dt>
+
+    <dd>
+      <p>Set this variable if you want <code>spam-split</code> to
+      use Eric Raymond&rsquo;s speedy Bogofilter, looking only at
+      the message headers. It works similarly to
+      <code>spam-use-bogofilter</code>, but the
+      <code>X-Bogosity</code> header must be in the message
+      already. Normally you would do this with a procmail recipe or
+      something similar; consult the Bogofilter installation
+      documents for details.</p>
+
+      <p>You should not enable this if you use
+      <code>spam-use-bogofilter</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dbogofilter"
+    id=
+    "index-gnus_002dgroup_002dspam_002dexit_002dprocessor_002dbogofilter">
+    </a>Variable:
+    <strong>gnus-group-spam-exit-processor-bogofilter</strong></dt>
+
+    <dd>
+      <p>Add this symbol to a group&rsquo;s
+      <code>spam-process</code> parameter by customizing the group
+      parameters or the <code>gnus-spam-process-newsgroups</code>
+      variable. When this symbol is added to a group&rsquo;s
+      <code>spam-process</code> parameter, spam-marked articles
+      will be added to the Bogofilter spam database.</p>
+
+      <p><em>WARNING</em></p>
+
+      <p>Instead of the obsolete
+      <code>gnus-group-spam-exit-processor-bogofilter</code>, it is
+      recommended that you use <code>(spam
+      spam-use-bogofilter)</code>. Everything will work the same
+      way, we promise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dbogofilter"
+    id=
+    "index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dbogofilter">
+    </a>Variable:
+    <strong>gnus-group-ham-exit-processor-bogofilter</strong></dt>
+
+    <dd>
+      <p>Add this symbol to a group&rsquo;s
+      <code>spam-process</code> parameter by customizing the group
+      parameters or the <code>gnus-spam-process-newsgroups</code>
+      variable. When this symbol is added to a group&rsquo;s
+      <code>spam-process</code> parameter, the ham-marked articles
+      in <em>ham</em> groups will be added to the Bogofilter
+      database of non-spam messages.</p>
+
+      <p><em>WARNING</em></p>
+
+      <p>Instead of the obsolete
+      <code>gnus-group-ham-exit-processor-bogofilter</code>, it is
+      recommended that you use <code>(ham
+      spam-use-bogofilter)</code>. Everything will work the same
+      way, we promise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-spam_002dbogofilter_002ddatabase_002ddirectory" id=
+    "index-spam_002dbogofilter_002ddatabase_002ddirectory"></a>Variable:
+    <strong>spam-bogofilter-database-directory</strong></dt>
+
+    <dd>
+      <p>This is the directory where Bogofilter will store its
+      databases. It is not specified by default, so Bogofilter will
+      use its own default database directory.</p>
+    </dd>
+  </dl>
+
+  <p>The Bogofilter mail classifier is similar to
+  <code>ifile</code> in intent and purpose. A ham and a spam
+  processor are provided, plus the <code>spam-use-bogofilter</code>
+  and <code>spam-use-bogofilter-headers</code> variables to
+  indicate to spam-split that Bogofilter should either be used, or
+  has already been used on the article. The 0.9.2.1 version of
+  Bogofilter was used to test this functionality.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "SpamAssassin-back-end.html#SpamAssassin-back-end" accesskey=
+    "n" rel="next">SpamAssassin back end</a>, Previous: <a href=
+    "Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching"
+    accesskey="p" rel="prev">Regular Expressions Header
+    Matching</a>, Up: <a href="Spam-Back-Ends.html#Spam-Back-Ends"
+    accesskey="u" rel="up">Spam Back Ends</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

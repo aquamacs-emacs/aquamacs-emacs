@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,100 +20,141 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Nonincremental Search</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Nonincremental Search">
-<meta name="keywords" content="GNU Emacs Manual: Nonincremental Search">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Search.html#Search" rel="up" title="Search">
-<link href="Word-Search.html#Word-Search" rel="next" title="Word Search">
-<link href="Isearch-Minibuffer.html#Isearch-Minibuffer" rel="prev" title="Isearch Minibuffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Nonincremental Search</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Nonincremental Search" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Nonincremental Search" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Search.html#Search" rel="up" title="Search" />
+  <link href="Word-Search.html#Word-Search" rel="next" title=
+  "Word Search" />
+  <link href="Isearch-Minibuffer.html#Isearch-Minibuffer" rel=
+  "prev" title="Isearch Minibuffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Nonincremental-Search" id="Nonincremental-Search"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Word-Search.html#Word-Search" accesskey="n"
+    rel="next">Word Search</a>, Previous: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="p" rel=
+    "prev">Incremental Search</a>, Up: <a href="Search.html#Search"
+    accesskey="u" rel="up">Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Nonincremental-Search-1" id=
+  "Nonincremental-Search-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Nonincremental-Search"></a>
-<div class="header">
-<p>
-Next: <a href="Word-Search.html#Word-Search" accesskey="n" rel="next">Word Search</a>, Previous: <a href="Incremental-Search.html#Incremental-Search" accesskey="p" rel="prev">Incremental Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Nonincremental-Search-1"></a>
-<h3 class="section">15.2 Nonincremental Search</h3>
-<a name="index-nonincremental-search"></a>
+  <h3 class="section">15.2 Nonincremental Search</h3><a name=
+  "index-nonincremental-search" id=
+  "index-nonincremental-search"></a>
 
-<p>Emacs also has conventional nonincremental search commands, which require
-you to type the entire search string before searching begins.
-</p>
-<dl compact="compact">
-<dt><kbd>C-s <span class="key">RET</span> <var>string</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Search for <var>string</var>.
-</p></dd>
-<dt><kbd>C-r <span class="key">RET</span> <var>string</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Search backward for <var>string</var>.
-</p></dd>
-</dl>
+  <p>Emacs also has conventional nonincremental search commands,
+  which require you to type the entire search string before
+  searching begins.</p>
 
-<p>To start a nonincremental search, first type <kbd>C-s <span class="key">RET</span></kbd>.
-This enters the minibuffer to read the search string; terminate the
-string with <tt class="key">RET</tt>, and then the search takes place.  If the string
-is not found, the search command signals an error.
-</p>
-<p>When you type <kbd>C-s <span class="key">RET</span></kbd>, the <kbd>C-s</kbd> invokes incremental
-search as usual.  That command is specially programmed to invoke the
-command for nonincremental search, if the string you specify is empty.
-(Such an empty argument would otherwise be useless.)  <kbd>C-r
-<span class="key">RET</span></kbd> does likewise, invoking the nonincremental
-backward-searching command.
-</p>
-<p>Nonincremental search can also be invoked form the menu bar&rsquo;s
-&lsquo;<samp>Edit-&gt;Search</samp>&rsquo; menu.
-</p>
-<a name="index-search_002dforward"></a>
-<a name="index-search_002dbackward"></a>
-<p>You can also use two simpler commands, <kbd>M-x search-forward</kbd> and
-<kbd>M-x search-backward</kbd>.  These commands look for the literal
-strings you specify, and don&rsquo;t support any of the lax-search features
-(see <a href="Lax-Search.html#Lax-Search">Lax Search</a>) except case folding.
-</p>
+  <dl compact="compact">
+    <dt><kbd>C-s <span class="key">RET</span> <var>string</var>
+    <span class="key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Search for <var>string</var>.</p>
+    </dd>
 
+    <dt><kbd>C-r <span class="key">RET</span> <var>string</var>
+    <span class="key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Search backward for <var>string</var>.</p>
+    </dd>
+  </dl>
+
+  <p>To start a nonincremental search, first type <kbd>C-s
+  <span class="key">RET</span></kbd>. This enters the minibuffer to
+  read the search string; terminate the string with <tt class=
+  "key">RET</tt>, and then the search takes place. If the string is
+  not found, the search command signals an error.</p>
+
+  <p>When you type <kbd>C-s <span class="key">RET</span></kbd>, the
+  <kbd>C-s</kbd> invokes incremental search as usual. That command
+  is specially programmed to invoke the command for nonincremental
+  search, if the string you specify is empty. (Such an empty
+  argument would otherwise be useless.) <kbd>C-r <span class=
+  "key">RET</span></kbd> does likewise, invoking the nonincremental
+  backward-searching command.</p>
+
+  <p>Nonincremental search can also be invoked form the menu
+  bar&rsquo;s &lsquo;<samp>Edit-&gt;Search</samp>&rsquo;
+  menu.</p><a name="index-search_002dforward" id=
+  "index-search_002dforward"></a> <a name=
+  "index-search_002dbackward" id="index-search_002dbackward"></a>
+
+  <p>You can also use two simpler commands, <kbd>M-x
+  search-forward</kbd> and <kbd>M-x search-backward</kbd>. These
+  commands look for the literal strings you specify, and
+  don&rsquo;t support any of the lax-search features (see <a href=
+  "Lax-Search.html#Lax-Search">Lax Search</a>) except case
+  folding.</p>
 </body>
 </html>

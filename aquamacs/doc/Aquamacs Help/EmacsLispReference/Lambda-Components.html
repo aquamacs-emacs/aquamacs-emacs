@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,110 +19,150 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Lambda Components</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Lambda Components">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Lambda Components">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lambda-Expressions.html#Lambda-Expressions" rel="up" title="Lambda Expressions">
-<link href="Simple-Lambda.html#Simple-Lambda" rel="next" title="Simple Lambda">
-<link href="Lambda-Expressions.html#Lambda-Expressions" rel="prev" title="Lambda Expressions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Lambda Components</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Lambda Components" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Lambda Components" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lambda-Expressions.html#Lambda-Expressions" rel="up"
+  title="Lambda Expressions" />
+  <link href="Simple-Lambda.html#Simple-Lambda" rel="next" title=
+  "Simple Lambda" />
+  <link href="Lambda-Expressions.html#Lambda-Expressions" rel=
+  "prev" title="Lambda Expressions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Lambda-Components" id="Lambda-Components"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Simple-Lambda.html#Simple-Lambda" accesskey=
+    "n" rel="next">Simple Lambda</a>, Up: <a href=
+    "Lambda-Expressions.html#Lambda-Expressions" accesskey="u" rel=
+    "up">Lambda Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Components-of-a-Lambda-Expression" id=
+  "Components-of-a-Lambda-Expression"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Lambda-Components"></a>
-<div class="header">
-<p>
-Next: <a href="Simple-Lambda.html#Simple-Lambda" accesskey="n" rel="next">Simple Lambda</a>, Up: <a href="Lambda-Expressions.html#Lambda-Expressions" accesskey="u" rel="up">Lambda Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Components-of-a-Lambda-Expression"></a>
-<h4 class="subsection">12.2.1 Components of a Lambda Expression</h4>
+  <h4 class="subsection">12.2.1 Components of a Lambda
+  Expression</h4>
 
-<p>A lambda expression is a list that looks like this:
-</p>
-<div class="example">
-<pre class="example">(lambda (<var>arg-variables</var>&hellip;)
+  <p>A lambda expression is a list that looks like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(lambda (<var>arg-variables</var>&hellip;)
   [<var>documentation-string</var>]
   [<var>interactive-declaration</var>]
   <var>body-forms</var>&hellip;)
-</pre></div>
+</pre>
+  </div><a name="index-lambda-list" id="index-lambda-list"></a>
 
-<a name="index-lambda-list"></a>
-<p>The first element of a lambda expression is always the symbol
-<code>lambda</code>.  This indicates that the list represents a function.  The
-reason functions are defined to start with <code>lambda</code> is so that
-other lists, intended for other uses, will not accidentally be valid as
-functions.
-</p>
-<p>The second element is a list of symbols&mdash;the argument variable names.
-This is called the <em>lambda list</em>.  When a Lisp function is called,
-the argument values are matched up against the variables in the lambda
-list, which are given local bindings with the values provided.
-See <a href="Local-Variables.html#Local-Variables">Local Variables</a>.
-</p>
-<p>The documentation string is a Lisp string object placed within the
-function definition to describe the function for the Emacs help
-facilities.  See <a href="Function-Documentation.html#Function-Documentation">Function Documentation</a>.
-</p>
-<p>The interactive declaration is a list of the form <code>(interactive
-<var>code-string</var>)</code>.  This declares how to provide arguments if the
-function is used interactively.  Functions with this declaration are called
-<em>commands</em>; they can be called using <kbd>M-x</kbd> or bound to a key.
-Functions not intended to be called in this way should not have interactive
-declarations.  See <a href="Defining-Commands.html#Defining-Commands">Defining Commands</a>, for how to write an interactive
-declaration.
-</p>
-<a name="index-body-of-function"></a>
-<p>The rest of the elements are the <em>body</em> of the function: the Lisp
-code to do the work of the function (or, as a Lisp programmer would say,
-&ldquo;a list of Lisp forms to evaluate&rdquo;).  The value returned by the
-function is the value returned by the last element of the body.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Simple-Lambda.html#Simple-Lambda" accesskey="n" rel="next">Simple Lambda</a>, Up: <a href="Lambda-Expressions.html#Lambda-Expressions" accesskey="u" rel="up">Lambda Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The first element of a lambda expression is always the symbol
+  <code>lambda</code>. This indicates that the list represents a
+  function. The reason functions are defined to start with
+  <code>lambda</code> is so that other lists, intended for other
+  uses, will not accidentally be valid as functions.</p>
 
+  <p>The second element is a list of symbols&mdash;the argument
+  variable names. This is called the <em>lambda list</em>. When a
+  Lisp function is called, the argument values are matched up
+  against the variables in the lambda list, which are given local
+  bindings with the values provided. See <a href=
+  "Local-Variables.html#Local-Variables">Local Variables</a>.</p>
 
+  <p>The documentation string is a Lisp string object placed within
+  the function definition to describe the function for the Emacs
+  help facilities. See <a href=
+  "Function-Documentation.html#Function-Documentation">Function
+  Documentation</a>.</p>
 
+  <p>The interactive declaration is a list of the form
+  <code>(interactive <var>code-string</var>)</code>. This declares
+  how to provide arguments if the function is used interactively.
+  Functions with this declaration are called <em>commands</em>;
+  they can be called using <kbd>M-x</kbd> or bound to a key.
+  Functions not intended to be called in this way should not have
+  interactive declarations. See <a href=
+  "Defining-Commands.html#Defining-Commands">Defining Commands</a>,
+  for how to write an interactive declaration.</p><a name=
+  "index-body-of-function" id="index-body-of-function"></a>
+
+  <p>The rest of the elements are the <em>body</em> of the
+  function: the Lisp code to do the work of the function (or, as a
+  Lisp programmer would say, &ldquo;a list of Lisp forms to
+  evaluate&rdquo;). The value returned by the function is the value
+  returned by the last element of the body.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Simple-Lambda.html#Simple-Lambda" accesskey=
+    "n" rel="next">Simple Lambda</a>, Up: <a href=
+    "Lambda-Expressions.html#Lambda-Expressions" accesskey="u" rel=
+    "up">Lambda Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

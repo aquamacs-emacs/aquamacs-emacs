@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents nXML mode, an Emacs major mode for editing
 XML with RELAX NG support.
 
@@ -15,118 +17,177 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>nXML Mode: Using type identifiers in schema locating files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="nXML Mode: Using type identifiers in schema locating files">
-<meta name="keywords" content="nXML Mode: Using type identifiers in schema locating files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Schema-locating-files.html#Schema-locating-files" rel="up" title="Schema locating files">
-<link href="Using-multiple-schema-locating-files.html#Using-multiple-schema-locating-files" rel="next" title="Using multiple schema locating files">
-<link href="Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema" rel="prev" title="Using the document element to locate a schema">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>nXML Mode: Using type identifiers in schema locating
+  files</title>
+  <meta name="description" content=
+  "nXML Mode: Using type identifiers in schema locating files" />
+  <meta name="keywords" content=
+  "nXML Mode: Using type identifiers in schema locating files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Schema-locating-files.html#Schema-locating-files"
+  rel="up" title="Schema locating files" />
+  <link href=
+  "Using-multiple-schema-locating-files.html#Using-multiple-schema-locating-files"
+  rel="next" title="Using multiple schema locating files" />
+  <link href=
+  "Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema"
+  rel="prev" title=
+  "Using the document element to locate a schema" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-type-identifiers-in-schema-locating-files"></a>
-<div class="header">
-<p>
-Next: <a href="Using-multiple-schema-locating-files.html#Using-multiple-schema-locating-files" accesskey="n" rel="next">Using multiple schema locating files</a>, Previous: <a href="Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema" accesskey="p" rel="prev">Using the document element to locate a schema</a>, Up: <a href="Schema-locating-files.html#Schema-locating-files" accesskey="u" rel="up">Schema locating files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Using-type-identifiers-in-schema-locating-files-1"></a>
-<h4 class="subsection">6.2.4 Using type identifiers in schema locating files</h4>
+<body lang="en" xml:lang="en">
+  <a name="Using-type-identifiers-in-schema-locating-files" id=
+  "Using-type-identifiers-in-schema-locating-files"></a>
 
-<p>Type identifiers allow a level of indirection in locating the
-schema for a document.  Instead of associating the document directly
-with a schema URI, the document is associated with a type identifier,
-which is in turn associated with a schema URI. nXML mode does not
-constrain the format of type identifiers.  They can be simply strings
-without any formal structure or they can be public identifiers or
-URIs.  Note that these type identifiers have nothing to do with the
-DOCTYPE declaration.  When comparing type identifiers, whitespace is
-normalized in the same way as with the &lsquo;<samp>xsd:token</samp>&rsquo;
-datatype: leading and trailing whitespace is stripped; other sequences
-of whitespace are normalized to a single space character.
-</p>
-<p>Each of the rules described in previous sections that uses a
-&lsquo;<samp>uri</samp>&rsquo; attribute to specify a schema, can instead use a
-&lsquo;<samp>typeId</samp>&rsquo; attribute to specify a type identifier.  The type
-identifier can be associated with a URI using a &lsquo;<samp>typeId</samp>&rsquo;
-element. For example,
-</p>
-<div class="example">
-<pre class="example">&lt;locatingRules xmlns=&quot;http://thaiopensource.com/ns/locating-rules/1.0&quot;&gt;
-  &lt;namespace ns=&quot;http://www.w3.org/1999/xhtml&quot; typeId=&quot;XHTML&quot;/&gt;
-  &lt;typeId id=&quot;XHTML&quot; typeId=&quot;XHTML Strict&quot;/&gt;
-  &lt;typeId id=&quot;XHTML Strict&quot; uri=&quot;xhtml-strict.rnc&quot;/&gt;
-  &lt;typeId id=&quot;XHTML Transitional&quot; uri=&quot;xhtml-transitional.rnc&quot;/&gt;
+  <div class="header">
+    <p>Next: <a href=
+    "Using-multiple-schema-locating-files.html#Using-multiple-schema-locating-files"
+    accesskey="n" rel="next">Using multiple schema locating
+    files</a>, Previous: <a href=
+    "Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema"
+    accesskey="p" rel="prev">Using the document element to locate a
+    schema</a>, Up: <a href=
+    "Schema-locating-files.html#Schema-locating-files" accesskey=
+    "u" rel="up">Schema locating files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-type-identifiers-in-schema-locating-files-1" id=
+  "Using-type-identifiers-in-schema-locating-files-1"></a>
+
+  <h4 class="subsection">6.2.4 Using type identifiers in schema
+  locating files</h4>
+
+  <p>Type identifiers allow a level of indirection in locating the
+  schema for a document. Instead of associating the document
+  directly with a schema URI, the document is associated with a
+  type identifier, which is in turn associated with a schema URI.
+  nXML mode does not constrain the format of type identifiers. They
+  can be simply strings without any formal structure or they can be
+  public identifiers or URIs. Note that these type identifiers have
+  nothing to do with the DOCTYPE declaration. When comparing type
+  identifiers, whitespace is normalized in the same way as with the
+  &lsquo;<samp>xsd:token</samp>&rsquo; datatype: leading and
+  trailing whitespace is stripped; other sequences of whitespace
+  are normalized to a single space character.</p>
+
+  <p>Each of the rules described in previous sections that uses a
+  &lsquo;<samp>uri</samp>&rsquo; attribute to specify a schema, can
+  instead use a &lsquo;<samp>typeId</samp>&rsquo; attribute to
+  specify a type identifier. The type identifier can be associated
+  with a URI using a &lsquo;<samp>typeId</samp>&rsquo; element. For
+  example,</p>
+
+  <div class="example">
+    <pre class="example">
+&lt;locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0"&gt;
+  &lt;namespace ns="http://www.w3.org/1999/xhtml" typeId="XHTML"/&gt;
+  &lt;typeId id="XHTML" typeId="XHTML Strict"/&gt;
+  &lt;typeId id="XHTML Strict" uri="xhtml-strict.rnc"/&gt;
+  &lt;typeId id="XHTML Transitional" uri="xhtml-transitional.rnc"/&gt;
 &lt;/locatingRules&gt;
-</pre></div>
+</pre>
+  </div>
 
-<p>declares three type identifiers &lsquo;<samp>XHTML</samp>&rsquo; (representing the
-default variant of XHTML to be used), &lsquo;<samp>XHTML Strict</samp>&rsquo; and
-&lsquo;<samp>XHTML Transitional</samp>&rsquo;.  Such a schema locating file would
-use &lsquo;<samp>xhtml-strict.rnc</samp>&rsquo; for a document whose namespace is
-&lsquo;<samp>http://www.w3.org/1999/xhtml</samp>&rsquo;.  But it is considerably
-more flexible than a schema locating file that simply specified
-</p>
-<div class="example">
-<pre class="example">&lt;namespace ns=&quot;http://www.w3.org/1999/xhtml&quot; uri=&quot;xhtml-strict.rnc&quot;/&gt;
-</pre></div>
+  <p>declares three type identifiers
+  &lsquo;<samp>XHTML</samp>&rsquo; (representing the default
+  variant of XHTML to be used), &lsquo;<samp>XHTML
+  Strict</samp>&rsquo; and &lsquo;<samp>XHTML
+  Transitional</samp>&rsquo;. Such a schema locating file would use
+  &lsquo;<samp>xhtml-strict.rnc</samp>&rsquo; for a document whose
+  namespace is
+  &lsquo;<samp>http://www.w3.org/1999/xhtml</samp>&rsquo;. But it
+  is considerably more flexible than a schema locating file that
+  simply specified</p>
 
-<p>A user can easily use <kbd>C-c C-s C-t</kbd> to select between XHTML
-Strict and XHTML Transitional. Also, a user can easily add a catalog
-</p>
-<div class="example">
-<pre class="example">&lt;locatingRules xmlns=&quot;http://thaiopensource.com/ns/locating-rules/1.0&quot;&gt;
-  &lt;typeId id=&quot;XHTML&quot; typeId=&quot;XHTML Transitional&quot;/&gt;
+  <div class="example">
+    <pre class="example">
+&lt;namespace ns="http://www.w3.org/1999/xhtml" uri="xhtml-strict.rnc"/&gt;
+</pre>
+  </div>
+
+  <p>A user can easily use <kbd>C-c C-s C-t</kbd> to select between
+  XHTML Strict and XHTML Transitional. Also, a user can easily add
+  a catalog</p>
+
+  <div class="example">
+    <pre class="example">
+&lt;locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0"&gt;
+  &lt;typeId id="XHTML" typeId="XHTML Transitional"/&gt;
 &lt;/locatingRules&gt;
-</pre></div>
+</pre>
+  </div>
 
-<p>that makes the default variant of XHTML be XHTML Transitional.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Using-multiple-schema-locating-files.html#Using-multiple-schema-locating-files" accesskey="n" rel="next">Using multiple schema locating files</a>, Previous: <a href="Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema" accesskey="p" rel="prev">Using the document element to locate a schema</a>, Up: <a href="Schema-locating-files.html#Schema-locating-files" accesskey="u" rel="up">Schema locating files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+  <p>that makes the default variant of XHTML be XHTML
+  Transitional.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Using-multiple-schema-locating-files.html#Using-multiple-schema-locating-files"
+    accesskey="n" rel="next">Using multiple schema locating
+    files</a>, Previous: <a href=
+    "Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema"
+    accesskey="p" rel="prev">Using the document element to locate a
+    schema</a>, Up: <a href=
+    "Schema-locating-files.html#Schema-locating-files" accesskey=
+    "u" rel="up">Schema locating files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

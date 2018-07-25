@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,204 +19,293 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Local Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Local Variables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Local Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variables.html#Variables" rel="up" title="Variables">
-<link href="Void-Variables.html#Void-Variables" rel="next" title="Void Variables">
-<link href="Constant-Variables.html#Constant-Variables" rel="prev" title="Constant Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Local Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Local Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Local Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variables.html#Variables" rel="up" title=
+  "Variables" />
+  <link href="Void-Variables.html#Void-Variables" rel="next" title=
+  "Void Variables" />
+  <link href="Constant-Variables.html#Constant-Variables" rel=
+  "prev" title="Constant Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Local-Variables" id="Local-Variables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Void-Variables.html#Void-Variables"
+    accesskey="n" rel="next">Void Variables</a>, Previous: <a href=
+    "Constant-Variables.html#Constant-Variables" accesskey="p" rel=
+    "prev">Constant Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Local-Variables-1" id="Local-Variables-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Local-Variables"></a>
-<div class="header">
-<p>
-Next: <a href="Void-Variables.html#Void-Variables" accesskey="n" rel="next">Void Variables</a>, Previous: <a href="Constant-Variables.html#Constant-Variables" accesskey="p" rel="prev">Constant Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Local-Variables-1"></a>
-<h3 class="section">11.3 Local Variables</h3>
-<a name="index-binding-local-variables"></a>
-<a name="index-local-variables"></a>
-<a name="index-local-binding"></a>
-<a name="index-global-binding"></a>
+  <h3 class="section">11.3 Local Variables</h3><a name=
+  "index-binding-local-variables" id=
+  "index-binding-local-variables"></a> <a name=
+  "index-local-variables" id="index-local-variables"></a> <a name=
+  "index-local-binding" id="index-local-binding"></a> <a name=
+  "index-global-binding" id="index-global-binding"></a>
 
-<p>Global variables have values that last until explicitly superseded
-with new values.  Sometimes it is useful to give a variable a
-<em>local value</em>&mdash;a value that takes effect only within a certain
-part of a Lisp program.  When a variable has a local value, we say
-that it is <em>locally bound</em> to that value, and that it is a
-<em>local variable</em>.
-</p>
-<p>For example, when a function is called, its argument variables
-receive local values, which are the actual arguments supplied to the
-function call; these local bindings take effect within the body of the
-function.  To take another example, the <code>let</code> special form
-explicitly establishes local bindings for specific variables, which
-take effect within the body of the <code>let</code> form.
-</p>
-<p>We also speak of the <em>global binding</em>, which is where
-(conceptually) the global value is kept.
-</p>
-<a name="index-shadowing-of-variables"></a>
-<p>Establishing a local binding saves away the variable&rsquo;s previous
-value (or lack of one).  We say that the previous value is
-<em>shadowed</em>.  Both global and local values may be shadowed.  If a
-local binding is in effect, using <code>setq</code> on the local variable
-stores the specified value in the local binding.  When that local
-binding is no longer in effect, the previously shadowed value (or lack
-of one) comes back.
-</p>
-<a name="index-current-binding"></a>
-<p>A variable can have more than one local binding at a time (e.g., if
-there are nested <code>let</code> forms that bind the variable).  The
-<em>current binding</em> is the local binding that is actually in effect.
-It determines the value returned by evaluating the variable symbol,
-and it is the binding acted on by <code>setq</code>.
-</p>
-<p>For most purposes, you can think of the current binding as the
-innermost local binding, or the global binding if there is no
-local binding.  To be more precise, a rule called the <em>scoping
-rule</em> determines where in a program a local binding takes effect.  The
-default scoping rule in Emacs Lisp is called <em>dynamic scoping</em>,
-which simply states that the current binding at any given point in the
-execution of a program is the most recently-created binding for that
-variable that still exists.  For details about dynamic scoping, and an
-alternative scoping rule called <em>lexical scoping</em>, See <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>.
-</p>
-<p>The special forms <code>let</code> and <code>let*</code> exist to create local
-bindings:
-</p>
-<dl>
-<dt><a name="index-let"></a>Special Form: <strong>let</strong> <em>(bindings&hellip;) forms&hellip;</em></dt>
-<dd><p>This special form sets up local bindings for a certain set of
-variables, as specified by <var>bindings</var>, and then evaluates all of
-the <var>forms</var> in textual order.  Its return value is the value of
-the last form in <var>forms</var>.
-</p>
-<p>Each of the <var>bindings</var> is either (i)&nbsp;a<!-- /@w --> symbol, in which case
-that symbol is locally bound to <code>nil</code>; or (ii)&nbsp;a<!-- /@w --> list of the
-form <code>(<var>symbol</var> <var>value-form</var>)</code>, in which case
-<var>symbol</var> is locally bound to the result of evaluating
-<var>value-form</var>.  If <var>value-form</var> is omitted, <code>nil</code> is used.
-</p>
-<p>All of the <var>value-form</var>s in <var>bindings</var> are evaluated in the
-order they appear and <em>before</em> binding any of the symbols to them.
-Here is an example of this: <code>z</code> is bound to the old value of
-<code>y</code>, which is 2, not the new value of <code>y</code>, which is 1.
-</p>
-<div class="example">
-<pre class="example">(setq y 2)
+  <p>Global variables have values that last until explicitly
+  superseded with new values. Sometimes it is useful to give a
+  variable a <em>local value</em>&mdash;a value that takes effect
+  only within a certain part of a Lisp program. When a variable has
+  a local value, we say that it is <em>locally bound</em> to that
+  value, and that it is a <em>local variable</em>.</p>
+
+  <p>For example, when a function is called, its argument variables
+  receive local values, which are the actual arguments supplied to
+  the function call; these local bindings take effect within the
+  body of the function. To take another example, the
+  <code>let</code> special form explicitly establishes local
+  bindings for specific variables, which take effect within the
+  body of the <code>let</code> form.</p>
+
+  <p>We also speak of the <em>global binding</em>, which is where
+  (conceptually) the global value is kept.</p><a name=
+  "index-shadowing-of-variables" id=
+  "index-shadowing-of-variables"></a>
+
+  <p>Establishing a local binding saves away the variable&rsquo;s
+  previous value (or lack of one). We say that the previous value
+  is <em>shadowed</em>. Both global and local values may be
+  shadowed. If a local binding is in effect, using
+  <code>setq</code> on the local variable stores the specified
+  value in the local binding. When that local binding is no longer
+  in effect, the previously shadowed value (or lack of one) comes
+  back.</p><a name="index-current-binding" id=
+  "index-current-binding"></a>
+
+  <p>A variable can have more than one local binding at a time
+  (e.g., if there are nested <code>let</code> forms that bind the
+  variable). The <em>current binding</em> is the local binding that
+  is actually in effect. It determines the value returned by
+  evaluating the variable symbol, and it is the binding acted on by
+  <code>setq</code>.</p>
+
+  <p>For most purposes, you can think of the current binding as the
+  innermost local binding, or the global binding if there is no
+  local binding. To be more precise, a rule called the <em>scoping
+  rule</em> determines where in a program a local binding takes
+  effect. The default scoping rule in Emacs Lisp is called
+  <em>dynamic scoping</em>, which simply states that the current
+  binding at any given point in the execution of a program is the
+  most recently-created binding for that variable that still
+  exists. For details about dynamic scoping, and an alternative
+  scoping rule called <em>lexical scoping</em>, See <a href=
+  "Variable-Scoping.html#Variable-Scoping">Variable
+  Scoping</a>.</p>
+
+  <p>The special forms <code>let</code> and <code>let*</code> exist
+  to create local bindings:</p>
+
+  <dl>
+    <dt><a name="index-let" id="index-let"></a>Special Form:
+    <strong>let</strong> <em>(bindings&hellip;)
+    forms&hellip;</em></dt>
+
+    <dd>
+      <p>This special form sets up local bindings for a certain set
+      of variables, as specified by <var>bindings</var>, and then
+      evaluates all of the <var>forms</var> in textual order. Its
+      return value is the value of the last form in
+      <var>forms</var>.</p>
+
+      <p>Each of the <var>bindings</var> is either (i)&nbsp;a
+      <!-- /@w --> symbol, in which case that symbol is locally
+      bound to <code>nil</code>; or (ii)&nbsp;a<!-- /@w --> list of
+      the form <code>(<var>symbol</var>
+      <var>value-form</var>)</code>, in which case
+      <var>symbol</var> is locally bound to the result of
+      evaluating <var>value-form</var>. If <var>value-form</var> is
+      omitted, <code>nil</code> is used.</p>
+
+      <p>All of the <var>value-form</var>s in <var>bindings</var>
+      are evaluated in the order they appear and <em>before</em>
+      binding any of the symbols to them. Here is an example of
+      this: <code>z</code> is bound to the old value of
+      <code>y</code>, which is 2, not the new value of
+      <code>y</code>, which is 1.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq y 2)
      &rArr; 2
-</pre><pre class="example">
-</pre><pre class="example">(let ((y 1)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(let ((y 1)
       (z y))
   (list y z))
      &rArr; (1 2)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-let_002a"></a>Special Form: <strong>let*</strong> <em>(bindings&hellip;) forms&hellip;</em></dt>
-<dd><p>This special form is like <code>let</code>, but it binds each variable right
-after computing its local value, before computing the local value for
-the next variable.  Therefore, an expression in <var>bindings</var> can
-refer to the preceding symbols bound in this <code>let*</code> form.
-Compare the following example with the example above for <code>let</code>.
-</p>
-<div class="example">
-<pre class="example">(setq y 2)
+  <dl>
+    <dt><a name="index-let_002a" id="index-let_002a"></a>Special
+    Form: <strong>let*</strong> <em>(bindings&hellip;)
+    forms&hellip;</em></dt>
+
+    <dd>
+      <p>This special form is like <code>let</code>, but it binds
+      each variable right after computing its local value, before
+      computing the local value for the next variable. Therefore,
+      an expression in <var>bindings</var> can refer to the
+      preceding symbols bound in this <code>let*</code> form.
+      Compare the following example with the example above for
+      <code>let</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq y 2)
      &rArr; 2
-</pre><pre class="example">
-</pre><pre class="example">(let* ((y 1)
-       (z y))    ; <span class="roman">Use the just-established value of <code>y</code>.</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(let* ((y 1)
+       (z y))    ; <span class=
+"roman">Use the just-established value of <code>y</code>.</span>
   (list y z))
      &rArr; (1 1)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>Here is a complete list of the other facilities that create local
-bindings:
-</p>
-<ul>
-<li> Function calls (see <a href="Functions.html#Functions">Functions</a>).
+  <p>Here is a complete list of the other facilities that create
+  local bindings:</p>
 
-</li><li> Macro calls (see <a href="Macros.html#Macros">Macros</a>).
+  <ul>
+    <li>Function calls (see <a href=
+    "Functions.html#Functions">Functions</a>).</li>
 
-</li><li> <code>condition-case</code> (see <a href="Errors.html#Errors">Errors</a>).
-</li></ul>
+    <li>Macro calls (see <a href=
+    "Macros.html#Macros">Macros</a>).</li>
 
-<p>Variables can also have buffer-local bindings (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>); a few variables have terminal-local bindings
-(see <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>).  These kinds of bindings work somewhat
-like ordinary local bindings, but they are localized depending on
-where you are in Emacs.
-</p>
-<dl>
-<dt><a name="index-max_002dspecpdl_002dsize"></a>User Option: <strong>max-specpdl-size</strong></dt>
-<dd><a name="Definition-of-max_002dspecpdl_002dsize"></a><a name="index-variable-limit-error"></a>
-<a name="index-evaluation-error"></a>
-<a name="index-infinite-recursion"></a>
-<p>This variable defines the limit on the total number of local variable
-bindings and <code>unwind-protect</code> cleanups (see <a href="Cleanups.html#Cleanups">Cleaning Up from Nonlocal Exits</a>) that are allowed before Emacs
-signals an error (with data <code>&quot;Variable binding depth exceeds
-max-specpdl-size&quot;</code>).
-</p>
-<p>This limit, with the associated error when it is exceeded, is one way
-that Lisp avoids infinite recursion on an ill-defined function.
-<code>max-lisp-eval-depth</code> provides another limit on depth of nesting.
-See <a href="Eval.html#Definition-of-max_002dlisp_002deval_002ddepth">Eval</a>.
-</p>
-<p>The default value is 1300.  Entry to the Lisp debugger increases the
-value, if there is little room left, to make sure the debugger itself
-has room to execute.
-</p></dd></dl>
+    <li><code>condition-case</code> (see <a href=
+    "Errors.html#Errors">Errors</a>).</li>
+  </ul>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Void-Variables.html#Void-Variables" accesskey="n" rel="next">Void Variables</a>, Previous: <a href="Constant-Variables.html#Constant-Variables" accesskey="p" rel="prev">Constant Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Variables can also have buffer-local bindings (see <a href=
+  "Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local
+  Variables</a>); a few variables have terminal-local bindings (see
+  <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple
+  Terminals</a>). These kinds of bindings work somewhat like
+  ordinary local bindings, but they are localized depending on
+  where you are in Emacs.</p>
 
+  <dl>
+    <dt><a name="index-max_002dspecpdl_002dsize" id=
+    "index-max_002dspecpdl_002dsize"></a>User Option:
+    <strong>max-specpdl-size</strong></dt>
 
+    <dd>
+      <a name="Definition-of-max_002dspecpdl_002dsize" id=
+      "Definition-of-max_002dspecpdl_002dsize"></a><a name=
+      "index-variable-limit-error" id=
+      "index-variable-limit-error"></a> <a name=
+      "index-evaluation-error" id="index-evaluation-error"></a>
+      <a name="index-infinite-recursion" id=
+      "index-infinite-recursion"></a>
 
+      <p>This variable defines the limit on the total number of
+      local variable bindings and <code>unwind-protect</code>
+      cleanups (see <a href="Cleanups.html#Cleanups">Cleaning Up
+      from Nonlocal Exits</a>) that are allowed before Emacs
+      signals an error (with data <code>"Variable binding depth
+      exceeds max-specpdl-size"</code>).</p>
+
+      <p>This limit, with the associated error when it is exceeded,
+      is one way that Lisp avoids infinite recursion on an
+      ill-defined function. <code>max-lisp-eval-depth</code>
+      provides another limit on depth of nesting. See <a href=
+      "Eval.html#Definition-of-max_002dlisp_002deval_002ddepth">Eval</a>.</p>
+
+      <p>The default value is 1300. Entry to the Lisp debugger
+      increases the value, if there is little room left, to make
+      sure the debugger itself has room to execute.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Void-Variables.html#Void-Variables"
+    accesskey="n" rel="next">Void Variables</a>, Previous: <a href=
+    "Constant-Variables.html#Constant-Variables" accesskey="p" rel=
+    "prev">Constant Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

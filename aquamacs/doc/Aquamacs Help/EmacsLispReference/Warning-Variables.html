@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,150 +19,219 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Warning Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Warning Variables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Warning Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Warnings.html#Warnings" rel="up" title="Warnings">
-<link href="Warning-Options.html#Warning-Options" rel="next" title="Warning Options">
-<link href="Warning-Basics.html#Warning-Basics" rel="prev" title="Warning Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Warning Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Warning Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Warning Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Warnings.html#Warnings" rel="up" title="Warnings" />
+  <link href="Warning-Options.html#Warning-Options" rel="next"
+  title="Warning Options" />
+  <link href="Warning-Basics.html#Warning-Basics" rel="prev" title=
+  "Warning Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Warning-Variables" id="Warning-Variables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Warning-Options.html#Warning-Options"
+    accesskey="n" rel="next">Warning Options</a>, Previous:
+    <a href="Warning-Basics.html#Warning-Basics" accesskey="p" rel=
+    "prev">Warning Basics</a>, Up: <a href="Warnings.html#Warnings"
+    accesskey="u" rel="up">Warnings</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Warning-Variables-1" id="Warning-Variables-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Warning-Variables"></a>
-<div class="header">
-<p>
-Next: <a href="Warning-Options.html#Warning-Options" accesskey="n" rel="next">Warning Options</a>, Previous: <a href="Warning-Basics.html#Warning-Basics" accesskey="p" rel="prev">Warning Basics</a>, Up: <a href="Warnings.html#Warnings" accesskey="u" rel="up">Warnings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Warning-Variables-1"></a>
-<h4 class="subsection">37.5.2 Warning Variables</h4>
-<a name="index-warning-variables"></a>
+  <h4 class="subsection">37.5.2 Warning Variables</h4><a name=
+  "index-warning-variables" id="index-warning-variables"></a>
 
-<p>Programs can customize how their warnings appear by binding
-the variables described in this section.
-</p>
-<dl>
-<dt><a name="index-warning_002dlevels"></a>Variable: <strong>warning-levels</strong></dt>
-<dd><p>This list defines the meaning and severity order of the warning
-severity levels.  Each element defines one severity level,
-and they are arranged in order of decreasing severity.
-</p>
-<p>Each element has the form <code>(<var>level</var> <var>string</var>
-<var>function</var>)</code>, where <var>level</var> is the severity level it defines.
-<var>string</var> specifies the textual description of this level.
-<var>string</var> should use &lsquo;<samp>%s</samp>&rsquo; to specify where to put the warning
-type information, or it can omit the &lsquo;<samp>%s</samp>&rsquo; so as not to include
-that information.
-</p>
-<p>The optional <var>function</var>, if non-<code>nil</code>, is a function to call
-with no arguments, to get the user&rsquo;s attention.
-</p>
-<p>Normally you should not change the value of this variable.
-</p></dd></dl>
+  <p>Programs can customize how their warnings appear by binding
+  the variables described in this section.</p>
 
-<dl>
-<dt><a name="index-warning_002dprefix_002dfunction"></a>Variable: <strong>warning-prefix-function</strong></dt>
-<dd><p>If non-<code>nil</code>, the value is a function to generate prefix text for
-warnings.  Programs can bind the variable to a suitable function.
-<code>display-warning</code> calls this function with the warnings buffer
-current, and the function can insert text in it.  That text becomes
-the beginning of the warning message.
-</p>
-<p>The function is called with two arguments, the severity level and its
-entry in <code>warning-levels</code>.  It should return a list to use as the
-entry (this value need not be an actual member of
-<code>warning-levels</code>).  By constructing this value, the function can
-change the severity of the warning, or specify different handling for
-a given severity level.
-</p>
-<p>If the variable&rsquo;s value is <code>nil</code> then there is no function
-to call.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-warning_002dlevels" id=
+    "index-warning_002dlevels"></a>Variable:
+    <strong>warning-levels</strong></dt>
 
-<dl>
-<dt><a name="index-warning_002dseries"></a>Variable: <strong>warning-series</strong></dt>
-<dd><p>Programs can bind this variable to <code>t</code> to say that the next
-warning should begin a series.  When several warnings form a series,
-that means to leave point on the first warning of the series, rather
-than keep moving it for each warning so that it appears on the last one.
-The series ends when the local binding is unbound and
-<code>warning-series</code> becomes <code>nil</code> again.
-</p>
-<p>The value can also be a symbol with a function definition.  That is
-equivalent to <code>t</code>, except that the next warning will also call
-the function with no arguments with the warnings buffer current.  The
-function can insert text which will serve as a header for the series
-of warnings.
-</p>
-<p>Once a series has begun, the value is a marker which points to the
-buffer position in the warnings buffer of the start of the series.
-</p>
-<p>The variable&rsquo;s normal value is <code>nil</code>, which means to handle
-each warning separately.
-</p></dd></dl>
+    <dd>
+      <p>This list defines the meaning and severity order of the
+      warning severity levels. Each element defines one severity
+      level, and they are arranged in order of decreasing
+      severity.</p>
 
-<dl>
-<dt><a name="index-warning_002dfill_002dprefix"></a>Variable: <strong>warning-fill-prefix</strong></dt>
-<dd><p>When this variable is non-<code>nil</code>, it specifies a fill prefix to
-use for filling each warning&rsquo;s text.
-</p></dd></dl>
+      <p>Each element has the form <code>(<var>level</var>
+      <var>string</var> <var>function</var>)</code>, where
+      <var>level</var> is the severity level it defines.
+      <var>string</var> specifies the textual description of this
+      level. <var>string</var> should use
+      &lsquo;<samp>%s</samp>&rsquo; to specify where to put the
+      warning type information, or it can omit the
+      &lsquo;<samp>%s</samp>&rsquo; so as not to include that
+      information.</p>
 
-<dl>
-<dt><a name="index-warning_002dtype_002dformat"></a>Variable: <strong>warning-type-format</strong></dt>
-<dd><p>This variable specifies the format for displaying the warning type
-in the warning message.  The result of formatting the type this way
-gets included in the message under the control of the string in the
-entry in <code>warning-levels</code>.  The default value is <code>&quot; (%s)&quot;</code>.
-If you bind it to <code>&quot;&quot;</code> then the warning type won&rsquo;t appear at
-all.
-</p></dd></dl>
+      <p>The optional <var>function</var>, if non-<code>nil</code>,
+      is a function to call with no arguments, to get the
+      user&rsquo;s attention.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Warning-Options.html#Warning-Options" accesskey="n" rel="next">Warning Options</a>, Previous: <a href="Warning-Basics.html#Warning-Basics" accesskey="p" rel="prev">Warning Basics</a>, Up: <a href="Warnings.html#Warnings" accesskey="u" rel="up">Warnings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Normally you should not change the value of this
+      variable.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-warning_002dprefix_002dfunction" id=
+    "index-warning_002dprefix_002dfunction"></a>Variable:
+    <strong>warning-prefix-function</strong></dt>
 
+    <dd>
+      <p>If non-<code>nil</code>, the value is a function to
+      generate prefix text for warnings. Programs can bind the
+      variable to a suitable function. <code>display-warning</code>
+      calls this function with the warnings buffer current, and the
+      function can insert text in it. That text becomes the
+      beginning of the warning message.</p>
 
+      <p>The function is called with two arguments, the severity
+      level and its entry in <code>warning-levels</code>. It should
+      return a list to use as the entry (this value need not be an
+      actual member of <code>warning-levels</code>). By
+      constructing this value, the function can change the severity
+      of the warning, or specify different handling for a given
+      severity level.</p>
+
+      <p>If the variable&rsquo;s value is <code>nil</code> then
+      there is no function to call.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-warning_002dseries" id=
+    "index-warning_002dseries"></a>Variable:
+    <strong>warning-series</strong></dt>
+
+    <dd>
+      <p>Programs can bind this variable to <code>t</code> to say
+      that the next warning should begin a series. When several
+      warnings form a series, that means to leave point on the
+      first warning of the series, rather than keep moving it for
+      each warning so that it appears on the last one. The series
+      ends when the local binding is unbound and
+      <code>warning-series</code> becomes <code>nil</code>
+      again.</p>
+
+      <p>The value can also be a symbol with a function definition.
+      That is equivalent to <code>t</code>, except that the next
+      warning will also call the function with no arguments with
+      the warnings buffer current. The function can insert text
+      which will serve as a header for the series of warnings.</p>
+
+      <p>Once a series has begun, the value is a marker which
+      points to the buffer position in the warnings buffer of the
+      start of the series.</p>
+
+      <p>The variable&rsquo;s normal value is <code>nil</code>,
+      which means to handle each warning separately.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-warning_002dfill_002dprefix" id=
+    "index-warning_002dfill_002dprefix"></a>Variable:
+    <strong>warning-fill-prefix</strong></dt>
+
+    <dd>
+      <p>When this variable is non-<code>nil</code>, it specifies a
+      fill prefix to use for filling each warning&rsquo;s text.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-warning_002dtype_002dformat" id=
+    "index-warning_002dtype_002dformat"></a>Variable:
+    <strong>warning-type-format</strong></dt>
+
+    <dd>
+      <p>This variable specifies the format for displaying the
+      warning type in the warning message. The result of formatting
+      the type this way gets included in the message under the
+      control of the string in the entry in
+      <code>warning-levels</code>. The default value is <code>"
+      (%s)"</code>. If you bind it to <code>""</code> then the
+      warning type won&rsquo;t appear at all.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Warning-Options.html#Warning-Options"
+    accesskey="n" rel="next">Warning Options</a>, Previous:
+    <a href="Warning-Basics.html#Warning-Basics" accesskey="p" rel=
+    "prev">Warning Basics</a>, Up: <a href="Warnings.html#Warnings"
+    accesskey="u" rel="up">Warnings</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

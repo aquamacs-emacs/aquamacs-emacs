@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,108 +19,156 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Dynamic Binding Tips</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Dynamic Binding Tips">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Dynamic Binding Tips">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variable-Scoping.html#Variable-Scoping" rel="up" title="Variable Scoping">
-<link href="Lexical-Binding.html#Lexical-Binding" rel="next" title="Lexical Binding">
-<link href="Dynamic-Binding.html#Dynamic-Binding" rel="prev" title="Dynamic Binding">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Dynamic Binding
+  Tips</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Dynamic Binding Tips" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Dynamic Binding Tips" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variable-Scoping.html#Variable-Scoping" rel="up"
+  title="Variable Scoping" />
+  <link href="Lexical-Binding.html#Lexical-Binding" rel="next"
+  title="Lexical Binding" />
+  <link href="Dynamic-Binding.html#Dynamic-Binding" rel="prev"
+  title="Dynamic Binding" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Dynamic-Binding-Tips" id="Dynamic-Binding-Tips"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Lexical-Binding.html#Lexical-Binding"
+    accesskey="n" rel="next">Lexical Binding</a>, Previous:
+    <a href="Dynamic-Binding.html#Dynamic-Binding" accesskey="p"
+    rel="prev">Dynamic Binding</a>, Up: <a href=
+    "Variable-Scoping.html#Variable-Scoping" accesskey="u" rel=
+    "up">Variable Scoping</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Proper-Use-of-Dynamic-Binding" id=
+  "Proper-Use-of-Dynamic-Binding"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dynamic-Binding-Tips"></a>
-<div class="header">
-<p>
-Next: <a href="Lexical-Binding.html#Lexical-Binding" accesskey="n" rel="next">Lexical Binding</a>, Previous: <a href="Dynamic-Binding.html#Dynamic-Binding" accesskey="p" rel="prev">Dynamic Binding</a>, Up: <a href="Variable-Scoping.html#Variable-Scoping" accesskey="u" rel="up">Variable Scoping</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Proper-Use-of-Dynamic-Binding"></a>
-<h4 class="subsection">11.9.2 Proper Use of Dynamic Binding</h4>
+  <h4 class="subsection">11.9.2 Proper Use of Dynamic Binding</h4>
 
-<p>Dynamic binding is a powerful feature, as it allows programs to
-refer to variables that are not defined within their local textual
-scope.  However, if used without restraint, this can also make
-programs hard to understand.  There are two clean ways to use this
-technique:
-</p>
-<ul>
-<li> If a variable has no global definition, use it as a local variable
-only within a binding construct, such as the body of the <code>let</code>
-form where the variable was bound.  If this convention is followed
-consistently throughout a program, the value of the variable will not
-affect, nor be affected by, any uses of the same variable symbol
-elsewhere in the program.
+  <p>Dynamic binding is a powerful feature, as it allows programs
+  to refer to variables that are not defined within their local
+  textual scope. However, if used without restraint, this can also
+  make programs hard to understand. There are two clean ways to use
+  this technique:</p>
 
-</li><li> Otherwise, define the variable with <code>defvar</code>, <code>defconst</code>, or
-<code>defcustom</code>.  See <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>.  Usually, the definition
-should be at top-level in an Emacs Lisp file.  As far as possible, it
-should include a documentation string which explains the meaning and
-purpose of the variable.  You should also choose the variable&rsquo;s name
-to avoid name conflicts (see <a href="Coding-Conventions.html#Coding-Conventions">Coding Conventions</a>).
+  <ul>
+    <li>If a variable has no global definition, use it as a local
+    variable only within a binding construct, such as the body of
+    the <code>let</code> form where the variable was bound. If this
+    convention is followed consistently throughout a program, the
+    value of the variable will not affect, nor be affected by, any
+    uses of the same variable symbol elsewhere in the program.</li>
 
-<p>Then you can bind the variable anywhere in a program, knowing reliably
-what the effect will be.  Wherever you encounter the variable, it will
-be easy to refer back to the definition, e.g., via the <kbd>C-h v</kbd>
-command (provided the variable definition has been loaded into Emacs).
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Name-Help.html#Name-Help">Name Help</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<p>For example, it is common to use local bindings for customizable
-variables like <code>case-fold-search</code>:
-</p>
-<div class="example">
-<pre class="example">(defun search-for-abc ()
-  &quot;Search for the string \&quot;abc\&quot;, ignoring case differences.&quot;
+    <li>Otherwise, define the variable with <code>defvar</code>,
+    <code>defconst</code>, or <code>defcustom</code>. See
+      <a href="Defining-Variables.html#Defining-Variables">Defining
+      Variables</a>. Usually, the definition should be at top-level
+      in an Emacs Lisp file. As far as possible, it should include
+      a documentation string which explains the meaning and purpose
+      of the variable. You should also choose the variable&rsquo;s
+      name to avoid name conflicts (see <a href=
+      "Coding-Conventions.html#Coding-Conventions">Coding
+      Conventions</a>).
+
+      <p>Then you can bind the variable anywhere in a program,
+      knowing reliably what the effect will be. Wherever you
+      encounter the variable, it will be easy to refer back to the
+      definition, e.g., via the <kbd>C-h v</kbd> command (provided
+      the variable definition has been loaded into Emacs). See
+      <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Name-Help.html#Name-Help">
+      Name Help</a> in <cite>The GNU Emacs Manual</cite>.</p>
+
+      <p>For example, it is common to use local bindings for
+      customizable variables like
+      <code>case-fold-search</code>:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun search-for-abc ()
+  "Search for the string \"abc\", ignoring case differences."
   (let ((case-fold-search nil))
-    (re-search-forward &quot;abc&quot;)))
-</pre></div>
-</li></ul>
+    (re-search-forward "abc")))
+</pre>
+      </div>
+    </li>
+  </ul>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Lexical-Binding.html#Lexical-Binding" accesskey="n" rel="next">Lexical Binding</a>, Previous: <a href="Dynamic-Binding.html#Dynamic-Binding" accesskey="p" rel="prev">Dynamic Binding</a>, Up: <a href="Variable-Scoping.html#Variable-Scoping" accesskey="u" rel="up">Variable Scoping</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Lexical-Binding.html#Lexical-Binding"
+    accesskey="n" rel="next">Lexical Binding</a>, Previous:
+    <a href="Dynamic-Binding.html#Dynamic-Binding" accesskey="p"
+    rel="prev">Dynamic Binding</a>, Up: <a href=
+    "Variable-Scoping.html#Variable-Scoping" accesskey="u" rel=
+    "up">Variable Scoping</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

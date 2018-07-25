@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,120 +20,163 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Auto Save Files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Auto Save Files">
-<meta name="keywords" content="GNU Emacs Manual: Auto Save Files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Auto-Save.html#Auto-Save" rel="up" title="Auto Save">
-<link href="Auto-Save-Control.html#Auto-Save-Control" rel="next" title="Auto Save Control">
-<link href="Auto-Save.html#Auto-Save" rel="prev" title="Auto Save">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Auto Save Files</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Auto Save Files" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Auto Save Files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Auto-Save.html#Auto-Save" rel="up" title=
+  "Auto Save" />
+  <link href="Auto-Save-Control.html#Auto-Save-Control" rel="next"
+  title="Auto Save Control" />
+  <link href="Auto-Save.html#Auto-Save" rel="prev" title=
+  "Auto Save" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Auto-Save-Files" id="Auto-Save-Files"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Auto-Save-Control.html#Auto-Save-Control"
+    accesskey="n" rel="next">Auto Save Control</a>, Up: <a href=
+    "Auto-Save.html#Auto-Save" accesskey="u" rel="up">Auto Save</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Auto_002dSave-Files" id="Auto_002dSave-Files"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Auto-Save-Files"></a>
-<div class="header">
-<p>
-Next: <a href="Auto-Save-Control.html#Auto-Save-Control" accesskey="n" rel="next">Auto Save Control</a>, Up: <a href="Auto-Save.html#Auto-Save" accesskey="u" rel="up">Auto Save</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Auto_002dSave-Files"></a>
-<h4 class="subsection">18.6.1 Auto-Save Files</h4>
+  <h4 class="subsection">18.6.1 Auto-Save Files</h4>
 
-<p>Auto-saving does not normally save in the files that you visited,
-because it can be very undesirable to save a change that you did not
-want to make permanent.  Instead, auto-saving is done in a different
-file called the <em>auto-save file</em>, and the visited file is changed
-only when you request saving explicitly (such as with <kbd>C-x C-s</kbd>).
-</p>
-<p>Normally, the auto-save file name is made by appending &lsquo;<samp>#</samp>&rsquo; to the
-front and rear of the visited file name.  Thus, a buffer visiting file
-<samp>foo.c</samp> is auto-saved in a file <samp>#foo.c#</samp>.  Most buffers that
-are not visiting files are auto-saved only if you request it explicitly;
-when they are auto-saved, the auto-save file name is made by appending
-&lsquo;<samp>#</samp>&rsquo; to the front and rear of buffer name, then
-adding digits and letters at the end for uniqueness.  For
-example, the <samp>*mail*</samp> buffer in which you compose messages to be
-sent might be auto-saved in a file named <samp>#*mail*#704juu</samp>.  Auto-save file
-names are made this way unless you reprogram parts of Emacs to do
-something different (the functions <code>make-auto-save-file-name</code> and
-<code>auto-save-file-name-p</code>).  The file name to be used for auto-saving
-in a buffer is calculated when auto-saving is turned on in that buffer.
-</p>
-<a name="index-auto_002dsave-for-remote-files"></a>
-<a name="index-auto_002dsave_002dfile_002dname_002dtransforms"></a>
-<p>The variable <code>auto-save-file-name-transforms</code> allows a degree
-of control over the auto-save file name.  It lets you specify a series
-of regular expressions and replacements to transform the auto save
-file name.  The default value puts the auto-save files for remote
-files (see <a href="Remote-Files.html#Remote-Files">Remote Files</a>) into the temporary file directory on the
-local machine.
-</p>
-<p>When you delete a substantial part of the text in a large buffer, auto
-save turns off temporarily in that buffer.  This is because if you
-deleted the text unintentionally, you might find the auto-save file more
-useful if it contains the deleted text.  To reenable auto-saving after
-this happens, save the buffer with <kbd>C-x C-s</kbd>, or use <kbd>C-u 1 M-x
-auto-save-mode</kbd>.
-</p>
-<a name="index-auto_002dsave_002dvisited_002dfile_002dname"></a>
-<p>If you want auto-saving to be done in the visited file rather than
-in a separate auto-save file, set the variable
-<code>auto-save-visited-file-name</code> to a non-<code>nil</code> value.  In this
-mode, there is no real difference between auto-saving and explicit
-saving.
-</p>
-<a name="index-delete_002dauto_002dsave_002dfiles"></a>
-<p>A buffer&rsquo;s auto-save file is deleted when you save the buffer in its
-visited file.  (You can inhibit this by setting the variable
-<code>delete-auto-save-files</code> to <code>nil</code>.)  Changing the visited
-file name with <kbd>C-x C-w</kbd> or <code>set-visited-file-name</code> renames
-any auto-save file to go with the new visited name.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Auto-Save-Control.html#Auto-Save-Control" accesskey="n" rel="next">Auto Save Control</a>, Up: <a href="Auto-Save.html#Auto-Save" accesskey="u" rel="up">Auto Save</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Auto-saving does not normally save in the files that you
+  visited, because it can be very undesirable to save a change that
+  you did not want to make permanent. Instead, auto-saving is done
+  in a different file called the <em>auto-save file</em>, and the
+  visited file is changed only when you request saving explicitly
+  (such as with <kbd>C-x C-s</kbd>).</p>
 
+  <p>Normally, the auto-save file name is made by appending
+  &lsquo;<samp>#</samp>&rsquo; to the front and rear of the visited
+  file name. Thus, a buffer visiting file <samp>foo.c</samp> is
+  auto-saved in a file <samp>#foo.c#</samp>. Most buffers that are
+  not visiting files are auto-saved only if you request it
+  explicitly; when they are auto-saved, the auto-save file name is
+  made by appending &lsquo;<samp>#</samp>&rsquo; to the front and
+  rear of buffer name, then adding digits and letters at the end
+  for uniqueness. For example, the <samp>*mail*</samp> buffer in
+  which you compose messages to be sent might be auto-saved in a
+  file named <samp>#*mail*#704juu</samp>. Auto-save file names are
+  made this way unless you reprogram parts of Emacs to do something
+  different (the functions <code>make-auto-save-file-name</code>
+  and <code>auto-save-file-name-p</code>). The file name to be used
+  for auto-saving in a buffer is calculated when auto-saving is
+  turned on in that buffer.</p><a name=
+  "index-auto_002dsave-for-remote-files" id=
+  "index-auto_002dsave-for-remote-files"></a> <a name=
+  "index-auto_002dsave_002dfile_002dname_002dtransforms" id=
+  "index-auto_002dsave_002dfile_002dname_002dtransforms"></a>
 
+  <p>The variable <code>auto-save-file-name-transforms</code>
+  allows a degree of control over the auto-save file name. It lets
+  you specify a series of regular expressions and replacements to
+  transform the auto save file name. The default value puts the
+  auto-save files for remote files (see <a href=
+  "Remote-Files.html#Remote-Files">Remote Files</a>) into the
+  temporary file directory on the local machine.</p>
 
+  <p>When you delete a substantial part of the text in a large
+  buffer, auto save turns off temporarily in that buffer. This is
+  because if you deleted the text unintentionally, you might find
+  the auto-save file more useful if it contains the deleted text.
+  To reenable auto-saving after this happens, save the buffer with
+  <kbd>C-x C-s</kbd>, or use <kbd>C-u 1 M-x
+  auto-save-mode</kbd>.</p><a name=
+  "index-auto_002dsave_002dvisited_002dfile_002dname" id=
+  "index-auto_002dsave_002dvisited_002dfile_002dname"></a>
+
+  <p>If you want auto-saving to be done in the visited file rather
+  than in a separate auto-save file, set the variable
+  <code>auto-save-visited-file-name</code> to a
+  non-<code>nil</code> value. In this mode, there is no real
+  difference between auto-saving and explicit saving.</p><a name=
+  "index-delete_002dauto_002dsave_002dfiles" id=
+  "index-delete_002dauto_002dsave_002dfiles"></a>
+
+  <p>A buffer&rsquo;s auto-save file is deleted when you save the
+  buffer in its visited file. (You can inhibit this by setting the
+  variable <code>delete-auto-save-files</code> to
+  <code>nil</code>.) Changing the visited file name with <kbd>C-x
+  C-w</kbd> or <code>set-visited-file-name</code> renames any
+  auto-save file to go with the new visited name.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Auto-Save-Control.html#Auto-Save-Control"
+    accesskey="n" rel="next">Auto Save Control</a>, Up: <a href=
+    "Auto-Save.html#Auto-Save" accesskey="u" rel="up">Auto Save</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

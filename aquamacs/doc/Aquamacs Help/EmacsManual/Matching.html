@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,171 +20,224 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Matching</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Matching">
-<meta name="keywords" content="GNU Emacs Manual: Matching">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Parentheses.html#Parentheses" rel="up" title="Parentheses">
-<link href="Comments.html#Comments" rel="next" title="Comments">
-<link href="Moving-by-Parens.html#Moving-by-Parens" rel="prev" title="Moving by Parens">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Matching</title>
+  <meta name="description" content="GNU Emacs Manual: Matching" />
+  <meta name="keywords" content="GNU Emacs Manual: Matching" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Parentheses.html#Parentheses" rel="up" title=
+  "Parentheses" />
+  <link href="Comments.html#Comments" rel="next" title=
+  "Comments" />
+  <link href="Moving-by-Parens.html#Moving-by-Parens" rel="prev"
+  title="Moving by Parens" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Matching" id="Matching"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Moving-by-Parens.html#Moving-by-Parens"
+    accesskey="p" rel="prev">Moving by Parens</a>, Up: <a href=
+    "Parentheses.html#Parentheses" accesskey="u" rel=
+    "up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Matching-Parentheses" id="Matching-Parentheses"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Matching"></a>
-<div class="header">
-<p>
-Previous: <a href="Moving-by-Parens.html#Moving-by-Parens" accesskey="p" rel="prev">Moving by Parens</a>, Up: <a href="Parentheses.html#Parentheses" accesskey="u" rel="up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Matching-Parentheses"></a>
-<h4 class="subsection">26.4.3 Matching Parentheses</h4>
-<a name="index-matching-parentheses"></a>
-<a name="index-parentheses_002c-displaying-matches"></a>
+  <h4 class="subsection">26.4.3 Matching Parentheses</h4><a name=
+  "index-matching-parentheses" id="index-matching-parentheses"></a>
+  <a name="index-parentheses_002c-displaying-matches" id=
+  "index-parentheses_002c-displaying-matches"></a>
 
-<p>Emacs has a number of <em>parenthesis matching</em> features, which
-make it easy to see how and whether parentheses (or other delimiters)
-match up.
-</p>
-<p>Whenever you type a self-inserting character that is a closing
-delimiter, Emacs briefly indicates the location of the matching
-opening delimiter, provided that is on the screen.  If it is not on
-the screen, Emacs displays some of the text near it in the echo area.
-Either way, you can tell which grouping you are closing off.  If the
-opening delimiter and closing delimiter are mismatched&mdash;such as in
-&lsquo;<samp>[x)</samp>&rsquo;&mdash;a warning message is displayed in the echo area.
-</p>
-<a name="index-blink_002dmatching_002dparen"></a>
-<a name="index-blink_002dmatching_002dparen_002ddistance"></a>
-<a name="index-blink_002dmatching_002ddelay"></a>
-<p>Three variables control the display of matching parentheses:
-</p>
-<ul>
-<li> <code>blink-matching-paren</code> turns the feature on or off: <code>nil</code>
-disables it, but the default is <code>t</code> to enable it.  Set it to
-<code>jump</code> to make indication work by momentarily moving the cursor
-to the matching opening delimiter.  Set it to <code>jump-offscreen</code> to
-make the cursor jump, even if the opening delimiter is off screen.
+  <p>Emacs has a number of <em>parenthesis matching</em> features,
+  which make it easy to see how and whether parentheses (or other
+  delimiters) match up.</p>
 
-</li><li> <code>blink-matching-delay</code> says how many seconds to keep indicating
-the matching opening delimiter.  This may be an integer or
-floating-point number; the default is 1.
+  <p>Whenever you type a self-inserting character that is a closing
+  delimiter, Emacs briefly indicates the location of the matching
+  opening delimiter, provided that is on the screen. If it is not
+  on the screen, Emacs displays some of the text near it in the
+  echo area. Either way, you can tell which grouping you are
+  closing off. If the opening delimiter and closing delimiter are
+  mismatched&mdash;such as in
+  &lsquo;<samp>[x)</samp>&rsquo;&mdash;a warning message is
+  displayed in the echo area.</p><a name=
+  "index-blink_002dmatching_002dparen" id=
+  "index-blink_002dmatching_002dparen"></a> <a name=
+  "index-blink_002dmatching_002dparen_002ddistance" id=
+  "index-blink_002dmatching_002dparen_002ddistance"></a> <a name=
+  "index-blink_002dmatching_002ddelay" id=
+  "index-blink_002dmatching_002ddelay"></a>
 
-</li><li> <code>blink-matching-paren-distance</code> specifies how many characters
-back to search to find the matching opening delimiter.  If the match
-is not found in that distance, Emacs stops scanning and nothing is
-displayed.  The default is 102400.
-</li></ul>
+  <p>Three variables control the display of matching
+  parentheses:</p>
 
-<a name="index-Show-Paren-mode"></a>
-<a name="index-highlighting-matching-parentheses"></a>
-<a name="index-show_002dparen_002dmode"></a>
-<p>Show Paren mode, a global minor mode, provides a more powerful kind
-of automatic matching.  Whenever point is before an opening delimiter
-or after a closing delimiter, the delimiter, its matching delimiter,
-and optionally the text between them are highlighted.  To toggle Show
-Paren mode, type <kbd>M-x show-paren-mode</kbd>.  To customize it, type
-<kbd>M-x customize-group <span class="key">RET</span> paren-showing</kbd>.  The customizable
-options which control the operation of this mode include:
-</p>
-<ul>
-<li> <code>show-paren-highlight-open-paren</code> controls whether to highlight
-an open paren when point stands just before it, and hence its position
-is marked by the cursor anyway.  The default is non-<code>nil</code> (yes).
+  <ul>
+    <li><code>blink-matching-paren</code> turns the feature on or
+    off: <code>nil</code> disables it, but the default is
+    <code>t</code> to enable it. Set it to <code>jump</code> to
+    make indication work by momentarily moving the cursor to the
+    matching opening delimiter. Set it to
+    <code>jump-offscreen</code> to make the cursor jump, even if
+    the opening delimiter is off screen.</li>
 
-</li><li> <code>show-paren-style</code> controls whether just the two parens, or also
-the space between them get highlighted.  The valid options here are
-<code>parenthesis</code> (show the matching paren), <code>expression</code>
-(highlight the entire expression enclosed by the parens), and
-<code>mixed</code> (highlight the matching paren if it is visible, the
-expression otherwise).
+    <li><code>blink-matching-delay</code> says how many seconds to
+    keep indicating the matching opening delimiter. This may be an
+    integer or floating-point number; the default is 1.</li>
 
-</li><li> <code>show-paren-when-point-inside-paren</code>, when non-<code>nil</code>, causes
-highlighting also when point is on the inside of a parenthesis.
+    <li><code>blink-matching-paren-distance</code> specifies how
+    many characters back to search to find the matching opening
+    delimiter. If the match is not found in that distance, Emacs
+    stops scanning and nothing is displayed. The default is
+    102400.</li>
+  </ul><a name="index-Show-Paren-mode" id=
+  "index-Show-Paren-mode"></a> <a name=
+  "index-highlighting-matching-parentheses" id=
+  "index-highlighting-matching-parentheses"></a> <a name=
+  "index-show_002dparen_002dmode" id=
+  "index-show_002dparen_002dmode"></a>
 
-</li><li> <code>show-paren-when-point-in-periphery</code>, when non-<code>nil</code>, causes
-highlighting also when point is in whitespace at the beginning or end
-of a line, and there is a paren at, respectively, the first or last,
-or the last, non-whitespace position on the line.
-</li></ul>
+  <p>Show Paren mode, a global minor mode, provides a more powerful
+  kind of automatic matching. Whenever point is before an opening
+  delimiter or after a closing delimiter, the delimiter, its
+  matching delimiter, and optionally the text between them are
+  highlighted. To toggle Show Paren mode, type <kbd>M-x
+  show-paren-mode</kbd>. To customize it, type <kbd>M-x
+  customize-group <span class="key">RET</span> paren-showing</kbd>.
+  The customizable options which control the operation of this mode
+  include:</p>
 
-<a name="index-Electric-Pair-mode"></a>
-<a name="index-inserting-matching-parentheses"></a>
-<a name="index-electric_002dpair_002dmode"></a>
-<p>Electric Pair mode, a global minor mode, provides a way to easily
-insert matching delimiters.  Whenever you insert an opening delimiter,
-the matching closing delimiter is automatically inserted as well,
-leaving point between the two.  Conversely, when you insert a closing
-delimiter over an existing one, no inserting takes places and that
-position is simply skipped over.  These variables control additional
-features of Electric Pair mode:
-</p>
-<ul>
-<li> <code>electric-pair-preserve-balance</code>, when non-<code>nil</code>, makes the
-default pairing logic balance out the number of opening and closing
-delimiters.
+  <ul>
+    <li><code>show-paren-highlight-open-paren</code> controls
+    whether to highlight an open paren when point stands just
+    before it, and hence its position is marked by the cursor
+    anyway. The default is non-<code>nil</code> (yes).</li>
 
-</li><li> <code>electric-pair-delete-adjacent-pairs</code>, when non-<code>nil</code>, makes
-backspacing between two adjacent delimiters also automatically delete
-the closing delimiter.
+    <li><code>show-paren-style</code> controls whether just the two
+    parens, or also the space between them get highlighted. The
+    valid options here are <code>parenthesis</code> (show the
+    matching paren), <code>expression</code> (highlight the entire
+    expression enclosed by the parens), and <code>mixed</code>
+    (highlight the matching paren if it is visible, the expression
+    otherwise).</li>
 
-</li><li> <code>electric-pair-open-newline-between-pairs</code>, when non-<code>nil</code>,
-makes inserting inserting a newline between two adjacent pairs also
-automatically open and extra newline after point.
+    <li><code>show-paren-when-point-inside-paren</code>, when
+    non-<code>nil</code>, causes highlighting also when point is on
+    the inside of a parenthesis.</li>
 
-</li><li> <code>electric-pair-skip-whitespace</code>, when non-<code>nil</code>, causes the minor
-mode to skip whitespace forward before deciding whether to skip over
-the closing delimiter.
-</li></ul>
+    <li><code>show-paren-when-point-in-periphery</code>, when
+    non-<code>nil</code>, causes highlighting also when point is in
+    whitespace at the beginning or end of a line, and there is a
+    paren at, respectively, the first or last, or the last,
+    non-whitespace position on the line.</li>
+  </ul><a name="index-Electric-Pair-mode" id=
+  "index-Electric-Pair-mode"></a> <a name=
+  "index-inserting-matching-parentheses" id=
+  "index-inserting-matching-parentheses"></a> <a name=
+  "index-electric_002dpair_002dmode" id=
+  "index-electric_002dpair_002dmode"></a>
 
-<p>To toggle Electric Pair mode, type <kbd>M-x electric-pair-mode</kbd>.  To
-toggle the mode in a single buffer, use <kbd>M-x
-electric-pair-local-mode</kbd>.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Moving-by-Parens.html#Moving-by-Parens" accesskey="p" rel="prev">Moving by Parens</a>, Up: <a href="Parentheses.html#Parentheses" accesskey="u" rel="up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Electric Pair mode, a global minor mode, provides a way to
+  easily insert matching delimiters. Whenever you insert an opening
+  delimiter, the matching closing delimiter is automatically
+  inserted as well, leaving point between the two. Conversely, when
+  you insert a closing delimiter over an existing one, no inserting
+  takes places and that position is simply skipped over. These
+  variables control additional features of Electric Pair mode:</p>
 
+  <ul>
+    <li><code>electric-pair-preserve-balance</code>, when
+    non-<code>nil</code>, makes the default pairing logic balance
+    out the number of opening and closing delimiters.</li>
 
+    <li><code>electric-pair-delete-adjacent-pairs</code>, when
+    non-<code>nil</code>, makes backspacing between two adjacent
+    delimiters also automatically delete the closing
+    delimiter.</li>
 
+    <li><code>electric-pair-open-newline-between-pairs</code>, when
+    non-<code>nil</code>, makes inserting inserting a newline
+    between two adjacent pairs also automatically open and extra
+    newline after point.</li>
+
+    <li><code>electric-pair-skip-whitespace</code>, when
+    non-<code>nil</code>, causes the minor mode to skip whitespace
+    forward before deciding whether to skip over the closing
+    delimiter.</li>
+  </ul>
+
+  <p>To toggle Electric Pair mode, type <kbd>M-x
+  electric-pair-mode</kbd>. To toggle the mode in a single buffer,
+  use <kbd>M-x electric-pair-local-mode</kbd>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Moving-by-Parens.html#Moving-by-Parens"
+    accesskey="p" rel="prev">Moving by Parens</a>, Up: <a href=
+    "Parentheses.html#Parentheses" accesskey="u" rel=
+    "up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

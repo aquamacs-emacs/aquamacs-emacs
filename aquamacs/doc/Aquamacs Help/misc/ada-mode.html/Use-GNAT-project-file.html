@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,144 +14,200 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Ada Mode: Use GNAT project file</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Ada Mode: Use GNAT project file">
-<meta name="keywords" content="Ada Mode: Use GNAT project file">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Compiling-Examples.html#Compiling-Examples" rel="up" title="Compiling Examples">
-<link href="Use-multiple-GNAT-project-files.html#Use-multiple-GNAT-project-files" rel="next" title="Use multiple GNAT project files">
-<link href="Set-source-search-path.html#Set-source-search-path" rel="prev" title="Set source search path">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Ada Mode: Use GNAT project file</title>
+  <meta name="description" content=
+  "Ada Mode: Use GNAT project file" />
+  <meta name="keywords" content=
+  "Ada Mode: Use GNAT project file" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Compiling-Examples.html#Compiling-Examples" rel="up"
+  title="Compiling Examples" />
+  <link href=
+  "Use-multiple-GNAT-project-files.html#Use-multiple-GNAT-project-files"
+  rel="next" title="Use multiple GNAT project files" />
+  <link href="Set-source-search-path.html#Set-source-search-path"
+  rel="prev" title="Set source search path" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Use-GNAT-project-file"></a>
-<div class="header">
-<p>
-Next: <a href="Use-multiple-GNAT-project-files.html#Use-multiple-GNAT-project-files" accesskey="n" rel="next">Use multiple GNAT project files</a>, Previous: <a href="Set-source-search-path.html#Set-source-search-path" accesskey="p" rel="prev">Set source search path</a>, Up: <a href="Compiling-Examples.html#Compiling-Examples" accesskey="u" rel="up">Compiling Examples</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Use-GNAT-project-file-1"></a>
-<h3 class="section">6.4 Use GNAT project file</h3>
+<body lang="en" xml:lang="en">
+  <a name="Use-GNAT-project-file" id="Use-GNAT-project-file"></a>
 
-<p>In this example, we show how to use a GNAT project file, with no Ada
-mode project file.
-</p>
-<p>Create the directory <samp>Example_4</samp>, containing:
-</p>
-<p><samp>hello_pkg.ads</samp>:
-</p>
-<div class="example">
-<pre class="example">package Hello_Pkg is
+  <div class="header">
+    <p>Next: <a href=
+    "Use-multiple-GNAT-project-files.html#Use-multiple-GNAT-project-files"
+    accesskey="n" rel="next">Use multiple GNAT project files</a>,
+    Previous: <a href=
+    "Set-source-search-path.html#Set-source-search-path" accesskey=
+    "p" rel="prev">Set source search path</a>, Up: <a href=
+    "Compiling-Examples.html#Compiling-Examples" accesskey="u" rel=
+    "up">Compiling Examples</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Use-GNAT-project-file-1" id=
+  "Use-GNAT-project-file-1"></a>
+
+  <h3 class="section">6.4 Use GNAT project file</h3>
+
+  <p>In this example, we show how to use a GNAT project file, with
+  no Ada mode project file.</p>
+
+  <p>Create the directory <samp>Example_4</samp>, containing:</p>
+
+  <p><samp>hello_pkg.ads</samp>:</p>
+
+  <div class="example">
+    <pre class="example">
+package Hello_Pkg is
    procedure Say_Hello;
 end Hello_Pkg;
-</pre></div>
+</pre>
+  </div>
 
-<p><samp>hello_pkg.adb</samp>:
-</p>
-<div class="example">
-<pre class="example">with Ada.Text_IO;
+  <p><samp>hello_pkg.adb</samp>:</p>
+
+  <div class="example">
+    <pre class="example">
+with Ada.Text_IO;
 package Hello_Pkg is
    procedure Say_Hello
    is begin
-      Ada.Text_IO.Put_Line (&quot;Hello from hello_pkg.adb&quot;);
+      Ada.Text_IO.Put_Line ("Hello from hello_pkg.adb");
    end Say_Hello;
 end Hello_Pkg;
-</pre></div>
+</pre>
+  </div>
 
-<p>These are the same files from example 1; <samp>hello_pkg.adb</samp> has an
-error on line 2.
-</p>
-<p>In addition, create a directory <samp>Example_4/Gnat_Project</samp>,
-containing these files:
-</p>
-<p><samp>Gnat_Project/hello_4.adb</samp>:
-</p>
-<div class="example">
-<pre class="example">with Hello_Pkg;
+  <p>These are the same files from example 1;
+  <samp>hello_pkg.adb</samp> has an error on line 2.</p>
+
+  <p>In addition, create a directory
+  <samp>Example_4/Gnat_Project</samp>, containing these files:</p>
+
+  <p><samp>Gnat_Project/hello_4.adb</samp>:</p>
+
+  <div class="example">
+    <pre class="example">
+with Hello_Pkg;
 with Ada.Text_IO; use Ada.Text_IO;
 procedure Hello_4
 is begin
    Hello_Pkg.Say_Hello;
-   Put_Line (&quot;From hello_4&quot;);
+   Put_Line ("From hello_4");
 end Hello_4;
-</pre></div>
+</pre>
+  </div>
 
-<p>There are no errors in this file.
-</p>
-<p><samp>Gnat_Project/hello_4.gpr</samp>:
-</p>
-<div class="example">
-<pre class="example">Project Hello_4 is
-   for Source_Dirs use (&quot;.&quot;, &quot;..&quot;);
+  <p>There are no errors in this file.</p>
+
+  <p><samp>Gnat_Project/hello_4.gpr</samp>:</p>
+
+  <div class="example">
+    <pre class="example">
+Project Hello_4 is
+   for Source_Dirs use (".", "..");
 end Hello_4;
-</pre></div>
+</pre>
+  </div>
 
-<p>In buffer <samp>hello_4.adb</samp>, invoke &lsquo;<samp>Ada | Project | Load...</samp>&rsquo;, and
-select <samp>Example_4/Gnat_Project/hello_4.gpr</samp>.
-</p>
-<p>Then, again in <samp>hello_4.adb</samp>, invoke &lsquo;<samp>Ada | Set main and
-Build</samp>&rsquo;. You should get a <samp>*compilation*</samp> buffer containing
-something like (the directory paths will be different):
-</p>
-<div class="smallexample">
-<pre class="smallexample">cd c:/Examples/Example_4/Gnat_Project/
+  <p>In buffer <samp>hello_4.adb</samp>, invoke &lsquo;<samp>Ada |
+  Project | Load...</samp>&rsquo;, and select
+  <samp>Example_4/Gnat_Project/hello_4.gpr</samp>.</p>
+
+  <p>Then, again in <samp>hello_4.adb</samp>, invoke
+  &lsquo;<samp>Ada | Set main and Build</samp>&rsquo;. You should
+  get a <samp>*compilation*</samp> buffer containing something like
+  (the directory paths will be different):</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+cd c:/Examples/Example_4/Gnat_Project/
 gnatmake -o hello_4 hello_4 -Phello_4.gpr -cargs -gnatq -gnatQ -bargs  -largs
 gcc -c -g -gnatyt -gnatq -gnatQ -I- -gnatA c:\Examples\Example_4\Gnat_Project\hello_4.adb
 gcc -c -g -gnatyt -gnatq -gnatQ -I- -gnatA c:\Examples\Example_4\hello_pkg.adb
-hello_pkg.adb:2:08: keyword &quot;body&quot; expected here [see file name]
-gnatmake: &quot;c:\examples\example_4\hello_pkg.adb&quot; compilation error
-</pre></div>
+hello_pkg.adb:2:08: keyword "body" expected here [see file name]
+gnatmake: "c:\examples\example_4\hello_pkg.adb" compilation error
+</pre>
+  </div>
 
-<p>Compare the <code>gcc</code> options to the compiler output in <a href="Set-compiler-options.html#Set-compiler-options">Set compiler options</a>; this shows that <samp>hello_4.gpr</samp> is being used to
-set the compiler options.
-</p>
-<p>Fixing the error, linking and running the code proceed as in <a href="No-project-files.html#No-project-files">No project files</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Use-multiple-GNAT-project-files.html#Use-multiple-GNAT-project-files" accesskey="n" rel="next">Use multiple GNAT project files</a>, Previous: <a href="Set-source-search-path.html#Set-source-search-path" accesskey="p" rel="prev">Set source search path</a>, Up: <a href="Compiling-Examples.html#Compiling-Examples" accesskey="u" rel="up">Compiling Examples</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Compare the <code>gcc</code> options to the compiler output in
+  <a href="Set-compiler-options.html#Set-compiler-options">Set
+  compiler options</a>; this shows that <samp>hello_4.gpr</samp> is
+  being used to set the compiler options.</p>
 
+  <p>Fixing the error, linking and running the code proceed as in
+  <a href="No-project-files.html#No-project-files">No project
+  files</a>.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Use-multiple-GNAT-project-files.html#Use-multiple-GNAT-project-files"
+    accesskey="n" rel="next">Use multiple GNAT project files</a>,
+    Previous: <a href=
+    "Set-source-search-path.html#Set-source-search-path" accesskey=
+    "p" rel="prev">Set source search path</a>, Up: <a href=
+    "Compiling-Examples.html#Compiling-Examples" accesskey="u" rel=
+    "up">Compiling Examples</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

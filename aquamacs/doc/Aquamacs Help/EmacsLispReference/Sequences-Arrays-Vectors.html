@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,83 +19,119 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Sequences Arrays Vectors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Sequences Arrays Vectors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Sequences Arrays Vectors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Sequence-Functions.html#Sequence-Functions" rel="next" title="Sequence Functions">
-<link href="Plist-Access.html#Plist-Access" rel="prev" title="Plist Access">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Sequences Arrays
+  Vectors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Sequences Arrays Vectors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Sequences Arrays Vectors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Sequence-Functions.html#Sequence-Functions" rel=
+  "next" title="Sequence Functions" />
+  <link href="Plist-Access.html#Plist-Access" rel="prev" title=
+  "Plist Access" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Sequences-Arrays-Vectors" id=
+  "Sequences-Arrays-Vectors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Hash-Tables.html#Hash-Tables" accesskey="n"
+    rel="next">Hash Tables</a>, Previous: <a href=
+    "Lists.html#Lists" accesskey="p" rel="prev">Lists</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sequences_002c-Arrays_002c-and-Vectors" id=
+  "Sequences_002c-Arrays_002c-and-Vectors"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sequences-Arrays-Vectors"></a>
-<div class="header">
-<p>
-Next: <a href="Hash-Tables.html#Hash-Tables" accesskey="n" rel="next">Hash Tables</a>, Previous: <a href="Lists.html#Lists" accesskey="p" rel="prev">Lists</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sequences_002c-Arrays_002c-and-Vectors"></a>
-<h2 class="chapter">6 Sequences, Arrays, and Vectors</h2>
-<a name="index-sequence"></a>
+  <h2 class="chapter">6 Sequences, Arrays, and Vectors</h2><a name=
+  "index-sequence" id="index-sequence"></a>
 
-<p>The <em>sequence</em> type is the union of two other Lisp types: lists
-and arrays.  In other words, any list is a sequence, and any array is
-a sequence.  The common property that all sequences have is that each
-is an ordered collection of elements.
-</p>
-<p>An <em>array</em> is a fixed-length object with a slot for each of its
-elements.  All the elements are accessible in constant time.  The four
-types of arrays are strings, vectors, char-tables and bool-vectors.
-</p>
-<p>A list is a sequence of elements, but it is not a single primitive
-object; it is made of cons cells, one cell per element.  Finding the
-<var>n</var>th element requires looking through <var>n</var> cons cells, so
-elements farther from the beginning of the list take longer to access.
-But it is possible to add elements to the list, or remove elements.
-</p>
-<p>The following diagram shows the relationship between these types:
-</p>
-<div class="example">
-<pre class="example">          _____________________________________________
+  <p>The <em>sequence</em> type is the union of two other Lisp
+  types: lists and arrays. In other words, any list is a sequence,
+  and any array is a sequence. The common property that all
+  sequences have is that each is an ordered collection of
+  elements.</p>
+
+  <p>An <em>array</em> is a fixed-length object with a slot for
+  each of its elements. All the elements are accessible in constant
+  time. The four types of arrays are strings, vectors, char-tables
+  and bool-vectors.</p>
+
+  <p>A list is a sequence of elements, but it is not a single
+  primitive object; it is made of cons cells, one cell per element.
+  Finding the <var>n</var>th element requires looking through
+  <var>n</var> cons cells, so elements farther from the beginning
+  of the list take longer to access. But it is possible to add
+  elements to the list, or remove elements.</p>
+
+  <p>The following diagram shows the relationship between these
+  types:</p>
+
+  <div class="example">
+    <pre class="example">
+          _____________________________________________
          |                                             |
          |          Sequence                           |
          |  ______   ________________________________  |
@@ -109,34 +147,105 @@ But it is possible to add elements to the list, or remove elements.
          |          | |____________| |_____________| | |
          |          |________________________________| |
          |_____________________________________________|
-</pre></div>
+</pre>
+  </div>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Sequence-Functions.html#Sequence-Functions" accesskey="1">Sequence Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions that accept any kind of sequence.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Arrays.html#Arrays" accesskey="2">Arrays</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Characteristics of arrays in Emacs Lisp.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Array-Functions.html#Array-Functions" accesskey="3">Array Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions specifically for arrays.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Vectors.html#Vectors" accesskey="4">Vectors</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special characteristics of Emacs Lisp vectors.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Vector-Functions.html#Vector-Functions" accesskey="5">Vector Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions specifically for vectors.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Char_002dTables.html#Char_002dTables" accesskey="6">Char-Tables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to work with char-tables.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Bool_002dVectors.html#Bool_002dVectors" accesskey="7">Bool-Vectors</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to work with bool-vectors.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rings.html#Rings" accesskey="8">Rings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Managing a fixed-size ring of objects.
-</td></tr>
-</table>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Sequence-Functions.html#Sequence-Functions" accesskey=
+      "1">Sequence Functions</a>:</td>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Hash-Tables.html#Hash-Tables" accesskey="n" rel="next">Hash Tables</a>, Previous: <a href="Lists.html#Lists" accesskey="p" rel="prev">Lists</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Functions that accept any kind
+      of sequence.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Arrays.html#Arrays" accesskey="2">Arrays</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Characteristics of arrays in
+      Emacs Lisp.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Array-Functions.html#Array-Functions" accesskey="3">Array
+      Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions specifically for
+      arrays.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Vectors.html#Vectors" accesskey="4">Vectors</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Special characteristics of
+      Emacs Lisp vectors.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Vector-Functions.html#Vector-Functions" accesskey="5">Vector
+      Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions specifically for
+      vectors.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Char_002dTables.html#Char_002dTables" accesskey=
+      "6">Char-Tables</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to work with
+      char-tables.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Bool_002dVectors.html#Bool_002dVectors" accesskey=
+      "7">Bool-Vectors</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to work with
+      bool-vectors.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rings.html#Rings" accesskey="8">Rings</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Managing a fixed-size ring of
+      objects.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Hash-Tables.html#Hash-Tables" accesskey="n"
+    rel="next">Hash Tables</a>, Previous: <a href=
+    "Lists.html#Lists" accesskey="p" rel="prev">Lists</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,136 +19,187 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Association Lists</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Association Lists">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Association Lists">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lists.html#Lists" rel="up" title="Lists">
-<link href="Property-Lists.html#Property-Lists" rel="next" title="Property Lists">
-<link href="Sets-And-Lists.html#Sets-And-Lists" rel="prev" title="Sets And Lists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Association Lists</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Association Lists" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Association Lists" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lists.html#Lists" rel="up" title="Lists" />
+  <link href="Property-Lists.html#Property-Lists" rel="next" title=
+  "Property Lists" />
+  <link href="Sets-And-Lists.html#Sets-And-Lists" rel="prev" title=
+  "Sets And Lists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Association-Lists" id="Association-Lists"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Property-Lists.html#Property-Lists"
+    accesskey="n" rel="next">Property Lists</a>, Previous: <a href=
+    "Sets-And-Lists.html#Sets-And-Lists" accesskey="p" rel=
+    "prev">Sets And Lists</a>, Up: <a href="Lists.html#Lists"
+    accesskey="u" rel="up">Lists</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Association-Lists-1" id="Association-Lists-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Association-Lists"></a>
-<div class="header">
-<p>
-Next: <a href="Property-Lists.html#Property-Lists" accesskey="n" rel="next">Property Lists</a>, Previous: <a href="Sets-And-Lists.html#Sets-And-Lists" accesskey="p" rel="prev">Sets And Lists</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Association-Lists-1"></a>
-<h3 class="section">5.8 Association Lists</h3>
-<a name="index-association-list"></a>
-<a name="index-alist"></a>
+  <h3 class="section">5.8 Association Lists</h3><a name=
+  "index-association-list" id="index-association-list"></a>
+  <a name="index-alist" id="index-alist"></a>
 
-<p>An <em>association list</em>, or <em>alist</em> for short, records a mapping
-from keys to values.  It is a list of cons cells called
-<em>associations</em>: the <small>CAR</small> of each cons cell is the <em>key</em>, and the
-<small>CDR</small> is the <em>associated value</em>.<a name="DOCF3" href="#FOOT3"><sup>3</sup></a>
-</p>
-<p>Here is an example of an alist.  The key <code>pine</code> is associated with
-the value <code>cones</code>; the key <code>oak</code> is associated with
-<code>acorns</code>; and the key <code>maple</code> is associated with <code>seeds</code>.
-</p>
-<div class="example">
-<pre class="example">((pine . cones)
+  <p>An <em>association list</em>, or <em>alist</em> for short,
+  records a mapping from keys to values. It is a list of cons cells
+  called <em>associations</em>: the <small>CAR</small> of each cons
+  cell is the <em>key</em>, and the <small>CDR</small> is the
+  <em>associated value</em>.<a name="DOCF3" href="#FOOT3" id=
+  "DOCF3"><sup>3</sup></a></p>
+
+  <p>Here is an example of an alist. The key <code>pine</code> is
+  associated with the value <code>cones</code>; the key
+  <code>oak</code> is associated with <code>acorns</code>; and the
+  key <code>maple</code> is associated with <code>seeds</code>.</p>
+
+  <div class="example">
+    <pre class="example">
+((pine . cones)
  (oak . acorns)
  (maple . seeds))
-</pre></div>
+</pre>
+  </div>
 
-<p>Both the values and the keys in an alist may be any Lisp objects.
-For example, in the following alist, the symbol <code>a</code> is
-associated with the number <code>1</code>, and the string <code>&quot;b&quot;</code> is
-associated with the <em>list</em> <code>(2 3)</code>, which is the <small>CDR</small> of
-the alist element:
-</p>
-<div class="example">
-<pre class="example">((a . 1) (&quot;b&quot; 2 3))
-</pre></div>
+  <p>Both the values and the keys in an alist may be any Lisp
+  objects. For example, in the following alist, the symbol
+  <code>a</code> is associated with the number <code>1</code>, and
+  the string <code>"b"</code> is associated with the <em>list</em>
+  <code>(2 3)</code>, which is the <small>CDR</small> of the alist
+  element:</p>
 
-<p>Sometimes it is better to design an alist to store the associated
-value in the <small>CAR</small> of the <small>CDR</small> of the element.  Here is an
-example of such an alist:
-</p>
-<div class="example">
-<pre class="example">((rose red) (lily white) (buttercup yellow))
-</pre></div>
+  <div class="example">
+    <pre class="example">
+((a . 1) ("b" 2 3))
+</pre>
+  </div>
 
-<p>Here we regard <code>red</code> as the value associated with <code>rose</code>.  One
-advantage of this kind of alist is that you can store other related
-information&mdash;even a list of other items&mdash;in the <small>CDR</small> of the
-<small>CDR</small>.  One disadvantage is that you cannot use <code>rassq</code> (see
-below) to find the element containing a given value.  When neither of
-these considerations is important, the choice is a matter of taste, as
-long as you are consistent about it for any given alist.
-</p>
-<p>The same alist shown above could be regarded as having the
-associated value in the <small>CDR</small> of the element; the value associated
-with <code>rose</code> would be the list <code>(red)</code>.
-</p>
-<p>Association lists are often used to record information that you might
-otherwise keep on a stack, since new associations may be added easily to
-the front of the list.  When searching an association list for an
-association with a given key, the first one found is returned, if there
-is more than one.
-</p>
-<p>In Emacs Lisp, it is <em>not</em> an error if an element of an
-association list is not a cons cell.  The alist search functions simply
-ignore such elements.  Many other versions of Lisp signal errors in such
-cases.
-</p>
-<p>Note that property lists are similar to association lists in several
-respects.  A property list behaves like an association list in which
-each key can occur only once.  See <a href="Property-Lists.html#Property-Lists">Property Lists</a>, for a comparison
-of property lists and association lists.
-</p>
-<dl>
-<dt><a name="index-assoc"></a>Function: <strong>assoc</strong> <em>key alist</em></dt>
-<dd><p>This function returns the first association for <var>key</var> in
-<var>alist</var>, comparing <var>key</var> against the alist elements using
-<code>equal</code> (see <a href="Equality-Predicates.html#Equality-Predicates">Equality Predicates</a>).  It returns <code>nil</code> if no
-association in <var>alist</var> has a <small>CAR</small> <code>equal</code> to <var>key</var>.
-For example:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(setq trees '((pine . cones) (oak . acorns) (maple . seeds)))
+  <p>Sometimes it is better to design an alist to store the
+  associated value in the <small>CAR</small> of the
+  <small>CDR</small> of the element. Here is an example of such an
+  alist:</p>
+
+  <div class="example">
+    <pre class="example">
+((rose red) (lily white) (buttercup yellow))
+</pre>
+  </div>
+
+  <p>Here we regard <code>red</code> as the value associated with
+  <code>rose</code>. One advantage of this kind of alist is that
+  you can store other related information&mdash;even a list of
+  other items&mdash;in the <small>CDR</small> of the
+  <small>CDR</small>. One disadvantage is that you cannot use
+  <code>rassq</code> (see below) to find the element containing a
+  given value. When neither of these considerations is important,
+  the choice is a matter of taste, as long as you are consistent
+  about it for any given alist.</p>
+
+  <p>The same alist shown above could be regarded as having the
+  associated value in the <small>CDR</small> of the element; the
+  value associated with <code>rose</code> would be the list
+  <code>(red)</code>.</p>
+
+  <p>Association lists are often used to record information that
+  you might otherwise keep on a stack, since new associations may
+  be added easily to the front of the list. When searching an
+  association list for an association with a given key, the first
+  one found is returned, if there is more than one.</p>
+
+  <p>In Emacs Lisp, it is <em>not</em> an error if an element of an
+  association list is not a cons cell. The alist search functions
+  simply ignore such elements. Many other versions of Lisp signal
+  errors in such cases.</p>
+
+  <p>Note that property lists are similar to association lists in
+  several respects. A property list behaves like an association
+  list in which each key can occur only once. See <a href=
+  "Property-Lists.html#Property-Lists">Property Lists</a>, for a
+  comparison of property lists and association lists.</p>
+
+  <dl>
+    <dt><a name="index-assoc" id="index-assoc"></a>Function:
+    <strong>assoc</strong> <em>key alist</em></dt>
+
+    <dd>
+      <p>This function returns the first association for
+      <var>key</var> in <var>alist</var>, comparing <var>key</var>
+      against the alist elements using <code>equal</code> (see
+      <a href=
+      "Equality-Predicates.html#Equality-Predicates">Equality
+      Predicates</a>). It returns <code>nil</code> if no
+      association in <var>alist</var> has a <small>CAR</small>
+      <code>equal</code> to <var>key</var>. For example:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(setq trees '((pine . cones) (oak . acorns) (maple . seeds)))
      &rArr; ((pine . cones) (oak . acorns) (maple . seeds))
 (assoc 'oak trees)
      &rArr; (oak . acorns)
@@ -154,164 +207,238 @@ For example:
      &rArr; acorns
 (assoc 'birch trees)
      &rArr; nil
-</pre></div>
+</pre>
+      </div>
 
-<p>Here is another example, in which the keys and values are not symbols:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(setq needles-per-cluster
-      '((2 &quot;Austrian Pine&quot; &quot;Red Pine&quot;)
-        (3 &quot;Pitch Pine&quot;)
-        (5 &quot;White Pine&quot;)))
+      <p>Here is another example, in which the keys and values are
+      not symbols:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(setq needles-per-cluster
+      '((2 "Austrian Pine" "Red Pine")
+        (3 "Pitch Pine")
+        (5 "White Pine")))
 
 (cdr (assoc 3 needles-per-cluster))
-     &rArr; (&quot;Pitch Pine&quot;)
+     &rArr; ("Pitch Pine")
 (cdr (assoc 2 needles-per-cluster))
-     &rArr; (&quot;Austrian Pine&quot; &quot;Red Pine&quot;)
-</pre></div>
-</dd></dl>
+     &rArr; ("Austrian Pine" "Red Pine")
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>The function <code>assoc-string</code> is much like <code>assoc</code> except
-that it ignores certain differences between strings.  See <a href="Text-Comparison.html#Text-Comparison">Text Comparison</a>.
-</p>
-<dl>
-<dt><a name="index-rassoc"></a>Function: <strong>rassoc</strong> <em>value alist</em></dt>
-<dd><p>This function returns the first association with value <var>value</var> in
-<var>alist</var>.  It returns <code>nil</code> if no association in <var>alist</var> has
-a <small>CDR</small> <code>equal</code> to <var>value</var>.
-</p>
-<p><code>rassoc</code> is like <code>assoc</code> except that it compares the <small>CDR</small> of
-each <var>alist</var> association instead of the <small>CAR</small>.  You can think of
-this as reverse <code>assoc</code>, finding the key for a given value.
-</p></dd></dl>
+  <p>The function <code>assoc-string</code> is much like
+  <code>assoc</code> except that it ignores certain differences
+  between strings. See <a href=
+  "Text-Comparison.html#Text-Comparison">Text Comparison</a>.</p>
 
-<dl>
-<dt><a name="index-assq"></a>Function: <strong>assq</strong> <em>key alist</em></dt>
-<dd><p>This function is like <code>assoc</code> in that it returns the first
-association for <var>key</var> in <var>alist</var>, but it makes the comparison
-using <code>eq</code> instead of <code>equal</code>.  <code>assq</code> returns <code>nil</code>
-if no association in <var>alist</var> has a <small>CAR</small> <code>eq</code> to <var>key</var>.
-This function is used more often than <code>assoc</code>, since <code>eq</code> is
-faster than <code>equal</code> and most alists use symbols as keys.
-See <a href="Equality-Predicates.html#Equality-Predicates">Equality Predicates</a>.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(setq trees '((pine . cones) (oak . acorns) (maple . seeds)))
+  <dl>
+    <dt><a name="index-rassoc" id="index-rassoc"></a>Function:
+    <strong>rassoc</strong> <em>value alist</em></dt>
+
+    <dd>
+      <p>This function returns the first association with value
+      <var>value</var> in <var>alist</var>. It returns
+      <code>nil</code> if no association in <var>alist</var> has a
+      <small>CDR</small> <code>equal</code> to
+      <var>value</var>.</p>
+
+      <p><code>rassoc</code> is like <code>assoc</code> except that
+      it compares the <small>CDR</small> of each <var>alist</var>
+      association instead of the <small>CAR</small>. You can think
+      of this as reverse <code>assoc</code>, finding the key for a
+      given value.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-assq" id="index-assq"></a>Function:
+    <strong>assq</strong> <em>key alist</em></dt>
+
+    <dd>
+      <p>This function is like <code>assoc</code> in that it
+      returns the first association for <var>key</var> in
+      <var>alist</var>, but it makes the comparison using
+      <code>eq</code> instead of <code>equal</code>.
+      <code>assq</code> returns <code>nil</code> if no association
+      in <var>alist</var> has a <small>CAR</small> <code>eq</code>
+      to <var>key</var>. This function is used more often than
+      <code>assoc</code>, since <code>eq</code> is faster than
+      <code>equal</code> and most alists use symbols as keys. See
+      <a href=
+      "Equality-Predicates.html#Equality-Predicates">Equality
+      Predicates</a>.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(setq trees '((pine . cones) (oak . acorns) (maple . seeds)))
      &rArr; ((pine . cones) (oak . acorns) (maple . seeds))
 (assq 'pine trees)
      &rArr; (pine . cones)
-</pre></div>
+</pre>
+      </div>
 
-<p>On the other hand, <code>assq</code> is not usually useful in alists where the
-keys may not be symbols:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(setq leaves
-      '((&quot;simple leaves&quot; . oak)
-        (&quot;compound leaves&quot; . horsechestnut)))
+      <p>On the other hand, <code>assq</code> is not usually useful
+      in alists where the keys may not be symbols:</p>
 
-(assq &quot;simple leaves&quot; leaves)
+      <div class="smallexample">
+        <pre class="smallexample">
+(setq leaves
+      '(("simple leaves" . oak)
+        ("compound leaves" . horsechestnut)))
+
+(assq "simple leaves" leaves)
      &rArr; nil
-(assoc &quot;simple leaves&quot; leaves)
-     &rArr; (&quot;simple leaves&quot; . oak)
-</pre></div>
-</dd></dl>
+(assoc "simple leaves" leaves)
+     &rArr; ("simple leaves" . oak)
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-alist_002dget"></a>Function: <strong>alist-get</strong> <em>key value &amp;optional default remove</em></dt>
-<dd><p>This function is like <code>assq</code>, but instead of returning the entire
-association for <var>key</var>, <code>(<var>key</var> . <var>value</var>)</code>, it
-returns just the <var>value</var>.  If <var>key</var> is not found in
-<var>alist</var> it returns <var>default</var>.
-</p>
-<p>This is a generalized variable (see <a href="Generalized-Variables.html#Generalized-Variables">Generalized Variables</a>) that
-can be used to change a value with <code>setf</code>.  When using it to set
-a value, optional argument <var>remove</var> non-nil means to remove
-<var>key</var> from <var>alist</var> if the new value is <code>eql</code> to <var>default</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-alist_002dget" id=
+    "index-alist_002dget"></a>Function: <strong>alist-get</strong>
+    <em>key value &amp;optional default remove</em></dt>
 
-<dl>
-<dt><a name="index-rassq"></a>Function: <strong>rassq</strong> <em>value alist</em></dt>
-<dd><p>This function returns the first association with value <var>value</var> in
-<var>alist</var>.  It returns <code>nil</code> if no association in <var>alist</var> has
-a <small>CDR</small> <code>eq</code> to <var>value</var>.
-</p>
-<p><code>rassq</code> is like <code>assq</code> except that it compares the <small>CDR</small> of
-each <var>alist</var> association instead of the <small>CAR</small>.  You can think of
-this as reverse <code>assq</code>, finding the key for a given value.
-</p>
-<p>For example:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(setq trees '((pine . cones) (oak . acorns) (maple . seeds)))
+    <dd>
+      <p>This function is like <code>assq</code>, but instead of
+      returning the entire association for <var>key</var>,
+      <code>(<var>key</var> . <var>value</var>)</code>, it returns
+      just the <var>value</var>. If <var>key</var> is not found in
+      <var>alist</var> it returns <var>default</var>.</p>
+
+      <p>This is a generalized variable (see <a href=
+      "Generalized-Variables.html#Generalized-Variables">Generalized
+      Variables</a>) that can be used to change a value with
+      <code>setf</code>. When using it to set a value, optional
+      argument <var>remove</var> non-nil means to remove
+      <var>key</var> from <var>alist</var> if the new value is
+      <code>eql</code> to <var>default</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-rassq" id="index-rassq"></a>Function:
+    <strong>rassq</strong> <em>value alist</em></dt>
+
+    <dd>
+      <p>This function returns the first association with value
+      <var>value</var> in <var>alist</var>. It returns
+      <code>nil</code> if no association in <var>alist</var> has a
+      <small>CDR</small> <code>eq</code> to <var>value</var>.</p>
+
+      <p><code>rassq</code> is like <code>assq</code> except that
+      it compares the <small>CDR</small> of each <var>alist</var>
+      association instead of the <small>CAR</small>. You can think
+      of this as reverse <code>assq</code>, finding the key for a
+      given value.</p>
+
+      <p>For example:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(setq trees '((pine . cones) (oak . acorns) (maple . seeds)))
 
 (rassq 'acorns trees)
      &rArr; (oak . acorns)
 (rassq 'spores trees)
      &rArr; nil
-</pre></div>
+</pre>
+      </div>
 
-<p><code>rassq</code> cannot search for a value stored in the <small>CAR</small>
-of the <small>CDR</small> of an element:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(setq colors '((rose red) (lily white) (buttercup yellow)))
+      <p><code>rassq</code> cannot search for a value stored in the
+      <small>CAR</small> of the <small>CDR</small> of an
+      element:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(setq colors '((rose red) (lily white) (buttercup yellow)))
 
 (rassq 'white colors)
      &rArr; nil
-</pre></div>
+</pre>
+      </div>
 
-<p>In this case, the <small>CDR</small> of the association <code>(lily white)</code> is not
-the symbol <code>white</code>, but rather the list <code>(white)</code>.  This
-becomes clearer if the association is written in dotted pair notation:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(lily white) &equiv; (lily . (white))
-</pre></div>
-</dd></dl>
+      <p>In this case, the <small>CDR</small> of the association
+      <code>(lily white)</code> is not the symbol
+      <code>white</code>, but rather the list <code>(white)</code>.
+      This becomes clearer if the association is written in dotted
+      pair notation:</p>
 
-<dl>
-<dt><a name="index-assoc_002ddefault"></a>Function: <strong>assoc-default</strong> <em>key alist &amp;optional test default</em></dt>
-<dd><p>This function searches <var>alist</var> for a match for <var>key</var>.  For each
-element of <var>alist</var>, it compares the element (if it is an atom) or
-the element&rsquo;s <small>CAR</small> (if it is a cons) against <var>key</var>, by calling
-<var>test</var> with two arguments: the element or its <small>CAR</small>, and
-<var>key</var>.  The arguments are passed in that order so that you can get
-useful results using <code>string-match</code> with an alist that contains
-regular expressions (see <a href="Regexp-Search.html#Regexp-Search">Regexp Search</a>).  If <var>test</var> is omitted
-or <code>nil</code>, <code>equal</code> is used for comparison.
-</p>
-<p>If an alist element matches <var>key</var> by this criterion,
-then <code>assoc-default</code> returns a value based on this element.
-If the element is a cons, then the value is the element&rsquo;s <small>CDR</small>.
-Otherwise, the return value is <var>default</var>.
-</p>
-<p>If no alist element matches <var>key</var>, <code>assoc-default</code> returns
-<code>nil</code>.
-</p></dd></dl>
+      <div class="smallexample">
+        <pre class="smallexample">
+(lily white) &equiv; (lily . (white))
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-copy_002dalist"></a>Function: <strong>copy-alist</strong> <em>alist</em></dt>
-<dd><a name="index-copying-alists"></a>
-<p>This function returns a two-level deep copy of <var>alist</var>: it creates a
-new copy of each association, so that you can alter the associations of
-the new alist without changing the old one.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(setq needles-per-cluster
-      '((2 . (&quot;Austrian Pine&quot; &quot;Red Pine&quot;))
-        (3 . (&quot;Pitch Pine&quot;))
-</pre><pre class="smallexample">        (5 . (&quot;White Pine&quot;))))
+  <dl>
+    <dt><a name="index-assoc_002ddefault" id=
+    "index-assoc_002ddefault"></a>Function:
+    <strong>assoc-default</strong> <em>key alist &amp;optional test
+    default</em></dt>
+
+    <dd>
+      <p>This function searches <var>alist</var> for a match for
+      <var>key</var>. For each element of <var>alist</var>, it
+      compares the element (if it is an atom) or the
+      element&rsquo;s <small>CAR</small> (if it is a cons) against
+      <var>key</var>, by calling <var>test</var> with two
+      arguments: the element or its <small>CAR</small>, and
+      <var>key</var>. The arguments are passed in that order so
+      that you can get useful results using
+      <code>string-match</code> with an alist that contains regular
+      expressions (see <a href=
+      "Regexp-Search.html#Regexp-Search">Regexp Search</a>). If
+      <var>test</var> is omitted or <code>nil</code>,
+      <code>equal</code> is used for comparison.</p>
+
+      <p>If an alist element matches <var>key</var> by this
+      criterion, then <code>assoc-default</code> returns a value
+      based on this element. If the element is a cons, then the
+      value is the element&rsquo;s <small>CDR</small>. Otherwise,
+      the return value is <var>default</var>.</p>
+
+      <p>If no alist element matches <var>key</var>,
+      <code>assoc-default</code> returns <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-copy_002dalist" id=
+    "index-copy_002dalist"></a>Function:
+    <strong>copy-alist</strong> <em>alist</em></dt>
+
+    <dd>
+      <a name="index-copying-alists" id="index-copying-alists"></a>
+
+      <p>This function returns a two-level deep copy of
+      <var>alist</var>: it creates a new copy of each association,
+      so that you can alter the associations of the new alist
+      without changing the old one.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(setq needles-per-cluster
+      '((2 . ("Austrian Pine" "Red Pine"))
+        (3 . ("Pitch Pine"))
+</pre>
+        <pre class="smallexample">
+        (5 . ("White Pine"))))
 &rArr;
-((2 &quot;Austrian Pine&quot; &quot;Red Pine&quot;)
- (3 &quot;Pitch Pine&quot;)
- (5 &quot;White Pine&quot;))
+((2 "Austrian Pine" "Red Pine")
+ (3 "Pitch Pine")
+ (5 "White Pine"))
 
 (setq copy (copy-alist needles-per-cluster))
 &rArr;
-((2 &quot;Austrian Pine&quot; &quot;Red Pine&quot;)
- (3 &quot;Pitch Pine&quot;)
- (5 &quot;White Pine&quot;))
+((2 "Austrian Pine" "Red Pine")
+ (3 "Pitch Pine")
+ (5 "White Pine"))
 
 (eq needles-per-cluster copy)
      &rArr; nil
@@ -320,68 +447,97 @@ the new alist without changing the old one.
 (eq (car needles-per-cluster) (car copy))
      &rArr; nil
 (cdr (car (cdr needles-per-cluster)))
-     &rArr; (&quot;Pitch Pine&quot;)
-</pre><pre class="smallexample">(eq (cdr (car (cdr needles-per-cluster)))
+     &rArr; ("Pitch Pine")
+</pre>
+        <pre class="smallexample">
+(eq (cdr (car (cdr needles-per-cluster)))
     (cdr (car (cdr copy))))
      &rArr; t
-</pre></div>
+</pre>
+      </div>
 
-<p>This example shows how <code>copy-alist</code> makes it possible to change
-the associations of one copy without affecting the other:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(setcdr (assq 3 copy) '(&quot;Martian Vacuum Pine&quot;))
+      <p>This example shows how <code>copy-alist</code> makes it
+      possible to change the associations of one copy without
+      affecting the other:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(setcdr (assq 3 copy) '("Martian Vacuum Pine"))
 (cdr (assq 3 needles-per-cluster))
-     &rArr; (&quot;Pitch Pine&quot;)
-</pre></div>
-</dd></dl>
+     &rArr; ("Pitch Pine")
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-assq_002ddelete_002dall"></a>Function: <strong>assq-delete-all</strong> <em>key alist</em></dt>
-<dd><p>This function deletes from <var>alist</var> all the elements whose <small>CAR</small>
-is <code>eq</code> to <var>key</var>, much as if you used <code>delq</code> to delete
-each such element one by one.  It returns the shortened alist, and
-often modifies the original list structure of <var>alist</var>.  For
-correct results, use the return value of <code>assq-delete-all</code> rather
-than looking at the saved value of <var>alist</var>.
-</p>
-<div class="example">
-<pre class="example">(setq alist '((foo 1) (bar 2) (foo 3) (lose 4)))
+  <dl>
+    <dt><a name="index-assq_002ddelete_002dall" id=
+    "index-assq_002ddelete_002dall"></a>Function:
+    <strong>assq-delete-all</strong> <em>key alist</em></dt>
+
+    <dd>
+      <p>This function deletes from <var>alist</var> all the
+      elements whose <small>CAR</small> is <code>eq</code> to
+      <var>key</var>, much as if you used <code>delq</code> to
+      delete each such element one by one. It returns the shortened
+      alist, and often modifies the original list structure of
+      <var>alist</var>. For correct results, use the return value
+      of <code>assq-delete-all</code> rather than looking at the
+      saved value of <var>alist</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq alist '((foo 1) (bar 2) (foo 3) (lose 4)))
      &rArr; ((foo 1) (bar 2) (foo 3) (lose 4))
 (assq-delete-all 'foo alist)
      &rArr; ((bar 2) (lose 4))
 alist
      &rArr; ((foo 1) (bar 2) (lose 4))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-rassq_002ddelete_002dall"></a>Function: <strong>rassq-delete-all</strong> <em>value alist</em></dt>
-<dd><p>This function deletes from <var>alist</var> all the elements whose <small>CDR</small>
-is <code>eq</code> to <var>value</var>.  It returns the shortened alist, and
-often modifies the original list structure of <var>alist</var>.
-<code>rassq-delete-all</code> is like <code>assq-delete-all</code> except that it
-compares the <small>CDR</small> of each <var>alist</var> association instead of the
-<small>CAR</small>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-rassq_002ddelete_002dall" id=
+    "index-rassq_002ddelete_002dall"></a>Function:
+    <strong>rassq-delete-all</strong> <em>value alist</em></dt>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <dd>
+      <p>This function deletes from <var>alist</var> all the
+      elements whose <small>CDR</small> is <code>eq</code> to
+      <var>value</var>. It returns the shortened alist, and often
+      modifies the original list structure of <var>alist</var>.
+      <code>rassq-delete-all</code> is like
+      <code>assq-delete-all</code> except that it compares the
+      <small>CDR</small> of each <var>alist</var> association
+      instead of the <small>CAR</small>.</p>
+    </dd>
+  </dl>
 
-<h3><a name="FOOT3" href="#DOCF3">(3)</a></h3>
-<p>This usage of &ldquo;key&rdquo;
-is not related to the term &ldquo;key sequence&rdquo;; it means a value used to
-look up an item in a table.  In this case, the table is the alist, and
-the alist associations are the items.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Property-Lists.html#Property-Lists" accesskey="n" rel="next">Property Lists</a>, Previous: <a href="Sets-And-Lists.html#Sets-And-Lists" accesskey="p" rel="prev">Sets And Lists</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT3" href="#DOCF3" id="FOOT3">(3)</a></h3>
 
+    <p>This usage of &ldquo;key&rdquo; is not related to the term
+    &ldquo;key sequence&rdquo;; it means a value used to look up an
+    item in a table. In this case, the table is the alist, and the
+    alist associations are the items.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Property-Lists.html#Property-Lists"
+    accesskey="n" rel="next">Property Lists</a>, Previous: <a href=
+    "Sets-And-Lists.html#Sets-And-Lists" accesskey="p" rel=
+    "prev">Sets And Lists</a>, Up: <a href="Lists.html#Lists"
+    accesskey="u" rel="up">Lists</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

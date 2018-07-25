@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,136 +16,186 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Organization</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Organization">
-<meta name="keywords" content="Common Lisp Extensions: Organization">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Overview.html#Overview" rel="up" title="Overview">
-<link href="Naming-Conventions.html#Naming-Conventions" rel="next" title="Naming Conventions">
-<link href="Usage.html#Usage" rel="prev" title="Usage">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Organization</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Organization" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Organization" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Overview.html#Overview" rel="up" title="Overview" />
+  <link href="Naming-Conventions.html#Naming-Conventions" rel=
+  "next" title="Naming Conventions" />
+  <link href="Usage.html#Usage" rel="prev" title="Usage" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Organization"></a>
-<div class="header">
-<p>
-Next: <a href="Naming-Conventions.html#Naming-Conventions" accesskey="n" rel="next">Naming Conventions</a>, Previous: <a href="Usage.html#Usage" accesskey="p" rel="prev">Usage</a>, Up: <a href="Overview.html#Overview" accesskey="u" rel="up">Overview</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Organization-1"></a>
-<h3 class="section">1.2 Organization</h3>
+<body lang="en" xml:lang="en">
+  <a name="Organization" id="Organization"></a>
 
-<p>The Common Lisp package is organized into four main files:
-</p>
-<dl compact="compact">
-<dt><samp>cl-lib.el</samp></dt>
-<dd><p>This is the main file, which contains basic functions
-and information about the package.  This file is relatively compact.
-</p>
-</dd>
-<dt><samp>cl-extra.el</samp></dt>
-<dd><p>This file contains the larger, more complex or unusual functions.
-It is kept separate so that packages which only want to use Common
-Lisp fundamentals like the <code>cl-incf</code> function won&rsquo;t need to pay
-the overhead of loading the more advanced functions.
-</p>
-</dd>
-<dt><samp>cl-seq.el</samp></dt>
-<dd><p>This file contains most of the advanced functions for operating
-on sequences or lists, such as <code>cl-delete-if</code> and <code>cl-assoc</code>.
-</p>
-</dd>
-<dt><samp>cl-macs.el</samp></dt>
-<dd><p>This file contains the features that are macros instead of functions.
-Macros expand when the caller is compiled, not when it is run, so the
-macros generally only need to be present when the byte-compiler is
-running (or when the macros are used in uncompiled code).  Most of the
-macros of this package are isolated in <samp>cl-macs.el</samp> so that they
-won&rsquo;t take up memory unless you are compiling.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Naming-Conventions.html#Naming-Conventions"
+    accesskey="n" rel="next">Naming Conventions</a>, Previous:
+    <a href="Usage.html#Usage" accesskey="p" rel="prev">Usage</a>,
+    Up: <a href="Overview.html#Overview" accesskey="u" rel=
+    "up">Overview</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Organization-1" id="Organization-1"></a>
 
-<p>The file <samp>cl-lib.el</samp> includes all necessary <code>autoload</code>
-commands for the functions and macros in the other three files.
-All you have to do is <code>(require 'cl-lib)</code>, and <samp>cl-lib.el</samp>
-will take care of pulling in the other files when they are
-needed.
-</p>
-<p>There is another file, <samp>cl.el</samp>, which was the main entry point to
-this package prior to Emacs 24.3.  Nowadays, it is replaced by
-<samp>cl-lib.el</samp>.  The two provide the same features (in most cases),
-but use different function names (in fact, <samp>cl.el</samp> mainly just
-defines aliases to the <samp>cl-lib.el</samp> definitions).  Where
-<samp>cl-lib.el</samp> defines a function called, for example,
-<code>cl-incf</code>, <samp>cl.el</samp> uses the same name but without the
-&lsquo;<samp>cl-</samp>&rsquo; prefix, e.g., <code>incf</code> in this example.  There are a few
-exceptions to this.  First, functions such as <code>cl-defun</code> where
-the unprefixed version was already used for a standard Emacs Lisp
-function.  In such cases, the <samp>cl.el</samp> version adds a &lsquo;<samp>*</samp>&rsquo;
-suffix, e.g., <code>defun*</code>.  Second, there are some obsolete features
-that are only implemented in <samp>cl.el</samp>, not in <samp>cl-lib.el</samp>,
-because they are replaced by other standard Emacs Lisp features.
-Finally, in a very few cases the old <samp>cl.el</samp> versions do not
-behave in exactly the same way as the <samp>cl-lib.el</samp> versions.
-See <a href="Obsolete-Features.html#Obsolete-Features">Obsolete Features</a>.
-</p>
-<p>Since the old <samp>cl.el</samp> does not use a clean namespace, Emacs has a
-policy that packages distributed with Emacs must not load <code>cl</code> at
-run time.  (It is ok for them to load <code>cl</code> at <em>compile</em>
-time, with <code>eval-when-compile</code>, and use the macros it provides.)
-There is no such restriction on the use of <code>cl-lib</code>.  New code
-should use <code>cl-lib</code> rather than <code>cl</code>.
-</p>
-<p>There is one more file, <samp>cl-compat.el</samp>, which defines some
-routines from the older Quiroz <samp>cl.el</samp> package that are not otherwise
-present in the new package.  This file is obsolete and should not be
-used in new code.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Naming-Conventions.html#Naming-Conventions" accesskey="n" rel="next">Naming Conventions</a>, Previous: <a href="Usage.html#Usage" accesskey="p" rel="prev">Usage</a>, Up: <a href="Overview.html#Overview" accesskey="u" rel="up">Overview</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">1.2 Organization</h3>
 
+  <p>The Common Lisp package is organized into four main files:</p>
 
+  <dl compact="compact">
+    <dt><samp>cl-lib.el</samp></dt>
 
+    <dd>
+      <p>This is the main file, which contains basic functions and
+      information about the package. This file is relatively
+      compact.</p>
+    </dd>
+
+    <dt><samp>cl-extra.el</samp></dt>
+
+    <dd>
+      <p>This file contains the larger, more complex or unusual
+      functions. It is kept separate so that packages which only
+      want to use Common Lisp fundamentals like the
+      <code>cl-incf</code> function won&rsquo;t need to pay the
+      overhead of loading the more advanced functions.</p>
+    </dd>
+
+    <dt><samp>cl-seq.el</samp></dt>
+
+    <dd>
+      <p>This file contains most of the advanced functions for
+      operating on sequences or lists, such as
+      <code>cl-delete-if</code> and <code>cl-assoc</code>.</p>
+    </dd>
+
+    <dt><samp>cl-macs.el</samp></dt>
+
+    <dd>
+      <p>This file contains the features that are macros instead of
+      functions. Macros expand when the caller is compiled, not
+      when it is run, so the macros generally only need to be
+      present when the byte-compiler is running (or when the macros
+      are used in uncompiled code). Most of the macros of this
+      package are isolated in <samp>cl-macs.el</samp> so that they
+      won&rsquo;t take up memory unless you are compiling.</p>
+    </dd>
+  </dl>
+
+  <p>The file <samp>cl-lib.el</samp> includes all necessary
+  <code>autoload</code> commands for the functions and macros in
+  the other three files. All you have to do is <code>(require
+  'cl-lib)</code>, and <samp>cl-lib.el</samp> will take care of
+  pulling in the other files when they are needed.</p>
+
+  <p>There is another file, <samp>cl.el</samp>, which was the main
+  entry point to this package prior to Emacs 24.3. Nowadays, it is
+  replaced by <samp>cl-lib.el</samp>. The two provide the same
+  features (in most cases), but use different function names (in
+  fact, <samp>cl.el</samp> mainly just defines aliases to the
+  <samp>cl-lib.el</samp> definitions). Where <samp>cl-lib.el</samp>
+  defines a function called, for example, <code>cl-incf</code>,
+  <samp>cl.el</samp> uses the same name but without the
+  &lsquo;<samp>cl-</samp>&rsquo; prefix, e.g., <code>incf</code> in
+  this example. There are a few exceptions to this. First,
+  functions such as <code>cl-defun</code> where the unprefixed
+  version was already used for a standard Emacs Lisp function. In
+  such cases, the <samp>cl.el</samp> version adds a
+  &lsquo;<samp>*</samp>&rsquo; suffix, e.g., <code>defun*</code>.
+  Second, there are some obsolete features that are only
+  implemented in <samp>cl.el</samp>, not in <samp>cl-lib.el</samp>,
+  because they are replaced by other standard Emacs Lisp features.
+  Finally, in a very few cases the old <samp>cl.el</samp> versions
+  do not behave in exactly the same way as the
+  <samp>cl-lib.el</samp> versions. See <a href=
+  "Obsolete-Features.html#Obsolete-Features">Obsolete
+  Features</a>.</p>
+
+  <p>Since the old <samp>cl.el</samp> does not use a clean
+  namespace, Emacs has a policy that packages distributed with
+  Emacs must not load <code>cl</code> at run time. (It is ok for
+  them to load <code>cl</code> at <em>compile</em> time, with
+  <code>eval-when-compile</code>, and use the macros it provides.)
+  There is no such restriction on the use of <code>cl-lib</code>.
+  New code should use <code>cl-lib</code> rather than
+  <code>cl</code>.</p>
+
+  <p>There is one more file, <samp>cl-compat.el</samp>, which
+  defines some routines from the older Quiroz <samp>cl.el</samp>
+  package that are not otherwise present in the new package. This
+  file is obsolete and should not be used in new code.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Naming-Conventions.html#Naming-Conventions"
+    accesskey="n" rel="next">Naming Conventions</a>, Previous:
+    <a href="Usage.html#Usage" accesskey="p" rel="prev">Usage</a>,
+    Up: <a href="Overview.html#Overview" accesskey="u" rel=
+    "up">Overview</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

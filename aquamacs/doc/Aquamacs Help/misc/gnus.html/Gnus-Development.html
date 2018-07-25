@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,117 +14,161 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Gnus Development</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Gnus Development">
-<meta name="keywords" content="Gnus Manual: Gnus Development">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="History.html#History" rel="up" title="History">
-<link href="Contributors.html#Contributors" rel="next" title="Contributors">
-<link href="Emacsen.html#Emacsen" rel="prev" title="Emacsen">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Gnus Development</title>
+  <meta name="description" content=
+  "Gnus Manual: Gnus Development" />
+  <meta name="keywords" content="Gnus Manual: Gnus Development" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="History.html#History" rel="up" title="History" />
+  <link href="Contributors.html#Contributors" rel="next" title=
+  "Contributors" />
+  <link href="Emacsen.html#Emacsen" rel="prev" title="Emacsen" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Gnus-Development"></a>
-<div class="header">
-<p>
-Next: <a href="Contributors.html#Contributors" accesskey="n" rel="next">Contributors</a>, Previous: <a href="Emacsen.html#Emacsen" accesskey="p" rel="prev">Emacsen</a>, Up: <a href="History.html#History" accesskey="u" rel="up">History</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Gnus-Development-1"></a>
-<h4 class="subsection">11.2.6 Gnus Development</h4>
+<body lang="en" xml:lang="en">
+  <a name="Gnus-Development" id="Gnus-Development"></a>
 
-<p>Gnus is developed in a two-phased cycle.  The first phase involves much
-discussion on the development mailing list &lsquo;<samp>ding@gnus.org</samp>&rsquo;, where people
-propose changes and new features, post patches and new back ends.  This
-phase is called the <em>alpha</em> phase, since the Gnusae released in this
-phase are <em>alpha releases</em>, or (perhaps more commonly in other
-circles) <em>snapshots</em>.  During this phase, Gnus is assumed to be
-unstable and should not be used by casual users.  Gnus alpha releases
-have names like &ldquo;Oort Gnus&rdquo; and &ldquo;No Gnus&rdquo;.  See <a href="Gnus-Versions.html#Gnus-Versions">Gnus Versions</a>.
-</p>
-<p>After futzing around for 10&ndash;100 alpha releases, Gnus is declared
-<em>frozen</em>, and only bug fixes are applied.  Gnus loses the prefix,
-and is called things like &ldquo;Gnus 5.10.1&rdquo; instead.  Normal people are
-supposed to be able to use these, and these are mostly discussed on the
-&lsquo;<samp>gnu.emacs.gnus</samp>&rsquo; newsgroup.  This newgroup is mirrored to the
-mailing list &lsquo;<samp>info-gnus-english@gnu.org</samp>&rsquo; which is carried on Gmane
-as &lsquo;<samp>gmane.emacs.gnus.user</samp>&rsquo;.  These releases are finally integrated
-in Emacs.
-</p>
-<a name="index-Incoming_002a-1"></a>
-<a name="index-mail_002dsource_002ddelete_002dincoming-1"></a>
-<p>Some variable defaults differ between alpha Gnusae and released Gnusae,
-in particular, <code>mail-source-delete-incoming</code>.  This is to prevent
-lossage of mail if an alpha release hiccups while handling the mail.
-See <a href="Mail-Source-Customization.html#Mail-Source-Customization">Mail Source Customization</a>.
-</p>
-<p>The division of discussion between the ding mailing list and the Gnus
-newsgroup is not purely based on publicity concerns.  It&rsquo;s true that
-having people write about the horrible things that an alpha Gnus release
-can do (sometimes) in a public forum may scare people off, but more
-importantly, talking about new experimental features that have been
-introduced may confuse casual users.  New features are frequently
-introduced, fiddled with, and judged to be found wanting, and then
-either discarded or totally rewritten.  People reading the mailing list
-usually keep up with these rapid changes, while people on the newsgroup
-can&rsquo;t be assumed to do so.
-</p>
-<p>So if you have problems with or questions about the alpha versions,
-direct those to the ding mailing list &lsquo;<samp>ding@gnus.org</samp>&rsquo;.  This list
-is also available on Gmane as &lsquo;<samp>gmane.emacs.gnus.general</samp>&rsquo;.
-</p>
-<a name="index-Incoming_002a-2"></a>
-<a name="index-mail_002dsource_002ddelete_002dincoming-2"></a>
-<p>Some variable defaults differ between alpha Gnusae and released Gnusae,
-in particular, <code>mail-source-delete-incoming</code>.  This is to prevent
-lossage of mail if an alpha release hiccups while handling the mail.
-See <a href="Mail-Source-Customization.html#Mail-Source-Customization">Mail Source Customization</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Contributors.html#Contributors" accesskey="n" rel="next">Contributors</a>, Previous: <a href="Emacsen.html#Emacsen" accesskey="p" rel="prev">Emacsen</a>, Up: <a href="History.html#History" accesskey="u" rel="up">History</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Contributors.html#Contributors" accesskey="n"
+    rel="next">Contributors</a>, Previous: <a href=
+    "Emacsen.html#Emacsen" accesskey="p" rel="prev">Emacsen</a>,
+    Up: <a href="History.html#History" accesskey="u" rel=
+    "up">History</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Gnus-Development-1" id="Gnus-Development-1"></a>
 
+  <h4 class="subsection">11.2.6 Gnus Development</h4>
 
+  <p>Gnus is developed in a two-phased cycle. The first phase
+  involves much discussion on the development mailing list
+  &lsquo;<samp>ding@gnus.org</samp>&rsquo;, where people propose
+  changes and new features, post patches and new back ends. This
+  phase is called the <em>alpha</em> phase, since the Gnusae
+  released in this phase are <em>alpha releases</em>, or (perhaps
+  more commonly in other circles) <em>snapshots</em>. During this
+  phase, Gnus is assumed to be unstable and should not be used by
+  casual users. Gnus alpha releases have names like &ldquo;Oort
+  Gnus&rdquo; and &ldquo;No Gnus&rdquo;. See <a href=
+  "Gnus-Versions.html#Gnus-Versions">Gnus Versions</a>.</p>
 
+  <p>After futzing around for 10&ndash;100 alpha releases, Gnus is
+  declared <em>frozen</em>, and only bug fixes are applied. Gnus
+  loses the prefix, and is called things like &ldquo;Gnus
+  5.10.1&rdquo; instead. Normal people are supposed to be able to
+  use these, and these are mostly discussed on the
+  &lsquo;<samp>gnu.emacs.gnus</samp>&rsquo; newsgroup. This
+  newgroup is mirrored to the mailing list
+  &lsquo;<samp>info-gnus-english@gnu.org</samp>&rsquo; which is
+  carried on Gmane as
+  &lsquo;<samp>gmane.emacs.gnus.user</samp>&rsquo;. These releases
+  are finally integrated in Emacs.</p><a name=
+  "index-Incoming_002a-1" id="index-Incoming_002a-1"></a> <a name=
+  "index-mail_002dsource_002ddelete_002dincoming-1" id=
+  "index-mail_002dsource_002ddelete_002dincoming-1"></a>
+
+  <p>Some variable defaults differ between alpha Gnusae and
+  released Gnusae, in particular,
+  <code>mail-source-delete-incoming</code>. This is to prevent
+  lossage of mail if an alpha release hiccups while handling the
+  mail. See <a href=
+  "Mail-Source-Customization.html#Mail-Source-Customization">Mail
+  Source Customization</a>.</p>
+
+  <p>The division of discussion between the ding mailing list and
+  the Gnus newsgroup is not purely based on publicity concerns.
+  It&rsquo;s true that having people write about the horrible
+  things that an alpha Gnus release can do (sometimes) in a public
+  forum may scare people off, but more importantly, talking about
+  new experimental features that have been introduced may confuse
+  casual users. New features are frequently introduced, fiddled
+  with, and judged to be found wanting, and then either discarded
+  or totally rewritten. People reading the mailing list usually
+  keep up with these rapid changes, while people on the newsgroup
+  can&rsquo;t be assumed to do so.</p>
+
+  <p>So if you have problems with or questions about the alpha
+  versions, direct those to the ding mailing list
+  &lsquo;<samp>ding@gnus.org</samp>&rsquo;. This list is also
+  available on Gmane as
+  &lsquo;<samp>gmane.emacs.gnus.general</samp>&rsquo;.</p><a name=
+  "index-Incoming_002a-2" id="index-Incoming_002a-2"></a> <a name=
+  "index-mail_002dsource_002ddelete_002dincoming-2" id=
+  "index-mail_002dsource_002ddelete_002dincoming-2"></a>
+
+  <p>Some variable defaults differ between alpha Gnusae and
+  released Gnusae, in particular,
+  <code>mail-source-delete-incoming</code>. This is to prevent
+  lossage of mail if an alpha release hiccups while handling the
+  mail. See <a href=
+  "Mail-Source-Customization.html#Mail-Source-Customization">Mail
+  Source Customization</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Contributors.html#Contributors" accesskey="n"
+    rel="next">Contributors</a>, Previous: <a href=
+    "Emacsen.html#Emacsen" accesskey="p" rel="prev">Emacsen</a>,
+    Up: <a href="History.html#History" accesskey="u" rel=
+    "up">History</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

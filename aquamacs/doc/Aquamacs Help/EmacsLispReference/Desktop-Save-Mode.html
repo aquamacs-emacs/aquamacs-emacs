@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,115 +19,162 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Desktop Save Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Desktop Save Mode">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Desktop Save Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Modes.html#Modes" rel="up" title="Modes">
-<link href="Documentation.html#Documentation" rel="next" title="Documentation">
-<link href="SMIE-Customization.html#SMIE-Customization" rel="prev" title="SMIE Customization">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Desktop Save Mode</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Desktop Save Mode" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Desktop Save Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Modes.html#Modes" rel="up" title="Modes" />
+  <link href="Documentation.html#Documentation" rel="next" title=
+  "Documentation" />
+  <link href="SMIE-Customization.html#SMIE-Customization" rel=
+  "prev" title="SMIE Customization" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Desktop-Save-Mode" id="Desktop-Save-Mode"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Auto_002dIndentation.html#Auto_002dIndentation" accesskey="p"
+    rel="prev">Auto-Indentation</a>, Up: <a href="Modes.html#Modes"
+    accesskey="u" rel="up">Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Desktop-Save-Mode-1" id="Desktop-Save-Mode-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Desktop-Save-Mode"></a>
-<div class="header">
-<p>
-Previous: <a href="Auto_002dIndentation.html#Auto_002dIndentation" accesskey="p" rel="prev">Auto-Indentation</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Desktop-Save-Mode-1"></a>
-<h3 class="section">22.8 Desktop Save Mode</h3>
-<a name="index-desktop-save-mode"></a>
+  <h3 class="section">22.8 Desktop Save Mode</h3><a name=
+  "index-desktop-save-mode" id="index-desktop-save-mode"></a>
 
-<p><em>Desktop Save Mode</em> is a feature to save the state of Emacs from
-one session to another.  The user-level commands for using Desktop
-Save Mode are described in the GNU Emacs Manual (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html#Saving-Emacs-Sessions">Saving Emacs
-Sessions</a> in <cite>the GNU Emacs Manual</cite>).  Modes whose buffers visit
-a file, don&rsquo;t have to do anything to use this feature.
-</p>
-<p>For buffers not visiting a file to have their state saved, the major
-mode must bind the buffer local variable <code>desktop-save-buffer</code> to
-a non-<code>nil</code> value.
-</p>
-<dl>
-<dt><a name="index-desktop_002dsave_002dbuffer"></a>Variable: <strong>desktop-save-buffer</strong></dt>
-<dd><p>If this buffer-local variable is non-<code>nil</code>, the buffer will have
-its state saved in the desktop file at desktop save.  If the value is
-a function, it is called at desktop save with argument
-<var>desktop-dirname</var>, and its value is saved in the desktop file along
-with the state of the buffer for which it was called.  When file names
-are returned as part of the auxiliary information, they should be
-formatted using the call
-</p>
-<div class="example">
-<pre class="example">(desktop-file-name <var>file-name</var> <var>desktop-dirname</var>)
-</pre></div>
+  <p><em>Desktop Save Mode</em> is a feature to save the state of
+  Emacs from one session to another. The user-level commands for
+  using Desktop Save Mode are described in the GNU Emacs Manual
+  (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html#Saving-Emacs-Sessions">
+  Saving Emacs Sessions</a> in <cite>the GNU Emacs Manual</cite>).
+  Modes whose buffers visit a file, don&rsquo;t have to do anything
+  to use this feature.</p>
 
-</dd></dl>
+  <p>For buffers not visiting a file to have their state saved, the
+  major mode must bind the buffer local variable
+  <code>desktop-save-buffer</code> to a non-<code>nil</code>
+  value.</p>
 
-<p>For buffers not visiting a file to be restored, the major mode must
-define a function to do the job, and that function must be listed in
-the alist <code>desktop-buffer-mode-handlers</code>.
-</p>
-<dl>
-<dt><a name="index-desktop_002dbuffer_002dmode_002dhandlers"></a>Variable: <strong>desktop-buffer-mode-handlers</strong></dt>
-<dd><p>Alist with elements
-</p>
-<div class="example">
-<pre class="example">(<var>major-mode</var> . <var>restore-buffer-function</var>)
-</pre></div>
+  <dl>
+    <dt><a name="index-desktop_002dsave_002dbuffer" id=
+    "index-desktop_002dsave_002dbuffer"></a>Variable:
+    <strong>desktop-save-buffer</strong></dt>
 
-<p>The function <var>restore-buffer-function</var> will be called with
-argument list
-</p>
-<div class="example">
-<pre class="example">(<var>buffer-file-name</var> <var>buffer-name</var> <var>desktop-buffer-misc</var>)
-</pre></div>
+    <dd>
+      <p>If this buffer-local variable is non-<code>nil</code>, the
+      buffer will have its state saved in the desktop file at
+      desktop save. If the value is a function, it is called at
+      desktop save with argument <var>desktop-dirname</var>, and
+      its value is saved in the desktop file along with the state
+      of the buffer for which it was called. When file names are
+      returned as part of the auxiliary information, they should be
+      formatted using the call</p>
 
-<p>and it should return the restored buffer.
-Here <var>desktop-buffer-misc</var> is the value returned by the function
-optionally bound to <code>desktop-save-buffer</code>.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+(desktop-file-name <var>file-name</var> <var>desktop-dirname</var>)
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <p>For buffers not visiting a file to be restored, the major mode
+  must define a function to do the job, and that function must be
+  listed in the alist
+  <code>desktop-buffer-mode-handlers</code>.</p>
 
+  <dl>
+    <dt><a name="index-desktop_002dbuffer_002dmode_002dhandlers"
+    id="index-desktop_002dbuffer_002dmode_002dhandlers"></a>Variable:
+    <strong>desktop-buffer-mode-handlers</strong></dt>
 
+    <dd>
+      <p>Alist with elements</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>major-mode</var> . <var>restore-buffer-function</var>)
+</pre>
+      </div>
+
+      <p>The function <var>restore-buffer-function</var> will be
+      called with argument list</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>buffer-file-name</var> <var>buffer-name</var> <var>desktop-buffer-misc</var>)
+</pre>
+      </div>
+
+      <p>and it should return the restored buffer. Here
+      <var>desktop-buffer-misc</var> is the value returned by the
+      function optionally bound to
+      <code>desktop-save-buffer</code>.</p>
+    </dd>
+  </dl>
 </body>
 </html>

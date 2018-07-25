@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,130 +19,199 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Mode Hooks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Mode Hooks">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Mode Hooks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Major-Modes.html#Major-Modes" rel="up" title="Major Modes">
-<link href="Tabulated-List-Mode.html#Tabulated-List-Mode" rel="next" title="Tabulated List Mode">
-<link href="Basic-Major-Modes.html#Basic-Major-Modes" rel="prev" title="Basic Major Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Mode Hooks</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Mode Hooks" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Mode Hooks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Major-Modes.html#Major-Modes" rel="up" title=
+  "Major Modes" />
+  <link href="Tabulated-List-Mode.html#Tabulated-List-Mode" rel=
+  "next" title="Tabulated List Mode" />
+  <link href="Basic-Major-Modes.html#Basic-Major-Modes" rel="prev"
+  title="Basic Major Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Mode-Hooks" id="Mode-Hooks"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Tabulated-List-Mode.html#Tabulated-List-Mode"
+    accesskey="n" rel="next">Tabulated List Mode</a>, Previous:
+    <a href="Basic-Major-Modes.html#Basic-Major-Modes" accesskey=
+    "p" rel="prev">Basic Major Modes</a>, Up: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major
+    Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Mode-Hooks-1" id="Mode-Hooks-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Mode-Hooks"></a>
-<div class="header">
-<p>
-Next: <a href="Tabulated-List-Mode.html#Tabulated-List-Mode" accesskey="n" rel="next">Tabulated List Mode</a>, Previous: <a href="Basic-Major-Modes.html#Basic-Major-Modes" accesskey="p" rel="prev">Basic Major Modes</a>, Up: <a href="Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Mode-Hooks-1"></a>
-<h4 class="subsection">22.2.6 Mode Hooks</h4>
+  <h4 class="subsection">22.2.6 Mode Hooks</h4>
 
-<p>Every major mode command should finish by running the mode-independent
-normal hook <code>change-major-mode-after-body-hook</code>, its mode hook,
-and the normal hook <code>after-change-major-mode-hook</code>.
-It does this by calling <code>run-mode-hooks</code>.  If the major mode is a
-derived mode, that is if it calls another major mode (the parent mode)
-in its body, it should do this inside <code>delay-mode-hooks</code> so that
-the parent won&rsquo;t run these hooks itself.  Instead, the derived mode&rsquo;s
-call to <code>run-mode-hooks</code> runs the parent&rsquo;s mode hook too.
-See <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>.
-</p>
-<p>Emacs versions before Emacs 22 did not have <code>delay-mode-hooks</code>.
-Versions before 24 did not have <code>change-major-mode-after-body-hook</code>.
-When user-implemented major modes do not use <code>run-mode-hooks</code> and
-have not been updated to use these newer features, they won&rsquo;t entirely
-follow these conventions: they may run the parent&rsquo;s mode hook too early,
-or fail to run <code>after-change-major-mode-hook</code>.  If you encounter
-such a major mode, please correct it to follow these conventions.
-</p>
-<p>When you define a major mode using <code>define-derived-mode</code>, it
-automatically makes sure these conventions are followed.  If you
-define a major mode &ldquo;by hand&rdquo;, not using <code>define-derived-mode</code>,
-use the following functions to handle these conventions automatically.
-</p>
-<dl>
-<dt><a name="index-run_002dmode_002dhooks"></a>Function: <strong>run-mode-hooks</strong> <em>&amp;rest hookvars</em></dt>
-<dd><p>Major modes should run their mode hook using this function.  It is
-similar to <code>run-hooks</code> (see <a href="Hooks.html#Hooks">Hooks</a>), but it also runs
-<code>change-major-mode-after-body-hook</code> and
-<code>after-change-major-mode-hook</code>.
-</p>
-<p>When this function is called during the execution of a
-<code>delay-mode-hooks</code> form, it does not run the hooks immediately.
-Instead, it arranges for the next call to <code>run-mode-hooks</code> to run
-them.
-</p></dd></dl>
+  <p>Every major mode command should finish by running the
+  mode-independent normal hook
+  <code>change-major-mode-after-body-hook</code>, its mode hook,
+  and the normal hook <code>after-change-major-mode-hook</code>. It
+  does this by calling <code>run-mode-hooks</code>. If the major
+  mode is a derived mode, that is if it calls another major mode
+  (the parent mode) in its body, it should do this inside
+  <code>delay-mode-hooks</code> so that the parent won&rsquo;t run
+  these hooks itself. Instead, the derived mode&rsquo;s call to
+  <code>run-mode-hooks</code> runs the parent&rsquo;s mode hook
+  too. See <a href=
+  "Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode
+  Conventions</a>.</p>
 
-<dl>
-<dt><a name="index-delay_002dmode_002dhooks"></a>Macro: <strong>delay-mode-hooks</strong> <em>body&hellip;</em></dt>
-<dd><p>When one major mode command calls another, it should do so inside of
-<code>delay-mode-hooks</code>.
-</p>
-<p>This macro executes <var>body</var>, but tells all <code>run-mode-hooks</code>
-calls during the execution of <var>body</var> to delay running their hooks.
-The hooks will actually run during the next call to
-<code>run-mode-hooks</code> after the end of the <code>delay-mode-hooks</code>
-construct.
-</p></dd></dl>
+  <p>Emacs versions before Emacs 22 did not have
+  <code>delay-mode-hooks</code>. Versions before 24 did not have
+  <code>change-major-mode-after-body-hook</code>. When
+  user-implemented major modes do not use
+  <code>run-mode-hooks</code> and have not been updated to use
+  these newer features, they won&rsquo;t entirely follow these
+  conventions: they may run the parent&rsquo;s mode hook too early,
+  or fail to run <code>after-change-major-mode-hook</code>. If you
+  encounter such a major mode, please correct it to follow these
+  conventions.</p>
 
-<dl>
-<dt><a name="index-change_002dmajor_002dmode_002dafter_002dbody_002dhook"></a>Variable: <strong>change-major-mode-after-body-hook</strong></dt>
-<dd><p>This is a normal hook run by <code>run-mode-hooks</code>.  It is run before
-the mode hooks.
-</p></dd></dl>
+  <p>When you define a major mode using
+  <code>define-derived-mode</code>, it automatically makes sure
+  these conventions are followed. If you define a major mode
+  &ldquo;by hand&rdquo;, not using
+  <code>define-derived-mode</code>, use the following functions to
+  handle these conventions automatically.</p>
 
-<dl>
-<dt><a name="index-after_002dchange_002dmajor_002dmode_002dhook"></a>Variable: <strong>after-change-major-mode-hook</strong></dt>
-<dd><p>This is a normal hook run by <code>run-mode-hooks</code>.  It is run at the
-very end of every properly-written major mode command.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-run_002dmode_002dhooks" id=
+    "index-run_002dmode_002dhooks"></a>Function:
+    <strong>run-mode-hooks</strong> <em>&amp;rest
+    hookvars</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Tabulated-List-Mode.html#Tabulated-List-Mode" accesskey="n" rel="next">Tabulated List Mode</a>, Previous: <a href="Basic-Major-Modes.html#Basic-Major-Modes" accesskey="p" rel="prev">Basic Major Modes</a>, Up: <a href="Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Major modes should run their mode hook using this
+      function. It is similar to <code>run-hooks</code> (see
+      <a href="Hooks.html#Hooks">Hooks</a>), but it also runs
+      <code>change-major-mode-after-body-hook</code> and
+      <code>after-change-major-mode-hook</code>.</p>
 
+      <p>When this function is called during the execution of a
+      <code>delay-mode-hooks</code> form, it does not run the hooks
+      immediately. Instead, it arranges for the next call to
+      <code>run-mode-hooks</code> to run them.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-delay_002dmode_002dhooks" id=
+    "index-delay_002dmode_002dhooks"></a>Macro:
+    <strong>delay-mode-hooks</strong> <em>body&hellip;</em></dt>
 
+    <dd>
+      <p>When one major mode command calls another, it should do so
+      inside of <code>delay-mode-hooks</code>.</p>
+
+      <p>This macro executes <var>body</var>, but tells all
+      <code>run-mode-hooks</code> calls during the execution of
+      <var>body</var> to delay running their hooks. The hooks will
+      actually run during the next call to
+      <code>run-mode-hooks</code> after the end of the
+      <code>delay-mode-hooks</code> construct.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-change_002dmajor_002dmode_002dafter_002dbody_002dhook"
+    id=
+    "index-change_002dmajor_002dmode_002dafter_002dbody_002dhook"></a>Variable:
+    <strong>change-major-mode-after-body-hook</strong></dt>
+
+    <dd>
+      <p>This is a normal hook run by <code>run-mode-hooks</code>.
+      It is run before the mode hooks.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-after_002dchange_002dmajor_002dmode_002dhook" id=
+    "index-after_002dchange_002dmajor_002dmode_002dhook"></a>Variable:
+    <strong>after-change-major-mode-hook</strong></dt>
+
+    <dd>
+      <p>This is a normal hook run by <code>run-mode-hooks</code>.
+      It is run at the very end of every properly-written major
+      mode command.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Tabulated-List-Mode.html#Tabulated-List-Mode"
+    accesskey="n" rel="next">Tabulated List Mode</a>, Previous:
+    <a href="Basic-Major-Modes.html#Basic-Major-Modes" accesskey=
+    "p" rel="prev">Basic Major Modes</a>, Up: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major
+    Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

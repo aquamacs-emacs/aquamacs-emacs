@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Rewrites Answer 2 - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Answers-to-Exercises.html#Answers-to-Exercises" title="Answers to Exercises">
-<link rel="prev" href="Rewrites-Answer-1.html#Rewrites-Answer-1" title="Rewrites Answer 1">
-<link rel="next" href="Rewrites-Answer-3.html#Rewrites-Answer-3" title="Rewrites Answer 3">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Rewrites Answer 2 - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Answers-to-Exercises.html#Answers-to-Exercises" title=
+  "Answers to Exercises" />
+  <link rel="prev" href="Rewrites-Answer-1.html#Rewrites-Answer-1"
+  title="Rewrites Answer 1" />
+  <link rel="next" href="Rewrites-Answer-3.html#Rewrites-Answer-3"
+  title="Rewrites Answer 3" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +39,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,46 +52,62 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Rewrites-Answer-2"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Rewrites-Answer-3.html#Rewrites-Answer-3">Rewrites Answer 3</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Rewrites-Answer-1.html#Rewrites-Answer-1">Rewrites Answer 1</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Answers-to-Exercises.html#Answers-to-Exercises">Answers to Exercises</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Rewrites-Answer-2" id="Rewrites-Answer-2"></a>
 
-<h4 class="subsection">3.7.53 Rewrites Tutorial Exercise 2</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Rewrites-Answer-3.html#Rewrites-Answer-3">Rewrites Answer
+    3</a>, Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Rewrites-Answer-1.html#Rewrites-Answer-1">Rewrites Answer
+    1</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Answers-to-Exercises.html#Answers-to-Exercises">Answers to
+    Exercises</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">Here is the rule set:
+  <h4 class="subsection">3.7.53 Rewrites Tutorial Exercise 2</h4>
 
-<pre class="smallexample">     [ fib(n) := fib(n, 1, 1) :: integer(n) :: n &gt;= 1,
+  <p class="noindent">Here is the rule set:</p>
+  <pre class="smallexample">
+     [ fib(n) := fib(n, 1, 1) :: integer(n) :: n &gt;= 1,
        fib(1, x, y) := x,
        fib(n, x, y) := fib(n-1, y, x+y) ]
 </pre>
-   <p class="noindent">The first rule turns a one-argument <code>fib</code> that people like to write
-into a three-argument <code>fib</code> that makes computation easier.  The
-second rule converts back from three-argument form once the computation
-is done.  The third rule does the computation itself.  It basically
-says that if &lsquo;<samp><span class="samp">x</span></samp>&rsquo; and &lsquo;<samp><span class="samp">y</span></samp>&rsquo; are two consecutive Fibonacci numbers,
-then &lsquo;<samp><span class="samp">y</span></samp>&rsquo; and &lsquo;<samp><span class="samp">x+y</span></samp>&rsquo; are the next (overlapping) pair of Fibonacci
-numbers.
 
-   <p>Notice that because the number &lsquo;<samp><span class="samp">n</span></samp>&rsquo; was &ldquo;validated&rdquo; by the
-conditions on the first rule, there is no need to put conditions on
-the other rules because the rule set would never get that far unless
-the input were valid.  That further speeds computation, since no
-extra conditions need to be checked at every step.
+  <p class="noindent">The first rule turns a one-argument
+  <code>fib</code> that people like to write into a three-argument
+  <code>fib</code> that makes computation easier. The second rule
+  converts back from three-argument form once the computation is
+  done. The third rule does the computation itself. It basically
+  says that if &lsquo;<samp><span class=
+  "samp">x</span></samp>&rsquo; and &lsquo;<samp><span class=
+  "samp">y</span></samp>&rsquo; are two consecutive Fibonacci
+  numbers, then &lsquo;<samp><span class=
+  "samp">y</span></samp>&rsquo; and &lsquo;<samp><span class=
+  "samp">x+y</span></samp>&rsquo; are the next (overlapping) pair
+  of Fibonacci numbers.</p>
 
-   <p>Actually, a user with a nasty sense of humor could enter a bad
-three-argument <code>fib</code> call directly, say, &lsquo;<samp><span class="samp">fib(0, 1, 1)</span></samp>&rsquo;,
-which would get the rules into an infinite loop.  One thing that would
-help keep this from happening by accident would be to use something like
-&lsquo;<samp><span class="samp">ZzFib</span></samp>&rsquo; instead of <code>fib</code> as the name of the three-argument
-function.
+  <p>Notice that because the number &lsquo;<samp><span class=
+  "samp">n</span></samp>&rsquo; was &ldquo;validated&rdquo; by the
+  conditions on the first rule, there is no need to put conditions
+  on the other rules because the rule set would never get that far
+  unless the input were valid. That further speeds computation,
+  since no extra conditions need to be checked at every step.</p>
 
-   </body></html>
-
+  <p>Actually, a user with a nasty sense of humor could enter a bad
+  three-argument <code>fib</code> call directly, say,
+  &lsquo;<samp><span class="samp">fib(0, 1,
+  1)</span></samp>&rsquo;, which would get the rules into an
+  infinite loop. One thing that would help keep this from happening
+  by accident would be to use something like
+  &lsquo;<samp><span class="samp">ZzFib</span></samp>&rsquo;
+  instead of <code>fib</code> as the name of the three-argument
+  function.</p>
+</body>
+</html>

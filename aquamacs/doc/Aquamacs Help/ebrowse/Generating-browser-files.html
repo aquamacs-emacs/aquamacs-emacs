@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Generating browser files - A Class Browser for C++</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="A Class Browser for C++">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Overview.html#Overview" title="Overview">
-<link rel="next" href="Loading-a-Tree.html#Loading-a-Tree" title="Loading a Tree">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Generating browser files - A Class Browser for C++</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="A Class Browser for C++" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Overview.html#Overview" title=
+  "Overview" />
+  <link rel="next" href="Loading-a-Tree.html#Loading-a-Tree" title=
+  "Loading a Tree" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Ebrowse, a C++ class browser for GNU Emacs.
 
 Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -26,8 +34,10 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,51 +47,81 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Generating-browser-files"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Loading-a-Tree.html#Loading-a-Tree">Loading a Tree</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Overview.html#Overview">Overview</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Generating-browser-files" id=
+    "Generating-browser-files"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h2 class="chapter">2 Processing Source Files</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Loading-a-Tree.html#Loading-a-Tree">Loading a Tree</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Overview.html#Overview">Overview</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="index.html#Top">Top</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-<p><a name="index-g_t_0040command_007bebrowse_007d_002c-the-program-5"></a><a name="index-class-data-base-creation-6"></a>Before you can start browsing a class hierarchy, you must run the parser
-<samp><span class="command">ebrowse</span></samp> on your source files in order to generate a Lisp data
-base describing your program.
+  <h2 class="chapter">2 Processing Source Files</h2>
 
-   <p><a name="index-command-line-for-_0040command_007bebrowse_007d-7"></a>The operation of <samp><span class="command">ebrowse</span></samp> can be tailored with command line
-options.  Under normal circumstances it suffices to let the parser use
-its default settings.  If you want to do that, call it with a command
-line like:
+  <p><a name=
+  "index-g_t_0040command_007bebrowse_007d_002c-the-program-5" id=
+  "index-g_t_0040command_007bebrowse_007d_002c-the-program-5"></a><a name="index-class-data-base-creation-6"
+  id="index-class-data-base-creation-6"></a>Before you can start
+  browsing a class hierarchy, you must run the parser
+  <samp><span class="command">ebrowse</span></samp> on your source
+  files in order to generate a Lisp data base describing your
+  program.</p>
 
-<pre class="example">     ebrowse *.h *.cc
+  <p><a name=
+  "index-command-line-for-_0040command_007bebrowse_007d-7" id=
+  "index-command-line-for-_0040command_007bebrowse_007d-7"></a>The
+  operation of <samp><span class="command">ebrowse</span></samp>
+  can be tailored with command line options. Under normal
+  circumstances it suffices to let the parser use its default
+  settings. If you want to do that, call it with a command line
+  like:</p>
+  <pre class="example">
+     ebrowse *.h *.cc
 </pre>
-   <p class="noindent">or, if your shell doesn't allow all the file names to be specified on
-the command line,
 
-<pre class="example">     ebrowse --files=<var>file</var>
+  <p class="noindent">or, if your shell doesn't allow all the file
+  names to be specified on the command line,</p>
+  <pre class="example">
+     ebrowse --files=<var>file</var>
 </pre>
-   <p class="noindent">where <var>file</var> contains the names of the files to be parsed, one
-per line.
 
-   <p><a name="index-g_t_002d_002dhelp-8"></a>When invoked with option &lsquo;<samp><span class="samp">--help</span></samp>&rsquo;, <samp><span class="command">ebrowse</span></samp> prints a list of
-available command line options.
+  <p class="noindent">where <var>file</var> contains the names of
+  the files to be parsed, one per line.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Input-files.html#Input-files">Input files</a>:          Specifying which files to parse
-<li><a accesskey="2" href="Output-file.html#Output-file">Output file</a>:          Changing the output file name
-<li><a accesskey="3" href="Structs-and-unions.html#Structs-and-unions">Structs and unions</a>:   Omitting <code>struct</code>s and <code>union</code>s
-<li><a accesskey="4" href="Matching.html#Matching">Matching</a>:             Setting regular expression lengths
-<li><a accesskey="5" href="Verbosity.html#Verbosity">Verbosity</a>:            Getting feedback for lengthy operations
-</ul>
+  <p><a name="index-g_t_002d_002dhelp-8" id=
+  "index-g_t_002d_002dhelp-8"></a>When invoked with option
+  &lsquo;<samp><span class="samp">--help</span></samp>&rsquo;,
+  <samp><span class="command">ebrowse</span></samp> prints a list
+  of available command line options.</p>
 
-<!-- name,     next,        prev,                     up -->
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href="Input-files.html#Input-files">Input
+    files</a>: Specifying which files to parse</li>
 
+    <li><a accesskey="2" href="Output-file.html#Output-file">Output
+    file</a>: Changing the output file name</li>
+
+    <li><a accesskey="3" href=
+    "Structs-and-unions.html#Structs-and-unions">Structs and
+    unions</a>: Omitting <code>struct</code>s and
+    <code>union</code>s</li>
+
+    <li><a accesskey="4" href=
+    "Matching.html#Matching">Matching</a>: Setting regular
+    expression lengths</li>
+
+    <li><a accesskey="5" href=
+    "Verbosity.html#Verbosity">Verbosity</a>: Getting feedback for
+    lengthy operations</li>
+  </ul><!-- name,     next,        prev,                     up -->
+</body>
+</html>

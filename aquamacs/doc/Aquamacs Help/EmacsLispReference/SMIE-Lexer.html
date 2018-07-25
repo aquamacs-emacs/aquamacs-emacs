@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,85 +19,119 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: SMIE Lexer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: SMIE Lexer">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: SMIE Lexer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="SMIE.html#SMIE" rel="up" title="SMIE">
-<link href="SMIE-Tricks.html#SMIE-Tricks" rel="next" title="SMIE Tricks">
-<link href="SMIE-Grammar.html#SMIE-Grammar" rel="prev" title="SMIE Grammar">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: SMIE Lexer</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: SMIE Lexer" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: SMIE Lexer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="SMIE.html#SMIE" rel="up" title="SMIE" />
+  <link href="SMIE-Tricks.html#SMIE-Tricks" rel="next" title=
+  "SMIE Tricks" />
+  <link href="SMIE-Grammar.html#SMIE-Grammar" rel="prev" title=
+  "SMIE Grammar" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="SMIE-Lexer" id="SMIE-Lexer"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="SMIE-Tricks.html#SMIE-Tricks" accesskey="n"
+    rel="next">SMIE Tricks</a>, Previous: <a href=
+    "SMIE-Grammar.html#SMIE-Grammar" accesskey="p" rel="prev">SMIE
+    Grammar</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel=
+    "up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Tokens" id="Defining-Tokens"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="SMIE-Lexer"></a>
-<div class="header">
-<p>
-Next: <a href="SMIE-Tricks.html#SMIE-Tricks" accesskey="n" rel="next">SMIE Tricks</a>, Previous: <a href="SMIE-Grammar.html#SMIE-Grammar" accesskey="p" rel="prev">SMIE Grammar</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Tokens"></a>
-<h4 class="subsubsection">22.7.1.4 Defining Tokens</h4>
-<a name="index-SMIE-lexer"></a>
-<a name="index-defining-tokens_002c-SMIE"></a>
+  <h4 class="subsubsection">22.7.1.4 Defining Tokens</h4><a name=
+  "index-SMIE-lexer" id="index-SMIE-lexer"></a> <a name=
+  "index-defining-tokens_002c-SMIE" id=
+  "index-defining-tokens_002c-SMIE"></a>
 
-<p>SMIE comes with a predefined lexical analyzer which uses syntax tables
-in the following way: any sequence of characters that have word or
-symbol syntax is considered a token, and so is any sequence of
-characters that have punctuation syntax.  This default lexer is
-often a good starting point but is rarely actually correct for any given
-language.  For example, it will consider <code>&quot;2,+3&quot;</code> to be composed
-of 3 tokens: <code>&quot;2&quot;</code>, <code>&quot;,+&quot;</code>, and <code>&quot;3&quot;</code>.
-</p>
-<p>To describe the lexing rules of your language to SMIE, you need
-2 functions, one to fetch the next token, and another to fetch the
-previous token.  Those functions will usually first skip whitespace and
-comments and then look at the next chunk of text to see if it
-is a special token.  If so it should skip the token and
-return a description of this token.  Usually this is simply the string
-extracted from the buffer, but it can be anything you want.
-For example:
-</p><div class="example">
-<pre class="example">(defvar sample-keywords-regexp
-  (regexp-opt '(&quot;+&quot; &quot;*&quot; &quot;,&quot; &quot;;&quot; &quot;&gt;&quot; &quot;&gt;=&quot; &quot;&lt;&quot; &quot;&lt;=&quot; &quot;:=&quot; &quot;=&quot;)))
-</pre><pre class="example">(defun sample-smie-forward-token ()
+  <p>SMIE comes with a predefined lexical analyzer which uses
+  syntax tables in the following way: any sequence of characters
+  that have word or symbol syntax is considered a token, and so is
+  any sequence of characters that have punctuation syntax. This
+  default lexer is often a good starting point but is rarely
+  actually correct for any given language. For example, it will
+  consider <code>"2,+3"</code> to be composed of 3 tokens:
+  <code>"2"</code>, <code>",+"</code>, and <code>"3"</code>.</p>
+
+  <p>To describe the lexing rules of your language to SMIE, you
+  need 2 functions, one to fetch the next token, and another to
+  fetch the previous token. Those functions will usually first skip
+  whitespace and comments and then look at the next chunk of text
+  to see if it is a special token. If so it should skip the token
+  and return a description of this token. Usually this is simply
+  the string extracted from the buffer, but it can be anything you
+  want. For example:</p>
+
+  <div class="example">
+    <pre class="example">
+(defvar sample-keywords-regexp
+  (regexp-opt '("+" "*" "," ";" "&gt;" "&gt;=" "&lt;" "&lt;=" ":=" "=")))
+</pre>
+    <pre class="example">
+(defun sample-smie-forward-token ()
   (forward-comment (point-max))
   (cond
    ((looking-at sample-keywords-regexp)
@@ -103,9 +139,11 @@ For example:
     (match-string-no-properties 0))
    (t (buffer-substring-no-properties
        (point)
-       (progn (skip-syntax-forward &quot;w_&quot;)
+       (progn (skip-syntax-forward "w_")
               (point))))))
-</pre><pre class="example">(defun sample-smie-backward-token ()
+</pre>
+    <pre class="example">
+(defun sample-smie-backward-token ()
   (forward-comment (- (point)))
   (cond
    ((looking-back sample-keywords-regexp (- (point) 2) t)
@@ -113,23 +151,27 @@ For example:
     (match-string-no-properties 0))
    (t (buffer-substring-no-properties
        (point)
-       (progn (skip-syntax-backward &quot;w_&quot;)
+       (progn (skip-syntax-backward "w_")
               (point))))))
-</pre></div>
+</pre>
+  </div>
 
-<p>Notice how those lexers return the empty string when in front of
-parentheses.  This is because SMIE automatically takes care of the
-parentheses defined in the syntax table.  More specifically if the lexer
-returns <code>nil</code> or an empty string, SMIE tries to handle the corresponding
-text as a sexp according to syntax tables.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="SMIE-Tricks.html#SMIE-Tricks" accesskey="n" rel="next">SMIE Tricks</a>, Previous: <a href="SMIE-Grammar.html#SMIE-Grammar" accesskey="p" rel="prev">SMIE Grammar</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Notice how those lexers return the empty string when in front
+  of parentheses. This is because SMIE automatically takes care of
+  the parentheses defined in the syntax table. More specifically if
+  the lexer returns <code>nil</code> or an empty string, SMIE tries
+  to handle the corresponding text as a sexp according to syntax
+  tables.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="SMIE-Tricks.html#SMIE-Tricks" accesskey="n"
+    rel="next">SMIE Tricks</a>, Previous: <a href=
+    "SMIE-Grammar.html#SMIE-Grammar" accesskey="p" rel="prev">SMIE
+    Grammar</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel=
+    "up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

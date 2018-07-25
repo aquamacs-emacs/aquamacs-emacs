@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,226 +19,323 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Screen Lines</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Screen Lines">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Screen Lines">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Motion.html#Motion" rel="up" title="Motion">
-<link href="List-Motion.html#List-Motion" rel="next" title="List Motion">
-<link href="Text-Lines.html#Text-Lines" rel="prev" title="Text Lines">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Screen Lines</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Screen Lines" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Screen Lines" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Motion.html#Motion" rel="up" title="Motion" />
+  <link href="List-Motion.html#List-Motion" rel="next" title=
+  "List Motion" />
+  <link href="Text-Lines.html#Text-Lines" rel="prev" title=
+  "Text Lines" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Screen-Lines" id="Screen-Lines"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="List-Motion.html#List-Motion" accesskey="n"
+    rel="next">List Motion</a>, Previous: <a href=
+    "Text-Lines.html#Text-Lines" accesskey="p" rel="prev">Text
+    Lines</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel=
+    "up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Motion-by-Screen-Lines" id="Motion-by-Screen-Lines"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Screen-Lines"></a>
-<div class="header">
-<p>
-Next: <a href="List-Motion.html#List-Motion" accesskey="n" rel="next">List Motion</a>, Previous: <a href="Text-Lines.html#Text-Lines" accesskey="p" rel="prev">Text Lines</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Motion-by-Screen-Lines"></a>
-<h4 class="subsection">29.2.5 Motion by Screen Lines</h4>
-<a name="index-screen-lines_002c-moving-by"></a>
+  <h4 class="subsection">29.2.5 Motion by Screen Lines</h4><a name=
+  "index-screen-lines_002c-moving-by" id=
+  "index-screen-lines_002c-moving-by"></a>
 
-<p>The line functions in the previous section count text lines, delimited
-only by newline characters.  By contrast, these functions count screen
-lines, which are defined by the way the text appears on the screen.  A
-text line is a single screen line if it is short enough to fit the width
-of the selected window, but otherwise it may occupy several screen
-lines.
-</p>
-<p>In some cases, text lines are truncated on the screen rather than
-continued onto additional screen lines.  In these cases,
-<code>vertical-motion</code> moves point much like <code>forward-line</code>.
-See <a href="Truncation.html#Truncation">Truncation</a>.
-</p>
-<p>Because the width of a given string depends on the flags that control
-the appearance of certain characters, <code>vertical-motion</code> behaves
-differently, for a given piece of text, depending on the buffer it is
-in, and even on the selected window (because the width, the truncation
-flag, and display table may vary between windows).  See <a href="Usual-Display.html#Usual-Display">Usual Display</a>.
-</p>
-<p>These functions scan text to determine where screen lines break, and
-thus take time proportional to the distance scanned.
-</p>
-<dl>
-<dt><a name="index-vertical_002dmotion"></a>Function: <strong>vertical-motion</strong> <em>count &amp;optional window cur-col</em></dt>
-<dd><p>This function moves point to the start of the screen line <var>count</var>
-screen lines down from the screen line containing point.  If <var>count</var>
-is negative, it moves up instead.
-</p>
-<p>The <var>count</var> argument can be a cons cell, <code>(<var>cols</var>
-. <var>lines</var>)</code>, instead of an integer.  Then the function moves by
-<var>lines</var> screen lines, and puts point <var>cols</var> columns from the
-visual start of that screen line.  Note that <var>cols</var> are counted
-from the <em>visual</em> start of the line; if the window is scrolled
-horizontally (see <a href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>), the column on which point
-will end is in addition to the number of columns by which the text is
-scrolled.
-</p>
-<p>The return value is the number of screen lines over which point was
-moved.  The value may be less in absolute value than <var>count</var> if
-the beginning or end of the buffer was reached.
-</p>
-<p>The window <var>window</var> is used for obtaining parameters such as the
-width, the horizontal scrolling, and the display table.  But
-<code>vertical-motion</code> always operates on the current buffer, even if
-<var>window</var> currently displays some other buffer.
-</p>
-<p>The optional argument <var>cur-col</var> specifies the current column when
-the function is called.  This is the window-relative horizontal
-coordinate of point, measured in units of font width of the frame&rsquo;s
-default face.  Providing it speeds up the function, especially in very
-long lines, because it doesn&rsquo;t have to go back in the buffer in order
-to determine the current column.  Note that <var>cur-col</var> is also
-counted from the visual start of the line.
-</p></dd></dl>
+  <p>The line functions in the previous section count text lines,
+  delimited only by newline characters. By contrast, these
+  functions count screen lines, which are defined by the way the
+  text appears on the screen. A text line is a single screen line
+  if it is short enough to fit the width of the selected window,
+  but otherwise it may occupy several screen lines.</p>
 
-<dl>
-<dt><a name="index-count_002dscreen_002dlines"></a>Function: <strong>count-screen-lines</strong> <em>&amp;optional beg end count-final-newline window</em></dt>
-<dd><p>This function returns the number of screen lines in the text from
-<var>beg</var> to <var>end</var>.  The number of screen lines may be different
-from the number of actual lines, due to line continuation, the display
-table, etc.  If <var>beg</var> and <var>end</var> are <code>nil</code> or omitted,
-they default to the beginning and end of the accessible portion of the
-buffer.
-</p>
-<p>If the region ends with a newline, that is ignored unless the optional
-third argument <var>count-final-newline</var> is non-<code>nil</code>.
-</p>
-<p>The optional fourth argument <var>window</var> specifies the window for
-obtaining parameters such as width, horizontal scrolling, and so on.
-The default is to use the selected window&rsquo;s parameters.
-</p>
-<p>Like <code>vertical-motion</code>, <code>count-screen-lines</code> always uses the
-current buffer, regardless of which buffer is displayed in
-<var>window</var>.  This makes possible to use <code>count-screen-lines</code> in
-any buffer, whether or not it is currently displayed in some window.
-</p></dd></dl>
+  <p>In some cases, text lines are truncated on the screen rather
+  than continued onto additional screen lines. In these cases,
+  <code>vertical-motion</code> moves point much like
+  <code>forward-line</code>. See <a href=
+  "Truncation.html#Truncation">Truncation</a>.</p>
 
-<dl>
-<dt><a name="index-move_002dto_002dwindow_002dline"></a>Command: <strong>move-to-window-line</strong> <em>count</em></dt>
-<dd><p>This function moves point with respect to the text currently displayed
-in the selected window.  It moves point to the beginning of the screen
-line <var>count</var> screen lines from the top of the window.  If
-<var>count</var> is negative, that specifies a position
-−<var>count</var><!-- /@w --> lines from the bottom (or the last line of the
-buffer, if the buffer ends above the specified screen position).
-</p>
-<p>If <var>count</var> is <code>nil</code>, then point moves to the beginning of the
-line in the middle of the window.  If the absolute value of <var>count</var>
-is greater than the size of the window, then point moves to the place
-that would appear on that screen line if the window were tall enough.
-This will probably cause the next redisplay to scroll to bring that
-location onto the screen.
-</p>
-<p>In an interactive call, <var>count</var> is the numeric prefix argument.
-</p>
-<p>The value returned is the window line number point has moved to, with
-the top line in the window numbered 0.
-</p></dd></dl>
+  <p>Because the width of a given string depends on the flags that
+  control the appearance of certain characters,
+  <code>vertical-motion</code> behaves differently, for a given
+  piece of text, depending on the buffer it is in, and even on the
+  selected window (because the width, the truncation flag, and
+  display table may vary between windows). See <a href=
+  "Usual-Display.html#Usual-Display">Usual Display</a>.</p>
 
-<a name="index-move_002dto_002dwindow_002dgroup_002dline_002dfunction"></a>
-<dl>
-<dt><a name="index-move_002dto_002dwindow_002dgroup_002dline"></a>Function: <strong>move-to-window-group-line</strong> <em>count</em></dt>
-<dd><p>This function is like <code>move-to-window-line</code>, except that when the
-selected window is a part of a group of windows (see <a href="Basic-Windows.html#Window-Group">Window Group</a>), <code>move-to-window-group-line</code> will move to a position with
-respect to the entire group, not just the single window.  This
-condition holds when the buffer local variable
-<code>move-to-window-group-line-function</code> is set to a function.  In
-this case, <code>move-to-window-group-line</code> calls the function with
-the argument <var>count</var>, then returns its result.
-</p></dd></dl>
+  <p>These functions scan text to determine where screen lines
+  break, and thus take time proportional to the distance
+  scanned.</p>
 
-<dl>
-<dt><a name="index-compute_002dmotion"></a>Function: <strong>compute-motion</strong> <em>from frompos to topos width offsets window</em></dt>
-<dd><p>This function scans the current buffer, calculating screen positions.
-It scans the buffer forward from position <var>from</var>, assuming that is
-at screen coordinates <var>frompos</var>, to position <var>to</var> or coordinates
-<var>topos</var>, whichever comes first.  It returns the ending buffer
-position and screen coordinates.
-</p>
-<p>The coordinate arguments <var>frompos</var> and <var>topos</var> are cons cells of
-the form <code>(<var>hpos</var> . <var>vpos</var>)</code>.
-</p>
-<p>The argument <var>width</var> is the number of columns available to display
-text; this affects handling of continuation lines.  <code>nil</code> means
-the actual number of usable text columns in the window, which is
-equivalent to the value returned by <code>(window-width window)</code>.
-</p>
-<p>The argument <var>offsets</var> is either <code>nil</code> or a cons cell of the
-form <code>(<var>hscroll</var> . <var>tab-offset</var>)</code>.  Here <var>hscroll</var> is
-the number of columns not being displayed at the left margin; most
-callers get this by calling <code>window-hscroll</code>.  Meanwhile,
-<var>tab-offset</var> is the offset between column numbers on the screen and
-column numbers in the buffer.  This can be nonzero in a continuation
-line, when the previous screen lines&rsquo; widths do not add up to a multiple
-of <code>tab-width</code>.  It is always zero in a non-continuation line.
-</p>
-<p>The window <var>window</var> serves only to specify which display table to
-use.  <code>compute-motion</code> always operates on the current buffer,
-regardless of what buffer is displayed in <var>window</var>.
-</p>
-<p>The return value is a list of five elements:
-</p>
-<div class="example">
-<pre class="example">(<var>pos</var> <var>hpos</var> <var>vpos</var> <var>prevhpos</var> <var>contin</var>)
-</pre></div>
+  <dl>
+    <dt><a name="index-vertical_002dmotion" id=
+    "index-vertical_002dmotion"></a>Function:
+    <strong>vertical-motion</strong> <em>count &amp;optional window
+    cur-col</em></dt>
 
-<p>Here <var>pos</var> is the buffer position where the scan stopped, <var>vpos</var>
-is the vertical screen position, and <var>hpos</var> is the horizontal screen
-position.
-</p>
-<p>The result <var>prevhpos</var> is the horizontal position one character back
-from <var>pos</var>.  The result <var>contin</var> is <code>t</code> if the last line
-was continued after (or within) the previous character.
-</p>
-<p>For example, to find the buffer position of column <var>col</var> of screen line
-<var>line</var> of a certain window, pass the window&rsquo;s display start location
-as <var>from</var> and the window&rsquo;s upper-left coordinates as <var>frompos</var>.
-Pass the buffer&rsquo;s <code>(point-max)</code> as <var>to</var>, to limit the scan to
-the end of the accessible portion of the buffer, and pass <var>line</var> and
-<var>col</var> as <var>topos</var>.  Here&rsquo;s a function that does this:
-</p>
-<div class="example">
-<pre class="example">(defun coordinates-of-position (col line)
+    <dd>
+      <p>This function moves point to the start of the screen line
+      <var>count</var> screen lines down from the screen line
+      containing point. If <var>count</var> is negative, it moves
+      up instead.</p>
+
+      <p>The <var>count</var> argument can be a cons cell,
+      <code>(<var>cols</var> . <var>lines</var>)</code>, instead of
+      an integer. Then the function moves by <var>lines</var>
+      screen lines, and puts point <var>cols</var> columns from the
+      visual start of that screen line. Note that <var>cols</var>
+      are counted from the <em>visual</em> start of the line; if
+      the window is scrolled horizontally (see <a href=
+      "Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal
+      Scrolling</a>), the column on which point will end is in
+      addition to the number of columns by which the text is
+      scrolled.</p>
+
+      <p>The return value is the number of screen lines over which
+      point was moved. The value may be less in absolute value than
+      <var>count</var> if the beginning or end of the buffer was
+      reached.</p>
+
+      <p>The window <var>window</var> is used for obtaining
+      parameters such as the width, the horizontal scrolling, and
+      the display table. But <code>vertical-motion</code> always
+      operates on the current buffer, even if <var>window</var>
+      currently displays some other buffer.</p>
+
+      <p>The optional argument <var>cur-col</var> specifies the
+      current column when the function is called. This is the
+      window-relative horizontal coordinate of point, measured in
+      units of font width of the frame&rsquo;s default face.
+      Providing it speeds up the function, especially in very long
+      lines, because it doesn&rsquo;t have to go back in the buffer
+      in order to determine the current column. Note that
+      <var>cur-col</var> is also counted from the visual start of
+      the line.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-count_002dscreen_002dlines" id=
+    "index-count_002dscreen_002dlines"></a>Function:
+    <strong>count-screen-lines</strong> <em>&amp;optional beg end
+    count-final-newline window</em></dt>
+
+    <dd>
+      <p>This function returns the number of screen lines in the
+      text from <var>beg</var> to <var>end</var>. The number of
+      screen lines may be different from the number of actual
+      lines, due to line continuation, the display table, etc. If
+      <var>beg</var> and <var>end</var> are <code>nil</code> or
+      omitted, they default to the beginning and end of the
+      accessible portion of the buffer.</p>
+
+      <p>If the region ends with a newline, that is ignored unless
+      the optional third argument <var>count-final-newline</var> is
+      non-<code>nil</code>.</p>
+
+      <p>The optional fourth argument <var>window</var> specifies
+      the window for obtaining parameters such as width, horizontal
+      scrolling, and so on. The default is to use the selected
+      window&rsquo;s parameters.</p>
+
+      <p>Like <code>vertical-motion</code>,
+      <code>count-screen-lines</code> always uses the current
+      buffer, regardless of which buffer is displayed in
+      <var>window</var>. This makes possible to use
+      <code>count-screen-lines</code> in any buffer, whether or not
+      it is currently displayed in some window.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-move_002dto_002dwindow_002dline" id=
+    "index-move_002dto_002dwindow_002dline"></a>Command:
+    <strong>move-to-window-line</strong> <em>count</em></dt>
+
+    <dd>
+      <p>This function moves point with respect to the text
+      currently displayed in the selected window. It moves point to
+      the beginning of the screen line <var>count</var> screen
+      lines from the top of the window. If <var>count</var> is
+      negative, that specifies a position
+      &acirc;&circ;&rsquo;<var>count</var><!-- /@w --> lines from
+      the bottom (or the last line of the buffer, if the buffer
+      ends above the specified screen position).</p>
+
+      <p>If <var>count</var> is <code>nil</code>, then point moves
+      to the beginning of the line in the middle of the window. If
+      the absolute value of <var>count</var> is greater than the
+      size of the window, then point moves to the place that would
+      appear on that screen line if the window were tall enough.
+      This will probably cause the next redisplay to scroll to
+      bring that location onto the screen.</p>
+
+      <p>In an interactive call, <var>count</var> is the numeric
+      prefix argument.</p>
+
+      <p>The value returned is the window line number point has
+      moved to, with the top line in the window numbered 0.</p>
+    </dd>
+  </dl><a name=
+  "index-move_002dto_002dwindow_002dgroup_002dline_002dfunction"
+  id="index-move_002dto_002dwindow_002dgroup_002dline_002dfunction"></a>
+
+  <dl>
+    <dt><a name="index-move_002dto_002dwindow_002dgroup_002dline"
+    id=
+    "index-move_002dto_002dwindow_002dgroup_002dline"></a>Function:
+    <strong>move-to-window-group-line</strong> <em>count</em></dt>
+
+    <dd>
+      <p>This function is like <code>move-to-window-line</code>,
+      except that when the selected window is a part of a group of
+      windows (see <a href="Basic-Windows.html#Window-Group">Window
+      Group</a>), <code>move-to-window-group-line</code> will move
+      to a position with respect to the entire group, not just the
+      single window. This condition holds when the buffer local
+      variable <code>move-to-window-group-line-function</code> is
+      set to a function. In this case,
+      <code>move-to-window-group-line</code> calls the function
+      with the argument <var>count</var>, then returns its
+      result.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-compute_002dmotion" id=
+    "index-compute_002dmotion"></a>Function:
+    <strong>compute-motion</strong> <em>from frompos to topos width
+    offsets window</em></dt>
+
+    <dd>
+      <p>This function scans the current buffer, calculating screen
+      positions. It scans the buffer forward from position
+      <var>from</var>, assuming that is at screen coordinates
+      <var>frompos</var>, to position <var>to</var> or coordinates
+      <var>topos</var>, whichever comes first. It returns the
+      ending buffer position and screen coordinates.</p>
+
+      <p>The coordinate arguments <var>frompos</var> and
+      <var>topos</var> are cons cells of the form
+      <code>(<var>hpos</var> . <var>vpos</var>)</code>.</p>
+
+      <p>The argument <var>width</var> is the number of columns
+      available to display text; this affects handling of
+      continuation lines. <code>nil</code> means the actual number
+      of usable text columns in the window, which is equivalent to
+      the value returned by <code>(window-width window)</code>.</p>
+
+      <p>The argument <var>offsets</var> is either <code>nil</code>
+      or a cons cell of the form <code>(<var>hscroll</var> .
+      <var>tab-offset</var>)</code>. Here <var>hscroll</var> is the
+      number of columns not being displayed at the left margin;
+      most callers get this by calling <code>window-hscroll</code>.
+      Meanwhile, <var>tab-offset</var> is the offset between column
+      numbers on the screen and column numbers in the buffer. This
+      can be nonzero in a continuation line, when the previous
+      screen lines&rsquo; widths do not add up to a multiple of
+      <code>tab-width</code>. It is always zero in a
+      non-continuation line.</p>
+
+      <p>The window <var>window</var> serves only to specify which
+      display table to use. <code>compute-motion</code> always
+      operates on the current buffer, regardless of what buffer is
+      displayed in <var>window</var>.</p>
+
+      <p>The return value is a list of five elements:</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>pos</var> <var>hpos</var> <var>vpos</var> <var>prevhpos</var> <var>contin</var>)
+</pre>
+      </div>
+
+      <p>Here <var>pos</var> is the buffer position where the scan
+      stopped, <var>vpos</var> is the vertical screen position, and
+      <var>hpos</var> is the horizontal screen position.</p>
+
+      <p>The result <var>prevhpos</var> is the horizontal position
+      one character back from <var>pos</var>. The result
+      <var>contin</var> is <code>t</code> if the last line was
+      continued after (or within) the previous character.</p>
+
+      <p>For example, to find the buffer position of column
+      <var>col</var> of screen line <var>line</var> of a certain
+      window, pass the window&rsquo;s display start location as
+      <var>from</var> and the window&rsquo;s upper-left coordinates
+      as <var>frompos</var>. Pass the buffer&rsquo;s
+      <code>(point-max)</code> as <var>to</var>, to limit the scan
+      to the end of the accessible portion of the buffer, and pass
+      <var>line</var> and <var>col</var> as <var>topos</var>.
+      Here&rsquo;s a function that does this:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun coordinates-of-position (col line)
   (car (compute-motion (window-start)
                        '(0 . 0)
                        (point-max)
@@ -244,20 +343,28 @@ the end of the accessible portion of the buffer, and pass <var>line</var> and
                        (window-width)
                        (cons (window-hscroll) 0)
                        (selected-window))))
-</pre></div>
+</pre>
+      </div>
 
-<p>When you use <code>compute-motion</code> for the minibuffer, you need to use
-<code>minibuffer-prompt-width</code> to get the horizontal position of the
-beginning of the first screen line.  See <a href="Minibuffer-Contents.html#Minibuffer-Contents">Minibuffer Contents</a>.
-</p></dd></dl>
+      <p>When you use <code>compute-motion</code> for the
+      minibuffer, you need to use
+      <code>minibuffer-prompt-width</code> to get the horizontal
+      position of the beginning of the first screen line. See
+      <a href=
+      "Minibuffer-Contents.html#Minibuffer-Contents">Minibuffer
+      Contents</a>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="List-Motion.html#List-Motion" accesskey="n" rel="next">List Motion</a>, Previous: <a href="Text-Lines.html#Text-Lines" accesskey="p" rel="prev">Text Lines</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="List-Motion.html#List-Motion" accesskey="n"
+    rel="next">List Motion</a>, Previous: <a href=
+    "Text-Lines.html#Text-Lines" accesskey="p" rel="prev">Text
+    Lines</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel=
+    "up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

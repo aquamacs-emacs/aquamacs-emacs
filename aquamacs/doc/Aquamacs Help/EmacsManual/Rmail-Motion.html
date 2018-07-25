@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,189 +20,283 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Rmail Motion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Rmail Motion">
-<meta name="keywords" content="GNU Emacs Manual: Rmail Motion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Rmail.html#Rmail" rel="up" title="Rmail">
-<link href="Rmail-Deletion.html#Rmail-Deletion" rel="next" title="Rmail Deletion">
-<link href="Rmail-Scrolling.html#Rmail-Scrolling" rel="prev" title="Rmail Scrolling">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Rmail Motion</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Rmail Motion" />
+  <meta name="keywords" content="GNU Emacs Manual: Rmail Motion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Rmail.html#Rmail" rel="up" title="Rmail" />
+  <link href="Rmail-Deletion.html#Rmail-Deletion" rel="next" title=
+  "Rmail Deletion" />
+  <link href="Rmail-Scrolling.html#Rmail-Scrolling" rel="prev"
+  title="Rmail Scrolling" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Rmail-Motion" id="Rmail-Motion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Rmail-Deletion.html#Rmail-Deletion"
+    accesskey="n" rel="next">Rmail Deletion</a>, Previous: <a href=
+    "Rmail-Scrolling.html#Rmail-Scrolling" accesskey="p" rel=
+    "prev">Rmail Scrolling</a>, Up: <a href="Rmail.html#Rmail"
+    accesskey="u" rel="up">Rmail</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Moving-Among-Messages" id="Moving-Among-Messages"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Rmail-Motion"></a>
-<div class="header">
-<p>
-Next: <a href="Rmail-Deletion.html#Rmail-Deletion" accesskey="n" rel="next">Rmail Deletion</a>, Previous: <a href="Rmail-Scrolling.html#Rmail-Scrolling" accesskey="p" rel="prev">Rmail Scrolling</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Moving-Among-Messages"></a>
-<h3 class="section">33.3 Moving Among Messages</h3>
+  <h3 class="section">33.3 Moving Among Messages</h3>
 
-<p>The most basic thing to do with a message is to read it.  The way to
-do this in Rmail is to make the message current.  The usual practice is
-to move sequentially through the file, since this is the order of
-receipt of messages.  When you enter Rmail, you are positioned at the
-first message that you have not yet made current (that is, the first one
-that has the &lsquo;<samp>unseen</samp>&rsquo; attribute; see <a href="Rmail-Attributes.html#Rmail-Attributes">Rmail Attributes</a>).  Move
-forward to see the other new messages; move backward to re-examine old
-messages.
-</p>
-<dl compact="compact">
-<dt><kbd>n</kbd></dt>
-<dd><p>Move to the next nondeleted message, skipping any intervening deleted
-messages (<code>rmail-next-undeleted-message</code>).
-</p></dd>
-<dt><kbd>p</kbd></dt>
-<dd><p>Move to the previous nondeleted message
-(<code>rmail-previous-undeleted-message</code>).
-</p></dd>
-<dt><kbd>M-n</kbd></dt>
-<dd><p>Move to the next message, including deleted messages
-(<code>rmail-next-message</code>).
-</p></dd>
-<dt><kbd>M-p</kbd></dt>
-<dd><p>Move to the previous message, including deleted messages
-(<code>rmail-previous-message</code>).
-</p></dd>
-<dt><kbd>C-c C-n</kbd></dt>
-<dd><p>Move to the next message with the same subject as the current one
-(<code>rmail-next-same-subject</code>).
-</p></dd>
-<dt><kbd>C-c C-p</kbd></dt>
-<dd><p>Move to the previous message with the same subject as the current one
-(<code>rmail-previous-same-subject</code>).
-</p></dd>
-<dt><kbd>j</kbd></dt>
-<dd><p>Move to the first message.  With argument <var>n</var>, move to
-message number <var>n</var> (<code>rmail-show-message</code>).
-</p></dd>
-<dt><kbd>&gt;</kbd></dt>
-<dd><p>Move to the last message (<code>rmail-last-message</code>).
-</p></dd>
-<dt><kbd>&lt;</kbd></dt>
-<dd><p>Move to the first message (<code>rmail-first-message</code>).
-</p>
-</dd>
-<dt><kbd>M-s <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Move to the next message containing a match for <var>regexp</var>
-(<code>rmail-search</code>).
-</p>
-</dd>
-<dt><kbd>- M-s <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Move to the previous message containing a match for <var>regexp</var>.
-</p></dd>
-</dl>
+  <p>The most basic thing to do with a message is to read it. The
+  way to do this in Rmail is to make the message current. The usual
+  practice is to move sequentially through the file, since this is
+  the order of receipt of messages. When you enter Rmail, you are
+  positioned at the first message that you have not yet made
+  current (that is, the first one that has the
+  &lsquo;<samp>unseen</samp>&rsquo; attribute; see <a href=
+  "Rmail-Attributes.html#Rmail-Attributes">Rmail Attributes</a>).
+  Move forward to see the other new messages; move backward to
+  re-examine old messages.</p>
 
-<a name="index-n-_0028Rmail_0029"></a>
-<a name="index-p-_0028Rmail_0029"></a>
-<a name="index-M_002dn-_0028Rmail_0029"></a>
-<a name="index-M_002dp-_0028Rmail_0029"></a>
-<a name="index-rmail_002dnext_002dundeleted_002dmessage"></a>
-<a name="index-rmail_002dprevious_002dundeleted_002dmessage"></a>
-<a name="index-rmail_002dnext_002dmessage"></a>
-<a name="index-rmail_002dprevious_002dmessage"></a>
-<p><kbd>n</kbd> and <kbd>p</kbd> are the usual way of moving among messages in
-Rmail.  They move through the messages sequentially, but skip over
-deleted messages, which is usually what you want to do.  Their command
-definitions are named <code>rmail-next-undeleted-message</code> and
-<code>rmail-previous-undeleted-message</code>.  If you do not want to skip
-deleted messages&mdash;for example, if you want to move to a message to
-undelete it&mdash;use the variants <kbd>M-n</kbd> and <kbd>M-p</kbd>
-(<code>rmail-next-message</code> and <code>rmail-previous-message</code>).  A
-numeric argument to any of these commands serves as a repeat
-count.
-</p>
-<p>In Rmail, you can specify a numeric argument by typing just the
-digits.  You don&rsquo;t need to type <kbd>C-u</kbd> first.
-</p>
-<a name="index-M_002ds-_0028Rmail_0029"></a>
-<a name="index-rmail_002dsearch"></a>
-<a name="index-searching-in-Rmail"></a>
-<p>The <kbd>M-s</kbd> (<code>rmail-search</code>) command is Rmail&rsquo;s version of
-search.  The usual incremental search command <kbd>C-s</kbd> works in Rmail,
-but it searches only within the current message.  The purpose of
-<kbd>M-s</kbd> is to search for another message.  It reads a regular
-expression (see <a href="Regexps.html#Regexps">Regexps</a>) nonincrementally, then searches starting at
-the beginning of the following message for a match.  It then selects
-that message.  If <var>regexp</var> is empty, <kbd>M-s</kbd> reuses the regexp
-used the previous time.
-</p>
-<p>To search backward in the file for another message, give <kbd>M-s</kbd> a
-negative argument.  In Rmail you can do this with <kbd>- M-s</kbd>.  This
-begins searching from the end of the previous message.
-</p>
-<p>It is also possible to search for a message based on labels.
-See <a href="Rmail-Labels.html#Rmail-Labels">Rmail Labels</a>.
-</p>
-<a name="index-C_002dc-C_002dn-_0028Rmail_0029"></a>
-<a name="index-C_002dc-C_002dp-_0028Rmail_0029"></a>
-<a name="index-rmail_002dnext_002dsame_002dsubject"></a>
-<a name="index-rmail_002dprevious_002dsame_002dsubject"></a>
-<p>The <kbd>C-c C-n</kbd> (<code>rmail-next-same-subject</code>) command moves to
-the next message with the same subject as the current one.  A prefix
-argument serves as a repeat count.  With a negative argument, this
-command moves backward, acting like <kbd>C-c C-p</kbd>
-(<code>rmail-previous-same-subject</code>).  When comparing subjects, these
-commands ignore the prefixes typically added to the subjects of replies.
-</p>
-<a name="index-j-_0028Rmail_0029"></a>
-<a name="index-_003e-_0028Rmail_0029"></a>
-<a name="index-_003c-_0028Rmail_0029"></a>
-<a name="index-rmail_002dshow_002dmessage"></a>
-<a name="index-rmail_002dlast_002dmessage"></a>
-<a name="index-rmail_002dfirst_002dmessage"></a>
-<p>To move to a message specified by absolute message number, use <kbd>j</kbd>
-(<code>rmail-show-message</code>) with the message number as argument.  With
-no argument, <kbd>j</kbd> selects the first message.  <kbd>&lt;</kbd>
-(<code>rmail-first-message</code>) also selects the first message.  <kbd>&gt;</kbd>
-(<code>rmail-last-message</code>) selects the last message.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Rmail-Deletion.html#Rmail-Deletion" accesskey="n" rel="next">Rmail Deletion</a>, Previous: <a href="Rmail-Scrolling.html#Rmail-Scrolling" accesskey="p" rel="prev">Rmail Scrolling</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>n</kbd></dt>
 
+    <dd>
+      <p>Move to the next nondeleted message, skipping any
+      intervening deleted messages
+      (<code>rmail-next-undeleted-message</code>).</p>
+    </dd>
 
+    <dt><kbd>p</kbd></dt>
 
+    <dd>
+      <p>Move to the previous nondeleted message
+      (<code>rmail-previous-undeleted-message</code>).</p>
+    </dd>
+
+    <dt><kbd>M-n</kbd></dt>
+
+    <dd>
+      <p>Move to the next message, including deleted messages
+      (<code>rmail-next-message</code>).</p>
+    </dd>
+
+    <dt><kbd>M-p</kbd></dt>
+
+    <dd>
+      <p>Move to the previous message, including deleted messages
+      (<code>rmail-previous-message</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-n</kbd></dt>
+
+    <dd>
+      <p>Move to the next message with the same subject as the
+      current one (<code>rmail-next-same-subject</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-p</kbd></dt>
+
+    <dd>
+      <p>Move to the previous message with the same subject as the
+      current one (<code>rmail-previous-same-subject</code>).</p>
+    </dd>
+
+    <dt><kbd>j</kbd></dt>
+
+    <dd>
+      <p>Move to the first message. With argument <var>n</var>,
+      move to message number <var>n</var>
+      (<code>rmail-show-message</code>).</p>
+    </dd>
+
+    <dt><kbd>&gt;</kbd></dt>
+
+    <dd>
+      <p>Move to the last message
+      (<code>rmail-last-message</code>).</p>
+    </dd>
+
+    <dt><kbd>&lt;</kbd></dt>
+
+    <dd>
+      <p>Move to the first message
+      (<code>rmail-first-message</code>).</p>
+    </dd>
+
+    <dt><kbd>M-s <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Move to the next message containing a match for
+      <var>regexp</var> (<code>rmail-search</code>).</p>
+    </dd>
+
+    <dt><kbd>- M-s <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Move to the previous message containing a match for
+      <var>regexp</var>.</p>
+    </dd>
+  </dl><a name="index-n-_0028Rmail_0029" id=
+  "index-n-_0028Rmail_0029"></a> <a name="index-p-_0028Rmail_0029"
+  id="index-p-_0028Rmail_0029"></a> <a name=
+  "index-M_002dn-_0028Rmail_0029" id=
+  "index-M_002dn-_0028Rmail_0029"></a> <a name=
+  "index-M_002dp-_0028Rmail_0029" id=
+  "index-M_002dp-_0028Rmail_0029"></a> <a name=
+  "index-rmail_002dnext_002dundeleted_002dmessage" id=
+  "index-rmail_002dnext_002dundeleted_002dmessage"></a> <a name=
+  "index-rmail_002dprevious_002dundeleted_002dmessage" id=
+  "index-rmail_002dprevious_002dundeleted_002dmessage"></a>
+  <a name="index-rmail_002dnext_002dmessage" id=
+  "index-rmail_002dnext_002dmessage"></a> <a name=
+  "index-rmail_002dprevious_002dmessage" id=
+  "index-rmail_002dprevious_002dmessage"></a>
+
+  <p><kbd>n</kbd> and <kbd>p</kbd> are the usual way of moving
+  among messages in Rmail. They move through the messages
+  sequentially, but skip over deleted messages, which is usually
+  what you want to do. Their command definitions are named
+  <code>rmail-next-undeleted-message</code> and
+  <code>rmail-previous-undeleted-message</code>. If you do not want
+  to skip deleted messages&mdash;for example, if you want to move
+  to a message to undelete it&mdash;use the variants <kbd>M-n</kbd>
+  and <kbd>M-p</kbd> (<code>rmail-next-message</code> and
+  <code>rmail-previous-message</code>). A numeric argument to any
+  of these commands serves as a repeat count.</p>
+
+  <p>In Rmail, you can specify a numeric argument by typing just
+  the digits. You don&rsquo;t need to type <kbd>C-u</kbd>
+  first.</p><a name="index-M_002ds-_0028Rmail_0029" id=
+  "index-M_002ds-_0028Rmail_0029"></a> <a name=
+  "index-rmail_002dsearch" id="index-rmail_002dsearch"></a>
+  <a name="index-searching-in-Rmail" id=
+  "index-searching-in-Rmail"></a>
+
+  <p>The <kbd>M-s</kbd> (<code>rmail-search</code>) command is
+  Rmail&rsquo;s version of search. The usual incremental search
+  command <kbd>C-s</kbd> works in Rmail, but it searches only
+  within the current message. The purpose of <kbd>M-s</kbd> is to
+  search for another message. It reads a regular expression (see
+  <a href="Regexps.html#Regexps">Regexps</a>) nonincrementally,
+  then searches starting at the beginning of the following message
+  for a match. It then selects that message. If <var>regexp</var>
+  is empty, <kbd>M-s</kbd> reuses the regexp used the previous
+  time.</p>
+
+  <p>To search backward in the file for another message, give
+  <kbd>M-s</kbd> a negative argument. In Rmail you can do this with
+  <kbd>- M-s</kbd>. This begins searching from the end of the
+  previous message.</p>
+
+  <p>It is also possible to search for a message based on labels.
+  See <a href="Rmail-Labels.html#Rmail-Labels">Rmail
+  Labels</a>.</p><a name="index-C_002dc-C_002dn-_0028Rmail_0029"
+  id="index-C_002dc-C_002dn-_0028Rmail_0029"></a> <a name=
+  "index-C_002dc-C_002dp-_0028Rmail_0029" id=
+  "index-C_002dc-C_002dp-_0028Rmail_0029"></a> <a name=
+  "index-rmail_002dnext_002dsame_002dsubject" id=
+  "index-rmail_002dnext_002dsame_002dsubject"></a> <a name=
+  "index-rmail_002dprevious_002dsame_002dsubject" id=
+  "index-rmail_002dprevious_002dsame_002dsubject"></a>
+
+  <p>The <kbd>C-c C-n</kbd> (<code>rmail-next-same-subject</code>)
+  command moves to the next message with the same subject as the
+  current one. A prefix argument serves as a repeat count. With a
+  negative argument, this command moves backward, acting like
+  <kbd>C-c C-p</kbd> (<code>rmail-previous-same-subject</code>).
+  When comparing subjects, these commands ignore the prefixes
+  typically added to the subjects of replies.</p><a name=
+  "index-j-_0028Rmail_0029" id="index-j-_0028Rmail_0029"></a>
+  <a name="index-_003e-_0028Rmail_0029" id=
+  "index-_003e-_0028Rmail_0029"></a> <a name=
+  "index-_003c-_0028Rmail_0029" id=
+  "index-_003c-_0028Rmail_0029"></a> <a name=
+  "index-rmail_002dshow_002dmessage" id=
+  "index-rmail_002dshow_002dmessage"></a> <a name=
+  "index-rmail_002dlast_002dmessage" id=
+  "index-rmail_002dlast_002dmessage"></a> <a name=
+  "index-rmail_002dfirst_002dmessage" id=
+  "index-rmail_002dfirst_002dmessage"></a>
+
+  <p>To move to a message specified by absolute message number, use
+  <kbd>j</kbd> (<code>rmail-show-message</code>) with the message
+  number as argument. With no argument, <kbd>j</kbd> selects the
+  first message. <kbd>&lt;</kbd> (<code>rmail-first-message</code>)
+  also selects the first message. <kbd>&gt;</kbd>
+  (<code>rmail-last-message</code>) selects the last message.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Rmail-Deletion.html#Rmail-Deletion"
+    accesskey="n" rel="next">Rmail Deletion</a>, Previous: <a href=
+    "Rmail-Scrolling.html#Rmail-Scrolling" accesskey="p" rel=
+    "prev">Rmail Scrolling</a>, Up: <a href="Rmail.html#Rmail"
+    accesskey="u" rel="up">Rmail</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

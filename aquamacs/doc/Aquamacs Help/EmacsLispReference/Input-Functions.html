@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,155 +19,241 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Input Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Input Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Input Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Read-and-Print.html#Read-and-Print" rel="up" title="Read and Print">
-<link href="Output-Streams.html#Output-Streams" rel="next" title="Output Streams">
-<link href="Input-Streams.html#Input-Streams" rel="prev" title="Input Streams">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Input Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Input Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Input Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Read-and-Print.html#Read-and-Print" rel="up" title=
+  "Read and Print" />
+  <link href="Output-Streams.html#Output-Streams" rel="next" title=
+  "Output Streams" />
+  <link href="Input-Streams.html#Input-Streams" rel="prev" title=
+  "Input Streams" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Input-Functions" id="Input-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Output-Streams.html#Output-Streams"
+    accesskey="n" rel="next">Output Streams</a>, Previous: <a href=
+    "Input-Streams.html#Input-Streams" accesskey="p" rel=
+    "prev">Input Streams</a>, Up: <a href=
+    "Read-and-Print.html#Read-and-Print" accesskey="u" rel=
+    "up">Read and Print</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Input-Functions-1" id="Input-Functions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Input-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Output-Streams.html#Output-Streams" accesskey="n" rel="next">Output Streams</a>, Previous: <a href="Input-Streams.html#Input-Streams" accesskey="p" rel="prev">Input Streams</a>, Up: <a href="Read-and-Print.html#Read-and-Print" accesskey="u" rel="up">Read and Print</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Input-Functions-1"></a>
-<h3 class="section">18.3 Input Functions</h3>
+  <h3 class="section">18.3 Input Functions</h3>
 
-<p>This section describes the Lisp functions and variables that pertain
-to reading.
-</p>
-<p>In the functions below, <var>stream</var> stands for an input stream (see
-the previous section).  If <var>stream</var> is <code>nil</code> or omitted, it
-defaults to the value of <code>standard-input</code>.
-</p>
-<a name="index-end_002dof_002dfile"></a>
-<p>An <code>end-of-file</code> error is signaled if reading encounters an
-unterminated list, vector, or string.
-</p>
-<dl>
-<dt><a name="index-read"></a>Function: <strong>read</strong> <em>&amp;optional stream</em></dt>
-<dd><p>This function reads one textual Lisp expression from <var>stream</var>,
-returning it as a Lisp object.  This is the basic Lisp input function.
-</p></dd></dl>
+  <p>This section describes the Lisp functions and variables that
+  pertain to reading.</p>
 
-<dl>
-<dt><a name="index-read_002dfrom_002dstring"></a>Function: <strong>read-from-string</strong> <em>string &amp;optional start end</em></dt>
-<dd><a name="index-string-to-object"></a>
-<p>This function reads the first textual Lisp expression from the text in
-<var>string</var>.  It returns a cons cell whose <small>CAR</small> is that expression,
-and whose <small>CDR</small> is an integer giving the position of the next
-remaining character in the string (i.e., the first one not read).
-</p>
-<p>If <var>start</var> is supplied, then reading begins at index <var>start</var> in
-the string (where the first character is at index 0).  If you specify
-<var>end</var>, then reading is forced to stop just before that index, as if
-the rest of the string were not there.
-</p>
-<p>For example:
-</p>
-<div class="example">
-<pre class="example">(read-from-string &quot;(setq x 55) (setq y 5)&quot;)
+  <p>In the functions below, <var>stream</var> stands for an input
+  stream (see the previous section). If <var>stream</var> is
+  <code>nil</code> or omitted, it defaults to the value of
+  <code>standard-input</code>.</p><a name=
+  "index-end_002dof_002dfile" id="index-end_002dof_002dfile"></a>
+
+  <p>An <code>end-of-file</code> error is signaled if reading
+  encounters an unterminated list, vector, or string.</p>
+
+  <dl>
+    <dt><a name="index-read" id="index-read"></a>Function:
+    <strong>read</strong> <em>&amp;optional stream</em></dt>
+
+    <dd>
+      <p>This function reads one textual Lisp expression from
+      <var>stream</var>, returning it as a Lisp object. This is the
+      basic Lisp input function.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-read_002dfrom_002dstring" id=
+    "index-read_002dfrom_002dstring"></a>Function:
+    <strong>read-from-string</strong> <em>string &amp;optional
+    start end</em></dt>
+
+    <dd>
+      <a name="index-string-to-object" id=
+      "index-string-to-object"></a>
+
+      <p>This function reads the first textual Lisp expression from
+      the text in <var>string</var>. It returns a cons cell whose
+      <small>CAR</small> is that expression, and whose
+      <small>CDR</small> is an integer giving the position of the
+      next remaining character in the string (i.e., the first one
+      not read).</p>
+
+      <p>If <var>start</var> is supplied, then reading begins at
+      index <var>start</var> in the string (where the first
+      character is at index 0). If you specify <var>end</var>, then
+      reading is forced to stop just before that index, as if the
+      rest of the string were not there.</p>
+
+      <p>For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(read-from-string "(setq x 55) (setq y 5)")
      &rArr; ((setq x 55) . 11)
-</pre><pre class="example">(read-from-string &quot;\&quot;A short string\&quot;&quot;)
-     &rArr; (&quot;A short string&quot; . 16)
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Read starting at the first character.</span>
-(read-from-string &quot;(list 112)&quot; 0)
+</pre>
+        <pre class="example">
+(read-from-string "\"A short string\"")
+     &rArr; ("A short string" . 16)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class="roman">Read starting at the first character.</span>
+(read-from-string "(list 112)" 0)
      &rArr; ((list 112) . 10)
-</pre><pre class="example">;; <span class="roman">Read starting at the second character.</span>
-(read-from-string &quot;(list 112)&quot; 1)
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">Read starting at the second character.</span>
+(read-from-string "(list 112)" 1)
      &rArr; (list . 5)
-</pre><pre class="example">;; <span class="roman">Read starting at the seventh character,</span>
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">Read starting at the seventh character,</span>
 ;;   <span class="roman">and stopping at the ninth.</span>
-(read-from-string &quot;(list 112)&quot; 6 8)
+(read-from-string "(list 112)" 6 8)
      &rArr; (11 . 8)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-standard_002dinput"></a>Variable: <strong>standard-input</strong></dt>
-<dd><p>This variable holds the default input stream&mdash;the stream that
-<code>read</code> uses when the <var>stream</var> argument is <code>nil</code>.
-The default is <code>t</code>, meaning use the minibuffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-standard_002dinput" id=
+    "index-standard_002dinput"></a>Variable:
+    <strong>standard-input</strong></dt>
 
-<dl>
-<dt><a name="index-read_002dcircle"></a>Variable: <strong>read-circle</strong></dt>
-<dd><p>If non-<code>nil</code>, this variable enables the reading of circular and
-shared structures.  See <a href="Circular-Objects.html#Circular-Objects">Circular Objects</a>.  Its default value is
-<code>t</code>.
-</p></dd></dl>
+    <dd>
+      <p>This variable holds the default input stream&mdash;the
+      stream that <code>read</code> uses when the <var>stream</var>
+      argument is <code>nil</code>. The default is <code>t</code>,
+      meaning use the minibuffer.</p>
+    </dd>
+  </dl>
 
-<a name="index-binary-I_002fO-in-batch-mode"></a>
-<p>When reading or writing from the standard input/output streams of the
-Emacs process in batch mode, it is sometimes required to make sure any
-arbitrary binary data will be read/written verbatim, and/or that no
-translation of newlines to or from CR-LF pairs is performed.  This
-issue does not exist on Posix hosts, only on MS-Windows and MS-DOS.
-The following function allows you to control the I/O mode of any
-standard stream of the Emacs process.
-</p>
-<dl>
-<dt><a name="index-set_002dbinary_002dmode"></a>Function: <strong>set-binary-mode</strong> <em>stream mode</em></dt>
-<dd><p>Switch <var>stream</var> into binary or text I/O mode.  If <var>mode</var> is
-non-<code>nil</code>, switch to binary mode, otherwise switch to text mode.
-The value of <var>stream</var> can be one of <code>stdin</code>, <code>stdout</code>,
-or <code>stderr</code>.  This function flushes any pending output data of
-<var>stream</var> as a side effect, and returns the previous value of I/O
-mode for <var>stream</var>.  On Posix hosts, it always returns a
-non-<code>nil</code> value and does nothing except flushing pending output.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-read_002dcircle" id=
+    "index-read_002dcircle"></a>Variable:
+    <strong>read-circle</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Output-Streams.html#Output-Streams" accesskey="n" rel="next">Output Streams</a>, Previous: <a href="Input-Streams.html#Input-Streams" accesskey="p" rel="prev">Input Streams</a>, Up: <a href="Read-and-Print.html#Read-and-Print" accesskey="u" rel="up">Read and Print</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>If non-<code>nil</code>, this variable enables the reading
+      of circular and shared structures. See <a href=
+      "Circular-Objects.html#Circular-Objects">Circular
+      Objects</a>. Its default value is <code>t</code>.</p>
+    </dd>
+  </dl><a name="index-binary-I_002fO-in-batch-mode" id=
+  "index-binary-I_002fO-in-batch-mode"></a>
 
+  <p>When reading or writing from the standard input/output streams
+  of the Emacs process in batch mode, it is sometimes required to
+  make sure any arbitrary binary data will be read/written
+  verbatim, and/or that no translation of newlines to or from CR-LF
+  pairs is performed. This issue does not exist on Posix hosts,
+  only on MS-Windows and MS-DOS. The following function allows you
+  to control the I/O mode of any standard stream of the Emacs
+  process.</p>
 
+  <dl>
+    <dt><a name="index-set_002dbinary_002dmode" id=
+    "index-set_002dbinary_002dmode"></a>Function:
+    <strong>set-binary-mode</strong> <em>stream mode</em></dt>
 
+    <dd>
+      <p>Switch <var>stream</var> into binary or text I/O mode. If
+      <var>mode</var> is non-<code>nil</code>, switch to binary
+      mode, otherwise switch to text mode. The value of
+      <var>stream</var> can be one of <code>stdin</code>,
+      <code>stdout</code>, or <code>stderr</code>. This function
+      flushes any pending output data of <var>stream</var> as a
+      side effect, and returns the previous value of I/O mode for
+      <var>stream</var>. On Posix hosts, it always returns a
+      non-<code>nil</code> value and does nothing except flushing
+      pending output.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Output-Streams.html#Output-Streams"
+    accesskey="n" rel="next">Output Streams</a>, Previous: <a href=
+    "Input-Streams.html#Input-Streams" accesskey="p" rel=
+    "prev">Input Streams</a>, Up: <a href=
+    "Read-and-Print.html#Read-and-Print" accesskey="u" rel=
+    "up">Read and Print</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,13 +1,20 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Responses - Message Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Message Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Appendices.html#Appendices" title="Appendices">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Responses - Message Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Message Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Appendices.html#Appendices" title=
+  "Appendices" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Message, the Emacs message composition mode.
 
 Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
@@ -25,8 +32,10 @@ Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,60 +45,87 @@ Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Responses"></a>
-<p>
-Up:&nbsp;<a rel="up" accesskey="u" href="Appendices.html#Appendices">Appendices</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Responses" id="Responses"></a>
 
-<h3 class="section">5.1 Responses</h3>
+    <p>Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Appendices.html#Appendices">Appendices</a></p>
+    <hr />
+  </div>
 
-<p>To determine where a message is to go, the following algorithm is used
-by default.
+  <h3 class="section">5.1 Responses</h3>
 
-     <dl>
-<dt><dfn>reply</dfn><dd>A <dfn>reply</dfn> is when you want to respond <em>just</em> to the person who
-sent the message via mail.  There will only be one recipient.  To
-determine who the recipient will be, the following headers are
-consulted, in turn:
+  <p>To determine where a message is to go, the following algorithm
+  is used by default.</p>
 
-          <dl>
-<dt><code>Reply-To</code>
-<br><dt><code>From</code><dd></dl>
+  <dl>
+    <dt><dfn>reply</dfn></dt>
 
-     <br><dt><dfn>wide reply</dfn><dd>A <dfn>wide reply</dfn> is a mail response that includes <em>all</em> entities
-mentioned in the message you are responding to.  All mailboxes from the
-following headers will be concatenated to form the outgoing
-<code>To</code>/<code>Cc</code> headers:
+    <dd>
+      A <dfn>reply</dfn> is when you want to respond <em>just</em>
+      to the person who sent the message via mail. There will only
+      be one recipient. To determine who the recipient will be, the
+      following headers are consulted, in turn:
 
-          <dl>
-<dt><code>From</code><dd>(unless there's a <code>Reply-To</code>, in which case that is used instead).
+      <dl>
+        <dt><code>Reply-To</code><br /></dt>
 
-          <br><dt><code>Cc</code>
-<br><dt><code>To</code><dd></dl>
+        <dt><code>From</code></dt>
+      </dl><br />
+    </dd>
 
-     <p>If a <code>Mail-Copies-To</code> header is present, it will also be included
-in the list of mailboxes.  If this header is &lsquo;<samp><span class="samp">never</span></samp>&rsquo;, that means
-that the <code>From</code> (or <code>Reply-To</code>) mailbox will be suppressed.
+    <dt><dfn>wide reply</dfn></dt>
 
-     <br><dt><dfn>followup</dfn><dd>A <dfn>followup</dfn> is a response sent via news.  The following headers
-(listed in order of precedence) determine where the response is to be
-sent:
+    <dd>
+      A <dfn>wide reply</dfn> is a mail response that includes
+      <em>all</em> entities mentioned in the message you are
+      responding to. All mailboxes from the following headers will
+      be concatenated to form the outgoing
+      <code>To</code>/<code>Cc</code> headers:
 
-          <dl>
-<dt><code>Followup-To</code>
-<br><dt><code>Newsgroups</code><dd>
-</dl>
+      <dl>
+        <dt><code>From</code></dt>
 
-     <p>If a <code>Mail-Copies-To</code> header is present, it will be used as the
-basis of the new <code>Cc</code> header, except if this header is
-&lsquo;<samp><span class="samp">never</span></samp>&rsquo;.
+        <dd>(unless there's a <code>Reply-To</code>, in which case
+        that is used instead).<br /></dd>
 
-   </dl>
+        <dt><code>Cc</code><br /></dt>
 
-   </body></html>
+        <dt><code>To</code></dt>
+      </dl>
 
+      <p>If a <code>Mail-Copies-To</code> header is present, it
+      will also be included in the list of mailboxes. If this
+      header is &lsquo;<samp><span class=
+      "samp">never</span></samp>&rsquo;, that means that the
+      <code>From</code> (or <code>Reply-To</code>) mailbox will be
+      suppressed.<br /></p>
+    </dd>
+
+    <dt><dfn>followup</dfn></dt>
+
+    <dd>
+      A <dfn>followup</dfn> is a response sent via news. The
+      following headers (listed in order of precedence) determine
+      where the response is to be sent:
+
+      <dl>
+        <dt><code>Followup-To</code><br /></dt>
+
+        <dt><code>Newsgroups</code></dt>
+      </dl>
+
+      <p>If a <code>Mail-Copies-To</code> header is present, it
+      will be used as the basis of the new <code>Cc</code> header,
+      except if this header is &lsquo;<samp><span class=
+      "samp">never</span></samp>&rsquo;.</p>
+    </dd>
+  </dl>
+</body>
+</html>

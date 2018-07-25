@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,230 +19,366 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Char-Tables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Char-Tables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Char-Tables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up" title="Sequences Arrays Vectors">
-<link href="Bool_002dVectors.html#Bool_002dVectors" rel="next" title="Bool-Vectors">
-<link href="Vector-Functions.html#Vector-Functions" rel="prev" title="Vector Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Char-Tables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Char-Tables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Char-Tables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up"
+  title="Sequences Arrays Vectors" />
+  <link href="Bool_002dVectors.html#Bool_002dVectors" rel="next"
+  title="Bool-Vectors" />
+  <link href="Vector-Functions.html#Vector-Functions" rel="prev"
+  title="Vector Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Char_002dTables" id="Char_002dTables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Bool_002dVectors.html#Bool_002dVectors"
+    accesskey="n" rel="next">Bool-Vectors</a>, Previous: <a href=
+    "Vector-Functions.html#Vector-Functions" accesskey="p" rel=
+    "prev">Vector Functions</a>, Up: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Char_002dTables-1" id="Char_002dTables-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Char_002dTables"></a>
-<div class="header">
-<p>
-Next: <a href="Bool_002dVectors.html#Bool_002dVectors" accesskey="n" rel="next">Bool-Vectors</a>, Previous: <a href="Vector-Functions.html#Vector-Functions" accesskey="p" rel="prev">Vector Functions</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Char_002dTables-1"></a>
-<h3 class="section">6.6 Char-Tables</h3>
-<a name="index-char_002dtables"></a>
-<a name="index-extra-slots-of-char_002dtable"></a>
+  <h3 class="section">6.6 Char-Tables</h3><a name=
+  "index-char_002dtables" id="index-char_002dtables"></a> <a name=
+  "index-extra-slots-of-char_002dtable" id=
+  "index-extra-slots-of-char_002dtable"></a>
 
-<p>A char-table is much like a vector, except that it is indexed by
-character codes.  Any valid character code, without modifiers, can be
-used as an index in a char-table.  You can access a char-table&rsquo;s
-elements with <code>aref</code> and <code>aset</code>, as with any array.  In
-addition, a char-table can have <em>extra slots</em> to hold additional
-data not associated with particular character codes.  Like vectors,
-char-tables are constants when evaluated, and can hold elements of any
-type.
-</p>
-<a name="index-subtype-of-char_002dtable"></a>
-<p>Each char-table has a <em>subtype</em>, a symbol, which serves two
-purposes:
-</p>
-<ul>
-<li> The subtype provides an easy way to tell what the char-table is for.
-For instance, display tables are char-tables with <code>display-table</code>
-as the subtype, and syntax tables are char-tables with
-<code>syntax-table</code> as the subtype.  The subtype can be queried using
-the function <code>char-table-subtype</code>, described below.
+  <p>A char-table is much like a vector, except that it is indexed
+  by character codes. Any valid character code, without modifiers,
+  can be used as an index in a char-table. You can access a
+  char-table&rsquo;s elements with <code>aref</code> and
+  <code>aset</code>, as with any array. In addition, a char-table
+  can have <em>extra slots</em> to hold additional data not
+  associated with particular character codes. Like vectors,
+  char-tables are constants when evaluated, and can hold elements
+  of any type.</p><a name="index-subtype-of-char_002dtable" id=
+  "index-subtype-of-char_002dtable"></a>
 
-</li><li> The subtype controls the number of <em>extra slots</em> in the
-char-table.  This number is specified by the subtype&rsquo;s
-<code>char-table-extra-slots</code> symbol property (see <a href="Symbol-Properties.html#Symbol-Properties">Symbol Properties</a>), whose value should be an integer between 0 and 10.  If
-the subtype has no such symbol property, the char-table has no extra
-slots.
-</li></ul>
+  <p>Each char-table has a <em>subtype</em>, a symbol, which serves
+  two purposes:</p>
 
-<a name="index-parent-of-char_002dtable"></a>
-<p>A char-table can have a <em>parent</em>, which is another char-table.  If
-it does, then whenever the char-table specifies <code>nil</code> for a
-particular character <var>c</var>, it inherits the value specified in the
-parent.  In other words, <code>(aref <var>char-table</var> <var>c</var>)</code> returns
-the value from the parent of <var>char-table</var> if <var>char-table</var> itself
-specifies <code>nil</code>.
-</p>
-<a name="index-default-value-of-char_002dtable"></a>
-<p>A char-table can also have a <em>default value</em>.  If so, then
-<code>(aref <var>char-table</var> <var>c</var>)</code> returns the default value
-whenever the char-table does not specify any other non-<code>nil</code> value.
-</p>
-<dl>
-<dt><a name="index-make_002dchar_002dtable"></a>Function: <strong>make-char-table</strong> <em>subtype &amp;optional init</em></dt>
-<dd><p>Return a newly-created char-table, with subtype <var>subtype</var> (a
-symbol).  Each element is initialized to <var>init</var>, which defaults to
-<code>nil</code>.  You cannot alter the subtype of a char-table after the
-char-table is created.
-</p>
-<p>There is no argument to specify the length of the char-table, because
-all char-tables have room for any valid character code as an index.
-</p>
-<p>If <var>subtype</var> has the <code>char-table-extra-slots</code> symbol
-property, that specifies the number of extra slots in the char-table.
-This should be an integer between 0 and 10; otherwise,
-<code>make-char-table</code> raises an error.  If <var>subtype</var> has no
-<code>char-table-extra-slots</code> symbol property (see <a href="Property-Lists.html#Property-Lists">Property Lists</a>), the char-table has no extra slots.
-</p></dd></dl>
+  <ul>
+    <li>The subtype provides an easy way to tell what the
+    char-table is for. For instance, display tables are char-tables
+    with <code>display-table</code> as the subtype, and syntax
+    tables are char-tables with <code>syntax-table</code> as the
+    subtype. The subtype can be queried using the function
+    <code>char-table-subtype</code>, described below.</li>
 
-<dl>
-<dt><a name="index-char_002dtable_002dp"></a>Function: <strong>char-table-p</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a char-table, and
-<code>nil</code> otherwise.
-</p></dd></dl>
+    <li>The subtype controls the number of <em>extra slots</em> in
+    the char-table. This number is specified by the subtype&rsquo;s
+    <code>char-table-extra-slots</code> symbol property (see
+    <a href="Symbol-Properties.html#Symbol-Properties">Symbol
+    Properties</a>), whose value should be an integer between 0 and
+    10. If the subtype has no such symbol property, the char-table
+    has no extra slots.</li>
+  </ul><a name="index-parent-of-char_002dtable" id=
+  "index-parent-of-char_002dtable"></a>
 
-<dl>
-<dt><a name="index-char_002dtable_002dsubtype"></a>Function: <strong>char-table-subtype</strong> <em>char-table</em></dt>
-<dd><p>This function returns the subtype symbol of <var>char-table</var>.
-</p></dd></dl>
+  <p>A char-table can have a <em>parent</em>, which is another
+  char-table. If it does, then whenever the char-table specifies
+  <code>nil</code> for a particular character <var>c</var>, it
+  inherits the value specified in the parent. In other words,
+  <code>(aref <var>char-table</var> <var>c</var>)</code> returns
+  the value from the parent of <var>char-table</var> if
+  <var>char-table</var> itself specifies
+  <code>nil</code>.</p><a name=
+  "index-default-value-of-char_002dtable" id=
+  "index-default-value-of-char_002dtable"></a>
 
-<p>There is no special function to access default values in a char-table.
-To do that, use <code>char-table-range</code> (see below).
-</p>
-<dl>
-<dt><a name="index-char_002dtable_002dparent"></a>Function: <strong>char-table-parent</strong> <em>char-table</em></dt>
-<dd><p>This function returns the parent of <var>char-table</var>.  The parent is
-always either <code>nil</code> or another char-table.
-</p></dd></dl>
+  <p>A char-table can also have a <em>default value</em>. If so,
+  then <code>(aref <var>char-table</var> <var>c</var>)</code>
+  returns the default value whenever the char-table does not
+  specify any other non-<code>nil</code> value.</p>
 
-<dl>
-<dt><a name="index-set_002dchar_002dtable_002dparent"></a>Function: <strong>set-char-table-parent</strong> <em>char-table new-parent</em></dt>
-<dd><p>This function sets the parent of <var>char-table</var> to <var>new-parent</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dchar_002dtable" id=
+    "index-make_002dchar_002dtable"></a>Function:
+    <strong>make-char-table</strong> <em>subtype &amp;optional
+    init</em></dt>
 
-<dl>
-<dt><a name="index-char_002dtable_002dextra_002dslot"></a>Function: <strong>char-table-extra-slot</strong> <em>char-table n</em></dt>
-<dd><p>This function returns the contents of extra slot <var>n</var> (zero based)
-of <var>char-table</var>.  The number of extra slots in a char-table is
-determined by its subtype.
-</p></dd></dl>
+    <dd>
+      <p>Return a newly-created char-table, with subtype
+      <var>subtype</var> (a symbol). Each element is initialized to
+      <var>init</var>, which defaults to <code>nil</code>. You
+      cannot alter the subtype of a char-table after the char-table
+      is created.</p>
 
-<dl>
-<dt><a name="index-set_002dchar_002dtable_002dextra_002dslot"></a>Function: <strong>set-char-table-extra-slot</strong> <em>char-table n value</em></dt>
-<dd><p>This function stores <var>value</var> in extra slot <var>n</var> (zero based) of
-<var>char-table</var>.
-</p></dd></dl>
+      <p>There is no argument to specify the length of the
+      char-table, because all char-tables have room for any valid
+      character code as an index.</p>
 
-<p>A char-table can specify an element value for a single character code;
-it can also specify a value for an entire character set.
-</p>
-<dl>
-<dt><a name="index-char_002dtable_002drange"></a>Function: <strong>char-table-range</strong> <em>char-table range</em></dt>
-<dd><p>This returns the value specified in <var>char-table</var> for a range of
-characters <var>range</var>.  Here are the possibilities for <var>range</var>:
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>Refers to the default value.
-</p>
-</dd>
-<dt><var>char</var></dt>
-<dd><p>Refers to the element for character <var>char</var>
-(supposing <var>char</var> is a valid character code).
-</p>
-</dd>
-<dt><code>(<var>from</var> . <var>to</var>)</code></dt>
-<dd><p>A cons cell refers to all the characters in the inclusive range
-&lsquo;<samp>[<var>from</var>..<var>to</var>]</samp>&rsquo;.
-</p></dd>
-</dl>
-</dd></dl>
+      <p>If <var>subtype</var> has the
+      <code>char-table-extra-slots</code> symbol property, that
+      specifies the number of extra slots in the char-table. This
+      should be an integer between 0 and 10; otherwise,
+      <code>make-char-table</code> raises an error. If
+      <var>subtype</var> has no <code>char-table-extra-slots</code>
+      symbol property (see <a href=
+      "Property-Lists.html#Property-Lists">Property Lists</a>), the
+      char-table has no extra slots.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-set_002dchar_002dtable_002drange"></a>Function: <strong>set-char-table-range</strong> <em>char-table range value</em></dt>
-<dd><p>This function sets the value in <var>char-table</var> for a range of
-characters <var>range</var>.  Here are the possibilities for <var>range</var>:
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>Refers to the default value.
-</p>
-</dd>
-<dt><code>t</code></dt>
-<dd><p>Refers to the whole range of character codes.
-</p>
-</dd>
-<dt><var>char</var></dt>
-<dd><p>Refers to the element for character <var>char</var>
-(supposing <var>char</var> is a valid character code).
-</p>
-</dd>
-<dt><code>(<var>from</var> . <var>to</var>)</code></dt>
-<dd><p>A cons cell refers to all the characters in the inclusive range
-&lsquo;<samp>[<var>from</var>..<var>to</var>]</samp>&rsquo;.
-</p></dd>
-</dl>
-</dd></dl>
+  <dl>
+    <dt><a name="index-char_002dtable_002dp" id=
+    "index-char_002dtable_002dp"></a>Function:
+    <strong>char-table-p</strong> <em>object</em></dt>
 
-<dl>
-<dt><a name="index-map_002dchar_002dtable"></a>Function: <strong>map-char-table</strong> <em>function char-table</em></dt>
-<dd><p>This function calls its argument <var>function</var> for each element of
-<var>char-table</var> that has a non-<code>nil</code> value.  The call to
-<var>function</var> is with two arguments, a key and a value.  The key
-is a possible <var>range</var> argument for <code>char-table-range</code>&mdash;either
-a valid character or a cons cell <code>(<var>from</var> . <var>to</var>)</code>,
-specifying a range of characters that share the same value.  The value is
-what <code>(char-table-range <var>char-table</var> <var>key</var>)</code> returns.
-</p>
-<p>Overall, the key-value pairs passed to <var>function</var> describe all the
-values stored in <var>char-table</var>.
-</p>
-<p>The return value is always <code>nil</code>; to make calls to
-<code>map-char-table</code> useful, <var>function</var> should have side effects.
-For example, here is how to examine the elements of the syntax table:
-</p>
-<div class="example">
-<pre class="example">(let (accumulator)
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a char-table, and <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-char_002dtable_002dsubtype" id=
+    "index-char_002dtable_002dsubtype"></a>Function:
+    <strong>char-table-subtype</strong> <em>char-table</em></dt>
+
+    <dd>
+      <p>This function returns the subtype symbol of
+      <var>char-table</var>.</p>
+    </dd>
+  </dl>
+
+  <p>There is no special function to access default values in a
+  char-table. To do that, use <code>char-table-range</code> (see
+  below).</p>
+
+  <dl>
+    <dt><a name="index-char_002dtable_002dparent" id=
+    "index-char_002dtable_002dparent"></a>Function:
+    <strong>char-table-parent</strong> <em>char-table</em></dt>
+
+    <dd>
+      <p>This function returns the parent of <var>char-table</var>.
+      The parent is always either <code>nil</code> or another
+      char-table.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dchar_002dtable_002dparent" id=
+    "index-set_002dchar_002dtable_002dparent"></a>Function:
+    <strong>set-char-table-parent</strong> <em>char-table
+    new-parent</em></dt>
+
+    <dd>
+      <p>This function sets the parent of <var>char-table</var> to
+      <var>new-parent</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-char_002dtable_002dextra_002dslot" id=
+    "index-char_002dtable_002dextra_002dslot"></a>Function:
+    <strong>char-table-extra-slot</strong> <em>char-table
+    n</em></dt>
+
+    <dd>
+      <p>This function returns the contents of extra slot
+      <var>n</var> (zero based) of <var>char-table</var>. The
+      number of extra slots in a char-table is determined by its
+      subtype.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dchar_002dtable_002dextra_002dslot"
+    id=
+    "index-set_002dchar_002dtable_002dextra_002dslot"></a>Function:
+    <strong>set-char-table-extra-slot</strong> <em>char-table n
+    value</em></dt>
+
+    <dd>
+      <p>This function stores <var>value</var> in extra slot
+      <var>n</var> (zero based) of <var>char-table</var>.</p>
+    </dd>
+  </dl>
+
+  <p>A char-table can specify an element value for a single
+  character code; it can also specify a value for an entire
+  character set.</p>
+
+  <dl>
+    <dt><a name="index-char_002dtable_002drange" id=
+    "index-char_002dtable_002drange"></a>Function:
+    <strong>char-table-range</strong> <em>char-table
+    range</em></dt>
+
+    <dd>
+      <p>This returns the value specified in <var>char-table</var>
+      for a range of characters <var>range</var>. Here are the
+      possibilities for <var>range</var>:</p>
+
+      <dl compact="compact">
+        <dt><code>nil</code></dt>
+
+        <dd>
+          <p>Refers to the default value.</p>
+        </dd>
+
+        <dt><var>char</var></dt>
+
+        <dd>
+          <p>Refers to the element for character <var>char</var>
+          (supposing <var>char</var> is a valid character
+          code).</p>
+        </dd>
+
+        <dt><code>(<var>from</var> . <var>to</var>)</code></dt>
+
+        <dd>
+          <p>A cons cell refers to all the characters in the
+          inclusive range
+          &lsquo;<samp>[<var>from</var>..<var>to</var>]</samp>&rsquo;.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dchar_002dtable_002drange" id=
+    "index-set_002dchar_002dtable_002drange"></a>Function:
+    <strong>set-char-table-range</strong> <em>char-table range
+    value</em></dt>
+
+    <dd>
+      <p>This function sets the value in <var>char-table</var> for
+      a range of characters <var>range</var>. Here are the
+      possibilities for <var>range</var>:</p>
+
+      <dl compact="compact">
+        <dt><code>nil</code></dt>
+
+        <dd>
+          <p>Refers to the default value.</p>
+        </dd>
+
+        <dt><code>t</code></dt>
+
+        <dd>
+          <p>Refers to the whole range of character codes.</p>
+        </dd>
+
+        <dt><var>char</var></dt>
+
+        <dd>
+          <p>Refers to the element for character <var>char</var>
+          (supposing <var>char</var> is a valid character
+          code).</p>
+        </dd>
+
+        <dt><code>(<var>from</var> . <var>to</var>)</code></dt>
+
+        <dd>
+          <p>A cons cell refers to all the characters in the
+          inclusive range
+          &lsquo;<samp>[<var>from</var>..<var>to</var>]</samp>&rsquo;.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-map_002dchar_002dtable" id=
+    "index-map_002dchar_002dtable"></a>Function:
+    <strong>map-char-table</strong> <em>function
+    char-table</em></dt>
+
+    <dd>
+      <p>This function calls its argument <var>function</var> for
+      each element of <var>char-table</var> that has a
+      non-<code>nil</code> value. The call to <var>function</var>
+      is with two arguments, a key and a value. The key is a
+      possible <var>range</var> argument for
+      <code>char-table-range</code>&mdash;either a valid character
+      or a cons cell <code>(<var>from</var> .
+      <var>to</var>)</code>, specifying a range of characters that
+      share the same value. The value is what
+      <code>(char-table-range <var>char-table</var>
+      <var>key</var>)</code> returns.</p>
+
+      <p>Overall, the key-value pairs passed to <var>function</var>
+      describe all the values stored in <var>char-table</var>.</p>
+
+      <p>The return value is always <code>nil</code>; to make calls
+      to <code>map-char-table</code> useful, <var>function</var>
+      should have side effects. For example, here is how to examine
+      the elements of the syntax table:</p>
+
+      <div class="example">
+        <pre class="example">
+(let (accumulator)
    (map-char-table
     #'(lambda (key value)
         (setq accumulator
@@ -256,16 +394,22 @@ For example, here is how to examine the elements of the syntax table:
 (((2597602 4194303) (2)) ((2597523 2597601) (3))
  ... (65379 (5 . 65378)) (65378 (4 . 65379)) (65377 (1))
  ... (12 (0)) (11 (3)) (10 (12)) (9 (0)) ((0 8) (3)))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Bool_002dVectors.html#Bool_002dVectors" accesskey="n" rel="next">Bool-Vectors</a>, Previous: <a href="Vector-Functions.html#Vector-Functions" accesskey="p" rel="prev">Vector Functions</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Bool_002dVectors.html#Bool_002dVectors"
+    accesskey="n" rel="next">Bool-Vectors</a>, Previous: <a href=
+    "Vector-Functions.html#Vector-Functions" accesskey="p" rel=
+    "prev">Vector Functions</a>, Up: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

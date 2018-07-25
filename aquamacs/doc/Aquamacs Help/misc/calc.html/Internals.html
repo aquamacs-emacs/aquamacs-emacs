@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,116 +18,225 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Internals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Internals">
-<meta name="keywords" content="GNU Emacs Calc Manual: Internals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lisp-Definitions.html#Lisp-Definitions" rel="up" title="Lisp Definitions">
-<link href="Data-Type-Formats.html#Data-Type-Formats" rel="next" title="Data Type Formats">
-<link href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs" rel="prev" title="Calling Calc from Your Programs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Internals</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Internals" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Internals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lisp-Definitions.html#Lisp-Definitions" rel="up"
+  title="Lisp Definitions" />
+  <link href="Data-Type-Formats.html#Data-Type-Formats" rel="next"
+  title="Data Type Formats" />
+  <link href=
+  "Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs"
+  rel="prev" title="Calling Calc from Your Programs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Internals"></a>
-<div class="header">
-<p>
-Previous: <a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs" accesskey="p" rel="prev">Calling Calc from Your Programs</a>, Up: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel="up">Lisp Definitions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Calculator-Internals"></a>
-<h4 class="subsection">17.5.7 Calculator Internals</h4>
+<body lang="en" xml:lang="en">
+  <a name="Internals" id="Internals"></a>
 
-<p>This section describes the Lisp functions defined by the Calculator that
-may be of use to user-written Calculator programs (as described in the
-rest of this chapter).  These functions are shown by their names as they
-conventionally appear in <code>defmath</code>.  Their full Lisp names are
-generally gotten by prepending &lsquo;<samp>calcFunc-</samp>&rsquo; or &lsquo;<samp>math-</samp>&rsquo; to their
-apparent names.  (Names that begin with &lsquo;<samp>calc-</samp>&rsquo; are already in
-their full Lisp form.)  You can use the actual full names instead if you
-prefer them, or if you are calling these functions from regular Lisp.
-</p>
-<p>The functions described here are scattered throughout the various
-Calc component files.  Note that <samp>calc.el</samp> includes <code>autoload</code>s
-for only a few component files; when Calc wants to call an advanced
-function it calls &lsquo;<samp>(calc-extensions)</samp>&rsquo; first; this function
-autoloads <samp>calc-ext.el</samp>, which in turn autoloads all the functions
-in the remaining component files.
-</p>
-<p>Because <code>defmath</code> itself uses the extensions, user-written code
-generally always executes with the extensions already loaded, so
-normally you can use any Calc function and be confident that it will
-be autoloaded for you when necessary.  If you are doing something
-special, check carefully to make sure each function you are using is
-from <samp>calc.el</samp> or its components, and call &lsquo;<samp>(calc-extensions)</samp>&rsquo;
-before using any function based in <samp>calc-ext.el</samp> if you can&rsquo;t
-prove this file will already be loaded.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Data-Type-Formats.html#Data-Type-Formats" accesskey="1">Data Type Formats</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Interactive-Lisp-Functions.html#Interactive-Lisp-Functions" accesskey="2">Interactive Lisp Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Stack-Lisp-Functions.html#Stack-Lisp-Functions" accesskey="3">Stack Lisp Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Predicates.html#Predicates" accesskey="4">Predicates</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Computational-Lisp-Functions.html#Computational-Lisp-Functions" accesskey="5">Computational Lisp Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Vector-Lisp-Functions.html#Vector-Lisp-Functions" accesskey="6">Vector Lisp Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions" accesskey="7">Symbolic Lisp Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Formatting-Lisp-Functions.html#Formatting-Lisp-Functions" accesskey="8">Formatting Lisp Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Hooks.html#Hooks" accesskey="9">Hooks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Previous: <a href=
+    "Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs"
+    accesskey="p" rel="prev">Calling Calc from Your Programs</a>,
+    Up: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey=
+    "u" rel="up">Lisp Definitions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Calculator-Internals" id="Calculator-Internals"></a>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs" accesskey="p" rel="prev">Calling Calc from Your Programs</a>, Up: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel="up">Lisp Definitions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h4 class="subsection">17.5.7 Calculator Internals</h4>
 
+  <p>This section describes the Lisp functions defined by the
+  Calculator that may be of use to user-written Calculator programs
+  (as described in the rest of this chapter). These functions are
+  shown by their names as they conventionally appear in
+  <code>defmath</code>. Their full Lisp names are generally gotten
+  by prepending &lsquo;<samp>calcFunc-</samp>&rsquo; or
+  &lsquo;<samp>math-</samp>&rsquo; to their apparent names. (Names
+  that begin with &lsquo;<samp>calc-</samp>&rsquo; are already in
+  their full Lisp form.) You can use the actual full names instead
+  if you prefer them, or if you are calling these functions from
+  regular Lisp.</p>
 
+  <p>The functions described here are scattered throughout the
+  various Calc component files. Note that <samp>calc.el</samp>
+  includes <code>autoload</code>s for only a few component files;
+  when Calc wants to call an advanced function it calls
+  &lsquo;<samp>(calc-extensions)</samp>&rsquo; first; this function
+  autoloads <samp>calc-ext.el</samp>, which in turn autoloads all
+  the functions in the remaining component files.</p>
 
+  <p>Because <code>defmath</code> itself uses the extensions,
+  user-written code generally always executes with the extensions
+  already loaded, so normally you can use any Calc function and be
+  confident that it will be autoloaded for you when necessary. If
+  you are doing something special, check carefully to make sure
+  each function you are using is from <samp>calc.el</samp> or its
+  components, and call &lsquo;<samp>(calc-extensions)</samp>&rsquo;
+  before using any function based in <samp>calc-ext.el</samp> if
+  you can&rsquo;t prove this file will already be loaded.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Data-Type-Formats.html#Data-Type-Formats" accesskey="1">Data
+      Type Formats</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Interactive-Lisp-Functions.html#Interactive-Lisp-Functions"
+      accesskey="2">Interactive Lisp Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Stack-Lisp-Functions.html#Stack-Lisp-Functions" accesskey=
+      "3">Stack Lisp Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Predicates.html#Predicates" accesskey=
+      "4">Predicates</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Computational-Lisp-Functions.html#Computational-Lisp-Functions"
+      accesskey="5">Computational Lisp Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Vector-Lisp-Functions.html#Vector-Lisp-Functions" accesskey=
+      "6">Vector Lisp Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions"
+      accesskey="7">Symbolic Lisp Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Formatting-Lisp-Functions.html#Formatting-Lisp-Functions"
+      accesskey="8">Formatting Lisp Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Hooks.html#Hooks" accesskey="9">Hooks</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs"
+    accesskey="p" rel="prev">Calling Calc from Your Programs</a>,
+    Up: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey=
+    "u" rel="up">Lisp Definitions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

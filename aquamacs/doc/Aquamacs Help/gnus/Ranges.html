@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Ranges - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" title="Gnus Reference Guide">
-<link rel="prev" href="Headers.html#Headers" title="Headers">
-<link rel="next" href="Group-Info.html#Group-Info" title="Group Info">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Ranges - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Gnus-Reference-Guide.html#Gnus-Reference-Guide" title=
+  "Gnus Reference Guide" />
+  <link rel="prev" href="Headers.html#Headers" title="Headers" />
+  <link rel="next" href="Group-Info.html#Group-Info" title=
+  "Group Info" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +35,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,79 +48,97 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Ranges"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Group-Info.html#Group-Info">Group Info</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Headers.html#Headers">Headers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference Guide</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Ranges" id="Ranges"></a>
 
-<h4 class="subsection">11.7.5 Ranges</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Group-Info.html#Group-Info">Group Info</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Headers.html#Headers">Headers</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference
+    Guide</a></p>
+    <hr />
+  </div>
 
-<p><span class="sc">gnus</span> introduced a concept that I found so useful that I've started
-using it a lot and have elaborated on it greatly.
+  <h4 class="subsection">11.7.5 Ranges</h4>
 
-   <p>The question is simple: If you have a large amount of objects that are
-identified by numbers (say, articles, to take a <em>wild</em> example)
-that you want to qualify as being &ldquo;included&rdquo;, a normal sequence isn't
-very useful.  (A 200,000 length sequence is a bit long-winded.)
+  <p><span class="sc">gnus</span> introduced a concept that I found
+  so useful that I've started using it a lot and have elaborated on
+  it greatly.</p>
 
-   <p>The solution is as simple as the question: You just collapse the
-sequence.
+  <p>The question is simple: If you have a large amount of objects
+  that are identified by numbers (say, articles, to take a
+  <em>wild</em> example) that you want to qualify as being
+  &ldquo;included&rdquo;, a normal sequence isn't very useful. (A
+  200,000 length sequence is a bit long-winded.)</p>
 
-<pre class="example">     (1 2 3 4 5 6 10 11 12)
+  <p>The solution is as simple as the question: You just collapse
+  the sequence.</p>
+  <pre class="example">
+     (1 2 3 4 5 6 10 11 12)
 </pre>
-   <p>is transformed into
 
-<pre class="example">     ((1 . 6) (10 . 12))
+  <p>is transformed into</p>
+  <pre class="example">
+     ((1 . 6) (10 . 12))
 </pre>
-   <p>To avoid having those nasty &lsquo;<samp><span class="samp">(13 . 13)</span></samp>&rsquo; elements to denote a
-lonesome object, a &lsquo;<samp><span class="samp">13</span></samp>&rsquo; is a valid element:
 
-<pre class="example">     ((1 . 6) 7 (10 . 12))
+  <p>To avoid having those nasty &lsquo;<samp><span class=
+  "samp">(13 . 13)</span></samp>&rsquo; elements to denote a
+  lonesome object, a &lsquo;<samp><span class=
+  "samp">13</span></samp>&rsquo; is a valid element:</p>
+  <pre class="example">
+     ((1 . 6) 7 (10 . 12))
 </pre>
-   <p>This means that comparing two ranges to find out whether they are equal
-is slightly tricky:
 
-<pre class="example">     ((1 . 5) 7 8 (10 . 12))
+  <p>This means that comparing two ranges to find out whether they
+  are equal is slightly tricky:</p>
+  <pre class="example">
+     ((1 . 5) 7 8 (10 . 12))
 </pre>
-   <p>and
 
-<pre class="example">     ((1 . 5) (7 . 8) (10 . 12))
+  <p>and</p>
+  <pre class="example">
+     ((1 . 5) (7 . 8) (10 . 12))
 </pre>
-   <p>are equal.  In fact, any non-descending list is a range:
 
-<pre class="example">     (1 2 3 4 5)
+  <p>are equal. In fact, any non-descending list is a range:</p>
+  <pre class="example">
+     (1 2 3 4 5)
 </pre>
-   <p>is a perfectly valid range, although a pretty long-winded one.  This is
-also valid:
 
-<pre class="example">     (1 . 5)
+  <p>is a perfectly valid range, although a pretty long-winded one.
+  This is also valid:</p>
+  <pre class="example">
+     (1 . 5)
 </pre>
-   <p>and is equal to the previous range.
 
-   <p>Here's a BNF definition of ranges.  Of course, one must remember the
-semantic requirement that the numbers are non-descending.  (Any number
-of repetition of the same number is allowed, but apt to disappear in
-range handling.)
+  <p>and is equal to the previous range.</p>
 
-<pre class="example">     range           = simple-range / normal-range
+  <p>Here's a BNF definition of ranges. Of course, one must
+  remember the semantic requirement that the numbers are
+  non-descending. (Any number of repetition of the same number is
+  allowed, but apt to disappear in range handling.)</p>
+  <pre class="example">
+     range           = simple-range / normal-range
      simple-range    = "(" number " . " number ")"
      normal-range    = "(" start-contents ")"
      contents        = "" / simple-range *[ " " contents ] /
                        number *[ " " contents ]
 </pre>
-   <p>Gnus currently uses ranges to keep track of read articles and article
-marks.  I plan on implementing a number of range operators in C if The
-Powers That Be are willing to let me.  (I haven't asked yet, because I
-need to do some more thinking on what operators I need to make life
-totally range-based without ever having to convert back to normal
-sequences.)
 
-   </body></html>
-
+  <p>Gnus currently uses ranges to keep track of read articles and
+  article marks. I plan on implementing a number of range operators
+  in C if The Powers That Be are willing to let me. (I haven't
+  asked yet, because I need to do some more thinking on what
+  operators I need to make life totally range-based without ever
+  having to convert back to normal sequences.)</p>
+</body>
+</html>

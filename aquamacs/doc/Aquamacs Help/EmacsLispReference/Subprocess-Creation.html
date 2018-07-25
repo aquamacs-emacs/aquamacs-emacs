@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,174 +19,252 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Subprocess Creation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Subprocess Creation">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Subprocess Creation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Processes.html#Processes" rel="up" title="Processes">
-<link href="Shell-Arguments.html#Shell-Arguments" rel="next" title="Shell Arguments">
-<link href="Processes.html#Processes" rel="prev" title="Processes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Subprocess
+  Creation</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Subprocess Creation" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Subprocess Creation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Processes.html#Processes" rel="up" title=
+  "Processes" />
+  <link href="Shell-Arguments.html#Shell-Arguments" rel="next"
+  title="Shell Arguments" />
+  <link href="Processes.html#Processes" rel="prev" title=
+  "Processes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Subprocess-Creation" id="Subprocess-Creation"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Shell-Arguments.html#Shell-Arguments"
+    accesskey="n" rel="next">Shell Arguments</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Functions-that-Create-Subprocesses" id=
+  "Functions-that-Create-Subprocesses"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Subprocess-Creation"></a>
-<div class="header">
-<p>
-Next: <a href="Shell-Arguments.html#Shell-Arguments" accesskey="n" rel="next">Shell Arguments</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Functions-that-Create-Subprocesses"></a>
-<h3 class="section">36.1 Functions that Create Subprocesses</h3>
-<a name="index-create-subprocess"></a>
-<a name="index-process-creation"></a>
+  <h3 class="section">36.1 Functions that Create
+  Subprocesses</h3><a name="index-create-subprocess" id=
+  "index-create-subprocess"></a> <a name="index-process-creation"
+  id="index-process-creation"></a>
 
-<p>There are three primitives that create a new subprocess in which to run
-a program.  One of them, <code>make-process</code>, creates an asynchronous
-process and returns a process object (see <a href="Asynchronous-Processes.html#Asynchronous-Processes">Asynchronous Processes</a>).
-The other two, <code>call-process</code> and <code>call-process-region</code>,
-create a synchronous process and do not return a process object
-(see <a href="Synchronous-Processes.html#Synchronous-Processes">Synchronous Processes</a>).  There are various higher-level
-functions that make use of these primitives to run particular types of
-process.
-</p>
-<p>Synchronous and asynchronous processes are explained in the following
-sections.  Since the three functions are all called in a similar
-fashion, their common arguments are described here.
-</p>
-<a name="index-execute-program"></a>
-<a name="index-PATH-environment-variable"></a>
-<a name="index-HOME-environment-variable"></a>
-<p>In all cases, the functions specify the program to be run.  An error
-is signaled if the file is not found or cannot be executed.  If the
-file name is relative, the variable <code>exec-path</code> contains a list
-of directories to search.  Emacs initializes <code>exec-path</code> when it
-starts up, based on the value of the environment variable <code>PATH</code>.
-The standard file name constructs, &lsquo;<samp>~</samp>&rsquo;, &lsquo;<samp>.</samp>&rsquo;, and &lsquo;<samp>..</samp>&rsquo;,
-are interpreted as usual in <code>exec-path</code>, but environment variable
-substitutions (&lsquo;<samp>$HOME</samp>&rsquo;, etc.) are not recognized; use
-<code>substitute-in-file-name</code> to perform them (see <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>).  <code>nil</code> in this list refers to
-<code>default-directory</code>.
-</p>
-<p>Executing a program can also try adding suffixes to the specified
-name:
-</p>
-<dl>
-<dt><a name="index-exec_002dsuffixes"></a>User Option: <strong>exec-suffixes</strong></dt>
-<dd><p>This variable is a list of suffixes (strings) to try adding to the
-specified program file name.  The list should include <code>&quot;&quot;</code> if you
-want the name to be tried exactly as specified.  The default value is
-system-dependent.
-</p></dd></dl>
+  <p>There are three primitives that create a new subprocess in
+  which to run a program. One of them, <code>make-process</code>,
+  creates an asynchronous process and returns a process object (see
+  <a href=
+  "Asynchronous-Processes.html#Asynchronous-Processes">Asynchronous
+  Processes</a>). The other two, <code>call-process</code> and
+  <code>call-process-region</code>, create a synchronous process
+  and do not return a process object (see <a href=
+  "Synchronous-Processes.html#Synchronous-Processes">Synchronous
+  Processes</a>). There are various higher-level functions that
+  make use of these primitives to run particular types of
+  process.</p>
 
-<p><strong>Please note:</strong> The argument <var>program</var> contains only the
-name of the program file; it may not contain any command-line
-arguments.  You must use a separate argument, <var>args</var>, to provide
-those, as described below.
-</p>
-<p>Each of the subprocess-creating functions has a <var>buffer-or-name</var>
-argument that specifies where the output from the program will go.  It
-should be a buffer or a buffer name; if it is a buffer name, that will
-create the buffer if it does not already exist.  It can also be
-<code>nil</code>, which says to discard the output, unless a custom filter
-function handles it.  (See <a href="Filter-Functions.html#Filter-Functions">Filter Functions</a>, and <a href="Read-and-Print.html#Read-and-Print">Read and Print</a>.)  Normally, you should avoid having multiple processes send
-output to the same buffer because their output would be intermixed
-randomly.  For synchronous processes, you can send the output to a
-file instead of a buffer (and the corresponding argument is therefore
-more appropriately called <var>destination</var>).  By default, both
-standard output and standard error streams go to the same destination,
-but all the 3 primitives allow optionally to direct the standard error
-stream to a different destination.
-</p>
-<a name="index-program-arguments"></a>
-<p>All three of the subprocess-creating functions allow to specify
-command-line arguments for the process to run. For <code>call-process</code>
-and <code>call-process-region</code>, these come in the form of a
-<code>&amp;rest</code> argument, <var>args</var>.  For <code>make-process</code>, both the
-program to run and its command-line arguments are specified as a list
-of strings.  The command-line arguments must all be strings, and they
-are supplied to the program as separate argument strings.  Wildcard
-characters and other shell constructs have no special meanings in
-these strings, since the strings are passed directly to the specified
-program.
-</p>
-<a name="index-environment-variables_002c-subprocesses"></a>
-<p>The subprocess inherits its environment from Emacs, but you can
-specify overrides for it with <code>process-environment</code>.  See <a href="System-Environment.html#System-Environment">System Environment</a>.  The subprocess gets its current directory from the
-value of <code>default-directory</code>.
-</p>
-<dl>
-<dt><a name="index-exec_002ddirectory"></a>Variable: <strong>exec-directory</strong></dt>
-<dd><a name="index-movemail"></a>
-<p>The value of this variable is a string, the name of a directory that
-contains programs that come with GNU Emacs and are intended for Emacs
-to invoke.  The program <code>movemail</code> is an example of such a program;
-Rmail uses it to fetch new mail from an inbox.
-</p></dd></dl>
+  <p>Synchronous and asynchronous processes are explained in the
+  following sections. Since the three functions are all called in a
+  similar fashion, their common arguments are described
+  here.</p><a name="index-execute-program" id=
+  "index-execute-program"></a> <a name=
+  "index-PATH-environment-variable" id=
+  "index-PATH-environment-variable"></a> <a name=
+  "index-HOME-environment-variable" id=
+  "index-HOME-environment-variable"></a>
 
-<dl>
-<dt><a name="index-exec_002dpath"></a>User Option: <strong>exec-path</strong></dt>
-<dd><p>The value of this variable is a list of directories to search for
-programs to run in subprocesses.  Each element is either the name of a
-directory (i.e., a string), or <code>nil</code>, which stands for the default
-directory (which is the value of <code>default-directory</code>).
-See <a href="Locating-Files.html#Locating-Files">executable-find</a>, for the details of this search.
-<a name="index-program-directories"></a>
-</p>
-<p>The value of <code>exec-path</code> is used by <code>call-process</code> and
-<code>start-process</code> when the <var>program</var> argument is not an absolute
-file name.
-</p>
-<p>Generally, you should not modify <code>exec-path</code> directly.  Instead,
-ensure that your <code>PATH</code> environment variable is set appropriately
-before starting Emacs.  Trying to modify <code>exec-path</code>
-independently of <code>PATH</code> can lead to confusing results.
-</p></dd></dl>
+  <p>In all cases, the functions specify the program to be run. An
+  error is signaled if the file is not found or cannot be executed.
+  If the file name is relative, the variable <code>exec-path</code>
+  contains a list of directories to search. Emacs initializes
+  <code>exec-path</code> when it starts up, based on the value of
+  the environment variable <code>PATH</code>. The standard file
+  name constructs, &lsquo;<samp>~</samp>&rsquo;,
+  &lsquo;<samp>.</samp>&rsquo;, and &lsquo;<samp>..</samp>&rsquo;,
+  are interpreted as usual in <code>exec-path</code>, but
+  environment variable substitutions
+  (&lsquo;<samp>$HOME</samp>&rsquo;, etc.) are not recognized; use
+  <code>substitute-in-file-name</code> to perform them (see
+  <a href="File-Name-Expansion.html#File-Name-Expansion">File Name
+  Expansion</a>). <code>nil</code> in this list refers to
+  <code>default-directory</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Shell-Arguments.html#Shell-Arguments" accesskey="n" rel="next">Shell Arguments</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Executing a program can also try adding suffixes to the
+  specified name:</p>
 
+  <dl>
+    <dt><a name="index-exec_002dsuffixes" id=
+    "index-exec_002dsuffixes"></a>User Option:
+    <strong>exec-suffixes</strong></dt>
 
+    <dd>
+      <p>This variable is a list of suffixes (strings) to try
+      adding to the specified program file name. The list should
+      include <code>""</code> if you want the name to be tried
+      exactly as specified. The default value is
+      system-dependent.</p>
+    </dd>
+  </dl>
 
+  <p><strong>Please note:</strong> The argument <var>program</var>
+  contains only the name of the program file; it may not contain
+  any command-line arguments. You must use a separate argument,
+  <var>args</var>, to provide those, as described below.</p>
+
+  <p>Each of the subprocess-creating functions has a
+  <var>buffer-or-name</var> argument that specifies where the
+  output from the program will go. It should be a buffer or a
+  buffer name; if it is a buffer name, that will create the buffer
+  if it does not already exist. It can also be <code>nil</code>,
+  which says to discard the output, unless a custom filter function
+  handles it. (See <a href=
+  "Filter-Functions.html#Filter-Functions">Filter Functions</a>,
+  and <a href="Read-and-Print.html#Read-and-Print">Read and
+  Print</a>.) Normally, you should avoid having multiple processes
+  send output to the same buffer because their output would be
+  intermixed randomly. For synchronous processes, you can send the
+  output to a file instead of a buffer (and the corresponding
+  argument is therefore more appropriately called
+  <var>destination</var>). By default, both standard output and
+  standard error streams go to the same destination, but all the 3
+  primitives allow optionally to direct the standard error stream
+  to a different destination.</p><a name="index-program-arguments"
+  id="index-program-arguments"></a>
+
+  <p>All three of the subprocess-creating functions allow to
+  specify command-line arguments for the process to run. For
+  <code>call-process</code> and <code>call-process-region</code>,
+  these come in the form of a <code>&amp;rest</code> argument,
+  <var>args</var>. For <code>make-process</code>, both the program
+  to run and its command-line arguments are specified as a list of
+  strings. The command-line arguments must all be strings, and they
+  are supplied to the program as separate argument strings.
+  Wildcard characters and other shell constructs have no special
+  meanings in these strings, since the strings are passed directly
+  to the specified program.</p><a name=
+  "index-environment-variables_002c-subprocesses" id=
+  "index-environment-variables_002c-subprocesses"></a>
+
+  <p>The subprocess inherits its environment from Emacs, but you
+  can specify overrides for it with
+  <code>process-environment</code>. See <a href=
+  "System-Environment.html#System-Environment">System
+  Environment</a>. The subprocess gets its current directory from
+  the value of <code>default-directory</code>.</p>
+
+  <dl>
+    <dt><a name="index-exec_002ddirectory" id=
+    "index-exec_002ddirectory"></a>Variable:
+    <strong>exec-directory</strong></dt>
+
+    <dd>
+      <a name="index-movemail" id="index-movemail"></a>
+
+      <p>The value of this variable is a string, the name of a
+      directory that contains programs that come with GNU Emacs and
+      are intended for Emacs to invoke. The program
+      <code>movemail</code> is an example of such a program; Rmail
+      uses it to fetch new mail from an inbox.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-exec_002dpath" id=
+    "index-exec_002dpath"></a>User Option:
+    <strong>exec-path</strong></dt>
+
+    <dd>
+      <p>The value of this variable is a list of directories to
+      search for programs to run in subprocesses. Each element is
+      either the name of a directory (i.e., a string), or
+      <code>nil</code>, which stands for the default directory
+      (which is the value of <code>default-directory</code>). See
+      <a href=
+      "Locating-Files.html#Locating-Files">executable-find</a>, for
+      the details of this search. <a name=
+      "index-program-directories" id=
+      "index-program-directories"></a></p>
+
+      <p>The value of <code>exec-path</code> is used by
+      <code>call-process</code> and <code>start-process</code> when
+      the <var>program</var> argument is not an absolute file
+      name.</p>
+
+      <p>Generally, you should not modify <code>exec-path</code>
+      directly. Instead, ensure that your <code>PATH</code>
+      environment variable is set appropriately before starting
+      Emacs. Trying to modify <code>exec-path</code> independently
+      of <code>PATH</code> can lead to confusing results.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Shell-Arguments.html#Shell-Arguments"
+    accesskey="n" rel="next">Shell Arguments</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

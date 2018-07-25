@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,90 +19,120 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Special Events</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Special Events">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Special Events">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Waiting.html#Waiting" rel="next" title="Waiting">
-<link href="Event-Input-Misc.html#Event-Input-Misc" rel="prev" title="Event Input Misc">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Special Events</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Special Events" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Special Events" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Waiting.html#Waiting" rel="next" title="Waiting" />
+  <link href="Event-Input-Misc.html#Event-Input-Misc" rel="prev"
+  title="Event Input Misc" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Special-Events" id="Special-Events"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Waiting.html#Waiting" accesskey="n" rel=
+    "next">Waiting</a>, Previous: <a href=
+    "Reading-Input.html#Reading-Input" accesskey="p" rel=
+    "prev">Reading Input</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Special-Events-1" id="Special-Events-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Special-Events"></a>
-<div class="header">
-<p>
-Next: <a href="Waiting.html#Waiting" accesskey="n" rel="next">Waiting</a>, Previous: <a href="Reading-Input.html#Reading-Input" accesskey="p" rel="prev">Reading Input</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Special-Events-1"></a>
-<h3 class="section">20.9 Special Events</h3>
+  <h3 class="section">20.9 Special Events</h3><a name=
+  "index-special-events" id="index-special-events"></a>
 
-<a name="index-special-events"></a>
-<p>Certain <em>special events</em> are handled at a very low level&mdash;as soon
-as they are read.  The <code>read-event</code> function processes these
-events itself, and never returns them.  Instead, it keeps waiting for
-the first event that is not special and returns that one.
-</p>
-<p>Special events do not echo, they are never grouped into key
-sequences, and they never appear in the value of
-<code>last-command-event</code> or <code>(this-command-keys)</code>.  They do not
-discard a numeric argument, they cannot be unread with
-<code>unread-command-events</code>, they may not appear in a keyboard macro,
-and they are not recorded in a keyboard macro while you are defining
-one.
-</p>
-<p>Special events do, however, appear in <code>last-input-event</code>
-immediately after they are read, and this is the way for the event&rsquo;s
-definition to find the actual event.
-</p>
-<p>The events types <code>iconify-frame</code>, <code>make-frame-visible</code>,
-<code>delete-frame</code>, <code>drag-n-drop</code>, <code>language-change</code>, and
-user signals like <code>sigusr1</code> are normally handled in this way.
-The keymap which defines how to handle special events&mdash;and which
-events are special&mdash;is in the variable <code>special-event-map</code>
-(see <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>).
-</p>
+  <p>Certain <em>special events</em> are handled at a very low
+  level&mdash;as soon as they are read. The <code>read-event</code>
+  function processes these events itself, and never returns them.
+  Instead, it keeps waiting for the first event that is not special
+  and returns that one.</p>
 
+  <p>Special events do not echo, they are never grouped into key
+  sequences, and they never appear in the value of
+  <code>last-command-event</code> or
+  <code>(this-command-keys)</code>. They do not discard a numeric
+  argument, they cannot be unread with
+  <code>unread-command-events</code>, they may not appear in a
+  keyboard macro, and they are not recorded in a keyboard macro
+  while you are defining one.</p>
 
+  <p>Special events do, however, appear in
+  <code>last-input-event</code> immediately after they are read,
+  and this is the way for the event&rsquo;s definition to find the
+  actual event.</p>
 
+  <p>The events types <code>iconify-frame</code>,
+  <code>make-frame-visible</code>, <code>delete-frame</code>,
+  <code>drag-n-drop</code>, <code>language-change</code>, and user
+  signals like <code>sigusr1</code> are normally handled in this
+  way. The keymap which defines how to handle special
+  events&mdash;and which events are special&mdash;is in the
+  variable <code>special-event-map</code> (see <a href=
+  "Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>).</p>
 </body>
 </html>

@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Commands Sent to the Shell - IDLWAVE User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="IDLWAVE User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" title="The IDLWAVE Shell">
-<link rel="prev" href="Using-the-Shell.html#Using-the-Shell" title="Using the Shell">
-<link rel="next" href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" title="Debugging IDL Programs">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Commands Sent to the Shell - IDLWAVE User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="IDLWAVE User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell"
+  title="The IDLWAVE Shell" />
+  <link rel="prev" href="Using-the-Shell.html#Using-the-Shell"
+  title="Using the Shell" />
+  <link rel="next" href=
+  "Debugging-IDL-Programs.html#Debugging-IDL-Programs" title=
+  "Debugging IDL Programs" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -31,8 +41,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,55 +54,84 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Commands-Sent-to-the-Shell"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging IDL Programs</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Commands-Sent-to-the-Shell" id=
+    "Commands-Sent-to-the-Shell"></a>
 
-<h3 class="section">5.3 Commands Sent to the Shell</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging
+    IDL Programs</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href="Using-the-Shell.html#Using-the-Shell">Using the
+    Shell</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE
+    Shell</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Commands-in-shell_002c-showing-280"></a><a name="index-Showing-commands-in-shell-281"></a>
-The IDLWAVE buffers and shell interact very closely.  In addition to the
-normal commands you enter at the <code>IDL&gt;</code> prompt, many other special
-commands are sent to the shell, sometimes as a direct result of invoking
-a key command, menu item, or toolbar button, but also automatically, as
-part of the normal flow of information updates between the buffer and
-shell.
+  <h3 class="section">5.3 Commands Sent to the Shell</h3>
 
-   <p>The commands sent include <code>breakpoint</code>, <code>.step</code> and other
-debug commands (see <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging IDL Programs</a>), <code>.run</code> and other
-compilation statements (see <a href="Compiling-Programs.html#Compiling-Programs">Compiling Programs</a>), examination
-commands like <code>print</code> and <code>help</code> (see <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a>), and other special purpose commands designed to keep
-information on the running shell current.
+  <p><a name="index-Commands-in-shell_002c-showing-280" id=
+  "index-Commands-in-shell_002c-showing-280"></a><a name=
+  "index-Showing-commands-in-shell-281" id=
+  "index-Showing-commands-in-shell-281"></a> The IDLWAVE buffers
+  and shell interact very closely. In addition to the normal
+  commands you enter at the <code>IDL&gt;</code> prompt, many other
+  special commands are sent to the shell, sometimes as a direct
+  result of invoking a key command, menu item, or toolbar button,
+  but also automatically, as part of the normal flow of information
+  updates between the buffer and shell.</p>
 
-   <p>By default, much of this background shell input and output is hidden
-from the user, but this is configurable.  The custom variable
-<code>idlwave-abbrev-show-commands</code> allows you to configure which
-commands sent to the shell are shown there.  For a related customization
-for separating the output of <em>examine</em> commands, see <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a>.
+  <p>The commands sent include <code>breakpoint</code>,
+  <code>.step</code> and other debug commands (see <a href=
+  "Debugging-IDL-Programs.html#Debugging-IDL-Programs">Debugging
+  IDL Programs</a>), <code>.run</code> and other compilation
+  statements (see <a href=
+  "Compiling-Programs.html#Compiling-Programs">Compiling
+  Programs</a>), examination commands like <code>print</code> and
+  <code>help</code> (see <a href=
+  "Examining-Variables.html#Examining-Variables">Examining
+  Variables</a>), and other special purpose commands designed to
+  keep information on the running shell current.</p>
 
-<div class="defun">
-&mdash; User Option: <b>idlwave-shell-show-commands</b> (<code>'(run misc breakpoint)</code>)<var><a name="index-idlwave_002dshell_002dshow_002dcommands-282"></a></var><br>
-<blockquote><p>A list of command types to echo in the shell when sent.  Possible values
-are <code>run</code> for <code>.run</code>, <code>.compile</code> and other run commands,
-<code>misc</code> for lesser used commands like <code>window</code>,
-<code>retall</code>,<code>close</code>, etc., <code>breakpoint</code> for breakpoint
-setting and clearing commands, and <code>debug</code> for other debug,
-stepping, and continue commands.  In addition, if the variable is set to
-the single symbol <code>'everything</code>, all the copious shell input is
-displayed (which is probably only useful for debugging purposes). 
-N.B. For hidden commands which produce output by side-effect, that
-output remains hidden (e.g., stepping through a <code>print</code> command). 
-As a special case, any error message in the output will be displayed
-(e.g., stepping to an error). 
-</p></blockquote></div>
+  <p>By default, much of this background shell input and output is
+  hidden from the user, but this is configurable. The custom
+  variable <code>idlwave-abbrev-show-commands</code> allows you to
+  configure which commands sent to the shell are shown there. For a
+  related customization for separating the output of
+  <em>examine</em> commands, see <a href=
+  "Examining-Variables.html#Examining-Variables">Examining
+  Variables</a>.</p>
 
-   </body></html>
+  <div class="defun">
+    &mdash; User Option: <b>idlwave-shell-show-commands</b>
+    (<code>'(run misc breakpoint)</code>)<var><a name=
+    "index-idlwave_002dshell_002dshow_002dcommands-282" id=
+    "index-idlwave_002dshell_002dshow_002dcommands-282"></a></var><br />
 
+
+    <blockquote>
+      <p>A list of command types to echo in the shell when sent.
+      Possible values are <code>run</code> for <code>.run</code>,
+      <code>.compile</code> and other run commands,
+      <code>misc</code> for lesser used commands like
+      <code>window</code>, <code>retall</code>,<code>close</code>,
+      etc., <code>breakpoint</code> for breakpoint setting and
+      clearing commands, and <code>debug</code> for other debug,
+      stepping, and continue commands. In addition, if the variable
+      is set to the single symbol <code>'everything</code>, all the
+      copious shell input is displayed (which is probably only
+      useful for debugging purposes). N.B. For hidden commands
+      which produce output by side-effect, that output remains
+      hidden (e.g., stepping through a <code>print</code> command).
+      As a special case, any error message in the output will be
+      displayed (e.g., stepping to an error).</p>
+    </blockquote>
+  </div>
+</body>
+</html>

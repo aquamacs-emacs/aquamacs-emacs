@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,199 +19,292 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Defining Images</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Defining Images">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Defining Images">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Images.html#Images" rel="up" title="Images">
-<link href="Showing-Images.html#Showing-Images" rel="next" title="Showing Images">
-<link href="Other-Image-Types.html#Other-Image-Types" rel="prev" title="Other Image Types">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Defining Images</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Defining Images" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Defining Images" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Images.html#Images" rel="up" title="Images" />
+  <link href="Showing-Images.html#Showing-Images" rel="next" title=
+  "Showing Images" />
+  <link href="Other-Image-Types.html#Other-Image-Types" rel="prev"
+  title="Other Image Types" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Defining-Images" id="Defining-Images"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Showing-Images.html#Showing-Images"
+    accesskey="n" rel="next">Showing Images</a>, Previous: <a href=
+    "Other-Image-Types.html#Other-Image-Types" accesskey="p" rel=
+    "prev">Other Image Types</a>, Up: <a href="Images.html#Images"
+    accesskey="u" rel="up">Images</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Images-1" id="Defining-Images-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Images"></a>
-<div class="header">
-<p>
-Next: <a href="Showing-Images.html#Showing-Images" accesskey="n" rel="next">Showing Images</a>, Previous: <a href="Other-Image-Types.html#Other-Image-Types" accesskey="p" rel="prev">Other Image Types</a>, Up: <a href="Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Images-1"></a>
-<h4 class="subsection">37.17.8 Defining Images</h4>
-<a name="index-define-image"></a>
+  <h4 class="subsection">37.17.8 Defining Images</h4><a name=
+  "index-define-image" id="index-define-image"></a>
 
-<p>The functions <code>create-image</code>, <code>defimage</code> and
-<code>find-image</code> provide convenient ways to create image descriptors.
-</p>
-<dl>
-<dt><a name="index-create_002dimage"></a>Function: <strong>create-image</strong> <em>file-or-data &amp;optional type data-p &amp;rest props</em></dt>
-<dd><p>This function creates and returns an image descriptor which uses the
-data in <var>file-or-data</var>.  <var>file-or-data</var> can be a file name or
-a string containing the image data; <var>data-p</var> should be <code>nil</code>
-for the former case, non-<code>nil</code> for the latter case.
-</p>
-<p>The optional argument <var>type</var> is a symbol specifying the image type.
-If <var>type</var> is omitted or <code>nil</code>, <code>create-image</code> tries to
-determine the image type from the file&rsquo;s first few bytes, or else
-from the file&rsquo;s name.
-</p>
-<p>The remaining arguments, <var>props</var>, specify additional image
-properties&mdash;for example,
-</p>
-<div class="example">
-<pre class="example">(create-image &quot;foo.xpm&quot; 'xpm nil :heuristic-mask t)
-</pre></div>
+  <p>The functions <code>create-image</code>, <code>defimage</code>
+  and <code>find-image</code> provide convenient ways to create
+  image descriptors.</p>
 
-<p>The function returns <code>nil</code> if images of this type are not
-supported.  Otherwise it returns an image descriptor.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-create_002dimage" id=
+    "index-create_002dimage"></a>Function:
+    <strong>create-image</strong> <em>file-or-data &amp;optional
+    type data-p &amp;rest props</em></dt>
 
-<dl>
-<dt><a name="index-defimage"></a>Macro: <strong>defimage</strong> <em>symbol specs &amp;optional doc</em></dt>
-<dd><p>This macro defines <var>symbol</var> as an image name.  The arguments
-<var>specs</var> is a list which specifies how to display the image.
-The third argument, <var>doc</var>, is an optional documentation string.
-</p>
-<p>Each argument in <var>specs</var> has the form of a property list, and each
-one should specify at least the <code>:type</code> property and either the
-<code>:file</code> or the <code>:data</code> property.  The value of <code>:type</code>
-should be a symbol specifying the image type, the value of
-<code>:file</code> is the file to load the image from, and the value of
-<code>:data</code> is a string containing the actual image data.  Here is an
-example:
-</p>
-<div class="example">
-<pre class="example">(defimage test-image
-  ((:type xpm :file &quot;~/test1.xpm&quot;)
-   (:type xbm :file &quot;~/test1.xbm&quot;)))
-</pre></div>
+    <dd>
+      <p>This function creates and returns an image descriptor
+      which uses the data in <var>file-or-data</var>.
+      <var>file-or-data</var> can be a file name or a string
+      containing the image data; <var>data-p</var> should be
+      <code>nil</code> for the former case, non-<code>nil</code>
+      for the latter case.</p>
 
-<p><code>defimage</code> tests each argument, one by one, to see if it is
-usable&mdash;that is, if the type is supported and the file exists.  The
-first usable argument is used to make an image descriptor which is
-stored in <var>symbol</var>.
-</p>
-<p>If none of the alternatives will work, then <var>symbol</var> is defined
-as <code>nil</code>.
-</p></dd></dl>
+      <p>The optional argument <var>type</var> is a symbol
+      specifying the image type. If <var>type</var> is omitted or
+      <code>nil</code>, <code>create-image</code> tries to
+      determine the image type from the file&rsquo;s first few
+      bytes, or else from the file&rsquo;s name.</p>
 
-<dl>
-<dt><a name="index-find_002dimage"></a>Function: <strong>find-image</strong> <em>specs</em></dt>
-<dd><p>This function provides a convenient way to find an image satisfying one
-of a list of image specifications <var>specs</var>.
-</p>
-<p>Each specification in <var>specs</var> is a property list with contents
-depending on image type.  All specifications must at least contain the
-properties <code>:type <var>type</var></code> and either <code>:file&nbsp;<var>file</var></code><!-- /@w -->
-or <code>:data&nbsp;<var>data</var></code><!-- /@w -->, where <var>type</var> is a symbol specifying
-the image type, e.g., <code>xbm</code>, <var>file</var> is the file to load the
-image from, and <var>data</var> is a string containing the actual image data.
-The first specification in the list whose <var>type</var> is supported, and
-<var>file</var> exists, is used to construct the image specification to be
-returned.  If no specification is satisfied, <code>nil</code> is returned.
-</p>
-<p>The image is looked for in <code>image-load-path</code>.
-</p></dd></dl>
+      <p>The remaining arguments, <var>props</var>, specify
+      additional image properties&mdash;for example,</p>
 
-<dl>
-<dt><a name="index-image_002dload_002dpath"></a>User Option: <strong>image-load-path</strong></dt>
-<dd><p>This variable&rsquo;s value is a list of locations in which to search for
-image files.  If an element is a string or a variable symbol whose
-value is a string, the string is taken to be the name of a directory
-to search.  If an element is a variable symbol whose value is a list,
-that is taken to be a list of directory names to search.
-</p>
-<p>The default is to search in the <samp>images</samp> subdirectory of the
-directory specified by <code>data-directory</code>, then the directory
-specified by <code>data-directory</code>, and finally in the directories in
-<code>load-path</code>.  Subdirectories are not automatically included in
-the search, so if you put an image file in a subdirectory, you have to
-supply the subdirectory name explicitly.  For example, to find the
-image <samp>images/foo/bar.xpm</samp> within <code>data-directory</code>, you
-should specify the image as follows:
-</p>
-<div class="example">
-<pre class="example">(defimage foo-image '((:type xpm :file &quot;foo/bar.xpm&quot;)))
-</pre></div>
-</dd></dl>
+      <div class="example">
+        <pre class="example">
+(create-image "foo.xpm" 'xpm nil :heuristic-mask t)
+</pre>
+      </div>
 
-<dl>
-<dt><a name="index-image_002dload_002dpath_002dfor_002dlibrary"></a>Function: <strong>image-load-path-for-library</strong> <em>library image &amp;optional path no-error</em></dt>
-<dd><p>This function returns a suitable search path for images used by the
-Lisp package <var>library</var>.
-</p>
-<p>The function searches for <var>image</var> first using <code>image-load-path</code>,
-excluding <samp><code>data-directory</code>/images</samp>, and then in
-<code>load-path</code>, followed by a path suitable for <var>library</var>, which
-includes <samp>../../etc/images</samp> and <samp>../etc/images</samp> relative to
-the library file itself, and finally in
-<samp><code>data-directory</code>/images</samp>.
-</p>
-<p>Then this function returns a list of directories which contains first
-the directory in which <var>image</var> was found, followed by the value of
-<code>load-path</code>.  If <var>path</var> is given, it is used instead of
-<code>load-path</code>.
-</p>
-<p>If <var>no-error</var> is non-<code>nil</code> and a suitable path can&rsquo;t be
-found, don&rsquo;t signal an error.  Instead, return a list of directories as
-before, except that <code>nil</code> appears in place of the image directory.
-</p>
-<p>Here is an example of using <code>image-load-path-for-library</code>:
-</p>
-<div class="example">
-<pre class="example">(defvar image-load-path) ; shush compiler
+      <p>The function returns <code>nil</code> if images of this
+      type are not supported. Otherwise it returns an image
+      descriptor.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-defimage" id="index-defimage"></a>Macro:
+    <strong>defimage</strong> <em>symbol specs &amp;optional
+    doc</em></dt>
+
+    <dd>
+      <p>This macro defines <var>symbol</var> as an image name. The
+      arguments <var>specs</var> is a list which specifies how to
+      display the image. The third argument, <var>doc</var>, is an
+      optional documentation string.</p>
+
+      <p>Each argument in <var>specs</var> has the form of a
+      property list, and each one should specify at least the
+      <code>:type</code> property and either the <code>:file</code>
+      or the <code>:data</code> property. The value of
+      <code>:type</code> should be a symbol specifying the image
+      type, the value of <code>:file</code> is the file to load the
+      image from, and the value of <code>:data</code> is a string
+      containing the actual image data. Here is an example:</p>
+
+      <div class="example">
+        <pre class="example">
+(defimage test-image
+  ((:type xpm :file "~/test1.xpm")
+   (:type xbm :file "~/test1.xbm")))
+</pre>
+      </div>
+
+      <p><code>defimage</code> tests each argument, one by one, to
+      see if it is usable&mdash;that is, if the type is supported
+      and the file exists. The first usable argument is used to
+      make an image descriptor which is stored in
+      <var>symbol</var>.</p>
+
+      <p>If none of the alternatives will work, then
+      <var>symbol</var> is defined as <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-find_002dimage" id=
+    "index-find_002dimage"></a>Function:
+    <strong>find-image</strong> <em>specs</em></dt>
+
+    <dd>
+      <p>This function provides a convenient way to find an image
+      satisfying one of a list of image specifications
+      <var>specs</var>.</p>
+
+      <p>Each specification in <var>specs</var> is a property list
+      with contents depending on image type. All specifications
+      must at least contain the properties <code>:type
+      <var>type</var></code> and either
+      <code>:file&nbsp;<var>file</var></code><!-- /@w -->
+      or <code>:data&nbsp;<var>data</var></code><!-- /@w -->, where
+      <var>type</var> is a symbol specifying the image type, e.g.,
+      <code>xbm</code>, <var>file</var> is the file to load the
+      image from, and <var>data</var> is a string containing the
+      actual image data. The first specification in the list whose
+      <var>type</var> is supported, and <var>file</var> exists, is
+      used to construct the image specification to be returned. If
+      no specification is satisfied, <code>nil</code> is
+      returned.</p>
+
+      <p>The image is looked for in
+      <code>image-load-path</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-image_002dload_002dpath" id=
+    "index-image_002dload_002dpath"></a>User Option:
+    <strong>image-load-path</strong></dt>
+
+    <dd>
+      <p>This variable&rsquo;s value is a list of locations in
+      which to search for image files. If an element is a string or
+      a variable symbol whose value is a string, the string is
+      taken to be the name of a directory to search. If an element
+      is a variable symbol whose value is a list, that is taken to
+      be a list of directory names to search.</p>
+
+      <p>The default is to search in the <samp>images</samp>
+      subdirectory of the directory specified by
+      <code>data-directory</code>, then the directory specified by
+      <code>data-directory</code>, and finally in the directories
+      in <code>load-path</code>. Subdirectories are not
+      automatically included in the search, so if you put an image
+      file in a subdirectory, you have to supply the subdirectory
+      name explicitly. For example, to find the image
+      <samp>images/foo/bar.xpm</samp> within
+      <code>data-directory</code>, you should specify the image as
+      follows:</p>
+
+      <div class="example">
+        <pre class="example">
+(defimage foo-image '((:type xpm :file "foo/bar.xpm")))
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-image_002dload_002dpath_002dfor_002dlibrary"
+    id=
+    "index-image_002dload_002dpath_002dfor_002dlibrary"></a>Function:
+    <strong>image-load-path-for-library</strong> <em>library image
+    &amp;optional path no-error</em></dt>
+
+    <dd>
+      <p>This function returns a suitable search path for images
+      used by the Lisp package <var>library</var>.</p>
+
+      <p>The function searches for <var>image</var> first using
+      <code>image-load-path</code>, excluding
+      <samp><code>data-directory</code>/images</samp>, and then in
+      <code>load-path</code>, followed by a path suitable for
+      <var>library</var>, which includes
+      <samp>../../etc/images</samp> and <samp>../etc/images</samp>
+      relative to the library file itself, and finally in
+      <samp><code>data-directory</code>/images</samp>.</p>
+
+      <p>Then this function returns a list of directories which
+      contains first the directory in which <var>image</var> was
+      found, followed by the value of <code>load-path</code>. If
+      <var>path</var> is given, it is used instead of
+      <code>load-path</code>.</p>
+
+      <p>If <var>no-error</var> is non-<code>nil</code> and a
+      suitable path can&rsquo;t be found, don&rsquo;t signal an
+      error. Instead, return a list of directories as before,
+      except that <code>nil</code> appears in place of the image
+      directory.</p>
+
+      <p>Here is an example of using
+      <code>image-load-path-for-library</code>:</p>
+
+      <div class="example">
+        <pre class="example">
+(defvar image-load-path) ; shush compiler
 (let* ((load-path (image-load-path-for-library
-                    &quot;mh-e&quot; &quot;mh-logo.xpm&quot;))
+                    "mh-e" "mh-logo.xpm"))
        (image-load-path (cons (car load-path)
                               image-load-path)))
   (mh-tool-bar-folder-buttons-init))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Showing-Images.html#Showing-Images" accesskey="n" rel="next">Showing Images</a>, Previous: <a href="Other-Image-Types.html#Other-Image-Types" accesskey="p" rel="prev">Other Image Types</a>, Up: <a href="Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Showing-Images.html#Showing-Images"
+    accesskey="n" rel="next">Showing Images</a>, Previous: <a href=
+    "Other-Image-Types.html#Other-Image-Types" accesskey="p" rel=
+    "prev">Other Image Types</a>, Up: <a href="Images.html#Images"
+    accesskey="u" rel="up">Images</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,125 +19,205 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Variable Scoping</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Variable Scoping">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Variable Scoping">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variables.html#Variables" rel="up" title="Variables">
-<link href="Dynamic-Binding.html#Dynamic-Binding" rel="next" title="Dynamic Binding">
-<link href="Setting-Variables.html#Setting-Variables" rel="prev" title="Setting Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Variable Scoping</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Variable Scoping" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Variable Scoping" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variables.html#Variables" rel="up" title=
+  "Variables" />
+  <link href="Dynamic-Binding.html#Dynamic-Binding" rel="next"
+  title="Dynamic Binding" />
+  <link href="Setting-Variables.html#Setting-Variables" rel="prev"
+  title="Setting Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Variable-Scoping" id="Variable-Scoping"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables"
+    accesskey="n" rel="next">Buffer-Local Variables</a>, Previous:
+    <a href="Setting-Variables.html#Setting-Variables" accesskey=
+    "p" rel="prev">Setting Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Scoping-Rules-for-Variable-Bindings" id=
+  "Scoping-Rules-for-Variable-Bindings"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Variable-Scoping"></a>
-<div class="header">
-<p>
-Next: <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" accesskey="n" rel="next">Buffer-Local Variables</a>, Previous: <a href="Setting-Variables.html#Setting-Variables" accesskey="p" rel="prev">Setting Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Scoping-Rules-for-Variable-Bindings"></a>
-<h3 class="section">11.9 Scoping Rules for Variable Bindings</h3>
-<a name="index-scoping-rule"></a>
+  <h3 class="section">11.9 Scoping Rules for Variable
+  Bindings</h3><a name="index-scoping-rule" id=
+  "index-scoping-rule"></a>
 
-<p>When you create a local binding for a variable, that binding takes
-effect only within a limited portion of the program (see <a href="Local-Variables.html#Local-Variables">Local Variables</a>).  This section describes exactly what this means.
-</p>
-<a name="index-scope"></a>
-<a name="index-extent"></a>
-<p>Each local binding has a certain <em>scope</em> and <em>extent</em>.
-<em>Scope</em> refers to <em>where</em> in the textual source code the
-binding can be accessed.  <em>Extent</em> refers to <em>when</em>, as the
-program is executing, the binding exists.
-</p>
-<a name="index-dynamic-binding"></a>
-<a name="index-dynamic-scope"></a>
-<a name="index-dynamic-extent"></a>
-<p>By default, the local bindings that Emacs creates are <em>dynamic
-bindings</em>.  Such a binding has <em>dynamic scope</em>, meaning that any
-part of the program can potentially access the variable binding.  It
-also has <em>dynamic extent</em>, meaning that the binding lasts only
-while the binding construct (such as the body of a <code>let</code> form) is
-being executed.
-</p>
-<a name="index-lexical-binding"></a>
-<a name="index-lexical-scope"></a>
-<a name="index-indefinite-extent"></a>
-<p>Emacs can optionally create <em>lexical bindings</em>.  A lexical
-binding has <em>lexical scope</em>, meaning that any reference to the
-variable must be located textually within the binding
-construct<a name="DOCF7" href="#FOOT7"><sup>7</sup></a>.  It also has
-<em>indefinite extent</em>, meaning that under some circumstances the
-binding can live on even after the binding construct has finished
-executing, by means of special objects called <em>closures</em>.
-</p>
-<p>The following subsections describe dynamic binding and lexical
-binding in greater detail, and how to enable lexical binding in Emacs
-Lisp programs.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Dynamic-Binding.html#Dynamic-Binding" accesskey="1">Dynamic Binding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The default for binding local variables in Emacs.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dynamic-Binding-Tips.html#Dynamic-Binding-Tips" accesskey="2">Dynamic Binding Tips</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Avoiding problems with dynamic binding.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Lexical-Binding.html#Lexical-Binding" accesskey="3">Lexical Binding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A different type of local variable binding.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Using-Lexical-Binding.html#Using-Lexical-Binding" accesskey="4">Using Lexical Binding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to enable lexical binding.
-</td></tr>
-</table>
+  <p>When you create a local binding for a variable, that binding
+  takes effect only within a limited portion of the program (see
+  <a href="Local-Variables.html#Local-Variables">Local
+  Variables</a>). This section describes exactly what this
+  means.</p><a name="index-scope" id="index-scope"></a> <a name=
+  "index-extent" id="index-extent"></a>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>Each local binding has a certain <em>scope</em> and
+  <em>extent</em>. <em>Scope</em> refers to <em>where</em> in the
+  textual source code the binding can be accessed. <em>Extent</em>
+  refers to <em>when</em>, as the program is executing, the binding
+  exists.</p><a name="index-dynamic-binding" id=
+  "index-dynamic-binding"></a> <a name="index-dynamic-scope" id=
+  "index-dynamic-scope"></a> <a name="index-dynamic-extent" id=
+  "index-dynamic-extent"></a>
 
-<h3><a name="FOOT7" href="#DOCF7">(7)</a></h3>
-<p>With some exceptions; for instance, a lexical
-binding can also be accessed from the Lisp debugger.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" accesskey="n" rel="next">Buffer-Local Variables</a>, Previous: <a href="Setting-Variables.html#Setting-Variables" accesskey="p" rel="prev">Setting Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>By default, the local bindings that Emacs creates are
+  <em>dynamic bindings</em>. Such a binding has <em>dynamic
+  scope</em>, meaning that any part of the program can potentially
+  access the variable binding. It also has <em>dynamic extent</em>,
+  meaning that the binding lasts only while the binding construct
+  (such as the body of a <code>let</code> form) is being
+  executed.</p><a name="index-lexical-binding" id=
+  "index-lexical-binding"></a> <a name="index-lexical-scope" id=
+  "index-lexical-scope"></a> <a name="index-indefinite-extent" id=
+  "index-indefinite-extent"></a>
 
+  <p>Emacs can optionally create <em>lexical bindings</em>. A
+  lexical binding has <em>lexical scope</em>, meaning that any
+  reference to the variable must be located textually within the
+  binding construct<a name="DOCF7" href="#FOOT7" id=
+  "DOCF7"><sup>7</sup></a>. It also has <em>indefinite extent</em>,
+  meaning that under some circumstances the binding can live on
+  even after the binding construct has finished executing, by means
+  of special objects called <em>closures</em>.</p>
 
+  <p>The following subsections describe dynamic binding and lexical
+  binding in greater detail, and how to enable lexical binding in
+  Emacs Lisp programs.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dynamic-Binding.html#Dynamic-Binding" accesskey="1">Dynamic
+      Binding</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">The default for binding local
+      variables in Emacs.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dynamic-Binding-Tips.html#Dynamic-Binding-Tips" accesskey=
+      "2">Dynamic Binding Tips</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Avoiding problems with dynamic
+      binding.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Lexical-Binding.html#Lexical-Binding" accesskey="3">Lexical
+      Binding</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A different type of local
+      variable binding.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Using-Lexical-Binding.html#Using-Lexical-Binding" accesskey=
+      "4">Using Lexical Binding</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to enable lexical
+      binding.</td>
+    </tr>
+  </table>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT7" href="#DOCF7" id="FOOT7">(7)</a></h3>
+
+    <p>With some exceptions; for instance, a lexical binding can
+    also be accessed from the Lisp debugger.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables"
+    accesskey="n" rel="next">Buffer-Local Variables</a>, Previous:
+    <a href="Setting-Variables.html#Setting-Variables" accesskey=
+    "p" rel="prev">Setting Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

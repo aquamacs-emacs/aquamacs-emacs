@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Assignment - Common Lisp Extensions</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Common Lisp Extensions">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Control-Structure.html#Control-Structure" title="Control Structure">
-<link rel="prev" href="Control-Structure.html#Control-Structure" title="Control Structure">
-<link rel="next" href="Generalized-Variables.html#Generalized-Variables" title="Generalized Variables">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Assignment - Common Lisp Extensions</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Common Lisp Extensions" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Control-Structure.html#Control-Structure"
+  title="Control Structure" />
+  <link rel="prev" href="Control-Structure.html#Control-Structure"
+  title="Control Structure" />
+  <link rel="next" href=
+  "Generalized-Variables.html#Generalized-Variables" title=
+  "Generalized Variables" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -27,8 +37,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,51 +50,71 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Assignment"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Generalized-Variables.html#Generalized-Variables">Generalized Variables</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Control-Structure.html#Control-Structure">Control Structure</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structure.html#Control-Structure">Control Structure</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Assignment" id="Assignment"></a>
 
-<h3 class="section">5.1 Assignment</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Generalized-Variables.html#Generalized-Variables">Generalized
+    Variables</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Control-Structure.html#Control-Structure">Control
+    Structure</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Control-Structure.html#Control-Structure">Control
+    Structure</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">The <code>psetq</code> form is just like <code>setq</code>, except that multiple
-assignments are done in parallel rather than sequentially.
+  <h3 class="section">5.1 Assignment</h3>
 
-<div class="defun">
-&mdash; Special Form: <b>psetq</b> [<var>symbol form</var>]<var><small class="dots">...</small><a name="index-psetq-12"></a></var><br>
-<blockquote><p>This special form (actually a macro) is used to assign to several
-variables simultaneously.  Given only one <var>symbol</var> and <var>form</var>,
-it has the same effect as <code>setq</code>.  Given several <var>symbol</var>
-and <var>form</var> pairs, it evaluates all the <var>form</var>s in advance
-and then stores the corresponding variables afterwards.
+  <p class="noindent">The <code>psetq</code> form is just like
+  <code>setq</code>, except that multiple assignments are done in
+  parallel rather than sequentially.</p>
 
-     <pre class="example">          (setq x 2 y 3)
+  <div class="defun">
+    &mdash; Special Form: <b>psetq</b> [<var>symbol
+    form</var>]<var><small class="dots">...</small><a name=
+    "index-psetq-12" id="index-psetq-12"></a></var><br />
+
+    <blockquote>
+      <p>This special form (actually a macro) is used to assign to
+      several variables simultaneously. Given only one
+      <var>symbol</var> and <var>form</var>, it has the same effect
+      as <code>setq</code>. Given several <var>symbol</var> and
+      <var>form</var> pairs, it evaluates all the <var>form</var>s
+      in advance and then stores the corresponding variables
+      afterwards.</p>
+      <pre class="example">
+          (setq x 2 y 3)
           (setq x (+ x y)  y (* x y))
           x
                &rArr; 5
-          y                     ; <code>y</code><span class="roman"> was computed after </span><code>x</code><span class="roman"> was set.</span>
+          y                     ; <code>y</code><span class=
+"roman"> was computed after </span><code>x</code><span class=
+"roman"> was set.</span>
                &rArr; 15
           (setq x 2 y 3)
           (psetq x (+ x y)  y (* x y))
           x
                &rArr; 5
-          y                     ; <code>y</code><span class="roman"> was computed before </span><code>x</code><span class="roman"> was set.</span>
+          y                     ; <code>y</code><span class=
+"roman"> was computed before </span><code>x</code><span class=
+"roman"> was set.</span>
                &rArr; 6
 </pre>
-        <p>The simplest use of <code>psetq</code> is <code>(psetq x y y x)</code>, which
-exchanges the values of two variables.  (The <code>rotatef</code> form
-provides an even more convenient way to swap two variables;
-see <a href="Modify-Macros.html#Modify-Macros">Modify Macros</a>.)
 
-        <p><code>psetq</code> always returns <code>nil</code>. 
-</p></blockquote></div>
+      <p>The simplest use of <code>psetq</code> is <code>(psetq x y
+      y x)</code>, which exchanges the values of two variables.
+      (The <code>rotatef</code> form provides an even more
+      convenient way to swap two variables; see <a href=
+      "Modify-Macros.html#Modify-Macros">Modify Macros</a>.)</p>
 
-   </body></html>
-
+      <p><code>psetq</code> always returns <code>nil</code>.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

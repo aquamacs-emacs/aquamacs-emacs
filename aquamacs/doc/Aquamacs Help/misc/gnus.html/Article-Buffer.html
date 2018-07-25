@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,86 +14,158 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Article Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Article Buffer">
-<meta name="keywords" content="Gnus Manual: Article Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Hiding-Headers.html#Hiding-Headers" rel="next" title="Hiding Headers">
-<link href="Mailing-List.html#Mailing-List" rel="prev" title="Mailing List">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Article Buffer</title>
+  <meta name="description" content="Gnus Manual: Article Buffer" />
+  <meta name="keywords" content="Gnus Manual: Article Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Hiding-Headers.html#Hiding-Headers" rel="next" title=
+  "Hiding Headers" />
+  <link href="Mailing-List.html#Mailing-List" rel="prev" title=
+  "Mailing List" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Article-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Composing-Messages.html#Composing-Messages" accesskey="n" rel="next">Composing Messages</a>, Previous: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="p" rel="prev">Summary Buffer</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Article-Buffer-1"></a>
-<h2 class="chapter">4 Article Buffer</h2>
-<a name="index-article-buffer"></a>
+<body lang="en" xml:lang="en">
+  <a name="Article-Buffer" id="Article-Buffer"></a>
 
-<p>The articles are displayed in the article buffer, of which there is only
-one.  All the summary buffers share the same article buffer unless you
-tell Gnus otherwise.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Hiding-Headers.html#Hiding-Headers" accesskey="1">Hiding Headers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Deciding what headers should be displayed.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Using-MIME.html#Using-MIME" accesskey="2">Using MIME</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Pushing articles through <acronym>MIME</acronym> before reading them.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="HTML.html#HTML" accesskey="3">HTML</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading <acronym>HTML</acronym> messages.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Customizing-Articles.html#Customizing-Articles" accesskey="4">Customizing Articles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Tailoring the look of the articles.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Article-Keymap.html#Article-Keymap" accesskey="5">Article Keymap</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Keystrokes available in the article buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Misc-Article.html#Misc-Article" accesskey="6">Misc Article</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Other stuff.
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Composing-Messages.html#Composing-Messages"
+    accesskey="n" rel="next">Composing Messages</a>, Previous:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="p" rel=
+    "prev">Summary Buffer</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Article-Buffer-1" id="Article-Buffer-1"></a>
 
+  <h2 class="chapter">4 Article Buffer</h2><a name=
+  "index-article-buffer" id="index-article-buffer"></a>
 
+  <p>The articles are displayed in the article buffer, of which
+  there is only one. All the summary buffers share the same article
+  buffer unless you tell Gnus otherwise.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Hiding-Headers.html#Hiding-Headers" accesskey="1">Hiding
+      Headers</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Deciding what headers should be
+      displayed.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Using-MIME.html#Using-MIME" accesskey="2">Using
+      MIME</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Pushing articles through
+      <acronym>MIME</acronym> before reading them.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href="HTML.html#HTML"
+      accesskey="3">HTML</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading <acronym>HTML</acronym>
+      messages.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Customizing-Articles.html#Customizing-Articles" accesskey=
+      "4">Customizing Articles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Tailoring the look of the
+      articles.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Article-Keymap.html#Article-Keymap" accesskey="5">Article
+      Keymap</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Keystrokes available in the
+      article buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Misc-Article.html#Misc-Article" accesskey="6">Misc
+      Article</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Other stuff.</td>
+    </tr>
+  </table>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,92 +18,143 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Statistical Operations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Statistical Operations">
-<meta name="keywords" content="GNU Emacs Calc Manual: Statistical Operations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Matrix-Functions.html#Matrix-Functions" rel="up" title="Matrix Functions">
-<link href="Single_002dVariable-Statistics.html#Single_002dVariable-Statistics" rel="next" title="Single-Variable Statistics">
-<link href="Set-Operations.html#Set-Operations" rel="prev" title="Set Operations">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Statistical Operations</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Statistical Operations" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Statistical Operations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Matrix-Functions.html#Matrix-Functions" rel="up"
+  title="Matrix Functions" />
+  <link href=
+  "Single_002dVariable-Statistics.html#Single_002dVariable-Statistics"
+  rel="next" title="Single-Variable Statistics" />
+  <link href="Set-Operations.html#Set-Operations" rel="prev" title=
+  "Set Operations" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Statistical-Operations"></a>
-<div class="header">
-<p>
-Next: <a href="Reducing-and-Mapping.html#Reducing-and-Mapping" accesskey="n" rel="next">Reducing and Mapping</a>, Previous: <a href="Set-Operations.html#Set-Operations" accesskey="p" rel="prev">Set Operations</a>, Up: <a href="Matrix-Functions.html#Matrix-Functions" accesskey="u" rel="up">Matrix Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Statistical-Operations-on-Vectors"></a>
-<h3 class="section">9.7 Statistical Operations on Vectors</h3>
+<body lang="en" xml:lang="en">
+  <a name="Statistical-Operations" id="Statistical-Operations"></a>
 
-<a name="index-Statistical-functions"></a>
-<p>The commands in this section take vectors as arguments and compute
-various statistical measures on the data stored in the vectors.  The
-references used in the definitions of these functions are Bevington&rsquo;s
-<em>Data Reduction and Error Analysis for the Physical Sciences</em>,
-and <em>Numerical Recipes</em> by Press, Flannery, Teukolsky and
-Vetterling.
-</p>
-<p>The statistical commands use the <kbd>u</kbd> prefix key followed by
-a shifted letter or other character.
-</p>
-<p>See <a href="Manipulating-Vectors.html#Manipulating-Vectors">Manipulating Vectors</a>, for a description of <kbd>V H</kbd>
-(<code>calc-histogram</code>).
-</p>
-<p>See <a href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>, for the <kbd>a F</kbd> command for doing
-least-squares fits to statistical data.
-</p>
-<p>See <a href="Probability-Distribution-Functions.html#Probability-Distribution-Functions">Probability Distribution Functions</a>, for several common
-probability distribution functions.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Single_002dVariable-Statistics.html#Single_002dVariable-Statistics" accesskey="1">Single-Variable Statistics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Paired_002dSample-Statistics.html#Paired_002dSample-Statistics" accesskey="2">Paired-Sample Statistics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href=
+    "Reducing-and-Mapping.html#Reducing-and-Mapping" accesskey="n"
+    rel="next">Reducing and Mapping</a>, Previous: <a href=
+    "Set-Operations.html#Set-Operations" accesskey="p" rel=
+    "prev">Set Operations</a>, Up: <a href=
+    "Matrix-Functions.html#Matrix-Functions" accesskey="u" rel=
+    "up">Matrix Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Statistical-Operations-on-Vectors" id=
+  "Statistical-Operations-on-Vectors"></a>
 
+  <h3 class="section">9.7 Statistical Operations on
+  Vectors</h3><a name="index-Statistical-functions" id=
+  "index-Statistical-functions"></a>
 
+  <p>The commands in this section take vectors as arguments and
+  compute various statistical measures on the data stored in the
+  vectors. The references used in the definitions of these
+  functions are Bevington&rsquo;s <em>Data Reduction and Error
+  Analysis for the Physical Sciences</em>, and <em>Numerical
+  Recipes</em> by Press, Flannery, Teukolsky and Vetterling.</p>
 
+  <p>The statistical commands use the <kbd>u</kbd> prefix key
+  followed by a shifted letter or other character.</p>
 
+  <p>See <a href=
+  "Manipulating-Vectors.html#Manipulating-Vectors">Manipulating
+  Vectors</a>, for a description of <kbd>V H</kbd>
+  (<code>calc-histogram</code>).</p>
+
+  <p>See <a href="Curve-Fitting.html#Curve-Fitting">Curve
+  Fitting</a>, for the <kbd>a F</kbd> command for doing
+  least-squares fits to statistical data.</p>
+
+  <p>See <a href=
+  "Probability-Distribution-Functions.html#Probability-Distribution-Functions">
+  Probability Distribution Functions</a>, for several common
+  probability distribution functions.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Single_002dVariable-Statistics.html#Single_002dVariable-Statistics"
+      accesskey="1">Single-Variable Statistics</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Paired_002dSample-Statistics.html#Paired_002dSample-Statistics"
+      accesskey="2">Paired-Sample Statistics</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

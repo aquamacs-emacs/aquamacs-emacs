@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,156 +14,241 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Group Maneuvering</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Group Maneuvering">
-<meta name="keywords" content="Gnus Manual: Group Maneuvering">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Group-Buffer.html#Group-Buffer" rel="up" title="Group Buffer">
-<link href="Selecting-a-Group.html#Selecting-a-Group" rel="next" title="Selecting a Group">
-<link href="Group-Highlighting.html#Group-Highlighting" rel="prev" title="Group Highlighting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Group Maneuvering</title>
+  <meta name="description" content=
+  "Gnus Manual: Group Maneuvering" />
+  <meta name="keywords" content="Gnus Manual: Group Maneuvering" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Group-Buffer.html#Group-Buffer" rel="up" title=
+  "Group Buffer" />
+  <link href="Selecting-a-Group.html#Selecting-a-Group" rel="next"
+  title="Selecting a Group" />
+  <link href="Group-Highlighting.html#Group-Highlighting" rel=
+  "prev" title="Group Highlighting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Group-Maneuvering"></a>
-<div class="header">
-<p>
-Next: <a href="Selecting-a-Group.html#Selecting-a-Group" accesskey="n" rel="next">Selecting a Group</a>, Previous: <a href="Group-Buffer-Format.html#Group-Buffer-Format" accesskey="p" rel="prev">Group Buffer Format</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Group-Maneuvering-1"></a>
-<h3 class="section">2.2 Group Maneuvering</h3>
-<a name="index-group-movement"></a>
+<body lang="en" xml:lang="en">
+  <a name="Group-Maneuvering" id="Group-Maneuvering"></a>
 
-<p>All movement commands understand the numeric prefix and will behave as
-expected, hopefully.
-</p>
-<dl compact="compact">
-<dt><kbd>n</kbd></dt>
-<dd><a name="index-n-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dnext_002dunread_002dgroup"></a>
-<p>Go to the next group that has unread articles
-(<code>gnus-group-next-unread-group</code>).
-</p>
-</dd>
-<dt><kbd>p</kbd></dt>
-<dt><kbd>DEL</kbd></dt>
-<dd><a name="index-DEL-_0028Group_0029"></a>
-<a name="index-p-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dprev_002dunread_002dgroup"></a>
-<p>Go to the previous group that has unread articles
-(<code>gnus-group-prev-unread-group</code>).
-</p>
-</dd>
-<dt><kbd>N</kbd></dt>
-<dd><a name="index-N-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dnext_002dgroup"></a>
-<p>Go to the next group (<code>gnus-group-next-group</code>).
-</p>
-</dd>
-<dt><kbd>P</kbd></dt>
-<dd><a name="index-P-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dprev_002dgroup"></a>
-<p>Go to the previous group (<code>gnus-group-prev-group</code>).
-</p>
-</dd>
-<dt><kbd>M-n</kbd></dt>
-<dd><a name="index-M_002dn-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dnext_002dunread_002dgroup_002dsame_002dlevel"></a>
-<p>Go to the next unread group on the same (or lower) level
-(<code>gnus-group-next-unread-group-same-level</code>).
-</p>
-</dd>
-<dt><kbd>M-p</kbd></dt>
-<dd><a name="index-M_002dp-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dprev_002dunread_002dgroup_002dsame_002dlevel"></a>
-<p>Go to the previous unread group on the same (or lower) level
-(<code>gnus-group-prev-unread-group-same-level</code>).
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Selecting-a-Group.html#Selecting-a-Group"
+    accesskey="n" rel="next">Selecting a Group</a>, Previous:
+    <a href="Group-Buffer-Format.html#Group-Buffer-Format"
+    accesskey="p" rel="prev">Group Buffer Format</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Group-Maneuvering-1" id="Group-Maneuvering-1"></a>
 
-<p>Three commands for jumping to groups:
-</p>
-<dl compact="compact">
-<dt><kbd>j</kbd></dt>
-<dd><a name="index-j-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002djump_002dto_002dgroup"></a>
-<p>Jump to a group (and make it visible if it isn&rsquo;t already)
-(<code>gnus-group-jump-to-group</code>).  Killed groups can be jumped to, just
-like living groups.
-</p>
-</dd>
-<dt><kbd>,</kbd></dt>
-<dd><a name="index-_002c-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dbest_002dunread_002dgroup"></a>
-<p>Jump to the unread group with the lowest level
-(<code>gnus-group-best-unread-group</code>).
-</p>
-</dd>
-<dt><kbd>.</kbd></dt>
-<dd><a name="index-_002e-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dfirst_002dunread_002dgroup"></a>
-<p>Jump to the first group with unread articles
-(<code>gnus-group-first-unread-group</code>).
-</p></dd>
-</dl>
+  <h3 class="section">2.2 Group Maneuvering</h3><a name=
+  "index-group-movement" id="index-group-movement"></a>
 
-<a name="index-gnus_002dgroup_002dgoto_002dunread"></a>
-<p>If <code>gnus-group-goto-unread</code> is <code>nil</code>, all the movement
-commands will move to the next group, not the next unread group.  Even
-the commands that say they move to the next unread group.  The default
-is <code>t</code>.
-</p>
-<a name="index-gnus_002dsummary_002dnext_002dgroup_002don_002dexit"></a>
-<p>If <code>gnus-summary-next-group-on-exit</code> is <code>t</code>, when a summary is
-exited, the point in the group buffer is moved to the next unread group.
-Otherwise, the point is set to the group just exited.  The default is
-<code>t</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Selecting-a-Group.html#Selecting-a-Group" accesskey="n" rel="next">Selecting a Group</a>, Previous: <a href="Group-Buffer-Format.html#Group-Buffer-Format" accesskey="p" rel="prev">Group Buffer Format</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>All movement commands understand the numeric prefix and will
+  behave as expected, hopefully.</p>
 
+  <dl compact="compact">
+    <dt><kbd>n</kbd></dt>
 
+    <dd>
+      <a name="index-n-_0028Group_0029" id=
+      "index-n-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dnext_002dunread_002dgroup" id=
+      "index-gnus_002dgroup_002dnext_002dunread_002dgroup"></a>
 
+      <p>Go to the next group that has unread articles
+      (<code>gnus-group-next-unread-group</code>).</p>
+    </dd>
+
+    <dt><kbd>p</kbd></dt>
+
+    <dt><kbd>DEL</kbd></dt>
+
+    <dd>
+      <a name="index-DEL-_0028Group_0029" id=
+      "index-DEL-_0028Group_0029"></a> <a name=
+      "index-p-_0028Group_0029" id="index-p-_0028Group_0029"></a>
+      <a name="index-gnus_002dgroup_002dprev_002dunread_002dgroup"
+      id="index-gnus_002dgroup_002dprev_002dunread_002dgroup"></a>
+
+      <p>Go to the previous group that has unread articles
+      (<code>gnus-group-prev-unread-group</code>).</p>
+    </dd>
+
+    <dt><kbd>N</kbd></dt>
+
+    <dd>
+      <a name="index-N-_0028Group_0029" id=
+      "index-N-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dnext_002dgroup" id=
+      "index-gnus_002dgroup_002dnext_002dgroup"></a>
+
+      <p>Go to the next group
+      (<code>gnus-group-next-group</code>).</p>
+    </dd>
+
+    <dt><kbd>P</kbd></dt>
+
+    <dd>
+      <a name="index-P-_0028Group_0029" id=
+      "index-P-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dprev_002dgroup" id=
+      "index-gnus_002dgroup_002dprev_002dgroup"></a>
+
+      <p>Go to the previous group
+      (<code>gnus-group-prev-group</code>).</p>
+    </dd>
+
+    <dt><kbd>M-n</kbd></dt>
+
+    <dd>
+      <a name="index-M_002dn-_0028Group_0029" id=
+      "index-M_002dn-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dnext_002dunread_002dgroup_002dsame_002dlevel"
+      id=
+      "index-gnus_002dgroup_002dnext_002dunread_002dgroup_002dsame_002dlevel">
+      </a>
+
+      <p>Go to the next unread group on the same (or lower) level
+      (<code>gnus-group-next-unread-group-same-level</code>).</p>
+    </dd>
+
+    <dt><kbd>M-p</kbd></dt>
+
+    <dd>
+      <a name="index-M_002dp-_0028Group_0029" id=
+      "index-M_002dp-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dprev_002dunread_002dgroup_002dsame_002dlevel"
+      id=
+      "index-gnus_002dgroup_002dprev_002dunread_002dgroup_002dsame_002dlevel">
+      </a>
+
+      <p>Go to the previous unread group on the same (or lower)
+      level
+      (<code>gnus-group-prev-unread-group-same-level</code>).</p>
+    </dd>
+  </dl>
+
+  <p>Three commands for jumping to groups:</p>
+
+  <dl compact="compact">
+    <dt><kbd>j</kbd></dt>
+
+    <dd>
+      <a name="index-j-_0028Group_0029" id=
+      "index-j-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002djump_002dto_002dgroup" id=
+      "index-gnus_002dgroup_002djump_002dto_002dgroup"></a>
+
+      <p>Jump to a group (and make it visible if it isn&rsquo;t
+      already) (<code>gnus-group-jump-to-group</code>). Killed
+      groups can be jumped to, just like living groups.</p>
+    </dd>
+
+    <dt><kbd>,</kbd></dt>
+
+    <dd>
+      <a name="index-_002c-_0028Group_0029" id=
+      "index-_002c-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dbest_002dunread_002dgroup" id=
+      "index-gnus_002dgroup_002dbest_002dunread_002dgroup"></a>
+
+      <p>Jump to the unread group with the lowest level
+      (<code>gnus-group-best-unread-group</code>).</p>
+    </dd>
+
+    <dt><kbd>.</kbd></dt>
+
+    <dd>
+      <a name="index-_002e-_0028Group_0029" id=
+      "index-_002e-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dfirst_002dunread_002dgroup" id=
+      "index-gnus_002dgroup_002dfirst_002dunread_002dgroup"></a>
+
+      <p>Jump to the first group with unread articles
+      (<code>gnus-group-first-unread-group</code>).</p>
+    </dd>
+  </dl><a name="index-gnus_002dgroup_002dgoto_002dunread" id=
+  "index-gnus_002dgroup_002dgoto_002dunread"></a>
+
+  <p>If <code>gnus-group-goto-unread</code> is <code>nil</code>,
+  all the movement commands will move to the next group, not the
+  next unread group. Even the commands that say they move to the
+  next unread group. The default is <code>t</code>.</p><a name=
+  "index-gnus_002dsummary_002dnext_002dgroup_002don_002dexit" id=
+  "index-gnus_002dsummary_002dnext_002dgroup_002don_002dexit"></a>
+
+  <p>If <code>gnus-summary-next-group-on-exit</code> is
+  <code>t</code>, when a summary is exited, the point in the group
+  buffer is moved to the next unread group. Otherwise, the point is
+  set to the group just exited. The default is <code>t</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Selecting-a-Group.html#Selecting-a-Group"
+    accesskey="n" rel="next">Selecting a Group</a>, Previous:
+    <a href="Group-Buffer-Format.html#Group-Buffer-Format"
+    accesskey="p" rel="prev">Group Buffer Format</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,208 +14,301 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to
 copy and modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>TRAMP User Manual: Multi-hops</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="TRAMP User Manual: Multi-hops">
-<meta name="keywords" content="TRAMP User Manual: Multi-hops">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Configuration.html#Configuration" rel="up" title="Configuration">
-<link href="Customizing-Methods.html#Customizing-Methods" rel="next" title="Customizing Methods">
-<link href="Default-Host.html#Default-Host" rel="prev" title="Default Host">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>TRAMP User Manual: Multi-hops</title>
+  <meta name="description" content=
+  "TRAMP User Manual: Multi-hops" />
+  <meta name="keywords" content="TRAMP User Manual: Multi-hops" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Configuration.html#Configuration" rel="up" title=
+  "Configuration" />
+  <link href="Customizing-Methods.html#Customizing-Methods" rel=
+  "next" title="Customizing Methods" />
+  <link href="Default-Host.html#Default-Host" rel="prev" title=
+  "Default Host" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Multi_002dhops"></a>
-<div class="header">
-<p>
-Next: <a href="Customizing-Methods.html#Customizing-Methods" accesskey="n" rel="next">Customizing Methods</a>, Previous: <a href="Default-Host.html#Default-Host" accesskey="p" rel="prev">Default Host</a>, Up: <a href="Configuration.html#Configuration" accesskey="u" rel="up">Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Connecting-to-a-remote-host-using-multiple-hops"></a>
-<h3 class="section">4.9 Connecting to a remote host using multiple hops</h3>
-<a name="index-multi_002dhop"></a>
-<a name="index-proxy-hosts"></a>
+<body lang="en" xml:lang="en">
+  <a name="Multi_002dhops" id="Multi_002dhops"></a>
 
-<p>Multi-hops are methods to reach hosts behind firewalls or to reach the
-outside world from inside a bastion host.  With multi-hops,
-<small>TRAMP</small> can negotiate these hops with the appropriate user/host
-authentication at each hop.  All methods until now have been the single
-hop kind, where the start and end points of the connection did not
-have intermediate check points.
-</p>
-<dl>
-<dt><a name="index-tramp_002ddefault_002dproxies_002dalist"></a>User Option: <strong>tramp-default-proxies-alist</strong></dt>
-<dd><a name="index-tramp_002ddefault_002dproxies_002dalist-1"></a>
-<p><samp>tramp-default-proxies-alist</samp> specifies proxy hosts to pass
-through.  This variable is list of triples consisting of (<var>host</var>
-<var>user</var> <var>proxy</var>).
-</p>
-<p>The first match is the proxy host through which passes the file name
-and the target host matching <var>user</var>@<var>host</var>.  <var>host</var> and
-<var>user</var> are regular expressions or <code>nil</code>, interpreted as a
-regular expression which always matches.
-</p>
-<p><var>proxy</var> is a literal <small>TRAMP</small> file name whose local name part
-is ignored, and the method and user name parts are optional.
-</p>
-<p>The method must be an inline or gateway method (see <a href="Inline-methods.html#Inline-methods">Inline methods</a>, see <a href="Gateway-methods.html#Gateway-methods">Gateway methods</a>).
-If <var>proxy</var> is <code>nil</code>, no additional hop is required reaching
-<var>user</var>@<var>host</var>.
-</p>
-<p>For example, to pass through the host &lsquo;<samp>bastion.your.domain</samp>&rsquo; as
-user &lsquo;<samp>bird</samp>&rsquo; to reach remote hosts outside the local domain:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'tramp-default-proxies-alist
-             '(&quot;\\.&quot; nil &quot;/ssh:bird@bastion.your.domain:&quot;))
+  <div class="header">
+    <p>Next: <a href="Customizing-Methods.html#Customizing-Methods"
+    accesskey="n" rel="next">Customizing Methods</a>, Previous:
+    <a href="Default-Host.html#Default-Host" accesskey="p" rel=
+    "prev">Default Host</a>, Up: <a href=
+    "Configuration.html#Configuration" accesskey="u" rel=
+    "up">Configuration</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Connecting-to-a-remote-host-using-multiple-hops" id=
+  "Connecting-to-a-remote-host-using-multiple-hops"></a>
+
+  <h3 class="section">4.9 Connecting to a remote host using
+  multiple hops</h3><a name="index-multi_002dhop" id=
+  "index-multi_002dhop"></a> <a name="index-proxy-hosts" id=
+  "index-proxy-hosts"></a>
+
+  <p>Multi-hops are methods to reach hosts behind firewalls or to
+  reach the outside world from inside a bastion host. With
+  multi-hops, <small>TRAMP</small> can negotiate these hops with
+  the appropriate user/host authentication at each hop. All methods
+  until now have been the single hop kind, where the start and end
+  points of the connection did not have intermediate check
+  points.</p>
+
+  <dl>
+    <dt><a name="index-tramp_002ddefault_002dproxies_002dalist" id=
+    "index-tramp_002ddefault_002dproxies_002dalist"></a>User
+    Option: <strong>tramp-default-proxies-alist</strong></dt>
+
+    <dd>
+      <a name="index-tramp_002ddefault_002dproxies_002dalist-1" id=
+      "index-tramp_002ddefault_002dproxies_002dalist-1"></a>
+
+      <p><samp>tramp-default-proxies-alist</samp> specifies proxy
+      hosts to pass through. This variable is list of triples
+      consisting of (<var>host</var> <var>user</var>
+      <var>proxy</var>).</p>
+
+      <p>The first match is the proxy host through which passes the
+      file name and the target host matching
+      <var>user</var>@<var>host</var>. <var>host</var> and
+      <var>user</var> are regular expressions or <code>nil</code>,
+      interpreted as a regular expression which always matches.</p>
+
+      <p><var>proxy</var> is a literal <small>TRAMP</small> file
+      name whose local name part is ignored, and the method and
+      user name parts are optional.</p>
+
+      <p>The method must be an inline or gateway method (see
+      <a href="Inline-methods.html#Inline-methods">Inline
+      methods</a>, see <a href=
+      "Gateway-methods.html#Gateway-methods">Gateway methods</a>).
+      If <var>proxy</var> is <code>nil</code>, no additional hop is
+      required reaching <var>user</var>@<var>host</var>.</p>
+
+      <p>For example, to pass through the host
+      &lsquo;<samp>bastion.your.domain</samp>&rsquo; as user
+      &lsquo;<samp>bird</samp>&rsquo; to reach remote hosts outside
+      the local domain:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
 (add-to-list 'tramp-default-proxies-alist
-             '(&quot;\\.your\\.domain\\'&quot; nil nil))
-</pre></div>
+             '("\\." nil "/ssh:bird@bastion.your.domain:"))
+(add-to-list 'tramp-default-proxies-alist
+             '("\\.your\\.domain\\'" nil nil))
+</pre>
+      </div>
 
-<p><strong>Note</strong>: <code>add-to-list</code> adds elements at the beginning of a
-list.  Therefore, most relevant rules must come last in the list.
-</p>
-<p>Proxy hosts can be cascaded in the alist.  If there is another host
-called &lsquo;<samp>jump.your.domain</samp>&rsquo;, which is the only host allowed to
-connect to &lsquo;<samp>bastion.your.domain</samp>&rsquo;, then:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'tramp-default-proxies-alist
-             '(&quot;\\`bastion\\.your\\.domain\\'&quot;
-               &quot;\\`bird\\'&quot;
-               &quot;/ssh:jump.your.domain:&quot;))
-</pre></div>
+      <p><strong>Note</strong>: <code>add-to-list</code> adds
+      elements at the beginning of a list. Therefore, most relevant
+      rules must come last in the list.</p>
 
-<p><var>proxy</var> can take patterns <code>%h</code> or <code>%u</code> for <var>host</var> or
-<var>user</var> respectively.
-</p>
-<p>To login as &lsquo;<samp>root</samp>&rsquo; on remote hosts in the domain
-&lsquo;<samp>your.domain</samp>&rsquo;, but login as &lsquo;<samp>root</samp>&rsquo; is disabled for non-local
-access, then use this alist entry:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'tramp-default-proxies-alist
-             '(&quot;\\.your\\.domain\\'&quot; &quot;\\`root\\'&quot; &quot;/ssh:%h:&quot;))
-</pre></div>
+      <p>Proxy hosts can be cascaded in the alist. If there is
+      another host called
+      &lsquo;<samp>jump.your.domain</samp>&rsquo;, which is the
+      only host allowed to connect to
+      &lsquo;<samp>bastion.your.domain</samp>&rsquo;, then:</p>
 
-<p>Opening <samp>/sudo:randomhost.your.domain:</samp> first
-connects to &lsquo;<samp>randomhost.your.domain</samp>&rsquo; via <code>ssh</code> under your
-account name, and then perform <code>sudo -u root</code> on that host.
-</p>
-<p>It is key for the sudo method in the above example to be applied on
-the host after reaching it and not on the local host.
-</p>
-<p><var>host</var>, <var>user</var> and <var>proxy</var> can also take Lisp forms.  These
-forms when evaluated must return either a string or <code>nil</code>.
-</p>
-<p>To generalize (from the previous example): For all hosts, except my
-local one, first connect via <code>ssh</code>, and then apply
-<code>sudo -u root</code>:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'tramp-default-proxies-alist
-             '(nil &quot;\\`root\\'&quot; &quot;/ssh:%h:&quot;))
+      <div class="lisp">
+        <pre class="lisp">
+(add-to-list 'tramp-default-proxies-alist
+             '("\\`bastion\\.your\\.domain\\'"
+               "\\`bird\\'"
+               "/ssh:jump.your.domain:"))
+</pre>
+      </div>
+
+      <p><var>proxy</var> can take patterns <code>%h</code> or
+      <code>%u</code> for <var>host</var> or <var>user</var>
+      respectively.</p>
+
+      <p>To login as &lsquo;<samp>root</samp>&rsquo; on remote
+      hosts in the domain &lsquo;<samp>your.domain</samp>&rsquo;,
+      but login as &lsquo;<samp>root</samp>&rsquo; is disabled for
+      non-local access, then use this alist entry:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(add-to-list 'tramp-default-proxies-alist
+             '("\\.your\\.domain\\'" "\\`root\\'" "/ssh:%h:"))
+</pre>
+      </div>
+
+      <p>Opening <samp>/sudo:randomhost.your.domain:</samp> first
+      connects to &lsquo;<samp>randomhost.your.domain</samp>&rsquo;
+      via <code>ssh</code> under your account name, and then
+      perform <code>sudo -u root</code> on that host.</p>
+
+      <p>It is key for the sudo method in the above example to be
+      applied on the host after reaching it and not on the local
+      host.</p>
+
+      <p><var>host</var>, <var>user</var> and <var>proxy</var> can
+      also take Lisp forms. These forms when evaluated must return
+      either a string or <code>nil</code>.</p>
+
+      <p>To generalize (from the previous example): For all hosts,
+      except my local one, first connect via <code>ssh</code>, and
+      then apply <code>sudo -u root</code>:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(add-to-list 'tramp-default-proxies-alist
+             '(nil "\\`root\\'" "/ssh:%h:"))
 (add-to-list 'tramp-default-proxies-alist
              '((regexp-quote (system-name)) nil nil))
-</pre></div>
+</pre>
+      </div>
 
-<p>The above configuration allows <small>TRAMP</small> connection as &lsquo;<samp>root</samp>&rsquo;
-to remote Ubuntu hosts.
-</p>
-<p><code>tramp-default-proxies-alist</code> is also used for passing through
-firewalls or proxy servers.
-</p>
-<p>For example, the local host &lsquo;<samp>proxy.your.domain</samp>&rsquo; on port 3128
-serves as HTTP proxy to the outer world.  User has access rights to
-another proxy server on &lsquo;<samp>host.other.domain</samp>&rsquo;.<a name="DOCF1" href="#FOOT1"><sup>1</sup></a>  Then the configuration is:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'tramp-default-proxies-alist
-             '(&quot;\\`host\\.other\\.domain\\'&quot; nil
-             &quot;/tunnel:proxy.your.domain#3128:&quot;))
-</pre></div>
+      <p>The above configuration allows <small>TRAMP</small>
+      connection as &lsquo;<samp>root</samp>&rsquo; to remote
+      Ubuntu hosts.</p>
 
-<p>Gateway methods in a multiple hop chain can be declared only as the first hop.
-</p></dd></dl>
+      <p><code>tramp-default-proxies-alist</code> is also used for
+      passing through firewalls or proxy servers.</p>
 
-<p>Passing through hops involves dealing with restricted shells, such as
-<code>rbash</code>.  If <small>TRAMP</small> is made aware, then it would use
-them for proxies only.
-</p>
-<dl>
-<dt><a name="index-tramp_002drestricted_002dshell_002dhosts_002dalist"></a>User Option: <strong>tramp-restricted-shell-hosts-alist</strong></dt>
-<dd><a name="index-tramp_002drestricted_002dshell_002dhosts_002dalist-1"></a>
-<p>An alist of regular expressions of hosts running restricted shells,
-such as <code>rbash</code>.  <small>TRAMP</small> will then use them only as
-proxies.
-</p>
-<p>To specify the bastion host from the example above as running a
-restricted shell:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'tramp-restricted-shell-hosts-alist
-             &quot;\\`bastion\\.your\\.domain\\'&quot;)
-</pre></div>
-</dd></dl>
+      <p>For example, the local host
+      &lsquo;<samp>proxy.your.domain</samp>&rsquo; on port 3128
+      serves as HTTP proxy to the outer world. User has access
+      rights to another proxy server on
+      &lsquo;<samp>host.other.domain</samp>&rsquo;.<a name="DOCF1"
+      href="#FOOT1" id="DOCF1"><sup>1</sup></a> Then the
+      configuration is:</p>
 
+      <div class="lisp">
+        <pre class="lisp">
+(add-to-list 'tramp-default-proxies-alist
+             '("\\`host\\.other\\.domain\\'" nil
+             "/tunnel:proxy.your.domain#3128:"))
+</pre>
+      </div>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+      <p>Gateway methods in a multiple hop chain can be declared
+      only as the first hop.</p>
+    </dd>
+  </dl>
 
-<h3><a name="FOOT1" href="#DOCF1">(1)</a></h3>
-<p>HTTP tunnels
-are intended for secure SSL/TLS communication.  Therefore, many proxy
-servers restrict the tunnels to related target ports.  You might need
-to run your ssh server on your target host &lsquo;<samp>host.other.domain</samp>&rsquo; on
-such a port, like 443 (https).  See
-<a href="http://savannah.gnu.org/maintenance/CvsFromBehindFirewall">http://savannah.gnu.org/maintenance/CvsFromBehindFirewall</a> for
-discussion of ethical issues.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Customizing-Methods.html#Customizing-Methods" accesskey="n" rel="next">Customizing Methods</a>, Previous: <a href="Default-Host.html#Default-Host" accesskey="p" rel="prev">Default Host</a>, Up: <a href="Configuration.html#Configuration" accesskey="u" rel="up">Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Passing through hops involves dealing with restricted shells,
+  such as <code>rbash</code>. If <small>TRAMP</small> is made
+  aware, then it would use them for proxies only.</p>
 
+  <dl>
+    <dt><a name=
+    "index-tramp_002drestricted_002dshell_002dhosts_002dalist" id=
+    "index-tramp_002drestricted_002dshell_002dhosts_002dalist"></a>User
+    Option:
+    <strong>tramp-restricted-shell-hosts-alist</strong></dt>
 
+    <dd>
+      <a name=
+      "index-tramp_002drestricted_002dshell_002dhosts_002dalist-1"
+      id=
+      "index-tramp_002drestricted_002dshell_002dhosts_002dalist-1"></a>
 
+      <p>An alist of regular expressions of hosts running
+      restricted shells, such as <code>rbash</code>.
+      <small>TRAMP</small> will then use them only as proxies.</p>
+
+      <p>To specify the bastion host from the example above as
+      running a restricted shell:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(add-to-list 'tramp-restricted-shell-hosts-alist
+             "\\`bastion\\.your\\.domain\\'")
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT1" href="#DOCF1" id="FOOT1">(1)</a></h3>
+
+    <p>HTTP tunnels are intended for secure SSL/TLS communication.
+    Therefore, many proxy servers restrict the tunnels to related
+    target ports. You might need to run your ssh server on your
+    target host &lsquo;<samp>host.other.domain</samp>&rsquo; on
+    such a port, like 443 (https). See <a href=
+    "http://savannah.gnu.org/maintenance/CvsFromBehindFirewall">http://savannah.gnu.org/maintenance/CvsFromBehindFirewall</a>
+    for discussion of ethical issues.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Customizing-Methods.html#Customizing-Methods"
+    accesskey="n" rel="next">Customizing Methods</a>, Previous:
+    <a href="Default-Host.html#Default-Host" accesskey="p" rel=
+    "prev">Default Host</a>, Up: <a href=
+    "Configuration.html#Configuration" accesskey="u" rel=
+    "up">Configuration</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

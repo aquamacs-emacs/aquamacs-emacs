@@ -1,14 +1,21 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Errors and Events - Using of D-Bus</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Using of D-Bus">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Alternative-Buses.html#Alternative-Buses" title="Alternative Buses">
-<link rel="next" href="Index.html#Index" title="Index">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Errors and Events - Using of D-Bus</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Using of D-Bus" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Alternative-Buses.html#Alternative-Buses"
+  title="Alternative Buses" />
+  <link rel="next" href="Index.html#Index" title="Index" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
@@ -23,8 +30,10 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -34,134 +43,221 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Errors-and-Events"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Index.html#Index">Index</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Alternative-Buses.html#Alternative-Buses">Alternative Buses</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Errors-and-Events" id="Errors-and-Events"></a>
 
-<h2 class="chapter">9 Errors and events.</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Index.html#Index">Index</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Alternative-Buses.html#Alternative-Buses">Alternative
+    Buses</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-debugging-57"></a><a name="index-errors-58"></a><a name="index-events-59"></a>
-The internal actions can be traced by running in a debug mode.
+  <h2 class="chapter">9 Errors and events.</h2>
 
-<div class="defun">
-&mdash; Variable: <b>dbus-debug</b><var><a name="index-dbus_002ddebug-60"></a></var><br>
-<blockquote><p>If this variable is non-<code>nil</code>, D-Bus specific debug messages are raised. 
-</p></blockquote></div>
+  <p><a name="index-debugging-57" id=
+  "index-debugging-57"></a><a name="index-errors-58" id=
+  "index-errors-58"></a><a name="index-events-59" id=
+  "index-events-59"></a> The internal actions can be traced by
+  running in a debug mode.</p>
 
-   <p>Input parameters of <code>dbus-call-method</code>,
-<code>dbus-call-method-non-blocking</code>,
-<code>dbus-call-method-asynchronously</code>, and
-<code>dbus-register-signal</code> are checked for correct D-Bus types. If
-there is a type mismatch, the Lisp error <code>wrong-type-argument</code>
-<code>D-Bus ARG</code> is raised.
+  <div class="defun">
+    &mdash; Variable: <b>dbus-debug</b><var><a name=
+    "index-dbus_002ddebug-60" id=
+    "index-dbus_002ddebug-60"></a></var><br />
 
-   <p>All errors raised by D-Bus are signaled with the error symbol
-<code>dbus-error</code>.  If possible, error messages from D-Bus are
-appended to the <code>dbus-error</code>.
+    <blockquote>
+      <p>If this variable is non-<code>nil</code>, D-Bus specific
+      debug messages are raised.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Special Form: <b>dbus-ignore-errors</b><var> forms<small class="dots">...</small><a name="index-dbus_002dignore_002derrors-61"></a></var><br>
-<blockquote><p>This executes <var>forms</var> exactly like a <code>progn</code>, except that
-<code>dbus-error</code> errors are ignored during the <var>forms</var>.  These
-errors can be made visible when <code>dbus-debug</code> is set to <code>t</code>. 
-</p></blockquote></div>
+  <p>Input parameters of <code>dbus-call-method</code>,
+  <code>dbus-call-method-non-blocking</code>,
+  <code>dbus-call-method-asynchronously</code>, and
+  <code>dbus-register-signal</code> are checked for correct D-Bus
+  types. If there is a type mismatch, the Lisp error
+  <code>wrong-type-argument</code> <code>D-Bus ARG</code> is
+  raised.</p>
 
-   <p>Incoming D-Bus messages are handled as Emacs events, see see <a href="../elisp/Misc-Events.html#Misc-Events">Misc Events</a>.  They are retrieved only, when Emacs runs in
-interactive mode.  The generated event has this form:
+  <p>All errors raised by D-Bus are signaled with the error symbol
+  <code>dbus-error</code>. If possible, error messages from D-Bus
+  are appended to the <code>dbus-error</code>.</p>
 
-<pre class="lisp">     (dbus-event <var>bus</var> <var>type</var> <var>serial</var> <var>service</var> <var>path</var> <var>interface</var> <var>member</var> <var>handler</var>
+  <div class="defun">
+    &mdash; Special Form: <b>dbus-ignore-errors</b>
+    <var>forms<small class="dots">...</small><a name=
+    "index-dbus_002dignore_002derrors-61" id=
+    "index-dbus_002dignore_002derrors-61"></a></var><br />
+
+    <blockquote>
+      <p>This executes <var>forms</var> exactly like a
+      <code>progn</code>, except that <code>dbus-error</code>
+      errors are ignored during the <var>forms</var>. These errors
+      can be made visible when <code>dbus-debug</code> is set to
+      <code>t</code>.</p>
+    </blockquote>
+  </div>
+
+  <p>Incoming D-Bus messages are handled as Emacs events, see see
+  <a href="../elisp/Misc-Events.html#Misc-Events">Misc Events</a>.
+  They are retrieved only, when Emacs runs in interactive mode. The
+  generated event has this form:</p>
+  <pre class="lisp">
+     (dbus-event <var>bus</var> <var>type</var> <var>serial</var> <var>service</var> <var>path</var> <var>interface</var> <var>member</var> <var>handler</var>
              &amp;rest <var>args</var>)
 </pre>
-   <p><var>bus</var> identifies the D-Bus the message is coming from.  It is
-either the symbol <code>:system</code> or the symbol <code>:session</code>.
 
-   <p><var>type</var> is the D-Bus message type which has caused the event.  It
-can be <code>dbus-message-type-invalid</code>,
-<code>dbus-message-type-method-call</code>,
-<code>dbus-message-type-method-return</code>,
-<code>dbus-message-type-error</code>, or <code>dbus-message-type-signal</code>. 
-<var>serial</var> is the serial number of the received D-Bus message.
+  <p><var>bus</var> identifies the D-Bus the message is coming
+  from. It is either the symbol <code>:system</code> or the symbol
+  <code>:session</code>.</p>
 
-   <p><var>service</var> and <var>path</var> are the unique name and the object path
-of the D-Bus object emitting the message.  <var>interface</var> and
-<var>member</var> denote the message which has been sent.
+  <p><var>type</var> is the D-Bus message type which has caused the
+  event. It can be <code>dbus-message-type-invalid</code>,
+  <code>dbus-message-type-method-call</code>,
+  <code>dbus-message-type-method-return</code>,
+  <code>dbus-message-type-error</code>, or
+  <code>dbus-message-type-signal</code>. <var>serial</var> is the
+  serial number of the received D-Bus message.</p>
 
-   <p><var>handler</var> is the callback function which has been registered for
-this message (see see <a href="Signals.html#Signals">Signals</a>).  When a <code>dbus-event</code> event
-arrives, <var>handler</var> is called with <var>args</var> as arguments.
+  <p><var>service</var> and <var>path</var> are the unique name and
+  the object path of the D-Bus object emitting the message.
+  <var>interface</var> and <var>member</var> denote the message
+  which has been sent.</p>
 
-   <p>In order to inspect the <code>dbus-event</code> data, you could extend the
-definition of the callback function in <a href="Signals.html#Signals">Signals</a>:
+  <p><var>handler</var> is the callback function which has been
+  registered for this message (see see <a href=
+  "Signals.html#Signals">Signals</a>). When a
+  <code>dbus-event</code> event arrives, <var>handler</var> is
+  called with <var>args</var> as arguments.</p>
 
-<pre class="lisp">     (defun my-dbus-signal-handler (&amp;rest args)
+  <p>In order to inspect the <code>dbus-event</code> data, you
+  could extend the definition of the callback function in <a href=
+  "Signals.html#Signals">Signals</a>:</p>
+  <pre class="lisp">
+     (defun my-dbus-signal-handler (&amp;rest args)
        (message "my-dbus-signal-handler: %S" last-input-event))
 </pre>
-   <p>There exist convenience functions which could be called inside a
-callback function in order to retrieve the information from the event.
 
-<div class="defun">
-&mdash; Function: <b>dbus-event-bus-name</b><var> event<a name="index-dbus_002devent_002dbus_002dname-62"></a></var><br>
-<blockquote><p>Returns the bus name <var>event</var> is coming from. 
-The result is either the symbol <code>:system</code> or the symbol <code>:session</code>. 
-</p></blockquote></div>
+  <p>There exist convenience functions which could be called inside
+  a callback function in order to retrieve the information from the
+  event.</p>
 
-<div class="defun">
-&mdash; Function: <b>dbus-event-message-type</b><var> event<a name="index-dbus_002devent_002dmessage_002dtype-63"></a></var><br>
-<blockquote><p>Returns the message type of the corresponding D-Bus message.  The
-result is a natural number. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Function: <b>dbus-event-bus-name</b> <var>event<a name=
+    "index-dbus_002devent_002dbus_002dname-62" id=
+    "index-dbus_002devent_002dbus_002dname-62"></a></var><br />
 
-<div class="defun">
-&mdash; Function: <b>dbus-event-serial-number</b><var> event<a name="index-dbus_002devent_002dserial_002dnumber-64"></a></var><br>
-<blockquote><p>Returns the serial number of the corresponding D-Bus message. 
-The result is a natural number. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Returns the bus name <var>event</var> is coming from. The
+      result is either the symbol <code>:system</code> or the
+      symbol <code>:session</code>.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Function: <b>dbus-event-service-name</b><var> event<a name="index-dbus_002devent_002dservice_002dname-65"></a></var><br>
-<blockquote><p>Returns the unique name of the D-Bus object <var>event</var> is coming from. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Function: <b>dbus-event-message-type</b>
+    <var>event<a name=
+    "index-dbus_002devent_002dmessage_002dtype-63" id=
+    "index-dbus_002devent_002dmessage_002dtype-63"></a></var><br />
 
-<div class="defun">
-&mdash; Function: <b>dbus-event-path-name</b><var> event<a name="index-dbus_002devent_002dpath_002dname-66"></a></var><br>
-<blockquote><p>Returns the object path of the D-Bus object <var>event</var> is coming from. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Returns the message type of the corresponding D-Bus
+      message. The result is a natural number.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Function: <b>dbus-event-interface-name</b><var> event<a name="index-dbus_002devent_002dinterface_002dname-67"></a></var><br>
-<blockquote><p>Returns the interface name of the D-Bus object <var>event</var> is coming from. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Function: <b>dbus-event-serial-number</b>
+    <var>event<a name=
+    "index-dbus_002devent_002dserial_002dnumber-64" id=
+    "index-dbus_002devent_002dserial_002dnumber-64"></a></var><br />
 
-<div class="defun">
-&mdash; Function: <b>dbus-event-member-name</b><var> event<a name="index-dbus_002devent_002dmember_002dname-68"></a></var><br>
-<blockquote><p>Returns the member name of the D-Bus object <var>event</var> is coming
-from.  It is either a signal name or a method name. 
-</p></blockquote></div>
 
-   <p>D-Bus errors are not propagated during event handling, because it is
-usually not desired.  D-Bus errors in events can be made visible by
-setting the variable <code>dbus-debug</code> to <code>t</code>.  They can also be
-handled by a hook function.
+    <blockquote>
+      <p>Returns the serial number of the corresponding D-Bus
+      message. The result is a natural number.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Variable: <b>dbus-event-error-hooks</b><var><a name="index-dbus_002devent_002derror_002dhooks-69"></a></var><br>
-<blockquote><p>This hook variable keeps a list of functions, which are called when a
-D-Bus error happens in the event handler.  Every function must accept
-two arguments, the event and the error variable catched in
-<code>condition-case</code> by <code>dbus-error</code>.
+  <div class="defun">
+    &mdash; Function: <b>dbus-event-service-name</b>
+    <var>event<a name=
+    "index-dbus_002devent_002dservice_002dname-65" id=
+    "index-dbus_002devent_002dservice_002dname-65"></a></var><br />
 
-        <p>Such functions can be used the adapt the error signal to be raised. 
-Example:
+    <blockquote>
+      <p>Returns the unique name of the D-Bus object
+      <var>event</var> is coming from.</p>
+    </blockquote>
+  </div>
 
-     <pre class="lisp">          (defun my-dbus-event-error-handler (event error)
+  <div class="defun">
+    &mdash; Function: <b>dbus-event-path-name</b>
+    <var>event<a name="index-dbus_002devent_002dpath_002dname-66"
+    id="index-dbus_002devent_002dpath_002dname-66"></a></var><br />
+
+    <blockquote>
+      <p>Returns the object path of the D-Bus object
+      <var>event</var> is coming from.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Function: <b>dbus-event-interface-name</b>
+    <var>event<a name=
+    "index-dbus_002devent_002dinterface_002dname-67" id=
+    "index-dbus_002devent_002dinterface_002dname-67"></a></var><br />
+
+
+    <blockquote>
+      <p>Returns the interface name of the D-Bus object
+      <var>event</var> is coming from.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Function: <b>dbus-event-member-name</b>
+    <var>event<a name="index-dbus_002devent_002dmember_002dname-68"
+    id=
+    "index-dbus_002devent_002dmember_002dname-68"></a></var><br />
+
+    <blockquote>
+      <p>Returns the member name of the D-Bus object
+      <var>event</var> is coming from. It is either a signal name
+      or a method name.</p>
+    </blockquote>
+  </div>
+
+  <p>D-Bus errors are not propagated during event handling, because
+  it is usually not desired. D-Bus errors in events can be made
+  visible by setting the variable <code>dbus-debug</code> to
+  <code>t</code>. They can also be handled by a hook function.</p>
+
+  <div class="defun">
+    &mdash; Variable: <b>dbus-event-error-hooks</b><var><a name=
+    "index-dbus_002devent_002derror_002dhooks-69" id=
+    "index-dbus_002devent_002derror_002dhooks-69"></a></var><br />
+
+    <blockquote>
+      <p>This hook variable keeps a list of functions, which are
+      called when a D-Bus error happens in the event handler. Every
+      function must accept two arguments, the event and the error
+      variable catched in <code>condition-case</code> by
+      <code>dbus-error</code>.</p>
+
+      <p>Such functions can be used the adapt the error signal to
+      be raised. Example:</p>
+      <pre class="lisp">
+          (defun my-dbus-event-error-handler (event error)
             (when (string-equal (concat dbus-service-emacs ".FileManager")
                                 (dbus-event-interface-name event))
               (message "my-dbus-event-error-handler: %S %S" event error)
@@ -169,11 +265,11 @@ Example:
           
           (add-hook 'dbus-event-error-hooks 'my-dbus-event-error-handler)
 </pre>
-        </blockquote></div>
+    </blockquote>
+  </div>
 
-   <p>Hook functions shall take into account, that there might be other
-D-Bus applications running.  Therefore, they shall check carefully,
-whether a given D-Bus error is related to them.
-
-   </body></html>
-
+  <p>Hook functions shall take into account, that there might be
+  other D-Bus applications running. Therefore, they shall check
+  carefully, whether a given D-Bus error is related to them.</p>
+</body>
+</html>

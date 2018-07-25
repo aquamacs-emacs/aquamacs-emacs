@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,115 +19,205 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Parsing Expressions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Parsing Expressions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Parsing Expressions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Syntax-Tables.html#Syntax-Tables" rel="up" title="Syntax Tables">
-<link href="Motion-via-Parsing.html#Motion-via-Parsing" rel="next" title="Motion via Parsing">
-<link href="Motion-and-Syntax.html#Motion-and-Syntax" rel="prev" title="Motion and Syntax">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Parsing
+  Expressions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Parsing Expressions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Parsing Expressions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Syntax-Tables.html#Syntax-Tables" rel="up" title=
+  "Syntax Tables" />
+  <link href="Motion-via-Parsing.html#Motion-via-Parsing" rel=
+  "next" title="Motion via Parsing" />
+  <link href="Motion-and-Syntax.html#Motion-and-Syntax" rel="prev"
+  title="Motion and Syntax" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Parsing-Expressions" id="Parsing-Expressions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Syntax-Table-Internals.html#Syntax-Table-Internals" accesskey=
+    "n" rel="next">Syntax Table Internals</a>, Previous: <a href=
+    "Motion-and-Syntax.html#Motion-and-Syntax" accesskey="p" rel=
+    "prev">Motion and Syntax</a>, Up: <a href=
+    "Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Parsing-Expressions-1" id="Parsing-Expressions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Parsing-Expressions"></a>
-<div class="header">
-<p>
-Next: <a href="Syntax-Table-Internals.html#Syntax-Table-Internals" accesskey="n" rel="next">Syntax Table Internals</a>, Previous: <a href="Motion-and-Syntax.html#Motion-and-Syntax" accesskey="p" rel="prev">Motion and Syntax</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Parsing-Expressions-1"></a>
-<h3 class="section">34.6 Parsing Expressions</h3>
-<a name="index-parsing-expressions"></a>
-<a name="index-scanning-expressions"></a>
+  <h3 class="section">34.6 Parsing Expressions</h3><a name=
+  "index-parsing-expressions" id="index-parsing-expressions"></a>
+  <a name="index-scanning-expressions" id=
+  "index-scanning-expressions"></a>
 
-<p>This section describes functions for parsing and scanning balanced
-expressions.  We will refer to such expressions as <em>sexps</em>,
-following the terminology of Lisp, even though these functions can act
-on languages other than Lisp.  Basically, a sexp is either a balanced
-parenthetical grouping, a string, or a symbol (i.e., a sequence
-of characters whose syntax is either word constituent or symbol
-constituent).  However, characters in the expression prefix syntax
-class (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>) are treated as part of the sexp if
-they appear next to it.
-</p>
-<p>The syntax table controls the interpretation of characters, so these
-functions can be used for Lisp expressions when in Lisp mode and for C
-expressions when in C mode.  See <a href="List-Motion.html#List-Motion">List Motion</a>, for convenient
-higher-level functions for moving over balanced expressions.
-</p>
-<p>A character&rsquo;s syntax controls how it changes the state of the
-parser, rather than describing the state itself.  For example, a
-string delimiter character toggles the parser state between
-in-string and in-code, but the syntax of characters does not
-directly say whether they are inside a string.  For example (note that
-15 is the syntax code for generic string delimiters),
-</p>
-<div class="example">
-<pre class="example">(put-text-property 1 9 'syntax-table '(15 . nil))
-</pre></div>
+  <p>This section describes functions for parsing and scanning
+  balanced expressions. We will refer to such expressions as
+  <em>sexps</em>, following the terminology of Lisp, even though
+  these functions can act on languages other than Lisp. Basically,
+  a sexp is either a balanced parenthetical grouping, a string, or
+  a symbol (i.e., a sequence of characters whose syntax is either
+  word constituent or symbol constituent). However, characters in
+  the expression prefix syntax class (see <a href=
+  "Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class
+  Table</a>) are treated as part of the sexp if they appear next to
+  it.</p>
 
-<p>does not tell Emacs that the first eight chars of the current buffer
-are a string, but rather that they are all string delimiters.  As a
-result, Emacs treats them as four consecutive empty string constants.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Motion-via-Parsing.html#Motion-via-Parsing" accesskey="1">Motion via Parsing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Motion functions that work by parsing.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Position-Parse.html#Position-Parse" accesskey="2">Position Parse</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Determining the syntactic state of a position.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Parser-State.html#Parser-State" accesskey="3">Parser State</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Emacs represents a syntactic state.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Low_002dLevel-Parsing.html#Low_002dLevel-Parsing" accesskey="4">Low-Level Parsing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Parsing across a specified region.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Control-Parsing.html#Control-Parsing" accesskey="5">Control Parsing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Parameters that affect parsing.
-</td></tr>
-</table>
+  <p>The syntax table controls the interpretation of characters, so
+  these functions can be used for Lisp expressions when in Lisp
+  mode and for C expressions when in C mode. See <a href=
+  "List-Motion.html#List-Motion">List Motion</a>, for convenient
+  higher-level functions for moving over balanced expressions.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Syntax-Table-Internals.html#Syntax-Table-Internals" accesskey="n" rel="next">Syntax Table Internals</a>, Previous: <a href="Motion-and-Syntax.html#Motion-and-Syntax" accesskey="p" rel="prev">Motion and Syntax</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A character&rsquo;s syntax controls how it changes the state
+  of the parser, rather than describing the state itself. For
+  example, a string delimiter character toggles the parser state
+  between in-string and in-code, but the syntax of characters does
+  not directly say whether they are inside a string. For example
+  (note that 15 is the syntax code for generic string
+  delimiters),</p>
 
+  <div class="example">
+    <pre class="example">
+(put-text-property 1 9 'syntax-table '(15 . nil))
+</pre>
+  </div>
 
+  <p>does not tell Emacs that the first eight chars of the current
+  buffer are a string, but rather that they are all string
+  delimiters. As a result, Emacs treats them as four consecutive
+  empty string constants.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Motion-via-Parsing.html#Motion-via-Parsing" accesskey=
+      "1">Motion via Parsing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Motion functions that work by
+      parsing.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Position-Parse.html#Position-Parse" accesskey="2">Position
+      Parse</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Determining the syntactic state
+      of a position.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Parser-State.html#Parser-State" accesskey="3">Parser
+      State</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How Emacs represents a
+      syntactic state.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Low_002dLevel-Parsing.html#Low_002dLevel-Parsing" accesskey=
+      "4">Low-Level Parsing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Parsing across a specified
+      region.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Control-Parsing.html#Control-Parsing" accesskey="5">Control
+      Parsing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Parameters that affect
+      parsing.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Syntax-Table-Internals.html#Syntax-Table-Internals" accesskey=
+    "n" rel="next">Syntax Table Internals</a>, Previous: <a href=
+    "Motion-and-Syntax.html#Motion-and-Syntax" accesskey="p" rel=
+    "prev">Motion and Syntax</a>, Up: <a href=
+    "Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

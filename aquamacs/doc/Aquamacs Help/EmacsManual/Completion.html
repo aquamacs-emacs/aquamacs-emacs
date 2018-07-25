@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,95 +20,171 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Completion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Completion">
-<meta name="keywords" content="GNU Emacs Manual: Completion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Minibuffer.html#Minibuffer" rel="up" title="Minibuffer">
-<link href="Completion-Example.html#Completion-Example" rel="next" title="Completion Example">
-<link href="Minibuffer-Edit.html#Minibuffer-Edit" rel="prev" title="Minibuffer Edit">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Completion</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Completion" />
+  <meta name="keywords" content="GNU Emacs Manual: Completion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Minibuffer.html#Minibuffer" rel="up" title=
+  "Minibuffer" />
+  <link href="Completion-Example.html#Completion-Example" rel=
+  "next" title="Completion Example" />
+  <link href="Minibuffer-Edit.html#Minibuffer-Edit" rel="prev"
+  title="Minibuffer Edit" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Completion" id="Completion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Minibuffer-History.html#Minibuffer-History"
+    accesskey="n" rel="next">Minibuffer History</a>, Previous:
+    <a href="Minibuffer-Edit.html#Minibuffer-Edit" accesskey="p"
+    rel="prev">Minibuffer Edit</a>, Up: <a href=
+    "Minibuffer.html#Minibuffer" accesskey="u" rel=
+    "up">Minibuffer</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Completion-1" id="Completion-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Completion"></a>
-<div class="header">
-<p>
-Next: <a href="Minibuffer-History.html#Minibuffer-History" accesskey="n" rel="next">Minibuffer History</a>, Previous: <a href="Minibuffer-Edit.html#Minibuffer-Edit" accesskey="p" rel="prev">Minibuffer Edit</a>, Up: <a href="Minibuffer.html#Minibuffer" accesskey="u" rel="up">Minibuffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Completion-1"></a>
-<h3 class="section">8.4 Completion</h3>
-<a name="index-completion"></a>
+  <h3 class="section">8.4 Completion</h3><a name="index-completion"
+  id="index-completion"></a>
 
-<p>You can often use a feature called <em>completion</em> to help enter
-arguments.  This means that after you type part of the argument, Emacs
-can fill in the rest, or some of it, based on what was typed so far.
-</p>
-<a name="index-completion-alternative"></a>
-<p>When completion is available, certain keys (usually <tt class="key">TAB</tt>,
-<tt class="key">RET</tt>, and <tt class="key">SPC</tt>) are rebound in the minibuffer to special
-completion commands (see <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a>).  These commands
-attempt to complete the text in the minibuffer, based on a set of
-<em>completion alternatives</em> provided by the command that requested
-the argument.  You can usually type <kbd>?</kbd> to see a list of
-completion alternatives.
-</p>
-<p>Although completion is usually done in the minibuffer, the feature
-is sometimes available in ordinary buffers too.  See <a href="Symbol-Completion.html#Symbol-Completion">Symbol Completion</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Completion-Example.html#Completion-Example" accesskey="1">Completion Example</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Examples of using completion.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Completion-Commands.html#Completion-Commands" accesskey="2">Completion Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A list of completion commands.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Completion-Exit.html#Completion-Exit" accesskey="3">Completion Exit</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Completion and minibuffer text submission.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Completion-Styles.html#Completion-Styles" accesskey="4">Completion Styles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How completion matches are chosen.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Completion-Options.html#Completion-Options" accesskey="5">Completion Options</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Options for completion.
-</td></tr>
-</table>
+  <p>You can often use a feature called <em>completion</em> to help
+  enter arguments. This means that after you type part of the
+  argument, Emacs can fill in the rest, or some of it, based on
+  what was typed so far.</p><a name="index-completion-alternative"
+  id="index-completion-alternative"></a>
 
+  <p>When completion is available, certain keys (usually <tt class=
+  "key">TAB</tt>, <tt class="key">RET</tt>, and <tt class=
+  "key">SPC</tt>) are rebound in the minibuffer to special
+  completion commands (see <a href=
+  "Completion-Commands.html#Completion-Commands">Completion
+  Commands</a>). These commands attempt to complete the text in the
+  minibuffer, based on a set of <em>completion alternatives</em>
+  provided by the command that requested the argument. You can
+  usually type <kbd>?</kbd> to see a list of completion
+  alternatives.</p>
 
+  <p>Although completion is usually done in the minibuffer, the
+  feature is sometimes available in ordinary buffers too. See
+  <a href="Symbol-Completion.html#Symbol-Completion">Symbol
+  Completion</a>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Completion-Example.html#Completion-Example" accesskey=
+      "1">Completion Example</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Examples of using
+      completion.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Completion-Commands.html#Completion-Commands" accesskey=
+      "2">Completion Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A list of completion
+      commands.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Completion-Exit.html#Completion-Exit" accesskey=
+      "3">Completion Exit</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Completion and minibuffer text
+      submission.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Completion-Styles.html#Completion-Styles" accesskey=
+      "4">Completion Styles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How completion matches are
+      chosen.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Completion-Options.html#Completion-Options" accesskey=
+      "5">Completion Options</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Options for completion.</td>
+    </tr>
+  </table>
 </body>
 </html>

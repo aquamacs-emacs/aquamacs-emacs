@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,148 +19,226 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Vector Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Vector Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Vector Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up" title="Sequences Arrays Vectors">
-<link href="Char_002dTables.html#Char_002dTables" rel="next" title="Char-Tables">
-<link href="Vectors.html#Vectors" rel="prev" title="Vectors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Vector Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Vector Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Vector Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up"
+  title="Sequences Arrays Vectors" />
+  <link href="Char_002dTables.html#Char_002dTables" rel="next"
+  title="Char-Tables" />
+  <link href="Vectors.html#Vectors" rel="prev" title="Vectors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Vector-Functions" id="Vector-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Char_002dTables.html#Char_002dTables"
+    accesskey="n" rel="next">Char-Tables</a>, Previous: <a href=
+    "Vectors.html#Vectors" accesskey="p" rel="prev">Vectors</a>,
+    Up: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Functions-for-Vectors" id="Functions-for-Vectors"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Vector-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Char_002dTables.html#Char_002dTables" accesskey="n" rel="next">Char-Tables</a>, Previous: <a href="Vectors.html#Vectors" accesskey="p" rel="prev">Vectors</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Functions-for-Vectors"></a>
-<h3 class="section">6.5 Functions for Vectors</h3>
+  <h3 class="section">6.5 Functions for Vectors</h3>
 
-<p>Here are some functions that relate to vectors:
-</p>
-<dl>
-<dt><a name="index-vectorp"></a>Function: <strong>vectorp</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a vector.
-</p>
-<div class="example">
-<pre class="example">(vectorp [a])
+  <p>Here are some functions that relate to vectors:</p>
+
+  <dl>
+    <dt><a name="index-vectorp" id="index-vectorp"></a>Function:
+    <strong>vectorp</strong> <em>object</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a vector.</p>
+
+      <div class="example">
+        <pre class="example">
+(vectorp [a])
      &rArr; t
-(vectorp &quot;asdf&quot;)
+(vectorp "asdf")
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-vector"></a>Function: <strong>vector</strong> <em>&amp;rest objects</em></dt>
-<dd><p>This function creates and returns a vector whose elements are the
-arguments, <var>objects</var>.
-</p>
-<div class="example">
-<pre class="example">(vector 'foo 23 [bar baz] &quot;rats&quot;)
-     &rArr; [foo 23 [bar baz] &quot;rats&quot;]
+  <dl>
+    <dt><a name="index-vector" id="index-vector"></a>Function:
+    <strong>vector</strong> <em>&amp;rest objects</em></dt>
+
+    <dd>
+      <p>This function creates and returns a vector whose elements
+      are the arguments, <var>objects</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(vector 'foo 23 [bar baz] "rats")
+     &rArr; [foo 23 [bar baz] "rats"]
 (vector)
      &rArr; []
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-make_002dvector"></a>Function: <strong>make-vector</strong> <em>length object</em></dt>
-<dd><p>This function returns a new vector consisting of <var>length</var> elements,
-each initialized to <var>object</var>.
-</p>
-<div class="example">
-<pre class="example">(setq sleepy (make-vector 9 'Z))
+  <dl>
+    <dt><a name="index-make_002dvector" id=
+    "index-make_002dvector"></a>Function:
+    <strong>make-vector</strong> <em>length object</em></dt>
+
+    <dd>
+      <p>This function returns a new vector consisting of
+      <var>length</var> elements, each initialized to
+      <var>object</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq sleepy (make-vector 9 'Z))
      &rArr; [Z Z Z Z Z Z Z Z Z]
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-vconcat"></a>Function: <strong>vconcat</strong> <em>&amp;rest sequences</em></dt>
-<dd><a name="index-copying-vectors"></a>
-<p>This function returns a new vector containing all the elements of
-<var>sequences</var>.  The arguments <var>sequences</var> may be true lists,
-vectors, strings or bool-vectors.  If no <var>sequences</var> are given,
-the empty vector is returned.
-</p>
-<p>The value is either the empty vector, or is a newly constructed
-nonempty vector that is not <code>eq</code> to any existing vector.
-</p>
-<div class="example">
-<pre class="example">(setq a (vconcat '(A B C) '(D E F)))
+  <dl>
+    <dt><a name="index-vconcat" id="index-vconcat"></a>Function:
+    <strong>vconcat</strong> <em>&amp;rest sequences</em></dt>
+
+    <dd>
+      <a name="index-copying-vectors" id=
+      "index-copying-vectors"></a>
+
+      <p>This function returns a new vector containing all the
+      elements of <var>sequences</var>. The arguments
+      <var>sequences</var> may be true lists, vectors, strings or
+      bool-vectors. If no <var>sequences</var> are given, the empty
+      vector is returned.</p>
+
+      <p>The value is either the empty vector, or is a newly
+      constructed nonempty vector that is not <code>eq</code> to
+      any existing vector.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq a (vconcat '(A B C) '(D E F)))
      &rArr; [A B C D E F]
 (eq a (vconcat a))
      &rArr; nil
-</pre><pre class="example">(vconcat)
+</pre>
+        <pre class="example">
+(vconcat)
      &rArr; []
-(vconcat [A B C] &quot;aa&quot; '(foo (6 7)))
+(vconcat [A B C] "aa" '(foo (6 7)))
      &rArr; [A B C 97 97 foo (6 7)]
-</pre></div>
+</pre>
+      </div>
 
-<p>The <code>vconcat</code> function also allows byte-code function objects as
-arguments.  This is a special feature to make it easy to access the entire
-contents of a byte-code function object.  See <a href="Byte_002dCode-Objects.html#Byte_002dCode-Objects">Byte-Code Objects</a>.
-</p>
-<p>For other concatenation functions, see <code>mapconcat</code> in <a href="Mapping-Functions.html#Mapping-Functions">Mapping Functions</a>, <code>concat</code> in <a href="Creating-Strings.html#Creating-Strings">Creating Strings</a>, and <code>append</code>
-in <a href="Building-Lists.html#Building-Lists">Building Lists</a>.
-</p></dd></dl>
+      <p>The <code>vconcat</code> function also allows byte-code
+      function objects as arguments. This is a special feature to
+      make it easy to access the entire contents of a byte-code
+      function object. See <a href=
+      "Byte_002dCode-Objects.html#Byte_002dCode-Objects">Byte-Code
+      Objects</a>.</p>
 
-<p>The <code>append</code> function also provides a way to convert a vector into a
-list with the same elements:
-</p>
-<div class="example">
-<pre class="example">(setq avector [1 two (quote (three)) &quot;four&quot; [five]])
-     &rArr; [1 two (quote (three)) &quot;four&quot; [five]]
+      <p>For other concatenation functions, see
+      <code>mapconcat</code> in <a href=
+      "Mapping-Functions.html#Mapping-Functions">Mapping
+      Functions</a>, <code>concat</code> in <a href=
+      "Creating-Strings.html#Creating-Strings">Creating
+      Strings</a>, and <code>append</code> in <a href=
+      "Building-Lists.html#Building-Lists">Building Lists</a>.</p>
+    </dd>
+  </dl>
+
+  <p>The <code>append</code> function also provides a way to
+  convert a vector into a list with the same elements:</p>
+
+  <div class="example">
+    <pre class="example">
+(setq avector [1 two (quote (three)) "four" [five]])
+     &rArr; [1 two (quote (three)) "four" [five]]
 (append avector nil)
-     &rArr; (1 two (quote (three)) &quot;four&quot; [five])
-</pre></div>
+     &rArr; (1 two (quote (three)) "four" [five])
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Char_002dTables.html#Char_002dTables" accesskey="n" rel="next">Char-Tables</a>, Previous: <a href="Vectors.html#Vectors" accesskey="p" rel="prev">Vectors</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Char_002dTables.html#Char_002dTables"
+    accesskey="n" rel="next">Char-Tables</a>, Previous: <a href=
+    "Vectors.html#Vectors" accesskey="p" rel="prev">Vectors</a>,
+    Up: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

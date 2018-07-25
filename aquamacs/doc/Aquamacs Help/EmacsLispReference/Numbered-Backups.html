@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,137 +19,211 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Numbered Backups</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Numbered Backups">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Numbered Backups">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Backup-Files.html#Backup-Files" rel="up" title="Backup Files">
-<link href="Backup-Names.html#Backup-Names" rel="next" title="Backup Names">
-<link href="Rename-or-Copy.html#Rename-or-Copy" rel="prev" title="Rename or Copy">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Numbered Backups</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Numbered Backups" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Numbered Backups" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Backup-Files.html#Backup-Files" rel="up" title=
+  "Backup Files" />
+  <link href="Backup-Names.html#Backup-Names" rel="next" title=
+  "Backup Names" />
+  <link href="Rename-or-Copy.html#Rename-or-Copy" rel="prev" title=
+  "Rename or Copy" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Numbered-Backups" id="Numbered-Backups"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Backup-Names.html#Backup-Names" accesskey="n"
+    rel="next">Backup Names</a>, Previous: <a href=
+    "Rename-or-Copy.html#Rename-or-Copy" accesskey="p" rel=
+    "prev">Rename or Copy</a>, Up: <a href=
+    "Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup
+    Files</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Making-and-Deleting-Numbered-Backup-Files" id=
+  "Making-and-Deleting-Numbered-Backup-Files"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Numbered-Backups"></a>
-<div class="header">
-<p>
-Next: <a href="Backup-Names.html#Backup-Names" accesskey="n" rel="next">Backup Names</a>, Previous: <a href="Rename-or-Copy.html#Rename-or-Copy" accesskey="p" rel="prev">Rename or Copy</a>, Up: <a href="Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Making-and-Deleting-Numbered-Backup-Files"></a>
-<h4 class="subsection">25.1.3 Making and Deleting Numbered Backup Files</h4>
-<a name="index-numbered-backups"></a>
+  <h4 class="subsection">25.1.3 Making and Deleting Numbered Backup
+  Files</h4><a name="index-numbered-backups" id=
+  "index-numbered-backups"></a>
 
-<p>If a file&rsquo;s name is <samp>foo</samp>, the names of its numbered backup
-versions are <samp>foo.~<var>v</var>~</samp>, for various integers <var>v</var>, like
-this: <samp>foo.~1~</samp>, <samp>foo.~2~</samp>, <samp>foo.~3~</samp>, &hellip;,
-<samp>foo.~259~</samp>, and so on.
-</p>
-<dl>
-<dt><a name="index-version_002dcontrol"></a>User Option: <strong>version-control</strong></dt>
-<dd><p>This variable controls whether to make a single non-numbered backup
-file or multiple numbered backups.
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>Make numbered backups if the visited file already has numbered backups;
-otherwise, do not.  This is the default.
-</p>
-</dd>
-<dt><code>never</code></dt>
-<dd><p>Do not make numbered backups.
-</p>
-</dd>
-<dt><var>anything else</var></dt>
-<dd><p>Make numbered backups.
-</p></dd>
-</dl>
-</dd></dl>
+  <p>If a file&rsquo;s name is <samp>foo</samp>, the names of its
+  numbered backup versions are <samp>foo.~<var>v</var>~</samp>, for
+  various integers <var>v</var>, like this: <samp>foo.~1~</samp>,
+  <samp>foo.~2~</samp>, <samp>foo.~3~</samp>, &hellip;,
+  <samp>foo.~259~</samp>, and so on.</p>
 
-<p>The use of numbered backups ultimately leads to a large number of
-backup versions, which must then be deleted.  Emacs can do this
-automatically or it can ask the user whether to delete them.
-</p>
-<dl>
-<dt><a name="index-kept_002dnew_002dversions"></a>User Option: <strong>kept-new-versions</strong></dt>
-<dd><p>The value of this variable is the number of newest versions to keep
-when a new numbered backup is made.  The newly made backup is included
-in the count.  The default value is&nbsp;2.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-version_002dcontrol" id=
+    "index-version_002dcontrol"></a>User Option:
+    <strong>version-control</strong></dt>
 
-<dl>
-<dt><a name="index-kept_002dold_002dversions"></a>User Option: <strong>kept-old-versions</strong></dt>
-<dd><p>The value of this variable is the number of oldest versions to keep
-when a new numbered backup is made.  The default value is&nbsp;2.
-</p></dd></dl>
+    <dd>
+      <p>This variable controls whether to make a single
+      non-numbered backup file or multiple numbered backups.</p>
 
-<p>If there are backups numbered 1, 2, 3, 5, and 7, and both of these
-variables have the value 2, then the backups numbered 1 and 2 are kept
-as old versions and those numbered 5 and 7 are kept as new versions;
-backup version 3 is excess.  The function <code>find-backup-file-name</code>
-(see <a href="Backup-Names.html#Backup-Names">Backup Names</a>) is responsible for determining which backup
-versions to delete, but does not delete them itself.
-</p>
-<dl>
-<dt><a name="index-delete_002dold_002dversions"></a>User Option: <strong>delete-old-versions</strong></dt>
-<dd><p>If this variable is <code>t</code>, then saving a file deletes excess
-backup versions silently.  If it is <code>nil</code>, that means
-to ask for confirmation before deleting excess backups.
-Otherwise, they are not deleted at all.
-</p></dd></dl>
+      <dl compact="compact">
+        <dt><code>nil</code></dt>
 
-<dl>
-<dt><a name="index-dired_002dkept_002dversions"></a>User Option: <strong>dired-kept-versions</strong></dt>
-<dd><p>This variable specifies how many of the newest backup versions to keep
-in the Dired command <kbd>.</kbd> (<code>dired-clean-directory</code>).  That&rsquo;s the
-same thing <code>kept-new-versions</code> specifies when you make a new backup
-file.  The default is&nbsp;2.
-</p></dd></dl>
+        <dd>
+          <p>Make numbered backups if the visited file already has
+          numbered backups; otherwise, do not. This is the
+          default.</p>
+        </dd>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Backup-Names.html#Backup-Names" accesskey="n" rel="next">Backup Names</a>, Previous: <a href="Rename-or-Copy.html#Rename-or-Copy" accesskey="p" rel="prev">Rename or Copy</a>, Up: <a href="Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+        <dt><code>never</code></dt>
 
+        <dd>
+          <p>Do not make numbered backups.</p>
+        </dd>
 
+        <dt><var>anything else</var></dt>
 
+        <dd>
+          <p>Make numbered backups.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <p>The use of numbered backups ultimately leads to a large number
+  of backup versions, which must then be deleted. Emacs can do this
+  automatically or it can ask the user whether to delete them.</p>
+
+  <dl>
+    <dt><a name="index-kept_002dnew_002dversions" id=
+    "index-kept_002dnew_002dversions"></a>User Option:
+    <strong>kept-new-versions</strong></dt>
+
+    <dd>
+      <p>The value of this variable is the number of newest
+      versions to keep when a new numbered backup is made. The
+      newly made backup is included in the count. The default value
+      is&nbsp;2.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-kept_002dold_002dversions" id=
+    "index-kept_002dold_002dversions"></a>User Option:
+    <strong>kept-old-versions</strong></dt>
+
+    <dd>
+      <p>The value of this variable is the number of oldest
+      versions to keep when a new numbered backup is made. The
+      default value is&nbsp;2.</p>
+    </dd>
+  </dl>
+
+  <p>If there are backups numbered 1, 2, 3, 5, and 7, and both of
+  these variables have the value 2, then the backups numbered 1 and
+  2 are kept as old versions and those numbered 5 and 7 are kept as
+  new versions; backup version 3 is excess. The function
+  <code>find-backup-file-name</code> (see <a href=
+  "Backup-Names.html#Backup-Names">Backup Names</a>) is responsible
+  for determining which backup versions to delete, but does not
+  delete them itself.</p>
+
+  <dl>
+    <dt><a name="index-delete_002dold_002dversions" id=
+    "index-delete_002dold_002dversions"></a>User Option:
+    <strong>delete-old-versions</strong></dt>
+
+    <dd>
+      <p>If this variable is <code>t</code>, then saving a file
+      deletes excess backup versions silently. If it is
+      <code>nil</code>, that means to ask for confirmation before
+      deleting excess backups. Otherwise, they are not deleted at
+      all.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dired_002dkept_002dversions" id=
+    "index-dired_002dkept_002dversions"></a>User Option:
+    <strong>dired-kept-versions</strong></dt>
+
+    <dd>
+      <p>This variable specifies how many of the newest backup
+      versions to keep in the Dired command <kbd>.</kbd>
+      (<code>dired-clean-directory</code>). That&rsquo;s the same
+      thing <code>kept-new-versions</code> specifies when you make
+      a new backup file. The default is&nbsp;2.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Backup-Names.html#Backup-Names" accesskey="n"
+    rel="next">Backup Names</a>, Previous: <a href=
+    "Rename-or-Copy.html#Rename-or-Copy" accesskey="p" rel=
+    "prev">Rename or Copy</a>, Up: <a href=
+    "Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup
+    Files</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

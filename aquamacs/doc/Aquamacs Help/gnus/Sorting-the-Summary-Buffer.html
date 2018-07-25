@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Sorting the Summary Buffer - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
-<link rel="prev" href="Threading.html#Threading" title="Threading">
-<link rel="next" href="Asynchronous-Fetching.html#Asynchronous-Fetching" title="Asynchronous Fetching">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Sorting the Summary Buffer - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Summary-Buffer.html#Summary-Buffer" title=
+  "Summary Buffer" />
+  <link rel="prev" href="Threading.html#Threading" title=
+  "Threading" />
+  <link rel="next" href=
+  "Asynchronous-Fetching.html#Asynchronous-Fetching" title=
+  "Asynchronous Fetching" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +36,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,93 +49,157 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Sorting-the-Summary-Buffer"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Asynchronous-Fetching.html#Asynchronous-Fetching">Asynchronous Fetching</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Threading.html#Threading">Threading</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Sorting-the-Summary-Buffer" id=
+    "Sorting-the-Summary-Buffer"></a>
 
-<h3 class="section">3.10 Sorting the Summary Buffer</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Asynchronous-Fetching.html#Asynchronous-Fetching">Asynchronous
+    Fetching</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Threading.html#Threading">Threading</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href=
+    "Summary-Buffer.html#Summary-Buffer">Summary Buffer</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-gnus_002dthread_002dsort_002dby_002dtotal_002dscore-1020"></a><a name="index-gnus_002dthread_002dsort_002dby_002ddate-1021"></a><a name="index-gnus_002dthread_002dsort_002dby_002dscore-1022"></a><a name="index-gnus_002dthread_002dsort_002dby_002dsubject-1023"></a><a name="index-gnus_002dthread_002dsort_002dby_002dauthor-1024"></a><a name="index-gnus_002dthread_002dsort_002dby_002drecipient-1025"></a><a name="index-gnus_002dthread_002dsort_002dby_002dnumber-1026"></a><a name="index-gnus_002dthread_002dsort_002dby_002drandom-1027"></a><a name="index-gnus_002dthread_002dsort_002dfunctions-1028"></a><a name="index-gnus_002dthread_002dsort_002dby_002dmost_002drecent_002dnumber-1029"></a><a name="index-gnus_002dthread_002dsort_002dby_002dmost_002drecent_002ddate-1030"></a>If you are using a threaded summary display, you can sort the threads by
-setting <code>gnus-thread-sort-functions</code>, which can be either a single
-function, a list of functions, or a list containing functions and
-<code>(not some-function)</code> elements.
+  <h3 class="section">3.10 Sorting the Summary Buffer</h3>
 
-   <p>By default, sorting is done on article numbers.  Ready-made sorting
-predicate functions include <code>gnus-thread-sort-by-number</code>,
-<code>gnus-thread-sort-by-author</code>, <code>gnus-thread-sort-by-recipient</code>,
-<code>gnus-thread-sort-by-subject</code>,
-<code>gnus-thread-sort-by-date</code>,
-<code>gnus-thread-sort-by-score</code>,
-<code>gnus-thread-sort-by-most-recent-number</code>,
-<code>gnus-thread-sort-by-most-recent-date</code>,
-<code>gnus-thread-sort-by-random</code> and
-<code>gnus-thread-sort-by-total-score</code>.
+  <p><a name=
+  "index-gnus_002dthread_002dsort_002dby_002dtotal_002dscore-1020"
+  id=
+  "index-gnus_002dthread_002dsort_002dby_002dtotal_002dscore-1020"></a><a name="index-gnus_002dthread_002dsort_002dby_002ddate-1021"
+  id=
+  "index-gnus_002dthread_002dsort_002dby_002ddate-1021"></a><a name="index-gnus_002dthread_002dsort_002dby_002dscore-1022"
+  id=
+  "index-gnus_002dthread_002dsort_002dby_002dscore-1022"></a><a name="index-gnus_002dthread_002dsort_002dby_002dsubject-1023"
+  id=
+  "index-gnus_002dthread_002dsort_002dby_002dsubject-1023"></a><a name="index-gnus_002dthread_002dsort_002dby_002dauthor-1024"
+  id=
+  "index-gnus_002dthread_002dsort_002dby_002dauthor-1024"></a><a name="index-gnus_002dthread_002dsort_002dby_002drecipient-1025"
+  id=
+  "index-gnus_002dthread_002dsort_002dby_002drecipient-1025"></a><a name="index-gnus_002dthread_002dsort_002dby_002dnumber-1026"
+  id=
+  "index-gnus_002dthread_002dsort_002dby_002dnumber-1026"></a><a name="index-gnus_002dthread_002dsort_002dby_002drandom-1027"
+  id=
+  "index-gnus_002dthread_002dsort_002dby_002drandom-1027"></a><a name="index-gnus_002dthread_002dsort_002dfunctions-1028"
+  id=
+  "index-gnus_002dthread_002dsort_002dfunctions-1028"></a><a name=
+  "index-gnus_002dthread_002dsort_002dby_002dmost_002drecent_002dnumber-1029"
+  id=
+  "index-gnus_002dthread_002dsort_002dby_002dmost_002drecent_002dnumber-1029"></a><a name="index-gnus_002dthread_002dsort_002dby_002dmost_002drecent_002ddate-1030"
+  id=
+  "index-gnus_002dthread_002dsort_002dby_002dmost_002drecent_002ddate-1030"></a>If
+  you are using a threaded summary display, you can sort the
+  threads by setting <code>gnus-thread-sort-functions</code>, which
+  can be either a single function, a list of functions, or a list
+  containing functions and <code>(not some-function)</code>
+  elements.</p>
 
-   <p>Each function takes two threads and returns non-<code>nil</code> if the first
-thread should be sorted before the other.  Note that sorting really is
-normally done by looking only at the roots of each thread.
+  <p>By default, sorting is done on article numbers. Ready-made
+  sorting predicate functions include
+  <code>gnus-thread-sort-by-number</code>,
+  <code>gnus-thread-sort-by-author</code>,
+  <code>gnus-thread-sort-by-recipient</code>,
+  <code>gnus-thread-sort-by-subject</code>,
+  <code>gnus-thread-sort-by-date</code>,
+  <code>gnus-thread-sort-by-score</code>,
+  <code>gnus-thread-sort-by-most-recent-number</code>,
+  <code>gnus-thread-sort-by-most-recent-date</code>,
+  <code>gnus-thread-sort-by-random</code> and
+  <code>gnus-thread-sort-by-total-score</code>.</p>
 
-   <p>If you use more than one function, the primary sort key should be the
-last function in the list.  You should probably always include
-<code>gnus-thread-sort-by-number</code> in the list of sorting
-functions&mdash;preferably first.  This will ensure that threads that are
-equal with respect to the other sort criteria will be displayed in
-ascending article order.
+  <p>Each function takes two threads and returns
+  non-<code>nil</code> if the first thread should be sorted before
+  the other. Note that sorting really is normally done by looking
+  only at the roots of each thread.</p>
 
-   <p>If you would like to sort by reverse score, then by subject, and finally
-by number, you could do something like:
+  <p>If you use more than one function, the primary sort key should
+  be the last function in the list. You should probably always
+  include <code>gnus-thread-sort-by-number</code> in the list of
+  sorting functions&mdash;preferably first. This will ensure that
+  threads that are equal with respect to the other sort criteria
+  will be displayed in ascending article order.</p>
 
-<pre class="lisp">     (setq gnus-thread-sort-functions
+  <p>If you would like to sort by reverse score, then by subject,
+  and finally by number, you could do something like:</p>
+  <pre class="lisp">
+     (setq gnus-thread-sort-functions
            '(gnus-thread-sort-by-number
              gnus-thread-sort-by-subject
              (not gnus-thread-sort-by-total-score)))
 </pre>
-   <p>The threads that have highest score will be displayed first in the
-summary buffer.  When threads have the same score, they will be sorted
-alphabetically.  The threads that have the same score and the same
-subject will be sorted by number, which is (normally) the sequence in
-which the articles arrived.
 
-   <p>If you want to sort by score and then reverse arrival order, you could
-say something like:
+  <p>The threads that have highest score will be displayed first in
+  the summary buffer. When threads have the same score, they will
+  be sorted alphabetically. The threads that have the same score
+  and the same subject will be sorted by number, which is
+  (normally) the sequence in which the articles arrived.</p>
 
-<pre class="lisp">     (setq gnus-thread-sort-functions
+  <p>If you want to sort by score and then reverse arrival order,
+  you could say something like:</p>
+  <pre class="lisp">
+     (setq gnus-thread-sort-functions
            '((not gnus-thread-sort-by-number)
              gnus-thread-sort-by-score))
 </pre>
-   <p><a name="index-gnus_002dthread_002dscore_002dfunction-1031"></a>The function in the <code>gnus-thread-score-function</code> variable (default
-<code>+</code>) is used for calculating the total score of a thread.  Useful
-functions might be <code>max</code>, <code>min</code>, or squared means, or whatever
-tickles your fancy.
 
-   <p><a name="index-gnus_002darticle_002dsort_002dfunctions-1032"></a><a name="index-gnus_002darticle_002dsort_002dby_002ddate-1033"></a><a name="index-gnus_002darticle_002dsort_002dby_002dmost_002drecent_002ddate-1034"></a><a name="index-gnus_002darticle_002dsort_002dby_002dscore-1035"></a><a name="index-gnus_002darticle_002dsort_002dby_002dsubject-1036"></a><a name="index-gnus_002darticle_002dsort_002dby_002dauthor-1037"></a><a name="index-gnus_002darticle_002dsort_002dby_002drandom-1038"></a><a name="index-gnus_002darticle_002dsort_002dby_002dnumber-1039"></a><a name="index-gnus_002darticle_002dsort_002dby_002dmost_002drecent_002dnumber-1040"></a>If you are using an unthreaded display for some strange reason or
-other, you have to fiddle with the <code>gnus-article-sort-functions</code>
-variable.  It is very similar to the
-<code>gnus-thread-sort-functions</code>, except that it uses slightly
-different functions for article comparison.  Available sorting
-predicate functions are <code>gnus-article-sort-by-number</code>,
-<code>gnus-article-sort-by-author</code>,
-<code>gnus-article-sort-by-subject</code>, <code>gnus-article-sort-by-date</code>,
-<code>gnus-article-sort-by-random</code>, and
-<code>gnus-article-sort-by-score</code>.
+  <p><a name="index-gnus_002dthread_002dscore_002dfunction-1031"
+  id="index-gnus_002dthread_002dscore_002dfunction-1031"></a>The
+  function in the <code>gnus-thread-score-function</code> variable
+  (default <code>+</code>) is used for calculating the total score
+  of a thread. Useful functions might be <code>max</code>,
+  <code>min</code>, or squared means, or whatever tickles your
+  fancy.</p>
 
-   <p>If you want to sort an unthreaded summary display by subject, you could
-say something like:
+  <p><a name="index-gnus_002darticle_002dsort_002dfunctions-1032"
+  id=
+  "index-gnus_002darticle_002dsort_002dfunctions-1032"></a><a name=
+  "index-gnus_002darticle_002dsort_002dby_002ddate-1033" id=
+  "index-gnus_002darticle_002dsort_002dby_002ddate-1033"></a><a name="index-gnus_002darticle_002dsort_002dby_002dmost_002drecent_002ddate-1034"
+  id=
+  "index-gnus_002darticle_002dsort_002dby_002dmost_002drecent_002ddate-1034"></a><a name="index-gnus_002darticle_002dsort_002dby_002dscore-1035"
+  id=
+  "index-gnus_002darticle_002dsort_002dby_002dscore-1035"></a><a name="index-gnus_002darticle_002dsort_002dby_002dsubject-1036"
+  id=
+  "index-gnus_002darticle_002dsort_002dby_002dsubject-1036"></a><a name="index-gnus_002darticle_002dsort_002dby_002dauthor-1037"
+  id=
+  "index-gnus_002darticle_002dsort_002dby_002dauthor-1037"></a><a name="index-gnus_002darticle_002dsort_002dby_002drandom-1038"
+  id=
+  "index-gnus_002darticle_002dsort_002dby_002drandom-1038"></a><a name="index-gnus_002darticle_002dsort_002dby_002dnumber-1039"
+  id=
+  "index-gnus_002darticle_002dsort_002dby_002dnumber-1039"></a><a name="index-gnus_002darticle_002dsort_002dby_002dmost_002drecent_002dnumber-1040"
+  id=
+  "index-gnus_002darticle_002dsort_002dby_002dmost_002drecent_002dnumber-1040"></a>If
+  you are using an unthreaded display for some strange reason or
+  other, you have to fiddle with the
+  <code>gnus-article-sort-functions</code> variable. It is very
+  similar to the <code>gnus-thread-sort-functions</code>, except
+  that it uses slightly different functions for article comparison.
+  Available sorting predicate functions are
+  <code>gnus-article-sort-by-number</code>,
+  <code>gnus-article-sort-by-author</code>,
+  <code>gnus-article-sort-by-subject</code>,
+  <code>gnus-article-sort-by-date</code>,
+  <code>gnus-article-sort-by-random</code>, and
+  <code>gnus-article-sort-by-score</code>.</p>
 
-<pre class="lisp">     (setq gnus-article-sort-functions
+  <p>If you want to sort an unthreaded summary display by subject,
+  you could say something like:</p>
+  <pre class="lisp">
+     (setq gnus-article-sort-functions
            '(gnus-article-sort-by-number
              gnus-article-sort-by-subject))
 </pre>
-   <p>You can define group specific sorting via <code>gnus-parameters</code>,
-See <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>.
 
-   </body></html>
-
+  <p>You can define group specific sorting via
+  <code>gnus-parameters</code>, See <a href=
+  "Group-Parameters.html#Group-Parameters">Group
+  Parameters</a>.</p>
+</body>
+</html>

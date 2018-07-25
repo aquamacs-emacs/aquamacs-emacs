@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,134 +19,196 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Base 64</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Base 64">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Base 64">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Checksum_002fHash.html#Checksum_002fHash" rel="next" title="Checksum/Hash">
-<link href="Decompression.html#Decompression" rel="prev" title="Decompression">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Base 64</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Base 64" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Base 64" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Checksum_002fHash.html#Checksum_002fHash" rel="next"
+  title="Checksum/Hash" />
+  <link href="Decompression.html#Decompression" rel="prev" title=
+  "Decompression" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Base-64" id="Base-64"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Checksum_002fHash.html#Checksum_002fHash"
+    accesskey="n" rel="next">Checksum/Hash</a>, Previous: <a href=
+    "Decompression.html#Decompression" accesskey="p" rel=
+    "prev">Decompression</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Base-64-Encoding" id="Base-64-Encoding"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Base-64"></a>
-<div class="header">
-<p>
-Next: <a href="Checksum_002fHash.html#Checksum_002fHash" accesskey="n" rel="next">Checksum/Hash</a>, Previous: <a href="Decompression.html#Decompression" accesskey="p" rel="prev">Decompression</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Base-64-Encoding"></a>
-<h3 class="section">31.24 Base 64 Encoding</h3>
-<a name="index-base-64-encoding"></a>
+  <h3 class="section">31.24 Base 64 Encoding</h3><a name=
+  "index-base-64-encoding" id="index-base-64-encoding"></a>
 
-<p>Base 64 code is used in email to encode a sequence of 8-bit bytes as
-a longer sequence of <acronym>ASCII</acronym> graphic characters.  It is defined in
-Internet RFC<a name="DOCF14" href="#FOOT14"><sup>14</sup></a>2045.  This section describes the functions for
-converting to and from this code.
-</p>
-<dl>
-<dt><a name="index-base64_002dencode_002dregion"></a>Command: <strong>base64-encode-region</strong> <em>beg end &amp;optional no-line-break</em></dt>
-<dd><p>This function converts the region from <var>beg</var> to <var>end</var> into base
-64 code.  It returns the length of the encoded text.  An error is
-signaled if a character in the region is multibyte, i.e., in a
-multibyte buffer the region must contain only characters from the
-charsets <code>ascii</code>, <code>eight-bit-control</code> and
-<code>eight-bit-graphic</code>.
-</p>
-<p>Normally, this function inserts newline characters into the encoded
-text, to avoid overlong lines.  However, if the optional argument
-<var>no-line-break</var> is non-<code>nil</code>, these newlines are not added, so
-the output is just one long line.
-</p></dd></dl>
+  <p>Base 64 code is used in email to encode a sequence of 8-bit
+  bytes as a longer sequence of <acronym>ASCII</acronym> graphic
+  characters. It is defined in Internet RFC<a name="DOCF14" href=
+  "#FOOT14" id="DOCF14"><sup>14</sup></a>2045. This section
+  describes the functions for converting to and from this code.</p>
 
-<dl>
-<dt><a name="index-base64_002dencode_002dstring"></a>Function: <strong>base64-encode-string</strong> <em>string &amp;optional no-line-break</em></dt>
-<dd><p>This function converts the string <var>string</var> into base 64 code.  It
-returns a string containing the encoded text.  As for
-<code>base64-encode-region</code>, an error is signaled if a character in the
-string is multibyte.
-</p>
-<p>Normally, this function inserts newline characters into the encoded
-text, to avoid overlong lines.  However, if the optional argument
-<var>no-line-break</var> is non-<code>nil</code>, these newlines are not added, so
-the result string is just one long line.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-base64_002dencode_002dregion" id=
+    "index-base64_002dencode_002dregion"></a>Command:
+    <strong>base64-encode-region</strong> <em>beg end &amp;optional
+    no-line-break</em></dt>
 
-<dl>
-<dt><a name="index-base64_002ddecode_002dregion"></a>Command: <strong>base64-decode-region</strong> <em>beg end</em></dt>
-<dd><p>This function converts the region from <var>beg</var> to <var>end</var> from base
-64 code into the corresponding decoded text.  It returns the length of
-the decoded text.
-</p>
-<p>The decoding functions ignore newline characters in the encoded text.
-</p></dd></dl>
+    <dd>
+      <p>This function converts the region from <var>beg</var> to
+      <var>end</var> into base 64 code. It returns the length of
+      the encoded text. An error is signaled if a character in the
+      region is multibyte, i.e., in a multibyte buffer the region
+      must contain only characters from the charsets
+      <code>ascii</code>, <code>eight-bit-control</code> and
+      <code>eight-bit-graphic</code>.</p>
 
-<dl>
-<dt><a name="index-base64_002ddecode_002dstring"></a>Function: <strong>base64-decode-string</strong> <em>string</em></dt>
-<dd><p>This function converts the string <var>string</var> from base 64 code into
-the corresponding decoded text.  It returns a unibyte string containing the
-decoded text.
-</p>
-<p>The decoding functions ignore newline characters in the encoded text.
-</p></dd></dl>
+      <p>Normally, this function inserts newline characters into
+      the encoded text, to avoid overlong lines. However, if the
+      optional argument <var>no-line-break</var> is
+      non-<code>nil</code>, these newlines are not added, so the
+      output is just one long line.</p>
+    </dd>
+  </dl>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl>
+    <dt><a name="index-base64_002dencode_002dstring" id=
+    "index-base64_002dencode_002dstring"></a>Function:
+    <strong>base64-encode-string</strong> <em>string &amp;optional
+    no-line-break</em></dt>
 
-<h3><a name="FOOT14" href="#DOCF14">(14)</a></h3>
-<p>An RFC, an acronym for <em>Request for Comments</em>, is a numbered
-Internet informational document describing a standard.  RFCs are
-usually written by technical experts acting on their own initiative,
-and are traditionally written in a pragmatic, experience-driven
-manner.
-</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Checksum_002fHash.html#Checksum_002fHash" accesskey="n" rel="next">Checksum/Hash</a>, Previous: <a href="Decompression.html#Decompression" accesskey="p" rel="prev">Decompression</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function converts the string <var>string</var> into
+      base 64 code. It returns a string containing the encoded
+      text. As for <code>base64-encode-region</code>, an error is
+      signaled if a character in the string is multibyte.</p>
 
+      <p>Normally, this function inserts newline characters into
+      the encoded text, to avoid overlong lines. However, if the
+      optional argument <var>no-line-break</var> is
+      non-<code>nil</code>, these newlines are not added, so the
+      result string is just one long line.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-base64_002ddecode_002dregion" id=
+    "index-base64_002ddecode_002dregion"></a>Command:
+    <strong>base64-decode-region</strong> <em>beg end</em></dt>
 
+    <dd>
+      <p>This function converts the region from <var>beg</var> to
+      <var>end</var> from base 64 code into the corresponding
+      decoded text. It returns the length of the decoded text.</p>
+
+      <p>The decoding functions ignore newline characters in the
+      encoded text.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-base64_002ddecode_002dstring" id=
+    "index-base64_002ddecode_002dstring"></a>Function:
+    <strong>base64-decode-string</strong> <em>string</em></dt>
+
+    <dd>
+      <p>This function converts the string <var>string</var> from
+      base 64 code into the corresponding decoded text. It returns
+      a unibyte string containing the decoded text.</p>
+
+      <p>The decoding functions ignore newline characters in the
+      encoded text.</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT14" href="#DOCF14" id="FOOT14">(14)</a></h3>
+
+    <p>An RFC, an acronym for <em>Request for Comments</em>, is a
+    numbered Internet informational document describing a standard.
+    RFCs are usually written by technical experts acting on their
+    own initiative, and are traditionally written in a pragmatic,
+    experience-driven manner.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Checksum_002fHash.html#Checksum_002fHash"
+    accesskey="n" rel="next">Checksum/Hash</a>, Previous: <a href=
+    "Decompression.html#Decompression" accesskey="p" rel=
+    "prev">Decompression</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

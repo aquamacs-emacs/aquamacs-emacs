@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,201 +18,273 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Linear Fits</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Linear Fits">
-<meta name="keywords" content="GNU Emacs Calc Manual: Linear Fits">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Curve-Fitting.html#Curve-Fitting" rel="up" title="Curve Fitting">
-<link href="Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits" rel="next" title="Polynomial and Multilinear Fits">
-<link href="Curve-Fitting.html#Curve-Fitting" rel="prev" title="Curve Fitting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Linear Fits</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Linear Fits" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Linear Fits" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Curve-Fitting.html#Curve-Fitting" rel="up" title=
+  "Curve Fitting" />
+  <link href=
+  "Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits"
+  rel="next" title="Polynomial and Multilinear Fits" />
+  <link href="Curve-Fitting.html#Curve-Fitting" rel="prev" title=
+  "Curve Fitting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Linear-Fits"></a>
-<div class="header">
-<p>
-Next: <a href="Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits" accesskey="n" rel="next">Polynomial and Multilinear Fits</a>, Previous: <a href="Curve-Fitting.html#Curve-Fitting" accesskey="p" rel="prev">Curve Fitting</a>, Up: <a href="Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Linear-Fits-1"></a>
-<h4 class="subsection">10.8.1 Linear Fits</h4>
+<body lang="en" xml:lang="en">
+  <a name="Linear-Fits" id="Linear-Fits"></a>
 
-<a name="index-a-F"></a>
-<a name="index-calc_002dcurve_002dfit"></a>
-<a name="index-fit"></a>
-<a name="index-Linear-regression"></a>
-<a name="index-Least_002dsquares-fits"></a>
-<p>The <kbd>a F</kbd> (<code>calc-curve-fit</code>) [<code>fit</code>] command attempts
-to fit a set of data (&lsquo;<samp>x</samp>&rsquo; and &lsquo;<samp>y</samp>&rsquo; vectors of numbers) to a
-straight line, polynomial, or other function of &lsquo;<samp>x</samp>&rsquo;.  For the
-moment we will consider only the case of fitting to a line, and we
-will ignore the issue of whether or not the model was in fact a good
-fit for the data.
-</p>
-<p>In a standard linear least-squares fit, we have a set of &lsquo;<samp>(x,y)</samp>&rsquo;
-data points that we wish to fit to the model &lsquo;<samp>y = m x + b</samp>&rsquo;
-by adjusting the parameters &lsquo;<samp>m</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo; to make the &lsquo;<samp>y</samp>&rsquo;
-values calculated from the formula be as close as possible to the actual
-&lsquo;<samp>y</samp>&rsquo; values in the data set.  (In a polynomial fit, the model is
-instead, say, &lsquo;<samp>y = a x^3 + b x^2 + c x + d</samp>&rsquo;.  In a multilinear fit,
-we have data points of the form &lsquo;<samp>(x_1,x_2,x_3,y)</samp>&rsquo; and our model is
-&lsquo;<samp>y = a x_1 + b x_2 + c x_3 + d</samp>&rsquo;.  These will be discussed later.)
-</p>
-<p>In the model formula, variables like &lsquo;<samp>x</samp>&rsquo; and &lsquo;<samp>x_2</samp>&rsquo; are called
-the <em>independent variables</em>, and &lsquo;<samp>y</samp>&rsquo; is the <em>dependent
-variable</em>.  Variables like &lsquo;<samp>m</samp>&rsquo;, &lsquo;<samp>a</samp>&rsquo;, and &lsquo;<samp>b</samp>&rsquo; are called
-the <em>parameters</em> of the model.
-</p>
-<p>The <kbd>a F</kbd> command takes the data set to be fitted from the stack.
-By default, it expects the data in the form of a matrix.  For example,
-for a linear or polynomial fit, this would be a
-2xN
-matrix where the first row is a list of &lsquo;<samp>x</samp>&rsquo; values and the second
-row has the corresponding &lsquo;<samp>y</samp>&rsquo; values.  For the multilinear fit
-shown above, the matrix would have four rows (&lsquo;<samp>x_1</samp>&rsquo;, &lsquo;<samp>x_2</samp>&rsquo;,
-&lsquo;<samp>x_3</samp>&rsquo;, and &lsquo;<samp>y</samp>&rsquo;, respectively).
-</p>
-<p>If you happen to have an
-Nx2
-matrix instead of a
-2xN
-matrix, just press <kbd>v t</kbd> first to transpose the matrix.
-</p>
-<p>After you type <kbd>a F</kbd>, Calc prompts you to select a model.  For a
-linear fit, press the digit <kbd>1</kbd>.
-</p>
-<p>Calc then prompts for you to name the variables.  By default it chooses
-high letters like &lsquo;<samp>x</samp>&rsquo; and &lsquo;<samp>y</samp>&rsquo; for independent variables and
-low letters like &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo; for parameters.  (The dependent
-variable doesn&rsquo;t need a name.)  The two kinds of variables are separated
-by a semicolon.  Since you generally care more about the names of the
-independent variables than of the parameters, Calc also allows you to
-name only those and let the parameters use default names.
-</p>
-<p>For example, suppose the data matrix
-</p>
-<div class="example">
-<pre class="example">[ [ 1, 2, 3, 4,  5  ]
+  <div class="header">
+    <p>Next: <a href=
+    "Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits"
+    accesskey="n" rel="next">Polynomial and Multilinear Fits</a>,
+    Previous: <a href="Curve-Fitting.html#Curve-Fitting" accesskey=
+    "p" rel="prev">Curve Fitting</a>, Up: <a href=
+    "Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve
+    Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Linear-Fits-1" id="Linear-Fits-1"></a>
+
+  <h4 class="subsection">10.8.1 Linear Fits</h4><a name="index-a-F"
+  id="index-a-F"></a> <a name="index-calc_002dcurve_002dfit" id=
+  "index-calc_002dcurve_002dfit"></a> <a name="index-fit" id=
+  "index-fit"></a> <a name="index-Linear-regression" id=
+  "index-Linear-regression"></a> <a name=
+  "index-Least_002dsquares-fits" id=
+  "index-Least_002dsquares-fits"></a>
+
+  <p>The <kbd>a F</kbd> (<code>calc-curve-fit</code>)
+  [<code>fit</code>] command attempts to fit a set of data
+  (&lsquo;<samp>x</samp>&rsquo; and &lsquo;<samp>y</samp>&rsquo;
+  vectors of numbers) to a straight line, polynomial, or other
+  function of &lsquo;<samp>x</samp>&rsquo;. For the moment we will
+  consider only the case of fitting to a line, and we will ignore
+  the issue of whether or not the model was in fact a good fit for
+  the data.</p>
+
+  <p>In a standard linear least-squares fit, we have a set of
+  &lsquo;<samp>(x,y)</samp>&rsquo; data points that we wish to fit
+  to the model &lsquo;<samp>y = m x + b</samp>&rsquo; by adjusting
+  the parameters &lsquo;<samp>m</samp>&rsquo; and
+  &lsquo;<samp>b</samp>&rsquo; to make the
+  &lsquo;<samp>y</samp>&rsquo; values calculated from the formula
+  be as close as possible to the actual
+  &lsquo;<samp>y</samp>&rsquo; values in the data set. (In a
+  polynomial fit, the model is instead, say, &lsquo;<samp>y = a x^3
+  + b x^2 + c x + d</samp>&rsquo;. In a multilinear fit, we have
+  data points of the form
+  &lsquo;<samp>(x_1,x_2,x_3,y)</samp>&rsquo; and our model is
+  &lsquo;<samp>y = a x_1 + b x_2 + c x_3 + d</samp>&rsquo;. These
+  will be discussed later.)</p>
+
+  <p>In the model formula, variables like
+  &lsquo;<samp>x</samp>&rsquo; and &lsquo;<samp>x_2</samp>&rsquo;
+  are called the <em>independent variables</em>, and
+  &lsquo;<samp>y</samp>&rsquo; is the <em>dependent variable</em>.
+  Variables like &lsquo;<samp>m</samp>&rsquo;,
+  &lsquo;<samp>a</samp>&rsquo;, and &lsquo;<samp>b</samp>&rsquo;
+  are called the <em>parameters</em> of the model.</p>
+
+  <p>The <kbd>a F</kbd> command takes the data set to be fitted
+  from the stack. By default, it expects the data in the form of a
+  matrix. For example, for a linear or polynomial fit, this would
+  be a 2xN matrix where the first row is a list of
+  &lsquo;<samp>x</samp>&rsquo; values and the second row has the
+  corresponding &lsquo;<samp>y</samp>&rsquo; values. For the
+  multilinear fit shown above, the matrix would have four rows
+  (&lsquo;<samp>x_1</samp>&rsquo;, &lsquo;<samp>x_2</samp>&rsquo;,
+  &lsquo;<samp>x_3</samp>&rsquo;, and &lsquo;<samp>y</samp>&rsquo;,
+  respectively).</p>
+
+  <p>If you happen to have an Nx2 matrix instead of a 2xN matrix,
+  just press <kbd>v t</kbd> first to transpose the matrix.</p>
+
+  <p>After you type <kbd>a F</kbd>, Calc prompts you to select a
+  model. For a linear fit, press the digit <kbd>1</kbd>.</p>
+
+  <p>Calc then prompts for you to name the variables. By default it
+  chooses high letters like &lsquo;<samp>x</samp>&rsquo; and
+  &lsquo;<samp>y</samp>&rsquo; for independent variables and low
+  letters like &lsquo;<samp>a</samp>&rsquo; and
+  &lsquo;<samp>b</samp>&rsquo; for parameters. (The dependent
+  variable doesn&rsquo;t need a name.) The two kinds of variables
+  are separated by a semicolon. Since you generally care more about
+  the names of the independent variables than of the parameters,
+  Calc also allows you to name only those and let the parameters
+  use default names.</p>
+
+  <p>For example, suppose the data matrix</p>
+
+  <div class="example">
+    <pre class="example">
+[ [ 1, 2, 3, 4,  5  ]
   [ 5, 7, 9, 11, 13 ] ]
-</pre></div>
+</pre>
+  </div>
 
-<p>is on the stack and we wish to do a simple linear fit.  Type
-<kbd>a F</kbd>, then <kbd>1</kbd> for the model, then <tt class="key">RET</tt> to use
-the default names.  The result will be the formula &lsquo;<samp>3. + 2. x</samp>&rsquo;
-on the stack.  Calc has created the model expression <kbd>a + b x</kbd>,
-then found the optimal values of &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo; to fit the
-data.  (In this case, it was able to find an exact fit.)  Calc then
-substituted those values for &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo; in the model
-formula.
-</p>
-<p>The <kbd>a F</kbd> command puts two entries in the trail.  One is, as
-always, a copy of the result that went to the stack; the other is
-a vector of the actual parameter values, written as equations:
-&lsquo;<samp>[a = 3, b = 2]</samp>&rsquo;, in case you&rsquo;d rather read them in a list
-than pick them out of the formula.  (You can type <kbd>t y</kbd>
-to move this vector to the stack; see <a href="Trail-Commands.html#Trail-Commands">Trail Commands</a>.
-</p>
-<p>Specifying a different independent variable name will affect the
-resulting formula: <kbd>a F 1 k <span class="key">RET</span></kbd> produces <kbd>3 + 2 k</kbd>.
-Changing the parameter names (say, <kbd>a F 1 k;b,m <span class="key">RET</span></kbd>) will affect
-the equations that go into the trail.
-</p>
+  <p>is on the stack and we wish to do a simple linear fit. Type
+  <kbd>a F</kbd>, then <kbd>1</kbd> for the model, then <tt class=
+  "key">RET</tt> to use the default names. The result will be the
+  formula &lsquo;<samp>3. + 2. x</samp>&rsquo; on the stack. Calc
+  has created the model expression <kbd>a + b x</kbd>, then found
+  the optimal values of &lsquo;<samp>a</samp>&rsquo; and
+  &lsquo;<samp>b</samp>&rsquo; to fit the data. (In this case, it
+  was able to find an exact fit.) Calc then substituted those
+  values for &lsquo;<samp>a</samp>&rsquo; and
+  &lsquo;<samp>b</samp>&rsquo; in the model formula.</p>
 
-<p>To see what happens when the fit is not exact, we could change
-the number 13 in the data matrix to 14 and try the fit again.
-The result is:
-</p>
-<div class="example">
-<pre class="example">2.6 + 2.2 x
-</pre></div>
+  <p>The <kbd>a F</kbd> command puts two entries in the trail. One
+  is, as always, a copy of the result that went to the stack; the
+  other is a vector of the actual parameter values, written as
+  equations: &lsquo;<samp>[a = 3, b = 2]</samp>&rsquo;, in case
+  you&rsquo;d rather read them in a list than pick them out of the
+  formula. (You can type <kbd>t y</kbd> to move this vector to the
+  stack; see <a href="Trail-Commands.html#Trail-Commands">Trail
+  Commands</a>.</p>
 
-<p>Evaluating this formula, say with <kbd>v x 5 <span class="key">RET</span> <span class="key">TAB</span> V M $ <span class="key">RET</span></kbd>, shows
-a reasonably close match to the y-values in the data.
-</p>
-<div class="example">
-<pre class="example">[4.8, 7., 9.2, 11.4, 13.6]
-</pre></div>
+  <p>Specifying a different independent variable name will affect
+  the resulting formula: <kbd>a F 1 k <span class=
+  "key">RET</span></kbd> produces <kbd>3 + 2 k</kbd>. Changing the
+  parameter names (say, <kbd>a F 1 k;b,m <span class=
+  "key">RET</span></kbd>) will affect the equations that go into
+  the trail.</p>
 
-<p>Since there is no line which passes through all the <var>n</var> data points,
-Calc has chosen a line that best approximates the data points using
-the method of least squares.  The idea is to define the <em>chi-square</em>
-error measure
-</p>
-<div class="example">
-<pre class="example">chi^2 = sum((y_i - (a + b x_i))^2, i, 1, N)
-</pre></div>
+  <p>To see what happens when the fit is not exact, we could change
+  the number 13 in the data matrix to 14 and try the fit again. The
+  result is:</p>
 
-<p>which is clearly zero if &lsquo;<samp>a + b x</samp>&rsquo; exactly fits all data points,
-and increases as various &lsquo;<samp>a + b x_i</samp>&rsquo; values fail to match the
-corresponding &lsquo;<samp>y_i</samp>&rsquo; values.  There are several reasons why the
-summand is squared, one of them being to ensure that
-&lsquo;<samp>chi^2 &gt;= 0</samp>&rsquo;.
-Least-squares fitting simply chooses the values of &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo;
-for which the error
-&lsquo;<samp>chi^2</samp>&rsquo;
-is as small as possible.
-</p>
-<p>Other kinds of models do the same thing but with a different model
-formula in place of &lsquo;<samp>a + b x_i</samp>&rsquo;.
-</p>
+  <div class="example">
+    <pre class="example">
+2.6 + 2.2 x
+</pre>
+  </div>
 
-<p>A numeric prefix argument causes the <kbd>a F</kbd> command to take the
-data in some other form than one big matrix.  A positive argument <var>n</var>
-will take <var>N</var> items from the stack, corresponding to the <var>n</var> rows
-of a data matrix.  In the linear case, <var>n</var> must be 2 since there
-is always one independent variable and one dependent variable.
-</p>
-<p>A prefix of zero or plain <kbd>C-u</kbd> is a compromise; Calc takes two
-items from the stack, an <var>n</var>-row matrix of &lsquo;<samp>x</samp>&rsquo; values, and a
-vector of &lsquo;<samp>y</samp>&rsquo; values.  If there is only one independent variable,
-the &lsquo;<samp>x</samp>&rsquo; values can be either a one-row matrix or a plain vector,
-in which case the <kbd>C-u</kbd> prefix is the same as a <kbd><span class="nolinebreak">C-u</span>&nbsp;2</kbd><!-- /@w --> prefix.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits" accesskey="n" rel="next">Polynomial and Multilinear Fits</a>, Previous: <a href="Curve-Fitting.html#Curve-Fitting" accesskey="p" rel="prev">Curve Fitting</a>, Up: <a href="Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Evaluating this formula, say with <kbd>v x 5 <span class=
+  "key">RET</span> <span class="key">TAB</span> V M $ <span class=
+  "key">RET</span></kbd>, shows a reasonably close match to the
+  y-values in the data.</p>
 
+  <div class="example">
+    <pre class="example">
+[4.8, 7., 9.2, 11.4, 13.6]
+</pre>
+  </div>
 
+  <p>Since there is no line which passes through all the
+  <var>n</var> data points, Calc has chosen a line that best
+  approximates the data points using the method of least squares.
+  The idea is to define the <em>chi-square</em> error measure</p>
 
+  <div class="example">
+    <pre class="example">
+chi^2 = sum((y_i - (a + b x_i))^2, i, 1, N)
+</pre>
+  </div>
+
+  <p>which is clearly zero if &lsquo;<samp>a + b x</samp>&rsquo;
+  exactly fits all data points, and increases as various
+  &lsquo;<samp>a + b x_i</samp>&rsquo; values fail to match the
+  corresponding &lsquo;<samp>y_i</samp>&rsquo; values. There are
+  several reasons why the summand is squared, one of them being to
+  ensure that &lsquo;<samp>chi^2 &gt;= 0</samp>&rsquo;.
+  Least-squares fitting simply chooses the values of
+  &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo; for
+  which the error &lsquo;<samp>chi^2</samp>&rsquo; is as small as
+  possible.</p>
+
+  <p>Other kinds of models do the same thing but with a different
+  model formula in place of &lsquo;<samp>a + b
+  x_i</samp>&rsquo;.</p>
+
+  <p>A numeric prefix argument causes the <kbd>a F</kbd> command to
+  take the data in some other form than one big matrix. A positive
+  argument <var>n</var> will take <var>N</var> items from the
+  stack, corresponding to the <var>n</var> rows of a data matrix.
+  In the linear case, <var>n</var> must be 2 since there is always
+  one independent variable and one dependent variable.</p>
+
+  <p>A prefix of zero or plain <kbd>C-u</kbd> is a compromise; Calc
+  takes two items from the stack, an <var>n</var>-row matrix of
+  &lsquo;<samp>x</samp>&rsquo; values, and a vector of
+  &lsquo;<samp>y</samp>&rsquo; values. If there is only one
+  independent variable, the &lsquo;<samp>x</samp>&rsquo; values can
+  be either a one-row matrix or a plain vector, in which case the
+  <kbd>C-u</kbd> prefix is the same as a <kbd><span class=
+  "nolinebreak">C-u</span>&nbsp;2</kbd><!-- /@w --> prefix.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits"
+    accesskey="n" rel="next">Polynomial and Multilinear Fits</a>,
+    Previous: <a href="Curve-Fitting.html#Curve-Fitting" accesskey=
+    "p" rel="prev">Curve Fitting</a>, Up: <a href=
+    "Curve-Fitting.html#Curve-Fitting" accesskey="u" rel="up">Curve
+    Fitting</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Kill Files - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Scoring.html#Scoring" title="Scoring">
-<link rel="prev" href="Global-Score-Files.html#Global-Score-Files" title="Global Score Files">
-<link rel="next" href="Converting-Kill-Files.html#Converting-Kill-Files" title="Converting Kill Files">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Kill Files - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Scoring.html#Scoring" title="Scoring" />
+  <link rel="prev" href=
+  "Global-Score-Files.html#Global-Score-Files" title=
+  "Global Score Files" />
+  <link rel="next" href=
+  "Converting-Kill-Files.html#Converting-Kill-Files" title=
+  "Converting Kill Files" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +36,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,85 +49,152 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Kill-Files"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Converting-Kill-Files.html#Converting-Kill-Files">Converting Kill Files</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Global-Score-Files.html#Global-Score-Files">Global Score Files</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Scoring.html#Scoring">Scoring</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Kill-Files" id="Kill-Files"></a>
 
-<h3 class="section">7.13 Kill Files</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Converting-Kill-Files.html#Converting-Kill-Files">Converting
+    Kill Files</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Global-Score-Files.html#Global-Score-Files">Global Score
+    Files</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Scoring.html#Scoring">Scoring</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-kill-files-2517"></a>
-Gnus still supports those pesky old kill files.  In fact, the kill file
-entries can now be expiring, which is something I wrote before Daniel
-Quinlan thought of doing score files, so I've left the code in there.
+  <h3 class="section">7.13 Kill Files</h3>
 
-   <p>In short, kill processing is a lot slower (and I do mean <em>a lot</em>)
-than score processing, so it might be a good idea to rewrite your kill
-files into score files.
+  <p><a name="index-kill-files-2517" id=
+  "index-kill-files-2517"></a> Gnus still supports those pesky old
+  kill files. In fact, the kill file entries can now be expiring,
+  which is something I wrote before Daniel Quinlan thought of doing
+  score files, so I've left the code in there.</p>
 
-   <p>Anyway, a kill file is a normal <code>emacs-lisp</code> file.  You can put any
-forms into this file, which means that you can use kill files as some
-sort of primitive hook function to be run on group entry, even though
-that isn't a very good idea.
+  <p>In short, kill processing is a lot slower (and I do mean <em>a
+  lot</em>) than score processing, so it might be a good idea to
+  rewrite your kill files into score files.</p>
 
-   <p>Normal kill files look like this:
+  <p>Anyway, a kill file is a normal <code>emacs-lisp</code> file.
+  You can put any forms into this file, which means that you can
+  use kill files as some sort of primitive hook function to be run
+  on group entry, even though that isn't a very good idea.</p>
 
-<pre class="lisp">     (gnus-kill "From" "Lars Ingebrigtsen")
+  <p>Normal kill files look like this:</p>
+  <pre class="lisp">
+     (gnus-kill "From" "Lars Ingebrigtsen")
      (gnus-kill "Subject" "ding")
      (gnus-expunge "X")
 </pre>
-   <p>This will mark every article written by me as read, and remove the
-marked articles from the summary buffer.  Very useful, you'll agree.
 
-   <p>Other programs use a totally different kill file syntax.  If Gnus
-encounters what looks like a <code>rn</code> kill file, it will take a stab at
-interpreting it.
+  <p>This will mark every article written by me as read, and remove
+  the marked articles from the summary buffer. Very useful, you'll
+  agree.</p>
 
-   <p>Two summary functions for editing a <span class="sc">gnus</span> kill file:
+  <p>Other programs use a totally different kill file syntax. If
+  Gnus encounters what looks like a <code>rn</code> kill file, it
+  will take a stab at interpreting it.</p>
 
-     <dl>
-<dt><kbd>M-k</kbd><dd><a name="index-M_002dk-_0028Summary_0029-2518"></a><a name="index-gnus_002dsummary_002dedit_002dlocal_002dkill-2519"></a>Edit this group's kill file (<code>gnus-summary-edit-local-kill</code>).
+  <p>Two summary functions for editing a <span class=
+  "sc">gnus</span> kill file:</p>
 
-     <br><dt><kbd>M-K</kbd><dd><a name="index-M_002dK-_0028Summary_0029-2520"></a><a name="index-gnus_002dsummary_002dedit_002dglobal_002dkill-2521"></a>Edit the general kill file (<code>gnus-summary-edit-global-kill</code>). 
-</dl>
+  <dl>
+    <dt><kbd>M-k</kbd></dt>
 
-   <p>Two group mode functions for editing the kill files:
+    <dd><a name="index-M_002dk-_0028Summary_0029-2518" id=
+    "index-M_002dk-_0028Summary_0029-2518"></a><a name=
+    "index-gnus_002dsummary_002dedit_002dlocal_002dkill-2519" id=
+    "index-gnus_002dsummary_002dedit_002dlocal_002dkill-2519"></a>Edit
+    this group's kill file
+    (<code>gnus-summary-edit-local-kill</code>).<br /></dd>
 
-     <dl>
-<dt><kbd>M-k</kbd><dd><a name="index-M_002dk-_0028Group_0029-2522"></a><a name="index-gnus_002dgroup_002dedit_002dlocal_002dkill-2523"></a>Edit this group's kill file (<code>gnus-group-edit-local-kill</code>).
+    <dt><kbd>M-K</kbd></dt>
 
-     <br><dt><kbd>M-K</kbd><dd><a name="index-M_002dK-_0028Group_0029-2524"></a><a name="index-gnus_002dgroup_002dedit_002dglobal_002dkill-2525"></a>Edit the general kill file (<code>gnus-group-edit-global-kill</code>). 
-</dl>
+    <dd><a name="index-M_002dK-_0028Summary_0029-2520" id=
+    "index-M_002dK-_0028Summary_0029-2520"></a><a name=
+    "index-gnus_002dsummary_002dedit_002dglobal_002dkill-2521" id=
+    "index-gnus_002dsummary_002dedit_002dglobal_002dkill-2521"></a>Edit
+    the general kill file
+    (<code>gnus-summary-edit-global-kill</code>).</dd>
+  </dl>
 
-   <p>Kill file variables:
+  <p>Two group mode functions for editing the kill files:</p>
 
-     <dl>
-<dt><code>gnus-kill-file-name</code><dd><a name="index-gnus_002dkill_002dfile_002dname-2526"></a>A kill file for the group &lsquo;<samp><span class="samp">soc.motss</span></samp>&rsquo; is normally called
-<samp><span class="file">soc.motss.KILL</span></samp>.  The suffix appended to the group name to get
-this file name is detailed by the <code>gnus-kill-file-name</code> variable. 
-The &ldquo;global&rdquo; kill file (not in the score file sense of &ldquo;global&rdquo;, of
-course) is just called <samp><span class="file">KILL</span></samp>.
+  <dl>
+    <dt><kbd>M-k</kbd></dt>
 
-     <p><a name="index-gnus_002dkill_002dsave_002dkill_002dfile-2527"></a><br><dt><code>gnus-kill-save-kill-file</code><dd>If this variable is non-<code>nil</code>, Gnus will save the
-kill file after processing, which is necessary if you use expiring
-kills.
+    <dd><a name="index-M_002dk-_0028Group_0029-2522" id=
+    "index-M_002dk-_0028Group_0029-2522"></a><a name=
+    "index-gnus_002dgroup_002dedit_002dlocal_002dkill-2523" id=
+    "index-gnus_002dgroup_002dedit_002dlocal_002dkill-2523"></a>Edit
+    this group's kill file
+    (<code>gnus-group-edit-local-kill</code>).<br /></dd>
 
-     <br><dt><code>gnus-apply-kill-hook</code><dd><a name="index-gnus_002dapply_002dkill_002dhook-2528"></a><a name="index-gnus_002dapply_002dkill_002dfile_002dunless_002dscored-2529"></a><a name="index-gnus_002dapply_002dkill_002dfile-2530"></a>A hook called to apply kill files to a group.  It is
-<code>(gnus-apply-kill-file)</code> by default.  If you want to ignore the
-kill file if you have a score file for the same group, you can set this
-hook to <code>(gnus-apply-kill-file-unless-scored)</code>.  If you don't want
-kill files to be processed, you should set this variable to <code>nil</code>.
+    <dt><kbd>M-K</kbd></dt>
 
-     <br><dt><code>gnus-kill-file-mode-hook</code><dd><a name="index-gnus_002dkill_002dfile_002dmode_002dhook-2531"></a>A hook called in kill-file mode buffers.
+    <dd><a name="index-M_002dK-_0028Group_0029-2524" id=
+    "index-M_002dK-_0028Group_0029-2524"></a><a name=
+    "index-gnus_002dgroup_002dedit_002dglobal_002dkill-2525" id=
+    "index-gnus_002dgroup_002dedit_002dglobal_002dkill-2525"></a>Edit
+    the general kill file
+    (<code>gnus-group-edit-global-kill</code>).</dd>
+  </dl>
 
-   </dl>
+  <p>Kill file variables:</p>
 
-   </body></html>
+  <dl>
+    <dt><code>gnus-kill-file-name</code></dt>
 
+    <dd>
+      <a name="index-gnus_002dkill_002dfile_002dname-2526" id=
+      "index-gnus_002dkill_002dfile_002dname-2526"></a>A kill file
+      for the group &lsquo;<samp><span class=
+      "samp">soc.motss</span></samp>&rsquo; is normally called
+      <samp><span class="file">soc.motss.KILL</span></samp>. The
+      suffix appended to the group name to get this file name is
+      detailed by the <code>gnus-kill-file-name</code> variable.
+      The &ldquo;global&rdquo; kill file (not in the score file
+      sense of &ldquo;global&rdquo;, of course) is just called
+      <samp><span class="file">KILL</span></samp>.
+
+      <p><a name=
+      "index-gnus_002dkill_002dsave_002dkill_002dfile-2527" id=
+      "index-gnus_002dkill_002dsave_002dkill_002dfile-2527"></a><br />
+      </p>
+    </dd>
+
+    <dt><code>gnus-kill-save-kill-file</code></dt>
+
+    <dd>If this variable is non-<code>nil</code>, Gnus will save
+    the kill file after processing, which is necessary if you use
+    expiring kills.<br /></dd>
+
+    <dt><code>gnus-apply-kill-hook</code></dt>
+
+    <dd><a name="index-gnus_002dapply_002dkill_002dhook-2528" id=
+    "index-gnus_002dapply_002dkill_002dhook-2528"></a><a name=
+    "index-gnus_002dapply_002dkill_002dfile_002dunless_002dscored-2529"
+    id=
+    "index-gnus_002dapply_002dkill_002dfile_002dunless_002dscored-2529"></a><a name="index-gnus_002dapply_002dkill_002dfile-2530"
+    id="index-gnus_002dapply_002dkill_002dfile-2530"></a>A hook
+    called to apply kill files to a group. It is
+    <code>(gnus-apply-kill-file)</code> by default. If you want to
+    ignore the kill file if you have a score file for the same
+    group, you can set this hook to
+    <code>(gnus-apply-kill-file-unless-scored)</code>. If you don't
+    want kill files to be processed, you should set this variable
+    to <code>nil</code>.<br /></dd>
+
+    <dt><code>gnus-kill-file-mode-hook</code></dt>
+
+    <dd><a name=
+    "index-gnus_002dkill_002dfile_002dmode_002dhook-2531" id=
+    "index-gnus_002dkill_002dfile_002dmode_002dhook-2531"></a>A
+    hook called in kill-file mode buffers.</dd>
+  </dl>
+</body>
+</html>

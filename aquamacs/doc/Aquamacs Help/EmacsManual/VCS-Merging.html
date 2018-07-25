@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,114 +20,156 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: VCS Merging</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: VCS Merging">
-<meta name="keywords" content="GNU Emacs Manual: VCS Merging">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Introduction-to-VC.html#Introduction-to-VC" rel="up" title="Introduction to VC">
-<link href="VCS-Changesets.html#VCS-Changesets" rel="next" title="VCS Changesets">
-<link href="VCS-Concepts.html#VCS-Concepts" rel="prev" title="VCS Concepts">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: VCS Merging</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: VCS Merging" />
+  <meta name="keywords" content="GNU Emacs Manual: VCS Merging" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Introduction-to-VC.html#Introduction-to-VC" rel="up"
+  title="Introduction to VC" />
+  <link href="VCS-Changesets.html#VCS-Changesets" rel="next" title=
+  "VCS Changesets" />
+  <link href="VCS-Concepts.html#VCS-Concepts" rel="prev" title=
+  "VCS Concepts" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="VCS-Merging" id="VCS-Merging"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="VCS-Changesets.html#VCS-Changesets"
+    accesskey="n" rel="next">VCS Changesets</a>, Previous: <a href=
+    "VCS-Concepts.html#VCS-Concepts" accesskey="p" rel="prev">VCS
+    Concepts</a>, Up: <a href=
+    "Introduction-to-VC.html#Introduction-to-VC" accesskey="u" rel=
+    "up">Introduction to VC</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Merge_002dbased-vs-lock_002dbased-Version-Control" id=
+  "Merge_002dbased-vs-lock_002dbased-Version-Control"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="VCS-Merging"></a>
-<div class="header">
-<p>
-Next: <a href="VCS-Changesets.html#VCS-Changesets" accesskey="n" rel="next">VCS Changesets</a>, Previous: <a href="VCS-Concepts.html#VCS-Concepts" accesskey="p" rel="prev">VCS Concepts</a>, Up: <a href="Introduction-to-VC.html#Introduction-to-VC" accesskey="u" rel="up">Introduction to VC</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Merge_002dbased-vs-lock_002dbased-Version-Control"></a>
-<h4 class="subsubsection">28.1.1.4 Merge-based vs lock-based Version Control</h4>
+  <h4 class="subsubsection">28.1.1.4 Merge-based vs lock-based
+  Version Control</h4>
 
-<p>A version control system typically has some mechanism to coordinate
-between users who want to change the same file.  There are two ways to
-do this: merging and locking.
-</p>
-<a name="index-merging_002dbased-version"></a>
-<p>In a version control system that uses merging, each user may modify
-a work file at any time.  The system lets you <em>merge</em> your work
-file, which may contain changes that have not been committed, with the
-latest changes that others have committed.
-</p>
-<a name="index-locking_002dbased-version"></a>
-<p>Older version control systems use a <em>locking</em> scheme instead.
-Here, work files are normally read-only.  To edit a file, you ask the
-version control system to make it writable for you by <em>locking</em>
-it; only one user can lock a given file at any given time.  This
-procedure is analogous to, but different from, the locking that Emacs
-uses to detect simultaneous editing of ordinary files
-(see <a href="Interlocking.html#Interlocking">Interlocking</a>).  When you commit your changes, that unlocks
-the file, and the work file becomes read-only again.  Other users may
-then lock the file to make their own changes.
-</p>
-<p>Both locking and merging systems can have problems when multiple
-users try to modify the same file at the same time.  Locking systems
-have <em>lock conflicts</em>; a user may try to check a file out and be
-unable to because it is locked.  In merging systems, <em>merge
-conflicts</em> happen when you commit a change to a file that conflicts
-with a change committed by someone else after your checkout.  Both
-kinds of conflict have to be resolved by human judgment and
-communication.  Experience has shown that merging is superior to
-locking, both in convenience to developers and in minimizing the
-number and severity of conflicts that actually occur.
-</p>
-<p>SCCS always uses locking.  RCS is lock-based by default but can be
-told to operate in a merging style.  CVS and Subversion are
-merge-based by default but can be told to operate in a locking mode.
-Decentralized version control systems, such as Git and Mercurial, are
-exclusively merging-based.
-</p>
-<p>VC mode supports both locking and merging version control.  The
-terms &ldquo;commit&rdquo; and &ldquo;update&rdquo; are used in newer version control
-systems; older lock-based systems use the terms &ldquo;check in&rdquo; and
-&ldquo;check out&rdquo;.  VC hides the differences between them as much as
-possible.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="VCS-Changesets.html#VCS-Changesets" accesskey="n" rel="next">VCS Changesets</a>, Previous: <a href="VCS-Concepts.html#VCS-Concepts" accesskey="p" rel="prev">VCS Concepts</a>, Up: <a href="Introduction-to-VC.html#Introduction-to-VC" accesskey="u" rel="up">Introduction to VC</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A version control system typically has some mechanism to
+  coordinate between users who want to change the same file. There
+  are two ways to do this: merging and locking.</p><a name=
+  "index-merging_002dbased-version" id=
+  "index-merging_002dbased-version"></a>
 
+  <p>In a version control system that uses merging, each user may
+  modify a work file at any time. The system lets you
+  <em>merge</em> your work file, which may contain changes that
+  have not been committed, with the latest changes that others have
+  committed.</p><a name="index-locking_002dbased-version" id=
+  "index-locking_002dbased-version"></a>
 
+  <p>Older version control systems use a <em>locking</em> scheme
+  instead. Here, work files are normally read-only. To edit a file,
+  you ask the version control system to make it writable for you by
+  <em>locking</em> it; only one user can lock a given file at any
+  given time. This procedure is analogous to, but different from,
+  the locking that Emacs uses to detect simultaneous editing of
+  ordinary files (see <a href=
+  "Interlocking.html#Interlocking">Interlocking</a>). When you
+  commit your changes, that unlocks the file, and the work file
+  becomes read-only again. Other users may then lock the file to
+  make their own changes.</p>
 
+  <p>Both locking and merging systems can have problems when
+  multiple users try to modify the same file at the same time.
+  Locking systems have <em>lock conflicts</em>; a user may try to
+  check a file out and be unable to because it is locked. In
+  merging systems, <em>merge conflicts</em> happen when you commit
+  a change to a file that conflicts with a change committed by
+  someone else after your checkout. Both kinds of conflict have to
+  be resolved by human judgment and communication. Experience has
+  shown that merging is superior to locking, both in convenience to
+  developers and in minimizing the number and severity of conflicts
+  that actually occur.</p>
+
+  <p>SCCS always uses locking. RCS is lock-based by default but can
+  be told to operate in a merging style. CVS and Subversion are
+  merge-based by default but can be told to operate in a locking
+  mode. Decentralized version control systems, such as Git and
+  Mercurial, are exclusively merging-based.</p>
+
+  <p>VC mode supports both locking and merging version control. The
+  terms &ldquo;commit&rdquo; and &ldquo;update&rdquo; are used in
+  newer version control systems; older lock-based systems use the
+  terms &ldquo;check in&rdquo; and &ldquo;check out&rdquo;. VC
+  hides the differences between them as much as possible.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="VCS-Changesets.html#VCS-Changesets"
+    accesskey="n" rel="next">VCS Changesets</a>, Previous: <a href=
+    "VCS-Concepts.html#VCS-Concepts" accesskey="p" rel="prev">VCS
+    Concepts</a>, Up: <a href=
+    "Introduction-to-VC.html#Introduction-to-VC" accesskey="u" rel=
+    "up">Introduction to VC</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Nodes and Interfaces - Using of D-Bus</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Using of D-Bus">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Inspection.html#Inspection" title="Inspection">
-<link rel="prev" href="Introspection.html#Introspection" title="Introspection">
-<link rel="next" href="Methods-and-Signal.html#Methods-and-Signal" title="Methods and Signal">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Nodes and Interfaces - Using of D-Bus</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Using of D-Bus" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Inspection.html#Inspection" title=
+  "Inspection" />
+  <link rel="prev" href="Introspection.html#Introspection" title=
+  "Introspection" />
+  <link rel="next" href=
+  "Methods-and-Signal.html#Methods-and-Signal" title=
+  "Methods and Signal" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
@@ -24,8 +34,10 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,47 +47,73 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Nodes-and-Interfaces"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Methods-and-Signal.html#Methods-and-Signal">Methods and Signal</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Introspection.html#Introspection">Introspection</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Inspection.html#Inspection">Inspection</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Nodes-and-Interfaces" id="Nodes-and-Interfaces"></a>
 
-<h3 class="section">2.3 Detecting object paths and interfaces.</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Methods-and-Signal.html#Methods-and-Signal">Methods and
+    Signal</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Introspection.html#Introspection">Introspection</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Inspection.html#Inspection">Inspection</a></p>
+    <hr />
+  </div>
 
-<p>The first elements, to be introspected for a D-Bus object, are further
-object paths and interfaces.
+  <h3 class="section">2.3 Detecting object paths and
+  interfaces.</h3>
 
-<div class="defun">
-&mdash; Function: <b>dbus-introspect-get-node-names</b><var> bus service path<a name="index-dbus_002dintrospect_002dget_002dnode_002dnames-13"></a></var><br>
-<blockquote><p>All node names of <var>service</var> in D-Bus <var>bus</var> at object path
-<var>path</var> are returned as list of strings.  Example:
+  <p>The first elements, to be introspected for a D-Bus object, are
+  further object paths and interfaces.</p>
 
-     <pre class="lisp">          (dbus-introspect-get-node-names
+  <div class="defun">
+    &mdash; Function: <b>dbus-introspect-get-node-names</b>
+    <var>bus service path<a name=
+    "index-dbus_002dintrospect_002dget_002dnode_002dnames-13" id=
+    "index-dbus_002dintrospect_002dget_002dnode_002dnames-13"></a></var><br />
+
+
+    <blockquote>
+      <p>All node names of <var>service</var> in D-Bus
+      <var>bus</var> at object path <var>path</var> are returned as
+      list of strings. Example:</p>
+      <pre class="lisp">
+          (dbus-introspect-get-node-names
             :session "org.gnome.seahorse" "/org/gnome/seahorse")
           
           &rArr; ("crypto" "keys")
 </pre>
-        <p>The node names stand for further object paths of the D-Bus
-<var>service</var>, relative to <var>path</var>.  In the example,
-&lsquo;<samp><span class="samp">/org/gnome/seahorse/crypto</span></samp>&rsquo; and &lsquo;<samp><span class="samp">/org/gnome/seahorse/keys</span></samp>&rsquo;
-are also object paths of the D-Bus service &lsquo;<samp><span class="samp">org.gnome.seahorse</span></samp>&rsquo;. 
-</p></blockquote></div>
 
-<div class="defun">
-&mdash; Function: <b>dbus-introspect-get-all-nodes</b><var> bus service path<a name="index-dbus_002dintrospect_002dget_002dall_002dnodes-14"></a></var><br>
-<blockquote><p>This function returns all node names of <var>service</var> in D-Bus
-<var>bus</var> at object path <var>path</var>.  It returns a list of strings
-with all object paths of <var>service</var>, starting at <var>path</var>. 
-Example:
+      <p>The node names stand for further object paths of the D-Bus
+      <var>service</var>, relative to <var>path</var>. In the
+      example, &lsquo;<samp><span class=
+      "samp">/org/gnome/seahorse/crypto</span></samp>&rsquo; and
+      &lsquo;<samp><span class=
+      "samp">/org/gnome/seahorse/keys</span></samp>&rsquo; are also
+      object paths of the D-Bus service &lsquo;<samp><span class=
+      "samp">org.gnome.seahorse</span></samp>&rsquo;.</p>
+    </blockquote>
+  </div>
 
-     <pre class="lisp">          (dbus-introspect-get-all-nodes :session "org.gnome.seahorse" "/")
+  <div class="defun">
+    &mdash; Function: <b>dbus-introspect-get-all-nodes</b> <var>bus
+    service path<a name=
+    "index-dbus_002dintrospect_002dget_002dall_002dnodes-14" id=
+    "index-dbus_002dintrospect_002dget_002dall_002dnodes-14"></a></var><br />
+
+
+    <blockquote>
+      <p>This function returns all node names of <var>service</var>
+      in D-Bus <var>bus</var> at object path <var>path</var>. It
+      returns a list of strings with all object paths of
+      <var>service</var>, starting at <var>path</var>. Example:</p>
+      <pre class="lisp">
+          (dbus-introspect-get-all-nodes :session "org.gnome.seahorse" "/")
           
           &rArr; ("/" "/org" "/org/gnome" "/org/gnome/seahorse"
               "/org/gnome/seahorse/crypto"
@@ -85,19 +123,30 @@ Example:
               "/org/gnome/seahorse/keys/openssh"
               "/org/gnome/seahorse/keys/openssh/local")
 </pre>
-        </blockquote></div>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Function: <b>dbus-introspect-get-interface-names</b><var> bus service path<a name="index-dbus_002dintrospect_002dget_002dinterface_002dnames-15"></a></var><br>
-<blockquote><p>There will be returned a list strings of all interface names of
-<var>service</var> in D-Bus <var>bus</var> at object path <var>path</var>.  This list
-will contain the default interface &lsquo;<samp><span class="samp">org.freedesktop.DBus.Introspectable</span></samp>&rsquo;.
+  <div class="defun">
+    &mdash; Function: <b>dbus-introspect-get-interface-names</b>
+    <var>bus service path<a name=
+    "index-dbus_002dintrospect_002dget_002dinterface_002dnames-15"
+    id=
+    "index-dbus_002dintrospect_002dget_002dinterface_002dnames-15"></a></var><br />
 
-        <p>Another default interface is &lsquo;<samp><span class="samp">org.freedesktop.DBus.Properties</span></samp>&rsquo;. 
-If present, <code>interface</code> elements can also have <code>property</code>
-children.  Example:
 
-     <pre class="lisp">          (dbus-introspect-get-interface-names
+    <blockquote>
+      <p>There will be returned a list strings of all interface
+      names of <var>service</var> in D-Bus <var>bus</var> at object
+      path <var>path</var>. This list will contain the default
+      interface &lsquo;<samp><span class=
+      "samp">org.freedesktop.DBus.Introspectable</span></samp>&rsquo;.</p>
+
+      <p>Another default interface is &lsquo;<samp><span class=
+      "samp">org.freedesktop.DBus.Properties</span></samp>&rsquo;.
+      If present, <code>interface</code> elements can also have
+      <code>property</code> children. Example:</p>
+      <pre class="lisp">
+          (dbus-introspect-get-interface-names
             :system "org.freedesktop.Hal"
             "/org/freedesktop/Hal/devices/computer")
           
@@ -106,16 +155,25 @@ children.  Example:
               "org.freedesktop.Hal.Device.SystemPowerManagement"
               "org.freedesktop.Hal.Device.CPUFreq")
 </pre>
-        </blockquote></div>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Function: <b>dbus-introspect-get-interface</b><var> bus service path interface<a name="index-dbus_002dintrospect_002dget_002dinterface-16"></a></var><br>
-<blockquote><p>Return <var>interface</var> of <var>service</var> in D-Bus <var>bus</var> at object
-path <var>path</var>.  The return value is an XML element.  <var>interface</var>
-must be a string, element of the list returned by
-<code>dbus-introspect-get-interface-names</code>.  Example:
+  <div class="defun">
+    &mdash; Function: <b>dbus-introspect-get-interface</b> <var>bus
+    service path interface<a name=
+    "index-dbus_002dintrospect_002dget_002dinterface-16" id=
+    "index-dbus_002dintrospect_002dget_002dinterface-16"></a></var><br />
 
-     <pre class="lisp">          (dbus-introspect-get-interface
+
+    <blockquote>
+      <p>Return <var>interface</var> of <var>service</var> in D-Bus
+      <var>bus</var> at object path <var>path</var>. The return
+      value is an XML element. <var>interface</var> must be a
+      string, element of the list returned by
+      <code>dbus-introspect-get-interface-names</code>.
+      Example:</p>
+      <pre class="lisp">
+          (dbus-introspect-get-interface
             :session "org.freedesktop.xesam.searcher"
             "/org/freedesktop/xesam/searcher/main"
             "org.freedesktop.xesam.Search")
@@ -134,12 +192,13 @@ must be a string, element of the list returned by
                )
              )
 </pre>
-        </blockquote></div>
+    </blockquote>
+  </div>
 
-<p class="noindent">With these functions, it is possible to retrieve all introspection
-data from a running system:
-
-<pre class="lisp">     (with-current-buffer (switch-to-buffer "*introspect*")
+  <p class="noindent">With these functions, it is possible to
+  retrieve all introspection data from a running system:</p>
+  <pre class="lisp">
+     (with-current-buffer (switch-to-buffer "*introspect*")
        (erase-buffer)
        (dolist (service (dbus-list-known-names :session))
          (dolist (path (dbus-introspect-get-all-nodes :session service "/"))
@@ -152,5 +211,5 @@ data from a running system:
                      (dbus-introspect :session service path))
              (redisplay t)))))
 </pre>
-   </body></html>
-
+</body>
+</html>

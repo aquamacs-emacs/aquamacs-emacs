@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Keyboard Macros - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Programming.html#Programming" title="Programming">
-<link rel="prev" href="Creating-User-Keys.html#Creating-User-Keys" title="Creating User Keys">
-<link rel="next" href="Invocation-Macros.html#Invocation-Macros" title="Invocation Macros">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Keyboard Macros - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Programming.html#Programming" title=
+  "Programming" />
+  <link rel="prev" href=
+  "Creating-User-Keys.html#Creating-User-Keys" title=
+  "Creating User Keys" />
+  <link rel="next" href="Invocation-Macros.html#Invocation-Macros"
+  title="Invocation Macros" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +39,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,55 +52,84 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Keyboard-Macros"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Invocation-Macros.html#Invocation-Macros">Invocation Macros</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-User-Keys.html#Creating-User-Keys">Creating User Keys</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Programming.html#Programming">Programming</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Keyboard-Macros" id="Keyboard-Macros"></a>
 
-<h3 class="section">18.2 Programming with Keyboard Macros</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Invocation-Macros.html#Invocation-Macros">Invocation
+    Macros</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Creating-User-Keys.html#Creating-User-Keys">Creating User
+    Keys</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Programming.html#Programming">Programming</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-X-2270"></a><a name="index-Programming-with-keyboard-macros-2271"></a><a name="index-Keyboard-macros-2272"></a>The easiest way to &ldquo;program&rdquo; the Emacs Calculator is to use standard
-keyboard macros.  Press <kbd>C-x&nbsp;(</kbd><!-- /@w --> to begin recording a macro.  From
-this point on, keystrokes you type will be saved away as well as
-performing their usual functions.  Press <kbd>C-x )</kbd> to end recording. 
-Press shift-<kbd>X</kbd> (or the standard Emacs key sequence <kbd>C-x e</kbd>) to
-execute your keyboard macro by replaying the recorded keystrokes. 
-See <a href="../emacs/Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>, for further
-information.
+  <h3 class="section">18.2 Programming with Keyboard Macros</h3>
 
-   <p>When you use <kbd>X</kbd> to invoke a keyboard macro, the entire macro is
-treated as a single command by the undo and trail features.  The stack
-display buffer is not updated during macro execution, but is instead
-fixed up once the macro completes.  Thus, commands defined with keyboard
-macros are convenient and efficient.  The <kbd>C-x e</kbd> command, on the
-other hand, invokes the keyboard macro with no special treatment: Each
-command in the macro will record its own undo information and trail entry,
-and update the stack buffer accordingly.  If your macro uses features
-outside of Calc's control to operate on the contents of the Calc stack
-buffer, or if it includes Undo, Redo, or last-arguments commands, you
-must use <kbd>C-x e</kbd> to make sure the buffer and undo list are up-to-date
-at all times.  You could also consider using <kbd>K</kbd> (<code>calc-keep-args</code>)
-instead of <kbd>M-&lt;RET&gt;</kbd> (<code>calc-last-args</code>).
+  <p class="noindent"><a name="index-X-2270" id=
+  "index-X-2270"></a><a name=
+  "index-Programming-with-keyboard-macros-2271" id=
+  "index-Programming-with-keyboard-macros-2271"></a><a name=
+  "index-Keyboard-macros-2272" id=
+  "index-Keyboard-macros-2272"></a>The easiest way to
+  &ldquo;program&rdquo; the Emacs Calculator is to use standard
+  keyboard macros. Press <kbd>C-x&nbsp;(</kbd><!-- /@w --> to begin
+  recording a macro. From this point on, keystrokes you type will
+  be saved away as well as performing their usual functions. Press
+  <kbd>C-x )</kbd> to end recording. Press shift-<kbd>X</kbd> (or
+  the standard Emacs key sequence <kbd>C-x e</kbd>) to execute your
+  keyboard macro by replaying the recorded keystrokes. See <a href=
+  "../emacs/Keyboard-Macros.html#Keyboard-Macros">Keyboard
+  Macros</a>, for further information.</p>
 
-   <p>Calc extends the standard Emacs keyboard macros in several ways. 
-Keyboard macros can be used to create user-defined commands.  Keyboard
-macros can include conditional and iteration structures, somewhat
-analogous to those provided by a traditional programmable calculator.
+  <p>When you use <kbd>X</kbd> to invoke a keyboard macro, the
+  entire macro is treated as a single command by the undo and trail
+  features. The stack display buffer is not updated during macro
+  execution, but is instead fixed up once the macro completes.
+  Thus, commands defined with keyboard macros are convenient and
+  efficient. The <kbd>C-x e</kbd> command, on the other hand,
+  invokes the keyboard macro with no special treatment: Each
+  command in the macro will record its own undo information and
+  trail entry, and update the stack buffer accordingly. If your
+  macro uses features outside of Calc's control to operate on the
+  contents of the Calc stack buffer, or if it includes Undo, Redo,
+  or last-arguments commands, you must use <kbd>C-x e</kbd> to make
+  sure the buffer and undo list are up-to-date at all times. You
+  could also consider using <kbd>K</kbd>
+  (<code>calc-keep-args</code>) instead of <kbd>M-&lt;RET&gt;</kbd>
+  (<code>calc-last-args</code>).</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Naming-Keyboard-Macros.html#Naming-Keyboard-Macros">Naming Keyboard Macros</a>
-<li><a accesskey="2" href="Conditionals-in-Macros.html#Conditionals-in-Macros">Conditionals in Macros</a>
-<li><a accesskey="3" href="Loops-in-Macros.html#Loops-in-Macros">Loops in Macros</a>
-<li><a accesskey="4" href="Local-Values-in-Macros.html#Local-Values-in-Macros">Local Values in Macros</a>
-<li><a accesskey="5" href="Queries-in-Macros.html#Queries-in-Macros">Queries in Macros</a>
-</ul>
+  <p>Calc extends the standard Emacs keyboard macros in several
+  ways. Keyboard macros can be used to create user-defined
+  commands. Keyboard macros can include conditional and iteration
+  structures, somewhat analogous to those provided by a traditional
+  programmable calculator.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Naming-Keyboard-Macros.html#Naming-Keyboard-Macros">Naming
+    Keyboard Macros</a></li>
 
+    <li><a accesskey="2" href=
+    "Conditionals-in-Macros.html#Conditionals-in-Macros">Conditionals
+    in Macros</a></li>
+
+    <li><a accesskey="3" href=
+    "Loops-in-Macros.html#Loops-in-Macros">Loops in Macros</a></li>
+
+    <li><a accesskey="4" href=
+    "Local-Values-in-Macros.html#Local-Values-in-Macros">Local
+    Values in Macros</a></li>
+
+    <li><a accesskey="5" href=
+    "Queries-in-Macros.html#Queries-in-Macros">Queries in
+    Macros</a></li>
+  </ul>
+</body>
+</html>

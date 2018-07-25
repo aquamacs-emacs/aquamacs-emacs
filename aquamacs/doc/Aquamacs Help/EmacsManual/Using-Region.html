@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,133 +20,204 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Using Region</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Using Region">
-<meta name="keywords" content="GNU Emacs Manual: Using Region">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mark.html#Mark" rel="up" title="Mark">
-<link href="Mark-Ring.html#Mark-Ring" rel="next" title="Mark Ring">
-<link href="Marking-Objects.html#Marking-Objects" rel="prev" title="Marking Objects">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Using Region</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Using Region" />
+  <meta name="keywords" content="GNU Emacs Manual: Using Region" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mark.html#Mark" rel="up" title="Mark" />
+  <link href="Mark-Ring.html#Mark-Ring" rel="next" title=
+  "Mark Ring" />
+  <link href="Marking-Objects.html#Marking-Objects" rel="prev"
+  title="Marking Objects" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Using-Region" id="Using-Region"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Mark-Ring.html#Mark-Ring" accesskey="n" rel=
+    "next">Mark Ring</a>, Previous: <a href=
+    "Marking-Objects.html#Marking-Objects" accesskey="p" rel=
+    "prev">Marking Objects</a>, Up: <a href="Mark.html#Mark"
+    accesskey="u" rel="up">Mark</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Operating-on-the-Region" id=
+  "Operating-on-the-Region"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-Region"></a>
-<div class="header">
-<p>
-Next: <a href="Mark-Ring.html#Mark-Ring" accesskey="n" rel="next">Mark Ring</a>, Previous: <a href="Marking-Objects.html#Marking-Objects" accesskey="p" rel="prev">Marking Objects</a>, Up: <a href="Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Operating-on-the-Region"></a>
-<h3 class="section">11.3 Operating on the Region</h3>
+  <h3 class="section">11.3 Operating on the Region</h3><a name=
+  "index-operations-on-a-marked-region" id=
+  "index-operations-on-a-marked-region"></a>
 
-<a name="index-operations-on-a-marked-region"></a>
-<p>Once you have a region, here are some of the ways you can operate on
-it:
-</p>
-<ul>
-<li> Kill it with <kbd>C-w</kbd> (see <a href="Killing.html#Killing">Killing</a>).
-</li><li> Copy it to the kill ring with <kbd>M-w</kbd> (see <a href="Yanking.html#Yanking">Yanking</a>).
-</li><li> Convert case with <kbd>C-x C-l</kbd> or <kbd>C-x C-u</kbd> (see <a href="Case.html#Case">Case</a>).
-</li><li> Undo changes within it using <kbd>C-u C-/</kbd> (see <a href="Undo.html#Undo">Undo</a>).
-</li><li> Replace text within it using <kbd>M-%</kbd> (see <a href="Query-Replace.html#Query-Replace">Query Replace</a>).
-</li><li> Indent it with <kbd>C-x <span class="key">TAB</span></kbd> or <kbd>C-M-\</kbd> (see <a href="Indentation.html#Indentation">Indentation</a>).
-</li><li> Fill it as text with <kbd>M-x fill-region</kbd> (see <a href="Filling.html#Filling">Filling</a>).
-</li><li> Check the spelling of words within it with <kbd>M-$</kbd> (see <a href="Spelling.html#Spelling">Spelling</a>).
-</li><li> Evaluate it as Lisp code with <kbd>M-x eval-region</kbd> (see <a href="Lisp-Eval.html#Lisp-Eval">Lisp Eval</a>).
-</li><li> Save it in a register with <kbd>C-x r s</kbd> (see <a href="Registers.html#Registers">Registers</a>).
-</li><li> Save it in a buffer or a file (see <a href="Accumulating-Text.html#Accumulating-Text">Accumulating Text</a>).
-</li></ul>
+  <p>Once you have a region, here are some of the ways you can
+  operate on it:</p>
 
-<p>Some commands have a default behavior when the mark is inactive, but
-operate on the region if the mark is active.  For example, <kbd>M-$</kbd>
-(<code>ispell-word</code>) normally checks the spelling of the word at
-point, but it checks the text in the region if the mark is active
-(see <a href="Spelling.html#Spelling">Spelling</a>).  Normally, such commands use their default
-behavior if the region is empty (i.e., if mark and point are at the
-same position).  If you want them to operate on the empty region,
-change the variable <code>use-empty-active-region</code> to <code>t</code>.
-</p>
-<a name="index-delete_002dactive_002dregion"></a>
-<p>As described in <a href="Erasing.html#Erasing">Erasing</a>, the <tt class="key">DEL</tt>
-(<code>backward-delete-char</code>) and <tt class="key">delete</tt>
-(<code>delete-forward-char</code>) commands also act this way.  If the mark
-is active, they delete the text in the region.  (As an exception, if
-you supply a numeric argument <var>n</var>, where <var>n</var> is not one, these
-commands delete <var>n</var> characters regardless of whether the mark is
-active).  If you change the variable <code>delete-active-region</code> to
-<code>nil</code>, then these commands don&rsquo;t act differently when the mark is
-active.  If you change the value to <code>kill</code>, these commands
-<em>kill</em> the region instead of deleting it (see <a href="Killing.html#Killing">Killing</a>).
-</p>
-<a name="index-mark_002deven_002dif_002dinactive"></a>
-<p>Other commands always operate on the region, and have no default
-behavior.  Such commands usually have the word <code>region</code> in their
-names, like <kbd>C-w</kbd> (<code>kill-region</code>) and <code>C-x C-u</code>
-(<code>upcase-region</code>).  If the mark is inactive, they operate on the
-<em>inactive region</em>&mdash;that is, on the text between point and the
-position at which the mark was last set (see <a href="Mark-Ring.html#Mark-Ring">Mark Ring</a>).  To
-disable this behavior, change the variable
-<code>mark-even-if-inactive</code> to <code>nil</code>.  Then these commands will
-instead signal an error if the mark is inactive.
-</p>
-<a name="index-Delete-Selection-mode"></a>
-<a name="index-mode_002c-Delete-Selection"></a>
-<a name="index-delete_002dselection_002dmode"></a>
-<p>By default, text insertion occurs normally even if the mark is
-active&mdash;for example, typing <kbd>a</kbd> inserts the character &lsquo;<samp>a</samp>&rsquo;,
-then deactivates the mark.  Delete Selection mode, a minor mode,
-modifies this behavior: if you enable that mode, then inserting text
-while the mark is active causes the text in the region to be deleted
-first.  Also, commands that normally delete just one character, such
-as <kbd>C-d</kbd> or <kbd><span class="key">DEL</span></kbd>, will delete the entire region
-instead.  To toggle Delete Selection mode on or off, type <kbd>M-x
-delete-selection-mode</kbd>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Mark-Ring.html#Mark-Ring" accesskey="n" rel="next">Mark Ring</a>, Previous: <a href="Marking-Objects.html#Marking-Objects" accesskey="p" rel="prev">Marking Objects</a>, Up: <a href="Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <ul>
+    <li>Kill it with <kbd>C-w</kbd> (see <a href=
+    "Killing.html#Killing">Killing</a>).</li>
 
+    <li>Copy it to the kill ring with <kbd>M-w</kbd> (see <a href=
+    "Yanking.html#Yanking">Yanking</a>).</li>
 
+    <li>Convert case with <kbd>C-x C-l</kbd> or <kbd>C-x C-u</kbd>
+    (see <a href="Case.html#Case">Case</a>).</li>
 
+    <li>Undo changes within it using <kbd>C-u C-/</kbd> (see
+    <a href="Undo.html#Undo">Undo</a>).</li>
+
+    <li>Replace text within it using <kbd>M-%</kbd> (see <a href=
+    "Query-Replace.html#Query-Replace">Query Replace</a>).</li>
+
+    <li>Indent it with <kbd>C-x <span class="key">TAB</span></kbd>
+    or <kbd>C-M-\</kbd> (see <a href=
+    "Indentation.html#Indentation">Indentation</a>).</li>
+
+    <li>Fill it as text with <kbd>M-x fill-region</kbd> (see
+    <a href="Filling.html#Filling">Filling</a>).</li>
+
+    <li>Check the spelling of words within it with <kbd>M-$</kbd>
+    (see <a href="Spelling.html#Spelling">Spelling</a>).</li>
+
+    <li>Evaluate it as Lisp code with <kbd>M-x eval-region</kbd>
+    (see <a href="Lisp-Eval.html#Lisp-Eval">Lisp Eval</a>).</li>
+
+    <li>Save it in a register with <kbd>C-x r s</kbd> (see <a href=
+    "Registers.html#Registers">Registers</a>).</li>
+
+    <li>Save it in a buffer or a file (see <a href=
+    "Accumulating-Text.html#Accumulating-Text">Accumulating
+    Text</a>).</li>
+  </ul>
+
+  <p>Some commands have a default behavior when the mark is
+  inactive, but operate on the region if the mark is active. For
+  example, <kbd>M-$</kbd> (<code>ispell-word</code>) normally
+  checks the spelling of the word at point, but it checks the text
+  in the region if the mark is active (see <a href=
+  "Spelling.html#Spelling">Spelling</a>). Normally, such commands
+  use their default behavior if the region is empty (i.e., if mark
+  and point are at the same position). If you want them to operate
+  on the empty region, change the variable
+  <code>use-empty-active-region</code> to
+  <code>t</code>.</p><a name="index-delete_002dactive_002dregion"
+  id="index-delete_002dactive_002dregion"></a>
+
+  <p>As described in <a href="Erasing.html#Erasing">Erasing</a>,
+  the <tt class="key">DEL</tt> (<code>backward-delete-char</code>)
+  and <tt class="key">delete</tt>
+  (<code>delete-forward-char</code>) commands also act this way. If
+  the mark is active, they delete the text in the region. (As an
+  exception, if you supply a numeric argument <var>n</var>, where
+  <var>n</var> is not one, these commands delete <var>n</var>
+  characters regardless of whether the mark is active). If you
+  change the variable <code>delete-active-region</code> to
+  <code>nil</code>, then these commands don&rsquo;t act differently
+  when the mark is active. If you change the value to
+  <code>kill</code>, these commands <em>kill</em> the region
+  instead of deleting it (see <a href=
+  "Killing.html#Killing">Killing</a>).</p><a name=
+  "index-mark_002deven_002dif_002dinactive" id=
+  "index-mark_002deven_002dif_002dinactive"></a>
+
+  <p>Other commands always operate on the region, and have no
+  default behavior. Such commands usually have the word
+  <code>region</code> in their names, like <kbd>C-w</kbd>
+  (<code>kill-region</code>) and <code>C-x C-u</code>
+  (<code>upcase-region</code>). If the mark is inactive, they
+  operate on the <em>inactive region</em>&mdash;that is, on the
+  text between point and the position at which the mark was last
+  set (see <a href="Mark-Ring.html#Mark-Ring">Mark Ring</a>). To
+  disable this behavior, change the variable
+  <code>mark-even-if-inactive</code> to <code>nil</code>. Then
+  these commands will instead signal an error if the mark is
+  inactive.</p><a name="index-Delete-Selection-mode" id=
+  "index-Delete-Selection-mode"></a> <a name=
+  "index-mode_002c-Delete-Selection" id=
+  "index-mode_002c-Delete-Selection"></a> <a name=
+  "index-delete_002dselection_002dmode" id=
+  "index-delete_002dselection_002dmode"></a>
+
+  <p>By default, text insertion occurs normally even if the mark is
+  active&mdash;for example, typing <kbd>a</kbd> inserts the
+  character &lsquo;<samp>a</samp>&rsquo;, then deactivates the
+  mark. Delete Selection mode, a minor mode, modifies this
+  behavior: if you enable that mode, then inserting text while the
+  mark is active causes the text in the region to be deleted first.
+  Also, commands that normally delete just one character, such as
+  <kbd>C-d</kbd> or <kbd><span class="key">DEL</span></kbd>, will
+  delete the entire region instead. To toggle Delete Selection mode
+  on or off, type <kbd>M-x delete-selection-mode</kbd>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Mark-Ring.html#Mark-Ring" accesskey="n" rel=
+    "next">Mark Ring</a>, Previous: <a href=
+    "Marking-Objects.html#Marking-Objects" accesskey="p" rel=
+    "prev">Marking Objects</a>, Up: <a href="Mark.html#Mark"
+    accesskey="u" rel="up">Mark</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

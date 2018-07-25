@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,193 +20,266 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Basic Keyboard Macro</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Basic Keyboard Macro">
-<meta name="keywords" content="GNU Emacs Manual: Basic Keyboard Macro">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title="Keyboard Macros">
-<link href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring" rel="next" title="Keyboard Macro Ring">
-<link href="Keyboard-Macros.html#Keyboard-Macros" rel="prev" title="Keyboard Macros">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Basic Keyboard Macro</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Basic Keyboard Macro" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Basic Keyboard Macro" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title=
+  "Keyboard Macros" />
+  <link href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring" rel=
+  "next" title="Keyboard Macro Ring" />
+  <link href="Keyboard-Macros.html#Keyboard-Macros" rel="prev"
+  title="Keyboard Macros" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Basic-Keyboard-Macro" id="Basic-Keyboard-Macro"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring"
+    accesskey="n" rel="next">Keyboard Macro Ring</a>, Up: <a href=
+    "Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel=
+    "up">Keyboard Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Use" id="Basic-Use"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Keyboard-Macro"></a>
-<div class="header">
-<p>
-Next: <a href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring" accesskey="n" rel="next">Keyboard Macro Ring</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Use"></a>
-<h3 class="section">17.1 Basic Use</h3>
+  <h3 class="section">17.1 Basic Use</h3>
 
-<dl compact="compact">
-<dt><kbd><span class="key">F3</span></kbd></dt>
-<dd><p>Start defining a keyboard macro
-(<code>kmacro-start-macro-or-insert-counter</code>).
-</p></dd>
-<dt><kbd><span class="key">F4</span></kbd></dt>
-<dd><p>If a keyboard macro is being defined, end the definition; otherwise,
-execute the most recent keyboard macro
-(<code>kmacro-end-or-call-macro</code>).
-</p></dd>
-<dt><kbd>C-u <span class="key">F3</span></kbd></dt>
-<dd><p>Re-execute last keyboard macro, then append keys to its definition.
-</p></dd>
-<dt><kbd>C-u C-u <span class="key">F3</span></kbd></dt>
-<dd><p>Append keys to the last keyboard macro without re-executing it.
-</p></dd>
-<dt><kbd>C-x C-k r</kbd></dt>
-<dd><p>Run the last keyboard macro on each line that begins in the region
-(<code>apply-macro-to-region-lines</code>).
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd><span class="key">F3</span></kbd></dt>
 
-<a name="index-F3"></a>
-<a name="index-F4"></a>
-<a name="index-kmacro_002dstart_002dmacro_002dor_002dinsert_002dcounter"></a>
-<a name="index-kmacro_002dend_002dor_002dcall_002dmacro"></a>
-<a name="index-kmacro_002dend_002dand_002dcall_002dmacro"></a>
-<p>To start defining a keyboard macro, type <tt class="key">F3</tt>.  From then on,
-your keys continue to be executed, but also become part of the
-definition of the macro.  &lsquo;<samp>Def</samp>&rsquo; appears in the mode line to
-remind you of what is going on.  When you are finished, type <tt class="key">F4</tt>
-(<code>kmacro-end-or-call-macro</code>) to terminate the definition.  For
-example,
-</p>
-<div class="example">
-<pre class="example"><span class="key">F3</span> M-f foo <span class="key">F4</span>
-</pre></div>
+    <dd>
+      <p>Start defining a keyboard macro
+      (<code>kmacro-start-macro-or-insert-counter</code>).</p>
+    </dd>
 
-<p>defines a macro to move forward a word and then insert &lsquo;<samp>foo</samp>&rsquo;.
-Note that <tt class="key">F3</tt> and <tt class="key">F4</tt> do not become part of the macro.
-</p>
-<p>After defining the macro, you can call it with <tt class="key">F4</tt>.  For the
-above example, this has the same effect as typing <kbd>M-f foo</kbd> again.
-(Note the two roles of the <tt class="key">F4</tt> command: it ends the macro if you
-are in the process of defining one, or calls the last macro
-otherwise.)  You can also supply <tt class="key">F4</tt> with a numeric prefix
-argument &lsquo;<samp>n</samp>&rsquo;, which means to invoke the macro &lsquo;<samp>n</samp>&rsquo; times.  An
-argument of zero repeats the macro indefinitely, until it gets an
-error or you type <kbd>C-g</kbd> (or, on MS-DOS, <kbd>C-<span class="key">BREAK</span></kbd>).
-</p>
-<p>The above example demonstrates a handy trick that you can employ
-with keyboard macros: if you wish to repeat an operation at regularly
-spaced places in the text, include a motion command as part of the
-macro.  In this case, repeating the macro inserts the string
-&lsquo;<samp>foo</samp>&rsquo; after each successive word.
-</p>
-<p>After terminating the definition of a keyboard macro, you can append
-more keystrokes to its definition by typing <kbd>C-u <span class="key">F3</span></kbd>.  This
-is equivalent to plain <tt class="key">F3</tt> followed by retyping the whole
-definition so far.  As a consequence, it re-executes the macro as
-previously defined.  If you change the variable
-<code>kmacro-execute-before-append</code> to <code>nil</code>, the existing macro
-will not be re-executed before appending to it (the default is
-<code>t</code>).  You can also add to the end of the definition of the last
-keyboard macro without re-executing it by typing <kbd>C-u C-u
-<span class="key">F3</span></kbd>.
-</p>
-<p>When a command reads an argument with the minibuffer, your
-minibuffer input becomes part of the macro along with the command.  So
-when you replay the macro, the command gets the same argument as when
-you entered the macro.  For example,
-</p>
-<div class="example">
-<pre class="example"><span class="key">F3</span> C-a C-k C-x b foo <span class="key">RET</span> C-y C-x b <span class="key">RET</span> <span class="key">F4</span>
-</pre></div>
+    <dt><kbd><span class="key">F4</span></kbd></dt>
 
-<p>defines a macro that kills the current line, yanks it into the buffer
-&lsquo;<samp>foo</samp>&rsquo;, then returns to the original buffer.
-</p>
-<p>Most keyboard commands work as usual in a keyboard macro definition,
-with some exceptions.  Typing <kbd>C-g</kbd> (<code>keyboard-quit</code>) quits
-the keyboard macro definition.  Typing <kbd>C-M-c</kbd>
-(<code>exit-recursive-edit</code>) can be unreliable: it works as you&rsquo;d
-expect if exiting a recursive edit that started within the macro, but
-if it exits a recursive edit that started before you invoked the
-keyboard macro, it also necessarily exits the keyboard macro too.
-Mouse events are also unreliable, even though you can use them in a
-keyboard macro: when the macro replays the mouse event, it uses the
-original mouse position of that event, the position that the mouse had
-while you were defining the macro.  The effect of this may be hard to
-predict.
-</p>
-<a name="index-apply_002dmacro_002dto_002dregion_002dlines"></a>
-<a name="index-C_002dx-C_002dk-r"></a>
-<p>The command <kbd>C-x C-k r</kbd> (<code>apply-macro-to-region-lines</code>)
-repeats the last defined keyboard macro on each line that begins in
-the region.  It does this line by line, by moving point to the
-beginning of the line and then executing the macro.
-</p>
-<a name="index-C_002dx-_0028"></a>
-<a name="index-C_002dx-_0029"></a>
-<a name="index-C_002dx-e"></a>
-<a name="index-kmacro_002dstart_002dmacro"></a>
-<a name="index-kmacro_002dend_002dmacro"></a>
-<p>In addition to the <tt class="key">F3</tt> and <tt class="key">F4</tt> commands described above,
-Emacs also supports an older set of key bindings for defining and
-executing keyboard macros.  To begin a macro definition, type <kbd>C-x
-(</kbd> (<code>kmacro-start-macro</code>); as with <tt class="key">F3</tt>, a prefix argument
-appends this definition to the last keyboard macro.  To end a macro
-definition, type <kbd>C-x )</kbd> (<code>kmacro-end-macro</code>).  To execute
-the most recent macro, type <kbd>C-x e</kbd>
-(<code>kmacro-end-and-call-macro</code>).  If you enter <kbd>C-x e</kbd> while
-defining a macro, the macro is terminated and executed immediately.
-Immediately after typing <kbd>C-x e</kbd>, you can type <tt class="key">e</tt> repeatedly
-to immediately repeat the macro one or more times.  You can also give
-<kbd>C-x e</kbd> a repeat argument, just like <tt class="key">F4</tt>.
-</p>
-<p><kbd>C-x )</kbd> can be given a repeat count as an argument.  This means
-to repeat the macro right after defining it.  The macro definition
-itself counts as the first repetition, since it is executed as you
-define it, so <kbd>C-u 4 C-x )</kbd> executes the macro immediately 3
-additional times.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring" accesskey="n" rel="next">Keyboard Macro Ring</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>If a keyboard macro is being defined, end the definition;
+      otherwise, execute the most recent keyboard macro
+      (<code>kmacro-end-or-call-macro</code>).</p>
+    </dd>
 
+    <dt><kbd>C-u <span class="key">F3</span></kbd></dt>
 
+    <dd>
+      <p>Re-execute last keyboard macro, then append keys to its
+      definition.</p>
+    </dd>
 
+    <dt><kbd>C-u C-u <span class="key">F3</span></kbd></dt>
+
+    <dd>
+      <p>Append keys to the last keyboard macro without
+      re-executing it.</p>
+    </dd>
+
+    <dt><kbd>C-x C-k r</kbd></dt>
+
+    <dd>
+      <p>Run the last keyboard macro on each line that begins in
+      the region (<code>apply-macro-to-region-lines</code>).</p>
+    </dd>
+  </dl><a name="index-F3" id="index-F3"></a> <a name="index-F4" id=
+  "index-F4"></a> <a name=
+  "index-kmacro_002dstart_002dmacro_002dor_002dinsert_002dcounter"
+  id=
+  "index-kmacro_002dstart_002dmacro_002dor_002dinsert_002dcounter"></a>
+  <a name="index-kmacro_002dend_002dor_002dcall_002dmacro" id=
+  "index-kmacro_002dend_002dor_002dcall_002dmacro"></a> <a name=
+  "index-kmacro_002dend_002dand_002dcall_002dmacro" id=
+  "index-kmacro_002dend_002dand_002dcall_002dmacro"></a>
+
+  <p>To start defining a keyboard macro, type <tt class=
+  "key">F3</tt>. From then on, your keys continue to be executed,
+  but also become part of the definition of the macro.
+  &lsquo;<samp>Def</samp>&rsquo; appears in the mode line to remind
+  you of what is going on. When you are finished, type <tt class=
+  "key">F4</tt> (<code>kmacro-end-or-call-macro</code>) to
+  terminate the definition. For example,</p>
+
+  <div class="example">
+    <pre class="example">
+<span class="key">F3</span> M-f foo <span class="key">F4</span>
+</pre>
+  </div>
+
+  <p>defines a macro to move forward a word and then insert
+  &lsquo;<samp>foo</samp>&rsquo;. Note that <tt class="key">F3</tt>
+  and <tt class="key">F4</tt> do not become part of the macro.</p>
+
+  <p>After defining the macro, you can call it with <tt class=
+  "key">F4</tt>. For the above example, this has the same effect as
+  typing <kbd>M-f foo</kbd> again. (Note the two roles of the
+  <tt class="key">F4</tt> command: it ends the macro if you are in
+  the process of defining one, or calls the last macro otherwise.)
+  You can also supply <tt class="key">F4</tt> with a numeric prefix
+  argument &lsquo;<samp>n</samp>&rsquo;, which means to invoke the
+  macro &lsquo;<samp>n</samp>&rsquo; times. An argument of zero
+  repeats the macro indefinitely, until it gets an error or you
+  type <kbd>C-g</kbd> (or, on MS-DOS, <kbd>C-<span class=
+  "key">BREAK</span></kbd>).</p>
+
+  <p>The above example demonstrates a handy trick that you can
+  employ with keyboard macros: if you wish to repeat an operation
+  at regularly spaced places in the text, include a motion command
+  as part of the macro. In this case, repeating the macro inserts
+  the string &lsquo;<samp>foo</samp>&rsquo; after each successive
+  word.</p>
+
+  <p>After terminating the definition of a keyboard macro, you can
+  append more keystrokes to its definition by typing <kbd>C-u
+  <span class="key">F3</span></kbd>. This is equivalent to plain
+  <tt class="key">F3</tt> followed by retyping the whole definition
+  so far. As a consequence, it re-executes the macro as previously
+  defined. If you change the variable
+  <code>kmacro-execute-before-append</code> to <code>nil</code>,
+  the existing macro will not be re-executed before appending to it
+  (the default is <code>t</code>). You can also add to the end of
+  the definition of the last keyboard macro without re-executing it
+  by typing <kbd>C-u C-u <span class="key">F3</span></kbd>.</p>
+
+  <p>When a command reads an argument with the minibuffer, your
+  minibuffer input becomes part of the macro along with the
+  command. So when you replay the macro, the command gets the same
+  argument as when you entered the macro. For example,</p>
+
+  <div class="example">
+    <pre class="example">
+<span class="key">F3</span> C-a C-k C-x b foo <span class=
+"key">RET</span> C-y C-x b <span class=
+"key">RET</span> <span class="key">F4</span>
+</pre>
+  </div>
+
+  <p>defines a macro that kills the current line, yanks it into the
+  buffer &lsquo;<samp>foo</samp>&rsquo;, then returns to the
+  original buffer.</p>
+
+  <p>Most keyboard commands work as usual in a keyboard macro
+  definition, with some exceptions. Typing <kbd>C-g</kbd>
+  (<code>keyboard-quit</code>) quits the keyboard macro definition.
+  Typing <kbd>C-M-c</kbd> (<code>exit-recursive-edit</code>) can be
+  unreliable: it works as you&rsquo;d expect if exiting a recursive
+  edit that started within the macro, but if it exits a recursive
+  edit that started before you invoked the keyboard macro, it also
+  necessarily exits the keyboard macro too. Mouse events are also
+  unreliable, even though you can use them in a keyboard macro:
+  when the macro replays the mouse event, it uses the original
+  mouse position of that event, the position that the mouse had
+  while you were defining the macro. The effect of this may be hard
+  to predict.</p><a name=
+  "index-apply_002dmacro_002dto_002dregion_002dlines" id=
+  "index-apply_002dmacro_002dto_002dregion_002dlines"></a> <a name=
+  "index-C_002dx-C_002dk-r" id="index-C_002dx-C_002dk-r"></a>
+
+  <p>The command <kbd>C-x C-k r</kbd>
+  (<code>apply-macro-to-region-lines</code>) repeats the last
+  defined keyboard macro on each line that begins in the region. It
+  does this line by line, by moving point to the beginning of the
+  line and then executing the macro.</p><a name=
+  "index-C_002dx-_0028" id="index-C_002dx-_0028"></a> <a name=
+  "index-C_002dx-_0029" id="index-C_002dx-_0029"></a> <a name=
+  "index-C_002dx-e" id="index-C_002dx-e"></a> <a name=
+  "index-kmacro_002dstart_002dmacro" id=
+  "index-kmacro_002dstart_002dmacro"></a> <a name=
+  "index-kmacro_002dend_002dmacro" id=
+  "index-kmacro_002dend_002dmacro"></a>
+
+  <p>In addition to the <tt class="key">F3</tt> and <tt class=
+  "key">F4</tt> commands described above, Emacs also supports an
+  older set of key bindings for defining and executing keyboard
+  macros. To begin a macro definition, type <kbd>C-x (</kbd>
+  (<code>kmacro-start-macro</code>); as with <tt class=
+  "key">F3</tt>, a prefix argument appends this definition to the
+  last keyboard macro. To end a macro definition, type <kbd>C-x
+  )</kbd> (<code>kmacro-end-macro</code>). To execute the most
+  recent macro, type <kbd>C-x e</kbd>
+  (<code>kmacro-end-and-call-macro</code>). If you enter <kbd>C-x
+  e</kbd> while defining a macro, the macro is terminated and
+  executed immediately. Immediately after typing <kbd>C-x e</kbd>,
+  you can type <tt class="key">e</tt> repeatedly to immediately
+  repeat the macro one or more times. You can also give <kbd>C-x
+  e</kbd> a repeat argument, just like <tt class="key">F4</tt>.</p>
+
+  <p><kbd>C-x )</kbd> can be given a repeat count as an argument.
+  This means to repeat the macro right after defining it. The macro
+  definition itself counts as the first repetition, since it is
+  executed as you define it, so <kbd>C-u 4 C-x )</kbd> executes the
+  macro immediately 3 additional times.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring"
+    accesskey="n" rel="next">Keyboard Macro Ring</a>, Up: <a href=
+    "Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel=
+    "up">Keyboard Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

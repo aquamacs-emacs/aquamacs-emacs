@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1994-1995, 1999, 2001-2016
 Free Software Foundation, Inc.
 
@@ -13,170 +15,265 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Features for Automatic Typing: Skeleton Language</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Features for Automatic Typing: Skeleton Language">
-<meta name="keywords" content="Features for Automatic Typing: Skeleton Language">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Inserting-Pairs.html#Inserting-Pairs" rel="next" title="Inserting Pairs">
-<link href="Skeletons-as-Abbrevs.html#Skeletons-as-Abbrevs" rel="prev" title="Skeletons as Abbrevs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Features for Automatic Typing: Skeleton Language</title>
+  <meta name="description" content=
+  "Features for Automatic Typing: Skeleton Language" />
+  <meta name="keywords" content=
+  "Features for Automatic Typing: Skeleton Language" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Inserting-Pairs.html#Inserting-Pairs" rel="next"
+  title="Inserting Pairs" />
+  <link href="Skeletons-as-Abbrevs.html#Skeletons-as-Abbrevs" rel=
+  "prev" title="Skeletons as Abbrevs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Skeleton-Language"></a>
-<div class="header">
-<p>
-Next: <a href="Inserting-Pairs.html#Inserting-Pairs" accesskey="n" rel="next">Inserting Pairs</a>, Previous: <a href="Skeletons-as-Abbrevs.html#Skeletons-as-Abbrevs" accesskey="p" rel="prev">Skeletons as Abbrevs</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Skeleton-Language-1"></a>
-<h2 class="chapter">4 Skeleton Language</h2>
-<a name="index-skeleton-language"></a>
+<body lang="en" xml:lang="en">
+  <a name="Skeleton-Language" id="Skeleton-Language"></a>
 
-<a name="index-skeleton_002dinsert"></a>
-<p>Skeletons are an shorthand extension to the Lisp language, where various
-atoms directly perform either actions on the current buffer or rudimentary
-flow control mechanisms.  Skeletons are interpreted by the function
-<code>skeleton-insert</code>.
-</p>
-<p>A skeleton is a list starting with an interactor, which is usually a
-prompt-string, or <code>nil</code> when not needed, but can also be a Lisp
-expression for complex read functions or for returning some calculated value.
-The rest of the list are any number of elements as described in the following
-table:
-</p>
-<dl compact="compact">
-<dt><code>&quot;<var>string</var>&quot;</code>, <code>?<var>c</var></code>, <code>?\<var>c</var></code></dt>
-<dd><a name="index-skeleton_002dtransformation"></a>
-<p>Insert string or character.  Literal strings and characters are passed through
-<code>skeleton-transformation</code> when that is non-<code>nil</code>.
-</p></dd>
-<dt><code>?\n</code></dt>
-<dd><p>Insert a newline and align under current line, but not if this is the
-last element of a skeleton and the newline would be inserted at end of
-line, or this is the first element and the newline would be inserted
-at beginning of line.  Use newline character <code>?\n</code> to prevent
-alignment.  Use <code>&quot;\n&quot;</code> as the first or last string element of a
-skeleton to insert a newline unconditionally.
-</p></dd>
-<dt><code>_</code></dt>
-<dd><p>Interesting point.  When wrapping skeletons around successive regions, they are
-put at these places.  Point is left at first <code>_</code> where nothing is wrapped.
-</p></dd>
-<dt><code>&gt;</code></dt>
-<dd><p>Indent line according to major mode.  When following element is <code>_</code>, and
-there is a interregion that will be wrapped here, indent that interregion.
-</p></dd>
-<dt><code>&amp;</code></dt>
-<dd><p>Logical and.  If preceding element moved point, i.e., usually inserted
-something, do following element.
-</p></dd>
-<dt><code>|</code></dt>
-<dd><p>Logical xor.  If preceding element didn&rsquo;t move point, i.e., usually inserted
-nothing, do following element.
-</p></dd>
-<dt><code>-<var>number</var></code></dt>
-<dd><p>Delete preceding number characters.  Depends on value of
-<code>skeleton-untabify</code>.
-</p></dd>
-<dt><code>()</code> or <code>nil</code></dt>
-<dd><p>Ignored.
-</p></dd>
-<dt><var>lisp-expression</var></dt>
-<dd><p>Evaluated, and the return value is again interpreted as a skeleton element.
-</p></dd>
-<dt><code>str</code></dt>
-<dd><p>A special variable that, when evaluated the first time, usually prompts
-for input according to the skeleton&rsquo;s interactor.  It is then set to the
-return value resulting from the interactor.  Each subskeleton has its local
-copy of this variable.
-</p></dd>
-<dt><code>v1</code>, <code>v2</code></dt>
-<dd><p>Skeleton-local user variables.
-</p></dd>
-<dt><code>'<var>expression</var></code></dt>
-<dd><p>Evaluate following Lisp expression for its side-effect, but prevent it from
-being interpreted as a skeleton element.
-</p></dd>
-<dt><var>skeleton</var></dt>
-<dd><p>Subskeletons are inserted recursively, not once, but as often as the user
-enters something at the subskeletons interactor.  Thus there must be a
-<code>str</code> in the subskeleton.  They can also be used non-interactively, when
-prompt is a lisp-expression that returns successive list-elements.
-</p></dd>
-<dt><code>resume:</code></dt>
-<dd><p>Ignored.  Execution resumes here if the user quits during skeleton
-interpretation.
-</p></dd>
-<dt><code>quit</code></dt>
-<dd><p>A constant which is non-<code>nil</code> when the <code>resume:</code> section was entered
-because the user quit.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Inserting-Pairs.html#Inserting-Pairs"
+    accesskey="n" rel="next">Inserting Pairs</a>, Previous:
+    <a href="Skeletons-as-Abbrevs.html#Skeletons-as-Abbrevs"
+    accesskey="p" rel="prev">Skeletons as Abbrevs</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Skeleton-Language-1" id="Skeleton-Language-1"></a>
 
-<a name="index-skeleton_002dfurther_002delements"></a>
-<p>Some modes also use other skeleton elements they themselves defined.  For
-example in shell script mode&rsquo;s skeletons you will find <code>&lt;</code> which does a
-rigid indentation backwards, or in CC mode&rsquo;s skeletons you find the
-self-inserting elements <code>{</code> and <code>}</code>.  These are defined by the
-buffer-local variable <code>skeleton-further-elements</code> which is a list of
-variables bound while interpreting a skeleton.
-</p>
-<a name="index-define_002dskeleton"></a>
-<p>The macro <code>define-skeleton</code> defines a command for interpreting a
-skeleton.  The first argument is the command name, the second is a
-documentation string, and the rest is an interactor and any number of skeleton
-elements together forming a skeleton.  This skeleton is assigned to a variable
-of the same name as the command and can thus be overridden from your
-<samp>~/.emacs</samp> file (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html#Init-File">Init File</a> in <cite>The GNU Emacs Manual</cite>).
-</p>
+  <h2 class="chapter">4 Skeleton Language</h2><a name=
+  "index-skeleton-language" id="index-skeleton-language"></a>
+  <a name="index-skeleton_002dinsert" id=
+  "index-skeleton_002dinsert"></a>
 
+  <p>Skeletons are an shorthand extension to the Lisp language,
+  where various atoms directly perform either actions on the
+  current buffer or rudimentary flow control mechanisms. Skeletons
+  are interpreted by the function <code>skeleton-insert</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Inserting-Pairs.html#Inserting-Pairs" accesskey="n" rel="next">Inserting Pairs</a>, Previous: <a href="Skeletons-as-Abbrevs.html#Skeletons-as-Abbrevs" accesskey="p" rel="prev">Skeletons as Abbrevs</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A skeleton is a list starting with an interactor, which is
+  usually a prompt-string, or <code>nil</code> when not needed, but
+  can also be a Lisp expression for complex read functions or for
+  returning some calculated value. The rest of the list are any
+  number of elements as described in the following table:</p>
 
+  <dl compact="compact">
+    <dt><code>"<var>string</var>"</code>,
+    <code>?<var>c</var></code>, <code>?\<var>c</var></code></dt>
 
+    <dd>
+      <a name="index-skeleton_002dtransformation" id=
+      "index-skeleton_002dtransformation"></a>
 
+      <p>Insert string or character. Literal strings and characters
+      are passed through <code>skeleton-transformation</code> when
+      that is non-<code>nil</code>.</p>
+    </dd>
+
+    <dt><code>?\n</code></dt>
+
+    <dd>
+      <p>Insert a newline and align under current line, but not if
+      this is the last element of a skeleton and the newline would
+      be inserted at end of line, or this is the first element and
+      the newline would be inserted at beginning of line. Use
+      newline character <code>?\n</code> to prevent alignment. Use
+      <code>"\n"</code> as the first or last string element of a
+      skeleton to insert a newline unconditionally.</p>
+    </dd>
+
+    <dt><code>_</code></dt>
+
+    <dd>
+      <p>Interesting point. When wrapping skeletons around
+      successive regions, they are put at these places. Point is
+      left at first <code>_</code> where nothing is wrapped.</p>
+    </dd>
+
+    <dt><code>&gt;</code></dt>
+
+    <dd>
+      <p>Indent line according to major mode. When following
+      element is <code>_</code>, and there is a interregion that
+      will be wrapped here, indent that interregion.</p>
+    </dd>
+
+    <dt><code>&amp;</code></dt>
+
+    <dd>
+      <p>Logical and. If preceding element moved point, i.e.,
+      usually inserted something, do following element.</p>
+    </dd>
+
+    <dt><code>|</code></dt>
+
+    <dd>
+      <p>Logical xor. If preceding element didn&rsquo;t move point,
+      i.e., usually inserted nothing, do following element.</p>
+    </dd>
+
+    <dt><code>-<var>number</var></code></dt>
+
+    <dd>
+      <p>Delete preceding number characters. Depends on value of
+      <code>skeleton-untabify</code>.</p>
+    </dd>
+
+    <dt><code>()</code> or <code>nil</code></dt>
+
+    <dd>
+      <p>Ignored.</p>
+    </dd>
+
+    <dt><var>lisp-expression</var></dt>
+
+    <dd>
+      <p>Evaluated, and the return value is again interpreted as a
+      skeleton element.</p>
+    </dd>
+
+    <dt><code>str</code></dt>
+
+    <dd>
+      <p>A special variable that, when evaluated the first time,
+      usually prompts for input according to the skeleton&rsquo;s
+      interactor. It is then set to the return value resulting from
+      the interactor. Each subskeleton has its local copy of this
+      variable.</p>
+    </dd>
+
+    <dt><code>v1</code>, <code>v2</code></dt>
+
+    <dd>
+      <p>Skeleton-local user variables.</p>
+    </dd>
+
+    <dt><code>'<var>expression</var></code></dt>
+
+    <dd>
+      <p>Evaluate following Lisp expression for its side-effect,
+      but prevent it from being interpreted as a skeleton
+      element.</p>
+    </dd>
+
+    <dt><var>skeleton</var></dt>
+
+    <dd>
+      <p>Subskeletons are inserted recursively, not once, but as
+      often as the user enters something at the subskeletons
+      interactor. Thus there must be a <code>str</code> in the
+      subskeleton. They can also be used non-interactively, when
+      prompt is a lisp-expression that returns successive
+      list-elements.</p>
+    </dd>
+
+    <dt><code>resume:</code></dt>
+
+    <dd>
+      <p>Ignored. Execution resumes here if the user quits during
+      skeleton interpretation.</p>
+    </dd>
+
+    <dt><code>quit</code></dt>
+
+    <dd>
+      <p>A constant which is non-<code>nil</code> when the
+      <code>resume:</code> section was entered because the user
+      quit.</p>
+    </dd>
+  </dl><a name="index-skeleton_002dfurther_002delements" id=
+  "index-skeleton_002dfurther_002delements"></a>
+
+  <p>Some modes also use other skeleton elements they themselves
+  defined. For example in shell script mode&rsquo;s skeletons you
+  will find <code>&lt;</code> which does a rigid indentation
+  backwards, or in CC mode&rsquo;s skeletons you find the
+  self-inserting elements <code>{</code> and <code>}</code>. These
+  are defined by the buffer-local variable
+  <code>skeleton-further-elements</code> which is a list of
+  variables bound while interpreting a skeleton.</p><a name=
+  "index-define_002dskeleton" id="index-define_002dskeleton"></a>
+
+  <p>The macro <code>define-skeleton</code> defines a command for
+  interpreting a skeleton. The first argument is the command name,
+  the second is a documentation string, and the rest is an
+  interactor and any number of skeleton elements together forming a
+  skeleton. This skeleton is assigned to a variable of the same
+  name as the command and can thus be overridden from your
+  <samp>~/.emacs</samp> file (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html#Init-File">
+  Init File</a> in <cite>The GNU Emacs Manual</cite>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Inserting-Pairs.html#Inserting-Pairs"
+    accesskey="n" rel="next">Inserting Pairs</a>, Previous:
+    <a href="Skeletons-as-Abbrevs.html#Skeletons-as-Abbrevs"
+    accesskey="p" rel="prev">Skeletons as Abbrevs</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

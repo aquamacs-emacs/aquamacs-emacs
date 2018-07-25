@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2003-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,130 +14,175 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs SMTP Library: Encryption</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs SMTP Library: Encryption">
-<meta name="keywords" content="Emacs SMTP Library: Encryption">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Queued-delivery.html#Queued-delivery" rel="next" title="Queued delivery">
-<link href="Authentication.html#Authentication" rel="prev" title="Authentication">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs SMTP Library: Encryption</title>
+  <meta name="description" content=
+  "Emacs SMTP Library: Encryption" />
+  <meta name="keywords" content="Emacs SMTP Library: Encryption" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Queued-delivery.html#Queued-delivery" rel="next"
+  title="Queued delivery" />
+  <link href="Authentication.html#Authentication" rel="prev" title=
+  "Authentication" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Encryption"></a>
-<div class="header">
-<p>
-Next: <a href="Queued-delivery.html#Queued-delivery" accesskey="n" rel="next">Queued delivery</a>, Previous: <a href="Authentication.html#Authentication" accesskey="p" rel="prev">Authentication</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Encryption-1"></a>
-<h2 class="chapter">4 Encryption</h2>
+<body lang="en" xml:lang="en">
+  <a name="Encryption" id="Encryption"></a>
 
-<a name="index-STARTTLS"></a>
-<a name="index-TLS"></a>
-<a name="index-SSL"></a>
-<p>For greater security, you can encrypt your connection to the SMTP
-server.  If this is to work, both Emacs and the server must support it.
-</p>
-<p>The SMTP library supports the &ldquo;Transport Layer Security&rdquo; (TLS), and
-the older &ldquo;Secure Sockets Layer&rdquo; (SSL) encryption mechanisms.
-It also supports STARTTLS, which is a variant of TLS in which the
-initial connection to the server is made in plain text, requesting a
-switch to an encrypted channel for the rest of the process.
-</p>
-<a name="index-smtpmail_002dstream_002dtype"></a>
-<p>The variable <code>smtpmail-stream-type</code> controls what form of
-connection the SMTP library uses.  The default value is <code>nil</code>,
-which means to use a plain connection, but try to switch to a STARTTLS
-encrypted connection if the server supports it.  Other possible values
-are: <code>starttls</code> to insist on STARTTLS; <code>ssl</code> to use TLS/SSL;
-and <code>plain</code> for no encryption.
-</p>
-<p>Use of any form of TLS/SSL requires support in Emacs.  You can either
-use the built-in support (in Emacs 24.1 and later), or the
-<samp>starttls.el</samp> Lisp library.  The built-in support uses the GnuTLS
-<a name="DOCF1" href="#FOOT1"><sup>1</sup></a> library.
-If your Emacs has GnuTLS support built-in, the function
-<code>gnutls-available-p</code> is defined and returns non-<code>nil</code>.
-Otherwise, you must use the <samp>starttls.el</samp> library (see that file for
-more information on customization options, etc.).  The Lisp library
-requires one of the following external tools to be installed:
-</p>
-<ol>
-<li> The GnuTLS command line tool &lsquo;<samp>gnutls-cli</samp>&rsquo;, which you can get from
-<a href="http://www.gnu.org/software/gnutls/">http://www.gnu.org/software/gnutls/</a>.  This is the recommended
-tool, mainly because it can verify server certificates.
+  <div class="header">
+    <p>Next: <a href="Queued-delivery.html#Queued-delivery"
+    accesskey="n" rel="next">Queued delivery</a>, Previous:
+    <a href="Authentication.html#Authentication" accesskey="p" rel=
+    "prev">Authentication</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Encryption-1" id="Encryption-1"></a>
 
-</li><li> The &lsquo;<samp>starttls</samp>&rsquo; external program, which you can get from
-<samp>starttls-*.tar.gz</samp> from <a href="ftp://ftp.opaopa.org/pub/elisp/">ftp://ftp.opaopa.org/pub/elisp/</a>.
-</li></ol>
+  <h2 class="chapter">4 Encryption</h2><a name="index-STARTTLS" id=
+  "index-STARTTLS"></a> <a name="index-TLS" id="index-TLS"></a>
+  <a name="index-SSL" id="index-SSL"></a>
 
-<a name="index-certificates"></a>
-<a name="index-keys"></a>
-<p>The SMTP server may also request that you verify your identity by
-sending a certificate and the associated encryption key to the server.
-If you need to do this, you can use an <samp>~/.authinfo</samp> entry like this:
-</p>
-<div class="smallexample">
-<pre class="smallexample">machine mail.example.org port 25 key &quot;~/.my_smtp_tls.key&quot; cert &quot;~/.my_smtp_tls.cert&quot;
-</pre></div>
+  <p>For greater security, you can encrypt your connection to the
+  SMTP server. If this is to work, both Emacs and the server must
+  support it.</p>
 
-<p>(This replaces the old <code>smtpmail-starttls-credentials</code> variable used
-prior to Emacs 24.1.)
-</p>
+  <p>The SMTP library supports the &ldquo;Transport Layer
+  Security&rdquo; (TLS), and the older &ldquo;Secure Sockets
+  Layer&rdquo; (SSL) encryption mechanisms. It also supports
+  STARTTLS, which is a variant of TLS in which the initial
+  connection to the server is made in plain text, requesting a
+  switch to an encrypted channel for the rest of the
+  process.</p><a name="index-smtpmail_002dstream_002dtype" id=
+  "index-smtpmail_002dstream_002dtype"></a>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>The variable <code>smtpmail-stream-type</code> controls what
+  form of connection the SMTP library uses. The default value is
+  <code>nil</code>, which means to use a plain connection, but try
+  to switch to a STARTTLS encrypted connection if the server
+  supports it. Other possible values are: <code>starttls</code> to
+  insist on STARTTLS; <code>ssl</code> to use TLS/SSL; and
+  <code>plain</code> for no encryption.</p>
 
-<h3><a name="FOOT1" href="#DOCF1">(1)</a></h3>
-<p><a href="http://www.gnu.org/software/gnutls/">http://www.gnu.org/software/gnutls/</a></p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Queued-delivery.html#Queued-delivery" accesskey="n" rel="next">Queued delivery</a>, Previous: <a href="Authentication.html#Authentication" accesskey="p" rel="prev">Authentication</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Use of any form of TLS/SSL requires support in Emacs. You can
+  either use the built-in support (in Emacs 24.1 and later), or the
+  <samp>starttls.el</samp> Lisp library. The built-in support uses
+  the GnuTLS <a name="DOCF1" href="#FOOT1" id=
+  "DOCF1"><sup>1</sup></a> library. If your Emacs has GnuTLS
+  support built-in, the function <code>gnutls-available-p</code> is
+  defined and returns non-<code>nil</code>. Otherwise, you must use
+  the <samp>starttls.el</samp> library (see that file for more
+  information on customization options, etc.). The Lisp library
+  requires one of the following external tools to be installed:</p>
 
+  <ol>
+    <li>The GnuTLS command line tool
+    &lsquo;<samp>gnutls-cli</samp>&rsquo;, which you can get from
+    <a href=
+    "http://www.gnu.org/software/gnutls/">http://www.gnu.org/software/gnutls/</a>.
+    This is the recommended tool, mainly because it can verify
+    server certificates.</li>
 
+    <li>The &lsquo;<samp>starttls</samp>&rsquo; external program,
+    which you can get from <samp>starttls-*.tar.gz</samp> from
+    <a href=
+    "ftp://ftp.opaopa.org/pub/elisp/">ftp://ftp.opaopa.org/pub/elisp/</a>.</li>
+  </ol><a name="index-certificates" id="index-certificates"></a>
+  <a name="index-keys" id="index-keys"></a>
 
+  <p>The SMTP server may also request that you verify your identity
+  by sending a certificate and the associated encryption key to the
+  server. If you need to do this, you can use an
+  <samp>~/.authinfo</samp> entry like this:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+machine mail.example.org port 25 key "~/.my_smtp_tls.key" cert "~/.my_smtp_tls.cert"
+</pre>
+  </div>
+
+  <p>(This replaces the old
+  <code>smtpmail-starttls-credentials</code> variable used prior to
+  Emacs 24.1.)</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT1" href="#DOCF1" id="FOOT1">(1)</a></h3>
+
+    <p><a href=
+    "http://www.gnu.org/software/gnutls/">http://www.gnu.org/software/gnutls/</a></p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Queued-delivery.html#Queued-delivery"
+    accesskey="n" rel="next">Queued delivery</a>, Previous:
+    <a href="Authentication.html#Authentication" accesskey="p" rel=
+    "prev">Authentication</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,142 +16,210 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Using capture</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Using capture">
-<meta name="keywords" content="The Org Manual: Using capture">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Capture.html#Capture" rel="up" title="Capture">
-<link href="Capture-templates.html#Capture-templates" rel="next" title="Capture templates">
-<link href="Setting-up-capture.html#Setting-up-capture" rel="prev" title="Setting up capture">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Using capture</title>
+  <meta name="description" content=
+  "The Org Manual: Using capture" />
+  <meta name="keywords" content="The Org Manual: Using capture" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Capture.html#Capture" rel="up" title="Capture" />
+  <link href="Capture-templates.html#Capture-templates" rel="next"
+  title="Capture templates" />
+  <link href="Setting-up-capture.html#Setting-up-capture" rel=
+  "prev" title="Setting up capture" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-capture"></a>
-<div class="header">
-<p>
-Next: <a href="Capture-templates.html#Capture-templates" accesskey="n" rel="next">Capture templates</a>, Previous: <a href="Setting-up-capture.html#Setting-up-capture" accesskey="p" rel="prev">Setting up capture</a>, Up: <a href="Capture.html#Capture" accesskey="u" rel="up">Capture</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-capture-1"></a>
-<h4 class="subsection">9.1.2 Using capture</h4>
+<body lang="en" xml:lang="en">
+  <a name="Using-capture" id="Using-capture"></a>
 
-<dl compact="compact">
-<dd><a name="index-C_002dc-c-1"></a>
-<a name="index-org_002dcapture-2"></a>
-</dd>
-<dt><kbd><kbd>C-c c</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-capture</code>)</kbd></dt>
-<dd><p>Call the command <code>org-capture</code>.  Note that this keybinding is global and
-not active by default: you need to install it.  If you have templates
-<a name="index-date-tree"></a>
-defined see <a href="Capture-templates.html#Capture-templates">Capture templates</a>, it will offer these templates for
-selection or use a new Org outline node as the default template.  It will
-insert the template into the target file and switch to an indirect buffer
-narrowed to this new node.  You may then insert the information you want.
-</p>
-<a name="index-C_002dc-C_002dc-15"></a>
-<a name="index-org_002dcapture_002dfinalize"></a>
-</dd>
-<dt><kbd><kbd>C-c C-c</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-capture-finalize</code>)</kbd></dt>
-<dd><p>Once you have finished entering information into the capture buffer, <kbd>C-c
-C-c</kbd> will return you to the window configuration before the capture process,
-so that you can resume your work without further distraction.  When called
-with a prefix arg, finalize and then jump to the captured item.
-</p>
-<a name="index-C_002dc-C_002dw-1"></a>
-<a name="index-org_002dcapture_002drefile"></a>
-</dd>
-<dt><kbd><kbd>C-c C-w</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-capture-refile</code>)</kbd></dt>
-<dd><p>Finalize the capture process by refiling (see <a href="Refile-and-copy.html#Refile-and-copy">Refile and copy</a>) the note to
-a different place.  Please realize that this is a normal refiling command
-that will be executed&mdash;so the cursor position at the moment you run this
-command is important.  If you have inserted a tree with a parent and
-children, first move the cursor back to the parent.  Any prefix argument
-given to this command will be passed on to the <code>org-refile</code> command.
-</p>
-<a name="index-C_002dc-C_002dk-1"></a>
-<a name="index-org_002dcapture_002dkill"></a>
-</dd>
-<dt><kbd><kbd>C-c C-k</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-capture-kill</code>)</kbd></dt>
-<dd><p>Abort the capture process and return to the previous state.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Capture-templates.html#Capture-templates"
+    accesskey="n" rel="next">Capture templates</a>, Previous:
+    <a href="Setting-up-capture.html#Setting-up-capture" accesskey=
+    "p" rel="prev">Setting up capture</a>, Up: <a href=
+    "Capture.html#Capture" accesskey="u" rel="up">Capture</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-capture-1" id="Using-capture-1"></a>
 
-<p>You can also call <code>org-capture</code> in a special way from the agenda, using
-the <kbd>k c</kbd> key combination.  With this access, any timestamps inserted by
-the selected capture template will default to the cursor date in the agenda,
-rather than to the current date.
-</p>
-<p>To find the locations of the last stored capture, use <code>org-capture</code> with
-prefix commands:
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002du-C_002dc-c"></a>
-</dd>
-<dt><kbd><kbd>C-u C-c c</kbd></kbd></dt>
-<dd><p>Visit the target location of a capture template.  You get to select the
-template in the usual way.
-<a name="index-C_002du-C_002du-C_002dc-c"></a>
-</p></dd>
-<dt><kbd><kbd>C-u C-u C-c c</kbd></kbd></dt>
-<dd><p>Visit the last stored capture item in its buffer.
-</p></dd>
-</dl>
+  <h4 class="subsection">9.1.2 Using capture</h4>
 
-<a name="index-org_002dcapture_002dbookmark"></a>
-<a name="index-org_002dcapture_002dlast_002dstored"></a>
-<p>You can also jump to the bookmark <code>org-capture-last-stored</code>, which will
-automatically be created unless you set <code>org-capture-bookmark</code> to
-<code>nil</code>.
-</p>
-<p>To insert the capture at point in an Org buffer, call <code>org-capture</code> with
-a <code>C-0</code> prefix argument.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Capture-templates.html#Capture-templates" accesskey="n" rel="next">Capture templates</a>, Previous: <a href="Setting-up-capture.html#Setting-up-capture" accesskey="p" rel="prev">Setting up capture</a>, Up: <a href="Capture.html#Capture" accesskey="u" rel="up">Capture</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-c-1" id="index-C_002dc-c-1"></a>
+    <a name="index-org_002dcapture-2" id=
+    "index-org_002dcapture-2"></a></dd>
 
+    <dt><kbd><kbd>C-c c</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-capture</code>)</kbd></dt>
 
+    <dd>
+      <p>Call the command <code>org-capture</code>. Note that this
+      keybinding is global and not active by default: you need to
+      install it. If you have templates <a name="index-date-tree"
+      id="index-date-tree"></a> defined see <a href=
+      "Capture-templates.html#Capture-templates">Capture
+      templates</a>, it will offer these templates for selection or
+      use a new Org outline node as the default template. It will
+      insert the template into the target file and switch to an
+      indirect buffer narrowed to this new node. You may then
+      insert the information you want.</p><a name=
+      "index-C_002dc-C_002dc-15" id="index-C_002dc-C_002dc-15"></a>
+      <a name="index-org_002dcapture_002dfinalize" id=
+      "index-org_002dcapture_002dfinalize"></a>
+    </dd>
 
+    <dt><kbd><kbd>C-c C-c</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-capture-finalize</code>)</kbd></dt>
+
+    <dd>
+      <p>Once you have finished entering information into the
+      capture buffer, <kbd>C-c C-c</kbd> will return you to the
+      window configuration before the capture process, so that you
+      can resume your work without further distraction. When called
+      with a prefix arg, finalize and then jump to the captured
+      item.</p><a name="index-C_002dc-C_002dw-1" id=
+      "index-C_002dc-C_002dw-1"></a> <a name=
+      "index-org_002dcapture_002drefile" id=
+      "index-org_002dcapture_002drefile"></a>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-w</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-capture-refile</code>)</kbd></dt>
+
+    <dd>
+      <p>Finalize the capture process by refiling (see <a href=
+      "Refile-and-copy.html#Refile-and-copy">Refile and copy</a>)
+      the note to a different place. Please realize that this is a
+      normal refiling command that will be executed&mdash;so the
+      cursor position at the moment you run this command is
+      important. If you have inserted a tree with a parent and
+      children, first move the cursor back to the parent. Any
+      prefix argument given to this command will be passed on to
+      the <code>org-refile</code> command.</p><a name=
+      "index-C_002dc-C_002dk-1" id="index-C_002dc-C_002dk-1"></a>
+      <a name="index-org_002dcapture_002dkill" id=
+      "index-org_002dcapture_002dkill"></a>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-k</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-capture-kill</code>)</kbd></dt>
+
+    <dd>
+      <p>Abort the capture process and return to the previous
+      state.</p>
+    </dd>
+  </dl>
+
+  <p>You can also call <code>org-capture</code> in a special way
+  from the agenda, using the <kbd>k c</kbd> key combination. With
+  this access, any timestamps inserted by the selected capture
+  template will default to the cursor date in the agenda, rather
+  than to the current date.</p>
+
+  <p>To find the locations of the last stored capture, use
+  <code>org-capture</code> with prefix commands:</p>
+
+  <dl compact="compact">
+    <dd><a name="index-C_002du-C_002dc-c" id=
+    "index-C_002du-C_002dc-c"></a></dd>
+
+    <dt><kbd><kbd>C-u C-c c</kbd></kbd></dt>
+
+    <dd>
+      <p>Visit the target location of a capture template. You get
+      to select the template in the usual way. <a name=
+      "index-C_002du-C_002du-C_002dc-c" id=
+      "index-C_002du-C_002du-C_002dc-c"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-u C-u C-c c</kbd></kbd></dt>
+
+    <dd>
+      <p>Visit the last stored capture item in its buffer.</p>
+    </dd>
+  </dl><a name="index-org_002dcapture_002dbookmark" id=
+  "index-org_002dcapture_002dbookmark"></a> <a name=
+  "index-org_002dcapture_002dlast_002dstored" id=
+  "index-org_002dcapture_002dlast_002dstored"></a>
+
+  <p>You can also jump to the bookmark
+  <code>org-capture-last-stored</code>, which will automatically be
+  created unless you set <code>org-capture-bookmark</code> to
+  <code>nil</code>.</p>
+
+  <p>To insert the capture at point in an Org buffer, call
+  <code>org-capture</code> with a <code>C-0</code> prefix
+  argument.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Capture-templates.html#Capture-templates"
+    accesskey="n" rel="next">Capture templates</a>, Previous:
+    <a href="Setting-up-capture.html#Setting-up-capture" accesskey=
+    "p" rel="prev">Setting up capture</a>, Up: <a href=
+    "Capture.html#Capture" accesskey="u" rel="up">Capture</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

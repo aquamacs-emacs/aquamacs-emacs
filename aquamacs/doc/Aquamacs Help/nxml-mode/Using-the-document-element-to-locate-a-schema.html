@@ -1,15 +1,28 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Using the document element to locate a schema - nXML Mode</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="nXML Mode">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Schema-locating-files.html#Schema-locating-files" title="Schema locating files">
-<link rel="prev" href="Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema" title="Using the document's URI to locate a schema">
-<link rel="next" href="Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files" title="Using type identifiers in schema locating files">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Using the document element to locate a schema - nXML
+  Mode</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="nXML Mode" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Schema-locating-files.html#Schema-locating-files" title=
+  "Schema locating files" />
+  <link rel="prev" href=
+  "Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema"
+  title="Using the document's URI to locate a schema" />
+  <link rel="next" href=
+  "Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files"
+  title="Using type identifiers in schema locating files" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual documents nxml-mode, an Emacs major mode for editing
 XML with RELAX NG support.
 
@@ -34,8 +47,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -45,39 +60,61 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Using-the-document-element-to-locate-a-schema"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files">Using type identifiers in schema locating files</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema">Using the document's URI to locate a schema</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Schema-locating-files.html#Schema-locating-files">Schema locating files</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Using-the-document-element-to-locate-a-schema" id=
+    "Using-the-document-element-to-locate-a-schema"></a>
 
-<h4 class="subsection">6.2.3 Using the document element to locate a schema</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files">Using
+    type identifiers in schema locating files</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema">Using
+    the document's URI to locate a schema</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Schema-locating-files.html#Schema-locating-files">Schema
+    locating files</a></p>
+    <hr />
+  </div>
 
-<p>A &lsquo;<samp><span class="samp">documentElement</span></samp>&rsquo; rule locates a schema based on
-the local name and prefix of the document element. For example, a rule
+  <h4 class="subsection">6.2.3 Using the document element to locate
+  a schema</h4>
 
-<pre class="example">     &lt;documentElement prefix="xsl" localName="stylesheet" uri="xslt.rnc"/&gt;
+  <p>A &lsquo;<samp><span class=
+  "samp">documentElement</span></samp>&rsquo; rule locates a schema
+  based on the local name and prefix of the document element. For
+  example, a rule</p>
+  <pre class="example">
+     &lt;documentElement prefix="xsl" localName="stylesheet" uri="xslt.rnc"/&gt;
 </pre>
-   <p class="noindent">specifies that when the name of the document element is
-&lsquo;<samp><span class="samp">xsl:stylesheet</span></samp>&rsquo;, then &lsquo;<samp><span class="samp">xslt.rnc</span></samp>&rsquo; should be used
-as the schema. Either the &lsquo;<samp><span class="samp">prefix</span></samp>&rsquo; or
-&lsquo;<samp><span class="samp">localName</span></samp>&rsquo; attribute may be omitted to allow any prefix or
-local name.
 
-   <p>A &lsquo;<samp><span class="samp">namespace</span></samp>&rsquo; rule locates a schema based on the
-namespace URI of the document element. For example, a rule
+  <p class="noindent">specifies that when the name of the document
+  element is &lsquo;<samp><span class=
+  "samp">xsl:stylesheet</span></samp>&rsquo;, then
+  &lsquo;<samp><span class="samp">xslt.rnc</span></samp>&rsquo;
+  should be used as the schema. Either the
+  &lsquo;<samp><span class="samp">prefix</span></samp>&rsquo; or
+  &lsquo;<samp><span class="samp">localName</span></samp>&rsquo;
+  attribute may be omitted to allow any prefix or local name.</p>
 
-<pre class="example">     &lt;namespace ns="http://www.w3.org/1999/XSL/Transform" uri="xslt.rnc"/&gt;
+  <p>A &lsquo;<samp><span class=
+  "samp">namespace</span></samp>&rsquo; rule locates a schema based
+  on the namespace URI of the document element. For example, a
+  rule</p>
+  <pre class="example">
+     &lt;namespace ns="http://www.w3.org/1999/XSL/Transform" uri="xslt.rnc"/&gt;
 </pre>
-   <p class="noindent">specifies that when the namespace URI of the document is
-&lsquo;<samp><span class="samp">http://www.w3.org/1999/XSL/Transform</span></samp>&rsquo;, then
-&lsquo;<samp><span class="samp">xslt.rnc</span></samp>&rsquo; should be used as the schema.
 
-   </body></html>
-
+  <p class="noindent">specifies that when the namespace URI of the
+  document is &lsquo;<samp><span class=
+  "samp">http://www.w3.org/1999/XSL/Transform</span></samp>&rsquo;,
+  then &lsquo;<samp><span class=
+  "samp">xslt.rnc</span></samp>&rsquo; should be used as the
+  schema.</p>
+</body>
+</html>

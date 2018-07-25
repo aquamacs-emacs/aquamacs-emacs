@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2004, 2012-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,102 +14,164 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Bovine parser development: Bovine Grammar Rules</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Bovine parser development: Bovine Grammar Rules">
-<meta name="keywords" content="Bovine parser development: Bovine Grammar Rules">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="top">
-<link href="How-Lexical-Tokens-Match.html#How-Lexical-Tokens-Match" rel="next" title="How Lexical Tokens Match">
-<link href="Starting-Rules.html#Starting-Rules" rel="prev" title="Starting Rules">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Bovine parser development: Bovine Grammar Rules</title>
+  <meta name="description" content=
+  "Bovine parser development: Bovine Grammar Rules" />
+  <meta name="keywords" content=
+  "Bovine parser development: Bovine Grammar Rules" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="top" />
+  <link href=
+  "How-Lexical-Tokens-Match.html#How-Lexical-Tokens-Match" rel=
+  "next" title="How Lexical Tokens Match" />
+  <link href="Starting-Rules.html#Starting-Rules" rel="prev" title=
+  "Starting Rules" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Bovine-Grammar-Rules"></a>
-<div class="header">
-<p>
-Next: <a href="Optional-Lambda-Expression.html#Optional-Lambda-Expression" accesskey="n" rel="next">Optional Lambda Expression</a>, Previous: <a href="Starting-Rules.html#Starting-Rules" accesskey="p" rel="prev">Starting Rules</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Bovine-Grammar-Rules-1"></a>
-<h2 class="chapter">2 Bovine Grammar Rules</h2>
+<body lang="en" xml:lang="en">
+  <a name="Bovine-Grammar-Rules" id="Bovine-Grammar-Rules"></a>
 
-<p>The rules are what allow the compiler to create tags from a language
-file.  Once the setup is done in the prologue, you can start writing
-rules.  See <a href="../grammar-fw/Grammar-Rules.html#Grammar-Rules">(grammar-fw)Grammar Rules</a>.
-</p>
-<div class="example">
-<pre class="example"><var>result</var> : <var>components1</var> <var>optional-semantic-action1</var>)
+  <div class="header">
+    <p>Next: <a href=
+    "Optional-Lambda-Expression.html#Optional-Lambda-Expression"
+    accesskey="n" rel="next">Optional Lambda Expression</a>,
+    Previous: <a href="Starting-Rules.html#Starting-Rules"
+    accesskey="p" rel="prev">Starting Rules</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Bovine-Grammar-Rules-1" id="Bovine-Grammar-Rules-1"></a>
+
+  <h2 class="chapter">2 Bovine Grammar Rules</h2>
+
+  <p>The rules are what allow the compiler to create tags from a
+  language file. Once the setup is done in the prologue, you can
+  start writing rules. See <a href=
+  "../grammar-fw/Grammar-Rules.html#Grammar-Rules">(grammar-fw)Grammar
+  Rules</a>.</p>
+
+  <div class="example">
+    <pre class="example">
+<var>result</var> : <var>components1</var> <var>optional-semantic-action1</var>)
        | <var>components2</var> <var>optional-semantic-action2</var>
        ;
-</pre></div>
+</pre>
+  </div>
 
-<p><var>result</var> is a nonterminal, that is a symbol synthesized in your grammar.
-<var>components</var> is a list of elements that are to be matched if <var>result</var>
-is to be made.  <var>optional-semantic-action</var> is an optional sequence
-of simplified Emacs Lisp expressions for concocting the parse tree.
-</p>
-<p>In bison, each time an element of <var>components</var> is found, it is
-<em>shifted</em> onto the parser stack.  (The stack of matched elements.)
-When all <var>components</var>&rsquo; elements have been matched, it is
-<em>reduced</em> to <var>result</var>.  See <a href="http://www.gnu.org/software/bison/manual/html_node/Algorithm.html#Algorithm">Algorithm</a> in <cite>The GNU Bison Manual</cite>.
-</p>
-<p>A particular <var>result</var> written into your grammar becomes
-the parser&rsquo;s goal.  It is designated by a <code>%start</code> statement
-(see <a href="Starting-Rules.html#Starting-Rules">Starting Rules</a>).  The value returned by the associated
-<var>optional-semantic-action</var> is the parser&rsquo;s result.  It should be
-a tree of <i>Semantic</i> <em>tags</em>, See <a href="../semantic-appdev/Semantic-Tags.html#Semantic-Tags">(semantic-appdev)Semantic Tags</a>.
-</p>
-<p><var>components</var> is made up of symbols.  A symbol such as <code>FOO</code>
-means that a syntactic token of class <code>FOO</code> must be matched.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="How-Lexical-Tokens-Match.html#How-Lexical-Tokens-Match" accesskey="1">How Lexical Tokens Match</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Grammar_002dto_002dLisp-Details.html#Grammar_002dto_002dLisp-Details" accesskey="2">Grammar-to-Lisp Details</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Order-of-components-in-rules.html#Order-of-components-in-rules" accesskey="3">Order of components in rules</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <p><var>result</var> is a nonterminal, that is a symbol
+  synthesized in your grammar. <var>components</var> is a list of
+  elements that are to be matched if <var>result</var> is to be
+  made. <var>optional-semantic-action</var> is an optional sequence
+  of simplified Emacs Lisp expressions for concocting the parse
+  tree.</p>
 
+  <p>In bison, each time an element of <var>components</var> is
+  found, it is <em>shifted</em> onto the parser stack. (The stack
+  of matched elements.) When all <var>components</var>&rsquo;
+  elements have been matched, it is <em>reduced</em> to
+  <var>result</var>. See <a href=
+  "http://www.gnu.org/software/bison/manual/html_node/Algorithm.html#Algorithm">
+  Algorithm</a> in <cite>The GNU Bison Manual</cite>.</p>
 
+  <p>A particular <var>result</var> written into your grammar
+  becomes the parser&rsquo;s goal. It is designated by a
+  <code>%start</code> statement (see <a href=
+  "Starting-Rules.html#Starting-Rules">Starting Rules</a>). The
+  value returned by the associated
+  <var>optional-semantic-action</var> is the parser&rsquo;s result.
+  It should be a tree of <i>Semantic</i> <em>tags</em>, See
+  <a href="../semantic-appdev/Semantic-Tags.html#Semantic-Tags">(semantic-appdev)Semantic
+  Tags</a>.</p>
 
+  <p><var>components</var> is made up of symbols. A symbol such as
+  <code>FOO</code> means that a syntactic token of class
+  <code>FOO</code> must be matched.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "How-Lexical-Tokens-Match.html#How-Lexical-Tokens-Match"
+      accesskey="1">How Lexical Tokens Match</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Grammar_002dto_002dLisp-Details.html#Grammar_002dto_002dLisp-Details"
+      accesskey="2">Grammar-to-Lisp Details</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Order-of-components-in-rules.html#Order-of-components-in-rules"
+      accesskey="3">Order of components in rules</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

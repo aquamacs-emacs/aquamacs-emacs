@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,133 +19,199 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Display Tables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Display Tables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Display Tables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Character-Display.html#Character-Display" rel="up" title="Character Display">
-<link href="Active-Display-Table.html#Active-Display-Table" rel="next" title="Active Display Table">
-<link href="Usual-Display.html#Usual-Display" rel="prev" title="Usual Display">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Display Tables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Display Tables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Display Tables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Character-Display.html#Character-Display" rel="up"
+  title="Character Display" />
+  <link href="Active-Display-Table.html#Active-Display-Table" rel=
+  "next" title="Active Display Table" />
+  <link href="Usual-Display.html#Usual-Display" rel="prev" title=
+  "Usual Display" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Display-Tables" id="Display-Tables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Active-Display-Table.html#Active-Display-Table" accesskey="n"
+    rel="next">Active Display Table</a>, Previous: <a href=
+    "Usual-Display.html#Usual-Display" accesskey="p" rel=
+    "prev">Usual Display</a>, Up: <a href=
+    "Character-Display.html#Character-Display" accesskey="u" rel=
+    "up">Character Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Display-Tables-1" id="Display-Tables-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Display-Tables"></a>
-<div class="header">
-<p>
-Next: <a href="Active-Display-Table.html#Active-Display-Table" accesskey="n" rel="next">Active Display Table</a>, Previous: <a href="Usual-Display.html#Usual-Display" accesskey="p" rel="prev">Usual Display</a>, Up: <a href="Character-Display.html#Character-Display" accesskey="u" rel="up">Character Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Display-Tables-1"></a>
-<h4 class="subsection">37.22.2 Display Tables</h4>
+  <h4 class="subsection">37.22.2 Display Tables</h4><a name=
+  "index-display-table" id="index-display-table"></a>
 
-<a name="index-display-table"></a>
-<p>A display table is a special-purpose char-table
-(see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>), with <code>display-table</code> as its subtype, which
-is used to override the usual character display conventions.  This
-section describes how to make, inspect, and assign elements to a
-display table object.
-</p>
-<dl>
-<dt><a name="index-make_002ddisplay_002dtable"></a>Function: <strong>make-display-table</strong></dt>
-<dd><p>This creates and returns a display table.  The table initially has
-<code>nil</code> in all elements.
-</p></dd></dl>
+  <p>A display table is a special-purpose char-table (see <a href=
+  "Char_002dTables.html#Char_002dTables">Char-Tables</a>), with
+  <code>display-table</code> as its subtype, which is used to
+  override the usual character display conventions. This section
+  describes how to make, inspect, and assign elements to a display
+  table object.</p>
 
-<p>The ordinary elements of the display table are indexed by character
-codes; the element at index <var>c</var> says how to display the character
-code <var>c</var>.  The value should be <code>nil</code> (which means to display
-the character <var>c</var> according to the usual display conventions;
-see <a href="Usual-Display.html#Usual-Display">Usual Display</a>), or a vector of glyph codes (which means to
-display the character <var>c</var> as those glyphs; see <a href="Glyphs.html#Glyphs">Glyphs</a>).
-</p>
-<p><strong>Warning:</strong> if you use the display table to change the display
-of newline characters, the whole buffer will be displayed as one long
-line.
-</p>
-<p>The display table also has six <em>extra slots</em> which serve special
-purposes.  Here is a table of their meanings; <code>nil</code> in any slot
-means to use the default for that slot, as stated below.
-</p>
-<dl compact="compact">
-<dt>0</dt>
-<dd><p>The glyph for the end of a truncated screen line (the default for this
-is &lsquo;<samp>$</samp>&rsquo;).  See <a href="Glyphs.html#Glyphs">Glyphs</a>.  On graphical terminals, Emacs uses
-arrows in the fringes to indicate truncation, so the display table has
-no effect.
-</p>
-</dd>
-<dt>1</dt>
-<dd><p>The glyph for the end of a continued line (the default is &lsquo;<samp>\</samp>&rsquo;).
-On graphical terminals, Emacs uses curved arrows in the fringes to
-indicate continuation, so the display table has no effect.
-</p>
-</dd>
-<dt>2</dt>
-<dd><p>The glyph for indicating a character displayed as an octal character
-code (the default is &lsquo;<samp>\</samp>&rsquo;).
-</p>
-</dd>
-<dt>3</dt>
-<dd><p>The glyph for indicating a control character (the default is &lsquo;<samp>^</samp>&rsquo;).
-</p>
-</dd>
-<dt>4</dt>
-<dd><p>A vector of glyphs for indicating the presence of invisible lines (the
-default is &lsquo;<samp>...</samp>&rsquo;).  See <a href="Selective-Display.html#Selective-Display">Selective Display</a>.
-</p>
-</dd>
-<dt>5</dt>
-<dd><p>The glyph used to draw the border between side-by-side windows (the
-default is &lsquo;<samp>|</samp>&rsquo;).  See <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>.  This takes effect only
-when there are no scroll bars; if scroll bars are supported and in use,
-a scroll bar separates the two windows.
-</p></dd>
-</dl>
+  <dl>
+    <dt><a name="index-make_002ddisplay_002dtable" id=
+    "index-make_002ddisplay_002dtable"></a>Function:
+    <strong>make-display-table</strong></dt>
 
-<p>For example, here is how to construct a display table that mimics
-the effect of setting <code>ctl-arrow</code> to a non-<code>nil</code> value
-(see <a href="Glyphs.html#Glyphs">Glyphs</a>, for the function <code>make-glyph-code</code>):
-</p>
-<div class="example">
-<pre class="example">(setq disptab (make-display-table))
+    <dd>
+      <p>This creates and returns a display table. The table
+      initially has <code>nil</code> in all elements.</p>
+    </dd>
+  </dl>
+
+  <p>The ordinary elements of the display table are indexed by
+  character codes; the element at index <var>c</var> says how to
+  display the character code <var>c</var>. The value should be
+  <code>nil</code> (which means to display the character
+  <var>c</var> according to the usual display conventions; see
+  <a href="Usual-Display.html#Usual-Display">Usual Display</a>), or
+  a vector of glyph codes (which means to display the character
+  <var>c</var> as those glyphs; see <a href=
+  "Glyphs.html#Glyphs">Glyphs</a>).</p>
+
+  <p><strong>Warning:</strong> if you use the display table to
+  change the display of newline characters, the whole buffer will
+  be displayed as one long line.</p>
+
+  <p>The display table also has six <em>extra slots</em> which
+  serve special purposes. Here is a table of their meanings;
+  <code>nil</code> in any slot means to use the default for that
+  slot, as stated below.</p>
+
+  <dl compact="compact">
+    <dt>0</dt>
+
+    <dd>
+      <p>The glyph for the end of a truncated screen line (the
+      default for this is &lsquo;<samp>$</samp>&rsquo;). See
+      <a href="Glyphs.html#Glyphs">Glyphs</a>. On graphical
+      terminals, Emacs uses arrows in the fringes to indicate
+      truncation, so the display table has no effect.</p>
+    </dd>
+
+    <dt>1</dt>
+
+    <dd>
+      <p>The glyph for the end of a continued line (the default is
+      &lsquo;<samp>\</samp>&rsquo;). On graphical terminals, Emacs
+      uses curved arrows in the fringes to indicate continuation,
+      so the display table has no effect.</p>
+    </dd>
+
+    <dt>2</dt>
+
+    <dd>
+      <p>The glyph for indicating a character displayed as an octal
+      character code (the default is
+      &lsquo;<samp>\</samp>&rsquo;).</p>
+    </dd>
+
+    <dt>3</dt>
+
+    <dd>
+      <p>The glyph for indicating a control character (the default
+      is &lsquo;<samp>^</samp>&rsquo;).</p>
+    </dd>
+
+    <dt>4</dt>
+
+    <dd>
+      <p>A vector of glyphs for indicating the presence of
+      invisible lines (the default is
+      &lsquo;<samp>...</samp>&rsquo;). See <a href=
+      "Selective-Display.html#Selective-Display">Selective
+      Display</a>.</p>
+    </dd>
+
+    <dt>5</dt>
+
+    <dd>
+      <p>The glyph used to draw the border between side-by-side
+      windows (the default is &lsquo;<samp>|</samp>&rsquo;). See
+      <a href="Splitting-Windows.html#Splitting-Windows">Splitting
+      Windows</a>. This takes effect only when there are no scroll
+      bars; if scroll bars are supported and in use, a scroll bar
+      separates the two windows.</p>
+    </dd>
+  </dl>
+
+  <p>For example, here is how to construct a display table that
+  mimics the effect of setting <code>ctl-arrow</code> to a
+  non-<code>nil</code> value (see <a href=
+  "Glyphs.html#Glyphs">Glyphs</a>, for the function
+  <code>make-glyph-code</code>):</p>
+
+  <div class="example">
+    <pre class="example">
+(setq disptab (make-display-table))
 (dotimes (i 32)
   (or (= i ?\t)
       (= i ?\n)
@@ -153,45 +221,81 @@ the effect of setting <code>ctl-arrow</code> to a non-<code>nil</code> value
 (aset disptab 127
       (vector (make-glyph-code ?^ 'escape-glyph)
               (make-glyph-code ?? 'escape-glyph)))))
-</pre></div>
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-display_002dtable_002dslot"></a>Function: <strong>display-table-slot</strong> <em>display-table slot</em></dt>
-<dd><p>This function returns the value of the extra slot <var>slot</var> of
-<var>display-table</var>.  The argument <var>slot</var> may be a number from 0 to
-5 inclusive, or a slot name (symbol).  Valid symbols are
-<code>truncation</code>, <code>wrap</code>, <code>escape</code>, <code>control</code>,
-<code>selective-display</code>, and <code>vertical-border</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-display_002dtable_002dslot" id=
+    "index-display_002dtable_002dslot"></a>Function:
+    <strong>display-table-slot</strong> <em>display-table
+    slot</em></dt>
 
-<dl>
-<dt><a name="index-set_002ddisplay_002dtable_002dslot"></a>Function: <strong>set-display-table-slot</strong> <em>display-table slot value</em></dt>
-<dd><p>This function stores <var>value</var> in the extra slot <var>slot</var> of
-<var>display-table</var>.  The argument <var>slot</var> may be a number from 0 to
-5 inclusive, or a slot name (symbol).  Valid symbols are
-<code>truncation</code>, <code>wrap</code>, <code>escape</code>, <code>control</code>,
-<code>selective-display</code>, and <code>vertical-border</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the value of the extra slot
+      <var>slot</var> of <var>display-table</var>. The argument
+      <var>slot</var> may be a number from 0 to 5 inclusive, or a
+      slot name (symbol). Valid symbols are
+      <code>truncation</code>, <code>wrap</code>,
+      <code>escape</code>, <code>control</code>,
+      <code>selective-display</code>, and
+      <code>vertical-border</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-describe_002ddisplay_002dtable"></a>Function: <strong>describe-display-table</strong> <em>display-table</em></dt>
-<dd><p>This function displays a description of the display table
-<var>display-table</var> in a help buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002ddisplay_002dtable_002dslot" id=
+    "index-set_002ddisplay_002dtable_002dslot"></a>Function:
+    <strong>set-display-table-slot</strong> <em>display-table slot
+    value</em></dt>
 
-<dl>
-<dt><a name="index-describe_002dcurrent_002ddisplay_002dtable"></a>Command: <strong>describe-current-display-table</strong></dt>
-<dd><p>This command displays a description of the current display table in a
-help buffer.
-</p></dd></dl>
+    <dd>
+      <p>This function stores <var>value</var> in the extra slot
+      <var>slot</var> of <var>display-table</var>. The argument
+      <var>slot</var> may be a number from 0 to 5 inclusive, or a
+      slot name (symbol). Valid symbols are
+      <code>truncation</code>, <code>wrap</code>,
+      <code>escape</code>, <code>control</code>,
+      <code>selective-display</code>, and
+      <code>vertical-border</code>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Active-Display-Table.html#Active-Display-Table" accesskey="n" rel="next">Active Display Table</a>, Previous: <a href="Usual-Display.html#Usual-Display" accesskey="p" rel="prev">Usual Display</a>, Up: <a href="Character-Display.html#Character-Display" accesskey="u" rel="up">Character Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-describe_002ddisplay_002dtable" id=
+    "index-describe_002ddisplay_002dtable"></a>Function:
+    <strong>describe-display-table</strong>
+    <em>display-table</em></dt>
 
+    <dd>
+      <p>This function displays a description of the display table
+      <var>display-table</var> in a help buffer.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-describe_002dcurrent_002ddisplay_002dtable"
+    id=
+    "index-describe_002dcurrent_002ddisplay_002dtable"></a>Command:
+    <strong>describe-current-display-table</strong></dt>
 
+    <dd>
+      <p>This command displays a description of the current display
+      table in a help buffer.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Active-Display-Table.html#Active-Display-Table" accesskey="n"
+    rel="next">Active Display Table</a>, Previous: <a href=
+    "Usual-Display.html#Usual-Display" accesskey="p" rel=
+    "prev">Usual Display</a>, Up: <a href=
+    "Character-Display.html#Character-Display" accesskey="u" rel=
+    "up">Character Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

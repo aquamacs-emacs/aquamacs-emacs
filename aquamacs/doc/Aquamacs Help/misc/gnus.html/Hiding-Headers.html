@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,205 +14,297 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Hiding Headers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Hiding Headers">
-<meta name="keywords" content="Gnus Manual: Hiding Headers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Article-Buffer.html#Article-Buffer" rel="up" title="Article Buffer">
-<link href="Using-MIME.html#Using-MIME" rel="next" title="Using MIME">
-<link href="Article-Buffer.html#Article-Buffer" rel="prev" title="Article Buffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Hiding Headers</title>
+  <meta name="description" content="Gnus Manual: Hiding Headers" />
+  <meta name="keywords" content="Gnus Manual: Hiding Headers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Article-Buffer.html#Article-Buffer" rel="up" title=
+  "Article Buffer" />
+  <link href="Using-MIME.html#Using-MIME" rel="next" title=
+  "Using MIME" />
+  <link href="Article-Buffer.html#Article-Buffer" rel="prev" title=
+  "Article Buffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Hiding-Headers"></a>
-<div class="header">
-<p>
-Next: <a href="Using-MIME.html#Using-MIME" accesskey="n" rel="next">Using MIME</a>, Up: <a href="Article-Buffer.html#Article-Buffer" accesskey="u" rel="up">Article Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Hiding-Headers-1"></a>
-<h3 class="section">4.1 Hiding Headers</h3>
-<a name="index-hiding-headers"></a>
-<a name="index-deleting-headers"></a>
+<body lang="en" xml:lang="en">
+  <a name="Hiding-Headers" id="Hiding-Headers"></a>
 
-<p>The top section of each article is the <em>head</em>.  (The rest is the
-<em>body</em>, but you may have guessed that already.)
-</p>
-<a name="index-gnus_002dshow_002dall_002dheaders"></a>
-<p>There is a lot of useful information in the head: the name of the person
-who wrote the article, the date it was written and the subject of the
-article.  That&rsquo;s well and nice, but there&rsquo;s also lots of information
-most people do not want to see&mdash;what systems the article has passed
-through before reaching you, the <code>Message-ID</code>, the
-<code>References</code>, etc. ad nauseam&mdash;and you&rsquo;ll probably want to get rid
-of some of those lines.  If you want to keep all those lines in the
-article buffer, you can set <code>gnus-show-all-headers</code> to <code>t</code>.
-</p>
-<p>Gnus provides you with two variables for sifting headers:
-</p>
-<dl compact="compact">
-<dt><code>gnus-visible-headers</code></dt>
-<dd><a name="index-gnus_002dvisible_002dheaders"></a>
-<p>If this variable is non-<code>nil</code>, it should be a regular expression
-that says what headers you wish to keep in the article buffer.  All
-headers that do not match this variable will be hidden.
-</p>
-<p>For instance, if you only want to see the name of the person who wrote
-the article and the subject, you&rsquo;d say:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-visible-headers &quot;^From:\\|^Subject:&quot;)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Using-MIME.html#Using-MIME" accesskey="n"
+    rel="next">Using MIME</a>, Up: <a href=
+    "Article-Buffer.html#Article-Buffer" accesskey="u" rel=
+    "up">Article Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Hiding-Headers-1" id="Hiding-Headers-1"></a>
 
-<p>This variable can also be a list of regexps to match headers to
-remain visible.
-</p>
-</dd>
-<dt><code>gnus-ignored-headers</code></dt>
-<dd><a name="index-gnus_002dignored_002dheaders"></a>
-<p>This variable is the reverse of <code>gnus-visible-headers</code>.  If this
-variable is set (and <code>gnus-visible-headers</code> is <code>nil</code>), it
-should be a regular expression that matches all lines that you want to
-hide.  All lines that do not match this variable will remain visible.
-</p>
-<p>For instance, if you just want to get rid of the <code>References</code> line
-and the <code>Xref</code> line, you might say:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-ignored-headers &quot;^References:\\|^Xref:&quot;)
-</pre></div>
+  <h3 class="section">4.1 Hiding Headers</h3><a name=
+  "index-hiding-headers" id="index-hiding-headers"></a> <a name=
+  "index-deleting-headers" id="index-deleting-headers"></a>
 
-<p>This variable can also be a list of regexps to match headers to
-be removed.
-</p>
-<p>Note that if <code>gnus-visible-headers</code> is non-<code>nil</code>, this
-variable will have no effect.
-</p>
-</dd>
-</dl>
+  <p>The top section of each article is the <em>head</em>. (The
+  rest is the <em>body</em>, but you may have guessed that
+  already.)</p><a name="index-gnus_002dshow_002dall_002dheaders"
+  id="index-gnus_002dshow_002dall_002dheaders"></a>
 
-<a name="index-gnus_002dsorted_002dheader_002dlist"></a>
-<p>Gnus can also sort the headers for you.  (It does this by default.)  You
-can control the sorting by setting the <code>gnus-sorted-header-list</code>
-variable.  It is a list of regular expressions that says in what order
-the headers are to be displayed.
-</p>
-<p>For instance, if you want the name of the author of the article first,
-and then the subject, you might say something like:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-sorted-header-list '(&quot;^From:&quot; &quot;^Subject:&quot;))
-</pre></div>
+  <p>There is a lot of useful information in the head: the name of
+  the person who wrote the article, the date it was written and the
+  subject of the article. That&rsquo;s well and nice, but
+  there&rsquo;s also lots of information most people do not want to
+  see&mdash;what systems the article has passed through before
+  reaching you, the <code>Message-ID</code>, the
+  <code>References</code>, etc. ad nauseam&mdash;and you&rsquo;ll
+  probably want to get rid of some of those lines. If you want to
+  keep all those lines in the article buffer, you can set
+  <code>gnus-show-all-headers</code> to <code>t</code>.</p>
 
-<p>Any headers that are to remain visible, but are not listed in this
-variable, will be displayed in random order after all the headers listed in this variable.
-</p>
-<a name="index-gnus_002darticle_002dhide_002dboring_002dheaders-1"></a>
-<a name="index-gnus_002dboring_002darticle_002dheaders"></a>
-<p>You can hide further boring headers by setting
-<code>gnus-treat-hide-boring-headers</code> to <code>head</code>.  What this function
-does depends on the <code>gnus-boring-article-headers</code> variable.  It&rsquo;s a
-list, but this list doesn&rsquo;t actually contain header names.  Instead it
-lists various <em>boring conditions</em> that Gnus can check and remove
-from sight.
-</p>
-<p>These conditions are:
-</p><dl compact="compact">
-<dt><code>empty</code></dt>
-<dd><p>Remove all empty headers.
-</p></dd>
-<dt><code>followup-to</code></dt>
-<dd><p>Remove the <code>Followup-To</code> header if it is identical to the
-<code>Newsgroups</code> header.
-</p></dd>
-<dt><code>reply-to</code></dt>
-<dd><p>Remove the <code>Reply-To</code> header if it lists the same addresses as
-the <code>From</code> header, or if the <code>broken-reply-to</code> group
-parameter is set.
-</p></dd>
-<dt><code>newsgroups</code></dt>
-<dd><p>Remove the <code>Newsgroups</code> header if it only contains the current group
-name.
-</p></dd>
-<dt><code>to-address</code></dt>
-<dd><p>Remove the <code>To</code> header if it only contains the address identical to
-the current group&rsquo;s <code>to-address</code> parameter.
-</p></dd>
-<dt><code>to-list</code></dt>
-<dd><p>Remove the <code>To</code> header if it only contains the address identical to
-the current group&rsquo;s <code>to-list</code> parameter.
-</p></dd>
-<dt><code>cc-list</code></dt>
-<dd><p>Remove the <code>Cc</code> header if it only contains the address identical to
-the current group&rsquo;s <code>to-list</code> parameter.
-</p></dd>
-<dt><code>date</code></dt>
-<dd><p>Remove the <code>Date</code> header if the article is less than three days
-old.
-</p></dd>
-<dt><code>long-to</code></dt>
-<dd><p>Remove the <code>To</code> and/or <code>Cc</code> header if it is very long.
-</p></dd>
-<dt><code>many-to</code></dt>
-<dd><p>Remove all <code>To</code> and/or <code>Cc</code> headers if there are more than one.
-</p></dd>
-</dl>
+  <p>Gnus provides you with two variables for sifting headers:</p>
 
-<p>To include these three elements, you could say something like:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-boring-article-headers
+  <dl compact="compact">
+    <dt><code>gnus-visible-headers</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dvisible_002dheaders" id=
+      "index-gnus_002dvisible_002dheaders"></a>
+
+      <p>If this variable is non-<code>nil</code>, it should be a
+      regular expression that says what headers you wish to keep in
+      the article buffer. All headers that do not match this
+      variable will be hidden.</p>
+
+      <p>For instance, if you only want to see the name of the
+      person who wrote the article and the subject, you&rsquo;d
+      say:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq gnus-visible-headers "^From:\\|^Subject:")
+</pre>
+      </div>
+
+      <p>This variable can also be a list of regexps to match
+      headers to remain visible.</p>
+    </dd>
+
+    <dt><code>gnus-ignored-headers</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dignored_002dheaders" id=
+      "index-gnus_002dignored_002dheaders"></a>
+
+      <p>This variable is the reverse of
+      <code>gnus-visible-headers</code>. If this variable is set
+      (and <code>gnus-visible-headers</code> is <code>nil</code>),
+      it should be a regular expression that matches all lines that
+      you want to hide. All lines that do not match this variable
+      will remain visible.</p>
+
+      <p>For instance, if you just want to get rid of the
+      <code>References</code> line and the <code>Xref</code> line,
+      you might say:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq gnus-ignored-headers "^References:\\|^Xref:")
+</pre>
+      </div>
+
+      <p>This variable can also be a list of regexps to match
+      headers to be removed.</p>
+
+      <p>Note that if <code>gnus-visible-headers</code> is
+      non-<code>nil</code>, this variable will have no effect.</p>
+    </dd>
+  </dl><a name="index-gnus_002dsorted_002dheader_002dlist" id=
+  "index-gnus_002dsorted_002dheader_002dlist"></a>
+
+  <p>Gnus can also sort the headers for you. (It does this by
+  default.) You can control the sorting by setting the
+  <code>gnus-sorted-header-list</code> variable. It is a list of
+  regular expressions that says in what order the headers are to be
+  displayed.</p>
+
+  <p>For instance, if you want the name of the author of the
+  article first, and then the subject, you might say something
+  like:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-sorted-header-list '("^From:" "^Subject:"))
+</pre>
+  </div>
+
+  <p>Any headers that are to remain visible, but are not listed in
+  this variable, will be displayed in random order after all the
+  headers listed in this variable.</p><a name=
+  "index-gnus_002darticle_002dhide_002dboring_002dheaders-1" id=
+  "index-gnus_002darticle_002dhide_002dboring_002dheaders-1"></a>
+  <a name="index-gnus_002dboring_002darticle_002dheaders" id=
+  "index-gnus_002dboring_002darticle_002dheaders"></a>
+
+  <p>You can hide further boring headers by setting
+  <code>gnus-treat-hide-boring-headers</code> to <code>head</code>.
+  What this function does depends on the
+  <code>gnus-boring-article-headers</code> variable. It&rsquo;s a
+  list, but this list doesn&rsquo;t actually contain header names.
+  Instead it lists various <em>boring conditions</em> that Gnus can
+  check and remove from sight.</p>
+
+  <p>These conditions are:</p>
+
+  <dl compact="compact">
+    <dt><code>empty</code></dt>
+
+    <dd>
+      <p>Remove all empty headers.</p>
+    </dd>
+
+    <dt><code>followup-to</code></dt>
+
+    <dd>
+      <p>Remove the <code>Followup-To</code> header if it is
+      identical to the <code>Newsgroups</code> header.</p>
+    </dd>
+
+    <dt><code>reply-to</code></dt>
+
+    <dd>
+      <p>Remove the <code>Reply-To</code> header if it lists the
+      same addresses as the <code>From</code> header, or if the
+      <code>broken-reply-to</code> group parameter is set.</p>
+    </dd>
+
+    <dt><code>newsgroups</code></dt>
+
+    <dd>
+      <p>Remove the <code>Newsgroups</code> header if it only
+      contains the current group name.</p>
+    </dd>
+
+    <dt><code>to-address</code></dt>
+
+    <dd>
+      <p>Remove the <code>To</code> header if it only contains the
+      address identical to the current group&rsquo;s
+      <code>to-address</code> parameter.</p>
+    </dd>
+
+    <dt><code>to-list</code></dt>
+
+    <dd>
+      <p>Remove the <code>To</code> header if it only contains the
+      address identical to the current group&rsquo;s
+      <code>to-list</code> parameter.</p>
+    </dd>
+
+    <dt><code>cc-list</code></dt>
+
+    <dd>
+      <p>Remove the <code>Cc</code> header if it only contains the
+      address identical to the current group&rsquo;s
+      <code>to-list</code> parameter.</p>
+    </dd>
+
+    <dt><code>date</code></dt>
+
+    <dd>
+      <p>Remove the <code>Date</code> header if the article is less
+      than three days old.</p>
+    </dd>
+
+    <dt><code>long-to</code></dt>
+
+    <dd>
+      <p>Remove the <code>To</code> and/or <code>Cc</code> header
+      if it is very long.</p>
+    </dd>
+
+    <dt><code>many-to</code></dt>
+
+    <dd>
+      <p>Remove all <code>To</code> and/or <code>Cc</code> headers
+      if there are more than one.</p>
+    </dd>
+  </dl>
+
+  <p>To include these three elements, you could say something
+  like:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-boring-article-headers
       '(empty followup-to reply-to))
-</pre></div>
+</pre>
+  </div>
 
-<p>This is also the default value for this variable.
-</p>
+  <p>This is also the default value for this variable.</p>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Using-MIME.html#Using-MIME" accesskey="n" rel="next">Using MIME</a>, Up: <a href="Article-Buffer.html#Article-Buffer" accesskey="u" rel="up">Article Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Using-MIME.html#Using-MIME" accesskey="n"
+    rel="next">Using MIME</a>, Up: <a href=
+    "Article-Buffer.html#Article-Buffer" accesskey="u" rel=
+    "up">Article Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

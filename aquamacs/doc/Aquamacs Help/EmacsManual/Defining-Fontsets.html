@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,200 +20,286 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Defining Fontsets</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Defining Fontsets">
-<meta name="keywords" content="GNU Emacs Manual: Defining Fontsets">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="International.html#International" rel="up" title="International">
-<link href="Modifying-Fontsets.html#Modifying-Fontsets" rel="next" title="Modifying Fontsets">
-<link href="Fontsets.html#Fontsets" rel="prev" title="Fontsets">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Defining Fontsets</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Defining Fontsets" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Defining Fontsets" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="International.html#International" rel="up" title=
+  "International" />
+  <link href="Modifying-Fontsets.html#Modifying-Fontsets" rel=
+  "next" title="Modifying Fontsets" />
+  <link href="Fontsets.html#Fontsets" rel="prev" title=
+  "Fontsets" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Defining-Fontsets" id="Defining-Fontsets"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Modifying-Fontsets.html#Modifying-Fontsets"
+    accesskey="n" rel="next">Modifying Fontsets</a>, Previous:
+    <a href="Fontsets.html#Fontsets" accesskey="p" rel=
+    "prev">Fontsets</a>, Up: <a href=
+    "International.html#International" accesskey="u" rel=
+    "up">International</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-fontsets" id="Defining-fontsets"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Fontsets"></a>
-<div class="header">
-<p>
-Next: <a href="Modifying-Fontsets.html#Modifying-Fontsets" accesskey="n" rel="next">Modifying Fontsets</a>, Previous: <a href="Fontsets.html#Fontsets" accesskey="p" rel="prev">Fontsets</a>, Up: <a href="International.html#International" accesskey="u" rel="up">International</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-fontsets"></a>
-<h3 class="section">22.14 Defining fontsets</h3>
+  <h3 class="section">22.14 Defining fontsets</h3><a name=
+  "index-standard_002dfontset_002dspec" id=
+  "index-standard_002dfontset_002dspec"></a> <a name=
+  "index-w32_002dstandard_002dfontset_002dspec" id=
+  "index-w32_002dstandard_002dfontset_002dspec"></a> <a name=
+  "index-ns_002dstandard_002dfontset_002dspec" id=
+  "index-ns_002dstandard_002dfontset_002dspec"></a> <a name=
+  "index-standard-fontset" id="index-standard-fontset"></a>
 
-<a name="index-standard_002dfontset_002dspec"></a>
-<a name="index-w32_002dstandard_002dfontset_002dspec"></a>
-<a name="index-ns_002dstandard_002dfontset_002dspec"></a>
-<a name="index-standard-fontset"></a>
-<p>When running on X, Emacs creates a standard fontset automatically according to the value
-of <code>standard-fontset-spec</code>.  This fontset&rsquo;s name is
-</p>
-<div class="example">
-<pre class="example">-*-fixed-medium-r-normal-*-16-*-*-*-*-*-fontset-standard
-</pre></div>
+  <p>When running on X, Emacs creates a standard fontset
+  automatically according to the value of
+  <code>standard-fontset-spec</code>. This fontset&rsquo;s name
+  is</p>
 
-<p>or just &lsquo;<samp>fontset-standard</samp>&rsquo; for short.
-</p>
-<p>On GNUstep and Mac OS X, the standard fontset is created using the value of
-<code>ns-standard-fontset-spec</code>, and on MS Windows it is
-created using the value of <code>w32-standard-fontset-spec</code>.
-</p>
-<p>Bold, italic, and bold-italic variants of the standard fontset are
-created automatically.  Their names have &lsquo;<samp>bold</samp>&rsquo; instead of
-&lsquo;<samp>medium</samp>&rsquo;, or &lsquo;<samp>i</samp>&rsquo; instead of &lsquo;<samp>r</samp>&rsquo;, or both.
-</p>
-<a name="index-startup-fontset"></a>
-<p>Emacs generates a fontset automatically, based on any default
-<acronym>ASCII</acronym> font that you specify with the &lsquo;<samp>Font</samp>&rsquo; resource or
-the &lsquo;<samp>-fn</samp>&rsquo; argument, or the default font that Emacs found when it
-started.  This is the <em>startup fontset</em> and its name is
-<code>fontset-startup</code>.  It does this by replacing the
-<var>charset_registry</var> field with &lsquo;<samp>fontset</samp>&rsquo;, and replacing
-<var>charset_encoding</var> field with &lsquo;<samp>startup</samp>&rsquo;, then using the
-resulting string to specify a fontset.
-</p>
-<p>For instance, if you start Emacs with a font of this form,
-</p>
-<div class="example">
-<pre class="example">emacs -fn &quot;*courier-medium-r-normal--14-140-*-iso8859-1&quot;
-</pre></div>
+  <div class="example">
+    <pre class="example">
+-*-fixed-medium-r-normal-*-16-*-*-*-*-*-fontset-standard
+</pre>
+  </div>
 
-<p>Emacs generates the following fontset and uses it for the initial X
-window frame:
-</p>
-<div class="example">
-<pre class="example">-*-courier-medium-r-normal-*-14-140-*-*-*-*-fontset-startup
-</pre></div>
+  <p>or just &lsquo;<samp>fontset-standard</samp>&rsquo; for
+  short.</p>
 
-<p>The startup fontset will use the font that you specify, or a variant
-with a different registry and encoding, for all the characters that
-are supported by that font, and fallback on &lsquo;<samp>fontset-default</samp>&rsquo; for
-other characters.
-</p>
-<p>With the X resource &lsquo;<samp>Emacs.Font</samp>&rsquo;, you can specify a fontset name
-just like an actual font name.  But be careful not to specify a fontset
-name in a wildcard resource like &lsquo;<samp>Emacs*Font</samp>&rsquo;&mdash;that wildcard
-specification matches various other resources, such as for menus, and
-menus cannot handle fontsets.  See <a href="X-Resources.html#X-Resources">X Resources</a>.
-</p>
-<p>You can specify additional fontsets using X resources named
-&lsquo;<samp>Fontset-<var>n</var></samp>&rsquo;, where <var>n</var> is an integer starting from 0.
-The resource value should have this form:
-</p>
-<div class="smallexample">
-<pre class="smallexample"><var>fontpattern</var>, <span class="roman">[</span><var>charset</var>:<var>font</var><span class="roman">]&hellip;</span>
-</pre></div>
+  <p>On GNUstep and Mac OS X, the standard fontset is created using
+  the value of <code>ns-standard-fontset-spec</code>, and on MS
+  Windows it is created using the value of
+  <code>w32-standard-fontset-spec</code>.</p>
 
-<p><var>fontpattern</var> should have the form of a standard X font name (see
-the previous fontset-startup example), except
-for the last two fields.  They should have the form
-&lsquo;<samp>fontset-<var>alias</var></samp>&rsquo;.
-</p>
-<p>The fontset has two names, one long and one short.  The long name is
-<var>fontpattern</var>.  The short name is &lsquo;<samp>fontset-<var>alias</var></samp>&rsquo;.  You
-can refer to the fontset by either name.
-</p>
-<p>The construct &lsquo;<samp><var>charset</var>:<var>font</var></samp>&rsquo; specifies which font to
-use (in this fontset) for one particular character set.  Here,
-<var>charset</var> is the name of a character set, and <var>font</var> is the
-font to use for that character set.  You can use this construct any
-number of times in defining one fontset.
-</p>
-<p>For the other character sets, Emacs chooses a font based on
-<var>fontpattern</var>.  It replaces &lsquo;<samp>fontset-<var>alias</var></samp>&rsquo; with values
-that describe the character set.  For the <acronym>ASCII</acronym> character font,
-&lsquo;<samp>fontset-<var>alias</var></samp>&rsquo; is replaced with &lsquo;<samp>ISO8859-1</samp>&rsquo;.
-</p>
-<p>In addition, when several consecutive fields are wildcards, Emacs
-collapses them into a single wildcard.  This is to prevent use of
-auto-scaled fonts.  Fonts made by scaling larger fonts are not usable
-for editing, and scaling a smaller font is not also useful, because it is
-better to use the smaller font in its own size, which is what Emacs
-does.
-</p>
-<p>Thus if <var>fontpattern</var> is this,
-</p>
-<div class="example">
-<pre class="example">-*-fixed-medium-r-normal-*-24-*-*-*-*-*-fontset-24
-</pre></div>
+  <p>Bold, italic, and bold-italic variants of the standard fontset
+  are created automatically. Their names have
+  &lsquo;<samp>bold</samp>&rsquo; instead of
+  &lsquo;<samp>medium</samp>&rsquo;, or
+  &lsquo;<samp>i</samp>&rsquo; instead of
+  &lsquo;<samp>r</samp>&rsquo;, or both.</p><a name=
+  "index-startup-fontset" id="index-startup-fontset"></a>
 
-<p>the font specification for <acronym>ASCII</acronym> characters would be this:
-</p>
-<div class="example">
-<pre class="example">-*-fixed-medium-r-normal-*-24-*-ISO8859-1
-</pre></div>
+  <p>Emacs generates a fontset automatically, based on any default
+  <acronym>ASCII</acronym> font that you specify with the
+  &lsquo;<samp>Font</samp>&rsquo; resource or the
+  &lsquo;<samp>-fn</samp>&rsquo; argument, or the default font that
+  Emacs found when it started. This is the <em>startup fontset</em>
+  and its name is <code>fontset-startup</code>. It does this by
+  replacing the <var>charset_registry</var> field with
+  &lsquo;<samp>fontset</samp>&rsquo;, and replacing
+  <var>charset_encoding</var> field with
+  &lsquo;<samp>startup</samp>&rsquo;, then using the resulting
+  string to specify a fontset.</p>
 
-<p>and the font specification for Chinese GB2312 characters would be this:
-</p>
-<div class="example">
-<pre class="example">-*-fixed-medium-r-normal-*-24-*-gb2312*-*
-</pre></div>
+  <p>For instance, if you start Emacs with a font of this form,</p>
 
-<p>You may not have any Chinese font matching the above font
-specification.  Most X distributions include only Chinese fonts that
-have &lsquo;<samp>song ti</samp>&rsquo; or &lsquo;<samp>fangsong ti</samp>&rsquo; in the <var>family</var> field.  In
-such a case, &lsquo;<samp>Fontset-<var>n</var></samp>&rsquo; can be specified as:
-</p>
-<div class="smallexample">
-<pre class="smallexample">Emacs.Fontset-0: -*-fixed-medium-r-normal-*-24-*-*-*-*-*-fontset-24,\
+  <div class="example">
+    <pre class="example">
+emacs -fn "*courier-medium-r-normal--14-140-*-iso8859-1"
+</pre>
+  </div>
+
+  <p>Emacs generates the following fontset and uses it for the
+  initial X window frame:</p>
+
+  <div class="example">
+    <pre class="example">
+-*-courier-medium-r-normal-*-14-140-*-*-*-*-fontset-startup
+</pre>
+  </div>
+
+  <p>The startup fontset will use the font that you specify, or a
+  variant with a different registry and encoding, for all the
+  characters that are supported by that font, and fallback on
+  &lsquo;<samp>fontset-default</samp>&rsquo; for other
+  characters.</p>
+
+  <p>With the X resource &lsquo;<samp>Emacs.Font</samp>&rsquo;, you
+  can specify a fontset name just like an actual font name. But be
+  careful not to specify a fontset name in a wildcard resource like
+  &lsquo;<samp>Emacs*Font</samp>&rsquo;&mdash;that wildcard
+  specification matches various other resources, such as for menus,
+  and menus cannot handle fontsets. See <a href=
+  "X-Resources.html#X-Resources">X Resources</a>.</p>
+
+  <p>You can specify additional fontsets using X resources named
+  &lsquo;<samp>Fontset-<var>n</var></samp>&rsquo;, where
+  <var>n</var> is an integer starting from 0. The resource value
+  should have this form:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+<var>fontpattern</var>, <span class=
+"roman">[</span><var>charset</var>:<var>font</var><span class=
+"roman">]&hellip;</span>
+</pre>
+  </div>
+
+  <p><var>fontpattern</var> should have the form of a standard X
+  font name (see the previous fontset-startup example), except for
+  the last two fields. They should have the form
+  &lsquo;<samp>fontset-<var>alias</var></samp>&rsquo;.</p>
+
+  <p>The fontset has two names, one long and one short. The long
+  name is <var>fontpattern</var>. The short name is
+  &lsquo;<samp>fontset-<var>alias</var></samp>&rsquo;. You can
+  refer to the fontset by either name.</p>
+
+  <p>The construct
+  &lsquo;<samp><var>charset</var>:<var>font</var></samp>&rsquo;
+  specifies which font to use (in this fontset) for one particular
+  character set. Here, <var>charset</var> is the name of a
+  character set, and <var>font</var> is the font to use for that
+  character set. You can use this construct any number of times in
+  defining one fontset.</p>
+
+  <p>For the other character sets, Emacs chooses a font based on
+  <var>fontpattern</var>. It replaces
+  &lsquo;<samp>fontset-<var>alias</var></samp>&rsquo; with values
+  that describe the character set. For the <acronym>ASCII</acronym>
+  character font,
+  &lsquo;<samp>fontset-<var>alias</var></samp>&rsquo; is replaced
+  with &lsquo;<samp>ISO8859-1</samp>&rsquo;.</p>
+
+  <p>In addition, when several consecutive fields are wildcards,
+  Emacs collapses them into a single wildcard. This is to prevent
+  use of auto-scaled fonts. Fonts made by scaling larger fonts are
+  not usable for editing, and scaling a smaller font is not also
+  useful, because it is better to use the smaller font in its own
+  size, which is what Emacs does.</p>
+
+  <p>Thus if <var>fontpattern</var> is this,</p>
+
+  <div class="example">
+    <pre class="example">
+-*-fixed-medium-r-normal-*-24-*-*-*-*-*-fontset-24
+</pre>
+  </div>
+
+  <p>the font specification for <acronym>ASCII</acronym> characters
+  would be this:</p>
+
+  <div class="example">
+    <pre class="example">
+-*-fixed-medium-r-normal-*-24-*-ISO8859-1
+</pre>
+  </div>
+
+  <p>and the font specification for Chinese GB2312 characters would
+  be this:</p>
+
+  <div class="example">
+    <pre class="example">
+-*-fixed-medium-r-normal-*-24-*-gb2312*-*
+</pre>
+  </div>
+
+  <p>You may not have any Chinese font matching the above font
+  specification. Most X distributions include only Chinese fonts
+  that have &lsquo;<samp>song ti</samp>&rsquo; or
+  &lsquo;<samp>fangsong ti</samp>&rsquo; in the <var>family</var>
+  field. In such a case,
+  &lsquo;<samp>Fontset-<var>n</var></samp>&rsquo; can be specified
+  as:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+Emacs.Fontset-0: -*-fixed-medium-r-normal-*-24-*-*-*-*-*-fontset-24,\
         chinese-gb2312:-*-*-medium-r-normal-*-24-*-gb2312*-*
-</pre></div>
+</pre>
+  </div>
 
-<p>Then, the font specifications for all but Chinese GB2312 characters have
-&lsquo;<samp>fixed</samp>&rsquo; in the <var>family</var> field, and the font specification for
-Chinese GB2312 characters has a wild card &lsquo;<samp>*</samp>&rsquo; in the <var>family</var>
-field.
-</p>
-<a name="index-create_002dfontset_002dfrom_002dfontset_002dspec"></a>
-<p>The function that processes the fontset resource value to create the
-fontset is called <code>create-fontset-from-fontset-spec</code>.  You can also
-call this function explicitly to create a fontset.
-</p>
-<p>See <a href="Fonts.html#Fonts">Fonts</a>, for more information about font naming.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Modifying-Fontsets.html#Modifying-Fontsets" accesskey="n" rel="next">Modifying Fontsets</a>, Previous: <a href="Fontsets.html#Fontsets" accesskey="p" rel="prev">Fontsets</a>, Up: <a href="International.html#International" accesskey="u" rel="up">International</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Then, the font specifications for all but Chinese GB2312
+  characters have &lsquo;<samp>fixed</samp>&rsquo; in the
+  <var>family</var> field, and the font specification for Chinese
+  GB2312 characters has a wild card &lsquo;<samp>*</samp>&rsquo; in
+  the <var>family</var> field.</p><a name=
+  "index-create_002dfontset_002dfrom_002dfontset_002dspec" id=
+  "index-create_002dfontset_002dfrom_002dfontset_002dspec"></a>
 
+  <p>The function that processes the fontset resource value to
+  create the fontset is called
+  <code>create-fontset-from-fontset-spec</code>. You can also call
+  this function explicitly to create a fontset.</p>
 
+  <p>See <a href="Fonts.html#Fonts">Fonts</a>, for more information
+  about font naming.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Modifying-Fontsets.html#Modifying-Fontsets"
+    accesskey="n" rel="next">Modifying Fontsets</a>, Previous:
+    <a href="Fontsets.html#Fontsets" accesskey="p" rel=
+    "prev">Fontsets</a>, Up: <a href=
+    "International.html#International" accesskey="u" rel=
+    "up">International</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

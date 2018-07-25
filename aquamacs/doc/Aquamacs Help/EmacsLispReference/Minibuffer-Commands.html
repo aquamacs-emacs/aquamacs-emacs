@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,122 +19,200 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Minibuffer Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Minibuffer Commands">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Minibuffer Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Minibuffers.html#Minibuffers" rel="up" title="Minibuffers">
-<link href="Minibuffer-Windows.html#Minibuffer-Windows" rel="next" title="Minibuffer Windows">
-<link href="Reading-a-Password.html#Reading-a-Password" rel="prev" title="Reading a Password">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Minibuffer
+  Commands</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Minibuffer Commands" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Minibuffer Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Minibuffers.html#Minibuffers" rel="up" title=
+  "Minibuffers" />
+  <link href="Minibuffer-Windows.html#Minibuffer-Windows" rel=
+  "next" title="Minibuffer Windows" />
+  <link href="Reading-a-Password.html#Reading-a-Password" rel=
+  "prev" title="Reading a Password" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Minibuffer-Commands" id="Minibuffer-Commands"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Minibuffer-Windows.html#Minibuffer-Windows"
+    accesskey="n" rel="next">Minibuffer Windows</a>, Previous:
+    <a href="Reading-a-Password.html#Reading-a-Password" accesskey=
+    "p" rel="prev">Reading a Password</a>, Up: <a href=
+    "Minibuffers.html#Minibuffers" accesskey="u" rel=
+    "up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Minibuffer-Commands-1" id="Minibuffer-Commands-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Minibuffer-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Minibuffer-Windows.html#Minibuffer-Windows" accesskey="n" rel="next">Minibuffer Windows</a>, Previous: <a href="Reading-a-Password.html#Reading-a-Password" accesskey="p" rel="prev">Reading a Password</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Minibuffer-Commands-1"></a>
-<h3 class="section">19.10 Minibuffer Commands</h3>
+  <h3 class="section">19.10 Minibuffer Commands</h3>
 
-<p>This section describes some commands meant for use in the
-minibuffer.
-</p>
-<dl>
-<dt><a name="index-exit_002dminibuffer"></a>Command: <strong>exit-minibuffer</strong></dt>
-<dd><p>This command exits the active minibuffer.  It is normally bound to
-keys in minibuffer local keymaps.
-</p></dd></dl>
+  <p>This section describes some commands meant for use in the
+  minibuffer.</p>
 
-<dl>
-<dt><a name="index-self_002dinsert_002dand_002dexit"></a>Command: <strong>self-insert-and-exit</strong></dt>
-<dd><p>This command exits the active minibuffer after inserting the last
-character typed on the keyboard (found in <code>last-command-event</code>;
-see <a href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-exit_002dminibuffer" id=
+    "index-exit_002dminibuffer"></a>Command:
+    <strong>exit-minibuffer</strong></dt>
 
-<dl>
-<dt><a name="index-previous_002dhistory_002delement"></a>Command: <strong>previous-history-element</strong> <em>n</em></dt>
-<dd><p>This command replaces the minibuffer contents with the value of the
-<var>n</var>th previous (older) history element.
-</p></dd></dl>
+    <dd>
+      <p>This command exits the active minibuffer. It is normally
+      bound to keys in minibuffer local keymaps.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-next_002dhistory_002delement"></a>Command: <strong>next-history-element</strong> <em>n</em></dt>
-<dd><p>This command replaces the minibuffer contents with the value of the
-<var>n</var>th more recent history element.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-self_002dinsert_002dand_002dexit" id=
+    "index-self_002dinsert_002dand_002dexit"></a>Command:
+    <strong>self-insert-and-exit</strong></dt>
 
-<dl>
-<dt><a name="index-previous_002dmatching_002dhistory_002delement"></a>Command: <strong>previous-matching-history-element</strong> <em>pattern n</em></dt>
-<dd><p>This command replaces the minibuffer contents with the value of the
-<var>n</var>th previous (older) history element that matches <var>pattern</var> (a
-regular expression).
-</p></dd></dl>
+    <dd>
+      <p>This command exits the active minibuffer after inserting
+      the last character typed on the keyboard (found in
+      <code>last-command-event</code>; see <a href=
+      "Command-Loop-Info.html#Command-Loop-Info">Command Loop
+      Info</a>).</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-next_002dmatching_002dhistory_002delement"></a>Command: <strong>next-matching-history-element</strong> <em>pattern n</em></dt>
-<dd><p>This command replaces the minibuffer contents with the value of the
-<var>n</var>th next (newer) history element that matches <var>pattern</var> (a
-regular expression).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-previous_002dhistory_002delement" id=
+    "index-previous_002dhistory_002delement"></a>Command:
+    <strong>previous-history-element</strong> <em>n</em></dt>
 
-<dl>
-<dt><a name="index-previous_002dcomplete_002dhistory_002delement"></a>Command: <strong>previous-complete-history-element</strong> <em>n</em></dt>
-<dd><p>This command replaces the minibuffer contents with the value of the
-<var>n</var>th previous (older) history element that completes the current
-contents of the minibuffer before the point.
-</p></dd></dl>
+    <dd>
+      <p>This command replaces the minibuffer contents with the
+      value of the <var>n</var>th previous (older) history
+      element.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-next_002dcomplete_002dhistory_002delement"></a>Command: <strong>next-complete-history-element</strong> <em>n</em></dt>
-<dd><p>This command replaces the minibuffer contents with the value of the
-<var>n</var>th next (newer) history element that completes the current
-contents of the minibuffer before the point.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-next_002dhistory_002delement" id=
+    "index-next_002dhistory_002delement"></a>Command:
+    <strong>next-history-element</strong> <em>n</em></dt>
 
+    <dd>
+      <p>This command replaces the minibuffer contents with the
+      value of the <var>n</var>th more recent history element.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-previous_002dmatching_002dhistory_002delement" id=
+    "index-previous_002dmatching_002dhistory_002delement"></a>Command:
+    <strong>previous-matching-history-element</strong> <em>pattern
+    n</em></dt>
 
+    <dd>
+      <p>This command replaces the minibuffer contents with the
+      value of the <var>n</var>th previous (older) history element
+      that matches <var>pattern</var> (a regular expression).</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-next_002dmatching_002dhistory_002delement"
+    id=
+    "index-next_002dmatching_002dhistory_002delement"></a>Command:
+    <strong>next-matching-history-element</strong> <em>pattern
+    n</em></dt>
 
+    <dd>
+      <p>This command replaces the minibuffer contents with the
+      value of the <var>n</var>th next (newer) history element that
+      matches <var>pattern</var> (a regular expression).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-previous_002dcomplete_002dhistory_002delement" id=
+    "index-previous_002dcomplete_002dhistory_002delement"></a>Command:
+    <strong>previous-complete-history-element</strong>
+    <em>n</em></dt>
+
+    <dd>
+      <p>This command replaces the minibuffer contents with the
+      value of the <var>n</var>th previous (older) history element
+      that completes the current contents of the minibuffer before
+      the point.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-next_002dcomplete_002dhistory_002delement"
+    id=
+    "index-next_002dcomplete_002dhistory_002delement"></a>Command:
+    <strong>next-complete-history-element</strong> <em>n</em></dt>
+
+    <dd>
+      <p>This command replaces the minibuffer contents with the
+      value of the <var>n</var>th next (newer) history element that
+      completes the current contents of the minibuffer before the
+      point.</p>
+    </dd>
+  </dl>
 </body>
 </html>

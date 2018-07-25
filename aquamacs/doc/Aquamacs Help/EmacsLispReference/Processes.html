@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,154 +19,362 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Processes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Processes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Processes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Subprocess-Creation.html#Subprocess-Creation" rel="next" title="Subprocess Creation">
-<link href="Abbrev-Table-Properties.html#Abbrev-Table-Properties" rel="prev" title="Abbrev Table Properties">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Processes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Processes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Processes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Subprocess-Creation.html#Subprocess-Creation" rel=
+  "next" title="Subprocess Creation" />
+  <link href="Abbrev-Table-Properties.html#Abbrev-Table-Properties"
+  rel="prev" title="Abbrev Table Properties" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Processes" id="Processes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Display.html#Display" accesskey="n" rel=
+    "next">Display</a>, Previous: <a href="Abbrevs.html#Abbrevs"
+    accesskey="p" rel="prev">Abbrevs</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Processes-1" id="Processes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Processes"></a>
-<div class="header">
-<p>
-Next: <a href="Display.html#Display" accesskey="n" rel="next">Display</a>, Previous: <a href="Abbrevs.html#Abbrevs" accesskey="p" rel="prev">Abbrevs</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Processes-1"></a>
-<h2 class="chapter">36 Processes</h2>
-<a name="index-child-process"></a>
-<a name="index-parent-process"></a>
-<a name="index-subprocess"></a>
-<a name="index-process"></a>
+  <h2 class="chapter">36 Processes</h2><a name=
+  "index-child-process" id="index-child-process"></a> <a name=
+  "index-parent-process" id="index-parent-process"></a> <a name=
+  "index-subprocess" id="index-subprocess"></a> <a name=
+  "index-process" id="index-process"></a>
 
-<p>In the terminology of operating systems, a <em>process</em> is a space in
-which a program can execute.  Emacs runs in a process.  Emacs Lisp
-programs can invoke other programs in processes of their own.  These are
-called <em>subprocesses</em> or <em>child processes</em> of the Emacs process,
-which is their <em>parent process</em>.
-</p>
-<p>A subprocess of Emacs may be <em>synchronous</em> or <em>asynchronous</em>,
-depending on how it is created.  When you create a synchronous
-subprocess, the Lisp program waits for the subprocess to terminate
-before continuing execution.  When you create an asynchronous
-subprocess, it can run in parallel with the Lisp program.  This kind of
-subprocess is represented within Emacs by a Lisp object which is also
-called a &ldquo;process&rdquo;.  Lisp programs can use this object to communicate
-with the subprocess or to control it.  For example, you can send
-signals, obtain status information, receive output from the process, or
-send input to it.
-</p>
-<p>In addition to processes that run programs, Lisp programs can open
-connections of several types to devices or processes running on the
-same machine or on other machines.  The supported connection types
-are: TCP and UDP network connections, serial port connections, and
-pipe connections.  Each such connection is also represented by a
-process object.
-</p>
-<dl>
-<dt><a name="index-processp"></a>Function: <strong>processp</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> represents an Emacs
-process object, <code>nil</code> otherwise.  The process object can
-represent a subprocess running a program or a connection of any
-supported type.
-</p></dd></dl>
+  <p>In the terminology of operating systems, a <em>process</em> is
+  a space in which a program can execute. Emacs runs in a process.
+  Emacs Lisp programs can invoke other programs in processes of
+  their own. These are called <em>subprocesses</em> or <em>child
+  processes</em> of the Emacs process, which is their <em>parent
+  process</em>.</p>
 
-<p>In addition to subprocesses of the current Emacs session, you can
-also access other processes running on your machine.  See <a href="System-Processes.html#System-Processes">System Processes</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Subprocess-Creation.html#Subprocess-Creation" accesskey="1">Subprocess Creation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions that start subprocesses.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Shell-Arguments.html#Shell-Arguments" accesskey="2">Shell Arguments</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Quoting an argument to pass it to a shell.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Synchronous-Processes.html#Synchronous-Processes" accesskey="3">Synchronous Processes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Details of using synchronous subprocesses.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Asynchronous-Processes.html#Asynchronous-Processes" accesskey="4">Asynchronous Processes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Starting up an asynchronous subprocess.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Deleting-Processes.html#Deleting-Processes" accesskey="5">Deleting Processes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Eliminating an asynchronous subprocess.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Process-Information.html#Process-Information" accesskey="6">Process Information</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Accessing run-status and other attributes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Input-to-Processes.html#Input-to-Processes" accesskey="7">Input to Processes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Sending input to an asynchronous subprocess.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Signals-to-Processes.html#Signals-to-Processes" accesskey="8">Signals to Processes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Stopping, continuing or interrupting
-                               an asynchronous subprocess.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Output-from-Processes.html#Output-from-Processes" accesskey="9">Output from Processes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Collecting output from an asynchronous subprocess.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Sentinels.html#Sentinels">Sentinels</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Sentinels run when process run-status changes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Whether to query if exiting will kill a process.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="System-Processes.html#System-Processes">System Processes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Accessing other processes running on your system.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Transaction-Queues.html#Transaction-Queues">Transaction Queues</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Transaction-based communication with subprocesses.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Network.html#Network">Network</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Opening network connections.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Network-Servers.html#Network-Servers">Network Servers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Network servers let Emacs accept net connections.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Datagrams.html#Datagrams">Datagrams</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">UDP network connections.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Low_002dLevel-Network.html#Low_002dLevel-Network">Low-Level Network</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Lower-level but more general function
-                               to create connections and servers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Misc-Network.html#Misc-Network">Misc Network</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Additional relevant functions for net connections.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Serial-Ports.html#Serial-Ports">Serial Ports</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Communicating with serial ports.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Byte-Packing.html#Byte-Packing">Byte Packing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using bindat to pack and unpack binary data.
-</td></tr>
-</table>
+  <p>A subprocess of Emacs may be <em>synchronous</em> or
+  <em>asynchronous</em>, depending on how it is created. When you
+  create a synchronous subprocess, the Lisp program waits for the
+  subprocess to terminate before continuing execution. When you
+  create an asynchronous subprocess, it can run in parallel with
+  the Lisp program. This kind of subprocess is represented within
+  Emacs by a Lisp object which is also called a
+  &ldquo;process&rdquo;. Lisp programs can use this object to
+  communicate with the subprocess or to control it. For example,
+  you can send signals, obtain status information, receive output
+  from the process, or send input to it.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Display.html#Display" accesskey="n" rel="next">Display</a>, Previous: <a href="Abbrevs.html#Abbrevs" accesskey="p" rel="prev">Abbrevs</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In addition to processes that run programs, Lisp programs can
+  open connections of several types to devices or processes running
+  on the same machine or on other machines. The supported
+  connection types are: TCP and UDP network connections, serial
+  port connections, and pipe connections. Each such connection is
+  also represented by a process object.</p>
 
+  <dl>
+    <dt><a name="index-processp" id="index-processp"></a>Function:
+    <strong>processp</strong> <em>object</em></dt>
 
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      represents an Emacs process object, <code>nil</code>
+      otherwise. The process object can represent a subprocess
+      running a program or a connection of any supported type.</p>
+    </dd>
+  </dl>
 
+  <p>In addition to subprocesses of the current Emacs session, you
+  can also access other processes running on your machine. See
+  <a href="System-Processes.html#System-Processes">System
+  Processes</a>.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Subprocess-Creation.html#Subprocess-Creation" accesskey=
+      "1">Subprocess Creation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions that start
+      subprocesses.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Shell-Arguments.html#Shell-Arguments" accesskey="2">Shell
+      Arguments</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Quoting an argument to pass it
+      to a shell.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Synchronous-Processes.html#Synchronous-Processes" accesskey=
+      "3">Synchronous Processes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Details of using synchronous
+      subprocesses.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Asynchronous-Processes.html#Asynchronous-Processes"
+      accesskey="4">Asynchronous Processes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Starting up an asynchronous
+      subprocess.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Deleting-Processes.html#Deleting-Processes" accesskey=
+      "5">Deleting Processes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Eliminating an asynchronous
+      subprocess.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Process-Information.html#Process-Information" accesskey=
+      "6">Process Information</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Accessing run-status and other
+      attributes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Input-to-Processes.html#Input-to-Processes" accesskey=
+      "7">Input to Processes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Sending input to an
+      asynchronous subprocess.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Signals-to-Processes.html#Signals-to-Processes" accesskey=
+      "8">Signals to Processes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Stopping, continuing or
+      interrupting an asynchronous subprocess.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Output-from-Processes.html#Output-from-Processes" accesskey=
+      "9">Output from Processes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Collecting output from an
+      asynchronous subprocess.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Sentinels.html#Sentinels">Sentinels</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Sentinels run when process
+      run-status changes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Query-Before-Exit.html#Query-Before-Exit">Query Before
+      Exit</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Whether to query if exiting
+      will kill a process.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "System-Processes.html#System-Processes">System
+      Processes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Accessing other processes
+      running on your system.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Transaction-Queues.html#Transaction-Queues">Transaction
+      Queues</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Transaction-based communication
+      with subprocesses.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Network.html#Network">Network</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Opening network
+      connections.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Network-Servers.html#Network-Servers">Network
+      Servers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Network servers let Emacs
+      accept net connections.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Datagrams.html#Datagrams">Datagrams</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">UDP network connections.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Low_002dLevel-Network.html#Low_002dLevel-Network">Low-Level
+      Network</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Lower-level but more general
+      function to create connections and servers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Misc-Network.html#Misc-Network">Misc Network</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Additional relevant functions
+      for net connections.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Serial-Ports.html#Serial-Ports">Serial Ports</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Communicating with serial
+      ports.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Byte-Packing.html#Byte-Packing">Byte Packing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Using bindat to pack and unpack
+      binary data.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Display.html#Display" accesskey="n" rel=
+    "next">Display</a>, Previous: <a href="Abbrevs.html#Abbrevs"
+    accesskey="p" rel="prev">Abbrevs</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

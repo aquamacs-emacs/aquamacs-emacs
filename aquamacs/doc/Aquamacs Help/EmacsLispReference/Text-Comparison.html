@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,357 +19,545 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Text Comparison</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Text Comparison">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Text Comparison">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Strings-and-Characters.html#Strings-and-Characters" rel="up" title="Strings and Characters">
-<link href="String-Conversion.html#String-Conversion" rel="next" title="String Conversion">
-<link href="Modifying-Strings.html#Modifying-Strings" rel="prev" title="Modifying Strings">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Text Comparison</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Text Comparison" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Text Comparison" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Strings-and-Characters.html#Strings-and-Characters"
+  rel="up" title="Strings and Characters" />
+  <link href="String-Conversion.html#String-Conversion" rel="next"
+  title="String Conversion" />
+  <link href="Modifying-Strings.html#Modifying-Strings" rel="prev"
+  title="Modifying Strings" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Text-Comparison" id="Text-Comparison"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="String-Conversion.html#String-Conversion"
+    accesskey="n" rel="next">String Conversion</a>, Previous:
+    <a href="Modifying-Strings.html#Modifying-Strings" accesskey=
+    "p" rel="prev">Modifying Strings</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Comparison-of-Characters-and-Strings" id=
+  "Comparison-of-Characters-and-Strings"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Text-Comparison"></a>
-<div class="header">
-<p>
-Next: <a href="String-Conversion.html#String-Conversion" accesskey="n" rel="next">String Conversion</a>, Previous: <a href="Modifying-Strings.html#Modifying-Strings" accesskey="p" rel="prev">Modifying Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Comparison-of-Characters-and-Strings"></a>
-<h3 class="section">4.5 Comparison of Characters and Strings</h3>
-<a name="index-string-equality"></a>
-<a name="index-text-comparison"></a>
+  <h3 class="section">4.5 Comparison of Characters and
+  Strings</h3><a name="index-string-equality" id=
+  "index-string-equality"></a> <a name="index-text-comparison" id=
+  "index-text-comparison"></a>
 
-<dl>
-<dt><a name="index-char_002dequal"></a>Function: <strong>char-equal</strong> <em>character1 character2</em></dt>
-<dd><p>This function returns <code>t</code> if the arguments represent the same
-character, <code>nil</code> otherwise.  This function ignores differences
-in case if <code>case-fold-search</code> is non-<code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(char-equal ?x ?x)
+  <dl>
+    <dt><a name="index-char_002dequal" id=
+    "index-char_002dequal"></a>Function:
+    <strong>char-equal</strong> <em>character1 character2</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if the arguments
+      represent the same character, <code>nil</code> otherwise.
+      This function ignores differences in case if
+      <code>case-fold-search</code> is non-<code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(char-equal ?x ?x)
      &rArr; t
 (let ((case-fold-search nil))
   (char-equal ?x ?X))
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-string_003d"></a>Function: <strong>string=</strong> <em>string1 string2</em></dt>
-<dd><p>This function returns <code>t</code> if the characters of the two strings
-match exactly.  Symbols are also allowed as arguments, in which case
-the symbol names are used.  Case is always significant, regardless of
-<code>case-fold-search</code>.
-</p>
-<p>This function is equivalent to <code>equal</code> for comparing two strings
-(see <a href="Equality-Predicates.html#Equality-Predicates">Equality Predicates</a>).  In particular, the text properties of
-the two strings are ignored; use <code>equal-including-properties</code> if
-you need to distinguish between strings that differ only in their text
-properties.  However, unlike <code>equal</code>, if either argument is not a
-string or symbol, <code>string=</code> signals an error.
-</p>
-<div class="example">
-<pre class="example">(string= &quot;abc&quot; &quot;abc&quot;)
+  <dl>
+    <dt><a name="index-string_003d" id=
+    "index-string_003d"></a>Function: <strong>string=</strong>
+    <em>string1 string2</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if the characters of
+      the two strings match exactly. Symbols are also allowed as
+      arguments, in which case the symbol names are used. Case is
+      always significant, regardless of
+      <code>case-fold-search</code>.</p>
+
+      <p>This function is equivalent to <code>equal</code> for
+      comparing two strings (see <a href=
+      "Equality-Predicates.html#Equality-Predicates">Equality
+      Predicates</a>). In particular, the text properties of the
+      two strings are ignored; use
+      <code>equal-including-properties</code> if you need to
+      distinguish between strings that differ only in their text
+      properties. However, unlike <code>equal</code>, if either
+      argument is not a string or symbol, <code>string=</code>
+      signals an error.</p>
+
+      <div class="example">
+        <pre class="example">
+(string= "abc" "abc")
      &rArr; t
-(string= &quot;abc&quot; &quot;ABC&quot;)
+(string= "abc" "ABC")
      &rArr; nil
-(string= &quot;ab&quot; &quot;ABC&quot;)
+(string= "ab" "ABC")
      &rArr; nil
-</pre></div>
+</pre>
+      </div>
 
-<p>For technical reasons, a unibyte and a multibyte string are
-<code>equal</code> if and only if they contain the same sequence of
-character codes and all these codes are either in the range 0 through
-127 (<acronym>ASCII</acronym>) or 160 through 255 (<code>eight-bit-graphic</code>).
-However, when a unibyte string is converted to a multibyte string, all
-characters with codes in the range 160 through 255 are converted to
-characters with higher codes, whereas <acronym>ASCII</acronym> characters
-remain unchanged.  Thus, a unibyte string and its conversion to
-multibyte are only <code>equal</code> if the string is all <acronym>ASCII</acronym>.
-Character codes 160 through 255 are not entirely proper in multibyte
-text, even though they can occur.  As a consequence, the situation
-where a unibyte and a multibyte string are <code>equal</code> without both
-being all <acronym>ASCII</acronym> is a technical oddity that very few Emacs
-Lisp programmers ever get confronted with.  See <a href="Text-Representations.html#Text-Representations">Text Representations</a>.
-</p></dd></dl>
+      <p>For technical reasons, a unibyte and a multibyte string
+      are <code>equal</code> if and only if they contain the same
+      sequence of character codes and all these codes are either in
+      the range 0 through 127 (<acronym>ASCII</acronym>) or 160
+      through 255 (<code>eight-bit-graphic</code>). However, when a
+      unibyte string is converted to a multibyte string, all
+      characters with codes in the range 160 through 255 are
+      converted to characters with higher codes, whereas
+      <acronym>ASCII</acronym> characters remain unchanged. Thus, a
+      unibyte string and its conversion to multibyte are only
+      <code>equal</code> if the string is all
+      <acronym>ASCII</acronym>. Character codes 160 through 255 are
+      not entirely proper in multibyte text, even though they can
+      occur. As a consequence, the situation where a unibyte and a
+      multibyte string are <code>equal</code> without both being
+      all <acronym>ASCII</acronym> is a technical oddity that very
+      few Emacs Lisp programmers ever get confronted with. See
+      <a href="Text-Representations.html#Text-Representations">Text
+      Representations</a>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-string_002dequal"></a>Function: <strong>string-equal</strong> <em>string1 string2</em></dt>
-<dd><p><code>string-equal</code> is another name for <code>string=</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-string_002dequal" id=
+    "index-string_002dequal"></a>Function:
+    <strong>string-equal</strong> <em>string1 string2</em></dt>
 
-<a name="index-locale_002ddependent-string-equivalence"></a>
-<dl>
-<dt><a name="index-string_002dcollate_002dequalp"></a>Function: <strong>string-collate-equalp</strong> <em>string1 string2 &amp;optional locale ignore-case</em></dt>
-<dd><p>This function returns <code>t</code> if <var>string1</var> and <var>string2</var> are
-equal with respect to collation rules.  A collation rule is not only
-determined by the lexicographic order of the characters contained in
-<var>string1</var> and <var>string2</var>, but also further rules about
-relations between these characters.  Usually, it is defined by the
-<var>locale</var> environment Emacs is running with.
-</p>
-<p>For example, characters with different coding points but
-the same meaning might be considered as equal, like different grave
-accent Unicode characters:
-</p>
-<div class="example">
-<pre class="example">(string-collate-equalp (string ?\uFF40) (string ?\u1FEF))
+    <dd>
+      <p><code>string-equal</code> is another name for
+      <code>string=</code>.</p>
+    </dd>
+  </dl><a name="index-locale_002ddependent-string-equivalence" id=
+  "index-locale_002ddependent-string-equivalence"></a>
+
+  <dl>
+    <dt><a name="index-string_002dcollate_002dequalp" id=
+    "index-string_002dcollate_002dequalp"></a>Function:
+    <strong>string-collate-equalp</strong> <em>string1 string2
+    &amp;optional locale ignore-case</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>string1</var>
+      and <var>string2</var> are equal with respect to collation
+      rules. A collation rule is not only determined by the
+      lexicographic order of the characters contained in
+      <var>string1</var> and <var>string2</var>, but also further
+      rules about relations between these characters. Usually, it
+      is defined by the <var>locale</var> environment Emacs is
+      running with.</p>
+
+      <p>For example, characters with different coding points but
+      the same meaning might be considered as equal, like different
+      grave accent Unicode characters:</p>
+
+      <div class="example">
+        <pre class="example">
+(string-collate-equalp (string ?\uFF40) (string ?\u1FEF))
      &rArr; t
-</pre></div>
+</pre>
+      </div>
 
-<p>The optional argument <var>locale</var>, a string, overrides the setting of
-your current locale identifier for collation.  The value is system
-dependent; a <var>locale</var> <code>&quot;en_US.UTF-8&quot;</code> is applicable on POSIX
-systems, while it would be, e.g., <code>&quot;enu_USA.1252&quot;</code> on MS-Windows
-systems.
-</p>
-<p>If <var>ignore-case</var> is non-<code>nil</code>, characters are converted to lower-case
-before comparing them.
-</p>
-<a name="index-w32_002dcollate_002dignore_002dpunctuation"></a>
-<p>To emulate Unicode-compliant collation on MS-Windows systems,
-bind <code>w32-collate-ignore-punctuation</code> to a non-<code>nil</code> value, since
-the codeset part of the locale cannot be <code>&quot;UTF-8&quot;</code> on MS-Windows.
-</p>
-<p>If your system does not support a locale environment, this function
-behaves like <code>string-equal</code>.
-</p>
-<p>Do <em>not</em> use this function to compare file names for equality, as
-filesystems generally don&rsquo;t honor linguistic equivalence of strings
-that collation implements.
-</p></dd></dl>
+      <p>The optional argument <var>locale</var>, a string,
+      overrides the setting of your current locale identifier for
+      collation. The value is system dependent; a <var>locale</var>
+      <code>"en_US.UTF-8"</code> is applicable on POSIX systems,
+      while it would be, e.g., <code>"enu_USA.1252"</code> on
+      MS-Windows systems.</p>
 
-<dl>
-<dt><a name="index-string_002dprefix_002dp"></a>Function: <strong>string-prefix-p</strong> <em>string1 string2 &amp;optional ignore-case</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>string1</var> is a prefix of
-<var>string2</var>; i.e., if <var>string2</var> starts with <var>string1</var>.  If
-the optional argument <var>ignore-case</var> is non-<code>nil</code>, the
-comparison ignores case differences.
-</p></dd></dl>
+      <p>If <var>ignore-case</var> is non-<code>nil</code>,
+      characters are converted to lower-case before comparing
+      them.</p><a name=
+      "index-w32_002dcollate_002dignore_002dpunctuation" id=
+      "index-w32_002dcollate_002dignore_002dpunctuation"></a>
 
-<dl>
-<dt><a name="index-string_002dsuffix_002dp"></a>Function: <strong>string-suffix-p</strong> <em>suffix string &amp;optional ignore-case</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>suffix</var> is a suffix of
-<var>string</var>; i.e., if <var>string</var> ends with <var>suffix</var>.  If the
-optional argument <var>ignore-case</var> is non-<code>nil</code>, the comparison
-ignores case differences.
-</p></dd></dl>
+      <p>To emulate Unicode-compliant collation on MS-Windows
+      systems, bind <code>w32-collate-ignore-punctuation</code> to
+      a non-<code>nil</code> value, since the codeset part of the
+      locale cannot be <code>"UTF-8"</code> on MS-Windows.</p>
 
-<a name="index-lexical-comparison-of-strings"></a>
-<dl>
-<dt><a name="index-string_003c"></a>Function: <strong>string&lt;</strong> <em>string1 string2</em></dt>
-<dd><p>This function compares two strings a character at a time.  It
-scans both the strings at the same time to find the first pair of corresponding
-characters that do not match.  If the lesser character of these two is
-the character from <var>string1</var>, then <var>string1</var> is less, and this
-function returns <code>t</code>.  If the lesser character is the one from
-<var>string2</var>, then <var>string1</var> is greater, and this function returns
-<code>nil</code>.  If the two strings match entirely, the value is <code>nil</code>.
-</p>
-<p>Pairs of characters are compared according to their character codes.
-Keep in mind that lower case letters have higher numeric values in the
-<acronym>ASCII</acronym> character set than their upper case counterparts; digits and
-many punctuation characters have a lower numeric value than upper case
-letters.  An <acronym>ASCII</acronym> character is less than any non-<acronym>ASCII</acronym>
-character; a unibyte non-<acronym>ASCII</acronym> character is always less than any
-multibyte non-<acronym>ASCII</acronym> character (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).
-</p>
-<div class="example">
-<pre class="example">(string&lt; &quot;abc&quot; &quot;abd&quot;)
+      <p>If your system does not support a locale environment, this
+      function behaves like <code>string-equal</code>.</p>
+
+      <p>Do <em>not</em> use this function to compare file names
+      for equality, as filesystems generally don&rsquo;t honor
+      linguistic equivalence of strings that collation
+      implements.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-string_002dprefix_002dp" id=
+    "index-string_002dprefix_002dp"></a>Function:
+    <strong>string-prefix-p</strong> <em>string1 string2
+    &amp;optional ignore-case</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>string1</var> is a prefix of <var>string2</var>; i.e.,
+      if <var>string2</var> starts with <var>string1</var>. If the
+      optional argument <var>ignore-case</var> is
+      non-<code>nil</code>, the comparison ignores case
+      differences.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-string_002dsuffix_002dp" id=
+    "index-string_002dsuffix_002dp"></a>Function:
+    <strong>string-suffix-p</strong> <em>suffix string
+    &amp;optional ignore-case</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>suffix</var> is a suffix of <var>string</var>; i.e., if
+      <var>string</var> ends with <var>suffix</var>. If the
+      optional argument <var>ignore-case</var> is
+      non-<code>nil</code>, the comparison ignores case
+      differences.</p>
+    </dd>
+  </dl><a name="index-lexical-comparison-of-strings" id=
+  "index-lexical-comparison-of-strings"></a>
+
+  <dl>
+    <dt><a name="index-string_003c" id=
+    "index-string_003c"></a>Function: <strong>string&lt;</strong>
+    <em>string1 string2</em></dt>
+
+    <dd>
+      <p>This function compares two strings a character at a time.
+      It scans both the strings at the same time to find the first
+      pair of corresponding characters that do not match. If the
+      lesser character of these two is the character from
+      <var>string1</var>, then <var>string1</var> is less, and this
+      function returns <code>t</code>. If the lesser character is
+      the one from <var>string2</var>, then <var>string1</var> is
+      greater, and this function returns <code>nil</code>. If the
+      two strings match entirely, the value is
+      <code>nil</code>.</p>
+
+      <p>Pairs of characters are compared according to their
+      character codes. Keep in mind that lower case letters have
+      higher numeric values in the <acronym>ASCII</acronym>
+      character set than their upper case counterparts; digits and
+      many punctuation characters have a lower numeric value than
+      upper case letters. An <acronym>ASCII</acronym> character is
+      less than any non-<acronym>ASCII</acronym> character; a
+      unibyte non-<acronym>ASCII</acronym> character is always less
+      than any multibyte non-<acronym>ASCII</acronym> character
+      (see <a href=
+      "Text-Representations.html#Text-Representations">Text
+      Representations</a>).</p>
+
+      <div class="example">
+        <pre class="example">
+(string&lt; "abc" "abd")
      &rArr; t
-(string&lt; &quot;abd&quot; &quot;abc&quot;)
+(string&lt; "abd" "abc")
      &rArr; nil
-(string&lt; &quot;123&quot; &quot;abc&quot;)
+(string&lt; "123" "abc")
      &rArr; t
-</pre></div>
+</pre>
+      </div>
 
-<p>When the strings have different lengths, and they match up to the
-length of <var>string1</var>, then the result is <code>t</code>.  If they match up
-to the length of <var>string2</var>, the result is <code>nil</code>.  A string of
-no characters is less than any other string.
-</p>
-<div class="example">
-<pre class="example">(string&lt; &quot;&quot; &quot;abc&quot;)
+      <p>When the strings have different lengths, and they match up
+      to the length of <var>string1</var>, then the result is
+      <code>t</code>. If they match up to the length of
+      <var>string2</var>, the result is <code>nil</code>. A string
+      of no characters is less than any other string.</p>
+
+      <div class="example">
+        <pre class="example">
+(string&lt; "" "abc")
      &rArr; t
-(string&lt; &quot;ab&quot; &quot;abc&quot;)
+(string&lt; "ab" "abc")
      &rArr; t
-(string&lt; &quot;abc&quot; &quot;&quot;)
+(string&lt; "abc" "")
      &rArr; nil
-(string&lt; &quot;abc&quot; &quot;ab&quot;)
+(string&lt; "abc" "ab")
      &rArr; nil
-(string&lt; &quot;&quot; &quot;&quot;)
+(string&lt; "" "")
      &rArr; nil
-</pre></div>
+</pre>
+      </div>
 
-<p>Symbols are also allowed as arguments, in which case their print names
-are compared.
-</p></dd></dl>
+      <p>Symbols are also allowed as arguments, in which case their
+      print names are compared.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-string_002dlessp"></a>Function: <strong>string-lessp</strong> <em>string1 string2</em></dt>
-<dd><p><code>string-lessp</code> is another name for <code>string&lt;</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-string_002dlessp" id=
+    "index-string_002dlessp"></a>Function:
+    <strong>string-lessp</strong> <em>string1 string2</em></dt>
 
-<dl>
-<dt><a name="index-string_002dgreaterp"></a>Function: <strong>string-greaterp</strong> <em>string1 string2</em></dt>
-<dd><p>This function returns the result of comparing <var>string1</var> and
-<var>string2</var> in the opposite order, i.e., it is equivalent to calling
-<code>(string-lessp <var>string2</var> <var>string1</var>)</code>.
-</p></dd></dl>
+    <dd>
+      <p><code>string-lessp</code> is another name for
+      <code>string&lt;</code>.</p>
+    </dd>
+  </dl>
 
-<a name="index-locale_002ddependent-string-comparison"></a>
-<dl>
-<dt><a name="index-string_002dcollate_002dlessp"></a>Function: <strong>string-collate-lessp</strong> <em>string1 string2 &amp;optional locale ignore-case</em></dt>
-<dd><p>This function returns <code>t</code> if <var>string1</var> is less than
-<var>string2</var> in collation order.  A collation order is not only
-determined by the lexicographic order of the characters contained in
-<var>string1</var> and <var>string2</var>, but also further rules about
-relations between these characters.  Usually, it is defined by the
-<var>locale</var> environment Emacs is running with.
-</p>
-<p>For example, punctuation and whitespace characters might be ignored
-for sorting (see <a href="Sequence-Functions.html#Sequence-Functions">Sequence Functions</a>):
-</p>
-<div class="example">
-<pre class="example">(sort '(&quot;11&quot; &quot;12&quot; &quot;1 1&quot; &quot;1 2&quot; &quot;1.1&quot; &quot;1.2&quot;) 'string-collate-lessp)
-     &rArr; (&quot;11&quot; &quot;1 1&quot; &quot;1.1&quot; &quot;12&quot; &quot;1 2&quot; &quot;1.2&quot;)
-</pre></div>
+  <dl>
+    <dt><a name="index-string_002dgreaterp" id=
+    "index-string_002dgreaterp"></a>Function:
+    <strong>string-greaterp</strong> <em>string1 string2</em></dt>
 
-<p>This behavior is system-dependent; e.g., punctuation and whitespace
-are never ignored on Cygwin, regardless of locale.
-</p>
-<p>The optional argument <var>locale</var>, a string, overrides the setting of
-your current locale identifier for collation.  The value is system
-dependent; a <var>locale</var> <code>&quot;en_US.UTF-8&quot;</code> is applicable on POSIX
-systems, while it would be, e.g., <code>&quot;enu_USA.1252&quot;</code> on MS-Windows
-systems.  The <var>locale</var> value of <code>&quot;POSIX&quot;</code> or <code>&quot;C&quot;</code> lets
-<code>string-collate-lessp</code> behave like <code>string-lessp</code>:
-</p>
-<div class="example">
-<pre class="example">(sort '(&quot;11&quot; &quot;12&quot; &quot;1 1&quot; &quot;1 2&quot; &quot;1.1&quot; &quot;1.2&quot;)
-      (lambda (s1 s2) (string-collate-lessp s1 s2 &quot;POSIX&quot;)))
-     &rArr; (&quot;1 1&quot; &quot;1 2&quot; &quot;1.1&quot; &quot;1.2&quot; &quot;11&quot; &quot;12&quot;)
-</pre></div>
+    <dd>
+      <p>This function returns the result of comparing
+      <var>string1</var> and <var>string2</var> in the opposite
+      order, i.e., it is equivalent to calling <code>(string-lessp
+      <var>string2</var> <var>string1</var>)</code>.</p>
+    </dd>
+  </dl><a name="index-locale_002ddependent-string-comparison" id=
+  "index-locale_002ddependent-string-comparison"></a>
 
-<p>If <var>ignore-case</var> is non-<code>nil</code>, characters are converted to lower-case
-before comparing them.
-</p>
-<p>To emulate Unicode-compliant collation on MS-Windows systems,
-bind <code>w32-collate-ignore-punctuation</code> to a non-<code>nil</code> value, since
-the codeset part of the locale cannot be <code>&quot;UTF-8&quot;</code> on MS-Windows.
-</p>
-<p>If your system does not support a locale environment, this function
-behaves like <code>string-lessp</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-string_002dcollate_002dlessp" id=
+    "index-string_002dcollate_002dlessp"></a>Function:
+    <strong>string-collate-lessp</strong> <em>string1 string2
+    &amp;optional locale ignore-case</em></dt>
 
-<dl>
-<dt><a name="index-string_002dprefix_002dp-1"></a>Function: <strong>string-prefix-p</strong> <em>string1 string2 &amp;optional ignore-case</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>string1</var> is a prefix of
-<var>string2</var>; i.e., if <var>string2</var> starts with <var>string1</var>.  If
-the optional argument <var>ignore-case</var> is non-<code>nil</code>, the
-comparison ignores case differences.
-</p></dd></dl>
+    <dd>
+      <p>This function returns <code>t</code> if <var>string1</var>
+      is less than <var>string2</var> in collation order. A
+      collation order is not only determined by the lexicographic
+      order of the characters contained in <var>string1</var> and
+      <var>string2</var>, but also further rules about relations
+      between these characters. Usually, it is defined by the
+      <var>locale</var> environment Emacs is running with.</p>
 
-<dl>
-<dt><a name="index-string_002dsuffix_002dp-1"></a>Function: <strong>string-suffix-p</strong> <em>suffix string &amp;optional ignore-case</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>suffix</var> is a suffix of
-<var>string</var>; i.e., if <var>string</var> ends with <var>suffix</var>.  If the
-optional argument <var>ignore-case</var> is non-<code>nil</code>, the comparison
-ignores case differences.
-</p></dd></dl>
+      <p>For example, punctuation and whitespace characters might
+      be ignored for sorting (see <a href=
+      "Sequence-Functions.html#Sequence-Functions">Sequence
+      Functions</a>):</p>
 
-<dl>
-<dt><a name="index-compare_002dstrings"></a>Function: <strong>compare-strings</strong> <em>string1 start1 end1 string2 start2 end2 &amp;optional ignore-case</em></dt>
-<dd><p>This function compares a specified part of <var>string1</var> with a
-specified part of <var>string2</var>.  The specified part of <var>string1</var>
-runs from index <var>start1</var> (inclusive) up to index <var>end1</var>
-(exclusive); <code>nil</code> for <var>start1</var> means the start of the
-string, while <code>nil</code> for <var>end1</var> means the length of the
-string.  Likewise, the specified part of <var>string2</var> runs from index
-<var>start2</var> up to index <var>end2</var>.
-</p>
-<p>The strings are compared by the numeric values of their characters.
-For instance, <var>str1</var> is considered less than <var>str2</var> if
-its first differing character has a smaller numeric value.  If
-<var>ignore-case</var> is non-<code>nil</code>, characters are converted to
-upper-case before comparing them.  Unibyte strings are converted to
-multibyte for comparison (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>), so that a
-unibyte string and its conversion to multibyte are always regarded as
-equal.
-</p>
-<p>If the specified portions of the two strings match, the value is
-<code>t</code>.  Otherwise, the value is an integer which indicates how many
-leading characters agree, and which string is less.  Its absolute
-value is one plus the number of characters that agree at the beginning
-of the two strings.  The sign is negative if <var>string1</var> (or its
-specified portion) is less.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+(sort '("11" "12" "1 1" "1 2" "1.1" "1.2") 'string-collate-lessp)
+     &rArr; ("11" "1 1" "1.1" "12" "1 2" "1.2")
+</pre>
+      </div>
 
-<dl>
-<dt><a name="index-assoc_002dstring"></a>Function: <strong>assoc-string</strong> <em>key alist &amp;optional case-fold</em></dt>
-<dd><p>This function works like <code>assoc</code>, except that <var>key</var> must be a
-string or symbol, and comparison is done using <code>compare-strings</code>.
-Symbols are converted to strings before testing.
-If <var>case-fold</var> is non-<code>nil</code>, <var>key</var> and the elements of
-<var>alist</var> are converted to upper-case before comparison.
-Unlike <code>assoc</code>, this function can also match elements of the alist
-that are strings or symbols rather than conses.  In particular, <var>alist</var> can
-be a list of strings or symbols rather than an actual alist.
-See <a href="Association-Lists.html#Association-Lists">Association Lists</a>.
-</p></dd></dl>
+      <p>This behavior is system-dependent; e.g., punctuation and
+      whitespace are never ignored on Cygwin, regardless of
+      locale.</p>
 
-<p>See also the function <code>compare-buffer-substrings</code> in
-<a href="Comparing-Text.html#Comparing-Text">Comparing Text</a>, for a way to compare text in buffers.  The
-function <code>string-match</code>, which matches a regular expression
-against a string, can be used for a kind of string comparison; see
-<a href="Regexp-Search.html#Regexp-Search">Regexp Search</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="String-Conversion.html#String-Conversion" accesskey="n" rel="next">String Conversion</a>, Previous: <a href="Modifying-Strings.html#Modifying-Strings" accesskey="p" rel="prev">Modifying Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>The optional argument <var>locale</var>, a string,
+      overrides the setting of your current locale identifier for
+      collation. The value is system dependent; a <var>locale</var>
+      <code>"en_US.UTF-8"</code> is applicable on POSIX systems,
+      while it would be, e.g., <code>"enu_USA.1252"</code> on
+      MS-Windows systems. The <var>locale</var> value of
+      <code>"POSIX"</code> or <code>"C"</code> lets
+      <code>string-collate-lessp</code> behave like
+      <code>string-lessp</code>:</p>
 
+      <div class="example">
+        <pre class="example">
+(sort '("11" "12" "1 1" "1 2" "1.1" "1.2")
+      (lambda (s1 s2) (string-collate-lessp s1 s2 "POSIX")))
+     &rArr; ("1 1" "1 2" "1.1" "1.2" "11" "12")
+</pre>
+      </div>
 
+      <p>If <var>ignore-case</var> is non-<code>nil</code>,
+      characters are converted to lower-case before comparing
+      them.</p>
 
+      <p>To emulate Unicode-compliant collation on MS-Windows
+      systems, bind <code>w32-collate-ignore-punctuation</code> to
+      a non-<code>nil</code> value, since the codeset part of the
+      locale cannot be <code>"UTF-8"</code> on MS-Windows.</p>
+
+      <p>If your system does not support a locale environment, this
+      function behaves like <code>string-lessp</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-string_002dprefix_002dp-1" id=
+    "index-string_002dprefix_002dp-1"></a>Function:
+    <strong>string-prefix-p</strong> <em>string1 string2
+    &amp;optional ignore-case</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>string1</var> is a prefix of <var>string2</var>; i.e.,
+      if <var>string2</var> starts with <var>string1</var>. If the
+      optional argument <var>ignore-case</var> is
+      non-<code>nil</code>, the comparison ignores case
+      differences.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-string_002dsuffix_002dp-1" id=
+    "index-string_002dsuffix_002dp-1"></a>Function:
+    <strong>string-suffix-p</strong> <em>suffix string
+    &amp;optional ignore-case</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>suffix</var> is a suffix of <var>string</var>; i.e., if
+      <var>string</var> ends with <var>suffix</var>. If the
+      optional argument <var>ignore-case</var> is
+      non-<code>nil</code>, the comparison ignores case
+      differences.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-compare_002dstrings" id=
+    "index-compare_002dstrings"></a>Function:
+    <strong>compare-strings</strong> <em>string1 start1 end1
+    string2 start2 end2 &amp;optional ignore-case</em></dt>
+
+    <dd>
+      <p>This function compares a specified part of
+      <var>string1</var> with a specified part of
+      <var>string2</var>. The specified part of <var>string1</var>
+      runs from index <var>start1</var> (inclusive) up to index
+      <var>end1</var> (exclusive); <code>nil</code> for
+      <var>start1</var> means the start of the string, while
+      <code>nil</code> for <var>end1</var> means the length of the
+      string. Likewise, the specified part of <var>string2</var>
+      runs from index <var>start2</var> up to index
+      <var>end2</var>.</p>
+
+      <p>The strings are compared by the numeric values of their
+      characters. For instance, <var>str1</var> is considered less
+      than <var>str2</var> if its first differing character has a
+      smaller numeric value. If <var>ignore-case</var> is
+      non-<code>nil</code>, characters are converted to upper-case
+      before comparing them. Unibyte strings are converted to
+      multibyte for comparison (see <a href=
+      "Text-Representations.html#Text-Representations">Text
+      Representations</a>), so that a unibyte string and its
+      conversion to multibyte are always regarded as equal.</p>
+
+      <p>If the specified portions of the two strings match, the
+      value is <code>t</code>. Otherwise, the value is an integer
+      which indicates how many leading characters agree, and which
+      string is less. Its absolute value is one plus the number of
+      characters that agree at the beginning of the two strings.
+      The sign is negative if <var>string1</var> (or its specified
+      portion) is less.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-assoc_002dstring" id=
+    "index-assoc_002dstring"></a>Function:
+    <strong>assoc-string</strong> <em>key alist &amp;optional
+    case-fold</em></dt>
+
+    <dd>
+      <p>This function works like <code>assoc</code>, except that
+      <var>key</var> must be a string or symbol, and comparison is
+      done using <code>compare-strings</code>. Symbols are
+      converted to strings before testing. If <var>case-fold</var>
+      is non-<code>nil</code>, <var>key</var> and the elements of
+      <var>alist</var> are converted to upper-case before
+      comparison. Unlike <code>assoc</code>, this function can also
+      match elements of the alist that are strings or symbols
+      rather than conses. In particular, <var>alist</var> can be a
+      list of strings or symbols rather than an actual alist. See
+      <a href=
+      "Association-Lists.html#Association-Lists">Association
+      Lists</a>.</p>
+    </dd>
+  </dl>
+
+  <p>See also the function <code>compare-buffer-substrings</code>
+  in <a href="Comparing-Text.html#Comparing-Text">Comparing
+  Text</a>, for a way to compare text in buffers. The function
+  <code>string-match</code>, which matches a regular expression
+  against a string, can be used for a kind of string comparison;
+  see <a href="Regexp-Search.html#Regexp-Search">Regexp
+  Search</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="String-Conversion.html#String-Conversion"
+    accesskey="n" rel="next">String Conversion</a>, Previous:
+    <a href="Modifying-Strings.html#Modifying-Strings" accesskey=
+    "p" rel="prev">Modifying Strings</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

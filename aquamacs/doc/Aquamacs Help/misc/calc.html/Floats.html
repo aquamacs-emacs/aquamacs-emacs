@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,138 +18,184 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Floats</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Floats">
-<meta name="keywords" content="GNU Emacs Calc Manual: Floats">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Data-Types.html#Data-Types" rel="up" title="Data Types">
-<link href="Complex-Numbers.html#Complex-Numbers" rel="next" title="Complex Numbers">
-<link href="Fractions.html#Fractions" rel="prev" title="Fractions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Floats</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Floats" />
+  <meta name="keywords" content="GNU Emacs Calc Manual: Floats" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Data-Types.html#Data-Types" rel="up" title=
+  "Data Types" />
+  <link href="Complex-Numbers.html#Complex-Numbers" rel="next"
+  title="Complex Numbers" />
+  <link href="Fractions.html#Fractions" rel="prev" title=
+  "Fractions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Floats"></a>
-<div class="header">
-<p>
-Next: <a href="Complex-Numbers.html#Complex-Numbers" accesskey="n" rel="next">Complex Numbers</a>, Previous: <a href="Fractions.html#Fractions" accesskey="p" rel="prev">Fractions</a>, Up: <a href="Data-Types.html#Data-Types" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Floats-1"></a>
-<h3 class="section">4.3 Floats</h3>
+<body lang="en" xml:lang="en">
+  <a name="Floats" id="Floats"></a>
 
-<a name="index-Floating_002dpoint-numbers"></a>
-<p>A floating-point number or <em>float</em> is a number stored in scientific
-notation.  The number of significant digits in the fractional part is
-governed by the current floating precision (see <a href="Precision.html#Precision">Precision</a>).  The
-range of acceptable values is from
-&lsquo;<samp>10^-3999999</samp>&rsquo;
-(inclusive) to
-&lsquo;<samp>10^4000000</samp>&rsquo;
-(exclusive), plus the corresponding negative values and zero.
-</p>
-<p>Calculations that would exceed the allowable range of values (such
-as &lsquo;<samp>exp(exp(20))</samp>&rsquo;) are left in symbolic form by Calc.  The
-messages &ldquo;floating-point overflow&rdquo; or &ldquo;floating-point underflow&rdquo;
-indicate that during the calculation a number would have been produced
-that was too large or too close to zero, respectively, to be represented
-by Calc.  This does not necessarily mean the final result would have
-overflowed, just that an overflow occurred while computing the result.
-(In fact, it could report an underflow even though the final result
-would have overflowed!)
-</p>
-<p>If a rational number and a float are mixed in a calculation, the result
-will in general be expressed as a float.  Commands that require an integer
-value (such as <kbd>k g</kbd> [<code>gcd</code>]) will also accept integer-valued
-floats, i.e., floating-point numbers with nothing after the decimal point.
-</p>
-<p>Floats are identified by the presence of a decimal point and/or an
-exponent.  In general a float consists of an optional sign, digits
-including an optional decimal point, and an optional exponent consisting
-of an &lsquo;<samp>e</samp>&rsquo;, an optional sign, and up to seven exponent digits.
-For example, &lsquo;<samp>23.5e-2</samp>&rsquo; is 23.5 times ten to the minus-second power,
-or 0.235.
-</p>
-<p>Floating-point numbers are normally displayed in decimal notation with
-all significant figures shown.  Exceedingly large or small numbers are
-displayed in scientific notation.  Various other display options are
-available.  See <a href="Float-Formats.html#Float-Formats">Float Formats</a>.
-</p>
-<a name="index-Accuracy-of-calculations"></a>
-<p>Floating-point numbers are stored in decimal, not binary.  The result
-of each operation is rounded to the nearest value representable in the
-number of significant digits specified by the current precision,
-rounding away from zero in the case of a tie.  Thus (in the default
-display mode) what you see is exactly what you get.  Some operations such
-as square roots and transcendental functions are performed with several
-digits of extra precision and then rounded down, in an effort to make the
-final result accurate to the full requested precision.  However,
-accuracy is not rigorously guaranteed.  If you suspect the validity of a
-result, try doing the same calculation in a higher precision.  The
-Calculator&rsquo;s arithmetic is not intended to be IEEE-conformant in any
-way.
-</p>
-<p>While floats are always <em>stored</em> in decimal, they can be entered
-and displayed in any radix just like integers and fractions.  Since a
-float that is entered in a radix other that 10 will be converted to
-decimal, the number that Calc stores may not be exactly the number that
-was entered, it will be the closest decimal approximation given the
-current precision.  The notation &lsquo;<samp><var>radix</var>#<var>ddd</var>.<var>ddd</var></samp>&rsquo;
-is a floating-point number whose digits are in the specified radix.
-Note that the &lsquo;<samp>.</samp>&rsquo;  is more aptly referred to as a &ldquo;radix point&rdquo;
-than as a decimal point in this case.  The number &lsquo;<samp>8#123.4567</samp>&rsquo; is
-defined as &lsquo;<samp>8#1234567 * 8^-4</samp>&rsquo;.  If the radix is 14 or less, you can
-use &lsquo;<samp>e</samp>&rsquo; notation to write a non-decimal number in scientific
-notation.  The exponent is written in decimal, and is considered to be a
-power of the radix: &lsquo;<samp>8#1234567e-4</samp>&rsquo;.  If the radix is 15 or above,
-the letter &lsquo;<samp>e</samp>&rsquo; is a digit, so scientific notation must be written
-out, e.g., &lsquo;<samp>16#123.4567*16^2</samp>&rsquo;.  The first two exercises of the
-Modes Tutorial explore some of the properties of non-decimal floats.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Complex-Numbers.html#Complex-Numbers" accesskey="n" rel="next">Complex Numbers</a>, Previous: <a href="Fractions.html#Fractions" accesskey="p" rel="prev">Fractions</a>, Up: <a href="Data-Types.html#Data-Types" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Complex-Numbers.html#Complex-Numbers"
+    accesskey="n" rel="next">Complex Numbers</a>, Previous:
+    <a href="Fractions.html#Fractions" accesskey="p" rel=
+    "prev">Fractions</a>, Up: <a href="Data-Types.html#Data-Types"
+    accesskey="u" rel="up">Data Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Floats-1" id="Floats-1"></a>
 
+  <h3 class="section">4.3 Floats</h3><a name=
+  "index-Floating_002dpoint-numbers" id=
+  "index-Floating_002dpoint-numbers"></a>
 
+  <p>A floating-point number or <em>float</em> is a number stored
+  in scientific notation. The number of significant digits in the
+  fractional part is governed by the current floating precision
+  (see <a href="Precision.html#Precision">Precision</a>). The range
+  of acceptable values is from
+  &lsquo;<samp>10^-3999999</samp>&rsquo; (inclusive) to
+  &lsquo;<samp>10^4000000</samp>&rsquo; (exclusive), plus the
+  corresponding negative values and zero.</p>
 
+  <p>Calculations that would exceed the allowable range of values
+  (such as &lsquo;<samp>exp(exp(20))</samp>&rsquo;) are left in
+  symbolic form by Calc. The messages &ldquo;floating-point
+  overflow&rdquo; or &ldquo;floating-point underflow&rdquo;
+  indicate that during the calculation a number would have been
+  produced that was too large or too close to zero, respectively,
+  to be represented by Calc. This does not necessarily mean the
+  final result would have overflowed, just that an overflow
+  occurred while computing the result. (In fact, it could report an
+  underflow even though the final result would have
+  overflowed!)</p>
+
+  <p>If a rational number and a float are mixed in a calculation,
+  the result will in general be expressed as a float. Commands that
+  require an integer value (such as <kbd>k g</kbd>
+  [<code>gcd</code>]) will also accept integer-valued floats, i.e.,
+  floating-point numbers with nothing after the decimal point.</p>
+
+  <p>Floats are identified by the presence of a decimal point
+  and/or an exponent. In general a float consists of an optional
+  sign, digits including an optional decimal point, and an optional
+  exponent consisting of an &lsquo;<samp>e</samp>&rsquo;, an
+  optional sign, and up to seven exponent digits. For example,
+  &lsquo;<samp>23.5e-2</samp>&rsquo; is 23.5 times ten to the
+  minus-second power, or 0.235.</p>
+
+  <p>Floating-point numbers are normally displayed in decimal
+  notation with all significant figures shown. Exceedingly large or
+  small numbers are displayed in scientific notation. Various other
+  display options are available. See <a href=
+  "Float-Formats.html#Float-Formats">Float Formats</a>.</p><a name=
+  "index-Accuracy-of-calculations" id=
+  "index-Accuracy-of-calculations"></a>
+
+  <p>Floating-point numbers are stored in decimal, not binary. The
+  result of each operation is rounded to the nearest value
+  representable in the number of significant digits specified by
+  the current precision, rounding away from zero in the case of a
+  tie. Thus (in the default display mode) what you see is exactly
+  what you get. Some operations such as square roots and
+  transcendental functions are performed with several digits of
+  extra precision and then rounded down, in an effort to make the
+  final result accurate to the full requested precision. However,
+  accuracy is not rigorously guaranteed. If you suspect the
+  validity of a result, try doing the same calculation in a higher
+  precision. The Calculator&rsquo;s arithmetic is not intended to
+  be IEEE-conformant in any way.</p>
+
+  <p>While floats are always <em>stored</em> in decimal, they can
+  be entered and displayed in any radix just like integers and
+  fractions. Since a float that is entered in a radix other that 10
+  will be converted to decimal, the number that Calc stores may not
+  be exactly the number that was entered, it will be the closest
+  decimal approximation given the current precision. The notation
+  &lsquo;<samp><var>radix</var>#<var>ddd</var>.<var>ddd</var></samp>&rsquo;
+  is a floating-point number whose digits are in the specified
+  radix. Note that the &lsquo;<samp>.</samp>&rsquo; is more aptly
+  referred to as a &ldquo;radix point&rdquo; than as a decimal
+  point in this case. The number
+  &lsquo;<samp>8#123.4567</samp>&rsquo; is defined as
+  &lsquo;<samp>8#1234567 * 8^-4</samp>&rsquo;. If the radix is 14
+  or less, you can use &lsquo;<samp>e</samp>&rsquo; notation to
+  write a non-decimal number in scientific notation. The exponent
+  is written in decimal, and is considered to be a power of the
+  radix: &lsquo;<samp>8#1234567e-4</samp>&rsquo;. If the radix is
+  15 or above, the letter &lsquo;<samp>e</samp>&rsquo; is a digit,
+  so scientific notation must be written out, e.g.,
+  &lsquo;<samp>16#123.4567*16^2</samp>&rsquo;. The first two
+  exercises of the Modes Tutorial explore some of the properties of
+  non-decimal floats.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Complex-Numbers.html#Complex-Numbers"
+    accesskey="n" rel="next">Complex Numbers</a>, Previous:
+    <a href="Fractions.html#Fractions" accesskey="p" rel=
+    "prev">Fractions</a>, Up: <a href="Data-Types.html#Data-Types"
+    accesskey="u" rel="up">Data Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

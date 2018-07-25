@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,104 +29,160 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: Automatic indentation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: Automatic indentation">
-<meta name="keywords" content="GNU Emacs FAQ: Automatic indentation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Common-requests.html#Common-requests" rel="up" title="Common requests">
-<link href="Matching-parentheses.html#Matching-parentheses" rel="next" title="Matching parentheses">
-<link href="Turning-the-volume-down.html#Turning-the-volume-down" rel="prev" title="Turning the volume down">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: Automatic indentation</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: Automatic indentation" />
+  <meta name="keywords" content=
+  "GNU Emacs FAQ: Automatic indentation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Common-requests.html#Common-requests" rel="up" title=
+  "Common requests" />
+  <link href="Matching-parentheses.html#Matching-parentheses" rel=
+  "next" title="Matching parentheses" />
+  <link href="Turning-the-volume-down.html#Turning-the-volume-down"
+  rel="prev" title="Turning the volume down" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Automatic-indentation"></a>
-<div class="header">
-<p>
-Next: <a href="Matching-parentheses.html#Matching-parentheses" accesskey="n" rel="next">Matching parentheses</a>, Previous: <a href="Turning-the-volume-down.html#Turning-the-volume-down" accesskey="p" rel="prev">Turning the volume down</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-do-I-tell-Emacs-to-automatically-indent-a-new-line-to-the-indentation-of-the-previous-line_003f"></a>
-<h3 class="section">5.26 How do I tell Emacs to automatically indent a new line to the indentation of the previous line?</h3>
-<a name="index-Indenting-new-lines"></a>
-<a name="index-New-lines_002c-indenting-of"></a>
-<a name="index-Previous-line_002c-indenting-according-to"></a>
-<a name="index-Text-indentation"></a>
+<body lang="en" xml:lang="en">
+  <a name="Automatic-indentation" id="Automatic-indentation"></a>
 
-<p>Such behavior is automatic (in Text mode) in Emacs 20 and later.  From the
-<samp>etc/NEWS</samp> file for Emacs 20.2:
-</p>
-<div class="example">
-<pre class="example">** In Text mode, now only blank lines separate paragraphs.  This makes
+  <div class="header">
+    <p>Next: <a href=
+    "Matching-parentheses.html#Matching-parentheses" accesskey="n"
+    rel="next">Matching parentheses</a>, Previous: <a href=
+    "Turning-the-volume-down.html#Turning-the-volume-down"
+    accesskey="p" rel="prev">Turning the volume down</a>, Up:
+    <a href="Common-requests.html#Common-requests" accesskey="u"
+    rel="up">Common requests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name=
+  "How-do-I-tell-Emacs-to-automatically-indent-a-new-line-to-the-indentation-of-the-previous-line_003f"
+  id=
+  "How-do-I-tell-Emacs-to-automatically-indent-a-new-line-to-the-indentation-of-the-previous-line_003f"></a>
+
+  <h3 class="section">5.26 How do I tell Emacs to automatically
+  indent a new line to the indentation of the previous
+  line?</h3><a name="index-Indenting-new-lines" id=
+  "index-Indenting-new-lines"></a> <a name=
+  "index-New-lines_002c-indenting-of" id=
+  "index-New-lines_002c-indenting-of"></a> <a name=
+  "index-Previous-line_002c-indenting-according-to" id=
+  "index-Previous-line_002c-indenting-according-to"></a> <a name=
+  "index-Text-indentation" id="index-Text-indentation"></a>
+
+  <p>Such behavior is automatic (in Text mode) in Emacs 20 and
+  later. From the <samp>etc/NEWS</samp> file for Emacs 20.2:</p>
+
+  <div class="example">
+    <pre class="example">
+** In Text mode, now only blank lines separate paragraphs.  This makes
 it possible to get the full benefit of Adaptive Fill mode in Text mode,
-and other modes derived from it (such as Mail mode).  <span class="key">TAB</span> in Text
+and other modes derived from it (such as Mail mode).  <span class=
+"key">TAB</span> in Text
 mode now runs the command <code>indent-relative</code>; this makes a practical
 difference only when you use indented paragraphs.
 
 If you want spaces at the beginning of a line to start a paragraph, use
 the new mode, Paragraph Indent Text mode.
-</pre></div>
+</pre>
+  </div><a name="index-Prefixing-lines" id=
+  "index-Prefixing-lines"></a> <a name="index-Fill-prefix" id=
+  "index-Fill-prefix"></a>
 
-<a name="index-Prefixing-lines"></a>
-<a name="index-Fill-prefix"></a>
-<p>If you have <code>auto-fill-mode</code> turned on (see <a href="Turning-on-auto_002dfill-by-default.html#Turning-on-auto_002dfill-by-default">Turning on auto-fill by default</a>), you can tell Emacs to prefix every line with a certain
-character sequence, the <em>fill prefix</em>.  Type the prefix at the
-beginning of a line, position point after it, and then type <kbd>C-x .</kbd>
-(<code>set-fill-prefix</code>) to set the fill prefix.  Thereafter,
-auto-filling will automatically put the fill prefix at the beginning of
-new lines, and <kbd>M-q</kbd> (<code>fill-paragraph</code>) will maintain any fill
-prefix when refilling the paragraph.
-</p>
-<p>If you have paragraphs with different levels of indentation, you will
-have to set the fill prefix to the correct value each time you move to a
-new paragraph.  There are many packages available to deal with this
-(see <a href="Packages-that-do-not-come-with-Emacs.html#Packages-that-do-not-come-with-Emacs">Packages that do not come with Emacs</a>).  Look for &ldquo;fill&rdquo; and
-&ldquo;indent&rdquo; keywords for guidance.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Matching-parentheses.html#Matching-parentheses" accesskey="n" rel="next">Matching parentheses</a>, Previous: <a href="Turning-the-volume-down.html#Turning-the-volume-down" accesskey="p" rel="prev">Turning the volume down</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If you have <code>auto-fill-mode</code> turned on (see
+  <a href="Turning-on-auto_002dfill-by-default.html#Turning-on-auto_002dfill-by-default">
+  Turning on auto-fill by default</a>), you can tell Emacs to
+  prefix every line with a certain character sequence, the <em>fill
+  prefix</em>. Type the prefix at the beginning of a line, position
+  point after it, and then type <kbd>C-x .</kbd>
+  (<code>set-fill-prefix</code>) to set the fill prefix.
+  Thereafter, auto-filling will automatically put the fill prefix
+  at the beginning of new lines, and <kbd>M-q</kbd>
+  (<code>fill-paragraph</code>) will maintain any fill prefix when
+  refilling the paragraph.</p>
 
+  <p>If you have paragraphs with different levels of indentation,
+  you will have to set the fill prefix to the correct value each
+  time you move to a new paragraph. There are many packages
+  available to deal with this (see <a href=
+  "Packages-that-do-not-come-with-Emacs.html#Packages-that-do-not-come-with-Emacs">
+  Packages that do not come with Emacs</a>). Look for
+  &ldquo;fill&rdquo; and &ldquo;indent&rdquo; keywords for
+  guidance.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Matching-parentheses.html#Matching-parentheses" accesskey="n"
+    rel="next">Matching parentheses</a>, Previous: <a href=
+    "Turning-the-volume-down.html#Turning-the-volume-down"
+    accesskey="p" rel="prev">Turning the volume down</a>, Up:
+    <a href="Common-requests.html#Common-requests" accesskey="u"
+    rel="up">Common requests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

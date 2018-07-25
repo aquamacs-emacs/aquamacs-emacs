@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents SES: the Simple Emacs Spreadsheet.
 
 Copyright (C) 2002-2016 Free Software Foundation, Inc.
@@ -14,93 +16,127 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>SES: Simple Emacs Spreadsheet: Sorting by column</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="SES: Simple Emacs Spreadsheet: Sorting by column">
-<meta name="keywords" content="SES: Simple Emacs Spreadsheet: Sorting by column">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Advanced-Features.html#Advanced-Features" rel="up" title="Advanced Features">
-<link href="Standard-formula-functions.html#Standard-formula-functions" rel="next" title="Standard formula functions">
-<link href="Ranges-in-formulas.html#Ranges-in-formulas" rel="prev" title="Ranges in formulas">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>SES: Simple Emacs Spreadsheet: Sorting by column</title>
+  <meta name="description" content=
+  "SES: Simple Emacs Spreadsheet: Sorting by column" />
+  <meta name="keywords" content=
+  "SES: Simple Emacs Spreadsheet: Sorting by column" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Advanced-Features.html#Advanced-Features" rel="up"
+  title="Advanced Features" />
+  <link href=
+  "Standard-formula-functions.html#Standard-formula-functions" rel=
+  "next" title="Standard formula functions" />
+  <link href="Ranges-in-formulas.html#Ranges-in-formulas" rel=
+  "prev" title="Ranges in formulas" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sorting-by-column"></a>
-<div class="header">
-<p>
-Next: <a href="Standard-formula-functions.html#Standard-formula-functions" accesskey="n" rel="next">Standard formula functions</a>, Previous: <a href="Ranges-in-formulas.html#Ranges-in-formulas" accesskey="p" rel="prev">Ranges in formulas</a>, Up: <a href="Advanced-Features.html#Advanced-Features" accesskey="u" rel="up">Advanced Features</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sorting-by-column-1"></a>
-<h3 class="section">4.3 Sorting by column</h3>
-<a name="index-sorting"></a>
-<a name="index-ses_002dsort_002dcolumn"></a>
-<a name="index-ses_002dsort_002dcolumn_002dclick"></a>
+<body lang="en" xml:lang="en">
+  <a name="Sorting-by-column" id="Sorting-by-column"></a>
 
-<dl compact="compact">
-<dt><kbd>C-c M-C-s</kbd></dt>
-<dd><p>Sort the cells of a range using one of the columns
-(<code>ses-sort-column</code>).  The rows (or partial rows if the range
-doesn&rsquo;t include all columns) are rearranged so the chosen column will
-be in order.
-</p>
-</dd>
-<dt><kbd>[header-line mouse-2]</kbd></dt>
-<dd><p>The easiest way to sort is to click mouse-2 on the chosen column&rsquo;s header row
-(<code>ses-sort-column-click</code>).
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Standard-formula-functions.html#Standard-formula-functions"
+    accesskey="n" rel="next">Standard formula functions</a>,
+    Previous: <a href="Ranges-in-formulas.html#Ranges-in-formulas"
+    accesskey="p" rel="prev">Ranges in formulas</a>, Up: <a href=
+    "Advanced-Features.html#Advanced-Features" accesskey="u" rel=
+    "up">Advanced Features</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sorting-by-column-1" id="Sorting-by-column-1"></a>
 
-<p>The sort comparison uses <code>string&lt;</code>, which works well for
-right-justified numbers and left-justified strings.
-</p>
-<p>With prefix arg, sort is in descending order.
-</p>
-<p>Rows are moved one at a time, with relocation of formulas.  This works
-well if formulas refer to other cells in their row, not so well for
-formulas that refer to other rows in the range or to cells outside the
-range.
-</p>
+  <h3 class="section">4.3 Sorting by column</h3><a name=
+  "index-sorting" id="index-sorting"></a> <a name=
+  "index-ses_002dsort_002dcolumn" id=
+  "index-ses_002dsort_002dcolumn"></a> <a name=
+  "index-ses_002dsort_002dcolumn_002dclick" id=
+  "index-ses_002dsort_002dcolumn_002dclick"></a>
 
+  <dl compact="compact">
+    <dt><kbd>C-c M-C-s</kbd></dt>
 
+    <dd>
+      <p>Sort the cells of a range using one of the columns
+      (<code>ses-sort-column</code>). The rows (or partial rows if
+      the range doesn&rsquo;t include all columns) are rearranged
+      so the chosen column will be in order.</p>
+    </dd>
 
+    <dt><kbd>[header-line mouse-2]</kbd></dt>
 
+    <dd>
+      <p>The easiest way to sort is to click mouse-2 on the chosen
+      column&rsquo;s header row
+      (<code>ses-sort-column-click</code>).</p>
+    </dd>
+  </dl>
+
+  <p>The sort comparison uses <code>string&lt;</code>, which works
+  well for right-justified numbers and left-justified strings.</p>
+
+  <p>With prefix arg, sort is in descending order.</p>
+
+  <p>Rows are moved one at a time, with relocation of formulas.
+  This works well if formulas refer to other cells in their row,
+  not so well for formulas that refer to other rows in the range or
+  to cells outside the range.</p>
 </body>
 </html>

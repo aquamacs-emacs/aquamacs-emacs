@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Formatting Variables - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Various.html#Various" title="Various">
-<link rel="prev" href="Symbolic-Prefixes.html#Symbolic-Prefixes" title="Symbolic Prefixes">
-<link rel="next" href="Window-Layout.html#Window-Layout" title="Window Layout">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Formatting Variables - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Various.html#Various" title="Various" />
+  <link rel="prev" href="Symbolic-Prefixes.html#Symbolic-Prefixes"
+  title="Symbolic Prefixes" />
+  <link rel="next" href="Window-Layout.html#Window-Layout" title=
+  "Window Layout" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,59 +47,99 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Formatting-Variables"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Window-Layout.html#Window-Layout">Window Layout</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Symbolic-Prefixes.html#Symbolic-Prefixes">Symbolic Prefixes</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Various.html#Various">Various</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Formatting-Variables" id="Formatting-Variables"></a>
 
-<h3 class="section">9.4 Formatting Variables</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Window-Layout.html#Window-Layout">Window Layout</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Symbolic-Prefixes.html#Symbolic-Prefixes">Symbolic
+    Prefixes</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Various.html#Various">Various</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-formatting-variables-2602"></a>
-Throughout this manual you've probably noticed lots of variables called
-things like <code>gnus-group-line-format</code> and
-<code>gnus-summary-mode-line-format</code>.  These control how Gnus is to
-output lines in the various buffers.  There's quite a lot of them. 
-Fortunately, they all use the same syntax, so there's not that much to
-be annoyed by.
+  <h3 class="section">9.4 Formatting Variables</h3>
 
-   <p>Here's an example format spec (from the group buffer): &lsquo;<samp><span class="samp">%M%S%5y:
-%(%g%)\n</span></samp>&rsquo;.  We see that it is indeed extremely ugly, and that there are
-lots of percentages everywhere.
+  <p><a name="index-formatting-variables-2602" id=
+  "index-formatting-variables-2602"></a> Throughout this manual
+  you've probably noticed lots of variables called things like
+  <code>gnus-group-line-format</code> and
+  <code>gnus-summary-mode-line-format</code>. These control how
+  Gnus is to output lines in the various buffers. There's quite a
+  lot of them. Fortunately, they all use the same syntax, so
+  there's not that much to be annoyed by.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Formatting-Basics.html#Formatting-Basics">Formatting Basics</a>:            A formatting variable is basically a format string. 
-<li><a accesskey="2" href="Mode-Line-Formatting.html#Mode-Line-Formatting">Mode Line Formatting</a>:         Some rules about mode line formatting variables. 
-<li><a accesskey="3" href="Advanced-Formatting.html#Advanced-Formatting">Advanced Formatting</a>:          Modifying output in various ways. 
-<li><a accesskey="4" href="User_002dDefined-Specs.html#User_002dDefined-Specs">User-Defined Specs</a>:           Having Gnus call your own functions. 
-<li><a accesskey="5" href="Formatting-Fonts.html#Formatting-Fonts">Formatting Fonts</a>:             Making the formatting look colorful and nice. 
-<li><a accesskey="6" href="Positioning-Point.html#Positioning-Point">Positioning Point</a>:            Moving point to a position after an operation. 
-<li><a accesskey="7" href="Tabulation.html#Tabulation">Tabulation</a>:                   Tabulating your output. 
-<li><a accesskey="8" href="Wide-Characters.html#Wide-Characters">Wide Characters</a>:              Dealing with wide characters. 
-</ul>
+  <p>Here's an example format spec (from the group buffer):
+  &lsquo;<samp><span class="samp">%M%S%5y:
+  %(%g%)\n</span></samp>&rsquo;. We see that it is indeed extremely
+  ugly, and that there are lots of percentages everywhere.</p>
 
-   <p>Currently Gnus uses the following formatting variables:
-<code>gnus-group-line-format</code>, <code>gnus-summary-line-format</code>,
-<code>gnus-server-line-format</code>, <code>gnus-topic-line-format</code>,
-<code>gnus-group-mode-line-format</code>,
-<code>gnus-summary-mode-line-format</code>,
-<code>gnus-article-mode-line-format</code>,
-<code>gnus-server-mode-line-format</code>, and
-<code>gnus-summary-pick-line-format</code>.
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Formatting-Basics.html#Formatting-Basics">Formatting
+    Basics</a>: A formatting variable is basically a format
+    string.</li>
 
-   <p>All these format variables can also be arbitrary elisp forms.  In that
-case, they will be <code>eval</code>ed to insert the required lines.
+    <li><a accesskey="2" href=
+    "Mode-Line-Formatting.html#Mode-Line-Formatting">Mode Line
+    Formatting</a>: Some rules about mode line formatting
+    variables.</li>
 
-   <p><a name="index-M_002dx-gnus_002dupdate_002dformat-2603"></a><a name="index-gnus_002dupdate_002dformat-2604"></a>Gnus includes a command to help you while creating your own format
-specs.  <kbd>M-x gnus-update-format</kbd> will <code>eval</code> the current form,
-update the spec in question and pop you to a buffer where you can
-examine the resulting Lisp code to be run to generate the line.
+    <li><a accesskey="3" href=
+    "Advanced-Formatting.html#Advanced-Formatting">Advanced
+    Formatting</a>: Modifying output in various ways.</li>
 
-   </body></html>
+    <li><a accesskey="4" href=
+    "User_002dDefined-Specs.html#User_002dDefined-Specs">User-Defined
+    Specs</a>: Having Gnus call your own functions.</li>
 
+    <li><a accesskey="5" href=
+    "Formatting-Fonts.html#Formatting-Fonts">Formatting Fonts</a>:
+    Making the formatting look colorful and nice.</li>
+
+    <li><a accesskey="6" href=
+    "Positioning-Point.html#Positioning-Point">Positioning
+    Point</a>: Moving point to a position after an operation.</li>
+
+    <li><a accesskey="7" href=
+    "Tabulation.html#Tabulation">Tabulation</a>: Tabulating your
+    output.</li>
+
+    <li><a accesskey="8" href=
+    "Wide-Characters.html#Wide-Characters">Wide Characters</a>:
+    Dealing with wide characters.</li>
+  </ul>
+
+  <p>Currently Gnus uses the following formatting variables:
+  <code>gnus-group-line-format</code>,
+  <code>gnus-summary-line-format</code>,
+  <code>gnus-server-line-format</code>,
+  <code>gnus-topic-line-format</code>,
+  <code>gnus-group-mode-line-format</code>,
+  <code>gnus-summary-mode-line-format</code>,
+  <code>gnus-article-mode-line-format</code>,
+  <code>gnus-server-mode-line-format</code>, and
+  <code>gnus-summary-pick-line-format</code>.</p>
+
+  <p>All these format variables can also be arbitrary elisp forms.
+  In that case, they will be <code>eval</code>ed to insert the
+  required lines.</p>
+
+  <p><a name="index-M_002dx-gnus_002dupdate_002dformat-2603" id=
+  "index-M_002dx-gnus_002dupdate_002dformat-2603"></a><a name=
+  "index-gnus_002dupdate_002dformat-2604" id=
+  "index-gnus_002dupdate_002dformat-2604"></a>Gnus includes a
+  command to help you while creating your own format specs.
+  <kbd>M-x gnus-update-format</kbd> will <code>eval</code> the
+  current form, update the spec in question and pop you to a buffer
+  where you can examine the resulting Lisp code to be run to
+  generate the line.</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents the Semantic library and utilities.
 
 Copyright (C) 1999-2005, 2007, 2009-2016 Free Software
@@ -15,188 +17,320 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Semantic Manual: Tag Decoration Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Semantic Manual: Tag Decoration Mode">
-<meta name="keywords" content="Semantic Manual: Tag Decoration Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Using-Semantic.html#Using-Semantic" rel="up" title="Using Semantic">
-<link href="Semantic-Internals.html#Semantic-Internals" rel="next" title="Semantic Internals">
-<link href="Highlight-Func-Mode.html#Highlight-Func-Mode" rel="prev" title="Highlight Func Mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Semantic Manual: Tag Decoration Mode</title>
+  <meta name="description" content=
+  "Semantic Manual: Tag Decoration Mode" />
+  <meta name="keywords" content=
+  "Semantic Manual: Tag Decoration Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Using-Semantic.html#Using-Semantic" rel="up" title=
+  "Using Semantic" />
+  <link href="Semantic-Internals.html#Semantic-Internals" rel=
+  "next" title="Semantic Internals" />
+  <link href="Highlight-Func-Mode.html#Highlight-Func-Mode" rel=
+  "prev" title="Highlight Func Mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Tag-Decoration-Mode"></a>
-<div class="header">
-<p>
-Previous: <a href="Highlight-Func-Mode.html#Highlight-Func-Mode" accesskey="p" rel="prev">Highlight Func Mode</a>, Up: <a href="Using-Semantic.html#Using-Semantic" accesskey="u" rel="up">Using Semantic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Tag-Decoration-Mode-1"></a>
-<h3 class="section">2.10 Tag Decoration Mode</h3>
-<a name="index-semantic_002ddecoration_002dmode"></a>
+<body lang="en" xml:lang="en">
+  <a name="Tag-Decoration-Mode" id="Tag-Decoration-Mode"></a>
 
-<p>Semantic Tag Decoration mode &ldquo;decorates&rdquo; each tag based on certain
-arbitrary features of that tag.  Decorations are specified using the
-variable <code>semantic-decoration-styles</code>.
-</p>
-<dl>
-<dt><a name="index-global_002dsemantic_002ddecoration_002dmode"></a>Command: <strong>global-semantic-decoration-mode</strong> <em>&amp;optional arg</em></dt>
-<dd><p>Toggle Semantic Tag Decoration mode in all Semantic-enabled buffers.
-With an optional argument <var>arg</var>, enable if <var>arg</var> is positive,
-and disable otherwise.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href=
+    "Highlight-Func-Mode.html#Highlight-Func-Mode" accesskey="p"
+    rel="prev">Highlight Func Mode</a>, Up: <a href=
+    "Using-Semantic.html#Using-Semantic" accesskey="u" rel=
+    "up">Using Semantic</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Tag-Decoration-Mode-1" id="Tag-Decoration-Mode-1"></a>
 
-<dl>
-<dt><a name="index-semantic_002ddecoration_002dstyles"></a>Variable: <strong>semantic-decoration-styles</strong></dt>
-<dd><p>The value of this variable is a list of decoration styles for Semantic
-Tag Decoration mode.  Each element in this list should have the form
-<code>(<var>name</var> . <var>flag</var>)</code>, where <var>name</var> is a style name (a
-symbol) and <var>flag</var> is non-<code>nil</code> if the style is enabled.
-</p>
-<p>The following styles are available:
-</p>
-<dl compact="compact">
-<dt><code>semantic-tag-boundary</code></dt>
-<dd><p>Place an overline in front of each long tag (excluding prototypes).
-</p>
-</dd>
-<dt><code>semantic-decoration-on-private-members</code></dt>
-<dd><p>Highlight class members that are designated as private.
-</p>
-</dd>
-<dt><code>semantic-decoration-on-protected-members</code></dt>
-<dd><p>Highlight class members that are designated as protected.
-</p>
-</dd>
-<dt><code>semantic-decoration-on-includes</code></dt>
-<dd><p>Highlight class members that are includes.  Clicking on the
-highlighted include statements opens a context menu for configuring
-<i>Semantic</i> includes.
-</p></dd>
-</dl>
-</dd></dl>
+  <h3 class="section">2.10 Tag Decoration Mode</h3><a name=
+  "index-semantic_002ddecoration_002dmode" id=
+  "index-semantic_002ddecoration_002dmode"></a>
 
-<p>To enable or disable specific decorations, use this function:
-</p>
-<dl>
-<dt><a name="index-semantic_002dtoggle_002ddecoration_002dstyle"></a>Command: <strong>semantic-toggle-decoration-style</strong> <em>name &amp;optional arg</em></dt>
-<dd><p>Prompt for a decoration style, <var>name</var>, and turn it on or off.
-With prefix argument <var>arg</var>, turn on if positive, otherwise off.
-Return non-<code>nil</code> if the decoration style is enabled.
-</p></dd></dl>
+  <p>Semantic Tag Decoration mode &ldquo;decorates&rdquo; each tag
+  based on certain arbitrary features of that tag. Decorations are
+  specified using the variable
+  <code>semantic-decoration-styles</code>.</p>
 
-<dl>
-<dt><a name="index-semantic_002dtag_002dboundary_002dface"></a>Face: <strong>semantic-tag-boundary-face</strong></dt>
-<dd><p>Face for long tags in the <code>semantic-tag-boundary</code> decoration
-style.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-global_002dsemantic_002ddecoration_002dmode"
+    id=
+    "index-global_002dsemantic_002ddecoration_002dmode"></a>Command:
+    <strong>global-semantic-decoration-mode</strong>
+    <em>&amp;optional arg</em></dt>
 
-<dl>
-<dt><a name="index-semantic_002ddecoration_002don_002dprivate_002dmembers_002dface"></a>Face: <strong>semantic-decoration-on-private-members-face</strong></dt>
-<dd><p>Face for privately-scoped tags in the
-<code>semantic-decoration-on-private-members</code> decoration style.
-</p></dd></dl>
+    <dd>
+      <p>Toggle Semantic Tag Decoration mode in all
+      Semantic-enabled buffers. With an optional argument
+      <var>arg</var>, enable if <var>arg</var> is positive, and
+      disable otherwise.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-semantic_002ddecoration_002don_002dprotected_002dmembers_002dface"></a>Face: <strong>semantic-decoration-on-protected-members-face</strong></dt>
-<dd><p>Face for protected tags in the
-<code>semantic-decoration-on-protected-members</code> decoration style.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-semantic_002ddecoration_002dstyles" id=
+    "index-semantic_002ddecoration_002dstyles"></a>Variable:
+    <strong>semantic-decoration-styles</strong></dt>
 
-<dl>
-<dt><a name="index-semantic_002ddecoration_002don_002dincludes"></a>Face: <strong>semantic-decoration-on-includes</strong></dt>
-<dd><p>Face for includes that are not in some other state, in the
-<code>semantic-decoration-on-includes</code> decoration style.
-</p></dd></dl>
+    <dd>
+      <p>The value of this variable is a list of decoration styles
+      for Semantic Tag Decoration mode. Each element in this list
+      should have the form <code>(<var>name</var> .
+      <var>flag</var>)</code>, where <var>name</var> is a style
+      name (a symbol) and <var>flag</var> is non-<code>nil</code>
+      if the style is enabled.</p>
 
-<dl>
-<dt><a name="index-semantic_002ddecoration_002don_002dunknown_002dincludes"></a>Face: <strong>semantic-decoration-on-unknown-includes</strong></dt>
-<dd><p>Face for includes that cannot be found, in the
-<code>semantic-decoration-on-includes</code> decoration style.
-</p></dd></dl>
+      <p>The following styles are available:</p>
 
-<dl>
-<dt><a name="index-semantic_002ddecoration_002don_002dunparsed_002dincludes"></a>Face: <strong>semantic-decoration-on-unparsed-includes</strong></dt>
-<dd><p>Face for includes that have not yet been parsed, in the
-<code>semantic-decoration-on-includes</code> decoration style.
-</p></dd></dl>
+      <dl compact="compact">
+        <dt><code>semantic-tag-boundary</code></dt>
 
-<a name="Creating-New-Decoration-Modes"></a>
-<h4 class="subsection">2.10.1 Creating New Decoration Modes</h4>
+        <dd>
+          <p>Place an overline in front of each long tag (excluding
+          prototypes).</p>
+        </dd>
 
-<p>You can create new types of decorations using the following function:
-</p>
-<dl>
-<dt><a name="index-define_002dsemantic_002ddecoration_002dstyle"></a>Function: <strong>define-semantic-decoration-style</strong> <em>name doc &amp;rest flags</em></dt>
-<dd><p>Define a new decoration style with <var>name</var>.
-<var>doc</var> is a documentation string describing the decoration style <var>name</var>.
-It is appended to auto-generated doc strings.
-An optional list of <var>flags</var> can also be specified.  Flags are:
-  <code>:enabled</code> &lt;value&gt;  - specify the default enabled value for <var>name</var>.
-</p>
+        <dt>
+        <code>semantic-decoration-on-private-members</code></dt>
 
-<p>This defines two new overload functions respectively called <code>NAME-p</code>
-and <code>NAME-highlight</code>, for which you must provide a default
-implementation in respectively the functions <code>NAME-p-default</code> and
-<code>NAME-highlight-default</code>.  Those functions are passed a tag.  <code>NAME-p</code>
-must return non-<code>nil</code> to indicate that the tag should be decorated by
-<code>NAME-highlight</code>.
-</p>
-<p>To put primary decorations on a tag <code>NAME-highlight</code>, use
-functions like <em>semantic-set-tag-face</em>,
-<em>semantic-set-tag-intangible</em>, etc., found in the
-semantic-decorate library.
-</p>
-<p>To add other kind of decorations on a tag, <code>NAME-highlight</code> must use
-<em>semantic-decorate-tag</em>, and other functions of the semantic
-decoration <var>api</var> found in this library.
-</p></dd></dl>
+        <dd>
+          <p>Highlight class members that are designated as
+          private.</p>
+        </dd>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Highlight-Func-Mode.html#Highlight-Func-Mode" accesskey="p" rel="prev">Highlight Func Mode</a>, Up: <a href="Using-Semantic.html#Using-Semantic" accesskey="u" rel="up">Using Semantic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+        <dt>
+        <code>semantic-decoration-on-protected-members</code></dt>
 
+        <dd>
+          <p>Highlight class members that are designated as
+          protected.</p>
+        </dd>
 
+        <dt><code>semantic-decoration-on-includes</code></dt>
 
+        <dd>
+          <p>Highlight class members that are includes. Clicking on
+          the highlighted include statements opens a context menu
+          for configuring <i>Semantic</i> includes.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <p>To enable or disable specific decorations, use this
+  function:</p>
+
+  <dl>
+    <dt><a name=
+    "index-semantic_002dtoggle_002ddecoration_002dstyle" id=
+    "index-semantic_002dtoggle_002ddecoration_002dstyle"></a>Command:
+    <strong>semantic-toggle-decoration-style</strong> <em>name
+    &amp;optional arg</em></dt>
+
+    <dd>
+      <p>Prompt for a decoration style, <var>name</var>, and turn
+      it on or off. With prefix argument <var>arg</var>, turn on if
+      positive, otherwise off. Return non-<code>nil</code> if the
+      decoration style is enabled.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-semantic_002dtag_002dboundary_002dface" id=
+    "index-semantic_002dtag_002dboundary_002dface"></a>Face:
+    <strong>semantic-tag-boundary-face</strong></dt>
+
+    <dd>
+      <p>Face for long tags in the
+      <code>semantic-tag-boundary</code> decoration style.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-semantic_002ddecoration_002don_002dprivate_002dmembers_002dface"
+    id=
+    "index-semantic_002ddecoration_002don_002dprivate_002dmembers_002dface">
+    </a>Face:
+    <strong>semantic-decoration-on-private-members-face</strong></dt>
+
+    <dd>
+      <p>Face for privately-scoped tags in the
+      <code>semantic-decoration-on-private-members</code>
+      decoration style.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-semantic_002ddecoration_002don_002dprotected_002dmembers_002dface"
+    id=
+    "index-semantic_002ddecoration_002don_002dprotected_002dmembers_002dface">
+    </a>Face:
+    <strong>semantic-decoration-on-protected-members-face</strong></dt>
+
+    <dd>
+      <p>Face for protected tags in the
+      <code>semantic-decoration-on-protected-members</code>
+      decoration style.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-semantic_002ddecoration_002don_002dincludes"
+    id=
+    "index-semantic_002ddecoration_002don_002dincludes"></a>Face:
+    <strong>semantic-decoration-on-includes</strong></dt>
+
+    <dd>
+      <p>Face for includes that are not in some other state, in the
+      <code>semantic-decoration-on-includes</code> decoration
+      style.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-semantic_002ddecoration_002don_002dunknown_002dincludes"
+    id=
+    "index-semantic_002ddecoration_002don_002dunknown_002dincludes">
+    </a>Face:
+    <strong>semantic-decoration-on-unknown-includes</strong></dt>
+
+    <dd>
+      <p>Face for includes that cannot be found, in the
+      <code>semantic-decoration-on-includes</code> decoration
+      style.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-semantic_002ddecoration_002don_002dunparsed_002dincludes"
+    id=
+    "index-semantic_002ddecoration_002don_002dunparsed_002dincludes">
+    </a>Face:
+    <strong>semantic-decoration-on-unparsed-includes</strong></dt>
+
+    <dd>
+      <p>Face for includes that have not yet been parsed, in the
+      <code>semantic-decoration-on-includes</code> decoration
+      style.</p>
+    </dd>
+  </dl><a name="Creating-New-Decoration-Modes" id=
+  "Creating-New-Decoration-Modes"></a>
+
+  <h4 class="subsection">2.10.1 Creating New Decoration Modes</h4>
+
+  <p>You can create new types of decorations using the following
+  function:</p>
+
+  <dl>
+    <dt><a name=
+    "index-define_002dsemantic_002ddecoration_002dstyle" id=
+    "index-define_002dsemantic_002ddecoration_002dstyle"></a>Function:
+    <strong>define-semantic-decoration-style</strong> <em>name doc
+    &amp;rest flags</em></dt>
+
+    <dd>
+      <p>Define a new decoration style with <var>name</var>.
+      <var>doc</var> is a documentation string describing the
+      decoration style <var>name</var>. It is appended to
+      auto-generated doc strings. An optional list of
+      <var>flags</var> can also be specified. Flags are:
+      <code>:enabled</code> &lt;value&gt; - specify the default
+      enabled value for <var>name</var>.</p>
+
+      <p>This defines two new overload functions respectively
+      called <code>NAME-p</code> and <code>NAME-highlight</code>,
+      for which you must provide a default implementation in
+      respectively the functions <code>NAME-p-default</code> and
+      <code>NAME-highlight-default</code>. Those functions are
+      passed a tag. <code>NAME-p</code> must return
+      non-<code>nil</code> to indicate that the tag should be
+      decorated by <code>NAME-highlight</code>.</p>
+
+      <p>To put primary decorations on a tag
+      <code>NAME-highlight</code>, use functions like
+      <em>semantic-set-tag-face</em>,
+      <em>semantic-set-tag-intangible</em>, etc., found in the
+      semantic-decorate library.</p>
+
+      <p>To add other kind of decorations on a tag,
+      <code>NAME-highlight</code> must use
+      <em>semantic-decorate-tag</em>, and other functions of the
+      semantic decoration <var>api</var> found in this library.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Highlight-Func-Mode.html#Highlight-Func-Mode" accesskey="p"
+    rel="prev">Highlight Func Mode</a>, Up: <a href=
+    "Using-Semantic.html#Using-Semantic" accesskey="u" rel=
+    "up">Using Semantic</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

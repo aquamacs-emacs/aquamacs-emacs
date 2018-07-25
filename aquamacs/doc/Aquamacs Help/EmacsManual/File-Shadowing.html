@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,121 +20,177 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: File Shadowing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: File Shadowing">
-<meta name="keywords" content="GNU Emacs Manual: File Shadowing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Saving.html#Saving" rel="up" title="Saving">
-<link href="Time-Stamps.html#Time-Stamps" rel="next" title="Time Stamps">
-<link href="Interlocking.html#Interlocking" rel="prev" title="Interlocking">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: File Shadowing</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: File Shadowing" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: File Shadowing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Saving.html#Saving" rel="up" title="Saving" />
+  <link href="Time-Stamps.html#Time-Stamps" rel="next" title=
+  "Time Stamps" />
+  <link href="Interlocking.html#Interlocking" rel="prev" title=
+  "Interlocking" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="File-Shadowing" id="File-Shadowing"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Time-Stamps.html#Time-Stamps" accesskey="n"
+    rel="next">Time Stamps</a>, Previous: <a href=
+    "Interlocking.html#Interlocking" accesskey="p" rel=
+    "prev">Interlocking</a>, Up: <a href="Saving.html#Saving"
+    accesskey="u" rel="up">Saving</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Shadowing-Files" id="Shadowing-Files"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="File-Shadowing"></a>
-<div class="header">
-<p>
-Next: <a href="Time-Stamps.html#Time-Stamps" accesskey="n" rel="next">Time Stamps</a>, Previous: <a href="Interlocking.html#Interlocking" accesskey="p" rel="prev">Interlocking</a>, Up: <a href="Saving.html#Saving" accesskey="u" rel="up">Saving</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Shadowing-Files"></a>
-<h4 class="subsection">18.3.5 Shadowing Files</h4>
-<a name="index-shadow-files"></a>
-<a name="index-file-shadows"></a>
-<a name="index-shadow_002dinitialize"></a>
+  <h4 class="subsection">18.3.5 Shadowing Files</h4><a name=
+  "index-shadow-files" id="index-shadow-files"></a> <a name=
+  "index-file-shadows" id="index-file-shadows"></a> <a name=
+  "index-shadow_002dinitialize" id=
+  "index-shadow_002dinitialize"></a>
 
-<dl compact="compact">
-<dt><kbd>M-x shadow-initialize</kbd></dt>
-<dd><p>Set up file shadowing.
-</p></dd>
-<dt><kbd>M-x shadow-define-literal-group</kbd></dt>
-<dd><p>Declare a single file to be shared between sites.
-</p></dd>
-<dt><kbd>M-x shadow-define-regexp-group</kbd></dt>
-<dd><p>Make all files that match each of a group of files be shared between hosts.
-</p></dd>
-<dt><kbd>M-x shadow-define-cluster <span class="key">RET</span> <var>name</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Define a shadow file cluster <var>name</var>.
-</p></dd>
-<dt><kbd>M-x shadow-copy-files</kbd></dt>
-<dd><p>Copy all pending shadow files.
-</p></dd>
-<dt><kbd>M-x shadow-cancel</kbd></dt>
-<dd><p>Cancel the instruction to shadow some files.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>M-x shadow-initialize</kbd></dt>
 
-<p>You can arrange to keep identical <em>shadow</em> copies of certain files
-in more than one place&mdash;possibly on different machines.  To do this,
-first you must set up a <em>shadow file group</em>, which is a set of
-identically-named files shared between a list of sites.  The file
-group is permanent and applies to further Emacs sessions as well as
-the current one.  Once the group is set up, every time you exit Emacs,
-it will copy the file you edited to the other files in its group.  You
-can also do the copying without exiting Emacs, by typing <kbd>M-x
-shadow-copy-files</kbd>.
-</p>
-<p>To set up a shadow file group, use <kbd>M-x
-shadow-define-literal-group</kbd> or <kbd>M-x shadow-define-regexp-group</kbd>.
-See their documentation strings for further information.
-</p>
-<p>Before copying a file to its shadows, Emacs asks for confirmation.
-You can answer &ldquo;no&rdquo; to bypass copying of this file, this time.  If
-you want to cancel the shadowing permanently for a certain file, use
-<kbd>M-x shadow-cancel</kbd> to eliminate or change the shadow file group.
-</p>
-<p>A <em>shadow cluster</em> is a group of hosts that share directories, so
-that copying to or from one of them is sufficient to update the file
-on all of them.  Each shadow cluster has a name, and specifies the
-network address of a primary host (the one we copy files to), and a
-regular expression that matches the host names of all the other hosts
-in the cluster.  You can define a shadow cluster with <kbd>M-x
-shadow-define-cluster</kbd>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Time-Stamps.html#Time-Stamps" accesskey="n" rel="next">Time Stamps</a>, Previous: <a href="Interlocking.html#Interlocking" accesskey="p" rel="prev">Interlocking</a>, Up: <a href="Saving.html#Saving" accesskey="u" rel="up">Saving</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Set up file shadowing.</p>
+    </dd>
 
+    <dt><kbd>M-x shadow-define-literal-group</kbd></dt>
 
+    <dd>
+      <p>Declare a single file to be shared between sites.</p>
+    </dd>
 
+    <dt><kbd>M-x shadow-define-regexp-group</kbd></dt>
+
+    <dd>
+      <p>Make all files that match each of a group of files be
+      shared between hosts.</p>
+    </dd>
+
+    <dt><kbd>M-x shadow-define-cluster <span class="key">RET</span>
+    <var>name</var> <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Define a shadow file cluster <var>name</var>.</p>
+    </dd>
+
+    <dt><kbd>M-x shadow-copy-files</kbd></dt>
+
+    <dd>
+      <p>Copy all pending shadow files.</p>
+    </dd>
+
+    <dt><kbd>M-x shadow-cancel</kbd></dt>
+
+    <dd>
+      <p>Cancel the instruction to shadow some files.</p>
+    </dd>
+  </dl>
+
+  <p>You can arrange to keep identical <em>shadow</em> copies of
+  certain files in more than one place&mdash;possibly on different
+  machines. To do this, first you must set up a <em>shadow file
+  group</em>, which is a set of identically-named files shared
+  between a list of sites. The file group is permanent and applies
+  to further Emacs sessions as well as the current one. Once the
+  group is set up, every time you exit Emacs, it will copy the file
+  you edited to the other files in its group. You can also do the
+  copying without exiting Emacs, by typing <kbd>M-x
+  shadow-copy-files</kbd>.</p>
+
+  <p>To set up a shadow file group, use <kbd>M-x
+  shadow-define-literal-group</kbd> or <kbd>M-x
+  shadow-define-regexp-group</kbd>. See their documentation strings
+  for further information.</p>
+
+  <p>Before copying a file to its shadows, Emacs asks for
+  confirmation. You can answer &ldquo;no&rdquo; to bypass copying
+  of this file, this time. If you want to cancel the shadowing
+  permanently for a certain file, use <kbd>M-x shadow-cancel</kbd>
+  to eliminate or change the shadow file group.</p>
+
+  <p>A <em>shadow cluster</em> is a group of hosts that share
+  directories, so that copying to or from one of them is sufficient
+  to update the file on all of them. Each shadow cluster has a
+  name, and specifies the network address of a primary host (the
+  one we copy files to), and a regular expression that matches the
+  host names of all the other hosts in the cluster. You can define
+  a shadow cluster with <kbd>M-x shadow-define-cluster</kbd>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Time-Stamps.html#Time-Stamps" accesskey="n"
+    rel="next">Time Stamps</a>, Previous: <a href=
+    "Interlocking.html#Interlocking" accesskey="p" rel=
+    "prev">Interlocking</a>, Up: <a href="Saving.html#Saving"
+    accesskey="u" rel="up">Saving</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

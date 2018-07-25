@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,98 +20,133 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: VC With A Locking VCS</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: VC With A Locking VCS">
-<meta name="keywords" content="GNU Emacs Manual: VC With A Locking VCS">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Basic-VC-Editing.html#Basic-VC-Editing" rel="up" title="Basic VC Editing">
-<link href="Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v" rel="next" title="Advanced C-x v v">
-<link href="VC-With-A-Merging-VCS.html#VC-With-A-Merging-VCS" rel="prev" title="VC With A Merging VCS">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: VC With A Locking VCS</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: VC With A Locking VCS" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: VC With A Locking VCS" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Basic-VC-Editing.html#Basic-VC-Editing" rel="up"
+  title="Basic VC Editing" />
+  <link href="Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v" rel=
+  "next" title="Advanced C-x v v" />
+  <link href="VC-With-A-Merging-VCS.html#VC-With-A-Merging-VCS"
+  rel="prev" title="VC With A Merging VCS" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="VC-With-A-Locking-VCS" id="VC-With-A-Locking-VCS"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v" accesskey="n"
+    rel="next">Advanced C-x v v</a>, Previous: <a href=
+    "VC-With-A-Merging-VCS.html#VC-With-A-Merging-VCS" accesskey=
+    "p" rel="prev">VC With A Merging VCS</a>, Up: <a href=
+    "Basic-VC-Editing.html#Basic-VC-Editing" accesskey="u" rel=
+    "up">Basic VC Editing</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Version-Control-with-Locking" id=
+  "Basic-Version-Control-with-Locking"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="VC-With-A-Locking-VCS"></a>
-<div class="header">
-<p>
-Next: <a href="Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v" accesskey="n" rel="next">Advanced C-x v v</a>, Previous: <a href="VC-With-A-Merging-VCS.html#VC-With-A-Merging-VCS" accesskey="p" rel="prev">VC With A Merging VCS</a>, Up: <a href="Basic-VC-Editing.html#Basic-VC-Editing" accesskey="u" rel="up">Basic VC Editing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Version-Control-with-Locking"></a>
-<h4 class="subsubsection">28.1.3.2 Basic Version Control with Locking</h4>
+  <h4 class="subsubsection">28.1.3.2 Basic Version Control with
+  Locking</h4>
 
-<p>On a locking-based version control system (such as SCCS, and RCS in
-its default mode), <kbd>C-x v v</kbd> does the following:
-</p>
-<ul>
-<li> If there is more than one file in the VC fileset and the files have
-inconsistent version control statuses, signal an error.
+  <p>On a locking-based version control system (such as SCCS, and
+  RCS in its default mode), <kbd>C-x v v</kbd> does the
+  following:</p>
 
-</li><li> If each file in the VC fileset is not registered with a version
-control system, register the VC fileset.  See <a href="Registering.html#Registering">Registering</a>.  If
-Emacs cannot find a system to register under, it prompts for a
-repository type, creates a new repository, and registers the VC
-fileset with it.
+  <ul>
+    <li>If there is more than one file in the VC fileset and the
+    files have inconsistent version control statuses, signal an
+    error.</li>
 
-</li><li> If each file is registered and unlocked, lock it and make it writable,
-so that you can begin to edit it.
+    <li>If each file in the VC fileset is not registered with a
+    version control system, register the VC fileset. See <a href=
+    "Registering.html#Registering">Registering</a>. If Emacs cannot
+    find a system to register under, it prompts for a repository
+    type, creates a new repository, and registers the VC fileset
+    with it.</li>
 
-</li><li> If each file is locked by you and contains changes, commit the
-changes.  To do this, Emacs pops up a <samp>*vc-log*</samp> buffer; type the
-desired log entry for the new revision, followed by <kbd>C-c C-c</kbd> to
-commit (see <a href="Log-Buffer.html#Log-Buffer">Log Buffer</a>).
+    <li>If each file is registered and unlocked, lock it and make
+    it writable, so that you can begin to edit it.</li>
 
-</li><li> If each file is locked by you, but you have not changed it, release
-the lock and make the file read-only again.
+    <li>If each file is locked by you and contains changes, commit
+    the changes. To do this, Emacs pops up a <samp>*vc-log*</samp>
+    buffer; type the desired log entry for the new revision,
+    followed by <kbd>C-c C-c</kbd> to commit (see <a href=
+    "Log-Buffer.html#Log-Buffer">Log Buffer</a>).</li>
 
-</li><li> If each file is locked by another user, ask whether you want to
-steal the lock.  If you say yes, the file becomes locked by you,
-and a warning message is sent to the user who had formerly locked the
-file.
-</li></ul>
+    <li>If each file is locked by you, but you have not changed it,
+    release the lock and make the file read-only again.</li>
 
-<p>These rules also apply when you use CVS in locking mode, except
-that CVS does not support stealing locks.
-</p>
+    <li>If each file is locked by another user, ask whether you
+    want to steal the lock. If you say yes, the file becomes locked
+    by you, and a warning message is sent to the user who had
+    formerly locked the file.</li>
+  </ul>
 
-
-
+  <p>These rules also apply when you use CVS in locking mode,
+  except that CVS does not support stealing locks.</p>
 </body>
 </html>

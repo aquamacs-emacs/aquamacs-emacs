@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,108 +16,153 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Time of Evaluation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Time of Evaluation">
-<meta name="keywords" content="Common Lisp Extensions: Time of Evaluation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Program-Structure.html#Program-Structure" rel="up" title="Program Structure">
-<link href="Predicates.html#Predicates" rel="next" title="Predicates">
-<link href="Argument-Lists.html#Argument-Lists" rel="prev" title="Argument Lists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Time of Evaluation</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Time of Evaluation" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Time of Evaluation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Program-Structure.html#Program-Structure" rel="up"
+  title="Program Structure" />
+  <link href="Predicates.html#Predicates" rel="next" title=
+  "Predicates" />
+  <link href="Argument-Lists.html#Argument-Lists" rel="prev" title=
+  "Argument Lists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Time-of-Evaluation"></a>
-<div class="header">
-<p>
-Previous: <a href="Argument-Lists.html#Argument-Lists" accesskey="p" rel="prev">Argument Lists</a>, Up: <a href="Program-Structure.html#Program-Structure" accesskey="u" rel="up">Program Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Time-of-Evaluation-1"></a>
-<h3 class="section">2.2 Time of Evaluation</h3>
+<body lang="en" xml:lang="en">
+  <a name="Time-of-Evaluation" id="Time-of-Evaluation"></a>
 
-<p>Normally, the byte-compiler does not actually execute the forms in
-a file it compiles.  For example, if a file contains <code>(setq foo t)</code>,
-the act of compiling it will not actually set <code>foo</code> to <code>t</code>.
-This is true even if the <code>setq</code> was a top-level form (i.e., not
-enclosed in a <code>defun</code> or other form).  Sometimes, though, you
-would like to have certain top-level forms evaluated at compile-time.
-For example, the compiler effectively evaluates <code>defmacro</code> forms
-at compile-time so that later parts of the file can refer to the
-macros that are defined.
-</p>
-<dl>
-<dt><a name="index-cl_002deval_002dwhen"></a>Macro: <strong>cl-eval-when</strong> <em>(situations&hellip;) forms&hellip;</em></dt>
-<dd><p>This form controls when the body <var>forms</var> are evaluated.
-The <var>situations</var> list may contain any set of the symbols
-<code>compile</code>, <code>load</code>, and <code>eval</code> (or their long-winded
-ANSI equivalents, <code>:compile-toplevel</code>, <code>:load-toplevel</code>,
-and <code>:execute</code>).
-</p>
-<p>The <code>cl-eval-when</code> form is handled differently depending on
-whether or not it is being compiled as a top-level form.
-Specifically, it gets special treatment if it is being compiled
-by a command such as <code>byte-compile-file</code> which compiles files
-or buffers of code, and it appears either literally at the
-top level of the file or inside a top-level <code>progn</code>.
-</p>
-<p>For compiled top-level <code>cl-eval-when</code>s, the body <var>forms</var> are
-executed at compile-time if <code>compile</code> is in the <var>situations</var>
-list, and the <var>forms</var> are written out to the file (to be executed
-at load-time) if <code>load</code> is in the <var>situations</var> list.
-</p>
-<p>For non-compiled-top-level forms, only the <code>eval</code> situation is
-relevant.  (This includes forms executed by the interpreter, forms
-compiled with <code>byte-compile</code> rather than <code>byte-compile-file</code>,
-and non-top-level forms.)  The <code>cl-eval-when</code> acts like a
-<code>progn</code> if <code>eval</code> is specified, and like <code>nil</code>
-(ignoring the body <var>forms</var>) if not.
-</p>
-<p>The rules become more subtle when <code>cl-eval-when</code>s are nested;
-consult Steele (second edition) for the gruesome details (and
-some gruesome examples).
-</p>
-<p>Some simple examples:
-</p>
-<div class="example">
-<pre class="example">;; Top-level forms in foo.el:
+  <div class="header">
+    <p>Previous: <a href="Argument-Lists.html#Argument-Lists"
+    accesskey="p" rel="prev">Argument Lists</a>, Up: <a href=
+    "Program-Structure.html#Program-Structure" accesskey="u" rel=
+    "up">Program Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Time-of-Evaluation-1" id="Time-of-Evaluation-1"></a>
+
+  <h3 class="section">2.2 Time of Evaluation</h3>
+
+  <p>Normally, the byte-compiler does not actually execute the
+  forms in a file it compiles. For example, if a file contains
+  <code>(setq foo t)</code>, the act of compiling it will not
+  actually set <code>foo</code> to <code>t</code>. This is true
+  even if the <code>setq</code> was a top-level form (i.e., not
+  enclosed in a <code>defun</code> or other form). Sometimes,
+  though, you would like to have certain top-level forms evaluated
+  at compile-time. For example, the compiler effectively evaluates
+  <code>defmacro</code> forms at compile-time so that later parts
+  of the file can refer to the macros that are defined.</p>
+
+  <dl>
+    <dt><a name="index-cl_002deval_002dwhen" id=
+    "index-cl_002deval_002dwhen"></a>Macro:
+    <strong>cl-eval-when</strong> <em>(situations&hellip;)
+    forms&hellip;</em></dt>
+
+    <dd>
+      <p>This form controls when the body <var>forms</var> are
+      evaluated. The <var>situations</var> list may contain any set
+      of the symbols <code>compile</code>, <code>load</code>, and
+      <code>eval</code> (or their long-winded ANSI equivalents,
+      <code>:compile-toplevel</code>, <code>:load-toplevel</code>,
+      and <code>:execute</code>).</p>
+
+      <p>The <code>cl-eval-when</code> form is handled differently
+      depending on whether or not it is being compiled as a
+      top-level form. Specifically, it gets special treatment if it
+      is being compiled by a command such as
+      <code>byte-compile-file</code> which compiles files or
+      buffers of code, and it appears either literally at the top
+      level of the file or inside a top-level
+      <code>progn</code>.</p>
+
+      <p>For compiled top-level <code>cl-eval-when</code>s, the
+      body <var>forms</var> are executed at compile-time if
+      <code>compile</code> is in the <var>situations</var> list,
+      and the <var>forms</var> are written out to the file (to be
+      executed at load-time) if <code>load</code> is in the
+      <var>situations</var> list.</p>
+
+      <p>For non-compiled-top-level forms, only the
+      <code>eval</code> situation is relevant. (This includes forms
+      executed by the interpreter, forms compiled with
+      <code>byte-compile</code> rather than
+      <code>byte-compile-file</code>, and non-top-level forms.) The
+      <code>cl-eval-when</code> acts like a <code>progn</code> if
+      <code>eval</code> is specified, and like <code>nil</code>
+      (ignoring the body <var>forms</var>) if not.</p>
+
+      <p>The rules become more subtle when
+      <code>cl-eval-when</code>s are nested; consult Steele (second
+      edition) for the gruesome details (and some gruesome
+      examples).</p>
+
+      <p>Some simple examples:</p>
+
+      <div class="example">
+        <pre class="example">
+;; Top-level forms in foo.el:
 (cl-eval-when (compile)           (setq foo1 'bar))
 (cl-eval-when (load)              (setq foo2 'bar))
 (cl-eval-when (compile load)      (setq foo3 'bar))
@@ -123,109 +170,151 @@ some gruesome examples).
 (cl-eval-when (eval compile)      (setq foo5 'bar))
 (cl-eval-when (eval load)         (setq foo6 'bar))
 (cl-eval-when (eval compile load) (setq foo7 'bar))
-</pre></div>
+</pre>
+      </div>
 
-<p>When <samp>foo.el</samp> is compiled, these variables will be set during
-the compilation itself:
-</p>
-<div class="example">
-<pre class="example">foo1  foo3  foo5  foo7      ; 'compile'
-</pre></div>
+      <p>When <samp>foo.el</samp> is compiled, these variables will
+      be set during the compilation itself:</p>
 
-<p>When <samp>foo.elc</samp> is loaded, these variables will be set:
-</p>
-<div class="example">
-<pre class="example">foo2  foo3  foo6  foo7      ; 'load'
-</pre></div>
+      <div class="example">
+        <pre class="example">
+foo1  foo3  foo5  foo7      ; 'compile'
+</pre>
+      </div>
 
-<p>And if <samp>foo.el</samp> is loaded uncompiled, these variables will
-be set:
-</p>
-<div class="example">
-<pre class="example">foo4  foo5  foo6  foo7      ; 'eval'
-</pre></div>
+      <p>When <samp>foo.elc</samp> is loaded, these variables will
+      be set:</p>
 
-<p>If these seven <code>cl-eval-when</code>s had been, say, inside a <code>defun</code>,
-then the first three would have been equivalent to <code>nil</code> and the
-last four would have been equivalent to the corresponding <code>setq</code>s.
-</p>
-<p>Note that <code>(cl-eval-when (load eval) &hellip;)</code> is equivalent
-to <code>(progn &hellip;)</code> in all contexts.  The compiler treats
-certain top-level forms, like <code>defmacro</code> (sort-of) and
-<code>require</code>, as if they were wrapped in <code>(cl-eval-when
-(compile load eval) &hellip;)</code>.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+foo2  foo3  foo6  foo7      ; 'load'
+</pre>
+      </div>
 
-<p>Emacs includes two special forms related to <code>cl-eval-when</code>.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Eval-During-Compile.html#Eval-During-Compile">Eval During Compile</a> in <cite>GNU Emacs Lisp Reference Manual</cite>.
-One of these, <code>eval-when-compile</code>, is not quite equivalent to
-any <code>cl-eval-when</code> construct and is described below.
-</p>
-<p>The other form, <code>(eval-and-compile &hellip;)</code>, is exactly
-equivalent to &lsquo;<samp>(cl-eval-when (compile load eval) &hellip;)</samp>&rsquo;.
-</p>
-<dl>
-<dt><a name="index-eval_002dwhen_002dcompile"></a>Macro: <strong>eval-when-compile</strong> <em>forms&hellip;</em></dt>
-<dd><p>The <var>forms</var> are evaluated at compile-time; at execution time,
-this form acts like a quoted constant of the resulting value.  Used
-at top-level, <code>eval-when-compile</code> is just like &lsquo;<samp>eval-when
-(compile eval)</samp>&rsquo;.  In other contexts, <code>eval-when-compile</code>
-allows code to be evaluated once at compile-time for efficiency
-or other reasons.
-</p>
-<p>This form is similar to the &lsquo;<samp>#.</samp>&rsquo; syntax of true Common Lisp.
-</p></dd></dl>
+      <p>And if <samp>foo.el</samp> is loaded uncompiled, these
+      variables will be set:</p>
 
-<dl>
-<dt><a name="index-cl_002dload_002dtime_002dvalue"></a>Macro: <strong>cl-load-time-value</strong> <em>form</em></dt>
-<dd><p>The <var>form</var> is evaluated at load-time; at execution time,
-this form acts like a quoted constant of the resulting value.
-</p>
-<p>Early Common Lisp had a &lsquo;<samp>#,</samp>&rsquo; syntax that was similar to
-this, but ANSI Common Lisp replaced it with <code>load-time-value</code>
-and gave it more well-defined semantics.
-</p>
-<p>In a compiled file, <code>cl-load-time-value</code> arranges for <var>form</var>
-to be evaluated when the <samp>.elc</samp> file is loaded and then used
-as if it were a quoted constant.  In code compiled by
-<code>byte-compile</code> rather than <code>byte-compile-file</code>, the
-effect is identical to <code>eval-when-compile</code>.  In uncompiled
-code, both <code>eval-when-compile</code> and <code>cl-load-time-value</code>
-act exactly like <code>progn</code>.
-</p>
-<div class="example">
-<pre class="example">(defun report ()
-  (insert &quot;This function was executed on: &quot;
+      <div class="example">
+        <pre class="example">
+foo4  foo5  foo6  foo7      ; 'eval'
+</pre>
+      </div>
+
+      <p>If these seven <code>cl-eval-when</code>s had been, say,
+      inside a <code>defun</code>, then the first three would have
+      been equivalent to <code>nil</code> and the last four would
+      have been equivalent to the corresponding
+      <code>setq</code>s.</p>
+
+      <p>Note that <code>(cl-eval-when (load eval) &hellip;)</code>
+      is equivalent to <code>(progn &hellip;)</code> in all
+      contexts. The compiler treats certain top-level forms, like
+      <code>defmacro</code> (sort-of) and <code>require</code>, as
+      if they were wrapped in <code>(cl-eval-when (compile load
+      eval) &hellip;)</code>.</p>
+    </dd>
+  </dl>
+
+  <p>Emacs includes two special forms related to
+  <code>cl-eval-when</code>. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Eval-During-Compile.html#Eval-During-Compile">
+  Eval During Compile</a> in <cite>GNU Emacs Lisp Reference
+  Manual</cite>. One of these, <code>eval-when-compile</code>, is
+  not quite equivalent to any <code>cl-eval-when</code> construct
+  and is described below.</p>
+
+  <p>The other form, <code>(eval-and-compile &hellip;)</code>, is
+  exactly equivalent to &lsquo;<samp>(cl-eval-when (compile load
+  eval) &hellip;)</samp>&rsquo;.</p>
+
+  <dl>
+    <dt><a name="index-eval_002dwhen_002dcompile" id=
+    "index-eval_002dwhen_002dcompile"></a>Macro:
+    <strong>eval-when-compile</strong> <em>forms&hellip;</em></dt>
+
+    <dd>
+      <p>The <var>forms</var> are evaluated at compile-time; at
+      execution time, this form acts like a quoted constant of the
+      resulting value. Used at top-level,
+      <code>eval-when-compile</code> is just like
+      &lsquo;<samp>eval-when (compile eval)</samp>&rsquo;. In other
+      contexts, <code>eval-when-compile</code> allows code to be
+      evaluated once at compile-time for efficiency or other
+      reasons.</p>
+
+      <p>This form is similar to the &lsquo;<samp>#.</samp>&rsquo;
+      syntax of true Common Lisp.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dload_002dtime_002dvalue" id=
+    "index-cl_002dload_002dtime_002dvalue"></a>Macro:
+    <strong>cl-load-time-value</strong> <em>form</em></dt>
+
+    <dd>
+      <p>The <var>form</var> is evaluated at load-time; at
+      execution time, this form acts like a quoted constant of the
+      resulting value.</p>
+
+      <p>Early Common Lisp had a &lsquo;<samp>#,</samp>&rsquo;
+      syntax that was similar to this, but ANSI Common Lisp
+      replaced it with <code>load-time-value</code> and gave it
+      more well-defined semantics.</p>
+
+      <p>In a compiled file, <code>cl-load-time-value</code>
+      arranges for <var>form</var> to be evaluated when the
+      <samp>.elc</samp> file is loaded and then used as if it were
+      a quoted constant. In code compiled by
+      <code>byte-compile</code> rather than
+      <code>byte-compile-file</code>, the effect is identical to
+      <code>eval-when-compile</code>. In uncompiled code, both
+      <code>eval-when-compile</code> and
+      <code>cl-load-time-value</code> act exactly like
+      <code>progn</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(defun report ()
+  (insert "This function was executed on: "
           (current-time-string)
-          &quot;, compiled on: &quot;
+          ", compiled on: "
           (eval-when-compile (current-time-string))
           ;; or '#.(current-time-string) in real Common Lisp
-          &quot;, and loaded on: &quot;
+          ", and loaded on: "
           (cl-load-time-value (current-time-string))))
-</pre></div>
+</pre>
+      </div>
 
-<p>Byte-compiled, the above defun will result in the following code
-(or its compiled equivalent, of course) in the <samp>.elc</samp> file:
-</p>
-<div class="example">
-<pre class="example">(setq --temp-- (current-time-string))
+      <p>Byte-compiled, the above defun will result in the
+      following code (or its compiled equivalent, of course) in the
+      <samp>.elc</samp> file:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq --temp-- (current-time-string))
 (defun report ()
-  (insert &quot;This function was executed on: &quot;
+  (insert "This function was executed on: "
           (current-time-string)
-          &quot;, compiled on: &quot;
-          '&quot;Wed Oct 31 16:32:28 2012&quot;
-          &quot;, and loaded on: &quot;
+          ", compiled on: "
+          '"Wed Oct 31 16:32:28 2012"
+          ", and loaded on: "
           --temp--))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Argument-Lists.html#Argument-Lists" accesskey="p" rel="prev">Argument Lists</a>, Up: <a href="Program-Structure.html#Program-Structure" accesskey="u" rel="up">Program Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Previous: <a href="Argument-Lists.html#Argument-Lists"
+    accesskey="p" rel="prev">Argument Lists</a>, Up: <a href=
+    "Program-Structure.html#Program-Structure" accesskey="u" rel=
+    "up">Program Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

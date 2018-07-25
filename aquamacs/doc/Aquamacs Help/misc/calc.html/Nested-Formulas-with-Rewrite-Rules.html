@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,144 +18,200 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Nested Formulas with Rewrite Rules</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Nested Formulas with Rewrite Rules">
-<meta name="keywords" content="GNU Emacs Calc Manual: Nested Formulas with Rewrite Rules">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Rewrite-Rules.html#Rewrite-Rules" rel="up" title="Rewrite Rules">
-<link href="Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules" rel="next" title="Multi-Phase Rewrite Rules">
-<link href="Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules" rel="prev" title="Composing Patterns in Rewrite Rules">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Nested Formulas with Rewrite
+  Rules</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Nested Formulas with Rewrite Rules" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Nested Formulas with Rewrite Rules" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Rewrite-Rules.html#Rewrite-Rules" rel="up" title=
+  "Rewrite Rules" />
+  <link href=
+  "Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules"
+  rel="next" title="Multi-Phase Rewrite Rules" />
+  <link href=
+  "Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules"
+  rel="prev" title="Composing Patterns in Rewrite Rules" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Nested-Formulas-with-Rewrite-Rules"></a>
-<div class="header">
-<p>
-Next: <a href="Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules" accesskey="n" rel="next">Multi-Phase Rewrite Rules</a>, Previous: <a href="Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules" accesskey="p" rel="prev">Composing Patterns in Rewrite Rules</a>, Up: <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel="up">Rewrite Rules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Nested-Formulas-with-Rewrite-Rules-1"></a>
-<h4 class="subsection">10.11.7 Nested Formulas with Rewrite Rules</h4>
+<body lang="en" xml:lang="en">
+  <a name="Nested-Formulas-with-Rewrite-Rules" id=
+  "Nested-Formulas-with-Rewrite-Rules"></a>
 
-<p>When <kbd>a r</kbd> (<code>calc-rewrite</code>) is used, it takes an expression from
-the top of the stack and attempts to match any of the specified rules
-to any part of the expression, starting with the whole expression
-and then, if that fails, trying deeper and deeper sub-expressions.
-For each part of the expression, the rules are tried in the order
-they appear in the rules vector.  The first rule to match the first
-sub-expression wins; it replaces the matched sub-expression according
-to the <var>new</var> part of the rule.
-</p>
-<p>Often, the rule set will match and change the formula several times.
-The top-level formula is first matched and substituted repeatedly until
-it no longer matches the pattern; then, sub-formulas are tried, and
-so on.  Once every part of the formula has gotten its chance, the
-rewrite mechanism starts over again with the top-level formula
-(in case a substitution of one of its arguments has caused it again
-to match).  This continues until no further matches can be made
-anywhere in the formula.
-</p>
-<p>It is possible for a rule set to get into an infinite loop.  The
-most obvious case, replacing a formula with itself, is not a problem
-because a rule is not considered to &ldquo;succeed&rdquo; unless the righthand
-side actually comes out to something different than the original
-formula or sub-formula that was matched.  But if you accidentally
-had both &lsquo;<samp>ln(a b) := ln(a) + ln(b)</samp>&rsquo; and the reverse
-&lsquo;<samp>ln(a) + ln(b) := ln(a b)</samp>&rsquo; in your rule set, Calc would
-run forever switching a formula back and forth between the two
-forms.
-</p>
-<p>To avoid disaster, Calc normally stops after 100 changes have been
-made to the formula.  This will be enough for most multiple rewrites,
-but it will keep an endless loop of rewrites from locking up the
-computer forever.  (On most systems, you can also type <kbd>C-g</kbd> to
-halt any Emacs command prematurely.)
-</p>
-<p>To change this limit, give a positive numeric prefix argument.
-In particular, <kbd>M-1 a r</kbd> applies only one rewrite at a time,
-useful when you are first testing your rule (or just if repeated
-rewriting is not what is called for by your application).
-</p>
-<a name="index-iterations"></a>
-<p>You can also put a &ldquo;function call&rdquo; &lsquo;<samp>iterations(<var>n</var>)</samp>&rsquo;
-in place of a rule anywhere in your rules vector (but usually at
-the top).  Then, <var>n</var> will be used instead of 100 as the default
-number of iterations for this rule set.  You can use
-&lsquo;<samp>iterations(inf)</samp>&rsquo; if you want no iteration limit by default.
-A prefix argument will override the <code>iterations</code> limit in the
-rule set.
-</p>
-<div class="example">
-<pre class="example">[ iterations(1),
+  <div class="header">
+    <p>Next: <a href=
+    "Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules"
+    accesskey="n" rel="next">Multi-Phase Rewrite Rules</a>,
+    Previous: <a href=
+    "Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules"
+    accesskey="p" rel="prev">Composing Patterns in Rewrite
+    Rules</a>, Up: <a href="Rewrite-Rules.html#Rewrite-Rules"
+    accesskey="u" rel="up">Rewrite Rules</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Nested-Formulas-with-Rewrite-Rules-1" id=
+  "Nested-Formulas-with-Rewrite-Rules-1"></a>
+
+  <h4 class="subsection">10.11.7 Nested Formulas with Rewrite
+  Rules</h4>
+
+  <p>When <kbd>a r</kbd> (<code>calc-rewrite</code>) is used, it
+  takes an expression from the top of the stack and attempts to
+  match any of the specified rules to any part of the expression,
+  starting with the whole expression and then, if that fails,
+  trying deeper and deeper sub-expressions. For each part of the
+  expression, the rules are tried in the order they appear in the
+  rules vector. The first rule to match the first sub-expression
+  wins; it replaces the matched sub-expression according to the
+  <var>new</var> part of the rule.</p>
+
+  <p>Often, the rule set will match and change the formula several
+  times. The top-level formula is first matched and substituted
+  repeatedly until it no longer matches the pattern; then,
+  sub-formulas are tried, and so on. Once every part of the formula
+  has gotten its chance, the rewrite mechanism starts over again
+  with the top-level formula (in case a substitution of one of its
+  arguments has caused it again to match). This continues until no
+  further matches can be made anywhere in the formula.</p>
+
+  <p>It is possible for a rule set to get into an infinite loop.
+  The most obvious case, replacing a formula with itself, is not a
+  problem because a rule is not considered to &ldquo;succeed&rdquo;
+  unless the righthand side actually comes out to something
+  different than the original formula or sub-formula that was
+  matched. But if you accidentally had both &lsquo;<samp>ln(a b) :=
+  ln(a) + ln(b)</samp>&rsquo; and the reverse &lsquo;<samp>ln(a) +
+  ln(b) := ln(a b)</samp>&rsquo; in your rule set, Calc would run
+  forever switching a formula back and forth between the two
+  forms.</p>
+
+  <p>To avoid disaster, Calc normally stops after 100 changes have
+  been made to the formula. This will be enough for most multiple
+  rewrites, but it will keep an endless loop of rewrites from
+  locking up the computer forever. (On most systems, you can also
+  type <kbd>C-g</kbd> to halt any Emacs command prematurely.)</p>
+
+  <p>To change this limit, give a positive numeric prefix argument.
+  In particular, <kbd>M-1 a r</kbd> applies only one rewrite at a
+  time, useful when you are first testing your rule (or just if
+  repeated rewriting is not what is called for by your
+  application).</p><a name="index-iterations" id=
+  "index-iterations"></a>
+
+  <p>You can also put a &ldquo;function call&rdquo;
+  &lsquo;<samp>iterations(<var>n</var>)</samp>&rsquo; in place of a
+  rule anywhere in your rules vector (but usually at the top).
+  Then, <var>n</var> will be used instead of 100 as the default
+  number of iterations for this rule set. You can use
+  &lsquo;<samp>iterations(inf)</samp>&rsquo; if you want no
+  iteration limit by default. A prefix argument will override the
+  <code>iterations</code> limit in the rule set.</p>
+
+  <div class="example">
+    <pre class="example">
+[ iterations(1),
   f(x) := f(x+1) ]
-</pre></div>
+</pre>
+  </div>
 
-<p>More precisely, the limit controls the number of &ldquo;iterations,&rdquo;
-where each iteration is a successful matching of a rule pattern whose
-righthand side, after substituting meta-variables and applying the
-default simplifications, is different from the original sub-formula
-that was matched.
-</p>
-<p>A prefix argument of zero sets the limit to infinity.  Use with caution!
-</p>
-<p>Given a negative numeric prefix argument, <kbd>a r</kbd> will match and
-substitute the top-level expression up to that many times, but
-will not attempt to match the rules to any sub-expressions.
-</p>
-<p>In a formula, <code>rewrite(<var>expr</var>, <var>rules</var>, <var>n</var>)</code>
-does a rewriting operation.  Here <var>expr</var> is the expression
-being rewritten, <var>rules</var> is the rule, vector of rules, or
-variable containing the rules, and <var>n</var> is the optional
-iteration limit, which may be a positive integer, a negative
-integer, or &lsquo;<samp>inf</samp>&rsquo; or &lsquo;<samp>-inf</samp>&rsquo;.  If <var>n</var> is omitted
-the <code>iterations</code> value from the rule set is used; if both
-are omitted, 100 is used.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules" accesskey="n" rel="next">Multi-Phase Rewrite Rules</a>, Previous: <a href="Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules" accesskey="p" rel="prev">Composing Patterns in Rewrite Rules</a>, Up: <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel="up">Rewrite Rules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>More precisely, the limit controls the number of
+  &ldquo;iterations,&rdquo; where each iteration is a successful
+  matching of a rule pattern whose righthand side, after
+  substituting meta-variables and applying the default
+  simplifications, is different from the original sub-formula that
+  was matched.</p>
 
+  <p>A prefix argument of zero sets the limit to infinity. Use with
+  caution!</p>
 
+  <p>Given a negative numeric prefix argument, <kbd>a r</kbd> will
+  match and substitute the top-level expression up to that many
+  times, but will not attempt to match the rules to any
+  sub-expressions.</p>
 
+  <p>In a formula, <code>rewrite(<var>expr</var>, <var>rules</var>,
+  <var>n</var>)</code> does a rewriting operation. Here
+  <var>expr</var> is the expression being rewritten,
+  <var>rules</var> is the rule, vector of rules, or variable
+  containing the rules, and <var>n</var> is the optional iteration
+  limit, which may be a positive integer, a negative integer, or
+  &lsquo;<samp>inf</samp>&rsquo; or
+  &lsquo;<samp>-inf</samp>&rsquo;. If <var>n</var> is omitted the
+  <code>iterations</code> value from the rule set is used; if both
+  are omitted, 100 is used.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules"
+    accesskey="n" rel="next">Multi-Phase Rewrite Rules</a>,
+    Previous: <a href=
+    "Composing-Patterns-in-Rewrite-Rules.html#Composing-Patterns-in-Rewrite-Rules"
+    accesskey="p" rel="prev">Composing Patterns in Rewrite
+    Rules</a>, Up: <a href="Rewrite-Rules.html#Rewrite-Rules"
+    accesskey="u" rel="up">Rewrite Rules</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Score File Editing - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Scoring.html#Scoring" title="Scoring">
-<link rel="prev" href="Score-File-Format.html#Score-File-Format" title="Score File Format">
-<link rel="next" href="Adaptive-Scoring.html#Adaptive-Scoring" title="Adaptive Scoring">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Score File Editing - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Scoring.html#Scoring" title="Scoring" />
+  <link rel="prev" href="Score-File-Format.html#Score-File-Format"
+  title="Score File Format" />
+  <link rel="next" href="Adaptive-Scoring.html#Adaptive-Scoring"
+  title="Adaptive Scoring" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,48 +47,73 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Score-File-Editing"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Adaptive-Scoring.html#Adaptive-Scoring">Adaptive Scoring</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Score-File-Format.html#Score-File-Format">Score File Format</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Scoring.html#Scoring">Scoring</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Score-File-Editing" id="Score-File-Editing"></a>
 
-<h3 class="section">7.5 Score File Editing</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Adaptive-Scoring.html#Adaptive-Scoring">Adaptive Scoring</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Score-File-Format.html#Score-File-Format">Score File
+    Format</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Scoring.html#Scoring">Scoring</a></p>
+    <hr />
+  </div>
 
-<p>You normally enter all scoring commands from the summary buffer, but you
-might feel the urge to edit them by hand as well, so we've supplied you
-with a mode for that.
+  <h3 class="section">7.5 Score File Editing</h3>
 
-   <p>It's simply a slightly customized <code>emacs-lisp</code> mode, with these
-additional commands:
+  <p>You normally enter all scoring commands from the summary
+  buffer, but you might feel the urge to edit them by hand as well,
+  so we've supplied you with a mode for that.</p>
 
-     <dl>
-<dt><kbd>C-c C-c</kbd><dd><a name="index-C_002dc-C_002dc-_0028Score_0029-2481"></a><a name="index-gnus_002dscore_002dedit_002dexit-2482"></a>Save the changes you have made and return to the summary buffer
-(<code>gnus-score-edit-exit</code>).
+  <p>It's simply a slightly customized <code>emacs-lisp</code>
+  mode, with these additional commands:</p>
 
-     <br><dt><kbd>C-c C-d</kbd><dd><a name="index-C_002dc-C_002dd-_0028Score_0029-2483"></a><a name="index-gnus_002dscore_002dedit_002dinsert_002ddate-2484"></a>Insert the current date in numerical format
-(<code>gnus-score-edit-insert-date</code>).  This is really the day number, if
-you were wondering.
+  <dl>
+    <dt><kbd>C-c C-c</kbd></dt>
 
-     <br><dt><kbd>C-c C-p</kbd><dd><a name="index-C_002dc-C_002dp-_0028Score_0029-2485"></a><a name="index-gnus_002dscore_002dpretty_002dprint-2486"></a>The adaptive score files are saved in an unformatted fashion.  If you
-intend to read one of these files, you want to <dfn>pretty print</dfn> it
-first.  This command (<code>gnus-score-pretty-print</code>) does that for
-you.
+    <dd><a name="index-C_002dc-C_002dc-_0028Score_0029-2481" id=
+    "index-C_002dc-C_002dc-_0028Score_0029-2481"></a><a name=
+    "index-gnus_002dscore_002dedit_002dexit-2482" id=
+    "index-gnus_002dscore_002dedit_002dexit-2482"></a>Save the
+    changes you have made and return to the summary buffer
+    (<code>gnus-score-edit-exit</code>).<br /></dd>
 
-   </dl>
+    <dt><kbd>C-c C-d</kbd></dt>
 
-   <p>Type <kbd>M-x gnus-score-mode</kbd> to use this mode.
+    <dd><a name="index-C_002dc-C_002dd-_0028Score_0029-2483" id=
+    "index-C_002dc-C_002dd-_0028Score_0029-2483"></a><a name=
+    "index-gnus_002dscore_002dedit_002dinsert_002ddate-2484" id=
+    "index-gnus_002dscore_002dedit_002dinsert_002ddate-2484"></a>Insert
+    the current date in numerical format
+    (<code>gnus-score-edit-insert-date</code>). This is really the
+    day number, if you were wondering.<br /></dd>
 
-   <p><a name="index-gnus_002dscore_002dmode_002dhook-2487"></a><code>gnus-score-menu-hook</code> is run in score mode buffers.
+    <dt><kbd>C-c C-p</kbd></dt>
 
-   <p>In the summary buffer you can use commands like <kbd>V f</kbd>, <kbd>V e</kbd> and
-<kbd>V t</kbd> to begin editing score files.
+    <dd><a name="index-C_002dc-C_002dp-_0028Score_0029-2485" id=
+    "index-C_002dc-C_002dp-_0028Score_0029-2485"></a><a name=
+    "index-gnus_002dscore_002dpretty_002dprint-2486" id=
+    "index-gnus_002dscore_002dpretty_002dprint-2486"></a>The
+    adaptive score files are saved in an unformatted fashion. If
+    you intend to read one of these files, you want to <dfn>pretty
+    print</dfn> it first. This command
+    (<code>gnus-score-pretty-print</code>) does that for you.</dd>
+  </dl>
 
-   </body></html>
+  <p>Type <kbd>M-x gnus-score-mode</kbd> to use this mode.</p>
 
+  <p><a name="index-gnus_002dscore_002dmode_002dhook-2487" id=
+  "index-gnus_002dscore_002dmode_002dhook-2487"></a><code>gnus-score-menu-hook</code>
+  is run in score mode buffers.</p>
+
+  <p>In the summary buffer you can use commands like <kbd>V
+  f</kbd>, <kbd>V e</kbd> and <kbd>V t</kbd> to begin editing score
+  files.</p>
+</body>
+</html>

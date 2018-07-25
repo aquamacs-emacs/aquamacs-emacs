@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,95 +20,135 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Compiling Programs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Compiling Programs">
-<meta name="keywords" content="IDLWAVE User Manual: Compiling Programs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" rel="up" title="Debugging IDL Programs">
-<link href="Walking-the-Calling-Stack.html#Walking-the-Calling-Stack" rel="next" title="Walking the Calling Stack">
-<link href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping" rel="prev" title="Breakpoints and Stepping">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Compiling Programs</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Compiling Programs" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Compiling Programs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugging-IDL-Programs.html#Debugging-IDL-Programs"
+  rel="up" title="Debugging IDL Programs" />
+  <link href=
+  "Walking-the-Calling-Stack.html#Walking-the-Calling-Stack" rel=
+  "next" title="Walking the Calling Stack" />
+  <link href=
+  "Breakpoints-and-Stepping.html#Breakpoints-and-Stepping" rel=
+  "prev" title="Breakpoints and Stepping" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Compiling-Programs"></a>
-<div class="header">
-<p>
-Next: <a href="Walking-the-Calling-Stack.html#Walking-the-Calling-Stack" accesskey="n" rel="next">Walking the Calling Stack</a>, Previous: <a href="Breakpoints-and-Stepping.html#Breakpoints-and-Stepping" accesskey="p" rel="prev">Breakpoints and Stepping</a>, Up: <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" accesskey="u" rel="up">Debugging IDL Programs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Compiling-Programs-1"></a>
-<h4 class="subsection">5.4.4 Compiling Programs</h4>
-<a name="index-Compiling-programs"></a>
-<a name="index-Programs_002c-compiling"></a>
-<a name="index-Default-command-line_002c-executing"></a>
-<a name="index-Executing-a-default-command-line"></a>
+<body lang="en" xml:lang="en">
+  <a name="Compiling-Programs" id="Compiling-Programs"></a>
 
-<a name="index-C_002dc-C_002dd-C_002dc"></a>
-<p>In order to compile the current buffer under the IDLWAVE shell, press
-<kbd>C-c C-d C-c</kbd> (<code>idlwave-save-and-run</code>).  This first saves the
-current buffer and then sends the command &lsquo;<samp>.run path/to/file</samp>&rsquo; to the
-shell.  You can also execute <kbd>C-c C-d C-c</kbd> from the shell buffer, in
-which case the most recently compiled buffer will be saved and
-re-compiled.
-</p>
-<p>When developing or debugging a program, it is often necessary to execute
-the same command line many times.  A convenient way to do this is
-<kbd>C-c C-d C-y</kbd> (<code>idlwave-shell-execute-default-command-line</code>).
-This command first resets IDL from a state of interrupted execution by
-closing all files and returning to the main interpreter level.  Then a
-default command line is send to the shell.  To edit the default command
-line, call <code>idlwave-shell-execute-default-command-line</code> with a
-prefix argument: <kbd>C-u C-c C-d C-y</kbd>.  If no default command line has
-been set (or you give two prefix arguments), the last command on the
-<code>comint</code> input history is sent.
-</p>
-<a name="index-C_002dc-C_002dd-C_002de"></a>
-<a name="index-Compiling-regions"></a>
-<p>For quickly compiling and running the currently marked region as a main
-level program <kbd>C-c C-d C-e</kbd> (<code>idlwave-shell-run-region</code>) is
-very useful.  A temporary file is created holding the contents of the
-current region (with <code>END</code> appended), and run from the shell.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Walking-the-Calling-Stack.html#Walking-the-Calling-Stack"
+    accesskey="n" rel="next">Walking the Calling Stack</a>,
+    Previous: <a href=
+    "Breakpoints-and-Stepping.html#Breakpoints-and-Stepping"
+    accesskey="p" rel="prev">Breakpoints and Stepping</a>, Up:
+    <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs"
+    accesskey="u" rel="up">Debugging IDL Programs</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Compiling-Programs-1" id="Compiling-Programs-1"></a>
 
+  <h4 class="subsection">5.4.4 Compiling Programs</h4><a name=
+  "index-Compiling-programs" id="index-Compiling-programs"></a>
+  <a name="index-Programs_002c-compiling" id=
+  "index-Programs_002c-compiling"></a> <a name=
+  "index-Default-command-line_002c-executing" id=
+  "index-Default-command-line_002c-executing"></a> <a name=
+  "index-Executing-a-default-command-line" id=
+  "index-Executing-a-default-command-line"></a> <a name=
+  "index-C_002dc-C_002dd-C_002dc" id=
+  "index-C_002dc-C_002dd-C_002dc"></a>
 
+  <p>In order to compile the current buffer under the IDLWAVE
+  shell, press <kbd>C-c C-d C-c</kbd>
+  (<code>idlwave-save-and-run</code>). This first saves the current
+  buffer and then sends the command &lsquo;<samp>.run
+  path/to/file</samp>&rsquo; to the shell. You can also execute
+  <kbd>C-c C-d C-c</kbd> from the shell buffer, in which case the
+  most recently compiled buffer will be saved and re-compiled.</p>
 
+  <p>When developing or debugging a program, it is often necessary
+  to execute the same command line many times. A convenient way to
+  do this is <kbd>C-c C-d C-y</kbd>
+  (<code>idlwave-shell-execute-default-command-line</code>). This
+  command first resets IDL from a state of interrupted execution by
+  closing all files and returning to the main interpreter level.
+  Then a default command line is send to the shell. To edit the
+  default command line, call
+  <code>idlwave-shell-execute-default-command-line</code> with a
+  prefix argument: <kbd>C-u C-c C-d C-y</kbd>. If no default
+  command line has been set (or you give two prefix arguments), the
+  last command on the <code>comint</code> input history is
+  sent.</p><a name="index-C_002dc-C_002dd-C_002de" id=
+  "index-C_002dc-C_002dd-C_002de"></a> <a name=
+  "index-Compiling-regions" id="index-Compiling-regions"></a>
+
+  <p>For quickly compiling and running the currently marked region
+  as a main level program <kbd>C-c C-d C-e</kbd>
+  (<code>idlwave-shell-run-region</code>) is very useful. A
+  temporary file is created holding the contents of the current
+  region (with <code>END</code> appended), and run from the
+  shell.</p>
 </body>
 </html>

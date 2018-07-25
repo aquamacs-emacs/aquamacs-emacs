@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,288 +16,456 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Brace/Paren Line-Up</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Brace/Paren Line-Up">
-<meta name="keywords" content="CC Mode Manual: Brace/Paren Line-Up">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Line_002dUp-Functions.html#Line_002dUp-Functions" rel="up" title="Line-Up Functions">
-<link href="List-Line_002dUp.html#List-Line_002dUp" rel="next" title="List Line-Up">
-<link href="Line_002dUp-Functions.html#Line_002dUp-Functions" rel="prev" title="Line-Up Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Brace/Paren Line-Up</title>
+  <meta name="description" content=
+  "CC Mode Manual: Brace/Paren Line-Up" />
+  <meta name="keywords" content=
+  "CC Mode Manual: Brace/Paren Line-Up" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Line_002dUp-Functions.html#Line_002dUp-Functions"
+  rel="up" title="Line-Up Functions" />
+  <link href="List-Line_002dUp.html#List-Line_002dUp" rel="next"
+  title="List Line-Up" />
+  <link href="Line_002dUp-Functions.html#Line_002dUp-Functions"
+  rel="prev" title="Line-Up Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Brace_002fParen-Line_002dUp"></a>
-<div class="header">
-<p>
-Next: <a href="List-Line_002dUp.html#List-Line_002dUp" accesskey="n" rel="next">List Line-Up</a>, Previous: <a href="Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey="p" rel="prev">Line-Up Functions</a>, Up: <a href="Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey="u" rel="up">Line-Up Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Brace-and-Parenthesis-Line_002dUp-Functions"></a>
-<h4 class="subsection">11.3.1 Brace and Parenthesis Line-Up Functions</h4>
+<body lang="en" xml:lang="en">
+  <a name="Brace_002fParen-Line_002dUp" id=
+  "Brace_002fParen-Line_002dUp"></a>
 
-<p>The line-up functions here calculate the indentation for braces,
-parentheses and statements within brace blocks.
-</p>
-<dl>
-<dt><a name="index-c_002dlineup_002dclose_002dparen"></a>Function: <strong>c-lineup-close-paren</strong></dt>
-<dd><a name="index-lineup_002dclose_002dparen-_0028c_002d_0029"></a>
-<p>Line up the closing paren under its corresponding open paren if the
-open paren is followed by code.  If the open paren ends its line, no
-indentation is added.  E.g.:
-</p>
-<div class="example">
-<pre class="example">main (int,
+  <div class="header">
+    <p>Next: <a href="List-Line_002dUp.html#List-Line_002dUp"
+    accesskey="n" rel="next">List Line-Up</a>, Previous: <a href=
+    "Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey=
+    "p" rel="prev">Line-Up Functions</a>, Up: <a href=
+    "Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey=
+    "u" rel="up">Line-Up Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Brace-and-Parenthesis-Line_002dUp-Functions" id=
+  "Brace-and-Parenthesis-Line_002dUp-Functions"></a>
+
+  <h4 class="subsection">11.3.1 Brace and Parenthesis Line-Up
+  Functions</h4>
+
+  <p>The line-up functions here calculate the indentation for
+  braces, parentheses and statements within brace blocks.</p>
+
+  <dl>
+    <dt><a name="index-c_002dlineup_002dclose_002dparen" id=
+    "index-c_002dlineup_002dclose_002dparen"></a>Function:
+    <strong>c-lineup-close-paren</strong></dt>
+
+    <dd>
+      <a name="index-lineup_002dclose_002dparen-_0028c_002d_0029"
+      id="index-lineup_002dclose_002dparen-_0028c_002d_0029"></a>
+
+      <p>Line up the closing paren under its corresponding open
+      paren if the open paren is followed by code. If the open
+      paren ends its line, no indentation is added. E.g.:</p>
+
+      <div class="example">
+        <pre class="example">
+main (int,
       char **
-     )                &lt;- <i>c-lineup-close-paren</i></pre></div>
+     )                &lt;- <i>c-lineup-close-paren</i>
+</pre>
+      </div>
 
-<p>and
-</p>
-<div class="example">
-<pre class="example">main (
+      <p>and</p>
+
+      <div class="example">
+        <pre class="example">
+main (
     int, char **
-)                     &lt;- <i>c-lineup-close-paren</i></pre></div>
+)                     &lt;- <i>c-lineup-close-paren</i>
+</pre>
+      </div>
 
-<p>As a special case, if a brace block is opened at the same line as the
-open parenthesis of the argument list, the indentation is
-<code>c-basic-offset</code> instead of the open paren column.  See
-<code>c-lineup-arglist</code> for further discussion of this &ldquo;DWIM&rdquo; measure.
-</p>
-<p><em>Works with:&nbsp;</em> All <code>*-close</code> symbols.
-</p></dd></dl>
+      <p>As a special case, if a brace block is opened at the same
+      line as the open parenthesis of the argument list, the
+      indentation is <code>c-basic-offset</code> instead of the
+      open paren column. See <code>c-lineup-arglist</code> for
+      further discussion of this &ldquo;DWIM&rdquo; measure.</p>
 
+      <p><em>Works with:&nbsp;</em> All <code>*-close</code>
+      symbols.</p>
+    </dd>
+  </dl><a name=
+  "c_002dlineup_002darglist_002dclose_002dunder_002dparen" id=
+  "c_002dlineup_002darglist_002dclose_002dunder_002dparen"></a>
 
-<a name="c_002dlineup_002darglist_002dclose_002dunder_002dparen"></a><dl>
-<dt><a name="index-c_002dlineup_002darglist_002dclose_002dunder_002dparen"></a>Function: <strong>c-lineup-arglist-close-under-paren</strong></dt>
-<dd><a name="index-lineup_002darglist_002dclose_002dunder_002dparen-_0028c_002d_0029"></a>
-<p>Set your <code>arglist-close</code> syntactic symbol to this line-up function
-so that parentheses that close argument lists will line up under the
-parenthesis that opened the argument list.  It can also be used with
-<code>arglist-cont</code> and <code>arglist-cont-nonempty</code> to line up all
-lines inside a parenthesis under the open paren.
-</p>
-<p>As a special case, if a brace block is opened at the same line as the
-open parenthesis of the argument list, the indentation is
-<code>c-basic-offset</code> only.  See <code>c-lineup-arglist</code> for further
-discussion of this &ldquo;DWIM&rdquo; measure.
-</p>
-<p><em>Works with:&nbsp;</em> Almost all symbols, but are typically most useful on
-<code>arglist-close</code>, <code>brace-list-close</code>, <code>arglist-cont</code> and
-<code>arglist-cont-nonempty</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-c_002dlineup_002darglist_002dclose_002dunder_002dparen"
+    id=
+    "index-c_002dlineup_002darglist_002dclose_002dunder_002dparen"></a>Function:
+    <strong>c-lineup-arglist-close-under-paren</strong></dt>
 
+    <dd>
+      <a name=
+      "index-lineup_002darglist_002dclose_002dunder_002dparen-_0028c_002d_0029"
+      id=
+      "index-lineup_002darglist_002dclose_002dunder_002dparen-_0028c_002d_0029">
+      </a>
 
-<dl>
-<dt><a name="index-c_002dindent_002done_002dline_002dblock"></a>Function: <strong>c-indent-one-line-block</strong></dt>
-<dd><a name="index-indent_002done_002dline_002dblock-_0028c_002d_0029"></a>
-<p>Indent a one line block <code>c-basic-offset</code> extra.  E.g.:
-</p>
-<div class="example">
-<pre class="example">if (n &gt; 0)
-    {m+=n; n=0;}      &lt;- <i>c-indent-one-line-block</i>&lt;--&gt; <i>c-basic-offset</i></pre></div>
+      <p>Set your <code>arglist-close</code> syntactic symbol to
+      this line-up function so that parentheses that close argument
+      lists will line up under the parenthesis that opened the
+      argument list. It can also be used with
+      <code>arglist-cont</code> and
+      <code>arglist-cont-nonempty</code> to line up all lines
+      inside a parenthesis under the open paren.</p>
 
-<p>and
-</p>
-<div class="example">
-<pre class="example">if (n &gt; 0)
+      <p>As a special case, if a brace block is opened at the same
+      line as the open parenthesis of the argument list, the
+      indentation is <code>c-basic-offset</code> only. See
+      <code>c-lineup-arglist</code> for further discussion of this
+      &ldquo;DWIM&rdquo; measure.</p>
+
+      <p><em>Works with:&nbsp;</em> Almost all symbols, but are
+      typically most useful on <code>arglist-close</code>,
+      <code>brace-list-close</code>, <code>arglist-cont</code> and
+      <code>arglist-cont-nonempty</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-c_002dindent_002done_002dline_002dblock" id=
+    "index-c_002dindent_002done_002dline_002dblock"></a>Function:
+    <strong>c-indent-one-line-block</strong></dt>
+
+    <dd>
+      <a name=
+      "index-indent_002done_002dline_002dblock-_0028c_002d_0029"
+      id="index-indent_002done_002dline_002dblock-_0028c_002d_0029">
+      </a>
+
+      <p>Indent a one line block <code>c-basic-offset</code> extra.
+      E.g.:</p>
+
+      <div class="example">
+        <pre class="example">
+if (n &gt; 0)
+    {m+=n; n=0;}      &lt;- <i>c-indent-one-line-block</i>&lt;--&gt; <i>c-basic-offset</i>
+</pre>
+      </div>
+
+      <p>and</p>
+
+      <div class="example">
+        <pre class="example">
+if (n &gt; 0)
 {                     &lt;- <i>c-indent-one-line-block</i>    m+=n; n=0;
 }
-</pre></div>
+</pre>
+      </div>
 
-<p>The block may be surrounded by any kind of parenthesis characters.
-<code>nil</code> is returned if the line doesn&rsquo;t start with a one line block,
-which makes the function usable in list expressions.
-</p>
-<p><em>Works with:&nbsp;</em> Almost all syntactic symbols, but most useful on the
-<code>-open</code> symbols.
-</p></dd></dl>
+      <p>The block may be surrounded by any kind of parenthesis
+      characters. <code>nil</code> is returned if the line
+      doesn&rsquo;t start with a one line block, which makes the
+      function usable in list expressions.</p>
 
+      <p><em>Works with:&nbsp;</em> Almost all syntactic symbols,
+      but most useful on the <code>-open</code> symbols.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-c_002dindent_002dmulti_002dline_002dblock"></a>Function: <strong>c-indent-multi-line-block</strong></dt>
-<dd><a name="index-indent_002dmulti_002dline_002dblock-_0028c_002d_0029"></a>
-<p>Indent a multiline block <code>c-basic-offset</code> extra.  E.g.:
-</p>
-<div class="example">
-<pre class="example">int *foo[] = {
+  <dl>
+    <dt><a name="index-c_002dindent_002dmulti_002dline_002dblock"
+    id=
+    "index-c_002dindent_002dmulti_002dline_002dblock"></a>Function:
+    <strong>c-indent-multi-line-block</strong></dt>
+
+    <dd>
+      <a name=
+      "index-indent_002dmulti_002dline_002dblock-_0028c_002d_0029"
+      id=
+      "index-indent_002dmulti_002dline_002dblock-_0028c_002d_0029"></a>
+
+      <p>Indent a multiline block <code>c-basic-offset</code>
+      extra. E.g.:</p>
+
+      <div class="example">
+        <pre class="example">
+int *foo[] = {
     NULL,
-    {17},             &lt;- <i>c-indent-multi-line-block</i></pre></div>
+    {17},             &lt;- <i>c-indent-multi-line-block</i>
+</pre>
+      </div>
 
-<p>and
-</p>
-<div class="example">
-<pre class="example">int *foo[] = {
+      <p>and</p>
+
+      <div class="example">
+        <pre class="example">
+int *foo[] = {
     NULL,
         {             &lt;- <i>c-indent-multi-line-block</i>        17
         },
-    &lt;--&gt; <i>c-basic-offset</i></pre></div>
+    &lt;--&gt; <i>c-basic-offset</i>
+</pre>
+      </div>
 
-<p>The block may be surrounded by any kind of parenthesis characters.
-<code>nil</code> is returned if the line doesn&rsquo;t start with a multiline
-block, which makes the function usable in list expressions.
-</p>
-<p><em>Works with:&nbsp;</em> Almost all syntactic symbols, but most useful on the
-<code>-open</code> symbols.
-</p></dd></dl>
+      <p>The block may be surrounded by any kind of parenthesis
+      characters. <code>nil</code> is returned if the line
+      doesn&rsquo;t start with a multiline block, which makes the
+      function usable in list expressions.</p>
 
+      <p><em>Works with:&nbsp;</em> Almost all syntactic symbols,
+      but most useful on the <code>-open</code> symbols.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-c_002dlineup_002drunin_002dstatements"></a>Function: <strong>c-lineup-runin-statements</strong></dt>
-<dd><a name="index-lineup_002drunin_002dstatements-_0028c_002d_0029"></a>
-<p>Line up statements for coding standards which place the first statement
-in a block on the same line as the block opening brace<a name="DOCF45" href="#FOOT45"><sup>45</sup></a>.  E.g.:
-</p>
-<div class="example">
-<pre class="example">int main()
-{ puts (&quot;Hello!&quot;);
+  <dl>
+    <dt><a name="index-c_002dlineup_002drunin_002dstatements" id=
+    "index-c_002dlineup_002drunin_002dstatements"></a>Function:
+    <strong>c-lineup-runin-statements</strong></dt>
+
+    <dd>
+      <a name=
+      "index-lineup_002drunin_002dstatements-_0028c_002d_0029" id=
+      "index-lineup_002drunin_002dstatements-_0028c_002d_0029"></a>
+
+      <p>Line up statements for coding standards which place the
+      first statement in a block on the same line as the block
+      opening brace<a name="DOCF45" href="#FOOT45" id=
+      "DOCF45"><sup>45</sup></a>. E.g.:</p>
+
+      <div class="example">
+        <pre class="example">
+int main()
+{ puts ("Hello!");
   return 0;           &lt;- <i>c-lineup-runin-statements</i>}
-</pre></div>
+</pre>
+      </div>
 
-<p>If there is no statement after the opening brace to align with,
-<code>nil</code> is returned.  This makes the function usable in list
-expressions.
-</p>
-<p><em>Works with:&nbsp;</em> The <code>statement</code> syntactic symbol.
-</p></dd></dl>
+      <p>If there is no statement after the opening brace to align
+      with, <code>nil</code> is returned. This makes the function
+      usable in list expressions.</p>
 
+      <p><em>Works with:&nbsp;</em> The <code>statement</code>
+      syntactic symbol.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-c_002dlineup_002dinexpr_002dblock"></a>Function: <strong>c-lineup-inexpr-block</strong></dt>
-<dd><a name="index-lineup_002dinexpr_002dblock-_0028c_002d_0029"></a>
-<p>This can be used with the in-expression block symbols to indent the
-whole block to the column where the construct is started.  E.g., for Java
-anonymous classes, this lines up the class under the &lsquo;<samp>new</samp>&rsquo; keyword,
-and in Pike it lines up the lambda function body under the &lsquo;<samp>lambda</samp>&rsquo;
-keyword.  Returns <code>nil</code> if the block isn&rsquo;t part of such a
-construct.
-</p>
-<p><em>Works with:&nbsp;</em> <code>inlambda</code>, <code>inexpr-statement</code>,
-<code>inexpr-class</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-c_002dlineup_002dinexpr_002dblock" id=
+    "index-c_002dlineup_002dinexpr_002dblock"></a>Function:
+    <strong>c-lineup-inexpr-block</strong></dt>
 
+    <dd>
+      <a name="index-lineup_002dinexpr_002dblock-_0028c_002d_0029"
+      id="index-lineup_002dinexpr_002dblock-_0028c_002d_0029"></a>
 
-<dl>
-<dt><a name="index-c_002dlineup_002dafter_002dwhitesmith_002dblocks"></a>Function: <strong>c-lineup-after-whitesmith-blocks</strong></dt>
-<dd><a name="index-lineup_002dafter_002dwhitesmith_002dblocks-_0028c_002d_0029"></a>
-<p>Compensate for Whitesmith style indentation of blocks.  Due to the way
-CC Mode calculates anchor positions for normal lines inside blocks,
-this function is necessary for those lines to get correct Whitesmith
-style indentation.  Consider the following examples:
-</p>
-<div class="example">
-<pre class="example">int foo()
+      <p>This can be used with the in-expression block symbols to
+      indent the whole block to the column where the construct is
+      started. E.g., for Java anonymous classes, this lines up the
+      class under the &lsquo;<samp>new</samp>&rsquo; keyword, and
+      in Pike it lines up the lambda function body under the
+      &lsquo;<samp>lambda</samp>&rsquo; keyword. Returns
+      <code>nil</code> if the block isn&rsquo;t part of such a
+      construct.</p>
+
+      <p><em>Works with:&nbsp;</em> <code>inlambda</code>,
+      <code>inexpr-statement</code>, <code>inexpr-class</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-c_002dlineup_002dafter_002dwhitesmith_002dblocks" id=
+    "index-c_002dlineup_002dafter_002dwhitesmith_002dblocks"></a>Function:
+    <strong>c-lineup-after-whitesmith-blocks</strong></dt>
+
+    <dd>
+      <a name=
+      "index-lineup_002dafter_002dwhitesmith_002dblocks-_0028c_002d_0029"
+      id=
+      "index-lineup_002dafter_002dwhitesmith_002dblocks-_0028c_002d_0029">
+      </a>
+
+      <p>Compensate for Whitesmith style indentation of blocks. Due
+      to the way CC Mode calculates anchor positions for normal
+      lines inside blocks, this function is necessary for those
+      lines to get correct Whitesmith style indentation. Consider
+      the following examples:</p>
+
+      <div class="example">
+        <pre class="example">
+int foo()
     {
     a;
-    x;                 &lt;- <i>c-lineup-after-whitesmith-blocks</i></pre></div>
+    x;                 &lt;- <i>c-lineup-after-whitesmith-blocks</i>
+</pre>
+      </div>
 
-<div class="example">
-<pre class="example">int foo()
+      <div class="example">
+        <pre class="example">
+int foo()
     {
         {
         a;
         }
-    x;                 &lt;- <i>c-lineup-after-whitesmith-blocks</i></pre></div>
+    x;                 &lt;- <i>c-lineup-after-whitesmith-blocks</i>
+</pre>
+      </div>
 
-<p>The fact that the line with <code>x</code> is preceded by a Whitesmith style
-indented block in the latter case and not the first should not affect
-its indentation.  But since CC Mode in cases like this uses the
-indentation of the preceding statement as anchor position, the <code>x</code>
-would in the second case be indented too much if the offset for
-<code>statement</code> was set simply to zero.
-</p>
-<p>This lineup function corrects for this situation by detecting if the
-anchor position is at an open paren character.  In that case, it instead
-indents relative to the surrounding block just like
-<code>c-lineup-whitesmith-in-block</code>.
-</p>
-<p><em>Works with:&nbsp;</em> <code>brace-list-entry</code>, <code>brace-entry-open</code>,
-<code>statement</code>, <code>arglist-cont</code>.
-</p></dd></dl>
+      <p>The fact that the line with <code>x</code> is preceded by
+      a Whitesmith style indented block in the latter case and not
+      the first should not affect its indentation. But since CC
+      Mode in cases like this uses the indentation of the preceding
+      statement as anchor position, the <code>x</code> would in the
+      second case be indented too much if the offset for
+      <code>statement</code> was set simply to zero.</p>
 
+      <p>This lineup function corrects for this situation by
+      detecting if the anchor position is at an open paren
+      character. In that case, it instead indents relative to the
+      surrounding block just like
+      <code>c-lineup-whitesmith-in-block</code>.</p>
 
-<dl>
-<dt><a name="index-c_002dlineup_002dwhitesmith_002din_002dblock"></a>Function: <strong>c-lineup-whitesmith-in-block</strong></dt>
-<dd><a name="index-lineup_002dwhitesmith_002din_002dblock-_0028c_002d_0029"></a>
-<p>Line up lines inside a block in Whitesmith style.  It&rsquo;s done in a way
-that works both when the opening brace hangs and when it doesn&rsquo;t.  E.g.:
-</p>
-<div class="example">
-<pre class="example">something
+      <p><em>Works with:&nbsp;</em> <code>brace-list-entry</code>,
+      <code>brace-entry-open</code>, <code>statement</code>,
+      <code>arglist-cont</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-c_002dlineup_002dwhitesmith_002din_002dblock" id=
+    "index-c_002dlineup_002dwhitesmith_002din_002dblock"></a>Function:
+    <strong>c-lineup-whitesmith-in-block</strong></dt>
+
+    <dd>
+      <a name=
+      "index-lineup_002dwhitesmith_002din_002dblock-_0028c_002d_0029"
+      id=
+      "index-lineup_002dwhitesmith_002din_002dblock-_0028c_002d_0029">
+      </a>
+
+      <p>Line up lines inside a block in Whitesmith style.
+      It&rsquo;s done in a way that works both when the opening
+      brace hangs and when it doesn&rsquo;t. E.g.:</p>
+
+      <div class="example">
+        <pre class="example">
+something
     {
     foo;              &lt;- <i>c-lineup-whitesmith-in-block</i>    }
-</pre></div>
+</pre>
+      </div>
 
-<p>and
-</p>
-<div class="example">
-<pre class="example">something {
+      <p>and</p>
+
+      <div class="example">
+        <pre class="example">
+something {
     foo;              &lt;- <i>c-lineup-whitesmith-in-block</i>    }
-&lt;--&gt; <i>c-basic-offset</i></pre></div>
+&lt;--&gt; <i>c-basic-offset</i>
+</pre>
+      </div>
 
-<p>In the first case the indentation is kept unchanged, in the second
-<code>c-basic-offset</code> is added.
-</p>
-<p><em>Works with:&nbsp;</em> <code>defun-close</code>, <code>defun-block-intro</code>,
-<code>inline-close</code>, <code>block-close</code>, <code>brace-list-close</code>,
-<code>brace-list-intro</code>, <code>statement-block-intro</code>,
-<code>arglist-intro</code>, <code>arglist-cont-nonempty</code>,
-<code>arglist-close</code>, and all <code>in*</code> symbols, e.g., <code>inclass</code>
-and <code>inextern-lang</code>.
-</p></dd></dl>
+      <p>In the first case the indentation is kept unchanged, in
+      the second <code>c-basic-offset</code> is added.</p>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+      <p><em>Works with:&nbsp;</em> <code>defun-close</code>,
+      <code>defun-block-intro</code>, <code>inline-close</code>,
+      <code>block-close</code>, <code>brace-list-close</code>,
+      <code>brace-list-intro</code>,
+      <code>statement-block-intro</code>,
+      <code>arglist-intro</code>,
+      <code>arglist-cont-nonempty</code>,
+      <code>arglist-close</code>, and all <code>in*</code> symbols,
+      e.g., <code>inclass</code> and
+      <code>inextern-lang</code>.</p>
+    </dd>
+  </dl>
 
-<h3><a name="FOOT45" href="#DOCF45">(45)</a></h3>
-<p>Run-in
-style doesn&rsquo;t really work too well.  You might need to write your own
-custom line-up functions to better support this style.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="List-Line_002dUp.html#List-Line_002dUp" accesskey="n" rel="next">List Line-Up</a>, Previous: <a href="Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey="p" rel="prev">Line-Up Functions</a>, Up: <a href="Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey="u" rel="up">Line-Up Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT45" href="#DOCF45" id="FOOT45">(45)</a></h3>
 
+    <p>Run-in style doesn&rsquo;t really work too well. You might
+    need to write your own custom line-up functions to better
+    support this style.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="List-Line_002dUp.html#List-Line_002dUp"
+    accesskey="n" rel="next">List Line-Up</a>, Previous: <a href=
+    "Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey=
+    "p" rel="prev">Line-Up Functions</a>, Up: <a href=
+    "Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey=
+    "u" rel="up">Line-Up Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

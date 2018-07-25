@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Function Bindings - Common Lisp Extensions</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Common Lisp Extensions">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Variable-Bindings.html#Variable-Bindings" title="Variable Bindings">
-<link rel="prev" href="Lexical-Bindings.html#Lexical-Bindings" title="Lexical Bindings">
-<link rel="next" href="Macro-Bindings.html#Macro-Bindings" title="Macro Bindings">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Function Bindings - Common Lisp Extensions</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Common Lisp Extensions" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Variable-Bindings.html#Variable-Bindings"
+  title="Variable Bindings" />
+  <link rel="prev" href="Lexical-Bindings.html#Lexical-Bindings"
+  title="Lexical Bindings" />
+  <link rel="next" href="Macro-Bindings.html#Macro-Bindings" title=
+  "Macro Bindings" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -27,8 +36,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,91 +49,121 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Function-Bindings"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Macro-Bindings.html#Macro-Bindings">Macro Bindings</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Lexical-Bindings.html#Lexical-Bindings">Lexical Bindings</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Variable-Bindings.html#Variable-Bindings">Variable Bindings</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Function-Bindings" id="Function-Bindings"></a>
 
-<h4 class="subsection">5.3.3 Function Bindings</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Macro-Bindings.html#Macro-Bindings">Macro Bindings</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Lexical-Bindings.html#Lexical-Bindings">Lexical Bindings</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Variable-Bindings.html#Variable-Bindings">Variable
+    Bindings</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">These forms make <code>let</code>-like bindings to functions instead
-of variables.
+  <h4 class="subsection">5.3.3 Function Bindings</h4>
 
-<div class="defun">
-&mdash; Special Form: <b>flet</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-flet-34"></a></var><br>
-<blockquote><p>This form establishes <code>let</code>-style bindings on the function
-cells of symbols rather than on the value cells.  Each <var>binding</var>
-must be a list of the form &lsquo;<samp><span class="samp">(</span><var>name</var> <var>arglist</var>
-<var>forms</var><span class="samp">...)</span></samp>&rsquo;, which defines a function exactly as if
-it were a <code>defun*</code> form.  The function <var>name</var> is defined
-accordingly for the duration of the body of the <code>flet</code>; then
-the old function definition, or lack thereof, is restored.
+  <p class="noindent">These forms make <code>let</code>-like
+  bindings to functions instead of variables.</p>
 
-        <p>While <code>flet</code> in Common Lisp establishes a lexical binding of
-<var>name</var>, Emacs Lisp <code>flet</code> makes a dynamic binding.  The
-result is that <code>flet</code> affects indirect calls to a function as
-well as calls directly inside the <code>flet</code> form itself.
+  <div class="defun">
+    &mdash; Special Form: <b>flet</b> (<var>bindings<small class=
+    "dots">...</small></var>) <var>forms<small class=
+    "dots">...</small><a name="index-flet-34" id=
+    "index-flet-34"></a></var><br />
 
-        <p>You can use <code>flet</code> to disable or modify the behavior of a
-function in a temporary fashion.  This will even work on Emacs
-primitives, although note that some calls to primitive functions
-internal to Emacs are made without going through the symbol's
-function cell, and so will not be affected by <code>flet</code>.  For
-example,
+    <blockquote>
+      <p>This form establishes <code>let</code>-style bindings on
+      the function cells of symbols rather than on the value cells.
+      Each <var>binding</var> must be a list of the form
+      &lsquo;<samp><span class="samp">(</span><var>name</var>
+      <var>arglist</var> <var>forms</var><span class=
+      "samp">...)</span></samp>&rsquo;, which defines a function
+      exactly as if it were a <code>defun*</code> form. The
+      function <var>name</var> is defined accordingly for the
+      duration of the body of the <code>flet</code>; then the old
+      function definition, or lack thereof, is restored.</p>
 
-     <pre class="example">          (flet ((message (&amp;rest args) (push args saved-msgs)))
+      <p>While <code>flet</code> in Common Lisp establishes a
+      lexical binding of <var>name</var>, Emacs Lisp
+      <code>flet</code> makes a dynamic binding. The result is that
+      <code>flet</code> affects indirect calls to a function as
+      well as calls directly inside the <code>flet</code> form
+      itself.</p>
+
+      <p>You can use <code>flet</code> to disable or modify the
+      behavior of a function in a temporary fashion. This will even
+      work on Emacs primitives, although note that some calls to
+      primitive functions internal to Emacs are made without going
+      through the symbol's function cell, and so will not be
+      affected by <code>flet</code>. For example,</p>
+      <pre class="example">
+          (flet ((message (&amp;rest args) (push args saved-msgs)))
             (do-something))
 </pre>
-        <p>This code attempts to replace the built-in function <code>message</code>
-with a function that simply saves the messages in a list rather
-than displaying them.  The original definition of <code>message</code>
-will be restored after <code>do-something</code> exits.  This code will
-work fine on messages generated by other Lisp code, but messages
-generated directly inside Emacs will not be caught since they make
-direct C-language calls to the message routines rather than going
-through the Lisp <code>message</code> function.
 
-     <!-- Bug#411. -->
-        <p>Also note that many primitives (e.g. <code>+</code>) have special byte-compile
-handling.  Attempts to redefine such functions using <code>flet</code> will
-fail if byte-compiled.  In such cases, use <code>labels</code> instead.
+      <p>This code attempts to replace the built-in function
+      <code>message</code> with a function that simply saves the
+      messages in a list rather than displaying them. The original
+      definition of <code>message</code> will be restored after
+      <code>do-something</code> exits. This code will work fine on
+      messages generated by other Lisp code, but messages generated
+      directly inside Emacs will not be caught since they make
+      direct C-language calls to the message routines rather than
+      going through the Lisp <code>message</code> function. 
+      <!-- Bug#411. --></p>
 
-        <p>Functions defined by <code>flet</code> may use the full Common Lisp
-argument notation supported by <code>defun*</code>; also, the function
-body is enclosed in an implicit block as if by <code>defun*</code>. 
-See <a href="Program-Structure.html#Program-Structure">Program Structure</a>. 
-</p></blockquote></div>
+      <p>Also note that many primitives (e.g. <code>+</code>) have
+      special byte-compile handling. Attempts to redefine such
+      functions using <code>flet</code> will fail if byte-compiled.
+      In such cases, use <code>labels</code> instead.</p>
 
-<div class="defun">
-&mdash; Special Form: <b>labels</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-labels-35"></a></var><br>
-<blockquote><p>The <code>labels</code> form is like <code>flet</code>, except that it
-makes lexical bindings of the function names rather than
-dynamic bindings.  (In true Common Lisp, both <code>flet</code> and
-<code>labels</code> make lexical bindings of slightly different sorts;
-since Emacs Lisp is dynamically bound by default, it seemed
-more appropriate for <code>flet</code> also to use dynamic binding. 
-The <code>labels</code> form, with its lexical binding, is fully
-compatible with Common Lisp.)
+      <p>Functions defined by <code>flet</code> may use the full
+      Common Lisp argument notation supported by
+      <code>defun*</code>; also, the function body is enclosed in
+      an implicit block as if by <code>defun*</code>. See <a href=
+      "Program-Structure.html#Program-Structure">Program
+      Structure</a>.</p>
+    </blockquote>
+  </div>
 
-        <p>Lexical scoping means that all references to the named
-functions must appear physically within the body of the
-<code>labels</code> form.  References may appear both in the body
-<var>forms</var> of <code>labels</code> itself, and in the bodies of
-the functions themselves.  Thus, <code>labels</code> can define
-local recursive functions, or mutually-recursive sets of
-functions.
+  <div class="defun">
+    &mdash; Special Form: <b>labels</b> (<var>bindings<small class=
+    "dots">...</small></var>) <var>forms<small class=
+    "dots">...</small><a name="index-labels-35" id=
+    "index-labels-35"></a></var><br />
 
-        <p>A &ldquo;reference&rdquo; to a function name is either a call to that
-function, or a use of its name quoted by <code>quote</code> or
-<code>function</code> to be passed on to, say, <code>mapcar</code>. 
-</p></blockquote></div>
+    <blockquote>
+      <p>The <code>labels</code> form is like <code>flet</code>,
+      except that it makes lexical bindings of the function names
+      rather than dynamic bindings. (In true Common Lisp, both
+      <code>flet</code> and <code>labels</code> make lexical
+      bindings of slightly different sorts; since Emacs Lisp is
+      dynamically bound by default, it seemed more appropriate for
+      <code>flet</code> also to use dynamic binding. The
+      <code>labels</code> form, with its lexical binding, is fully
+      compatible with Common Lisp.)</p>
 
-   </body></html>
+      <p>Lexical scoping means that all references to the named
+      functions must appear physically within the body of the
+      <code>labels</code> form. References may appear both in the
+      body <var>forms</var> of <code>labels</code> itself, and in
+      the bodies of the functions themselves. Thus,
+      <code>labels</code> can define local recursive functions, or
+      mutually-recursive sets of functions.</p>
 
+      <p>A &ldquo;reference&rdquo; to a function name is either a
+      call to that function, or a use of its name quoted by
+      <code>quote</code> or <code>function</code> to be passed on
+      to, say, <code>mapcar</code>.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

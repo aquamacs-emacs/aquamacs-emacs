@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,132 +18,177 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Float Formats</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Float Formats">
-<meta name="keywords" content="GNU Emacs Calc Manual: Float Formats">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display-Modes.html#Display-Modes" rel="up" title="Display Modes">
-<link href="Complex-Formats.html#Complex-Formats" rel="next" title="Complex Formats">
-<link href="Grouping-Digits.html#Grouping-Digits" rel="prev" title="Grouping Digits">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Float Formats</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Float Formats" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Float Formats" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display-Modes.html#Display-Modes" rel="up" title=
+  "Display Modes" />
+  <link href="Complex-Formats.html#Complex-Formats" rel="next"
+  title="Complex Formats" />
+  <link href="Grouping-Digits.html#Grouping-Digits" rel="prev"
+  title="Grouping Digits" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Float-Formats"></a>
-<div class="header">
-<p>
-Next: <a href="Complex-Formats.html#Complex-Formats" accesskey="n" rel="next">Complex Formats</a>, Previous: <a href="Grouping-Digits.html#Grouping-Digits" accesskey="p" rel="prev">Grouping Digits</a>, Up: <a href="Display-Modes.html#Display-Modes" accesskey="u" rel="up">Display Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Float-Formats-1"></a>
-<h4 class="subsection">6.7.3 Float Formats</h4>
+<body lang="en" xml:lang="en">
+  <a name="Float-Formats" id="Float-Formats"></a>
 
-<p>Floating-point quantities are normally displayed in standard decimal
-form, with scientific notation used if the exponent is especially high
-or low.  All significant digits are normally displayed.  The commands
-in this section allow you to choose among several alternative display
-formats for floats.
-</p>
-<a name="index-d-n"></a>
-<a name="index-calc_002dnormal_002dnotation"></a>
-<p>The <kbd>d n</kbd> (<code>calc-normal-notation</code>) command selects the normal
-display format.  All significant figures in a number are displayed.
-With a positive numeric prefix, numbers are rounded if necessary to
-that number of significant digits.  With a negative numerix prefix,
-the specified number of significant digits less than the current
-precision is used.  (Thus <kbd>C-u -2 d n</kbd> displays 10 digits if the
-current precision is 12.)
-</p>
-<a name="index-d-f"></a>
-<a name="index-calc_002dfix_002dnotation"></a>
-<p>The <kbd>d f</kbd> (<code>calc-fix-notation</code>) command selects fixed-point
-notation.  The numeric argument is the number of digits after the
-decimal point, zero or more.  This format will relax into scientific
-notation if a nonzero number would otherwise have been rounded all the
-way to zero.  Specifying a negative number of digits is the same as
-for a positive number, except that small nonzero numbers will be rounded
-to zero rather than switching to scientific notation.
-</p>
-<a name="index-d-s"></a>
-<a name="index-calc_002dsci_002dnotation"></a>
-<a name="index-Scientific-notation_002c-display-of"></a>
-<p>The <kbd>d s</kbd> (<code>calc-sci-notation</code>) command selects scientific
-notation.  A positive argument sets the number of significant figures
-displayed, of which one will be before and the rest after the decimal
-point.  A negative argument works the same as for <kbd>d n</kbd> format.
-The default is to display all significant digits.
-</p>
-<a name="index-d-e"></a>
-<a name="index-calc_002deng_002dnotation"></a>
-<a name="index-Engineering-notation_002c-display-of"></a>
-<p>The <kbd>d e</kbd> (<code>calc-eng-notation</code>) command selects engineering
-notation.  This is similar to scientific notation except that the
-exponent is rounded down to a multiple of three, with from one to three
-digits before the decimal point.  An optional numeric prefix sets the
-number of significant digits to display, as for <kbd>d s</kbd>.
-</p>
-<p>It is important to distinguish between the current <em>precision</em> and
-the current <em>display format</em>.  After the commands <kbd>C-u 10 p</kbd>
-and <kbd>C-u 6 d n</kbd> the Calculator computes all results to ten
-significant figures but displays only six.  (In fact, intermediate
-calculations are often carried to one or two more significant figures,
-but values placed on the stack will be rounded down to ten figures.)
-Numbers are never actually rounded to the display precision for storage,
-except by commands like <kbd>C-k</kbd> and <kbd>C-x * y</kbd> which operate on the
-actual displayed text in the Calculator buffer.
-</p>
-<a name="index-d-_002e"></a>
-<a name="index-calc_002dpoint_002dchar"></a>
-<p>The <kbd>d .</kbd> (<code>calc-point-char</code>) command selects the character used
-as a decimal point.  Normally this is a period; users in some countries
-may wish to change this to a comma.  Note that this is only a display
-style; on entry, periods must always be used to denote floating-point
-numbers, and commas to separate elements in a list.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Complex-Formats.html#Complex-Formats" accesskey="n" rel="next">Complex Formats</a>, Previous: <a href="Grouping-Digits.html#Grouping-Digits" accesskey="p" rel="prev">Grouping Digits</a>, Up: <a href="Display-Modes.html#Display-Modes" accesskey="u" rel="up">Display Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Complex-Formats.html#Complex-Formats"
+    accesskey="n" rel="next">Complex Formats</a>, Previous:
+    <a href="Grouping-Digits.html#Grouping-Digits" accesskey="p"
+    rel="prev">Grouping Digits</a>, Up: <a href=
+    "Display-Modes.html#Display-Modes" accesskey="u" rel=
+    "up">Display Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Float-Formats-1" id="Float-Formats-1"></a>
 
+  <h4 class="subsection">6.7.3 Float Formats</h4>
 
+  <p>Floating-point quantities are normally displayed in standard
+  decimal form, with scientific notation used if the exponent is
+  especially high or low. All significant digits are normally
+  displayed. The commands in this section allow you to choose among
+  several alternative display formats for floats.</p><a name=
+  "index-d-n" id="index-d-n"></a> <a name=
+  "index-calc_002dnormal_002dnotation" id=
+  "index-calc_002dnormal_002dnotation"></a>
 
+  <p>The <kbd>d n</kbd> (<code>calc-normal-notation</code>) command
+  selects the normal display format. All significant figures in a
+  number are displayed. With a positive numeric prefix, numbers are
+  rounded if necessary to that number of significant digits. With a
+  negative numerix prefix, the specified number of significant
+  digits less than the current precision is used. (Thus <kbd>C-u -2
+  d n</kbd> displays 10 digits if the current precision is
+  12.)</p><a name="index-d-f" id="index-d-f"></a> <a name=
+  "index-calc_002dfix_002dnotation" id=
+  "index-calc_002dfix_002dnotation"></a>
+
+  <p>The <kbd>d f</kbd> (<code>calc-fix-notation</code>) command
+  selects fixed-point notation. The numeric argument is the number
+  of digits after the decimal point, zero or more. This format will
+  relax into scientific notation if a nonzero number would
+  otherwise have been rounded all the way to zero. Specifying a
+  negative number of digits is the same as for a positive number,
+  except that small nonzero numbers will be rounded to zero rather
+  than switching to scientific notation.</p><a name="index-d-s" id=
+  "index-d-s"></a> <a name="index-calc_002dsci_002dnotation" id=
+  "index-calc_002dsci_002dnotation"></a> <a name=
+  "index-Scientific-notation_002c-display-of" id=
+  "index-Scientific-notation_002c-display-of"></a>
+
+  <p>The <kbd>d s</kbd> (<code>calc-sci-notation</code>) command
+  selects scientific notation. A positive argument sets the number
+  of significant figures displayed, of which one will be before and
+  the rest after the decimal point. A negative argument works the
+  same as for <kbd>d n</kbd> format. The default is to display all
+  significant digits.</p><a name="index-d-e" id="index-d-e"></a>
+  <a name="index-calc_002deng_002dnotation" id=
+  "index-calc_002deng_002dnotation"></a> <a name=
+  "index-Engineering-notation_002c-display-of" id=
+  "index-Engineering-notation_002c-display-of"></a>
+
+  <p>The <kbd>d e</kbd> (<code>calc-eng-notation</code>) command
+  selects engineering notation. This is similar to scientific
+  notation except that the exponent is rounded down to a multiple
+  of three, with from one to three digits before the decimal point.
+  An optional numeric prefix sets the number of significant digits
+  to display, as for <kbd>d s</kbd>.</p>
+
+  <p>It is important to distinguish between the current
+  <em>precision</em> and the current <em>display format</em>. After
+  the commands <kbd>C-u 10 p</kbd> and <kbd>C-u 6 d n</kbd> the
+  Calculator computes all results to ten significant figures but
+  displays only six. (In fact, intermediate calculations are often
+  carried to one or two more significant figures, but values placed
+  on the stack will be rounded down to ten figures.) Numbers are
+  never actually rounded to the display precision for storage,
+  except by commands like <kbd>C-k</kbd> and <kbd>C-x * y</kbd>
+  which operate on the actual displayed text in the Calculator
+  buffer.</p><a name="index-d-_002e" id="index-d-_002e"></a>
+  <a name="index-calc_002dpoint_002dchar" id=
+  "index-calc_002dpoint_002dchar"></a>
+
+  <p>The <kbd>d .</kbd> (<code>calc-point-char</code>) command
+  selects the character used as a decimal point. Normally this is a
+  period; users in some countries may wish to change this to a
+  comma. Note that this is only a display style; on entry, periods
+  must always be used to denote floating-point numbers, and commas
+  to separate elements in a list.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Complex-Formats.html#Complex-Formats"
+    accesskey="n" rel="next">Complex Formats</a>, Previous:
+    <a href="Grouping-Digits.html#Grouping-Digits" accesskey="p"
+    rel="prev">Grouping Digits</a>, Up: <a href=
+    "Display-Modes.html#Display-Modes" accesskey="u" rel=
+    "up">Display Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

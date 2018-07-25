@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,131 +16,203 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Field and range formulas</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Field and range formulas">
-<meta name="keywords" content="The Org Manual: Field and range formulas">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-spreadsheet.html#The-spreadsheet" rel="up" title="The spreadsheet">
-<link href="Column-formulas.html#Column-formulas" rel="next" title="Column formulas">
-<link href="Durations-and-time-values.html#Durations-and-time-values" rel="prev" title="Durations and time values">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Field and range formulas</title>
+  <meta name="description" content=
+  "The Org Manual: Field and range formulas" />
+  <meta name="keywords" content=
+  "The Org Manual: Field and range formulas" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-spreadsheet.html#The-spreadsheet" rel="up" title=
+  "The spreadsheet" />
+  <link href="Column-formulas.html#Column-formulas" rel="next"
+  title="Column formulas" />
+  <link href=
+  "Durations-and-time-values.html#Durations-and-time-values" rel=
+  "prev" title="Durations and time values" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Field-and-range-formulas"></a>
-<div class="header">
-<p>
-Next: <a href="Column-formulas.html#Column-formulas" accesskey="n" rel="next">Column formulas</a>, Previous: <a href="Durations-and-time-values.html#Durations-and-time-values" accesskey="p" rel="prev">Durations and time values</a>, Up: <a href="The-spreadsheet.html#The-spreadsheet" accesskey="u" rel="up">The spreadsheet</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Field-and-range-formulas-1"></a>
-<h4 class="subsection">3.5.5 Field and range formulas</h4>
-<a name="index-field-formula"></a>
-<a name="index-range-formula"></a>
-<a name="index-formula_002c-for-individual-table-field"></a>
-<a name="index-formula_002c-for-range-of-fields"></a>
+<body lang="en" xml:lang="en">
+  <a name="Field-and-range-formulas" id=
+  "Field-and-range-formulas"></a>
 
-<p>To assign a formula to a particular field, type it directly into the field,
-preceded by &lsquo;<samp>:=</samp>&rsquo;, for example &lsquo;<samp>:=vsum(@II..III)</samp>&rsquo;.  When you press
-<tt class="key">TAB</tt> or <tt class="key">RET</tt> or <kbd>C-c C-c</kbd> with the cursor still in the field,
-the formula will be stored as the formula for this field, evaluated, and the
-current field will be replaced with the result.
-</p>
-<a name="index-_0023_002bTBLFM"></a>
-<p>Formulas are stored in a special line starting with &lsquo;<samp>#+TBLFM:</samp>&rsquo; directly
-below the table.  If you type the equation in the 4th field of the 3rd data
-line in the table, the formula will look like &lsquo;<samp>@3$4=$1+$2</samp>&rsquo;.  When
-inserting/deleting/swapping column and rows with the appropriate commands,
-<i>absolute references</i> (but not relative ones) in stored formulas are
-modified in order to still reference the same field.  To avoid this from
-happening, in particular in range references, anchor ranges at the table
-borders (using <code>@&lt;</code>, <code>@&gt;</code>, <code>$&lt;</code>, <code>$&gt;</code>), or at hlines
-using the <code>@I</code> notation.  Automatic adaptation of field references does
-of course not happen if you edit the table structure with normal editing
-commands&mdash;then you must fix the equations yourself.
-</p>
-<p>Instead of typing an equation into the field, you may also use the following
-command
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002du-C_002dc-_003d"></a>
-<a name="index-org_002dtable_002deval_002dformula"></a>
-</dd>
-<dt><kbd><kbd>C-u C-c =</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-eval-formula</code>)</kbd></dt>
-<dd><p>Install a new formula for the current field.  The command prompts for a
-formula with default taken from the &lsquo;<samp>#+TBLFM:</samp>&rsquo; line, applies
-it to the current field, and stores it.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Column-formulas.html#Column-formulas"
+    accesskey="n" rel="next">Column formulas</a>, Previous:
+    <a href="Durations-and-time-values.html#Durations-and-time-values"
+    accesskey="p" rel="prev">Durations and time values</a>, Up:
+    <a href="The-spreadsheet.html#The-spreadsheet" accesskey="u"
+    rel="up">The spreadsheet</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Field-and-range-formulas-1" id=
+  "Field-and-range-formulas-1"></a>
 
-<p>The left-hand side of a formula can also be a special expression in order to
-assign the formula to a number of different fields.  There is no keyboard
-shortcut to enter such range formulas.  To add them, use the formula editor
-(see <a href="Editing-and-debugging-formulas.html#Editing-and-debugging-formulas">Editing and debugging formulas</a>) or edit the <code>#+TBLFM:</code> line
-directly.
-</p>
-<dl compact="compact">
-<dt><code>$2=</code></dt>
-<dd><p>Column formula, valid for the entire column.  This is so common that Org
-treats these formulas in a special way, see <a href="Column-formulas.html#Column-formulas">Column formulas</a>.
-</p></dd>
-<dt><code>@3=</code></dt>
-<dd><p>Row formula, applies to all fields in the specified row.  <code>@&gt;=</code> means
-the last row.
-</p></dd>
-<dt><code>@1$2..@4$3=</code></dt>
-<dd><p>Range formula, applies to all fields in the given rectangular range.  This
-can also be used to assign a formula to some but not all fields in a row.
-</p></dd>
-<dt><code>$name=</code></dt>
-<dd><p>Named field, see <a href="Advanced-features.html#Advanced-features">Advanced features</a>.
-</p></dd>
-</dl>
+  <h4 class="subsection">3.5.5 Field and range
+  formulas</h4><a name="index-field-formula" id=
+  "index-field-formula"></a> <a name="index-range-formula" id=
+  "index-range-formula"></a> <a name=
+  "index-formula_002c-for-individual-table-field" id=
+  "index-formula_002c-for-individual-table-field"></a> <a name=
+  "index-formula_002c-for-range-of-fields" id=
+  "index-formula_002c-for-range-of-fields"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Column-formulas.html#Column-formulas" accesskey="n" rel="next">Column formulas</a>, Previous: <a href="Durations-and-time-values.html#Durations-and-time-values" accesskey="p" rel="prev">Durations and time values</a>, Up: <a href="The-spreadsheet.html#The-spreadsheet" accesskey="u" rel="up">The spreadsheet</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>To assign a formula to a particular field, type it directly
+  into the field, preceded by &lsquo;<samp>:=</samp>&rsquo;, for
+  example &lsquo;<samp>:=vsum(@II..III)</samp>&rsquo;. When you
+  press <tt class="key">TAB</tt> or <tt class="key">RET</tt> or
+  <kbd>C-c C-c</kbd> with the cursor still in the field, the
+  formula will be stored as the formula for this field, evaluated,
+  and the current field will be replaced with the
+  result.</p><a name="index-_0023_002bTBLFM" id=
+  "index-_0023_002bTBLFM"></a>
 
+  <p>Formulas are stored in a special line starting with
+  &lsquo;<samp>#+TBLFM:</samp>&rsquo; directly below the table. If
+  you type the equation in the 4th field of the 3rd data line in
+  the table, the formula will look like
+  &lsquo;<samp>@3$4=$1+$2</samp>&rsquo;. When
+  inserting/deleting/swapping column and rows with the appropriate
+  commands, <i>absolute references</i> (but not relative ones) in
+  stored formulas are modified in order to still reference the same
+  field. To avoid this from happening, in particular in range
+  references, anchor ranges at the table borders (using
+  <code>@&lt;</code>, <code>@&gt;</code>, <code>$&lt;</code>,
+  <code>$&gt;</code>), or at hlines using the <code>@I</code>
+  notation. Automatic adaptation of field references does of course
+  not happen if you edit the table structure with normal editing
+  commands&mdash;then you must fix the equations yourself.</p>
 
+  <p>Instead of typing an equation into the field, you may also use
+  the following command</p>
 
+  <dl compact="compact">
+    <dd><a name="index-C_002du-C_002dc-_003d" id=
+    "index-C_002du-C_002dc-_003d"></a> <a name=
+    "index-org_002dtable_002deval_002dformula" id=
+    "index-org_002dtable_002deval_002dformula"></a></dd>
+
+    <dt><kbd><kbd>C-u C-c =</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-eval-formula</code>)</kbd></dt>
+
+    <dd>
+      <p>Install a new formula for the current field. The command
+      prompts for a formula with default taken from the
+      &lsquo;<samp>#+TBLFM:</samp>&rsquo; line, applies it to the
+      current field, and stores it.</p>
+    </dd>
+  </dl>
+
+  <p>The left-hand side of a formula can also be a special
+  expression in order to assign the formula to a number of
+  different fields. There is no keyboard shortcut to enter such
+  range formulas. To add them, use the formula editor (see <a href=
+  "Editing-and-debugging-formulas.html#Editing-and-debugging-formulas">
+  Editing and debugging formulas</a>) or edit the
+  <code>#+TBLFM:</code> line directly.</p>
+
+  <dl compact="compact">
+    <dt><code>$2=</code></dt>
+
+    <dd>
+      <p>Column formula, valid for the entire column. This is so
+      common that Org treats these formulas in a special way, see
+      <a href="Column-formulas.html#Column-formulas">Column
+      formulas</a>.</p>
+    </dd>
+
+    <dt><code>@3=</code></dt>
+
+    <dd>
+      <p>Row formula, applies to all fields in the specified row.
+      <code>@&gt;=</code> means the last row.</p>
+    </dd>
+
+    <dt><code>@1$2..@4$3=</code></dt>
+
+    <dd>
+      <p>Range formula, applies to all fields in the given
+      rectangular range. This can also be used to assign a formula
+      to some but not all fields in a row.</p>
+    </dd>
+
+    <dt><code>$name=</code></dt>
+
+    <dd>
+      <p>Named field, see <a href=
+      "Advanced-features.html#Advanced-features">Advanced
+      features</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Column-formulas.html#Column-formulas"
+    accesskey="n" rel="next">Column formulas</a>, Previous:
+    <a href="Durations-and-time-values.html#Durations-and-time-values"
+    accesskey="p" rel="prev">Durations and time values</a>, Up:
+    <a href="The-spreadsheet.html#The-spreadsheet" accesskey="u"
+    rel="up">The spreadsheet</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

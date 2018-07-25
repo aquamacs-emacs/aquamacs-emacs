@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Undo - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Various.html#Various" title="Various">
-<link rel="prev" href="Daemons.html#Daemons" title="Daemons">
-<link rel="next" href="Predicate-Specifiers.html#Predicate-Specifiers" title="Predicate Specifiers">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Undo - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Various.html#Various" title="Various" />
+  <link rel="prev" href="Daemons.html#Daemons" title="Daemons" />
+  <link rel="next" href=
+  "Predicate-Specifiers.html#Predicate-Specifiers" title=
+  "Predicate Specifiers" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,49 +47,61 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Undo"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Predicate-Specifiers.html#Predicate-Specifiers">Predicate Specifiers</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Daemons.html#Daemons">Daemons</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Various.html#Various">Various</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Undo" id="Undo"></a>
 
-<h3 class="section">9.11 Undo</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Predicate-Specifiers.html#Predicate-Specifiers">Predicate
+    Specifiers</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Daemons.html#Daemons">Daemons</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="Various.html#Various">Various</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-undo-2655"></a>
-It is very useful to be able to undo actions one has done.  In normal
-Emacs buffers, it's easy enough&mdash;you just push the <code>undo</code> button. 
-In Gnus buffers, however, it isn't that simple.
+  <h3 class="section">9.11 Undo</h3>
 
-   <p>The things Gnus displays in its buffer is of no value whatsoever to
-Gnus&mdash;it's all just data designed to look nice to the user. 
-Killing a group in the group buffer with <kbd>C-k</kbd> makes the line
-disappear, but that's just a side-effect of the real action&mdash;the
-removal of the group in question from the internal Gnus structures. 
-Undoing something like that can't be done by the normal Emacs
-<code>undo</code> function.
+  <p><a name="index-undo-2655" id="index-undo-2655"></a> It is very
+  useful to be able to undo actions one has done. In normal Emacs
+  buffers, it's easy enough&mdash;you just push the
+  <code>undo</code> button. In Gnus buffers, however, it isn't that
+  simple.</p>
 
-   <p>Gnus tries to remedy this somewhat by keeping track of what the user
-does and coming up with actions that would reverse the actions the user
-takes.  When the user then presses the <code>undo</code> key, Gnus will run
-the code to reverse the previous action, or the previous actions. 
-However, not all actions are easily reversible, so Gnus currently offers
-a few key functions to be undoable.  These include killing groups,
-yanking groups, and changing the list of read articles of groups. 
-That's it, really.  More functions may be added in the future, but each
-added function means an increase in data to be stored, so Gnus will
-never be totally undoable.
+  <p>The things Gnus displays in its buffer is of no value
+  whatsoever to Gnus&mdash;it's all just data designed to look nice
+  to the user. Killing a group in the group buffer with
+  <kbd>C-k</kbd> makes the line disappear, but that's just a
+  side-effect of the real action&mdash;the removal of the group in
+  question from the internal Gnus structures. Undoing something
+  like that can't be done by the normal Emacs <code>undo</code>
+  function.</p>
 
-   <p><a name="index-gnus_002dundo_002dmode-2656"></a><a name="index-gnus_002duse_002dundo-2657"></a><a name="index-gnus_002dundo-2658"></a>The undoability is provided by the <code>gnus-undo-mode</code> minor mode.  It
-is used if <code>gnus-use-undo</code> is non-<code>nil</code>, which is the
-default.  The <kbd>C-M-_</kbd> key performs the <code>gnus-undo</code>
-command, which should feel kinda like the normal Emacs <code>undo</code>
-command.
+  <p>Gnus tries to remedy this somewhat by keeping track of what
+  the user does and coming up with actions that would reverse the
+  actions the user takes. When the user then presses the
+  <code>undo</code> key, Gnus will run the code to reverse the
+  previous action, or the previous actions. However, not all
+  actions are easily reversible, so Gnus currently offers a few key
+  functions to be undoable. These include killing groups, yanking
+  groups, and changing the list of read articles of groups. That's
+  it, really. More functions may be added in the future, but each
+  added function means an increase in data to be stored, so Gnus
+  will never be totally undoable.</p>
 
-   </body></html>
-
+  <p><a name="index-gnus_002dundo_002dmode-2656" id=
+  "index-gnus_002dundo_002dmode-2656"></a><a name=
+  "index-gnus_002duse_002dundo-2657" id=
+  "index-gnus_002duse_002dundo-2657"></a><a name=
+  "index-gnus_002dundo-2658" id="index-gnus_002dundo-2658"></a>The
+  undoability is provided by the <code>gnus-undo-mode</code> minor
+  mode. It is used if <code>gnus-use-undo</code> is
+  non-<code>nil</code>, which is the default. The <kbd>C-M-_</kbd>
+  key performs the <code>gnus-undo</code> command, which should
+  feel kinda like the normal Emacs <code>undo</code> command.</p>
+</body>
+</html>

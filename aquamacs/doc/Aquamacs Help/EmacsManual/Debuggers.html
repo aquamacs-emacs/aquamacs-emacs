@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,100 +20,171 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Debuggers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Debuggers">
-<meta name="keywords" content="GNU Emacs Manual: Debuggers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Building.html#Building" rel="up" title="Building">
-<link href="Starting-GUD.html#Starting-GUD" rel="next" title="Starting GUD">
-<link href="Flymake.html#Flymake" rel="prev" title="Flymake">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Debuggers</title>
+  <meta name="description" content="GNU Emacs Manual: Debuggers" />
+  <meta name="keywords" content="GNU Emacs Manual: Debuggers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Building.html#Building" rel="up" title="Building" />
+  <link href="Starting-GUD.html#Starting-GUD" rel="next" title=
+  "Starting GUD" />
+  <link href="Flymake.html#Flymake" rel="prev" title="Flymake" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Debuggers" id="Debuggers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Executing-Lisp.html#Executing-Lisp"
+    accesskey="n" rel="next">Executing Lisp</a>, Previous: <a href=
+    "Flymake.html#Flymake" accesskey="p" rel="prev">Flymake</a>,
+    Up: <a href="Building.html#Building" accesskey="u" rel=
+    "up">Building</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Running-Debuggers-Under-Emacs" id=
+  "Running-Debuggers-Under-Emacs"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Debuggers"></a>
-<div class="header">
-<p>
-Next: <a href="Executing-Lisp.html#Executing-Lisp" accesskey="n" rel="next">Executing Lisp</a>, Previous: <a href="Flymake.html#Flymake" accesskey="p" rel="prev">Flymake</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Running-Debuggers-Under-Emacs"></a>
-<h3 class="section">27.6 Running Debuggers Under Emacs</h3>
-<a name="index-debuggers"></a>
-<a name="index-GUD-library"></a>
-<a name="index-GDB"></a>
-<a name="index-DBX"></a>
-<a name="index-SDB"></a>
-<a name="index-XDB"></a>
-<a name="index-Perldb"></a>
-<a name="index-JDB"></a>
-<a name="index-PDB"></a>
+  <h3 class="section">27.6 Running Debuggers Under
+  Emacs</h3><a name="index-debuggers" id="index-debuggers"></a>
+  <a name="index-GUD-library" id="index-GUD-library"></a> <a name=
+  "index-GDB" id="index-GDB"></a> <a name="index-DBX" id=
+  "index-DBX"></a> <a name="index-SDB" id="index-SDB"></a> <a name=
+  "index-XDB" id="index-XDB"></a> <a name="index-Perldb" id=
+  "index-Perldb"></a> <a name="index-JDB" id="index-JDB"></a>
+  <a name="index-PDB" id="index-PDB"></a>
 
-<p>The GUD (Grand Unified Debugger) library provides an Emacs interface
-to a wide variety of symbolic debuggers.  It can run the GNU Debugger
-(GDB), as well as DBX, SDB, XDB, Perl&rsquo;s debugging mode, the Python
-debugger PDB, and the Java Debugger JDB.
-</p>
-<p>Emacs provides a special interface to GDB, which uses extra Emacs
-windows to display the state of the debugged program.  See <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface">GDB Graphical Interface</a>.
-</p>
-<p>Emacs also has a built-in debugger for Emacs Lisp programs.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Debugging.html#Debugging">The Lisp Debugger</a> in <cite>the Emacs Lisp Reference
-Manual</cite>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Starting-GUD.html#Starting-GUD" accesskey="1">Starting GUD</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to start a debugger subprocess.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Debugger-Operation.html#Debugger-Operation" accesskey="2">Debugger Operation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Connection between the debugger and source buffers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Commands-of-GUD.html#Commands-of-GUD" accesskey="3">Commands of GUD</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Key bindings for common commands.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="GUD-Customization.html#GUD-Customization" accesskey="4">GUD Customization</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defining your own commands for GUD.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="5">GDB Graphical Interface</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An enhanced mode that uses GDB features to
-                        implement a graphical debugging environment.
-</td></tr>
-</table>
+  <p>The GUD (Grand Unified Debugger) library provides an Emacs
+  interface to a wide variety of symbolic debuggers. It can run the
+  GNU Debugger (GDB), as well as DBX, SDB, XDB, Perl&rsquo;s
+  debugging mode, the Python debugger PDB, and the Java Debugger
+  JDB.</p>
 
+  <p>Emacs provides a special interface to GDB, which uses extra
+  Emacs windows to display the state of the debugged program. See
+  <a href=
+  "GDB-Graphical-Interface.html#GDB-Graphical-Interface">GDB
+  Graphical Interface</a>.</p>
 
+  <p>Emacs also has a built-in debugger for Emacs Lisp programs.
+  See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Debugging.html#Debugging">
+  The Lisp Debugger</a> in <cite>the Emacs Lisp Reference
+  Manual</cite>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Starting-GUD.html#Starting-GUD" accesskey="1">Starting
+      GUD</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to start a debugger
+      subprocess.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Debugger-Operation.html#Debugger-Operation" accesskey=
+      "2">Debugger Operation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Connection between the debugger
+      and source buffers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Commands-of-GUD.html#Commands-of-GUD" accesskey="3">Commands
+      of GUD</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Key bindings for common
+      commands.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "GUD-Customization.html#GUD-Customization" accesskey="4">GUD
+      Customization</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Defining your own commands for
+      GUD.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+      accesskey="5">GDB Graphical Interface</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">An enhanced mode that uses GDB
+      features to implement a graphical debugging environment.</td>
+    </tr>
+  </table>
 </body>
 </html>

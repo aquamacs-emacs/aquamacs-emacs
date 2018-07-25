@@ -1,14 +1,21 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Smart Completion - Semantic Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Semantic Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Analyzer.html#Analyzer" title="Analyzer">
-<link rel="next" href="Smart-Summary.html#Smart-Summary" title="Smart Summary">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Smart Completion - Semantic Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Semantic Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Analyzer.html#Analyzer" title="Analyzer" />
+  <link rel="next" href="Smart-Summary.html#Smart-Summary" title=
+  "Smart Summary" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual documents the Semantic library and utilities.
 
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
@@ -26,8 +33,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,92 +46,150 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Smart-Completion"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Smart-Summary.html#Smart-Summary">Smart Summary</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Analyzer.html#Analyzer">Analyzer</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Smart-Completion" id="Smart-Completion"></a>
 
-<h4 class="subsection">2.4.1 Smart Completion</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Smart-Summary.html#Smart-Summary">Smart Summary</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Analyzer.html#Analyzer">Analyzer</a></p>
+    <hr />
+  </div>
 
-<p>The Semantic Analyzer can be used to perform code completion in a
-manner that takes the local context into account.  (In addition to the
-user commands in this section, Semantic Idle Completions mode also
-uses the Semantic Analyzer.  See <a href="Idle-Completions-Mode.html#Idle-Completions-Mode">Idle Completions Mode</a>.)
+  <h4 class="subsection">2.4.1 Smart Completion</h4>
 
-<div class="defun">
-&mdash; Command: <b>semantic-analyze-possible-completions</b><var> context<a name="index-semantic_002danalyze_002dpossible_002dcompletions-44"></a></var><br>
-<blockquote><p>This is the most basic command for Semantic Analyzer-based completion. 
-Called interactively, it displays a list of the possible completions
-for the symbol at point.
+  <p>The Semantic Analyzer can be used to perform code completion
+  in a manner that takes the local context into account. (In
+  addition to the user commands in this section, Semantic Idle
+  Completions mode also uses the Semantic Analyzer. See <a href=
+  "Idle-Completions-Mode.html#Idle-Completions-Mode">Idle
+  Completions Mode</a>.)</p>
 
-        <p>When called from a Lisp program,
-<code>semantic-analyze-possible-completions</code> does not display a
-completions list.  The argument <var>context</var> should be either a
-buffer position, or a context object.  The return value is a list of
-<i>Semantic</i> tag objects that complete the symbol for <var>context</var>,
-based on the following criteria:
+  <div class="defun">
+    &mdash; Command: <b>semantic-analyze-possible-completions</b>
+    <var>context<a name=
+    "index-semantic_002danalyze_002dpossible_002dcompletions-44"
+    id="index-semantic_002danalyze_002dpossible_002dcompletions-44"></a></var><br />
 
-          <ul>
-<li>Elements currently in scope. 
-<li>Constants currently in scope. 
-<li>Elements matching the context's <code>:prefix</code>. 
-<li>Type of the completion matching the type of the context. 
-</ul>
 
-        <p>Most of the other commands documented in this section call
-<code>semantic-analyze-possible-completions</code> internally. 
-</p></blockquote></div>
+    <blockquote>
+      <p>This is the most basic command for Semantic Analyzer-based
+      completion. Called interactively, it displays a list of the
+      possible completions for the symbol at point.</p>
 
-<div class="defun">
-&mdash; Command: <b>semantic-complete-analyze-inline</b><var><a name="index-semantic_002dcomplete_002danalyze_002dinline-45"></a></var><br>
-<blockquote><p>This command is bound to <kbd>C-c , &lt;SPC&gt;</kbd> when Semantic mode is
-enabled (see <a href="Semantic-mode-user-commands.html#Semantic-mode-user-commands">Semantic mode user commands</a>).  It displays a list of
-possible completions for the symbol at point, and activates a special
-set of keybindings for choosing a completion.
+      <p>When called from a Lisp program,
+      <code>semantic-analyze-possible-completions</code> does not
+      display a completions list. The argument <var>context</var>
+      should be either a buffer position, or a context object. The
+      return value is a list of <i>Semantic</i> tag objects that
+      complete the symbol for <var>context</var>, based on the
+      following criteria:</p>
 
-        <p>You can type &lt;RET&gt; to accept the current completion, <kbd>M-n</kbd> and
-<kbd>M-p</kbd> to cycle through the possible completions, &lt;TAB&gt; to
-complete as far as possible and then cycle through completions, and
-either <kbd>C-g</kbd> or any other key to abort the completion.
+      <ul>
+        <li>Elements currently in scope.</li>
 
-        <p>This command is similar to the completion performed by Semantic Idle
-Completions mode.  The main difference is that it is called
-explicitly, whereas Semantic Idle Completions mode completes during
-idle time (see <a href="Idle-Completions-Mode.html#Idle-Completions-Mode">Idle Completions Mode</a>). 
-</p></blockquote></div>
+        <li>Constants currently in scope.</li>
 
-<div class="defun">
-&mdash; Option: <b>semantic-complete-inline-analyzer-idle-displayor-class</b><var><a name="index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass-46"></a></var><br>
-<blockquote><p>The value of this variable determines how
-<code>semantic-complete-analyze-inline</code> shows its completions. 
-Possible values include:
+        <li>Elements matching the context's
+        <code>:prefix</code>.</li>
 
-          <dl>
-<dt><code>semantic-displayor-traditional</code><dd>Display completions in a separate window.  This is the default value.
+        <li>Type of the completion matching the type of the
+        context.</li>
+      </ul>
 
-          <br><dt><code>semantic-displayor-ghost</code><dd>Display completions &ldquo;inline&rdquo; with the buffer text, similar to the
-default behavior of Semantic Idle Completions mode (see <a href="Idle-Completions-Mode.html#Idle-Completions-Mode">Idle Completions Mode</a>).
+      <p>Most of the other commands documented in this section call
+      <code>semantic-analyze-possible-completions</code>
+      internally.</p>
+    </blockquote>
+  </div>
 
-          <br><dt><code>semantic-displayor-tooltip</code><dd>Display completions in a tooltip. 
-</dl>
-        </p></blockquote></div>
+  <div class="defun">
+    &mdash; Command:
+    <b>semantic-complete-analyze-inline</b><var><a name=
+    "index-semantic_002dcomplete_002danalyze_002dinline-45" id=
+    "index-semantic_002dcomplete_002danalyze_002dinline-45"></a></var><br />
 
-   <p>In addition to <code>semantic-complete-analyze-inline</code>, you can use
-the simpler command <code>semantic-ia-complete-symbol point</code>.  This
-behaves like the usual <kbd>M-&lt;TAB&gt;</kbd> (<code>complete-symbol</code>)
-command (see <a href="../emacs/Symbol-Completion.html#Symbol-Completion">Symbol Completion</a>), except it
-uses the Semantic Analyzer.
 
-<div class="defun">
-&mdash; Command: <b>semantic-ia-complete-symbol</b><var> point<a name="index-semantic_002dia_002dcomplete_002dsymbol-47"></a></var><br>
-<blockquote><p>Complete the current symbol at <var>point</var>. 
-</p></blockquote></div>
+    <blockquote>
+      <p>This command is bound to <kbd>C-c , &lt;SPC&gt;</kbd> when
+      Semantic mode is enabled (see <a href=
+      "Semantic-mode-user-commands.html#Semantic-mode-user-commands">
+      Semantic mode user commands</a>). It displays a list of
+      possible completions for the symbol at point, and activates a
+      special set of keybindings for choosing a completion.</p>
 
-   </body></html>
+      <p>You can type &lt;RET&gt; to accept the current completion,
+      <kbd>M-n</kbd> and <kbd>M-p</kbd> to cycle through the
+      possible completions, &lt;TAB&gt; to complete as far as
+      possible and then cycle through completions, and either
+      <kbd>C-g</kbd> or any other key to abort the completion.</p>
 
+      <p>This command is similar to the completion performed by
+      Semantic Idle Completions mode. The main difference is that
+      it is called explicitly, whereas Semantic Idle Completions
+      mode completes during idle time (see <a href=
+      "Idle-Completions-Mode.html#Idle-Completions-Mode">Idle
+      Completions Mode</a>).</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Option:
+    <b>semantic-complete-inline-analyzer-idle-displayor-class</b><var><a name="index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass-46"
+    id=
+    "index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass-46"></a></var><br />
+
+
+    <blockquote>
+      <p>The value of this variable determines how
+      <code>semantic-complete-analyze-inline</code> shows its
+      completions. Possible values include:</p>
+
+      <dl>
+        <dt><code>semantic-displayor-traditional</code></dt>
+
+        <dd>Display completions in a separate window. This is the
+        default value.<br /></dd>
+
+        <dt><code>semantic-displayor-ghost</code></dt>
+
+        <dd>Display completions &ldquo;inline&rdquo; with the
+        buffer text, similar to the default behavior of Semantic
+        Idle Completions mode (see <a href=
+        "Idle-Completions-Mode.html#Idle-Completions-Mode">Idle
+        Completions Mode</a>).<br /></dd>
+
+        <dt><code>semantic-displayor-tooltip</code></dt>
+
+        <dd>Display completions in a tooltip.</dd>
+      </dl>
+    </blockquote>
+  </div>
+
+  <p>In addition to <code>semantic-complete-analyze-inline</code>,
+  you can use the simpler command <code>semantic-ia-complete-symbol
+  point</code>. This behaves like the usual
+  <kbd>M-&lt;TAB&gt;</kbd> (<code>complete-symbol</code>) command
+  (see <a href=
+  "../emacs/Symbol-Completion.html#Symbol-Completion">Symbol
+  Completion</a>), except it uses the Semantic Analyzer.</p>
+
+  <div class="defun">
+    &mdash; Command: <b>semantic-ia-complete-symbol</b>
+    <var>point<a name=
+    "index-semantic_002dia_002dcomplete_002dsymbol-47" id=
+    "index-semantic_002dia_002dcomplete_002dsymbol-47"></a></var><br />
+
+
+    <blockquote>
+      <p>Complete the current symbol at <var>point</var>.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

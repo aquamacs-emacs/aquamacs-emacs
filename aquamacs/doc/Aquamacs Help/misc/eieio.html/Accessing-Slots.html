@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,176 +16,304 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Accessing Slots</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Accessing Slots">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Accessing Slots">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Writing-Methods.html#Writing-Methods" rel="next" title="Writing Methods">
-<link href="Making-New-Objects.html#Making-New-Objects" rel="prev" title="Making New Objects">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Accessing Slots</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Accessing Slots" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Accessing Slots" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Writing-Methods.html#Writing-Methods" rel="next"
+  title="Writing Methods" />
+  <link href="Making-New-Objects.html#Making-New-Objects" rel=
+  "prev" title="Making New Objects" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Accessing-Slots"></a>
-<div class="header">
-<p>
-Next: <a href="Writing-Methods.html#Writing-Methods" accesskey="n" rel="next">Writing Methods</a>, Previous: <a href="Making-New-Objects.html#Making-New-Objects" accesskey="p" rel="prev">Making New Objects</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Accessing-Slots-1"></a>
-<h2 class="chapter">5 Accessing Slots</h2>
+<body lang="en" xml:lang="en">
+  <a name="Accessing-Slots" id="Accessing-Slots"></a>
 
-<p>There are several ways to access slot values in an object.  The naming
-and argument-order conventions are similar to those used for
-referencing vectors (see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Vectors.html#Vectors">Vectors</a> in <cite>GNU Emacs Lisp Reference
-Manual</cite>).
-</p>
-<dl>
-<dt><a name="index-oset"></a>Macro: <strong>oset</strong> <em>object slot value</em></dt>
-<dd><p>This macro sets the value behind <var>slot</var> to <var>value</var> in
-<var>object</var>.  It returns <var>value</var>.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Writing-Methods.html#Writing-Methods"
+    accesskey="n" rel="next">Writing Methods</a>, Previous:
+    <a href="Making-New-Objects.html#Making-New-Objects" accesskey=
+    "p" rel="prev">Making New Objects</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="Function-Index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Accessing-Slots-1" id="Accessing-Slots-1"></a>
 
-<dl>
-<dt><a name="index-oset_002ddefault"></a>Macro: <strong>oset-default</strong> <em>class slot value</em></dt>
-<dd><p>This macro sets the value for the class-allocated <var>slot</var> in <var>class</var> to
-<var>value</var>.
-</p>
-<p>For example, if a user wanted all <code>data-objects</code> (see <a href="Building-Classes.html#Building-Classes">Building Classes</a>) to inform a special object of his own devising when they
-changed, this can be arranged by simply executing this bit of code:
-</p>
-<div class="example">
-<pre class="example">(oset-default data-object reference (list my-special-object))
-</pre></div>
-</dd></dl>
+  <h2 class="chapter">5 Accessing Slots</h2>
 
-<dl>
-<dt><a name="index-oref"></a>Macro: <strong>oref</strong> <em>obj slot</em></dt>
-<dd><a name="oref"></a><p>Retrieve the value stored in <var>obj</var> in the slot named by <var>slot</var>.
-Slot is the name of the slot when created by <em>defclass</em>.
-</p></dd></dl>
+  <p>There are several ways to access slot values in an object. The
+  naming and argument-order conventions are similar to those used
+  for referencing vectors (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Vectors.html#Vectors">
+  Vectors</a> in <cite>GNU Emacs Lisp Reference Manual</cite>).</p>
 
-<dl>
-<dt><a name="index-oref_002ddefault"></a>Macro: <strong>oref-default</strong> <em>class slot</em></dt>
-<dd><a name="oref_002ddefault"></a><p>Get the value of the class-allocated <var>slot</var> from <var>class</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-oset" id="index-oset"></a>Macro:
+    <strong>oset</strong> <em>object slot value</em></dt>
 
-<p>The following accessors are defined by CLOS to reference or modify
-slot values, and use the previously mentioned set/ref routines.
-</p>
-<dl>
-<dt><a name="index-slot_002dvalue"></a>Function: <strong>slot-value</strong> <em>object slot</em></dt>
-<dd><a name="slot_002dvalue"></a><p>This function retrieves the value of <var>slot</var> from <var>object</var>.
-Unlike <code>oref</code>, the symbol for <var>slot</var> must be quoted.
-</p></dd></dl>
+    <dd>
+      <p>This macro sets the value behind <var>slot</var> to
+      <var>value</var> in <var>object</var>. It returns
+      <var>value</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-set_002dslot_002dvalue"></a>Function: <strong>set-slot-value</strong> <em>object slot value</em></dt>
-<dd><a name="set_002dslot_002dvalue"></a><p>This is not a CLOS function, but is the setter for <code>slot-value</code>
-used by the <code>setf</code> macro.  This
-function sets the value of <var>slot</var> from <var>object</var>.  Unlike
-<code>oset</code>, the symbol for <var>slot</var> must be quoted.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-oset_002ddefault" id=
+    "index-oset_002ddefault"></a>Macro:
+    <strong>oset-default</strong> <em>class slot value</em></dt>
 
-<dl>
-<dt><a name="index-slot_002dmakeunbound"></a>Function: <strong>slot-makeunbound</strong> <em>object slot</em></dt>
-<dd><p>This function unbinds <var>slot</var> in <var>object</var>.  Referencing an
-unbound slot can signal an error.
-</p></dd></dl>
+    <dd>
+      <p>This macro sets the value for the class-allocated
+      <var>slot</var> in <var>class</var> to <var>value</var>.</p>
 
-<dl>
-<dt><a name="index-object_002dadd_002dto_002dlist"></a>Function: <strong>object-add-to-list</strong> <em>object slot item &amp;optional append</em></dt>
-<dd><a name="object_002dadd_002dto_002dlist"></a><p>In OBJECT&rsquo;s <var>slot</var>, add <var>item</var> to the list of elements.
-Optional argument <var>append</var> indicates we need to append to the list.
-If <var>item</var> already exists in the list in <var>slot</var>, then it is not added.
-Comparison is done with <em>equal</em> through the <em>member</em> function call.
-If <var>slot</var> is unbound, bind it to the list containing <var>item</var>.
-</p></dd></dl>
+      <p>For example, if a user wanted all
+      <code>data-objects</code> (see <a href=
+      "Building-Classes.html#Building-Classes">Building
+      Classes</a>) to inform a special object of his own devising
+      when they changed, this can be arranged by simply executing
+      this bit of code:</p>
 
-<dl>
-<dt><a name="index-object_002dremove_002dfrom_002dlist"></a>Function: <strong>object-remove-from-list</strong> <em>object slot item</em></dt>
-<dd><a name="object_002dremove_002dfrom_002dlist"></a><p>In OBJECT&rsquo;s <var>slot</var>, remove occurrences of <var>item</var>.
-Deletion is done with <em>delete</em>, which deletes by side effect
-and comparisons are done with <em>equal</em>.
-If <var>slot</var> is unbound, do nothing.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+(oset-default data-object reference (list my-special-object))
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-with_002dslots"></a>Function: <strong>with-slots</strong> <em>spec-list object &amp;rest body</em></dt>
-<dd><a name="with_002dslots"></a><p>Bind <var>spec-list</var> lexically to slot values in <var>object</var>, and execute <var>body</var>.
-This establishes a lexical environment for referring to the slots in
-the instance named by the given slot-names as though they were
-variables.  Within such a context the value of the slot can be
-specified by using its slot name, as if it were a lexically bound
-variable.  Both <code>setf</code> and <code>setq</code> can be used to set the value of the
-slot.
-</p>
-<p><var>spec-list</var> is of a form similar to <em>let</em>.  For example:
-</p>
-<div class="example">
-<pre class="example">  ((VAR1 SLOT1)
+  <dl>
+    <dt><a name="index-oref" id="index-oref"></a>Macro:
+    <strong>oref</strong> <em>obj slot</em></dt>
+
+    <dd>
+      <a name="oref" id="oref"></a>
+
+      <p>Retrieve the value stored in <var>obj</var> in the slot
+      named by <var>slot</var>. Slot is the name of the slot when
+      created by <em>defclass</em>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-oref_002ddefault" id=
+    "index-oref_002ddefault"></a>Macro:
+    <strong>oref-default</strong> <em>class slot</em></dt>
+
+    <dd>
+      <a name="oref_002ddefault" id="oref_002ddefault"></a>
+
+      <p>Get the value of the class-allocated <var>slot</var> from
+      <var>class</var>.</p>
+    </dd>
+  </dl>
+
+  <p>The following accessors are defined by CLOS to reference or
+  modify slot values, and use the previously mentioned set/ref
+  routines.</p>
+
+  <dl>
+    <dt><a name="index-slot_002dvalue" id=
+    "index-slot_002dvalue"></a>Function:
+    <strong>slot-value</strong> <em>object slot</em></dt>
+
+    <dd>
+      <a name="slot_002dvalue" id="slot_002dvalue"></a>
+
+      <p>This function retrieves the value of <var>slot</var> from
+      <var>object</var>. Unlike <code>oref</code>, the symbol for
+      <var>slot</var> must be quoted.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dslot_002dvalue" id=
+    "index-set_002dslot_002dvalue"></a>Function:
+    <strong>set-slot-value</strong> <em>object slot value</em></dt>
+
+    <dd>
+      <a name="set_002dslot_002dvalue" id=
+      "set_002dslot_002dvalue"></a>
+
+      <p>This is not a CLOS function, but is the setter for
+      <code>slot-value</code> used by the <code>setf</code> macro.
+      This function sets the value of <var>slot</var> from
+      <var>object</var>. Unlike <code>oset</code>, the symbol for
+      <var>slot</var> must be quoted.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-slot_002dmakeunbound" id=
+    "index-slot_002dmakeunbound"></a>Function:
+    <strong>slot-makeunbound</strong> <em>object slot</em></dt>
+
+    <dd>
+      <p>This function unbinds <var>slot</var> in
+      <var>object</var>. Referencing an unbound slot can signal an
+      error.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-object_002dadd_002dto_002dlist" id=
+    "index-object_002dadd_002dto_002dlist"></a>Function:
+    <strong>object-add-to-list</strong> <em>object slot item
+    &amp;optional append</em></dt>
+
+    <dd>
+      <a name="object_002dadd_002dto_002dlist" id=
+      "object_002dadd_002dto_002dlist"></a>
+
+      <p>In OBJECT&rsquo;s <var>slot</var>, add <var>item</var> to
+      the list of elements. Optional argument <var>append</var>
+      indicates we need to append to the list. If <var>item</var>
+      already exists in the list in <var>slot</var>, then it is not
+      added. Comparison is done with <em>equal</em> through the
+      <em>member</em> function call. If <var>slot</var> is unbound,
+      bind it to the list containing <var>item</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-object_002dremove_002dfrom_002dlist" id=
+    "index-object_002dremove_002dfrom_002dlist"></a>Function:
+    <strong>object-remove-from-list</strong> <em>object slot
+    item</em></dt>
+
+    <dd>
+      <a name="object_002dremove_002dfrom_002dlist" id=
+      "object_002dremove_002dfrom_002dlist"></a>
+
+      <p>In OBJECT&rsquo;s <var>slot</var>, remove occurrences of
+      <var>item</var>. Deletion is done with <em>delete</em>, which
+      deletes by side effect and comparisons are done with
+      <em>equal</em>. If <var>slot</var> is unbound, do
+      nothing.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-with_002dslots" id=
+    "index-with_002dslots"></a>Function:
+    <strong>with-slots</strong> <em>spec-list object &amp;rest
+    body</em></dt>
+
+    <dd>
+      <a name="with_002dslots" id="with_002dslots"></a>
+
+      <p>Bind <var>spec-list</var> lexically to slot values in
+      <var>object</var>, and execute <var>body</var>. This
+      establishes a lexical environment for referring to the slots
+      in the instance named by the given slot-names as though they
+      were variables. Within such a context the value of the slot
+      can be specified by using its slot name, as if it were a
+      lexically bound variable. Both <code>setf</code> and
+      <code>setq</code> can be used to set the value of the
+      slot.</p>
+
+      <p><var>spec-list</var> is of a form similar to <em>let</em>.
+      For example:</p>
+
+      <div class="example">
+        <pre class="example">
+  ((VAR1 SLOT1)
     SLOT2
     SLOTN
    (VARN+1 SLOTN+1))
-</pre></div>
+</pre>
+      </div>
 
-<p>Where each <var>var</var> is the local variable given to the associated
-<var>slot</var>.  A slot specified without a variable name is given a
-variable name of the same name as the slot.
-</p>
-<div class="example">
-<pre class="example">(defclass myclass () (x :initform 1))
+      <p>Where each <var>var</var> is the local variable given to
+      the associated <var>slot</var>. A slot specified without a
+      variable name is given a variable name of the same name as
+      the slot.</p>
+
+      <div class="example">
+        <pre class="example">
+(defclass myclass () (x :initform 1))
 (setq mc (make-instance 'myclass))
 (with-slots (x) mc x)                      =&gt; 1
 (with-slots ((something x)) mc something)  =&gt; 1
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Writing-Methods.html#Writing-Methods" accesskey="n" rel="next">Writing Methods</a>, Previous: <a href="Making-New-Objects.html#Making-New-Objects" accesskey="p" rel="prev">Making New Objects</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Writing-Methods.html#Writing-Methods"
+    accesskey="n" rel="next">Writing Methods</a>, Previous:
+    <a href="Making-New-Objects.html#Making-New-Objects" accesskey=
+    "p" rel="prev">Making New Objects</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="Function-Index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

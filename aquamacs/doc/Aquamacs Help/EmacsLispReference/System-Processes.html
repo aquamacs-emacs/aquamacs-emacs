@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,283 +19,431 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: System Processes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: System Processes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: System Processes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Processes.html#Processes" rel="up" title="Processes">
-<link href="Transaction-Queues.html#Transaction-Queues" rel="next" title="Transaction Queues">
-<link href="Query-Before-Exit.html#Query-Before-Exit" rel="prev" title="Query Before Exit">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: System Processes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: System Processes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: System Processes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Processes.html#Processes" rel="up" title=
+  "Processes" />
+  <link href="Transaction-Queues.html#Transaction-Queues" rel=
+  "next" title="Transaction Queues" />
+  <link href="Query-Before-Exit.html#Query-Before-Exit" rel="prev"
+  title="Query Before Exit" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="System-Processes" id="System-Processes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Transaction-Queues.html#Transaction-Queues"
+    accesskey="n" rel="next">Transaction Queues</a>, Previous:
+    <a href="Query-Before-Exit.html#Query-Before-Exit" accesskey=
+    "p" rel="prev">Query Before Exit</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Accessing-Other-Processes" id=
+  "Accessing-Other-Processes"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="System-Processes"></a>
-<div class="header">
-<p>
-Next: <a href="Transaction-Queues.html#Transaction-Queues" accesskey="n" rel="next">Transaction Queues</a>, Previous: <a href="Query-Before-Exit.html#Query-Before-Exit" accesskey="p" rel="prev">Query Before Exit</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Accessing-Other-Processes"></a>
-<h3 class="section">36.12 Accessing Other Processes</h3>
-<a name="index-system-processes"></a>
+  <h3 class="section">36.12 Accessing Other Processes</h3><a name=
+  "index-system-processes" id="index-system-processes"></a>
 
-<p>In addition to accessing and manipulating processes that are
-subprocesses of the current Emacs session, Emacs Lisp programs can
-also access other processes running on the same machine.  We call
-these <em>system processes</em>, to distinguish them from Emacs
-subprocesses.
-</p>
-<p>Emacs provides several primitives for accessing system processes.
-Not all platforms support these primitives; on those which don&rsquo;t,
-these primitives return <code>nil</code>.
-</p>
-<dl>
-<dt><a name="index-list_002dsystem_002dprocesses"></a>Function: <strong>list-system-processes</strong></dt>
-<dd><p>This function returns a list of all the processes running on the
-system.  Each process is identified by its <acronym>PID</acronym>, a numerical
-process ID that is assigned by the OS and distinguishes the process
-from all the other processes running on the same machine at the same
-time.
-</p></dd></dl>
+  <p>In addition to accessing and manipulating processes that are
+  subprocesses of the current Emacs session, Emacs Lisp programs
+  can also access other processes running on the same machine. We
+  call these <em>system processes</em>, to distinguish them from
+  Emacs subprocesses.</p>
 
-<dl>
-<dt><a name="index-process_002dattributes"></a>Function: <strong>process-attributes</strong> <em>pid</em></dt>
-<dd><p>This function returns an alist of attributes for the process specified
-by its process ID <var>pid</var>.  Each association in the alist is of the
-form <code>(<var>key</var> . <var>value</var>)</code>, where <var>key</var> designates the
-attribute and <var>value</var> is the value of that attribute.  The various
-attribute <var>key</var>s that this function can return are listed below.
-Not all platforms support all of these attributes; if an attribute is
-not supported, its association will not appear in the returned alist.
-Values that are numbers can be either integer or floating point,
-depending on the magnitude of the value.
-</p>
-<dl compact="compact">
-<dt><code>euid</code></dt>
-<dd><p>The effective user ID of the user who invoked the process.  The
-corresponding <var>value</var> is a number.  If the process was invoked by
-the same user who runs the current Emacs session, the value is
-identical to what <code>user-uid</code> returns (see <a href="User-Identification.html#User-Identification">User Identification</a>).
-</p>
-</dd>
-<dt><code>user</code></dt>
-<dd><p>User name corresponding to the process&rsquo;s effective user ID, a string.
-</p>
-</dd>
-<dt><code>egid</code></dt>
-<dd><p>The group ID of the effective user ID, a number.
-</p>
-</dd>
-<dt><code>group</code></dt>
-<dd><p>Group name corresponding to the effective user&rsquo;s group ID, a string.
-</p>
-</dd>
-<dt><code>comm</code></dt>
-<dd><p>The name of the command that runs in the process.  This is a string
-that usually specifies the name of the executable file of the process,
-without the leading directories.  However, some special system
-processes can report strings that do not correspond to an executable
-file of a program.
-</p>
-</dd>
-<dt><code>state</code></dt>
-<dd><p>The state code of the process.  This is a short string that encodes
-the scheduling state of the process.  Here&rsquo;s a list of the most
-frequently seen codes:
-</p>
-<dl compact="compact">
-<dt><code>&quot;D&quot;</code></dt>
-<dd><p>uninterruptible sleep (usually I/O)
-</p></dd>
-<dt><code>&quot;R&quot;</code></dt>
-<dd><p>running
-</p></dd>
-<dt><code>&quot;S&quot;</code></dt>
-<dd><p>interruptible sleep (waiting for some event)
-</p></dd>
-<dt><code>&quot;T&quot;</code></dt>
-<dd><p>stopped, e.g., by a job control signal
-</p></dd>
-<dt><code>&quot;Z&quot;</code></dt>
-<dd><p>zombie: a process that terminated, but was not reaped by its parent
-</p></dd>
-</dl>
+  <p>Emacs provides several primitives for accessing system
+  processes. Not all platforms support these primitives; on those
+  which don&rsquo;t, these primitives return <code>nil</code>.</p>
 
-<p>For the full list of the possible states, see the manual page of the
-<code>ps</code> command.
-</p>
-</dd>
-<dt><code>ppid</code></dt>
-<dd><p>The process ID of the parent process, a number.
-</p>
-</dd>
-<dt><code>pgrp</code></dt>
-<dd><p>The process group ID of the process, a number.
-</p>
-</dd>
-<dt><code>sess</code></dt>
-<dd><p>The session ID of the process.  This is a number that is the process
-ID of the process&rsquo;s <em>session leader</em>.
-</p>
-</dd>
-<dt><code>ttname</code></dt>
-<dd><p>A string that is the name of the process&rsquo;s controlling terminal.  On
-Unix and GNU systems, this is normally the file name of the
-corresponding terminal device, such as <samp>/dev/pts65</samp>.
-</p>
-</dd>
-<dt><code>tpgid</code></dt>
-<dd><p>The numerical process group ID of the foreground process group that
-uses the process&rsquo;s terminal.
-</p>
-</dd>
-<dt><code>minflt</code></dt>
-<dd><p>The number of minor page faults caused by the process since its
-beginning.  (Minor page faults are those that don&rsquo;t involve reading
-from disk.)
-</p>
-</dd>
-<dt><code>majflt</code></dt>
-<dd><p>The number of major page faults caused by the process since its
-beginning.  (Major page faults require a disk to be read, and are thus
-more expensive than minor page faults.)
-</p>
-</dd>
-<dt><code>cminflt</code></dt>
-<dt><code>cmajflt</code></dt>
-<dd><p>Like <code>minflt</code> and <code>majflt</code>, but include the number of page
-faults for all the child processes of the given process.
-</p>
-</dd>
-<dt><code>utime</code></dt>
-<dd><p>Time spent by the process in the user context, for running the
-application&rsquo;s code.  The corresponding <var>value</var> is in the
-<code>(<var>high</var>&nbsp;<var>low</var>&nbsp;<var>microsec</var>&nbsp;<var>picosec</var>)</code><!-- /@w --> format, the same
-format used by functions <code>current-time</code> (see <a href="Time-of-Day.html#Time-of-Day">current-time</a>) and <code>file-attributes</code> (see <a href="File-Attributes.html#File-Attributes">File Attributes</a>).
-</p>
-</dd>
-<dt><code>stime</code></dt>
-<dd><p>Time spent by the process in the system (kernel) context, for
-processing system calls.  The corresponding <var>value</var> is in the same
-format as for <code>utime</code>.
-</p>
-</dd>
-<dt><code>time</code></dt>
-<dd><p>The sum of <code>utime</code> and <code>stime</code>.  The corresponding
-<var>value</var> is in the same format as for <code>utime</code>.
-</p>
-</dd>
-<dt><code>cutime</code></dt>
-<dt><code>cstime</code></dt>
-<dt><code>ctime</code></dt>
-<dd><p>Like <code>utime</code>, <code>stime</code>, and <code>time</code>, but include the
-times of all the child processes of the given process.
-</p>
-</dd>
-<dt><code>pri</code></dt>
-<dd><p>The numerical priority of the process.
-</p>
-</dd>
-<dt><code>nice</code></dt>
-<dd><p>The <em>nice value</em> of the process, a number.  (Processes with smaller
-nice values get scheduled more favorably.)
-</p>
-</dd>
-<dt><code>thcount</code></dt>
-<dd><p>The number of threads in the process.
-</p>
-</dd>
-<dt><code>start</code></dt>
-<dd><p>The time when the process was started, in the same
-<code>(<var>high</var> <var>low</var> <var>microsec</var> <var>picosec</var>)</code> format used by
-<code>file-attributes</code> and <code>current-time</code>.
-</p>
-</dd>
-<dt><code>etime</code></dt>
-<dd><p>The time elapsed since the process started, in the format <code>(<var>high</var>
-<var>low</var> <var>microsec</var> <var>picosec</var>)</code>.
-</p>
-</dd>
-<dt><code>vsize</code></dt>
-<dd><p>The virtual memory size of the process, measured in kilobytes.
-</p>
-</dd>
-<dt><code>rss</code></dt>
-<dd><p>The size of the process&rsquo;s <em>resident set</em>, the number of kilobytes
-occupied by the process in the machine&rsquo;s physical memory.
-</p>
-</dd>
-<dt><code>pcpu</code></dt>
-<dd><p>The percentage of the CPU time used by the process since it started.
-The corresponding <var>value</var> is a floating-point number between 0 and
-100.
-</p>
-</dd>
-<dt><code>pmem</code></dt>
-<dd><p>The percentage of the total physical memory installed on the machine
-used by the process&rsquo;s resident set.  The value is a floating-point
-number between 0 and 100.
-</p>
-</dd>
-<dt><code>args</code></dt>
-<dd><p>The command-line with which the process was invoked.  This is a string
-in which individual command-line arguments are separated by blanks;
-whitespace characters that are embedded in the arguments are quoted as
-appropriate for the system&rsquo;s shell: escaped by backslash characters on
-GNU and Unix, and enclosed in double quote characters on Windows.
-Thus, this command-line string can be directly used in primitives such
-as <code>shell-command</code>.
-</p></dd>
-</dl>
+  <dl>
+    <dt><a name="index-list_002dsystem_002dprocesses" id=
+    "index-list_002dsystem_002dprocesses"></a>Function:
+    <strong>list-system-processes</strong></dt>
 
-</dd></dl>
+    <dd>
+      <p>This function returns a list of all the processes running
+      on the system. Each process is identified by its
+      <acronym>PID</acronym>, a numerical process ID that is
+      assigned by the OS and distinguishes the process from all the
+      other processes running on the same machine at the same
+      time.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-process_002dattributes" id=
+    "index-process_002dattributes"></a>Function:
+    <strong>process-attributes</strong> <em>pid</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Transaction-Queues.html#Transaction-Queues" accesskey="n" rel="next">Transaction Queues</a>, Previous: <a href="Query-Before-Exit.html#Query-Before-Exit" accesskey="p" rel="prev">Query Before Exit</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns an alist of attributes for the
+      process specified by its process ID <var>pid</var>. Each
+      association in the alist is of the form <code>(<var>key</var>
+      . <var>value</var>)</code>, where <var>key</var> designates
+      the attribute and <var>value</var> is the value of that
+      attribute. The various attribute <var>key</var>s that this
+      function can return are listed below. Not all platforms
+      support all of these attributes; if an attribute is not
+      supported, its association will not appear in the returned
+      alist. Values that are numbers can be either integer or
+      floating point, depending on the magnitude of the value.</p>
 
+      <dl compact="compact">
+        <dt><code>euid</code></dt>
 
+        <dd>
+          <p>The effective user ID of the user who invoked the
+          process. The corresponding <var>value</var> is a number.
+          If the process was invoked by the same user who runs the
+          current Emacs session, the value is identical to what
+          <code>user-uid</code> returns (see <a href=
+          "User-Identification.html#User-Identification">User
+          Identification</a>).</p>
+        </dd>
 
+        <dt><code>user</code></dt>
+
+        <dd>
+          <p>User name corresponding to the process&rsquo;s
+          effective user ID, a string.</p>
+        </dd>
+
+        <dt><code>egid</code></dt>
+
+        <dd>
+          <p>The group ID of the effective user ID, a number.</p>
+        </dd>
+
+        <dt><code>group</code></dt>
+
+        <dd>
+          <p>Group name corresponding to the effective user&rsquo;s
+          group ID, a string.</p>
+        </dd>
+
+        <dt><code>comm</code></dt>
+
+        <dd>
+          <p>The name of the command that runs in the process. This
+          is a string that usually specifies the name of the
+          executable file of the process, without the leading
+          directories. However, some special system processes can
+          report strings that do not correspond to an executable
+          file of a program.</p>
+        </dd>
+
+        <dt><code>state</code></dt>
+
+        <dd>
+          <p>The state code of the process. This is a short string
+          that encodes the scheduling state of the process.
+          Here&rsquo;s a list of the most frequently seen
+          codes:</p>
+
+          <dl compact="compact">
+            <dt><code>"D"</code></dt>
+
+            <dd>
+              <p>uninterruptible sleep (usually I/O)</p>
+            </dd>
+
+            <dt><code>"R"</code></dt>
+
+            <dd>
+              <p>running</p>
+            </dd>
+
+            <dt><code>"S"</code></dt>
+
+            <dd>
+              <p>interruptible sleep (waiting for some event)</p>
+            </dd>
+
+            <dt><code>"T"</code></dt>
+
+            <dd>
+              <p>stopped, e.g., by a job control signal</p>
+            </dd>
+
+            <dt><code>"Z"</code></dt>
+
+            <dd>
+              <p>zombie: a process that terminated, but was not
+              reaped by its parent</p>
+            </dd>
+          </dl>
+
+          <p>For the full list of the possible states, see the
+          manual page of the <code>ps</code> command.</p>
+        </dd>
+
+        <dt><code>ppid</code></dt>
+
+        <dd>
+          <p>The process ID of the parent process, a number.</p>
+        </dd>
+
+        <dt><code>pgrp</code></dt>
+
+        <dd>
+          <p>The process group ID of the process, a number.</p>
+        </dd>
+
+        <dt><code>sess</code></dt>
+
+        <dd>
+          <p>The session ID of the process. This is a number that
+          is the process ID of the process&rsquo;s <em>session
+          leader</em>.</p>
+        </dd>
+
+        <dt><code>ttname</code></dt>
+
+        <dd>
+          <p>A string that is the name of the process&rsquo;s
+          controlling terminal. On Unix and GNU systems, this is
+          normally the file name of the corresponding terminal
+          device, such as <samp>/dev/pts65</samp>.</p>
+        </dd>
+
+        <dt><code>tpgid</code></dt>
+
+        <dd>
+          <p>The numerical process group ID of the foreground
+          process group that uses the process&rsquo;s terminal.</p>
+        </dd>
+
+        <dt><code>minflt</code></dt>
+
+        <dd>
+          <p>The number of minor page faults caused by the process
+          since its beginning. (Minor page faults are those that
+          don&rsquo;t involve reading from disk.)</p>
+        </dd>
+
+        <dt><code>majflt</code></dt>
+
+        <dd>
+          <p>The number of major page faults caused by the process
+          since its beginning. (Major page faults require a disk to
+          be read, and are thus more expensive than minor page
+          faults.)</p>
+        </dd>
+
+        <dt><code>cminflt</code></dt>
+
+        <dt><code>cmajflt</code></dt>
+
+        <dd>
+          <p>Like <code>minflt</code> and <code>majflt</code>, but
+          include the number of page faults for all the child
+          processes of the given process.</p>
+        </dd>
+
+        <dt><code>utime</code></dt>
+
+        <dd>
+          <p>Time spent by the process in the user context, for
+          running the application&rsquo;s code. The corresponding
+          <var>value</var> is in the
+          <code>(<var>high</var>&nbsp;<var>low</var>&nbsp;<var>microsec</var>&nbsp;<var>picosec</var>)</code><!-- /@w -->
+          format, the same format used by functions
+          <code>current-time</code> (see <a href=
+          "Time-of-Day.html#Time-of-Day">current-time</a>) and
+          <code>file-attributes</code> (see <a href=
+          "File-Attributes.html#File-Attributes">File
+          Attributes</a>).</p>
+        </dd>
+
+        <dt><code>stime</code></dt>
+
+        <dd>
+          <p>Time spent by the process in the system (kernel)
+          context, for processing system calls. The corresponding
+          <var>value</var> is in the same format as for
+          <code>utime</code>.</p>
+        </dd>
+
+        <dt><code>time</code></dt>
+
+        <dd>
+          <p>The sum of <code>utime</code> and <code>stime</code>.
+          The corresponding <var>value</var> is in the same format
+          as for <code>utime</code>.</p>
+        </dd>
+
+        <dt><code>cutime</code></dt>
+
+        <dt><code>cstime</code></dt>
+
+        <dt><code>ctime</code></dt>
+
+        <dd>
+          <p>Like <code>utime</code>, <code>stime</code>, and
+          <code>time</code>, but include the times of all the child
+          processes of the given process.</p>
+        </dd>
+
+        <dt><code>pri</code></dt>
+
+        <dd>
+          <p>The numerical priority of the process.</p>
+        </dd>
+
+        <dt><code>nice</code></dt>
+
+        <dd>
+          <p>The <em>nice value</em> of the process, a number.
+          (Processes with smaller nice values get scheduled more
+          favorably.)</p>
+        </dd>
+
+        <dt><code>thcount</code></dt>
+
+        <dd>
+          <p>The number of threads in the process.</p>
+        </dd>
+
+        <dt><code>start</code></dt>
+
+        <dd>
+          <p>The time when the process was started, in the same
+          <code>(<var>high</var> <var>low</var> <var>microsec</var>
+          <var>picosec</var>)</code> format used by
+          <code>file-attributes</code> and
+          <code>current-time</code>.</p>
+        </dd>
+
+        <dt><code>etime</code></dt>
+
+        <dd>
+          <p>The time elapsed since the process started, in the
+          format <code>(<var>high</var> <var>low</var>
+          <var>microsec</var> <var>picosec</var>)</code>.</p>
+        </dd>
+
+        <dt><code>vsize</code></dt>
+
+        <dd>
+          <p>The virtual memory size of the process, measured in
+          kilobytes.</p>
+        </dd>
+
+        <dt><code>rss</code></dt>
+
+        <dd>
+          <p>The size of the process&rsquo;s <em>resident set</em>,
+          the number of kilobytes occupied by the process in the
+          machine&rsquo;s physical memory.</p>
+        </dd>
+
+        <dt><code>pcpu</code></dt>
+
+        <dd>
+          <p>The percentage of the CPU time used by the process
+          since it started. The corresponding <var>value</var> is a
+          floating-point number between 0 and 100.</p>
+        </dd>
+
+        <dt><code>pmem</code></dt>
+
+        <dd>
+          <p>The percentage of the total physical memory installed
+          on the machine used by the process&rsquo;s resident set.
+          The value is a floating-point number between 0 and
+          100.</p>
+        </dd>
+
+        <dt><code>args</code></dt>
+
+        <dd>
+          <p>The command-line with which the process was invoked.
+          This is a string in which individual command-line
+          arguments are separated by blanks; whitespace characters
+          that are embedded in the arguments are quoted as
+          appropriate for the system&rsquo;s shell: escaped by
+          backslash characters on GNU and Unix, and enclosed in
+          double quote characters on Windows. Thus, this
+          command-line string can be directly used in primitives
+          such as <code>shell-command</code>.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Transaction-Queues.html#Transaction-Queues"
+    accesskey="n" rel="next">Transaction Queues</a>, Previous:
+    <a href="Query-Before-Exit.html#Query-Before-Exit" accesskey=
+    "p" rel="prev">Query Before Exit</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

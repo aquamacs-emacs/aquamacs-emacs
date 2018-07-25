@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,232 +14,332 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Spam Package Configuration Examples</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Spam Package Configuration Examples">
-<meta name="keywords" content="Gnus Manual: Spam Package Configuration Examples">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Package.html#Spam-Package" rel="up" title="Spam Package">
-<link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="next" title="Spam Back Ends">
-<link href="Spam-and-Ham-Processors.html#Spam-and-Ham-Processors" rel="prev" title="Spam and Ham Processors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Spam Package Configuration Examples</title>
+  <meta name="description" content=
+  "Gnus Manual: Spam Package Configuration Examples" />
+  <meta name="keywords" content=
+  "Gnus Manual: Spam Package Configuration Examples" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Package.html#Spam-Package" rel="up" title=
+  "Spam Package" />
+  <link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="next" title=
+  "Spam Back Ends" />
+  <link href="Spam-and-Ham-Processors.html#Spam-and-Ham-Processors"
+  rel="prev" title="Spam and Ham Processors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Spam-Package-Configuration-Examples"></a>
-<div class="header">
-<p>
-Next: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="n" rel="next">Spam Back Ends</a>, Previous: <a href="Spam-and-Ham-Processors.html#Spam-and-Ham-Processors" accesskey="p" rel="prev">Spam and Ham Processors</a>, Up: <a href="Spam-Package.html#Spam-Package" accesskey="u" rel="up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Spam-Package-Configuration-Examples-1"></a>
-<h4 class="subsection">9.17.5 Spam Package Configuration Examples</h4>
-<a name="index-spam-filtering-4"></a>
-<a name="index-spam-filtering-configuration-examples"></a>
-<a name="index-spam-configuration-examples"></a>
-<a name="index-spam-6"></a>
+<body lang="en" xml:lang="en">
+  <a name="Spam-Package-Configuration-Examples" id=
+  "Spam-Package-Configuration-Examples"></a>
 
-<a name="Ted_0027s-setup"></a>
-<h4 class="subsubheading">Ted&rsquo;s setup</h4>
+  <div class="header">
+    <p>Next: <a href="Spam-Back-Ends.html#Spam-Back-Ends"
+    accesskey="n" rel="next">Spam Back Ends</a>, Previous: <a href=
+    "Spam-and-Ham-Processors.html#Spam-and-Ham-Processors"
+    accesskey="p" rel="prev">Spam and Ham Processors</a>, Up:
+    <a href="Spam-Package.html#Spam-Package" accesskey="u" rel=
+    "up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Spam-Package-Configuration-Examples-1" id=
+  "Spam-Package-Configuration-Examples-1"></a>
 
-<p>From Ted Zlatanov &lt;tzz@lifelogs.com&gt;.
-</p><div class="example">
-<pre class="example">;; <span class="roman">for <code>gnus-registry-split-fancy-with-parent</code> and spam autodetection</span>
-;; <span class="roman">see <samp>gnus-registry.el</samp> for more information</span>
+  <h4 class="subsection">9.17.5 Spam Package Configuration
+  Examples</h4><a name="index-spam-filtering-4" id=
+  "index-spam-filtering-4"></a> <a name=
+  "index-spam-filtering-configuration-examples" id=
+  "index-spam-filtering-configuration-examples"></a> <a name=
+  "index-spam-configuration-examples" id=
+  "index-spam-configuration-examples"></a> <a name="index-spam-6"
+  id="index-spam-6"></a> <a name="Ted_0027s-setup" id=
+  "Ted_0027s-setup"></a>
+
+  <h4 class="subsubheading">Ted&rsquo;s setup</h4>
+
+  <p>From Ted Zlatanov &lt;tzz@lifelogs.com&gt;.</p>
+
+  <div class="example">
+    <pre class="example">
+;; <span class=
+"roman">for <code>gnus-registry-split-fancy-with-parent</code> and spam autodetection</span>
+;; <span class=
+"roman">see <samp>gnus-registry.el</samp> for more information</span>
 (gnus-registry-initialize)
 (spam-initialize)
 
 (setq
- spam-log-to-registry t     ; <span class="roman">for spam autodetection</span>
+ spam-log-to-registry t     ; <span class=
+"roman">for spam autodetection</span>
  spam-use-BBDB t
- spam-use-regex-headers t   ; <span class="roman">catch X-Spam-Flag (SpamAssassin)</span>
- ;; <span class="roman">all groups with &lsquo;<samp>spam</samp>&rsquo; in the name contain spam</span>
+ spam-use-regex-headers t   ; <span class=
+"roman">catch X-Spam-Flag (SpamAssassin)</span>
+ ;; <span class=
+"roman">all groups with &lsquo;<samp>spam</samp>&rsquo; in the name contain spam</span>
  gnus-spam-newsgroup-contents
-  '((&quot;spam&quot; gnus-group-spam-classification-spam))
+  '(("spam" gnus-group-spam-classification-spam))
  ;; <span class="roman">see documentation for these</span>
  spam-move-spam-nonspam-groups-only nil
  spam-mark-only-unseen-as-spam t
  spam-mark-ham-unread-before-move-from-spam-group t
- ;; <span class="roman">understand what this does before you copy it to your own setup!</span>
- ;; <span class="roman">for nnimap you&rsquo;ll probably want to set nnimap-split-methods, see the manual</span>
+ ;; <span class=
+"roman">understand what this does before you copy it to your own setup!</span>
+ ;; <span class=
+"roman">for nnimap you&rsquo;ll probably want to set nnimap-split-methods, see the manual</span>
  nnimap-split-fancy '(|
-                      ;; <span class="roman">trace references to parents and put in their group</span>
+                      ;; <span class=
+"roman">trace references to parents and put in their group</span>
                       (: gnus-registry-split-fancy-with-parent)
-                      ;; <span class="roman">this will catch server-side SpamAssassin tags</span>
+                      ;; <span class=
+"roman">this will catch server-side SpamAssassin tags</span>
                       (: spam-split 'spam-use-regex-headers)
-                      (any &quot;ding&quot; &quot;ding&quot;)
-                      ;; <span class="roman">note that spam by default will go to &lsquo;<samp>spam</samp>&rsquo;</span>
+                      (any "ding" "ding")
+                      ;; <span class=
+"roman">note that spam by default will go to &lsquo;<samp>spam</samp>&rsquo;</span>
                       (: spam-split)
                       ;; <span class="roman">default mailbox</span>
-                      &quot;mail&quot;))
+                      "mail"))
 
-;; <span class="roman">my parameters, set with <kbd>G p</kbd></span>
+;; <span class=
+"roman">my parameters, set with <kbd>G p</kbd></span>
 
-;; <span class="roman">all nnml groups, and all nnimap groups except</span>
-;; <span class="roman">&lsquo;<samp>nnimap+mail.lifelogs.com:train</samp>&rsquo; and</span>
-;; <span class="roman">&lsquo;<samp>nnimap+mail.lifelogs.com:spam</samp>&rsquo;: any spam goes to nnimap training,</span>
-;; <span class="roman">because it must have been detected manually</span>
+;; <span class=
+"roman">all nnml groups, and all nnimap groups except</span>
+;; <span class=
+"roman">&lsquo;<samp>nnimap+mail.lifelogs.com:train</samp>&rsquo; and</span>
+;; <span class=
+"roman">&lsquo;<samp>nnimap+mail.lifelogs.com:spam</samp>&rsquo;: any spam goes to nnimap training,</span>
+;; <span class=
+"roman">because it must have been detected manually</span>
 
-((spam-process-destination . &quot;nnimap+mail.lifelogs.com:train&quot;))
+((spam-process-destination . "nnimap+mail.lifelogs.com:train"))
 
 ;; <span class="roman">all <acronym>NNTP</acronym> groups</span>
-;; <span class="roman">autodetect spam with the blacklist and ham with the BBDB</span>
+;; <span class=
+"roman">autodetect spam with the blacklist and ham with the BBDB</span>
 ((spam-autodetect-methods spam-use-blacklist spam-use-BBDB)
 ;; <span class="roman">send all spam to the training group</span>
- (spam-process-destination . &quot;nnimap+mail.lifelogs.com:train&quot;))
+ (spam-process-destination . "nnimap+mail.lifelogs.com:train"))
 
-;; <span class="roman">only some <acronym>NNTP</acronym> groups, where I want to autodetect spam</span>
+;; <span class=
+"roman">only some <acronym>NNTP</acronym> groups, where I want to autodetect spam</span>
 ((spam-autodetect . t))
 
-;; <span class="roman">my nnimap &lsquo;<samp>nnimap+mail.lifelogs.com:spam</samp>&rsquo; group</span>
+;; <span class=
+"roman">my nnimap &lsquo;<samp>nnimap+mail.lifelogs.com:spam</samp>&rsquo; group</span>
 
 ;; <span class="roman">this is a spam group</span>
 ((spam-contents gnus-group-spam-classification-spam)
 
- ;; <span class="roman">any spam (which happens when I enter for all unseen messages,</span>
- ;; <span class="roman">because of the <code>gnus-spam-newsgroup-contents</code> setting above), goes to</span>
- ;; <span class="roman">&lsquo;<samp>nnimap+mail.lifelogs.com:train</samp>&rsquo; unless I mark it as ham</span>
+ ;; <span class=
+"roman">any spam (which happens when I enter for all unseen messages,</span>
+ ;; <span class=
+"roman">because of the <code>gnus-spam-newsgroup-contents</code> setting above), goes to</span>
+ ;; <span class=
+"roman">&lsquo;<samp>nnimap+mail.lifelogs.com:train</samp>&rsquo; unless I mark it as ham</span>
 
- (spam-process-destination &quot;nnimap+mail.lifelogs.com:train&quot;)
+ (spam-process-destination "nnimap+mail.lifelogs.com:train")
 
- ;; <span class="roman">any ham goes to my &lsquo;<samp>nnimap+mail.lifelogs.com:mail</samp>&rsquo; folder, but</span>
- ;; <span class="roman">also to my &lsquo;<samp>nnimap+mail.lifelogs.com:trainham</samp>&rsquo; folder for training</span>
+ ;; <span class=
+"roman">any ham goes to my &lsquo;<samp>nnimap+mail.lifelogs.com:mail</samp>&rsquo; folder, but</span>
+ ;; <span class=
+"roman">also to my &lsquo;<samp>nnimap+mail.lifelogs.com:trainham</samp>&rsquo; folder for training</span>
 
- (ham-process-destination &quot;nnimap+mail.lifelogs.com:mail&quot;
-                          &quot;nnimap+mail.lifelogs.com:trainham&quot;)
- ;; <span class="roman">in this group, only &lsquo;<samp>!</samp>&rsquo; marks are ham</span>
+ (ham-process-destination "nnimap+mail.lifelogs.com:mail"
+                          "nnimap+mail.lifelogs.com:trainham")
+ ;; <span class=
+"roman">in this group, only &lsquo;<samp>!</samp>&rsquo; marks are ham</span>
  (ham-marks
   (gnus-ticked-mark))
- ;; <span class="roman">remembers senders in the blacklist on the way out&mdash;this is</span>
- ;; <span class="roman">definitely not needed, it just makes me feel better</span>
+ ;; <span class=
+"roman">remembers senders in the blacklist on the way out&mdash;this is</span>
+ ;; <span class=
+"roman">definitely not needed, it just makes me feel better</span>
  (spam-process (gnus-group-spam-exit-processor-blacklist)))
 
-;; <span class="roman">Later, on the <acronym>IMAP</acronym> server I use the &lsquo;<samp>train</samp>&rsquo; group for training</span>
-;; <span class="roman">SpamAssassin to recognize spam, and the &lsquo;<samp>trainham</samp>&rsquo; group fora</span>
-;; <span class="roman">recognizing ham&mdash;but Gnus has nothing to do with it.</span>
+;; <span class=
+"roman">Later, on the <acronym>IMAP</acronym> server I use the &lsquo;<samp>train</samp>&rsquo; group for training</span>
+;; <span class=
+"roman">SpamAssassin to recognize spam, and the &lsquo;<samp>trainham</samp>&rsquo; group fora</span>
+;; <span class=
+"roman">recognizing ham&mdash;but Gnus has nothing to do with it.</span>
 
-</pre></div>
+</pre>
+  </div><a name=
+  "Using-spam_002eel-on-an-IMAP-server-with-a-statistical-filter-on-the-server"
+  id=
+  "Using-spam_002eel-on-an-IMAP-server-with-a-statistical-filter-on-the-server"></a>
 
-<a name="Using-spam_002eel-on-an-IMAP-server-with-a-statistical-filter-on-the-server"></a>
-<h4 class="subsubheading">Using <code>spam.el</code> on an IMAP server with a statistical filter on the server</h4>
-<p>From Reiner Steib &lt;reiner.steib@gmx.de&gt;.
-</p>
-<p>My provider has set up bogofilter (in combination with <acronym>DCC</acronym>) on
-the mail server (<acronym>IMAP</acronym>).  Recognized spam goes to
-&lsquo;<samp>spam.detected</samp>&rsquo;, the rest goes through the normal filter rules,
-i.e., to &lsquo;<samp>some.folder</samp>&rsquo; or to &lsquo;<samp>INBOX</samp>&rsquo;.  Training on false
-positives or negatives is done by copying or moving the article to
-&lsquo;<samp>training.ham</samp>&rsquo; or &lsquo;<samp>training.spam</samp>&rsquo; respectively.  A cron job on
-the server feeds those to bogofilter with the suitable ham or spam
-options and deletes them from the &lsquo;<samp>training.ham</samp>&rsquo; and
-&lsquo;<samp>training.spam</samp>&rsquo; folders.
-</p>
-<p>With the following entries in <code>gnus-parameters</code>, <code>spam.el</code>
-does most of the job for me:
-</p>
-<div class="lisp">
-<pre class="lisp">   (&quot;nnimap:spam\\.detected&quot;
+  <h4 class="subsubheading">Using <code>spam.el</code> on an IMAP
+  server with a statistical filter on the server</h4>
+
+  <p>From Reiner Steib &lt;reiner.steib@gmx.de&gt;.</p>
+
+  <p>My provider has set up bogofilter (in combination with
+  <acronym>DCC</acronym>) on the mail server
+  (<acronym>IMAP</acronym>). Recognized spam goes to
+  &lsquo;<samp>spam.detected</samp>&rsquo;, the rest goes through
+  the normal filter rules, i.e., to
+  &lsquo;<samp>some.folder</samp>&rsquo; or to
+  &lsquo;<samp>INBOX</samp>&rsquo;. Training on false positives or
+  negatives is done by copying or moving the article to
+  &lsquo;<samp>training.ham</samp>&rsquo; or
+  &lsquo;<samp>training.spam</samp>&rsquo; respectively. A cron job
+  on the server feeds those to bogofilter with the suitable ham or
+  spam options and deletes them from the
+  &lsquo;<samp>training.ham</samp>&rsquo; and
+  &lsquo;<samp>training.spam</samp>&rsquo; folders.</p>
+
+  <p>With the following entries in <code>gnus-parameters</code>,
+  <code>spam.el</code> does most of the job for me:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+   ("nnimap:spam\\.detected"
     (gnus-article-sort-functions '(gnus-article-sort-by-chars))
-    (ham-process-destination &quot;nnimap:INBOX&quot; &quot;nnimap:training.ham&quot;)
+    (ham-process-destination "nnimap:INBOX" "nnimap:training.ham")
     (spam-contents gnus-group-spam-classification-spam))
-   (&quot;nnimap:\\(INBOX\\|other-folders\\)&quot;
-    (spam-process-destination . &quot;nnimap:training.spam&quot;)
+   ("nnimap:\\(INBOX\\|other-folders\\)"
+    (spam-process-destination . "nnimap:training.spam")
     (spam-contents gnus-group-spam-classification-ham))
-</pre></div>
+</pre>
+  </div>
 
-<ul>
-<li> <b>The Spam folder:</b>
+  <ul>
+    <li>
+      <b>The Spam folder:</b>
 
-<p>In the folder &lsquo;<samp>spam.detected</samp>&rsquo;, I have to check for false positives
-(i.e., legitimate mails, that were wrongly judged as spam by
-bogofilter or DCC).
-</p>
-<p>Because of the <code>gnus-group-spam-classification-spam</code> entry, all
-messages are marked as spam (with <code>$</code>).  When I find a false
-positive, I mark the message with some other ham mark
-(<code>ham-marks</code>, <a href="Spam-and-Ham-Processors.html#Spam-and-Ham-Processors">Spam and Ham Processors</a>).  On group exit,
-those messages are copied to both groups, &lsquo;<samp>INBOX</samp>&rsquo; (where I want
-to have the article) and &lsquo;<samp>training.ham</samp>&rsquo; (for training bogofilter)
-and deleted from the &lsquo;<samp>spam.detected</samp>&rsquo; folder.
-</p>
-<p>The <code>gnus-article-sort-by-chars</code> entry simplifies detection of
-false positives for me.  I receive lots of worms (sweN, &hellip;), that all
-have a similar size.  Grouping them by size (i.e., chars) makes finding
-other false positives easier.  (Of course worms aren&rsquo;t <i>spam</i>
-(<acronym>UCE</acronym>, <acronym>UBE</acronym>) strictly speaking.  Anyhow, bogofilter is
-an excellent tool for filtering those unwanted mails for me.)
-</p>
-</li><li> <b>Ham folders:</b>
+      <p>In the folder &lsquo;<samp>spam.detected</samp>&rsquo;, I
+      have to check for false positives (i.e., legitimate mails,
+      that were wrongly judged as spam by bogofilter or DCC).</p>
 
-<p>In my ham folders, I just hit <kbd>S x</kbd>
-(<code>gnus-summary-mark-as-spam</code>) whenever I see an unrecognized spam
-mail (false negative).  On group exit, those messages are moved to
-&lsquo;<samp>training.spam</samp>&rsquo;.
-</p></li></ul>
+      <p>Because of the
+      <code>gnus-group-spam-classification-spam</code> entry, all
+      messages are marked as spam (with <code>$</code>). When I
+      find a false positive, I mark the message with some other ham
+      mark (<code>ham-marks</code>, <a href=
+      "Spam-and-Ham-Processors.html#Spam-and-Ham-Processors">Spam
+      and Ham Processors</a>). On group exit, those messages are
+      copied to both groups, &lsquo;<samp>INBOX</samp>&rsquo;
+      (where I want to have the article) and
+      &lsquo;<samp>training.ham</samp>&rsquo; (for training
+      bogofilter) and deleted from the
+      &lsquo;<samp>spam.detected</samp>&rsquo; folder.</p>
 
-<a name="Reporting-spam-articles-in-Gmane-groups-with-spam_002dreport_002eel"></a>
-<h4 class="subsubheading">Reporting spam articles in Gmane groups with <code>spam-report.el</code></h4>
+      <p>The <code>gnus-article-sort-by-chars</code> entry
+      simplifies detection of false positives for me. I receive
+      lots of worms (sweN, &hellip;), that all have a similar size.
+      Grouping them by size (i.e., chars) makes finding other false
+      positives easier. (Of course worms aren&rsquo;t <i>spam</i>
+      (<acronym>UCE</acronym>, <acronym>UBE</acronym>) strictly
+      speaking. Anyhow, bogofilter is an excellent tool for
+      filtering those unwanted mails for me.)</p>
+    </li>
 
-<p>From Reiner Steib &lt;reiner.steib@gmx.de&gt;.
-</p>
-<p>With following entry in <code>gnus-parameters</code>, <kbd>S x</kbd>
-(<code>gnus-summary-mark-as-spam</code>) marks articles in <code>gmane.*</code>
-groups as spam and reports the to Gmane at group exit:
-</p>
-<div class="lisp">
-<pre class="lisp">   (&quot;^gmane\\.&quot;
+    <li>
+      <b>Ham folders:</b>
+
+      <p>In my ham folders, I just hit <kbd>S x</kbd>
+      (<code>gnus-summary-mark-as-spam</code>) whenever I see an
+      unrecognized spam mail (false negative). On group exit, those
+      messages are moved to
+      &lsquo;<samp>training.spam</samp>&rsquo;.</p>
+    </li>
+  </ul><a name=
+  "Reporting-spam-articles-in-Gmane-groups-with-spam_002dreport_002eel"
+  id=
+  "Reporting-spam-articles-in-Gmane-groups-with-spam_002dreport_002eel"></a>
+
+  <h4 class="subsubheading">Reporting spam articles in Gmane groups
+  with <code>spam-report.el</code></h4>
+
+  <p>From Reiner Steib &lt;reiner.steib@gmx.de&gt;.</p>
+
+  <p>With following entry in <code>gnus-parameters</code>, <kbd>S
+  x</kbd> (<code>gnus-summary-mark-as-spam</code>) marks articles
+  in <code>gmane.*</code> groups as spam and reports the to Gmane
+  at group exit:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+   ("^gmane\\."
     (spam-process (gnus-group-spam-exit-processor-report-gmane)))
-</pre></div>
+</pre>
+  </div>
 
-<p>Additionally, I use <code>(setq spam-report-gmane-use-article-number nil)</code>
-because I don&rsquo;t read the groups directly from news.gmane.org, but
-through my local news server (leafnode).  I.e., the article numbers are
-not the same as on news.gmane.org, thus <code>spam-report.el</code> has to check
-the <code>X-Report-Spam</code> header to find the correct number.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="n" rel="next">Spam Back Ends</a>, Previous: <a href="Spam-and-Ham-Processors.html#Spam-and-Ham-Processors" accesskey="p" rel="prev">Spam and Ham Processors</a>, Up: <a href="Spam-Package.html#Spam-Package" accesskey="u" rel="up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Additionally, I use <code>(setq
+  spam-report-gmane-use-article-number nil)</code> because I
+  don&rsquo;t read the groups directly from news.gmane.org, but
+  through my local news server (leafnode). I.e., the article
+  numbers are not the same as on news.gmane.org, thus
+  <code>spam-report.el</code> has to check the
+  <code>X-Report-Spam</code> header to find the correct number.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Spam-Back-Ends.html#Spam-Back-Ends"
+    accesskey="n" rel="next">Spam Back Ends</a>, Previous: <a href=
+    "Spam-and-Ham-Processors.html#Spam-and-Ham-Processors"
+    accesskey="p" rel="prev">Spam and Ham Processors</a>, Up:
+    <a href="Spam-Package.html#Spam-Package" accesskey="u" rel=
+    "up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,133 +16,212 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Code evaluation security</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Code evaluation security">
-<meta name="keywords" content="The Org Manual: Code evaluation security">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Miscellaneous.html#Miscellaneous" rel="up" title="Miscellaneous">
-<link href="Customization.html#Customization" rel="next" title="Customization">
-<link href="Speed-keys.html#Speed-keys" rel="prev" title="Speed keys">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Code evaluation security</title>
+  <meta name="description" content=
+  "The Org Manual: Code evaluation security" />
+  <meta name="keywords" content=
+  "The Org Manual: Code evaluation security" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Miscellaneous.html#Miscellaneous" rel="up" title=
+  "Miscellaneous" />
+  <link href="Customization.html#Customization" rel="next" title=
+  "Customization" />
+  <link href="Speed-keys.html#Speed-keys" rel="prev" title=
+  "Speed keys" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  dt.c1 {font-style: italic}
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Code-evaluation-security"></a>
-<div class="header">
-<p>
-Next: <a href="Customization.html#Customization" accesskey="n" rel="next">Customization</a>, Previous: <a href="Speed-keys.html#Speed-keys" accesskey="p" rel="prev">Speed keys</a>, Up: <a href="Miscellaneous.html#Miscellaneous" accesskey="u" rel="up">Miscellaneous</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Code-evaluation-and-security-issues"></a>
-<h3 class="section">15.4 Code evaluation and security issues</h3>
+<body lang="en" xml:lang="en">
+  <a name="Code-evaluation-security" id=
+  "Code-evaluation-security"></a>
 
-<p>Org provides tools to work with the code snippets, including evaluating them.
-</p>
-<p>Running code on your machine always comes with a security risk.  Badly
-written or malicious code can be executed on purpose or by accident.  Org has
-default settings which will only evaluate such code if you give explicit
-permission to do so, and as a casual user of these features you should leave
-these precautions intact.
-</p>
-<p>For people who regularly work with such code, the confirmation prompts can
-become annoying, and you might want to turn them off.  This can be done, but
-you must be aware of the risks that are involved.
-</p>
-<p>Code evaluation can happen under the following circumstances:
-</p>
-<dl compact="compact">
-<dt><i>Source code blocks</i></dt>
-<dd><p>Source code blocks can be evaluated during export, or when pressing <kbd>C-c
-C-c</kbd> in the block.  The most important thing to realize here is that Org mode
-files which contain code snippets are, in a certain sense, like executable
-files.  So you should accept them and load them into Emacs only from trusted
-sources&mdash;just like you would do with a program you install on your computer.
-</p>
-<p>Make sure you know what you are doing before customizing the variables
-which take off the default security brakes.
-</p>
-<dl>
-<dt><a name="index-org_002dconfirm_002dbabel_002devaluate"></a>User Option: <strong>org-confirm-babel-evaluate</strong></dt>
-<dd><p>When t (the default), the user is asked before every code block evaluation.
-When <code>nil</code>, the user is not asked.  When set to a function, it is called with
-two arguments (language and body of the code block) and should return t to
-ask and <code>nil</code> not to ask.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Customization.html#Customization" accesskey=
+    "n" rel="next">Customization</a>, Previous: <a href=
+    "Speed-keys.html#Speed-keys" accesskey="p" rel="prev">Speed
+    keys</a>, Up: <a href="Miscellaneous.html#Miscellaneous"
+    accesskey="u" rel="up">Miscellaneous</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Code-evaluation-and-security-issues" id=
+  "Code-evaluation-and-security-issues"></a>
 
-<p>For example, here is how to execute &quot;ditaa&quot; code (which is considered safe)
-without asking:
-</p>
-<div class="lisp">
-<pre class="lisp">(defun my-org-confirm-babel-evaluate (lang body)
-  (not (string= lang &quot;ditaa&quot;)))  ; don't ask for ditaa
+  <h3 class="section">15.4 Code evaluation and security issues</h3>
+
+  <p>Org provides tools to work with the code snippets, including
+  evaluating them.</p>
+
+  <p>Running code on your machine always comes with a security
+  risk. Badly written or malicious code can be executed on purpose
+  or by accident. Org has default settings which will only evaluate
+  such code if you give explicit permission to do so, and as a
+  casual user of these features you should leave these precautions
+  intact.</p>
+
+  <p>For people who regularly work with such code, the confirmation
+  prompts can become annoying, and you might want to turn them off.
+  This can be done, but you must be aware of the risks that are
+  involved.</p>
+
+  <p>Code evaluation can happen under the following
+  circumstances:</p>
+
+  <dl compact="compact">
+    <dt class="c1">Source code blocks</dt>
+
+    <dd>
+      <p>Source code blocks can be evaluated during export, or when
+      pressing <kbd>C-c C-c</kbd> in the block. The most important
+      thing to realize here is that Org mode files which contain
+      code snippets are, in a certain sense, like executable files.
+      So you should accept them and load them into Emacs only from
+      trusted sources&mdash;just like you would do with a program
+      you install on your computer.</p>
+
+      <p>Make sure you know what you are doing before customizing
+      the variables which take off the default security brakes.</p>
+
+      <dl>
+        <dt><a name="index-org_002dconfirm_002dbabel_002devaluate"
+        id="index-org_002dconfirm_002dbabel_002devaluate"></a>User
+        Option: <strong>org-confirm-babel-evaluate</strong></dt>
+
+        <dd>
+          <p>When t (the default), the user is asked before every
+          code block evaluation. When <code>nil</code>, the user is
+          not asked. When set to a function, it is called with two
+          arguments (language and body of the code block) and
+          should return t to ask and <code>nil</code> not to
+          ask.</p>
+        </dd>
+      </dl>
+
+      <p>For example, here is how to execute "ditaa" code (which is
+      considered safe) without asking:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(defun my-org-confirm-babel-evaluate (lang body)
+  (not (string= lang "ditaa")))  ; don't ask for ditaa
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><i>Following <code>shell</code> and <code>elisp</code> links</i></dt>
-<dd><p>Org has two link types that can directly evaluate code (see <a href="External-links.html#External-links">External links</a>).  These links can be problematic because the code to be evaluated is
-not visible.
-</p>
-<dl>
-<dt><a name="index-org_002dconfirm_002dshell_002dlink_002dfunction"></a>User Option: <strong>org-confirm-shell-link-function</strong></dt>
-<dd><p>Function to queries user about shell link execution.
-</p></dd></dl>
-<dl>
-<dt><a name="index-org_002dconfirm_002delisp_002dlink_002dfunction"></a>User Option: <strong>org-confirm-elisp-link-function</strong></dt>
-<dd><p>Functions to query user for Emacs Lisp link execution.
-</p></dd></dl>
+    <dt class="c1">Following <code>shell</code> and
+    <code>elisp</code> links</dt>
 
-</dd>
-<dt><i>Formulas in tables</i></dt>
-<dd><p>Formulas in tables (see <a href="The-spreadsheet.html#The-spreadsheet">The spreadsheet</a>) are code that is evaluated
-either by the <i>calc</i> interpreter, or by the <i>Emacs Lisp</i> interpreter.
-</p></dd>
-</dl>
+    <dd>
+      <p>Org has two link types that can directly evaluate code
+      (see <a href="External-links.html#External-links">External
+      links</a>). These links can be problematic because the code
+      to be evaluated is not visible.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Customization.html#Customization" accesskey="n" rel="next">Customization</a>, Previous: <a href="Speed-keys.html#Speed-keys" accesskey="p" rel="prev">Speed keys</a>, Up: <a href="Miscellaneous.html#Miscellaneous" accesskey="u" rel="up">Miscellaneous</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <dl>
+        <dt><a name=
+        "index-org_002dconfirm_002dshell_002dlink_002dfunction" id=
+        "index-org_002dconfirm_002dshell_002dlink_002dfunction"></a>User
+        Option:
+        <strong>org-confirm-shell-link-function</strong></dt>
 
+        <dd>
+          <p>Function to queries user about shell link
+          execution.</p>
+        </dd>
+      </dl>
 
+      <dl>
+        <dt><a name=
+        "index-org_002dconfirm_002delisp_002dlink_002dfunction" id=
+        "index-org_002dconfirm_002delisp_002dlink_002dfunction"></a>User
+        Option:
+        <strong>org-confirm-elisp-link-function</strong></dt>
 
+        <dd>
+          <p>Functions to query user for Emacs Lisp link
+          execution.</p>
+        </dd>
+      </dl>
+    </dd>
+
+    <dt class="c1">Formulas in tables</dt>
+
+    <dd>
+      <p>Formulas in tables (see <a href=
+      "The-spreadsheet.html#The-spreadsheet">The spreadsheet</a>)
+      are code that is evaluated either by the <i>calc</i>
+      interpreter, or by the <i>Emacs Lisp</i> interpreter.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Customization.html#Customization" accesskey=
+    "n" rel="next">Customization</a>, Previous: <a href=
+    "Speed-keys.html#Speed-keys" accesskey="p" rel="prev">Speed
+    keys</a>, Up: <a href="Miscellaneous.html#Miscellaneous"
+    accesskey="u" rel="up">Miscellaneous</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

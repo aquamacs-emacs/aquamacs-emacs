@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,146 +20,200 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Multithreaded Debugging</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Multithreaded Debugging">
-<meta name="keywords" content="GNU Emacs Manual: Multithreaded Debugging">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" rel="up" title="GDB Graphical Interface">
-<link href="Executing-Lisp.html#Executing-Lisp" rel="next" title="Executing Lisp">
-<link href="Watch-Expressions.html#Watch-Expressions" rel="prev" title="Watch Expressions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Multithreaded Debugging</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Multithreaded Debugging" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Multithreaded Debugging" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+  rel="up" title="GDB Graphical Interface" />
+  <link href="Executing-Lisp.html#Executing-Lisp" rel="next" title=
+  "Executing Lisp" />
+  <link href="Watch-Expressions.html#Watch-Expressions" rel="prev"
+  title="Watch Expressions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Multithreaded-Debugging" id=
+  "Multithreaded-Debugging"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Watch-Expressions.html#Watch-Expressions"
+    accesskey="p" rel="prev">Watch Expressions</a>, Up: <a href=
+    "GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+    accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Multithreaded-Debugging-1" id=
+  "Multithreaded-Debugging-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Multithreaded-Debugging"></a>
-<div class="header">
-<p>
-Previous: <a href="Watch-Expressions.html#Watch-Expressions" accesskey="p" rel="prev">Watch Expressions</a>, Up: <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Multithreaded-Debugging-1"></a>
-<h4 class="subsubsection">27.6.5.8 Multithreaded Debugging</h4>
-<a name="index-Multithreaded-debugging-in-GDB"></a>
-<a name="index-Non_002dstop-debugging-in-GDB"></a>
+  <h4 class="subsubsection">27.6.5.8 Multithreaded
+  Debugging</h4><a name="index-Multithreaded-debugging-in-GDB" id=
+  "index-Multithreaded-debugging-in-GDB"></a> <a name=
+  "index-Non_002dstop-debugging-in-GDB" id=
+  "index-Non_002dstop-debugging-in-GDB"></a>
 
-<p>In GDB&rsquo;s <em>all-stop mode</em>, whenever your program stops, all
-execution threads stop.  Likewise, whenever you restart the program,
-all threads start executing.  See <a href="http://sourceware.org/gdb/current/onlinedocs/gdb/All_002dStop-Mode.html#All_002dStop-Mode">All-Stop Mode</a> in <cite>The GNU debugger</cite>.  For some multi-threaded targets, GDB supports
-a further mode of operation, called <em>non-stop mode</em>, in which you
-can examine stopped program threads in the debugger while other
-threads continue to execute freely.  See <a href="http://sourceware.org/gdb/current/onlinedocs/gdb/Non_002dStop-Mode.html#Non_002dStop-Mode">Non-Stop
-Mode</a> in <cite>The GNU debugger</cite>.  Versions of GDB prior to 7.0 do not
-support non-stop mode, and it does not work on all targets.
-</p>
-<a name="index-gdb_002dnon_002dstop_002dsetting"></a>
-<p>The variable <code>gdb-non-stop-setting</code> determines whether Emacs
-runs GDB in all-stop mode or non-stop mode.  The default is <code>t</code>,
-which means it tries to use non-stop mode if that is available.  If
-you change the value to <code>nil</code>, or if non-stop mode is
-unavailable, Emacs runs GDB in all-stop mode.  The variable takes
-effect when Emacs begins a debugging session; if you change its value,
-you should restart any active debugging session.
-</p>
-<a name="index-gdb_002dswitch_002dwhen_002danother_002dstopped"></a>
-<p>When a thread stops in non-stop mode, Emacs usually switches to that
-thread.  If you don&rsquo;t want Emacs to do this switch if another stopped
-thread is already selected, change the variable
-<code>gdb-switch-when-another-stopped</code> to <code>nil</code>.
-</p>
-<a name="index-gdb_002dswitch_002dreasons"></a>
-<p>Emacs can decide whether or not to switch to the stopped thread
-depending on the reason which caused the stop.  Customize the variable
-<code>gdb-switch-reasons</code> to select the stop reasons which will cause
-a thread switch.
-</p>
-<a name="index-gdb_002dstopped_002dfunctions"></a>
-<p>The variable <code>gdb-stopped-functions</code> allows you to execute your
-functions whenever some thread stops.
-</p>
-<p>In non-stop mode, you can switch between different modes for GUD
-execution control commands.
-</p>
-<a name="index-gdb_002dgud_002dcontrol_002dall_002dthreads"></a>
-<dl compact="compact">
-<dt><em>Non-stop/A</em></dt>
-<dd>
-<p>When <code>gdb-gud-control-all-threads</code> is <code>t</code> (the default
-value), interruption and continuation commands apply to all threads,
-so you can halt or continue all your threads with one command using
-<code>gud-stop-subjob</code> and <code>gud-cont</code>, respectively.  The
-&lsquo;<samp>Go</samp>&rsquo; button is shown on the toolbar when at least one thread is
-stopped, whereas &lsquo;<samp>Stop</samp>&rsquo; button is shown when at least one thread
-is running.
-</p>
-</dd>
-<dt><em>Non-stop/T</em></dt>
-<dd>
-<p>When <code>gdb-gud-control-all-threads</code> is <code>nil</code>, only the
-current thread is stopped/continued.  &lsquo;<samp>Go</samp>&rsquo; and &lsquo;<samp>Stop</samp>&rsquo;
-buttons on the GUD toolbar are shown depending on the state of current
-thread.
-</p></dd>
-</dl>
+  <p>In GDB&rsquo;s <em>all-stop mode</em>, whenever your program
+  stops, all execution threads stop. Likewise, whenever you restart
+  the program, all threads start executing. See <a href=
+  "http://sourceware.org/gdb/current/onlinedocs/gdb/All_002dStop-Mode.html#All_002dStop-Mode">
+  All-Stop Mode</a> in <cite>The GNU debugger</cite>. For some
+  multi-threaded targets, GDB supports a further mode of operation,
+  called <em>non-stop mode</em>, in which you can examine stopped
+  program threads in the debugger while other threads continue to
+  execute freely. See <a href=
+  "http://sourceware.org/gdb/current/onlinedocs/gdb/Non_002dStop-Mode.html#Non_002dStop-Mode">
+  Non-Stop Mode</a> in <cite>The GNU debugger</cite>. Versions of
+  GDB prior to 7.0 do not support non-stop mode, and it does not
+  work on all targets.</p><a name=
+  "index-gdb_002dnon_002dstop_002dsetting" id=
+  "index-gdb_002dnon_002dstop_002dsetting"></a>
 
-<p>You can change the current value of <code>gdb-gud-control-all-threads</code>
-from the tool bar or from &lsquo;<samp>GUD-&gt;GDB-MI</samp>&rsquo; menu.
-</p>
-<p>Stepping commands always apply to the current thread.
-</p>
-<p>In non-stop mode, you can interrupt/continue your threads without
-selecting them.  Hitting <kbd>i</kbd> in threads buffer interrupts thread
-under point, <kbd>c</kbd> continues it, <kbd>s</kbd> steps through.  More such
-commands may be added in the future.
-</p>
-<p>Note that when you interrupt a thread, it stops with the
-&lsquo;<samp>signal received</samp>&rsquo; reason.  If that reason is included in your
-<code>gdb-switch-reasons</code> (it is by default), Emacs will switch to
-that thread.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Watch-Expressions.html#Watch-Expressions" accesskey="p" rel="prev">Watch Expressions</a>, Up: <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The variable <code>gdb-non-stop-setting</code> determines
+  whether Emacs runs GDB in all-stop mode or non-stop mode. The
+  default is <code>t</code>, which means it tries to use non-stop
+  mode if that is available. If you change the value to
+  <code>nil</code>, or if non-stop mode is unavailable, Emacs runs
+  GDB in all-stop mode. The variable takes effect when Emacs begins
+  a debugging session; if you change its value, you should restart
+  any active debugging session.</p><a name=
+  "index-gdb_002dswitch_002dwhen_002danother_002dstopped" id=
+  "index-gdb_002dswitch_002dwhen_002danother_002dstopped"></a>
 
+  <p>When a thread stops in non-stop mode, Emacs usually switches
+  to that thread. If you don&rsquo;t want Emacs to do this switch
+  if another stopped thread is already selected, change the
+  variable <code>gdb-switch-when-another-stopped</code> to
+  <code>nil</code>.</p><a name="index-gdb_002dswitch_002dreasons"
+  id="index-gdb_002dswitch_002dreasons"></a>
 
+  <p>Emacs can decide whether or not to switch to the stopped
+  thread depending on the reason which caused the stop. Customize
+  the variable <code>gdb-switch-reasons</code> to select the stop
+  reasons which will cause a thread switch.</p><a name=
+  "index-gdb_002dstopped_002dfunctions" id=
+  "index-gdb_002dstopped_002dfunctions"></a>
 
+  <p>The variable <code>gdb-stopped-functions</code> allows you to
+  execute your functions whenever some thread stops.</p>
+
+  <p>In non-stop mode, you can switch between different modes for
+  GUD execution control commands.</p><a name=
+  "index-gdb_002dgud_002dcontrol_002dall_002dthreads" id=
+  "index-gdb_002dgud_002dcontrol_002dall_002dthreads"></a>
+
+  <dl compact="compact">
+    <dt><em>Non-stop/A</em></dt>
+
+    <dd>
+      <p>When <code>gdb-gud-control-all-threads</code> is
+      <code>t</code> (the default value), interruption and
+      continuation commands apply to all threads, so you can halt
+      or continue all your threads with one command using
+      <code>gud-stop-subjob</code> and <code>gud-cont</code>,
+      respectively. The &lsquo;<samp>Go</samp>&rsquo; button is
+      shown on the toolbar when at least one thread is stopped,
+      whereas &lsquo;<samp>Stop</samp>&rsquo; button is shown when
+      at least one thread is running.</p>
+    </dd>
+
+    <dt><em>Non-stop/T</em></dt>
+
+    <dd>
+      <p>When <code>gdb-gud-control-all-threads</code> is
+      <code>nil</code>, only the current thread is
+      stopped/continued. &lsquo;<samp>Go</samp>&rsquo; and
+      &lsquo;<samp>Stop</samp>&rsquo; buttons on the GUD toolbar
+      are shown depending on the state of current thread.</p>
+    </dd>
+  </dl>
+
+  <p>You can change the current value of
+  <code>gdb-gud-control-all-threads</code> from the tool bar or
+  from &lsquo;<samp>GUD-&gt;GDB-MI</samp>&rsquo; menu.</p>
+
+  <p>Stepping commands always apply to the current thread.</p>
+
+  <p>In non-stop mode, you can interrupt/continue your threads
+  without selecting them. Hitting <kbd>i</kbd> in threads buffer
+  interrupts thread under point, <kbd>c</kbd> continues it,
+  <kbd>s</kbd> steps through. More such commands may be added in
+  the future.</p>
+
+  <p>Note that when you interrupt a thread, it stops with the
+  &lsquo;<samp>signal received</samp>&rsquo; reason. If that reason
+  is included in your <code>gdb-switch-reasons</code> (it is by
+  default), Emacs will switch to that thread.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Watch-Expressions.html#Watch-Expressions"
+    accesskey="p" rel="prev">Watch Expressions</a>, Up: <a href=
+    "GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+    accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

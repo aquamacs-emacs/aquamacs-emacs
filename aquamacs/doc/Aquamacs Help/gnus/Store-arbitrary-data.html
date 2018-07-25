@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Store arbitrary data - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="The-Gnus-Registry.html#The-Gnus-Registry" title="The Gnus Registry">
-<link rel="prev" href="Store-custom-flags-and-keywords.html#Store-custom-flags-and-keywords" title="Store custom flags and keywords">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Store arbitrary data - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="The-Gnus-Registry.html#The-Gnus-Registry"
+  title="The Gnus Registry" />
+  <link rel="prev" href=
+  "Store-custom-flags-and-keywords.html#Store-custom-flags-and-keywords"
+  title="Store custom flags and keywords" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,47 +47,85 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Store-arbitrary-data"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Store-custom-flags-and-keywords.html#Store-custom-flags-and-keywords">Store custom flags and keywords</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="The-Gnus-Registry.html#The-Gnus-Registry">The Gnus Registry</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Store-arbitrary-data" id="Store-arbitrary-data"></a>
 
-<h4 class="subsection">9.19.5 Store arbitrary data</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Store-custom-flags-and-keywords.html#Store-custom-flags-and-keywords">Store
+    custom flags and keywords</a>, Up:&nbsp;<a rel="up" accesskey=
+    "u" href="The-Gnus-Registry.html#The-Gnus-Registry">The Gnus
+    Registry</a></p>
+    <hr />
+  </div>
 
-<p>The registry has a simple API that uses a Message-ID as the key to
-store arbitrary data (as long as it can be converted to a list for
-storage).
+  <h4 class="subsection">9.19.5 Store arbitrary data</h4>
 
-<div class="defun">
-&mdash; Function: <b>gnus-registry-store-extra-entry</b> (<var>id key value</var>)<var><a name="index-gnus_002dregistry_002dstore_002dextra_002dentry-2891"></a></var><br>
-<blockquote><p>Store <code>value</code> in the extra data key <code>key</code> for message
-<code>id</code>. 
-</p></blockquote></div>
+  <p>The registry has a simple API that uses a Message-ID as the
+  key to store arbitrary data (as long as it can be converted to a
+  list for storage).</p>
 
-<div class="defun">
-&mdash; Function: <b>gnus-registry-delete-extra-entry</b> (<var>id key</var>)<var><a name="index-gnus_002dregistry_002ddelete_002dextra_002dentry-2892"></a></var><br>
-<blockquote><p>Delete the extra data key <code>key</code> for message <code>id</code>. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Function: <b>gnus-registry-store-extra-entry</b>
+    (<var>id key value</var>)<var><a name=
+    "index-gnus_002dregistry_002dstore_002dextra_002dentry-2891"
+    id="index-gnus_002dregistry_002dstore_002dextra_002dentry-2891"></a></var><br />
 
-<div class="defun">
-&mdash; Function: <b>gnus-registry-fetch-extra</b> (<var>id key</var>)<var><a name="index-gnus_002dregistry_002dfetch_002dextra-2893"></a></var><br>
-<blockquote><p>Get the extra data key <code>key</code> for message <code>id</code>. 
-</p></blockquote></div>
 
-<div class="defun">
-&mdash; Variable: <b>gnus-registry-extra-entries-precious</b><var><a name="index-gnus_002dregistry_002dextra_002dentries_002dprecious-2894"></a></var><br>
-<blockquote><p>If any extra entries are precious, their presence will make the
-registry keep the whole entry forever, even if there are no groups for
-the Message-ID and if the size limit of the registry is reached.  By
-default this is just <code>(marks)</code> so the custom registry marks are
-precious. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Store <code>value</code> in the extra data key
+      <code>key</code> for message <code>id</code>.</p>
+    </blockquote>
+  </div>
 
-   </body></html>
+  <div class="defun">
+    &mdash; Function: <b>gnus-registry-delete-extra-entry</b>
+    (<var>id key</var>)<var><a name=
+    "index-gnus_002dregistry_002ddelete_002dextra_002dentry-2892"
+    id=
+    "index-gnus_002dregistry_002ddelete_002dextra_002dentry-2892"></a></var><br />
 
+
+    <blockquote>
+      <p>Delete the extra data key <code>key</code> for message
+      <code>id</code>.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Function: <b>gnus-registry-fetch-extra</b> (<var>id
+    key</var>)<var><a name=
+    "index-gnus_002dregistry_002dfetch_002dextra-2893" id=
+    "index-gnus_002dregistry_002dfetch_002dextra-2893"></a></var><br />
+
+
+    <blockquote>
+      <p>Get the extra data key <code>key</code> for message
+      <code>id</code>.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Variable:
+    <b>gnus-registry-extra-entries-precious</b><var><a name=
+    "index-gnus_002dregistry_002dextra_002dentries_002dprecious-2894"
+    id=
+    "index-gnus_002dregistry_002dextra_002dentries_002dprecious-2894"></a></var><br />
+
+
+    <blockquote>
+      <p>If any extra entries are precious, their presence will
+      make the registry keep the whole entry forever, even if there
+      are no groups for the Message-ID and if the size limit of the
+      registry is reached. By default this is just
+      <code>(marks)</code> so the custom registry marks are
+      precious.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

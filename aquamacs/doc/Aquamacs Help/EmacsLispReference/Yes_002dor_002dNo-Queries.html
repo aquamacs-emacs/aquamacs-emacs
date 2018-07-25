@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,175 +19,267 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Yes-or-No Queries</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Yes-or-No Queries">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Yes-or-No Queries">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Minibuffers.html#Minibuffers" rel="up" title="Minibuffers">
-<link href="Multiple-Queries.html#Multiple-Queries" rel="next" title="Multiple Queries">
-<link href="Completion-in-Buffers.html#Completion-in-Buffers" rel="prev" title="Completion in Buffers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Yes-or-No Queries</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Yes-or-No Queries" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Yes-or-No Queries" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Minibuffers.html#Minibuffers" rel="up" title=
+  "Minibuffers" />
+  <link href="Multiple-Queries.html#Multiple-Queries" rel="next"
+  title="Multiple Queries" />
+  <link href="Completion-in-Buffers.html#Completion-in-Buffers"
+  rel="prev" title="Completion in Buffers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Yes_002dor_002dNo-Queries" id=
+  "Yes_002dor_002dNo-Queries"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Multiple-Queries.html#Multiple-Queries"
+    accesskey="n" rel="next">Multiple Queries</a>, Previous:
+    <a href="Completion.html#Completion" accesskey="p" rel=
+    "prev">Completion</a>, Up: <a href=
+    "Minibuffers.html#Minibuffers" accesskey="u" rel=
+    "up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Yes_002dor_002dNo-Queries-1" id=
+  "Yes_002dor_002dNo-Queries-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Yes_002dor_002dNo-Queries"></a>
-<div class="header">
-<p>
-Next: <a href="Multiple-Queries.html#Multiple-Queries" accesskey="n" rel="next">Multiple Queries</a>, Previous: <a href="Completion.html#Completion" accesskey="p" rel="prev">Completion</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Yes_002dor_002dNo-Queries-1"></a>
-<h3 class="section">19.7 Yes-or-No Queries</h3>
-<a name="index-asking-the-user-questions"></a>
-<a name="index-querying-the-user"></a>
-<a name="index-yes_002dor_002dno-questions"></a>
+  <h3 class="section">19.7 Yes-or-No Queries</h3><a name=
+  "index-asking-the-user-questions" id=
+  "index-asking-the-user-questions"></a> <a name=
+  "index-querying-the-user" id="index-querying-the-user"></a>
+  <a name="index-yes_002dor_002dno-questions" id=
+  "index-yes_002dor_002dno-questions"></a>
 
-<p>This section describes functions used to ask the user a yes-or-no
-question.  The function <code>y-or-n-p</code> can be answered with a single
-character; it is useful for questions where an inadvertent wrong answer
-will not have serious consequences.  <code>yes-or-no-p</code> is suitable for
-more momentous questions, since it requires three or four characters to
-answer.
-</p>
-<p>If either of these functions is called in a command that was invoked
-using the mouse&mdash;more precisely, if <code>last-nonmenu-event</code>
-(see <a href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>) is either <code>nil</code> or a list&mdash;then it
-uses a dialog box or pop-up menu to ask the question.  Otherwise, it
-uses keyboard input.  You can force use either of the mouse or of keyboard
-input by binding <code>last-nonmenu-event</code> to a suitable value around
-the call.
-</p>
-<p>Strictly speaking, <code>yes-or-no-p</code> uses the minibuffer and
-<code>y-or-n-p</code> does not; but it seems best to describe them together.
-</p>
-<dl>
-<dt><a name="index-y_002dor_002dn_002dp"></a>Function: <strong>y-or-n-p</strong> <em>prompt</em></dt>
-<dd><p>This function asks the user a question, expecting input in the echo
-area.  It returns <code>t</code> if the user types <kbd>y</kbd>, <code>nil</code> if the
-user types <kbd>n</kbd>.  This function also accepts <tt class="key">SPC</tt> to mean yes
-and <tt class="key">DEL</tt> to mean no.  It accepts <kbd>C-]</kbd> to quit, like
-<kbd>C-g</kbd>, because the question might look like a minibuffer and for
-that reason the user might try to use <kbd>C-]</kbd> to get out.  The answer
-is a single character, with no <tt class="key">RET</tt> needed to terminate it.  Upper
-and lower case are equivalent.
-</p>
-<p>&ldquo;Asking the question&rdquo; means printing <var>prompt</var> in the echo area,
-followed by the string &lsquo;<samp>(y&nbsp;or&nbsp;n)&nbsp;</samp>&rsquo;<!-- /@w -->.  If the input is not one of
-the expected answers (<kbd>y</kbd>, <kbd>n</kbd>, <kbd><span class="key">SPC</span></kbd>,
-<kbd><span class="key">DEL</span></kbd>, or something that quits), the function responds
-&lsquo;<samp>Please answer y or n.</samp>&rsquo;, and repeats the request.
-</p>
-<p>This function does not actually use the minibuffer, since it does not
-allow editing of the answer.  It actually uses the echo area (see <a href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>), which uses the same screen space as the minibuffer.  The
-cursor moves to the echo area while the question is being asked.
-</p>
-<p>The answers and their meanings, even &lsquo;<samp>y</samp>&rsquo; and &lsquo;<samp>n</samp>&rsquo;, are not
-hardwired, and are specified by the keymap <code>query-replace-map</code>
-(see <a href="Search-and-Replace.html#Search-and-Replace">Search and Replace</a>).  In particular, if the user enters the
-special responses <code>recenter</code>, <code>scroll-up</code>,
-<code>scroll-down</code>, <code>scroll-other-window</code>, or
-<code>scroll-other-window-down</code> (respectively bound to <kbd>C-l</kbd>,
-<kbd>C-v</kbd>, <kbd>M-v</kbd>, <kbd>C-M-v</kbd> and <kbd>C-M-S-v</kbd> in
-<code>query-replace-map</code>), this function performs the specified window
-recentering or scrolling operation, and poses the question again.
-</p>
-<p>We show successive lines of echo area messages, but only one actually
-appears on the screen at a time.
-</p></dd></dl>
+  <p>This section describes functions used to ask the user a
+  yes-or-no question. The function <code>y-or-n-p</code> can be
+  answered with a single character; it is useful for questions
+  where an inadvertent wrong answer will not have serious
+  consequences. <code>yes-or-no-p</code> is suitable for more
+  momentous questions, since it requires three or four characters
+  to answer.</p>
 
-<dl>
-<dt><a name="index-y_002dor_002dn_002dp_002dwith_002dtimeout"></a>Function: <strong>y-or-n-p-with-timeout</strong> <em>prompt seconds default</em></dt>
-<dd><p>Like <code>y-or-n-p</code>, except that if the user fails to answer within
-<var>seconds</var> seconds, this function stops waiting and returns
-<var>default</var>.  It works by setting up a timer; see <a href="Timers.html#Timers">Timers</a>.
-The argument <var>seconds</var> should be a number.
-</p></dd></dl>
+  <p>If either of these functions is called in a command that was
+  invoked using the mouse&mdash;more precisely, if
+  <code>last-nonmenu-event</code> (see <a href=
+  "Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>)
+  is either <code>nil</code> or a list&mdash;then it uses a dialog
+  box or pop-up menu to ask the question. Otherwise, it uses
+  keyboard input. You can force use either of the mouse or of
+  keyboard input by binding <code>last-nonmenu-event</code> to a
+  suitable value around the call.</p>
 
-<dl>
-<dt><a name="index-yes_002dor_002dno_002dp"></a>Function: <strong>yes-or-no-p</strong> <em>prompt</em></dt>
-<dd><p>This function asks the user a question, expecting input in the
-minibuffer.  It returns <code>t</code> if the user enters &lsquo;<samp>yes</samp>&rsquo;,
-<code>nil</code> if the user types &lsquo;<samp>no</samp>&rsquo;.  The user must type <tt class="key">RET</tt> to
-finalize the response.  Upper and lower case are equivalent.
-</p>
-<p><code>yes-or-no-p</code> starts by displaying <var>prompt</var> in the echo area,
-followed by &lsquo;<samp>(yes&nbsp;or&nbsp;no)&nbsp;</samp>&rsquo;<!-- /@w -->.  The user must type one of the
-expected responses; otherwise, the function responds &lsquo;<samp>Please answer
-yes or no.</samp>&rsquo;, waits about two seconds and repeats the request.
-</p>
-<p><code>yes-or-no-p</code> requires more work from the user than
-<code>y-or-n-p</code> and is appropriate for more crucial decisions.
-</p>
-<p>Here is an example:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(yes-or-no-p &quot;Do you really want to remove everything? &quot;)
+  <p>Strictly speaking, <code>yes-or-no-p</code> uses the
+  minibuffer and <code>y-or-n-p</code> does not; but it seems best
+  to describe them together.</p>
 
-;; <span class="roman">After evaluation of the preceding expression,</span>
+  <dl>
+    <dt><a name="index-y_002dor_002dn_002dp" id=
+    "index-y_002dor_002dn_002dp"></a>Function:
+    <strong>y-or-n-p</strong> <em>prompt</em></dt>
+
+    <dd>
+      <p>This function asks the user a question, expecting input in
+      the echo area. It returns <code>t</code> if the user types
+      <kbd>y</kbd>, <code>nil</code> if the user types
+      <kbd>n</kbd>. This function also accepts <tt class=
+      "key">SPC</tt> to mean yes and <tt class="key">DEL</tt> to
+      mean no. It accepts <kbd>C-]</kbd> to quit, like
+      <kbd>C-g</kbd>, because the question might look like a
+      minibuffer and for that reason the user might try to use
+      <kbd>C-]</kbd> to get out. The answer is a single character,
+      with no <tt class="key">RET</tt> needed to terminate it.
+      Upper and lower case are equivalent.</p>
+
+      <p>&ldquo;Asking the question&rdquo; means printing
+      <var>prompt</var> in the echo area, followed by the string
+      &lsquo;<samp>(y&nbsp;or&nbsp;n)&nbsp;</samp>&rsquo;
+      <!-- /@w -->. If the input is not one of the expected answers
+      (<kbd>y</kbd>, <kbd>n</kbd>, <kbd><span class=
+      "key">SPC</span></kbd>, <kbd><span class=
+      "key">DEL</span></kbd>, or something that quits), the
+      function responds &lsquo;<samp>Please answer y or
+      n.</samp>&rsquo;, and repeats the request.</p>
+
+      <p>This function does not actually use the minibuffer, since
+      it does not allow editing of the answer. It actually uses the
+      echo area (see <a href="The-Echo-Area.html#The-Echo-Area">The
+      Echo Area</a>), which uses the same screen space as the
+      minibuffer. The cursor moves to the echo area while the
+      question is being asked.</p>
+
+      <p>The answers and their meanings, even
+      &lsquo;<samp>y</samp>&rsquo; and
+      &lsquo;<samp>n</samp>&rsquo;, are not hardwired, and are
+      specified by the keymap <code>query-replace-map</code> (see
+      <a href="Search-and-Replace.html#Search-and-Replace">Search
+      and Replace</a>). In particular, if the user enters the
+      special responses <code>recenter</code>,
+      <code>scroll-up</code>, <code>scroll-down</code>,
+      <code>scroll-other-window</code>, or
+      <code>scroll-other-window-down</code> (respectively bound to
+      <kbd>C-l</kbd>, <kbd>C-v</kbd>, <kbd>M-v</kbd>,
+      <kbd>C-M-v</kbd> and <kbd>C-M-S-v</kbd> in
+      <code>query-replace-map</code>), this function performs the
+      specified window recentering or scrolling operation, and
+      poses the question again.</p>
+
+      <p>We show successive lines of echo area messages, but only
+      one actually appears on the screen at a time.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-y_002dor_002dn_002dp_002dwith_002dtimeout"
+    id=
+    "index-y_002dor_002dn_002dp_002dwith_002dtimeout"></a>Function:
+    <strong>y-or-n-p-with-timeout</strong> <em>prompt seconds
+    default</em></dt>
+
+    <dd>
+      <p>Like <code>y-or-n-p</code>, except that if the user fails
+      to answer within <var>seconds</var> seconds, this function
+      stops waiting and returns <var>default</var>. It works by
+      setting up a timer; see <a href=
+      "Timers.html#Timers">Timers</a>. The argument
+      <var>seconds</var> should be a number.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-yes_002dor_002dno_002dp" id=
+    "index-yes_002dor_002dno_002dp"></a>Function:
+    <strong>yes-or-no-p</strong> <em>prompt</em></dt>
+
+    <dd>
+      <p>This function asks the user a question, expecting input in
+      the minibuffer. It returns <code>t</code> if the user enters
+      &lsquo;<samp>yes</samp>&rsquo;, <code>nil</code> if the user
+      types &lsquo;<samp>no</samp>&rsquo;. The user must type
+      <tt class="key">RET</tt> to finalize the response. Upper and
+      lower case are equivalent.</p>
+
+      <p><code>yes-or-no-p</code> starts by displaying
+      <var>prompt</var> in the echo area, followed by
+      &lsquo;<samp>(yes&nbsp;or&nbsp;no)&nbsp;</samp>&rsquo;
+      <!-- /@w -->. The user must type one of the expected
+      responses; otherwise, the function responds
+      &lsquo;<samp>Please answer yes or no.</samp>&rsquo;, waits
+      about two seconds and repeats the request.</p>
+
+      <p><code>yes-or-no-p</code> requires more work from the user
+      than <code>y-or-n-p</code> and is appropriate for more
+      crucial decisions.</p>
+
+      <p>Here is an example:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(yes-or-no-p "Do you really want to remove everything? ")
+
+;; <span class=
+"roman">After evaluation of the preceding expression,</span>
 ;;   <span class="roman">the following prompt appears,</span>
 ;;   <span class="roman">with an empty minibuffer:</span>
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">---------- Buffer: minibuffer ----------
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+---------- Buffer: minibuffer ----------
 Do you really want to remove everything? (yes or no)
 ---------- Buffer: minibuffer ----------
-</pre></div>
+</pre>
+      </div>
 
-<p>If the user first types <kbd>y <span class="key">RET</span></kbd>, which is invalid because this
-function demands the entire word &lsquo;<samp>yes</samp>&rsquo;, it responds by displaying
-these prompts, with a brief pause between them:
-</p>
-<div class="smallexample">
-<pre class="smallexample">---------- Buffer: minibuffer ----------
+      <p>If the user first types <kbd>y <span class=
+      "key">RET</span></kbd>, which is invalid because this
+      function demands the entire word
+      &lsquo;<samp>yes</samp>&rsquo;, it responds by displaying
+      these prompts, with a brief pause between them:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+---------- Buffer: minibuffer ----------
 Please answer yes or no.
 Do you really want to remove everything? (yes or no)
 ---------- Buffer: minibuffer ----------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Multiple-Queries.html#Multiple-Queries" accesskey="n" rel="next">Multiple Queries</a>, Previous: <a href="Completion.html#Completion" accesskey="p" rel="prev">Completion</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Multiple-Queries.html#Multiple-Queries"
+    accesskey="n" rel="next">Multiple Queries</a>, Previous:
+    <a href="Completion.html#Completion" accesskey="p" rel=
+    "prev">Completion</a>, Up: <a href=
+    "Minibuffers.html#Minibuffers" accesskey="u" rel=
+    "up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

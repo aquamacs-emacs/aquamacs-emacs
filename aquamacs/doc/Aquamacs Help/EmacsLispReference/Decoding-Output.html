@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,104 +19,154 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Decoding Output</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Decoding Output">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Decoding Output">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Output-from-Processes.html#Output-from-Processes" rel="up" title="Output from Processes">
-<link href="Accepting-Output.html#Accepting-Output" rel="next" title="Accepting Output">
-<link href="Filter-Functions.html#Filter-Functions" rel="prev" title="Filter Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Decoding Output</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Decoding Output" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Decoding Output" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Output-from-Processes.html#Output-from-Processes"
+  rel="up" title="Output from Processes" />
+  <link href="Accepting-Output.html#Accepting-Output" rel="next"
+  title="Accepting Output" />
+  <link href="Filter-Functions.html#Filter-Functions" rel="prev"
+  title="Filter Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Decoding-Output" id="Decoding-Output"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Accepting-Output.html#Accepting-Output"
+    accesskey="n" rel="next">Accepting Output</a>, Previous:
+    <a href="Filter-Functions.html#Filter-Functions" accesskey="p"
+    rel="prev">Filter Functions</a>, Up: <a href=
+    "Output-from-Processes.html#Output-from-Processes" accesskey=
+    "u" rel="up">Output from Processes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Decoding-Process-Output" id=
+  "Decoding-Process-Output"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Decoding-Output"></a>
-<div class="header">
-<p>
-Next: <a href="Accepting-Output.html#Accepting-Output" accesskey="n" rel="next">Accepting Output</a>, Previous: <a href="Filter-Functions.html#Filter-Functions" accesskey="p" rel="prev">Filter Functions</a>, Up: <a href="Output-from-Processes.html#Output-from-Processes" accesskey="u" rel="up">Output from Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Decoding-Process-Output"></a>
-<h4 class="subsection">36.9.3 Decoding Process Output</h4>
-<a name="index-decode-process-output"></a>
+  <h4 class="subsection">36.9.3 Decoding Process
+  Output</h4><a name="index-decode-process-output" id=
+  "index-decode-process-output"></a>
 
-<p>When Emacs writes process output directly into a multibyte buffer,
-it decodes the output according to the process output coding system.
-If the coding system is <code>raw-text</code> or <code>no-conversion</code>, Emacs
-converts the unibyte output to multibyte using
-<code>string-to-multibyte</code>, and inserts the resulting multibyte text.
-</p>
-<p>You can use <code>set-process-coding-system</code> to specify which coding
-system to use (see <a href="Process-Information.html#Process-Information">Process Information</a>).  Otherwise, the coding
-system comes from <code>coding-system-for-read</code>, if that is
-non-<code>nil</code>; or else from the defaulting mechanism (see <a href="Default-Coding-Systems.html#Default-Coding-Systems">Default Coding Systems</a>).  If the text output by a process contains null
-bytes, Emacs by default uses <code>no-conversion</code> for it; see
-<a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">inhibit-null-byte-detection</a>, for how to
-control this behavior.
-</p>
-<p><strong>Warning:</strong> Coding systems such as <code>undecided</code>, which
-determine the coding system from the data, do not work entirely
-reliably with asynchronous subprocess output.  This is because Emacs
-has to process asynchronous subprocess output in batches, as it
-arrives.  Emacs must try to detect the proper coding system from one
-batch at a time, and this does not always work.  Therefore, if at all
-possible, specify a coding system that determines both the character
-code conversion and the end of line conversion&mdash;that is, one like
-<code>latin-1-unix</code>, rather than <code>undecided</code> or <code>latin-1</code>.
-</p>
-<a name="index-filter-multibyte-flag_002c-of-process"></a>
-<a name="index-process-filter-multibyte-flag"></a>
-<p>When Emacs calls a process filter function, it provides the process
-output as a multibyte string or as a unibyte string according to the
-process&rsquo;s filter coding system.  Emacs
-decodes the output according to the process output coding system,
-which usually produces a multibyte string, except for coding systems
-such as <code>binary</code> and <code>raw-text</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Accepting-Output.html#Accepting-Output" accesskey="n" rel="next">Accepting Output</a>, Previous: <a href="Filter-Functions.html#Filter-Functions" accesskey="p" rel="prev">Filter Functions</a>, Up: <a href="Output-from-Processes.html#Output-from-Processes" accesskey="u" rel="up">Output from Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When Emacs writes process output directly into a multibyte
+  buffer, it decodes the output according to the process output
+  coding system. If the coding system is <code>raw-text</code> or
+  <code>no-conversion</code>, Emacs converts the unibyte output to
+  multibyte using <code>string-to-multibyte</code>, and inserts the
+  resulting multibyte text.</p>
 
+  <p>You can use <code>set-process-coding-system</code> to specify
+  which coding system to use (see <a href=
+  "Process-Information.html#Process-Information">Process
+  Information</a>). Otherwise, the coding system comes from
+  <code>coding-system-for-read</code>, if that is
+  non-<code>nil</code>; or else from the defaulting mechanism (see
+  <a href=
+  "Default-Coding-Systems.html#Default-Coding-Systems">Default
+  Coding Systems</a>). If the text output by a process contains
+  null bytes, Emacs by default uses <code>no-conversion</code> for
+  it; see <a href=
+  "Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">inhibit-null-byte-detection</a>,
+  for how to control this behavior.</p>
 
+  <p><strong>Warning:</strong> Coding systems such as
+  <code>undecided</code>, which determine the coding system from
+  the data, do not work entirely reliably with asynchronous
+  subprocess output. This is because Emacs has to process
+  asynchronous subprocess output in batches, as it arrives. Emacs
+  must try to detect the proper coding system from one batch at a
+  time, and this does not always work. Therefore, if at all
+  possible, specify a coding system that determines both the
+  character code conversion and the end of line
+  conversion&mdash;that is, one like <code>latin-1-unix</code>,
+  rather than <code>undecided</code> or
+  <code>latin-1</code>.</p><a name=
+  "index-filter-multibyte-flag_002c-of-process" id=
+  "index-filter-multibyte-flag_002c-of-process"></a> <a name=
+  "index-process-filter-multibyte-flag" id=
+  "index-process-filter-multibyte-flag"></a>
 
+  <p>When Emacs calls a process filter function, it provides the
+  process output as a multibyte string or as a unibyte string
+  according to the process&rsquo;s filter coding system. Emacs
+  decodes the output according to the process output coding system,
+  which usually produces a multibyte string, except for coding
+  systems such as <code>binary</code> and
+  <code>raw-text</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Accepting-Output.html#Accepting-Output"
+    accesskey="n" rel="next">Accepting Output</a>, Previous:
+    <a href="Filter-Functions.html#Filter-Functions" accesskey="p"
+    rel="prev">Filter Functions</a>, Up: <a href=
+    "Output-from-Processes.html#Output-from-Processes" accesskey=
+    "u" rel="up">Output from Processes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

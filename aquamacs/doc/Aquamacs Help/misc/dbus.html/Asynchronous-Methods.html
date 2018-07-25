@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,108 +14,157 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Using of D-Bus: Asynchronous Methods</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Using of D-Bus: Asynchronous Methods">
-<meta name="keywords" content="Using of D-Bus: Asynchronous Methods">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Receiving-Method-Calls.html#Receiving-Method-Calls" rel="next" title="Receiving Method Calls">
-<link href="Synchronous-Methods.html#Synchronous-Methods" rel="prev" title="Synchronous Methods">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Using of D-Bus: Asynchronous Methods</title>
+  <meta name="description" content=
+  "Using of D-Bus: Asynchronous Methods" />
+  <meta name="keywords" content=
+  "Using of D-Bus: Asynchronous Methods" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Receiving-Method-Calls.html#Receiving-Method-Calls"
+  rel="next" title="Receiving Method Calls" />
+  <link href="Synchronous-Methods.html#Synchronous-Methods" rel=
+  "prev" title="Synchronous Methods" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Asynchronous-Methods"></a>
-<div class="header">
-<p>
-Next: <a href="Receiving-Method-Calls.html#Receiving-Method-Calls" accesskey="n" rel="next">Receiving Method Calls</a>, Previous: <a href="Synchronous-Methods.html#Synchronous-Methods" accesskey="p" rel="prev">Synchronous Methods</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Calling-methods-non_002dblocking_002e"></a>
-<h2 class="chapter">5 Calling methods non-blocking.</h2>
-<a name="index-method-calls_002c-asynchronous"></a>
-<a name="index-asynchronous-method-calls"></a>
+<body lang="en" xml:lang="en">
+  <a name="Asynchronous-Methods" id="Asynchronous-Methods"></a>
 
-<dl>
-<dt><a name="index-dbus_002dcall_002dmethod_002dasynchronously"></a>Function: <strong>dbus-call-method-asynchronously</strong> <em>bus service path interface method handler &amp;optional :timeout timeout &amp;rest args</em></dt>
-<dd><p>This function calls <var>method</var> on the D-Bus <var>bus</var>
-asynchronously.  <var>bus</var> is either the symbol <code>:system</code> or the
-symbol <code>:session</code>.
-</p>
-<p><var>service</var> is the D-Bus service name to be used.  <var>path</var> is the
-D-Bus object path, <var>service</var> is registered at.  <var>interface</var> is
-an interface offered by <var>service</var>.  It must provide <var>method</var>.
-</p>
-<p><var>handler</var> is a Lisp function, which is called when the
-corresponding return message has arrived.  If <var>handler</var> is
-<code>nil</code>, no return message will be expected.
-</p>
-<p>If the parameter <code>:timeout</code> is given, the following integer
-<var>timeout</var> specifies the maximum number of milliseconds a reply
-message must arrive.  The default value is 25,000.  If there is no
-reply message in time, a D-Bus error is raised (see <a href="Errors-and-Events.html#Errors-and-Events">Errors and Events</a>).
-</p>
-<p>All other arguments args are passed to <var>method</var> as arguments.
-They are converted into D-Bus types as described in <a href="Type-Conversion.html#Type-Conversion">Type Conversion</a>.
-</p>
-<p>If <var>handler</var> is a Lisp function, the function returns a key into
-the hash table <code>dbus-registered-objects-table</code>.  The
-corresponding entry in the hash table is removed, when the return
-message has been arrived, and <var>handler</var> is called.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-call-method-asynchronously
-  :system &quot;org.freedesktop.Hal&quot;
-  &quot;/org/freedesktop/Hal/devices/computer&quot;
-  &quot;org.freedesktop.Hal.Device&quot; &quot;GetPropertyString&quot; 'message
-  &quot;system.kernel.machine&quot;)
+  <div class="header">
+    <p>Next: <a href=
+    "Receiving-Method-Calls.html#Receiving-Method-Calls" accesskey=
+    "n" rel="next">Receiving Method Calls</a>, Previous: <a href=
+    "Synchronous-Methods.html#Synchronous-Methods" accesskey="p"
+    rel="prev">Synchronous Methods</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Calling-methods-non_002dblocking_002e" id=
+  "Calling-methods-non_002dblocking_002e"></a>
+
+  <h2 class="chapter">5 Calling methods non-blocking.</h2><a name=
+  "index-method-calls_002c-asynchronous" id=
+  "index-method-calls_002c-asynchronous"></a> <a name=
+  "index-asynchronous-method-calls" id=
+  "index-asynchronous-method-calls"></a>
+
+  <dl>
+    <dt><a name="index-dbus_002dcall_002dmethod_002dasynchronously"
+    id=
+    "index-dbus_002dcall_002dmethod_002dasynchronously"></a>Function:
+    <strong>dbus-call-method-asynchronously</strong> <em>bus
+    service path interface method handler &amp;optional :timeout
+    timeout &amp;rest args</em></dt>
+
+    <dd>
+      <p>This function calls <var>method</var> on the D-Bus
+      <var>bus</var> asynchronously. <var>bus</var> is either the
+      symbol <code>:system</code> or the symbol
+      <code>:session</code>.</p>
+
+      <p><var>service</var> is the D-Bus service name to be used.
+      <var>path</var> is the D-Bus object path, <var>service</var>
+      is registered at. <var>interface</var> is an interface
+      offered by <var>service</var>. It must provide
+      <var>method</var>.</p>
+
+      <p><var>handler</var> is a Lisp function, which is called
+      when the corresponding return message has arrived. If
+      <var>handler</var> is <code>nil</code>, no return message
+      will be expected.</p>
+
+      <p>If the parameter <code>:timeout</code> is given, the
+      following integer <var>timeout</var> specifies the maximum
+      number of milliseconds a reply message must arrive. The
+      default value is 25,000. If there is no reply message in
+      time, a D-Bus error is raised (see <a href=
+      "Errors-and-Events.html#Errors-and-Events">Errors and
+      Events</a>).</p>
+
+      <p>All other arguments args are passed to <var>method</var>
+      as arguments. They are converted into D-Bus types as
+      described in <a href=
+      "Type-Conversion.html#Type-Conversion">Type
+      Conversion</a>.</p>
+
+      <p>If <var>handler</var> is a Lisp function, the function
+      returns a key into the hash table
+      <code>dbus-registered-objects-table</code>. The corresponding
+      entry in the hash table is removed, when the return message
+      has been arrived, and <var>handler</var> is called.
+      Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-call-method-asynchronously
+  :system "org.freedesktop.Hal"
+  "/org/freedesktop/Hal/devices/computer"
+  "org.freedesktop.Hal.Device" "GetPropertyString" 'message
+  "system.kernel.machine")
 
 &rArr; (:serial :system 2)
 
 -| i686
-</pre></div>
-</dd></dl>
-
-
-
-
-
+</pre>
+      </div>
+    </dd>
+  </dl>
 </body>
 </html>

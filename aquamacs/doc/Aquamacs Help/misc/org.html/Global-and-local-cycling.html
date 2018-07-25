@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,196 +16,333 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Global and local cycling</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Global and local cycling">
-<meta name="keywords" content="The Org Manual: Global and local cycling">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Visibility-cycling.html#Visibility-cycling" rel="up" title="Visibility cycling">
-<link href="Initial-visibility.html#Initial-visibility" rel="next" title="Initial visibility">
-<link href="Visibility-cycling.html#Visibility-cycling" rel="prev" title="Visibility cycling">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Global and local cycling</title>
+  <meta name="description" content=
+  "The Org Manual: Global and local cycling" />
+  <meta name="keywords" content=
+  "The Org Manual: Global and local cycling" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Visibility-cycling.html#Visibility-cycling" rel="up"
+  title="Visibility cycling" />
+  <link href="Initial-visibility.html#Initial-visibility" rel=
+  "next" title="Initial visibility" />
+  <link href="Visibility-cycling.html#Visibility-cycling" rel=
+  "prev" title="Visibility cycling" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Global-and-local-cycling"></a>
-<div class="header">
-<p>
-Next: <a href="Initial-visibility.html#Initial-visibility" accesskey="n" rel="next">Initial visibility</a>, Previous: <a href="Visibility-cycling.html#Visibility-cycling" accesskey="p" rel="prev">Visibility cycling</a>, Up: <a href="Visibility-cycling.html#Visibility-cycling" accesskey="u" rel="up">Visibility cycling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Global-and-local-cycling-1"></a>
-<h4 class="subsection">2.3.1 Global and local cycling</h4>
+<body lang="en" xml:lang="en">
+  <a name="Global-and-local-cycling" id=
+  "Global-and-local-cycling"></a>
 
-<p>Outlines make it possible to hide parts of the text in the buffer.
-Org uses just two commands, bound to <tt class="key">TAB</tt> and
-<kbd>S-<span class="key">TAB</span></kbd> to change the visibility in the buffer.
-</p>
-<a name="index-subtree-visibility-states"></a>
-<a name="index-subtree-cycling"></a>
-<a name="index-folded_002c-subtree-visibility-state"></a>
-<a name="index-children_002c-subtree-visibility-state"></a>
-<a name="index-subtree_002c-subtree-visibility-state"></a>
-<dl compact="compact">
-<dd><a name="index-TAB"></a>
-<a name="index-org_002dcycle"></a>
-</dd>
-<dt><kbd><span class="key">TAB</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-cycle</code>)</dt>
-<dd><p><em>Subtree cycling</em>: Rotate current subtree among the states
-</p>
-<div class="example">
-<pre class="example">,-&gt; FOLDED -&gt; CHILDREN -&gt; SUBTREE --.
+  <div class="header">
+    <p>Next: <a href="Initial-visibility.html#Initial-visibility"
+    accesskey="n" rel="next">Initial visibility</a>, Previous:
+    <a href="Visibility-cycling.html#Visibility-cycling" accesskey=
+    "p" rel="prev">Visibility cycling</a>, Up: <a href=
+    "Visibility-cycling.html#Visibility-cycling" accesskey="u" rel=
+    "up">Visibility cycling</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Global-and-local-cycling-1" id=
+  "Global-and-local-cycling-1"></a>
+
+  <h4 class="subsection">2.3.1 Global and local cycling</h4>
+
+  <p>Outlines make it possible to hide parts of the text in the
+  buffer. Org uses just two commands, bound to <tt class=
+  "key">TAB</tt> and <kbd>S-<span class="key">TAB</span></kbd> to
+  change the visibility in the buffer.</p><a name=
+  "index-subtree-visibility-states" id=
+  "index-subtree-visibility-states"></a> <a name=
+  "index-subtree-cycling" id="index-subtree-cycling"></a> <a name=
+  "index-folded_002c-subtree-visibility-state" id=
+  "index-folded_002c-subtree-visibility-state"></a> <a name=
+  "index-children_002c-subtree-visibility-state" id=
+  "index-children_002c-subtree-visibility-state"></a> <a name=
+  "index-subtree_002c-subtree-visibility-state" id=
+  "index-subtree_002c-subtree-visibility-state"></a>
+
+  <dl compact="compact">
+    <dd><a name="index-TAB" id="index-TAB"></a> <a name=
+    "index-org_002dcycle" id="index-org_002dcycle"></a></dd>
+
+    <dt><kbd><span class="key">TAB</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-cycle</code>)</dt>
+
+    <dd>
+      <p><em>Subtree cycling</em>: Rotate current subtree among the
+      states</p>
+
+      <div class="example">
+        <pre class="example">
+,-&gt; FOLDED -&gt; CHILDREN -&gt; SUBTREE --.
 '-----------------------------------'
-</pre></div>
+</pre>
+      </div><a name="index-org_002dcycle_002demulate_002dtab" id=
+      "index-org_002dcycle_002demulate_002dtab"></a> <a name=
+      "index-org_002dcycle_002dglobal_002dat_002dbob" id=
+      "index-org_002dcycle_002dglobal_002dat_002dbob"></a>
 
-<a name="index-org_002dcycle_002demulate_002dtab"></a>
-<a name="index-org_002dcycle_002dglobal_002dat_002dbob"></a>
-<p>The cursor must be on a headline for this to work<a name="DOCF6" href="#FOOT6"><sup>6</sup></a>.  When the cursor is at the
-beginning of the buffer and the first line is not a headline, then
-<tt class="key">TAB</tt> actually runs global cycling (see below)<a name="DOCF7" href="#FOOT7"><sup>7</sup></a>.  Also when called with a prefix
-argument (<kbd>C-u <span class="key">TAB</span></kbd>), global cycling is invoked.
-</p>
-<a name="index-global-visibility-states"></a>
-<a name="index-global-cycling"></a>
-<a name="index-overview_002c-global-visibility-state"></a>
-<a name="index-contents_002c-global-visibility-state"></a>
-<a name="index-show-all_002c-global-visibility-state"></a>
-<a name="index-S_002dTAB"></a>
-<a name="index-org_002dglobal_002dcycle"></a>
-</dd>
-<dt><kbd>S-<span class="key">TAB</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-global-cycle</code>)</dt>
-<dt>C-u <tt class="key">TAB</tt></dt>
-<dd><p><em>Global cycling</em>: Rotate the entire buffer among the states
-</p>
-<div class="example">
-<pre class="example">,-&gt; OVERVIEW -&gt; CONTENTS -&gt; SHOW ALL --.
+      <p>The cursor must be on a headline for this to work<a name=
+      "DOCF6" href="#FOOT6" id="DOCF6"><sup>6</sup></a>. When the
+      cursor is at the beginning of the buffer and the first line
+      is not a headline, then <tt class="key">TAB</tt> actually
+      runs global cycling (see below)<a name="DOCF7" href="#FOOT7"
+      id="DOCF7"><sup>7</sup></a>. Also when called with a prefix
+      argument (<kbd>C-u <span class="key">TAB</span></kbd>),
+      global cycling is invoked.</p><a name=
+      "index-global-visibility-states" id=
+      "index-global-visibility-states"></a> <a name=
+      "index-global-cycling" id="index-global-cycling"></a>
+      <a name="index-overview_002c-global-visibility-state" id=
+      "index-overview_002c-global-visibility-state"></a> <a name=
+      "index-contents_002c-global-visibility-state" id=
+      "index-contents_002c-global-visibility-state"></a> <a name=
+      "index-show-all_002c-global-visibility-state" id=
+      "index-show-all_002c-global-visibility-state"></a> <a name=
+      "index-S_002dTAB" id="index-S_002dTAB"></a> <a name=
+      "index-org_002dglobal_002dcycle" id=
+      "index-org_002dglobal_002dcycle"></a>
+    </dd>
+
+    <dt><kbd>S-<span class="key">TAB</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-global-cycle</code>)</dt>
+
+    <dt>C-u <tt class="key">TAB</tt></dt>
+
+    <dd>
+      <p><em>Global cycling</em>: Rotate the entire buffer among
+      the states</p>
+
+      <div class="example">
+        <pre class="example">
+,-&gt; OVERVIEW -&gt; CONTENTS -&gt; SHOW ALL --.
 '--------------------------------------'
-</pre></div>
+</pre>
+      </div>
 
-<p>When <kbd>S-<span class="key">TAB</span></kbd> is called with a numeric prefix argument N, the
-CONTENTS view up to headlines of level N will be shown.  Note that inside
-tables, <kbd>S-<span class="key">TAB</span></kbd> jumps to the previous field.
-</p>
-<a name="index-set-startup-visibility_002c-command"></a>
-<a name="index-C_002du-C_002du-TAB"></a>
-<a name="index-org_002dset_002dstartup_002dvisibility"></a>
-</dd>
-<dt><kbd>C-u C-u <span class="key">TAB</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-set-startup-visibility</code>)</dt>
-<dd><p>Switch back to the startup visibility of the buffer (see <a href="Initial-visibility.html#Initial-visibility">Initial visibility</a>).
-<a name="index-show-all_002c-command"></a>
-<a name="index-C_002du-C_002du-C_002du-TAB"></a>
-<a name="index-show_002dall"></a>
-</p></dd>
-<dt><kbd>C-u C-u C-u <span class="key">TAB</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>show-all</code>)</dt>
-<dd><p>Show all, including drawers.
-<a name="index-revealing-context"></a>
-<a name="index-C_002dc-C_002dr"></a>
-<a name="index-org_002dreveal"></a>
-</p></dd>
-<dt><kbd>C-c C-r</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-reveal</code>)</dt>
-<dd><p>Reveal context around point, showing the current entry, the following heading
-and the hierarchy above.  Useful for working near a location that has been
-exposed by a sparse tree command (see <a href="Sparse-trees.html#Sparse-trees">Sparse trees</a>) or an agenda command
-(see <a href="Agenda-commands.html#Agenda-commands">Agenda commands</a>).  With a prefix argument show, on each
-level, all sibling headings.  With a double prefix argument, also show the
-entire subtree of the parent.
-<a name="index-show-branches_002c-command"></a>
-<a name="index-C_002dc-C_002dk"></a>
-<a name="index-show_002dbranches"></a>
-</p></dd>
-<dt><kbd>C-c C-k</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>show-branches</code>)</dt>
-<dd><p>Expose all the headings of the subtree, CONTENT view for just one subtree.
-<a name="index-show-children_002c-command"></a>
-<a name="index-C_002dc-TAB"></a>
-<a name="index-show_002dchildren"></a>
-</p></dd>
-<dt><kbd>C-c <span class="key">TAB</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>show-children</code>)</dt>
-<dd><p>Expose all direct children of the subtree.  With a numeric prefix argument N,
-expose all children down to level N.
-<a name="index-C_002dc-C_002dx-b"></a>
-<a name="index-org_002dtree_002dto_002dindirect_002dbuffer"></a>
-</p></dd>
-<dt><kbd>C-c C-x b</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-tree-to-indirect-buffer</code>)</dt>
-<dd><p>Show the current subtree in an indirect buffer<a name="DOCF8" href="#FOOT8"><sup>8</sup></a>.  With a numeric
-prefix argument N, go up to level N and then take that tree.  If N is
-negative then go up that many levels.  With a <kbd>C-u</kbd> prefix, do not remove
-the previously used indirect buffer.
-<a name="index-C_002dc-C_002dx-v"></a>
-<a name="index-org_002dcopy_002dvisible"></a>
-</p></dd>
-<dt><kbd>C-c C-x v</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-copy-visible</code>)</dt>
-<dd><p>Copy the <i>visible</i> text in the region into the kill ring.
-</p></dd>
-</dl>
+      <p>When <kbd>S-<span class="key">TAB</span></kbd> is called
+      with a numeric prefix argument N, the CONTENTS view up to
+      headlines of level N will be shown. Note that inside tables,
+      <kbd>S-<span class="key">TAB</span></kbd> jumps to the
+      previous field.</p><a name=
+      "index-set-startup-visibility_002c-command" id=
+      "index-set-startup-visibility_002c-command"></a> <a name=
+      "index-C_002du-C_002du-TAB" id=
+      "index-C_002du-C_002du-TAB"></a> <a name=
+      "index-org_002dset_002dstartup_002dvisibility" id=
+      "index-org_002dset_002dstartup_002dvisibility"></a>
+    </dd>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Initial-visibility.html#Initial-visibility" accesskey="1">Initial visibility</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Setting the initial visibility state
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Catching-invisible-edits.html#Catching-invisible-edits" accesskey="2">Catching invisible edits</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Preventing mistakes when editing invisible parts
-</td></tr>
-</table>
+    <dt><kbd>C-u C-u <span class="key">TAB</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-set-startup-visibility</code>)</dt>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <dd>
+      <p>Switch back to the startup visibility of the buffer (see
+      <a href="Initial-visibility.html#Initial-visibility">Initial
+      visibility</a>). <a name="index-show-all_002c-command" id=
+      "index-show-all_002c-command"></a> <a name=
+      "index-C_002du-C_002du-C_002du-TAB" id=
+      "index-C_002du-C_002du-C_002du-TAB"></a> <a name=
+      "index-show_002dall" id="index-show_002dall"></a></p>
+    </dd>
 
-<h3><a name="FOOT6" href="#DOCF6">(6)</a></h3>
-<p>see, however,
-the option <code>org-cycle-emulate-tab</code>.</p>
-<h3><a name="FOOT7" href="#DOCF7">(7)</a></h3>
-<p>see the
-option <code>org-cycle-global-at-bob</code>.</p>
-<h3><a name="FOOT8" href="#DOCF8">(8)</a></h3>
-<p>The indirect
-buffer
-(see the Emacs manual for more information about indirect buffers)
-will contain the entire buffer, but will be narrowed to the current
-tree.  Editing the indirect buffer will also change the original buffer,
-but without affecting visibility in that buffer.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Initial-visibility.html#Initial-visibility" accesskey="n" rel="next">Initial visibility</a>, Previous: <a href="Visibility-cycling.html#Visibility-cycling" accesskey="p" rel="prev">Visibility cycling</a>, Up: <a href="Visibility-cycling.html#Visibility-cycling" accesskey="u" rel="up">Visibility cycling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><kbd>C-u C-u C-u <span class="key">TAB</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>show-all</code>)</dt>
 
+    <dd>
+      <p>Show all, including drawers. <a name=
+      "index-revealing-context" id="index-revealing-context"></a>
+      <a name="index-C_002dc-C_002dr" id=
+      "index-C_002dc-C_002dr"></a> <a name="index-org_002dreveal"
+      id="index-org_002dreveal"></a></p>
+    </dd>
 
+    <dt><kbd>C-c C-r</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-reveal</code>)</dt>
 
+    <dd>
+      <p>Reveal context around point, showing the current entry,
+      the following heading and the hierarchy above. Useful for
+      working near a location that has been exposed by a sparse
+      tree command (see <a href=
+      "Sparse-trees.html#Sparse-trees">Sparse trees</a>) or an
+      agenda command (see <a href=
+      "Agenda-commands.html#Agenda-commands">Agenda commands</a>).
+      With a prefix argument show, on each level, all sibling
+      headings. With a double prefix argument, also show the entire
+      subtree of the parent. <a name=
+      "index-show-branches_002c-command" id=
+      "index-show-branches_002c-command"></a> <a name=
+      "index-C_002dc-C_002dk" id="index-C_002dc-C_002dk"></a>
+      <a name="index-show_002dbranches" id=
+      "index-show_002dbranches"></a></p>
+    </dd>
+
+    <dt><kbd>C-c C-k</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>show-branches</code>)</dt>
+
+    <dd>
+      <p>Expose all the headings of the subtree, CONTENT view for
+      just one subtree. <a name="index-show-children_002c-command"
+      id="index-show-children_002c-command"></a> <a name=
+      "index-C_002dc-TAB" id="index-C_002dc-TAB"></a> <a name=
+      "index-show_002dchildren" id=
+      "index-show_002dchildren"></a></p>
+    </dd>
+
+    <dt><kbd>C-c <span class="key">TAB</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>show-children</code>)</dt>
+
+    <dd>
+      <p>Expose all direct children of the subtree. With a numeric
+      prefix argument N, expose all children down to level N.
+      <a name="index-C_002dc-C_002dx-b" id=
+      "index-C_002dc-C_002dx-b"></a> <a name=
+      "index-org_002dtree_002dto_002dindirect_002dbuffer" id=
+      "index-org_002dtree_002dto_002dindirect_002dbuffer"></a></p>
+    </dd>
+
+    <dt><kbd>C-c C-x b</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-tree-to-indirect-buffer</code>)</dt>
+
+    <dd>
+      <p>Show the current subtree in an indirect buffer<a name=
+      "DOCF8" href="#FOOT8" id="DOCF8"><sup>8</sup></a>. With a
+      numeric prefix argument N, go up to level N and then take
+      that tree. If N is negative then go up that many levels. With
+      a <kbd>C-u</kbd> prefix, do not remove the previously used
+      indirect buffer. <a name="index-C_002dc-C_002dx-v" id=
+      "index-C_002dc-C_002dx-v"></a> <a name=
+      "index-org_002dcopy_002dvisible" id=
+      "index-org_002dcopy_002dvisible"></a></p>
+    </dd>
+
+    <dt><kbd>C-c C-x v</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-copy-visible</code>)</dt>
+
+    <dd>
+      <p>Copy the <i>visible</i> text in the region into the kill
+      ring.</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Initial-visibility.html#Initial-visibility" accesskey=
+      "1">Initial visibility</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Setting the initial visibility
+      state</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Catching-invisible-edits.html#Catching-invisible-edits"
+      accesskey="2">Catching invisible edits</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Preventing mistakes when
+      editing invisible parts</td>
+    </tr>
+  </table>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT6" href="#DOCF6" id="FOOT6">(6)</a></h3>
+
+    <p>see, however, the option
+    <code>org-cycle-emulate-tab</code>.</p>
+
+    <h3><a name="FOOT7" href="#DOCF7" id="FOOT7">(7)</a></h3>
+
+    <p>see the option <code>org-cycle-global-at-bob</code>.</p>
+
+    <h3><a name="FOOT8" href="#DOCF8" id="FOOT8">(8)</a></h3>
+
+    <p>The indirect buffer (see the Emacs manual for more
+    information about indirect buffers) will contain the entire
+    buffer, but will be narrowed to the current tree. Editing the
+    indirect buffer will also change the original buffer, but
+    without affecting visibility in that buffer.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Initial-visibility.html#Initial-visibility"
+    accesskey="n" rel="next">Initial visibility</a>, Previous:
+    <a href="Visibility-cycling.html#Visibility-cycling" accesskey=
+    "p" rel="prev">Visibility cycling</a>, Up: <a href=
+    "Visibility-cycling.html#Visibility-cycling" accesskey="u" rel=
+    "up">Visibility cycling</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

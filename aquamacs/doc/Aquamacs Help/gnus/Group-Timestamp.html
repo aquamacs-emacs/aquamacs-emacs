@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Group Timestamp - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Misc-Group-Stuff.html#Misc-Group-Stuff" title="Misc Group Stuff">
-<link rel="prev" href="Group-Information.html#Group-Information" title="Group Information">
-<link rel="next" href="File-Commands.html#File-Commands" title="File Commands">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Group Timestamp - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Misc-Group-Stuff.html#Misc-Group-Stuff"
+  title="Misc Group Stuff" />
+  <link rel="prev" href="Group-Information.html#Group-Information"
+  title="Group Information" />
+  <link rel="next" href="File-Commands.html#File-Commands" title=
+  "File Commands" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +35,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,52 +48,67 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Group-Timestamp"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="File-Commands.html#File-Commands">File Commands</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Group-Information.html#Group-Information">Group Information</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Misc-Group-Stuff.html#Misc-Group-Stuff">Misc Group Stuff</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Group-Timestamp" id="Group-Timestamp"></a>
 
-<h4 class="subsection">2.18.3 Group Timestamp</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "File-Commands.html#File-Commands">File Commands</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Group-Information.html#Group-Information">Group
+    Information</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Misc-Group-Stuff.html#Misc-Group-Stuff">Misc Group
+    Stuff</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-timestamps-548"></a><a name="index-group-timestamps-549"></a>
-It can be convenient to let Gnus keep track of when you last read a
-group.  To set the ball rolling, you should add
-<code>gnus-group-set-timestamp</code> to <code>gnus-select-group-hook</code>:
+  <h4 class="subsection">2.18.3 Group Timestamp</h4>
 
-<pre class="lisp">     (add-hook 'gnus-select-group-hook 'gnus-group-set-timestamp)
+  <p><a name="index-timestamps-548" id=
+  "index-timestamps-548"></a><a name="index-group-timestamps-549"
+  id="index-group-timestamps-549"></a> It can be convenient to let
+  Gnus keep track of when you last read a group. To set the ball
+  rolling, you should add <code>gnus-group-set-timestamp</code> to
+  <code>gnus-select-group-hook</code>:</p>
+  <pre class="lisp">
+     (add-hook 'gnus-select-group-hook 'gnus-group-set-timestamp)
 </pre>
-   <p>After doing this, each time you enter a group, it'll be recorded.
 
-   <p>This information can be displayed in various ways&mdash;the easiest is to
-use the &lsquo;<samp><span class="samp">%d</span></samp>&rsquo; spec in the group line format:
+  <p>After doing this, each time you enter a group, it'll be
+  recorded.</p>
 
-<pre class="lisp">     (setq gnus-group-line-format
+  <p>This information can be displayed in various ways&mdash;the
+  easiest is to use the &lsquo;<samp><span class=
+  "samp">%d</span></samp>&rsquo; spec in the group line format:</p>
+  <pre class="lisp">
+     (setq gnus-group-line-format
            "%M\%S\%p\%P\%5y: %(%-40,40g%) %d\n")
 </pre>
-   <p>This will result in lines looking like:
 
-<pre class="example">     *        0: mail.ding                                19961002T012943
+  <p>This will result in lines looking like:</p>
+  <pre class="example">
+     *        0: mail.ding                                19961002T012943
               0: custom                                   19961002T012713
 </pre>
-   <p>As you can see, the date is displayed in compact ISO 8601 format.  This
-may be a bit too much, so to just display the date, you could say
-something like:
 
-<pre class="lisp">     (setq gnus-group-line-format
+  <p>As you can see, the date is displayed in compact ISO 8601
+  format. This may be a bit too much, so to just display the date,
+  you could say something like:</p>
+  <pre class="lisp">
+     (setq gnus-group-line-format
            "%M\%S\%p\%P\%5y: %(%-40,40g%) %6,6~(cut 2)d\n")
 </pre>
-   <p>If you would like greater control of the time format, you can use a
-user-defined format spec.  Something like the following should do the
-trick:
 
-<pre class="lisp">     (setq gnus-group-line-format
+  <p>If you would like greater control of the time format, you can
+  use a user-defined format spec. Something like the following
+  should do the trick:</p>
+  <pre class="lisp">
+     (setq gnus-group-line-format
            "%M\%S\%p\%P\%5y: %(%-40,40g%) %ud\n")
      (defun gnus-user-format-function-d (headers)
        (let ((time (gnus-group-timestamp gnus-tmp-group)))
@@ -89,5 +116,5 @@ trick:
              (format-time-string "%b %d  %H:%M" time)
            "")))
 </pre>
-   </body></html>
-
+</body>
+</html>

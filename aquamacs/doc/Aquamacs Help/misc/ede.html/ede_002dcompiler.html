@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes EDE, the Emacs Development Environment.
 
 Copyright (C) 1998-2001, 2004-2005, 2008-2016
@@ -15,192 +17,289 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Development Environment: ede-compiler</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Development Environment: ede-compiler">
-<meta name="keywords" content="Emacs Development Environment: ede-compiler">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Compilers.html#Compilers" rel="up" title="Compilers">
-<link href="ede_002dobject_002dcompiler.html#ede_002dobject_002dcompiler" rel="next" title="ede-object-compiler">
-<link href="ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram" rel="prev" title="ede-compilation-program">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Development Environment: ede-compiler</title>
+  <meta name="description" content=
+  "Emacs Development Environment: ede-compiler" />
+  <meta name="keywords" content=
+  "Emacs Development Environment: ede-compiler" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Compilers.html#Compilers" rel="up" title=
+  "Compilers" />
+  <link href=
+  "ede_002dobject_002dcompiler.html#ede_002dobject_002dcompiler"
+  rel="next" title="ede-object-compiler" />
+  <link href=
+  "ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram"
+  rel="prev" title="ede-compilation-program" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="ede_002dcompiler"></a>
-<div class="header">
-<p>
-Next: <a href="ede_002dobject_002dcompiler.html#ede_002dobject_002dcompiler" accesskey="n" rel="next">ede-object-compiler</a>, Previous: <a href="ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram" accesskey="p" rel="prev">ede-compilation-program</a>, Up: <a href="Compilers.html#Compilers" accesskey="u" rel="up">Compilers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="ede_002dcompiler-1"></a>
-<h4 class="subsection">8.10.2 ede-compiler</h4>
-<a name="index-ede_002dcompiler"></a>
+<body lang="en" xml:lang="en">
+  <a name="ede_002dcompiler" id="ede_002dcompiler"></a>
 
-<dl compact="compact">
-<dt>Inheritance Tree:</dt>
-<dd><dl compact="compact">
-<dt><code>eieio-instance-inheritor</code></dt>
-<dd><dl compact="compact">
-<dt><code>See&nbsp;<a href="ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram">ede-compilation-program</a>.<!-- /@w --></code></dt>
-<dd><dl compact="compact">
-<dt><code>ede-compiler</code></dt>
-<dd><dl compact="compact">
-<dt>Children:</dt>
-<dd><p>See&nbsp;<a href="ede_002dobject_002dcompiler.html#ede_002dobject_002dcompiler">ede-object-compiler</a>,<!-- /@w --> <span class="nolinebreak">semantic-ede-grammar-compiler-class.</span><!-- /@w -->
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "ede_002dobject_002dcompiler.html#ede_002dobject_002dcompiler"
+    accesskey="n" rel="next">ede-object-compiler</a>, Previous:
+    <a href=
+    "ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram"
+    accesskey="p" rel="prev">ede-compilation-program</a>, Up:
+    <a href="Compilers.html#Compilers" accesskey="u" rel=
+    "up">Compilers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="ede_002dcompiler-1" id="ede_002dcompiler-1"></a>
 
-</dd>
-</dl>
+  <h4 class="subsection">8.10.2 ede-compiler</h4><a name=
+  "index-ede_002dcompiler" id="index-ede_002dcompiler"></a>
 
-</dd>
-</dl>
+  <dl compact="compact">
+    <dt>Inheritance Tree:</dt>
 
-</dd>
-</dl>
-</dd>
-</dl>
+    <dd>
+      <dl compact="compact">
+        <dt><code>eieio-instance-inheritor</code></dt>
 
-<p>Create a new object with name NAME of class type ede-compiler
-</p>
-<dl compact="compact">
-<dt>Slots:</dt>
-<dd>
-<dl compact="compact">
-<dt><code>:parent-instance</code></dt>
-<dd><p>Type: <code>eieio-instance-inheritor-child</code>
-</p>
-<p>The parent of this instance.
-If a slot of this class is reference, and is unbound, then  the parent
-is checked for a value.
-</p>
-</dd>
-<dt><code>:name</code></dt>
-<dd><p>Type: <code>string</code>
-</p>
-<p>Name of this type of compiler.
-</p>
-</dd>
-<dt><code>:variables</code></dt>
-<dd><p>Type: <code>list</code>
-</p>
-<p>Variables needed in the Makefile for this compiler.
-An assoc list where each element is (VARNAME . VALUE) where VARNAME
-is a string, and VALUE is either a string, or a list of strings.
-For example, GCC would define CC=gcc, and emacs would define EMACS=emacs.
-</p>
-</dd>
-<dt><code>:sourcetype</code></dt>
-<dd><p>Type: <code>list</code>
-</p>
-<p>A list of <code>ede-sourcecode</code> See <a href="ede_002dsourcecode.html#ede_002dsourcecode">ede-sourcecode</a>. objects this class will handle.
-This is used to match target objects with the compilers and linkers
-they can use, and which files this object is interested in.
-</p>
-</dd>
-<dt><code>:commands</code></dt>
-<dd><p>Type: <code>list</code>
-</p>
-<p>The commands used to execute this compiler.
-The object which uses this compiler will place these commands after
-it&rsquo;s rule definition.
-</p>
-</dd>
-<dt><code>:objectextention</code></dt>
-<dd><p>Type: <code>string</code>
-</p>
-<p>A string which is the extension used for object files.
-For example, C code uses .o on unix, and Emacs Lisp uses .elc.
-</p>
-</dd>
-<dt><code>:makedepends</code></dt>
-<dd><p>Type: <code>boolean</code> <br>
-Default Value: <code>nil</code>
-</p>
-<p>Non-<code>nil</code> if this compiler can make dependencies.
-</p>
-</dd>
-<dt><code>:uselinker</code></dt>
-<dd><p>Type: <code>boolean</code> <br>
-Default Value: <code>nil</code>
-</p>
-<p>Non-<code>nil</code> if this compiler creates code that can be linked.
-This requires that the containing target also define a list of available
-linkers that can be used.
-</p>
-</dd>
-</dl>
+        <dd>
+          <dl compact="compact">
+            <dt><code>See&nbsp;<a href=
+            "ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram">ede-compilation-program</a>.<!-- /@w --></code></dt>
 
-</dd>
-</dl>
-<a name="Specialized-Methods-29"></a>
-<h4 class="subsubsection">8.10.2.1 Specialized Methods</h4>
+            <dd>
+              <dl compact="compact">
+                <dt><code>ede-compiler</code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dinsert_002dobject_002dvariables"></a>Method: <strong>ede-proj-makefile-insert-object-variables</strong> <em>:AFTER this targetname sourcefiles</em></dt>
-<dd><p>Insert an OBJ variable to specify object code to be generated for <var>THIS</var>.
-The name of the target is <var>TARGETNAME</var> as a string.  <var>SOURCEFILES</var> is the list of
-files to be objectified.
-Not all compilers do this.
-</p></dd></dl>
+                <dd>
+                  <dl compact="compact">
+                    <dt>Children:</dt>
 
-<dl>
-<dt><a name="index-ede_002dcompiler_002dintermediate_002dobjects_002dp"></a>Method: <strong>ede-compiler-intermediate-objects-p</strong> <em>:AFTER this</em></dt>
-<dd><p>Return non-<code>nil</code> if <var>THIS</var> has intermediate object files.
-If this compiler creates code that can be linked together,
-then the object files created by the compiler are considered intermediate.
-</p></dd></dl>
+                    <dd>
+                      <p>See&nbsp;<a href=
+                      "ede_002dobject_002dcompiler.html#ede_002dobject_002dcompiler">ede-object-compiler</a>,<!-- /@w -->
+                      <span class=
+                      "nolinebreak">semantic-ede-grammar-compiler-class.</span><!-- /@w --></p>
+                    </dd>
+                  </dl>
+                </dd>
+              </dl>
+            </dd>
+          </dl>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ede_002dcompiler_002dintermediate_002dobject_002dvariable"></a>Method: <strong>ede-compiler-intermediate-object-variable</strong> <em>:AFTER this targetname</em></dt>
-<dd><p>Return a string based on <var>THIS</var> representing a make object variable.
-<var>TARGETNAME</var> is the name of the target that these objects belong to.
-</p></dd></dl>
+  <p>Create a new object with name NAME of class type
+  ede-compiler</p>
 
+  <dl compact="compact">
+    <dt>Slots:</dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="ede_002dobject_002dcompiler.html#ede_002dobject_002dcompiler" accesskey="n" rel="next">ede-object-compiler</a>, Previous: <a href="ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram" accesskey="p" rel="prev">ede-compilation-program</a>, Up: <a href="Compilers.html#Compilers" accesskey="u" rel="up">Compilers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+    <dd>
+      <dl compact="compact">
+        <dt><code>:parent-instance</code></dt>
 
+        <dd>
+          <p>Type: <code>eieio-instance-inheritor-child</code></p>
 
+          <p>The parent of this instance. If a slot of this class
+          is reference, and is unbound, then the parent is checked
+          for a value.</p>
+        </dd>
 
+        <dt><code>:name</code></dt>
+
+        <dd>
+          <p>Type: <code>string</code></p>
+
+          <p>Name of this type of compiler.</p>
+        </dd>
+
+        <dt><code>:variables</code></dt>
+
+        <dd>
+          <p>Type: <code>list</code></p>
+
+          <p>Variables needed in the Makefile for this compiler. An
+          assoc list where each element is (VARNAME . VALUE) where
+          VARNAME is a string, and VALUE is either a string, or a
+          list of strings. For example, GCC would define CC=gcc,
+          and emacs would define EMACS=emacs.</p>
+        </dd>
+
+        <dt><code>:sourcetype</code></dt>
+
+        <dd>
+          <p>Type: <code>list</code></p>
+
+          <p>A list of <code>ede-sourcecode</code> See <a href=
+          "ede_002dsourcecode.html#ede_002dsourcecode">ede-sourcecode</a>.
+          objects this class will handle. This is used to match
+          target objects with the compilers and linkers they can
+          use, and which files this object is interested in.</p>
+        </dd>
+
+        <dt><code>:commands</code></dt>
+
+        <dd>
+          <p>Type: <code>list</code></p>
+
+          <p>The commands used to execute this compiler. The object
+          which uses this compiler will place these commands after
+          it&rsquo;s rule definition.</p>
+        </dd>
+
+        <dt><code>:objectextention</code></dt>
+
+        <dd>
+          <p>Type: <code>string</code></p>
+
+          <p>A string which is the extension used for object files.
+          For example, C code uses .o on unix, and Emacs Lisp uses
+          .elc.</p>
+        </dd>
+
+        <dt><code>:makedepends</code></dt>
+
+        <dd>
+          <p>Type: <code>boolean</code><br />
+          Default Value: <code>nil</code></p>
+
+          <p>Non-<code>nil</code> if this compiler can make
+          dependencies.</p>
+        </dd>
+
+        <dt><code>:uselinker</code></dt>
+
+        <dd>
+          <p>Type: <code>boolean</code><br />
+          Default Value: <code>nil</code></p>
+
+          <p>Non-<code>nil</code> if this compiler creates code
+          that can be linked. This requires that the containing
+          target also define a list of available linkers that can
+          be used.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl><a name="Specialized-Methods-29" id=
+  "Specialized-Methods-29"></a>
+
+  <h4 class="subsubsection">8.10.2.1 Specialized Methods</h4>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dinsert_002dobject_002dvariables"
+    id=
+    "index-ede_002dproj_002dmakefile_002dinsert_002dobject_002dvariables">
+    </a>Method:
+    <strong>ede-proj-makefile-insert-object-variables</strong>
+    <em>:AFTER this targetname sourcefiles</em></dt>
+
+    <dd>
+      <p>Insert an OBJ variable to specify object code to be
+      generated for <var>THIS</var>. The name of the target is
+      <var>TARGETNAME</var> as a string. <var>SOURCEFILES</var> is
+      the list of files to be objectified. Not all compilers do
+      this.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dcompiler_002dintermediate_002dobjects_002dp" id=
+    "index-ede_002dcompiler_002dintermediate_002dobjects_002dp"></a>Method:
+    <strong>ede-compiler-intermediate-objects-p</strong> <em>:AFTER
+    this</em></dt>
+
+    <dd>
+      <p>Return non-<code>nil</code> if <var>THIS</var> has
+      intermediate object files. If this compiler creates code that
+      can be linked together, then the object files created by the
+      compiler are considered intermediate.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dcompiler_002dintermediate_002dobject_002dvariable"
+    id=
+    "index-ede_002dcompiler_002dintermediate_002dobject_002dvariable">
+    </a>Method:
+    <strong>ede-compiler-intermediate-object-variable</strong>
+    <em>:AFTER this targetname</em></dt>
+
+    <dd>
+      <p>Return a string based on <var>THIS</var> representing a
+      make object variable. <var>TARGETNAME</var> is the name of
+      the target that these objects belong to.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "ede_002dobject_002dcompiler.html#ede_002dobject_002dcompiler"
+    accesskey="n" rel="next">ede-object-compiler</a>, Previous:
+    <a href=
+    "ede_002dcompilation_002dprogram.html#ede_002dcompilation_002dprogram"
+    accesskey="p" rel="prev">ede-compilation-program</a>, Up:
+    <a href="Compilers.html#Compilers" accesskey="u" rel=
+    "up">Compilers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

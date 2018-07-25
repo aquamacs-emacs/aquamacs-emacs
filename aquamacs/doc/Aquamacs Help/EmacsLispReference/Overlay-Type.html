@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,75 +19,102 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Overlay Type</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Overlay Type">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Overlay Type">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Editing-Types.html#Editing-Types" rel="up" title="Editing Types">
-<link href="Font-Type.html#Font-Type" rel="next" title="Font Type">
-<link href="Keymap-Type.html#Keymap-Type" rel="prev" title="Keymap Type">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Overlay Type</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Overlay Type" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Overlay Type" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Editing-Types.html#Editing-Types" rel="up" title=
+  "Editing Types" />
+  <link href="Font-Type.html#Font-Type" rel="next" title=
+  "Font Type" />
+  <link href="Keymap-Type.html#Keymap-Type" rel="prev" title=
+  "Keymap Type" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Overlay-Type" id="Overlay-Type"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Font-Type.html#Font-Type" accesskey="n" rel=
+    "next">Font Type</a>, Previous: <a href=
+    "Keymap-Type.html#Keymap-Type" accesskey="p" rel="prev">Keymap
+    Type</a>, Up: <a href="Editing-Types.html#Editing-Types"
+    accesskey="u" rel="up">Editing Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Overlay-Type-1" id="Overlay-Type-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Overlay-Type"></a>
-<div class="header">
-<p>
-Next: <a href="Font-Type.html#Font-Type" accesskey="n" rel="next">Font Type</a>, Previous: <a href="Keymap-Type.html#Keymap-Type" accesskey="p" rel="prev">Keymap Type</a>, Up: <a href="Editing-Types.html#Editing-Types" accesskey="u" rel="up">Editing Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Overlay-Type-1"></a>
-<h4 class="subsection">2.4.11 Overlay Type</h4>
+  <h4 class="subsection">2.4.11 Overlay Type</h4>
 
-<p>An <em>overlay</em> specifies properties that apply to a part of a
-buffer.  Each overlay applies to a specified range of the buffer, and
-contains a property list (a list whose elements are alternating property
-names and values).  Overlay properties are used to present parts of the
-buffer temporarily in a different display style.  Overlays have no read
-syntax, and print in hash notation, giving the buffer name and range of
-positions.
-</p>
-<p>See <a href="Overlays.html#Overlays">Overlays</a>, for information on how you can create and use overlays.
-</p>
+  <p>An <em>overlay</em> specifies properties that apply to a part
+  of a buffer. Each overlay applies to a specified range of the
+  buffer, and contains a property list (a list whose elements are
+  alternating property names and values). Overlay properties are
+  used to present parts of the buffer temporarily in a different
+  display style. Overlays have no read syntax, and print in hash
+  notation, giving the buffer name and range of positions.</p>
 
-
-
+  <p>See <a href="Overlays.html#Overlays">Overlays</a>, for
+  information on how you can create and use overlays.</p>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2008, 2010-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,86 +14,121 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Lisp Regression Testing: Useful Techniques</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Lisp Regression Testing: Useful Techniques">
-<meta name="keywords" content="Emacs Lisp Regression Testing: Useful Techniques">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="How-to-Write-Tests.html#How-to-Write-Tests" rel="up" title="How to Write Tests">
-<link href="How-to-Debug-Tests.html#How-to-Debug-Tests" rel="next" title="How to Debug Tests">
-<link href="Tests-and-Their-Environment.html#Tests-and-Their-Environment" rel="prev" title="Tests and Their Environment">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Lisp Regression Testing: Useful Techniques</title>
+  <meta name="description" content=
+  "Emacs Lisp Regression Testing: Useful Techniques" />
+  <meta name="keywords" content=
+  "Emacs Lisp Regression Testing: Useful Techniques" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="How-to-Write-Tests.html#How-to-Write-Tests" rel="up"
+  title="How to Write Tests" />
+  <link href="How-to-Debug-Tests.html#How-to-Debug-Tests" rel=
+  "next" title="How to Debug Tests" />
+  <link href=
+  "Tests-and-Their-Environment.html#Tests-and-Their-Environment"
+  rel="prev" title="Tests and Their Environment" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Useful-Techniques"></a>
-<div class="header">
-<p>
-Previous: <a href="Tests-and-Their-Environment.html#Tests-and-Their-Environment" accesskey="p" rel="prev">Tests and Their Environment</a>, Up: <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel="up">How to Write Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Useful-Techniques-when-Writing-Tests"></a>
-<h3 class="section">3.4 Useful Techniques when Writing Tests</h3>
+<body lang="en" xml:lang="en">
+  <a name="Useful-Techniques" id="Useful-Techniques"></a>
 
-<p>Testing simple functions that have no side effects and no dependencies
-on their environment is easy.  Such tests often look like this:
-</p>
-<div class="lisp">
-<pre class="lisp">(ert-deftest ert-test-mismatch ()
-  (should (eql (ert--mismatch &quot;&quot; &quot;&quot;) nil))
-  (should (eql (ert--mismatch &quot;&quot; &quot;a&quot;) 0))
-  (should (eql (ert--mismatch &quot;a&quot; &quot;a&quot;) nil))
-  (should (eql (ert--mismatch &quot;ab&quot; &quot;a&quot;) 1))
-  (should (eql (ert--mismatch &quot;Aa&quot; &quot;aA&quot;) 0))
+  <div class="header">
+    <p>Previous: <a href=
+    "Tests-and-Their-Environment.html#Tests-and-Their-Environment"
+    accesskey="p" rel="prev">Tests and Their Environment</a>, Up:
+    <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey=
+    "u" rel="up">How to Write Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Useful-Techniques-when-Writing-Tests" id=
+  "Useful-Techniques-when-Writing-Tests"></a>
+
+  <h3 class="section">3.4 Useful Techniques when Writing Tests</h3>
+
+  <p>Testing simple functions that have no side effects and no
+  dependencies on their environment is easy. Such tests often look
+  like this:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(ert-deftest ert-test-mismatch ()
+  (should (eql (ert--mismatch "" "") nil))
+  (should (eql (ert--mismatch "" "a") 0))
+  (should (eql (ert--mismatch "a" "a") nil))
+  (should (eql (ert--mismatch "ab" "a") 1))
+  (should (eql (ert--mismatch "Aa" "aA") 0))
   (should (eql (ert--mismatch '(a b c) '(a b d)) 2)))
-</pre></div>
+</pre>
+  </div>
 
-<p>This test calls the function <code>ert--mismatch</code> several times with
-various combinations of arguments and compares the return value to the
-expected return value.  (Some programmers prefer <code>(should (eql
-EXPECTED ACTUAL))</code> over the <code>(should (eql ACTUAL EXPECTED))</code>
-shown here.  ERT works either way.)
-</p>
-<p>Here&rsquo;s a more complicated test:
-</p>
-<div class="lisp">
-<pre class="lisp">(ert-deftest ert-test-record-backtrace ()
-  (let ((test (make-ert-test :body (lambda () (ert-fail &quot;foo&quot;)))))
+  <p>This test calls the function <code>ert--mismatch</code>
+  several times with various combinations of arguments and compares
+  the return value to the expected return value. (Some programmers
+  prefer <code>(should (eql EXPECTED ACTUAL))</code> over the
+  <code>(should (eql ACTUAL EXPECTED))</code> shown here. ERT works
+  either way.)</p>
+
+  <p>Here&rsquo;s a more complicated test:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(ert-deftest ert-test-record-backtrace ()
+  (let ((test (make-ert-test :body (lambda () (ert-fail "foo")))))
     (let ((result (ert-run-test test)))
       (should (ert-test-failed-p result))
       (with-temp-buffer
@@ -101,58 +138,65 @@ shown here.  ERT works either way.)
         (let ((first-line (buffer-substring-no-properties
                            (point-min) (point))))
           (should (equal first-line
-                         &quot;  signal(ert-test-failed (\&quot;foo\&quot;))&quot;)))))))
-</pre></div>
+                         "  signal(ert-test-failed (\"foo\"))")))))))
+</pre>
+  </div>
 
-<p>This test creates a test object using <code>make-ert-test</code> whose body
-will immediately signal failure.  It then runs that test and asserts
-that it fails.  Then, it creates a temporary buffer and invokes
-<code>ert--print-backtrace</code> to print the backtrace of the failed test
-to the current buffer.  Finally, it extracts the first line from the
-buffer and asserts that it matches what we expect.  It uses
-<code>buffer-substring-no-properties</code> and <code>equal</code> to ignore text
-properties; for a test that takes properties into account,
-<code>buffer-substring</code> and <code>ert-equal-including-properties</code>
-could be used instead.
-</p>
-<p>The reason why this test only checks the first line of the backtrace
-is that the remainder of the backtrace is dependent on ERT&rsquo;s internals
-as well as whether the code is running interpreted or compiled.  By
-looking only at the first line, the test checks a useful property&mdash;that
-the backtrace correctly captures the call to <code>signal</code> that
-results from the call to <code>ert-fail</code>&mdash;without being brittle.
-</p>
-<p>This example also shows that writing tests is much easier if the code
-under test was structured with testing in mind.
-</p>
-<p>For example, if <code>ert-run-test</code> accepted only symbols that name
-tests rather than test objects, the test would need a name for the
-failing test, which would have to be a temporary symbol generated with
-<code>make-symbol</code>, to avoid side effects on Emacs&rsquo;s state.  Choosing
-the right interface for <code>ert-run-tests</code> allows the test to be
-simpler.
-</p>
-<p>Similarly, if <code>ert--print-backtrace</code> printed the backtrace to a
-buffer with a fixed name rather than the current buffer, it would be
-much harder for the test to undo the side effect.  Of course, some
-code somewhere needs to pick the buffer name.  But that logic is
-independent of the logic that prints backtraces, and keeping them in
-separate functions allows us to test them independently.
-</p>
-<p>A lot of code that you will encounter in Emacs was not written with
-testing in mind.  Sometimes, the easiest way to write tests for such
-code is to restructure the code slightly to provide better interfaces
-for testing.  Usually, this makes the interfaces easier to use as
-well.
-</p>
+  <p>This test creates a test object using
+  <code>make-ert-test</code> whose body will immediately signal
+  failure. It then runs that test and asserts that it fails. Then,
+  it creates a temporary buffer and invokes
+  <code>ert--print-backtrace</code> to print the backtrace of the
+  failed test to the current buffer. Finally, it extracts the first
+  line from the buffer and asserts that it matches what we expect.
+  It uses <code>buffer-substring-no-properties</code> and
+  <code>equal</code> to ignore text properties; for a test that
+  takes properties into account, <code>buffer-substring</code> and
+  <code>ert-equal-including-properties</code> could be used
+  instead.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Tests-and-Their-Environment.html#Tests-and-Their-Environment" accesskey="p" rel="prev">Tests and Their Environment</a>, Up: <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel="up">How to Write Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+  <p>The reason why this test only checks the first line of the
+  backtrace is that the remainder of the backtrace is dependent on
+  ERT&rsquo;s internals as well as whether the code is running
+  interpreted or compiled. By looking only at the first line, the
+  test checks a useful property&mdash;that the backtrace correctly
+  captures the call to <code>signal</code> that results from the
+  call to <code>ert-fail</code>&mdash;without being brittle.</p>
 
+  <p>This example also shows that writing tests is much easier if
+  the code under test was structured with testing in mind.</p>
 
+  <p>For example, if <code>ert-run-test</code> accepted only
+  symbols that name tests rather than test objects, the test would
+  need a name for the failing test, which would have to be a
+  temporary symbol generated with <code>make-symbol</code>, to
+  avoid side effects on Emacs&rsquo;s state. Choosing the right
+  interface for <code>ert-run-tests</code> allows the test to be
+  simpler.</p>
 
+  <p>Similarly, if <code>ert--print-backtrace</code> printed the
+  backtrace to a buffer with a fixed name rather than the current
+  buffer, it would be much harder for the test to undo the side
+  effect. Of course, some code somewhere needs to pick the buffer
+  name. But that logic is independent of the logic that prints
+  backtraces, and keeping them in separate functions allows us to
+  test them independently.</p>
+
+  <p>A lot of code that you will encounter in Emacs was not written
+  with testing in mind. Sometimes, the easiest way to write tests
+  for such code is to restructure the code slightly to provide
+  better interfaces for testing. Usually, this makes the interfaces
+  easier to use as well.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Tests-and-Their-Environment.html#Tests-and-Their-Environment"
+    accesskey="p" rel="prev">Tests and Their Environment</a>, Up:
+    <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey=
+    "u" rel="up">How to Write Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

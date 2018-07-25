@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,99 +16,150 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Predicates on Numbers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Predicates on Numbers">
-<meta name="keywords" content="Common Lisp Extensions: Predicates on Numbers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numbers.html#Numbers" rel="up" title="Numbers">
-<link href="Numerical-Functions.html#Numerical-Functions" rel="next" title="Numerical Functions">
-<link href="Numbers.html#Numbers" rel="prev" title="Numbers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Predicates on Numbers</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Predicates on Numbers" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Predicates on Numbers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numbers.html#Numbers" rel="up" title="Numbers" />
+  <link href="Numerical-Functions.html#Numerical-Functions" rel=
+  "next" title="Numerical Functions" />
+  <link href="Numbers.html#Numbers" rel="prev" title="Numbers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Predicates-on-Numbers"></a>
-<div class="header">
-<p>
-Next: <a href="Numerical-Functions.html#Numerical-Functions" accesskey="n" rel="next">Numerical Functions</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Predicates-on-Numbers-1"></a>
-<h3 class="section">8.1 Predicates on Numbers</h3>
+<body lang="en" xml:lang="en">
+  <a name="Predicates-on-Numbers" id="Predicates-on-Numbers"></a>
 
-<p>These functions return <code>t</code> if the specified condition is
-true of the numerical argument, or <code>nil</code> otherwise.
-</p>
-<dl>
-<dt><a name="index-cl_002dplusp"></a>Function: <strong>cl-plusp</strong> <em>number</em></dt>
-<dd><p>This predicate tests whether <var>number</var> is positive.  It is an
-error if the argument is not a number.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Numerical-Functions.html#Numerical-Functions"
+    accesskey="n" rel="next">Numerical Functions</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Predicates-on-Numbers-1" id=
+  "Predicates-on-Numbers-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dminusp"></a>Function: <strong>cl-minusp</strong> <em>number</em></dt>
-<dd><p>This predicate tests whether <var>number</var> is negative.  It is an
-error if the argument is not a number.
-</p></dd></dl>
+  <h3 class="section">8.1 Predicates on Numbers</h3>
 
-<dl>
-<dt><a name="index-cl_002doddp"></a>Function: <strong>cl-oddp</strong> <em>integer</em></dt>
-<dd><p>This predicate tests whether <var>integer</var> is odd.  It is an
-error if the argument is not an integer.
-</p></dd></dl>
+  <p>These functions return <code>t</code> if the specified
+  condition is true of the numerical argument, or <code>nil</code>
+  otherwise.</p>
 
-<dl>
-<dt><a name="index-cl_002devenp"></a>Function: <strong>cl-evenp</strong> <em>integer</em></dt>
-<dd><p>This predicate tests whether <var>integer</var> is even.  It is an
-error if the argument is not an integer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dplusp" id=
+    "index-cl_002dplusp"></a>Function: <strong>cl-plusp</strong>
+    <em>number</em></dt>
 
-<dl>
-<dt><a name="index-cl_002ddigit_002dchar_002dp"></a>Function: <strong>cl-digit-char-p</strong> <em>char radix</em></dt>
-<dd><p>Test if <var>char</var> is a digit in the specified <var>radix</var> (default is
-10).  If it is, return the numerical value of digit <var>char</var> in
-<var>radix</var>.
-</p></dd></dl>
+    <dd>
+      <p>This predicate tests whether <var>number</var> is
+      positive. It is an error if the argument is not a number.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dminusp" id=
+    "index-cl_002dminusp"></a>Function: <strong>cl-minusp</strong>
+    <em>number</em></dt>
 
+    <dd>
+      <p>This predicate tests whether <var>number</var> is
+      negative. It is an error if the argument is not a number.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002doddp" id=
+    "index-cl_002doddp"></a>Function: <strong>cl-oddp</strong>
+    <em>integer</em></dt>
 
+    <dd>
+      <p>This predicate tests whether <var>integer</var> is odd. It
+      is an error if the argument is not an integer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002devenp" id=
+    "index-cl_002devenp"></a>Function: <strong>cl-evenp</strong>
+    <em>integer</em></dt>
+
+    <dd>
+      <p>This predicate tests whether <var>integer</var> is even.
+      It is an error if the argument is not an integer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002ddigit_002dchar_002dp" id=
+    "index-cl_002ddigit_002dchar_002dp"></a>Function:
+    <strong>cl-digit-char-p</strong> <em>char radix</em></dt>
+
+    <dd>
+      <p>Test if <var>char</var> is a digit in the specified
+      <var>radix</var> (default is 10). If it is, return the
+      numerical value of digit <var>char</var> in
+      <var>radix</var>.</p>
+    </dd>
+  </dl>
 </body>
 </html>

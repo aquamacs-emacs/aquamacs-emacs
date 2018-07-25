@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1991-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,105 +14,156 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>PCL-CVS&mdash;Emacs Front-End to CVS: Adding and removing files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="PCL-CVS&mdash;Emacs Front-End to CVS: Adding and removing files">
-<meta name="keywords" content="PCL-CVS&mdash;Emacs Front-End to CVS: Adding and removing files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-and-Variable-Index.html#Function-and-Variable-Index" rel="index" title="Function and Variable Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="Undoing-changes.html#Undoing-changes" rel="next" title="Undoing changes">
-<link href="Getting-info-about-files.html#Getting-info-about-files" rel="prev" title="Getting info about files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>PCL-CVS&mdash;Emacs Front-End to CVS: Adding and removing
+  files</title>
+  <meta name="description" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Adding and removing files" />
+  <meta name="keywords" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Adding and removing files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Function-and-Variable-Index.html#Function-and-Variable-Index"
+  rel="index" title="Function and Variable Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="Undoing-changes.html#Undoing-changes" rel="next"
+  title="Undoing changes" />
+  <link href=
+  "Getting-info-about-files.html#Getting-info-about-files" rel=
+  "prev" title="Getting info about files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Adding-and-removing-files"></a>
-<div class="header">
-<p>
-Next: <a href="Undoing-changes.html#Undoing-changes" accesskey="n" rel="next">Undoing changes</a>, Previous: <a href="Getting-info-about-files.html#Getting-info-about-files" accesskey="p" rel="prev">Getting info about files</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-and-Variable-Index.html#Function-and-Variable-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Adding-and-removing-files-1"></a>
-<h3 class="section">5.9 Adding and removing files</h3>
-<a name="index-Adding-files"></a>
-<a name="index-Removing-files"></a>
-<a name="index-Resurrecting-files"></a>
-<a name="index-Deleting-files"></a>
-<a name="index-Putting-files-under-CVS-control"></a>
-<a name="index-a_002d_002dadd-a-file"></a>
-<a name="index-r_002d_002dremove-a-file"></a>
-<a name="index-cvs_002dmode_002dadd"></a>
-<a name="index-cvs_002dmode_002dremove_002dfile"></a>
+<body lang="en" xml:lang="en">
+  <a name="Adding-and-removing-files" id=
+  "Adding-and-removing-files"></a>
 
-<p>The following commands are available to make it easy to add files to
-and remove them from the CVS repository.
-</p>
-<dl compact="compact">
-<dt><kbd>a</kbd></dt>
-<dd><p>Add all selected files.  This command can be used on &lsquo;<samp>Unknown</samp>&rsquo;
-files (see <a href="Buffer-contents.html#Buffer-contents">Buffer contents</a>).  The status of the file will change to
-&lsquo;<samp>Added</samp>&rsquo;, and you will have to use <kbd>c</kbd> (&lsquo;<samp>cvs-mode-commit</samp>&rsquo;
-see <a href="Committing-changes.html#Committing-changes">Committing changes</a>), to really add the file to the
-repository.
-</p>
-<p>This command can also be used on &lsquo;<samp>Removed</samp>&rsquo; files (before you commit
-them) to resurrect them.
-</p>
-<p>The command that is run is <code>cvs-mode-add</code>.
-</p>
-</dd>
-<dt><kbd>r</kbd></dt>
-<dd><p>This command removes the selected files (after prompting for
-confirmation).  The files are deleted from your directory and
-(unless the status was &lsquo;<samp>Unknown</samp>&rsquo;; see <a href="Buffer-contents.html#Buffer-contents">Buffer contents</a>) they will
-also be &lsquo;<samp>cvs remove</samp>&rsquo;d.  If the files&rsquo; status was &lsquo;<samp>Unknown</samp>&rsquo;
-they will disappear from the buffer.  Otherwise their status will change to
-&lsquo;<samp>Removed</samp>&rsquo;, and you must use <kbd>c</kbd> (&lsquo;<samp>cvs-mode-commit</samp>&rsquo;,
-see <a href="Committing-changes.html#Committing-changes">Committing changes</a>) to commit the removal.
-</p>
-<p>The command that is run is <code>cvs-mode-remove-file</code>.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Undoing-changes.html#Undoing-changes"
+    accesskey="n" rel="next">Undoing changes</a>, Previous:
+    <a href="Getting-info-about-files.html#Getting-info-about-files"
+    accesskey="p" rel="prev">Getting info about files</a>, Up:
+    <a href="Commands.html#Commands" accesskey="u" rel=
+    "up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-and-Variable-Index.html#Function-and-Variable-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Adding-and-removing-files-1" id=
+  "Adding-and-removing-files-1"></a>
 
+  <h3 class="section">5.9 Adding and removing files</h3><a name=
+  "index-Adding-files" id="index-Adding-files"></a> <a name=
+  "index-Removing-files" id="index-Removing-files"></a> <a name=
+  "index-Resurrecting-files" id="index-Resurrecting-files"></a>
+  <a name="index-Deleting-files" id="index-Deleting-files"></a>
+  <a name="index-Putting-files-under-CVS-control" id=
+  "index-Putting-files-under-CVS-control"></a> <a name=
+  "index-a_002d_002dadd-a-file" id=
+  "index-a_002d_002dadd-a-file"></a> <a name=
+  "index-r_002d_002dremove-a-file" id=
+  "index-r_002d_002dremove-a-file"></a> <a name=
+  "index-cvs_002dmode_002dadd" id="index-cvs_002dmode_002dadd"></a>
+  <a name="index-cvs_002dmode_002dremove_002dfile" id=
+  "index-cvs_002dmode_002dremove_002dfile"></a>
 
+  <p>The following commands are available to make it easy to add
+  files to and remove them from the CVS repository.</p>
 
+  <dl compact="compact">
+    <dt><kbd>a</kbd></dt>
 
+    <dd>
+      <p>Add all selected files. This command can be used on
+      &lsquo;<samp>Unknown</samp>&rsquo; files (see <a href=
+      "Buffer-contents.html#Buffer-contents">Buffer contents</a>).
+      The status of the file will change to
+      &lsquo;<samp>Added</samp>&rsquo;, and you will have to use
+      <kbd>c</kbd> (&lsquo;<samp>cvs-mode-commit</samp>&rsquo; see
+      <a href=
+      "Committing-changes.html#Committing-changes">Committing
+      changes</a>), to really add the file to the repository.</p>
 
+      <p>This command can also be used on
+      &lsquo;<samp>Removed</samp>&rsquo; files (before you commit
+      them) to resurrect them.</p>
+
+      <p>The command that is run is <code>cvs-mode-add</code>.</p>
+    </dd>
+
+    <dt><kbd>r</kbd></dt>
+
+    <dd>
+      <p>This command removes the selected files (after prompting
+      for confirmation). The files are deleted from your directory
+      and (unless the status was
+      &lsquo;<samp>Unknown</samp>&rsquo;; see <a href=
+      "Buffer-contents.html#Buffer-contents">Buffer contents</a>)
+      they will also be &lsquo;<samp>cvs remove</samp>&rsquo;d. If
+      the files&rsquo; status was
+      &lsquo;<samp>Unknown</samp>&rsquo; they will disappear from
+      the buffer. Otherwise their status will change to
+      &lsquo;<samp>Removed</samp>&rsquo;, and you must use
+      <kbd>c</kbd> (&lsquo;<samp>cvs-mode-commit</samp>&rsquo;, see
+      <a href=
+      "Committing-changes.html#Committing-changes">Committing
+      changes</a>) to commit the removal.</p>
+
+      <p>The command that is run is
+      <code>cvs-mode-remove-file</code>.</p>
+    </dd>
+  </dl>
 </body>
 </html>

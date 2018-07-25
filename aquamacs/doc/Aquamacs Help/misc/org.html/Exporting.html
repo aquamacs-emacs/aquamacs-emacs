@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,120 +16,276 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Exporting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Exporting">
-<meta name="keywords" content="The Org Manual: Exporting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="The-Export-Dispatcher.html#The-Export-Dispatcher" rel="next" title="The Export Dispatcher">
-<link href="Special-blocks.html#Special-blocks" rel="prev" title="Special blocks">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Exporting</title>
+  <meta name="description" content="The Org Manual: Exporting" />
+  <meta name="keywords" content="The Org Manual: Exporting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="The-Export-Dispatcher.html#The-Export-Dispatcher"
+  rel="next" title="The Export Dispatcher" />
+  <link href="Special-blocks.html#Special-blocks" rel="prev" title=
+  "Special blocks" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Exporting"></a>
-<div class="header">
-<p>
-Next: <a href="Publishing.html#Publishing" accesskey="n" rel="next">Publishing</a>, Previous: <a href="Markup.html#Markup" accesskey="p" rel="prev">Markup</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Exporting-1"></a>
-<h2 class="chapter">12 Exporting</h2>
-<a name="index-exporting"></a>
+<body lang="en" xml:lang="en">
+  <a name="Exporting" id="Exporting"></a>
 
-<p>The Org mode export facilities can be used to export Org documents or parts
-of Org documents to a variety of other formats.  In addition, these
-facilities can be used with <code>orgtbl-mode</code> and/or <code>orgstruct-mode</code>
-in foreign buffers so you can author tables and lists in Org syntax and
-convert them in place to the target language.
-</p>
-<p>ASCII export produces a readable and simple version of an Org file for
-printing and sharing notes.  HTML export allows you to easily publish notes
-on the web, or to build full-fledged websites.  LaTeX export lets you use
-Org mode and its structured editing functions to create arbitrarily complex
-LaTeX files for any kind of document.  OpenDocument Text (ODT) export
-allows seamless collaboration across organizational boundaries.  Markdown
-export lets you seamlessly collaborate with other developers.  Finally, iCal
-export can extract entries with deadlines or appointments to produce a file
-in the iCalendar format.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="The-Export-Dispatcher.html#The-Export-Dispatcher" accesskey="1">The Export Dispatcher</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The main exporter interface
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Export-back_002dends.html#Export-back_002dends" accesskey="2">Export back-ends</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Built-in export formats
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Export-settings.html#Export-settings" accesskey="3">Export settings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Generic export settings
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="ASCII_002fLatin_002d1_002fUTF_002d8-export.html#ASCII_002fLatin_002d1_002fUTF_002d8-export" accesskey="4">ASCII/Latin-1/UTF-8 export</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Exporting to flat files with encoding
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Beamer-export.html#Beamer-export" accesskey="5">Beamer export</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Exporting as a Beamer presentation
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="HTML-export.html#HTML-export" accesskey="6">HTML export</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Exporting to HTML
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="LaTeX-and-PDF-export.html#LaTeX-and-PDF-export" accesskey="7">LaTeX and PDF export</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Exporting to LaTeX, and processing to PDF
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Markdown-export.html#Markdown-export" accesskey="8">Markdown export</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Exporting to Markdown
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="OpenDocument-Text-export.html#OpenDocument-Text-export" accesskey="9">OpenDocument Text export</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Exporting to OpenDocument Text
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Org-export.html#Org-export">Org export</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Exporting to Org
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Texinfo-export.html#Texinfo-export">Texinfo export</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Exporting to Texinfo
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="iCalendar-export.html#iCalendar-export">iCalendar export</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Exporting to iCalendar
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Other-built_002din-back_002dends.html#Other-built_002din-back_002dends">Other built-in back-ends</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Exporting to a man page
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Export-in-foreign-buffers.html#Export-in-foreign-buffers">Export in foreign buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Author tables and lists in Org syntax
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Advanced-configuration.html#Advanced-configuration">Advanced configuration</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Fine-tuning the export output
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Publishing.html#Publishing" accesskey="n"
+    rel="next">Publishing</a>, Previous: <a href=
+    "Markup.html#Markup" accesskey="p" rel="prev">Markup</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Exporting-1" id="Exporting-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Publishing.html#Publishing" accesskey="n" rel="next">Publishing</a>, Previous: <a href="Markup.html#Markup" accesskey="p" rel="prev">Markup</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h2 class="chapter">12 Exporting</h2><a name="index-exporting"
+  id="index-exporting"></a>
 
+  <p>The Org mode export facilities can be used to export Org
+  documents or parts of Org documents to a variety of other
+  formats. In addition, these facilities can be used with
+  <code>orgtbl-mode</code> and/or <code>orgstruct-mode</code> in
+  foreign buffers so you can author tables and lists in Org syntax
+  and convert them in place to the target language.</p>
 
+  <p>ASCII export produces a readable and simple version of an Org
+  file for printing and sharing notes. HTML export allows you to
+  easily publish notes on the web, or to build full-fledged
+  websites. LaTeX export lets you use Org mode and its structured
+  editing functions to create arbitrarily complex LaTeX files for
+  any kind of document. OpenDocument Text (ODT) export allows
+  seamless collaboration across organizational boundaries. Markdown
+  export lets you seamlessly collaborate with other developers.
+  Finally, iCal export can extract entries with deadlines or
+  appointments to produce a file in the iCalendar format.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "The-Export-Dispatcher.html#The-Export-Dispatcher" accesskey=
+      "1">The Export Dispatcher</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">The main exporter
+      interface</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Export-back_002dends.html#Export-back_002dends" accesskey=
+      "2">Export back-ends</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Built-in export formats</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Export-settings.html#Export-settings" accesskey="3">Export
+      settings</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Generic export settings</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "ASCII_002fLatin_002d1_002fUTF_002d8-export.html#ASCII_002fLatin_002d1_002fUTF_002d8-export"
+      accesskey="4">ASCII/Latin-1/UTF-8 export</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Exporting to flat files with
+      encoding</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Beamer-export.html#Beamer-export" accesskey="5">Beamer
+      export</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Exporting as a Beamer
+      presentation</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "HTML-export.html#HTML-export" accesskey="6">HTML
+      export</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Exporting to HTML</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "LaTeX-and-PDF-export.html#LaTeX-and-PDF-export" accesskey=
+      "7">LaTeX and PDF export</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Exporting to LaTeX, and
+      processing to PDF</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Markdown-export.html#Markdown-export" accesskey="8">Markdown
+      export</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Exporting to Markdown</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "OpenDocument-Text-export.html#OpenDocument-Text-export"
+      accesskey="9">OpenDocument Text export</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Exporting to OpenDocument
+      Text</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Org-export.html#Org-export">Org export</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Exporting to Org</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Texinfo-export.html#Texinfo-export">Texinfo export</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Exporting to Texinfo</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "iCalendar-export.html#iCalendar-export">iCalendar
+      export</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Exporting to iCalendar</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Other-built_002din-back_002dends.html#Other-built_002din-back_002dends">
+      Other built-in back-ends</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Exporting to a man page</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Export-in-foreign-buffers.html#Export-in-foreign-buffers">Export
+      in foreign buffers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Author tables and lists in Org
+      syntax</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Advanced-configuration.html#Advanced-configuration">Advanced
+      configuration</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Fine-tuning the export
+      output</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Publishing.html#Publishing" accesskey="n"
+    rel="next">Publishing</a>, Previous: <a href=
+    "Markup.html#Markup" accesskey="p" rel="prev">Markup</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,93 +16,132 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Generics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Generics">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Generics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Writing-Methods.html#Writing-Methods" rel="up" title="Writing Methods">
-<link href="Methods.html#Methods" rel="next" title="Methods">
-<link href="Writing-Methods.html#Writing-Methods" rel="prev" title="Writing Methods">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Generics</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Generics" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Generics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="Writing-Methods.html#Writing-Methods" rel="up" title=
+  "Writing Methods" />
+  <link href="Methods.html#Methods" rel="next" title="Methods" />
+  <link href="Writing-Methods.html#Writing-Methods" rel="prev"
+  title="Writing Methods" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Generics"></a>
-<div class="header">
-<p>
-Next: <a href="Methods.html#Methods" accesskey="n" rel="next">Methods</a>, Up: <a href="Writing-Methods.html#Writing-Methods" accesskey="u" rel="up">Writing Methods</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Generics-1"></a>
-<h3 class="section">6.1 Generics</h3>
+<body lang="en" xml:lang="en">
+  <a name="Generics" id="Generics"></a>
 
-<p>Each <i>EIEIO</i> method has one corresponding generic.  This generic
-provides a function binding and the base documentation for the method
-symbol (see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Symbol-Components.html#Symbol-Components">Symbol Components</a> in <cite>GNU Emacs Lisp Reference
-Manual</cite>).
-</p>
-<dl>
-<dt><a name="index-defgeneric"></a>Macro: <strong>defgeneric</strong> <em>method arglist [doc-string]</em></dt>
-<dd><p>This macro turns the (unquoted) symbol <var>method</var> into a function.
-<var>arglist</var> is the default list of arguments to use (not implemented
-yet).  <var>doc-string</var> is the documentation used for this symbol.
-</p>
-<p>A generic function acts as a placeholder for methods.  There is no
-need to call <code>defgeneric</code> yourself, as <code>defmethod</code> will call
-it if necessary.  Currently the argument list is unused.
-</p>
-<p><code>defgeneric</code> signals an error if you attempt to turn an existing
-Emacs Lisp function into a generic function.
-</p>
-<p>You can also create a generic method with <code>defmethod</code>
-(see <a href="Methods.html#Methods">Methods</a>).  When a method is created and there is no generic
-method in place with that name, then a new generic will be created,
-and the new method will use it.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Methods.html#Methods" accesskey="n" rel=
+    "next">Methods</a>, Up: <a href=
+    "Writing-Methods.html#Writing-Methods" accesskey="u" rel=
+    "up">Writing Methods</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Generics-1" id="Generics-1"></a>
 
-<p>In CLOS, a generic call also be used to provide an argument list and
-dispatch precedence for all the arguments.  In <i>EIEIO</i>, dispatching
-only occurs for the first argument, so the <var>arglist</var> is not used.
-</p>
+  <h3 class="section">6.1 Generics</h3>
 
+  <p>Each <i>EIEIO</i> method has one corresponding generic. This
+  generic provides a function binding and the base documentation
+  for the method symbol (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Symbol-Components.html#Symbol-Components">
+  Symbol Components</a> in <cite>GNU Emacs Lisp Reference
+  Manual</cite>).</p>
 
+  <dl>
+    <dt><a name="index-defgeneric" id="index-defgeneric"></a>Macro:
+    <strong>defgeneric</strong> <em>method arglist
+    [doc-string]</em></dt>
 
+    <dd>
+      <p>This macro turns the (unquoted) symbol <var>method</var>
+      into a function. <var>arglist</var> is the default list of
+      arguments to use (not implemented yet). <var>doc-string</var>
+      is the documentation used for this symbol.</p>
+
+      <p>A generic function acts as a placeholder for methods.
+      There is no need to call <code>defgeneric</code> yourself, as
+      <code>defmethod</code> will call it if necessary. Currently
+      the argument list is unused.</p>
+
+      <p><code>defgeneric</code> signals an error if you attempt to
+      turn an existing Emacs Lisp function into a generic
+      function.</p>
+
+      <p>You can also create a generic method with
+      <code>defmethod</code> (see <a href=
+      "Methods.html#Methods">Methods</a>). When a method is created
+      and there is no generic method in place with that name, then
+      a new generic will be created, and the new method will use
+      it.</p>
+    </dd>
+  </dl>
+
+  <p>In CLOS, a generic call also be used to provide an argument
+  list and dispatch precedence for all the arguments. In
+  <i>EIEIO</i>, dispatching only occurs for the first argument, so
+  the <var>arglist</var> is not used.</p>
 </body>
 </html>

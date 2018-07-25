@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,129 +20,180 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Safe File Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Safe File Variables">
-<meta name="keywords" content="GNU Emacs Manual: Safe File Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="File-Variables.html#File-Variables" rel="up" title="File Variables">
-<link href="Directory-Variables.html#Directory-Variables" rel="next" title="Directory Variables">
-<link href="Specifying-File-Variables.html#Specifying-File-Variables" rel="prev" title="Specifying File Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Safe File Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Safe File Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Safe File Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="File-Variables.html#File-Variables" rel="up" title=
+  "File Variables" />
+  <link href="Directory-Variables.html#Directory-Variables" rel=
+  "next" title="Directory Variables" />
+  <link href=
+  "Specifying-File-Variables.html#Specifying-File-Variables" rel=
+  "prev" title="Specifying File Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Safe-File-Variables" id="Safe-File-Variables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Specifying-File-Variables.html#Specifying-File-Variables"
+    accesskey="p" rel="prev">Specifying File Variables</a>, Up:
+    <a href="File-Variables.html#File-Variables" accesskey="u" rel=
+    "up">File Variables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Safety-of-File-Variables" id=
+  "Safety-of-File-Variables"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Safe-File-Variables"></a>
-<div class="header">
-<p>
-Previous: <a href="Specifying-File-Variables.html#Specifying-File-Variables" accesskey="p" rel="prev">Specifying File Variables</a>, Up: <a href="File-Variables.html#File-Variables" accesskey="u" rel="up">File Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Safety-of-File-Variables"></a>
-<h4 class="subsubsection">51.2.4.2 Safety of File Variables</h4>
+  <h4 class="subsubsection">51.2.4.2 Safety of File Variables</h4>
 
-<p>File-local variables can be dangerous; when you visit someone else&rsquo;s
-file, there&rsquo;s no telling what its local variables list could do to
-your Emacs.  Improper values of the <code>eval</code> &ldquo;variable&rdquo;, and
-other variables such as <code>load-path</code>, could execute Lisp code you
-didn&rsquo;t intend to run.
-</p>
-<p>Therefore, whenever Emacs encounters file local variable values that
-are not known to be safe, it displays the file&rsquo;s entire local
-variables list, and asks you for confirmation before setting them.
-You can type <kbd>y</kbd> or <tt class="key">SPC</tt> to put the local variables list into
-effect, or <kbd>n</kbd> to ignore it.  When Emacs is run in batch mode
-(see <a href="Initial-Options.html#Initial-Options">Initial Options</a>), it can&rsquo;t really ask you, so it assumes the
-answer <kbd>n</kbd>.
-</p>
-<p>Emacs normally recognizes certain variable/value pairs as safe.
-For instance, it is safe to give <code>comment-column</code> or
-<code>fill-column</code> any integer value.  If a file specifies only
-known-safe variable/value pairs, Emacs does not ask for confirmation
-before setting them.  Otherwise, you can tell Emacs to record all the
-variable/value pairs in this file as safe, by typing <kbd>!</kbd> at the
-confirmation prompt.  When Emacs encounters these variable/value pairs
-subsequently, in the same file or others, it will assume they are
-safe.
-</p>
-<a name="index-safe_002dlocal_002dvariable_002dvalues"></a>
-<a name="index-risky-variable"></a>
-<p>Some variables, such as <code>load-path</code>, are considered
-particularly <em>risky</em>: there is seldom any reason to specify them
-as local variables, and changing them can be dangerous.  If a file
-contains only risky local variables, Emacs neither offers nor accepts
-<kbd>!</kbd> as input at the confirmation prompt.  If some of the local
-variables in a file are risky, and some are only potentially unsafe, you
-can enter <kbd>!</kbd> at the prompt.  It applies all the variables, but only
-marks the non-risky ones as safe for the future.  If you really want to
-record safe values for risky variables, do it directly by customizing
-&lsquo;<samp>safe-local-variable-values</samp>&rsquo; (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>).
-</p>
-<a name="index-enable_002dlocal_002dvariables"></a>
-<p>The variable <code>enable-local-variables</code> allows you to change the
-way Emacs processes local variables.  Its default value is <code>t</code>,
-which specifies the behavior described above.  If it is <code>nil</code>,
-Emacs simply ignores all file local variables.  <code>:safe</code> means use
-only the safe values and ignore the rest.  Any other value says to
-query you about each file that has local variables, without trying to
-determine whether the values are known to be safe.
-</p>
-<a name="index-enable_002dlocal_002deval"></a>
-<a name="index-safe_002dlocal_002deval_002dforms"></a>
-<p>The variable <code>enable-local-eval</code> controls whether Emacs
-processes <code>eval</code> variables.  The three possibilities for the
-variable&rsquo;s value are <code>t</code>, <code>nil</code>, and anything else, just as
-for <code>enable-local-variables</code>.  The default is <code>maybe</code>, which
-is neither <code>t</code> nor <code>nil</code>, so normally Emacs does ask for
-confirmation about processing <code>eval</code> variables.
-</p>
-<p>As an exception, Emacs never asks for confirmation to evaluate any
-<code>eval</code> form if that form occurs within the variable
-<code>safe-local-eval-forms</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Specifying-File-Variables.html#Specifying-File-Variables" accesskey="p" rel="prev">Specifying File Variables</a>, Up: <a href="File-Variables.html#File-Variables" accesskey="u" rel="up">File Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>File-local variables can be dangerous; when you visit someone
+  else&rsquo;s file, there&rsquo;s no telling what its local
+  variables list could do to your Emacs. Improper values of the
+  <code>eval</code> &ldquo;variable&rdquo;, and other variables
+  such as <code>load-path</code>, could execute Lisp code you
+  didn&rsquo;t intend to run.</p>
 
+  <p>Therefore, whenever Emacs encounters file local variable
+  values that are not known to be safe, it displays the
+  file&rsquo;s entire local variables list, and asks you for
+  confirmation before setting them. You can type <kbd>y</kbd> or
+  <tt class="key">SPC</tt> to put the local variables list into
+  effect, or <kbd>n</kbd> to ignore it. When Emacs is run in batch
+  mode (see <a href="Initial-Options.html#Initial-Options">Initial
+  Options</a>), it can&rsquo;t really ask you, so it assumes the
+  answer <kbd>n</kbd>.</p>
 
+  <p>Emacs normally recognizes certain variable/value pairs as
+  safe. For instance, it is safe to give
+  <code>comment-column</code> or <code>fill-column</code> any
+  integer value. If a file specifies only known-safe variable/value
+  pairs, Emacs does not ask for confirmation before setting them.
+  Otherwise, you can tell Emacs to record all the variable/value
+  pairs in this file as safe, by typing <kbd>!</kbd> at the
+  confirmation prompt. When Emacs encounters these variable/value
+  pairs subsequently, in the same file or others, it will assume
+  they are safe.</p><a name=
+  "index-safe_002dlocal_002dvariable_002dvalues" id=
+  "index-safe_002dlocal_002dvariable_002dvalues"></a> <a name=
+  "index-risky-variable" id="index-risky-variable"></a>
 
+  <p>Some variables, such as <code>load-path</code>, are considered
+  particularly <em>risky</em>: there is seldom any reason to
+  specify them as local variables, and changing them can be
+  dangerous. If a file contains only risky local variables, Emacs
+  neither offers nor accepts <kbd>!</kbd> as input at the
+  confirmation prompt. If some of the local variables in a file are
+  risky, and some are only potentially unsafe, you can enter
+  <kbd>!</kbd> at the prompt. It applies all the variables, but
+  only marks the non-risky ones as safe for the future. If you
+  really want to record safe values for risky variables, do it
+  directly by customizing
+  &lsquo;<samp>safe-local-variable-values</samp>&rsquo; (see
+  <a href="Easy-Customization.html#Easy-Customization">Easy
+  Customization</a>).</p><a name=
+  "index-enable_002dlocal_002dvariables" id=
+  "index-enable_002dlocal_002dvariables"></a>
+
+  <p>The variable <code>enable-local-variables</code> allows you to
+  change the way Emacs processes local variables. Its default value
+  is <code>t</code>, which specifies the behavior described above.
+  If it is <code>nil</code>, Emacs simply ignores all file local
+  variables. <code>:safe</code> means use only the safe values and
+  ignore the rest. Any other value says to query you about each
+  file that has local variables, without trying to determine
+  whether the values are known to be safe.</p><a name=
+  "index-enable_002dlocal_002deval" id=
+  "index-enable_002dlocal_002deval"></a> <a name=
+  "index-safe_002dlocal_002deval_002dforms" id=
+  "index-safe_002dlocal_002deval_002dforms"></a>
+
+  <p>The variable <code>enable-local-eval</code> controls whether
+  Emacs processes <code>eval</code> variables. The three
+  possibilities for the variable&rsquo;s value are <code>t</code>,
+  <code>nil</code>, and anything else, just as for
+  <code>enable-local-variables</code>. The default is
+  <code>maybe</code>, which is neither <code>t</code> nor
+  <code>nil</code>, so normally Emacs does ask for confirmation
+  about processing <code>eval</code> variables.</p>
+
+  <p>As an exception, Emacs never asks for confirmation to evaluate
+  any <code>eval</code> form if that form occurs within the
+  variable <code>safe-local-eval-forms</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Specifying-File-Variables.html#Specifying-File-Variables"
+    accesskey="p" rel="prev">Specifying File Variables</a>, Up:
+    <a href="File-Variables.html#File-Variables" accesskey="u" rel=
+    "up">File Variables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

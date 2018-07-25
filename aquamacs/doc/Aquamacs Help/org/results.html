@@ -1,15 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>results - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Specific-header-arguments.html#Specific-header-arguments" title="Specific header arguments">
-<link rel="prev" href="var.html#var" title="var">
-<link rel="next" href="file.html#file" title="file">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>results - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Specific-header-arguments.html#Specific-header-arguments" title=
+  "Specific header arguments" />
+  <link rel="prev" href="var.html#var" title="var" />
+  <link rel="next" href="file.html#file" title="file" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +41,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,113 +54,136 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="results"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="file.html#file">file</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="var.html#var">var</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Specific-header-arguments.html#Specific-header-arguments">Specific header arguments</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="results" id="results"></a>
 
-<h5 class="subsubsection">14.8.2.2 <code>:results</code></h5>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "file.html#file">file</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href="var.html#var">var</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Specific-header-arguments.html#Specific-header-arguments">Specific
+    header arguments</a></p>
+    <hr />
+  </div>
 
-<p>There are three classes of <code>:results</code> header argument.  Only one option
-per class may be supplied per code block.
+  <h5 class="subsubsection">14.8.2.2 <code>:results</code></h5>
 
-     <ul>
-<li><b>collection</b> header arguments specify how the results should be collected
-from the code block
-<li><b>type</b> header arguments specify what type of result the code block will
-return&mdash;which has implications for how they will be inserted into the
-Org-mode buffer
-<li><b>handling</b> header arguments specify how the results of evaluating the code
-block should be handled. 
-</ul>
+  <p>There are three classes of <code>:results</code> header
+  argument. Only one option per class may be supplied per code
+  block.</p>
 
-<h5 class="subsubheading">Collection</h5>
+  <ul>
+    <li><b>collection</b> header arguments specify how the results
+    should be collected from the code block</li>
 
-<p>The following options are mutually exclusive, and specify how the results
-should be collected from the code block.
+    <li><b>type</b> header arguments specify what type of result
+    the code block will return&mdash;which has implications for how
+    they will be inserted into the Org-mode buffer</li>
 
-     <ul>
-<li><code>value</code>
-This is the default.  The result is the value of the last statement in the
-code block.  This header argument places the evaluation in functional
-mode.  Note that in some languages, e.g., Python, use of this result type
-requires that a <code>return</code> statement be included in the body of the source
-code block. E.g., <code>:results value</code>. 
-<li><code>output</code>
-The result is the collection of everything printed to STDOUT during the
-execution of the code block.  This header argument places the
-evaluation in scripting mode.  E.g., <code>:results output</code>. 
-</ul>
+    <li><b>handling</b> header arguments specify how the results of
+    evaluating the code block should be handled.</li>
+  </ul>
 
-<h5 class="subsubheading">Type</h5>
+  <h5 class="subsubheading">Collection</h5>
 
-<p>The following options are mutually exclusive and specify what type of results
-the code block will return.  By default, results are inserted as either a
-table or scalar depending on their value.
+  <p>The following options are mutually exclusive, and specify how
+  the results should be collected from the code block.</p>
 
-     <ul>
-<li><code>table</code>, <code>vector</code>
-The results should be interpreted as an Org-mode table.  If a single value is
-returned, it will be converted into a table with one row and one column. 
-E.g., <code>:results value table</code>. 
-<li><code>list</code>
-The results should be interpreted as an Org-mode list.  If a single scalar
-value is returned it will be converted into a list with only one element. 
-<li><code>scalar</code>, <code>verbatim</code>
-The results should be interpreted literally&mdash;they will not be
-converted into a table.  The results will be inserted into the Org-mode
-buffer as quoted text.  E.g., <code>:results value verbatim</code>. 
-<li><code>file</code>
-The results will be interpreted as the path to a file, and will be inserted
-into the Org-mode buffer as a file link.  E.g., <code>:results value file</code>. 
-<li><code>raw</code>, <code>org</code>
-The results are interpreted as raw Org-mode code and are inserted directly
-into the buffer.  If the results look like a table they will be aligned as
-such by Org-mode.  E.g., <code>:results value raw</code>. 
-<li><code>html</code>
-Results are assumed to be HTML and will be enclosed in a <code>begin_html</code>
-block.  E.g., <code>:results value html</code>. 
-<li><code>latex</code>
-Results assumed to be LaTeX and are enclosed in a <code>begin_latex</code> block. 
-E.g., <code>:results value latex</code>. 
-<li><code>code</code>
-Result are assumed to be parseable code and are enclosed in a code block. 
-E.g., <code>:results value code</code>. 
-<li><code>pp</code>
-The result is converted to pretty-printed code and is enclosed in a code
-block.  This option currently supports Emacs Lisp, Python, and Ruby.  E.g.,
-<code>:results value pp</code>. 
-</ul>
+  <ul>
+    <li><code>value</code> This is the default. The result is the
+    value of the last statement in the code block. This header
+    argument places the evaluation in functional mode. Note that in
+    some languages, e.g., Python, use of this result type requires
+    that a <code>return</code> statement be included in the body of
+    the source code block. E.g., <code>:results value</code>.</li>
 
-<h5 class="subsubheading">Handling</h5>
+    <li><code>output</code> The result is the collection of
+    everything printed to STDOUT during the execution of the code
+    block. This header argument places the evaluation in scripting
+    mode. E.g., <code>:results output</code>.</li>
+  </ul>
 
-<p>The following results options indicate what happens with the
-results once they are collected.
+  <h5 class="subsubheading">Type</h5>
 
-     <ul>
-<li><code>silent</code>
-The results will be echoed in the minibuffer but will not be inserted into
-the Org-mode buffer.  E.g., <code>:results output silent</code>. 
-<li><code>replace</code>
-The default value.  Any existing results will be removed, and the new results
-will be inserted into the Org-mode buffer in their place.  E.g.,
-<code>:results output replace</code>. 
-<li><code>append</code>
-If there are pre-existing results of the code block then the new results will
-be appended to the existing results.  Otherwise the new results will be
-inserted as with <code>replace</code>. 
-<li><code>prepend</code>
-If there are pre-existing results of the code block then the new results will
-be prepended to the existing results.  Otherwise the new results will be
-inserted as with <code>replace</code>. 
-</ul>
+  <p>The following options are mutually exclusive and specify what
+  type of results the code block will return. By default, results
+  are inserted as either a table or scalar depending on their
+  value.</p>
 
-   </body></html>
+  <ul>
+    <li><code>table</code>, <code>vector</code> The results should
+    be interpreted as an Org-mode table. If a single value is
+    returned, it will be converted into a table with one row and
+    one column. E.g., <code>:results value table</code>.</li>
 
+    <li><code>list</code> The results should be interpreted as an
+    Org-mode list. If a single scalar value is returned it will be
+    converted into a list with only one element.</li>
+
+    <li><code>scalar</code>, <code>verbatim</code> The results
+    should be interpreted literally&mdash;they will not be
+    converted into a table. The results will be inserted into the
+    Org-mode buffer as quoted text. E.g., <code>:results value
+    verbatim</code>.</li>
+
+    <li><code>file</code> The results will be interpreted as the
+    path to a file, and will be inserted into the Org-mode buffer
+    as a file link. E.g., <code>:results value file</code>.</li>
+
+    <li><code>raw</code>, <code>org</code> The results are
+    interpreted as raw Org-mode code and are inserted directly into
+    the buffer. If the results look like a table they will be
+    aligned as such by Org-mode. E.g., <code>:results value
+    raw</code>.</li>
+
+    <li><code>html</code> Results are assumed to be HTML and will
+    be enclosed in a <code>begin_html</code> block. E.g.,
+    <code>:results value html</code>.</li>
+
+    <li><code>latex</code> Results assumed to be LaTeX and are
+    enclosed in a <code>begin_latex</code> block. E.g.,
+    <code>:results value latex</code>.</li>
+
+    <li><code>code</code> Result are assumed to be parseable code
+    and are enclosed in a code block. E.g., <code>:results value
+    code</code>.</li>
+
+    <li><code>pp</code> The result is converted to pretty-printed
+    code and is enclosed in a code block. This option currently
+    supports Emacs Lisp, Python, and Ruby. E.g., <code>:results
+    value pp</code>.</li>
+  </ul>
+
+  <h5 class="subsubheading">Handling</h5>
+
+  <p>The following results options indicate what happens with the
+  results once they are collected.</p>
+
+  <ul>
+    <li><code>silent</code> The results will be echoed in the
+    minibuffer but will not be inserted into the Org-mode buffer.
+    E.g., <code>:results output silent</code>.</li>
+
+    <li><code>replace</code> The default value. Any existing
+    results will be removed, and the new results will be inserted
+    into the Org-mode buffer in their place. E.g., <code>:results
+    output replace</code>.</li>
+
+    <li><code>append</code> If there are pre-existing results of
+    the code block then the new results will be appended to the
+    existing results. Otherwise the new results will be inserted as
+    with <code>replace</code>.</li>
+
+    <li><code>prepend</code> If there are pre-existing results of
+    the code block then the new results will be prepended to the
+    existing results. Otherwise the new results will be inserted as
+    with <code>replace</code>.</li>
+  </ul>
+</body>
+</html>

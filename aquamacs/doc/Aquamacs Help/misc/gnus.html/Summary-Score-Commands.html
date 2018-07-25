@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,350 +14,524 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Summary Score Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Summary Score Commands">
-<meta name="keywords" content="Gnus Manual: Summary Score Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Scoring.html#Scoring" rel="up" title="Scoring">
-<link href="Group-Score-Commands.html#Group-Score-Commands" rel="next" title="Group Score Commands">
-<link href="Scoring.html#Scoring" rel="prev" title="Scoring">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Summary Score Commands</title>
+  <meta name="description" content=
+  "Gnus Manual: Summary Score Commands" />
+  <meta name="keywords" content=
+  "Gnus Manual: Summary Score Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Scoring.html#Scoring" rel="up" title="Scoring" />
+  <link href="Group-Score-Commands.html#Group-Score-Commands" rel=
+  "next" title="Group Score Commands" />
+  <link href="Scoring.html#Scoring" rel="prev" title="Scoring" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Summary-Score-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Group-Score-Commands.html#Group-Score-Commands" accesskey="n" rel="next">Group Score Commands</a>, Up: <a href="Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Summary-Score-Commands-1"></a>
-<h3 class="section">7.1 Summary Score Commands</h3>
-<a name="index-score-commands"></a>
+<body lang="en" xml:lang="en">
+  <a name="Summary-Score-Commands" id="Summary-Score-Commands"></a>
 
-<p>The score commands that alter score entries do not actually modify real
-score files.  That would be too inefficient.  Gnus maintains a cache of
-previously loaded score files, one of which is considered the
-<em>current score file alist</em>.  The score commands simply insert
-entries into this list, and upon group exit, this list is saved.
-</p>
-<p>The current score file is by default the group&rsquo;s local score file, even
-if no such score file actually exists.  To insert score commands into
-some other score file (e.g., <samp>all.SCORE</samp>), you must first make this
-score file the current one.
-</p>
-<p>General score commands that don&rsquo;t actually change the score file:
-</p>
-<dl compact="compact">
-<dt><kbd>V s</kbd></dt>
-<dd><a name="index-V-s-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dset_002dscore"></a>
-<p>Set the score of the current article (<code>gnus-summary-set-score</code>).
-</p>
-</dd>
-<dt><kbd>V S</kbd></dt>
-<dd><a name="index-V-S-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dcurrent_002dscore"></a>
-<p>Display the score of the current article
-(<code>gnus-summary-current-score</code>).
-</p>
-</dd>
-<dt><kbd>V t</kbd></dt>
-<dd><a name="index-V-t-_0028Summary_0029"></a>
-<a name="index-gnus_002dscore_002dfind_002dtrace"></a>
-<p>Display all score rules that have been used on the current article
-(<code>gnus-score-find-trace</code>).  In the <samp>*Score Trace*</samp> buffer, you
-may type <kbd>e</kbd> to edit score file corresponding to the score rule on
-current line and <kbd>f</kbd> to format (<code>gnus-score-pretty-print</code>) the
-score file and edit it.
-</p>
-</dd>
-<dt><kbd>V w</kbd></dt>
-<dd><a name="index-V-w-_0028Summary_0029"></a>
-<a name="index-gnus_002dscore_002dfind_002dfavourite_002dwords"></a>
-<p>List words used in scoring (<code>gnus-score-find-favourite-words</code>).
-</p>
-</dd>
-<dt><kbd>V R</kbd></dt>
-<dd><a name="index-V-R-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002drescore"></a>
-<p>Run the current summary through the scoring process
-(<code>gnus-summary-rescore</code>).  This might be useful if you&rsquo;re playing
-around with your score files behind Gnus&rsquo; back and want to see the
-effect you&rsquo;re having.
-</p>
-</dd>
-<dt><kbd>V c</kbd></dt>
-<dd><a name="index-V-c-_0028Summary_0029"></a>
-<a name="index-gnus_002dscore_002dchange_002dscore_002dfile"></a>
-<p>Make a different score file the current
-(<code>gnus-score-change-score-file</code>).
-</p>
-</dd>
-<dt><kbd>V e</kbd></dt>
-<dd><a name="index-V-e-_0028Summary_0029"></a>
-<a name="index-gnus_002dscore_002dedit_002dcurrent_002dscores"></a>
-<p>Edit the current score file (<code>gnus-score-edit-current-scores</code>).
-You will be popped into a <code>gnus-score-mode</code> buffer (see <a href="Score-File-Editing.html#Score-File-Editing">Score File Editing</a>).
-</p>
-</dd>
-<dt><kbd>V f</kbd></dt>
-<dd><a name="index-V-f-_0028Summary_0029"></a>
-<a name="index-gnus_002dscore_002dedit_002dfile"></a>
-<p>Edit a score file and make this score file the current one
-(<code>gnus-score-edit-file</code>).
-</p>
-</dd>
-<dt><kbd>V F</kbd></dt>
-<dd><a name="index-V-F-_0028Summary_0029"></a>
-<a name="index-gnus_002dscore_002dflush_002dcache"></a>
-<p>Flush the score cache (<code>gnus-score-flush-cache</code>).  This is useful
-after editing score files.
-</p>
-</dd>
-<dt><kbd>V C</kbd></dt>
-<dd><a name="index-V-C-_0028Summary_0029"></a>
-<a name="index-gnus_002dscore_002dcustomize"></a>
-<p>Customize a score file in a visually pleasing manner
-(<code>gnus-score-customize</code>).
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Group-Score-Commands.html#Group-Score-Commands" accesskey="n"
+    rel="next">Group Score Commands</a>, Up: <a href=
+    "Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Summary-Score-Commands-1" id=
+  "Summary-Score-Commands-1"></a>
 
-<p>The rest of these commands modify the local score file.
-</p>
-<dl compact="compact">
-<dt><kbd>V m</kbd></dt>
-<dd><a name="index-V-m-_0028Summary_0029"></a>
-<a name="index-gnus_002dscore_002dset_002dmark_002dbelow"></a>
-<p>Prompt for a score, and mark all articles with a score below this as
-read (<code>gnus-score-set-mark-below</code>).
-</p>
-</dd>
-<dt><kbd>V x</kbd></dt>
-<dd><a name="index-V-x-_0028Summary_0029"></a>
-<a name="index-gnus_002dscore_002dset_002dexpunge_002dbelow"></a>
-<p>Prompt for a score, and add a score rule to the current score file to
-expunge all articles below this score
-(<code>gnus-score-set-expunge-below</code>).
-</p></dd>
-</dl>
+  <h3 class="section">7.1 Summary Score Commands</h3><a name=
+  "index-score-commands" id="index-score-commands"></a>
 
-<p>The keystrokes for actually making score entries follow a very regular
-pattern, so there&rsquo;s no need to list all the commands.  (Hundreds of
-them.)
-</p>
-<a name="index-gnus_002dsummary_002dincrease_002dscore"></a>
-<a name="index-gnus_002dsummary_002dlower_002dscore"></a>
+  <p>The score commands that alter score entries do not actually
+  modify real score files. That would be too inefficient. Gnus
+  maintains a cache of previously loaded score files, one of which
+  is considered the <em>current score file alist</em>. The score
+  commands simply insert entries into this list, and upon group
+  exit, this list is saved.</p>
 
-<ol>
-<li> The first key is either <kbd>I</kbd> (upper case i) for increasing the score
-or <kbd>L</kbd> for lowering the score.
-</li><li> The second key says what header you want to score on.  The following
-keys are available:
-<dl compact="compact">
-<dt><kbd>a</kbd></dt>
-<dd><p>Score on the author name.
-</p>
-</dd>
-<dt><kbd>s</kbd></dt>
-<dd><p>Score on the subject line.
-</p>
-</dd>
-<dt><kbd>x</kbd></dt>
-<dd><p>Score on the <code>Xref</code> line&mdash;i.e., the cross-posting line.
-</p>
-</dd>
-<dt><kbd>r</kbd></dt>
-<dd><p>Score on the <code>References</code> line.
-</p>
-</dd>
-<dt><kbd>d</kbd></dt>
-<dd><p>Score on the date.
-</p>
-</dd>
-<dt><kbd>l</kbd></dt>
-<dd><p>Score on the number of lines.
-</p>
-</dd>
-<dt><kbd>i</kbd></dt>
-<dd><p>Score on the <code>Message-ID</code> header.
-</p>
-</dd>
-<dt><kbd>e</kbd></dt>
-<dd><p>Score on an &ldquo;extra&rdquo; header, that is, one of those in gnus-extra-headers,
-if your <acronym>NNTP</acronym> server tracks additional header data in overviews.
-</p>
-</dd>
-<dt><kbd>f</kbd></dt>
-<dd><p>Score on followups&mdash;this matches the author name, and adds scores to
-the followups to this author.  (Using this key leads to the creation of
-<samp>ADAPT</samp> files.)
-</p>
-</dd>
-<dt><kbd>b</kbd></dt>
-<dd><p>Score on the body.
-</p>
-</dd>
-<dt><kbd>h</kbd></dt>
-<dd><p>Score on the head.
-</p>
-</dd>
-<dt><kbd>t</kbd></dt>
-<dd><p>Score on thread.  (Using this key leads to the creation of <samp>ADAPT</samp>
-files.)
-</p>
-</dd>
-</dl>
+  <p>The current score file is by default the group&rsquo;s local
+  score file, even if no such score file actually exists. To insert
+  score commands into some other score file (e.g.,
+  <samp>all.SCORE</samp>), you must first make this score file the
+  current one.</p>
 
-</li><li> The third key is the match type.  Which match types are valid depends on
-what headers you are scoring on.
+  <p>General score commands that don&rsquo;t actually change the
+  score file:</p>
 
-<dl compact="compact">
-<dt><code>strings</code></dt>
-<dd>
-<dl compact="compact">
-<dt><kbd>e</kbd></dt>
-<dd><p>Exact matching.
-</p>
-</dd>
-<dt><kbd>s</kbd></dt>
-<dd><p>Substring matching.
-</p>
-</dd>
-<dt><kbd>f</kbd></dt>
-<dd><p>Fuzzy matching (see <a href="Fuzzy-Matching.html#Fuzzy-Matching">Fuzzy Matching</a>).
-</p>
-</dd>
-<dt><kbd>r</kbd></dt>
-<dd><p>Regexp matching
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>V s</kbd></dt>
 
-</dd>
-<dt><code>date</code></dt>
-<dd><dl compact="compact">
-<dt><kbd>b</kbd></dt>
-<dd><p>Before date.
-</p>
-</dd>
-<dt><kbd>a</kbd></dt>
-<dd><p>After date.
-</p>
-</dd>
-<dt><kbd>n</kbd></dt>
-<dd><p>This date.
-</p></dd>
-</dl>
+    <dd>
+      <a name="index-V-s-_0028Summary_0029" id=
+      "index-V-s-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dset_002dscore" id=
+      "index-gnus_002dsummary_002dset_002dscore"></a>
 
-</dd>
-<dt><code>number</code></dt>
-<dd><dl compact="compact">
-<dt><kbd>&lt;</kbd></dt>
-<dd><p>Less than number.
-</p>
-</dd>
-<dt><kbd>=</kbd></dt>
-<dd><p>Equal to number.
-</p>
-</dd>
-<dt><kbd>&gt;</kbd></dt>
-<dd><p>Greater than number.
-</p></dd>
-</dl>
-</dd>
-</dl>
+      <p>Set the score of the current article
+      (<code>gnus-summary-set-score</code>).</p>
+    </dd>
 
-</li><li> The fourth and usually final key says whether this is a temporary (i.e.,
-expiring) score entry, or a permanent (i.e., non-expiring) score entry,
-or whether it is to be done immediately, without adding to the score
-file.
-<dl compact="compact">
-<dt><kbd>t</kbd></dt>
-<dd><p>Temporary score entry.
-</p>
-</dd>
-<dt><kbd>p</kbd></dt>
-<dd><p>Permanent score entry.
-</p>
-</dd>
-<dt><kbd>i</kbd></dt>
-<dd><p>Immediately scoring.
-</p></dd>
-</dl>
+    <dt><kbd>V S</kbd></dt>
 
-</li><li> If you are scoring on &lsquo;<samp>e</samp>&rsquo; (extra) headers, you will then be prompted for
-the header name on which you wish to score.  This must be a header named
-in gnus-extra-headers, and &lsquo;<samp>TAB</samp>&rsquo; completion is available.
+    <dd>
+      <a name="index-V-S-_0028Summary_0029" id=
+      "index-V-S-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dcurrent_002dscore" id=
+      "index-gnus_002dsummary_002dcurrent_002dscore"></a>
 
-</li></ol>
+      <p>Display the score of the current article
+      (<code>gnus-summary-current-score</code>).</p>
+    </dd>
 
-<p>So, let&rsquo;s say you want to increase the score on the current author with
-exact matching permanently: <kbd>I a e p</kbd>.  If you want to lower the
-score based on the subject line, using substring matching, and make a
-temporary score entry: <kbd>L s s t</kbd>.  Pretty easy.
-</p>
-<p>To make things a bit more complicated, there are shortcuts.  If you use
-a capital letter on either the second or third keys, Gnus will use
-defaults for the remaining one or two keystrokes.  The defaults are
-&ldquo;substring&rdquo; and &ldquo;temporary&rdquo;.  So <kbd>I A</kbd> is the same as <kbd>I a s
-t</kbd>, and <kbd>I a R</kbd> is the same as <kbd>I a r t</kbd>.
-</p>
-<p>These functions take both the numerical prefix and the symbolic prefix
-(see <a href="Symbolic-Prefixes.html#Symbolic-Prefixes">Symbolic Prefixes</a>).  A numerical prefix says how much to lower
-(or increase) the score of the article.  A symbolic prefix of <code>a</code>
-says to use the <samp>all.SCORE</samp> file for the command instead of the
-current score file.
-</p>
-<a name="index-gnus_002dscore_002dmimic_002dkeymap"></a>
-<p>The <code>gnus-score-mimic-keymap</code> says whether these commands will
-pretend they are keymaps or not.
-</p>
+    <dt><kbd>V t</kbd></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Group-Score-Commands.html#Group-Score-Commands" accesskey="n" rel="next">Group Score Commands</a>, Up: <a href="Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name="index-V-t-_0028Summary_0029" id=
+      "index-V-t-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dscore_002dfind_002dtrace" id=
+      "index-gnus_002dscore_002dfind_002dtrace"></a>
 
+      <p>Display all score rules that have been used on the current
+      article (<code>gnus-score-find-trace</code>). In the
+      <samp>*Score Trace*</samp> buffer, you may type <kbd>e</kbd>
+      to edit score file corresponding to the score rule on current
+      line and <kbd>f</kbd> to format
+      (<code>gnus-score-pretty-print</code>) the score file and
+      edit it.</p>
+    </dd>
 
+    <dt><kbd>V w</kbd></dt>
 
+    <dd>
+      <a name="index-V-w-_0028Summary_0029" id=
+      "index-V-w-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dscore_002dfind_002dfavourite_002dwords" id=
+      "index-gnus_002dscore_002dfind_002dfavourite_002dwords"></a>
+
+      <p>List words used in scoring
+      (<code>gnus-score-find-favourite-words</code>).</p>
+    </dd>
+
+    <dt><kbd>V R</kbd></dt>
+
+    <dd>
+      <a name="index-V-R-_0028Summary_0029" id=
+      "index-V-R-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002drescore" id=
+      "index-gnus_002dsummary_002drescore"></a>
+
+      <p>Run the current summary through the scoring process
+      (<code>gnus-summary-rescore</code>). This might be useful if
+      you&rsquo;re playing around with your score files behind
+      Gnus&rsquo; back and want to see the effect you&rsquo;re
+      having.</p>
+    </dd>
+
+    <dt><kbd>V c</kbd></dt>
+
+    <dd>
+      <a name="index-V-c-_0028Summary_0029" id=
+      "index-V-c-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dscore_002dchange_002dscore_002dfile" id=
+      "index-gnus_002dscore_002dchange_002dscore_002dfile"></a>
+
+      <p>Make a different score file the current
+      (<code>gnus-score-change-score-file</code>).</p>
+    </dd>
+
+    <dt><kbd>V e</kbd></dt>
+
+    <dd>
+      <a name="index-V-e-_0028Summary_0029" id=
+      "index-V-e-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dscore_002dedit_002dcurrent_002dscores" id=
+      "index-gnus_002dscore_002dedit_002dcurrent_002dscores"></a>
+
+      <p>Edit the current score file
+      (<code>gnus-score-edit-current-scores</code>). You will be
+      popped into a <code>gnus-score-mode</code> buffer (see
+      <a href="Score-File-Editing.html#Score-File-Editing">Score
+      File Editing</a>).</p>
+    </dd>
+
+    <dt><kbd>V f</kbd></dt>
+
+    <dd>
+      <a name="index-V-f-_0028Summary_0029" id=
+      "index-V-f-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dscore_002dedit_002dfile" id=
+      "index-gnus_002dscore_002dedit_002dfile"></a>
+
+      <p>Edit a score file and make this score file the current one
+      (<code>gnus-score-edit-file</code>).</p>
+    </dd>
+
+    <dt><kbd>V F</kbd></dt>
+
+    <dd>
+      <a name="index-V-F-_0028Summary_0029" id=
+      "index-V-F-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dscore_002dflush_002dcache" id=
+      "index-gnus_002dscore_002dflush_002dcache"></a>
+
+      <p>Flush the score cache
+      (<code>gnus-score-flush-cache</code>). This is useful after
+      editing score files.</p>
+    </dd>
+
+    <dt><kbd>V C</kbd></dt>
+
+    <dd>
+      <a name="index-V-C-_0028Summary_0029" id=
+      "index-V-C-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dscore_002dcustomize" id=
+      "index-gnus_002dscore_002dcustomize"></a>
+
+      <p>Customize a score file in a visually pleasing manner
+      (<code>gnus-score-customize</code>).</p>
+    </dd>
+  </dl>
+
+  <p>The rest of these commands modify the local score file.</p>
+
+  <dl compact="compact">
+    <dt><kbd>V m</kbd></dt>
+
+    <dd>
+      <a name="index-V-m-_0028Summary_0029" id=
+      "index-V-m-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dscore_002dset_002dmark_002dbelow" id=
+      "index-gnus_002dscore_002dset_002dmark_002dbelow"></a>
+
+      <p>Prompt for a score, and mark all articles with a score
+      below this as read
+      (<code>gnus-score-set-mark-below</code>).</p>
+    </dd>
+
+    <dt><kbd>V x</kbd></dt>
+
+    <dd>
+      <a name="index-V-x-_0028Summary_0029" id=
+      "index-V-x-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dscore_002dset_002dexpunge_002dbelow" id=
+      "index-gnus_002dscore_002dset_002dexpunge_002dbelow"></a>
+
+      <p>Prompt for a score, and add a score rule to the current
+      score file to expunge all articles below this score
+      (<code>gnus-score-set-expunge-below</code>).</p>
+    </dd>
+  </dl>
+
+  <p>The keystrokes for actually making score entries follow a very
+  regular pattern, so there&rsquo;s no need to list all the
+  commands. (Hundreds of them.)</p><a name=
+  "index-gnus_002dsummary_002dincrease_002dscore" id=
+  "index-gnus_002dsummary_002dincrease_002dscore"></a> <a name=
+  "index-gnus_002dsummary_002dlower_002dscore" id=
+  "index-gnus_002dsummary_002dlower_002dscore"></a>
+
+  <ol>
+    <li>The first key is either <kbd>I</kbd> (upper case i) for
+    increasing the score or <kbd>L</kbd> for lowering the
+    score.</li>
+
+    <li>The second key says what header you want to score on. The
+    following keys are available:
+
+      <dl compact="compact">
+        <dt><kbd>a</kbd></dt>
+
+        <dd>
+          <p>Score on the author name.</p>
+        </dd>
+
+        <dt><kbd>s</kbd></dt>
+
+        <dd>
+          <p>Score on the subject line.</p>
+        </dd>
+
+        <dt><kbd>x</kbd></dt>
+
+        <dd>
+          <p>Score on the <code>Xref</code> line&mdash;i.e., the
+          cross-posting line.</p>
+        </dd>
+
+        <dt><kbd>r</kbd></dt>
+
+        <dd>
+          <p>Score on the <code>References</code> line.</p>
+        </dd>
+
+        <dt><kbd>d</kbd></dt>
+
+        <dd>
+          <p>Score on the date.</p>
+        </dd>
+
+        <dt><kbd>l</kbd></dt>
+
+        <dd>
+          <p>Score on the number of lines.</p>
+        </dd>
+
+        <dt><kbd>i</kbd></dt>
+
+        <dd>
+          <p>Score on the <code>Message-ID</code> header.</p>
+        </dd>
+
+        <dt><kbd>e</kbd></dt>
+
+        <dd>
+          <p>Score on an &ldquo;extra&rdquo; header, that is, one
+          of those in gnus-extra-headers, if your
+          <acronym>NNTP</acronym> server tracks additional header
+          data in overviews.</p>
+        </dd>
+
+        <dt><kbd>f</kbd></dt>
+
+        <dd>
+          <p>Score on followups&mdash;this matches the author name,
+          and adds scores to the followups to this author. (Using
+          this key leads to the creation of <samp>ADAPT</samp>
+          files.)</p>
+        </dd>
+
+        <dt><kbd>b</kbd></dt>
+
+        <dd>
+          <p>Score on the body.</p>
+        </dd>
+
+        <dt><kbd>h</kbd></dt>
+
+        <dd>
+          <p>Score on the head.</p>
+        </dd>
+
+        <dt><kbd>t</kbd></dt>
+
+        <dd>
+          <p>Score on thread. (Using this key leads to the creation
+          of <samp>ADAPT</samp> files.)</p>
+        </dd>
+      </dl>
+    </li>
+
+    <li>The third key is the match type. Which match types are
+    valid depends on what headers you are scoring on.
+
+      <dl compact="compact">
+        <dt><code>strings</code></dt>
+
+        <dd>
+          <dl compact="compact">
+            <dt><kbd>e</kbd></dt>
+
+            <dd>
+              <p>Exact matching.</p>
+            </dd>
+
+            <dt><kbd>s</kbd></dt>
+
+            <dd>
+              <p>Substring matching.</p>
+            </dd>
+
+            <dt><kbd>f</kbd></dt>
+
+            <dd>
+              <p>Fuzzy matching (see <a href=
+              "Fuzzy-Matching.html#Fuzzy-Matching">Fuzzy
+              Matching</a>).</p>
+            </dd>
+
+            <dt><kbd>r</kbd></dt>
+
+            <dd>
+              <p>Regexp matching</p>
+            </dd>
+          </dl>
+        </dd>
+
+        <dt><code>date</code></dt>
+
+        <dd>
+          <dl compact="compact">
+            <dt><kbd>b</kbd></dt>
+
+            <dd>
+              <p>Before date.</p>
+            </dd>
+
+            <dt><kbd>a</kbd></dt>
+
+            <dd>
+              <p>After date.</p>
+            </dd>
+
+            <dt><kbd>n</kbd></dt>
+
+            <dd>
+              <p>This date.</p>
+            </dd>
+          </dl>
+        </dd>
+
+        <dt><code>number</code></dt>
+
+        <dd>
+          <dl compact="compact">
+            <dt><kbd>&lt;</kbd></dt>
+
+            <dd>
+              <p>Less than number.</p>
+            </dd>
+
+            <dt><kbd>=</kbd></dt>
+
+            <dd>
+              <p>Equal to number.</p>
+            </dd>
+
+            <dt><kbd>&gt;</kbd></dt>
+
+            <dd>
+              <p>Greater than number.</p>
+            </dd>
+          </dl>
+        </dd>
+      </dl>
+    </li>
+
+    <li>The fourth and usually final key says whether this is a
+    temporary (i.e., expiring) score entry, or a permanent (i.e.,
+    non-expiring) score entry, or whether it is to be done
+    immediately, without adding to the score file.
+
+      <dl compact="compact">
+        <dt><kbd>t</kbd></dt>
+
+        <dd>
+          <p>Temporary score entry.</p>
+        </dd>
+
+        <dt><kbd>p</kbd></dt>
+
+        <dd>
+          <p>Permanent score entry.</p>
+        </dd>
+
+        <dt><kbd>i</kbd></dt>
+
+        <dd>
+          <p>Immediately scoring.</p>
+        </dd>
+      </dl>
+    </li>
+
+    <li>If you are scoring on &lsquo;<samp>e</samp>&rsquo; (extra)
+    headers, you will then be prompted for the header name on which
+    you wish to score. This must be a header named in
+    gnus-extra-headers, and &lsquo;<samp>TAB</samp>&rsquo;
+    completion is available.</li>
+  </ol>
+
+  <p>So, let&rsquo;s say you want to increase the score on the
+  current author with exact matching permanently: <kbd>I a e
+  p</kbd>. If you want to lower the score based on the subject
+  line, using substring matching, and make a temporary score entry:
+  <kbd>L s s t</kbd>. Pretty easy.</p>
+
+  <p>To make things a bit more complicated, there are shortcuts. If
+  you use a capital letter on either the second or third keys, Gnus
+  will use defaults for the remaining one or two keystrokes. The
+  defaults are &ldquo;substring&rdquo; and &ldquo;temporary&rdquo;.
+  So <kbd>I A</kbd> is the same as <kbd>I a s t</kbd>, and <kbd>I a
+  R</kbd> is the same as <kbd>I a r t</kbd>.</p>
+
+  <p>These functions take both the numerical prefix and the
+  symbolic prefix (see <a href=
+  "Symbolic-Prefixes.html#Symbolic-Prefixes">Symbolic
+  Prefixes</a>). A numerical prefix says how much to lower (or
+  increase) the score of the article. A symbolic prefix of
+  <code>a</code> says to use the <samp>all.SCORE</samp> file for
+  the command instead of the current score file.</p><a name=
+  "index-gnus_002dscore_002dmimic_002dkeymap" id=
+  "index-gnus_002dscore_002dmimic_002dkeymap"></a>
+
+  <p>The <code>gnus-score-mimic-keymap</code> says whether these
+  commands will pretend they are keymaps or not.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Group-Score-Commands.html#Group-Score-Commands" accesskey="n"
+    rel="next">Group Score Commands</a>, Up: <a href=
+    "Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

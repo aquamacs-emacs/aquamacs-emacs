@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,138 +19,195 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Entire Match Data</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Entire Match Data">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Entire Match Data">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Match-Data.html#Match-Data" rel="up" title="Match Data">
-<link href="Saving-Match-Data.html#Saving-Match-Data" rel="next" title="Saving Match Data">
-<link href="Simple-Match-Data.html#Simple-Match-Data" rel="prev" title="Simple Match Data">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Entire Match Data</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Entire Match Data" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Entire Match Data" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Match-Data.html#Match-Data" rel="up" title=
+  "Match Data" />
+  <link href="Saving-Match-Data.html#Saving-Match-Data" rel="next"
+  title="Saving Match Data" />
+  <link href="Simple-Match-Data.html#Simple-Match-Data" rel="prev"
+  title="Simple Match Data" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Entire-Match-Data" id="Entire-Match-Data"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Saving-Match-Data.html#Saving-Match-Data"
+    accesskey="n" rel="next">Saving Match Data</a>, Previous:
+    <a href="Simple-Match-Data.html#Simple-Match-Data" accesskey=
+    "p" rel="prev">Simple Match Data</a>, Up: <a href=
+    "Match-Data.html#Match-Data" accesskey="u" rel="up">Match
+    Data</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Accessing-the-Entire-Match-Data" id=
+  "Accessing-the-Entire-Match-Data"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Entire-Match-Data"></a>
-<div class="header">
-<p>
-Next: <a href="Saving-Match-Data.html#Saving-Match-Data" accesskey="n" rel="next">Saving Match Data</a>, Previous: <a href="Simple-Match-Data.html#Simple-Match-Data" accesskey="p" rel="prev">Simple Match Data</a>, Up: <a href="Match-Data.html#Match-Data" accesskey="u" rel="up">Match Data</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Accessing-the-Entire-Match-Data"></a>
-<h4 class="subsection">33.6.3 Accessing the Entire Match Data</h4>
+  <h4 class="subsection">33.6.3 Accessing the Entire Match
+  Data</h4>
 
-<p>The functions <code>match-data</code> and <code>set-match-data</code> read or
-write the entire match data, all at once.
-</p>
-<dl>
-<dt><a name="index-match_002ddata"></a>Function: <strong>match-data</strong> <em>&amp;optional integers reuse reseat</em></dt>
-<dd><p>This function returns a list of positions (markers or integers) that
-record all the information on the text that the last search matched.
-Element zero is the position of the beginning of the match for the
-whole expression; element one is the position of the end of the match
-for the expression.  The next two elements are the positions of the
-beginning and end of the match for the first subexpression, and so on.
-In general, element
-number 2<var>n</var>
-corresponds to <code>(match-beginning <var>n</var>)</code>; and
-element
-number 2<var>n</var> + 1
-corresponds to <code>(match-end <var>n</var>)</code>.
-</p>
-<p>Normally all the elements are markers or <code>nil</code>, but if
-<var>integers</var> is non-<code>nil</code>, that means to use integers instead
-of markers.  (In that case, the buffer itself is appended as an
-additional element at the end of the list, to facilitate complete
-restoration of the match data.)  If the last match was done on a
-string with <code>string-match</code>, then integers are always used,
-since markers can&rsquo;t point into a string.
-</p>
-<p>If <var>reuse</var> is non-<code>nil</code>, it should be a list.  In that case,
-<code>match-data</code> stores the match data in <var>reuse</var>.  That is,
-<var>reuse</var> is destructively modified.  <var>reuse</var> does not need to
-have the right length.  If it is not long enough to contain the match
-data, it is extended.  If it is too long, the length of <var>reuse</var>
-stays the same, but the elements that were not used are set to
-<code>nil</code>.  The purpose of this feature is to reduce the need for
-garbage collection.
-</p>
-<p>If <var>reseat</var> is non-<code>nil</code>, all markers on the <var>reuse</var> list
-are reseated to point to nowhere.
-</p>
-<p>As always, there must be no possibility of intervening searches between
-the call to a search function and the call to <code>match-data</code> that is
-intended to access the match data for that search.
-</p>
-<div class="example">
-<pre class="example">(match-data)
+  <p>The functions <code>match-data</code> and
+  <code>set-match-data</code> read or write the entire match data,
+  all at once.</p>
+
+  <dl>
+    <dt><a name="index-match_002ddata" id=
+    "index-match_002ddata"></a>Function:
+    <strong>match-data</strong> <em>&amp;optional integers reuse
+    reseat</em></dt>
+
+    <dd>
+      <p>This function returns a list of positions (markers or
+      integers) that record all the information on the text that
+      the last search matched. Element zero is the position of the
+      beginning of the match for the whole expression; element one
+      is the position of the end of the match for the expression.
+      The next two elements are the positions of the beginning and
+      end of the match for the first subexpression, and so on. In
+      general, element number 2<var>n</var> corresponds to
+      <code>(match-beginning <var>n</var>)</code>; and element
+      number 2<var>n</var> + 1 corresponds to <code>(match-end
+      <var>n</var>)</code>.</p>
+
+      <p>Normally all the elements are markers or <code>nil</code>,
+      but if <var>integers</var> is non-<code>nil</code>, that
+      means to use integers instead of markers. (In that case, the
+      buffer itself is appended as an additional element at the end
+      of the list, to facilitate complete restoration of the match
+      data.) If the last match was done on a string with
+      <code>string-match</code>, then integers are always used,
+      since markers can&rsquo;t point into a string.</p>
+
+      <p>If <var>reuse</var> is non-<code>nil</code>, it should be
+      a list. In that case, <code>match-data</code> stores the
+      match data in <var>reuse</var>. That is, <var>reuse</var> is
+      destructively modified. <var>reuse</var> does not need to
+      have the right length. If it is not long enough to contain
+      the match data, it is extended. If it is too long, the length
+      of <var>reuse</var> stays the same, but the elements that
+      were not used are set to <code>nil</code>. The purpose of
+      this feature is to reduce the need for garbage
+      collection.</p>
+
+      <p>If <var>reseat</var> is non-<code>nil</code>, all markers
+      on the <var>reuse</var> list are reseated to point to
+      nowhere.</p>
+
+      <p>As always, there must be no possibility of intervening
+      searches between the call to a search function and the call
+      to <code>match-data</code> that is intended to access the
+      match data for that search.</p>
+
+      <div class="example">
+        <pre class="example">
+(match-data)
      &rArr;  (#&lt;marker at 9 in foo&gt;
           #&lt;marker at 17 in foo&gt;
           #&lt;marker at 13 in foo&gt;
           #&lt;marker at 17 in foo&gt;)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-set_002dmatch_002ddata"></a>Function: <strong>set-match-data</strong> <em>match-list &amp;optional reseat</em></dt>
-<dd><p>This function sets the match data from the elements of <var>match-list</var>,
-which should be a list that was the value of a previous call to
-<code>match-data</code>.  (More precisely, anything that has the same format
-will work.)
-</p>
-<p>If <var>match-list</var> refers to a buffer that doesn&rsquo;t exist, you don&rsquo;t get
-an error; that sets the match data in a meaningless but harmless way.
-</p>
-<p>If <var>reseat</var> is non-<code>nil</code>, all markers on the <var>match-list</var> list
-are reseated to point to nowhere.
-</p>
-<a name="index-store_002dmatch_002ddata"></a>
-<p><code>store-match-data</code> is a semi-obsolete alias for <code>set-match-data</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dmatch_002ddata" id=
+    "index-set_002dmatch_002ddata"></a>Function:
+    <strong>set-match-data</strong> <em>match-list &amp;optional
+    reseat</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Saving-Match-Data.html#Saving-Match-Data" accesskey="n" rel="next">Saving Match Data</a>, Previous: <a href="Simple-Match-Data.html#Simple-Match-Data" accesskey="p" rel="prev">Simple Match Data</a>, Up: <a href="Match-Data.html#Match-Data" accesskey="u" rel="up">Match Data</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function sets the match data from the elements of
+      <var>match-list</var>, which should be a list that was the
+      value of a previous call to <code>match-data</code>. (More
+      precisely, anything that has the same format will work.)</p>
 
+      <p>If <var>match-list</var> refers to a buffer that
+      doesn&rsquo;t exist, you don&rsquo;t get an error; that sets
+      the match data in a meaningless but harmless way.</p>
 
+      <p>If <var>reseat</var> is non-<code>nil</code>, all markers
+      on the <var>match-list</var> list are reseated to point to
+      nowhere.</p><a name="index-store_002dmatch_002ddata" id=
+      "index-store_002dmatch_002ddata"></a>
 
+      <p><code>store-match-data</code> is a semi-obsolete alias for
+      <code>set-match-data</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Saving-Match-Data.html#Saving-Match-Data"
+    accesskey="n" rel="next">Saving Match Data</a>, Previous:
+    <a href="Simple-Match-Data.html#Simple-Match-Data" accesskey=
+    "p" rel="prev">Simple Match Data</a>, Up: <a href=
+    "Match-Data.html#Match-Data" accesskey="u" rel="up">Match
+    Data</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

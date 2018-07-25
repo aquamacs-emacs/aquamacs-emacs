@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,147 +18,212 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Simplification Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Simplification Modes">
-<meta name="keywords" content="GNU Emacs Calc Manual: Simplification Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mode-Settings.html#Mode-Settings" rel="up" title="Mode Settings">
-<link href="Declarations.html#Declarations" rel="next" title="Declarations">
-<link href="Working-Message.html#Working-Message" rel="prev" title="Working Message">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Simplification Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Simplification Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Simplification Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mode-Settings.html#Mode-Settings" rel="up" title=
+  "Mode Settings" />
+  <link href="Declarations.html#Declarations" rel="next" title=
+  "Declarations" />
+  <link href="Working-Message.html#Working-Message" rel="prev"
+  title="Working Message" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Simplification-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Declarations.html#Declarations" accesskey="n" rel="next">Declarations</a>, Previous: <a href="Calculation-Modes.html#Calculation-Modes" accesskey="p" rel="prev">Calculation Modes</a>, Up: <a href="Mode-Settings.html#Mode-Settings" accesskey="u" rel="up">Mode Settings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Simplification-Modes-1"></a>
-<h3 class="section">6.5 Simplification Modes</h3>
+<body lang="en" xml:lang="en">
+  <a name="Simplification-Modes" id="Simplification-Modes"></a>
 
-<p>The current <em>simplification mode</em> controls how numbers and formulas
-are &ldquo;normalized&rdquo; when being taken from or pushed onto the stack.
-Some normalizations are unavoidable, such as rounding floating-point
-results to the current precision, and reducing fractions to simplest
-form.  Others, such as simplifying a formula like &lsquo;<samp>a+a</samp>&rsquo; (or &lsquo;<samp>2+3</samp>&rsquo;),
-are done automatically but can be turned off when necessary.
-</p>
-<p>When you press a key like <kbd>+</kbd> when &lsquo;<samp>2</samp>&rsquo; and &lsquo;<samp>3</samp>&rsquo; are on the
-stack, Calc pops these numbers, normalizes them, creates the formula
-&lsquo;<samp>2+3</samp>&rsquo;, normalizes it, and pushes the result.  Of course the standard
-rules for normalizing &lsquo;<samp>2+3</samp>&rsquo; will produce the result &lsquo;<samp>5</samp>&rsquo;.
-</p>
-<p>Simplification mode commands consist of the lower-case <kbd>m</kbd> prefix key
-followed by a shifted letter.
-</p>
-<a name="index-m-O"></a>
-<a name="index-calc_002dno_002dsimplify_002dmode"></a>
-<p>The <kbd>m O</kbd> (<code>calc-no-simplify-mode</code>) command turns off all optional
-simplifications.  These would leave a formula like &lsquo;<samp>2+3</samp>&rsquo; alone.  In
-fact, nothing except simple numbers are ever affected by normalization
-in this mode.  Explicit simplification commands, such as <kbd>=</kbd> or
-<kbd>a s</kbd>, can still be given to simplify any formulas.
-See <a href="Algebraic-Definitions.html#Algebraic-Definitions">Algebraic Definitions</a>, for a sample use of
-No-Simplification mode.
-</p>
-<a name="index-m-N"></a>
-<a name="index-calc_002dnum_002dsimplify_002dmode"></a>
-<p>The <kbd>m N</kbd> (<code>calc-num-simplify-mode</code>) command turns off simplification
-of any formulas except those for which all arguments are constants.  For
-example, &lsquo;<samp>1+2</samp>&rsquo; is simplified to &lsquo;<samp>3</samp>&rsquo;, and &lsquo;<samp>a+(2-2)</samp>&rsquo; is
-simplified to &lsquo;<samp>a+0</samp>&rsquo; but no further, since one argument of the sum
-is not a constant.  Unfortunately, &lsquo;<samp>(a+2)-2</samp>&rsquo; is <em>not</em> simplified
-because the top-level &lsquo;<samp>-</samp>&rsquo; operator&rsquo;s arguments are not both
-constant numbers (one of them is the formula &lsquo;<samp>a+2</samp>&rsquo;).
-A constant is a number or other numeric object (such as a constant
-error form or modulo form), or a vector all of whose
-elements are constant.
-</p>
-<a name="index-m-I"></a>
-<a name="index-calc_002dbasic_002dsimplify_002dmode"></a>
-<p>The <kbd>m I</kbd> (<code>calc-basic-simplify-mode</code>) command does some basic
-simplifications for all formulas.  This includes many easy and
-fast algebraic simplifications such as &lsquo;<samp>a+0</samp>&rsquo; to &lsquo;<samp>a</samp>&rsquo;, and
-&lsquo;<samp>a + 2 a</samp>&rsquo; to &lsquo;<samp>3 a</samp>&rsquo;, as well as evaluating functions like
-&lsquo;<samp><tt>deriv</tt>(x^2, x)</samp>&rsquo; to &lsquo;<samp>2 x</samp>&rsquo;.
-</p>
-<a name="index-m-B"></a>
-<a name="index-calc_002dbin_002dsimplify_002dmode"></a>
-<p>The <kbd>m B</kbd> (<code>calc-bin-simplify-mode</code>) mode applies the basic
-simplifications to a result and then, if the result is an integer,
-uses the <kbd>b c</kbd> (<code>calc-clip</code>) command to clip the integer according
-to the current binary word size.  See <a href="Binary-Functions.html#Binary-Functions">Binary Functions</a>.  Real numbers
-are rounded to the nearest integer and then clipped; other kinds of
-results (after the basic simplifications) are left alone.
-</p>
-<a name="index-m-A"></a>
-<a name="index-calc_002dalg_002dsimplify_002dmode"></a>
-<p>The <kbd>m A</kbd> (<code>calc-alg-simplify-mode</code>) mode does standard
-algebraic simplifications.  See <a href="Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic Simplifications</a>.
-</p>
-<a name="index-m-E"></a>
-<a name="index-calc_002dext_002dsimplify_002dmode"></a>
-<p>The <kbd>m E</kbd> (<code>calc-ext-simplify-mode</code>) mode does &ldquo;extended&rdquo;, or
-&ldquo;unsafe&rdquo;, algebraic simplification.  See <a href="Unsafe-Simplifications.html#Unsafe-Simplifications">Unsafe Simplifications</a>.
-</p>
-<a name="index-m-U"></a>
-<a name="index-calc_002dunits_002dsimplify_002dmode"></a>
-<p>The <kbd>m U</kbd> (<code>calc-units-simplify-mode</code>) mode does units
-simplification.  See <a href="Simplification-of-Units.html#Simplification-of-Units">Simplification of Units</a>.  These include the
-algebraic simplifications, plus variable names which
-are identifiable as unit names (like &lsquo;<samp>mm</samp>&rsquo; for &ldquo;millimeters&rdquo;)
-are simplified with their unit definitions in mind.
-</p>
-<p>A common technique is to set the simplification mode down to the lowest
-amount of simplification you will allow to be applied automatically, then
-use manual commands like <kbd>a s</kbd> and <kbd>c c</kbd> (<code>calc-clean</code>) to
-perform higher types of simplifications on demand.
-</p><hr>
-<div class="header">
-<p>
-Next: <a href="Declarations.html#Declarations" accesskey="n" rel="next">Declarations</a>, Previous: <a href="Calculation-Modes.html#Calculation-Modes" accesskey="p" rel="prev">Calculation Modes</a>, Up: <a href="Mode-Settings.html#Mode-Settings" accesskey="u" rel="up">Mode Settings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Declarations.html#Declarations" accesskey="n"
+    rel="next">Declarations</a>, Previous: <a href=
+    "Calculation-Modes.html#Calculation-Modes" accesskey="p" rel=
+    "prev">Calculation Modes</a>, Up: <a href=
+    "Mode-Settings.html#Mode-Settings" accesskey="u" rel="up">Mode
+    Settings</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Simplification-Modes-1" id="Simplification-Modes-1"></a>
 
+  <h3 class="section">6.5 Simplification Modes</h3>
 
+  <p>The current <em>simplification mode</em> controls how numbers
+  and formulas are &ldquo;normalized&rdquo; when being taken from
+  or pushed onto the stack. Some normalizations are unavoidable,
+  such as rounding floating-point results to the current precision,
+  and reducing fractions to simplest form. Others, such as
+  simplifying a formula like &lsquo;<samp>a+a</samp>&rsquo; (or
+  &lsquo;<samp>2+3</samp>&rsquo;), are done automatically but can
+  be turned off when necessary.</p>
 
+  <p>When you press a key like <kbd>+</kbd> when
+  &lsquo;<samp>2</samp>&rsquo; and &lsquo;<samp>3</samp>&rsquo; are
+  on the stack, Calc pops these numbers, normalizes them, creates
+  the formula &lsquo;<samp>2+3</samp>&rsquo;, normalizes it, and
+  pushes the result. Of course the standard rules for normalizing
+  &lsquo;<samp>2+3</samp>&rsquo; will produce the result
+  &lsquo;<samp>5</samp>&rsquo;.</p>
+
+  <p>Simplification mode commands consist of the lower-case
+  <kbd>m</kbd> prefix key followed by a shifted letter.</p><a name=
+  "index-m-O" id="index-m-O"></a> <a name=
+  "index-calc_002dno_002dsimplify_002dmode" id=
+  "index-calc_002dno_002dsimplify_002dmode"></a>
+
+  <p>The <kbd>m O</kbd> (<code>calc-no-simplify-mode</code>)
+  command turns off all optional simplifications. These would leave
+  a formula like &lsquo;<samp>2+3</samp>&rsquo; alone. In fact,
+  nothing except simple numbers are ever affected by normalization
+  in this mode. Explicit simplification commands, such as
+  <kbd>=</kbd> or <kbd>a s</kbd>, can still be given to simplify
+  any formulas. See <a href=
+  "Algebraic-Definitions.html#Algebraic-Definitions">Algebraic
+  Definitions</a>, for a sample use of No-Simplification
+  mode.</p><a name="index-m-N" id="index-m-N"></a> <a name=
+  "index-calc_002dnum_002dsimplify_002dmode" id=
+  "index-calc_002dnum_002dsimplify_002dmode"></a>
+
+  <p>The <kbd>m N</kbd> (<code>calc-num-simplify-mode</code>)
+  command turns off simplification of any formulas except those for
+  which all arguments are constants. For example,
+  &lsquo;<samp>1+2</samp>&rsquo; is simplified to
+  &lsquo;<samp>3</samp>&rsquo;, and
+  &lsquo;<samp>a+(2-2)</samp>&rsquo; is simplified to
+  &lsquo;<samp>a+0</samp>&rsquo; but no further, since one argument
+  of the sum is not a constant. Unfortunately,
+  &lsquo;<samp>(a+2)-2</samp>&rsquo; is <em>not</em> simplified
+  because the top-level &lsquo;<samp>-</samp>&rsquo;
+  operator&rsquo;s arguments are not both constant numbers (one of
+  them is the formula &lsquo;<samp>a+2</samp>&rsquo;). A constant
+  is a number or other numeric object (such as a constant error
+  form or modulo form), or a vector all of whose elements are
+  constant.</p><a name="index-m-I" id="index-m-I"></a> <a name=
+  "index-calc_002dbasic_002dsimplify_002dmode" id=
+  "index-calc_002dbasic_002dsimplify_002dmode"></a>
+
+  <p>The <kbd>m I</kbd> (<code>calc-basic-simplify-mode</code>)
+  command does some basic simplifications for all formulas. This
+  includes many easy and fast algebraic simplifications such as
+  &lsquo;<samp>a+0</samp>&rsquo; to &lsquo;<samp>a</samp>&rsquo;,
+  and &lsquo;<samp>a + 2 a</samp>&rsquo; to &lsquo;<samp>3
+  a</samp>&rsquo;, as well as evaluating functions like
+  &lsquo;<samp><tt>deriv</tt>(x^2, x)</samp>&rsquo; to
+  &lsquo;<samp>2 x</samp>&rsquo;.</p><a name="index-m-B" id=
+  "index-m-B"></a> <a name=
+  "index-calc_002dbin_002dsimplify_002dmode" id=
+  "index-calc_002dbin_002dsimplify_002dmode"></a>
+
+  <p>The <kbd>m B</kbd> (<code>calc-bin-simplify-mode</code>) mode
+  applies the basic simplifications to a result and then, if the
+  result is an integer, uses the <kbd>b c</kbd>
+  (<code>calc-clip</code>) command to clip the integer according to
+  the current binary word size. See <a href=
+  "Binary-Functions.html#Binary-Functions">Binary Functions</a>.
+  Real numbers are rounded to the nearest integer and then clipped;
+  other kinds of results (after the basic simplifications) are left
+  alone.</p><a name="index-m-A" id="index-m-A"></a> <a name=
+  "index-calc_002dalg_002dsimplify_002dmode" id=
+  "index-calc_002dalg_002dsimplify_002dmode"></a>
+
+  <p>The <kbd>m A</kbd> (<code>calc-alg-simplify-mode</code>) mode
+  does standard algebraic simplifications. See <a href=
+  "Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic
+  Simplifications</a>.</p><a name="index-m-E" id="index-m-E"></a>
+  <a name="index-calc_002dext_002dsimplify_002dmode" id=
+  "index-calc_002dext_002dsimplify_002dmode"></a>
+
+  <p>The <kbd>m E</kbd> (<code>calc-ext-simplify-mode</code>) mode
+  does &ldquo;extended&rdquo;, or &ldquo;unsafe&rdquo;, algebraic
+  simplification. See <a href=
+  "Unsafe-Simplifications.html#Unsafe-Simplifications">Unsafe
+  Simplifications</a>.</p><a name="index-m-U" id="index-m-U"></a>
+  <a name="index-calc_002dunits_002dsimplify_002dmode" id=
+  "index-calc_002dunits_002dsimplify_002dmode"></a>
+
+  <p>The <kbd>m U</kbd> (<code>calc-units-simplify-mode</code>)
+  mode does units simplification. See <a href=
+  "Simplification-of-Units.html#Simplification-of-Units">Simplification
+  of Units</a>. These include the algebraic simplifications, plus
+  variable names which are identifiable as unit names (like
+  &lsquo;<samp>mm</samp>&rsquo; for &ldquo;millimeters&rdquo;) are
+  simplified with their unit definitions in mind.</p>
+
+  <p>A common technique is to set the simplification mode down to
+  the lowest amount of simplification you will allow to be applied
+  automatically, then use manual commands like <kbd>a s</kbd> and
+  <kbd>c c</kbd> (<code>calc-clean</code>) to perform higher types
+  of simplifications on demand.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Declarations.html#Declarations" accesskey="n"
+    rel="next">Declarations</a>, Previous: <a href=
+    "Calculation-Modes.html#Calculation-Modes" accesskey="p" rel=
+    "prev">Calculation Modes</a>, Up: <a href=
+    "Mode-Settings.html#Mode-Settings" accesskey="u" rel="up">Mode
+    Settings</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

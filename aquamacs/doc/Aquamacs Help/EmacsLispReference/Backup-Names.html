@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,174 +19,252 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Backup Names</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Backup Names">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Backup Names">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Backup-Files.html#Backup-Files" rel="up" title="Backup Files">
-<link href="Auto_002dSaving.html#Auto_002dSaving" rel="next" title="Auto-Saving">
-<link href="Numbered-Backups.html#Numbered-Backups" rel="prev" title="Numbered Backups">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Backup Names</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Backup Names" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Backup Names" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Backup-Files.html#Backup-Files" rel="up" title=
+  "Backup Files" />
+  <link href="Auto_002dSaving.html#Auto_002dSaving" rel="next"
+  title="Auto-Saving" />
+  <link href="Numbered-Backups.html#Numbered-Backups" rel="prev"
+  title="Numbered Backups" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Backup-Names" id="Backup-Names"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Numbered-Backups.html#Numbered-Backups"
+    accesskey="p" rel="prev">Numbered Backups</a>, Up: <a href=
+    "Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup
+    Files</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Naming-Backup-Files" id="Naming-Backup-Files"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Backup-Names"></a>
-<div class="header">
-<p>
-Previous: <a href="Numbered-Backups.html#Numbered-Backups" accesskey="p" rel="prev">Numbered Backups</a>, Up: <a href="Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Naming-Backup-Files"></a>
-<h4 class="subsection">25.1.4 Naming Backup Files</h4>
-<a name="index-naming-backup-files"></a>
+  <h4 class="subsection">25.1.4 Naming Backup Files</h4><a name=
+  "index-naming-backup-files" id="index-naming-backup-files"></a>
 
-<p>The functions in this section are documented mainly because you can
-customize the naming conventions for backup files by redefining them.
-If you change one, you probably need to change the rest.
-</p>
-<dl>
-<dt><a name="index-backup_002dfile_002dname_002dp"></a>Function: <strong>backup-file-name-p</strong> <em>filename</em></dt>
-<dd><p>This function returns a non-<code>nil</code> value if <var>filename</var> is a
-possible name for a backup file.  It just checks the name, not whether
-a file with the name <var>filename</var> exists.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(backup-file-name-p &quot;foo&quot;)
+  <p>The functions in this section are documented mainly because
+  you can customize the naming conventions for backup files by
+  redefining them. If you change one, you probably need to change
+  the rest.</p>
+
+  <dl>
+    <dt><a name="index-backup_002dfile_002dname_002dp" id=
+    "index-backup_002dfile_002dname_002dp"></a>Function:
+    <strong>backup-file-name-p</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This function returns a non-<code>nil</code> value if
+      <var>filename</var> is a possible name for a backup file. It
+      just checks the name, not whether a file with the name
+      <var>filename</var> exists.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(backup-file-name-p "foo")
      &rArr; nil
-</pre><pre class="smallexample">(backup-file-name-p &quot;foo~&quot;)
+</pre>
+        <pre class="smallexample">
+(backup-file-name-p "foo~")
      &rArr; 3
-</pre></div>
+</pre>
+      </div>
 
-<p>The standard definition of this function is as follows:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun backup-file-name-p (file)
-  &quot;Return non-nil if FILE is a backup file \
-name (numeric or not)...&quot;
-  (string-match &quot;~\\'&quot; file))
-</pre></div>
+      <p>The standard definition of this function is as
+      follows:</p>
 
-<p>Thus, the function returns a non-<code>nil</code> value if the file name ends
-with a &lsquo;<samp>~</samp>&rsquo;.  (We use a backslash to split the documentation
-string&rsquo;s first line into two lines in the text, but produce just one
-line in the string itself.)
-</p>
-<p>This simple expression is placed in a separate function to make it easy
-to redefine for customization.
-</p></dd></dl>
+      <div class="smallexample">
+        <pre class="smallexample">
+(defun backup-file-name-p (file)
+  "Return non-nil if FILE is a backup file \
+name (numeric or not)..."
+  (string-match "~\\'" file))
+</pre>
+      </div>
 
-<dl>
-<dt><a name="index-make_002dbackup_002dfile_002dname"></a>Function: <strong>make-backup-file-name</strong> <em>filename</em></dt>
-<dd><p>This function returns a string that is the name to use for a
-non-numbered backup file for file <var>filename</var>.  On Unix, this is just
-<var>filename</var> with a tilde appended.
-</p>
-<p>The standard definition of this function, on most operating systems, is
-as follows:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun make-backup-file-name (file)
-  &quot;Create the non-numeric backup file name for FILE...&quot;
-  (concat file &quot;~&quot;))
-</pre></div>
+      <p>Thus, the function returns a non-<code>nil</code> value if
+      the file name ends with a &lsquo;<samp>~</samp>&rsquo;. (We
+      use a backslash to split the documentation string&rsquo;s
+      first line into two lines in the text, but produce just one
+      line in the string itself.)</p>
 
-<p>You can change the backup-file naming convention by redefining this
-function.  The following example redefines <code>make-backup-file-name</code>
-to prepend a &lsquo;<samp>.</samp>&rsquo; in addition to appending a tilde:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun make-backup-file-name (filename)
+      <p>This simple expression is placed in a separate function to
+      make it easy to redefine for customization.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-make_002dbackup_002dfile_002dname" id=
+    "index-make_002dbackup_002dfile_002dname"></a>Function:
+    <strong>make-backup-file-name</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This function returns a string that is the name to use for
+      a non-numbered backup file for file <var>filename</var>. On
+      Unix, this is just <var>filename</var> with a tilde
+      appended.</p>
+
+      <p>The standard definition of this function, on most
+      operating systems, is as follows:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(defun make-backup-file-name (file)
+  "Create the non-numeric backup file name for FILE..."
+  (concat file "~"))
+</pre>
+      </div>
+
+      <p>You can change the backup-file naming convention by
+      redefining this function. The following example redefines
+      <code>make-backup-file-name</code> to prepend a
+      &lsquo;<samp>.</samp>&rsquo; in addition to appending a
+      tilde:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(defun make-backup-file-name (filename)
   (expand-file-name
-    (concat &quot;.&quot; (file-name-nondirectory filename) &quot;~&quot;)
+    (concat "." (file-name-nondirectory filename) "~")
     (file-name-directory filename)))
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">(make-backup-file-name &quot;backups.texi&quot;)
-     &rArr; &quot;.backups.texi~&quot;
-</pre></div>
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+(make-backup-file-name "backups.texi")
+     &rArr; ".backups.texi~"
+</pre>
+      </div>
 
-<p>Some parts of Emacs, including some Dired commands, assume that backup
-file names end with &lsquo;<samp>~</samp>&rsquo;.  If you do not follow that convention, it
-will not cause serious problems, but these commands may give
-less-than-desirable results.
-</p></dd></dl>
+      <p>Some parts of Emacs, including some Dired commands, assume
+      that backup file names end with &lsquo;<samp>~</samp>&rsquo;.
+      If you do not follow that convention, it will not cause
+      serious problems, but these commands may give
+      less-than-desirable results.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-find_002dbackup_002dfile_002dname"></a>Function: <strong>find-backup-file-name</strong> <em>filename</em></dt>
-<dd><p>This function computes the file name for a new backup file for
-<var>filename</var>.  It may also propose certain existing backup files for
-deletion.  <code>find-backup-file-name</code> returns a list whose <small>CAR</small> is
-the name for the new backup file and whose <small>CDR</small> is a list of backup
-files whose deletion is proposed.  The value can also be <code>nil</code>,
-which means not to make a backup.
-</p>
-<p>Two variables, <code>kept-old-versions</code> and <code>kept-new-versions</code>,
-determine which backup versions should be kept.  This function keeps
-those versions by excluding them from the <small>CDR</small> of the value.
-See <a href="Numbered-Backups.html#Numbered-Backups">Numbered Backups</a>.
-</p>
-<p>In this example, the value says that <samp>~rms/foo.~5~</samp> is the name
-to use for the new backup file, and <samp>~rms/foo.~3~</samp> is an excess
-version that the caller should consider deleting now.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(find-backup-file-name &quot;~rms/foo&quot;)
-     &rArr; (&quot;~rms/foo.~5~&quot; &quot;~rms/foo.~3~&quot;)
-</pre></div>
-</dd></dl>
+  <dl>
+    <dt><a name="index-find_002dbackup_002dfile_002dname" id=
+    "index-find_002dbackup_002dfile_002dname"></a>Function:
+    <strong>find-backup-file-name</strong> <em>filename</em></dt>
 
-<dl>
-<dt><a name="index-file_002dnewest_002dbackup"></a>Function: <strong>file-newest-backup</strong> <em>filename</em></dt>
-<dd><p>This function returns the name of the most recent backup file for
-<var>filename</var>, or <code>nil</code> if that file has no backup files.
-</p>
-<p>Some file comparison commands use this function so that they can
-automatically compare a file with its most recent backup.
-</p></dd></dl>
+    <dd>
+      <p>This function computes the file name for a new backup file
+      for <var>filename</var>. It may also propose certain existing
+      backup files for deletion. <code>find-backup-file-name</code>
+      returns a list whose <small>CAR</small> is the name for the
+      new backup file and whose <small>CDR</small> is a list of
+      backup files whose deletion is proposed. The value can also
+      be <code>nil</code>, which means not to make a backup.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Numbered-Backups.html#Numbered-Backups" accesskey="p" rel="prev">Numbered Backups</a>, Up: <a href="Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Two variables, <code>kept-old-versions</code> and
+      <code>kept-new-versions</code>, determine which backup
+      versions should be kept. This function keeps those versions
+      by excluding them from the <small>CDR</small> of the value.
+      See <a href="Numbered-Backups.html#Numbered-Backups">Numbered
+      Backups</a>.</p>
 
+      <p>In this example, the value says that
+      <samp>~rms/foo.~5~</samp> is the name to use for the new
+      backup file, and <samp>~rms/foo.~3~</samp> is an excess
+      version that the caller should consider deleting now.</p>
 
+      <div class="smallexample">
+        <pre class="smallexample">
+(find-backup-file-name "~rms/foo")
+     &rArr; ("~rms/foo.~5~" "~rms/foo.~3~")
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-file_002dnewest_002dbackup" id=
+    "index-file_002dnewest_002dbackup"></a>Function:
+    <strong>file-newest-backup</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This function returns the name of the most recent backup
+      file for <var>filename</var>, or <code>nil</code> if that
+      file has no backup files.</p>
+
+      <p>Some file comparison commands use this function so that
+      they can automatically compare a file with its most recent
+      backup.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Numbered-Backups.html#Numbered-Backups"
+    accesskey="p" rel="prev">Numbered Backups</a>, Up: <a href=
+    "Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup
+    Files</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

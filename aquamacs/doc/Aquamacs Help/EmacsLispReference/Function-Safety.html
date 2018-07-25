@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,95 +19,131 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Function Safety</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Function Safety">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Function Safety">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Related-Topics.html#Related-Topics" rel="next" title="Related Topics">
-<link href="Declaring-Functions.html#Declaring-Functions" rel="prev" title="Declaring Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Function Safety</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Function Safety" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Function Safety" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href="Related-Topics.html#Related-Topics" rel="next" title=
+  "Related Topics" />
+  <link href="Declaring-Functions.html#Declaring-Functions" rel=
+  "prev" title="Declaring Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Function-Safety" id="Function-Safety"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Related-Topics.html#Related-Topics"
+    accesskey="n" rel="next">Related Topics</a>, Previous: <a href=
+    "Declaring-Functions.html#Declaring-Functions" accesskey="p"
+    rel="prev">Declaring Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Determining-whether-a-Function-is-Safe-to-Call" id=
+  "Determining-whether-a-Function-is-Safe-to-Call"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Function-Safety"></a>
-<div class="header">
-<p>
-Next: <a href="Related-Topics.html#Related-Topics" accesskey="n" rel="next">Related Topics</a>, Previous: <a href="Declaring-Functions.html#Declaring-Functions" accesskey="p" rel="prev">Declaring Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Determining-whether-a-Function-is-Safe-to-Call"></a>
-<h3 class="section">12.16 Determining whether a Function is Safe to Call</h3>
-<a name="index-function-safety"></a>
-<a name="index-safety-of-functions"></a>
+  <h3 class="section">12.16 Determining whether a Function is Safe
+  to Call</h3><a name="index-function-safety" id=
+  "index-function-safety"></a> <a name="index-safety-of-functions"
+  id="index-safety-of-functions"></a>
 
-<p>Some major modes, such as SES, call functions that are stored in user
-files.  (See <a href="../ses/index.html#Top">(ses)Top</a>, for more information on SES.)  User
-files sometimes have poor pedigrees&mdash;you can get a spreadsheet from
-someone you&rsquo;ve just met, or you can get one through email from someone
-you&rsquo;ve never met.  So it is risky to call a function whose source code
-is stored in a user file until you have determined that it is safe.
-</p>
-<dl>
-<dt><a name="index-unsafep"></a>Function: <strong>unsafep</strong> <em>form &amp;optional unsafep-vars</em></dt>
-<dd><p>Returns <code>nil</code> if <var>form</var> is a <em>safe</em> Lisp expression, or
-returns a list that describes why it might be unsafe.  The argument
-<var>unsafep-vars</var> is a list of symbols known to have temporary
-bindings at this point; it is mainly used for internal recursive
-calls.  The current buffer is an implicit argument, which provides a
-list of buffer-local bindings.
-</p></dd></dl>
+  <p>Some major modes, such as SES, call functions that are stored
+  in user files. (See <a href="../ses/index.html#Top">(ses)Top</a>,
+  for more information on SES.) User files sometimes have poor
+  pedigrees&mdash;you can get a spreadsheet from someone
+  you&rsquo;ve just met, or you can get one through email from
+  someone you&rsquo;ve never met. So it is risky to call a function
+  whose source code is stored in a user file until you have
+  determined that it is safe.</p>
 
-<p>Being quick and simple, <code>unsafep</code> does a very light analysis and
-rejects many Lisp expressions that are actually safe.  There are no
-known cases where <code>unsafep</code> returns <code>nil</code> for an unsafe
-expression.  However, a safe Lisp expression can return a string
-with a <code>display</code> property, containing an associated Lisp
-expression to be executed after the string is inserted into a buffer.
-This associated expression can be a virus.  In order to be safe, you
-must delete properties from all strings calculated by user code before
-inserting them into buffers.
-</p>
+  <dl>
+    <dt><a name="index-unsafep" id="index-unsafep"></a>Function:
+    <strong>unsafep</strong> <em>form &amp;optional
+    unsafep-vars</em></dt>
 
+    <dd>
+      <p>Returns <code>nil</code> if <var>form</var> is a
+      <em>safe</em> Lisp expression, or returns a list that
+      describes why it might be unsafe. The argument
+      <var>unsafep-vars</var> is a list of symbols known to have
+      temporary bindings at this point; it is mainly used for
+      internal recursive calls. The current buffer is an implicit
+      argument, which provides a list of buffer-local bindings.</p>
+    </dd>
+  </dl>
 
-
-
+  <p>Being quick and simple, <code>unsafep</code> does a very light
+  analysis and rejects many Lisp expressions that are actually
+  safe. There are no known cases where <code>unsafep</code> returns
+  <code>nil</code> for an unsafe expression. However, a safe Lisp
+  expression can return a string with a <code>display</code>
+  property, containing an associated Lisp expression to be executed
+  after the string is inserted into a buffer. This associated
+  expression can be a virus. In order to be safe, you must delete
+  properties from all strings calculated by user code before
+  inserting them into buffers.</p>
 </body>
 </html>

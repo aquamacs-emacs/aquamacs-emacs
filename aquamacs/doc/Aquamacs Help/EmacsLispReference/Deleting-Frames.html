@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,98 +19,143 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Deleting Frames</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Deleting Frames">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Deleting Frames">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Frames.html#Frames" rel="up" title="Frames">
-<link href="Finding-All-Frames.html#Finding-All-Frames" rel="next" title="Finding All Frames">
-<link href="Frame-Titles.html#Frame-Titles" rel="prev" title="Frame Titles">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Deleting Frames</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Deleting Frames" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Deleting Frames" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Frames.html#Frames" rel="up" title="Frames" />
+  <link href="Finding-All-Frames.html#Finding-All-Frames" rel=
+  "next" title="Finding All Frames" />
+  <link href="Frame-Titles.html#Frame-Titles" rel="prev" title=
+  "Frame Titles" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Deleting-Frames" id="Deleting-Frames"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Finding-All-Frames.html#Finding-All-Frames"
+    accesskey="n" rel="next">Finding All Frames</a>, Previous:
+    <a href="Frame-Titles.html#Frame-Titles" accesskey="p" rel=
+    "prev">Frame Titles</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Deleting-Frames-1" id="Deleting-Frames-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Deleting-Frames"></a>
-<div class="header">
-<p>
-Next: <a href="Finding-All-Frames.html#Finding-All-Frames" accesskey="n" rel="next">Finding All Frames</a>, Previous: <a href="Frame-Titles.html#Frame-Titles" accesskey="p" rel="prev">Frame Titles</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Deleting-Frames-1"></a>
-<h3 class="section">28.7 Deleting Frames</h3>
-<a name="index-deleting-frames"></a>
+  <h3 class="section">28.7 Deleting Frames</h3><a name=
+  "index-deleting-frames" id="index-deleting-frames"></a>
 
-<p>A <em>live frame</em> is one that has not been deleted.  When a frame
-is deleted, it is removed from its terminal display, although it may
-continue to exist as a Lisp object until there are no more references
-to it.
-</p>
-<dl>
-<dt><a name="index-delete_002dframe"></a>Command: <strong>delete-frame</strong> <em>&amp;optional frame force</em></dt>
-<dd><a name="index-delete_002dframe_002dfunctions"></a>
-<p>This function deletes the frame <var>frame</var>.  Unless <var>frame</var> is a
-tooltip, it first runs the hook <code>delete-frame-functions</code> (each
-function gets one argument, <var>frame</var>).  By default, <var>frame</var> is
-the selected frame.
-</p>
-<p>A frame cannot be deleted as long as its minibuffer serves as surrogate
-minibuffer for another frame (see <a href="Minibuffers-and-Frames.html#Minibuffers-and-Frames">Minibuffers and Frames</a>).
-Normally, you cannot delete a frame if all other frames are invisible,
-but if <var>force</var> is non-<code>nil</code>, then you are allowed to do so.
-</p></dd></dl>
+  <p>A <em>live frame</em> is one that has not been deleted. When a
+  frame is deleted, it is removed from its terminal display,
+  although it may continue to exist as a Lisp object until there
+  are no more references to it.</p>
 
-<dl>
-<dt><a name="index-frame_002dlive_002dp"></a>Function: <strong>frame-live-p</strong> <em>frame</em></dt>
-<dd><p>The function <code>frame-live-p</code> returns non-<code>nil</code> if the frame
-<var>frame</var> has not been deleted.  The possible non-<code>nil</code> return
-values are like those of <code>framep</code>.  See <a href="Frames.html#Frames">Frames</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-delete_002dframe" id=
+    "index-delete_002dframe"></a>Command:
+    <strong>delete-frame</strong> <em>&amp;optional frame
+    force</em></dt>
 
-<p>Some window managers provide a command to delete a window.  These work
-by sending a special message to the program that operates the window.
-When Emacs gets one of these commands, it generates a
-<code>delete-frame</code> event, whose normal definition is a command that
-calls the function <code>delete-frame</code>.  See <a href="Misc-Events.html#Misc-Events">Misc Events</a>.
-</p>
+    <dd>
+      <a name="index-delete_002dframe_002dfunctions" id=
+      "index-delete_002dframe_002dfunctions"></a>
 
+      <p>This function deletes the frame <var>frame</var>. Unless
+      <var>frame</var> is a tooltip, it first runs the hook
+      <code>delete-frame-functions</code> (each function gets one
+      argument, <var>frame</var>). By default, <var>frame</var> is
+      the selected frame.</p>
 
+      <p>A frame cannot be deleted as long as its minibuffer serves
+      as surrogate minibuffer for another frame (see <a href=
+      "Minibuffers-and-Frames.html#Minibuffers-and-Frames">Minibuffers
+      and Frames</a>). Normally, you cannot delete a frame if all
+      other frames are invisible, but if <var>force</var> is
+      non-<code>nil</code>, then you are allowed to do so.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-frame_002dlive_002dp" id=
+    "index-frame_002dlive_002dp"></a>Function:
+    <strong>frame-live-p</strong> <em>frame</em></dt>
+
+    <dd>
+      <p>The function <code>frame-live-p</code> returns
+      non-<code>nil</code> if the frame <var>frame</var> has not
+      been deleted. The possible non-<code>nil</code> return values
+      are like those of <code>framep</code>. See <a href=
+      "Frames.html#Frames">Frames</a>.</p>
+    </dd>
+  </dl>
+
+  <p>Some window managers provide a command to delete a window.
+  These work by sending a special message to the program that
+  operates the window. When Emacs gets one of these commands, it
+  generates a <code>delete-frame</code> event, whose normal
+  definition is a command that calls the function
+  <code>delete-frame</code>. See <a href=
+  "Misc-Events.html#Misc-Events">Misc Events</a>.</p>
 </body>
 </html>

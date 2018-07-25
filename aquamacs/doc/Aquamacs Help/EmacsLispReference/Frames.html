@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,201 +19,477 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Frames</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Frames">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Frames">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Creating-Frames.html#Creating-Frames" rel="next" title="Creating Frames">
-<link href="Window-Hooks.html#Window-Hooks" rel="prev" title="Window Hooks">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Frames</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Frames" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Frames" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Creating-Frames.html#Creating-Frames" rel="next"
+  title="Creating Frames" />
+  <link href="Window-Hooks.html#Window-Hooks" rel="prev" title=
+  "Window Hooks" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Frames" id="Frames"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Positions.html#Positions" accesskey="n" rel=
+    "next">Positions</a>, Previous: <a href="Windows.html#Windows"
+    accesskey="p" rel="prev">Windows</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Frames-1" id="Frames-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Frames"></a>
-<div class="header">
-<p>
-Next: <a href="Positions.html#Positions" accesskey="n" rel="next">Positions</a>, Previous: <a href="Windows.html#Windows" accesskey="p" rel="prev">Windows</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Frames-1"></a>
-<h2 class="chapter">28 Frames</h2>
-<a name="index-frame"></a>
+  <h2 class="chapter">28 Frames</h2><a name="index-frame" id=
+  "index-frame"></a>
 
-<p>A <em>frame</em> is a screen object that contains one or more Emacs
-windows (see <a href="Windows.html#Windows">Windows</a>).  It is the kind of object called a
-&ldquo;window&rdquo; in the terminology of graphical environments; but we can&rsquo;t
-call it a &ldquo;window&rdquo; here, because Emacs uses that word in a different
-way.  In Emacs Lisp, a <em>frame object</em> is a Lisp object that
-represents a frame on the screen.  See <a href="Frame-Type.html#Frame-Type">Frame Type</a>.
-</p>
-<p>A frame initially contains a single main window and/or a minibuffer
-window; you can subdivide the main window vertically or horizontally
-into smaller windows.  See <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>.
-</p>
-<a name="index-terminal"></a>
-<p>A <em>terminal</em> is a display device capable of displaying one or
-more Emacs frames.  In Emacs Lisp, a <em>terminal object</em> is a Lisp
-object that represents a terminal.  See <a href="Terminal-Type.html#Terminal-Type">Terminal Type</a>.
-</p>
-<a name="index-text-terminal"></a>
-<a name="index-graphical-terminal"></a>
-<a name="index-graphical-display"></a>
-<p>There are two classes of terminals: <em>text terminals</em> and
-<em>graphical terminals</em>.  Text terminals are non-graphics-capable
-displays, including <code>xterm</code> and other terminal emulators.  On
-a text terminal, each Emacs frame occupies the terminal&rsquo;s entire
-screen; although you can create additional frames and switch between
-them, the terminal only shows one frame at a time.  Graphical
-terminals, on the other hand, are managed by graphical display systems
-such as the X Window System, which allow Emacs to show multiple frames
-simultaneously on the same display.
-</p>
-<p>On GNU and Unix systems, you can create additional frames on any
-available terminal, within a single Emacs session, regardless of
-whether Emacs was started on a text or graphical terminal.  Emacs can
-display on both graphical and text terminals simultaneously.  This
-comes in handy, for instance, when you connect to the same session
-from several remote locations.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
-</p>
-<dl>
-<dt><a name="index-framep"></a>Function: <strong>framep</strong> <em>object</em></dt>
-<dd><p>This predicate returns a non-<code>nil</code> value if <var>object</var> is a
-frame, and <code>nil</code> otherwise.  For a frame, the value indicates which
-kind of display the frame uses:
-</p>
-<dl compact="compact">
-<dt><code>t</code></dt>
-<dd><p>The frame is displayed on a text terminal.
-</p></dd>
-<dt><code>x</code></dt>
-<dd><p>The frame is displayed on an X graphical terminal.
-</p></dd>
-<dt><code>w32</code></dt>
-<dd><p>The frame is displayed on a MS-Windows graphical terminal.
-</p></dd>
-<dt><code>ns</code></dt>
-<dd><p>The frame is displayed on a GNUstep or Macintosh Cocoa graphical
-terminal.
-</p></dd>
-<dt><code>pc</code></dt>
-<dd><p>The frame is displayed on an MS-DOS terminal.
-</p></dd>
-</dl>
-</dd></dl>
+  <p>A <em>frame</em> is a screen object that contains one or more
+  Emacs windows (see <a href="Windows.html#Windows">Windows</a>).
+  It is the kind of object called a &ldquo;window&rdquo; in the
+  terminology of graphical environments; but we can&rsquo;t call it
+  a &ldquo;window&rdquo; here, because Emacs uses that word in a
+  different way. In Emacs Lisp, a <em>frame object</em> is a Lisp
+  object that represents a frame on the screen. See <a href=
+  "Frame-Type.html#Frame-Type">Frame Type</a>.</p>
 
-<dl>
-<dt><a name="index-frame_002dterminal"></a>Function: <strong>frame-terminal</strong> <em>&amp;optional frame</em></dt>
-<dd><p>This function returns the terminal object that displays <var>frame</var>.
-If <var>frame</var> is <code>nil</code> or unspecified, it defaults to the
-selected frame.
-</p></dd></dl>
+  <p>A frame initially contains a single main window and/or a
+  minibuffer window; you can subdivide the main window vertically
+  or horizontally into smaller windows. See <a href=
+  "Splitting-Windows.html#Splitting-Windows">Splitting
+  Windows</a>.</p><a name="index-terminal" id="index-terminal"></a>
 
-<dl>
-<dt><a name="index-terminal_002dlive_002dp"></a>Function: <strong>terminal-live-p</strong> <em>object</em></dt>
-<dd><p>This predicate returns a non-<code>nil</code> value if <var>object</var> is a
-terminal that is live (i.e., not deleted), and <code>nil</code> otherwise.
-For live terminals, the return value indicates what kind of frames are
-displayed on that terminal; the list of possible values is the same as
-for <code>framep</code> above.
-</p></dd></dl>
+  <p>A <em>terminal</em> is a display device capable of displaying
+  one or more Emacs frames. In Emacs Lisp, a <em>terminal
+  object</em> is a Lisp object that represents a terminal. See
+  <a href="Terminal-Type.html#Terminal-Type">Terminal
+  Type</a>.</p><a name="index-text-terminal" id=
+  "index-text-terminal"></a> <a name="index-graphical-terminal" id=
+  "index-graphical-terminal"></a> <a name="index-graphical-display"
+  id="index-graphical-display"></a>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Creating-Frames.html#Creating-Frames" accesskey="1">Creating Frames</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating additional frames.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Multiple-Terminals.html#Multiple-Terminals" accesskey="2">Multiple Terminals</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Displaying on several different devices.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Frame-Geometry.html#Frame-Geometry" accesskey="3">Frame Geometry</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Geometric properties of frames.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Frame-Parameters.html#Frame-Parameters" accesskey="4">Frame Parameters</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling frame size, position, font, etc.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Terminal-Parameters.html#Terminal-Parameters" accesskey="5">Terminal Parameters</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Parameters common for all frames on terminal.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Frame-Titles.html#Frame-Titles" accesskey="6">Frame Titles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Automatic updating of frame titles.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Deleting-Frames.html#Deleting-Frames" accesskey="7">Deleting Frames</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Frames last until explicitly deleted.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Finding-All-Frames.html#Finding-All-Frames" accesskey="8">Finding All Frames</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to examine all existing frames.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Minibuffers-and-Frames.html#Minibuffers-and-Frames" accesskey="9">Minibuffers and Frames</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How a frame finds the minibuffer to use.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Input-Focus.html#Input-Focus">Input Focus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying the selected frame.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Visibility-of-Frames.html#Visibility-of-Frames">Visibility of Frames</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Frames may be visible or invisible, or icons.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Raising-and-Lowering.html#Raising-and-Lowering">Raising and Lowering</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Raising a frame makes it hide other windows;
-                                  lowering it makes the others hide it.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Saving the state of all frames.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mouse-Tracking.html#Mouse-Tracking">Mouse Tracking</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting events that say when the mouse moves.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mouse-Position.html#Mouse-Position">Mouse Position</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Asking where the mouse is, or moving it.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Pop_002dUp-Menus.html#Pop_002dUp-Menus">Pop-Up Menus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Displaying a menu for the user to select from.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dialog-Boxes.html#Dialog-Boxes">Dialog Boxes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Displaying a box to ask yes or no.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying the shape of the mouse pointer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Window-System-Selections.html#Window-System-Selections">Window System Selections</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Transferring text to and from other X clients.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Internals of Drag-and-Drop implementation.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Color-Names.html#Color-Names">Color Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting the definitions of color names.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Text-Terminal-Colors.html#Text-Terminal-Colors">Text Terminal Colors</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defining colors for text terminals.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Resources.html#Resources">Resources</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting resource values from the server.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Display-Feature-Testing.html#Display-Feature-Testing">Display Feature Testing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Determining the features of a terminal.
-</td></tr>
-</table>
+  <p>There are two classes of terminals: <em>text terminals</em>
+  and <em>graphical terminals</em>. Text terminals are
+  non-graphics-capable displays, including <code>xterm</code> and
+  other terminal emulators. On a text terminal, each Emacs frame
+  occupies the terminal&rsquo;s entire screen; although you can
+  create additional frames and switch between them, the terminal
+  only shows one frame at a time. Graphical terminals, on the other
+  hand, are managed by graphical display systems such as the X
+  Window System, which allow Emacs to show multiple frames
+  simultaneously on the same display.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Positions.html#Positions" accesskey="n" rel="next">Positions</a>, Previous: <a href="Windows.html#Windows" accesskey="p" rel="prev">Windows</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>On GNU and Unix systems, you can create additional frames on
+  any available terminal, within a single Emacs session, regardless
+  of whether Emacs was started on a text or graphical terminal.
+  Emacs can display on both graphical and text terminals
+  simultaneously. This comes in handy, for instance, when you
+  connect to the same session from several remote locations. See
+  <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple
+  Terminals</a>.</p>
 
+  <dl>
+    <dt><a name="index-framep" id="index-framep"></a>Function:
+    <strong>framep</strong> <em>object</em></dt>
 
+    <dd>
+      <p>This predicate returns a non-<code>nil</code> value if
+      <var>object</var> is a frame, and <code>nil</code> otherwise.
+      For a frame, the value indicates which kind of display the
+      frame uses:</p>
 
+      <dl compact="compact">
+        <dt><code>t</code></dt>
+
+        <dd>
+          <p>The frame is displayed on a text terminal.</p>
+        </dd>
+
+        <dt><code>x</code></dt>
+
+        <dd>
+          <p>The frame is displayed on an X graphical terminal.</p>
+        </dd>
+
+        <dt><code>w32</code></dt>
+
+        <dd>
+          <p>The frame is displayed on a MS-Windows graphical
+          terminal.</p>
+        </dd>
+
+        <dt><code>ns</code></dt>
+
+        <dd>
+          <p>The frame is displayed on a GNUstep or Macintosh Cocoa
+          graphical terminal.</p>
+        </dd>
+
+        <dt><code>pc</code></dt>
+
+        <dd>
+          <p>The frame is displayed on an MS-DOS terminal.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-frame_002dterminal" id=
+    "index-frame_002dterminal"></a>Function:
+    <strong>frame-terminal</strong> <em>&amp;optional
+    frame</em></dt>
+
+    <dd>
+      <p>This function returns the terminal object that displays
+      <var>frame</var>. If <var>frame</var> is <code>nil</code> or
+      unspecified, it defaults to the selected frame.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-terminal_002dlive_002dp" id=
+    "index-terminal_002dlive_002dp"></a>Function:
+    <strong>terminal-live-p</strong> <em>object</em></dt>
+
+    <dd>
+      <p>This predicate returns a non-<code>nil</code> value if
+      <var>object</var> is a terminal that is live (i.e., not
+      deleted), and <code>nil</code> otherwise. For live terminals,
+      the return value indicates what kind of frames are displayed
+      on that terminal; the list of possible values is the same as
+      for <code>framep</code> above.</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Creating-Frames.html#Creating-Frames" accesskey="1">Creating
+      Frames</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Creating additional
+      frames.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Multiple-Terminals.html#Multiple-Terminals" accesskey=
+      "2">Multiple Terminals</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Displaying on several different
+      devices.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Frame-Geometry.html#Frame-Geometry" accesskey="3">Frame
+      Geometry</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Geometric properties of
+      frames.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Frame-Parameters.html#Frame-Parameters" accesskey="4">Frame
+      Parameters</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Controlling frame size,
+      position, font, etc.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Terminal-Parameters.html#Terminal-Parameters" accesskey=
+      "5">Terminal Parameters</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Parameters common for all
+      frames on terminal.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Frame-Titles.html#Frame-Titles" accesskey="6">Frame
+      Titles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Automatic updating of frame
+      titles.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Deleting-Frames.html#Deleting-Frames" accesskey="7">Deleting
+      Frames</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Frames last until explicitly
+      deleted.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Finding-All-Frames.html#Finding-All-Frames" accesskey=
+      "8">Finding All Frames</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to examine all existing
+      frames.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Minibuffers-and-Frames.html#Minibuffers-and-Frames"
+      accesskey="9">Minibuffers and Frames</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How a frame finds the
+      minibuffer to use.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Input-Focus.html#Input-Focus">Input Focus</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Specifying the selected
+      frame.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Visibility-of-Frames.html#Visibility-of-Frames">Visibility
+      of Frames</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Frames may be visible or
+      invisible, or icons.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Raising-and-Lowering.html#Raising-and-Lowering">Raising and
+      Lowering</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Raising a frame makes it hide
+      other windows; lowering it makes the others hide it.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Frame-Configurations.html#Frame-Configurations">Frame
+      Configurations</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Saving the state of all
+      frames.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mouse-Tracking.html#Mouse-Tracking">Mouse Tracking</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Getting events that say when
+      the mouse moves.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mouse-Position.html#Mouse-Position">Mouse Position</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Asking where the mouse is, or
+      moving it.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Pop_002dUp-Menus.html#Pop_002dUp-Menus">Pop-Up
+      Menus</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Displaying a menu for the user
+      to select from.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dialog-Boxes.html#Dialog-Boxes">Dialog Boxes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Displaying a box to ask yes or
+      no.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Specifying the shape of the
+      mouse pointer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Window-System-Selections.html#Window-System-Selections">Window
+      System Selections</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Transferring text to and from
+      other X clients.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Internals of Drag-and-Drop
+      implementation.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Color-Names.html#Color-Names">Color Names</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Getting the definitions of
+      color names.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Text-Terminal-Colors.html#Text-Terminal-Colors">Text
+      Terminal Colors</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Defining colors for text
+      terminals.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Resources.html#Resources">Resources</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Getting resource values from
+      the server.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Display-Feature-Testing.html#Display-Feature-Testing">Display
+      Feature Testing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Determining the features of a
+      terminal.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Positions.html#Positions" accesskey="n" rel=
+    "next">Positions</a>, Previous: <a href="Windows.html#Windows"
+    accesskey="p" rel="prev">Windows</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

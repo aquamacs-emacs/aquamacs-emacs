@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,232 +19,320 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Named Features</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Named Features">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Named Features">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Loading.html#Loading" rel="up" title="Loading">
-<link href="Where-Defined.html#Where-Defined" rel="next" title="Where Defined">
-<link href="Repeated-Loading.html#Repeated-Loading" rel="prev" title="Repeated Loading">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Named Features</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Named Features" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Named Features" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Loading.html#Loading" rel="up" title="Loading" />
+  <link href="Where-Defined.html#Where-Defined" rel="next" title=
+  "Where Defined" />
+  <link href="Repeated-Loading.html#Repeated-Loading" rel="prev"
+  title="Repeated Loading" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Named-Features" id="Named-Features"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Where-Defined.html#Where-Defined" accesskey=
+    "n" rel="next">Where Defined</a>, Previous: <a href=
+    "Repeated-Loading.html#Repeated-Loading" accesskey="p" rel=
+    "prev">Repeated Loading</a>, Up: <a href="Loading.html#Loading"
+    accesskey="u" rel="up">Loading</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Features" id="Features"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Named-Features"></a>
-<div class="header">
-<p>
-Next: <a href="Where-Defined.html#Where-Defined" accesskey="n" rel="next">Where Defined</a>, Previous: <a href="Repeated-Loading.html#Repeated-Loading" accesskey="p" rel="prev">Repeated Loading</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Features"></a>
-<h3 class="section">15.7 Features</h3>
-<a name="index-features"></a>
-<a name="index-requiring-features"></a>
-<a name="index-providing-features"></a>
+  <h3 class="section">15.7 Features</h3><a name="index-features"
+  id="index-features"></a> <a name="index-requiring-features" id=
+  "index-requiring-features"></a> <a name=
+  "index-providing-features" id="index-providing-features"></a>
 
-<p><code>provide</code> and <code>require</code> are an alternative to
-<code>autoload</code> for loading files automatically.  They work in terms of
-named <em>features</em>.  Autoloading is triggered by calling a specific
-function, but a feature is loaded the first time another program asks
-for it by name.
-</p>
-<p>A feature name is a symbol that stands for a collection of functions,
-variables, etc.  The file that defines them should <em>provide</em> the
-feature.  Another program that uses them may ensure they are defined by
-<em>requiring</em> the feature.  This loads the file of definitions if it
-hasn&rsquo;t been loaded already.
-</p>
-<a name="index-load-error-with-require"></a>
-<p>To require the presence of a feature, call <code>require</code> with the
-feature name as argument.  <code>require</code> looks in the global variable
-<code>features</code> to see whether the desired feature has been provided
-already.  If not, it loads the feature from the appropriate file.  This
-file should call <code>provide</code> at the top level to add the feature to
-<code>features</code>; if it fails to do so, <code>require</code> signals an error.
-</p>
-<p>For example, in <samp>idlwave.el</samp>, the definition for
-<code>idlwave-complete-filename</code> includes the following code:
-</p>
-<div class="example">
-<pre class="example">(defun idlwave-complete-filename ()
-  &quot;Use the comint stuff to complete a file name.&quot;
+  <p><code>provide</code> and <code>require</code> are an
+  alternative to <code>autoload</code> for loading files
+  automatically. They work in terms of named <em>features</em>.
+  Autoloading is triggered by calling a specific function, but a
+  feature is loaded the first time another program asks for it by
+  name.</p>
+
+  <p>A feature name is a symbol that stands for a collection of
+  functions, variables, etc. The file that defines them should
+  <em>provide</em> the feature. Another program that uses them may
+  ensure they are defined by <em>requiring</em> the feature. This
+  loads the file of definitions if it hasn&rsquo;t been loaded
+  already.</p><a name="index-load-error-with-require" id=
+  "index-load-error-with-require"></a>
+
+  <p>To require the presence of a feature, call
+  <code>require</code> with the feature name as argument.
+  <code>require</code> looks in the global variable
+  <code>features</code> to see whether the desired feature has been
+  provided already. If not, it loads the feature from the
+  appropriate file. This file should call <code>provide</code> at
+  the top level to add the feature to <code>features</code>; if it
+  fails to do so, <code>require</code> signals an error.</p>
+
+  <p>For example, in <samp>idlwave.el</samp>, the definition for
+  <code>idlwave-complete-filename</code> includes the following
+  code:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun idlwave-complete-filename ()
+  "Use the comint stuff to complete a file name."
    (require 'comint)
-   (let* ((comint-file-name-chars &quot;~/A-Za-z0-9+@:_.$#%={}\\-&quot;)
+   (let* ((comint-file-name-chars "~/A-Za-z0-9+@:_.$#%={}\\-")
           (comint-completion-addsuffix nil)
           ...)
        (comint-dynamic-complete-filename)))
-</pre></div>
+</pre>
+  </div>
 
-<p>The expression <code>(require 'comint)</code> loads the file <samp>comint.el</samp>
-if it has not yet been loaded, ensuring that
-<code>comint-dynamic-complete-filename</code> is defined.  Features are
-normally named after the files that provide them, so that
-<code>require</code> need not be given the file name.  (Note that it is
-important that the <code>require</code> statement be outside the body of the
-<code>let</code>.  Loading a library while its variables are let-bound can
-have unintended consequences, namely the variables becoming unbound
-after the let exits.)
-</p>
-<p>The <samp>comint.el</samp> file contains the following top-level expression:
-</p>
-<div class="example">
-<pre class="example">(provide 'comint)
-</pre></div>
+  <p>The expression <code>(require 'comint)</code> loads the file
+  <samp>comint.el</samp> if it has not yet been loaded, ensuring
+  that <code>comint-dynamic-complete-filename</code> is defined.
+  Features are normally named after the files that provide them, so
+  that <code>require</code> need not be given the file name. (Note
+  that it is important that the <code>require</code> statement be
+  outside the body of the <code>let</code>. Loading a library while
+  its variables are let-bound can have unintended consequences,
+  namely the variables becoming unbound after the let exits.)</p>
 
-<p>This adds <code>comint</code> to the global <code>features</code> list, so that
-<code>(require 'comint)</code> will henceforth know that nothing needs to be
-done.
-</p>
-<a name="index-byte_002dcompiling-require"></a>
-<p>When <code>require</code> is used at top level in a file, it takes effect
-when you byte-compile that file (see <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>) as well as
-when you load it.  This is in case the required package contains macros
-that the byte compiler must know about.  It also avoids byte compiler
-warnings for functions and variables defined in the file loaded with
-<code>require</code>.
-</p>
-<p>Although top-level calls to <code>require</code> are evaluated during
-byte compilation, <code>provide</code> calls are not.  Therefore, you can
-ensure that a file of definitions is loaded before it is byte-compiled
-by including a <code>provide</code> followed by a <code>require</code> for the same
-feature, as in the following example.
-</p>
-<div class="example">
-<pre class="example">(provide 'my-feature)  ; <span class="roman">Ignored by byte compiler,</span>
-                       ;   <span class="roman">evaluated by <code>load</code>.</span>
-(require 'my-feature)  ; <span class="roman">Evaluated by byte compiler.</span>
-</pre></div>
+  <p>The <samp>comint.el</samp> file contains the following
+  top-level expression:</p>
 
-<p>The compiler ignores the <code>provide</code>, then processes the
-<code>require</code> by loading the file in question.  Loading the file does
-execute the <code>provide</code> call, so the subsequent <code>require</code> call
-does nothing when the file is loaded.
-</p>
-<dl>
-<dt><a name="index-provide"></a>Function: <strong>provide</strong> <em>feature &amp;optional subfeatures</em></dt>
-<dd><p>This function announces that <var>feature</var> is now loaded, or being
-loaded, into the current Emacs session.  This means that the facilities
-associated with <var>feature</var> are or will be available for other Lisp
-programs.
-</p>
-<p>The direct effect of calling <code>provide</code> is to add <var>feature</var> to
-the front of <code>features</code> if it is not already in that list and
-call any <code>eval-after-load</code> code waiting for it (see <a href="Hooks-for-Loading.html#Hooks-for-Loading">Hooks for Loading</a>).  The argument <var>feature</var> must be a symbol.
-<code>provide</code> returns <var>feature</var>.
-</p>
-<p>If provided, <var>subfeatures</var> should be a list of symbols indicating
-a set of specific subfeatures provided by this version of
-<var>feature</var>.  You can test the presence of a subfeature using
-<code>featurep</code>.  The idea of subfeatures is that you use them when a
-package (which is one <var>feature</var>) is complex enough to make it
-useful to give names to various parts or functionalities of the
-package, which might or might not be loaded, or might or might not be
-present in a given version.  See <a href="Network-Feature-Testing.html#Network-Feature-Testing">Network Feature Testing</a>, for
-an example.
-</p>
-<div class="example">
-<pre class="example">features
+  <div class="example">
+    <pre class="example">
+(provide 'comint)
+</pre>
+  </div>
+
+  <p>This adds <code>comint</code> to the global
+  <code>features</code> list, so that <code>(require
+  'comint)</code> will henceforth know that nothing needs to be
+  done.</p><a name="index-byte_002dcompiling-require" id=
+  "index-byte_002dcompiling-require"></a>
+
+  <p>When <code>require</code> is used at top level in a file, it
+  takes effect when you byte-compile that file (see <a href=
+  "Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>) as
+  well as when you load it. This is in case the required package
+  contains macros that the byte compiler must know about. It also
+  avoids byte compiler warnings for functions and variables defined
+  in the file loaded with <code>require</code>.</p>
+
+  <p>Although top-level calls to <code>require</code> are evaluated
+  during byte compilation, <code>provide</code> calls are not.
+  Therefore, you can ensure that a file of definitions is loaded
+  before it is byte-compiled by including a <code>provide</code>
+  followed by a <code>require</code> for the same feature, as in
+  the following example.</p>
+
+  <div class="example">
+    <pre class="example">
+(provide 'my-feature)  ; <span class=
+"roman">Ignored by byte compiler,</span>
+                       ;   <span class=
+"roman">evaluated by <code>load</code>.</span>
+(require 'my-feature)  ; <span class=
+"roman">Evaluated by byte compiler.</span>
+</pre>
+  </div>
+
+  <p>The compiler ignores the <code>provide</code>, then processes
+  the <code>require</code> by loading the file in question. Loading
+  the file does execute the <code>provide</code> call, so the
+  subsequent <code>require</code> call does nothing when the file
+  is loaded.</p>
+
+  <dl>
+    <dt><a name="index-provide" id="index-provide"></a>Function:
+    <strong>provide</strong> <em>feature &amp;optional
+    subfeatures</em></dt>
+
+    <dd>
+      <p>This function announces that <var>feature</var> is now
+      loaded, or being loaded, into the current Emacs session. This
+      means that the facilities associated with <var>feature</var>
+      are or will be available for other Lisp programs.</p>
+
+      <p>The direct effect of calling <code>provide</code> is to
+      add <var>feature</var> to the front of <code>features</code>
+      if it is not already in that list and call any
+      <code>eval-after-load</code> code waiting for it (see
+      <a href="Hooks-for-Loading.html#Hooks-for-Loading">Hooks for
+      Loading</a>). The argument <var>feature</var> must be a
+      symbol. <code>provide</code> returns <var>feature</var>.</p>
+
+      <p>If provided, <var>subfeatures</var> should be a list of
+      symbols indicating a set of specific subfeatures provided by
+      this version of <var>feature</var>. You can test the presence
+      of a subfeature using <code>featurep</code>. The idea of
+      subfeatures is that you use them when a package (which is one
+      <var>feature</var>) is complex enough to make it useful to
+      give names to various parts or functionalities of the
+      package, which might or might not be loaded, or might or
+      might not be present in a given version. See <a href=
+      "Network-Feature-Testing.html#Network-Feature-Testing">Network
+      Feature Testing</a>, for an example.</p>
+
+      <div class="example">
+        <pre class="example">
+features
      &rArr; (bar bish)
 
 (provide 'foo)
      &rArr; foo
 features
      &rArr; (foo bar bish)
-</pre></div>
+</pre>
+      </div>
 
-<p>When a file is loaded to satisfy an autoload, and it stops due to an
-error in the evaluation of its contents, any function definitions or
-<code>provide</code> calls that occurred during the load are undone.
-See <a href="Autoload.html#Autoload">Autoload</a>.
-</p></dd></dl>
+      <p>When a file is loaded to satisfy an autoload, and it stops
+      due to an error in the evaluation of its contents, any
+      function definitions or <code>provide</code> calls that
+      occurred during the load are undone. See <a href=
+      "Autoload.html#Autoload">Autoload</a>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-require"></a>Function: <strong>require</strong> <em>feature &amp;optional filename noerror</em></dt>
-<dd><p>This function checks whether <var>feature</var> is present in the current
-Emacs session (using <code>(featurep <var>feature</var>)</code>; see below).  The
-argument <var>feature</var> must be a symbol.
-</p>
-<p>If the feature is not present, then <code>require</code> loads <var>filename</var>
-with <code>load</code>.  If <var>filename</var> is not supplied, then the name of
-the symbol <var>feature</var> is used as the base file name to load.
-However, in this case, <code>require</code> insists on finding <var>feature</var>
-with an added &lsquo;<samp>.el</samp>&rsquo; or &lsquo;<samp>.elc</samp>&rsquo; suffix (possibly extended with
-a compression suffix); a file whose name is just <var>feature</var> won&rsquo;t
-be used.  (The variable <code>load-suffixes</code> specifies the exact
-required Lisp suffixes.)
-</p>
-<p>If <var>noerror</var> is non-<code>nil</code>, that suppresses errors from actual
-loading of the file.  In that case, <code>require</code> returns <code>nil</code>
-if loading the file fails.  Normally, <code>require</code> returns
-<var>feature</var>.
-</p>
-<p>If loading the file succeeds but does not provide <var>feature</var>,
-<code>require</code> signals an error, &lsquo;<samp>Required feature <var>feature</var>
-was not provided</samp>&rsquo;.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-require" id="index-require"></a>Function:
+    <strong>require</strong> <em>feature &amp;optional filename
+    noerror</em></dt>
 
-<dl>
-<dt><a name="index-featurep"></a>Function: <strong>featurep</strong> <em>feature &amp;optional subfeature</em></dt>
-<dd><p>This function returns <code>t</code> if <var>feature</var> has been provided in
-the current Emacs session (i.e., if <var>feature</var> is a member of
-<code>features</code>.)  If <var>subfeature</var> is non-<code>nil</code>, then the
-function returns <code>t</code> only if that subfeature is provided as well
-(i.e., if <var>subfeature</var> is a member of the <code>subfeature</code>
-property of the <var>feature</var> symbol.)
-</p></dd></dl>
+    <dd>
+      <p>This function checks whether <var>feature</var> is present
+      in the current Emacs session (using <code>(featurep
+      <var>feature</var>)</code>; see below). The argument
+      <var>feature</var> must be a symbol.</p>
 
-<dl>
-<dt><a name="index-features-1"></a>Variable: <strong>features</strong></dt>
-<dd><p>The value of this variable is a list of symbols that are the features
-loaded in the current Emacs session.  Each symbol was put in this list
-with a call to <code>provide</code>.  The order of the elements in the
-<code>features</code> list is not significant.
-</p></dd></dl>
+      <p>If the feature is not present, then <code>require</code>
+      loads <var>filename</var> with <code>load</code>. If
+      <var>filename</var> is not supplied, then the name of the
+      symbol <var>feature</var> is used as the base file name to
+      load. However, in this case, <code>require</code> insists on
+      finding <var>feature</var> with an added
+      &lsquo;<samp>.el</samp>&rsquo; or
+      &lsquo;<samp>.elc</samp>&rsquo; suffix (possibly extended
+      with a compression suffix); a file whose name is just
+      <var>feature</var> won&rsquo;t be used. (The variable
+      <code>load-suffixes</code> specifies the exact required Lisp
+      suffixes.)</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Where-Defined.html#Where-Defined" accesskey="n" rel="next">Where Defined</a>, Previous: <a href="Repeated-Loading.html#Repeated-Loading" accesskey="p" rel="prev">Repeated Loading</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If <var>noerror</var> is non-<code>nil</code>, that
+      suppresses errors from actual loading of the file. In that
+      case, <code>require</code> returns <code>nil</code> if
+      loading the file fails. Normally, <code>require</code>
+      returns <var>feature</var>.</p>
 
+      <p>If loading the file succeeds but does not provide
+      <var>feature</var>, <code>require</code> signals an error,
+      &lsquo;<samp>Required feature <var>feature</var> was not
+      provided</samp>&rsquo;.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-featurep" id="index-featurep"></a>Function:
+    <strong>featurep</strong> <em>feature &amp;optional
+    subfeature</em></dt>
 
+    <dd>
+      <p>This function returns <code>t</code> if <var>feature</var>
+      has been provided in the current Emacs session (i.e., if
+      <var>feature</var> is a member of <code>features</code>.) If
+      <var>subfeature</var> is non-<code>nil</code>, then the
+      function returns <code>t</code> only if that subfeature is
+      provided as well (i.e., if <var>subfeature</var> is a member
+      of the <code>subfeature</code> property of the
+      <var>feature</var> symbol.)</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-features-1" id=
+    "index-features-1"></a>Variable: <strong>features</strong></dt>
+
+    <dd>
+      <p>The value of this variable is a list of symbols that are
+      the features loaded in the current Emacs session. Each symbol
+      was put in this list with a call to <code>provide</code>. The
+      order of the elements in the <code>features</code> list is
+      not significant.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Where-Defined.html#Where-Defined" accesskey=
+    "n" rel="next">Where Defined</a>, Previous: <a href=
+    "Repeated-Loading.html#Repeated-Loading" accesskey="p" rel=
+    "prev">Repeated Loading</a>, Up: <a href="Loading.html#Loading"
+    accesskey="u" rel="up">Loading</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

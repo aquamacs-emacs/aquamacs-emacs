@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,121 +16,173 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Auto-newlines</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Auto-newlines">
-<meta name="keywords" content="CC Mode Manual: Auto-newlines">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="Hungry-WS-Deletion.html#Hungry-WS-Deletion" rel="next" title="Hungry WS Deletion">
-<link href="Electric-Keys.html#Electric-Keys" rel="prev" title="Electric Keys">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Auto-newlines</title>
+  <meta name="description" content=
+  "CC Mode Manual: Auto-newlines" />
+  <meta name="keywords" content="CC Mode Manual: Auto-newlines" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="Hungry-WS-Deletion.html#Hungry-WS-Deletion" rel=
+  "next" title="Hungry WS Deletion" />
+  <link href="Electric-Keys.html#Electric-Keys" rel="prev" title=
+  "Electric Keys" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Auto_002dnewlines"></a>
-<div class="header">
-<p>
-Next: <a href="Hungry-WS-Deletion.html#Hungry-WS-Deletion" accesskey="n" rel="next">Hungry WS Deletion</a>, Previous: <a href="Electric-Keys.html#Electric-Keys" accesskey="p" rel="prev">Electric Keys</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Auto_002dnewline-Insertion"></a>
-<h3 class="section">4.7 Auto-newline Insertion</h3>
-<a name="index-auto_002dnewline"></a>
+<body lang="en" xml:lang="en">
+  <a name="Auto_002dnewlines" id="Auto_002dnewlines"></a>
 
-<p>When you have <em>Auto-newline minor mode</em> enabled (see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>), CC Mode inserts newlines for you automatically (in certain
-syntactic contexts) when you type a left or right brace, a colon, a
-semicolon, or a comma.  Sometimes a newline appears before the
-character you type, sometimes after it, sometimes both.
-</p>
-<p>Auto-newline only triggers when the following conditions hold:
-</p>
-<ul>
-<li> Auto-newline minor mode is enabled, as evidenced by the indicator
-&lsquo;<samp>a</samp>&rsquo; after the mode name on the modeline (e.g., &lsquo;<samp>C/a</samp>&rsquo; or
-&lsquo;<samp>C/la</samp>&rsquo;).
+  <div class="header">
+    <p>Next: <a href="Hungry-WS-Deletion.html#Hungry-WS-Deletion"
+    accesskey="n" rel="next">Hungry WS Deletion</a>, Previous:
+    <a href="Electric-Keys.html#Electric-Keys" accesskey="p" rel=
+    "prev">Electric Keys</a>, Up: <a href="Commands.html#Commands"
+    accesskey="u" rel="up">Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Auto_002dnewline-Insertion" id=
+  "Auto_002dnewline-Insertion"></a>
 
-</li><li> The character was typed at the end of a line, or with only whitespace
-after it, and possibly a &lsquo;<samp>\</samp>&rsquo; escaping the newline.
+  <h3 class="section">4.7 Auto-newline Insertion</h3><a name=
+  "index-auto_002dnewline" id="index-auto_002dnewline"></a>
 
-</li><li> The character is not on its own line already.  (This applies only to
-insertion of a newline <em>before</em> the character.)
+  <p>When you have <em>Auto-newline minor mode</em> enabled (see
+  <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>), CC Mode
+  inserts newlines for you automatically (in certain syntactic
+  contexts) when you type a left or right brace, a colon, a
+  semicolon, or a comma. Sometimes a newline appears before the
+  character you type, sometimes after it, sometimes both.</p>
 
-</li><li> <a name="index-literal-1"></a>
-<a name="index-syntactic-whitespace"></a>
-The character was not typed inside of a literal <a name="DOCF11" href="#FOOT11"><sup>11</sup></a>.
+  <p>Auto-newline only triggers when the following conditions
+  hold:</p>
 
-</li><li> No numeric argument was supplied to the command (i.e., it was typed as
-normal, with no <kbd>C-u</kbd> prefix).
-</li></ul>
+  <ul>
+    <li>Auto-newline minor mode is enabled, as evidenced by the
+    indicator &lsquo;<samp>a</samp>&rsquo; after the mode name on
+    the modeline (e.g., &lsquo;<samp>C/a</samp>&rsquo; or
+    &lsquo;<samp>C/la</samp>&rsquo;).</li>
 
-<p>You can configure the precise circumstances in which newlines get
-inserted (see see <a href="Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines">Custom Auto-newlines</a>).  Typically, the style
-system (see <a href="Styles.html#Styles">Styles</a>) will have set this up for you, so you probably
-won&rsquo;t have to bother.
-</p>
-<p>Sometimes CC Mode inserts an auto-newline where you don&rsquo;t want one,
-such as after a &lsquo;<samp>}</samp>&rsquo; when you&rsquo;re about to type a &lsquo;<samp>;</samp>&rsquo;.
-Hungry deletion can help here (see <a href="Hungry-WS-Deletion.html#Hungry-WS-Deletion">Hungry WS Deletion</a>), or you can
-activate an appropriate <em>clean-up</em>, which will remove the excess
-whitespace after you&rsquo;ve typed the &lsquo;<samp>;</samp>&rsquo;.  See <a href="Clean_002dups.html#Clean_002dups">Clean-ups</a> for a
-full description.  See also <a href="Electric-Keys.html#Electric-Keys">Electric Keys</a> for a summary of
-clean-ups listed by key.
-</p>
+    <li>The character was typed at the end of a line, or with only
+    whitespace after it, and possibly a
+    &lsquo;<samp>\</samp>&rsquo; escaping the newline.</li>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <li>The character is not on its own line already. (This applies
+    only to insertion of a newline <em>before</em> the
+    character.)</li>
 
-<h3><a name="FOOT11" href="#DOCF11">(11)</a></h3>
-<p>A
-<em>literal</em> is defined as any comment, string, or preprocessor macro
-definition.  These constructs are also known as <em>syntactic
-whitespace</em> since they are usually ignored when scanning C code.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Hungry-WS-Deletion.html#Hungry-WS-Deletion" accesskey="n" rel="next">Hungry WS Deletion</a>, Previous: <a href="Electric-Keys.html#Electric-Keys" accesskey="p" rel="prev">Electric Keys</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li><a name="index-literal-1" id="index-literal-1"></a>
+    <a name="index-syntactic-whitespace" id=
+    "index-syntactic-whitespace"></a> The character was not typed
+    inside of a literal <a name="DOCF11" href="#FOOT11" id=
+    "DOCF11"><sup>11</sup></a>.</li>
 
+    <li>No numeric argument was supplied to the command (i.e., it
+    was typed as normal, with no <kbd>C-u</kbd> prefix).</li>
+  </ul>
 
+  <p>You can configure the precise circumstances in which newlines
+  get inserted (see see <a href=
+  "Custom-Auto_002dnewlines.html#Custom-Auto_002dnewlines">Custom
+  Auto-newlines</a>). Typically, the style system (see <a href=
+  "Styles.html#Styles">Styles</a>) will have set this up for you,
+  so you probably won&rsquo;t have to bother.</p>
 
+  <p>Sometimes CC Mode inserts an auto-newline where you
+  don&rsquo;t want one, such as after a
+  &lsquo;<samp>}</samp>&rsquo; when you&rsquo;re about to type a
+  &lsquo;<samp>;</samp>&rsquo;. Hungry deletion can help here (see
+  <a href="Hungry-WS-Deletion.html#Hungry-WS-Deletion">Hungry WS
+  Deletion</a>), or you can activate an appropriate
+  <em>clean-up</em>, which will remove the excess whitespace after
+  you&rsquo;ve typed the &lsquo;<samp>;</samp>&rsquo;. See <a href=
+  "Clean_002dups.html#Clean_002dups">Clean-ups</a> for a full
+  description. See also <a href=
+  "Electric-Keys.html#Electric-Keys">Electric Keys</a> for a
+  summary of clean-ups listed by key.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT11" href="#DOCF11" id="FOOT11">(11)</a></h3>
+
+    <p>A <em>literal</em> is defined as any comment, string, or
+    preprocessor macro definition. These constructs are also known
+    as <em>syntactic whitespace</em> since they are usually ignored
+    when scanning C code.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Hungry-WS-Deletion.html#Hungry-WS-Deletion"
+    accesskey="n" rel="next">Hungry WS Deletion</a>, Previous:
+    <a href="Electric-Keys.html#Electric-Keys" accesskey="p" rel=
+    "prev">Electric Keys</a>, Up: <a href="Commands.html#Commands"
+    accesskey="u" rel="up">Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

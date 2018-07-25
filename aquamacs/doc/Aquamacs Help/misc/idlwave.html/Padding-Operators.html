@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,118 +20,183 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Padding Operators</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Padding Operators">
-<meta name="keywords" content="IDLWAVE User Manual: Padding Operators">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Actions.html#Actions" rel="up" title="Actions">
-<link href="Case-Changes.html#Case-Changes" rel="next" title="Case Changes">
-<link href="Block-Boundary-Check.html#Block-Boundary-Check" rel="prev" title="Block Boundary Check">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Padding Operators</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Padding Operators" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Padding Operators" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Actions.html#Actions" rel="up" title="Actions" />
+  <link href="Case-Changes.html#Case-Changes" rel="next" title=
+  "Case Changes" />
+  <link href="Block-Boundary-Check.html#Block-Boundary-Check" rel=
+  "prev" title="Block Boundary Check" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Padding-Operators"></a>
-<div class="header">
-<p>
-Next: <a href="Case-Changes.html#Case-Changes" accesskey="n" rel="next">Case Changes</a>, Previous: <a href="Block-Boundary-Check.html#Block-Boundary-Check" accesskey="p" rel="prev">Block Boundary Check</a>, Up: <a href="Actions.html#Actions" accesskey="u" rel="up">Actions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Padding-Operators-1"></a>
-<h4 class="subsection">4.9.2 Padding Operators</h4>
-<a name="index-Padding-operators-with-spaces"></a>
-<a name="index-Operators_002c-padding-with-spaces"></a>
-<a name="index-Space_002c-around-operators"></a>
+<body lang="en" xml:lang="en">
+  <a name="Padding-Operators" id="Padding-Operators"></a>
 
-<p>Some operators can be automatically surrounded by spaces.  This can
-happen when the operator is typed, or later when the line is indented.
-IDLWAVE can pad the operators &lsquo;<samp>&lt;</samp>&rsquo;, &lsquo;<samp>&gt;</samp>&rsquo;, &lsquo;<samp>,</samp>&rsquo;, &lsquo;<samp>=</samp>&rsquo;,
-and &lsquo;<samp>-&gt;</samp>&rsquo;, as well as the modified assignment operators
-(&lsquo;<samp>AND=</samp>&rsquo;, &lsquo;<samp>OR=</samp>&rsquo;, etc.).  This feature is turned off by default.
-If you want to turn it on, customize the variables
-<code>idlwave-surround-by-blank</code> and <code>idlwave-do-actions</code> and turn
-both on.  You can also define similar actions for other operators by
-using the function <code>idlwave-action-and-binding</code> in the mode hook.
-For example, to enforce space padding of the &lsquo;<samp>+</samp>&rsquo; and &lsquo;<samp>*</samp>&rsquo;
-operators (outside of strings and comments, of course), try this in
-<samp>.emacs</samp>
-</p>
-<div class="lisp">
-<pre class="lisp">(add-hook 'idlwave-mode-hook
+  <div class="header">
+    <p>Next: <a href="Case-Changes.html#Case-Changes" accesskey="n"
+    rel="next">Case Changes</a>, Previous: <a href=
+    "Block-Boundary-Check.html#Block-Boundary-Check" accesskey="p"
+    rel="prev">Block Boundary Check</a>, Up: <a href=
+    "Actions.html#Actions" accesskey="u" rel="up">Actions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Padding-Operators-1" id="Padding-Operators-1"></a>
+
+  <h4 class="subsection">4.9.2 Padding Operators</h4><a name=
+  "index-Padding-operators-with-spaces" id=
+  "index-Padding-operators-with-spaces"></a> <a name=
+  "index-Operators_002c-padding-with-spaces" id=
+  "index-Operators_002c-padding-with-spaces"></a> <a name=
+  "index-Space_002c-around-operators" id=
+  "index-Space_002c-around-operators"></a>
+
+  <p>Some operators can be automatically surrounded by spaces. This
+  can happen when the operator is typed, or later when the line is
+  indented. IDLWAVE can pad the operators
+  &lsquo;<samp>&lt;</samp>&rsquo;, &lsquo;<samp>&gt;</samp>&rsquo;,
+  &lsquo;<samp>,</samp>&rsquo;, &lsquo;<samp>=</samp>&rsquo;, and
+  &lsquo;<samp>-&gt;</samp>&rsquo;, as well as the modified
+  assignment operators (&lsquo;<samp>AND=</samp>&rsquo;,
+  &lsquo;<samp>OR=</samp>&rsquo;, etc.). This feature is turned off
+  by default. If you want to turn it on, customize the variables
+  <code>idlwave-surround-by-blank</code> and
+  <code>idlwave-do-actions</code> and turn both on. You can also
+  define similar actions for other operators by using the function
+  <code>idlwave-action-and-binding</code> in the mode hook. For
+  example, to enforce space padding of the
+  &lsquo;<samp>+</samp>&rsquo; and &lsquo;<samp>*</samp>&rsquo;
+  operators (outside of strings and comments, of course), try this
+  in <samp>.emacs</samp></p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(add-hook 'idlwave-mode-hook
   (lambda ()
      (setq idlwave-surround-by-blank t)  ; Turn this type of actions on
-     (idlwave-action-and-binding &quot;*&quot; '(idlwave-surround 1 1))
-     (idlwave-action-and-binding &quot;+&quot; '(idlwave-surround 1 1))))
-</pre></div>
+     (idlwave-action-and-binding "*" '(idlwave-surround 1 1))
+     (idlwave-action-and-binding "+" '(idlwave-surround 1 1))))
+</pre>
+  </div>
 
-<p>Note that the modified assignment operators which begin with a word
-(&lsquo;<samp>AND=</samp>&rsquo;, &lsquo;<samp>OR=</samp>&rsquo;, &lsquo;<samp>NOT=</samp>&rsquo;, etc.) require a leading space to
-be recognized (e.g., <code>vAND=4</code> would be interpreted as a variable
-<code>vAND</code>).  Also note that since, e.g., <code>&gt;</code> and <code>&gt;=</code> are
-both valid operators, it is impossible to surround both by blanks while
-they are being typed.  Similarly with <code>&amp;</code> and <code>&amp;&amp;</code>.  For
-these, a compromise is made: the padding is placed on the left, and if
-the longer operator is keyed in, on the right as well (otherwise you
-must insert spaces to pad right yourself, or press simply press Tab to
-repad everything if <code>idlwave-do-actions</code> is on).
-</p>
-<dl>
-<dt><a name="index-idlwave_002dsurround_002dby_002dblank"></a>User Option: <strong>idlwave-surround-by-blank</strong> <em>(<code>nil</code>)</em></dt>
-<dd><p>Non-<code>nil</code> means enable <code>idlwave-surround</code>.  If non-<code>nil</code>,
-&lsquo;<samp>=</samp>&rsquo;, &lsquo;<samp>&lt;</samp>&rsquo;, &lsquo;<samp>&gt;</samp>&rsquo;, &lsquo;<samp>&amp;</samp>&rsquo;, &lsquo;<samp>,</samp>&rsquo;, &lsquo;<samp>-&gt;</samp>&rsquo;, and the
-modified assignment operators (&lsquo;<samp>AND=</samp>&rsquo;, &lsquo;<samp>OR=</samp>&rsquo;, etc.) are
-surrounded with spaces by <code>idlwave-surround</code>.
-</p></dd></dl>
+  <p>Note that the modified assignment operators which begin with a
+  word (&lsquo;<samp>AND=</samp>&rsquo;,
+  &lsquo;<samp>OR=</samp>&rsquo;, &lsquo;<samp>NOT=</samp>&rsquo;,
+  etc.) require a leading space to be recognized (e.g.,
+  <code>vAND=4</code> would be interpreted as a variable
+  <code>vAND</code>). Also note that since, e.g., <code>&gt;</code>
+  and <code>&gt;=</code> are both valid operators, it is impossible
+  to surround both by blanks while they are being typed. Similarly
+  with <code>&amp;</code> and <code>&amp;&amp;</code>. For these, a
+  compromise is made: the padding is placed on the left, and if the
+  longer operator is keyed in, on the right as well (otherwise you
+  must insert spaces to pad right yourself, or press simply press
+  Tab to repad everything if <code>idlwave-do-actions</code> is
+  on).</p>
 
-<dl>
-<dt><a name="index-idlwave_002dpad_002dkeyword"></a>User Option: <strong>idlwave-pad-keyword</strong> <em>(<code>t</code>)</em></dt>
-<dd><p>Non-<code>nil</code> means space-pad the &lsquo;<samp>=</samp>&rsquo; in keyword assignments.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-idlwave_002dsurround_002dby_002dblank" id=
+    "index-idlwave_002dsurround_002dby_002dblank"></a>User Option:
+    <strong>idlwave-surround-by-blank</strong>
+    <em>(<code>nil</code>)</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Case-Changes.html#Case-Changes" accesskey="n" rel="next">Case Changes</a>, Previous: <a href="Block-Boundary-Check.html#Block-Boundary-Check" accesskey="p" rel="prev">Block Boundary Check</a>, Up: <a href="Actions.html#Actions" accesskey="u" rel="up">Actions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Non-<code>nil</code> means enable
+      <code>idlwave-surround</code>. If non-<code>nil</code>,
+      &lsquo;<samp>=</samp>&rsquo;,
+      &lsquo;<samp>&lt;</samp>&rsquo;,
+      &lsquo;<samp>&gt;</samp>&rsquo;,
+      &lsquo;<samp>&amp;</samp>&rsquo;,
+      &lsquo;<samp>,</samp>&rsquo;,
+      &lsquo;<samp>-&gt;</samp>&rsquo;, and the modified assignment
+      operators (&lsquo;<samp>AND=</samp>&rsquo;,
+      &lsquo;<samp>OR=</samp>&rsquo;, etc.) are surrounded with
+      spaces by <code>idlwave-surround</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-idlwave_002dpad_002dkeyword" id=
+    "index-idlwave_002dpad_002dkeyword"></a>User Option:
+    <strong>idlwave-pad-keyword</strong>
+    <em>(<code>t</code>)</em></dt>
 
+    <dd>
+      <p>Non-<code>nil</code> means space-pad the
+      &lsquo;<samp>=</samp>&rsquo; in keyword assignments.</p>
+    </dd>
+  </dl>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Case-Changes.html#Case-Changes" accesskey="n"
+    rel="next">Case Changes</a>, Previous: <a href=
+    "Block-Boundary-Check.html#Block-Boundary-Check" accesskey="p"
+    rel="prev">Block Boundary Check</a>, Up: <a href=
+    "Actions.html#Actions" accesskey="u" rel="up">Actions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

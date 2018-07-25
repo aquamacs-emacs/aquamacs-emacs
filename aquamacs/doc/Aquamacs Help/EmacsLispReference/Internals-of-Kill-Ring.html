@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,94 +19,129 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Internals of Kill Ring</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Internals of Kill Ring">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Internals of Kill Ring">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-Kill-Ring.html#The-Kill-Ring" rel="up" title="The Kill Ring">
-<link href="Undo.html#Undo" rel="next" title="Undo">
-<link href="Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring" rel="prev" title="Low-Level Kill Ring">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Internals of Kill
+  Ring</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Internals of Kill Ring" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Internals of Kill Ring" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-Kill-Ring.html#The-Kill-Ring" rel="up" title=
+  "The Kill Ring" />
+  <link href="Undo.html#Undo" rel="next" title="Undo" />
+  <link href="Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring"
+  rel="prev" title="Low-Level Kill Ring" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Internals-of-Kill-Ring" id="Internals-of-Kill-Ring"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring"
+    accesskey="p" rel="prev">Low-Level Kill Ring</a>, Up: <a href=
+    "The-Kill-Ring.html#The-Kill-Ring" accesskey="u" rel="up">The
+    Kill Ring</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Internals-of-the-Kill-Ring" id=
+  "Internals-of-the-Kill-Ring"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Internals-of-Kill-Ring"></a>
-<div class="header">
-<p>
-Previous: <a href="Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring" accesskey="p" rel="prev">Low-Level Kill Ring</a>, Up: <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey="u" rel="up">The Kill Ring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Internals-of-the-Kill-Ring"></a>
-<h4 class="subsection">31.8.6 Internals of the Kill Ring</h4>
+  <h4 class="subsection">31.8.6 Internals of the Kill Ring</h4>
 
-<p>The variable <code>kill-ring</code> holds the kill ring contents, in the
-form of a list of strings.  The most recent kill is always at the front
-of the list.
-</p>
-<p>The <code>kill-ring-yank-pointer</code> variable points to a link in the
-kill ring list, whose <small>CAR</small> is the text to yank next.  We say it
-identifies the front of the ring.  Moving
-<code>kill-ring-yank-pointer</code> to a different link is called
-<em>rotating the kill ring</em>.  We call the kill ring a &ldquo;ring&rdquo; because
-the functions that move the yank pointer wrap around from the end of the
-list to the beginning, or vice-versa.  Rotation of the kill ring is
-virtual; it does not change the value of <code>kill-ring</code>.
-</p>
-<p>Both <code>kill-ring</code> and <code>kill-ring-yank-pointer</code> are Lisp
-variables whose values are normally lists.  The word &ldquo;pointer&rdquo; in the
-name of the <code>kill-ring-yank-pointer</code> indicates that the variable&rsquo;s
-purpose is to identify one element of the list for use by the next yank
-command.
-</p>
-<p>The value of <code>kill-ring-yank-pointer</code> is always <code>eq</code> to one
-of the links in the kill ring list.  The element it identifies is the
-<small>CAR</small> of that link.  Kill commands, which change the kill ring, also
-set this variable to the value of <code>kill-ring</code>.  The effect is to
-rotate the ring so that the newly killed text is at the front.
-</p>
-<p>Here is a diagram that shows the variable <code>kill-ring-yank-pointer</code>
-pointing to the second entry in the kill ring <code>(&quot;some text&quot; &quot;a
-different piece of text&quot; &quot;yet older text&quot;)</code>.
-</p>
-<div class="example">
-<pre class="example">kill-ring                  ---- kill-ring-yank-pointer
+  <p>The variable <code>kill-ring</code> holds the kill ring
+  contents, in the form of a list of strings. The most recent kill
+  is always at the front of the list.</p>
+
+  <p>The <code>kill-ring-yank-pointer</code> variable points to a
+  link in the kill ring list, whose <small>CAR</small> is the text
+  to yank next. We say it identifies the front of the ring. Moving
+  <code>kill-ring-yank-pointer</code> to a different link is called
+  <em>rotating the kill ring</em>. We call the kill ring a
+  &ldquo;ring&rdquo; because the functions that move the yank
+  pointer wrap around from the end of the list to the beginning, or
+  vice-versa. Rotation of the kill ring is virtual; it does not
+  change the value of <code>kill-ring</code>.</p>
+
+  <p>Both <code>kill-ring</code> and
+  <code>kill-ring-yank-pointer</code> are Lisp variables whose
+  values are normally lists. The word &ldquo;pointer&rdquo; in the
+  name of the <code>kill-ring-yank-pointer</code> indicates that
+  the variable&rsquo;s purpose is to identify one element of the
+  list for use by the next yank command.</p>
+
+  <p>The value of <code>kill-ring-yank-pointer</code> is always
+  <code>eq</code> to one of the links in the kill ring list. The
+  element it identifies is the <small>CAR</small> of that link.
+  Kill commands, which change the kill ring, also set this variable
+  to the value of <code>kill-ring</code>. The effect is to rotate
+  the ring so that the newly killed text is at the front.</p>
+
+  <p>Here is a diagram that shows the variable
+  <code>kill-ring-yank-pointer</code> pointing to the second entry
+  in the kill ring <code>("some text" "a different piece of text"
+  "yet older text")</code>.</p>
+
+  <div class="example">
+    <pre class="example">
+kill-ring                  ---- kill-ring-yank-pointer
   |                       |
   |                       v
   |     --- ---          --- ---      --- ---
@@ -112,44 +149,65 @@ different piece of text&quot; &quot;yet older text&quot;)</code>.
         --- ---          --- ---      --- ---
          |                |            |
          |                |            |
-         |                |             --&gt;&quot;yet older text&quot;
+         |                |             --&gt;"yet older text"
          |                |
-         |                 --&gt; &quot;a different piece of text&quot;
+         |                 --&gt; "a different piece of text"
          |
-          --&gt; &quot;some text&quot;
-</pre></div>
+          --&gt; "some text"
+</pre>
+  </div>
 
-<p>This state of affairs might occur after <kbd>C-y</kbd> (<code>yank</code>)
-immediately followed by <kbd>M-y</kbd> (<code>yank-pop</code>).
-</p>
-<dl>
-<dt><a name="index-kill_002dring"></a>Variable: <strong>kill-ring</strong></dt>
-<dd><p>This variable holds the list of killed text sequences, most recently
-killed first.
-</p></dd></dl>
+  <p>This state of affairs might occur after <kbd>C-y</kbd>
+  (<code>yank</code>) immediately followed by <kbd>M-y</kbd>
+  (<code>yank-pop</code>).</p>
 
-<dl>
-<dt><a name="index-kill_002dring_002dyank_002dpointer"></a>Variable: <strong>kill-ring-yank-pointer</strong></dt>
-<dd><p>This variable&rsquo;s value indicates which element of the kill ring is at the
-front of the ring for yanking.  More precisely, the value is a tail
-of the value of <code>kill-ring</code>, and its <small>CAR</small> is the kill string
-that <kbd>C-y</kbd> should yank.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-kill_002dring" id=
+    "index-kill_002dring"></a>Variable:
+    <strong>kill-ring</strong></dt>
 
-<dl>
-<dt><a name="index-kill_002dring_002dmax"></a>User Option: <strong>kill-ring-max</strong></dt>
-<dd><p>The value of this variable is the maximum length to which the kill
-ring can grow, before elements are thrown away at the end.  The default
-value for <code>kill-ring-max</code> is 60.
-</p></dd></dl>
+    <dd>
+      <p>This variable holds the list of killed text sequences,
+      most recently killed first.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring" accesskey="p" rel="prev">Low-Level Kill Ring</a>, Up: <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey="u" rel="up">The Kill Ring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-kill_002dring_002dyank_002dpointer" id=
+    "index-kill_002dring_002dyank_002dpointer"></a>Variable:
+    <strong>kill-ring-yank-pointer</strong></dt>
 
+    <dd>
+      <p>This variable&rsquo;s value indicates which element of the
+      kill ring is at the front of the ring for yanking. More
+      precisely, the value is a tail of the value of
+      <code>kill-ring</code>, and its <small>CAR</small> is the
+      kill string that <kbd>C-y</kbd> should yank.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-kill_002dring_002dmax" id=
+    "index-kill_002dring_002dmax"></a>User Option:
+    <strong>kill-ring-max</strong></dt>
 
+    <dd>
+      <p>The value of this variable is the maximum length to which
+      the kill ring can grow, before elements are thrown away at
+      the end. The default value for <code>kill-ring-max</code> is
+      60.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Low_002dLevel-Kill-Ring.html#Low_002dLevel-Kill-Ring"
+    accesskey="p" rel="prev">Low-Level Kill Ring</a>, Up: <a href=
+    "The-Kill-Ring.html#The-Kill-Ring" accesskey="u" rel="up">The
+    Kill Ring</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

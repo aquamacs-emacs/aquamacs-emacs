@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1987, 2001-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,139 +14,239 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>VIP: Searching and Replacing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="VIP: Searching and Replacing">
-<meta name="keywords" content="VIP: Searching and Replacing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" rel="index" title="GNU Free Documentation License">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Vi-Commands.html#Vi-Commands" rel="up" title="Vi Commands">
-<link href="Modifying-Commands.html#Modifying-Commands" rel="next" title="Modifying Commands">
-<link href="Motion-Commands.html#Motion-Commands" rel="prev" title="Motion Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>VIP: Searching and Replacing</title>
+  <meta name="description" content=
+  "VIP: Searching and Replacing" />
+  <meta name="keywords" content="VIP: Searching and Replacing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+  rel="index" title="GNU Free Documentation License" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Vi-Commands.html#Vi-Commands" rel="up" title=
+  "Vi Commands" />
+  <link href="Modifying-Commands.html#Modifying-Commands" rel=
+  "next" title="Modifying Commands" />
+  <link href="Motion-Commands.html#Motion-Commands" rel="prev"
+  title="Motion Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Searching-and-Replacing"></a>
-<div class="header">
-<p>
-Next: <a href="Modifying-Commands.html#Modifying-Commands" accesskey="n" rel="next">Modifying Commands</a>, Previous: <a href="Motion-Commands.html#Motion-Commands" accesskey="p" rel="prev">Motion Commands</a>, Up: <a href="Vi-Commands.html#Vi-Commands" accesskey="u" rel="up">Vi Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Searching-and-Replacing-1"></a>
-<h3 class="section">2.8 Searching and Replacing</h3>
+<body lang="en" xml:lang="en">
+  <a name="Searching-and-Replacing" id=
+  "Searching-and-Replacing"></a>
 
-<p>Following commands are available for searching and replacing.
-</p>
-<a name="index-regular-expression-_0028search_0029"></a>
+  <div class="header">
+    <p>Next: <a href="Modifying-Commands.html#Modifying-Commands"
+    accesskey="n" rel="next">Modifying Commands</a>, Previous:
+    <a href="Motion-Commands.html#Motion-Commands" accesskey="p"
+    rel="prev">Motion Commands</a>, Up: <a href=
+    "Vi-Commands.html#Vi-Commands" accesskey="u" rel="up">Vi
+    Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Searching-and-Replacing-1" id=
+  "Searching-and-Replacing-1"></a>
 
-<dl compact="compact">
-<dt><kbd>/ <var>string</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-057-_002f-_0028vip_002dsearch_002dforward_0029-2"></a>
-<p>Search the first occurrence of the string <var>string</var> forward starting
-from point.  Given a count <var>n</var>, the <var>n</var>-th occurrence of
-<var>string</var> will be searched.  If the variable <code>vip-re-search</code> has value
-<code>t</code> then <em>regular expression</em> search is done and the string
-matching the regular expression <var>string</var> is found.  If you give an
-empty string as <var>string</var> then the search mode will change from vanilla
-search to regular expression search and vice versa
-(<code>vip-search-forward</code>).
-</p></dd>
-<dt><kbd>? <var>string</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-077-_003f-_0028vip_002dsearch_002dbackward_0029-2"></a>
-<p>Same as <kbd>/</kbd>, except that search is done backward
-(<code>vip-search-backward</code>).
-</p></dd>
-<dt><kbd>n</kbd></dt>
-<dd><a name="index-156-n-_0028vip_002dsearch_002dnext_0029"></a>
-<p>Search the previous search pattern in the same direction as before
-(<code>vip-search-next</code>).
-</p></dd>
-<dt><kbd>N</kbd></dt>
-<dd><a name="index-116-N-_0028vip_002dsearch_002dNext_0029"></a>
-<p>Search the previous search pattern in the opposite direction
-(<code>vip-search-Next</code>).
-</p></dd>
-<dt><kbd>C-s</kbd></dt>
-<dd><a name="index-023-C_002ds-_0028isearch_002dforward_0029-1"></a>
-<p>Search forward incrementally.  See GNU Emacs Manual for details
-(<code>isearch-forward</code>).
-</p></dd>
-<dt><kbd>C-r</kbd></dt>
-<dd><a name="index-022-C_002dr-_0028isearch_002dbackward_0029-1"></a>
-<p>Search backward incrementally (<code>isearch-backward</code>).
-<a name="index-vanilla-_0028replacement_0029"></a>
-<a name="index-regular-expression-_0028replacement_0029"></a>
-</p></dd>
-<dt><kbd>R <var>string</var> RET <var>newstring</var></kbd></dt>
-<dd><a name="index-122-R-_0028vip_002dreplace_002dstring_0029-1"></a>
-<p>There are two modes of replacement, <em>vanilla</em> and <em>regular expression</em>.
-If the mode is <i>vanilla</i> you will get a prompt &lsquo;<samp>Replace string:</samp>&rsquo;,
-and if the mode is <i>regular expression</i> you will ge a prompt
-&lsquo;<samp>Replace regexp:</samp>&rsquo;.  The mode is initially <i>vanilla</i>, but you can
-toggle these modes by giving a null string as <var>string</var>.  If the mode is
-vanilla, this command replaces every occurrence of <var>string</var> with
-<var>newstring</var>.  If the mode is regular expression, <var>string</var> is
-treated as a regular expression and every string matching the regular
-expression is replaced with <var>newstring</var> (<code>vip-replace-string</code>).
-</p></dd>
-<dt><kbd>Q <var>string</var> RET <var>newstring</var></kbd></dt>
-<dd><a name="index-121-Q-_0028vip_002dquery_002dreplace_0029-1"></a>
-<p>Same as <kbd>R</kbd> except that you will be asked form confirmation before each
-replacement
-<br>(<code>vip-query-replace</code>).
-</p></dd>
-<dt><kbd>r <var>ch</var></kbd></dt>
-<dd><a name="index-162-r-_0028vip_002dreplace_002dchar_0029"></a>
-<p>Replace the character point is looking at by the character <var>ch</var>.  Give
-count, replace that many characters by <var>ch</var> (<code>vip-replace-char</code>).
-</p></dd>
-</dl>
-<p>The commands <kbd>/</kbd> and <kbd>?</kbd> mark point before move, so that you can
-return to the original point by <kbd>`&nbsp;`</kbd><!-- /@w -->.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Modifying-Commands.html#Modifying-Commands" accesskey="n" rel="next">Modifying Commands</a>, Previous: <a href="Motion-Commands.html#Motion-Commands" accesskey="p" rel="prev">Motion Commands</a>, Up: <a href="Vi-Commands.html#Vi-Commands" accesskey="u" rel="up">Vi Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">2.8 Searching and Replacing</h3>
 
+  <p>Following commands are available for searching and
+  replacing.</p><a name="index-regular-expression-_0028search_0029"
+  id="index-regular-expression-_0028search_0029"></a>
 
+  <dl compact="compact">
+    <dt><kbd>/ <var>string</var> <span class=
+    "key">RET</span></kbd></dt>
 
+    <dd>
+      <a name=
+      "index-057-_002f-_0028vip_002dsearch_002dforward_0029-2" id=
+      "index-057-_002f-_0028vip_002dsearch_002dforward_0029-2"></a>
+
+      <p>Search the first occurrence of the string
+      <var>string</var> forward starting from point. Given a count
+      <var>n</var>, the <var>n</var>-th occurrence of
+      <var>string</var> will be searched. If the variable
+      <code>vip-re-search</code> has value <code>t</code> then
+      <em>regular expression</em> search is done and the string
+      matching the regular expression <var>string</var> is found.
+      If you give an empty string as <var>string</var> then the
+      search mode will change from vanilla search to regular
+      expression search and vice versa
+      (<code>vip-search-forward</code>).</p>
+    </dd>
+
+    <dt><kbd>? <var>string</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <a name=
+      "index-077-_003f-_0028vip_002dsearch_002dbackward_0029-2" id=
+      "index-077-_003f-_0028vip_002dsearch_002dbackward_0029-2"></a>
+
+      <p>Same as <kbd>/</kbd>, except that search is done backward
+      (<code>vip-search-backward</code>).</p>
+    </dd>
+
+    <dt><kbd>n</kbd></dt>
+
+    <dd>
+      <a name="index-156-n-_0028vip_002dsearch_002dnext_0029" id=
+      "index-156-n-_0028vip_002dsearch_002dnext_0029"></a>
+
+      <p>Search the previous search pattern in the same direction
+      as before (<code>vip-search-next</code>).</p>
+    </dd>
+
+    <dt><kbd>N</kbd></dt>
+
+    <dd>
+      <a name="index-116-N-_0028vip_002dsearch_002dNext_0029" id=
+      "index-116-N-_0028vip_002dsearch_002dNext_0029"></a>
+
+      <p>Search the previous search pattern in the opposite
+      direction (<code>vip-search-Next</code>).</p>
+    </dd>
+
+    <dt><kbd>C-s</kbd></dt>
+
+    <dd>
+      <a name="index-023-C_002ds-_0028isearch_002dforward_0029-1"
+      id="index-023-C_002ds-_0028isearch_002dforward_0029-1"></a>
+
+      <p>Search forward incrementally. See GNU Emacs Manual for
+      details (<code>isearch-forward</code>).</p>
+    </dd>
+
+    <dt><kbd>C-r</kbd></dt>
+
+    <dd>
+      <a name="index-022-C_002dr-_0028isearch_002dbackward_0029-1"
+      id="index-022-C_002dr-_0028isearch_002dbackward_0029-1"></a>
+
+      <p>Search backward incrementally
+      (<code>isearch-backward</code>). <a name=
+      "index-vanilla-_0028replacement_0029" id=
+      "index-vanilla-_0028replacement_0029"></a> <a name=
+      "index-regular-expression-_0028replacement_0029" id=
+      "index-regular-expression-_0028replacement_0029"></a></p>
+    </dd>
+
+    <dt><kbd>R <var>string</var> RET
+    <var>newstring</var></kbd></dt>
+
+    <dd>
+      <a name="index-122-R-_0028vip_002dreplace_002dstring_0029-1"
+      id="index-122-R-_0028vip_002dreplace_002dstring_0029-1"></a>
+
+      <p>There are two modes of replacement, <em>vanilla</em> and
+      <em>regular expression</em>. If the mode is <i>vanilla</i>
+      you will get a prompt &lsquo;<samp>Replace
+      string:</samp>&rsquo;, and if the mode is <i>regular
+      expression</i> you will ge a prompt &lsquo;<samp>Replace
+      regexp:</samp>&rsquo;. The mode is initially <i>vanilla</i>,
+      but you can toggle these modes by giving a null string as
+      <var>string</var>. If the mode is vanilla, this command
+      replaces every occurrence of <var>string</var> with
+      <var>newstring</var>. If the mode is regular expression,
+      <var>string</var> is treated as a regular expression and
+      every string matching the regular expression is replaced with
+      <var>newstring</var> (<code>vip-replace-string</code>).</p>
+    </dd>
+
+    <dt><kbd>Q <var>string</var> RET
+    <var>newstring</var></kbd></dt>
+
+    <dd>
+      <a name="index-121-Q-_0028vip_002dquery_002dreplace_0029-1"
+      id="index-121-Q-_0028vip_002dquery_002dreplace_0029-1"></a>
+
+      <p>Same as <kbd>R</kbd> except that you will be asked form
+      confirmation before each replacement<br />
+      (<code>vip-query-replace</code>).</p>
+    </dd>
+
+    <dt><kbd>r <var>ch</var></kbd></dt>
+
+    <dd>
+      <a name="index-162-r-_0028vip_002dreplace_002dchar_0029" id=
+      "index-162-r-_0028vip_002dreplace_002dchar_0029"></a>
+
+      <p>Replace the character point is looking at by the character
+      <var>ch</var>. Give count, replace that many characters by
+      <var>ch</var> (<code>vip-replace-char</code>).</p>
+    </dd>
+  </dl>
+
+  <p>The commands <kbd>/</kbd> and <kbd>?</kbd> mark point before
+  move, so that you can return to the original point by
+  <kbd>`&nbsp;`</kbd><!-- /@w -->.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Modifying-Commands.html#Modifying-Commands"
+    accesskey="n" rel="next">Modifying Commands</a>, Previous:
+    <a href="Motion-Commands.html#Motion-Commands" accesskey="p"
+    rel="prev">Motion Commands</a>, Up: <a href=
+    "Vi-Commands.html#Vi-Commands" accesskey="u" rel="up">Vi
+    Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

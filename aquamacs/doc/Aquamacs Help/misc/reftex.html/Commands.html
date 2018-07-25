@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,296 +18,505 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Commands">
-<meta name="keywords" content="RefTeX User Manual: Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Options.html#Options" rel="next" title="Options">
-<link href="Imprint.html#Imprint" rel="prev" title="Imprint">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Commands</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Commands" />
+  <meta name="keywords" content="RefTeX User Manual: Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Options.html#Options" rel="next" title="Options" />
+  <link href="Imprint.html#Imprint" rel="prev" title="Imprint" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Options.html#Options" accesskey="n" rel="next">Options</a>, Previous: <a href="Imprint.html#Imprint" accesskey="p" rel="prev">Imprint</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Commands-1"></a>
-<h2 class="chapter">17 Commands</h2>
-<a name="index-Commands_002c-list-of"></a>
+<body lang="en" xml:lang="en">
+  <a name="Commands" id="Commands"></a>
 
-<p>Here is a summary of RefTeX&rsquo;s commands which can be executed from
-LaTeX files.  Command which are executed from the special buffers are
-not described here.  All commands are available from the <code>Ref</code>
-menu.  See See <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a>.
-</p>
-<dl>
-<dt><a name="index-reftex_002dtoc-1"></a>Command: <strong>reftex-toc</strong></dt>
-<dd><p>Show the table of contents for the current document.  When called with
-one ore two <kbd>C-u</kbd> prefixes, rescan the document first.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Options.html#Options" accesskey="n" rel=
+    "next">Options</a>, Previous: <a href="Imprint.html#Imprint"
+    accesskey="p" rel="prev">Imprint</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Commands-1" id="Commands-1"></a>
 
-<dl>
-<dt><a name="index-reftex_002dlabel-2"></a>Command: <strong>reftex-label</strong></dt>
-<dd><p>Insert a unique label.  With one or two <kbd>C-u</kbd> prefixes, enforce
-document rescan first.
-</p></dd></dl>
+  <h2 class="chapter">17 Commands</h2><a name=
+  "index-Commands_002c-list-of" id=
+  "index-Commands_002c-list-of"></a>
 
-<dl>
-<dt><a name="index-reftex_002dreference-1"></a>Command: <strong>reftex-reference</strong></dt>
-<dd><p>Start a selection process to select a label, and insert a reference to
-it.  With one or two <kbd>C-u</kbd> prefixes, enforce document rescan first.
-</p></dd></dl>
+  <p>Here is a summary of RefTeX&rsquo;s commands which can be
+  executed from LaTeX files. Command which are executed from the
+  special buffers are not described here. All commands are
+  available from the <code>Ref</code> menu. See See <a href=
+  "Key-Bindings.html#Key-Bindings">Key Bindings</a>.</p>
 
-<dl>
-<dt><a name="index-reftex_002dcitation-1"></a>Command: <strong>reftex-citation</strong></dt>
-<dd><p>Make a citation using BibTeX database files.  After prompting for a regular
-expression, scans the buffers with BibTeX entries (taken from the
-<code>\bibliography</code> command or a <code>thebibliography</code> environment)
-and offers the matching entries for selection.  The selected entry is
-formatted according to <code>reftex-cite-format</code> and inserted into the
-buffer. <br>
-When called with a <kbd>C-u</kbd> prefix, prompt for optional arguments in
-cite macros.  When called with a numeric prefix, make that many citations.
-When called with point inside the braces of a <code>\cite</code> command, it
-will add another key, ignoring the value of
-<code>reftex-cite-format</code>. <br>
-The regular expression uses an expanded syntax: &lsquo;<samp>&amp;&amp;</samp>&rsquo; is interpreted
-as <code>and</code>.  Thus, &lsquo;<samp>aaaa&amp;&amp;bbb</samp>&rsquo; matches entries which contain
-both &lsquo;<samp>aaaa</samp>&rsquo; and &lsquo;<samp>bbb</samp>&rsquo;.  While entering the regexp, completion
-on knows citation keys is possible.  &lsquo;<samp>=</samp>&rsquo; is a good regular
-expression to match all entries in all files.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-reftex_002dtoc-1" id=
+    "index-reftex_002dtoc-1"></a>Command:
+    <strong>reftex-toc</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dindex-1"></a>Command: <strong>reftex-index</strong></dt>
-<dd><p>Query for an index macro and insert it along with its arguments.  The
-index macros available are those defined in <code>reftex-index-macro</code> or
-by a call to <code>reftex-add-index-macros</code>, typically from an AUCTeX
-style file.  RefTeX provides completion for the index tag and the
-index key, and will prompt for other arguments.
-</p></dd></dl>
+    <dd>
+      <p>Show the table of contents for the current document. When
+      called with one ore two <kbd>C-u</kbd> prefixes, rescan the
+      document first.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dindex_002dselection_002dor_002dword-1"></a>Command: <strong>reftex-index-selection-or-word</strong></dt>
-<dd><p>Put current selection or the word near point into the default index
-macro.  This uses the information in <code>reftex-index-default-macro</code>
-to make an index entry.  The phrase indexed is the current selection or
-the word near point.  When called with one <kbd>C-u</kbd> prefix, let the
-user have a chance to edit the index entry.  When called with 2
-<kbd>C-u</kbd> as prefix, also ask for the index macro and other stuff.  When
-called inside TeX math mode as determined by the <samp>texmathp.el</samp>
-library which is part of AUCTeX, the string is first processed with the
-<code>reftex-index-math-format</code>, which see.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-reftex_002dlabel-2" id=
+    "index-reftex_002dlabel-2"></a>Command:
+    <strong>reftex-label</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dindex_002dphrase_002dselection_002dor_002dword"></a>Command: <strong>reftex-index-phrase-selection-or-word</strong></dt>
-<dd><p>Add current selection or the word at point to the phrases buffer.
-When you are in transient-mark-mode and the region is active, the
-selection will be used; otherwise the word at point.
-You get a chance to edit the entry in the phrases buffer; to save the
-buffer and return to the LaTeX document, finish with <kbd>C-c C-c</kbd>.
-</p></dd></dl>
+    <dd>
+      <p>Insert a unique label. With one or two <kbd>C-u</kbd>
+      prefixes, enforce document rescan first.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dindex_002dvisit_002dphrases_002dbuffer-1"></a>Command: <strong>reftex-index-visit-phrases-buffer</strong></dt>
-<dd><p>Switch to the phrases buffer, initialize if empty.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-reftex_002dreference-1" id=
+    "index-reftex_002dreference-1"></a>Command:
+    <strong>reftex-reference</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dindex_002dphrases_002dapply_002dto_002dregion"></a>Command: <strong>reftex-index-phrases-apply-to-region</strong></dt>
-<dd><p>Index all index phrases in the current region.
-This works exactly like global indexing from the index phrases buffer,
-but operation is restricted to the current region.
-</p></dd></dl>
+    <dd>
+      <p>Start a selection process to select a label, and insert a
+      reference to it. With one or two <kbd>C-u</kbd> prefixes,
+      enforce document rescan first.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002ddisplay_002dindex-1"></a>Command: <strong>reftex-display-index</strong></dt>
-<dd><p>Display a buffer with an index compiled from the current document.
-When the document has multiple indices, first prompts for the correct one.
-When index support is turned off, offer to turn it on.
-With one or two <kbd>C-u</kbd> prefixes, rescan document first.
-With prefix 2, restrict index to current document section.
-With prefix 3, restrict index to active region.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-reftex_002dcitation-1" id=
+    "index-reftex_002dcitation-1"></a>Command:
+    <strong>reftex-citation</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dview_002dcrossref-3"></a>Command: <strong>reftex-view-crossref</strong></dt>
-<dd><p>View cross reference of macro at point.  Point must be on the <var>key</var>
-argument.  Works with the macros <code>\label</code>, <code>\ref</code>,
-<code>\cite</code>, <code>\bibitem</code>, <code>\index</code> and many derivatives of
-these.  Where it makes sense, subsequent calls show additional
-locations.  See also the variable <code>reftex-view-crossref-extra</code> and
-the command <code>reftex-view-crossref-from-bibtex</code>.  With one or two
-<kbd>C-u</kbd> prefixes, enforce rescanning of the document.  With argument
-2, select the window showing the cross reference.
-</p></dd></dl>
+    <dd>
+      <p>Make a citation using BibTeX database files. After
+      prompting for a regular expression, scans the buffers with
+      BibTeX entries (taken from the <code>\bibliography</code>
+      command or a <code>thebibliography</code> environment) and
+      offers the matching entries for selection. The selected entry
+      is formatted according to <code>reftex-cite-format</code> and
+      inserted into the buffer.<br />
+      When called with a <kbd>C-u</kbd> prefix, prompt for optional
+      arguments in cite macros. When called with a numeric prefix,
+      make that many citations. When called with point inside the
+      braces of a <code>\cite</code> command, it will add another
+      key, ignoring the value of
+      <code>reftex-cite-format</code>.<br />
+      The regular expression uses an expanded syntax:
+      &lsquo;<samp>&amp;&amp;</samp>&rsquo; is interpreted as
+      <code>and</code>. Thus,
+      &lsquo;<samp>aaaa&amp;&amp;bbb</samp>&rsquo; matches entries
+      which contain both &lsquo;<samp>aaaa</samp>&rsquo; and
+      &lsquo;<samp>bbb</samp>&rsquo;. While entering the regexp,
+      completion on knows citation keys is possible.
+      &lsquo;<samp>=</samp>&rsquo; is a good regular expression to
+      match all entries in all files.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dview_002dcrossref_002dfrom_002dbibtex"></a>Command: <strong>reftex-view-crossref-from-bibtex</strong></dt>
-<dd><p>View location in a LaTeX document which cites the BibTeX entry at point.
-Since BibTeX files can be used by many LaTeX documents, this function
-prompts upon first use for a buffer in RefTeX mode.  To reset this
-link to a document, call the function with a prefix arg.  Calling
-this function several times find successive citation locations.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-reftex_002dindex-1" id=
+    "index-reftex_002dindex-1"></a>Command:
+    <strong>reftex-index</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dcreate_002dtags_002dfile"></a>Command: <strong>reftex-create-tags-file</strong></dt>
-<dd><p>Create TAGS file by running <code>etags</code> on the current document.  The
-TAGS file is also immediately visited with
-<code>visit-tags-table</code>.
-</p></dd></dl>
+    <dd>
+      <p>Query for an index macro and insert it along with its
+      arguments. The index macros available are those defined in
+      <code>reftex-index-macro</code> or by a call to
+      <code>reftex-add-index-macros</code>, typically from an
+      AUCTeX style file. RefTeX provides completion for the index
+      tag and the index key, and will prompt for other
+      arguments.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dgrep_002ddocument"></a>Command: <strong>reftex-grep-document</strong></dt>
-<dd><p>Run grep query through all files related to this document.
-With prefix arg, force to rescan document.
-No active TAGS table is required.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-reftex_002dindex_002dselection_002dor_002dword-1" id=
+    "index-reftex_002dindex_002dselection_002dor_002dword-1"></a>Command:
+    <strong>reftex-index-selection-or-word</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dsearch_002ddocument"></a>Command: <strong>reftex-search-document</strong></dt>
-<dd><p>Regexp search through all files of the current document.
-Starts always in the master file.  Stops when a match is found.
-No active TAGS table is required.
-</p></dd></dl>
+    <dd>
+      <p>Put current selection or the word near point into the
+      default index macro. This uses the information in
+      <code>reftex-index-default-macro</code> to make an index
+      entry. The phrase indexed is the current selection or the
+      word near point. When called with one <kbd>C-u</kbd> prefix,
+      let the user have a chance to edit the index entry. When
+      called with 2 <kbd>C-u</kbd> as prefix, also ask for the
+      index macro and other stuff. When called inside TeX math mode
+      as determined by the <samp>texmathp.el</samp> library which
+      is part of AUCTeX, the string is first processed with the
+      <code>reftex-index-math-format</code>, which see.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dquery_002dreplace_002ddocument"></a>Command: <strong>reftex-query-replace-document</strong></dt>
-<dd><p>Run a query-replace-regexp of <var>from</var> with <var>to</var> over the entire
-document.  With prefix arg, replace only word-delimited matches.  No
-active TAGS table is required.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-reftex_002dindex_002dphrase_002dselection_002dor_002dword"
+    id=
+    "index-reftex_002dindex_002dphrase_002dselection_002dor_002dword">
+    </a>Command:
+    <strong>reftex-index-phrase-selection-or-word</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002disearch_002dminor_002dmode"></a>Command: <strong>reftex-isearch-minor-mode</strong></dt>
-<dd><p>Toggle a minor mode which enables incremental search to work globally
-on the entire multifile document.  Files will be searched in the
-sequence they appear in the document.
-</p></dd></dl>
+    <dd>
+      <p>Add current selection or the word at point to the phrases
+      buffer. When you are in transient-mark-mode and the region is
+      active, the selection will be used; otherwise the word at
+      point. You get a chance to edit the entry in the phrases
+      buffer; to save the buffer and return to the LaTeX document,
+      finish with <kbd>C-c C-c</kbd>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dgoto_002dlabel"></a>Command: <strong>reftex-goto-label</strong></dt>
-<dd><p>Prompt for a label (with completion) and jump to the location of this
-label.  Optional prefix argument <var>other-window</var> goes to the label in
-another window.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-reftex_002dindex_002dvisit_002dphrases_002dbuffer-1" id=
+    "index-reftex_002dindex_002dvisit_002dphrases_002dbuffer-1"></a>Command:
+    <strong>reftex-index-visit-phrases-buffer</strong></dt>
 
+    <dd>
+      <p>Switch to the phrases buffer, initialize if empty.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dchange_002dlabel"></a>Command: <strong>reftex-change-label</strong></dt>
-<dd><p>Query replace <var>from</var> with <var>to</var> in all <code>\label</code> and
-<code>\ref</code> commands.  Works on the entire multifile document.  No
-active TAGS table is required.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-reftex_002dindex_002dphrases_002dapply_002dto_002dregion"
+    id=
+    "index-reftex_002dindex_002dphrases_002dapply_002dto_002dregion">
+    </a>Command:
+    <strong>reftex-index-phrases-apply-to-region</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002drenumber_002dsimple_002dlabels"></a>Command: <strong>reftex-renumber-simple-labels</strong></dt>
-<dd><p>Renumber all simple labels in the document to make them sequentially.
-Simple labels are the ones created by RefTeX, consisting only of the
-prefix and a number.  After the command completes, all these labels will
-have sequential numbers throughout the document.  Any references to the
-labels will be changed as well.  For this, RefTeX looks at the
-arguments of any macros which either start or end with the string
-&lsquo;<samp>ref</samp>&rsquo;.  This command should be used with care, in particular in
-multifile documents.  You should not use it if another document refers
-to this one with the <code>xr</code> package.
-</p></dd></dl>
+    <dd>
+      <p>Index all index phrases in the current region. This works
+      exactly like global indexing from the index phrases buffer,
+      but operation is restricted to the current region.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dfind_002dduplicate_002dlabels"></a>Command: <strong>reftex-find-duplicate-labels</strong></dt>
-<dd><p>Produce a list of all duplicate labels in the document.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-reftex_002ddisplay_002dindex-1" id=
+    "index-reftex_002ddisplay_002dindex-1"></a>Command:
+    <strong>reftex-display-index</strong></dt>
 
-<dl>
-<dt><a name="index-reftex_002dcreate_002dbibtex_002dfile-1"></a>Command: <strong>reftex-create-bibtex-file</strong></dt>
-<dd><a name="index-reftex_002dcreate_002dbibtex_002dheader"></a>
-<a name="index-reftex_002dcreate_002dbibtex_002dfooter"></a>
-<p>Create a new BibTeX database file with all entries referenced in
-document.  The command prompts for a filename and writes the collected
-entries to that file.  Only entries referenced in the current document
-with any <code>\cite</code>-like macros are used.  The sequence in the new
-file is the same as it was in the old database.
-</p>
-<p>Entries referenced from other entries must appear after all referencing
-entries.
-</p>
-<p>You can define strings to be used as header or footer for the created
-files in the variables <code>reftex-create-bibtex-header</code> or
-<code>reftex-create-bibtex-footer</code> respectively.
-</p></dd></dl>
+    <dd>
+      <p>Display a buffer with an index compiled from the current
+      document. When the document has multiple indices, first
+      prompts for the correct one. When index support is turned
+      off, offer to turn it on. With one or two <kbd>C-u</kbd>
+      prefixes, rescan document first. With prefix 2, restrict
+      index to current document section. With prefix 3, restrict
+      index to active region.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reftex_002dcustomize"></a>Command: <strong>reftex-customize</strong></dt>
-<dd><p>Run the customize browser on the RefTeX group.
-</p></dd></dl>
-<dl>
-<dt><a name="index-reftex_002dshow_002dcommentary"></a>Command: <strong>reftex-show-commentary</strong></dt>
-<dd><p>Show the commentary section from <samp>reftex.el</samp>.
-</p></dd></dl>
-<dl>
-<dt><a name="index-reftex_002dinfo"></a>Command: <strong>reftex-info</strong></dt>
-<dd><p>Run info on the top RefTeX node.
-</p></dd></dl>
-<dl>
-<dt><a name="index-reftex_002dparse_002ddocument"></a>Command: <strong>reftex-parse-document</strong></dt>
-<dd><p>Parse the entire document in order to update the parsing information.
-</p></dd></dl>
-<dl>
-<dt><a name="index-reftex_002dreset_002dmode"></a>Command: <strong>reftex-reset-mode</strong></dt>
-<dd><p>Enforce rebuilding of several internal lists and variables.  Also
-removes the parse file associated with the current document.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-reftex_002dview_002dcrossref-3" id=
+    "index-reftex_002dview_002dcrossref-3"></a>Command:
+    <strong>reftex-view-crossref</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Options.html#Options" accesskey="n" rel="next">Options</a>, Previous: <a href="Imprint.html#Imprint" accesskey="p" rel="prev">Imprint</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>View cross reference of macro at point. Point must be on
+      the <var>key</var> argument. Works with the macros
+      <code>\label</code>, <code>\ref</code>, <code>\cite</code>,
+      <code>\bibitem</code>, <code>\index</code> and many
+      derivatives of these. Where it makes sense, subsequent calls
+      show additional locations. See also the variable
+      <code>reftex-view-crossref-extra</code> and the command
+      <code>reftex-view-crossref-from-bibtex</code>. With one or
+      two <kbd>C-u</kbd> prefixes, enforce rescanning of the
+      document. With argument 2, select the window showing the
+      cross reference.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-reftex_002dview_002dcrossref_002dfrom_002dbibtex" id=
+    "index-reftex_002dview_002dcrossref_002dfrom_002dbibtex"></a>Command:
+    <strong>reftex-view-crossref-from-bibtex</strong></dt>
 
+    <dd>
+      <p>View location in a LaTeX document which cites the BibTeX
+      entry at point. Since BibTeX files can be used by many LaTeX
+      documents, this function prompts upon first use for a buffer
+      in RefTeX mode. To reset this link to a document, call the
+      function with a prefix arg. Calling this function several
+      times find successive citation locations.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-reftex_002dcreate_002dtags_002dfile" id=
+    "index-reftex_002dcreate_002dtags_002dfile"></a>Command:
+    <strong>reftex-create-tags-file</strong></dt>
+
+    <dd>
+      <p>Create TAGS file by running <code>etags</code> on the
+      current document. The TAGS file is also immediately visited
+      with <code>visit-tags-table</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dgrep_002ddocument" id=
+    "index-reftex_002dgrep_002ddocument"></a>Command:
+    <strong>reftex-grep-document</strong></dt>
+
+    <dd>
+      <p>Run grep query through all files related to this document.
+      With prefix arg, force to rescan document. No active TAGS
+      table is required.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dsearch_002ddocument" id=
+    "index-reftex_002dsearch_002ddocument"></a>Command:
+    <strong>reftex-search-document</strong></dt>
+
+    <dd>
+      <p>Regexp search through all files of the current document.
+      Starts always in the master file. Stops when a match is
+      found. No active TAGS table is required.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dquery_002dreplace_002ddocument"
+    id=
+    "index-reftex_002dquery_002dreplace_002ddocument"></a>Command:
+    <strong>reftex-query-replace-document</strong></dt>
+
+    <dd>
+      <p>Run a query-replace-regexp of <var>from</var> with
+      <var>to</var> over the entire document. With prefix arg,
+      replace only word-delimited matches. No active TAGS table is
+      required.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002disearch_002dminor_002dmode" id=
+    "index-reftex_002disearch_002dminor_002dmode"></a>Command:
+    <strong>reftex-isearch-minor-mode</strong></dt>
+
+    <dd>
+      <p>Toggle a minor mode which enables incremental search to
+      work globally on the entire multifile document. Files will be
+      searched in the sequence they appear in the document.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dgoto_002dlabel" id=
+    "index-reftex_002dgoto_002dlabel"></a>Command:
+    <strong>reftex-goto-label</strong></dt>
+
+    <dd>
+      <p>Prompt for a label (with completion) and jump to the
+      location of this label. Optional prefix argument
+      <var>other-window</var> goes to the label in another
+      window.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dchange_002dlabel" id=
+    "index-reftex_002dchange_002dlabel"></a>Command:
+    <strong>reftex-change-label</strong></dt>
+
+    <dd>
+      <p>Query replace <var>from</var> with <var>to</var> in all
+      <code>\label</code> and <code>\ref</code> commands. Works on
+      the entire multifile document. No active TAGS table is
+      required.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002drenumber_002dsimple_002dlabels"
+    id=
+    "index-reftex_002drenumber_002dsimple_002dlabels"></a>Command:
+    <strong>reftex-renumber-simple-labels</strong></dt>
+
+    <dd>
+      <p>Renumber all simple labels in the document to make them
+      sequentially. Simple labels are the ones created by RefTeX,
+      consisting only of the prefix and a number. After the command
+      completes, all these labels will have sequential numbers
+      throughout the document. Any references to the labels will be
+      changed as well. For this, RefTeX looks at the arguments of
+      any macros which either start or end with the string
+      &lsquo;<samp>ref</samp>&rsquo;. This command should be used
+      with care, in particular in multifile documents. You should
+      not use it if another document refers to this one with the
+      <code>xr</code> package.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dfind_002dduplicate_002dlabels"
+    id="index-reftex_002dfind_002dduplicate_002dlabels"></a>Command:
+    <strong>reftex-find-duplicate-labels</strong></dt>
+
+    <dd>
+      <p>Produce a list of all duplicate labels in the
+      document.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dcreate_002dbibtex_002dfile-1" id=
+    "index-reftex_002dcreate_002dbibtex_002dfile-1"></a>Command:
+    <strong>reftex-create-bibtex-file</strong></dt>
+
+    <dd>
+      <a name="index-reftex_002dcreate_002dbibtex_002dheader" id=
+      "index-reftex_002dcreate_002dbibtex_002dheader"></a> <a name=
+      "index-reftex_002dcreate_002dbibtex_002dfooter" id=
+      "index-reftex_002dcreate_002dbibtex_002dfooter"></a>
+
+      <p>Create a new BibTeX database file with all entries
+      referenced in document. The command prompts for a filename
+      and writes the collected entries to that file. Only entries
+      referenced in the current document with any
+      <code>\cite</code>-like macros are used. The sequence in the
+      new file is the same as it was in the old database.</p>
+
+      <p>Entries referenced from other entries must appear after
+      all referencing entries.</p>
+
+      <p>You can define strings to be used as header or footer for
+      the created files in the variables
+      <code>reftex-create-bibtex-header</code> or
+      <code>reftex-create-bibtex-footer</code> respectively.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dcustomize" id=
+    "index-reftex_002dcustomize"></a>Command:
+    <strong>reftex-customize</strong></dt>
+
+    <dd>
+      <p>Run the customize browser on the RefTeX group.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dshow_002dcommentary" id=
+    "index-reftex_002dshow_002dcommentary"></a>Command:
+    <strong>reftex-show-commentary</strong></dt>
+
+    <dd>
+      <p>Show the commentary section from
+      <samp>reftex.el</samp>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dinfo" id=
+    "index-reftex_002dinfo"></a>Command:
+    <strong>reftex-info</strong></dt>
+
+    <dd>
+      <p>Run info on the top RefTeX node.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dparse_002ddocument" id=
+    "index-reftex_002dparse_002ddocument"></a>Command:
+    <strong>reftex-parse-document</strong></dt>
+
+    <dd>
+      <p>Parse the entire document in order to update the parsing
+      information.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dreset_002dmode" id=
+    "index-reftex_002dreset_002dmode"></a>Command:
+    <strong>reftex-reset-mode</strong></dt>
+
+    <dd>
+      <p>Enforce rebuilding of several internal lists and
+      variables. Also removes the parse file associated with the
+      current document.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Options.html#Options" accesskey="n" rel=
+    "next">Options</a>, Previous: <a href="Imprint.html#Imprint"
+    accesskey="p" rel="prev">Imprint</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

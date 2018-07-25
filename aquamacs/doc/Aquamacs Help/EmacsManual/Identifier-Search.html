@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,166 +20,248 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Identifier Search</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Identifier Search">
-<meta name="keywords" content="GNU Emacs Manual: Identifier Search">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Find-Identifiers.html#Find-Identifiers" rel="up" title="Find Identifiers">
-<link href="List-Identifiers.html#List-Identifiers" rel="next" title="List Identifiers">
-<link href="Xref-Commands.html#Xref-Commands" rel="prev" title="Xref Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Identifier Search</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Identifier Search" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Identifier Search" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Find-Identifiers.html#Find-Identifiers" rel="up"
+  title="Find Identifiers" />
+  <link href="List-Identifiers.html#List-Identifiers" rel="next"
+  title="List Identifiers" />
+  <link href="Xref-Commands.html#Xref-Commands" rel="prev" title=
+  "Xref Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Identifier-Search" id="Identifier-Search"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="List-Identifiers.html#List-Identifiers"
+    accesskey="n" rel="next">List Identifiers</a>, Previous:
+    <a href="Xref-Commands.html#Xref-Commands" accesskey="p" rel=
+    "prev">Xref Commands</a>, Up: <a href=
+    "Find-Identifiers.html#Find-Identifiers" accesskey="u" rel=
+    "up">Find Identifiers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Searching-and-Replacing-with-Identifiers" id=
+  "Searching-and-Replacing-with-Identifiers"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Identifier-Search"></a>
-<div class="header">
-<p>
-Next: <a href="List-Identifiers.html#List-Identifiers" accesskey="n" rel="next">List Identifiers</a>, Previous: <a href="Xref-Commands.html#Xref-Commands" accesskey="p" rel="prev">Xref Commands</a>, Up: <a href="Find-Identifiers.html#Find-Identifiers" accesskey="u" rel="up">Find Identifiers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Searching-and-Replacing-with-Identifiers"></a>
-<h4 class="subsubsection">28.3.1.3 Searching and Replacing with Identifiers</h4>
-<a name="index-search-and-replace-in-multiple-files"></a>
-<a name="index-multiple_002dfile-search-and-replace"></a>
+  <h4 class="subsubsection">28.3.1.3 Searching and Replacing with
+  Identifiers</h4><a name=
+  "index-search-and-replace-in-multiple-files" id=
+  "index-search-and-replace-in-multiple-files"></a> <a name=
+  "index-multiple_002dfile-search-and-replace" id=
+  "index-multiple_002dfile-search-and-replace"></a>
 
-<p>The commands in this section perform various search and replace
-operations either on identifiers themselves or on files that reference
-them.
-</p>
-<dl compact="compact">
-<dt><kbd>M-?</kbd></dt>
-<dd><p>Find all the references for the identifier at point.
-</p></dd>
-<dt><kbd>M-x xref-query-replace-in-results <span class="key">RET</span> <var>regexp</var> <span class="key">RET</span> <var>replacement</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Interactively replace <var>regexp</var> with <var>replacement</var> in the names
-of all the identifiers shown in the <samp>*xref*</samp> buffer.
-</p></dd>
-<dt><kbd>M-x tags-search <span class="key">RET</span> <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Search for <var>regexp</var> through the files in the selected tags
-table.
-</p></dd>
-<dt><kbd>M-x tags-query-replace <span class="key">RET</span> <var>regexp</var> <span class="key">RET</span> <var>replacement</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Perform a <code>query-replace-regexp</code> on each file in the selected tags table.
-</p></dd>
-<dt><kbd>M-x tags-loop-continue</kbd></dt>
-<dd><p>Restart one of the last 2 commands above, from the current location of point.
-</p></dd>
-</dl>
+  <p>The commands in this section perform various search and
+  replace operations either on identifiers themselves or on files
+  that reference them.</p>
 
-<a name="index-M_002d_003f"></a>
-<a name="index-xref_002dfind_002dreferences"></a>
-<p><kbd>M-?</kbd> finds all the references for the identifier at point.  If
-there&rsquo;s no identifier at point, or when invoked with a prefix
-argument, the command prompts for the identifier, with completion.  It
-then presents a <samp>*xref*</samp> buffer with all the references to the
-identifier, showing the file name and the line where the identifier is
-referenced.  The XREF mode commands are available in this buffer, see
-<a href="Xref-Commands.html#Xref-Commands">Xref Commands</a>.
-</p>
-<a name="index-xref_002dquery_002dreplace_002din_002dresults-1"></a>
-<p><kbd>M-x xref-query-replace-in-results</kbd> reads a regexp to match identifier
-names and a replacement string, just like ordinary <kbd>M-x
-query-replace-regexp</kbd>.  It then performs the specified replacement in
-the names of the matching identifiers in all the places in all the
-files where these identifiers are referenced.  This is useful when you
-rename your identifiers as part of refactoring.  This command should
-be invoked in the <samp>*xref*</samp> buffer generated by <code>M-?</code>.
-</p>
-<a name="index-tags_002dsearch"></a>
-<p><kbd>M-x tags-search</kbd> reads a regexp using the minibuffer, then
-searches for matches in all the files in the selected tags table, one
-file at a time.  It displays the name of the file being searched so
-you can follow its progress.  As soon as it finds an occurrence,
-<code>tags-search</code> returns.  This command requires tags tables to be
-available (see <a href="Tags-Tables.html#Tags-Tables">Tags Tables</a>).
-</p>
-<a name="index-tags_002dloop_002dcontinue"></a>
-<p>Having found one match with <code>tags-search</code>, you probably want to
-find all the rest.  Type <kbd>M-x tags-loop-continue</kbd> to resume the
-<code>tags-search</code>, finding one more match.  This searches the rest of
-the current buffer, followed by the remaining files of the tags table.
-</p>
-<a name="index-tags_002dquery_002dreplace"></a>
-<p><kbd>M-x tags-query-replace</kbd> performs a single
-<code>query-replace-regexp</code> through all the files in the tags table.  It
-reads a regexp to search for and a string to replace with, just like
-ordinary <kbd>M-x query-replace-regexp</kbd>.  It searches much like <kbd>M-x
-tags-search</kbd>, but repeatedly, processing matches according to your
-input.  See <a href="Query-Replace.html#Query-Replace">Query Replace</a>, for more information on query replace.
-</p>
-<a name="index-tags_002dcase_002dfold_002dsearch"></a>
-<a name="index-case_002dsensitivity-and-tags-search"></a>
-<p>You can control the case-sensitivity of tags search commands by
-customizing the value of the variable <code>tags-case-fold-search</code>.  The
-default is to use the same setting as the value of
-<code>case-fold-search</code> (see <a href="Lax-Search.html#Lax-Search">Lax Search</a>).
-</p>
-<p>It is possible to get through all the files in the tags table with a
-single invocation of <kbd>M-x tags-query-replace</kbd>.  But often it is
-useful to exit temporarily, which you can do with any input event that
-has no special query replace meaning.  You can resume the query
-replace subsequently by typing <kbd>M-x tags-loop-continue</kbd>; this
-command resumes the last tags search or replace command that you did.
-For instance, to skip the rest of the current file, you can type
-<kbd><span class="nolinebreak">M-&gt;</span>&nbsp;<span class="nolinebreak">M-x</span>&nbsp;<span class="nolinebreak">tags-loop-continue</span></kbd><!-- /@w -->.
-</p>
-<p>Note that the commands described above carry out much broader
-searches than the <code>xref-find-definitions</code> family.  The
-<code>xref-find-definitions</code> commands search only for definitions of
-identifiers that match your string or regexp.  The commands
-<code>xref-find-references</code>, <code>tags-search</code>, and
-<code>tags-query-replace</code> find every occurrence of the identifier or
-regexp, as ordinary search commands and replace commands do in the
-current buffer.
-</p>
-<p>As an alternative to <code>xref-find-references</code> and
-<code>tags-search</code>, you can run <code>grep</code> as a subprocess and
-have Emacs show you the matching lines one by one.  See <a href="Grep-Searching.html#Grep-Searching">Grep Searching</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="List-Identifiers.html#List-Identifiers" accesskey="n" rel="next">List Identifiers</a>, Previous: <a href="Xref-Commands.html#Xref-Commands" accesskey="p" rel="prev">Xref Commands</a>, Up: <a href="Find-Identifiers.html#Find-Identifiers" accesskey="u" rel="up">Find Identifiers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>M-?</kbd></dt>
 
+    <dd>
+      <p>Find all the references for the identifier at point.</p>
+    </dd>
 
+    <dt><kbd>M-x xref-query-replace-in-results <span class=
+    "key">RET</span> <var>regexp</var> <span class="key">RET</span>
+    <var>replacement</var> <span class="key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Interactively replace <var>regexp</var> with
+      <var>replacement</var> in the names of all the identifiers
+      shown in the <samp>*xref*</samp> buffer.</p>
+    </dd>
+
+    <dt><kbd>M-x tags-search <span class="key">RET</span>
+    <var>regexp</var> <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Search for <var>regexp</var> through the files in the
+      selected tags table.</p>
+    </dd>
+
+    <dt><kbd>M-x tags-query-replace <span class="key">RET</span>
+    <var>regexp</var> <span class="key">RET</span>
+    <var>replacement</var> <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Perform a <code>query-replace-regexp</code> on each file
+      in the selected tags table.</p>
+    </dd>
+
+    <dt><kbd>M-x tags-loop-continue</kbd></dt>
+
+    <dd>
+      <p>Restart one of the last 2 commands above, from the current
+      location of point.</p>
+    </dd>
+  </dl><a name="index-M_002d_003f" id="index-M_002d_003f"></a>
+  <a name="index-xref_002dfind_002dreferences" id=
+  "index-xref_002dfind_002dreferences"></a>
+
+  <p><kbd>M-?</kbd> finds all the references for the identifier at
+  point. If there&rsquo;s no identifier at point, or when invoked
+  with a prefix argument, the command prompts for the identifier,
+  with completion. It then presents a <samp>*xref*</samp> buffer
+  with all the references to the identifier, showing the file name
+  and the line where the identifier is referenced. The XREF mode
+  commands are available in this buffer, see <a href=
+  "Xref-Commands.html#Xref-Commands">Xref Commands</a>.</p><a name=
+  "index-xref_002dquery_002dreplace_002din_002dresults-1" id=
+  "index-xref_002dquery_002dreplace_002din_002dresults-1"></a>
+
+  <p><kbd>M-x xref-query-replace-in-results</kbd> reads a regexp to
+  match identifier names and a replacement string, just like
+  ordinary <kbd>M-x query-replace-regexp</kbd>. It then performs
+  the specified replacement in the names of the matching
+  identifiers in all the places in all the files where these
+  identifiers are referenced. This is useful when you rename your
+  identifiers as part of refactoring. This command should be
+  invoked in the <samp>*xref*</samp> buffer generated by
+  <code>M-?</code>.</p><a name="index-tags_002dsearch" id=
+  "index-tags_002dsearch"></a>
+
+  <p><kbd>M-x tags-search</kbd> reads a regexp using the
+  minibuffer, then searches for matches in all the files in the
+  selected tags table, one file at a time. It displays the name of
+  the file being searched so you can follow its progress. As soon
+  as it finds an occurrence, <code>tags-search</code> returns. This
+  command requires tags tables to be available (see <a href=
+  "Tags-Tables.html#Tags-Tables">Tags Tables</a>).</p><a name=
+  "index-tags_002dloop_002dcontinue" id=
+  "index-tags_002dloop_002dcontinue"></a>
+
+  <p>Having found one match with <code>tags-search</code>, you
+  probably want to find all the rest. Type <kbd>M-x
+  tags-loop-continue</kbd> to resume the <code>tags-search</code>,
+  finding one more match. This searches the rest of the current
+  buffer, followed by the remaining files of the tags
+  table.</p><a name="index-tags_002dquery_002dreplace" id=
+  "index-tags_002dquery_002dreplace"></a>
+
+  <p><kbd>M-x tags-query-replace</kbd> performs a single
+  <code>query-replace-regexp</code> through all the files in the
+  tags table. It reads a regexp to search for and a string to
+  replace with, just like ordinary <kbd>M-x
+  query-replace-regexp</kbd>. It searches much like <kbd>M-x
+  tags-search</kbd>, but repeatedly, processing matches according
+  to your input. See <a href=
+  "Query-Replace.html#Query-Replace">Query Replace</a>, for more
+  information on query replace.</p><a name=
+  "index-tags_002dcase_002dfold_002dsearch" id=
+  "index-tags_002dcase_002dfold_002dsearch"></a> <a name=
+  "index-case_002dsensitivity-and-tags-search" id=
+  "index-case_002dsensitivity-and-tags-search"></a>
+
+  <p>You can control the case-sensitivity of tags search commands
+  by customizing the value of the variable
+  <code>tags-case-fold-search</code>. The default is to use the
+  same setting as the value of <code>case-fold-search</code> (see
+  <a href="Lax-Search.html#Lax-Search">Lax Search</a>).</p>
+
+  <p>It is possible to get through all the files in the tags table
+  with a single invocation of <kbd>M-x tags-query-replace</kbd>.
+  But often it is useful to exit temporarily, which you can do with
+  any input event that has no special query replace meaning. You
+  can resume the query replace subsequently by typing <kbd>M-x
+  tags-loop-continue</kbd>; this command resumes the last tags
+  search or replace command that you did. For instance, to skip the
+  rest of the current file, you can type <kbd><span class=
+  "nolinebreak">M-&gt;</span>&nbsp;<span class=
+  "nolinebreak">M-x</span>&nbsp;<span class=
+  "nolinebreak">tags-loop-continue</span></kbd><!-- /@w -->.</p>
+
+  <p>Note that the commands described above carry out much broader
+  searches than the <code>xref-find-definitions</code> family. The
+  <code>xref-find-definitions</code> commands search only for
+  definitions of identifiers that match your string or regexp. The
+  commands <code>xref-find-references</code>,
+  <code>tags-search</code>, and <code>tags-query-replace</code>
+  find every occurrence of the identifier or regexp, as ordinary
+  search commands and replace commands do in the current
+  buffer.</p>
+
+  <p>As an alternative to <code>xref-find-references</code> and
+  <code>tags-search</code>, you can run <code>grep</code> as a
+  subprocess and have Emacs show you the matching lines one by one.
+  See <a href="Grep-Searching.html#Grep-Searching">Grep
+  Searching</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="List-Identifiers.html#List-Identifiers"
+    accesskey="n" rel="next">List Identifiers</a>, Previous:
+    <a href="Xref-Commands.html#Xref-Commands" accesskey="p" rel=
+    "prev">Xref Commands</a>, Up: <a href=
+    "Find-Identifiers.html#Find-Identifiers" accesskey="u" rel=
+    "up">Find Identifiers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

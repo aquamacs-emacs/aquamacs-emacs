@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,345 +19,593 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Standard Hooks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Standard Hooks">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Standard Hooks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Index.html#Index" rel="next" title="Index">
-<link href="Standard-Keymaps.html#Standard-Keymaps" rel="prev" title="Standard Keymaps">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Standard Hooks</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Standard Hooks" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Standard Hooks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Index.html#Index" rel="next" title="Index" />
+  <link href="Standard-Keymaps.html#Standard-Keymaps" rel="prev"
+  title="Standard Keymaps" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Standard-Hooks" id="Standard-Hooks"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Index.html#Index" accesskey="n" rel=
+    "next">Index</a>, Previous: <a href=
+    "Standard-Keymaps.html#Standard-Keymaps" accesskey="p" rel=
+    "prev">Standard Keymaps</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Standard-Hooks-1" id="Standard-Hooks-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Standard-Hooks"></a>
-<div class="header">
-<p>
-Next: <a href="Index.html#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="Standard-Keymaps.html#Standard-Keymaps" accesskey="p" rel="prev">Standard Keymaps</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Standard-Hooks-1"></a>
-<h2 class="appendix">Appendix H Standard Hooks</h2>
-<a name="index-standard-hooks"></a>
-<a name="index-hook-variables_002c-list-of"></a>
+  <h2 class="appendix">Appendix H Standard Hooks</h2><a name=
+  "index-standard-hooks" id="index-standard-hooks"></a> <a name=
+  "index-hook-variables_002c-list-of" id=
+  "index-hook-variables_002c-list-of"></a>
 
-<p>The following is a list of some hook variables that let you provide
-functions to be called from within Emacs on suitable occasions.
-</p>
-<p>Most of these variables have names ending with &lsquo;<samp>-hook</samp>&rsquo;.  They are
-<em>normal hooks</em>, run by means of <code>run-hooks</code>.  The value of such
-a hook is a list of functions; the functions are called with no
-arguments and their values are completely ignored.  The recommended way
-to put a new function on such a hook is to call <code>add-hook</code>.
-See <a href="Hooks.html#Hooks">Hooks</a>, for more information about using hooks.
-</p>
-<p>The variables whose names end in &lsquo;<samp>-functions</samp>&rsquo; are usually <em>abnormal
-hooks</em> (some old code may also use the deprecated &lsquo;<samp>-hooks</samp>&rsquo; suffix); their
-values are lists of functions, but these functions are called in a special way
-(they are passed arguments, or their return values are used).  The variables
-whose names end in &lsquo;<samp>-function</samp>&rsquo; have single functions as their values.
-</p>
-<p>This is not an exhaustive list, it only covers the more general hooks.
-For example, every major mode defines a hook named
-&lsquo;<samp><var>modename</var>-mode-hook</samp>&rsquo;.  The major mode command runs this
-normal hook with <code>run-mode-hooks</code> as the very last thing it does.
-See <a href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>.  Most minor modes have mode hooks too.
-</p>
-<p>A special feature allows you to specify expressions to evaluate if and
-when a file is loaded (see <a href="Hooks-for-Loading.html#Hooks-for-Loading">Hooks for Loading</a>).  That feature is
-not exactly a hook, but does a similar job.
-</p>
+  <p>The following is a list of some hook variables that let you
+  provide functions to be called from within Emacs on suitable
+  occasions.</p>
 
-<dl compact="compact">
-<dt><code>activate-mark-hook</code></dt>
-<dt><code>deactivate-mark-hook</code></dt>
-<dd><p>See <a href="The-Mark.html#The-Mark">The Mark</a>.
-</p>
-</dd>
-<dt><code>after-change-functions</code></dt>
-<dt><code>before-change-functions</code></dt>
-<dt><code>first-change-hook</code></dt>
-<dd><p>See <a href="Change-Hooks.html#Change-Hooks">Change Hooks</a>.
-</p>
-</dd>
-<dt><code>after-change-major-mode-hook</code></dt>
-<dt><code>change-major-mode-after-body-hook</code></dt>
-<dd><p>See <a href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>.
-</p>
-</dd>
-<dt><code>after-init-hook</code></dt>
-<dt><code>before-init-hook</code></dt>
-<dt><code>emacs-startup-hook</code></dt>
-<dt><code>window-setup-hook</code></dt>
-<dd><p>See <a href="Init-File.html#Init-File">Init File</a>.
-</p>
-</dd>
-<dt><code>after-insert-file-functions</code></dt>
-<dt><code>write-region-annotate-functions</code></dt>
-<dt><code>write-region-post-annotation-function</code></dt>
-<dd><p>See <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>.
-</p>
-</dd>
-<dt><code>after-make-frame-functions</code></dt>
-<dt><code>before-make-frame-hook</code></dt>
-<dd><p>See <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>.
-</p>
+  <p>Most of these variables have names ending with
+  &lsquo;<samp>-hook</samp>&rsquo;. They are <em>normal hooks</em>,
+  run by means of <code>run-hooks</code>. The value of such a hook
+  is a list of functions; the functions are called with no
+  arguments and their values are completely ignored. The
+  recommended way to put a new function on such a hook is to call
+  <code>add-hook</code>. See <a href="Hooks.html#Hooks">Hooks</a>,
+  for more information about using hooks.</p>
 
-</dd>
-<dt><code>after-save-hook</code></dt>
-<dt><code>before-save-hook</code></dt>
-<dt><code>write-contents-functions</code></dt>
-<dt><code>write-file-functions</code></dt>
-<dd><p>See <a href="Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>.
-</p>
-</dd>
-<dt><code>after-setting-font-hook</code></dt>
-<dd><a name="index-after_002dsetting_002dfont_002dhook"></a>
-<p>Hook run after a frame&rsquo;s font changes.
-</p>
-</dd>
-<dt><code>auto-save-hook</code></dt>
-<dd><p>See <a href="Auto_002dSaving.html#Auto_002dSaving">Auto-Saving</a>.
-</p>
-</dd>
-<dt><code>before-hack-local-variables-hook</code></dt>
-<dt><code>hack-local-variables-hook</code></dt>
-<dd><p>See <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>.
-</p>
-</dd>
-<dt><code>buffer-access-fontify-functions</code></dt>
-<dd><p>See <a href="Lazy-Properties.html#Lazy-Properties">Lazy Properties</a>.
-</p>
-</dd>
-<dt><code>buffer-list-update-hook</code></dt>
-<dd><a name="index-buffer_002dlist_002dupdate_002dhook-1"></a>
-<p>Hook run when the buffer list changes (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>).
-</p>
-</dd>
-<dt><code>buffer-quit-function</code></dt>
-<dd><a name="index-buffer_002dquit_002dfunction"></a>
-<p>Function to call to quit the current buffer.
-</p>
-</dd>
-<dt><code>change-major-mode-hook</code></dt>
-<dd><p>See <a href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal">Creating Buffer-Local</a>.
-</p>
-</dd>
-<dt><code>command-line-functions</code></dt>
-<dd><p>See <a href="Command_002dLine-Arguments.html#Command_002dLine-Arguments">Command-Line Arguments</a>.
-</p>
-</dd>
-<dt><code>delayed-warnings-hook</code></dt>
-<dd><a name="index-delayed_002dwarnings_002dhook-1"></a>
-<p>The command loop runs this soon after <code>post-command-hook</code> (q.v.).
-</p>
-</dd>
-<dt><code>focus-in-hook</code></dt>
-<dd><a name="index-focus_002din_002dhook-1"></a>
-</dd>
-<dt><code>focus-out-hook</code></dt>
-<dd><a name="index-focus_002dout_002dhook-1"></a>
-<p>See <a href="Input-Focus.html#Input-Focus">Input Focus</a>.
-</p>
-</dd>
-<dt><code>delete-frame-functions</code></dt>
-<dd><p>See <a href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>.
-</p>
-</dd>
-<dt><code>delete-terminal-functions</code></dt>
-<dd><p>See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
-</p>
-</dd>
-<dt><code>pop-up-frame-function</code></dt>
-<dt><code>split-window-preferred-function</code></dt>
-<dd><p>See <a href="Choosing-Window-Options.html#Choosing-Window-Options">Choosing Window Options</a>.
-</p>
-</dd>
-<dt><code>echo-area-clear-hook</code></dt>
-<dd><p>See <a href="Echo-Area-Customization.html#Echo-Area-Customization">Echo Area Customization</a>.
-</p>
-</dd>
-<dt><code>find-file-hook</code></dt>
-<dt><code>find-file-not-found-functions</code></dt>
-<dd><p>See <a href="Visiting-Functions.html#Visiting-Functions">Visiting Functions</a>.
-</p>
-</dd>
-<dt><code>font-lock-extend-after-change-region-function</code></dt>
-<dd><p>See <a href="Region-to-Refontify.html#Region-to-Refontify">Region to Refontify</a>.
-</p>
-</dd>
-<dt><code>font-lock-extend-region-functions</code></dt>
-<dd><p>See <a href="Multiline-Font-Lock.html#Multiline-Font-Lock">Multiline Font Lock</a>.
-</p>
-</dd>
-<dt><code>font-lock-fontify-buffer-function</code></dt>
-<dt><code>font-lock-fontify-region-function</code></dt>
-<dt><code>font-lock-mark-block-function</code></dt>
-<dt><code>font-lock-unfontify-buffer-function</code></dt>
-<dt><code>font-lock-unfontify-region-function</code></dt>
-<dd><p>See <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>.
-</p>
-</dd>
-<dt><code>fontification-functions</code></dt>
-<dd><p>See <a href="Auto-Faces.html#Auto-Faces">Automatic Face Assignment</a>.
-</p>
-</dd>
-<dt><code>frame-auto-hide-function</code></dt>
-<dd><p>See <a href="Quitting-Windows.html#Quitting-Windows">Quitting Windows</a>.
-</p>
-</dd>
-<dt><code>kill-buffer-hook</code></dt>
-<dt><code>kill-buffer-query-functions</code></dt>
-<dd><p>See <a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>.
-</p>
-</dd>
-<dt><code>kill-emacs-hook</code></dt>
-<dt><code>kill-emacs-query-functions</code></dt>
-<dd><p>See <a href="Killing-Emacs.html#Killing-Emacs">Killing Emacs</a>.
-</p>
-</dd>
-<dt><code>menu-bar-update-hook</code></dt>
-<dd><p>See <a href="Menu-Bar.html#Menu-Bar">Menu Bar</a>.
-</p>
-</dd>
-<dt><code>minibuffer-setup-hook</code></dt>
-<dt><code>minibuffer-exit-hook</code></dt>
-<dd><p>See <a href="Minibuffer-Misc.html#Minibuffer-Misc">Minibuffer Misc</a>.
-</p>
-</dd>
-<dt><code>mouse-leave-buffer-hook</code></dt>
-<dd><a name="index-mouse_002dleave_002dbuffer_002dhook"></a>
-<p>Hook run when about to switch windows with a mouse command.
-</p>
-</dd>
-<dt><code>mouse-position-function</code></dt>
-<dd><p>See <a href="Mouse-Position.html#Mouse-Position">Mouse Position</a>.
-</p>
-</dd>
-<dt><code>prefix-command-echo-keystrokes-functions</code></dt>
-<dd><a name="index-prefix_002dcommand_002decho_002dkeystrokes_002dfunctions"></a>
-<p>An abnormal hook run by prefix commands (such as <kbd>C-u</kbd>) which
-should return a string describing the current prefix state.  For
-example, <kbd>C-u</kbd> produces &lsquo;<samp>C-u-</samp>&rsquo; and &lsquo;<samp>C-u 1 2 3-</samp>&rsquo;.  Each
-hook function is called with no arguments and should return a string
-describing the current prefix state, or <code>nil</code> if there&rsquo;s no
-prefix state.  See <a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>.
-</p>
-</dd>
-<dt><code>prefix-command-preserve-state-hook</code></dt>
-<dd><a name="index-prefix_002dcommand_002dpreserve_002dstate_002dhook"></a>
-<p>Hook run when a prefix command needs to preserve the prefix by passing
-the current prefix command state to the next command.  For example,
-<kbd>C-u</kbd> needs to pass the state to the next command when the user
-types <kbd>C-u -</kbd> or follows <kbd>C-u</kbd> with a digit.
-</p>
-</dd>
-<dt><code>pre-redisplay-functions</code></dt>
-<dd><p>Hook run in each window just before redisplaying it.  See <a href="Forcing-Redisplay.html#Forcing-Redisplay">Forcing Redisplay</a>.
-</p>
-</dd>
-<dt><code>post-command-hook</code></dt>
-<dt><code>pre-command-hook</code></dt>
-<dd><p>See <a href="Command-Overview.html#Command-Overview">Command Overview</a>.
-</p>
-</dd>
-<dt><code>post-gc-hook</code></dt>
-<dd><p>See <a href="Garbage-Collection.html#Garbage-Collection">Garbage Collection</a>.
-</p>
-</dd>
-<dt><code>post-self-insert-hook</code></dt>
-<dd><p>See <a href="Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes">Keymaps and Minor Modes</a>.
-</p>
+  <p>The variables whose names end in
+  &lsquo;<samp>-functions</samp>&rsquo; are usually <em>abnormal
+  hooks</em> (some old code may also use the deprecated
+  &lsquo;<samp>-hooks</samp>&rsquo; suffix); their values are lists
+  of functions, but these functions are called in a special way
+  (they are passed arguments, or their return values are used). The
+  variables whose names end in &lsquo;<samp>-function</samp>&rsquo;
+  have single functions as their values.</p>
 
-</dd>
-<dt><code>suspend-hook</code></dt>
-<dt><code>suspend-resume-hook</code></dt>
-<dt><code>suspend-tty-functions</code></dt>
-<dt><code>resume-tty-functions</code></dt>
-<dd><p>See <a href="Suspending-Emacs.html#Suspending-Emacs">Suspending Emacs</a>.
-</p>
-</dd>
-<dt><code>syntax-begin-function</code></dt>
-<dt><code>syntax-propertize-extend-region-functions</code></dt>
-<dt><code>syntax-propertize-function</code></dt>
-<dt><code>font-lock-syntactic-face-function</code></dt>
-<dd><p>See <a href="Syntactic-Font-Lock.html#Syntactic-Font-Lock">Syntactic Font Lock</a>.  See <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>.
-</p>
-</dd>
-<dt><code>temp-buffer-setup-hook</code></dt>
-<dt><code>temp-buffer-show-function</code></dt>
-<dt><code>temp-buffer-show-hook</code></dt>
-<dd><p>See <a href="Temporary-Displays.html#Temporary-Displays">Temporary Displays</a>.
-</p>
-</dd>
-<dt><code>tty-setup-hook</code></dt>
-<dd><p>See <a href="Terminal_002dSpecific.html#Terminal_002dSpecific">Terminal-Specific</a>.
-</p>
-</dd>
-<dt><code>window-configuration-change-hook</code></dt>
-<dt><code>window-scroll-functions</code></dt>
-<dt><code>window-size-change-functions</code></dt>
-<dd><p>See <a href="Window-Hooks.html#Window-Hooks">Window Hooks</a>.
-</p>
-</dd>
-<dt><code>window-text-change-functions</code></dt>
-<dd><a name="index-window_002dtext_002dchange_002dfunctions"></a>
-<p>Functions to call in redisplay when text in the window might change.
-</p>
-</dd>
-</dl>
+  <p>This is not an exhaustive list, it only covers the more
+  general hooks. For example, every major mode defines a hook named
+  &lsquo;<samp><var>modename</var>-mode-hook</samp>&rsquo;. The
+  major mode command runs this normal hook with
+  <code>run-mode-hooks</code> as the very last thing it does. See
+  <a href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>. Most minor
+  modes have mode hooks too.</p>
 
+  <p>A special feature allows you to specify expressions to
+  evaluate if and when a file is loaded (see <a href=
+  "Hooks-for-Loading.html#Hooks-for-Loading">Hooks for
+  Loading</a>). That feature is not exactly a hook, but does a
+  similar job.</p>
 
+  <dl compact="compact">
+    <dt><code>activate-mark-hook</code></dt>
 
+    <dt><code>deactivate-mark-hook</code></dt>
 
+    <dd>
+      <p>See <a href="The-Mark.html#The-Mark">The Mark</a>.</p>
+    </dd>
 
+    <dt><code>after-change-functions</code></dt>
 
+    <dt><code>before-change-functions</code></dt>
 
+    <dt><code>first-change-hook</code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Index.html#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="Standard-Keymaps.html#Standard-Keymaps" accesskey="p" rel="prev">Standard Keymaps</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>See <a href="Change-Hooks.html#Change-Hooks">Change
+      Hooks</a>.</p>
+    </dd>
 
+    <dt><code>after-change-major-mode-hook</code></dt>
 
+    <dt><code>change-major-mode-after-body-hook</code></dt>
 
+    <dd>
+      <p>See <a href="Mode-Hooks.html#Mode-Hooks">Mode
+      Hooks</a>.</p>
+    </dd>
+
+    <dt><code>after-init-hook</code></dt>
+
+    <dt><code>before-init-hook</code></dt>
+
+    <dt><code>emacs-startup-hook</code></dt>
+
+    <dt><code>window-setup-hook</code></dt>
+
+    <dd>
+      <p>See <a href="Init-File.html#Init-File">Init File</a>.</p>
+    </dd>
+
+    <dt><code>after-insert-file-functions</code></dt>
+
+    <dt><code>write-region-annotate-functions</code></dt>
+
+    <dt><code>write-region-post-annotation-function</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Format-Conversion.html#Format-Conversion">Format
+      Conversion</a>.</p>
+    </dd>
+
+    <dt><code>after-make-frame-functions</code></dt>
+
+    <dt><code>before-make-frame-hook</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Creating-Frames.html#Creating-Frames">Creating
+      Frames</a>.</p>
+    </dd>
+
+    <dt><code>after-save-hook</code></dt>
+
+    <dt><code>before-save-hook</code></dt>
+
+    <dt><code>write-contents-functions</code></dt>
+
+    <dt><code>write-file-functions</code></dt>
+
+    <dd>
+      <p>See <a href="Saving-Buffers.html#Saving-Buffers">Saving
+      Buffers</a>.</p>
+    </dd>
+
+    <dt><code>after-setting-font-hook</code></dt>
+
+    <dd>
+      <a name="index-after_002dsetting_002dfont_002dhook" id=
+      "index-after_002dsetting_002dfont_002dhook"></a>
+
+      <p>Hook run after a frame&rsquo;s font changes.</p>
+    </dd>
+
+    <dt><code>auto-save-hook</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Auto_002dSaving.html#Auto_002dSaving">Auto-Saving</a>.</p>
+    </dd>
+
+    <dt><code>before-hack-local-variables-hook</code></dt>
+
+    <dt><code>hack-local-variables-hook</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "File-Local-Variables.html#File-Local-Variables">File Local
+      Variables</a>.</p>
+    </dd>
+
+    <dt><code>buffer-access-fontify-functions</code></dt>
+
+    <dd>
+      <p>See <a href="Lazy-Properties.html#Lazy-Properties">Lazy
+      Properties</a>.</p>
+    </dd>
+
+    <dt><code>buffer-list-update-hook</code></dt>
+
+    <dd>
+      <a name="index-buffer_002dlist_002dupdate_002dhook-1" id=
+      "index-buffer_002dlist_002dupdate_002dhook-1"></a>
+
+      <p>Hook run when the buffer list changes (see <a href=
+      "Buffer-List.html#Buffer-List">Buffer List</a>).</p>
+    </dd>
+
+    <dt><code>buffer-quit-function</code></dt>
+
+    <dd>
+      <a name="index-buffer_002dquit_002dfunction" id=
+      "index-buffer_002dquit_002dfunction"></a>
+
+      <p>Function to call to quit the current buffer.</p>
+    </dd>
+
+    <dt><code>change-major-mode-hook</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal">Creating
+      Buffer-Local</a>.</p>
+    </dd>
+
+    <dt><code>command-line-functions</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Command_002dLine-Arguments.html#Command_002dLine-Arguments">Command-Line
+      Arguments</a>.</p>
+    </dd>
+
+    <dt><code>delayed-warnings-hook</code></dt>
+
+    <dd>
+      <a name="index-delayed_002dwarnings_002dhook-1" id=
+      "index-delayed_002dwarnings_002dhook-1"></a>
+
+      <p>The command loop runs this soon after
+      <code>post-command-hook</code> (q.v.).</p>
+    </dd>
+
+    <dt><code>focus-in-hook</code></dt>
+
+    <dd><a name="index-focus_002din_002dhook-1" id=
+    "index-focus_002din_002dhook-1"></a></dd>
+
+    <dt><code>focus-out-hook</code></dt>
+
+    <dd>
+      <a name="index-focus_002dout_002dhook-1" id=
+      "index-focus_002dout_002dhook-1"></a>
+
+      <p>See <a href="Input-Focus.html#Input-Focus">Input
+      Focus</a>.</p>
+    </dd>
+
+    <dt><code>delete-frame-functions</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Deleting-Frames.html#Deleting-Frames">Deleting
+      Frames</a>.</p>
+    </dd>
+
+    <dt><code>delete-terminal-functions</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Multiple-Terminals.html#Multiple-Terminals">Multiple
+      Terminals</a>.</p>
+    </dd>
+
+    <dt><code>pop-up-frame-function</code></dt>
+
+    <dt><code>split-window-preferred-function</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Choosing-Window-Options.html#Choosing-Window-Options">Choosing
+      Window Options</a>.</p>
+    </dd>
+
+    <dt><code>echo-area-clear-hook</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Echo-Area-Customization.html#Echo-Area-Customization">Echo
+      Area Customization</a>.</p>
+    </dd>
+
+    <dt><code>find-file-hook</code></dt>
+
+    <dt><code>find-file-not-found-functions</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Visiting-Functions.html#Visiting-Functions">Visiting
+      Functions</a>.</p>
+    </dd>
+
+    <dt>
+    <code>font-lock-extend-after-change-region-function</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Region-to-Refontify.html#Region-to-Refontify">Region to
+      Refontify</a>.</p>
+    </dd>
+
+    <dt><code>font-lock-extend-region-functions</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Multiline-Font-Lock.html#Multiline-Font-Lock">Multiline Font
+      Lock</a>.</p>
+    </dd>
+
+    <dt><code>font-lock-fontify-buffer-function</code></dt>
+
+    <dt><code>font-lock-fontify-region-function</code></dt>
+
+    <dt><code>font-lock-mark-block-function</code></dt>
+
+    <dt><code>font-lock-unfontify-buffer-function</code></dt>
+
+    <dt><code>font-lock-unfontify-region-function</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other
+      Font Lock Variables</a>.</p>
+    </dd>
+
+    <dt><code>fontification-functions</code></dt>
+
+    <dd>
+      <p>See <a href="Auto-Faces.html#Auto-Faces">Automatic Face
+      Assignment</a>.</p>
+    </dd>
+
+    <dt><code>frame-auto-hide-function</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Quitting-Windows.html#Quitting-Windows">Quitting
+      Windows</a>.</p>
+    </dd>
+
+    <dt><code>kill-buffer-hook</code></dt>
+
+    <dt><code>kill-buffer-query-functions</code></dt>
+
+    <dd>
+      <p>See <a href="Killing-Buffers.html#Killing-Buffers">Killing
+      Buffers</a>.</p>
+    </dd>
+
+    <dt><code>kill-emacs-hook</code></dt>
+
+    <dt><code>kill-emacs-query-functions</code></dt>
+
+    <dd>
+      <p>See <a href="Killing-Emacs.html#Killing-Emacs">Killing
+      Emacs</a>.</p>
+    </dd>
+
+    <dt><code>menu-bar-update-hook</code></dt>
+
+    <dd>
+      <p>See <a href="Menu-Bar.html#Menu-Bar">Menu Bar</a>.</p>
+    </dd>
+
+    <dt><code>minibuffer-setup-hook</code></dt>
+
+    <dt><code>minibuffer-exit-hook</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Minibuffer-Misc.html#Minibuffer-Misc">Minibuffer
+      Misc</a>.</p>
+    </dd>
+
+    <dt><code>mouse-leave-buffer-hook</code></dt>
+
+    <dd>
+      <a name="index-mouse_002dleave_002dbuffer_002dhook" id=
+      "index-mouse_002dleave_002dbuffer_002dhook"></a>
+
+      <p>Hook run when about to switch windows with a mouse
+      command.</p>
+    </dd>
+
+    <dt><code>mouse-position-function</code></dt>
+
+    <dd>
+      <p>See <a href="Mouse-Position.html#Mouse-Position">Mouse
+      Position</a>.</p>
+    </dd>
+
+    <dt><code>prefix-command-echo-keystrokes-functions</code></dt>
+
+    <dd>
+      <a name=
+      "index-prefix_002dcommand_002decho_002dkeystrokes_002dfunctions"
+      id=
+      "index-prefix_002dcommand_002decho_002dkeystrokes_002dfunctions">
+      </a>
+
+      <p>An abnormal hook run by prefix commands (such as
+      <kbd>C-u</kbd>) which should return a string describing the
+      current prefix state. For example, <kbd>C-u</kbd> produces
+      &lsquo;<samp>C-u-</samp>&rsquo; and &lsquo;<samp>C-u 1 2
+      3-</samp>&rsquo;. Each hook function is called with no
+      arguments and should return a string describing the current
+      prefix state, or <code>nil</code> if there&rsquo;s no prefix
+      state. See <a href=
+      "Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix
+      Command Arguments</a>.</p>
+    </dd>
+
+    <dt><code>prefix-command-preserve-state-hook</code></dt>
+
+    <dd>
+      <a name=
+      "index-prefix_002dcommand_002dpreserve_002dstate_002dhook"
+      id="index-prefix_002dcommand_002dpreserve_002dstate_002dhook">
+      </a>
+
+      <p>Hook run when a prefix command needs to preserve the
+      prefix by passing the current prefix command state to the
+      next command. For example, <kbd>C-u</kbd> needs to pass the
+      state to the next command when the user types <kbd>C-u
+      -</kbd> or follows <kbd>C-u</kbd> with a digit.</p>
+    </dd>
+
+    <dt><code>pre-redisplay-functions</code></dt>
+
+    <dd>
+      <p>Hook run in each window just before redisplaying it. See
+      <a href="Forcing-Redisplay.html#Forcing-Redisplay">Forcing
+      Redisplay</a>.</p>
+    </dd>
+
+    <dt><code>post-command-hook</code></dt>
+
+    <dt><code>pre-command-hook</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Command-Overview.html#Command-Overview">Command
+      Overview</a>.</p>
+    </dd>
+
+    <dt><code>post-gc-hook</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Garbage-Collection.html#Garbage-Collection">Garbage
+      Collection</a>.</p>
+    </dd>
+
+    <dt><code>post-self-insert-hook</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes">Keymaps
+      and Minor Modes</a>.</p>
+    </dd>
+
+    <dt><code>suspend-hook</code></dt>
+
+    <dt><code>suspend-resume-hook</code></dt>
+
+    <dt><code>suspend-tty-functions</code></dt>
+
+    <dt><code>resume-tty-functions</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Suspending-Emacs.html#Suspending-Emacs">Suspending
+      Emacs</a>.</p>
+    </dd>
+
+    <dt><code>syntax-begin-function</code></dt>
+
+    <dt><code>syntax-propertize-extend-region-functions</code></dt>
+
+    <dt><code>syntax-propertize-function</code></dt>
+
+    <dt><code>font-lock-syntactic-face-function</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Syntactic-Font-Lock.html#Syntactic-Font-Lock">Syntactic Font
+      Lock</a>. See <a href=
+      "Syntax-Properties.html#Syntax-Properties">Syntax
+      Properties</a>.</p>
+    </dd>
+
+    <dt><code>temp-buffer-setup-hook</code></dt>
+
+    <dt><code>temp-buffer-show-function</code></dt>
+
+    <dt><code>temp-buffer-show-hook</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Temporary-Displays.html#Temporary-Displays">Temporary
+      Displays</a>.</p>
+    </dd>
+
+    <dt><code>tty-setup-hook</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Terminal_002dSpecific.html#Terminal_002dSpecific">Terminal-Specific</a>.</p>
+    </dd>
+
+    <dt><code>window-configuration-change-hook</code></dt>
+
+    <dt><code>window-scroll-functions</code></dt>
+
+    <dt><code>window-size-change-functions</code></dt>
+
+    <dd>
+      <p>See <a href="Window-Hooks.html#Window-Hooks">Window
+      Hooks</a>.</p>
+    </dd>
+
+    <dt><code>window-text-change-functions</code></dt>
+
+    <dd>
+      <a name="index-window_002dtext_002dchange_002dfunctions" id=
+      "index-window_002dtext_002dchange_002dfunctions"></a>
+
+      <p>Functions to call in redisplay when text in the window
+      might change.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Index.html#Index" accesskey="n" rel=
+    "next">Index</a>, Previous: <a href=
+    "Standard-Keymaps.html#Standard-Keymaps" accesskey="p" rel=
+    "prev">Standard Keymaps</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

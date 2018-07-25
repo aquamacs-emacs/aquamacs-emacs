@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,110 +18,153 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Killing From Stack</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Killing From Stack">
-<meta name="keywords" content="GNU Emacs Calc Manual: Killing From Stack">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Kill-and-Yank.html#Kill-and-Yank" rel="up" title="Kill and Yank">
-<link href="Yanking-Into-Stack.html#Yanking-Into-Stack" rel="next" title="Yanking Into Stack">
-<link href="Kill-and-Yank.html#Kill-and-Yank" rel="prev" title="Kill and Yank">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Killing From Stack</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Killing From Stack" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Killing From Stack" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Kill-and-Yank.html#Kill-and-Yank" rel="up" title=
+  "Kill and Yank" />
+  <link href="Yanking-Into-Stack.html#Yanking-Into-Stack" rel=
+  "next" title="Yanking Into Stack" />
+  <link href="Kill-and-Yank.html#Kill-and-Yank" rel="prev" title=
+  "Kill and Yank" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Killing-From-Stack"></a>
-<div class="header">
-<p>
-Next: <a href="Yanking-Into-Stack.html#Yanking-Into-Stack" accesskey="n" rel="next">Yanking Into Stack</a>, Previous: <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="p" rel="prev">Kill and Yank</a>, Up: <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Killing-from-the-Stack"></a>
-<h3 class="section">14.1 Killing from the Stack</h3>
+<body lang="en" xml:lang="en">
+  <a name="Killing-From-Stack" id="Killing-From-Stack"></a>
 
-<a name="index-C_002dk"></a>
-<a name="index-calc_002dkill"></a>
-<a name="index-M_002dk"></a>
-<a name="index-calc_002dcopy_002das_002dkill"></a>
-<a name="index-C_002dw"></a>
-<a name="index-calc_002dkill_002dregion"></a>
-<a name="index-M_002dw"></a>
-<a name="index-calc_002dcopy_002dregion_002das_002dkill"></a>
-<a name="index-M_002dC_002dw"></a>
-<a name="index-Kill-ring"></a>
-<p><em>Kill</em> commands are Emacs commands that insert text into the &ldquo;kill
-ring,&rdquo; from which it can later be &ldquo;yanked&rdquo; by a <kbd>C-y</kbd> command.
-Three common kill commands in normal Emacs are <kbd>C-k</kbd>, which kills
-one line, <kbd>C-w</kbd>, which kills the region between mark and point, and
-<kbd>M-w</kbd>, which puts the region into the kill ring without actually
-deleting it.  All of these commands work in the Calculator, too,
-although in the Calculator they operate on whole stack entries, so they
-&ldquo;round up&rdquo; the specified region to encompass full lines.  (To copy
-only parts of lines, the <kbd>M-C-w</kbd> command in the Calculator will copy
-the region to the kill ring without any &ldquo;rounding up&rdquo;, just like the
-<kbd>M-w</kbd> command in normal Emacs.)  Also, <kbd>M-k</kbd> has been provided
-to complete the set; it puts the current line into the kill ring without
-deleting anything.
-</p>
-<p>The kill commands are unusual in that they pay attention to the location
-of the cursor in the Calculator buffer.  If the cursor is on or below
-the bottom line, the kill commands operate on the top of the stack.
-Otherwise, they operate on whatever stack element the cursor is on.  The
-text is copied into the kill ring exactly as it appears on the screen,
-including line numbers if they are enabled.
-</p>
-<p>A numeric prefix argument to <kbd>C-k</kbd> or <kbd>M-k</kbd> affects the number
-of lines killed.  A positive argument kills the current line and &lsquo;<samp>n-1</samp>&rsquo;
-lines below it.  A negative argument kills the &lsquo;<samp>-n</samp>&rsquo; lines above the
-current line.  Again this mirrors the behavior of the standard Emacs
-<kbd>C-k</kbd> command.  Although a whole line is always deleted, <kbd>C-k</kbd>
-with no argument copies only the number itself into the kill ring, whereas
-<kbd>C-k</kbd> with a prefix argument of 1 copies the number with its trailing
-newline.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Yanking-Into-Stack.html#Yanking-Into-Stack" accesskey="n" rel="next">Yanking Into Stack</a>, Previous: <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="p" rel="prev">Kill and Yank</a>, Up: <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Yanking-Into-Stack.html#Yanking-Into-Stack"
+    accesskey="n" rel="next">Yanking Into Stack</a>, Previous:
+    <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="p" rel=
+    "prev">Kill and Yank</a>, Up: <a href=
+    "Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill
+    and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Killing-from-the-Stack" id="Killing-from-the-Stack"></a>
 
+  <h3 class="section">14.1 Killing from the Stack</h3><a name=
+  "index-C_002dk" id="index-C_002dk"></a> <a name=
+  "index-calc_002dkill" id="index-calc_002dkill"></a> <a name=
+  "index-M_002dk" id="index-M_002dk"></a> <a name=
+  "index-calc_002dcopy_002das_002dkill" id=
+  "index-calc_002dcopy_002das_002dkill"></a> <a name=
+  "index-C_002dw" id="index-C_002dw"></a> <a name=
+  "index-calc_002dkill_002dregion" id=
+  "index-calc_002dkill_002dregion"></a> <a name="index-M_002dw" id=
+  "index-M_002dw"></a> <a name=
+  "index-calc_002dcopy_002dregion_002das_002dkill" id=
+  "index-calc_002dcopy_002dregion_002das_002dkill"></a> <a name=
+  "index-M_002dC_002dw" id="index-M_002dC_002dw"></a> <a name=
+  "index-Kill-ring" id="index-Kill-ring"></a>
 
+  <p><em>Kill</em> commands are Emacs commands that insert text
+  into the &ldquo;kill ring,&rdquo; from which it can later be
+  &ldquo;yanked&rdquo; by a <kbd>C-y</kbd> command. Three common
+  kill commands in normal Emacs are <kbd>C-k</kbd>, which kills one
+  line, <kbd>C-w</kbd>, which kills the region between mark and
+  point, and <kbd>M-w</kbd>, which puts the region into the kill
+  ring without actually deleting it. All of these commands work in
+  the Calculator, too, although in the Calculator they operate on
+  whole stack entries, so they &ldquo;round up&rdquo; the specified
+  region to encompass full lines. (To copy only parts of lines, the
+  <kbd>M-C-w</kbd> command in the Calculator will copy the region
+  to the kill ring without any &ldquo;rounding up&rdquo;, just like
+  the <kbd>M-w</kbd> command in normal Emacs.) Also, <kbd>M-k</kbd>
+  has been provided to complete the set; it puts the current line
+  into the kill ring without deleting anything.</p>
 
+  <p>The kill commands are unusual in that they pay attention to
+  the location of the cursor in the Calculator buffer. If the
+  cursor is on or below the bottom line, the kill commands operate
+  on the top of the stack. Otherwise, they operate on whatever
+  stack element the cursor is on. The text is copied into the kill
+  ring exactly as it appears on the screen, including line numbers
+  if they are enabled.</p>
+
+  <p>A numeric prefix argument to <kbd>C-k</kbd> or <kbd>M-k</kbd>
+  affects the number of lines killed. A positive argument kills the
+  current line and &lsquo;<samp>n-1</samp>&rsquo; lines below it. A
+  negative argument kills the &lsquo;<samp>-n</samp>&rsquo; lines
+  above the current line. Again this mirrors the behavior of the
+  standard Emacs <kbd>C-k</kbd> command. Although a whole line is
+  always deleted, <kbd>C-k</kbd> with no argument copies only the
+  number itself into the kill ring, whereas <kbd>C-k</kbd> with a
+  prefix argument of 1 copies the number with its trailing
+  newline.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Yanking-Into-Stack.html#Yanking-Into-Stack"
+    accesskey="n" rel="next">Yanking Into Stack</a>, Previous:
+    <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="p" rel=
+    "prev">Kill and Yank</a>, Up: <a href=
+    "Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill
+    and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

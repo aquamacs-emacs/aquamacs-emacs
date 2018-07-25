@@ -1,15 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>atoms - The Emacs Widget Library</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Emacs Widget Library">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Sexp-Types.html#Sexp-Types" title="Sexp Types">
-<link rel="prev" href="generic.html#generic" title="generic">
-<link rel="next" href="composite.html#composite" title="composite">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>atoms - The Emacs Widget Library</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Emacs Widget Library" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Sexp-Types.html#Sexp-Types" title=
+  "Sexp Types" />
+  <link rel="prev" href="generic.html#generic" title="generic" />
+  <link rel="next" href="composite.html#composite" title=
+  "composite" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -25,8 +33,10 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,101 +46,160 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="atoms"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="composite.html#composite">composite</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="generic.html#generic">generic</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Sexp-Types.html#Sexp-Types">Sexp Types</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="atoms" id="atoms"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h4 class="subsection">Atomic Sexp Widgets</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "composite.html#composite">composite</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "generic.html#generic">generic</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="Sexp-Types.html#Sexp-Types">Sexp
+    Types</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-<p><a name="index-atomic-sexp-widget-114"></a>
-The atoms are s-expressions that do not consist of other s-expressions. 
-For example, a string, a file name, or a symbol are atoms, while a list
-is a composite type.  You can edit the value of an atom with the
-following widgets.
+  <h4 class="subsection">Atomic Sexp Widgets</h4>
 
-   <p>The syntax for all the atoms are:
+  <p><a name="index-atomic-sexp-widget-114" id=
+  "index-atomic-sexp-widget-114"></a> The atoms are s-expressions
+  that do not consist of other s-expressions. For example, a
+  string, a file name, or a symbol are atoms, while a list is a
+  composite type. You can edit the value of an atom with the
+  following widgets.</p>
 
-<pre class="example">     <var>type</var> ::= (<var>construct</var> [<var>keyword</var> <var>argument</var>]...  [ <var>value</var> ])
+  <p>The syntax for all the atoms are:</p>
+  <pre class="example">
+     <var>type</var> ::= (<var>construct</var> [<var>keyword</var> <var>argument</var>]...  [ <var>value</var> ])
 </pre>
-   <p>The <var>value</var>, if present, is used to initialize the <code>:value</code>
-property and must be an expression of the same type as the widget. 
-That is, the string widget can only be initialized with a string.
 
-   <p>All the atom widgets take the same keyword arguments as the
-<code>editable-field</code> widget.  See <a href="editable_002dfield.html#editable_002dfield">editable-field</a>.
+  <p>The <var>value</var>, if present, is used to initialize the
+  <code>:value</code> property and must be an expression of the
+  same type as the widget. That is, the string widget can only be
+  initialized with a string.</p>
 
-<div class="defun">
-&mdash; Widget: <b>string</b><var><a name="index-string-115"></a></var><br>
-<blockquote><p>Allows you to edit a string in an editable field. 
-</p></blockquote></div>
+  <p>All the atom widgets take the same keyword arguments as the
+  <code>editable-field</code> widget. See <a href=
+  "editable_002dfield.html#editable_002dfield">editable-field</a>.</p>
 
-<div class="defun">
-&mdash; Widget: <b>regexp</b><var><a name="index-regexp-116"></a></var><br>
-<blockquote><p>Allows you to edit a regular expression in an editable field. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Widget: <b>string</b><var><a name="index-string-115"
+    id="index-string-115"></a></var><br />
 
-<div class="defun">
-&mdash; Widget: <b>character</b><var><a name="index-character-117"></a></var><br>
-<blockquote><p>Allows you to enter a character in an editable field. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Allows you to edit a string in an editable field.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Widget: <b>file</b><var><a name="index-file-118"></a></var><br>
-<blockquote><p>Allows you to edit a file name in an editable field.
+  <div class="defun">
+    &mdash; Widget: <b>regexp</b><var><a name="index-regexp-116"
+    id="index-regexp-116"></a></var><br />
 
-        <p>Keywords:
-          
-<a name="index-must_002dmatch_0040r_007b-keyword_007d-119"></a>
-<dl><dt><code>:must-match</code><dd>If this is set to non-<code>nil</code>, only existing file names will be
-allowed in the minibuffer. 
-</dl>
-        </p></blockquote></div>
+    <blockquote>
+      <p>Allows you to edit a regular expression in an editable
+      field.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Widget: <b>directory</b><var><a name="index-directory-120"></a></var><br>
-<blockquote><p>Allows you to edit a directory name in an editable field. 
-Similar to the <code>file</code> widget. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Widget: <b>character</b><var><a name=
+    "index-character-117" id="index-character-117"></a></var><br />
 
-<div class="defun">
-&mdash; Widget: <b>symbol</b><var><a name="index-symbol-121"></a></var><br>
-<blockquote><p>Allows you to edit a Lisp symbol in an editable field. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Allows you to enter a character in an editable field.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Widget: <b>function</b><var><a name="index-function-122"></a></var><br>
-<blockquote><p>Allows you to edit a lambda expression, or a function name with completion. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Widget: <b>file</b><var><a name="index-file-118" id=
+    "index-file-118"></a></var><br />
 
-<div class="defun">
-&mdash; Widget: <b>variable</b><var><a name="index-variable-123"></a></var><br>
-<blockquote><p>Allows you to edit a variable name, with completion. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Allows you to edit a file name in an editable field.</p>
 
-<div class="defun">
-&mdash; Widget: <b>integer</b><var><a name="index-integer-124"></a></var><br>
-<blockquote><p>Allows you to edit an integer in an editable field. 
-</p></blockquote></div>
+      <p>Keywords: <a name=
+      "index-must_002dmatch_0040r_007b-keyword_007d-119" id=
+      "index-must_002dmatch_0040r_007b-keyword_007d-119"></a></p>
 
-<div class="defun">
-&mdash; Widget: <b>number</b><var><a name="index-number-125"></a></var><br>
-<blockquote><p>Allows you to edit a number in an editable field. 
-</p></blockquote></div>
+      <dl>
+        <dt><code>:must-match</code></dt>
 
-<div class="defun">
-&mdash; Widget: <b>boolean</b><var><a name="index-boolean-126"></a></var><br>
-<blockquote><p>Allows you to edit a boolean.  In Lisp this means a variable which is
-either <code>nil</code> meaning false, or non-<code>nil</code> meaning true. 
-</p></blockquote></div>
+        <dd>If this is set to non-<code>nil</code>, only existing
+        file names will be allowed in the minibuffer.</dd>
+      </dl>
+    </blockquote>
+  </div>
 
-   </body></html>
+  <div class="defun">
+    &mdash; Widget: <b>directory</b><var><a name=
+    "index-directory-120" id="index-directory-120"></a></var><br />
 
+    <blockquote>
+      <p>Allows you to edit a directory name in an editable field.
+      Similar to the <code>file</code> widget.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Widget: <b>symbol</b><var><a name="index-symbol-121"
+    id="index-symbol-121"></a></var><br />
+
+    <blockquote>
+      <p>Allows you to edit a Lisp symbol in an editable field.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Widget: <b>function</b><var><a name=
+    "index-function-122" id="index-function-122"></a></var><br />
+
+    <blockquote>
+      <p>Allows you to edit a lambda expression, or a function name
+      with completion.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Widget: <b>variable</b><var><a name=
+    "index-variable-123" id="index-variable-123"></a></var><br />
+
+    <blockquote>
+      <p>Allows you to edit a variable name, with completion.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Widget: <b>integer</b><var><a name="index-integer-124"
+    id="index-integer-124"></a></var><br />
+
+    <blockquote>
+      <p>Allows you to edit an integer in an editable field.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Widget: <b>number</b><var><a name="index-number-125"
+    id="index-number-125"></a></var><br />
+
+    <blockquote>
+      <p>Allows you to edit a number in an editable field.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Widget: <b>boolean</b><var><a name="index-boolean-126"
+    id="index-boolean-126"></a></var><br />
+
+    <blockquote>
+      <p>Allows you to edit a boolean. In Lisp this means a
+      variable which is either <code>nil</code> meaning false, or
+      non-<code>nil</code> meaning true.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

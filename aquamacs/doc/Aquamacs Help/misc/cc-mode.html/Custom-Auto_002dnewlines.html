@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,122 +16,199 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Custom Auto-newlines</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Custom Auto-newlines">
-<meta name="keywords" content="CC Mode Manual: Custom Auto-newlines">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Hanging-Braces.html#Hanging-Braces" rel="next" title="Hanging Braces">
-<link href="Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking" rel="prev" title="Custom Filling and Breaking">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Custom Auto-newlines</title>
+  <meta name="description" content=
+  "CC Mode Manual: Custom Auto-newlines" />
+  <meta name="keywords" content=
+  "CC Mode Manual: Custom Auto-newlines" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Hanging-Braces.html#Hanging-Braces" rel="next" title=
+  "Hanging Braces" />
+  <link href=
+  "Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking"
+  rel="prev" title="Custom Filling and Breaking" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Custom-Auto_002dnewlines"></a>
-<div class="header">
-<p>
-Next: <a href="Clean_002dups.html#Clean_002dups" accesskey="n" rel="next">Clean-ups</a>, Previous: <a href="Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking" accesskey="p" rel="prev">Custom Filling and Breaking</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Customizing-Auto_002dnewlines"></a>
-<h2 class="chapter">8 Customizing Auto-newlines</h2>
+<body lang="en" xml:lang="en">
+  <a name="Custom-Auto_002dnewlines" id=
+  "Custom-Auto_002dnewlines"></a>
 
-<p>CC Mode determines whether to insert auto-newlines in two basically
-different ways, depending on the character just typed:
-</p>
-<dl compact="compact">
-<dt>Braces and Colons</dt>
-<dd><p>CC Mode first determines the syntactic context of the brace or colon
-(see <a href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>), then looks for a corresponding element in
-an alist.  This element specifies where to put newlines: this is any
-combination of before and after the brace or colon.  If no alist
-element is found, newlines are inserted both before and after a brace,
-but none are inserted around a colon.  See <a href="Hanging-Braces.html#Hanging-Braces">Hanging Braces</a> and
-<a href="Hanging-Colons.html#Hanging-Colons">Hanging Colons</a>.
-</p>
-</dd>
-<dt>Semicolons and Commas</dt>
-<dd><p>The variable <code>c-hanging-semi&amp;comma-criteria</code> contains a list of
-functions which determine whether to insert a newline after a newly
-typed semicolon or comma.  See <a href="Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas">Hanging Semicolons and Commas</a>.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Clean_002dups.html#Clean_002dups" accesskey=
+    "n" rel="next">Clean-ups</a>, Previous: <a href=
+    "Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking"
+    accesskey="p" rel="prev">Custom Filling and Breaking</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Customizing-Auto_002dnewlines" id=
+  "Customizing-Auto_002dnewlines"></a>
 
-<p>The names of these configuration variables contain &lsquo;<samp>hanging</samp>&rsquo;
-because they let you <em>hang</em> the pertinent characters.  A character
-which introduces a C construct is said to <em>hang on the right</em> when
-it appears at the end of a line after other code, being separated by a
-line break from the construct it introduces, like the opening brace in:
-</p>
-<div class="example">
-<pre class="example">while (i &lt; MAX) {
+  <h2 class="chapter">8 Customizing Auto-newlines</h2>
+
+  <p>CC Mode determines whether to insert auto-newlines in two
+  basically different ways, depending on the character just
+  typed:</p>
+
+  <dl compact="compact">
+    <dt>Braces and Colons</dt>
+
+    <dd>
+      <p>CC Mode first determines the syntactic context of the
+      brace or colon (see <a href=
+      "Syntactic-Symbols.html#Syntactic-Symbols">Syntactic
+      Symbols</a>), then looks for a corresponding element in an
+      alist. This element specifies where to put newlines: this is
+      any combination of before and after the brace or colon. If no
+      alist element is found, newlines are inserted both before and
+      after a brace, but none are inserted around a colon. See
+      <a href="Hanging-Braces.html#Hanging-Braces">Hanging
+      Braces</a> and <a href=
+      "Hanging-Colons.html#Hanging-Colons">Hanging Colons</a>.</p>
+    </dd>
+
+    <dt>Semicolons and Commas</dt>
+
+    <dd>
+      <p>The variable
+      <code>c-hanging-semi&amp;comma-criteria</code> contains a
+      list of functions which determine whether to insert a newline
+      after a newly typed semicolon or comma. See <a href=
+      "Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas">
+      Hanging Semicolons and Commas</a>.</p>
+    </dd>
+  </dl>
+
+  <p>The names of these configuration variables contain
+  &lsquo;<samp>hanging</samp>&rsquo; because they let you
+  <em>hang</em> the pertinent characters. A character which
+  introduces a C construct is said to <em>hang on the right</em>
+  when it appears at the end of a line after other code, being
+  separated by a line break from the construct it introduces, like
+  the opening brace in:</p>
+
+  <div class="example">
+    <pre class="example">
+while (i &lt; MAX) {
     total += entry[i];
     entry [i++] = 0;
 }
-</pre></div>
+</pre>
+  </div>
 
-<p>A character <em>hangs on the left</em> when it appears at the start of
-the line after the construct it closes off, like the above closing
-brace.
-</p>
-<p>The next chapter, &ldquo;Clean-ups&rdquo;, describes how to configure CC Mode
-to remove these automatically added newlines in certain specific
-circumstances.  See <a href="Clean_002dups.html#Clean_002dups">Clean-ups</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Hanging-Braces.html#Hanging-Braces" accesskey="1">Hanging Braces</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Hanging-Colons.html#Hanging-Colons" accesskey="2">Hanging Colons</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas" accesskey="3">Hanging Semicolons and Commas</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <p>A character <em>hangs on the left</em> when it appears at the
+  start of the line after the construct it closes off, like the
+  above closing brace.</p>
 
+  <p>The next chapter, &ldquo;Clean-ups&rdquo;, describes how to
+  configure CC Mode to remove these automatically added newlines in
+  certain specific circumstances. See <a href=
+  "Clean_002dups.html#Clean_002dups">Clean-ups</a>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Clean_002dups.html#Clean_002dups" accesskey="n" rel="next">Clean-ups</a>, Previous: <a href="Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking" accesskey="p" rel="prev">Custom Filling and Breaking</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Hanging-Braces.html#Hanging-Braces" accesskey="1">Hanging
+      Braces</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top"></td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Hanging-Colons.html#Hanging-Colons" accesskey="2">Hanging
+      Colons</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas"
+      accesskey="3">Hanging Semicolons and Commas</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Clean_002dups.html#Clean_002dups" accesskey=
+    "n" rel="next">Clean-ups</a>, Previous: <a href=
+    "Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking"
+    accesskey="p" rel="prev">Custom Filling and Breaking</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

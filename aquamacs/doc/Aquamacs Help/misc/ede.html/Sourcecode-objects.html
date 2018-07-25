@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes EDE, the Emacs Development Environment.
 
 Copyright (C) 1998-2001, 2004-2005, 2008-2016
@@ -15,107 +17,141 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Development Environment: Sourcecode objects</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Development Environment: Sourcecode objects">
-<meta name="keywords" content="Emacs Development Environment: Sourcecode objects">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Extending-EDE.html#Extending-EDE" rel="up" title="Extending EDE">
-<link href="Compiler-and-Linker-objects.html#Compiler-and-Linker-objects" rel="next" title="Compiler and Linker objects">
-<link href="Base-project-methods.html#Base-project-methods" rel="prev" title="Base project methods">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Development Environment: Sourcecode objects</title>
+  <meta name="description" content=
+  "Emacs Development Environment: Sourcecode objects" />
+  <meta name="keywords" content=
+  "Emacs Development Environment: Sourcecode objects" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Extending-EDE.html#Extending-EDE" rel="up" title=
+  "Extending EDE" />
+  <link href=
+  "Compiler-and-Linker-objects.html#Compiler-and-Linker-objects"
+  rel="next" title="Compiler and Linker objects" />
+  <link href="Base-project-methods.html#Base-project-methods" rel=
+  "prev" title="Base project methods" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sourcecode-objects"></a>
-<div class="header">
-<p>
-Next: <a href="Compiler-and-Linker-objects.html#Compiler-and-Linker-objects" accesskey="n" rel="next">Compiler and Linker objects</a>, Previous: <a href="Base-project-methods.html#Base-project-methods" accesskey="p" rel="prev">Base project methods</a>, Up: <a href="Extending-EDE.html#Extending-EDE" accesskey="u" rel="up">Extending EDE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Sourcecode-objects-1"></a>
-<h3 class="section">8.5 Sourcecode objects</h3>
+<body lang="en" xml:lang="en">
+  <a name="Sourcecode-objects" id="Sourcecode-objects"></a>
 
-<p><i>EDE</i> projects track source file / target associates via source code
-objects.  The definitions for this is in <samp>ede-source.el</samp>.  A source
-code object contains methods that know how to identify a file as being
-of that class, (i.e., a C file ends with <samp>.c</samp>).  Some targets can
-handle many different types of sources which must all be compiled
-together.  For example, a mixed C and C++ program would have
-instantiations of both sourcecode types.
-</p>
-<p>When a target needs to know if it will accept a source file, it
-references its list of source code objects.  These objects then make
-that decision.
-</p>
-<p>Source code objects are stored in the target objects as a list of
-symbols, where the symbol&rsquo;s value is the object.  This enables the
-project save file mechanism to work.
-</p>
-<p>Here is an example for an instantiation of an Emacs Lisp source code object:
-</p>
-<div class="example">
-<pre class="example">(defvar ede-source-emacs
-  (ede-sourcecode &quot;ede-emacs-source&quot;
-                  :name &quot;Emacs Lisp&quot;
-                  :sourcepattern &quot;\\.el$&quot;
-                  :garbagepattern '(&quot;*.elc&quot;))
-  &quot;Emacs Lisp source code definition.&quot;)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Compiler-and-Linker-objects.html#Compiler-and-Linker-objects"
+    accesskey="n" rel="next">Compiler and Linker objects</a>,
+    Previous: <a href=
+    "Base-project-methods.html#Base-project-methods" accesskey="p"
+    rel="prev">Base project methods</a>, Up: <a href=
+    "Extending-EDE.html#Extending-EDE" accesskey="u" rel=
+    "up">Extending EDE</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Sourcecode-objects-1" id="Sourcecode-objects-1"></a>
 
-<p>If you want to recycle parts of an existing sourcecode object, you can
-clone the original, and then just tweak the parts that are different.
-For example:
-</p>
-<div class="example">
-<pre class="example">(defvar ede-source-emacs-autoload
-  (clone ede-source-emacs &quot;ede-source-emacs-autoload&quot;
-         :name &quot;Emacs Lisp Autoload&quot;
-         :sourcepattern &quot;-loaddefs\\.el&quot;)
-  &quot;Emacs Lisp autoload source code.&quot;)
-</pre></div>
+  <h3 class="section">8.5 Sourcecode objects</h3>
 
-<p>In this case, the garbage pattern is the same.
-</p>
-<p>See <a href="Sourcecode.html#Sourcecode">Sourcecode</a>.
-</p>
+  <p><i>EDE</i> projects track source file / target associates via
+  source code objects. The definitions for this is in
+  <samp>ede-source.el</samp>. A source code object contains methods
+  that know how to identify a file as being of that class, (i.e., a
+  C file ends with <samp>.c</samp>). Some targets can handle many
+  different types of sources which must all be compiled together.
+  For example, a mixed C and C++ program would have instantiations
+  of both sourcecode types.</p>
 
+  <p>When a target needs to know if it will accept a source file,
+  it references its list of source code objects. These objects then
+  make that decision.</p>
 
+  <p>Source code objects are stored in the target objects as a list
+  of symbols, where the symbol&rsquo;s value is the object. This
+  enables the project save file mechanism to work.</p>
 
+  <p>Here is an example for an instantiation of an Emacs Lisp
+  source code object:</p>
+
+  <div class="example">
+    <pre class="example">
+(defvar ede-source-emacs
+  (ede-sourcecode "ede-emacs-source"
+                  :name "Emacs Lisp"
+                  :sourcepattern "\\.el$"
+                  :garbagepattern '("*.elc"))
+  "Emacs Lisp source code definition.")
+</pre>
+  </div>
+
+  <p>If you want to recycle parts of an existing sourcecode object,
+  you can clone the original, and then just tweak the parts that
+  are different. For example:</p>
+
+  <div class="example">
+    <pre class="example">
+(defvar ede-source-emacs-autoload
+  (clone ede-source-emacs "ede-source-emacs-autoload"
+         :name "Emacs Lisp Autoload"
+         :sourcepattern "-loaddefs\\.el")
+  "Emacs Lisp autoload source code.")
+</pre>
+  </div>
+
+  <p>In this case, the garbage pattern is the same.</p>
+
+  <p>See <a href="Sourcecode.html#Sourcecode">Sourcecode</a>.</p>
 </body>
 </html>

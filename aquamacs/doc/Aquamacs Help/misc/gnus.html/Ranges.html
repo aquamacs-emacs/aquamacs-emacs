@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,147 +14,194 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Ranges</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Ranges">
-<meta name="keywords" content="Gnus Manual: Ranges">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel="up" title="Gnus Reference Guide">
-<link href="Group-Info.html#Group-Info" rel="next" title="Group Info">
-<link href="Headers.html#Headers" rel="prev" title="Headers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Ranges</title>
+  <meta name="description" content="Gnus Manual: Ranges" />
+  <meta name="keywords" content="Gnus Manual: Ranges" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel=
+  "up" title="Gnus Reference Guide" />
+  <link href="Group-Info.html#Group-Info" rel="next" title=
+  "Group Info" />
+  <link href="Headers.html#Headers" rel="prev" title="Headers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Ranges"></a>
-<div class="header">
-<p>
-Next: <a href="Group-Info.html#Group-Info" accesskey="n" rel="next">Group Info</a>, Previous: <a href="Headers.html#Headers" accesskey="p" rel="prev">Headers</a>, Up: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Ranges-1"></a>
-<h4 class="subsection">11.7.5 Ranges</h4>
+<body lang="en" xml:lang="en">
+  <a name="Ranges" id="Ranges"></a>
 
-<p><small>GNUS</small> introduced a concept that I found so useful that I&rsquo;ve started
-using it a lot and have elaborated on it greatly.
-</p>
-<p>The question is simple: If you have a large amount of objects that are
-identified by numbers (say, articles, to take a <em>wild</em> example)
-that you want to qualify as being &ldquo;included&rdquo;, a normal sequence isn&rsquo;t
-very useful.  (A 200,000 length sequence is a bit long-winded.)
-</p>
-<p>The solution is as simple as the question: You just collapse the
-sequence.
-</p>
-<div class="example">
-<pre class="example">(1 2 3 4 5 6 10 11 12)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Group-Info.html#Group-Info" accesskey="n"
+    rel="next">Group Info</a>, Previous: <a href=
+    "Headers.html#Headers" accesskey="p" rel="prev">Headers</a>,
+    Up: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide"
+    accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Ranges-1" id="Ranges-1"></a>
 
-<p>is transformed into
-</p>
-<div class="example">
-<pre class="example">((1 . 6) (10 . 12))
-</pre></div>
+  <h4 class="subsection">11.7.5 Ranges</h4>
 
-<p>To avoid having those nasty &lsquo;<samp>(13 . 13)</samp>&rsquo; elements to denote a
-lonesome object, a &lsquo;<samp>13</samp>&rsquo; is a valid element:
-</p>
-<div class="example">
-<pre class="example">((1 . 6) 7 (10 . 12))
-</pre></div>
+  <p><small>GNUS</small> introduced a concept that I found so
+  useful that I&rsquo;ve started using it a lot and have elaborated
+  on it greatly.</p>
 
-<p>This means that comparing two ranges to find out whether they are equal
-is slightly tricky:
-</p>
-<div class="example">
-<pre class="example">((1 . 5) 7 8 (10 . 12))
-</pre></div>
+  <p>The question is simple: If you have a large amount of objects
+  that are identified by numbers (say, articles, to take a
+  <em>wild</em> example) that you want to qualify as being
+  &ldquo;included&rdquo;, a normal sequence isn&rsquo;t very
+  useful. (A 200,000 length sequence is a bit long-winded.)</p>
 
-<p>and
-</p>
-<div class="example">
-<pre class="example">((1 . 5) (7 . 8) (10 . 12))
-</pre></div>
+  <p>The solution is as simple as the question: You just collapse
+  the sequence.</p>
 
-<p>are equal.  In fact, any non-descending list is a range:
-</p>
-<div class="example">
-<pre class="example">(1 2 3 4 5)
-</pre></div>
+  <div class="example">
+    <pre class="example">
+(1 2 3 4 5 6 10 11 12)
+</pre>
+  </div>
 
-<p>is a perfectly valid range, although a pretty long-winded one.  This is
-also valid:
-</p>
-<div class="example">
-<pre class="example">(1 . 5)
-</pre></div>
+  <p>is transformed into</p>
 
-<p>and is equal to the previous range.
-</p>
-<p>Here&rsquo;s a BNF definition of ranges.  Of course, one must remember the
-semantic requirement that the numbers are non-descending.  (Any number
-of repetition of the same number is allowed, but apt to disappear in
-range handling.)
-</p>
-<div class="example">
-<pre class="example">range           = simple-range / normal-range
-simple-range    = &quot;(&quot; number &quot; . &quot; number &quot;)&quot;
-normal-range    = &quot;(&quot; start-contents &quot;)&quot;
-contents        = &quot;&quot; / simple-range *[ &quot; &quot; contents ] /
-                  number *[ &quot; &quot; contents ]
-</pre></div>
+  <div class="example">
+    <pre class="example">
+((1 . 6) (10 . 12))
+</pre>
+  </div>
 
-<p>Gnus currently uses ranges to keep track of read articles and article
-marks.  I plan on implementing a number of range operators in C if The
-Powers That Be are willing to let me.  (I haven&rsquo;t asked yet, because I
-need to do some more thinking on what operators I need to make life
-totally range-based without ever having to convert back to normal
-sequences.)
-</p>
+  <p>To avoid having those nasty &lsquo;<samp>(13 .
+  13)</samp>&rsquo; elements to denote a lonesome object, a
+  &lsquo;<samp>13</samp>&rsquo; is a valid element:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Group-Info.html#Group-Info" accesskey="n" rel="next">Group Info</a>, Previous: <a href="Headers.html#Headers" accesskey="p" rel="prev">Headers</a>, Up: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="example">
+    <pre class="example">
+((1 . 6) 7 (10 . 12))
+</pre>
+  </div>
 
+  <p>This means that comparing two ranges to find out whether they
+  are equal is slightly tricky:</p>
 
+  <div class="example">
+    <pre class="example">
+((1 . 5) 7 8 (10 . 12))
+</pre>
+  </div>
 
+  <p>and</p>
+
+  <div class="example">
+    <pre class="example">
+((1 . 5) (7 . 8) (10 . 12))
+</pre>
+  </div>
+
+  <p>are equal. In fact, any non-descending list is a range:</p>
+
+  <div class="example">
+    <pre class="example">
+(1 2 3 4 5)
+</pre>
+  </div>
+
+  <p>is a perfectly valid range, although a pretty long-winded one.
+  This is also valid:</p>
+
+  <div class="example">
+    <pre class="example">
+(1 . 5)
+</pre>
+  </div>
+
+  <p>and is equal to the previous range.</p>
+
+  <p>Here&rsquo;s a BNF definition of ranges. Of course, one must
+  remember the semantic requirement that the numbers are
+  non-descending. (Any number of repetition of the same number is
+  allowed, but apt to disappear in range handling.)</p>
+
+  <div class="example">
+    <pre class="example">
+range           = simple-range / normal-range
+simple-range    = "(" number " . " number ")"
+normal-range    = "(" start-contents ")"
+contents        = "" / simple-range *[ " " contents ] /
+                  number *[ " " contents ]
+</pre>
+  </div>
+
+  <p>Gnus currently uses ranges to keep track of read articles and
+  article marks. I plan on implementing a number of range operators
+  in C if The Powers That Be are willing to let me. (I
+  haven&rsquo;t asked yet, because I need to do some more thinking
+  on what operators I need to make life totally range-based without
+  ever having to convert back to normal sequences.)</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Group-Info.html#Group-Info" accesskey="n"
+    rel="next">Group Info</a>, Previous: <a href=
+    "Headers.html#Headers" accesskey="p" rel="prev">Headers</a>,
+    Up: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide"
+    accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

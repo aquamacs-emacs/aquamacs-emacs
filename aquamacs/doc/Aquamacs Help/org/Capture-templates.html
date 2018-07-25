@@ -1,14 +1,21 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Capture templates - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Capture.html#Capture" title="Capture">
-<link rel="prev" href="Using-capture.html#Using-capture" title="Using capture">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Capture templates - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Capture.html#Capture" title="Capture" />
+  <link rel="prev" href="Using-capture.html#Using-capture" title=
+  "Using capture" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -32,8 +39,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -43,58 +52,77 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Capture-templates"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-capture.html#Using-capture">Using capture</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Capture.html#Capture">Capture</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Capture-templates" id="Capture-templates"></a>
 
-<h4 class="subsection">9.1.3 Capture templates</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Using-capture.html#Using-capture">Using capture</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Capture.html#Capture">Capture</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-templates_002c-for-Capture-895"></a>
-You can use templates for different types of capture items, and
-for different target locations.  The easiest way to create such templates is
-through the customize interface.
+  <h4 class="subsection">9.1.3 Capture templates</h4>
 
-     
-<a name="index-C_002dc-c-C-896"></a>
-<dl><dt><kbd>C-c c C</kbd><dd>
-Customize the variable <code>org-capture-templates</code>. 
-</dl>
+  <p><a name="index-templates_002c-for-Capture-895" id=
+  "index-templates_002c-for-Capture-895"></a> You can use templates
+  for different types of capture items, and for different target
+  locations. The easiest way to create such templates is through
+  the customize interface. <a name="index-C_002dc-c-C-896" id=
+  "index-C_002dc-c-C-896"></a></p>
 
-   <p>Before we give the formal description of template definitions, let's look at
-an example.  Say you would like to use one template to create general TODO
-entries, and you want to put these entries under the heading &lsquo;<samp><span class="samp">Tasks</span></samp>&rsquo; in
-your file <samp><span class="file">~/org/gtd.org</span></samp>.  Also, a date tree in the file
-<samp><span class="file">journal.org</span></samp> should capture journal entries.  A possible configuration
-would look like:
+  <dl>
+    <dt><kbd>C-c c C</kbd></dt>
 
-<pre class="example">     (setq org-capture-templates
+    <dd>Customize the variable
+    <code>org-capture-templates</code>.</dd>
+  </dl>
+
+  <p>Before we give the formal description of template definitions,
+  let's look at an example. Say you would like to use one template
+  to create general TODO entries, and you want to put these entries
+  under the heading &lsquo;<samp><span class=
+  "samp">Tasks</span></samp>&rsquo; in your file <samp><span class=
+  "file">~/org/gtd.org</span></samp>. Also, a date tree in the file
+  <samp><span class="file">journal.org</span></samp> should capture
+  journal entries. A possible configuration would look like:</p>
+  <pre class="example">
+     (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Tasks")
              "* TODO %?\n  %i\n  %a")
         ("j" "Journal" entry (file+datetree "~/org/journal.org")
              "* %?\nEntered on %U\n  %i\n  %a")))
 </pre>
-   <p class="noindent">If you then press <kbd>C-c c t</kbd>, Org will prepare the template
-for you like this:
-<pre class="example">     * TODO
+
+  <p class="noindent">If you then press <kbd>C-c c t</kbd>, Org
+  will prepare the template for you like this:</p>
+  <pre class="example">
+     * TODO
        [[file:<var>link to where you initiated capture</var>]]
 </pre>
-   <p class="noindent">During expansion of the template, <code>%a</code> has been replaced by a link to
-the location from where you called the capture command.  This can be
-extremely useful for deriving tasks from emails, for example.  You fill in
-the task definition, press <code>C-c C-c</code> and Org returns you to the same
-place where you started the capture process.
 
-<ul class="menu">
-<li><a accesskey="1" href="Template-elements.html#Template-elements">Template elements</a>:            What is needed for a complete template entry
-<li><a accesskey="2" href="Template-expansion.html#Template-expansion">Template expansion</a>:           Filling in information about time and context
-</ul>
+  <p class="noindent">During expansion of the template,
+  <code>%a</code> has been replaced by a link to the location from
+  where you called the capture command. This can be extremely
+  useful for deriving tasks from emails, for example. You fill in
+  the task definition, press <code>C-c C-c</code> and Org returns
+  you to the same place where you started the capture process.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Template-elements.html#Template-elements">Template
+    elements</a>: What is needed for a complete template entry</li>
 
+    <li><a accesskey="2" href=
+    "Template-expansion.html#Template-expansion">Template
+    expansion</a>: Filling in information about time and
+    context</li>
+  </ul>
+</body>
+</html>

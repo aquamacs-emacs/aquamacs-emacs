@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,114 +19,170 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Lazy Properties</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Lazy Properties">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Lazy Properties">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text-Properties.html#Text-Properties" rel="up" title="Text Properties">
-<link href="Clickable-Text.html#Clickable-Text" rel="next" title="Clickable Text">
-<link href="Sticky-Properties.html#Sticky-Properties" rel="prev" title="Sticky Properties">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Lazy Properties</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Lazy Properties" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Lazy Properties" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text-Properties.html#Text-Properties" rel="up" title=
+  "Text Properties" />
+  <link href="Clickable-Text.html#Clickable-Text" rel="next" title=
+  "Clickable Text" />
+  <link href="Sticky-Properties.html#Sticky-Properties" rel="prev"
+  title="Sticky Properties" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Lazy-Properties" id="Lazy-Properties"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Clickable-Text.html#Clickable-Text"
+    accesskey="n" rel="next">Clickable Text</a>, Previous: <a href=
+    "Sticky-Properties.html#Sticky-Properties" accesskey="p" rel=
+    "prev">Sticky Properties</a>, Up: <a href=
+    "Text-Properties.html#Text-Properties" accesskey="u" rel=
+    "up">Text Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Lazy-Computation-of-Text-Properties" id=
+  "Lazy-Computation-of-Text-Properties"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Lazy-Properties"></a>
-<div class="header">
-<p>
-Next: <a href="Clickable-Text.html#Clickable-Text" accesskey="n" rel="next">Clickable Text</a>, Previous: <a href="Sticky-Properties.html#Sticky-Properties" accesskey="p" rel="prev">Sticky Properties</a>, Up: <a href="Text-Properties.html#Text-Properties" accesskey="u" rel="up">Text Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Lazy-Computation-of-Text-Properties"></a>
-<h4 class="subsection">31.19.7 Lazy Computation of Text Properties</h4>
+  <h4 class="subsection">31.19.7 Lazy Computation of Text
+  Properties</h4>
 
-<p>Instead of computing text properties for all the text in the buffer,
-you can arrange to compute the text properties for parts of the text
-when and if something depends on them.
-</p>
-<p>The primitive that extracts text from the buffer along with its
-properties is <code>buffer-substring</code>.  Before examining the properties,
-this function runs the abnormal hook <code>buffer-access-fontify-functions</code>.
-</p>
-<dl>
-<dt><a name="index-buffer_002daccess_002dfontify_002dfunctions"></a>Variable: <strong>buffer-access-fontify-functions</strong></dt>
-<dd><p>This variable holds a list of functions for computing text properties.
-Before <code>buffer-substring</code> copies the text and text properties for a
-portion of the buffer, it calls all the functions in this list.  Each of
-the functions receives two arguments that specify the range of the
-buffer being accessed.  (The buffer itself is always the current
-buffer.)
-</p></dd></dl>
+  <p>Instead of computing text properties for all the text in the
+  buffer, you can arrange to compute the text properties for parts
+  of the text when and if something depends on them.</p>
 
-<p>The function <code>buffer-substring-no-properties</code> does not call these
-functions, since it ignores text properties anyway.
-</p>
-<p>In order to prevent the hook functions from being called more than
-once for the same part of the buffer, you can use the variable
-<code>buffer-access-fontified-property</code>.
-</p>
-<dl>
-<dt><a name="index-buffer_002daccess_002dfontified_002dproperty"></a>Variable: <strong>buffer-access-fontified-property</strong></dt>
-<dd><p>If this variable&rsquo;s value is non-<code>nil</code>, it is a symbol which is used
-as a text property name.  A non-<code>nil</code> value for that text property
-means the other text properties for this character have already been
-computed.
-</p>
-<p>If all the characters in the range specified for <code>buffer-substring</code>
-have a non-<code>nil</code> value for this property, <code>buffer-substring</code>
-does not call the <code>buffer-access-fontify-functions</code> functions.  It
-assumes these characters already have the right text properties, and
-just copies the properties they already have.
-</p>
-<p>The normal way to use this feature is that the
-<code>buffer-access-fontify-functions</code> functions add this property, as
-well as others, to the characters they operate on.  That way, they avoid
-being called over and over for the same text.
-</p></dd></dl>
+  <p>The primitive that extracts text from the buffer along with
+  its properties is <code>buffer-substring</code>. Before examining
+  the properties, this function runs the abnormal hook
+  <code>buffer-access-fontify-functions</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Clickable-Text.html#Clickable-Text" accesskey="n" rel="next">Clickable Text</a>, Previous: <a href="Sticky-Properties.html#Sticky-Properties" accesskey="p" rel="prev">Sticky Properties</a>, Up: <a href="Text-Properties.html#Text-Properties" accesskey="u" rel="up">Text Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-buffer_002daccess_002dfontify_002dfunctions"
+    id=
+    "index-buffer_002daccess_002dfontify_002dfunctions"></a>Variable:
+    <strong>buffer-access-fontify-functions</strong></dt>
 
+    <dd>
+      <p>This variable holds a list of functions for computing text
+      properties. Before <code>buffer-substring</code> copies the
+      text and text properties for a portion of the buffer, it
+      calls all the functions in this list. Each of the functions
+      receives two arguments that specify the range of the buffer
+      being accessed. (The buffer itself is always the current
+      buffer.)</p>
+    </dd>
+  </dl>
 
+  <p>The function <code>buffer-substring-no-properties</code> does
+  not call these functions, since it ignores text properties
+  anyway.</p>
 
+  <p>In order to prevent the hook functions from being called more
+  than once for the same part of the buffer, you can use the
+  variable <code>buffer-access-fontified-property</code>.</p>
+
+  <dl>
+    <dt><a name=
+    "index-buffer_002daccess_002dfontified_002dproperty" id=
+    "index-buffer_002daccess_002dfontified_002dproperty"></a>Variable:
+    <strong>buffer-access-fontified-property</strong></dt>
+
+    <dd>
+      <p>If this variable&rsquo;s value is non-<code>nil</code>, it
+      is a symbol which is used as a text property name. A
+      non-<code>nil</code> value for that text property means the
+      other text properties for this character have already been
+      computed.</p>
+
+      <p>If all the characters in the range specified for
+      <code>buffer-substring</code> have a non-<code>nil</code>
+      value for this property, <code>buffer-substring</code> does
+      not call the <code>buffer-access-fontify-functions</code>
+      functions. It assumes these characters already have the right
+      text properties, and just copies the properties they already
+      have.</p>
+
+      <p>The normal way to use this feature is that the
+      <code>buffer-access-fontify-functions</code> functions add
+      this property, as well as others, to the characters they
+      operate on. That way, they avoid being called over and over
+      for the same text.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Clickable-Text.html#Clickable-Text"
+    accesskey="n" rel="next">Clickable Text</a>, Previous: <a href=
+    "Sticky-Properties.html#Sticky-Properties" accesskey="p" rel=
+    "prev">Sticky Properties</a>, Up: <a href=
+    "Text-Properties.html#Text-Properties" accesskey="u" rel=
+    "up">Text Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

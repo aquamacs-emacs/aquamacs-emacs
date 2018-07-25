@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,249 +19,401 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Accessing Mouse</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Accessing Mouse">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Accessing Mouse">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Input-Events.html#Input-Events" rel="up" title="Input Events">
-<link href="Accessing-Scroll.html#Accessing-Scroll" rel="next" title="Accessing Scroll">
-<link href="Classifying-Events.html#Classifying-Events" rel="prev" title="Classifying Events">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Accessing Mouse</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Accessing Mouse" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Accessing Mouse" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Input-Events.html#Input-Events" rel="up" title=
+  "Input Events" />
+  <link href="Accessing-Scroll.html#Accessing-Scroll" rel="next"
+  title="Accessing Scroll" />
+  <link href="Classifying-Events.html#Classifying-Events" rel=
+  "prev" title="Classifying Events" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Accessing-Mouse" id="Accessing-Mouse"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Accessing-Scroll.html#Accessing-Scroll"
+    accesskey="n" rel="next">Accessing Scroll</a>, Previous:
+    <a href="Classifying-Events.html#Classifying-Events" accesskey=
+    "p" rel="prev">Classifying Events</a>, Up: <a href=
+    "Input-Events.html#Input-Events" accesskey="u" rel="up">Input
+    Events</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Accessing-Mouse-Events" id="Accessing-Mouse-Events"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Accessing-Mouse"></a>
-<div class="header">
-<p>
-Next: <a href="Accessing-Scroll.html#Accessing-Scroll" accesskey="n" rel="next">Accessing Scroll</a>, Previous: <a href="Classifying-Events.html#Classifying-Events" accesskey="p" rel="prev">Classifying Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Accessing-Mouse-Events"></a>
-<h4 class="subsection">20.7.13 Accessing Mouse Events</h4>
-<a name="index-mouse-events_002c-data-in"></a>
-<a name="index-keyboard-events_002c-data-in"></a>
+  <h4 class="subsection">20.7.13 Accessing Mouse
+  Events</h4><a name="index-mouse-events_002c-data-in" id=
+  "index-mouse-events_002c-data-in"></a> <a name=
+  "index-keyboard-events_002c-data-in" id=
+  "index-keyboard-events_002c-data-in"></a>
 
-<p>This section describes convenient functions for accessing the data in
-a mouse button or motion event.  Keyboard event data can be accessed
-using the same functions, but data elements that aren&rsquo;t applicable to
-keyboard events are zero or <code>nil</code>.
-</p>
-<p>The following two functions return a mouse position list
-(see <a href="Click-Events.html#Click-Events">Click Events</a>), specifying the position of a mouse event.
-</p>
-<dl>
-<dt><a name="index-event_002dstart"></a>Function: <strong>event-start</strong> <em>event</em></dt>
-<dd><p>This returns the starting position of <var>event</var>.
-</p>
-<p>If <var>event</var> is a click or button-down event, this returns the
-location of the event.  If <var>event</var> is a drag event, this returns the
-drag&rsquo;s starting position.
-</p></dd></dl>
+  <p>This section describes convenient functions for accessing the
+  data in a mouse button or motion event. Keyboard event data can
+  be accessed using the same functions, but data elements that
+  aren&rsquo;t applicable to keyboard events are zero or
+  <code>nil</code>.</p>
 
-<dl>
-<dt><a name="index-event_002dend"></a>Function: <strong>event-end</strong> <em>event</em></dt>
-<dd><p>This returns the ending position of <var>event</var>.
-</p>
-<p>If <var>event</var> is a drag event, this returns the position where the user
-released the mouse button.  If <var>event</var> is a click or button-down
-event, the value is actually the starting position, which is the only
-position such events have.
-</p></dd></dl>
+  <p>The following two functions return a mouse position list (see
+  <a href="Click-Events.html#Click-Events">Click Events</a>),
+  specifying the position of a mouse event.</p>
 
-<dl>
-<dt><a name="index-posnp"></a>Function: <strong>posnp</strong> <em>object</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>object</var> is a mouse
-position list, in either of the formats documented in <a href="Click-Events.html#Click-Events">Click Events</a>); and <code>nil</code> otherwise.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-event_002dstart" id=
+    "index-event_002dstart"></a>Function:
+    <strong>event-start</strong> <em>event</em></dt>
 
-<a name="index-mouse-position-list_002c-accessing"></a>
-<p>These functions take a mouse position list as argument, and return
-various parts of it:
-</p>
-<dl>
-<dt><a name="index-posn_002dwindow"></a>Function: <strong>posn-window</strong> <em>position</em></dt>
-<dd><p>Return the window that <var>position</var> is in.  If <var>position</var>
-represents a location outside the frame where the event was initiated,
-return that frame instead.
-</p></dd></dl>
+    <dd>
+      <p>This returns the starting position of
+      <var>event</var>.</p>
 
-<dl>
-<dt><a name="index-posn_002darea"></a>Function: <strong>posn-area</strong> <em>position</em></dt>
-<dd><p>Return the window area recorded in <var>position</var>.  It returns <code>nil</code>
-when the event occurred in the text area of the window; otherwise, it
-is a symbol identifying the area in which the event occurred.
-</p></dd></dl>
+      <p>If <var>event</var> is a click or button-down event, this
+      returns the location of the event. If <var>event</var> is a
+      drag event, this returns the drag&rsquo;s starting
+      position.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-posn_002dpoint"></a>Function: <strong>posn-point</strong> <em>position</em></dt>
-<dd><p>Return the buffer position in <var>position</var>.  When the event occurred
-in the text area of the window, in a marginal area, or on a fringe,
-this is an integer specifying a buffer position.  Otherwise, the value
-is undefined.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-event_002dend" id=
+    "index-event_002dend"></a>Function: <strong>event-end</strong>
+    <em>event</em></dt>
 
-<dl>
-<dt><a name="index-posn_002dx_002dy"></a>Function: <strong>posn-x-y</strong> <em>position</em></dt>
-<dd><p>Return the pixel-based x and y coordinates in <var>position</var>, as a
-cons cell <code>(<var>x</var> . <var>y</var>)</code>.  These coordinates are relative
-to the window given by <code>posn-window</code>.
-</p>
-<p>This example shows how to convert the window-relative coordinates in
-the text area of a window into frame-relative coordinates:
-</p>
-<div class="example">
-<pre class="example">(defun frame-relative-coordinates (position)
-  &quot;Return frame-relative coordinates from POSITION.
-POSITION is assumed to lie in a window text area.&quot;
+    <dd>
+      <p>This returns the ending position of <var>event</var>.</p>
+
+      <p>If <var>event</var> is a drag event, this returns the
+      position where the user released the mouse button. If
+      <var>event</var> is a click or button-down event, the value
+      is actually the starting position, which is the only position
+      such events have.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-posnp" id="index-posnp"></a>Function:
+    <strong>posnp</strong> <em>object</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>object</var> is a mouse position list, in either of the
+      formats documented in <a href=
+      "Click-Events.html#Click-Events">Click Events</a>); and
+      <code>nil</code> otherwise.</p>
+    </dd>
+  </dl><a name="index-mouse-position-list_002c-accessing" id=
+  "index-mouse-position-list_002c-accessing"></a>
+
+  <p>These functions take a mouse position list as argument, and
+  return various parts of it:</p>
+
+  <dl>
+    <dt><a name="index-posn_002dwindow" id=
+    "index-posn_002dwindow"></a>Function:
+    <strong>posn-window</strong> <em>position</em></dt>
+
+    <dd>
+      <p>Return the window that <var>position</var> is in. If
+      <var>position</var> represents a location outside the frame
+      where the event was initiated, return that frame instead.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-posn_002darea" id=
+    "index-posn_002darea"></a>Function: <strong>posn-area</strong>
+    <em>position</em></dt>
+
+    <dd>
+      <p>Return the window area recorded in <var>position</var>. It
+      returns <code>nil</code> when the event occurred in the text
+      area of the window; otherwise, it is a symbol identifying the
+      area in which the event occurred.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-posn_002dpoint" id=
+    "index-posn_002dpoint"></a>Function:
+    <strong>posn-point</strong> <em>position</em></dt>
+
+    <dd>
+      <p>Return the buffer position in <var>position</var>. When
+      the event occurred in the text area of the window, in a
+      marginal area, or on a fringe, this is an integer specifying
+      a buffer position. Otherwise, the value is undefined.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-posn_002dx_002dy" id=
+    "index-posn_002dx_002dy"></a>Function:
+    <strong>posn-x-y</strong> <em>position</em></dt>
+
+    <dd>
+      <p>Return the pixel-based x and y coordinates in
+      <var>position</var>, as a cons cell <code>(<var>x</var> .
+      <var>y</var>)</code>. These coordinates are relative to the
+      window given by <code>posn-window</code>.</p>
+
+      <p>This example shows how to convert the window-relative
+      coordinates in the text area of a window into frame-relative
+      coordinates:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun frame-relative-coordinates (position)
+  "Return frame-relative coordinates from POSITION.
+POSITION is assumed to lie in a window text area."
   (let* ((x-y (posn-x-y position))
          (window (posn-window position))
          (edges (window-inside-pixel-edges window)))
     (cons (+ (car x-y) (car edges))
           (+ (cdr x-y) (cadr edges)))))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-posn_002dcol_002drow"></a>Function: <strong>posn-col-row</strong> <em>position</em></dt>
-<dd><p>This function returns a cons cell <code>(<var>col</var> .  <var>row</var>)</code>,
-containing the estimated column and row corresponding to buffer
-position in <var>position</var>.  The return value is given in units of the
-frame&rsquo;s default character width and default line height (including
-spacing), as computed from the <var>x</var> and <var>y</var> values
-corresponding to <var>position</var>.  (So, if the actual characters have
-non-default sizes, the actual row and column may differ from these
-computed values.)
-</p>
-<p>Note that <var>row</var> is counted from the top of the text area.  If the
-window given by <var>position</var> possesses a header line (see <a href="Header-Lines.html#Header-Lines">Header Lines</a>), it is <em>not</em> included in the <var>row</var> count.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-posn_002dcol_002drow" id=
+    "index-posn_002dcol_002drow"></a>Function:
+    <strong>posn-col-row</strong> <em>position</em></dt>
 
-<dl>
-<dt><a name="index-posn_002dactual_002dcol_002drow"></a>Function: <strong>posn-actual-col-row</strong> <em>position</em></dt>
-<dd><p>Return the actual row and column in <var>position</var>, as a cons cell
-<code>(<var>col</var> . <var>row</var>)</code>.  The values are the actual row and
-column numbers in the window given by <var>position</var>.  See <a href="Click-Events.html#Click-Events">Click Events</a>, for details.  The function returns <code>nil</code> if
-<var>position</var> does not include actual position values; in that case
-<code>posn-col-row</code> can be used to get approximate values.
-</p>
-<p>Note that this function doesn&rsquo;t account for the visual width of
-characters on display, like the number of visual columns taken by a
-tab character or an image.  If you need the coordinates in canonical
-character units, use <code>posn-col-row</code> instead.
-</p></dd></dl>
+    <dd>
+      <p>This function returns a cons cell <code>(<var>col</var> .
+      <var>row</var>)</code>, containing the estimated column and
+      row corresponding to buffer position in <var>position</var>.
+      The return value is given in units of the frame&rsquo;s
+      default character width and default line height (including
+      spacing), as computed from the <var>x</var> and <var>y</var>
+      values corresponding to <var>position</var>. (So, if the
+      actual characters have non-default sizes, the actual row and
+      column may differ from these computed values.)</p>
 
-<dl>
-<dt><a name="index-posn_002dstring"></a>Function: <strong>posn-string</strong> <em>position</em></dt>
-<dd><p>Return the string object in <var>position</var>, either <code>nil</code>, or a
-cons cell <code>(<var>string</var> . <var>string-pos</var>)</code>.
-</p></dd></dl>
+      <p>Note that <var>row</var> is counted from the top of the
+      text area. If the window given by <var>position</var>
+      possesses a header line (see <a href=
+      "Header-Lines.html#Header-Lines">Header Lines</a>), it is
+      <em>not</em> included in the <var>row</var> count.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-posn_002dimage"></a>Function: <strong>posn-image</strong> <em>position</em></dt>
-<dd><p>Return the image object in <var>position</var>, either <code>nil</code>, or an
-image <code>(image ...)</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-posn_002dactual_002dcol_002drow" id=
+    "index-posn_002dactual_002dcol_002drow"></a>Function:
+    <strong>posn-actual-col-row</strong> <em>position</em></dt>
 
-<dl>
-<dt><a name="index-posn_002dobject"></a>Function: <strong>posn-object</strong> <em>position</em></dt>
-<dd><p>Return the image or string object in <var>position</var>, either
-<code>nil</code>, an image <code>(image ...)</code>, or a cons cell
-<code>(<var>string</var> . <var>string-pos</var>)</code>.
-</p></dd></dl>
+    <dd>
+      <p>Return the actual row and column in <var>position</var>,
+      as a cons cell <code>(<var>col</var> .
+      <var>row</var>)</code>. The values are the actual row and
+      column numbers in the window given by <var>position</var>.
+      See <a href="Click-Events.html#Click-Events">Click
+      Events</a>, for details. The function returns
+      <code>nil</code> if <var>position</var> does not include
+      actual position values; in that case
+      <code>posn-col-row</code> can be used to get approximate
+      values.</p>
 
-<dl>
-<dt><a name="index-posn_002dobject_002dx_002dy"></a>Function: <strong>posn-object-x-y</strong> <em>position</em></dt>
-<dd><p>Return the pixel-based x and y coordinates relative to the upper left
-corner of the object in <var>position</var> as a cons cell <code>(<var>dx</var>
-. <var>dy</var>)</code>.  If the <var>position</var> is on buffer text, return the
-relative position of the buffer-text character closest to that
-position.
-</p></dd></dl>
+      <p>Note that this function doesn&rsquo;t account for the
+      visual width of characters on display, like the number of
+      visual columns taken by a tab character or an image. If you
+      need the coordinates in canonical character units, use
+      <code>posn-col-row</code> instead.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-posn_002dobject_002dwidth_002dheight"></a>Function: <strong>posn-object-width-height</strong> <em>position</em></dt>
-<dd><p>Return the pixel width and height of the object in <var>position</var> as a
-cons cell <code>(<var>width</var> . <var>height</var>)</code>.  If the <var>position</var>
-is a buffer position, return the size of the character at that position.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-posn_002dstring" id=
+    "index-posn_002dstring"></a>Function:
+    <strong>posn-string</strong> <em>position</em></dt>
 
-<a name="index-timestamp-of-a-mouse-event"></a>
-<dl>
-<dt><a name="index-posn_002dtimestamp"></a>Function: <strong>posn-timestamp</strong> <em>position</em></dt>
-<dd><p>Return the timestamp in <var>position</var>.  This is the time at which the
-event occurred, in milliseconds.
-</p></dd></dl>
+    <dd>
+      <p>Return the string object in <var>position</var>, either
+      <code>nil</code>, or a cons cell <code>(<var>string</var> .
+      <var>string-pos</var>)</code>.</p>
+    </dd>
+  </dl>
 
-<p>These functions compute a position list given particular buffer
-position or screen position.  You can access the data in this position
-list with the functions described above.
-</p>
-<dl>
-<dt><a name="index-posn_002dat_002dpoint"></a>Function: <strong>posn-at-point</strong> <em>&amp;optional pos window</em></dt>
-<dd><p>This function returns a position list for position <var>pos</var> in
-<var>window</var>.  <var>pos</var> defaults to point in <var>window</var>;
-<var>window</var> defaults to the selected window.
-</p>
-<p><code>posn-at-point</code> returns <code>nil</code> if <var>pos</var> is not visible in
-<var>window</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-posn_002dimage" id=
+    "index-posn_002dimage"></a>Function:
+    <strong>posn-image</strong> <em>position</em></dt>
 
-<dl>
-<dt><a name="index-posn_002dat_002dx_002dy"></a>Function: <strong>posn-at-x-y</strong> <em>x y &amp;optional frame-or-window whole</em></dt>
-<dd><p>This function returns position information corresponding to pixel
-coordinates <var>x</var> and <var>y</var> in a specified frame or window,
-<var>frame-or-window</var>, which defaults to the selected window.
-The coordinates <var>x</var> and <var>y</var> are relative to the
-frame or window used.
-If <var>whole</var> is <code>nil</code>, the coordinates are relative
-to the window text area, otherwise they are relative to
-the entire window area including scroll bars, margins and fringes.
-</p></dd></dl>
+    <dd>
+      <p>Return the image object in <var>position</var>, either
+      <code>nil</code>, or an image <code>(image ...)</code>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Accessing-Scroll.html#Accessing-Scroll" accesskey="n" rel="next">Accessing Scroll</a>, Previous: <a href="Classifying-Events.html#Classifying-Events" accesskey="p" rel="prev">Classifying Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-posn_002dobject" id=
+    "index-posn_002dobject"></a>Function:
+    <strong>posn-object</strong> <em>position</em></dt>
 
+    <dd>
+      <p>Return the image or string object in <var>position</var>,
+      either <code>nil</code>, an image <code>(image ...)</code>,
+      or a cons cell <code>(<var>string</var> .
+      <var>string-pos</var>)</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-posn_002dobject_002dx_002dy" id=
+    "index-posn_002dobject_002dx_002dy"></a>Function:
+    <strong>posn-object-x-y</strong> <em>position</em></dt>
 
+    <dd>
+      <p>Return the pixel-based x and y coordinates relative to the
+      upper left corner of the object in <var>position</var> as a
+      cons cell <code>(<var>dx</var> . <var>dy</var>)</code>. If
+      the <var>position</var> is on buffer text, return the
+      relative position of the buffer-text character closest to
+      that position.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-posn_002dobject_002dwidth_002dheight" id=
+    "index-posn_002dobject_002dwidth_002dheight"></a>Function:
+    <strong>posn-object-width-height</strong>
+    <em>position</em></dt>
+
+    <dd>
+      <p>Return the pixel width and height of the object in
+      <var>position</var> as a cons cell <code>(<var>width</var> .
+      <var>height</var>)</code>. If the <var>position</var> is a
+      buffer position, return the size of the character at that
+      position.</p>
+    </dd>
+  </dl><a name="index-timestamp-of-a-mouse-event" id=
+  "index-timestamp-of-a-mouse-event"></a>
+
+  <dl>
+    <dt><a name="index-posn_002dtimestamp" id=
+    "index-posn_002dtimestamp"></a>Function:
+    <strong>posn-timestamp</strong> <em>position</em></dt>
+
+    <dd>
+      <p>Return the timestamp in <var>position</var>. This is the
+      time at which the event occurred, in milliseconds.</p>
+    </dd>
+  </dl>
+
+  <p>These functions compute a position list given particular
+  buffer position or screen position. You can access the data in
+  this position list with the functions described above.</p>
+
+  <dl>
+    <dt><a name="index-posn_002dat_002dpoint" id=
+    "index-posn_002dat_002dpoint"></a>Function:
+    <strong>posn-at-point</strong> <em>&amp;optional pos
+    window</em></dt>
+
+    <dd>
+      <p>This function returns a position list for position
+      <var>pos</var> in <var>window</var>. <var>pos</var> defaults
+      to point in <var>window</var>; <var>window</var> defaults to
+      the selected window.</p>
+
+      <p><code>posn-at-point</code> returns <code>nil</code> if
+      <var>pos</var> is not visible in <var>window</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-posn_002dat_002dx_002dy" id=
+    "index-posn_002dat_002dx_002dy"></a>Function:
+    <strong>posn-at-x-y</strong> <em>x y &amp;optional
+    frame-or-window whole</em></dt>
+
+    <dd>
+      <p>This function returns position information corresponding
+      to pixel coordinates <var>x</var> and <var>y</var> in a
+      specified frame or window, <var>frame-or-window</var>, which
+      defaults to the selected window. The coordinates <var>x</var>
+      and <var>y</var> are relative to the frame or window used. If
+      <var>whole</var> is <code>nil</code>, the coordinates are
+      relative to the window text area, otherwise they are relative
+      to the entire window area including scroll bars, margins and
+      fringes.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Accessing-Scroll.html#Accessing-Scroll"
+    accesskey="n" rel="next">Accessing Scroll</a>, Previous:
+    <a href="Classifying-Events.html#Classifying-Events" accesskey=
+    "p" rel="prev">Classifying Events</a>, Up: <a href=
+    "Input-Events.html#Input-Events" accesskey="u" rel="up">Input
+    Events</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

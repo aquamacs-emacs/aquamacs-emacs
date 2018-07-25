@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,186 +20,386 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Breakpoints and Stepping</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Breakpoints and Stepping">
-<meta name="keywords" content="IDLWAVE User Manual: Breakpoints and Stepping">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" rel="up" title="Debugging IDL Programs">
-<link href="Compiling-Programs.html#Compiling-Programs" rel="next" title="Compiling Programs">
-<link href="Debug-Key-Bindings.html#Debug-Key-Bindings" rel="prev" title="Debug Key Bindings">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Breakpoints and Stepping</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Breakpoints and Stepping" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Breakpoints and Stepping" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugging-IDL-Programs.html#Debugging-IDL-Programs"
+  rel="up" title="Debugging IDL Programs" />
+  <link href="Compiling-Programs.html#Compiling-Programs" rel=
+  "next" title="Compiling Programs" />
+  <link href="Debug-Key-Bindings.html#Debug-Key-Bindings" rel=
+  "prev" title="Debug Key Bindings" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Breakpoints-and-Stepping"></a>
-<div class="header">
-<p>
-Next: <a href="Compiling-Programs.html#Compiling-Programs" accesskey="n" rel="next">Compiling Programs</a>, Previous: <a href="Debug-Key-Bindings.html#Debug-Key-Bindings" accesskey="p" rel="prev">Debug Key Bindings</a>, Up: <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" accesskey="u" rel="up">Debugging IDL Programs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Breakpoints-and-Stepping-1"></a>
-<h4 class="subsection">5.4.3 Breakpoints and Stepping</h4>
-<a name="index-Breakpoints"></a>
-<a name="index-Stepping"></a>
-<a name="index-Execution_002c-controlled"></a>
+<body lang="en" xml:lang="en">
+  <a name="Breakpoints-and-Stepping" id=
+  "Breakpoints-and-Stepping"></a>
 
-<a name="index-C_002dc-C_002dd-C_002db"></a>
-<a name="index-C_002dc-C_002dd-C_002db-1"></a>
-<p>IDLWAVE helps you set breakpoints and step through code.  Setting a
-breakpoint in the current line of the source buffer is accomplished
-with <kbd>C-c C-d C-b</kbd> (<code>idlwave-shell-break-here</code>).  With a
-prefix arg of 1 (i.e., <kbd>C-1 C-c C-d C-b</kbd>), the breakpoint gets a
-<code>/ONCE</code> keyword, meaning that it will be deleted after first use.
-With a numeric prefix greater than one (e.g., <kbd>C-4 C-c C-d C-b</kbd>),
-the breakpoint will only be active the <code>nth</code> time it is hit.
-With a single non-numeric prefix (i.e., <kbd>C-u C-c C-d C-b</kbd>), prompt
-for a condition: an IDL expression to be evaluated and trigger the
-breakpoint only if true.  To clear the breakpoint in the current line,
-use <kbd>C-c C-d C-d</kbd> (<code>idlwave-clear-current-bp</code>).  When
-executed from the shell window, the breakpoint where IDL is currently
-stopped will be deleted.  To clear all breakpoints, use <kbd>C-c C-d
-C-a</kbd> (<code>idlwave-clear-all-bp</code>).  Breakpoints can also be disabled
-and re-enabled: <kbd>C-c C-d C-\</kbd>
-(<code>idlwave-shell-toggle-enable-current-bp</code>).
-</p>
-<p>Breakpoint lines are highlighted or indicated with an icon in the source
-code (different icons for conditional, after, and other break types).
-Disabled breakpoints are <em>grayed out</em> by default.  Note that IDL
-places breakpoints as close as possible on or after the line you
-specify.  IDLWAVE queries the shell for the actual breakpoint location
-which was set, so the exact line you specify may not be marked.  You can
-re-sync the breakpoint list and update the display at any time (e.g., if
-you add or remove some on the command line) using <kbd>C-c C-d C-l</kbd>.
-</p>
-<p>In recent IDLWAVE versions, the breakpoint line is highlighted when the
-mouse is moved over it, and a tooltip pops up describing the break
-details.  <kbd>mouse-3</kbd> on the breakpoint line pops up a menu of
-breakpoint actions, including clearing, disabling, and adding or
-changing break conditions or &ldquo;after&rdquo; break count.
-</p>
-<p>Once the program has stopped somewhere, you can step through it.  The
-most important stepping commands are <kbd>C-c C-d C-s</kbd> to execute one
-line of IDL code (&quot;step into&quot;); <kbd>C-c C-d C-n</kbd> to step a single line,
-treating procedure and function calls as a single step (&quot;step over&quot;);
-<kbd>C-c C-d C-h</kbd> to continue execution to the line at the cursor and
-<kbd>C-c C-d C-r</kbd> to continue execution.  See <a href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell">Commands Sent to the Shell</a>, for information on displaying or hiding the breakpoint and
-stepping commands the shell receives.  Here is a summary of the
-breakpoint and stepping commands:
-</p>
-<table>
-<tr><td width="23%"><kbd>C-c C-d C-b</kbd></td><td width="77%">Set breakpoint (<code>idlwave-shell-break-here</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-i</kbd></td><td width="77%">Set breakpoint in module named here (<code>idlwave-shell-break-in</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-d</kbd></td><td width="77%">Clear current breakpoint (<code>idlwave-shell-clear-current-bp</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-a</kbd></td><td width="77%">Clear all breakpoints (<code>idlwave-shell-clear-all-bp</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d [</kbd></td><td width="77%">Go to the previous breakpoint (<code>idlwave-shell-goto-previous-bp</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d ]</kbd></td><td width="77%">Go to the next breakpoint (<code>idlwave-shell-goto-next-bp</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-\</kbd></td><td width="77%">Disable/Enable current breakpoint (<code>idlwave-shell-toggle-enable-current-bp</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-j</kbd></td><td width="77%">Set a breakpoint at the beginning of the enclosing routine.</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-s</kbd></td><td width="77%">Step, into function calls (<code>idlwave-shell-step</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-n</kbd></td><td width="77%">Step, over function calls (<code>idlwave-shell-stepover</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-k</kbd></td><td width="77%">Skip one statement (<code>idlwave-shell-skip</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-u</kbd></td><td width="77%">Continue to end of block (<code>idlwave-shell-up</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-m</kbd></td><td width="77%">Continue to end of function (<code>idlwave-shell-return</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-o</kbd></td><td width="77%">Continue past end of function (<code>idlwave-shell-out</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-h</kbd></td><td width="77%">Continue to line at cursor position (<code>idlwave-shell-to-here</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-r</kbd></td><td width="77%">Continue execution to next breakpoint, if any (<code>idlwave-shell-cont</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-up</kbd></td><td width="77%">Show higher level in calling stack (<code>idlwave-shell-stack-up</code>)</td></tr>
-<tr><td width="23%"><kbd>C-c C-d C-down</kbd></td><td width="77%">Show lower level in calling stack (<code>idlwave-shell-stack-down</code>)</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Compiling-Programs.html#Compiling-Programs"
+    accesskey="n" rel="next">Compiling Programs</a>, Previous:
+    <a href="Debug-Key-Bindings.html#Debug-Key-Bindings" accesskey=
+    "p" rel="prev">Debug Key Bindings</a>, Up: <a href=
+    "Debugging-IDL-Programs.html#Debugging-IDL-Programs" accesskey=
+    "u" rel="up">Debugging IDL Programs</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Breakpoints-and-Stepping-1" id=
+  "Breakpoints-and-Stepping-1"></a>
 
-<p>All of these commands have equivalents in Electric Debug Mode, which
-provides faster single-key access (see <a href="Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug Mode</a>).
-</p>
-<p>The line where IDL is currently stopped, at breakpoints, halts, and
-errors, etc., is marked with a color overlay or arrow, depending on the
-setting in <code>idlwave-shell-mark-stop-line</code>.  If an overlay face is
-used to mark the stop line (as it is by default), when stepping through
-code, the face color is temporarily changed to gray, until IDL completes
-the next command and moves to the new line.
-</p>
-<dl>
-<dt><a name="index-idlwave_002dshell_002dmark_002dbreakpoints"></a>User Option: <strong>idlwave-shell-mark-breakpoints</strong> <em>(<code>t</code>)</em></dt>
-<dd><p>Non-<code>nil</code> means mark breakpoints in the source file buffers.  The
-value indicates the preferred method.  Valid values are <code>nil</code>,
-<code>t</code>, <code>face</code>, and <code>glyph</code>.
-</p></dd></dl>
+  <h4 class="subsection">5.4.3 Breakpoints and
+  Stepping</h4><a name="index-Breakpoints" id=
+  "index-Breakpoints"></a> <a name="index-Stepping" id=
+  "index-Stepping"></a> <a name="index-Execution_002c-controlled"
+  id="index-Execution_002c-controlled"></a> <a name=
+  "index-C_002dc-C_002dd-C_002db" id=
+  "index-C_002dc-C_002dd-C_002db"></a> <a name=
+  "index-C_002dc-C_002dd-C_002db-1" id=
+  "index-C_002dc-C_002dd-C_002db-1"></a>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002dbreakpoint_002dface"></a>User Option: <strong>idlwave-shell-breakpoint-face</strong></dt>
-<dd><p>The face for breakpoint lines in the source code if
-<code>idlwave-shell-mark-breakpoints</code> has the value <code>face</code>.
-</p></dd></dl>
+  <p>IDLWAVE helps you set breakpoints and step through code.
+  Setting a breakpoint in the current line of the source buffer is
+  accomplished with <kbd>C-c C-d C-b</kbd>
+  (<code>idlwave-shell-break-here</code>). With a prefix arg of 1
+  (i.e., <kbd>C-1 C-c C-d C-b</kbd>), the breakpoint gets a
+  <code>/ONCE</code> keyword, meaning that it will be deleted after
+  first use. With a numeric prefix greater than one (e.g., <kbd>C-4
+  C-c C-d C-b</kbd>), the breakpoint will only be active the
+  <code>nth</code> time it is hit. With a single non-numeric prefix
+  (i.e., <kbd>C-u C-c C-d C-b</kbd>), prompt for a condition: an
+  IDL expression to be evaluated and trigger the breakpoint only if
+  true. To clear the breakpoint in the current line, use <kbd>C-c
+  C-d C-d</kbd> (<code>idlwave-clear-current-bp</code>). When
+  executed from the shell window, the breakpoint where IDL is
+  currently stopped will be deleted. To clear all breakpoints, use
+  <kbd>C-c C-d C-a</kbd> (<code>idlwave-clear-all-bp</code>).
+  Breakpoints can also be disabled and re-enabled: <kbd>C-c C-d
+  C-\</kbd>
+  (<code>idlwave-shell-toggle-enable-current-bp</code>).</p>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002dbreakpoint_002dpopup_002dmenu"></a>User Option: <strong>idlwave-shell-breakpoint-popup-menu</strong> <em>(<code>t</code>)</em></dt>
-<dd><p>Whether to pop-up a menu and present a tooltip description on
-breakpoint lines.
-</p></dd></dl>
+  <p>Breakpoint lines are highlighted or indicated with an icon in
+  the source code (different icons for conditional, after, and
+  other break types). Disabled breakpoints are <em>grayed out</em>
+  by default. Note that IDL places breakpoints as close as possible
+  on or after the line you specify. IDLWAVE queries the shell for
+  the actual breakpoint location which was set, so the exact line
+  you specify may not be marked. You can re-sync the breakpoint
+  list and update the display at any time (e.g., if you add or
+  remove some on the command line) using <kbd>C-c C-d
+  C-l</kbd>.</p>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002dmark_002dstop_002dline"></a>User Option: <strong>idlwave-shell-mark-stop-line</strong> <em>(<code>t</code>)</em></dt>
-<dd><p>Non-<code>nil</code> means mark the source code line where IDL is currently
-stopped.  The value specifies the preferred method.  Valid values are
-<code>nil</code>, <code>t</code>, <code>arrow</code>, and <code>face</code>.
-</p></dd></dl>
+  <p>In recent IDLWAVE versions, the breakpoint line is highlighted
+  when the mouse is moved over it, and a tooltip pops up describing
+  the break details. <kbd>mouse-3</kbd> on the breakpoint line pops
+  up a menu of breakpoint actions, including clearing, disabling,
+  and adding or changing break conditions or &ldquo;after&rdquo;
+  break count.</p>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002doverlay_002darrow"></a>User Option: <strong>idlwave-shell-overlay-arrow</strong> <em>(<code>&quot;&gt;&quot;</code>)</em></dt>
-<dd><p>The overlay arrow to display at source lines where execution halts, if
-configured in <code>idlwave-shell-mark-stop-line</code>.
-</p></dd></dl>
+  <p>Once the program has stopped somewhere, you can step through
+  it. The most important stepping commands are <kbd>C-c C-d
+  C-s</kbd> to execute one line of IDL code ("step into"); <kbd>C-c
+  C-d C-n</kbd> to step a single line, treating procedure and
+  function calls as a single step ("step over"); <kbd>C-c C-d
+  C-h</kbd> to continue execution to the line at the cursor and
+  <kbd>C-c C-d C-r</kbd> to continue execution. See <a href=
+  "Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell">Commands
+  Sent to the Shell</a>, for information on displaying or hiding
+  the breakpoint and stepping commands the shell receives. Here is
+  a summary of the breakpoint and stepping commands:</p>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002dstop_002dline_002dface"></a>User Option: <strong>idlwave-shell-stop-line-face</strong></dt>
-<dd><p>The face which highlights the source line where IDL is stopped, if
-configured in <code>idlwave-shell-mark-stop-line</code>.
-</p></dd></dl>
+  <table>
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-b</kbd></td>
 
+      <td width="77%">Set breakpoint
+      (<code>idlwave-shell-break-here</code>)</td>
+    </tr>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Compiling-Programs.html#Compiling-Programs" accesskey="n" rel="next">Compiling Programs</a>, Previous: <a href="Debug-Key-Bindings.html#Debug-Key-Bindings" accesskey="p" rel="prev">Debug Key Bindings</a>, Up: <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" accesskey="u" rel="up">Debugging IDL Programs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-i</kbd></td>
 
+      <td width="77%">Set breakpoint in module named here
+      (<code>idlwave-shell-break-in</code>)</td>
+    </tr>
 
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-d</kbd></td>
 
+      <td width="77%">Clear current breakpoint
+      (<code>idlwave-shell-clear-current-bp</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-a</kbd></td>
+
+      <td width="77%">Clear all breakpoints
+      (<code>idlwave-shell-clear-all-bp</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d [</kbd></td>
+
+      <td width="77%">Go to the previous breakpoint
+      (<code>idlwave-shell-goto-previous-bp</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d ]</kbd></td>
+
+      <td width="77%">Go to the next breakpoint
+      (<code>idlwave-shell-goto-next-bp</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-\</kbd></td>
+
+      <td width="77%">Disable/Enable current breakpoint
+      (<code>idlwave-shell-toggle-enable-current-bp</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-j</kbd></td>
+
+      <td width="77%">Set a breakpoint at the beginning of the
+      enclosing routine.</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-s</kbd></td>
+
+      <td width="77%">Step, into function calls
+      (<code>idlwave-shell-step</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-n</kbd></td>
+
+      <td width="77%">Step, over function calls
+      (<code>idlwave-shell-stepover</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-k</kbd></td>
+
+      <td width="77%">Skip one statement
+      (<code>idlwave-shell-skip</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-u</kbd></td>
+
+      <td width="77%">Continue to end of block
+      (<code>idlwave-shell-up</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-m</kbd></td>
+
+      <td width="77%">Continue to end of function
+      (<code>idlwave-shell-return</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-o</kbd></td>
+
+      <td width="77%">Continue past end of function
+      (<code>idlwave-shell-out</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-h</kbd></td>
+
+      <td width="77%">Continue to line at cursor position
+      (<code>idlwave-shell-to-here</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-r</kbd></td>
+
+      <td width="77%">Continue execution to next breakpoint, if any
+      (<code>idlwave-shell-cont</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-up</kbd></td>
+
+      <td width="77%">Show higher level in calling stack
+      (<code>idlwave-shell-stack-up</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="23%"><kbd>C-c C-d C-down</kbd></td>
+
+      <td width="77%">Show lower level in calling stack
+      (<code>idlwave-shell-stack-down</code>)</td>
+    </tr>
+  </table>
+
+  <p>All of these commands have equivalents in Electric Debug Mode,
+  which provides faster single-key access (see <a href=
+  "Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug
+  Mode</a>).</p>
+
+  <p>The line where IDL is currently stopped, at breakpoints,
+  halts, and errors, etc., is marked with a color overlay or arrow,
+  depending on the setting in
+  <code>idlwave-shell-mark-stop-line</code>. If an overlay face is
+  used to mark the stop line (as it is by default), when stepping
+  through code, the face color is temporarily changed to gray,
+  until IDL completes the next command and moves to the new
+  line.</p>
+
+  <dl>
+    <dt><a name="index-idlwave_002dshell_002dmark_002dbreakpoints"
+    id="index-idlwave_002dshell_002dmark_002dbreakpoints"></a>User
+    Option: <strong>idlwave-shell-mark-breakpoints</strong>
+    <em>(<code>t</code>)</em></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means mark breakpoints in the source
+      file buffers. The value indicates the preferred method. Valid
+      values are <code>nil</code>, <code>t</code>,
+      <code>face</code>, and <code>glyph</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-idlwave_002dshell_002dbreakpoint_002dface"
+    id="index-idlwave_002dshell_002dbreakpoint_002dface"></a>User
+    Option: <strong>idlwave-shell-breakpoint-face</strong></dt>
+
+    <dd>
+      <p>The face for breakpoint lines in the source code if
+      <code>idlwave-shell-mark-breakpoints</code> has the value
+      <code>face</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002dbreakpoint_002dpopup_002dmenu" id=
+    "index-idlwave_002dshell_002dbreakpoint_002dpopup_002dmenu"></a>User
+    Option: <strong>idlwave-shell-breakpoint-popup-menu</strong>
+    <em>(<code>t</code>)</em></dt>
+
+    <dd>
+      <p>Whether to pop-up a menu and present a tooltip description
+      on breakpoint lines.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002dmark_002dstop_002dline" id=
+    "index-idlwave_002dshell_002dmark_002dstop_002dline"></a>User
+    Option: <strong>idlwave-shell-mark-stop-line</strong>
+    <em>(<code>t</code>)</em></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means mark the source code line where
+      IDL is currently stopped. The value specifies the preferred
+      method. Valid values are <code>nil</code>, <code>t</code>,
+      <code>arrow</code>, and <code>face</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-idlwave_002dshell_002doverlay_002darrow" id=
+    "index-idlwave_002dshell_002doverlay_002darrow"></a>User
+    Option: <strong>idlwave-shell-overlay-arrow</strong>
+    <em>(<code>"&gt;"</code>)</em></dt>
+
+    <dd>
+      <p>The overlay arrow to display at source lines where
+      execution halts, if configured in
+      <code>idlwave-shell-mark-stop-line</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002dstop_002dline_002dface" id=
+    "index-idlwave_002dshell_002dstop_002dline_002dface"></a>User
+    Option: <strong>idlwave-shell-stop-line-face</strong></dt>
+
+    <dd>
+      <p>The face which highlights the source line where IDL is
+      stopped, if configured in
+      <code>idlwave-shell-mark-stop-line</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Compiling-Programs.html#Compiling-Programs"
+    accesskey="n" rel="next">Compiling Programs</a>, Previous:
+    <a href="Debug-Key-Bindings.html#Debug-Key-Bindings" accesskey=
+    "p" rel="prev">Debug Key Bindings</a>, Up: <a href=
+    "Debugging-IDL-Programs.html#Debugging-IDL-Programs" accesskey=
+    "u" rel="up">Debugging IDL Programs</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

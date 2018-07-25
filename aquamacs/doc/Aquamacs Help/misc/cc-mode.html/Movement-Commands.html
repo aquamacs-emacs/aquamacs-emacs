@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,236 +16,378 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Movement Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Movement Commands">
-<meta name="keywords" content="CC Mode Manual: Movement Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="Filling-and-Breaking.html#Filling-and-Breaking" rel="next" title="Filling and Breaking">
-<link href="Comment-Commands.html#Comment-Commands" rel="prev" title="Comment Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Movement Commands</title>
+  <meta name="description" content=
+  "CC Mode Manual: Movement Commands" />
+  <meta name="keywords" content=
+  "CC Mode Manual: Movement Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="Filling-and-Breaking.html#Filling-and-Breaking" rel=
+  "next" title="Filling and Breaking" />
+  <link href="Comment-Commands.html#Comment-Commands" rel="prev"
+  title="Comment Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Movement-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Filling-and-Breaking.html#Filling-and-Breaking" accesskey="n" rel="next">Filling and Breaking</a>, Previous: <a href="Comment-Commands.html#Comment-Commands" accesskey="p" rel="prev">Comment Commands</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Movement-Commands-1"></a>
-<h3 class="section">4.3 Movement Commands</h3>
-<a name="index-movement"></a>
+<body lang="en" xml:lang="en">
+  <a name="Movement-Commands" id="Movement-Commands"></a>
 
-<p>CC Mode contains some useful commands for moving around in C code.
-</p>
-<dl compact="compact">
-<dt><kbd>C-M-a</kbd> (<code>c-beginning-of-defun</code>)</dt>
-<dt><kbd>C-M-e</kbd> (<code>c-end-of-defun</code>)</dt>
-<dd><a name="index-c_002dbeginning_002dof_002ddefun"></a>
-<a name="index-c_002dend_002dof_002ddefun"></a>
-<a name="index-c_002ddefun_002dtactic"></a>
-<a name="index-defun_002dtactic-_0028c_002d_0029"></a>
+  <div class="header">
+    <p>Next: <a href=
+    "Filling-and-Breaking.html#Filling-and-Breaking" accesskey="n"
+    rel="next">Filling and Breaking</a>, Previous: <a href=
+    "Comment-Commands.html#Comment-Commands" accesskey="p" rel=
+    "prev">Comment Commands</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Movement-Commands-1" id="Movement-Commands-1"></a>
 
-<p>Move to the beginning or end of the current or next function.  Other
-constructs (such as a structs or classes) which have a brace block
-also count as &ldquo;functions&rdquo; here.  To move over several functions, you
-can give these commands a repeat count.
-</p>
-<p>The start of a function is at its header.  The end of the function is
-after its closing brace, or after the semicolon of a construct (such
-as a <code>struct</code>) which doesn&rsquo;t end at the brace.  These two
-commands try to leave point at the beginning of a line near the actual
-start or end of the function.  This occasionally causes point not to
-move at all.
-</p>
-<p>By default, these commands will recognize functions contained within a
-<em>declaration scope</em> such as a C++ <code>class</code> or <code>namespace</code>
-construct, should the point start inside it.  If CC Mode fails to find
-function beginnings or ends inside the current declaration scope, it
-will search the enclosing scopes.  If you want CC Mode to recognize
-functions only at the top level<a name="DOCF5" href="#FOOT5"><sup>5</sup></a>, set <code>c-defun-tactic</code> to
-<code>t</code>.
-</p>
-<p>These functions are analogous to the Emacs built-in commands
-<code>beginning-of-defun</code> and <code>end-of-defun</code>, except they
-eliminate the constraint that the top-level opening brace of the defun
-must be in column zero.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Defuns.html#Defuns">Defuns</a> in <cite>GNU Emacs Manual</cite>, for more information.
-</p>
-</dd>
-<dt><kbd>C-M-a</kbd> (AWK Mode) (<code>c-awk-beginning-of-defun</code>)</dt>
-<dt><kbd>C-M-e</kbd> (AWK Mode) (<code>c-awk-end-of-defun</code>)</dt>
-<dd><a name="index-C_002dM_002da-_0028AWK-Mode_0029"></a>
-<a name="index-C_002dM_002de-_0028AWK-Mode_0029"></a>
-<a name="index-c_002dawk_002dbeginning_002dof_002ddefun"></a>
-<a name="index-awk_002dbeginning_002dof_002ddefun-_0028c_002d_0029"></a>
-<a name="index-c_002dawk_002dend_002dof_002ddefun"></a>
-<a name="index-awk_002dend_002dof_002ddefun-_0028c_002d_0029"></a>
-<p>Move to the beginning or end of the current or next AWK defun.  These
-commands can take prefix-arguments, their functionality being entirely
-equivalent to <code>beginning-of-defun</code> and <code>end-of-defun</code>.
-</p>
-<p>AWK Mode <em>defuns</em> are either pattern/action pairs (either of which
-might be implicit) or user defined functions.  Having the &lsquo;<samp>{</samp>&rsquo; and
-&lsquo;<samp>}</samp>&rsquo; (if there are any) in column zero, as is suggested for some
-modes, is neither necessary nor helpful in AWK mode.
-</p>
-</dd>
-<dt><kbd>M-a</kbd> (<code>c-beginning-of-statement</code>)</dt>
-<dt><kbd>M-e</kbd> (<code>c-end-of-statement</code>)</dt>
-<dd><a name="index-M_002da"></a>
-<a name="index-M_002de"></a>
-<a name="index-c_002dbeginning_002dof_002dstatement"></a>
-<a name="index-c_002dend_002dof_002dstatement"></a>
-<a name="index-beginning_002dof_002dstatement-_0028c_002d_0029"></a>
-<a name="index-end_002dof_002dstatement-_0028c_002d_0029"></a>
-<p>Move to the beginning or end of the innermost C statement.  If point
-is already there, move to the next beginning or end of a statement,
-even if that means moving into a block.  (Use <kbd>C-M-b</kbd> or
-<kbd>C-M-f</kbd> to move over a balanced block.)  A prefix argument <var>n</var>
-means move over <var>n</var> statements.
-</p>
-<p>If point is within or next to a comment or a string which spans more
-than one line, these commands move by sentences instead of statements.
-</p>
-<p>When called from a program, these functions take three optional
-arguments: the repetition count, a buffer position limit which is the
-farthest back to search for the syntactic context, and a flag saying
-whether to do sentence motion in or near comments and multiline
-strings.
-</p>
-</dd>
-<dt><kbd>C-c C-u</kbd> (<code>c-up-conditional</code>)</dt>
-<dd><a name="index-C_002dc-C_002du"></a>
-<a name="index-c_002dup_002dconditional"></a>
-<a name="index-up_002dconditional-_0028c_002d_0029"></a>
-<p>Move back to the containing preprocessor conditional, leaving the mark
-behind.  A prefix argument acts as a repeat count.  With a negative
-argument, move forward to the end of the containing preprocessor
-conditional.
-</p>
-<p>&lsquo;<samp>#elif</samp>&rsquo; is treated like &lsquo;<samp>#else</samp>&rsquo; followed by &lsquo;<samp>#if</samp>&rsquo;, so the
-function stops at them when going backward, but not when going
-forward.
-</p>
-<p>This key sequence is not bound in AWK Mode, which doesn&rsquo;t have
-preprocessor statements.
-</p>
-</dd>
-<dt><kbd>M-x c-up-conditional-with-else</kbd></dt>
-<dd><a name="index-c_002dup_002dconditional_002dwith_002delse"></a>
-<a name="index-up_002dconditional_002dwith_002delse-_0028c_002d_0029"></a>
-<p>A variety of <code>c-up-conditional</code> that also stops at &lsquo;<samp>#else</samp>&rsquo;
-lines.  Normally those lines are ignored.
-</p>
-</dd>
-<dt><kbd>M-x c-down-conditional</kbd></dt>
-<dd><a name="index-c_002ddown_002dconditional"></a>
-<a name="index-down_002dconditional-_0028c_002d_0029"></a>
-<p>Move forward into the next nested preprocessor conditional, leaving
-the mark behind.  A prefix argument acts as a repeat count.  With a
-negative argument, move backward into the previous nested preprocessor
-conditional.
-</p>
-<p>&lsquo;<samp>#elif</samp>&rsquo; is treated like &lsquo;<samp>#else</samp>&rsquo; followed by &lsquo;<samp>#if</samp>&rsquo;, so the
-function stops at them when going forward, but not when going backward.
-</p>
-</dd>
-<dt><kbd>M-x c-down-conditional-with-else</kbd></dt>
-<dd><a name="index-c_002ddown_002dconditional_002dwith_002delse"></a>
-<a name="index-down_002dconditional_002dwith_002delse-_0028c_002d_0029"></a>
-<p>A variety of <code>c-down-conditional</code> that also stops at &lsquo;<samp>#else</samp>&rsquo;
-lines.  Normally those lines are ignored.
-</p>
-</dd>
-<dt><kbd>C-c C-p</kbd> (<code>c-backward-conditional</code>)</dt>
-<dt><kbd>C-c C-n</kbd> (<code>c-forward-conditional</code>)</dt>
-<dd><a name="index-C_002dc-C_002dp"></a>
-<a name="index-C_002dc-C_002dn"></a>
-<a name="index-c_002dbackward_002dconditional"></a>
-<a name="index-c_002dforward_002dconditional"></a>
-<a name="index-backward_002dconditional-_0028c_002d_0029"></a>
-<a name="index-forward_002dconditional-_0028c_002d_0029"></a>
-<p>Move backward or forward across a preprocessor conditional, leaving
-the mark behind.  A prefix argument acts as a repeat count.  With a
-negative argument, move in the opposite direction.
-</p>
-<p>These key sequences are not bound in AWK Mode, which doesn&rsquo;t have
-preprocessor statements.
-</p>
-</dd>
-<dt><kbd>M-x c-backward-into-nomenclature</kbd></dt>
-<dt><kbd>M-x c-forward-into-nomenclature</kbd></dt>
-<dd><a name="index-c_002dbackward_002dinto_002dnomenclature"></a>
-<a name="index-c_002dforward_002dinto_002dnomenclature"></a>
-<a name="index-backward_002dinto_002dnomenclature-_0028c_002d_0029"></a>
-<a name="index-forward_002dinto_002dnomenclature-_0028c_002d_0029"></a>
-<p>A popular programming style, especially for object-oriented languages
-such as C++ is to write symbols in a mixed case format, where the
-first letter of each word is capitalized, and not separated by
-underscores.  E.g., &lsquo;<samp>SymbolsWithMixedCaseAndNoUnderlines</samp>&rsquo;.
-</p>
-<p>These commands move backward or forward to the beginning of the next
-capitalized word.  With prefix argument <var>n</var>, move <var>n</var> times.
-If <var>n</var> is negative, move in the opposite direction.
-</p>
-<p>Note that these two commands have been superseded by
-<code>subword-mode</code>, which you should use instead.  See <a href="Subword-Movement.html#Subword-Movement">Subword Movement</a>.  They might be removed from a future release of CC Mode.
-</p></dd>
-</dl>
+  <h3 class="section">4.3 Movement Commands</h3><a name=
+  "index-movement" id="index-movement"></a>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>CC Mode contains some useful commands for moving around in C
+  code.</p>
 
-<h3><a name="FOOT5" href="#DOCF5">(5)</a></h3>
-<p>this was CC Mode&rsquo;s
-behavior prior to version 5.32.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Filling-and-Breaking.html#Filling-and-Breaking" accesskey="n" rel="next">Filling and Breaking</a>, Previous: <a href="Comment-Commands.html#Comment-Commands" accesskey="p" rel="prev">Comment Commands</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>C-M-a</kbd> (<code>c-beginning-of-defun</code>)</dt>
 
+    <dt><kbd>C-M-e</kbd> (<code>c-end-of-defun</code>)</dt>
 
+    <dd>
+      <a name="index-c_002dbeginning_002dof_002ddefun" id=
+      "index-c_002dbeginning_002dof_002ddefun"></a> <a name=
+      "index-c_002dend_002dof_002ddefun" id=
+      "index-c_002dend_002dof_002ddefun"></a> <a name=
+      "index-c_002ddefun_002dtactic" id=
+      "index-c_002ddefun_002dtactic"></a> <a name=
+      "index-defun_002dtactic-_0028c_002d_0029" id=
+      "index-defun_002dtactic-_0028c_002d_0029"></a>
 
+      <p>Move to the beginning or end of the current or next
+      function. Other constructs (such as a structs or classes)
+      which have a brace block also count as
+      &ldquo;functions&rdquo; here. To move over several functions,
+      you can give these commands a repeat count.</p>
+
+      <p>The start of a function is at its header. The end of the
+      function is after its closing brace, or after the semicolon
+      of a construct (such as a <code>struct</code>) which
+      doesn&rsquo;t end at the brace. These two commands try to
+      leave point at the beginning of a line near the actual start
+      or end of the function. This occasionally causes point not to
+      move at all.</p>
+
+      <p>By default, these commands will recognize functions
+      contained within a <em>declaration scope</em> such as a C++
+      <code>class</code> or <code>namespace</code> construct,
+      should the point start inside it. If CC Mode fails to find
+      function beginnings or ends inside the current declaration
+      scope, it will search the enclosing scopes. If you want CC
+      Mode to recognize functions only at the top level<a name=
+      "DOCF5" href="#FOOT5" id="DOCF5"><sup>5</sup></a>, set
+      <code>c-defun-tactic</code> to <code>t</code>.</p>
+
+      <p>These functions are analogous to the Emacs built-in
+      commands <code>beginning-of-defun</code> and
+      <code>end-of-defun</code>, except they eliminate the
+      constraint that the top-level opening brace of the defun must
+      be in column zero. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Defuns.html#Defuns">
+      Defuns</a> in <cite>GNU Emacs Manual</cite>, for more
+      information.</p>
+    </dd>
+
+    <dt><kbd>C-M-a</kbd> (AWK Mode)
+    (<code>c-awk-beginning-of-defun</code>)</dt>
+
+    <dt><kbd>C-M-e</kbd> (AWK Mode)
+    (<code>c-awk-end-of-defun</code>)</dt>
+
+    <dd>
+      <a name="index-C_002dM_002da-_0028AWK-Mode_0029" id=
+      "index-C_002dM_002da-_0028AWK-Mode_0029"></a> <a name=
+      "index-C_002dM_002de-_0028AWK-Mode_0029" id=
+      "index-C_002dM_002de-_0028AWK-Mode_0029"></a> <a name=
+      "index-c_002dawk_002dbeginning_002dof_002ddefun" id=
+      "index-c_002dawk_002dbeginning_002dof_002ddefun"></a>
+      <a name="index-awk_002dbeginning_002dof_002ddefun-_0028c_002d_0029"
+      id=
+      "index-awk_002dbeginning_002dof_002ddefun-_0028c_002d_0029"></a>
+      <a name="index-c_002dawk_002dend_002dof_002ddefun" id=
+      "index-c_002dawk_002dend_002dof_002ddefun"></a> <a name=
+      "index-awk_002dend_002dof_002ddefun-_0028c_002d_0029" id=
+      "index-awk_002dend_002dof_002ddefun-_0028c_002d_0029"></a>
+
+      <p>Move to the beginning or end of the current or next AWK
+      defun. These commands can take prefix-arguments, their
+      functionality being entirely equivalent to
+      <code>beginning-of-defun</code> and
+      <code>end-of-defun</code>.</p>
+
+      <p>AWK Mode <em>defuns</em> are either pattern/action pairs
+      (either of which might be implicit) or user defined
+      functions. Having the &lsquo;<samp>{</samp>&rsquo; and
+      &lsquo;<samp>}</samp>&rsquo; (if there are any) in column
+      zero, as is suggested for some modes, is neither necessary
+      nor helpful in AWK mode.</p>
+    </dd>
+
+    <dt><kbd>M-a</kbd> (<code>c-beginning-of-statement</code>)</dt>
+
+    <dt><kbd>M-e</kbd> (<code>c-end-of-statement</code>)</dt>
+
+    <dd>
+      <a name="index-M_002da" id="index-M_002da"></a> <a name=
+      "index-M_002de" id="index-M_002de"></a> <a name=
+      "index-c_002dbeginning_002dof_002dstatement" id=
+      "index-c_002dbeginning_002dof_002dstatement"></a> <a name=
+      "index-c_002dend_002dof_002dstatement" id=
+      "index-c_002dend_002dof_002dstatement"></a> <a name=
+      "index-beginning_002dof_002dstatement-_0028c_002d_0029" id=
+      "index-beginning_002dof_002dstatement-_0028c_002d_0029"></a>
+      <a name="index-end_002dof_002dstatement-_0028c_002d_0029" id=
+      "index-end_002dof_002dstatement-_0028c_002d_0029"></a>
+
+      <p>Move to the beginning or end of the innermost C statement.
+      If point is already there, move to the next beginning or end
+      of a statement, even if that means moving into a block. (Use
+      <kbd>C-M-b</kbd> or <kbd>C-M-f</kbd> to move over a balanced
+      block.) A prefix argument <var>n</var> means move over
+      <var>n</var> statements.</p>
+
+      <p>If point is within or next to a comment or a string which
+      spans more than one line, these commands move by sentences
+      instead of statements.</p>
+
+      <p>When called from a program, these functions take three
+      optional arguments: the repetition count, a buffer position
+      limit which is the farthest back to search for the syntactic
+      context, and a flag saying whether to do sentence motion in
+      or near comments and multiline strings.</p>
+    </dd>
+
+    <dt><kbd>C-c C-u</kbd> (<code>c-up-conditional</code>)</dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002du" id=
+      "index-C_002dc-C_002du"></a> <a name=
+      "index-c_002dup_002dconditional" id=
+      "index-c_002dup_002dconditional"></a> <a name=
+      "index-up_002dconditional-_0028c_002d_0029" id=
+      "index-up_002dconditional-_0028c_002d_0029"></a>
+
+      <p>Move back to the containing preprocessor conditional,
+      leaving the mark behind. A prefix argument acts as a repeat
+      count. With a negative argument, move forward to the end of
+      the containing preprocessor conditional.</p>
+
+      <p>&lsquo;<samp>#elif</samp>&rsquo; is treated like
+      &lsquo;<samp>#else</samp>&rsquo; followed by
+      &lsquo;<samp>#if</samp>&rsquo;, so the function stops at them
+      when going backward, but not when going forward.</p>
+
+      <p>This key sequence is not bound in AWK Mode, which
+      doesn&rsquo;t have preprocessor statements.</p>
+    </dd>
+
+    <dt><kbd>M-x c-up-conditional-with-else</kbd></dt>
+
+    <dd>
+      <a name="index-c_002dup_002dconditional_002dwith_002delse"
+      id="index-c_002dup_002dconditional_002dwith_002delse"></a>
+      <a name=
+      "index-up_002dconditional_002dwith_002delse-_0028c_002d_0029"
+      id=
+      "index-up_002dconditional_002dwith_002delse-_0028c_002d_0029">
+      </a>
+
+      <p>A variety of <code>c-up-conditional</code> that also stops
+      at &lsquo;<samp>#else</samp>&rsquo; lines. Normally those
+      lines are ignored.</p>
+    </dd>
+
+    <dt><kbd>M-x c-down-conditional</kbd></dt>
+
+    <dd>
+      <a name="index-c_002ddown_002dconditional" id=
+      "index-c_002ddown_002dconditional"></a> <a name=
+      "index-down_002dconditional-_0028c_002d_0029" id=
+      "index-down_002dconditional-_0028c_002d_0029"></a>
+
+      <p>Move forward into the next nested preprocessor
+      conditional, leaving the mark behind. A prefix argument acts
+      as a repeat count. With a negative argument, move backward
+      into the previous nested preprocessor conditional.</p>
+
+      <p>&lsquo;<samp>#elif</samp>&rsquo; is treated like
+      &lsquo;<samp>#else</samp>&rsquo; followed by
+      &lsquo;<samp>#if</samp>&rsquo;, so the function stops at them
+      when going forward, but not when going backward.</p>
+    </dd>
+
+    <dt><kbd>M-x c-down-conditional-with-else</kbd></dt>
+
+    <dd>
+      <a name="index-c_002ddown_002dconditional_002dwith_002delse"
+      id="index-c_002ddown_002dconditional_002dwith_002delse"></a>
+      <a name=
+      "index-down_002dconditional_002dwith_002delse-_0028c_002d_0029"
+      id=
+      "index-down_002dconditional_002dwith_002delse-_0028c_002d_0029">
+      </a>
+
+      <p>A variety of <code>c-down-conditional</code> that also
+      stops at &lsquo;<samp>#else</samp>&rsquo; lines. Normally
+      those lines are ignored.</p>
+    </dd>
+
+    <dt><kbd>C-c C-p</kbd>
+    (<code>c-backward-conditional</code>)</dt>
+
+    <dt><kbd>C-c C-n</kbd>
+    (<code>c-forward-conditional</code>)</dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dp" id=
+      "index-C_002dc-C_002dp"></a> <a name="index-C_002dc-C_002dn"
+      id="index-C_002dc-C_002dn"></a> <a name=
+      "index-c_002dbackward_002dconditional" id=
+      "index-c_002dbackward_002dconditional"></a> <a name=
+      "index-c_002dforward_002dconditional" id=
+      "index-c_002dforward_002dconditional"></a> <a name=
+      "index-backward_002dconditional-_0028c_002d_0029" id=
+      "index-backward_002dconditional-_0028c_002d_0029"></a>
+      <a name="index-forward_002dconditional-_0028c_002d_0029" id=
+      "index-forward_002dconditional-_0028c_002d_0029"></a>
+
+      <p>Move backward or forward across a preprocessor
+      conditional, leaving the mark behind. A prefix argument acts
+      as a repeat count. With a negative argument, move in the
+      opposite direction.</p>
+
+      <p>These key sequences are not bound in AWK Mode, which
+      doesn&rsquo;t have preprocessor statements.</p>
+    </dd>
+
+    <dt><kbd>M-x c-backward-into-nomenclature</kbd></dt>
+
+    <dt><kbd>M-x c-forward-into-nomenclature</kbd></dt>
+
+    <dd>
+      <a name="index-c_002dbackward_002dinto_002dnomenclature" id=
+      "index-c_002dbackward_002dinto_002dnomenclature"></a>
+      <a name="index-c_002dforward_002dinto_002dnomenclature" id=
+      "index-c_002dforward_002dinto_002dnomenclature"></a> <a name=
+      "index-backward_002dinto_002dnomenclature-_0028c_002d_0029"
+      id=
+      "index-backward_002dinto_002dnomenclature-_0028c_002d_0029"></a>
+      <a name=
+      "index-forward_002dinto_002dnomenclature-_0028c_002d_0029"
+      id="index-forward_002dinto_002dnomenclature-_0028c_002d_0029">
+      </a>
+
+      <p>A popular programming style, especially for
+      object-oriented languages such as C++ is to write symbols in
+      a mixed case format, where the first letter of each word is
+      capitalized, and not separated by underscores. E.g.,
+      &lsquo;<samp>SymbolsWithMixedCaseAndNoUnderlines</samp>&rsquo;.</p>
+
+      <p>These commands move backward or forward to the beginning
+      of the next capitalized word. With prefix argument
+      <var>n</var>, move <var>n</var> times. If <var>n</var> is
+      negative, move in the opposite direction.</p>
+
+      <p>Note that these two commands have been superseded by
+      <code>subword-mode</code>, which you should use instead. See
+      <a href="Subword-Movement.html#Subword-Movement">Subword
+      Movement</a>. They might be removed from a future release of
+      CC Mode.</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT5" href="#DOCF5" id="FOOT5">(5)</a></h3>
+
+    <p>this was CC Mode&rsquo;s behavior prior to version 5.32.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Filling-and-Breaking.html#Filling-and-Breaking" accesskey="n"
+    rel="next">Filling and Breaking</a>, Previous: <a href=
+    "Comment-Commands.html#Comment-Commands" accesskey="p" rel=
+    "prev">Comment Commands</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,152 +19,232 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Object from Minibuffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Object from Minibuffer">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Object from Minibuffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Minibuffers.html#Minibuffers" rel="up" title="Minibuffers">
-<link href="Minibuffer-History.html#Minibuffer-History" rel="next" title="Minibuffer History">
-<link href="Text-from-Minibuffer.html#Text-from-Minibuffer" rel="prev" title="Text from Minibuffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Object from
+  Minibuffer</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Object from Minibuffer" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Object from Minibuffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Minibuffers.html#Minibuffers" rel="up" title=
+  "Minibuffers" />
+  <link href="Minibuffer-History.html#Minibuffer-History" rel=
+  "next" title="Minibuffer History" />
+  <link href="Text-from-Minibuffer.html#Text-from-Minibuffer" rel=
+  "prev" title="Text from Minibuffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Object-from-Minibuffer" id="Object-from-Minibuffer"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Minibuffer-History.html#Minibuffer-History"
+    accesskey="n" rel="next">Minibuffer History</a>, Previous:
+    <a href="Text-from-Minibuffer.html#Text-from-Minibuffer"
+    accesskey="p" rel="prev">Text from Minibuffer</a>, Up: <a href=
+    "Minibuffers.html#Minibuffers" accesskey="u" rel=
+    "up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Reading-Lisp-Objects-with-the-Minibuffer" id=
+  "Reading-Lisp-Objects-with-the-Minibuffer"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Object-from-Minibuffer"></a>
-<div class="header">
-<p>
-Next: <a href="Minibuffer-History.html#Minibuffer-History" accesskey="n" rel="next">Minibuffer History</a>, Previous: <a href="Text-from-Minibuffer.html#Text-from-Minibuffer" accesskey="p" rel="prev">Text from Minibuffer</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Reading-Lisp-Objects-with-the-Minibuffer"></a>
-<h3 class="section">19.3 Reading Lisp Objects with the Minibuffer</h3>
-<a name="index-minibuffer-input_002c-reading-lisp-objects"></a>
+  <h3 class="section">19.3 Reading Lisp Objects with the
+  Minibuffer</h3><a name=
+  "index-minibuffer-input_002c-reading-lisp-objects" id=
+  "index-minibuffer-input_002c-reading-lisp-objects"></a>
 
-<p>This section describes functions for reading Lisp objects with the
-minibuffer.
-</p>
-<dl>
-<dt><a name="index-read_002dminibuffer"></a>Function: <strong>read-minibuffer</strong> <em>prompt &amp;optional initial</em></dt>
-<dd><p>This function reads a Lisp object using the minibuffer, and returns it
-without evaluating it.  The arguments <var>prompt</var> and <var>initial</var> are
-used as in <code>read-from-minibuffer</code>.
-</p>
-<p>This is a simplified interface to the
-<code>read-from-minibuffer</code> function:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(read-minibuffer <var>prompt</var> <var>initial</var>)
+  <p>This section describes functions for reading Lisp objects with
+  the minibuffer.</p>
+
+  <dl>
+    <dt><a name="index-read_002dminibuffer" id=
+    "index-read_002dminibuffer"></a>Function:
+    <strong>read-minibuffer</strong> <em>prompt &amp;optional
+    initial</em></dt>
+
+    <dd>
+      <p>This function reads a Lisp object using the minibuffer,
+      and returns it without evaluating it. The arguments
+      <var>prompt</var> and <var>initial</var> are used as in
+      <code>read-from-minibuffer</code>.</p>
+
+      <p>This is a simplified interface to the
+      <code>read-from-minibuffer</code> function:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(read-minibuffer <var>prompt</var> <var>initial</var>)
 &equiv;
 (let (minibuffer-allow-text-properties)
   (read-from-minibuffer <var>prompt</var> <var>initial</var> nil t))
-</pre></div>
+</pre>
+      </div>
 
-<p>Here is an example in which we supply the string <code>&quot;(testing)&quot;</code> as
-initial input:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(read-minibuffer
- &quot;Enter an expression: &quot; (format &quot;%s&quot; '(testing)))
+      <p>Here is an example in which we supply the string
+      <code>"(testing)"</code> as initial input:</p>
 
-;; <span class="roman">Here is how the minibuffer is displayed:</span>
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">---------- Buffer: Minibuffer ----------
+      <div class="smallexample">
+        <pre class="smallexample">
+(read-minibuffer
+ "Enter an expression: " (format "%s" '(testing)))
+
+;; <span class=
+"roman">Here is how the minibuffer is displayed:</span>
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+---------- Buffer: Minibuffer ----------
 Enter an expression: (testing)&lowast;
 ---------- Buffer: Minibuffer ----------
-</pre></div>
+</pre>
+      </div>
 
-<p>The user can type <tt class="key">RET</tt> immediately to use the initial input as a
-default, or can edit the input.
-</p></dd></dl>
+      <p>The user can type <tt class="key">RET</tt> immediately to
+      use the initial input as a default, or can edit the
+      input.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-eval_002dminibuffer"></a>Function: <strong>eval-minibuffer</strong> <em>prompt &amp;optional initial</em></dt>
-<dd><p>This function reads a Lisp expression using the minibuffer, evaluates
-it, then returns the result.  The arguments <var>prompt</var> and
-<var>initial</var> are used as in <code>read-from-minibuffer</code>.
-</p>
-<p>This function simply evaluates the result of a call to
-<code>read-minibuffer</code>:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(eval-minibuffer <var>prompt</var> <var>initial</var>)
+  <dl>
+    <dt><a name="index-eval_002dminibuffer" id=
+    "index-eval_002dminibuffer"></a>Function:
+    <strong>eval-minibuffer</strong> <em>prompt &amp;optional
+    initial</em></dt>
+
+    <dd>
+      <p>This function reads a Lisp expression using the
+      minibuffer, evaluates it, then returns the result. The
+      arguments <var>prompt</var> and <var>initial</var> are used
+      as in <code>read-from-minibuffer</code>.</p>
+
+      <p>This function simply evaluates the result of a call to
+      <code>read-minibuffer</code>:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(eval-minibuffer <var>prompt</var> <var>initial</var>)
 &equiv;
 (eval (read-minibuffer <var>prompt</var> <var>initial</var>))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-edit_002dand_002deval_002dcommand"></a>Function: <strong>edit-and-eval-command</strong> <em>prompt form</em></dt>
-<dd><p>This function reads a Lisp expression in the minibuffer, evaluates it,
-then returns the result.  The difference between this command and
-<code>eval-minibuffer</code> is that here the initial <var>form</var> is not
-optional and it is treated as a Lisp object to be converted to printed
-representation rather than as a string of text.  It is printed with
-<code>prin1</code>, so if it is a string, double-quote characters (&lsquo;<samp>&quot;</samp>&rsquo;)
-appear in the initial text.  See <a href="Output-Functions.html#Output-Functions">Output Functions</a>.
-</p>
-<p>In the following example, we offer the user an expression with initial
-text that is already a valid form:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(edit-and-eval-command &quot;Please edit: &quot; '(forward-word 1))
+  <dl>
+    <dt><a name="index-edit_002dand_002deval_002dcommand" id=
+    "index-edit_002dand_002deval_002dcommand"></a>Function:
+    <strong>edit-and-eval-command</strong> <em>prompt
+    form</em></dt>
 
-;; <span class="roman">After evaluation of the preceding expression,</span>
-;;   <span class="roman">the following appears in the minibuffer:</span>
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">---------- Buffer: Minibuffer ----------
+    <dd>
+      <p>This function reads a Lisp expression in the minibuffer,
+      evaluates it, then returns the result. The difference between
+      this command and <code>eval-minibuffer</code> is that here
+      the initial <var>form</var> is not optional and it is treated
+      as a Lisp object to be converted to printed representation
+      rather than as a string of text. It is printed with
+      <code>prin1</code>, so if it is a string, double-quote
+      characters (&lsquo;<samp>"</samp>&rsquo;) appear in the
+      initial text. See <a href=
+      "Output-Functions.html#Output-Functions">Output
+      Functions</a>.</p>
+
+      <p>In the following example, we offer the user an expression
+      with initial text that is already a valid form:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(edit-and-eval-command "Please edit: " '(forward-word 1))
+
+;; <span class=
+"roman">After evaluation of the preceding expression,</span>
+;;   <span class=
+"roman">the following appears in the minibuffer:</span>
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+---------- Buffer: Minibuffer ----------
 Please edit: (forward-word 1)&lowast;
 ---------- Buffer: Minibuffer ----------
-</pre></div>
+</pre>
+      </div>
 
-<p>Typing <tt class="key">RET</tt> right away would exit the minibuffer and evaluate the
-expression, thus moving point forward one word.
-</p></dd></dl>
+      <p>Typing <tt class="key">RET</tt> right away would exit the
+      minibuffer and evaluate the expression, thus moving point
+      forward one word.</p>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Minibuffer-History.html#Minibuffer-History" accesskey="n" rel="next">Minibuffer History</a>, Previous: <a href="Text-from-Minibuffer.html#Text-from-Minibuffer" accesskey="p" rel="prev">Text from Minibuffer</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Minibuffer-History.html#Minibuffer-History"
+    accesskey="n" rel="next">Minibuffer History</a>, Previous:
+    <a href="Text-from-Minibuffer.html#Text-from-Minibuffer"
+    accesskey="p" rel="prev">Text from Minibuffer</a>, Up: <a href=
+    "Minibuffers.html#Minibuffers" accesskey="u" rel=
+    "up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

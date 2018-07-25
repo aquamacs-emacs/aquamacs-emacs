@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,136 +20,201 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Motion in C</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Motion in C">
-<meta name="keywords" content="GNU Emacs Manual: Motion in C">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="C-Modes.html#C-Modes" rel="up" title="C Modes">
-<link href="Electric-C.html#Electric-C" rel="next" title="Electric C">
-<link href="C-Modes.html#C-Modes" rel="prev" title="C Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Motion in C</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Motion in C" />
+  <meta name="keywords" content="GNU Emacs Manual: Motion in C" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="C-Modes.html#C-Modes" rel="up" title="C Modes" />
+  <link href="Electric-C.html#Electric-C" rel="next" title=
+  "Electric C" />
+  <link href="C-Modes.html#C-Modes" rel="prev" title="C Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Motion-in-C" id="Motion-in-C"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Electric-C.html#Electric-C" accesskey="n"
+    rel="next">Electric C</a>, Up: <a href="C-Modes.html#C-Modes"
+    accesskey="u" rel="up">C Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="C-Mode-Motion-Commands" id="C-Mode-Motion-Commands"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Motion-in-C"></a>
-<div class="header">
-<p>
-Next: <a href="Electric-C.html#Electric-C" accesskey="n" rel="next">Electric C</a>, Up: <a href="C-Modes.html#C-Modes" accesskey="u" rel="up">C Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="C-Mode-Motion-Commands"></a>
-<h4 class="subsection">26.12.1 C Mode Motion Commands</h4>
+  <h4 class="subsection">26.12.1 C Mode Motion Commands</h4>
 
-<p>This section describes commands for moving point, in C mode and
-related modes.
-</p>
-<dl compact="compact">
-<dt><code>C-M-a</code></dt>
-<dt><code>C-M-e</code></dt>
-<dd><a name="index-c_002dbeginning_002dof_002ddefun"></a>
-<a name="index-c_002dend_002dof_002ddefun"></a>
-<p>Move point to the beginning or end of the current function or
-top-level definition.  In languages with enclosing scopes (such as
-C++&rsquo;s classes) the <em>current function</em> is the immediate one,
-possibly inside a scope.  Otherwise it is the one defined by the least
-enclosing braces.  (By contrast, <code>beginning-of-defun</code> and
-<code>end-of-defun</code> search for braces in column zero.)  See <a href="Moving-by-Defuns.html#Moving-by-Defuns">Moving by Defuns</a>.
-</p>
-</dd>
-<dt><code>C-c C-u</code></dt>
-<dd><a name="index-C_002dc-C_002du-_0028C-mode_0029"></a>
-<a name="index-c_002dup_002dconditional"></a>
-<p>Move point back to the containing preprocessor conditional, leaving the
-mark behind.  A prefix argument acts as a repeat count.  With a negative
-argument, move point forward to the end of the containing
-preprocessor conditional.
-</p>
-<p>&lsquo;<samp>#elif</samp>&rsquo; is equivalent to &lsquo;<samp>#else</samp>&rsquo; followed by &lsquo;<samp>#if</samp>&rsquo;, so
-the function will stop at a &lsquo;<samp>#elif</samp>&rsquo; when going backward, but not
-when going forward.
-</p>
-</dd>
-<dt><code>C-c C-p</code></dt>
-<dd><a name="index-C_002dc-C_002dp-_0028C-mode_0029"></a>
-<a name="index-c_002dbackward_002dconditional"></a>
-<p>Move point back over a preprocessor conditional, leaving the mark
-behind.  A prefix argument acts as a repeat count.  With a negative
-argument, move forward.
-</p>
-</dd>
-<dt><code>C-c C-n</code></dt>
-<dd><a name="index-C_002dc-C_002dn-_0028C-mode_0029"></a>
-<a name="index-c_002dforward_002dconditional"></a>
-<p>Move point forward across a preprocessor conditional, leaving the mark
-behind.  A prefix argument acts as a repeat count.  With a negative
-argument, move backward.
-</p>
-</dd>
-<dt><code>M-a</code></dt>
-<dd><a name="index-M_002da-_0028C-mode_0029"></a>
-<a name="index-c_002dbeginning_002dof_002dstatement"></a>
-<p>Move point to the beginning of the innermost C statement
-(<code>c-beginning-of-statement</code>).  If point is already at the beginning
-of a statement, move to the beginning of the preceding statement.  With
-prefix argument <var>n</var>, move back <var>n</var> − 1 statements.
-</p>
-<p>In comments or in strings which span more than one line, this command
-moves by sentences instead of statements.
-</p>
-</dd>
-<dt><code>M-e</code></dt>
-<dd><a name="index-M_002de-_0028C-mode_0029"></a>
-<a name="index-c_002dend_002dof_002dstatement"></a>
-<p>Move point to the end of the innermost C statement or sentence; like
-<kbd>M-a</kbd> except that it moves in the other direction
-(<code>c-end-of-statement</code>).
-</p></dd>
-</dl>
+  <p>This section describes commands for moving point, in C mode
+  and related modes.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Electric-C.html#Electric-C" accesskey="n" rel="next">Electric C</a>, Up: <a href="C-Modes.html#C-Modes" accesskey="u" rel="up">C Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><code>C-M-a</code></dt>
 
+    <dt><code>C-M-e</code></dt>
 
+    <dd>
+      <a name="index-c_002dbeginning_002dof_002ddefun" id=
+      "index-c_002dbeginning_002dof_002ddefun"></a> <a name=
+      "index-c_002dend_002dof_002ddefun" id=
+      "index-c_002dend_002dof_002ddefun"></a>
 
+      <p>Move point to the beginning or end of the current function
+      or top-level definition. In languages with enclosing scopes
+      (such as C++&rsquo;s classes) the <em>current function</em>
+      is the immediate one, possibly inside a scope. Otherwise it
+      is the one defined by the least enclosing braces. (By
+      contrast, <code>beginning-of-defun</code> and
+      <code>end-of-defun</code> search for braces in column zero.)
+      See <a href="Moving-by-Defuns.html#Moving-by-Defuns">Moving
+      by Defuns</a>.</p>
+    </dd>
+
+    <dt><code>C-c C-u</code></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002du-_0028C-mode_0029" id=
+      "index-C_002dc-C_002du-_0028C-mode_0029"></a> <a name=
+      "index-c_002dup_002dconditional" id=
+      "index-c_002dup_002dconditional"></a>
+
+      <p>Move point back to the containing preprocessor
+      conditional, leaving the mark behind. A prefix argument acts
+      as a repeat count. With a negative argument, move point
+      forward to the end of the containing preprocessor
+      conditional.</p>
+
+      <p>&lsquo;<samp>#elif</samp>&rsquo; is equivalent to
+      &lsquo;<samp>#else</samp>&rsquo; followed by
+      &lsquo;<samp>#if</samp>&rsquo;, so the function will stop at
+      a &lsquo;<samp>#elif</samp>&rsquo; when going backward, but
+      not when going forward.</p>
+    </dd>
+
+    <dt><code>C-c C-p</code></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dp-_0028C-mode_0029" id=
+      "index-C_002dc-C_002dp-_0028C-mode_0029"></a> <a name=
+      "index-c_002dbackward_002dconditional" id=
+      "index-c_002dbackward_002dconditional"></a>
+
+      <p>Move point back over a preprocessor conditional, leaving
+      the mark behind. A prefix argument acts as a repeat count.
+      With a negative argument, move forward.</p>
+    </dd>
+
+    <dt><code>C-c C-n</code></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dn-_0028C-mode_0029" id=
+      "index-C_002dc-C_002dn-_0028C-mode_0029"></a> <a name=
+      "index-c_002dforward_002dconditional" id=
+      "index-c_002dforward_002dconditional"></a>
+
+      <p>Move point forward across a preprocessor conditional,
+      leaving the mark behind. A prefix argument acts as a repeat
+      count. With a negative argument, move backward.</p>
+    </dd>
+
+    <dt><code>M-a</code></dt>
+
+    <dd>
+      <a name="index-M_002da-_0028C-mode_0029" id=
+      "index-M_002da-_0028C-mode_0029"></a> <a name=
+      "index-c_002dbeginning_002dof_002dstatement" id=
+      "index-c_002dbeginning_002dof_002dstatement"></a>
+
+      <p>Move point to the beginning of the innermost C statement
+      (<code>c-beginning-of-statement</code>). If point is already
+      at the beginning of a statement, move to the beginning of the
+      preceding statement. With prefix argument <var>n</var>, move
+      back <var>n</var> &acirc;&circ;&rsquo; 1 statements.</p>
+
+      <p>In comments or in strings which span more than one line,
+      this command moves by sentences instead of statements.</p>
+    </dd>
+
+    <dt><code>M-e</code></dt>
+
+    <dd>
+      <a name="index-M_002de-_0028C-mode_0029" id=
+      "index-M_002de-_0028C-mode_0029"></a> <a name=
+      "index-c_002dend_002dof_002dstatement" id=
+      "index-c_002dend_002dof_002dstatement"></a>
+
+      <p>Move point to the end of the innermost C statement or
+      sentence; like <kbd>M-a</kbd> except that it moves in the
+      other direction (<code>c-end-of-statement</code>).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Electric-C.html#Electric-C" accesskey="n"
+    rel="next">Electric C</a>, Up: <a href="C-Modes.html#C-Modes"
+    accesskey="u" rel="up">C Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Receiving Method Calls - Using of D-Bus</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Using of D-Bus">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Asynchronous-Methods.html#Asynchronous-Methods" title="Asynchronous Methods">
-<link rel="next" href="Signals.html#Signals" title="Signals">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Receiving Method Calls - Using of D-Bus</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Using of D-Bus" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Asynchronous-Methods.html#Asynchronous-Methods" title=
+  "Asynchronous Methods" />
+  <link rel="next" href="Signals.html#Signals" title="Signals" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
@@ -23,8 +31,10 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -34,84 +44,121 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Receiving-Method-Calls"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Signals.html#Signals">Signals</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Asynchronous-Methods.html#Asynchronous-Methods">Asynchronous Methods</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Receiving-Method-Calls" id=
+    "Receiving-Method-Calls"></a>
 
-<h2 class="chapter">6 Offering own methods.</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Signals.html#Signals">Signals</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Asynchronous-Methods.html#Asynchronous-Methods">Asynchronous
+    Methods</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-method-calls_002c-returning-43"></a><a name="index-returning-method-calls-44"></a>
-Emacs can also offer own methods, which can be called by other
-applications.  These methods could be an implementation of an
-interface of a well known service, like &lsquo;<samp><span class="samp">org.freedesktop.TextEditor</span></samp>&rsquo;.
+  <h2 class="chapter">6 Offering own methods.</h2>
 
-   <p>It could be also an implementation of an own interface.  In this case,
-the service name must be &lsquo;<samp><span class="samp">org.gnu.Emacs</span></samp>&rsquo;.  The object path shall
-begin with &lsquo;<samp><span class="samp">/org/gnu/Emacs/</span><strong>Application</strong><span class="samp">/</span></samp>&rsquo;, and the
-interface name shall be <code>org.gnu.Emacs.</code><strong>Application</strong>. 
-&lsquo;<samp><strong>Application</strong></samp>&rsquo; is the name of the application which
-provides the interface.
+  <p><a name="index-method-calls_002c-returning-43" id=
+  "index-method-calls_002c-returning-43"></a><a name=
+  "index-returning-method-calls-44" id=
+  "index-returning-method-calls-44"></a> Emacs can also offer own
+  methods, which can be called by other applications. These methods
+  could be an implementation of an interface of a well known
+  service, like &lsquo;<samp><span class=
+  "samp">org.freedesktop.TextEditor</span></samp>&rsquo;.</p>
 
-<div class="defun">
-&mdash; Constant: <b>dbus-service-emacs</b><var><a name="index-dbus_002dservice_002demacs-45"></a></var><br>
-<blockquote><p>The well known service name of Emacs. 
-</p></blockquote></div>
+  <p>It could be also an implementation of an own interface. In
+  this case, the service name must be &lsquo;<samp><span class=
+  "samp">org.gnu.Emacs</span></samp>&rsquo;. The object path shall
+  begin with &lsquo;<samp><span class=
+  "samp">/org/gnu/Emacs/</span><strong>Application</strong><span class="samp">/</span></samp>&rsquo;,
+  and the interface name shall be
+  <code>org.gnu.Emacs.</code><strong>Application</strong>.
+  &lsquo;<samp><strong>Application</strong></samp>&rsquo; is the
+  name of the application which provides the interface.</p>
 
-<div class="defun">
-&mdash; Constant: <b>dbus-path-emacs</b><var><a name="index-dbus_002dpath_002demacs-46"></a></var><br>
-<blockquote><p>The object path head "/org/gnu/Emacs" used by Emacs.  All object
-paths, used by offered methods or signals, shall start with this
-string. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Constant: <b>dbus-service-emacs</b><var><a name=
+    "index-dbus_002dservice_002demacs-45" id=
+    "index-dbus_002dservice_002demacs-45"></a></var><br />
 
-<div class="defun">
-&mdash; Function: <b>dbus-register-method</b><var> bus service path interface method handler<a name="index-dbus_002dregister_002dmethod-47"></a></var><br>
-<blockquote><p>With this function, an application registers <var>method</var> on the D-Bus
-<var>bus</var>.
+    <blockquote>
+      <p>The well known service name of Emacs.</p>
+    </blockquote>
+  </div>
 
-        <p><var>bus</var> is either the symbol <code>:system</code> or the symbol
-<code>:session</code>.
+  <div class="defun">
+    &mdash; Constant: <b>dbus-path-emacs</b><var><a name=
+    "index-dbus_002dpath_002demacs-46" id=
+    "index-dbus_002dpath_002demacs-46"></a></var><br />
 
-        <p><var>service</var> is the D-Bus service name of the D-Bus object
-<var>method</var> is registered for.  It must be a known name.
+    <blockquote>
+      <p>The object path head "/org/gnu/Emacs" used by Emacs. All
+      object paths, used by offered methods or signals, shall start
+      with this string.</p>
+    </blockquote>
+  </div>
 
-        <p><var>path</var> is the D-Bus object path <var>service</var> is
-registered.
+  <div class="defun">
+    &mdash; Function: <b>dbus-register-method</b> <var>bus service
+    path interface method handler<a name=
+    "index-dbus_002dregister_002dmethod-47" id=
+    "index-dbus_002dregister_002dmethod-47"></a></var><br />
 
-        <p><var>interface</var> is the interface offered by <var>service</var>.  It must
-provide <var>method</var>.
+    <blockquote>
+      <p>With this function, an application registers
+      <var>method</var> on the D-Bus <var>bus</var>.</p>
 
-        <p><var>handler</var> is a Lisp function to be called when a <var>method</var> call
-is received.  It must accept as arguments the input arguments of
-<var>method</var>.  <var>handler</var> should return a list, whose elements are
-to be used as arguments for the reply message of <var>method</var>.  This
-list can be composed like the input parameters in <a href="Type-Conversion.html#Type-Conversion">Type Conversion</a>.
+      <p><var>bus</var> is either the symbol <code>:system</code>
+      or the symbol <code>:session</code>.</p>
 
-        <p>If <var>handler</var> wants to return just one Lisp object and it is not a
-cons cell, <var>handler</var> can return this object directly, instead of
-returning a list containing the object.
+      <p><var>service</var> is the D-Bus service name of the D-Bus
+      object <var>method</var> is registered for. It must be a
+      known name.</p>
 
-        <p>In case <var>handler</var> shall return a reply message with an empty
-argument list, <var>handler</var> must return the symbol <code>:ignore</code>.
+      <p><var>path</var> is the D-Bus object path
+      <var>service</var> is registered.</p>
 
-        <p>The default D-Bus timeout when waiting for a message reply is 25
-seconds.  This value could be even smaller, depending on the calling
-client.  Therefore, <var>handler</var> shall not last longer than
-absolutely necessary.
+      <p><var>interface</var> is the interface offered by
+      <var>service</var>. It must provide <var>method</var>.</p>
 
-        <p><code>dbus-register-method</code> returns a Lisp object, which can be used
-as argument in <code>dbus-unregister-object</code> for removing the
-registration for <var>method</var>.  Example:
+      <p><var>handler</var> is a Lisp function to be called when a
+      <var>method</var> call is received. It must accept as
+      arguments the input arguments of <var>method</var>.
+      <var>handler</var> should return a list, whose elements are
+      to be used as arguments for the reply message of
+      <var>method</var>. This list can be composed like the input
+      parameters in <a href=
+      "Type-Conversion.html#Type-Conversion">Type
+      Conversion</a>.</p>
 
-     <pre class="lisp">          (defun my-dbus-method-handler (filename)
+      <p>If <var>handler</var> wants to return just one Lisp object
+      and it is not a cons cell, <var>handler</var> can return this
+      object directly, instead of returning a list containing the
+      object.</p>
+
+      <p>In case <var>handler</var> shall return a reply message
+      with an empty argument list, <var>handler</var> must return
+      the symbol <code>:ignore</code>.</p>
+
+      <p>The default D-Bus timeout when waiting for a message reply
+      is 25 seconds. This value could be even smaller, depending on
+      the calling client. Therefore, <var>handler</var> shall not
+      last longer than absolutely necessary.</p>
+
+      <p><code>dbus-register-method</code> returns a Lisp object,
+      which can be used as argument in
+      <code>dbus-unregister-object</code> for removing the
+      registration for <var>method</var>. Example:</p>
+      <pre class="lisp">
+          (defun my-dbus-method-handler (filename)
             (let (result)
               (if (find-file filename)
                   (setq result '(:boolean t))
@@ -129,13 +176,16 @@ registration for <var>method</var>.  Example:
               ("org.freedesktop.TextEditor" "/org/freedesktop/TextEditor"
                my-dbus-method-handler))
 </pre>
-        <p>If you invoke the method &lsquo;<samp><span class="samp">org.freedesktop.TextEditor.OpenFile</span></samp>&rsquo;
-from another D-Bus application with a filename as parameter, the file
-is opened in Emacs, and the method returns either <var>true</var> or
-<var>false</var>, indicating the success of the method.  As test tool one
-could use the command line tool <code>dbus-send</code> in a shell:
 
-     <pre class="example">          # dbus-send --session --print-reply \
+      <p>If you invoke the method &lsquo;<samp><span class=
+      "samp">org.freedesktop.TextEditor.OpenFile</span></samp>&rsquo;
+      from another D-Bus application with a filename as parameter,
+      the file is opened in Emacs, and the method returns either
+      <var>true</var> or <var>false</var>, indicating the success
+      of the method. As test tool one could use the command line
+      tool <code>dbus-send</code> in a shell:</p>
+      <pre class="example">
+          # dbus-send --session --print-reply \
               --dest="org.freedesktop.TextEditor" \
               "/org/freedesktop/TextEditor" \
               "org.freedesktop.TextEditor.OpenFile" string:"/etc/hosts"
@@ -143,10 +193,12 @@ could use the command line tool <code>dbus-send</code> in a shell:
           -| method return sender=:1.22 -&gt; dest=:1.23 reply_serial=2
                 boolean true
 </pre>
-        <p>You can indicate an error by raising the Emacs signal
-<code>dbus-error</code>.  The handler above could be changed like this:
 
-     <pre class="lisp">          (defun my-dbus-method-handler (&amp;rest args)
+      <p>You can indicate an error by raising the Emacs signal
+      <code>dbus-error</code>. The handler above could be changed
+      like this:</p>
+      <pre class="lisp">
+          (defun my-dbus-method-handler (&amp;rest args)
             (unless (and (= (length args) 1) (stringp (car args)))
               (signal 'dbus-error (list (format "Wrong argument list: %S" args))))
             (condition-case err
@@ -156,9 +208,10 @@ could use the command line tool <code>dbus-send</code> in a shell:
           
           &rArr; my-dbus-method-handler
 </pre>
-        <p>The test runs then
 
-     <pre class="example">          # dbus-send --session --print-reply \
+      <p>The test runs then</p>
+      <pre class="example">
+          # dbus-send --session --print-reply \
               --dest="org.freedesktop.TextEditor" \
               "/org/freedesktop/TextEditor" \
               "org.freedesktop.TextEditor.OpenFile" \
@@ -167,45 +220,60 @@ could use the command line tool <code>dbus-send</code> in a shell:
           -| Error org.freedesktop.DBus.Error.Failed:
              Wrong argument list: ("/etc/hosts" "/etc/passwd")
 </pre>
-        </blockquote></div>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Function: <b>dbus-register-property</b><var> bus service path interface property access value &amp;optional emits-signal<a name="index-dbus_002dregister_002dproperty-48"></a></var><br>
-<blockquote><p>With this function, an application declares a <var>property</var> on the D-Bus
-<var>bus</var>.
+  <div class="defun">
+    &mdash; Function: <b>dbus-register-property</b> <var>bus
+    service path interface property access value &amp;optional
+    emits-signal<a name="index-dbus_002dregister_002dproperty-48"
+    id="index-dbus_002dregister_002dproperty-48"></a></var><br />
 
-        <p><var>bus</var> is either the symbol <code>:system</code> or the symbol
-<code>:session</code>.
+    <blockquote>
+      <p>With this function, an application declares a
+      <var>property</var> on the D-Bus <var>bus</var>.</p>
 
-        <p><var>service</var> is the D-Bus service name of the D-Bus.  It must be a
-known name.
+      <p><var>bus</var> is either the symbol <code>:system</code>
+      or the symbol <code>:session</code>.</p>
 
-        <p><var>path</var> is the D-Bus object path <var>service</var> is
-registered.
+      <p><var>service</var> is the D-Bus service name of the D-Bus.
+      It must be a known name.</p>
 
-        <p><var>interface</var> is the name of the interface used at <var>path</var>,
-<var>property</var> is the name of the property of <var>interface</var>.
+      <p><var>path</var> is the D-Bus object path
+      <var>service</var> is registered.</p>
 
-        <p><var>access</var> indicates, whether the property can be changed by other
-services via D-Bus.  It must be either the symbol <code>:read</code> or
-<code>:readwrite</code>.  <var>value</var> is the initial value of the property,
-it can be of any valid type (see <code>dbus-call-method</code> for details).
+      <p><var>interface</var> is the name of the interface used at
+      <var>path</var>, <var>property</var> is the name of the
+      property of <var>interface</var>.</p>
 
-        <p>If <var>property</var> already exists on <var>path</var>, it will be
-overwritten.  For properties with access type <code>:read</code> this is the
-only way to change their values.  Properties with access type
-<code>:readwrite</code> can be changed by <code>dbus-set-property</code>.
+      <p><var>access</var> indicates, whether the property can be
+      changed by other services via D-Bus. It must be either the
+      symbol <code>:read</code> or <code>:readwrite</code>.
+      <var>value</var> is the initial value of the property, it can
+      be of any valid type (see <code>dbus-call-method</code> for
+      details).</p>
 
-        <p>The interface &lsquo;<samp><span class="samp">org.freedesktop.DBus.Properties</span></samp>&rsquo; is added to
-<var>path</var>, including a default handler for the &lsquo;<samp><span class="samp">Get</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">GetAll</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Set</span></samp>&rsquo; methods of this interface.  When
-<var>emits-signal</var> is non-<code>nil</code>, the signal
-&lsquo;<samp><span class="samp">PropertiesChanged</span></samp>&rsquo; is sent when the property is changed by
-<code>dbus-set-property</code>.
+      <p>If <var>property</var> already exists on <var>path</var>,
+      it will be overwritten. For properties with access type
+      <code>:read</code> this is the only way to change their
+      values. Properties with access type <code>:readwrite</code>
+      can be changed by <code>dbus-set-property</code>.</p>
 
-     <p class="noindent">Example:
+      <p>The interface &lsquo;<samp><span class=
+      "samp">org.freedesktop.DBus.Properties</span></samp>&rsquo;
+      is added to <var>path</var>, including a default handler for
+      the &lsquo;<samp><span class="samp">Get</span></samp>&rsquo;,
+      &lsquo;<samp><span class="samp">GetAll</span></samp>&rsquo;
+      and &lsquo;<samp><span class="samp">Set</span></samp>&rsquo;
+      methods of this interface. When <var>emits-signal</var> is
+      non-<code>nil</code>, the signal &lsquo;<samp><span class=
+      "samp">PropertiesChanged</span></samp>&rsquo; is sent when
+      the property is changed by
+      <code>dbus-set-property</code>.</p>
 
-     <pre class="lisp">          (dbus-register-property
+      <p class="noindent">Example:</p>
+      <pre class="lisp">
+          (dbus-register-property
             :session "org.freedesktop.TextEditor" "/org/freedesktop/TextEditor"
             "org.freedesktop.TextEditor" "name" :read "GNU Emacs")
           
@@ -219,12 +287,16 @@ only way to change their values.  Properties with access type
           &rArr; ((:session "org.freedesktop.TextEditor" "version")
               ("org.freedesktop.TextEditor" "/org/freedesktop/TextEditor"))
 </pre>
-        <p>Other D-Bus applications can read the property via the default methods
-&lsquo;<samp><span class="samp">org.freedesktop.DBus.Properties.Get</span></samp>&rsquo; and
-&lsquo;<samp><span class="samp">org.freedesktop.DBus.Properties.GetAll</span></samp>&rsquo;.  Testing is also
-possible via the command line tool <code>dbus-send</code> in a shell:
 
-     <pre class="example">          # dbus-send --session --print-reply \
+      <p>Other D-Bus applications can read the property via the
+      default methods &lsquo;<samp><span class=
+      "samp">org.freedesktop.DBus.Properties.Get</span></samp>&rsquo;
+      and &lsquo;<samp><span class=
+      "samp">org.freedesktop.DBus.Properties.GetAll</span></samp>&rsquo;.
+      Testing is also possible via the command line tool
+      <code>dbus-send</code> in a shell:</p>
+      <pre class="example">
+          # dbus-send --session --print-reply \
               --dest="org.freedesktop.TextEditor" \
               "/org/freedesktop/TextEditor" \
               "org.freedesktop.DBus.Properties.GetAll" \
@@ -242,11 +314,15 @@ possible via the command line tool <code>dbus-send</code> in a shell:
                    )
                 ]
 </pre>
-        <p>It is also possible, to apply the <code>dbus-get-property</code>,
-<code>dbus-get-all-properties</code> and <code>dbus-set-property</code> functions
-(see <a href="Properties-and-Annotations.html#Properties-and-Annotations">Properties and Annotations</a>).
 
-     <pre class="lisp">          (dbus-set-property
+      <p>It is also possible, to apply the
+      <code>dbus-get-property</code>,
+      <code>dbus-get-all-properties</code> and
+      <code>dbus-set-property</code> functions (see <a href=
+      "Properties-and-Annotations.html#Properties-and-Annotations">Properties
+      and Annotations</a>).</p>
+      <pre class="lisp">
+          (dbus-set-property
             :session "org.freedesktop.TextEditor" "/org/freedesktop/TextEditor"
             "org.freedesktop.TextEditor" "version" "23.1.50")
           
@@ -258,33 +334,46 @@ possible via the command line tool <code>dbus-send</code> in a shell:
           
           &rArr; "23.1.50"
 </pre>
-        </blockquote></div>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Function: <b>dbus-unregister-object</b><var> object<a name="index-dbus_002dunregister_002dobject-49"></a></var><br>
-<blockquote><p>Unregister <var>object</var> from the D-Bus.  <var>object</var> must be the
-result of a preceding <code>dbus-register-method</code>,
-<code>dbus-register-property</code> or <code>dbus-register-signal</code> call
-(see <a href="Signals.html#Signals">Signals</a>).  It returns <code>t</code> if <var>object</var> has been
-unregistered, <code>nil</code> otherwise.
+  <div class="defun">
+    &mdash; Function: <b>dbus-unregister-object</b>
+    <var>object<a name="index-dbus_002dunregister_002dobject-49"
+    id="index-dbus_002dunregister_002dobject-49"></a></var><br />
 
-        <p>When <var>object</var> identifies the last method or property, which is
-registered for the respective service, Emacs releases its association
-to the service from D-Bus. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Unregister <var>object</var> from the D-Bus.
+      <var>object</var> must be the result of a preceding
+      <code>dbus-register-method</code>,
+      <code>dbus-register-property</code> or
+      <code>dbus-register-signal</code> call (see <a href=
+      "Signals.html#Signals">Signals</a>). It returns
+      <code>t</code> if <var>object</var> has been unregistered,
+      <code>nil</code> otherwise.</p>
 
-<div class="defun">
-&mdash; Function: <b>dbus-unregister-service</b><var> bus service<a name="index-dbus_002dunregister_002dservice-50"></a></var><br>
-<blockquote><p>Unregister all objects from D-Bus <var>bus</var>, registered by Emacs for
-<var>service</var>.
+      <p>When <var>object</var> identifies the last method or
+      property, which is registered for the respective service,
+      Emacs releases its association to the service from D-Bus.</p>
+    </blockquote>
+  </div>
 
-        <p><var>bus</var> is either the symbol <code>:system</code> or the symbol
-<code>:session</code>.
+  <div class="defun">
+    &mdash; Function: <b>dbus-unregister-service</b> <var>bus
+    service<a name="index-dbus_002dunregister_002dservice-50" id=
+    "index-dbus_002dunregister_002dservice-50"></a></var><br />
 
-        <p><var>service</var> is the D-Bus service name of the D-Bus.  It must be a
-known name.  Emacs releases its association to <var>service</var> from
-D-Bus. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Unregister all objects from D-Bus <var>bus</var>,
+      registered by Emacs for <var>service</var>.</p>
 
-   </body></html>
+      <p><var>bus</var> is either the symbol <code>:system</code>
+      or the symbol <code>:session</code>.</p>
 
+      <p><var>service</var> is the D-Bus service name of the D-Bus.
+      It must be a known name. Emacs releases its association to
+      <var>service</var> from D-Bus.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

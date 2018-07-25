@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,81 +29,116 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: Using Customize</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: Using Customize">
-<meta name="keywords" content="GNU Emacs FAQ: Using Customize">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Common-requests.html#Common-requests" rel="up" title="Common requests">
-<link href="Colors-on-a-TTY.html#Colors-on-a-TTY" rel="next" title="Colors on a TTY">
-<link href="Setting-up-a-customization-file.html#Setting-up-a-customization-file" rel="prev" title="Setting up a customization file">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: Using Customize</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: Using Customize" />
+  <meta name="keywords" content="GNU Emacs FAQ: Using Customize" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Common-requests.html#Common-requests" rel="up" title=
+  "Common requests" />
+  <link href="Colors-on-a-TTY.html#Colors-on-a-TTY" rel="next"
+  title="Colors on a TTY" />
+  <link href=
+  "Setting-up-a-customization-file.html#Setting-up-a-customization-file"
+  rel="prev" title="Setting up a customization file" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-Customize"></a>
-<div class="header">
-<p>
-Next: <a href="Colors-on-a-TTY.html#Colors-on-a-TTY" accesskey="n" rel="next">Colors on a TTY</a>, Previous: <a href="Setting-up-a-customization-file.html#Setting-up-a-customization-file" accesskey="p" rel="prev">Setting up a customization file</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-do-I-start-using-Customize_003f"></a>
-<h3 class="section">5.2 How do I start using Customize?</h3>
-<a name="index-Customize-groups"></a>
-<a name="index-Customizing-variables"></a>
-<a name="index-Customizing-faces"></a>
+<body lang="en" xml:lang="en">
+  <a name="Using-Customize" id="Using-Customize"></a>
 
-<p>The main Customize entry point is <kbd>M-x customize <span class="key">RET</span></kbd>.  This
-command takes you to a buffer listing all the available Customize
-groups.  From there, you can access all customizable options and faces,
-change their values, and save your changes to your init file.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Easy-Customization.html#Easy-Customization">Easy Customization</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<p>If you know the name of the group in advance (e.g., &ldquo;shell&rdquo;), use
-<kbd>M-x customize-group <span class="key">RET</span></kbd>.
-</p>
-<p>If you wish to customize a single option, use <kbd>M-x customize-option
-<span class="key">RET</span></kbd>.  This command prompts you for the name of the option to
-customize, with completion.
-</p>
+  <div class="header">
+    <p>Next: <a href="Colors-on-a-TTY.html#Colors-on-a-TTY"
+    accesskey="n" rel="next">Colors on a TTY</a>, Previous:
+    <a href="Setting-up-a-customization-file.html#Setting-up-a-customization-file"
+    accesskey="p" rel="prev">Setting up a customization file</a>,
+    Up: <a href="Common-requests.html#Common-requests" accesskey=
+    "u" rel="up">Common requests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="How-do-I-start-using-Customize_003f" id=
+  "How-do-I-start-using-Customize_003f"></a>
 
+  <h3 class="section">5.2 How do I start using
+  Customize?</h3><a name="index-Customize-groups" id=
+  "index-Customize-groups"></a> <a name=
+  "index-Customizing-variables" id=
+  "index-Customizing-variables"></a> <a name=
+  "index-Customizing-faces" id="index-Customizing-faces"></a>
 
+  <p>The main Customize entry point is <kbd>M-x customize
+  <span class="key">RET</span></kbd>. This command takes you to a
+  buffer listing all the available Customize groups. From there,
+  you can access all customizable options and faces, change their
+  values, and save your changes to your init file. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Easy-Customization.html#Easy-Customization">
+  Easy Customization</a> in <cite>The GNU Emacs Manual</cite>.</p>
 
+  <p>If you know the name of the group in advance (e.g.,
+  &ldquo;shell&rdquo;), use <kbd>M-x customize-group <span class=
+  "key">RET</span></kbd>.</p>
+
+  <p>If you wish to customize a single option, use <kbd>M-x
+  customize-option <span class="key">RET</span></kbd>. This command
+  prompts you for the name of the option to customize, with
+  completion.</p>
 </body>
 </html>

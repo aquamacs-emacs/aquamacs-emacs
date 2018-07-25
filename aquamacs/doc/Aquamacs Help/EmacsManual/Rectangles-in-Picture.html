@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,127 +20,183 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Rectangles in Picture</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Rectangles in Picture">
-<meta name="keywords" content="GNU Emacs Manual: Rectangles in Picture">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Picture-Mode.html#Picture-Mode" rel="up" title="Picture Mode">
-<link href="Editing-Binary-Files.html#Editing-Binary-Files" rel="next" title="Editing Binary Files">
-<link href="Tabs-in-Picture.html#Tabs-in-Picture" rel="prev" title="Tabs in Picture">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Rectangles in Picture</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Rectangles in Picture" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Rectangles in Picture" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Picture-Mode.html#Picture-Mode" rel="up" title=
+  "Picture Mode" />
+  <link href="Editing-Binary-Files.html#Editing-Binary-Files" rel=
+  "next" title="Editing Binary Files" />
+  <link href="Tabs-in-Picture.html#Tabs-in-Picture" rel="prev"
+  title="Tabs in Picture" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Rectangles-in-Picture" id="Rectangles-in-Picture"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Tabs-in-Picture.html#Tabs-in-Picture"
+    accesskey="p" rel="prev">Tabs in Picture</a>, Up: <a href=
+    "Picture-Mode.html#Picture-Mode" accesskey="u" rel="up">Picture
+    Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Picture-Mode-Rectangle-Commands" id=
+  "Picture-Mode-Rectangle-Commands"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Rectangles-in-Picture"></a>
-<div class="header">
-<p>
-Previous: <a href="Tabs-in-Picture.html#Tabs-in-Picture" accesskey="p" rel="prev">Tabs in Picture</a>, Up: <a href="Picture-Mode.html#Picture-Mode" accesskey="u" rel="up">Picture Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Picture-Mode-Rectangle-Commands"></a>
-<h3 class="section">44.4 Picture Mode Rectangle Commands</h3>
-<a name="index-rectangles-and-Picture-mode"></a>
-<a name="index-Picture-mode-and-rectangles"></a>
+  <h3 class="section">44.4 Picture Mode Rectangle
+  Commands</h3><a name="index-rectangles-and-Picture-mode" id=
+  "index-rectangles-and-Picture-mode"></a> <a name=
+  "index-Picture-mode-and-rectangles" id=
+  "index-Picture-mode-and-rectangles"></a>
 
-<p>Picture mode defines commands for working on rectangular pieces of
-the text in ways that fit with the quarter-plane model.  The standard
-rectangle commands may also be useful.
-See <a href="Rectangles.html#Rectangles">Rectangles</a>.
-</p>
-<dl compact="compact">
-<dt><kbd>C-c C-k</kbd></dt>
-<dd><p>Clear out the region-rectangle with spaces
-(<code>picture-clear-rectangle</code>).  With a prefix argument, delete the
-text.
-</p></dd>
-<dt><kbd>C-c C-w <var>r</var></kbd></dt>
-<dd><p>Similar, but save rectangle contents in register <var>r</var> first
-(<code>picture-clear-rectangle-to-register</code>).
-</p></dd>
-<dt><kbd>C-c C-y</kbd></dt>
-<dd><p>Copy last killed rectangle into the buffer by overwriting, with upper
-left corner at point (<code>picture-yank-rectangle</code>).  With argument,
-insert instead.
-</p></dd>
-<dt><kbd>C-c C-x <var>r</var></kbd></dt>
-<dd><p>Similar, but use the rectangle in register <var>r</var>
-(<code>picture-yank-rectangle-from-register</code>).
-</p></dd>
-</dl>
+  <p>Picture mode defines commands for working on rectangular
+  pieces of the text in ways that fit with the quarter-plane model.
+  The standard rectangle commands may also be useful. See <a href=
+  "Rectangles.html#Rectangles">Rectangles</a>.</p>
 
-<a name="index-C_002dc-C_002dk-_0028Picture-mode_0029"></a>
-<a name="index-C_002dc-C_002dw-_0028Picture-mode_0029"></a>
-<a name="index-picture_002dclear_002drectangle"></a>
-<a name="index-picture_002dclear_002drectangle_002dto_002dregister"></a>
-<p>The picture rectangle commands <kbd>C-c C-k</kbd>
-(<code>picture-clear-rectangle</code>) and <kbd>C-c C-w</kbd>
-(<code>picture-clear-rectangle-to-register</code>) differ from the standard
-rectangle commands in that they normally clear the rectangle instead of
-deleting it; this is analogous with the way <kbd>C-d</kbd> is changed in Picture
-mode.
-</p>
-<p>However, deletion of rectangles can be useful in Picture mode, so
-these commands delete the rectangle if given a numeric argument.
-<kbd>C-c C-k</kbd> either with or without a numeric argument saves the
-rectangle for <kbd>C-c C-y</kbd>.
-</p>
-<a name="index-C_002dc-C_002dy-_0028Picture-mode_0029"></a>
-<a name="index-C_002dc-C_002dx-_0028Picture-mode_0029"></a>
-<a name="index-picture_002dyank_002drectangle"></a>
-<a name="index-picture_002dyank_002drectangle_002dfrom_002dregister"></a>
-<p>The Picture mode commands for yanking rectangles differ from the
-standard ones in that they overwrite instead of inserting.  This is
-the same way that Picture mode insertion of other text differs from
-other modes.  <kbd>C-c C-y</kbd> (<code>picture-yank-rectangle</code>) inserts
-(by overwriting) the rectangle that was most recently killed, while
-<kbd>C-c C-x</kbd> (<code>picture-yank-rectangle-from-register</code>) does
-likewise for the rectangle found in a specified register.
-</p>
+  <dl compact="compact">
+    <dt><kbd>C-c C-k</kbd></dt>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Tabs-in-Picture.html#Tabs-in-Picture" accesskey="p" rel="prev">Tabs in Picture</a>, Up: <a href="Picture-Mode.html#Picture-Mode" accesskey="u" rel="up">Picture Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Clear out the region-rectangle with spaces
+      (<code>picture-clear-rectangle</code>). With a prefix
+      argument, delete the text.</p>
+    </dd>
 
+    <dt><kbd>C-c C-w <var>r</var></kbd></dt>
 
+    <dd>
+      <p>Similar, but save rectangle contents in register
+      <var>r</var> first
+      (<code>picture-clear-rectangle-to-register</code>).</p>
+    </dd>
 
+    <dt><kbd>C-c C-y</kbd></dt>
+
+    <dd>
+      <p>Copy last killed rectangle into the buffer by overwriting,
+      with upper left corner at point
+      (<code>picture-yank-rectangle</code>). With argument, insert
+      instead.</p>
+    </dd>
+
+    <dt><kbd>C-c C-x <var>r</var></kbd></dt>
+
+    <dd>
+      <p>Similar, but use the rectangle in register <var>r</var>
+      (<code>picture-yank-rectangle-from-register</code>).</p>
+    </dd>
+  </dl><a name="index-C_002dc-C_002dk-_0028Picture-mode_0029" id=
+  "index-C_002dc-C_002dk-_0028Picture-mode_0029"></a> <a name=
+  "index-C_002dc-C_002dw-_0028Picture-mode_0029" id=
+  "index-C_002dc-C_002dw-_0028Picture-mode_0029"></a> <a name=
+  "index-picture_002dclear_002drectangle" id=
+  "index-picture_002dclear_002drectangle"></a> <a name=
+  "index-picture_002dclear_002drectangle_002dto_002dregister" id=
+  "index-picture_002dclear_002drectangle_002dto_002dregister"></a>
+
+  <p>The picture rectangle commands <kbd>C-c C-k</kbd>
+  (<code>picture-clear-rectangle</code>) and <kbd>C-c C-w</kbd>
+  (<code>picture-clear-rectangle-to-register</code>) differ from
+  the standard rectangle commands in that they normally clear the
+  rectangle instead of deleting it; this is analogous with the way
+  <kbd>C-d</kbd> is changed in Picture mode.</p>
+
+  <p>However, deletion of rectangles can be useful in Picture mode,
+  so these commands delete the rectangle if given a numeric
+  argument. <kbd>C-c C-k</kbd> either with or without a numeric
+  argument saves the rectangle for <kbd>C-c C-y</kbd>.</p><a name=
+  "index-C_002dc-C_002dy-_0028Picture-mode_0029" id=
+  "index-C_002dc-C_002dy-_0028Picture-mode_0029"></a> <a name=
+  "index-C_002dc-C_002dx-_0028Picture-mode_0029" id=
+  "index-C_002dc-C_002dx-_0028Picture-mode_0029"></a> <a name=
+  "index-picture_002dyank_002drectangle" id=
+  "index-picture_002dyank_002drectangle"></a> <a name=
+  "index-picture_002dyank_002drectangle_002dfrom_002dregister" id=
+  "index-picture_002dyank_002drectangle_002dfrom_002dregister"></a>
+
+  <p>The Picture mode commands for yanking rectangles differ from
+  the standard ones in that they overwrite instead of inserting.
+  This is the same way that Picture mode insertion of other text
+  differs from other modes. <kbd>C-c C-y</kbd>
+  (<code>picture-yank-rectangle</code>) inserts (by overwriting)
+  the rectangle that was most recently killed, while <kbd>C-c
+  C-x</kbd> (<code>picture-yank-rectangle-from-register</code>)
+  does likewise for the rectangle found in a specified
+  register.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Tabs-in-Picture.html#Tabs-in-Picture"
+    accesskey="p" rel="prev">Tabs in Picture</a>, Up: <a href=
+    "Picture-Mode.html#Picture-Mode" accesskey="u" rel="up">Picture
+    Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,120 +19,173 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Session Management</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Session Management">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Session Management">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="System-Interface.html#System-Interface" rel="up" title="System Interface">
-<link href="Desktop-Notifications.html#Desktop-Notifications" rel="next" title="Desktop Notifications">
-<link href="Batch-Mode.html#Batch-Mode" rel="prev" title="Batch Mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Session
+  Management</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Session Management" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Session Management" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="System-Interface.html#System-Interface" rel="up"
+  title="System Interface" />
+  <link href="Desktop-Notifications.html#Desktop-Notifications"
+  rel="next" title="Desktop Notifications" />
+  <link href="Batch-Mode.html#Batch-Mode" rel="prev" title=
+  "Batch Mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Session-Management" id="Session-Management"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Desktop-Notifications.html#Desktop-Notifications" accesskey=
+    "n" rel="next">Desktop Notifications</a>, Previous: <a href=
+    "Batch-Mode.html#Batch-Mode" accesskey="p" rel="prev">Batch
+    Mode</a>, Up: <a href="System-Interface.html#System-Interface"
+    accesskey="u" rel="up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Session-Management-1" id="Session-Management-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Session-Management"></a>
-<div class="header">
-<p>
-Next: <a href="Desktop-Notifications.html#Desktop-Notifications" accesskey="n" rel="next">Desktop Notifications</a>, Previous: <a href="Batch-Mode.html#Batch-Mode" accesskey="p" rel="prev">Batch Mode</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Session-Management-1"></a>
-<h3 class="section">38.18 Session Management</h3>
-<a name="index-session-manager"></a>
+  <h3 class="section">38.18 Session Management</h3><a name=
+  "index-session-manager" id="index-session-manager"></a>
 
-<p>Emacs supports the X Session Management Protocol, which is used to
-suspend and restart applications.  In the X Window System, a program
-called the <em>session manager</em> is responsible for keeping track of
-the applications that are running.  When the X server shuts down, the
-session manager asks applications to save their state, and delays the
-actual shutdown until they respond.  An application can also cancel
-the shutdown.
-</p>
-<p>When the session manager restarts a suspended session, it directs
-these applications to individually reload their saved state.  It does
-this by specifying a special command-line argument that says what
-saved session to restore.  For Emacs, this argument is &lsquo;<samp>--smid
-<var>session</var></samp>&rsquo;.
-</p>
-<dl>
-<dt><a name="index-emacs_002dsave_002dsession_002dfunctions"></a>Variable: <strong>emacs-save-session-functions</strong></dt>
-<dd><a name="index-session-file"></a>
-<p>Emacs supports saving state via a hook called
-<code>emacs-save-session-functions</code>.  Emacs runs this hook when the
-session manager tells it that the window system is shutting down.  The
-functions are called with no arguments, and with the current buffer
-set to a temporary buffer.  Each function can use <code>insert</code> to add
-Lisp code to this buffer.  At the end, Emacs saves the buffer in a
-file, called the <em>session file</em>.
-</p>
-<a name="index-emacs_002dsession_002drestore"></a>
-<p>Subsequently, when the session manager restarts Emacs, it loads the
-session file automatically (see <a href="Loading.html#Loading">Loading</a>).  This is performed by a
-function named <code>emacs-session-restore</code>, which is called during
-startup.  See <a href="Startup-Summary.html#Startup-Summary">Startup Summary</a>.
-</p>
-<p>If a function in <code>emacs-save-session-functions</code> returns
-non-<code>nil</code>, Emacs tells the session manager to cancel the
-shutdown.
-</p></dd></dl>
+  <p>Emacs supports the X Session Management Protocol, which is
+  used to suspend and restart applications. In the X Window System,
+  a program called the <em>session manager</em> is responsible for
+  keeping track of the applications that are running. When the X
+  server shuts down, the session manager asks applications to save
+  their state, and delays the actual shutdown until they respond.
+  An application can also cancel the shutdown.</p>
 
-<p>Here is an example that just inserts some text into <samp>*scratch*</samp> when
-Emacs is restarted by the session manager.
-</p>
-<div class="example">
-<pre class="example">(add-hook 'emacs-save-session-functions 'save-yourself-test)
-</pre><pre class="example">
-</pre><pre class="example">(defun save-yourself-test ()
-  (insert &quot;(save-current-buffer
-  (switch-to-buffer \&quot;*scratch*\&quot;)
-  (insert \&quot;I am restored\&quot;))&quot;)
+  <p>When the session manager restarts a suspended session, it
+  directs these applications to individually reload their saved
+  state. It does this by specifying a special command-line argument
+  that says what saved session to restore. For Emacs, this argument
+  is &lsquo;<samp>--smid <var>session</var></samp>&rsquo;.</p>
+
+  <dl>
+    <dt><a name="index-emacs_002dsave_002dsession_002dfunctions"
+    id="index-emacs_002dsave_002dsession_002dfunctions"></a>Variable:
+    <strong>emacs-save-session-functions</strong></dt>
+
+    <dd>
+      <a name="index-session-file" id="index-session-file"></a>
+
+      <p>Emacs supports saving state via a hook called
+      <code>emacs-save-session-functions</code>. Emacs runs this
+      hook when the session manager tells it that the window system
+      is shutting down. The functions are called with no arguments,
+      and with the current buffer set to a temporary buffer. Each
+      function can use <code>insert</code> to add Lisp code to this
+      buffer. At the end, Emacs saves the buffer in a file, called
+      the <em>session file</em>.</p><a name=
+      "index-emacs_002dsession_002drestore" id=
+      "index-emacs_002dsession_002drestore"></a>
+
+      <p>Subsequently, when the session manager restarts Emacs, it
+      loads the session file automatically (see <a href=
+      "Loading.html#Loading">Loading</a>). This is performed by a
+      function named <code>emacs-session-restore</code>, which is
+      called during startup. See <a href=
+      "Startup-Summary.html#Startup-Summary">Startup
+      Summary</a>.</p>
+
+      <p>If a function in <code>emacs-save-session-functions</code>
+      returns non-<code>nil</code>, Emacs tells the session manager
+      to cancel the shutdown.</p>
+    </dd>
+  </dl>
+
+  <p>Here is an example that just inserts some text into
+  <samp>*scratch*</samp> when Emacs is restarted by the session
+  manager.</p>
+
+  <div class="example">
+    <pre class="example">
+(add-hook 'emacs-save-session-functions 'save-yourself-test)
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(defun save-yourself-test ()
+  (insert "(save-current-buffer
+  (switch-to-buffer \"*scratch*\")
+  (insert \"I am restored\"))")
   nil)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Desktop-Notifications.html#Desktop-Notifications" accesskey="n" rel="next">Desktop Notifications</a>, Previous: <a href="Batch-Mode.html#Batch-Mode" accesskey="p" rel="prev">Batch Mode</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Desktop-Notifications.html#Desktop-Notifications" accesskey=
+    "n" rel="next">Desktop Notifications</a>, Previous: <a href=
+    "Batch-Mode.html#Batch-Mode" accesskey="p" rel="prev">Batch
+    Mode</a>, Up: <a href="System-Interface.html#System-Interface"
+    accesskey="u" rel="up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

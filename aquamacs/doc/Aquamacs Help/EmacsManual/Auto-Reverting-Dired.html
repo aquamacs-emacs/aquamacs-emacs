@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,105 +20,152 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Auto Reverting Dired</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Auto Reverting Dired">
-<meta name="keywords" content="GNU Emacs Manual: Auto Reverting Dired">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Autorevert.html#Autorevert" rel="up" title="Autorevert">
-<link href="Supporting-additional-buffers.html#Supporting-additional-buffers" rel="next" title="Supporting additional buffers">
-<link href="Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu" rel="prev" title="Auto Reverting the Buffer Menu">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Auto Reverting Dired</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Auto Reverting Dired" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Auto Reverting Dired" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Autorevert.html#Autorevert" rel="up" title=
+  "Autorevert" />
+  <link href=
+  "Supporting-additional-buffers.html#Supporting-additional-buffers"
+  rel="next" title="Supporting additional buffers" />
+  <link href=
+  "Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu"
+  rel="prev" title="Auto Reverting the Buffer Menu" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Auto-Reverting-Dired" id="Auto-Reverting-Dired"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Supporting-additional-buffers.html#Supporting-additional-buffers"
+    accesskey="n" rel="next">Supporting additional buffers</a>,
+    Previous: <a href=
+    "Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu"
+    accesskey="p" rel="prev">Auto Reverting the Buffer Menu</a>,
+    Up: <a href="Autorevert.html#Autorevert" accesskey="u" rel=
+    "up">Autorevert</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Auto-Reverting-Dired-buffers" id=
+  "Auto-Reverting-Dired-buffers"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Auto-Reverting-Dired"></a>
-<div class="header">
-<p>
-Next: <a href="Supporting-additional-buffers.html#Supporting-additional-buffers" accesskey="n" rel="next">Supporting additional buffers</a>, Previous: <a href="Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu" accesskey="p" rel="prev">Auto Reverting the Buffer Menu</a>, Up: <a href="Autorevert.html#Autorevert" accesskey="u" rel="up">Autorevert</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Auto-Reverting-Dired-buffers"></a>
-<h4 class="subsection">18.5.2 Auto Reverting Dired buffers</h4>
+  <h4 class="subsection">18.5.2 Auto Reverting Dired buffers</h4>
 
-<p>Auto-reverting Dired buffers currently works on GNU or Unix style
-operating systems.  It may not work satisfactorily on some other
-systems.
-</p>
-<p>Dired buffers only auto-revert when the file list of the buffer&rsquo;s main
-directory changes (e.g., when a new file is added).  They do not
-auto-revert when information about a particular file changes
-(e.g., when the size changes) or when inserted subdirectories change.
-To be sure that <em>all</em> listed information is up to date, you have
-to manually revert using <kbd>g</kbd>, <em>even</em> if auto-reverting is
-enabled in the Dired buffer.  Sometimes, you might get the impression
-that modifying or saving files listed in the main directory actually
-does cause auto-reverting.  This is because making changes to a file,
-or saving it, very often causes changes in the directory itself; for
-instance, through backup files or auto-save files.  However, this is
-not guaranteed.
-</p>
-<p>If the Dired buffer is marked modified and there are no changes you
-want to protect, then most of the time you can make auto-reverting
-resume by manually reverting the buffer using <kbd>g</kbd>.  There is one
-exception.  If you flag or mark files, you can safely revert the
-buffer.  This will not erase the flags or marks (unless the marked
-file has been deleted, of course).  However, the buffer will stay
-modified, even after reverting, and auto-reverting will not resume.
-This is because, if you flag or mark files, you may be working on the
-buffer and you might not want the buffer to change without warning.
-If you want auto-reverting to resume in the presence of marks and
-flags, mark the buffer non-modified using <kbd>M-~</kbd>.  However, adding,
-deleting or changing marks or flags will mark it modified again.
-</p>
-<p>Remote Dired buffers are not auto-reverted (because it may be slow).
-Neither are Dired buffers for which you used shell wildcards or file
-arguments to list only some of the files.  <samp>*Find*</samp> and
-<samp>*Locate*</samp> buffers do not auto-revert either.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Supporting-additional-buffers.html#Supporting-additional-buffers" accesskey="n" rel="next">Supporting additional buffers</a>, Previous: <a href="Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu" accesskey="p" rel="prev">Auto Reverting the Buffer Menu</a>, Up: <a href="Autorevert.html#Autorevert" accesskey="u" rel="up">Autorevert</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Auto-reverting Dired buffers currently works on GNU or Unix
+  style operating systems. It may not work satisfactorily on some
+  other systems.</p>
 
+  <p>Dired buffers only auto-revert when the file list of the
+  buffer&rsquo;s main directory changes (e.g., when a new file is
+  added). They do not auto-revert when information about a
+  particular file changes (e.g., when the size changes) or when
+  inserted subdirectories change. To be sure that <em>all</em>
+  listed information is up to date, you have to manually revert
+  using <kbd>g</kbd>, <em>even</em> if auto-reverting is enabled in
+  the Dired buffer. Sometimes, you might get the impression that
+  modifying or saving files listed in the main directory actually
+  does cause auto-reverting. This is because making changes to a
+  file, or saving it, very often causes changes in the directory
+  itself; for instance, through backup files or auto-save files.
+  However, this is not guaranteed.</p>
 
+  <p>If the Dired buffer is marked modified and there are no
+  changes you want to protect, then most of the time you can make
+  auto-reverting resume by manually reverting the buffer using
+  <kbd>g</kbd>. There is one exception. If you flag or mark files,
+  you can safely revert the buffer. This will not erase the flags
+  or marks (unless the marked file has been deleted, of course).
+  However, the buffer will stay modified, even after reverting, and
+  auto-reverting will not resume. This is because, if you flag or
+  mark files, you may be working on the buffer and you might not
+  want the buffer to change without warning. If you want
+  auto-reverting to resume in the presence of marks and flags, mark
+  the buffer non-modified using <kbd>M-~</kbd>. However, adding,
+  deleting or changing marks or flags will mark it modified
+  again.</p>
 
+  <p>Remote Dired buffers are not auto-reverted (because it may be
+  slow). Neither are Dired buffers for which you used shell
+  wildcards or file arguments to list only some of the files.
+  <samp>*Find*</samp> and <samp>*Locate*</samp> buffers do not
+  auto-revert either.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Supporting-additional-buffers.html#Supporting-additional-buffers"
+    accesskey="n" rel="next">Supporting additional buffers</a>,
+    Previous: <a href=
+    "Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu"
+    accesskey="p" rel="prev">Auto Reverting the Buffer Menu</a>,
+    Up: <a href="Autorevert.html#Autorevert" accesskey="u" rel=
+    "up">Autorevert</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

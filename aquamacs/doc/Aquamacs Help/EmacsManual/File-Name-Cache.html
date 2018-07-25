@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,115 +20,180 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: File Name Cache</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: File Name Cache">
-<meta name="keywords" content="GNU Emacs Manual: File Name Cache">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="File-Conveniences.html#File-Conveniences" rel="next" title="File Conveniences">
-<link href="Quoted-File-Names.html#Quoted-File-Names" rel="prev" title="Quoted File Names">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: File Name Cache</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: File Name Cache" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: File Name Cache" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href="File-Conveniences.html#File-Conveniences" rel="next"
+  title="File Conveniences" />
+  <link href="Quoted-File-Names.html#Quoted-File-Names" rel="prev"
+  title="Quoted File Names" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="File-Name-Cache" id="File-Name-Cache"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="File-Conveniences.html#File-Conveniences"
+    accesskey="n" rel="next">File Conveniences</a>, Previous:
+    <a href="Quoted-File-Names.html#Quoted-File-Names" accesskey=
+    "p" rel="prev">Quoted File Names</a>, Up: <a href=
+    "Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="File-Name-Cache-1" id="File-Name-Cache-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="File-Name-Cache"></a>
-<div class="header">
-<p>
-Next: <a href="File-Conveniences.html#File-Conveniences" accesskey="n" rel="next">File Conveniences</a>, Previous: <a href="Quoted-File-Names.html#Quoted-File-Names" accesskey="p" rel="prev">Quoted File Names</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="File-Name-Cache-1"></a>
-<h3 class="section">18.16 File Name Cache</h3>
+  <h3 class="section">18.16 File Name Cache</h3><a name=
+  "index-file-name-caching" id="index-file-name-caching"></a>
+  <a name="index-cache-of-file-names" id=
+  "index-cache-of-file-names"></a> <a name="index-find" id=
+  "index-find"></a> <a name="index-C_002dTAB" id=
+  "index-C_002dTAB"></a> <a name=
+  "index-file_002dcache_002dminibuffer_002dcomplete" id=
+  "index-file_002dcache_002dminibuffer_002dcomplete"></a>
 
-<a name="index-file-name-caching"></a>
-<a name="index-cache-of-file-names"></a>
-<a name="index-find"></a>
-<a name="index-C_002dTAB"></a>
-<a name="index-file_002dcache_002dminibuffer_002dcomplete"></a>
-<p>You can use the <em>file name cache</em> to make it easy to locate a
-file by name, without having to remember exactly where it is located.
-When typing a file name in the minibuffer, <kbd>C-<span class="key">TAB</span></kbd>
-(<code>file-cache-minibuffer-complete</code>) completes it using the file
-name cache.  If you repeat <kbd>C-<span class="key">TAB</span></kbd>, that cycles through the
-possible completions of what you had originally typed.  (However, note
-that the <kbd>C-<span class="key">TAB</span></kbd> character cannot be typed on most text
-terminals.)
-</p>
-<p>The file name cache does not fill up automatically.  Instead, you
-load file names into the cache using these commands:
-</p>
-<a name="index-file_002dcache_002dadd_002ddirectory"></a>
-<dl compact="compact">
-<dt><kbd>M-x file-cache-add-directory <span class="key">RET</span> <var>directory</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Add each file name in <var>directory</var> to the file name cache.
-</p></dd>
-<dt><kbd>M-x file-cache-add-directory-using-find <span class="key">RET</span> <var>directory</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Add each file name in <var>directory</var> and all of its nested
-subdirectories to the file name cache.
-</p></dd>
-<dt><kbd>M-x file-cache-add-directory-using-locate <span class="key">RET</span> <var>directory</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Add each file name in <var>directory</var> and all of its nested
-subdirectories to the file name cache, using <code>locate</code> to find
-them all.
-</p></dd>
-<dt><kbd>M-x file-cache-add-directory-list <span class="key">RET</span> <var>variable</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Add each file name in each directory listed in <var>variable</var> to the
-file name cache.  <var>variable</var> should be a Lisp variable whose value
-is a list of directory names, like <code>load-path</code>.
-</p></dd>
-<dt><kbd>M-x file-cache-clear-cache <span class="key">RET</span></kbd></dt>
-<dd><p>Clear the cache; that is, remove all file names from it.
-</p></dd>
-</dl>
+  <p>You can use the <em>file name cache</em> to make it easy to
+  locate a file by name, without having to remember exactly where
+  it is located. When typing a file name in the minibuffer,
+  <kbd>C-<span class="key">TAB</span></kbd>
+  (<code>file-cache-minibuffer-complete</code>) completes it using
+  the file name cache. If you repeat <kbd>C-<span class=
+  "key">TAB</span></kbd>, that cycles through the possible
+  completions of what you had originally typed. (However, note that
+  the <kbd>C-<span class="key">TAB</span></kbd> character cannot be
+  typed on most text terminals.)</p>
 
-<p>The file name cache is not persistent: it is kept and maintained
-only for the duration of the Emacs session.  You can view the contents
-of the cache with the <code>file-cache-display</code> command.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="File-Conveniences.html#File-Conveniences" accesskey="n" rel="next">File Conveniences</a>, Previous: <a href="Quoted-File-Names.html#Quoted-File-Names" accesskey="p" rel="prev">Quoted File Names</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The file name cache does not fill up automatically. Instead,
+  you load file names into the cache using these
+  commands:</p><a name="index-file_002dcache_002dadd_002ddirectory"
+  id="index-file_002dcache_002dadd_002ddirectory"></a>
 
+  <dl compact="compact">
+    <dt><kbd>M-x file-cache-add-directory <span class=
+    "key">RET</span> <var>directory</var> <span class=
+    "key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Add each file name in <var>directory</var> to the file
+      name cache.</p>
+    </dd>
 
+    <dt><kbd>M-x file-cache-add-directory-using-find <span class=
+    "key">RET</span> <var>directory</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Add each file name in <var>directory</var> and all of its
+      nested subdirectories to the file name cache.</p>
+    </dd>
+
+    <dt><kbd>M-x file-cache-add-directory-using-locate <span class=
+    "key">RET</span> <var>directory</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Add each file name in <var>directory</var> and all of its
+      nested subdirectories to the file name cache, using
+      <code>locate</code> to find them all.</p>
+    </dd>
+
+    <dt><kbd>M-x file-cache-add-directory-list <span class=
+    "key">RET</span> <var>variable</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Add each file name in each directory listed in
+      <var>variable</var> to the file name cache.
+      <var>variable</var> should be a Lisp variable whose value is
+      a list of directory names, like <code>load-path</code>.</p>
+    </dd>
+
+    <dt><kbd>M-x file-cache-clear-cache <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Clear the cache; that is, remove all file names from
+      it.</p>
+    </dd>
+  </dl>
+
+  <p>The file name cache is not persistent: it is kept and
+  maintained only for the duration of the Emacs session. You can
+  view the contents of the cache with the
+  <code>file-cache-display</code> command.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="File-Conveniences.html#File-Conveniences"
+    accesskey="n" rel="next">File Conveniences</a>, Previous:
+    <a href="Quoted-File-Names.html#Quoted-File-Names" accesskey=
+    "p" rel="prev">Quoted File Names</a>, Up: <a href=
+    "Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

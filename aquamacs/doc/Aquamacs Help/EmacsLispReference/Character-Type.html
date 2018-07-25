@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,97 +19,177 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Character Type</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Character Type">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Character Type">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Programming-Types.html#Programming-Types" rel="up" title="Programming Types">
-<link href="Basic-Char-Syntax.html#Basic-Char-Syntax" rel="next" title="Basic Char Syntax">
-<link href="Floating_002dPoint-Type.html#Floating_002dPoint-Type" rel="prev" title="Floating-Point Type">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Character Type</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Character Type" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Character Type" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Programming-Types.html#Programming-Types" rel="up"
+  title="Programming Types" />
+  <link href="Basic-Char-Syntax.html#Basic-Char-Syntax" rel="next"
+  title="Basic Char Syntax" />
+  <link href="Floating_002dPoint-Type.html#Floating_002dPoint-Type"
+  rel="prev" title="Floating-Point Type" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Character-Type" id="Character-Type"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Symbol-Type.html#Symbol-Type" accesskey="n"
+    rel="next">Symbol Type</a>, Previous: <a href=
+    "Floating_002dPoint-Type.html#Floating_002dPoint-Type"
+    accesskey="p" rel="prev">Floating-Point Type</a>, Up: <a href=
+    "Programming-Types.html#Programming-Types" accesskey="u" rel=
+    "up">Programming Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Character-Type-1" id="Character-Type-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Character-Type"></a>
-<div class="header">
-<p>
-Next: <a href="Symbol-Type.html#Symbol-Type" accesskey="n" rel="next">Symbol Type</a>, Previous: <a href="Floating_002dPoint-Type.html#Floating_002dPoint-Type" accesskey="p" rel="prev">Floating-Point Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Character-Type-1"></a>
-<h4 class="subsection">2.3.3 Character Type</h4>
-<a name="index-ASCII-character-codes"></a>
+  <h4 class="subsection">2.3.3 Character Type</h4><a name=
+  "index-ASCII-character-codes" id=
+  "index-ASCII-character-codes"></a>
 
-<p>A <em>character</em> in Emacs Lisp is nothing more than an integer.  In
-other words, characters are represented by their character codes.  For
-example, the character <kbd>A</kbd> is represented as the integer&nbsp;65<!-- /@w -->.
-</p>
-<p>Individual characters are used occasionally in programs, but it is
-more common to work with <em>strings</em>, which are sequences composed
-of characters.  See <a href="String-Type.html#String-Type">String Type</a>.
-</p>
-<p>Characters in strings and buffers are currently limited to the range
-of 0 to 4194303&mdash;twenty two bits (see <a href="Character-Codes.html#Character-Codes">Character Codes</a>).  Codes 0
-through 127 are <acronym>ASCII</acronym> codes; the rest are
-non-<acronym>ASCII</acronym> (see <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>).  Characters that
-represent keyboard input have a much wider range, to encode modifier
-keys such as Control, Meta and Shift.
-</p>
-<p>There are special functions for producing a human-readable textual
-description of a character for the sake of messages.  See <a href="Describing-Characters.html#Describing-Characters">Describing Characters</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Basic-Char-Syntax.html#Basic-Char-Syntax" accesskey="1">Basic Char Syntax</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Syntax for regular characters.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="General-Escape-Syntax.html#General-Escape-Syntax" accesskey="2">General Escape Syntax</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to specify characters by their codes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax" accesskey="3">Ctl-Char Syntax</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Syntax for control characters.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Meta_002dChar-Syntax.html#Meta_002dChar-Syntax" accesskey="4">Meta-Char Syntax</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Syntax for meta-characters.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Other-Char-Bits.html#Other-Char-Bits" accesskey="5">Other Char Bits</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Syntax for hyper-, super-, and alt-characters.
-</td></tr>
-</table>
+  <p>A <em>character</em> in Emacs Lisp is nothing more than an
+  integer. In other words, characters are represented by their
+  character codes. For example, the character <kbd>A</kbd> is
+  represented as the integer&nbsp;65<!-- /@w -->.</p>
 
+  <p>Individual characters are used occasionally in programs, but
+  it is more common to work with <em>strings</em>, which are
+  sequences composed of characters. See <a href=
+  "String-Type.html#String-Type">String Type</a>.</p>
 
+  <p>Characters in strings and buffers are currently limited to the
+  range of 0 to 4194303&mdash;twenty two bits (see <a href=
+  "Character-Codes.html#Character-Codes">Character Codes</a>).
+  Codes 0 through 127 are <acronym>ASCII</acronym> codes; the rest
+  are non-<acronym>ASCII</acronym> (see <a href=
+  "Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII
+  Characters</a>). Characters that represent keyboard input have a
+  much wider range, to encode modifier keys such as Control, Meta
+  and Shift.</p>
 
+  <p>There are special functions for producing a human-readable
+  textual description of a character for the sake of messages. See
+  <a href=
+  "Describing-Characters.html#Describing-Characters">Describing
+  Characters</a>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Basic-Char-Syntax.html#Basic-Char-Syntax" accesskey=
+      "1">Basic Char Syntax</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Syntax for regular
+      characters.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "General-Escape-Syntax.html#General-Escape-Syntax" accesskey=
+      "2">General Escape Syntax</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to specify characters by
+      their codes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax" accesskey=
+      "3">Ctl-Char Syntax</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Syntax for control
+      characters.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Meta_002dChar-Syntax.html#Meta_002dChar-Syntax" accesskey=
+      "4">Meta-Char Syntax</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Syntax for
+      meta-characters.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Other-Char-Bits.html#Other-Char-Bits" accesskey="5">Other
+      Char Bits</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Syntax for hyper-, super-, and
+      alt-characters.</td>
+    </tr>
+  </table>
 </body>
 </html>

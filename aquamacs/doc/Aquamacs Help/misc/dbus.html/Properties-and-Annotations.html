@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,315 +14,467 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Using of D-Bus: Properties and Annotations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Using of D-Bus: Properties and Annotations">
-<meta name="keywords" content="Using of D-Bus: Properties and Annotations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Inspection.html#Inspection" rel="up" title="Inspection">
-<link href="Arguments-and-Signatures.html#Arguments-and-Signatures" rel="next" title="Arguments and Signatures">
-<link href="Methods-and-Signal.html#Methods-and-Signal" rel="prev" title="Methods and Signal">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Using of D-Bus: Properties and Annotations</title>
+  <meta name="description" content=
+  "Using of D-Bus: Properties and Annotations" />
+  <meta name="keywords" content=
+  "Using of D-Bus: Properties and Annotations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Inspection.html#Inspection" rel="up" title=
+  "Inspection" />
+  <link href=
+  "Arguments-and-Signatures.html#Arguments-and-Signatures" rel=
+  "next" title="Arguments and Signatures" />
+  <link href="Methods-and-Signal.html#Methods-and-Signal" rel=
+  "prev" title="Methods and Signal" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Properties-and-Annotations"></a>
-<div class="header">
-<p>
-Next: <a href="Arguments-and-Signatures.html#Arguments-and-Signatures" accesskey="n" rel="next">Arguments and Signatures</a>, Previous: <a href="Methods-and-Signal.html#Methods-and-Signal" accesskey="p" rel="prev">Methods and Signal</a>, Up: <a href="Inspection.html#Inspection" accesskey="u" rel="up">Inspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="What-else-to-know-about-interfaces_002e"></a>
-<h3 class="section">2.6 What else to know about interfaces.</h3>
+<body lang="en" xml:lang="en">
+  <a name="Properties-and-Annotations" id=
+  "Properties-and-Annotations"></a>
 
-<p>Interfaces can have properties.  These can be exposed via the
-&lsquo;<samp>org.freedesktop.DBus.Properties</samp>&rsquo; interface<a name="DOCF3" href="#FOOT3"><sup>3</sup></a>.
-That is, properties can be retrieved and changed during lifetime of an
-element.
-</p>
-<p>A generalized interface is
-&lsquo;<samp>org.freedesktop.DBus.Objectmanager</samp>&rsquo;<a name="DOCF4" href="#FOOT4"><sup>4</sup></a>,
-which returns objects, their interfaces and properties for a given
-service in just one call.
-</p>
-<p>Annotations, on the other hand, are static values for an element.
-Often, they are used to instruct generators, how to generate code from
-the interface for a given language binding.
-</p>
-<dl>
-<dt><a name="index-dbus_002dintrospect_002dget_002dproperty_002dnames"></a>Function: <strong>dbus-introspect-get-property-names</strong> <em>bus service path interface</em></dt>
-<dd><p>Return a list of strings with all property names of <var>interface</var> of
-<var>service</var> in D-Bus <var>bus</var> at object path <var>path</var>.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-introspect-get-property-names
-  :session &quot;org.kde.kded&quot; &quot;/modules/networkstatus&quot;
-  &quot;org.kde.Solid.Networking.Client&quot;)
+  <div class="header">
+    <p>Next: <a href=
+    "Arguments-and-Signatures.html#Arguments-and-Signatures"
+    accesskey="n" rel="next">Arguments and Signatures</a>,
+    Previous: <a href="Methods-and-Signal.html#Methods-and-Signal"
+    accesskey="p" rel="prev">Methods and Signal</a>, Up: <a href=
+    "Inspection.html#Inspection" accesskey="u" rel=
+    "up">Inspection</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="What-else-to-know-about-interfaces_002e" id=
+  "What-else-to-know-about-interfaces_002e"></a>
 
-&rArr; (&quot;Status&quot;)
-</pre></div>
+  <h3 class="section">2.6 What else to know about interfaces.</h3>
 
-<p>If an interface declares properties, the corresponding element supports
-also the &lsquo;<samp>org.freedesktop.DBus.Properties</samp>&rsquo; interface.
-</p></dd></dl>
+  <p>Interfaces can have properties. These can be exposed via the
+  &lsquo;<samp>org.freedesktop.DBus.Properties</samp>&rsquo;
+  interface<a name="DOCF3" href="#FOOT3" id=
+  "DOCF3"><sup>3</sup></a>. That is, properties can be retrieved
+  and changed during lifetime of an element.</p>
 
-<dl>
-<dt><a name="index-dbus_002dintrospect_002dget_002dproperty"></a>Function: <strong>dbus-introspect-get-property</strong> <em>bus service path interface property</em></dt>
-<dd><p>This function returns <var>property</var> of <var>interface</var> as XML element.
-It must be located at <var>service</var> in D-Bus <var>bus</var> at object path
-<var>path</var>.  <var>property</var> must be a string, element of the list
-returned by <code>dbus-introspect-get-property-names</code>.
-</p>
-<p>A <var>property</var> value can be retrieved by the function
-<code>dbus-introspect-get-attribute</code>.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-introspect-get-property
-  :session &quot;org.kde.kded&quot; &quot;/modules/networkstatus&quot;
-  &quot;org.kde.Solid.Networking.Client&quot; &quot;Status&quot;)
+  <p>A generalized interface is
+  &lsquo;<samp>org.freedesktop.DBus.Objectmanager</samp>&rsquo;<a name="DOCF4"
+  href="#FOOT4" id="DOCF4"><sup>4</sup></a>, which returns objects,
+  their interfaces and properties for a given service in just one
+  call.</p>
 
-&rArr; (property ((access . &quot;read&quot;) (type . &quot;u&quot;) (name . &quot;Status&quot;)))
+  <p>Annotations, on the other hand, are static values for an
+  element. Often, they are used to instruct generators, how to
+  generate code from the interface for a given language
+  binding.</p>
+
+  <dl>
+    <dt><a name=
+    "index-dbus_002dintrospect_002dget_002dproperty_002dnames" id=
+    "index-dbus_002dintrospect_002dget_002dproperty_002dnames"></a>Function:
+    <strong>dbus-introspect-get-property-names</strong> <em>bus
+    service path interface</em></dt>
+
+    <dd>
+      <p>Return a list of strings with all property names of
+      <var>interface</var> of <var>service</var> in D-Bus
+      <var>bus</var> at object path <var>path</var>. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-introspect-get-property-names
+  :session "org.kde.kded" "/modules/networkstatus"
+  "org.kde.Solid.Networking.Client")
+
+&rArr; ("Status")
+</pre>
+      </div>
+
+      <p>If an interface declares properties, the corresponding
+      element supports also the
+      &lsquo;<samp>org.freedesktop.DBus.Properties</samp>&rsquo;
+      interface.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dbus_002dintrospect_002dget_002dproperty"
+    id="index-dbus_002dintrospect_002dget_002dproperty"></a>Function:
+    <strong>dbus-introspect-get-property</strong> <em>bus service
+    path interface property</em></dt>
+
+    <dd>
+      <p>This function returns <var>property</var> of
+      <var>interface</var> as XML element. It must be located at
+      <var>service</var> in D-Bus <var>bus</var> at object path
+      <var>path</var>. <var>property</var> must be a string,
+      element of the list returned by
+      <code>dbus-introspect-get-property-names</code>.</p>
+
+      <p>A <var>property</var> value can be retrieved by the
+      function <code>dbus-introspect-get-attribute</code>.
+      Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-introspect-get-property
+  :session "org.kde.kded" "/modules/networkstatus"
+  "org.kde.Solid.Networking.Client" "Status")
+
+&rArr; (property ((access . "read") (type . "u") (name . "Status")))
 
 (dbus-introspect-get-attribute
   (dbus-introspect-get-property
-    :session &quot;org.kde.kded&quot; &quot;/modules/networkstatus&quot;
-    &quot;org.kde.Solid.Networking.Client&quot; &quot;Status&quot;)
-  &quot;access&quot;)
+    :session "org.kde.kded" "/modules/networkstatus"
+    "org.kde.Solid.Networking.Client" "Status")
+  "access")
 
-&rArr; &quot;read&quot;
-</pre></div>
-</dd></dl>
+&rArr; "read"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-dbus_002dget_002dproperty"></a>Function: <strong>dbus-get-property</strong> <em>bus service path interface property</em></dt>
-<dd><p>This function returns the value of <var>property</var> of <var>interface</var>.
-It will be checked at <var>bus</var>, <var>service</var>, <var>path</var>.  The
-result can be any valid D-Bus value, or <code>nil</code> if there is no
-<var>property</var>.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-get-property
-  :session &quot;org.kde.kded&quot; &quot;/modules/networkstatus&quot;
-  &quot;org.kde.Solid.Networking.Client&quot; &quot;Status&quot;)
+  <dl>
+    <dt><a name="index-dbus_002dget_002dproperty" id=
+    "index-dbus_002dget_002dproperty"></a>Function:
+    <strong>dbus-get-property</strong> <em>bus service path
+    interface property</em></dt>
+
+    <dd>
+      <p>This function returns the value of <var>property</var> of
+      <var>interface</var>. It will be checked at <var>bus</var>,
+      <var>service</var>, <var>path</var>. The result can be any
+      valid D-Bus value, or <code>nil</code> if there is no
+      <var>property</var>. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-get-property
+  :session "org.kde.kded" "/modules/networkstatus"
+  "org.kde.Solid.Networking.Client" "Status")
 
 &rArr; 4
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-dbus_002dset_002dproperty"></a>Function: <strong>dbus-set-property</strong> <em>bus service path interface property value</em></dt>
-<dd><p>Set value of <var>property</var> of <var>interface</var> to <var>value</var>.  It
-will be checked at <var>bus</var>, <var>service</var>, <var>path</var>.  When the
-value has been set successful, the result is <var>value</var>.  Otherwise,
-<code>nil</code> is returned.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-set-property
-  :session &quot;org.kde.kaccess&quot; &quot;/MainApplication&quot;
-  &quot;com.trolltech.Qt.QApplication&quot; &quot;doubleClickInterval&quot; 500)
+  <dl>
+    <dt><a name="index-dbus_002dset_002dproperty" id=
+    "index-dbus_002dset_002dproperty"></a>Function:
+    <strong>dbus-set-property</strong> <em>bus service path
+    interface property value</em></dt>
+
+    <dd>
+      <p>Set value of <var>property</var> of <var>interface</var>
+      to <var>value</var>. It will be checked at <var>bus</var>,
+      <var>service</var>, <var>path</var>. When the value has been
+      set successful, the result is <var>value</var>. Otherwise,
+      <code>nil</code> is returned. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-set-property
+  :session "org.kde.kaccess" "/MainApplication"
+  "com.trolltech.Qt.QApplication" "doubleClickInterval" 500)
 
 &rArr; 500
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-dbus_002dget_002dall_002dproperties"></a>Function: <strong>dbus-get-all-properties</strong> <em>bus service path interface</em></dt>
-<dd><p>This function returns all properties of <var>interface</var>.  It will be
-checked at <var>bus</var>, <var>service</var>, <var>path</var>.  The result is a list
-of cons.  Every cons contains the name of the property, and its value.
-If there are no properties, <code>nil</code> is returned.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-get-all-properties
-  :session &quot;org.kde.kaccess&quot; &quot;/MainApplication&quot;
-  &quot;com.trolltech.Qt.QApplication&quot;)
+  <dl>
+    <dt><a name="index-dbus_002dget_002dall_002dproperties" id=
+    "index-dbus_002dget_002dall_002dproperties"></a>Function:
+    <strong>dbus-get-all-properties</strong> <em>bus service path
+    interface</em></dt>
 
-&rArr; ((&quot;cursorFlashTime&quot; . 1000) (&quot;doubleClickInterval&quot; . 500)
-    (&quot;keyboardInputInterval&quot; . 400) (&quot;wheelScrollLines&quot; . 3)
-    (&quot;globalStrut&quot; 0 0) (&quot;startDragTime&quot; . 500)
-    (&quot;startDragDistance&quot; . 4) (&quot;quitOnLastWindowClosed&quot; . t)
-    (&quot;styleSheet&quot; . &quot;&quot;))
-</pre></div>
-</dd></dl>
+    <dd>
+      <p>This function returns all properties of
+      <var>interface</var>. It will be checked at <var>bus</var>,
+      <var>service</var>, <var>path</var>. The result is a list of
+      cons. Every cons contains the name of the property, and its
+      value. If there are no properties, <code>nil</code> is
+      returned. Example:</p>
 
-<dl>
-<dt><a name="index-dbus_002dget_002dall_002dmanaged_002dobjects"></a>Function: <strong>dbus-get-all-managed-objects</strong> <em>bus service path</em></dt>
-<dd><p>This function returns all objects at <var>bus</var>, <var>service</var>,
-<var>path</var>, and the children of <var>path</var>.  The result is a list of
-objects.  Every object is a cons of an existing path name, and the
-list of available interface objects.  An interface object is another
-cons, which car is the interface name, and the cdr is the list of
-properties as returned by <code>dbus-get-all-properties</code> for that path
-and interface. Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-get-all-managed-objects
-  :session &quot;org.gnome.SettingsDaemon&quot; &quot;/&quot;)
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-get-all-properties
+  :session "org.kde.kaccess" "/MainApplication"
+  "com.trolltech.Qt.QApplication")
 
-&rArr; ((&quot;/org/gnome/SettingsDaemon/MediaKeys&quot;
-     (&quot;org.gnome.SettingsDaemon.MediaKeys&quot;)
-     (&quot;org.freedesktop.DBus.Peer&quot;)
-     (&quot;org.freedesktop.DBus.Introspectable&quot;)
-     (&quot;org.freedesktop.DBus.Properties&quot;)
-     (&quot;org.freedesktop.DBus.ObjectManager&quot;))
-    (&quot;/org/gnome/SettingsDaemon/Power&quot;
-     (&quot;org.gnome.SettingsDaemon.Power.Keyboard&quot;)
-     (&quot;org.gnome.SettingsDaemon.Power.Screen&quot;)
-     (&quot;org.gnome.SettingsDaemon.Power&quot;
-      (&quot;Icon&quot; . &quot;. GThemedIcon battery-full-charged-symbolic &quot;)
-      (&quot;Tooltip&quot; . &quot;Laptop battery is charged&quot;))
-     (&quot;org.freedesktop.DBus.Peer&quot;)
-     (&quot;org.freedesktop.DBus.Introspectable&quot;)
-     (&quot;org.freedesktop.DBus.Properties&quot;)
-     (&quot;org.freedesktop.DBus.ObjectManager&quot;))
+&rArr; (("cursorFlashTime" . 1000) ("doubleClickInterval" . 500)
+    ("keyboardInputInterval" . 400) ("wheelScrollLines" . 3)
+    ("globalStrut" 0 0) ("startDragTime" . 500)
+    ("startDragDistance" . 4) ("quitOnLastWindowClosed" . t)
+    ("styleSheet" . ""))
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-dbus_002dget_002dall_002dmanaged_002dobjects" id=
+    "index-dbus_002dget_002dall_002dmanaged_002dobjects"></a>Function:
+    <strong>dbus-get-all-managed-objects</strong> <em>bus service
+    path</em></dt>
+
+    <dd>
+      <p>This function returns all objects at <var>bus</var>,
+      <var>service</var>, <var>path</var>, and the children of
+      <var>path</var>. The result is a list of objects. Every
+      object is a cons of an existing path name, and the list of
+      available interface objects. An interface object is another
+      cons, which car is the interface name, and the cdr is the
+      list of properties as returned by
+      <code>dbus-get-all-properties</code> for that path and
+      interface. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-get-all-managed-objects
+  :session "org.gnome.SettingsDaemon" "/")
+
+&rArr; (("/org/gnome/SettingsDaemon/MediaKeys"
+     ("org.gnome.SettingsDaemon.MediaKeys")
+     ("org.freedesktop.DBus.Peer")
+     ("org.freedesktop.DBus.Introspectable")
+     ("org.freedesktop.DBus.Properties")
+     ("org.freedesktop.DBus.ObjectManager"))
+    ("/org/gnome/SettingsDaemon/Power"
+     ("org.gnome.SettingsDaemon.Power.Keyboard")
+     ("org.gnome.SettingsDaemon.Power.Screen")
+     ("org.gnome.SettingsDaemon.Power"
+      ("Icon" . ". GThemedIcon battery-full-charged-symbolic ")
+      ("Tooltip" . "Laptop battery is charged"))
+     ("org.freedesktop.DBus.Peer")
+     ("org.freedesktop.DBus.Introspectable")
+     ("org.freedesktop.DBus.Properties")
+     ("org.freedesktop.DBus.ObjectManager"))
     &hellip;)
-</pre></div>
+</pre>
+      </div>
 
-<p>If possible, &lsquo;<samp>org.freedesktop.DBus.ObjectManager.GetManagedObjects</samp>&rsquo;
-is used for retrieving the information.  Otherwise, the information
-is collected via &lsquo;<samp>org.freedesktop.DBus.Introspectable.Introspect</samp>&rsquo;
-and &lsquo;<samp>org.freedesktop.DBus.Properties.GetAll</samp>&rsquo;, which is slow.
-</p>
-<p>An overview of all existing object paths, their interfaces and
-properties could be retrieved by the following code:
-</p>
-<div class="lisp">
-<pre class="lisp">(with-current-buffer (switch-to-buffer &quot;*objectmanager*&quot;)
+      <p>If possible,
+      &lsquo;<samp>org.freedesktop.DBus.ObjectManager.GetManagedObjects</samp>&rsquo;
+      is used for retrieving the information. Otherwise, the
+      information is collected via
+      &lsquo;<samp>org.freedesktop.DBus.Introspectable.Introspect</samp>&rsquo;
+      and
+      &lsquo;<samp>org.freedesktop.DBus.Properties.GetAll</samp>&rsquo;,
+      which is slow.</p>
+
+      <p>An overview of all existing object paths, their interfaces
+      and properties could be retrieved by the following code:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(with-current-buffer (switch-to-buffer "*objectmanager*")
   (erase-buffer)
   (let (result)
     (dolist (service (dbus-list-known-names :session) result)
-      (message &quot;%s&quot; service)
+      (message "%s" service)
       (add-to-list
        'result
        (cons service
-             (dbus-get-all-managed-objects :session service &quot;/&quot;))))
-    (insert (message &quot;%s&quot; (pp result)))
+             (dbus-get-all-managed-objects :session service "/"))))
+    (insert (message "%s" (pp result)))
     (redisplay t)))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-dbus_002dintrospect_002dget_002dannotation_002dnames"></a>Function: <strong>dbus-introspect-get-annotation-names</strong> <em>bus service path interface &amp;optional name</em></dt>
-<dd><p>Return a list of all annotation names as list of strings.  If
-<var>name</var> is <code>nil</code>, the annotations are children of
-<var>interface</var>, otherwise <var>name</var> must be a <code>method</code>,
-<code>signal</code>, or <code>property</code> XML element, where the annotations
-belong to.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-introspect-get-annotation-names
-  :session &quot;de.berlios.Pinot&quot; &quot;/de/berlios/Pinot&quot;
-  &quot;de.berlios.Pinot&quot; &quot;GetStatistics&quot;)
+  <dl>
+    <dt><a name=
+    "index-dbus_002dintrospect_002dget_002dannotation_002dnames"
+    id="index-dbus_002dintrospect_002dget_002dannotation_002dnames">
+    </a>Function:
+    <strong>dbus-introspect-get-annotation-names</strong> <em>bus
+    service path interface &amp;optional name</em></dt>
 
-&rArr; (&quot;de.berlios.Pinot.GetStatistics&quot;)
-</pre></div>
+    <dd>
+      <p>Return a list of all annotation names as list of strings.
+      If <var>name</var> is <code>nil</code>, the annotations are
+      children of <var>interface</var>, otherwise <var>name</var>
+      must be a <code>method</code>, <code>signal</code>, or
+      <code>property</code> XML element, where the annotations
+      belong to. Example:</p>
 
-<p>Default annotation names<a name="DOCF5" href="#FOOT5"><sup>5</sup></a>
-are
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>org.freedesktop.DBus.Deprecated</samp>&rsquo;</dt>
-<dd><p>Whether or not the entity is deprecated; defaults to <code>nil</code>
-</p>
-</dd>
-<dt>&lsquo;<samp>org.freedesktop.DBus.GLib.CSymbol</samp>&rsquo;</dt>
-<dd><p>The C symbol; may be used for <code>methods</code> and <code>interfaces</code>
-</p>
-</dd>
-<dt>&lsquo;<samp>org.freedesktop.DBus.Method.NoReply</samp>&rsquo;</dt>
-<dd><p>If set, don&rsquo;t expect a reply to the <code>method</code> call; defaults to <code>nil</code>
-</p></dd>
-</dl>
-</dd></dl>
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-introspect-get-annotation-names
+  :session "de.berlios.Pinot" "/de/berlios/Pinot"
+  "de.berlios.Pinot" "GetStatistics")
 
-<dl>
-<dt><a name="index-dbus_002dintrospect_002dget_002dannotation"></a>Function: <strong>dbus-introspect-get-annotation</strong> <em>bus service path interface name annotation</em></dt>
-<dd><p>Return annotation <var>ANNOTATION</var> as XML object.  If <var>name</var> is
-<code>nil</code>, <var>ANNOTATION</var> is a child of <var>interface</var>, otherwise
-<var>name</var> must be the name of a <code>method</code>, <code>signal</code>, or
-<code>property</code> XML element, where the <var>ANNOTATION</var> belongs to.
-</p>
-<p>An attribute value can be retrieved by
-<code>dbus-introspect-get-attribute</code>.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-introspect-get-annotation
-  :session &quot;de.berlios.Pinot&quot; &quot;/de/berlios/Pinot&quot;
-  &quot;de.berlios.Pinot&quot; &quot;GetStatistics&quot;
-  &quot;de.berlios.Pinot.GetStatistics&quot;)
+&rArr; ("de.berlios.Pinot.GetStatistics")
+</pre>
+      </div>
 
-&rArr; (annotation ((name . &quot;de.berlios.Pinot.GetStatistics&quot;)
-                (value . &quot;pinotDBus&quot;)))
+      <p>Default annotation names<a name="DOCF5" href="#FOOT5" id=
+      "DOCF5"><sup>5</sup></a> are</p>
+
+      <dl compact="compact">
+        <dt>
+        &lsquo;<samp>org.freedesktop.DBus.Deprecated</samp>&rsquo;</dt>
+
+        <dd>
+          <p>Whether or not the entity is deprecated; defaults to
+          <code>nil</code></p>
+        </dd>
+
+        <dt>
+        &lsquo;<samp>org.freedesktop.DBus.GLib.CSymbol</samp>&rsquo;</dt>
+
+        <dd>
+          <p>The C symbol; may be used for <code>methods</code> and
+          <code>interfaces</code></p>
+        </dd>
+
+        <dt>
+        &lsquo;<samp>org.freedesktop.DBus.Method.NoReply</samp>&rsquo;</dt>
+
+        <dd>
+          <p>If set, don&rsquo;t expect a reply to the
+          <code>method</code> call; defaults to
+          <code>nil</code></p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dbus_002dintrospect_002dget_002dannotation"
+    id=
+    "index-dbus_002dintrospect_002dget_002dannotation"></a>Function:
+    <strong>dbus-introspect-get-annotation</strong> <em>bus service
+    path interface name annotation</em></dt>
+
+    <dd>
+      <p>Return annotation <var>ANNOTATION</var> as XML object. If
+      <var>name</var> is <code>nil</code>, <var>ANNOTATION</var> is
+      a child of <var>interface</var>, otherwise <var>name</var>
+      must be the name of a <code>method</code>,
+      <code>signal</code>, or <code>property</code> XML element,
+      where the <var>ANNOTATION</var> belongs to.</p>
+
+      <p>An attribute value can be retrieved by
+      <code>dbus-introspect-get-attribute</code>. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-introspect-get-annotation
+  :session "de.berlios.Pinot" "/de/berlios/Pinot"
+  "de.berlios.Pinot" "GetStatistics"
+  "de.berlios.Pinot.GetStatistics")
+
+&rArr; (annotation ((name . "de.berlios.Pinot.GetStatistics")
+                (value . "pinotDBus")))
 
 (dbus-introspect-get-attribute
   (dbus-introspect-get-annotation
-    :session &quot;de.berlios.Pinot&quot; &quot;/de/berlios/Pinot&quot;
-    &quot;de.berlios.Pinot&quot; &quot;GetStatistics&quot;
-    &quot;de.berlios.Pinot.GetStatistics&quot;)
-  &quot;value&quot;)
+    :session "de.berlios.Pinot" "/de/berlios/Pinot"
+    "de.berlios.Pinot" "GetStatistics"
+    "de.berlios.Pinot.GetStatistics")
+  "value")
 
-&rArr; &quot;pinotDBus&quot;
-</pre></div>
-</dd></dl>
+&rArr; "pinotDBus"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <div class="footnote">
+    <hr />
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <h4 class="footnotes-heading">Footnotes</h4>
 
-<h3><a name="FOOT3" href="#DOCF3">(3)</a></h3>
-<p>See
-<a href="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties">http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties</a></p>
-<h3><a name="FOOT4" href="#DOCF4">(4)</a></h3>
-<p>See
-<a href="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager">http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager</a></p>
-<h3><a name="FOOT5" href="#DOCF5">(5)</a></h3>
-<p>See
-<a href="http://dbus.freedesktop.org/doc/dbus-specification.html#introspection-format">http://dbus.freedesktop.org/doc/dbus-specification.html#introspection-format</a></p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Arguments-and-Signatures.html#Arguments-and-Signatures" accesskey="n" rel="next">Arguments and Signatures</a>, Previous: <a href="Methods-and-Signal.html#Methods-and-Signal" accesskey="p" rel="prev">Methods and Signal</a>, Up: <a href="Inspection.html#Inspection" accesskey="u" rel="up">Inspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <h3><a name="FOOT3" href="#DOCF3" id="FOOT3">(3)</a></h3>
 
+    <p>See <a href=
+    "http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties">
+    http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties</a></p>
 
+    <h3><a name="FOOT4" href="#DOCF4" id="FOOT4">(4)</a></h3>
 
+    <p>See <a href=
+    "http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager">
+    http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager</a></p>
+
+    <h3><a name="FOOT5" href="#DOCF5" id="FOOT5">(5)</a></h3>
+
+    <p>See <a href=
+    "http://dbus.freedesktop.org/doc/dbus-specification.html#introspection-format">
+    http://dbus.freedesktop.org/doc/dbus-specification.html#introspection-format</a></p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Arguments-and-Signatures.html#Arguments-and-Signatures"
+    accesskey="n" rel="next">Arguments and Signatures</a>,
+    Previous: <a href="Methods-and-Signal.html#Methods-and-Signal"
+    accesskey="p" rel="prev">Methods and Signal</a>, Up: <a href=
+    "Inspection.html#Inspection" accesskey="u" rel=
+    "up">Inspection</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

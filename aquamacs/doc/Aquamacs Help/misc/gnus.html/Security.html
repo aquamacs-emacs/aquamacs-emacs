@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,168 +14,245 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Security</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Security">
-<meta name="keywords" content="Gnus Manual: Security">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Mailing-List.html#Mailing-List" rel="next" title="Mailing List">
-<link href="Duplicate-Suppression.html#Duplicate-Suppression" rel="prev" title="Duplicate Suppression">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Security</title>
+  <meta name="description" content="Gnus Manual: Security" />
+  <meta name="keywords" content="Gnus Manual: Security" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Mailing-List.html#Mailing-List" rel="next" title=
+  "Mailing List" />
+  <link href="Duplicate-Suppression.html#Duplicate-Suppression"
+  rel="prev" title="Duplicate Suppression" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Security"></a>
-<div class="header">
-<p>
-Next: <a href="Mailing-List.html#Mailing-List" accesskey="n" rel="next">Mailing List</a>, Previous: <a href="Duplicate-Suppression.html#Duplicate-Suppression" accesskey="p" rel="prev">Duplicate Suppression</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Security-1"></a>
-<h3 class="section">3.31 Security</h3>
+<body lang="en" xml:lang="en">
+  <a name="Security" id="Security"></a>
 
-<p>Gnus is able to verify signed messages or decrypt encrypted messages.
-The formats that are supported are <acronym>PGP</acronym>, <acronym>PGP/MIME</acronym>
-and <acronym>S/MIME</acronym>, however you need some external programs to get
-things to work:
-</p>
-<ol>
-<li> To handle <acronym>PGP</acronym> and <acronym>PGP/MIME</acronym> messages, you have to
-install an OpenPGP implementation such as GnuPG.  The Lisp interface
-to GnuPG included with Emacs is called EasyPG (see <a href="http://www.gnu.org/software/emacs/manual/html_node/epa/index.html#Top">EasyPG</a> in <cite>EasyPG Assistant user&rsquo;s manual</cite>), but PGG (see <a href="../pgg/index.html#Top">PGG</a> in <cite>PGG Manual</cite>), and Mailcrypt are also supported.
+  <div class="header">
+    <p>Next: <a href="Mailing-List.html#Mailing-List" accesskey="n"
+    rel="next">Mailing List</a>, Previous: <a href=
+    "Duplicate-Suppression.html#Duplicate-Suppression" accesskey=
+    "p" rel="prev">Duplicate Suppression</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Security-1" id="Security-1"></a>
 
-</li><li> To handle <acronym>S/MIME</acronym> message, you need to install OpenSSL.  OpenSSL 0.9.6
-or newer is recommended.
+  <h3 class="section">3.31 Security</h3>
 
-</li></ol>
+  <p>Gnus is able to verify signed messages or decrypt encrypted
+  messages. The formats that are supported are
+  <acronym>PGP</acronym>, <acronym>PGP/MIME</acronym> and
+  <acronym>S/MIME</acronym>, however you need some external
+  programs to get things to work:</p>
 
-<p>The variables that control security functionality on reading/composing
-messages include:
-</p>
-<dl compact="compact">
-<dt><code>mm-verify-option</code></dt>
-<dd><a name="index-mm_002dverify_002doption"></a>
-<p>Option of verifying signed parts.  <code>never</code>, not verify;
-<code>always</code>, always verify; <code>known</code>, only verify known
-protocols.  Otherwise, ask user.
-</p>
-</dd>
-<dt><code>mm-decrypt-option</code></dt>
-<dd><a name="index-mm_002ddecrypt_002doption"></a>
-<p>Option of decrypting encrypted parts.  <code>never</code>, no decryption;
-<code>always</code>, always decrypt; <code>known</code>, only decrypt known
-protocols.  Otherwise, ask user.
-</p>
-</dd>
-<dt><code>mm-sign-option</code></dt>
-<dd><a name="index-mm_002dsign_002doption"></a>
-<p>Option of creating signed parts.  <code>nil</code>, use default signing
-keys; <code>guided</code>, ask user to select signing keys from the menu.
-</p>
-</dd>
-<dt><code>mm-encrypt-option</code></dt>
-<dd><a name="index-mm_002dencrypt_002doption"></a>
-<p>Option of creating encrypted parts.  <code>nil</code>, use the first
-public-key matching the &lsquo;<samp>From:</samp>&rsquo; header as the recipient;
-<code>guided</code>, ask user to select recipient keys from the menu.
-</p>
-</dd>
-<dt><code>mml1991-use</code></dt>
-<dd><a name="index-mml1991_002duse"></a>
-<p>Symbol indicating elisp interface to OpenPGP implementation for
-<acronym>PGP</acronym> messages.  The default is <code>epg</code>, but <code>pgg</code>,
-and <code>mailcrypt</code> are also supported although
-deprecated.  By default, Gnus uses the first available interface in
-this order.
-</p>
-</dd>
-<dt><code>mml2015-use</code></dt>
-<dd><a name="index-mml2015_002duse"></a>
-<p>Symbol indicating elisp interface to OpenPGP implementation for
-<acronym>PGP/MIME</acronym> messages.  The default is <code>epg</code>, but
-<code>pgg</code>, and <code>mailcrypt</code> are also supported
-although deprecated.  By default, Gnus uses the first available
-interface in this order.
-</p>
-</dd>
-</dl>
+  <ol>
+    <li>To handle <acronym>PGP</acronym> and
+    <acronym>PGP/MIME</acronym> messages, you have to install an
+    OpenPGP implementation such as GnuPG. The Lisp interface to
+    GnuPG included with Emacs is called EasyPG (see <a href=
+    "http://www.gnu.org/software/emacs/manual/html_node/epa/index.html#Top">
+    EasyPG</a> in <cite>EasyPG Assistant user&rsquo;s
+    manual</cite>), but PGG (see <a href=
+    "../pgg/index.html#Top">PGG</a> in <cite>PGG Manual</cite>),
+    and Mailcrypt are also supported.</li>
 
-<p>By default the buttons that display security information are not
-shown, because they clutter reading the actual e-mail.  You can type
-<kbd>K b</kbd> manually to display the information.  Use the
-<code>gnus-buttonized-mime-types</code> and
-<code>gnus-unbuttonized-mime-types</code> variables to control this
-permanently.  <a href="MIME-Commands.html#MIME-Commands">MIME Commands</a> for further details, and hints on
-how to customize these variables to always display security
-information.
-</p>
-<a name="index-snarfing-keys"></a>
-<a name="index-importing-PGP-keys"></a>
-<a name="index-PGP-key-ring-import"></a>
-<p>Snarfing OpenPGP keys (i.e., importing keys from articles into your
-key ring) is not supported explicitly through a menu item or command,
-rather Gnus do detect and label keys as &lsquo;<samp>application/pgp-keys</samp>&rsquo;,
-allowing you to specify whatever action you think is appropriate
-through the usual <acronym>MIME</acronym> infrastructure.  You can use a
-<samp>~/.mailcap</samp> entry (see <a href="../emacs-mime/mailcap.html#mailcap">mailcap</a> in <cite>The
-Emacs MIME Manual</cite>) such as the following to import keys using GNU
-Privacy Guard when you click on the <acronym>MIME</acronym> button
-(see <a href="Using-MIME.html#Using-MIME">Using MIME</a>).
-</p>
-<div class="example">
-<pre class="example">application/pgp-keys; gpg --import --interactive --verbose; needsterminal
-</pre></div>
-<p>This happens to also be the default action defined in
-<code>mailcap-mime-data</code>.
-</p>
-<p>More information on how to set things for sending outgoing signed and
-encrypted messages up can be found in the message manual
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/message/Security.html#Security">Security</a> in <cite>Message Manual</cite>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Mailing-List.html#Mailing-List" accesskey="n" rel="next">Mailing List</a>, Previous: <a href="Duplicate-Suppression.html#Duplicate-Suppression" accesskey="p" rel="prev">Duplicate Suppression</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>To handle <acronym>S/MIME</acronym> message, you need to
+    install OpenSSL. OpenSSL 0.9.6 or newer is recommended.</li>
+  </ol>
 
+  <p>The variables that control security functionality on
+  reading/composing messages include:</p>
 
+  <dl compact="compact">
+    <dt><code>mm-verify-option</code></dt>
 
+    <dd>
+      <a name="index-mm_002dverify_002doption" id=
+      "index-mm_002dverify_002doption"></a>
+
+      <p>Option of verifying signed parts. <code>never</code>, not
+      verify; <code>always</code>, always verify;
+      <code>known</code>, only verify known protocols. Otherwise,
+      ask user.</p>
+    </dd>
+
+    <dt><code>mm-decrypt-option</code></dt>
+
+    <dd>
+      <a name="index-mm_002ddecrypt_002doption" id=
+      "index-mm_002ddecrypt_002doption"></a>
+
+      <p>Option of decrypting encrypted parts. <code>never</code>,
+      no decryption; <code>always</code>, always decrypt;
+      <code>known</code>, only decrypt known protocols. Otherwise,
+      ask user.</p>
+    </dd>
+
+    <dt><code>mm-sign-option</code></dt>
+
+    <dd>
+      <a name="index-mm_002dsign_002doption" id=
+      "index-mm_002dsign_002doption"></a>
+
+      <p>Option of creating signed parts. <code>nil</code>, use
+      default signing keys; <code>guided</code>, ask user to select
+      signing keys from the menu.</p>
+    </dd>
+
+    <dt><code>mm-encrypt-option</code></dt>
+
+    <dd>
+      <a name="index-mm_002dencrypt_002doption" id=
+      "index-mm_002dencrypt_002doption"></a>
+
+      <p>Option of creating encrypted parts. <code>nil</code>, use
+      the first public-key matching the
+      &lsquo;<samp>From:</samp>&rsquo; header as the recipient;
+      <code>guided</code>, ask user to select recipient keys from
+      the menu.</p>
+    </dd>
+
+    <dt><code>mml1991-use</code></dt>
+
+    <dd>
+      <a name="index-mml1991_002duse" id=
+      "index-mml1991_002duse"></a>
+
+      <p>Symbol indicating elisp interface to OpenPGP
+      implementation for <acronym>PGP</acronym> messages. The
+      default is <code>epg</code>, but <code>pgg</code>, and
+      <code>mailcrypt</code> are also supported although
+      deprecated. By default, Gnus uses the first available
+      interface in this order.</p>
+    </dd>
+
+    <dt><code>mml2015-use</code></dt>
+
+    <dd>
+      <a name="index-mml2015_002duse" id=
+      "index-mml2015_002duse"></a>
+
+      <p>Symbol indicating elisp interface to OpenPGP
+      implementation for <acronym>PGP/MIME</acronym> messages. The
+      default is <code>epg</code>, but <code>pgg</code>, and
+      <code>mailcrypt</code> are also supported although
+      deprecated. By default, Gnus uses the first available
+      interface in this order.</p>
+    </dd>
+  </dl>
+
+  <p>By default the buttons that display security information are
+  not shown, because they clutter reading the actual e-mail. You
+  can type <kbd>K b</kbd> manually to display the information. Use
+  the <code>gnus-buttonized-mime-types</code> and
+  <code>gnus-unbuttonized-mime-types</code> variables to control
+  this permanently. <a href="MIME-Commands.html#MIME-Commands">MIME
+  Commands</a> for further details, and hints on how to customize
+  these variables to always display security
+  information.</p><a name="index-snarfing-keys" id=
+  "index-snarfing-keys"></a> <a name="index-importing-PGP-keys" id=
+  "index-importing-PGP-keys"></a> <a name=
+  "index-PGP-key-ring-import" id="index-PGP-key-ring-import"></a>
+
+  <p>Snarfing OpenPGP keys (i.e., importing keys from articles into
+  your key ring) is not supported explicitly through a menu item or
+  command, rather Gnus do detect and label keys as
+  &lsquo;<samp>application/pgp-keys</samp>&rsquo;, allowing you to
+  specify whatever action you think is appropriate through the
+  usual <acronym>MIME</acronym> infrastructure. You can use a
+  <samp>~/.mailcap</samp> entry (see <a href=
+  "../emacs-mime/mailcap.html#mailcap">mailcap</a> in <cite>The
+  Emacs MIME Manual</cite>) such as the following to import keys
+  using GNU Privacy Guard when you click on the
+  <acronym>MIME</acronym> button (see <a href=
+  "Using-MIME.html#Using-MIME">Using MIME</a>).</p>
+
+  <div class="example">
+    <pre class="example">
+application/pgp-keys; gpg --import --interactive --verbose; needsterminal
+</pre>
+  </div>
+
+  <p>This happens to also be the default action defined in
+  <code>mailcap-mime-data</code>.</p>
+
+  <p>More information on how to set things for sending outgoing
+  signed and encrypted messages up can be found in the message
+  manual (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/message/Security.html#Security">
+  Security</a> in <cite>Message Manual</cite>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Mailing-List.html#Mailing-List" accesskey="n"
+    rel="next">Mailing List</a>, Previous: <a href=
+    "Duplicate-Suppression.html#Duplicate-Suppression" accesskey=
+    "p" rel="prev">Duplicate Suppression</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

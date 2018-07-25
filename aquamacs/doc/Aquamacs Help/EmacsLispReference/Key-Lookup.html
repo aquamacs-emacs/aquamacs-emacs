@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,184 +19,265 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Key Lookup</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Key Lookup">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Key Lookup">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
-<link href="Functions-for-Key-Lookup.html#Functions-for-Key-Lookup" rel="next" title="Functions for Key Lookup">
-<link href="Controlling-Active-Maps.html#Controlling-Active-Maps" rel="prev" title="Controlling Active Maps">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Key Lookup</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Key Lookup" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Key Lookup" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keymaps.html#Keymaps" rel="up" title="Keymaps" />
+  <link href=
+  "Functions-for-Key-Lookup.html#Functions-for-Key-Lookup" rel=
+  "next" title="Functions for Key Lookup" />
+  <link href="Controlling-Active-Maps.html#Controlling-Active-Maps"
+  rel="prev" title="Controlling Active Maps" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Key-Lookup" id="Key-Lookup"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Functions-for-Key-Lookup.html#Functions-for-Key-Lookup"
+    accesskey="n" rel="next">Functions for Key Lookup</a>,
+    Previous: <a href=
+    "Controlling-Active-Maps.html#Controlling-Active-Maps"
+    accesskey="p" rel="prev">Controlling Active Maps</a>, Up:
+    <a href="Keymaps.html#Keymaps" accesskey="u" rel=
+    "up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Key-Lookup-1" id="Key-Lookup-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Key-Lookup"></a>
-<div class="header">
-<p>
-Next: <a href="Functions-for-Key-Lookup.html#Functions-for-Key-Lookup" accesskey="n" rel="next">Functions for Key Lookup</a>, Previous: <a href="Controlling-Active-Maps.html#Controlling-Active-Maps" accesskey="p" rel="prev">Controlling Active Maps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Key-Lookup-1"></a>
-<h3 class="section">21.10 Key Lookup</h3>
-<a name="index-key-lookup"></a>
-<a name="index-keymap-entry"></a>
+  <h3 class="section">21.10 Key Lookup</h3><a name=
+  "index-key-lookup" id="index-key-lookup"></a> <a name=
+  "index-keymap-entry" id="index-keymap-entry"></a>
 
-<p><em>Key lookup</em> is the process of finding the binding of a key
-sequence from a given keymap.  The execution or use of the binding is
-not part of key lookup.
-</p>
-<p>Key lookup uses just the event type of each event in the key sequence;
-the rest of the event is ignored.  In fact, a key sequence used for key
-lookup may designate a mouse event with just its types (a symbol)
-instead of the entire event (a list).  See <a href="Input-Events.html#Input-Events">Input Events</a>.  Such
-a key sequence is insufficient for <code>command-execute</code> to run,
-but it is sufficient for looking up or rebinding a key.
-</p>
-<p>When the key sequence consists of multiple events, key lookup
-processes the events sequentially: the binding of the first event is
-found, and must be a keymap; then the second event&rsquo;s binding is found in
-that keymap, and so on until all the events in the key sequence are used
-up.  (The binding thus found for the last event may or may not be a
-keymap.)  Thus, the process of key lookup is defined in terms of a
-simpler process for looking up a single event in a keymap.  How that is
-done depends on the type of object associated with the event in that
-keymap.
-</p>
-<p>Let&rsquo;s use the term <em>keymap entry</em> to describe the value found by
-looking up an event type in a keymap.  (This doesn&rsquo;t include the item
-string and other extra elements in a keymap element for a menu item, because
-<code>lookup-key</code> and other key lookup functions don&rsquo;t include them in
-the returned value.)  While any Lisp object may be stored in a keymap
-as a keymap entry, not all make sense for key lookup.  Here is a table
-of the meaningful types of keymap entries:
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><a name="index-nil-in-keymap"></a>
-<p><code>nil</code> means that the events used so far in the lookup form an
-undefined key.  When a keymap fails to mention an event type at all, and
-has no default binding, that is equivalent to a binding of <code>nil</code>
-for that event type.
-</p>
-</dd>
-<dt><var>command</var></dt>
-<dd><a name="index-command-in-keymap"></a>
-<p>The events used so far in the lookup form a complete key,
-and <var>command</var> is its binding.  See <a href="What-Is-a-Function.html#What-Is-a-Function">What Is a Function</a>.
-</p>
-</dd>
-<dt><var>array</var></dt>
-<dd><a name="index-string-in-keymap"></a>
-<p>The array (either a string or a vector) is a keyboard macro.  The events
-used so far in the lookup form a complete key, and the array is its
-binding.  See <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>, for more information.
-</p>
-</dd>
-<dt><var>keymap</var></dt>
-<dd><a name="index-keymap-in-keymap"></a>
-<p>The events used so far in the lookup form a prefix key.  The next
-event of the key sequence is looked up in <var>keymap</var>.
-</p>
-</dd>
-<dt><var>list</var></dt>
-<dd><a name="index-list-in-keymap"></a>
-<p>The meaning of a list depends on what it contains:
-</p>
-<ul>
-<li> If the <small>CAR</small> of <var>list</var> is the symbol <code>keymap</code>, then the list
-is a keymap, and is treated as a keymap (see above).
+  <p><em>Key lookup</em> is the process of finding the binding of a
+  key sequence from a given keymap. The execution or use of the
+  binding is not part of key lookup.</p>
 
-</li><li> <a name="index-lambda-in-keymap"></a>
-If the <small>CAR</small> of <var>list</var> is <code>lambda</code>, then the list is a
-lambda expression.  This is presumed to be a function, and is treated
-as such (see above).  In order to execute properly as a key binding,
-this function must be a command&mdash;it must have an <code>interactive</code>
-specification.  See <a href="Defining-Commands.html#Defining-Commands">Defining Commands</a>.
-</li></ul>
+  <p>Key lookup uses just the event type of each event in the key
+  sequence; the rest of the event is ignored. In fact, a key
+  sequence used for key lookup may designate a mouse event with
+  just its types (a symbol) instead of the entire event (a list).
+  See <a href="Input-Events.html#Input-Events">Input Events</a>.
+  Such a key sequence is insufficient for
+  <code>command-execute</code> to run, but it is sufficient for
+  looking up or rebinding a key.</p>
 
-</dd>
-<dt><var>symbol</var></dt>
-<dd><a name="index-symbol-in-keymap"></a>
-<p>The function definition of <var>symbol</var> is used in place of
-<var>symbol</var>.  If that too is a symbol, then this process is repeated,
-any number of times.  Ultimately this should lead to an object that is
-a keymap, a command, or a keyboard macro.
-</p>
-<p>Note that keymaps and keyboard macros (strings and vectors) are not
-valid functions, so a symbol with a keymap, string, or vector as its
-function definition is invalid as a function.  It is, however, valid as
-a key binding.  If the definition is a keyboard macro, then the symbol
-is also valid as an argument to <code>command-execute</code>
-(see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>).
-</p>
-<a name="index-undefined-in-keymap"></a>
-<p>The symbol <code>undefined</code> is worth special mention: it means to treat
-the key as undefined.  Strictly speaking, the key is defined, and its
-binding is the command <code>undefined</code>; but that command does the same
-thing that is done automatically for an undefined key: it rings the bell
-(by calling <code>ding</code>) but does not signal an error.
-</p>
-<a name="index-preventing-prefix-key"></a>
-<p><code>undefined</code> is used in local keymaps to override a global key
-binding and make the key undefined locally.  A local binding of
-<code>nil</code> would fail to do this because it would not override the
-global binding.
-</p>
-</dd>
-<dt><var>anything else</var></dt>
-<dd><p>If any other type of object is found, the events used so far in the
-lookup form a complete key, and the object is its binding, but the
-binding is not executable as a command.
-</p></dd>
-</dl>
+  <p>When the key sequence consists of multiple events, key lookup
+  processes the events sequentially: the binding of the first event
+  is found, and must be a keymap; then the second event&rsquo;s
+  binding is found in that keymap, and so on until all the events
+  in the key sequence are used up. (The binding thus found for the
+  last event may or may not be a keymap.) Thus, the process of key
+  lookup is defined in terms of a simpler process for looking up a
+  single event in a keymap. How that is done depends on the type of
+  object associated with the event in that keymap.</p>
 
-<p>In short, a keymap entry may be a keymap, a command, a keyboard
-macro, a symbol that leads to one of them, or <code>nil</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Functions-for-Key-Lookup.html#Functions-for-Key-Lookup" accesskey="n" rel="next">Functions for Key Lookup</a>, Previous: <a href="Controlling-Active-Maps.html#Controlling-Active-Maps" accesskey="p" rel="prev">Controlling Active Maps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Let&rsquo;s use the term <em>keymap entry</em> to describe the
+  value found by looking up an event type in a keymap. (This
+  doesn&rsquo;t include the item string and other extra elements in
+  a keymap element for a menu item, because <code>lookup-key</code>
+  and other key lookup functions don&rsquo;t include them in the
+  returned value.) While any Lisp object may be stored in a keymap
+  as a keymap entry, not all make sense for key lookup. Here is a
+  table of the meaningful types of keymap entries:</p>
 
+  <dl compact="compact">
+    <dt><code>nil</code></dt>
 
+    <dd>
+      <a name="index-nil-in-keymap" id="index-nil-in-keymap"></a>
 
+      <p><code>nil</code> means that the events used so far in the
+      lookup form an undefined key. When a keymap fails to mention
+      an event type at all, and has no default binding, that is
+      equivalent to a binding of <code>nil</code> for that event
+      type.</p>
+    </dd>
+
+    <dt><var>command</var></dt>
+
+    <dd>
+      <a name="index-command-in-keymap" id=
+      "index-command-in-keymap"></a>
+
+      <p>The events used so far in the lookup form a complete key,
+      and <var>command</var> is its binding. See <a href=
+      "What-Is-a-Function.html#What-Is-a-Function">What Is a
+      Function</a>.</p>
+    </dd>
+
+    <dt><var>array</var></dt>
+
+    <dd>
+      <a name="index-string-in-keymap" id=
+      "index-string-in-keymap"></a>
+
+      <p>The array (either a string or a vector) is a keyboard
+      macro. The events used so far in the lookup form a complete
+      key, and the array is its binding. See <a href=
+      "Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>,
+      for more information.</p>
+    </dd>
+
+    <dt><var>keymap</var></dt>
+
+    <dd>
+      <a name="index-keymap-in-keymap" id=
+      "index-keymap-in-keymap"></a>
+
+      <p>The events used so far in the lookup form a prefix key.
+      The next event of the key sequence is looked up in
+      <var>keymap</var>.</p>
+    </dd>
+
+    <dt><var>list</var></dt>
+
+    <dd>
+      <a name="index-list-in-keymap" id="index-list-in-keymap"></a>
+
+      <p>The meaning of a list depends on what it contains:</p>
+
+      <ul>
+        <li>If the <small>CAR</small> of <var>list</var> is the
+        symbol <code>keymap</code>, then the list is a keymap, and
+        is treated as a keymap (see above).</li>
+
+        <li><a name="index-lambda-in-keymap" id=
+        "index-lambda-in-keymap"></a> If the <small>CAR</small> of
+        <var>list</var> is <code>lambda</code>, then the list is a
+        lambda expression. This is presumed to be a function, and
+        is treated as such (see above). In order to execute
+        properly as a key binding, this function must be a
+        command&mdash;it must have an <code>interactive</code>
+        specification. See <a href=
+        "Defining-Commands.html#Defining-Commands">Defining
+        Commands</a>.</li>
+      </ul>
+    </dd>
+
+    <dt><var>symbol</var></dt>
+
+    <dd>
+      <a name="index-symbol-in-keymap" id=
+      "index-symbol-in-keymap"></a>
+
+      <p>The function definition of <var>symbol</var> is used in
+      place of <var>symbol</var>. If that too is a symbol, then
+      this process is repeated, any number of times. Ultimately
+      this should lead to an object that is a keymap, a command, or
+      a keyboard macro.</p>
+
+      <p>Note that keymaps and keyboard macros (strings and
+      vectors) are not valid functions, so a symbol with a keymap,
+      string, or vector as its function definition is invalid as a
+      function. It is, however, valid as a key binding. If the
+      definition is a keyboard macro, then the symbol is also valid
+      as an argument to <code>command-execute</code> (see <a href=
+      "Interactive-Call.html#Interactive-Call">Interactive
+      Call</a>).</p><a name="index-undefined-in-keymap" id=
+      "index-undefined-in-keymap"></a>
+
+      <p>The symbol <code>undefined</code> is worth special
+      mention: it means to treat the key as undefined. Strictly
+      speaking, the key is defined, and its binding is the command
+      <code>undefined</code>; but that command does the same thing
+      that is done automatically for an undefined key: it rings the
+      bell (by calling <code>ding</code>) but does not signal an
+      error.</p><a name="index-preventing-prefix-key" id=
+      "index-preventing-prefix-key"></a>
+
+      <p><code>undefined</code> is used in local keymaps to
+      override a global key binding and make the key undefined
+      locally. A local binding of <code>nil</code> would fail to do
+      this because it would not override the global binding.</p>
+    </dd>
+
+    <dt><var>anything else</var></dt>
+
+    <dd>
+      <p>If any other type of object is found, the events used so
+      far in the lookup form a complete key, and the object is its
+      binding, but the binding is not executable as a command.</p>
+    </dd>
+  </dl>
+
+  <p>In short, a keymap entry may be a keymap, a command, a
+  keyboard macro, a symbol that leads to one of them, or
+  <code>nil</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Functions-for-Key-Lookup.html#Functions-for-Key-Lookup"
+    accesskey="n" rel="next">Functions for Key Lookup</a>,
+    Previous: <a href=
+    "Controlling-Active-Maps.html#Controlling-Active-Maps"
+    accesskey="p" rel="prev">Controlling Active Maps</a>, Up:
+    <a href="Keymaps.html#Keymaps" accesskey="u" rel=
+    "up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

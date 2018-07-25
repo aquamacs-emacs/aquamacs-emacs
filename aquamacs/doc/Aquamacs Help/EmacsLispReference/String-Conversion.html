@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,183 +19,293 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: String Conversion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: String Conversion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: String Conversion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Strings-and-Characters.html#Strings-and-Characters" rel="up" title="Strings and Characters">
-<link href="Formatting-Strings.html#Formatting-Strings" rel="next" title="Formatting Strings">
-<link href="Text-Comparison.html#Text-Comparison" rel="prev" title="Text Comparison">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: String Conversion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: String Conversion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: String Conversion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Strings-and-Characters.html#Strings-and-Characters"
+  rel="up" title="Strings and Characters" />
+  <link href="Formatting-Strings.html#Formatting-Strings" rel=
+  "next" title="Formatting Strings" />
+  <link href="Text-Comparison.html#Text-Comparison" rel="prev"
+  title="Text Comparison" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="String-Conversion" id="String-Conversion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Formatting-Strings.html#Formatting-Strings"
+    accesskey="n" rel="next">Formatting Strings</a>, Previous:
+    <a href="Text-Comparison.html#Text-Comparison" accesskey="p"
+    rel="prev">Text Comparison</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Conversion-of-Characters-and-Strings" id=
+  "Conversion-of-Characters-and-Strings"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="String-Conversion"></a>
-<div class="header">
-<p>
-Next: <a href="Formatting-Strings.html#Formatting-Strings" accesskey="n" rel="next">Formatting Strings</a>, Previous: <a href="Text-Comparison.html#Text-Comparison" accesskey="p" rel="prev">Text Comparison</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Conversion-of-Characters-and-Strings"></a>
-<h3 class="section">4.6 Conversion of Characters and Strings</h3>
-<a name="index-conversion-of-strings"></a>
+  <h3 class="section">4.6 Conversion of Characters and
+  Strings</h3><a name="index-conversion-of-strings" id=
+  "index-conversion-of-strings"></a>
 
-<p>This section describes functions for converting between characters,
-strings and integers.  <code>format</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>) and
-<code>prin1-to-string</code> (see <a href="Output-Functions.html#Output-Functions">Output Functions</a>) can also convert
-Lisp objects into strings.  <code>read-from-string</code> (see <a href="Input-Functions.html#Input-Functions">Input Functions</a>) can convert a string representation of a Lisp object
-into an object.  The functions <code>string-to-multibyte</code> and
-<code>string-to-unibyte</code> convert the text representation of a string
-(see <a href="Converting-Representations.html#Converting-Representations">Converting Representations</a>).
-</p>
-<p>See <a href="Documentation.html#Documentation">Documentation</a>, for functions that produce textual descriptions
-of text characters and general input events
-(<code>single-key-description</code> and <code>text-char-description</code>).  These
-are used primarily for making help messages.
-</p>
-<dl>
-<dt><a name="index-number_002dto_002dstring"></a>Function: <strong>number-to-string</strong> <em>number</em></dt>
-<dd><a name="index-integer-to-string"></a>
-<a name="index-integer-to-decimal"></a>
-<p>This function returns a string consisting of the printed base-ten
-representation of <var>number</var>.  The returned value starts with a
-minus sign if the argument is negative.
-</p>
-<div class="example">
-<pre class="example">(number-to-string 256)
-     &rArr; &quot;256&quot;
-</pre><pre class="example">(number-to-string -23)
-     &rArr; &quot;-23&quot;
-</pre><pre class="example">(number-to-string -23.5)
-     &rArr; &quot;-23.5&quot;
-</pre></div>
+  <p>This section describes functions for converting between
+  characters, strings and integers. <code>format</code> (see
+  <a href="Formatting-Strings.html#Formatting-Strings">Formatting
+  Strings</a>) and <code>prin1-to-string</code> (see <a href=
+  "Output-Functions.html#Output-Functions">Output Functions</a>)
+  can also convert Lisp objects into strings.
+  <code>read-from-string</code> (see <a href=
+  "Input-Functions.html#Input-Functions">Input Functions</a>) can
+  convert a string representation of a Lisp object into an object.
+  The functions <code>string-to-multibyte</code> and
+  <code>string-to-unibyte</code> convert the text representation of
+  a string (see <a href=
+  "Converting-Representations.html#Converting-Representations">Converting
+  Representations</a>).</p>
 
-<a name="index-int_002dto_002dstring"></a>
-<p><code>int-to-string</code> is a semi-obsolete alias for this function.
-</p>
-<p>See also the function <code>format</code> in <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>.
-</p></dd></dl>
+  <p>See <a href=
+  "Documentation.html#Documentation">Documentation</a>, for
+  functions that produce textual descriptions of text characters
+  and general input events (<code>single-key-description</code> and
+  <code>text-char-description</code>). These are used primarily for
+  making help messages.</p>
 
-<dl>
-<dt><a name="index-string_002dto_002dnumber"></a>Function: <strong>string-to-number</strong> <em>string &amp;optional base</em></dt>
-<dd><a name="index-string-to-number"></a>
-<p>This function returns the numeric value of the characters in
-<var>string</var>.  If <var>base</var> is non-<code>nil</code>, it must be an integer
-between 2 and 16 (inclusive), and integers are converted in that base.
-If <var>base</var> is <code>nil</code>, then base ten is used.  Floating-point
-conversion only works in base ten; we have not implemented other
-radices for floating-point numbers, because that would be much more
-work and does not seem useful.  If <var>string</var> looks like an integer
-but its value is too large to fit into a Lisp integer,
-<code>string-to-number</code> returns a floating-point result.
-</p>
-<p>The parsing skips spaces and tabs at the beginning of <var>string</var>,
-then reads as much of <var>string</var> as it can interpret as a number in
-the given base.  (On some systems it ignores other whitespace at the
-beginning, not just spaces and tabs.)  If <var>string</var> cannot be
-interpreted as a number, this function returns 0.
-</p>
-<div class="example">
-<pre class="example">(string-to-number &quot;256&quot;)
+  <dl>
+    <dt><a name="index-number_002dto_002dstring" id=
+    "index-number_002dto_002dstring"></a>Function:
+    <strong>number-to-string</strong> <em>number</em></dt>
+
+    <dd>
+      <a name="index-integer-to-string" id=
+      "index-integer-to-string"></a> <a name=
+      "index-integer-to-decimal" id="index-integer-to-decimal"></a>
+
+      <p>This function returns a string consisting of the printed
+      base-ten representation of <var>number</var>. The returned
+      value starts with a minus sign if the argument is
+      negative.</p>
+
+      <div class="example">
+        <pre class="example">
+(number-to-string 256)
+     &rArr; "256"
+</pre>
+        <pre class="example">
+(number-to-string -23)
+     &rArr; "-23"
+</pre>
+        <pre class="example">
+(number-to-string -23.5)
+     &rArr; "-23.5"
+</pre>
+      </div><a name="index-int_002dto_002dstring" id=
+      "index-int_002dto_002dstring"></a>
+
+      <p><code>int-to-string</code> is a semi-obsolete alias for
+      this function.</p>
+
+      <p>See also the function <code>format</code> in <a href=
+      "Formatting-Strings.html#Formatting-Strings">Formatting
+      Strings</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-string_002dto_002dnumber" id=
+    "index-string_002dto_002dnumber"></a>Function:
+    <strong>string-to-number</strong> <em>string &amp;optional
+    base</em></dt>
+
+    <dd>
+      <a name="index-string-to-number" id=
+      "index-string-to-number"></a>
+
+      <p>This function returns the numeric value of the characters
+      in <var>string</var>. If <var>base</var> is
+      non-<code>nil</code>, it must be an integer between 2 and 16
+      (inclusive), and integers are converted in that base. If
+      <var>base</var> is <code>nil</code>, then base ten is used.
+      Floating-point conversion only works in base ten; we have not
+      implemented other radices for floating-point numbers, because
+      that would be much more work and does not seem useful. If
+      <var>string</var> looks like an integer but its value is too
+      large to fit into a Lisp integer,
+      <code>string-to-number</code> returns a floating-point
+      result.</p>
+
+      <p>The parsing skips spaces and tabs at the beginning of
+      <var>string</var>, then reads as much of <var>string</var> as
+      it can interpret as a number in the given base. (On some
+      systems it ignores other whitespace at the beginning, not
+      just spaces and tabs.) If <var>string</var> cannot be
+      interpreted as a number, this function returns 0.</p>
+
+      <div class="example">
+        <pre class="example">
+(string-to-number "256")
      &rArr; 256
-(string-to-number &quot;25 is a perfect square.&quot;)
+(string-to-number "25 is a perfect square.")
      &rArr; 25
-(string-to-number &quot;X256&quot;)
+(string-to-number "X256")
      &rArr; 0
-(string-to-number &quot;-4.5&quot;)
+(string-to-number "-4.5")
      &rArr; -4.5
-(string-to-number &quot;1e5&quot;)
+(string-to-number "1e5")
      &rArr; 100000.0
-</pre></div>
+</pre>
+      </div><a name="index-string_002dto_002dint" id=
+      "index-string_002dto_002dint"></a>
 
-<a name="index-string_002dto_002dint"></a>
-<p><code>string-to-int</code> is an obsolete alias for this function.
-</p></dd></dl>
+      <p><code>string-to-int</code> is an obsolete alias for this
+      function.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-char_002dto_002dstring"></a>Function: <strong>char-to-string</strong> <em>character</em></dt>
-<dd><a name="index-character-to-string"></a>
-<p>This function returns a new string containing one character,
-<var>character</var>.  This function is semi-obsolete because the function
-<code>string</code> is more general.  See <a href="Creating-Strings.html#Creating-Strings">Creating Strings</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-char_002dto_002dstring" id=
+    "index-char_002dto_002dstring"></a>Function:
+    <strong>char-to-string</strong> <em>character</em></dt>
 
-<dl>
-<dt><a name="index-string_002dto_002dchar"></a>Function: <strong>string-to-char</strong> <em>string</em></dt>
-<dd><p>This function returns the first character in <var>string</var>.  This
-mostly identical to <code>(aref string 0)</code>, except that it returns 0
-if the string is empty.  (The value is also 0 when the first character
-of <var>string</var> is the null character, <acronym>ASCII</acronym> code 0.)  This
-function may be eliminated in the future if it does not seem useful
-enough to retain.
-</p></dd></dl>
+    <dd>
+      <a name="index-character-to-string" id=
+      "index-character-to-string"></a>
 
-<p>Here are some other functions that can convert to or from a string:
-</p>
-<dl compact="compact">
-<dt><code>concat</code></dt>
-<dd><p>This function converts a vector or a list into a string.
-See <a href="Creating-Strings.html#Creating-Strings">Creating Strings</a>.
-</p>
-</dd>
-<dt><code>vconcat</code></dt>
-<dd><p>This function converts a string into a vector.  See <a href="Vector-Functions.html#Vector-Functions">Vector Functions</a>.
-</p>
-</dd>
-<dt><code>append</code></dt>
-<dd><p>This function converts a string into a list.  See <a href="Building-Lists.html#Building-Lists">Building Lists</a>.
-</p>
-</dd>
-<dt><code>byte-to-string</code></dt>
-<dd><p>This function converts a byte of character data into a unibyte string.
-See <a href="Converting-Representations.html#Converting-Representations">Converting Representations</a>.
-</p></dd>
-</dl>
+      <p>This function returns a new string containing one
+      character, <var>character</var>. This function is
+      semi-obsolete because the function <code>string</code> is
+      more general. See <a href=
+      "Creating-Strings.html#Creating-Strings">Creating
+      Strings</a>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Formatting-Strings.html#Formatting-Strings" accesskey="n" rel="next">Formatting Strings</a>, Previous: <a href="Text-Comparison.html#Text-Comparison" accesskey="p" rel="prev">Text Comparison</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-string_002dto_002dchar" id=
+    "index-string_002dto_002dchar"></a>Function:
+    <strong>string-to-char</strong> <em>string</em></dt>
 
+    <dd>
+      <p>This function returns the first character in
+      <var>string</var>. This mostly identical to <code>(aref
+      string 0)</code>, except that it returns 0 if the string is
+      empty. (The value is also 0 when the first character of
+      <var>string</var> is the null character,
+      <acronym>ASCII</acronym> code 0.) This function may be
+      eliminated in the future if it does not seem useful enough to
+      retain.</p>
+    </dd>
+  </dl>
 
+  <p>Here are some other functions that can convert to or from a
+  string:</p>
 
+  <dl compact="compact">
+    <dt><code>concat</code></dt>
+
+    <dd>
+      <p>This function converts a vector or a list into a string.
+      See <a href="Creating-Strings.html#Creating-Strings">Creating
+      Strings</a>.</p>
+    </dd>
+
+    <dt><code>vconcat</code></dt>
+
+    <dd>
+      <p>This function converts a string into a vector. See
+      <a href="Vector-Functions.html#Vector-Functions">Vector
+      Functions</a>.</p>
+    </dd>
+
+    <dt><code>append</code></dt>
+
+    <dd>
+      <p>This function converts a string into a list. See <a href=
+      "Building-Lists.html#Building-Lists">Building Lists</a>.</p>
+    </dd>
+
+    <dt><code>byte-to-string</code></dt>
+
+    <dd>
+      <p>This function converts a byte of character data into a
+      unibyte string. See <a href=
+      "Converting-Representations.html#Converting-Representations">Converting
+      Representations</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Formatting-Strings.html#Formatting-Strings"
+    accesskey="n" rel="next">Formatting Strings</a>, Previous:
+    <a href="Text-Comparison.html#Text-Comparison" accesskey="p"
+    rel="prev">Text Comparison</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

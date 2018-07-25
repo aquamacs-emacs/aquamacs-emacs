@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,91 +20,143 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Auto Save</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Auto Save">
-<meta name="keywords" content="GNU Emacs Manual: Auto Save">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="Auto-Save-Files.html#Auto-Save-Files" rel="next" title="Auto Save Files">
-<link href="Supporting-additional-buffers.html#Supporting-additional-buffers" rel="prev" title="Supporting additional buffers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Auto Save</title>
+  <meta name="description" content="GNU Emacs Manual: Auto Save" />
+  <meta name="keywords" content="GNU Emacs Manual: Auto Save" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href="Auto-Save-Files.html#Auto-Save-Files" rel="next"
+  title="Auto Save Files" />
+  <link href=
+  "Supporting-additional-buffers.html#Supporting-additional-buffers"
+  rel="prev" title="Supporting additional buffers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Auto-Save" id="Auto-Save"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="File-Aliases.html#File-Aliases" accesskey="n"
+    rel="next">File Aliases</a>, Previous: <a href=
+    "Autorevert.html#Autorevert" accesskey="p" rel=
+    "prev">Autorevert</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Auto_002dSaving_003a-Protection-Against-Disasters" id=
+  "Auto_002dSaving_003a-Protection-Against-Disasters"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Auto-Save"></a>
-<div class="header">
-<p>
-Next: <a href="File-Aliases.html#File-Aliases" accesskey="n" rel="next">File Aliases</a>, Previous: <a href="Autorevert.html#Autorevert" accesskey="p" rel="prev">Autorevert</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Auto_002dSaving_003a-Protection-Against-Disasters"></a>
-<h3 class="section">18.6 Auto-Saving: Protection Against Disasters</h3>
-<a name="index-Auto-Save-mode"></a>
-<a name="index-mode_002c-Auto-Save"></a>
-<a name="index-crashes"></a>
+  <h3 class="section">18.6 Auto-Saving: Protection Against
+  Disasters</h3><a name="index-Auto-Save-mode" id=
+  "index-Auto-Save-mode"></a> <a name="index-mode_002c-Auto-Save"
+  id="index-mode_002c-Auto-Save"></a> <a name="index-crashes" id=
+  "index-crashes"></a>
 
-<p>From time to time, Emacs automatically saves each visited file in a
-separate file, without altering the file you actually use.  This is
-called <em>auto-saving</em>.  It prevents you from losing more than a
-limited amount of work if the system crashes.
-</p>
-<p>When Emacs determines that it is time for auto-saving, it considers
-each buffer, and each is auto-saved if auto-saving is enabled for it
-and it has been changed since the last time it was auto-saved.  The
-message &lsquo;<samp>Auto-saving...</samp>&rsquo; is displayed in the echo area during
-auto-saving, if any files are actually auto-saved.  Errors occurring
-during auto-saving are caught so that they do not interfere with the
-execution of commands you have been typing.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Auto-Save-Files.html#Auto-Save-Files" accesskey="1">Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The file where auto-saved changes are
-                                  actually made until you save the file.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Auto-Save-Control.html#Auto-Save-Control" accesskey="2">Control</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling when and how often to auto-save.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Recover.html#Recover" accesskey="3">Recover</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Recovering text from auto-save files.
-</td></tr>
-</table>
+  <p>From time to time, Emacs automatically saves each visited file
+  in a separate file, without altering the file you actually use.
+  This is called <em>auto-saving</em>. It prevents you from losing
+  more than a limited amount of work if the system crashes.</p>
 
+  <p>When Emacs determines that it is time for auto-saving, it
+  considers each buffer, and each is auto-saved if auto-saving is
+  enabled for it and it has been changed since the last time it was
+  auto-saved. The message &lsquo;<samp>Auto-saving...</samp>&rsquo;
+  is displayed in the echo area during auto-saving, if any files
+  are actually auto-saved. Errors occurring during auto-saving are
+  caught so that they do not interfere with the execution of
+  commands you have been typing.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Auto-Save-Files.html#Auto-Save-Files" accesskey=
+      "1">Files</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">The file where auto-saved
+      changes are actually made until you save the file.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Auto-Save-Control.html#Auto-Save-Control" accesskey=
+      "2">Control</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Controlling when and how often
+      to auto-save.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Recover.html#Recover" accesskey="3">Recover</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Recovering text from auto-save
+      files.</td>
+    </tr>
+  </table>
 </body>
 </html>

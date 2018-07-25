@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>The IDLWAVE Major Mode - IDLWAVE User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="IDLWAVE User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Getting-Started.html#Getting-Started" title="Getting Started">
-<link rel="next" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" title="The IDLWAVE Shell">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>The IDLWAVE Major Mode - IDLWAVE User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="IDLWAVE User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Getting-Started.html#Getting-Started"
+  title="Getting Started" />
+  <link rel="next" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell"
+  title="The IDLWAVE Shell" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -30,8 +38,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -41,39 +51,78 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="The-IDLWAVE-Major-Mode"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE Shell</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Getting-Started.html#Getting-Started">Getting Started</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="The-IDLWAVE-Major-Mode" id=
+    "The-IDLWAVE-Major-Mode"></a>
 
-<h2 class="chapter">4 The IDLWAVE Major Mode</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "The-IDLWAVE-Shell.html#The-IDLWAVE-Shell">The IDLWAVE
+    Shell</a>, Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Getting-Started.html#Getting-Started">Getting Started</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-IDLWAVE-major-mode-16"></a><a name="index-Major-mode_002c-_0040code_007bidlwave_002dmode_007d-17"></a>
-The IDLWAVE major mode supports editing IDL source files.  In this
-chapter we describe the main features of the mode and how to customize
-them.
+  <h2 class="chapter">4 The IDLWAVE Major Mode</h2>
 
-<ul class="menu">
-<li><a accesskey="1" href="Code-Formatting.html#Code-Formatting">Code Formatting</a>:              Making code look nice
-<li><a accesskey="2" href="Routine-Info.html#Routine-Info">Routine Info</a>:                 Calling Sequence and Keyword List
-<li><a accesskey="3" href="Online-Help.html#Online-Help">Online Help</a>:                  One key press from source to help
-<li><a accesskey="4" href="Completion.html#Completion">Completion</a>:                   Completing routine names and Keywords
-<li><a accesskey="5" href="Routine-Source.html#Routine-Source">Routine Source</a>:               Finding routines, the easy way
-<li><a accesskey="6" href="Resolving-Routines.html#Resolving-Routines">Resolving Routines</a>:           Force the Shell to compile a routine
-<li><a accesskey="7" href="Code-Templates.html#Code-Templates">Code Templates</a>:               Frequent code constructs
-<li><a accesskey="8" href="Abbreviations.html#Abbreviations">Abbreviations</a>:                Abbreviations for common commands
-<li><a accesskey="9" href="Actions.html#Actions">Actions</a>:                      Changing case, Padding, End checking
-<li><a href="Doc-Header.html#Doc-Header">Doc Header</a>:                   Inserting a standard header
-<li><a href="Motion-Commands.html#Motion-Commands">Motion Commands</a>:              Moving through the structure of a program
-<li><a href="Misc-Options.html#Misc-Options">Misc Options</a>:                 Things that fit nowhere else
-</ul>
+  <p><a name="index-IDLWAVE-major-mode-16" id=
+  "index-IDLWAVE-major-mode-16"></a><a name=
+  "index-Major-mode_002c-_0040code_007bidlwave_002dmode_007d-17"
+  id="index-Major-mode_002c-_0040code_007bidlwave_002dmode_007d-17"></a>
+  The IDLWAVE major mode supports editing IDL source files. In this
+  chapter we describe the main features of the mode and how to
+  customize them.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Code-Formatting.html#Code-Formatting">Code Formatting</a>:
+    Making code look nice</li>
 
+    <li><a accesskey="2" href=
+    "Routine-Info.html#Routine-Info">Routine Info</a>: Calling
+    Sequence and Keyword List</li>
+
+    <li><a accesskey="3" href="Online-Help.html#Online-Help">Online
+    Help</a>: One key press from source to help</li>
+
+    <li><a accesskey="4" href=
+    "Completion.html#Completion">Completion</a>: Completing routine
+    names and Keywords</li>
+
+    <li><a accesskey="5" href=
+    "Routine-Source.html#Routine-Source">Routine Source</a>:
+    Finding routines, the easy way</li>
+
+    <li><a accesskey="6" href=
+    "Resolving-Routines.html#Resolving-Routines">Resolving
+    Routines</a>: Force the Shell to compile a routine</li>
+
+    <li><a accesskey="7" href=
+    "Code-Templates.html#Code-Templates">Code Templates</a>:
+    Frequent code constructs</li>
+
+    <li><a accesskey="8" href=
+    "Abbreviations.html#Abbreviations">Abbreviations</a>:
+    Abbreviations for common commands</li>
+
+    <li><a accesskey="9" href="Actions.html#Actions">Actions</a>:
+    Changing case, Padding, End checking</li>
+
+    <li><a href="Doc-Header.html#Doc-Header">Doc Header</a>:
+    Inserting a standard header</li>
+
+    <li><a href="Motion-Commands.html#Motion-Commands">Motion
+    Commands</a>: Moving through the structure of a program</li>
+
+    <li><a href="Misc-Options.html#Misc-Options">Misc Options</a>:
+    Things that fit nowhere else</li>
+  </ul>
+</body>
+</html>

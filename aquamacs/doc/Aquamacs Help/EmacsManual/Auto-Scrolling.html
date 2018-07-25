@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,136 +20,182 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Auto Scrolling</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Auto Scrolling">
-<meta name="keywords" content="GNU Emacs Manual: Auto Scrolling">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="Horizontal-Scrolling.html#Horizontal-Scrolling" rel="next" title="Horizontal Scrolling">
-<link href="Recentering.html#Recentering" rel="prev" title="Recentering">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Auto Scrolling</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Auto Scrolling" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Auto Scrolling" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="Horizontal-Scrolling.html#Horizontal-Scrolling" rel=
+  "next" title="Horizontal Scrolling" />
+  <link href="Recentering.html#Recentering" rel="prev" title=
+  "Recentering" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Auto-Scrolling" id="Auto-Scrolling"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="n"
+    rel="next">Horizontal Scrolling</a>, Previous: <a href=
+    "Recentering.html#Recentering" accesskey="p" rel=
+    "prev">Recentering</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Automatic-Scrolling" id="Automatic-Scrolling"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Auto-Scrolling"></a>
-<div class="header">
-<p>
-Next: <a href="Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="n" rel="next">Horizontal Scrolling</a>, Previous: <a href="Recentering.html#Recentering" accesskey="p" rel="prev">Recentering</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Automatic-Scrolling"></a>
-<h3 class="section">14.3 Automatic Scrolling</h3>
+  <h3 class="section">14.3 Automatic Scrolling</h3><a name=
+  "index-automatic-scrolling" id="index-automatic-scrolling"></a>
 
-<a name="index-automatic-scrolling"></a>
-<p>Emacs performs <em>automatic scrolling</em> when point moves out of the
-visible portion of the text.  Normally, automatic scrolling centers
-point vertically in the window, but there are several ways to alter
-this behavior.
-</p>
-<a name="index-scroll_002dconservatively"></a>
-<p>If you set <code>scroll-conservatively</code> to a small number <var>n</var>,
-then moving point just a little off the screen (no more than <var>n</var>
-lines) causes Emacs to scroll just enough to bring point back on
-screen; if doing so fails to make point visible, Emacs scrolls just
-far enough to center point in the window.  If you set
-<code>scroll-conservatively</code> to a large number (larger than 100),
-automatic scrolling never centers point, no matter how far point
-moves; Emacs always scrolls text just enough to bring point into view,
-either at the top or bottom of the window depending on the scroll
-direction.  By default, <code>scroll-conservatively</code> is&nbsp;0, which
-means to always center point in the window.
-</p>
-<a name="index-scroll_002dstep"></a>
-<p>Another way to control automatic scrolling is to customize the
-variable <code>scroll-step</code>.  Its value determines the number of lines
-by which to automatically scroll, when point moves off the screen.  If
-scrolling by that number of lines fails to bring point back into view,
-point is centered instead.  The default value is zero, which (by
-default) causes point to always be centered after scrolling.
-</p>
-<a name="index-aggressive-scrolling"></a>
-<a name="index-scroll_002dup_002daggressively"></a>
-<a name="index-scroll_002ddown_002daggressively"></a>
-<p>A third way to control automatic scrolling is to customize the
-variables <code>scroll-up-aggressively</code> and
-<code>scroll-down-aggressively</code>, which directly specify the vertical
-position of point after scrolling.  The value of
-<code>scroll-up-aggressively</code> should be either <code>nil</code> (the
-default), or a floating point number <var>f</var> between 0 and 1.  The
-latter means that when point goes below the bottom window edge (i.e.,
-scrolling forward), Emacs scrolls the window so that point is <var>f</var>
-parts of the window height from the bottom window edge.  Thus, larger
-<var>f</var> means more aggressive scrolling: more new text is brought into
-view.  The default value, <code>nil</code>, is equivalent to 0.5.
-</p>
-<p>Likewise, <code>scroll-down-aggressively</code> is used when point goes
-above the bottom window edge (i.e., scrolling backward).  The value
-specifies how far point should be from the top margin of the window
-after scrolling.  Thus, as with <code>scroll-up-aggressively</code>, a
-larger value is more aggressive.
-</p>
-<p>Note that the variables <code>scroll-conservatively</code>,
-<code>scroll-step</code>, and <code>scroll-up-aggressively</code> /
-<code>scroll-down-aggressively</code> control automatic scrolling in
-contradictory ways.  Therefore, you should pick no more than one of
-these methods to customize automatic scrolling.  In case you customize
-multiple variables, the order of priority is:
-<code>scroll-conservatively</code>, then <code>scroll-step</code>, and finally
-<code>scroll-up-aggressively</code> / <code>scroll-down-aggressively</code>.
-</p>
-<a name="index-scroll_002dmargin"></a>
-<p>The variable <code>scroll-margin</code> restricts how close point can come
-to the top or bottom of a window (even if aggressive scrolling
-specifies a fraction <var>f</var> that is larger than the window portion
-between the top and the bottom margins).  Its value is a number of screen
-lines; if point comes within that many lines of the top or bottom of
-the window, Emacs performs automatic scrolling.  By default,
-<code>scroll-margin</code> is 0.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="n" rel="next">Horizontal Scrolling</a>, Previous: <a href="Recentering.html#Recentering" accesskey="p" rel="prev">Recentering</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Emacs performs <em>automatic scrolling</em> when point moves
+  out of the visible portion of the text. Normally, automatic
+  scrolling centers point vertically in the window, but there are
+  several ways to alter this behavior.</p><a name=
+  "index-scroll_002dconservatively" id=
+  "index-scroll_002dconservatively"></a>
 
+  <p>If you set <code>scroll-conservatively</code> to a small
+  number <var>n</var>, then moving point just a little off the
+  screen (no more than <var>n</var> lines) causes Emacs to scroll
+  just enough to bring point back on screen; if doing so fails to
+  make point visible, Emacs scrolls just far enough to center point
+  in the window. If you set <code>scroll-conservatively</code> to a
+  large number (larger than 100), automatic scrolling never centers
+  point, no matter how far point moves; Emacs always scrolls text
+  just enough to bring point into view, either at the top or bottom
+  of the window depending on the scroll direction. By default,
+  <code>scroll-conservatively</code> is&nbsp;0, which means to
+  always center point in the window.</p><a name=
+  "index-scroll_002dstep" id="index-scroll_002dstep"></a>
 
+  <p>Another way to control automatic scrolling is to customize the
+  variable <code>scroll-step</code>. Its value determines the
+  number of lines by which to automatically scroll, when point
+  moves off the screen. If scrolling by that number of lines fails
+  to bring point back into view, point is centered instead. The
+  default value is zero, which (by default) causes point to always
+  be centered after scrolling.</p><a name=
+  "index-aggressive-scrolling" id="index-aggressive-scrolling"></a>
+  <a name="index-scroll_002dup_002daggressively" id=
+  "index-scroll_002dup_002daggressively"></a> <a name=
+  "index-scroll_002ddown_002daggressively" id=
+  "index-scroll_002ddown_002daggressively"></a>
 
+  <p>A third way to control automatic scrolling is to customize the
+  variables <code>scroll-up-aggressively</code> and
+  <code>scroll-down-aggressively</code>, which directly specify the
+  vertical position of point after scrolling. The value of
+  <code>scroll-up-aggressively</code> should be either
+  <code>nil</code> (the default), or a floating point number
+  <var>f</var> between 0 and 1. The latter means that when point
+  goes below the bottom window edge (i.e., scrolling forward),
+  Emacs scrolls the window so that point is <var>f</var> parts of
+  the window height from the bottom window edge. Thus, larger
+  <var>f</var> means more aggressive scrolling: more new text is
+  brought into view. The default value, <code>nil</code>, is
+  equivalent to 0.5.</p>
+
+  <p>Likewise, <code>scroll-down-aggressively</code> is used when
+  point goes above the bottom window edge (i.e., scrolling
+  backward). The value specifies how far point should be from the
+  top margin of the window after scrolling. Thus, as with
+  <code>scroll-up-aggressively</code>, a larger value is more
+  aggressive.</p>
+
+  <p>Note that the variables <code>scroll-conservatively</code>,
+  <code>scroll-step</code>, and <code>scroll-up-aggressively</code>
+  / <code>scroll-down-aggressively</code> control automatic
+  scrolling in contradictory ways. Therefore, you should pick no
+  more than one of these methods to customize automatic scrolling.
+  In case you customize multiple variables, the order of priority
+  is: <code>scroll-conservatively</code>, then
+  <code>scroll-step</code>, and finally
+  <code>scroll-up-aggressively</code> /
+  <code>scroll-down-aggressively</code>.</p><a name=
+  "index-scroll_002dmargin" id="index-scroll_002dmargin"></a>
+
+  <p>The variable <code>scroll-margin</code> restricts how close
+  point can come to the top or bottom of a window (even if
+  aggressive scrolling specifies a fraction <var>f</var> that is
+  larger than the window portion between the top and the bottom
+  margins). Its value is a number of screen lines; if point comes
+  within that many lines of the top or bottom of the window, Emacs
+  performs automatic scrolling. By default,
+  <code>scroll-margin</code> is 0.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="n"
+    rel="next">Horizontal Scrolling</a>, Previous: <a href=
+    "Recentering.html#Recentering" accesskey="p" rel=
+    "prev">Recentering</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

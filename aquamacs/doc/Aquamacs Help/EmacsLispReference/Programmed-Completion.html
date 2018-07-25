@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,198 +19,290 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Programmed Completion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Programmed Completion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Programmed Completion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Completion.html#Completion" rel="up" title="Completion">
-<link href="Completion-in-Buffers.html#Completion-in-Buffers" rel="next" title="Completion in Buffers">
-<link href="Completion-Variables.html#Completion-Variables" rel="prev" title="Completion Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Programmed
+  Completion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Programmed Completion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Programmed Completion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Completion.html#Completion" rel="up" title=
+  "Completion" />
+  <link href="Completion-in-Buffers.html#Completion-in-Buffers"
+  rel="next" title="Completion in Buffers" />
+  <link href="Completion-Variables.html#Completion-Variables" rel=
+  "prev" title="Completion Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Programmed-Completion" id="Programmed-Completion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Completion-in-Buffers.html#Completion-in-Buffers" accesskey=
+    "n" rel="next">Completion in Buffers</a>, Previous: <a href=
+    "Completion-Variables.html#Completion-Variables" accesskey="p"
+    rel="prev">Completion Variables</a>, Up: <a href=
+    "Completion.html#Completion" accesskey="u" rel=
+    "up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Programmed-Completion-1" id=
+  "Programmed-Completion-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Programmed-Completion"></a>
-<div class="header">
-<p>
-Next: <a href="Completion-in-Buffers.html#Completion-in-Buffers" accesskey="n" rel="next">Completion in Buffers</a>, Previous: <a href="Completion-Variables.html#Completion-Variables" accesskey="p" rel="prev">Completion Variables</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Programmed-Completion-1"></a>
-<h4 class="subsection">19.6.7 Programmed Completion</h4>
-<a name="index-programmed-completion"></a>
+  <h4 class="subsection">19.6.7 Programmed Completion</h4><a name=
+  "index-programmed-completion" id=
+  "index-programmed-completion"></a>
 
-<p>Sometimes it is not possible or convenient to create an alist or
-an obarray containing all the intended possible completions ahead
-of time.  In such a case, you can supply your own function to compute
-the completion of a given string.  This is called <em>programmed
-completion</em>.  Emacs uses programmed completion when completing file
-names (see <a href="File-Name-Completion.html#File-Name-Completion">File Name Completion</a>), among many other cases.
-</p>
-<p>To use this feature, pass a function as the <var>collection</var>
-argument to <code>completing-read</code>.  The function
-<code>completing-read</code> arranges to pass your completion function along
-to <code>try-completion</code>, <code>all-completions</code>, and other basic
-completion functions, which will then let your function do all
-the work.
-</p>
-<p>The completion function should accept three arguments:
-</p>
-<ul>
-<li> The string to be completed.
+  <p>Sometimes it is not possible or convenient to create an alist
+  or an obarray containing all the intended possible completions
+  ahead of time. In such a case, you can supply your own function
+  to compute the completion of a given string. This is called
+  <em>programmed completion</em>. Emacs uses programmed completion
+  when completing file names (see <a href=
+  "File-Name-Completion.html#File-Name-Completion">File Name
+  Completion</a>), among many other cases.</p>
 
-</li><li> A predicate function with which to filter possible matches, or
-<code>nil</code> if none.  The function should call the predicate for each
-possible match, and ignore the match if the predicate returns
-<code>nil</code>.
+  <p>To use this feature, pass a function as the
+  <var>collection</var> argument to <code>completing-read</code>.
+  The function <code>completing-read</code> arranges to pass your
+  completion function along to <code>try-completion</code>,
+  <code>all-completions</code>, and other basic completion
+  functions, which will then let your function do all the work.</p>
 
-</li><li> A flag specifying the type of completion operation to perform.  This
-flag may be one of the following values.
+  <p>The completion function should accept three arguments:</p>
 
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>This specifies a <code>try-completion</code> operation.  The function should
-return <code>t</code> if the specified string is a unique and exact match;
-if there is more than one match, it should return the common substring
-of all matches (if the string is an exact match for one completion
-alternative but also matches other longer alternatives, the return
-value is the string); if there are no matches, it should return
-<code>nil</code>.
-</p>
-</dd>
-<dt><code>t</code></dt>
-<dd><p>This specifies an <code>all-completions</code> operation.  The function
-should return a list of all possible completions of the specified
-string.
-</p>
-</dd>
-<dt><code>lambda</code></dt>
-<dd><p>This specifies a <code>test-completion</code> operation.  The function
-should return <code>t</code> if the specified string is an exact match for
-some completion alternative; <code>nil</code> otherwise.
-</p>
-</dd>
-<dt><code>(boundaries . <var>suffix</var>)</code></dt>
-<dd><p>This specifies a <code>completion-boundaries</code> operation.  The function
-should return <code>(boundaries <var>start</var> . <var>end</var>)</code>, where
-<var>start</var> is the position of the beginning boundary in the specified
-string, and <var>end</var> is the position of the end boundary in
-<var>suffix</var>.
-</p>
-</dd>
-<dt><code>metadata</code></dt>
-<dd><p>This specifies a request for information about the state of the
-current completion.  The return value should have the form
-<code>(metadata . <var>alist</var>)</code>, where <var>alist</var> is an alist whose
-elements are described below.
-</p></dd>
-</dl>
+  <ul>
+    <li>The string to be completed.</li>
 
-<p>If the flag has any other value, the completion function should return
-<code>nil</code>.
-</p></li></ul>
+    <li>A predicate function with which to filter possible matches,
+    or <code>nil</code> if none. The function should call the
+    predicate for each possible match, and ignore the match if the
+    predicate returns <code>nil</code>.</li>
 
-<p>The following is a list of metadata entries that a completion function
-may return in response to a <code>metadata</code> flag argument:
-</p>
-<dl compact="compact">
-<dt><code>category</code></dt>
-<dd><p>The value should be a symbol describing what kind of text the
-completion function is trying to complete.  If the symbol matches one
-of the keys in <code>completion-category-overrides</code>, the usual
-completion behavior is overridden.  See <a href="Completion-Variables.html#Completion-Variables">Completion Variables</a>.
-</p>
-</dd>
-<dt><code>annotation-function</code></dt>
-<dd><p>The value should be a function for <em>annotating</em> completions.  The
-function should take one argument, <var>string</var>, which is a possible
-completion.  It should return a string, which is displayed after the
-completion <var>string</var> in the <samp>*Completions*</samp> buffer.
-</p>
-</dd>
-<dt><code>display-sort-function</code></dt>
-<dd><p>The value should be a function for sorting completions.  The function
-should take one argument, a list of completion strings, and return a
-sorted list of completion strings.  It is allowed to alter the input
-list destructively.
-</p>
-</dd>
-<dt><code>cycle-sort-function</code></dt>
-<dd><p>The value should be a function for sorting completions, when
-<code>completion-cycle-threshold</code> is non-<code>nil</code> and the user is
-cycling through completion alternatives.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Completion-Options.html#Completion-Options">Completion Options</a> in <cite>The GNU Emacs Manual</cite>.  Its argument list and return value are
-the same as for <code>display-sort-function</code>.
-</p></dd>
-</dl>
+    <li>A flag specifying the type of completion operation to
+    perform. This flag may be one of the following values.
 
-<dl>
-<dt><a name="index-completion_002dtable_002ddynamic"></a>Function: <strong>completion-table-dynamic</strong> <em>function &amp;optional switch-buffer</em></dt>
-<dd><p>This function is a convenient way to write a function that can act as
-a programmed completion function.  The argument <var>function</var> should be
-a function that takes one argument, a string, and returns an alist of
-possible completions of it.  It is allowed to ignore the argument and
-return a full list of all possible completions.  You can think of
-<code>completion-table-dynamic</code> as a transducer between that interface
-and the interface for programmed completion functions.
-</p>
-<p>If the optional argument <var>switch-buffer</var> is non-<code>nil</code>, and
-completion is performed in the minibuffer, <var>function</var> will be
-called with current buffer set to the buffer from which the minibuffer
-was entered.
-</p></dd></dl>
+      <dl compact="compact">
+        <dt><code>nil</code></dt>
 
-<dl>
-<dt><a name="index-completion_002dtable_002dwith_002dcache"></a>Function: <strong>completion-table-with-cache</strong> <em>function &amp;optional ignore-case</em></dt>
-<dd><p>This is a wrapper for <code>completion-table-dynamic</code> that saves the
-last argument-result pair.  This means that multiple lookups with the
-same argument only need to call <var>function</var> once.  This can be useful
-when a slow operation is involved, such as calling an external process.
-</p></dd></dl>
+        <dd>
+          <p>This specifies a <code>try-completion</code>
+          operation. The function should return <code>t</code> if
+          the specified string is a unique and exact match; if
+          there is more than one match, it should return the common
+          substring of all matches (if the string is an exact match
+          for one completion alternative but also matches other
+          longer alternatives, the return value is the string); if
+          there are no matches, it should return
+          <code>nil</code>.</p>
+        </dd>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Completion-in-Buffers.html#Completion-in-Buffers" accesskey="n" rel="next">Completion in Buffers</a>, Previous: <a href="Completion-Variables.html#Completion-Variables" accesskey="p" rel="prev">Completion Variables</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+        <dt><code>t</code></dt>
 
+        <dd>
+          <p>This specifies an <code>all-completions</code>
+          operation. The function should return a list of all
+          possible completions of the specified string.</p>
+        </dd>
 
+        <dt><code>lambda</code></dt>
 
+        <dd>
+          <p>This specifies a <code>test-completion</code>
+          operation. The function should return <code>t</code> if
+          the specified string is an exact match for some
+          completion alternative; <code>nil</code> otherwise.</p>
+        </dd>
+
+        <dt><code>(boundaries . <var>suffix</var>)</code></dt>
+
+        <dd>
+          <p>This specifies a <code>completion-boundaries</code>
+          operation. The function should return <code>(boundaries
+          <var>start</var> . <var>end</var>)</code>, where
+          <var>start</var> is the position of the beginning
+          boundary in the specified string, and <var>end</var> is
+          the position of the end boundary in
+          <var>suffix</var>.</p>
+        </dd>
+
+        <dt><code>metadata</code></dt>
+
+        <dd>
+          <p>This specifies a request for information about the
+          state of the current completion. The return value should
+          have the form <code>(metadata . <var>alist</var>)</code>,
+          where <var>alist</var> is an alist whose elements are
+          described below.</p>
+        </dd>
+      </dl>
+
+      <p>If the flag has any other value, the completion function
+      should return <code>nil</code>.</p>
+    </li>
+  </ul>
+
+  <p>The following is a list of metadata entries that a completion
+  function may return in response to a <code>metadata</code> flag
+  argument:</p>
+
+  <dl compact="compact">
+    <dt><code>category</code></dt>
+
+    <dd>
+      <p>The value should be a symbol describing what kind of text
+      the completion function is trying to complete. If the symbol
+      matches one of the keys in
+      <code>completion-category-overrides</code>, the usual
+      completion behavior is overridden. See <a href=
+      "Completion-Variables.html#Completion-Variables">Completion
+      Variables</a>.</p>
+    </dd>
+
+    <dt><code>annotation-function</code></dt>
+
+    <dd>
+      <p>The value should be a function for <em>annotating</em>
+      completions. The function should take one argument,
+      <var>string</var>, which is a possible completion. It should
+      return a string, which is displayed after the completion
+      <var>string</var> in the <samp>*Completions*</samp>
+      buffer.</p>
+    </dd>
+
+    <dt><code>display-sort-function</code></dt>
+
+    <dd>
+      <p>The value should be a function for sorting completions.
+      The function should take one argument, a list of completion
+      strings, and return a sorted list of completion strings. It
+      is allowed to alter the input list destructively.</p>
+    </dd>
+
+    <dt><code>cycle-sort-function</code></dt>
+
+    <dd>
+      <p>The value should be a function for sorting completions,
+      when <code>completion-cycle-threshold</code> is
+      non-<code>nil</code> and the user is cycling through
+      completion alternatives. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Completion-Options.html#Completion-Options">
+      Completion Options</a> in <cite>The GNU Emacs Manual</cite>.
+      Its argument list and return value are the same as for
+      <code>display-sort-function</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-completion_002dtable_002ddynamic" id=
+    "index-completion_002dtable_002ddynamic"></a>Function:
+    <strong>completion-table-dynamic</strong> <em>function
+    &amp;optional switch-buffer</em></dt>
+
+    <dd>
+      <p>This function is a convenient way to write a function that
+      can act as a programmed completion function. The argument
+      <var>function</var> should be a function that takes one
+      argument, a string, and returns an alist of possible
+      completions of it. It is allowed to ignore the argument and
+      return a full list of all possible completions. You can think
+      of <code>completion-table-dynamic</code> as a transducer
+      between that interface and the interface for programmed
+      completion functions.</p>
+
+      <p>If the optional argument <var>switch-buffer</var> is
+      non-<code>nil</code>, and completion is performed in the
+      minibuffer, <var>function</var> will be called with current
+      buffer set to the buffer from which the minibuffer was
+      entered.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-completion_002dtable_002dwith_002dcache" id=
+    "index-completion_002dtable_002dwith_002dcache"></a>Function:
+    <strong>completion-table-with-cache</strong> <em>function
+    &amp;optional ignore-case</em></dt>
+
+    <dd>
+      <p>This is a wrapper for
+      <code>completion-table-dynamic</code> that saves the last
+      argument-result pair. This means that multiple lookups with
+      the same argument only need to call <var>function</var> once.
+      This can be useful when a slow operation is involved, such as
+      calling an external process.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Completion-in-Buffers.html#Completion-in-Buffers" accesskey=
+    "n" rel="next">Completion in Buffers</a>, Previous: <a href=
+    "Completion-Variables.html#Completion-Variables" accesskey="p"
+    rel="prev">Completion Variables</a>, Up: <a href=
+    "Completion.html#Completion" accesskey="u" rel=
+    "up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

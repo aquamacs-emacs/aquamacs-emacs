@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,137 +19,179 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Using Edebug</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Using Edebug">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Using Edebug">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="Instrumenting.html#Instrumenting" rel="next" title="Instrumenting">
-<link href="Edebug.html#Edebug" rel="prev" title="Edebug">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Using Edebug</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Using Edebug" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Using Edebug" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="Instrumenting.html#Instrumenting" rel="next" title=
+  "Instrumenting" />
+  <link href="Edebug.html#Edebug" rel="prev" title="Edebug" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Using-Edebug" id="Using-Edebug"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Instrumenting.html#Instrumenting" accesskey=
+    "n" rel="next">Instrumenting</a>, Up: <a href=
+    "Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-Edebug-1" id="Using-Edebug-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-Edebug"></a>
-<div class="header">
-<p>
-Next: <a href="Instrumenting.html#Instrumenting" accesskey="n" rel="next">Instrumenting</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-Edebug-1"></a>
-<h4 class="subsection">17.2.1 Using Edebug</h4>
+  <h4 class="subsection">17.2.1 Using Edebug</h4>
 
-<p>To debug a Lisp program with Edebug, you must first <em>instrument</em>
-the Lisp code that you want to debug.  A simple way to do this is to
-first move point into the definition of a function or macro and then do
-<kbd>C-u C-M-x</kbd> (<code>eval-defun</code> with a prefix argument).  See
-<a href="Instrumenting.html#Instrumenting">Instrumenting</a>, for alternative ways to instrument code.
-</p>
-<p>Once a function is instrumented, any call to the function activates
-Edebug.  Depending on which Edebug execution mode you have selected,
-activating Edebug may stop execution and let you step through the
-function, or it may update the display and continue execution while
-checking for debugging commands.  The default execution mode is step,
-which stops execution.  See <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug Execution Modes</a>.
-</p>
-<p>Within Edebug, you normally view an Emacs buffer showing the source of
-the Lisp code you are debugging.  This is referred to as the <em>source
-code buffer</em>, and it is temporarily read-only.
-</p>
-<p>An arrow in the left fringe indicates the line where the function is
-executing.  Point initially shows where within the line the function is
-executing, but this ceases to be true if you move point yourself.
-</p>
-<p>If you instrument the definition of <code>fac</code> (shown below) and then
-execute <code>(fac 3)</code>, here is what you would normally see.  Point is
-at the open-parenthesis before <code>if</code>.
-</p>
-<div class="example">
-<pre class="example">(defun fac (n)
+  <p>To debug a Lisp program with Edebug, you must first
+  <em>instrument</em> the Lisp code that you want to debug. A
+  simple way to do this is to first move point into the definition
+  of a function or macro and then do <kbd>C-u C-M-x</kbd>
+  (<code>eval-defun</code> with a prefix argument). See <a href=
+  "Instrumenting.html#Instrumenting">Instrumenting</a>, for
+  alternative ways to instrument code.</p>
+
+  <p>Once a function is instrumented, any call to the function
+  activates Edebug. Depending on which Edebug execution mode you
+  have selected, activating Edebug may stop execution and let you
+  step through the function, or it may update the display and
+  continue execution while checking for debugging commands. The
+  default execution mode is step, which stops execution. See
+  <a href=
+  "Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug
+  Execution Modes</a>.</p>
+
+  <p>Within Edebug, you normally view an Emacs buffer showing the
+  source of the Lisp code you are debugging. This is referred to as
+  the <em>source code buffer</em>, and it is temporarily
+  read-only.</p>
+
+  <p>An arrow in the left fringe indicates the line where the
+  function is executing. Point initially shows where within the
+  line the function is executing, but this ceases to be true if you
+  move point yourself.</p>
+
+  <p>If you instrument the definition of <code>fac</code> (shown
+  below) and then execute <code>(fac 3)</code>, here is what you
+  would normally see. Point is at the open-parenthesis before
+  <code>if</code>.</p>
+
+  <div class="example">
+    <pre class="example">
+(defun fac (n)
 =&gt;&lowast;(if (&lt; 0 n)
       (* n (fac (1- n)))
     1))
-</pre></div>
+</pre>
+  </div><a name="index-stop-points" id="index-stop-points"></a>
 
-<a name="index-stop-points"></a>
-<p>The places within a function where Edebug can stop execution are called
-<em>stop points</em>.  These occur both before and after each subexpression
-that is a list, and also after each variable reference.
-Here we use periods to show the stop points in the function
-<code>fac</code>:
-</p>
-<div class="example">
-<pre class="example">(defun fac (n)
+  <p>The places within a function where Edebug can stop execution
+  are called <em>stop points</em>. These occur both before and
+  after each subexpression that is a list, and also after each
+  variable reference. Here we use periods to show the stop points
+  in the function <code>fac</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun fac (n)
   .(if .(&lt; 0 n.).
       .(* n. .(fac .(1- n.).).).
     1).)
-</pre></div>
+</pre>
+  </div>
 
-<p>The special commands of Edebug are available in the source code buffer
-in addition to the commands of Emacs Lisp mode.  For example, you can
-type the Edebug command <tt class="key">SPC</tt> to execute until the next stop point.
-If you type <tt class="key">SPC</tt> once after entry to <code>fac</code>, here is the
-display you will see:
-</p>
-<div class="example">
-<pre class="example">(defun fac (n)
+  <p>The special commands of Edebug are available in the source
+  code buffer in addition to the commands of Emacs Lisp mode. For
+  example, you can type the Edebug command <tt class="key">SPC</tt>
+  to execute until the next stop point. If you type <tt class=
+  "key">SPC</tt> once after entry to <code>fac</code>, here is the
+  display you will see:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun fac (n)
 =&gt;(if &lowast;(&lt; 0 n)
       (* n (fac (1- n)))
     1))
-</pre></div>
+</pre>
+  </div>
 
-<p>When Edebug stops execution after an expression, it displays the
-expression&rsquo;s value in the echo area.
-</p>
-<p>Other frequently used commands are <kbd>b</kbd> to set a breakpoint at a stop
-point, <kbd>g</kbd> to execute until a breakpoint is reached, and <kbd>q</kbd> to
-exit Edebug and return to the top-level command loop.  Type <kbd>?</kbd> to
-display a list of all Edebug commands.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Instrumenting.html#Instrumenting" accesskey="n" rel="next">Instrumenting</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When Edebug stops execution after an expression, it displays
+  the expression&rsquo;s value in the echo area.</p>
 
+  <p>Other frequently used commands are <kbd>b</kbd> to set a
+  breakpoint at a stop point, <kbd>g</kbd> to execute until a
+  breakpoint is reached, and <kbd>q</kbd> to exit Edebug and return
+  to the top-level command loop. Type <kbd>?</kbd> to display a
+  list of all Edebug commands.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Instrumenting.html#Instrumenting" accesskey=
+    "n" rel="next">Instrumenting</a>, Up: <a href=
+    "Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

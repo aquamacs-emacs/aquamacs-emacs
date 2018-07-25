@@ -1,14 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Help for developers - Emacs auth-source Library 0.2</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Emacs auth-source Library 0.2">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Secret-Service-API.html#Secret-Service-API" title="Secret Service API">
-<link rel="next" href="GnuPG-and-EasyPG-Assistant-Configuration.html#GnuPG-and-EasyPG-Assistant-Configuration" title="GnuPG and EasyPG Assistant Configuration">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Help for developers - Emacs auth-source Library
+  0.2</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Emacs auth-source Library 0.2" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Secret-Service-API.html#Secret-Service-API" title=
+  "Secret Service API" />
+  <link rel="next" href=
+  "GnuPG-and-EasyPG-Assistant-Configuration.html#GnuPG-and-EasyPG-Assistant-Configuration"
+  title="GnuPG and EasyPG Assistant Configuration" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file describes the Emacs auth-source library.
 
 Copyright (C) 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -31,8 +43,10 @@ Copyright (C) 2008, 2009, 2010 Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,49 +56,66 @@ Copyright (C) 2008, 2009, 2010 Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Help-for-developers"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="GnuPG-and-EasyPG-Assistant-Configuration.html#GnuPG-and-EasyPG-Assistant-Configuration">GnuPG and EasyPG Assistant Configuration</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Secret-Service-API.html#Secret-Service-API">Secret Service API</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Help-for-developers" id="Help-for-developers"></a>
 
-<h2 class="chapter">4 Help for developers</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "GnuPG-and-EasyPG-Assistant-Configuration.html#GnuPG-and-EasyPG-Assistant-Configuration">GnuPG
+    and EasyPG Assistant Configuration</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Secret-Service-API.html#Secret-Service-API">Secret Service
+    API</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>The auth-source library only has one function for external use.
+  <h2 class="chapter">4 Help for developers</h2>
 
-<div class="defun">
-&mdash; Function: <b>auth-source-user-or-password</b><var> mode host port &amp;optional username<a name="index-auth_002dsource_002duser_002dor_002dpassword-2"></a></var><br>
-<blockquote>
-        <p>Retrieve appropriate authentication tokens, determined by <var>mode</var>,
-for host <var>host</var> and <var>port</var>.  If <var>username</var> is provided it
-will also be checked.  If <code>auth-source-debug</code> is t, debugging
-messages will be printed.  Set <code>auth-source-debug</code> to a function
-to use that function for logging.  The parameters passed will be the
-same that the <code>message</code> function takes, that is, a string
-formatting spec and optional parameters.
+  <p>The auth-source library only has one function for external
+  use.</p>
 
-        <p>If <var>mode</var> is a list of strings, the function will return a list of
-strings or <code>nil</code> objects (thus you can avoid parsing the netrc
-file or checking the Secret Service API more than once).  If it's a
-string, the function will return a string or a <code>nil</code> object. 
-Currently only the modes &ldquo;login&rdquo; and &ldquo;password&rdquo; are recognized but
-more may be added in the future.
+  <div class="defun">
+    &mdash; Function: <b>auth-source-user-or-password</b> <var>mode
+    host port &amp;optional username<a name=
+    "index-auth_002dsource_002duser_002dor_002dpassword-2" id=
+    "index-auth_002dsource_002duser_002dor_002dpassword-2"></a></var><br />
 
-        <p><var>host</var> is a string containing the host name.
 
-        <p><var>port</var> contains the protocol name (e.g. &ldquo;imap&rdquo;) or
-a port number.  It must be a string, corresponding to the port in the
-users' netrc files.
+    <blockquote>
+      <p>Retrieve appropriate authentication tokens, determined by
+      <var>mode</var>, for host <var>host</var> and
+      <var>port</var>. If <var>username</var> is provided it will
+      also be checked. If <code>auth-source-debug</code> is t,
+      debugging messages will be printed. Set
+      <code>auth-source-debug</code> to a function to use that
+      function for logging. The parameters passed will be the same
+      that the <code>message</code> function takes, that is, a
+      string formatting spec and optional parameters.</p>
 
-        <p><var>username</var> contains the user name (e.g. &ldquo;joe&rdquo;) as a string.
+      <p>If <var>mode</var> is a list of strings, the function will
+      return a list of strings or <code>nil</code> objects (thus
+      you can avoid parsing the netrc file or checking the Secret
+      Service API more than once). If it's a string, the function
+      will return a string or a <code>nil</code> object. Currently
+      only the modes &ldquo;login&rdquo; and &ldquo;password&rdquo;
+      are recognized but more may be added in the future.</p>
 
-     <pre class="example">          ;; IMAP example
+      <p><var>host</var> is a string containing the host name.</p>
+
+      <p><var>port</var> contains the protocol name (e.g.
+      &ldquo;imap&rdquo;) or a port number. It must be a string,
+      corresponding to the port in the users' netrc files.</p>
+
+      <p><var>username</var> contains the user name (e.g.
+      &ldquo;joe&rdquo;) as a string.</p>
+      <pre class="example">
+          ;; IMAP example
           (setq auth (auth-source-user-or-password
                       '("login" "password")
                       "anyhostnamehere"
@@ -92,7 +123,7 @@ users' netrc files.
           (nth 0 auth) ; the login name
           (nth 1 auth) ; the password
 </pre>
-        </blockquote></div>
-
-   </body></html>
-
+    </blockquote>
+  </div>
+</body>
+</html>

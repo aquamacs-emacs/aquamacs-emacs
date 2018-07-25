@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,141 +16,207 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Introduction</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Introduction">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Introduction">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Building-Classes.html#Building-Classes" rel="next" title="Building Classes">
-<link href="Quick-Start.html#Quick-Start" rel="prev" title="Quick Start">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Introduction</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Introduction" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Introduction" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Building-Classes.html#Building-Classes" rel="next"
+  title="Building Classes" />
+  <link href="Quick-Start.html#Quick-Start" rel="prev" title=
+  "Quick Start" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Introduction"></a>
-<div class="header">
-<p>
-Next: <a href="Building-Classes.html#Building-Classes" accesskey="n" rel="next">Building Classes</a>, Previous: <a href="Quick-Start.html#Quick-Start" accesskey="p" rel="prev">Quick Start</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Introduction-1"></a>
-<h2 class="chapter">2 Introduction</h2>
+<body lang="en" xml:lang="en">
+  <a name="Introduction" id="Introduction"></a>
 
-<p>First off, please note that this manual cannot serve as a complete
-introduction to object oriented programming and generic functions in
-LISP.  Although EIEIO is not a complete implementation of the Common
-Lisp Object System (CLOS) and also differs from it in several aspects,
-it follows the same basic concepts.  Therefore, it is highly
-recommended to learn those from a textbook or tutorial first,
-especially if you only know OOP from languages like C++ or Java.  If
-on the other hand you are already familiar with CLOS, you should be
-aware that <i>EIEIO</i> does not implement the full CLOS specification and
-also differs in some other aspects which are mentioned below (also
-see <a href="CLOS-compatibility.html#CLOS-compatibility">CLOS compatibility</a>).
-</p>
-<p><i>EIEIO</i> supports the following features:
-</p>
-<ol>
-<li> A structured framework for the creation of basic classes with attributes
-and methods using singular inheritance similar to CLOS.
-</li><li> Type checking, and slot unbinding.
-</li><li> Method definitions similar to CLOS.
-</li><li> Simple and complex class browsers.
-</li><li> Edebug support for methods.
-</li><li> Imenu updates.
-</li><li> Byte compilation support of methods.
-</li><li> Help system extensions for classes and methods.
-</li><li> Several base classes for interesting tasks.
-</li><li> Simple test suite.
-</li><li> Public and private classifications for slots (extensions to CLOS)
-</li><li> Customization support in a class (extension to CLOS)
-</li></ol>
+  <div class="header">
+    <p>Next: <a href="Building-Classes.html#Building-Classes"
+    accesskey="n" rel="next">Building Classes</a>, Previous:
+    <a href="Quick-Start.html#Quick-Start" accesskey="p" rel=
+    "prev">Quick Start</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Introduction-1" id="Introduction-1"></a>
 
-<p>Due to restrictions in the Emacs Lisp language, CLOS cannot be
-completely supported, and a few functions have been added in place of
-setf.  Here are some important CLOS features that <i>EIEIO</i> presently
-lacks:
-</p>
-<dl compact="compact">
-<dt>Method dispatch</dt>
-<dd><p>EIEO does not support method dispatch for built-in types and multiple
-arguments types.  In other words, method dispatch only looks at the
-first argument, and this one must be an <i>EIEIO</i> type.
-</p>
-</dd>
-<dt>Support for metaclasses</dt>
-<dd><p>There is just one default metaclass, <code>eieio-default-superclass</code>,
-and you cannot define your own.  The <code>:metaclass</code> tag in
-<code>defclass</code> is ignored.  Also, functions like <code>find-class</code>, which
-should return instances of the metaclass, behave differently in
-<i>EIEIO</i> in that they return symbols or plain structures instead.
-</p>
-</dd>
-<dt>EQL specialization</dt>
-<dd><p>EIEIO does not support it.
-</p>
-</dd>
-<dt><code>:around</code> method tag</dt>
-<dd><p>This CLOS method tag is non-functional.
-</p>
-</dd>
-<dt>:default-initargs in <code>defclass</code></dt>
-<dd><p>Each slot can have an <code>:initform</code> tag, so this is not really necessary.
-</p>
-</dd>
-<dt>Mock object initializers</dt>
-<dd><p>Each class contains a mock object used for fast initialization of
-instantiated objects.  Using functions with side effects on object slot
-values can potentially cause modifications in the mock object.  <i>EIEIO</i>
-should use a deep copy but currently does not.
-</p>
-</dd>
-</dl>
+  <h2 class="chapter">2 Introduction</h2>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Building-Classes.html#Building-Classes" accesskey="n" rel="next">Building Classes</a>, Previous: <a href="Quick-Start.html#Quick-Start" accesskey="p" rel="prev">Quick Start</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>First off, please note that this manual cannot serve as a
+  complete introduction to object oriented programming and generic
+  functions in LISP. Although EIEIO is not a complete
+  implementation of the Common Lisp Object System (CLOS) and also
+  differs from it in several aspects, it follows the same basic
+  concepts. Therefore, it is highly recommended to learn those from
+  a textbook or tutorial first, especially if you only know OOP
+  from languages like C++ or Java. If on the other hand you are
+  already familiar with CLOS, you should be aware that <i>EIEIO</i>
+  does not implement the full CLOS specification and also differs
+  in some other aspects which are mentioned below (also see
+  <a href="CLOS-compatibility.html#CLOS-compatibility">CLOS
+  compatibility</a>).</p>
 
+  <p><i>EIEIO</i> supports the following features:</p>
 
+  <ol>
+    <li>A structured framework for the creation of basic classes
+    with attributes and methods using singular inheritance similar
+    to CLOS.</li>
 
+    <li>Type checking, and slot unbinding.</li>
+
+    <li>Method definitions similar to CLOS.</li>
+
+    <li>Simple and complex class browsers.</li>
+
+    <li>Edebug support for methods.</li>
+
+    <li>Imenu updates.</li>
+
+    <li>Byte compilation support of methods.</li>
+
+    <li>Help system extensions for classes and methods.</li>
+
+    <li>Several base classes for interesting tasks.</li>
+
+    <li>Simple test suite.</li>
+
+    <li>Public and private classifications for slots (extensions to
+    CLOS)</li>
+
+    <li>Customization support in a class (extension to CLOS)</li>
+  </ol>
+
+  <p>Due to restrictions in the Emacs Lisp language, CLOS cannot be
+  completely supported, and a few functions have been added in
+  place of setf. Here are some important CLOS features that
+  <i>EIEIO</i> presently lacks:</p>
+
+  <dl compact="compact">
+    <dt>Method dispatch</dt>
+
+    <dd>
+      <p>EIEO does not support method dispatch for built-in types
+      and multiple arguments types. In other words, method dispatch
+      only looks at the first argument, and this one must be an
+      <i>EIEIO</i> type.</p>
+    </dd>
+
+    <dt>Support for metaclasses</dt>
+
+    <dd>
+      <p>There is just one default metaclass,
+      <code>eieio-default-superclass</code>, and you cannot define
+      your own. The <code>:metaclass</code> tag in
+      <code>defclass</code> is ignored. Also, functions like
+      <code>find-class</code>, which should return instances of the
+      metaclass, behave differently in <i>EIEIO</i> in that they
+      return symbols or plain structures instead.</p>
+    </dd>
+
+    <dt>EQL specialization</dt>
+
+    <dd>
+      <p>EIEIO does not support it.</p>
+    </dd>
+
+    <dt><code>:around</code> method tag</dt>
+
+    <dd>
+      <p>This CLOS method tag is non-functional.</p>
+    </dd>
+
+    <dt>:default-initargs in <code>defclass</code></dt>
+
+    <dd>
+      <p>Each slot can have an <code>:initform</code> tag, so this
+      is not really necessary.</p>
+    </dd>
+
+    <dt>Mock object initializers</dt>
+
+    <dd>
+      <p>Each class contains a mock object used for fast
+      initialization of instantiated objects. Using functions with
+      side effects on object slot values can potentially cause
+      modifications in the mock object. <i>EIEIO</i> should use a
+      deep copy but currently does not.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Building-Classes.html#Building-Classes"
+    accesskey="n" rel="next">Building Classes</a>, Previous:
+    <a href="Quick-Start.html#Quick-Start" accesskey="p" rel=
+    "prev">Quick Start</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

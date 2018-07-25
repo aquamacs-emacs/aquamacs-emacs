@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2003-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,129 +14,157 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs SMTP Library: How Mail Works</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs SMTP Library: How Mail Works">
-<meta name="keywords" content="Emacs SMTP Library: How Mail Works">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Emacs-Speaks-SMTP.html#Emacs-Speaks-SMTP" rel="next" title="Emacs Speaks SMTP">
-<link href="index.html#Top" rel="prev" title="Top">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs SMTP Library: How Mail Works</title>
+  <meta name="description" content=
+  "Emacs SMTP Library: How Mail Works" />
+  <meta name="keywords" content=
+  "Emacs SMTP Library: How Mail Works" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Emacs-Speaks-SMTP.html#Emacs-Speaks-SMTP" rel="next"
+  title="Emacs Speaks SMTP" />
+  <link href="index.html#Top" rel="prev" title="Top" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="How-Mail-Works"></a>
-<div class="header">
-<p>
-Next: <a href="Emacs-Speaks-SMTP.html#Emacs-Speaks-SMTP" accesskey="n" rel="next">Emacs Speaks SMTP</a>, Previous: <a href="index.html#Top" accesskey="p" rel="prev">Top</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-Mail-Works-1"></a>
-<h2 class="chapter">1 How Mail Works</h2>
+<body lang="en" xml:lang="en">
+  <a name="How-Mail-Works" id="How-Mail-Works"></a>
 
-<a name="index-SMTP"></a>
-<a name="index-MTA"></a>
-<p>On the internet, mail is sent from mail host to mail host using the
-simple mail transfer protocol (SMTP).  To send and receive mail, you
-must get it from and send it to a mail host.  Every mail host runs a
-mail transfer agent (MTA) such as Exim that accepts mails and passes
-them on.  The communication between a mail host and other clients does
-not necessarily involve SMTP, however.  Here is short overview of what
-is involved.
-</p>
-<a name="index-MUA"></a>
-<p>The mail program&mdash;also called a mail user agent (MUA)&mdash;usually
-sends outgoing mail to a mail host.  When your computer is
-permanently connected to the internet, it might even be a mail host
-itself.  In this case, the MUA will pipe mail to the
-<samp>/usr/lib/sendmail</samp> application.  It will take care of your mail
-and pass it on to the next mail host.
-</p>
-<a name="index-ISP"></a>
-<p>When you are only connected to the internet from time to time, your
-internet service provider (ISP) has probably told you which mail host
-to use.  You must configure your MUA to use that mail host.  Since you
-are reading this manual, you probably want to configure Emacs to use
-SMTP to send mail to that mail host.  More on that in the next
-section.
-</p>
-<a name="index-MDA"></a>
-<p>Things are different when reading mail.  The mail host responsible
-for your mail keeps it in a file somewhere.  The messages get into the
-file by way of a mail delivery agent (MDA) such as procmail.  These
-delivery agents often allow you to filter and munge your mails before
-you get to see it.  When your computer is that mail host, this file is
-called a spool, and sometimes located in the directory
-<samp>/var/spool/mail/</samp>.  All your MUA has to do is read mail from the
-spool, then.
-</p>
-<a name="index-POP3"></a>
-<a name="index-IMAP"></a>
-<p>When your computer is not always connected to the internet, you
-must get the mail from the remote mail host using a protocol such as
-POP3 or IMAP.  POP3 essentially downloads all your mail from the mail
-host to your computer.  The mail is stored in some file on your
-computer, and again, all your MUA has to do is read mail from the
-spool.
-</p>
-<p>When you read mail from various machines, downloading mail from the
-mail host to your current machine is not convenient.  In that case,
-you will probably want to use the IMAP protocol.  Your mail is kept on
-the mail host, and you can read it while you are connected via IMAP to
-the mail host.
-</p>
-<a name="index-Webmail"></a>
-<p>So how does reading mail via the web work, you ask.  In that case,
-the web interface just allows you to remote-control a MUA on the web
-host.  Whether the web host is also a mail host, and how all the
-pieces interact is completely irrelevant.  You usually cannot use
-Emacs to read mail via the web, unless you use software that parses
-the ever-changing HTML of the web interface.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Emacs-Speaks-SMTP.html#Emacs-Speaks-SMTP" accesskey="n" rel="next">Emacs Speaks SMTP</a>, Previous: <a href="index.html#Top" accesskey="p" rel="prev">Top</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Emacs-Speaks-SMTP.html#Emacs-Speaks-SMTP"
+    accesskey="n" rel="next">Emacs Speaks SMTP</a>, Previous:
+    <a href="index.html#Top" accesskey="p" rel="prev">Top</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="How-Mail-Works-1" id="How-Mail-Works-1"></a>
 
+  <h2 class="chapter">1 How Mail Works</h2><a name="index-SMTP" id=
+  "index-SMTP"></a> <a name="index-MTA" id="index-MTA"></a>
 
+  <p>On the internet, mail is sent from mail host to mail host
+  using the simple mail transfer protocol (SMTP). To send and
+  receive mail, you must get it from and send it to a mail host.
+  Every mail host runs a mail transfer agent (MTA) such as Exim
+  that accepts mails and passes them on. The communication between
+  a mail host and other clients does not necessarily involve SMTP,
+  however. Here is short overview of what is involved.</p><a name=
+  "index-MUA" id="index-MUA"></a>
 
+  <p>The mail program&mdash;also called a mail user agent
+  (MUA)&mdash;usually sends outgoing mail to a mail host. When your
+  computer is permanently connected to the internet, it might even
+  be a mail host itself. In this case, the MUA will pipe mail to
+  the <samp>/usr/lib/sendmail</samp> application. It will take care
+  of your mail and pass it on to the next mail host.</p><a name=
+  "index-ISP" id="index-ISP"></a>
+
+  <p>When you are only connected to the internet from time to time,
+  your internet service provider (ISP) has probably told you which
+  mail host to use. You must configure your MUA to use that mail
+  host. Since you are reading this manual, you probably want to
+  configure Emacs to use SMTP to send mail to that mail host. More
+  on that in the next section.</p><a name="index-MDA" id=
+  "index-MDA"></a>
+
+  <p>Things are different when reading mail. The mail host
+  responsible for your mail keeps it in a file somewhere. The
+  messages get into the file by way of a mail delivery agent (MDA)
+  such as procmail. These delivery agents often allow you to filter
+  and munge your mails before you get to see it. When your computer
+  is that mail host, this file is called a spool, and sometimes
+  located in the directory <samp>/var/spool/mail/</samp>. All your
+  MUA has to do is read mail from the spool, then.</p><a name=
+  "index-POP3" id="index-POP3"></a> <a name="index-IMAP" id=
+  "index-IMAP"></a>
+
+  <p>When your computer is not always connected to the internet,
+  you must get the mail from the remote mail host using a protocol
+  such as POP3 or IMAP. POP3 essentially downloads all your mail
+  from the mail host to your computer. The mail is stored in some
+  file on your computer, and again, all your MUA has to do is read
+  mail from the spool.</p>
+
+  <p>When you read mail from various machines, downloading mail
+  from the mail host to your current machine is not convenient. In
+  that case, you will probably want to use the IMAP protocol. Your
+  mail is kept on the mail host, and you can read it while you are
+  connected via IMAP to the mail host.</p><a name="index-Webmail"
+  id="index-Webmail"></a>
+
+  <p>So how does reading mail via the web work, you ask. In that
+  case, the web interface just allows you to remote-control a MUA
+  on the web host. Whether the web host is also a mail host, and
+  how all the pieces interact is completely irrelevant. You usually
+  cannot use Emacs to read mail via the web, unless you use
+  software that parses the ever-changing HTML of the web
+  interface.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Emacs-Speaks-SMTP.html#Emacs-Speaks-SMTP"
+    accesskey="n" rel="next">Emacs Speaks SMTP</a>, Previous:
+    <a href="index.html#Top" accesskey="p" rel="prev">Top</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

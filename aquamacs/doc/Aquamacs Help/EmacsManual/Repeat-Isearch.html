@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,139 +20,199 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Repeat Isearch</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Repeat Isearch">
-<meta name="keywords" content="GNU Emacs Manual: Repeat Isearch">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Incremental-Search.html#Incremental-Search" rel="up" title="Incremental Search">
-<link href="Isearch-Yank.html#Isearch-Yank" rel="next" title="Isearch Yank">
-<link href="Basic-Isearch.html#Basic-Isearch" rel="prev" title="Basic Isearch">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Repeat Isearch</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Repeat Isearch" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Repeat Isearch" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Incremental-Search.html#Incremental-Search" rel="up"
+  title="Incremental Search" />
+  <link href="Isearch-Yank.html#Isearch-Yank" rel="next" title=
+  "Isearch Yank" />
+  <link href="Basic-Isearch.html#Basic-Isearch" rel="prev" title=
+  "Basic Isearch" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Repeat-Isearch" id="Repeat-Isearch"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Isearch-Yank.html#Isearch-Yank" accesskey="n"
+    rel="next">Isearch Yank</a>, Previous: <a href=
+    "Basic-Isearch.html#Basic-Isearch" accesskey="p" rel=
+    "prev">Basic Isearch</a>, Up: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="u" rel=
+    "up">Incremental Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Repeating-Incremental-Search" id=
+  "Repeating-Incremental-Search"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Repeat-Isearch"></a>
-<div class="header">
-<p>
-Next: <a href="Isearch-Yank.html#Isearch-Yank" accesskey="n" rel="next">Isearch Yank</a>, Previous: <a href="Basic-Isearch.html#Basic-Isearch" accesskey="p" rel="prev">Basic Isearch</a>, Up: <a href="Incremental-Search.html#Incremental-Search" accesskey="u" rel="up">Incremental Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Repeating-Incremental-Search"></a>
-<h4 class="subsection">15.1.2 Repeating Incremental Search</h4>
+  <h4 class="subsection">15.1.2 Repeating Incremental Search</h4>
 
-<p>Suppose you search forward for &lsquo;<samp>FOO</samp>&rsquo; and find a match, but not
-the one you expected to find: the &lsquo;<samp>FOO</samp>&rsquo; you were aiming for
-occurs later in the buffer.  In this event, type another <kbd>C-s</kbd> to
-move to the next occurrence of the search string.  You can repeat this
-any number of times.  If you overshoot, you can cancel some <kbd>C-s</kbd>
-characters with <tt class="key">DEL</tt>.  Similarly, each <kbd>C-r</kbd> in a backward
-incremental search repeats the backward search.
-</p>
-<a name="index-lazy-search-highlighting"></a>
-<p>If you pause for a little while during incremental search, Emacs
-highlights all the other possible matches for the search string that
-are present on the screen.  This helps you anticipate where you can
-get to by typing <kbd>C-s</kbd> or <kbd>C-r</kbd> to repeat the search.  The
-other matches are highlighted differently from the current match,
-using the customizable face <code>lazy-highlight</code> (see <a href="Faces.html#Faces">Faces</a>).  If
-you don&rsquo;t like this feature, you can disable it by setting
-<code>isearch-lazy-highlight</code> to <code>nil</code>.  For other customizations
-related to highlighting matches, see <a href="Search-Customizations.html#Search-Customizations">Search Customizations</a>.
-</p>
-<p>After exiting a search, you can search for the same string again by
-typing just <kbd>C-s C-s</kbd>.  The first <kbd>C-s</kbd> is the key that
-invokes incremental search, and the second <kbd>C-s</kbd> means to search
-again for the last search string.  Similarly, <kbd>C-r C-r</kbd> searches
-backward for the last search string.  In determining the last search
-string, it doesn&rsquo;t matter whether that string was searched for with
-<kbd>C-s</kbd> or <kbd>C-r</kbd>.
-</p>
-<p>If you are searching forward but you realize you were looking for
-something before the starting point, type <kbd>C-r</kbd> to switch to a
-backward search, leaving the search string unchanged.  Similarly,
-<kbd>C-s</kbd> in a backward search switches to a forward search.
-</p>
-<a name="index-search_002c-wrapping-around"></a>
-<a name="index-search_002c-overwrapped"></a>
-<a name="index-wrapped-search"></a>
-<a name="index-overwrapped-search"></a>
-<p>If a search is failing and you ask to repeat it by typing another
-<kbd>C-s</kbd>, it starts again from the beginning of the buffer.
-Repeating a failing reverse search with <kbd>C-r</kbd> starts again from
-the end.  This is called <em>wrapping around</em>, and &lsquo;<samp>Wrapped</samp>&rsquo;
-appears in the search prompt once this has happened.  If you keep on
-going past the original starting point of the search, it changes to
-&lsquo;<samp>Overwrapped</samp>&rsquo;, which means that you are revisiting matches that
-you have already seen.
-</p>
-<a name="index-search-ring"></a>
-<a name="index-M_002dn-_0028Incremental-search_0029"></a>
-<a name="index-M_002dp-_0028Incremental-search_0029"></a>
-<a name="index-search_002dring_002dmax"></a>
-<p>To reuse earlier search strings, use the <em>search ring</em>.  The
-commands <kbd>M-p</kbd> and <kbd>M-n</kbd> move through the ring to pick a
-search string to reuse.  These commands leave the selected search ring
-element in the minibuffer, where you can edit it.  Type
-<kbd>C-s</kbd>/<kbd>C-r</kbd> or <tt class="key">RET</tt> to accept the string and start
-searching for it.  The number of most recently used search strings
-saved in the search ring is specified by the variable
-<code>search-ring-max</code>, 16 by default.
-</p>
-<a name="index-incremental-search_002c-edit-search-string"></a>
-<a name="index-interactively-edit-search-string"></a>
-<a name="index-M_002de-_0028Incremental-search_0029"></a>
-<a name="index-mouse_002d1-in-the-minibuffer-_0028Incremental-Search_0029"></a>
-<p>To edit the current search string in the minibuffer without
-replacing it with items from the search ring, type <kbd>M-e</kbd> or click
-<kbd>mouse-1</kbd> in the minibuffer.  Type <tt class="key">RET</tt>, <kbd>C-s</kbd> or
-<kbd>C-r</kbd> to finish editing the string and search for it.  Type
-<kbd>C-f</kbd> or <kbd><span class="key">RIGHT</span></kbd> to add to the search string characters
-following point from the buffer from which you started the search.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Isearch-Yank.html#Isearch-Yank" accesskey="n" rel="next">Isearch Yank</a>, Previous: <a href="Basic-Isearch.html#Basic-Isearch" accesskey="p" rel="prev">Basic Isearch</a>, Up: <a href="Incremental-Search.html#Incremental-Search" accesskey="u" rel="up">Incremental Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Suppose you search forward for &lsquo;<samp>FOO</samp>&rsquo;
+  and find a match, but not the one you expected to find: the
+  &lsquo;<samp>FOO</samp>&rsquo; you were aiming for occurs later
+  in the buffer. In this event, type another <kbd>C-s</kbd> to move
+  to the next occurrence of the search string. You can repeat this
+  any number of times. If you overshoot, you can cancel some
+  <kbd>C-s</kbd> characters with <tt class="key">DEL</tt>.
+  Similarly, each <kbd>C-r</kbd> in a backward incremental search
+  repeats the backward search.</p><a name=
+  "index-lazy-search-highlighting" id=
+  "index-lazy-search-highlighting"></a>
 
+  <p>If you pause for a little while during incremental search,
+  Emacs highlights all the other possible matches for the search
+  string that are present on the screen. This helps you anticipate
+  where you can get to by typing <kbd>C-s</kbd> or <kbd>C-r</kbd>
+  to repeat the search. The other matches are highlighted
+  differently from the current match, using the customizable face
+  <code>lazy-highlight</code> (see <a href=
+  "Faces.html#Faces">Faces</a>). If you don&rsquo;t like this
+  feature, you can disable it by setting
+  <code>isearch-lazy-highlight</code> to <code>nil</code>. For
+  other customizations related to highlighting matches, see
+  <a href="Search-Customizations.html#Search-Customizations">Search
+  Customizations</a>.</p>
 
+  <p>After exiting a search, you can search for the same string
+  again by typing just <kbd>C-s C-s</kbd>. The first <kbd>C-s</kbd>
+  is the key that invokes incremental search, and the second
+  <kbd>C-s</kbd> means to search again for the last search string.
+  Similarly, <kbd>C-r C-r</kbd> searches backward for the last
+  search string. In determining the last search string, it
+  doesn&rsquo;t matter whether that string was searched for with
+  <kbd>C-s</kbd> or <kbd>C-r</kbd>.</p>
 
+  <p>If you are searching forward but you realize you were looking
+  for something before the starting point, type <kbd>C-r</kbd> to
+  switch to a backward search, leaving the search string unchanged.
+  Similarly, <kbd>C-s</kbd> in a backward search switches to a
+  forward search.</p><a name="index-search_002c-wrapping-around"
+  id="index-search_002c-wrapping-around"></a> <a name=
+  "index-search_002c-overwrapped" id=
+  "index-search_002c-overwrapped"></a> <a name=
+  "index-wrapped-search" id="index-wrapped-search"></a> <a name=
+  "index-overwrapped-search" id="index-overwrapped-search"></a>
+
+  <p>If a search is failing and you ask to repeat it by typing
+  another <kbd>C-s</kbd>, it starts again from the beginning of the
+  buffer. Repeating a failing reverse search with <kbd>C-r</kbd>
+  starts again from the end. This is called <em>wrapping
+  around</em>, and &lsquo;<samp>Wrapped</samp>&rsquo; appears in
+  the search prompt once this has happened. If you keep on going
+  past the original starting point of the search, it changes to
+  &lsquo;<samp>Overwrapped</samp>&rsquo;, which means that you are
+  revisiting matches that you have already seen.</p><a name=
+  "index-search-ring" id="index-search-ring"></a> <a name=
+  "index-M_002dn-_0028Incremental-search_0029" id=
+  "index-M_002dn-_0028Incremental-search_0029"></a> <a name=
+  "index-M_002dp-_0028Incremental-search_0029" id=
+  "index-M_002dp-_0028Incremental-search_0029"></a> <a name=
+  "index-search_002dring_002dmax" id=
+  "index-search_002dring_002dmax"></a>
+
+  <p>To reuse earlier search strings, use the <em>search ring</em>.
+  The commands <kbd>M-p</kbd> and <kbd>M-n</kbd> move through the
+  ring to pick a search string to reuse. These commands leave the
+  selected search ring element in the minibuffer, where you can
+  edit it. Type <kbd>C-s</kbd>/<kbd>C-r</kbd> or <tt class=
+  "key">RET</tt> to accept the string and start searching for it.
+  The number of most recently used search strings saved in the
+  search ring is specified by the variable
+  <code>search-ring-max</code>, 16 by default.</p><a name=
+  "index-incremental-search_002c-edit-search-string" id=
+  "index-incremental-search_002c-edit-search-string"></a> <a name=
+  "index-interactively-edit-search-string" id=
+  "index-interactively-edit-search-string"></a> <a name=
+  "index-M_002de-_0028Incremental-search_0029" id=
+  "index-M_002de-_0028Incremental-search_0029"></a> <a name=
+  "index-mouse_002d1-in-the-minibuffer-_0028Incremental-Search_0029"
+  id=
+  "index-mouse_002d1-in-the-minibuffer-_0028Incremental-Search_0029">
+  </a>
+
+  <p>To edit the current search string in the minibuffer without
+  replacing it with items from the search ring, type <kbd>M-e</kbd>
+  or click <kbd>mouse-1</kbd> in the minibuffer. Type <tt class=
+  "key">RET</tt>, <kbd>C-s</kbd> or <kbd>C-r</kbd> to finish
+  editing the string and search for it. Type <kbd>C-f</kbd> or
+  <kbd><span class="key">RIGHT</span></kbd> to add to the search
+  string characters following point from the buffer from which you
+  started the search.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Isearch-Yank.html#Isearch-Yank" accesskey="n"
+    rel="next">Isearch Yank</a>, Previous: <a href=
+    "Basic-Isearch.html#Basic-Isearch" accesskey="p" rel=
+    "prev">Basic Isearch</a>, Up: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="u" rel=
+    "up">Incremental Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,116 +14,165 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Scoring Tips</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Scoring Tips">
-<meta name="keywords" content="Gnus Manual: Scoring Tips">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Scoring.html#Scoring" rel="up" title="Scoring">
-<link href="Reverse-Scoring.html#Reverse-Scoring" rel="next" title="Reverse Scoring">
-<link href="Scoring-On-Other-Headers.html#Scoring-On-Other-Headers" rel="prev" title="Scoring On Other Headers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Scoring Tips</title>
+  <meta name="description" content="Gnus Manual: Scoring Tips" />
+  <meta name="keywords" content="Gnus Manual: Scoring Tips" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Scoring.html#Scoring" rel="up" title="Scoring" />
+  <link href="Reverse-Scoring.html#Reverse-Scoring" rel="next"
+  title="Reverse Scoring" />
+  <link href=
+  "Scoring-On-Other-Headers.html#Scoring-On-Other-Headers" rel=
+  "prev" title="Scoring On Other Headers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Scoring-Tips"></a>
-<div class="header">
-<p>
-Next: <a href="Reverse-Scoring.html#Reverse-Scoring" accesskey="n" rel="next">Reverse Scoring</a>, Previous: <a href="Scoring-On-Other-Headers.html#Scoring-On-Other-Headers" accesskey="p" rel="prev">Scoring On Other Headers</a>, Up: <a href="Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Scoring-Tips-1"></a>
-<h3 class="section">7.10 Scoring Tips</h3>
-<a name="index-scoring-tips"></a>
+<body lang="en" xml:lang="en">
+  <a name="Scoring-Tips" id="Scoring-Tips"></a>
 
-<dl compact="compact">
-<dt><em>Crossposts</em></dt>
-<dd><a name="index-crossposts"></a>
-<a name="index-scoring-crossposts"></a>
-<p>If you want to lower the score of crossposts, the line to match on is
-the <code>Xref</code> header.
-</p><div class="lisp">
-<pre class="lisp">(&quot;xref&quot; (&quot; talk.politics.misc:&quot; -1000))
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Reverse-Scoring.html#Reverse-Scoring"
+    accesskey="n" rel="next">Reverse Scoring</a>, Previous:
+    <a href="Scoring-On-Other-Headers.html#Scoring-On-Other-Headers"
+    accesskey="p" rel="prev">Scoring On Other Headers</a>, Up:
+    <a href="Scoring.html#Scoring" accesskey="u" rel=
+    "up">Scoring</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Scoring-Tips-1" id="Scoring-Tips-1"></a>
 
-</dd>
-<dt><em>Multiple crossposts</em></dt>
-<dd><p>If you want to lower the score of articles that have been crossposted to
-more than, say, 3 groups:
-</p><div class="lisp">
-<pre class="lisp">(&quot;xref&quot;
-  (&quot;[^:\n]+:[0-9]+ +[^:\n]+:[0-9]+ +[^:\n]+:[0-9]+&quot;
+  <h3 class="section">7.10 Scoring Tips</h3><a name=
+  "index-scoring-tips" id="index-scoring-tips"></a>
+
+  <dl compact="compact">
+    <dt><em>Crossposts</em></dt>
+
+    <dd>
+      <a name="index-crossposts" id="index-crossposts"></a>
+      <a name="index-scoring-crossposts" id=
+      "index-scoring-crossposts"></a>
+
+      <p>If you want to lower the score of crossposts, the line to
+      match on is the <code>Xref</code> header.</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+("xref" (" talk.politics.misc:" -1000))
+</pre>
+      </div>
+    </dd>
+
+    <dt><em>Multiple crossposts</em></dt>
+
+    <dd>
+      <p>If you want to lower the score of articles that have been
+      crossposted to more than, say, 3 groups:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+("xref"
+  ("[^:\n]+:[0-9]+ +[^:\n]+:[0-9]+ +[^:\n]+:[0-9]+"
    -1000 nil r))
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><em>Matching on the body</em></dt>
-<dd><p>This is generally not a very good idea&mdash;it takes a very long time.
-Gnus actually has to fetch each individual article from the server.  But
-you might want to anyway, I guess.  Even though there are three match
-keys (<code>Head</code>, <code>Body</code> and <code>All</code>), you should choose one
-and stick with it in each score file.  If you use any two, each article
-will be fetched <em>twice</em>.  If you want to match a bit on the
-<code>Head</code> and a bit on the <code>Body</code>, just use <code>All</code> for all
-the matches.
-</p>
-</dd>
-<dt><em>Marking as read</em></dt>
-<dd><p>You will probably want to mark articles that have scores below a certain
-number as read.  This is most easily achieved by putting the following
-in your <samp>all.SCORE</samp> file:
-</p><div class="lisp">
-<pre class="lisp">((mark -100))
-</pre></div>
-<p>You may also consider doing something similar with <code>expunge</code>.
-</p>
-</dd>
-<dt><em>Negated character classes</em></dt>
-<dd><p>If you say stuff like <code>[^abcd]*</code>, you may get unexpected results.
-That will match newlines, which might lead to, well, The Unknown.  Say
-<code>[^abcd\n]*</code> instead.
-</p></dd>
-</dl>
+    <dt><em>Matching on the body</em></dt>
 
+    <dd>
+      <p>This is generally not a very good idea&mdash;it takes a
+      very long time. Gnus actually has to fetch each individual
+      article from the server. But you might want to anyway, I
+      guess. Even though there are three match keys
+      (<code>Head</code>, <code>Body</code> and <code>All</code>),
+      you should choose one and stick with it in each score file.
+      If you use any two, each article will be fetched
+      <em>twice</em>. If you want to match a bit on the
+      <code>Head</code> and a bit on the <code>Body</code>, just
+      use <code>All</code> for all the matches.</p>
+    </dd>
 
+    <dt><em>Marking as read</em></dt>
 
+    <dd>
+      <p>You will probably want to mark articles that have scores
+      below a certain number as read. This is most easily achieved
+      by putting the following in your <samp>all.SCORE</samp>
+      file:</p>
 
+      <div class="lisp">
+        <pre class="lisp">
+((mark -100))
+</pre>
+      </div>
 
+      <p>You may also consider doing something similar with
+      <code>expunge</code>.</p>
+    </dd>
+
+    <dt><em>Negated character classes</em></dt>
+
+    <dd>
+      <p>If you say stuff like <code>[^abcd]*</code>, you may get
+      unexpected results. That will match newlines, which might
+      lead to, well, The Unknown. Say <code>[^abcd\n]*</code>
+      instead.</p>
+    </dd>
+  </dl>
 </body>
 </html>

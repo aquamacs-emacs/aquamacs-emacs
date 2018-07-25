@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Conversion - Emacs MIME Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Emacs MIME Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Composing.html#Composing" title="Composing">
-<link rel="prev" href="Charset-Translation.html#Charset-Translation" title="Charset Translation">
-<link rel="next" href="Flowed-text.html#Flowed-text" title="Flowed text">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Conversion - Emacs MIME Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Emacs MIME Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Composing.html#Composing" title=
+  "Composing" />
+  <link rel="prev" href=
+  "Charset-Translation.html#Charset-Translation" title=
+  "Charset Translation" />
+  <link rel="next" href="Flowed-text.html#Flowed-text" title=
+  "Flowed text" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the Emacs MIME interface functionality.
 
 Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
@@ -27,8 +38,10 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,41 +51,53 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Conversion"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Flowed-text.html#Flowed-text">Flowed text</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Charset-Translation.html#Charset-Translation">Charset Translation</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Composing.html#Composing">Composing</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Conversion" id="Conversion"></a>
 
-<h3 class="section">2.6 Conversion</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Flowed-text.html#Flowed-text">Flowed text</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Charset-Translation.html#Charset-Translation">Charset
+    Translation</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Composing.html#Composing">Composing</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-mime_002dto_002dmml-76"></a>A (multipart) <acronym>MIME</acronym> message can be converted to <acronym>MML</acronym>
-with the <code>mime-to-mml</code> function.  It works on the message in the
-current buffer, and substitutes <acronym>MML</acronym> markup for <acronym>MIME</acronym>
-boundaries.  Non-textual parts do not have their contents in the buffer,
-but instead have the contents in separate buffers that are referred to
-from the <acronym>MML</acronym> tags.
+  <h3 class="section">2.6 Conversion</h3>
 
-   <p><a name="index-mml_002dto_002dmime-77"></a>An <acronym>MML</acronym> message can be converted back to <acronym>MIME</acronym> by the
-<code>mml-to-mime</code> function.
+  <p><a name="index-mime_002dto_002dmml-76" id=
+  "index-mime_002dto_002dmml-76"></a>A (multipart)
+  <acronym>MIME</acronym> message can be converted to
+  <acronym>MML</acronym> with the <code>mime-to-mml</code>
+  function. It works on the message in the current buffer, and
+  substitutes <acronym>MML</acronym> markup for
+  <acronym>MIME</acronym> boundaries. Non-textual parts do not have
+  their contents in the buffer, but instead have the contents in
+  separate buffers that are referred to from the
+  <acronym>MML</acronym> tags.</p>
 
-   <p>These functions are in certain senses &ldquo;lossy&rdquo;&mdash;you will not get back
-an identical message if you run <code>mime-to-mml</code> and then
-<code>mml-to-mime</code>.  Not only will trivial things like the order of the
-headers differ, but the contents of the headers may also be different. 
-For instance, the original message may use base64 encoding on text,
-while <code>mml-to-mime</code> may decide to use quoted-printable encoding, and
-so on.
+  <p><a name="index-mml_002dto_002dmime-77" id=
+  "index-mml_002dto_002dmime-77"></a>An <acronym>MML</acronym>
+  message can be converted back to <acronym>MIME</acronym> by the
+  <code>mml-to-mime</code> function.</p>
 
-   <p>In essence, however, these two functions should be the inverse of each
-other.  The resulting contents of the message should remain equivalent,
-if not identical.
+  <p>These functions are in certain senses
+  &ldquo;lossy&rdquo;&mdash;you will not get back an identical
+  message if you run <code>mime-to-mml</code> and then
+  <code>mml-to-mime</code>. Not only will trivial things like the
+  order of the headers differ, but the contents of the headers may
+  also be different. For instance, the original message may use
+  base64 encoding on text, while <code>mml-to-mime</code> may
+  decide to use quoted-printable encoding, and so on.</p>
 
-   </body></html>
-
+  <p>In essence, however, these two functions should be the inverse
+  of each other. The resulting contents of the message should
+  remain equivalent, if not identical.</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,130 +19,198 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Sound Output</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Sound Output">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Sound Output">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="System-Interface.html#System-Interface" rel="up" title="System Interface">
-<link href="X11-Keysyms.html#X11-Keysyms" rel="next" title="X11 Keysyms">
-<link href="Terminal-Output.html#Terminal-Output" rel="prev" title="Terminal Output">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Sound Output</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Sound Output" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Sound Output" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="System-Interface.html#System-Interface" rel="up"
+  title="System Interface" />
+  <link href="X11-Keysyms.html#X11-Keysyms" rel="next" title=
+  "X11 Keysyms" />
+  <link href="Terminal-Output.html#Terminal-Output" rel="prev"
+  title="Terminal Output" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Sound-Output" id="Sound-Output"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="X11-Keysyms.html#X11-Keysyms" accesskey="n"
+    rel="next">X11 Keysyms</a>, Previous: <a href=
+    "Terminal-Output.html#Terminal-Output" accesskey="p" rel=
+    "prev">Terminal Output</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sound-Output-1" id="Sound-Output-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sound-Output"></a>
-<div class="header">
-<p>
-Next: <a href="X11-Keysyms.html#X11-Keysyms" accesskey="n" rel="next">X11 Keysyms</a>, Previous: <a href="Terminal-Output.html#Terminal-Output" accesskey="p" rel="prev">Terminal Output</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sound-Output-1"></a>
-<h3 class="section">38.15 Sound Output</h3>
-<a name="index-sound"></a>
+  <h3 class="section">38.15 Sound Output</h3><a name="index-sound"
+  id="index-sound"></a>
 
-<p>To play sound using Emacs, use the function <code>play-sound</code>.  Only
-certain systems are supported; if you call <code>play-sound</code> on a
-system which cannot really do the job, it gives an error.
-</p>
-<p>The sound must be stored as a file in RIFF-WAVE format (&lsquo;<samp>.wav</samp>&rsquo;)
-or Sun Audio format (&lsquo;<samp>.au</samp>&rsquo;).
-</p>
-<dl>
-<dt><a name="index-play_002dsound"></a>Function: <strong>play-sound</strong> <em>sound</em></dt>
-<dd><p>This function plays a specified sound.  The argument, <var>sound</var>, has
-the form <code>(sound <var>properties</var>...)</code>, where the <var>properties</var>
-consist of alternating keywords (particular symbols recognized
-specially) and values corresponding to them.
-</p>
-<p>Here is a table of the keywords that are currently meaningful in
-<var>sound</var>, and their meanings:
-</p>
-<dl compact="compact">
-<dt><code>:file <var>file</var></code></dt>
-<dd><p>This specifies the file containing the sound to play.
-If the file name is not absolute, it is expanded against
-the directory <code>data-directory</code>.
-</p>
-</dd>
-<dt><code>:data <var>data</var></code></dt>
-<dd><p>This specifies the sound to play without need to refer to a file.  The
-value, <var>data</var>, should be a string containing the same bytes as a
-sound file.  We recommend using a unibyte string.
-</p>
-</dd>
-<dt><code>:volume <var>volume</var></code></dt>
-<dd><p>This specifies how loud to play the sound.  It should be a number in the
-range of 0 to 1.  The default is to use whatever volume has been
-specified before.
-</p>
-</dd>
-<dt><code>:device <var>device</var></code></dt>
-<dd><p>This specifies the system device on which to play the sound, as a
-string.  The default device is system-dependent.
-</p></dd>
-</dl>
+  <p>To play sound using Emacs, use the function
+  <code>play-sound</code>. Only certain systems are supported; if
+  you call <code>play-sound</code> on a system which cannot really
+  do the job, it gives an error.</p>
 
-<p>Before actually playing the sound, <code>play-sound</code>
-calls the functions in the list <code>play-sound-functions</code>.
-Each function is called with one argument, <var>sound</var>.
-</p></dd></dl>
+  <p>The sound must be stored as a file in RIFF-WAVE format
+  (&lsquo;<samp>.wav</samp>&rsquo;) or Sun Audio format
+  (&lsquo;<samp>.au</samp>&rsquo;).</p>
 
-<dl>
-<dt><a name="index-play_002dsound_002dfile"></a>Command: <strong>play-sound-file</strong> <em>file &amp;optional volume device</em></dt>
-<dd><p>This function is an alternative interface to playing a sound <var>file</var>
-specifying an optional <var>volume</var> and <var>device</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-play_002dsound" id=
+    "index-play_002dsound"></a>Function:
+    <strong>play-sound</strong> <em>sound</em></dt>
 
-<dl>
-<dt><a name="index-play_002dsound_002dfunctions"></a>Variable: <strong>play-sound-functions</strong></dt>
-<dd><p>A list of functions to be called before playing a sound.  Each function
-is called with one argument, a property list that describes the sound.
-</p></dd></dl>
+    <dd>
+      <p>This function plays a specified sound. The argument,
+      <var>sound</var>, has the form <code>(sound
+      <var>properties</var>...)</code>, where the
+      <var>properties</var> consist of alternating keywords
+      (particular symbols recognized specially) and values
+      corresponding to them.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="X11-Keysyms.html#X11-Keysyms" accesskey="n" rel="next">X11 Keysyms</a>, Previous: <a href="Terminal-Output.html#Terminal-Output" accesskey="p" rel="prev">Terminal Output</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Here is a table of the keywords that are currently
+      meaningful in <var>sound</var>, and their meanings:</p>
 
+      <dl compact="compact">
+        <dt><code>:file <var>file</var></code></dt>
 
+        <dd>
+          <p>This specifies the file containing the sound to play.
+          If the file name is not absolute, it is expanded against
+          the directory <code>data-directory</code>.</p>
+        </dd>
 
+        <dt><code>:data <var>data</var></code></dt>
+
+        <dd>
+          <p>This specifies the sound to play without need to refer
+          to a file. The value, <var>data</var>, should be a string
+          containing the same bytes as a sound file. We recommend
+          using a unibyte string.</p>
+        </dd>
+
+        <dt><code>:volume <var>volume</var></code></dt>
+
+        <dd>
+          <p>This specifies how loud to play the sound. It should
+          be a number in the range of 0 to 1. The default is to use
+          whatever volume has been specified before.</p>
+        </dd>
+
+        <dt><code>:device <var>device</var></code></dt>
+
+        <dd>
+          <p>This specifies the system device on which to play the
+          sound, as a string. The default device is
+          system-dependent.</p>
+        </dd>
+      </dl>
+
+      <p>Before actually playing the sound, <code>play-sound</code>
+      calls the functions in the list
+      <code>play-sound-functions</code>. Each function is called
+      with one argument, <var>sound</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-play_002dsound_002dfile" id=
+    "index-play_002dsound_002dfile"></a>Command:
+    <strong>play-sound-file</strong> <em>file &amp;optional volume
+    device</em></dt>
+
+    <dd>
+      <p>This function is an alternative interface to playing a
+      sound <var>file</var> specifying an optional
+      <var>volume</var> and <var>device</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-play_002dsound_002dfunctions" id=
+    "index-play_002dsound_002dfunctions"></a>Variable:
+    <strong>play-sound-functions</strong></dt>
+
+    <dd>
+      <p>A list of functions to be called before playing a sound.
+      Each function is called with one argument, a property list
+      that describes the sound.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="X11-Keysyms.html#X11-Keysyms" accesskey="n"
+    rel="next">X11 Keysyms</a>, Previous: <a href=
+    "Terminal-Output.html#Terminal-Output" accesskey="p" rel=
+    "prev">Terminal Output</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes EDE, the Emacs Development Environment.
 
 Copyright (C) 1998-2001, 2004-2005, 2008-2016
@@ -15,215 +17,336 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Development Environment: ede-step-project</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Development Environment: ede-step-project">
-<meta name="keywords" content="Emacs Development Environment: ede-step-project">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Project.html#Project" rel="up" title="Project">
-<link href="Targets.html#Targets" rel="next" title="Targets">
-<link href="project_002dam_002dmakefile.html#project_002dam_002dmakefile" rel="prev" title="project-am-makefile">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Development Environment: ede-step-project</title>
+  <meta name="description" content=
+  "Emacs Development Environment: ede-step-project" />
+  <meta name="keywords" content=
+  "Emacs Development Environment: ede-step-project" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Project.html#Project" rel="up" title="Project" />
+  <link href="Targets.html#Targets" rel="next" title="Targets" />
+  <link href=
+  "project_002dam_002dmakefile.html#project_002dam_002dmakefile"
+  rel="prev" title="project-am-makefile" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="ede_002dstep_002dproject"></a>
-<div class="header">
-<p>
-Previous: <a href="project_002dam_002dmakefile.html#project_002dam_002dmakefile" accesskey="p" rel="prev">project-am-makefile</a>, Up: <a href="Project.html#Project" accesskey="u" rel="up">Project</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="ede_002dstep_002dproject-1"></a>
-<h4 class="subsection">8.7.8 ede-step-project</h4>
-<a name="index-ede_002dstep_002dproject"></a>
+<body lang="en" xml:lang="en">
+  <a name="ede_002dstep_002dproject" id=
+  "ede_002dstep_002dproject"></a>
 
-<dl compact="compact">
-<dt>Inheritance Tree:</dt>
-<dd><dl compact="compact">
-<dt><code>eieio-speedbar</code></dt>
-<dd><dl compact="compact">
-<dt><code>eieio-speedbar-directory-button</code></dt>
-<dd><dl compact="compact">
-<dt><code>See&nbsp;<a href="ede_002dproject_002dplaceholder.html#ede_002dproject_002dplaceholder">ede-project-placeholder</a>.<!-- /@w --></code></dt>
-<dd><dl compact="compact">
-<dt><code>See&nbsp;<a href="ede_002dproject.html#ede_002dproject">ede-project</a>.<!-- /@w --></code></dt>
-<dd><dl compact="compact">
-<dt><code>ede-step-project</code></dt>
-<dd><p>No children
-</p></dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
+  <div class="header">
+    <p>Previous: <a href=
+    "project_002dam_002dmakefile.html#project_002dam_002dmakefile"
+    accesskey="p" rel="prev">project-am-makefile</a>, Up: <a href=
+    "Project.html#Project" accesskey="u" rel="up">Project</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="ede_002dstep_002dproject-1" id=
+  "ede_002dstep_002dproject-1"></a>
 
-<dl compact="compact">
-<dt>Slots:</dt>
-<dd>
-<dl compact="compact">
-<dt><code>:init-variables</code></dt>
-<dd><p>Type: <code>list</code> <br>
-Default Value: <code>nil</code>
-</p>
-<p>Variables to set in this Makefile, at top of file.
-</p>
-</dd>
-<dt><code>:additional-variables</code></dt>
-<dd><p>Type: <code>(or null list)</code> <br>
-Default Value: <code>nil</code>
-</p>
-<p>Arbitrary variables needed from this project.
-It is safe to leave this blank.
-</p>
-</dd>
-<dt><code>:additional-rules</code></dt>
-<dd><p>Type: <code>(or null list)</code> <br>
-Default Value: <code>nil</code>
-</p>
-<p>Arbitrary rules and dependencies needed to make this target.
-It is safe to leave this blank.
-</p>
-</dd>
-<dt><code>:installation-domain</code></dt>
-<dd><p>Type: <code>symbol</code> <br>
-Default Value: <code>user</code>
-</p>
-<p>Installation domain specification.
-The variable GNUSTEP_INSTALLATION_DOMAIN is set at this value.
-</p>
-</dd>
-<dt><code>:preamble</code></dt>
-<dd><p>Type: <code>(or null list)</code> <br>
-Default Value: <code>(quote (&quot;GNUmakefile.preamble&quot;))</code>
-</p>
-<p>The auxiliary makefile for additional variables.
-Included just before the specific target files.
-</p>
-</dd>
-<dt><code>:postamble</code></dt>
-<dd><p>Type: <code>(or null list)</code> <br>
-Default Value: <code>(quote (&quot;GNUmakefile.postamble&quot;))</code>
-</p>
-<p>The auxiliary makefile for additional rules.
-Included just after the specific target files.
-</p>
-</dd>
-<dt><code>:metasubproject</code></dt>
-<dd><p>Type: <code>boolean</code> <br>
-Default Value: <code>nil</code>
-</p>
-<p>Non-<code>nil</code> if this is a metasubproject.
-Usually, a subproject is determined by a parent project.  If multiple top level
-projects are grouped into a large project not maintained by EDE, then you need
-to set this to non-<code>nil</code>.  The only effect is that the <code>dist</code> rule will then avoid
-making a tar file.
-</p>
-</dd>
-</dl>
+  <h4 class="subsection">8.7.8 ede-step-project</h4><a name=
+  "index-ede_002dstep_002dproject" id=
+  "index-ede_002dstep_002dproject"></a>
 
-</dd>
-</dl>
-<a name="Specialized-Methods-6"></a>
-<h4 class="subsubsection">8.7.8.1 Specialized Methods</h4>
+  <dl compact="compact">
+    <dt>Inheritance Tree:</dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dcreate-1"></a>Method: <strong>ede-proj-makefile-create</strong> <em>:AFTER this mfilename</em></dt>
-<dd><p>Create a GNUmakefile for all Makefile targets in <var>THIS</var>.
-<var>MFILENAME</var> is the makefile to generate.
-</p></dd></dl>
+    <dd>
+      <dl compact="compact">
+        <dt><code>eieio-speedbar</code></dt>
 
-<dl>
-<dt><a name="index-project_002dmake_002ddist-2"></a>Method: <strong>project-make-dist</strong> <em>:AFTER this</em></dt>
-<dd><p>Build a distribution for the project based on <var>THIS</var> target.
-</p></dd></dl>
+        <dd>
+          <dl compact="compact">
+            <dt><code>eieio-speedbar-directory-button</code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dcreate_002dmaybe-1"></a>Method: <strong>ede-proj-makefile-create-maybe</strong> <em>:AFTER this mfilename</em></dt>
-<dd><p>Create a Makefile for all Makefile targets in <var>THIS</var> if needed.
-<var>MFILENAME</var> is the makefile to generate.
-</p></dd></dl>
+            <dd>
+              <dl compact="compact">
+                <dt><code>See&nbsp;<a href=
+                "ede_002dproject_002dplaceholder.html#ede_002dproject_002dplaceholder">ede-project-placeholder</a>.<!-- /@w --></code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dsetup_002dbuildenvironment-1"></a>Method: <strong>ede-proj-setup-buildenvironment</strong> <em>:AFTER this &amp;optional force</em></dt>
-<dd><p>Setup the build environment for project <var>THIS</var>.
-Handles the Makefile, or a Makefile.am configure.ac combination.
-Optional argument <var>FORCE</var> will force items to be regenerated.
-</p></dd></dl>
+                <dd>
+                  <dl compact="compact">
+                    <dt><code>See&nbsp;<a href=
+                    "ede_002dproject.html#ede_002dproject">ede-project</a>.<!-- /@w --></code></dt>
 
-<dl>
-<dt><a name="index-eieio_002ddone_002dcustomizing-2"></a>Method: <strong>eieio-done-customizing</strong> <em>:AFTER proj</em></dt>
-<dd><p>Call this when a user finishes customizing this object.
-Argument <var>PROJ</var> is the project to save.
-</p></dd></dl>
+                    <dd>
+                      <dl compact="compact">
+                        <dt><code>ede-step-project</code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002ddist_002dmakefile-1"></a>Method: <strong>ede-proj-dist-makefile</strong> <em>:AFTER this</em></dt>
-<dd><p>Return the name of the Makefile with the DIST target in it for <var>THIS</var>.
-</p></dd></dl>
+                        <dd>
+                          <p>No children</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+                </dd>
+              </dl>
+            </dd>
+          </dl>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ede_002dcommit_002dproject-3"></a>Method: <strong>ede-commit-project</strong> <em>:AFTER proj</em></dt>
-<dd><p>Commit any change to <var>PROJ</var> to its file.
-</p></dd></dl>
+  <dl compact="compact">
+    <dt>Slots:</dt>
 
-<dl>
-<dt><a name="index-project_002ddist_002dfiles-2"></a>Method: <strong>project-dist-files</strong> <em>:AFTER this</em></dt>
-<dd><p>Return a list of files that constitutes a distribution of <var>THIS</var> project.
-</p></dd></dl>
+    <dd>
+      <dl compact="compact">
+        <dt><code>:init-variables</code></dt>
 
-<dl>
-<dt><a name="index-ede_002dcommit_002dlocal_002dvariables-2"></a>Method: <strong>ede-commit-local-variables</strong> <em>:AFTER proj</em></dt>
-<dd><p>Commit change to local variables in <var>PROJ</var>.
-</p></dd></dl>
+        <dd>
+          <p>Type: <code>list</code><br />
+          Default Value: <code>nil</code></p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="project_002dam_002dmakefile.html#project_002dam_002dmakefile" accesskey="p" rel="prev">project-am-makefile</a>, Up: <a href="Project.html#Project" accesskey="u" rel="up">Project</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+          <p>Variables to set in this Makefile, at top of file.</p>
+        </dd>
 
+        <dt><code>:additional-variables</code></dt>
 
+        <dd>
+          <p>Type: <code>(or null list)</code><br />
+          Default Value: <code>nil</code></p>
 
+          <p>Arbitrary variables needed from this project. It is
+          safe to leave this blank.</p>
+        </dd>
+
+        <dt><code>:additional-rules</code></dt>
+
+        <dd>
+          <p>Type: <code>(or null list)</code><br />
+          Default Value: <code>nil</code></p>
+
+          <p>Arbitrary rules and dependencies needed to make this
+          target. It is safe to leave this blank.</p>
+        </dd>
+
+        <dt><code>:installation-domain</code></dt>
+
+        <dd>
+          <p>Type: <code>symbol</code><br />
+          Default Value: <code>user</code></p>
+
+          <p>Installation domain specification. The variable
+          GNUSTEP_INSTALLATION_DOMAIN is set at this value.</p>
+        </dd>
+
+        <dt><code>:preamble</code></dt>
+
+        <dd>
+          <p>Type: <code>(or null list)</code><br />
+          Default Value: <code>(quote
+          ("GNUmakefile.preamble"))</code></p>
+
+          <p>The auxiliary makefile for additional variables.
+          Included just before the specific target files.</p>
+        </dd>
+
+        <dt><code>:postamble</code></dt>
+
+        <dd>
+          <p>Type: <code>(or null list)</code><br />
+          Default Value: <code>(quote
+          ("GNUmakefile.postamble"))</code></p>
+
+          <p>The auxiliary makefile for additional rules. Included
+          just after the specific target files.</p>
+        </dd>
+
+        <dt><code>:metasubproject</code></dt>
+
+        <dd>
+          <p>Type: <code>boolean</code><br />
+          Default Value: <code>nil</code></p>
+
+          <p>Non-<code>nil</code> if this is a metasubproject.
+          Usually, a subproject is determined by a parent project.
+          If multiple top level projects are grouped into a large
+          project not maintained by EDE, then you need to set this
+          to non-<code>nil</code>. The only effect is that the
+          <code>dist</code> rule will then avoid making a tar
+          file.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl><a name="Specialized-Methods-6" id=
+  "Specialized-Methods-6"></a>
+
+  <h4 class="subsubsection">8.7.8.1 Specialized Methods</h4>
+
+  <dl>
+    <dt><a name="index-ede_002dproj_002dmakefile_002dcreate-1" id=
+    "index-ede_002dproj_002dmakefile_002dcreate-1"></a>Method:
+    <strong>ede-proj-makefile-create</strong> <em>:AFTER this
+    mfilename</em></dt>
+
+    <dd>
+      <p>Create a GNUmakefile for all Makefile targets in
+      <var>THIS</var>. <var>MFILENAME</var> is the makefile to
+      generate.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-project_002dmake_002ddist-2" id=
+    "index-project_002dmake_002ddist-2"></a>Method:
+    <strong>project-make-dist</strong> <em>:AFTER this</em></dt>
+
+    <dd>
+      <p>Build a distribution for the project based on
+      <var>THIS</var> target.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dcreate_002dmaybe-1" id=
+    "index-ede_002dproj_002dmakefile_002dcreate_002dmaybe-1"></a>Method:
+    <strong>ede-proj-makefile-create-maybe</strong> <em>:AFTER this
+    mfilename</em></dt>
+
+    <dd>
+      <p>Create a Makefile for all Makefile targets in
+      <var>THIS</var> if needed. <var>MFILENAME</var> is the
+      makefile to generate.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dsetup_002dbuildenvironment-1" id=
+    "index-ede_002dproj_002dsetup_002dbuildenvironment-1"></a>Method:
+    <strong>ede-proj-setup-buildenvironment</strong> <em>:AFTER
+    this &amp;optional force</em></dt>
+
+    <dd>
+      <p>Setup the build environment for project <var>THIS</var>.
+      Handles the Makefile, or a Makefile.am configure.ac
+      combination. Optional argument <var>FORCE</var> will force
+      items to be regenerated.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-eieio_002ddone_002dcustomizing-2" id=
+    "index-eieio_002ddone_002dcustomizing-2"></a>Method:
+    <strong>eieio-done-customizing</strong> <em>:AFTER
+    proj</em></dt>
+
+    <dd>
+      <p>Call this when a user finishes customizing this object.
+      Argument <var>PROJ</var> is the project to save.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ede_002dproj_002ddist_002dmakefile-1" id=
+    "index-ede_002dproj_002ddist_002dmakefile-1"></a>Method:
+    <strong>ede-proj-dist-makefile</strong> <em>:AFTER
+    this</em></dt>
+
+    <dd>
+      <p>Return the name of the Makefile with the DIST target in it
+      for <var>THIS</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ede_002dcommit_002dproject-3" id=
+    "index-ede_002dcommit_002dproject-3"></a>Method:
+    <strong>ede-commit-project</strong> <em>:AFTER proj</em></dt>
+
+    <dd>
+      <p>Commit any change to <var>PROJ</var> to its file.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-project_002ddist_002dfiles-2" id=
+    "index-project_002ddist_002dfiles-2"></a>Method:
+    <strong>project-dist-files</strong> <em>:AFTER this</em></dt>
+
+    <dd>
+      <p>Return a list of files that constitutes a distribution of
+      <var>THIS</var> project.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ede_002dcommit_002dlocal_002dvariables-2"
+    id="index-ede_002dcommit_002dlocal_002dvariables-2"></a>Method:
+    <strong>ede-commit-local-variables</strong> <em>:AFTER
+    proj</em></dt>
+
+    <dd>
+      <p>Commit change to local variables in <var>PROJ</var>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "project_002dam_002dmakefile.html#project_002dam_002dmakefile"
+    accesskey="p" rel="prev">project-am-makefile</a>, Up: <a href=
+    "Project.html#Project" accesskey="u" rel="up">Project</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,176 +20,258 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Keyboard Macro Counter</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Keyboard Macro Counter">
-<meta name="keywords" content="GNU Emacs Manual: Keyboard Macro Counter">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title="Keyboard Macros">
-<link href="Keyboard-Macro-Query.html#Keyboard-Macro-Query" rel="next" title="Keyboard Macro Query">
-<link href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring" rel="prev" title="Keyboard Macro Ring">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Keyboard Macro Counter</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Keyboard Macro Counter" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Keyboard Macro Counter" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title=
+  "Keyboard Macros" />
+  <link href="Keyboard-Macro-Query.html#Keyboard-Macro-Query" rel=
+  "next" title="Keyboard Macro Query" />
+  <link href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring" rel=
+  "prev" title="Keyboard Macro Ring" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Keyboard-Macro-Counter" id="Keyboard-Macro-Counter"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Keyboard-Macro-Query.html#Keyboard-Macro-Query" accesskey="n"
+    rel="next">Keyboard Macro Query</a>, Previous: <a href=
+    "Keyboard-Macro-Ring.html#Keyboard-Macro-Ring" accesskey="p"
+    rel="prev">Keyboard Macro Ring</a>, Up: <a href=
+    "Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel=
+    "up">Keyboard Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Keyboard-Macro-Counter" id=
+  "The-Keyboard-Macro-Counter"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Keyboard-Macro-Counter"></a>
-<div class="header">
-<p>
-Next: <a href="Keyboard-Macro-Query.html#Keyboard-Macro-Query" accesskey="n" rel="next">Keyboard Macro Query</a>, Previous: <a href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring" accesskey="p" rel="prev">Keyboard Macro Ring</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Keyboard-Macro-Counter"></a>
-<h3 class="section">17.3 The Keyboard Macro Counter</h3>
+  <h3 class="section">17.3 The Keyboard Macro Counter</h3>
 
-<p>Each keyboard macro has an associated counter, which is initialized
-to 0 when you start defining the macro.  This counter allows you to
-insert a number into the buffer that depends on the number of times
-the macro has been called.  The counter is incremented each time its
-value is inserted into the buffer.
-</p>
-<dl compact="compact">
-<dt><kbd><span class="key">F3</span></kbd></dt>
-<dd><p>In a keyboard macro definition, insert the keyboard macro counter
-value in the buffer (<code>kmacro-start-macro-or-insert-counter</code>).
-</p></dd>
-<dt><kbd>C-x C-k C-i</kbd></dt>
-<dd><p>Insert the keyboard macro counter value in the buffer
-(<code>kmacro-insert-counter</code>).
-</p></dd>
-<dt><kbd>C-x C-k C-c</kbd></dt>
-<dd><p>Set the keyboard macro counter (<code>kmacro-set-counter</code>).
-</p></dd>
-<dt><kbd>C-x C-k C-a</kbd></dt>
-<dd><p>Add the prefix arg to the keyboard macro counter (<code>kmacro-add-counter</code>).
-</p></dd>
-<dt><kbd>C-x C-k C-f</kbd></dt>
-<dd><p>Specify the format for inserting the keyboard macro counter
-(<code>kmacro-set-format</code>).
-</p></dd>
-</dl>
+  <p>Each keyboard macro has an associated counter, which is
+  initialized to 0 when you start defining the macro. This counter
+  allows you to insert a number into the buffer that depends on the
+  number of times the macro has been called. The counter is
+  incremented each time its value is inserted into the buffer.</p>
 
-<a name="index-kmacro_002dinsert_002dcounter"></a>
-<a name="index-C_002dx-C_002dk-C_002di"></a>
-<p>When you are defining a keyboard macro, the command <tt class="key">F3</tt>
-(<code>kmacro-start-macro-or-insert-counter</code>) inserts the current
-value of the keyboard macro&rsquo;s counter into the buffer, and increments
-the counter by 1.  (If you are not defining a macro, <tt class="key">F3</tt> begins a
-macro definition instead.  See <a href="Basic-Keyboard-Macro.html#Basic-Keyboard-Macro">Basic Keyboard Macro</a>.)  You can use
-a numeric prefix argument to specify a different increment.  If you
-just specify a <kbd>C-u</kbd> prefix, that is the same as an increment of
-zero: it inserts the current counter value without changing it.
-</p>
-<p>As an example, let us show how the keyboard macro counter can be
-used to build a numbered list.  Consider the following key sequence:
-</p>
-<div class="example">
-<pre class="example"><span class="key">F3</span> C-a <span class="key">F3</span> . <span class="key">SPC</span> <span class="key">F4</span>
-</pre></div>
+  <dl compact="compact">
+    <dt><kbd><span class="key">F3</span></kbd></dt>
 
-<p>As part of this keyboard macro definition, the string &lsquo;<samp>0. </samp>&rsquo; was
-inserted into the beginning of the current line.  If you now move
-somewhere else in the buffer and type <tt class="key">F4</tt> to invoke the macro,
-the string &lsquo;<samp>1. </samp>&rsquo; is inserted at the beginning of that line.
-Subsequent invocations insert &lsquo;<samp>2. </samp>&rsquo;, &lsquo;<samp>3. </samp>&rsquo;, and so forth.
-</p>
-<p>The command <kbd>C-x C-k C-i</kbd> (<code>kmacro-insert-counter</code>) does
-the same thing as <tt class="key">F3</tt>, but it can be used outside a keyboard
-macro definition.  When no keyboard macro is being defined or
-executed, it inserts and increments the counter of the macro at the
-head of the keyboard macro ring.
-</p>
-<a name="index-kmacro_002dset_002dcounter"></a>
-<a name="index-C_002dx-C_002dk-C_002dc"></a>
-<p>The command <kbd>C-x C-k C-c</kbd> (<code>kmacro-set-counter</code>) sets the
-current macro counter to the value of the numeric argument.  If you use
-it inside the macro, it operates on each repetition of the macro.  If
-you specify just <kbd>C-u</kbd> as the prefix, while executing the macro,
-that resets the counter to the value it had at the beginning of the
-current repetition of the macro (undoing any increments so far in this
-repetition).
-</p>
-<a name="index-kmacro_002dadd_002dcounter"></a>
-<a name="index-C_002dx-C_002dk-C_002da"></a>
-<p>The command <kbd>C-x C-k C-a</kbd> (<code>kmacro-add-counter</code>) adds the
-prefix argument to the current macro counter.  With just <kbd>C-u</kbd> as
-argument, it resets the counter to the last value inserted by any
-keyboard macro.  (Normally, when you use this, the last insertion
-will be in the same macro and it will be the same counter.)
-</p>
-<a name="index-kmacro_002dset_002dformat"></a>
-<a name="index-C_002dx-C_002dk-C_002df"></a>
-<p>The command <kbd>C-x C-k C-f</kbd> (<code>kmacro-set-format</code>) prompts for
-the format to use when inserting the macro counter.  The default
-format is &lsquo;<samp>%d</samp>&rsquo;, which means to insert the number in decimal
-without any padding.  You can exit with empty minibuffer to reset the
-format to this default.  You can specify any format string that the
-<code>format</code> function accepts and that makes sense with a single
-integer extra argument (see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Formatting-Strings.html#Formatting-Strings">Formatting Strings</a> in <cite>The Emacs
-Lisp Reference Manual</cite>).  Do not put the format string inside double
-quotes when you insert it in the minibuffer.
-</p>
-<p>If you use this command while no keyboard macro is being defined or
-executed, the new format affects all subsequent macro definitions.
-Existing macros continue to use the format in effect when they were
-defined.  If you set the format while defining a keyboard macro, this
-affects the macro being defined from that point on, but it does not
-affect subsequent macros.  Execution of the macro will, at each step,
-use the format in effect at that step during its definition.  Changes
-to the macro format during execution of a macro, like the
-corresponding changes during its definition, have no effect on
-subsequent macros.
-</p>
-<p>The format set by <kbd>C-x C-k C-f</kbd> does not affect insertion of
-numbers stored in registers.
-</p>
-<p>If you use a register as a counter, incrementing it on each
-repetition of the macro, that accomplishes the same thing as a
-keyboard macro counter.  See <a href="Number-Registers.html#Number-Registers">Number Registers</a>.  For most purposes,
-it is simpler to use a keyboard macro counter.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Keyboard-Macro-Query.html#Keyboard-Macro-Query" accesskey="n" rel="next">Keyboard Macro Query</a>, Previous: <a href="Keyboard-Macro-Ring.html#Keyboard-Macro-Ring" accesskey="p" rel="prev">Keyboard Macro Ring</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>In a keyboard macro definition, insert the keyboard macro
+      counter value in the buffer
+      (<code>kmacro-start-macro-or-insert-counter</code>).</p>
+    </dd>
 
+    <dt><kbd>C-x C-k C-i</kbd></dt>
 
+    <dd>
+      <p>Insert the keyboard macro counter value in the buffer
+      (<code>kmacro-insert-counter</code>).</p>
+    </dd>
 
+    <dt><kbd>C-x C-k C-c</kbd></dt>
+
+    <dd>
+      <p>Set the keyboard macro counter
+      (<code>kmacro-set-counter</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x C-k C-a</kbd></dt>
+
+    <dd>
+      <p>Add the prefix arg to the keyboard macro counter
+      (<code>kmacro-add-counter</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x C-k C-f</kbd></dt>
+
+    <dd>
+      <p>Specify the format for inserting the keyboard macro
+      counter (<code>kmacro-set-format</code>).</p>
+    </dd>
+  </dl><a name="index-kmacro_002dinsert_002dcounter" id=
+  "index-kmacro_002dinsert_002dcounter"></a> <a name=
+  "index-C_002dx-C_002dk-C_002di" id=
+  "index-C_002dx-C_002dk-C_002di"></a>
+
+  <p>When you are defining a keyboard macro, the command <tt class=
+  "key">F3</tt> (<code>kmacro-start-macro-or-insert-counter</code>)
+  inserts the current value of the keyboard macro&rsquo;s counter
+  into the buffer, and increments the counter by 1. (If you are not
+  defining a macro, <tt class="key">F3</tt> begins a macro
+  definition instead. See <a href=
+  "Basic-Keyboard-Macro.html#Basic-Keyboard-Macro">Basic Keyboard
+  Macro</a>.) You can use a numeric prefix argument to specify a
+  different increment. If you just specify a <kbd>C-u</kbd> prefix,
+  that is the same as an increment of zero: it inserts the current
+  counter value without changing it.</p>
+
+  <p>As an example, let us show how the keyboard macro counter can
+  be used to build a numbered list. Consider the following key
+  sequence:</p>
+
+  <div class="example">
+    <pre class="example">
+<span class="key">F3</span> C-a <span class=
+"key">F3</span> . <span class="key">SPC</span> <span class=
+"key">F4</span>
+</pre>
+  </div>
+
+  <p>As part of this keyboard macro definition, the string
+  &lsquo;<samp>0.</samp> &rsquo; was inserted into the beginning of
+  the current line. If you now move somewhere else in the buffer
+  and type <tt class="key">F4</tt> to invoke the macro, the string
+  &lsquo;<samp>1.</samp> &rsquo; is inserted at the beginning of
+  that line. Subsequent invocations insert &lsquo;<samp>2.</samp>
+  &rsquo;, &lsquo;<samp>3.</samp> &rsquo;, and so forth.</p>
+
+  <p>The command <kbd>C-x C-k C-i</kbd>
+  (<code>kmacro-insert-counter</code>) does the same thing as
+  <tt class="key">F3</tt>, but it can be used outside a keyboard
+  macro definition. When no keyboard macro is being defined or
+  executed, it inserts and increments the counter of the macro at
+  the head of the keyboard macro ring.</p><a name=
+  "index-kmacro_002dset_002dcounter" id=
+  "index-kmacro_002dset_002dcounter"></a> <a name=
+  "index-C_002dx-C_002dk-C_002dc" id=
+  "index-C_002dx-C_002dk-C_002dc"></a>
+
+  <p>The command <kbd>C-x C-k C-c</kbd>
+  (<code>kmacro-set-counter</code>) sets the current macro counter
+  to the value of the numeric argument. If you use it inside the
+  macro, it operates on each repetition of the macro. If you
+  specify just <kbd>C-u</kbd> as the prefix, while executing the
+  macro, that resets the counter to the value it had at the
+  beginning of the current repetition of the macro (undoing any
+  increments so far in this repetition).</p><a name=
+  "index-kmacro_002dadd_002dcounter" id=
+  "index-kmacro_002dadd_002dcounter"></a> <a name=
+  "index-C_002dx-C_002dk-C_002da" id=
+  "index-C_002dx-C_002dk-C_002da"></a>
+
+  <p>The command <kbd>C-x C-k C-a</kbd>
+  (<code>kmacro-add-counter</code>) adds the prefix argument to the
+  current macro counter. With just <kbd>C-u</kbd> as argument, it
+  resets the counter to the last value inserted by any keyboard
+  macro. (Normally, when you use this, the last insertion will be
+  in the same macro and it will be the same counter.)</p><a name=
+  "index-kmacro_002dset_002dformat" id=
+  "index-kmacro_002dset_002dformat"></a> <a name=
+  "index-C_002dx-C_002dk-C_002df" id=
+  "index-C_002dx-C_002dk-C_002df"></a>
+
+  <p>The command <kbd>C-x C-k C-f</kbd>
+  (<code>kmacro-set-format</code>) prompts for the format to use
+  when inserting the macro counter. The default format is
+  &lsquo;<samp>%d</samp>&rsquo;, which means to insert the number
+  in decimal without any padding. You can exit with empty
+  minibuffer to reset the format to this default. You can specify
+  any format string that the <code>format</code> function accepts
+  and that makes sense with a single integer extra argument (see
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Formatting-Strings.html#Formatting-Strings">
+  Formatting Strings</a> in <cite>The Emacs Lisp Reference
+  Manual</cite>). Do not put the format string inside double quotes
+  when you insert it in the minibuffer.</p>
+
+  <p>If you use this command while no keyboard macro is being
+  defined or executed, the new format affects all subsequent macro
+  definitions. Existing macros continue to use the format in effect
+  when they were defined. If you set the format while defining a
+  keyboard macro, this affects the macro being defined from that
+  point on, but it does not affect subsequent macros. Execution of
+  the macro will, at each step, use the format in effect at that
+  step during its definition. Changes to the macro format during
+  execution of a macro, like the corresponding changes during its
+  definition, have no effect on subsequent macros.</p>
+
+  <p>The format set by <kbd>C-x C-k C-f</kbd> does not affect
+  insertion of numbers stored in registers.</p>
+
+  <p>If you use a register as a counter, incrementing it on each
+  repetition of the macro, that accomplishes the same thing as a
+  keyboard macro counter. See <a href=
+  "Number-Registers.html#Number-Registers">Number Registers</a>.
+  For most purposes, it is simpler to use a keyboard macro
+  counter.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Keyboard-Macro-Query.html#Keyboard-Macro-Query" accesskey="n"
+    rel="next">Keyboard Macro Query</a>, Previous: <a href=
+    "Keyboard-Macro-Ring.html#Keyboard-Macro-Ring" accesskey="p"
+    rel="prev">Keyboard Macro Ring</a>, Up: <a href=
+    "Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel=
+    "up">Keyboard Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

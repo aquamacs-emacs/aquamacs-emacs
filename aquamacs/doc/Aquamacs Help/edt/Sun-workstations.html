@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Sun workstations - EDT Emulation for Emacs</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="EDT Emulation for Emacs">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Platform_002dspecific-notes.html#Platform_002dspecific-notes" title="Platform-specific notes">
-<link rel="next" href="MS_002dDOS.html#MS_002dDOS" title="MS-DOS">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Sun workstations - EDT Emulation for Emacs</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="EDT Emulation for Emacs" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Platform_002dspecific-notes.html#Platform_002dspecific-notes"
+  title="Platform-specific notes" />
+  <link rel="next" href="MS_002dDOS.html#MS_002dDOS" title=
+  "MS-DOS" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the EDT emulation package for Emacs.
 
 Copyright (C) 1986, 1992, 1994, 1995, 1999, 2000, 2001, 2002,
@@ -27,8 +36,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,40 +49,49 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Sun-workstations"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="MS_002dDOS.html#MS_002dDOS">MS-DOS</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Platform_002dspecific-notes.html#Platform_002dspecific-notes">Platform-specific notes</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Sun-workstations" id="Sun-workstations"></a>
 
-<h3 class="section">4.1 Sun Workstations Running X</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "MS_002dDOS.html#MS_002dDOS">MS-DOS</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Platform_002dspecific-notes.html#Platform_002dspecific-notes">Platform-specific
+    notes</a></p>
+    <hr />
+  </div>
 
-<p>Some earlier Sun keyboards do not have arrow keys separate from the
-keypad keys.  It is difficult to emulate the full EDT keypad and still
-retain use of the arrow keys on such keyboards.
+  <h3 class="section">4.1 Sun Workstations Running X</h3>
 
-   <p>The Sun Type 5 and other more recent Sun keyboards, however, do have
-separate arrow keys.  This makes them candidates for setting up a
-reasonable EDT keypad emulation.
+  <p>Some earlier Sun keyboards do not have arrow keys separate
+  from the keypad keys. It is difficult to emulate the full EDT
+  keypad and still retain use of the arrow keys on such
+  keyboards.</p>
 
-   <p>Depending upon the configuration of the version of X installed on your
-system, you may find the default X keynames for the keypad keys don't
-permit Emacs to interpret some or all the keypad keys as something other
-than arrow keys, numeric keys, &lt;Home&gt;, &lt;PageUp&gt;, etc.  Both Sun
-and HP have been particularly guilty of making bizarre keysym
-assignments to the keypad keys.
+  <p>The Sun Type 5 and other more recent Sun keyboards, however,
+  do have separate arrow keys. This makes them candidates for
+  setting up a reasonable EDT keypad emulation.</p>
 
-   <p>In most cases, the X Windows command, <code>xmodmap</code>, can be used to
-correct the problem.  Here's a sample <samp><span class="file">.xmodmaprc</span></samp> file which
-corrects this problem on one Sun workstation configuration using an
-older SunOS release configured with a Sun Type 5 keyboard:
+  <p>Depending upon the configuration of the version of X installed
+  on your system, you may find the default X keynames for the
+  keypad keys don't permit Emacs to interpret some or all the
+  keypad keys as something other than arrow keys, numeric keys,
+  &lt;Home&gt;, &lt;PageUp&gt;, etc. Both Sun and HP have been
+  particularly guilty of making bizarre keysym assignments to the
+  keypad keys.</p>
 
-<pre class="example">     ! File:  .xmodmaprc
+  <p>In most cases, the X Windows command, <code>xmodmap</code>,
+  can be used to correct the problem. Here's a sample
+  <samp><span class="file">.xmodmaprc</span></samp> file which
+  corrects this problem on one Sun workstation configuration using
+  an older SunOS release configured with a Sun Type 5 keyboard:</p>
+  <pre class="example">
+     ! File:  .xmodmaprc
      !
      ! Set up Sun Type 5 keypad for use with the GNU Emacs EDT Emulation
      !
@@ -93,28 +113,35 @@ older SunOS release configured with a Sun Type 5 keyboard:
      keycode 121 = KP_3
      keycode 132 = KP_Add
 </pre>
-   <p>If <samp><span class="file">edt-mapper.el</span></samp> does not recognize your keypad keys as unique
-keys, use the command &lsquo;<samp><span class="samp">xmodmap -pke</span></samp>&rsquo; to get a listing of the actual
-key codes and the keysyms mapped to them and then generate you own
-custom <samp><span class="file">.xmodmaprc</span></samp> similar to the one above.
 
-   <p>Next, feed <samp><span class="file">.xmodmaprc</span></samp> to the <code>xmodmap</code> command and all the
-Sun Type 5 keypad keys will now be configurable for the emulation of an
-LK-201 keypad (less the &lt;,&gt; key).  In this example, the line
+  <p>If <samp><span class="file">edt-mapper.el</span></samp> does
+  not recognize your keypad keys as unique keys, use the command
+  &lsquo;<samp><span class="samp">xmodmap -pke</span></samp>&rsquo;
+  to get a listing of the actual key codes and the keysyms mapped
+  to them and then generate you own custom <samp><span class=
+  "file">.xmodmaprc</span></samp> similar to the one above.</p>
 
-<pre class="example">     keycode 105 = F24
+  <p>Next, feed <samp><span class="file">.xmodmaprc</span></samp>
+  to the <code>xmodmap</code> command and all the Sun Type 5 keypad
+  keys will now be configurable for the emulation of an LK-201
+  keypad (less the &lt;,&gt; key). In this example, the line</p>
+  <pre class="example">
+     keycode 105 = F24
 </pre>
-   <p class="noindent">changes the X Windows name of the keypad &lt;NumLock&gt; key to
-be known internally as the &lt;F24&gt; key.  Doing so permits it to be
-configured to behave as the &lt;PF1&gt; (&lt;GOLD&gt;) key.
 
-   <p>The side effect of this change is that you will no longer have a
-&lt;NumLock&gt; key.  If you are using other software under X which
-requires a &lt;NumLock&gt; key, then examine your keyboard and look for
-one you don't use and redefine it to be the &lt;NumLock&gt; key. 
-Basically, you need to clear the &lt;NumLock&gt; key from being assigned
-as a modifier, assign it to the key of your choice, and then add it back
-as a modifier.  (<a href="Unix.html#Unix">Unix</a> for further help on how to do this.)
+  <p class="noindent">changes the X Windows name of the keypad
+  &lt;NumLock&gt; key to be known internally as the &lt;F24&gt;
+  key. Doing so permits it to be configured to behave as the
+  &lt;PF1&gt; (&lt;GOLD&gt;) key.</p>
 
-   </body></html>
-
+  <p>The side effect of this change is that you will no longer have
+  a &lt;NumLock&gt; key. If you are using other software under X
+  which requires a &lt;NumLock&gt; key, then examine your keyboard
+  and look for one you don't use and redefine it to be the
+  &lt;NumLock&gt; key. Basically, you need to clear the
+  &lt;NumLock&gt; key from being assigned as a modifier, assign it
+  to the key of your choice, and then add it back as a modifier.
+  (<a href="Unix.html#Unix">Unix</a> for further help on how to do
+  this.)</p>
+</body>
+</html>

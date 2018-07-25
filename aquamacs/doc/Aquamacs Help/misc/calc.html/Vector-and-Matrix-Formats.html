@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,204 +18,268 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Vector and Matrix Formats</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Vector and Matrix Formats">
-<meta name="keywords" content="GNU Emacs Calc Manual: Vector and Matrix Formats">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Matrix-Functions.html#Matrix-Functions" rel="up" title="Matrix Functions">
-<link href="Algebra.html#Algebra" rel="next" title="Algebra">
-<link href="Generalized-Products.html#Generalized-Products" rel="prev" title="Generalized Products">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Vector and Matrix Formats</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Vector and Matrix Formats" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Vector and Matrix Formats" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Matrix-Functions.html#Matrix-Functions" rel="up"
+  title="Matrix Functions" />
+  <link href="Algebra.html#Algebra" rel="next" title="Algebra" />
+  <link href="Generalized-Products.html#Generalized-Products" rel=
+  "prev" title="Generalized Products" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Vector-and-Matrix-Formats"></a>
-<div class="header">
-<p>
-Previous: <a href="Reducing-and-Mapping.html#Reducing-and-Mapping" accesskey="p" rel="prev">Reducing and Mapping</a>, Up: <a href="Matrix-Functions.html#Matrix-Functions" accesskey="u" rel="up">Matrix Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Vector-and-Matrix-Display-Formats"></a>
-<h3 class="section">9.9 Vector and Matrix Display Formats</h3>
+<body lang="en" xml:lang="en">
+  <a name="Vector-and-Matrix-Formats" id=
+  "Vector-and-Matrix-Formats"></a>
 
-<p>Commands for controlling vector and matrix display use the <kbd>v</kbd> prefix
-instead of the usual <kbd>d</kbd> prefix.  But they are display modes; in
-particular, they are influenced by the <kbd>I</kbd> and <kbd>H</kbd> prefix keys
-in the same way (see <a href="Display-Modes.html#Display-Modes">Display Modes</a>).  Matrix display is also
-influenced by the <kbd>d O</kbd> (<code>calc-flat-language</code>) mode;
-see <a href="Normal-Language-Modes.html#Normal-Language-Modes">Normal Language Modes</a>.
-</p>
-<a name="index-v-_003c"></a>
-<a name="index-V-_003c"></a>
-<a name="index-calc_002dmatrix_002dleft_002djustify"></a>
-<a name="index-v-_003d"></a>
-<a name="index-V-_003d"></a>
-<a name="index-calc_002dmatrix_002dcenter_002djustify"></a>
-<a name="index-v-_003e"></a>
-<a name="index-V-_003e"></a>
-<a name="index-calc_002dmatrix_002dright_002djustify"></a>
-<p>The commands <kbd>v &lt;</kbd> (<code>calc-matrix-left-justify</code>), <kbd>v &gt;</kbd>
-(<code>calc-matrix-right-justify</code>), and <kbd>v&nbsp;=</kbd><!-- /@w -->
-(<code>calc-matrix-center-justify</code>) control whether matrix elements
-are justified to the left, right, or center of their columns.
-</p>
-<a name="index-v-_005b"></a>
-<a name="index-V-_005b"></a>
-<a name="index-calc_002dvector_002dbrackets"></a>
-<a name="index-v-_007b"></a>
-<a name="index-V-_007b"></a>
-<a name="index-calc_002dvector_002dbraces"></a>
-<a name="index-v-_0028"></a>
-<a name="index-V-_0028"></a>
-<a name="index-calc_002dvector_002dparens"></a>
-<p>The <kbd>v [</kbd> (<code>calc-vector-brackets</code>) command turns the square
-brackets that surround vectors and matrices displayed in the stack on
-and off.  The <kbd>v {</kbd> (<code>calc-vector-braces</code>) and <kbd>v (</kbd>
-(<code>calc-vector-parens</code>) commands use curly braces or parentheses,
-respectively, instead of square brackets.  For example, <kbd>v {</kbd> might
-be used in preparation for yanking a matrix into a buffer running
-Mathematica.  (In fact, the Mathematica language mode uses this mode;
-see <a href="Mathematica-Language-Mode.html#Mathematica-Language-Mode">Mathematica Language Mode</a>.)  Note that, regardless of the
-display mode, either brackets or braces may be used to enter vectors,
-and parentheses may never be used for this purpose.
-</p>
-<a name="index-V-_005d"></a>
-<a name="index-v-_005d"></a>
-<a name="index-V-_0029"></a>
-<a name="index-v-_0029"></a>
-<a name="index-V-_007d"></a>
-<a name="index-v-_007d"></a>
-<a name="index-calc_002dmatrix_002dbrackets"></a>
-<p>The <kbd>v ]</kbd> (<code>calc-matrix-brackets</code>) command controls the
-&ldquo;big&rdquo; style display of matrices, for matrices which have more than
-one row.  It prompts for a string of code letters; currently
-implemented letters are <code>R</code>, which enables brackets on each row
-of the matrix; <code>O</code>, which enables outer brackets in opposite
-corners of the matrix; and <code>C</code>, which enables commas or
-semicolons at the ends of all rows but the last.  The default format
-is &lsquo;<samp>RO</samp>&rsquo;.  (Before Calc 2.00, the format was fixed at &lsquo;<samp>ROC</samp>&rsquo;.)
-Here are some example matrices:
-</p>
-<div class="example">
-<pre class="example">[ [ 123,  0,   0  ]       [ [ 123,  0,   0  ],
+  <div class="header">
+    <p>Previous: <a href=
+    "Reducing-and-Mapping.html#Reducing-and-Mapping" accesskey="p"
+    rel="prev">Reducing and Mapping</a>, Up: <a href=
+    "Matrix-Functions.html#Matrix-Functions" accesskey="u" rel=
+    "up">Matrix Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Vector-and-Matrix-Display-Formats" id=
+  "Vector-and-Matrix-Display-Formats"></a>
+
+  <h3 class="section">9.9 Vector and Matrix Display Formats</h3>
+
+  <p>Commands for controlling vector and matrix display use the
+  <kbd>v</kbd> prefix instead of the usual <kbd>d</kbd> prefix. But
+  they are display modes; in particular, they are influenced by the
+  <kbd>I</kbd> and <kbd>H</kbd> prefix keys in the same way (see
+  <a href="Display-Modes.html#Display-Modes">Display Modes</a>).
+  Matrix display is also influenced by the <kbd>d O</kbd>
+  (<code>calc-flat-language</code>) mode; see <a href=
+  "Normal-Language-Modes.html#Normal-Language-Modes">Normal
+  Language Modes</a>.</p><a name="index-v-_003c" id=
+  "index-v-_003c"></a> <a name="index-V-_003c" id=
+  "index-V-_003c"></a> <a name=
+  "index-calc_002dmatrix_002dleft_002djustify" id=
+  "index-calc_002dmatrix_002dleft_002djustify"></a> <a name=
+  "index-v-_003d" id="index-v-_003d"></a> <a name="index-V-_003d"
+  id="index-V-_003d"></a> <a name=
+  "index-calc_002dmatrix_002dcenter_002djustify" id=
+  "index-calc_002dmatrix_002dcenter_002djustify"></a> <a name=
+  "index-v-_003e" id="index-v-_003e"></a> <a name="index-V-_003e"
+  id="index-V-_003e"></a> <a name=
+  "index-calc_002dmatrix_002dright_002djustify" id=
+  "index-calc_002dmatrix_002dright_002djustify"></a>
+
+  <p>The commands <kbd>v &lt;</kbd>
+  (<code>calc-matrix-left-justify</code>), <kbd>v &gt;</kbd>
+  (<code>calc-matrix-right-justify</code>), and <kbd>v&nbsp;=</kbd>
+  <!-- /@w -->
+  (<code>calc-matrix-center-justify</code>) control whether matrix
+  elements are justified to the left, right, or center of their
+  columns.</p><a name="index-v-_005b" id="index-v-_005b"></a>
+  <a name="index-V-_005b" id="index-V-_005b"></a> <a name=
+  "index-calc_002dvector_002dbrackets" id=
+  "index-calc_002dvector_002dbrackets"></a> <a name="index-v-_007b"
+  id="index-v-_007b"></a> <a name="index-V-_007b" id=
+  "index-V-_007b"></a> <a name="index-calc_002dvector_002dbraces"
+  id="index-calc_002dvector_002dbraces"></a> <a name=
+  "index-v-_0028" id="index-v-_0028"></a> <a name="index-V-_0028"
+  id="index-V-_0028"></a> <a name=
+  "index-calc_002dvector_002dparens" id=
+  "index-calc_002dvector_002dparens"></a>
+
+  <p>The <kbd>v [</kbd> (<code>calc-vector-brackets</code>) command
+  turns the square brackets that surround vectors and matrices
+  displayed in the stack on and off. The <kbd>v {</kbd>
+  (<code>calc-vector-braces</code>) and <kbd>v (</kbd>
+  (<code>calc-vector-parens</code>) commands use curly braces or
+  parentheses, respectively, instead of square brackets. For
+  example, <kbd>v {</kbd> might be used in preparation for yanking
+  a matrix into a buffer running Mathematica. (In fact, the
+  Mathematica language mode uses this mode; see <a href=
+  "Mathematica-Language-Mode.html#Mathematica-Language-Mode">Mathematica
+  Language Mode</a>.) Note that, regardless of the display mode,
+  either brackets or braces may be used to enter vectors, and
+  parentheses may never be used for this purpose.</p><a name=
+  "index-V-_005d" id="index-V-_005d"></a> <a name="index-v-_005d"
+  id="index-v-_005d"></a> <a name="index-V-_0029" id=
+  "index-V-_0029"></a> <a name="index-v-_0029" id=
+  "index-v-_0029"></a> <a name="index-V-_007d" id=
+  "index-V-_007d"></a> <a name="index-v-_007d" id=
+  "index-v-_007d"></a> <a name="index-calc_002dmatrix_002dbrackets"
+  id="index-calc_002dmatrix_002dbrackets"></a>
+
+  <p>The <kbd>v ]</kbd> (<code>calc-matrix-brackets</code>) command
+  controls the &ldquo;big&rdquo; style display of matrices, for
+  matrices which have more than one row. It prompts for a string of
+  code letters; currently implemented letters are <code>R</code>,
+  which enables brackets on each row of the matrix; <code>O</code>,
+  which enables outer brackets in opposite corners of the matrix;
+  and <code>C</code>, which enables commas or semicolons at the
+  ends of all rows but the last. The default format is
+  &lsquo;<samp>RO</samp>&rsquo;. (Before Calc 2.00, the format was
+  fixed at &lsquo;<samp>ROC</samp>&rsquo;.) Here are some example
+  matrices:</p>
+
+  <div class="example">
+    <pre class="example">
+[ [ 123,  0,   0  ]       [ [ 123,  0,   0  ],
   [  0,  123,  0  ]         [  0,  123,  0  ],
   [  0,   0,  123 ] ]       [  0,   0,  123 ] ]
 
          RO                        ROC
 
-</pre></div>
-<div class="example">
-<pre class="example">  [ 123,  0,   0            [ 123,  0,   0 ;
+</pre>
+  </div>
+
+  <div class="example">
+    <pre class="example">
+  [ 123,  0,   0            [ 123,  0,   0 ;
      0,  123,  0               0,  123,  0 ;
      0,   0,  123 ]            0,   0,  123 ]
 
           O                        OC
 
-</pre></div>
-<div class="example">
-<pre class="example">  [ 123,  0,   0  ]           123,  0,   0
+</pre>
+  </div>
+
+  <div class="example">
+    <pre class="example">
+  [ 123,  0,   0  ]           123,  0,   0
   [  0,  123,  0  ]            0,  123,  0
   [  0,   0,  123 ]            0,   0,  123
 
           R                       <span class="roman">blank</span>
-</pre></div>
+</pre>
+  </div>
 
-<p>Note that of the formats shown here, &lsquo;<samp>RO</samp>&rsquo;, &lsquo;<samp>ROC</samp>&rsquo;, and
-&lsquo;<samp>OC</samp>&rsquo; are all recognized as matrices during reading, while
-the others are useful for display only.
-</p>
-<a name="index-v-_002c"></a>
-<a name="index-V-_002c"></a>
-<a name="index-calc_002dvector_002dcommas"></a>
-<p>The <kbd>v ,</kbd> (<code>calc-vector-commas</code>) command turns commas on and
-off in vector and matrix display.
-</p>
-<p>In vectors of length one, and in all vectors when commas have been
-turned off, Calc adds extra parentheses around formulas that might
-otherwise be ambiguous.  For example, &lsquo;<samp>[a b]</samp>&rsquo; could be a vector
-of the one formula &lsquo;<samp>a b</samp>&rsquo;, or it could be a vector of two
-variables with commas turned off.  Calc will display the former
-case as &lsquo;<samp>[(a b)]</samp>&rsquo;.  You can disable these extra parentheses
-(to make the output less cluttered at the expense of allowing some
-ambiguity) by adding the letter <code>P</code> to the control string you
-give to <kbd>v ]</kbd> (as described above).
-</p>
-<a name="index-v-_002e"></a>
-<a name="index-V-_002e"></a>
-<a name="index-calc_002dfull_002dvectors"></a>
-<p>The <kbd>v .</kbd> (<code>calc-full-vectors</code>) command turns abbreviated
-display of long vectors on and off.  In this mode, vectors of six
-or more elements, or matrices of six or more rows or columns, will
-be displayed in an abbreviated form that displays only the first
-three elements and the last element:  &lsquo;<samp>[a, b, c, ..., z]</samp>&rsquo;.
-When very large vectors are involved this will substantially
-improve Calc&rsquo;s display speed.
-</p>
-<a name="index-t-_002e"></a>
-<a name="index-calc_002dfull_002dtrail_002dvectors"></a>
-<p>The <kbd>t .</kbd> (<code>calc-full-trail-vectors</code>) command controls a
-similar mode for recording vectors in the Trail.  If you turn on
-this mode, vectors of six or more elements and matrices of six or
-more rows or columns will be abbreviated when they are put in the
-Trail.  The <kbd>t y</kbd> (<code>calc-trail-yank</code>) command will be
-unable to recover those vectors.  If you are working with very
-large vectors, this mode will improve the speed of all operations
-that involve the trail.
-</p>
-<a name="index-v-_002f"></a>
-<a name="index-V-_002f"></a>
-<a name="index-calc_002dbreak_002dvectors"></a>
-<p>The <kbd>v /</kbd> (<code>calc-break-vectors</code>) command turns multi-line
-vector display on and off.  Normally, matrices are displayed with one
-row per line but all other types of vectors are displayed in a single
-line.  This mode causes all vectors, whether matrices or not, to be
-displayed with a single element per line.  Sub-vectors within the
-vectors will still use the normal linear form.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Reducing-and-Mapping.html#Reducing-and-Mapping" accesskey="p" rel="prev">Reducing and Mapping</a>, Up: <a href="Matrix-Functions.html#Matrix-Functions" accesskey="u" rel="up">Matrix Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Note that of the formats shown here,
+  &lsquo;<samp>RO</samp>&rsquo;, &lsquo;<samp>ROC</samp>&rsquo;,
+  and &lsquo;<samp>OC</samp>&rsquo; are all recognized as matrices
+  during reading, while the others are useful for display
+  only.</p><a name="index-v-_002c" id="index-v-_002c"></a> <a name=
+  "index-V-_002c" id="index-V-_002c"></a> <a name=
+  "index-calc_002dvector_002dcommas" id=
+  "index-calc_002dvector_002dcommas"></a>
 
+  <p>The <kbd>v ,</kbd> (<code>calc-vector-commas</code>) command
+  turns commas on and off in vector and matrix display.</p>
 
+  <p>In vectors of length one, and in all vectors when commas have
+  been turned off, Calc adds extra parentheses around formulas that
+  might otherwise be ambiguous. For example, &lsquo;<samp>[a
+  b]</samp>&rsquo; could be a vector of the one formula
+  &lsquo;<samp>a b</samp>&rsquo;, or it could be a vector of two
+  variables with commas turned off. Calc will display the former
+  case as &lsquo;<samp>[(a b)]</samp>&rsquo;. You can disable these
+  extra parentheses (to make the output less cluttered at the
+  expense of allowing some ambiguity) by adding the letter
+  <code>P</code> to the control string you give to <kbd>v ]</kbd>
+  (as described above).</p><a name="index-v-_002e" id=
+  "index-v-_002e"></a> <a name="index-V-_002e" id=
+  "index-V-_002e"></a> <a name="index-calc_002dfull_002dvectors"
+  id="index-calc_002dfull_002dvectors"></a>
 
+  <p>The <kbd>v .</kbd> (<code>calc-full-vectors</code>) command
+  turns abbreviated display of long vectors on and off. In this
+  mode, vectors of six or more elements, or matrices of six or more
+  rows or columns, will be displayed in an abbreviated form that
+  displays only the first three elements and the last element:
+  &lsquo;<samp>[a, b, c, ..., z]</samp>&rsquo;. When very large
+  vectors are involved this will substantially improve Calc&rsquo;s
+  display speed.</p><a name="index-t-_002e" id="index-t-_002e"></a>
+  <a name="index-calc_002dfull_002dtrail_002dvectors" id=
+  "index-calc_002dfull_002dtrail_002dvectors"></a>
+
+  <p>The <kbd>t .</kbd> (<code>calc-full-trail-vectors</code>)
+  command controls a similar mode for recording vectors in the
+  Trail. If you turn on this mode, vectors of six or more elements
+  and matrices of six or more rows or columns will be abbreviated
+  when they are put in the Trail. The <kbd>t y</kbd>
+  (<code>calc-trail-yank</code>) command will be unable to recover
+  those vectors. If you are working with very large vectors, this
+  mode will improve the speed of all operations that involve the
+  trail.</p><a name="index-v-_002f" id="index-v-_002f"></a>
+  <a name="index-V-_002f" id="index-V-_002f"></a> <a name=
+  "index-calc_002dbreak_002dvectors" id=
+  "index-calc_002dbreak_002dvectors"></a>
+
+  <p>The <kbd>v /</kbd> (<code>calc-break-vectors</code>) command
+  turns multi-line vector display on and off. Normally, matrices
+  are displayed with one row per line but all other types of
+  vectors are displayed in a single line. This mode causes all
+  vectors, whether matrices or not, to be displayed with a single
+  element per line. Sub-vectors within the vectors will still use
+  the normal linear form.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Reducing-and-Mapping.html#Reducing-and-Mapping" accesskey="p"
+    rel="prev">Reducing and Mapping</a>, Up: <a href=
+    "Matrix-Functions.html#Matrix-Functions" accesskey="u" rel=
+    "up">Matrix Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,269 +14,355 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to
 copy and modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>TRAMP User Manual: Remote shell setup</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="TRAMP User Manual: Remote shell setup">
-<meta name="keywords" content="TRAMP User Manual: Remote shell setup">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Configuration.html#Configuration" rel="up" title="Configuration">
-<link href="Android-shell-setup.html#Android-shell-setup" rel="next" title="Android shell setup">
-<link href="Remote-programs.html#Remote-programs" rel="prev" title="Remote programs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>TRAMP User Manual: Remote shell setup</title>
+  <meta name="description" content=
+  "TRAMP User Manual: Remote shell setup" />
+  <meta name="keywords" content=
+  "TRAMP User Manual: Remote shell setup" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Configuration.html#Configuration" rel="up" title=
+  "Configuration" />
+  <link href="Android-shell-setup.html#Android-shell-setup" rel=
+  "next" title="Android shell setup" />
+  <link href="Remote-programs.html#Remote-programs" rel="prev"
+  title="Remote programs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Remote-shell-setup"></a>
-<div class="header">
-<p>
-Next: <a href="Android-shell-setup.html#Android-shell-setup" accesskey="n" rel="next">Android shell setup</a>, Previous: <a href="Remote-programs.html#Remote-programs" accesskey="p" rel="prev">Remote programs</a>, Up: <a href="Configuration.html#Configuration" accesskey="u" rel="up">Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Remote-shell-setup-hints"></a>
-<h3 class="section">4.16 Remote shell setup hints</h3>
-<a name="index-remote-shell-setup"></a>
-<a name="index-_002eprofile-file"></a>
-<a name="index-_002elogin-file"></a>
-<a name="index-shell-init-files"></a>
+<body lang="en" xml:lang="en">
+  <a name="Remote-shell-setup" id="Remote-shell-setup"></a>
 
-<p><small>TRAMP</small> checks for the availability of standard programs in the
-usual locations.  Common tactics include successively trying
-<code>test -e</code>, <code>/usr/bin/test -e</code>, and <code>/bin/test
--e</code>.  <code>ls -d</code> is another approach.  But these approaches do not
-help with these new login patterns.
-</p>
-<p>When <small>TRAMP</small> encounters two-factor logins or additional challenge
-questions, such as entering birth date or security code or passphrase,
-<small>TRAMP</small> needs a few more configuration steps to accommodate
-them.
-</p>
-<p>The difference between a password prompt and a passphrase prompt is
-that the password for completing the login while the passphrase is
-for authorizing access to local authentication information, such as
-the ssh key.
-</p>
-<p>There is no one configuration to accommodate all the variations in
-login security, especially not the exotic ones.  However, <small>TRAMP</small>
-provides a few tweaks to address the most common ones.
-</p>
-<dl compact="compact">
-<dt><var>tramp-shell-prompt-pattern</var></dt>
-<dd><a name="index-tramp_002dshell_002dprompt_002dpattern"></a>
+  <div class="header">
+    <p>Next: <a href="Android-shell-setup.html#Android-shell-setup"
+    accesskey="n" rel="next">Android shell setup</a>, Previous:
+    <a href="Remote-programs.html#Remote-programs" accesskey="p"
+    rel="prev">Remote programs</a>, Up: <a href=
+    "Configuration.html#Configuration" accesskey="u" rel=
+    "up">Configuration</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Remote-shell-setup-hints" id=
+  "Remote-shell-setup-hints"></a>
 
-<p><code>tramp-shell-prompt-pattern</code> is for remote login shell prompt,
-which may not be the same as the local login shell prompt,
-<code>shell-prompt-pattern</code>.  Since most hosts use identical prompts,
-<small>TRAMP</small> sets a similar default value for both prompts.
-</p>
-</dd>
-<dt><var>tramp-password-prompt-regexp</var></dt>
-<dt><var>tramp-wrong-passwd-regexp</var></dt>
-<dd><a name="index-tramp_002dpassword_002dprompt_002dregexp"></a>
-<a name="index-tramp_002dwrong_002dpasswd_002dregexp"></a>
+  <h3 class="section">4.16 Remote shell setup hints</h3><a name=
+  "index-remote-shell-setup" id="index-remote-shell-setup"></a>
+  <a name="index-_002eprofile-file" id=
+  "index-_002eprofile-file"></a> <a name="index-_002elogin-file"
+  id="index-_002elogin-file"></a> <a name="index-shell-init-files"
+  id="index-shell-init-files"></a>
 
-<p><small>TRAMP</small> uses <var>tramp-password-prompt-regexp</var> to distinguish
-between prompts for passwords and prompts for passphrases.  By default,
-<var>tramp-password-prompt-regexp</var> handles the detection in English
-language environments.  See a localization example below:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq
+  <p><small>TRAMP</small> checks for the availability of standard
+  programs in the usual locations. Common tactics include
+  successively trying <code>test -e</code>, <code>/usr/bin/test
+  -e</code>, and <code>/bin/test -e</code>. <code>ls -d</code> is
+  another approach. But these approaches do not help with these new
+  login patterns.</p>
+
+  <p>When <small>TRAMP</small> encounters two-factor logins or
+  additional challenge questions, such as entering birth date or
+  security code or passphrase, <small>TRAMP</small> needs a few
+  more configuration steps to accommodate them.</p>
+
+  <p>The difference between a password prompt and a passphrase
+  prompt is that the password for completing the login while the
+  passphrase is for authorizing access to local authentication
+  information, such as the ssh key.</p>
+
+  <p>There is no one configuration to accommodate all the
+  variations in login security, especially not the exotic ones.
+  However, <small>TRAMP</small> provides a few tweaks to address
+  the most common ones.</p>
+
+  <dl compact="compact">
+    <dt><var>tramp-shell-prompt-pattern</var></dt>
+
+    <dd>
+      <a name="index-tramp_002dshell_002dprompt_002dpattern" id=
+      "index-tramp_002dshell_002dprompt_002dpattern"></a>
+
+      <p><code>tramp-shell-prompt-pattern</code> is for remote
+      login shell prompt, which may not be the same as the local
+      login shell prompt, <code>shell-prompt-pattern</code>. Since
+      most hosts use identical prompts, <small>TRAMP</small> sets a
+      similar default value for both prompts.</p>
+    </dd>
+
+    <dt><var>tramp-password-prompt-regexp</var></dt>
+
+    <dt><var>tramp-wrong-passwd-regexp</var></dt>
+
+    <dd>
+      <a name="index-tramp_002dpassword_002dprompt_002dregexp" id=
+      "index-tramp_002dpassword_002dprompt_002dregexp"></a>
+      <a name="index-tramp_002dwrong_002dpasswd_002dregexp" id=
+      "index-tramp_002dwrong_002dpasswd_002dregexp"></a>
+
+      <p><small>TRAMP</small> uses
+      <var>tramp-password-prompt-regexp</var> to distinguish
+      between prompts for passwords and prompts for passphrases. By
+      default, <var>tramp-password-prompt-regexp</var> handles the
+      detection in English language environments. See a
+      localization example below:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq
   tramp-password-prompt-regexp
     (concat
-      &quot;^.*&quot;
+      "^.*"
       (regexp-opt
-        '(&quot;passphrase&quot; &quot;Passphrase&quot;
+        '("passphrase" "Passphrase"
           ;; English
-          &quot;password&quot; &quot;Password&quot;
+          "password" "Password"
           ;; Deutsch
-          &quot;passwort&quot; &quot;Passwort&quot;
-          ;; Français
-          &quot;mot de passe&quot; &quot;Mot de passe&quot;) t)
-      &quot;.*:\0? *&quot;))
-</pre></div>
+          "passwort" "Passwort"
+          ;; Fran&Atilde;&sect;ais
+          "mot de passe" "Mot de passe") t)
+      ".*:\0? *"))
+</pre>
+      </div>
 
-<p>Similar localization may be necessary for handling wrong password
-prompts, for which <small>TRAMP</small> uses <var>tramp-wrong-passwd-regexp</var>.
-</p>
-</dd>
-<dt><code>tset</code> and other questions</dt>
-<dd><a name="index-Unix-command-tset"></a>
-<a name="index-tset-Unix-command"></a>
-<a name="index-tramp_002dterminal_002dtype"></a>
+      <p>Similar localization may be necessary for handling wrong
+      password prompts, for which <small>TRAMP</small> uses
+      <var>tramp-wrong-passwd-regexp</var>.</p>
+    </dd>
 
-<p>To suppress inappropriate prompts for terminal type, <small>TRAMP</small>
-sets the <code>TERM</code> to <code>dumb</code> before the remote login process
-begins via the variable <code>tramp-terminal-type</code>.  This will silence
-common <code>tset</code> related prompts.
-</p>
-<p><small>TRAMP</small>&rsquo;s strategy for handling such prompts (commonly triggered
-from login scripts on remote hosts) is to set the environment
-variables so that no prompts interrupt the shell initialization
-process.
-</p>
-<a name="index-tramp_002dactions_002dbefore_002dshell"></a>
+    <dt><code>tset</code> and other questions</dt>
 
-<p>An alternative approach is to configure <small>TRAMP</small> with strings
-that can identify such questions using
-<code>tramp-actions-before-shell</code>.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(defconst my-tramp-prompt-regexp
-  (concat (regexp-opt '(&quot;Enter the birth date of your mother:&quot;) t)
-          &quot;\\s-*&quot;)
-  &quot;Regular expression matching my login prompt question.&quot;)
+    <dd>
+      <a name="index-Unix-command-tset" id=
+      "index-Unix-command-tset"></a> <a name=
+      "index-tset-Unix-command" id="index-tset-Unix-command"></a>
+      <a name="index-tramp_002dterminal_002dtype" id=
+      "index-tramp_002dterminal_002dtype"></a>
+
+      <p>To suppress inappropriate prompts for terminal type,
+      <small>TRAMP</small> sets the <code>TERM</code> to
+      <code>dumb</code> before the remote login process begins via
+      the variable <code>tramp-terminal-type</code>. This will
+      silence common <code>tset</code> related prompts.</p>
+
+      <p><small>TRAMP</small>&rsquo;s strategy for handling such
+      prompts (commonly triggered from login scripts on remote
+      hosts) is to set the environment variables so that no prompts
+      interrupt the shell initialization process.</p><a name=
+      "index-tramp_002dactions_002dbefore_002dshell" id=
+      "index-tramp_002dactions_002dbefore_002dshell"></a>
+
+      <p>An alternative approach is to configure
+      <small>TRAMP</small> with strings that can identify such
+      questions using <code>tramp-actions-before-shell</code>.
+      Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(defconst my-tramp-prompt-regexp
+  (concat (regexp-opt '("Enter the birth date of your mother:") t)
+          "\\s-*")
+  "Regular expression matching my login prompt question.")
 
 (defun my-tramp-action (proc vec)
-  &quot;Enter \&quot;19000101\&quot; in order to give a correct answer.&quot;
+  "Enter \"19000101\" in order to give a correct answer."
   (save-window-excursion
     (with-current-buffer (tramp-get-connection-buffer vec)
-      (tramp-message vec 6 &quot;\n%s&quot; (buffer-string))
-      (tramp-send-string vec &quot;19000101&quot;))))
+      (tramp-message vec 6 "\n%s" (buffer-string))
+      (tramp-send-string vec "19000101"))))
 
 (add-to-list 'tramp-actions-before-shell
              '(my-tramp-prompt-regexp my-tramp-action))
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
+    <dt>Conflicting names for users and variables in
+    <samp>.profile</samp></dt>
 
-</dd>
-<dt>Conflicting names for users and variables in <samp>.profile</samp></dt>
-<dd>
-<p>When a user name is the same as a variable name in a local file, such
-as <samp>.profile</samp>, then <small>TRAMP</small> may send incorrect values for
-environment variables.  To avoid incorrect values, change the local
-variable name to something different from the user name.  For example,
-if the user name is <code>FRUMPLE</code>, then change the variable name to
-<code>FRUMPLE_DIR</code>.
-</p>
+    <dd>
+      <p>When a user name is the same as a variable name in a local
+      file, such as <samp>.profile</samp>, then
+      <small>TRAMP</small> may send incorrect values for
+      environment variables. To avoid incorrect values, change the
+      local variable name to something different from the user
+      name. For example, if the user name is <code>FRUMPLE</code>,
+      then change the variable name to
+      <code>FRUMPLE_DIR</code>.</p>
+    </dd>
 
-</dd>
-<dt>Non-Bourne commands in <samp>.profile</samp></dt>
-<dd>
-<p>When the remote host&rsquo;s <samp>.profile</samp> is also used for shells other
-than Bourne shell, then some incompatible syntaxes for commands in
-<samp>.profile</samp> may trigger errors in Bourne shell on the host and may
-not complete client&rsquo;s <small>TRAMP</small> connections.
-</p>
-<p>One example of a Bourne shell incompatible syntax in <samp>.profile</samp>:
-using <code>export FOO=bar</code> instead of <code>FOO=bar; export
-FOO</code>.  After remote login, <small>TRAMP</small> will trigger an error during
-its execution of <code>/bin/sh</code> on the remote host because Bourne
-shell does not recognize the export command as entered in
-<samp>.profile</samp>.
-</p>
-<p>Likewise, (<code>~</code>) character in paths will cause errors because
-Bourne shell does not do (<code>~</code>) character expansions.
-</p>
-<p>One approach to avoiding these incompatibilities is to make all
-commands in <samp>~/.shrc</samp> and <samp>~/.profile</samp> Bourne shell
-compatible so <small>TRAMP</small> can complete connections to that remote.
-To accommodate using non-Bourne shells on that remote, use other
-shell-specific config files.  For example, bash can use
-<samp>~/.bash_profile</samp> and ignore <samp>.profile</samp>.
-</p>
+    <dt>Non-Bourne commands in <samp>.profile</samp></dt>
 
-</dd>
-<dt>Interactive shell prompt</dt>
-<dd>
-<p><small>TRAMP</small> redefines the remote shell prompt internally for robust
-parsing.  This redefinition affects the looks of a prompt in an
-interactive remote shell through commands, such as <kbd>M-x
-shell</kbd>.  Such prompts, however, can be reset to something more readable
-and recognizable using these <small>TRAMP</small> variables.
-</p>
-<p><small>TRAMP</small> sets the <code>INSIDE_EMACS</code> variable in the startup
-script file <samp>~/.emacs_SHELLNAME</samp>.
-</p>
-<p><code>SHELLNAME</code> is <code>bash</code> or equivalent shell names.  Change it by
-setting the environment variable <code>ESHELL</code> in the <samp>.emacs</samp> as
-follows:
-</p>
-<div class="lisp">
-<pre class="lisp">(setenv &quot;ESHELL&quot; &quot;bash&quot;)
-</pre></div>
+    <dd>
+      <p>When the remote host&rsquo;s <samp>.profile</samp> is also
+      used for shells other than Bourne shell, then some
+      incompatible syntaxes for commands in <samp>.profile</samp>
+      may trigger errors in Bourne shell on the host and may not
+      complete client&rsquo;s <small>TRAMP</small> connections.</p>
 
-<p>Then re-set the prompt string in <samp>~/.emacs_SHELLNAME</samp> as follows:
-</p>
-<div class="example">
-<pre class="example"># Reset the prompt for remote Tramp shells.
-if [ &quot;${INSIDE_EMACS/*tramp*/tramp}&quot; == &quot;tramp&quot; ] ; then
-   PS1=&quot;[\u@\h \w]$ &quot;
+      <p>One example of a Bourne shell incompatible syntax in
+      <samp>.profile</samp>: using <code>export FOO=bar</code>
+      instead of <code>FOO=bar; export FOO</code>. After remote
+      login, <small>TRAMP</small> will trigger an error during its
+      execution of <code>/bin/sh</code> on the remote host because
+      Bourne shell does not recognize the export command as entered
+      in <samp>.profile</samp>.</p>
+
+      <p>Likewise, (<code>~</code>) character in paths will cause
+      errors because Bourne shell does not do (<code>~</code>)
+      character expansions.</p>
+
+      <p>One approach to avoiding these incompatibilities is to
+      make all commands in <samp>~/.shrc</samp> and
+      <samp>~/.profile</samp> Bourne shell compatible so
+      <small>TRAMP</small> can complete connections to that remote.
+      To accommodate using non-Bourne shells on that remote, use
+      other shell-specific config files. For example, bash can use
+      <samp>~/.bash_profile</samp> and ignore
+      <samp>.profile</samp>.</p>
+    </dd>
+
+    <dt>Interactive shell prompt</dt>
+
+    <dd>
+      <p><small>TRAMP</small> redefines the remote shell prompt
+      internally for robust parsing. This redefinition affects the
+      looks of a prompt in an interactive remote shell through
+      commands, such as <kbd>M-x shell</kbd>. Such prompts,
+      however, can be reset to something more readable and
+      recognizable using these <small>TRAMP</small> variables.</p>
+
+      <p><small>TRAMP</small> sets the <code>INSIDE_EMACS</code>
+      variable in the startup script file
+      <samp>~/.emacs_SHELLNAME</samp>.</p>
+
+      <p><code>SHELLNAME</code> is <code>bash</code> or equivalent
+      shell names. Change it by setting the environment variable
+      <code>ESHELL</code> in the <samp>.emacs</samp> as
+      follows:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setenv "ESHELL" "bash")
+</pre>
+      </div>
+
+      <p>Then re-set the prompt string in
+      <samp>~/.emacs_SHELLNAME</samp> as follows:</p>
+
+      <div class="example">
+        <pre class="example">
+# Reset the prompt for remote Tramp shells.
+if [ "${INSIDE_EMACS/*tramp*/tramp}" == "tramp" ] ; then
+   PS1="[\u@\h \w]$ "
 fi
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
+    <dt><code>busybox</code> / <code>nc</code></dt>
 
-</dd>
-<dt><code>busybox</code> / <code>nc</code></dt>
-<dd><a name="index-Unix-command-nc"></a>
-<a name="index-nc-Unix-command"></a>
+    <dd>
+      <a name="index-Unix-command-nc" id=
+      "index-Unix-command-nc"></a> <a name="index-nc-Unix-command"
+      id="index-nc-Unix-command"></a>
 
-<p><small>TRAMP</small>&rsquo;s <samp>nc</samp> method uses the <code>nc</code> command to
-install and execute a listener as follows (see <code>tramp-methods</code>):
-</p>
-<div class="example">
-<pre class="example"># nc -l -p 42
-</pre></div>
+      <p><small>TRAMP</small>&rsquo;s <samp>nc</samp> method uses
+      the <code>nc</code> command to install and execute a listener
+      as follows (see <code>tramp-methods</code>):</p>
 
-<p>The above command-line syntax has changed with <code>busybox</code>
-versions.  If <code>nc</code> refuses the <code>-p</code> parameter, then
-overwrite as follows:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list
+      <div class="example">
+        <pre class="example">
+# nc -l -p 42
+</pre>
+      </div>
+
+      <p>The above command-line syntax has changed with
+      <code>busybox</code> versions. If <code>nc</code> refuses the
+      <code>-p</code> parameter, then overwrite as follows:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(add-to-list
  'tramp-connection-properties
- `(,(regexp-quote &quot;192.168.0.1&quot;) &quot;remote-copy-args&quot; ((&quot;-l&quot;) (&quot;%r&quot;))))
-</pre></div>
+ `(,(regexp-quote "192.168.0.1") "remote-copy-args" (("-l") ("%r"))))
+</pre>
+      </div>
 
-<p>where &lsquo;<samp>192.168.0.1</samp>&rsquo; is the remote host IP address
-(see <a href="Predefined-connection-information.html#Predefined-connection-information">Predefined connection information</a>).
-</p>
-</dd>
-</dl>
+      <p>where &lsquo;<samp>192.168.0.1</samp>&rsquo; is the remote
+      host IP address (see <a href=
+      "Predefined-connection-information.html#Predefined-connection-information">
+      Predefined connection information</a>).</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Android-shell-setup.html#Android-shell-setup" accesskey="n" rel="next">Android shell setup</a>, Previous: <a href="Remote-programs.html#Remote-programs" accesskey="p" rel="prev">Remote programs</a>, Up: <a href="Configuration.html#Configuration" accesskey="u" rel="up">Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Android-shell-setup.html#Android-shell-setup"
+    accesskey="n" rel="next">Android shell setup</a>, Previous:
+    <a href="Remote-programs.html#Remote-programs" accesskey="p"
+    rel="prev">Remote programs</a>, Up: <a href=
+    "Configuration.html#Configuration" accesskey="u" rel=
+    "up">Configuration</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

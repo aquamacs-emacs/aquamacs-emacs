@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Issues - TRAMP User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="TRAMP User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Traces-and-Profiles.html#Traces-and-Profiles" title="Traces and Profiles">
-<link rel="next" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="GNU Free Documentation License">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Issues - TRAMP User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="TRAMP User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Traces-and-Profiles.html#Traces-and-Profiles" title=
+  "Traces and Profiles" />
+  <link rel="next" href=
+  "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+  title="GNU Free Documentation License" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +34,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,52 +47,67 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Issues"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Traces-and-Profiles.html#Traces-and-Profiles">Traces and Profiles</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Issues" id="Issues"></a>
 
-<h2 class="chapter">10 Debatable Issues and What Was Decided</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU
+    Free Documentation License</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Traces-and-Profiles.html#Traces-and-Profiles">Traces and
+    Profiles</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-     <ul>
-<li>The uuencode method does not always work.
+  <h2 class="chapter">10 Debatable Issues and What Was Decided</h2>
 
-     <p>Due to the design of <span class="sc">tramp</span>, the encoding and decoding programs
-need to read from stdin and write to stdout.  On some systems,
-<samp><span class="command">uudecode -o -</span></samp> will read stdin and write the decoded file to
-stdout, on other systems <samp><span class="command">uudecode -p</span></samp> does the same thing. 
-But some systems have uudecode implementations which cannot do this at
-all&mdash;it is not possible to call these uudecode implementations with
-suitable parameters so that they write to stdout.
+  <ul>
+    <li>The uuencode method does not always work.
 
-     <p>Of course, this could be circumvented: the <code>begin foo 644</code> line
-could be rewritten to put in some temporary file name, then
-<samp><span class="command">uudecode</span></samp> could be called, then the temp file could be
-printed and deleted.
+      <p>Due to the design of <span class="sc">tramp</span>, the
+      encoding and decoding programs need to read from stdin and
+      write to stdout. On some systems, <samp><span class=
+      "command">uudecode -o -</span></samp> will read stdin and
+      write the decoded file to stdout, on other systems
+      <samp><span class="command">uudecode -p</span></samp> does
+      the same thing. But some systems have uudecode
+      implementations which cannot do this at all&mdash;it is not
+      possible to call these uudecode implementations with suitable
+      parameters so that they write to stdout.</p>
 
-     <p>But I have decided that this is too fragile to reliably work, so on some
-systems you'll have to do without the uuencode methods.
+      <p>Of course, this could be circumvented: the <code>begin foo
+      644</code> line could be rewritten to put in some temporary
+      file name, then <samp><span class=
+      "command">uudecode</span></samp> could be called, then the
+      temp file could be printed and deleted.</p>
 
-     <li>The <span class="sc">tramp</span> filename syntax differs between GNU Emacs and XEmacs.
+      <p>But I have decided that this is too fragile to reliably
+      work, so on some systems you'll have to do without the
+      uuencode methods.</p>
+    </li>
 
-     <p>The GNU Emacs maintainers wish to use a unified filename syntax for
-Ange-FTP and <span class="sc">tramp</span> so that users don't have to learn a new
-syntax.  It is sufficient to learn some extensions to the old syntax.
+    <li>The <span class="sc">tramp</span> filename syntax differs
+    between GNU Emacs and XEmacs.
 
-     <p>For the XEmacs maintainers, the problems caused from using a unified
-filename syntax are greater than the gains.  The XEmacs package system
-uses EFS for downloading new packages.  So, obviously, EFS has to be
-installed from the start.  If the filenames were unified, <span class="sc">tramp</span>
-would have to be installed from the start, too.
+      <p>The GNU Emacs maintainers wish to use a unified filename
+      syntax for Ange-FTP and <span class="sc">tramp</span> so that
+      users don't have to learn a new syntax. It is sufficient to
+      learn some extensions to the old syntax.</p>
 
-</ul>
-
-   </body></html>
-
+      <p>For the XEmacs maintainers, the problems caused from using
+      a unified filename syntax are greater than the gains. The
+      XEmacs package system uses EFS for downloading new packages.
+      So, obviously, EFS has to be installed from the start. If the
+      filenames were unified, <span class="sc">tramp</span> would
+      have to be installed from the start, too.</p>
+    </li>
+  </ul>
+</body>
+</html>

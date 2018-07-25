@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents EUDC version 1.40.0.
 
 EUDC is the Emacs Unified Directory Client, a common interface to
@@ -17,174 +19,268 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Unified Directory Client (EUDC) Manual: Inline Query Expansion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Unified Directory Client (EUDC) Manual: Inline Query Expansion">
-<meta name="keywords" content="Emacs Unified Directory Client (EUDC) Manual: Inline Query Expansion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Usage.html#Usage" rel="up" title="Usage">
-<link href="The-Server-Hotlist.html#The-Server-Hotlist" rel="next" title="The Server Hotlist">
-<link href="Display-of-Query-Results.html#Display-of-Query-Results" rel="prev" title="Display of Query Results">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Unified Directory Client (EUDC) Manual: Inline Query
+  Expansion</title>
+  <meta name="description" content=
+  "Emacs Unified Directory Client (EUDC) Manual: Inline Query Expansion" />
+  <meta name="keywords" content=
+  "Emacs Unified Directory Client (EUDC) Manual: Inline Query Expansion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Usage.html#Usage" rel="up" title="Usage" />
+  <link href="The-Server-Hotlist.html#The-Server-Hotlist" rel=
+  "next" title="The Server Hotlist" />
+  <link href=
+  "Display-of-Query-Results.html#Display-of-Query-Results" rel=
+  "prev" title="Display of Query Results" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Inline-Query-Expansion"></a>
-<div class="header">
-<p>
-Next: <a href="The-Server-Hotlist.html#The-Server-Hotlist" accesskey="n" rel="next">The Server Hotlist</a>, Previous: <a href="Display-of-Query-Results.html#Display-of-Query-Results" accesskey="p" rel="prev">Display of Query Results</a>, Up: <a href="Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Inline-Query-Expansion-1"></a>
-<h3 class="section">3.4 Inline Query Expansion</h3>
+<body lang="en" xml:lang="en">
+  <a name="Inline-Query-Expansion" id="Inline-Query-Expansion"></a>
 
-<p>Inline query expansion is a powerful method to get completion from your
-directory server.  The most common usage is for expanding names to email
-addresses in mail message buffers.  The expansion is performed by the
-command <kbd>M-x eudc-expand-inline</kbd> which is available from the
-&lsquo;<samp>Expand Inline Query</samp>&rsquo; menu item but can also be conveniently
-bound to a key shortcut (see <a href="Installation.html#Installation">Installation</a>).  The operation is
-controlled by the variables <code>eudc-inline-expansion-format</code>,
-<code>eudc-inline-query-format</code>,
-<code>eudc-expanding-overwrites-query</code> and
-<code>eudc-multiple-match-handling-method</code>.
-</p>
-<p>If the query fails for a server, other servers may be tried successively
-until one of them finds a match (see <a href="Multi_002dserver-Queries.html#Multi_002dserver-Queries">Multi-server Queries</a>).
-</p>
-<dl>
-<dt><a name="index-eudc_002dexpand_002dinline-3"></a>Command: <strong>eudc-expand-inline</strong> <em>replace-p</em></dt>
-<dd><p>Query the server and expand the query string before point.  The query
-string consists of the buffer substring from the point back to the
-preceding comma, colon or beginning of
-line.  <code>eudc-inline-query-format</code> controls how individual words
-are mapped onto directory attribute names.  After querying the server
-for the given string, the expansion specified by
-<code>eudc-inline-expansion-format</code> is inserted in the buffer at
-point. If <var>replace-p</var> is <code>t</code> then this expansion replaces the
-query string in the buffer.  If <code>eudc-expanding-overwrites-query</code>
-is non-<code>nil</code> then the meaning of <var>replace-p</var> is negated.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="The-Server-Hotlist.html#The-Server-Hotlist"
+    accesskey="n" rel="next">The Server Hotlist</a>, Previous:
+    <a href=
+    "Display-of-Query-Results.html#Display-of-Query-Results"
+    accesskey="p" rel="prev">Display of Query Results</a>, Up:
+    <a href="Usage.html#Usage" accesskey="u" rel="up">Usage</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Inline-Query-Expansion-1" id=
+  "Inline-Query-Expansion-1"></a>
 
-<dl>
-<dt><a name="index-eudc_002dinline_002dquery_002dformat"></a>Variable: <strong>eudc-inline-query-format</strong></dt>
-<dd><p>Format of an inline expansion query.
-This is actually a list of <var>format</var>s.  A <var>format</var> is a list of
-one or more EUDC attribute names.  A <var>format</var> applies if it contains
-as many attributes as individual words in the inline query string.  If
-several <var>format</var>s apply then they are tried in order until a match
-is found.  If <code>nil</code> all the words will be mapped onto the default
-server/protocol attribute name (generally <code>name</code>).
-</p>
-<p>For instance, use the following
-</p><div class="lisp">
-<pre class="lisp">(setq eudc-inline-query-format '((name)
+  <h3 class="section">3.4 Inline Query Expansion</h3>
+
+  <p>Inline query expansion is a powerful method to get completion
+  from your directory server. The most common usage is for
+  expanding names to email addresses in mail message buffers. The
+  expansion is performed by the command <kbd>M-x
+  eudc-expand-inline</kbd> which is available from the
+  &lsquo;<samp>Expand Inline Query</samp>&rsquo; menu item but can
+  also be conveniently bound to a key shortcut (see <a href=
+  "Installation.html#Installation">Installation</a>). The operation
+  is controlled by the variables
+  <code>eudc-inline-expansion-format</code>,
+  <code>eudc-inline-query-format</code>,
+  <code>eudc-expanding-overwrites-query</code> and
+  <code>eudc-multiple-match-handling-method</code>.</p>
+
+  <p>If the query fails for a server, other servers may be tried
+  successively until one of them finds a match (see <a href=
+  "Multi_002dserver-Queries.html#Multi_002dserver-Queries">Multi-server
+  Queries</a>).</p>
+
+  <dl>
+    <dt><a name="index-eudc_002dexpand_002dinline-3" id=
+    "index-eudc_002dexpand_002dinline-3"></a>Command:
+    <strong>eudc-expand-inline</strong> <em>replace-p</em></dt>
+
+    <dd>
+      <p>Query the server and expand the query string before point.
+      The query string consists of the buffer substring from the
+      point back to the preceding comma, colon or beginning of
+      line. <code>eudc-inline-query-format</code> controls how
+      individual words are mapped onto directory attribute names.
+      After querying the server for the given string, the expansion
+      specified by <code>eudc-inline-expansion-format</code> is
+      inserted in the buffer at point. If <var>replace-p</var> is
+      <code>t</code> then this expansion replaces the query string
+      in the buffer. If
+      <code>eudc-expanding-overwrites-query</code> is
+      non-<code>nil</code> then the meaning of <var>replace-p</var>
+      is negated.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-eudc_002dinline_002dquery_002dformat" id=
+    "index-eudc_002dinline_002dquery_002dformat"></a>Variable:
+    <strong>eudc-inline-query-format</strong></dt>
+
+    <dd>
+      <p>Format of an inline expansion query. This is actually a
+      list of <var>format</var>s. A <var>format</var> is a list of
+      one or more EUDC attribute names. A <var>format</var> applies
+      if it contains as many attributes as individual words in the
+      inline query string. If several <var>format</var>s apply then
+      they are tried in order until a match is found. If
+      <code>nil</code> all the words will be mapped onto the
+      default server/protocol attribute name (generally
+      <code>name</code>).</p>
+
+      <p>For instance, use the following</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq eudc-inline-query-format '((name)
                                  (firstname)
                                  (firstname name)))
-</pre></div>
-<p>to indicate that single word expansion queries are to be considered as
-surnames and if no match is found then they should be tried as first
-names.  Inline queries consisting of two words are considered as
-consisting of a first name followed by a surname.  If the query consists
-of more than two words, then the first one is considered as the first
-name and the remaining words are all considered as surname constituents.
-</p>
-<p><var>format</var>s are in fact not limited to EUDC attribute names, you can
-use server or protocol specific names in them.  It may be safer if you
-do so, to set the variable <code>eudc-inline-query-format</code> in a protocol
-or server local fashion (see see <a href="Server_002fProtocol-Locals.html#Server_002fProtocol-Locals">Server/Protocol Locals</a>).
-</p>
-<p>For instance you could use the following to match up to three words
-against the <code>cn</code> attribute of LDAP servers:
-</p><div class="lisp">
-<pre class="lisp">(eudc-protocol-set 'eudc-inline-query-format
+</pre>
+      </div>
+
+      <p>to indicate that single word expansion queries are to be
+      considered as surnames and if no match is found then they
+      should be tried as first names. Inline queries consisting of
+      two words are considered as consisting of a first name
+      followed by a surname. If the query consists of more than two
+      words, then the first one is considered as the first name and
+      the remaining words are all considered as surname
+      constituents.</p>
+
+      <p><var>format</var>s are in fact not limited to EUDC
+      attribute names, you can use server or protocol specific
+      names in them. It may be safer if you do so, to set the
+      variable <code>eudc-inline-query-format</code> in a protocol
+      or server local fashion (see see <a href=
+      "Server_002fProtocol-Locals.html#Server_002fProtocol-Locals">Server/Protocol
+      Locals</a>).</p>
+
+      <p>For instance you could use the following to match up to
+      three words against the <code>cn</code> attribute of LDAP
+      servers:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(eudc-protocol-set 'eudc-inline-query-format
                    '((cn)
                      (cn cn)
                      (cn cn cn))
                    'ldap)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-eudc_002dinline_002dexpansion_002dformat"></a>Variable: <strong>eudc-inline-expansion-format</strong></dt>
-<dd><p>This variable lets you control exactly what is inserted into the buffer
-upon an inline expansion request.  It is a list whose first element is a
-string passed to <code>format</code>.  Remaining elements are symbols
-corresponding to directory attribute names.  The corresponding attribute
-values are passed as additional arguments to <code>format</code>.  Default is
-<code>(&quot;%s&quot; email)</code> but you may want to consider a value like <code>(&quot;%s
-&lt;%s&gt;&quot; name email)</code>
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-eudc_002dinline_002dexpansion_002dformat"
+    id="index-eudc_002dinline_002dexpansion_002dformat"></a>Variable:
+    <strong>eudc-inline-expansion-format</strong></dt>
 
-<dl>
-<dt><a name="index-eudc_002dmultiple_002dmatch_002dhandling_002dmethod"></a>Variable: <strong>eudc-multiple-match-handling-method</strong></dt>
-<dd><p>This variable controls what to do when multiple entries match a query
-for an inline expansion.  Possible values are:
-</p><dl compact="compact">
-<dt><code>first</code></dt>
-<dd><p>The first match is considered as being the only one, the others are
-discarded.
-</p></dd>
-<dt><code>select</code></dt>
-<dd><p>A selection buffer pops up where you can choose a particular match.  This
-is the default value of the variable.
-</p></dd>
-<dt><code>all</code></dt>
-<dd><p>The expansion uses all records successively
-</p></dd>
-<dt><code>abort</code></dt>
-<dd><p>An error is signaled.  The expansion aborts.
-</p></dd>
-</dl>
+    <dd>
+      <p>This variable lets you control exactly what is inserted
+      into the buffer upon an inline expansion request. It is a
+      list whose first element is a string passed to
+      <code>format</code>. Remaining elements are symbols
+      corresponding to directory attribute names. The corresponding
+      attribute values are passed as additional arguments to
+      <code>format</code>. Default is <code>("%s" email)</code> but
+      you may want to consider a value like <code>("%s &lt;%s&gt;"
+      name email)</code></p>
+    </dd>
+  </dl>
 
-<p>Default is <code>select</code>
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-eudc_002dmultiple_002dmatch_002dhandling_002dmethod" id=
+    "index-eudc_002dmultiple_002dmatch_002dhandling_002dmethod"></a>Variable:
+    <strong>eudc-multiple-match-handling-method</strong></dt>
 
+    <dd>
+      <p>This variable controls what to do when multiple entries
+      match a query for an inline expansion. Possible values
+      are:</p>
 
+      <dl compact="compact">
+        <dt><code>first</code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="The-Server-Hotlist.html#The-Server-Hotlist" accesskey="n" rel="next">The Server Hotlist</a>, Previous: <a href="Display-of-Query-Results.html#Display-of-Query-Results" accesskey="p" rel="prev">Display of Query Results</a>, Up: <a href="Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+        <dd>
+          <p>The first match is considered as being the only one,
+          the others are discarded.</p>
+        </dd>
 
+        <dt><code>select</code></dt>
 
+        <dd>
+          <p>A selection buffer pops up where you can choose a
+          particular match. This is the default value of the
+          variable.</p>
+        </dd>
 
+        <dt><code>all</code></dt>
+
+        <dd>
+          <p>The expansion uses all records successively</p>
+        </dd>
+
+        <dt><code>abort</code></dt>
+
+        <dd>
+          <p>An error is signaled. The expansion aborts.</p>
+        </dd>
+      </dl>
+
+      <p>Default is <code>select</code></p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="The-Server-Hotlist.html#The-Server-Hotlist"
+    accesskey="n" rel="next">The Server Hotlist</a>, Previous:
+    <a href=
+    "Display-of-Query-Results.html#Display-of-Query-Results"
+    accesskey="p" rel="prev">Display of Query Results</a>, Up:
+    <a href="Usage.html#Usage" accesskey="u" rel="up">Usage</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

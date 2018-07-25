@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,216 +19,347 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Choosing Window Options</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Choosing Window Options">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Choosing Window Options">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Window-History.html#Window-History" rel="next" title="Window History">
-<link href="Display-Action-Functions.html#Display-Action-Functions" rel="prev" title="Display Action Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Choosing Window
+  Options</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Choosing Window Options" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Choosing Window Options" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Window-History.html#Window-History" rel="next" title=
+  "Window History" />
+  <link href=
+  "Display-Action-Functions.html#Display-Action-Functions" rel=
+  "prev" title="Display Action Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Choosing-Window-Options" id=
+  "Choosing-Window-Options"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Window-History.html#Window-History"
+    accesskey="n" rel="next">Window History</a>, Previous: <a href=
+    "Display-Action-Functions.html#Display-Action-Functions"
+    accesskey="p" rel="prev">Display Action Functions</a>, Up:
+    <a href="Windows.html#Windows" accesskey="u" rel=
+    "up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Additional-Options-for-Displaying-Buffers" id=
+  "Additional-Options-for-Displaying-Buffers"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Choosing-Window-Options"></a>
-<div class="header">
-<p>
-Next: <a href="Window-History.html#Window-History" accesskey="n" rel="next">Window History</a>, Previous: <a href="Display-Action-Functions.html#Display-Action-Functions" accesskey="p" rel="prev">Display Action Functions</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Additional-Options-for-Displaying-Buffers"></a>
-<h3 class="section">27.15 Additional Options for Displaying Buffers</h3>
+  <h3 class="section">27.15 Additional Options for Displaying
+  Buffers</h3>
 
-<p>The behavior of the standard display actions of <code>display-buffer</code>
-(see <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>) can be modified by a variety of user
-options.
-</p>
-<dl>
-<dt><a name="index-pop_002dup_002dwindows"></a>User Option: <strong>pop-up-windows</strong></dt>
-<dd><p>If the value of this variable is non-<code>nil</code>, <code>display-buffer</code>
-is allowed to split an existing window to make a new window for
-displaying in.  This is the default.
-</p>
-<p>This variable is provided mainly for backward compatibility.  It is
-obeyed by <code>display-buffer</code> via a special mechanism in
-<code>display-buffer-fallback-action</code>, which only calls the action
-function <code>display-buffer-pop-up-window</code> (see <a href="Display-Action-Functions.html#Display-Action-Functions">Display Action Functions</a>) when the value is <code>nil</code>.  It is not consulted by
-<code>display-buffer-pop-up-window</code> itself, which the user may specify
-directly in <code>display-buffer-alist</code> etc.
-</p></dd></dl>
+  <p>The behavior of the standard display actions of
+  <code>display-buffer</code> (see <a href=
+  "Choosing-Window.html#Choosing-Window">Choosing Window</a>) can
+  be modified by a variety of user options.</p>
 
-<dl>
-<dt><a name="index-split_002dwindow_002dpreferred_002dfunction"></a>User Option: <strong>split-window-preferred-function</strong></dt>
-<dd><p>This variable specifies a function for splitting a window, in order to
-make a new window for displaying a buffer.  It is used by the
-<code>display-buffer-pop-up-window</code> action function to actually split
-the window (see <a href="Display-Action-Functions.html#Display-Action-Functions">Display Action Functions</a>).
-</p>
-<p>The default value is <code>split-window-sensibly</code>, which is documented
-below.  The value must be a function that takes one argument, a window,
-and return either a new window (which will be used to display the
-desired buffer) or <code>nil</code> (which means the splitting failed).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-pop_002dup_002dwindows" id=
+    "index-pop_002dup_002dwindows"></a>User Option:
+    <strong>pop-up-windows</strong></dt>
 
-<dl>
-<dt><a name="index-split_002dwindow_002dsensibly"></a>Function: <strong>split-window-sensibly</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function tries to split <var>window</var>, and return the newly created
-window.  If <var>window</var> cannot be split, it returns <code>nil</code>.  If
-<var>window</var> is omitted or <code>nil</code>, it defaults to the selected
-window.
-</p>
-<p>This function obeys the usual rules that determine when a window may
-be split (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>).  It first tries to split by
-placing the new window below, subject to the restriction imposed by
-<code>split-height-threshold</code> (see below), in addition to any other
-restrictions.  If that fails, it tries to split by placing the new
-window to the right, subject to <code>split-width-threshold</code> (see
-below).  If that fails, and the window is the only window on its
-frame, this function again tries to split and place the new window
-below, disregarding <code>split-height-threshold</code>.  If this fails as
-well, this function gives up and returns <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>If the value of this variable is non-<code>nil</code>,
+      <code>display-buffer</code> is allowed to split an existing
+      window to make a new window for displaying in. This is the
+      default.</p>
 
-<dl>
-<dt><a name="index-split_002dheight_002dthreshold"></a>User Option: <strong>split-height-threshold</strong></dt>
-<dd><p>This variable, used by <code>split-window-sensibly</code>, specifies whether
-to split the window placing the new window below.  If it is an
-integer, that means to split only if the original window has at least
-that many lines.  If it is <code>nil</code>, that means not to split this
-way.
-</p></dd></dl>
+      <p>This variable is provided mainly for backward
+      compatibility. It is obeyed by <code>display-buffer</code>
+      via a special mechanism in
+      <code>display-buffer-fallback-action</code>, which only calls
+      the action function <code>display-buffer-pop-up-window</code>
+      (see <a href=
+      "Display-Action-Functions.html#Display-Action-Functions">Display
+      Action Functions</a>) when the value is <code>nil</code>. It
+      is not consulted by <code>display-buffer-pop-up-window</code>
+      itself, which the user may specify directly in
+      <code>display-buffer-alist</code> etc.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-split_002dwidth_002dthreshold"></a>User Option: <strong>split-width-threshold</strong></dt>
-<dd><p>This variable, used by <code>split-window-sensibly</code>, specifies whether
-to split the window placing the new window to the right.  If the value
-is an integer, that means to split only if the original window has at
-least that many columns.  If the value is <code>nil</code>, that means not
-to split this way.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-split_002dwindow_002dpreferred_002dfunction"
+    id="index-split_002dwindow_002dpreferred_002dfunction"></a>User
+    Option: <strong>split-window-preferred-function</strong></dt>
 
-<dl>
-<dt><a name="index-even_002dwindow_002dsizes"></a>User Option: <strong>even-window-sizes</strong></dt>
-<dd><p>This variable, if non-<code>nil</code>, causes <code>display-buffer</code> to even
-window sizes whenever it reuses an existing window and that window is
-adjacent to the selected one.
-</p>
-<p>If its value is <code>width-only</code>, sizes are evened only if the reused
-window is on the left or right of the selected one and the selected
-window is wider than the reused one.  If its value is <code>height-only</code>
-sizes are evened only if the reused window is above or beneath the
-selected window and the selected window is higher than the reused one.
-Any other non-<code>nil</code> value means to even sizes in any of these cases
-provided the selected window is larger than the reused one in the sense
-of their combination.
-</p></dd></dl>
+    <dd>
+      <p>This variable specifies a function for splitting a window,
+      in order to make a new window for displaying a buffer. It is
+      used by the <code>display-buffer-pop-up-window</code> action
+      function to actually split the window (see <a href=
+      "Display-Action-Functions.html#Display-Action-Functions">Display
+      Action Functions</a>).</p>
 
-<dl>
-<dt><a name="index-pop_002dup_002dframes"></a>User Option: <strong>pop-up-frames</strong></dt>
-<dd><p>If the value of this variable is non-<code>nil</code>, that means
-<code>display-buffer</code> may display buffers by making new frames.  The
-default is <code>nil</code>.
-</p>
-<p>A non-<code>nil</code> value also means that when <code>display-buffer</code> is
-looking for a window already displaying <var>buffer-or-name</var>, it can
-search any visible or iconified frame, not just the selected frame.
-</p>
-<p>This variable is provided mainly for backward compatibility.  It is
-obeyed by <code>display-buffer</code> via a special mechanism in
-<code>display-buffer-fallback-action</code>, which calls the action function
-<code>display-buffer-pop-up-frame</code> (see <a href="Display-Action-Functions.html#Display-Action-Functions">Display Action Functions</a>)
-if the value is non-<code>nil</code>.  (This is done before attempting to
-split a window.)  This variable is not consulted by
-<code>display-buffer-pop-up-frame</code> itself, which the user may specify
-directly in <code>display-buffer-alist</code> etc.
-</p></dd></dl>
+      <p>The default value is <code>split-window-sensibly</code>,
+      which is documented below. The value must be a function that
+      takes one argument, a window, and return either a new window
+      (which will be used to display the desired buffer) or
+      <code>nil</code> (which means the splitting failed).</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-pop_002dup_002dframe_002dfunction"></a>User Option: <strong>pop-up-frame-function</strong></dt>
-<dd><p>This variable specifies a function for creating a new frame, in order
-to make a new window for displaying a buffer.  It is used by the
-<code>display-buffer-pop-up-frame</code> action function (see <a href="Display-Action-Functions.html#Display-Action-Functions">Display Action Functions</a>).
-</p>
-<p>The value should be a function that takes no arguments and returns a
-frame, or <code>nil</code> if no frame could be created.  The default value
-is a function that creates a frame using the parameters specified by
-<code>pop-up-frame-alist</code> (see below).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-split_002dwindow_002dsensibly" id=
+    "index-split_002dwindow_002dsensibly"></a>Function:
+    <strong>split-window-sensibly</strong> <em>&amp;optional
+    window</em></dt>
 
-<dl>
-<dt><a name="index-pop_002dup_002dframe_002dalist"></a>User Option: <strong>pop-up-frame-alist</strong></dt>
-<dd><p>This variable holds an alist of frame parameters (see <a href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>), which is used by the default function in
-<code>pop-up-frame-function</code> to make a new frame.  The default is
-<code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function tries to split <var>window</var>, and return
+      the newly created window. If <var>window</var> cannot be
+      split, it returns <code>nil</code>. If <var>window</var> is
+      omitted or <code>nil</code>, it defaults to the selected
+      window.</p>
 
-<dl>
-<dt><a name="index-same_002dwindow_002dbuffer_002dnames"></a>User Option: <strong>same-window-buffer-names</strong></dt>
-<dd><p>A list of buffer names for buffers that should be displayed in the
-selected window.  If a buffer&rsquo;s name is in this list,
-<code>display-buffer</code> handles the buffer by showing it in the selected
-window.
-</p></dd></dl>
+      <p>This function obeys the usual rules that determine when a
+      window may be split (see <a href=
+      "Splitting-Windows.html#Splitting-Windows">Splitting
+      Windows</a>). It first tries to split by placing the new
+      window below, subject to the restriction imposed by
+      <code>split-height-threshold</code> (see below), in addition
+      to any other restrictions. If that fails, it tries to split
+      by placing the new window to the right, subject to
+      <code>split-width-threshold</code> (see below). If that
+      fails, and the window is the only window on its frame, this
+      function again tries to split and place the new window below,
+      disregarding <code>split-height-threshold</code>. If this
+      fails as well, this function gives up and returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-same_002dwindow_002dregexps"></a>User Option: <strong>same-window-regexps</strong></dt>
-<dd><p>A list of regular expressions that specify buffers that should be
-displayed in the selected window.  If the buffer&rsquo;s name matches any of
-the regular expressions in this list, <code>display-buffer</code> handles the
-buffer by showing it in the selected window.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-split_002dheight_002dthreshold" id=
+    "index-split_002dheight_002dthreshold"></a>User Option:
+    <strong>split-height-threshold</strong></dt>
 
-<dl>
-<dt><a name="index-same_002dwindow_002dp"></a>Function: <strong>same-window-p</strong> <em>buffer-name</em></dt>
-<dd><p>This function returns <code>t</code> if displaying a buffer
-named <var>buffer-name</var> with <code>display-buffer</code> would
-put it in the selected window.
-</p></dd></dl>
+    <dd>
+      <p>This variable, used by <code>split-window-sensibly</code>,
+      specifies whether to split the window placing the new window
+      below. If it is an integer, that means to split only if the
+      original window has at least that many lines. If it is
+      <code>nil</code>, that means not to split this way.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Window-History.html#Window-History" accesskey="n" rel="next">Window History</a>, Previous: <a href="Display-Action-Functions.html#Display-Action-Functions" accesskey="p" rel="prev">Display Action Functions</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-split_002dwidth_002dthreshold" id=
+    "index-split_002dwidth_002dthreshold"></a>User Option:
+    <strong>split-width-threshold</strong></dt>
 
+    <dd>
+      <p>This variable, used by <code>split-window-sensibly</code>,
+      specifies whether to split the window placing the new window
+      to the right. If the value is an integer, that means to split
+      only if the original window has at least that many columns.
+      If the value is <code>nil</code>, that means not to split
+      this way.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-even_002dwindow_002dsizes" id=
+    "index-even_002dwindow_002dsizes"></a>User Option:
+    <strong>even-window-sizes</strong></dt>
 
+    <dd>
+      <p>This variable, if non-<code>nil</code>, causes
+      <code>display-buffer</code> to even window sizes whenever it
+      reuses an existing window and that window is adjacent to the
+      selected one.</p>
+
+      <p>If its value is <code>width-only</code>, sizes are evened
+      only if the reused window is on the left or right of the
+      selected one and the selected window is wider than the reused
+      one. If its value is <code>height-only</code> sizes are
+      evened only if the reused window is above or beneath the
+      selected window and the selected window is higher than the
+      reused one. Any other non-<code>nil</code> value means to
+      even sizes in any of these cases provided the selected window
+      is larger than the reused one in the sense of their
+      combination.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pop_002dup_002dframes" id=
+    "index-pop_002dup_002dframes"></a>User Option:
+    <strong>pop-up-frames</strong></dt>
+
+    <dd>
+      <p>If the value of this variable is non-<code>nil</code>,
+      that means <code>display-buffer</code> may display buffers by
+      making new frames. The default is <code>nil</code>.</p>
+
+      <p>A non-<code>nil</code> value also means that when
+      <code>display-buffer</code> is looking for a window already
+      displaying <var>buffer-or-name</var>, it can search any
+      visible or iconified frame, not just the selected frame.</p>
+
+      <p>This variable is provided mainly for backward
+      compatibility. It is obeyed by <code>display-buffer</code>
+      via a special mechanism in
+      <code>display-buffer-fallback-action</code>, which calls the
+      action function <code>display-buffer-pop-up-frame</code> (see
+      <a href=
+      "Display-Action-Functions.html#Display-Action-Functions">Display
+      Action Functions</a>) if the value is non-<code>nil</code>.
+      (This is done before attempting to split a window.) This
+      variable is not consulted by
+      <code>display-buffer-pop-up-frame</code> itself, which the
+      user may specify directly in
+      <code>display-buffer-alist</code> etc.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pop_002dup_002dframe_002dfunction" id=
+    "index-pop_002dup_002dframe_002dfunction"></a>User Option:
+    <strong>pop-up-frame-function</strong></dt>
+
+    <dd>
+      <p>This variable specifies a function for creating a new
+      frame, in order to make a new window for displaying a buffer.
+      It is used by the <code>display-buffer-pop-up-frame</code>
+      action function (see <a href=
+      "Display-Action-Functions.html#Display-Action-Functions">Display
+      Action Functions</a>).</p>
+
+      <p>The value should be a function that takes no arguments and
+      returns a frame, or <code>nil</code> if no frame could be
+      created. The default value is a function that creates a frame
+      using the parameters specified by
+      <code>pop-up-frame-alist</code> (see below).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pop_002dup_002dframe_002dalist" id=
+    "index-pop_002dup_002dframe_002dalist"></a>User Option:
+    <strong>pop-up-frame-alist</strong></dt>
+
+    <dd>
+      <p>This variable holds an alist of frame parameters (see
+      <a href="Frame-Parameters.html#Frame-Parameters">Frame
+      Parameters</a>), which is used by the default function in
+      <code>pop-up-frame-function</code> to make a new frame. The
+      default is <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-same_002dwindow_002dbuffer_002dnames" id=
+    "index-same_002dwindow_002dbuffer_002dnames"></a>User Option:
+    <strong>same-window-buffer-names</strong></dt>
+
+    <dd>
+      <p>A list of buffer names for buffers that should be
+      displayed in the selected window. If a buffer&rsquo;s name is
+      in this list, <code>display-buffer</code> handles the buffer
+      by showing it in the selected window.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-same_002dwindow_002dregexps" id=
+    "index-same_002dwindow_002dregexps"></a>User Option:
+    <strong>same-window-regexps</strong></dt>
+
+    <dd>
+      <p>A list of regular expressions that specify buffers that
+      should be displayed in the selected window. If the
+      buffer&rsquo;s name matches any of the regular expressions in
+      this list, <code>display-buffer</code> handles the buffer by
+      showing it in the selected window.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-same_002dwindow_002dp" id=
+    "index-same_002dwindow_002dp"></a>Function:
+    <strong>same-window-p</strong> <em>buffer-name</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if displaying a
+      buffer named <var>buffer-name</var> with
+      <code>display-buffer</code> would put it in the selected
+      window.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Window-History.html#Window-History"
+    accesskey="n" rel="next">Window History</a>, Previous: <a href=
+    "Display-Action-Functions.html#Display-Action-Functions"
+    accesskey="p" rel="prev">Display Action Functions</a>, Up:
+    <a href="Windows.html#Windows" accesskey="u" rel=
+    "up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

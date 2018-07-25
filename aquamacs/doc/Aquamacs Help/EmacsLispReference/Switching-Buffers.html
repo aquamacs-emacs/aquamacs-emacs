@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,237 +19,352 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Switching Buffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Switching Buffers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Switching Buffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Choosing-Window.html#Choosing-Window" rel="next" title="Choosing Window">
-<link href="Buffers-and-Windows.html#Buffers-and-Windows" rel="prev" title="Buffers and Windows">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Switching Buffers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Switching Buffers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Switching Buffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Choosing-Window.html#Choosing-Window" rel="next"
+  title="Choosing Window" />
+  <link href="Buffers-and-Windows.html#Buffers-and-Windows" rel=
+  "prev" title="Buffers and Windows" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Switching-Buffers" id="Switching-Buffers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Choosing-Window.html#Choosing-Window"
+    accesskey="n" rel="next">Choosing Window</a>, Previous:
+    <a href="Buffers-and-Windows.html#Buffers-and-Windows"
+    accesskey="p" rel="prev">Buffers and Windows</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Switching-to-a-Buffer-in-a-Window" id=
+  "Switching-to-a-Buffer-in-a-Window"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Switching-Buffers"></a>
-<div class="header">
-<p>
-Next: <a href="Choosing-Window.html#Choosing-Window" accesskey="n" rel="next">Choosing Window</a>, Previous: <a href="Buffers-and-Windows.html#Buffers-and-Windows" accesskey="p" rel="prev">Buffers and Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Switching-to-a-Buffer-in-a-Window"></a>
-<h3 class="section">27.12 Switching to a Buffer in a Window</h3>
-<a name="index-switching-to-a-buffer"></a>
-<a name="index-displaying-a-buffer"></a>
+  <h3 class="section">27.12 Switching to a Buffer in a
+  Window</h3><a name="index-switching-to-a-buffer" id=
+  "index-switching-to-a-buffer"></a> <a name=
+  "index-displaying-a-buffer" id="index-displaying-a-buffer"></a>
 
-<p>This section describes high-level functions for switching to a specified
-buffer in some window.  In general, &ldquo;switching to a buffer&rdquo; means to
-(1) show the buffer in some window, (2) make that window the selected
-window (and its frame the selected frame), and (3) make the buffer the
-current buffer.
-</p>
-<p>Do <em>not</em> use these functions to make a buffer temporarily
-current just so a Lisp program can access or modify it.  They have
-side-effects, such as changing window histories (see <a href="Window-History.html#Window-History">Window History</a>), which will surprise the user if used that way.  If you want
-to make a buffer current to modify it in Lisp, use
-<code>with-current-buffer</code>, <code>save-current-buffer</code>, or
-<code>set-buffer</code>.  See <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>.
-</p>
-<dl>
-<dt><a name="index-switch_002dto_002dbuffer"></a>Command: <strong>switch-to-buffer</strong> <em>buffer-or-name &amp;optional norecord force-same-window</em></dt>
-<dd><p>This command attempts to display <var>buffer-or-name</var> in the selected
-window and make it the current buffer.  It is often used interactively
-(as the binding of <kbd>C-x b</kbd>), as well as in Lisp programs.  The
-return value is the buffer switched to.
-</p>
-<p>If <var>buffer-or-name</var> is <code>nil</code>, it defaults to the buffer
-returned by <code>other-buffer</code> (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>).  If
-<var>buffer-or-name</var> is a string that is not the name of any existing
-buffer, this function creates a new buffer with that name; the new
-buffer&rsquo;s major mode is determined by the variable <code>major-mode</code>
-(see <a href="Major-Modes.html#Major-Modes">Major Modes</a>).
-</p>
-<p>Normally, the specified buffer is put at the front of the buffer
-list&mdash;both the global buffer list and the selected frame&rsquo;s buffer
-list (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>).  However, this is not done if the
-optional argument <var>norecord</var> is non-<code>nil</code>.
-</p>
-<p>Sometimes, the selected window may not be suitable for displaying the
-buffer.  This happens if the selected window is a minibuffer window, or
-if the selected window is strongly dedicated to its buffer
-(see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>).  In such cases, the command normally tries
-to display the buffer in some other window, by invoking
-<code>pop-to-buffer</code> (see below).
-</p>
-<p>If the optional argument <var>force-same-window</var> is non-<code>nil</code> and
-the selected window is not suitable for displaying the buffer, this
-function always signals an error when called non-interactively.  In
-interactive use, if the selected window is a minibuffer window, this
-function will try to use some other window instead.  If the selected
-window is strongly dedicated to its buffer, the option
-<code>switch-to-buffer-in-dedicated-window</code> described next can be used
-to proceed.
-</p></dd></dl>
+  <p>This section describes high-level functions for switching to a
+  specified buffer in some window. In general, &ldquo;switching to
+  a buffer&rdquo; means to (1) show the buffer in some window, (2)
+  make that window the selected window (and its frame the selected
+  frame), and (3) make the buffer the current buffer.</p>
 
-<dl>
-<dt><a name="index-switch_002dto_002dbuffer_002din_002ddedicated_002dwindow"></a>User Option: <strong>switch-to-buffer-in-dedicated-window</strong></dt>
-<dd><p>This option, if non-<code>nil</code>, allows <code>switch-to-buffer</code> to
-proceed when called interactively and the selected window is strongly
-dedicated to its buffer.
-</p>
-<p>The following values are respected:
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>Disallows switching and signals an error as in non-interactive use.
-</p>
-</dd>
-<dt><code>prompt</code></dt>
-<dd><p>Prompts the user whether to allow switching.
-</p>
-</dd>
-<dt><code>pop</code></dt>
-<dd><p>Invokes <code>pop-to-buffer</code> to proceed.
-</p>
-</dd>
-<dt><code>t</code></dt>
-<dd><p>Marks the selected window as non-dedicated and proceeds.
-</p></dd>
-</dl>
+  <p>Do <em>not</em> use these functions to make a buffer
+  temporarily current just so a Lisp program can access or modify
+  it. They have side-effects, such as changing window histories
+  (see <a href="Window-History.html#Window-History">Window
+  History</a>), which will surprise the user if used that way. If
+  you want to make a buffer current to modify it in Lisp, use
+  <code>with-current-buffer</code>,
+  <code>save-current-buffer</code>, or <code>set-buffer</code>. See
+  <a href="Current-Buffer.html#Current-Buffer">Current
+  Buffer</a>.</p>
 
-<p>This option does not affect non-interactive calls of
-<code>switch-to-buffer</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-switch_002dto_002dbuffer" id=
+    "index-switch_002dto_002dbuffer"></a>Command:
+    <strong>switch-to-buffer</strong> <em>buffer-or-name
+    &amp;optional norecord force-same-window</em></dt>
 
-<p>By default, <code>switch-to-buffer</code> shows the buffer at its position of
-<code>point</code>.  This behavior can be tuned using the following option.
-</p>
-<dl>
-<dt><a name="index-switch_002dto_002dbuffer_002dpreserve_002dwindow_002dpoint"></a>User Option: <strong>switch-to-buffer-preserve-window-point</strong></dt>
-<dd><p>If this variable is <code>nil</code>, <code>switch-to-buffer</code> displays the
-buffer specified by <var>buffer-or-name</var> at the position of that
-buffer&rsquo;s <code>point</code>.  If this variable is <code>already-displayed</code>, it
-tries to display the buffer at its previous position in the selected
-window, provided the buffer is currently displayed in some other window
-on any visible or iconified frame.  If this variable is <code>t</code>,
-<code>switch-to-buffer</code> unconditionally tries to display the buffer at
-its previous position in the selected window.
-</p>
-<p>This variable is ignored if the buffer is already displayed in the
-selected window or never appeared in it before, or if
-<code>switch-to-buffer</code> calls <code>pop-to-buffer</code> to display the
-buffer.
-</p></dd></dl>
+    <dd>
+      <p>This command attempts to display <var>buffer-or-name</var>
+      in the selected window and make it the current buffer. It is
+      often used interactively (as the binding of <kbd>C-x
+      b</kbd>), as well as in Lisp programs. The return value is
+      the buffer switched to.</p>
 
-<p>The next two commands are similar to <code>switch-to-buffer</code>, except for
-the described features.
-</p>
-<dl>
-<dt><a name="index-switch_002dto_002dbuffer_002dother_002dwindow"></a>Command: <strong>switch-to-buffer-other-window</strong> <em>buffer-or-name &amp;optional norecord</em></dt>
-<dd><p>This function displays the buffer specified by <var>buffer-or-name</var> in
-some window other than the selected window.  It uses the function
-<code>pop-to-buffer</code> internally (see below).
-</p>
-<p>If the selected window already displays the specified buffer, it
-continues to do so, but another window is nonetheless found to display
-it as well.
-</p>
-<p>The <var>buffer-or-name</var> and <var>norecord</var> arguments have the same
-meanings as in <code>switch-to-buffer</code>.
-</p></dd></dl>
+      <p>If <var>buffer-or-name</var> is <code>nil</code>, it
+      defaults to the buffer returned by <code>other-buffer</code>
+      (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>).
+      If <var>buffer-or-name</var> is a string that is not the name
+      of any existing buffer, this function creates a new buffer
+      with that name; the new buffer&rsquo;s major mode is
+      determined by the variable <code>major-mode</code> (see
+      <a href="Major-Modes.html#Major-Modes">Major Modes</a>).</p>
 
-<dl>
-<dt><a name="index-switch_002dto_002dbuffer_002dother_002dframe"></a>Command: <strong>switch-to-buffer-other-frame</strong> <em>buffer-or-name &amp;optional norecord</em></dt>
-<dd><p>This function displays the buffer specified by <var>buffer-or-name</var> in a
-new frame.  It uses the function <code>pop-to-buffer</code> internally (see
-below).
-</p>
-<p>If the specified buffer is already displayed in another window, in any
-frame on the current terminal, this switches to that window instead of
-creating a new frame.  However, the selected window is never used for
-this.
-</p>
-<p>The <var>buffer-or-name</var> and <var>norecord</var> arguments have the same
-meanings as in <code>switch-to-buffer</code>.
-</p></dd></dl>
+      <p>Normally, the specified buffer is put at the front of the
+      buffer list&mdash;both the global buffer list and the
+      selected frame&rsquo;s buffer list (see <a href=
+      "Buffer-List.html#Buffer-List">Buffer List</a>). However,
+      this is not done if the optional argument <var>norecord</var>
+      is non-<code>nil</code>.</p>
 
-<p>The above commands use the function <code>pop-to-buffer</code>, which
-flexibly displays a buffer in some window and selects that window for
-editing.  In turn, <code>pop-to-buffer</code> uses <code>display-buffer</code> for
-displaying the buffer.  Hence, all the variables affecting
-<code>display-buffer</code> will affect it as well.  See <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>,
-for the documentation of <code>display-buffer</code>.
-</p>
-<dl>
-<dt><a name="index-pop_002dto_002dbuffer"></a>Command: <strong>pop-to-buffer</strong> <em>buffer-or-name &amp;optional action norecord</em></dt>
-<dd><p>This function makes <var>buffer-or-name</var> the current buffer and
-displays it in some window, preferably not the window currently
-selected.  It then selects the displaying window.  If that window is
-on a different graphical frame, that frame is given input focus if
-possible (see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).  The return value is the buffer that
-was switched to.
-</p>
-<p>If <var>buffer-or-name</var> is <code>nil</code>, it defaults to the buffer
-returned by <code>other-buffer</code> (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>).  If
-<var>buffer-or-name</var> is a string that is not the name of any existing
-buffer, this function creates a new buffer with that name; the new
-buffer&rsquo;s major mode is determined by the variable <code>major-mode</code>
-(see <a href="Major-Modes.html#Major-Modes">Major Modes</a>).
-</p>
-<p>If <var>action</var> is non-<code>nil</code>, it should be a display action to
-pass to <code>display-buffer</code> (see <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>).
-Alternatively, a non-<code>nil</code>, non-list value means to pop to a
-window other than the selected one&mdash;even if the buffer is already
-displayed in the selected window.
-</p>
-<p>Like <code>switch-to-buffer</code>, this function updates the buffer list
-unless <var>norecord</var> is non-<code>nil</code>.
-</p></dd></dl>
+      <p>Sometimes, the selected window may not be suitable for
+      displaying the buffer. This happens if the selected window is
+      a minibuffer window, or if the selected window is strongly
+      dedicated to its buffer (see <a href=
+      "Dedicated-Windows.html#Dedicated-Windows">Dedicated
+      Windows</a>). In such cases, the command normally tries to
+      display the buffer in some other window, by invoking
+      <code>pop-to-buffer</code> (see below).</p>
 
+      <p>If the optional argument <var>force-same-window</var> is
+      non-<code>nil</code> and the selected window is not suitable
+      for displaying the buffer, this function always signals an
+      error when called non-interactively. In interactive use, if
+      the selected window is a minibuffer window, this function
+      will try to use some other window instead. If the selected
+      window is strongly dedicated to its buffer, the option
+      <code>switch-to-buffer-in-dedicated-window</code> described
+      next can be used to proceed.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Choosing-Window.html#Choosing-Window" accesskey="n" rel="next">Choosing Window</a>, Previous: <a href="Buffers-and-Windows.html#Buffers-and-Windows" accesskey="p" rel="prev">Buffers and Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name=
+    "index-switch_002dto_002dbuffer_002din_002ddedicated_002dwindow"
+    id=
+    "index-switch_002dto_002dbuffer_002din_002ddedicated_002dwindow">
+    </a>User Option:
+    <strong>switch-to-buffer-in-dedicated-window</strong></dt>
 
+    <dd>
+      <p>This option, if non-<code>nil</code>, allows
+      <code>switch-to-buffer</code> to proceed when called
+      interactively and the selected window is strongly dedicated
+      to its buffer.</p>
 
+      <p>The following values are respected:</p>
 
+      <dl compact="compact">
+        <dt><code>nil</code></dt>
+
+        <dd>
+          <p>Disallows switching and signals an error as in
+          non-interactive use.</p>
+        </dd>
+
+        <dt><code>prompt</code></dt>
+
+        <dd>
+          <p>Prompts the user whether to allow switching.</p>
+        </dd>
+
+        <dt><code>pop</code></dt>
+
+        <dd>
+          <p>Invokes <code>pop-to-buffer</code> to proceed.</p>
+        </dd>
+
+        <dt><code>t</code></dt>
+
+        <dd>
+          <p>Marks the selected window as non-dedicated and
+          proceeds.</p>
+        </dd>
+      </dl>
+
+      <p>This option does not affect non-interactive calls of
+      <code>switch-to-buffer</code>.</p>
+    </dd>
+  </dl>
+
+  <p>By default, <code>switch-to-buffer</code> shows the buffer at
+  its position of <code>point</code>. This behavior can be tuned
+  using the following option.</p>
+
+  <dl>
+    <dt><a name=
+    "index-switch_002dto_002dbuffer_002dpreserve_002dwindow_002dpoint"
+    id=
+    "index-switch_002dto_002dbuffer_002dpreserve_002dwindow_002dpoint">
+    </a>User Option:
+    <strong>switch-to-buffer-preserve-window-point</strong></dt>
+
+    <dd>
+      <p>If this variable is <code>nil</code>,
+      <code>switch-to-buffer</code> displays the buffer specified
+      by <var>buffer-or-name</var> at the position of that
+      buffer&rsquo;s <code>point</code>. If this variable is
+      <code>already-displayed</code>, it tries to display the
+      buffer at its previous position in the selected window,
+      provided the buffer is currently displayed in some other
+      window on any visible or iconified frame. If this variable is
+      <code>t</code>, <code>switch-to-buffer</code> unconditionally
+      tries to display the buffer at its previous position in the
+      selected window.</p>
+
+      <p>This variable is ignored if the buffer is already
+      displayed in the selected window or never appeared in it
+      before, or if <code>switch-to-buffer</code> calls
+      <code>pop-to-buffer</code> to display the buffer.</p>
+    </dd>
+  </dl>
+
+  <p>The next two commands are similar to
+  <code>switch-to-buffer</code>, except for the described
+  features.</p>
+
+  <dl>
+    <dt><a name=
+    "index-switch_002dto_002dbuffer_002dother_002dwindow" id=
+    "index-switch_002dto_002dbuffer_002dother_002dwindow"></a>Command:
+    <strong>switch-to-buffer-other-window</strong>
+    <em>buffer-or-name &amp;optional norecord</em></dt>
+
+    <dd>
+      <p>This function displays the buffer specified by
+      <var>buffer-or-name</var> in some window other than the
+      selected window. It uses the function
+      <code>pop-to-buffer</code> internally (see below).</p>
+
+      <p>If the selected window already displays the specified
+      buffer, it continues to do so, but another window is
+      nonetheless found to display it as well.</p>
+
+      <p>The <var>buffer-or-name</var> and <var>norecord</var>
+      arguments have the same meanings as in
+      <code>switch-to-buffer</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-switch_002dto_002dbuffer_002dother_002dframe" id=
+    "index-switch_002dto_002dbuffer_002dother_002dframe"></a>Command:
+    <strong>switch-to-buffer-other-frame</strong>
+    <em>buffer-or-name &amp;optional norecord</em></dt>
+
+    <dd>
+      <p>This function displays the buffer specified by
+      <var>buffer-or-name</var> in a new frame. It uses the
+      function <code>pop-to-buffer</code> internally (see
+      below).</p>
+
+      <p>If the specified buffer is already displayed in another
+      window, in any frame on the current terminal, this switches
+      to that window instead of creating a new frame. However, the
+      selected window is never used for this.</p>
+
+      <p>The <var>buffer-or-name</var> and <var>norecord</var>
+      arguments have the same meanings as in
+      <code>switch-to-buffer</code>.</p>
+    </dd>
+  </dl>
+
+  <p>The above commands use the function
+  <code>pop-to-buffer</code>, which flexibly displays a buffer in
+  some window and selects that window for editing. In turn,
+  <code>pop-to-buffer</code> uses <code>display-buffer</code> for
+  displaying the buffer. Hence, all the variables affecting
+  <code>display-buffer</code> will affect it as well. See <a href=
+  "Choosing-Window.html#Choosing-Window">Choosing Window</a>, for
+  the documentation of <code>display-buffer</code>.</p>
+
+  <dl>
+    <dt><a name="index-pop_002dto_002dbuffer" id=
+    "index-pop_002dto_002dbuffer"></a>Command:
+    <strong>pop-to-buffer</strong> <em>buffer-or-name &amp;optional
+    action norecord</em></dt>
+
+    <dd>
+      <p>This function makes <var>buffer-or-name</var> the current
+      buffer and displays it in some window, preferably not the
+      window currently selected. It then selects the displaying
+      window. If that window is on a different graphical frame,
+      that frame is given input focus if possible (see <a href=
+      "Input-Focus.html#Input-Focus">Input Focus</a>). The return
+      value is the buffer that was switched to.</p>
+
+      <p>If <var>buffer-or-name</var> is <code>nil</code>, it
+      defaults to the buffer returned by <code>other-buffer</code>
+      (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>).
+      If <var>buffer-or-name</var> is a string that is not the name
+      of any existing buffer, this function creates a new buffer
+      with that name; the new buffer&rsquo;s major mode is
+      determined by the variable <code>major-mode</code> (see
+      <a href="Major-Modes.html#Major-Modes">Major Modes</a>).</p>
+
+      <p>If <var>action</var> is non-<code>nil</code>, it should be
+      a display action to pass to <code>display-buffer</code> (see
+      <a href="Choosing-Window.html#Choosing-Window">Choosing
+      Window</a>). Alternatively, a non-<code>nil</code>, non-list
+      value means to pop to a window other than the selected
+      one&mdash;even if the buffer is already displayed in the
+      selected window.</p>
+
+      <p>Like <code>switch-to-buffer</code>, this function updates
+      the buffer list unless <var>norecord</var> is
+      non-<code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Choosing-Window.html#Choosing-Window"
+    accesskey="n" rel="next">Choosing Window</a>, Previous:
+    <a href="Buffers-and-Windows.html#Buffers-and-Windows"
+    accesskey="p" rel="prev">Buffers and Windows</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

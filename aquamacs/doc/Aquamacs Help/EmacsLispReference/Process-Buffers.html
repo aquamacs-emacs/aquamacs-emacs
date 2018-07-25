@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,204 +19,308 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Process Buffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Process Buffers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Process Buffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Output-from-Processes.html#Output-from-Processes" rel="up" title="Output from Processes">
-<link href="Filter-Functions.html#Filter-Functions" rel="next" title="Filter Functions">
-<link href="Output-from-Processes.html#Output-from-Processes" rel="prev" title="Output from Processes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Process Buffers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Process Buffers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Process Buffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Output-from-Processes.html#Output-from-Processes"
+  rel="up" title="Output from Processes" />
+  <link href="Filter-Functions.html#Filter-Functions" rel="next"
+  title="Filter Functions" />
+  <link href="Output-from-Processes.html#Output-from-Processes"
+  rel="prev" title="Output from Processes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Process-Buffers" id="Process-Buffers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Filter-Functions.html#Filter-Functions"
+    accesskey="n" rel="next">Filter Functions</a>, Up: <a href=
+    "Output-from-Processes.html#Output-from-Processes" accesskey=
+    "u" rel="up">Output from Processes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Process-Buffers-1" id="Process-Buffers-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Process-Buffers"></a>
-<div class="header">
-<p>
-Next: <a href="Filter-Functions.html#Filter-Functions" accesskey="n" rel="next">Filter Functions</a>, Up: <a href="Output-from-Processes.html#Output-from-Processes" accesskey="u" rel="up">Output from Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Process-Buffers-1"></a>
-<h4 class="subsection">36.9.1 Process Buffers</h4>
+  <h4 class="subsection">36.9.1 Process Buffers</h4>
 
-<p>A process can (and usually does) have an <em>associated buffer</em>,
-which is an ordinary Emacs buffer that is used for two purposes: storing
-the output from the process, and deciding when to kill the process.  You
-can also use the buffer to identify a process to operate on, since in
-normal practice only one process is associated with any given buffer.
-Many applications of processes also use the buffer for editing input to
-be sent to the process, but this is not built into Emacs Lisp.
-</p>
-<p>By default, process output is inserted in the associated buffer.
-(You can change this by defining a custom filter function,
-see <a href="Filter-Functions.html#Filter-Functions">Filter Functions</a>.)  The position to insert the output is
-determined by the <code>process-mark</code>, which is then updated to point
-to the end of the text just inserted.  Usually, but not always, the
-<code>process-mark</code> is at the end of the buffer.
-</p>
-<a name="index-process_002dkill_002dbuffer_002dquery_002dfunction"></a>
-<p>Killing the associated buffer of a process also kills the process.
-Emacs asks for confirmation first, if the process&rsquo;s
-<code>process-query-on-exit-flag</code> is non-<code>nil</code> (see <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>).  This confirmation is done by the function
-<code>process-kill-buffer-query-function</code>, which is run from
-<code>kill-buffer-query-functions</code> (see <a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>).
-</p>
-<dl>
-<dt><a name="index-process_002dbuffer"></a>Function: <strong>process-buffer</strong> <em>process</em></dt>
-<dd><p>This function returns the associated buffer of the specified
-<var>process</var>.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(process-buffer (get-process &quot;shell&quot;))
+  <p>A process can (and usually does) have an <em>associated
+  buffer</em>, which is an ordinary Emacs buffer that is used for
+  two purposes: storing the output from the process, and deciding
+  when to kill the process. You can also use the buffer to identify
+  a process to operate on, since in normal practice only one
+  process is associated with any given buffer. Many applications of
+  processes also use the buffer for editing input to be sent to the
+  process, but this is not built into Emacs Lisp.</p>
+
+  <p>By default, process output is inserted in the associated
+  buffer. (You can change this by defining a custom filter
+  function, see <a href=
+  "Filter-Functions.html#Filter-Functions">Filter Functions</a>.)
+  The position to insert the output is determined by the
+  <code>process-mark</code>, which is then updated to point to the
+  end of the text just inserted. Usually, but not always, the
+  <code>process-mark</code> is at the end of the
+  buffer.</p><a name="index-process_002dkill_002dbuffer_002dquery_002dfunction"
+  id=
+  "index-process_002dkill_002dbuffer_002dquery_002dfunction"></a>
+
+  <p>Killing the associated buffer of a process also kills the
+  process. Emacs asks for confirmation first, if the
+  process&rsquo;s <code>process-query-on-exit-flag</code> is
+  non-<code>nil</code> (see <a href=
+  "Query-Before-Exit.html#Query-Before-Exit">Query Before
+  Exit</a>). This confirmation is done by the function
+  <code>process-kill-buffer-query-function</code>, which is run
+  from <code>kill-buffer-query-functions</code> (see <a href=
+  "Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>).</p>
+
+  <dl>
+    <dt><a name="index-process_002dbuffer" id=
+    "index-process_002dbuffer"></a>Function:
+    <strong>process-buffer</strong> <em>process</em></dt>
+
+    <dd>
+      <p>This function returns the associated buffer of the
+      specified <var>process</var>.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(process-buffer (get-process "shell"))
      &rArr; #&lt;buffer *shell*&gt;
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-process_002dmark"></a>Function: <strong>process-mark</strong> <em>process</em></dt>
-<dd><p>This function returns the process marker for <var>process</var>, which is the
-marker that says where to insert output from the process.
-</p>
-<p>If <var>process</var> does not have a buffer, <code>process-mark</code> returns a
-marker that points nowhere.
-</p>
-<p>The default filter function uses this marker to decide where to
-insert process output, and updates it to point after the inserted text.
-That is why successive batches of output are inserted consecutively.
-</p>
-<p>Custom filter functions normally should use this marker in the same fashion.
-For an example of a filter function that uses <code>process-mark</code>,
-see <a href="Filter-Functions.html#Process-Filter-Example">Process Filter Example</a>.
-</p>
-<p>When the user is expected to enter input in the process buffer for
-transmission to the process, the process marker separates the new input
-from previous output.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-process_002dmark" id=
+    "index-process_002dmark"></a>Function:
+    <strong>process-mark</strong> <em>process</em></dt>
 
-<dl>
-<dt><a name="index-set_002dprocess_002dbuffer"></a>Function: <strong>set-process-buffer</strong> <em>process buffer</em></dt>
-<dd><p>This function sets the buffer associated with <var>process</var> to
-<var>buffer</var>.  If <var>buffer</var> is <code>nil</code>, the process becomes
-associated with no buffer.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the process marker for
+      <var>process</var>, which is the marker that says where to
+      insert output from the process.</p>
 
-<dl>
-<dt><a name="index-get_002dbuffer_002dprocess"></a>Function: <strong>get-buffer-process</strong> <em>buffer-or-name</em></dt>
-<dd><p>This function returns a nondeleted process associated with the buffer
-specified by <var>buffer-or-name</var>.  If there are several processes
-associated with it, this function chooses one (currently, the one most
-recently created, but don&rsquo;t count on that).  Deletion of a process
-(see <code>delete-process</code>) makes it ineligible for this function to
-return.
-</p>
-<p>It is usually a bad idea to have more than one process associated with
-the same buffer.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(get-buffer-process &quot;*shell*&quot;)
+      <p>If <var>process</var> does not have a buffer,
+      <code>process-mark</code> returns a marker that points
+      nowhere.</p>
+
+      <p>The default filter function uses this marker to decide
+      where to insert process output, and updates it to point after
+      the inserted text. That is why successive batches of output
+      are inserted consecutively.</p>
+
+      <p>Custom filter functions normally should use this marker in
+      the same fashion. For an example of a filter function that
+      uses <code>process-mark</code>, see <a href=
+      "Filter-Functions.html#Process-Filter-Example">Process Filter
+      Example</a>.</p>
+
+      <p>When the user is expected to enter input in the process
+      buffer for transmission to the process, the process marker
+      separates the new input from previous output.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dprocess_002dbuffer" id=
+    "index-set_002dprocess_002dbuffer"></a>Function:
+    <strong>set-process-buffer</strong> <em>process
+    buffer</em></dt>
+
+    <dd>
+      <p>This function sets the buffer associated with
+      <var>process</var> to <var>buffer</var>. If <var>buffer</var>
+      is <code>nil</code>, the process becomes associated with no
+      buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-get_002dbuffer_002dprocess" id=
+    "index-get_002dbuffer_002dprocess"></a>Function:
+    <strong>get-buffer-process</strong>
+    <em>buffer-or-name</em></dt>
+
+    <dd>
+      <p>This function returns a nondeleted process associated with
+      the buffer specified by <var>buffer-or-name</var>. If there
+      are several processes associated with it, this function
+      chooses one (currently, the one most recently created, but
+      don&rsquo;t count on that). Deletion of a process (see
+      <code>delete-process</code>) makes it ineligible for this
+      function to return.</p>
+
+      <p>It is usually a bad idea to have more than one process
+      associated with the same buffer.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(get-buffer-process "*shell*")
      &rArr; #&lt;process shell&gt;
-</pre></div>
+</pre>
+      </div>
 
-<p>Killing the process&rsquo;s buffer deletes the process, which kills the
-subprocess with a <code>SIGHUP</code> signal (see <a href="Signals-to-Processes.html#Signals-to-Processes">Signals to Processes</a>).
-</p></dd></dl>
+      <p>Killing the process&rsquo;s buffer deletes the process,
+      which kills the subprocess with a <code>SIGHUP</code> signal
+      (see <a href=
+      "Signals-to-Processes.html#Signals-to-Processes">Signals to
+      Processes</a>).</p>
+    </dd>
+  </dl>
 
-<p>If the process&rsquo;s buffer is displayed in a window, your Lisp program
-may wish to tell the process the dimensions of that window, so that
-the process could adapt its output to those dimensions, much as it
-adapts to the screen dimensions.  The following functions allow
-communicating this kind of information to processes; however, not all
-systems support the underlying functionality, so it is best to provide
-fallbacks, e.g., via command-line arguments or environment variables.
-</p>
-<dl>
-<dt><a name="index-set_002dprocess_002dwindow_002dsize"></a>Function: <strong>set-process-window-size</strong> <em>process height width</em></dt>
-<dd><p>Tell <var>process</var> that its logical window size has dimensions
-<var>width</var> by <var>height</var>, in character units.  If this function
-succeeds in communicating this information to the process, it returns
-<code>t</code>; otherwise it returns <code>nil</code>.
-</p></dd></dl>
+  <p>If the process&rsquo;s buffer is displayed in a window, your
+  Lisp program may wish to tell the process the dimensions of that
+  window, so that the process could adapt its output to those
+  dimensions, much as it adapts to the screen dimensions. The
+  following functions allow communicating this kind of information
+  to processes; however, not all systems support the underlying
+  functionality, so it is best to provide fallbacks, e.g., via
+  command-line arguments or environment variables.</p>
 
-<p>When windows that display buffers associated with process change their
-dimensions, the affected processes should be told about these changes.
-By default, when the window configuration changes, Emacs will
-automatically call <code>set-process-window-size</code> on behalf of every
-process whose buffer is displayed in a window, passing it the smallest
-dimensions of all the windows displaying the process&rsquo;s buffer.  This
-works via <code>window-configuration-change-hook</code> (see <a href="Window-Hooks.html#Window-Hooks">Window Hooks</a>), which is told to invoke the function that is the value of
-the variable <code>window-adjust-process-window-size-function</code> for
-each process whose buffer is displayed in at least one window.  You
-can customize this behavior by setting the value of that variable.
-</p>
-<dl>
-<dt><a name="index-window_002dadjust_002dprocess_002dwindow_002dsize_002dfunction"></a>User Option: <strong>window-adjust-process-window-size-function</strong></dt>
-<dd><p>The value of this variable should be a function of two arguments: a
-process and the list of windows displaying the process&rsquo;s buffer.  When
-the function is called, the process&rsquo;s buffer is the current buffer.
-The function should return a cons cell <code>(<var>width</var>&nbsp;.&nbsp;<var>height</var>)</code><!-- /@w --> that describes the dimensions of the logical process
-window to be passed via a call to <code>set-process-window-size</code>.  The
-function can also return <code>nil</code>, in which case Emacs will not call
-<code>set-process-window-size</code> for this process.
-</p>
-<p>Emacs supplies two predefined values for this variable:
-<code>window-adjust-process-window-size-smallest</code>, which returns the
-smallest of all the dimensions of the windows that display a process&rsquo;s
-buffer; and <code>window-adjust-process-window-size-largest</code>, which
-returns the largest dimensions.  For more complex strategies, write
-your own function.
-</p>
-<p>This variable can be buffer-local.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dprocess_002dwindow_002dsize" id=
+    "index-set_002dprocess_002dwindow_002dsize"></a>Function:
+    <strong>set-process-window-size</strong> <em>process height
+    width</em></dt>
 
-<p>If the process has the <code>adjust-window-size-function</code> property
-(see <a href="Process-Information.html#Process-Information">Process Information</a>), its value overrides the global and
-buffer-local values of
-<code>window-adjust-process-window-size-function</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Filter-Functions.html#Filter-Functions" accesskey="n" rel="next">Filter Functions</a>, Up: <a href="Output-from-Processes.html#Output-from-Processes" accesskey="u" rel="up">Output from Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Tell <var>process</var> that its logical window size has
+      dimensions <var>width</var> by <var>height</var>, in
+      character units. If this function succeeds in communicating
+      this information to the process, it returns <code>t</code>;
+      otherwise it returns <code>nil</code>.</p>
+    </dd>
+  </dl>
 
+  <p>When windows that display buffers associated with process
+  change their dimensions, the affected processes should be told
+  about these changes. By default, when the window configuration
+  changes, Emacs will automatically call
+  <code>set-process-window-size</code> on behalf of every process
+  whose buffer is displayed in a window, passing it the smallest
+  dimensions of all the windows displaying the process&rsquo;s
+  buffer. This works via
+  <code>window-configuration-change-hook</code> (see <a href=
+  "Window-Hooks.html#Window-Hooks">Window Hooks</a>), which is told
+  to invoke the function that is the value of the variable
+  <code>window-adjust-process-window-size-function</code> for each
+  process whose buffer is displayed in at least one window. You can
+  customize this behavior by setting the value of that
+  variable.</p>
 
+  <dl>
+    <dt><a name=
+    "index-window_002dadjust_002dprocess_002dwindow_002dsize_002dfunction"
+    id=
+    "index-window_002dadjust_002dprocess_002dwindow_002dsize_002dfunction">
+    </a>User Option:
+    <strong>window-adjust-process-window-size-function</strong></dt>
 
+    <dd>
+      <p>The value of this variable should be a function of two
+      arguments: a process and the list of windows displaying the
+      process&rsquo;s buffer. When the function is called, the
+      process&rsquo;s buffer is the current buffer. The function
+      should return a cons cell
+      <code>(<var>width</var>&nbsp;.&nbsp;<var>height</var>)</code>
+      <!-- /@w --> that describes the dimensions of the logical
+      process window to be passed via a call to
+      <code>set-process-window-size</code>. The function can also
+      return <code>nil</code>, in which case Emacs will not call
+      <code>set-process-window-size</code> for this process.</p>
+
+      <p>Emacs supplies two predefined values for this variable:
+      <code>window-adjust-process-window-size-smallest</code>,
+      which returns the smallest of all the dimensions of the
+      windows that display a process&rsquo;s buffer; and
+      <code>window-adjust-process-window-size-largest</code>, which
+      returns the largest dimensions. For more complex strategies,
+      write your own function.</p>
+
+      <p>This variable can be buffer-local.</p>
+    </dd>
+  </dl>
+
+  <p>If the process has the
+  <code>adjust-window-size-function</code> property (see <a href=
+  "Process-Information.html#Process-Information">Process
+  Information</a>), its value overrides the global and buffer-local
+  values of
+  <code>window-adjust-process-window-size-function</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Filter-Functions.html#Filter-Functions"
+    accesskey="n" rel="next">Filter Functions</a>, Up: <a href=
+    "Output-from-Processes.html#Output-from-Processes" accesskey=
+    "u" rel="up">Output from Processes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

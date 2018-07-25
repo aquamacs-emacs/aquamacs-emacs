@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,108 +19,154 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Backtracking</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Backtracking">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Backtracking">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug-and-Macros.html#Edebug-and-Macros" rel="up" title="Edebug and Macros">
-<link href="Specification-Examples.html#Specification-Examples" rel="next" title="Specification Examples">
-<link href="Specification-List.html#Specification-List" rel="prev" title="Specification List">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Backtracking</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Backtracking" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Backtracking" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug-and-Macros.html#Edebug-and-Macros" rel="up"
+  title="Edebug and Macros" />
+  <link href="Specification-Examples.html#Specification-Examples"
+  rel="next" title="Specification Examples" />
+  <link href="Specification-List.html#Specification-List" rel=
+  "prev" title="Specification List" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Backtracking" id="Backtracking"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Specification-Examples.html#Specification-Examples" accesskey=
+    "n" rel="next">Specification Examples</a>, Previous: <a href=
+    "Specification-List.html#Specification-List" accesskey="p" rel=
+    "prev">Specification List</a>, Up: <a href=
+    "Edebug-and-Macros.html#Edebug-and-Macros" accesskey="u" rel=
+    "up">Edebug and Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Backtracking-in-Specifications" id=
+  "Backtracking-in-Specifications"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Backtracking"></a>
-<div class="header">
-<p>
-Next: <a href="Specification-Examples.html#Specification-Examples" accesskey="n" rel="next">Specification Examples</a>, Previous: <a href="Specification-List.html#Specification-List" accesskey="p" rel="prev">Specification List</a>, Up: <a href="Edebug-and-Macros.html#Edebug-and-Macros" accesskey="u" rel="up">Edebug and Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Backtracking-in-Specifications"></a>
-<h4 class="subsubsection">17.2.15.3 Backtracking in Specifications</h4>
+  <h4 class="subsubsection">17.2.15.3 Backtracking in
+  Specifications</h4><a name="index-backtracking" id=
+  "index-backtracking"></a> <a name=
+  "index-syntax-error-_0028Edebug_0029" id=
+  "index-syntax-error-_0028Edebug_0029"></a>
 
-<a name="index-backtracking"></a>
-<a name="index-syntax-error-_0028Edebug_0029"></a>
-<p>If a specification fails to match at some point, this does not
-necessarily mean a syntax error will be signaled; instead,
-<em>backtracking</em> will take place until all alternatives have been
-exhausted.  Eventually every element of the argument list must be
-matched by some element in the specification, and every required element
-in the specification must match some argument.
-</p>
-<p>When a syntax error is detected, it might not be reported until much
-later, after higher-level alternatives have been exhausted, and with the
-point positioned further from the real error.  But if backtracking is
-disabled when an error occurs, it can be reported immediately.  Note
-that backtracking is also reenabled automatically in several situations;
-when a new alternative is established by <code>&amp;optional</code>,
-<code>&amp;rest</code>, or <code>&amp;or</code>, or at the start of processing a sublist,
-group, or indirect specification.  The effect of enabling or disabling
-backtracking is limited to the remainder of the level currently being
-processed and lower levels.
-</p>
-<p>Backtracking is disabled while matching any of the
-form specifications (that is, <code>form</code>, <code>body</code>, <code>def-form</code>, and
-<code>def-body</code>).  These specifications will match any form so any error
-must be in the form itself rather than at a higher level.
-</p>
-<p>Backtracking is also disabled after successfully matching a quoted
-symbol or string specification, since this usually indicates a
-recognized construct.  But if you have a set of alternative constructs that
-all begin with the same symbol, you can usually work around this
-constraint by factoring the symbol out of the alternatives, e.g.,
-<code>[&quot;foo&quot; &amp;or [first case] [second case] ...]</code>.
-</p>
-<p>Most needs are satisfied by these two ways that backtracking is
-automatically disabled, but occasionally it is useful to explicitly
-disable backtracking by using the <code>gate</code> specification.  This is
-useful when you know that no higher alternatives could apply.  See the
-example of the <code>let</code> specification.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Specification-Examples.html#Specification-Examples" accesskey="n" rel="next">Specification Examples</a>, Previous: <a href="Specification-List.html#Specification-List" accesskey="p" rel="prev">Specification List</a>, Up: <a href="Edebug-and-Macros.html#Edebug-and-Macros" accesskey="u" rel="up">Edebug and Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If a specification fails to match at some point, this does not
+  necessarily mean a syntax error will be signaled; instead,
+  <em>backtracking</em> will take place until all alternatives have
+  been exhausted. Eventually every element of the argument list
+  must be matched by some element in the specification, and every
+  required element in the specification must match some
+  argument.</p>
 
+  <p>When a syntax error is detected, it might not be reported
+  until much later, after higher-level alternatives have been
+  exhausted, and with the point positioned further from the real
+  error. But if backtracking is disabled when an error occurs, it
+  can be reported immediately. Note that backtracking is also
+  reenabled automatically in several situations; when a new
+  alternative is established by <code>&amp;optional</code>,
+  <code>&amp;rest</code>, or <code>&amp;or</code>, or at the start
+  of processing a sublist, group, or indirect specification. The
+  effect of enabling or disabling backtracking is limited to the
+  remainder of the level currently being processed and lower
+  levels.</p>
 
+  <p>Backtracking is disabled while matching any of the form
+  specifications (that is, <code>form</code>, <code>body</code>,
+  <code>def-form</code>, and <code>def-body</code>). These
+  specifications will match any form so any error must be in the
+  form itself rather than at a higher level.</p>
 
+  <p>Backtracking is also disabled after successfully matching a
+  quoted symbol or string specification, since this usually
+  indicates a recognized construct. But if you have a set of
+  alternative constructs that all begin with the same symbol, you
+  can usually work around this constraint by factoring the symbol
+  out of the alternatives, e.g., <code>["foo" &amp;or [first case]
+  [second case] ...]</code>.</p>
+
+  <p>Most needs are satisfied by these two ways that backtracking
+  is automatically disabled, but occasionally it is useful to
+  explicitly disable backtracking by using the <code>gate</code>
+  specification. This is useful when you know that no higher
+  alternatives could apply. See the example of the <code>let</code>
+  specification.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Specification-Examples.html#Specification-Examples" accesskey=
+    "n" rel="next">Specification Examples</a>, Previous: <a href=
+    "Specification-List.html#Specification-List" accesskey="p" rel=
+    "prev">Specification List</a>, Up: <a href=
+    "Edebug-and-Macros.html#Edebug-and-Macros" accesskey="u" rel=
+    "up">Edebug and Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

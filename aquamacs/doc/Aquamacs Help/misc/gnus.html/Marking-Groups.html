@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,130 +14,192 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Marking Groups</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Marking Groups">
-<meta name="keywords" content="Gnus Manual: Marking Groups">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Group-Buffer.html#Group-Buffer" rel="up" title="Group Buffer">
-<link href="Foreign-Groups.html#Foreign-Groups" rel="next" title="Foreign Groups">
-<link href="Group-Score.html#Group-Score" rel="prev" title="Group Score">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Marking Groups</title>
+  <meta name="description" content="Gnus Manual: Marking Groups" />
+  <meta name="keywords" content="Gnus Manual: Marking Groups" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Group-Buffer.html#Group-Buffer" rel="up" title=
+  "Group Buffer" />
+  <link href="Foreign-Groups.html#Foreign-Groups" rel="next" title=
+  "Foreign Groups" />
+  <link href="Group-Score.html#Group-Score" rel="prev" title=
+  "Group Score" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Marking-Groups"></a>
-<div class="header">
-<p>
-Next: <a href="Foreign-Groups.html#Foreign-Groups" accesskey="n" rel="next">Foreign Groups</a>, Previous: <a href="Group-Score.html#Group-Score" accesskey="p" rel="prev">Group Score</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Marking-Groups-1"></a>
-<h3 class="section">2.8 Marking Groups</h3>
-<a name="index-marking-groups"></a>
+<body lang="en" xml:lang="en">
+  <a name="Marking-Groups" id="Marking-Groups"></a>
 
-<p>If you want to perform some command on several groups, and they appear
-subsequently in the group buffer, you would normally just give a
-numerical prefix to the command.  Most group commands will then do your
-bidding on those groups.
-</p>
-<p>However, if the groups are not in sequential order, you can still
-perform a command on several groups.  You simply mark the groups first
-with the process mark and then execute the command.
-</p>
-<dl compact="compact">
-<dt><kbd>#</kbd></dt>
-<dd><a name="index-_0023-_0028Group_0029"></a>
-</dd>
-<dt><kbd>M m</kbd></dt>
-<dd><a name="index-M-m-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dmark_002dgroup"></a>
-<p>Set the mark on the current group (<code>gnus-group-mark-group</code>).
-</p>
-</dd>
-<dt><kbd>M-#</kbd></dt>
-<dd><a name="index-M_002d_0023-_0028Group_0029"></a>
-</dd>
-<dt><kbd>M u</kbd></dt>
-<dd><a name="index-M-u-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dunmark_002dgroup"></a>
-<p>Remove the mark from the current group
-(<code>gnus-group-unmark-group</code>).
-</p>
-</dd>
-<dt><kbd>M U</kbd></dt>
-<dd><a name="index-M-U-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dunmark_002dall_002dgroups"></a>
-<p>Remove the mark from all groups (<code>gnus-group-unmark-all-groups</code>).
-</p>
-</dd>
-<dt><kbd>M w</kbd></dt>
-<dd><a name="index-M-w-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dmark_002dregion"></a>
-<p>Mark all groups between point and mark (<code>gnus-group-mark-region</code>).
-</p>
-</dd>
-<dt><kbd>M b</kbd></dt>
-<dd><a name="index-M-b-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dmark_002dbuffer"></a>
-<p>Mark all groups in the buffer (<code>gnus-group-mark-buffer</code>).
-</p>
-</dd>
-<dt><kbd>M r</kbd></dt>
-<dd><a name="index-M-r-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dmark_002dregexp"></a>
-<p>Mark all groups that match some regular expression
-(<code>gnus-group-mark-regexp</code>).
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Foreign-Groups.html#Foreign-Groups"
+    accesskey="n" rel="next">Foreign Groups</a>, Previous: <a href=
+    "Group-Score.html#Group-Score" accesskey="p" rel="prev">Group
+    Score</a>, Up: <a href="Group-Buffer.html#Group-Buffer"
+    accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Marking-Groups-1" id="Marking-Groups-1"></a>
 
-<p>Also see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>.
-</p>
-<a name="index-gnus_002dgroup_002duniversal_002dargument"></a>
-<p>If you want to execute some command on all groups that have been marked
-with the process mark, you can use the <kbd>M-&amp;</kbd>
-(<code>gnus-group-universal-argument</code>) command.  It will prompt you for
-the command to be executed.
-</p>
+  <h3 class="section">2.8 Marking Groups</h3><a name=
+  "index-marking-groups" id="index-marking-groups"></a>
 
+  <p>If you want to perform some command on several groups, and
+  they appear subsequently in the group buffer, you would normally
+  just give a numerical prefix to the command. Most group commands
+  will then do your bidding on those groups.</p>
 
+  <p>However, if the groups are not in sequential order, you can
+  still perform a command on several groups. You simply mark the
+  groups first with the process mark and then execute the
+  command.</p>
 
+  <dl compact="compact">
+    <dt><kbd>#</kbd></dt>
 
+    <dd><a name="index-_0023-_0028Group_0029" id=
+    "index-_0023-_0028Group_0029"></a></dd>
+
+    <dt><kbd>M m</kbd></dt>
+
+    <dd>
+      <a name="index-M-m-_0028Group_0029" id=
+      "index-M-m-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dmark_002dgroup" id=
+      "index-gnus_002dgroup_002dmark_002dgroup"></a>
+
+      <p>Set the mark on the current group
+      (<code>gnus-group-mark-group</code>).</p>
+    </dd>
+
+    <dt><kbd>M-#</kbd></dt>
+
+    <dd><a name="index-M_002d_0023-_0028Group_0029" id=
+    "index-M_002d_0023-_0028Group_0029"></a></dd>
+
+    <dt><kbd>M u</kbd></dt>
+
+    <dd>
+      <a name="index-M-u-_0028Group_0029" id=
+      "index-M-u-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dunmark_002dgroup" id=
+      "index-gnus_002dgroup_002dunmark_002dgroup"></a>
+
+      <p>Remove the mark from the current group
+      (<code>gnus-group-unmark-group</code>).</p>
+    </dd>
+
+    <dt><kbd>M U</kbd></dt>
+
+    <dd>
+      <a name="index-M-U-_0028Group_0029" id=
+      "index-M-U-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dunmark_002dall_002dgroups" id=
+      "index-gnus_002dgroup_002dunmark_002dall_002dgroups"></a>
+
+      <p>Remove the mark from all groups
+      (<code>gnus-group-unmark-all-groups</code>).</p>
+    </dd>
+
+    <dt><kbd>M w</kbd></dt>
+
+    <dd>
+      <a name="index-M-w-_0028Group_0029" id=
+      "index-M-w-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dmark_002dregion" id=
+      "index-gnus_002dgroup_002dmark_002dregion"></a>
+
+      <p>Mark all groups between point and mark
+      (<code>gnus-group-mark-region</code>).</p>
+    </dd>
+
+    <dt><kbd>M b</kbd></dt>
+
+    <dd>
+      <a name="index-M-b-_0028Group_0029" id=
+      "index-M-b-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dmark_002dbuffer" id=
+      "index-gnus_002dgroup_002dmark_002dbuffer"></a>
+
+      <p>Mark all groups in the buffer
+      (<code>gnus-group-mark-buffer</code>).</p>
+    </dd>
+
+    <dt><kbd>M r</kbd></dt>
+
+    <dd>
+      <a name="index-M-r-_0028Group_0029" id=
+      "index-M-r-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dmark_002dregexp" id=
+      "index-gnus_002dgroup_002dmark_002dregexp"></a>
+
+      <p>Mark all groups that match some regular expression
+      (<code>gnus-group-mark-regexp</code>).</p>
+    </dd>
+  </dl>
+
+  <p>Also see <a href=
+  "Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>.</p><a name="index-gnus_002dgroup_002duniversal_002dargument"
+  id="index-gnus_002dgroup_002duniversal_002dargument"></a>
+
+  <p>If you want to execute some command on all groups that have
+  been marked with the process mark, you can use the
+  <kbd>M-&amp;</kbd> (<code>gnus-group-universal-argument</code>)
+  command. It will prompt you for the command to be executed.</p>
 </body>
 </html>

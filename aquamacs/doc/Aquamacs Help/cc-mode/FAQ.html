@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>FAQ - CC Mode Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="CC Mode Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Limitations-and-Known-Bugs.html#Limitations-and-Known-Bugs" title="Limitations and Known Bugs">
-<link rel="next" href="Updating-CC-Mode.html#Updating-CC-Mode" title="Updating CC Mode">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>FAQ - CC Mode Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="CC Mode Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Limitations-and-Known-Bugs.html#Limitations-and-Known-Bugs"
+  title="Limitations and Known Bugs" />
+  <link rel="next" href="Updating-CC-Mode.html#Updating-CC-Mode"
+  title="Updating CC Mode" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
@@ -27,8 +36,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,89 +49,149 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="FAQ"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Updating-CC-Mode.html#Updating-CC-Mode">Updating CC Mode</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Limitations-and-Known-Bugs.html#Limitations-and-Known-Bugs">Limitations and Known Bugs</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="FAQ" id="FAQ"></a>
 
-<!-- node-name, next, previous, up -->
-<h2 class="appendix">Appendix A Frequently Asked Questions</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Updating-CC-Mode.html#Updating-CC-Mode">Updating CC Mode</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Limitations-and-Known-Bugs.html#Limitations-and-Known-Bugs">Limitations
+    and Known Bugs</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div><!-- node-name, next, previous, up -->
 
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-     <ul>
-<li><em>How can I change the indent level from 4 spaces to 2 spaces?</em>
+  <h2 class="appendix">Appendix A Frequently Asked Questions</h2>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
-     <p>Set the variable <code>c-basic-offset</code>.  See <a href="Getting-Started.html#Getting-Started">Getting Started</a>.
+  <ul>
+    <li>
+      <em>How can I change the indent level from 4 spaces to 2
+      spaces?</em>
 
-     <li><a name="index-RET-608"></a><a name="index-C_002dj-609"></a><em>Why doesn't the </em><kbd>RET</kbd><em> key indent the new line?</em>
+      <p>Set the variable <code>c-basic-offset</code>. See <a href=
+      "Getting-Started.html#Getting-Started">Getting
+      Started</a>.</p>
+    </li>
 
-     <p>Emacs' convention is that <kbd>RET</kbd> just adds a newline, and that
-<kbd>C-j</kbd> adds a newline and indents it.  You can make <kbd>RET</kbd> do this
-too by adding this to your <code>c-initialization-hook</code>:
+    <li>
+      <a name="index-RET-608" id="index-RET-608"></a><a name=
+      "index-C_002dj-609" id="index-C_002dj-609"></a><em>Why
+      doesn't the</em> <kbd>RET</kbd> <em>key indent the new
+      line?</em>
 
-     <pre class="example">          (define-key c-mode-base-map "\C-m" 'c-context-line-break)
+      <p>Emacs' convention is that <kbd>RET</kbd> just adds a
+      newline, and that <kbd>C-j</kbd> adds a newline and indents
+      it. You can make <kbd>RET</kbd> do this too by adding this to
+      your <code>c-initialization-hook</code>:</p>
+      <pre class="example">
+          (define-key c-mode-base-map "\C-m" 'c-context-line-break)
 </pre>
-     <p>See <a href="Getting-Started.html#Getting-Started">Getting Started</a>.  This is a very common question.  If you want
-this to be the default behavior, don't lobby us, lobby RMS!  <tt>:-)</tt>
 
-     <li><em>How do I stop my code jumping all over the place when I type?</em>
+      <p>See <a href="Getting-Started.html#Getting-Started">Getting
+      Started</a>. This is a very common question. If you want this
+      to be the default behavior, don't lobby us, lobby RMS!
+      <tt>:-)</tt></p>
+    </li>
 
-     <p>Deactivate &ldquo;electric minor mode&rdquo; with <kbd>C-c C-l</kbd>.  See <a href="Getting-Started.html#Getting-Started">Getting Started</a>.
+    <li>
+      <em>How do I stop my code jumping all over the place when I
+      type?</em>
 
-     <li><a name="index-C_002dx-h-610"></a><a name="index-C_002dM_002d_005c-611"></a><em>How do I reindent the whole file?</em>
+      <p>Deactivate &ldquo;electric minor mode&rdquo; with <kbd>C-c
+      C-l</kbd>. See <a href=
+      "Getting-Started.html#Getting-Started">Getting
+      Started</a>.</p>
+    </li>
 
-     <p>Visit the file and hit <kbd>C-x h</kbd> to mark the whole buffer. Then hit
-<kbd>C-M-\</kbd>.  See <a href="Indentation-Commands.html#Indentation-Commands">Indentation Commands</a>.
+    <li>
+      <a name="index-C_002dx-h-610" id=
+      "index-C_002dx-h-610"></a><a name=
+      "index-C_002dM_002d_005c-611" id=
+      "index-C_002dM_002d_005c-611"></a><em>How do I reindent the
+      whole file?</em>
 
-     <li><a name="index-C_002dM_002dq-612"></a><a name="index-C_002dM_002du-613"></a><em>How do I reindent the current block?</em>
+      <p>Visit the file and hit <kbd>C-x h</kbd> to mark the whole
+      buffer. Then hit <kbd>C-M-\</kbd>. See <a href=
+      "Indentation-Commands.html#Indentation-Commands">Indentation
+      Commands</a>.</p>
+    </li>
 
-     <p>First move to the brace which opens the block with <kbd>C-M-u</kbd>, then
-reindent that expression with <kbd>C-M-q</kbd>.  See <a href="Indentation-Commands.html#Indentation-Commands">Indentation Commands</a>.
+    <li>
+      <a name="index-C_002dM_002dq-612" id=
+      "index-C_002dM_002dq-612"></a><a name=
+      "index-C_002dM_002du-613" id=
+      "index-C_002dM_002du-613"></a><em>How do I reindent the
+      current block?</em>
 
-     <li><em>I put </em><code>(c-set-offset 'substatement-open 0)</code><em> in my
-</em><samp><span class="file">.emacs</span></samp><em> file but I get an error saying that </em><code>c-set-offset</code><em>'s
-function definition is void.  What's wrong?</em>
+      <p>First move to the brace which opens the block with
+      <kbd>C-M-u</kbd>, then reindent that expression with
+      <kbd>C-M-q</kbd>. See <a href=
+      "Indentation-Commands.html#Indentation-Commands">Indentation
+      Commands</a>.</p>
+    </li>
 
-     <p>This means that CC Mode hasn't yet been loaded into your Emacs
-session by the time the <code>c-set-offset</code> call is reached, most
-likely because CC Mode is being autoloaded.  Instead of putting the
-<code>c-set-offset</code> line in your top-level <samp><span class="file">.emacs</span></samp> file, put it
-in your <code>c-initialization-hook</code> (see <a href="CC-Hooks.html#CC-Hooks">CC Hooks</a>), or simply
-modify <code>c-offsets-alist</code> directly:
+    <li>
+      <em>I put</em> <code>(c-set-offset 'substatement-open
+      0)</code> <em>in my</em> <samp><span class=
+      "file">.emacs</span></samp> <em>file but I get an error
+      saying that</em> <code>c-set-offset</code><em>'s function
+      definition is void. What's wrong?</em>
 
-     <pre class="example">          (setq c-offsets-alist '((substatement-open . 0)))
+      <p>This means that CC Mode hasn't yet been loaded into your
+      Emacs session by the time the <code>c-set-offset</code> call
+      is reached, most likely because CC Mode is being autoloaded.
+      Instead of putting the <code>c-set-offset</code> line in your
+      top-level <samp><span class="file">.emacs</span></samp> file,
+      put it in your <code>c-initialization-hook</code> (see
+      <a href="CC-Hooks.html#CC-Hooks">CC Hooks</a>), or simply
+      modify <code>c-offsets-alist</code> directly:</p>
+      <pre class="example">
+          (setq c-offsets-alist '((substatement-open . 0)))
 </pre>
-     <li><a name="index-open-paren-in-column-zero-614"></a><em>I have an open paren character at column zero inside a comment or
-multiline string literal, and it causes the fontification and/or
-indentation to go haywire.  What gives?</em>
+    </li>
 
-     <p>It's due to the ad-hoc rule in (X)Emacs that such open parens always
-start defuns (which translates to functions, classes, namespaces or any
-other top-level block constructs in the CC Mode languages). 
-See <a href="../emacs/Left-Margin-Paren.html#Left-Margin-Paren">Left Margin Paren</a>, for details
-(See <a href="../emacs/Defuns.html#Defuns">Defuns</a>, in the Emacs 20 manual).
+    <li>
+      <a name="index-open-paren-in-column-zero-614" id=
+      "index-open-paren-in-column-zero-614"></a><em>I have an open
+      paren character at column zero inside a comment or multiline
+      string literal, and it causes the fontification and/or
+      indentation to go haywire. What gives?</em>
 
-     <p>This heuristic is built into the core syntax analysis routines in
-(X)Emacs, so it's not really a CC Mode issue.  However, in Emacs
-21.1 it became possible to turn it off<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> and CC Mode does so
-there since it's got its own system to keep track of blocks.
+      <p>It's due to the ad-hoc rule in (X)Emacs that such open
+      parens always start defuns (which translates to functions,
+      classes, namespaces or any other top-level block constructs
+      in the CC Mode languages). See <a href=
+      "../emacs/Left-Margin-Paren.html#Left-Margin-Paren">Left
+      Margin Paren</a>, for details (See <a href=
+      "../emacs/Defuns.html#Defuns">Defuns</a>, in the Emacs 20
+      manual).</p>
 
-</ul>
+      <p>This heuristic is built into the core syntax analysis
+      routines in (X)Emacs, so it's not really a CC Mode issue.
+      However, in Emacs 21.1 it became possible to turn it
+      off<a rel="footnote" href="#fn-1" name="fnd-1" id=
+      "fnd-1"><sup>1</sup></a> and CC Mode does so there since it's
+      got its own system to keep track of blocks.</p>
+    </li>
+  </ul>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Using the variable
-<code>open-paren-in-column-0-is-defun-start</code>.</p>
+  <div class="footnote">
+    <hr />
 
-   <hr></div>
+    <h4>Footnotes</h4>
 
-   </body></html>
-
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> Using the variable
+    <code>open-paren-in-column-0-is-defun-start</code>.</p>
+    <hr />
+  </div>
+</body>
+</html>

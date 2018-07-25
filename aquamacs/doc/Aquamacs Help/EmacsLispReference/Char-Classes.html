@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,146 +19,264 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Char Classes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Char Classes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Char Classes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Syntax-of-Regexps.html#Syntax-of-Regexps" rel="up" title="Syntax of Regexps">
-<link href="Regexp-Backslash.html#Regexp-Backslash" rel="next" title="Regexp Backslash">
-<link href="Regexp-Special.html#Regexp-Special" rel="prev" title="Regexp Special">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Char Classes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Char Classes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Char Classes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Syntax-of-Regexps.html#Syntax-of-Regexps" rel="up"
+  title="Syntax of Regexps" />
+  <link href="Regexp-Backslash.html#Regexp-Backslash" rel="next"
+  title="Regexp Backslash" />
+  <link href="Regexp-Special.html#Regexp-Special" rel="prev" title=
+  "Regexp Special" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Char-Classes" id="Char-Classes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Regexp-Backslash.html#Regexp-Backslash"
+    accesskey="n" rel="next">Regexp Backslash</a>, Previous:
+    <a href="Regexp-Special.html#Regexp-Special" accesskey="p" rel=
+    "prev">Regexp Special</a>, Up: <a href=
+    "Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey="u" rel=
+    "up">Syntax of Regexps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Character-Classes" id="Character-Classes"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Char-Classes"></a>
-<div class="header">
-<p>
-Next: <a href="Regexp-Backslash.html#Regexp-Backslash" accesskey="n" rel="next">Regexp Backslash</a>, Previous: <a href="Regexp-Special.html#Regexp-Special" accesskey="p" rel="prev">Regexp Special</a>, Up: <a href="Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey="u" rel="up">Syntax of Regexps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Character-Classes"></a>
-<h4 class="subsubsection">33.3.1.2 Character Classes</h4>
-<a name="index-character-classes-in-regexp"></a>
+  <h4 class="subsubsection">33.3.1.2 Character Classes</h4><a name=
+  "index-character-classes-in-regexp" id=
+  "index-character-classes-in-regexp"></a>
 
-<p>Here is a table of the classes you can use in a character alternative,
-and what they mean:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>[:ascii:]</samp>&rsquo;</dt>
-<dd><p>This matches any <acronym>ASCII</acronym> character (codes 0&ndash;127).
-</p></dd>
-<dt>&lsquo;<samp>[:alnum:]</samp>&rsquo;</dt>
-<dd><p>This matches any letter or digit.  For multibyte characters, it
-matches characters whose Unicode &lsquo;<samp>general-category</samp>&rsquo; property
-(see <a href="Character-Properties.html#Character-Properties">Character Properties</a>) indicates they are alphabetic or
-decimal number characters.
-</p></dd>
-<dt>&lsquo;<samp>[:alpha:]</samp>&rsquo;</dt>
-<dd><p>This matches any letter.  For multibyte characters, it matches
-characters whose Unicode &lsquo;<samp>general-category</samp>&rsquo; property
-(see <a href="Character-Properties.html#Character-Properties">Character Properties</a>) indicates they are alphabetic
-characters.
-</p></dd>
-<dt>&lsquo;<samp>[:blank:]</samp>&rsquo;</dt>
-<dd><p>This matches space and tab only.
-</p></dd>
-<dt>&lsquo;<samp>[:cntrl:]</samp>&rsquo;</dt>
-<dd><p>This matches any <acronym>ASCII</acronym> control character.
-</p></dd>
-<dt>&lsquo;<samp>[:digit:]</samp>&rsquo;</dt>
-<dd><p>This matches &lsquo;<samp>0</samp>&rsquo; through &lsquo;<samp>9</samp>&rsquo;.  Thus, &lsquo;<samp>[-+[:digit:]]</samp>&rsquo;
-matches any digit, as well as &lsquo;<samp>+</samp>&rsquo; and &lsquo;<samp>-</samp>&rsquo;.
-</p></dd>
-<dt>&lsquo;<samp>[:graph:]</samp>&rsquo;</dt>
-<dd><p>This matches graphic characters&mdash;everything except whitespace,
-<acronym>ASCII</acronym> and non-<acronym>ASCII</acronym> control characters,
-surrogates, and codepoints unassigned by Unicode, as indicated by the
-Unicode &lsquo;<samp>general-category</samp>&rsquo; property (see <a href="Character-Properties.html#Character-Properties">Character Properties</a>).
-</p></dd>
-<dt>&lsquo;<samp>[:lower:]</samp>&rsquo;</dt>
-<dd><p>This matches any lower-case letter, as determined by the current case
-table (see <a href="Case-Tables.html#Case-Tables">Case Tables</a>).  If <code>case-fold-search</code> is
-non-<code>nil</code>, this also matches any upper-case letter.
-</p></dd>
-<dt>&lsquo;<samp>[:multibyte:]</samp>&rsquo;</dt>
-<dd><p>This matches any multibyte character (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).
-</p></dd>
-<dt>&lsquo;<samp>[:nonascii:]</samp>&rsquo;</dt>
-<dd><p>This matches any non-<acronym>ASCII</acronym> character.
-</p></dd>
-<dt>&lsquo;<samp>[:print:]</samp>&rsquo;</dt>
-<dd><p>This matches any printing character&mdash;either whitespace, or a graphic
-character matched by &lsquo;<samp>[:graph:]</samp>&rsquo;.
-</p></dd>
-<dt>&lsquo;<samp>[:punct:]</samp>&rsquo;</dt>
-<dd><p>This matches any punctuation character.  (At present, for multibyte
-characters, it matches anything that has non-word syntax.)
-</p></dd>
-<dt>&lsquo;<samp>[:space:]</samp>&rsquo;</dt>
-<dd><p>This matches any character that has whitespace syntax
-(see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).
-</p></dd>
-<dt>&lsquo;<samp>[:unibyte:]</samp>&rsquo;</dt>
-<dd><p>This matches any unibyte character (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).
-</p></dd>
-<dt>&lsquo;<samp>[:upper:]</samp>&rsquo;</dt>
-<dd><p>This matches any upper-case letter, as determined by the current case
-table (see <a href="Case-Tables.html#Case-Tables">Case Tables</a>).  If <code>case-fold-search</code> is
-non-<code>nil</code>, this also matches any lower-case letter.
-</p></dd>
-<dt>&lsquo;<samp>[:word:]</samp>&rsquo;</dt>
-<dd><p>This matches any character that has word syntax (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).
-</p></dd>
-<dt>&lsquo;<samp>[:xdigit:]</samp>&rsquo;</dt>
-<dd><p>This matches the hexadecimal digits: &lsquo;<samp>0</samp>&rsquo; through &lsquo;<samp>9</samp>&rsquo;, &lsquo;<samp>a</samp>&rsquo;
-through &lsquo;<samp>f</samp>&rsquo; and &lsquo;<samp>A</samp>&rsquo; through &lsquo;<samp>F</samp>&rsquo;.
-</p></dd>
-</dl>
+  <p>Here is a table of the classes you can use in a character
+  alternative, and what they mean:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Regexp-Backslash.html#Regexp-Backslash" accesskey="n" rel="next">Regexp Backslash</a>, Previous: <a href="Regexp-Special.html#Regexp-Special" accesskey="p" rel="prev">Regexp Special</a>, Up: <a href="Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey="u" rel="up">Syntax of Regexps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt>&lsquo;<samp>[:ascii:]</samp>&rsquo;</dt>
 
+    <dd>
+      <p>This matches any <acronym>ASCII</acronym> character (codes
+      0&ndash;127).</p>
+    </dd>
 
+    <dt>&lsquo;<samp>[:alnum:]</samp>&rsquo;</dt>
 
+    <dd>
+      <p>This matches any letter or digit. For multibyte
+      characters, it matches characters whose Unicode
+      &lsquo;<samp>general-category</samp>&rsquo; property (see
+      <a href=
+      "Character-Properties.html#Character-Properties">Character
+      Properties</a>) indicates they are alphabetic or decimal
+      number characters.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:alpha:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches any letter. For multibyte characters, it
+      matches characters whose Unicode
+      &lsquo;<samp>general-category</samp>&rsquo; property (see
+      <a href=
+      "Character-Properties.html#Character-Properties">Character
+      Properties</a>) indicates they are alphabetic characters.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:blank:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches space and tab only.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:cntrl:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches any <acronym>ASCII</acronym> control
+      character.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:digit:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches &lsquo;<samp>0</samp>&rsquo; through
+      &lsquo;<samp>9</samp>&rsquo;. Thus,
+      &lsquo;<samp>[-+[:digit:]]</samp>&rsquo; matches any digit,
+      as well as &lsquo;<samp>+</samp>&rsquo; and
+      &lsquo;<samp>-</samp>&rsquo;.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:graph:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches graphic characters&mdash;everything except
+      whitespace, <acronym>ASCII</acronym> and
+      non-<acronym>ASCII</acronym> control characters, surrogates,
+      and codepoints unassigned by Unicode, as indicated by the
+      Unicode &lsquo;<samp>general-category</samp>&rsquo; property
+      (see <a href=
+      "Character-Properties.html#Character-Properties">Character
+      Properties</a>).</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:lower:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches any lower-case letter, as determined by the
+      current case table (see <a href=
+      "Case-Tables.html#Case-Tables">Case Tables</a>). If
+      <code>case-fold-search</code> is non-<code>nil</code>, this
+      also matches any upper-case letter.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:multibyte:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches any multibyte character (see <a href=
+      "Text-Representations.html#Text-Representations">Text
+      Representations</a>).</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:nonascii:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches any non-<acronym>ASCII</acronym>
+      character.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:print:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches any printing character&mdash;either
+      whitespace, or a graphic character matched by
+      &lsquo;<samp>[:graph:]</samp>&rsquo;.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:punct:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches any punctuation character. (At present, for
+      multibyte characters, it matches anything that has non-word
+      syntax.)</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:space:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches any character that has whitespace syntax (see
+      <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax
+      Class Table</a>).</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:unibyte:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches any unibyte character (see <a href=
+      "Text-Representations.html#Text-Representations">Text
+      Representations</a>).</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:upper:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches any upper-case letter, as determined by the
+      current case table (see <a href=
+      "Case-Tables.html#Case-Tables">Case Tables</a>). If
+      <code>case-fold-search</code> is non-<code>nil</code>, this
+      also matches any lower-case letter.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:word:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches any character that has word syntax (see
+      <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax
+      Class Table</a>).</p>
+    </dd>
+
+    <dt>&lsquo;<samp>[:xdigit:]</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This matches the hexadecimal digits:
+      &lsquo;<samp>0</samp>&rsquo; through
+      &lsquo;<samp>9</samp>&rsquo;, &lsquo;<samp>a</samp>&rsquo;
+      through &lsquo;<samp>f</samp>&rsquo; and
+      &lsquo;<samp>A</samp>&rsquo; through
+      &lsquo;<samp>F</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Regexp-Backslash.html#Regexp-Backslash"
+    accesskey="n" rel="next">Regexp Backslash</a>, Previous:
+    <a href="Regexp-Special.html#Regexp-Special" accesskey="p" rel=
+    "prev">Regexp Special</a>, Up: <a href=
+    "Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey="u" rel=
+    "up">Syntax of Regexps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

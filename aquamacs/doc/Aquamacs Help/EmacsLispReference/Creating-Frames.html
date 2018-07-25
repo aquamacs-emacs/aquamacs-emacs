@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,129 +19,198 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Creating Frames</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Creating Frames">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Creating Frames">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Frames.html#Frames" rel="up" title="Frames">
-<link href="Multiple-Terminals.html#Multiple-Terminals" rel="next" title="Multiple Terminals">
-<link href="Frames.html#Frames" rel="prev" title="Frames">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Creating Frames</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Creating Frames" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Creating Frames" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Frames.html#Frames" rel="up" title="Frames" />
+  <link href="Multiple-Terminals.html#Multiple-Terminals" rel=
+  "next" title="Multiple Terminals" />
+  <link href="Frames.html#Frames" rel="prev" title="Frames" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Creating-Frames" id="Creating-Frames"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Multiple-Terminals.html#Multiple-Terminals"
+    accesskey="n" rel="next">Multiple Terminals</a>, Up: <a href=
+    "Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-Frames-1" id="Creating-Frames-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-Frames"></a>
-<div class="header">
-<p>
-Next: <a href="Multiple-Terminals.html#Multiple-Terminals" accesskey="n" rel="next">Multiple Terminals</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-Frames-1"></a>
-<h3 class="section">28.1 Creating Frames</h3>
-<a name="index-frame-creation"></a>
+  <h3 class="section">28.1 Creating Frames</h3><a name=
+  "index-frame-creation" id="index-frame-creation"></a>
 
-<p>To create a new frame, call the function <code>make-frame</code>.
-</p>
-<dl>
-<dt><a name="index-make_002dframe"></a>Command: <strong>make-frame</strong> <em>&amp;optional alist</em></dt>
-<dd><p>This function creates and returns a new frame, displaying the current
-buffer.
-</p>
-<p>The <var>alist</var> argument is an alist that specifies frame parameters
-for the new frame.  See <a href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>.  If you specify the
-<code>terminal</code> parameter in <var>alist</var>, the new frame is created on
-that terminal.  Otherwise, if you specify the <code>window-system</code>
-frame parameter in <var>alist</var>, that determines whether the frame
-should be displayed on a text terminal or a graphical terminal.
-See <a href="Window-Systems.html#Window-Systems">Window Systems</a>.  If neither is specified, the new frame is
-created in the same terminal as the selected frame.
-</p>
-<p>Any parameters not mentioned in <var>alist</var> default to the values in
-the alist <code>default-frame-alist</code> (see <a href="Initial-Parameters.html#Initial-Parameters">Initial Parameters</a>);
-parameters not specified there default from the X resources or its
-equivalent on your operating system (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/X-Resources.html#X-Resources">X Resources</a> in <cite>The GNU Emacs Manual</cite>).  After the frame is created, Emacs
-applies any parameters listed in <code>frame-inherited-parameters</code>
-(see below) and not present in the argument, taking the values from
-the frame that was selected when <code>make-frame</code> was called.
-</p>
-<p>Note that on multi-monitor displays (see <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>), the
-window manager might position the frame differently than specified by
-the positional parameters in <var>alist</var> (see <a href="Position-Parameters.html#Position-Parameters">Position Parameters</a>).  For example, some window managers have a policy of
-displaying the frame on the monitor that contains the largest part of
-the window (a.k.a. the <em>dominating</em> monitor).
-</p>
-<p>This function itself does not make the new frame the selected frame.
-See <a href="Input-Focus.html#Input-Focus">Input Focus</a>.  The previously selected frame remains selected.
-On graphical terminals, however, the windowing system may select the
-new frame for its own reasons.
-</p></dd></dl>
+  <p>To create a new frame, call the function
+  <code>make-frame</code>.</p>
 
-<dl>
-<dt><a name="index-before_002dmake_002dframe_002dhook"></a>Variable: <strong>before-make-frame-hook</strong></dt>
-<dd><p>A normal hook run by <code>make-frame</code> before it creates the frame.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dframe" id=
+    "index-make_002dframe"></a>Command: <strong>make-frame</strong>
+    <em>&amp;optional alist</em></dt>
 
-<dl>
-<dt><a name="index-after_002dmake_002dframe_002dfunctions"></a>Variable: <strong>after-make-frame-functions</strong></dt>
-<dd><p>An abnormal hook run by <code>make-frame</code> after it creates the frame.
-Each function in <code>after-make-frame-functions</code> receives one argument, the
-frame just created.
-</p></dd></dl>
+    <dd>
+      <p>This function creates and returns a new frame, displaying
+      the current buffer.</p>
 
-<dl>
-<dt><a name="index-frame_002dinherited_002dparameters"></a>Variable: <strong>frame-inherited-parameters</strong></dt>
-<dd><p>This variable specifies the list of frame parameters that a newly
-created frame inherits from the currently selected frame.  For each
-parameter (a symbol) that is an element in the list and is not present
-in the argument to <code>make-frame</code>, the function sets the value of
-that parameter in the created frame to its value in the selected
-frame.
-</p></dd></dl>
+      <p>The <var>alist</var> argument is an alist that specifies
+      frame parameters for the new frame. See <a href=
+      "Frame-Parameters.html#Frame-Parameters">Frame
+      Parameters</a>. If you specify the <code>terminal</code>
+      parameter in <var>alist</var>, the new frame is created on
+      that terminal. Otherwise, if you specify the
+      <code>window-system</code> frame parameter in
+      <var>alist</var>, that determines whether the frame should be
+      displayed on a text terminal or a graphical terminal. See
+      <a href="Window-Systems.html#Window-Systems">Window
+      Systems</a>. If neither is specified, the new frame is
+      created in the same terminal as the selected frame.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Multiple-Terminals.html#Multiple-Terminals" accesskey="n" rel="next">Multiple Terminals</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Any parameters not mentioned in <var>alist</var> default
+      to the values in the alist <code>default-frame-alist</code>
+      (see <a href=
+      "Initial-Parameters.html#Initial-Parameters">Initial
+      Parameters</a>); parameters not specified there default from
+      the X resources or its equivalent on your operating system
+      (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/X-Resources.html#X-Resources">
+      X Resources</a> in <cite>The GNU Emacs Manual</cite>). After
+      the frame is created, Emacs applies any parameters listed in
+      <code>frame-inherited-parameters</code> (see below) and not
+      present in the argument, taking the values from the frame
+      that was selected when <code>make-frame</code> was
+      called.</p>
 
+      <p>Note that on multi-monitor displays (see <a href=
+      "Multiple-Terminals.html#Multiple-Terminals">Multiple
+      Terminals</a>), the window manager might position the frame
+      differently than specified by the positional parameters in
+      <var>alist</var> (see <a href=
+      "Position-Parameters.html#Position-Parameters">Position
+      Parameters</a>). For example, some window managers have a
+      policy of displaying the frame on the monitor that contains
+      the largest part of the window (a.k.a. the
+      <em>dominating</em> monitor).</p>
 
+      <p>This function itself does not make the new frame the
+      selected frame. See <a href=
+      "Input-Focus.html#Input-Focus">Input Focus</a>. The
+      previously selected frame remains selected. On graphical
+      terminals, however, the windowing system may select the new
+      frame for its own reasons.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-before_002dmake_002dframe_002dhook" id=
+    "index-before_002dmake_002dframe_002dhook"></a>Variable:
+    <strong>before-make-frame-hook</strong></dt>
+
+    <dd>
+      <p>A normal hook run by <code>make-frame</code> before it
+      creates the frame.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-after_002dmake_002dframe_002dfunctions" id=
+    "index-after_002dmake_002dframe_002dfunctions"></a>Variable:
+    <strong>after-make-frame-functions</strong></dt>
+
+    <dd>
+      <p>An abnormal hook run by <code>make-frame</code> after it
+      creates the frame. Each function in
+      <code>after-make-frame-functions</code> receives one
+      argument, the frame just created.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-frame_002dinherited_002dparameters" id=
+    "index-frame_002dinherited_002dparameters"></a>Variable:
+    <strong>frame-inherited-parameters</strong></dt>
+
+    <dd>
+      <p>This variable specifies the list of frame parameters that
+      a newly created frame inherits from the currently selected
+      frame. For each parameter (a symbol) that is an element in
+      the list and is not present in the argument to
+      <code>make-frame</code>, the function sets the value of that
+      parameter in the created frame to its value in the selected
+      frame.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Multiple-Terminals.html#Multiple-Terminals"
+    accesskey="n" rel="next">Multiple Terminals</a>, Up: <a href=
+    "Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

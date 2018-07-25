@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Inheritance - Enhanced Implementation of Emacs Interpreted Objects</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Building-Classes.html#Building-Classes" title="Building Classes">
-<link rel="next" href="Slot-Options.html#Slot-Options" title="Slot Options">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Inheritance - Enhanced Implementation of Emacs Interpreted
+  Objects</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Building-Classes.html#Building-Classes"
+  title="Building Classes" />
+  <link rel="next" href="Slot-Options.html#Slot-Options" title=
+  "Slot Options" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -25,8 +35,10 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,79 +48,97 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Inheritance"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Slot-Options.html#Slot-Options">Slot Options</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Building-Classes.html#Building-Classes">Building Classes</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Inheritance" id="Inheritance"></a>
 
-<h3 class="section">3.1 Inheritance</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Slot-Options.html#Slot-Options">Slot Options</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Building-Classes.html#Building-Classes">Building
+    Classes</a></p>
+    <hr />
+  </div>
 
-<p><dfn>Inheritance</dfn> is a basic feature of an object-oriented language. 
-In <i>EIEIO</i>, a defined class specifies the super classes from which it
-inherits by using the second argument to <code>defclass</code>.  Here is an
-example:
+  <h3 class="section">3.1 Inheritance</h3>
 
-<pre class="example">     (defclass my-baseclass ()
+  <p><dfn>Inheritance</dfn> is a basic feature of an
+  object-oriented language. In <i>EIEIO</i>, a defined class
+  specifies the super classes from which it inherits by using the
+  second argument to <code>defclass</code>. Here is an example:</p>
+  <pre class="example">
+     (defclass my-baseclass ()
         ((slot-A :initarg :slot-A)
          (slot-B :initarg :slot-B))
        "My Baseclass.")
 </pre>
-   <p class="noindent">To subclass from <code>my-baseclass</code>, we specify it in the superclass
-list:
 
-<pre class="example">     (defclass my-subclass (my-baseclass)
+  <p class="noindent">To subclass from <code>my-baseclass</code>,
+  we specify it in the superclass list:</p>
+  <pre class="example">
+     (defclass my-subclass (my-baseclass)
         ((specific-slot-A :initarg specific-slot-A)
          )
         "My subclass of my-baseclass")
 </pre>
-   <p class="indent">Instances of <code>my-subclass</code> will inherit <code>slot-A</code> and
-<code>slot-B</code>, in addition to having <code>specific-slot-A</code> from the
-declaration of <code>my-subclass</code>.
 
-   <p><i>EIEIO</i> also supports multiple inheritance.  Suppose we define a
-second baseclass, perhaps an &ldquo;interface&rdquo; class, like this:
+  <p class="indent">Instances of <code>my-subclass</code> will
+  inherit <code>slot-A</code> and <code>slot-B</code>, in addition
+  to having <code>specific-slot-A</code> from the declaration of
+  <code>my-subclass</code>.</p>
 
-<pre class="example">     (defclass my-interface ()
+  <p><i>EIEIO</i> also supports multiple inheritance. Suppose we
+  define a second baseclass, perhaps an &ldquo;interface&rdquo;
+  class, like this:</p>
+  <pre class="example">
+     (defclass my-interface ()
         ((interface-slot :initarg :interface-slot))
         "An interface to special behavior."
         :abstract t)
 </pre>
-   <p class="noindent">The interface class defines a special <code>interface-slot</code>, and also
-specifies itself as abstract.  Abstract classes cannot be
-instantiated.  It is not required to make interfaces abstract, but it
-is a good programming practice.
 
-   <p>We can now modify our definition of <code>my-subclass</code> to use this
-interface class, together with our original base class:
+  <p class="noindent">The interface class defines a special
+  <code>interface-slot</code>, and also specifies itself as
+  abstract. Abstract classes cannot be instantiated. It is not
+  required to make interfaces abstract, but it is a good
+  programming practice.</p>
 
-<pre class="example">     (defclass my-subclass (my-baseclass my-interface)
+  <p>We can now modify our definition of <code>my-subclass</code>
+  to use this interface class, together with our original base
+  class:</p>
+  <pre class="example">
+     (defclass my-subclass (my-baseclass my-interface)
         ((specific-slot-A :initarg specific-slot-A)
          )
         "My subclass of my-baseclass")
 </pre>
-   <p class="noindent">With this, <code>my-subclass</code> also has <code>interface-slot</code>.
 
-   <p>If <code>my-baseclass</code> and <code>my-interface</code> had slots with the same
-name, then the superclass showing up in the list first defines the
-slot attributes.
+  <p class="noindent">With this, <code>my-subclass</code> also has
+  <code>interface-slot</code>.</p>
 
-   <p>Inheritance in <i>EIEIO</i> is more than just combining different slots. 
-It is also important in method invocation.  <a href="Methods.html#Methods">Methods</a>.
+  <p>If <code>my-baseclass</code> and <code>my-interface</code> had
+  slots with the same name, then the superclass showing up in the
+  list first defines the slot attributes.</p>
 
-   <p>If a method is called on an instance of <code>my-subclass</code>, and that
-method only has an implementation on <code>my-baseclass</code>, or perhaps
-<code>my-interface</code>, then the implementation for the baseclass is
-called.
+  <p>Inheritance in <i>EIEIO</i> is more than just combining
+  different slots. It is also important in method invocation.
+  <a href="Methods.html#Methods">Methods</a>.</p>
 
-   <p>If there is a method implementation for <code>my-subclass</code>, and
-another in <code>my-baseclass</code>, the implementation for
-<code>my-subclass</code> can call up to the superclass as well.
+  <p>If a method is called on an instance of
+  <code>my-subclass</code>, and that method only has an
+  implementation on <code>my-baseclass</code>, or perhaps
+  <code>my-interface</code>, then the implementation for the
+  baseclass is called.</p>
 
-   </body></html>
-
+  <p>If there is a method implementation for
+  <code>my-subclass</code>, and another in
+  <code>my-baseclass</code>, the implementation for
+  <code>my-subclass</code> can call up to the superclass as
+  well.</p>
+</body>
+</html>

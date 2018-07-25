@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,115 +14,156 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Posting Server</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Posting Server">
-<meta name="keywords" content="Gnus Manual: Posting Server">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Composing-Messages.html#Composing-Messages" rel="up" title="Composing Messages">
-<link href="POP-before-SMTP.html#POP-before-SMTP" rel="next" title="POP before SMTP">
-<link href="Mail.html#Mail" rel="prev" title="Mail">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Posting Server</title>
+  <meta name="description" content="Gnus Manual: Posting Server" />
+  <meta name="keywords" content="Gnus Manual: Posting Server" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Composing-Messages.html#Composing-Messages" rel="up"
+  title="Composing Messages" />
+  <link href="POP-before-SMTP.html#POP-before-SMTP" rel="next"
+  title="POP before SMTP" />
+  <link href="Mail.html#Mail" rel="prev" title="Mail" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Posting-Server"></a>
-<div class="header">
-<p>
-Next: <a href="POP-before-SMTP.html#POP-before-SMTP" accesskey="n" rel="next">POP before SMTP</a>, Previous: <a href="Mail.html#Mail" accesskey="p" rel="prev">Mail</a>, Up: <a href="Composing-Messages.html#Composing-Messages" accesskey="u" rel="up">Composing Messages</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Posting-Server-1"></a>
-<h3 class="section">5.2 Posting Server</h3>
+<body lang="en" xml:lang="en">
+  <a name="Posting-Server" id="Posting-Server"></a>
 
-<p>When you press those magical <kbd>C-c C-c</kbd> keys to ship off your latest
-(extremely intelligent, of course) article, where does it go?
-</p>
-<p>Thank you for asking.  I hate you.
-</p>
-<p>It can be quite complicated.
-</p>
-<a name="index-gnus_002dpost_002dmethod"></a>
-<p>When posting news, Message usually invokes <code>message-send-news</code>
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/message/News-Variables.html#News-Variables">News Variables</a> in <cite>Message Manual</cite>).
-Normally, Gnus will post using the same select method as you&rsquo;re
-reading from (which might be convenient if you&rsquo;re reading lots of
-groups from different private servers).  However.  If the server
-you&rsquo;re reading from doesn&rsquo;t allow posting, just reading, you probably
-want to use some other server to post your (extremely intelligent and
-fabulously interesting) articles.  You can then set the
-<code>gnus-post-method</code> to some other method:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-post-method '(nnspool &quot;&quot;))
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="POP-before-SMTP.html#POP-before-SMTP"
+    accesskey="n" rel="next">POP before SMTP</a>, Previous:
+    <a href="Mail.html#Mail" accesskey="p" rel="prev">Mail</a>, Up:
+    <a href="Composing-Messages.html#Composing-Messages" accesskey=
+    "u" rel="up">Composing Messages</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Posting-Server-1" id="Posting-Server-1"></a>
 
-<p>Now, if you&rsquo;ve done this, and then this server rejects your article, or
-this server is down, what do you do then?  To override this variable you
-can use a non-zero prefix to the <kbd>C-c C-c</kbd> command to force using
-the &ldquo;current&rdquo; server, to get back the default behavior, for posting.
-</p>
-<p>If you give a zero prefix (i.e., <kbd>C-u 0 C-c C-c</kbd>) to that command,
-Gnus will prompt you for what method to use for posting.
-</p>
-<p>You can also set <code>gnus-post-method</code> to a list of select methods.
-If that&rsquo;s the case, Gnus will always prompt you for what method to use
-for posting.
-</p>
-<p>Finally, if you want to always post using the native select method,
-you can set this variable to <code>native</code>.
-</p>
-<a name="index-message_002dsend_002dmail_002dfunction"></a>
-<p>When sending mail, Message invokes the function specified by the
-variable <code>message-send-mail-function</code>.  Gnus tries to set it to a
-value suitable for your system.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/message/Mail-Variables.html#Mail-Variables">Mail Variables</a> in <cite>Message manual</cite>, for more
-information.
-</p>
+  <h3 class="section">5.2 Posting Server</h3>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="POP-before-SMTP.html#POP-before-SMTP" accesskey="n" rel="next">POP before SMTP</a>, Previous: <a href="Mail.html#Mail" accesskey="p" rel="prev">Mail</a>, Up: <a href="Composing-Messages.html#Composing-Messages" accesskey="u" rel="up">Composing Messages</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When you press those magical <kbd>C-c C-c</kbd> keys to ship
+  off your latest (extremely intelligent, of course) article, where
+  does it go?</p>
 
+  <p>Thank you for asking. I hate you.</p>
 
+  <p>It can be quite complicated.</p><a name=
+  "index-gnus_002dpost_002dmethod" id=
+  "index-gnus_002dpost_002dmethod"></a>
 
+  <p>When posting news, Message usually invokes
+  <code>message-send-news</code> (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/message/News-Variables.html#News-Variables">
+  News Variables</a> in <cite>Message Manual</cite>). Normally,
+  Gnus will post using the same select method as you&rsquo;re
+  reading from (which might be convenient if you&rsquo;re reading
+  lots of groups from different private servers). However. If the
+  server you&rsquo;re reading from doesn&rsquo;t allow posting,
+  just reading, you probably want to use some other server to post
+  your (extremely intelligent and fabulously interesting) articles.
+  You can then set the <code>gnus-post-method</code> to some other
+  method:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-post-method '(nnspool ""))
+</pre>
+  </div>
+
+  <p>Now, if you&rsquo;ve done this, and then this server rejects
+  your article, or this server is down, what do you do then? To
+  override this variable you can use a non-zero prefix to the
+  <kbd>C-c C-c</kbd> command to force using the
+  &ldquo;current&rdquo; server, to get back the default behavior,
+  for posting.</p>
+
+  <p>If you give a zero prefix (i.e., <kbd>C-u 0 C-c C-c</kbd>) to
+  that command, Gnus will prompt you for what method to use for
+  posting.</p>
+
+  <p>You can also set <code>gnus-post-method</code> to a list of
+  select methods. If that&rsquo;s the case, Gnus will always prompt
+  you for what method to use for posting.</p>
+
+  <p>Finally, if you want to always post using the native select
+  method, you can set this variable to
+  <code>native</code>.</p><a name=
+  "index-message_002dsend_002dmail_002dfunction" id=
+  "index-message_002dsend_002dmail_002dfunction"></a>
+
+  <p>When sending mail, Message invokes the function specified by
+  the variable <code>message-send-mail-function</code>. Gnus tries
+  to set it to a value suitable for your system. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/message/Mail-Variables.html#Mail-Variables">
+  Mail Variables</a> in <cite>Message manual</cite>, for more
+  information.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="POP-before-SMTP.html#POP-before-SMTP"
+    accesskey="n" rel="next">POP before SMTP</a>, Previous:
+    <a href="Mail.html#Mail" accesskey="p" rel="prev">Mail</a>, Up:
+    <a href="Composing-Messages.html#Composing-Messages" accesskey=
+    "u" rel="up">Composing Messages</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

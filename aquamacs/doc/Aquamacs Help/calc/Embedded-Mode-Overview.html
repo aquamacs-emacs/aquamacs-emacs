@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Embedded Mode Overview - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Using-Calc.html#Using-Calc" title="Using Calc">
-<link rel="prev" href="Standalone-Operation.html#Standalone-Operation" title="Standalone Operation">
-<link rel="next" href="Other-C_002dx-_002a-Commands.html#Other-C_002dx-_002a-Commands" title="Other C-x * Commands">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Embedded Mode Overview - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Using-Calc.html#Using-Calc" title=
+  "Using Calc" />
+  <link rel="prev" href=
+  "Standalone-Operation.html#Standalone-Operation" title=
+  "Standalone Operation" />
+  <link rel="next" href=
+  "Other-C_002dx-_002a-Commands.html#Other-C_002dx-_002a-Commands"
+  title="Other C-x * Commands" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +40,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,37 +53,46 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Embedded-Mode-Overview"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Other-C_002dx-_002a-Commands.html#Other-C_002dx-_002a-Commands">Other C-x * Commands</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Standalone-Operation.html#Standalone-Operation">Standalone Operation</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Using-Calc.html#Using-Calc">Using Calc</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Embedded-Mode-Overview" id=
+    "Embedded-Mode-Overview"></a>
 
-<h4 class="subsection">2.5.6 Embedded Mode (Overview)</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Other-C_002dx-_002a-Commands.html#Other-C_002dx-_002a-Commands">Other
+    C-x * Commands</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href=
+    "Standalone-Operation.html#Standalone-Operation">Standalone
+    Operation</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Using-Calc.html#Using-Calc">Using Calc</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><dfn>Embedded mode</dfn> is a way to use Calc directly from inside an
-editing buffer.  Suppose you have a formula written as part of a
-document like this:
+  <h4 class="subsection">2.5.6 Embedded Mode (Overview)</h4>
 
-<pre class="smallexample">     The derivative of
+  <p class="noindent"><dfn>Embedded mode</dfn> is a way to use Calc
+  directly from inside an editing buffer. Suppose you have a
+  formula written as part of a document like this:</p>
+  <pre class="smallexample">
+     The derivative of
      
                                         ln(ln(x))
      
      is
 </pre>
-   <p class="noindent">and you wish to have Calc compute and format the derivative for
-you and store this derivative in the buffer automatically.  To
-do this with Embedded mode, first copy the formula down to where
-you want the result to be, leaving a blank line before and after the
-formula:
 
-<pre class="smallexample">     The derivative of
+  <p class="noindent">and you wish to have Calc compute and format
+  the derivative for you and store this derivative in the buffer
+  automatically. To do this with Embedded mode, first copy the
+  formula down to where you want the result to be, leaving a blank
+  line before and after the formula:</p>
+  <pre class="smallexample">
+     The derivative of
      
                                         ln(ln(x))
      
@@ -78,19 +100,22 @@ formula:
      
                                         ln(ln(x))
 </pre>
-   <p>Now, move the cursor onto this new formula and press <kbd>C-x * e</kbd>. 
-Calc will read the formula (using the surrounding blank lines to tell
-how much text to read), then push this formula (invisibly) onto the Calc
-stack.  The cursor will stay on the formula in the editing buffer, but
-the line with the formula will now appear as it would on the Calc stack
-(in this case, it will be left-aligned) and the buffer's mode line will
-change to look like the Calc mode line (with mode indicators like
-&lsquo;<samp><span class="samp">12 Deg</span></samp>&rsquo; and so on).  Even though you are still in your editing
-buffer, the keyboard now acts like the Calc keyboard, and any new result
-you get is copied from the stack back into the buffer.  To take the
-derivative, you would type <kbd>a d x &lt;RET&gt;</kbd>.
 
-<pre class="smallexample">     The derivative of
+  <p>Now, move the cursor onto this new formula and press <kbd>C-x
+  * e</kbd>. Calc will read the formula (using the surrounding
+  blank lines to tell how much text to read), then push this
+  formula (invisibly) onto the Calc stack. The cursor will stay on
+  the formula in the editing buffer, but the line with the formula
+  will now appear as it would on the Calc stack (in this case, it
+  will be left-aligned) and the buffer's mode line will change to
+  look like the Calc mode line (with mode indicators like
+  &lsquo;<samp><span class="samp">12 Deg</span></samp>&rsquo; and
+  so on). Even though you are still in your editing buffer, the
+  keyboard now acts like the Calc keyboard, and any new result you
+  get is copied from the stack back into the buffer. To take the
+  derivative, you would type <kbd>a d x &lt;RET&gt;</kbd>.</p>
+  <pre class="smallexample">
+     The derivative of
      
                                         ln(ln(x))
      
@@ -98,13 +123,18 @@ derivative, you would type <kbd>a d x &lt;RET&gt;</kbd>.
      
      1 / ln(x) x
 </pre>
-   <p>(Note that by default, Calc gives division lower precedence than multiplication,
-so that &lsquo;<samp><span class="samp">1 / ln(x) x</span></samp>&rsquo; is equivalent to &lsquo;<samp><span class="samp">1 / (ln(x) x)</span></samp>&rsquo;.)
 
-   <p>To make this look nicer, you might want to press <kbd>d =</kbd> to center
-the formula, and even <kbd>d B</kbd> to use Big display mode.
+  <p>(Note that by default, Calc gives division lower precedence
+  than multiplication, so that &lsquo;<samp><span class="samp">1 /
+  ln(x) x</span></samp>&rsquo; is equivalent to
+  &lsquo;<samp><span class="samp">1 / (ln(x)
+  x)</span></samp>&rsquo;.)</p>
 
-<pre class="smallexample">     The derivative of
+  <p>To make this look nicer, you might want to press <kbd>d
+  =</kbd> to center the formula, and even <kbd>d B</kbd> to use Big
+  display mode.</p>
+  <pre class="smallexample">
+     The derivative of
      
                                         ln(ln(x))
      
@@ -116,17 +146,18 @@ the formula, and even <kbd>d B</kbd> to use Big display mode.
                                          -------
                                          ln(x) x
 </pre>
-   <p>Calc has added annotations to the file to help it remember the modes
-that were used for this formula.  They are formatted like comments
-in the TeX typesetting language, just in case you are using TeX or
-LaTeX. (In this example TeX is not being used, so you might want
-to move these comments up to the top of the file or otherwise put them
-out of the way.)
 
-   <p>As an extra flourish, we can add an equation number using a
-righthand label:  Type <kbd>d } (1) &lt;RET&gt;</kbd>.
+  <p>Calc has added annotations to the file to help it remember the
+  modes that were used for this formula. They are formatted like
+  comments in the TeX typesetting language, just in case you are
+  using TeX or LaTeX. (In this example TeX is not being used, so
+  you might want to move these comments up to the top of the file
+  or otherwise put them out of the way.)</p>
 
-<pre class="smallexample">     % [calc-mode: justify: center]
+  <p>As an extra flourish, we can add an equation number using a
+  righthand label: Type <kbd>d } (1) &lt;RET&gt;</kbd>.</p>
+  <pre class="smallexample">
+     % [calc-mode: justify: center]
      % [calc-mode: language: big]
      % [calc-mode: right-label: " (1)"]
      
@@ -134,25 +165,30 @@ righthand label:  Type <kbd>d } (1) &lt;RET&gt;</kbd>.
                                          -------                      (1)
                                          ln(x) x
 </pre>
-   <p>To leave Embedded mode, type <kbd>C-x * e</kbd> again.  The mode line
-and keyboard will revert to the way they were before.
 
-   <p>The related command <kbd>C-x * w</kbd> operates on a single word, which
-generally means a single number, inside text.  It searches for an
-expression which &ldquo;looks&rdquo; like a number containing the point. 
-Here's an example of its use:
+  <p>To leave Embedded mode, type <kbd>C-x * e</kbd> again. The
+  mode line and keyboard will revert to the way they were
+  before.</p>
 
-<pre class="smallexample">     A slope of one-third corresponds to an angle of 1 degrees.
+  <p>The related command <kbd>C-x * w</kbd> operates on a single
+  word, which generally means a single number, inside text. It
+  searches for an expression which &ldquo;looks&rdquo; like a
+  number containing the point. Here's an example of its use:</p>
+  <pre class="smallexample">
+     A slope of one-third corresponds to an angle of 1 degrees.
 </pre>
-   <p>Place the cursor on the &lsquo;<samp><span class="samp">1</span></samp>&rsquo;, then type <kbd>C-x * w</kbd> to enable
-Embedded mode on that number.  Now type <kbd>3 /</kbd> (to get one-third),
-and <kbd>I T</kbd> (the Inverse Tangent converts a slope into an angle),
-then <kbd>C-x&nbsp;*&nbsp;w</kbd><!-- /@w --> again to exit Embedded mode.
 
-<pre class="smallexample">     A slope of one-third corresponds to an angle of 18.4349488229 degrees.
-</pre>
-   <!-- [fix-ref Embedded Mode] -->
-   <p>See <a href="Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>, for full details.
+  <p>Place the cursor on the &lsquo;<samp><span class=
+  "samp">1</span></samp>&rsquo;, then type <kbd>C-x * w</kbd> to
+  enable Embedded mode on that number. Now type <kbd>3 /</kbd> (to
+  get one-third), and <kbd>I T</kbd> (the Inverse Tangent converts
+  a slope into an angle), then <kbd>C-x&nbsp;*&nbsp;w</kbd>
+  <!-- /@w --> again to exit Embedded mode.</p>
+  <pre class="smallexample">
+     A slope of one-third corresponds to an angle of 18.4349488229 degrees.
+</pre><!-- [fix-ref Embedded Mode] -->
 
-   </body></html>
-
+  <p>See <a href="Embedded-Mode.html#Embedded-Mode">Embedded
+  Mode</a>, for full details.</p>
+</body>
+</html>

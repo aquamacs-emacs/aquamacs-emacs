@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,95 +19,194 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Debugger</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Debugger">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Debugger">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugging.html#Debugging" rel="up" title="Debugging">
-<link href="Error-Debugging.html#Error-Debugging" rel="next" title="Error Debugging">
-<link href="Debugging.html#Debugging" rel="prev" title="Debugging">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Debugger</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Debugger" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Debugger" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugging.html#Debugging" rel="up" title=
+  "Debugging" />
+  <link href="Error-Debugging.html#Error-Debugging" rel="next"
+  title="Error Debugging" />
+  <link href="Debugging.html#Debugging" rel="prev" title=
+  "Debugging" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Debugger" id="Debugger"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Edebug.html#Edebug" accesskey="n" rel=
+    "next">Edebug</a>, Up: <a href="Debugging.html#Debugging"
+    accesskey="u" rel="up">Debugging</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Lisp-Debugger" id="The-Lisp-Debugger"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Debugger"></a>
-<div class="header">
-<p>
-Next: <a href="Edebug.html#Edebug" accesskey="n" rel="next">Edebug</a>, Up: <a href="Debugging.html#Debugging" accesskey="u" rel="up">Debugging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Lisp-Debugger"></a>
-<h3 class="section">17.1 The Lisp Debugger</h3>
-<a name="index-debugger-for-Emacs-Lisp"></a>
-<a name="index-Lisp-debugger"></a>
-<a name="index-break"></a>
+  <h3 class="section">17.1 The Lisp Debugger</h3><a name=
+  "index-debugger-for-Emacs-Lisp" id=
+  "index-debugger-for-Emacs-Lisp"></a> <a name=
+  "index-Lisp-debugger" id="index-Lisp-debugger"></a> <a name=
+  "index-break" id="index-break"></a>
 
-<p>The ordinary <em>Lisp debugger</em> provides the ability to suspend
-evaluation of a form.  While evaluation is suspended (a state that is
-commonly known as a <em>break</em>), you may examine the run time stack,
-examine the values of local or global variables, or change those values.
-Since a break is a recursive edit, all the usual editing facilities of
-Emacs are available; you can even run programs that will enter the
-debugger recursively.  See <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Error-Debugging.html#Error-Debugging" accesskey="1">Error Debugging</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Entering the debugger when an error happens.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Infinite-Loops.html#Infinite-Loops" accesskey="2">Infinite Loops</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Stopping and debugging a program that doesn&rsquo;t exit.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Function-Debugging.html#Function-Debugging" accesskey="3">Function Debugging</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Entering it when a certain function is called.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Explicit-Debug.html#Explicit-Debug" accesskey="4">Explicit Debug</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Entering it at a certain point in the program.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Using-Debugger.html#Using-Debugger" accesskey="5">Using Debugger</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What the debugger does; what you see while in it.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Debugger-Commands.html#Debugger-Commands" accesskey="6">Debugger Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Commands used while in the debugger.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Invoking-the-Debugger.html#Invoking-the-Debugger" accesskey="7">Invoking the Debugger</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to call the function <code>debug</code>.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Internals-of-Debugger.html#Internals-of-Debugger" accesskey="8">Internals of Debugger</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Subroutines of the debugger, and global variables.
-</td></tr>
-</table>
+  <p>The ordinary <em>Lisp debugger</em> provides the ability to
+  suspend evaluation of a form. While evaluation is suspended (a
+  state that is commonly known as a <em>break</em>), you may
+  examine the run time stack, examine the values of local or global
+  variables, or change those values. Since a break is a recursive
+  edit, all the usual editing facilities of Emacs are available;
+  you can even run programs that will enter the debugger
+  recursively. See <a href=
+  "Recursive-Editing.html#Recursive-Editing">Recursive
+  Editing</a>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Error-Debugging.html#Error-Debugging" accesskey="1">Error
+      Debugging</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Entering the debugger when an
+      error happens.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Infinite-Loops.html#Infinite-Loops" accesskey="2">Infinite
+      Loops</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Stopping and debugging a
+      program that doesn&rsquo;t exit.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Function-Debugging.html#Function-Debugging" accesskey=
+      "3">Function Debugging</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Entering it when a certain
+      function is called.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Explicit-Debug.html#Explicit-Debug" accesskey="4">Explicit
+      Debug</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Entering it at a certain point
+      in the program.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Using-Debugger.html#Using-Debugger" accesskey="5">Using
+      Debugger</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What the debugger does; what
+      you see while in it.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Debugger-Commands.html#Debugger-Commands" accesskey=
+      "6">Debugger Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Commands used while in the
+      debugger.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Invoking-the-Debugger.html#Invoking-the-Debugger" accesskey=
+      "7">Invoking the Debugger</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to call the function
+      <code>debug</code>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Internals-of-Debugger.html#Internals-of-Debugger" accesskey=
+      "8">Internals of Debugger</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Subroutines of the debugger,
+      and global variables.</td>
+    </tr>
+  </table>
 </body>
 </html>

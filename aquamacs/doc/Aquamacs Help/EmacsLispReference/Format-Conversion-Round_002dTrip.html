@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,244 +19,374 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Format Conversion Round-Trip</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Format Conversion Round-Trip">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Format Conversion Round-Trip">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Format-Conversion.html#Format-Conversion" rel="up" title="Format Conversion">
-<link href="Format-Conversion-Piecemeal.html#Format-Conversion-Piecemeal" rel="next" title="Format Conversion Piecemeal">
-<link href="Format-Conversion-Overview.html#Format-Conversion-Overview" rel="prev" title="Format Conversion Overview">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Format Conversion
+  Round-Trip</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Format Conversion Round-Trip" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Format Conversion Round-Trip" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Format-Conversion.html#Format-Conversion" rel="up"
+  title="Format Conversion" />
+  <link href=
+  "Format-Conversion-Piecemeal.html#Format-Conversion-Piecemeal"
+  rel="next" title="Format Conversion Piecemeal" />
+  <link href=
+  "Format-Conversion-Overview.html#Format-Conversion-Overview" rel=
+  "prev" title="Format Conversion Overview" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Format-Conversion-Round_002dTrip" id=
+  "Format-Conversion-Round_002dTrip"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Format-Conversion-Piecemeal.html#Format-Conversion-Piecemeal"
+    accesskey="n" rel="next">Format Conversion Piecemeal</a>,
+    Previous: <a href=
+    "Format-Conversion-Overview.html#Format-Conversion-Overview"
+    accesskey="p" rel="prev">Format Conversion Overview</a>, Up:
+    <a href="Format-Conversion.html#Format-Conversion" accesskey=
+    "u" rel="up">Format Conversion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Round_002dTrip-Specification" id=
+  "Round_002dTrip-Specification"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Format-Conversion-Round_002dTrip"></a>
-<div class="header">
-<p>
-Next: <a href="Format-Conversion-Piecemeal.html#Format-Conversion-Piecemeal" accesskey="n" rel="next">Format Conversion Piecemeal</a>, Previous: <a href="Format-Conversion-Overview.html#Format-Conversion-Overview" accesskey="p" rel="prev">Format Conversion Overview</a>, Up: <a href="Format-Conversion.html#Format-Conversion" accesskey="u" rel="up">Format Conversion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Round_002dTrip-Specification"></a>
-<h4 class="subsection">24.12.2 Round-Trip Specification</h4>
+  <h4 class="subsection">24.12.2 Round-Trip Specification</h4>
 
-<p>The most general of the two facilities is controlled by the variable
-<code>format-alist</code>, a list of <em>file format</em> specifications, which
-describe textual representations used in files for the data in an Emacs
-buffer.  The descriptions for reading and writing are paired, which is
-why we call this &ldquo;round-trip&rdquo; specification
-(see <a href="Format-Conversion-Piecemeal.html#Format-Conversion-Piecemeal">Format Conversion Piecemeal</a>, for non-paired specification).
-</p>
-<dl>
-<dt><a name="index-format_002dalist"></a>Variable: <strong>format-alist</strong></dt>
-<dd><p>This list contains one format definition for each defined file format.
-Each format definition is a list of this form:
-</p>
-<div class="example">
-<pre class="example">(<var>name</var> <var>doc-string</var> <var>regexp</var> <var>from-fn</var> <var>to-fn</var> <var>modify</var> <var>mode-fn</var> <var>preserve</var>)
-</pre></div>
-</dd></dl>
+  <p>The most general of the two facilities is controlled by the
+  variable <code>format-alist</code>, a list of <em>file
+  format</em> specifications, which describe textual
+  representations used in files for the data in an Emacs buffer.
+  The descriptions for reading and writing are paired, which is why
+  we call this &ldquo;round-trip&rdquo; specification (see <a href=
+  "Format-Conversion-Piecemeal.html#Format-Conversion-Piecemeal">Format
+  Conversion Piecemeal</a>, for non-paired specification).</p>
 
-<a name="index-format-definition"></a>
-<p>Here is what the elements in a format definition mean:
-</p>
-<dl compact="compact">
-<dt><var>name</var></dt>
-<dd><p>The name of this format.
-</p>
-</dd>
-<dt><var>doc-string</var></dt>
-<dd><p>A documentation string for the format.
-</p>
-</dd>
-<dt><var>regexp</var></dt>
-<dd><p>A regular expression which is used to recognize files represented in
-this format.  If <code>nil</code>, the format is never applied automatically.
-</p>
-</dd>
-<dt><var>from-fn</var></dt>
-<dd><p>A shell command or function to decode data in this format (to convert
-file data into the usual Emacs data representation).
-</p>
-<p>A shell command is represented as a string; Emacs runs the command as a
-filter to perform the conversion.
-</p>
-<p>If <var>from-fn</var> is a function, it is called with two arguments, <var>begin</var>
-and <var>end</var>, which specify the part of the buffer it should convert.
-It should convert the text by editing it in place.  Since this can
-change the length of the text, <var>from-fn</var> should return the modified
-end position.
-</p>
-<p>One responsibility of <var>from-fn</var> is to make sure that the beginning
-of the file no longer matches <var>regexp</var>.  Otherwise it is likely to
-get called again.
-</p>
-</dd>
-<dt><var>to-fn</var></dt>
-<dd><p>A shell command or function to encode data in this format&mdash;that is, to
-convert the usual Emacs data representation into this format.
-</p>
-<p>If <var>to-fn</var> is a string, it is a shell command; Emacs runs the
-command as a filter to perform the conversion.
-</p>
-<p>If <var>to-fn</var> is a function, it is called with three arguments:
-<var>begin</var> and <var>end</var>, which specify the part of the buffer it
-should convert, and <var>buffer</var>, which specifies which buffer.  There
-are two ways it can do the conversion:
-</p>
-<ul>
-<li> By editing the buffer in place.  In this case, <var>to-fn</var> should
-return the end-position of the range of text, as modified.
+  <dl>
+    <dt><a name="index-format_002dalist" id=
+    "index-format_002dalist"></a>Variable:
+    <strong>format-alist</strong></dt>
 
-</li><li> By returning a list of annotations.  This is a list of elements of the
-form <code>(<var>position</var> . <var>string</var>)</code>, where <var>position</var> is an
-integer specifying the relative position in the text to be written, and
-<var>string</var> is the annotation to add there.  The list must be sorted in
-order of position when <var>to-fn</var> returns it.
+    <dd>
+      <p>This list contains one format definition for each defined
+      file format. Each format definition is a list of this
+      form:</p>
 
-<p>When <code>write-region</code> actually writes the text from the buffer to the
-file, it intermixes the specified annotations at the corresponding
-positions.  All this takes place without modifying the buffer.
-</p></li></ul>
+      <div class="example">
+        <pre class="example">
+(<var>name</var> <var>doc-string</var> <var>regexp</var> <var>from-fn</var> <var>to-fn</var> <var>modify</var> <var>mode-fn</var> <var>preserve</var>)
+</pre>
+      </div>
+    </dd>
+  </dl><a name="index-format-definition" id=
+  "index-format-definition"></a>
 
-</dd>
-<dt><var>modify</var></dt>
-<dd><p>A flag, <code>t</code> if the encoding function modifies the buffer, and
-<code>nil</code> if it works by returning a list of annotations.
-</p>
-</dd>
-<dt><var>mode-fn</var></dt>
-<dd><p>A minor-mode function to call after visiting a file converted from this
-format.  The function is called with one argument, the integer 1;
-that tells a minor-mode function to enable the mode.
-</p>
-</dd>
-<dt><var>preserve</var></dt>
-<dd><p>A flag, <code>t</code> if <code>format-write-file</code> should not remove this format
-from <code>buffer-file-format</code>.
-</p></dd>
-</dl>
+  <p>Here is what the elements in a format definition mean:</p>
 
-<p>The function <code>insert-file-contents</code> automatically recognizes file
-formats when it reads the specified file.  It checks the text of the
-beginning of the file against the regular expressions of the format
-definitions, and if it finds a match, it calls the decoding function for
-that format.  Then it checks all the known formats over again.
-It keeps checking them until none of them is applicable.
-</p>
-<p>Visiting a file, with <code>find-file-noselect</code> or the commands that use
-it, performs conversion likewise (because it calls
-<code>insert-file-contents</code>); it also calls the mode function for each
-format that it decodes.  It stores a list of the format names in the
-buffer-local variable <code>buffer-file-format</code>.
-</p>
-<dl>
-<dt><a name="index-buffer_002dfile_002dformat"></a>Variable: <strong>buffer-file-format</strong></dt>
-<dd><p>This variable states the format of the visited file.  More precisely,
-this is a list of the file format names that were decoded in the course
-of visiting the current buffer&rsquo;s file.  It is always buffer-local in all
-buffers.
-</p></dd></dl>
+  <dl compact="compact">
+    <dt><var>name</var></dt>
 
-<p>When <code>write-region</code> writes data into a file, it first calls the
-encoding functions for the formats listed in <code>buffer-file-format</code>,
-in the order of appearance in the list.
-</p>
-<dl>
-<dt><a name="index-format_002dwrite_002dfile"></a>Command: <strong>format-write-file</strong> <em>file format &amp;optional confirm</em></dt>
-<dd><p>This command writes the current buffer contents into the file <var>file</var>
-in a format based on <var>format</var>, which is a list of format names.  It
-constructs the actual format starting from <var>format</var>, then appending
-any elements from the value of <code>buffer-file-format</code> with a
-non-<code>nil</code> <var>preserve</var> flag (see above), if they are not already
-present in <var>format</var>.  It then updates <code>buffer-file-format</code> with
-this format, making it the default for future saves.  Except for the
-<var>format</var> argument, this command is similar to <code>write-file</code>.  In
-particular, <var>confirm</var> has the same meaning and interactive treatment
-as the corresponding argument to <code>write-file</code>.  See <a href="Saving-Buffers.html#Definition-of-write_002dfile">Definition of write-file</a>.
-</p></dd></dl>
+    <dd>
+      <p>The name of this format.</p>
+    </dd>
 
-<dl>
-<dt><a name="index-format_002dfind_002dfile"></a>Command: <strong>format-find-file</strong> <em>file format</em></dt>
-<dd><p>This command finds the file <var>file</var>, converting it according to
-format <var>format</var>.  It also makes <var>format</var> the default if the
-buffer is saved later.
-</p>
-<p>The argument <var>format</var> is a list of format names.  If <var>format</var> is
-<code>nil</code>, no conversion takes place.  Interactively, typing just
-<tt class="key">RET</tt> for <var>format</var> specifies <code>nil</code>.
-</p></dd></dl>
+    <dt><var>doc-string</var></dt>
 
-<dl>
-<dt><a name="index-format_002dinsert_002dfile"></a>Command: <strong>format-insert-file</strong> <em>file format &amp;optional beg end</em></dt>
-<dd><p>This command inserts the contents of file <var>file</var>, converting it
-according to format <var>format</var>.  If <var>beg</var> and <var>end</var> are
-non-<code>nil</code>, they specify which part of the file to read, as in
-<code>insert-file-contents</code> (see <a href="Reading-from-Files.html#Reading-from-Files">Reading from Files</a>).
-</p>
-<p>The return value is like what <code>insert-file-contents</code> returns: a
-list of the absolute file name and the length of the data inserted
-(after conversion).
-</p>
-<p>The argument <var>format</var> is a list of format names.  If <var>format</var> is
-<code>nil</code>, no conversion takes place.  Interactively, typing just
-<tt class="key">RET</tt> for <var>format</var> specifies <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>A documentation string for the format.</p>
+    </dd>
 
-<dl>
-<dt><a name="index-buffer_002dauto_002dsave_002dfile_002dformat"></a>Variable: <strong>buffer-auto-save-file-format</strong></dt>
-<dd><p>This variable specifies the format to use for auto-saving.  Its value is
-a list of format names, just like the value of
-<code>buffer-file-format</code>; however, it is used instead of
-<code>buffer-file-format</code> for writing auto-save files.  If the value
-is <code>t</code>, the default, auto-saving uses the same format as a
-regular save in the same buffer.  This variable is always buffer-local
-in all buffers.
-</p></dd></dl>
+    <dt><var>regexp</var></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Format-Conversion-Piecemeal.html#Format-Conversion-Piecemeal" accesskey="n" rel="next">Format Conversion Piecemeal</a>, Previous: <a href="Format-Conversion-Overview.html#Format-Conversion-Overview" accesskey="p" rel="prev">Format Conversion Overview</a>, Up: <a href="Format-Conversion.html#Format-Conversion" accesskey="u" rel="up">Format Conversion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>A regular expression which is used to recognize files
+      represented in this format. If <code>nil</code>, the format
+      is never applied automatically.</p>
+    </dd>
 
+    <dt><var>from-fn</var></dt>
 
+    <dd>
+      <p>A shell command or function to decode data in this format
+      (to convert file data into the usual Emacs data
+      representation).</p>
 
+      <p>A shell command is represented as a string; Emacs runs the
+      command as a filter to perform the conversion.</p>
+
+      <p>If <var>from-fn</var> is a function, it is called with two
+      arguments, <var>begin</var> and <var>end</var>, which specify
+      the part of the buffer it should convert. It should convert
+      the text by editing it in place. Since this can change the
+      length of the text, <var>from-fn</var> should return the
+      modified end position.</p>
+
+      <p>One responsibility of <var>from-fn</var> is to make sure
+      that the beginning of the file no longer matches
+      <var>regexp</var>. Otherwise it is likely to get called
+      again.</p>
+    </dd>
+
+    <dt><var>to-fn</var></dt>
+
+    <dd>
+      <p>A shell command or function to encode data in this
+      format&mdash;that is, to convert the usual Emacs data
+      representation into this format.</p>
+
+      <p>If <var>to-fn</var> is a string, it is a shell command;
+      Emacs runs the command as a filter to perform the
+      conversion.</p>
+
+      <p>If <var>to-fn</var> is a function, it is called with three
+      arguments: <var>begin</var> and <var>end</var>, which specify
+      the part of the buffer it should convert, and
+      <var>buffer</var>, which specifies which buffer. There are
+      two ways it can do the conversion:</p>
+
+      <ul>
+        <li>By editing the buffer in place. In this case,
+        <var>to-fn</var> should return the end-position of the
+        range of text, as modified.</li>
+
+        <li>By returning a list of annotations. This is a list of
+        elements of the form <code>(<var>position</var> .
+        <var>string</var>)</code>, where <var>position</var> is an
+        integer specifying the relative position in the text to be
+        written, and <var>string</var> is the annotation to add
+        there. The list must be sorted in order of position when
+        <var>to-fn</var> returns it.
+
+          <p>When <code>write-region</code> actually writes the
+          text from the buffer to the file, it intermixes the
+          specified annotations at the corresponding positions. All
+          this takes place without modifying the buffer.</p>
+        </li>
+      </ul>
+    </dd>
+
+    <dt><var>modify</var></dt>
+
+    <dd>
+      <p>A flag, <code>t</code> if the encoding function modifies
+      the buffer, and <code>nil</code> if it works by returning a
+      list of annotations.</p>
+    </dd>
+
+    <dt><var>mode-fn</var></dt>
+
+    <dd>
+      <p>A minor-mode function to call after visiting a file
+      converted from this format. The function is called with one
+      argument, the integer 1; that tells a minor-mode function to
+      enable the mode.</p>
+    </dd>
+
+    <dt><var>preserve</var></dt>
+
+    <dd>
+      <p>A flag, <code>t</code> if <code>format-write-file</code>
+      should not remove this format from
+      <code>buffer-file-format</code>.</p>
+    </dd>
+  </dl>
+
+  <p>The function <code>insert-file-contents</code> automatically
+  recognizes file formats when it reads the specified file. It
+  checks the text of the beginning of the file against the regular
+  expressions of the format definitions, and if it finds a match,
+  it calls the decoding function for that format. Then it checks
+  all the known formats over again. It keeps checking them until
+  none of them is applicable.</p>
+
+  <p>Visiting a file, with <code>find-file-noselect</code> or the
+  commands that use it, performs conversion likewise (because it
+  calls <code>insert-file-contents</code>); it also calls the mode
+  function for each format that it decodes. It stores a list of the
+  format names in the buffer-local variable
+  <code>buffer-file-format</code>.</p>
+
+  <dl>
+    <dt><a name="index-buffer_002dfile_002dformat" id=
+    "index-buffer_002dfile_002dformat"></a>Variable:
+    <strong>buffer-file-format</strong></dt>
+
+    <dd>
+      <p>This variable states the format of the visited file. More
+      precisely, this is a list of the file format names that were
+      decoded in the course of visiting the current buffer&rsquo;s
+      file. It is always buffer-local in all buffers.</p>
+    </dd>
+  </dl>
+
+  <p>When <code>write-region</code> writes data into a file, it
+  first calls the encoding functions for the formats listed in
+  <code>buffer-file-format</code>, in the order of appearance in
+  the list.</p>
+
+  <dl>
+    <dt><a name="index-format_002dwrite_002dfile" id=
+    "index-format_002dwrite_002dfile"></a>Command:
+    <strong>format-write-file</strong> <em>file format
+    &amp;optional confirm</em></dt>
+
+    <dd>
+      <p>This command writes the current buffer contents into the
+      file <var>file</var> in a format based on <var>format</var>,
+      which is a list of format names. It constructs the actual
+      format starting from <var>format</var>, then appending any
+      elements from the value of <code>buffer-file-format</code>
+      with a non-<code>nil</code> <var>preserve</var> flag (see
+      above), if they are not already present in <var>format</var>.
+      It then updates <code>buffer-file-format</code> with this
+      format, making it the default for future saves. Except for
+      the <var>format</var> argument, this command is similar to
+      <code>write-file</code>. In particular, <var>confirm</var>
+      has the same meaning and interactive treatment as the
+      corresponding argument to <code>write-file</code>. See
+      <a href=
+      "Saving-Buffers.html#Definition-of-write_002dfile">Definition
+      of write-file</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-format_002dfind_002dfile" id=
+    "index-format_002dfind_002dfile"></a>Command:
+    <strong>format-find-file</strong> <em>file format</em></dt>
+
+    <dd>
+      <p>This command finds the file <var>file</var>, converting it
+      according to format <var>format</var>. It also makes
+      <var>format</var> the default if the buffer is saved
+      later.</p>
+
+      <p>The argument <var>format</var> is a list of format names.
+      If <var>format</var> is <code>nil</code>, no conversion takes
+      place. Interactively, typing just <tt class="key">RET</tt>
+      for <var>format</var> specifies <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-format_002dinsert_002dfile" id=
+    "index-format_002dinsert_002dfile"></a>Command:
+    <strong>format-insert-file</strong> <em>file format
+    &amp;optional beg end</em></dt>
+
+    <dd>
+      <p>This command inserts the contents of file <var>file</var>,
+      converting it according to format <var>format</var>. If
+      <var>beg</var> and <var>end</var> are non-<code>nil</code>,
+      they specify which part of the file to read, as in
+      <code>insert-file-contents</code> (see <a href=
+      "Reading-from-Files.html#Reading-from-Files">Reading from
+      Files</a>).</p>
+
+      <p>The return value is like what
+      <code>insert-file-contents</code> returns: a list of the
+      absolute file name and the length of the data inserted (after
+      conversion).</p>
+
+      <p>The argument <var>format</var> is a list of format names.
+      If <var>format</var> is <code>nil</code>, no conversion takes
+      place. Interactively, typing just <tt class="key">RET</tt>
+      for <var>format</var> specifies <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-buffer_002dauto_002dsave_002dfile_002dformat" id=
+    "index-buffer_002dauto_002dsave_002dfile_002dformat"></a>Variable:
+    <strong>buffer-auto-save-file-format</strong></dt>
+
+    <dd>
+      <p>This variable specifies the format to use for auto-saving.
+      Its value is a list of format names, just like the value of
+      <code>buffer-file-format</code>; however, it is used instead
+      of <code>buffer-file-format</code> for writing auto-save
+      files. If the value is <code>t</code>, the default,
+      auto-saving uses the same format as a regular save in the
+      same buffer. This variable is always buffer-local in all
+      buffers.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Format-Conversion-Piecemeal.html#Format-Conversion-Piecemeal"
+    accesskey="n" rel="next">Format Conversion Piecemeal</a>,
+    Previous: <a href=
+    "Format-Conversion-Overview.html#Format-Conversion-Overview"
+    accesskey="p" rel="prev">Format Conversion Overview</a>, Up:
+    <a href="Format-Conversion.html#Format-Conversion" accesskey=
+    "u" rel="up">Format Conversion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

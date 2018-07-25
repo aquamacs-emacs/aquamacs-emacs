@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the manual for the url Emacs Lisp library.
 
 Copyright (C) 1993-1999, 2002, 2004-2016 Free Software
@@ -15,143 +17,203 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>URL Programmer&rsquo;s Manual: Parsed URIs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="URL Programmer&rsquo;s Manual: Parsed URIs">
-<meta name="keywords" content="URL Programmer&rsquo;s Manual: Parsed URIs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="URI-Parsing.html#URI-Parsing" rel="up" title="URI Parsing">
-<link href="URI-Encoding.html#URI-Encoding" rel="next" title="URI Encoding">
-<link href="URI-Parsing.html#URI-Parsing" rel="prev" title="URI Parsing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>URL Programmer&rsquo;s Manual: Parsed URIs</title>
+  <meta name="description" content=
+  "URL Programmer&rsquo;s Manual: Parsed URIs" />
+  <meta name="keywords" content=
+  "URL Programmer&rsquo;s Manual: Parsed URIs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="URI-Parsing.html#URI-Parsing" rel="up" title=
+  "URI Parsing" />
+  <link href="URI-Encoding.html#URI-Encoding" rel="next" title=
+  "URI Encoding" />
+  <link href="URI-Parsing.html#URI-Parsing" rel="prev" title=
+  "URI Parsing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Parsed-URIs"></a>
-<div class="header">
-<p>
-Next: <a href="URI-Encoding.html#URI-Encoding" accesskey="n" rel="next">URI Encoding</a>, Up: <a href="URI-Parsing.html#URI-Parsing" accesskey="u" rel="up">URI Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Parsed-URI-structures"></a>
-<h3 class="section">2.1 Parsed URI structures</h3>
+<body lang="en" xml:lang="en">
+  <a name="Parsed-URIs" id="Parsed-URIs"></a>
 
-<p>Each parsed URI structure contains the following slots:
-</p>
-<dl compact="compact">
-<dt><code>type</code></dt>
-<dd><p>The URI scheme (a string, e.g., <code>http</code>).  See <a href="Supported-URL-Types.html#Supported-URL-Types">Supported URL Types</a>, for a list of schemes that the <code>url</code> library knows how to
-process.  This slot can also be <code>nil</code>, if the URI is not fully
-specified.
-</p>
-</dd>
-<dt><code>user</code></dt>
-<dd><p>The user name (a string), or <code>nil</code>.
-</p>
-</dd>
-<dt><code>password</code></dt>
-<dd><p>The user password (a string), or <code>nil</code>.  The use of this URI
-component is strongly discouraged; nowadays, passwords are transmitted
-by other means, not as part of a URI.
-</p>
-</dd>
-<dt><code>host</code></dt>
-<dd><p>The host name (a string), or <code>nil</code>.  If present, this is
-typically a domain name or IP address.
-</p>
-</dd>
-<dt><code>port</code></dt>
-<dd><p>The port number (an integer), or <code>nil</code>.  Omitting this component
-usually means to use the &ldquo;standard&rdquo; port associated with the URI
-scheme.
-</p>
-</dd>
-<dt><code>filename</code></dt>
-<dd><p>The combination of the &ldquo;path&rdquo; and &ldquo;query&rdquo; components of the URI (a
-string), or <code>nil</code>.  If the query component is present, it is the
-substring following the first &lsquo;<samp>?</samp>&rsquo; character, and the path
-component is the substring before the &lsquo;<samp>?</samp>&rsquo;.  The meaning of these
-components is scheme-dependent; they do not necessarily refer to a
-file on a disk.
-</p>
-</dd>
-<dt><code>target</code></dt>
-<dd><p>The fragment component (a string), or <code>nil</code>.  The fragment
-component specifies a &ldquo;secondary resource&rdquo;, such as a section of a
-webpage.
-</p>
-</dd>
-<dt><code>fullness</code></dt>
-<dd><p>This is <code>t</code> if the URI is fully specified, i.e., the
-hierarchical components of the URI (the hostname and/or username
-and/or password) are preceded by &lsquo;<samp>//</samp>&rsquo;.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="URI-Encoding.html#URI-Encoding" accesskey="n"
+    rel="next">URI Encoding</a>, Up: <a href=
+    "URI-Parsing.html#URI-Parsing" accesskey="u" rel="up">URI
+    Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Parsed-URI-structures" id="Parsed-URI-structures"></a>
 
-<a name="index-url_002dtype"></a>
-<a name="index-url_002duser"></a>
-<a name="index-url_002dpassword"></a>
-<a name="index-url_002dhost"></a>
-<a name="index-url_002dport"></a>
-<a name="index-url_002dfilename"></a>
-<a name="index-url_002dtarget"></a>
-<a name="index-url_002dattributes"></a>
-<a name="index-url_002dfullness"></a>
-<p>These slots have accessors named <code>url-<var>part</var></code>, where
-<var>part</var> is the slot name.  For example, the accessor for the
-<code>host</code> slot is the function <code>url-host</code>.  The <code>url-port</code>
-accessor returns the default port for the URI scheme if the parsed
-URI&rsquo;s <var>port</var> slot is <code>nil</code>.
-</p>
-<p>The slots can be set using <code>setf</code>.  For example:
-</p>
-<div class="example">
-<pre class="example">(setf (url-port url) 80)
-</pre></div>
+  <h3 class="section">2.1 Parsed URI structures</h3>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="URI-Encoding.html#URI-Encoding" accesskey="n" rel="next">URI Encoding</a>, Up: <a href="URI-Parsing.html#URI-Parsing" accesskey="u" rel="up">URI Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Each parsed URI structure contains the following slots:</p>
 
+  <dl compact="compact">
+    <dt><code>type</code></dt>
 
+    <dd>
+      <p>The URI scheme (a string, e.g., <code>http</code>). See
+      <a href=
+      "Supported-URL-Types.html#Supported-URL-Types">Supported URL
+      Types</a>, for a list of schemes that the <code>url</code>
+      library knows how to process. This slot can also be
+      <code>nil</code>, if the URI is not fully specified.</p>
+    </dd>
 
+    <dt><code>user</code></dt>
+
+    <dd>
+      <p>The user name (a string), or <code>nil</code>.</p>
+    </dd>
+
+    <dt><code>password</code></dt>
+
+    <dd>
+      <p>The user password (a string), or <code>nil</code>. The use
+      of this URI component is strongly discouraged; nowadays,
+      passwords are transmitted by other means, not as part of a
+      URI.</p>
+    </dd>
+
+    <dt><code>host</code></dt>
+
+    <dd>
+      <p>The host name (a string), or <code>nil</code>. If present,
+      this is typically a domain name or IP address.</p>
+    </dd>
+
+    <dt><code>port</code></dt>
+
+    <dd>
+      <p>The port number (an integer), or <code>nil</code>.
+      Omitting this component usually means to use the
+      &ldquo;standard&rdquo; port associated with the URI
+      scheme.</p>
+    </dd>
+
+    <dt><code>filename</code></dt>
+
+    <dd>
+      <p>The combination of the &ldquo;path&rdquo; and
+      &ldquo;query&rdquo; components of the URI (a string), or
+      <code>nil</code>. If the query component is present, it is
+      the substring following the first
+      &lsquo;<samp>?</samp>&rsquo; character, and the path
+      component is the substring before the
+      &lsquo;<samp>?</samp>&rsquo;. The meaning of these components
+      is scheme-dependent; they do not necessarily refer to a file
+      on a disk.</p>
+    </dd>
+
+    <dt><code>target</code></dt>
+
+    <dd>
+      <p>The fragment component (a string), or <code>nil</code>.
+      The fragment component specifies a &ldquo;secondary
+      resource&rdquo;, such as a section of a webpage.</p>
+    </dd>
+
+    <dt><code>fullness</code></dt>
+
+    <dd>
+      <p>This is <code>t</code> if the URI is fully specified,
+      i.e., the hierarchical components of the URI (the hostname
+      and/or username and/or password) are preceded by
+      &lsquo;<samp>//</samp>&rsquo;.</p>
+    </dd>
+  </dl><a name="index-url_002dtype" id="index-url_002dtype"></a>
+  <a name="index-url_002duser" id="index-url_002duser"></a>
+  <a name="index-url_002dpassword" id="index-url_002dpassword"></a>
+  <a name="index-url_002dhost" id="index-url_002dhost"></a>
+  <a name="index-url_002dport" id="index-url_002dport"></a>
+  <a name="index-url_002dfilename" id="index-url_002dfilename"></a>
+  <a name="index-url_002dtarget" id="index-url_002dtarget"></a>
+  <a name="index-url_002dattributes" id=
+  "index-url_002dattributes"></a> <a name="index-url_002dfullness"
+  id="index-url_002dfullness"></a>
+
+  <p>These slots have accessors named
+  <code>url-<var>part</var></code>, where <var>part</var> is the
+  slot name. For example, the accessor for the <code>host</code>
+  slot is the function <code>url-host</code>. The
+  <code>url-port</code> accessor returns the default port for the
+  URI scheme if the parsed URI&rsquo;s <var>port</var> slot is
+  <code>nil</code>.</p>
+
+  <p>The slots can be set using <code>setf</code>. For example:</p>
+
+  <div class="example">
+    <pre class="example">
+(setf (url-port url) 80)
+</pre>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="URI-Encoding.html#URI-Encoding" accesskey="n"
+    rel="next">URI Encoding</a>, Up: <a href=
+    "URI-Parsing.html#URI-Parsing" accesskey="u" rel="up">URI
+    Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

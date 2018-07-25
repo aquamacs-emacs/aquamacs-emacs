@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is version 8.6 of The MH-E
 Manual, last updated 2016-04-29.
 
@@ -25,208 +27,288 @@ copy of the license is included in the section entitled "GNU General
 Public License."
  -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The MH-E Manual: Threading</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The MH-E Manual: Threading">
-<meta name="keywords" content="The MH-E Manual: Threading">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Limits.html#Limits" rel="next" title="Limits">
-<link href="Searching.html#Searching" rel="prev" title="Searching">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The MH-E Manual: Threading</title>
+  <meta name="description" content="The MH-E Manual: Threading" />
+  <meta name="keywords" content="The MH-E Manual: Threading" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Limits.html#Limits" rel="next" title="Limits" />
+  <link href="Searching.html#Searching" rel="prev" title=
+  "Searching" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Threading"></a>
-<div class="header">
-<p>
-Next: <a href="Limits.html#Limits" accesskey="n" rel="next">Limits</a>, Previous: <a href="Searching.html#Searching" accesskey="p" rel="prev">Searching</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Viewing-Message-Threads"></a>
-<h2 class="chapter">16 Viewing Message Threads</h2>
+<body lang="en" xml:lang="en">
+  <a name="Threading" id="Threading"></a>
 
-<a name="index-threading"></a>
+  <div class="header">
+    <p>Next: <a href="Limits.html#Limits" accesskey="n" rel=
+    "next">Limits</a>, Previous: <a href="Searching.html#Searching"
+    accesskey="p" rel="prev">Searching</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Viewing-Message-Threads" id=
+  "Viewing-Message-Threads"></a>
 
-<p>MH-E groups messages by <em>threads</em> which are messages that are part
-of the same discussion and usually all have the same &lsquo;<samp>Subject:</samp>&rsquo;
-header field. Other ways to organize messages in a folder include
-limiting (see <a href="Limits.html#Limits">Limits</a>) or using full-text indexed searches
-(see <a href="Searching.html#Searching">Searching</a>).
-</p>
-<a name="index-root_002c-in-threads"></a>
-<a name="index-siblings_002c-in-threads"></a>
-<a name="index-ancestor_002c-in-threads"></a>
+  <h2 class="chapter">16 Viewing Message Threads</h2><a name=
+  "index-threading" id="index-threading"></a>
 
-<p>A thread begins with a single message called a <em>root</em>. All replies
-to the same message are <em>siblings</em> of each other. Any message that
-has replies to it is an <em>ancestor</em> of those replies.
-</p>
-<p>There are several commands that you can use to navigate and operate on
-threads.
-</p>
-<dl compact="compact">
-<dd><a name="index-T-_003f"></a>
-<a name="index-mh_002dprefix_002dhelp-5"></a>
-</dd>
-<dt><kbd>T ?</kbd></dt>
-<dd><p>Display cheat sheet for the commands of the current prefix in
-minibuffer (<code>mh-prefix-help</code>).
-<a name="index-T-o"></a>
-<a name="index-mh_002dthread_002drefile"></a>
-</p></dd>
-<dt><kbd>T o</kbd></dt>
-<dd><p>Refile (output) thread into folder (<code>mh-thread-refile</code>).
-<a name="index-T-d-1"></a>
-<a name="index-mh_002dthread_002ddelete-1"></a>
-</p></dd>
-<dt><kbd>T d</kbd></dt>
-<dd><p>Delete thread (<code>mh-thread-delete</code>).
-<a name="index-T-t"></a>
-<a name="index-mh_002dtoggle_002dthreads"></a>
-</p></dd>
-<dt><kbd>T t</kbd></dt>
-<dd><p>Toggle threaded view of folder (<code>mh-toggle-threads</code>).
-<a name="index-T-n"></a>
-<a name="index-mh_002dthread_002dnext_002dsibling"></a>
-</p></dd>
-<dt><kbd>T n</kbd></dt>
-<dd><p>Display next sibling (<code>mh-thread-next-sibling</code>).
-<a name="index-T-p"></a>
-<a name="index-mh_002dthread_002dprevious_002dsibling"></a>
-</p></dd>
-<dt><kbd>T p</kbd></dt>
-<dd><p>Display previous sibling (<code>mh-thread-previous-sibling</code>).
-<a name="index-T-u"></a>
-<a name="index-mh_002dthread_002dancestor"></a>
-</p></dd>
-<dt><kbd>T u</kbd></dt>
-<dd><p>Display ancestor of current message (<code>mh-thread-ancestor</code>).
-</p></dd>
-</dl>
+  <p>MH-E groups messages by <em>threads</em> which are messages
+  that are part of the same discussion and usually all have the
+  same &lsquo;<samp>Subject:</samp>&rsquo; header field. Other ways
+  to organize messages in a folder include limiting (see <a href=
+  "Limits.html#Limits">Limits</a>) or using full-text indexed
+  searches (see <a href=
+  "Searching.html#Searching">Searching</a>).</p><a name=
+  "index-root_002c-in-threads" id="index-root_002c-in-threads"></a>
+  <a name="index-siblings_002c-in-threads" id=
+  "index-siblings_002c-in-threads"></a> <a name=
+  "index-ancestor_002c-in-threads" id=
+  "index-ancestor_002c-in-threads"></a>
 
-<a name="index-mh_002dthread-customization-group"></a>
-<a name="index-customization-group_002c-mh_002dthread"></a>
+  <p>A thread begins with a single message called a <em>root</em>.
+  All replies to the same message are <em>siblings</em> of each
+  other. Any message that has replies to it is an <em>ancestor</em>
+  of those replies.</p>
 
-<p>The &lsquo;<samp>mh-thread</samp>&rsquo; customization group contains one option.
-</p>
-<dl compact="compact">
-<dt><code>mh-show-threads-flag</code>
-<a name="index-mh_002dshow_002dthreads_002dflag"></a>
-</dt>
-<dd><p>On means new folders start in threaded mode (default: &lsquo;<samp>off</samp>&rsquo;).
-</p></dd>
-</dl>
+  <p>There are several commands that you can use to navigate and
+  operate on threads.</p>
 
-<a name="index-mh_002dtoggle_002dthreads-1"></a>
-<a name="index-T-t-1"></a>
-<a name="index-mh_002dlarge_002dfolder-2"></a>
-<a name="index-mh_002dshow_002dthreads_002dflag-1"></a>
+  <dl compact="compact">
+    <dd><a name="index-T-_003f" id="index-T-_003f"></a> <a name=
+    "index-mh_002dprefix_002dhelp-5" id=
+    "index-mh_002dprefix_002dhelp-5"></a></dd>
 
-<p>Threading large number of messages can be time consuming so the option
-<code>mh-show-threads-flag</code> is turned off by default. If you turn on
-this option, then threading will be done only if the number of
-messages being threaded is less than <code>mh-large-folder</code>. In any
-event, threading can be turned on (and off) with the command <kbd>T t</kbd>
-(<code>mh-toggle-threads</code>).
-</p>
-<a name="index-mh_002dthread_002dancestor-1"></a>
-<a name="index-mh_002dthread_002dnext_002dsibling-1"></a>
-<a name="index-mh_002dthread_002dprevious_002dsibling-1"></a>
-<a name="index-T-n-1"></a>
-<a name="index-T-p-1"></a>
-<a name="index-T-u-1"></a>
+    <dt><kbd>T ?</kbd></dt>
 
-<p>There are a few commands to help you navigate threads. If you do not
-care for the way a particular thread has turned, you can move up the
-chain of messages with the command <kbd>T u</kbd>
-(<code>mh-thread-ancestor</code>. At any point you can use <kbd>T n</kbd>
-(<code>mh-thread-next-sibling</code> or <kbd>T p</kbd>
-(<code>mh-thread-previous-sibling</code>) to jump to the next or previous
-sibling, skipping the sub-threads. The command <kbd>T u</kbd> can also take
-a prefix argument to jump to the message that started everything.
-</p>
-<a name="index-mh_002ddelete_002dsubject_002dor_002dthread-2"></a>
-<a name="index-mh_002dthread_002ddelete-2"></a>
-<a name="index-mh_002dthread_002drefile-1"></a>
-<a name="index-k-3"></a>
-<a name="index-T-d-2"></a>
-<a name="index-T-o-1"></a>
+    <dd>
+      <p>Display cheat sheet for the commands of the current prefix
+      in minibuffer (<code>mh-prefix-help</code>). <a name=
+      "index-T-o" id="index-T-o"></a> <a name=
+      "index-mh_002dthread_002drefile" id=
+      "index-mh_002dthread_002drefile"></a></p>
+    </dd>
 
-<p>There are threaded equivalents for the commands that delete and refile
-messages. For example, <kbd>T o</kbd> (<code>mh-thread-refile</code>) refiles the
-current message and all its children. Similarly, the command <kbd>T d</kbd>
-(<code>mh-thread-delete</code>) deletes the current message and all its
-children. These commands do not refile or delete sibling messages.
-See <a href="Navigating.html#Navigating">Navigating</a>, for a description of the similar command <kbd>k</kbd>
-(<code>mh-delete-subject-or-thread</code>).
-</p>
-<a name="index-mh_002dlarge_002dfolder-3"></a>
+    <dt><kbd>T o</kbd></dt>
 
-<p>If you find that threading is too slow, it may be that you have
-<code>mh-large-folder</code> set too high. Also, threading is one of the few
-features of MH-E that really benefits from compiling. If you haven&rsquo;t
-compiled MH-E, I encourage you to do so<a name="DOCF49" href="#FOOT49"><sup>49</sup></a>.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <dd>
+      <p>Refile (output) thread into folder
+      (<code>mh-thread-refile</code>). <a name="index-T-d-1" id=
+      "index-T-d-1"></a> <a name="index-mh_002dthread_002ddelete-1"
+      id="index-mh_002dthread_002ddelete-1"></a></p>
+    </dd>
 
-<h3><a name="FOOT49" href="#DOCF49">(49)</a></h3>
-<p>If you&rsquo;re not sure if
-MH-E has been byte-compiled, you could try running &lsquo;<samp>locate
-mh-thread.elc</samp>&rsquo; or otherwise find MH-E on your system and ensure that
-<samp>mh-thread.elc</samp> exists. If you have multiple versions and you
-find that one is compiled but the other is not, then go into your
-<samp>*scratch*</samp> buffer in Emacs, enter <kbd>load-path C-j</kbd>, and
-ensure that the byte-compiled version appears first in the
-<code>load-path</code>. If you find that MH-E is not compiled and you
-installed MH-E yourself, please refer to the installation directions
-in the file <samp>README</samp> in the distribution.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Limits.html#Limits" accesskey="n" rel="next">Limits</a>, Previous: <a href="Searching.html#Searching" accesskey="p" rel="prev">Searching</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><kbd>T d</kbd></dt>
 
+    <dd>
+      <p>Delete thread (<code>mh-thread-delete</code>). <a name=
+      "index-T-t" id="index-T-t"></a> <a name=
+      "index-mh_002dtoggle_002dthreads" id=
+      "index-mh_002dtoggle_002dthreads"></a></p>
+    </dd>
 
+    <dt><kbd>T t</kbd></dt>
 
+    <dd>
+      <p>Toggle threaded view of folder
+      (<code>mh-toggle-threads</code>). <a name="index-T-n" id=
+      "index-T-n"></a> <a name=
+      "index-mh_002dthread_002dnext_002dsibling" id=
+      "index-mh_002dthread_002dnext_002dsibling"></a></p>
+    </dd>
+
+    <dt><kbd>T n</kbd></dt>
+
+    <dd>
+      <p>Display next sibling
+      (<code>mh-thread-next-sibling</code>). <a name="index-T-p"
+      id="index-T-p"></a> <a name=
+      "index-mh_002dthread_002dprevious_002dsibling" id=
+      "index-mh_002dthread_002dprevious_002dsibling"></a></p>
+    </dd>
+
+    <dt><kbd>T p</kbd></dt>
+
+    <dd>
+      <p>Display previous sibling
+      (<code>mh-thread-previous-sibling</code>). <a name=
+      "index-T-u" id="index-T-u"></a> <a name=
+      "index-mh_002dthread_002dancestor" id=
+      "index-mh_002dthread_002dancestor"></a></p>
+    </dd>
+
+    <dt><kbd>T u</kbd></dt>
+
+    <dd>
+      <p>Display ancestor of current message
+      (<code>mh-thread-ancestor</code>).</p>
+    </dd>
+  </dl><a name="index-mh_002dthread-customization-group" id=
+  "index-mh_002dthread-customization-group"></a> <a name=
+  "index-customization-group_002c-mh_002dthread" id=
+  "index-customization-group_002c-mh_002dthread"></a>
+
+  <p>The &lsquo;<samp>mh-thread</samp>&rsquo; customization group
+  contains one option.</p>
+
+  <dl compact="compact">
+    <dt><code>mh-show-threads-flag</code> <a name=
+    "index-mh_002dshow_002dthreads_002dflag" id=
+    "index-mh_002dshow_002dthreads_002dflag"></a></dt>
+
+    <dd>
+      <p>On means new folders start in threaded mode (default:
+      &lsquo;<samp>off</samp>&rsquo;).</p>
+    </dd>
+  </dl><a name="index-mh_002dtoggle_002dthreads-1" id=
+  "index-mh_002dtoggle_002dthreads-1"></a> <a name="index-T-t-1"
+  id="index-T-t-1"></a> <a name="index-mh_002dlarge_002dfolder-2"
+  id="index-mh_002dlarge_002dfolder-2"></a> <a name=
+  "index-mh_002dshow_002dthreads_002dflag-1" id=
+  "index-mh_002dshow_002dthreads_002dflag-1"></a>
+
+  <p>Threading large number of messages can be time consuming so
+  the option <code>mh-show-threads-flag</code> is turned off by
+  default. If you turn on this option, then threading will be done
+  only if the number of messages being threaded is less than
+  <code>mh-large-folder</code>. In any event, threading can be
+  turned on (and off) with the command <kbd>T t</kbd>
+  (<code>mh-toggle-threads</code>).</p><a name=
+  "index-mh_002dthread_002dancestor-1" id=
+  "index-mh_002dthread_002dancestor-1"></a> <a name=
+  "index-mh_002dthread_002dnext_002dsibling-1" id=
+  "index-mh_002dthread_002dnext_002dsibling-1"></a> <a name=
+  "index-mh_002dthread_002dprevious_002dsibling-1" id=
+  "index-mh_002dthread_002dprevious_002dsibling-1"></a> <a name=
+  "index-T-n-1" id="index-T-n-1"></a> <a name="index-T-p-1" id=
+  "index-T-p-1"></a> <a name="index-T-u-1" id="index-T-u-1"></a>
+
+  <p>There are a few commands to help you navigate threads. If you
+  do not care for the way a particular thread has turned, you can
+  move up the chain of messages with the command <kbd>T u</kbd>
+  (<code>mh-thread-ancestor</code>. At any point you can use <kbd>T
+  n</kbd> (<code>mh-thread-next-sibling</code> or <kbd>T p</kbd>
+  (<code>mh-thread-previous-sibling</code>) to jump to the next or
+  previous sibling, skipping the sub-threads. The command <kbd>T
+  u</kbd> can also take a prefix argument to jump to the message
+  that started everything.</p><a name=
+  "index-mh_002ddelete_002dsubject_002dor_002dthread-2" id=
+  "index-mh_002ddelete_002dsubject_002dor_002dthread-2"></a>
+  <a name="index-mh_002dthread_002ddelete-2" id=
+  "index-mh_002dthread_002ddelete-2"></a> <a name=
+  "index-mh_002dthread_002drefile-1" id=
+  "index-mh_002dthread_002drefile-1"></a> <a name="index-k-3" id=
+  "index-k-3"></a> <a name="index-T-d-2" id="index-T-d-2"></a>
+  <a name="index-T-o-1" id="index-T-o-1"></a>
+
+  <p>There are threaded equivalents for the commands that delete
+  and refile messages. For example, <kbd>T o</kbd>
+  (<code>mh-thread-refile</code>) refiles the current message and
+  all its children. Similarly, the command <kbd>T d</kbd>
+  (<code>mh-thread-delete</code>) deletes the current message and
+  all its children. These commands do not refile or delete sibling
+  messages. See <a href=
+  "Navigating.html#Navigating">Navigating</a>, for a description of
+  the similar command <kbd>k</kbd>
+  (<code>mh-delete-subject-or-thread</code>).</p><a name=
+  "index-mh_002dlarge_002dfolder-3" id=
+  "index-mh_002dlarge_002dfolder-3"></a>
+
+  <p>If you find that threading is too slow, it may be that you
+  have <code>mh-large-folder</code> set too high. Also, threading
+  is one of the few features of MH-E that really benefits from
+  compiling. If you haven&rsquo;t compiled MH-E, I encourage you to
+  do so<a name="DOCF49" href="#FOOT49" id=
+  "DOCF49"><sup>49</sup></a>.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT49" href="#DOCF49" id="FOOT49">(49)</a></h3>
+
+    <p>If you&rsquo;re not sure if MH-E has been byte-compiled, you
+    could try running &lsquo;<samp>locate
+    mh-thread.elc</samp>&rsquo; or otherwise find MH-E on your
+    system and ensure that <samp>mh-thread.elc</samp> exists. If
+    you have multiple versions and you find that one is compiled
+    but the other is not, then go into your <samp>*scratch*</samp>
+    buffer in Emacs, enter <kbd>load-path C-j</kbd>, and ensure
+    that the byte-compiled version appears first in the
+    <code>load-path</code>. If you find that MH-E is not compiled
+    and you installed MH-E yourself, please refer to the
+    installation directions in the file <samp>README</samp> in the
+    distribution.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Limits.html#Limits" accesskey="n" rel=
+    "next">Limits</a>, Previous: <a href="Searching.html#Searching"
+    accesskey="p" rel="prev">Searching</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

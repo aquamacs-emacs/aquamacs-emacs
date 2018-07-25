@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,262 +19,390 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: File Attributes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: File Attributes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: File Attributes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Information-about-Files.html#Information-about-Files" rel="up" title="Information about Files">
-<link href="Extended-Attributes.html#Extended-Attributes" rel="next" title="Extended Attributes">
-<link href="Truenames.html#Truenames" rel="prev" title="Truenames">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: File Attributes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: File Attributes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: File Attributes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Information-about-Files.html#Information-about-Files"
+  rel="up" title="Information about Files" />
+  <link href="Extended-Attributes.html#Extended-Attributes" rel=
+  "next" title="Extended Attributes" />
+  <link href="Truenames.html#Truenames" rel="prev" title=
+  "Truenames" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="File-Attributes" id="File-Attributes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Extended-Attributes.html#Extended-Attributes"
+    accesskey="n" rel="next">Extended Attributes</a>, Previous:
+    <a href="Truenames.html#Truenames" accesskey="p" rel=
+    "prev">Truenames</a>, Up: <a href=
+    "Information-about-Files.html#Information-about-Files"
+    accesskey="u" rel="up">Information about Files</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="File-Attributes-1" id="File-Attributes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="File-Attributes"></a>
-<div class="header">
-<p>
-Next: <a href="Extended-Attributes.html#Extended-Attributes" accesskey="n" rel="next">Extended Attributes</a>, Previous: <a href="Truenames.html#Truenames" accesskey="p" rel="prev">Truenames</a>, Up: <a href="Information-about-Files.html#Information-about-Files" accesskey="u" rel="up">Information about Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="File-Attributes-1"></a>
-<h4 class="subsection">24.6.4 File Attributes</h4>
-<a name="index-file-attributes"></a>
+  <h4 class="subsection">24.6.4 File Attributes</h4><a name=
+  "index-file-attributes" id="index-file-attributes"></a>
 
-<p>This section describes the functions for getting detailed
-information about a file, including the owner and group numbers, the
-number of names, the inode number, the size, and the times of access
-and modification.
-</p>
-<dl>
-<dt><a name="index-file_002dnewer_002dthan_002dfile_002dp"></a>Function: <strong>file-newer-than-file-p</strong> <em>filename1 filename2</em></dt>
-<dd><a name="index-file-age"></a>
-<a name="index-file-modification-time"></a>
-<p>This function returns <code>t</code> if the file <var>filename1</var> is
-newer than file <var>filename2</var>.  If <var>filename1</var> does not
-exist, it returns <code>nil</code>.  If <var>filename1</var> does exist, but
-<var>filename2</var> does not, it returns <code>t</code>.
-</p>
-<p>In the following example, assume that the file <samp>aug-19</samp> was written
-on the 19th, <samp>aug-20</samp> was written on the 20th, and the file
-<samp>no-file</samp> doesn&rsquo;t exist at all.
-</p>
-<div class="example">
-<pre class="example">(file-newer-than-file-p &quot;aug-19&quot; &quot;aug-20&quot;)
+  <p>This section describes the functions for getting detailed
+  information about a file, including the owner and group numbers,
+  the number of names, the inode number, the size, and the times of
+  access and modification.</p>
+
+  <dl>
+    <dt><a name="index-file_002dnewer_002dthan_002dfile_002dp" id=
+    "index-file_002dnewer_002dthan_002dfile_002dp"></a>Function:
+    <strong>file-newer-than-file-p</strong> <em>filename1
+    filename2</em></dt>
+
+    <dd>
+      <a name="index-file-age" id="index-file-age"></a> <a name=
+      "index-file-modification-time" id=
+      "index-file-modification-time"></a>
+
+      <p>This function returns <code>t</code> if the file
+      <var>filename1</var> is newer than file <var>filename2</var>.
+      If <var>filename1</var> does not exist, it returns
+      <code>nil</code>. If <var>filename1</var> does exist, but
+      <var>filename2</var> does not, it returns <code>t</code>.</p>
+
+      <p>In the following example, assume that the file
+      <samp>aug-19</samp> was written on the 19th,
+      <samp>aug-20</samp> was written on the 20th, and the file
+      <samp>no-file</samp> doesn&rsquo;t exist at all.</p>
+
+      <div class="example">
+        <pre class="example">
+(file-newer-than-file-p "aug-19" "aug-20")
      &rArr; nil
-</pre><pre class="example">(file-newer-than-file-p &quot;aug-20&quot; &quot;aug-19&quot;)
+</pre>
+        <pre class="example">
+(file-newer-than-file-p "aug-20" "aug-19")
      &rArr; t
-</pre><pre class="example">(file-newer-than-file-p &quot;aug-19&quot; &quot;no-file&quot;)
+</pre>
+        <pre class="example">
+(file-newer-than-file-p "aug-19" "no-file")
      &rArr; t
-</pre><pre class="example">(file-newer-than-file-p &quot;no-file&quot; &quot;aug-19&quot;)
+</pre>
+        <pre class="example">
+(file-newer-than-file-p "no-file" "aug-19")
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>If the <var>filename</var> argument to the next two functions is a
-symbolic link, then these function do <em>not</em> replace it with its
-target.  However, they both recursively follow symbolic links at all
-levels of parent directories.
-</p>
-<dl>
-<dt><a name="index-file_002dattributes"></a>Function: <strong>file-attributes</strong> <em>filename &amp;optional id-format</em></dt>
-<dd><a name="Definition-of-file_002dattributes"></a><p>This function returns a list of attributes of file <var>filename</var>.  If
-the specified file cannot be opened, it returns <code>nil</code>.
-The optional parameter <var>id-format</var> specifies the preferred format
-of attributes <acronym>UID</acronym> and <acronym>GID</acronym> (see below)&mdash;the
-valid values are <code>'string</code> and <code>'integer</code>.  The latter is
-the default, but we plan to change that, so you should specify a
-non-<code>nil</code> value for <var>id-format</var> if you use the returned
-<acronym>UID</acronym> or <acronym>GID</acronym>.
-</p>
-<p>The elements of the list, in order, are:
-</p>
-<ol>
-<li> <code>t</code> for a directory, a string for a symbolic link (the name
-linked to), or <code>nil</code> for a text file.
+  <p>If the <var>filename</var> argument to the next two functions
+  is a symbolic link, then these function do <em>not</em> replace
+  it with its target. However, they both recursively follow
+  symbolic links at all levels of parent directories.</p>
 
-</li><li> The number of names the file has.  Alternate names, also known as hard
-links, can be created by using the <code>add-name-to-file</code> function
-(see <a href="Changing-Files.html#Changing-Files">Changing Files</a>).
+  <dl>
+    <dt><a name="index-file_002dattributes" id=
+    "index-file_002dattributes"></a>Function:
+    <strong>file-attributes</strong> <em>filename &amp;optional
+    id-format</em></dt>
 
-</li><li> The file&rsquo;s <acronym>UID</acronym>, normally as a string.  However, if it does
-not correspond to a named user, the value is a number.
+    <dd>
+      <a name="Definition-of-file_002dattributes" id=
+      "Definition-of-file_002dattributes"></a>
 
-</li><li> The file&rsquo;s <acronym>GID</acronym>, likewise.
+      <p>This function returns a list of attributes of file
+      <var>filename</var>. If the specified file cannot be opened,
+      it returns <code>nil</code>. The optional parameter
+      <var>id-format</var> specifies the preferred format of
+      attributes <acronym>UID</acronym> and <acronym>GID</acronym>
+      (see below)&mdash;the valid values are <code>'string</code>
+      and <code>'integer</code>. The latter is the default, but we
+      plan to change that, so you should specify a
+      non-<code>nil</code> value for <var>id-format</var> if you
+      use the returned <acronym>UID</acronym> or
+      <acronym>GID</acronym>.</p>
 
-</li><li> The time of last access, as a list of four integers <code>(<var>sec-high</var>
-<var>sec-low</var> <var>microsec</var> <var>picosec</var>)</code>.  (This is similar to the
-value of <code>current-time</code>; see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>.)  Note that on
-some FAT-based filesystems, only the date of last access is recorded,
-so this time will always hold the midnight of the day of last access.
+      <p>The elements of the list, in order, are:</p>
 
-</li><li> <a name="index-modification-time-of-file"></a>
-The time of last modification as a list of four integers (as above).
-This is the last time when the file&rsquo;s contents were modified.
+      <ol>
+        <li><code>t</code> for a directory, a string for a symbolic
+        link (the name linked to), or <code>nil</code> for a text
+        file.</li>
 
-</li><li> The time of last status change as a list of four integers (as above).
-This is the time of the last change to the file&rsquo;s access mode bits,
-its owner and group, and other information recorded in the filesystem
-for the file, beyond the file&rsquo;s contents.
+        <li>The number of names the file has. Alternate names, also
+        known as hard links, can be created by using the
+        <code>add-name-to-file</code> function (see <a href=
+        "Changing-Files.html#Changing-Files">Changing
+        Files</a>).</li>
 
-</li><li> The size of the file in bytes.  This is floating point if the size is
-too large to fit in a Lisp integer.
+        <li>The file&rsquo;s <acronym>UID</acronym>, normally as a
+        string. However, if it does not correspond to a named user,
+        the value is a number.</li>
 
-</li><li> The file&rsquo;s modes, as a string of ten letters or dashes,
-as in &lsquo;<samp>ls -l</samp>&rsquo;.
+        <li>The file&rsquo;s <acronym>GID</acronym>, likewise.</li>
 
-</li><li> An unspecified value, present for backward compatibility.
+        <li>The time of last access, as a list of four integers
+        <code>(<var>sec-high</var> <var>sec-low</var>
+        <var>microsec</var> <var>picosec</var>)</code>. (This is
+        similar to the value of <code>current-time</code>; see
+        <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>.)
+        Note that on some FAT-based filesystems, only the date of
+        last access is recorded, so this time will always hold the
+        midnight of the day of last access.</li>
 
-</li><li> The file&rsquo;s inode number.  If possible, this is an integer.  If the
-inode number is too large to be represented as an integer in Emacs
-Lisp but dividing it by <em>2^{16}</em> yields a representable integer,
-then the value has the
-form <code>(<var>high</var> . <var>low</var>)</code>, where <var>low</var> holds the low 16
-bits.  If the inode number is too wide for even that, the value is of the form
-<code>(<var>high</var> <var>middle</var> . <var>low</var>)</code>, where <code>high</code> holds
-the high bits, <var>middle</var> the middle 24 bits, and <var>low</var> the low
-16 bits.
+        <li><a name="index-modification-time-of-file" id=
+        "index-modification-time-of-file"></a> The time of last
+        modification as a list of four integers (as above). This is
+        the last time when the file&rsquo;s contents were
+        modified.</li>
 
-</li><li> The filesystem number of the device that the file is on.  Depending on
-the magnitude of the value, this can be either an integer or a cons
-cell, in the same manner as the inode number.  This element and the
-file&rsquo;s inode number together give enough information to distinguish
-any two files on the system&mdash;no two files can have the same values
-for both of these numbers.
-</li></ol>
+        <li>The time of last status change as a list of four
+        integers (as above). This is the time of the last change to
+        the file&rsquo;s access mode bits, its owner and group, and
+        other information recorded in the filesystem for the file,
+        beyond the file&rsquo;s contents.</li>
 
-<p>For example, here are the file attributes for <samp>files.texi</samp>:
-</p>
-<div class="example">
-<pre class="example">(file-attributes &quot;files.texi&quot; 'string)
-     &rArr;  (nil 1 &quot;lh&quot; &quot;users&quot;
+        <li>The size of the file in bytes. This is floating point
+        if the size is too large to fit in a Lisp integer.</li>
+
+        <li>The file&rsquo;s modes, as a string of ten letters or
+        dashes, as in &lsquo;<samp>ls -l</samp>&rsquo;.</li>
+
+        <li>An unspecified value, present for backward
+        compatibility.</li>
+
+        <li>The file&rsquo;s inode number. If possible, this is an
+        integer. If the inode number is too large to be represented
+        as an integer in Emacs Lisp but dividing it by
+        <em>2^{16}</em> yields a representable integer, then the
+        value has the form <code>(<var>high</var> .
+        <var>low</var>)</code>, where <var>low</var> holds the low
+        16 bits. If the inode number is too wide for even that, the
+        value is of the form <code>(<var>high</var>
+        <var>middle</var> . <var>low</var>)</code>, where
+        <code>high</code> holds the high bits, <var>middle</var>
+        the middle 24 bits, and <var>low</var> the low 16
+        bits.</li>
+
+        <li>The filesystem number of the device that the file is
+        on. Depending on the magnitude of the value, this can be
+        either an integer or a cons cell, in the same manner as the
+        inode number. This element and the file&rsquo;s inode
+        number together give enough information to distinguish any
+        two files on the system&mdash;no two files can have the
+        same values for both of these numbers.</li>
+      </ol>
+
+      <p>For example, here are the file attributes for
+      <samp>files.texi</samp>:</p>
+
+      <div class="example">
+        <pre class="example">
+(file-attributes "files.texi" 'string)
+     &rArr;  (nil 1 "lh" "users"
           (20614 64019 50040 152000)
           (20000 23 0 0)
           (20614 64555 902289 872000)
-          122295 &quot;-rw-rw-rw-&quot;
+          122295 "-rw-rw-rw-"
           t (5888 2 . 43978)
           (15479 . 46724))
-</pre></div>
+</pre>
+      </div>
 
-<p>and here is how the result is interpreted:
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>is neither a directory nor a symbolic link.
-</p>
-</dd>
-<dt><code>1</code></dt>
-<dd><p>has only one name (the name <samp>files.texi</samp> in the current default
-directory).
-</p>
-</dd>
-<dt><code>&quot;lh&quot;</code></dt>
-<dd><p>is owned by the user with name &lsquo;<samp>lh</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>&quot;users&quot;</code></dt>
-<dd><p>is in the group with name &lsquo;<samp>users</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>(20614 64019 50040 152000)</code></dt>
-<dd><p>was last accessed on October 23, 2012, at 20:12:03.050040152 UTC.
-</p>
-</dd>
-<dt><code>(20000 23 0 0)</code></dt>
-<dd><p>was last modified on July 15, 2001, at 08:53:43 UTC.
-</p>
-</dd>
-<dt><code>(20614 64555 902289 872000)</code></dt>
-<dd><p>last had its status changed on October 23, 2012, at 20:20:59.902289872 UTC.
-</p>
-</dd>
-<dt><code>122295</code></dt>
-<dd><p>is 122295 bytes long.  (It may not contain 122295 characters, though,
-if some of the bytes belong to multibyte sequences, and also if the
-end-of-line format is CR-LF.)
-</p>
-</dd>
-<dt><code>&quot;-rw-rw-rw-&quot;</code></dt>
-<dd><p>has a mode of read and write access for the owner, group, and world.
-</p>
-</dd>
-<dt><code>t</code></dt>
-<dd><p>is merely a placeholder; it carries no information.
-</p>
-</dd>
-<dt><code>(5888 2 . 43978)</code></dt>
-<dd><p>has an inode number of 6473924464520138.
-</p>
-</dd>
-<dt><code>(15479 . 46724)</code></dt>
-<dd><p>is on the file-system device whose number is 1014478468.
-</p></dd>
-</dl>
-</dd></dl>
+      <p>and here is how the result is interpreted:</p>
 
-<dl>
-<dt><a name="index-file_002dnlinks"></a>Function: <strong>file-nlinks</strong> <em>filename</em></dt>
-<dd><p>This function returns the number of names (i.e., hard links) that
-file <var>filename</var> has.  If the file does not exist, this function
-returns <code>nil</code>.  Note that symbolic links have no effect on this
-function, because they are not considered to be names of the files
-they link to.
-</p>
-<div class="example">
-<pre class="example">$ ls -l foo*
+      <dl compact="compact">
+        <dt><code>nil</code></dt>
+
+        <dd>
+          <p>is neither a directory nor a symbolic link.</p>
+        </dd>
+
+        <dt><code>1</code></dt>
+
+        <dd>
+          <p>has only one name (the name <samp>files.texi</samp> in
+          the current default directory).</p>
+        </dd>
+
+        <dt><code>"lh"</code></dt>
+
+        <dd>
+          <p>is owned by the user with name
+          &lsquo;<samp>lh</samp>&rsquo;.</p>
+        </dd>
+
+        <dt><code>"users"</code></dt>
+
+        <dd>
+          <p>is in the group with name
+          &lsquo;<samp>users</samp>&rsquo;.</p>
+        </dd>
+
+        <dt><code>(20614 64019 50040 152000)</code></dt>
+
+        <dd>
+          <p>was last accessed on October 23, 2012, at
+          20:12:03.050040152 UTC.</p>
+        </dd>
+
+        <dt><code>(20000 23 0 0)</code></dt>
+
+        <dd>
+          <p>was last modified on July 15, 2001, at 08:53:43
+          UTC.</p>
+        </dd>
+
+        <dt><code>(20614 64555 902289 872000)</code></dt>
+
+        <dd>
+          <p>last had its status changed on October 23, 2012, at
+          20:20:59.902289872 UTC.</p>
+        </dd>
+
+        <dt><code>122295</code></dt>
+
+        <dd>
+          <p>is 122295 bytes long. (It may not contain 122295
+          characters, though, if some of the bytes belong to
+          multibyte sequences, and also if the end-of-line format
+          is CR-LF.)</p>
+        </dd>
+
+        <dt><code>"-rw-rw-rw-"</code></dt>
+
+        <dd>
+          <p>has a mode of read and write access for the owner,
+          group, and world.</p>
+        </dd>
+
+        <dt><code>t</code></dt>
+
+        <dd>
+          <p>is merely a placeholder; it carries no
+          information.</p>
+        </dd>
+
+        <dt><code>(5888 2 . 43978)</code></dt>
+
+        <dd>
+          <p>has an inode number of 6473924464520138.</p>
+        </dd>
+
+        <dt><code>(15479 . 46724)</code></dt>
+
+        <dd>
+          <p>is on the file-system device whose number is
+          1014478468.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-file_002dnlinks" id=
+    "index-file_002dnlinks"></a>Function:
+    <strong>file-nlinks</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This function returns the number of names (i.e., hard
+      links) that file <var>filename</var> has. If the file does
+      not exist, this function returns <code>nil</code>. Note that
+      symbolic links have no effect on this function, because they
+      are not considered to be names of the files they link to.</p>
+
+      <div class="example">
+        <pre class="example">
+$ ls -l foo*
 -rw-rw-rw- 2 rms rms 4 Aug 19 01:27 foo
 -rw-rw-rw- 2 rms rms 4 Aug 19 01:27 foo1
-</pre><pre class="example">
-</pre><pre class="example">(file-nlinks &quot;foo&quot;)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(file-nlinks "foo")
      &rArr; 2
-</pre><pre class="example">(file-nlinks &quot;doesnt-exist&quot;)
+</pre>
+        <pre class="example">
+(file-nlinks "doesnt-exist")
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Extended-Attributes.html#Extended-Attributes" accesskey="n" rel="next">Extended Attributes</a>, Previous: <a href="Truenames.html#Truenames" accesskey="p" rel="prev">Truenames</a>, Up: <a href="Information-about-Files.html#Information-about-Files" accesskey="u" rel="up">Information about Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Extended-Attributes.html#Extended-Attributes"
+    accesskey="n" rel="next">Extended Attributes</a>, Previous:
+    <a href="Truenames.html#Truenames" accesskey="p" rel=
+    "prev">Truenames</a>, Up: <a href=
+    "Information-about-Files.html#Information-about-Files"
+    accesskey="u" rel="up">Information about Files</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,104 +19,139 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Macro Forms</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Macro Forms">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Macro Forms">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Forms.html#Forms" rel="up" title="Forms">
-<link href="Special-Forms.html#Special-Forms" rel="next" title="Special Forms">
-<link href="Function-Forms.html#Function-Forms" rel="prev" title="Function Forms">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Macro Forms</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Macro Forms" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Macro Forms" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Forms.html#Forms" rel="up" title="Forms" />
+  <link href="Special-Forms.html#Special-Forms" rel="next" title=
+  "Special Forms" />
+  <link href="Function-Forms.html#Function-Forms" rel="prev" title=
+  "Function Forms" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Macro-Forms" id="Macro-Forms"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Special-Forms.html#Special-Forms" accesskey=
+    "n" rel="next">Special Forms</a>, Previous: <a href=
+    "Function-Forms.html#Function-Forms" accesskey="p" rel=
+    "prev">Function Forms</a>, Up: <a href="Forms.html#Forms"
+    accesskey="u" rel="up">Forms</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Lisp-Macro-Evaluation" id="Lisp-Macro-Evaluation"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Macro-Forms"></a>
-<div class="header">
-<p>
-Next: <a href="Special-Forms.html#Special-Forms" accesskey="n" rel="next">Special Forms</a>, Previous: <a href="Function-Forms.html#Function-Forms" accesskey="p" rel="prev">Function Forms</a>, Up: <a href="Forms.html#Forms" accesskey="u" rel="up">Forms</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Lisp-Macro-Evaluation"></a>
-<h4 class="subsection">9.2.6 Lisp Macro Evaluation</h4>
-<a name="index-macro-call-evaluation"></a>
+  <h4 class="subsection">9.2.6 Lisp Macro Evaluation</h4><a name=
+  "index-macro-call-evaluation" id=
+  "index-macro-call-evaluation"></a>
 
-<p>If the first element of a list being evaluated is a macro object, then
-the list is a <em>macro call</em>.  When a macro call is evaluated, the
-elements of the rest of the list are <em>not</em> initially evaluated.
-Instead, these elements themselves are used as the arguments of the
-macro.  The macro definition computes a replacement form, called the
-<em>expansion</em> of the macro, to be evaluated in place of the original
-form.  The expansion may be any sort of form: a self-evaluating
-constant, a symbol, or a list.  If the expansion is itself a macro call,
-this process of expansion repeats until some other sort of form results.
-</p>
-<p>Ordinary evaluation of a macro call finishes by evaluating the
-expansion.  However, the macro expansion is not necessarily evaluated
-right away, or at all, because other programs also expand macro calls,
-and they may or may not evaluate the expansions.
-</p>
-<p>Normally, the argument expressions are not evaluated as part of
-computing the macro expansion, but instead appear as part of the
-expansion, so they are computed when the expansion is evaluated.
-</p>
-<p>For example, given a macro defined as follows:
-</p>
-<div class="example">
-<pre class="example">(defmacro cadr (x)
+  <p>If the first element of a list being evaluated is a macro
+  object, then the list is a <em>macro call</em>. When a macro call
+  is evaluated, the elements of the rest of the list are
+  <em>not</em> initially evaluated. Instead, these elements
+  themselves are used as the arguments of the macro. The macro
+  definition computes a replacement form, called the
+  <em>expansion</em> of the macro, to be evaluated in place of the
+  original form. The expansion may be any sort of form: a
+  self-evaluating constant, a symbol, or a list. If the expansion
+  is itself a macro call, this process of expansion repeats until
+  some other sort of form results.</p>
+
+  <p>Ordinary evaluation of a macro call finishes by evaluating the
+  expansion. However, the macro expansion is not necessarily
+  evaluated right away, or at all, because other programs also
+  expand macro calls, and they may or may not evaluate the
+  expansions.</p>
+
+  <p>Normally, the argument expressions are not evaluated as part
+  of computing the macro expansion, but instead appear as part of
+  the expansion, so they are computed when the expansion is
+  evaluated.</p>
+
+  <p>For example, given a macro defined as follows:</p>
+
+  <div class="example">
+    <pre class="example">
+(defmacro cadr (x)
   (list 'car (list 'cdr x)))
-</pre></div>
+</pre>
+  </div>
 
-<p>an expression such as <code>(cadr (assq 'handler list))</code> is a macro
-call, and its expansion is:
-</p>
-<div class="example">
-<pre class="example">(car (cdr (assq 'handler list)))
-</pre></div>
+  <p>an expression such as <code>(cadr (assq 'handler list))</code>
+  is a macro call, and its expansion is:</p>
 
-<p>Note that the argument <code>(assq 'handler list)</code> appears in the
-expansion.
-</p>
-<p>See <a href="Macros.html#Macros">Macros</a>, for a complete description of Emacs Lisp macros.
-</p>
+  <div class="example">
+    <pre class="example">
+(car (cdr (assq 'handler list)))
+</pre>
+  </div>
 
+  <p>Note that the argument <code>(assq 'handler list)</code>
+  appears in the expansion.</p>
 
-
+  <p>See <a href="Macros.html#Macros">Macros</a>, for a complete
+  description of Emacs Lisp macros.</p>
 </body>
 </html>

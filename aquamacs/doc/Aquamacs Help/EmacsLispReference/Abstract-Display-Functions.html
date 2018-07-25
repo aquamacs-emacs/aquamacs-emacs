@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,222 +19,400 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Abstract Display Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Abstract Display Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Abstract Display Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Abstract-Display.html#Abstract-Display" rel="up" title="Abstract Display">
-<link href="Abstract-Display-Example.html#Abstract-Display-Example" rel="next" title="Abstract Display Example">
-<link href="Abstract-Display.html#Abstract-Display" rel="prev" title="Abstract Display">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Abstract Display
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Abstract Display Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Abstract Display Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Abstract-Display.html#Abstract-Display" rel="up"
+  title="Abstract Display" />
+  <link href=
+  "Abstract-Display-Example.html#Abstract-Display-Example" rel=
+  "next" title="Abstract Display Example" />
+  <link href="Abstract-Display.html#Abstract-Display" rel="prev"
+  title="Abstract Display" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Abstract-Display-Functions" id=
+  "Abstract-Display-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Abstract-Display-Example.html#Abstract-Display-Example"
+    accesskey="n" rel="next">Abstract Display Example</a>, Up:
+    <a href="Abstract-Display.html#Abstract-Display" accesskey="u"
+    rel="up">Abstract Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Abstract-Display-Functions-1" id=
+  "Abstract-Display-Functions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Abstract-Display-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Abstract-Display-Example.html#Abstract-Display-Example" accesskey="n" rel="next">Abstract Display Example</a>, Up: <a href="Abstract-Display.html#Abstract-Display" accesskey="u" rel="up">Abstract Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Abstract-Display-Functions-1"></a>
-<h4 class="subsection">37.20.1 Abstract Display Functions</h4>
+  <h4 class="subsection">37.20.1 Abstract Display Functions</h4>
 
-<p>In this subsection, <var>ewoc</var> and <var>node</var> stand for the
-structures described above (see <a href="Abstract-Display.html#Abstract-Display">Abstract Display</a>), while
-<var>data</var> stands for an arbitrary Lisp object used as a data element.
-</p>
-<dl>
-<dt><a name="index-ewoc_002dcreate"></a>Function: <strong>ewoc-create</strong> <em>pretty-printer &amp;optional header footer nosep</em></dt>
-<dd><p>This constructs and returns a new ewoc, with no nodes (and thus no data
-elements).  <var>pretty-printer</var> should be a function that takes one
-argument, a data element of the sort you plan to use in this ewoc, and
-inserts its textual description at point using <code>insert</code> (and never
-<code>insert-before-markers</code>, because that would interfere with the
-Ewoc package&rsquo;s internal mechanisms).
-</p>
-<p>Normally, a newline is automatically inserted after the header,
-the footer and every node&rsquo;s textual description.  If <var>nosep</var>
-is non-<code>nil</code>, no newline is inserted.  This may be useful for
-displaying an entire ewoc on a single line, for example, or for
-making nodes invisible by arranging for <var>pretty-printer</var>
-to do nothing for those nodes.
-</p>
-<p>An ewoc maintains its text in the buffer that is current when
-you create it, so switch to the intended buffer before calling
-<code>ewoc-create</code>.
-</p></dd></dl>
+  <p>In this subsection, <var>ewoc</var> and <var>node</var> stand
+  for the structures described above (see <a href=
+  "Abstract-Display.html#Abstract-Display">Abstract Display</a>),
+  while <var>data</var> stands for an arbitrary Lisp object used as
+  a data element.</p>
 
-<dl>
-<dt><a name="index-ewoc_002dbuffer"></a>Function: <strong>ewoc-buffer</strong> <em>ewoc</em></dt>
-<dd><p>This returns the buffer where <var>ewoc</var> maintains its text.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-ewoc_002dcreate" id=
+    "index-ewoc_002dcreate"></a>Function:
+    <strong>ewoc-create</strong> <em>pretty-printer &amp;optional
+    header footer nosep</em></dt>
 
-<dl>
-<dt><a name="index-ewoc_002dget_002dhf"></a>Function: <strong>ewoc-get-hf</strong> <em>ewoc</em></dt>
-<dd><p>This returns a cons cell <code>(<var>header</var> . <var>footer</var>)</code>
-made from <var>ewoc</var>&rsquo;s header and footer.
-</p></dd></dl>
+    <dd>
+      <p>This constructs and returns a new ewoc, with no nodes (and
+      thus no data elements). <var>pretty-printer</var> should be a
+      function that takes one argument, a data element of the sort
+      you plan to use in this ewoc, and inserts its textual
+      description at point using <code>insert</code> (and never
+      <code>insert-before-markers</code>, because that would
+      interfere with the Ewoc package&rsquo;s internal
+      mechanisms).</p>
 
-<dl>
-<dt><a name="index-ewoc_002dset_002dhf"></a>Function: <strong>ewoc-set-hf</strong> <em>ewoc header footer</em></dt>
-<dd><p>This sets the header and footer of <var>ewoc</var> to the strings
-<var>header</var> and <var>footer</var>, respectively.
-</p></dd></dl>
+      <p>Normally, a newline is automatically inserted after the
+      header, the footer and every node&rsquo;s textual
+      description. If <var>nosep</var> is non-<code>nil</code>, no
+      newline is inserted. This may be useful for displaying an
+      entire ewoc on a single line, for example, or for making
+      nodes invisible by arranging for <var>pretty-printer</var> to
+      do nothing for those nodes.</p>
 
-<dl>
-<dt><a name="index-ewoc_002denter_002dfirst"></a>Function: <strong>ewoc-enter-first</strong> <em>ewoc data</em></dt>
-<dt><a name="index-ewoc_002denter_002dlast"></a>Function: <strong>ewoc-enter-last</strong> <em>ewoc data</em></dt>
-<dd><p>These add a new node encapsulating <var>data</var>, putting it, respectively,
-at the beginning or end of <var>ewoc</var>&rsquo;s chain of nodes.
-</p></dd></dl>
+      <p>An ewoc maintains its text in the buffer that is current
+      when you create it, so switch to the intended buffer before
+      calling <code>ewoc-create</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ewoc_002denter_002dbefore"></a>Function: <strong>ewoc-enter-before</strong> <em>ewoc node data</em></dt>
-<dt><a name="index-ewoc_002denter_002dafter"></a>Function: <strong>ewoc-enter-after</strong> <em>ewoc node data</em></dt>
-<dd><p>These add a new node encapsulating <var>data</var>, adding it to
-<var>ewoc</var> before or after <var>node</var>, respectively.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-ewoc_002dbuffer" id=
+    "index-ewoc_002dbuffer"></a>Function:
+    <strong>ewoc-buffer</strong> <em>ewoc</em></dt>
 
-<dl>
-<dt><a name="index-ewoc_002dprev"></a>Function: <strong>ewoc-prev</strong> <em>ewoc node</em></dt>
-<dt><a name="index-ewoc_002dnext"></a>Function: <strong>ewoc-next</strong> <em>ewoc node</em></dt>
-<dd><p>These return, respectively, the previous node and the next node of <var>node</var>
-in <var>ewoc</var>.
-</p></dd></dl>
+    <dd>
+      <p>This returns the buffer where <var>ewoc</var> maintains
+      its text.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ewoc_002dnth"></a>Function: <strong>ewoc-nth</strong> <em>ewoc n</em></dt>
-<dd><p>This returns the node in <var>ewoc</var> found at zero-based index <var>n</var>.
-A negative <var>n</var> means count from the end.  <code>ewoc-nth</code> returns
-<code>nil</code> if <var>n</var> is out of range.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-ewoc_002dget_002dhf" id=
+    "index-ewoc_002dget_002dhf"></a>Function:
+    <strong>ewoc-get-hf</strong> <em>ewoc</em></dt>
 
-<dl>
-<dt><a name="index-ewoc_002ddata"></a>Function: <strong>ewoc-data</strong> <em>node</em></dt>
-<dd><p>This extracts the data encapsulated by <var>node</var> and returns it.
-</p></dd></dl>
+    <dd>
+      <p>This returns a cons cell <code>(<var>header</var> .
+      <var>footer</var>)</code> made from <var>ewoc</var>&rsquo;s
+      header and footer.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ewoc_002dset_002ddata"></a>Function: <strong>ewoc-set-data</strong> <em>node data</em></dt>
-<dd><p>This sets the data encapsulated by <var>node</var> to <var>data</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-ewoc_002dset_002dhf" id=
+    "index-ewoc_002dset_002dhf"></a>Function:
+    <strong>ewoc-set-hf</strong> <em>ewoc header footer</em></dt>
 
-<dl>
-<dt><a name="index-ewoc_002dlocate"></a>Function: <strong>ewoc-locate</strong> <em>ewoc &amp;optional pos guess</em></dt>
-<dd><p>This determines the node in <var>ewoc</var> which contains point (or
-<var>pos</var> if specified), and returns that node.  If <var>ewoc</var> has no
-nodes, it returns <code>nil</code>.  If <var>pos</var> is before the first node,
-it returns the first node; if <var>pos</var> is after the last node, it returns
-the last node.  The optional third arg <var>guess</var>
-should be a node that is likely to be near <var>pos</var>; this doesn&rsquo;t
-alter the result, but makes the function run faster.
-</p></dd></dl>
+    <dd>
+      <p>This sets the header and footer of <var>ewoc</var> to the
+      strings <var>header</var> and <var>footer</var>,
+      respectively.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ewoc_002dlocation"></a>Function: <strong>ewoc-location</strong> <em>node</em></dt>
-<dd><p>This returns the start position of <var>node</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-ewoc_002denter_002dfirst" id=
+    "index-ewoc_002denter_002dfirst"></a>Function:
+    <strong>ewoc-enter-first</strong> <em>ewoc data</em></dt>
 
-<dl>
-<dt><a name="index-ewoc_002dgoto_002dprev"></a>Function: <strong>ewoc-goto-prev</strong> <em>ewoc arg</em></dt>
-<dt><a name="index-ewoc_002dgoto_002dnext"></a>Function: <strong>ewoc-goto-next</strong> <em>ewoc arg</em></dt>
-<dd><p>These move point to the previous or next, respectively, <var>arg</var>th node
-in <var>ewoc</var>.  <code>ewoc-goto-prev</code> does not move if it is already at
-the first node or if <var>ewoc</var> is empty, whereas <code>ewoc-goto-next</code>
-moves past the last node, returning <code>nil</code>.  Excepting this special
-case, these functions return the node moved to.
-</p></dd></dl>
+    <dt><a name="index-ewoc_002denter_002dlast" id=
+    "index-ewoc_002denter_002dlast"></a>Function:
+    <strong>ewoc-enter-last</strong> <em>ewoc data</em></dt>
 
-<dl>
-<dt><a name="index-ewoc_002dgoto_002dnode"></a>Function: <strong>ewoc-goto-node</strong> <em>ewoc node</em></dt>
-<dd><p>This moves point to the start of <var>node</var> in <var>ewoc</var>.
-</p></dd></dl>
+    <dd>
+      <p>These add a new node encapsulating <var>data</var>,
+      putting it, respectively, at the beginning or end of
+      <var>ewoc</var>&rsquo;s chain of nodes.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ewoc_002drefresh"></a>Function: <strong>ewoc-refresh</strong> <em>ewoc</em></dt>
-<dd><p>This function regenerates the text of <var>ewoc</var>.  It works by
-deleting the text between the header and the footer, i.e., all the
-data elements&rsquo; representations, and then calling the pretty-printer
-function for each node, one by one, in order.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-ewoc_002denter_002dbefore" id=
+    "index-ewoc_002denter_002dbefore"></a>Function:
+    <strong>ewoc-enter-before</strong> <em>ewoc node data</em></dt>
 
-<dl>
-<dt><a name="index-ewoc_002dinvalidate"></a>Function: <strong>ewoc-invalidate</strong> <em>ewoc &amp;rest nodes</em></dt>
-<dd><p>This is similar to <code>ewoc-refresh</code>, except that only <var>nodes</var> in
-<var>ewoc</var> are updated instead of the entire set.
-</p></dd></dl>
+    <dt><a name="index-ewoc_002denter_002dafter" id=
+    "index-ewoc_002denter_002dafter"></a>Function:
+    <strong>ewoc-enter-after</strong> <em>ewoc node data</em></dt>
 
-<dl>
-<dt><a name="index-ewoc_002ddelete"></a>Function: <strong>ewoc-delete</strong> <em>ewoc &amp;rest nodes</em></dt>
-<dd><p>This deletes each node in <var>nodes</var> from <var>ewoc</var>.
-</p></dd></dl>
+    <dd>
+      <p>These add a new node encapsulating <var>data</var>, adding
+      it to <var>ewoc</var> before or after <var>node</var>,
+      respectively.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ewoc_002dfilter"></a>Function: <strong>ewoc-filter</strong> <em>ewoc predicate &amp;rest args</em></dt>
-<dd><p>This calls <var>predicate</var> for each data element in <var>ewoc</var> and
-deletes those nodes for which <var>predicate</var> returns <code>nil</code>.
-Any <var>args</var> are passed to <var>predicate</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-ewoc_002dprev" id=
+    "index-ewoc_002dprev"></a>Function: <strong>ewoc-prev</strong>
+    <em>ewoc node</em></dt>
 
-<dl>
-<dt><a name="index-ewoc_002dcollect"></a>Function: <strong>ewoc-collect</strong> <em>ewoc predicate &amp;rest args</em></dt>
-<dd><p>This calls <var>predicate</var> for each data element in <var>ewoc</var>
-and returns a list of those elements for which <var>predicate</var>
-returns non-<code>nil</code>.  The elements in the list are ordered
-as in the buffer.  Any <var>args</var> are passed to <var>predicate</var>.
-</p></dd></dl>
+    <dt><a name="index-ewoc_002dnext" id=
+    "index-ewoc_002dnext"></a>Function: <strong>ewoc-next</strong>
+    <em>ewoc node</em></dt>
 
-<dl>
-<dt><a name="index-ewoc_002dmap"></a>Function: <strong>ewoc-map</strong> <em>map-function ewoc &amp;rest args</em></dt>
-<dd><p>This calls <var>map-function</var> for each data element in <var>ewoc</var> and
-updates those nodes for which <var>map-function</var> returns non-<code>nil</code>.
-Any <var>args</var> are passed to <var>map-function</var>.
-</p></dd></dl>
+    <dd>
+      <p>These return, respectively, the previous node and the next
+      node of <var>node</var> in <var>ewoc</var>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Abstract-Display-Example.html#Abstract-Display-Example" accesskey="n" rel="next">Abstract Display Example</a>, Up: <a href="Abstract-Display.html#Abstract-Display" accesskey="u" rel="up">Abstract Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-ewoc_002dnth" id=
+    "index-ewoc_002dnth"></a>Function: <strong>ewoc-nth</strong>
+    <em>ewoc n</em></dt>
 
+    <dd>
+      <p>This returns the node in <var>ewoc</var> found at
+      zero-based index <var>n</var>. A negative <var>n</var> means
+      count from the end. <code>ewoc-nth</code> returns
+      <code>nil</code> if <var>n</var> is out of range.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-ewoc_002ddata" id=
+    "index-ewoc_002ddata"></a>Function: <strong>ewoc-data</strong>
+    <em>node</em></dt>
 
+    <dd>
+      <p>This extracts the data encapsulated by <var>node</var> and
+      returns it.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ewoc_002dset_002ddata" id=
+    "index-ewoc_002dset_002ddata"></a>Function:
+    <strong>ewoc-set-data</strong> <em>node data</em></dt>
+
+    <dd>
+      <p>This sets the data encapsulated by <var>node</var> to
+      <var>data</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ewoc_002dlocate" id=
+    "index-ewoc_002dlocate"></a>Function:
+    <strong>ewoc-locate</strong> <em>ewoc &amp;optional pos
+    guess</em></dt>
+
+    <dd>
+      <p>This determines the node in <var>ewoc</var> which contains
+      point (or <var>pos</var> if specified), and returns that
+      node. If <var>ewoc</var> has no nodes, it returns
+      <code>nil</code>. If <var>pos</var> is before the first node,
+      it returns the first node; if <var>pos</var> is after the
+      last node, it returns the last node. The optional third arg
+      <var>guess</var> should be a node that is likely to be near
+      <var>pos</var>; this doesn&rsquo;t alter the result, but
+      makes the function run faster.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ewoc_002dlocation" id=
+    "index-ewoc_002dlocation"></a>Function:
+    <strong>ewoc-location</strong> <em>node</em></dt>
+
+    <dd>
+      <p>This returns the start position of <var>node</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ewoc_002dgoto_002dprev" id=
+    "index-ewoc_002dgoto_002dprev"></a>Function:
+    <strong>ewoc-goto-prev</strong> <em>ewoc arg</em></dt>
+
+    <dt><a name="index-ewoc_002dgoto_002dnext" id=
+    "index-ewoc_002dgoto_002dnext"></a>Function:
+    <strong>ewoc-goto-next</strong> <em>ewoc arg</em></dt>
+
+    <dd>
+      <p>These move point to the previous or next, respectively,
+      <var>arg</var>th node in <var>ewoc</var>.
+      <code>ewoc-goto-prev</code> does not move if it is already at
+      the first node or if <var>ewoc</var> is empty, whereas
+      <code>ewoc-goto-next</code> moves past the last node,
+      returning <code>nil</code>. Excepting this special case,
+      these functions return the node moved to.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ewoc_002dgoto_002dnode" id=
+    "index-ewoc_002dgoto_002dnode"></a>Function:
+    <strong>ewoc-goto-node</strong> <em>ewoc node</em></dt>
+
+    <dd>
+      <p>This moves point to the start of <var>node</var> in
+      <var>ewoc</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ewoc_002drefresh" id=
+    "index-ewoc_002drefresh"></a>Function:
+    <strong>ewoc-refresh</strong> <em>ewoc</em></dt>
+
+    <dd>
+      <p>This function regenerates the text of <var>ewoc</var>. It
+      works by deleting the text between the header and the footer,
+      i.e., all the data elements&rsquo; representations, and then
+      calling the pretty-printer function for each node, one by
+      one, in order.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ewoc_002dinvalidate" id=
+    "index-ewoc_002dinvalidate"></a>Function:
+    <strong>ewoc-invalidate</strong> <em>ewoc &amp;rest
+    nodes</em></dt>
+
+    <dd>
+      <p>This is similar to <code>ewoc-refresh</code>, except that
+      only <var>nodes</var> in <var>ewoc</var> are updated instead
+      of the entire set.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ewoc_002ddelete" id=
+    "index-ewoc_002ddelete"></a>Function:
+    <strong>ewoc-delete</strong> <em>ewoc &amp;rest nodes</em></dt>
+
+    <dd>
+      <p>This deletes each node in <var>nodes</var> from
+      <var>ewoc</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ewoc_002dfilter" id=
+    "index-ewoc_002dfilter"></a>Function:
+    <strong>ewoc-filter</strong> <em>ewoc predicate &amp;rest
+    args</em></dt>
+
+    <dd>
+      <p>This calls <var>predicate</var> for each data element in
+      <var>ewoc</var> and deletes those nodes for which
+      <var>predicate</var> returns <code>nil</code>. Any
+      <var>args</var> are passed to <var>predicate</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ewoc_002dcollect" id=
+    "index-ewoc_002dcollect"></a>Function:
+    <strong>ewoc-collect</strong> <em>ewoc predicate &amp;rest
+    args</em></dt>
+
+    <dd>
+      <p>This calls <var>predicate</var> for each data element in
+      <var>ewoc</var> and returns a list of those elements for
+      which <var>predicate</var> returns non-<code>nil</code>. The
+      elements in the list are ordered as in the buffer. Any
+      <var>args</var> are passed to <var>predicate</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ewoc_002dmap" id=
+    "index-ewoc_002dmap"></a>Function: <strong>ewoc-map</strong>
+    <em>map-function ewoc &amp;rest args</em></dt>
+
+    <dd>
+      <p>This calls <var>map-function</var> for each data element
+      in <var>ewoc</var> and updates those nodes for which
+      <var>map-function</var> returns non-<code>nil</code>. Any
+      <var>args</var> are passed to <var>map-function</var>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Abstract-Display-Example.html#Abstract-Display-Example"
+    accesskey="n" rel="next">Abstract Display Example</a>, Up:
+    <a href="Abstract-Display.html#Abstract-Display" accesskey="u"
+    rel="up">Abstract Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

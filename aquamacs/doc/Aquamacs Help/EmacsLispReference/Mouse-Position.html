@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,155 +19,252 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Mouse Position</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Mouse Position">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Mouse Position">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Frames.html#Frames" rel="up" title="Frames">
-<link href="Pop_002dUp-Menus.html#Pop_002dUp-Menus" rel="next" title="Pop-Up Menus">
-<link href="Mouse-Tracking.html#Mouse-Tracking" rel="prev" title="Mouse Tracking">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Mouse Position</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Mouse Position" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Mouse Position" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Frames.html#Frames" rel="up" title="Frames" />
+  <link href="Pop_002dUp-Menus.html#Pop_002dUp-Menus" rel="next"
+  title="Pop-Up Menus" />
+  <link href="Mouse-Tracking.html#Mouse-Tracking" rel="prev" title=
+  "Mouse Tracking" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Mouse-Position" id="Mouse-Position"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Pop_002dUp-Menus.html#Pop_002dUp-Menus"
+    accesskey="n" rel="next">Pop-Up Menus</a>, Previous: <a href=
+    "Mouse-Tracking.html#Mouse-Tracking" accesskey="p" rel=
+    "prev">Mouse Tracking</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Mouse-Position-1" id="Mouse-Position-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Mouse-Position"></a>
-<div class="header">
-<p>
-Next: <a href="Pop_002dUp-Menus.html#Pop_002dUp-Menus" accesskey="n" rel="next">Pop-Up Menus</a>, Previous: <a href="Mouse-Tracking.html#Mouse-Tracking" accesskey="p" rel="prev">Mouse Tracking</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Mouse-Position-1"></a>
-<h3 class="section">28.15 Mouse Position</h3>
-<a name="index-mouse-position"></a>
-<a name="index-position-of-mouse"></a>
+  <h3 class="section">28.15 Mouse Position</h3><a name=
+  "index-mouse-position" id="index-mouse-position"></a> <a name=
+  "index-position-of-mouse" id="index-position-of-mouse"></a>
 
-<p>The functions <code>mouse-position</code> and <code>set-mouse-position</code>
-give access to the current position of the mouse.
-</p>
-<dl>
-<dt><a name="index-mouse_002dposition"></a>Function: <strong>mouse-position</strong></dt>
-<dd><p>This function returns a description of the position of the mouse.  The
-value looks like <code>(<var>frame</var> <var>x</var> . <var>y</var>)</code>, where <var>x</var>
-and <var>y</var> are integers giving the (possibly rounded) position in
-multiples of the default character size of <var>frame</var> (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>) relative to the native position of <var>frame</var> (see <a href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>).
-</p></dd></dl>
+  <p>The functions <code>mouse-position</code> and
+  <code>set-mouse-position</code> give access to the current
+  position of the mouse.</p>
 
-<dl>
-<dt><a name="index-mouse_002dposition_002dfunction"></a>Variable: <strong>mouse-position-function</strong></dt>
-<dd><p>If non-<code>nil</code>, the value of this variable is a function for
-<code>mouse-position</code> to call.  <code>mouse-position</code> calls this
-function just before returning, with its normal return value as the
-sole argument, and it returns whatever this function returns to it.
-</p>
-<p>This abnormal hook exists for the benefit of packages like
-<samp>xt-mouse.el</samp> that need to do mouse handling at the Lisp level.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-mouse_002dposition" id=
+    "index-mouse_002dposition"></a>Function:
+    <strong>mouse-position</strong></dt>
 
-<dl>
-<dt><a name="index-set_002dmouse_002dposition"></a>Function: <strong>set-mouse-position</strong> <em>frame x y</em></dt>
-<dd><p>This function <em>warps the mouse</em> to position <var>x</var>, <var>y</var> in
-frame <var>frame</var>.  The arguments <var>x</var> and <var>y</var> are integers,
-giving the position in multiples of the default character size of
-<var>frame</var> (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>) relative to the native position of
-<var>frame</var> (see <a href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>).
-</p>
-<p>The resulting mouse position is constrained to the native frame of
-<var>frame</var>.  If <var>frame</var> is not visible, this function does nothing.
-The return value is not significant.
-</p></dd></dl>
+    <dd>
+      <p>This function returns a description of the position of the
+      mouse. The value looks like <code>(<var>frame</var>
+      <var>x</var> . <var>y</var>)</code>, where <var>x</var> and
+      <var>y</var> are integers giving the (possibly rounded)
+      position in multiples of the default character size of
+      <var>frame</var> (see <a href=
+      "Frame-Font.html#Frame-Font">Frame Font</a>) relative to the
+      native position of <var>frame</var> (see <a href=
+      "Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>).</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-mouse_002dpixel_002dposition"></a>Function: <strong>mouse-pixel-position</strong></dt>
-<dd><p>This function is like <code>mouse-position</code> except that it returns
-coordinates in units of pixels rather than units of characters.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-mouse_002dposition_002dfunction" id=
+    "index-mouse_002dposition_002dfunction"></a>Variable:
+    <strong>mouse-position-function</strong></dt>
 
-<dl>
-<dt><a name="index-set_002dmouse_002dpixel_002dposition"></a>Function: <strong>set-mouse-pixel-position</strong> <em>frame x y</em></dt>
-<dd><p>This function warps the mouse like <code>set-mouse-position</code> except that
-<var>x</var> and <var>y</var> are in units of pixels rather than units of
-characters.
-</p>
-<p>The resulting mouse position is not constrained to the native frame of
-<var>frame</var>.  If <var>frame</var> is not visible, this function does nothing.
-The return value is not significant.
-</p></dd></dl>
+    <dd>
+      <p>If non-<code>nil</code>, the value of this variable is a
+      function for <code>mouse-position</code> to call.
+      <code>mouse-position</code> calls this function just before
+      returning, with its normal return value as the sole argument,
+      and it returns whatever this function returns to it.</p>
 
-<p>On a graphical terminal the following two functions allow the absolute
-position of the mouse cursor to be retrieved and set.
-</p>
-<dl>
-<dt><a name="index-mouse_002dabsolute_002dpixel_002dposition"></a>Function: <strong>mouse-absolute-pixel-position</strong></dt>
-<dd><p>This function returns a cons cell (<var>x</var> . <var>y</var>) of the coordinates
-of the mouse cursor position in pixels, relative to a position (0, 0) of
-the selected frame&rsquo;s display.
-</p></dd></dl>
+      <p>This abnormal hook exists for the benefit of packages like
+      <samp>xt-mouse.el</samp> that need to do mouse handling at
+      the Lisp level.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-set_002dmouse_002dabsolute_002dpixel_002dposition"></a>Function: <strong>set-mouse-absolute-pixel-position</strong> <em>x y</em></dt>
-<dd><p>This function moves the mouse cursor to the position (<var>x</var>, <var>y</var>).
-The coordinates <var>x</var> and <var>y</var> are interpreted in pixels relative
-to a position (0, 0) of the selected frame&rsquo;s display.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dmouse_002dposition" id=
+    "index-set_002dmouse_002dposition"></a>Function:
+    <strong>set-mouse-position</strong> <em>frame x y</em></dt>
 
-<p>The following function can tell whether the mouse cursor is currently
-visible on a frame:
-</p>
-<dl>
-<dt><a name="index-frame_002dpointer_002dvisible_002dp"></a>Function: <strong>frame-pointer-visible-p</strong> <em>&amp;optional frame</em></dt>
-<dd><p>This predicate function returns non-<code>nil</code> if the mouse pointer
-displayed on <var>frame</var> is visible; otherwise it returns <code>nil</code>.
-<var>frame</var> omitted or <code>nil</code> means the selected frame.  This is
-useful when <code>make-pointer-invisible</code> is set to <code>t</code>: it
-allows you to know if the pointer has been hidden.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Mouse-Avoidance.html#Mouse-Avoidance">Mouse Avoidance</a> in <cite>The Emacs Manual</cite>.
-</p></dd></dl>
+    <dd>
+      <p>This function <em>warps the mouse</em> to position
+      <var>x</var>, <var>y</var> in frame <var>frame</var>. The
+      arguments <var>x</var> and <var>y</var> are integers, giving
+      the position in multiples of the default character size of
+      <var>frame</var> (see <a href=
+      "Frame-Font.html#Frame-Font">Frame Font</a>) relative to the
+      native position of <var>frame</var> (see <a href=
+      "Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>).</p>
 
+      <p>The resulting mouse position is constrained to the native
+      frame of <var>frame</var>. If <var>frame</var> is not
+      visible, this function does nothing. The return value is not
+      significant.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Pop_002dUp-Menus.html#Pop_002dUp-Menus" accesskey="n" rel="next">Pop-Up Menus</a>, Previous: <a href="Mouse-Tracking.html#Mouse-Tracking" accesskey="p" rel="prev">Mouse Tracking</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-mouse_002dpixel_002dposition" id=
+    "index-mouse_002dpixel_002dposition"></a>Function:
+    <strong>mouse-pixel-position</strong></dt>
 
+    <dd>
+      <p>This function is like <code>mouse-position</code> except
+      that it returns coordinates in units of pixels rather than
+      units of characters.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-set_002dmouse_002dpixel_002dposition" id=
+    "index-set_002dmouse_002dpixel_002dposition"></a>Function:
+    <strong>set-mouse-pixel-position</strong> <em>frame x
+    y</em></dt>
 
+    <dd>
+      <p>This function warps the mouse like
+      <code>set-mouse-position</code> except that <var>x</var> and
+      <var>y</var> are in units of pixels rather than units of
+      characters.</p>
+
+      <p>The resulting mouse position is not constrained to the
+      native frame of <var>frame</var>. If <var>frame</var> is not
+      visible, this function does nothing. The return value is not
+      significant.</p>
+    </dd>
+  </dl>
+
+  <p>On a graphical terminal the following two functions allow the
+  absolute position of the mouse cursor to be retrieved and
+  set.</p>
+
+  <dl>
+    <dt><a name="index-mouse_002dabsolute_002dpixel_002dposition"
+    id=
+    "index-mouse_002dabsolute_002dpixel_002dposition"></a>Function:
+    <strong>mouse-absolute-pixel-position</strong></dt>
+
+    <dd>
+      <p>This function returns a cons cell (<var>x</var> .
+      <var>y</var>) of the coordinates of the mouse cursor position
+      in pixels, relative to a position (0, 0) of the selected
+      frame&rsquo;s display.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-set_002dmouse_002dabsolute_002dpixel_002dposition" id=
+    "index-set_002dmouse_002dabsolute_002dpixel_002dposition"></a>Function:
+    <strong>set-mouse-absolute-pixel-position</strong> <em>x
+    y</em></dt>
+
+    <dd>
+      <p>This function moves the mouse cursor to the position
+      (<var>x</var>, <var>y</var>). The coordinates <var>x</var>
+      and <var>y</var> are interpreted in pixels relative to a
+      position (0, 0) of the selected frame&rsquo;s display.</p>
+    </dd>
+  </dl>
+
+  <p>The following function can tell whether the mouse cursor is
+  currently visible on a frame:</p>
+
+  <dl>
+    <dt><a name="index-frame_002dpointer_002dvisible_002dp" id=
+    "index-frame_002dpointer_002dvisible_002dp"></a>Function:
+    <strong>frame-pointer-visible-p</strong> <em>&amp;optional
+    frame</em></dt>
+
+    <dd>
+      <p>This predicate function returns non-<code>nil</code> if
+      the mouse pointer displayed on <var>frame</var> is visible;
+      otherwise it returns <code>nil</code>. <var>frame</var>
+      omitted or <code>nil</code> means the selected frame. This is
+      useful when <code>make-pointer-invisible</code> is set to
+      <code>t</code>: it allows you to know if the pointer has been
+      hidden. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Mouse-Avoidance.html#Mouse-Avoidance">
+      Mouse Avoidance</a> in <cite>The Emacs Manual</cite>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Pop_002dUp-Menus.html#Pop_002dUp-Menus"
+    accesskey="n" rel="next">Pop-Up Menus</a>, Previous: <a href=
+    "Mouse-Tracking.html#Mouse-Tracking" accesskey="p" rel=
+    "prev">Mouse Tracking</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

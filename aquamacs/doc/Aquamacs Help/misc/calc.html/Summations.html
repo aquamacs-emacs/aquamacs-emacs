@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,223 +18,295 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Summations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Summations">
-<meta name="keywords" content="GNU Emacs Calc Manual: Summations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Algebra.html#Algebra" rel="up" title="Algebra">
-<link href="Logical-Operations.html#Logical-Operations" rel="next" title="Logical Operations">
-<link href="Interpolation.html#Interpolation" rel="prev" title="Interpolation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Summations</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Summations" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Summations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Algebra.html#Algebra" rel="up" title="Algebra" />
+  <link href="Logical-Operations.html#Logical-Operations" rel=
+  "next" title="Logical Operations" />
+  <link href="Interpolation.html#Interpolation" rel="prev" title=
+  "Interpolation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Summations"></a>
-<div class="header">
-<p>
-Next: <a href="Logical-Operations.html#Logical-Operations" accesskey="n" rel="next">Logical Operations</a>, Previous: <a href="Curve-Fitting.html#Curve-Fitting" accesskey="p" rel="prev">Curve Fitting</a>, Up: <a href="Algebra.html#Algebra" accesskey="u" rel="up">Algebra</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Summations-1"></a>
-<h3 class="section">10.9 Summations</h3>
+<body lang="en" xml:lang="en">
+  <a name="Summations" id="Summations"></a>
 
-<a name="index-Summation-of-a-series"></a>
-<a name="index-a-_002b"></a>
-<a name="index-calc_002dsummation"></a>
-<a name="index-sum"></a>
-<p>The <kbd>a +</kbd> (<code>calc-summation</code>) [<code>sum</code>] command computes
-the sum of a formula over a certain range of index values.  The formula
-is taken from the top of the stack; the command prompts for the
-name of the summation index variable, the lower limit of the
-sum (any formula), and the upper limit of the sum.  If you
-enter a blank line at any of these prompts, that prompt and
-any later ones are answered by reading additional elements from
-the stack.  Thus, <kbd>' k^2 <span class="key">RET</span> ' k <span class="key">RET</span> 1 <span class="key">RET</span> 5 <span class="key">RET</span> a + <span class="key">RET</span></kbd>
-produces the result 55.
-</p>
-<p>The choice of index variable is arbitrary, but it&rsquo;s best not to
-use a variable with a stored value.  In particular, while
-<code>i</code> is often a favorite index variable, it should be avoided
-in Calc because <code>i</code> has the imaginary constant &lsquo;<samp>(0, 1)</samp>&rsquo;
-as a value.  If you pressed <kbd>=</kbd> on a sum over <code>i</code>, it would
-be changed to a nonsensical sum over the &ldquo;variable&rdquo; &lsquo;<samp>(0, 1)</samp>&rsquo;!
-If you really want to use <code>i</code> as an index variable, use
-<kbd>s&nbsp;u&nbsp;i&nbsp;<span class="key">RET</span></kbd><!-- /@w --> first to &ldquo;unstore&rdquo; this variable.
-(See <a href="Storing-Variables.html#Storing-Variables">Storing Variables</a>.)
-</p>
-<p>A numeric prefix argument steps the index by that amount rather
-than by one.  Thus <kbd>' a_k <span class="key">RET</span> C-u -2 a + k <span class="key">RET</span> 10 <span class="key">RET</span> 0 <span class="key">RET</span></kbd>
-yields &lsquo;<samp>a_10 + a_8 + a_6 + a_4 + a_2 + a_0</samp>&rsquo;.  A prefix
-argument of plain <kbd>C-u</kbd> causes <kbd>a +</kbd> to prompt for the
-step value, in which case you can enter any formula or enter
-a blank line to take the step value from the stack.  With the
-<kbd>C-u</kbd> prefix, <kbd>a +</kbd> can take up to five arguments from
-the stack:  The formula, the variable, the lower limit, the
-upper limit, and (at the top of the stack), the step value.
-</p>
-<p>Calc knows how to do certain sums in closed form.  For example,
-&lsquo;<samp>sum(6 k^2, k, 1, n) = 2&nbsp;n^3<!-- /@w --> + 3 n^2 + n</samp>&rsquo;.  In particular,
-this is possible if the formula being summed is polynomial or
-exponential in the index variable.  Sums of logarithms are
-transformed into logarithms of products.  Sums of trigonometric
-and hyperbolic functions are transformed to sums of exponentials
-and then done in closed form.  Also, of course, sums in which the
-lower and upper limits are both numbers can always be evaluated
-just by grinding them out, although Calc will use closed forms
-whenever it can for the sake of efficiency.
-</p>
-<p>The notation for sums in algebraic formulas is
-&lsquo;<samp>sum(<var>expr</var>, <var>var</var>, <var>low</var>, <var>high</var>, <var>step</var>)</samp>&rsquo;.
-If <var>step</var> is omitted, it defaults to one.  If <var>high</var> is
-omitted, <var>low</var> is actually the upper limit and the lower limit
-is one.  If <var>low</var> is also omitted, the limits are &lsquo;<samp>-inf</samp>&rsquo;
-and &lsquo;<samp>inf</samp>&rsquo;, respectively.
-</p>
-<p>Infinite sums can sometimes be evaluated:  &lsquo;<samp>sum(.5^k, k, 1, inf)</samp>&rsquo;
-returns &lsquo;<samp>1</samp>&rsquo;.  This is done by evaluating the sum in closed
-form (to &lsquo;<samp>1. - 0.5^n</samp>&rsquo; in this case), then evaluating this
-formula with <code>n</code> set to <code>inf</code>.  Calc&rsquo;s usual rules
-for &ldquo;infinite&rdquo; arithmetic can find the answer from there.  If
-infinite arithmetic yields a &lsquo;<samp>nan</samp>&rsquo;, or if the sum cannot be
-solved in closed form, Calc leaves the <code>sum</code> function in
-symbolic form.  See <a href="Infinities.html#Infinities">Infinities</a>.
-</p>
-<p>As a special feature, if the limits are infinite (or omitted, as
-described above) but the formula includes vectors subscripted by
-expressions that involve the iteration variable, Calc narrows
-the limits to include only the range of integers which result in
-valid subscripts for the vector.  For example, the sum
-&lsquo;<samp>sum(k [a,b,c,d,e,f,g]_(2k),k)</samp>&rsquo; evaluates to &lsquo;<samp>b + 2 d + 3 f</samp>&rsquo;.
-</p>
-<p>The limits of a sum do not need to be integers.  For example,
-&lsquo;<samp>sum(a_k, k, 0, 2 n, n)</samp>&rsquo; produces &lsquo;<samp>a_0 + a_n + a_(2 n)</samp>&rsquo;.
-Calc computes the number of iterations using the formula
-&lsquo;<samp>1 + (<var>high</var> - <var>low</var>) / <var>step</var></samp>&rsquo;, which must,
-after algebraic simplification, evaluate to an integer.
-</p>
-<p>If the number of iterations according to the above formula does
-not come out to an integer, the sum is invalid and will be left
-in symbolic form.  However, closed forms are still supplied, and
-you are on your honor not to misuse the resulting formulas by
-substituting mismatched bounds into them.  For example,
-&lsquo;<samp>sum(k, k, 1, 10, 2)</samp>&rsquo; is invalid, but Calc will go ahead and
-evaluate the closed form solution for the limits 1 and 10 to get
-the rather dubious answer, 29.25.
-</p>
-<p>If the lower limit is greater than the upper limit (assuming a
-positive step size), the result is generally zero.  However,
-Calc only guarantees a zero result when the upper limit is
-exactly one step less than the lower limit, i.e., if the number
-of iterations is <i>-1</i>.  Thus &lsquo;<samp>sum(f(k), k, n, n-1)</samp>&rsquo; is zero
-but the sum from &lsquo;<samp>n</samp>&rsquo; to &lsquo;<samp>n-2</samp>&rsquo; may report a nonzero value
-if Calc used a closed form solution.
-</p>
-<p>Calc&rsquo;s logical predicates like &lsquo;<samp>a &lt; b</samp>&rsquo; return 1 for &ldquo;true&rdquo;
-and 0 for &ldquo;false.&rdquo;  See <a href="Logical-Operations.html#Logical-Operations">Logical Operations</a>.  This can be
-used to advantage for building conditional sums.  For example,
-&lsquo;<samp>sum(prime(k)*k^2, k, 1, 20)</samp>&rsquo; is the sum of the squares of all
-prime numbers from 1 to 20; the <code>prime</code> predicate returns 1 if
-its argument is prime and 0 otherwise.  You can read this expression
-as &ldquo;the sum of &lsquo;<samp>k^2</samp>&rsquo;, where &lsquo;<samp>k</samp>&rsquo; is prime.&rdquo;  Indeed,
-&lsquo;<samp>sum(prime(k)*k^2, k)</samp>&rsquo; would represent the sum of <em>all</em> primes
-squared, since the limits default to plus and minus infinity, but
-there are no such sums that Calc&rsquo;s built-in rules can do in
-closed form.
-</p>
-<p>As another example, &lsquo;<samp>sum((k != k_0) * f(k), k, 1, n)</samp>&rsquo; is the
-sum of &lsquo;<samp>f(k)</samp>&rsquo; for all &lsquo;<samp>k</samp>&rsquo; from 1 to &lsquo;<samp>n</samp>&rsquo;, excluding
-one value &lsquo;<samp>k_0</samp>&rsquo;.  Slightly more tricky is the summand
-&lsquo;<samp>(k != k_0) / (k - k_0)</samp>&rsquo;, which is an attempt to describe
-the sum of all &lsquo;<samp>1/(k-k_0)</samp>&rsquo; except at &lsquo;<samp>k = k_0</samp>&rsquo;, where
-this would be a division by zero.  But at &lsquo;<samp>k = k_0</samp>&rsquo;, this
-formula works out to the indeterminate form &lsquo;<samp>0 / 0</samp>&rsquo;, which
-Calc will not assume is zero.  Better would be to use
-&lsquo;<samp>(k != k_0) ? 1/(k-k_0) : 0</samp>&rsquo;; the &lsquo;<samp>? :</samp>&rsquo; operator does
-an &ldquo;if-then-else&rdquo; test:  This expression says, &ldquo;if
-&lsquo;<samp>k != k_0</samp>&rsquo;,
-then &lsquo;<samp>1/(k-k_0)</samp>&rsquo;, else zero.&rdquo;  Now the formula &lsquo;<samp>1/(k-k_0)</samp>&rsquo;
-will not even be evaluated by Calc when &lsquo;<samp>k = k_0</samp>&rsquo;.
-</p>
-<a name="index-Alternating-sums"></a>
-<a name="index-a-_002d"></a>
-<a name="index-calc_002dalt_002dsummation"></a>
-<a name="index-asum"></a>
-<p>The <kbd>a -</kbd> (<code>calc-alt-summation</code>) [<code>asum</code>] command
-computes an alternating sum.  Successive terms of the sequence
-are given alternating signs, with the first term (corresponding
-to the lower index value) being positive.  Alternating sums
-are converted to normal sums with an extra term of the form
-&lsquo;<samp>(-1)^(k-<var>low</var>)</samp>&rsquo;.  This formula is adjusted appropriately
-if the step value is other than one.  For example, the Taylor
-series for the sine function is &lsquo;<samp>asum(x^k / k!, k, 1, inf, 2)</samp>&rsquo;.
-(Calc cannot evaluate this infinite series, but it can approximate
-it if you replace <code>inf</code> with any particular odd number.)
-Calc converts this series to a regular sum with a step of one,
-namely &lsquo;<samp>sum((-1)^k x^(2k+1) / (2k+1)!, k, 0, inf)</samp>&rsquo;.
-</p>
-<a name="index-Product-of-a-sequence"></a>
-<a name="index-a-_002a"></a>
-<a name="index-calc_002dproduct"></a>
-<a name="index-prod"></a>
-<p>The <kbd>a *</kbd> (<code>calc-product</code>) [<code>prod</code>] command is
-the analogous way to take a product of many terms.  Calc also knows
-some closed forms for products, such as &lsquo;<samp>prod(k, k, 1, n) = n!</samp>&rsquo;.
-Conditional products can be written &lsquo;<samp>prod(k^prime(k), k, 1, n)</samp>&rsquo;
-or &lsquo;<samp>prod(prime(k) ? k : 1, k, 1, n)</samp>&rsquo;.
-</p>
-<a name="index-a-T"></a>
-<a name="index-calc_002dtabulate"></a>
-<a name="index-table"></a>
-<p>The <kbd>a T</kbd> (<code>calc-tabulate</code>) [<code>table</code>] command
-evaluates a formula at a series of iterated index values, just
-like <code>sum</code> and <code>prod</code>, but its result is simply a
-vector of the results.  For example, &lsquo;<samp>table(a_i, i, 1, 7, 2)</samp>&rsquo;
-produces &lsquo;<samp>[a_1, a_3, a_5, a_7]</samp>&rsquo;.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Logical-Operations.html#Logical-Operations" accesskey="n" rel="next">Logical Operations</a>, Previous: <a href="Curve-Fitting.html#Curve-Fitting" accesskey="p" rel="prev">Curve Fitting</a>, Up: <a href="Algebra.html#Algebra" accesskey="u" rel="up">Algebra</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Logical-Operations.html#Logical-Operations"
+    accesskey="n" rel="next">Logical Operations</a>, Previous:
+    <a href="Curve-Fitting.html#Curve-Fitting" accesskey="p" rel=
+    "prev">Curve Fitting</a>, Up: <a href="Algebra.html#Algebra"
+    accesskey="u" rel="up">Algebra</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Summations-1" id="Summations-1"></a>
 
+  <h3 class="section">10.9 Summations</h3><a name=
+  "index-Summation-of-a-series" id=
+  "index-Summation-of-a-series"></a> <a name="index-a-_002b" id=
+  "index-a-_002b"></a> <a name="index-calc_002dsummation" id=
+  "index-calc_002dsummation"></a> <a name="index-sum" id=
+  "index-sum"></a>
 
+  <p>The <kbd>a +</kbd> (<code>calc-summation</code>)
+  [<code>sum</code>] command computes the sum of a formula over a
+  certain range of index values. The formula is taken from the top
+  of the stack; the command prompts for the name of the summation
+  index variable, the lower limit of the sum (any formula), and the
+  upper limit of the sum. If you enter a blank line at any of these
+  prompts, that prompt and any later ones are answered by reading
+  additional elements from the stack. Thus, <kbd>' k^2 <span class=
+  "key">RET</span> ' k <span class="key">RET</span> 1 <span class=
+  "key">RET</span> 5 <span class="key">RET</span> a + <span class=
+  "key">RET</span></kbd> produces the result 55.</p>
 
+  <p>The choice of index variable is arbitrary, but it&rsquo;s best
+  not to use a variable with a stored value. In particular, while
+  <code>i</code> is often a favorite index variable, it should be
+  avoided in Calc because <code>i</code> has the imaginary constant
+  &lsquo;<samp>(0, 1)</samp>&rsquo; as a value. If you pressed
+  <kbd>=</kbd> on a sum over <code>i</code>, it would be changed to
+  a nonsensical sum over the &ldquo;variable&rdquo;
+  &lsquo;<samp>(0, 1)</samp>&rsquo;! If you really want to use
+  <code>i</code> as an index variable, use
+  <kbd>s&nbsp;u&nbsp;i&nbsp;<span class="key">RET</span></kbd>
+  <!-- /@w --> first to &ldquo;unstore&rdquo; this variable. (See
+  <a href="Storing-Variables.html#Storing-Variables">Storing
+  Variables</a>.)</p>
+
+  <p>A numeric prefix argument steps the index by that amount
+  rather than by one. Thus <kbd>' a_k <span class="key">RET</span>
+  C-u -2 a + k <span class="key">RET</span> 10 <span class=
+  "key">RET</span> 0 <span class="key">RET</span></kbd> yields
+  &lsquo;<samp>a_10 + a_8 + a_6 + a_4 + a_2 + a_0</samp>&rsquo;. A
+  prefix argument of plain <kbd>C-u</kbd> causes <kbd>a +</kbd> to
+  prompt for the step value, in which case you can enter any
+  formula or enter a blank line to take the step value from the
+  stack. With the <kbd>C-u</kbd> prefix, <kbd>a +</kbd> can take up
+  to five arguments from the stack: The formula, the variable, the
+  lower limit, the upper limit, and (at the top of the stack), the
+  step value.</p>
+
+  <p>Calc knows how to do certain sums in closed form. For example,
+  &lsquo;<samp>sum(6 k^2, k, 1, n) = 2&nbsp;n^3<!-- /@w --> + 3 n^2
+  + n</samp>&rsquo;. In particular, this is possible if the formula
+  being summed is polynomial or exponential in the index variable.
+  Sums of logarithms are transformed into logarithms of products.
+  Sums of trigonometric and hyperbolic functions are transformed to
+  sums of exponentials and then done in closed form. Also, of
+  course, sums in which the lower and upper limits are both numbers
+  can always be evaluated just by grinding them out, although Calc
+  will use closed forms whenever it can for the sake of
+  efficiency.</p>
+
+  <p>The notation for sums in algebraic formulas is
+  &lsquo;<samp>sum(<var>expr</var>, <var>var</var>, <var>low</var>,
+  <var>high</var>, <var>step</var>)</samp>&rsquo;. If
+  <var>step</var> is omitted, it defaults to one. If
+  <var>high</var> is omitted, <var>low</var> is actually the upper
+  limit and the lower limit is one. If <var>low</var> is also
+  omitted, the limits are &lsquo;<samp>-inf</samp>&rsquo; and
+  &lsquo;<samp>inf</samp>&rsquo;, respectively.</p>
+
+  <p>Infinite sums can sometimes be evaluated:
+  &lsquo;<samp>sum(.5^k, k, 1, inf)</samp>&rsquo; returns
+  &lsquo;<samp>1</samp>&rsquo;. This is done by evaluating the sum
+  in closed form (to &lsquo;<samp>1. - 0.5^n</samp>&rsquo; in this
+  case), then evaluating this formula with <code>n</code> set to
+  <code>inf</code>. Calc&rsquo;s usual rules for
+  &ldquo;infinite&rdquo; arithmetic can find the answer from there.
+  If infinite arithmetic yields a &lsquo;<samp>nan</samp>&rsquo;,
+  or if the sum cannot be solved in closed form, Calc leaves the
+  <code>sum</code> function in symbolic form. See <a href=
+  "Infinities.html#Infinities">Infinities</a>.</p>
+
+  <p>As a special feature, if the limits are infinite (or omitted,
+  as described above) but the formula includes vectors subscripted
+  by expressions that involve the iteration variable, Calc narrows
+  the limits to include only the range of integers which result in
+  valid subscripts for the vector. For example, the sum
+  &lsquo;<samp>sum(k [a,b,c,d,e,f,g]_(2k),k)</samp>&rsquo;
+  evaluates to &lsquo;<samp>b + 2 d + 3 f</samp>&rsquo;.</p>
+
+  <p>The limits of a sum do not need to be integers. For example,
+  &lsquo;<samp>sum(a_k, k, 0, 2 n, n)</samp>&rsquo; produces
+  &lsquo;<samp>a_0 + a_n + a_(2 n)</samp>&rsquo;. Calc computes the
+  number of iterations using the formula &lsquo;<samp>1 +
+  (<var>high</var> - <var>low</var>) /
+  <var>step</var></samp>&rsquo;, which must, after algebraic
+  simplification, evaluate to an integer.</p>
+
+  <p>If the number of iterations according to the above formula
+  does not come out to an integer, the sum is invalid and will be
+  left in symbolic form. However, closed forms are still supplied,
+  and you are on your honor not to misuse the resulting formulas by
+  substituting mismatched bounds into them. For example,
+  &lsquo;<samp>sum(k, k, 1, 10, 2)</samp>&rsquo; is invalid, but
+  Calc will go ahead and evaluate the closed form solution for the
+  limits 1 and 10 to get the rather dubious answer, 29.25.</p>
+
+  <p>If the lower limit is greater than the upper limit (assuming a
+  positive step size), the result is generally zero. However, Calc
+  only guarantees a zero result when the upper limit is exactly one
+  step less than the lower limit, i.e., if the number of iterations
+  is <i>-1</i>. Thus &lsquo;<samp>sum(f(k), k, n,
+  n-1)</samp>&rsquo; is zero but the sum from
+  &lsquo;<samp>n</samp>&rsquo; to &lsquo;<samp>n-2</samp>&rsquo;
+  may report a nonzero value if Calc used a closed form
+  solution.</p>
+
+  <p>Calc&rsquo;s logical predicates like &lsquo;<samp>a &lt;
+  b</samp>&rsquo; return 1 for &ldquo;true&rdquo; and 0 for
+  &ldquo;false.&rdquo; See <a href=
+  "Logical-Operations.html#Logical-Operations">Logical
+  Operations</a>. This can be used to advantage for building
+  conditional sums. For example, &lsquo;<samp>sum(prime(k)*k^2, k,
+  1, 20)</samp>&rsquo; is the sum of the squares of all prime
+  numbers from 1 to 20; the <code>prime</code> predicate returns 1
+  if its argument is prime and 0 otherwise. You can read this
+  expression as &ldquo;the sum of &lsquo;<samp>k^2</samp>&rsquo;,
+  where &lsquo;<samp>k</samp>&rsquo; is prime.&rdquo; Indeed,
+  &lsquo;<samp>sum(prime(k)*k^2, k)</samp>&rsquo; would represent
+  the sum of <em>all</em> primes squared, since the limits default
+  to plus and minus infinity, but there are no such sums that
+  Calc&rsquo;s built-in rules can do in closed form.</p>
+
+  <p>As another example, &lsquo;<samp>sum((k != k_0) * f(k), k, 1,
+  n)</samp>&rsquo; is the sum of &lsquo;<samp>f(k)</samp>&rsquo;
+  for all &lsquo;<samp>k</samp>&rsquo; from 1 to
+  &lsquo;<samp>n</samp>&rsquo;, excluding one value
+  &lsquo;<samp>k_0</samp>&rsquo;. Slightly more tricky is the
+  summand &lsquo;<samp>(k != k_0) / (k - k_0)</samp>&rsquo;, which
+  is an attempt to describe the sum of all
+  &lsquo;<samp>1/(k-k_0)</samp>&rsquo; except at &lsquo;<samp>k =
+  k_0</samp>&rsquo;, where this would be a division by zero. But at
+  &lsquo;<samp>k = k_0</samp>&rsquo;, this formula works out to the
+  indeterminate form &lsquo;<samp>0 / 0</samp>&rsquo;, which Calc
+  will not assume is zero. Better would be to use &lsquo;<samp>(k
+  != k_0) ? 1/(k-k_0) : 0</samp>&rsquo;; the &lsquo;<samp>?
+  :</samp>&rsquo; operator does an &ldquo;if-then-else&rdquo; test:
+  This expression says, &ldquo;if &lsquo;<samp>k !=
+  k_0</samp>&rsquo;, then &lsquo;<samp>1/(k-k_0)</samp>&rsquo;,
+  else zero.&rdquo; Now the formula
+  &lsquo;<samp>1/(k-k_0)</samp>&rsquo; will not even be evaluated
+  by Calc when &lsquo;<samp>k = k_0</samp>&rsquo;.</p><a name=
+  "index-Alternating-sums" id="index-Alternating-sums"></a>
+  <a name="index-a-_002d" id="index-a-_002d"></a> <a name=
+  "index-calc_002dalt_002dsummation" id=
+  "index-calc_002dalt_002dsummation"></a> <a name="index-asum" id=
+  "index-asum"></a>
+
+  <p>The <kbd>a -</kbd> (<code>calc-alt-summation</code>)
+  [<code>asum</code>] command computes an alternating sum.
+  Successive terms of the sequence are given alternating signs,
+  with the first term (corresponding to the lower index value)
+  being positive. Alternating sums are converted to normal sums
+  with an extra term of the form
+  &lsquo;<samp>(-1)^(k-<var>low</var>)</samp>&rsquo;. This formula
+  is adjusted appropriately if the step value is other than one.
+  For example, the Taylor series for the sine function is
+  &lsquo;<samp>asum(x^k / k!, k, 1, inf, 2)</samp>&rsquo;. (Calc
+  cannot evaluate this infinite series, but it can approximate it
+  if you replace <code>inf</code> with any particular odd number.)
+  Calc converts this series to a regular sum with a step of one,
+  namely &lsquo;<samp>sum((-1)^k x^(2k+1) / (2k+1)!, k, 0,
+  inf)</samp>&rsquo;.</p><a name="index-Product-of-a-sequence" id=
+  "index-Product-of-a-sequence"></a> <a name="index-a-_002a" id=
+  "index-a-_002a"></a> <a name="index-calc_002dproduct" id=
+  "index-calc_002dproduct"></a> <a name="index-prod" id=
+  "index-prod"></a>
+
+  <p>The <kbd>a *</kbd> (<code>calc-product</code>)
+  [<code>prod</code>] command is the analogous way to take a
+  product of many terms. Calc also knows some closed forms for
+  products, such as &lsquo;<samp>prod(k, k, 1, n) =
+  n!</samp>&rsquo;. Conditional products can be written
+  &lsquo;<samp>prod(k^prime(k), k, 1, n)</samp>&rsquo; or
+  &lsquo;<samp>prod(prime(k) ? k : 1, k, 1,
+  n)</samp>&rsquo;.</p><a name="index-a-T" id="index-a-T"></a>
+  <a name="index-calc_002dtabulate" id=
+  "index-calc_002dtabulate"></a> <a name="index-table" id=
+  "index-table"></a>
+
+  <p>The <kbd>a T</kbd> (<code>calc-tabulate</code>)
+  [<code>table</code>] command evaluates a formula at a series of
+  iterated index values, just like <code>sum</code> and
+  <code>prod</code>, but its result is simply a vector of the
+  results. For example, &lsquo;<samp>table(a_i, i, 1, 7,
+  2)</samp>&rsquo; produces &lsquo;<samp>[a_1, a_3, a_5,
+  a_7]</samp>&rsquo;.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Logical-Operations.html#Logical-Operations"
+    accesskey="n" rel="next">Logical Operations</a>, Previous:
+    <a href="Curve-Fitting.html#Curve-Fitting" accesskey="p" rel=
+    "prev">Curve Fitting</a>, Up: <a href="Algebra.html#Algebra"
+    accesskey="u" rel="up">Algebra</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

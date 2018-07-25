@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,149 +29,232 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: Customizing C and C++ indentation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: Customizing C and C++ indentation">
-<meta name="keywords" content="GNU Emacs FAQ: Customizing C and C++ indentation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Common-requests.html#Common-requests" rel="up" title="Common requests">
-<link href="Horizontal-scrolling.html#Horizontal-scrolling" rel="next" title="Horizontal scrolling">
-<link href="Indenting-switch-statements.html#Indenting-switch-statements" rel="prev" title="Indenting switch statements">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: Customizing C and C++ indentation</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: Customizing C and C++ indentation" />
+  <meta name="keywords" content=
+  "GNU Emacs FAQ: Customizing C and C++ indentation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Common-requests.html#Common-requests" rel="up" title=
+  "Common requests" />
+  <link href="Horizontal-scrolling.html#Horizontal-scrolling" rel=
+  "next" title="Horizontal scrolling" />
+  <link href=
+  "Indenting-switch-statements.html#Indenting-switch-statements"
+  rel="prev" title="Indenting switch statements" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Customizing-C-and-C_002b_002b-indentation"></a>
-<div class="header">
-<p>
-Next: <a href="Horizontal-scrolling.html#Horizontal-scrolling" accesskey="n" rel="next">Horizontal scrolling</a>, Previous: <a href="Indenting-switch-statements.html#Indenting-switch-statements" accesskey="p" rel="prev">Indenting switch statements</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-to-customize-indentation-in-C_002c-C_002b_002b_002c-and-Java-buffers_003f"></a>
-<h3 class="section">5.21 How to customize indentation in C, C<tt>++</tt>, and Java buffers?</h3>
-<a name="index-Indentation_002c-how-to-customize"></a>
-<a name="index-Customize-indentation"></a>
+<body lang="en" xml:lang="en">
+  <a name="Customizing-C-and-C_002b_002b-indentation" id=
+  "Customizing-C-and-C_002b_002b-indentation"></a>
 
-<p>The Emacs <code>cc-mode</code> features an interactive procedure for
-customizing the indentation style, which is fully explained in the
-<cite>CC Mode</cite> manual that is part of the Emacs distribution, see
-<a href="http://www.gnu.org/software/emacs/manual/html_node/ccmode/Customizing-Indentation.html#Customizing-Indentation">Customization Indentation</a> in <cite>The CC Mode Manual</cite>.  Here&rsquo;s a short summary of the procedure:
-</p>
-<ol>
-<li> Go to the beginning of the first line where you don&rsquo;t like the
-indentation and type <kbd>C-c C-o</kbd>.  Emacs will prompt you for the
-syntactic symbol; type <tt class="key">RET</tt> to accept the default it suggests.
+  <div class="header">
+    <p>Next: <a href=
+    "Horizontal-scrolling.html#Horizontal-scrolling" accesskey="n"
+    rel="next">Horizontal scrolling</a>, Previous: <a href=
+    "Indenting-switch-statements.html#Indenting-switch-statements"
+    accesskey="p" rel="prev">Indenting switch statements</a>, Up:
+    <a href="Common-requests.html#Common-requests" accesskey="u"
+    rel="up">Common requests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name=
+  "How-to-customize-indentation-in-C_002c-C_002b_002b_002c-and-Java-buffers_003f"
+  id=
+  "How-to-customize-indentation-in-C_002c-C_002b_002b_002c-and-Java-buffers_003f"></a>
 
-</li><li> Emacs now prompts for the offset of this syntactic symbol, showing the
-default (the current definition) inside parentheses.  You can choose
-one of these:
+  <h3 class="section">5.21 How to customize indentation in C,
+  C<tt>++</tt>, and Java buffers?</h3><a name=
+  "index-Indentation_002c-how-to-customize" id=
+  "index-Indentation_002c-how-to-customize"></a> <a name=
+  "index-Customize-indentation" id=
+  "index-Customize-indentation"></a>
 
-<dl compact="compact">
-<dt><code>0</code></dt>
-<dd><p>No extra indentation.
-</p></dd>
-<dt><code>+</code></dt>
-<dd><p>Indent one basic offset.
-</p></dd>
-<dt><code>-</code></dt>
-<dd><p>Outdent one basic offset.
-</p></dd>
-<dt><code>++</code></dt>
-<dd><p>Indent two basic offsets
-</p></dd>
-<dt><code>--</code></dt>
-<dd><p>Outdent two basic offsets.
-</p></dd>
-<dt><code>*</code></dt>
-<dd><p>Indent half basic offset.
-</p></dd>
-<dt><code>/</code></dt>
-<dd><p>Outdent half basic offset.
-</p></dd>
-</dl>
+  <p>The Emacs <code>cc-mode</code> features an interactive
+  procedure for customizing the indentation style, which is fully
+  explained in the <cite>CC Mode</cite> manual that is part of the
+  Emacs distribution, see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/ccmode/Customizing-Indentation.html#Customizing-Indentation">
+  Customization Indentation</a> in <cite>The CC Mode Manual</cite>.
+  Here&rsquo;s a short summary of the procedure:</p>
 
-</li><li> After choosing one of these symbols, type <kbd>C-c C-q</kbd> to reindent
-the line or the block according to what you just specified.
+  <ol>
+    <li>Go to the beginning of the first line where you don&rsquo;t
+    like the indentation and type <kbd>C-c C-o</kbd>. Emacs will
+    prompt you for the syntactic symbol; type <tt class=
+    "key">RET</tt> to accept the default it suggests.</li>
 
-</li><li> If you don&rsquo;t like the result, go back to step 1.  Otherwise, add the
-following line to your <samp>.emacs</samp>:
+    <li>Emacs now prompts for the offset of this syntactic symbol,
+    showing the default (the current definition) inside
+    parentheses. You can choose one of these:
 
-<div class="lisp">
-<pre class="lisp">(c-set-offset '<var>syntactic-symbol</var> <var>offset</var>)
-</pre></div>
+      <dl compact="compact">
+        <dt><code>0</code></dt>
 
-<p>where <var>syntactic-symbol</var> is the name Emacs shows in the minibuffer
-when you type <kbd>C-c C-o</kbd> at the beginning of the line, and
-<var>offset</var> is one of the indentation symbols listed above (<code>+</code>,
-<code>/</code>, <code>0</code>, etc.) that you&rsquo;ve chosen during the interactive
-procedure.
-</p>
-</li><li> Go to the next line whose indentation is not to your liking and repeat
-the process there.
-</li></ol>
+        <dd>
+          <p>No extra indentation.</p>
+        </dd>
 
-<p>It is recommended to put all the resulting <code>(c-set-offset ...)</code>
-customizations inside a C mode hook, like this:
-</p>
-<div class="lisp">
-<pre class="lisp">(defun my-c-mode-hook ()
+        <dt><code>+</code></dt>
+
+        <dd>
+          <p>Indent one basic offset.</p>
+        </dd>
+
+        <dt><code>-</code></dt>
+
+        <dd>
+          <p>Outdent one basic offset.</p>
+        </dd>
+
+        <dt><code>++</code></dt>
+
+        <dd>
+          <p>Indent two basic offsets</p>
+        </dd>
+
+        <dt><code>--</code></dt>
+
+        <dd>
+          <p>Outdent two basic offsets.</p>
+        </dd>
+
+        <dt><code>*</code></dt>
+
+        <dd>
+          <p>Indent half basic offset.</p>
+        </dd>
+
+        <dt><code>/</code></dt>
+
+        <dd>
+          <p>Outdent half basic offset.</p>
+        </dd>
+      </dl>
+    </li>
+
+    <li>After choosing one of these symbols, type <kbd>C-c
+    C-q</kbd> to reindent the line or the block according to what
+    you just specified.</li>
+
+    <li>If you don&rsquo;t like the result, go back to step 1.
+    Otherwise, add the following line to your <samp>.emacs</samp>:
+
+      <div class="lisp">
+        <pre class="lisp">
+(c-set-offset '<var>syntactic-symbol</var> <var>offset</var>)
+</pre>
+      </div>
+
+      <p>where <var>syntactic-symbol</var> is the name Emacs shows
+      in the minibuffer when you type <kbd>C-c C-o</kbd> at the
+      beginning of the line, and <var>offset</var> is one of the
+      indentation symbols listed above (<code>+</code>,
+      <code>/</code>, <code>0</code>, etc.) that you&rsquo;ve
+      chosen during the interactive procedure.</p>
+    </li>
+
+    <li>Go to the next line whose indentation is not to your liking
+    and repeat the process there.</li>
+  </ol>
+
+  <p>It is recommended to put all the resulting <code>(c-set-offset
+  ...)</code> customizations inside a C mode hook, like this:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(defun my-c-mode-hook ()
   (c-set-offset ...)
   (c-set-offset ...))
 (add-hook 'c-mode-hook 'my-c-mode-hook)
-</pre></div>
+</pre>
+  </div>
 
-<p>Using <code>c-mode-hook</code> avoids the need to put a <code>(require&nbsp;<span class="nolinebreak">'cc-mode)</span></code><!-- /@w --> into your <samp>.emacs</samp> file, because <code>c-set-offset</code>
-might be unavailable when <code>cc-mode</code> is not loaded.
-</p>
-<p>Note that <code>c-mode-hook</code> runs for C source files only; use
-<code>c++-mode-hook</code> for C<tt>++</tt> sources, <code>java-mode-hook</code> for
-Java sources, etc.  If you want the same customizations to be in
-effect in <em>all</em> languages supported by <code>cc-mode</code>, use
-<code>c-mode-common-hook</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Horizontal-scrolling.html#Horizontal-scrolling" accesskey="n" rel="next">Horizontal scrolling</a>, Previous: <a href="Indenting-switch-statements.html#Indenting-switch-statements" accesskey="p" rel="prev">Indenting switch statements</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Using <code>c-mode-hook</code> avoids the need to put a
+  <code>(require&nbsp;<span class=
+  "nolinebreak">'cc-mode)</span></code><!-- /@w --> into your
+  <samp>.emacs</samp> file, because <code>c-set-offset</code> might
+  be unavailable when <code>cc-mode</code> is not loaded.</p>
 
+  <p>Note that <code>c-mode-hook</code> runs for C source files
+  only; use <code>c++-mode-hook</code> for C<tt>++</tt> sources,
+  <code>java-mode-hook</code> for Java sources, etc. If you want
+  the same customizations to be in effect in <em>all</em> languages
+  supported by <code>cc-mode</code>, use
+  <code>c-mode-common-hook</code>.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Horizontal-scrolling.html#Horizontal-scrolling" accesskey="n"
+    rel="next">Horizontal scrolling</a>, Previous: <a href=
+    "Indenting-switch-statements.html#Indenting-switch-statements"
+    accesskey="p" rel="prev">Indenting switch statements</a>, Up:
+    <a href="Common-requests.html#Common-requests" accesskey="u"
+    rel="up">Common requests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

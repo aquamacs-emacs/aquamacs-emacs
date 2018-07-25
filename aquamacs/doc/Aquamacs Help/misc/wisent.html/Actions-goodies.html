@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,88 +16,136 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Actions goodies</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Actions goodies">
-<meta name="keywords" content="Wisent Parser Development: Actions goodies">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Wisent-Parsing.html#Wisent-Parsing" rel="up" title="Wisent Parsing">
-<link href="Report-errors.html#Report-errors" rel="next" title="Report errors">
-<link href="Writing-a-lexer.html#Writing-a-lexer" rel="prev" title="Writing a lexer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Actions goodies</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Actions goodies" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Actions goodies" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Wisent-Parsing.html#Wisent-Parsing" rel="up" title=
+  "Wisent Parsing" />
+  <link href="Report-errors.html#Report-errors" rel="next" title=
+  "Report errors" />
+  <link href="Writing-a-lexer.html#Writing-a-lexer" rel="prev"
+  title="Writing a lexer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Actions-goodies"></a>
-<div class="header">
-<p>
-Next: <a href="Report-errors.html#Report-errors" accesskey="n" rel="next">Report errors</a>, Previous: <a href="Writing-a-lexer.html#Writing-a-lexer" accesskey="p" rel="prev">Writing a lexer</a>, Up: <a href="Wisent-Parsing.html#Wisent-Parsing" accesskey="u" rel="up">Wisent Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Variables-and-macros-useful-in-grammar-actions_002e"></a>
-<h3 class="section">3.2 Variables and macros useful in grammar actions.</h3>
+<body lang="en" xml:lang="en">
+  <a name="Actions-goodies" id="Actions-goodies"></a>
 
-<a name="index-wisent_002dinput"></a>
-<dl>
-<dt><a name="index-wisent_002dinput-1"></a>Variable: <strong>wisent-input</strong></dt>
-<dd><p>The last token read.
-This variable only has meaning in the scope of <code>wisent-parse</code>.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Report-errors.html#Report-errors" accesskey=
+    "n" rel="next">Report errors</a>, Previous: <a href=
+    "Writing-a-lexer.html#Writing-a-lexer" accesskey="p" rel=
+    "prev">Writing a lexer</a>, Up: <a href=
+    "Wisent-Parsing.html#Wisent-Parsing" accesskey="u" rel=
+    "up">Wisent Parsing</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Variables-and-macros-useful-in-grammar-actions_002e" id=
+  "Variables-and-macros-useful-in-grammar-actions_002e"></a>
 
-<a name="index-wisent_002dlexer"></a>
-<dl>
-<dt><a name="index-wisent_002dlexer-1"></a>Function: <strong>wisent-lexer</strong></dt>
-<dd><p>Obtain the next terminal in input.
-</p></dd></dl>
+  <h3 class="section">3.2 Variables and macros useful in grammar
+  actions.</h3><a name="index-wisent_002dinput" id=
+  "index-wisent_002dinput"></a>
 
-<a name="index-wisent_002dregion"></a>
-<dl>
-<dt><a name="index-wisent_002dregion-1"></a>Function: <strong>wisent-region</strong> <em>&amp;rest positions</em></dt>
-<dd><p>Return the start/end positions of the region including
-<var>positions</var>.  Each element of <var>positions</var> is a pair
-<code>(<var><span class="nolinebreak">start-pos</span></var>&nbsp;.&nbsp;&nbsp;<var><span class="nolinebreak">end-pos</span></var>)</code><!-- /@w --> or <code>nil</code>.  The
-returned value is the pair <code>(<var><span class="nolinebreak">min-start-pos</span></var>&nbsp;.&nbsp;<var><span class="nolinebreak">max-end-pos</span></var>)</code><!-- /@w --> or <code>nil</code> if no <var>positions</var> are
-available.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-wisent_002dinput-1" id=
+    "index-wisent_002dinput-1"></a>Variable:
+    <strong>wisent-input</strong></dt>
 
+    <dd>
+      <p>The last token read. This variable only has meaning in the
+      scope of <code>wisent-parse</code>.</p>
+    </dd>
+  </dl><a name="index-wisent_002dlexer" id=
+  "index-wisent_002dlexer"></a>
 
+  <dl>
+    <dt><a name="index-wisent_002dlexer-1" id=
+    "index-wisent_002dlexer-1"></a>Function:
+    <strong>wisent-lexer</strong></dt>
 
+    <dd>
+      <p>Obtain the next terminal in input.</p>
+    </dd>
+  </dl><a name="index-wisent_002dregion" id=
+  "index-wisent_002dregion"></a>
 
+  <dl>
+    <dt><a name="index-wisent_002dregion-1" id=
+    "index-wisent_002dregion-1"></a>Function:
+    <strong>wisent-region</strong> <em>&amp;rest
+    positions</em></dt>
+
+    <dd>
+      <p>Return the start/end positions of the region including
+      <var>positions</var>. Each element of <var>positions</var> is
+      a pair <code>(<var><span class=
+      "nolinebreak">start-pos</span></var>&nbsp;.&nbsp;&nbsp;<var><span class="nolinebreak">end-pos</span></var>)</code><!-- /@w -->
+      or <code>nil</code>. The returned value is the pair
+      <code>(<var><span class=
+      "nolinebreak">min-start-pos</span></var>&nbsp;.&nbsp;<var><span class="nolinebreak">max-end-pos</span></var>)</code><!-- /@w -->
+      or <code>nil</code> if no <var>positions</var> are
+      available.</p>
+    </dd>
+  </dl>
 </body>
 </html>

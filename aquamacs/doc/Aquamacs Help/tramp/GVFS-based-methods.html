@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>GVFS based methods - TRAMP User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="TRAMP User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Configuration.html#Configuration" title="Configuration">
-<link rel="prev" href="External-methods.html#External-methods" title="External methods">
-<link rel="next" href="Gateway-methods.html#Gateway-methods" title="Gateway methods">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>GVFS based methods - TRAMP User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="TRAMP User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Configuration.html#Configuration" title=
+  "Configuration" />
+  <link rel="prev" href="External-methods.html#External-methods"
+  title="External methods" />
+  <link rel="next" href="Gateway-methods.html#Gateway-methods"
+  title="Gateway methods" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +34,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,55 +47,96 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="GVFS-based-methods"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Gateway-methods.html#Gateway-methods">Gateway methods</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="External-methods.html#External-methods">External methods</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="GVFS-based-methods" id="GVFS-based-methods"></a>
 
-<h3 class="section">4.4 GVFS based external methods</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Gateway-methods.html#Gateway-methods">Gateway methods</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "External-methods.html#External-methods">External methods</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Configuration.html#Configuration">Configuration</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-methods_002c-gvfs-96"></a><a name="index-gvfs-based-methods-97"></a><a name="index-dbus-98"></a>
-The connection methods described in this section are based on GVFS
-<a href="http://en.wikipedia.org/wiki/GVFS">http://en.wikipedia.org/wiki/GVFS</a>.  Via GVFS, the remote
-filesystem is mounted locally through FUSE.  <span class="sc">tramp</span> uses
-internally this local mounted directory.
+  <h3 class="section">4.4 GVFS based external methods</h3>
 
-   <p>The communication with GVFS is implemented via D-Bus messages. 
-Therefore, your GNU Emacs must have D-Bus integration,
-see <a href="../dbus/index.html#Top">D-Bus</a>.
+  <p><a name="index-methods_002c-gvfs-96" id=
+  "index-methods_002c-gvfs-96"></a><a name=
+  "index-gvfs-based-methods-97" id=
+  "index-gvfs-based-methods-97"></a><a name="index-dbus-98" id=
+  "index-dbus-98"></a> The connection methods described in this
+  section are based on GVFS <a href=
+  "http://en.wikipedia.org/wiki/GVFS">http://en.wikipedia.org/wiki/GVFS</a>.
+  Via GVFS, the remote filesystem is mounted locally through FUSE.
+  <span class="sc">tramp</span> uses internally this local mounted
+  directory.</p>
 
-     <dl>
-<dt><samp><span class="option">dav</span></samp><dd><a name="index-method-dav-99"></a><a name="index-method-davs-100"></a><a name="index-dav-method-101"></a><a name="index-davs-method-102"></a>
-This method provides access to WebDAV files and directories.  There
-exists also the external method <samp><span class="option">davs</span></samp>, which uses SSL
-encryption for the access.
+  <p>The communication with GVFS is implemented via D-Bus messages.
+  Therefore, your GNU Emacs must have D-Bus integration, see
+  <a href="../dbus/index.html#Top">D-Bus</a>.</p>
 
-     <p>Both methods support the port number specification as discussed above.
+  <dl>
+    <dt><samp><span class="option">dav</span></samp></dt>
 
-     <br><dt><samp><span class="option">obex</span></samp><dd><a name="index-method-obex-103"></a><a name="index-obex-method-104"></a>
-OBEX is an FTP-like access protocol for simple devices, like cell
-phones.  Until now <span class="sc">tramp</span> supports only OBEX over Bluetooth.
+    <dd>
+      <a name="index-method-dav-99" id=
+      "index-method-dav-99"></a><a name="index-method-davs-100" id=
+      "index-method-davs-100"></a><a name="index-dav-method-101"
+      id="index-dav-method-101"></a><a name="index-davs-method-102"
+      id="index-davs-method-102"></a> This method provides access
+      to WebDAV files and directories. There exists also the
+      external method <samp><span class=
+      "option">davs</span></samp>, which uses SSL encryption for
+      the access.
 
-     <br><dt><samp><span class="option">synce</span></samp><dd><a name="index-method-synce-105"></a><a name="index-synce-method-106"></a>
-The <samp><span class="option">synce</span></samp> method allows communication with Windows Mobile
-devices.  Beside GVFS for mounting remote files and directories via
-FUSE, it needs also the SYNCE-GVFS plugin. 
-</dl>
+      <p>Both methods support the port number specification as
+      discussed above.<br /></p>
+    </dd>
 
-<div class="defun">
-&mdash; User Option: <b>tramp-gvfs-methods</b><var><a name="index-tramp_002dgvfs_002dmethods-107"></a></var><br>
-<blockquote><p>This customer option, a list, defines the external methods, which
-shall be used with GVFS.  Per default, these are <samp><span class="option">dav</span></samp>,
-<samp><span class="option">davs</span></samp>, <samp><span class="option">obex</span></samp> and <samp><span class="option">synce</span></samp>.  Other possible
-values are <samp><span class="option">ftp</span></samp>, <samp><span class="option">sftp</span></samp> and <samp><span class="option">smb</span></samp>. 
-</p></blockquote></div>
+    <dt><samp><span class="option">obex</span></samp></dt>
 
-   </body></html>
+    <dd><a name="index-method-obex-103" id=
+    "index-method-obex-103"></a><a name="index-obex-method-104" id=
+    "index-obex-method-104"></a> OBEX is an FTP-like access
+    protocol for simple devices, like cell phones. Until now
+    <span class="sc">tramp</span> supports only OBEX over
+    Bluetooth.<br /></dd>
 
+    <dt><samp><span class="option">synce</span></samp></dt>
+
+    <dd><a name="index-method-synce-105" id=
+    "index-method-synce-105"></a><a name="index-synce-method-106"
+    id="index-synce-method-106"></a> The <samp><span class=
+    "option">synce</span></samp> method allows communication with
+    Windows Mobile devices. Beside GVFS for mounting remote files
+    and directories via FUSE, it needs also the SYNCE-GVFS
+    plugin.</dd>
+  </dl>
+
+  <div class="defun">
+    &mdash; User Option: <b>tramp-gvfs-methods</b><var><a name=
+    "index-tramp_002dgvfs_002dmethods-107" id=
+    "index-tramp_002dgvfs_002dmethods-107"></a></var><br />
+
+    <blockquote>
+      <p>This customer option, a list, defines the external
+      methods, which shall be used with GVFS. Per default, these
+      are <samp><span class="option">dav</span></samp>,
+      <samp><span class="option">davs</span></samp>,
+      <samp><span class="option">obex</span></samp> and
+      <samp><span class="option">synce</span></samp>. Other
+      possible values are <samp><span class=
+      "option">ftp</span></samp>, <samp><span class=
+      "option">sftp</span></samp> and <samp><span class=
+      "option">smb</span></samp>.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

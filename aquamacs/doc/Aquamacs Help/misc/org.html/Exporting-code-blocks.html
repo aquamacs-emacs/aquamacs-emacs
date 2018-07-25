@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,117 +16,180 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Exporting code blocks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Exporting code blocks">
-<meta name="keywords" content="The Org Manual: Exporting code blocks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Working-With-Source-Code.html#Working-With-Source-Code" rel="up" title="Working With Source Code">
-<link href="Extracting-source-code.html#Extracting-source-code" rel="next" title="Extracting source code">
-<link href="Editing-source-code.html#Editing-source-code" rel="prev" title="Editing source code">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Exporting code blocks</title>
+  <meta name="description" content=
+  "The Org Manual: Exporting code blocks" />
+  <meta name="keywords" content=
+  "The Org Manual: Exporting code blocks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Working-With-Source-Code.html#Working-With-Source-Code" rel="up"
+  title="Working With Source Code" />
+  <link href="Extracting-source-code.html#Extracting-source-code"
+  rel="next" title="Extracting source code" />
+  <link href="Editing-source-code.html#Editing-source-code" rel=
+  "prev" title="Editing source code" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Exporting-code-blocks"></a>
-<div class="header">
-<p>
-Next: <a href="Extracting-source-code.html#Extracting-source-code" accesskey="n" rel="next">Extracting source code</a>, Previous: <a href="Editing-source-code.html#Editing-source-code" accesskey="p" rel="prev">Editing source code</a>, Up: <a href="Working-With-Source-Code.html#Working-With-Source-Code" accesskey="u" rel="up">Working With Source Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Exporting-code-blocks-1"></a>
-<h3 class="section">14.3 Exporting code blocks</h3>
-<a name="index-code-block_002c-exporting"></a>
-<a name="index-source-code_002c-exporting"></a>
+<body lang="en" xml:lang="en">
+  <a name="Exporting-code-blocks" id="Exporting-code-blocks"></a>
 
-<p>It is possible to export the <em>code</em> of code blocks, the <em>results</em>
-of code block evaluation, <em>both</em> the code and the results of code block
-evaluation, or <em>none</em>.  For most languages, the default exports code.
-However, for some languages (e.g., <code>ditaa</code>) the default exports the
-results of code block evaluation.  For information on exporting code block
-bodies, see <a href="Literal-examples.html#Literal-examples">Literal examples</a>.
-</p>
-<p>The <code>:exports</code> header argument can be used to specify export
-behavior:
-</p>
-<a name="Header-arguments_003a"></a>
-<h4 class="subsubheading">Header arguments:</h4>
+  <div class="header">
+    <p>Next: <a href=
+    "Extracting-source-code.html#Extracting-source-code" accesskey=
+    "n" rel="next">Extracting source code</a>, Previous: <a href=
+    "Editing-source-code.html#Editing-source-code" accesskey="p"
+    rel="prev">Editing source code</a>, Up: <a href=
+    "Working-With-Source-Code.html#Working-With-Source-Code"
+    accesskey="u" rel="up">Working With Source Code</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Exporting-code-blocks-1" id=
+  "Exporting-code-blocks-1"></a>
 
-<dl compact="compact">
-<dt><code>:exports code</code></dt>
-<dd><p>The default in most languages.  The body of the code block is exported, as
-described in <a href="Literal-examples.html#Literal-examples">Literal examples</a>.
-</p></dd>
-<dt><code>:exports results</code></dt>
-<dd><p>The code block will be evaluated and the results will be placed in the
-Org mode buffer for export, either updating previous results of the code
-block located anywhere in the buffer or, if no previous results exist,
-placing the results immediately after the code block.  The body of the code
-block will not be exported.
-</p></dd>
-<dt><code>:exports both</code></dt>
-<dd><p>Both the code block and its results will be exported.
-</p></dd>
-<dt><code>:exports none</code></dt>
-<dd><p>Neither the code block nor its results will be exported.
-</p></dd>
-</dl>
+  <h3 class="section">14.3 Exporting code blocks</h3><a name=
+  "index-code-block_002c-exporting" id=
+  "index-code-block_002c-exporting"></a> <a name=
+  "index-source-code_002c-exporting" id=
+  "index-source-code_002c-exporting"></a>
 
-<p>It is possible to inhibit the evaluation of code blocks during export.
-Setting the <code>org-export-babel-evaluate</code> variable to <code>nil</code> will
-ensure that no code blocks are evaluated as part of the export process.  This
-can be useful in situations where potentially untrusted Org mode files are
-exported in an automated fashion, for example when Org mode is used as the
-markup language for a wiki.  It is also possible to set this variable to
-<code>'inline-only</code>.  In that case, only inline code blocks will be
-evaluated, in order to insert their results.  Non-inline code blocks are
-assumed to have their results already inserted in the buffer by manual
-evaluation.  This setting is useful to avoid expensive recalculations during
-export, not to provide security.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Extracting-source-code.html#Extracting-source-code" accesskey="n" rel="next">Extracting source code</a>, Previous: <a href="Editing-source-code.html#Editing-source-code" accesskey="p" rel="prev">Editing source code</a>, Up: <a href="Working-With-Source-Code.html#Working-With-Source-Code" accesskey="u" rel="up">Working With Source Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>It is possible to export the <em>code</em> of code blocks, the
+  <em>results</em> of code block evaluation, <em>both</em> the code
+  and the results of code block evaluation, or <em>none</em>. For
+  most languages, the default exports code. However, for some
+  languages (e.g., <code>ditaa</code>) the default exports the
+  results of code block evaluation. For information on exporting
+  code block bodies, see <a href=
+  "Literal-examples.html#Literal-examples">Literal
+  examples</a>.</p>
 
+  <p>The <code>:exports</code> header argument can be used to
+  specify export behavior:</p><a name="Header-arguments_003a" id=
+  "Header-arguments_003a"></a>
 
+  <h4 class="subsubheading">Header arguments:</h4>
 
+  <dl compact="compact">
+    <dt><code>:exports code</code></dt>
+
+    <dd>
+      <p>The default in most languages. The body of the code block
+      is exported, as described in <a href=
+      "Literal-examples.html#Literal-examples">Literal
+      examples</a>.</p>
+    </dd>
+
+    <dt><code>:exports results</code></dt>
+
+    <dd>
+      <p>The code block will be evaluated and the results will be
+      placed in the Org mode buffer for export, either updating
+      previous results of the code block located anywhere in the
+      buffer or, if no previous results exist, placing the results
+      immediately after the code block. The body of the code block
+      will not be exported.</p>
+    </dd>
+
+    <dt><code>:exports both</code></dt>
+
+    <dd>
+      <p>Both the code block and its results will be exported.</p>
+    </dd>
+
+    <dt><code>:exports none</code></dt>
+
+    <dd>
+      <p>Neither the code block nor its results will be
+      exported.</p>
+    </dd>
+  </dl>
+
+  <p>It is possible to inhibit the evaluation of code blocks during
+  export. Setting the <code>org-export-babel-evaluate</code>
+  variable to <code>nil</code> will ensure that no code blocks are
+  evaluated as part of the export process. This can be useful in
+  situations where potentially untrusted Org mode files are
+  exported in an automated fashion, for example when Org mode is
+  used as the markup language for a wiki. It is also possible to
+  set this variable to <code>'inline-only</code>. In that case,
+  only inline code blocks will be evaluated, in order to insert
+  their results. Non-inline code blocks are assumed to have their
+  results already inserted in the buffer by manual evaluation. This
+  setting is useful to avoid expensive recalculations during
+  export, not to provide security.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Extracting-source-code.html#Extracting-source-code" accesskey=
+    "n" rel="next">Extracting source code</a>, Previous: <a href=
+    "Editing-source-code.html#Editing-source-code" accesskey="p"
+    rel="prev">Editing source code</a>, Up: <a href=
+    "Working-With-Source-Code.html#Working-With-Source-Code"
+    accesskey="u" rel="up">Working With Source Code</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

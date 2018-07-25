@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,97 +19,189 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Modes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Hooks.html#Hooks" rel="next" title="Hooks">
-<link href="Easy-Menu.html#Easy-Menu" rel="prev" title="Easy Menu">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Hooks.html#Hooks" rel="next" title="Hooks" />
+  <link href="Easy-Menu.html#Easy-Menu" rel="prev" title=
+  "Easy Menu" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Modes" id="Modes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Documentation.html#Documentation" accesskey=
+    "n" rel="next">Documentation</a>, Previous: <a href=
+    "Keymaps.html#Keymaps" accesskey="p" rel="prev">Keymaps</a>,
+    Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Major-and-Minor-Modes" id="Major-and-Minor-Modes"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Documentation.html#Documentation" accesskey="n" rel="next">Documentation</a>, Previous: <a href="Keymaps.html#Keymaps" accesskey="p" rel="prev">Keymaps</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Major-and-Minor-Modes"></a>
-<h2 class="chapter">22 Major and Minor Modes</h2>
-<a name="index-mode"></a>
+  <h2 class="chapter">22 Major and Minor Modes</h2><a name=
+  "index-mode" id="index-mode"></a>
 
-<p>A <em>mode</em> is a set of definitions that customize Emacs and can be
-turned on and off while you edit.  There are two varieties of modes:
-<em>major modes</em>, which are mutually exclusive and used for editing
-particular kinds of text, and <em>minor modes</em>, which provide features
-that users can enable individually.
-</p>
-<p>This chapter describes how to write both major and minor modes, how to
-indicate them in the mode line, and how they run hooks supplied by the
-user.  For related topics such as keymaps and syntax tables, see
-<a href="Keymaps.html#Keymaps">Keymaps</a>, and <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Hooks.html#Hooks" accesskey="1">Hooks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to use hooks; how to write code that provides hooks.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Major-Modes.html#Major-Modes" accesskey="2">Major Modes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defining major modes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Minor-Modes.html#Minor-Modes" accesskey="3">Minor Modes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defining minor modes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mode-Line-Format.html#Mode-Line-Format" accesskey="4">Mode Line Format</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Customizing the text that appears in the mode line.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Imenu.html#Imenu" accesskey="5">Imenu</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Providing a menu of definitions made in a buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="6">Font Lock Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How modes can highlight text according to syntax.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Auto_002dIndentation.html#Auto_002dIndentation" accesskey="7">Auto-Indentation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to teach Emacs to indent for a major mode.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Desktop-Save-Mode.html#Desktop-Save-Mode" accesskey="8">Desktop Save Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How modes can have buffer state saved between
-                        Emacs sessions.
-</td></tr>
-</table>
+  <p>A <em>mode</em> is a set of definitions that customize Emacs
+  and can be turned on and off while you edit. There are two
+  varieties of modes: <em>major modes</em>, which are mutually
+  exclusive and used for editing particular kinds of text, and
+  <em>minor modes</em>, which provide features that users can
+  enable individually.</p>
 
+  <p>This chapter describes how to write both major and minor
+  modes, how to indicate them in the mode line, and how they run
+  hooks supplied by the user. For related topics such as keymaps
+  and syntax tables, see <a href=
+  "Keymaps.html#Keymaps">Keymaps</a>, and <a href=
+  "Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Hooks.html#Hooks" accesskey="1">Hooks</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">How to use hooks; how to write
+      code that provides hooks.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Major-Modes.html#Major-Modes" accesskey="2">Major
+      Modes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Defining major modes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Minor-Modes.html#Minor-Modes" accesskey="3">Minor
+      Modes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Defining minor modes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mode-Line-Format.html#Mode-Line-Format" accesskey="4">Mode
+      Line Format</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Customizing the text that
+      appears in the mode line.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Imenu.html#Imenu" accesskey="5">Imenu</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Providing a menu of definitions
+      made in a buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Font-Lock-Mode.html#Font-Lock-Mode" accesskey="6">Font Lock
+      Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How modes can highlight text
+      according to syntax.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Auto_002dIndentation.html#Auto_002dIndentation" accesskey=
+      "7">Auto-Indentation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to teach Emacs to indent
+      for a major mode.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Desktop-Save-Mode.html#Desktop-Save-Mode" accesskey=
+      "8">Desktop Save Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How modes can have buffer state
+      saved between Emacs sessions.</td>
+    </tr>
+  </table>
 </body>
 </html>

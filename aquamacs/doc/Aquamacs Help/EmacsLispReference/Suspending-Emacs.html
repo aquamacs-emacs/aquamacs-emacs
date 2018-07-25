@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,210 +19,310 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Suspending Emacs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Suspending Emacs">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Suspending Emacs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Getting-Out.html#Getting-Out" rel="up" title="Getting Out">
-<link href="System-Environment.html#System-Environment" rel="next" title="System Environment">
-<link href="Killing-Emacs.html#Killing-Emacs" rel="prev" title="Killing Emacs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Suspending Emacs</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Suspending Emacs" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Suspending Emacs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Getting-Out.html#Getting-Out" rel="up" title=
+  "Getting Out" />
+  <link href="System-Environment.html#System-Environment" rel=
+  "next" title="System Environment" />
+  <link href="Killing-Emacs.html#Killing-Emacs" rel="prev" title=
+  "Killing Emacs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Suspending-Emacs" id="Suspending-Emacs"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Killing-Emacs.html#Killing-Emacs"
+    accesskey="p" rel="prev">Killing Emacs</a>, Up: <a href=
+    "Getting-Out.html#Getting-Out" accesskey="u" rel="up">Getting
+    Out</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Suspending-Emacs-1" id="Suspending-Emacs-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Suspending-Emacs"></a>
-<div class="header">
-<p>
-Previous: <a href="Killing-Emacs.html#Killing-Emacs" accesskey="p" rel="prev">Killing Emacs</a>, Up: <a href="Getting-Out.html#Getting-Out" accesskey="u" rel="up">Getting Out</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Suspending-Emacs-1"></a>
-<h4 class="subsection">38.2.2 Suspending Emacs</h4>
-<a name="index-suspending-Emacs"></a>
+  <h4 class="subsection">38.2.2 Suspending Emacs</h4><a name=
+  "index-suspending-Emacs" id="index-suspending-Emacs"></a>
 
-<p>On text terminals, it is possible to <em>suspend Emacs</em>, which
-means stopping Emacs temporarily and returning control to its superior
-process, which is usually the shell.  This allows you to resume
-editing later in the same Emacs process, with the same buffers, the
-same kill ring, the same undo history, and so on.  To resume Emacs,
-use the appropriate command in the parent shell&mdash;most likely
-<code>fg</code>.
-</p>
-<a name="index-controlling-terminal"></a>
-<p>Suspending works only on a terminal device from which the Emacs
-session was started.  We call that device the <em>controlling
-terminal</em> of the session.  Suspending is not allowed if the
-controlling terminal is a graphical terminal.  Suspending is usually
-not relevant in graphical environments, since you can simply switch to
-another application without doing anything special to Emacs.
-</p>
-<a name="index-SIGTSTP"></a>
-<p>Some operating systems (those without <code>SIGTSTP</code>, or MS-DOS) do
-not support suspension of jobs; on these systems, suspension
-actually creates a new shell temporarily as a subprocess of Emacs.
-Then you would exit the shell to return to Emacs.
-</p>
-<dl>
-<dt><a name="index-suspend_002demacs"></a>Command: <strong>suspend-emacs</strong> <em>&amp;optional string</em></dt>
-<dd><p>This function stops Emacs and returns control to the superior process.
-If and when the superior process resumes Emacs, <code>suspend-emacs</code>
-returns <code>nil</code> to its caller in Lisp.
-</p>
-<p>This function works only on the controlling terminal of the Emacs
-session; to relinquish control of other tty devices, use
-<code>suspend-tty</code> (see below).  If the Emacs session uses more than
-one terminal, you must delete the frames on all the other terminals
-before suspending Emacs, or this function signals an error.
-See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
-</p>
-<p>If <var>string</var> is non-<code>nil</code>, its characters are sent to Emacs&rsquo;s
-superior shell, to be read as terminal input.
-The characters in <var>string</var> are not echoed by the superior shell;
-only the results appear.
-</p>
-<p>Before suspending, <code>suspend-emacs</code> runs the normal hook
-<code>suspend-hook</code>.  After the user resumes Emacs,
-<code>suspend-emacs</code> runs the normal hook <code>suspend-resume-hook</code>.
-See <a href="Hooks.html#Hooks">Hooks</a>.
-</p>
-<p>The next redisplay after resumption will redraw the entire screen,
-unless the variable <code>no-redraw-on-reenter</code> is non-<code>nil</code>.
-See <a href="Refresh-Screen.html#Refresh-Screen">Refresh Screen</a>.
-</p>
-<p>Here is an example of how you could use these hooks:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(add-hook 'suspend-hook
-          (lambda () (or (y-or-n-p &quot;Really suspend? &quot;)
-                         (error &quot;Suspend canceled&quot;))))
-</pre><pre class="smallexample">(add-hook 'suspend-resume-hook (lambda () (message &quot;Resumed!&quot;)
+  <p>On text terminals, it is possible to <em>suspend Emacs</em>,
+  which means stopping Emacs temporarily and returning control to
+  its superior process, which is usually the shell. This allows you
+  to resume editing later in the same Emacs process, with the same
+  buffers, the same kill ring, the same undo history, and so on. To
+  resume Emacs, use the appropriate command in the parent
+  shell&mdash;most likely <code>fg</code>.</p><a name=
+  "index-controlling-terminal" id="index-controlling-terminal"></a>
+
+  <p>Suspending works only on a terminal device from which the
+  Emacs session was started. We call that device the
+  <em>controlling terminal</em> of the session. Suspending is not
+  allowed if the controlling terminal is a graphical terminal.
+  Suspending is usually not relevant in graphical environments,
+  since you can simply switch to another application without doing
+  anything special to Emacs.</p><a name="index-SIGTSTP" id=
+  "index-SIGTSTP"></a>
+
+  <p>Some operating systems (those without <code>SIGTSTP</code>, or
+  MS-DOS) do not support suspension of jobs; on these systems,
+  suspension actually creates a new shell temporarily as a
+  subprocess of Emacs. Then you would exit the shell to return to
+  Emacs.</p>
+
+  <dl>
+    <dt><a name="index-suspend_002demacs" id=
+    "index-suspend_002demacs"></a>Command:
+    <strong>suspend-emacs</strong> <em>&amp;optional
+    string</em></dt>
+
+    <dd>
+      <p>This function stops Emacs and returns control to the
+      superior process. If and when the superior process resumes
+      Emacs, <code>suspend-emacs</code> returns <code>nil</code> to
+      its caller in Lisp.</p>
+
+      <p>This function works only on the controlling terminal of
+      the Emacs session; to relinquish control of other tty
+      devices, use <code>suspend-tty</code> (see below). If the
+      Emacs session uses more than one terminal, you must delete
+      the frames on all the other terminals before suspending
+      Emacs, or this function signals an error. See <a href=
+      "Multiple-Terminals.html#Multiple-Terminals">Multiple
+      Terminals</a>.</p>
+
+      <p>If <var>string</var> is non-<code>nil</code>, its
+      characters are sent to Emacs&rsquo;s superior shell, to be
+      read as terminal input. The characters in <var>string</var>
+      are not echoed by the superior shell; only the results
+      appear.</p>
+
+      <p>Before suspending, <code>suspend-emacs</code> runs the
+      normal hook <code>suspend-hook</code>. After the user resumes
+      Emacs, <code>suspend-emacs</code> runs the normal hook
+      <code>suspend-resume-hook</code>. See <a href=
+      "Hooks.html#Hooks">Hooks</a>.</p>
+
+      <p>The next redisplay after resumption will redraw the entire
+      screen, unless the variable <code>no-redraw-on-reenter</code>
+      is non-<code>nil</code>. See <a href=
+      "Refresh-Screen.html#Refresh-Screen">Refresh Screen</a>.</p>
+
+      <p>Here is an example of how you could use these hooks:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(add-hook 'suspend-hook
+          (lambda () (or (y-or-n-p "Really suspend? ")
+                         (error "Suspend canceled"))))
+</pre>
+        <pre class="smallexample">
+(add-hook 'suspend-resume-hook (lambda () (message "Resumed!")
                                  (sit-for 2)))
-</pre></div>
+</pre>
+      </div>
 
-<p>Here is what you would see upon evaluating <code>(suspend-emacs &quot;pwd&quot;)</code>:
-</p>
-<div class="smallexample">
-<pre class="smallexample">---------- Buffer: Minibuffer ----------
+      <p>Here is what you would see upon evaluating
+      <code>(suspend-emacs "pwd")</code>:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+---------- Buffer: Minibuffer ----------
 Really suspend? <kbd>y</kbd>
 ---------- Buffer: Minibuffer ----------
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">---------- Parent Shell ----------
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+---------- Parent Shell ----------
 bash$ /home/username
 bash$ fg
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">---------- Echo Area ----------
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+---------- Echo Area ----------
 Resumed!
-</pre></div>
+</pre>
+      </div>
 
-<p>Note that &lsquo;<samp>pwd</samp>&rsquo; is not echoed after Emacs is suspended.  But it
-is read and executed by the shell.
-</p></dd></dl>
+      <p>Note that &lsquo;<samp>pwd</samp>&rsquo; is not echoed
+      after Emacs is suspended. But it is read and executed by the
+      shell.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-suspend_002dhook"></a>Variable: <strong>suspend-hook</strong></dt>
-<dd><p>This variable is a normal hook that Emacs runs before suspending.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-suspend_002dhook" id=
+    "index-suspend_002dhook"></a>Variable:
+    <strong>suspend-hook</strong></dt>
 
-<dl>
-<dt><a name="index-suspend_002dresume_002dhook"></a>Variable: <strong>suspend-resume-hook</strong></dt>
-<dd><p>This variable is a normal hook that Emacs runs on resuming
-after a suspension.
-</p></dd></dl>
+    <dd>
+      <p>This variable is a normal hook that Emacs runs before
+      suspending.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-suspend_002dtty"></a>Function: <strong>suspend-tty</strong> <em>&amp;optional tty</em></dt>
-<dd><p>If <var>tty</var> specifies a terminal device used by Emacs, this function
-relinquishes the device and restores it to its prior state.  Frames
-that used the device continue to exist, but are not updated and Emacs
-doesn&rsquo;t read input from them.  <var>tty</var> can be a terminal object, a
-frame (meaning the terminal for that frame), or <code>nil</code> (meaning
-the terminal for the selected frame).  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
-</p>
-<p>If <var>tty</var> is already suspended, this function does nothing.
-</p>
-<a name="index-suspend_002dtty_002dfunctions"></a>
-<p>This function runs the hook <code>suspend-tty-functions</code>, passing the
-terminal object as an argument to each function.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-suspend_002dresume_002dhook" id=
+    "index-suspend_002dresume_002dhook"></a>Variable:
+    <strong>suspend-resume-hook</strong></dt>
 
-<dl>
-<dt><a name="index-resume_002dtty"></a>Function: <strong>resume-tty</strong> <em>&amp;optional tty</em></dt>
-<dd><p>This function resumes the previously suspended terminal device
-<var>tty</var>; where <var>tty</var> has the same possible values as it does
-for <code>suspend-tty</code>.
-</p>
-<a name="index-resume_002dtty_002dfunctions"></a>
-<p>This function reopens the terminal device, re-initializes it, and
-redraws it with that terminal&rsquo;s selected frame.  It then runs the
-hook <code>resume-tty-functions</code>, passing the terminal object as an
-argument to each function.
-</p>
-<p>If the same device is already used by another Emacs terminal, this
-function signals an error.  If <var>tty</var> is not suspended, this
-function does nothing.
-</p></dd></dl>
+    <dd>
+      <p>This variable is a normal hook that Emacs runs on resuming
+      after a suspension.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-controlling_002dtty_002dp"></a>Function: <strong>controlling-tty-p</strong> <em>&amp;optional tty</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>tty</var> is the
-controlling terminal of the Emacs session; <var>tty</var> can be a
-terminal object, a frame (meaning the terminal for that frame), or
-<code>nil</code> (meaning the terminal for the selected frame).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-suspend_002dtty" id=
+    "index-suspend_002dtty"></a>Function:
+    <strong>suspend-tty</strong> <em>&amp;optional tty</em></dt>
 
-<dl>
-<dt><a name="index-suspend_002dframe"></a>Command: <strong>suspend-frame</strong></dt>
-<dd><p>This command <em>suspends</em> a frame.  For GUI frames, it calls
-<code>iconify-frame</code> (see <a href="Visibility-of-Frames.html#Visibility-of-Frames">Visibility of Frames</a>); for frames on
-text terminals, it calls either <code>suspend-emacs</code> or
-<code>suspend-tty</code>, depending on whether the frame is displayed on the
-controlling terminal device or not.
-</p></dd></dl>
+    <dd>
+      <p>If <var>tty</var> specifies a terminal device used by
+      Emacs, this function relinquishes the device and restores it
+      to its prior state. Frames that used the device continue to
+      exist, but are not updated and Emacs doesn&rsquo;t read input
+      from them. <var>tty</var> can be a terminal object, a frame
+      (meaning the terminal for that frame), or <code>nil</code>
+      (meaning the terminal for the selected frame). See <a href=
+      "Multiple-Terminals.html#Multiple-Terminals">Multiple
+      Terminals</a>.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Killing-Emacs.html#Killing-Emacs" accesskey="p" rel="prev">Killing Emacs</a>, Up: <a href="Getting-Out.html#Getting-Out" accesskey="u" rel="up">Getting Out</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If <var>tty</var> is already suspended, this function does
+      nothing.</p><a name="index-suspend_002dtty_002dfunctions" id=
+      "index-suspend_002dtty_002dfunctions"></a>
 
+      <p>This function runs the hook
+      <code>suspend-tty-functions</code>, passing the terminal
+      object as an argument to each function.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-resume_002dtty" id=
+    "index-resume_002dtty"></a>Function:
+    <strong>resume-tty</strong> <em>&amp;optional tty</em></dt>
 
+    <dd>
+      <p>This function resumes the previously suspended terminal
+      device <var>tty</var>; where <var>tty</var> has the same
+      possible values as it does for
+      <code>suspend-tty</code>.</p><a name=
+      "index-resume_002dtty_002dfunctions" id=
+      "index-resume_002dtty_002dfunctions"></a>
+
+      <p>This function reopens the terminal device, re-initializes
+      it, and redraws it with that terminal&rsquo;s selected frame.
+      It then runs the hook <code>resume-tty-functions</code>,
+      passing the terminal object as an argument to each
+      function.</p>
+
+      <p>If the same device is already used by another Emacs
+      terminal, this function signals an error. If <var>tty</var>
+      is not suspended, this function does nothing.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-controlling_002dtty_002dp" id=
+    "index-controlling_002dtty_002dp"></a>Function:
+    <strong>controlling-tty-p</strong> <em>&amp;optional
+    tty</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>tty</var> is the controlling terminal of the Emacs
+      session; <var>tty</var> can be a terminal object, a frame
+      (meaning the terminal for that frame), or <code>nil</code>
+      (meaning the terminal for the selected frame).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-suspend_002dframe" id=
+    "index-suspend_002dframe"></a>Command:
+    <strong>suspend-frame</strong></dt>
+
+    <dd>
+      <p>This command <em>suspends</em> a frame. For GUI frames, it
+      calls <code>iconify-frame</code> (see <a href=
+      "Visibility-of-Frames.html#Visibility-of-Frames">Visibility
+      of Frames</a>); for frames on text terminals, it calls either
+      <code>suspend-emacs</code> or <code>suspend-tty</code>,
+      depending on whether the frame is displayed on the
+      controlling terminal device or not.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Killing-Emacs.html#Killing-Emacs"
+    accesskey="p" rel="prev">Killing Emacs</a>, Up: <a href=
+    "Getting-Out.html#Getting-Out" accesskey="u" rel="up">Getting
+    Out</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

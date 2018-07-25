@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,127 +16,185 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Making New Objects</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Making New Objects">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Making New Objects">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Accessing-Slots.html#Accessing-Slots" rel="next" title="Accessing Slots">
-<link href="Class-Options.html#Class-Options" rel="prev" title="Class Options">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Making New Objects</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Making New Objects" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Making New Objects" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Accessing-Slots.html#Accessing-Slots" rel="next"
+  title="Accessing Slots" />
+  <link href="Class-Options.html#Class-Options" rel="prev" title=
+  "Class Options" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Making-New-Objects"></a>
-<div class="header">
-<p>
-Next: <a href="Accessing-Slots.html#Accessing-Slots" accesskey="n" rel="next">Accessing Slots</a>, Previous: <a href="Building-Classes.html#Building-Classes" accesskey="p" rel="prev">Building Classes</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Making-New-Objects-1"></a>
-<h2 class="chapter">4 Making New Objects</h2>
+<body lang="en" xml:lang="en">
+  <a name="Making-New-Objects" id="Making-New-Objects"></a>
 
-<p>Suppose we have a simple class is defined, such as:
-</p>
-<div class="example">
-<pre class="example">(defclass record ()
-   ( ) &quot;Doc String&quot;)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Accessing-Slots.html#Accessing-Slots"
+    accesskey="n" rel="next">Accessing Slots</a>, Previous:
+    <a href="Building-Classes.html#Building-Classes" accesskey="p"
+    rel="prev">Building Classes</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Making-New-Objects-1" id="Making-New-Objects-1"></a>
 
-<p>It is now possible to create objects of that class type.
-</p>
-<p>Calling <code>defclass</code> has defined two new functions.  One is the
-constructor <var>record</var>, and the other is the predicate,
-<var>record</var>-p.
-</p>
-<dl>
-<dt><a name="index-record"></a>Function: <strong>record</strong> <em>object-name &amp;rest slots</em></dt>
-<dd>
-<p>This creates and returns a new object.  This object is not assigned to
-anything, and will be garbage collected if not saved.  This object
-will be given the string name <var>object-name</var>.  There can be
-multiple objects of the same name, but the name slot provides a handy
-way to keep track of your objects.  <var>slots</var> is just all the slots
-you wish to preset.  Any slot set as such <em>will not</em> get its
-default value, and any side effects from a slot&rsquo;s <code>:initform</code>
-that may be a function will not occur.
-</p>
-<p>An example pair would appear simply as <code>:value 1</code>.  Of course you
-can do any valid Lispy thing you want with it, such as
-<code>:value (if (boundp 'special-symbol) special-symbol nil)</code>
-</p>
-<p>Example of creating an object from a class:
-</p>
-<div class="example">
-<pre class="example">(record :value 3 :reference nil)
-</pre></div>
+  <h2 class="chapter">4 Making New Objects</h2>
 
-</dd></dl>
+  <p>Suppose we have a simple class is defined, such as:</p>
 
-<p>To create an object from a class symbol, use <code>make-instance</code>.
-</p>
-<dl>
-<dt><a name="index-make_002dinstance"></a>Function: <strong>make-instance</strong> <em>class &amp;rest initargs</em></dt>
-<dd><a name="make_002dinstance"></a><p>Make a new instance of <var>class</var> based on <var>initargs</var>.
-<var>class</var> is a class symbol.  For example:
-</p>
-<div class="example">
-<pre class="example">  (make-instance 'foo)
-</pre></div>
+  <div class="example">
+    <pre class="example">
+(defclass record ()
+   ( ) "Doc String")
+</pre>
+  </div>
 
-<p><var>initargs</var> is a property list with keywords based on the <code>:initarg</code>
-for each slot.  For example:
-</p>
-<div class="example">
-<pre class="example">  (make-instance <code>'foo</code> <code>:slot1</code> value1 <code>:slotN</code> valueN)
-</pre></div>
+  <p>It is now possible to create objects of that class type.</p>
 
-</dd></dl>
+  <p>Calling <code>defclass</code> has defined two new functions.
+  One is the constructor <var>record</var>, and the other is the
+  predicate, <var>record</var>-p.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Accessing-Slots.html#Accessing-Slots" accesskey="n" rel="next">Accessing Slots</a>, Previous: <a href="Building-Classes.html#Building-Classes" accesskey="p" rel="prev">Building Classes</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-record" id="index-record"></a>Function:
+    <strong>record</strong> <em>object-name &amp;rest
+    slots</em></dt>
 
+    <dd>
+      <p>This creates and returns a new object. This object is not
+      assigned to anything, and will be garbage collected if not
+      saved. This object will be given the string name
+      <var>object-name</var>. There can be multiple objects of the
+      same name, but the name slot provides a handy way to keep
+      track of your objects. <var>slots</var> is just all the slots
+      you wish to preset. Any slot set as such <em>will not</em>
+      get its default value, and any side effects from a
+      slot&rsquo;s <code>:initform</code> that may be a function
+      will not occur.</p>
 
+      <p>An example pair would appear simply as <code>:value
+      1</code>. Of course you can do any valid Lispy thing you want
+      with it, such as <code>:value (if (boundp 'special-symbol)
+      special-symbol nil)</code></p>
 
+      <p>Example of creating an object from a class:</p>
+
+      <div class="example">
+        <pre class="example">
+(record :value 3 :reference nil)
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <p>To create an object from a class symbol, use
+  <code>make-instance</code>.</p>
+
+  <dl>
+    <dt><a name="index-make_002dinstance" id=
+    "index-make_002dinstance"></a>Function:
+    <strong>make-instance</strong> <em>class &amp;rest
+    initargs</em></dt>
+
+    <dd>
+      <a name="make_002dinstance" id="make_002dinstance"></a>
+
+      <p>Make a new instance of <var>class</var> based on
+      <var>initargs</var>. <var>class</var> is a class symbol. For
+      example:</p>
+
+      <div class="example">
+        <pre class="example">
+  (make-instance 'foo)
+</pre>
+      </div>
+
+      <p><var>initargs</var> is a property list with keywords based
+      on the <code>:initarg</code> for each slot. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+  (make-instance <code>'foo</code> <code>:slot1</code> value1 <code>:slotN</code> valueN)
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Accessing-Slots.html#Accessing-Slots"
+    accesskey="n" rel="next">Accessing Slots</a>, Previous:
+    <a href="Building-Classes.html#Building-Classes" accesskey="p"
+    rel="prev">Building Classes</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

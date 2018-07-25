@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,257 +19,395 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Defining Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Defining Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Defining Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Calling-Functions.html#Calling-Functions" rel="next" title="Calling Functions">
-<link href="Function-Names.html#Function-Names" rel="prev" title="Function Names">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Defining
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Defining Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Defining Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href="Calling-Functions.html#Calling-Functions" rel="next"
+  title="Calling Functions" />
+  <link href="Function-Names.html#Function-Names" rel="prev" title=
+  "Function Names" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Defining-Functions" id="Defining-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Calling-Functions.html#Calling-Functions"
+    accesskey="n" rel="next">Calling Functions</a>, Previous:
+    <a href="Function-Names.html#Function-Names" accesskey="p" rel=
+    "prev">Function Names</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Functions-1" id="Defining-Functions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Calling-Functions.html#Calling-Functions" accesskey="n" rel="next">Calling Functions</a>, Previous: <a href="Function-Names.html#Function-Names" accesskey="p" rel="prev">Function Names</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Functions-1"></a>
-<h3 class="section">12.4 Defining Functions</h3>
-<a name="index-defining-a-function"></a>
+  <h3 class="section">12.4 Defining Functions</h3><a name=
+  "index-defining-a-function" id="index-defining-a-function"></a>
 
-<p>We usually give a name to a function when it is first created.  This
-is called <em>defining a function</em>, and it is done with the
-<code>defun</code> macro.
-</p>
-<dl>
-<dt><a name="index-defun"></a>Macro: <strong>defun</strong> <em>name args [doc] [declare] [interactive] body&hellip;</em></dt>
-<dd><p><code>defun</code> is the usual way to define new Lisp functions.  It
-defines the symbol <var>name</var> as a function with argument list
-<var>args</var> and body forms given by <var>body</var>.  Neither <var>name</var> nor
-<var>args</var> should be quoted.
-</p>
-<p><var>doc</var>, if present, should be a string specifying the function&rsquo;s
-documentation string (see <a href="Function-Documentation.html#Function-Documentation">Function Documentation</a>).  <var>declare</var>,
-if present, should be a <code>declare</code> form specifying function
-metadata (see <a href="Declare-Form.html#Declare-Form">Declare Form</a>).  <var>interactive</var>, if present,
-should be an <code>interactive</code> form specifying how the function is to
-be called interactively (see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>).
-</p>
-<p>The return value of <code>defun</code> is undefined.
-</p>
-<p>Here are some examples:
-</p>
-<div class="example">
-<pre class="example">(defun foo () 5)
+  <p>We usually give a name to a function when it is first created.
+  This is called <em>defining a function</em>, and it is done with
+  the <code>defun</code> macro.</p>
+
+  <dl>
+    <dt><a name="index-defun" id="index-defun"></a>Macro:
+    <strong>defun</strong> <em>name args [doc] [declare]
+    [interactive] body&hellip;</em></dt>
+
+    <dd>
+      <p><code>defun</code> is the usual way to define new Lisp
+      functions. It defines the symbol <var>name</var> as a
+      function with argument list <var>args</var> and body forms
+      given by <var>body</var>. Neither <var>name</var> nor
+      <var>args</var> should be quoted.</p>
+
+      <p><var>doc</var>, if present, should be a string specifying
+      the function&rsquo;s documentation string (see <a href=
+      "Function-Documentation.html#Function-Documentation">Function
+      Documentation</a>). <var>declare</var>, if present, should be
+      a <code>declare</code> form specifying function metadata (see
+      <a href="Declare-Form.html#Declare-Form">Declare Form</a>).
+      <var>interactive</var>, if present, should be an
+      <code>interactive</code> form specifying how the function is
+      to be called interactively (see <a href=
+      "Interactive-Call.html#Interactive-Call">Interactive
+      Call</a>).</p>
+
+      <p>The return value of <code>defun</code> is undefined.</p>
+
+      <p>Here are some examples:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun foo () 5)
 (foo)
      &rArr; 5
-</pre><pre class="example">
-</pre><pre class="example">(defun bar (a &amp;optional b &amp;rest c)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(defun bar (a &amp;optional b &amp;rest c)
     (list a b c))
 (bar 1 2 3 4 5)
      &rArr; (1 2 (3 4 5))
-</pre><pre class="example">(bar 1)
+</pre>
+        <pre class="example">
+(bar 1)
      &rArr; (1 nil nil)
-</pre><pre class="example">(bar)
+</pre>
+        <pre class="example">
+(bar)
 error&rarr; Wrong number of arguments.
-</pre><pre class="example">
-</pre><pre class="example">(defun capitalize-backwards ()
-  &quot;Upcase the last letter of the word at point.&quot;
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(defun capitalize-backwards ()
+  "Upcase the last letter of the word at point."
   (interactive)
   (backward-word 1)
   (forward-word 1)
   (backward-char 1)
   (capitalize-word 1))
-</pre></div>
+</pre>
+      </div>
 
-<p>Be careful not to redefine existing functions unintentionally.
-<code>defun</code> redefines even primitive functions such as <code>car</code>
-without any hesitation or notification.  Emacs does not prevent you
-from doing this, because redefining a function is sometimes done
-deliberately, and there is no way to distinguish deliberate
-redefinition from unintentional redefinition.
-</p></dd></dl>
+      <p>Be careful not to redefine existing functions
+      unintentionally. <code>defun</code> redefines even primitive
+      functions such as <code>car</code> without any hesitation or
+      notification. Emacs does not prevent you from doing this,
+      because redefining a function is sometimes done deliberately,
+      and there is no way to distinguish deliberate redefinition
+      from unintentional redefinition.</p>
+    </dd>
+  </dl><a name="index-function-aliases" id=
+  "index-function-aliases"></a> <a name=
+  "index-alias_002c-for-functions" id=
+  "index-alias_002c-for-functions"></a>
 
-<a name="index-function-aliases"></a>
-<a name="index-alias_002c-for-functions"></a>
-<dl>
-<dt><a name="index-defalias"></a>Function: <strong>defalias</strong> <em>name definition &amp;optional doc</em></dt>
-<dd><a name="Definition-of-defalias"></a><p>This function defines the symbol <var>name</var> as a function, with
-definition <var>definition</var> (which can be any valid Lisp function).
-Its return value is <em>undefined</em>.
-</p>
-<p>If <var>doc</var> is non-<code>nil</code>, it becomes the function documentation
-of <var>name</var>.  Otherwise, any documentation provided by
-<var>definition</var> is used.
-</p>
-<a name="index-defalias_002dfset_002dfunction-property"></a>
-<p>Internally, <code>defalias</code> normally uses <code>fset</code> to set the definition.
-If <var>name</var> has a <code>defalias-fset-function</code> property, however,
-the associated value is used as a function to call in place of <code>fset</code>.
-</p>
-<p>The proper place to use <code>defalias</code> is where a specific function
-name is being defined&mdash;especially where that name appears explicitly in
-the source file being loaded.  This is because <code>defalias</code> records
-which file defined the function, just like <code>defun</code>
-(see <a href="Unloading.html#Unloading">Unloading</a>).
-</p>
-<p>By contrast, in programs that manipulate function definitions for other
-purposes, it is better to use <code>fset</code>, which does not keep such
-records.  See <a href="Function-Cells.html#Function-Cells">Function Cells</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-defalias" id="index-defalias"></a>Function:
+    <strong>defalias</strong> <em>name definition &amp;optional
+    doc</em></dt>
 
-<p>You cannot create a new primitive function with <code>defun</code> or
-<code>defalias</code>, but you can use them to change the function definition of
-any symbol, even one such as <code>car</code> or <code>x-popup-menu</code> whose
-normal definition is a primitive.  However, this is risky: for
-instance, it is next to impossible to redefine <code>car</code> without
-breaking Lisp completely.  Redefining an obscure function such as
-<code>x-popup-menu</code> is less dangerous, but it still may not work as
-you expect.  If there are calls to the primitive from C code, they
-call the primitive&rsquo;s C definition directly, so changing the symbol&rsquo;s
-definition will have no effect on them.
-</p>
-<p>See also <code>defsubst</code>, which defines a function like <code>defun</code>
-and tells the Lisp compiler to perform inline expansion on it.
-See <a href="Inline-Functions.html#Inline-Functions">Inline Functions</a>.
-</p>
-<p>Alternatively, you can define a function by providing the code which
-will inline it as a compiler macro.  The following macros make this
-possible.
-</p>
-<dl>
-<dt><a name="index-define_002dinline"></a>Macro: <strong>define-inline</strong> <em>name args [doc] [declare] body&hellip;</em></dt>
-<dd><p>Define a function <var>name</var> by providing code that does its inlining,
-as a compiler macro.  The function will accept the argument list
-<var>args</var> and will have the specified <var>body</var>.
-</p>
-<p>If present, <var>doc</var> should be the function&rsquo;s documentation string
-(see <a href="Function-Documentation.html#Function-Documentation">Function Documentation</a>); <var>declare</var>, if present, should be
-a <code>declare</code> form (see <a href="Declare-Form.html#Declare-Form">Declare Form</a>) specifying the function&rsquo;s
-metadata.
-</p></dd></dl>
+    <dd>
+      <a name="Definition-of-defalias" id=
+      "Definition-of-defalias"></a>
 
-<p>Functions defined via <code>define-inline</code> have several advantages
-with respect to macros defined by <code>defsubst</code> or <code>defmacro</code>:
-</p>
-<ul class="no-bullet">
-<li>− They can be passed to <code>mapcar</code> (see <a href="Mapping-Functions.html#Mapping-Functions">Mapping Functions</a>).
+      <p>This function defines the symbol <var>name</var> as a
+      function, with definition <var>definition</var> (which can be
+      any valid Lisp function). Its return value is
+      <em>undefined</em>.</p>
 
-</li><li>− They are more efficient.
+      <p>If <var>doc</var> is non-<code>nil</code>, it becomes the
+      function documentation of <var>name</var>. Otherwise, any
+      documentation provided by <var>definition</var> is
+      used.</p><a name=
+      "index-defalias_002dfset_002dfunction-property" id=
+      "index-defalias_002dfset_002dfunction-property"></a>
 
-</li><li>− They can be used as <em>place forms</em> to store values
-(see <a href="Generalized-Variables.html#Generalized-Variables">Generalized Variables</a>).
+      <p>Internally, <code>defalias</code> normally uses
+      <code>fset</code> to set the definition. If <var>name</var>
+      has a <code>defalias-fset-function</code> property, however,
+      the associated value is used as a function to call in place
+      of <code>fset</code>.</p>
 
-</li><li>− They behave in a more predictable way than <code>cl-defsubst</code>
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/cl/Argument-Lists.html#Argument-Lists">Argument Lists</a> in <cite>Common Lisp Extensions for GNU Emacs
-Lisp</cite>).
-</li></ul>
+      <p>The proper place to use <code>defalias</code> is where a
+      specific function name is being defined&mdash;especially
+      where that name appears explicitly in the source file being
+      loaded. This is because <code>defalias</code> records which
+      file defined the function, just like <code>defun</code> (see
+      <a href="Unloading.html#Unloading">Unloading</a>).</p>
 
-<p>Like <code>defmacro</code>, a function inlined with <code>define-inline</code>
-inherits the scoping rules, either dynamic or lexical, from the call
-site.  See <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>.
-</p>
-<p>The following macros should be used in the body of a function defined
-by <code>define-inline</code>.
-</p>
-<dl>
-<dt><a name="index-inline_002dquote"></a>Macro: <strong>inline-quote</strong> <em>expression</em></dt>
-<dd><p>Quote <var>expression</var> for <code>define-inline</code>.  This is similar to
-the backquote (see <a href="Backquote.html#Backquote">Backquote</a>), but quotes code and accepts only
-<code>,</code>, not <code>,@</code>.
-</p></dd></dl>
+      <p>By contrast, in programs that manipulate function
+      definitions for other purposes, it is better to use
+      <code>fset</code>, which does not keep such records. See
+      <a href="Function-Cells.html#Function-Cells">Function
+      Cells</a>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-inline_002dletevals"></a>Macro: <strong>inline-letevals</strong> <em>(bindings&hellip;) body&hellip;</em></dt>
-<dd><p>This is is similar to <code>let</code> (see <a href="Local-Variables.html#Local-Variables">Local Variables</a>): it sets up
-local variables as specified by <var>bindings</var>, and then evaluates
-<var>body</var> with those bindings in effect.  Each element of
-<var>bindings</var> should be either a symbol or a list of the form
-<code>(<var>var</var>&nbsp;<var>expr</var>)</code><!-- /@w -->; the result is to evaluate
-<var>expr</var> and bind <var>var</var> to the result.  The tail of
-<var>bindings</var> can be either <code>nil</code> or a symbol which should hold
-a list of arguments, in which case each argument is evaluated, and the
-symbol is bound to the resulting list.
-</p></dd></dl>
+  <p>You cannot create a new primitive function with
+  <code>defun</code> or <code>defalias</code>, but you can use them
+  to change the function definition of any symbol, even one such as
+  <code>car</code> or <code>x-popup-menu</code> whose normal
+  definition is a primitive. However, this is risky: for instance,
+  it is next to impossible to redefine <code>car</code> without
+  breaking Lisp completely. Redefining an obscure function such as
+  <code>x-popup-menu</code> is less dangerous, but it still may not
+  work as you expect. If there are calls to the primitive from C
+  code, they call the primitive&rsquo;s C definition directly, so
+  changing the symbol&rsquo;s definition will have no effect on
+  them.</p>
 
-<dl>
-<dt><a name="index-inline_002dconst_002dp"></a>Macro: <strong>inline-const-p</strong> <em>expression</em></dt>
-<dd><p>Return non-<code>nil</code> if the value of <var>expression</var> is already
-known.
-</p></dd></dl>
+  <p>See also <code>defsubst</code>, which defines a function like
+  <code>defun</code> and tells the Lisp compiler to perform inline
+  expansion on it. See <a href=
+  "Inline-Functions.html#Inline-Functions">Inline
+  Functions</a>.</p>
 
-<dl>
-<dt><a name="index-inline_002dconst_002dval"></a>Macro: <strong>inline-const-val</strong> <em>expression</em></dt>
-<dd><p>Return the value of <var>expression</var>.
-</p></dd></dl>
+  <p>Alternatively, you can define a function by providing the code
+  which will inline it as a compiler macro. The following macros
+  make this possible.</p>
 
-<dl>
-<dt><a name="index-inline_002derror"></a>Macro: <strong>inline-error</strong> <em>format &amp;rest args</em></dt>
-<dd><p>Signal an error, formatting <var>args</var> according to <var>format</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-define_002dinline" id=
+    "index-define_002dinline"></a>Macro:
+    <strong>define-inline</strong> <em>name args [doc] [declare]
+    body&hellip;</em></dt>
 
-<p>Here&rsquo;s an example of using <code>define-inline</code>:
-</p>
-<div class="lisp">
-<pre class="lisp">(define-inline myaccessor (obj)
+    <dd>
+      <p>Define a function <var>name</var> by providing code that
+      does its inlining, as a compiler macro. The function will
+      accept the argument list <var>args</var> and will have the
+      specified <var>body</var>.</p>
+
+      <p>If present, <var>doc</var> should be the function&rsquo;s
+      documentation string (see <a href=
+      "Function-Documentation.html#Function-Documentation">Function
+      Documentation</a>); <var>declare</var>, if present, should be
+      a <code>declare</code> form (see <a href=
+      "Declare-Form.html#Declare-Form">Declare Form</a>) specifying
+      the function&rsquo;s metadata.</p>
+    </dd>
+  </dl>
+
+  <p>Functions defined via <code>define-inline</code> have several
+  advantages with respect to macros defined by
+  <code>defsubst</code> or <code>defmacro</code>:</p>
+
+  <ul class="no-bullet">
+    <li>&acirc;&circ;&rsquo; They can be passed to
+    <code>mapcar</code> (see <a href=
+    "Mapping-Functions.html#Mapping-Functions">Mapping
+    Functions</a>).</li>
+
+    <li>&acirc;&circ;&rsquo; They are more efficient.</li>
+
+    <li>&acirc;&circ;&rsquo; They can be used as <em>place
+    forms</em> to store values (see <a href=
+    "Generalized-Variables.html#Generalized-Variables">Generalized
+    Variables</a>).</li>
+
+    <li>&acirc;&circ;&rsquo; They behave in a more predictable way
+    than <code>cl-defsubst</code> (see <a href=
+    "http://www.gnu.org/software/emacs/manual/html_node/cl/Argument-Lists.html#Argument-Lists">
+    Argument Lists</a> in <cite>Common Lisp Extensions for GNU
+    Emacs Lisp</cite>).</li>
+  </ul>
+
+  <p>Like <code>defmacro</code>, a function inlined with
+  <code>define-inline</code> inherits the scoping rules, either
+  dynamic or lexical, from the call site. See <a href=
+  "Variable-Scoping.html#Variable-Scoping">Variable
+  Scoping</a>.</p>
+
+  <p>The following macros should be used in the body of a function
+  defined by <code>define-inline</code>.</p>
+
+  <dl>
+    <dt><a name="index-inline_002dquote" id=
+    "index-inline_002dquote"></a>Macro:
+    <strong>inline-quote</strong> <em>expression</em></dt>
+
+    <dd>
+      <p>Quote <var>expression</var> for
+      <code>define-inline</code>. This is similar to the backquote
+      (see <a href="Backquote.html#Backquote">Backquote</a>), but
+      quotes code and accepts only <code>,</code>, not
+      <code>,@</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-inline_002dletevals" id=
+    "index-inline_002dletevals"></a>Macro:
+    <strong>inline-letevals</strong> <em>(bindings&hellip;)
+    body&hellip;</em></dt>
+
+    <dd>
+      <p>This is is similar to <code>let</code> (see <a href=
+      "Local-Variables.html#Local-Variables">Local Variables</a>):
+      it sets up local variables as specified by
+      <var>bindings</var>, and then evaluates <var>body</var> with
+      those bindings in effect. Each element of <var>bindings</var>
+      should be either a symbol or a list of the form
+      <code>(<var>var</var>&nbsp;<var>expr</var>)</code>
+      <!-- /@w -->; the result is to evaluate <var>expr</var> and
+      bind <var>var</var> to the result. The tail of
+      <var>bindings</var> can be either <code>nil</code> or a
+      symbol which should hold a list of arguments, in which case
+      each argument is evaluated, and the symbol is bound to the
+      resulting list.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-inline_002dconst_002dp" id=
+    "index-inline_002dconst_002dp"></a>Macro:
+    <strong>inline-const-p</strong> <em>expression</em></dt>
+
+    <dd>
+      <p>Return non-<code>nil</code> if the value of
+      <var>expression</var> is already known.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-inline_002dconst_002dval" id=
+    "index-inline_002dconst_002dval"></a>Macro:
+    <strong>inline-const-val</strong> <em>expression</em></dt>
+
+    <dd>
+      <p>Return the value of <var>expression</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-inline_002derror" id=
+    "index-inline_002derror"></a>Macro:
+    <strong>inline-error</strong> <em>format &amp;rest
+    args</em></dt>
+
+    <dd>
+      <p>Signal an error, formatting <var>args</var> according to
+      <var>format</var>.</p>
+    </dd>
+  </dl>
+
+  <p>Here&rsquo;s an example of using
+  <code>define-inline</code>:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(define-inline myaccessor (obj)
   (inline-letevals (obj)
     (inline-quote (if (foo-p ,obj) (aref (cdr ,obj) 3) (aref ,obj 2)))))
-</pre></div>
+</pre>
+  </div>
 
-<p>This is equivalent to
-</p>
-<div class="lisp">
-<pre class="lisp">(defsubst myaccessor (obj)
+  <p>This is equivalent to</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(defsubst myaccessor (obj)
   (if (foo-p obj) (aref (cdr obj) 3) (aref obj 2)))
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Calling-Functions.html#Calling-Functions" accesskey="n" rel="next">Calling Functions</a>, Previous: <a href="Function-Names.html#Function-Names" accesskey="p" rel="prev">Function Names</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Calling-Functions.html#Calling-Functions"
+    accesskey="n" rel="next">Calling Functions</a>, Previous:
+    <a href="Function-Names.html#Function-Names" accesskey="p" rel=
+    "prev">Function Names</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,90 +16,135 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: eval</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: eval">
-<meta name="keywords" content="The Org Manual: eval">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Specific-header-arguments.html#Specific-header-arguments" rel="up" title="Specific header arguments">
-<link href="wrap.html#wrap" rel="next" title="wrap">
-<link href="tangle_002dmode.html#tangle_002dmode" rel="prev" title="tangle-mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: eval</title>
+  <meta name="description" content="The Org Manual: eval" />
+  <meta name="keywords" content="The Org Manual: eval" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Specific-header-arguments.html#Specific-header-arguments" rel=
+  "up" title="Specific header arguments" />
+  <link href="wrap.html#wrap" rel="next" title="wrap" />
+  <link href="tangle_002dmode.html#tangle_002dmode" rel="prev"
+  title="tangle-mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="eval"></a>
-<div class="header">
-<p>
-Next: <a href="wrap.html#wrap" accesskey="n" rel="next">wrap</a>, Previous: <a href="tangle_002dmode.html#tangle_002dmode" accesskey="p" rel="prev">tangle-mode</a>, Up: <a href="Specific-header-arguments.html#Specific-header-arguments" accesskey="u" rel="up">Specific header arguments</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="g_t_003aeval"></a>
-<h4 class="subsubsection">14.8.2.23 <code>:eval</code></h4>
-<p>The <code>:eval</code> header argument can be used to limit the evaluation of
-specific code blocks.  The <code>:eval</code> header argument can be useful for
-protecting against the evaluation of dangerous code blocks or to ensure that
-evaluation will require a query regardless of the value of the
-<code>org-confirm-babel-evaluate</code> variable.  The possible values of
-<code>:eval</code> and their effects are shown below.
-</p>
-<dl compact="compact">
-<dt><code>never or no</code></dt>
-<dd><p>The code block will not be evaluated under any circumstances.
-</p></dd>
-<dt><code>query</code></dt>
-<dd><p>Evaluation of the code block will require a query.
-</p></dd>
-<dt><code>never-export or no-export</code></dt>
-<dd><p>The code block will not be evaluated during export but may still be called
-interactively.
-</p></dd>
-<dt><code>query-export</code></dt>
-<dd><p>Evaluation of the code block during export will require a query.
-</p></dd>
-</dl>
+<body lang="en" xml:lang="en">
+  <a name="eval" id="eval"></a>
 
-<p>If this header argument is not set then evaluation is determined by the value
-of the <code>org-confirm-babel-evaluate</code> variable see <a href="Code-evaluation-security.html#Code-evaluation-security">Code evaluation security</a>.
-</p>
+  <div class="header">
+    <p>Next: <a href="wrap.html#wrap" accesskey="n" rel=
+    "next">wrap</a>, Previous: <a href=
+    "tangle_002dmode.html#tangle_002dmode" accesskey="p" rel=
+    "prev">tangle-mode</a>, Up: <a href=
+    "Specific-header-arguments.html#Specific-header-arguments"
+    accesskey="u" rel="up">Specific header arguments</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="g_t_003aeval" id="g_t_003aeval"></a>
 
+  <h4 class="subsubsection">14.8.2.23 <code>:eval</code></h4>
 
+  <p>The <code>:eval</code> header argument can be used to limit
+  the evaluation of specific code blocks. The <code>:eval</code>
+  header argument can be useful for protecting against the
+  evaluation of dangerous code blocks or to ensure that evaluation
+  will require a query regardless of the value of the
+  <code>org-confirm-babel-evaluate</code> variable. The possible
+  values of <code>:eval</code> and their effects are shown
+  below.</p>
 
+  <dl compact="compact">
+    <dt><code>never or no</code></dt>
+
+    <dd>
+      <p>The code block will not be evaluated under any
+      circumstances.</p>
+    </dd>
+
+    <dt><code>query</code></dt>
+
+    <dd>
+      <p>Evaluation of the code block will require a query.</p>
+    </dd>
+
+    <dt><code>never-export or no-export</code></dt>
+
+    <dd>
+      <p>The code block will not be evaluated during export but may
+      still be called interactively.</p>
+    </dd>
+
+    <dt><code>query-export</code></dt>
+
+    <dd>
+      <p>Evaluation of the code block during export will require a
+      query.</p>
+    </dd>
+  </dl>
+
+  <p>If this header argument is not set then evaluation is
+  determined by the value of the
+  <code>org-confirm-babel-evaluate</code> variable see <a href=
+  "Code-evaluation-security.html#Code-evaluation-security">Code
+  evaluation security</a>.</p>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,174 +20,246 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Font Lock</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Font Lock">
-<meta name="keywords" content="GNU Emacs Manual: Font Lock">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="Highlight-Interactively.html#Highlight-Interactively" rel="next" title="Highlight Interactively">
-<link href="Text-Scale.html#Text-Scale" rel="prev" title="Text Scale">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Font Lock</title>
+  <meta name="description" content="GNU Emacs Manual: Font Lock" />
+  <meta name="keywords" content="GNU Emacs Manual: Font Lock" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="Highlight-Interactively.html#Highlight-Interactively"
+  rel="next" title="Highlight Interactively" />
+  <link href="Text-Scale.html#Text-Scale" rel="prev" title=
+  "Text Scale" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Font-Lock" id="Font-Lock"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Highlight-Interactively.html#Highlight-Interactively"
+    accesskey="n" rel="next">Highlight Interactively</a>, Previous:
+    <a href="Text-Scale.html#Text-Scale" accesskey="p" rel=
+    "prev">Text Scale</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Font-Lock-mode" id="Font-Lock-mode"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Font-Lock"></a>
-<div class="header">
-<p>
-Next: <a href="Highlight-Interactively.html#Highlight-Interactively" accesskey="n" rel="next">Highlight Interactively</a>, Previous: <a href="Text-Scale.html#Text-Scale" accesskey="p" rel="prev">Text Scale</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Font-Lock-mode"></a>
-<h3 class="section">14.12 Font Lock mode</h3>
-<a name="index-Font-Lock-mode"></a>
-<a name="index-mode_002c-Font-Lock"></a>
-<a name="index-syntax-highlighting-and-coloring"></a>
+  <h3 class="section">14.12 Font Lock mode</h3><a name=
+  "index-Font-Lock-mode" id="index-Font-Lock-mode"></a> <a name=
+  "index-mode_002c-Font-Lock" id="index-mode_002c-Font-Lock"></a>
+  <a name="index-syntax-highlighting-and-coloring" id=
+  "index-syntax-highlighting-and-coloring"></a>
 
-<p>Font Lock mode is a minor mode, always local to a particular buffer,
-which assigns faces to (or <em>fontifies</em>) the text in the buffer.
-Each buffer&rsquo;s major mode tells Font Lock mode which text to fontify;
-for instance, programming language modes fontify syntactically
-relevant constructs like comments, strings, and function names.
-</p>
-<a name="index-font_002dlock_002dmode"></a>
-<p>Font Lock mode is enabled by default.  To toggle it in the current
-buffer, type <kbd>M-x font-lock-mode</kbd>.  A positive numeric argument
-unconditionally enables Font Lock mode, and a negative or zero
-argument disables it.
-</p>
-<a name="index-global_002dfont_002dlock_002dmode"></a>
-<a name="index-global_002dfont_002dlock_002dmode-1"></a>
-<p>Type <kbd>M-x global-font-lock-mode</kbd> to toggle Font Lock mode in all
-buffers.  To impose this setting for future Emacs sessions, customize
-the variable <code>global-font-lock-mode</code> (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>), or add the following line to your init file:
-</p>
-<div class="example">
-<pre class="example">(global-font-lock-mode 0)
-</pre></div>
+  <p>Font Lock mode is a minor mode, always local to a particular
+  buffer, which assigns faces to (or <em>fontifies</em>) the text
+  in the buffer. Each buffer&rsquo;s major mode tells Font Lock
+  mode which text to fontify; for instance, programming language
+  modes fontify syntactically relevant constructs like comments,
+  strings, and function names.</p><a name=
+  "index-font_002dlock_002dmode" id=
+  "index-font_002dlock_002dmode"></a>
 
-<p>If you have disabled Global Font Lock mode, you can still enable Font
-Lock for specific major modes by adding the function
-<code>font-lock-mode</code> to the mode hooks (see <a href="Hooks.html#Hooks">Hooks</a>).  For example,
-to enable Font Lock mode for editing C files, you can do this:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'c-mode-hook 'font-lock-mode)
-</pre></div>
+  <p>Font Lock mode is enabled by default. To toggle it in the
+  current buffer, type <kbd>M-x font-lock-mode</kbd>. A positive
+  numeric argument unconditionally enables Font Lock mode, and a
+  negative or zero argument disables it.</p><a name=
+  "index-global_002dfont_002dlock_002dmode" id=
+  "index-global_002dfont_002dlock_002dmode"></a> <a name=
+  "index-global_002dfont_002dlock_002dmode-1" id=
+  "index-global_002dfont_002dlock_002dmode-1"></a>
 
-<p>Font Lock mode uses several specifically named faces to do its job,
-including <code>font-lock-string-face</code>, <code>font-lock-comment-face</code>,
-and others.  The easiest way to find them all is to use <kbd>M-x
-customize-group <span class="key">RET</span> font-lock-faces <span class="key">RET</span></kbd>.  You can then
-use that customization buffer to customize the appearance of these
-faces.  See <a href="Face-Customization.html#Face-Customization">Face Customization</a>.
-</p>
-<a name="index-font_002dlock_002dmaximum_002ddecoration"></a>
-<p>You can customize the variable <code>font-lock-maximum-decoration</code>
-to alter the amount of fontification applied by Font Lock mode, for
-major modes that support this feature.  The value should be a number
-(with 1 representing a minimal amount of fontification; some modes
-support levels as high as 3); or <code>t</code>, meaning &ldquo;as high as
-possible&rdquo; (the default).  To be effective for a given file buffer,
-the customization of <code>font-lock-maximum-decoration</code> should be
-done <em>before</em> the file is visited; if you already have the file
-visited in a buffer when you customize this variable, kill the buffer
-and visit the file again after the customization.
-</p>
-<p>You can also specify different numbers for particular major modes; for
-example, to use level 1 for C/C++ modes, and the default level
-otherwise, use the value
-</p>
-<div class="example">
-<pre class="example">'((c-mode . 1) (c++-mode . 1)))
-</pre></div>
+  <p>Type <kbd>M-x global-font-lock-mode</kbd> to toggle Font Lock
+  mode in all buffers. To impose this setting for future Emacs
+  sessions, customize the variable
+  <code>global-font-lock-mode</code> (see <a href=
+  "Easy-Customization.html#Easy-Customization">Easy
+  Customization</a>), or add the following line to your init
+  file:</p>
 
-<a name="index-incorrect-fontification"></a>
-<a name="index-parenthesis-in-column-zero-and-fontification"></a>
-<a name="index-brace-in-column-zero-and-fontification"></a>
-<p>Comment and string fontification (or &ldquo;syntactic&rdquo; fontification)
-relies on analysis of the syntactic structure of the buffer text.  For
-the sake of speed, some modes, including Lisp mode, rely on a special
-convention: an open-parenthesis or open-brace in the leftmost column
-always defines the beginning of a defun, and is thus always outside
-any string or comment.  Therefore, you should avoid placing an
-open-parenthesis or open-brace in the leftmost column, if it is inside
-a string or comment.  See <a href="Left-Margin-Paren.html#Left-Margin-Paren">Left Margin Paren</a>, for details.
-</p>
-<a name="index-font_002dlock_002dadd_002dkeywords"></a>
-<p>Font Lock highlighting patterns already exist for most modes, but
-you may want to fontify additional patterns.  You can use the function
-<code>font-lock-add-keywords</code>, to add your own highlighting patterns
-for a particular mode.  For example, to highlight &lsquo;<samp>FIXME:</samp>&rsquo; words
-in C comments, use this:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'c-mode-hook
+  <div class="example">
+    <pre class="example">
+(global-font-lock-mode 0)
+</pre>
+  </div>
+
+  <p>If you have disabled Global Font Lock mode, you can still
+  enable Font Lock for specific major modes by adding the function
+  <code>font-lock-mode</code> to the mode hooks (see <a href=
+  "Hooks.html#Hooks">Hooks</a>). For example, to enable Font Lock
+  mode for editing C files, you can do this:</p>
+
+  <div class="example">
+    <pre class="example">
+(add-hook 'c-mode-hook 'font-lock-mode)
+</pre>
+  </div>
+
+  <p>Font Lock mode uses several specifically named faces to do its
+  job, including <code>font-lock-string-face</code>,
+  <code>font-lock-comment-face</code>, and others. The easiest way
+  to find them all is to use <kbd>M-x customize-group <span class=
+  "key">RET</span> font-lock-faces <span class=
+  "key">RET</span></kbd>. You can then use that customization
+  buffer to customize the appearance of these faces. See <a href=
+  "Face-Customization.html#Face-Customization">Face
+  Customization</a>.</p><a name=
+  "index-font_002dlock_002dmaximum_002ddecoration" id=
+  "index-font_002dlock_002dmaximum_002ddecoration"></a>
+
+  <p>You can customize the variable
+  <code>font-lock-maximum-decoration</code> to alter the amount of
+  fontification applied by Font Lock mode, for major modes that
+  support this feature. The value should be a number (with 1
+  representing a minimal amount of fontification; some modes
+  support levels as high as 3); or <code>t</code>, meaning
+  &ldquo;as high as possible&rdquo; (the default). To be effective
+  for a given file buffer, the customization of
+  <code>font-lock-maximum-decoration</code> should be done
+  <em>before</em> the file is visited; if you already have the file
+  visited in a buffer when you customize this variable, kill the
+  buffer and visit the file again after the customization.</p>
+
+  <p>You can also specify different numbers for particular major
+  modes; for example, to use level 1 for C/C++ modes, and the
+  default level otherwise, use the value</p>
+
+  <div class="example">
+    <pre class="example">
+'((c-mode . 1) (c++-mode . 1)))
+</pre>
+  </div><a name="index-incorrect-fontification" id=
+  "index-incorrect-fontification"></a> <a name=
+  "index-parenthesis-in-column-zero-and-fontification" id=
+  "index-parenthesis-in-column-zero-and-fontification"></a>
+  <a name="index-brace-in-column-zero-and-fontification" id=
+  "index-brace-in-column-zero-and-fontification"></a>
+
+  <p>Comment and string fontification (or &ldquo;syntactic&rdquo;
+  fontification) relies on analysis of the syntactic structure of
+  the buffer text. For the sake of speed, some modes, including
+  Lisp mode, rely on a special convention: an open-parenthesis or
+  open-brace in the leftmost column always defines the beginning of
+  a defun, and is thus always outside any string or comment.
+  Therefore, you should avoid placing an open-parenthesis or
+  open-brace in the leftmost column, if it is inside a string or
+  comment. See <a href=
+  "Left-Margin-Paren.html#Left-Margin-Paren">Left Margin Paren</a>,
+  for details.</p><a name=
+  "index-font_002dlock_002dadd_002dkeywords" id=
+  "index-font_002dlock_002dadd_002dkeywords"></a>
+
+  <p>Font Lock highlighting patterns already exist for most modes,
+  but you may want to fontify additional patterns. You can use the
+  function <code>font-lock-add-keywords</code>, to add your own
+  highlighting patterns for a particular mode. For example, to
+  highlight &lsquo;<samp>FIXME:</samp>&rsquo; words in C comments,
+  use this:</p>
+
+  <div class="example">
+    <pre class="example">
+(add-hook 'c-mode-hook
           (lambda ()
            (font-lock-add-keywords nil
-            '((&quot;\\&lt;\\(FIXME\\):&quot; 1
+            '(("\\&lt;\\(FIXME\\):" 1
                font-lock-warning-face t)))))
-</pre></div>
+</pre>
+  </div><a name="index-font_002dlock_002dremove_002dkeywords" id=
+  "index-font_002dlock_002dremove_002dkeywords"></a>
 
-<a name="index-font_002dlock_002dremove_002dkeywords"></a>
-<p>To remove keywords from the font-lock highlighting patterns, use the
-function <code>font-lock-remove-keywords</code>.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Search_002dbased-Fontification.html#Search_002dbased-Fontification">Search-based
-Fontification</a> in <cite>The Emacs Lisp Reference Manual</cite>.
-</p>
-<a name="index-just_002din_002dtime-_0028JIT_0029-font_002dlock"></a>
-<a name="index-background-syntax-highlighting"></a>
-<p>Fontifying large buffers can take a long time.  To avoid large
-delays when a file is visited, Emacs initially fontifies only the
-visible portion of a buffer.  As you scroll through the buffer, each
-portion that becomes visible is fontified as soon as it is displayed;
-this type of Font Lock is called <em>Just-In-Time</em> (or <em>JIT</em>)
-Lock.  You can control how JIT Lock behaves, including telling it to
-perform fontification while idle, by customizing variables in the
-customization group &lsquo;<samp>jit-lock</samp>&rsquo;.  See <a href="Specific-Customization.html#Specific-Customization">Specific Customization</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Highlight-Interactively.html#Highlight-Interactively" accesskey="n" rel="next">Highlight Interactively</a>, Previous: <a href="Text-Scale.html#Text-Scale" accesskey="p" rel="prev">Text Scale</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>To remove keywords from the font-lock highlighting patterns,
+  use the function <code>font-lock-remove-keywords</code>. See
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Search_002dbased-Fontification.html#Search_002dbased-Fontification">
+  Search-based Fontification</a> in <cite>The Emacs Lisp Reference
+  Manual</cite>.</p><a name=
+  "index-just_002din_002dtime-_0028JIT_0029-font_002dlock" id=
+  "index-just_002din_002dtime-_0028JIT_0029-font_002dlock"></a>
+  <a name="index-background-syntax-highlighting" id=
+  "index-background-syntax-highlighting"></a>
 
+  <p>Fontifying large buffers can take a long time. To avoid large
+  delays when a file is visited, Emacs initially fontifies only the
+  visible portion of a buffer. As you scroll through the buffer,
+  each portion that becomes visible is fontified as soon as it is
+  displayed; this type of Font Lock is called <em>Just-In-Time</em>
+  (or <em>JIT</em>) Lock. You can control how JIT Lock behaves,
+  including telling it to perform fontification while idle, by
+  customizing variables in the customization group
+  &lsquo;<samp>jit-lock</samp>&rsquo;. See <a href=
+  "Specific-Customization.html#Specific-Customization">Specific
+  Customization</a>.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Highlight-Interactively.html#Highlight-Interactively"
+    accesskey="n" rel="next">Highlight Interactively</a>, Previous:
+    <a href="Text-Scale.html#Text-Scale" accesskey="p" rel=
+    "prev">Text Scale</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

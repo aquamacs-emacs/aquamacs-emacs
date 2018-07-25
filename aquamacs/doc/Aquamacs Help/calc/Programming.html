@@ -1,14 +1,21 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Programming - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Embedded-Mode.html#Embedded-Mode" title="Embedded Mode">
-<link rel="next" href="Copying.html#Copying" title="Copying">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Programming - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Embedded-Mode.html#Embedded-Mode" title=
+  "Embedded Mode" />
+  <link rel="next" href="Copying.html#Copying" title="Copying" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -28,8 +35,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -39,61 +48,91 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Programming"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Copying.html#Copying">Copying</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Programming" id="Programming"></a>
 
-<h2 class="chapter">18 Programming</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Copying.html#Copying">Copying</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Embedded-Mode.html#Embedded-Mode">Embedded Mode</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">There are several ways to &ldquo;program&rdquo; the Emacs Calculator, depending
-on the nature of the problem you need to solve.
+  <h2 class="chapter">18 Programming</h2>
 
-     <ol type=1 start=1>
-<li><dfn>Keyboard macros</dfn> allow you to record a sequence of keystrokes
-and play them back at a later time.  This is just the standard Emacs
-keyboard macro mechanism, dressed up with a few more features such
-as loops and conditionals.
+  <p class="noindent">There are several ways to
+  &ldquo;program&rdquo; the Emacs Calculator, depending on the
+  nature of the problem you need to solve.</p>
 
-     <li><dfn>Algebraic definitions</dfn> allow you to use any formula to define a
-new function.  This function can then be used in algebraic formulas or
-as an interactive command.
+  <ol type="1" start="1">
+    <li><dfn>Keyboard macros</dfn> allow you to record a sequence
+    of keystrokes and play them back at a later time. This is just
+    the standard Emacs keyboard macro mechanism, dressed up with a
+    few more features such as loops and conditionals.</li>
 
-     <li><dfn>Rewrite rules</dfn> are discussed in the section on algebra commands. 
-See <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>.  If you put your rewrite rules in the variable
-<code>EvalRules</code>, they will be applied automatically to all Calc
-results in just the same way as an internal &ldquo;rule&rdquo; is applied to
-evaluate &lsquo;<samp><span class="samp">sqrt(9)</span></samp>&rsquo; to 3 and so on.  See <a href="Automatic-Rewrites.html#Automatic-Rewrites">Automatic Rewrites</a>.
+    <li><dfn>Algebraic definitions</dfn> allow you to use any
+    formula to define a new function. This function can then be
+    used in algebraic formulas or as an interactive command.</li>
 
-     <li><dfn>Lisp</dfn> is the programming language that Calc (and most of Emacs)
-is written in.  If the above techniques aren't powerful enough, you
-can write Lisp functions to do anything that built-in Calc commands
-can do.  Lisp code is also somewhat faster than keyboard macros or
-rewrite rules.
-        </ol>
+    <li><dfn>Rewrite rules</dfn> are discussed in the section on
+    algebra commands. See <a href=
+    "Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>. If you
+    put your rewrite rules in the variable <code>EvalRules</code>,
+    they will be applied automatically to all Calc results in just
+    the same way as an internal &ldquo;rule&rdquo; is applied to
+    evaluate &lsquo;<samp><span class=
+    "samp">sqrt(9)</span></samp>&rsquo; to 3 and so on. See
+    <a href="Automatic-Rewrites.html#Automatic-Rewrites">Automatic
+    Rewrites</a>.</li>
 
-   <p><a name="index-z-2257"></a>Programming features are available through the <kbd>z</kbd> and <kbd>Z</kbd>
-prefix keys.  New commands that you define are two-key sequences
-beginning with <kbd>z</kbd>.  Commands for managing these definitions
-use the shift-<kbd>Z</kbd> prefix.  (The <kbd>Z T</kbd> (<code>calc-timing</code>)
-command is described elsewhere; see <a href="Troubleshooting-Commands.html#Troubleshooting-Commands">Troubleshooting Commands</a>. 
-The <kbd>Z C</kbd> (<code>calc-user-define-composition</code>) command is also
-described elsewhere; see <a href="User_002dDefined-Compositions.html#User_002dDefined-Compositions">User-Defined Compositions</a>.)
+    <li><dfn>Lisp</dfn> is the programming language that Calc (and
+    most of Emacs) is written in. If the above techniques aren't
+    powerful enough, you can write Lisp functions to do anything
+    that built-in Calc commands can do. Lisp code is also somewhat
+    faster than keyboard macros or rewrite rules.</li>
+  </ol>
 
-<ul class="menu">
-<li><a accesskey="1" href="Creating-User-Keys.html#Creating-User-Keys">Creating User Keys</a>
-<li><a accesskey="2" href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>
-<li><a accesskey="3" href="Invocation-Macros.html#Invocation-Macros">Invocation Macros</a>
-<li><a accesskey="4" href="Algebraic-Definitions.html#Algebraic-Definitions">Algebraic Definitions</a>
-<li><a accesskey="5" href="Lisp-Definitions.html#Lisp-Definitions">Lisp Definitions</a>
-</ul>
+  <p><a name="index-z-2257" id="index-z-2257"></a>Programming
+  features are available through the <kbd>z</kbd> and <kbd>Z</kbd>
+  prefix keys. New commands that you define are two-key sequences
+  beginning with <kbd>z</kbd>. Commands for managing these
+  definitions use the shift-<kbd>Z</kbd> prefix. (The <kbd>Z
+  T</kbd> (<code>calc-timing</code>) command is described
+  elsewhere; see <a href=
+  "Troubleshooting-Commands.html#Troubleshooting-Commands">Troubleshooting
+  Commands</a>. The <kbd>Z C</kbd>
+  (<code>calc-user-define-composition</code>) command is also
+  described elsewhere; see <a href=
+  "User_002dDefined-Compositions.html#User_002dDefined-Compositions">
+  User-Defined Compositions</a>.)</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Creating-User-Keys.html#Creating-User-Keys">Creating User
+    Keys</a></li>
 
+    <li><a accesskey="2" href=
+    "Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a></li>
+
+    <li><a accesskey="3" href=
+    "Invocation-Macros.html#Invocation-Macros">Invocation
+    Macros</a></li>
+
+    <li><a accesskey="4" href=
+    "Algebraic-Definitions.html#Algebraic-Definitions">Algebraic
+    Definitions</a></li>
+
+    <li><a accesskey="5" href=
+    "Lisp-Definitions.html#Lisp-Definitions">Lisp
+    Definitions</a></li>
+  </ul>
+</body>
+</html>

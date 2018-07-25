@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,148 +16,212 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Macros</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Macros">
-<meta name="keywords" content="Common Lisp Extensions: Macros">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Declarations.html#Declarations" rel="next" title="Declarations">
-<link href="Multiple-Values.html#Multiple-Values" rel="prev" title="Multiple Values">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Macros</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Macros" />
+  <meta name="keywords" content="Common Lisp Extensions: Macros" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Declarations.html#Declarations" rel="next" title=
+  "Declarations" />
+  <link href="Multiple-Values.html#Multiple-Values" rel="prev"
+  title="Multiple Values" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Macros"></a>
-<div class="header">
-<p>
-Next: <a href="Declarations.html#Declarations" accesskey="n" rel="next">Declarations</a>, Previous: <a href="Control-Structure.html#Control-Structure" accesskey="p" rel="prev">Control Structure</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Macros-1"></a>
-<h2 class="chapter">5 Macros</h2>
+<body lang="en" xml:lang="en">
+  <a name="Macros" id="Macros"></a>
 
-<p>This package implements the various Common Lisp features of
-<code>defmacro</code>, such as destructuring, <code>&amp;environment</code>,
-and <code>&amp;body</code>.  Top-level <code>&amp;whole</code> is not implemented
-for <code>defmacro</code> due to technical difficulties.
-See <a href="Argument-Lists.html#Argument-Lists">Argument Lists</a>.
-</p>
-<p>Destructuring is made available to the user by way of the
-following macro:
-</p>
-<dl>
-<dt><a name="index-cl_002ddestructuring_002dbind"></a>Macro: <strong>cl-destructuring-bind</strong> <em>arglist expr forms&hellip;</em></dt>
-<dd><p>This macro expands to code that executes <var>forms</var>, with
-the variables in <var>arglist</var> bound to the list of values
-returned by <var>expr</var>.  The <var>arglist</var> can include all
-the features allowed for <code>cl-defmacro</code> argument lists,
-including destructuring.  (The <code>&amp;environment</code> keyword
-is not allowed.)  The macro expansion will signal an error
-if <var>expr</var> returns a list of the wrong number of arguments
-or with incorrect keyword arguments.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Declarations.html#Declarations" accesskey="n"
+    rel="next">Declarations</a>, Previous: <a href=
+    "Control-Structure.html#Control-Structure" accesskey="p" rel=
+    "prev">Control Structure</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Macros-1" id="Macros-1"></a>
 
-<a name="index-compiler-macros"></a>
-<a name="index-define-compiler-macros"></a>
-<p>This package also includes the Common Lisp <code>define-compiler-macro</code>
-facility, which allows you to define compile-time expansions and
-optimizations for your functions.
-</p>
-<dl>
-<dt><a name="index-cl_002ddefine_002dcompiler_002dmacro"></a>Macro: <strong>cl-define-compiler-macro</strong> <em>name arglist forms&hellip;</em></dt>
-<dd><p>This form is similar to <code>defmacro</code>, except that it only expands
-calls to <var>name</var> at compile-time; calls processed by the Lisp
-interpreter are not expanded, nor are they expanded by the
-<code>macroexpand</code> function.
-</p>
-<p>The argument list may begin with a <code>&amp;whole</code> keyword and a
-variable.  This variable is bound to the macro-call form itself,
-i.e., to a list of the form &lsquo;<samp>(<var>name</var> <var>args</var>&hellip;)</samp>&rsquo;.
-If the macro expander returns this form unchanged, then the
-compiler treats it as a normal function call.  This allows
-compiler macros to work as optimizers for special cases of a
-function, leaving complicated cases alone.
-</p>
-<p>For example, here is a simplified version of a definition that
-appears as a standard part of this package:
-</p>
-<div class="example">
-<pre class="example">(cl-define-compiler-macro cl-member (&amp;whole form a list &amp;rest keys)
+  <h2 class="chapter">5 Macros</h2>
+
+  <p>This package implements the various Common Lisp features of
+  <code>defmacro</code>, such as destructuring,
+  <code>&amp;environment</code>, and <code>&amp;body</code>.
+  Top-level <code>&amp;whole</code> is not implemented for
+  <code>defmacro</code> due to technical difficulties. See <a href=
+  "Argument-Lists.html#Argument-Lists">Argument Lists</a>.</p>
+
+  <p>Destructuring is made available to the user by way of the
+  following macro:</p>
+
+  <dl>
+    <dt><a name="index-cl_002ddestructuring_002dbind" id=
+    "index-cl_002ddestructuring_002dbind"></a>Macro:
+    <strong>cl-destructuring-bind</strong> <em>arglist expr
+    forms&hellip;</em></dt>
+
+    <dd>
+      <p>This macro expands to code that executes <var>forms</var>,
+      with the variables in <var>arglist</var> bound to the list of
+      values returned by <var>expr</var>. The <var>arglist</var>
+      can include all the features allowed for
+      <code>cl-defmacro</code> argument lists, including
+      destructuring. (The <code>&amp;environment</code> keyword is
+      not allowed.) The macro expansion will signal an error if
+      <var>expr</var> returns a list of the wrong number of
+      arguments or with incorrect keyword arguments.</p>
+    </dd>
+  </dl><a name="index-compiler-macros" id=
+  "index-compiler-macros"></a> <a name=
+  "index-define-compiler-macros" id=
+  "index-define-compiler-macros"></a>
+
+  <p>This package also includes the Common Lisp
+  <code>define-compiler-macro</code> facility, which allows you to
+  define compile-time expansions and optimizations for your
+  functions.</p>
+
+  <dl>
+    <dt><a name="index-cl_002ddefine_002dcompiler_002dmacro" id=
+    "index-cl_002ddefine_002dcompiler_002dmacro"></a>Macro:
+    <strong>cl-define-compiler-macro</strong> <em>name arglist
+    forms&hellip;</em></dt>
+
+    <dd>
+      <p>This form is similar to <code>defmacro</code>, except that
+      it only expands calls to <var>name</var> at compile-time;
+      calls processed by the Lisp interpreter are not expanded, nor
+      are they expanded by the <code>macroexpand</code>
+      function.</p>
+
+      <p>The argument list may begin with a <code>&amp;whole</code>
+      keyword and a variable. This variable is bound to the
+      macro-call form itself, i.e., to a list of the form
+      &lsquo;<samp>(<var>name</var>
+      <var>args</var>&hellip;)</samp>&rsquo;. If the macro expander
+      returns this form unchanged, then the compiler treats it as a
+      normal function call. This allows compiler macros to work as
+      optimizers for special cases of a function, leaving
+      complicated cases alone.</p>
+
+      <p>For example, here is a simplified version of a definition
+      that appears as a standard part of this package:</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-define-compiler-macro cl-member (&amp;whole form a list &amp;rest keys)
      (if (and (null keys)
               (eq (car-safe a) 'quote)
               (not (floatp (cadr a))))
          (list 'memq a list)
        form))
-</pre></div>
+</pre>
+      </div>
 
-<p>This definition causes <code>(cl-member <var>a</var> <var>list</var>)</code> to change
-to a call to the faster <code>memq</code> in the common case where <var>a</var>
-is a non-floating-point constant; if <var>a</var> is anything else, or
-if there are any keyword arguments in the call, then the original
-<code>cl-member</code> call is left intact.  (The actual compiler macro
-for <code>cl-member</code> optimizes a number of other cases, including
-common <code>:test</code> predicates.)
-</p></dd></dl>
+      <p>This definition causes <code>(cl-member <var>a</var>
+      <var>list</var>)</code> to change to a call to the faster
+      <code>memq</code> in the common case where <var>a</var> is a
+      non-floating-point constant; if <var>a</var> is anything
+      else, or if there are any keyword arguments in the call, then
+      the original <code>cl-member</code> call is left intact. (The
+      actual compiler macro for <code>cl-member</code> optimizes a
+      number of other cases, including common <code>:test</code>
+      predicates.)</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dcompiler_002dmacroexpand"></a>Function: <strong>cl-compiler-macroexpand</strong> <em>form</em></dt>
-<dd><p>This function is analogous to <code>macroexpand</code>, except that it
-expands compiler macros rather than regular macros.  It returns
-<var>form</var> unchanged if it is not a call to a function for which
-a compiler macro has been defined, or if that compiler macro
-decided to punt by returning its <code>&amp;whole</code> argument.  Like
-<code>macroexpand</code>, it expands repeatedly until it reaches a form
-for which no further expansion is possible.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dcompiler_002dmacroexpand" id=
+    "index-cl_002dcompiler_002dmacroexpand"></a>Function:
+    <strong>cl-compiler-macroexpand</strong> <em>form</em></dt>
 
-<p>See <a href="Macro-Bindings.html#Macro-Bindings">Macro Bindings</a>, for descriptions of the <code>cl-macrolet</code>
-and <code>cl-symbol-macrolet</code> forms for making &ldquo;local&rdquo; macro
-definitions.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Declarations.html#Declarations" accesskey="n" rel="next">Declarations</a>, Previous: <a href="Control-Structure.html#Control-Structure" accesskey="p" rel="prev">Control Structure</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function is analogous to <code>macroexpand</code>,
+      except that it expands compiler macros rather than regular
+      macros. It returns <var>form</var> unchanged if it is not a
+      call to a function for which a compiler macro has been
+      defined, or if that compiler macro decided to punt by
+      returning its <code>&amp;whole</code> argument. Like
+      <code>macroexpand</code>, it expands repeatedly until it
+      reaches a form for which no further expansion is
+      possible.</p>
+    </dd>
+  </dl>
 
+  <p>See <a href="Macro-Bindings.html#Macro-Bindings">Macro
+  Bindings</a>, for descriptions of the <code>cl-macrolet</code>
+  and <code>cl-symbol-macrolet</code> forms for making
+  &ldquo;local&rdquo; macro definitions.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Declarations.html#Declarations" accesskey="n"
+    rel="next">Declarations</a>, Previous: <a href=
+    "Control-Structure.html#Control-Structure" accesskey="p" rel=
+    "prev">Control Structure</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

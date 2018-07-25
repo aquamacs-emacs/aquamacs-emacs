@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,170 +19,276 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Rings</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Rings">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Rings">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up" title="Sequences Arrays Vectors">
-<link href="Hash-Tables.html#Hash-Tables" rel="next" title="Hash Tables">
-<link href="Bool_002dVectors.html#Bool_002dVectors" rel="prev" title="Bool-Vectors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Rings</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Rings" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Rings" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up"
+  title="Sequences Arrays Vectors" />
+  <link href="Hash-Tables.html#Hash-Tables" rel="next" title=
+  "Hash Tables" />
+  <link href="Bool_002dVectors.html#Bool_002dVectors" rel="prev"
+  title="Bool-Vectors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Rings" id="Rings"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Bool_002dVectors.html#Bool_002dVectors"
+    accesskey="p" rel="prev">Bool-Vectors</a>, Up: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Managing-a-Fixed_002dSize-Ring-of-Objects" id=
+  "Managing-a-Fixed_002dSize-Ring-of-Objects"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Rings"></a>
-<div class="header">
-<p>
-Previous: <a href="Bool_002dVectors.html#Bool_002dVectors" accesskey="p" rel="prev">Bool-Vectors</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Managing-a-Fixed_002dSize-Ring-of-Objects"></a>
-<h3 class="section">6.8 Managing a Fixed-Size Ring of Objects</h3>
+  <h3 class="section">6.8 Managing a Fixed-Size Ring of
+  Objects</h3><a name="index-ring-data-structure" id=
+  "index-ring-data-structure"></a>
 
-<a name="index-ring-data-structure"></a>
-<p>A <em>ring</em> is a fixed-size data structure that supports insertion,
-deletion, rotation, and modulo-indexed reference and traversal.  An
-efficient ring data structure is implemented by the <code>ring</code>
-package.  It provides the functions listed in this section.
-</p>
-<p>Note that several rings in Emacs, like the kill ring and the
-mark ring, are actually implemented as simple lists, <em>not</em> using
-the <code>ring</code> package; thus the following functions won&rsquo;t work on
-them.
-</p>
-<dl>
-<dt><a name="index-make_002dring"></a>Function: <strong>make-ring</strong> <em>size</em></dt>
-<dd><p>This returns a new ring capable of holding <var>size</var> objects.
-<var>size</var> should be an integer.
-</p></dd></dl>
+  <p>A <em>ring</em> is a fixed-size data structure that supports
+  insertion, deletion, rotation, and modulo-indexed reference and
+  traversal. An efficient ring data structure is implemented by the
+  <code>ring</code> package. It provides the functions listed in
+  this section.</p>
 
-<dl>
-<dt><a name="index-ring_002dp"></a>Function: <strong>ring-p</strong> <em>object</em></dt>
-<dd><p>This returns <code>t</code> if <var>object</var> is a ring, <code>nil</code> otherwise.
-</p></dd></dl>
+  <p>Note that several rings in Emacs, like the kill ring and the
+  mark ring, are actually implemented as simple lists, <em>not</em>
+  using the <code>ring</code> package; thus the following functions
+  won&rsquo;t work on them.</p>
 
-<dl>
-<dt><a name="index-ring_002dsize"></a>Function: <strong>ring-size</strong> <em>ring</em></dt>
-<dd><p>This returns the maximum capacity of the <var>ring</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dring" id=
+    "index-make_002dring"></a>Function: <strong>make-ring</strong>
+    <em>size</em></dt>
 
-<dl>
-<dt><a name="index-ring_002dlength"></a>Function: <strong>ring-length</strong> <em>ring</em></dt>
-<dd><p>This returns the number of objects that <var>ring</var> currently contains.
-The value will never exceed that returned by <code>ring-size</code>.
-</p></dd></dl>
+    <dd>
+      <p>This returns a new ring capable of holding <var>size</var>
+      objects. <var>size</var> should be an integer.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ring_002delements"></a>Function: <strong>ring-elements</strong> <em>ring</em></dt>
-<dd><p>This returns a list of the objects in <var>ring</var>, in order, newest first.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-ring_002dp" id=
+    "index-ring_002dp"></a>Function: <strong>ring-p</strong>
+    <em>object</em></dt>
 
-<dl>
-<dt><a name="index-ring_002dcopy"></a>Function: <strong>ring-copy</strong> <em>ring</em></dt>
-<dd><p>This returns a new ring which is a copy of <var>ring</var>.
-The new ring contains the same (<code>eq</code>) objects as <var>ring</var>.
-</p></dd></dl>
+    <dd>
+      <p>This returns <code>t</code> if <var>object</var> is a
+      ring, <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ring_002dempty_002dp"></a>Function: <strong>ring-empty-p</strong> <em>ring</em></dt>
-<dd><p>This returns <code>t</code> if <var>ring</var> is empty, <code>nil</code> otherwise.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-ring_002dsize" id=
+    "index-ring_002dsize"></a>Function: <strong>ring-size</strong>
+    <em>ring</em></dt>
 
-<p>The newest element in the ring always has index 0.  Higher indices
-correspond to older elements.  Indices are computed modulo the ring
-length.  Index −1 corresponds to the oldest element, −2
-to the next-oldest, and so forth.
-</p>
-<dl>
-<dt><a name="index-ring_002dref"></a>Function: <strong>ring-ref</strong> <em>ring index</em></dt>
-<dd><p>This returns the object in <var>ring</var> found at index <var>index</var>.
-<var>index</var> may be negative or greater than the ring length.  If
-<var>ring</var> is empty, <code>ring-ref</code> signals an error.
-</p></dd></dl>
+    <dd>
+      <p>This returns the maximum capacity of the
+      <var>ring</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ring_002dinsert"></a>Function: <strong>ring-insert</strong> <em>ring object</em></dt>
-<dd><p>This inserts <var>object</var> into <var>ring</var>, making it the newest
-element, and returns <var>object</var>.
-</p>
-<p>If the ring is full, insertion removes the oldest element to
-make room for the new element.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-ring_002dlength" id=
+    "index-ring_002dlength"></a>Function:
+    <strong>ring-length</strong> <em>ring</em></dt>
 
-<dl>
-<dt><a name="index-ring_002dremove"></a>Function: <strong>ring-remove</strong> <em>ring &amp;optional index</em></dt>
-<dd><p>Remove an object from <var>ring</var>, and return that object.  The
-argument <var>index</var> specifies which item to remove; if it is
-<code>nil</code>, that means to remove the oldest item.  If <var>ring</var> is
-empty, <code>ring-remove</code> signals an error.
-</p></dd></dl>
+    <dd>
+      <p>This returns the number of objects that <var>ring</var>
+      currently contains. The value will never exceed that returned
+      by <code>ring-size</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ring_002dinsert_002dat_002dbeginning"></a>Function: <strong>ring-insert-at-beginning</strong> <em>ring object</em></dt>
-<dd><p>This inserts <var>object</var> into <var>ring</var>, treating it as the oldest
-element.  The return value is not significant.
-</p>
-<p>If the ring is full, this function removes the newest element to make
-room for the inserted element.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-ring_002delements" id=
+    "index-ring_002delements"></a>Function:
+    <strong>ring-elements</strong> <em>ring</em></dt>
 
-<a name="index-fifo-data-structure"></a>
-<p>If you are careful not to exceed the ring size, you can
-use the ring as a first-in-first-out queue.  For example:
-</p>
-<div class="lisp">
-<pre class="lisp">(let ((fifo (make-ring 5)))
+    <dd>
+      <p>This returns a list of the objects in <var>ring</var>, in
+      order, newest first.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ring_002dcopy" id=
+    "index-ring_002dcopy"></a>Function: <strong>ring-copy</strong>
+    <em>ring</em></dt>
+
+    <dd>
+      <p>This returns a new ring which is a copy of
+      <var>ring</var>. The new ring contains the same
+      (<code>eq</code>) objects as <var>ring</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ring_002dempty_002dp" id=
+    "index-ring_002dempty_002dp"></a>Function:
+    <strong>ring-empty-p</strong> <em>ring</em></dt>
+
+    <dd>
+      <p>This returns <code>t</code> if <var>ring</var> is empty,
+      <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+
+  <p>The newest element in the ring always has index 0. Higher
+  indices correspond to older elements. Indices are computed modulo
+  the ring length. Index &acirc;&circ;&rsquo;1 corresponds to the
+  oldest element, &acirc;&circ;&rsquo;2 to the next-oldest, and so
+  forth.</p>
+
+  <dl>
+    <dt><a name="index-ring_002dref" id=
+    "index-ring_002dref"></a>Function: <strong>ring-ref</strong>
+    <em>ring index</em></dt>
+
+    <dd>
+      <p>This returns the object in <var>ring</var> found at index
+      <var>index</var>. <var>index</var> may be negative or greater
+      than the ring length. If <var>ring</var> is empty,
+      <code>ring-ref</code> signals an error.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ring_002dinsert" id=
+    "index-ring_002dinsert"></a>Function:
+    <strong>ring-insert</strong> <em>ring object</em></dt>
+
+    <dd>
+      <p>This inserts <var>object</var> into <var>ring</var>,
+      making it the newest element, and returns
+      <var>object</var>.</p>
+
+      <p>If the ring is full, insertion removes the oldest element
+      to make room for the new element.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ring_002dremove" id=
+    "index-ring_002dremove"></a>Function:
+    <strong>ring-remove</strong> <em>ring &amp;optional
+    index</em></dt>
+
+    <dd>
+      <p>Remove an object from <var>ring</var>, and return that
+      object. The argument <var>index</var> specifies which item to
+      remove; if it is <code>nil</code>, that means to remove the
+      oldest item. If <var>ring</var> is empty,
+      <code>ring-remove</code> signals an error.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ring_002dinsert_002dat_002dbeginning" id=
+    "index-ring_002dinsert_002dat_002dbeginning"></a>Function:
+    <strong>ring-insert-at-beginning</strong> <em>ring
+    object</em></dt>
+
+    <dd>
+      <p>This inserts <var>object</var> into <var>ring</var>,
+      treating it as the oldest element. The return value is not
+      significant.</p>
+
+      <p>If the ring is full, this function removes the newest
+      element to make room for the inserted element.</p>
+    </dd>
+  </dl><a name="index-fifo-data-structure" id=
+  "index-fifo-data-structure"></a>
+
+  <p>If you are careful not to exceed the ring size, you can use
+  the ring as a first-in-first-out queue. For example:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(let ((fifo (make-ring 5)))
   (mapc (lambda (obj) (ring-insert fifo obj))
-        '(0 one &quot;two&quot;))
+        '(0 one "two"))
   (list (ring-remove fifo) t
         (ring-remove fifo) t
         (ring-remove fifo)))
-     &rArr; (0 t one t &quot;two&quot;)
-</pre></div>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Bool_002dVectors.html#Bool_002dVectors" accesskey="p" rel="prev">Bool-Vectors</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+     &rArr; (0 t one t "two")
+</pre>
+  </div>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Previous: <a href="Bool_002dVectors.html#Bool_002dVectors"
+    accesskey="p" rel="prev">Bool-Vectors</a>, Up: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

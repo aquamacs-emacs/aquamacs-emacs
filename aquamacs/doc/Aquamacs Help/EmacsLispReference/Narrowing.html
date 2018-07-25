@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,190 +19,270 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Narrowing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Narrowing">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Narrowing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Positions.html#Positions" rel="up" title="Positions">
-<link href="Markers.html#Markers" rel="next" title="Markers">
-<link href="Excursions.html#Excursions" rel="prev" title="Excursions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Narrowing</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Narrowing" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Narrowing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Positions.html#Positions" rel="up" title=
+  "Positions" />
+  <link href="Markers.html#Markers" rel="next" title="Markers" />
+  <link href="Excursions.html#Excursions" rel="prev" title=
+  "Excursions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Narrowing" id="Narrowing"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Excursions.html#Excursions" accesskey="p"
+    rel="prev">Excursions</a>, Up: <a href=
+    "Positions.html#Positions" accesskey="u" rel="up">Positions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Narrowing-1" id="Narrowing-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Narrowing"></a>
-<div class="header">
-<p>
-Previous: <a href="Excursions.html#Excursions" accesskey="p" rel="prev">Excursions</a>, Up: <a href="Positions.html#Positions" accesskey="u" rel="up">Positions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Narrowing-1"></a>
-<h3 class="section">29.4 Narrowing</h3>
-<a name="index-narrowing"></a>
-<a name="index-restriction-_0028in-a-buffer_0029"></a>
-<a name="index-accessible-portion-_0028of-a-buffer_0029"></a>
+  <h3 class="section">29.4 Narrowing</h3><a name="index-narrowing"
+  id="index-narrowing"></a> <a name=
+  "index-restriction-_0028in-a-buffer_0029" id=
+  "index-restriction-_0028in-a-buffer_0029"></a> <a name=
+  "index-accessible-portion-_0028of-a-buffer_0029" id=
+  "index-accessible-portion-_0028of-a-buffer_0029"></a>
 
-<p><em>Narrowing</em> means limiting the text addressable by Emacs editing
-commands to a limited range of characters in a buffer.  The text that
-remains addressable is called the <em>accessible portion</em> of the
-buffer.
-</p>
-<p>Narrowing is specified with two buffer positions, which become the
-beginning and end of the accessible portion.  For most editing
-commands and primitives, these positions replace the values of the
-beginning and end of the buffer.  While narrowing is in effect, no
-text outside the accessible portion is displayed, and point cannot
-move outside the accessible portion.  Note that narrowing does not
-alter actual buffer positions (see <a href="Point.html#Point">Point</a>); it only determines
-which positions are considered the accessible portion of the buffer.
-Most functions refuse to operate on text that is outside the
-accessible portion.
-</p>
-<p>Commands for saving buffers are unaffected by narrowing; they save
-the entire buffer regardless of any narrowing.
-</p>
-<p>If you need to display in a single buffer several very different
-types of text, consider using an alternative facility described in
-<a href="Swapping-Text.html#Swapping-Text">Swapping Text</a>.
-</p>
-<dl>
-<dt><a name="index-narrow_002dto_002dregion"></a>Command: <strong>narrow-to-region</strong> <em>start end</em></dt>
-<dd><p>This function sets the accessible portion of the current buffer to start
-at <var>start</var> and end at <var>end</var>.  Both arguments should be character
-positions.
-</p>
-<p>In an interactive call, <var>start</var> and <var>end</var> are set to the bounds
-of the current region (point and the mark, with the smallest first).
-</p></dd></dl>
+  <p><em>Narrowing</em> means limiting the text addressable by
+  Emacs editing commands to a limited range of characters in a
+  buffer. The text that remains addressable is called the
+  <em>accessible portion</em> of the buffer.</p>
 
-<dl>
-<dt><a name="index-narrow_002dto_002dpage"></a>Command: <strong>narrow-to-page</strong> <em>&amp;optional move-count</em></dt>
-<dd><p>This function sets the accessible portion of the current buffer to
-include just the current page.  An optional first argument
-<var>move-count</var> non-<code>nil</code> means to move forward or backward by
-<var>move-count</var> pages and then narrow to one page.  The variable
-<code>page-delimiter</code> specifies where pages start and end
-(see <a href="Standard-Regexps.html#Standard-Regexps">Standard Regexps</a>).
-</p>
-<p>In an interactive call, <var>move-count</var> is set to the numeric prefix
-argument.
-</p></dd></dl>
+  <p>Narrowing is specified with two buffer positions, which become
+  the beginning and end of the accessible portion. For most editing
+  commands and primitives, these positions replace the values of
+  the beginning and end of the buffer. While narrowing is in
+  effect, no text outside the accessible portion is displayed, and
+  point cannot move outside the accessible portion. Note that
+  narrowing does not alter actual buffer positions (see <a href=
+  "Point.html#Point">Point</a>); it only determines which positions
+  are considered the accessible portion of the buffer. Most
+  functions refuse to operate on text that is outside the
+  accessible portion.</p>
 
-<dl>
-<dt><a name="index-widen"></a>Command: <strong>widen</strong></dt>
-<dd><a name="index-widening"></a>
-<p>This function cancels any narrowing in the current buffer, so that the
-entire contents are accessible.  This is called <em>widening</em>.
-It is equivalent to the following expression:
-</p>
-<div class="example">
-<pre class="example">(narrow-to-region 1 (1+ (buffer-size)))
-</pre></div>
-</dd></dl>
+  <p>Commands for saving buffers are unaffected by narrowing; they
+  save the entire buffer regardless of any narrowing.</p>
 
-<dl>
-<dt><a name="index-buffer_002dnarrowed_002dp"></a>Function: <strong>buffer-narrowed-p</strong></dt>
-<dd><p>This function returns non-<code>nil</code> if the buffer is narrowed, and
-<code>nil</code> otherwise.
-</p></dd></dl>
+  <p>If you need to display in a single buffer several very
+  different types of text, consider using an alternative facility
+  described in <a href="Swapping-Text.html#Swapping-Text">Swapping
+  Text</a>.</p>
 
-<dl>
-<dt><a name="index-save_002drestriction"></a>Special Form: <strong>save-restriction</strong> <em>body&hellip;</em></dt>
-<dd><p>This special form saves the current bounds of the accessible portion,
-evaluates the <var>body</var> forms, and finally restores the saved bounds,
-thus restoring the same state of narrowing (or absence thereof) formerly
-in effect.  The state of narrowing is restored even in the event of an
-abnormal exit via <code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
-Therefore, this construct is a clean way to narrow a buffer temporarily.
-</p>
-<p>The value returned by <code>save-restriction</code> is that returned by the
-last form in <var>body</var>, or <code>nil</code> if no body forms were given.
-</p>
-<p><strong>Caution:</strong> it is easy to make a mistake when using the
-<code>save-restriction</code> construct.  Read the entire description here
-before you try it.
-</p>
-<p>If <var>body</var> changes the current buffer, <code>save-restriction</code> still
-restores the restrictions on the original buffer (the buffer whose
-restrictions it saved from), but it does not restore the identity of the
-current buffer.
-</p>
-<p><code>save-restriction</code> does <em>not</em> restore point; use
-<code>save-excursion</code> for that.  If you use both <code>save-restriction</code>
-and <code>save-excursion</code> together, <code>save-excursion</code> should come
-first (on the outside).  Otherwise, the old point value would be
-restored with temporary narrowing still in effect.  If the old point
-value were outside the limits of the temporary narrowing, this would
-fail to restore it accurately.
-</p>
-<p>Here is a simple example of correct use of <code>save-restriction</code>:
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
+  <dl>
+    <dt><a name="index-narrow_002dto_002dregion" id=
+    "index-narrow_002dto_002dregion"></a>Command:
+    <strong>narrow-to-region</strong> <em>start end</em></dt>
+
+    <dd>
+      <p>This function sets the accessible portion of the current
+      buffer to start at <var>start</var> and end at
+      <var>end</var>. Both arguments should be character
+      positions.</p>
+
+      <p>In an interactive call, <var>start</var> and
+      <var>end</var> are set to the bounds of the current region
+      (point and the mark, with the smallest first).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-narrow_002dto_002dpage" id=
+    "index-narrow_002dto_002dpage"></a>Command:
+    <strong>narrow-to-page</strong> <em>&amp;optional
+    move-count</em></dt>
+
+    <dd>
+      <p>This function sets the accessible portion of the current
+      buffer to include just the current page. An optional first
+      argument <var>move-count</var> non-<code>nil</code> means to
+      move forward or backward by <var>move-count</var> pages and
+      then narrow to one page. The variable
+      <code>page-delimiter</code> specifies where pages start and
+      end (see <a href=
+      "Standard-Regexps.html#Standard-Regexps">Standard
+      Regexps</a>).</p>
+
+      <p>In an interactive call, <var>move-count</var> is set to
+      the numeric prefix argument.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-widen" id="index-widen"></a>Command:
+    <strong>widen</strong></dt>
+
+    <dd>
+      <a name="index-widening" id="index-widening"></a>
+
+      <p>This function cancels any narrowing in the current buffer,
+      so that the entire contents are accessible. This is called
+      <em>widening</em>. It is equivalent to the following
+      expression:</p>
+
+      <div class="example">
+        <pre class="example">
+(narrow-to-region 1 (1+ (buffer-size)))
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-buffer_002dnarrowed_002dp" id=
+    "index-buffer_002dnarrowed_002dp"></a>Function:
+    <strong>buffer-narrowed-p</strong></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if the buffer
+      is narrowed, and <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-save_002drestriction" id=
+    "index-save_002drestriction"></a>Special Form:
+    <strong>save-restriction</strong> <em>body&hellip;</em></dt>
+
+    <dd>
+      <p>This special form saves the current bounds of the
+      accessible portion, evaluates the <var>body</var> forms, and
+      finally restores the saved bounds, thus restoring the same
+      state of narrowing (or absence thereof) formerly in effect.
+      The state of narrowing is restored even in the event of an
+      abnormal exit via <code>throw</code> or error (see <a href=
+      "Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
+      Therefore, this construct is a clean way to narrow a buffer
+      temporarily.</p>
+
+      <p>The value returned by <code>save-restriction</code> is
+      that returned by the last form in <var>body</var>, or
+      <code>nil</code> if no body forms were given.</p>
+
+      <p><strong>Caution:</strong> it is easy to make a mistake
+      when using the <code>save-restriction</code> construct. Read
+      the entire description here before you try it.</p>
+
+      <p>If <var>body</var> changes the current buffer,
+      <code>save-restriction</code> still restores the restrictions
+      on the original buffer (the buffer whose restrictions it
+      saved from), but it does not restore the identity of the
+      current buffer.</p>
+
+      <p><code>save-restriction</code> does <em>not</em> restore
+      point; use <code>save-excursion</code> for that. If you use
+      both <code>save-restriction</code> and
+      <code>save-excursion</code> together,
+      <code>save-excursion</code> should come first (on the
+      outside). Otherwise, the old point value would be restored
+      with temporary narrowing still in effect. If the old point
+      value were outside the limits of the temporary narrowing,
+      this would fail to restore it accurately.</p>
+
+      <p>Here is a simple example of correct use of
+      <code>save-restriction</code>:</p>
+
+      <div class="example">
+        <pre class="example">
+---------- Buffer: foo ----------
 This is the contents of foo
 This is the contents of foo
 This is the contents of foo&lowast;
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(save-excursion
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(save-excursion
   (save-restriction
     (goto-char 1)
     (forward-line 2)
     (narrow-to-region 1 (point))
     (goto-char (point-min))
-    (replace-string &quot;foo&quot; &quot;bar&quot;)))
+    (replace-string "foo" "bar")))
 
 ---------- Buffer: foo ----------
 This is the contents of bar
 This is the contents of bar
 This is the contents of foo&lowast;
 ---------- Buffer: foo ----------
-</pre></div>
-</dd></dl>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Excursions.html#Excursions" accesskey="p" rel="prev">Excursions</a>, Up: <a href="Positions.html#Positions" accesskey="u" rel="up">Positions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Previous: <a href="Excursions.html#Excursions" accesskey="p"
+    rel="prev">Excursions</a>, Up: <a href=
+    "Positions.html#Positions" accesskey="u" rel="up">Positions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

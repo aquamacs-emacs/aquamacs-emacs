@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,97 +20,175 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: The IDLWAVE Shell</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: The IDLWAVE Shell">
-<meta name="keywords" content="IDLWAVE User Manual: The IDLWAVE Shell">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Starting-the-Shell.html#Starting-the-Shell" rel="next" title="Starting the Shell">
-<link href="Misc-Options.html#Misc-Options" rel="prev" title="Misc Options">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: The IDLWAVE Shell</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: The IDLWAVE Shell" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: The IDLWAVE Shell" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Starting-the-Shell.html#Starting-the-Shell" rel=
+  "next" title="Starting the Shell" />
+  <link href="Misc-Options.html#Misc-Options" rel="prev" title=
+  "Misc Options" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-IDLWAVE-Shell"></a>
-<div class="header">
-<p>
-Next: <a href="Acknowledgments.html#Acknowledgments" accesskey="n" rel="next">Acknowledgments</a>, Previous: <a href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" accesskey="p" rel="prev">The IDLWAVE Major Mode</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-IDLWAVE-Shell-1"></a>
-<h2 class="chapter">5 The IDLWAVE Shell</h2>
-<a name="index-IDLWAVE-shell"></a>
-<a name="index-Major-mode_002c-idlwave_002dshell_002dmode"></a>
-<a name="index-IDL_002c-as-Emacs-subprocess"></a>
-<a name="index-Subprocess-of-Emacs_002c-IDL"></a>
-<a name="index-Comint_002c-Emacs-package"></a>
-<a name="index-Windows"></a>
-<a name="index-MacOS"></a>
+<body lang="en" xml:lang="en">
+  <a name="The-IDLWAVE-Shell" id="The-IDLWAVE-Shell"></a>
 
-<p>The IDLWAVE shell is an Emacs major mode which permits running the IDL
-program as an inferior process of Emacs, and works closely with the
-IDLWAVE major mode in buffers.  It can be used to work with IDL
-interactively, to compile and run IDL programs in Emacs buffers and to
-debug these programs.  The IDLWAVE shell is built on <samp>comint</samp>, an
-Emacs packages which handles the communication with the IDL program.
-Unfortunately, IDL for Windows does not have command-prompt versions and
-thus do not allow the interaction with Emacs, so the IDLWAVE shell
-currently only works under Unix and MacOSX.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Starting-the-Shell.html#Starting-the-Shell" accesskey="1">Starting the Shell</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to launch IDL as a subprocess
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Using-the-Shell.html#Using-the-Shell" accesskey="2">Using the Shell</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Interactively working with the Shell
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell" accesskey="3">Commands Sent to the Shell</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" accesskey="4">Debugging IDL Programs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Examining-Variables.html#Examining-Variables" accesskey="5">Examining Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Custom-Expression-Examination.html#Custom-Expression-Examination" accesskey="6">Custom Expression Examination</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Acknowledgments.html#Acknowledgments"
+    accesskey="n" rel="next">Acknowledgments</a>, Previous:
+    <a href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode"
+    accesskey="p" rel="prev">The IDLWAVE Major Mode</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-IDLWAVE-Shell-1" id="The-IDLWAVE-Shell-1"></a>
 
+  <h2 class="chapter">5 The IDLWAVE Shell</h2><a name=
+  "index-IDLWAVE-shell" id="index-IDLWAVE-shell"></a> <a name=
+  "index-Major-mode_002c-idlwave_002dshell_002dmode" id=
+  "index-Major-mode_002c-idlwave_002dshell_002dmode"></a> <a name=
+  "index-IDL_002c-as-Emacs-subprocess" id=
+  "index-IDL_002c-as-Emacs-subprocess"></a> <a name=
+  "index-Subprocess-of-Emacs_002c-IDL" id=
+  "index-Subprocess-of-Emacs_002c-IDL"></a> <a name=
+  "index-Comint_002c-Emacs-package" id=
+  "index-Comint_002c-Emacs-package"></a> <a name="index-Windows"
+  id="index-Windows"></a> <a name="index-MacOS" id=
+  "index-MacOS"></a>
 
+  <p>The IDLWAVE shell is an Emacs major mode which permits running
+  the IDL program as an inferior process of Emacs, and works
+  closely with the IDLWAVE major mode in buffers. It can be used to
+  work with IDL interactively, to compile and run IDL programs in
+  Emacs buffers and to debug these programs. The IDLWAVE shell is
+  built on <samp>comint</samp>, an Emacs packages which handles the
+  communication with the IDL program. Unfortunately, IDL for
+  Windows does not have command-prompt versions and thus do not
+  allow the interaction with Emacs, so the IDLWAVE shell currently
+  only works under Unix and MacOSX.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Starting-the-Shell.html#Starting-the-Shell" accesskey=
+      "1">Starting the Shell</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to launch IDL as a
+      subprocess</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Using-the-Shell.html#Using-the-Shell" accesskey="2">Using
+      the Shell</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Interactively working with the
+      Shell</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Commands-Sent-to-the-Shell.html#Commands-Sent-to-the-Shell"
+      accesskey="3">Commands Sent to the Shell</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Debugging-IDL-Programs.html#Debugging-IDL-Programs"
+      accesskey="4">Debugging IDL Programs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Examining-Variables.html#Examining-Variables" accesskey=
+      "5">Examining Variables</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Custom-Expression-Examination.html#Custom-Expression-Examination"
+      accesskey="6">Custom Expression Examination</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

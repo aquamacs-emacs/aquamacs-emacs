@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,113 +19,199 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Control Structures</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Control Structures">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Control Structures">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Sequencing.html#Sequencing" rel="next" title="Sequencing">
-<link href="Eval.html#Eval" rel="prev" title="Eval">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Control
+  Structures</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Control Structures" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Control Structures" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Sequencing.html#Sequencing" rel="next" title=
+  "Sequencing" />
+  <link href="Eval.html#Eval" rel="prev" title="Eval" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Control-Structures" id="Control-Structures"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Variables.html#Variables" accesskey="n" rel=
+    "next">Variables</a>, Previous: <a href=
+    "Evaluation.html#Evaluation" accesskey="p" rel=
+    "prev">Evaluation</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Control-Structures-1" id="Control-Structures-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Control-Structures"></a>
-<div class="header">
-<p>
-Next: <a href="Variables.html#Variables" accesskey="n" rel="next">Variables</a>, Previous: <a href="Evaluation.html#Evaluation" accesskey="p" rel="prev">Evaluation</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Control-Structures-1"></a>
-<h2 class="chapter">10 Control Structures</h2>
-<a name="index-special-forms-for-control-structures"></a>
-<a name="index-control-structures"></a>
+  <h2 class="chapter">10 Control Structures</h2><a name=
+  "index-special-forms-for-control-structures" id=
+  "index-special-forms-for-control-structures"></a> <a name=
+  "index-control-structures" id="index-control-structures"></a>
 
-<p>A Lisp program consists of a set of <em>expressions</em>, or
-<em>forms</em> (see <a href="Forms.html#Forms">Forms</a>).  We control the order of execution of
-these forms by enclosing them in <em>control structures</em>.  Control
-structures are special forms which control when, whether, or how many
-times to execute the forms they contain.
-</p>
-<a name="index-textual-order"></a>
-<p>The simplest order of execution is sequential execution: first form
-<var>a</var>, then form <var>b</var>, and so on.  This is what happens when you
-write several forms in succession in the body of a function, or at top
-level in a file of Lisp code&mdash;the forms are executed in the order
-written.  We call this <em>textual order</em>.  For example, if a function
-body consists of two forms <var>a</var> and <var>b</var>, evaluation of the
-function evaluates first <var>a</var> and then <var>b</var>.  The result of
-evaluating <var>b</var> becomes the value of the function.
-</p>
-<p>Explicit control structures make possible an order of execution other
-than sequential.
-</p>
-<p>Emacs Lisp provides several kinds of control structure, including
-other varieties of sequencing, conditionals, iteration, and (controlled)
-jumps&mdash;all discussed below.  The built-in control structures are
-special forms since their subforms are not necessarily evaluated or not
-evaluated sequentially.  You can use macros to define your own control
-structure constructs (see <a href="Macros.html#Macros">Macros</a>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Sequencing.html#Sequencing" accesskey="1">Sequencing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Evaluation in textual order.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Conditionals.html#Conditionals" accesskey="2">Conditionals</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top"><code>if</code>, <code>cond</code>, <code>when</code>, <code>unless</code>.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Combining-Conditions.html#Combining-Conditions" accesskey="3">Combining Conditions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top"><code>and</code>, <code>or</code>, <code>not</code>.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Iteration.html#Iteration" accesskey="4">Iteration</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top"><code>while</code> loops.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Generators.html#Generators" accesskey="5">Generators</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Generic sequences and coroutines.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Nonlocal-Exits.html#Nonlocal-Exits" accesskey="6">Nonlocal Exits</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Jumping out of a sequence.
-</td></tr>
-</table>
+  <p>A Lisp program consists of a set of <em>expressions</em>, or
+  <em>forms</em> (see <a href="Forms.html#Forms">Forms</a>). We
+  control the order of execution of these forms by enclosing them
+  in <em>control structures</em>. Control structures are special
+  forms which control when, whether, or how many times to execute
+  the forms they contain.</p><a name="index-textual-order" id=
+  "index-textual-order"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Variables.html#Variables" accesskey="n" rel="next">Variables</a>, Previous: <a href="Evaluation.html#Evaluation" accesskey="p" rel="prev">Evaluation</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The simplest order of execution is sequential execution: first
+  form <var>a</var>, then form <var>b</var>, and so on. This is
+  what happens when you write several forms in succession in the
+  body of a function, or at top level in a file of Lisp
+  code&mdash;the forms are executed in the order written. We call
+  this <em>textual order</em>. For example, if a function body
+  consists of two forms <var>a</var> and <var>b</var>, evaluation
+  of the function evaluates first <var>a</var> and then
+  <var>b</var>. The result of evaluating <var>b</var> becomes the
+  value of the function.</p>
 
+  <p>Explicit control structures make possible an order of
+  execution other than sequential.</p>
 
+  <p>Emacs Lisp provides several kinds of control structure,
+  including other varieties of sequencing, conditionals, iteration,
+  and (controlled) jumps&mdash;all discussed below. The built-in
+  control structures are special forms since their subforms are not
+  necessarily evaluated or not evaluated sequentially. You can use
+  macros to define your own control structure constructs (see
+  <a href="Macros.html#Macros">Macros</a>).</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Sequencing.html#Sequencing" accesskey=
+      "1">Sequencing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Evaluation in textual
+      order.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Conditionals.html#Conditionals" accesskey=
+      "2">Conditionals</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"><code>if</code>,
+      <code>cond</code>, <code>when</code>,
+      <code>unless</code>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Combining-Conditions.html#Combining-Conditions" accesskey=
+      "3">Combining Conditions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"><code>and</code>,
+      <code>or</code>, <code>not</code>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Iteration.html#Iteration" accesskey="4">Iteration</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"><code>while</code> loops.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Generators.html#Generators" accesskey=
+      "5">Generators</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Generic sequences and
+      coroutines.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Nonlocal-Exits.html#Nonlocal-Exits" accesskey="6">Nonlocal
+      Exits</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Jumping out of a sequence.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Variables.html#Variables" accesskey="n" rel=
+    "next">Variables</a>, Previous: <a href=
+    "Evaluation.html#Evaluation" accesskey="p" rel=
+    "prev">Evaluation</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

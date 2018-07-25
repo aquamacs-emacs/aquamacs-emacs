@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,70 +19,104 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Examples of Catch</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Examples of Catch">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Examples of Catch">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Nonlocal-Exits.html#Nonlocal-Exits" rel="up" title="Nonlocal Exits">
-<link href="Errors.html#Errors" rel="next" title="Errors">
-<link href="Catch-and-Throw.html#Catch-and-Throw" rel="prev" title="Catch and Throw">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Examples of Catch</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Examples of Catch" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Examples of Catch" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Nonlocal-Exits.html#Nonlocal-Exits" rel="up" title=
+  "Nonlocal Exits" />
+  <link href="Errors.html#Errors" rel="next" title="Errors" />
+  <link href="Catch-and-Throw.html#Catch-and-Throw" rel="prev"
+  title="Catch and Throw" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Examples-of-Catch" id="Examples-of-Catch"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Errors.html#Errors" accesskey="n" rel=
+    "next">Errors</a>, Previous: <a href=
+    "Catch-and-Throw.html#Catch-and-Throw" accesskey="p" rel=
+    "prev">Catch and Throw</a>, Up: <a href=
+    "Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel=
+    "up">Nonlocal Exits</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Examples-of-catch-and-throw" id=
+  "Examples-of-catch-and-throw"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Examples-of-Catch"></a>
-<div class="header">
-<p>
-Next: <a href="Errors.html#Errors" accesskey="n" rel="next">Errors</a>, Previous: <a href="Catch-and-Throw.html#Catch-and-Throw" accesskey="p" rel="prev">Catch and Throw</a>, Up: <a href="Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel="up">Nonlocal Exits</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Examples-of-catch-and-throw"></a>
-<h4 class="subsection">10.6.2 Examples of <code>catch</code> and <code>throw</code></h4>
+  <h4 class="subsection">10.6.2 Examples of <code>catch</code> and
+  <code>throw</code></h4>
 
-<p>One way to use <code>catch</code> and <code>throw</code> is to exit from a doubly
-nested loop.  (In most languages, this would be done with a <code>goto</code>.)
-Here we compute <code>(foo <var>i</var> <var>j</var>)</code> for <var>i</var> and <var>j</var>
-varying from 0 to 9:
-</p>
-<div class="example">
-<pre class="example">(defun search-foo ()
+  <p>One way to use <code>catch</code> and <code>throw</code> is to
+  exit from a doubly nested loop. (In most languages, this would be
+  done with a <code>goto</code>.) Here we compute <code>(foo
+  <var>i</var> <var>j</var>)</code> for <var>i</var> and
+  <var>j</var> varying from 0 to 9:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun search-foo ()
   (catch 'loop
     (let ((i 0))
       (while (&lt; i 10)
@@ -90,58 +126,76 @@ varying from 0 to 9:
                 (throw 'loop (list i j)))
             (setq j (1+ j))))
         (setq i (1+ i))))))
-</pre></div>
+</pre>
+  </div>
 
-<p>If <code>foo</code> ever returns non-<code>nil</code>, we stop immediately and return a
-list of <var>i</var> and <var>j</var>.  If <code>foo</code> always returns <code>nil</code>, the
-<code>catch</code> returns normally, and the value is <code>nil</code>, since that
-is the result of the <code>while</code>.
-</p>
-<p>Here are two tricky examples, slightly different, showing two
-return points at once.  First, two return points with the same tag,
-<code>hack</code>:
-</p>
-<div class="example">
-<pre class="example">(defun catch2 (tag)
+  <p>If <code>foo</code> ever returns non-<code>nil</code>, we stop
+  immediately and return a list of <var>i</var> and <var>j</var>.
+  If <code>foo</code> always returns <code>nil</code>, the
+  <code>catch</code> returns normally, and the value is
+  <code>nil</code>, since that is the result of the
+  <code>while</code>.</p>
+
+  <p>Here are two tricky examples, slightly different, showing two
+  return points at once. First, two return points with the same
+  tag, <code>hack</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun catch2 (tag)
   (catch tag
     (throw 'hack 'yes)))
 &rArr; catch2
-</pre><pre class="example">
-</pre><pre class="example">(catch 'hack
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(catch 'hack
   (print (catch2 'hack))
   'no)
-⊣ yes
+&acirc;&Scaron;&pound; yes
 &rArr; no
-</pre></div>
+</pre>
+  </div>
 
-<p>Since both return points have tags that match the <code>throw</code>, it goes to
-the inner one, the one established in <code>catch2</code>.  Therefore,
-<code>catch2</code> returns normally with value <code>yes</code>, and this value is
-printed.  Finally the second body form in the outer <code>catch</code>, which is
-<code>'no</code>, is evaluated and returned from the outer <code>catch</code>.
-</p>
-<p>Now let&rsquo;s change the argument given to <code>catch2</code>:
-</p>
-<div class="example">
-<pre class="example">(catch 'hack
+  <p>Since both return points have tags that match the
+  <code>throw</code>, it goes to the inner one, the one established
+  in <code>catch2</code>. Therefore, <code>catch2</code> returns
+  normally with value <code>yes</code>, and this value is printed.
+  Finally the second body form in the outer <code>catch</code>,
+  which is <code>'no</code>, is evaluated and returned from the
+  outer <code>catch</code>.</p>
+
+  <p>Now let&rsquo;s change the argument given to
+  <code>catch2</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(catch 'hack
   (print (catch2 'quux))
   'no)
 &rArr; yes
-</pre></div>
+</pre>
+  </div>
 
-<p>We still have two return points, but this time only the outer one has
-the tag <code>hack</code>; the inner one has the tag <code>quux</code> instead.
-Therefore, <code>throw</code> makes the outer <code>catch</code> return the value
-<code>yes</code>.  The function <code>print</code> is never called, and the
-body-form <code>'no</code> is never evaluated.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Errors.html#Errors" accesskey="n" rel="next">Errors</a>, Previous: <a href="Catch-and-Throw.html#Catch-and-Throw" accesskey="p" rel="prev">Catch and Throw</a>, Up: <a href="Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel="up">Nonlocal Exits</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>We still have two return points, but this time only the outer
+  one has the tag <code>hack</code>; the inner one has the tag
+  <code>quux</code> instead. Therefore, <code>throw</code> makes
+  the outer <code>catch</code> return the value <code>yes</code>.
+  The function <code>print</code> is never called, and the
+  body-form <code>'no</code> is never evaluated.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Errors.html#Errors" accesskey="n" rel=
+    "next">Errors</a>, Previous: <a href=
+    "Catch-and-Throw.html#Catch-and-Throw" accesskey="p" rel=
+    "prev">Catch and Throw</a>, Up: <a href=
+    "Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel=
+    "up">Nonlocal Exits</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

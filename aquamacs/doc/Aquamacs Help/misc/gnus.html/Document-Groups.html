@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,216 +14,318 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Document Groups</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Document Groups">
-<meta name="keywords" content="Gnus Manual: Document Groups">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Other-Sources.html#Other-Sources" rel="up" title="Other Sources">
-<link href="Document-Server-Internals.html#Document-Server-Internals" rel="next" title="Document Server Internals">
-<link href="Anything-Groups.html#Anything-Groups" rel="prev" title="Anything Groups">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Document Groups</title>
+  <meta name="description" content=
+  "Gnus Manual: Document Groups" />
+  <meta name="keywords" content="Gnus Manual: Document Groups" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Other-Sources.html#Other-Sources" rel="up" title=
+  "Other Sources" />
+  <link href=
+  "Document-Server-Internals.html#Document-Server-Internals" rel=
+  "next" title="Document Server Internals" />
+  <link href="Anything-Groups.html#Anything-Groups" rel="prev"
+  title="Anything Groups" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Document-Groups"></a>
-<div class="header">
-<p>
-Next: <a href="Mail_002dTo_002dNews-Gateways.html#Mail_002dTo_002dNews-Gateways" accesskey="n" rel="next">Mail-To-News Gateways</a>, Previous: <a href="Anything-Groups.html#Anything-Groups" accesskey="p" rel="prev">Anything Groups</a>, Up: <a href="Other-Sources.html#Other-Sources" accesskey="u" rel="up">Other Sources</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Document-Groups-1"></a>
-<h4 class="subsection">6.6.3 Document Groups</h4>
-<a name="index-nndoc-1"></a>
-<a name="index-documentation-group"></a>
-<a name="index-help-group-1"></a>
+<body lang="en" xml:lang="en">
+  <a name="Document-Groups" id="Document-Groups"></a>
 
-<p><code>nndoc</code> is a cute little thing that will let you read a single file
-as a newsgroup.  Several files types are supported:
-</p>
-<dl compact="compact">
-<dd><a name="index-Babyl"></a>
-</dd>
-<dt><code>babyl</code></dt>
-<dd><p>The Babyl format.
-</p>
-<a name="index-mbox"></a>
-<a name="index-Unix-mbox"></a>
-</dd>
-<dt><code>mbox</code></dt>
-<dd><p>The standard Unix mbox file.
-</p>
-<a name="index-MMDF-mail-box"></a>
-</dd>
-<dt><code>mmdf</code></dt>
-<dd><p>The MMDF mail box format.
-</p>
-</dd>
-<dt><code>news</code></dt>
-<dd><p>Several news articles appended into a file.
-</p>
-<a name="index-rnews-batch-files"></a>
-</dd>
-<dt><code>rnews</code></dt>
-<dd><p>The rnews batch transport format.
-</p>
-</dd>
-<dt><code>nsmail</code></dt>
-<dd><p>Netscape mail boxes.
-</p>
-</dd>
-<dt><code>mime-parts</code></dt>
-<dd><p><acronym>MIME</acronym> multipart messages.
-</p>
-</dd>
-<dt><code>standard-digest</code></dt>
-<dd><p>The standard (RFC 1153) digest format.
-</p>
-</dd>
-<dt><code>mime-digest</code></dt>
-<dd><p>A <acronym>MIME</acronym> digest of messages.
-</p>
-</dd>
-<dt><code>lanl-gov-announce</code></dt>
-<dd><p>Announcement messages from LANL Gov Announce.
-</p>
-<a name="index-git-commit-messages"></a>
-</dd>
-<dt><code>git</code></dt>
-<dd><p><code>git</code> commit messages.
-</p>
-<a name="index-forwarded-messages"></a>
-</dd>
-<dt><code>rfc822-forward</code></dt>
-<dd><p>A message forwarded according to RFC822.
-</p>
-</dd>
-<dt><code>outlook</code></dt>
-<dd><p>The Outlook mail box.
-</p>
-</dd>
-<dt><code>oe-dbx</code></dt>
-<dd><p>The Outlook Express dbx mail box.
-</p>
-</dd>
-<dt><code>exim-bounce</code></dt>
-<dd><p>A bounce message from the Exim MTA.
-</p>
-</dd>
-<dt><code>forward</code></dt>
-<dd><p>A message forwarded according to informal rules.
-</p>
-</dd>
-<dt><code>rfc934</code></dt>
-<dd><p>An RFC934-forwarded message.
-</p>
-</dd>
-<dt><code>mailman</code></dt>
-<dd><p>A mailman digest.
-</p>
-</dd>
-<dt><code>clari-briefs</code></dt>
-<dd><p>A digest of Clarinet brief news items.
-</p>
-</dd>
-<dt><code>slack-digest</code></dt>
-<dd><p>Non-standard digest format&mdash;matches most things, but does it badly.
-</p>
-</dd>
-<dt><code>mail-in-mail</code></dt>
-<dd><p>The last resort.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Mail_002dTo_002dNews-Gateways.html#Mail_002dTo_002dNews-Gateways"
+    accesskey="n" rel="next">Mail-To-News Gateways</a>, Previous:
+    <a href="Anything-Groups.html#Anything-Groups" accesskey="p"
+    rel="prev">Anything Groups</a>, Up: <a href=
+    "Other-Sources.html#Other-Sources" accesskey="u" rel="up">Other
+    Sources</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Document-Groups-1" id="Document-Groups-1"></a>
 
-<p>You can also use the special &ldquo;file type&rdquo; <code>guess</code>, which means
-that <code>nndoc</code> will try to guess what file type it is looking at.
-<code>digest</code> means that <code>nndoc</code> should guess what digest type the
-file is.
-</p>
-<p><code>nndoc</code> will not try to change the file or insert any extra headers into
-it&mdash;it will simply, like, let you use the file as the basis for a
-group.  And that&rsquo;s it.
-</p>
-<p>If you have some old archived articles that you want to insert into your
-new &amp; spiffy Gnus mail back end, <code>nndoc</code> can probably help you with
-that.  Say you have an old <samp>RMAIL</samp> file with mail that you now want
-to split into your new <code>nnml</code> groups.  You look at that file using
-<code>nndoc</code> (using the <kbd>G f</kbd> command in the group buffer
-(see <a href="Foreign-Groups.html#Foreign-Groups">Foreign Groups</a>)), set the process mark on all the articles in
-the buffer (<kbd>M P b</kbd>, for instance), and then re-spool (<kbd>B r</kbd>)
-using <code>nnml</code>.  If all goes well, all the mail in the <samp>RMAIL</samp>
-file is now also stored in lots of <code>nnml</code> directories, and you can
-delete that pesky <samp>RMAIL</samp> file.  If you have the guts!
-</p>
-<p>Virtual server variables:
-</p>
-<dl compact="compact">
-<dt><code>nndoc-article-type</code></dt>
-<dd><a name="index-nndoc_002darticle_002dtype"></a>
-<p>This should be one of <code>mbox</code>, <code>babyl</code>, <code>digest</code>,
-<code>news</code>, <code>rnews</code>, <code>mmdf</code>, <code>forward</code>, <code>rfc934</code>,
-<code>rfc822-forward</code>, <code>mime-parts</code>, <code>standard-digest</code>,
-<code>slack-digest</code>, <code>clari-briefs</code>, <code>nsmail</code>, <code>outlook</code>,
-<code>oe-dbx</code>, <code>mailman</code>, and <code>mail-in-mail</code> or <code>guess</code>.
-</p>
-</dd>
-<dt><code>nndoc-post-type</code></dt>
-<dd><a name="index-nndoc_002dpost_002dtype"></a>
-<p>This variable says whether Gnus is to consider the group a news group or
-a mail group.  There are two valid values:  <code>mail</code> (the default)
-and <code>news</code>.
-</p></dd>
-</dl>
+  <h4 class="subsection">6.6.3 Document Groups</h4><a name=
+  "index-nndoc-1" id="index-nndoc-1"></a> <a name=
+  "index-documentation-group" id="index-documentation-group"></a>
+  <a name="index-help-group-1" id="index-help-group-1"></a>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Document-Server-Internals.html#Document-Server-Internals" accesskey="1">Document Server Internals</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to add your own document types.
-</td></tr>
-</table>
+  <p><code>nndoc</code> is a cute little thing that will let you
+  read a single file as a newsgroup. Several files types are
+  supported:</p>
 
+  <dl compact="compact">
+    <dd><a name="index-Babyl" id="index-Babyl"></a></dd>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Mail_002dTo_002dNews-Gateways.html#Mail_002dTo_002dNews-Gateways" accesskey="n" rel="next">Mail-To-News Gateways</a>, Previous: <a href="Anything-Groups.html#Anything-Groups" accesskey="p" rel="prev">Anything Groups</a>, Up: <a href="Other-Sources.html#Other-Sources" accesskey="u" rel="up">Other Sources</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><code>babyl</code></dt>
 
+    <dd>
+      <p>The Babyl format.</p><a name="index-mbox" id=
+      "index-mbox"></a> <a name="index-Unix-mbox" id=
+      "index-Unix-mbox"></a>
+    </dd>
 
+    <dt><code>mbox</code></dt>
 
+    <dd>
+      <p>The standard Unix mbox file.</p><a name=
+      "index-MMDF-mail-box" id="index-MMDF-mail-box"></a>
+    </dd>
+
+    <dt><code>mmdf</code></dt>
+
+    <dd>
+      <p>The MMDF mail box format.</p>
+    </dd>
+
+    <dt><code>news</code></dt>
+
+    <dd>
+      <p>Several news articles appended into a file.</p><a name=
+      "index-rnews-batch-files" id="index-rnews-batch-files"></a>
+    </dd>
+
+    <dt><code>rnews</code></dt>
+
+    <dd>
+      <p>The rnews batch transport format.</p>
+    </dd>
+
+    <dt><code>nsmail</code></dt>
+
+    <dd>
+      <p>Netscape mail boxes.</p>
+    </dd>
+
+    <dt><code>mime-parts</code></dt>
+
+    <dd>
+      <p><acronym>MIME</acronym> multipart messages.</p>
+    </dd>
+
+    <dt><code>standard-digest</code></dt>
+
+    <dd>
+      <p>The standard (RFC 1153) digest format.</p>
+    </dd>
+
+    <dt><code>mime-digest</code></dt>
+
+    <dd>
+      <p>A <acronym>MIME</acronym> digest of messages.</p>
+    </dd>
+
+    <dt><code>lanl-gov-announce</code></dt>
+
+    <dd>
+      <p>Announcement messages from LANL Gov Announce.</p><a name=
+      "index-git-commit-messages" id=
+      "index-git-commit-messages"></a>
+    </dd>
+
+    <dt><code>git</code></dt>
+
+    <dd>
+      <p><code>git</code> commit messages.</p><a name=
+      "index-forwarded-messages" id="index-forwarded-messages"></a>
+    </dd>
+
+    <dt><code>rfc822-forward</code></dt>
+
+    <dd>
+      <p>A message forwarded according to RFC822.</p>
+    </dd>
+
+    <dt><code>outlook</code></dt>
+
+    <dd>
+      <p>The Outlook mail box.</p>
+    </dd>
+
+    <dt><code>oe-dbx</code></dt>
+
+    <dd>
+      <p>The Outlook Express dbx mail box.</p>
+    </dd>
+
+    <dt><code>exim-bounce</code></dt>
+
+    <dd>
+      <p>A bounce message from the Exim MTA.</p>
+    </dd>
+
+    <dt><code>forward</code></dt>
+
+    <dd>
+      <p>A message forwarded according to informal rules.</p>
+    </dd>
+
+    <dt><code>rfc934</code></dt>
+
+    <dd>
+      <p>An RFC934-forwarded message.</p>
+    </dd>
+
+    <dt><code>mailman</code></dt>
+
+    <dd>
+      <p>A mailman digest.</p>
+    </dd>
+
+    <dt><code>clari-briefs</code></dt>
+
+    <dd>
+      <p>A digest of Clarinet brief news items.</p>
+    </dd>
+
+    <dt><code>slack-digest</code></dt>
+
+    <dd>
+      <p>Non-standard digest format&mdash;matches most things, but
+      does it badly.</p>
+    </dd>
+
+    <dt><code>mail-in-mail</code></dt>
+
+    <dd>
+      <p>The last resort.</p>
+    </dd>
+  </dl>
+
+  <p>You can also use the special &ldquo;file type&rdquo;
+  <code>guess</code>, which means that <code>nndoc</code> will try
+  to guess what file type it is looking at. <code>digest</code>
+  means that <code>nndoc</code> should guess what digest type the
+  file is.</p>
+
+  <p><code>nndoc</code> will not try to change the file or insert
+  any extra headers into it&mdash;it will simply, like, let you use
+  the file as the basis for a group. And that&rsquo;s it.</p>
+
+  <p>If you have some old archived articles that you want to insert
+  into your new &amp; spiffy Gnus mail back end, <code>nndoc</code>
+  can probably help you with that. Say you have an old
+  <samp>RMAIL</samp> file with mail that you now want to split into
+  your new <code>nnml</code> groups. You look at that file using
+  <code>nndoc</code> (using the <kbd>G f</kbd> command in the group
+  buffer (see <a href="Foreign-Groups.html#Foreign-Groups">Foreign
+  Groups</a>)), set the process mark on all the articles in the
+  buffer (<kbd>M P b</kbd>, for instance), and then re-spool
+  (<kbd>B r</kbd>) using <code>nnml</code>. If all goes well, all
+  the mail in the <samp>RMAIL</samp> file is now also stored in
+  lots of <code>nnml</code> directories, and you can delete that
+  pesky <samp>RMAIL</samp> file. If you have the guts!</p>
+
+  <p>Virtual server variables:</p>
+
+  <dl compact="compact">
+    <dt><code>nndoc-article-type</code></dt>
+
+    <dd>
+      <a name="index-nndoc_002darticle_002dtype" id=
+      "index-nndoc_002darticle_002dtype"></a>
+
+      <p>This should be one of <code>mbox</code>,
+      <code>babyl</code>, <code>digest</code>, <code>news</code>,
+      <code>rnews</code>, <code>mmdf</code>, <code>forward</code>,
+      <code>rfc934</code>, <code>rfc822-forward</code>,
+      <code>mime-parts</code>, <code>standard-digest</code>,
+      <code>slack-digest</code>, <code>clari-briefs</code>,
+      <code>nsmail</code>, <code>outlook</code>,
+      <code>oe-dbx</code>, <code>mailman</code>, and
+      <code>mail-in-mail</code> or <code>guess</code>.</p>
+    </dd>
+
+    <dt><code>nndoc-post-type</code></dt>
+
+    <dd>
+      <a name="index-nndoc_002dpost_002dtype" id=
+      "index-nndoc_002dpost_002dtype"></a>
+
+      <p>This variable says whether Gnus is to consider the group a
+      news group or a mail group. There are two valid values:
+      <code>mail</code> (the default) and <code>news</code>.</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Document-Server-Internals.html#Document-Server-Internals"
+      accesskey="1">Document Server Internals</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to add your own document
+      types.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Mail_002dTo_002dNews-Gateways.html#Mail_002dTo_002dNews-Gateways"
+    accesskey="n" rel="next">Mail-To-News Gateways</a>, Previous:
+    <a href="Anything-Groups.html#Anything-Groups" accesskey="p"
+    rel="prev">Anything Groups</a>, Up: <a href=
+    "Other-Sources.html#Other-Sources" accesskey="u" rel="up">Other
+    Sources</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

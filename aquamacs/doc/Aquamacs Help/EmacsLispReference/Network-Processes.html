@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,238 +19,346 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Network Processes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Network Processes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Network Processes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Low_002dLevel-Network.html#Low_002dLevel-Network" rel="up" title="Low-Level Network">
-<link href="Network-Options.html#Network-Options" rel="next" title="Network Options">
-<link href="Low_002dLevel-Network.html#Low_002dLevel-Network" rel="prev" title="Low-Level Network">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Network Processes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Network Processes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Network Processes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Low_002dLevel-Network.html#Low_002dLevel-Network"
+  rel="up" title="Low-Level Network" />
+  <link href="Network-Options.html#Network-Options" rel="next"
+  title="Network Options" />
+  <link href="Low_002dLevel-Network.html#Low_002dLevel-Network"
+  rel="prev" title="Low-Level Network" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Network-Processes" id="Network-Processes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Network-Options.html#Network-Options"
+    accesskey="n" rel="next">Network Options</a>, Up: <a href=
+    "Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey=
+    "u" rel="up">Low-Level Network</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="make_002dnetwork_002dprocess" id=
+  "make_002dnetwork_002dprocess"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Network-Processes"></a>
-<div class="header">
-<p>
-Next: <a href="Network-Options.html#Network-Options" accesskey="n" rel="next">Network Options</a>, Up: <a href="Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey="u" rel="up">Low-Level Network</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="make_002dnetwork_002dprocess"></a>
-<h4 class="subsection">36.17.1 <code>make-network-process</code></h4>
+  <h4 class="subsection">36.17.1
+  <code>make-network-process</code></h4>
 
-<p>The basic function for creating network connections and network
-servers is <code>make-network-process</code>.  It can do either of those
-jobs, depending on the arguments you give it.
-</p>
-<dl>
-<dt><a name="index-make_002dnetwork_002dprocess"></a>Function: <strong>make-network-process</strong> <em>&amp;rest args</em></dt>
-<dd><p>This function creates a network connection or server and returns the
-process object that represents it.  The arguments <var>args</var> are a
-list of keyword/argument pairs.  Omitting a keyword is always
-equivalent to specifying it with value <code>nil</code>, except for
-<code>:coding</code>, <code>:filter-multibyte</code>, and <code>:reuseaddr</code>.  Here
-are the meaningful keywords (those corresponding to network options
-are listed in the following section):
-</p>
-<dl compact="compact">
-<dt>:name <var>name</var></dt>
-<dd><p>Use the string <var>name</var> as the process name.  It is modified if
-necessary to make it unique.
-</p>
-</dd>
-<dt>:type <var>type</var></dt>
-<dd><p>Specify the communication type.  A value of <code>nil</code> specifies a
-stream connection (the default); <code>datagram</code> specifies a datagram
-connection; <code>seqpacket</code> specifies a sequenced packet stream
-connection.  Both connections and servers can be of these types.
-</p>
-</dd>
-<dt>:server <var>server-flag</var></dt>
-<dd><p>If <var>server-flag</var> is non-<code>nil</code>, create a server.  Otherwise,
-create a connection.  For a stream type server, <var>server-flag</var> may
-be an integer, which then specifies the length of the queue of pending
-connections to the server.  The default queue length is 5.
-</p>
-</dd>
-<dt>:host <var>host</var></dt>
-<dd><p>Specify the host to connect to.  <var>host</var> should be a host name or
-Internet address, as a string, or the symbol <code>local</code> to specify
-the local host.  If you specify <var>host</var> for a server, it must
-specify a valid address for the local host, and only clients
-connecting to that address will be accepted.
-</p>
-</dd>
-<dt>:service <var>service</var></dt>
-<dd><p><var>service</var> specifies a port number to connect to; or, for a server,
-the port number to listen on.  It should be a service name that
-translates to a port number, or an integer specifying the port number
-directly.  For a server, it can also be <code>t</code>, which means to let
-the system select an unused port number.
-</p>
-</dd>
-<dt>:family <var>family</var></dt>
-<dd><p><var>family</var> specifies the address (and protocol) family for
-communication.  <code>nil</code> means determine the proper address family
-automatically for the given <var>host</var> and <var>service</var>.
-<code>local</code> specifies a Unix socket, in which case <var>host</var> is
-ignored.  <code>ipv4</code> and <code>ipv6</code> specify to use IPv4 and IPv6,
-respectively.
-</p>
-</dd>
-<dt>:local <var>local-address</var></dt>
-<dd><p>For a server process, <var>local-address</var> is the address to listen on.
-It overrides <var>family</var>, <var>host</var> and <var>service</var>, so you
-might as well not specify them.
-</p>
-</dd>
-<dt>:remote <var>remote-address</var></dt>
-<dd><p>For a connection, <var>remote-address</var> is the address to connect to.
-It overrides <var>family</var>, <var>host</var> and <var>service</var>, so you
-might as well not specify them.
-</p>
-<p>For a datagram server, <var>remote-address</var> specifies the initial
-setting of the remote datagram address.
-</p>
-<p>The format of <var>local-address</var> or <var>remote-address</var> depends on
-the address family:
-</p>
-<ul class="no-bullet">
-<li>- An IPv4 address is represented as a five-element vector of four 8-bit
-integers and one 16-bit integer
-<code>[<var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>p</var>]</code> corresponding to
-numeric IPv4 address <var>a</var>.<var>b</var>.<var>c</var>.<var>d</var> and port number
-<var>p</var>.
+  <p>The basic function for creating network connections and
+  network servers is <code>make-network-process</code>. It can do
+  either of those jobs, depending on the arguments you give it.</p>
 
-</li><li>- An IPv6 address is represented as a nine-element vector of 16-bit
-integers <code>[<var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>e</var> <var>f</var>
-<var>g</var> <var>h</var> <var>p</var>]</code> corresponding to numeric IPv6 address
-<var>a</var>:<var>b</var>:<var>c</var>:<var>d</var>:<var>e</var>:<var>f</var>:<var>g</var>:<var>h</var> and
-port number <var>p</var>.
+  <dl>
+    <dt><a name="index-make_002dnetwork_002dprocess" id=
+    "index-make_002dnetwork_002dprocess"></a>Function:
+    <strong>make-network-process</strong> <em>&amp;rest
+    args</em></dt>
 
-</li><li>- A local address is represented as a string, which specifies the address
-in the local address space.
+    <dd>
+      <p>This function creates a network connection or server and
+      returns the process object that represents it. The arguments
+      <var>args</var> are a list of keyword/argument pairs.
+      Omitting a keyword is always equivalent to specifying it with
+      value <code>nil</code>, except for <code>:coding</code>,
+      <code>:filter-multibyte</code>, and <code>:reuseaddr</code>.
+      Here are the meaningful keywords (those corresponding to
+      network options are listed in the following section):</p>
 
-</li><li>- An unsupported-family address is represented by a cons
-<code>(<var>f</var> . <var>av</var>)</code>, where <var>f</var> is the family number and
-<var>av</var> is a vector specifying the socket address using one element
-per address data byte.  Do not rely on this format in portable code,
-as it may depend on implementation defined constants, data sizes, and
-data structure alignment.
-</li></ul>
+      <dl compact="compact">
+        <dt>:name <var>name</var></dt>
 
-</dd>
-<dt>:nowait <var>bool</var></dt>
-<dd><p>If <var>bool</var> is non-<code>nil</code> for a stream connection, return
-without waiting for the connection to complete.  When the connection
-succeeds or fails, Emacs will call the sentinel function, with a
-second argument matching <code>&quot;open&quot;</code> (if successful) or
-<code>&quot;failed&quot;</code>.  The default is to block, so that
-<code>make-network-process</code> does not return until the connection
-has succeeded or failed.
-</p>
-</dd>
-<dt>:stop <var>stopped</var></dt>
-<dd><p>If <var>stopped</var> is non-<code>nil</code>, start the network connection or
-server in the stopped state.
-</p>
-</dd>
-<dt>:buffer <var>buffer</var></dt>
-<dd><p>Use <var>buffer</var> as the process buffer.
-</p>
-</dd>
-<dt>:coding <var>coding</var></dt>
-<dd><p>Use <var>coding</var> as the coding system for this process.  To specify
-different coding systems for decoding data from the connection and for
-encoding data sent to it, specify <code>(<var>decoding</var> .
-<var>encoding</var>)</code> for <var>coding</var>.
-</p>
-<p>If you don&rsquo;t specify this keyword at all, the default
-is to determine the coding systems from the data.
-</p>
-</dd>
-<dt>:noquery <var>query-flag</var></dt>
-<dd><p>Initialize the process query flag to <var>query-flag</var>.
-See <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>.
-</p>
-</dd>
-<dt>:filter <var>filter</var></dt>
-<dd><p>Initialize the process filter to <var>filter</var>.
-</p>
-</dd>
-<dt>:filter-multibyte <var>multibyte</var></dt>
-<dd><p>If <var>multibyte</var> is non-<code>nil</code>, strings given to the process
-filter are multibyte, otherwise they are unibyte.  The default is the
-default value of <code>enable-multibyte-characters</code>.
-</p>
-</dd>
-<dt>:sentinel <var>sentinel</var></dt>
-<dd><p>Initialize the process sentinel to <var>sentinel</var>.
-</p>
-</dd>
-<dt>:log <var>log</var></dt>
-<dd><p>Initialize the log function of a server process to <var>log</var>.  The log
-function is called each time the server accepts a network connection
-from a client.  The arguments passed to the log function are
-<var>server</var>, <var>connection</var>, and <var>message</var>; where <var>server</var>
-is the server process, <var>connection</var> is the new process for the
-connection, and <var>message</var> is a string describing what has
-happened.
-</p>
-</dd>
-<dt>:plist <var>plist</var></dt>
-<dd><p>Initialize the process plist to <var>plist</var>.
-</p></dd>
-</dl>
+        <dd>
+          <p>Use the string <var>name</var> as the process name. It
+          is modified if necessary to make it unique.</p>
+        </dd>
 
-<p>The original argument list, modified with the actual connection
-information, is available via the <code>process-contact</code> function.
-</p></dd></dl>
+        <dt>:type <var>type</var></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Network-Options.html#Network-Options" accesskey="n" rel="next">Network Options</a>, Up: <a href="Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey="u" rel="up">Low-Level Network</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+        <dd>
+          <p>Specify the communication type. A value of
+          <code>nil</code> specifies a stream connection (the
+          default); <code>datagram</code> specifies a datagram
+          connection; <code>seqpacket</code> specifies a sequenced
+          packet stream connection. Both connections and servers
+          can be of these types.</p>
+        </dd>
 
+        <dt>:server <var>server-flag</var></dt>
 
+        <dd>
+          <p>If <var>server-flag</var> is non-<code>nil</code>,
+          create a server. Otherwise, create a connection. For a
+          stream type server, <var>server-flag</var> may be an
+          integer, which then specifies the length of the queue of
+          pending connections to the server. The default queue
+          length is 5.</p>
+        </dd>
 
+        <dt>:host <var>host</var></dt>
+
+        <dd>
+          <p>Specify the host to connect to. <var>host</var> should
+          be a host name or Internet address, as a string, or the
+          symbol <code>local</code> to specify the local host. If
+          you specify <var>host</var> for a server, it must specify
+          a valid address for the local host, and only clients
+          connecting to that address will be accepted.</p>
+        </dd>
+
+        <dt>:service <var>service</var></dt>
+
+        <dd>
+          <p><var>service</var> specifies a port number to connect
+          to; or, for a server, the port number to listen on. It
+          should be a service name that translates to a port
+          number, or an integer specifying the port number
+          directly. For a server, it can also be <code>t</code>,
+          which means to let the system select an unused port
+          number.</p>
+        </dd>
+
+        <dt>:family <var>family</var></dt>
+
+        <dd>
+          <p><var>family</var> specifies the address (and protocol)
+          family for communication. <code>nil</code> means
+          determine the proper address family automatically for the
+          given <var>host</var> and <var>service</var>.
+          <code>local</code> specifies a Unix socket, in which case
+          <var>host</var> is ignored. <code>ipv4</code> and
+          <code>ipv6</code> specify to use IPv4 and IPv6,
+          respectively.</p>
+        </dd>
+
+        <dt>:local <var>local-address</var></dt>
+
+        <dd>
+          <p>For a server process, <var>local-address</var> is the
+          address to listen on. It overrides <var>family</var>,
+          <var>host</var> and <var>service</var>, so you might as
+          well not specify them.</p>
+        </dd>
+
+        <dt>:remote <var>remote-address</var></dt>
+
+        <dd>
+          <p>For a connection, <var>remote-address</var> is the
+          address to connect to. It overrides <var>family</var>,
+          <var>host</var> and <var>service</var>, so you might as
+          well not specify them.</p>
+
+          <p>For a datagram server, <var>remote-address</var>
+          specifies the initial setting of the remote datagram
+          address.</p>
+
+          <p>The format of <var>local-address</var> or
+          <var>remote-address</var> depends on the address
+          family:</p>
+
+          <ul class="no-bullet">
+            <li>- An IPv4 address is represented as a five-element
+            vector of four 8-bit integers and one 16-bit integer
+            <code>[<var>a</var> <var>b</var> <var>c</var>
+            <var>d</var> <var>p</var>]</code> corresponding to
+            numeric IPv4 address
+            <var>a</var>.<var>b</var>.<var>c</var>.<var>d</var> and
+            port number <var>p</var>.</li>
+
+            <li>- An IPv6 address is represented as a nine-element
+            vector of 16-bit integers <code>[<var>a</var>
+            <var>b</var> <var>c</var> <var>d</var> <var>e</var>
+            <var>f</var> <var>g</var> <var>h</var>
+            <var>p</var>]</code> corresponding to numeric IPv6
+            address
+            <var>a</var>:<var>b</var>:<var>c</var>:<var>d</var>:<var>e</var>:<var>f</var>:<var>g</var>:<var>h</var>
+            and port number <var>p</var>.</li>
+
+            <li>- A local address is represented as a string, which
+            specifies the address in the local address space.</li>
+
+            <li>- An unsupported-family address is represented by a
+            cons <code>(<var>f</var> . <var>av</var>)</code>, where
+            <var>f</var> is the family number and <var>av</var> is
+            a vector specifying the socket address using one
+            element per address data byte. Do not rely on this
+            format in portable code, as it may depend on
+            implementation defined constants, data sizes, and data
+            structure alignment.</li>
+          </ul>
+        </dd>
+
+        <dt>:nowait <var>bool</var></dt>
+
+        <dd>
+          <p>If <var>bool</var> is non-<code>nil</code> for a
+          stream connection, return without waiting for the
+          connection to complete. When the connection succeeds or
+          fails, Emacs will call the sentinel function, with a
+          second argument matching <code>"open"</code> (if
+          successful) or <code>"failed"</code>. The default is to
+          block, so that <code>make-network-process</code> does not
+          return until the connection has succeeded or failed.</p>
+        </dd>
+
+        <dt>:stop <var>stopped</var></dt>
+
+        <dd>
+          <p>If <var>stopped</var> is non-<code>nil</code>, start
+          the network connection or server in the stopped
+          state.</p>
+        </dd>
+
+        <dt>:buffer <var>buffer</var></dt>
+
+        <dd>
+          <p>Use <var>buffer</var> as the process buffer.</p>
+        </dd>
+
+        <dt>:coding <var>coding</var></dt>
+
+        <dd>
+          <p>Use <var>coding</var> as the coding system for this
+          process. To specify different coding systems for decoding
+          data from the connection and for encoding data sent to
+          it, specify <code>(<var>decoding</var> .
+          <var>encoding</var>)</code> for <var>coding</var>.</p>
+
+          <p>If you don&rsquo;t specify this keyword at all, the
+          default is to determine the coding systems from the
+          data.</p>
+        </dd>
+
+        <dt>:noquery <var>query-flag</var></dt>
+
+        <dd>
+          <p>Initialize the process query flag to
+          <var>query-flag</var>. See <a href=
+          "Query-Before-Exit.html#Query-Before-Exit">Query Before
+          Exit</a>.</p>
+        </dd>
+
+        <dt>:filter <var>filter</var></dt>
+
+        <dd>
+          <p>Initialize the process filter to
+          <var>filter</var>.</p>
+        </dd>
+
+        <dt>:filter-multibyte <var>multibyte</var></dt>
+
+        <dd>
+          <p>If <var>multibyte</var> is non-<code>nil</code>,
+          strings given to the process filter are multibyte,
+          otherwise they are unibyte. The default is the default
+          value of <code>enable-multibyte-characters</code>.</p>
+        </dd>
+
+        <dt>:sentinel <var>sentinel</var></dt>
+
+        <dd>
+          <p>Initialize the process sentinel to
+          <var>sentinel</var>.</p>
+        </dd>
+
+        <dt>:log <var>log</var></dt>
+
+        <dd>
+          <p>Initialize the log function of a server process to
+          <var>log</var>. The log function is called each time the
+          server accepts a network connection from a client. The
+          arguments passed to the log function are
+          <var>server</var>, <var>connection</var>, and
+          <var>message</var>; where <var>server</var> is the server
+          process, <var>connection</var> is the new process for the
+          connection, and <var>message</var> is a string describing
+          what has happened.</p>
+        </dd>
+
+        <dt>:plist <var>plist</var></dt>
+
+        <dd>
+          <p>Initialize the process plist to <var>plist</var>.</p>
+        </dd>
+      </dl>
+
+      <p>The original argument list, modified with the actual
+      connection information, is available via the
+      <code>process-contact</code> function.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Network-Options.html#Network-Options"
+    accesskey="n" rel="next">Network Options</a>, Up: <a href=
+    "Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey=
+    "u" rel="up">Low-Level Network</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

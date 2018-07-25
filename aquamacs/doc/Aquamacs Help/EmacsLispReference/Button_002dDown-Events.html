@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,93 +19,130 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Button-Down Events</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Button-Down Events">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Button-Down Events">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Input-Events.html#Input-Events" rel="up" title="Input Events">
-<link href="Repeat-Events.html#Repeat-Events" rel="next" title="Repeat Events">
-<link href="Drag-Events.html#Drag-Events" rel="prev" title="Drag Events">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Button-Down
+  Events</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Button-Down Events" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Button-Down Events" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Input-Events.html#Input-Events" rel="up" title=
+  "Input Events" />
+  <link href="Repeat-Events.html#Repeat-Events" rel="next" title=
+  "Repeat Events" />
+  <link href="Drag-Events.html#Drag-Events" rel="prev" title=
+  "Drag Events" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Button_002dDown-Events" id="Button_002dDown-Events"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Repeat-Events.html#Repeat-Events" accesskey=
+    "n" rel="next">Repeat Events</a>, Previous: <a href=
+    "Drag-Events.html#Drag-Events" accesskey="p" rel="prev">Drag
+    Events</a>, Up: <a href="Input-Events.html#Input-Events"
+    accesskey="u" rel="up">Input Events</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Button_002dDown-Events-1" id=
+  "Button_002dDown-Events-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Button_002dDown-Events"></a>
-<div class="header">
-<p>
-Next: <a href="Repeat-Events.html#Repeat-Events" accesskey="n" rel="next">Repeat Events</a>, Previous: <a href="Drag-Events.html#Drag-Events" accesskey="p" rel="prev">Drag Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Button_002dDown-Events-1"></a>
-<h4 class="subsection">20.7.6 Button-Down Events</h4>
-<a name="index-button_002ddown-event"></a>
+  <h4 class="subsection">20.7.6 Button-Down Events</h4><a name=
+  "index-button_002ddown-event" id=
+  "index-button_002ddown-event"></a>
 
-<p>Click and drag events happen when the user releases a mouse button.
-They cannot happen earlier, because there is no way to distinguish a
-click from a drag until the button is released.
-</p>
-<p>If you want to take action as soon as a button is pressed, you need to
-handle <em>button-down</em> events.<a name="DOCF11" href="#FOOT11"><sup>11</sup></a>  These occur as soon as a button is
-pressed.  They are represented by lists that look exactly like click
-events (see <a href="Click-Events.html#Click-Events">Click Events</a>), except that the <var>event-type</var> symbol
-name contains the prefix &lsquo;<samp>down-</samp>&rsquo;.  The &lsquo;<samp>down-</samp>&rsquo; prefix follows
-modifier key prefixes such as &lsquo;<samp>C-</samp>&rsquo; and &lsquo;<samp>M-</samp>&rsquo;.
-</p>
-<p>The function <code>read-key-sequence</code> ignores any button-down events
-that don&rsquo;t have command bindings; therefore, the Emacs command loop
-ignores them too.  This means that you need not worry about defining
-button-down events unless you want them to do something.  The usual
-reason to define a button-down event is so that you can track mouse
-motion (by reading motion events) until the button is released.
-See <a href="Motion-Events.html#Motion-Events">Motion Events</a>.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>Click and drag events happen when the user releases a mouse
+  button. They cannot happen earlier, because there is no way to
+  distinguish a click from a drag until the button is released.</p>
 
-<h3><a name="FOOT11" href="#DOCF11">(11)</a></h3>
-<p>Button-down is the
-conservative antithesis of drag.</p>
-</div>
+  <p>If you want to take action as soon as a button is pressed, you
+  need to handle <em>button-down</em> events.<a name="DOCF11" href=
+  "#FOOT11" id="DOCF11"><sup>11</sup></a> These occur as soon as a
+  button is pressed. They are represented by lists that look
+  exactly like click events (see <a href=
+  "Click-Events.html#Click-Events">Click Events</a>), except that
+  the <var>event-type</var> symbol name contains the prefix
+  &lsquo;<samp>down-</samp>&rsquo;. The
+  &lsquo;<samp>down-</samp>&rsquo; prefix follows modifier key
+  prefixes such as &lsquo;<samp>C-</samp>&rsquo; and
+  &lsquo;<samp>M-</samp>&rsquo;.</p>
 
+  <p>The function <code>read-key-sequence</code> ignores any
+  button-down events that don&rsquo;t have command bindings;
+  therefore, the Emacs command loop ignores them too. This means
+  that you need not worry about defining button-down events unless
+  you want them to do something. The usual reason to define a
+  button-down event is so that you can track mouse motion (by
+  reading motion events) until the button is released. See <a href=
+  "Motion-Events.html#Motion-Events">Motion Events</a>.</p>
 
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT11" href="#DOCF11" id="FOOT11">(11)</a></h3>
+
+    <p>Button-down is the conservative antithesis of drag.</p>
+  </div>
 </body>
 </html>

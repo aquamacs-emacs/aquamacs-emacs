@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Server Buffer Format - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Server-Buffer.html#Server-Buffer" title="Server Buffer">
-<link rel="next" href="Server-Commands.html#Server-Commands" title="Server Commands">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Server Buffer Format - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Server-Buffer.html#Server-Buffer" title=
+  "Server Buffer" />
+  <link rel="next" href="Server-Commands.html#Server-Commands"
+  title="Server Commands" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +33,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,46 +46,76 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Server-Buffer-Format"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Server-Commands.html#Server-Commands">Server Commands</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Server-Buffer.html#Server-Buffer">Server Buffer</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Server-Buffer-Format" id="Server-Buffer-Format"></a>
 
-<h4 class="subsection">6.1.1 Server Buffer Format</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Server-Commands.html#Server-Commands">Server Commands</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Server-Buffer.html#Server-Buffer">Server Buffer</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-server-buffer-format-1937"></a>
-<a name="index-gnus_002dserver_002dline_002dformat-1938"></a>You can change the look of the server buffer lines by changing the
-<code>gnus-server-line-format</code> variable.  This is a <code>format</code>-like
-variable, with some simple extensions:
+  <h4 class="subsection">6.1.1 Server Buffer Format</h4>
 
-     <dl>
-<dt>&lsquo;<samp><span class="samp">h</span></samp>&rsquo;<dd>How the news is fetched&mdash;the back end name.
+  <p><a name="index-server-buffer-format-1937" id=
+  "index-server-buffer-format-1937"></a> <a name=
+  "index-gnus_002dserver_002dline_002dformat-1938" id=
+  "index-gnus_002dserver_002dline_002dformat-1938"></a>You can
+  change the look of the server buffer lines by changing the
+  <code>gnus-server-line-format</code> variable. This is a
+  <code>format</code>-like variable, with some simple
+  extensions:</p>
 
-     <br><dt>&lsquo;<samp><span class="samp">n</span></samp>&rsquo;<dd>The name of this server.
+  <dl>
+    <dt>&lsquo;<samp><span class="samp">h</span></samp>&rsquo;</dt>
 
-     <br><dt>&lsquo;<samp><span class="samp">w</span></samp>&rsquo;<dd>Where the news is to be fetched from&mdash;the address.
+    <dd>How the news is fetched&mdash;the back end name.<br /></dd>
 
-     <br><dt>&lsquo;<samp><span class="samp">s</span></samp>&rsquo;<dd>The opened/closed/denied status of the server.
+    <dt>&lsquo;<samp><span class="samp">n</span></samp>&rsquo;</dt>
 
-     <br><dt>&lsquo;<samp><span class="samp">a</span></samp>&rsquo;<dd>Whether this server is agentized. 
-</dl>
+    <dd>The name of this server.<br /></dd>
 
-   <p><a name="index-gnus_002dserver_002dmode_002dline_002dformat-1939"></a>The mode line can also be customized by using the
-<code>gnus-server-mode-line-format</code> variable (see <a href="Mode-Line-Formatting.html#Mode-Line-Formatting">Mode Line Formatting</a>).  The following specs are understood:
+    <dt>&lsquo;<samp><span class="samp">w</span></samp>&rsquo;</dt>
 
-     <dl>
-<dt>&lsquo;<samp><span class="samp">S</span></samp>&rsquo;<dd>Server name.
+    <dd>Where the news is to be fetched from&mdash;the
+    address.<br /></dd>
 
-     <br><dt>&lsquo;<samp><span class="samp">M</span></samp>&rsquo;<dd>Server method. 
-</dl>
+    <dt>&lsquo;<samp><span class="samp">s</span></samp>&rsquo;</dt>
 
-   <p>Also see <a href="Formatting-Variables.html#Formatting-Variables">Formatting Variables</a>.
+    <dd>The opened/closed/denied status of the server.<br /></dd>
 
-   </body></html>
+    <dt>&lsquo;<samp><span class="samp">a</span></samp>&rsquo;</dt>
 
+    <dd>Whether this server is agentized.</dd>
+  </dl>
+
+  <p><a name=
+  "index-gnus_002dserver_002dmode_002dline_002dformat-1939" id=
+  "index-gnus_002dserver_002dmode_002dline_002dformat-1939"></a>The
+  mode line can also be customized by using the
+  <code>gnus-server-mode-line-format</code> variable (see <a href=
+  "Mode-Line-Formatting.html#Mode-Line-Formatting">Mode Line
+  Formatting</a>). The following specs are understood:</p>
+
+  <dl>
+    <dt>&lsquo;<samp><span class="samp">S</span></samp>&rsquo;</dt>
+
+    <dd>Server name.<br /></dd>
+
+    <dt>&lsquo;<samp><span class="samp">M</span></samp>&rsquo;</dt>
+
+    <dd>Server method.</dd>
+  </dl>
+
+  <p>Also see <a href=
+  "Formatting-Variables.html#Formatting-Variables">Formatting
+  Variables</a>.</p>
+</body>
+</html>

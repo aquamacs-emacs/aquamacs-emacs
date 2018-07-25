@@ -1,15 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Drawers - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Document-Structure.html#Document-Structure" title="Document Structure">
-<link rel="prev" href="Plain-lists.html#Plain-lists" title="Plain lists">
-<link rel="next" href="Blocks.html#Blocks" title="Blocks">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Drawers - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Document-Structure.html#Document-Structure"
+  title="Document Structure" />
+  <link rel="prev" href="Plain-lists.html#Plain-lists" title=
+  "Plain lists" />
+  <link rel="next" href="Blocks.html#Blocks" title="Blocks" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +41,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,54 +54,83 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Drawers"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Blocks.html#Blocks">Blocks</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Plain-lists.html#Plain-lists">Plain lists</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Document-Structure.html#Document-Structure">Document Structure</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Drawers" id="Drawers"></a>
 
-<h3 class="section">2.8 Drawers</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Blocks.html#Blocks">Blocks</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Plain-lists.html#Plain-lists">Plain lists</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Document-Structure.html#Document-Structure">Document
+    Structure</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-drawers-197"></a><a name="index-g_t_0023_002bDRAWERS-198"></a><a name="index-visibility-cycling_002c-drawers-199"></a>
-<a name="index-org_002ddrawers-200"></a>Sometimes you want to keep information associated with an entry, but you
-normally don't want to see it.  For this, Org-mode has <em>drawers</em>. 
-Drawers need to be configured with the variable
-<code>org-drawers</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Drawers
-look like this:
+  <h3 class="section">2.8 Drawers</h3>
 
-<pre class="example">     ** This is a headline
+  <p><a name="index-drawers-197" id=
+  "index-drawers-197"></a><a name="index-g_t_0023_002bDRAWERS-198"
+  id="index-g_t_0023_002bDRAWERS-198"></a><a name=
+  "index-visibility-cycling_002c-drawers-199" id=
+  "index-visibility-cycling_002c-drawers-199"></a> <a name=
+  "index-org_002ddrawers-200" id=
+  "index-org_002ddrawers-200"></a>Sometimes you want to keep
+  information associated with an entry, but you normally don't want
+  to see it. For this, Org-mode has <em>drawers</em>. Drawers need
+  to be configured with the variable
+  <code>org-drawers</code><a rel="footnote" href="#fn-1" name=
+  "fnd-1" id="fnd-1"><sup>1</sup></a>. Drawers look like this:</p>
+  <pre class="example">
+     ** This is a headline
         Still outside the drawer
         :DRAWERNAME:
            This is inside the drawer.
         :END:
         After the drawer.
 </pre>
-   <p>Visibility cycling (see <a href="Visibility-cycling.html#Visibility-cycling">Visibility cycling</a>) on the headline will hide and
-show the entry, but keep the drawer collapsed to a single line.  In order to
-look inside the drawer, you need to move the cursor to the drawer line and
-press &lt;TAB&gt; there.  Org-mode uses the <code>PROPERTIES</code> drawer for
-storing properties (see <a href="Properties-and-Columns.html#Properties-and-Columns">Properties and Columns</a>), and you can also arrange
-for state change notes (see <a href="Tracking-TODO-state-changes.html#Tracking-TODO-state-changes">Tracking TODO state changes</a>) and clock times
-(see <a href="Clocking-work-time.html#Clocking-work-time">Clocking work time</a>) to be stored in a drawer <code>LOGBOOK</code>.  If you
-want to store a quick note in the LOGBOOK drawer, in a similar way to state changes, use
 
-     
-<a name="index-C_002dc-C_002dz-201"></a>
-<dl><dt><kbd>C-c C-z</kbd><dd>Add a time-stamped note to the LOGBOOK drawer. 
-</dl>
+  <p>Visibility cycling (see <a href=
+  "Visibility-cycling.html#Visibility-cycling">Visibility
+  cycling</a>) on the headline will hide and show the entry, but
+  keep the drawer collapsed to a single line. In order to look
+  inside the drawer, you need to move the cursor to the drawer line
+  and press &lt;TAB&gt; there. Org-mode uses the
+  <code>PROPERTIES</code> drawer for storing properties (see
+  <a href=
+  "Properties-and-Columns.html#Properties-and-Columns">Properties
+  and Columns</a>), and you can also arrange for state change notes
+  (see <a href=
+  "Tracking-TODO-state-changes.html#Tracking-TODO-state-changes">Tracking
+  TODO state changes</a>) and clock times (see <a href=
+  "Clocking-work-time.html#Clocking-work-time">Clocking work
+  time</a>) to be stored in a drawer <code>LOGBOOK</code>. If you
+  want to store a quick note in the LOGBOOK drawer, in a similar
+  way to state changes, use <a name="index-C_002dc-C_002dz-201" id=
+  "index-C_002dc-C_002dz-201"></a></p>
 
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> You can define drawers on a per-file basis
-with a line like <code>#+DRAWERS: HIDDEN PROPERTIES STATE</code></p>
+  <dl>
+    <dt><kbd>C-c C-z</kbd></dt>
 
-   <hr></div>
+    <dd>Add a time-stamped note to the LOGBOOK drawer.</dd>
+  </dl>
 
-   </body></html>
+  <div class="footnote">
+    <hr />
 
+    <h4>Footnotes</h4>
+
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> You can define drawers on a per-file
+    basis with a line like <code>#+DRAWERS: HIDDEN PROPERTIES
+    STATE</code></p>
+    <hr />
+  </div>
+</body>
+</html>

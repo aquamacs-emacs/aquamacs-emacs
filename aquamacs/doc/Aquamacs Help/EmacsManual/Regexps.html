@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,288 +20,444 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Regexps</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Regexps">
-<meta name="keywords" content="GNU Emacs Manual: Regexps">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Search.html#Search" rel="up" title="Search">
-<link href="Regexp-Backslash.html#Regexp-Backslash" rel="next" title="Regexp Backslash">
-<link href="Regexp-Search.html#Regexp-Search" rel="prev" title="Regexp Search">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Regexps</title>
+  <meta name="description" content="GNU Emacs Manual: Regexps" />
+  <meta name="keywords" content="GNU Emacs Manual: Regexps" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Search.html#Search" rel="up" title="Search" />
+  <link href="Regexp-Backslash.html#Regexp-Backslash" rel="next"
+  title="Regexp Backslash" />
+  <link href="Regexp-Search.html#Regexp-Search" rel="prev" title=
+  "Regexp Search" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Regexps" id="Regexps"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Regexp-Backslash.html#Regexp-Backslash"
+    accesskey="n" rel="next">Regexp Backslash</a>, Previous:
+    <a href="Regexp-Search.html#Regexp-Search" accesskey="p" rel=
+    "prev">Regexp Search</a>, Up: <a href="Search.html#Search"
+    accesskey="u" rel="up">Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Syntax-of-Regular-Expressions" id=
+  "Syntax-of-Regular-Expressions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Regexps"></a>
-<div class="header">
-<p>
-Next: <a href="Regexp-Backslash.html#Regexp-Backslash" accesskey="n" rel="next">Regexp Backslash</a>, Previous: <a href="Regexp-Search.html#Regexp-Search" accesskey="p" rel="prev">Regexp Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Syntax-of-Regular-Expressions"></a>
-<h3 class="section">15.6 Syntax of Regular Expressions</h3>
-<a name="index-syntax-of-regexps"></a>
-<a name="index-regular-expression"></a>
-<a name="index-regexp"></a>
+  <h3 class="section">15.6 Syntax of Regular
+  Expressions</h3><a name="index-syntax-of-regexps" id=
+  "index-syntax-of-regexps"></a> <a name="index-regular-expression"
+  id="index-regular-expression"></a> <a name="index-regexp" id=
+  "index-regexp"></a>
 
-<p>This manual describes regular expression features that users
-typically use.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Regular-Expressions.html#Regular-Expressions">Regular Expressions</a> in <cite>The Emacs Lisp
-Reference Manual</cite>, for additional features used mainly in Lisp
-programs.
-</p>
-<p>Regular expressions have a syntax in which a few characters are
-special constructs and the rest are <em>ordinary</em>.  An ordinary
-character matches that same character and nothing else.  The special
-characters are &lsquo;<samp>$^.*+?[\</samp>&rsquo;.  The character &lsquo;<samp>]</samp>&rsquo; is special if
-it ends a character alternative (see later).  The character &lsquo;<samp>-</samp>&rsquo;
-is special inside a character alternative.  Any other character
-appearing in a regular expression is ordinary, unless a &lsquo;<samp>\</samp>&rsquo;
-precedes it.  (When you use regular expressions in a Lisp program,
-each &lsquo;<samp>\</samp>&rsquo; must be doubled, see the example near the end of this
-section.)
-</p>
-<p>For example, &lsquo;<samp>f</samp>&rsquo; is not a special character, so it is ordinary, and
-therefore &lsquo;<samp>f</samp>&rsquo; is a regular expression that matches the string
-&lsquo;<samp>f</samp>&rsquo; and no other string.  (It does <em>not</em> match the string
-&lsquo;<samp>ff</samp>&rsquo;.)  Likewise, &lsquo;<samp>o</samp>&rsquo; is a regular expression that matches
-only &lsquo;<samp>o</samp>&rsquo;.  (When case distinctions are being ignored, these regexps
-also match &lsquo;<samp>F</samp>&rsquo; and &lsquo;<samp>O</samp>&rsquo;, but we consider this a generalization
-of &ldquo;the same string&rdquo;, rather than an exception.)
-</p>
-<p>Any two regular expressions <var>a</var> and <var>b</var> can be concatenated.
-The result is a regular expression which matches a string if <var>a</var>
-matches some amount of the beginning of that string and <var>b</var>
-matches the rest of the string.  For example, concatenating the
-regular expressions &lsquo;<samp>f</samp>&rsquo; and &lsquo;<samp>o</samp>&rsquo; gives the regular expression
-&lsquo;<samp>fo</samp>&rsquo;, which matches only the string &lsquo;<samp>fo</samp>&rsquo;.  Still trivial.
-To do something nontrivial, you need to use one of the special
-characters.  Here is a list of them.
-</p>
-<dl compact="compact">
-<dt><kbd>.</kbd> <span class="roman">(Period)</span></dt>
-<dd><p>is a special character that matches any single character except a
-newline.  For example, the regular expressions &lsquo;<samp>a.b</samp>&rsquo; matches any
-three-character string that begins with &lsquo;<samp>a</samp>&rsquo; and ends with
-&lsquo;<samp>b</samp>&rsquo;.
-</p>
-</dd>
-<dt><kbd>*</kbd></dt>
-<dd><p>is not a construct by itself; it is a postfix operator that means to
-match the preceding regular expression repetitively any number of
-times, as many times as possible.  Thus, &lsquo;<samp>o*</samp>&rsquo; matches any number
-of &lsquo;<samp>o</samp>&rsquo;s, including no &lsquo;<samp>o</samp>&rsquo;s.
-</p>
-<p>&lsquo;<samp>*</samp>&rsquo; always applies to the <em>smallest</em> possible preceding
-expression.  Thus, &lsquo;<samp>fo*</samp>&rsquo; has a repeating &lsquo;<samp>o</samp>&rsquo;, not a repeating
-&lsquo;<samp>fo</samp>&rsquo;.  It matches &lsquo;<samp>f</samp>&rsquo;, &lsquo;<samp>fo</samp>&rsquo;, &lsquo;<samp>foo</samp>&rsquo;, and so on.
-</p>
-<p>The matcher processes a &lsquo;<samp>*</samp>&rsquo; construct by matching, immediately,
-as many repetitions as can be found.  Then it continues with the rest
-of the pattern.  If that fails, backtracking occurs, discarding some
-of the matches of the &lsquo;<samp>*</samp>&rsquo;-modified construct in case that makes
-it possible to match the rest of the pattern.  For example, in matching
-&lsquo;<samp>ca*ar</samp>&rsquo; against the string &lsquo;<samp>caaar</samp>&rsquo;, the &lsquo;<samp>a*</samp>&rsquo; first
-tries to match all three &lsquo;<samp>a</samp>&rsquo;s; but the rest of the pattern is
-&lsquo;<samp>ar</samp>&rsquo; and there is only &lsquo;<samp>r</samp>&rsquo; left to match, so this try fails.
-The next alternative is for &lsquo;<samp>a*</samp>&rsquo; to match only two &lsquo;<samp>a</samp>&rsquo;s.
-With this choice, the rest of the regexp matches successfully.
-</p>
-</dd>
-<dt><kbd>+</kbd></dt>
-<dd><p>is a postfix operator, similar to &lsquo;<samp>*</samp>&rsquo; except that it must match
-the preceding expression at least once.  Thus, &lsquo;<samp>ca+r</samp>&rsquo; matches the
-strings &lsquo;<samp>car</samp>&rsquo; and &lsquo;<samp>caaaar</samp>&rsquo; but not the string &lsquo;<samp>cr</samp>&rsquo;,
-whereas &lsquo;<samp>ca*r</samp>&rsquo; matches all three strings.
-</p>
-</dd>
-<dt><kbd>?</kbd></dt>
-<dd><p>is a postfix operator, similar to &lsquo;<samp>*</samp>&rsquo; except that it can match
-the preceding expression either once or not at all.  Thus, &lsquo;<samp>ca?r</samp>&rsquo;
-matches &lsquo;<samp>car</samp>&rsquo; or &lsquo;<samp>cr</samp>&rsquo;, and nothing else.
-</p>
-</dd>
-<dt><kbd>*?</kbd>, <kbd>+?</kbd>, <kbd>??</kbd></dt>
-<dd><a name="index-non_002dgreedy-regexp-matching"></a>
-<p>are non-<em>greedy</em> variants of the operators above.  The normal
-operators &lsquo;<samp>*</samp>&rsquo;, &lsquo;<samp>+</samp>&rsquo;, &lsquo;<samp>?</samp>&rsquo; match as much as they can, as
-long as the overall regexp can still match.  With a following
-&lsquo;<samp>?</samp>&rsquo;, they will match as little as possible.
-</p>
-<p>Thus, both &lsquo;<samp>ab*</samp>&rsquo; and &lsquo;<samp>ab*?</samp>&rsquo; can match the string &lsquo;<samp>a</samp>&rsquo;
-and the string &lsquo;<samp>abbbb</samp>&rsquo;; but if you try to match them both against
-the text &lsquo;<samp>abbb</samp>&rsquo;, &lsquo;<samp>ab*</samp>&rsquo; will match it all (the longest valid
-match), while &lsquo;<samp>ab*?</samp>&rsquo;  will match just &lsquo;<samp>a</samp>&rsquo; (the shortest
-valid match).
-</p>
-<p>Non-greedy operators match the shortest possible string starting at a
-given starting point; in a forward search, though, the earliest
-possible starting point for match is always the one chosen.  Thus, if
-you search for &lsquo;<samp>a.*?$</samp>&rsquo; against the text &lsquo;<samp>abbab</samp>&rsquo; followed by
-a newline, it matches the whole string.  Since it <em>can</em> match
-starting at the first &lsquo;<samp>a</samp>&rsquo;, it does.
-</p>
-</dd>
-<dt><kbd>\{<var>n</var>\}</kbd></dt>
-<dd><p>is a postfix operator specifying <var>n</var> repetitions&mdash;that is, the
-preceding regular expression must match exactly <var>n</var> times in a
-row.  For example, &lsquo;<samp>x\{4\}</samp>&rsquo; matches the string &lsquo;<samp>xxxx</samp>&rsquo; and
-nothing else.
-</p>
-</dd>
-<dt><kbd>\{<var>n</var>,<var>m</var>\}</kbd></dt>
-<dd><p>is a postfix operator specifying between <var>n</var> and <var>m</var>
-repetitions&mdash;that is, the preceding regular expression must match at
-least <var>n</var> times, but no more than <var>m</var> times.  If <var>m</var> is
-omitted, then there is no upper limit, but the preceding regular
-expression must match at least <var>n</var> times.<br> &lsquo;<samp>\{0,1\}</samp>&rsquo; is
-equivalent to &lsquo;<samp>?</samp>&rsquo;. <br> &lsquo;<samp>\{0,\}</samp>&rsquo; is equivalent to
-&lsquo;<samp>*</samp>&rsquo;. <br> &lsquo;<samp>\{1,\}</samp>&rsquo; is equivalent to &lsquo;<samp>+</samp>&rsquo;.
-</p>
-</dd>
-<dt><kbd>[ &hellip; ]</kbd></dt>
-<dd><p>is a <em>character set</em>, beginning with &lsquo;<samp>[</samp>&rsquo; and terminated by
-&lsquo;<samp>]</samp>&rsquo;.
-</p>
-<p>In the simplest case, the characters between the two brackets are what
-this set can match.  Thus, &lsquo;<samp>[ad]</samp>&rsquo; matches either one &lsquo;<samp>a</samp>&rsquo; or
-one &lsquo;<samp>d</samp>&rsquo;, and &lsquo;<samp>[ad]*</samp>&rsquo; matches any string composed of just
-&lsquo;<samp>a</samp>&rsquo;s and &lsquo;<samp>d</samp>&rsquo;s (including the empty string).  It follows that
-&lsquo;<samp>c[ad]*r</samp>&rsquo; matches &lsquo;<samp>cr</samp>&rsquo;, &lsquo;<samp>car</samp>&rsquo;, &lsquo;<samp>cdr</samp>&rsquo;,
-&lsquo;<samp>caddaar</samp>&rsquo;, etc.
-</p>
-<p>You can also include character ranges in a character set, by writing the
-starting and ending characters with a &lsquo;<samp>-</samp>&rsquo; between them.  Thus,
-&lsquo;<samp>[a-z]</samp>&rsquo; matches any lower-case <acronym>ASCII</acronym> letter.  Ranges may be
-intermixed freely with individual characters, as in &lsquo;<samp>[a-z$%.]</samp>&rsquo;,
-which matches any lower-case <acronym>ASCII</acronym> letter or &lsquo;<samp>$</samp>&rsquo;, &lsquo;<samp>%</samp>&rsquo; or
-period.
-</p>
-<p>You can also include certain special <em>character classes</em> in a
-character set.  A &lsquo;<samp>[:</samp>&rsquo; and balancing &lsquo;<samp>:]</samp>&rsquo; enclose a
-character class inside a character alternative.  For instance,
-&lsquo;<samp>[[:alnum:]]</samp>&rsquo; matches any letter or digit.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Char-Classes.html#Char-Classes">Char Classes</a> in <cite>The Emacs Lisp Reference Manual</cite>, for a list of character
-classes.
-</p>
-<p>To include a &lsquo;<samp>]</samp>&rsquo; in a character set, you must make it the first
-character.  For example, &lsquo;<samp>[]a]</samp>&rsquo; matches &lsquo;<samp>]</samp>&rsquo; or &lsquo;<samp>a</samp>&rsquo;.  To
-include a &lsquo;<samp>-</samp>&rsquo;, write &lsquo;<samp>-</samp>&rsquo; as the first or last character of the
-set, or put it after a range.  Thus, &lsquo;<samp>[]-]</samp>&rsquo; matches both &lsquo;<samp>]</samp>&rsquo;
-and &lsquo;<samp>-</samp>&rsquo;.
-</p>
-<p>To include &lsquo;<samp>^</samp>&rsquo; in a set, put it anywhere but at the beginning of
-the set.  (At the beginning, it complements the set&mdash;see below.)
-</p>
-<p>When you use a range in case-insensitive search, you should write both
-ends of the range in upper case, or both in lower case, or both should
-be non-letters.  The behavior of a mixed-case range such as &lsquo;<samp>A-z</samp>&rsquo;
-is somewhat ill-defined, and it may change in future Emacs versions.
-</p>
-</dd>
-<dt><kbd>[^ &hellip; ]</kbd></dt>
-<dd><p>&lsquo;<samp>[^</samp>&rsquo; begins a <em>complemented character set</em>, which matches any
-character except the ones specified.  Thus, &lsquo;<samp>[^a-z0-9A-Z]</samp>&rsquo; matches
-all characters <em>except</em> <acronym>ASCII</acronym> letters and digits.
-</p>
-<p>&lsquo;<samp>^</samp>&rsquo; is not special in a character set unless it is the first
-character.  The character following the &lsquo;<samp>^</samp>&rsquo; is treated as if it
-were first (in other words, &lsquo;<samp>-</samp>&rsquo; and &lsquo;<samp>]</samp>&rsquo; are not special there).
-</p>
-<p>A complemented character set can match a newline, unless newline is
-mentioned as one of the characters not to match.  This is in contrast to
-the handling of regexps in programs such as <code>grep</code>.
-</p>
-</dd>
-<dt><kbd>^</kbd></dt>
-<dd><p>is a special character that matches the empty string, but only at the
-beginning of a line in the text being matched.  Otherwise it fails to
-match anything.  Thus, &lsquo;<samp>^foo</samp>&rsquo; matches a &lsquo;<samp>foo</samp>&rsquo; that occurs at
-the beginning of a line.
-</p>
-<p>For historical compatibility reasons, &lsquo;<samp>^</samp>&rsquo; can be used with this
-meaning only at the beginning of the regular expression, or after
-&lsquo;<samp>\(</samp>&rsquo; or &lsquo;<samp>\|</samp>&rsquo;.
-</p>
-</dd>
-<dt><kbd>$</kbd></dt>
-<dd><p>is similar to &lsquo;<samp>^</samp>&rsquo; but matches only at the end of a line.  Thus,
-&lsquo;<samp>x+$</samp>&rsquo; matches a string of one &lsquo;<samp>x</samp>&rsquo; or more at the end of a line.
-</p>
-<p>For historical compatibility reasons, &lsquo;<samp>$</samp>&rsquo; can be used with this
-meaning only at the end of the regular expression, or before &lsquo;<samp>\)</samp>&rsquo;
-or &lsquo;<samp>\|</samp>&rsquo;.
-</p>
-</dd>
-<dt><kbd>\</kbd></dt>
-<dd><p>has two functions: it quotes the special characters (including
-&lsquo;<samp>\</samp>&rsquo;), and it introduces additional special constructs.
-</p>
-<p>Because &lsquo;<samp>\</samp>&rsquo; quotes special characters, &lsquo;<samp>\$</samp>&rsquo; is a regular
-expression that matches only &lsquo;<samp>$</samp>&rsquo;, and &lsquo;<samp>\[</samp>&rsquo; is a regular
-expression that matches only &lsquo;<samp>[</samp>&rsquo;, and so on.
-</p>
-<p>See the following section for the special constructs that begin
-with &lsquo;<samp>\</samp>&rsquo;.
-</p></dd>
-</dl>
+  <p>This manual describes regular expression features that users
+  typically use. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Regular-Expressions.html#Regular-Expressions">
+  Regular Expressions</a> in <cite>The Emacs Lisp Reference
+  Manual</cite>, for additional features used mainly in Lisp
+  programs.</p>
 
-<p>Note: for historical compatibility, special characters are treated as
-ordinary ones if they are in contexts where their special meanings make no
-sense.  For example, &lsquo;<samp>*foo</samp>&rsquo; treats &lsquo;<samp>*</samp>&rsquo; as ordinary since there is
-no preceding expression on which the &lsquo;<samp>*</samp>&rsquo; can act.  It is poor practice
-to depend on this behavior; it is better to quote the special character anyway,
-regardless of where it appears.
-</p>
-<p>As a &lsquo;<samp>\</samp>&rsquo; is not special inside a character alternative, it can
-never remove the special meaning of &lsquo;<samp>-</samp>&rsquo; or &lsquo;<samp>]</samp>&rsquo;.  So you
-should not quote these characters when they have no special meaning
-either.  This would not clarify anything, since backslashes can
-legitimately precede these characters where they <em>have</em> special
-meaning, as in &lsquo;<samp>[^\]</samp>&rsquo; (<code>&quot;[^\\]&quot;</code> for Lisp string syntax),
-which matches any single character except a backslash.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Regexp-Backslash.html#Regexp-Backslash" accesskey="n" rel="next">Regexp Backslash</a>, Previous: <a href="Regexp-Search.html#Regexp-Search" accesskey="p" rel="prev">Regexp Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Regular expressions have a syntax in which a few characters
+  are special constructs and the rest are <em>ordinary</em>. An
+  ordinary character matches that same character and nothing else.
+  The special characters are &lsquo;<samp>$^.*+?[\</samp>&rsquo;.
+  The character &lsquo;<samp>]</samp>&rsquo; is special if it ends
+  a character alternative (see later). The character
+  &lsquo;<samp>-</samp>&rsquo; is special inside a character
+  alternative. Any other character appearing in a regular
+  expression is ordinary, unless a &lsquo;<samp>\</samp>&rsquo;
+  precedes it. (When you use regular expressions in a Lisp program,
+  each &lsquo;<samp>\</samp>&rsquo; must be doubled, see the
+  example near the end of this section.)</p>
 
+  <p>For example, &lsquo;<samp>f</samp>&rsquo; is not a special
+  character, so it is ordinary, and therefore
+  &lsquo;<samp>f</samp>&rsquo; is a regular expression that matches
+  the string &lsquo;<samp>f</samp>&rsquo; and no other string. (It
+  does <em>not</em> match the string
+  &lsquo;<samp>ff</samp>&rsquo;.) Likewise,
+  &lsquo;<samp>o</samp>&rsquo; is a regular expression that matches
+  only &lsquo;<samp>o</samp>&rsquo;. (When case distinctions are
+  being ignored, these regexps also match
+  &lsquo;<samp>F</samp>&rsquo; and &lsquo;<samp>O</samp>&rsquo;,
+  but we consider this a generalization of &ldquo;the same
+  string&rdquo;, rather than an exception.)</p>
 
+  <p>Any two regular expressions <var>a</var> and <var>b</var> can
+  be concatenated. The result is a regular expression which matches
+  a string if <var>a</var> matches some amount of the beginning of
+  that string and <var>b</var> matches the rest of the string. For
+  example, concatenating the regular expressions
+  &lsquo;<samp>f</samp>&rsquo; and &lsquo;<samp>o</samp>&rsquo;
+  gives the regular expression &lsquo;<samp>fo</samp>&rsquo;, which
+  matches only the string &lsquo;<samp>fo</samp>&rsquo;. Still
+  trivial. To do something nontrivial, you need to use one of the
+  special characters. Here is a list of them.</p>
 
+  <dl compact="compact">
+    <dt><kbd>.</kbd> <span class="roman">(Period)</span></dt>
+
+    <dd>
+      <p>is a special character that matches any single character
+      except a newline. For example, the regular expressions
+      &lsquo;<samp>a.b</samp>&rsquo; matches any three-character
+      string that begins with &lsquo;<samp>a</samp>&rsquo; and ends
+      with &lsquo;<samp>b</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><kbd>*</kbd></dt>
+
+    <dd>
+      <p>is not a construct by itself; it is a postfix operator
+      that means to match the preceding regular expression
+      repetitively any number of times, as many times as possible.
+      Thus, &lsquo;<samp>o*</samp>&rsquo; matches any number of
+      &lsquo;<samp>o</samp>&rsquo;s, including no
+      &lsquo;<samp>o</samp>&rsquo;s.</p>
+
+      <p>&lsquo;<samp>*</samp>&rsquo; always applies to the
+      <em>smallest</em> possible preceding expression. Thus,
+      &lsquo;<samp>fo*</samp>&rsquo; has a repeating
+      &lsquo;<samp>o</samp>&rsquo;, not a repeating
+      &lsquo;<samp>fo</samp>&rsquo;. It matches
+      &lsquo;<samp>f</samp>&rsquo;, &lsquo;<samp>fo</samp>&rsquo;,
+      &lsquo;<samp>foo</samp>&rsquo;, and so on.</p>
+
+      <p>The matcher processes a &lsquo;<samp>*</samp>&rsquo;
+      construct by matching, immediately, as many repetitions as
+      can be found. Then it continues with the rest of the pattern.
+      If that fails, backtracking occurs, discarding some of the
+      matches of the &lsquo;<samp>*</samp>&rsquo;-modified
+      construct in case that makes it possible to match the rest of
+      the pattern. For example, in matching
+      &lsquo;<samp>ca*ar</samp>&rsquo; against the string
+      &lsquo;<samp>caaar</samp>&rsquo;, the
+      &lsquo;<samp>a*</samp>&rsquo; first tries to match all three
+      &lsquo;<samp>a</samp>&rsquo;s; but the rest of the pattern is
+      &lsquo;<samp>ar</samp>&rsquo; and there is only
+      &lsquo;<samp>r</samp>&rsquo; left to match, so this try
+      fails. The next alternative is for
+      &lsquo;<samp>a*</samp>&rsquo; to match only two
+      &lsquo;<samp>a</samp>&rsquo;s. With this choice, the rest of
+      the regexp matches successfully.</p>
+    </dd>
+
+    <dt><kbd>+</kbd></dt>
+
+    <dd>
+      <p>is a postfix operator, similar to
+      &lsquo;<samp>*</samp>&rsquo; except that it must match the
+      preceding expression at least once. Thus,
+      &lsquo;<samp>ca+r</samp>&rsquo; matches the strings
+      &lsquo;<samp>car</samp>&rsquo; and
+      &lsquo;<samp>caaaar</samp>&rsquo; but not the string
+      &lsquo;<samp>cr</samp>&rsquo;, whereas
+      &lsquo;<samp>ca*r</samp>&rsquo; matches all three
+      strings.</p>
+    </dd>
+
+    <dt><kbd>?</kbd></dt>
+
+    <dd>
+      <p>is a postfix operator, similar to
+      &lsquo;<samp>*</samp>&rsquo; except that it can match the
+      preceding expression either once or not at all. Thus,
+      &lsquo;<samp>ca?r</samp>&rsquo; matches
+      &lsquo;<samp>car</samp>&rsquo; or
+      &lsquo;<samp>cr</samp>&rsquo;, and nothing else.</p>
+    </dd>
+
+    <dt><kbd>*?</kbd>, <kbd>+?</kbd>, <kbd>??</kbd></dt>
+
+    <dd>
+      <a name="index-non_002dgreedy-regexp-matching" id=
+      "index-non_002dgreedy-regexp-matching"></a>
+
+      <p>are non-<em>greedy</em> variants of the operators above.
+      The normal operators &lsquo;<samp>*</samp>&rsquo;,
+      &lsquo;<samp>+</samp>&rsquo;, &lsquo;<samp>?</samp>&rsquo;
+      match as much as they can, as long as the overall regexp can
+      still match. With a following &lsquo;<samp>?</samp>&rsquo;,
+      they will match as little as possible.</p>
+
+      <p>Thus, both &lsquo;<samp>ab*</samp>&rsquo; and
+      &lsquo;<samp>ab*?</samp>&rsquo; can match the string
+      &lsquo;<samp>a</samp>&rsquo; and the string
+      &lsquo;<samp>abbbb</samp>&rsquo;; but if you try to match
+      them both against the text &lsquo;<samp>abbb</samp>&rsquo;,
+      &lsquo;<samp>ab*</samp>&rsquo; will match it all (the longest
+      valid match), while &lsquo;<samp>ab*?</samp>&rsquo; will
+      match just &lsquo;<samp>a</samp>&rsquo; (the shortest valid
+      match).</p>
+
+      <p>Non-greedy operators match the shortest possible string
+      starting at a given starting point; in a forward search,
+      though, the earliest possible starting point for match is
+      always the one chosen. Thus, if you search for
+      &lsquo;<samp>a.*?$</samp>&rsquo; against the text
+      &lsquo;<samp>abbab</samp>&rsquo; followed by a newline, it
+      matches the whole string. Since it <em>can</em> match
+      starting at the first &lsquo;<samp>a</samp>&rsquo;, it
+      does.</p>
+    </dd>
+
+    <dt><kbd>\{<var>n</var>\}</kbd></dt>
+
+    <dd>
+      <p>is a postfix operator specifying <var>n</var>
+      repetitions&mdash;that is, the preceding regular expression
+      must match exactly <var>n</var> times in a row. For example,
+      &lsquo;<samp>x\{4\}</samp>&rsquo; matches the string
+      &lsquo;<samp>xxxx</samp>&rsquo; and nothing else.</p>
+    </dd>
+
+    <dt><kbd>\{<var>n</var>,<var>m</var>\}</kbd></dt>
+
+    <dd>
+      <p>is a postfix operator specifying between <var>n</var> and
+      <var>m</var> repetitions&mdash;that is, the preceding regular
+      expression must match at least <var>n</var> times, but no
+      more than <var>m</var> times. If <var>m</var> is omitted,
+      then there is no upper limit, but the preceding regular
+      expression must match at least <var>n</var> times.<br />
+      &lsquo;<samp>\{0,1\}</samp>&rsquo; is equivalent to
+      &lsquo;<samp>?</samp>&rsquo;.<br />
+      &lsquo;<samp>\{0,\}</samp>&rsquo; is equivalent to
+      &lsquo;<samp>*</samp>&rsquo;.<br />
+      &lsquo;<samp>\{1,\}</samp>&rsquo; is equivalent to
+      &lsquo;<samp>+</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><kbd>[ &hellip; ]</kbd></dt>
+
+    <dd>
+      <p>is a <em>character set</em>, beginning with
+      &lsquo;<samp>[</samp>&rsquo; and terminated by
+      &lsquo;<samp>]</samp>&rsquo;.</p>
+
+      <p>In the simplest case, the characters between the two
+      brackets are what this set can match. Thus,
+      &lsquo;<samp>[ad]</samp>&rsquo; matches either one
+      &lsquo;<samp>a</samp>&rsquo; or one
+      &lsquo;<samp>d</samp>&rsquo;, and
+      &lsquo;<samp>[ad]*</samp>&rsquo; matches any string composed
+      of just &lsquo;<samp>a</samp>&rsquo;s and
+      &lsquo;<samp>d</samp>&rsquo;s (including the empty string).
+      It follows that &lsquo;<samp>c[ad]*r</samp>&rsquo; matches
+      &lsquo;<samp>cr</samp>&rsquo;,
+      &lsquo;<samp>car</samp>&rsquo;,
+      &lsquo;<samp>cdr</samp>&rsquo;,
+      &lsquo;<samp>caddaar</samp>&rsquo;, etc.</p>
+
+      <p>You can also include character ranges in a character set,
+      by writing the starting and ending characters with a
+      &lsquo;<samp>-</samp>&rsquo; between them. Thus,
+      &lsquo;<samp>[a-z]</samp>&rsquo; matches any lower-case
+      <acronym>ASCII</acronym> letter. Ranges may be intermixed
+      freely with individual characters, as in
+      &lsquo;<samp>[a-z$%.]</samp>&rsquo;, which matches any
+      lower-case <acronym>ASCII</acronym> letter or
+      &lsquo;<samp>$</samp>&rsquo;, &lsquo;<samp>%</samp>&rsquo; or
+      period.</p>
+
+      <p>You can also include certain special <em>character
+      classes</em> in a character set. A
+      &lsquo;<samp>[:</samp>&rsquo; and balancing
+      &lsquo;<samp>:]</samp>&rsquo; enclose a character class
+      inside a character alternative. For instance,
+      &lsquo;<samp>[[:alnum:]]</samp>&rsquo; matches any letter or
+      digit. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/elisp/Char-Classes.html#Char-Classes">
+      Char Classes</a> in <cite>The Emacs Lisp Reference
+      Manual</cite>, for a list of character classes.</p>
+
+      <p>To include a &lsquo;<samp>]</samp>&rsquo; in a character
+      set, you must make it the first character. For example,
+      &lsquo;<samp>[]a]</samp>&rsquo; matches
+      &lsquo;<samp>]</samp>&rsquo; or &lsquo;<samp>a</samp>&rsquo;.
+      To include a &lsquo;<samp>-</samp>&rsquo;, write
+      &lsquo;<samp>-</samp>&rsquo; as the first or last character
+      of the set, or put it after a range. Thus,
+      &lsquo;<samp>[]-]</samp>&rsquo; matches both
+      &lsquo;<samp>]</samp>&rsquo; and
+      &lsquo;<samp>-</samp>&rsquo;.</p>
+
+      <p>To include &lsquo;<samp>^</samp>&rsquo; in a set, put it
+      anywhere but at the beginning of the set. (At the beginning,
+      it complements the set&mdash;see below.)</p>
+
+      <p>When you use a range in case-insensitive search, you
+      should write both ends of the range in upper case, or both in
+      lower case, or both should be non-letters. The behavior of a
+      mixed-case range such as &lsquo;<samp>A-z</samp>&rsquo; is
+      somewhat ill-defined, and it may change in future Emacs
+      versions.</p>
+    </dd>
+
+    <dt><kbd>[^ &hellip; ]</kbd></dt>
+
+    <dd>
+      <p>&lsquo;<samp>[^</samp>&rsquo; begins a <em>complemented
+      character set</em>, which matches any character except the
+      ones specified. Thus, &lsquo;<samp>[^a-z0-9A-Z]</samp>&rsquo;
+      matches all characters <em>except</em>
+      <acronym>ASCII</acronym> letters and digits.</p>
+
+      <p>&lsquo;<samp>^</samp>&rsquo; is not special in a character
+      set unless it is the first character. The character following
+      the &lsquo;<samp>^</samp>&rsquo; is treated as if it were
+      first (in other words, &lsquo;<samp>-</samp>&rsquo; and
+      &lsquo;<samp>]</samp>&rsquo; are not special there).</p>
+
+      <p>A complemented character set can match a newline, unless
+      newline is mentioned as one of the characters not to match.
+      This is in contrast to the handling of regexps in programs
+      such as <code>grep</code>.</p>
+    </dd>
+
+    <dt><kbd>^</kbd></dt>
+
+    <dd>
+      <p>is a special character that matches the empty string, but
+      only at the beginning of a line in the text being matched.
+      Otherwise it fails to match anything. Thus,
+      &lsquo;<samp>^foo</samp>&rsquo; matches a
+      &lsquo;<samp>foo</samp>&rsquo; that occurs at the beginning
+      of a line.</p>
+
+      <p>For historical compatibility reasons,
+      &lsquo;<samp>^</samp>&rsquo; can be used with this meaning
+      only at the beginning of the regular expression, or after
+      &lsquo;<samp>\(</samp>&rsquo; or
+      &lsquo;<samp>\|</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><kbd>$</kbd></dt>
+
+    <dd>
+      <p>is similar to &lsquo;<samp>^</samp>&rsquo; but matches
+      only at the end of a line. Thus,
+      &lsquo;<samp>x+$</samp>&rsquo; matches a string of one
+      &lsquo;<samp>x</samp>&rsquo; or more at the end of a
+      line.</p>
+
+      <p>For historical compatibility reasons,
+      &lsquo;<samp>$</samp>&rsquo; can be used with this meaning
+      only at the end of the regular expression, or before
+      &lsquo;<samp>\)</samp>&rsquo; or
+      &lsquo;<samp>\|</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><kbd>\</kbd></dt>
+
+    <dd>
+      <p>has two functions: it quotes the special characters
+      (including &lsquo;<samp>\</samp>&rsquo;), and it introduces
+      additional special constructs.</p>
+
+      <p>Because &lsquo;<samp>\</samp>&rsquo; quotes special
+      characters, &lsquo;<samp>\$</samp>&rsquo; is a regular
+      expression that matches only &lsquo;<samp>$</samp>&rsquo;,
+      and &lsquo;<samp>\[</samp>&rsquo; is a regular expression
+      that matches only &lsquo;<samp>[</samp>&rsquo;, and so
+      on.</p>
+
+      <p>See the following section for the special constructs that
+      begin with &lsquo;<samp>\</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <p>Note: for historical compatibility, special characters are
+  treated as ordinary ones if they are in contexts where their
+  special meanings make no sense. For example,
+  &lsquo;<samp>*foo</samp>&rsquo; treats
+  &lsquo;<samp>*</samp>&rsquo; as ordinary since there is no
+  preceding expression on which the &lsquo;<samp>*</samp>&rsquo;
+  can act. It is poor practice to depend on this behavior; it is
+  better to quote the special character anyway, regardless of where
+  it appears.</p>
+
+  <p>As a &lsquo;<samp>\</samp>&rsquo; is not special inside a
+  character alternative, it can never remove the special meaning of
+  &lsquo;<samp>-</samp>&rsquo; or &lsquo;<samp>]</samp>&rsquo;. So
+  you should not quote these characters when they have no special
+  meaning either. This would not clarify anything, since
+  backslashes can legitimately precede these characters where they
+  <em>have</em> special meaning, as in
+  &lsquo;<samp>[^\]</samp>&rsquo; (<code>"[^\\]"</code> for Lisp
+  string syntax), which matches any single character except a
+  backslash.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Regexp-Backslash.html#Regexp-Backslash"
+    accesskey="n" rel="next">Regexp Backslash</a>, Previous:
+    <a href="Regexp-Search.html#Regexp-Search" accesskey="p" rel=
+    "prev">Regexp Search</a>, Up: <a href="Search.html#Search"
+    accesskey="u" rel="up">Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

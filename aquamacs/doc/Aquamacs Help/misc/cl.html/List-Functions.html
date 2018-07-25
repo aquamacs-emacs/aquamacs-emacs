@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,148 +16,242 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: List Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: List Functions">
-<meta name="keywords" content="Common Lisp Extensions: List Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lists.html#Lists" rel="up" title="Lists">
-<link href="Substitution-of-Expressions.html#Substitution-of-Expressions" rel="next" title="Substitution of Expressions">
-<link href="Lists.html#Lists" rel="prev" title="Lists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: List Functions</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: List Functions" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: List Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lists.html#Lists" rel="up" title="Lists" />
+  <link href=
+  "Substitution-of-Expressions.html#Substitution-of-Expressions"
+  rel="next" title="Substitution of Expressions" />
+  <link href="Lists.html#Lists" rel="prev" title="Lists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="List-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Substitution-of-Expressions.html#Substitution-of-Expressions" accesskey="n" rel="next">Substitution of Expressions</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="List-Functions-1"></a>
-<h3 class="section">10.1 List Functions</h3>
+<body lang="en" xml:lang="en">
+  <a name="List-Functions" id="List-Functions"></a>
 
-<p>This section describes a number of simple operations on lists,
-i.e., chains of cons cells.
-</p>
-<dl>
-<dt><a name="index-cl_002dcaddr"></a>Function: <strong>cl-caddr</strong> <em>x</em></dt>
-<dd><p>This function is equivalent to <code>(car (cdr (cdr <var>x</var>)))</code>.
-Likewise, this package defines all 24 <code>c<var>xxx</var>r</code> functions
-where <var>xxx</var> is up to four &lsquo;<samp>a</samp>&rsquo;s and/or &lsquo;<samp>d</samp>&rsquo;s.
-All of these functions are <code>setf</code>-able, and calls to them
-are expanded inline by the byte-compiler for maximum efficiency.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Substitution-of-Expressions.html#Substitution-of-Expressions"
+    accesskey="n" rel="next">Substitution of Expressions</a>, Up:
+    <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="List-Functions-1" id="List-Functions-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dfirst"></a>Function: <strong>cl-first</strong> <em>x</em></dt>
-<dd><p>This function is a synonym for <code>(car <var>x</var>)</code>.  Likewise,
-the functions <code>cl-second</code>, <code>cl-third</code>, &hellip;, through
-<code>cl-tenth</code> return the given element of the list <var>x</var>.
-</p></dd></dl>
+  <h3 class="section">10.1 List Functions</h3>
 
-<dl>
-<dt><a name="index-cl_002drest"></a>Function: <strong>cl-rest</strong> <em>x</em></dt>
-<dd><p>This function is a synonym for <code>(cdr <var>x</var>)</code>.
-</p></dd></dl>
+  <p>This section describes a number of simple operations on lists,
+  i.e., chains of cons cells.</p>
 
-<dl>
-<dt><a name="index-cl_002dendp"></a>Function: <strong>cl-endp</strong> <em>x</em></dt>
-<dd><p>This function acts like <code>null</code>, but signals an error if <code>x</code>
-is neither a <code>nil</code> nor a cons cell.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dcaddr" id=
+    "index-cl_002dcaddr"></a>Function: <strong>cl-caddr</strong>
+    <em>x</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dlist_002dlength"></a>Function: <strong>cl-list-length</strong> <em>x</em></dt>
-<dd><p>This function returns the length of list <var>x</var>, exactly like
-<code>(length <var>x</var>)</code>, except that if <var>x</var> is a circular
-list (where the <small>CDR</small>-chain forms a loop rather than terminating
-with <code>nil</code>), this function returns <code>nil</code>.  (The regular
-<code>length</code> function would get stuck if given a circular list.
-See also the <code>safe-length</code> function.)
-</p></dd></dl>
+    <dd>
+      <p>This function is equivalent to <code>(car (cdr (cdr
+      <var>x</var>)))</code>. Likewise, this package defines all 24
+      <code>c<var>xxx</var>r</code> functions where <var>xxx</var>
+      is up to four &lsquo;<samp>a</samp>&rsquo;s and/or
+      &lsquo;<samp>d</samp>&rsquo;s. All of these functions are
+      <code>setf</code>-able, and calls to them are expanded inline
+      by the byte-compiler for maximum efficiency.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dlist_002a"></a>Function: <strong>cl-list*</strong> <em>arg &amp;rest others</em></dt>
-<dd><p>This function constructs a list of its arguments.  The final
-argument becomes the <small>CDR</small> of the last cell constructed.
-Thus, <code>(cl-list* <var>a</var> <var>b</var> <var>c</var>)</code> is equivalent to
-<code>(cons <var>a</var> (cons <var>b</var> <var>c</var>))</code>, and
-<code>(cl-list* <var>a</var> <var>b</var> nil)</code> is equivalent to
-<code>(list <var>a</var> <var>b</var>)</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dfirst" id=
+    "index-cl_002dfirst"></a>Function: <strong>cl-first</strong>
+    <em>x</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dldiff"></a>Function: <strong>cl-ldiff</strong> <em>list sublist</em></dt>
-<dd><p>If <var>sublist</var> is a sublist of <var>list</var>, i.e., is <code>eq</code> to
-one of the cons cells of <var>list</var>, then this function returns
-a copy of the part of <var>list</var> up to but not including
-<var>sublist</var>.  For example, <code>(cl-ldiff x (cddr x))</code> returns
-the first two elements of the list <code>x</code>.  The result is a
-copy; the original <var>list</var> is not modified.  If <var>sublist</var>
-is not a sublist of <var>list</var>, a copy of the entire <var>list</var>
-is returned.
-</p></dd></dl>
+    <dd>
+      <p>This function is a synonym for <code>(car
+      <var>x</var>)</code>. Likewise, the functions
+      <code>cl-second</code>, <code>cl-third</code>, &hellip;,
+      through <code>cl-tenth</code> return the given element of the
+      list <var>x</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dcopy_002dlist"></a>Function: <strong>cl-copy-list</strong> <em>list</em></dt>
-<dd><p>This function returns a copy of the list <var>list</var>.  It copies
-dotted lists like <code>(1 2 . 3)</code> correctly.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002drest" id=
+    "index-cl_002drest"></a>Function: <strong>cl-rest</strong>
+    <em>x</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dtree_002dequal"></a>Function: <strong>cl-tree-equal</strong> <em>x y <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function compares two trees of cons cells.  If <var>x</var> and
-<var>y</var> are both cons cells, their <small>CAR</small>s and <small>CDR</small>s are
-compared recursively.  If neither <var>x</var> nor <var>y</var> is a cons
-cell, they are compared by <code>eql</code>, or according to the
-specified test.  The <code>:key</code> function, if specified, is
-applied to the elements of both trees.  See <a href="Sequences.html#Sequences">Sequences</a>.
-</p></dd></dl>
+    <dd>
+      <p>This function is a synonym for <code>(cdr
+      <var>x</var>)</code>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Substitution-of-Expressions.html#Substitution-of-Expressions" accesskey="n" rel="next">Substitution of Expressions</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-cl_002dendp" id=
+    "index-cl_002dendp"></a>Function: <strong>cl-endp</strong>
+    <em>x</em></dt>
 
+    <dd>
+      <p>This function acts like <code>null</code>, but signals an
+      error if <code>x</code> is neither a <code>nil</code> nor a
+      cons cell.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dlist_002dlength" id=
+    "index-cl_002dlist_002dlength"></a>Function:
+    <strong>cl-list-length</strong> <em>x</em></dt>
 
+    <dd>
+      <p>This function returns the length of list <var>x</var>,
+      exactly like <code>(length <var>x</var>)</code>, except that
+      if <var>x</var> is a circular list (where the
+      <small>CDR</small>-chain forms a loop rather than terminating
+      with <code>nil</code>), this function returns
+      <code>nil</code>. (The regular <code>length</code> function
+      would get stuck if given a circular list. See also the
+      <code>safe-length</code> function.)</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dlist_002a" id=
+    "index-cl_002dlist_002a"></a>Function:
+    <strong>cl-list*</strong> <em>arg &amp;rest others</em></dt>
+
+    <dd>
+      <p>This function constructs a list of its arguments. The
+      final argument becomes the <small>CDR</small> of the last
+      cell constructed. Thus, <code>(cl-list* <var>a</var>
+      <var>b</var> <var>c</var>)</code> is equivalent to
+      <code>(cons <var>a</var> (cons <var>b</var>
+      <var>c</var>))</code>, and <code>(cl-list* <var>a</var>
+      <var>b</var> nil)</code> is equivalent to <code>(list
+      <var>a</var> <var>b</var>)</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dldiff" id=
+    "index-cl_002dldiff"></a>Function: <strong>cl-ldiff</strong>
+    <em>list sublist</em></dt>
+
+    <dd>
+      <p>If <var>sublist</var> is a sublist of <var>list</var>,
+      i.e., is <code>eq</code> to one of the cons cells of
+      <var>list</var>, then this function returns a copy of the
+      part of <var>list</var> up to but not including
+      <var>sublist</var>. For example, <code>(cl-ldiff x (cddr
+      x))</code> returns the first two elements of the list
+      <code>x</code>. The result is a copy; the original
+      <var>list</var> is not modified. If <var>sublist</var> is not
+      a sublist of <var>list</var>, a copy of the entire
+      <var>list</var> is returned.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dcopy_002dlist" id=
+    "index-cl_002dcopy_002dlist"></a>Function:
+    <strong>cl-copy-list</strong> <em>list</em></dt>
+
+    <dd>
+      <p>This function returns a copy of the list <var>list</var>.
+      It copies dotted lists like <code>(1 2 . 3)</code>
+      correctly.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dtree_002dequal" id=
+    "index-cl_002dtree_002dequal"></a>Function:
+    <strong>cl-tree-equal</strong> <em>x y <tt>&amp;key :test
+    :test-not :key</tt></em></dt>
+
+    <dd>
+      <p>This function compares two trees of cons cells. If
+      <var>x</var> and <var>y</var> are both cons cells, their
+      <small>CAR</small>s and <small>CDR</small>s are compared
+      recursively. If neither <var>x</var> nor <var>y</var> is a
+      cons cell, they are compared by <code>eql</code>, or
+      according to the specified test. The <code>:key</code>
+      function, if specified, is applied to the elements of both
+      trees. See <a href=
+      "Sequences.html#Sequences">Sequences</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Substitution-of-Expressions.html#Substitution-of-Expressions"
+    accesskey="n" rel="next">Substitution of Expressions</a>, Up:
+    <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

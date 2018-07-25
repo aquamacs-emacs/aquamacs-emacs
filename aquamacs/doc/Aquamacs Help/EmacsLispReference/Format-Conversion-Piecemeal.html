@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,167 +19,241 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Format Conversion Piecemeal</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Format Conversion Piecemeal">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Format Conversion Piecemeal">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Format-Conversion.html#Format-Conversion" rel="up" title="Format Conversion">
-<link href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" rel="next" title="Backups and Auto-Saving">
-<link href="Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip" rel="prev" title="Format Conversion Round-Trip">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Format Conversion
+  Piecemeal</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Format Conversion Piecemeal" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Format Conversion Piecemeal" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Format-Conversion.html#Format-Conversion" rel="up"
+  title="Format Conversion" />
+  <link href=
+  "Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving"
+  rel="next" title="Backups and Auto-Saving" />
+  <link href=
+  "Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip"
+  rel="prev" title="Format Conversion Round-Trip" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Format-Conversion-Piecemeal" id=
+  "Format-Conversion-Piecemeal"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip"
+    accesskey="p" rel="prev">Format Conversion Round-Trip</a>, Up:
+    <a href="Format-Conversion.html#Format-Conversion" accesskey=
+    "u" rel="up">Format Conversion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Piecemeal-Specification" id=
+  "Piecemeal-Specification"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Format-Conversion-Piecemeal"></a>
-<div class="header">
-<p>
-Previous: <a href="Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip" accesskey="p" rel="prev">Format Conversion Round-Trip</a>, Up: <a href="Format-Conversion.html#Format-Conversion" accesskey="u" rel="up">Format Conversion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Piecemeal-Specification"></a>
-<h4 class="subsection">24.12.3 Piecemeal Specification</h4>
+  <h4 class="subsection">24.12.3 Piecemeal Specification</h4>
 
-<p>In contrast to the round-trip specification described in the previous
-subsection (see <a href="Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip">Format Conversion Round-Trip</a>), you can use the variables
-<code>after-insert-file-functions</code> and <code>write-region-annotate-functions</code>
-to separately control the respective reading and writing conversions.
-</p>
-<p>Conversion starts with one representation and produces another
-representation.  When there is only one conversion to do, there is no
-conflict about what to start with.  However, when there are multiple
-conversions involved, conflict may arise when two conversions need to
-start with the same data.
-</p>
-<p>This situation is best understood in the context of converting text
-properties during <code>write-region</code>.  For example, the character at
-position 42 in a buffer is &lsquo;<samp>X</samp>&rsquo; with a text property <code>foo</code>.  If
-the conversion for <code>foo</code> is done by inserting into the buffer, say,
-&lsquo;<samp>FOO:</samp>&rsquo;, then that changes the character at position 42 from
-&lsquo;<samp>X</samp>&rsquo; to &lsquo;<samp>F</samp>&rsquo;.  The next conversion will start with the wrong
-data straight away.
-</p>
-<p>To avoid conflict, cooperative conversions do not modify the buffer,
-but instead specify <em>annotations</em>, a list of elements of the form
-<code>(<var>position</var> . <var>string</var>)</code>, sorted in order of increasing
-<var>position</var>.
-</p>
-<p>If there is more than one conversion, <code>write-region</code> merges their
-annotations destructively into one sorted list.  Later, when the text
-from the buffer is actually written to the file, it intermixes the
-specified annotations at the corresponding positions.  All this takes
-place without modifying the buffer.
-</p>
+  <p>In contrast to the round-trip specification described in the
+  previous subsection (see <a href=
+  "Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip">
+  Format Conversion Round-Trip</a>), you can use the variables
+  <code>after-insert-file-functions</code> and
+  <code>write-region-annotate-functions</code> to separately
+  control the respective reading and writing conversions.</p>
 
-<p>In contrast, when reading, the annotations intermixed with the text
-are handled immediately.  <code>insert-file-contents</code> sets point to
-the beginning of some text to be converted, then calls the conversion
-functions with the length of that text.  These functions should always
-return with point at the beginning of the inserted text.  This
-approach makes sense for reading because annotations removed by the
-first converter can&rsquo;t be mistakenly processed by a later converter.
-Each conversion function should scan for the annotations it
-recognizes, remove the annotation, modify the buffer text (to set a
-text property, for example), and return the updated length of the
-text, as it stands after those changes.  The value returned by one
-function becomes the argument to the next function.
-</p>
-<dl>
-<dt><a name="index-write_002dregion_002dannotate_002dfunctions"></a>Variable: <strong>write-region-annotate-functions</strong></dt>
-<dd><p>A list of functions for <code>write-region</code> to call.  Each function in
-the list is called with two arguments: the start and end of the region
-to be written.  These functions should not alter the contents of the
-buffer.  Instead, they should return annotations.
-</p>
-<p>As a special case, a function may return with a different buffer
-current.  Emacs takes this to mean that the current buffer contains
-altered text to be output.  It therefore changes the <var>start</var> and
-<var>end</var> arguments of the <code>write-region</code> call, giving them the
-values of <code>point-min</code> and <code>point-max</code> in the new buffer,
-respectively.  It also discards all previous annotations, because they
-should have been dealt with by this function.
-</p></dd></dl>
+  <p>Conversion starts with one representation and produces another
+  representation. When there is only one conversion to do, there is
+  no conflict about what to start with. However, when there are
+  multiple conversions involved, conflict may arise when two
+  conversions need to start with the same data.</p>
 
-<dl>
-<dt><a name="index-write_002dregion_002dpost_002dannotation_002dfunction"></a>Variable: <strong>write-region-post-annotation-function</strong></dt>
-<dd><p>The value of this variable, if non-<code>nil</code>, should be a function.
-This function is called, with no arguments, after <code>write-region</code>
-has completed.
-</p>
-<p>If any function in <code>write-region-annotate-functions</code> returns with
-a different buffer current, Emacs calls
-<code>write-region-post-annotation-function</code> more than once.  Emacs
-calls it with the last buffer that was current, and again with the
-buffer before that, and so on back to the original buffer.
-</p>
-<p>Thus, a function in <code>write-region-annotate-functions</code> can create
-a buffer, give this variable the local value of <code>kill-buffer</code> in
-that buffer, set up the buffer with altered text, and make the buffer
-current.  The buffer will be killed after <code>write-region</code> is done.
-</p></dd></dl>
+  <p>This situation is best understood in the context of converting
+  text properties during <code>write-region</code>. For example,
+  the character at position 42 in a buffer is
+  &lsquo;<samp>X</samp>&rsquo; with a text property
+  <code>foo</code>. If the conversion for <code>foo</code> is done
+  by inserting into the buffer, say,
+  &lsquo;<samp>FOO:</samp>&rsquo;, then that changes the character
+  at position 42 from &lsquo;<samp>X</samp>&rsquo; to
+  &lsquo;<samp>F</samp>&rsquo;. The next conversion will start with
+  the wrong data straight away.</p>
 
-<dl>
-<dt><a name="index-after_002dinsert_002dfile_002dfunctions"></a>Variable: <strong>after-insert-file-functions</strong></dt>
-<dd><p>Each function in this list is called by <code>insert-file-contents</code>
-with one argument, the number of characters inserted, and with point
-at the beginning of the inserted text.  Each function should leave
-point unchanged, and return the new character count describing the
-inserted text as modified by the function.
-</p></dd></dl>
+  <p>To avoid conflict, cooperative conversions do not modify the
+  buffer, but instead specify <em>annotations</em>, a list of
+  elements of the form <code>(<var>position</var> .
+  <var>string</var>)</code>, sorted in order of increasing
+  <var>position</var>.</p>
 
-<p>We invite users to write Lisp programs to store and retrieve text
-properties in files, using these hooks, and thus to experiment with
-various data formats and find good ones.  Eventually we hope users
-will produce good, general extensions we can install in Emacs.
-</p>
-<p>We suggest not trying to handle arbitrary Lisp objects as text property
-names or values&mdash;because a program that general is probably difficult
-to write, and slow.  Instead, choose a set of possible data types that
-are reasonably flexible, and not too hard to encode.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip" accesskey="p" rel="prev">Format Conversion Round-Trip</a>, Up: <a href="Format-Conversion.html#Format-Conversion" accesskey="u" rel="up">Format Conversion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If there is more than one conversion,
+  <code>write-region</code> merges their annotations destructively
+  into one sorted list. Later, when the text from the buffer is
+  actually written to the file, it intermixes the specified
+  annotations at the corresponding positions. All this takes place
+  without modifying the buffer.</p>
 
+  <p>In contrast, when reading, the annotations intermixed with the
+  text are handled immediately. <code>insert-file-contents</code>
+  sets point to the beginning of some text to be converted, then
+  calls the conversion functions with the length of that text.
+  These functions should always return with point at the beginning
+  of the inserted text. This approach makes sense for reading
+  because annotations removed by the first converter can&rsquo;t be
+  mistakenly processed by a later converter. Each conversion
+  function should scan for the annotations it recognizes, remove
+  the annotation, modify the buffer text (to set a text property,
+  for example), and return the updated length of the text, as it
+  stands after those changes. The value returned by one function
+  becomes the argument to the next function.</p>
 
+  <dl>
+    <dt><a name="index-write_002dregion_002dannotate_002dfunctions"
+    id=
+    "index-write_002dregion_002dannotate_002dfunctions"></a>Variable:
+    <strong>write-region-annotate-functions</strong></dt>
 
+    <dd>
+      <p>A list of functions for <code>write-region</code> to call.
+      Each function in the list is called with two arguments: the
+      start and end of the region to be written. These functions
+      should not alter the contents of the buffer. Instead, they
+      should return annotations.</p>
+
+      <p>As a special case, a function may return with a different
+      buffer current. Emacs takes this to mean that the current
+      buffer contains altered text to be output. It therefore
+      changes the <var>start</var> and <var>end</var> arguments of
+      the <code>write-region</code> call, giving them the values of
+      <code>point-min</code> and <code>point-max</code> in the new
+      buffer, respectively. It also discards all previous
+      annotations, because they should have been dealt with by this
+      function.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-write_002dregion_002dpost_002dannotation_002dfunction"
+    id=
+    "index-write_002dregion_002dpost_002dannotation_002dfunction"></a>Variable:
+    <strong>write-region-post-annotation-function</strong></dt>
+
+    <dd>
+      <p>The value of this variable, if non-<code>nil</code>,
+      should be a function. This function is called, with no
+      arguments, after <code>write-region</code> has completed.</p>
+
+      <p>If any function in
+      <code>write-region-annotate-functions</code> returns with a
+      different buffer current, Emacs calls
+      <code>write-region-post-annotation-function</code> more than
+      once. Emacs calls it with the last buffer that was current,
+      and again with the buffer before that, and so on back to the
+      original buffer.</p>
+
+      <p>Thus, a function in
+      <code>write-region-annotate-functions</code> can create a
+      buffer, give this variable the local value of
+      <code>kill-buffer</code> in that buffer, set up the buffer
+      with altered text, and make the buffer current. The buffer
+      will be killed after <code>write-region</code> is done.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-after_002dinsert_002dfile_002dfunctions" id=
+    "index-after_002dinsert_002dfile_002dfunctions"></a>Variable:
+    <strong>after-insert-file-functions</strong></dt>
+
+    <dd>
+      <p>Each function in this list is called by
+      <code>insert-file-contents</code> with one argument, the
+      number of characters inserted, and with point at the
+      beginning of the inserted text. Each function should leave
+      point unchanged, and return the new character count
+      describing the inserted text as modified by the function.</p>
+    </dd>
+  </dl>
+
+  <p>We invite users to write Lisp programs to store and retrieve
+  text properties in files, using these hooks, and thus to
+  experiment with various data formats and find good ones.
+  Eventually we hope users will produce good, general extensions we
+  can install in Emacs.</p>
+
+  <p>We suggest not trying to handle arbitrary Lisp objects as text
+  property names or values&mdash;because a program that general is
+  probably difficult to write, and slow. Instead, choose a set of
+  possible data types that are reasonably flexible, and not too
+  hard to encode.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Format-Conversion-Round_002dTrip.html#Format-Conversion-Round_002dTrip"
+    accesskey="p" rel="prev">Format Conversion Round-Trip</a>, Up:
+    <a href="Format-Conversion.html#Format-Conversion" accesskey=
+    "u" rel="up">Format Conversion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

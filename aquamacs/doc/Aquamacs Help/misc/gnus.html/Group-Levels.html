@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,180 +14,236 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Group Levels</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Group Levels">
-<meta name="keywords" content="Gnus Manual: Group Levels">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Group-Buffer.html#Group-Buffer" rel="up" title="Group Buffer">
-<link href="Group-Score.html#Group-Score" rel="next" title="Group Score">
-<link href="Group-Data.html#Group-Data" rel="prev" title="Group Data">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Group Levels</title>
+  <meta name="description" content="Gnus Manual: Group Levels" />
+  <meta name="keywords" content="Gnus Manual: Group Levels" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Group-Buffer.html#Group-Buffer" rel="up" title=
+  "Group Buffer" />
+  <link href="Group-Score.html#Group-Score" rel="next" title=
+  "Group Score" />
+  <link href="Group-Data.html#Group-Data" rel="prev" title=
+  "Group Data" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Group-Levels"></a>
-<div class="header">
-<p>
-Next: <a href="Group-Score.html#Group-Score" accesskey="n" rel="next">Group Score</a>, Previous: <a href="Group-Data.html#Group-Data" accesskey="p" rel="prev">Group Data</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Group-Levels-1"></a>
-<h3 class="section">2.6 Group Levels</h3>
-<a name="index-group-level"></a>
-<a name="index-level"></a>
+<body lang="en" xml:lang="en">
+  <a name="Group-Levels" id="Group-Levels"></a>
 
-<p>All groups have a level of <em>subscribedness</em>.  For instance, if a
-group is on level 2, it is more subscribed than a group on level 5.  You
-can ask Gnus to just list groups on a given level or lower
-(see <a href="Listing-Groups.html#Listing-Groups">Listing Groups</a>), or to just check for new articles in groups on
-a given level or lower (see <a href="Scanning-New-Messages.html#Scanning-New-Messages">Scanning New Messages</a>).
-</p>
-<p>Remember:  The higher the level of the group, the less important it is.
-</p>
-<dl compact="compact">
-<dt><kbd>S l</kbd></dt>
-<dd><a name="index-S-l-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dset_002dcurrent_002dlevel"></a>
-<p>Set the level of the current group.  If a numeric prefix is given, the
-next <var>n</var> groups will have their levels set.  The user will be
-prompted for a level.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Group-Score.html#Group-Score" accesskey="n"
+    rel="next">Group Score</a>, Previous: <a href=
+    "Group-Data.html#Group-Data" accesskey="p" rel="prev">Group
+    Data</a>, Up: <a href="Group-Buffer.html#Group-Buffer"
+    accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Group-Levels-1" id="Group-Levels-1"></a>
 
-<a name="index-gnus_002dlevel_002dkilled"></a>
-<a name="index-gnus_002dlevel_002dzombie"></a>
-<a name="index-gnus_002dlevel_002dunsubscribed"></a>
-<a name="index-gnus_002dlevel_002dsubscribed"></a>
-<p>Gnus considers groups from levels 1 to
-<code>gnus-level-subscribed</code> (inclusive) (default 5) to be subscribed,
-<code>gnus-level-subscribed</code> (exclusive) and
-<code>gnus-level-unsubscribed</code> (inclusive) (default 7) to be
-unsubscribed, <code>gnus-level-zombie</code> to be zombies (walking dead)
-(default 8) and <code>gnus-level-killed</code> to be killed (completely dead)
-(default 9).  Gnus treats subscribed and unsubscribed groups exactly the
-same, but zombie and killed groups store no information on what articles
-you have read, etc.  This distinction between dead and living
-groups isn&rsquo;t done because it is nice or clever, it is done purely for
-reasons of efficiency.
-</p>
-<p>It is recommended that you keep all your mail groups (if any) on quite
-low levels (e.g., 1 or 2).
-</p>
-<p>Maybe the following description of the default behavior of Gnus helps to
-understand what these levels are all about.  By default, Gnus shows you
-subscribed nonempty groups, but by hitting <kbd>L</kbd> you can have it show
-empty subscribed groups and unsubscribed groups, too.  Type <kbd>l</kbd> to
-go back to showing nonempty subscribed groups again.  Thus, unsubscribed
-groups are hidden, in a way.
-</p>
-<a name="index-zombie-groups"></a>
-<p>Zombie and killed groups are similar to unsubscribed groups in that they
-are hidden by default.  But they are different from subscribed and
-unsubscribed groups in that Gnus doesn&rsquo;t ask the news server for
-information (number of messages, number of unread messages) on zombie
-and killed groups.  Normally, you use <kbd>C-k</kbd> to kill the groups you
-aren&rsquo;t interested in.  If most groups are killed, Gnus is faster.
-</p>
-<p>Why does Gnus distinguish between zombie and killed groups?  Well, when
-a new group arrives on the server, Gnus by default makes it a zombie
-group.  This means that you are normally not bothered with new groups,
-but you can type <kbd>A z</kbd> to get a list of all new groups.  Subscribe
-the ones you like and kill the ones you don&rsquo;t want.  (<kbd>A k</kbd> shows a
-list of killed groups.)
-</p>
-<p>If you want to play with the level variables, you should show some care.
-Set them once, and don&rsquo;t touch them ever again.  Better yet, don&rsquo;t touch
-them at all unless you know exactly what you&rsquo;re doing.
-</p>
-<a name="index-gnus_002dlevel_002ddefault_002dunsubscribed"></a>
-<a name="index-gnus_002dlevel_002ddefault_002dsubscribed"></a>
-<p>Two closely related variables are <code>gnus-level-default-subscribed</code>
-(default 3) and <code>gnus-level-default-unsubscribed</code> (default 6),
-which are the levels that new groups will be put on if they are
-(un)subscribed.  These two variables should, of course, be inside the
-relevant valid ranges.
-</p>
-<a name="index-gnus_002dkeep_002dsame_002dlevel"></a>
-<p>If <code>gnus-keep-same-level</code> is non-<code>nil</code>, some movement commands
-will only move to groups of the same level (or lower).  In
-particular, going from the last article in one group to the next group
-will go to the next group of the same level (or lower).  This might be
-handy if you want to read the most important groups before you read the
-rest.
-</p>
-<p>If this variable is <code>best</code>, Gnus will make the next newsgroup the
-one with the best level.
-</p>
-<a name="index-gnus_002dgroup_002ddefault_002dlist_002dlevel"></a>
-<p>All groups with a level less than or equal to
-<code>gnus-group-default-list-level</code> will be listed in the group buffer
-by default.
-This variable can also be a function.  In that case, that function will
-be called and the result will be used as value.
-</p>
+  <h3 class="section">2.6 Group Levels</h3><a name=
+  "index-group-level" id="index-group-level"></a> <a name=
+  "index-level" id="index-level"></a>
 
-<a name="index-gnus_002dgroup_002dlist_002dinactive_002dgroups"></a>
-<p>If <code>gnus-group-list-inactive-groups</code> is non-<code>nil</code>, non-active
-groups will be listed along with the unread groups.  This variable is
-<code>t</code> by default.  If it is <code>nil</code>, inactive groups won&rsquo;t be
-listed.
-</p>
-<a name="index-gnus_002dgroup_002duse_002dpermanent_002dlevels"></a>
-<p>If <code>gnus-group-use-permanent-levels</code> is non-<code>nil</code>, once you
-give a level prefix to <kbd>g</kbd> or <kbd>l</kbd>, all subsequent commands will
-use this level as the &ldquo;work&rdquo; level.
-</p>
-<a name="index-gnus_002dactivate_002dlevel"></a>
-<p>Gnus will normally just activate (i.e., query the server about) groups
-on level <code>gnus-activate-level</code> or less.  If you don&rsquo;t want to
-activate unsubscribed groups, for instance, you might set this variable
-to 5.  The default is 6.
-</p>
+  <p>All groups have a level of <em>subscribedness</em>. For
+  instance, if a group is on level 2, it is more subscribed than a
+  group on level 5. You can ask Gnus to just list groups on a given
+  level or lower (see <a href=
+  "Listing-Groups.html#Listing-Groups">Listing Groups</a>), or to
+  just check for new articles in groups on a given level or lower
+  (see <a href=
+  "Scanning-New-Messages.html#Scanning-New-Messages">Scanning New
+  Messages</a>).</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Group-Score.html#Group-Score" accesskey="n" rel="next">Group Score</a>, Previous: <a href="Group-Data.html#Group-Data" accesskey="p" rel="prev">Group Data</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Remember: The higher the level of the group, the less
+  important it is.</p>
 
+  <dl compact="compact">
+    <dt><kbd>S l</kbd></dt>
 
+    <dd>
+      <a name="index-S-l-_0028Group_0029" id=
+      "index-S-l-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dset_002dcurrent_002dlevel" id=
+      "index-gnus_002dgroup_002dset_002dcurrent_002dlevel"></a>
 
+      <p>Set the level of the current group. If a numeric prefix is
+      given, the next <var>n</var> groups will have their levels
+      set. The user will be prompted for a level.</p>
+    </dd>
+  </dl><a name="index-gnus_002dlevel_002dkilled" id=
+  "index-gnus_002dlevel_002dkilled"></a> <a name=
+  "index-gnus_002dlevel_002dzombie" id=
+  "index-gnus_002dlevel_002dzombie"></a> <a name=
+  "index-gnus_002dlevel_002dunsubscribed" id=
+  "index-gnus_002dlevel_002dunsubscribed"></a> <a name=
+  "index-gnus_002dlevel_002dsubscribed" id=
+  "index-gnus_002dlevel_002dsubscribed"></a>
+
+  <p>Gnus considers groups from levels 1 to
+  <code>gnus-level-subscribed</code> (inclusive) (default 5) to be
+  subscribed, <code>gnus-level-subscribed</code> (exclusive) and
+  <code>gnus-level-unsubscribed</code> (inclusive) (default 7) to
+  be unsubscribed, <code>gnus-level-zombie</code> to be zombies
+  (walking dead) (default 8) and <code>gnus-level-killed</code> to
+  be killed (completely dead) (default 9). Gnus treats subscribed
+  and unsubscribed groups exactly the same, but zombie and killed
+  groups store no information on what articles you have read, etc.
+  This distinction between dead and living groups isn&rsquo;t done
+  because it is nice or clever, it is done purely for reasons of
+  efficiency.</p>
+
+  <p>It is recommended that you keep all your mail groups (if any)
+  on quite low levels (e.g., 1 or 2).</p>
+
+  <p>Maybe the following description of the default behavior of
+  Gnus helps to understand what these levels are all about. By
+  default, Gnus shows you subscribed nonempty groups, but by
+  hitting <kbd>L</kbd> you can have it show empty subscribed groups
+  and unsubscribed groups, too. Type <kbd>l</kbd> to go back to
+  showing nonempty subscribed groups again. Thus, unsubscribed
+  groups are hidden, in a way.</p><a name="index-zombie-groups" id=
+  "index-zombie-groups"></a>
+
+  <p>Zombie and killed groups are similar to unsubscribed groups in
+  that they are hidden by default. But they are different from
+  subscribed and unsubscribed groups in that Gnus doesn&rsquo;t ask
+  the news server for information (number of messages, number of
+  unread messages) on zombie and killed groups. Normally, you use
+  <kbd>C-k</kbd> to kill the groups you aren&rsquo;t interested in.
+  If most groups are killed, Gnus is faster.</p>
+
+  <p>Why does Gnus distinguish between zombie and killed groups?
+  Well, when a new group arrives on the server, Gnus by default
+  makes it a zombie group. This means that you are normally not
+  bothered with new groups, but you can type <kbd>A z</kbd> to get
+  a list of all new groups. Subscribe the ones you like and kill
+  the ones you don&rsquo;t want. (<kbd>A k</kbd> shows a list of
+  killed groups.)</p>
+
+  <p>If you want to play with the level variables, you should show
+  some care. Set them once, and don&rsquo;t touch them ever again.
+  Better yet, don&rsquo;t touch them at all unless you know exactly
+  what you&rsquo;re doing.</p><a name=
+  "index-gnus_002dlevel_002ddefault_002dunsubscribed" id=
+  "index-gnus_002dlevel_002ddefault_002dunsubscribed"></a> <a name=
+  "index-gnus_002dlevel_002ddefault_002dsubscribed" id=
+  "index-gnus_002dlevel_002ddefault_002dsubscribed"></a>
+
+  <p>Two closely related variables are
+  <code>gnus-level-default-subscribed</code> (default 3) and
+  <code>gnus-level-default-unsubscribed</code> (default 6), which
+  are the levels that new groups will be put on if they are
+  (un)subscribed. These two variables should, of course, be inside
+  the relevant valid ranges.</p><a name=
+  "index-gnus_002dkeep_002dsame_002dlevel" id=
+  "index-gnus_002dkeep_002dsame_002dlevel"></a>
+
+  <p>If <code>gnus-keep-same-level</code> is non-<code>nil</code>,
+  some movement commands will only move to groups of the same level
+  (or lower). In particular, going from the last article in one
+  group to the next group will go to the next group of the same
+  level (or lower). This might be handy if you want to read the
+  most important groups before you read the rest.</p>
+
+  <p>If this variable is <code>best</code>, Gnus will make the next
+  newsgroup the one with the best level.</p><a name=
+  "index-gnus_002dgroup_002ddefault_002dlist_002dlevel" id=
+  "index-gnus_002dgroup_002ddefault_002dlist_002dlevel"></a>
+
+  <p>All groups with a level less than or equal to
+  <code>gnus-group-default-list-level</code> will be listed in the
+  group buffer by default. This variable can also be a function. In
+  that case, that function will be called and the result will be
+  used as value.</p><a name=
+  "index-gnus_002dgroup_002dlist_002dinactive_002dgroups" id=
+  "index-gnus_002dgroup_002dlist_002dinactive_002dgroups"></a>
+
+  <p>If <code>gnus-group-list-inactive-groups</code> is
+  non-<code>nil</code>, non-active groups will be listed along with
+  the unread groups. This variable is <code>t</code> by default. If
+  it is <code>nil</code>, inactive groups won&rsquo;t be
+  listed.</p><a name=
+  "index-gnus_002dgroup_002duse_002dpermanent_002dlevels" id=
+  "index-gnus_002dgroup_002duse_002dpermanent_002dlevels"></a>
+
+  <p>If <code>gnus-group-use-permanent-levels</code> is
+  non-<code>nil</code>, once you give a level prefix to
+  <kbd>g</kbd> or <kbd>l</kbd>, all subsequent commands will use
+  this level as the &ldquo;work&rdquo; level.</p><a name=
+  "index-gnus_002dactivate_002dlevel" id=
+  "index-gnus_002dactivate_002dlevel"></a>
+
+  <p>Gnus will normally just activate (i.e., query the server
+  about) groups on level <code>gnus-activate-level</code> or less.
+  If you don&rsquo;t want to activate unsubscribed groups, for
+  instance, you might set this variable to 5. The default is 6.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Group-Score.html#Group-Score" accesskey="n"
+    rel="next">Group Score</a>, Previous: <a href=
+    "Group-Data.html#Group-Data" accesskey="p" rel="prev">Group
+    Data</a>, Up: <a href="Group-Buffer.html#Group-Buffer"
+    accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,132 +19,219 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Output from Processes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Output from Processes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Output from Processes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Processes.html#Processes" rel="up" title="Processes">
-<link href="Process-Buffers.html#Process-Buffers" rel="next" title="Process Buffers">
-<link href="Signals-to-Processes.html#Signals-to-Processes" rel="prev" title="Signals to Processes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Output from
+  Processes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Output from Processes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Output from Processes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Processes.html#Processes" rel="up" title=
+  "Processes" />
+  <link href="Process-Buffers.html#Process-Buffers" rel="next"
+  title="Process Buffers" />
+  <link href="Signals-to-Processes.html#Signals-to-Processes" rel=
+  "prev" title="Signals to Processes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Output-from-Processes" id="Output-from-Processes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Sentinels.html#Sentinels" accesskey="n" rel=
+    "next">Sentinels</a>, Previous: <a href=
+    "Signals-to-Processes.html#Signals-to-Processes" accesskey="p"
+    rel="prev">Signals to Processes</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Receiving-Output-from-Processes" id=
+  "Receiving-Output-from-Processes"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Output-from-Processes"></a>
-<div class="header">
-<p>
-Next: <a href="Sentinels.html#Sentinels" accesskey="n" rel="next">Sentinels</a>, Previous: <a href="Signals-to-Processes.html#Signals-to-Processes" accesskey="p" rel="prev">Signals to Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Receiving-Output-from-Processes"></a>
-<h3 class="section">36.9 Receiving Output from Processes</h3>
-<a name="index-process-output"></a>
-<a name="index-output-from-processes"></a>
+  <h3 class="section">36.9 Receiving Output from
+  Processes</h3><a name="index-process-output" id=
+  "index-process-output"></a> <a name="index-output-from-processes"
+  id="index-output-from-processes"></a>
 
-<p>The output that an asynchronous subprocess writes to its standard
-output stream is passed to a function called the <em>filter
-function</em>.  The default filter function simply inserts the output into
-a buffer, which is called the associated buffer of the process
-(see <a href="Process-Buffers.html#Process-Buffers">Process Buffers</a>).  If the process has no buffer then the
-default filter discards the output.
-</p>
-<p>If the subprocess writes to its standard error stream, by default
-the error output is also passed to the process filter function.  If
-Emacs uses a pseudo-TTY (pty) for communication with the subprocess,
-then it is impossible to separate the standard output and standard
-error streams of the subprocess, because a pseudo-TTY has only one
-output channel.  In that case, if you want to keep the output to those
-streams separate, you should redirect one of them to a file&mdash;for
-example, by using an appropriate shell command via
-<code>start-process-shell-command</code> or a similar function.
-</p>
-<p>Alternatively, you could use the <code>:stderr</code> parameter with a
-non-<code>nil</code> value in a call to <code>make-process</code>
-(see <a href="Asynchronous-Processes.html#Asynchronous-Processes">make-process</a>) to make the destination
-of the error output separate from the standard output; in that case,
-Emacs will use pipes for communicating with the subprocess.
-</p>
-<p>When a subprocess terminates, Emacs reads any pending output,
-then stops reading output from that subprocess.  Therefore, if the
-subprocess has children that are still live and still producing
-output, Emacs won&rsquo;t receive that output.
-</p>
-<p>Output from a subprocess can arrive only while Emacs is waiting: when
-reading terminal input (see the function <code>waiting-for-user-input-p</code>),
-in <code>sit-for</code> and <code>sleep-for</code> (see <a href="Waiting.html#Waiting">Waiting</a>), and in
-<code>accept-process-output</code> (see <a href="Accepting-Output.html#Accepting-Output">Accepting Output</a>).  This
-minimizes the problem of timing errors that usually plague parallel
-programming.  For example, you can safely create a process and only
-then specify its buffer or filter function; no output can arrive
-before you finish, if the code in between does not call any primitive
-that waits.
-</p>
-<dl>
-<dt><a name="index-process_002dadaptive_002dread_002dbuffering"></a>Variable: <strong>process-adaptive-read-buffering</strong></dt>
-<dd><p>On some systems, when Emacs reads the output from a subprocess, the
-output data is read in very small blocks, potentially resulting in
-very poor performance.  This behavior can be remedied to some extent
-by setting the variable <code>process-adaptive-read-buffering</code> to a
-non-<code>nil</code> value (the default), as it will automatically delay reading
-from such processes, thus allowing them to produce more output before
-Emacs tries to read it.
-</p></dd></dl>
+  <p>The output that an asynchronous subprocess writes to its
+  standard output stream is passed to a function called the
+  <em>filter function</em>. The default filter function simply
+  inserts the output into a buffer, which is called the associated
+  buffer of the process (see <a href=
+  "Process-Buffers.html#Process-Buffers">Process Buffers</a>). If
+  the process has no buffer then the default filter discards the
+  output.</p>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Process-Buffers.html#Process-Buffers" accesskey="1">Process Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">By default, output is put in a buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Filter-Functions.html#Filter-Functions" accesskey="2">Filter Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Filter functions accept output from the process.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Decoding-Output.html#Decoding-Output" accesskey="3">Decoding Output</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Filters can get unibyte or multibyte strings.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Accepting-Output.html#Accepting-Output" accesskey="4">Accepting Output</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to wait until process output arrives.
-</td></tr>
-</table>
+  <p>If the subprocess writes to its standard error stream, by
+  default the error output is also passed to the process filter
+  function. If Emacs uses a pseudo-TTY (pty) for communication with
+  the subprocess, then it is impossible to separate the standard
+  output and standard error streams of the subprocess, because a
+  pseudo-TTY has only one output channel. In that case, if you want
+  to keep the output to those streams separate, you should redirect
+  one of them to a file&mdash;for example, by using an appropriate
+  shell command via <code>start-process-shell-command</code> or a
+  similar function.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Sentinels.html#Sentinels" accesskey="n" rel="next">Sentinels</a>, Previous: <a href="Signals-to-Processes.html#Signals-to-Processes" accesskey="p" rel="prev">Signals to Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Alternatively, you could use the <code>:stderr</code>
+  parameter with a non-<code>nil</code> value in a call to
+  <code>make-process</code> (see <a href=
+  "Asynchronous-Processes.html#Asynchronous-Processes">make-process</a>)
+  to make the destination of the error output separate from the
+  standard output; in that case, Emacs will use pipes for
+  communicating with the subprocess.</p>
 
+  <p>When a subprocess terminates, Emacs reads any pending output,
+  then stops reading output from that subprocess. Therefore, if the
+  subprocess has children that are still live and still producing
+  output, Emacs won&rsquo;t receive that output.</p>
 
+  <p>Output from a subprocess can arrive only while Emacs is
+  waiting: when reading terminal input (see the function
+  <code>waiting-for-user-input-p</code>), in <code>sit-for</code>
+  and <code>sleep-for</code> (see <a href=
+  "Waiting.html#Waiting">Waiting</a>), and in
+  <code>accept-process-output</code> (see <a href=
+  "Accepting-Output.html#Accepting-Output">Accepting Output</a>).
+  This minimizes the problem of timing errors that usually plague
+  parallel programming. For example, you can safely create a
+  process and only then specify its buffer or filter function; no
+  output can arrive before you finish, if the code in between does
+  not call any primitive that waits.</p>
 
+  <dl>
+    <dt><a name="index-process_002dadaptive_002dread_002dbuffering"
+    id=
+    "index-process_002dadaptive_002dread_002dbuffering"></a>Variable:
+    <strong>process-adaptive-read-buffering</strong></dt>
+
+    <dd>
+      <p>On some systems, when Emacs reads the output from a
+      subprocess, the output data is read in very small blocks,
+      potentially resulting in very poor performance. This behavior
+      can be remedied to some extent by setting the variable
+      <code>process-adaptive-read-buffering</code> to a
+      non-<code>nil</code> value (the default), as it will
+      automatically delay reading from such processes, thus
+      allowing them to produce more output before Emacs tries to
+      read it.</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Process-Buffers.html#Process-Buffers" accesskey="1">Process
+      Buffers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">By default, output is put in a
+      buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Filter-Functions.html#Filter-Functions" accesskey="2">Filter
+      Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Filter functions accept output
+      from the process.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Decoding-Output.html#Decoding-Output" accesskey="3">Decoding
+      Output</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Filters can get unibyte or
+      multibyte strings.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Accepting-Output.html#Accepting-Output" accesskey=
+      "4">Accepting Output</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to wait until process
+      output arrives.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Sentinels.html#Sentinels" accesskey="n" rel=
+    "next">Sentinels</a>, Previous: <a href=
+    "Signals-to-Processes.html#Signals-to-Processes" accesskey="p"
+    rel="prev">Signals to Processes</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

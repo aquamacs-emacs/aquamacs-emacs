@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,165 +19,262 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Init File</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Init File">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Init File">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Starting-Up.html#Starting-Up" rel="up" title="Starting Up">
-<link href="Terminal_002dSpecific.html#Terminal_002dSpecific" rel="next" title="Terminal-Specific">
-<link href="Startup-Summary.html#Startup-Summary" rel="prev" title="Startup Summary">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Init File</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Init File" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Init File" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Starting-Up.html#Starting-Up" rel="up" title=
+  "Starting Up" />
+  <link href="Terminal_002dSpecific.html#Terminal_002dSpecific"
+  rel="next" title="Terminal-Specific" />
+  <link href="Startup-Summary.html#Startup-Summary" rel="prev"
+  title="Startup Summary" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Init-File" id="Init-File"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Terminal_002dSpecific.html#Terminal_002dSpecific" accesskey=
+    "n" rel="next">Terminal-Specific</a>, Previous: <a href=
+    "Startup-Summary.html#Startup-Summary" accesskey="p" rel=
+    "prev">Startup Summary</a>, Up: <a href=
+    "Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting
+    Up</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Init-File" id="The-Init-File"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Init-File"></a>
-<div class="header">
-<p>
-Next: <a href="Terminal_002dSpecific.html#Terminal_002dSpecific" accesskey="n" rel="next">Terminal-Specific</a>, Previous: <a href="Startup-Summary.html#Startup-Summary" accesskey="p" rel="prev">Startup Summary</a>, Up: <a href="Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting Up</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Init-File"></a>
-<h4 class="subsection">38.1.2 The Init File</h4>
-<a name="index-init-file"></a>
-<a name="index-_002eemacs"></a>
-<a name="index-init_002eel"></a>
+  <h4 class="subsection">38.1.2 The Init File</h4><a name=
+  "index-init-file" id="index-init-file"></a> <a name=
+  "index-_002eemacs" id="index-_002eemacs"></a> <a name=
+  "index-init_002eel" id="index-init_002eel"></a>
 
-<p>When you start Emacs, it normally attempts to load your <em>init
-file</em>.  This is either a file named <samp>.emacs</samp> or <samp>.emacs.el</samp>
-in your home directory, or a file named <samp>init.el</samp> in a
-subdirectory named <samp>.emacs.d</samp> in your home directory.
-</p>
-<p>The command-line switches &lsquo;<samp>-q</samp>&rsquo;, &lsquo;<samp>-Q</samp>&rsquo;, and &lsquo;<samp>-u</samp>&rsquo;
-control whether and where to find the init file; &lsquo;<samp>-q</samp>&rsquo; (and the
-stronger &lsquo;<samp>-Q</samp>&rsquo;) says not to load an init file, while &lsquo;<samp>-u
-<var>user</var></samp>&rsquo; says to load <var>user</var>&rsquo;s init file instead of yours.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Entering-Emacs.html#Entering-Emacs">Entering Emacs</a> in <cite>The GNU Emacs Manual</cite>.  If neither
-option is specified, Emacs uses the <code>LOGNAME</code> environment
-variable, or the <code>USER</code> (most systems) or <code>USERNAME</code> (MS
-systems) variable, to find your home directory and thus your init
-file; this way, even if you have su&rsquo;d, Emacs still loads your own init
-file.  If those environment variables are absent, though, Emacs uses
-your user-id to find your home directory.
-</p>
-<a name="index-default-init-file"></a>
-<p>An Emacs installation may have a <em>default init file</em>, which is a
-Lisp library named <samp>default.el</samp>.  Emacs finds this file through
-the standard search path for libraries (see <a href="How-Programs-Do-Loading.html#How-Programs-Do-Loading">How Programs Do Loading</a>).  The Emacs distribution does not come with this file; it is
-intended for local customizations.  If the default init file exists,
-it is loaded whenever you start Emacs.  But your own personal init
-file, if any, is loaded first; if it sets <code>inhibit-default-init</code>
-to a non-<code>nil</code> value, then Emacs does not subsequently load the
-<samp>default.el</samp> file.  In batch mode, or if you specify &lsquo;<samp>-q</samp>&rsquo;
-(or &lsquo;<samp>-Q</samp>&rsquo;), Emacs loads neither your personal init file nor
-the default init file.
-</p>
-<p>Another file for site-customization is <samp>site-start.el</samp>.  Emacs
-loads this <em>before</em> the user&rsquo;s init file.  You can inhibit the
-loading of this file with the option &lsquo;<samp>--no-site-file</samp>&rsquo;.
-</p>
-<dl>
-<dt><a name="index-site_002drun_002dfile"></a>User Option: <strong>site-run-file</strong></dt>
-<dd><p>This variable specifies the site-customization file to load before the
-user&rsquo;s init file.  Its normal value is <code>&quot;site-start&quot;</code>.  The only
-way you can change it with real effect is to do so before dumping
-Emacs.
-</p></dd></dl>
+  <p>When you start Emacs, it normally attempts to load your
+  <em>init file</em>. This is either a file named
+  <samp>.emacs</samp> or <samp>.emacs.el</samp> in your home
+  directory, or a file named <samp>init.el</samp> in a subdirectory
+  named <samp>.emacs.d</samp> in your home directory.</p>
 
-<p>See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Init-Examples.html#Init-Examples">Init File Examples</a> in <cite>The GNU Emacs Manual</cite>, for
-examples of how to make various commonly desired customizations in your
-<samp>.emacs</samp> file.
-</p>
-<dl>
-<dt><a name="index-inhibit_002ddefault_002dinit"></a>User Option: <strong>inhibit-default-init</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, it prevents Emacs from loading the
-default initialization library file.  The default value is <code>nil</code>.
-</p></dd></dl>
+  <p>The command-line switches &lsquo;<samp>-q</samp>&rsquo;,
+  &lsquo;<samp>-Q</samp>&rsquo;, and &lsquo;<samp>-u</samp>&rsquo;
+  control whether and where to find the init file;
+  &lsquo;<samp>-q</samp>&rsquo; (and the stronger
+  &lsquo;<samp>-Q</samp>&rsquo;) says not to load an init file,
+  while &lsquo;<samp>-u <var>user</var></samp>&rsquo; says to load
+  <var>user</var>&rsquo;s init file instead of yours. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Entering-Emacs.html#Entering-Emacs">
+  Entering Emacs</a> in <cite>The GNU Emacs Manual</cite>. If
+  neither option is specified, Emacs uses the <code>LOGNAME</code>
+  environment variable, or the <code>USER</code> (most systems) or
+  <code>USERNAME</code> (MS systems) variable, to find your home
+  directory and thus your init file; this way, even if you have
+  su&rsquo;d, Emacs still loads your own init file. If those
+  environment variables are absent, though, Emacs uses your user-id
+  to find your home directory.</p><a name="index-default-init-file"
+  id="index-default-init-file"></a>
 
-<dl>
-<dt><a name="index-before_002dinit_002dhook"></a>Variable: <strong>before-init-hook</strong></dt>
-<dd><p>This normal hook is run, once, just before loading all the init files
-(<samp>site-start.el</samp>, your init file, and <samp>default.el</samp>).
-(The only way to change it with real effect is before dumping Emacs.)
-</p></dd></dl>
+  <p>An Emacs installation may have a <em>default init file</em>,
+  which is a Lisp library named <samp>default.el</samp>. Emacs
+  finds this file through the standard search path for libraries
+  (see <a href=
+  "How-Programs-Do-Loading.html#How-Programs-Do-Loading">How
+  Programs Do Loading</a>). The Emacs distribution does not come
+  with this file; it is intended for local customizations. If the
+  default init file exists, it is loaded whenever you start Emacs.
+  But your own personal init file, if any, is loaded first; if it
+  sets <code>inhibit-default-init</code> to a non-<code>nil</code>
+  value, then Emacs does not subsequently load the
+  <samp>default.el</samp> file. In batch mode, or if you specify
+  &lsquo;<samp>-q</samp>&rsquo; (or &lsquo;<samp>-Q</samp>&rsquo;),
+  Emacs loads neither your personal init file nor the default init
+  file.</p>
 
-<dl>
-<dt><a name="index-after_002dinit_002dhook"></a>Variable: <strong>after-init-hook</strong></dt>
-<dd><p>This normal hook is run, once, just after loading all the init files
-(<samp>site-start.el</samp>, your init file, and <samp>default.el</samp>),
-before loading the terminal-specific library (if started on a text
-terminal) and processing the command-line action arguments.
-</p></dd></dl>
+  <p>Another file for site-customization is
+  <samp>site-start.el</samp>. Emacs loads this <em>before</em> the
+  user&rsquo;s init file. You can inhibit the loading of this file
+  with the option &lsquo;<samp>--no-site-file</samp>&rsquo;.</p>
 
-<dl>
-<dt><a name="index-emacs_002dstartup_002dhook"></a>Variable: <strong>emacs-startup-hook</strong></dt>
-<dd><p>This normal hook is run, once, just after handling the command line
-arguments.  In batch mode, Emacs does not run this hook.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-site_002drun_002dfile" id=
+    "index-site_002drun_002dfile"></a>User Option:
+    <strong>site-run-file</strong></dt>
 
-<dl>
-<dt><a name="index-window_002dsetup_002dhook"></a>Variable: <strong>window-setup-hook</strong></dt>
-<dd><p>This normal hook is very similar to <code>emacs-startup-hook</code>.
-The only difference is that it runs slightly later, after setting
-of the frame parameters.  See <a href="Startup-Summary.html#Startup-Summary">window-setup-hook</a>.
-</p></dd></dl>
+    <dd>
+      <p>This variable specifies the site-customization file to
+      load before the user&rsquo;s init file. Its normal value is
+      <code>"site-start"</code>. The only way you can change it
+      with real effect is to do so before dumping Emacs.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-user_002dinit_002dfile"></a>Variable: <strong>user-init-file</strong></dt>
-<dd><p>This variable holds the absolute file name of the user&rsquo;s init file.  If the
-actual init file loaded is a compiled file, such as <samp>.emacs.elc</samp>,
-the value refers to the corresponding source file.
-</p></dd></dl>
+  <p>See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Init-Examples.html#Init-Examples">
+  Init File Examples</a> in <cite>The GNU Emacs Manual</cite>, for
+  examples of how to make various commonly desired customizations
+  in your <samp>.emacs</samp> file.</p>
 
-<dl>
-<dt><a name="index-user_002demacs_002ddirectory"></a>Variable: <strong>user-emacs-directory</strong></dt>
-<dd><p>This variable holds the name of the <samp>.emacs.d</samp> directory.  It is
-<samp>~/.emacs.d</samp> on all platforms but MS-DOS.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-inhibit_002ddefault_002dinit" id=
+    "index-inhibit_002ddefault_002dinit"></a>User Option:
+    <strong>inhibit-default-init</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Terminal_002dSpecific.html#Terminal_002dSpecific" accesskey="n" rel="next">Terminal-Specific</a>, Previous: <a href="Startup-Summary.html#Startup-Summary" accesskey="p" rel="prev">Startup Summary</a>, Up: <a href="Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting Up</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>If this variable is non-<code>nil</code>, it prevents
+      Emacs from loading the default initialization library file.
+      The default value is <code>nil</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-before_002dinit_002dhook" id=
+    "index-before_002dinit_002dhook"></a>Variable:
+    <strong>before-init-hook</strong></dt>
 
+    <dd>
+      <p>This normal hook is run, once, just before loading all the
+      init files (<samp>site-start.el</samp>, your init file, and
+      <samp>default.el</samp>). (The only way to change it with
+      real effect is before dumping Emacs.)</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-after_002dinit_002dhook" id=
+    "index-after_002dinit_002dhook"></a>Variable:
+    <strong>after-init-hook</strong></dt>
+
+    <dd>
+      <p>This normal hook is run, once, just after loading all the
+      init files (<samp>site-start.el</samp>, your init file, and
+      <samp>default.el</samp>), before loading the
+      terminal-specific library (if started on a text terminal) and
+      processing the command-line action arguments.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-emacs_002dstartup_002dhook" id=
+    "index-emacs_002dstartup_002dhook"></a>Variable:
+    <strong>emacs-startup-hook</strong></dt>
+
+    <dd>
+      <p>This normal hook is run, once, just after handling the
+      command line arguments. In batch mode, Emacs does not run
+      this hook.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-window_002dsetup_002dhook" id=
+    "index-window_002dsetup_002dhook"></a>Variable:
+    <strong>window-setup-hook</strong></dt>
+
+    <dd>
+      <p>This normal hook is very similar to
+      <code>emacs-startup-hook</code>. The only difference is that
+      it runs slightly later, after setting of the frame
+      parameters. See <a href=
+      "Startup-Summary.html#Startup-Summary">window-setup-hook</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-user_002dinit_002dfile" id=
+    "index-user_002dinit_002dfile"></a>Variable:
+    <strong>user-init-file</strong></dt>
+
+    <dd>
+      <p>This variable holds the absolute file name of the
+      user&rsquo;s init file. If the actual init file loaded is a
+      compiled file, such as <samp>.emacs.elc</samp>, the value
+      refers to the corresponding source file.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-user_002demacs_002ddirectory" id=
+    "index-user_002demacs_002ddirectory"></a>Variable:
+    <strong>user-emacs-directory</strong></dt>
+
+    <dd>
+      <p>This variable holds the name of the <samp>.emacs.d</samp>
+      directory. It is <samp>~/.emacs.d</samp> on all platforms but
+      MS-DOS.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Terminal_002dSpecific.html#Terminal_002dSpecific" accesskey=
+    "n" rel="next">Terminal-Specific</a>, Previous: <a href=
+    "Startup-Summary.html#Startup-Summary" accesskey="p" rel=
+    "prev">Startup Summary</a>, Up: <a href=
+    "Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting
+    Up</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

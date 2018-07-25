@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Property inheritance - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Properties-and-Columns.html#Properties-and-Columns" title="Properties and Columns">
-<link rel="prev" href="Property-searches.html#Property-searches" title="Property searches">
-<link rel="next" href="Column-view.html#Column-view" title="Column view">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Property inheritance - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Properties-and-Columns.html#Properties-and-Columns" title=
+  "Properties and Columns" />
+  <link rel="prev" href="Property-searches.html#Property-searches"
+  title="Property searches" />
+  <link rel="next" href="Column-view.html#Column-view" title=
+  "Column view" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +43,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,51 +56,89 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Property-inheritance"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Column-view.html#Column-view">Column view</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Property-searches.html#Property-searches">Property searches</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Properties-and-Columns.html#Properties-and-Columns">Properties and Columns</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Property-inheritance" id="Property-inheritance"></a>
 
-<h3 class="section">7.4 Property Inheritance</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Column-view.html#Column-view">Column view</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Property-searches.html#Property-searches">Property
+    searches</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Properties-and-Columns.html#Properties-and-Columns">Properties
+    and Columns</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-properties_002c-inheritance-671"></a><a name="index-inheritance_002c-of-properties-672"></a>
-<a name="index-org_002duse_002dproperty_002dinheritance-673"></a>The outline structure of Org-mode documents lends itself to an
-inheritance model of properties: if the parent in a tree has a certain
-property, the children can inherit this property.  Org-mode does not
-turn this on by default, because it can slow down property searches
-significantly and is often not needed.  However, if you find inheritance
-useful, you can turn it on by setting the variable
-<code>org-use-property-inheritance</code>.  It may be set to <code>t</code> to make
-all properties inherited from the parent, to a list of properties
-that should be inherited, or to a regular expression that matches
-inherited properties.  If a property has the value &lsquo;<samp><span class="samp">nil</span></samp>&rsquo;, this is
-interpreted as an explicit undefine of the property, so that inheritance
-search will stop at this value and return <code>nil</code>.
+  <h3 class="section">7.4 Property Inheritance</h3>
 
-   <p>Org-mode has a few properties for which inheritance is hard-coded, at
-least for the special applications for which they are used:
+  <p><a name="index-properties_002c-inheritance-671" id=
+  "index-properties_002c-inheritance-671"></a><a name=
+  "index-inheritance_002c-of-properties-672" id=
+  "index-inheritance_002c-of-properties-672"></a> <a name=
+  "index-org_002duse_002dproperty_002dinheritance-673" id=
+  "index-org_002duse_002dproperty_002dinheritance-673"></a>The
+  outline structure of Org-mode documents lends itself to an
+  inheritance model of properties: if the parent in a tree has a
+  certain property, the children can inherit this property.
+  Org-mode does not turn this on by default, because it can slow
+  down property searches significantly and is often not needed.
+  However, if you find inheritance useful, you can turn it on by
+  setting the variable <code>org-use-property-inheritance</code>.
+  It may be set to <code>t</code> to make all properties inherited
+  from the parent, to a list of properties that should be
+  inherited, or to a regular expression that matches inherited
+  properties. If a property has the value &lsquo;<samp><span class=
+  "samp">nil</span></samp>&rsquo;, this is interpreted as an
+  explicit undefine of the property, so that inheritance search
+  will stop at this value and return <code>nil</code>.</p>
 
-   <p><a name="index-property_002c-COLUMNS-674"></a>
-     <dl>
-<dt><code>COLUMNS</code><dd>The <code>:COLUMNS:</code> property defines the format of column view
-(see <a href="Column-view.html#Column-view">Column view</a>).  It is inherited in the sense that the level
-where a <code>:COLUMNS:</code> property is defined is used as the starting
-point for a column view table, independently of the location in the
-subtree from where columns view is turned on. 
-<br><dt><code>CATEGORY</code><dd><a name="index-property_002c-CATEGORY-675"></a>For agenda view, a category set through a <code>:CATEGORY:</code> property
-applies to the entire subtree. 
-<br><dt><code>ARCHIVE</code><dd><a name="index-property_002c-ARCHIVE-676"></a>For archiving, the <code>:ARCHIVE:</code> property may define the archive
-location for the entire subtree (see <a href="Moving-subtrees.html#Moving-subtrees">Moving subtrees</a>). 
-<br><dt><code>LOGGING</code><dd><a name="index-property_002c-LOGGING-677"></a>The LOGGING property may define logging settings for an entry or a
-subtree (see <a href="Tracking-TODO-state-changes.html#Tracking-TODO-state-changes">Tracking TODO state changes</a>). 
-</dl>
+  <p>Org-mode has a few properties for which inheritance is
+  hard-coded, at least for the special applications for which they
+  are used:</p>
 
-   </body></html>
+  <p><a name="index-property_002c-COLUMNS-674" id=
+  "index-property_002c-COLUMNS-674"></a></p>
 
+  <dl>
+    <dt><code>COLUMNS</code></dt>
+
+    <dd>The <code>:COLUMNS:</code> property defines the format of
+    column view (see <a href="Column-view.html#Column-view">Column
+    view</a>). It is inherited in the sense that the level where a
+    <code>:COLUMNS:</code> property is defined is used as the
+    starting point for a column view table, independently of the
+    location in the subtree from where columns view is turned
+    on.<br /></dd>
+
+    <dt><code>CATEGORY</code></dt>
+
+    <dd><a name="index-property_002c-CATEGORY-675" id=
+    "index-property_002c-CATEGORY-675"></a>For agenda view, a
+    category set through a <code>:CATEGORY:</code> property applies
+    to the entire subtree.<br /></dd>
+
+    <dt><code>ARCHIVE</code></dt>
+
+    <dd><a name="index-property_002c-ARCHIVE-676" id=
+    "index-property_002c-ARCHIVE-676"></a>For archiving, the
+    <code>:ARCHIVE:</code> property may define the archive location
+    for the entire subtree (see <a href=
+    "Moving-subtrees.html#Moving-subtrees">Moving
+    subtrees</a>).<br /></dd>
+
+    <dt><code>LOGGING</code></dt>
+
+    <dd><a name="index-property_002c-LOGGING-677" id=
+    "index-property_002c-LOGGING-677"></a>The LOGGING property may
+    define logging settings for an entry or a subtree (see <a href=
+    "Tracking-TODO-state-changes.html#Tracking-TODO-state-changes">Tracking
+    TODO state changes</a>).</dd>
+  </dl>
+</body>
+</html>

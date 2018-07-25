@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,157 +16,248 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: iCalendar export</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: iCalendar export">
-<meta name="keywords" content="The Org Manual: iCalendar export">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Exporting.html#Exporting" rel="up" title="Exporting">
-<link href="Other-built_002din-back_002dends.html#Other-built_002din-back_002dends" rel="next" title="Other built-in back-ends">
-<link href="An-example.html#An-example" rel="prev" title="An example">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: iCalendar export</title>
+  <meta name="description" content=
+  "The Org Manual: iCalendar export" />
+  <meta name="keywords" content=
+  "The Org Manual: iCalendar export" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Exporting.html#Exporting" rel="up" title=
+  "Exporting" />
+  <link href=
+  "Other-built_002din-back_002dends.html#Other-built_002din-back_002dends"
+  rel="next" title="Other built-in back-ends" />
+  <link href="An-example.html#An-example" rel="prev" title=
+  "An example" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="iCalendar-export"></a>
-<div class="header">
-<p>
-Next: <a href="Other-built_002din-back_002dends.html#Other-built_002din-back_002dends" accesskey="n" rel="next">Other built-in back-ends</a>, Previous: <a href="Texinfo-export.html#Texinfo-export" accesskey="p" rel="prev">Texinfo export</a>, Up: <a href="Exporting.html#Exporting" accesskey="u" rel="up">Exporting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="iCalendar-export-1"></a>
-<h3 class="section">12.12 iCalendar export</h3>
-<a name="index-iCalendar-export"></a>
+<body lang="en" xml:lang="en">
+  <a name="iCalendar-export" id="iCalendar-export"></a>
 
-<a name="index-org_002dicalendar_002dinclude_002dtodo"></a>
-<a name="index-org_002dicalendar_002duse_002ddeadline"></a>
-<a name="index-org_002dicalendar_002duse_002dscheduled"></a>
-<a name="index-org_002dicalendar_002dcategories"></a>
-<a name="index-org_002dicalendar_002dalarm_002dtime"></a>
-<p>Some people use Org mode for keeping track of projects, but still prefer a
-standard calendar application for anniversaries and appointments.  In this
-case it can be useful to show deadlines and other time-stamped items in Org
-files in the calendar application.  Org mode can export calendar information
-in the standard iCalendar format.  If you also want to have TODO entries
-included in the export, configure the variable
-<code>org-icalendar-include-todo</code>.  Plain timestamps are exported as VEVENT,
-and TODO items as VTODO.  It will also create events from deadlines that are
-in non-TODO items.  Deadlines and scheduling dates in TODO items will be used
-to set the start and due dates for the TODO entry<a name="DOCF164" href="#FOOT164"><sup>164</sup></a>.
-As categories, it will use the tags locally defined in the heading, and the
-file/tree category<a name="DOCF165" href="#FOOT165"><sup>165</sup></a>.  See the variable
-<code>org-icalendar-alarm-time</code> for a way to assign alarms to entries with a
-time.
-</p>
-<a name="index-org_002dicalendar_002dstore_002dUID"></a>
-<a name="index-property_002c-ID-2"></a>
-<p>The iCalendar standard requires each entry to have a globally unique
-identifier (UID).  Org creates these identifiers during export.  If you set
-the variable <code>org-icalendar-store-UID</code>, the UID will be stored in the
-<code>:ID:</code> property of the entry and re-used next time you report this
-entry.  Since a single entry can give rise to multiple iCalendar entries (as
-a timestamp, a deadline, a scheduled item, and as a TODO item), Org adds
-prefixes to the UID, depending on what triggered the inclusion of the entry.
-In this way the UID remains unique, but a synchronization program can still
-figure out from which entry all the different instances originate.
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002dc-C_002de-c-f"></a>
-<a name="index-org_002dicalendar_002dexport_002dto_002dics"></a>
-</dd>
-<dt><kbd><kbd>C-c C-e c f</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-icalendar-export-to-ics</code>)</kbd></dt>
-<dd><p>Create iCalendar entries for the current buffer and store them in the same
-directory, using a file extension <samp>.ics</samp>.
-<a name="index-C_002dc-C_002de-c-a"></a>
-<a name="index-org_002dicalendar_002dexport_002dagenda_002dfiles"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-e c a</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-icalendar-export-agenda-files</code>)</kbd></dt>
-<dd><a name="index-org_002dagenda_002dfiles-2"></a>
-<p>Like <kbd>C-c C-e c f</kbd>, but do this for all files in
-<code>org-agenda-files</code>.  For each of these files, a separate iCalendar
-file will be written.
-<a name="index-C_002dc-C_002de-c-c"></a>
-<a name="index-org_002dicalendar_002dcombine_002dagenda_002dfiles"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-e c c</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-icalendar-combine-agenda-files</code>)</kbd></dt>
-<dd><a name="index-org_002dicalendar_002dcombined_002dagenda_002dfile"></a>
-<p>Create a single large iCalendar file from all files in
-<code>org-agenda-files</code> and write it to the file given by
-<code>org-icalendar-combined-agenda-file</code>.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Other-built_002din-back_002dends.html#Other-built_002din-back_002dends"
+    accesskey="n" rel="next">Other built-in back-ends</a>,
+    Previous: <a href="Texinfo-export.html#Texinfo-export"
+    accesskey="p" rel="prev">Texinfo export</a>, Up: <a href=
+    "Exporting.html#Exporting" accesskey="u" rel="up">Exporting</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="iCalendar-export-1" id="iCalendar-export-1"></a>
 
-<a name="index-org_002duse_002dproperty_002dinheritance-1"></a>
-<a name="index-org_002dicalendar_002dinclude_002dbody"></a>
-<a name="index-property_002c-SUMMARY"></a>
-<a name="index-property_002c-DESCRIPTION-1"></a>
-<a name="index-property_002c-LOCATION"></a>
-<p>The export will honor SUMMARY, DESCRIPTION and LOCATION<a name="DOCF166" href="#FOOT166"><sup>166</sup></a> properties if the selected
-entries have them.  If not, the summary will be derived from the headline,
-and the description from the body (limited to
-<code>org-icalendar-include-body</code> characters).
-</p>
-<p>How this calendar is best read and updated, depends on the application
-you are using.  The FAQ covers this issue.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <h3 class="section">12.12 iCalendar export</h3><a name=
+  "index-iCalendar-export" id="index-iCalendar-export"></a>
+  <a name="index-org_002dicalendar_002dinclude_002dtodo" id=
+  "index-org_002dicalendar_002dinclude_002dtodo"></a> <a name=
+  "index-org_002dicalendar_002duse_002ddeadline" id=
+  "index-org_002dicalendar_002duse_002ddeadline"></a> <a name=
+  "index-org_002dicalendar_002duse_002dscheduled" id=
+  "index-org_002dicalendar_002duse_002dscheduled"></a> <a name=
+  "index-org_002dicalendar_002dcategories" id=
+  "index-org_002dicalendar_002dcategories"></a> <a name=
+  "index-org_002dicalendar_002dalarm_002dtime" id=
+  "index-org_002dicalendar_002dalarm_002dtime"></a>
 
-<h3><a name="FOOT164" href="#DOCF164">(164)</a></h3>
-<p>See the variables
-<code>org-icalendar-use-deadline</code> and <code>org-icalendar-use-scheduled</code>.</p>
-<h3><a name="FOOT165" href="#DOCF165">(165)</a></h3>
-<p>To add inherited tags or the TODO state,
-configure the variable <code>org-icalendar-categories</code>.</p>
-<h3><a name="FOOT166" href="#DOCF166">(166)</a></h3>
-<p>The LOCATION
-property can be inherited from higher in the hierarchy if you configure
-<code>org-use-property-inheritance</code> accordingly.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Other-built_002din-back_002dends.html#Other-built_002din-back_002dends" accesskey="n" rel="next">Other built-in back-ends</a>, Previous: <a href="Texinfo-export.html#Texinfo-export" accesskey="p" rel="prev">Texinfo export</a>, Up: <a href="Exporting.html#Exporting" accesskey="u" rel="up">Exporting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Some people use Org mode for keeping track of projects, but
+  still prefer a standard calendar application for anniversaries
+  and appointments. In this case it can be useful to show deadlines
+  and other time-stamped items in Org files in the calendar
+  application. Org mode can export calendar information in the
+  standard iCalendar format. If you also want to have TODO entries
+  included in the export, configure the variable
+  <code>org-icalendar-include-todo</code>. Plain timestamps are
+  exported as VEVENT, and TODO items as VTODO. It will also create
+  events from deadlines that are in non-TODO items. Deadlines and
+  scheduling dates in TODO items will be used to set the start and
+  due dates for the TODO entry<a name="DOCF164" href="#FOOT164" id=
+  "DOCF164"><sup>164</sup></a>. As categories, it will use the tags
+  locally defined in the heading, and the file/tree
+  category<a name="DOCF165" href="#FOOT165" id=
+  "DOCF165"><sup>165</sup></a>. See the variable
+  <code>org-icalendar-alarm-time</code> for a way to assign alarms
+  to entries with a time.</p><a name=
+  "index-org_002dicalendar_002dstore_002dUID" id=
+  "index-org_002dicalendar_002dstore_002dUID"></a> <a name=
+  "index-property_002c-ID-2" id="index-property_002c-ID-2"></a>
 
+  <p>The iCalendar standard requires each entry to have a globally
+  unique identifier (UID). Org creates these identifiers during
+  export. If you set the variable
+  <code>org-icalendar-store-UID</code>, the UID will be stored in
+  the <code>:ID:</code> property of the entry and re-used next time
+  you report this entry. Since a single entry can give rise to
+  multiple iCalendar entries (as a timestamp, a deadline, a
+  scheduled item, and as a TODO item), Org adds prefixes to the
+  UID, depending on what triggered the inclusion of the entry. In
+  this way the UID remains unique, but a synchronization program
+  can still figure out from which entry all the different instances
+  originate.</p>
 
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-C_002de-c-f" id=
+    "index-C_002dc-C_002de-c-f"></a> <a name=
+    "index-org_002dicalendar_002dexport_002dto_002dics" id=
+    "index-org_002dicalendar_002dexport_002dto_002dics"></a></dd>
 
+    <dt><kbd><kbd>C-c C-e c f</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-icalendar-export-to-ics</code>)</kbd></dt>
+
+    <dd>
+      <p>Create iCalendar entries for the current buffer and store
+      them in the same directory, using a file extension
+      <samp>.ics</samp>. <a name="index-C_002dc-C_002de-c-a" id=
+      "index-C_002dc-C_002de-c-a"></a> <a name=
+      "index-org_002dicalendar_002dexport_002dagenda_002dfiles" id=
+      "index-org_002dicalendar_002dexport_002dagenda_002dfiles"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-e c a</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-icalendar-export-agenda-files</code>)</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dagenda_002dfiles-2" id=
+      "index-org_002dagenda_002dfiles-2"></a>
+
+      <p>Like <kbd>C-c C-e c f</kbd>, but do this for all files in
+      <code>org-agenda-files</code>. For each of these files, a
+      separate iCalendar file will be written. <a name=
+      "index-C_002dc-C_002de-c-c" id=
+      "index-C_002dc-C_002de-c-c"></a> <a name=
+      "index-org_002dicalendar_002dcombine_002dagenda_002dfiles"
+      id="index-org_002dicalendar_002dcombine_002dagenda_002dfiles">
+      </a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-e c c</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-icalendar-combine-agenda-files</code>)</kbd></dt>
+
+    <dd>
+      <a name=
+      "index-org_002dicalendar_002dcombined_002dagenda_002dfile"
+      id="index-org_002dicalendar_002dcombined_002dagenda_002dfile">
+      </a>
+
+      <p>Create a single large iCalendar file from all files in
+      <code>org-agenda-files</code> and write it to the file given
+      by <code>org-icalendar-combined-agenda-file</code>.</p>
+    </dd>
+  </dl><a name="index-org_002duse_002dproperty_002dinheritance-1"
+  id="index-org_002duse_002dproperty_002dinheritance-1"></a>
+  <a name="index-org_002dicalendar_002dinclude_002dbody" id=
+  "index-org_002dicalendar_002dinclude_002dbody"></a> <a name=
+  "index-property_002c-SUMMARY" id=
+  "index-property_002c-SUMMARY"></a> <a name=
+  "index-property_002c-DESCRIPTION-1" id=
+  "index-property_002c-DESCRIPTION-1"></a> <a name=
+  "index-property_002c-LOCATION" id=
+  "index-property_002c-LOCATION"></a>
+
+  <p>The export will honor SUMMARY, DESCRIPTION and
+  LOCATION<a name="DOCF166" href="#FOOT166" id=
+  "DOCF166"><sup>166</sup></a> properties if the selected entries
+  have them. If not, the summary will be derived from the headline,
+  and the description from the body (limited to
+  <code>org-icalendar-include-body</code> characters).</p>
+
+  <p>How this calendar is best read and updated, depends on the
+  application you are using. The FAQ covers this issue.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT164" href="#DOCF164" id=
+    "FOOT164">(164)</a></h3>
+
+    <p>See the variables <code>org-icalendar-use-deadline</code>
+    and <code>org-icalendar-use-scheduled</code>.</p>
+
+    <h3><a name="FOOT165" href="#DOCF165" id=
+    "FOOT165">(165)</a></h3>
+
+    <p>To add inherited tags or the TODO state, configure the
+    variable <code>org-icalendar-categories</code>.</p>
+
+    <h3><a name="FOOT166" href="#DOCF166" id=
+    "FOOT166">(166)</a></h3>
+
+    <p>The LOCATION property can be inherited from higher in the
+    hierarchy if you configure
+    <code>org-use-property-inheritance</code> accordingly.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Other-built_002din-back_002dends.html#Other-built_002din-back_002dends"
+    accesskey="n" rel="next">Other built-in back-ends</a>,
+    Previous: <a href="Texinfo-export.html#Texinfo-export"
+    accesskey="p" rel="prev">Texinfo export</a>, Up: <a href=
+    "Exporting.html#Exporting" accesskey="u" rel="up">Exporting</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

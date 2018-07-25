@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,166 +19,242 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Function Indirection</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Function Indirection">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Function Indirection">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Forms.html#Forms" rel="up" title="Forms">
-<link href="Function-Forms.html#Function-Forms" rel="next" title="Function Forms">
-<link href="Classifying-Lists.html#Classifying-Lists" rel="prev" title="Classifying Lists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Function
+  Indirection</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Function Indirection" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Function Indirection" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Forms.html#Forms" rel="up" title="Forms" />
+  <link href="Function-Forms.html#Function-Forms" rel="next" title=
+  "Function Forms" />
+  <link href="Classifying-Lists.html#Classifying-Lists" rel="prev"
+  title="Classifying Lists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Function-Indirection" id="Function-Indirection"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Function-Forms.html#Function-Forms"
+    accesskey="n" rel="next">Function Forms</a>, Previous: <a href=
+    "Classifying-Lists.html#Classifying-Lists" accesskey="p" rel=
+    "prev">Classifying Lists</a>, Up: <a href="Forms.html#Forms"
+    accesskey="u" rel="up">Forms</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Symbol-Function-Indirection" id=
+  "Symbol-Function-Indirection"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Function-Indirection"></a>
-<div class="header">
-<p>
-Next: <a href="Function-Forms.html#Function-Forms" accesskey="n" rel="next">Function Forms</a>, Previous: <a href="Classifying-Lists.html#Classifying-Lists" accesskey="p" rel="prev">Classifying Lists</a>, Up: <a href="Forms.html#Forms" accesskey="u" rel="up">Forms</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Symbol-Function-Indirection"></a>
-<h4 class="subsection">9.2.4 Symbol Function Indirection</h4>
-<a name="index-symbol-function-indirection"></a>
-<a name="index-indirection-for-functions"></a>
-<a name="index-void-function"></a>
+  <h4 class="subsection">9.2.4 Symbol Function
+  Indirection</h4><a name="index-symbol-function-indirection" id=
+  "index-symbol-function-indirection"></a> <a name=
+  "index-indirection-for-functions" id=
+  "index-indirection-for-functions"></a> <a name=
+  "index-void-function" id="index-void-function"></a>
 
-<p>If the first element of the list is a symbol then evaluation
-examines the symbol&rsquo;s function cell, and uses its contents instead of
-the original symbol.  If the contents are another symbol, this
-process, called <em>symbol function indirection</em>, is repeated until
-it obtains a non-symbol.  See <a href="Function-Names.html#Function-Names">Function Names</a>, for more information
-about symbol function indirection.
-</p>
-<p>One possible consequence of this process is an infinite loop, in the
-event that a symbol&rsquo;s function cell refers to the same symbol.
-Otherwise, we eventually obtain a non-symbol, which ought to be a
-function or other suitable object.
-</p>
-<a name="index-invalid_002dfunction"></a>
-<p>More precisely, we should now have a Lisp function (a lambda
-expression), a byte-code function, a primitive function, a Lisp macro,
-a special form, or an autoload object.  Each of these types is a case
-described in one of the following sections.  If the object is not one
-of these types, Emacs signals an <code>invalid-function</code> error.
-</p>
-<p>The following example illustrates the symbol indirection process.
-We use <code>fset</code> to set the function cell of a symbol and
-<code>symbol-function</code> to get the function cell contents
-(see <a href="Function-Cells.html#Function-Cells">Function Cells</a>).  Specifically, we store the symbol
-<code>car</code> into the function cell of <code>first</code>, and the symbol
-<code>first</code> into the function cell of <code>erste</code>.
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Build this function cell linkage:</span>
+  <p>If the first element of the list is a symbol then evaluation
+  examines the symbol&rsquo;s function cell, and uses its contents
+  instead of the original symbol. If the contents are another
+  symbol, this process, called <em>symbol function
+  indirection</em>, is repeated until it obtains a non-symbol. See
+  <a href="Function-Names.html#Function-Names">Function Names</a>,
+  for more information about symbol function indirection.</p>
+
+  <p>One possible consequence of this process is an infinite loop,
+  in the event that a symbol&rsquo;s function cell refers to the
+  same symbol. Otherwise, we eventually obtain a non-symbol, which
+  ought to be a function or other suitable object.</p><a name=
+  "index-invalid_002dfunction" id="index-invalid_002dfunction"></a>
+
+  <p>More precisely, we should now have a Lisp function (a lambda
+  expression), a byte-code function, a primitive function, a Lisp
+  macro, a special form, or an autoload object. Each of these types
+  is a case described in one of the following sections. If the
+  object is not one of these types, Emacs signals an
+  <code>invalid-function</code> error.</p>
+
+  <p>The following example illustrates the symbol indirection
+  process. We use <code>fset</code> to set the function cell of a
+  symbol and <code>symbol-function</code> to get the function cell
+  contents (see <a href=
+  "Function-Cells.html#Function-Cells">Function Cells</a>).
+  Specifically, we store the symbol <code>car</code> into the
+  function cell of <code>first</code>, and the symbol
+  <code>first</code> into the function cell of
+  <code>erste</code>.</p>
+
+  <div class="example">
+    <pre class="example">
+;; <span class="roman">Build this function cell linkage:</span>
 ;;   -------------       -----        -------        -------
 ;;  | #&lt;subr car&gt; | &lt;-- | car |  &lt;-- | first |  &lt;-- | erste |
 ;;   -------------       -----        -------        -------
-</pre><pre class="example">(symbol-function 'car)
+</pre>
+    <pre class="example">
+(symbol-function 'car)
      &rArr; #&lt;subr car&gt;
-</pre><pre class="example">(fset 'first 'car)
+</pre>
+    <pre class="example">
+(fset 'first 'car)
      &rArr; car
-</pre><pre class="example">(fset 'erste 'first)
+</pre>
+    <pre class="example">
+(fset 'erste 'first)
      &rArr; first
-</pre><pre class="example">(erste '(1 2 3))   ; <span class="roman">Call the function referenced by <code>erste</code>.</span>
+</pre>
+    <pre class="example">
+(erste '(1 2 3))   ; <span class=
+"roman">Call the function referenced by <code>erste</code>.</span>
      &rArr; 1
-</pre></div>
+</pre>
+  </div>
 
-<p>By contrast, the following example calls a function without any symbol
-function indirection, because the first element is an anonymous Lisp
-function, not a symbol.
-</p>
-<div class="example">
-<pre class="example">((lambda (arg) (erste arg))
+  <p>By contrast, the following example calls a function without
+  any symbol function indirection, because the first element is an
+  anonymous Lisp function, not a symbol.</p>
+
+  <div class="example">
+    <pre class="example">
+((lambda (arg) (erste arg))
  '(1 2 3))
      &rArr; 1
-</pre></div>
+</pre>
+  </div>
 
-<p>Executing the function itself evaluates its body; this does involve
-symbol function indirection when calling <code>erste</code>.
-</p>
-<p>This form is rarely used and is now deprecated.  Instead, you should write it
-as:
-</p>
-<div class="example">
-<pre class="example">(funcall (lambda (arg) (erste arg))
+  <p>Executing the function itself evaluates its body; this does
+  involve symbol function indirection when calling
+  <code>erste</code>.</p>
+
+  <p>This form is rarely used and is now deprecated. Instead, you
+  should write it as:</p>
+
+  <div class="example">
+    <pre class="example">
+(funcall (lambda (arg) (erste arg))
          '(1 2 3))
-</pre></div>
-<p>or just
-</p><div class="example">
-<pre class="example">(let ((arg '(1 2 3))) (erste arg))
-</pre></div>
+</pre>
+  </div>
 
-<p>The built-in function <code>indirect-function</code> provides an easy way to
-perform symbol function indirection explicitly.
-</p>
-<dl>
-<dt><a name="index-indirect_002dfunction"></a>Function: <strong>indirect-function</strong> <em>function &amp;optional noerror</em></dt>
-<dd><a name="Definition-of-indirect_002dfunction"></a><p>This function returns the meaning of <var>function</var> as a function.  If
-<var>function</var> is a symbol, then it finds <var>function</var>&rsquo;s function
-definition and starts over with that value.  If <var>function</var> is not a
-symbol, then it returns <var>function</var> itself.
-</p>
-<p>This function returns <code>nil</code> if the final symbol is unbound.  It
-signals a <code>cyclic-function-indirection</code> error if there is a loop
-in the chain of symbols.
-</p>
-<p>The optional argument <var>noerror</var> is obsolete, kept for backward
-compatibility, and has no effect.
-</p>
-<p>Here is how you could define <code>indirect-function</code> in Lisp:
-</p>
-<div class="example">
-<pre class="example">(defun indirect-function (function)
+  <p>or just</p>
+
+  <div class="example">
+    <pre class="example">
+(let ((arg '(1 2 3))) (erste arg))
+</pre>
+  </div>
+
+  <p>The built-in function <code>indirect-function</code> provides
+  an easy way to perform symbol function indirection
+  explicitly.</p>
+
+  <dl>
+    <dt><a name="index-indirect_002dfunction" id=
+    "index-indirect_002dfunction"></a>Function:
+    <strong>indirect-function</strong> <em>function &amp;optional
+    noerror</em></dt>
+
+    <dd>
+      <a name="Definition-of-indirect_002dfunction" id=
+      "Definition-of-indirect_002dfunction"></a>
+
+      <p>This function returns the meaning of <var>function</var>
+      as a function. If <var>function</var> is a symbol, then it
+      finds <var>function</var>&rsquo;s function definition and
+      starts over with that value. If <var>function</var> is not a
+      symbol, then it returns <var>function</var> itself.</p>
+
+      <p>This function returns <code>nil</code> if the final symbol
+      is unbound. It signals a
+      <code>cyclic-function-indirection</code> error if there is a
+      loop in the chain of symbols.</p>
+
+      <p>The optional argument <var>noerror</var> is obsolete, kept
+      for backward compatibility, and has no effect.</p>
+
+      <p>Here is how you could define
+      <code>indirect-function</code> in Lisp:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun indirect-function (function)
   (if (symbolp function)
       (indirect-function (symbol-function function))
     function))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Function-Forms.html#Function-Forms" accesskey="n" rel="next">Function Forms</a>, Previous: <a href="Classifying-Lists.html#Classifying-Lists" accesskey="p" rel="prev">Classifying Lists</a>, Up: <a href="Forms.html#Forms" accesskey="u" rel="up">Forms</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Function-Forms.html#Function-Forms"
+    accesskey="n" rel="next">Function Forms</a>, Previous: <a href=
+    "Classifying-Lists.html#Classifying-Lists" accesskey="p" rel=
+    "prev">Classifying Lists</a>, Up: <a href="Forms.html#Forms"
+    accesskey="u" rel="up">Forms</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

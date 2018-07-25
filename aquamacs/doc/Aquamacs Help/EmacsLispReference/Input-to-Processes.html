@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,148 +19,225 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Input to Processes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Input to Processes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Input to Processes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Processes.html#Processes" rel="up" title="Processes">
-<link href="Signals-to-Processes.html#Signals-to-Processes" rel="next" title="Signals to Processes">
-<link href="Process-Information.html#Process-Information" rel="prev" title="Process Information">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Input to
+  Processes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Input to Processes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Input to Processes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Processes.html#Processes" rel="up" title=
+  "Processes" />
+  <link href="Signals-to-Processes.html#Signals-to-Processes" rel=
+  "next" title="Signals to Processes" />
+  <link href="Process-Information.html#Process-Information" rel=
+  "prev" title="Process Information" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Input-to-Processes" id="Input-to-Processes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Signals-to-Processes.html#Signals-to-Processes" accesskey="n"
+    rel="next">Signals to Processes</a>, Previous: <a href=
+    "Process-Information.html#Process-Information" accesskey="p"
+    rel="prev">Process Information</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sending-Input-to-Processes" id=
+  "Sending-Input-to-Processes"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Input-to-Processes"></a>
-<div class="header">
-<p>
-Next: <a href="Signals-to-Processes.html#Signals-to-Processes" accesskey="n" rel="next">Signals to Processes</a>, Previous: <a href="Process-Information.html#Process-Information" accesskey="p" rel="prev">Process Information</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sending-Input-to-Processes"></a>
-<h3 class="section">36.7 Sending Input to Processes</h3>
-<a name="index-process-input"></a>
+  <h3 class="section">36.7 Sending Input to Processes</h3><a name=
+  "index-process-input" id="index-process-input"></a>
 
-<p>Asynchronous subprocesses receive input when it is sent to them by
-Emacs, which is done with the functions in this section.  You must
-specify the process to send input to, and the input data to send.  If
-the subprocess runs a program, the data appears on the standard input
-of that program; for connections, the data is sent to the connected
-device or program.
-</p>
-<p>Some operating systems have limited space for buffered input in a
-pty.  On these systems, Emacs sends an <acronym>EOF</acronym> periodically
-amidst the other characters, to force them through.  For most
-programs, these <acronym>EOF</acronym>s do no harm.
-</p>
-<p>Subprocess input is normally encoded using a coding system before the
-subprocess receives it, much like text written into a file.  You can use
-<code>set-process-coding-system</code> to specify which coding system to use
-(see <a href="Process-Information.html#Process-Information">Process Information</a>).  Otherwise, the coding system comes from
-<code>coding-system-for-write</code>, if that is non-<code>nil</code>; or else from
-the defaulting mechanism (see <a href="Default-Coding-Systems.html#Default-Coding-Systems">Default Coding Systems</a>).
-</p>
-<p>Sometimes the system is unable to accept input for that process,
-because the input buffer is full.  When this happens, the send functions
-wait a short while, accepting output from subprocesses, and then try
-again.  This gives the subprocess a chance to read more of its pending
-input and make space in the buffer.  It also allows filters, sentinels
-and timers to run&mdash;so take account of that in writing your code.
-</p>
-<p>In these functions, the <var>process</var> argument can be a process or
-the name of a process, or a buffer or buffer name (which stands
-for a process via <code>get-buffer-process</code>).  <code>nil</code> means
-the current buffer&rsquo;s process.
-</p>
-<dl>
-<dt><a name="index-process_002dsend_002dstring"></a>Function: <strong>process-send-string</strong> <em>process string</em></dt>
-<dd><p>This function sends <var>process</var> the contents of <var>string</var> as
-standard input.  It returns <code>nil</code>.  For example, to make a
-Shell buffer list files:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(process-send-string &quot;shell&lt;1&gt;&quot; &quot;ls\n&quot;)
+  <p>Asynchronous subprocesses receive input when it is sent to
+  them by Emacs, which is done with the functions in this section.
+  You must specify the process to send input to, and the input data
+  to send. If the subprocess runs a program, the data appears on
+  the standard input of that program; for connections, the data is
+  sent to the connected device or program.</p>
+
+  <p>Some operating systems have limited space for buffered input
+  in a pty. On these systems, Emacs sends an <acronym>EOF</acronym>
+  periodically amidst the other characters, to force them through.
+  For most programs, these <acronym>EOF</acronym>s do no harm.</p>
+
+  <p>Subprocess input is normally encoded using a coding system
+  before the subprocess receives it, much like text written into a
+  file. You can use <code>set-process-coding-system</code> to
+  specify which coding system to use (see <a href=
+  "Process-Information.html#Process-Information">Process
+  Information</a>). Otherwise, the coding system comes from
+  <code>coding-system-for-write</code>, if that is
+  non-<code>nil</code>; or else from the defaulting mechanism (see
+  <a href=
+  "Default-Coding-Systems.html#Default-Coding-Systems">Default
+  Coding Systems</a>).</p>
+
+  <p>Sometimes the system is unable to accept input for that
+  process, because the input buffer is full. When this happens, the
+  send functions wait a short while, accepting output from
+  subprocesses, and then try again. This gives the subprocess a
+  chance to read more of its pending input and make space in the
+  buffer. It also allows filters, sentinels and timers to
+  run&mdash;so take account of that in writing your code.</p>
+
+  <p>In these functions, the <var>process</var> argument can be a
+  process or the name of a process, or a buffer or buffer name
+  (which stands for a process via <code>get-buffer-process</code>).
+  <code>nil</code> means the current buffer&rsquo;s process.</p>
+
+  <dl>
+    <dt><a name="index-process_002dsend_002dstring" id=
+    "index-process_002dsend_002dstring"></a>Function:
+    <strong>process-send-string</strong> <em>process
+    string</em></dt>
+
+    <dd>
+      <p>This function sends <var>process</var> the contents of
+      <var>string</var> as standard input. It returns
+      <code>nil</code>. For example, to make a Shell buffer list
+      files:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(process-send-string "shell&lt;1&gt;" "ls\n")
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-process_002dsend_002dregion"></a>Function: <strong>process-send-region</strong> <em>process start end</em></dt>
-<dd><p>This function sends the text in the region defined by <var>start</var> and
-<var>end</var> as standard input to <var>process</var>.
-</p>
-<p>An error is signaled unless both <var>start</var> and <var>end</var> are
-integers or markers that indicate positions in the current buffer.  (It
-is unimportant which number is larger.)
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-process_002dsend_002dregion" id=
+    "index-process_002dsend_002dregion"></a>Function:
+    <strong>process-send-region</strong> <em>process start
+    end</em></dt>
 
-<dl>
-<dt><a name="index-process_002dsend_002deof"></a>Function: <strong>process-send-eof</strong> <em>&amp;optional process</em></dt>
-<dd><p>This function makes <var>process</var> see an end-of-file in its
-input.  The <acronym>EOF</acronym> comes after any text already sent to it.
-The function returns <var>process</var>.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(process-send-eof &quot;shell&quot;)
-     &rArr; &quot;shell&quot;
-</pre></div>
-</dd></dl>
+    <dd>
+      <p>This function sends the text in the region defined by
+      <var>start</var> and <var>end</var> as standard input to
+      <var>process</var>.</p>
 
-<dl>
-<dt><a name="index-process_002drunning_002dchild_002dp"></a>Function: <strong>process-running-child-p</strong> <em>&amp;optional process</em></dt>
-<dd><p>This function will tell you whether a <var>process</var>, which must not be
-a connection but a real subprocess, has given control of its terminal
-to a child process of its own.  If this is true, the function returns
-the numeric ID of the foreground process group of <var>process</var>; it
-returns <code>nil</code> if Emacs can be certain that this is not so.  The
-value is <code>t</code> if Emacs cannot tell whether this is true.  This
-function signals an error if <var>process</var> is a network, serial, or
-pipe connection, or is the subprocess is not active.
-</p></dd></dl>
+      <p>An error is signaled unless both <var>start</var> and
+      <var>end</var> are integers or markers that indicate
+      positions in the current buffer. (It is unimportant which
+      number is larger.)</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Signals-to-Processes.html#Signals-to-Processes" accesskey="n" rel="next">Signals to Processes</a>, Previous: <a href="Process-Information.html#Process-Information" accesskey="p" rel="prev">Process Information</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-process_002dsend_002deof" id=
+    "index-process_002dsend_002deof"></a>Function:
+    <strong>process-send-eof</strong> <em>&amp;optional
+    process</em></dt>
 
+    <dd>
+      <p>This function makes <var>process</var> see an end-of-file
+      in its input. The <acronym>EOF</acronym> comes after any text
+      already sent to it. The function returns
+      <var>process</var>.</p>
 
+      <div class="smallexample">
+        <pre class="smallexample">
+(process-send-eof "shell")
+     &rArr; "shell"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-process_002drunning_002dchild_002dp" id=
+    "index-process_002drunning_002dchild_002dp"></a>Function:
+    <strong>process-running-child-p</strong> <em>&amp;optional
+    process</em></dt>
+
+    <dd>
+      <p>This function will tell you whether a <var>process</var>,
+      which must not be a connection but a real subprocess, has
+      given control of its terminal to a child process of its own.
+      If this is true, the function returns the numeric ID of the
+      foreground process group of <var>process</var>; it returns
+      <code>nil</code> if Emacs can be certain that this is not so.
+      The value is <code>t</code> if Emacs cannot tell whether this
+      is true. This function signals an error if <var>process</var>
+      is a network, serial, or pipe connection, or is the
+      subprocess is not active.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Signals-to-Processes.html#Signals-to-Processes" accesskey="n"
+    rel="next">Signals to Processes</a>, Previous: <a href=
+    "Process-Information.html#Process-Information" accesskey="p"
+    rel="prev">Process Information</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

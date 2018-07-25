@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Finding Files - RefTeX User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="RefTeX User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Language-Support.html#Language-Support" title="Language Support">
-<link rel="next" href="Optimizations.html#Optimizations" title="Optimizations">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Finding Files - RefTeX User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="RefTeX User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Language-Support.html#Language-Support"
+  title="Language Support" />
+  <link rel="next" href="Optimizations.html#Optimizations" title=
+  "Optimizations" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents RefTeX, a package to do labels, references,
 citations and indices for LaTeX documents with Emacs.
 
@@ -30,8 +38,10 @@ Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -41,86 +51,114 @@ Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Finding-Files"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Optimizations.html#Optimizations">Optimizations</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Language-Support.html#Language-Support">Language Support</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Finding-Files" id="Finding-Files"></a>
 
-<h3 class="section">6.6 Finding Files</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Optimizations.html#Optimizations">Optimizations</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Language-Support.html#Language-Support">Language Support</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Finding-files-327"></a>
-In order to find files included in a document via <code>\input</code> or
-<code>\include</code>, <b>RefTeX</b> searches all directories specified in the
-environment variable <code>TEXINPUTS</code>.  Similarly, it will search the
-path specified in the variables <code>BIBINPUTS</code> and <code>TEXBIB</code> for
-BibTeX database files.
+  <h3 class="section">6.6 Finding Files</h3>
 
-   <p>When searching, <b>RefTeX</b> will also expand recursive path
-definitions (directories ending in &lsquo;<samp><span class="samp">//</span></samp>&rsquo; or &lsquo;<samp><span class="samp">!!</span></samp>&rsquo;).  But it will
-only search and expand directories <em>explicitly</em> given in these
-variables. This may cause problems under the following circumstances:
+  <p><a name="index-Finding-files-327" id=
+  "index-Finding-files-327"></a> In order to find files included in
+  a document via <code>\input</code> or <code>\include</code>,
+  <b>RefTeX</b> searches all directories specified in the
+  environment variable <code>TEXINPUTS</code>. Similarly, it will
+  search the path specified in the variables <code>BIBINPUTS</code>
+  and <code>TEXBIB</code> for BibTeX database files.</p>
 
-     <ul>
-<li>Most TeX system have a default search path for both TeX files and BibTeX
-files which is defined in some setup file.  Usually this default path is
-for system files which <b>RefTeX</b> does not need to see.  But if your
-document needs TeX files or BibTeX database files in a directory only
-given in the default search path, <b>RefTeX</b> will fail to find them. 
-<li>Some TeX systems do not use environment variables at all in order to
-specify the search path.  Both default and user search path are then
-defined in setup files. 
-</ul>
+  <p>When searching, <b>RefTeX</b> will also expand recursive path
+  definitions (directories ending in &lsquo;<samp><span class=
+  "samp">//</span></samp>&rsquo; or &lsquo;<samp><span class=
+  "samp">!!</span></samp>&rsquo;). But it will only search and
+  expand directories <em>explicitly</em> given in these variables.
+  This may cause problems under the following circumstances:</p>
 
-<p class="noindent">There are three ways to solve this problem:
+  <ul>
+    <li>Most TeX system have a default search path for both TeX
+    files and BibTeX files which is defined in some setup file.
+    Usually this default path is for system files which
+    <b>RefTeX</b> does not need to see. But if your document needs
+    TeX files or BibTeX database files in a directory only given in
+    the default search path, <b>RefTeX</b> will fail to find
+    them.</li>
 
-     <ul>
-<li>Specify all relevant directories explicitly in the environment
-variables.  If for some reason you don't want to mess with the default
-variables <code>TEXINPUTS</code> and <code>BIBINPUTS</code>, define your own
-variables and configure <b>RefTeX</b> to use them instead:
+    <li>Some TeX systems do not use environment variables at all in
+    order to specify the search path. Both default and user search
+    path are then defined in setup files.</li>
+  </ul>
 
-     <pre class="lisp">          (setq reftex-texpath-environment-variables '("MYTEXINPUTS"))
+  <p class="noindent">There are three ways to solve this
+  problem:</p>
+
+  <ul>
+    <li>Specify all relevant directories explicitly in the
+    environment variables. If for some reason you don't want to
+    mess with the default variables <code>TEXINPUTS</code> and
+    <code>BIBINPUTS</code>, define your own variables and configure
+    <b>RefTeX</b> to use them instead:
+      <pre class="lisp">
+          (setq reftex-texpath-environment-variables '("MYTEXINPUTS"))
           (setq reftex-bibpath-environment-variables '("MYBIBINPUTS"))
 </pre>
-     <li>Specify the full search path directly in <b>RefTeX</b>'s variables.
+    </li>
 
-     <pre class="lisp">          (setq reftex-texpath-environment-variables
+    <li>Specify the full search path directly in <b>RefTeX</b>'s
+    variables.
+      <pre class="lisp">
+          (setq reftex-texpath-environment-variables
                 '("./inp:/home/cd/tex//:/usr/local/tex//"))
           (setq reftex-bibpath-environment-variables
                 '("/home/cd/tex/lit/"))
 </pre>
-     <li>Some TeX systems provide stand&ndash;alone programs to do the file search just
-like TeX and BibTeX.  E.g. Thomas Esser's <code>teTeX</code> uses the
-<code>kpathsearch</code> library which provides the command <code>kpsewhich</code>
-to search for files.  <b>RefTeX</b> can be configured to use this
-program.  Note that the exact syntax of the <code>kpsewhich</code>
-command depends upon the version of that program.
+    </li>
 
-     <pre class="lisp">          (setq reftex-use-external-file-finders t)
+    <li>Some TeX systems provide stand&ndash;alone programs to do
+    the file search just like TeX and BibTeX. E.g. Thomas Esser's
+    <code>teTeX</code> uses the <code>kpathsearch</code> library
+    which provides the command <code>kpsewhich</code> to search for
+    files. <b>RefTeX</b> can be configured to use this program.
+    Note that the exact syntax of the <code>kpsewhich</code>
+    command depends upon the version of that program.
+      <pre class="lisp">
+          (setq reftex-use-external-file-finders t)
           (setq reftex-external-file-finders
                 '(("tex" . "kpsewhich -format=.tex %f")
                   ("bib" . "kpsewhich -format=.bib %f")))
 </pre>
-     </ul>
+    </li>
+  </ul>
 
-   <p><a name="index-Noweb-files-328"></a><a name="index-reftex_002dfile_002dextensions-329"></a><a name="index-TeX_002dfile_002dextensions-330"></a>Some people like to use RefTeX with noweb files, which usually have the
-extension <samp><span class="file">.nw</span></samp>.  In order to deal with such files, the new
-extension must be added to the list of valid extensions in the variable
-<code>reftex-file-extensions</code>.  When working with AUCTeX as major mode,
-the new extension must also be known to AUCTeX via the variable
-<code>TeX-file-extension</code>.  For example:
-
-<pre class="lisp">     (setq reftex-file-extensions
+  <p><a name="index-Noweb-files-328" id=
+  "index-Noweb-files-328"></a><a name=
+  "index-reftex_002dfile_002dextensions-329" id=
+  "index-reftex_002dfile_002dextensions-329"></a><a name=
+  "index-TeX_002dfile_002dextensions-330" id=
+  "index-TeX_002dfile_002dextensions-330"></a>Some people like to
+  use RefTeX with noweb files, which usually have the extension
+  <samp><span class="file">.nw</span></samp>. In order to deal with
+  such files, the new extension must be added to the list of valid
+  extensions in the variable <code>reftex-file-extensions</code>.
+  When working with AUCTeX as major mode, the new extension must
+  also be known to AUCTeX via the variable
+  <code>TeX-file-extension</code>. For example:</p>
+  <pre class="lisp">
+     (setq reftex-file-extensions
            '(("nw" "tex" ".tex" ".ltx") ("bib" ".bib")))
      (setq TeX-file-extensions
            '( "nw" "tex" "sty" "cls" "ltx" "texi" "texinfo"))
 </pre>
-   </body></html>
-
+</body>
+</html>

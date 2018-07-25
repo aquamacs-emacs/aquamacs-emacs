@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,152 +19,234 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: User-Chosen Coding Systems</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: User-Chosen Coding Systems">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: User-Chosen Coding Systems">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Coding-Systems.html#Coding-Systems" rel="up" title="Coding Systems">
-<link href="Default-Coding-Systems.html#Default-Coding-Systems" rel="next" title="Default Coding Systems">
-<link href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems" rel="prev" title="Lisp and Coding Systems">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: User-Chosen Coding
+  Systems</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: User-Chosen Coding Systems" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: User-Chosen Coding Systems" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Coding-Systems.html#Coding-Systems" rel="up" title=
+  "Coding Systems" />
+  <link href="Default-Coding-Systems.html#Default-Coding-Systems"
+  rel="next" title="Default Coding Systems" />
+  <link href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems"
+  rel="prev" title="Lisp and Coding Systems" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="User_002dChosen-Coding-Systems" id=
+  "User_002dChosen-Coding-Systems"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Default-Coding-Systems.html#Default-Coding-Systems" accesskey=
+    "n" rel="next">Default Coding Systems</a>, Previous: <a href=
+    "Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems"
+    accesskey="p" rel="prev">Lisp and Coding Systems</a>, Up:
+    <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel=
+    "up">Coding Systems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="User_002dChosen-Coding-Systems-1" id=
+  "User_002dChosen-Coding-Systems-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="User_002dChosen-Coding-Systems"></a>
-<div class="header">
-<p>
-Next: <a href="Default-Coding-Systems.html#Default-Coding-Systems" accesskey="n" rel="next">Default Coding Systems</a>, Previous: <a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems" accesskey="p" rel="prev">Lisp and Coding Systems</a>, Up: <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel="up">Coding Systems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="User_002dChosen-Coding-Systems-1"></a>
-<h4 class="subsection">32.10.4 User-Chosen Coding Systems</h4>
+  <h4 class="subsection">32.10.4 User-Chosen Coding
+  Systems</h4><a name="index-select-safe-coding-system" id=
+  "index-select-safe-coding-system"></a>
 
-<a name="index-select-safe-coding-system"></a>
-<dl>
-<dt><a name="index-select_002dsafe_002dcoding_002dsystem"></a>Function: <strong>select-safe-coding-system</strong> <em>from to &amp;optional default-coding-system accept-default-p file</em></dt>
-<dd><p>This function selects a coding system for encoding specified text,
-asking the user to choose if necessary.  Normally the specified text
-is the text in the current buffer between <var>from</var> and <var>to</var>.  If
-<var>from</var> is a string, the string specifies the text to encode, and
-<var>to</var> is ignored.
-</p>
-<p>If the specified text includes raw bytes (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>), <code>select-safe-coding-system</code> suggests
-<code>raw-text</code> for its encoding.
-</p>
-<p>If <var>default-coding-system</var> is non-<code>nil</code>, that is the first
-coding system to try; if that can handle the text,
-<code>select-safe-coding-system</code> returns that coding system.  It can
-also be a list of coding systems; then the function tries each of them
-one by one.  After trying all of them, it next tries the current
-buffer&rsquo;s value of <code>buffer-file-coding-system</code> (if it is not
-<code>undecided</code>), then the default value of
-<code>buffer-file-coding-system</code> and finally the user&rsquo;s most
-preferred coding system, which the user can set using the command
-<code>prefer-coding-system</code> (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Recognize-Coding.html#Recognize-Coding">Recognizing
-Coding Systems</a> in <cite>The GNU Emacs Manual</cite>).
-</p>
-<p>If one of those coding systems can safely encode all the specified
-text, <code>select-safe-coding-system</code> chooses it and returns it.
-Otherwise, it asks the user to choose from a list of coding systems
-which can encode all the text, and returns the user&rsquo;s choice.
-</p>
-<p><var>default-coding-system</var> can also be a list whose first element is
-t and whose other elements are coding systems.  Then, if no coding
-system in the list can handle the text, <code>select-safe-coding-system</code>
-queries the user immediately, without trying any of the three
-alternatives described above.
-</p>
-<p>The optional argument <var>accept-default-p</var>, if non-<code>nil</code>,
-should be a function to determine whether a coding system selected
-without user interaction is acceptable.  <code>select-safe-coding-system</code>
-calls this function with one argument, the base coding system of the
-selected coding system.  If <var>accept-default-p</var> returns <code>nil</code>,
-<code>select-safe-coding-system</code> rejects the silently selected coding
-system, and asks the user to select a coding system from a list of
-possible candidates.
-</p>
-<a name="index-select_002dsafe_002dcoding_002dsystem_002daccept_002ddefault_002dp"></a>
-<p>If the variable <code>select-safe-coding-system-accept-default-p</code> is
-non-<code>nil</code>, it should be a function taking a single argument.
-It is used in place of <var>accept-default-p</var>, overriding any
-value supplied for this argument.
-</p>
-<p>As a final step, before returning the chosen coding system,
-<code>select-safe-coding-system</code> checks whether that coding system is
-consistent with what would be selected if the contents of the region
-were read from a file.  (If not, this could lead to data corruption in
-a file subsequently re-visited and edited.)  Normally,
-<code>select-safe-coding-system</code> uses <code>buffer-file-name</code> as the
-file for this purpose, but if <var>file</var> is non-<code>nil</code>, it uses
-that file instead (this can be relevant for <code>write-region</code> and
-similar functions).  If it detects an apparent inconsistency,
-<code>select-safe-coding-system</code> queries the user before selecting the
-coding system.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-select_002dsafe_002dcoding_002dsystem" id=
+    "index-select_002dsafe_002dcoding_002dsystem"></a>Function:
+    <strong>select-safe-coding-system</strong> <em>from to
+    &amp;optional default-coding-system accept-default-p
+    file</em></dt>
 
-<p>Here are two functions you can use to let the user specify a coding
-system, with completion.  See <a href="Completion.html#Completion">Completion</a>.
-</p>
-<dl>
-<dt><a name="index-read_002dcoding_002dsystem"></a>Function: <strong>read-coding-system</strong> <em>prompt &amp;optional default</em></dt>
-<dd><p>This function reads a coding system using the minibuffer, prompting with
-string <var>prompt</var>, and returns the coding system name as a symbol.  If
-the user enters null input, <var>default</var> specifies which coding system
-to return.  It should be a symbol or a string.
-</p></dd></dl>
+    <dd>
+      <p>This function selects a coding system for encoding
+      specified text, asking the user to choose if necessary.
+      Normally the specified text is the text in the current buffer
+      between <var>from</var> and <var>to</var>. If <var>from</var>
+      is a string, the string specifies the text to encode, and
+      <var>to</var> is ignored.</p>
 
-<dl>
-<dt><a name="index-read_002dnon_002dnil_002dcoding_002dsystem"></a>Function: <strong>read-non-nil-coding-system</strong> <em>prompt</em></dt>
-<dd><p>This function reads a coding system using the minibuffer, prompting with
-string <var>prompt</var>, and returns the coding system name as a symbol.  If
-the user tries to enter null input, it asks the user to try again.
-See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
-</p></dd></dl>
+      <p>If the specified text includes raw bytes (see <a href=
+      "Text-Representations.html#Text-Representations">Text
+      Representations</a>), <code>select-safe-coding-system</code>
+      suggests <code>raw-text</code> for its encoding.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Default-Coding-Systems.html#Default-Coding-Systems" accesskey="n" rel="next">Default Coding Systems</a>, Previous: <a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems" accesskey="p" rel="prev">Lisp and Coding Systems</a>, Up: <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel="up">Coding Systems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If <var>default-coding-system</var> is
+      non-<code>nil</code>, that is the first coding system to try;
+      if that can handle the text,
+      <code>select-safe-coding-system</code> returns that coding
+      system. It can also be a list of coding systems; then the
+      function tries each of them one by one. After trying all of
+      them, it next tries the current buffer&rsquo;s value of
+      <code>buffer-file-coding-system</code> (if it is not
+      <code>undecided</code>), then the default value of
+      <code>buffer-file-coding-system</code> and finally the
+      user&rsquo;s most preferred coding system, which the user can
+      set using the command <code>prefer-coding-system</code> (see
+      <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Recognize-Coding.html#Recognize-Coding">
+      Recognizing Coding Systems</a> in <cite>The GNU Emacs
+      Manual</cite>).</p>
 
+      <p>If one of those coding systems can safely encode all the
+      specified text, <code>select-safe-coding-system</code>
+      chooses it and returns it. Otherwise, it asks the user to
+      choose from a list of coding systems which can encode all the
+      text, and returns the user&rsquo;s choice.</p>
 
+      <p><var>default-coding-system</var> can also be a list whose
+      first element is t and whose other elements are coding
+      systems. Then, if no coding system in the list can handle the
+      text, <code>select-safe-coding-system</code> queries the user
+      immediately, without trying any of the three alternatives
+      described above.</p>
 
+      <p>The optional argument <var>accept-default-p</var>, if
+      non-<code>nil</code>, should be a function to determine
+      whether a coding system selected without user interaction is
+      acceptable. <code>select-safe-coding-system</code> calls this
+      function with one argument, the base coding system of the
+      selected coding system. If <var>accept-default-p</var>
+      returns <code>nil</code>,
+      <code>select-safe-coding-system</code> rejects the silently
+      selected coding system, and asks the user to select a coding
+      system from a list of possible candidates.</p><a name=
+      "index-select_002dsafe_002dcoding_002dsystem_002daccept_002ddefault_002dp"
+      id=
+      "index-select_002dsafe_002dcoding_002dsystem_002daccept_002ddefault_002dp"></a>
+
+      <p>If the variable
+      <code>select-safe-coding-system-accept-default-p</code> is
+      non-<code>nil</code>, it should be a function taking a single
+      argument. It is used in place of <var>accept-default-p</var>,
+      overriding any value supplied for this argument.</p>
+
+      <p>As a final step, before returning the chosen coding
+      system, <code>select-safe-coding-system</code> checks whether
+      that coding system is consistent with what would be selected
+      if the contents of the region were read from a file. (If not,
+      this could lead to data corruption in a file subsequently
+      re-visited and edited.) Normally,
+      <code>select-safe-coding-system</code> uses
+      <code>buffer-file-name</code> as the file for this purpose,
+      but if <var>file</var> is non-<code>nil</code>, it uses that
+      file instead (this can be relevant for
+      <code>write-region</code> and similar functions). If it
+      detects an apparent inconsistency,
+      <code>select-safe-coding-system</code> queries the user
+      before selecting the coding system.</p>
+    </dd>
+  </dl>
+
+  <p>Here are two functions you can use to let the user specify a
+  coding system, with completion. See <a href=
+  "Completion.html#Completion">Completion</a>.</p>
+
+  <dl>
+    <dt><a name="index-read_002dcoding_002dsystem" id=
+    "index-read_002dcoding_002dsystem"></a>Function:
+    <strong>read-coding-system</strong> <em>prompt &amp;optional
+    default</em></dt>
+
+    <dd>
+      <p>This function reads a coding system using the minibuffer,
+      prompting with string <var>prompt</var>, and returns the
+      coding system name as a symbol. If the user enters null
+      input, <var>default</var> specifies which coding system to
+      return. It should be a symbol or a string.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-read_002dnon_002dnil_002dcoding_002dsystem"
+    id=
+    "index-read_002dnon_002dnil_002dcoding_002dsystem"></a>Function:
+    <strong>read-non-nil-coding-system</strong>
+    <em>prompt</em></dt>
+
+    <dd>
+      <p>This function reads a coding system using the minibuffer,
+      prompting with string <var>prompt</var>, and returns the
+      coding system name as a symbol. If the user tries to enter
+      null input, it asks the user to try again. See <a href=
+      "Coding-Systems.html#Coding-Systems">Coding Systems</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Default-Coding-Systems.html#Default-Coding-Systems" accesskey=
+    "n" rel="next">Default Coding Systems</a>, Previous: <a href=
+    "Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems"
+    accesskey="p" rel="prev">Lisp and Coding Systems</a>, Up:
+    <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel=
+    "up">Coding Systems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

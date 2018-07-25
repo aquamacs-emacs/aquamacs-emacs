@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,97 +19,142 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Modifying Strings</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Modifying Strings">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Modifying Strings">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Strings-and-Characters.html#Strings-and-Characters" rel="up" title="Strings and Characters">
-<link href="Text-Comparison.html#Text-Comparison" rel="next" title="Text Comparison">
-<link href="Creating-Strings.html#Creating-Strings" rel="prev" title="Creating Strings">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Modifying Strings</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Modifying Strings" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Modifying Strings" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Strings-and-Characters.html#Strings-and-Characters"
+  rel="up" title="Strings and Characters" />
+  <link href="Text-Comparison.html#Text-Comparison" rel="next"
+  title="Text Comparison" />
+  <link href="Creating-Strings.html#Creating-Strings" rel="prev"
+  title="Creating Strings" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Modifying-Strings" id="Modifying-Strings"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Text-Comparison.html#Text-Comparison"
+    accesskey="n" rel="next">Text Comparison</a>, Previous:
+    <a href="Creating-Strings.html#Creating-Strings" accesskey="p"
+    rel="prev">Creating Strings</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Modifying-Strings-1" id="Modifying-Strings-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Modifying-Strings"></a>
-<div class="header">
-<p>
-Next: <a href="Text-Comparison.html#Text-Comparison" accesskey="n" rel="next">Text Comparison</a>, Previous: <a href="Creating-Strings.html#Creating-Strings" accesskey="p" rel="prev">Creating Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Modifying-Strings-1"></a>
-<h3 class="section">4.4 Modifying Strings</h3>
-<a name="index-modifying-strings"></a>
-<a name="index-string-modification"></a>
+  <h3 class="section">4.4 Modifying Strings</h3><a name=
+  "index-modifying-strings" id="index-modifying-strings"></a>
+  <a name="index-string-modification" id=
+  "index-string-modification"></a>
 
-<p>The most basic way to alter the contents of an existing string is with
-<code>aset</code> (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>).  <code>(aset <var>string</var>
-<var>idx</var> <var>char</var>)</code> stores <var>char</var> into <var>string</var> at index
-<var>idx</var>.  Each character occupies one or more bytes, and if <var>char</var>
-needs a different number of bytes from the character already present at
-that index, <code>aset</code> signals an error.
-</p>
-<p>A more powerful function is <code>store-substring</code>:
-</p>
-<dl>
-<dt><a name="index-store_002dsubstring"></a>Function: <strong>store-substring</strong> <em>string idx obj</em></dt>
-<dd><p>This function alters part of the contents of the string <var>string</var>, by
-storing <var>obj</var> starting at index <var>idx</var>.  The argument <var>obj</var>
-may be either a character or a (smaller) string.
-</p>
-<p>Since it is impossible to change the length of an existing string, it is
-an error if <var>obj</var> doesn&rsquo;t fit within <var>string</var>&rsquo;s actual length,
-or if any new character requires a different number of bytes from the
-character currently present at that point in <var>string</var>.
-</p></dd></dl>
+  <p>The most basic way to alter the contents of an existing string
+  is with <code>aset</code> (see <a href=
+  "Array-Functions.html#Array-Functions">Array Functions</a>).
+  <code>(aset <var>string</var> <var>idx</var>
+  <var>char</var>)</code> stores <var>char</var> into
+  <var>string</var> at index <var>idx</var>. Each character
+  occupies one or more bytes, and if <var>char</var> needs a
+  different number of bytes from the character already present at
+  that index, <code>aset</code> signals an error.</p>
 
-<p>To clear out a string that contained a password, use
-<code>clear-string</code>:
-</p>
-<dl>
-<dt><a name="index-clear_002dstring"></a>Function: <strong>clear-string</strong> <em>string</em></dt>
-<dd><p>This makes <var>string</var> a unibyte string and clears its contents to
-zeros.  It may also change <var>string</var>&rsquo;s length.
-</p></dd></dl>
+  <p>A more powerful function is <code>store-substring</code>:</p>
 
+  <dl>
+    <dt><a name="index-store_002dsubstring" id=
+    "index-store_002dsubstring"></a>Function:
+    <strong>store-substring</strong> <em>string idx obj</em></dt>
 
+    <dd>
+      <p>This function alters part of the contents of the string
+      <var>string</var>, by storing <var>obj</var> starting at
+      index <var>idx</var>. The argument <var>obj</var> may be
+      either a character or a (smaller) string.</p>
 
+      <p>Since it is impossible to change the length of an existing
+      string, it is an error if <var>obj</var> doesn&rsquo;t fit
+      within <var>string</var>&rsquo;s actual length, or if any new
+      character requires a different number of bytes from the
+      character currently present at that point in
+      <var>string</var>.</p>
+    </dd>
+  </dl>
 
+  <p>To clear out a string that contained a password, use
+  <code>clear-string</code>:</p>
+
+  <dl>
+    <dt><a name="index-clear_002dstring" id=
+    "index-clear_002dstring"></a>Function:
+    <strong>clear-string</strong> <em>string</em></dt>
+
+    <dd>
+      <p>This makes <var>string</var> a unibyte string and clears
+      its contents to zeros. It may also change
+      <var>string</var>&rsquo;s length.</p>
+    </dd>
+  </dl>
 </body>
 </html>

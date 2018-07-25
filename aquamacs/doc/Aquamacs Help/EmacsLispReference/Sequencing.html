@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,160 +19,221 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Sequencing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Sequencing">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Sequencing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Control-Structures.html#Control-Structures" rel="up" title="Control Structures">
-<link href="Conditionals.html#Conditionals" rel="next" title="Conditionals">
-<link href="Control-Structures.html#Control-Structures" rel="prev" title="Control Structures">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Sequencing</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Sequencing" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Sequencing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Control-Structures.html#Control-Structures" rel="up"
+  title="Control Structures" />
+  <link href="Conditionals.html#Conditionals" rel="next" title=
+  "Conditionals" />
+  <link href="Control-Structures.html#Control-Structures" rel=
+  "prev" title="Control Structures" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Sequencing" id="Sequencing"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Conditionals.html#Conditionals" accesskey="n"
+    rel="next">Conditionals</a>, Up: <a href=
+    "Control-Structures.html#Control-Structures" accesskey="u" rel=
+    "up">Control Structures</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sequencing-1" id="Sequencing-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sequencing"></a>
-<div class="header">
-<p>
-Next: <a href="Conditionals.html#Conditionals" accesskey="n" rel="next">Conditionals</a>, Up: <a href="Control-Structures.html#Control-Structures" accesskey="u" rel="up">Control Structures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sequencing-1"></a>
-<h3 class="section">10.1 Sequencing</h3>
-<a name="index-sequencing"></a>
-<a name="index-sequential-execution"></a>
+  <h3 class="section">10.1 Sequencing</h3><a name=
+  "index-sequencing" id="index-sequencing"></a> <a name=
+  "index-sequential-execution" id="index-sequential-execution"></a>
 
-<p>Evaluating forms in the order they appear is the most common way
-control passes from one form to another.  In some contexts, such as in a
-function body, this happens automatically.  Elsewhere you must use a
-control structure construct to do this: <code>progn</code>, the simplest
-control construct of Lisp.
-</p>
-<p>A <code>progn</code> special form looks like this:
-</p>
-<div class="example">
-<pre class="example">(progn <var>a</var> <var>b</var> <var>c</var> &hellip;)
-</pre></div>
+  <p>Evaluating forms in the order they appear is the most common
+  way control passes from one form to another. In some contexts,
+  such as in a function body, this happens automatically. Elsewhere
+  you must use a control structure construct to do this:
+  <code>progn</code>, the simplest control construct of Lisp.</p>
 
-<p>and it says to execute the forms <var>a</var>, <var>b</var>, <var>c</var>, and so on, in
-that order.  These forms are called the <em>body</em> of the <code>progn</code> form.
-The value of the last form in the body becomes the value of the entire
-<code>progn</code>.  <code>(progn)</code> returns <code>nil</code>.
-</p>
-<a name="index-implicit-progn"></a>
-<p>In the early days of Lisp, <code>progn</code> was the only way to execute
-two or more forms in succession and use the value of the last of them.
-But programmers found they often needed to use a <code>progn</code> in the
-body of a function, where (at that time) only one form was allowed.  So
-the body of a function was made into an implicit <code>progn</code>:
-several forms are allowed just as in the body of an actual <code>progn</code>.
-Many other control structures likewise contain an implicit <code>progn</code>.
-As a result, <code>progn</code> is not used as much as it was many years ago.
-It is needed now most often inside an <code>unwind-protect</code>, <code>and</code>,
-<code>or</code>, or in the <var>then</var>-part of an <code>if</code>.
-</p>
-<dl>
-<dt><a name="index-progn"></a>Special Form: <strong>progn</strong> <em>forms&hellip;</em></dt>
-<dd><p>This special form evaluates all of the <var>forms</var>, in textual
-order, returning the result of the final form.
-</p>
-<div class="example">
-<pre class="example">(progn (print &quot;The first form&quot;)
-       (print &quot;The second form&quot;)
-       (print &quot;The third form&quot;))
-     ⊣ &quot;The first form&quot;
-     ⊣ &quot;The second form&quot;
-     ⊣ &quot;The third form&quot;
-&rArr; &quot;The third form&quot;
-</pre></div>
-</dd></dl>
+  <p>A <code>progn</code> special form looks like this:</p>
 
-<p>Two other constructs likewise evaluate a series of forms but return
-different values:
-</p>
-<dl>
-<dt><a name="index-prog1"></a>Special Form: <strong>prog1</strong> <em>form1 forms&hellip;</em></dt>
-<dd><p>This special form evaluates <var>form1</var> and all of the <var>forms</var>, in
-textual order, returning the result of <var>form1</var>.
-</p>
-<div class="example">
-<pre class="example">(prog1 (print &quot;The first form&quot;)
-       (print &quot;The second form&quot;)
-       (print &quot;The third form&quot;))
-     ⊣ &quot;The first form&quot;
-     ⊣ &quot;The second form&quot;
-     ⊣ &quot;The third form&quot;
-&rArr; &quot;The first form&quot;
-</pre></div>
+  <div class="example">
+    <pre class="example">
+(progn <var>a</var> <var>b</var> <var>c</var> &hellip;)
+</pre>
+  </div>
 
-<p>Here is a way to remove the first element from a list in the variable
-<code>x</code>, then return the value of that former element:
-</p>
-<div class="example">
-<pre class="example">(prog1 (car x) (setq x (cdr x)))
-</pre></div>
-</dd></dl>
+  <p>and it says to execute the forms <var>a</var>, <var>b</var>,
+  <var>c</var>, and so on, in that order. These forms are called
+  the <em>body</em> of the <code>progn</code> form. The value of
+  the last form in the body becomes the value of the entire
+  <code>progn</code>. <code>(progn)</code> returns
+  <code>nil</code>.</p><a name="index-implicit-progn" id=
+  "index-implicit-progn"></a>
 
-<dl>
-<dt><a name="index-prog2"></a>Special Form: <strong>prog2</strong> <em>form1 form2 forms&hellip;</em></dt>
-<dd><p>This special form evaluates <var>form1</var>, <var>form2</var>, and all of the
-following <var>forms</var>, in textual order, returning the result of
-<var>form2</var>.
-</p>
-<div class="example">
-<pre class="example">(prog2 (print &quot;The first form&quot;)
-       (print &quot;The second form&quot;)
-       (print &quot;The third form&quot;))
-     ⊣ &quot;The first form&quot;
-     ⊣ &quot;The second form&quot;
-     ⊣ &quot;The third form&quot;
-&rArr; &quot;The second form&quot;
-</pre></div>
-</dd></dl>
+  <p>In the early days of Lisp, <code>progn</code> was the only way
+  to execute two or more forms in succession and use the value of
+  the last of them. But programmers found they often needed to use
+  a <code>progn</code> in the body of a function, where (at that
+  time) only one form was allowed. So the body of a function was
+  made into an implicit <code>progn</code>: several forms are
+  allowed just as in the body of an actual <code>progn</code>. Many
+  other control structures likewise contain an implicit
+  <code>progn</code>. As a result, <code>progn</code> is not used
+  as much as it was many years ago. It is needed now most often
+  inside an <code>unwind-protect</code>, <code>and</code>,
+  <code>or</code>, or in the <var>then</var>-part of an
+  <code>if</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Conditionals.html#Conditionals" accesskey="n" rel="next">Conditionals</a>, Up: <a href="Control-Structures.html#Control-Structures" accesskey="u" rel="up">Control Structures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-progn" id="index-progn"></a>Special Form:
+    <strong>progn</strong> <em>forms&hellip;</em></dt>
 
+    <dd>
+      <p>This special form evaluates all of the <var>forms</var>,
+      in textual order, returning the result of the final form.</p>
 
+      <div class="example">
+        <pre class="example">
+(progn (print "The first form")
+       (print "The second form")
+       (print "The third form"))
+     &acirc;&Scaron;&pound; "The first form"
+     &acirc;&Scaron;&pound; "The second form"
+     &acirc;&Scaron;&pound; "The third form"
+&rArr; "The third form"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <p>Two other constructs likewise evaluate a series of forms but
+  return different values:</p>
+
+  <dl>
+    <dt><a name="index-prog1" id="index-prog1"></a>Special Form:
+    <strong>prog1</strong> <em>form1 forms&hellip;</em></dt>
+
+    <dd>
+      <p>This special form evaluates <var>form1</var> and all of
+      the <var>forms</var>, in textual order, returning the result
+      of <var>form1</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(prog1 (print "The first form")
+       (print "The second form")
+       (print "The third form"))
+     &acirc;&Scaron;&pound; "The first form"
+     &acirc;&Scaron;&pound; "The second form"
+     &acirc;&Scaron;&pound; "The third form"
+&rArr; "The first form"
+</pre>
+      </div>
+
+      <p>Here is a way to remove the first element from a list in
+      the variable <code>x</code>, then return the value of that
+      former element:</p>
+
+      <div class="example">
+        <pre class="example">
+(prog1 (car x) (setq x (cdr x)))
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-prog2" id="index-prog2"></a>Special Form:
+    <strong>prog2</strong> <em>form1 form2 forms&hellip;</em></dt>
+
+    <dd>
+      <p>This special form evaluates <var>form1</var>,
+      <var>form2</var>, and all of the following <var>forms</var>,
+      in textual order, returning the result of
+      <var>form2</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(prog2 (print "The first form")
+       (print "The second form")
+       (print "The third form"))
+     &acirc;&Scaron;&pound; "The first form"
+     &acirc;&Scaron;&pound; "The second form"
+     &acirc;&Scaron;&pound; "The third form"
+&rArr; "The second form"
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Conditionals.html#Conditionals" accesskey="n"
+    rel="next">Conditionals</a>, Up: <a href=
+    "Control-Structures.html#Control-Structures" accesskey="u" rel=
+    "up">Control Structures</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

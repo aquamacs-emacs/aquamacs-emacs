@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2000-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,157 +14,240 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Emacs Widget Library: atoms</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Emacs Widget Library: atoms">
-<meta name="keywords" content="The Emacs Widget Library: atoms">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sexp-Types.html#Sexp-Types" rel="up" title="Sexp Types">
-<link href="composite.html#composite" rel="next" title="composite">
-<link href="generic.html#generic" rel="prev" title="generic">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Emacs Widget Library: atoms</title>
+  <meta name="description" content=
+  "The Emacs Widget Library: atoms" />
+  <meta name="keywords" content=
+  "The Emacs Widget Library: atoms" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Sexp-Types.html#Sexp-Types" rel="up" title=
+  "Sexp Types" />
+  <link href="composite.html#composite" rel="next" title=
+  "composite" />
+  <link href="generic.html#generic" rel="prev" title="generic" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="atoms"></a>
-<div class="header">
-<p>
-Next: <a href="composite.html#composite" accesskey="n" rel="next">composite</a>, Previous: <a href="generic.html#generic" accesskey="p" rel="prev">generic</a>, Up: <a href="Sexp-Types.html#Sexp-Types" accesskey="u" rel="up">Sexp Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Atomic-Sexp-Widgets"></a>
-<h3 class="section">6.3 Atomic Sexp Widgets</h3>
-<a name="index-atomic-sexp-widget"></a>
+<body lang="en" xml:lang="en">
+  <a name="atoms" id="atoms"></a>
 
-<p>The atoms are s-expressions that do not consist of other s-expressions.
-For example, a string, a file name, or a symbol are atoms, while a list
-is a composite type.  You can edit the value of an atom with the
-following widgets.
-</p>
-<p>The syntax for all the atoms are:
-</p>
-<div class="example">
-<pre class="example"><var>type</var> ::= (<var>construct</var> [<var>keyword</var> <var>argument</var>]...  [ <var>value</var> ])
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="composite.html#composite" accesskey="n" rel=
+    "next">composite</a>, Previous: <a href="generic.html#generic"
+    accesskey="p" rel="prev">generic</a>, Up: <a href=
+    "Sexp-Types.html#Sexp-Types" accesskey="u" rel="up">Sexp
+    Types</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Atomic-Sexp-Widgets" id="Atomic-Sexp-Widgets"></a>
 
-<p>The <var>value</var>, if present, is used to initialize the <code>:value</code>
-property and must be an expression of the same type as the widget.
-That is, the string widget can only be initialized with a string.
-</p>
-<p>All the atom widgets take the same keyword arguments as the
-<code>editable-field</code> widget.  See <a href="editable_002dfield.html#editable_002dfield">editable-field</a>.
-</p>
-<dl>
-<dt><a name="index-string"></a>Widget: <strong>string</strong></dt>
-<dd><p>Allows you to edit a string in an editable field.
-</p></dd></dl>
+  <h3 class="section">6.3 Atomic Sexp Widgets</h3><a name=
+  "index-atomic-sexp-widget" id="index-atomic-sexp-widget"></a>
 
-<dl>
-<dt><a name="index-regexp"></a>Widget: <strong>regexp</strong></dt>
-<dd><p>Allows you to edit a regular expression in an editable field.
-</p></dd></dl>
+  <p>The atoms are s-expressions that do not consist of other
+  s-expressions. For example, a string, a file name, or a symbol
+  are atoms, while a list is a composite type. You can edit the
+  value of an atom with the following widgets.</p>
 
-<dl>
-<dt><a name="index-character"></a>Widget: <strong>character</strong></dt>
-<dd><p>Allows you to enter a character in an editable field.
-</p></dd></dl>
+  <p>The syntax for all the atoms are:</p>
 
-<dl>
-<dt><a name="index-file"></a>Widget: <strong>file</strong></dt>
-<dd><p>Allows you to edit a file name in an editable field.
-</p>
-<p>Keywords:
-</p><dl compact="compact">
-<dd><a name="index-must_002dmatch-keyword"></a>
-</dd>
-<dt><code>:must-match</code></dt>
-<dd><p>If this is set to non-<code>nil</code>, only existing file names will be
-allowed in the minibuffer.
-</p></dd>
-</dl>
-</dd></dl>
+  <div class="example">
+    <pre class="example">
+<var>type</var> ::= (<var>construct</var> [<var>keyword</var> <var>argument</var>]...  [ <var>value</var> ])
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-directory"></a>Widget: <strong>directory</strong></dt>
-<dd><p>Allows you to edit a directory name in an editable field.
-Similar to the <code>file</code> widget.
-</p></dd></dl>
+  <p>The <var>value</var>, if present, is used to initialize the
+  <code>:value</code> property and must be an expression of the
+  same type as the widget. That is, the string widget can only be
+  initialized with a string.</p>
 
-<dl>
-<dt><a name="index-symbol"></a>Widget: <strong>symbol</strong></dt>
-<dd><p>Allows you to edit a Lisp symbol in an editable field.
-</p></dd></dl>
+  <p>All the atom widgets take the same keyword arguments as the
+  <code>editable-field</code> widget. See <a href=
+  "editable_002dfield.html#editable_002dfield">editable-field</a>.</p>
 
-<dl>
-<dt><a name="index-function"></a>Widget: <strong>function</strong></dt>
-<dd><p>Allows you to edit a lambda expression, or a function name with completion.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-string" id="index-string"></a>Widget:
+    <strong>string</strong></dt>
 
-<dl>
-<dt><a name="index-variable"></a>Widget: <strong>variable</strong></dt>
-<dd><p>Allows you to edit a variable name, with completion.
-</p></dd></dl>
+    <dd>
+      <p>Allows you to edit a string in an editable field.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-integer"></a>Widget: <strong>integer</strong></dt>
-<dd><p>Allows you to edit an integer in an editable field.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-regexp" id="index-regexp"></a>Widget:
+    <strong>regexp</strong></dt>
 
-<dl>
-<dt><a name="index-number"></a>Widget: <strong>number</strong></dt>
-<dd><p>Allows you to edit a number in an editable field.
-</p></dd></dl>
+    <dd>
+      <p>Allows you to edit a regular expression in an editable
+      field.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-boolean"></a>Widget: <strong>boolean</strong></dt>
-<dd><p>Allows you to edit a boolean.  In Lisp this means a variable which is
-either <code>nil</code> meaning false, or non-<code>nil</code> meaning true.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-character" id="index-character"></a>Widget:
+    <strong>character</strong></dt>
 
+    <dd>
+      <p>Allows you to enter a character in an editable field.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="composite.html#composite" accesskey="n" rel="next">composite</a>, Previous: <a href="generic.html#generic" accesskey="p" rel="prev">generic</a>, Up: <a href="Sexp-Types.html#Sexp-Types" accesskey="u" rel="up">Sexp Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-file" id="index-file"></a>Widget:
+    <strong>file</strong></dt>
 
+    <dd>
+      <p>Allows you to edit a file name in an editable field.</p>
 
+      <p>Keywords:</p>
 
+      <dl compact="compact">
+        <dd><a name="index-must_002dmatch-keyword" id=
+        "index-must_002dmatch-keyword"></a></dd>
+
+        <dt><code>:must-match</code></dt>
+
+        <dd>
+          <p>If this is set to non-<code>nil</code>, only existing
+          file names will be allowed in the minibuffer.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-directory" id="index-directory"></a>Widget:
+    <strong>directory</strong></dt>
+
+    <dd>
+      <p>Allows you to edit a directory name in an editable field.
+      Similar to the <code>file</code> widget.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-symbol" id="index-symbol"></a>Widget:
+    <strong>symbol</strong></dt>
+
+    <dd>
+      <p>Allows you to edit a Lisp symbol in an editable field.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-function" id="index-function"></a>Widget:
+    <strong>function</strong></dt>
+
+    <dd>
+      <p>Allows you to edit a lambda expression, or a function name
+      with completion.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-variable" id="index-variable"></a>Widget:
+    <strong>variable</strong></dt>
+
+    <dd>
+      <p>Allows you to edit a variable name, with completion.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-integer" id="index-integer"></a>Widget:
+    <strong>integer</strong></dt>
+
+    <dd>
+      <p>Allows you to edit an integer in an editable field.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-number" id="index-number"></a>Widget:
+    <strong>number</strong></dt>
+
+    <dd>
+      <p>Allows you to edit a number in an editable field.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-boolean" id="index-boolean"></a>Widget:
+    <strong>boolean</strong></dt>
+
+    <dd>
+      <p>Allows you to edit a boolean. In Lisp this means a
+      variable which is either <code>nil</code> meaning false, or
+      non-<code>nil</code> meaning true.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="composite.html#composite" accesskey="n" rel=
+    "next">composite</a>, Previous: <a href="generic.html#generic"
+    accesskey="p" rel="prev">generic</a>, Up: <a href=
+    "Sexp-Types.html#Sexp-Types" accesskey="u" rel="up">Sexp
+    Types</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

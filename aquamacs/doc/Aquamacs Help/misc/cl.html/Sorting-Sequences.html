@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,128 +16,189 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Sorting Sequences</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Sorting Sequences">
-<meta name="keywords" content="Common Lisp Extensions: Sorting Sequences">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sequences.html#Sequences" rel="up" title="Sequences">
-<link href="Lists.html#Lists" rel="next" title="Lists">
-<link href="Searching-Sequences.html#Searching-Sequences" rel="prev" title="Searching Sequences">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Sorting Sequences</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Sorting Sequences" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Sorting Sequences" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Sequences.html#Sequences" rel="up" title=
+  "Sequences" />
+  <link href="Lists.html#Lists" rel="next" title="Lists" />
+  <link href="Searching-Sequences.html#Searching-Sequences" rel=
+  "prev" title="Searching Sequences" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sorting-Sequences"></a>
-<div class="header">
-<p>
-Previous: <a href="Searching-Sequences.html#Searching-Sequences" accesskey="p" rel="prev">Searching Sequences</a>, Up: <a href="Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sorting-Sequences-1"></a>
-<h3 class="section">9.5 Sorting Sequences</h3>
+<body lang="en" xml:lang="en">
+  <a name="Sorting-Sequences" id="Sorting-Sequences"></a>
 
-<dl>
-<dt><a name="index-cl_002dsort"></a>Function: <strong>cl-sort</strong> <em>seq predicate <tt>&amp;key :key</tt></em></dt>
-<dd><p>This function sorts <var>seq</var> into increasing order as determined
-by using <var>predicate</var> to compare pairs of elements.  <var>predicate</var>
-should return true (non-<code>nil</code>) if and only if its first argument
-is less than (not equal to) its second argument.  For example,
-<code>&lt;</code> and <code>string-lessp</code> are suitable predicate functions
-for sorting numbers and strings, respectively; <code>&gt;</code> would sort
-numbers into decreasing rather than increasing order.
-</p>
-<p>This function differs from Emacs&rsquo;s built-in <code>sort</code> in that it
-can operate on any type of sequence, not just lists.  Also, it
-accepts a <code>:key</code> argument, which is used to preprocess data
-fed to the <var>predicate</var> function.  For example,
-</p>
-<div class="example">
-<pre class="example">(setq data (cl-sort data 'string-lessp :key 'downcase))
-</pre></div>
+  <div class="header">
+    <p>Previous: <a href=
+    "Searching-Sequences.html#Searching-Sequences" accesskey="p"
+    rel="prev">Searching Sequences</a>, Up: <a href=
+    "Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sorting-Sequences-1" id="Sorting-Sequences-1"></a>
 
-<p>sorts <var>data</var>, a sequence of strings, into increasing alphabetical
-order without regard to case.  A <code>:key</code> function of <code>car</code>
-would be useful for sorting association lists.  It should only be a
-simple accessor though, since it&rsquo;s used heavily in the current
-implementation.
-</p>
-<p>The <code>cl-sort</code> function is destructive; it sorts lists by actually
-rearranging the <small>CDR</small> pointers in suitable fashion.
-</p></dd></dl>
+  <h3 class="section">9.5 Sorting Sequences</h3>
 
-<dl>
-<dt><a name="index-cl_002dstable_002dsort"></a>Function: <strong>cl-stable-sort</strong> <em>seq predicate <tt>&amp;key :key</tt></em></dt>
-<dd><p>This function sorts <var>seq</var> <em>stably</em>, meaning two elements
-which are equal in terms of <var>predicate</var> are guaranteed not to
-be rearranged out of their original order by the sort.
-</p>
-<p>In practice, <code>cl-sort</code> and <code>cl-stable-sort</code> are equivalent
-in Emacs Lisp because the underlying <code>sort</code> function is
-stable by default.  However, this package reserves the right to
-use non-stable methods for <code>cl-sort</code> in the future.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dsort" id=
+    "index-cl_002dsort"></a>Function: <strong>cl-sort</strong>
+    <em>seq predicate <tt>&amp;key :key</tt></em></dt>
 
-<dl>
-<dt><a name="index-cl_002dmerge"></a>Function: <strong>cl-merge</strong> <em>type seq1 seq2 predicate <tt>&amp;key :key</tt></em></dt>
-<dd><p>This function merges two sequences <var>seq1</var> and <var>seq2</var> by
-interleaving their elements.  The result sequence, of type <var>type</var>
-(in the sense of <code>cl-concatenate</code>), has length equal to the sum
-of the lengths of the two input sequences.  The sequences may be
-modified destructively.  Order of elements within <var>seq1</var> and
-<var>seq2</var> is preserved in the interleaving; elements of the two
-sequences are compared by <var>predicate</var> (in the sense of
-<code>sort</code>) and the lesser element goes first in the result.
-When elements are equal, those from <var>seq1</var> precede those from
-<var>seq2</var> in the result.  Thus, if <var>seq1</var> and <var>seq2</var> are
-both sorted according to <var>predicate</var>, then the result will be
-a merged sequence which is (stably) sorted according to
-<var>predicate</var>.
-</p></dd></dl>
+    <dd>
+      <p>This function sorts <var>seq</var> into increasing order
+      as determined by using <var>predicate</var> to compare pairs
+      of elements. <var>predicate</var> should return true
+      (non-<code>nil</code>) if and only if its first argument is
+      less than (not equal to) its second argument. For example,
+      <code>&lt;</code> and <code>string-lessp</code> are suitable
+      predicate functions for sorting numbers and strings,
+      respectively; <code>&gt;</code> would sort numbers into
+      decreasing rather than increasing order.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Searching-Sequences.html#Searching-Sequences" accesskey="p" rel="prev">Searching Sequences</a>, Up: <a href="Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This function differs from Emacs&rsquo;s built-in
+      <code>sort</code> in that it can operate on any type of
+      sequence, not just lists. Also, it accepts a
+      <code>:key</code> argument, which is used to preprocess data
+      fed to the <var>predicate</var> function. For example,</p>
 
+      <div class="example">
+        <pre class="example">
+(setq data (cl-sort data 'string-lessp :key 'downcase))
+</pre>
+      </div>
 
+      <p>sorts <var>data</var>, a sequence of strings, into
+      increasing alphabetical order without regard to case. A
+      <code>:key</code> function of <code>car</code> would be
+      useful for sorting association lists. It should only be a
+      simple accessor though, since it&rsquo;s used heavily in the
+      current implementation.</p>
 
+      <p>The <code>cl-sort</code> function is destructive; it sorts
+      lists by actually rearranging the <small>CDR</small> pointers
+      in suitable fashion.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dstable_002dsort" id=
+    "index-cl_002dstable_002dsort"></a>Function:
+    <strong>cl-stable-sort</strong> <em>seq predicate <tt>&amp;key
+    :key</tt></em></dt>
+
+    <dd>
+      <p>This function sorts <var>seq</var> <em>stably</em>,
+      meaning two elements which are equal in terms of
+      <var>predicate</var> are guaranteed not to be rearranged out
+      of their original order by the sort.</p>
+
+      <p>In practice, <code>cl-sort</code> and
+      <code>cl-stable-sort</code> are equivalent in Emacs Lisp
+      because the underlying <code>sort</code> function is stable
+      by default. However, this package reserves the right to use
+      non-stable methods for <code>cl-sort</code> in the
+      future.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dmerge" id=
+    "index-cl_002dmerge"></a>Function: <strong>cl-merge</strong>
+    <em>type seq1 seq2 predicate <tt>&amp;key :key</tt></em></dt>
+
+    <dd>
+      <p>This function merges two sequences <var>seq1</var> and
+      <var>seq2</var> by interleaving their elements. The result
+      sequence, of type <var>type</var> (in the sense of
+      <code>cl-concatenate</code>), has length equal to the sum of
+      the lengths of the two input sequences. The sequences may be
+      modified destructively. Order of elements within
+      <var>seq1</var> and <var>seq2</var> is preserved in the
+      interleaving; elements of the two sequences are compared by
+      <var>predicate</var> (in the sense of <code>sort</code>) and
+      the lesser element goes first in the result. When elements
+      are equal, those from <var>seq1</var> precede those from
+      <var>seq2</var> in the result. Thus, if <var>seq1</var> and
+      <var>seq2</var> are both sorted according to
+      <var>predicate</var>, then the result will be a merged
+      sequence which is (stably) sorted according to
+      <var>predicate</var>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Searching-Sequences.html#Searching-Sequences" accesskey="p"
+    rel="prev">Searching Sequences</a>, Up: <a href=
+    "Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

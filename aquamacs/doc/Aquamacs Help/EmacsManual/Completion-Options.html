@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,131 +20,184 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Completion Options</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Completion Options">
-<meta name="keywords" content="GNU Emacs Manual: Completion Options">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Completion.html#Completion" rel="up" title="Completion">
-<link href="Minibuffer-History.html#Minibuffer-History" rel="next" title="Minibuffer History">
-<link href="Completion-Styles.html#Completion-Styles" rel="prev" title="Completion Styles">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Completion Options</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Completion Options" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Completion Options" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Completion.html#Completion" rel="up" title=
+  "Completion" />
+  <link href="Minibuffer-History.html#Minibuffer-History" rel=
+  "next" title="Minibuffer History" />
+  <link href="Completion-Styles.html#Completion-Styles" rel="prev"
+  title="Completion Styles" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Completion-Options" id="Completion-Options"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Completion-Styles.html#Completion-Styles"
+    accesskey="p" rel="prev">Completion Styles</a>, Up: <a href=
+    "Completion.html#Completion" accesskey="u" rel=
+    "up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Completion-Options-1" id="Completion-Options-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Completion-Options"></a>
-<div class="header">
-<p>
-Previous: <a href="Completion-Styles.html#Completion-Styles" accesskey="p" rel="prev">Completion Styles</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Completion-Options-1"></a>
-<h4 class="subsection">8.4.5 Completion Options</h4>
+  <h4 class="subsection">8.4.5 Completion Options</h4><a name=
+  "index-case_002dsensitivity-and-completion" id=
+  "index-case_002dsensitivity-and-completion"></a> <a name=
+  "index-case-in-completion" id="index-case-in-completion"></a>
 
-<a name="index-case_002dsensitivity-and-completion"></a>
-<a name="index-case-in-completion"></a>
-<p>Case is significant when completing case-sensitive arguments, such
-as command names.  For example, when completing command names,
-&lsquo;<samp>AU</samp>&rsquo; does not complete to &lsquo;<samp>auto-fill-mode</samp>&rsquo;.  Case
-differences are ignored when completing arguments in which case does
-not matter.
-</p>
-<a name="index-read_002dfile_002dname_002dcompletion_002dignore_002dcase"></a>
-<a name="index-read_002dbuffer_002dcompletion_002dignore_002dcase"></a>
-<p>When completing file names, case differences are ignored if the
-variable <code>read-file-name-completion-ignore-case</code> is
-non-<code>nil</code>.  The default value is <code>nil</code> on systems that have
-case-sensitive file-names, such as GNU/Linux; it is non-<code>nil</code> on
-systems that have case-insensitive file-names, such as Microsoft
-Windows.  When completing buffer names, case differences are ignored
-if the variable <code>read-buffer-completion-ignore-case</code> is
-non-<code>nil</code>; the default is <code>nil</code>.
-</p>
-<a name="index-completion_002dignored_002dextensions"></a>
-<a name="index-ignored-file-names_002c-in-completion"></a>
-<p>When completing file names, Emacs usually omits certain alternatives
-that are considered unlikely to be chosen, as determined by the list
-variable <code>completion-ignored-extensions</code>.  Each element in the
-list should be a string; any file name ending in such a string is
-ignored as a completion alternative.  Any element ending in a slash
-(<samp>/</samp>) represents a subdirectory name.  The standard value of
-<code>completion-ignored-extensions</code> has several elements including
-<code>&quot;.o&quot;</code>, <code>&quot;.elc&quot;</code>, and <code>&quot;~&quot;</code>.  For example, if a
-directory contains &lsquo;<samp>foo.c</samp>&rsquo; and &lsquo;<samp>foo.elc</samp>&rsquo;, &lsquo;<samp>foo</samp>&rsquo;
-completes to &lsquo;<samp>foo.c</samp>&rsquo;.  However, if <em>all</em> possible
-completions end in otherwise-ignored strings, they are not ignored: in the
-previous example, &lsquo;<samp>foo.e</samp>&rsquo; completes to &lsquo;<samp>foo.elc</samp>&rsquo;.  Emacs
-disregards <code>completion-ignored-extensions</code> when showing
-completion alternatives in the completion list.
-</p>
-<p>Shell completion is an extended version of filename completion,
-see <a href="Shell-Options.html#Shell-Options">Shell Options</a>.
-</p>
-<a name="index-completion_002dauto_002dhelp"></a>
-<p>If <code>completion-auto-help</code> is set to <code>nil</code>, the completion
-commands never display the completion list buffer; you must type
-<kbd>?</kbd>  to display the list.  If the value is <code>lazy</code>, Emacs only
-shows the completion list buffer on the second attempt to complete.
-In other words, if there is nothing to complete, the first <tt class="key">TAB</tt>
-echoes &lsquo;<samp>Next char not unique</samp>&rsquo;; the second <tt class="key">TAB</tt> shows the
-completion list buffer.
-</p>
-<a name="index-completion_002dcycle_002dthreshold"></a>
-<p>If <code>completion-cycle-threshold</code> is non-<code>nil</code>, completion
-commands can cycle through completion alternatives.  Normally, if
-there is more than one completion alternative for the text in the
-minibuffer, a completion command completes up to the longest common
-substring.  If you change <code>completion-cycle-threshold</code> to
-<code>t</code>, the completion command instead completes to the first of
-those completion alternatives; each subsequent invocation of the
-completion command replaces that with the next completion alternative,
-in a cyclic manner.  If you give <code>completion-cycle-threshold</code> a
-numeric value <var>n</var>, completion commands switch to this cycling
-behavior only when there are <var>n</var> or fewer alternatives.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Completion-Styles.html#Completion-Styles" accesskey="p" rel="prev">Completion Styles</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Case is significant when completing case-sensitive arguments,
+  such as command names. For example, when completing command
+  names, &lsquo;<samp>AU</samp>&rsquo; does not complete to
+  &lsquo;<samp>auto-fill-mode</samp>&rsquo;. Case differences are
+  ignored when completing arguments in which case does not
+  matter.</p><a name=
+  "index-read_002dfile_002dname_002dcompletion_002dignore_002dcase"
+  id=
+  "index-read_002dfile_002dname_002dcompletion_002dignore_002dcase"></a>
+  <a name=
+  "index-read_002dbuffer_002dcompletion_002dignore_002dcase" id=
+  "index-read_002dbuffer_002dcompletion_002dignore_002dcase"></a>
 
+  <p>When completing file names, case differences are ignored if
+  the variable <code>read-file-name-completion-ignore-case</code>
+  is non-<code>nil</code>. The default value is <code>nil</code> on
+  systems that have case-sensitive file-names, such as GNU/Linux;
+  it is non-<code>nil</code> on systems that have case-insensitive
+  file-names, such as Microsoft Windows. When completing buffer
+  names, case differences are ignored if the variable
+  <code>read-buffer-completion-ignore-case</code> is
+  non-<code>nil</code>; the default is
+  <code>nil</code>.</p><a name="index-completion_002dignored_002dextensions"
+  id="index-completion_002dignored_002dextensions"></a> <a name=
+  "index-ignored-file-names_002c-in-completion" id=
+  "index-ignored-file-names_002c-in-completion"></a>
 
+  <p>When completing file names, Emacs usually omits certain
+  alternatives that are considered unlikely to be chosen, as
+  determined by the list variable
+  <code>completion-ignored-extensions</code>. Each element in the
+  list should be a string; any file name ending in such a string is
+  ignored as a completion alternative. Any element ending in a
+  slash (<samp>/</samp>) represents a subdirectory name. The
+  standard value of <code>completion-ignored-extensions</code> has
+  several elements including <code>".o"</code>,
+  <code>".elc"</code>, and <code>"~"</code>. For example, if a
+  directory contains &lsquo;<samp>foo.c</samp>&rsquo; and
+  &lsquo;<samp>foo.elc</samp>&rsquo;,
+  &lsquo;<samp>foo</samp>&rsquo; completes to
+  &lsquo;<samp>foo.c</samp>&rsquo;. However, if <em>all</em>
+  possible completions end in otherwise-ignored strings, they are
+  not ignored: in the previous example,
+  &lsquo;<samp>foo.e</samp>&rsquo; completes to
+  &lsquo;<samp>foo.elc</samp>&rsquo;. Emacs disregards
+  <code>completion-ignored-extensions</code> when showing
+  completion alternatives in the completion list.</p>
 
+  <p>Shell completion is an extended version of filename
+  completion, see <a href="Shell-Options.html#Shell-Options">Shell
+  Options</a>.</p><a name="index-completion_002dauto_002dhelp" id=
+  "index-completion_002dauto_002dhelp"></a>
+
+  <p>If <code>completion-auto-help</code> is set to
+  <code>nil</code>, the completion commands never display the
+  completion list buffer; you must type <kbd>?</kbd> to display the
+  list. If the value is <code>lazy</code>, Emacs only shows the
+  completion list buffer on the second attempt to complete. In
+  other words, if there is nothing to complete, the first
+  <tt class="key">TAB</tt> echoes &lsquo;<samp>Next char not
+  unique</samp>&rsquo;; the second <tt class="key">TAB</tt> shows
+  the completion list buffer.</p><a name=
+  "index-completion_002dcycle_002dthreshold" id=
+  "index-completion_002dcycle_002dthreshold"></a>
+
+  <p>If <code>completion-cycle-threshold</code> is
+  non-<code>nil</code>, completion commands can cycle through
+  completion alternatives. Normally, if there is more than one
+  completion alternative for the text in the minibuffer, a
+  completion command completes up to the longest common substring.
+  If you change <code>completion-cycle-threshold</code> to
+  <code>t</code>, the completion command instead completes to the
+  first of those completion alternatives; each subsequent
+  invocation of the completion command replaces that with the next
+  completion alternative, in a cyclic manner. If you give
+  <code>completion-cycle-threshold</code> a numeric value
+  <var>n</var>, completion commands switch to this cycling behavior
+  only when there are <var>n</var> or fewer alternatives.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Completion-Styles.html#Completion-Styles"
+    accesskey="p" rel="prev">Completion Styles</a>, Up: <a href=
+    "Completion.html#Completion" accesskey="u" rel=
+    "up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

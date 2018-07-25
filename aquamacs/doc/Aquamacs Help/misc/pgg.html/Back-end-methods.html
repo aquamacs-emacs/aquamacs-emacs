@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes PGG 0.1, an Emacs interface to various
 PGP implementations.
 
@@ -15,132 +17,224 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>PGG 0.1: Back end methods</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="PGG 0.1: Back end methods">
-<meta name="keywords" content="PGG 0.1: Back end methods">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Architecture.html#Architecture" rel="up" title="Architecture">
-<link href="Getting-output.html#Getting-output" rel="next" title="Getting output">
-<link href="Initializing.html#Initializing" rel="prev" title="Initializing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>PGG 0.1: Back end methods</title>
+  <meta name="description" content="PGG 0.1: Back end methods" />
+  <meta name="keywords" content="PGG 0.1: Back end methods" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Architecture.html#Architecture" rel="up" title=
+  "Architecture" />
+  <link href="Getting-output.html#Getting-output" rel="next" title=
+  "Getting output" />
+  <link href="Initializing.html#Initializing" rel="prev" title=
+  "Initializing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Back-end-methods"></a>
-<div class="header">
-<p>
-Next: <a href="Getting-output.html#Getting-output" accesskey="n" rel="next">Getting output</a>, Previous: <a href="Initializing.html#Initializing" accesskey="p" rel="prev">Initializing</a>, Up: <a href="Architecture.html#Architecture" accesskey="u" rel="up">Architecture</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Back-end-methods-1"></a>
-<h3 class="section">4.2 Back end methods</h3>
+<body lang="en" xml:lang="en">
+  <a name="Back-end-methods" id="Back-end-methods"></a>
 
-<p>In each back end, these methods must be present.  The output of these
-methods is stored in special buffers (<a href="Getting-output.html#Getting-output">Getting output</a>), so that
-these methods must tell the status of the execution.
-</p>
-<dl>
-<dt><a name="index-pgg_002dscheme_002dlookup_002dkey"></a>Method: <strong>pgg-scheme-lookup-key</strong> <em>scheme string &amp;optional type</em></dt>
-<dd><p>Return keys associated with <var>string</var>.  If the optional third
-argument <var>type</var> is non-<code>nil</code>, it searches from the secret
-keyrings.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Getting-output.html#Getting-output"
+    accesskey="n" rel="next">Getting output</a>, Previous: <a href=
+    "Initializing.html#Initializing" accesskey="p" rel=
+    "prev">Initializing</a>, Up: <a href=
+    "Architecture.html#Architecture" accesskey="u" rel=
+    "up">Architecture</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Back-end-methods-1" id="Back-end-methods-1"></a>
 
-<dl>
-<dt><a name="index-pgg_002dscheme_002dencrypt_002dregion"></a>Method: <strong>pgg-scheme-encrypt-region</strong> <em>scheme start end recipients &amp;optional sign passphrase</em></dt>
-<dd><p>Encrypt the current region between <var>start</var> and <var>end</var> for
-<var>recipients</var>.  If <var>sign</var> is non-<code>nil</code>, do a combined sign
-and encrypt.  If encryption is successful, it returns <code>t</code>,
-otherwise <code>nil</code>.
-</p></dd></dl>
+  <h3 class="section">4.2 Back end methods</h3>
 
-<dl>
-<dt><a name="index-pgg_002dscheme_002dencrypt_002dsymmetric_002dregion"></a>Method: <strong>pgg-scheme-encrypt-symmetric-region</strong> <em>scheme start end &amp;optional passphrase</em></dt>
-<dd><p>Encrypt the current region between <var>start</var> and <var>end</var> using a
-symmetric cipher and a passphrases.  If encryption is successful, it
-returns <code>t</code>, otherwise <code>nil</code>.  This function is currently only
-implemented for GnuPG.
-</p></dd></dl>
+  <p>In each back end, these methods must be present. The output of
+  these methods is stored in special buffers (<a href=
+  "Getting-output.html#Getting-output">Getting output</a>), so that
+  these methods must tell the status of the execution.</p>
 
-<dl>
-<dt><a name="index-pgg_002dscheme_002ddecrypt_002dregion"></a>Method: <strong>pgg-scheme-decrypt-region</strong> <em>scheme start end &amp;optional passphrase</em></dt>
-<dd><p>Decrypt the current region between <var>start</var> and <var>end</var>.  If
-decryption is successful, it returns <code>t</code>, otherwise <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-pgg_002dscheme_002dlookup_002dkey" id=
+    "index-pgg_002dscheme_002dlookup_002dkey"></a>Method:
+    <strong>pgg-scheme-lookup-key</strong> <em>scheme string
+    &amp;optional type</em></dt>
 
-<dl>
-<dt><a name="index-pgg_002dscheme_002dsign_002dregion"></a>Method: <strong>pgg-scheme-sign-region</strong> <em>scheme start end &amp;optional cleartext passphrase</em></dt>
-<dd><p>Make the signature from text between <var>start</var> and <var>end</var>.  If the
-optional third argument <var>cleartext</var> is non-<code>nil</code>, it does not
-create a detached signature.  If signing is successful, it returns
-<code>t</code>, otherwise <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>Return keys associated with <var>string</var>. If the
+      optional third argument <var>type</var> is
+      non-<code>nil</code>, it searches from the secret
+      keyrings.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-pgg_002dscheme_002dverify_002dregion"></a>Method: <strong>pgg-scheme-verify-region</strong> <em>scheme start end &amp;optional signature</em></dt>
-<dd><p>Verify the current region between <var>start</var> and <var>end</var>.  If the
-optional third argument <var>signature</var> is non-<code>nil</code>, it is treated
-as the detached signature of the current region.  If the signature is
-successfully verified, it returns <code>t</code>, otherwise <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-pgg_002dscheme_002dencrypt_002dregion" id=
+    "index-pgg_002dscheme_002dencrypt_002dregion"></a>Method:
+    <strong>pgg-scheme-encrypt-region</strong> <em>scheme start end
+    recipients &amp;optional sign passphrase</em></dt>
 
-<dl>
-<dt><a name="index-pgg_002dscheme_002dinsert_002dkey"></a>Method: <strong>pgg-scheme-insert-key</strong> <em>scheme</em></dt>
-<dd><p>Retrieve the user&rsquo;s public key and insert it as ASCII-armored format.
-On success, it returns <code>t</code>, otherwise <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>Encrypt the current region between <var>start</var> and
+      <var>end</var> for <var>recipients</var>. If <var>sign</var>
+      is non-<code>nil</code>, do a combined sign and encrypt. If
+      encryption is successful, it returns <code>t</code>,
+      otherwise <code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-pgg_002dscheme_002dsnarf_002dkeys_002dregion"></a>Method: <strong>pgg-scheme-snarf-keys-region</strong> <em>scheme start end</em></dt>
-<dd><p>Collect public keys in the current region between <var>start</var> and
-<var>end</var>, and add them into the user&rsquo;s keyring.
-On success, it returns <code>t</code>, otherwise <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-pgg_002dscheme_002dencrypt_002dsymmetric_002dregion" id=
+    "index-pgg_002dscheme_002dencrypt_002dsymmetric_002dregion"></a>Method:
+    <strong>pgg-scheme-encrypt-symmetric-region</strong> <em>scheme
+    start end &amp;optional passphrase</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Getting-output.html#Getting-output" accesskey="n" rel="next">Getting output</a>, Previous: <a href="Initializing.html#Initializing" accesskey="p" rel="prev">Initializing</a>, Up: <a href="Architecture.html#Architecture" accesskey="u" rel="up">Architecture</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Encrypt the current region between <var>start</var> and
+      <var>end</var> using a symmetric cipher and a passphrases. If
+      encryption is successful, it returns <code>t</code>,
+      otherwise <code>nil</code>. This function is currently only
+      implemented for GnuPG.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-pgg_002dscheme_002ddecrypt_002dregion" id=
+    "index-pgg_002dscheme_002ddecrypt_002dregion"></a>Method:
+    <strong>pgg-scheme-decrypt-region</strong> <em>scheme start end
+    &amp;optional passphrase</em></dt>
 
+    <dd>
+      <p>Decrypt the current region between <var>start</var> and
+      <var>end</var>. If decryption is successful, it returns
+      <code>t</code>, otherwise <code>nil</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-pgg_002dscheme_002dsign_002dregion" id=
+    "index-pgg_002dscheme_002dsign_002dregion"></a>Method:
+    <strong>pgg-scheme-sign-region</strong> <em>scheme start end
+    &amp;optional cleartext passphrase</em></dt>
+
+    <dd>
+      <p>Make the signature from text between <var>start</var> and
+      <var>end</var>. If the optional third argument
+      <var>cleartext</var> is non-<code>nil</code>, it does not
+      create a detached signature. If signing is successful, it
+      returns <code>t</code>, otherwise <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pgg_002dscheme_002dverify_002dregion" id=
+    "index-pgg_002dscheme_002dverify_002dregion"></a>Method:
+    <strong>pgg-scheme-verify-region</strong> <em>scheme start end
+    &amp;optional signature</em></dt>
+
+    <dd>
+      <p>Verify the current region between <var>start</var> and
+      <var>end</var>. If the optional third argument
+      <var>signature</var> is non-<code>nil</code>, it is treated
+      as the detached signature of the current region. If the
+      signature is successfully verified, it returns
+      <code>t</code>, otherwise <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pgg_002dscheme_002dinsert_002dkey" id=
+    "index-pgg_002dscheme_002dinsert_002dkey"></a>Method:
+    <strong>pgg-scheme-insert-key</strong> <em>scheme</em></dt>
+
+    <dd>
+      <p>Retrieve the user&rsquo;s public key and insert it as
+      ASCII-armored format. On success, it returns <code>t</code>,
+      otherwise <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-pgg_002dscheme_002dsnarf_002dkeys_002dregion" id=
+    "index-pgg_002dscheme_002dsnarf_002dkeys_002dregion"></a>Method:
+    <strong>pgg-scheme-snarf-keys-region</strong> <em>scheme start
+    end</em></dt>
+
+    <dd>
+      <p>Collect public keys in the current region between
+      <var>start</var> and <var>end</var>, and add them into the
+      user&rsquo;s keyring. On success, it returns <code>t</code>,
+      otherwise <code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Getting-output.html#Getting-output"
+    accesskey="n" rel="next">Getting output</a>, Previous: <a href=
+    "Initializing.html#Initializing" accesskey="p" rel=
+    "prev">Initializing</a>, Up: <a href=
+    "Architecture.html#Architecture" accesskey="u" rel=
+    "up">Architecture</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

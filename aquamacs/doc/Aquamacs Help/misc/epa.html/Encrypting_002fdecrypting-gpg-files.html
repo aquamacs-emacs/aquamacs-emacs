@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes EasyPG Assistant 1.0.0.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,155 +16,252 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>EasyPG Assistant User&rsquo;s Manual: Encrypting/decrypting gpg files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="EasyPG Assistant User&rsquo;s Manual: Encrypting/decrypting gpg files">
-<meta name="keywords" content="EasyPG Assistant User&rsquo;s Manual: Encrypting/decrypting gpg files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="GnuPG-version-compatibility.html#GnuPG-version-compatibility" rel="next" title="GnuPG version compatibility">
-<link href="Mail_002dmode-integration.html#Mail_002dmode-integration" rel="prev" title="Mail-mode integration">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>EasyPG Assistant User&rsquo;s Manual:
+  Encrypting/decrypting gpg files</title>
+  <meta name="description" content=
+  "EasyPG Assistant User&rsquo;s Manual: Encrypting/decrypting gpg files" />
+  <meta name="keywords" content=
+  "EasyPG Assistant User&rsquo;s Manual: Encrypting/decrypting gpg files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href=
+  "GnuPG-version-compatibility.html#GnuPG-version-compatibility"
+  rel="next" title="GnuPG version compatibility" />
+  <link href=
+  "Mail_002dmode-integration.html#Mail_002dmode-integration" rel=
+  "prev" title="Mail-mode integration" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Encrypting_002fdecrypting-gpg-files"></a>
-<div class="header">
-<p>
-Previous: <a href="Mail_002dmode-integration.html#Mail_002dmode-integration" accesskey="p" rel="prev">Mail-mode integration</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Encrypting_002fdecrypting-gpg-files-1"></a>
-<h3 class="section">3.6 Encrypting/decrypting gpg files</h3>
-<p>By default, every file whose name ends with <samp>.gpg</samp> will be
-treated as encrypted.  That is, when you open such a file, the
-decrypted text is inserted in the buffer rather than encrypted one.
-Similarly, when you save the buffer to a <samp>foo.gpg</samp> file,
-encrypted data is written.
-</p>
-<p>The file name pattern for encrypted files can be controlled by
-<var>epa-file-name-regexp</var>.
-</p>
-<dl>
-<dt><a name="index-epa_002dfile_002dname_002dregexp"></a>Variable: <strong>epa-file-name-regexp</strong></dt>
-<dd><p>Regexp which matches filenames treated as encrypted.
-</p></dd></dl>
+<body lang="en" xml:lang="en">
+  <a name="Encrypting_002fdecrypting-gpg-files" id=
+  "Encrypting_002fdecrypting-gpg-files"></a>
 
-<p>You can disable this behavior with <kbd>M-x epa-file-disable</kbd>, and
-then get it back with <kbd>M-x epa-file-enable</kbd>.
-</p>
-<dl>
-<dt><a name="index-epa_002dfile_002ddisable"></a>Command: <strong>epa-file-disable</strong></dt>
-<dd><p>Disable automatic encryption/decryption of *.gpg files.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href=
+    "Mail_002dmode-integration.html#Mail_002dmode-integration"
+    accesskey="p" rel="prev">Mail-mode integration</a>, Up:
+    <a href="Commands.html#Commands" accesskey="u" rel=
+    "up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Encrypting_002fdecrypting-gpg-files-1" id=
+  "Encrypting_002fdecrypting-gpg-files-1"></a>
 
-<dl>
-<dt><a name="index-epa_002dfile_002denable"></a>Command: <strong>epa-file-enable</strong></dt>
-<dd><p>Enable automatic encryption/decryption of *.gpg files.
-</p></dd></dl>
+  <h3 class="section">3.6 Encrypting/decrypting gpg files</h3>
 
-<p>By default, <code>epa-file</code> will try to use symmetric encryption, aka
-password-based encryption.  If you want to use public key encryption
-instead, do <kbd>M-x epa-file-select-keys</kbd>, which pops up the key
-selection dialog.
-</p>
-<dl>
-<dt><a name="index-epa_002dfile_002dselect_002dkeys"></a>Command: <strong>epa-file-select-keys</strong></dt>
-<dd><p>Select recipient keys to encrypt the currently visiting file with
-public key encryption.
-</p></dd></dl>
+  <p>By default, every file whose name ends with <samp>.gpg</samp>
+  will be treated as encrypted. That is, when you open such a file,
+  the decrypted text is inserted in the buffer rather than
+  encrypted one. Similarly, when you save the buffer to a
+  <samp>foo.gpg</samp> file, encrypted data is written.</p>
 
-<p>You can also change the default behavior with the variable
-<var>epa-file-select-keys</var>.
-</p>
-<dl>
-<dt><a name="index-epa_002dfile_002dselect_002dkeys-1"></a>Variable: <strong>epa-file-select-keys</strong></dt>
-<dd><p>Control whether or not to pop up the key selection dialog.
-</p></dd></dl>
+  <p>The file name pattern for encrypted files can be controlled by
+  <var>epa-file-name-regexp</var>.</p>
 
-<p>For frequently visited files, it might be a good idea to tell Emacs
-which encryption method should be used through See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Variables.html#File-Variables">File Variables</a> in <cite>the Emacs Manual</cite>.  Use the <code>epa-file-encrypt-to</code> local
-variable for this.
-<a name="index-epa_002dfile_002dencrypt_002dto"></a>
-</p>
-<p>For example, if you want an Elisp file to be encrypted with a
-public key associated with an email address &lsquo;<samp>ueno@unixuser.org</samp>&rsquo;,
-add the following line to the beginning of the file.
-</p>
-<table class="cartouche" border="1"><tr><td>
-<div class="lisp">
-<pre class="lisp">;; -*- epa-file-encrypt-to: (&quot;ueno@unixuser.org&quot;) -*-
-</pre></div>
-</td></tr></table>
+  <dl>
+    <dt><a name="index-epa_002dfile_002dname_002dregexp" id=
+    "index-epa_002dfile_002dname_002dregexp"></a>Variable:
+    <strong>epa-file-name-regexp</strong></dt>
 
-<p>Instead, if you want the file always (regardless of the value of the
-<code>epa-file-select-keys</code> variable) encrypted with symmetric
-encryption, change the line as follows.
-</p>
-<table class="cartouche" border="1"><tr><td>
-<div class="lisp">
-<pre class="lisp">;; -*- epa-file-encrypt-to: nil -*-
-</pre></div>
-</td></tr></table>
+    <dd>
+      <p>Regexp which matches filenames treated as encrypted.</p>
+    </dd>
+  </dl>
 
-<p>Other variables which control the automatic encryption/decryption
-behavior are below.
-</p>
-<dl>
-<dt><a name="index-epa_002dfile_002dcache_002dpassphrase_002dfor_002dsymmetric_002dencryption"></a>Variable: <strong>epa-file-cache-passphrase-for-symmetric-encryption</strong></dt>
-<dd><p>If non-<code>nil</code>, cache passphrase for symmetric encryption.  The
-default value is <code>nil</code>.
-</p></dd></dl>
+  <p>You can disable this behavior with <kbd>M-x
+  epa-file-disable</kbd>, and then get it back with <kbd>M-x
+  epa-file-enable</kbd>.</p>
 
-<dl>
-<dt><a name="index-epa_002dfile_002dinhibit_002dauto_002dsave"></a>Variable: <strong>epa-file-inhibit-auto-save</strong></dt>
-<dd><p>If non-<code>nil</code>, disable auto-saving when opening an encrypted file.
-The default value is <code>t</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-epa_002dfile_002ddisable" id=
+    "index-epa_002dfile_002ddisable"></a>Command:
+    <strong>epa-file-disable</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Mail_002dmode-integration.html#Mail_002dmode-integration" accesskey="p" rel="prev">Mail-mode integration</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Disable automatic encryption/decryption of *.gpg
+      files.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-epa_002dfile_002denable" id=
+    "index-epa_002dfile_002denable"></a>Command:
+    <strong>epa-file-enable</strong></dt>
 
+    <dd>
+      <p>Enable automatic encryption/decryption of *.gpg files.</p>
+    </dd>
+  </dl>
 
+  <p>By default, <code>epa-file</code> will try to use symmetric
+  encryption, aka password-based encryption. If you want to use
+  public key encryption instead, do <kbd>M-x
+  epa-file-select-keys</kbd>, which pops up the key selection
+  dialog.</p>
+
+  <dl>
+    <dt><a name="index-epa_002dfile_002dselect_002dkeys" id=
+    "index-epa_002dfile_002dselect_002dkeys"></a>Command:
+    <strong>epa-file-select-keys</strong></dt>
+
+    <dd>
+      <p>Select recipient keys to encrypt the currently visiting
+      file with public key encryption.</p>
+    </dd>
+  </dl>
+
+  <p>You can also change the default behavior with the variable
+  <var>epa-file-select-keys</var>.</p>
+
+  <dl>
+    <dt><a name="index-epa_002dfile_002dselect_002dkeys-1" id=
+    "index-epa_002dfile_002dselect_002dkeys-1"></a>Variable:
+    <strong>epa-file-select-keys</strong></dt>
+
+    <dd>
+      <p>Control whether or not to pop up the key selection
+      dialog.</p>
+    </dd>
+  </dl>
+
+  <p>For frequently visited files, it might be a good idea to tell
+  Emacs which encryption method should be used through See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Variables.html#File-Variables">
+  File Variables</a> in <cite>the Emacs Manual</cite>. Use the
+  <code>epa-file-encrypt-to</code> local variable for this.
+  <a name="index-epa_002dfile_002dencrypt_002dto" id=
+  "index-epa_002dfile_002dencrypt_002dto"></a></p>
+
+  <p>For example, if you want an Elisp file to be encrypted with a
+  public key associated with an email address
+  &lsquo;<samp>ueno@unixuser.org</samp>&rsquo;, add the following
+  line to the beginning of the file.</p>
+
+  <table class="cartouche" border="1">
+    <tr>
+      <td>
+        <div class="lisp">
+          <pre class="lisp">
+;; -*- epa-file-encrypt-to: ("ueno@unixuser.org") -*-
+</pre>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <p>Instead, if you want the file always (regardless of the value
+  of the <code>epa-file-select-keys</code> variable) encrypted with
+  symmetric encryption, change the line as follows.</p>
+
+  <table class="cartouche" border="1">
+    <tr>
+      <td>
+        <div class="lisp">
+          <pre class="lisp">
+;; -*- epa-file-encrypt-to: nil -*-
+</pre>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <p>Other variables which control the automatic
+  encryption/decryption behavior are below.</p>
+
+  <dl>
+    <dt><a name=
+    "index-epa_002dfile_002dcache_002dpassphrase_002dfor_002dsymmetric_002dencryption"
+    id=
+    "index-epa_002dfile_002dcache_002dpassphrase_002dfor_002dsymmetric_002dencryption">
+    </a>Variable:
+    <strong>epa-file-cache-passphrase-for-symmetric-encryption</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, cache passphrase for symmetric
+      encryption. The default value is <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-epa_002dfile_002dinhibit_002dauto_002dsave"
+    id=
+    "index-epa_002dfile_002dinhibit_002dauto_002dsave"></a>Variable:
+    <strong>epa-file-inhibit-auto-save</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, disable auto-saving when opening
+      an encrypted file. The default value is <code>t</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Mail_002dmode-integration.html#Mail_002dmode-integration"
+    accesskey="p" rel="prev">Mail-mode integration</a>, Up:
+    <a href="Commands.html#Commands" accesskey="u" rel=
+    "up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

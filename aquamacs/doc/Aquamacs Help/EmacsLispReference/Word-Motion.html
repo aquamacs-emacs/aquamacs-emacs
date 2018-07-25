@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,160 +19,254 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Word Motion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Word Motion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Word Motion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Motion.html#Motion" rel="up" title="Motion">
-<link href="Buffer-End-Motion.html#Buffer-End-Motion" rel="next" title="Buffer End Motion">
-<link href="Character-Motion.html#Character-Motion" rel="prev" title="Character Motion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Word Motion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Word Motion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Word Motion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Motion.html#Motion" rel="up" title="Motion" />
+  <link href="Buffer-End-Motion.html#Buffer-End-Motion" rel="next"
+  title="Buffer End Motion" />
+  <link href="Character-Motion.html#Character-Motion" rel="prev"
+  title="Character Motion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Word-Motion" id="Word-Motion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Buffer-End-Motion.html#Buffer-End-Motion"
+    accesskey="n" rel="next">Buffer End Motion</a>, Previous:
+    <a href="Character-Motion.html#Character-Motion" accesskey="p"
+    rel="prev">Character Motion</a>, Up: <a href=
+    "Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Motion-by-Words" id="Motion-by-Words"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Word-Motion"></a>
-<div class="header">
-<p>
-Next: <a href="Buffer-End-Motion.html#Buffer-End-Motion" accesskey="n" rel="next">Buffer End Motion</a>, Previous: <a href="Character-Motion.html#Character-Motion" accesskey="p" rel="prev">Character Motion</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Motion-by-Words"></a>
-<h4 class="subsection">29.2.2 Motion by Words</h4>
+  <h4 class="subsection">29.2.2 Motion by Words</h4>
 
-<p>The functions for parsing words described below use the syntax table
-and <code>char-script-table</code> to decide whether a given character is
-part of a word.  See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>, and see <a href="Character-Properties.html#Character-Properties">Character Properties</a>.
-</p>
-<dl>
-<dt><a name="index-forward_002dword"></a>Command: <strong>forward-word</strong> <em>&amp;optional count</em></dt>
-<dd><p>This function moves point forward <var>count</var> words (or backward if
-<var>count</var> is negative).  If <var>count</var> is omitted or <code>nil</code>, it
-defaults to 1.  In an interactive call, <var>count</var> is specified by
-the numeric prefix argument.
-</p>
-<p>&ldquo;Moving one word&rdquo; means moving until point crosses a
-word-constituent character, which indicates the beginning of a word,
-and then continue moving until the word ends.  By default, characters
-that begin and end words, known as <em>word boundaries</em>, are defined
-by the current buffer&rsquo;s syntax table (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>), but
-modes can override that by setting up a suitable
-<code>find-word-boundary-function-table</code>, described below.  Characters
-that belong to different scripts (as defined by
-<code>char-syntax-table</code>), also define a word boundary
-(see <a href="Character-Properties.html#Character-Properties">Character Properties</a>).  In any case, this function cannot
-move point past the boundary of the accessible portion of the buffer,
-or across a field boundary (see <a href="Fields.html#Fields">Fields</a>).  The most common case of
-a field boundary is the end of the prompt in the minibuffer.
-</p>
-<p>If it is possible to move <var>count</var> words, without being stopped
-prematurely by the buffer boundary or a field boundary, the value is
-<code>t</code>.  Otherwise, the return value is <code>nil</code> and point stops at
-the buffer boundary or field boundary.
-</p>
-<p>If <code>inhibit-field-text-motion</code> is non-<code>nil</code>,
-this function ignores field boundaries.
-</p>
-</dd></dl>
+  <p>The functions for parsing words described below use the syntax
+  table and <code>char-script-table</code> to decide whether a
+  given character is part of a word. See <a href=
+  "Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>, and see
+  <a href=
+  "Character-Properties.html#Character-Properties">Character
+  Properties</a>.</p>
 
-<dl>
-<dt><a name="index-backward_002dword"></a>Command: <strong>backward-word</strong> <em>&amp;optional count</em></dt>
-<dd><p>This function is just like <code>forward-word</code>, except that it moves
-backward until encountering the front of a word, rather than forward.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-forward_002dword" id=
+    "index-forward_002dword"></a>Command:
+    <strong>forward-word</strong> <em>&amp;optional count</em></dt>
 
-<dl>
-<dt><a name="index-words_002dinclude_002descapes"></a>User Option: <strong>words-include-escapes</strong></dt>
-<dd><p>This variable affects the behavior of <code>forward-word</code> and
-<code>backward-word</code>, and everything that uses them.  If it is
-non-<code>nil</code>, then characters in the escape and character-quote
-syntax classes count as part of words.  Otherwise, they do not.
-</p></dd></dl>
+    <dd>
+      <p>This function moves point forward <var>count</var> words
+      (or backward if <var>count</var> is negative). If
+      <var>count</var> is omitted or <code>nil</code>, it defaults
+      to 1. In an interactive call, <var>count</var> is specified
+      by the numeric prefix argument.</p>
 
-<dl>
-<dt><a name="index-inhibit_002dfield_002dtext_002dmotion"></a>Variable: <strong>inhibit-field-text-motion</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, certain motion functions including
-<code>forward-word</code>, <code>forward-sentence</code>, and
-<code>forward-paragraph</code> ignore field boundaries.
-</p></dd></dl>
+      <p>&ldquo;Moving one word&rdquo; means moving until point
+      crosses a word-constituent character, which indicates the
+      beginning of a word, and then continue moving until the word
+      ends. By default, characters that begin and end words, known
+      as <em>word boundaries</em>, are defined by the current
+      buffer&rsquo;s syntax table (see <a href=
+      "Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class
+      Table</a>), but modes can override that by setting up a
+      suitable <code>find-word-boundary-function-table</code>,
+      described below. Characters that belong to different scripts
+      (as defined by <code>char-syntax-table</code>), also define a
+      word boundary (see <a href=
+      "Character-Properties.html#Character-Properties">Character
+      Properties</a>). In any case, this function cannot move point
+      past the boundary of the accessible portion of the buffer, or
+      across a field boundary (see <a href=
+      "Fields.html#Fields">Fields</a>). The most common case of a
+      field boundary is the end of the prompt in the
+      minibuffer.</p>
 
-<dl>
-<dt><a name="index-find_002dword_002dboundary_002dfunction_002dtable"></a>Variable: <strong>find-word-boundary-function-table</strong></dt>
-<dd><p>This variable affects the behavior of <code>forward-word</code> and
-<code>backward-word</code>, and everything that uses them.  Its value is a
-char-table (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>) of functions to search for word
-boundaries.  If a character has a non-<code>nil</code> entry in this table,
-then when a word starts or ends with that character, the corresponding
-function will be called with 2 arguments: <var>pos</var> and <var>limit</var>.
-The function should return the position of the other word boundary.
-Specifically, if <var>pos</var> is smaller than <var>limit</var>, then <var>pos</var>
-is at the beginning of a word, and the function should return the
-position after the last character of the word; otherwise, <var>pos</var> is
-at the last character of a word, and the function should return the
-position of that word&rsquo;s first character.
-</p></dd></dl>
+      <p>If it is possible to move <var>count</var> words, without
+      being stopped prematurely by the buffer boundary or a field
+      boundary, the value is <code>t</code>. Otherwise, the return
+      value is <code>nil</code> and point stops at the buffer
+      boundary or field boundary.</p>
 
-<dl>
-<dt><a name="index-forward_002dword_002dstrictly"></a>Function: <strong>forward-word-strictly</strong> <em>&amp;optional count</em></dt>
-<dd><p>This function is like <code>forward-word</code>, but it is not affected by
-<code>find-word-boundary-function-table</code>.  Lisp programs that should
-not change behavior when word movement is modified by modes which set
-that table, such as <code>subword-mode</code>, should use this function
-instead of <code>forward-word</code>.
-</p></dd></dl>
+      <p>If <code>inhibit-field-text-motion</code> is
+      non-<code>nil</code>, this function ignores field
+      boundaries.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-backward_002dword_002dstrictly"></a>Function: <strong>backward-word-strictly</strong> <em>&amp;optional count</em></dt>
-<dd><p>This function is like <code>backward-word</code>, but it is not affected by
-<code>find-word-boundary-function-table</code>.  Like with
-<code>forward-word-strictly</code>, use this function instead of
-<code>backward-word</code> when movement by words should only consider
-syntax tables.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-backward_002dword" id=
+    "index-backward_002dword"></a>Command:
+    <strong>backward-word</strong> <em>&amp;optional
+    count</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Buffer-End-Motion.html#Buffer-End-Motion" accesskey="n" rel="next">Buffer End Motion</a>, Previous: <a href="Character-Motion.html#Character-Motion" accesskey="p" rel="prev">Character Motion</a>, Up: <a href="Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function is just like <code>forward-word</code>,
+      except that it moves backward until encountering the front of
+      a word, rather than forward.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-words_002dinclude_002descapes" id=
+    "index-words_002dinclude_002descapes"></a>User Option:
+    <strong>words-include-escapes</strong></dt>
 
+    <dd>
+      <p>This variable affects the behavior of
+      <code>forward-word</code> and <code>backward-word</code>, and
+      everything that uses them. If it is non-<code>nil</code>,
+      then characters in the escape and character-quote syntax
+      classes count as part of words. Otherwise, they do not.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-inhibit_002dfield_002dtext_002dmotion" id=
+    "index-inhibit_002dfield_002dtext_002dmotion"></a>Variable:
+    <strong>inhibit-field-text-motion</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, certain motion
+      functions including <code>forward-word</code>,
+      <code>forward-sentence</code>, and
+      <code>forward-paragraph</code> ignore field boundaries.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-find_002dword_002dboundary_002dfunction_002dtable" id=
+    "index-find_002dword_002dboundary_002dfunction_002dtable"></a>Variable:
+    <strong>find-word-boundary-function-table</strong></dt>
+
+    <dd>
+      <p>This variable affects the behavior of
+      <code>forward-word</code> and <code>backward-word</code>, and
+      everything that uses them. Its value is a char-table (see
+      <a href=
+      "Char_002dTables.html#Char_002dTables">Char-Tables</a>) of
+      functions to search for word boundaries. If a character has a
+      non-<code>nil</code> entry in this table, then when a word
+      starts or ends with that character, the corresponding
+      function will be called with 2 arguments: <var>pos</var> and
+      <var>limit</var>. The function should return the position of
+      the other word boundary. Specifically, if <var>pos</var> is
+      smaller than <var>limit</var>, then <var>pos</var> is at the
+      beginning of a word, and the function should return the
+      position after the last character of the word; otherwise,
+      <var>pos</var> is at the last character of a word, and the
+      function should return the position of that word&rsquo;s
+      first character.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-forward_002dword_002dstrictly" id=
+    "index-forward_002dword_002dstrictly"></a>Function:
+    <strong>forward-word-strictly</strong> <em>&amp;optional
+    count</em></dt>
+
+    <dd>
+      <p>This function is like <code>forward-word</code>, but it is
+      not affected by
+      <code>find-word-boundary-function-table</code>. Lisp programs
+      that should not change behavior when word movement is
+      modified by modes which set that table, such as
+      <code>subword-mode</code>, should use this function instead
+      of <code>forward-word</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-backward_002dword_002dstrictly" id=
+    "index-backward_002dword_002dstrictly"></a>Function:
+    <strong>backward-word-strictly</strong> <em>&amp;optional
+    count</em></dt>
+
+    <dd>
+      <p>This function is like <code>backward-word</code>, but it
+      is not affected by
+      <code>find-word-boundary-function-table</code>. Like with
+      <code>forward-word-strictly</code>, use this function instead
+      of <code>backward-word</code> when movement by words should
+      only consider syntax tables.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Buffer-End-Motion.html#Buffer-End-Motion"
+    accesskey="n" rel="next">Buffer End Motion</a>, Previous:
+    <a href="Character-Motion.html#Character-Motion" accesskey="p"
+    rel="prev">Character Motion</a>, Up: <a href=
+    "Motion.html#Motion" accesskey="u" rel="up">Motion</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

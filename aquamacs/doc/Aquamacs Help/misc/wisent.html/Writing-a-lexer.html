@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,118 +16,162 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Writing a lexer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Writing a lexer">
-<meta name="keywords" content="Wisent Parser Development: Writing a lexer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Wisent-Parsing.html#Wisent-Parsing" rel="up" title="Wisent Parsing">
-<link href="Actions-goodies.html#Actions-goodies" rel="next" title="Actions goodies">
-<link href="Wisent-Parsing.html#Wisent-Parsing" rel="prev" title="Wisent Parsing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Writing a lexer</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Writing a lexer" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Writing a lexer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Wisent-Parsing.html#Wisent-Parsing" rel="up" title=
+  "Wisent Parsing" />
+  <link href="Actions-goodies.html#Actions-goodies" rel="next"
+  title="Actions goodies" />
+  <link href="Wisent-Parsing.html#Wisent-Parsing" rel="prev" title=
+  "Wisent Parsing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Writing-a-lexer"></a>
-<div class="header">
-<p>
-Next: <a href="Actions-goodies.html#Actions-goodies" accesskey="n" rel="next">Actions goodies</a>, Up: <a href="Wisent-Parsing.html#Wisent-Parsing" accesskey="u" rel="up">Wisent Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="What-the-parser-must-receive"></a>
-<h3 class="section">3.1 What the parser must receive</h3>
+<body lang="en" xml:lang="en">
+  <a name="Writing-a-lexer" id="Writing-a-lexer"></a>
 
-<p>It is important to understand that the parser does not parse
-characters, but lexical tokens, and does not know anything about
-characters in text streams!
-</p>
-<a name="index-lexical-analysis"></a>
-<a name="index-lexer"></a>
-<a name="index-scanner"></a>
-<p>Reading input data to produce lexical tokens is performed by a lexer
-(also called a scanner) in a lexical analysis step, before the syntax
-analysis step performed by the parser.  The parser automatically calls
-the lexer when it needs the next token to parse.
-</p>
-<a name="index-lexical-tokens"></a>
-<p>A Wisent&rsquo;s lexer is an Emacs Lisp function with no argument.  It must
-return a valid lexical token of the form:
-</p>
-<p><code>(<var>token-class value</var> [<var>start</var> . <var>end</var>])</code>
-</p>
-<dl compact="compact">
-<dt><var>token-class</var></dt>
-<dd><p>Is a category of lexical token identifying a terminal as specified in
-the grammar (see <a href="Wisent-Grammar.html#Wisent-Grammar">Wisent Grammar</a>).  It can be a symbol or a character
-literal.
-</p>
-</dd>
-<dt><var>value</var></dt>
-<dd><p>Is the value of the lexical token.  It can be of any valid Emacs Lisp
-data type.
-</p>
-</dd>
-<dt><var>start</var></dt>
-<dt><var>end</var></dt>
-<dd><p>Are the optional beginning and ending positions of <var>value</var> in the
-input stream.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Actions-goodies.html#Actions-goodies"
+    accesskey="n" rel="next">Actions goodies</a>, Up: <a href=
+    "Wisent-Parsing.html#Wisent-Parsing" accesskey="u" rel=
+    "up">Wisent Parsing</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="What-the-parser-must-receive" id=
+  "What-the-parser-must-receive"></a>
 
-<p>When there are no more tokens to read the lexer must return the token
-<code>(list wisent-eoi-term)</code> to each request.
-</p>
-<a name="index-wisent_002deoi_002dterm"></a>
-<dl>
-<dt><a name="index-wisent_002deoi_002dterm-1"></a>Variable: <strong>wisent-eoi-term</strong></dt>
-<dd><p>Predefined constant, End-Of-Input terminal symbol.
-</p></dd></dl>
+  <h3 class="section">3.1 What the parser must receive</h3>
 
-<p><code>wisent-lex</code> is an example of a lexer that reads lexical tokens
-produced by a <i>Semantic</i> lexer, and translates them into lexical tokens
-suitable to the Wisent parser.  See also <a href="Wisent-Lex.html#Wisent-Lex">Wisent Lex</a>.
-</p>
-<p>To call the lexer in a semantic action use the function
-<code>wisent-lexer</code>.  See also <a href="Actions-goodies.html#Actions-goodies">Actions goodies</a>.
-</p>
+  <p>It is important to understand that the parser does not parse
+  characters, but lexical tokens, and does not know anything about
+  characters in text streams!</p><a name="index-lexical-analysis"
+  id="index-lexical-analysis"></a> <a name="index-lexer" id=
+  "index-lexer"></a> <a name="index-scanner" id=
+  "index-scanner"></a>
 
+  <p>Reading input data to produce lexical tokens is performed by a
+  lexer (also called a scanner) in a lexical analysis step, before
+  the syntax analysis step performed by the parser. The parser
+  automatically calls the lexer when it needs the next token to
+  parse.</p><a name="index-lexical-tokens" id=
+  "index-lexical-tokens"></a>
 
+  <p>A Wisent&rsquo;s lexer is an Emacs Lisp function with no
+  argument. It must return a valid lexical token of the form:</p>
 
+  <p><code>(<var>token-class value</var> [<var>start</var> .
+  <var>end</var>])</code></p>
+
+  <dl compact="compact">
+    <dt><var>token-class</var></dt>
+
+    <dd>
+      <p>Is a category of lexical token identifying a terminal as
+      specified in the grammar (see <a href=
+      "Wisent-Grammar.html#Wisent-Grammar">Wisent Grammar</a>). It
+      can be a symbol or a character literal.</p>
+    </dd>
+
+    <dt><var>value</var></dt>
+
+    <dd>
+      <p>Is the value of the lexical token. It can be of any valid
+      Emacs Lisp data type.</p>
+    </dd>
+
+    <dt><var>start</var></dt>
+
+    <dt><var>end</var></dt>
+
+    <dd>
+      <p>Are the optional beginning and ending positions of
+      <var>value</var> in the input stream.</p>
+    </dd>
+  </dl>
+
+  <p>When there are no more tokens to read the lexer must return
+  the token <code>(list wisent-eoi-term)</code> to each
+  request.</p><a name="index-wisent_002deoi_002dterm" id=
+  "index-wisent_002deoi_002dterm"></a>
+
+  <dl>
+    <dt><a name="index-wisent_002deoi_002dterm-1" id=
+    "index-wisent_002deoi_002dterm-1"></a>Variable:
+    <strong>wisent-eoi-term</strong></dt>
+
+    <dd>
+      <p>Predefined constant, End-Of-Input terminal symbol.</p>
+    </dd>
+  </dl>
+
+  <p><code>wisent-lex</code> is an example of a lexer that reads
+  lexical tokens produced by a <i>Semantic</i> lexer, and
+  translates them into lexical tokens suitable to the Wisent
+  parser. See also <a href="Wisent-Lex.html#Wisent-Lex">Wisent
+  Lex</a>.</p>
+
+  <p>To call the lexer in a semantic action use the function
+  <code>wisent-lexer</code>. See also <a href=
+  "Actions-goodies.html#Actions-goodies">Actions goodies</a>.</p>
 </body>
 </html>

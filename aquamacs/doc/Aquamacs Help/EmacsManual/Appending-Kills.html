@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,123 +20,165 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Appending Kills</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Appending Kills">
-<meta name="keywords" content="GNU Emacs Manual: Appending Kills">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Yanking.html#Yanking" rel="up" title="Yanking">
-<link href="Cut-and-Paste.html#Cut-and-Paste" rel="next" title="Cut and Paste">
-<link href="Earlier-Kills.html#Earlier-Kills" rel="prev" title="Earlier Kills">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Appending Kills</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Appending Kills" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Appending Kills" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Yanking.html#Yanking" rel="up" title="Yanking" />
+  <link href="Cut-and-Paste.html#Cut-and-Paste" rel="next" title=
+  "Cut and Paste" />
+  <link href="Earlier-Kills.html#Earlier-Kills" rel="prev" title=
+  "Earlier Kills" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Appending-Kills" id="Appending-Kills"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Earlier-Kills.html#Earlier-Kills"
+    accesskey="p" rel="prev">Earlier Kills</a>, Up: <a href=
+    "Yanking.html#Yanking" accesskey="u" rel="up">Yanking</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Appending-Kills-1" id="Appending-Kills-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Appending-Kills"></a>
-<div class="header">
-<p>
-Previous: <a href="Earlier-Kills.html#Earlier-Kills" accesskey="p" rel="prev">Earlier Kills</a>, Up: <a href="Yanking.html#Yanking" accesskey="u" rel="up">Yanking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Appending-Kills-1"></a>
-<h4 class="subsection">12.2.3 Appending Kills</h4>
+  <h4 class="subsection">12.2.3 Appending Kills</h4><a name=
+  "index-appending-kills-in-the-ring" id=
+  "index-appending-kills-in-the-ring"></a>
 
-<a name="index-appending-kills-in-the-ring"></a>
-<p>Normally, each kill command pushes a new entry onto the kill ring.
-However, two or more kill commands in a row combine their text into a
-single entry, so that a single <kbd>C-y</kbd> yanks all the text as a unit,
-just as it was before it was killed.
-</p>
-<p>Thus, if you want to yank text as a unit, you need not kill all of it
-with one command; you can keep killing line after line, or word after
-word, until you have killed it all, and you can still get it all back at
-once.
-</p>
-<p>Commands that kill forward from point add onto the end of the previous
-killed text.  Commands that kill backward from point add text onto the
-beginning.  This way, any sequence of mixed forward and backward kill
-commands puts all the killed text into one entry without rearrangement.
-Numeric arguments do not break the sequence of appending kills.  For
-example, suppose the buffer contains this text:
-</p>
-<div class="example">
-<pre class="example">This is a line &lowast;of sample text.
-</pre></div>
+  <p>Normally, each kill command pushes a new entry onto the kill
+  ring. However, two or more kill commands in a row combine their
+  text into a single entry, so that a single <kbd>C-y</kbd> yanks
+  all the text as a unit, just as it was before it was killed.</p>
 
-<p>with point shown by &lowast;.  If you type <kbd>M-d M-<span class="key">DEL</span> M-d
-M-<span class="key">DEL</span></kbd>, killing alternately forward and backward, you end up with
-&lsquo;<samp>a line of sample</samp>&rsquo; as one entry in the kill ring, and &lsquo;<samp>This
-is&nbsp;&nbsp;text.</samp>&rsquo; in the buffer.  (Note the double space between &lsquo;<samp>is</samp>&rsquo;
-and &lsquo;<samp>text</samp>&rsquo;, which you can clean up with <kbd>M-<span class="key">SPC</span></kbd> or
-<kbd>M-q</kbd>.)
-</p>
-<p>Another way to kill the same text is to move back two words with
-<kbd>M-b M-b</kbd>, then kill all four words forward with <kbd>C-u M-d</kbd>.
-This produces exactly the same results in the buffer and in the kill
-ring.  <kbd>M-f M-f C-u M-<span class="key">DEL</span></kbd> kills the same text, all going
-backward; once again, the result is the same.  The text in the kill ring
-entry always has the same order that it had in the buffer before you
-killed it.
-</p>
-<a name="index-C_002dM_002dw"></a>
-<a name="index-append_002dnext_002dkill"></a>
-<p>If a kill command is separated from the last kill command by other
-commands (not just numeric arguments), it starts a new entry on the
-kill ring.  But you can force it to combine with the last killed text,
-by typing <kbd>C-M-w</kbd> (<code>append-next-kill</code>) right beforehand.  The
-<kbd>C-M-w</kbd> tells its following command, if it is a kill command, to
-treat the kill as part of the sequence of previous kills.  As usual,
-the kill is appended to the previous killed text if the command kills
-forward, and prepended if the command kills backward.  In this way,
-you can kill several separated pieces of text and accumulate them to
-be yanked back in one place.
-</p>
-<p>A kill command following <kbd>M-w</kbd> (<code>kill-ring-save</code>) does not
-append to the text that <kbd>M-w</kbd> copied into the kill ring.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Earlier-Kills.html#Earlier-Kills" accesskey="p" rel="prev">Earlier Kills</a>, Up: <a href="Yanking.html#Yanking" accesskey="u" rel="up">Yanking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Thus, if you want to yank text as a unit, you need not kill
+  all of it with one command; you can keep killing line after line,
+  or word after word, until you have killed it all, and you can
+  still get it all back at once.</p>
 
+  <p>Commands that kill forward from point add onto the end of the
+  previous killed text. Commands that kill backward from point add
+  text onto the beginning. This way, any sequence of mixed forward
+  and backward kill commands puts all the killed text into one
+  entry without rearrangement. Numeric arguments do not break the
+  sequence of appending kills. For example, suppose the buffer
+  contains this text:</p>
 
+  <div class="example">
+    <pre class="example">
+This is a line &lowast;of sample text.
+</pre>
+  </div>
 
+  <p>with point shown by &lowast;. If you type <kbd>M-d
+  M-<span class="key">DEL</span> M-d M-<span class=
+  "key">DEL</span></kbd>, killing alternately forward and backward,
+  you end up with &lsquo;<samp>a line of sample</samp>&rsquo; as
+  one entry in the kill ring, and &lsquo;<samp>This
+  is&nbsp;&nbsp;text.</samp>&rsquo; in the buffer. (Note the double
+  space between &lsquo;<samp>is</samp>&rsquo; and
+  &lsquo;<samp>text</samp>&rsquo;, which you can clean up with
+  <kbd>M-<span class="key">SPC</span></kbd> or <kbd>M-q</kbd>.)</p>
+
+  <p>Another way to kill the same text is to move back two words
+  with <kbd>M-b M-b</kbd>, then kill all four words forward with
+  <kbd>C-u M-d</kbd>. This produces exactly the same results in the
+  buffer and in the kill ring. <kbd>M-f M-f C-u M-<span class=
+  "key">DEL</span></kbd> kills the same text, all going backward;
+  once again, the result is the same. The text in the kill ring
+  entry always has the same order that it had in the buffer before
+  you killed it.</p><a name="index-C_002dM_002dw" id=
+  "index-C_002dM_002dw"></a> <a name=
+  "index-append_002dnext_002dkill" id=
+  "index-append_002dnext_002dkill"></a>
+
+  <p>If a kill command is separated from the last kill command by
+  other commands (not just numeric arguments), it starts a new
+  entry on the kill ring. But you can force it to combine with the
+  last killed text, by typing <kbd>C-M-w</kbd>
+  (<code>append-next-kill</code>) right beforehand. The
+  <kbd>C-M-w</kbd> tells its following command, if it is a kill
+  command, to treat the kill as part of the sequence of previous
+  kills. As usual, the kill is appended to the previous killed text
+  if the command kills forward, and prepended if the command kills
+  backward. In this way, you can kill several separated pieces of
+  text and accumulate them to be yanked back in one place.</p>
+
+  <p>A kill command following <kbd>M-w</kbd>
+  (<code>kill-ring-save</code>) does not append to the text that
+  <kbd>M-w</kbd> copied into the kill ring.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Earlier-Kills.html#Earlier-Kills"
+    accesskey="p" rel="prev">Earlier Kills</a>, Up: <a href=
+    "Yanking.html#Yanking" accesskey="u" rel="up">Yanking</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

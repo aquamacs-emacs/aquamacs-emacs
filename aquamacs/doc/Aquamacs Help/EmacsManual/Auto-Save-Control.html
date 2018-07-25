@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,110 +20,157 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Auto Save Control</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Auto Save Control">
-<meta name="keywords" content="GNU Emacs Manual: Auto Save Control">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Auto-Save.html#Auto-Save" rel="up" title="Auto Save">
-<link href="Recover.html#Recover" rel="next" title="Recover">
-<link href="Auto-Save-Files.html#Auto-Save-Files" rel="prev" title="Auto Save Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Auto Save Control</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Auto Save Control" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Auto Save Control" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Auto-Save.html#Auto-Save" rel="up" title=
+  "Auto Save" />
+  <link href="Recover.html#Recover" rel="next" title="Recover" />
+  <link href="Auto-Save-Files.html#Auto-Save-Files" rel="prev"
+  title="Auto Save Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Auto-Save-Control" id="Auto-Save-Control"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Recover.html#Recover" accesskey="n" rel=
+    "next">Recover</a>, Previous: <a href=
+    "Auto-Save-Files.html#Auto-Save-Files" accesskey="p" rel=
+    "prev">Auto Save Files</a>, Up: <a href=
+    "Auto-Save.html#Auto-Save" accesskey="u" rel="up">Auto Save</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Controlling-Auto_002dSaving" id=
+  "Controlling-Auto_002dSaving"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Auto-Save-Control"></a>
-<div class="header">
-<p>
-Next: <a href="Recover.html#Recover" accesskey="n" rel="next">Recover</a>, Previous: <a href="Auto-Save-Files.html#Auto-Save-Files" accesskey="p" rel="prev">Auto Save Files</a>, Up: <a href="Auto-Save.html#Auto-Save" accesskey="u" rel="up">Auto Save</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Controlling-Auto_002dSaving"></a>
-<h4 class="subsection">18.6.2 Controlling Auto-Saving</h4>
+  <h4 class="subsection">18.6.2 Controlling
+  Auto-Saving</h4><a name="index-auto_002dsave_002ddefault" id=
+  "index-auto_002dsave_002ddefault"></a> <a name=
+  "index-auto_002dsave_002dmode" id=
+  "index-auto_002dsave_002dmode"></a>
 
-<a name="index-auto_002dsave_002ddefault"></a>
-<a name="index-auto_002dsave_002dmode"></a>
-<p>Each time you visit a file, auto-saving is turned on for that file&rsquo;s
-buffer if the variable <code>auto-save-default</code> is non-<code>nil</code> (but
-not in batch mode; see <a href="Initial-Options.html#Initial-Options">Initial Options</a>).  The default for this
-variable is <code>t</code>, so auto-saving is the usual practice for
-file-visiting buffers.  To toggle auto-saving in the current buffer,
-type <kbd>M-x auto-save-mode</kbd>.  Auto Save mode acts as a buffer-local
-minor mode (see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>).
-</p>
-<a name="index-auto_002dsave_002dinterval"></a>
-<p>Emacs auto-saves periodically based on how many characters you have
-typed since the last auto-save.  The variable
-<code>auto-save-interval</code> specifies how many characters there are
-between auto-saves.  By default, it is 300.  Emacs doesn&rsquo;t accept
-values that are too small: if you customize <code>auto-save-interval</code>
-to a value less than 20, Emacs will behave as if the value is 20.
-</p>
-<a name="index-auto_002dsave_002dtimeout"></a>
-<p>Auto-saving also takes place when you stop typing for a while.  By
-default, it does this after 30 seconds of idleness (at this time,
-Emacs may also perform garbage collection; see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Garbage-Collection.html#Garbage-Collection">Garbage
-Collection</a> in <cite>The Emacs Lisp Reference Manual</cite>).  To change
-this interval, customize the variable <code>auto-save-timeout</code>.  The
-actual time period is longer if the current buffer is long; this is a
-heuristic which aims to keep out of your way when you are editing long
-buffers, in which auto-save takes an appreciable amount of time.
-Auto-saving during idle periods accomplishes two things: first, it
-makes sure all your work is saved if you go away from the terminal for
-a while; second, it may avoid some auto-saving while you are actually
-typing.
-</p>
-<p>Emacs also does auto-saving whenever it gets a fatal error.  This
-includes killing the Emacs job with a shell command such as &lsquo;<samp>kill
-%emacs</samp>&rsquo;, or disconnecting a phone line or network connection.
-</p>
-<a name="index-do_002dauto_002dsave"></a>
-<p>You can perform an auto-save explicitly with the command <kbd>M-x
-do-auto-save</kbd>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Recover.html#Recover" accesskey="n" rel="next">Recover</a>, Previous: <a href="Auto-Save-Files.html#Auto-Save-Files" accesskey="p" rel="prev">Auto Save Files</a>, Up: <a href="Auto-Save.html#Auto-Save" accesskey="u" rel="up">Auto Save</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Each time you visit a file, auto-saving is turned on for that
+  file&rsquo;s buffer if the variable
+  <code>auto-save-default</code> is non-<code>nil</code> (but not
+  in batch mode; see <a href=
+  "Initial-Options.html#Initial-Options">Initial Options</a>). The
+  default for this variable is <code>t</code>, so auto-saving is
+  the usual practice for file-visiting buffers. To toggle
+  auto-saving in the current buffer, type <kbd>M-x
+  auto-save-mode</kbd>. Auto Save mode acts as a buffer-local minor
+  mode (see <a href="Minor-Modes.html#Minor-Modes">Minor
+  Modes</a>).</p><a name="index-auto_002dsave_002dinterval" id=
+  "index-auto_002dsave_002dinterval"></a>
 
+  <p>Emacs auto-saves periodically based on how many characters you
+  have typed since the last auto-save. The variable
+  <code>auto-save-interval</code> specifies how many characters
+  there are between auto-saves. By default, it is 300. Emacs
+  doesn&rsquo;t accept values that are too small: if you customize
+  <code>auto-save-interval</code> to a value less than 20, Emacs
+  will behave as if the value is 20.</p><a name=
+  "index-auto_002dsave_002dtimeout" id=
+  "index-auto_002dsave_002dtimeout"></a>
 
+  <p>Auto-saving also takes place when you stop typing for a while.
+  By default, it does this after 30 seconds of idleness (at this
+  time, Emacs may also perform garbage collection; see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Garbage-Collection.html#Garbage-Collection">
+  Garbage Collection</a> in <cite>The Emacs Lisp Reference
+  Manual</cite>). To change this interval, customize the variable
+  <code>auto-save-timeout</code>. The actual time period is longer
+  if the current buffer is long; this is a heuristic which aims to
+  keep out of your way when you are editing long buffers, in which
+  auto-save takes an appreciable amount of time. Auto-saving during
+  idle periods accomplishes two things: first, it makes sure all
+  your work is saved if you go away from the terminal for a while;
+  second, it may avoid some auto-saving while you are actually
+  typing.</p>
 
+  <p>Emacs also does auto-saving whenever it gets a fatal error.
+  This includes killing the Emacs job with a shell command such as
+  &lsquo;<samp>kill %emacs</samp>&rsquo;, or disconnecting a phone
+  line or network connection.</p><a name=
+  "index-do_002dauto_002dsave" id="index-do_002dauto_002dsave"></a>
+
+  <p>You can perform an auto-save explicitly with the command
+  <kbd>M-x do-auto-save</kbd>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Recover.html#Recover" accesskey="n" rel=
+    "next">Recover</a>, Previous: <a href=
+    "Auto-Save-Files.html#Auto-Save-Files" accesskey="p" rel=
+    "prev">Auto Save Files</a>, Up: <a href=
+    "Auto-Save.html#Auto-Save" accesskey="u" rel="up">Auto Save</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

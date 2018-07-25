@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,153 +14,195 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Virtual Groups</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Virtual Groups">
-<meta name="keywords" content="Gnus Manual: Virtual Groups">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Combined-Groups.html#Combined-Groups" rel="up" title="Combined Groups">
-<link href="Email-Based-Diary.html#Email-Based-Diary" rel="next" title="Email Based Diary">
-<link href="Combined-Groups.html#Combined-Groups" rel="prev" title="Combined Groups">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Virtual Groups</title>
+  <meta name="description" content="Gnus Manual: Virtual Groups" />
+  <meta name="keywords" content="Gnus Manual: Virtual Groups" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Combined-Groups.html#Combined-Groups" rel="up" title=
+  "Combined Groups" />
+  <link href="Email-Based-Diary.html#Email-Based-Diary" rel="next"
+  title="Email Based Diary" />
+  <link href="Combined-Groups.html#Combined-Groups" rel="prev"
+  title="Combined Groups" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Virtual-Groups"></a>
-<div class="header">
-<p>
-Up: <a href="Combined-Groups.html#Combined-Groups" accesskey="u" rel="up">Combined Groups</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Virtual-Groups-1"></a>
-<h4 class="subsection">6.7.1 Virtual Groups</h4>
-<a name="index-nnvirtual"></a>
-<a name="index-virtual-groups"></a>
-<a name="index-merging-groups"></a>
+<body lang="en" xml:lang="en">
+  <a name="Virtual-Groups" id="Virtual-Groups"></a>
 
-<p>An <em>nnvirtual group</em> is really nothing more than a collection of
-other groups.
-</p>
-<p>For instance, if you are tired of reading many small groups, you can
-put them all in one big group, and then grow tired of reading one
-big, unwieldy group.  The joys of computing!
-</p>
-<p>You specify <code>nnvirtual</code> as the method.  The address should be a
-regexp to match component groups.
-</p>
-<p>All marks in the virtual group will stick to the articles in the
-component groups.  So if you tick an article in a virtual group, the
-article will also be ticked in the component group from whence it
-came.  (And vice versa&mdash;marks from the component groups will also be
-shown in the virtual group.).  To create an empty virtual group, run
-<kbd>G V</kbd> (<code>gnus-group-make-empty-virtual</code>) in the group buffer
-and edit the method regexp with <kbd>M-e</kbd>
-(<code>gnus-group-edit-group-method</code>)
-</p>
-<p>Here&rsquo;s an example <code>nnvirtual</code> method that collects all Andrea Dworkin
-newsgroups into one, big, happy newsgroup:
-</p>
-<div class="lisp">
-<pre class="lisp">(nnvirtual &quot;^alt\\.fan\\.andrea-dworkin$\\|^rec\\.dworkin.*&quot;)
-</pre></div>
+  <div class="header">
+    <p>Up: <a href="Combined-Groups.html#Combined-Groups"
+    accesskey="u" rel="up">Combined Groups</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Virtual-Groups-1" id="Virtual-Groups-1"></a>
 
-<p>The component groups can be native or foreign; everything should work
-smoothly, but if your computer explodes, it was probably my fault.
-</p>
-<p>Collecting the same group from several servers might actually be a good
-idea if users have set the Distribution header to limit distribution.
-If you would like to read &lsquo;<samp>soc.motss</samp>&rsquo; both from a server in Japan
-and a server in Norway, you could use the following as the group regexp:
-</p>
-<div class="example">
-<pre class="example">&quot;^nntp\\+server\\.jp:soc\\.motss$\\|^nntp\\+server\\.no:soc\\.motss$&quot;
-</pre></div>
+  <h4 class="subsection">6.7.1 Virtual Groups</h4><a name=
+  "index-nnvirtual" id="index-nnvirtual"></a> <a name=
+  "index-virtual-groups" id="index-virtual-groups"></a> <a name=
+  "index-merging-groups" id="index-merging-groups"></a>
 
-<p>(Remember, though, that if you&rsquo;re creating the group with <kbd>G m</kbd>, you
-shouldn&rsquo;t double the backslashes, and you should leave off the quote
-characters at the beginning and the end of the string.)
-</p>
-<p>This should work kinda smoothly&mdash;all articles from both groups should
-end up in this one, and there should be no duplicates.  Threading (and
-the rest) will still work as usual, but there might be problems with the
-sequence of articles.  Sorting on date might be an option here
-(see <a href="Selecting-a-Group.html#Selecting-a-Group">Selecting a Group</a>).
-</p>
-<p>One limitation, however&mdash;all groups included in a virtual
-group have to be alive (i.e., subscribed or unsubscribed).  Killed or
-zombie groups can&rsquo;t be component groups for <code>nnvirtual</code> groups.
-</p>
-<a name="index-nnvirtual_002dalways_002drescan"></a>
-<p>If the <code>nnvirtual-always-rescan</code> variable is non-<code>nil</code> (which
-is the default), <code>nnvirtual</code> will always scan groups for unread
-articles when entering a virtual group.  If this variable is <code>nil</code>
-and you read articles in a component group after the virtual group has
-been activated, the read articles from the component group will show up
-when you enter the virtual group.  You&rsquo;ll also see this effect if you
-have two virtual groups that have a component group in common.  If
-that&rsquo;s the case, you should set this variable to <code>t</code>.  Or you can
-just tap <code>M-g</code> on the virtual group every time before you enter
-it&mdash;it&rsquo;ll have much the same effect.
-</p>
-<p><code>nnvirtual</code> can have both mail and news groups as component groups.
-When responding to articles in <code>nnvirtual</code> groups, <code>nnvirtual</code>
-has to ask the back end of the component group the article comes from
-whether it is a news or mail back end.  However, when you do a <kbd>^</kbd>,
-there is typically no sure way for the component back end to know this,
-and in that case <code>nnvirtual</code> tells Gnus that the article came from a
-not-news back end.  (Just to be on the safe side.)
-</p>
-<p><kbd>C-c C-n</kbd> in the message buffer will insert the <code>Newsgroups</code>
-line from the article you respond to in these cases.
-</p>
-<p><code>nnvirtual</code> groups do not inherit anything but articles and marks
-from component groups&mdash;group parameters, for instance, are not
-inherited.
-</p>
+  <p>An <em>nnvirtual group</em> is really nothing more than a
+  collection of other groups.</p>
 
-<hr>
-<div class="header">
-<p>
-Up: <a href="Combined-Groups.html#Combined-Groups" accesskey="u" rel="up">Combined Groups</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>For instance, if you are tired of reading many small groups,
+  you can put them all in one big group, and then grow tired of
+  reading one big, unwieldy group. The joys of computing!</p>
 
+  <p>You specify <code>nnvirtual</code> as the method. The address
+  should be a regexp to match component groups.</p>
 
+  <p>All marks in the virtual group will stick to the articles in
+  the component groups. So if you tick an article in a virtual
+  group, the article will also be ticked in the component group
+  from whence it came. (And vice versa&mdash;marks from the
+  component groups will also be shown in the virtual group.). To
+  create an empty virtual group, run <kbd>G V</kbd>
+  (<code>gnus-group-make-empty-virtual</code>) in the group buffer
+  and edit the method regexp with <kbd>M-e</kbd>
+  (<code>gnus-group-edit-group-method</code>)</p>
 
+  <p>Here&rsquo;s an example <code>nnvirtual</code> method that
+  collects all Andrea Dworkin newsgroups into one, big, happy
+  newsgroup:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(nnvirtual "^alt\\.fan\\.andrea-dworkin$\\|^rec\\.dworkin.*")
+</pre>
+  </div>
+
+  <p>The component groups can be native or foreign; everything
+  should work smoothly, but if your computer explodes, it was
+  probably my fault.</p>
+
+  <p>Collecting the same group from several servers might actually
+  be a good idea if users have set the Distribution header to limit
+  distribution. If you would like to read
+  &lsquo;<samp>soc.motss</samp>&rsquo; both from a server in Japan
+  and a server in Norway, you could use the following as the group
+  regexp:</p>
+
+  <div class="example">
+    <pre class="example">
+"^nntp\\+server\\.jp:soc\\.motss$\\|^nntp\\+server\\.no:soc\\.motss$"
+</pre>
+  </div>
+
+  <p>(Remember, though, that if you&rsquo;re creating the group
+  with <kbd>G m</kbd>, you shouldn&rsquo;t double the backslashes,
+  and you should leave off the quote characters at the beginning
+  and the end of the string.)</p>
+
+  <p>This should work kinda smoothly&mdash;all articles from both
+  groups should end up in this one, and there should be no
+  duplicates. Threading (and the rest) will still work as usual,
+  but there might be problems with the sequence of articles.
+  Sorting on date might be an option here (see <a href=
+  "Selecting-a-Group.html#Selecting-a-Group">Selecting a
+  Group</a>).</p>
+
+  <p>One limitation, however&mdash;all groups included in a virtual
+  group have to be alive (i.e., subscribed or unsubscribed). Killed
+  or zombie groups can&rsquo;t be component groups for
+  <code>nnvirtual</code> groups.</p><a name=
+  "index-nnvirtual_002dalways_002drescan" id=
+  "index-nnvirtual_002dalways_002drescan"></a>
+
+  <p>If the <code>nnvirtual-always-rescan</code> variable is
+  non-<code>nil</code> (which is the default),
+  <code>nnvirtual</code> will always scan groups for unread
+  articles when entering a virtual group. If this variable is
+  <code>nil</code> and you read articles in a component group after
+  the virtual group has been activated, the read articles from the
+  component group will show up when you enter the virtual group.
+  You&rsquo;ll also see this effect if you have two virtual groups
+  that have a component group in common. If that&rsquo;s the case,
+  you should set this variable to <code>t</code>. Or you can just
+  tap <code>M-g</code> on the virtual group every time before you
+  enter it&mdash;it&rsquo;ll have much the same effect.</p>
+
+  <p><code>nnvirtual</code> can have both mail and news groups as
+  component groups. When responding to articles in
+  <code>nnvirtual</code> groups, <code>nnvirtual</code> has to ask
+  the back end of the component group the article comes from
+  whether it is a news or mail back end. However, when you do a
+  <kbd>^</kbd>, there is typically no sure way for the component
+  back end to know this, and in that case <code>nnvirtual</code>
+  tells Gnus that the article came from a not-news back end. (Just
+  to be on the safe side.)</p>
+
+  <p><kbd>C-c C-n</kbd> in the message buffer will insert the
+  <code>Newsgroups</code> line from the article you respond to in
+  these cases.</p>
+
+  <p><code>nnvirtual</code> groups do not inherit anything but
+  articles and marks from component groups&mdash;group parameters,
+  for instance, are not inherited.</p>
+  <hr />
+
+  <div class="header">
+    <p>Up: <a href="Combined-Groups.html#Combined-Groups"
+    accesskey="u" rel="up">Combined Groups</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

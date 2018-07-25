@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,92 +19,132 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Region to Refontify</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Region to Refontify">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Region to Refontify">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Multiline-Font-Lock.html#Multiline-Font-Lock" rel="up" title="Multiline Font Lock">
-<link href="Auto_002dIndentation.html#Auto_002dIndentation" rel="next" title="Auto-Indentation">
-<link href="Font-Lock-Multiline.html#Font-Lock-Multiline" rel="prev" title="Font Lock Multiline">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Region to
+  Refontify</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Region to Refontify" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Region to Refontify" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Multiline-Font-Lock.html#Multiline-Font-Lock" rel=
+  "up" title="Multiline Font Lock" />
+  <link href="Auto_002dIndentation.html#Auto_002dIndentation" rel=
+  "next" title="Auto-Indentation" />
+  <link href="Font-Lock-Multiline.html#Font-Lock-Multiline" rel=
+  "prev" title="Font Lock Multiline" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Region-to-Refontify" id="Region-to-Refontify"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Font-Lock-Multiline.html#Font-Lock-Multiline" accesskey="p"
+    rel="prev">Font Lock Multiline</a>, Up: <a href=
+    "Multiline-Font-Lock.html#Multiline-Font-Lock" accesskey="u"
+    rel="up">Multiline Font Lock</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Region-to-Fontify-after-a-Buffer-Change" id=
+  "Region-to-Fontify-after-a-Buffer-Change"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Region-to-Refontify"></a>
-<div class="header">
-<p>
-Previous: <a href="Font-Lock-Multiline.html#Font-Lock-Multiline" accesskey="p" rel="prev">Font Lock Multiline</a>, Up: <a href="Multiline-Font-Lock.html#Multiline-Font-Lock" accesskey="u" rel="up">Multiline Font Lock</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Region-to-Fontify-after-a-Buffer-Change"></a>
-<h4 class="subsubsection">22.6.9.2 Region to Fontify after a Buffer Change</h4>
+  <h4 class="subsubsection">22.6.9.2 Region to Fontify after a
+  Buffer Change</h4>
 
-<p>When a buffer is changed, the region that Font Lock refontifies is
-by default the smallest sequence of whole lines that spans the change.
-While this works well most of the time, sometimes it doesn&rsquo;t&mdash;for
-example, when a change alters the syntactic meaning of text on an
-earlier line.
-</p>
-<p>You can enlarge (or even reduce) the region to refontify by setting
-the following variable:
-</p>
-<dl>
-<dt><a name="index-font_002dlock_002dextend_002dafter_002dchange_002dregion_002dfunction"></a>Variable: <strong>font-lock-extend-after-change-region-function</strong></dt>
-<dd><p>This buffer-local variable is either <code>nil</code> or a function for Font
-Lock mode to call to determine the region to scan and fontify.
-</p>
-<p>The function is given three parameters, the standard <var>beg</var>,
-<var>end</var>, and <var>old-len</var> from <code>after-change-functions</code>
-(see <a href="Change-Hooks.html#Change-Hooks">Change Hooks</a>).  It should return either a cons of the
-beginning and end buffer positions (in that order) of the region to
-fontify, or <code>nil</code> (which means choose the region in the standard
-way).  This function needs to preserve point, the match-data, and the
-current restriction.  The region it returns may start or end in the
-middle of a line.
-</p>
-<p>Since this function is called after every buffer change, it should be
-reasonably fast.
-</p></dd></dl>
+  <p>When a buffer is changed, the region that Font Lock
+  refontifies is by default the smallest sequence of whole lines
+  that spans the change. While this works well most of the time,
+  sometimes it doesn&rsquo;t&mdash;for example, when a change
+  alters the syntactic meaning of text on an earlier line.</p>
 
+  <p>You can enlarge (or even reduce) the region to refontify by
+  setting the following variable:</p>
 
+  <dl>
+    <dt><a name=
+    "index-font_002dlock_002dextend_002dafter_002dchange_002dregion_002dfunction"
+    id=
+    "index-font_002dlock_002dextend_002dafter_002dchange_002dregion_002dfunction">
+    </a>Variable:
+    <strong>font-lock-extend-after-change-region-function</strong></dt>
 
+    <dd>
+      <p>This buffer-local variable is either <code>nil</code> or a
+      function for Font Lock mode to call to determine the region
+      to scan and fontify.</p>
 
+      <p>The function is given three parameters, the standard
+      <var>beg</var>, <var>end</var>, and <var>old-len</var> from
+      <code>after-change-functions</code> (see <a href=
+      "Change-Hooks.html#Change-Hooks">Change Hooks</a>). It should
+      return either a cons of the beginning and end buffer
+      positions (in that order) of the region to fontify, or
+      <code>nil</code> (which means choose the region in the
+      standard way). This function needs to preserve point, the
+      match-data, and the current restriction. The region it
+      returns may start or end in the middle of a line.</p>
+
+      <p>Since this function is called after every buffer change,
+      it should be reasonably fast.</p>
+    </dd>
+  </dl>
 </body>
 </html>

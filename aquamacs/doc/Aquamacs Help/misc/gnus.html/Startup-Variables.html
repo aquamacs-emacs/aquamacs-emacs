@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,138 +14,212 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Startup Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Startup Variables">
-<meta name="keywords" content="Gnus Manual: Startup Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Starting-Up.html#Starting-Up" rel="up" title="Starting Up">
-<link href="Group-Buffer.html#Group-Buffer" rel="next" title="Group Buffer">
-<link href="The-Active-File.html#The-Active-File" rel="prev" title="The Active File">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Startup Variables</title>
+  <meta name="description" content=
+  "Gnus Manual: Startup Variables" />
+  <meta name="keywords" content="Gnus Manual: Startup Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Starting-Up.html#Starting-Up" rel="up" title=
+  "Starting Up" />
+  <link href="Group-Buffer.html#Group-Buffer" rel="next" title=
+  "Group Buffer" />
+  <link href="The-Active-File.html#The-Active-File" rel="prev"
+  title="The Active File" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Startup-Variables"></a>
-<div class="header">
-<p>
-Previous: <a href="The-Active-File.html#The-Active-File" accesskey="p" rel="prev">The Active File</a>, Up: <a href="Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting Up</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Startup-Variables-1"></a>
-<h3 class="section">1.9 Startup Variables</h3>
+<body lang="en" xml:lang="en">
+  <a name="Startup-Variables" id="Startup-Variables"></a>
 
-<dl compact="compact">
-<dt><code>gnus-load-hook</code></dt>
-<dd><a name="index-gnus_002dload_002dhook"></a>
-<p>A hook run while Gnus is being loaded.  Note that this hook will
-normally be run just once in each Emacs session, no matter how many
-times you start Gnus.
-</p>
-</dd>
-<dt><code>gnus-before-startup-hook</code></dt>
-<dd><a name="index-gnus_002dbefore_002dstartup_002dhook"></a>
-<p>A hook called as the first thing when Gnus is started.
-</p>
-</dd>
-<dt><code>gnus-before-resume-hook</code></dt>
-<dd><a name="index-gnus_002dbefore_002dresume_002dhook"></a>
-<p>A hook called as the first thing when Gnus is resumed after a suspend.
-</p>
-</dd>
-<dt><code>gnus-startup-hook</code></dt>
-<dd><a name="index-gnus_002dstartup_002dhook"></a>
-<p>A hook run as the very last thing after starting up Gnus
-</p>
-</dd>
-<dt><code>gnus-started-hook</code></dt>
-<dd><a name="index-gnus_002dstarted_002dhook"></a>
-<p>A hook that is run as the very last thing after starting up Gnus
-successfully.
-</p>
-</dd>
-<dt><code>gnus-setup-news-hook</code></dt>
-<dd><a name="index-gnus_002dsetup_002dnews_002dhook"></a>
-<p>A hook that is run after reading the <samp>.newsrc</samp> file(s), but before
-generating the group buffer.
-</p>
-</dd>
-<dt><code>gnus-check-bogus-newsgroups</code></dt>
-<dd><a name="index-gnus_002dcheck_002dbogus_002dnewsgroups"></a>
-<p>If non-<code>nil</code>, Gnus will check for and delete all bogus groups at
-startup.  A <em>bogus group</em> is a group that you have in your
-<samp>.newsrc</samp> file, but doesn&rsquo;t exist on the news server.  Checking for
-bogus groups can take quite a while, so to save time and resources it&rsquo;s
-best to leave this option off, and do the checking for bogus groups once
-in a while from the group buffer instead (see <a href="Group-Maintenance.html#Group-Maintenance">Group Maintenance</a>).
-</p>
-</dd>
-<dt><code>gnus-inhibit-startup-message</code></dt>
-<dd><a name="index-gnus_002dinhibit_002dstartup_002dmessage"></a>
-<p>If non-<code>nil</code>, the startup message won&rsquo;t be displayed.  That way,
-your boss might not notice as easily that you are reading news instead
-of doing your job.  Note that this variable is used before
-<samp>~/.gnus.el</samp> is loaded, so it should be set in <samp>.emacs</samp> instead.
-</p>
-</dd>
-<dt><code>gnus-no-groups-message</code></dt>
-<dd><a name="index-gnus_002dno_002dgroups_002dmessage"></a>
-<p>Message displayed by Gnus when no groups are available.
-</p>
-</dd>
-<dt><code>gnus-use-backend-marks</code></dt>
-<dd><a name="index-gnus_002duse_002dbackend_002dmarks"></a>
-<p>If non-<code>nil</code>, Gnus will store article marks both in the
-<samp>.newsrc.eld</samp> file and in the backends.  This will slow down
-group operation some.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Previous: <a href="The-Active-File.html#The-Active-File"
+    accesskey="p" rel="prev">The Active File</a>, Up: <a href=
+    "Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting
+    Up</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Startup-Variables-1" id="Startup-Variables-1"></a>
 
+  <h3 class="section">1.9 Startup Variables</h3>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="The-Active-File.html#The-Active-File" accesskey="p" rel="prev">The Active File</a>, Up: <a href="Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting Up</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><code>gnus-load-hook</code></dt>
 
+    <dd>
+      <a name="index-gnus_002dload_002dhook" id=
+      "index-gnus_002dload_002dhook"></a>
 
+      <p>A hook run while Gnus is being loaded. Note that this hook
+      will normally be run just once in each Emacs session, no
+      matter how many times you start Gnus.</p>
+    </dd>
 
+    <dt><code>gnus-before-startup-hook</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dbefore_002dstartup_002dhook" id=
+      "index-gnus_002dbefore_002dstartup_002dhook"></a>
+
+      <p>A hook called as the first thing when Gnus is started.</p>
+    </dd>
+
+    <dt><code>gnus-before-resume-hook</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dbefore_002dresume_002dhook" id=
+      "index-gnus_002dbefore_002dresume_002dhook"></a>
+
+      <p>A hook called as the first thing when Gnus is resumed
+      after a suspend.</p>
+    </dd>
+
+    <dt><code>gnus-startup-hook</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dstartup_002dhook" id=
+      "index-gnus_002dstartup_002dhook"></a>
+
+      <p>A hook run as the very last thing after starting up
+      Gnus</p>
+    </dd>
+
+    <dt><code>gnus-started-hook</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dstarted_002dhook" id=
+      "index-gnus_002dstarted_002dhook"></a>
+
+      <p>A hook that is run as the very last thing after starting
+      up Gnus successfully.</p>
+    </dd>
+
+    <dt><code>gnus-setup-news-hook</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dsetup_002dnews_002dhook" id=
+      "index-gnus_002dsetup_002dnews_002dhook"></a>
+
+      <p>A hook that is run after reading the <samp>.newsrc</samp>
+      file(s), but before generating the group buffer.</p>
+    </dd>
+
+    <dt><code>gnus-check-bogus-newsgroups</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dcheck_002dbogus_002dnewsgroups" id=
+      "index-gnus_002dcheck_002dbogus_002dnewsgroups"></a>
+
+      <p>If non-<code>nil</code>, Gnus will check for and delete
+      all bogus groups at startup. A <em>bogus group</em> is a
+      group that you have in your <samp>.newsrc</samp> file, but
+      doesn&rsquo;t exist on the news server. Checking for bogus
+      groups can take quite a while, so to save time and resources
+      it&rsquo;s best to leave this option off, and do the checking
+      for bogus groups once in a while from the group buffer
+      instead (see <a href=
+      "Group-Maintenance.html#Group-Maintenance">Group
+      Maintenance</a>).</p>
+    </dd>
+
+    <dt><code>gnus-inhibit-startup-message</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dinhibit_002dstartup_002dmessage" id=
+      "index-gnus_002dinhibit_002dstartup_002dmessage"></a>
+
+      <p>If non-<code>nil</code>, the startup message won&rsquo;t
+      be displayed. That way, your boss might not notice as easily
+      that you are reading news instead of doing your job. Note
+      that this variable is used before <samp>~/.gnus.el</samp> is
+      loaded, so it should be set in <samp>.emacs</samp>
+      instead.</p>
+    </dd>
+
+    <dt><code>gnus-no-groups-message</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dno_002dgroups_002dmessage" id=
+      "index-gnus_002dno_002dgroups_002dmessage"></a>
+
+      <p>Message displayed by Gnus when no groups are
+      available.</p>
+    </dd>
+
+    <dt><code>gnus-use-backend-marks</code></dt>
+
+    <dd>
+      <a name="index-gnus_002duse_002dbackend_002dmarks" id=
+      "index-gnus_002duse_002dbackend_002dmarks"></a>
+
+      <p>If non-<code>nil</code>, Gnus will store article marks
+      both in the <samp>.newsrc.eld</samp> file and in the
+      backends. This will slow down group operation some.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="The-Active-File.html#The-Active-File"
+    accesskey="p" rel="prev">The Active File</a>, Up: <a href=
+    "Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting
+    Up</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

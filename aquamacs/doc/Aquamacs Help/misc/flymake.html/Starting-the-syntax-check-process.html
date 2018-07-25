@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -15,72 +17,102 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Flymake 0.3: Starting the syntax check process</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Flymake 0.3: Starting the syntax check process">
-<meta name="keywords" content="GNU Flymake 0.3: Starting the syntax check process">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Flymake-Implementation.html#Flymake-Implementation" rel="up" title="Flymake Implementation">
-<link href="Parsing-the-output.html#Parsing-the-output" rel="next" title="Parsing the output">
-<link href="Locating-the-buildfile.html#Locating-the-buildfile" rel="prev" title="Locating the buildfile">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Flymake 0.3: Starting the syntax check process</title>
+  <meta name="description" content=
+  "GNU Flymake 0.3: Starting the syntax check process" />
+  <meta name="keywords" content=
+  "GNU Flymake 0.3: Starting the syntax check process" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Flymake-Implementation.html#Flymake-Implementation"
+  rel="up" title="Flymake Implementation" />
+  <link href="Parsing-the-output.html#Parsing-the-output" rel=
+  "next" title="Parsing the output" />
+  <link href="Locating-the-buildfile.html#Locating-the-buildfile"
+  rel="prev" title="Locating the buildfile" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Starting-the-syntax-check-process"></a>
-<div class="header">
-<p>
-Next: <a href="Parsing-the-output.html#Parsing-the-output" accesskey="n" rel="next">Parsing the output</a>, Previous: <a href="Locating-the-buildfile.html#Locating-the-buildfile" accesskey="p" rel="prev">Locating the buildfile</a>, Up: <a href="Flymake-Implementation.html#Flymake-Implementation" accesskey="u" rel="up">Flymake Implementation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Starting-the-syntax-check-process-1"></a>
-<h3 class="section">5.6 Starting the syntax check process</h3>
-<a name="index-Syntax-check-process"></a>
+<body lang="en" xml:lang="en">
+  <a name="Starting-the-syntax-check-process" id=
+  "Starting-the-syntax-check-process"></a>
 
-<p>The command line (command name and the list of arguments) for launching a process is returned by the
-initialization function.  Flymake then just calls <code>start-process</code>
-to start an asynchronous process and configures a process filter and
-sentinel, which are used for processing the output of the syntax check
-tool.
-</p>
+  <div class="header">
+    <p>Next: <a href="Parsing-the-output.html#Parsing-the-output"
+    accesskey="n" rel="next">Parsing the output</a>, Previous:
+    <a href="Locating-the-buildfile.html#Locating-the-buildfile"
+    accesskey="p" rel="prev">Locating the buildfile</a>, Up:
+    <a href="Flymake-Implementation.html#Flymake-Implementation"
+    accesskey="u" rel="up">Flymake Implementation</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Starting-the-syntax-check-process-1" id=
+  "Starting-the-syntax-check-process-1"></a>
 
+  <h3 class="section">5.6 Starting the syntax check
+  process</h3><a name="index-Syntax-check-process" id=
+  "index-Syntax-check-process"></a>
 
-
+  <p>The command line (command name and the list of arguments) for
+  launching a process is returned by the initialization function.
+  Flymake then just calls <code>start-process</code> to start an
+  asynchronous process and configures a process filter and
+  sentinel, which are used for processing the output of the syntax
+  check tool.</p>
 </body>
 </html>

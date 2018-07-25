@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,113 +19,270 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Minibuffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Minibuffers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Minibuffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Intro-to-Minibuffers.html#Intro-to-Minibuffers" rel="next" title="Intro to Minibuffers">
-<link href="Output-Variables.html#Output-Variables" rel="prev" title="Output Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Minibuffers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Minibuffers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Minibuffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Intro-to-Minibuffers.html#Intro-to-Minibuffers" rel=
+  "next" title="Intro to Minibuffers" />
+  <link href="Output-Variables.html#Output-Variables" rel="prev"
+  title="Output Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Minibuffers" id="Minibuffers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Command-Loop.html#Command-Loop" accesskey="n"
+    rel="next">Command Loop</a>, Previous: <a href=
+    "Read-and-Print.html#Read-and-Print" accesskey="p" rel=
+    "prev">Read and Print</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Minibuffers-1" id="Minibuffers-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Minibuffers"></a>
-<div class="header">
-<p>
-Next: <a href="Command-Loop.html#Command-Loop" accesskey="n" rel="next">Command Loop</a>, Previous: <a href="Read-and-Print.html#Read-and-Print" accesskey="p" rel="prev">Read and Print</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Minibuffers-1"></a>
-<h2 class="chapter">19 Minibuffers</h2>
-<a name="index-arguments_002c-reading"></a>
-<a name="index-complex-arguments"></a>
-<a name="index-minibuffer"></a>
+  <h2 class="chapter">19 Minibuffers</h2><a name=
+  "index-arguments_002c-reading" id=
+  "index-arguments_002c-reading"></a> <a name=
+  "index-complex-arguments" id="index-complex-arguments"></a>
+  <a name="index-minibuffer" id="index-minibuffer"></a>
 
-<p>A <em>minibuffer</em> is a special buffer that Emacs commands use to
-read arguments more complicated than the single numeric prefix
-argument.  These arguments include file names, buffer names, and
-command names (as in <kbd>M-x</kbd>).  The minibuffer is displayed on the
-bottom line of the frame, in the same place as the echo area
-(see <a href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>), but only while it is in use for reading an
-argument.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Intro-to-Minibuffers.html#Intro-to-Minibuffers" accesskey="1">Intro to Minibuffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic information about minibuffers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Text-from-Minibuffer.html#Text-from-Minibuffer" accesskey="2">Text from Minibuffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to read a straight text string.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Object-from-Minibuffer.html#Object-from-Minibuffer" accesskey="3">Object from Minibuffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to read a Lisp object or expression.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Minibuffer-History.html#Minibuffer-History" accesskey="4">Minibuffer History</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Recording previous minibuffer inputs
-                                so the user can reuse them.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Initial-Input.html#Initial-Input" accesskey="5">Initial Input</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying initial contents for the minibuffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Completion.html#Completion" accesskey="6">Completion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to invoke and customize completion.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries" accesskey="7">Yes-or-No Queries</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Asking a question with a simple answer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Multiple-Queries.html#Multiple-Queries" accesskey="8">Multiple Queries</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Asking a series of similar questions.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Reading-a-Password.html#Reading-a-Password" accesskey="9">Reading a Password</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading a password from the terminal.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Minibuffer-Commands.html#Minibuffer-Commands">Minibuffer Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Commands used as key bindings in minibuffers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Minibuffer-Windows.html#Minibuffer-Windows">Minibuffer Windows</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Operating on the special minibuffer windows.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Minibuffer-Contents.html#Minibuffer-Contents">Minibuffer Contents</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How such commands access the minibuffer text.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Recursive-Mini.html#Recursive-Mini">Recursive Mini</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Whether recursive entry to minibuffer is allowed.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Minibuffer-Misc.html#Minibuffer-Misc">Minibuffer Misc</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Various customization hooks and variables.
-</td></tr>
-</table>
+  <p>A <em>minibuffer</em> is a special buffer that Emacs commands
+  use to read arguments more complicated than the single numeric
+  prefix argument. These arguments include file names, buffer
+  names, and command names (as in <kbd>M-x</kbd>). The minibuffer
+  is displayed on the bottom line of the frame, in the same place
+  as the echo area (see <a href=
+  "The-Echo-Area.html#The-Echo-Area">The Echo Area</a>), but only
+  while it is in use for reading an argument.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Command-Loop.html#Command-Loop" accesskey="n" rel="next">Command Loop</a>, Previous: <a href="Read-and-Print.html#Read-and-Print" accesskey="p" rel="prev">Read and Print</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Intro-to-Minibuffers.html#Intro-to-Minibuffers" accesskey=
+      "1">Intro to Minibuffers</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Basic information about
+      minibuffers.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Text-from-Minibuffer.html#Text-from-Minibuffer" accesskey=
+      "2">Text from Minibuffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to read a straight text
+      string.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Object-from-Minibuffer.html#Object-from-Minibuffer"
+      accesskey="3">Object from Minibuffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to read a Lisp object or
+      expression.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Minibuffer-History.html#Minibuffer-History" accesskey=
+      "4">Minibuffer History</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Recording previous minibuffer
+      inputs so the user can reuse them.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Initial-Input.html#Initial-Input" accesskey="5">Initial
+      Input</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Specifying initial contents for
+      the minibuffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Completion.html#Completion" accesskey=
+      "6">Completion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to invoke and customize
+      completion.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries"
+      accesskey="7">Yes-or-No Queries</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Asking a question with a simple
+      answer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Multiple-Queries.html#Multiple-Queries" accesskey=
+      "8">Multiple Queries</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Asking a series of similar
+      questions.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Reading-a-Password.html#Reading-a-Password" accesskey=
+      "9">Reading a Password</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading a password from the
+      terminal.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Minibuffer-Commands.html#Minibuffer-Commands">Minibuffer
+      Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Commands used as key bindings
+      in minibuffers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Minibuffer-Windows.html#Minibuffer-Windows">Minibuffer
+      Windows</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Operating on the special
+      minibuffer windows.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Minibuffer-Contents.html#Minibuffer-Contents">Minibuffer
+      Contents</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How such commands access the
+      minibuffer text.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Recursive-Mini.html#Recursive-Mini">Recursive Mini</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Whether recursive entry to
+      minibuffer is allowed.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Minibuffer-Misc.html#Minibuffer-Misc">Minibuffer
+      Misc</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Various customization hooks and
+      variables.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Command-Loop.html#Command-Loop" accesskey="n"
+    rel="next">Command Loop</a>, Previous: <a href=
+    "Read-and-Print.html#Read-and-Print" accesskey="p" rel=
+    "prev">Read and Print</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

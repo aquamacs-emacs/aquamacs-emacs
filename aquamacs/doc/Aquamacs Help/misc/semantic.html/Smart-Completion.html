@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents the Semantic library and utilities.
 
 Copyright (C) 1999-2005, 2007, 2009-2016 Free Software
@@ -15,150 +17,233 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Semantic Manual: Smart Completion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Semantic Manual: Smart Completion">
-<meta name="keywords" content="Semantic Manual: Smart Completion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Analyzer.html#Analyzer" rel="up" title="Analyzer">
-<link href="Smart-Summary.html#Smart-Summary" rel="next" title="Smart Summary">
-<link href="Analyzer.html#Analyzer" rel="prev" title="Analyzer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Semantic Manual: Smart Completion</title>
+  <meta name="description" content=
+  "Semantic Manual: Smart Completion" />
+  <meta name="keywords" content=
+  "Semantic Manual: Smart Completion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Analyzer.html#Analyzer" rel="up" title="Analyzer" />
+  <link href="Smart-Summary.html#Smart-Summary" rel="next" title=
+  "Smart Summary" />
+  <link href="Analyzer.html#Analyzer" rel="prev" title=
+  "Analyzer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Smart-Completion"></a>
-<div class="header">
-<p>
-Next: <a href="Smart-Summary.html#Smart-Summary" accesskey="n" rel="next">Smart Summary</a>, Up: <a href="Analyzer.html#Analyzer" accesskey="u" rel="up">Analyzer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Smart-Completion-1"></a>
-<h4 class="subsection">2.4.1 Smart Completion</h4>
+<body lang="en" xml:lang="en">
+  <a name="Smart-Completion" id="Smart-Completion"></a>
 
-<p>The Semantic Analyzer can be used to perform code completion in a
-manner that takes the local context into account.  (In addition to the
-user commands in this section, Semantic Idle Completions mode also
-uses the Semantic Analyzer.  See <a href="Idle-Completions-Mode.html#Idle-Completions-Mode">Idle Completions Mode</a>.)
-</p>
-<dl>
-<dt><a name="index-semantic_002danalyze_002dpossible_002dcompletions"></a>Command: <strong>semantic-analyze-possible-completions</strong> <em>context</em></dt>
-<dd><p>This is the most basic command for Semantic Analyzer-based completion.
-Called interactively, it displays a list of the possible completions
-for the symbol at point.
-</p>
-<p>When called from a Lisp program,
-<code>semantic-analyze-possible-completions</code> does not display a
-completions list.  The argument <var>context</var> should be either a
-buffer position, or a context object.  The return value is a list of
-<i>Semantic</i> tag objects that complete the symbol for <var>context</var>,
-based on the following criteria:
-</p>
-<ul>
-<li> Elements currently in scope.
-</li><li> Constants currently in scope.
-</li><li> Elements matching the context&rsquo;s <code>:prefix</code>.
-</li><li> Type of the completion matching the type of the context.
-</li></ul>
+  <div class="header">
+    <p>Next: <a href="Smart-Summary.html#Smart-Summary" accesskey=
+    "n" rel="next">Smart Summary</a>, Up: <a href=
+    "Analyzer.html#Analyzer" accesskey="u" rel="up">Analyzer</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Smart-Completion-1" id="Smart-Completion-1"></a>
 
-<p>Most of the other commands documented in this section call
-<code>semantic-analyze-possible-completions</code> internally.
-</p></dd></dl>
+  <h4 class="subsection">2.4.1 Smart Completion</h4>
 
-<dl>
-<dt><a name="index-semantic_002dcomplete_002danalyze_002dinline"></a>Command: <strong>semantic-complete-analyze-inline</strong></dt>
-<dd><p>This command is bound to <kbd>C-c , <span class="key">SPC</span></kbd> when Semantic mode is
-enabled (see <a href="Semantic-mode-user-commands.html#Semantic-mode-user-commands">Semantic mode user commands</a>).  It displays a list of
-possible completions for the symbol at point, and activates a special
-set of keybindings for choosing a completion.
-</p>
-<p>You can type <tt class="key">RET</tt> to accept the current completion, <kbd>M-n</kbd> and
-<kbd>M-p</kbd> to cycle through the possible completions, <tt class="key">TAB</tt> to
-complete as far as possible and then cycle through completions, and
-either <kbd>C-g</kbd> or any other key to abort the completion.
-</p>
-<p>This command is similar to the completion performed by Semantic Idle
-Completions mode.  The main difference is that it is called
-explicitly, whereas Semantic Idle Completions mode completes during
-idle time (see <a href="Idle-Completions-Mode.html#Idle-Completions-Mode">Idle Completions Mode</a>).
-</p></dd></dl>
+  <p>The Semantic Analyzer can be used to perform code completion
+  in a manner that takes the local context into account. (In
+  addition to the user commands in this section, Semantic Idle
+  Completions mode also uses the Semantic Analyzer. See <a href=
+  "Idle-Completions-Mode.html#Idle-Completions-Mode">Idle
+  Completions Mode</a>.)</p>
 
-<dl>
-<dt><a name="index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass-1"></a>Option: <strong>semantic-complete-inline-analyzer-idle-displayor-class</strong></dt>
-<dd><p>The value of this variable determines how
-<code>semantic-complete-analyze-inline</code> shows its completions.
-Possible values include:
-</p>
-<dl compact="compact">
-<dt><code>semantic-displayor-traditional</code></dt>
-<dd><p>Display completions in a separate window.  This is the default value.
-</p>
-</dd>
-<dt><code>semantic-displayor-ghost</code></dt>
-<dd><p>Display completions &ldquo;inline&rdquo; with the buffer text, similar to the
-default behavior of Semantic Idle Completions mode (see <a href="Idle-Completions-Mode.html#Idle-Completions-Mode">Idle Completions Mode</a>).
-</p>
-</dd>
-<dt><code>semantic-displayor-tooltip</code></dt>
-<dd><p>Display completions in a tooltip.
-</p></dd>
-</dl>
-</dd></dl>
+  <dl>
+    <dt><a name=
+    "index-semantic_002danalyze_002dpossible_002dcompletions" id=
+    "index-semantic_002danalyze_002dpossible_002dcompletions"></a>Command:
+    <strong>semantic-analyze-possible-completions</strong>
+    <em>context</em></dt>
 
-<p>In addition to <code>semantic-complete-analyze-inline</code>, you can use
-the simpler command <code>semantic-ia-complete-symbol point</code>.  This
-behaves like the usual <kbd>M-<span class="key">TAB</span></kbd> (<code>complete-symbol</code>)
-command (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Symbol-Completion.html#Symbol-Completion">Symbol Completion</a> in <cite>Emacs manual</cite>), except it
-uses the Semantic Analyzer.
-</p>
-<dl>
-<dt><a name="index-semantic_002dia_002dcomplete_002dsymbol"></a>Command: <strong>semantic-ia-complete-symbol</strong> <em>point</em></dt>
-<dd><p>Complete the current symbol at <var>point</var>.
-</p></dd></dl>
+    <dd>
+      <p>This is the most basic command for Semantic Analyzer-based
+      completion. Called interactively, it displays a list of the
+      possible completions for the symbol at point.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Smart-Summary.html#Smart-Summary" accesskey="n" rel="next">Smart Summary</a>, Up: <a href="Analyzer.html#Analyzer" accesskey="u" rel="up">Analyzer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>When called from a Lisp program,
+      <code>semantic-analyze-possible-completions</code> does not
+      display a completions list. The argument <var>context</var>
+      should be either a buffer position, or a context object. The
+      return value is a list of <i>Semantic</i> tag objects that
+      complete the symbol for <var>context</var>, based on the
+      following criteria:</p>
 
+      <ul>
+        <li>Elements currently in scope.</li>
 
+        <li>Constants currently in scope.</li>
 
+        <li>Elements matching the context&rsquo;s
+        <code>:prefix</code>.</li>
+
+        <li>Type of the completion matching the type of the
+        context.</li>
+      </ul>
+
+      <p>Most of the other commands documented in this section call
+      <code>semantic-analyze-possible-completions</code>
+      internally.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-semantic_002dcomplete_002danalyze_002dinline" id=
+    "index-semantic_002dcomplete_002danalyze_002dinline"></a>Command:
+    <strong>semantic-complete-analyze-inline</strong></dt>
+
+    <dd>
+      <p>This command is bound to <kbd>C-c , <span class=
+      "key">SPC</span></kbd> when Semantic mode is enabled (see
+      <a href=
+      "Semantic-mode-user-commands.html#Semantic-mode-user-commands">
+      Semantic mode user commands</a>). It displays a list of
+      possible completions for the symbol at point, and activates a
+      special set of keybindings for choosing a completion.</p>
+
+      <p>You can type <tt class="key">RET</tt> to accept the
+      current completion, <kbd>M-n</kbd> and <kbd>M-p</kbd> to
+      cycle through the possible completions, <tt class=
+      "key">TAB</tt> to complete as far as possible and then cycle
+      through completions, and either <kbd>C-g</kbd> or any other
+      key to abort the completion.</p>
+
+      <p>This command is similar to the completion performed by
+      Semantic Idle Completions mode. The main difference is that
+      it is called explicitly, whereas Semantic Idle Completions
+      mode completes during idle time (see <a href=
+      "Idle-Completions-Mode.html#Idle-Completions-Mode">Idle
+      Completions Mode</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass-1"
+    id=
+    "index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass-1">
+    </a>Option:
+    <strong>semantic-complete-inline-analyzer-idle-displayor-class</strong></dt>
+
+    <dd>
+      <p>The value of this variable determines how
+      <code>semantic-complete-analyze-inline</code> shows its
+      completions. Possible values include:</p>
+
+      <dl compact="compact">
+        <dt><code>semantic-displayor-traditional</code></dt>
+
+        <dd>
+          <p>Display completions in a separate window. This is the
+          default value.</p>
+        </dd>
+
+        <dt><code>semantic-displayor-ghost</code></dt>
+
+        <dd>
+          <p>Display completions &ldquo;inline&rdquo; with the
+          buffer text, similar to the default behavior of Semantic
+          Idle Completions mode (see <a href=
+          "Idle-Completions-Mode.html#Idle-Completions-Mode">Idle
+          Completions Mode</a>).</p>
+        </dd>
+
+        <dt><code>semantic-displayor-tooltip</code></dt>
+
+        <dd>
+          <p>Display completions in a tooltip.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <p>In addition to <code>semantic-complete-analyze-inline</code>,
+  you can use the simpler command <code>semantic-ia-complete-symbol
+  point</code>. This behaves like the usual <kbd>M-<span class=
+  "key">TAB</span></kbd> (<code>complete-symbol</code>) command
+  (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Symbol-Completion.html#Symbol-Completion">
+  Symbol Completion</a> in <cite>Emacs manual</cite>), except it
+  uses the Semantic Analyzer.</p>
+
+  <dl>
+    <dt><a name="index-semantic_002dia_002dcomplete_002dsymbol" id=
+    "index-semantic_002dia_002dcomplete_002dsymbol"></a>Command:
+    <strong>semantic-ia-complete-symbol</strong>
+    <em>point</em></dt>
+
+    <dd>
+      <p>Complete the current symbol at <var>point</var>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Smart-Summary.html#Smart-Summary" accesskey=
+    "n" rel="next">Smart Summary</a>, Up: <a href=
+    "Analyzer.html#Analyzer" accesskey="u" rel="up">Analyzer</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

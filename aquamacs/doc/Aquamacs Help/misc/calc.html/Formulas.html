@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,222 +18,319 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Formulas</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Formulas">
-<meta name="keywords" content="GNU Emacs Calc Manual: Formulas">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Data-Types.html#Data-Types" rel="up" title="Data Types">
-<link href="Stack-and-Trail.html#Stack-and-Trail" rel="next" title="Stack and Trail">
-<link href="Variables.html#Variables" rel="prev" title="Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Formulas</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Formulas" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Formulas" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Data-Types.html#Data-Types" rel="up" title=
+  "Data Types" />
+  <link href="Stack-and-Trail.html#Stack-and-Trail" rel="next"
+  title="Stack and Trail" />
+  <link href="Variables.html#Variables" rel="prev" title=
+  "Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Formulas"></a>
-<div class="header">
-<p>
-Previous: <a href="Variables.html#Variables" accesskey="p" rel="prev">Variables</a>, Up: <a href="Data-Types.html#Data-Types" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Formulas-1"></a>
-<h3 class="section">4.15 Formulas</h3>
+<body lang="en" xml:lang="en">
+  <a name="Formulas" id="Formulas"></a>
 
-<a name="index-Formulas"></a>
-<a name="index-Expressions"></a>
-<a name="index-Operators-in-formulas"></a>
-<a name="index-Precedence-of-operators"></a>
-<p>When you press the apostrophe key you may enter any expression or formula
-in algebraic form.  (Calc uses the terms &ldquo;expression&rdquo; and &ldquo;formula&rdquo;
-interchangeably.)  An expression is built up of numbers, variable names,
-and function calls, combined with various arithmetic operators.
-Parentheses may
-be used to indicate grouping.  Spaces are ignored within formulas, except
-that spaces are not permitted within variable names or numbers.
-Arithmetic operators, in order from highest to lowest precedence, and
-with their equivalent function names, are:
-</p>
-<p>&lsquo;<samp>_</samp>&rsquo; [<code>subscr</code>] (subscripts);
-</p>
-<p>postfix &lsquo;<samp>%</samp>&rsquo; [<code>percent</code>] (as in &lsquo;<samp>25% = 0.25</samp>&rsquo;);
-</p>
-<p>prefix &lsquo;<samp>!</samp>&rsquo; [<code>lnot</code>] (logical &ldquo;not,&rdquo; as in &lsquo;<samp>!x</samp>&rsquo;);
-</p>
-<p>&lsquo;<samp>+/-</samp>&rsquo; [<code>sdev</code>] (the standard deviation symbol) and
-&lsquo;<samp>mod</samp>&rsquo; [<code>makemod</code>] (the symbol for modulo forms);
-</p>
-<p>postfix &lsquo;<samp>!</samp>&rsquo; [<code>fact</code>] (factorial, as in &lsquo;<samp>n!</samp>&rsquo;)
-and postfix &lsquo;<samp>!!</samp>&rsquo; [<code>dfact</code>] (double factorial);
-</p>
-<p>&lsquo;<samp>^</samp>&rsquo; [<code>pow</code>] (raised-to-the-power-of);
-</p>
-<p>prefix &lsquo;<samp>+</samp>&rsquo; and &lsquo;<samp>-</samp>&rsquo; [<code>neg</code>] (as in &lsquo;<samp>-x</samp>&rsquo;);
-</p>
-<p>&lsquo;<samp>*</samp>&rsquo; [<code>mul</code>];
-</p>
-<p>&lsquo;<samp>/</samp>&rsquo; [<code>div</code>], &lsquo;<samp>%</samp>&rsquo; [<code>mod</code>] (modulo), and
-&lsquo;<samp>\</samp>&rsquo; [<code>idiv</code>] (integer division);
-</p>
-<p>infix &lsquo;<samp>+</samp>&rsquo; [<code>add</code>] and &lsquo;<samp>-</samp>&rsquo; [<code>sub</code>] (as in &lsquo;<samp>x-y</samp>&rsquo;);
-</p>
-<p>&lsquo;<samp>|</samp>&rsquo; [<code>vconcat</code>] (vector concatenation);
-</p>
-<p>relations &lsquo;<samp>=</samp>&rsquo; [<code>eq</code>], &lsquo;<samp>!=</samp>&rsquo; [<code>neq</code>], &lsquo;<samp>&lt;</samp>&rsquo; [<code>lt</code>],
-&lsquo;<samp>&gt;</samp>&rsquo; [<code>gt</code>], &lsquo;<samp>&lt;=</samp>&rsquo; [<code>leq</code>], and &lsquo;<samp>&gt;=</samp>&rsquo; [<code>geq</code>];
-</p>
-<p>&lsquo;<samp>&amp;&amp;</samp>&rsquo; [<code>land</code>] (logical &ldquo;and&rdquo;);
-</p>
-<p>&lsquo;<samp>||</samp>&rsquo; [<code>lor</code>] (logical &ldquo;or&rdquo;);
-</p>
-<p>the C-style &ldquo;if&rdquo; operator &lsquo;<samp>a?b:c</samp>&rsquo; [<code>if</code>];
-</p>
-<p>&lsquo;<samp>!!!</samp>&rsquo; [<code>pnot</code>] (rewrite pattern &ldquo;not&rdquo;);
-</p>
-<p>&lsquo;<samp>&amp;&amp;&amp;</samp>&rsquo; [<code>pand</code>] (rewrite pattern &ldquo;and&rdquo;);
-</p>
-<p>&lsquo;<samp>|||</samp>&rsquo; [<code>por</code>] (rewrite pattern &ldquo;or&rdquo;);
-</p>
-<p>&lsquo;<samp>:=</samp>&rsquo; [<code>assign</code>] (for assignments and rewrite rules);
-</p>
-<p>&lsquo;<samp>::</samp>&rsquo; [<code>condition</code>] (rewrite pattern condition);
-</p>
-<p>&lsquo;<samp>=&gt;</samp>&rsquo; [<code>evalto</code>].
-</p>
-<p>Note that, unlike in usual computer notation, multiplication binds more
-strongly than division:  &lsquo;<samp>a*b/c*d</samp>&rsquo; is equivalent to
-&lsquo;<samp>(a*b)/(c*d)</samp>&rsquo;.
-</p>
-<a name="index-Multiplication_002c-implicit"></a>
-<a name="index-Implicit-multiplication"></a>
-<p>The multiplication sign &lsquo;<samp>*</samp>&rsquo; may be omitted in many cases.  In particular,
-if the righthand side is a number, variable name, or parenthesized
-expression, the &lsquo;<samp>*</samp>&rsquo; may be omitted.  Implicit multiplication has the
-same precedence as the explicit &lsquo;<samp>*</samp>&rsquo; operator.  The one exception to
-the rule is that a variable name followed by a parenthesized expression,
-as in &lsquo;<samp>f(x)</samp>&rsquo;,
-is interpreted as a function call, not an implicit &lsquo;<samp>*</samp>&rsquo;.  In many
-cases you must use a space if you omit the &lsquo;<samp>*</samp>&rsquo;:  &lsquo;<samp>2a</samp>&rsquo; is the
-same as &lsquo;<samp>2*a</samp>&rsquo;, and &lsquo;<samp>a b</samp>&rsquo; is the same as &lsquo;<samp>a*b</samp>&rsquo;, but &lsquo;<samp>ab</samp>&rsquo;
-is a variable called <code>ab</code>, <em>not</em> the product of &lsquo;<samp>a</samp>&rsquo; and
-&lsquo;<samp>b</samp>&rsquo;!  Also note that &lsquo;<samp>f (x)</samp>&rsquo; is still a function call.
-</p>
-<a name="index-Implicit-comma-in-vectors"></a>
-<p>The rules are slightly different for vectors written with square brackets.
-In vectors, the space character is interpreted (like the comma) as a
-separator of elements of the vector.  Thus &lsquo;<samp>[&nbsp;2a&nbsp;b+c&nbsp;d&nbsp;]</samp>&rsquo;<!-- /@w --> is
-equivalent to &lsquo;<samp>[2*a, b+c, d]</samp>&rsquo;, whereas &lsquo;<samp>2a b+c d</samp>&rsquo; is equivalent
-to &lsquo;<samp>2*a*b + c*d</samp>&rsquo;.
-Note that spaces around the brackets, and around explicit commas, are
-ignored.  To force spaces to be interpreted as multiplication you can
-enclose a formula in parentheses as in &lsquo;<samp>[(a b) 2(c d)]</samp>&rsquo;, which is
-interpreted as &lsquo;<samp>[a*b, 2*c*d]</samp>&rsquo;.  An implicit comma is also inserted
-between &lsquo;<samp>][</samp>&rsquo;, as in the matrix &lsquo;<samp>[[1 2][3 4]]</samp>&rsquo;.
-</p>
-<p>Vectors that contain commas (not embedded within nested parentheses or
-brackets) do not treat spaces specially:  &lsquo;<samp>[a b, 2 c d]</samp>&rsquo; is a vector
-of two elements.  Also, if it would be an error to treat spaces as
-separators, but not otherwise, then Calc will ignore spaces:
-&lsquo;<samp>[a&nbsp;<span class="nolinebreak">-</span>&nbsp;b]</samp>&rsquo;<!-- /@w --> is a vector of one element, but &lsquo;<samp>[a&nbsp;<span class="nolinebreak">-b]</span></samp>&rsquo;<!-- /@w --> is
-a vector of two elements.  Finally, vectors entered with curly braces
-instead of square brackets do not give spaces any special treatment.
-When Calc displays a vector that does not contain any commas, it will
-insert parentheses if necessary to make the meaning clear:
-&lsquo;<samp>[(a&nbsp;b)]</samp>&rsquo;<!-- /@w -->.
-</p>
-<p>The expression &lsquo;<samp>5%-2</samp>&rsquo; is ambiguous; is this five-percent minus two,
-or five modulo minus-two?  Calc always interprets the leftmost symbol as
-an infix operator preferentially (modulo, in this case), so you would
-need to write &lsquo;<samp>(5%)-2</samp>&rsquo; to get the former interpretation.
-</p>
-<a name="index-Function-call-notation"></a>
-<p>A function call is, e.g., &lsquo;<samp>sin(1+x)</samp>&rsquo;.  (The Calc algebraic function
-<code>foo</code> corresponds to the Emacs Lisp function <code>calcFunc-foo</code>,
-but unless you access the function from within Emacs Lisp, you don&rsquo;t
-need to worry about it.)  Most mathematical Calculator commands like
-<code>calc-sin</code> have function equivalents like <code>sin</code>.
-If no Lisp function is defined for a function called by a formula, the
-call is left as it is during algebraic manipulation: &lsquo;<samp>f(x+y)</samp>&rsquo; is
-left alone.  Beware that many innocent-looking short names like <code>in</code>
-and <code>re</code> have predefined meanings which could surprise you; however,
-single letters or single letters followed by digits are always safe to
-use for your own function names.  See <a href="Function-Index.html#Function-Index">Function Index</a>.
-</p>
-<p>In the documentation for particular commands, the notation <kbd>H S</kbd>
-(<code>calc-sinh</code>) [<code>sinh</code>] means that the key sequence <kbd>H S</kbd>, the
-command <kbd>M-x calc-sinh</kbd>, and the algebraic function <code>sinh(x)</code> all
-represent the same operation.
-</p>
-<p>Commands that interpret (&ldquo;parse&rdquo;) text as algebraic formulas include
-algebraic entry (<kbd>'</kbd>), editing commands like <kbd>`</kbd> which parse
-the contents of the editing buffer when you finish, the <kbd>C-x * g</kbd>
-and <kbd><span class="nolinebreak">C-x</span>&nbsp;*&nbsp;r</kbd><!-- /@w --> commands, the <kbd>C-y</kbd> command, the X window system
-&ldquo;paste&rdquo; mouse operation, and Embedded mode.  All of these operations
-use the same rules for parsing formulas; in particular, language modes
-(see <a href="Language-Modes.html#Language-Modes">Language Modes</a>) affect them all in the same way.
-</p>
-<p>When you read a large amount of text into the Calculator (say a vector
-which represents a big set of rewrite rules; see <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>),
-you may wish to include comments in the text.  Calc&rsquo;s formula parser
-ignores the symbol &lsquo;<samp>%%</samp>&rsquo; and anything following it on a line:
-</p>
-<div class="example">
-<pre class="example">[ a + b,   %% the sum of &quot;a&quot; and &quot;b&quot;
+  <div class="header">
+    <p>Previous: <a href="Variables.html#Variables" accesskey="p"
+    rel="prev">Variables</a>, Up: <a href=
+    "Data-Types.html#Data-Types" accesskey="u" rel="up">Data
+    Types</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Formulas-1" id="Formulas-1"></a>
+
+  <h3 class="section">4.15 Formulas</h3><a name="index-Formulas"
+  id="index-Formulas"></a> <a name="index-Expressions" id=
+  "index-Expressions"></a> <a name="index-Operators-in-formulas"
+  id="index-Operators-in-formulas"></a> <a name=
+  "index-Precedence-of-operators" id=
+  "index-Precedence-of-operators"></a>
+
+  <p>When you press the apostrophe key you may enter any expression
+  or formula in algebraic form. (Calc uses the terms
+  &ldquo;expression&rdquo; and &ldquo;formula&rdquo;
+  interchangeably.) An expression is built up of numbers, variable
+  names, and function calls, combined with various arithmetic
+  operators. Parentheses may be used to indicate grouping. Spaces
+  are ignored within formulas, except that spaces are not permitted
+  within variable names or numbers. Arithmetic operators, in order
+  from highest to lowest precedence, and with their equivalent
+  function names, are:</p>
+
+  <p>&lsquo;<samp>_</samp>&rsquo; [<code>subscr</code>]
+  (subscripts);</p>
+
+  <p>postfix &lsquo;<samp>%</samp>&rsquo; [<code>percent</code>]
+  (as in &lsquo;<samp>25% = 0.25</samp>&rsquo;);</p>
+
+  <p>prefix &lsquo;<samp>!</samp>&rsquo; [<code>lnot</code>]
+  (logical &ldquo;not,&rdquo; as in
+  &lsquo;<samp>!x</samp>&rsquo;);</p>
+
+  <p>&lsquo;<samp>+/-</samp>&rsquo; [<code>sdev</code>] (the
+  standard deviation symbol) and &lsquo;<samp>mod</samp>&rsquo;
+  [<code>makemod</code>] (the symbol for modulo forms);</p>
+
+  <p>postfix &lsquo;<samp>!</samp>&rsquo; [<code>fact</code>]
+  (factorial, as in &lsquo;<samp>n!</samp>&rsquo;) and postfix
+  &lsquo;<samp>!!</samp>&rsquo; [<code>dfact</code>] (double
+  factorial);</p>
+
+  <p>&lsquo;<samp>^</samp>&rsquo; [<code>pow</code>]
+  (raised-to-the-power-of);</p>
+
+  <p>prefix &lsquo;<samp>+</samp>&rsquo; and
+  &lsquo;<samp>-</samp>&rsquo; [<code>neg</code>] (as in
+  &lsquo;<samp>-x</samp>&rsquo;);</p>
+
+  <p>&lsquo;<samp>*</samp>&rsquo; [<code>mul</code>];</p>
+
+  <p>&lsquo;<samp>/</samp>&rsquo; [<code>div</code>],
+  &lsquo;<samp>%</samp>&rsquo; [<code>mod</code>] (modulo), and
+  &lsquo;<samp>\</samp>&rsquo; [<code>idiv</code>] (integer
+  division);</p>
+
+  <p>infix &lsquo;<samp>+</samp>&rsquo; [<code>add</code>] and
+  &lsquo;<samp>-</samp>&rsquo; [<code>sub</code>] (as in
+  &lsquo;<samp>x-y</samp>&rsquo;);</p>
+
+  <p>&lsquo;<samp>|</samp>&rsquo; [<code>vconcat</code>] (vector
+  concatenation);</p>
+
+  <p>relations &lsquo;<samp>=</samp>&rsquo; [<code>eq</code>],
+  &lsquo;<samp>!=</samp>&rsquo; [<code>neq</code>],
+  &lsquo;<samp>&lt;</samp>&rsquo; [<code>lt</code>],
+  &lsquo;<samp>&gt;</samp>&rsquo; [<code>gt</code>],
+  &lsquo;<samp>&lt;=</samp>&rsquo; [<code>leq</code>], and
+  &lsquo;<samp>&gt;=</samp>&rsquo; [<code>geq</code>];</p>
+
+  <p>&lsquo;<samp>&amp;&amp;</samp>&rsquo; [<code>land</code>]
+  (logical &ldquo;and&rdquo;);</p>
+
+  <p>&lsquo;<samp>||</samp>&rsquo; [<code>lor</code>] (logical
+  &ldquo;or&rdquo;);</p>
+
+  <p>the C-style &ldquo;if&rdquo; operator
+  &lsquo;<samp>a?b:c</samp>&rsquo; [<code>if</code>];</p>
+
+  <p>&lsquo;<samp>!!!</samp>&rsquo; [<code>pnot</code>] (rewrite
+  pattern &ldquo;not&rdquo;);</p>
+
+  <p>&lsquo;<samp>&amp;&amp;&amp;</samp>&rsquo; [<code>pand</code>]
+  (rewrite pattern &ldquo;and&rdquo;);</p>
+
+  <p>&lsquo;<samp>|||</samp>&rsquo; [<code>por</code>] (rewrite
+  pattern &ldquo;or&rdquo;);</p>
+
+  <p>&lsquo;<samp>:=</samp>&rsquo; [<code>assign</code>] (for
+  assignments and rewrite rules);</p>
+
+  <p>&lsquo;<samp>::</samp>&rsquo; [<code>condition</code>]
+  (rewrite pattern condition);</p>
+
+  <p>&lsquo;<samp>=&gt;</samp>&rsquo; [<code>evalto</code>].</p>
+
+  <p>Note that, unlike in usual computer notation, multiplication
+  binds more strongly than division:
+  &lsquo;<samp>a*b/c*d</samp>&rsquo; is equivalent to
+  &lsquo;<samp>(a*b)/(c*d)</samp>&rsquo;.</p><a name=
+  "index-Multiplication_002c-implicit" id=
+  "index-Multiplication_002c-implicit"></a> <a name=
+  "index-Implicit-multiplication" id=
+  "index-Implicit-multiplication"></a>
+
+  <p>The multiplication sign &lsquo;<samp>*</samp>&rsquo; may be
+  omitted in many cases. In particular, if the righthand side is a
+  number, variable name, or parenthesized expression, the
+  &lsquo;<samp>*</samp>&rsquo; may be omitted. Implicit
+  multiplication has the same precedence as the explicit
+  &lsquo;<samp>*</samp>&rsquo; operator. The one exception to the
+  rule is that a variable name followed by a parenthesized
+  expression, as in &lsquo;<samp>f(x)</samp>&rsquo;, is interpreted
+  as a function call, not an implicit &lsquo;<samp>*</samp>&rsquo;.
+  In many cases you must use a space if you omit the
+  &lsquo;<samp>*</samp>&rsquo;: &lsquo;<samp>2a</samp>&rsquo; is
+  the same as &lsquo;<samp>2*a</samp>&rsquo;, and &lsquo;<samp>a
+  b</samp>&rsquo; is the same as &lsquo;<samp>a*b</samp>&rsquo;,
+  but &lsquo;<samp>ab</samp>&rsquo; is a variable called
+  <code>ab</code>, <em>not</em> the product of
+  &lsquo;<samp>a</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo;!
+  Also note that &lsquo;<samp>f (x)</samp>&rsquo; is still a
+  function call.</p><a name="index-Implicit-comma-in-vectors" id=
+  "index-Implicit-comma-in-vectors"></a>
+
+  <p>The rules are slightly different for vectors written with
+  square brackets. In vectors, the space character is interpreted
+  (like the comma) as a separator of elements of the vector. Thus
+  &lsquo;<samp>[&nbsp;2a&nbsp;b+c&nbsp;d&nbsp;]</samp>&rsquo;
+  <!-- /@w --> is equivalent to &lsquo;<samp>[2*a, b+c,
+  d]</samp>&rsquo;, whereas &lsquo;<samp>2a b+c d</samp>&rsquo; is
+  equivalent to &lsquo;<samp>2*a*b + c*d</samp>&rsquo;. Note that
+  spaces around the brackets, and around explicit commas, are
+  ignored. To force spaces to be interpreted as multiplication you
+  can enclose a formula in parentheses as in &lsquo;<samp>[(a b)
+  2(c d)]</samp>&rsquo;, which is interpreted as &lsquo;<samp>[a*b,
+  2*c*d]</samp>&rsquo;. An implicit comma is also inserted between
+  &lsquo;<samp>][</samp>&rsquo;, as in the matrix &lsquo;<samp>[[1
+  2][3 4]]</samp>&rsquo;.</p>
+
+  <p>Vectors that contain commas (not embedded within nested
+  parentheses or brackets) do not treat spaces specially:
+  &lsquo;<samp>[a b, 2 c d]</samp>&rsquo; is a vector of two
+  elements. Also, if it would be an error to treat spaces as
+  separators, but not otherwise, then Calc will ignore spaces:
+  &lsquo;<samp>[a&nbsp;<span class=
+  "nolinebreak">-</span>&nbsp;b]</samp>&rsquo;<!-- /@w --> is a
+  vector of one element, but &lsquo;<samp>[a&nbsp;<span class=
+  "nolinebreak">-b]</span></samp>&rsquo;<!-- /@w --> is a vector of
+  two elements. Finally, vectors entered with curly braces instead
+  of square brackets do not give spaces any special treatment. When
+  Calc displays a vector that does not contain any commas, it will
+  insert parentheses if necessary to make the meaning clear:
+  &lsquo;<samp>[(a&nbsp;b)]</samp>&rsquo;<!-- /@w -->.</p>
+
+  <p>The expression &lsquo;<samp>5%-2</samp>&rsquo; is ambiguous;
+  is this five-percent minus two, or five modulo minus-two? Calc
+  always interprets the leftmost symbol as an infix operator
+  preferentially (modulo, in this case), so you would need to write
+  &lsquo;<samp>(5%)-2</samp>&rsquo; to get the former
+  interpretation.</p><a name="index-Function-call-notation" id=
+  "index-Function-call-notation"></a>
+
+  <p>A function call is, e.g., &lsquo;<samp>sin(1+x)</samp>&rsquo;.
+  (The Calc algebraic function <code>foo</code> corresponds to the
+  Emacs Lisp function <code>calcFunc-foo</code>, but unless you
+  access the function from within Emacs Lisp, you don&rsquo;t need
+  to worry about it.) Most mathematical Calculator commands like
+  <code>calc-sin</code> have function equivalents like
+  <code>sin</code>. If no Lisp function is defined for a function
+  called by a formula, the call is left as it is during algebraic
+  manipulation: &lsquo;<samp>f(x+y)</samp>&rsquo; is left alone.
+  Beware that many innocent-looking short names like
+  <code>in</code> and <code>re</code> have predefined meanings
+  which could surprise you; however, single letters or single
+  letters followed by digits are always safe to use for your own
+  function names. See <a href=
+  "Function-Index.html#Function-Index">Function Index</a>.</p>
+
+  <p>In the documentation for particular commands, the notation
+  <kbd>H S</kbd> (<code>calc-sinh</code>) [<code>sinh</code>] means
+  that the key sequence <kbd>H S</kbd>, the command <kbd>M-x
+  calc-sinh</kbd>, and the algebraic function <code>sinh(x)</code>
+  all represent the same operation.</p>
+
+  <p>Commands that interpret (&ldquo;parse&rdquo;) text as
+  algebraic formulas include algebraic entry (<kbd>'</kbd>),
+  editing commands like <kbd>`</kbd> which parse the contents of
+  the editing buffer when you finish, the <kbd>C-x * g</kbd> and
+  <kbd><span class="nolinebreak">C-x</span>&nbsp;*&nbsp;r</kbd>
+  <!-- /@w --> commands, the <kbd>C-y</kbd> command, the X window
+  system &ldquo;paste&rdquo; mouse operation, and Embedded mode.
+  All of these operations use the same rules for parsing formulas;
+  in particular, language modes (see <a href=
+  "Language-Modes.html#Language-Modes">Language Modes</a>) affect
+  them all in the same way.</p>
+
+  <p>When you read a large amount of text into the Calculator (say
+  a vector which represents a big set of rewrite rules; see
+  <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>),
+  you may wish to include comments in the text. Calc&rsquo;s
+  formula parser ignores the symbol &lsquo;<samp>%%</samp>&rsquo;
+  and anything following it on a line:</p>
+
+  <div class="example">
+    <pre class="example">
+[ a + b,   %% the sum of "a" and "b"
   c + d,
   %% last line is coming up:
   e + f ]
-</pre></div>
+</pre>
+  </div>
 
-<p>This is parsed exactly the same as &lsquo;<samp>[ a + b, c + d, e + f ]</samp>&rsquo;.
-</p>
-<p>See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>, for a way to create your own operators and other
-input notations.  See <a href="Compositions.html#Compositions">Compositions</a>, for a way to create new display
-formats.
-</p>
-<p>See <a href="Algebra.html#Algebra">Algebra</a>, for commands for manipulating formulas symbolically.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Variables.html#Variables" accesskey="p" rel="prev">Variables</a>, Up: <a href="Data-Types.html#Data-Types" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>This is parsed exactly the same as &lsquo;<samp>[ a + b, c +
+  d, e + f ]</samp>&rsquo;.</p>
 
+  <p>See <a href="Syntax-Tables.html#Syntax-Tables">Syntax
+  Tables</a>, for a way to create your own operators and other
+  input notations. See <a href=
+  "Compositions.html#Compositions">Compositions</a>, for a way to
+  create new display formats.</p>
 
+  <p>See <a href="Algebra.html#Algebra">Algebra</a>, for commands
+  for manipulating formulas symbolically.</p>
+  <hr />
 
+  <div class="header">
+    <p>Previous: <a href="Variables.html#Variables" accesskey="p"
+    rel="prev">Variables</a>, Up: <a href=
+    "Data-Types.html#Data-Types" accesskey="u" rel="up">Data
+    Types</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

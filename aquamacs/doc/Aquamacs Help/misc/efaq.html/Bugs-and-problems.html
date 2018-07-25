@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,102 +29,223 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: Bugs and problems</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: Bugs and problems">
-<meta name="keywords" content="GNU Emacs FAQ: Bugs and problems">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Problems-with-very-large-files.html#Problems-with-very-large-files" rel="next" title="Problems with very large files">
-<link href="Fullscreen-mode-on-MS_002dWindows.html#Fullscreen-mode-on-MS_002dWindows" rel="prev" title="Fullscreen mode on MS-Windows">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: Bugs and problems</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: Bugs and problems" />
+  <meta name="keywords" content=
+  "GNU Emacs FAQ: Bugs and problems" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href=
+  "Problems-with-very-large-files.html#Problems-with-very-large-files"
+  rel="next" title="Problems with very large files" />
+  <link href=
+  "Fullscreen-mode-on-MS_002dWindows.html#Fullscreen-mode-on-MS_002dWindows"
+  rel="prev" title="Fullscreen mode on MS-Windows" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Bugs-and-problems"></a>
-<div class="header">
-<p>
-Next: <a href="Compiling-and-installing-Emacs.html#Compiling-and-installing-Emacs" accesskey="n" rel="next">Compiling and installing Emacs</a>, Previous: <a href="Common-requests.html#Common-requests" accesskey="p" rel="prev">Common requests</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Bugs-and-problems-1"></a>
-<h2 class="chapter">6 Bugs and problems</h2>
-<a name="index-Bugs-and-problems"></a>
+<body lang="en" xml:lang="en">
+  <a name="Bugs-and-problems" id="Bugs-and-problems"></a>
 
-<p>The Emacs manual lists some common kinds of trouble users could get
-into, see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Lossage.html#Lossage">Dealing with Emacs Trouble</a> in <cite>The GNU
-Emacs Manual</cite>, so you might look there if the problem you encounter
-isn&rsquo;t described in this chapter.  If you decide you&rsquo;ve discovered a bug,
-see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Bugs.html#Bugs">Reporting Bugs</a> in <cite>The GNU Emacs Manual</cite>, for
-instructions how to do that.
-</p>
-<p>The file <samp>etc/PROBLEMS</samp> in the Emacs distribution lists various
-known problems with building and using Emacs on specific platforms;
-type <kbd>C-h C-p</kbd> to read it.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Problems-with-very-large-files.html#Problems-with-very-large-files" accesskey="1">Problems with very large files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="_005eM-in-the-shell-buffer.html#g_t_005eM-in-the-shell-buffer" accesskey="2">^M in the shell buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Problems-with-Shell-Mode.html#Problems-with-Shell-Mode" accesskey="3">Problems with Shell Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Termcap_002fTerminfo-entries-for-Emacs.html#Termcap_002fTerminfo-entries-for-Emacs" accesskey="4">Termcap/Terminfo entries for Emacs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Errors-with-init-files.html#Errors-with-init-files" accesskey="5">Errors with init files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Emacs-ignores-X-resources.html#Emacs-ignores-X-resources" accesskey="6">Emacs ignores X resources</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Emacs-ignores-frame-parameters.html#Emacs-ignores-frame-parameters" accesskey="7">Emacs ignores frame parameters</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Editing-files-with-_0024-in-the-name.html#Editing-files-with-_0024-in-the-name" accesskey="8">Editing files with $ in the name</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Shell-mode-loses-the-current-directory.html#Shell-mode-loses-the-current-directory" accesskey="9">Shell mode loses the current directory</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Security-risks-with-Emacs.html#Security-risks-with-Emacs">Security risks with Emacs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dired-claims-that-no-file-is-on-this-line.html#Dired-claims-that-no-file-is-on-this-line">Dired claims that no file is on this line</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href=
+    "Compiling-and-installing-Emacs.html#Compiling-and-installing-Emacs"
+    accesskey="n" rel="next">Compiling and installing Emacs</a>,
+    Previous: <a href="Common-requests.html#Common-requests"
+    accesskey="p" rel="prev">Common requests</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Bugs-and-problems-1" id="Bugs-and-problems-1"></a>
 
+  <h2 class="chapter">6 Bugs and problems</h2><a name=
+  "index-Bugs-and-problems" id="index-Bugs-and-problems"></a>
 
+  <p>The Emacs manual lists some common kinds of trouble users
+  could get into, see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Lossage.html#Lossage">
+  Dealing with Emacs Trouble</a> in <cite>The GNU Emacs
+  Manual</cite>, so you might look there if the problem you
+  encounter isn&rsquo;t described in this chapter. If you decide
+  you&rsquo;ve discovered a bug, see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Bugs.html#Bugs">
+  Reporting Bugs</a> in <cite>The GNU Emacs Manual</cite>, for
+  instructions how to do that.</p>
 
+  <p>The file <samp>etc/PROBLEMS</samp> in the Emacs distribution
+  lists various known problems with building and using Emacs on
+  specific platforms; type <kbd>C-h C-p</kbd> to read it.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Problems-with-very-large-files.html#Problems-with-very-large-files"
+      accesskey="1">Problems with very large files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "_005eM-in-the-shell-buffer.html#g_t_005eM-in-the-shell-buffer"
+      accesskey="2">^M in the shell buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Problems-with-Shell-Mode.html#Problems-with-Shell-Mode"
+      accesskey="3">Problems with Shell Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Termcap_002fTerminfo-entries-for-Emacs.html#Termcap_002fTerminfo-entries-for-Emacs"
+      accesskey="4">Termcap/Terminfo entries for Emacs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Errors-with-init-files.html#Errors-with-init-files"
+      accesskey="5">Errors with init files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Emacs-ignores-X-resources.html#Emacs-ignores-X-resources"
+      accesskey="6">Emacs ignores X resources</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Emacs-ignores-frame-parameters.html#Emacs-ignores-frame-parameters"
+      accesskey="7">Emacs ignores frame parameters</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Editing-files-with-_0024-in-the-name.html#Editing-files-with-_0024-in-the-name"
+      accesskey="8">Editing files with $ in the name</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Shell-mode-loses-the-current-directory.html#Shell-mode-loses-the-current-directory"
+      accesskey="9">Shell mode loses the current
+      directory</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Security-risks-with-Emacs.html#Security-risks-with-Emacs">Security
+      risks with Emacs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dired-claims-that-no-file-is-on-this-line.html#Dired-claims-that-no-file-is-on-this-line">
+      Dired claims that no file is on this line</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

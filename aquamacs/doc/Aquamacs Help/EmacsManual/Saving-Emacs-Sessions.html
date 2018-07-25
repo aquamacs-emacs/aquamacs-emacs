@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,152 +20,209 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Saving Emacs Sessions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Saving Emacs Sessions">
-<meta name="keywords" content="GNU Emacs Manual: Saving Emacs Sessions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Recursive-Edit.html#Recursive-Edit" rel="next" title="Recursive Edit">
-<link href="Editing-Binary-Files.html#Editing-Binary-Files" rel="prev" title="Editing Binary Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Saving Emacs Sessions</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Saving Emacs Sessions" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Saving Emacs Sessions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Recursive-Edit.html#Recursive-Edit" rel="next" title=
+  "Recursive Edit" />
+  <link href="Editing-Binary-Files.html#Editing-Binary-Files" rel=
+  "prev" title="Editing Binary Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Saving-Emacs-Sessions" id="Saving-Emacs-Sessions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Recursive-Edit.html#Recursive-Edit"
+    accesskey="n" rel="next">Recursive Edit</a>, Previous: <a href=
+    "Editing-Binary-Files.html#Editing-Binary-Files" accesskey="p"
+    rel="prev">Editing Binary Files</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Saving-Emacs-Sessions-1" id=
+  "Saving-Emacs-Sessions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Saving-Emacs-Sessions"></a>
-<div class="header">
-<p>
-Next: <a href="Recursive-Edit.html#Recursive-Edit" accesskey="n" rel="next">Recursive Edit</a>, Previous: <a href="Editing-Binary-Files.html#Editing-Binary-Files" accesskey="p" rel="prev">Editing Binary Files</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Saving-Emacs-Sessions-1"></a>
-<h2 class="chapter">46 Saving Emacs Sessions</h2>
-<a name="index-saving-sessions"></a>
-<a name="index-restore-session"></a>
-<a name="index-remember-editing-session"></a>
-<a name="index-reload-files"></a>
-<a name="index-desktop"></a>
+  <h2 class="chapter">46 Saving Emacs Sessions</h2><a name=
+  "index-saving-sessions" id="index-saving-sessions"></a> <a name=
+  "index-restore-session" id="index-restore-session"></a> <a name=
+  "index-remember-editing-session" id=
+  "index-remember-editing-session"></a> <a name=
+  "index-reload-files" id="index-reload-files"></a> <a name=
+  "index-desktop" id="index-desktop"></a> <a name=
+  "index-desktop_002drestore_002dframes" id=
+  "index-desktop_002drestore_002dframes"></a>
 
-<a name="index-desktop_002drestore_002dframes"></a>
-<p>Use the desktop library to save the state of Emacs from one session
-to another.  Once you save the Emacs <em>desktop</em>&mdash;the buffers,
-their file names, major modes, buffer positions, and so on&mdash;then
-subsequent Emacs sessions reload the saved desktop.  By default,
-the desktop also tries to save the frame and window configuration.
-To disable this, set <code>desktop-restore-frames</code> to <code>nil</code>.
-(See that variable&rsquo;s documentation for some related options
-that you can customize to fine-tune this behavior.)
-</p>
-<a name="index-frameset_002dfilter_002dalist"></a>
-<p>When the desktop restores the frame and window configuration, it
-uses the recorded values of frame parameters, disregarding any
-settings for those parameters you have in your init file (see <a href="Init-File.html#Init-File">Init File</a>).  This means that frame parameters such as fonts and faces for
-the restored frames will come from the desktop file, where they were
-saved when you exited your previous Emacs session; any settings for
-those parameters in your init file will be ignored.  To disable this,
-customize the value of <code>frameset-filter-alist</code> to filter out the
-frame parameters you don&rsquo;t want to be restored.
-</p>
-<a name="index-desktop_002dsave"></a>
-<a name="index-desktop_002dsave_002dmode"></a>
-<p>You can save the desktop manually with the command <kbd>M-x
-desktop-save</kbd>.  You can also enable automatic saving of the desktop
-when you exit Emacs, and automatic restoration of the last saved
-desktop when Emacs starts: use the Customization buffer (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>) to set <code>desktop-save-mode</code> to <code>t</code> for future
-sessions, or add this line in your init file (see <a href="Init-File.html#Init-File">Init File</a>):
-</p>
-<div class="example">
-<pre class="example">(desktop-save-mode 1)
-</pre></div>
+  <p>Use the desktop library to save the state of Emacs from one
+  session to another. Once you save the Emacs
+  <em>desktop</em>&mdash;the buffers, their file names, major
+  modes, buffer positions, and so on&mdash;then subsequent Emacs
+  sessions reload the saved desktop. By default, the desktop also
+  tries to save the frame and window configuration. To disable
+  this, set <code>desktop-restore-frames</code> to
+  <code>nil</code>. (See that variable&rsquo;s documentation for
+  some related options that you can customize to fine-tune this
+  behavior.)</p><a name="index-frameset_002dfilter_002dalist" id=
+  "index-frameset_002dfilter_002dalist"></a>
 
-<a name="index-desktop_002dauto_002dsave_002dtimeout"></a>
-<p>When <code>desktop-save-mode</code> is active and the desktop file exists,
-Emacs auto-saves it every <code>desktop-auto-save-timeout</code>
-seconds, if that is non-<code>nil</code> and non-zero.
-</p>
-<a name="index-desktop_002dchange_002ddir"></a>
-<a name="index-desktop_002drevert"></a>
-<a name="index-desktop_002dpath"></a>
-<p>If you turn on <code>desktop-save-mode</code> in your init file, then when
-Emacs starts, it looks for a saved desktop in the current directory.
-(More precisely, it looks in the directories specified by
-<var>desktop-path</var>, and uses the first desktop it finds.)
-Thus, you can have separate saved desktops in different directories,
-and the starting directory determines which one Emacs reloads.  You
-can save the current desktop and reload one saved in another directory
-by typing <kbd>M-x desktop-change-dir</kbd>.  Typing <kbd>M-x
-desktop-revert</kbd> reverts to the desktop previously reloaded.
-</p>
-<p>Specify the option &lsquo;<samp>--no-desktop</samp>&rsquo; on the command line when you
-don&rsquo;t want it to reload any saved desktop.  This turns off
-<code>desktop-save-mode</code> for the current session.  Starting Emacs with
-the &lsquo;<samp>--no-init-file</samp>&rsquo; option also disables desktop reloading,
-since it bypasses the init file, where <code>desktop-save-mode</code> is
-usually turned on.
-</p>
-<a name="index-desktop_002drestore_002deager"></a>
-<p>By default, all the buffers in the desktop are restored at one go.
-However, this may be slow if there are a lot of buffers in the
-desktop.  You can specify the maximum number of buffers to restore
-immediately with the variable <code>desktop-restore-eager</code>; the
-remaining buffers are restored lazily, when Emacs is idle.
-</p>
-<a name="index-desktop_002dclear"></a>
-<a name="index-desktop_002dglobals_002dto_002dclear"></a>
-<a name="index-desktop_002dclear_002dpreserve_002dbuffers_002dregexp"></a>
-<p>Type <kbd>M-x desktop-clear</kbd> to empty the Emacs desktop.  This kills
-all buffers except for internal ones, and clears the global variables
-listed in <code>desktop-globals-to-clear</code>.  If you want this to
-preserve certain buffers, customize the variable
-<code>desktop-clear-preserve-buffers-regexp</code>, whose value is a regular
-expression matching the names of buffers not to kill.
-</p>
-<p>If you want to save minibuffer history from one session to
-another, use the <code>savehist</code> library.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Recursive-Edit.html#Recursive-Edit" accesskey="n" rel="next">Recursive Edit</a>, Previous: <a href="Editing-Binary-Files.html#Editing-Binary-Files" accesskey="p" rel="prev">Editing Binary Files</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When the desktop restores the frame and window configuration,
+  it uses the recorded values of frame parameters, disregarding any
+  settings for those parameters you have in your init file (see
+  <a href="Init-File.html#Init-File">Init File</a>). This means
+  that frame parameters such as fonts and faces for the restored
+  frames will come from the desktop file, where they were saved
+  when you exited your previous Emacs session; any settings for
+  those parameters in your init file will be ignored. To disable
+  this, customize the value of <code>frameset-filter-alist</code>
+  to filter out the frame parameters you don&rsquo;t want to be
+  restored.</p><a name="index-desktop_002dsave" id=
+  "index-desktop_002dsave"></a> <a name=
+  "index-desktop_002dsave_002dmode" id=
+  "index-desktop_002dsave_002dmode"></a>
 
+  <p>You can save the desktop manually with the command <kbd>M-x
+  desktop-save</kbd>. You can also enable automatic saving of the
+  desktop when you exit Emacs, and automatic restoration of the
+  last saved desktop when Emacs starts: use the Customization
+  buffer (see <a href=
+  "Easy-Customization.html#Easy-Customization">Easy
+  Customization</a>) to set <code>desktop-save-mode</code> to
+  <code>t</code> for future sessions, or add this line in your init
+  file (see <a href="Init-File.html#Init-File">Init File</a>):</p>
 
+  <div class="example">
+    <pre class="example">
+(desktop-save-mode 1)
+</pre>
+  </div><a name="index-desktop_002dauto_002dsave_002dtimeout" id=
+  "index-desktop_002dauto_002dsave_002dtimeout"></a>
 
+  <p>When <code>desktop-save-mode</code> is active and the desktop
+  file exists, Emacs auto-saves it every
+  <code>desktop-auto-save-timeout</code> seconds, if that is
+  non-<code>nil</code> and non-zero.</p><a name=
+  "index-desktop_002dchange_002ddir" id=
+  "index-desktop_002dchange_002ddir"></a> <a name=
+  "index-desktop_002drevert" id="index-desktop_002drevert"></a>
+  <a name="index-desktop_002dpath" id="index-desktop_002dpath"></a>
+
+  <p>If you turn on <code>desktop-save-mode</code> in your init
+  file, then when Emacs starts, it looks for a saved desktop in the
+  current directory. (More precisely, it looks in the directories
+  specified by <var>desktop-path</var>, and uses the first desktop
+  it finds.) Thus, you can have separate saved desktops in
+  different directories, and the starting directory determines
+  which one Emacs reloads. You can save the current desktop and
+  reload one saved in another directory by typing <kbd>M-x
+  desktop-change-dir</kbd>. Typing <kbd>M-x desktop-revert</kbd>
+  reverts to the desktop previously reloaded.</p>
+
+  <p>Specify the option &lsquo;<samp>--no-desktop</samp>&rsquo; on
+  the command line when you don&rsquo;t want it to reload any saved
+  desktop. This turns off <code>desktop-save-mode</code> for the
+  current session. Starting Emacs with the
+  &lsquo;<samp>--no-init-file</samp>&rsquo; option also disables
+  desktop reloading, since it bypasses the init file, where
+  <code>desktop-save-mode</code> is usually turned on.</p><a name=
+  "index-desktop_002drestore_002deager" id=
+  "index-desktop_002drestore_002deager"></a>
+
+  <p>By default, all the buffers in the desktop are restored at one
+  go. However, this may be slow if there are a lot of buffers in
+  the desktop. You can specify the maximum number of buffers to
+  restore immediately with the variable
+  <code>desktop-restore-eager</code>; the remaining buffers are
+  restored lazily, when Emacs is idle.</p><a name=
+  "index-desktop_002dclear" id="index-desktop_002dclear"></a>
+  <a name="index-desktop_002dglobals_002dto_002dclear" id=
+  "index-desktop_002dglobals_002dto_002dclear"></a> <a name=
+  "index-desktop_002dclear_002dpreserve_002dbuffers_002dregexp" id=
+  "index-desktop_002dclear_002dpreserve_002dbuffers_002dregexp"></a>
+
+  <p>Type <kbd>M-x desktop-clear</kbd> to empty the Emacs desktop.
+  This kills all buffers except for internal ones, and clears the
+  global variables listed in <code>desktop-globals-to-clear</code>.
+  If you want this to preserve certain buffers, customize the
+  variable <code>desktop-clear-preserve-buffers-regexp</code>,
+  whose value is a regular expression matching the names of buffers
+  not to kill.</p>
+
+  <p>If you want to save minibuffer history from one session to
+  another, use the <code>savehist</code> library.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Recursive-Edit.html#Recursive-Edit"
+    accesskey="n" rel="next">Recursive Edit</a>, Previous: <a href=
+    "Editing-Binary-Files.html#Editing-Binary-Files" accesskey="p"
+    rel="prev">Editing Binary Files</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

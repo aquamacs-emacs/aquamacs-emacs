@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,157 +16,228 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Iteration</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Iteration">
-<meta name="keywords" content="Common Lisp Extensions: Iteration">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Control-Structure.html#Control-Structure" rel="up" title="Control Structure">
-<link href="Loop-Facility.html#Loop-Facility" rel="next" title="Loop Facility">
-<link href="Blocks-and-Exits.html#Blocks-and-Exits" rel="prev" title="Blocks and Exits">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Iteration</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Iteration" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Iteration" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Control-Structure.html#Control-Structure" rel="up"
+  title="Control Structure" />
+  <link href="Loop-Facility.html#Loop-Facility" rel="next" title=
+  "Loop Facility" />
+  <link href="Blocks-and-Exits.html#Blocks-and-Exits" rel="prev"
+  title="Blocks and Exits" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Iteration"></a>
-<div class="header">
-<p>
-Next: <a href="Loop-Facility.html#Loop-Facility" accesskey="n" rel="next">Loop Facility</a>, Previous: <a href="Blocks-and-Exits.html#Blocks-and-Exits" accesskey="p" rel="prev">Blocks and Exits</a>, Up: <a href="Control-Structure.html#Control-Structure" accesskey="u" rel="up">Control Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Iteration-1"></a>
-<h3 class="section">4.6 Iteration</h3>
+<body lang="en" xml:lang="en">
+  <a name="Iteration" id="Iteration"></a>
 
-<p>The macros described here provide more sophisticated, high-level
-looping constructs to complement Emacs Lisp&rsquo;s basic loop forms
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Iteration.html#Iteration">Iteration</a> in <cite>GNU Emacs Lisp Reference Manual</cite>).
-</p>
-<dl>
-<dt><a name="index-cl_002dloop"></a>Macro: <strong>cl-loop</strong> <em>forms&hellip;</em></dt>
-<dd><p>This package supports both the simple, old-style meaning of
-<code>loop</code> and the extremely powerful and flexible feature known as
-the <em>Loop Facility</em> or <em>Loop Macro</em>.  This more advanced
-facility is discussed in the following section; see <a href="Loop-Facility.html#Loop-Facility">Loop Facility</a>.
-The simple form of <code>loop</code> is described here.
-</p>
-<p>If <code>cl-loop</code> is followed by zero or more Lisp expressions,
-then <code>(cl-loop <var>exprs</var>&hellip;)</code> simply creates an infinite
-loop executing the expressions over and over.  The loop is
-enclosed in an implicit <code>nil</code> block.  Thus,
-</p>
-<div class="example">
-<pre class="example">(cl-loop (foo)  (if (no-more) (return 72))  (bar))
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Loop-Facility.html#Loop-Facility" accesskey=
+    "n" rel="next">Loop Facility</a>, Previous: <a href=
+    "Blocks-and-Exits.html#Blocks-and-Exits" accesskey="p" rel=
+    "prev">Blocks and Exits</a>, Up: <a href=
+    "Control-Structure.html#Control-Structure" accesskey="u" rel=
+    "up">Control Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Iteration-1" id="Iteration-1"></a>
 
-<p>is exactly equivalent to
-</p>
-<div class="example">
-<pre class="example">(cl-block nil (while t (foo)  (if (no-more) (return 72))  (bar)))
-</pre></div>
+  <h3 class="section">4.6 Iteration</h3>
 
-<p>If any of the expressions are plain symbols, the loop is instead
-interpreted as a Loop Macro specification as described later.
-(This is not a restriction in practice, since a plain symbol
-in the above notation would simply access and throw away the
-value of a variable.)
-</p></dd></dl>
+  <p>The macros described here provide more sophisticated,
+  high-level looping constructs to complement Emacs Lisp&rsquo;s
+  basic loop forms (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Iteration.html#Iteration">
+  Iteration</a> in <cite>GNU Emacs Lisp Reference
+  Manual</cite>).</p>
 
-<dl>
-<dt><a name="index-cl_002ddo"></a>Macro: <strong>cl-do</strong> <em>(spec&hellip;) (end-test [result&hellip;]) forms&hellip;</em></dt>
-<dd><p>This macro creates a general iterative loop.  Each <var>spec</var> is
-of the form
-</p>
-<div class="example">
-<pre class="example">(<var>var</var> [<var>init</var> [<var>step</var>]])
-</pre></div>
+  <dl>
+    <dt><a name="index-cl_002dloop" id=
+    "index-cl_002dloop"></a>Macro: <strong>cl-loop</strong>
+    <em>forms&hellip;</em></dt>
 
-<p>The loop works as follows:  First, each <var>var</var> is bound to the
-associated <var>init</var> value as if by a <code>let</code> form.  Then, in
-each iteration of the loop, the <var>end-test</var> is evaluated; if
-true, the loop is finished.  Otherwise, the body <var>forms</var> are
-evaluated, then each <var>var</var> is set to the associated <var>step</var>
-expression (as if by a <code>cl-psetq</code> form) and the next iteration
-begins.  Once the <var>end-test</var> becomes true, the <var>result</var>
-forms are evaluated (with the <var>var</var>s still bound to their
-values) to produce the result returned by <code>cl-do</code>.
-</p>
-<p>The entire <code>cl-do</code> loop is enclosed in an implicit <code>nil</code>
-block, so that you can use <code>(cl-return)</code> to break out of the
-loop at any time.
-</p>
-<p>If there are no <var>result</var> forms, the loop returns <code>nil</code>.
-If a given <var>var</var> has no <var>step</var> form, it is bound to its
-<var>init</var> value but not otherwise modified during the <code>cl-do</code>
-loop (unless the code explicitly modifies it); this case is just
-a shorthand for putting a <code>(let ((<var>var</var> <var>init</var>)) &hellip;)</code>
-around the loop.  If <var>init</var> is also omitted it defaults to
-<code>nil</code>, and in this case a plain &lsquo;<samp><var>var</var></samp>&rsquo; can be used
-in place of &lsquo;<samp>(<var>var</var>)</samp>&rsquo;, again following the analogy with
-<code>let</code>.
-</p>
-<p>This example (from Steele) illustrates a loop that applies the
-function <code>f</code> to successive pairs of values from the lists
-<code>foo</code> and <code>bar</code>; it is equivalent to the call
-<code>(cl-mapcar 'f foo bar)</code>.  Note that this loop has no body
-<var>forms</var> at all, performing all its work as side effects of
-the rest of the loop.
-</p>
-<div class="example">
-<pre class="example">(cl-do ((x foo (cdr x))
+    <dd>
+      <p>This package supports both the simple, old-style meaning
+      of <code>loop</code> and the extremely powerful and flexible
+      feature known as the <em>Loop Facility</em> or <em>Loop
+      Macro</em>. This more advanced facility is discussed in the
+      following section; see <a href=
+      "Loop-Facility.html#Loop-Facility">Loop Facility</a>. The
+      simple form of <code>loop</code> is described here.</p>
+
+      <p>If <code>cl-loop</code> is followed by zero or more Lisp
+      expressions, then <code>(cl-loop
+      <var>exprs</var>&hellip;)</code> simply creates an infinite
+      loop executing the expressions over and over. The loop is
+      enclosed in an implicit <code>nil</code> block. Thus,</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop (foo)  (if (no-more) (return 72))  (bar))
+</pre>
+      </div>
+
+      <p>is exactly equivalent to</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-block nil (while t (foo)  (if (no-more) (return 72))  (bar)))
+</pre>
+      </div>
+
+      <p>If any of the expressions are plain symbols, the loop is
+      instead interpreted as a Loop Macro specification as
+      described later. (This is not a restriction in practice,
+      since a plain symbol in the above notation would simply
+      access and throw away the value of a variable.)</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002ddo" id="index-cl_002ddo"></a>Macro:
+    <strong>cl-do</strong> <em>(spec&hellip;) (end-test
+    [result&hellip;]) forms&hellip;</em></dt>
+
+    <dd>
+      <p>This macro creates a general iterative loop. Each
+      <var>spec</var> is of the form</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>var</var> [<var>init</var> [<var>step</var>]])
+</pre>
+      </div>
+
+      <p>The loop works as follows: First, each <var>var</var> is
+      bound to the associated <var>init</var> value as if by a
+      <code>let</code> form. Then, in each iteration of the loop,
+      the <var>end-test</var> is evaluated; if true, the loop is
+      finished. Otherwise, the body <var>forms</var> are evaluated,
+      then each <var>var</var> is set to the associated
+      <var>step</var> expression (as if by a <code>cl-psetq</code>
+      form) and the next iteration begins. Once the
+      <var>end-test</var> becomes true, the <var>result</var> forms
+      are evaluated (with the <var>var</var>s still bound to their
+      values) to produce the result returned by
+      <code>cl-do</code>.</p>
+
+      <p>The entire <code>cl-do</code> loop is enclosed in an
+      implicit <code>nil</code> block, so that you can use
+      <code>(cl-return)</code> to break out of the loop at any
+      time.</p>
+
+      <p>If there are no <var>result</var> forms, the loop returns
+      <code>nil</code>. If a given <var>var</var> has no
+      <var>step</var> form, it is bound to its <var>init</var>
+      value but not otherwise modified during the
+      <code>cl-do</code> loop (unless the code explicitly modifies
+      it); this case is just a shorthand for putting a <code>(let
+      ((<var>var</var> <var>init</var>)) &hellip;)</code> around
+      the loop. If <var>init</var> is also omitted it defaults to
+      <code>nil</code>, and in this case a plain
+      &lsquo;<samp><var>var</var></samp>&rsquo; can be used in
+      place of &lsquo;<samp>(<var>var</var>)</samp>&rsquo;, again
+      following the analogy with <code>let</code>.</p>
+
+      <p>This example (from Steele) illustrates a loop that applies
+      the function <code>f</code> to successive pairs of values
+      from the lists <code>foo</code> and <code>bar</code>; it is
+      equivalent to the call <code>(cl-mapcar 'f foo bar)</code>.
+      Note that this loop has no body <var>forms</var> at all,
+      performing all its work as side effects of the rest of the
+      loop.</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-do ((x foo (cdr x))
         (y bar (cdr y))
         (z nil (cons (f (car x) (car y)) z)))
      ((or (null x) (null y))
       (nreverse z)))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002ddo_002a"></a>Macro: <strong>cl-do*</strong> <em>(spec&hellip;) (end-test [result&hellip;]) forms&hellip;</em></dt>
-<dd><p>This is to <code>cl-do</code> what <code>let*</code> is to <code>let</code>.  In
-particular, the initial values are bound as if by <code>let*</code>
-rather than <code>let</code>, and the steps are assigned as if by
-<code>setq</code> rather than <code>cl-psetq</code>.
-</p>
-<p>Here is another way to write the above loop:
-</p>
-<div class="example">
-<pre class="example">(cl-do* ((xp foo (cdr xp))
+  <dl>
+    <dt><a name="index-cl_002ddo_002a" id=
+    "index-cl_002ddo_002a"></a>Macro: <strong>cl-do*</strong>
+    <em>(spec&hellip;) (end-test [result&hellip;])
+    forms&hellip;</em></dt>
+
+    <dd>
+      <p>This is to <code>cl-do</code> what <code>let*</code> is to
+      <code>let</code>. In particular, the initial values are bound
+      as if by <code>let*</code> rather than <code>let</code>, and
+      the steps are assigned as if by <code>setq</code> rather than
+      <code>cl-psetq</code>.</p>
+
+      <p>Here is another way to write the above loop:</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-do* ((xp foo (cdr xp))
          (yp bar (cdr yp))
          (x (car xp) (car xp))
          (y (car yp) (car yp))
@@ -172,53 +245,90 @@ rather than <code>let</code>, and the steps are assigned as if by
   ((or (null xp) (null yp))
    (nreverse z))
   (push (f x y) z))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002ddolist"></a>Macro: <strong>cl-dolist</strong> <em>(var list [result]) forms&hellip;</em></dt>
-<dd><p>This is exactly like the standard Emacs Lisp macro <code>dolist</code>,
-but surrounds the loop with an implicit <code>nil</code> block.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002ddolist" id=
+    "index-cl_002ddolist"></a>Macro: <strong>cl-dolist</strong>
+    <em>(var list [result]) forms&hellip;</em></dt>
 
-<dl>
-<dt><a name="index-cl_002ddotimes"></a>Macro: <strong>cl-dotimes</strong> <em>(var count [result]) forms&hellip;</em></dt>
-<dd><p>This is exactly like the standard Emacs Lisp macro <code>dotimes</code>,
-but surrounds the loop with an implicit <code>nil</code> block.
-The body is executed with <var>var</var> bound to the integers
-from zero (inclusive) to <var>count</var> (exclusive), in turn.  Then
-the <code>result</code> form is evaluated with <var>var</var> bound to the total
-number of iterations that were done (i.e., <code>(max 0 <var>count</var>)</code>)
-to get the return value for the loop form.
-</p></dd></dl>
+    <dd>
+      <p>This is exactly like the standard Emacs Lisp macro
+      <code>dolist</code>, but surrounds the loop with an implicit
+      <code>nil</code> block.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002ddo_002dsymbols"></a>Macro: <strong>cl-do-symbols</strong> <em>(var [obarray [result]]) forms&hellip;</em></dt>
-<dd><p>This loop iterates over all interned symbols.  If <var>obarray</var>
-is specified and is not <code>nil</code>, it loops over all symbols in
-that obarray.  For each symbol, the body <var>forms</var> are evaluated
-with <var>var</var> bound to that symbol.  The symbols are visited in
-an unspecified order.  Afterward the <var>result</var> form, if any,
-is evaluated (with <var>var</var> bound to <code>nil</code>) to get the return
-value.  The loop is surrounded by an implicit <code>nil</code> block.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002ddotimes" id=
+    "index-cl_002ddotimes"></a>Macro: <strong>cl-dotimes</strong>
+    <em>(var count [result]) forms&hellip;</em></dt>
 
-<dl>
-<dt><a name="index-cl_002ddo_002dall_002dsymbols"></a>Macro: <strong>cl-do-all-symbols</strong> <em>(var [result]) forms&hellip;</em></dt>
-<dd><p>This is identical to <code>cl-do-symbols</code> except that the <var>obarray</var>
-argument is omitted; it always iterates over the default obarray.
-</p></dd></dl>
+    <dd>
+      <p>This is exactly like the standard Emacs Lisp macro
+      <code>dotimes</code>, but surrounds the loop with an implicit
+      <code>nil</code> block. The body is executed with
+      <var>var</var> bound to the integers from zero (inclusive) to
+      <var>count</var> (exclusive), in turn. Then the
+      <code>result</code> form is evaluated with <var>var</var>
+      bound to the total number of iterations that were done (i.e.,
+      <code>(max 0 <var>count</var>)</code>) to get the return
+      value for the loop form.</p>
+    </dd>
+  </dl>
 
-<p>See <a href="Mapping-over-Sequences.html#Mapping-over-Sequences">Mapping over Sequences</a>, for some more functions for
-iterating over vectors or lists.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Loop-Facility.html#Loop-Facility" accesskey="n" rel="next">Loop Facility</a>, Previous: <a href="Blocks-and-Exits.html#Blocks-and-Exits" accesskey="p" rel="prev">Blocks and Exits</a>, Up: <a href="Control-Structure.html#Control-Structure" accesskey="u" rel="up">Control Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-cl_002ddo_002dsymbols" id=
+    "index-cl_002ddo_002dsymbols"></a>Macro:
+    <strong>cl-do-symbols</strong> <em>(var [obarray [result]])
+    forms&hellip;</em></dt>
 
+    <dd>
+      <p>This loop iterates over all interned symbols. If
+      <var>obarray</var> is specified and is not <code>nil</code>,
+      it loops over all symbols in that obarray. For each symbol,
+      the body <var>forms</var> are evaluated with <var>var</var>
+      bound to that symbol. The symbols are visited in an
+      unspecified order. Afterward the <var>result</var> form, if
+      any, is evaluated (with <var>var</var> bound to
+      <code>nil</code>) to get the return value. The loop is
+      surrounded by an implicit <code>nil</code> block.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002ddo_002dall_002dsymbols" id=
+    "index-cl_002ddo_002dall_002dsymbols"></a>Macro:
+    <strong>cl-do-all-symbols</strong> <em>(var [result])
+    forms&hellip;</em></dt>
 
+    <dd>
+      <p>This is identical to <code>cl-do-symbols</code> except
+      that the <var>obarray</var> argument is omitted; it always
+      iterates over the default obarray.</p>
+    </dd>
+  </dl>
+
+  <p>See <a href=
+  "Mapping-over-Sequences.html#Mapping-over-Sequences">Mapping over
+  Sequences</a>, for some more functions for iterating over vectors
+  or lists.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Loop-Facility.html#Loop-Facility" accesskey=
+    "n" rel="next">Loop Facility</a>, Previous: <a href=
+    "Blocks-and-Exits.html#Blocks-and-Exits" accesskey="p" rel=
+    "prev">Blocks and Exits</a>, Up: <a href=
+    "Control-Structure.html#Control-Structure" accesskey="u" rel=
+    "up">Control Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

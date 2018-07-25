@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,89 +18,130 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Keymaps and Hooks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Keymaps and Hooks">
-<meta name="keywords" content="RefTeX User Manual: Keymaps and Hooks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Options.html#Options" rel="up" title="Options">
-<link href="Changes.html#Changes" rel="next" title="Changes">
-<link href="Options-_002d-Misc.html#Options-_002d-Misc" rel="prev" title="Options - Misc">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Keymaps and Hooks</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Keymaps and Hooks" />
+  <meta name="keywords" content=
+  "RefTeX User Manual: Keymaps and Hooks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Options.html#Options" rel="up" title="Options" />
+  <link href="Changes.html#Changes" rel="next" title="Changes" />
+  <link href="Options-_002d-Misc.html#Options-_002d-Misc" rel=
+  "prev" title="Options - Misc" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Keymaps-and-Hooks"></a>
-<div class="header">
-<p>
-Previous: <a href="Options-_002d-Misc.html#Options-_002d-Misc" accesskey="p" rel="prev">Options - Misc</a>, Up: <a href="Options.html#Options" accesskey="u" rel="up">Options</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Keymaps-and-Hooks-1"></a>
-<h3 class="section">18.12 Keymaps and Hooks</h3>
-<a name="index-Keymaps"></a>
+<body lang="en" xml:lang="en">
+  <a name="Keymaps-and-Hooks" id="Keymaps-and-Hooks"></a>
 
-<p>RefTeX has the usual general keymap, load hook and mode hook.
-</p>
-<dl>
-<dt><a name="index-reftex_002dmode_002dmap"></a>Keymap: <strong>reftex-mode-map</strong></dt>
-<dd><p>The keymap for RefTeX mode.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href=
+    "Options-_002d-Misc.html#Options-_002d-Misc" accesskey="p" rel=
+    "prev">Options - Misc</a>, Up: <a href="Options.html#Options"
+    accesskey="u" rel="up">Options</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Keymaps-and-Hooks-1" id="Keymaps-and-Hooks-1"></a>
 
-<dl>
-<dt><a name="index-reftex_002dload_002dhook"></a>Normal Hook: <strong>reftex-load-hook</strong></dt>
-<dd><p>Normal hook which is being run when loading <samp>reftex.el</samp>.
-</p></dd></dl>
+  <h3 class="section">18.12 Keymaps and Hooks</h3><a name=
+  "index-Keymaps" id="index-Keymaps"></a>
 
-<dl>
-<dt><a name="index-reftex_002dmode_002dhook"></a>Normal Hook: <strong>reftex-mode-hook</strong></dt>
-<dd><p>Normal hook which is being run when turning on RefTeX mode.
-</p></dd></dl>
+  <p>RefTeX has the usual general keymap, load hook and mode
+  hook.</p>
 
-<p>Furthermore, the four modes used for referencing labels, creating
-citations, the table of contents buffer and the phrases buffer have
-their own keymaps and mode hooks.  See the respective sections.  There
-are many more hooks which are described in the relevant sections about
-options for a specific part of RefTeX.
-</p>
+  <dl>
+    <dt><a name="index-reftex_002dmode_002dmap" id=
+    "index-reftex_002dmode_002dmap"></a>Keymap:
+    <strong>reftex-mode-map</strong></dt>
 
+    <dd>
+      <p>The keymap for RefTeX mode.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-reftex_002dload_002dhook" id=
+    "index-reftex_002dload_002dhook"></a>Normal Hook:
+    <strong>reftex-load-hook</strong></dt>
 
+    <dd>
+      <p>Normal hook which is being run when loading
+      <samp>reftex.el</samp>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-reftex_002dmode_002dhook" id=
+    "index-reftex_002dmode_002dhook"></a>Normal Hook:
+    <strong>reftex-mode-hook</strong></dt>
+
+    <dd>
+      <p>Normal hook which is being run when turning on RefTeX
+      mode.</p>
+    </dd>
+  </dl>
+
+  <p>Furthermore, the four modes used for referencing labels,
+  creating citations, the table of contents buffer and the phrases
+  buffer have their own keymaps and mode hooks. See the respective
+  sections. There are many more hooks which are described in the
+  relevant sections about options for a specific part of
+  RefTeX.</p>
 </body>
 </html>

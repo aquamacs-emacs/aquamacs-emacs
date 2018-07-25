@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1991-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,127 +14,185 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>PCL-CVS&mdash;Emacs Front-End to CVS: Setting flags</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="PCL-CVS&mdash;Emacs Front-End to CVS: Setting flags">
-<meta name="keywords" content="PCL-CVS&mdash;Emacs Front-End to CVS: Setting flags">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-and-Variable-Index.html#Function-and-Variable-Index" rel="index" title="Function and Variable Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="Updating-the-buffer.html#Updating-the-buffer" rel="next" title="Updating the buffer">
-<link href="Entering-PCL_002dCVS.html#Entering-PCL_002dCVS" rel="prev" title="Entering PCL-CVS">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>PCL-CVS&mdash;Emacs Front-End to CVS: Setting
+  flags</title>
+  <meta name="description" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Setting flags" />
+  <meta name="keywords" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Setting flags" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Function-and-Variable-Index.html#Function-and-Variable-Index"
+  rel="index" title="Function and Variable Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="Updating-the-buffer.html#Updating-the-buffer" rel=
+  "next" title="Updating the buffer" />
+  <link href="Entering-PCL_002dCVS.html#Entering-PCL_002dCVS" rel=
+  "prev" title="Entering PCL-CVS" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Setting-flags"></a>
-<div class="header">
-<p>
-Next: <a href="Updating-the-buffer.html#Updating-the-buffer" accesskey="n" rel="next">Updating the buffer</a>, Previous: <a href="Entering-PCL_002dCVS.html#Entering-PCL_002dCVS" accesskey="p" rel="prev">Entering PCL-CVS</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-and-Variable-Index.html#Function-and-Variable-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Setting-flags-for-CVS-commands"></a>
-<h3 class="section">5.2 Setting flags for CVS commands</h3>
-<a name="index-Optional-switches-to-CVS"></a>
-<a name="index-Command_002dline-options-to-CVS"></a>
+<body lang="en" xml:lang="en">
+  <a name="Setting-flags" id="Setting-flags"></a>
 
-<p>This section describes the convention used by nearly all PCL-CVS
-commands for setting optional flags sent to CVS.  A single <kbd>C-u</kbd>
-prefix argument is used to cause the command to prompt for flags to be
-used for the current invocation of the command only.  Two <kbd>C-u</kbd> prefix
-arguments are used to prompt for flags which will be set permanently, for the
-current invocation and all that follow, until the flags are changed, or
-unless temporary flags are set which override them.
-</p>
-<p>Perhaps an example or two is in order.  Say you are about to add a
-binary file to the repository, and want to specify the flags &lsquo;<samp>-kb</samp>&rsquo;
-to &lsquo;<samp>cvs add</samp>&rsquo;.  You can type <kbd>C-u a -kb <span class="key">RET</span></kbd>,
-and the file will be added.  Subsequent &lsquo;<samp>cvs add</samp>&rsquo;
-commands will use the previously prevailing flags.
-</p>
-<p>As a second example, say you are about to perform a diff and want to see
-the result in unified diff format, i.e., you&rsquo;d like to pass the flag
-&lsquo;<samp>-u</samp>&rsquo; to both &lsquo;<samp>cvs diff</samp>&rsquo; and &lsquo;<samp>diff</samp>&rsquo;.  You&rsquo;d also like all
-subsequent diffs to use this flag.  You can type <kbd>C-u C-u = -u <span class="key">RET</span></kbd>
-and the diff will be performed, and the default flags will be set to
-<code>(&quot;-u&quot;)</code>.  You can of course override this flag for a single diff
-by using a single <kbd>C-u</kbd> prefix argument.
-</p>
-<a name="index-Special-prefix"></a>
-<p>In addition to this, some commands can take <em>special prefix</em> arguments.
-These work as follows: When called with a <kbd>C-u</kbd> prefix, the user is
-prompted for a new value of the special prefix and the special prefix is
-activated for the next command.  When called without the <kbd>C-u</kbd>
-prefix, the special prefix is re-activated (with the same value as last
-time) for the next command.  Calling the prefix command again when it&rsquo;s
-already activated deactivates it.  Calling it with the <kbd>C-u C-u</kbd>
-prefix activates it for all subsequent commands until you deactivate it
-explicitly.  The special prefixes are:
-</p>
-<dl compact="compact">
-<dt><kbd>T</kbd></dt>
-<dd><p>Toggles whether or not marks will be active in the next command.
-</p>
-</dd>
-<dt><kbd>b</kbd></dt>
-<dd><p>Provide the next command with a branch (can be any version
-specifier) to work on.
-</p>
-</dd>
-<dt><kbd>B</kbd></dt>
-<dd><p>Secondary branch argument.  Only meaningful if <kbd>b</kbd> is also used.
-It can be used to provide a second branch argument to
-<code>cvs-mode-diff</code> or to <code>cvs-mode-update</code>.
-</p>
-</dd>
-<dt><kbd>M-f</kbd></dt>
-<dd><p>Forces the next command to apply to every selected file rather than only
-to the ones PCL-CVS thinks are relevant.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Updating-the-buffer.html#Updating-the-buffer"
+    accesskey="n" rel="next">Updating the buffer</a>, Previous:
+    <a href="Entering-PCL_002dCVS.html#Entering-PCL_002dCVS"
+    accesskey="p" rel="prev">Entering PCL-CVS</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-and-Variable-Index.html#Function-and-Variable-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Setting-flags-for-CVS-commands" id=
+  "Setting-flags-for-CVS-commands"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Updating-the-buffer.html#Updating-the-buffer" accesskey="n" rel="next">Updating the buffer</a>, Previous: <a href="Entering-PCL_002dCVS.html#Entering-PCL_002dCVS" accesskey="p" rel="prev">Entering PCL-CVS</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-and-Variable-Index.html#Function-and-Variable-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">5.2 Setting flags for CVS
+  commands</h3><a name="index-Optional-switches-to-CVS" id=
+  "index-Optional-switches-to-CVS"></a> <a name=
+  "index-Command_002dline-options-to-CVS" id=
+  "index-Command_002dline-options-to-CVS"></a>
 
+  <p>This section describes the convention used by nearly all
+  PCL-CVS commands for setting optional flags sent to CVS. A single
+  <kbd>C-u</kbd> prefix argument is used to cause the command to
+  prompt for flags to be used for the current invocation of the
+  command only. Two <kbd>C-u</kbd> prefix arguments are used to
+  prompt for flags which will be set permanently, for the current
+  invocation and all that follow, until the flags are changed, or
+  unless temporary flags are set which override them.</p>
 
+  <p>Perhaps an example or two is in order. Say you are about to
+  add a binary file to the repository, and want to specify the
+  flags &lsquo;<samp>-kb</samp>&rsquo; to &lsquo;<samp>cvs
+  add</samp>&rsquo;. You can type <kbd>C-u a -kb <span class=
+  "key">RET</span></kbd>, and the file will be added. Subsequent
+  &lsquo;<samp>cvs add</samp>&rsquo; commands will use the
+  previously prevailing flags.</p>
 
+  <p>As a second example, say you are about to perform a diff and
+  want to see the result in unified diff format, i.e., you&rsquo;d
+  like to pass the flag &lsquo;<samp>-u</samp>&rsquo; to both
+  &lsquo;<samp>cvs diff</samp>&rsquo; and
+  &lsquo;<samp>diff</samp>&rsquo;. You&rsquo;d also like all
+  subsequent diffs to use this flag. You can type <kbd>C-u C-u = -u
+  <span class="key">RET</span></kbd> and the diff will be
+  performed, and the default flags will be set to
+  <code>("-u")</code>. You can of course override this flag for a
+  single diff by using a single <kbd>C-u</kbd> prefix
+  argument.</p><a name="index-Special-prefix" id=
+  "index-Special-prefix"></a>
+
+  <p>In addition to this, some commands can take <em>special
+  prefix</em> arguments. These work as follows: When called with a
+  <kbd>C-u</kbd> prefix, the user is prompted for a new value of
+  the special prefix and the special prefix is activated for the
+  next command. When called without the <kbd>C-u</kbd> prefix, the
+  special prefix is re-activated (with the same value as last time)
+  for the next command. Calling the prefix command again when
+  it&rsquo;s already activated deactivates it. Calling it with the
+  <kbd>C-u C-u</kbd> prefix activates it for all subsequent
+  commands until you deactivate it explicitly. The special prefixes
+  are:</p>
+
+  <dl compact="compact">
+    <dt><kbd>T</kbd></dt>
+
+    <dd>
+      <p>Toggles whether or not marks will be active in the next
+      command.</p>
+    </dd>
+
+    <dt><kbd>b</kbd></dt>
+
+    <dd>
+      <p>Provide the next command with a branch (can be any version
+      specifier) to work on.</p>
+    </dd>
+
+    <dt><kbd>B</kbd></dt>
+
+    <dd>
+      <p>Secondary branch argument. Only meaningful if <kbd>b</kbd>
+      is also used. It can be used to provide a second branch
+      argument to <code>cvs-mode-diff</code> or to
+      <code>cvs-mode-update</code>.</p>
+    </dd>
+
+    <dt><kbd>M-f</kbd></dt>
+
+    <dd>
+      <p>Forces the next command to apply to every selected file
+      rather than only to the ones PCL-CVS thinks are relevant.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Updating-the-buffer.html#Updating-the-buffer"
+    accesskey="n" rel="next">Updating the buffer</a>, Previous:
+    <a href="Entering-PCL_002dCVS.html#Entering-PCL_002dCVS"
+    accesskey="p" rel="prev">Entering PCL-CVS</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-and-Variable-Index.html#Function-and-Variable-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

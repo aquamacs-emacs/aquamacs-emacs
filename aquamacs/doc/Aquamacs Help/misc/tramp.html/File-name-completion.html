@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,150 +14,274 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to
 copy and modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>TRAMP User Manual: File name completion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="TRAMP User Manual: File name completion">
-<meta name="keywords" content="TRAMP User Manual: File name completion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Usage.html#Usage" rel="up" title="Usage">
-<link href="Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops" rel="next" title="Ad-hoc multi-hops">
-<link href="File-name-Syntax.html#File-name-Syntax" rel="prev" title="File name Syntax">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>TRAMP User Manual: File name completion</title>
+  <meta name="description" content=
+  "TRAMP User Manual: File name completion" />
+  <meta name="keywords" content=
+  "TRAMP User Manual: File name completion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Usage.html#Usage" rel="up" title="Usage" />
+  <link href=
+  "Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops" rel=
+  "next" title="Ad-hoc multi-hops" />
+  <link href="File-name-Syntax.html#File-name-Syntax" rel="prev"
+  title="File name Syntax" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="File-name-completion"></a>
-<div class="header">
-<p>
-Next: <a href="Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops" accesskey="n" rel="next">Ad-hoc multi-hops</a>, Previous: <a href="File-name-Syntax.html#File-name-Syntax" accesskey="p" rel="prev">File name Syntax</a>, Up: <a href="Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="File-name-completion-1"></a>
-<h3 class="section">5.2 File name completion</h3>
-<a name="index-file-name-completion"></a>
+<body lang="en" xml:lang="en">
+  <a name="File-name-completion" id="File-name-completion"></a>
 
-<p><small>TRAMP</small> can complete the following <small>TRAMP</small> file name
-components: method names, user names, host names, and file names
-located on remote hosts.
-Enable this by activating partial completion in <samp>.emacs</samp>.
-</p>
-<p>For example, type <kbd>C-x C-f /t <span class="key">TAB</span></kbd>,
-<small>TRAMP</small> completion choices show up as
-</p>
-<div class="example">
-<table>
-<tr><td width="50%"><pre class="example">telnet:</pre></td><td width="50%"><pre class="example">tmp/</pre></td></tr>
-<tr><td width="50%"><pre class="example">toto:</pre></td><td width="50%"></td></tr>
-</table>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops"
+    accesskey="n" rel="next">Ad-hoc multi-hops</a>, Previous:
+    <a href="File-name-Syntax.html#File-name-Syntax" accesskey="p"
+    rel="prev">File name Syntax</a>, Up: <a href="Usage.html#Usage"
+    accesskey="u" rel="up">Usage</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="File-name-completion-1" id="File-name-completion-1"></a>
 
-<p>&lsquo;<samp>telnet:</samp>&rsquo;
-is a possible completion for the respective method,
-&lsquo;<samp>tmp/</samp>&rsquo; stands for the directory <samp>/tmp</samp> on your local host,
-and &lsquo;<samp>toto:</samp>&rsquo;
-might be a host <small>TRAMP</small> has detected in your <samp>~/.ssh/known_hosts</samp>
-file (when using <samp>ssh</samp> as default method).
-</p>
-<p>Type <kbd>e <span class="key">TAB</span></kbd> for the minibuffer completion to
-&lsquo;<samp>/telnet:</samp>&rsquo;.  Typing <kbd><span class="key">TAB</span></kbd>
-shows host names <small>TRAMP</small> from <samp>/etc/hosts</samp> file, for example.
-</p>
-<div class="example">
-<table>
-<tr><td width="50%"><pre class="example">/telnet:127.0.0.1:</pre></td><td width="50%"><pre class="example">/telnet:192.168.0.1:</pre></td></tr>
-<tr><td width="50%"><pre class="example">/telnet:[::1]:</pre></td><td width="50%"><pre class="example">/telnet:localhost:</pre></td></tr>
-<tr><td width="50%"><pre class="example">/telnet:melancholia.danann.net:</pre></td><td width="50%"><pre class="example">/telnet:melancholia:</pre></td></tr>
-</table>
-</div>
+  <h3 class="section">5.2 File name completion</h3><a name=
+  "index-file-name-completion" id="index-file-name-completion"></a>
 
-<p>Choose a host from the above list and then continue to complete file
-names on that host.
-</p>
-<p>When the configuration (see <a href="Customizing-Completion.html#Customizing-Completion">Customizing Completion</a>) includes user
-names, then the completion lists will account for the user names as well.
-</p>
-<p>Remote hosts previously visited or hosts whose connections are kept
-persistently (see <a href="Connection-caching.html#Connection-caching">Connection caching</a>) will be included in the
-completion lists.
-</p>
-<p>After remote host name completion comes completion of file names on
-the remote host.  It works the same as with local host file completion,
-except that killing with double-slash <samp>//</samp> kills only the file
-name part of the <small>TRAMP</small> file name syntax.
-A triple-slash stands for the default behavior.
-</p>
-<p>Example:
-</p>
-<div class="example">
-<pre class="example"><kbd>C-x C-f /telnet:melancholia:/usr/local/bin//etc <span class="key">TAB</span></kbd>
+  <p><small>TRAMP</small> can complete the following
+  <small>TRAMP</small> file name components: method names, user
+  names, host names, and file names located on remote hosts. Enable
+  this by activating partial completion in <samp>.emacs</samp>.</p>
+
+  <p>For example, type <kbd>C-x C-f /t <span class=
+  "key">TAB</span></kbd>, <small>TRAMP</small> completion choices
+  show up as</p>
+
+  <div class="example">
+    <table>
+      <tr>
+        <td width="50%">
+          <pre class="example">
+telnet:
+</pre>
+        </td>
+
+        <td width="50%">
+          <pre class="example">
+tmp/
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td width="50%">
+          <pre class="example">
+toto:
+</pre>
+        </td>
+
+        <td width="50%"></td>
+      </tr>
+    </table>
+  </div>
+
+  <p>&lsquo;<samp>telnet:</samp>&rsquo; is a possible completion
+  for the respective method, &lsquo;<samp>tmp/</samp>&rsquo; stands
+  for the directory <samp>/tmp</samp> on your local host, and
+  &lsquo;<samp>toto:</samp>&rsquo; might be a host
+  <small>TRAMP</small> has detected in your
+  <samp>~/.ssh/known_hosts</samp> file (when using <samp>ssh</samp>
+  as default method).</p>
+
+  <p>Type <kbd>e <span class="key">TAB</span></kbd> for the
+  minibuffer completion to &lsquo;<samp>/telnet:</samp>&rsquo;.
+  Typing <kbd><span class="key">TAB</span></kbd> shows host names
+  <small>TRAMP</small> from <samp>/etc/hosts</samp> file, for
+  example.</p>
+
+  <div class="example">
+    <table>
+      <tr>
+        <td width="50%">
+          <pre class="example">
+/telnet:127.0.0.1:
+</pre>
+        </td>
+
+        <td width="50%">
+          <pre class="example">
+/telnet:192.168.0.1:
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td width="50%">
+          <pre class="example">
+/telnet:[::1]:
+</pre>
+        </td>
+
+        <td width="50%">
+          <pre class="example">
+/telnet:localhost:
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td width="50%">
+          <pre class="example">
+/telnet:melancholia.danann.net:
+</pre>
+        </td>
+
+        <td width="50%">
+          <pre class="example">
+/telnet:melancholia:
+</pre>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <p>Choose a host from the above list and then continue to
+  complete file names on that host.</p>
+
+  <p>When the configuration (see <a href=
+  "Customizing-Completion.html#Customizing-Completion">Customizing
+  Completion</a>) includes user names, then the completion lists
+  will account for the user names as well.</p>
+
+  <p>Remote hosts previously visited or hosts whose connections are
+  kept persistently (see <a href=
+  "Connection-caching.html#Connection-caching">Connection
+  caching</a>) will be included in the completion lists.</p>
+
+  <p>After remote host name completion comes completion of file
+  names on the remote host. It works the same as with local host
+  file completion, except that killing with double-slash
+  <samp>//</samp> kills only the file name part of the
+  <small>TRAMP</small> file name syntax. A triple-slash stands for
+  the default behavior.</p>
+
+  <p>Example:</p>
+
+  <div class="example">
+    <pre class="example">
+<kbd>C-x C-f /telnet:melancholia:/usr/local/bin//etc <span class=
+"key">TAB</span></kbd>
      -| /telnet:melancholia:/etc
 
-<kbd>C-x C-f /telnet:melancholia://etc <span class="key">TAB</span></kbd>
+<kbd>C-x C-f /telnet:melancholia://etc <span class=
+"key">TAB</span></kbd>
      -| /etc
 
-<kbd>C-x C-f /telnet:melancholia:/usr/local/bin///etc <span class="key">TAB</span></kbd>
+<kbd>C-x C-f /telnet:melancholia:/usr/local/bin///etc <span class=
+"key">TAB</span></kbd>
      -| /etc
 
-</pre></div>
+</pre>
+  </div>
 
-<p>During file name completion, remote directory contents are re-read
-regularly to account for any changes in the filesystem that may affect
-the completion candidates.  Such re-reads can account for changes to
-the file system by applications outside Emacs
-(see <a href="Connection-caching.html#Connection-caching">Connection caching</a>).
-</p>
-<dl>
-<dt><a name="index-tramp_002dcompletion_002dreread_002ddirectory_002dtimeout"></a>User Option: <strong>tramp-completion-reread-directory-timeout</strong></dt>
-<dd><a name="index-tramp_002dcompletion_002dreread_002ddirectory_002dtimeout-1"></a>
-<p>The timeout is number of seconds since last remote command for
-rereading remote directory contents.  0 re-reads immediately during
-file name completion, <code>nil</code> uses cached directory contents.
-</p></dd></dl>
+  <p>During file name completion, remote directory contents are
+  re-read regularly to account for any changes in the filesystem
+  that may affect the completion candidates. Such re-reads can
+  account for changes to the file system by applications outside
+  Emacs (see <a href=
+  "Connection-caching.html#Connection-caching">Connection
+  caching</a>).</p>
 
+  <dl>
+    <dt><a name=
+    "index-tramp_002dcompletion_002dreread_002ddirectory_002dtimeout"
+    id=
+    "index-tramp_002dcompletion_002dreread_002ddirectory_002dtimeout">
+    </a>User Option:
+    <strong>tramp-completion-reread-directory-timeout</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops" accesskey="n" rel="next">Ad-hoc multi-hops</a>, Previous: <a href="File-name-Syntax.html#File-name-Syntax" accesskey="p" rel="prev">File name Syntax</a>, Up: <a href="Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name=
+      "index-tramp_002dcompletion_002dreread_002ddirectory_002dtimeout-1"
+      id=
+      "index-tramp_002dcompletion_002dreread_002ddirectory_002dtimeout-1">
+      </a>
 
+      <p>The timeout is number of seconds since last remote command
+      for rereading remote directory contents. 0 re-reads
+      immediately during file name completion, <code>nil</code>
+      uses cached directory contents.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops"
+    accesskey="n" rel="next">Ad-hoc multi-hops</a>, Previous:
+    <a href="File-name-Syntax.html#File-name-Syntax" accesskey="p"
+    rel="prev">File name Syntax</a>, Up: <a href="Usage.html#Usage"
+    accesskey="u" rel="up">Usage</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

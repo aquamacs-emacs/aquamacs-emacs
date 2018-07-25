@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,106 +14,144 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: POP before SMTP</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: POP before SMTP">
-<meta name="keywords" content="Gnus Manual: POP before SMTP">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Composing-Messages.html#Composing-Messages" rel="up" title="Composing Messages">
-<link href="Mail-and-Post.html#Mail-and-Post" rel="next" title="Mail and Post">
-<link href="Posting-Server.html#Posting-Server" rel="prev" title="Posting Server">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: POP before SMTP</title>
+  <meta name="description" content=
+  "Gnus Manual: POP before SMTP" />
+  <meta name="keywords" content="Gnus Manual: POP before SMTP" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Composing-Messages.html#Composing-Messages" rel="up"
+  title="Composing Messages" />
+  <link href="Mail-and-Post.html#Mail-and-Post" rel="next" title=
+  "Mail and Post" />
+  <link href="Posting-Server.html#Posting-Server" rel="prev" title=
+  "Posting Server" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="POP-before-SMTP"></a>
-<div class="header">
-<p>
-Next: <a href="Mail-and-Post.html#Mail-and-Post" accesskey="n" rel="next">Mail and Post</a>, Previous: <a href="Posting-Server.html#Posting-Server" accesskey="p" rel="prev">Posting Server</a>, Up: <a href="Composing-Messages.html#Composing-Messages" accesskey="u" rel="up">Composing Messages</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="POP-before-SMTP-1"></a>
-<h3 class="section">5.3 POP before SMTP</h3>
-<a name="index-pop-before-smtp"></a>
-<a name="index-mail_002dsource_002dtouch_002dpop"></a>
+<body lang="en" xml:lang="en">
+  <a name="POP-before-SMTP" id="POP-before-SMTP"></a>
 
-<p>Does your <acronym>ISP</acronym> use <acronym>POP</acronym>-before-<acronym>SMTP</acronym>
-authentication?  This authentication method simply requires you to
-contact the <acronym>POP</acronym> server before sending email.  To do that,
-put the following lines in your <samp>~/.gnus.el</samp> file:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-hook 'message-send-mail-hook 'mail-source-touch-pop)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Mail-and-Post.html#Mail-and-Post" accesskey=
+    "n" rel="next">Mail and Post</a>, Previous: <a href=
+    "Posting-Server.html#Posting-Server" accesskey="p" rel=
+    "prev">Posting Server</a>, Up: <a href=
+    "Composing-Messages.html#Composing-Messages" accesskey="u" rel=
+    "up">Composing Messages</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="POP-before-SMTP-1" id="POP-before-SMTP-1"></a>
 
-<p>The <code>mail-source-touch-pop</code> function does <acronym>POP</acronym>
-authentication according to the value of <code>mail-sources</code> without
-fetching mails, just before sending a mail.  See <a href="Mail-Sources.html#Mail-Sources">Mail Sources</a>.
-</p>
-<p>If you have two or more <acronym>POP</acronym> mail servers set in
-<code>mail-sources</code>, you may want to specify one of them to
-<code>mail-source-primary-source</code> as the <acronym>POP</acronym> mail server to be
-used for the <acronym>POP</acronym>-before-<acronym>SMTP</acronym> authentication.  If it
-is your primary <acronym>POP</acronym> mail server (i.e., you are fetching mails
-mainly from that server), you can set it permanently as follows:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq mail-source-primary-source
-      '(pop :server &quot;pop3.mail.server&quot;
-            :password &quot;secret&quot;))
-</pre></div>
+  <h3 class="section">5.3 POP before SMTP</h3><a name=
+  "index-pop-before-smtp" id="index-pop-before-smtp"></a> <a name=
+  "index-mail_002dsource_002dtouch_002dpop" id=
+  "index-mail_002dsource_002dtouch_002dpop"></a>
 
-<p>Otherwise, bind it dynamically only when performing the
-<acronym>POP</acronym>-before-<acronym>SMTP</acronym> authentication as follows:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-hook 'message-send-mail-hook
+  <p>Does your <acronym>ISP</acronym> use
+  <acronym>POP</acronym>-before-<acronym>SMTP</acronym>
+  authentication? This authentication method simply requires you to
+  contact the <acronym>POP</acronym> server before sending email.
+  To do that, put the following lines in your
+  <samp>~/.gnus.el</samp> file:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(add-hook 'message-send-mail-hook 'mail-source-touch-pop)
+</pre>
+  </div>
+
+  <p>The <code>mail-source-touch-pop</code> function does
+  <acronym>POP</acronym> authentication according to the value of
+  <code>mail-sources</code> without fetching mails, just before
+  sending a mail. See <a href="Mail-Sources.html#Mail-Sources">Mail
+  Sources</a>.</p>
+
+  <p>If you have two or more <acronym>POP</acronym> mail servers
+  set in <code>mail-sources</code>, you may want to specify one of
+  them to <code>mail-source-primary-source</code> as the
+  <acronym>POP</acronym> mail server to be used for the
+  <acronym>POP</acronym>-before-<acronym>SMTP</acronym>
+  authentication. If it is your primary <acronym>POP</acronym> mail
+  server (i.e., you are fetching mails mainly from that server),
+  you can set it permanently as follows:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq mail-source-primary-source
+      '(pop :server "pop3.mail.server"
+            :password "secret"))
+</pre>
+  </div>
+
+  <p>Otherwise, bind it dynamically only when performing the
+  <acronym>POP</acronym>-before-<acronym>SMTP</acronym>
+  authentication as follows:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(add-hook 'message-send-mail-hook
           (lambda ()
             (let ((mail-source-primary-source
-                   '(pop :server &quot;pop3.mail.server&quot;
-                         :password &quot;secret&quot;)))
+                   '(pop :server "pop3.mail.server"
+                         :password "secret")))
               (mail-source-touch-pop))))
-</pre></div>
-
-
-
-
-
+</pre>
+  </div>
 </body>
 </html>

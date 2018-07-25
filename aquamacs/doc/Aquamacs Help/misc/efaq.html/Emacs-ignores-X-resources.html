@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,125 +29,175 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: Emacs ignores X resources</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: Emacs ignores X resources">
-<meta name="keywords" content="GNU Emacs FAQ: Emacs ignores X resources">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Bugs-and-problems.html#Bugs-and-problems" rel="up" title="Bugs and problems">
-<link href="Emacs-ignores-frame-parameters.html#Emacs-ignores-frame-parameters" rel="next" title="Emacs ignores frame parameters">
-<link href="Errors-with-init-files.html#Errors-with-init-files" rel="prev" title="Errors with init files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: Emacs ignores X resources</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: Emacs ignores X resources" />
+  <meta name="keywords" content=
+  "GNU Emacs FAQ: Emacs ignores X resources" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Bugs-and-problems.html#Bugs-and-problems" rel="up"
+  title="Bugs and problems" />
+  <link href=
+  "Emacs-ignores-frame-parameters.html#Emacs-ignores-frame-parameters"
+  rel="next" title="Emacs ignores frame parameters" />
+  <link href="Errors-with-init-files.html#Errors-with-init-files"
+  rel="prev" title="Errors with init files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Emacs-ignores-X-resources"></a>
-<div class="header">
-<p>
-Next: <a href="Emacs-ignores-frame-parameters.html#Emacs-ignores-frame-parameters" accesskey="n" rel="next">Emacs ignores frame parameters</a>, Previous: <a href="Errors-with-init-files.html#Errors-with-init-files" accesskey="p" rel="prev">Errors with init files</a>, Up: <a href="Bugs-and-problems.html#Bugs-and-problems" accesskey="u" rel="up">Bugs and problems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Why-does-Emacs-ignore-my-X-resources-_0028my-_002eXdefaults-file_0029_003f"></a>
-<h3 class="section">6.6 Why does Emacs ignore my X resources (my .Xdefaults file)?</h3>
-<a name="index-X-resources-being-ignored"></a>
-<a name="index-Ignored-X-resources"></a>
-<a name="index-_002eXdefaults"></a>
+<body lang="en" xml:lang="en">
+  <a name="Emacs-ignores-X-resources" id=
+  "Emacs-ignores-X-resources"></a>
 
-<p>As of version 19, Emacs searches for X resources in the files specified
-by the following environment variables:
-</p>
-<ul>
-<li> <code>XFILESEARCHPATH</code>
-</li><li> <code>XUSERFILESEARCHPATH</code>
-</li><li> <code>XAPPLRESDIR</code>
+  <div class="header">
+    <p>Next: <a href=
+    "Emacs-ignores-frame-parameters.html#Emacs-ignores-frame-parameters"
+    accesskey="n" rel="next">Emacs ignores frame parameters</a>,
+    Previous: <a href=
+    "Errors-with-init-files.html#Errors-with-init-files" accesskey=
+    "p" rel="prev">Errors with init files</a>, Up: <a href=
+    "Bugs-and-problems.html#Bugs-and-problems" accesskey="u" rel=
+    "up">Bugs and problems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name=
+  "Why-does-Emacs-ignore-my-X-resources-_0028my-_002eXdefaults-file_0029_003f"
+  id=
+  "Why-does-Emacs-ignore-my-X-resources-_0028my-_002eXdefaults-file_0029_003f"></a>
 
-</li></ul>
+  <h3 class="section">6.6 Why does Emacs ignore my X resources (my
+  .Xdefaults file)?</h3><a name="index-X-resources-being-ignored"
+  id="index-X-resources-being-ignored"></a> <a name=
+  "index-Ignored-X-resources" id="index-Ignored-X-resources"></a>
+  <a name="index-_002eXdefaults" id="index-_002eXdefaults"></a>
 
-<p>This emulates the functionality provided by programs written using the
-Xt toolkit.
-</p>
-<p><code>XFILESEARCHPATH</code> and <code>XUSERFILESEARCHPATH</code> should be a list
-of file names separated by colons.  <code>XAPPLRESDIR</code> should be a list
-of directory names separated by colons.
-</p>
-<p>Emacs searches for X resources:
-</p>
-<ol>
-<li> specified on the command line, with the &lsquo;<samp>-xrm RESOURCESTRING</samp>&rsquo; option,
+  <p>As of version 19, Emacs searches for X resources in the files
+  specified by the following environment variables:</p>
 
-</li><li> then in the value of the &lsquo;<samp>XENVIRONMENT</samp>&rsquo; environment variable,
+  <ul>
+    <li><code>XFILESEARCHPATH</code></li>
 
-<ul class="no-bullet">
-<li>- or if that is unset, in the file named
-<samp>~/.Xdefaults-<var>hostname</var></samp> if it exists (where <var>hostname</var> is
-the name of the machine Emacs is running on),
+    <li><code>XUSERFILESEARCHPATH</code></li>
 
-</li></ul>
+    <li><code>XAPPLRESDIR</code></li>
+  </ul>
 
-</li><li> then in the screen-specific and server-wide resource properties provided
-by the server,
+  <p>This emulates the functionality provided by programs written
+  using the Xt toolkit.</p>
 
-<ul class="no-bullet">
-<li>- or if those properties are unset, in the file named <samp>~/.Xdefaults</samp>
-if it exists,
+  <p><code>XFILESEARCHPATH</code> and
+  <code>XUSERFILESEARCHPATH</code> should be a list of file names
+  separated by colons. <code>XAPPLRESDIR</code> should be a list of
+  directory names separated by colons.</p>
 
-</li></ul>
+  <p>Emacs searches for X resources:</p>
 
-</li><li> then in the files listed in &lsquo;<samp>XUSERFILESEARCHPATH</samp>&rsquo;,
+  <ol>
+    <li>specified on the command line, with the &lsquo;<samp>-xrm
+    RESOURCESTRING</samp>&rsquo; option,</li>
 
-<ul class="no-bullet">
-<li>- or in files named <samp><var>lang</var>/Emacs</samp> in directories listed in
-&lsquo;<samp>XAPPLRESDIR</samp>&rsquo; (where <var>lang</var> is the value of the <code>LANG</code>
-environment variable), if the &lsquo;<samp>LANG</samp>&rsquo; environment variable is set,
-</li><li>- or in files named Emacs in the directories listed in &lsquo;<samp>XAPPLRESDIR</samp>&rsquo;
-</li><li>- or in <samp>~/<var>lang</var>/Emacs</samp> (if the <code>LANG</code> environment variable
-is set),
-</li><li>- or in <samp>~/Emacs</samp>,
+    <li>then in the value of the
+    &lsquo;<samp>XENVIRONMENT</samp>&rsquo; environment variable,
 
-</li></ul>
+      <ul class="no-bullet">
+        <li>- or if that is unset, in the file named
+        <samp>~/.Xdefaults-<var>hostname</var></samp> if it exists
+        (where <var>hostname</var> is the name of the machine Emacs
+        is running on),</li>
+      </ul>
+    </li>
 
-</li><li> then in the files listed in  <code>XFILESEARCHPATH</code>.
+    <li>then in the screen-specific and server-wide resource
+    properties provided by the server,
 
-</li></ol>
+      <ul class="no-bullet">
+        <li>- or if those properties are unset, in the file named
+        <samp>~/.Xdefaults</samp> if it exists,</li>
+      </ul>
+    </li>
 
+    <li>then in the files listed in
+    &lsquo;<samp>XUSERFILESEARCHPATH</samp>&rsquo;,
 
+      <ul class="no-bullet">
+        <li>- or in files named <samp><var>lang</var>/Emacs</samp>
+        in directories listed in
+        &lsquo;<samp>XAPPLRESDIR</samp>&rsquo; (where
+        <var>lang</var> is the value of the <code>LANG</code>
+        environment variable), if the
+        &lsquo;<samp>LANG</samp>&rsquo; environment variable is
+        set,</li>
 
+        <li>- or in files named Emacs in the directories listed in
+        &lsquo;<samp>XAPPLRESDIR</samp>&rsquo;</li>
 
+        <li>- or in <samp>~/<var>lang</var>/Emacs</samp> (if the
+        <code>LANG</code> environment variable is set),</li>
+
+        <li>- or in <samp>~/Emacs</samp>,</li>
+      </ul>
+    </li>
+
+    <li>then in the files listed in
+    <code>XFILESEARCHPATH</code>.</li>
+  </ol>
 </body>
 </html>

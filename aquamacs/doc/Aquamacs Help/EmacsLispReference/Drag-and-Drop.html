@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,92 +19,126 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Drag and Drop</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Drag and Drop">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Drag and Drop">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Frames.html#Frames" rel="up" title="Frames">
-<link href="Color-Names.html#Color-Names" rel="next" title="Color Names">
-<link href="Window-System-Selections.html#Window-System-Selections" rel="prev" title="Window System Selections">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Drag and Drop</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Drag and Drop" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Drag and Drop" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Frames.html#Frames" rel="up" title="Frames" />
+  <link href="Color-Names.html#Color-Names" rel="next" title=
+  "Color Names" />
+  <link href=
+  "Window-System-Selections.html#Window-System-Selections" rel=
+  "prev" title="Window System Selections" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Drag-and-Drop" id="Drag-and-Drop"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Color-Names.html#Color-Names" accesskey="n"
+    rel="next">Color Names</a>, Previous: <a href=
+    "Window-System-Selections.html#Window-System-Selections"
+    accesskey="p" rel="prev">Window System Selections</a>, Up:
+    <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Drag-and-Drop-1" id="Drag-and-Drop-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Drag-and-Drop"></a>
-<div class="header">
-<p>
-Next: <a href="Color-Names.html#Color-Names" accesskey="n" rel="next">Color Names</a>, Previous: <a href="Window-System-Selections.html#Window-System-Selections" accesskey="p" rel="prev">Window System Selections</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Drag-and-Drop-1"></a>
-<h3 class="section">28.20 Drag and Drop</h3>
-<a name="index-drag-and-drop"></a>
+  <h3 class="section">28.20 Drag and Drop</h3><a name=
+  "index-drag-and-drop" id="index-drag-and-drop"></a> <a name=
+  "index-x_002ddnd_002dtest_002dfunction" id=
+  "index-x_002ddnd_002dtest_002dfunction"></a> <a name=
+  "index-x_002ddnd_002dknown_002dtypes" id=
+  "index-x_002ddnd_002dknown_002dtypes"></a>
 
-<a name="index-x_002ddnd_002dtest_002dfunction"></a>
-<a name="index-x_002ddnd_002dknown_002dtypes"></a>
-<p>When a user drags something from another application over Emacs, that other
-application expects Emacs to tell it if Emacs can handle the data that is
-dragged.  The variable <code>x-dnd-test-function</code> is used by Emacs to determine
-what to reply.  The default value is <code>x-dnd-default-test-function</code>
-which accepts drops if the type of the data to be dropped is present in
-<code>x-dnd-known-types</code>.  You can customize <code>x-dnd-test-function</code> and/or
-<code>x-dnd-known-types</code> if you want Emacs to accept or reject drops based
-on some other criteria.
-</p>
-<a name="index-x_002ddnd_002dtypes_002dalist"></a>
-<p>If you want to change the way Emacs handles drop of different types
-or add a new type, customize <code>x-dnd-types-alist</code>.  This requires
-detailed knowledge of what types other applications use for drag and
-drop.
-</p>
-<a name="index-dnd_002dprotocol_002dalist"></a>
-<p>When an URL is dropped on Emacs it may be a file, but it may also be
-another URL type (ftp, http, etc.).  Emacs first checks
-<code>dnd-protocol-alist</code> to determine what to do with the URL.  If
-there is no match there and if <code>browse-url-browser-function</code> is
-an alist, Emacs looks for a match there.  If no match is found the
-text for the URL is inserted.  If you want to alter Emacs behavior,
-you can customize these variables.
-</p>
+  <p>When a user drags something from another application over
+  Emacs, that other application expects Emacs to tell it if Emacs
+  can handle the data that is dragged. The variable
+  <code>x-dnd-test-function</code> is used by Emacs to determine
+  what to reply. The default value is
+  <code>x-dnd-default-test-function</code> which accepts drops if
+  the type of the data to be dropped is present in
+  <code>x-dnd-known-types</code>. You can customize
+  <code>x-dnd-test-function</code> and/or
+  <code>x-dnd-known-types</code> if you want Emacs to accept or
+  reject drops based on some other criteria.</p><a name=
+  "index-x_002ddnd_002dtypes_002dalist" id=
+  "index-x_002ddnd_002dtypes_002dalist"></a>
 
+  <p>If you want to change the way Emacs handles drop of different
+  types or add a new type, customize
+  <code>x-dnd-types-alist</code>. This requires detailed knowledge
+  of what types other applications use for drag and
+  drop.</p><a name="index-dnd_002dprotocol_002dalist" id=
+  "index-dnd_002dprotocol_002dalist"></a>
 
-
+  <p>When an URL is dropped on Emacs it may be a file, but it may
+  also be another URL type (ftp, http, etc.). Emacs first checks
+  <code>dnd-protocol-alist</code> to determine what to do with the
+  URL. If there is no match there and if
+  <code>browse-url-browser-function</code> is an alist, Emacs looks
+  for a match there. If no match is found the text for the URL is
+  inserted. If you want to alter Emacs behavior, you can customize
+  these variables.</p>
 </body>
 </html>

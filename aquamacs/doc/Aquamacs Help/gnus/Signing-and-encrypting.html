@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Signing and encrypting - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Composing-Messages.html#Composing-Messages" title="Composing Messages">
-<link rel="prev" href="Rejected-Articles.html#Rejected-Articles" title="Rejected Articles">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Signing and encrypting - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Composing-Messages.html#Composing-Messages"
+  title="Composing Messages" />
+  <link rel="prev" href="Rejected-Articles.html#Rejected-Articles"
+  title="Rejected Articles" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +33,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,61 +46,128 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Signing-and-encrypting"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Rejected-Articles.html#Rejected-Articles">Rejected Articles</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Composing-Messages.html#Composing-Messages">Composing Messages</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Signing-and-encrypting" id=
+    "Signing-and-encrypting"></a>
 
-<h3 class="section">5.9 Signing and encrypting</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Rejected-Articles.html#Rejected-Articles">Rejected
+    Articles</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Composing-Messages.html#Composing-Messages">Composing
+    Messages</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-using-gpg-1914"></a><a name="index-using-s_002fmime-1915"></a><a name="index-using-smime-1916"></a>
-Gnus can digitally sign and encrypt your messages, using vanilla
-<acronym>PGP</acronym> format or <acronym>PGP/MIME</acronym> or <acronym>S/MIME</acronym>.  For
-decoding such messages, see the <code>mm-verify-option</code> and
-<code>mm-decrypt-option</code> options (see <a href="Security.html#Security">Security</a>).
+  <h3 class="section">5.9 Signing and encrypting</h3>
 
-   <p><a name="index-gnus_002dmessage_002dreplysign-1917"></a><a name="index-gnus_002dmessage_002dreplyencrypt-1918"></a><a name="index-gnus_002dmessage_002dreplysignencrypted-1919"></a>Often, you would like to sign replies to people who send you signed
-messages.  Even more often, you might want to encrypt messages which
-are in reply to encrypted messages.  Gnus offers
-<code>gnus-message-replysign</code> to enable the former, and
-<code>gnus-message-replyencrypt</code> for the latter.  In addition, setting
-<code>gnus-message-replysignencrypted</code> (on by default) will sign
-automatically encrypted messages.
+  <p><a name="index-using-gpg-1914" id=
+  "index-using-gpg-1914"></a><a name="index-using-s_002fmime-1915"
+  id="index-using-s_002fmime-1915"></a><a name=
+  "index-using-smime-1916" id="index-using-smime-1916"></a> Gnus
+  can digitally sign and encrypt your messages, using vanilla
+  <acronym>PGP</acronym> format or <acronym>PGP/MIME</acronym> or
+  <acronym>S/MIME</acronym>. For decoding such messages, see the
+  <code>mm-verify-option</code> and <code>mm-decrypt-option</code>
+  options (see <a href="Security.html#Security">Security</a>).</p>
 
-   <p>Instructing <acronym>MML</acronym> to perform security operations on a
-<acronym>MIME</acronym> part is done using the <kbd>C-c C-m s</kbd> key map for
-signing and the <kbd>C-c C-m c</kbd> key map for encryption, as follows.
+  <p><a name="index-gnus_002dmessage_002dreplysign-1917" id=
+  "index-gnus_002dmessage_002dreplysign-1917"></a><a name=
+  "index-gnus_002dmessage_002dreplyencrypt-1918" id=
+  "index-gnus_002dmessage_002dreplyencrypt-1918"></a><a name=
+  "index-gnus_002dmessage_002dreplysignencrypted-1919" id=
+  "index-gnus_002dmessage_002dreplysignencrypted-1919"></a>Often,
+  you would like to sign replies to people who send you signed
+  messages. Even more often, you might want to encrypt messages
+  which are in reply to encrypted messages. Gnus offers
+  <code>gnus-message-replysign</code> to enable the former, and
+  <code>gnus-message-replyencrypt</code> for the latter. In
+  addition, setting <code>gnus-message-replysignencrypted</code>
+  (on by default) will sign automatically encrypted messages.</p>
 
-     <dl>
-<dt><kbd>C-c C-m s s</kbd><dd><a name="index-C_002dc-C_002dm-s-s-_0028Message_0029-1920"></a><a name="index-mml_002dsecure_002dmessage_002dsign_002dsmime-1921"></a>
-Digitally sign current message using <acronym>S/MIME</acronym>.
+  <p>Instructing <acronym>MML</acronym> to perform security
+  operations on a <acronym>MIME</acronym> part is done using the
+  <kbd>C-c C-m s</kbd> key map for signing and the <kbd>C-c C-m
+  c</kbd> key map for encryption, as follows.</p>
 
-     <br><dt><kbd>C-c C-m s o</kbd><dd><a name="index-C_002dc-C_002dm-s-o-_0028Message_0029-1922"></a><a name="index-mml_002dsecure_002dmessage_002dsign_002dpgp-1923"></a>
-Digitally sign current message using <acronym>PGP</acronym>.
+  <dl>
+    <dt><kbd>C-c C-m s s</kbd></dt>
 
-     <br><dt><kbd>C-c C-m s p</kbd><dd><a name="index-C_002dc-C_002dm-s-p-_0028Message_0029-1924"></a><a name="index-mml_002dsecure_002dmessage_002dsign_002dpgp-1925"></a>
-Digitally sign current message using <acronym>PGP/MIME</acronym>.
+    <dd><a name="index-C_002dc-C_002dm-s-s-_0028Message_0029-1920"
+    id=
+    "index-C_002dc-C_002dm-s-s-_0028Message_0029-1920"></a><a name=
+    "index-mml_002dsecure_002dmessage_002dsign_002dsmime-1921" id=
+    "index-mml_002dsecure_002dmessage_002dsign_002dsmime-1921"></a>
+    Digitally sign current message using
+    <acronym>S/MIME</acronym>.<br /></dd>
 
-     <br><dt><kbd>C-c C-m c s</kbd><dd><a name="index-C_002dc-C_002dm-c-s-_0028Message_0029-1926"></a><a name="index-mml_002dsecure_002dmessage_002dencrypt_002dsmime-1927"></a>
-Digitally encrypt current message using <acronym>S/MIME</acronym>.
+    <dt><kbd>C-c C-m s o</kbd></dt>
 
-     <br><dt><kbd>C-c C-m c o</kbd><dd><a name="index-C_002dc-C_002dm-c-o-_0028Message_0029-1928"></a><a name="index-mml_002dsecure_002dmessage_002dencrypt_002dpgp-1929"></a>
-Digitally encrypt current message using <acronym>PGP</acronym>.
+    <dd><a name="index-C_002dc-C_002dm-s-o-_0028Message_0029-1922"
+    id=
+    "index-C_002dc-C_002dm-s-o-_0028Message_0029-1922"></a><a name=
+    "index-mml_002dsecure_002dmessage_002dsign_002dpgp-1923" id=
+    "index-mml_002dsecure_002dmessage_002dsign_002dpgp-1923"></a>
+    Digitally sign current message using
+    <acronym>PGP</acronym>.<br /></dd>
 
-     <br><dt><kbd>C-c C-m c p</kbd><dd><a name="index-C_002dc-C_002dm-c-p-_0028Message_0029-1930"></a><a name="index-mml_002dsecure_002dmessage_002dencrypt_002dpgpmime-1931"></a>
-Digitally encrypt current message using <acronym>PGP/MIME</acronym>.
+    <dt><kbd>C-c C-m s p</kbd></dt>
 
-     <br><dt><kbd>C-c C-m C-n</kbd><dd><a name="index-C_002dc-C_002dm-C_002dn-_0028Message_0029-1932"></a><a name="index-mml_002dunsecure_002dmessage-1933"></a>Remove security related <acronym>MML</acronym> tags from message.
+    <dd><a name="index-C_002dc-C_002dm-s-p-_0028Message_0029-1924"
+    id=
+    "index-C_002dc-C_002dm-s-p-_0028Message_0029-1924"></a><a name=
+    "index-mml_002dsecure_002dmessage_002dsign_002dpgp-1925" id=
+    "index-mml_002dsecure_002dmessage_002dsign_002dpgp-1925"></a>
+    Digitally sign current message using
+    <acronym>PGP/MIME</acronym>.<br /></dd>
 
-   </dl>
+    <dt><kbd>C-c C-m c s</kbd></dt>
 
-   <p>See <a href="../message/Security.html#Security">Security</a>, for more information.
+    <dd><a name="index-C_002dc-C_002dm-c-s-_0028Message_0029-1926"
+    id=
+    "index-C_002dc-C_002dm-c-s-_0028Message_0029-1926"></a><a name=
+    "index-mml_002dsecure_002dmessage_002dencrypt_002dsmime-1927"
+    id=
+    "index-mml_002dsecure_002dmessage_002dencrypt_002dsmime-1927"></a>
+    Digitally encrypt current message using
+    <acronym>S/MIME</acronym>.<br /></dd>
 
-   </body></html>
+    <dt><kbd>C-c C-m c o</kbd></dt>
 
+    <dd><a name="index-C_002dc-C_002dm-c-o-_0028Message_0029-1928"
+    id=
+    "index-C_002dc-C_002dm-c-o-_0028Message_0029-1928"></a><a name=
+    "index-mml_002dsecure_002dmessage_002dencrypt_002dpgp-1929" id=
+    "index-mml_002dsecure_002dmessage_002dencrypt_002dpgp-1929"></a>
+    Digitally encrypt current message using
+    <acronym>PGP</acronym>.<br /></dd>
+
+    <dt><kbd>C-c C-m c p</kbd></dt>
+
+    <dd><a name="index-C_002dc-C_002dm-c-p-_0028Message_0029-1930"
+    id=
+    "index-C_002dc-C_002dm-c-p-_0028Message_0029-1930"></a><a name=
+    "index-mml_002dsecure_002dmessage_002dencrypt_002dpgpmime-1931"
+    id=
+    "index-mml_002dsecure_002dmessage_002dencrypt_002dpgpmime-1931"></a>
+    Digitally encrypt current message using
+    <acronym>PGP/MIME</acronym>.<br /></dd>
+
+    <dt><kbd>C-c C-m C-n</kbd></dt>
+
+    <dd><a name=
+    "index-C_002dc-C_002dm-C_002dn-_0028Message_0029-1932" id=
+    "index-C_002dc-C_002dm-C_002dn-_0028Message_0029-1932"></a><a name="index-mml_002dunsecure_002dmessage-1933"
+    id="index-mml_002dunsecure_002dmessage-1933"></a>Remove
+    security related <acronym>MML</acronym> tags from message.</dd>
+  </dl>
+
+  <p>See <a href="../message/Security.html#Security">Security</a>,
+  for more information.</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,89 +19,134 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: User-Level Deletion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: User-Level Deletion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: User-Level Deletion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="The-Kill-Ring.html#The-Kill-Ring" rel="next" title="The Kill Ring">
-<link href="Deletion.html#Deletion" rel="prev" title="Deletion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: User-Level
+  Deletion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: User-Level Deletion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: User-Level Deletion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="The-Kill-Ring.html#The-Kill-Ring" rel="next" title=
+  "The Kill Ring" />
+  <link href="Deletion.html#Deletion" rel="prev" title=
+  "Deletion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="User_002dLevel-Deletion" id=
+  "User_002dLevel-Deletion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey=
+    "n" rel="next">The Kill Ring</a>, Previous: <a href=
+    "Deletion.html#Deletion" accesskey="p" rel="prev">Deletion</a>,
+    Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="User_002dLevel-Deletion-Commands" id=
+  "User_002dLevel-Deletion-Commands"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="User_002dLevel-Deletion"></a>
-<div class="header">
-<p>
-Next: <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey="n" rel="next">The Kill Ring</a>, Previous: <a href="Deletion.html#Deletion" accesskey="p" rel="prev">Deletion</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="User_002dLevel-Deletion-Commands"></a>
-<h3 class="section">31.7 User-Level Deletion Commands</h3>
+  <h3 class="section">31.7 User-Level Deletion Commands</h3>
 
-<p>This section describes higher-level commands for deleting text,
-commands intended primarily for the user but useful also in Lisp
-programs.
-</p>
-<dl>
-<dt><a name="index-delete_002dhorizontal_002dspace"></a>Command: <strong>delete-horizontal-space</strong> <em>&amp;optional backward-only</em></dt>
-<dd><a name="index-deleting-whitespace"></a>
-<p>This function deletes all spaces and tabs around point.  It returns
-<code>nil</code>.
-</p>
-<p>If <var>backward-only</var> is non-<code>nil</code>, the function deletes
-spaces and tabs before point, but not after point.
-</p>
-<p>In the following examples, we call <code>delete-horizontal-space</code> four
-times, once on each line, with point between the second and third
-characters on the line each time.
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
+  <p>This section describes higher-level commands for deleting
+  text, commands intended primarily for the user but useful also in
+  Lisp programs.</p>
+
+  <dl>
+    <dt><a name="index-delete_002dhorizontal_002dspace" id=
+    "index-delete_002dhorizontal_002dspace"></a>Command:
+    <strong>delete-horizontal-space</strong> <em>&amp;optional
+    backward-only</em></dt>
+
+    <dd>
+      <a name="index-deleting-whitespace" id=
+      "index-deleting-whitespace"></a>
+
+      <p>This function deletes all spaces and tabs around point. It
+      returns <code>nil</code>.</p>
+
+      <p>If <var>backward-only</var> is non-<code>nil</code>, the
+      function deletes spaces and tabs before point, but not after
+      point.</p>
+
+      <p>In the following examples, we call
+      <code>delete-horizontal-space</code> four times, once on each
+      line, with point between the second and third characters on
+      the line each time.</p>
+
+      <div class="example">
+        <pre class="example">
+---------- Buffer: foo ----------
 I &lowast;thought
 I &lowast;     thought
 We&lowast; thought
 Yo&lowast;u thought
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(delete-horizontal-space)   ; <span class="roman">Four times.</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(delete-horizontal-space)   ; <span class=
+"roman">Four times.</span>
      &rArr; nil
 
 ---------- Buffer: foo ----------
@@ -108,118 +155,176 @@ Ithought
 Wethought
 You thought
 ---------- Buffer: foo ----------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-delete_002dindentation"></a>Command: <strong>delete-indentation</strong> <em>&amp;optional join-following-p</em></dt>
-<dd><p>This function joins the line point is on to the previous line, deleting
-any whitespace at the join and in some cases replacing it with one
-space.  If <var>join-following-p</var> is non-<code>nil</code>,
-<code>delete-indentation</code> joins this line to the following line
-instead.  The function returns <code>nil</code>.
-</p>
-<p>If there is a fill prefix, and the second of the lines being joined
-starts with the prefix, then <code>delete-indentation</code> deletes the
-fill prefix before joining the lines.  See <a href="Margins.html#Margins">Margins</a>.
-</p>
-<p>In the example below, point is located on the line starting
-&lsquo;<samp>events</samp>&rsquo;, and it makes no difference if there are trailing spaces
-in the preceding line.
-</p>
-<div class="smallexample">
-<pre class="smallexample">---------- Buffer: foo ----------
+  <dl>
+    <dt><a name="index-delete_002dindentation" id=
+    "index-delete_002dindentation"></a>Command:
+    <strong>delete-indentation</strong> <em>&amp;optional
+    join-following-p</em></dt>
+
+    <dd>
+      <p>This function joins the line point is on to the previous
+      line, deleting any whitespace at the join and in some cases
+      replacing it with one space. If <var>join-following-p</var>
+      is non-<code>nil</code>, <code>delete-indentation</code>
+      joins this line to the following line instead. The function
+      returns <code>nil</code>.</p>
+
+      <p>If there is a fill prefix, and the second of the lines
+      being joined starts with the prefix, then
+      <code>delete-indentation</code> deletes the fill prefix
+      before joining the lines. See <a href=
+      "Margins.html#Margins">Margins</a>.</p>
+
+      <p>In the example below, point is located on the line
+      starting &lsquo;<samp>events</samp>&rsquo;, and it makes no
+      difference if there are trailing spaces in the preceding
+      line.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+---------- Buffer: foo ----------
 When in the course of human
 &lowast;    events, it becomes necessary
 ---------- Buffer: foo ----------
-</pre><pre class="smallexample">
+</pre>
+        <pre class="smallexample">
 (delete-indentation)
      &rArr; nil
 
-</pre><pre class="smallexample">---------- Buffer: foo ----------
+</pre>
+        <pre class="smallexample">
+---------- Buffer: foo ----------
 When in the course of human&lowast; events, it becomes necessary
 ---------- Buffer: foo ----------
-</pre></div>
+</pre>
+      </div>
 
-<p>After the lines are joined, the function <code>fixup-whitespace</code> is
-responsible for deciding whether to leave a space at the junction.
-</p></dd></dl>
+      <p>After the lines are joined, the function
+      <code>fixup-whitespace</code> is responsible for deciding
+      whether to leave a space at the junction.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-fixup_002dwhitespace"></a>Command: <strong>fixup-whitespace</strong></dt>
-<dd><p>This function replaces all the horizontal whitespace surrounding point
-with either one space or no space, according to the context.  It
-returns <code>nil</code>.
-</p>
-<p>At the beginning or end of a line, the appropriate amount of space is
-none.  Before a character with close parenthesis syntax, or after a
-character with open parenthesis or expression-prefix syntax, no space is
-also appropriate.  Otherwise, one space is appropriate.  See <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>.
-</p>
-<p>In the example below, <code>fixup-whitespace</code> is called the first time
-with point before the word &lsquo;<samp>spaces</samp>&rsquo; in the first line.  For the
-second invocation, point is directly after the &lsquo;<samp>(</samp>&rsquo;.
-</p>
-<div class="smallexample">
-<pre class="smallexample">---------- Buffer: foo ----------
+  <dl>
+    <dt><a name="index-fixup_002dwhitespace" id=
+    "index-fixup_002dwhitespace"></a>Command:
+    <strong>fixup-whitespace</strong></dt>
+
+    <dd>
+      <p>This function replaces all the horizontal whitespace
+      surrounding point with either one space or no space,
+      according to the context. It returns <code>nil</code>.</p>
+
+      <p>At the beginning or end of a line, the appropriate amount
+      of space is none. Before a character with close parenthesis
+      syntax, or after a character with open parenthesis or
+      expression-prefix syntax, no space is also appropriate.
+      Otherwise, one space is appropriate. See <a href=
+      "Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class
+      Table</a>.</p>
+
+      <p>In the example below, <code>fixup-whitespace</code> is
+      called the first time with point before the word
+      &lsquo;<samp>spaces</samp>&rsquo; in the first line. For the
+      second invocation, point is directly after the
+      &lsquo;<samp>(</samp>&rsquo;.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+---------- Buffer: foo ----------
 This has too many     &lowast;spaces
 This has too many spaces at the start of (&lowast;   this list)
 ---------- Buffer: foo ----------
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">(fixup-whitespace)
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+(fixup-whitespace)
      &rArr; nil
 (fixup-whitespace)
      &rArr; nil
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">---------- Buffer: foo ----------
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+---------- Buffer: foo ----------
 This has too many spaces
 This has too many spaces at the start of (this list)
 ---------- Buffer: foo ----------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-just_002done_002dspace"></a>Command: <strong>just-one-space</strong> <em>&amp;optional n</em></dt>
-<dd><p>This command replaces any spaces and tabs around point with a single
-space, or <var>n</var> spaces if <var>n</var> is specified.  It returns
-<code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-just_002done_002dspace" id=
+    "index-just_002done_002dspace"></a>Command:
+    <strong>just-one-space</strong> <em>&amp;optional n</em></dt>
 
+    <dd>
+      <p>This command replaces any spaces and tabs around point
+      with a single space, or <var>n</var> spaces if <var>n</var>
+      is specified. It returns <code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-delete_002dblank_002dlines"></a>Command: <strong>delete-blank-lines</strong></dt>
-<dd><p>This function deletes blank lines surrounding point.  If point is on a
-blank line with one or more blank lines before or after it, then all but
-one of them are deleted.  If point is on an isolated blank line, then it
-is deleted.  If point is on a nonblank line, the command deletes all
-blank lines immediately following it.
-</p>
-<p>A blank line is defined as a line containing only tabs and spaces.
-</p>
-<p><code>delete-blank-lines</code> returns <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-delete_002dblank_002dlines" id=
+    "index-delete_002dblank_002dlines"></a>Command:
+    <strong>delete-blank-lines</strong></dt>
 
-<dl>
-<dt><a name="index-delete_002dtrailing_002dwhitespace"></a>Command: <strong>delete-trailing-whitespace</strong> <em>&amp;optional start end</em></dt>
-<dd><p>Delete trailing whitespace in the region defined by <var>start</var> and
-<var>end</var>.
-</p>
-<p>This command deletes whitespace characters after the last
-non-whitespace character in each line in the region.
-</p>
-<p>If this command acts on the entire buffer (i.e., if called
-interactively with the mark inactive, or called from Lisp with
-<var>end</var> <code>nil</code>), it also deletes all trailing lines at the end of the
-buffer if the variable <code>delete-trailing-lines</code> is non-<code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function deletes blank lines surrounding point. If
+      point is on a blank line with one or more blank lines before
+      or after it, then all but one of them are deleted. If point
+      is on an isolated blank line, then it is deleted. If point is
+      on a nonblank line, the command deletes all blank lines
+      immediately following it.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey="n" rel="next">The Kill Ring</a>, Previous: <a href="Deletion.html#Deletion" accesskey="p" rel="prev">Deletion</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>A blank line is defined as a line containing only tabs and
+      spaces.</p>
 
+      <p><code>delete-blank-lines</code> returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-delete_002dtrailing_002dwhitespace" id=
+    "index-delete_002dtrailing_002dwhitespace"></a>Command:
+    <strong>delete-trailing-whitespace</strong> <em>&amp;optional
+    start end</em></dt>
 
+    <dd>
+      <p>Delete trailing whitespace in the region defined by
+      <var>start</var> and <var>end</var>.</p>
+
+      <p>This command deletes whitespace characters after the last
+      non-whitespace character in each line in the region.</p>
+
+      <p>If this command acts on the entire buffer (i.e., if called
+      interactively with the mark inactive, or called from Lisp
+      with <var>end</var> <code>nil</code>), it also deletes all
+      trailing lines at the end of the buffer if the variable
+      <code>delete-trailing-lines</code> is
+      non-<code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey=
+    "n" rel="next">The Kill Ring</a>, Previous: <a href=
+    "Deletion.html#Deletion" accesskey="p" rel="prev">Deletion</a>,
+    Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

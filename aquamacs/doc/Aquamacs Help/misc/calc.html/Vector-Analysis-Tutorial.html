@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,177 +18,237 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Vector Analysis Tutorial</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Vector Analysis Tutorial">
-<meta name="keywords" content="GNU Emacs Calc Manual: Vector Analysis Tutorial">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" rel="up" title="Vector/Matrix Tutorial">
-<link href="Matrix-Tutorial.html#Matrix-Tutorial" rel="next" title="Matrix Tutorial">
-<link href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" rel="prev" title="Vector/Matrix Tutorial">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Vector Analysis Tutorial</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Vector Analysis Tutorial" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Vector Analysis Tutorial" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" rel=
+  "up" title="Vector/Matrix Tutorial" />
+  <link href="Matrix-Tutorial.html#Matrix-Tutorial" rel="next"
+  title="Matrix Tutorial" />
+  <link href=
+  "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" rel=
+  "prev" title="Vector/Matrix Tutorial" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Vector-Analysis-Tutorial"></a>
-<div class="header">
-<p>
-Next: <a href="Matrix-Tutorial.html#Matrix-Tutorial" accesskey="n" rel="next">Matrix Tutorial</a>, Previous: <a href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" accesskey="p" rel="prev">Vector/Matrix Tutorial</a>, Up: <a href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" accesskey="u" rel="up">Vector/Matrix Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Vector-Analysis"></a>
-<h4 class="subsection">2.3.1 Vector Analysis</h4>
+<body lang="en" xml:lang="en">
+  <a name="Vector-Analysis-Tutorial" id=
+  "Vector-Analysis-Tutorial"></a>
 
-<p>If you add two vectors, the result is a vector of the sums of the
-elements, taken pairwise.
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  [1, 2, 3]     2:  [1, 2, 3]     1:  [8, 8, 3]
+  <div class="header">
+    <p>Next: <a href="Matrix-Tutorial.html#Matrix-Tutorial"
+    accesskey="n" rel="next">Matrix Tutorial</a>, Previous:
+    <a href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial"
+    accesskey="p" rel="prev">Vector/Matrix Tutorial</a>, Up:
+    <a href=
+    "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial"
+    accesskey="u" rel="up">Vector/Matrix Tutorial</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Vector-Analysis" id="Vector-Analysis"></a>
+
+  <h4 class="subsection">2.3.1 Vector Analysis</h4>
+
+  <p>If you add two vectors, the result is a vector of the sums of
+  the elements, taken pairwise.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  [1, 2, 3]     2:  [1, 2, 3]     1:  [8, 8, 3]
     .             1:  [7, 6, 0]         .
                       .
 
     [1,2,3]  s 1      [7 6 0]  s 2      +
-</pre></div>
+</pre>
+  </div>
 
-<p>Note that we can separate the vector elements with either commas or
-spaces.  This is true whether we are using incomplete vectors or
-algebraic entry.  The <kbd>s 1</kbd> and <kbd>s 2</kbd> commands save these
-vectors so we can easily reuse them later.
-</p>
-<p>If you multiply two vectors, the result is the sum of the products
-of the elements taken pairwise.  This is called the <em>dot product</em>
-of the vectors.
-</p>
-<div class="smallexample">
-<pre class="smallexample">2:  [1, 2, 3]     1:  19
+  <p>Note that we can separate the vector elements with either
+  commas or spaces. This is true whether we are using incomplete
+  vectors or algebraic entry. The <kbd>s 1</kbd> and <kbd>s 2</kbd>
+  commands save these vectors so we can easily reuse them
+  later.</p>
+
+  <p>If you multiply two vectors, the result is the sum of the
+  products of the elements taken pairwise. This is called the
+  <em>dot product</em> of the vectors.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+2:  [1, 2, 3]     1:  19
 1:  [7, 6, 0]         .
     .
 
     r 1 r 2           *
-</pre></div>
+</pre>
+  </div><a name="index-Dot-product" id="index-Dot-product"></a>
 
-<a name="index-Dot-product"></a>
-<p>The dot product of two vectors is equal to the product of their
-lengths times the cosine of the angle between them.  (Here the vector
-is interpreted as a line from the origin &lsquo;<samp>(0,0,0)</samp>&rsquo; to the
-specified point in three-dimensional space.)  The <kbd>A</kbd>
-(absolute value) command can be used to compute the length of a
-vector.
-</p>
-<div class="smallexample">
-<pre class="smallexample">3:  19            3:  19          1:  0.550782    1:  56.579
+  <p>The dot product of two vectors is equal to the product of
+  their lengths times the cosine of the angle between them. (Here
+  the vector is interpreted as a line from the origin
+  &lsquo;<samp>(0,0,0)</samp>&rsquo; to the specified point in
+  three-dimensional space.) The <kbd>A</kbd> (absolute value)
+  command can be used to compute the length of a vector.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+3:  19            3:  19          1:  0.550782    1:  56.579
 2:  [1, 2, 3]     2:  3.741657        .               .
 1:  [7, 6, 0]     1:  9.219544
     .                 .
 
-    M-<span class="key">RET</span>             M-2 A          * /             I C
-</pre></div>
+    M-<span class=
+"key">RET</span>             M-2 A          * /             I C
+</pre>
+  </div>
 
-<p>First we recall the arguments to the dot product command, then
-we compute the absolute values of the top two stack entries to
-obtain the lengths of the vectors, then we divide the dot product
-by the product of the lengths to get the cosine of the angle.
-The inverse cosine finds that the angle between the vectors
-is about 56 degrees.
-</p>
-<a name="index-Cross-product"></a>
-<a name="index-Perpendicular-vectors"></a>
-<p>The <em>cross product</em> of two vectors is a vector whose length
-is the product of the lengths of the inputs times the sine of the
-angle between them, and whose direction is perpendicular to both
-input vectors.  Unlike the dot product, the cross product is
-defined only for three-dimensional vectors.  Let&rsquo;s double-check
-our computation of the angle using the cross product.
-</p>
-<div class="smallexample">
-<pre class="smallexample">2:  [1, 2, 3]  3:  [-18, 21, -8]  1:  [-0.52, 0.61, -0.23]  1:  56.579
+  <p>First we recall the arguments to the dot product command, then
+  we compute the absolute values of the top two stack entries to
+  obtain the lengths of the vectors, then we divide the dot product
+  by the product of the lengths to get the cosine of the angle. The
+  inverse cosine finds that the angle between the vectors is about
+  56 degrees.</p><a name="index-Cross-product" id=
+  "index-Cross-product"></a> <a name="index-Perpendicular-vectors"
+  id="index-Perpendicular-vectors"></a>
+
+  <p>The <em>cross product</em> of two vectors is a vector whose
+  length is the product of the lengths of the inputs times the sine
+  of the angle between them, and whose direction is perpendicular
+  to both input vectors. Unlike the dot product, the cross product
+  is defined only for three-dimensional vectors. Let&rsquo;s
+  double-check our computation of the angle using the cross
+  product.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+2:  [1, 2, 3]  3:  [-18, 21, -8]  1:  [-0.52, 0.61, -0.23]  1:  56.579
 1:  [7, 6, 0]  2:  [1, 2, 3]          .                         .
     .          1:  [7, 6, 0]
                    .
 
-    r 1 r 2        V C  s 3  M-<span class="key">RET</span>    M-2 A * /                 A I S
-</pre></div>
+    r 1 r 2        V C  s 3  M-<span class=
+"key">RET</span>    M-2 A * /                 A I S
+</pre>
+  </div>
 
-<p>First we recall the original vectors and compute their cross product,
-which we also store for later reference.  Now we divide the vector
-by the product of the lengths of the original vectors.  The length of
-this vector should be the sine of the angle; sure enough, it is!
-</p>
-<p>Vector-related commands generally begin with the <kbd>v</kbd> prefix key.
-Some are uppercase letters and some are lowercase.  To make it easier
-to type these commands, the shift-<kbd>V</kbd> prefix key acts the same as
-the <kbd>v</kbd> key.  (See <a href="General-Mode-Commands.html#General-Mode-Commands">General Mode Commands</a>, for a way to make all
-prefix keys have this property.)
-</p>
-<p>If we take the dot product of two perpendicular vectors we expect
-to get zero, since the cosine of 90 degrees is zero.  Let&rsquo;s check
-that the cross product is indeed perpendicular to both inputs:
-</p>
-<div class="smallexample">
-<pre class="smallexample">2:  [1, 2, 3]      1:  0          2:  [7, 6, 0]      1:  0
+  <p>First we recall the original vectors and compute their cross
+  product, which we also store for later reference. Now we divide
+  the vector by the product of the lengths of the original vectors.
+  The length of this vector should be the sine of the angle; sure
+  enough, it is!</p>
+
+  <p>Vector-related commands generally begin with the <kbd>v</kbd>
+  prefix key. Some are uppercase letters and some are lowercase. To
+  make it easier to type these commands, the shift-<kbd>V</kbd>
+  prefix key acts the same as the <kbd>v</kbd> key. (See <a href=
+  "General-Mode-Commands.html#General-Mode-Commands">General Mode
+  Commands</a>, for a way to make all prefix keys have this
+  property.)</p>
+
+  <p>If we take the dot product of two perpendicular vectors we
+  expect to get zero, since the cosine of 90 degrees is zero.
+  Let&rsquo;s check that the cross product is indeed perpendicular
+  to both inputs:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+2:  [1, 2, 3]      1:  0          2:  [7, 6, 0]      1:  0
 1:  [-18, 21, -8]      .          1:  [-18, 21, -8]      .
     .                                 .
 
-    r 1 r 3            *          <span class="key">DEL</span> r 2 r 3            *
-</pre></div>
+    r 1 r 3            *          <span class=
+"key">DEL</span> r 2 r 3            *
+</pre>
+  </div><a name="index-Normalizing-a-vector" id=
+  "index-Normalizing-a-vector"></a> <a name="index-Unit-vectors"
+  id="index-Unit-vectors"></a>
 
-<a name="index-Normalizing-a-vector"></a>
-<a name="index-Unit-vectors"></a>
-<p>(&bull;) <strong>Exercise 1.</strong>  Given a vector on the top of the
-stack, what keystrokes would you use to <em>normalize</em> the
-vector, i.e., to reduce its length to one without changing its
-direction?  See <a href="Vector-Answer-1.html#Vector-Answer-1">1</a>. (&bull;)
-</p>
-<p>(&bull;) <strong>Exercise 2.</strong>  Suppose a certain particle can be
-at any of several positions along a ruler.  You have a list of
-those positions in the form of a vector, and another list of the
-probabilities for the particle to be at the corresponding positions.
-Find the average position of the particle.
-See <a href="Vector-Answer-2.html#Vector-Answer-2">2</a>. (&bull;)
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Matrix-Tutorial.html#Matrix-Tutorial" accesskey="n" rel="next">Matrix Tutorial</a>, Previous: <a href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" accesskey="p" rel="prev">Vector/Matrix Tutorial</a>, Up: <a href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" accesskey="u" rel="up">Vector/Matrix Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>(&bull;) <strong>Exercise 1.</strong> Given a vector on the
+  top of the stack, what keystrokes would you use to
+  <em>normalize</em> the vector, i.e., to reduce its length to one
+  without changing its direction? See <a href=
+  "Vector-Answer-1.html#Vector-Answer-1">1</a>. (&bull;)</p>
 
+  <p>(&bull;) <strong>Exercise 2.</strong> Suppose a certain
+  particle can be at any of several positions along a ruler. You
+  have a list of those positions in the form of a vector, and
+  another list of the probabilities for the particle to be at the
+  corresponding positions. Find the average position of the
+  particle. See <a href=
+  "Vector-Answer-2.html#Vector-Answer-2">2</a>. (&bull;)</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Matrix-Tutorial.html#Matrix-Tutorial"
+    accesskey="n" rel="next">Matrix Tutorial</a>, Previous:
+    <a href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial"
+    accesskey="p" rel="prev">Vector/Matrix Tutorial</a>, Up:
+    <a href=
+    "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial"
+    accesskey="u" rel="up">Vector/Matrix Tutorial</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

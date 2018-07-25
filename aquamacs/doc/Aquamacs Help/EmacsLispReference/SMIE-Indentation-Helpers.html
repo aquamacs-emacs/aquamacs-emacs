@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,136 +19,226 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: SMIE Indentation Helpers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: SMIE Indentation Helpers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: SMIE Indentation Helpers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="SMIE.html#SMIE" rel="up" title="SMIE">
-<link href="SMIE-Indentation-Example.html#SMIE-Indentation-Example" rel="next" title="SMIE Indentation Example">
-<link href="SMIE-Indentation.html#SMIE-Indentation" rel="prev" title="SMIE Indentation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: SMIE Indentation
+  Helpers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: SMIE Indentation Helpers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: SMIE Indentation Helpers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="SMIE.html#SMIE" rel="up" title="SMIE" />
+  <link href=
+  "SMIE-Indentation-Example.html#SMIE-Indentation-Example" rel=
+  "next" title="SMIE Indentation Example" />
+  <link href="SMIE-Indentation.html#SMIE-Indentation" rel="prev"
+  title="SMIE Indentation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="SMIE-Indentation-Helpers" id=
+  "SMIE-Indentation-Helpers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "SMIE-Indentation-Example.html#SMIE-Indentation-Example"
+    accesskey="n" rel="next">SMIE Indentation Example</a>,
+    Previous: <a href="SMIE-Indentation.html#SMIE-Indentation"
+    accesskey="p" rel="prev">SMIE Indentation</a>, Up: <a href=
+    "SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Helper-Functions-for-Indentation-Rules" id=
+  "Helper-Functions-for-Indentation-Rules"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="SMIE-Indentation-Helpers"></a>
-<div class="header">
-<p>
-Next: <a href="SMIE-Indentation-Example.html#SMIE-Indentation-Example" accesskey="n" rel="next">SMIE Indentation Example</a>, Previous: <a href="SMIE-Indentation.html#SMIE-Indentation" accesskey="p" rel="prev">SMIE Indentation</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Helper-Functions-for-Indentation-Rules"></a>
-<h4 class="subsubsection">22.7.1.7 Helper Functions for Indentation Rules</h4>
+  <h4 class="subsubsection">22.7.1.7 Helper Functions for
+  Indentation Rules</h4>
 
-<p>SMIE provides various functions designed specifically for use in the
-indentation rules function (several of those functions break if used in
-another context).  These functions all start with the prefix
-<code>smie-rule-</code>.
-</p>
-<dl>
-<dt><a name="index-smie_002drule_002dbolp"></a>Function: <strong>smie-rule-bolp</strong></dt>
-<dd><p>Return non-<code>nil</code> if the current token is the first on the line.
-</p></dd></dl>
+  <p>SMIE provides various functions designed specifically for use
+  in the indentation rules function (several of those functions
+  break if used in another context). These functions all start with
+  the prefix <code>smie-rule-</code>.</p>
 
-<dl>
-<dt><a name="index-smie_002drule_002dhanging_002dp"></a>Function: <strong>smie-rule-hanging-p</strong></dt>
-<dd><p>Return non-<code>nil</code> if the current token is <em>hanging</em>.
-A token is <em>hanging</em> if it is the last token on the line
-and if it is preceded by other tokens: a lone token on a line is not
-hanging.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-smie_002drule_002dbolp" id=
+    "index-smie_002drule_002dbolp"></a>Function:
+    <strong>smie-rule-bolp</strong></dt>
 
-<dl>
-<dt><a name="index-smie_002drule_002dnext_002dp"></a>Function: <strong>smie-rule-next-p</strong> <em>&amp;rest tokens</em></dt>
-<dd><p>Return non-<code>nil</code> if the next token is among <var>tokens</var>.
-</p></dd></dl>
+    <dd>
+      <p>Return non-<code>nil</code> if the current token is the
+      first on the line.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-smie_002drule_002dprev_002dp"></a>Function: <strong>smie-rule-prev-p</strong> <em>&amp;rest tokens</em></dt>
-<dd><p>Return non-<code>nil</code> if the previous token is among <var>tokens</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-smie_002drule_002dhanging_002dp" id=
+    "index-smie_002drule_002dhanging_002dp"></a>Function:
+    <strong>smie-rule-hanging-p</strong></dt>
 
-<dl>
-<dt><a name="index-smie_002drule_002dparent_002dp"></a>Function: <strong>smie-rule-parent-p</strong> <em>&amp;rest parents</em></dt>
-<dd><p>Return non-<code>nil</code> if the current token&rsquo;s parent is among <var>parents</var>.
-</p></dd></dl>
+    <dd>
+      <p>Return non-<code>nil</code> if the current token is
+      <em>hanging</em>. A token is <em>hanging</em> if it is the
+      last token on the line and if it is preceded by other tokens:
+      a lone token on a line is not hanging.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-smie_002drule_002dsibling_002dp"></a>Function: <strong>smie-rule-sibling-p</strong></dt>
-<dd><p>Return non-<code>nil</code> if the current token&rsquo;s parent is actually a
-sibling.  This is the case for example when the parent of a <code>&quot;,&quot;</code>
-is just the previous <code>&quot;,&quot;</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-smie_002drule_002dnext_002dp" id=
+    "index-smie_002drule_002dnext_002dp"></a>Function:
+    <strong>smie-rule-next-p</strong> <em>&amp;rest
+    tokens</em></dt>
 
-<dl>
-<dt><a name="index-smie_002drule_002dparent"></a>Function: <strong>smie-rule-parent</strong> <em>&amp;optional offset</em></dt>
-<dd><p>Return the proper offset to align the current token with the parent.
-If non-<code>nil</code>, <var>offset</var> should be an integer giving an
-additional offset to apply.
-</p></dd></dl>
+    <dd>
+      <p>Return non-<code>nil</code> if the next token is among
+      <var>tokens</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-smie_002drule_002dseparator"></a>Function: <strong>smie-rule-separator</strong> <em>method</em></dt>
-<dd><p>Indent current token as a <em>separator</em>.
-</p>
-<p>By <em>separator</em>, we mean here a token whose sole purpose is to
-separate various elements within some enclosing syntactic construct, and
-which does not have any semantic significance in itself (i.e., it would
-typically not exist as a node in an abstract syntax tree).
-</p>
-<p>Such a token is expected to have an associative syntax and be closely
-tied to its syntactic parent.  Typical examples are <code>&quot;,&quot;</code> in lists
-of arguments (enclosed inside parentheses), or <code>&quot;;&quot;</code> in sequences
-of instructions (enclosed in a <code>{...}</code> or <code>begin...end</code>
-block).
-</p>
-<p><var>method</var> should be the method name that was passed to
-<code>smie-rules-function</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-smie_002drule_002dprev_002dp" id=
+    "index-smie_002drule_002dprev_002dp"></a>Function:
+    <strong>smie-rule-prev-p</strong> <em>&amp;rest
+    tokens</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="SMIE-Indentation-Example.html#SMIE-Indentation-Example" accesskey="n" rel="next">SMIE Indentation Example</a>, Previous: <a href="SMIE-Indentation.html#SMIE-Indentation" accesskey="p" rel="prev">SMIE Indentation</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Return non-<code>nil</code> if the previous token is among
+      <var>tokens</var>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-smie_002drule_002dparent_002dp" id=
+    "index-smie_002drule_002dparent_002dp"></a>Function:
+    <strong>smie-rule-parent-p</strong> <em>&amp;rest
+    parents</em></dt>
 
+    <dd>
+      <p>Return non-<code>nil</code> if the current token&rsquo;s
+      parent is among <var>parents</var>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-smie_002drule_002dsibling_002dp" id=
+    "index-smie_002drule_002dsibling_002dp"></a>Function:
+    <strong>smie-rule-sibling-p</strong></dt>
+
+    <dd>
+      <p>Return non-<code>nil</code> if the current token&rsquo;s
+      parent is actually a sibling. This is the case for example
+      when the parent of a <code>","</code> is just the previous
+      <code>","</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-smie_002drule_002dparent" id=
+    "index-smie_002drule_002dparent"></a>Function:
+    <strong>smie-rule-parent</strong> <em>&amp;optional
+    offset</em></dt>
+
+    <dd>
+      <p>Return the proper offset to align the current token with
+      the parent. If non-<code>nil</code>, <var>offset</var> should
+      be an integer giving an additional offset to apply.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-smie_002drule_002dseparator" id=
+    "index-smie_002drule_002dseparator"></a>Function:
+    <strong>smie-rule-separator</strong> <em>method</em></dt>
+
+    <dd>
+      <p>Indent current token as a <em>separator</em>.</p>
+
+      <p>By <em>separator</em>, we mean here a token whose sole
+      purpose is to separate various elements within some enclosing
+      syntactic construct, and which does not have any semantic
+      significance in itself (i.e., it would typically not exist as
+      a node in an abstract syntax tree).</p>
+
+      <p>Such a token is expected to have an associative syntax and
+      be closely tied to its syntactic parent. Typical examples are
+      <code>","</code> in lists of arguments (enclosed inside
+      parentheses), or <code>";"</code> in sequences of
+      instructions (enclosed in a <code>{...}</code> or
+      <code>begin...end</code> block).</p>
+
+      <p><var>method</var> should be the method name that was
+      passed to <code>smie-rules-function</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "SMIE-Indentation-Example.html#SMIE-Indentation-Example"
+    accesskey="n" rel="next">SMIE Indentation Example</a>,
+    Previous: <a href="SMIE-Indentation.html#SMIE-Indentation"
+    accesskey="p" rel="prev">SMIE Indentation</a>, Up: <a href=
+    "SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,162 +19,242 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Preserving Window Sizes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Preserving Window Sizes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Preserving Window Sizes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Splitting-Windows.html#Splitting-Windows" rel="next" title="Splitting Windows">
-<link href="Resizing-Windows.html#Resizing-Windows" rel="prev" title="Resizing Windows">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Preserving Window
+  Sizes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Preserving Window Sizes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Preserving Window Sizes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Splitting-Windows.html#Splitting-Windows" rel="next"
+  title="Splitting Windows" />
+  <link href="Resizing-Windows.html#Resizing-Windows" rel="prev"
+  title="Resizing Windows" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Preserving-Window-Sizes" id=
+  "Preserving-Window-Sizes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Splitting-Windows.html#Splitting-Windows"
+    accesskey="n" rel="next">Splitting Windows</a>, Previous:
+    <a href="Resizing-Windows.html#Resizing-Windows" accesskey="p"
+    rel="prev">Resizing Windows</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Preserving-Window-Sizes-1" id=
+  "Preserving-Window-Sizes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Preserving-Window-Sizes"></a>
-<div class="header">
-<p>
-Next: <a href="Splitting-Windows.html#Splitting-Windows" accesskey="n" rel="next">Splitting Windows</a>, Previous: <a href="Resizing-Windows.html#Resizing-Windows" accesskey="p" rel="prev">Resizing Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Preserving-Window-Sizes-1"></a>
-<h3 class="section">27.5 Preserving Window Sizes</h3>
-<a name="index-preserving-window-sizes"></a>
+  <h3 class="section">27.5 Preserving Window Sizes</h3><a name=
+  "index-preserving-window-sizes" id=
+  "index-preserving-window-sizes"></a>
 
-<p>A window can get resized explicitly by using one of the functions from
-the preceding section or implicitly, for example, when resizing an
-adjacent window, when splitting or deleting a window (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>, see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>) or when resizing the window&rsquo;s frame
-(see <a href="Size-and-Position.html#Size-and-Position">Size and Position</a>).
-</p>
-<p>It is possible to avoid implicit resizing of a specific window when
-there are one or more other resizable windows on the same frame.  For
-this purpose, Emacs must be advised to <em>preserve</em> the size of that
-window.  There are two basic ways to do that.
-</p>
-<dl>
-<dt><a name="index-window_002dsize_002dfixed"></a>Variable: <strong>window-size-fixed</strong></dt>
-<dd><p>If this buffer-local variable is non-<code>nil</code>, the size of any window
-displaying the buffer cannot normally be changed.  Deleting a window or
-changing the frame&rsquo;s size may still change the window&rsquo;s size, if there
-is no choice.
-</p>
-<p>If the value is <code>height</code>, then only the window&rsquo;s height is fixed;
-if the value is <code>width</code>, then only the window&rsquo;s width is fixed.
-Any other non-<code>nil</code> value fixes both the width and the height.
-</p>
-<p>If this variable is <code>nil</code>, this does not necessarily mean that any
-window showing the buffer can be resized in the desired direction.  To
-determine that, use the function <code>window-resizable</code>.
-See <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>.
-</p></dd></dl>
+  <p>A window can get resized explicitly by using one of the
+  functions from the preceding section or implicitly, for example,
+  when resizing an adjacent window, when splitting or deleting a
+  window (see <a href=
+  "Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>,
+  see <a href="Deleting-Windows.html#Deleting-Windows">Deleting
+  Windows</a>) or when resizing the window&rsquo;s frame (see
+  <a href="Size-and-Position.html#Size-and-Position">Size and
+  Position</a>).</p>
 
-<p>Often <code>window-size-fixed</code> is overly aggressive because it inhibits
-any attempt to explicitly resize or split an affected window as well.
-This may even happen after the window has been resized implicitly, for
-example, when deleting an adjacent window or resizing the window&rsquo;s
-frame.  The following function tries hard to never disallow resizing
-such a window explicitly:
-</p>
-<dl>
-<dt><a name="index-window_002dpreserve_002dsize"></a>Function: <strong>window-preserve-size</strong> <em>&amp;optional window horizontal preserve</em></dt>
-<dd><p>This function (un-)marks the height of window <var>window</var> as preserved
-for future resize operations.  <var>window</var> must be a live window and
-defaults to the selected one.  If the optional argument <var>horizontal</var>
-is non-<code>nil</code>, it (un-)marks the width of <var>window</var> as preserved.
-</p>
-<p>If the optional argument <var>preserve</var> is <code>t</code>, this means to
-preserve the current height/width of <var>window</var>&rsquo;s body.  The
-height/width of <var>window</var> will change only if Emacs has no better
-choice.  Resizing a window whose height/width is preserved by this
-function never throws an error.
-</p>
-<p>If <var>preserve</var> is <code>nil</code>, this means to stop preserving the
-height/width of <var>window</var>, lifting any respective restraint induced
-by a previous call of this function for <var>window</var>.  Calling
-<code>enlarge-window</code>, <code>shrink-window</code> or
-<code>fit-window-to-buffer</code> with <var>window</var> as argument may also
-remove the respective restraint.
-</p></dd></dl>
+  <p>It is possible to avoid implicit resizing of a specific window
+  when there are one or more other resizable windows on the same
+  frame. For this purpose, Emacs must be advised to
+  <em>preserve</em> the size of that window. There are two basic
+  ways to do that.</p>
 
-<p><code>window-preserve-size</code> is currently invoked by the following
-functions:
-</p>
-<dl compact="compact">
-<dt><code>fit-window-to-buffer</code></dt>
-<dd><p>If the optional argument <var>preserve-size</var> of that function
-(see <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>) is non-<code>nil</code>, the size established by
-that function is preserved.
-</p>
-</dd>
-<dt><code>display-buffer</code></dt>
-<dd><p>If the <var>alist</var> argument of that function (see <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>)
-contains a <code>preserve-size</code> entry, the size of the window produced
-by that function is preserved.
-</p></dd>
-</dl>
+  <dl>
+    <dt><a name="index-window_002dsize_002dfixed" id=
+    "index-window_002dsize_002dfixed"></a>Variable:
+    <strong>window-size-fixed</strong></dt>
 
-<p><code>window-preserve-size</code> installs a window parameter (see <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>) called <code>preserved-size</code> which is consulted by the
-window resizing functions.  This parameter will not prevent resizing the
-window when the window shows another buffer than the one when
-<code>window-preserve-size</code> was invoked or if its size has changed since
-then.
-</p>
-<p>The following function can be used to check whether the height of a
-particular window is preserved:
-</p>
-<dl>
-<dt><a name="index-window_002dpreserved_002dsize"></a>Function: <strong>window-preserved-size</strong> <em>&amp;optional window horizontal</em></dt>
-<dd><p>This function returns the preserved height of window <var>window</var> in
-pixels.  <var>window</var> must be a live window and defaults to the selected
-one.  If the optional argument <var>horizontal</var> is non-<code>nil</code>, it
-returns the preserved width of <var>window</var>.  It returns <code>nil</code> if
-the size of <var>window</var> is not preserved.
-</p></dd></dl>
+    <dd>
+      <p>If this buffer-local variable is non-<code>nil</code>, the
+      size of any window displaying the buffer cannot normally be
+      changed. Deleting a window or changing the frame&rsquo;s size
+      may still change the window&rsquo;s size, if there is no
+      choice.</p>
 
+      <p>If the value is <code>height</code>, then only the
+      window&rsquo;s height is fixed; if the value is
+      <code>width</code>, then only the window&rsquo;s width is
+      fixed. Any other non-<code>nil</code> value fixes both the
+      width and the height.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Splitting-Windows.html#Splitting-Windows" accesskey="n" rel="next">Splitting Windows</a>, Previous: <a href="Resizing-Windows.html#Resizing-Windows" accesskey="p" rel="prev">Resizing Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If this variable is <code>nil</code>, this does not
+      necessarily mean that any window showing the buffer can be
+      resized in the desired direction. To determine that, use the
+      function <code>window-resizable</code>. See <a href=
+      "Resizing-Windows.html#Resizing-Windows">Resizing
+      Windows</a>.</p>
+    </dd>
+  </dl>
 
+  <p>Often <code>window-size-fixed</code> is overly aggressive
+  because it inhibits any attempt to explicitly resize or split an
+  affected window as well. This may even happen after the window
+  has been resized implicitly, for example, when deleting an
+  adjacent window or resizing the window&rsquo;s frame. The
+  following function tries hard to never disallow resizing such a
+  window explicitly:</p>
 
+  <dl>
+    <dt><a name="index-window_002dpreserve_002dsize" id=
+    "index-window_002dpreserve_002dsize"></a>Function:
+    <strong>window-preserve-size</strong> <em>&amp;optional window
+    horizontal preserve</em></dt>
 
+    <dd>
+      <p>This function (un-)marks the height of window
+      <var>window</var> as preserved for future resize operations.
+      <var>window</var> must be a live window and defaults to the
+      selected one. If the optional argument <var>horizontal</var>
+      is non-<code>nil</code>, it (un-)marks the width of
+      <var>window</var> as preserved.</p>
+
+      <p>If the optional argument <var>preserve</var> is
+      <code>t</code>, this means to preserve the current
+      height/width of <var>window</var>&rsquo;s body. The
+      height/width of <var>window</var> will change only if Emacs
+      has no better choice. Resizing a window whose height/width is
+      preserved by this function never throws an error.</p>
+
+      <p>If <var>preserve</var> is <code>nil</code>, this means to
+      stop preserving the height/width of <var>window</var>,
+      lifting any respective restraint induced by a previous call
+      of this function for <var>window</var>. Calling
+      <code>enlarge-window</code>, <code>shrink-window</code> or
+      <code>fit-window-to-buffer</code> with <var>window</var> as
+      argument may also remove the respective restraint.</p>
+    </dd>
+  </dl>
+
+  <p><code>window-preserve-size</code> is currently invoked by the
+  following functions:</p>
+
+  <dl compact="compact">
+    <dt><code>fit-window-to-buffer</code></dt>
+
+    <dd>
+      <p>If the optional argument <var>preserve-size</var> of that
+      function (see <a href=
+      "Resizing-Windows.html#Resizing-Windows">Resizing
+      Windows</a>) is non-<code>nil</code>, the size established by
+      that function is preserved.</p>
+    </dd>
+
+    <dt><code>display-buffer</code></dt>
+
+    <dd>
+      <p>If the <var>alist</var> argument of that function (see
+      <a href="Choosing-Window.html#Choosing-Window">Choosing
+      Window</a>) contains a <code>preserve-size</code> entry, the
+      size of the window produced by that function is
+      preserved.</p>
+    </dd>
+  </dl>
+
+  <p><code>window-preserve-size</code> installs a window parameter
+  (see <a href="Window-Parameters.html#Window-Parameters">Window
+  Parameters</a>) called <code>preserved-size</code> which is
+  consulted by the window resizing functions. This parameter will
+  not prevent resizing the window when the window shows another
+  buffer than the one when <code>window-preserve-size</code> was
+  invoked or if its size has changed since then.</p>
+
+  <p>The following function can be used to check whether the height
+  of a particular window is preserved:</p>
+
+  <dl>
+    <dt><a name="index-window_002dpreserved_002dsize" id=
+    "index-window_002dpreserved_002dsize"></a>Function:
+    <strong>window-preserved-size</strong> <em>&amp;optional window
+    horizontal</em></dt>
+
+    <dd>
+      <p>This function returns the preserved height of window
+      <var>window</var> in pixels. <var>window</var> must be a live
+      window and defaults to the selected one. If the optional
+      argument <var>horizontal</var> is non-<code>nil</code>, it
+      returns the preserved width of <var>window</var>. It returns
+      <code>nil</code> if the size of <var>window</var> is not
+      preserved.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Splitting-Windows.html#Splitting-Windows"
+    accesskey="n" rel="next">Splitting Windows</a>, Previous:
+    <a href="Resizing-Windows.html#Resizing-Windows" accesskey="p"
+    rel="prev">Resizing Windows</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

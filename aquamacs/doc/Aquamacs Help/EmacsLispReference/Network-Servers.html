@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,111 +19,150 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Network Servers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Network Servers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Network Servers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Processes.html#Processes" rel="up" title="Processes">
-<link href="Datagrams.html#Datagrams" rel="next" title="Datagrams">
-<link href="Network.html#Network" rel="prev" title="Network">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Network Servers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Network Servers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Network Servers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Processes.html#Processes" rel="up" title=
+  "Processes" />
+  <link href="Datagrams.html#Datagrams" rel="next" title=
+  "Datagrams" />
+  <link href="Network.html#Network" rel="prev" title="Network" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Network-Servers" id="Network-Servers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Datagrams.html#Datagrams" accesskey="n" rel=
+    "next">Datagrams</a>, Previous: <a href="Network.html#Network"
+    accesskey="p" rel="prev">Network</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Network-Servers-1" id="Network-Servers-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Network-Servers"></a>
-<div class="header">
-<p>
-Next: <a href="Datagrams.html#Datagrams" accesskey="n" rel="next">Datagrams</a>, Previous: <a href="Network.html#Network" accesskey="p" rel="prev">Network</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Network-Servers-1"></a>
-<h3 class="section">36.15 Network Servers</h3>
-<a name="index-network-servers"></a>
+  <h3 class="section">36.15 Network Servers</h3><a name=
+  "index-network-servers" id="index-network-servers"></a>
 
-<p>You create a server by calling <code>make-network-process</code>
-(see <a href="Network-Processes.html#Network-Processes">Network Processes</a>) with <code>:server t</code>.  The server will
-listen for connection requests from clients.  When it accepts a client
-connection request, that creates a new network connection, itself a
-process object, with the following parameters:
-</p>
-<ul>
-<li> The connection&rsquo;s process name is constructed by concatenating the
-server process&rsquo;s <var>name</var> with a client identification string.  The
-client identification string for an IPv4 connection looks like
-&lsquo;<samp>&lt;<var>a</var>.<var>b</var>.<var>c</var>.<var>d</var>:<var>p</var>&gt;</samp>&rsquo;, which represents an
-address and port number.  Otherwise, it is a
-unique number in brackets, as in &lsquo;<samp>&lt;<var>nnn</var>&gt;</samp>&rsquo;.  The number
-is unique for each connection in the Emacs session.
+  <p>You create a server by calling
+  <code>make-network-process</code> (see <a href=
+  "Network-Processes.html#Network-Processes">Network Processes</a>)
+  with <code>:server t</code>. The server will listen for
+  connection requests from clients. When it accepts a client
+  connection request, that creates a new network connection, itself
+  a process object, with the following parameters:</p>
 
-</li><li> If the server has a non-default filter, the connection process does
-not get a separate process buffer; otherwise, Emacs creates a new
-buffer for the purpose.  The buffer name is the server&rsquo;s buffer name
-or process name, concatenated with the client identification string.
+  <ul>
+    <li>The connection&rsquo;s process name is constructed by
+    concatenating the server process&rsquo;s <var>name</var> with a
+    client identification string. The client identification string
+    for an IPv4 connection looks like
+    &lsquo;<samp>&lt;<var>a</var>.<var>b</var>.<var>c</var>.<var>d</var>:<var>p</var>&gt;</samp>&rsquo;,
+    which represents an address and port number. Otherwise, it is a
+    unique number in brackets, as in
+    &lsquo;<samp>&lt;<var>nnn</var>&gt;</samp>&rsquo;. The number
+    is unique for each connection in the Emacs session.</li>
 
-<p>The server&rsquo;s process buffer value is never used directly, but the log
-function can retrieve it and use it to log connections by inserting
-text there.
-</p>
-</li><li> The communication type and the process filter and sentinel are
-inherited from those of the server.  The server never directly
-uses its filter and sentinel; their sole purpose is to initialize
-connections made to the server.
+    <li>If the server has a non-default filter, the connection
+    process does not get a separate process buffer; otherwise,
+    Emacs creates a new buffer for the purpose. The buffer name is
+    the server&rsquo;s buffer name or process name, concatenated
+    with the client identification string.
 
-</li><li> The connection&rsquo;s process contact information is set according to the client&rsquo;s
-addressing information (typically an IP address and a port number).
-This information is associated with the <code>process-contact</code>
-keywords <code>:host</code>, <code>:service</code>, <code>:remote</code>.
+      <p>The server&rsquo;s process buffer value is never used
+      directly, but the log function can retrieve it and use it to
+      log connections by inserting text there.</p>
+    </li>
 
-</li><li> The connection&rsquo;s local address is set up according to the port
-number used for the connection.
+    <li>The communication type and the process filter and sentinel
+    are inherited from those of the server. The server never
+    directly uses its filter and sentinel; their sole purpose is to
+    initialize connections made to the server.</li>
 
-</li><li> The client process&rsquo;s plist is initialized from the server&rsquo;s plist.
-</li></ul>
+    <li>The connection&rsquo;s process contact information is set
+    according to the client&rsquo;s addressing information
+    (typically an IP address and a port number). This information
+    is associated with the <code>process-contact</code> keywords
+    <code>:host</code>, <code>:service</code>,
+    <code>:remote</code>.</li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Datagrams.html#Datagrams" accesskey="n" rel="next">Datagrams</a>, Previous: <a href="Network.html#Network" accesskey="p" rel="prev">Network</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>The connection&rsquo;s local address is set up according to
+    the port number used for the connection.</li>
 
+    <li>The client process&rsquo;s plist is initialized from the
+    server&rsquo;s plist.</li>
+  </ul>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Datagrams.html#Datagrams" accesskey="n" rel=
+    "next">Datagrams</a>, Previous: <a href="Network.html#Network"
+    accesskey="p" rel="prev">Network</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

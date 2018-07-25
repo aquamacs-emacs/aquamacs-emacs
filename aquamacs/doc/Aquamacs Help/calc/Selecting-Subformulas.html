@@ -1,15 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Selecting Subformulas - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Algebra.html#Algebra" title="Algebra">
-<link rel="prev" href="Algebra.html#Algebra" title="Algebra">
-<link rel="next" href="Algebraic-Manipulation.html#Algebraic-Manipulation" title="Algebraic Manipulation">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Selecting Subformulas - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Algebra.html#Algebra" title="Algebra" />
+  <link rel="prev" href="Algebra.html#Algebra" title="Algebra" />
+  <link rel="next" href=
+  "Algebraic-Manipulation.html#Algebraic-Manipulation" title=
+  "Algebraic Manipulation" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +37,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,38 +50,61 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Selecting-Subformulas"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Algebraic-Manipulation.html#Algebraic-Manipulation">Algebraic Manipulation</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Algebra.html#Algebra">Algebra</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Algebra.html#Algebra">Algebra</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Selecting-Subformulas" id="Selecting-Subformulas"></a>
 
-<h3 class="section">11.1 Selecting Sub-Formulas</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Algebraic-Manipulation.html#Algebraic-Manipulation">Algebraic
+    Manipulation</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href="Algebra.html#Algebra">Algebra</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href="Algebra.html#Algebra">Algebra</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-Selections-1592"></a><a name="index-Sub_002dformulas-1593"></a><a name="index-Parts-of-formulas-1594"></a>When working with an algebraic formula it is often necessary to
-manipulate a portion of the formula rather than the formula as a
-whole.  Calc allows you to &ldquo;select&rdquo; a portion of any formula on
-the stack.  Commands which would normally operate on that stack
-entry will now operate only on the sub-formula, leaving the
-surrounding part of the stack entry alone.
+  <h3 class="section">11.1 Selecting Sub-Formulas</h3>
 
-   <p>One common non-algebraic use for selection involves vectors.  To work
-on one element of a vector in-place, simply select that element as a
-&ldquo;sub-formula&rdquo; of the vector.
+  <p class="noindent"><a name="index-Selections-1592" id=
+  "index-Selections-1592"></a><a name="index-Sub_002dformulas-1593"
+  id="index-Sub_002dformulas-1593"></a><a name=
+  "index-Parts-of-formulas-1594" id=
+  "index-Parts-of-formulas-1594"></a>When working with an algebraic
+  formula it is often necessary to manipulate a portion of the
+  formula rather than the formula as a whole. Calc allows you to
+  &ldquo;select&rdquo; a portion of any formula on the stack.
+  Commands which would normally operate on that stack entry will
+  now operate only on the sub-formula, leaving the surrounding part
+  of the stack entry alone.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Making-Selections.html#Making-Selections">Making Selections</a>
-<li><a accesskey="2" href="Changing-Selections.html#Changing-Selections">Changing Selections</a>
-<li><a accesskey="3" href="Displaying-Selections.html#Displaying-Selections">Displaying Selections</a>
-<li><a accesskey="4" href="Operating-on-Selections.html#Operating-on-Selections">Operating on Selections</a>
-<li><a accesskey="5" href="Rearranging-with-Selections.html#Rearranging-with-Selections">Rearranging with Selections</a>
-</ul>
+  <p>One common non-algebraic use for selection involves vectors.
+  To work on one element of a vector in-place, simply select that
+  element as a &ldquo;sub-formula&rdquo; of the vector.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Making-Selections.html#Making-Selections">Making
+    Selections</a></li>
 
+    <li><a accesskey="2" href=
+    "Changing-Selections.html#Changing-Selections">Changing
+    Selections</a></li>
+
+    <li><a accesskey="3" href=
+    "Displaying-Selections.html#Displaying-Selections">Displaying
+    Selections</a></li>
+
+    <li><a accesskey="4" href=
+    "Operating-on-Selections.html#Operating-on-Selections">Operating
+    on Selections</a></li>
+
+    <li><a accesskey="5" href=
+    "Rearranging-with-Selections.html#Rearranging-with-Selections">Rearranging
+    with Selections</a></li>
+  </ul>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,115 +20,179 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Class and Keyword Inheritance</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Class and Keyword Inheritance">
-<meta name="keywords" content="IDLWAVE User Manual: Class and Keyword Inheritance">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Completion.html#Completion" rel="up" title="Completion">
-<link href="Structure-Tag-Completion.html#Structure-Tag-Completion" rel="next" title="Structure Tag Completion">
-<link href="Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell" rel="prev" title="Object Method Completion in the Shell">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Class and Keyword Inheritance</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Class and Keyword Inheritance" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Class and Keyword Inheritance" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Completion.html#Completion" rel="up" title=
+  "Completion" />
+  <link href=
+  "Structure-Tag-Completion.html#Structure-Tag-Completion" rel=
+  "next" title="Structure Tag Completion" />
+  <link href=
+  "Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell"
+  rel="prev" title="Object Method Completion in the Shell" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Class-and-Keyword-Inheritance"></a>
-<div class="header">
-<p>
-Next: <a href="Structure-Tag-Completion.html#Structure-Tag-Completion" accesskey="n" rel="next">Structure Tag Completion</a>, Previous: <a href="Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell" accesskey="p" rel="prev">Object Method Completion in the Shell</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Class-and-Keyword-Inheritance-1"></a>
-<h4 class="subsection">4.4.4 Class and Keyword Inheritance</h4>
-<a name="index-Inheritance_002c-class"></a>
-<a name="index-Keyword-inheritance"></a>
-<a name="index-Inheritance_002c-keyword"></a>
+<body lang="en" xml:lang="en">
+  <a name="Class-and-Keyword-Inheritance" id=
+  "Class-and-Keyword-Inheritance"></a>
 
-<p>Class inheritance affects which methods are called in IDL.  An object of
-a class which inherits methods from one or more superclasses can
-override that method by defining its own method of the same name, extend
-the method by calling the method(s) of its superclass(es) in its
-version, or inherit the method directly by making no modifications.
-IDLWAVE examines class definitions during completion and routine
-information display, and records all inheritance information it finds.
-This information is displayed if appropriate with the calling sequence
-for methods (see <a href="Routine-Info.html#Routine-Info">Routine Info</a>), as long as variable
-<code>idlwave-support-inheritance</code> is non-<code>nil</code>.
-</p>
-<p>In many class methods, <em>keyword</em> inheritance (<code>_EXTRA</code> and
-<code>_REF_EXTRA</code>) is used hand-in-hand with class inheritance and
-method overriding.  E.g., in a <code>SetProperty</code> method, this technique
-allows a single call <code>obj-&gt;SetProperty</code> to set properties up the
-entire class inheritance chain.  This is often referred to as
-<em>chaining</em>, and is characterized by chained method calls like
-<code><span class="nolinebreak">self-&gt;MySuperClass::SetProperty,_EXTRA=e</span></code><!-- /@w -->.
-</p>
-<p>IDLWAVE can accommodate this special synergy between class and keyword
-inheritance: if <code>_EXTRA</code> or <code>_REF_EXTRA</code> is detected among a
-method&rsquo;s keyword parameters, all keywords of superclass versions of
-the method being considered can be included in completion.  There is
-of course no guarantee that this type of keyword chaining actually
-occurs, but for some methods it&rsquo;s a very convenient assumption.  The
-variable <code>idlwave-keyword-class-inheritance</code> can be used to
-configure which methods have keyword inheritance treated in this
-simple, class-driven way.  By default, only <code>Init</code> and
-<code>(Get|Set)Property</code> are.  The completion buffer will label
-keywords based on their originating class.
-</p>
-<dl>
-<dt><a name="index-idlwave_002dsupport_002dinheritance"></a>User Option: <strong>idlwave-support-inheritance</strong> <em>(<code>t</code>)</em></dt>
-<dd><p>Non-<code>nil</code> means consider inheritance during completion, online help etc.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Structure-Tag-Completion.html#Structure-Tag-Completion"
+    accesskey="n" rel="next">Structure Tag Completion</a>,
+    Previous: <a href=
+    "Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell"
+    accesskey="p" rel="prev">Object Method Completion in the
+    Shell</a>, Up: <a href="Completion.html#Completion" accesskey=
+    "u" rel="up">Completion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Class-and-Keyword-Inheritance-1" id=
+  "Class-and-Keyword-Inheritance-1"></a>
 
-<dl>
-<dt><a name="index-idlwave_002dkeyword_002dclass_002dinheritance"></a>User Option: <strong>idlwave-keyword-class-inheritance</strong></dt>
-<dd><p>A list of regular expressions to match methods for which simple
-class-driven keyword inheritance will be used for Completion.
-</p></dd></dl>
+  <h4 class="subsection">4.4.4 Class and Keyword
+  Inheritance</h4><a name="index-Inheritance_002c-class" id=
+  "index-Inheritance_002c-class"></a> <a name=
+  "index-Keyword-inheritance" id="index-Keyword-inheritance"></a>
+  <a name="index-Inheritance_002c-keyword" id=
+  "index-Inheritance_002c-keyword"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Structure-Tag-Completion.html#Structure-Tag-Completion" accesskey="n" rel="next">Structure Tag Completion</a>, Previous: <a href="Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell" accesskey="p" rel="prev">Object Method Completion in the Shell</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Class inheritance affects which methods are called in IDL. An
+  object of a class which inherits methods from one or more
+  superclasses can override that method by defining its own method
+  of the same name, extend the method by calling the method(s) of
+  its superclass(es) in its version, or inherit the method directly
+  by making no modifications. IDLWAVE examines class definitions
+  during completion and routine information display, and records
+  all inheritance information it finds. This information is
+  displayed if appropriate with the calling sequence for methods
+  (see <a href="Routine-Info.html#Routine-Info">Routine Info</a>),
+  as long as variable <code>idlwave-support-inheritance</code> is
+  non-<code>nil</code>.</p>
 
+  <p>In many class methods, <em>keyword</em> inheritance
+  (<code>_EXTRA</code> and <code>_REF_EXTRA</code>) is used
+  hand-in-hand with class inheritance and method overriding. E.g.,
+  in a <code>SetProperty</code> method, this technique allows a
+  single call <code>obj-&gt;SetProperty</code> to set properties up
+  the entire class inheritance chain. This is often referred to as
+  <em>chaining</em>, and is characterized by chained method calls
+  like <code><span class=
+  "nolinebreak">self-&gt;MySuperClass::SetProperty,_EXTRA=e</span></code><!-- /@w -->.</p>
 
+  <p>IDLWAVE can accommodate this special synergy between class and
+  keyword inheritance: if <code>_EXTRA</code> or
+  <code>_REF_EXTRA</code> is detected among a method&rsquo;s
+  keyword parameters, all keywords of superclass versions of the
+  method being considered can be included in completion. There is
+  of course no guarantee that this type of keyword chaining
+  actually occurs, but for some methods it&rsquo;s a very
+  convenient assumption. The variable
+  <code>idlwave-keyword-class-inheritance</code> can be used to
+  configure which methods have keyword inheritance treated in this
+  simple, class-driven way. By default, only <code>Init</code> and
+  <code>(Get|Set)Property</code> are. The completion buffer will
+  label keywords based on their originating class.</p>
 
+  <dl>
+    <dt><a name="index-idlwave_002dsupport_002dinheritance" id=
+    "index-idlwave_002dsupport_002dinheritance"></a>User Option:
+    <strong>idlwave-support-inheritance</strong>
+    <em>(<code>t</code>)</em></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means consider inheritance during
+      completion, online help etc.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dkeyword_002dclass_002dinheritance" id=
+    "index-idlwave_002dkeyword_002dclass_002dinheritance"></a>User
+    Option: <strong>idlwave-keyword-class-inheritance</strong></dt>
+
+    <dd>
+      <p>A list of regular expressions to match methods for which
+      simple class-driven keyword inheritance will be used for
+      Completion.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Structure-Tag-Completion.html#Structure-Tag-Completion"
+    accesskey="n" rel="next">Structure Tag Completion</a>,
+    Previous: <a href=
+    "Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell"
+    accesskey="p" rel="prev">Object Method Completion in the
+    Shell</a>, Up: <a href="Completion.html#Completion" accesskey=
+    "u" rel="up">Completion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

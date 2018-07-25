@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the Emacs MIME interface functionality.
 
 Copyright © 1998-2016 Free Software Foundation, Inc.
@@ -14,176 +16,280 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs MIME Manual: rfc2047</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs MIME Manual: rfc2047">
-<meta name="keywords" content="Emacs MIME Manual: rfc2047">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Basic-Functions.html#Basic-Functions" rel="up" title="Basic Functions">
-<link href="time_002ddate.html#time_002ddate" rel="next" title="time-date">
-<link href="ietf_002ddrums.html#ietf_002ddrums" rel="prev" title="ietf-drums">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs MIME Manual: rfc2047</title>
+  <meta name="description" content="Emacs MIME Manual: rfc2047" />
+  <meta name="keywords" content="Emacs MIME Manual: rfc2047" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Basic-Functions.html#Basic-Functions" rel="up" title=
+  "Basic Functions" />
+  <link href="time_002ddate.html#time_002ddate" rel="next" title=
+  "time-date" />
+  <link href="ietf_002ddrums.html#ietf_002ddrums" rel="prev" title=
+  "ietf-drums" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="rfc2047"></a>
-<div class="header">
-<p>
-Next: <a href="time_002ddate.html#time_002ddate" accesskey="n" rel="next">time-date</a>, Previous: <a href="ietf_002ddrums.html#ietf_002ddrums" accesskey="p" rel="prev">ietf-drums</a>, Up: <a href="Basic-Functions.html#Basic-Functions" accesskey="u" rel="up">Basic Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="rfc2047-1"></a>
-<h3 class="section">4.4 rfc2047</h3>
+<body lang="en" xml:lang="en">
+  <a name="rfc2047" id="rfc2047"></a>
 
-<p>RFC2047 (Message Header Extensions for Non-<acronym>ASCII</acronym> Text) specifies how
-non-<acronym>ASCII</acronym> text in headers are to be encoded.  This is actually rather
-complicated, so a number of variables are necessary to tweak what this
-library does.
-</p>
-<p>The following variables are tweakable:
-</p>
-<dl compact="compact">
-<dt><code>rfc2047-header-encoding-alist</code></dt>
-<dd><a name="index-rfc2047_002dheader_002dencoding_002dalist"></a>
-<p>This is an alist of header / encoding-type pairs.  Its main purpose is
-to prevent encoding of certain headers.
-</p>
-<p>The keys can either be header regexps, or <code>t</code>.
-</p>
-<p>The values can be <code>nil</code>, in which case the header(s) in question
-won&rsquo;t be encoded, <code>mime</code>, which means that they will be encoded, or
-<code>address-mime</code>, which means the header(s) will be encoded carefully
-assuming they contain addresses.
-</p>
-</dd>
-<dt><code>rfc2047-charset-encoding-alist</code></dt>
-<dd><a name="index-rfc2047_002dcharset_002dencoding_002dalist"></a>
-<p>RFC2047 specifies two forms of encoding&mdash;<code>Q</code> (a
-Quoted-Printable-like encoding) and <code>B</code> (base64).  This alist
-specifies which charset should use which encoding.
-</p>
-</dd>
-<dt><code>rfc2047-encode-function-alist</code></dt>
-<dd><a name="index-rfc2047_002dencode_002dfunction_002dalist"></a>
-<p>This is an alist of encoding / function pairs.  The encodings are
-<code>Q</code>, <code>B</code> and <code>nil</code>.
-</p>
-</dd>
-<dt><code>rfc2047-encoded-word-regexp</code></dt>
-<dd><a name="index-rfc2047_002dencoded_002dword_002dregexp"></a>
-<p>When decoding words, this library looks for matches to this regexp.
-</p>
-</dd>
-<dt><code>rfc2047-encoded-word-regexp-loose</code></dt>
-<dd><a name="index-rfc2047_002dencoded_002dword_002dregexp_002dloose"></a>
-<p>This is a version from which the regexp for the Q encoding pattern of
-<code>rfc2047-encoded-word-regexp</code> is made loose.
-</p>
-</dd>
-<dt><code>rfc2047-encode-encoded-words</code></dt>
-<dd><a name="index-rfc2047_002dencode_002dencoded_002dwords"></a>
-<p>The boolean variable specifies whether encoded words
-(e.g., &lsquo;<samp>=?us-ascii?q?hello?=</samp>&rsquo;) should be encoded again.
-<code>rfc2047-encoded-word-regexp</code> is used to look for such words.
-</p>
-</dd>
-<dt><code>rfc2047-allow-irregular-q-encoded-words</code></dt>
-<dd><a name="index-rfc2047_002dallow_002dirregular_002dq_002dencoded_002dwords"></a>
-<p>The boolean variable specifies whether irregular Q encoded words
-(e.g., &lsquo;<samp>=?us-ascii?q?hello??=</samp>&rsquo;) should be decoded.  If it is
-non-<code>nil</code>, <code>rfc2047-encoded-word-regexp-loose</code> is used instead
-of <code>rfc2047-encoded-word-regexp</code> to look for encoded words.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="time_002ddate.html#time_002ddate" accesskey=
+    "n" rel="next">time-date</a>, Previous: <a href=
+    "ietf_002ddrums.html#ietf_002ddrums" accesskey="p" rel=
+    "prev">ietf-drums</a>, Up: <a href=
+    "Basic-Functions.html#Basic-Functions" accesskey="u" rel=
+    "up">Basic Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="rfc2047-1" id="rfc2047-1"></a>
 
-<p>Those were the variables, and these are this functions:
-</p>
-<dl compact="compact">
-<dt><code>rfc2047-narrow-to-field</code></dt>
-<dd><a name="index-rfc2047_002dnarrow_002dto_002dfield"></a>
-<p>Narrow the buffer to the header on the current line.
-</p>
-</dd>
-<dt><code>rfc2047-encode-message-header</code></dt>
-<dd><a name="index-rfc2047_002dencode_002dmessage_002dheader"></a>
-<p>Should be called narrowed to the header of a message.  Encodes according
-to <code>rfc2047-header-encoding-alist</code>.
-</p>
-</dd>
-<dt><code>rfc2047-encode-region</code></dt>
-<dd><a name="index-rfc2047_002dencode_002dregion"></a>
-<p>Encodes all encodable words in the region specified.
-</p>
-</dd>
-<dt><code>rfc2047-encode-string</code></dt>
-<dd><a name="index-rfc2047_002dencode_002dstring"></a>
-<p>Encode a string and return the results.
-</p>
-</dd>
-<dt><code>rfc2047-decode-region</code></dt>
-<dd><a name="index-rfc2047_002ddecode_002dregion"></a>
-<p>Decode the encoded words in the region.
-</p>
-</dd>
-<dt><code>rfc2047-decode-string</code></dt>
-<dd><a name="index-rfc2047_002ddecode_002dstring"></a>
-<p>Decode a string and return the results.
-</p>
-</dd>
-<dt><code>rfc2047-encode-parameter</code></dt>
-<dd><a name="index-rfc2047_002dencode_002dparameter"></a>
-<p>Encode a parameter in the RFC2047-like style.  This is a substitution
-for the <code>rfc2231-encode-string</code> function, that is the standard but
-many mailers don&rsquo;t support it.  See <a href="rfc2231.html#rfc2231">rfc2231</a>.
-</p>
-</dd>
-</dl>
+  <h3 class="section">4.4 rfc2047</h3>
 
+  <p>RFC2047 (Message Header Extensions for
+  Non-<acronym>ASCII</acronym> Text) specifies how
+  non-<acronym>ASCII</acronym> text in headers are to be encoded.
+  This is actually rather complicated, so a number of variables are
+  necessary to tweak what this library does.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="time_002ddate.html#time_002ddate" accesskey="n" rel="next">time-date</a>, Previous: <a href="ietf_002ddrums.html#ietf_002ddrums" accesskey="p" rel="prev">ietf-drums</a>, Up: <a href="Basic-Functions.html#Basic-Functions" accesskey="u" rel="up">Basic Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The following variables are tweakable:</p>
 
+  <dl compact="compact">
+    <dt><code>rfc2047-header-encoding-alist</code></dt>
 
+    <dd>
+      <a name="index-rfc2047_002dheader_002dencoding_002dalist" id=
+      "index-rfc2047_002dheader_002dencoding_002dalist"></a>
 
+      <p>This is an alist of header / encoding-type pairs. Its main
+      purpose is to prevent encoding of certain headers.</p>
+
+      <p>The keys can either be header regexps, or
+      <code>t</code>.</p>
+
+      <p>The values can be <code>nil</code>, in which case the
+      header(s) in question won&rsquo;t be encoded,
+      <code>mime</code>, which means that they will be encoded, or
+      <code>address-mime</code>, which means the header(s) will be
+      encoded carefully assuming they contain addresses.</p>
+    </dd>
+
+    <dt><code>rfc2047-charset-encoding-alist</code></dt>
+
+    <dd>
+      <a name="index-rfc2047_002dcharset_002dencoding_002dalist"
+      id="index-rfc2047_002dcharset_002dencoding_002dalist"></a>
+
+      <p>RFC2047 specifies two forms of
+      encoding&mdash;<code>Q</code> (a Quoted-Printable-like
+      encoding) and <code>B</code> (base64). This alist specifies
+      which charset should use which encoding.</p>
+    </dd>
+
+    <dt><code>rfc2047-encode-function-alist</code></dt>
+
+    <dd>
+      <a name="index-rfc2047_002dencode_002dfunction_002dalist" id=
+      "index-rfc2047_002dencode_002dfunction_002dalist"></a>
+
+      <p>This is an alist of encoding / function pairs. The
+      encodings are <code>Q</code>, <code>B</code> and
+      <code>nil</code>.</p>
+    </dd>
+
+    <dt><code>rfc2047-encoded-word-regexp</code></dt>
+
+    <dd>
+      <a name="index-rfc2047_002dencoded_002dword_002dregexp" id=
+      "index-rfc2047_002dencoded_002dword_002dregexp"></a>
+
+      <p>When decoding words, this library looks for matches to
+      this regexp.</p>
+    </dd>
+
+    <dt><code>rfc2047-encoded-word-regexp-loose</code></dt>
+
+    <dd>
+      <a name=
+      "index-rfc2047_002dencoded_002dword_002dregexp_002dloose" id=
+      "index-rfc2047_002dencoded_002dword_002dregexp_002dloose"></a>
+
+      <p>This is a version from which the regexp for the Q encoding
+      pattern of <code>rfc2047-encoded-word-regexp</code> is made
+      loose.</p>
+    </dd>
+
+    <dt><code>rfc2047-encode-encoded-words</code></dt>
+
+    <dd>
+      <a name="index-rfc2047_002dencode_002dencoded_002dwords" id=
+      "index-rfc2047_002dencode_002dencoded_002dwords"></a>
+
+      <p>The boolean variable specifies whether encoded words
+      (e.g., &lsquo;<samp>=?us-ascii?q?hello?=</samp>&rsquo;)
+      should be encoded again.
+      <code>rfc2047-encoded-word-regexp</code> is used to look for
+      such words.</p>
+    </dd>
+
+    <dt><code>rfc2047-allow-irregular-q-encoded-words</code></dt>
+
+    <dd>
+      <a name=
+      "index-rfc2047_002dallow_002dirregular_002dq_002dencoded_002dwords"
+      id=
+      "index-rfc2047_002dallow_002dirregular_002dq_002dencoded_002dwords">
+      </a>
+
+      <p>The boolean variable specifies whether irregular Q encoded
+      words (e.g.,
+      &lsquo;<samp>=?us-ascii?q?hello??=</samp>&rsquo;) should be
+      decoded. If it is non-<code>nil</code>,
+      <code>rfc2047-encoded-word-regexp-loose</code> is used
+      instead of <code>rfc2047-encoded-word-regexp</code> to look
+      for encoded words.</p>
+    </dd>
+  </dl>
+
+  <p>Those were the variables, and these are this functions:</p>
+
+  <dl compact="compact">
+    <dt><code>rfc2047-narrow-to-field</code></dt>
+
+    <dd>
+      <a name="index-rfc2047_002dnarrow_002dto_002dfield" id=
+      "index-rfc2047_002dnarrow_002dto_002dfield"></a>
+
+      <p>Narrow the buffer to the header on the current line.</p>
+    </dd>
+
+    <dt><code>rfc2047-encode-message-header</code></dt>
+
+    <dd>
+      <a name="index-rfc2047_002dencode_002dmessage_002dheader" id=
+      "index-rfc2047_002dencode_002dmessage_002dheader"></a>
+
+      <p>Should be called narrowed to the header of a message.
+      Encodes according to
+      <code>rfc2047-header-encoding-alist</code>.</p>
+    </dd>
+
+    <dt><code>rfc2047-encode-region</code></dt>
+
+    <dd>
+      <a name="index-rfc2047_002dencode_002dregion" id=
+      "index-rfc2047_002dencode_002dregion"></a>
+
+      <p>Encodes all encodable words in the region specified.</p>
+    </dd>
+
+    <dt><code>rfc2047-encode-string</code></dt>
+
+    <dd>
+      <a name="index-rfc2047_002dencode_002dstring" id=
+      "index-rfc2047_002dencode_002dstring"></a>
+
+      <p>Encode a string and return the results.</p>
+    </dd>
+
+    <dt><code>rfc2047-decode-region</code></dt>
+
+    <dd>
+      <a name="index-rfc2047_002ddecode_002dregion" id=
+      "index-rfc2047_002ddecode_002dregion"></a>
+
+      <p>Decode the encoded words in the region.</p>
+    </dd>
+
+    <dt><code>rfc2047-decode-string</code></dt>
+
+    <dd>
+      <a name="index-rfc2047_002ddecode_002dstring" id=
+      "index-rfc2047_002ddecode_002dstring"></a>
+
+      <p>Decode a string and return the results.</p>
+    </dd>
+
+    <dt><code>rfc2047-encode-parameter</code></dt>
+
+    <dd>
+      <a name="index-rfc2047_002dencode_002dparameter" id=
+      "index-rfc2047_002dencode_002dparameter"></a>
+
+      <p>Encode a parameter in the RFC2047-like style. This is a
+      substitution for the <code>rfc2231-encode-string</code>
+      function, that is the standard but many mailers don&rsquo;t
+      support it. See <a href=
+      "rfc2231.html#rfc2231">rfc2231</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="time_002ddate.html#time_002ddate" accesskey=
+    "n" rel="next">time-date</a>, Previous: <a href=
+    "ietf_002ddrums.html#ietf_002ddrums" accesskey="p" rel=
+    "prev">ietf-drums</a>, Up: <a href=
+    "Basic-Functions.html#Basic-Functions" accesskey="u" rel=
+    "up">Basic Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

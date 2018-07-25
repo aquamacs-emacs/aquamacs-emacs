@@ -1,15 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Ranges - The MH-E Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The MH-E Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Using-This-Manual.html#Using-This-Manual" title="Using This Manual">
-<link rel="prev" href="Options.html#Options" title="Options">
-<link rel="next" href="Folder-Selection.html#Folder-Selection" title="Folder Selection">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Ranges - The MH-E Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The MH-E Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Using-This-Manual.html#Using-This-Manual"
+  title="Using This Manual" />
+  <link rel="prev" href="Options.html#Options" title="Options" />
+  <link rel="next" href="Folder-Selection.html#Folder-Selection"
+  title="Folder Selection" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This is version 8.2 of `The MH-E
 Manual', last updated 2009-06-13.
 
@@ -36,8 +44,10 @@ Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
           any later version. A copy of the license is included in the
           section entitled ``GNU General Public License.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -47,66 +57,135 @@ Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Ranges"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Folder-Selection.html#Folder-Selection">Folder Selection</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Options.html#Options">Options</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Using-This-Manual.html#Using-This-Manual">Using This Manual</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Ranges" id="Ranges"></a>
 
-<h3 class="section">4.2 Ranges</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Folder-Selection.html#Folder-Selection">Folder Selection</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Options.html#Options">Options</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Using-This-Manual.html#Using-This-Manual">Using This
+    Manual</a></p>
+    <hr />
+  </div>
 
-<!-- Sync with mh-folder-mode docstring. -->
-<p><a name="index-message-abbreviations-235"></a><a name="index-message-ranges-236"></a><a name="index-ranges-237"></a>
-Many commands that operate on individual messages, such as
-<code>mh-forward</code> or <code>mh-refile-msg</code> take a <code>RANGE</code>
-argument. This argument can be used in several ways.
+  <h3 class="section">4.2 Ranges</h3>
+  <!-- Sync with mh-folder-mode docstring. -->
 
-   <p><a name="index-C_002du_002c-with-ranges-238"></a>
-If you provide the prefix argument <kbd>C-u</kbd> to these commands, then
-you will be prompted for the message range. This can be any valid MH
-range which can include messages, sequences (see <a href="Sequences.html#Sequences">Sequences</a>), and
-the abbreviations (described in the <samp><span class="command">mh</span></samp>(1) man page):
+  <p><a name="index-message-abbreviations-235" id=
+  "index-message-abbreviations-235"></a><a name=
+  "index-message-ranges-236" id=
+  "index-message-ranges-236"></a><a name="index-ranges-237" id=
+  "index-ranges-237"></a> Many commands that operate on individual
+  messages, such as <code>mh-forward</code> or
+  <code>mh-refile-msg</code> take a <code>RANGE</code> argument.
+  This argument can be used in several ways.</p>
 
-     <dl>
-<dt>&lsquo;<samp><span class="samp">&lt;num1&gt;-&lt;num2&gt;</span></samp>&rsquo;<dd>Indicates all messages in the range &lt;num1&gt; to &lt;num2&gt;, inclusive. The
-range must be nonempty. 
-<!--  -->
-<br><dt>&lsquo;<samp><span class="samp">&lt;num&gt;:N</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">&lt;num&gt;:+N</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">&lt;num&gt;:-N</span></samp>&rsquo;<dd>Up to N messages beginning with (or ending with) message num. Num may
-be any of the predefined symbols: first, prev, cur, next or last. 
-<!--  -->
-<br><dt>&lsquo;<samp><span class="samp">first:N</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">prev:N</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">next:N</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">last:N</span></samp>&rsquo;<dd>The first, previous, next or last messages, if they exist. 
-<!--  -->
-<br><dt>&lsquo;<samp><span class="samp">all</span></samp>&rsquo;<dd>All of the messages. 
-</dl>
+  <p><a name="index-C_002du_002c-with-ranges-238" id=
+  "index-C_002du_002c-with-ranges-238"></a> If you provide the
+  prefix argument <kbd>C-u</kbd> to these commands, then you will
+  be prompted for the message range. This can be any valid MH range
+  which can include messages, sequences (see <a href=
+  "Sequences.html#Sequences">Sequences</a>), and the abbreviations
+  (described in the <samp><span class="command">mh</span></samp>(1)
+  man page):</p>
 
-   <p>For example, a range that shows all of these things is &lsquo;<samp><span class="samp">1 2 3
-5-10 last:5 unseen</span></samp>&rsquo;.
+  <dl>
+    <dt>&lsquo;<samp><span class=
+    "samp">&lt;num1&gt;-&lt;num2&gt;</span></samp>&rsquo;</dt>
 
-   <p><a name="index-transient_002dmark_002dmode-239"></a>
-If the option <code>transient-mark-mode</code> is turned on and you set a
-region in the MH-Folder buffer, then the MH-E command will perform the
-operation on all messages in that region.
+    <dd>Indicates all messages in the range &lt;num1&gt; to
+    &lt;num2&gt;, inclusive. The range must be nonempty. <!--  -->
+    <br /></dd>
 
-   <p><a name="index-g_t_0040samp_007bmh_002drange_007d-customization-group-240"></a><a name="index-customization-group_002c-_0040samp_007bmh_002drange_007d-241"></a>
-The &lsquo;<samp><span class="samp">mh-range</span></samp>&rsquo; customization group contains a single option which
-affects how ranges are interpreted.
+    <dt>&lsquo;<samp><span class=
+    "samp">&lt;num&gt;:N</span></samp>&rsquo;</dt>
 
-     <dl>
-<dt><code>mh-interpret-number-as-range-flag</code><a name="index-mh_002dinterpret_002dnumber_002das_002drange_002dflag-242"></a><dd>On means interpret a number as a range (default: &lsquo;<samp><span class="samp">on</span></samp>&rsquo;). 
-</dl>
+    <dt>&lsquo;<samp><span class=
+    "samp">&lt;num&gt;:+N</span></samp>&rsquo;</dt>
 
-   <p><a name="index-mh_002dinterpret_002dnumber_002das_002drange_002dflag-243"></a>
-Since one of the most frequent ranges used is &lsquo;<samp><span class="samp">last:N</span></samp>&rsquo;, MH-E will
-interpret input such as &lsquo;<samp><span class="samp">200</span></samp>&rsquo; as &lsquo;<samp><span class="samp">last:200</span></samp>&rsquo; if the
-<code>mh-interpret-number-as-range-flag</code> option is on (which is the
-default). If you need to scan just the message 200, then use the range
-&lsquo;<samp><span class="samp">200:1</span></samp>&rsquo; or &lsquo;<samp><span class="samp">200-200</span></samp>&rsquo;.
+    <dt>&lsquo;<samp><span class=
+    "samp">&lt;num&gt;:-N</span></samp>&rsquo;</dt>
 
-   </body></html>
+    <dd>Up to N messages beginning with (or ending with) message
+    num. Num may be any of the predefined symbols: first, prev,
+    cur, next or last. <!--  -->
+    <br /></dd>
 
+    <dt>&lsquo;<samp><span class=
+    "samp">first:N</span></samp>&rsquo;</dt>
+
+    <dt>&lsquo;<samp><span class=
+    "samp">prev:N</span></samp>&rsquo;</dt>
+
+    <dt>&lsquo;<samp><span class=
+    "samp">next:N</span></samp>&rsquo;</dt>
+
+    <dt>&lsquo;<samp><span class=
+    "samp">last:N</span></samp>&rsquo;</dt>
+
+    <dd>The first, previous, next or last messages, if they exist. 
+    <!--  -->
+    <br /></dd>
+
+    <dt>&lsquo;<samp><span class=
+    "samp">all</span></samp>&rsquo;</dt>
+
+    <dd>All of the messages.</dd>
+  </dl>
+
+  <p>For example, a range that shows all of these things is
+  &lsquo;<samp><span class="samp">1 2 3 5-10 last:5
+  unseen</span></samp>&rsquo;.</p>
+
+  <p><a name="index-transient_002dmark_002dmode-239" id=
+  "index-transient_002dmark_002dmode-239"></a> If the option
+  <code>transient-mark-mode</code> is turned on and you set a
+  region in the MH-Folder buffer, then the MH-E command will
+  perform the operation on all messages in that region.</p>
+
+  <p><a name=
+  "index-g_t_0040samp_007bmh_002drange_007d-customization-group-240"
+  id=
+  "index-g_t_0040samp_007bmh_002drange_007d-customization-group-240">
+  </a><a name=
+  "index-customization-group_002c-_0040samp_007bmh_002drange_007d-241"
+  id=
+  "index-customization-group_002c-_0040samp_007bmh_002drange_007d-241"></a>
+  The &lsquo;<samp><span class="samp">mh-range</span></samp>&rsquo;
+  customization group contains a single option which affects how
+  ranges are interpreted.</p>
+
+  <dl>
+    <dt><code>mh-interpret-number-as-range-flag</code><a name=
+    "index-mh_002dinterpret_002dnumber_002das_002drange_002dflag-242"
+    id=
+    "index-mh_002dinterpret_002dnumber_002das_002drange_002dflag-242"></a></dt>
+
+    <dd>On means interpret a number as a range (default:
+    &lsquo;<samp><span class="samp">on</span></samp>&rsquo;).</dd>
+  </dl>
+
+  <p><a name=
+  "index-mh_002dinterpret_002dnumber_002das_002drange_002dflag-243"
+  id=
+  "index-mh_002dinterpret_002dnumber_002das_002drange_002dflag-243">
+  </a> Since one of the most frequent ranges used is
+  &lsquo;<samp><span class="samp">last:N</span></samp>&rsquo;, MH-E
+  will interpret input such as &lsquo;<samp><span class=
+  "samp">200</span></samp>&rsquo; as &lsquo;<samp><span class=
+  "samp">last:200</span></samp>&rsquo; if the
+  <code>mh-interpret-number-as-range-flag</code> option is on
+  (which is the default). If you need to scan just the message 200,
+  then use the range &lsquo;<samp><span class=
+  "samp">200:1</span></samp>&rsquo; or &lsquo;<samp><span class=
+  "samp">200-200</span></samp>&rsquo;.</p>
+</body>
+</html>

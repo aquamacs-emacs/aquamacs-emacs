@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,123 +20,179 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Symbol Search</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Symbol Search">
-<meta name="keywords" content="GNU Emacs Manual: Symbol Search">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Search.html#Search" rel="up" title="Search">
-<link href="Regexp-Search.html#Regexp-Search" rel="next" title="Regexp Search">
-<link href="Word-Search.html#Word-Search" rel="prev" title="Word Search">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Symbol Search</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Symbol Search" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Symbol Search" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Search.html#Search" rel="up" title="Search" />
+  <link href="Regexp-Search.html#Regexp-Search" rel="next" title=
+  "Regexp Search" />
+  <link href="Word-Search.html#Word-Search" rel="prev" title=
+  "Word Search" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Symbol-Search" id="Symbol-Search"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Regexp-Search.html#Regexp-Search" accesskey=
+    "n" rel="next">Regexp Search</a>, Previous: <a href=
+    "Word-Search.html#Word-Search" accesskey="p" rel="prev">Word
+    Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel=
+    "up">Search</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Symbol-Search-1" id="Symbol-Search-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Symbol-Search"></a>
-<div class="header">
-<p>
-Next: <a href="Regexp-Search.html#Regexp-Search" accesskey="n" rel="next">Regexp Search</a>, Previous: <a href="Word-Search.html#Word-Search" accesskey="p" rel="prev">Word Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Symbol-Search-1"></a>
-<h3 class="section">15.4 Symbol Search</h3>
-<a name="index-symbol-search"></a>
+  <h3 class="section">15.4 Symbol Search</h3><a name=
+  "index-symbol-search" id="index-symbol-search"></a>
 
-<p>A <em>symbol search</em> is much like an ordinary search, except that
-the boundaries of the search must match the boundaries of a symbol.
-The meaning of <em>symbol</em> in this context depends on the major mode,
-and usually refers to a source code token, such as a Lisp symbol in
-Emacs Lisp mode.  For instance, if you perform an incremental symbol
-search for the Lisp symbol <code>forward-word</code>, it would not match
-<code>isearch-forward-word</code>.  This feature is thus mainly useful for
-searching source code.
-</p>
-<dl compact="compact">
-<dt><kbd>M-s _</kbd></dt>
-<dd><a name="index-isearch_002dtoggle_002dsymbol"></a>
-<p>If incremental search is active, toggle symbol search mode
-(<code>isearch-toggle-symbol</code>); otherwise, begin an incremental
-forward symbol search (<code>isearch-forward-symbol</code>).
-</p></dd>
-<dt><kbd>M-s .</kbd></dt>
-<dd><p>Start a symbol incremental search forward with the symbol found near
-point added to the search string initially.
-</p></dd>
-<dt><kbd>M-s _ <span class="key">RET</span> <var>symbol</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Search forward for <var>symbol</var>, nonincrementally.
-</p></dd>
-<dt><kbd>M-s _ C-r <span class="key">RET</span> <var>symbol</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Search backward for <var>symbol</var>, nonincrementally.
-</p></dd>
-</dl>
+  <p>A <em>symbol search</em> is much like an ordinary search,
+  except that the boundaries of the search must match the
+  boundaries of a symbol. The meaning of <em>symbol</em> in this
+  context depends on the major mode, and usually refers to a source
+  code token, such as a Lisp symbol in Emacs Lisp mode. For
+  instance, if you perform an incremental symbol search for the
+  Lisp symbol <code>forward-word</code>, it would not match
+  <code>isearch-forward-word</code>. This feature is thus mainly
+  useful for searching source code.</p>
 
-<a name="index-M_002ds-_005f"></a>
-<a name="index-M_002ds-_002e"></a>
-<a name="index-isearch_002dforward_002dsymbol"></a>
-<a name="index-isearch_002dforward_002dsymbol_002dat_002dpoint"></a>
-<p>To begin a forward incremental symbol search, type <kbd>M-s _</kbd> (or
-<kbd>M-s .</kbd> if the symbol to search is near point).  If incremental
-search is not already active, this runs the command
-<code>isearch-forward-symbol</code>.  If incremental search is already
-active, <kbd>M-s _</kbd> switches to a symbol search, preserving the
-direction of the search and the current search string; you can disable
-symbol search by typing <kbd>M-s _</kbd> again.  In incremental symbol
-search, only the beginning of the search string is required to match
-the beginning of a symbol.
-</p>
-<p>To begin a nonincremental symbol search, type <kbd>M-s _ <span class="key">RET</span></kbd>
-for a forward search, or <kbd>M-s _ C-r <span class="key">RET</span></kbd> or a backward
-search.  In nonincremental symbol searches, the beginning and end of
-the search string are required to match the beginning and end of a
-symbol, respectively.
-</p>
-<p>The symbol search commands don&rsquo;t perform character folding, and
-toggling lax whitespace matching (see <a href="Lax-Search.html#Lax-Search">lax space
-matching</a>) has no effect on them.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Regexp-Search.html#Regexp-Search" accesskey="n" rel="next">Regexp Search</a>, Previous: <a href="Word-Search.html#Word-Search" accesskey="p" rel="prev">Word Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>M-s _</kbd></dt>
 
+    <dd>
+      <a name="index-isearch_002dtoggle_002dsymbol" id=
+      "index-isearch_002dtoggle_002dsymbol"></a>
 
+      <p>If incremental search is active, toggle symbol search mode
+      (<code>isearch-toggle-symbol</code>); otherwise, begin an
+      incremental forward symbol search
+      (<code>isearch-forward-symbol</code>).</p>
+    </dd>
 
+    <dt><kbd>M-s .</kbd></dt>
+
+    <dd>
+      <p>Start a symbol incremental search forward with the symbol
+      found near point added to the search string initially.</p>
+    </dd>
+
+    <dt><kbd>M-s _ <span class="key">RET</span> <var>symbol</var>
+    <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Search forward for <var>symbol</var>,
+      nonincrementally.</p>
+    </dd>
+
+    <dt><kbd>M-s _ C-r <span class="key">RET</span>
+    <var>symbol</var> <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Search backward for <var>symbol</var>,
+      nonincrementally.</p>
+    </dd>
+  </dl><a name="index-M_002ds-_005f" id="index-M_002ds-_005f"></a>
+  <a name="index-M_002ds-_002e" id="index-M_002ds-_002e"></a>
+  <a name="index-isearch_002dforward_002dsymbol" id=
+  "index-isearch_002dforward_002dsymbol"></a> <a name=
+  "index-isearch_002dforward_002dsymbol_002dat_002dpoint" id=
+  "index-isearch_002dforward_002dsymbol_002dat_002dpoint"></a>
+
+  <p>To begin a forward incremental symbol search, type <kbd>M-s
+  _</kbd> (or <kbd>M-s .</kbd> if the symbol to search is near
+  point). If incremental search is not already active, this runs
+  the command <code>isearch-forward-symbol</code>. If incremental
+  search is already active, <kbd>M-s _</kbd> switches to a symbol
+  search, preserving the direction of the search and the current
+  search string; you can disable symbol search by typing <kbd>M-s
+  _</kbd> again. In incremental symbol search, only the beginning
+  of the search string is required to match the beginning of a
+  symbol.</p>
+
+  <p>To begin a nonincremental symbol search, type <kbd>M-s _
+  <span class="key">RET</span></kbd> for a forward search, or
+  <kbd>M-s _ C-r <span class="key">RET</span></kbd> or a backward
+  search. In nonincremental symbol searches, the beginning and end
+  of the search string are required to match the beginning and end
+  of a symbol, respectively.</p>
+
+  <p>The symbol search commands don&rsquo;t perform character
+  folding, and toggling lax whitespace matching (see <a href=
+  "Lax-Search.html#Lax-Search">lax space matching</a>) has no
+  effect on them.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Regexp-Search.html#Regexp-Search" accesskey=
+    "n" rel="next">Regexp Search</a>, Previous: <a href=
+    "Word-Search.html#Word-Search" accesskey="p" rel="prev">Word
+    Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel=
+    "up">Search</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

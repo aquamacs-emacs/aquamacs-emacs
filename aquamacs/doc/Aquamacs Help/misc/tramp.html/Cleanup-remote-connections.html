@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,100 +14,151 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to
 copy and modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>TRAMP User Manual: Cleanup remote connections</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="TRAMP User Manual: Cleanup remote connections">
-<meta name="keywords" content="TRAMP User Manual: Cleanup remote connections">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Usage.html#Usage" rel="up" title="Usage">
-<link href="Bug-Reports.html#Bug-Reports" rel="next" title="Bug Reports">
-<link href="Remote-processes.html#Remote-processes" rel="prev" title="Remote processes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>TRAMP User Manual: Cleanup remote connections</title>
+  <meta name="description" content=
+  "TRAMP User Manual: Cleanup remote connections" />
+  <meta name="keywords" content=
+  "TRAMP User Manual: Cleanup remote connections" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Usage.html#Usage" rel="up" title="Usage" />
+  <link href="Bug-Reports.html#Bug-Reports" rel="next" title=
+  "Bug Reports" />
+  <link href="Remote-processes.html#Remote-processes" rel="prev"
+  title="Remote processes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Cleanup-remote-connections"></a>
-<div class="header">
-<p>
-Previous: <a href="Remote-processes.html#Remote-processes" accesskey="p" rel="prev">Remote processes</a>, Up: <a href="Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Cleanup-remote-connections-1"></a>
-<h3 class="section">5.5 Cleanup remote connections</h3>
-<a name="index-cleanup"></a>
+<body lang="en" xml:lang="en">
+  <a name="Cleanup-remote-connections" id=
+  "Cleanup-remote-connections"></a>
 
-<p><small>TRAMP</small> provides several ways to flush remote connections.
-</p>
-<dl>
-<dt><a name="index-tramp_002dcleanup_002dconnection"></a>Command: <strong>tramp-cleanup-connection</strong> <em>vec</em></dt>
-<dd><p>This command flushes all connection related objects.  <samp>vec</samp> is
-the internal representation of a remote connection.  When called
-interactively, this command lists active remote connections in the
-minibuffer.  Each connection is of the format
-<samp>/method:user@host:</samp>.  Flushing remote connections also
-cleans the password
-cache (see <a href="Password-handling.html#Password-handling">Password handling</a>), file cache, connection cache
-(see <a href="Connection-caching.html#Connection-caching">Connection caching</a>), and connection buffers.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href="Remote-processes.html#Remote-processes"
+    accesskey="p" rel="prev">Remote processes</a>, Up: <a href=
+    "Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Cleanup-remote-connections-1" id=
+  "Cleanup-remote-connections-1"></a>
 
-<dl>
-<dt><a name="index-tramp_002dcleanup_002dthis_002dconnection"></a>Command: <strong>tramp-cleanup-this-connection</strong></dt>
-<dd><p>Flushes only the current buffer&rsquo;s remote connection objects, the same
-as in <code>tramp-cleanup-connection</code>.
-</p></dd></dl>
+  <h3 class="section">5.5 Cleanup remote connections</h3><a name=
+  "index-cleanup" id="index-cleanup"></a>
 
-<dl>
-<dt><a name="index-tramp_002dcleanup_002dall_002dconnections"></a>Command: <strong>tramp-cleanup-all-connections</strong></dt>
-<dd><p>Flushes all active remote connection objects, the same as in
-<code>tramp-cleanup-connection</code>.
-</p></dd></dl>
+  <p><small>TRAMP</small> provides several ways to flush remote
+  connections.</p>
 
-<dl>
-<dt><a name="index-tramp_002dcleanup_002dall_002dbuffers"></a>Command: <strong>tramp-cleanup-all-buffers</strong></dt>
-<dd><p>Just as for <code>tramp-cleanup-all-connections</code>, all remote
-connections are cleaned up in addition to killing buffers related to
-that remote connection.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-tramp_002dcleanup_002dconnection" id=
+    "index-tramp_002dcleanup_002dconnection"></a>Command:
+    <strong>tramp-cleanup-connection</strong> <em>vec</em></dt>
 
+    <dd>
+      <p>This command flushes all connection related objects.
+      <samp>vec</samp> is the internal representation of a remote
+      connection. When called interactively, this command lists
+      active remote connections in the minibuffer. Each connection
+      is of the format <samp>/method:user@host:</samp>. Flushing
+      remote connections also cleans the password cache (see
+      <a href="Password-handling.html#Password-handling">Password
+      handling</a>), file cache, connection cache (see <a href=
+      "Connection-caching.html#Connection-caching">Connection
+      caching</a>), and connection buffers.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-tramp_002dcleanup_002dthis_002dconnection"
+    id=
+    "index-tramp_002dcleanup_002dthis_002dconnection"></a>Command:
+    <strong>tramp-cleanup-this-connection</strong></dt>
 
+    <dd>
+      <p>Flushes only the current buffer&rsquo;s remote connection
+      objects, the same as in
+      <code>tramp-cleanup-connection</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-tramp_002dcleanup_002dall_002dconnections"
+    id=
+    "index-tramp_002dcleanup_002dall_002dconnections"></a>Command:
+    <strong>tramp-cleanup-all-connections</strong></dt>
 
+    <dd>
+      <p>Flushes all active remote connection objects, the same as
+      in <code>tramp-cleanup-connection</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-tramp_002dcleanup_002dall_002dbuffers" id=
+    "index-tramp_002dcleanup_002dall_002dbuffers"></a>Command:
+    <strong>tramp-cleanup-all-buffers</strong></dt>
+
+    <dd>
+      <p>Just as for <code>tramp-cleanup-all-connections</code>,
+      all remote connections are cleaned up in addition to killing
+      buffers related to that remote connection.</p>
+    </dd>
+  </dl>
 </body>
 </html>

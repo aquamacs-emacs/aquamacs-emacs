@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,270 +14,434 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Article Hiding</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Article Hiding">
-<meta name="keywords" content="Gnus Manual: Article Hiding">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Article-Treatment.html#Article-Treatment" rel="up" title="Article Treatment">
-<link href="Article-Washing.html#Article-Washing" rel="next" title="Article Washing">
-<link href="Article-Fontisizing.html#Article-Fontisizing" rel="prev" title="Article Fontisizing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Article Hiding</title>
+  <meta name="description" content="Gnus Manual: Article Hiding" />
+  <meta name="keywords" content="Gnus Manual: Article Hiding" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Article-Treatment.html#Article-Treatment" rel="up"
+  title="Article Treatment" />
+  <link href="Article-Washing.html#Article-Washing" rel="next"
+  title="Article Washing" />
+  <link href="Article-Fontisizing.html#Article-Fontisizing" rel=
+  "prev" title="Article Fontisizing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Article-Hiding"></a>
-<div class="header">
-<p>
-Next: <a href="Article-Washing.html#Article-Washing" accesskey="n" rel="next">Article Washing</a>, Previous: <a href="Article-Fontisizing.html#Article-Fontisizing" accesskey="p" rel="prev">Article Fontisizing</a>, Up: <a href="Article-Treatment.html#Article-Treatment" accesskey="u" rel="up">Article Treatment</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Article-Hiding-1"></a>
-<h4 class="subsection">3.18.3 Article Hiding</h4>
-<a name="index-article-hiding"></a>
+<body lang="en" xml:lang="en">
+  <a name="Article-Hiding" id="Article-Hiding"></a>
 
-<p>Or rather, hiding certain things in each article.  There usually is much
-too much cruft in most articles.
-</p>
-<dl compact="compact">
-<dt><kbd>W W a</kbd></dt>
-<dd><a name="index-W-W-a-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhide"></a>
-<p>Do quite a lot of hiding on the article buffer
-(<kbd>gnus-article-hide</kbd>).  In particular, this function will hide
-headers, <acronym>PGP</acronym>, cited text and the signature.
-</p>
-</dd>
-<dt><kbd>W W h</kbd></dt>
-<dd><a name="index-W-W-h-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhide_002dheaders"></a>
-<p>Hide headers (<code>gnus-article-hide-headers</code>).  See <a href="Hiding-Headers.html#Hiding-Headers">Hiding Headers</a>.
-</p>
-</dd>
-<dt><kbd>W W b</kbd></dt>
-<dd><a name="index-W-W-b-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhide_002dboring_002dheaders"></a>
-<p>Hide headers that aren&rsquo;t particularly interesting
-(<code>gnus-article-hide-boring-headers</code>).  See <a href="Hiding-Headers.html#Hiding-Headers">Hiding Headers</a>.
-</p>
-</dd>
-<dt><kbd>W W s</kbd></dt>
-<dd><a name="index-W-W-s-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhide_002dsignature"></a>
-<p>Hide signature (<code>gnus-article-hide-signature</code>).  See <a href="Article-Signature.html#Article-Signature">Article Signature</a>.
-</p>
-</dd>
-<dt><kbd>W W l</kbd></dt>
-<dd><a name="index-W-W-l-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhide_002dlist_002didentifiers"></a>
-<a name="index-gnus_002dlist_002didentifiers-1"></a>
-<p>Strip list identifiers specified in <code>gnus-list-identifiers</code>.  These
-are strings some mailing list servers add to the beginning of all
-<code>Subject</code> headers&mdash;for example, &lsquo;<samp>[zebra 4711]</samp>&rsquo;.  Any leading
-&lsquo;<samp>Re: </samp>&rsquo; is skipped before stripping.  <code>gnus-list-identifiers</code>
-may not contain <code>\\(..\\)</code>.
-</p>
-<dl compact="compact">
-<dt><code>gnus-list-identifiers</code></dt>
-<dd><a name="index-gnus_002dlist_002didentifiers-2"></a>
-<p>A regular expression that matches list identifiers to be removed from
-subject.  This can also be a list of regular expressions.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Article-Washing.html#Article-Washing"
+    accesskey="n" rel="next">Article Washing</a>, Previous:
+    <a href="Article-Fontisizing.html#Article-Fontisizing"
+    accesskey="p" rel="prev">Article Fontisizing</a>, Up: <a href=
+    "Article-Treatment.html#Article-Treatment" accesskey="u" rel=
+    "up">Article Treatment</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Article-Hiding-1" id="Article-Hiding-1"></a>
 
-</dd>
-<dt><kbd>W W P</kbd></dt>
-<dd><a name="index-W-W-P-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhide_002dpem"></a>
-<p>Hide <acronym>PEM</acronym> (privacy enhanced messages) cruft
-(<code>gnus-article-hide-pem</code>).
-</p>
-</dd>
-<dt><kbd>W W B</kbd></dt>
-<dd><a name="index-W-W-B-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dstrip_002dbanner"></a>
-<a name="index-gnus_002darticle_002dbanner_002dalist"></a>
-<a name="index-gnus_002darticle_002daddress_002dbanner_002dalist"></a>
-<a name="index-banner-1"></a>
-<a name="index-OneList"></a>
-<a name="index-stripping-advertisements"></a>
-<a name="index-advertisements"></a>
-<p>Strip the banner specified by the <code>banner</code> group parameter
-(<code>gnus-article-strip-banner</code>).  This is mainly used to hide those
-annoying banners and/or signatures that some mailing lists and moderated
-groups adds to all the messages.  The way to use this function is to add
-the <code>banner</code> group parameter (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) to the
-group you want banners stripped from.  The parameter either be a string,
-which will be interpreted as a regular expression matching text to be
-removed, or the symbol <code>signature</code>, meaning that the (last)
-signature should be removed, or other symbol, meaning that the
-corresponding regular expression in <code>gnus-article-banner-alist</code> is
-used.
-</p>
-<p>For instance:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-article-banner-alist
+  <h4 class="subsection">3.18.3 Article Hiding</h4><a name=
+  "index-article-hiding" id="index-article-hiding"></a>
+
+  <p>Or rather, hiding certain things in each article. There
+  usually is much too much cruft in most articles.</p>
+
+  <dl compact="compact">
+    <dt><kbd>W W a</kbd></dt>
+
+    <dd>
+      <a name="index-W-W-a-_0028Summary_0029" id=
+      "index-W-W-a-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhide" id=
+      "index-gnus_002darticle_002dhide"></a>
+
+      <p>Do quite a lot of hiding on the article buffer
+      (<kbd>gnus-article-hide</kbd>). In particular, this function
+      will hide headers, <acronym>PGP</acronym>, cited text and the
+      signature.</p>
+    </dd>
+
+    <dt><kbd>W W h</kbd></dt>
+
+    <dd>
+      <a name="index-W-W-h-_0028Summary_0029" id=
+      "index-W-W-h-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhide_002dheaders" id=
+      "index-gnus_002darticle_002dhide_002dheaders"></a>
+
+      <p>Hide headers (<code>gnus-article-hide-headers</code>). See
+      <a href="Hiding-Headers.html#Hiding-Headers">Hiding
+      Headers</a>.</p>
+    </dd>
+
+    <dt><kbd>W W b</kbd></dt>
+
+    <dd>
+      <a name="index-W-W-b-_0028Summary_0029" id=
+      "index-W-W-b-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhide_002dboring_002dheaders" id=
+      "index-gnus_002darticle_002dhide_002dboring_002dheaders"></a>
+
+      <p>Hide headers that aren&rsquo;t particularly interesting
+      (<code>gnus-article-hide-boring-headers</code>). See <a href=
+      "Hiding-Headers.html#Hiding-Headers">Hiding Headers</a>.</p>
+    </dd>
+
+    <dt><kbd>W W s</kbd></dt>
+
+    <dd>
+      <a name="index-W-W-s-_0028Summary_0029" id=
+      "index-W-W-s-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhide_002dsignature" id=
+      "index-gnus_002darticle_002dhide_002dsignature"></a>
+
+      <p>Hide signature (<code>gnus-article-hide-signature</code>).
+      See <a href=
+      "Article-Signature.html#Article-Signature">Article
+      Signature</a>.</p>
+    </dd>
+
+    <dt><kbd>W W l</kbd></dt>
+
+    <dd>
+      <a name="index-W-W-l-_0028Summary_0029" id=
+      "index-W-W-l-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhide_002dlist_002didentifiers"
+      id="index-gnus_002darticle_002dhide_002dlist_002didentifiers">
+      </a> <a name="index-gnus_002dlist_002didentifiers-1" id=
+      "index-gnus_002dlist_002didentifiers-1"></a>
+
+      <p>Strip list identifiers specified in
+      <code>gnus-list-identifiers</code>. These are strings some
+      mailing list servers add to the beginning of all
+      <code>Subject</code> headers&mdash;for example,
+      &lsquo;<samp>[zebra 4711]</samp>&rsquo;. Any leading
+      &lsquo;<samp>Re:</samp> &rsquo; is skipped before stripping.
+      <code>gnus-list-identifiers</code> may not contain
+      <code>\\(..\\)</code>.</p>
+
+      <dl compact="compact">
+        <dt><code>gnus-list-identifiers</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dlist_002didentifiers-2" id=
+          "index-gnus_002dlist_002didentifiers-2"></a>
+
+          <p>A regular expression that matches list identifiers to
+          be removed from subject. This can also be a list of
+          regular expressions.</p>
+        </dd>
+      </dl>
+    </dd>
+
+    <dt><kbd>W W P</kbd></dt>
+
+    <dd>
+      <a name="index-W-W-P-_0028Summary_0029" id=
+      "index-W-W-P-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhide_002dpem" id=
+      "index-gnus_002darticle_002dhide_002dpem"></a>
+
+      <p>Hide <acronym>PEM</acronym> (privacy enhanced messages)
+      cruft (<code>gnus-article-hide-pem</code>).</p>
+    </dd>
+
+    <dt><kbd>W W B</kbd></dt>
+
+    <dd>
+      <a name="index-W-W-B-_0028Summary_0029" id=
+      "index-W-W-B-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dstrip_002dbanner" id=
+      "index-gnus_002darticle_002dstrip_002dbanner"></a> <a name=
+      "index-gnus_002darticle_002dbanner_002dalist" id=
+      "index-gnus_002darticle_002dbanner_002dalist"></a> <a name=
+      "index-gnus_002darticle_002daddress_002dbanner_002dalist" id=
+      "index-gnus_002darticle_002daddress_002dbanner_002dalist"></a>
+      <a name="index-banner-1" id="index-banner-1"></a> <a name=
+      "index-OneList" id="index-OneList"></a> <a name=
+      "index-stripping-advertisements" id=
+      "index-stripping-advertisements"></a> <a name=
+      "index-advertisements" id="index-advertisements"></a>
+
+      <p>Strip the banner specified by the <code>banner</code>
+      group parameter (<code>gnus-article-strip-banner</code>).
+      This is mainly used to hide those annoying banners and/or
+      signatures that some mailing lists and moderated groups adds
+      to all the messages. The way to use this function is to add
+      the <code>banner</code> group parameter (see <a href=
+      "Group-Parameters.html#Group-Parameters">Group
+      Parameters</a>) to the group you want banners stripped from.
+      The parameter either be a string, which will be interpreted
+      as a regular expression matching text to be removed, or the
+      symbol <code>signature</code>, meaning that the (last)
+      signature should be removed, or other symbol, meaning that
+      the corresponding regular expression in
+      <code>gnus-article-banner-alist</code> is used.</p>
+
+      <p>For instance:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq gnus-article-banner-alist
       ((googleGroups .
-       &quot;^\n*--~--~---------\\(.+\n\\)+&quot;)))
-</pre></div>
+       "^\n*--~--~---------\\(.+\n\\)+")))
+</pre>
+      </div>
 
-<p>Regardless of a group, you can hide things like advertisements only when
-the sender of an article has a certain mail address specified in
-<code>gnus-article-address-banner-alist</code>.
-</p>
-<dl compact="compact">
-<dt><code>gnus-article-address-banner-alist</code></dt>
-<dd><a name="index-gnus_002darticle_002daddress_002dbanner_002dalist-1"></a>
-<p>Alist of mail addresses and banners.  Each element has the form
-<code>(<var>address</var> . <var>banner</var>)</code>, where <var>address</var> is a regexp
-matching a mail address in the From header, <var>banner</var> is one of a
-symbol <code>signature</code>, an item in <code>gnus-article-banner-alist</code>,
-a regexp and <code>nil</code>.  If <var>address</var> matches author&rsquo;s mail
-address, it will remove things like advertisements.  For example, if a
-sender has the mail address &lsquo;<samp>hail@yoo-hoo.co.jp</samp>&rsquo; and there is a
-banner something like &lsquo;<samp>Do You Yoo-hoo!?</samp>&rsquo; in all articles he
-sends, you can use the following element to remove them:
-</p>
-<div class="lisp">
-<pre class="lisp">(&quot;@yoo-hoo\\.co\\.jp\\'&quot; .
- &quot;\n_+\nDo You Yoo-hoo!\\?\n.*\n.*\n&quot;)
-</pre></div>
+      <p>Regardless of a group, you can hide things like
+      advertisements only when the sender of an article has a
+      certain mail address specified in
+      <code>gnus-article-address-banner-alist</code>.</p>
 
-</dd>
-</dl>
+      <dl compact="compact">
+        <dt><code>gnus-article-address-banner-alist</code></dt>
 
-</dd>
-<dt><kbd>W W c</kbd></dt>
-<dd><a name="index-W-W-c-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhide_002dcitation"></a>
-<p>Hide citation (<code>gnus-article-hide-citation</code>).  Some variables for
-customizing the hiding:
-</p>
-<dl compact="compact">
-<dt><code>gnus-cited-opened-text-button-line-format</code></dt>
-<dt><code>gnus-cited-closed-text-button-line-format</code></dt>
-<dd><a name="index-gnus_002dcited_002dclosed_002dtext_002dbutton_002dline_002dformat"></a>
-<a name="index-gnus_002dcited_002dopened_002dtext_002dbutton_002dline_002dformat"></a>
-<p>Gnus adds buttons to show where the cited text has been hidden, and to
-allow toggle hiding the text.  The format of the variable is specified
-by these format-like variable (see <a href="Formatting-Variables.html#Formatting-Variables">Formatting Variables</a>).  These
-specs are valid:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>b</samp>&rsquo;</dt>
-<dd><p>Starting point of the hidden text.
-</p></dd>
-<dt>&lsquo;<samp>e</samp>&rsquo;</dt>
-<dd><p>Ending point of the hidden text.
-</p></dd>
-<dt>&lsquo;<samp>l</samp>&rsquo;</dt>
-<dd><p>Number of characters in the hidden region.
-</p></dd>
-<dt>&lsquo;<samp>n</samp>&rsquo;</dt>
-<dd><p>Number of lines of hidden text.
-</p></dd>
-</dl>
+        <dd>
+          <a name=
+          "index-gnus_002darticle_002daddress_002dbanner_002dalist-1"
+          id=
+          "index-gnus_002darticle_002daddress_002dbanner_002dalist-1">
+          </a>
 
-</dd>
-<dt><code>gnus-cited-lines-visible</code></dt>
-<dd><a name="index-gnus_002dcited_002dlines_002dvisible"></a>
-<p>The number of lines at the beginning of the cited text to leave
-shown.  This can also be a cons cell with the number of lines at the top
-and bottom of the text, respectively, to remain visible.
-</p>
-</dd>
-</dl>
+          <p>Alist of mail addresses and banners. Each element has
+          the form <code>(<var>address</var> .
+          <var>banner</var>)</code>, where <var>address</var> is a
+          regexp matching a mail address in the From header,
+          <var>banner</var> is one of a symbol
+          <code>signature</code>, an item in
+          <code>gnus-article-banner-alist</code>, a regexp and
+          <code>nil</code>. If <var>address</var> matches
+          author&rsquo;s mail address, it will remove things like
+          advertisements. For example, if a sender has the mail
+          address &lsquo;<samp>hail@yoo-hoo.co.jp</samp>&rsquo; and
+          there is a banner something like &lsquo;<samp>Do You
+          Yoo-hoo!?</samp>&rsquo; in all articles he sends, you can
+          use the following element to remove them:</p>
 
-</dd>
-<dt><kbd>W W C-c</kbd></dt>
-<dd><a name="index-W-W-C_002dc-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhide_002dcitation_002dmaybe"></a>
+          <div class="lisp">
+            <pre class="lisp">
+("@yoo-hoo\\.co\\.jp\\'" .
+ "\n_+\nDo You Yoo-hoo!\\?\n.*\n.*\n")
+</pre>
+          </div>
+        </dd>
+      </dl>
+    </dd>
 
-<p>Hide citation (<code>gnus-article-hide-citation-maybe</code>) depending on the
-following two variables:
-</p>
-<dl compact="compact">
-<dt><code>gnus-cite-hide-percentage</code></dt>
-<dd><a name="index-gnus_002dcite_002dhide_002dpercentage"></a>
-<p>If the cited text is of a bigger percentage than this variable (default
-50), hide the cited text.
-</p>
-</dd>
-<dt><code>gnus-cite-hide-absolute</code></dt>
-<dd><a name="index-gnus_002dcite_002dhide_002dabsolute"></a>
-<p>The cited text must have at least this length (default 10) before it
-is hidden.
-</p></dd>
-</dl>
+    <dt><kbd>W W c</kbd></dt>
 
-</dd>
-<dt><kbd>W W C</kbd></dt>
-<dd><a name="index-W-W-C-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhide_002dcitation_002din_002dfollowups"></a>
-<p>Hide cited text in articles that aren&rsquo;t roots
-(<code>gnus-article-hide-citation-in-followups</code>).  This isn&rsquo;t very
-useful as an interactive command, but might be a handy function to stick
-have happen automatically (see <a href="Customizing-Articles.html#Customizing-Articles">Customizing Articles</a>).
-</p>
-</dd>
-</dl>
+    <dd>
+      <a name="index-W-W-c-_0028Summary_0029" id=
+      "index-W-W-c-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhide_002dcitation" id=
+      "index-gnus_002darticle_002dhide_002dcitation"></a>
 
-<p>All these &ldquo;hiding&rdquo; commands are toggles, but if you give a negative
-prefix to these commands, they will show what they have previously
-hidden.  If you give a positive prefix, they will always hide.
-</p>
-<p>Also see <a href="Article-Highlighting.html#Article-Highlighting">Article Highlighting</a> for further variables for
-citation customization.
-</p>
-<p>See <a href="Customizing-Articles.html#Customizing-Articles">Customizing Articles</a>, for how to hide article elements
-automatically.
-</p>
+      <p>Hide citation (<code>gnus-article-hide-citation</code>).
+      Some variables for customizing the hiding:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Article-Washing.html#Article-Washing" accesskey="n" rel="next">Article Washing</a>, Previous: <a href="Article-Fontisizing.html#Article-Fontisizing" accesskey="p" rel="prev">Article Fontisizing</a>, Up: <a href="Article-Treatment.html#Article-Treatment" accesskey="u" rel="up">Article Treatment</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <dl compact="compact">
+        <dt>
+        <code>gnus-cited-opened-text-button-line-format</code></dt>
 
+        <dt>
+        <code>gnus-cited-closed-text-button-line-format</code></dt>
 
+        <dd>
+          <a name=
+          "index-gnus_002dcited_002dclosed_002dtext_002dbutton_002dline_002dformat"
+          id=
+          "index-gnus_002dcited_002dclosed_002dtext_002dbutton_002dline_002dformat">
+          </a> <a name=
+          "index-gnus_002dcited_002dopened_002dtext_002dbutton_002dline_002dformat"
+          id=
+          "index-gnus_002dcited_002dopened_002dtext_002dbutton_002dline_002dformat">
+          </a>
 
+          <p>Gnus adds buttons to show where the cited text has
+          been hidden, and to allow toggle hiding the text. The
+          format of the variable is specified by these format-like
+          variable (see <a href=
+          "Formatting-Variables.html#Formatting-Variables">Formatting
+          Variables</a>). These specs are valid:</p>
+
+          <dl compact="compact">
+            <dt>&lsquo;<samp>b</samp>&rsquo;</dt>
+
+            <dd>
+              <p>Starting point of the hidden text.</p>
+            </dd>
+
+            <dt>&lsquo;<samp>e</samp>&rsquo;</dt>
+
+            <dd>
+              <p>Ending point of the hidden text.</p>
+            </dd>
+
+            <dt>&lsquo;<samp>l</samp>&rsquo;</dt>
+
+            <dd>
+              <p>Number of characters in the hidden region.</p>
+            </dd>
+
+            <dt>&lsquo;<samp>n</samp>&rsquo;</dt>
+
+            <dd>
+              <p>Number of lines of hidden text.</p>
+            </dd>
+          </dl>
+        </dd>
+
+        <dt><code>gnus-cited-lines-visible</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dcited_002dlines_002dvisible" id=
+          "index-gnus_002dcited_002dlines_002dvisible"></a>
+
+          <p>The number of lines at the beginning of the cited text
+          to leave shown. This can also be a cons cell with the
+          number of lines at the top and bottom of the text,
+          respectively, to remain visible.</p>
+        </dd>
+      </dl>
+    </dd>
+
+    <dt><kbd>W W C-c</kbd></dt>
+
+    <dd>
+      <a name="index-W-W-C_002dc-_0028Summary_0029" id=
+      "index-W-W-C_002dc-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhide_002dcitation_002dmaybe" id=
+      "index-gnus_002darticle_002dhide_002dcitation_002dmaybe"></a>
+
+      <p>Hide citation
+      (<code>gnus-article-hide-citation-maybe</code>) depending on
+      the following two variables:</p>
+
+      <dl compact="compact">
+        <dt><code>gnus-cite-hide-percentage</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dcite_002dhide_002dpercentage" id=
+          "index-gnus_002dcite_002dhide_002dpercentage"></a>
+
+          <p>If the cited text is of a bigger percentage than this
+          variable (default 50), hide the cited text.</p>
+        </dd>
+
+        <dt><code>gnus-cite-hide-absolute</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dcite_002dhide_002dabsolute" id=
+          "index-gnus_002dcite_002dhide_002dabsolute"></a>
+
+          <p>The cited text must have at least this length (default
+          10) before it is hidden.</p>
+        </dd>
+      </dl>
+    </dd>
+
+    <dt><kbd>W W C</kbd></dt>
+
+    <dd>
+      <a name="index-W-W-C-_0028Summary_0029" id=
+      "index-W-W-C-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhide_002dcitation_002din_002dfollowups"
+      id=
+      "index-gnus_002darticle_002dhide_002dcitation_002din_002dfollowups">
+      </a>
+
+      <p>Hide cited text in articles that aren&rsquo;t roots
+      (<code>gnus-article-hide-citation-in-followups</code>). This
+      isn&rsquo;t very useful as an interactive command, but might
+      be a handy function to stick have happen automatically (see
+      <a href=
+      "Customizing-Articles.html#Customizing-Articles">Customizing
+      Articles</a>).</p>
+    </dd>
+  </dl>
+
+  <p>All these &ldquo;hiding&rdquo; commands are toggles, but if
+  you give a negative prefix to these commands, they will show what
+  they have previously hidden. If you give a positive prefix, they
+  will always hide.</p>
+
+  <p>Also see <a href=
+  "Article-Highlighting.html#Article-Highlighting">Article
+  Highlighting</a> for further variables for citation
+  customization.</p>
+
+  <p>See <a href=
+  "Customizing-Articles.html#Customizing-Articles">Customizing
+  Articles</a>, for how to hide article elements automatically.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Article-Washing.html#Article-Washing"
+    accesskey="n" rel="next">Article Washing</a>, Previous:
+    <a href="Article-Fontisizing.html#Article-Fontisizing"
+    accesskey="p" rel="prev">Article Fontisizing</a>, Up: <a href=
+    "Article-Treatment.html#Article-Treatment" accesskey="u" rel=
+    "up">Article Treatment</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

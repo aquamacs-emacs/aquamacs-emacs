@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,169 +14,273 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Back End Interface</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Back End Interface">
-<meta name="keywords" content="Gnus Manual: Back End Interface">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel="up" title="Gnus Reference Guide">
-<link href="Required-Back-End-Functions.html#Required-Back-End-Functions" rel="next" title="Required Back End Functions">
-<link href="Gnus-Utility-Functions.html#Gnus-Utility-Functions" rel="prev" title="Gnus Utility Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Back End Interface</title>
+  <meta name="description" content=
+  "Gnus Manual: Back End Interface" />
+  <meta name="keywords" content=
+  "Gnus Manual: Back End Interface" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel=
+  "up" title="Gnus Reference Guide" />
+  <link href=
+  "Required-Back-End-Functions.html#Required-Back-End-Functions"
+  rel="next" title="Required Back End Functions" />
+  <link href="Gnus-Utility-Functions.html#Gnus-Utility-Functions"
+  rel="prev" title="Gnus Utility Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Back-End-Interface"></a>
-<div class="header">
-<p>
-Next: <a href="Score-File-Syntax.html#Score-File-Syntax" accesskey="n" rel="next">Score File Syntax</a>, Previous: <a href="Gnus-Utility-Functions.html#Gnus-Utility-Functions" accesskey="p" rel="prev">Gnus Utility Functions</a>, Up: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Back-End-Interface-1"></a>
-<h4 class="subsection">11.7.2 Back End Interface</h4>
+<body lang="en" xml:lang="en">
+  <a name="Back-End-Interface" id="Back-End-Interface"></a>
 
-<p>Gnus doesn&rsquo;t know anything about <acronym>NNTP</acronym>, spools, mail or virtual
-groups.  It only knows how to talk to <em>virtual servers</em>.  A virtual
-server is a <em>back end</em> and some <em>back end variables</em>.  As examples
-of the first, we have <code>nntp</code>, <code>nnspool</code> and <code>nnmbox</code>.  As
-examples of the latter we have <code>nntp-port-number</code> and
-<code>nnmbox-directory</code>.
-</p>
-<p>When Gnus asks for information from a back end&mdash;say <code>nntp</code>&mdash;on
-something, it will normally include a virtual server name in the
-function parameters.  (If not, the back end should use the &ldquo;current&rdquo;
-virtual server.)  For instance, <code>nntp-request-list</code> takes a virtual
-server as its only (optional) parameter.  If this virtual server hasn&rsquo;t
-been opened, the function should fail.
-</p>
-<p>Note that a virtual server name has no relation to some physical server
-name.  Take this example:
-</p>
-<div class="lisp">
-<pre class="lisp">(nntp &quot;odd-one&quot;
-      (nntp-address &quot;ifi.uio.no&quot;)
+  <div class="header">
+    <p>Next: <a href="Score-File-Syntax.html#Score-File-Syntax"
+    accesskey="n" rel="next">Score File Syntax</a>, Previous:
+    <a href="Gnus-Utility-Functions.html#Gnus-Utility-Functions"
+    accesskey="p" rel="prev">Gnus Utility Functions</a>, Up:
+    <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide"
+    accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Back-End-Interface-1" id="Back-End-Interface-1"></a>
+
+  <h4 class="subsection">11.7.2 Back End Interface</h4>
+
+  <p>Gnus doesn&rsquo;t know anything about
+  <acronym>NNTP</acronym>, spools, mail or virtual groups. It only
+  knows how to talk to <em>virtual servers</em>. A virtual server
+  is a <em>back end</em> and some <em>back end variables</em>. As
+  examples of the first, we have <code>nntp</code>,
+  <code>nnspool</code> and <code>nnmbox</code>. As examples of the
+  latter we have <code>nntp-port-number</code> and
+  <code>nnmbox-directory</code>.</p>
+
+  <p>When Gnus asks for information from a back end&mdash;say
+  <code>nntp</code>&mdash;on something, it will normally include a
+  virtual server name in the function parameters. (If not, the back
+  end should use the &ldquo;current&rdquo; virtual server.) For
+  instance, <code>nntp-request-list</code> takes a virtual server
+  as its only (optional) parameter. If this virtual server
+  hasn&rsquo;t been opened, the function should fail.</p>
+
+  <p>Note that a virtual server name has no relation to some
+  physical server name. Take this example:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(nntp "odd-one"
+      (nntp-address "ifi.uio.no")
       (nntp-port-number 4324))
-</pre></div>
+</pre>
+  </div>
 
-<p>Here the virtual server name is &lsquo;<samp>odd-one</samp>&rsquo; while the name of
-the physical server is &lsquo;<samp>ifi.uio.no</samp>&rsquo;.
-</p>
-<p>The back ends should be able to switch between several virtual servers.
-The standard back ends implement this by keeping an alist of virtual
-server environments that they pull down/push up when needed.
-</p>
-<p>There are two groups of interface functions: <em>required functions</em>,
-which must be present, and <em>optional functions</em>, which Gnus will
-always check for presence before attempting to call &rsquo;em.
-</p>
-<p>All these functions are expected to return data in the buffer
-<code>nntp-server-buffer</code> (&lsquo;<samp> *nntpd*</samp>&rsquo;), which is somewhat
-unfortunately named, but we&rsquo;ll have to live with it.  When I talk about
-<em>resulting data</em>, I always refer to the data in that buffer.  When I
-talk about <em>return value</em>, I talk about the function value returned by
-the function call.  Functions that fail should return <code>nil</code> as the
-return value.
-</p>
-<p>Some back ends could be said to be <em>server-forming</em> back ends, and
-some might be said not to be.  The latter are back ends that generally
-only operate on one group at a time, and have no concept of &ldquo;server&rdquo;;
-they have a group, and they deliver info on that group and nothing
-more.
-</p>
-<p>Gnus identifies each message by way of group name and article number.  A
-few remarks about these article numbers might be useful.  First of all,
-the numbers are positive integers.  Secondly, it is normally not
-possible for later articles to &ldquo;re-use&rdquo; older article numbers without
-confusing Gnus.  That is, if a group has ever contained a message
-numbered 42, then no other message may get that number, or Gnus will get
-mightily confused.<a name="DOCF4" href="#FOOT4"><sup>4</sup></a>
-Third, article numbers must be assigned in order of arrival in the
-group; this is not necessarily the same as the date of the message.
-</p>
-<p>The previous paragraph already mentions all the &ldquo;hard&rdquo; restrictions that
-article numbers must fulfill.  But it seems that it might be useful to
-assign <em>consecutive</em> article numbers, for Gnus gets quite confused
-if there are holes in the article numbering sequence.  However, due to
-the &ldquo;no-reuse&rdquo; restriction, holes cannot be avoided altogether.  It&rsquo;s
-also useful for the article numbers to start at 1 to avoid running out
-of numbers as long as possible.
-</p>
-<p>Note that by convention, back ends are named <code>nnsomething</code>, but
-Gnus also comes with some <code>nnnotbackends</code>, such as
-<samp>nnheader.el</samp>, <samp>nnmail.el</samp> and <samp>nnoo.el</samp>.
-</p>
-<p>In the examples and definitions I will refer to the imaginary back end
-<code>nnchoke</code>.
-</p>
-<a name="index-nnchoke"></a>
+  <p>Here the virtual server name is
+  &lsquo;<samp>odd-one</samp>&rsquo; while the name of the physical
+  server is &lsquo;<samp>ifi.uio.no</samp>&rsquo;.</p>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Required-Back-End-Functions.html#Required-Back-End-Functions" accesskey="1">Required Back End Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions that must be implemented.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Optional-Back-End-Functions.html#Optional-Back-End-Functions" accesskey="2">Optional Back End Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions that need not be implemented.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Error-Messaging.html#Error-Messaging" accesskey="3">Error Messaging</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to get messages and report errors.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Writing-New-Back-Ends.html#Writing-New-Back-Ends" accesskey="4">Writing New Back Ends</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Extending old back ends.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Hooking-New-Back-Ends-Into-Gnus.html#Hooking-New-Back-Ends-Into-Gnus" accesskey="5">Hooking New Back Ends Into Gnus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What has to be done on the Gnus end.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mail_002dlike-Back-Ends.html#Mail_002dlike-Back-Ends" accesskey="6">Mail-like Back Ends</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Some tips on mail back ends.
-</td></tr>
-</table>
+  <p>The back ends should be able to switch between several virtual
+  servers. The standard back ends implement this by keeping an
+  alist of virtual server environments that they pull down/push up
+  when needed.</p>
 
+  <p>There are two groups of interface functions: <em>required
+  functions</em>, which must be present, and <em>optional
+  functions</em>, which Gnus will always check for presence before
+  attempting to call &rsquo;em.</p>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>All these functions are expected to return data in the buffer
+  <code>nntp-server-buffer</code> (&lsquo;
+  <samp>*nntpd*</samp>&rsquo;), which is somewhat unfortunately
+  named, but we&rsquo;ll have to live with it. When I talk about
+  <em>resulting data</em>, I always refer to the data in that
+  buffer. When I talk about <em>return value</em>, I talk about the
+  function value returned by the function call. Functions that fail
+  should return <code>nil</code> as the return value.</p>
 
-<h3><a name="FOOT4" href="#DOCF4">(4)</a></h3>
-<p>See the function
-<code>nnchoke-request-update-info</code>, <a href="Optional-Back-End-Functions.html#Optional-Back-End-Functions">Optional Back End Functions</a>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Score-File-Syntax.html#Score-File-Syntax" accesskey="n" rel="next">Score File Syntax</a>, Previous: <a href="Gnus-Utility-Functions.html#Gnus-Utility-Functions" accesskey="p" rel="prev">Gnus Utility Functions</a>, Up: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Some back ends could be said to be <em>server-forming</em>
+  back ends, and some might be said not to be. The latter are back
+  ends that generally only operate on one group at a time, and have
+  no concept of &ldquo;server&rdquo;; they have a group, and they
+  deliver info on that group and nothing more.</p>
 
+  <p>Gnus identifies each message by way of group name and article
+  number. A few remarks about these article numbers might be
+  useful. First of all, the numbers are positive integers.
+  Secondly, it is normally not possible for later articles to
+  &ldquo;re-use&rdquo; older article numbers without confusing
+  Gnus. That is, if a group has ever contained a message numbered
+  42, then no other message may get that number, or Gnus will get
+  mightily confused.<a name="DOCF4" href="#FOOT4" id=
+  "DOCF4"><sup>4</sup></a> Third, article numbers must be assigned
+  in order of arrival in the group; this is not necessarily the
+  same as the date of the message.</p>
 
+  <p>The previous paragraph already mentions all the
+  &ldquo;hard&rdquo; restrictions that article numbers must
+  fulfill. But it seems that it might be useful to assign
+  <em>consecutive</em> article numbers, for Gnus gets quite
+  confused if there are holes in the article numbering sequence.
+  However, due to the &ldquo;no-reuse&rdquo; restriction, holes
+  cannot be avoided altogether. It&rsquo;s also useful for the
+  article numbers to start at 1 to avoid running out of numbers as
+  long as possible.</p>
 
+  <p>Note that by convention, back ends are named
+  <code>nnsomething</code>, but Gnus also comes with some
+  <code>nnnotbackends</code>, such as <samp>nnheader.el</samp>,
+  <samp>nnmail.el</samp> and <samp>nnoo.el</samp>.</p>
+
+  <p>In the examples and definitions I will refer to the imaginary
+  back end <code>nnchoke</code>.</p><a name="index-nnchoke" id=
+  "index-nnchoke"></a>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Required-Back-End-Functions.html#Required-Back-End-Functions"
+      accesskey="1">Required Back End Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions that must be
+      implemented.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Optional-Back-End-Functions.html#Optional-Back-End-Functions"
+      accesskey="2">Optional Back End Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions that need not be
+      implemented.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Error-Messaging.html#Error-Messaging" accesskey="3">Error
+      Messaging</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to get messages and report
+      errors.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Writing-New-Back-Ends.html#Writing-New-Back-Ends" accesskey=
+      "4">Writing New Back Ends</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Extending old back ends.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Hooking-New-Back-Ends-Into-Gnus.html#Hooking-New-Back-Ends-Into-Gnus"
+      accesskey="5">Hooking New Back Ends Into Gnus</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What has to be done on the Gnus
+      end.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mail_002dlike-Back-Ends.html#Mail_002dlike-Back-Ends"
+      accesskey="6">Mail-like Back Ends</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Some tips on mail back
+      ends.</td>
+    </tr>
+  </table>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT4" href="#DOCF4" id="FOOT4">(4)</a></h3>
+
+    <p>See the function <code>nnchoke-request-update-info</code>,
+    <a href=
+    "Optional-Back-End-Functions.html#Optional-Back-End-Functions">Optional
+    Back End Functions</a>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Score-File-Syntax.html#Score-File-Syntax"
+    accesskey="n" rel="next">Score File Syntax</a>, Previous:
+    <a href="Gnus-Utility-Functions.html#Gnus-Utility-Functions"
+    accesskey="p" rel="prev">Gnus Utility Functions</a>, Up:
+    <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide"
+    accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

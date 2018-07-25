@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>SpamAssassin back end - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Spam-Back-Ends.html#Spam-Back-Ends" title="Spam Back Ends">
-<link rel="prev" href="Bogofilter.html#Bogofilter" title="Bogofilter">
-<link rel="next" href="ifile-spam-filtering.html#ifile-spam-filtering" title="ifile spam filtering">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>SpamAssassin back end - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Spam-Back-Ends.html#Spam-Back-Ends" title=
+  "Spam Back Ends" />
+  <link rel="prev" href="Bogofilter.html#Bogofilter" title=
+  "Bogofilter" />
+  <link rel="next" href=
+  "ifile-spam-filtering.html#ifile-spam-filtering" title=
+  "ifile spam filtering" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +36,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,71 +49,97 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="SpamAssassin-back-end"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="ifile-spam-filtering.html#ifile-spam-filtering">ifile spam filtering</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Bogofilter.html#Bogofilter">Bogofilter</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="SpamAssassin-back-end" id="SpamAssassin-back-end"></a>
 
-<h5 class="subsubsection">9.18.6.8 SpamAssassin back end</h5>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "ifile-spam-filtering.html#ifile-spam-filtering">ifile spam
+    filtering</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Bogofilter.html#Bogofilter">Bogofilter</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Spam-Back-Ends.html#Spam-Back-Ends">Spam Back Ends</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-spam-filtering-2823"></a><a name="index-spamassassin_002c-spam-filtering-2824"></a><a name="index-spam-2825"></a>
+  <h5 class="subsubsection">9.18.6.8 SpamAssassin back end</h5>
 
-<div class="defun">
-&mdash; Variable: <b>spam-use-spamassassin</b><var><a name="index-spam_002duse_002dspamassassin-2826"></a></var><br>
-<blockquote>
-        <p>Set this variable if you want <code>spam-split</code> to use SpamAssassin.
+  <p><a name="index-spam-filtering-2823" id=
+  "index-spam-filtering-2823"></a><a name=
+  "index-spamassassin_002c-spam-filtering-2824" id=
+  "index-spamassassin_002c-spam-filtering-2824"></a><a name=
+  "index-spam-2825" id="index-spam-2825"></a></p>
 
-        <p>SpamAssassin assigns a score to each article based on a set of rules
-and tests, including a Bayesian filter.  The Bayesian filter can be
-trained by associating the &lsquo;<samp><span class="samp">$</span></samp>&rsquo; mark for spam articles.  The
-spam score can be viewed by using the command <kbd>S t</kbd> in summary
-mode.
+  <div class="defun">
+    &mdash; Variable: <b>spam-use-spamassassin</b><var><a name=
+    "index-spam_002duse_002dspamassassin-2826" id=
+    "index-spam_002duse_002dspamassassin-2826"></a></var><br />
 
-        <p>If you set this variable, each article will be processed by
-SpamAssassin when <code>spam-split</code> is called.  If your mail is
-preprocessed by SpamAssassin, and you want to just use the
-SpamAssassin headers, set <code>spam-use-spamassassin-headers</code>
-instead.
+    <blockquote>
+      <p>Set this variable if you want <code>spam-split</code> to
+      use SpamAssassin.</p>
 
-        <p>You should not enable this if you use
-<code>spam-use-spamassassin-headers</code>.
+      <p>SpamAssassin assigns a score to each article based on a
+      set of rules and tests, including a Bayesian filter. The
+      Bayesian filter can be trained by associating the
+      &lsquo;<samp><span class="samp">$</span></samp>&rsquo; mark
+      for spam articles. The spam score can be viewed by using the
+      command <kbd>S t</kbd> in summary mode.</p>
 
-        </blockquote></div>
+      <p>If you set this variable, each article will be processed
+      by SpamAssassin when <code>spam-split</code> is called. If
+      your mail is preprocessed by SpamAssassin, and you want to
+      just use the SpamAssassin headers, set
+      <code>spam-use-spamassassin-headers</code> instead.</p>
 
-<div class="defun">
-&mdash; Variable: <b>spam-use-spamassassin-headers</b><var><a name="index-spam_002duse_002dspamassassin_002dheaders-2827"></a></var><br>
-<blockquote>
-        <p>Set this variable if your mail is preprocessed by SpamAssassin and
-want <code>spam-split</code> to split based on the SpamAssassin headers.
+      <p>You should not enable this if you use
+      <code>spam-use-spamassassin-headers</code>.</p>
+    </blockquote>
+  </div>
 
-        <p>You should not enable this if you use <code>spam-use-spamassassin</code>.
+  <div class="defun">
+    &mdash; Variable:
+    <b>spam-use-spamassassin-headers</b><var><a name=
+    "index-spam_002duse_002dspamassassin_002dheaders-2827" id=
+    "index-spam_002duse_002dspamassassin_002dheaders-2827"></a></var><br />
 
-        </blockquote></div>
 
-<div class="defun">
-&mdash; Variable: <b>spam-spamassassin-program</b><var><a name="index-spam_002dspamassassin_002dprogram-2828"></a></var><br>
-<blockquote>
-        <p>This variable points to the SpamAssassin executable.  If you have
-<code>spamd</code> running, you can set this variable to the <code>spamc</code>
-executable for faster processing.  See the SpamAssassin documentation
-for more information on <code>spamd</code>/<code>spamc</code>.
+    <blockquote>
+      <p>Set this variable if your mail is preprocessed by
+      SpamAssassin and want <code>spam-split</code> to split based
+      on the SpamAssassin headers.</p>
 
-        </blockquote></div>
+      <p>You should not enable this if you use
+      <code>spam-use-spamassassin</code>.</p>
+    </blockquote>
+  </div>
 
-   <p>SpamAssassin is a powerful and flexible spam filter that uses a wide
-variety of tests to identify spam.  A ham and a spam processors are
-provided, plus the <code>spam-use-spamassassin</code> and
-<code>spam-use-spamassassin-headers</code> variables to indicate to
-spam-split that SpamAssassin should be either used, or has already
-been used on the article.  The 2.63 version of SpamAssassin was used
-to test this functionality.
+  <div class="defun">
+    &mdash; Variable: <b>spam-spamassassin-program</b><var><a name=
+    "index-spam_002dspamassassin_002dprogram-2828" id=
+    "index-spam_002dspamassassin_002dprogram-2828"></a></var><br />
 
-   </body></html>
+    <blockquote>
+      <p>This variable points to the SpamAssassin executable. If
+      you have <code>spamd</code> running, you can set this
+      variable to the <code>spamc</code> executable for faster
+      processing. See the SpamAssassin documentation for more
+      information on <code>spamd</code>/<code>spamc</code>.</p>
+    </blockquote>
+  </div>
 
+  <p>SpamAssassin is a powerful and flexible spam filter that uses
+  a wide variety of tests to identify spam. A ham and a spam
+  processors are provided, plus the
+  <code>spam-use-spamassassin</code> and
+  <code>spam-use-spamassassin-headers</code> variables to indicate
+  to spam-split that SpamAssassin should be either used, or has
+  already been used on the article. The 2.63 version of
+  SpamAssassin was used to test this functionality.</p>
+</body>
+</html>

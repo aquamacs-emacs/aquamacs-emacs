@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,206 +19,285 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Creating Hash</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Creating Hash">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Creating Hash">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Hash-Tables.html#Hash-Tables" rel="up" title="Hash Tables">
-<link href="Hash-Access.html#Hash-Access" rel="next" title="Hash Access">
-<link href="Hash-Tables.html#Hash-Tables" rel="prev" title="Hash Tables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Creating Hash</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Creating Hash" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Creating Hash" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Hash-Tables.html#Hash-Tables" rel="up" title=
+  "Hash Tables" />
+  <link href="Hash-Access.html#Hash-Access" rel="next" title=
+  "Hash Access" />
+  <link href="Hash-Tables.html#Hash-Tables" rel="prev" title=
+  "Hash Tables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Creating-Hash" id="Creating-Hash"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Hash-Access.html#Hash-Access" accesskey="n"
+    rel="next">Hash Access</a>, Up: <a href=
+    "Hash-Tables.html#Hash-Tables" accesskey="u" rel="up">Hash
+    Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-Hash-Tables" id="Creating-Hash-Tables"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-Hash"></a>
-<div class="header">
-<p>
-Next: <a href="Hash-Access.html#Hash-Access" accesskey="n" rel="next">Hash Access</a>, Up: <a href="Hash-Tables.html#Hash-Tables" accesskey="u" rel="up">Hash Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-Hash-Tables"></a>
-<h3 class="section">7.1 Creating Hash Tables</h3>
-<a name="index-creating-hash-tables"></a>
+  <h3 class="section">7.1 Creating Hash Tables</h3><a name=
+  "index-creating-hash-tables" id="index-creating-hash-tables"></a>
 
-<p>The principal function for creating a hash table is
-<code>make-hash-table</code>.
-</p>
-<dl>
-<dt><a name="index-make_002dhash_002dtable"></a>Function: <strong>make-hash-table</strong> <em>&amp;rest keyword-args</em></dt>
-<dd><p>This function creates a new hash table according to the specified
-arguments.  The arguments should consist of alternating keywords
-(particular symbols recognized specially) and values corresponding to
-them.
-</p>
-<p>Several keywords make sense in <code>make-hash-table</code>, but the only two
-that you really need to know about are <code>:test</code> and <code>:weakness</code>.
-</p>
-<dl compact="compact">
-<dt><code>:test <var>test</var></code></dt>
-<dd><p>This specifies the method of key lookup for this hash table.  The
-default is <code>eql</code>; <code>eq</code> and <code>equal</code> are other
-alternatives:
-</p>
-<dl compact="compact">
-<dt><code>eql</code></dt>
-<dd><p>Keys which are numbers are the same if they are <code>equal</code>, that
-is, if they are equal in value and either both are integers or both
-are floating point; otherwise, two distinct objects are never
-the same.
-</p>
-</dd>
-<dt><code>eq</code></dt>
-<dd><p>Any two distinct Lisp objects are different as keys.
-</p>
-</dd>
-<dt><code>equal</code></dt>
-<dd><p>Two Lisp objects are the same, as keys, if they are equal
-according to <code>equal</code>.
-</p></dd>
-</dl>
+  <p>The principal function for creating a hash table is
+  <code>make-hash-table</code>.</p>
 
-<p>You can use <code>define-hash-table-test</code> (see <a href="Defining-Hash.html#Defining-Hash">Defining Hash</a>) to
-define additional possibilities for <var>test</var>.
-</p>
-</dd>
-<dt><code>:weakness <var>weak</var></code></dt>
-<dd><p>The weakness of a hash table specifies whether the presence of a key or
-value in the hash table preserves it from garbage collection.
-</p>
-<p>The value, <var>weak</var>, must be one of <code>nil</code>, <code>key</code>,
-<code>value</code>, <code>key-or-value</code>, <code>key-and-value</code>, or <code>t</code>
-which is an alias for <code>key-and-value</code>.  If <var>weak</var> is <code>key</code>
-then the hash table does not prevent its keys from being collected as
-garbage (if they are not referenced anywhere else); if a particular key
-does get collected, the corresponding association is removed from the
-hash table.
-</p>
-<p>If <var>weak</var> is <code>value</code>, then the hash table does not prevent
-values from being collected as garbage (if they are not referenced
-anywhere else); if a particular value does get collected, the
-corresponding association is removed from the hash table.
-</p>
-<p>If <var>weak</var> is <code>key-and-value</code> or <code>t</code>, both the key and
-the value must be live in order to preserve the association.  Thus,
-the hash table does not protect either keys or values from garbage
-collection; if either one is collected as garbage, that removes the
-association.
-</p>
-<p>If <var>weak</var> is <code>key-or-value</code>, either the key or
-the value can preserve the association.  Thus, associations are
-removed from the hash table when both their key and value would be
-collected as garbage (if not for references from weak hash tables).
-</p>
-<p>The default for <var>weak</var> is <code>nil</code>, so that all keys and values
-referenced in the hash table are preserved from garbage collection.
-</p>
-</dd>
-<dt><code>:size <var>size</var></code></dt>
-<dd><p>This specifies a hint for how many associations you plan to store in the
-hash table.  If you know the approximate number, you can make things a
-little more efficient by specifying it this way.  If you specify too
-small a size, the hash table will grow automatically when necessary, but
-doing that takes some extra time.
-</p>
-<p>The default size is 65.
-</p>
-</dd>
-<dt><code>:rehash-size <var>rehash-size</var></code></dt>
-<dd><p>When you add an association to a hash table and the table is full,
-it grows automatically.  This value specifies how to make the hash table
-larger, at that time.
-</p>
-<p>If <var>rehash-size</var> is an integer, it should be positive, and the hash
-table grows by adding that much to the nominal size.  If
-<var>rehash-size</var> is floating point, it had better be greater
-than 1, and the hash table grows by multiplying the old size by that
-number.
-</p>
-<p>The default value is 1.5.
-</p>
-</dd>
-<dt><code>:rehash-threshold <var>threshold</var></code></dt>
-<dd><p>This specifies the criterion for when the hash table is full (so
-it should be made larger).  The value, <var>threshold</var>, should be a
-positive floating-point number, no greater than 1.  The hash table is
-full whenever the actual number of entries exceeds this fraction
-of the nominal size.  The default for <var>threshold</var> is 0.8.
-</p></dd>
-</dl>
-</dd></dl>
+  <dl>
+    <dt><a name="index-make_002dhash_002dtable" id=
+    "index-make_002dhash_002dtable"></a>Function:
+    <strong>make-hash-table</strong> <em>&amp;rest
+    keyword-args</em></dt>
 
-<p>You can also create a new hash table using the printed representation
-for hash tables.  The Lisp reader can read this printed
-representation, provided each element in the specified hash table has
-a valid read syntax (see <a href="Printed-Representation.html#Printed-Representation">Printed Representation</a>).  For instance,
-the following specifies a new hash table containing the keys
-<code>key1</code> and <code>key2</code> (both symbols) associated with <code>val1</code>
-(a symbol) and <code>300</code> (a number) respectively.
-</p>
-<div class="example">
-<pre class="example">#s(hash-table size 30 data (key1 val1 key2 300))
-</pre></div>
+    <dd>
+      <p>This function creates a new hash table according to the
+      specified arguments. The arguments should consist of
+      alternating keywords (particular symbols recognized
+      specially) and values corresponding to them.</p>
 
-<p>The printed representation for a hash table consists of &lsquo;<samp>#s</samp>&rsquo;
-followed by a list beginning with &lsquo;<samp>hash-table</samp>&rsquo;.  The rest of the
-list should consist of zero or more property-value pairs specifying
-the hash table&rsquo;s properties and initial contents.  The properties and
-values are read literally.  Valid property names are <code>size</code>,
-<code>test</code>, <code>weakness</code>, <code>rehash-size</code>,
-<code>rehash-threshold</code>, and <code>data</code>.  The <code>data</code> property
-should be a list of key-value pairs for the initial contents; the
-other properties have the same meanings as the matching
-<code>make-hash-table</code> keywords (<code>:size</code>, <code>:test</code>, etc.),
-described above.
-</p>
-<p>Note that you cannot specify a hash table whose initial contents
-include objects that have no read syntax, such as buffers and frames.
-Such objects may be added to the hash table after it is created.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Hash-Access.html#Hash-Access" accesskey="n" rel="next">Hash Access</a>, Up: <a href="Hash-Tables.html#Hash-Tables" accesskey="u" rel="up">Hash Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Several keywords make sense in
+      <code>make-hash-table</code>, but the only two that you
+      really need to know about are <code>:test</code> and
+      <code>:weakness</code>.</p>
 
+      <dl compact="compact">
+        <dt><code>:test <var>test</var></code></dt>
 
+        <dd>
+          <p>This specifies the method of key lookup for this hash
+          table. The default is <code>eql</code>; <code>eq</code>
+          and <code>equal</code> are other alternatives:</p>
 
+          <dl compact="compact">
+            <dt><code>eql</code></dt>
+
+            <dd>
+              <p>Keys which are numbers are the same if they are
+              <code>equal</code>, that is, if they are equal in
+              value and either both are integers or both are
+              floating point; otherwise, two distinct objects are
+              never the same.</p>
+            </dd>
+
+            <dt><code>eq</code></dt>
+
+            <dd>
+              <p>Any two distinct Lisp objects are different as
+              keys.</p>
+            </dd>
+
+            <dt><code>equal</code></dt>
+
+            <dd>
+              <p>Two Lisp objects are the same, as keys, if they
+              are equal according to <code>equal</code>.</p>
+            </dd>
+          </dl>
+
+          <p>You can use <code>define-hash-table-test</code> (see
+          <a href="Defining-Hash.html#Defining-Hash">Defining
+          Hash</a>) to define additional possibilities for
+          <var>test</var>.</p>
+        </dd>
+
+        <dt><code>:weakness <var>weak</var></code></dt>
+
+        <dd>
+          <p>The weakness of a hash table specifies whether the
+          presence of a key or value in the hash table preserves it
+          from garbage collection.</p>
+
+          <p>The value, <var>weak</var>, must be one of
+          <code>nil</code>, <code>key</code>, <code>value</code>,
+          <code>key-or-value</code>, <code>key-and-value</code>, or
+          <code>t</code> which is an alias for
+          <code>key-and-value</code>. If <var>weak</var> is
+          <code>key</code> then the hash table does not prevent its
+          keys from being collected as garbage (if they are not
+          referenced anywhere else); if a particular key does get
+          collected, the corresponding association is removed from
+          the hash table.</p>
+
+          <p>If <var>weak</var> is <code>value</code>, then the
+          hash table does not prevent values from being collected
+          as garbage (if they are not referenced anywhere else); if
+          a particular value does get collected, the corresponding
+          association is removed from the hash table.</p>
+
+          <p>If <var>weak</var> is <code>key-and-value</code> or
+          <code>t</code>, both the key and the value must be live
+          in order to preserve the association. Thus, the hash
+          table does not protect either keys or values from garbage
+          collection; if either one is collected as garbage, that
+          removes the association.</p>
+
+          <p>If <var>weak</var> is <code>key-or-value</code>,
+          either the key or the value can preserve the association.
+          Thus, associations are removed from the hash table when
+          both their key and value would be collected as garbage
+          (if not for references from weak hash tables).</p>
+
+          <p>The default for <var>weak</var> is <code>nil</code>,
+          so that all keys and values referenced in the hash table
+          are preserved from garbage collection.</p>
+        </dd>
+
+        <dt><code>:size <var>size</var></code></dt>
+
+        <dd>
+          <p>This specifies a hint for how many associations you
+          plan to store in the hash table. If you know the
+          approximate number, you can make things a little more
+          efficient by specifying it this way. If you specify too
+          small a size, the hash table will grow automatically when
+          necessary, but doing that takes some extra time.</p>
+
+          <p>The default size is 65.</p>
+        </dd>
+
+        <dt><code>:rehash-size <var>rehash-size</var></code></dt>
+
+        <dd>
+          <p>When you add an association to a hash table and the
+          table is full, it grows automatically. This value
+          specifies how to make the hash table larger, at that
+          time.</p>
+
+          <p>If <var>rehash-size</var> is an integer, it should be
+          positive, and the hash table grows by adding that much to
+          the nominal size. If <var>rehash-size</var> is floating
+          point, it had better be greater than 1, and the hash
+          table grows by multiplying the old size by that
+          number.</p>
+
+          <p>The default value is 1.5.</p>
+        </dd>
+
+        <dt><code>:rehash-threshold
+        <var>threshold</var></code></dt>
+
+        <dd>
+          <p>This specifies the criterion for when the hash table
+          is full (so it should be made larger). The value,
+          <var>threshold</var>, should be a positive floating-point
+          number, no greater than 1. The hash table is full
+          whenever the actual number of entries exceeds this
+          fraction of the nominal size. The default for
+          <var>threshold</var> is 0.8.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <p>You can also create a new hash table using the printed
+  representation for hash tables. The Lisp reader can read this
+  printed representation, provided each element in the specified
+  hash table has a valid read syntax (see <a href=
+  "Printed-Representation.html#Printed-Representation">Printed
+  Representation</a>). For instance, the following specifies a new
+  hash table containing the keys <code>key1</code> and
+  <code>key2</code> (both symbols) associated with
+  <code>val1</code> (a symbol) and <code>300</code> (a number)
+  respectively.</p>
+
+  <div class="example">
+    <pre class="example">
+#s(hash-table size 30 data (key1 val1 key2 300))
+</pre>
+  </div>
+
+  <p>The printed representation for a hash table consists of
+  &lsquo;<samp>#s</samp>&rsquo; followed by a list beginning with
+  &lsquo;<samp>hash-table</samp>&rsquo;. The rest of the list
+  should consist of zero or more property-value pairs specifying
+  the hash table&rsquo;s properties and initial contents. The
+  properties and values are read literally. Valid property names
+  are <code>size</code>, <code>test</code>, <code>weakness</code>,
+  <code>rehash-size</code>, <code>rehash-threshold</code>, and
+  <code>data</code>. The <code>data</code> property should be a
+  list of key-value pairs for the initial contents; the other
+  properties have the same meanings as the matching
+  <code>make-hash-table</code> keywords (<code>:size</code>,
+  <code>:test</code>, etc.), described above.</p>
+
+  <p>Note that you cannot specify a hash table whose initial
+  contents include objects that have no read syntax, such as
+  buffers and frames. Such objects may be added to the hash table
+  after it is created.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Hash-Access.html#Hash-Access" accesskey="n"
+    rel="next">Hash Access</a>, Up: <a href=
+    "Hash-Tables.html#Hash-Tables" accesskey="u" rel="up">Hash
+    Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

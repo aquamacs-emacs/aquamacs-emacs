@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,119 +18,194 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Simplifying Formulas</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Simplifying Formulas">
-<meta name="keywords" content="GNU Emacs Calc Manual: Simplifying Formulas">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Algebra.html#Algebra" rel="up" title="Algebra">
-<link href="Basic-Simplifications.html#Basic-Simplifications" rel="next" title="Basic Simplifications">
-<link href="Algebraic-Manipulation.html#Algebraic-Manipulation" rel="prev" title="Algebraic Manipulation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Simplifying Formulas</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Simplifying Formulas" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Simplifying Formulas" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Algebra.html#Algebra" rel="up" title="Algebra" />
+  <link href="Basic-Simplifications.html#Basic-Simplifications"
+  rel="next" title="Basic Simplifications" />
+  <link href="Algebraic-Manipulation.html#Algebraic-Manipulation"
+  rel="prev" title="Algebraic Manipulation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Simplifying-Formulas"></a>
-<div class="header">
-<p>
-Next: <a href="Polynomials.html#Polynomials" accesskey="n" rel="next">Polynomials</a>, Previous: <a href="Algebraic-Manipulation.html#Algebraic-Manipulation" accesskey="p" rel="prev">Algebraic Manipulation</a>, Up: <a href="Algebra.html#Algebra" accesskey="u" rel="up">Algebra</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Simplifying-Formulas-1"></a>
-<h3 class="section">10.3 Simplifying Formulas</h3>
+<body lang="en" xml:lang="en">
+  <a name="Simplifying-Formulas" id="Simplifying-Formulas"></a>
 
-<a name="index-a-s"></a>
-<a name="index-I-a-s"></a>
-<a name="index-H-a-s"></a>
-<a name="index-calc_002dsimplify"></a>
-<a name="index-simplify-1"></a>
+  <div class="header">
+    <p>Next: <a href="Polynomials.html#Polynomials" accesskey="n"
+    rel="next">Polynomials</a>, Previous: <a href=
+    "Algebraic-Manipulation.html#Algebraic-Manipulation" accesskey=
+    "p" rel="prev">Algebraic Manipulation</a>, Up: <a href=
+    "Algebra.html#Algebra" accesskey="u" rel="up">Algebra</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Simplifying-Formulas-1" id="Simplifying-Formulas-1"></a>
 
-<p>The sections below describe all the various kinds of
-simplifications Calc provides in full detail.  None of Calc&rsquo;s
-simplification commands are designed to pull rabbits out of hats;
-they simply apply certain specific rules to put formulas into
-less redundant or more pleasing forms.  Serious algebra in Calc
-must be done manually, usually with a combination of selections
-and rewrite rules.  See <a href="Rearranging-with-Selections.html#Rearranging-with-Selections">Rearranging with Selections</a>.
-See <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>.
-</p>
-<p>See <a href="Simplification-Modes.html#Simplification-Modes">Simplification Modes</a>, for commands to control what level of
-simplification occurs automatically.  Normally the algebraic
-simplifications described below occur.  If you have turned on a
-simplification mode which does not do these algebraic simplifications,
-you can still apply them to a formula with the <kbd>a s</kbd>
-(<code>calc-simplify</code>) [<code>simplify</code>] command.
-</p>
-<p>There are some simplifications that, while sometimes useful, are never
-done automatically.  For example, the <kbd>I</kbd> prefix can be given to
-<kbd>a s</kbd>; the <kbd>I a s</kbd> command will change any trigonometric
-function to the appropriate combination of &lsquo;<samp>sin</samp>&rsquo;s and &lsquo;<samp>cos</samp>&rsquo;s
-before simplifying.  This can be useful in simplifying even mildly
-complicated trigonometric expressions.  For example, while the algebraic
-simplifications can reduce &lsquo;<samp>sin(x) csc(x)</samp>&rsquo; to &lsquo;<samp>1</samp>&rsquo;, they will not
-simplify &lsquo;<samp>sin(x)^2 csc(x)</samp>&rsquo;.  The command <kbd>I a s</kbd> can be used to
-simplify this latter expression; it will transform &lsquo;<samp>sin(x)^2
-csc(x)</samp>&rsquo; into &lsquo;<samp>sin(x)</samp>&rsquo;.  However, <kbd>I a s</kbd> will also perform
-some &ldquo;simplifications&rdquo; which may not be desired; for example, it
-will transform &lsquo;<samp>tan(x)^2</samp>&rsquo; into &lsquo;<samp>sin(x)^2 / cos(x)^2</samp>&rsquo;.  The
-Hyperbolic prefix <kbd>H</kbd> can be used similarly; the <kbd>H a s</kbd> will
-replace any hyperbolic functions in the formula with the appropriate
-combinations of &lsquo;<samp>sinh</samp>&rsquo;s and &lsquo;<samp>cosh</samp>&rsquo;s before simplifying.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Basic-Simplifications.html#Basic-Simplifications" accesskey="1">Basic Simplifications</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Algebraic-Simplifications.html#Algebraic-Simplifications" accesskey="2">Algebraic Simplifications</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Unsafe-Simplifications.html#Unsafe-Simplifications" accesskey="3">Unsafe Simplifications</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Simplification-of-Units.html#Simplification-of-Units" accesskey="4">Simplification of Units</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <h3 class="section">10.3 Simplifying Formulas</h3><a name=
+  "index-a-s" id="index-a-s"></a> <a name="index-I-a-s" id=
+  "index-I-a-s"></a> <a name="index-H-a-s" id="index-H-a-s"></a>
+  <a name="index-calc_002dsimplify" id=
+  "index-calc_002dsimplify"></a> <a name="index-simplify-1" id=
+  "index-simplify-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Polynomials.html#Polynomials" accesskey="n" rel="next">Polynomials</a>, Previous: <a href="Algebraic-Manipulation.html#Algebraic-Manipulation" accesskey="p" rel="prev">Algebraic Manipulation</a>, Up: <a href="Algebra.html#Algebra" accesskey="u" rel="up">Algebra</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The sections below describe all the various kinds of
+  simplifications Calc provides in full detail. None of
+  Calc&rsquo;s simplification commands are designed to pull rabbits
+  out of hats; they simply apply certain specific rules to put
+  formulas into less redundant or more pleasing forms. Serious
+  algebra in Calc must be done manually, usually with a combination
+  of selections and rewrite rules. See <a href=
+  "Rearranging-with-Selections.html#Rearranging-with-Selections">Rearranging
+  with Selections</a>. See <a href=
+  "Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>.</p>
 
+  <p>See <a href=
+  "Simplification-Modes.html#Simplification-Modes">Simplification
+  Modes</a>, for commands to control what level of simplification
+  occurs automatically. Normally the algebraic simplifications
+  described below occur. If you have turned on a simplification
+  mode which does not do these algebraic simplifications, you can
+  still apply them to a formula with the <kbd>a s</kbd>
+  (<code>calc-simplify</code>) [<code>simplify</code>] command.</p>
 
+  <p>There are some simplifications that, while sometimes useful,
+  are never done automatically. For example, the <kbd>I</kbd>
+  prefix can be given to <kbd>a s</kbd>; the <kbd>I a s</kbd>
+  command will change any trigonometric function to the appropriate
+  combination of &lsquo;<samp>sin</samp>&rsquo;s and
+  &lsquo;<samp>cos</samp>&rsquo;s before simplifying. This can be
+  useful in simplifying even mildly complicated trigonometric
+  expressions. For example, while the algebraic simplifications can
+  reduce &lsquo;<samp>sin(x) csc(x)</samp>&rsquo; to
+  &lsquo;<samp>1</samp>&rsquo;, they will not simplify
+  &lsquo;<samp>sin(x)^2 csc(x)</samp>&rsquo;. The command <kbd>I a
+  s</kbd> can be used to simplify this latter expression; it will
+  transform &lsquo;<samp>sin(x)^2 csc(x)</samp>&rsquo; into
+  &lsquo;<samp>sin(x)</samp>&rsquo;. However, <kbd>I a s</kbd> will
+  also perform some &ldquo;simplifications&rdquo; which may not be
+  desired; for example, it will transform
+  &lsquo;<samp>tan(x)^2</samp>&rsquo; into &lsquo;<samp>sin(x)^2 /
+  cos(x)^2</samp>&rsquo;. The Hyperbolic prefix <kbd>H</kbd> can be
+  used similarly; the <kbd>H a s</kbd> will replace any hyperbolic
+  functions in the formula with the appropriate combinations of
+  &lsquo;<samp>sinh</samp>&rsquo;s and
+  &lsquo;<samp>cosh</samp>&rsquo;s before simplifying.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Basic-Simplifications.html#Basic-Simplifications" accesskey=
+      "1">Basic Simplifications</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Algebraic-Simplifications.html#Algebraic-Simplifications"
+      accesskey="2">Algebraic Simplifications</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Unsafe-Simplifications.html#Unsafe-Simplifications"
+      accesskey="3">Unsafe Simplifications</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Simplification-of-Units.html#Simplification-of-Units"
+      accesskey="4">Simplification of Units</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Polynomials.html#Polynomials" accesskey="n"
+    rel="next">Polynomials</a>, Previous: <a href=
+    "Algebraic-Manipulation.html#Algebraic-Manipulation" accesskey=
+    "p" rel="prev">Algebraic Manipulation</a>, Up: <a href=
+    "Algebra.html#Algebra" accesskey="u" rel="up">Algebra</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

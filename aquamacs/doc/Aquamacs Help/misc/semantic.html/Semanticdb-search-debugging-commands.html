@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents the Semantic library and utilities.
 
 Copyright (C) 1999-2005, 2007, 2009-2016 Free Software
@@ -15,99 +17,158 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Semantic Manual: Semanticdb search debugging commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Semantic Manual: Semanticdb search debugging commands">
-<meta name="keywords" content="Semantic Manual: Semanticdb search debugging commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Semanticdb-Search-Configuration.html#Semanticdb-Search-Configuration" rel="up" title="Semanticdb Search Configuration">
-<link href="Changing-Backends.html#Changing-Backends" rel="next" title="Changing Backends">
-<link href="Include-paths.html#Include-paths" rel="prev" title="Include paths">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Semantic Manual: Semanticdb search debugging
+  commands</title>
+  <meta name="description" content=
+  "Semantic Manual: Semanticdb search debugging commands" />
+  <meta name="keywords" content=
+  "Semantic Manual: Semanticdb search debugging commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Semanticdb-Search-Configuration.html#Semanticdb-Search-Configuration"
+  rel="up" title="Semanticdb Search Configuration" />
+  <link href="Changing-Backends.html#Changing-Backends" rel="next"
+  title="Changing Backends" />
+  <link href="Include-paths.html#Include-paths" rel="prev" title=
+  "Include paths" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Semanticdb-search-debugging-commands"></a>
-<div class="header">
-<p>
-Previous: <a href="Include-paths.html#Include-paths" accesskey="p" rel="prev">Include paths</a>, Up: <a href="Semanticdb-Search-Configuration.html#Semanticdb-Search-Configuration" accesskey="u" rel="up">Semanticdb Search Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Semanticdb-search-debugging-commands-1"></a>
-<h4 class="subsubsection">2.2.2.4 Semanticdb search debugging commands</h4>
+<body lang="en" xml:lang="en">
+  <a name="Semanticdb-search-debugging-commands" id=
+  "Semanticdb-search-debugging-commands"></a>
 
-<p>You can use <kbd>M-x semanticdb-dump-all-table-summary</kbd> to see the
-list of databases that will be searched from a given buffer.  You can
-follow up with <kbd>M-x semanticdb-find-test-translate-path</kbd> to then
-make sure specific tables from the path are discovered correctly.
-Alternately, you can get a list of include files <i>Semantic</i>
-encountered, but could not find on disk using <kbd>M-x
-semanticdb-find-adebug-lost-includes</kbd>.
-</p>
-<dl>
-<dt><a name="index-semanticdb_002ddump_002dall_002dtable_002dsummary"></a>Command: <strong>semanticdb-dump-all-table-summary</strong></dt>
-<dd><p>Dump a list of all databases in Emacs memory.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href="Include-paths.html#Include-paths"
+    accesskey="p" rel="prev">Include paths</a>, Up: <a href=
+    "Semanticdb-Search-Configuration.html#Semanticdb-Search-Configuration"
+    accesskey="u" rel="up">Semanticdb Search Configuration</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Semanticdb-search-debugging-commands-1" id=
+  "Semanticdb-search-debugging-commands-1"></a>
 
-<dl>
-<dt><a name="index-semanticdb_002dfind_002dtest_002dtranslate_002dpath"></a>Command: <strong>semanticdb-find-test-translate-path</strong> <em>&amp;optional arg</em></dt>
-<dd><p>Call and output results of <em>semanticdb-find-translate-path</em>.  In
-the displayed buffer, you can type <tt class="key">SPC</tt> to expand items.  With
-<var>arg</var> non-<code>nil</code>, specify a <var>brutish</var> translation.
-</p></dd></dl>
+  <h4 class="subsubsection">2.2.2.4 Semanticdb search debugging
+  commands</h4>
 
-<dl>
-<dt><a name="index-semanticdb_002dfind_002dadebug_002dlost_002dincludes"></a>Command: <strong>semanticdb-find-adebug-lost-includes</strong></dt>
-<dd><p>Translate the current path, then display the lost includes.
-Examines the variable <code>semanticdb-find-lost-includes</code>.
-</p></dd></dl>
+  <p>You can use <kbd>M-x semanticdb-dump-all-table-summary</kbd>
+  to see the list of databases that will be searched from a given
+  buffer. You can follow up with <kbd>M-x
+  semanticdb-find-test-translate-path</kbd> to then make sure
+  specific tables from the path are discovered correctly.
+  Alternately, you can get a list of include files <i>Semantic</i>
+  encountered, but could not find on disk using <kbd>M-x
+  semanticdb-find-adebug-lost-includes</kbd>.</p>
 
-<p>Lastly, you can test an explicit search term using this command:
-</p>
-<dl>
-<dt><a name="index-semantic_002dadebug_002dsearchdb"></a>Command: <strong>semantic-adebug-searchdb</strong> <em>regex</em></dt>
-<dd><p>Search the semanticdb for <var>regex</var> for the current buffer.
-Display the results as a debug list.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-semanticdb_002ddump_002dall_002dtable_002dsummary" id=
+    "index-semanticdb_002ddump_002dall_002dtable_002dsummary"></a>Command:
+    <strong>semanticdb-dump-all-table-summary</strong></dt>
 
+    <dd>
+      <p>Dump a list of all databases in Emacs memory.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-semanticdb_002dfind_002dtest_002dtranslate_002dpath" id=
+    "index-semanticdb_002dfind_002dtest_002dtranslate_002dpath"></a>Command:
+    <strong>semanticdb-find-test-translate-path</strong>
+    <em>&amp;optional arg</em></dt>
 
+    <dd>
+      <p>Call and output results of
+      <em>semanticdb-find-translate-path</em>. In the displayed
+      buffer, you can type <tt class="key">SPC</tt> to expand
+      items. With <var>arg</var> non-<code>nil</code>, specify a
+      <var>brutish</var> translation.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-semanticdb_002dfind_002dadebug_002dlost_002dincludes"
+    id="index-semanticdb_002dfind_002dadebug_002dlost_002dincludes">
+    </a>Command:
+    <strong>semanticdb-find-adebug-lost-includes</strong></dt>
+
+    <dd>
+      <p>Translate the current path, then display the lost
+      includes. Examines the variable
+      <code>semanticdb-find-lost-includes</code>.</p>
+    </dd>
+  </dl>
+
+  <p>Lastly, you can test an explicit search term using this
+  command:</p>
+
+  <dl>
+    <dt><a name="index-semantic_002dadebug_002dsearchdb" id=
+    "index-semantic_002dadebug_002dsearchdb"></a>Command:
+    <strong>semantic-adebug-searchdb</strong> <em>regex</em></dt>
+
+    <dd>
+      <p>Search the semanticdb for <var>regex</var> for the current
+      buffer. Display the results as a debug list.</p>
+    </dd>
+  </dl>
 </body>
 </html>

@@ -1,15 +1,28 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Tagging Extensions - Speedbar: File/Tag summarizing utility</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Speedbar: File/Tag summarizing utility">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Extending.html#Extending" title="Extending">
-<link rel="prev" href="Major-Display-Modes.html#Major-Display-Modes" title="Major Display Modes">
-<link rel="next" href="Creating-a-display.html#Creating-a-display" title="Creating a display">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Tagging Extensions - Speedbar: File/Tag summarizing
+  utility</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Speedbar: File/Tag summarizing utility" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Extending.html#Extending" title=
+  "Extending" />
+  <link rel="prev" href=
+  "Major-Display-Modes.html#Major-Display-Modes" title=
+  "Major Display Modes" />
+  <link rel="next" href=
+  "Creating-a-display.html#Creating-a-display" title=
+  "Creating a display" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -25,8 +38,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,54 +51,81 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Tagging-Extensions"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Creating-a-display.html#Creating-a-display">Creating a display</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Major-Display-Modes.html#Major-Display-Modes">Major Display Modes</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Extending.html#Extending">Extending</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Tagging-Extensions" id="Tagging-Extensions"></a>
 
-<h3 class="section">7.3 Tagging Extensions</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Creating-a-display.html#Creating-a-display">Creating a
+    display</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Major-Display-Modes.html#Major-Display-Modes">Major
+    Display Modes</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Extending.html#Extending">Extending</a></p>
+    <hr />
+  </div>
 
-<p>It is possible to create new methods for tagging files in speedbar. 
-To do this, you need two basic functions, one function to fetch the
-tags from a buffer, the other to insert them below the filename.
+  <h3 class="section">7.3 Tagging Extensions</h3>
 
-<div class="defun">
-&mdash; Function: <b>my-fetch-dynamic-tags</b><var> file<a name="index-my_002dfetch_002ddynamic_002dtags-77"></a></var><br>
-<blockquote><p>Parse <var>file</var> for a list of tags.  Return the list, or <code>t</code> if there was
-an error. 
-</p></blockquote></div>
+  <p>It is possible to create new methods for tagging files in
+  speedbar. To do this, you need two basic functions, one function
+  to fetch the tags from a buffer, the other to insert them below
+  the filename.</p>
 
-   <p>The non-error return value can be anything, as long as it can be
-inserted by its paired function:
+  <div class="defun">
+    &mdash; Function: <b>my-fetch-dynamic-tags</b>
+    <var>file<a name="index-my_002dfetch_002ddynamic_002dtags-77"
+    id=
+    "index-my_002dfetch_002ddynamic_002dtags-77"></a></var><br />
 
-<div class="defun">
-&mdash; Function: <b>my-insert-tag-list</b><var> level lst<a name="index-my_002dinsert_002dtag_002dlist-78"></a></var><br>
-<blockquote><p>Insert a list of tags <var>lst</var> started at indentation level
-<var>level</var>.  Creates buttons for each tag, and provides any other
-display information required. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Parse <var>file</var> for a list of tags. Return the list,
+      or <code>t</code> if there was an error.</p>
+    </blockquote>
+  </div>
 
-   <p><a name="index-g_t_0040code_007bspeedbar_002dcreate_002dtag_002dhierarchy_007d-79"></a>It is often useful to use <code>speedbar-create-tag-hierarchy</code> on your
-token list.  See that function's documentation for details on what it
-requires.
+  <p>The non-error return value can be anything, as long as it can
+  be inserted by its paired function:</p>
 
-   <p><a name="index-g_t_0040code_007bspeedbar_002ddynamic_002dtags_002dfunction_002dlist_007d-80"></a>Once these two functions are written, modify the variable
-<code>speedbar-dynamic-tags-function-list</code> to include your parser at the
-beginning, like this:
+  <div class="defun">
+    &mdash; Function: <b>my-insert-tag-list</b> <var>level
+    lst<a name="index-my_002dinsert_002dtag_002dlist-78" id=
+    "index-my_002dinsert_002dtag_002dlist-78"></a></var><br />
 
-<pre class="example">     (add-to-list 'speedbar-dynamic-tags-function-list
+    <blockquote>
+      <p>Insert a list of tags <var>lst</var> started at
+      indentation level <var>level</var>. Creates buttons for each
+      tag, and provides any other display information required.</p>
+    </blockquote>
+  </div>
+
+  <p><a name=
+  "index-g_t_0040code_007bspeedbar_002dcreate_002dtag_002dhierarchy_007d-79"
+  id=
+  "index-g_t_0040code_007bspeedbar_002dcreate_002dtag_002dhierarchy_007d-79">
+  </a>It is often useful to use
+  <code>speedbar-create-tag-hierarchy</code> on your token list.
+  See that function's documentation for details on what it
+  requires.</p>
+
+  <p><a name=
+  "index-g_t_0040code_007bspeedbar_002ddynamic_002dtags_002dfunction_002dlist_007d-80"
+  id=
+  "index-g_t_0040code_007bspeedbar_002ddynamic_002dtags_002dfunction_002dlist_007d-80">
+  </a>Once these two functions are written, modify the variable
+  <code>speedbar-dynamic-tags-function-list</code> to include your
+  parser at the beginning, like this:</p>
+  <pre class="example">
+     (add-to-list 'speedbar-dynamic-tags-function-list
                   '(my-fetch-dynamic-tags . my-insert-tag-list))
 </pre>
-   <p>If your parser is only good for a few types of files, make sure that it
-is either a buffer local modification, or that the tag generator returns
-<code>t</code> for non valid buffers.
 
-   </body></html>
-
+  <p>If your parser is only good for a few types of files, make
+  sure that it is either a buffer local modification, or that the
+  tag generator returns <code>t</code> for non valid buffers.</p>
+</body>
+</html>

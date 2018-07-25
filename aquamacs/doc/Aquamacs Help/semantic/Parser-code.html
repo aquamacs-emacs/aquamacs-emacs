@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Parser code - Semantic Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Semantic Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Semantic-Internals.html#Semantic-Internals" title="Semantic Internals">
-<link rel="next" href="Tag-handling.html#Tag-handling" title="Tag handling">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Parser code - Semantic Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Semantic Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Semantic-Internals.html#Semantic-Internals"
+  title="Semantic Internals" />
+  <link rel="next" href="Tag-handling.html#Tag-handling" title=
+  "Tag handling" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual documents the Semantic library and utilities.
 
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
@@ -26,8 +34,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,54 +47,106 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Parser-code"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Tag-handling.html#Tag-handling">Tag handling</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Semantic-Internals.html#Semantic-Internals">Semantic Internals</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Parser-code" id="Parser-code"></a>
 
-<h3 class="section">3.1 Parser code</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Tag-handling.html#Tag-handling">Tag handling</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Semantic-Internals.html#Semantic-Internals">Semantic
+    Internals</a></p>
+    <hr />
+  </div>
 
-<p><i>Semantic</i> parsing code is spread across a range of files.
+  <h3 class="section">3.1 Parser code</h3>
 
-     <dl>
-<dt><samp><span class="file">semantic.el</span></samp><dd>The core infrastructure sets up buffers for parsing, and has all the
-core parsing routines.  Most parsing routines are overloadable, so the
-actual implementation may be somewhere else.
+  <p><i>Semantic</i> parsing code is spread across a range of
+  files.</p>
 
-     <br><dt><samp><span class="file">semantic-edit.el</span></samp><dd>Incremental reparse based on user edits.
+  <dl>
+    <dt><samp><span class="file">semantic.el</span></samp></dt>
 
-     <br><dt><samp><span class="file">semantic-grammar.el</span></samp><dt><samp><span class="file">semantic-grammar.wy</span></samp><dd>Parser for the different grammar languages, and a major mode for
-editing grammars in Emacs.
+    <dd>The core infrastructure sets up buffers for parsing, and
+    has all the core parsing routines. Most parsing routines are
+    overloadable, so the actual implementation may be somewhere
+    else.<br /></dd>
 
-     <br><dt><samp><span class="file">semantic-lex.el</span></samp><dd>Infrastructure for implementing lexical analyzers.  Provides macros
-for creating individual analyzers for specific features, and a way to
-combine them together.
+    <dt><samp><span class=
+    "file">semantic-edit.el</span></samp></dt>
 
-     <br><dt><samp><span class="file">semantic-lex-spp.el</span></samp><dd>Infrastructure for a lexical symbolic preprocessor.  This was written
-to implement the C preprocessor, but could be used for other lexical
-preprocessors.
+    <dd>Incremental reparse based on user edits.<br /></dd>
 
-     <br><dt><samp><span class="file">bovine/bovine-grammar.el</span></samp><dt><samp><span class="file">bovine/bovine-grammar-macros.el</span></samp><dt><samp><span class="file">bovine/semantic-bovine.el</span></samp><dd>The &ldquo;bovine&rdquo; grammar.  This is the first grammar mode written for
-<i>Semantic</i> and is useful for simple creating simple parsers.
+    <dt><samp><span class=
+    "file">semantic-grammar.el</span></samp></dt>
 
-     <br><dt><samp><span class="file">wisent/wisent.el</span></samp><dt><samp><span class="file">wisent/bison-wisent.el</span></samp><dt><samp><span class="file">wisent/semantic-wisent.el</span></samp><dt><samp><span class="file">wisent/semantic-debug-grammar.el</span></samp><dd>A port of bison to Emacs.  This infrastructure lets you create LALR
-based parsers for <i>Semantic</i>.
+    <dt><samp><span class=
+    "file">semantic-grammar.wy</span></samp></dt>
 
-     <br><dt><samp><span class="file">semantic-ast.el</span></samp><dd>Manage Abstract Syntax Trees for parsers.
+    <dd>Parser for the different grammar languages, and a major
+    mode for editing grammars in Emacs.<br /></dd>
 
-     <br><dt><samp><span class="file">semantic-debug.el</span></samp><dd>Infrastructure for debugging grammars.
+    <dt><samp><span class="file">semantic-lex.el</span></samp></dt>
 
-     <br><dt><samp><span class="file">semantic-util.el</span></samp><dd>Various utilities for manipulating tags, such as describing the tag
-under point, adding labels, and the all important
-<code>semantic-something-to-tag-table</code>.
+    <dd>Infrastructure for implementing lexical analyzers. Provides
+    macros for creating individual analyzers for specific features,
+    and a way to combine them together.<br /></dd>
 
-   </dl>
+    <dt><samp><span class=
+    "file">semantic-lex-spp.el</span></samp></dt>
 
-   </body></html>
+    <dd>Infrastructure for a lexical symbolic preprocessor. This
+    was written to implement the C preprocessor, but could be used
+    for other lexical preprocessors.<br /></dd>
 
+    <dt><samp><span class=
+    "file">bovine/bovine-grammar.el</span></samp></dt>
+
+    <dt><samp><span class=
+    "file">bovine/bovine-grammar-macros.el</span></samp></dt>
+
+    <dt><samp><span class=
+    "file">bovine/semantic-bovine.el</span></samp></dt>
+
+    <dd>The &ldquo;bovine&rdquo; grammar. This is the first grammar
+    mode written for <i>Semantic</i> and is useful for simple
+    creating simple parsers.<br /></dd>
+
+    <dt><samp><span class=
+    "file">wisent/wisent.el</span></samp></dt>
+
+    <dt><samp><span class=
+    "file">wisent/bison-wisent.el</span></samp></dt>
+
+    <dt><samp><span class=
+    "file">wisent/semantic-wisent.el</span></samp></dt>
+
+    <dt><samp><span class=
+    "file">wisent/semantic-debug-grammar.el</span></samp></dt>
+
+    <dd>A port of bison to Emacs. This infrastructure lets you
+    create LALR based parsers for <i>Semantic</i>.<br /></dd>
+
+    <dt><samp><span class="file">semantic-ast.el</span></samp></dt>
+
+    <dd>Manage Abstract Syntax Trees for parsers.<br /></dd>
+
+    <dt><samp><span class=
+    "file">semantic-debug.el</span></samp></dt>
+
+    <dd>Infrastructure for debugging grammars.<br /></dd>
+
+    <dt><samp><span class=
+    "file">semantic-util.el</span></samp></dt>
+
+    <dd>Various utilities for manipulating tags, such as describing
+    the tag under point, adding labels, and the all important
+    <code>semantic-something-to-tag-table</code>.</dd>
+  </dl>
+</body>
+</html>

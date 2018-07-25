@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,106 +19,158 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Motion and Syntax</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Motion and Syntax">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Motion and Syntax">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Syntax-Tables.html#Syntax-Tables" rel="up" title="Syntax Tables">
-<link href="Parsing-Expressions.html#Parsing-Expressions" rel="next" title="Parsing Expressions">
-<link href="Syntax-Properties.html#Syntax-Properties" rel="prev" title="Syntax Properties">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Motion and Syntax</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Motion and Syntax" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Motion and Syntax" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Syntax-Tables.html#Syntax-Tables" rel="up" title=
+  "Syntax Tables" />
+  <link href="Parsing-Expressions.html#Parsing-Expressions" rel=
+  "next" title="Parsing Expressions" />
+  <link href="Syntax-Properties.html#Syntax-Properties" rel="prev"
+  title="Syntax Properties" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Motion-and-Syntax" id="Motion-and-Syntax"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Parsing-Expressions.html#Parsing-Expressions"
+    accesskey="n" rel="next">Parsing Expressions</a>, Previous:
+    <a href="Syntax-Properties.html#Syntax-Properties" accesskey=
+    "p" rel="prev">Syntax Properties</a>, Up: <a href=
+    "Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Motion-and-Syntax-1" id="Motion-and-Syntax-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Motion-and-Syntax"></a>
-<div class="header">
-<p>
-Next: <a href="Parsing-Expressions.html#Parsing-Expressions" accesskey="n" rel="next">Parsing Expressions</a>, Previous: <a href="Syntax-Properties.html#Syntax-Properties" accesskey="p" rel="prev">Syntax Properties</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Motion-and-Syntax-1"></a>
-<h3 class="section">34.5 Motion and Syntax</h3>
-<a name="index-moving-across-syntax-classes"></a>
-<a name="index-skipping-characters-of-certain-syntax"></a>
+  <h3 class="section">34.5 Motion and Syntax</h3><a name=
+  "index-moving-across-syntax-classes" id=
+  "index-moving-across-syntax-classes"></a> <a name=
+  "index-skipping-characters-of-certain-syntax" id=
+  "index-skipping-characters-of-certain-syntax"></a>
 
-<p>This section describes functions for moving across characters that
-have certain syntax classes.
-</p>
-<dl>
-<dt><a name="index-skip_002dsyntax_002dforward"></a>Function: <strong>skip-syntax-forward</strong> <em>syntaxes &amp;optional limit</em></dt>
-<dd><p>This function moves point forward across characters having syntax
-classes mentioned in <var>syntaxes</var> (a string of syntax class
-characters).  It stops when it encounters the end of the buffer, or
-position <var>limit</var> (if specified), or a character it is not supposed
-to skip.
-</p>
-<p>If <var>syntaxes</var> starts with &lsquo;<samp>^</samp>&rsquo;, then the function skips
-characters whose syntax is <em>not</em> in <var>syntaxes</var>.
-</p>
-<p>The return value is the distance traveled, which is a nonnegative
-integer.
-</p></dd></dl>
+  <p>This section describes functions for moving across characters
+  that have certain syntax classes.</p>
 
-<dl>
-<dt><a name="index-skip_002dsyntax_002dbackward"></a>Function: <strong>skip-syntax-backward</strong> <em>syntaxes &amp;optional limit</em></dt>
-<dd><p>This function moves point backward across characters whose syntax
-classes are mentioned in <var>syntaxes</var>.  It stops when it encounters
-the beginning of the buffer, or position <var>limit</var> (if specified), or
-a character it is not supposed to skip.
-</p>
-<p>If <var>syntaxes</var> starts with &lsquo;<samp>^</samp>&rsquo;, then the function skips
-characters whose syntax is <em>not</em> in <var>syntaxes</var>.
-</p>
-<p>The return value indicates the distance traveled.  It is an integer that
-is zero or less.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-skip_002dsyntax_002dforward" id=
+    "index-skip_002dsyntax_002dforward"></a>Function:
+    <strong>skip-syntax-forward</strong> <em>syntaxes &amp;optional
+    limit</em></dt>
 
-<dl>
-<dt><a name="index-backward_002dprefix_002dchars"></a>Function: <strong>backward-prefix-chars</strong></dt>
-<dd><p>This function moves point backward over any number of characters with
-expression prefix syntax.  This includes both characters in the
-expression prefix syntax class, and characters with the &lsquo;<samp>p</samp>&rsquo; flag.
-</p></dd></dl>
+    <dd>
+      <p>This function moves point forward across characters having
+      syntax classes mentioned in <var>syntaxes</var> (a string of
+      syntax class characters). It stops when it encounters the end
+      of the buffer, or position <var>limit</var> (if specified),
+      or a character it is not supposed to skip.</p>
 
+      <p>If <var>syntaxes</var> starts with
+      &lsquo;<samp>^</samp>&rsquo;, then the function skips
+      characters whose syntax is <em>not</em> in
+      <var>syntaxes</var>.</p>
 
+      <p>The return value is the distance traveled, which is a
+      nonnegative integer.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-skip_002dsyntax_002dbackward" id=
+    "index-skip_002dsyntax_002dbackward"></a>Function:
+    <strong>skip-syntax-backward</strong> <em>syntaxes
+    &amp;optional limit</em></dt>
 
+    <dd>
+      <p>This function moves point backward across characters whose
+      syntax classes are mentioned in <var>syntaxes</var>. It stops
+      when it encounters the beginning of the buffer, or position
+      <var>limit</var> (if specified), or a character it is not
+      supposed to skip.</p>
+
+      <p>If <var>syntaxes</var> starts with
+      &lsquo;<samp>^</samp>&rsquo;, then the function skips
+      characters whose syntax is <em>not</em> in
+      <var>syntaxes</var>.</p>
+
+      <p>The return value indicates the distance traveled. It is an
+      integer that is zero or less.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-backward_002dprefix_002dchars" id=
+    "index-backward_002dprefix_002dchars"></a>Function:
+    <strong>backward-prefix-chars</strong></dt>
+
+    <dd>
+      <p>This function moves point backward over any number of
+      characters with expression prefix syntax. This includes both
+      characters in the expression prefix syntax class, and
+      characters with the &lsquo;<samp>p</samp>&rsquo; flag.</p>
+    </dd>
+  </dl>
 </body>
 </html>

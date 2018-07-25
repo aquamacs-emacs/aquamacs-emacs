@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the Emacs MIME interface functionality.
 
 Copyright © 1998-2016 Free Software Foundation, Inc.
@@ -14,286 +16,434 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs MIME Manual: Interface Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs MIME Manual: Interface Functions">
-<meta name="keywords" content="Emacs MIME Manual: Interface Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Basic-Functions.html#Basic-Functions" rel="next" title="Basic Functions">
-<link href="Flowed-text.html#Flowed-text" rel="prev" title="Flowed text">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs MIME Manual: Interface Functions</title>
+  <meta name="description" content=
+  "Emacs MIME Manual: Interface Functions" />
+  <meta name="keywords" content=
+  "Emacs MIME Manual: Interface Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Basic-Functions.html#Basic-Functions" rel="next"
+  title="Basic Functions" />
+  <link href="Flowed-text.html#Flowed-text" rel="prev" title=
+  "Flowed text" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Interface-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Basic-Functions.html#Basic-Functions" accesskey="n" rel="next">Basic Functions</a>, Previous: <a href="Composing.html#Composing" accesskey="p" rel="prev">Composing</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Interface-Functions-1"></a>
-<h2 class="chapter">3 Interface Functions</h2>
-<a name="index-interface-functions"></a>
-<a name="index-mail_002dparse"></a>
+<body lang="en" xml:lang="en">
+  <a name="Interface-Functions" id="Interface-Functions"></a>
 
-<p>The <code>mail-parse</code> library is an abstraction over the actual
-low-level libraries that are described in the next chapter.
-</p>
-<p>Standards change, and so programs have to change to fit in the new
-mold.  For instance, RFC2045 describes a syntax for the
-<code>Content-Type</code> header that only allows <acronym>ASCII</acronym> characters in the
-parameter list.  RFC2231 expands on RFC2045 syntax to provide a scheme
-for continuation headers and non-<acronym>ASCII</acronym> characters.
-</p>
-<p>The traditional way to deal with this is just to update the library
-functions to parse the new syntax.  However, this is sometimes the wrong
-thing to do.  In some instances it may be vital to be able to understand
-both the old syntax as well as the new syntax, and if there is only one
-library, one must choose between the old version of the library and the
-new version of the library.
-</p>
-<p>The Emacs <acronym>MIME</acronym> library takes a different tack.  It defines a
-series of low-level libraries (<samp>rfc2047.el</samp>, <samp>rfc2231.el</samp>
-and so on) that parses strictly according to the corresponding
-standard.  However, normal programs would not use the functions
-provided by these libraries directly, but instead use the functions
-provided by the <code>mail-parse</code> library.  The functions in this
-library are just aliases to the corresponding functions in the latest
-low-level libraries.  Using this scheme, programs get a consistent
-interface they can use, and library developers are free to create
-write code that handles new standards.
-</p>
-<p>The following functions are defined by this library:
-</p>
-<dl compact="compact">
-<dt><code>mail-header-parse-content-type</code></dt>
-<dd><a name="index-mail_002dheader_002dparse_002dcontent_002dtype"></a>
-<p>Parse a <code>Content-Type</code> header and return a list on the following
-format:
-</p>
-<div class="lisp">
-<pre class="lisp">(&quot;type/subtype&quot;
+  <div class="header">
+    <p>Next: <a href="Basic-Functions.html#Basic-Functions"
+    accesskey="n" rel="next">Basic Functions</a>, Previous:
+    <a href="Composing.html#Composing" accesskey="p" rel=
+    "prev">Composing</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Interface-Functions-1" id="Interface-Functions-1"></a>
+
+  <h2 class="chapter">3 Interface Functions</h2><a name=
+  "index-interface-functions" id="index-interface-functions"></a>
+  <a name="index-mail_002dparse" id="index-mail_002dparse"></a>
+
+  <p>The <code>mail-parse</code> library is an abstraction over the
+  actual low-level libraries that are described in the next
+  chapter.</p>
+
+  <p>Standards change, and so programs have to change to fit in the
+  new mold. For instance, RFC2045 describes a syntax for the
+  <code>Content-Type</code> header that only allows
+  <acronym>ASCII</acronym> characters in the parameter list.
+  RFC2231 expands on RFC2045 syntax to provide a scheme for
+  continuation headers and non-<acronym>ASCII</acronym>
+  characters.</p>
+
+  <p>The traditional way to deal with this is just to update the
+  library functions to parse the new syntax. However, this is
+  sometimes the wrong thing to do. In some instances it may be
+  vital to be able to understand both the old syntax as well as the
+  new syntax, and if there is only one library, one must choose
+  between the old version of the library and the new version of the
+  library.</p>
+
+  <p>The Emacs <acronym>MIME</acronym> library takes a different
+  tack. It defines a series of low-level libraries
+  (<samp>rfc2047.el</samp>, <samp>rfc2231.el</samp> and so on) that
+  parses strictly according to the corresponding standard. However,
+  normal programs would not use the functions provided by these
+  libraries directly, but instead use the functions provided by the
+  <code>mail-parse</code> library. The functions in this library
+  are just aliases to the corresponding functions in the latest
+  low-level libraries. Using this scheme, programs get a consistent
+  interface they can use, and library developers are free to create
+  write code that handles new standards.</p>
+
+  <p>The following functions are defined by this library:</p>
+
+  <dl compact="compact">
+    <dt><code>mail-header-parse-content-type</code></dt>
+
+    <dd>
+      <a name=
+      "index-mail_002dheader_002dparse_002dcontent_002dtype" id=
+      "index-mail_002dheader_002dparse_002dcontent_002dtype"></a>
+
+      <p>Parse a <code>Content-Type</code> header and return a list
+      on the following format:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+("type/subtype"
  (attribute1 . value1)
  (attribute2 . value2)
  ...)
-</pre></div>
+</pre>
+      </div>
 
-<p>Here&rsquo;s an example:
-</p>
-<div class="example">
-<pre class="example">(mail-header-parse-content-type
- &quot;image/gif; name=\&quot;b980912.gif\&quot;&quot;)
-&rArr; (&quot;image/gif&quot; (name . &quot;b980912.gif&quot;))
-</pre></div>
+      <p>Here&rsquo;s an example:</p>
 
-</dd>
-<dt><code>mail-header-parse-content-disposition</code></dt>
-<dd><a name="index-mail_002dheader_002dparse_002dcontent_002ddisposition"></a>
-<p>Parse a <code>Content-Disposition</code> header and return a list on the same
-format as the function above.
-</p>
-</dd>
-<dt><code>mail-content-type-get</code></dt>
-<dd><a name="index-mail_002dcontent_002dtype_002dget"></a>
-<p>Takes two parameters&mdash;a list on the format above, and an attribute.
-Returns the value of the attribute.
-</p>
-<div class="example">
-<pre class="example">(mail-content-type-get
- '(&quot;image/gif&quot; (name . &quot;b980912.gif&quot;)) 'name)
-&rArr; &quot;b980912.gif&quot;
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(mail-header-parse-content-type
+ "image/gif; name=\"b980912.gif\"")
+&rArr; ("image/gif" (name . "b980912.gif"))
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>mail-header-encode-parameter</code></dt>
-<dd><a name="index-mail_002dheader_002dencode_002dparameter"></a>
-<p>Takes a parameter string and returns an encoded version of the string.
-This is used for parameters in headers like <code>Content-Type</code> and
-<code>Content-Disposition</code>.
-</p>
-</dd>
-<dt><code>mail-header-remove-comments</code></dt>
-<dd><a name="index-mail_002dheader_002dremove_002dcomments"></a>
-<p>Return a comment-free version of a header.
-</p>
-<div class="example">
-<pre class="example">(mail-header-remove-comments
- &quot;Gnus/5.070027 (Pterodactyl Gnus v0.27) (Finnish Landrace)&quot;)
-&rArr; &quot;Gnus/5.070027  &quot;
-</pre></div>
+    <dt><code>mail-header-parse-content-disposition</code></dt>
 
-</dd>
-<dt><code>mail-header-remove-whitespace</code></dt>
-<dd><a name="index-mail_002dheader_002dremove_002dwhitespace"></a>
-<p>Remove linear white space from a header.  Space inside quoted strings
-and comments is preserved.
-</p>
-<div class="example">
-<pre class="example">(mail-header-remove-whitespace
- &quot;image/gif; name=\&quot;Name with spaces\&quot;&quot;)
-&rArr; &quot;image/gif;name=\&quot;Name with spaces\&quot;&quot;
-</pre></div>
+    <dd>
+      <a name=
+      "index-mail_002dheader_002dparse_002dcontent_002ddisposition"
+      id=
+      "index-mail_002dheader_002dparse_002dcontent_002ddisposition">
+      </a>
 
-</dd>
-<dt><code>mail-header-get-comment</code></dt>
-<dd><a name="index-mail_002dheader_002dget_002dcomment"></a>
-<p>Return the last comment in a header.
-</p>
-<div class="example">
-<pre class="example">(mail-header-get-comment
- &quot;Gnus/5.070027 (Pterodactyl Gnus v0.27) (Finnish Landrace)&quot;)
-&rArr; &quot;Finnish Landrace&quot;
-</pre></div>
+      <p>Parse a <code>Content-Disposition</code> header and return
+      a list on the same format as the function above.</p>
+    </dd>
 
-</dd>
-<dt><code>mail-header-parse-address</code></dt>
-<dd><a name="index-mail_002dheader_002dparse_002daddress"></a>
-<p>Parse an address and return a list containing the mailbox and the
-plaintext name.
-</p>
-<div class="example">
-<pre class="example">(mail-header-parse-address
- &quot;Hrvoje Niksic &lt;hniksic@srce.hr&gt;&quot;)
-&rArr; (&quot;hniksic@srce.hr&quot; . &quot;Hrvoje Niksic&quot;)
-</pre></div>
+    <dt><code>mail-content-type-get</code></dt>
 
-</dd>
-<dt><code>mail-header-parse-addresses</code></dt>
-<dd><a name="index-mail_002dheader_002dparse_002daddresses"></a>
-<p>Parse a string with list of addresses and return a list of elements like
-the one described above.
-</p>
-<div class="example">
-<pre class="example">(mail-header-parse-addresses
- &quot;Hrvoje Niksic &lt;hniksic@srce.hr&gt;, Steinar Bang &lt;sb@metis.no&gt;&quot;)
-&rArr; ((&quot;hniksic@srce.hr&quot; . &quot;Hrvoje Niksic&quot;)
-     (&quot;sb@metis.no&quot; . &quot;Steinar Bang&quot;))
-</pre></div>
+    <dd>
+      <a name="index-mail_002dcontent_002dtype_002dget" id=
+      "index-mail_002dcontent_002dtype_002dget"></a>
 
-</dd>
-<dt><code>mail-header-parse-date</code></dt>
-<dd><a name="index-mail_002dheader_002dparse_002ddate"></a>
-<p>Parse a date string and return an Emacs time structure.
-</p>
-</dd>
-<dt><code>mail-narrow-to-head</code></dt>
-<dd><a name="index-mail_002dnarrow_002dto_002dhead"></a>
-<p>Narrow the buffer to the header section of the buffer.  Point is placed
-at the beginning of the narrowed buffer.
-</p>
-</dd>
-<dt><code>mail-header-narrow-to-field</code></dt>
-<dd><a name="index-mail_002dheader_002dnarrow_002dto_002dfield"></a>
-<p>Narrow the buffer to the header under point.  Understands continuation
-headers.
-</p>
-</dd>
-<dt><code>mail-header-fold-field</code></dt>
-<dd><a name="index-mail_002dheader_002dfold_002dfield"></a>
-<p>Fold the header under point.
-</p>
-</dd>
-<dt><code>mail-header-unfold-field</code></dt>
-<dd><a name="index-mail_002dheader_002dunfold_002dfield"></a>
-<p>Unfold the header under point.
-</p>
-</dd>
-<dt><code>mail-header-field-value</code></dt>
-<dd><a name="index-mail_002dheader_002dfield_002dvalue"></a>
-<p>Return the value of the field under point.
-</p>
-</dd>
-<dt><code>mail-encode-encoded-word-region</code></dt>
-<dd><a name="index-mail_002dencode_002dencoded_002dword_002dregion"></a>
-<p>Encode the non-<acronym>ASCII</acronym> words in the region.  For instance,
-&lsquo;<samp>Naïve</samp>&rsquo; is encoded as &lsquo;<samp>=?iso-8859-1?q?Na=EFve?=</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>mail-encode-encoded-word-buffer</code></dt>
-<dd><a name="index-mail_002dencode_002dencoded_002dword_002dbuffer"></a>
-<p>Encode the non-<acronym>ASCII</acronym> words in the current buffer.  This function is
-meant to be called narrowed to the headers of a message.
-</p>
-</dd>
-<dt><code>mail-encode-encoded-word-string</code></dt>
-<dd><a name="index-mail_002dencode_002dencoded_002dword_002dstring"></a>
-<p>Encode the words that need encoding in a string, and return the result.
-</p>
-<div class="example">
-<pre class="example">(mail-encode-encoded-word-string
- &quot;This is naïve, baby&quot;)
-&rArr; &quot;This is =?iso-8859-1?q?na=EFve,?= baby&quot;
-</pre></div>
+      <p>Takes two parameters&mdash;a list on the format above, and
+      an attribute. Returns the value of the attribute.</p>
 
-</dd>
-<dt><code>mail-decode-encoded-word-region</code></dt>
-<dd><a name="index-mail_002ddecode_002dencoded_002dword_002dregion"></a>
-<p>Decode the encoded words in the region.
-</p>
-</dd>
-<dt><code>mail-decode-encoded-word-string</code></dt>
-<dd><a name="index-mail_002ddecode_002dencoded_002dword_002dstring"></a>
-<p>Decode the encoded words in the string and return the result.
-</p>
-<div class="example">
-<pre class="example">(mail-decode-encoded-word-string
- &quot;This is =?iso-8859-1?q?na=EFve,?= baby&quot;)
-&rArr; &quot;This is naïve, baby&quot;
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(mail-content-type-get
+ '("image/gif" (name . "b980912.gif")) 'name)
+&rArr; "b980912.gif"
+</pre>
+      </div>
+    </dd>
 
-</dd>
-</dl>
+    <dt><code>mail-header-encode-parameter</code></dt>
 
-<p>Currently, <code>mail-parse</code> is an abstraction over <code>ietf-drums</code>,
-<code>rfc2047</code>, <code>rfc2045</code> and <code>rfc2231</code>.  These are documented
-in the subsequent sections.
-</p>
+    <dd>
+      <a name="index-mail_002dheader_002dencode_002dparameter" id=
+      "index-mail_002dheader_002dencode_002dparameter"></a>
 
+      <p>Takes a parameter string and returns an encoded version of
+      the string. This is used for parameters in headers like
+      <code>Content-Type</code> and
+      <code>Content-Disposition</code>.</p>
+    </dd>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Basic-Functions.html#Basic-Functions" accesskey="n" rel="next">Basic Functions</a>, Previous: <a href="Composing.html#Composing" accesskey="p" rel="prev">Composing</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><code>mail-header-remove-comments</code></dt>
 
+    <dd>
+      <a name="index-mail_002dheader_002dremove_002dcomments" id=
+      "index-mail_002dheader_002dremove_002dcomments"></a>
 
+      <p>Return a comment-free version of a header.</p>
 
+      <div class="example">
+        <pre class="example">
+(mail-header-remove-comments
+ "Gnus/5.070027 (Pterodactyl Gnus v0.27) (Finnish Landrace)")
+&rArr; "Gnus/5.070027  "
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>mail-header-remove-whitespace</code></dt>
+
+    <dd>
+      <a name="index-mail_002dheader_002dremove_002dwhitespace" id=
+      "index-mail_002dheader_002dremove_002dwhitespace"></a>
+
+      <p>Remove linear white space from a header. Space inside
+      quoted strings and comments is preserved.</p>
+
+      <div class="example">
+        <pre class="example">
+(mail-header-remove-whitespace
+ "image/gif; name=\"Name with spaces\"")
+&rArr; "image/gif;name=\"Name with spaces\""
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>mail-header-get-comment</code></dt>
+
+    <dd>
+      <a name="index-mail_002dheader_002dget_002dcomment" id=
+      "index-mail_002dheader_002dget_002dcomment"></a>
+
+      <p>Return the last comment in a header.</p>
+
+      <div class="example">
+        <pre class="example">
+(mail-header-get-comment
+ "Gnus/5.070027 (Pterodactyl Gnus v0.27) (Finnish Landrace)")
+&rArr; "Finnish Landrace"
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>mail-header-parse-address</code></dt>
+
+    <dd>
+      <a name="index-mail_002dheader_002dparse_002daddress" id=
+      "index-mail_002dheader_002dparse_002daddress"></a>
+
+      <p>Parse an address and return a list containing the mailbox
+      and the plaintext name.</p>
+
+      <div class="example">
+        <pre class="example">
+(mail-header-parse-address
+ "Hrvoje Niksic &lt;hniksic@srce.hr&gt;")
+&rArr; ("hniksic@srce.hr" . "Hrvoje Niksic")
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>mail-header-parse-addresses</code></dt>
+
+    <dd>
+      <a name="index-mail_002dheader_002dparse_002daddresses" id=
+      "index-mail_002dheader_002dparse_002daddresses"></a>
+
+      <p>Parse a string with list of addresses and return a list of
+      elements like the one described above.</p>
+
+      <div class="example">
+        <pre class="example">
+(mail-header-parse-addresses
+ "Hrvoje Niksic &lt;hniksic@srce.hr&gt;, Steinar Bang &lt;sb@metis.no&gt;")
+&rArr; (("hniksic@srce.hr" . "Hrvoje Niksic")
+     ("sb@metis.no" . "Steinar Bang"))
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>mail-header-parse-date</code></dt>
+
+    <dd>
+      <a name="index-mail_002dheader_002dparse_002ddate" id=
+      "index-mail_002dheader_002dparse_002ddate"></a>
+
+      <p>Parse a date string and return an Emacs time
+      structure.</p>
+    </dd>
+
+    <dt><code>mail-narrow-to-head</code></dt>
+
+    <dd>
+      <a name="index-mail_002dnarrow_002dto_002dhead" id=
+      "index-mail_002dnarrow_002dto_002dhead"></a>
+
+      <p>Narrow the buffer to the header section of the buffer.
+      Point is placed at the beginning of the narrowed buffer.</p>
+    </dd>
+
+    <dt><code>mail-header-narrow-to-field</code></dt>
+
+    <dd>
+      <a name="index-mail_002dheader_002dnarrow_002dto_002dfield"
+      id="index-mail_002dheader_002dnarrow_002dto_002dfield"></a>
+
+      <p>Narrow the buffer to the header under point. Understands
+      continuation headers.</p>
+    </dd>
+
+    <dt><code>mail-header-fold-field</code></dt>
+
+    <dd>
+      <a name="index-mail_002dheader_002dfold_002dfield" id=
+      "index-mail_002dheader_002dfold_002dfield"></a>
+
+      <p>Fold the header under point.</p>
+    </dd>
+
+    <dt><code>mail-header-unfold-field</code></dt>
+
+    <dd>
+      <a name="index-mail_002dheader_002dunfold_002dfield" id=
+      "index-mail_002dheader_002dunfold_002dfield"></a>
+
+      <p>Unfold the header under point.</p>
+    </dd>
+
+    <dt><code>mail-header-field-value</code></dt>
+
+    <dd>
+      <a name="index-mail_002dheader_002dfield_002dvalue" id=
+      "index-mail_002dheader_002dfield_002dvalue"></a>
+
+      <p>Return the value of the field under point.</p>
+    </dd>
+
+    <dt><code>mail-encode-encoded-word-region</code></dt>
+
+    <dd>
+      <a name=
+      "index-mail_002dencode_002dencoded_002dword_002dregion" id=
+      "index-mail_002dencode_002dencoded_002dword_002dregion"></a>
+
+      <p>Encode the non-<acronym>ASCII</acronym> words in the
+      region. For instance,
+      &lsquo;<samp>Na&Atilde;&macr;ve</samp>&rsquo; is encoded as
+      &lsquo;<samp>=?iso-8859-1?q?Na=EFve?=</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><code>mail-encode-encoded-word-buffer</code></dt>
+
+    <dd>
+      <a name=
+      "index-mail_002dencode_002dencoded_002dword_002dbuffer" id=
+      "index-mail_002dencode_002dencoded_002dword_002dbuffer"></a>
+
+      <p>Encode the non-<acronym>ASCII</acronym> words in the
+      current buffer. This function is meant to be called narrowed
+      to the headers of a message.</p>
+    </dd>
+
+    <dt><code>mail-encode-encoded-word-string</code></dt>
+
+    <dd>
+      <a name=
+      "index-mail_002dencode_002dencoded_002dword_002dstring" id=
+      "index-mail_002dencode_002dencoded_002dword_002dstring"></a>
+
+      <p>Encode the words that need encoding in a string, and
+      return the result.</p>
+
+      <div class="example">
+        <pre class="example">
+(mail-encode-encoded-word-string
+ "This is na&Atilde;&macr;ve, baby")
+&rArr; "This is =?iso-8859-1?q?na=EFve,?= baby"
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>mail-decode-encoded-word-region</code></dt>
+
+    <dd>
+      <a name=
+      "index-mail_002ddecode_002dencoded_002dword_002dregion" id=
+      "index-mail_002ddecode_002dencoded_002dword_002dregion"></a>
+
+      <p>Decode the encoded words in the region.</p>
+    </dd>
+
+    <dt><code>mail-decode-encoded-word-string</code></dt>
+
+    <dd>
+      <a name=
+      "index-mail_002ddecode_002dencoded_002dword_002dstring" id=
+      "index-mail_002ddecode_002dencoded_002dword_002dstring"></a>
+
+      <p>Decode the encoded words in the string and return the
+      result.</p>
+
+      <div class="example">
+        <pre class="example">
+(mail-decode-encoded-word-string
+ "This is =?iso-8859-1?q?na=EFve,?= baby")
+&rArr; "This is na&Atilde;&macr;ve, baby"
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <p>Currently, <code>mail-parse</code> is an abstraction over
+  <code>ietf-drums</code>, <code>rfc2047</code>,
+  <code>rfc2045</code> and <code>rfc2231</code>. These are
+  documented in the subsequent sections.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Basic-Functions.html#Basic-Functions"
+    accesskey="n" rel="next">Basic Functions</a>, Previous:
+    <a href="Composing.html#Composing" accesskey="p" rel=
+    "prev">Composing</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

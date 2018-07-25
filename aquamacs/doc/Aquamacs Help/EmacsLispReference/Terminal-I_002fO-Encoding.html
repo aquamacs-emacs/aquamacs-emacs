@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,108 +19,168 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Terminal I/O Encoding</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Terminal I/O Encoding">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Terminal I/O Encoding">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Coding-Systems.html#Coding-Systems" rel="up" title="Coding Systems">
-<link href="Input-Methods.html#Input-Methods" rel="next" title="Input Methods">
-<link href="Explicit-Encoding.html#Explicit-Encoding" rel="prev" title="Explicit Encoding">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Terminal I/O
+  Encoding</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Terminal I/O Encoding" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Terminal I/O Encoding" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Coding-Systems.html#Coding-Systems" rel="up" title=
+  "Coding Systems" />
+  <link href="Input-Methods.html#Input-Methods" rel="next" title=
+  "Input Methods" />
+  <link href="Explicit-Encoding.html#Explicit-Encoding" rel="prev"
+  title="Explicit Encoding" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Terminal-I_002fO-Encoding" id=
+  "Terminal-I_002fO-Encoding"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Explicit-Encoding.html#Explicit-Encoding"
+    accesskey="p" rel="prev">Explicit Encoding</a>, Up: <a href=
+    "Coding-Systems.html#Coding-Systems" accesskey="u" rel=
+    "up">Coding Systems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Terminal-I_002fO-Encoding-1" id=
+  "Terminal-I_002fO-Encoding-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Terminal-I_002fO-Encoding"></a>
-<div class="header">
-<p>
-Previous: <a href="Explicit-Encoding.html#Explicit-Encoding" accesskey="p" rel="prev">Explicit Encoding</a>, Up: <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel="up">Coding Systems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Terminal-I_002fO-Encoding-1"></a>
-<h4 class="subsection">32.10.8 Terminal I/O Encoding</h4>
+  <h4 class="subsection">32.10.8 Terminal I/O Encoding</h4>
 
-<p>Emacs can use coding systems to decode keyboard input and encode
-terminal output.  This is useful for terminals that transmit or
-display text using a particular encoding, such as Latin-1.  Emacs does
-not set <code>last-coding-system-used</code> when encoding or decoding
-terminal I/O.
-</p>
-<dl>
-<dt><a name="index-keyboard_002dcoding_002dsystem"></a>Function: <strong>keyboard-coding-system</strong> <em>&amp;optional terminal</em></dt>
-<dd><p>This function returns the coding system used for decoding keyboard
-input from <var>terminal</var>.  A value of <code>no-conversion</code> means no
-decoding is done.  If <var>terminal</var> is omitted or <code>nil</code>, it
-means the selected frame&rsquo;s terminal.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
-</p></dd></dl>
+  <p>Emacs can use coding systems to decode keyboard input and
+  encode terminal output. This is useful for terminals that
+  transmit or display text using a particular encoding, such as
+  Latin-1. Emacs does not set <code>last-coding-system-used</code>
+  when encoding or decoding terminal I/O.</p>
 
-<dl>
-<dt><a name="index-set_002dkeyboard_002dcoding_002dsystem"></a>Command: <strong>set-keyboard-coding-system</strong> <em>coding-system &amp;optional terminal</em></dt>
-<dd><p>This command specifies <var>coding-system</var> as the coding system to use
-for decoding keyboard input from <var>terminal</var>.  If
-<var>coding-system</var> is <code>nil</code>, that means not to decode keyboard
-input.  If <var>terminal</var> is a frame, it means that frame&rsquo;s terminal;
-if it is <code>nil</code>, that means the currently selected frame&rsquo;s
-terminal.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-keyboard_002dcoding_002dsystem" id=
+    "index-keyboard_002dcoding_002dsystem"></a>Function:
+    <strong>keyboard-coding-system</strong> <em>&amp;optional
+    terminal</em></dt>
 
-<dl>
-<dt><a name="index-terminal_002dcoding_002dsystem"></a>Function: <strong>terminal-coding-system</strong> <em>&amp;optional terminal</em></dt>
-<dd><p>This function returns the coding system that is in use for encoding
-terminal output from <var>terminal</var>.  A value of <code>no-conversion</code>
-means no encoding is done.  If <var>terminal</var> is a frame, it means
-that frame&rsquo;s terminal; if it is <code>nil</code>, that means the currently
-selected frame&rsquo;s terminal.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the coding system used for decoding
+      keyboard input from <var>terminal</var>. A value of
+      <code>no-conversion</code> means no decoding is done. If
+      <var>terminal</var> is omitted or <code>nil</code>, it means
+      the selected frame&rsquo;s terminal. See <a href=
+      "Multiple-Terminals.html#Multiple-Terminals">Multiple
+      Terminals</a>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-set_002dterminal_002dcoding_002dsystem"></a>Command: <strong>set-terminal-coding-system</strong> <em>coding-system &amp;optional terminal</em></dt>
-<dd><p>This command specifies <var>coding-system</var> as the coding system to use
-for encoding terminal output from <var>terminal</var>.  If
-<var>coding-system</var> is <code>nil</code>, that means not to encode terminal
-output.  If <var>terminal</var> is a frame, it means that frame&rsquo;s terminal;
-if it is <code>nil</code>, that means the currently selected frame&rsquo;s
-terminal.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dkeyboard_002dcoding_002dsystem" id=
+    "index-set_002dkeyboard_002dcoding_002dsystem"></a>Command:
+    <strong>set-keyboard-coding-system</strong> <em>coding-system
+    &amp;optional terminal</em></dt>
 
+    <dd>
+      <p>This command specifies <var>coding-system</var> as the
+      coding system to use for decoding keyboard input from
+      <var>terminal</var>. If <var>coding-system</var> is
+      <code>nil</code>, that means not to decode keyboard input. If
+      <var>terminal</var> is a frame, it means that frame&rsquo;s
+      terminal; if it is <code>nil</code>, that means the currently
+      selected frame&rsquo;s terminal. See <a href=
+      "Multiple-Terminals.html#Multiple-Terminals">Multiple
+      Terminals</a>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-terminal_002dcoding_002dsystem" id=
+    "index-terminal_002dcoding_002dsystem"></a>Function:
+    <strong>terminal-coding-system</strong> <em>&amp;optional
+    terminal</em></dt>
 
+    <dd>
+      <p>This function returns the coding system that is in use for
+      encoding terminal output from <var>terminal</var>. A value of
+      <code>no-conversion</code> means no encoding is done. If
+      <var>terminal</var> is a frame, it means that frame&rsquo;s
+      terminal; if it is <code>nil</code>, that means the currently
+      selected frame&rsquo;s terminal.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-set_002dterminal_002dcoding_002dsystem" id=
+    "index-set_002dterminal_002dcoding_002dsystem"></a>Command:
+    <strong>set-terminal-coding-system</strong> <em>coding-system
+    &amp;optional terminal</em></dt>
+
+    <dd>
+      <p>This command specifies <var>coding-system</var> as the
+      coding system to use for encoding terminal output from
+      <var>terminal</var>. If <var>coding-system</var> is
+      <code>nil</code>, that means not to encode terminal output.
+      If <var>terminal</var> is a frame, it means that
+      frame&rsquo;s terminal; if it is <code>nil</code>, that means
+      the currently selected frame&rsquo;s terminal.</p>
+    </dd>
+  </dl>
 </body>
 </html>

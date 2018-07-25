@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Schema locating file syntax basics - nXML Mode</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="nXML Mode">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Schema-locating-files.html#Schema-locating-files" title="Schema locating files">
-<link rel="next" href="Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema" title="Using the document's URI to locate a schema">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Schema locating file syntax basics - nXML Mode</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="nXML Mode" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Schema-locating-files.html#Schema-locating-files" title=
+  "Schema locating files" />
+  <link rel="next" href=
+  "Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema"
+  title="Using the document's URI to locate a schema" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual documents nxml-mode, an Emacs major mode for editing
 XML with RELAX NG support.
 
@@ -33,8 +43,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,53 +56,75 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Schema-locating-file-syntax-basics"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema">Using the document's URI to locate a schema</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Schema-locating-files.html#Schema-locating-files">Schema locating files</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Schema-locating-file-syntax-basics" id=
+    "Schema-locating-file-syntax-basics"></a>
 
-<h4 class="subsection">6.2.1 Schema locating file syntax basics</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Using-the-document_0027s-URI-to-locate-a-schema.html#Using-the-document_0027s-URI-to-locate-a-schema">Using
+    the document's URI to locate a schema</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Schema-locating-files.html#Schema-locating-files">Schema
+    locating files</a></p>
+    <hr />
+  </div>
 
-<p>There is a schema for schema locating files in the file
-&lsquo;<samp><span class="samp">locate.rnc</span></samp>&rsquo; in the schema directory.  Schema locating
-files must be valid with respect to this schema.
+  <h4 class="subsection">6.2.1 Schema locating file syntax
+  basics</h4>
 
-   <p>The document element of a schema locating file must be
-&lsquo;<samp><span class="samp">locatingRules</span></samp>&rsquo; and the namespace URI must be
-&lsquo;<samp><span class="samp">http://thaiopensource.com/ns/locating-rules/1.0</span></samp>&rsquo;.  The
-children of the document element specify rules. The order of the
-children is the same as the order of the rules.  Here's a complete
-example of a schema locating file:
+  <p>There is a schema for schema locating files in the file
+  &lsquo;<samp><span class="samp">locate.rnc</span></samp>&rsquo;
+  in the schema directory. Schema locating files must be valid with
+  respect to this schema.</p>
 
-<pre class="example">     &lt;?xml version="1.0"?&gt;
+  <p>The document element of a schema locating file must be
+  &lsquo;<samp><span class=
+  "samp">locatingRules</span></samp>&rsquo; and the namespace URI
+  must be &lsquo;<samp><span class=
+  "samp">http://thaiopensource.com/ns/locating-rules/1.0</span></samp>&rsquo;.
+  The children of the document element specify rules. The order of
+  the children is the same as the order of the rules. Here's a
+  complete example of a schema locating file:</p>
+  <pre class="example">
+     &lt;?xml version="1.0"?&gt;
      &lt;locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0"&gt;
        &lt;namespace ns="http://www.w3.org/1999/xhtml" uri="xhtml.rnc"/&gt;
        &lt;documentElement localName="book" uri="docbook.rnc"/&gt;
      &lt;/locatingRules&gt;
 </pre>
-   <p class="noindent">This says to use the schema &lsquo;<samp><span class="samp">xhtml.rnc</span></samp>&rsquo; for a document with
-namespace &lsquo;<samp><span class="samp">http://www.w3.org/1999/xhtml</span></samp>&rsquo;, and to use the
-schema &lsquo;<samp><span class="samp">docbook.rnc</span></samp>&rsquo; for a document whose local name is
-&lsquo;<samp><span class="samp">book</span></samp>&rsquo;.  If the document element had both a namespace URI
-of &lsquo;<samp><span class="samp">http://www.w3.org/1999/xhtml</span></samp>&rsquo; and a local name of
-&lsquo;<samp><span class="samp">book</span></samp>&rsquo;, then the matching rule that comes first will be
-used and so the schema &lsquo;<samp><span class="samp">xhtml.rnc</span></samp>&rsquo; would be used.  There is
-no precedence between different types of rule; the first matching rule
-of any type is used.
 
-   <p>As usual with XML-related technologies, resources are identified
-by URIs.  The &lsquo;<samp><span class="samp">uri</span></samp>&rsquo; attribute identifies the schema by
-specifying the URI.  The URI may be relative.  If so, it is resolved
-relative to the URI of the schema locating file that contains
-attribute. This means that if the value of &lsquo;<samp><span class="samp">uri</span></samp>&rsquo; attribute
-does not contain a &lsquo;<samp><span class="samp">/</span></samp>&rsquo;, then it will refer to a filename in
-the same directory as the schema locating file.
+  <p class="noindent">This says to use the schema
+  &lsquo;<samp><span class="samp">xhtml.rnc</span></samp>&rsquo;
+  for a document with namespace &lsquo;<samp><span class=
+  "samp">http://www.w3.org/1999/xhtml</span></samp>&rsquo;, and to
+  use the schema &lsquo;<samp><span class=
+  "samp">docbook.rnc</span></samp>&rsquo; for a document whose
+  local name is &lsquo;<samp><span class=
+  "samp">book</span></samp>&rsquo;. If the document element had
+  both a namespace URI of &lsquo;<samp><span class=
+  "samp">http://www.w3.org/1999/xhtml</span></samp>&rsquo; and a
+  local name of &lsquo;<samp><span class=
+  "samp">book</span></samp>&rsquo;, then the matching rule that
+  comes first will be used and so the schema
+  &lsquo;<samp><span class="samp">xhtml.rnc</span></samp>&rsquo;
+  would be used. There is no precedence between different types of
+  rule; the first matching rule of any type is used.</p>
 
-   </body></html>
-
+  <p>As usual with XML-related technologies, resources are
+  identified by URIs. The &lsquo;<samp><span class=
+  "samp">uri</span></samp>&rsquo; attribute identifies the schema
+  by specifying the URI. The URI may be relative. If so, it is
+  resolved relative to the URI of the schema locating file that
+  contains attribute. This means that if the value of
+  &lsquo;<samp><span class="samp">uri</span></samp>&rsquo;
+  attribute does not contain a &lsquo;<samp><span class=
+  "samp">/</span></samp>&rsquo;, then it will refer to a filename
+  in the same directory as the schema locating file.</p>
+</body>
+</html>

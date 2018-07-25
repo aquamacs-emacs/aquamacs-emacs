@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the manual for the url Emacs Lisp library.
 
 Copyright (C) 1993-1999, 2002, 2004-2016 Free Software
@@ -15,99 +17,142 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>URL Programmer&rsquo;s Manual: mailto</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="URL Programmer&rsquo;s Manual: mailto">
-<meta name="keywords" content="URL Programmer&rsquo;s Manual: mailto">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Supported-URL-Types.html#Supported-URL-Types" rel="up" title="Supported URL Types">
-<link href="news_002fnntp_002fsnews.html#news_002fnntp_002fsnews" rel="next" title="news/nntp/snews">
-<link href="info.html#info" rel="prev" title="info">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>URL Programmer&rsquo;s Manual: mailto</title>
+  <meta name="description" content=
+  "URL Programmer&rsquo;s Manual: mailto" />
+  <meta name="keywords" content=
+  "URL Programmer&rsquo;s Manual: mailto" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Supported-URL-Types.html#Supported-URL-Types" rel=
+  "up" title="Supported URL Types" />
+  <link href="news_002fnntp_002fsnews.html#news_002fnntp_002fsnews"
+  rel="next" title="news/nntp/snews" />
+  <link href="info.html#info" rel="prev" title="info" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="mailto"></a>
-<div class="header">
-<p>
-Next: <a href="news_002fnntp_002fsnews.html#news_002fnntp_002fsnews" accesskey="n" rel="next">news/nntp/snews</a>, Previous: <a href="info.html#info" accesskey="p" rel="prev">info</a>, Up: <a href="Supported-URL-Types.html#Supported-URL-Types" accesskey="u" rel="up">Supported URL Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="mailto-1"></a>
-<h3 class="section">4.4 mailto</h3>
+<body lang="en" xml:lang="en">
+  <a name="mailto" id="mailto"></a>
 
-<a name="index-mailto"></a>
-<a name="index-email"></a>
-<p>A <code>mailto</code> URL specifies an email message to be sent to a given
-email address.  For example, &lsquo;<samp>mailto:foo@bar.com</samp>&rsquo; specifies
-sending a message to &lsquo;<samp>foo@bar.com</samp>&rsquo;.  The &ldquo;retrieval method&rdquo;
-for such URLs is to open a mail composition buffer in which the
-appropriate content (e.g., the recipient address) has been filled in.
-</p>
-<p>As defined in RFC 6068, a <code>mailto</code> URL can have the form
-</p>
-<div class="example">
-<pre class="example">&lsquo;<samp>mailto:<var>mailbox</var>[?<var>header</var>=<var>contents</var>[&amp;<var>header</var>=<var>contents</var>]]</samp>&rsquo;
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "news_002fnntp_002fsnews.html#news_002fnntp_002fsnews"
+    accesskey="n" rel="next">news/nntp/snews</a>, Previous:
+    <a href="info.html#info" accesskey="p" rel="prev">info</a>, Up:
+    <a href="Supported-URL-Types.html#Supported-URL-Types"
+    accesskey="u" rel="up">Supported URL Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="mailto-1" id="mailto-1"></a>
 
-<p>where an arbitrary number of <var>header</var>s can be added.  If the
-<var>header</var> is &lsquo;<samp>body</samp>&rsquo;, then <var>contents</var> is put in the message
-body; otherwise, a <var>header</var> header field is created with
-<var>contents</var> as its contents.  Note that the <code>url</code> library does
-not perform any checking of <var>header</var> or <var>contents</var>, so you
-should check them before sending the message.
-</p>
-<dl>
-<dt><a name="index-url_002dmail_002dcommand"></a>User Option: <strong>url-mail-command</strong></dt>
-<dd><a name="index-mail_002duser_002dagent"></a>
-<p>The value of this variable is the function called whenever url needs
-to send mail.  This should normally be left its default, which is the
-standard mail-composition command <code>compose-mail</code>.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Sending-Mail.html#Sending-Mail">Sending
-Mail</a> in <cite>The GNU Emacs Manual</cite>.
-</p></dd></dl>
+  <h3 class="section">4.4 mailto</h3><a name="index-mailto" id=
+  "index-mailto"></a> <a name="index-email" id="index-email"></a>
 
-<p>If the document containing the <code>mailto</code> URL itself possessed a
-known URL, Emacs automatically inserts an &lsquo;<samp>X-Url-From</samp>&rsquo; header
-field into the mail buffer, specifying that URL.
-</p>
+  <p>A <code>mailto</code> URL specifies an email message to be
+  sent to a given email address. For example,
+  &lsquo;<samp>mailto:foo@bar.com</samp>&rsquo; specifies sending a
+  message to &lsquo;<samp>foo@bar.com</samp>&rsquo;. The
+  &ldquo;retrieval method&rdquo; for such URLs is to open a mail
+  composition buffer in which the appropriate content (e.g., the
+  recipient address) has been filled in.</p>
 
+  <p>As defined in RFC 6068, a <code>mailto</code> URL can have the
+  form</p>
 
+  <div class="example">
+    <pre class="example">
+&lsquo;<samp>mailto:<var>mailbox</var>[?<var>header</var>=<var>contents</var>[&amp;<var>header</var>=<var>contents</var>]]</samp>&rsquo;
+</pre>
+  </div>
 
+  <p>where an arbitrary number of <var>header</var>s can be added.
+  If the <var>header</var> is &lsquo;<samp>body</samp>&rsquo;, then
+  <var>contents</var> is put in the message body; otherwise, a
+  <var>header</var> header field is created with
+  <var>contents</var> as its contents. Note that the
+  <code>url</code> library does not perform any checking of
+  <var>header</var> or <var>contents</var>, so you should check
+  them before sending the message.</p>
+
+  <dl>
+    <dt><a name="index-url_002dmail_002dcommand" id=
+    "index-url_002dmail_002dcommand"></a>User Option:
+    <strong>url-mail-command</strong></dt>
+
+    <dd>
+      <a name="index-mail_002duser_002dagent" id=
+      "index-mail_002duser_002dagent"></a>
+
+      <p>The value of this variable is the function called whenever
+      url needs to send mail. This should normally be left its
+      default, which is the standard mail-composition command
+      <code>compose-mail</code>. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Sending-Mail.html#Sending-Mail">
+      Sending Mail</a> in <cite>The GNU Emacs Manual</cite>.</p>
+    </dd>
+  </dl>
+
+  <p>If the document containing the <code>mailto</code> URL itself
+  possessed a known URL, Emacs automatically inserts an
+  &lsquo;<samp>X-Url-From</samp>&rsquo; header field into the mail
+  buffer, specifying that URL.</p>
 </body>
 </html>

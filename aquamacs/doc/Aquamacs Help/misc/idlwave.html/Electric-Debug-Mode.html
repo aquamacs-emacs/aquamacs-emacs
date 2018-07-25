@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,185 +20,422 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Electric Debug Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Electric Debug Mode">
-<meta name="keywords" content="IDLWAVE User Manual: Electric Debug Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" rel="up" title="Debugging IDL Programs">
-<link href="Examining-Variables.html#Examining-Variables" rel="next" title="Examining Variables">
-<link href="Walking-the-Calling-Stack.html#Walking-the-Calling-Stack" rel="prev" title="Walking the Calling Stack">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Electric Debug Mode</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Electric Debug Mode" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Electric Debug Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugging-IDL-Programs.html#Debugging-IDL-Programs"
+  rel="up" title="Debugging IDL Programs" />
+  <link href="Examining-Variables.html#Examining-Variables" rel=
+  "next" title="Examining Variables" />
+  <link href=
+  "Walking-the-Calling-Stack.html#Walking-the-Calling-Stack" rel=
+  "prev" title="Walking the Calling Stack" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Electric-Debug-Mode"></a>
-<div class="header">
-<p>
-Previous: <a href="Walking-the-Calling-Stack.html#Walking-the-Calling-Stack" accesskey="p" rel="prev">Walking the Calling Stack</a>, Up: <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" accesskey="u" rel="up">Debugging IDL Programs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Electric-Debug-Mode-1"></a>
-<h4 class="subsection">5.4.6 Electric Debug Mode</h4>
-<a name="index-Electric-Debug-Mode-1"></a>
-<a name="index-_002aDebugging_002a"></a>
+<body lang="en" xml:lang="en">
+  <a name="Electric-Debug-Mode" id="Electric-Debug-Mode"></a>
 
-<p>Even with a convenient debug key prefix enabled, repetitive stepping,
-variable examination (see <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a>), and other debugging
-activities can be awkward and slow using commands which require multiple
-keystrokes.  Luckily, there&rsquo;s a better way, inspired by the lisp e-debug
-mode, and available through the <em>Electric Debug Mode</em>.  By default,
-as soon as a breakpoint is hit, this minor mode is enabled.  The buffer
-showing the line where execution has halted is switched to Electric
-Debug Mode.  This mode is visible as &lsquo;<samp>*Debugging*</samp>&rsquo; in the mode
-line, and a different face (violet by default, if color is available)
-for the line stopped at point.  The buffer is made read-only and
-single-character bindings for the most commonly used debugging commands
-are enabled.  These character commands (a list of which is available
-with <kbd>C-?</kbd>) are:
-</p>
-<table>
-<tr><td width="20%"><kbd>a</kbd></td><td width="80%">Clear all breakpoints (<code>idlwave-shell-clear-all-bp</code>)</td></tr>
-<tr><td width="20%"><kbd>b</kbd></td><td width="80%">Set breakpoint, <kbd>C-u b</kbd> for a conditional break, <kbd>C-n b</kbd> for nth hit (<code>idlwave-shell-break-here</code>)</td></tr>
-<tr><td width="20%"><kbd>d</kbd></td><td width="80%">Clear current breakpoint (<code>idlwave-shell-clear-current-bp</code>)</td></tr>
-<tr><td width="20%"><kbd>e</kbd></td><td width="80%">Prompt for expression to print (<code>idlwave-shell-clear-current-bp</code>).</td></tr>
-<tr><td width="20%"><kbd>h</kbd></td><td width="80%">Continue to the line at cursor position (<code>idlwave-shell-to-here</code>)</td></tr>
-<tr><td width="20%"><kbd>i</kbd></td><td width="80%">Set breakpoint in module named here (<code>idlwave-shell-break-in</code>)</td></tr>
-<tr><td width="20%"><kbd>[</kbd></td><td width="80%">Go to the previous breakpoint in the file (<code>idlwave-shell-goto-previous-bp</code>)</td></tr>
-<tr><td width="20%"><kbd>]</kbd></td><td width="80%">Go to the next breakpoint in the file
-(<code>idlwave-shell-goto-next-bp</code>)</td></tr>
-<tr><td width="20%"><kbd>\</kbd></td><td width="80%">Disable/Enable current breakpoint (<code>idlwave-shell-toggle-enable-current-bp</code>)</td></tr>
-<tr><td width="20%"><kbd>j</kbd></td><td width="80%">Set breakpoint at beginning of enclosing routine (<code>idlwave-shell-break-this-module</code>)</td></tr>
-<tr><td width="20%"><kbd>k</kbd></td><td width="80%">Skip one statement (<code>idlwave-shell-skip</code>)</td></tr>
-<tr><td width="20%"><kbd>m</kbd></td><td width="80%">Continue to end of function (<code>idlwave-shell-return</code>)</td></tr>
-<tr><td width="20%"><kbd>n</kbd></td><td width="80%">Step, over function calls (<code>idlwave-shell-stepover</code>)</td></tr>
-<tr><td width="20%"><kbd>o</kbd></td><td width="80%">Continue past end of function (<code>idlwave-shell-out</code>)</td></tr>
-<tr><td width="20%"><kbd>p</kbd></td><td width="80%">Print expression near point or in region with <kbd>C-u p</kbd> (<code>idlwave-shell-print</code>)</td></tr>
-<tr><td width="20%"><kbd>q</kbd></td><td width="80%">End the debugging session and return to the Shell&rsquo;s main level
-(<code>idlwave-shell-retall</code>)</td></tr>
-<tr><td width="20%"><kbd>r</kbd></td><td width="80%">Continue execution to next breakpoint, if any (<code>idlwave-shell-cont</code>)</td></tr>
-<tr><td width="20%"><kbd>s</kbd> or <kbd><span class="key">SPACE</span></kbd></td><td width="80%">Step, into function calls (<code>idlwave-shell-step</code>)</td></tr>
-<tr><td width="20%"><kbd>t</kbd></td><td width="80%">Print a calling-level traceback in the shell</td></tr>
-<tr><td width="20%"><kbd>u</kbd></td><td width="80%">Continue to end of block (<code>idlwave-shell-up</code>)</td></tr>
-<tr><td width="20%"><kbd>v</kbd></td><td width="80%">Turn Electric Debug Mode off
-(<code>idlwave-shell-electric-debug-mode</code>)</td></tr>
-<tr><td width="20%"><kbd>x</kbd></td><td width="80%">Examine expression near point (or in region with <kbd>C-u x</kbd>)
-with shortcut of examine type.</td></tr>
-<tr><td width="20%"><kbd>z</kbd></td><td width="80%">Reset IDL (<code>idlwave-shell-reset</code>)</td></tr>
-<tr><td width="20%"><kbd>+</kbd> or <kbd>=</kbd></td><td width="80%">Show higher level in calling stack (<code>idlwave-shell-stack-up</code>)</td></tr>
-<tr><td width="20%"><kbd>-</kbd> or <kbd>_</kbd></td><td width="80%">Show lower level in calling stack (<code>idlwave-shell-stack-down</code>)</td></tr>
-<tr><td width="20%"><kbd>?</kbd></td><td width="80%">Help on expression near point or in region with <kbd>C-u ?</kbd>
-(<code>idlwave-shell-help-expression</code>)</td></tr>
-<tr><td width="20%"><kbd>C-?</kbd></td><td width="80%">Show help on the commands available.</td></tr>
-</table>
+  <div class="header">
+    <p>Previous: <a href=
+    "Walking-the-Calling-Stack.html#Walking-the-Calling-Stack"
+    accesskey="p" rel="prev">Walking the Calling Stack</a>, Up:
+    <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs"
+    accesskey="u" rel="up">Debugging IDL Programs</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Electric-Debug-Mode-1" id="Electric-Debug-Mode-1"></a>
 
-<p>Most single-character electric debug bindings use the final keystroke
-of the equivalent multiple key commands (which are of course also
-still available), but some differ (e.g., <kbd>e</kbd>,<kbd>t</kbd>,<kbd>q</kbd>,<kbd>x</kbd>).
-Some have additional convenience bindings (like <kbd><span class="key">SPACE</span></kbd> for
-stepping).  All prefix and other argument options described in this
-section for the commands invoked by electric debug bindings are still
-valid.  For example, <kbd>C-u b</kbd> sets a conditional breakpoint, just
-as it did with <kbd>C-u C-c C-d C-b</kbd>.
-</p>
-<p>You can toggle the electric debug mode at any time in a buffer using
-<kbd>C-c C-d C-v</kbd> (<kbd>v</kbd> to turn it off while in the mode), or from
-the Debug menu.  Normally the mode will be enabled and disabled at the
-appropriate times, but occasionally you might want to edit a file
-while still debugging it, or switch to the mode for conveniently
-setting lots of breakpoints.
-</p>
-<p>To quickly abandon a debugging session and return to normal editing at
-the Shell&rsquo;s main level, use <kbd>q</kbd> (<code>idlwave-shell-retall</code>).
-This disables electric debug mode in all IDLWAVE buffers<a name="DOCF4" href="#FOOT4"><sup>4</sup></a>.  Help is
-available for the command shortcuts with <kbd>C-?</kbd>.  If you find this
-mode gets in your way, you can keep it from automatically activating
-by setting the variable <code>idlwave-shell-automatic-electric-debug</code>
-to <code>nil</code>, or <code>'breakpoint</code>.  If you&rsquo;d like the convenient
-electric debug shortcuts available also when run-time errors are
-encountered, set to <code>t</code>.
-</p>
-<dl>
-<dt><a name="index-idlwave_002dshell_002dautomatic_002delectric_002ddebug"></a>User Option: <strong>idlwave-shell-automatic-electric-debug</strong> <em>(<code>'breakpoint</code>)</em></dt>
-<dd><p>Whether to enter electric debug mode automatically when a breakpoint
-or run-time error is encountered, and then disable it in all buffers
-when the $MAIN$ level is reached (either through normal program
-execution, or retall).  In addition to <code>nil</code> for never, and
-<code>t</code> for both breakpoints and errors, this can be
-<code>'breakpoint</code> (the default) to enable it only at breakpoint
-halts.
-</p></dd></dl>
+  <h4 class="subsection">5.4.6 Electric Debug Mode</h4><a name=
+  "index-Electric-Debug-Mode-1" id=
+  "index-Electric-Debug-Mode-1"></a> <a name=
+  "index-_002aDebugging_002a" id="index-_002aDebugging_002a"></a>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002delectric_002dstop_002dcolor"></a>User Option: <strong>idlwave-shell-electric-stop-color</strong> <em>(Violet)</em></dt>
-<dd><p>Default color of the stopped line overlay when in electric debug mode.
-</p></dd></dl>
+  <p>Even with a convenient debug key prefix enabled, repetitive
+  stepping, variable examination (see <a href=
+  "Examining-Variables.html#Examining-Variables">Examining
+  Variables</a>), and other debugging activities can be awkward and
+  slow using commands which require multiple keystrokes. Luckily,
+  there&rsquo;s a better way, inspired by the lisp e-debug mode,
+  and available through the <em>Electric Debug Mode</em>. By
+  default, as soon as a breakpoint is hit, this minor mode is
+  enabled. The buffer showing the line where execution has halted
+  is switched to Electric Debug Mode. This mode is visible as
+  &lsquo;<samp>*Debugging*</samp>&rsquo; in the mode line, and a
+  different face (violet by default, if color is available) for the
+  line stopped at point. The buffer is made read-only and
+  single-character bindings for the most commonly used debugging
+  commands are enabled. These character commands (a list of which
+  is available with <kbd>C-?</kbd>) are:</p>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002delectric_002dstop_002dline_002dface"></a>User Option: <strong>idlwave-shell-electric-stop-line-face</strong></dt>
-<dd><p>The face to use for the stopped line.  Defaults to a face similar to the
-modeline, with color <code>idlwave-shell-electric-stop-color</code>.
-</p></dd></dl>
+  <table>
+    <tr>
+      <td width="20%"><kbd>a</kbd></td>
 
-<dl>
-<dt><a name="index-idlwave_002dshell_002delectric_002dzap_002dto_002dfile"></a>User Option: <strong>idlwave-shell-electric-zap-to-file</strong> <em>(<code>t</code>)</em></dt>
-<dd><p>If set, when entering electric debug mode, select the window displaying
-the file where point is stopped.  This takes point away from the shell
-window, but is useful for immediate stepping, etc.
-</p></dd></dl>
+      <td width="80%">Clear all breakpoints
+      (<code>idlwave-shell-clear-all-bp</code>)</td>
+    </tr>
 
-<A NAME="EXAMINE"></A><div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <tr>
+      <td width="20%"><kbd>b</kbd></td>
 
-<h3><a name="FOOT4" href="#DOCF4">(4)</a></h3>
-<p>Note
-that this binding is not symmetric: <kbd>C-c C-d C-q</kbd> is bound to
-<code>idlwave-shell-quit</code>, which quits your IDL session.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Walking-the-Calling-Stack.html#Walking-the-Calling-Stack" accesskey="p" rel="prev">Walking the Calling Stack</a>, Up: <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" accesskey="u" rel="up">Debugging IDL Programs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <td width="80%">Set breakpoint, <kbd>C-u b</kbd> for a
+      conditional break, <kbd>C-n b</kbd> for nth hit
+      (<code>idlwave-shell-break-here</code>)</td>
+    </tr>
 
+    <tr>
+      <td width="20%"><kbd>d</kbd></td>
 
+      <td width="80%">Clear current breakpoint
+      (<code>idlwave-shell-clear-current-bp</code>)</td>
+    </tr>
 
+    <tr>
+      <td width="20%"><kbd>e</kbd></td>
+
+      <td width="80%">Prompt for expression to print
+      (<code>idlwave-shell-clear-current-bp</code>).</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>h</kbd></td>
+
+      <td width="80%">Continue to the line at cursor position
+      (<code>idlwave-shell-to-here</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>i</kbd></td>
+
+      <td width="80%">Set breakpoint in module named here
+      (<code>idlwave-shell-break-in</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>[</kbd></td>
+
+      <td width="80%">Go to the previous breakpoint in the file
+      (<code>idlwave-shell-goto-previous-bp</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>]</kbd></td>
+
+      <td width="80%">Go to the next breakpoint in the file
+      (<code>idlwave-shell-goto-next-bp</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>\</kbd></td>
+
+      <td width="80%">Disable/Enable current breakpoint
+      (<code>idlwave-shell-toggle-enable-current-bp</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>j</kbd></td>
+
+      <td width="80%">Set breakpoint at beginning of enclosing
+      routine (<code>idlwave-shell-break-this-module</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>k</kbd></td>
+
+      <td width="80%">Skip one statement
+      (<code>idlwave-shell-skip</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>m</kbd></td>
+
+      <td width="80%">Continue to end of function
+      (<code>idlwave-shell-return</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>n</kbd></td>
+
+      <td width="80%">Step, over function calls
+      (<code>idlwave-shell-stepover</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>o</kbd></td>
+
+      <td width="80%">Continue past end of function
+      (<code>idlwave-shell-out</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>p</kbd></td>
+
+      <td width="80%">Print expression near point or in region with
+      <kbd>C-u p</kbd> (<code>idlwave-shell-print</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>q</kbd></td>
+
+      <td width="80%">End the debugging session and return to the
+      Shell&rsquo;s main level
+      (<code>idlwave-shell-retall</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>r</kbd></td>
+
+      <td width="80%">Continue execution to next breakpoint, if any
+      (<code>idlwave-shell-cont</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>s</kbd> or <kbd><span class=
+      "key">SPACE</span></kbd></td>
+
+      <td width="80%">Step, into function calls
+      (<code>idlwave-shell-step</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>t</kbd></td>
+
+      <td width="80%">Print a calling-level traceback in the
+      shell</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>u</kbd></td>
+
+      <td width="80%">Continue to end of block
+      (<code>idlwave-shell-up</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>v</kbd></td>
+
+      <td width="80%">Turn Electric Debug Mode off
+      (<code>idlwave-shell-electric-debug-mode</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>x</kbd></td>
+
+      <td width="80%">Examine expression near point (or in region
+      with <kbd>C-u x</kbd>) with shortcut of examine type.</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>z</kbd></td>
+
+      <td width="80%">Reset IDL
+      (<code>idlwave-shell-reset</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>+</kbd> or <kbd>=</kbd></td>
+
+      <td width="80%">Show higher level in calling stack
+      (<code>idlwave-shell-stack-up</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>-</kbd> or <kbd>_</kbd></td>
+
+      <td width="80%">Show lower level in calling stack
+      (<code>idlwave-shell-stack-down</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>?</kbd></td>
+
+      <td width="80%">Help on expression near point or in region
+      with <kbd>C-u ?</kbd>
+      (<code>idlwave-shell-help-expression</code>)</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>C-?</kbd></td>
+
+      <td width="80%">Show help on the commands available.</td>
+    </tr>
+  </table>
+
+  <p>Most single-character electric debug bindings use the final
+  keystroke of the equivalent multiple key commands (which are of
+  course also still available), but some differ (e.g.,
+  <kbd>e</kbd>,<kbd>t</kbd>,<kbd>q</kbd>,<kbd>x</kbd>). Some have
+  additional convenience bindings (like <kbd><span class=
+  "key">SPACE</span></kbd> for stepping). All prefix and other
+  argument options described in this section for the commands
+  invoked by electric debug bindings are still valid. For example,
+  <kbd>C-u b</kbd> sets a conditional breakpoint, just as it did
+  with <kbd>C-u C-c C-d C-b</kbd>.</p>
+
+  <p>You can toggle the electric debug mode at any time in a buffer
+  using <kbd>C-c C-d C-v</kbd> (<kbd>v</kbd> to turn it off while
+  in the mode), or from the Debug menu. Normally the mode will be
+  enabled and disabled at the appropriate times, but occasionally
+  you might want to edit a file while still debugging it, or switch
+  to the mode for conveniently setting lots of breakpoints.</p>
+
+  <p>To quickly abandon a debugging session and return to normal
+  editing at the Shell&rsquo;s main level, use <kbd>q</kbd>
+  (<code>idlwave-shell-retall</code>). This disables electric debug
+  mode in all IDLWAVE buffers<a name="DOCF4" href="#FOOT4" id=
+  "DOCF4"><sup>4</sup></a>. Help is available for the command
+  shortcuts with <kbd>C-?</kbd>. If you find this mode gets in your
+  way, you can keep it from automatically activating by setting the
+  variable <code>idlwave-shell-automatic-electric-debug</code> to
+  <code>nil</code>, or <code>'breakpoint</code>. If you&rsquo;d
+  like the convenient electric debug shortcuts available also when
+  run-time errors are encountered, set to <code>t</code>.</p>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002dautomatic_002delectric_002ddebug"
+    id=
+    "index-idlwave_002dshell_002dautomatic_002delectric_002ddebug"></a>User
+    Option: <strong>idlwave-shell-automatic-electric-debug</strong>
+    <em>(<code>'breakpoint</code>)</em></dt>
+
+    <dd>
+      <p>Whether to enter electric debug mode automatically when a
+      breakpoint or run-time error is encountered, and then disable
+      it in all buffers when the $MAIN$ level is reached (either
+      through normal program execution, or retall). In addition to
+      <code>nil</code> for never, and <code>t</code> for both
+      breakpoints and errors, this can be <code>'breakpoint</code>
+      (the default) to enable it only at breakpoint halts.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002delectric_002dstop_002dcolor" id=
+    "index-idlwave_002dshell_002delectric_002dstop_002dcolor"></a>User
+    Option: <strong>idlwave-shell-electric-stop-color</strong>
+    <em>(Violet)</em></dt>
+
+    <dd>
+      <p>Default color of the stopped line overlay when in electric
+      debug mode.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002delectric_002dstop_002dline_002dface"
+    id=
+    "index-idlwave_002dshell_002delectric_002dstop_002dline_002dface">
+    </a>User Option:
+    <strong>idlwave-shell-electric-stop-line-face</strong></dt>
+
+    <dd>
+      <p>The face to use for the stopped line. Defaults to a face
+      similar to the modeline, with color
+      <code>idlwave-shell-electric-stop-color</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dshell_002delectric_002dzap_002dto_002dfile"
+    id=
+    "index-idlwave_002dshell_002delectric_002dzap_002dto_002dfile"></a>User
+    Option: <strong>idlwave-shell-electric-zap-to-file</strong>
+    <em>(<code>t</code>)</em></dt>
+
+    <dd>
+      <p>If set, when entering electric debug mode, select the
+      window displaying the file where point is stopped. This takes
+      point away from the shell window, but is useful for immediate
+      stepping, etc.</p>
+    </dd>
+  </dl><a name="EXAMINE" id="EXAMINE"></a>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT4" href="#DOCF4" id="FOOT4">(4)</a></h3>
+
+    <p>Note that this binding is not symmetric: <kbd>C-c C-d
+    C-q</kbd> is bound to <code>idlwave-shell-quit</code>, which
+    quits your IDL session.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Walking-the-Calling-Stack.html#Walking-the-Calling-Stack"
+    accesskey="p" rel="prev">Walking the Calling Stack</a>, Up:
+    <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs"
+    accesskey="u" rel="up">Debugging IDL Programs</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

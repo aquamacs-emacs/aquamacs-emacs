@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Miscellaneous - Forms Mode User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Forms Mode User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Modifying-Forms-Contents.html#Modifying-Forms-Contents" title="Modifying Forms Contents">
-<link rel="next" href="Error-Messages.html#Error-Messages" title="Error Messages">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Miscellaneous - Forms Mode User's Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Forms Mode User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Modifying-Forms-Contents.html#Modifying-Forms-Contents" title=
+  "Modifying Forms Contents" />
+  <link rel="next" href="Error-Messages.html#Error-Messages" title=
+  "Error Messages" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Forms mode, a form-editing major mode for GNU Emacs.
 
 Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
@@ -26,8 +35,10 @@ Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,50 +48,65 @@ Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Miscellaneous"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Error-Messages.html#Error-Messages">Error Messages</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Modifying-Forms-Contents.html#Modifying-Forms-Contents">Modifying Forms Contents</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Miscellaneous" id="Miscellaneous"></a>
 
-<h2 class="chapter">8 Miscellaneous</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Error-Messages.html#Error-Messages">Error Messages</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Modifying-Forms-Contents.html#Modifying-Forms-Contents">Modifying
+    Forms Contents</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-forms_002dversion-59"></a>The global variable <code>forms-version</code> holds the version information
-of the Forms mode software.
+  <h2 class="chapter">8 Miscellaneous</h2>
 
-   <p><a name="index-forms_002denumerate-60"></a>It is very convenient to use symbolic names for the fields in a record. 
-The function <code>forms-enumerate</code> provides an elegant means to define
-a series of variables whose values are consecutive integers.  The
-function returns the highest number used, so it can be used to set
-<code>forms-number-of-fields</code> also.  For example:
+  <p><a name="index-forms_002dversion-59" id=
+  "index-forms_002dversion-59"></a>The global variable
+  <code>forms-version</code> holds the version information of the
+  Forms mode software.</p>
 
-<pre class="example">     (setq forms-number-of-fields
+  <p><a name="index-forms_002denumerate-60" id=
+  "index-forms_002denumerate-60"></a>It is very convenient to use
+  symbolic names for the fields in a record. The function
+  <code>forms-enumerate</code> provides an elegant means to define
+  a series of variables whose values are consecutive integers. The
+  function returns the highest number used, so it can be used to
+  set <code>forms-number-of-fields</code> also. For example:</p>
+  <pre class="example">
+     (setq forms-number-of-fields
            (forms-enumerate
             '(field1 field2 field3 ...)))
 </pre>
-   <p>This sets <code>field1</code> to 1, <code>field2</code> to 2, and so on.
 
-   <p>Care has been taken to keep the Forms mode variables buffer-local, so it
-is possible to visit multiple files in Forms mode simultaneously, even
-if they have different properties.
+  <p>This sets <code>field1</code> to 1, <code>field2</code> to 2,
+  and so on.</p>
 
-   <p><a name="index-forms_002dmode-61"></a>If you have visited the control file in normal fashion with
-<code>find-file</code> or a like command, you can switch to Forms mode with
-the command <code>M-x forms-mode</code>.  If you put &lsquo;<samp><span class="samp">-*- forms -*-</span></samp>&rsquo; in
-the first line of the control file, then visiting it enables Forms mode
-automatically.  But this makes it hard to edit the control file itself,
-so you'd better think twice before using this.
+  <p>Care has been taken to keep the Forms mode variables
+  buffer-local, so it is possible to visit multiple files in Forms
+  mode simultaneously, even if they have different properties.</p>
 
-   <p>The default format for the data file, using <code>"\t"</code> to separate
-fields and <code>"\^k"</code> to separate lines within a field, matches the
-file format of some popular database programs, e.g. FileMaker.  So
-<code>forms-mode</code> can decrease the need to use proprietary software.
+  <p><a name="index-forms_002dmode-61" id=
+  "index-forms_002dmode-61"></a>If you have visited the control
+  file in normal fashion with <code>find-file</code> or a like
+  command, you can switch to Forms mode with the command <code>M-x
+  forms-mode</code>. If you put &lsquo;<samp><span class="samp">-*-
+  forms -*-</span></samp>&rsquo; in the first line of the control
+  file, then visiting it enables Forms mode automatically. But this
+  makes it hard to edit the control file itself, so you'd better
+  think twice before using this.</p>
 
-   </body></html>
-
+  <p>The default format for the data file, using <code>"\t"</code>
+  to separate fields and <code>"\^k"</code> to separate lines
+  within a field, matches the file format of some popular database
+  programs, e.g. FileMaker. So <code>forms-mode</code> can decrease
+  the need to use proprietary software.</p>
+</body>
+</html>

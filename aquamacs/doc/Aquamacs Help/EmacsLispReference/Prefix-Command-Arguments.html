@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,207 +19,295 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Prefix Command Arguments</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Prefix Command Arguments">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Prefix Command Arguments">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Recursive-Editing.html#Recursive-Editing" rel="next" title="Recursive Editing">
-<link href="Quitting.html#Quitting" rel="prev" title="Quitting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Prefix Command
+  Arguments</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Prefix Command Arguments" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Prefix Command Arguments" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Recursive-Editing.html#Recursive-Editing" rel="next"
+  title="Recursive Editing" />
+  <link href="Quitting.html#Quitting" rel="prev" title=
+  "Quitting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Prefix-Command-Arguments" id=
+  "Prefix-Command-Arguments"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Recursive-Editing.html#Recursive-Editing"
+    accesskey="n" rel="next">Recursive Editing</a>, Previous:
+    <a href="Quitting.html#Quitting" accesskey="p" rel=
+    "prev">Quitting</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Prefix-Command-Arguments-1" id=
+  "Prefix-Command-Arguments-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Prefix-Command-Arguments"></a>
-<div class="header">
-<p>
-Next: <a href="Recursive-Editing.html#Recursive-Editing" accesskey="n" rel="next">Recursive Editing</a>, Previous: <a href="Quitting.html#Quitting" accesskey="p" rel="prev">Quitting</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Prefix-Command-Arguments-1"></a>
-<h3 class="section">20.12 Prefix Command Arguments</h3>
-<a name="index-prefix-argument"></a>
-<a name="index-raw-prefix-argument"></a>
-<a name="index-numeric-prefix-argument"></a>
+  <h3 class="section">20.12 Prefix Command Arguments</h3><a name=
+  "index-prefix-argument" id="index-prefix-argument"></a> <a name=
+  "index-raw-prefix-argument" id="index-raw-prefix-argument"></a>
+  <a name="index-numeric-prefix-argument" id=
+  "index-numeric-prefix-argument"></a>
 
-<p>Most Emacs commands can use a <em>prefix argument</em>, a number
-specified before the command itself.  (Don&rsquo;t confuse prefix arguments
-with prefix keys.)  The prefix argument is at all times represented by a
-value, which may be <code>nil</code>, meaning there is currently no prefix
-argument.  Each command may use the prefix argument or ignore it.
-</p>
-<p>There are two representations of the prefix argument: <em>raw</em> and
-<em>numeric</em>.  The editor command loop uses the raw representation
-internally, and so do the Lisp variables that store the information, but
-commands can request either representation.
-</p>
-<p>Here are the possible values of a raw prefix argument:
-</p>
-<ul>
-<li> <code>nil</code>, meaning there is no prefix argument.  Its numeric value is
-1, but numerous commands make a distinction between <code>nil</code> and the
-integer 1.
+  <p>Most Emacs commands can use a <em>prefix argument</em>, a
+  number specified before the command itself. (Don&rsquo;t confuse
+  prefix arguments with prefix keys.) The prefix argument is at all
+  times represented by a value, which may be <code>nil</code>,
+  meaning there is currently no prefix argument. Each command may
+  use the prefix argument or ignore it.</p>
 
-</li><li> An integer, which stands for itself.
+  <p>There are two representations of the prefix argument:
+  <em>raw</em> and <em>numeric</em>. The editor command loop uses
+  the raw representation internally, and so do the Lisp variables
+  that store the information, but commands can request either
+  representation.</p>
 
-</li><li> A list of one element, which is an integer.  This form of prefix
-argument results from one or a succession of <kbd>C-u</kbd>s with no
-digits.  The numeric value is the integer in the list, but some
-commands make a distinction between such a list and an integer alone.
+  <p>Here are the possible values of a raw prefix argument:</p>
 
-</li><li> The symbol <code>-</code>.  This indicates that <kbd>M--</kbd> or <kbd>C-u -</kbd> was
-typed, without following digits.  The equivalent numeric value is
-−1, but some commands make a distinction between the integer
-−1 and the symbol <code>-</code>.
-</li></ul>
+  <ul>
+    <li><code>nil</code>, meaning there is no prefix argument. Its
+    numeric value is 1, but numerous commands make a distinction
+    between <code>nil</code> and the integer 1.</li>
 
-<p>We illustrate these possibilities by calling the following function with
-various prefixes:
-</p>
-<div class="example">
-<pre class="example">(defun display-prefix (arg)
-  &quot;Display the value of the raw prefix arg.&quot;
-  (interactive &quot;P&quot;)
-  (message &quot;%s&quot; arg))
-</pre></div>
+    <li>An integer, which stands for itself.</li>
 
-<p>Here are the results of calling <code>display-prefix</code> with various
-raw prefix arguments:
-</p>
-<div class="example">
-<pre class="example">        M-x display-prefix  ⊣ nil
+    <li>A list of one element, which is an integer. This form of
+    prefix argument results from one or a succession of
+    <kbd>C-u</kbd>s with no digits. The numeric value is the
+    integer in the list, but some commands make a distinction
+    between such a list and an integer alone.</li>
 
-C-u     M-x display-prefix  ⊣ (4)
+    <li>The symbol <code>-</code>. This indicates that
+    <kbd>M--</kbd> or <kbd>C-u -</kbd> was typed, without following
+    digits. The equivalent numeric value is &acirc;&circ;&rsquo;1,
+    but some commands make a distinction between the integer
+    &acirc;&circ;&rsquo;1 and the symbol <code>-</code>.</li>
+  </ul>
 
-C-u C-u M-x display-prefix  ⊣ (16)
+  <p>We illustrate these possibilities by calling the following
+  function with various prefixes:</p>
 
-C-u 3   M-x display-prefix  ⊣ 3
+  <div class="example">
+    <pre class="example">
+(defun display-prefix (arg)
+  "Display the value of the raw prefix arg."
+  (interactive "P")
+  (message "%s" arg))
+</pre>
+  </div>
 
-M-3     M-x display-prefix  ⊣ 3      ; <span class="roman">(Same as <code>C-u 3</code>.)</span>
+  <p>Here are the results of calling <code>display-prefix</code>
+  with various raw prefix arguments:</p>
 
-C-u -   M-x display-prefix  ⊣ -
+  <div class="example">
+    <pre class="example">
+        M-x display-prefix  &acirc;&Scaron;&pound; nil
 
-M--     M-x display-prefix  ⊣ -      ; <span class="roman">(Same as <code>C-u -</code>.)</span>
+C-u     M-x display-prefix  &acirc;&Scaron;&pound; (4)
 
-C-u - 7 M-x display-prefix  ⊣ -7
+C-u C-u M-x display-prefix  &acirc;&Scaron;&pound; (16)
 
-M-- 7   M-x display-prefix  ⊣ -7     ; <span class="roman">(Same as <code>C-u -7</code>.)</span>
-</pre></div>
+C-u 3   M-x display-prefix  &acirc;&Scaron;&pound; 3
 
-<p>Emacs uses two variables to store the prefix argument:
-<code>prefix-arg</code> and <code>current-prefix-arg</code>.  Commands such as
-<code>universal-argument</code> that set up prefix arguments for other
-commands store them in <code>prefix-arg</code>.  In contrast,
-<code>current-prefix-arg</code> conveys the prefix argument to the current
-command, so setting it has no effect on the prefix arguments for future
-commands.
-</p>
-<p>Normally, commands specify which representation to use for the prefix
-argument, either numeric or raw, in the <code>interactive</code> specification.
-(See <a href="Using-Interactive.html#Using-Interactive">Using Interactive</a>.)  Alternatively, functions may look at the
-value of the prefix argument directly in the variable
-<code>current-prefix-arg</code>, but this is less clean.
-</p>
-<dl>
-<dt><a name="index-prefix_002dnumeric_002dvalue"></a>Function: <strong>prefix-numeric-value</strong> <em>arg</em></dt>
-<dd><p>This function returns the numeric meaning of a valid raw prefix argument
-value, <var>arg</var>.  The argument may be a symbol, a number, or a list.
-If it is <code>nil</code>, the value 1 is returned; if it is <code>-</code>, the
-value −1 is returned; if it is a number, that number is returned;
-if it is a list, the <small>CAR</small> of that list (which should be a number) is
-returned.
-</p></dd></dl>
+M-3     M-x display-prefix  &acirc;&Scaron;&pound; 3      ; <span class="roman">(Same as <code>C-u 3</code>.)</span>
 
-<dl>
-<dt><a name="index-current_002dprefix_002darg"></a>Variable: <strong>current-prefix-arg</strong></dt>
-<dd><p>This variable holds the raw prefix argument for the <em>current</em>
-command.  Commands may examine it directly, but the usual method for
-accessing it is with <code>(interactive &quot;P&quot;)</code>.
-</p></dd></dl>
+C-u -   M-x display-prefix  &acirc;&Scaron;&pound; -
 
-<dl>
-<dt><a name="index-prefix_002darg"></a>Variable: <strong>prefix-arg</strong></dt>
-<dd><p>The value of this variable is the raw prefix argument for the
-<em>next</em> editing command.  Commands such as <code>universal-argument</code>
-that specify prefix arguments for the following command work by setting
-this variable.
-</p></dd></dl>
+M--     M-x display-prefix  &acirc;&Scaron;&pound; -      ; <span class="roman">(Same as <code>C-u -</code>.)</span>
 
-<dl>
-<dt><a name="index-last_002dprefix_002darg"></a>Variable: <strong>last-prefix-arg</strong></dt>
-<dd><p>The raw prefix argument value used by the previous command.
-</p></dd></dl>
+C-u - 7 M-x display-prefix  &acirc;&Scaron;&pound; -7
 
-<p>The following commands exist to set up prefix arguments for the
-following command.  Do not call them for any other reason.
-</p>
-<dl>
-<dt><a name="index-universal_002dargument"></a>Command: <strong>universal-argument</strong></dt>
-<dd><p>This command reads input and specifies a prefix argument for the
-following command.  Don&rsquo;t call this command yourself unless you know
-what you are doing.
-</p></dd></dl>
+M-- 7   M-x display-prefix  &acirc;&Scaron;&pound; -7     ; <span class="roman">(Same as <code>C-u -7</code>.)</span>
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-digit_002dargument"></a>Command: <strong>digit-argument</strong> <em>arg</em></dt>
-<dd><p>This command adds to the prefix argument for the following command.  The
-argument <var>arg</var> is the raw prefix argument as it was before this
-command; it is used to compute the updated prefix argument.  Don&rsquo;t call
-this command yourself unless you know what you are doing.
-</p></dd></dl>
+  <p>Emacs uses two variables to store the prefix argument:
+  <code>prefix-arg</code> and <code>current-prefix-arg</code>.
+  Commands such as <code>universal-argument</code> that set up
+  prefix arguments for other commands store them in
+  <code>prefix-arg</code>. In contrast,
+  <code>current-prefix-arg</code> conveys the prefix argument to
+  the current command, so setting it has no effect on the prefix
+  arguments for future commands.</p>
 
-<dl>
-<dt><a name="index-negative_002dargument"></a>Command: <strong>negative-argument</strong> <em>arg</em></dt>
-<dd><p>This command adds to the numeric argument for the next command.  The
-argument <var>arg</var> is the raw prefix argument as it was before this
-command; its value is negated to form the new prefix argument.  Don&rsquo;t
-call this command yourself unless you know what you are doing.
-</p></dd></dl>
+  <p>Normally, commands specify which representation to use for the
+  prefix argument, either numeric or raw, in the
+  <code>interactive</code> specification. (See <a href=
+  "Using-Interactive.html#Using-Interactive">Using
+  Interactive</a>.) Alternatively, functions may look at the value
+  of the prefix argument directly in the variable
+  <code>current-prefix-arg</code>, but this is less clean.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Recursive-Editing.html#Recursive-Editing" accesskey="n" rel="next">Recursive Editing</a>, Previous: <a href="Quitting.html#Quitting" accesskey="p" rel="prev">Quitting</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-prefix_002dnumeric_002dvalue" id=
+    "index-prefix_002dnumeric_002dvalue"></a>Function:
+    <strong>prefix-numeric-value</strong> <em>arg</em></dt>
 
+    <dd>
+      <p>This function returns the numeric meaning of a valid raw
+      prefix argument value, <var>arg</var>. The argument may be a
+      symbol, a number, or a list. If it is <code>nil</code>, the
+      value 1 is returned; if it is <code>-</code>, the value
+      &acirc;&circ;&rsquo;1 is returned; if it is a number, that
+      number is returned; if it is a list, the <small>CAR</small>
+      of that list (which should be a number) is returned.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-current_002dprefix_002darg" id=
+    "index-current_002dprefix_002darg"></a>Variable:
+    <strong>current-prefix-arg</strong></dt>
 
+    <dd>
+      <p>This variable holds the raw prefix argument for the
+      <em>current</em> command. Commands may examine it directly,
+      but the usual method for accessing it is with
+      <code>(interactive "P")</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-prefix_002darg" id=
+    "index-prefix_002darg"></a>Variable:
+    <strong>prefix-arg</strong></dt>
+
+    <dd>
+      <p>The value of this variable is the raw prefix argument for
+      the <em>next</em> editing command. Commands such as
+      <code>universal-argument</code> that specify prefix arguments
+      for the following command work by setting this variable.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-last_002dprefix_002darg" id=
+    "index-last_002dprefix_002darg"></a>Variable:
+    <strong>last-prefix-arg</strong></dt>
+
+    <dd>
+      <p>The raw prefix argument value used by the previous
+      command.</p>
+    </dd>
+  </dl>
+
+  <p>The following commands exist to set up prefix arguments for
+  the following command. Do not call them for any other reason.</p>
+
+  <dl>
+    <dt><a name="index-universal_002dargument" id=
+    "index-universal_002dargument"></a>Command:
+    <strong>universal-argument</strong></dt>
+
+    <dd>
+      <p>This command reads input and specifies a prefix argument
+      for the following command. Don&rsquo;t call this command
+      yourself unless you know what you are doing.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-digit_002dargument" id=
+    "index-digit_002dargument"></a>Command:
+    <strong>digit-argument</strong> <em>arg</em></dt>
+
+    <dd>
+      <p>This command adds to the prefix argument for the following
+      command. The argument <var>arg</var> is the raw prefix
+      argument as it was before this command; it is used to compute
+      the updated prefix argument. Don&rsquo;t call this command
+      yourself unless you know what you are doing.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-negative_002dargument" id=
+    "index-negative_002dargument"></a>Command:
+    <strong>negative-argument</strong> <em>arg</em></dt>
+
+    <dd>
+      <p>This command adds to the numeric argument for the next
+      command. The argument <var>arg</var> is the raw prefix
+      argument as it was before this command; its value is negated
+      to form the new prefix argument. Don&rsquo;t call this
+      command yourself unless you know what you are doing.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Recursive-Editing.html#Recursive-Editing"
+    accesskey="n" rel="next">Recursive Editing</a>, Previous:
+    <a href="Quitting.html#Quitting" accesskey="p" rel=
+    "prev">Quitting</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

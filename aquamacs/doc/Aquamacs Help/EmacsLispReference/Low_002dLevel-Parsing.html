@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,103 +19,152 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Low-Level Parsing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Low-Level Parsing">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Low-Level Parsing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Parsing-Expressions.html#Parsing-Expressions" rel="up" title="Parsing Expressions">
-<link href="Control-Parsing.html#Control-Parsing" rel="next" title="Control Parsing">
-<link href="Parser-State.html#Parser-State" rel="prev" title="Parser State">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Low-Level Parsing</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Low-Level Parsing" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Low-Level Parsing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Parsing-Expressions.html#Parsing-Expressions" rel=
+  "up" title="Parsing Expressions" />
+  <link href="Control-Parsing.html#Control-Parsing" rel="next"
+  title="Control Parsing" />
+  <link href="Parser-State.html#Parser-State" rel="prev" title=
+  "Parser State" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Low_002dLevel-Parsing" id="Low_002dLevel-Parsing"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Control-Parsing.html#Control-Parsing"
+    accesskey="n" rel="next">Control Parsing</a>, Previous:
+    <a href="Parser-State.html#Parser-State" accesskey="p" rel=
+    "prev">Parser State</a>, Up: <a href=
+    "Parsing-Expressions.html#Parsing-Expressions" accesskey="u"
+    rel="up">Parsing Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Low_002dLevel-Parsing-1" id=
+  "Low_002dLevel-Parsing-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Low_002dLevel-Parsing"></a>
-<div class="header">
-<p>
-Next: <a href="Control-Parsing.html#Control-Parsing" accesskey="n" rel="next">Control Parsing</a>, Previous: <a href="Parser-State.html#Parser-State" accesskey="p" rel="prev">Parser State</a>, Up: <a href="Parsing-Expressions.html#Parsing-Expressions" accesskey="u" rel="up">Parsing Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Low_002dLevel-Parsing-1"></a>
-<h4 class="subsection">34.6.4 Low-Level Parsing</h4>
+  <h4 class="subsection">34.6.4 Low-Level Parsing</h4>
 
-<p>The most basic way to use the expression parser is to tell it
-to start at a given position with a certain state, and parse up to
-a specified end position.
-</p>
-<dl>
-<dt><a name="index-parse_002dpartial_002dsexp"></a>Function: <strong>parse-partial-sexp</strong> <em>start limit &amp;optional target-depth stop-before state stop-comment</em></dt>
-<dd><p>This function parses a sexp in the current buffer starting at
-<var>start</var>, not scanning past <var>limit</var>.  It stops at position
-<var>limit</var> or when certain criteria described below are met, and sets
-point to the location where parsing stops.  It returns a parser state
-describing the status of the parse at the point where it stops.
-</p>
-<a name="index-parenthesis-depth"></a>
-<p>If the third argument <var>target-depth</var> is non-<code>nil</code>, parsing
-stops if the depth in parentheses becomes equal to <var>target-depth</var>.
-The depth starts at 0, or at whatever is given in <var>state</var>.
-</p>
-<p>If the fourth argument <var>stop-before</var> is non-<code>nil</code>, parsing
-stops when it comes to any character that starts a sexp.  If
-<var>stop-comment</var> is non-<code>nil</code>, parsing stops when it comes to the
-start of a comment.  If <var>stop-comment</var> is the symbol
-<code>syntax-table</code>, parsing stops after the start of a comment or a
-string, or the end of a comment or a string, whichever comes first.
-</p>
-<p>If <var>state</var> is <code>nil</code>, <var>start</var> is assumed to be at the top
-level of parenthesis structure, such as the beginning of a function
-definition.  Alternatively, you might wish to resume parsing in the
-middle of the structure.  To do this, you must provide a <var>state</var>
-argument that describes the initial status of parsing.  The value
-returned by a previous call to <code>parse-partial-sexp</code> will do
-nicely.
-</p></dd></dl>
+  <p>The most basic way to use the expression parser is to tell it
+  to start at a given position with a certain state, and parse up
+  to a specified end position.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Control-Parsing.html#Control-Parsing" accesskey="n" rel="next">Control Parsing</a>, Previous: <a href="Parser-State.html#Parser-State" accesskey="p" rel="prev">Parser State</a>, Up: <a href="Parsing-Expressions.html#Parsing-Expressions" accesskey="u" rel="up">Parsing Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-parse_002dpartial_002dsexp" id=
+    "index-parse_002dpartial_002dsexp"></a>Function:
+    <strong>parse-partial-sexp</strong> <em>start limit
+    &amp;optional target-depth stop-before state
+    stop-comment</em></dt>
 
+    <dd>
+      <p>This function parses a sexp in the current buffer starting
+      at <var>start</var>, not scanning past <var>limit</var>. It
+      stops at position <var>limit</var> or when certain criteria
+      described below are met, and sets point to the location where
+      parsing stops. It returns a parser state describing the
+      status of the parse at the point where it stops.</p><a name=
+      "index-parenthesis-depth" id="index-parenthesis-depth"></a>
 
+      <p>If the third argument <var>target-depth</var> is
+      non-<code>nil</code>, parsing stops if the depth in
+      parentheses becomes equal to <var>target-depth</var>. The
+      depth starts at 0, or at whatever is given in
+      <var>state</var>.</p>
 
+      <p>If the fourth argument <var>stop-before</var> is
+      non-<code>nil</code>, parsing stops when it comes to any
+      character that starts a sexp. If <var>stop-comment</var> is
+      non-<code>nil</code>, parsing stops when it comes to the
+      start of a comment. If <var>stop-comment</var> is the symbol
+      <code>syntax-table</code>, parsing stops after the start of a
+      comment or a string, or the end of a comment or a string,
+      whichever comes first.</p>
+
+      <p>If <var>state</var> is <code>nil</code>, <var>start</var>
+      is assumed to be at the top level of parenthesis structure,
+      such as the beginning of a function definition.
+      Alternatively, you might wish to resume parsing in the middle
+      of the structure. To do this, you must provide a
+      <var>state</var> argument that describes the initial status
+      of parsing. The value returned by a previous call to
+      <code>parse-partial-sexp</code> will do nicely.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Control-Parsing.html#Control-Parsing"
+    accesskey="n" rel="next">Control Parsing</a>, Previous:
+    <a href="Parser-State.html#Parser-State" accesskey="p" rel=
+    "prev">Parser State</a>, Up: <a href=
+    "Parsing-Expressions.html#Parsing-Expressions" accesskey="u"
+    rel="up">Parsing Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

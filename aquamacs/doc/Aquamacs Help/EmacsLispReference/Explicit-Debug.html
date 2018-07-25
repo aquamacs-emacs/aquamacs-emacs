@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,85 +19,118 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Explicit Debug</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Explicit Debug">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Explicit Debug">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugger.html#Debugger" rel="up" title="Debugger">
-<link href="Using-Debugger.html#Using-Debugger" rel="next" title="Using Debugger">
-<link href="Function-Debugging.html#Function-Debugging" rel="prev" title="Function Debugging">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Explicit Debug</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Explicit Debug" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Explicit Debug" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugger.html#Debugger" rel="up" title="Debugger" />
+  <link href="Using-Debugger.html#Using-Debugger" rel="next" title=
+  "Using Debugger" />
+  <link href="Function-Debugging.html#Function-Debugging" rel=
+  "prev" title="Function Debugging" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Explicit-Debug" id="Explicit-Debug"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Using-Debugger.html#Using-Debugger"
+    accesskey="n" rel="next">Using Debugger</a>, Previous: <a href=
+    "Function-Debugging.html#Function-Debugging" accesskey="p" rel=
+    "prev">Function Debugging</a>, Up: <a href=
+    "Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Explicit-Entry-to-the-Debugger" id=
+  "Explicit-Entry-to-the-Debugger"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Explicit-Debug"></a>
-<div class="header">
-<p>
-Next: <a href="Using-Debugger.html#Using-Debugger" accesskey="n" rel="next">Using Debugger</a>, Previous: <a href="Function-Debugging.html#Function-Debugging" accesskey="p" rel="prev">Function Debugging</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Explicit-Entry-to-the-Debugger"></a>
-<h4 class="subsection">17.1.4 Explicit Entry to the Debugger</h4>
-<a name="index-debugger_002c-explicit-entry"></a>
-<a name="index-force-entry-to-debugger"></a>
+  <h4 class="subsection">17.1.4 Explicit Entry to the
+  Debugger</h4><a name="index-debugger_002c-explicit-entry" id=
+  "index-debugger_002c-explicit-entry"></a> <a name=
+  "index-force-entry-to-debugger" id=
+  "index-force-entry-to-debugger"></a>
 
-<p>You can cause the debugger to be called at a certain point in your
-program by writing the expression <code>(debug)</code> at that point.  To do
-this, visit the source file, insert the text &lsquo;<samp>(debug)</samp>&rsquo; at the
-proper place, and type <kbd>C-M-x</kbd> (<code>eval-defun</code>, a Lisp mode key
-binding).  <strong>Warning:</strong> if you do this for temporary debugging
-purposes, be sure to undo this insertion before you save the file!
-</p>
-<p>The place where you insert &lsquo;<samp>(debug)</samp>&rsquo; must be a place where an
-additional form can be evaluated and its value ignored.  (If the value
-of <code>(debug)</code> isn&rsquo;t ignored, it will alter the execution of the
-program!)  The most common suitable places are inside a <code>progn</code> or
-an implicit <code>progn</code> (see <a href="Sequencing.html#Sequencing">Sequencing</a>).
-</p>
-<p>If you don&rsquo;t know exactly where in the source code you want to put
-the debug statement, but you want to display a backtrace when a
-certain message is displayed, you can set <code>debug-on-message</code> to a
-regular expression matching the desired message.
-</p>
+  <p>You can cause the debugger to be called at a certain point in
+  your program by writing the expression <code>(debug)</code> at
+  that point. To do this, visit the source file, insert the text
+  &lsquo;<samp>(debug)</samp>&rsquo; at the proper place, and type
+  <kbd>C-M-x</kbd> (<code>eval-defun</code>, a Lisp mode key
+  binding). <strong>Warning:</strong> if you do this for temporary
+  debugging purposes, be sure to undo this insertion before you
+  save the file!</p>
 
+  <p>The place where you insert &lsquo;<samp>(debug)</samp>&rsquo;
+  must be a place where an additional form can be evaluated and its
+  value ignored. (If the value of <code>(debug)</code> isn&rsquo;t
+  ignored, it will alter the execution of the program!) The most
+  common suitable places are inside a <code>progn</code> or an
+  implicit <code>progn</code> (see <a href=
+  "Sequencing.html#Sequencing">Sequencing</a>).</p>
 
-
+  <p>If you don&rsquo;t know exactly where in the source code you
+  want to put the debug statement, but you want to display a
+  backtrace when a certain message is displayed, you can set
+  <code>debug-on-message</code> to a regular expression matching
+  the desired message.</p>
 </body>
 </html>

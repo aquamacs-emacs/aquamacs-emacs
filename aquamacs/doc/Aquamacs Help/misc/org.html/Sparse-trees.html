@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,165 +16,249 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Sparse trees</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Sparse trees">
-<meta name="keywords" content="The Org Manual: Sparse trees">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Document-Structure.html#Document-Structure" rel="up" title="Document Structure">
-<link href="Plain-lists.html#Plain-lists" rel="next" title="Plain lists">
-<link href="Structure-editing.html#Structure-editing" rel="prev" title="Structure editing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Sparse trees</title>
+  <meta name="description" content=
+  "The Org Manual: Sparse trees" />
+  <meta name="keywords" content="The Org Manual: Sparse trees" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Document-Structure.html#Document-Structure" rel="up"
+  title="Document Structure" />
+  <link href="Plain-lists.html#Plain-lists" rel="next" title=
+  "Plain lists" />
+  <link href="Structure-editing.html#Structure-editing" rel="prev"
+  title="Structure editing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sparse-trees"></a>
-<div class="header">
-<p>
-Next: <a href="Plain-lists.html#Plain-lists" accesskey="n" rel="next">Plain lists</a>, Previous: <a href="Structure-editing.html#Structure-editing" accesskey="p" rel="prev">Structure editing</a>, Up: <a href="Document-Structure.html#Document-Structure" accesskey="u" rel="up">Document Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sparse-trees-1"></a>
-<h3 class="section">2.6 Sparse trees</h3>
-<a name="index-sparse-trees"></a>
-<a name="index-trees_002c-sparse"></a>
-<a name="index-folding_002c-sparse-trees"></a>
-<a name="index-occur_002c-command"></a>
+<body lang="en" xml:lang="en">
+  <a name="Sparse-trees" id="Sparse-trees"></a>
 
-<a name="index-org_002dshow_002dhierarchy_002dabove"></a>
-<a name="index-org_002dshow_002dfollowing_002dheading"></a>
-<a name="index-org_002dshow_002dsiblings"></a>
-<a name="index-org_002dshow_002dentry_002dbelow"></a>
-<p>An important feature of Org mode is the ability to construct <em>sparse
-trees</em> for selected information in an outline tree, so that the entire
-document is folded as much as possible, but the selected information is made
-visible along with the headline structure above it<a name="DOCF11" href="#FOOT11"><sup>11</sup></a>.  Just try it out
-and you will see immediately how it works.
-</p>
-<p>Org mode contains several commands creating such trees, all these
-commands can be accessed through a dispatcher:
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002dc-_002f"></a>
-<a name="index-org_002dsparse_002dtree"></a>
-</dd>
-<dt><kbd>C-c /</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-sparse-tree</code>)</dt>
-<dd><p>This prompts for an extra key to select a sparse-tree creating command.
-<a name="index-C_002dc-_002f-r"></a>
-<a name="index-org_002doccur"></a>
-</p></dd>
-<dt><kbd>C-c / r</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-occur</code>)</dt>
-<dd><a name="index-org_002dremove_002dhighlights_002dwith_002dchange"></a>
-<p>Prompts for a regexp and shows a sparse tree with all matches.  If
-the match is in a headline, the headline is made visible.  If the match is in
-the body of an entry, headline and body are made visible.  In order to
-provide minimal context, also the full hierarchy of headlines above the match
-is shown, as well as the headline following the match.  Each match is also
-highlighted; the highlights disappear when the buffer is changed by an
-editing command<a name="DOCF12" href="#FOOT12"><sup>12</sup></a>, or by pressing <kbd>C-c C-c</kbd>.
-When called with a <kbd>C-u</kbd> prefix argument, previous highlights are kept,
-so several calls to this command can be stacked.
-<a name="index-M_002dg-n"></a>
-<a name="index-M_002dg-M_002dn"></a>
-<a name="index-next_002derror"></a>
-</p></dd>
-<dt><kbd>M-g n</kbd> &nbsp;<span class="roman">or</span> &nbsp;<kbd>M-g M-n</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>next-error</code>)</dt>
-<dd><p>Jump to the next sparse tree match in this buffer.
-<a name="index-M_002dg-p"></a>
-<a name="index-M_002dg-M_002dp"></a>
-<a name="index-previous_002derror"></a>
-</p></dd>
-<dt><kbd>M-g p</kbd> &nbsp;<span class="roman">or</span> &nbsp;<kbd>M-g M-p</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>previous-error</code>)</dt>
-<dd><p>Jump to the previous sparse tree match in this buffer.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Plain-lists.html#Plain-lists" accesskey="n"
+    rel="next">Plain lists</a>, Previous: <a href=
+    "Structure-editing.html#Structure-editing" accesskey="p" rel=
+    "prev">Structure editing</a>, Up: <a href=
+    "Document-Structure.html#Document-Structure" accesskey="u" rel=
+    "up">Document Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sparse-trees-1" id="Sparse-trees-1"></a>
 
-<a name="index-org_002dagenda_002dcustom_002dcommands"></a>
-<p>For frequently used sparse trees of specific search strings, you can
-use the option <code>org-agenda-custom-commands</code> to define fast
-keyboard access to specific sparse trees.  These commands will then be
-accessible through the agenda dispatcher (see <a href="Agenda-dispatcher.html#Agenda-dispatcher">Agenda dispatcher</a>).
-For example:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq org-agenda-custom-commands
-      '((&quot;f&quot; occur-tree &quot;FIXME&quot;)))
-</pre></div>
+  <h3 class="section">2.6 Sparse trees</h3><a name=
+  "index-sparse-trees" id="index-sparse-trees"></a> <a name=
+  "index-trees_002c-sparse" id="index-trees_002c-sparse"></a>
+  <a name="index-folding_002c-sparse-trees" id=
+  "index-folding_002c-sparse-trees"></a> <a name=
+  "index-occur_002c-command" id="index-occur_002c-command"></a>
+  <a name="index-org_002dshow_002dhierarchy_002dabove" id=
+  "index-org_002dshow_002dhierarchy_002dabove"></a> <a name=
+  "index-org_002dshow_002dfollowing_002dheading" id=
+  "index-org_002dshow_002dfollowing_002dheading"></a> <a name=
+  "index-org_002dshow_002dsiblings" id=
+  "index-org_002dshow_002dsiblings"></a> <a name=
+  "index-org_002dshow_002dentry_002dbelow" id=
+  "index-org_002dshow_002dentry_002dbelow"></a>
 
-<p>will define the key <kbd>C-c a f</kbd> as a shortcut for creating
-a sparse tree matching the string &lsquo;<samp>FIXME</samp>&rsquo;.
-</p>
-<p>The other sparse tree commands select headings based on TODO keywords,
-tags, or properties and will be discussed later in this manual.
-</p>
-<a name="index-C_002dc-C_002de-C_002dv"></a>
-<a name="index-printing-sparse-trees"></a>
-<a name="index-visible-text_002c-printing"></a>
-<p>To print a sparse tree, you can use the Emacs command
-<code>ps-print-buffer-with-faces</code> which does not print invisible parts
-of the document <a name="DOCF13" href="#FOOT13"><sup>13</sup></a>.
-Or you can use <kbd>C-c C-e C-v</kbd> to export only the visible part of
-the document and print the resulting file.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>An important feature of Org mode is the ability to construct
+  <em>sparse trees</em> for selected information in an outline
+  tree, so that the entire document is folded as much as possible,
+  but the selected information is made visible along with the
+  headline structure above it<a name="DOCF11" href="#FOOT11" id=
+  "DOCF11"><sup>11</sup></a>. Just try it out and you will see
+  immediately how it works.</p>
 
-<h3><a name="FOOT11" href="#DOCF11">(11)</a></h3>
-<p>See also the
-variables <code>org-show-hierarchy-above</code>, <code>org-show-following-heading</code>,
-<code>org-show-siblings</code>, and <code>org-show-entry-below</code> for detailed
-control on how much context is shown around each match.</p>
-<h3><a name="FOOT12" href="#DOCF12">(12)</a></h3>
-<p>This depends on the option
-<code>org-remove-highlights-with-change</code></p>
-<h3><a name="FOOT13" href="#DOCF13">(13)</a></h3>
-<p>This does not work under XEmacs, because
-XEmacs uses selective display for outlining, not text properties.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Plain-lists.html#Plain-lists" accesskey="n" rel="next">Plain lists</a>, Previous: <a href="Structure-editing.html#Structure-editing" accesskey="p" rel="prev">Structure editing</a>, Up: <a href="Document-Structure.html#Document-Structure" accesskey="u" rel="up">Document Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Org mode contains several commands creating such trees, all
+  these commands can be accessed through a dispatcher:</p>
 
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-_002f" id="index-C_002dc-_002f"></a>
+    <a name="index-org_002dsparse_002dtree" id=
+    "index-org_002dsparse_002dtree"></a></dd>
 
+    <dt><kbd>C-c /</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-sparse-tree</code>)</dt>
 
+    <dd>
+      <p>This prompts for an extra key to select a sparse-tree
+      creating command. <a name="index-C_002dc-_002f-r" id=
+      "index-C_002dc-_002f-r"></a> <a name="index-org_002doccur"
+      id="index-org_002doccur"></a></p>
+    </dd>
+
+    <dt><kbd>C-c / r</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-occur</code>)</dt>
+
+    <dd>
+      <a name=
+      "index-org_002dremove_002dhighlights_002dwith_002dchange" id=
+      "index-org_002dremove_002dhighlights_002dwith_002dchange"></a>
+
+      <p>Prompts for a regexp and shows a sparse tree with all
+      matches. If the match is in a headline, the headline is made
+      visible. If the match is in the body of an entry, headline
+      and body are made visible. In order to provide minimal
+      context, also the full hierarchy of headlines above the match
+      is shown, as well as the headline following the match. Each
+      match is also highlighted; the highlights disappear when the
+      buffer is changed by an editing command<a name="DOCF12" href=
+      "#FOOT12" id="DOCF12"><sup>12</sup></a>, or by pressing
+      <kbd>C-c C-c</kbd>. When called with a <kbd>C-u</kbd> prefix
+      argument, previous highlights are kept, so several calls to
+      this command can be stacked. <a name="index-M_002dg-n" id=
+      "index-M_002dg-n"></a> <a name="index-M_002dg-M_002dn" id=
+      "index-M_002dg-M_002dn"></a> <a name="index-next_002derror"
+      id="index-next_002derror"></a></p>
+    </dd>
+
+    <dt><kbd>M-g n</kbd> &nbsp;<span class="roman">or</span>
+    &nbsp;<kbd>M-g M-n</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>next-error</code>)</dt>
+
+    <dd>
+      <p>Jump to the next sparse tree match in this buffer.
+      <a name="index-M_002dg-p" id="index-M_002dg-p"></a> <a name=
+      "index-M_002dg-M_002dp" id="index-M_002dg-M_002dp"></a>
+      <a name="index-previous_002derror" id=
+      "index-previous_002derror"></a></p>
+    </dd>
+
+    <dt><kbd>M-g p</kbd> &nbsp;<span class="roman">or</span>
+    &nbsp;<kbd>M-g M-p</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>previous-error</code>)</dt>
+
+    <dd>
+      <p>Jump to the previous sparse tree match in this buffer.</p>
+    </dd>
+  </dl><a name="index-org_002dagenda_002dcustom_002dcommands" id=
+  "index-org_002dagenda_002dcustom_002dcommands"></a>
+
+  <p>For frequently used sparse trees of specific search strings,
+  you can use the option <code>org-agenda-custom-commands</code> to
+  define fast keyboard access to specific sparse trees. These
+  commands will then be accessible through the agenda dispatcher
+  (see <a href="Agenda-dispatcher.html#Agenda-dispatcher">Agenda
+  dispatcher</a>). For example:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq org-agenda-custom-commands
+      '(("f" occur-tree "FIXME")))
+</pre>
+  </div>
+
+  <p>will define the key <kbd>C-c a f</kbd> as a shortcut for
+  creating a sparse tree matching the string
+  &lsquo;<samp>FIXME</samp>&rsquo;.</p>
+
+  <p>The other sparse tree commands select headings based on TODO
+  keywords, tags, or properties and will be discussed later in this
+  manual.</p><a name="index-C_002dc-C_002de-C_002dv" id=
+  "index-C_002dc-C_002de-C_002dv"></a> <a name=
+  "index-printing-sparse-trees" id=
+  "index-printing-sparse-trees"></a> <a name=
+  "index-visible-text_002c-printing" id=
+  "index-visible-text_002c-printing"></a>
+
+  <p>To print a sparse tree, you can use the Emacs command
+  <code>ps-print-buffer-with-faces</code> which does not print
+  invisible parts of the document <a name="DOCF13" href="#FOOT13"
+  id="DOCF13"><sup>13</sup></a>. Or you can use <kbd>C-c C-e
+  C-v</kbd> to export only the visible part of the document and
+  print the resulting file.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT11" href="#DOCF11" id="FOOT11">(11)</a></h3>
+
+    <p>See also the variables
+    <code>org-show-hierarchy-above</code>,
+    <code>org-show-following-heading</code>,
+    <code>org-show-siblings</code>, and
+    <code>org-show-entry-below</code> for detailed control on how
+    much context is shown around each match.</p>
+
+    <h3><a name="FOOT12" href="#DOCF12" id="FOOT12">(12)</a></h3>
+
+    <p>This depends on the option
+    <code>org-remove-highlights-with-change</code></p>
+
+    <h3><a name="FOOT13" href="#DOCF13" id="FOOT13">(13)</a></h3>
+
+    <p>This does not work under XEmacs, because XEmacs uses
+    selective display for outlining, not text properties.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Plain-lists.html#Plain-lists" accesskey="n"
+    rel="next">Plain lists</a>, Previous: <a href=
+    "Structure-editing.html#Structure-editing" accesskey="p" rel=
+    "prev">Structure editing</a>, Up: <a href=
+    "Document-Structure.html#Document-Structure" accesskey="u" rel=
+    "up">Document Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

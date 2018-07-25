@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,134 +20,190 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Watch Expressions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Watch Expressions">
-<meta name="keywords" content="GNU Emacs Manual: Watch Expressions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" rel="up" title="GDB Graphical Interface">
-<link href="Multithreaded-Debugging.html#Multithreaded-Debugging" rel="next" title="Multithreaded Debugging">
-<link href="Other-GDB-Buffers.html#Other-GDB-Buffers" rel="prev" title="Other GDB Buffers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Watch Expressions</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Watch Expressions" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Watch Expressions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+  rel="up" title="GDB Graphical Interface" />
+  <link href="Multithreaded-Debugging.html#Multithreaded-Debugging"
+  rel="next" title="Multithreaded Debugging" />
+  <link href="Other-GDB-Buffers.html#Other-GDB-Buffers" rel="prev"
+  title="Other GDB Buffers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Watch-Expressions" id="Watch-Expressions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Multithreaded-Debugging.html#Multithreaded-Debugging"
+    accesskey="n" rel="next">Multithreaded Debugging</a>, Previous:
+    <a href="Other-GDB-Buffers.html#Other-GDB-Buffers" accesskey=
+    "p" rel="prev">Other GDB Buffers</a>, Up: <a href=
+    "GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+    accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Watch-Expressions-1" id="Watch-Expressions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Watch-Expressions"></a>
-<div class="header">
-<p>
-Next: <a href="Multithreaded-Debugging.html#Multithreaded-Debugging" accesskey="n" rel="next">Multithreaded Debugging</a>, Previous: <a href="Other-GDB-Buffers.html#Other-GDB-Buffers" accesskey="p" rel="prev">Other GDB Buffers</a>, Up: <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Watch-Expressions-1"></a>
-<h4 class="subsubsection">27.6.5.7 Watch Expressions</h4>
-<a name="index-Watching-expressions-in-GDB"></a>
+  <h4 class="subsubsection">27.6.5.7 Watch Expressions</h4><a name=
+  "index-Watching-expressions-in-GDB" id=
+  "index-Watching-expressions-in-GDB"></a> <a name=
+  "index-gud_002dwatch" id="index-gud_002dwatch"></a> <a name=
+  "index-C_002dx-C_002da-C_002dw-_0028GUD_0029" id=
+  "index-C_002dx-C_002da-C_002dw-_0028GUD_0029"></a>
 
-<a name="index-gud_002dwatch"></a>
-<a name="index-C_002dx-C_002da-C_002dw-_0028GUD_0029"></a>
-<p>If you want to see how a variable changes each time your program
-stops, move point into the variable name and click on the watch icon
-in the tool bar (<code>gud-watch</code>) or type <kbd>C-x C-a C-w</kbd>.  If you
-specify a prefix argument, you can enter the variable name in the
-minibuffer.
-</p>
-<p>Each watch expression is displayed in the speedbar
-(see <a href="Speedbar.html#Speedbar">Speedbar</a>).  Complex data types, such as arrays, structures
-and unions are represented in a tree format.  Leaves and simple data
-types show the name of the expression and its value and, when the
-speedbar frame is selected, display the type as a tooltip.  Higher
-levels show the name, type and address value for pointers and just the
-name and type otherwise.  Root expressions also display the frame
-address as a tooltip to help identify the frame in which they were
-defined.
-</p>
-<p>To expand or contract a complex data type, click <kbd>mouse-2</kbd> or
-press <tt class="key">SPC</tt> on the tag to the left of the expression.  Emacs asks
-for confirmation before expanding the expression if its number of
-immediate children exceeds the value of the variable
-<code>gdb-max-children</code>.
-</p>
-<a name="index-D-_0028GDB-speedbar_0029"></a>
-<a name="index-gdb_002dvar_002ddelete"></a>
-<p>To delete a complex watch expression, move point to the root
-expression in the speedbar and type <kbd>D</kbd> (<code>gdb-var-delete</code>).
-</p>
-<a name="index-RET-_0028GDB-speedbar_0029"></a>
-<a name="index-gdb_002dedit_002dvalue"></a>
-<p>To edit a variable with a simple data type, or a simple element of a
-complex data type, move point there in the speedbar and type <tt class="key">RET</tt>
-(<code>gdb-edit-value</code>).  Or you can click <kbd>mouse-2</kbd> on a value to
-edit it.  Either way, this reads the new value using the minibuffer.
-</p>
-<a name="index-gdb_002dshow_002dchanged_002dvalues"></a>
-<p>If you set the variable <code>gdb-show-changed-values</code> to
-non-<code>nil</code> (the default value), Emacs uses
-<code>font-lock-warning-face</code> to highlight values that have recently
-changed and <code>shadow</code> face to make variables which have gone out of
-scope less noticeable.  When a variable goes out of scope you can&rsquo;t
-edit its value.
-</p>
-<a name="index-gdb_002ddelete_002dout_002dof_002dscope"></a>
-<p>If the variable <code>gdb-delete-out-of-scope</code> is non-<code>nil</code>
-(the default value), Emacs automatically deletes watch expressions
-which go out of scope.  Sometimes, when re-entering the same function,
-it may be useful to set this value to <code>nil</code> so that you don&rsquo;t
-need to recreate the watch expression.
-</p>
-<a name="index-gdb_002duse_002dcolon_002dcolon_002dnotation"></a>
-<p>If the variable <code>gdb-use-colon-colon-notation</code> is
-non-<code>nil</code>, Emacs uses the &lsquo;<samp><var>function</var>::<var>variable</var></samp>&rsquo;
-format.  This allows the user to display watch expressions which share
-the same variable name.  The default value is <code>nil</code>.
-</p>
-<a name="index-gdb_002dspeedbar_002dauto_002draise"></a>
-<p>To automatically raise the speedbar every time the display of watch
-expressions updates, set <code>gdb-speedbar-auto-raise</code> to
-non-<code>nil</code>.  This can be useful if you are debugging with a full
-screen Emacs frame.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Multithreaded-Debugging.html#Multithreaded-Debugging" accesskey="n" rel="next">Multithreaded Debugging</a>, Previous: <a href="Other-GDB-Buffers.html#Other-GDB-Buffers" accesskey="p" rel="prev">Other GDB Buffers</a>, Up: <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If you want to see how a variable changes each time your
+  program stops, move point into the variable name and click on the
+  watch icon in the tool bar (<code>gud-watch</code>) or type
+  <kbd>C-x C-a C-w</kbd>. If you specify a prefix argument, you can
+  enter the variable name in the minibuffer.</p>
 
+  <p>Each watch expression is displayed in the speedbar (see
+  <a href="Speedbar.html#Speedbar">Speedbar</a>). Complex data
+  types, such as arrays, structures and unions are represented in a
+  tree format. Leaves and simple data types show the name of the
+  expression and its value and, when the speedbar frame is
+  selected, display the type as a tooltip. Higher levels show the
+  name, type and address value for pointers and just the name and
+  type otherwise. Root expressions also display the frame address
+  as a tooltip to help identify the frame in which they were
+  defined.</p>
 
+  <p>To expand or contract a complex data type, click
+  <kbd>mouse-2</kbd> or press <tt class="key">SPC</tt> on the tag
+  to the left of the expression. Emacs asks for confirmation before
+  expanding the expression if its number of immediate children
+  exceeds the value of the variable
+  <code>gdb-max-children</code>.</p><a name=
+  "index-D-_0028GDB-speedbar_0029" id=
+  "index-D-_0028GDB-speedbar_0029"></a> <a name=
+  "index-gdb_002dvar_002ddelete" id=
+  "index-gdb_002dvar_002ddelete"></a>
 
+  <p>To delete a complex watch expression, move point to the root
+  expression in the speedbar and type <kbd>D</kbd>
+  (<code>gdb-var-delete</code>).</p><a name=
+  "index-RET-_0028GDB-speedbar_0029" id=
+  "index-RET-_0028GDB-speedbar_0029"></a> <a name=
+  "index-gdb_002dedit_002dvalue" id=
+  "index-gdb_002dedit_002dvalue"></a>
+
+  <p>To edit a variable with a simple data type, or a simple
+  element of a complex data type, move point there in the speedbar
+  and type <tt class="key">RET</tt> (<code>gdb-edit-value</code>).
+  Or you can click <kbd>mouse-2</kbd> on a value to edit it. Either
+  way, this reads the new value using the minibuffer.</p><a name=
+  "index-gdb_002dshow_002dchanged_002dvalues" id=
+  "index-gdb_002dshow_002dchanged_002dvalues"></a>
+
+  <p>If you set the variable <code>gdb-show-changed-values</code>
+  to non-<code>nil</code> (the default value), Emacs uses
+  <code>font-lock-warning-face</code> to highlight values that have
+  recently changed and <code>shadow</code> face to make variables
+  which have gone out of scope less noticeable. When a variable
+  goes out of scope you can&rsquo;t edit its value.</p><a name=
+  "index-gdb_002ddelete_002dout_002dof_002dscope" id=
+  "index-gdb_002ddelete_002dout_002dof_002dscope"></a>
+
+  <p>If the variable <code>gdb-delete-out-of-scope</code> is
+  non-<code>nil</code> (the default value), Emacs automatically
+  deletes watch expressions which go out of scope. Sometimes, when
+  re-entering the same function, it may be useful to set this value
+  to <code>nil</code> so that you don&rsquo;t need to recreate the
+  watch expression.</p><a name=
+  "index-gdb_002duse_002dcolon_002dcolon_002dnotation" id=
+  "index-gdb_002duse_002dcolon_002dcolon_002dnotation"></a>
+
+  <p>If the variable <code>gdb-use-colon-colon-notation</code> is
+  non-<code>nil</code>, Emacs uses the
+  &lsquo;<samp><var>function</var>::<var>variable</var></samp>&rsquo;
+  format. This allows the user to display watch expressions which
+  share the same variable name. The default value is
+  <code>nil</code>.</p><a name=
+  "index-gdb_002dspeedbar_002dauto_002draise" id=
+  "index-gdb_002dspeedbar_002dauto_002draise"></a>
+
+  <p>To automatically raise the speedbar every time the display of
+  watch expressions updates, set
+  <code>gdb-speedbar-auto-raise</code> to non-<code>nil</code>.
+  This can be useful if you are debugging with a full screen Emacs
+  frame.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Multithreaded-Debugging.html#Multithreaded-Debugging"
+    accesskey="n" rel="next">Multithreaded Debugging</a>, Previous:
+    <a href="Other-GDB-Buffers.html#Other-GDB-Buffers" accesskey=
+    "p" rel="prev">Other GDB Buffers</a>, Up: <a href=
+    "GDB-Graphical-Interface.html#GDB-Graphical-Interface"
+    accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

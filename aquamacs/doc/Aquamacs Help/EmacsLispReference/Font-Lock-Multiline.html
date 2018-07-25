@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,115 +19,159 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Font Lock Multiline</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Font Lock Multiline">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Font Lock Multiline">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Multiline-Font-Lock.html#Multiline-Font-Lock" rel="up" title="Multiline Font Lock">
-<link href="Region-to-Refontify.html#Region-to-Refontify" rel="next" title="Region to Refontify">
-<link href="Multiline-Font-Lock.html#Multiline-Font-Lock" rel="prev" title="Multiline Font Lock">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Font Lock
+  Multiline</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Font Lock Multiline" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Font Lock Multiline" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Multiline-Font-Lock.html#Multiline-Font-Lock" rel=
+  "up" title="Multiline Font Lock" />
+  <link href="Region-to-Refontify.html#Region-to-Refontify" rel=
+  "next" title="Region to Refontify" />
+  <link href="Multiline-Font-Lock.html#Multiline-Font-Lock" rel=
+  "prev" title="Multiline Font Lock" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Font-Lock-Multiline" id="Font-Lock-Multiline"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Region-to-Refontify.html#Region-to-Refontify"
+    accesskey="n" rel="next">Region to Refontify</a>, Up: <a href=
+    "Multiline-Font-Lock.html#Multiline-Font-Lock" accesskey="u"
+    rel="up">Multiline Font Lock</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Font-Lock-Multiline-1" id="Font-Lock-Multiline-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Font-Lock-Multiline"></a>
-<div class="header">
-<p>
-Next: <a href="Region-to-Refontify.html#Region-to-Refontify" accesskey="n" rel="next">Region to Refontify</a>, Up: <a href="Multiline-Font-Lock.html#Multiline-Font-Lock" accesskey="u" rel="up">Multiline Font Lock</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Font-Lock-Multiline-1"></a>
-<h4 class="subsubsection">22.6.9.1 Font Lock Multiline</h4>
+  <h4 class="subsubsection">22.6.9.1 Font Lock Multiline</h4>
 
-<p>One way to ensure reliable rehighlighting of multiline Font Lock
-constructs is to put on them the text property <code>font-lock-multiline</code>.
-It should be present and non-<code>nil</code> for text that is part of a
-multiline construct.
-</p>
-<p>When Font Lock is about to highlight a range of text, it first
-extends the boundaries of the range as necessary so that they do not
-fall within text marked with the <code>font-lock-multiline</code> property.
-Then it removes any <code>font-lock-multiline</code> properties from the
-range, and highlights it.  The highlighting specification (mostly
-<code>font-lock-keywords</code>) must reinstall this property each time,
-whenever it is appropriate.
-</p>
-<p><strong>Warning:</strong> don&rsquo;t use the <code>font-lock-multiline</code> property
-on large ranges of text, because that will make rehighlighting slow.
-</p>
-<dl>
-<dt><a name="index-font_002dlock_002dmultiline"></a>Variable: <strong>font-lock-multiline</strong></dt>
-<dd><p>If the <code>font-lock-multiline</code> variable is set to <code>t</code>, Font
-Lock will try to add the <code>font-lock-multiline</code> property
-automatically on multiline constructs.  This is not a universal
-solution, however, since it slows down Font Lock somewhat.  It can
-miss some multiline constructs, or make the property larger or smaller
-than necessary.
-</p>
-<p>For elements whose <var>matcher</var> is a function, the function should
-ensure that submatch 0 covers the whole relevant multiline construct,
-even if only a small subpart will be highlighted.  It is often just as
-easy to add the <code>font-lock-multiline</code> property by hand.
-</p></dd></dl>
+  <p>One way to ensure reliable rehighlighting of multiline Font
+  Lock constructs is to put on them the text property
+  <code>font-lock-multiline</code>. It should be present and
+  non-<code>nil</code> for text that is part of a multiline
+  construct.</p>
 
-<p>The <code>font-lock-multiline</code> property is meant to ensure proper
-refontification; it does not automatically identify new multiline
-constructs.  Identifying the requires that Font Lock mode operate on
-large enough chunks at a time.  This will happen by accident on many
-cases, which may give the impression that multiline constructs magically
-work.  If you set the <code>font-lock-multiline</code> variable
-non-<code>nil</code>, this impression will be even stronger, since the
-highlighting of those constructs which are found will be properly
-updated from then on.  But that does not work reliably.
-</p>
-<p>To find multiline constructs reliably, you must either manually place
-the <code>font-lock-multiline</code> property on the text before Font Lock
-mode looks at it, or use <code>font-lock-fontify-region-function</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Region-to-Refontify.html#Region-to-Refontify" accesskey="n" rel="next">Region to Refontify</a>, Up: <a href="Multiline-Font-Lock.html#Multiline-Font-Lock" accesskey="u" rel="up">Multiline Font Lock</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When Font Lock is about to highlight a range of text, it first
+  extends the boundaries of the range as necessary so that they do
+  not fall within text marked with the
+  <code>font-lock-multiline</code> property. Then it removes any
+  <code>font-lock-multiline</code> properties from the range, and
+  highlights it. The highlighting specification (mostly
+  <code>font-lock-keywords</code>) must reinstall this property
+  each time, whenever it is appropriate.</p>
 
+  <p><strong>Warning:</strong> don&rsquo;t use the
+  <code>font-lock-multiline</code> property on large ranges of
+  text, because that will make rehighlighting slow.</p>
 
+  <dl>
+    <dt><a name="index-font_002dlock_002dmultiline" id=
+    "index-font_002dlock_002dmultiline"></a>Variable:
+    <strong>font-lock-multiline</strong></dt>
 
+    <dd>
+      <p>If the <code>font-lock-multiline</code> variable is set to
+      <code>t</code>, Font Lock will try to add the
+      <code>font-lock-multiline</code> property automatically on
+      multiline constructs. This is not a universal solution,
+      however, since it slows down Font Lock somewhat. It can miss
+      some multiline constructs, or make the property larger or
+      smaller than necessary.</p>
+
+      <p>For elements whose <var>matcher</var> is a function, the
+      function should ensure that submatch 0 covers the whole
+      relevant multiline construct, even if only a small subpart
+      will be highlighted. It is often just as easy to add the
+      <code>font-lock-multiline</code> property by hand.</p>
+    </dd>
+  </dl>
+
+  <p>The <code>font-lock-multiline</code> property is meant to
+  ensure proper refontification; it does not automatically identify
+  new multiline constructs. Identifying the requires that Font Lock
+  mode operate on large enough chunks at a time. This will happen
+  by accident on many cases, which may give the impression that
+  multiline constructs magically work. If you set the
+  <code>font-lock-multiline</code> variable non-<code>nil</code>,
+  this impression will be even stronger, since the highlighting of
+  those constructs which are found will be properly updated from
+  then on. But that does not work reliably.</p>
+
+  <p>To find multiline constructs reliably, you must either
+  manually place the <code>font-lock-multiline</code> property on
+  the text before Font Lock mode looks at it, or use
+  <code>font-lock-fontify-region-function</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Region-to-Refontify.html#Region-to-Refontify"
+    accesskey="n" rel="next">Region to Refontify</a>, Up: <a href=
+    "Multiline-Font-Lock.html#Multiline-Font-Lock" accesskey="u"
+    rel="up">Multiline Font Lock</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

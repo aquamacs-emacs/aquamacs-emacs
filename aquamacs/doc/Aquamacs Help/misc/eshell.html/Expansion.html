@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Eshell, the Emacs shell.
 
 Copyright (C) 1999-2016 Free Software Foundation, Inc.
@@ -14,91 +16,138 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Eshell: The Emacs Shell: Expansion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Eshell: The Emacs Shell: Expansion">
-<meta name="keywords" content="Eshell: The Emacs Shell: Expansion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Dollars-Expansion.html#Dollars-Expansion" rel="next" title="Dollars Expansion">
-<link href="Scripts.html#Scripts" rel="prev" title="Scripts">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Eshell: The Emacs Shell: Expansion</title>
+  <meta name="description" content=
+  "Eshell: The Emacs Shell: Expansion" />
+  <meta name="keywords" content=
+  "Eshell: The Emacs Shell: Expansion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Dollars-Expansion.html#Dollars-Expansion" rel="next"
+  title="Dollars Expansion" />
+  <link href="Scripts.html#Scripts" rel="prev" title="Scripts" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Expansion"></a>
-<div class="header">
-<p>
-Next: <a href="Input_002fOutput.html#Input_002fOutput" accesskey="n" rel="next">Input/Output</a>, Previous: <a href="Commands.html#Commands" accesskey="p" rel="prev">Commands</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Expansion-1"></a>
-<h2 class="chapter">3 Expansion</h2>
-<p>Expansion in a command shell is somewhat like macro expansion in macro
-parsers (such as <code>cpp</code> and <code>m4</code>), but in a command
-shell, they are less often used for constants, and usually for using
-variables and string manipulation.<a name="DOCF6" href="#FOOT6"><sup>6</sup></a>  For example, <code>$var</code> on a line
-expands to the value of the variable <code>var</code> when the line is
-executed.  Expansions are usually passed as arguments, but may also be
-used as commands.<a name="DOCF7" href="#FOOT7"><sup>7</sup></a>
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Dollars-Expansion.html#Dollars-Expansion" accesskey="1">Dollars Expansion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Globbing.html#Globbing" accesskey="2">Globbing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+<body lang="en" xml:lang="en">
+  <a name="Expansion" id="Expansion"></a>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <div class="header">
+    <p>Next: <a href="Input_002fOutput.html#Input_002fOutput"
+    accesskey="n" rel="next">Input/Output</a>, Previous: <a href=
+    "Commands.html#Commands" accesskey="p" rel="prev">Commands</a>,
+    Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Expansion-1" id="Expansion-1"></a>
 
-<h3><a name="FOOT6" href="#DOCF6">(6)</a></h3>
-<p>Eshell has no
-string-manipulation expansions because the Elisp library already
-provides many functions for this.</p>
-<h3><a name="FOOT7" href="#DOCF7">(7)</a></h3>
-<p>E.g., entering just &lsquo;<samp>$var</samp>&rsquo; at the prompt
-is equivalent to entering the value of <code>var</code> at the prompt.</p>
-</div>
+  <h2 class="chapter">3 Expansion</h2>
 
+  <p>Expansion in a command shell is somewhat like macro expansion
+  in macro parsers (such as <code>cpp</code> and <code>m4</code>),
+  but in a command shell, they are less often used for constants,
+  and usually for using variables and string manipulation.<a name=
+  "DOCF6" href="#FOOT6" id="DOCF6"><sup>6</sup></a> For example,
+  <code>$var</code> on a line expands to the value of the variable
+  <code>var</code> when the line is executed. Expansions are
+  usually passed as arguments, but may also be used as
+  commands.<a name="DOCF7" href="#FOOT7" id=
+  "DOCF7"><sup>7</sup></a></p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dollars-Expansion.html#Dollars-Expansion" accesskey=
+      "1">Dollars Expansion</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Globbing.html#Globbing" accesskey="2">Globbing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT6" href="#DOCF6" id="FOOT6">(6)</a></h3>
+
+    <p>Eshell has no string-manipulation expansions because the
+    Elisp library already provides many functions for this.</p>
+
+    <h3><a name="FOOT7" href="#DOCF7" id="FOOT7">(7)</a></h3>
+
+    <p>E.g., entering just &lsquo;<samp>$var</samp>&rsquo; at the
+    prompt is equivalent to entering the value of <code>var</code>
+    at the prompt.</p>
+  </div>
 </body>
 </html>

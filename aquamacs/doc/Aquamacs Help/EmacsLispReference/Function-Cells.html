@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,160 +19,250 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Function Cells</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Function Cells">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Function Cells">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Closures.html#Closures" rel="next" title="Closures">
-<link href="Generic-Functions.html#Generic-Functions" rel="prev" title="Generic Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Function Cells</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Function Cells" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Function Cells" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href="Closures.html#Closures" rel="next" title=
+  "Closures" />
+  <link href="Generic-Functions.html#Generic-Functions" rel="prev"
+  title="Generic Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Function-Cells" id="Function-Cells"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Closures.html#Closures" accesskey="n" rel=
+    "next">Closures</a>, Previous: <a href=
+    "Generic-Functions.html#Generic-Functions" accesskey="p" rel=
+    "prev">Generic Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Accessing-Function-Cell-Contents" id=
+  "Accessing-Function-Cell-Contents"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Function-Cells"></a>
-<div class="header">
-<p>
-Next: <a href="Closures.html#Closures" accesskey="n" rel="next">Closures</a>, Previous: <a href="Generic-Functions.html#Generic-Functions" accesskey="p" rel="prev">Generic Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Accessing-Function-Cell-Contents"></a>
-<h3 class="section">12.9 Accessing Function Cell Contents</h3>
+  <h3 class="section">12.9 Accessing Function Cell Contents</h3>
 
-<p>The <em>function definition</em> of a symbol is the object stored in the
-function cell of the symbol.  The functions described here access, test,
-and set the function cell of symbols.
-</p>
-<p>See also the function <code>indirect-function</code>.  See <a href="Function-Indirection.html#Definition-of-indirect_002dfunction">Definition of indirect-function</a>.
-</p>
-<dl>
-<dt><a name="index-symbol_002dfunction"></a>Function: <strong>symbol-function</strong> <em>symbol</em></dt>
-<dd><a name="index-void_002dfunction"></a>
-<p>This returns the object in the function cell of <var>symbol</var>.  It does
-not check that the returned object is a legitimate function.
-</p>
-<p>If the function cell is void, the return value is <code>nil</code>.  To
-distinguish between a function cell that is void and one set to
-<code>nil</code>, use <code>fboundp</code> (see below).
-</p>
-<div class="example">
-<pre class="example">(defun bar (n) (+ n 2))
+  <p>The <em>function definition</em> of a symbol is the object
+  stored in the function cell of the symbol. The functions
+  described here access, test, and set the function cell of
+  symbols.</p>
+
+  <p>See also the function <code>indirect-function</code>. See
+  <a href=
+  "Function-Indirection.html#Definition-of-indirect_002dfunction">Definition
+  of indirect-function</a>.</p>
+
+  <dl>
+    <dt><a name="index-symbol_002dfunction" id=
+    "index-symbol_002dfunction"></a>Function:
+    <strong>symbol-function</strong> <em>symbol</em></dt>
+
+    <dd>
+      <a name="index-void_002dfunction" id=
+      "index-void_002dfunction"></a>
+
+      <p>This returns the object in the function cell of
+      <var>symbol</var>. It does not check that the returned object
+      is a legitimate function.</p>
+
+      <p>If the function cell is void, the return value is
+      <code>nil</code>. To distinguish between a function cell that
+      is void and one set to <code>nil</code>, use
+      <code>fboundp</code> (see below).</p>
+
+      <div class="example">
+        <pre class="example">
+(defun bar (n) (+ n 2))
 (symbol-function 'bar)
      &rArr; (lambda (n) (+ n 2))
-</pre><pre class="example">(fset 'baz 'bar)
+</pre>
+        <pre class="example">
+(fset 'baz 'bar)
      &rArr; bar
-</pre><pre class="example">(symbol-function 'baz)
+</pre>
+        <pre class="example">
+(symbol-function 'baz)
      &rArr; bar
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl><a name="index-void-function-cell" id=
+  "index-void-function-cell"></a>
 
-<a name="index-void-function-cell"></a>
-<p>If you have never given a symbol any function definition, we say
-that that symbol&rsquo;s function cell is <em>void</em>.  In other words, the
-function cell does not have any Lisp object in it.  If you try to call
-the symbol as a function, Emacs signals a <code>void-function</code> error.
-</p>
-<p>Note that void is not the same as <code>nil</code> or the symbol
-<code>void</code>.  The symbols <code>nil</code> and <code>void</code> are Lisp objects,
-and can be stored into a function cell just as any other object can be
-(and they can be valid functions if you define them in turn with
-<code>defun</code>).  A void function cell contains no object whatsoever.
-</p>
-<p>You can test the voidness of a symbol&rsquo;s function definition with
-<code>fboundp</code>.  After you have given a symbol a function definition, you
-can make it void once more using <code>fmakunbound</code>.
-</p>
-<dl>
-<dt><a name="index-fboundp"></a>Function: <strong>fboundp</strong> <em>symbol</em></dt>
-<dd><p>This function returns <code>t</code> if the symbol has an object in its
-function cell, <code>nil</code> otherwise.  It does not check that the object
-is a legitimate function.
-</p></dd></dl>
+  <p>If you have never given a symbol any function definition, we
+  say that that symbol&rsquo;s function cell is <em>void</em>. In
+  other words, the function cell does not have any Lisp object in
+  it. If you try to call the symbol as a function, Emacs signals a
+  <code>void-function</code> error.</p>
 
-<dl>
-<dt><a name="index-fmakunbound"></a>Function: <strong>fmakunbound</strong> <em>symbol</em></dt>
-<dd><p>This function makes <var>symbol</var>&rsquo;s function cell void, so that a
-subsequent attempt to access this cell will cause a
-<code>void-function</code> error.  It returns <var>symbol</var>.  (See also
-<code>makunbound</code>, in <a href="Void-Variables.html#Void-Variables">Void Variables</a>.)
-</p>
-<div class="example">
-<pre class="example">(defun foo (x) x)
+  <p>Note that void is not the same as <code>nil</code> or the
+  symbol <code>void</code>. The symbols <code>nil</code> and
+  <code>void</code> are Lisp objects, and can be stored into a
+  function cell just as any other object can be (and they can be
+  valid functions if you define them in turn with
+  <code>defun</code>). A void function cell contains no object
+  whatsoever.</p>
+
+  <p>You can test the voidness of a symbol&rsquo;s function
+  definition with <code>fboundp</code>. After you have given a
+  symbol a function definition, you can make it void once more
+  using <code>fmakunbound</code>.</p>
+
+  <dl>
+    <dt><a name="index-fboundp" id="index-fboundp"></a>Function:
+    <strong>fboundp</strong> <em>symbol</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if the symbol has an
+      object in its function cell, <code>nil</code> otherwise. It
+      does not check that the object is a legitimate function.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-fmakunbound" id=
+    "index-fmakunbound"></a>Function: <strong>fmakunbound</strong>
+    <em>symbol</em></dt>
+
+    <dd>
+      <p>This function makes <var>symbol</var>&rsquo;s function
+      cell void, so that a subsequent attempt to access this cell
+      will cause a <code>void-function</code> error. It returns
+      <var>symbol</var>. (See also <code>makunbound</code>, in
+      <a href="Void-Variables.html#Void-Variables">Void
+      Variables</a>.)</p>
+
+      <div class="example">
+        <pre class="example">
+(defun foo (x) x)
 (foo 1)
      &rArr;1
-</pre><pre class="example">(fmakunbound 'foo)
+</pre>
+        <pre class="example">
+(fmakunbound 'foo)
      &rArr; foo
-</pre><pre class="example">(foo 1)
+</pre>
+        <pre class="example">
+(foo 1)
 error&rarr; Symbol's function definition is void: foo
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-fset"></a>Function: <strong>fset</strong> <em>symbol definition</em></dt>
-<dd><p>This function stores <var>definition</var> in the function cell of
-<var>symbol</var>.  The result is <var>definition</var>.  Normally
-<var>definition</var> should be a function or the name of a function, but
-this is not checked.  The argument <var>symbol</var> is an ordinary evaluated
-argument.
-</p>
-<p>The primary use of this function is as a subroutine by constructs that define
-or alter functions, like <code>defun</code> or <code>advice-add</code> (see <a href="Advising-Functions.html#Advising-Functions">Advising Functions</a>).  You can also use it to give a symbol a function definition that
-is not a function, e.g., a keyboard macro (see <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>):
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Define a named keyboard macro.</span>
-(fset 'kill-two-lines &quot;\^u2\^k&quot;)
-     &rArr; &quot;\^u2\^k&quot;
-</pre></div>
+  <dl>
+    <dt><a name="index-fset" id="index-fset"></a>Function:
+    <strong>fset</strong> <em>symbol definition</em></dt>
 
-<p>It you wish to use <code>fset</code> to make an alternate name for a
-function, consider using <code>defalias</code> instead.  See <a href="Defining-Functions.html#Definition-of-defalias">Definition of defalias</a>.
-</p></dd></dl>
+    <dd>
+      <p>This function stores <var>definition</var> in the function
+      cell of <var>symbol</var>. The result is
+      <var>definition</var>. Normally <var>definition</var> should
+      be a function or the name of a function, but this is not
+      checked. The argument <var>symbol</var> is an ordinary
+      evaluated argument.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Closures.html#Closures" accesskey="n" rel="next">Closures</a>, Previous: <a href="Generic-Functions.html#Generic-Functions" accesskey="p" rel="prev">Generic Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>The primary use of this function is as a subroutine by
+      constructs that define or alter functions, like
+      <code>defun</code> or <code>advice-add</code> (see <a href=
+      "Advising-Functions.html#Advising-Functions">Advising
+      Functions</a>). You can also use it to give a symbol a
+      function definition that is not a function, e.g., a keyboard
+      macro (see <a href=
+      "Keyboard-Macros.html#Keyboard-Macros">Keyboard
+      Macros</a>):</p>
 
+      <div class="example">
+        <pre class="example">
+;; <span class="roman">Define a named keyboard macro.</span>
+(fset 'kill-two-lines "\^u2\^k")
+     &rArr; "\^u2\^k"
+</pre>
+      </div>
 
+      <p>It you wish to use <code>fset</code> to make an alternate
+      name for a function, consider using <code>defalias</code>
+      instead. See <a href=
+      "Defining-Functions.html#Definition-of-defalias">Definition
+      of defalias</a>.</p>
+    </dd>
+  </dl>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Closures.html#Closures" accesskey="n" rel=
+    "next">Closures</a>, Previous: <a href=
+    "Generic-Functions.html#Generic-Functions" accesskey="p" rel=
+    "prev">Generic Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

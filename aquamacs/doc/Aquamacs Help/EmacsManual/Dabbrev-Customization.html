@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,120 +20,166 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Dabbrev Customization</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Dabbrev Customization">
-<meta name="keywords" content="GNU Emacs Manual: Dabbrev Customization">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Abbrevs.html#Abbrevs" rel="up" title="Abbrevs">
-<link href="Dired.html#Dired" rel="next" title="Dired">
-<link href="Dynamic-Abbrevs.html#Dynamic-Abbrevs" rel="prev" title="Dynamic Abbrevs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Dabbrev Customization</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Dabbrev Customization" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Dabbrev Customization" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Abbrevs.html#Abbrevs" rel="up" title="Abbrevs" />
+  <link href="Dired.html#Dired" rel="next" title="Dired" />
+  <link href="Dynamic-Abbrevs.html#Dynamic-Abbrevs" rel="prev"
+  title="Dynamic Abbrevs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Dabbrev-Customization" id="Dabbrev-Customization"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Dynamic-Abbrevs.html#Dynamic-Abbrevs"
+    accesskey="p" rel="prev">Dynamic Abbrevs</a>, Up: <a href=
+    "Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Customizing-Dynamic-Abbreviation" id=
+  "Customizing-Dynamic-Abbreviation"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dabbrev-Customization"></a>
-<div class="header">
-<p>
-Previous: <a href="Dynamic-Abbrevs.html#Dynamic-Abbrevs" accesskey="p" rel="prev">Dynamic Abbrevs</a>, Up: <a href="Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Customizing-Dynamic-Abbreviation"></a>
-<h3 class="section">29.7 Customizing Dynamic Abbreviation</h3>
+  <h3 class="section">29.7 Customizing Dynamic Abbreviation</h3>
 
-<p>Normally, dynamic abbrev expansion ignores case when searching for
-expansions.  That is, the expansion need not agree in case with the word
-you are expanding.
-</p>
-<a name="index-dabbrev_002dcase_002dfold_002dsearch"></a>
-<p>This feature is controlled by the variable
-<code>dabbrev-case-fold-search</code>.  If it is <code>t</code>, case is ignored
-in this search; if it is <code>nil</code>, the word and the expansion must
-match in case.  If the value is <code>case-fold-search</code> (the default),
-then the variable <code>case-fold-search</code> controls whether to ignore
-case while searching for expansions (see <a href="Lax-Search.html#Lax-Search">Lax Search</a>).
-</p>
-<a name="index-dabbrev_002dcase_002dreplace"></a>
-<p>Normally, dynamic abbrev expansion preserves the case pattern
-<em>of the dynamic abbrev you are expanding</em>, by converting the
-expansion to that case pattern.
-</p>
-<a name="index-dabbrev_002dcase_002dfold_002dsearch-1"></a>
-<p>The variable <code>dabbrev-case-replace</code> controls whether to
-preserve the case pattern of the dynamic abbrev.  If it is <code>t</code>,
-the dynamic abbrev&rsquo;s case pattern is preserved in most cases; if it is
-<code>nil</code>, the expansion is always copied verbatim.  If the value is
-<code>case-replace</code> (the default), then the variable
-<code>case-replace</code> controls whether to copy the expansion verbatim
-(see <a href="Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches">Replacement and Lax Matches</a>).
-</p>
-<p>However, if the expansion contains a complex mixed case pattern, and
-the dynamic abbrev matches this pattern as far as it goes, then the
-expansion is always copied verbatim, regardless of those variables.
-Thus, for example, if the buffer contains
-<code>variableWithSillyCasePattern</code>, and you type <kbd>v a M-/</kbd>, it
-copies the expansion verbatim including its case pattern.
-</p>
-<a name="index-dabbrev_002dabbrev_002dchar_002dregexp"></a>
-<p>The variable <code>dabbrev-abbrev-char-regexp</code>, if non-<code>nil</code>,
-controls which characters are considered part of a word, for dynamic expansion
-purposes.  The regular expression must match just one character, never
-two or more.  The same regular expression also determines which
-characters are part of an expansion.  The (default) value <code>nil</code>
-has a special meaning: dynamic abbrevs are made of word characters,
-but expansions are made of word and symbol characters.
-</p>
-<a name="index-dabbrev_002dabbrev_002dskip_002dleading_002dregexp"></a>
-<p>In shell scripts and makefiles, a variable name is sometimes prefixed
-with &lsquo;<samp>$</samp>&rsquo; and sometimes not.  Major modes for this kind of text can
-customize dynamic abbrev expansion to handle optional prefixes by setting
-the variable <code>dabbrev-abbrev-skip-leading-regexp</code>.  Its value
-should be a regular expression that matches the optional prefix that
-dynamic abbrev expression should ignore.  The default is <code>nil</code>,
-which means no characters should be skipped.
-</p><hr>
-<div class="header">
-<p>
-Previous: <a href="Dynamic-Abbrevs.html#Dynamic-Abbrevs" accesskey="p" rel="prev">Dynamic Abbrevs</a>, Up: <a href="Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Normally, dynamic abbrev expansion ignores case when searching
+  for expansions. That is, the expansion need not agree in case
+  with the word you are expanding.</p><a name=
+  "index-dabbrev_002dcase_002dfold_002dsearch" id=
+  "index-dabbrev_002dcase_002dfold_002dsearch"></a>
 
+  <p>This feature is controlled by the variable
+  <code>dabbrev-case-fold-search</code>. If it is <code>t</code>,
+  case is ignored in this search; if it is <code>nil</code>, the
+  word and the expansion must match in case. If the value is
+  <code>case-fold-search</code> (the default), then the variable
+  <code>case-fold-search</code> controls whether to ignore case
+  while searching for expansions (see <a href=
+  "Lax-Search.html#Lax-Search">Lax Search</a>).</p><a name=
+  "index-dabbrev_002dcase_002dreplace" id=
+  "index-dabbrev_002dcase_002dreplace"></a>
 
+  <p>Normally, dynamic abbrev expansion preserves the case pattern
+  <em>of the dynamic abbrev you are expanding</em>, by converting
+  the expansion to that case pattern.</p><a name=
+  "index-dabbrev_002dcase_002dfold_002dsearch-1" id=
+  "index-dabbrev_002dcase_002dfold_002dsearch-1"></a>
 
+  <p>The variable <code>dabbrev-case-replace</code> controls
+  whether to preserve the case pattern of the dynamic abbrev. If it
+  is <code>t</code>, the dynamic abbrev&rsquo;s case pattern is
+  preserved in most cases; if it is <code>nil</code>, the expansion
+  is always copied verbatim. If the value is
+  <code>case-replace</code> (the default), then the variable
+  <code>case-replace</code> controls whether to copy the expansion
+  verbatim (see <a href=
+  "Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches">Replacement
+  and Lax Matches</a>).</p>
+
+  <p>However, if the expansion contains a complex mixed case
+  pattern, and the dynamic abbrev matches this pattern as far as it
+  goes, then the expansion is always copied verbatim, regardless of
+  those variables. Thus, for example, if the buffer contains
+  <code>variableWithSillyCasePattern</code>, and you type <kbd>v a
+  M-/</kbd>, it copies the expansion verbatim including its case
+  pattern.</p><a name=
+  "index-dabbrev_002dabbrev_002dchar_002dregexp" id=
+  "index-dabbrev_002dabbrev_002dchar_002dregexp"></a>
+
+  <p>The variable <code>dabbrev-abbrev-char-regexp</code>, if
+  non-<code>nil</code>, controls which characters are considered
+  part of a word, for dynamic expansion purposes. The regular
+  expression must match just one character, never two or more. The
+  same regular expression also determines which characters are part
+  of an expansion. The (default) value <code>nil</code> has a
+  special meaning: dynamic abbrevs are made of word characters, but
+  expansions are made of word and symbol characters.</p><a name=
+  "index-dabbrev_002dabbrev_002dskip_002dleading_002dregexp" id=
+  "index-dabbrev_002dabbrev_002dskip_002dleading_002dregexp"></a>
+
+  <p>In shell scripts and makefiles, a variable name is sometimes
+  prefixed with &lsquo;<samp>$</samp>&rsquo; and sometimes not.
+  Major modes for this kind of text can customize dynamic abbrev
+  expansion to handle optional prefixes by setting the variable
+  <code>dabbrev-abbrev-skip-leading-regexp</code>. Its value should
+  be a regular expression that matches the optional prefix that
+  dynamic abbrev expression should ignore. The default is
+  <code>nil</code>, which means no characters should be
+  skipped.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Dynamic-Abbrevs.html#Dynamic-Abbrevs"
+    accesskey="p" rel="prev">Dynamic Abbrevs</a>, Up: <a href=
+    "Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,160 +18,278 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Builtin Label Environments</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Builtin Label Environments">
-<meta name="keywords" content="RefTeX User Manual: Builtin Label Environments">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Labels-and-References.html#Labels-and-References" rel="up" title="Labels and References">
-<link href="Defining-Label-Environments.html#Defining-Label-Environments" rel="next" title="Defining Label Environments">
-<link href="Referencing-Labels.html#Referencing-Labels" rel="prev" title="Referencing Labels">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Builtin Label Environments</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Builtin Label Environments" />
+  <meta name="keywords" content=
+  "RefTeX User Manual: Builtin Label Environments" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Labels-and-References.html#Labels-and-References"
+  rel="up" title="Labels and References" />
+  <link href=
+  "Defining-Label-Environments.html#Defining-Label-Environments"
+  rel="next" title="Defining Label Environments" />
+  <link href="Referencing-Labels.html#Referencing-Labels" rel=
+  "prev" title="Referencing Labels" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Builtin-Label-Environments"></a>
-<div class="header">
-<p>
-Next: <a href="Defining-Label-Environments.html#Defining-Label-Environments" accesskey="n" rel="next">Defining Label Environments</a>, Previous: <a href="Referencing-Labels.html#Referencing-Labels" accesskey="p" rel="prev">Referencing Labels</a>, Up: <a href="Labels-and-References.html#Labels-and-References" accesskey="u" rel="up">Labels and References</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Builtin-Label-Environments-1"></a>
-<h3 class="section">3.3 Builtin Label Environments</h3>
-<a name="index-Builtin-label-environments"></a>
-<a name="index-Label-environments_002c-builtin"></a>
-<a name="index-Environments_002c-builtin"></a>
-<a name="index-reftex_002dlabel_002dalist"></a>
-<a name="index-reftex_002dlabel_002dalist_002dbuiltin"></a>
+<body lang="en" xml:lang="en">
+  <a name="Builtin-Label-Environments" id=
+  "Builtin-Label-Environments"></a>
 
-<p>RefTeX needs to be aware of the environments which can be referenced
-with a label (i.e., which carry their own counters).  By default, RefTeX
-recognizes all labeled environments and macros discussed in <cite>The
-LaTeX Companion by Goossens, Mittelbach &amp; Samarin, Addison-Wesley
-1994.</cite>.  These are:
-</p>
-<ul class="no-bullet">
-<li>- <a name="index-figure_002c-LaTeX-environment"></a>
-<a name="index-figure_002a_002c-LaTeX-environment"></a>
-<a name="index-table_002c-LaTeX-environment"></a>
-<a name="index-table_002a_002c-LaTeX-environment"></a>
-<a name="index-equation_002c-LaTeX-environment"></a>
-<a name="index-eqnarray_002c-LaTeX-environment"></a>
-<a name="index-enumerate_002c-LaTeX-environment"></a>
-<a name="index-_005cfootnote_002c-LaTeX-macro"></a>
-<a name="index-LaTeX-macro-footnote"></a>
-<a name="index-LaTeX-core"></a>
-<code>figure</code>, <code>figure*</code>, <code>table</code>, <code>table*</code>, <code>equation</code>,
-<code>eqnarray</code>, <code>enumerate</code>, the <code>\footnote</code> macro (this is
-the LaTeX core stuff)
-</li><li>- <a name="index-AMS_002dLaTeX"></a>
-<a name="index-amsmath_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-amsmath"></a>
-<a name="index-align_002c-AMS_002dLaTeX-environment"></a>
-<a name="index-gather_002c-AMS_002dLaTeX-environment"></a>
-<a name="index-multline_002c-AMS_002dLaTeX-environment"></a>
-<a name="index-flalign_002c-AMS_002dLaTeX-environment"></a>
-<a name="index-alignat_002c-AMS_002dLaTeX-environment"></a>
-<a name="index-xalignat_002c-AMS_002dLaTeX-environment"></a>
-<a name="index-xxalignat_002c-AMS_002dLaTeX-environment"></a>
-<a name="index-subequations_002c-AMS_002dLaTeX-environment"></a>
-<code>align</code>, <code>gather</code>, <code>multline</code>, <code>flalign</code>,
-<code>alignat</code>, <code>xalignat</code>, <code>xxalignat</code>, <code>subequations</code>
-(from AMS-LaTeX&rsquo;s <samp>amsmath.sty</samp> package)
-</li><li>- <a name="index-endnote_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-endnote"></a>
-<a name="index-_005cendnote_002c-LaTeX-macro"></a>
-the <code>\endnote</code> macro (from <samp>endnotes.sty</samp>)
-</li><li>- <a name="index-fancybox_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-fancybox"></a>
-<a name="index-Beqnarray_002c-LaTeX-environment"></a>
-<code>Beqnarray</code> (<samp>fancybox.sty</samp>)
-</li><li>- <a name="index-floatfig_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-floatfig"></a>
-<a name="index-floatingfig_002c-LaTeX-environment"></a>
-<code>floatingfig</code> (<samp>floatfig.sty</samp>)
-</li><li>- <a name="index-longtable_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-longtable"></a>
-<a name="index-longtable_002c-LaTeX-environment"></a>
-<code>longtable</code> (<samp>longtable.sty</samp>)
-</li><li>- <a name="index-picinpar_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-picinpar"></a>
-<a name="index-figwindow_002c-LaTeX-environment"></a>
-<a name="index-tabwindow_002c-LaTeX-environment"></a>
-<code>figwindow</code>, <code>tabwindow</code> (<samp>picinpar.sty</samp>)
-</li><li>- <a name="index-sidecap_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-sidecap"></a>
-<a name="index-SCfigure_002c-LaTeX-environment"></a>
-<a name="index-SCtable_002c-LaTeX-environment"></a>
-<code>SCfigure</code>, <code>SCtable</code> (<samp>sidecap.sty</samp>)
-</li><li>- <a name="index-rotating_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-rotating"></a>
-<a name="index-sidewaysfigure_002c-LaTeX-environment"></a>
-<a name="index-sidewaystable_002c-LaTeX-environment"></a>
-<code>sidewaysfigure</code>, <code>sidewaystable</code> (<samp>rotating.sty</samp>)
-</li><li>- <a name="index-subfig_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-subfigure"></a>
-<a name="index-subfigure_002c-LaTeX-environment"></a>
-<a name="index-subfigure_002a_002c-LaTeX-environment"></a>
-<code>subfigure</code>, <code>subfigure*</code>, the <code>\subfigure</code> macro
-(<samp>subfigure.sty</samp>)
-</li><li>- <a name="index-supertab_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-supertab"></a>
-<a name="index-supertabular_002c-LaTeX-environment"></a>
-<code>supertabular</code> (<samp>supertab.sty</samp>)
-</li><li>- <a name="index-wrapfig_002c-LaTeX-package"></a>
-<a name="index-LaTeX-packages_002c-wrapfig"></a>
-<a name="index-wrapfigure_002c-LaTeX-environment"></a>
-<code>wrapfigure</code> (<samp>wrapfig.sty</samp>)
-</li></ul>
+  <div class="header">
+    <p>Next: <a href=
+    "Defining-Label-Environments.html#Defining-Label-Environments"
+    accesskey="n" rel="next">Defining Label Environments</a>,
+    Previous: <a href="Referencing-Labels.html#Referencing-Labels"
+    accesskey="p" rel="prev">Referencing Labels</a>, Up: <a href=
+    "Labels-and-References.html#Labels-and-References" accesskey=
+    "u" rel="up">Labels and References</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Builtin-Label-Environments-1" id=
+  "Builtin-Label-Environments-1"></a>
 
-<p>If you want to use other labeled environments, defined with
-<code>\newtheorem</code>, RefTeX needs to be configured to recognize
-them (see <a href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Defining-Label-Environments.html#Defining-Label-Environments" accesskey="n" rel="next">Defining Label Environments</a>, Previous: <a href="Referencing-Labels.html#Referencing-Labels" accesskey="p" rel="prev">Referencing Labels</a>, Up: <a href="Labels-and-References.html#Labels-and-References" accesskey="u" rel="up">Labels and References</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">3.3 Builtin Label Environments</h3><a name=
+  "index-Builtin-label-environments" id=
+  "index-Builtin-label-environments"></a> <a name=
+  "index-Label-environments_002c-builtin" id=
+  "index-Label-environments_002c-builtin"></a> <a name=
+  "index-Environments_002c-builtin" id=
+  "index-Environments_002c-builtin"></a> <a name=
+  "index-reftex_002dlabel_002dalist" id=
+  "index-reftex_002dlabel_002dalist"></a> <a name=
+  "index-reftex_002dlabel_002dalist_002dbuiltin" id=
+  "index-reftex_002dlabel_002dalist_002dbuiltin"></a>
 
+  <p>RefTeX needs to be aware of the environments which can be
+  referenced with a label (i.e., which carry their own counters).
+  By default, RefTeX recognizes all labeled environments and macros
+  discussed in <cite>The LaTeX Companion by Goossens, Mittelbach
+  &amp; Samarin, Addison-Wesley 1994.</cite>. These are:</p>
 
+  <ul class="no-bullet">
+    <li>- <a name="index-figure_002c-LaTeX-environment" id=
+    "index-figure_002c-LaTeX-environment"></a> <a name=
+    "index-figure_002a_002c-LaTeX-environment" id=
+    "index-figure_002a_002c-LaTeX-environment"></a> <a name=
+    "index-table_002c-LaTeX-environment" id=
+    "index-table_002c-LaTeX-environment"></a> <a name=
+    "index-table_002a_002c-LaTeX-environment" id=
+    "index-table_002a_002c-LaTeX-environment"></a> <a name=
+    "index-equation_002c-LaTeX-environment" id=
+    "index-equation_002c-LaTeX-environment"></a> <a name=
+    "index-eqnarray_002c-LaTeX-environment" id=
+    "index-eqnarray_002c-LaTeX-environment"></a> <a name=
+    "index-enumerate_002c-LaTeX-environment" id=
+    "index-enumerate_002c-LaTeX-environment"></a> <a name=
+    "index-_005cfootnote_002c-LaTeX-macro" id=
+    "index-_005cfootnote_002c-LaTeX-macro"></a> <a name=
+    "index-LaTeX-macro-footnote" id=
+    "index-LaTeX-macro-footnote"></a> <a name="index-LaTeX-core"
+    id="index-LaTeX-core"></a> <code>figure</code>,
+    <code>figure*</code>, <code>table</code>, <code>table*</code>,
+    <code>equation</code>, <code>eqnarray</code>,
+    <code>enumerate</code>, the <code>\footnote</code> macro (this
+    is the LaTeX core stuff)</li>
 
+    <li>- <a name="index-AMS_002dLaTeX" id=
+    "index-AMS_002dLaTeX"></a> <a name=
+    "index-amsmath_002c-LaTeX-package" id=
+    "index-amsmath_002c-LaTeX-package"></a> <a name=
+    "index-LaTeX-packages_002c-amsmath" id=
+    "index-LaTeX-packages_002c-amsmath"></a> <a name=
+    "index-align_002c-AMS_002dLaTeX-environment" id=
+    "index-align_002c-AMS_002dLaTeX-environment"></a> <a name=
+    "index-gather_002c-AMS_002dLaTeX-environment" id=
+    "index-gather_002c-AMS_002dLaTeX-environment"></a> <a name=
+    "index-multline_002c-AMS_002dLaTeX-environment" id=
+    "index-multline_002c-AMS_002dLaTeX-environment"></a> <a name=
+    "index-flalign_002c-AMS_002dLaTeX-environment" id=
+    "index-flalign_002c-AMS_002dLaTeX-environment"></a> <a name=
+    "index-alignat_002c-AMS_002dLaTeX-environment" id=
+    "index-alignat_002c-AMS_002dLaTeX-environment"></a> <a name=
+    "index-xalignat_002c-AMS_002dLaTeX-environment" id=
+    "index-xalignat_002c-AMS_002dLaTeX-environment"></a> <a name=
+    "index-xxalignat_002c-AMS_002dLaTeX-environment" id=
+    "index-xxalignat_002c-AMS_002dLaTeX-environment"></a> <a name=
+    "index-subequations_002c-AMS_002dLaTeX-environment" id=
+    "index-subequations_002c-AMS_002dLaTeX-environment"></a>
+    <code>align</code>, <code>gather</code>, <code>multline</code>,
+    <code>flalign</code>, <code>alignat</code>,
+    <code>xalignat</code>, <code>xxalignat</code>,
+    <code>subequations</code> (from AMS-LaTeX&rsquo;s
+    <samp>amsmath.sty</samp> package)</li>
+
+    <li>- <a name="index-endnote_002c-LaTeX-package" id=
+    "index-endnote_002c-LaTeX-package"></a> <a name=
+    "index-LaTeX-packages_002c-endnote" id=
+    "index-LaTeX-packages_002c-endnote"></a> <a name=
+    "index-_005cendnote_002c-LaTeX-macro" id=
+    "index-_005cendnote_002c-LaTeX-macro"></a> the
+    <code>\endnote</code> macro (from
+    <samp>endnotes.sty</samp>)</li>
+
+    <li>- <a name="index-fancybox_002c-LaTeX-package" id=
+    "index-fancybox_002c-LaTeX-package"></a> <a name=
+    "index-LaTeX-packages_002c-fancybox" id=
+    "index-LaTeX-packages_002c-fancybox"></a> <a name=
+    "index-Beqnarray_002c-LaTeX-environment" id=
+    "index-Beqnarray_002c-LaTeX-environment"></a>
+    <code>Beqnarray</code> (<samp>fancybox.sty</samp>)</li>
+
+    <li>- <a name="index-floatfig_002c-LaTeX-package" id=
+    "index-floatfig_002c-LaTeX-package"></a> <a name=
+    "index-LaTeX-packages_002c-floatfig" id=
+    "index-LaTeX-packages_002c-floatfig"></a> <a name=
+    "index-floatingfig_002c-LaTeX-environment" id=
+    "index-floatingfig_002c-LaTeX-environment"></a>
+    <code>floatingfig</code> (<samp>floatfig.sty</samp>)</li>
+
+    <li>- <a name="index-longtable_002c-LaTeX-package" id=
+    "index-longtable_002c-LaTeX-package"></a> <a name=
+    "index-LaTeX-packages_002c-longtable" id=
+    "index-LaTeX-packages_002c-longtable"></a> <a name=
+    "index-longtable_002c-LaTeX-environment" id=
+    "index-longtable_002c-LaTeX-environment"></a>
+    <code>longtable</code> (<samp>longtable.sty</samp>)</li>
+
+    <li>- <a name="index-picinpar_002c-LaTeX-package" id=
+    "index-picinpar_002c-LaTeX-package"></a> <a name=
+    "index-LaTeX-packages_002c-picinpar" id=
+    "index-LaTeX-packages_002c-picinpar"></a> <a name=
+    "index-figwindow_002c-LaTeX-environment" id=
+    "index-figwindow_002c-LaTeX-environment"></a> <a name=
+    "index-tabwindow_002c-LaTeX-environment" id=
+    "index-tabwindow_002c-LaTeX-environment"></a>
+    <code>figwindow</code>, <code>tabwindow</code>
+    (<samp>picinpar.sty</samp>)</li>
+
+    <li>- <a name="index-sidecap_002c-LaTeX-package" id=
+    "index-sidecap_002c-LaTeX-package"></a> <a name=
+    "index-LaTeX-packages_002c-sidecap" id=
+    "index-LaTeX-packages_002c-sidecap"></a> <a name=
+    "index-SCfigure_002c-LaTeX-environment" id=
+    "index-SCfigure_002c-LaTeX-environment"></a> <a name=
+    "index-SCtable_002c-LaTeX-environment" id=
+    "index-SCtable_002c-LaTeX-environment"></a>
+    <code>SCfigure</code>, <code>SCtable</code>
+    (<samp>sidecap.sty</samp>)</li>
+
+    <li>- <a name="index-rotating_002c-LaTeX-package" id=
+    "index-rotating_002c-LaTeX-package"></a> <a name=
+    "index-LaTeX-packages_002c-rotating" id=
+    "index-LaTeX-packages_002c-rotating"></a> <a name=
+    "index-sidewaysfigure_002c-LaTeX-environment" id=
+    "index-sidewaysfigure_002c-LaTeX-environment"></a> <a name=
+    "index-sidewaystable_002c-LaTeX-environment" id=
+    "index-sidewaystable_002c-LaTeX-environment"></a>
+    <code>sidewaysfigure</code>, <code>sidewaystable</code>
+    (<samp>rotating.sty</samp>)</li>
+
+    <li>- <a name="index-subfig_002c-LaTeX-package" id=
+    "index-subfig_002c-LaTeX-package"></a> <a name=
+    "index-LaTeX-packages_002c-subfigure" id=
+    "index-LaTeX-packages_002c-subfigure"></a> <a name=
+    "index-subfigure_002c-LaTeX-environment" id=
+    "index-subfigure_002c-LaTeX-environment"></a> <a name=
+    "index-subfigure_002a_002c-LaTeX-environment" id=
+    "index-subfigure_002a_002c-LaTeX-environment"></a>
+    <code>subfigure</code>, <code>subfigure*</code>, the
+    <code>\subfigure</code> macro (<samp>subfigure.sty</samp>)</li>
+
+    <li>- <a name="index-supertab_002c-LaTeX-package" id=
+    "index-supertab_002c-LaTeX-package"></a> <a name=
+    "index-LaTeX-packages_002c-supertab" id=
+    "index-LaTeX-packages_002c-supertab"></a> <a name=
+    "index-supertabular_002c-LaTeX-environment" id=
+    "index-supertabular_002c-LaTeX-environment"></a>
+    <code>supertabular</code> (<samp>supertab.sty</samp>)</li>
+
+    <li>- <a name="index-wrapfig_002c-LaTeX-package" id=
+    "index-wrapfig_002c-LaTeX-package"></a> <a name=
+    "index-LaTeX-packages_002c-wrapfig" id=
+    "index-LaTeX-packages_002c-wrapfig"></a> <a name=
+    "index-wrapfigure_002c-LaTeX-environment" id=
+    "index-wrapfigure_002c-LaTeX-environment"></a>
+    <code>wrapfigure</code> (<samp>wrapfig.sty</samp>)</li>
+  </ul>
+
+  <p>If you want to use other labeled environments, defined with
+  <code>\newtheorem</code>, RefTeX needs to be configured to
+  recognize them (see <a href=
+  "Defining-Label-Environments.html#Defining-Label-Environments">Defining
+  Label Environments</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Defining-Label-Environments.html#Defining-Label-Environments"
+    accesskey="n" rel="next">Defining Label Environments</a>,
+    Previous: <a href="Referencing-Labels.html#Referencing-Labels"
+    accesskey="p" rel="prev">Referencing Labels</a>, Up: <a href=
+    "Labels-and-References.html#Labels-and-References" accesskey=
+    "u" rel="up">Labels and References</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

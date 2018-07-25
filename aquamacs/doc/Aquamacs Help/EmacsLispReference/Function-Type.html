@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,83 +19,119 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Function Type</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Function Type">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Function Type">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Programming-Types.html#Programming-Types" rel="up" title="Programming Types">
-<link href="Macro-Type.html#Macro-Type" rel="next" title="Macro Type">
-<link href="Hash-Table-Type.html#Hash-Table-Type" rel="prev" title="Hash Table Type">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Function Type</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Function Type" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Function Type" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Programming-Types.html#Programming-Types" rel="up"
+  title="Programming Types" />
+  <link href="Macro-Type.html#Macro-Type" rel="next" title=
+  "Macro Type" />
+  <link href="Hash-Table-Type.html#Hash-Table-Type" rel="prev"
+  title="Hash Table Type" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Function-Type" id="Function-Type"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Macro-Type.html#Macro-Type" accesskey="n"
+    rel="next">Macro Type</a>, Previous: <a href=
+    "Hash-Table-Type.html#Hash-Table-Type" accesskey="p" rel=
+    "prev">Hash Table Type</a>, Up: <a href=
+    "Programming-Types.html#Programming-Types" accesskey="u" rel=
+    "up">Programming Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Function-Type-1" id="Function-Type-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Function-Type"></a>
-<div class="header">
-<p>
-Next: <a href="Macro-Type.html#Macro-Type" accesskey="n" rel="next">Macro Type</a>, Previous: <a href="Hash-Table-Type.html#Hash-Table-Type" accesskey="p" rel="prev">Hash Table Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Function-Type-1"></a>
-<h4 class="subsection">2.3.13 Function Type</h4>
+  <h4 class="subsection">2.3.13 Function Type</h4>
 
-<p>Lisp functions are executable code, just like functions in other
-programming languages.  In Lisp, unlike most languages, functions are
-also Lisp objects.  A non-compiled function in Lisp is a lambda
-expression: that is, a list whose first element is the symbol
-<code>lambda</code> (see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>).
-</p>
-<p>In most programming languages, it is impossible to have a function
-without a name.  In Lisp, a function has no intrinsic name.  A lambda
-expression can be called as a function even though it has no name; to
-emphasize this, we also call it an <em>anonymous function</em>
-(see <a href="Anonymous-Functions.html#Anonymous-Functions">Anonymous Functions</a>).  A named function in Lisp is just a
-symbol with a valid function in its function cell (see <a href="Defining-Functions.html#Defining-Functions">Defining Functions</a>).
-</p>
-<p>Most of the time, functions are called when their names are written in
-Lisp expressions in Lisp programs.  However, you can construct or obtain
-a function object at run time and then call it with the primitive
-functions <code>funcall</code> and <code>apply</code>.  See <a href="Calling-Functions.html#Calling-Functions">Calling Functions</a>.
-</p>
+  <p>Lisp functions are executable code, just like functions in
+  other programming languages. In Lisp, unlike most languages,
+  functions are also Lisp objects. A non-compiled function in Lisp
+  is a lambda expression: that is, a list whose first element is
+  the symbol <code>lambda</code> (see <a href=
+  "Lambda-Expressions.html#Lambda-Expressions">Lambda
+  Expressions</a>).</p>
 
+  <p>In most programming languages, it is impossible to have a
+  function without a name. In Lisp, a function has no intrinsic
+  name. A lambda expression can be called as a function even though
+  it has no name; to emphasize this, we also call it an
+  <em>anonymous function</em> (see <a href=
+  "Anonymous-Functions.html#Anonymous-Functions">Anonymous
+  Functions</a>). A named function in Lisp is just a symbol with a
+  valid function in its function cell (see <a href=
+  "Defining-Functions.html#Defining-Functions">Defining
+  Functions</a>).</p>
 
-
+  <p>Most of the time, functions are called when their names are
+  written in Lisp expressions in Lisp programs. However, you can
+  construct or obtain a function object at run time and then call
+  it with the primitive functions <code>funcall</code> and
+  <code>apply</code>. See <a href=
+  "Calling-Functions.html#Calling-Functions">Calling
+  Functions</a>.</p>
 </body>
 </html>

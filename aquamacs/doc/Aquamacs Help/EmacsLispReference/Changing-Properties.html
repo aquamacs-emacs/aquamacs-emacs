@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,244 +19,366 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Changing Properties</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Changing Properties">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Changing Properties">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text-Properties.html#Text-Properties" rel="up" title="Text Properties">
-<link href="Property-Search.html#Property-Search" rel="next" title="Property Search">
-<link href="Examining-Properties.html#Examining-Properties" rel="prev" title="Examining Properties">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Changing
+  Properties</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Changing Properties" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Changing Properties" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text-Properties.html#Text-Properties" rel="up" title=
+  "Text Properties" />
+  <link href="Property-Search.html#Property-Search" rel="next"
+  title="Property Search" />
+  <link href="Examining-Properties.html#Examining-Properties" rel=
+  "prev" title="Examining Properties" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Changing-Properties" id="Changing-Properties"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Property-Search.html#Property-Search"
+    accesskey="n" rel="next">Property Search</a>, Previous:
+    <a href="Examining-Properties.html#Examining-Properties"
+    accesskey="p" rel="prev">Examining Properties</a>, Up: <a href=
+    "Text-Properties.html#Text-Properties" accesskey="u" rel=
+    "up">Text Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Changing-Text-Properties" id=
+  "Changing-Text-Properties"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Changing-Properties"></a>
-<div class="header">
-<p>
-Next: <a href="Property-Search.html#Property-Search" accesskey="n" rel="next">Property Search</a>, Previous: <a href="Examining-Properties.html#Examining-Properties" accesskey="p" rel="prev">Examining Properties</a>, Up: <a href="Text-Properties.html#Text-Properties" accesskey="u" rel="up">Text Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Changing-Text-Properties"></a>
-<h4 class="subsection">31.19.2 Changing Text Properties</h4>
-<a name="index-changing-text-properties"></a>
-<a name="index-text-properties_002c-changing"></a>
+  <h4 class="subsection">31.19.2 Changing Text
+  Properties</h4><a name="index-changing-text-properties" id=
+  "index-changing-text-properties"></a> <a name=
+  "index-text-properties_002c-changing" id=
+  "index-text-properties_002c-changing"></a>
 
-<p>The primitives for changing properties apply to a specified range of
-text in a buffer or string.  The function <code>set-text-properties</code>
-(see end of section) sets the entire property list of the text in that
-range; more often, it is useful to add, change, or delete just certain
-properties specified by name.
-</p>
-<p>Since text properties are considered part of the contents of the
-buffer (or string), and can affect how a buffer looks on the screen,
-any change in buffer text properties marks the buffer as modified.
-Buffer text property changes are undoable also (see <a href="Undo.html#Undo">Undo</a>).
-Positions in a string start from 0, whereas positions in a buffer
-start from 1.
-</p>
-<dl>
-<dt><a name="index-put_002dtext_002dproperty"></a>Function: <strong>put-text-property</strong> <em>start end prop value &amp;optional object</em></dt>
-<dd><p>This function sets the <var>prop</var> property to <var>value</var> for the text
-between <var>start</var> and <var>end</var> in the string or buffer <var>object</var>.
-If <var>object</var> is <code>nil</code>, it defaults to the current buffer.
-</p></dd></dl>
+  <p>The primitives for changing properties apply to a specified
+  range of text in a buffer or string. The function
+  <code>set-text-properties</code> (see end of section) sets the
+  entire property list of the text in that range; more often, it is
+  useful to add, change, or delete just certain properties
+  specified by name.</p>
 
-<dl>
-<dt><a name="index-add_002dtext_002dproperties"></a>Function: <strong>add-text-properties</strong> <em>start end props &amp;optional object</em></dt>
-<dd><p>This function adds or overrides text properties for the text between
-<var>start</var> and <var>end</var> in the string or buffer <var>object</var>.  If
-<var>object</var> is <code>nil</code>, it defaults to the current buffer.
-</p>
-<p>The argument <var>props</var> specifies which properties to add.  It should
-have the form of a property list (see <a href="Property-Lists.html#Property-Lists">Property Lists</a>): a list whose
-elements include the property names followed alternately by the
-corresponding values.
-</p>
-<p>The return value is <code>t</code> if the function actually changed some
-property&rsquo;s value; <code>nil</code> otherwise (if <var>props</var> is <code>nil</code> or
-its values agree with those in the text).
-</p>
-<p>For example, here is how to set the <code>comment</code> and <code>face</code>
-properties of a range of text:
-</p>
-<div class="example">
-<pre class="example">(add-text-properties <var>start</var> <var>end</var>
+  <p>Since text properties are considered part of the contents of
+  the buffer (or string), and can affect how a buffer looks on the
+  screen, any change in buffer text properties marks the buffer as
+  modified. Buffer text property changes are undoable also (see
+  <a href="Undo.html#Undo">Undo</a>). Positions in a string start
+  from 0, whereas positions in a buffer start from 1.</p>
+
+  <dl>
+    <dt><a name="index-put_002dtext_002dproperty" id=
+    "index-put_002dtext_002dproperty"></a>Function:
+    <strong>put-text-property</strong> <em>start end prop value
+    &amp;optional object</em></dt>
+
+    <dd>
+      <p>This function sets the <var>prop</var> property to
+      <var>value</var> for the text between <var>start</var> and
+      <var>end</var> in the string or buffer <var>object</var>. If
+      <var>object</var> is <code>nil</code>, it defaults to the
+      current buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-add_002dtext_002dproperties" id=
+    "index-add_002dtext_002dproperties"></a>Function:
+    <strong>add-text-properties</strong> <em>start end props
+    &amp;optional object</em></dt>
+
+    <dd>
+      <p>This function adds or overrides text properties for the
+      text between <var>start</var> and <var>end</var> in the
+      string or buffer <var>object</var>. If <var>object</var> is
+      <code>nil</code>, it defaults to the current buffer.</p>
+
+      <p>The argument <var>props</var> specifies which properties
+      to add. It should have the form of a property list (see
+      <a href="Property-Lists.html#Property-Lists">Property
+      Lists</a>): a list whose elements include the property names
+      followed alternately by the corresponding values.</p>
+
+      <p>The return value is <code>t</code> if the function
+      actually changed some property&rsquo;s value;
+      <code>nil</code> otherwise (if <var>props</var> is
+      <code>nil</code> or its values agree with those in the
+      text).</p>
+
+      <p>For example, here is how to set the <code>comment</code>
+      and <code>face</code> properties of a range of text:</p>
+
+      <div class="example">
+        <pre class="example">
+(add-text-properties <var>start</var> <var>end</var>
                      '(comment t face highlight))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-remove_002dtext_002dproperties"></a>Function: <strong>remove-text-properties</strong> <em>start end props &amp;optional object</em></dt>
-<dd><p>This function deletes specified text properties from the text between
-<var>start</var> and <var>end</var> in the string or buffer <var>object</var>.  If
-<var>object</var> is <code>nil</code>, it defaults to the current buffer.
-</p>
-<p>The argument <var>props</var> specifies which properties to delete.  It
-should have the form of a property list (see <a href="Property-Lists.html#Property-Lists">Property Lists</a>): a list
-whose elements are property names alternating with corresponding values.
-But only the names matter&mdash;the values that accompany them are ignored.
-For example, here&rsquo;s how to remove the <code>face</code> property.
-</p>
-<div class="example">
-<pre class="example">(remove-text-properties <var>start</var> <var>end</var> '(face nil))
-</pre></div>
+  <dl>
+    <dt><a name="index-remove_002dtext_002dproperties" id=
+    "index-remove_002dtext_002dproperties"></a>Function:
+    <strong>remove-text-properties</strong> <em>start end props
+    &amp;optional object</em></dt>
 
-<p>The return value is <code>t</code> if the function actually changed some
-property&rsquo;s value; <code>nil</code> otherwise (if <var>props</var> is <code>nil</code> or
-if no character in the specified text had any of those properties).
-</p>
-<p>To remove all text properties from certain text, use
-<code>set-text-properties</code> and specify <code>nil</code> for the new property
-list.
-</p></dd></dl>
+    <dd>
+      <p>This function deletes specified text properties from the
+      text between <var>start</var> and <var>end</var> in the
+      string or buffer <var>object</var>. If <var>object</var> is
+      <code>nil</code>, it defaults to the current buffer.</p>
 
-<dl>
-<dt><a name="index-remove_002dlist_002dof_002dtext_002dproperties"></a>Function: <strong>remove-list-of-text-properties</strong> <em>start end list-of-properties &amp;optional object</em></dt>
-<dd><p>Like <code>remove-text-properties</code> except that
-<var>list-of-properties</var> is a list of property names only, not an
-alternating list of property names and values.
-</p></dd></dl>
+      <p>The argument <var>props</var> specifies which properties
+      to delete. It should have the form of a property list (see
+      <a href="Property-Lists.html#Property-Lists">Property
+      Lists</a>): a list whose elements are property names
+      alternating with corresponding values. But only the names
+      matter&mdash;the values that accompany them are ignored. For
+      example, here&rsquo;s how to remove the <code>face</code>
+      property.</p>
 
-<dl>
-<dt><a name="index-set_002dtext_002dproperties"></a>Function: <strong>set-text-properties</strong> <em>start end props &amp;optional object</em></dt>
-<dd><p>This function completely replaces the text property list for the text
-between <var>start</var> and <var>end</var> in the string or buffer <var>object</var>.
-If <var>object</var> is <code>nil</code>, it defaults to the current buffer.
-</p>
-<p>The argument <var>props</var> is the new property list.  It should be a list
-whose elements are property names alternating with corresponding values.
-</p>
-<p>After <code>set-text-properties</code> returns, all the characters in the
-specified range have identical properties.
-</p>
-<p>If <var>props</var> is <code>nil</code>, the effect is to get rid of all properties
-from the specified range of text.  Here&rsquo;s an example:
-</p>
-<div class="example">
-<pre class="example">(set-text-properties <var>start</var> <var>end</var> nil)
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(remove-text-properties <var>start</var> <var>end</var> '(face nil))
+</pre>
+      </div>
 
-<p>Do not rely on the return value of this function.
-</p></dd></dl>
+      <p>The return value is <code>t</code> if the function
+      actually changed some property&rsquo;s value;
+      <code>nil</code> otherwise (if <var>props</var> is
+      <code>nil</code> or if no character in the specified text had
+      any of those properties).</p>
 
-<dl>
-<dt><a name="index-add_002dface_002dtext_002dproperty"></a>Function: <strong>add-face-text-property</strong> <em>start end face &amp;optional appendp object</em></dt>
-<dd><p>This function acts on the text between <var>start</var> and <var>end</var>,
-adding the face <var>face</var> to the <code>face</code> text property.
-<var>face</var> should be a valid value for the <code>face</code> property
-(see <a href="Special-Properties.html#Special-Properties">Special Properties</a>), such as a face name or an anonymous face
-(see <a href="Faces.html#Faces">Faces</a>).
-</p>
-<p>If any text in the region already has a non-<code>nil</code> <code>face</code> property,
-those face(s) are retained.  This function sets the <code>face</code>
-property to a list of faces, with <var>face</var> as the first element (by
-default) and the pre-existing faces as the remaining elements.  If the
-optional argument <var>append</var> is non-<code>nil</code>, <var>face</var> is
-appended to the end of the list instead.  Note that in a face list,
-the first occurring value for each attribute takes precedence.
-</p>
-<p>For example, the following code would assign a italicized green face
-to the text between <var>start</var> and <var>end</var>:
-</p>
-<div class="example">
-<pre class="example">(add-face-text-property <var>start</var> <var>end</var> 'italic)
-(add-face-text-property <var>start</var> <var>end</var> '(:foreground &quot;red&quot;))
-(add-face-text-property <var>start</var> <var>end</var> '(:foreground &quot;green&quot;))
-</pre></div>
+      <p>To remove all text properties from certain text, use
+      <code>set-text-properties</code> and specify <code>nil</code>
+      for the new property list.</p>
+    </dd>
+  </dl>
 
-<p>The optional argument <var>object</var>, if non-<code>nil</code>, specifies a
-buffer or string to act on, rather than the current buffer.  If
-<var>object</var> is a string, then <var>start</var> and <var>end</var> are
-zero-based indices into the string.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-remove_002dlist_002dof_002dtext_002dproperties" id=
+    "index-remove_002dlist_002dof_002dtext_002dproperties"></a>Function:
+    <strong>remove-list-of-text-properties</strong> <em>start end
+    list-of-properties &amp;optional object</em></dt>
 
-<p>The easiest way to make a string with text properties is with
-<code>propertize</code>:
-</p>
-<dl>
-<dt><a name="index-propertize"></a>Function: <strong>propertize</strong> <em>string &amp;rest properties</em></dt>
-<dd><p>This function returns a copy of <var>string</var> with the text properties
-<var>properties</var> added.  These properties apply to all the characters
-in the string that is returned.  Here is an example that constructs a
-string with a <code>face</code> property and a <code>mouse-face</code> property:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(propertize &quot;foo&quot; 'face 'italic
+    <dd>
+      <p>Like <code>remove-text-properties</code> except that
+      <var>list-of-properties</var> is a list of property names
+      only, not an alternating list of property names and
+      values.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dtext_002dproperties" id=
+    "index-set_002dtext_002dproperties"></a>Function:
+    <strong>set-text-properties</strong> <em>start end props
+    &amp;optional object</em></dt>
+
+    <dd>
+      <p>This function completely replaces the text property list
+      for the text between <var>start</var> and <var>end</var> in
+      the string or buffer <var>object</var>. If <var>object</var>
+      is <code>nil</code>, it defaults to the current buffer.</p>
+
+      <p>The argument <var>props</var> is the new property list. It
+      should be a list whose elements are property names
+      alternating with corresponding values.</p>
+
+      <p>After <code>set-text-properties</code> returns, all the
+      characters in the specified range have identical
+      properties.</p>
+
+      <p>If <var>props</var> is <code>nil</code>, the effect is to
+      get rid of all properties from the specified range of text.
+      Here&rsquo;s an example:</p>
+
+      <div class="example">
+        <pre class="example">
+(set-text-properties <var>start</var> <var>end</var> nil)
+</pre>
+      </div>
+
+      <p>Do not rely on the return value of this function.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-add_002dface_002dtext_002dproperty" id=
+    "index-add_002dface_002dtext_002dproperty"></a>Function:
+    <strong>add-face-text-property</strong> <em>start end face
+    &amp;optional appendp object</em></dt>
+
+    <dd>
+      <p>This function acts on the text between <var>start</var>
+      and <var>end</var>, adding the face <var>face</var> to the
+      <code>face</code> text property. <var>face</var> should be a
+      valid value for the <code>face</code> property (see <a href=
+      "Special-Properties.html#Special-Properties">Special
+      Properties</a>), such as a face name or an anonymous face
+      (see <a href="Faces.html#Faces">Faces</a>).</p>
+
+      <p>If any text in the region already has a
+      non-<code>nil</code> <code>face</code> property, those
+      face(s) are retained. This function sets the
+      <code>face</code> property to a list of faces, with
+      <var>face</var> as the first element (by default) and the
+      pre-existing faces as the remaining elements. If the optional
+      argument <var>append</var> is non-<code>nil</code>,
+      <var>face</var> is appended to the end of the list instead.
+      Note that in a face list, the first occurring value for each
+      attribute takes precedence.</p>
+
+      <p>For example, the following code would assign a italicized
+      green face to the text between <var>start</var> and
+      <var>end</var>:</p>
+
+      <div class="example">
+        <pre class="example">
+(add-face-text-property <var>start</var> <var>end</var> 'italic)
+(add-face-text-property <var>start</var> <var>end</var> '(:foreground "red"))
+(add-face-text-property <var>start</var> <var>end</var> '(:foreground "green"))
+</pre>
+      </div>
+
+      <p>The optional argument <var>object</var>, if
+      non-<code>nil</code>, specifies a buffer or string to act on,
+      rather than the current buffer. If <var>object</var> is a
+      string, then <var>start</var> and <var>end</var> are
+      zero-based indices into the string.</p>
+    </dd>
+  </dl>
+
+  <p>The easiest way to make a string with text properties is with
+  <code>propertize</code>:</p>
+
+  <dl>
+    <dt><a name="index-propertize" id=
+    "index-propertize"></a>Function: <strong>propertize</strong>
+    <em>string &amp;rest properties</em></dt>
+
+    <dd>
+      <p>This function returns a copy of <var>string</var> with the
+      text properties <var>properties</var> added. These properties
+      apply to all the characters in the string that is returned.
+      Here is an example that constructs a string with a
+      <code>face</code> property and a <code>mouse-face</code>
+      property:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(propertize "foo" 'face 'italic
             'mouse-face 'bold-italic)
-     &rArr; #(&quot;foo&quot; 0 3 (mouse-face bold-italic face italic))
-</pre></div>
+     &rArr; #("foo" 0 3 (mouse-face bold-italic face italic))
+</pre>
+      </div>
 
-<p>To put different properties on various parts of a string, you can
-construct each part with <code>propertize</code> and then combine them with
-<code>concat</code>:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(concat
- (propertize &quot;foo&quot; 'face 'italic
+      <p>To put different properties on various parts of a string,
+      you can construct each part with <code>propertize</code> and
+      then combine them with <code>concat</code>:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(concat
+ (propertize "foo" 'face 'italic
              'mouse-face 'bold-italic)
- &quot; and &quot;
- (propertize &quot;bar&quot; 'face 'italic
+ " and "
+ (propertize "bar" 'face 'italic
              'mouse-face 'bold-italic))
-     &rArr; #(&quot;foo and bar&quot;
+     &rArr; #("foo and bar"
                  0 3 (face italic mouse-face bold-italic)
                  3 8 nil
                  8 11 (face italic mouse-face bold-italic))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>See <a href="Buffer-Contents.html#Buffer-Contents">Buffer Contents</a>, for the function
-<code>buffer-substring-no-properties</code>, which copies text from the
-buffer but does not copy its properties.
-</p>
-<a name="index-with_002dsilent_002dmodifications"></a>
-<p>If you wish to add or remove text properties to a buffer without
-marking the buffer as modified, you can wrap the calls above in the
-<code>with-silent-modifications</code> macro.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Property-Search.html#Property-Search" accesskey="n" rel="next">Property Search</a>, Previous: <a href="Examining-Properties.html#Examining-Properties" accesskey="p" rel="prev">Examining Properties</a>, Up: <a href="Text-Properties.html#Text-Properties" accesskey="u" rel="up">Text Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>See <a href="Buffer-Contents.html#Buffer-Contents">Buffer
+  Contents</a>, for the function
+  <code>buffer-substring-no-properties</code>, which copies text
+  from the buffer but does not copy its properties.</p><a name=
+  "index-with_002dsilent_002dmodifications" id=
+  "index-with_002dsilent_002dmodifications"></a>
 
+  <p>If you wish to add or remove text properties to a buffer
+  without marking the buffer as modified, you can wrap the calls
+  above in the <code>with-silent-modifications</code> macro.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Property-Search.html#Property-Search"
+    accesskey="n" rel="next">Property Search</a>, Previous:
+    <a href="Examining-Properties.html#Examining-Properties"
+    accesskey="p" rel="prev">Examining Properties</a>, Up: <a href=
+    "Text-Properties.html#Text-Properties" accesskey="u" rel=
+    "up">Text Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

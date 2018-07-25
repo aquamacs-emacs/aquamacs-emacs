@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents VHDL Mode, an Emacs mode for editing VHDL code.
 
 Copyright (C) 1995-2008, 2010, 2012, 2015-2016 Free Software
@@ -15,138 +17,188 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>VHDL Mode, an Emacs mode for editing VHDL code: Indentation Calculation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="VHDL Mode, an Emacs mode for editing VHDL code: Indentation Calculation">
-<meta name="keywords" content="VHDL Mode, an Emacs mode for editing VHDL code: Indentation Calculation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="New-Indentation-Engine.html#New-Indentation-Engine" rel="up" title="New Indentation Engine">
-<link href="Customizing-Indentation.html#Customizing-Indentation" rel="next" title="Customizing Indentation">
-<link href="Syntactic-Analysis.html#Syntactic-Analysis" rel="prev" title="Syntactic Analysis">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>VHDL Mode, an Emacs mode for editing VHDL code:
+  Indentation Calculation</title>
+  <meta name="description" content=
+  "VHDL Mode, an Emacs mode for editing VHDL code: Indentation Calculation" />
+  <meta name="keywords" content=
+  "VHDL Mode, an Emacs mode for editing VHDL code: Indentation Calculation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="New-Indentation-Engine.html#New-Indentation-Engine"
+  rel="up" title="New Indentation Engine" />
+  <link href="Customizing-Indentation.html#Customizing-Indentation"
+  rel="next" title="Customizing Indentation" />
+  <link href="Syntactic-Analysis.html#Syntactic-Analysis" rel=
+  "prev" title="Syntactic Analysis" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Indentation-Calculation"></a>
-<div class="header">
-<p>
-Previous: <a href="Syntactic-Analysis.html#Syntactic-Analysis" accesskey="p" rel="prev">Syntactic Analysis</a>, Up: <a href="New-Indentation-Engine.html#New-Indentation-Engine" accesskey="u" rel="up">New Indentation Engine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Indentation-Calculation-1"></a>
-<h3 class="section">3.2 Indentation Calculation</h3>
-<a name="index-Indentation-Calculation"></a>
+<body lang="en" xml:lang="en">
+  <a name="Indentation-Calculation" id=
+  "Indentation-Calculation"></a>
 
-<a name="index-vhdl_002doffsets_002dalist-1"></a>
-<a name="index-offsets_002dalist-_0028vhdl_002d_0029-1"></a>
-<p>Indentation for the current line is calculated using the syntactic
-component list derived in step 1 above (see <a href="Syntactic-Analysis.html#Syntactic-Analysis">Syntactic Analysis</a>).  Each component contributes to the final total indentation
-of the line in two ways.
-</p>
-<p>First, the syntactic symbols are looked up in the <code>vhdl-offsets-alist</code>
-variable, which is an association list of syntactic symbols and the
-offsets to apply for those symbols.  These offsets are added to the
-running total.
-</p>
-<p>Second, if the component has a relative buffer position, VHDL Mode
-adds the column number of that position to the running total.  By adding
-up the offsets and columns for every syntactic component on the list,
-the final total indentation for the current line is computed.
-</p>
-<p>Let&rsquo;s use our code example above to see how this works.  Here is our
-example again.
-</p><div class="example">
-<pre class="example">
+  <div class="header">
+    <p>Previous: <a href=
+    "Syntactic-Analysis.html#Syntactic-Analysis" accesskey="p" rel=
+    "prev">Syntactic Analysis</a>, Up: <a href=
+    "New-Indentation-Engine.html#New-Indentation-Engine" accesskey=
+    "u" rel="up">New Indentation Engine</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Indentation-Calculation-1" id=
+  "Indentation-Calculation-1"></a>
+
+  <h3 class="section">3.2 Indentation Calculation</h3><a name=
+  "index-Indentation-Calculation" id=
+  "index-Indentation-Calculation"></a> <a name=
+  "index-vhdl_002doffsets_002dalist-1" id=
+  "index-vhdl_002doffsets_002dalist-1"></a> <a name=
+  "index-offsets_002dalist-_0028vhdl_002d_0029-1" id=
+  "index-offsets_002dalist-_0028vhdl_002d_0029-1"></a>
+
+  <p>Indentation for the current line is calculated using the
+  syntactic component list derived in step 1 above (see <a href=
+  "Syntactic-Analysis.html#Syntactic-Analysis">Syntactic
+  Analysis</a>). Each component contributes to the final total
+  indentation of the line in two ways.</p>
+
+  <p>First, the syntactic symbols are looked up in the
+  <code>vhdl-offsets-alist</code> variable, which is an association
+  list of syntactic symbols and the offsets to apply for those
+  symbols. These offsets are added to the running total.</p>
+
+  <p>Second, if the component has a relative buffer position, VHDL
+  Mode adds the column number of that position to the running
+  total. By adding up the offsets and columns for every syntactic
+  component on the list, the final total indentation for the
+  current line is computed.</p>
+
+  <p>Let&rsquo;s use our code example above to see how this works.
+  Here is our example again.</p>
+
+  <div class="example">
+    <pre class="example">
   1: inverter : process
   2: begin
   3:   q &lt;= not d;
   4:   wait on d;
   5: end inverter;
 
-</pre></div>
+</pre>
+  </div><a name="index-TAB-1" id="index-TAB-1"></a>
 
-<a name="index-TAB-1"></a>
-<p>Let&rsquo;s say point is on line 3 and we hit the <tt class="key">TAB</tt> key to re-indent
-the line.  Remember that the syntactic component list for that
-line is:
-</p><div class="example">
-<pre class="example">
+  <p>Let&rsquo;s say point is on line 3 and we hit the <tt class=
+  "key">TAB</tt> key to re-indent the line. Remember that the
+  syntactic component list for that line is:</p>
+
+  <div class="example">
+    <pre class="example">
 ((statement-block-intro . 20))
 
-</pre></div>
+</pre>
+  </div>
 
-<p>VHDL Mode looks up <code>statement-block-intro</code> in the
-<code>vhdl-offsets-alist</code> variable.  Let&rsquo;s say it finds the value &lsquo;<samp>2</samp>&rsquo;;
-it adds this to the running total (initialized to zero), yielding a
-running total indentation of 2 spaces.
-</p>
-<p>Next VHDL Mode goes to buffer position 20 and asks for the
-current column.  Since the <code>begin</code> keyword at buffer position 20 is
-in column zero, it adds &lsquo;<samp>0</samp>&rsquo; to the running total.  Since there is
-only one syntactic component on the list for this line, indentation
-calculation is complete, and the total indentation for the line is 2
-spaces.
-Simple, huh?
-</p>
-<p>Actually, the mode usually just does The Right Thing without you having
-to think about it in this much detail.  But when customizing
-indentation, it&rsquo;s helpful to understand the general indentation model
-being used.
-</p>
-<a name="index-vhdl_002decho_002dsyntactic_002dinformation_002dp"></a>
-<a name="index-echo_002dsyntactic_002dinformation_002dp-_0028vhdl_002d_0029"></a>
-<a name="index-TAB"></a>
-<p>To help you configure VHDL Mode, you can set the variable
-<code>vhdl-echo-syntactic-information-p</code> to non-<code>nil</code> so that the
-syntactic component list and calculated offset will always be echoed in
-the minibuffer when you hit <kbd>TAB</kbd>.
-</p>
+  <p>VHDL Mode looks up <code>statement-block-intro</code> in the
+  <code>vhdl-offsets-alist</code> variable. Let&rsquo;s say it
+  finds the value &lsquo;<samp>2</samp>&rsquo;; it adds this to the
+  running total (initialized to zero), yielding a running total
+  indentation of 2 spaces.</p>
 
+  <p>Next VHDL Mode goes to buffer position 20 and asks for the
+  current column. Since the <code>begin</code> keyword at buffer
+  position 20 is in column zero, it adds
+  &lsquo;<samp>0</samp>&rsquo; to the running total. Since there is
+  only one syntactic component on the list for this line,
+  indentation calculation is complete, and the total indentation
+  for the line is 2 spaces. Simple, huh?</p>
 
+  <p>Actually, the mode usually just does The Right Thing without
+  you having to think about it in this much detail. But when
+  customizing indentation, it&rsquo;s helpful to understand the
+  general indentation model being used.</p><a name=
+  "index-vhdl_002decho_002dsyntactic_002dinformation_002dp" id=
+  "index-vhdl_002decho_002dsyntactic_002dinformation_002dp"></a>
+  <a name=
+  "index-echo_002dsyntactic_002dinformation_002dp-_0028vhdl_002d_0029"
+  id=
+  "index-echo_002dsyntactic_002dinformation_002dp-_0028vhdl_002d_0029">
+  </a> <a name="index-TAB" id="index-TAB"></a>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Syntactic-Analysis.html#Syntactic-Analysis" accesskey="p" rel="prev">Syntactic Analysis</a>, Up: <a href="New-Indentation-Engine.html#New-Indentation-Engine" accesskey="u" rel="up">New Indentation Engine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>To help you configure VHDL Mode, you can set the variable
+  <code>vhdl-echo-syntactic-information-p</code> to
+  non-<code>nil</code> so that the syntactic component list and
+  calculated offset will always be echoed in the minibuffer when
+  you hit <kbd>TAB</kbd>.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Previous: <a href=
+    "Syntactic-Analysis.html#Syntactic-Analysis" accesskey="p" rel=
+    "prev">Syntactic Analysis</a>, Up: <a href=
+    "New-Indentation-Engine.html#New-Indentation-Engine" accesskey=
+    "u" rel="up">New Indentation Engine</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

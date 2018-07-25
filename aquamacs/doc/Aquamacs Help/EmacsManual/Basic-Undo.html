@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,95 +20,128 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Basic Undo</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Basic Undo">
-<meta name="keywords" content="GNU Emacs Manual: Basic Undo">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Basic.html#Basic" rel="up" title="Basic">
-<link href="Basic-Files.html#Basic-Files" rel="next" title="Basic Files">
-<link href="Erasing.html#Erasing" rel="prev" title="Erasing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Basic Undo</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Basic Undo" />
+  <meta name="keywords" content="GNU Emacs Manual: Basic Undo" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Basic.html#Basic" rel="up" title="Basic" />
+  <link href="Basic-Files.html#Basic-Files" rel="next" title=
+  "Basic Files" />
+  <link href="Erasing.html#Erasing" rel="prev" title="Erasing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Basic-Undo" id="Basic-Undo"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Basic-Files.html#Basic-Files" accesskey="n"
+    rel="next">Basic Files</a>, Previous: <a href=
+    "Erasing.html#Erasing" accesskey="p" rel="prev">Erasing</a>,
+    Up: <a href="Basic.html#Basic" accesskey="u" rel="up">Basic</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Undoing-Changes" id="Undoing-Changes"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Undo"></a>
-<div class="header">
-<p>
-Next: <a href="Basic-Files.html#Basic-Files" accesskey="n" rel="next">Basic Files</a>, Previous: <a href="Erasing.html#Erasing" accesskey="p" rel="prev">Erasing</a>, Up: <a href="Basic.html#Basic" accesskey="u" rel="up">Basic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Undoing-Changes"></a>
-<h3 class="section">7.4 Undoing Changes</h3>
+  <h3 class="section">7.4 Undoing Changes</h3>
 
-<dl compact="compact">
-<dt><kbd>C-/</kbd></dt>
-<dd><p>Undo one entry of the undo records&mdash;usually, one command worth
-(<code>undo</code>).
-</p>
-</dd>
-<dt><kbd>C-x u</kbd></dt>
-<dt><kbd>C-_</kbd></dt>
-<dd><p>The same.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>C-/</kbd></dt>
 
-<p>Emacs records a list of changes made in the buffer text, so you can
-undo recent changes.  This is done using the <code>undo</code> command,
-which is bound to <kbd>C-/</kbd> (as well as <kbd>C-x u</kbd> and <kbd>C-_</kbd>).
-Normally, this command undoes the last change, moving point back to
-where it was before the change.  The undo command applies only to
-changes in the buffer; you can&rsquo;t use it to undo cursor motion.
-</p>
-<p>Although each editing command usually makes a separate entry in the
-undo records, very simple commands may be grouped together.
-Sometimes, an entry may cover just part of a complex command.
-</p>
-<p>If you repeat <kbd>C-/</kbd> (or its aliases), each repetition undoes
-another, earlier change, back to the limit of the undo information
-available.  If all recorded changes have already been undone, the undo
-command displays an error message and does nothing.
-</p>
-<p>To learn more about the <code>undo</code> command, see <a href="Undo.html#Undo">Undo</a>.
-</p>
+    <dd>
+      <p>Undo one entry of the undo records&mdash;usually, one
+      command worth (<code>undo</code>).</p>
+    </dd>
 
+    <dt><kbd>C-x u</kbd></dt>
 
+    <dt><kbd>C-_</kbd></dt>
 
+    <dd>
+      <p>The same.</p>
+    </dd>
+  </dl>
+
+  <p>Emacs records a list of changes made in the buffer text, so
+  you can undo recent changes. This is done using the
+  <code>undo</code> command, which is bound to <kbd>C-/</kbd> (as
+  well as <kbd>C-x u</kbd> and <kbd>C-_</kbd>). Normally, this
+  command undoes the last change, moving point back to where it was
+  before the change. The undo command applies only to changes in
+  the buffer; you can&rsquo;t use it to undo cursor motion.</p>
+
+  <p>Although each editing command usually makes a separate entry
+  in the undo records, very simple commands may be grouped
+  together. Sometimes, an entry may cover just part of a complex
+  command.</p>
+
+  <p>If you repeat <kbd>C-/</kbd> (or its aliases), each repetition
+  undoes another, earlier change, back to the limit of the undo
+  information available. If all recorded changes have already been
+  undone, the undo command displays an error message and does
+  nothing.</p>
+
+  <p>To learn more about the <code>undo</code> command, see
+  <a href="Undo.html#Undo">Undo</a>.</p>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Message, the Emacs message composition mode.
 
 Copyright (C) 1996-2016 Free Software Foundation, Inc.
@@ -14,97 +16,126 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Message Manual: MIME</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Message Manual: MIME">
-<meta name="keywords" content="Message Manual: MIME">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="IDNA.html#IDNA" rel="next" title="IDNA">
-<link href="Insertion.html#Insertion" rel="prev" title="Insertion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Message Manual: MIME</title>
+  <meta name="description" content="Message Manual: MIME" />
+  <meta name="keywords" content="Message Manual: MIME" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="IDNA.html#IDNA" rel="next" title="IDNA" />
+  <link href="Insertion.html#Insertion" rel="prev" title=
+  "Insertion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="MIME"></a>
-<div class="header">
-<p>
-Next: <a href="IDNA.html#IDNA" accesskey="n" rel="next">IDNA</a>, Previous: <a href="Insertion.html#Insertion" accesskey="p" rel="prev">Insertion</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="MIME-1"></a>
-<h3 class="section">2.5 MIME</h3>
-<a name="index-MML"></a>
-<a name="index-MIME"></a>
-<a name="index-multipart"></a>
-<a name="index-attachment"></a>
+<body lang="en" xml:lang="en">
+  <a name="MIME" id="MIME"></a>
 
-<p>Message is a <acronym>MIME</acronym>-compliant posting agent.  The user generally
-doesn&rsquo;t have to do anything to make the <acronym>MIME</acronym> happen&mdash;Message will
-automatically add the <code>Content-Type</code> and
-<code>Content-Transfer-Encoding</code> headers.
-</p>
-<a name="index-mml_002dattach_002dfile"></a>
-<a name="index-C_002dc-C_002da"></a>
-<p>The most typical thing users want to use the multipart things in
-<acronym>MIME</acronym> for is to add &ldquo;attachments&rdquo; to mail they send out.
-This can be done with the <kbd>C-c C-a</kbd> command (<kbd>M-x mml-attach-file</kbd>),
-which will prompt for a file name and a <acronym>MIME</acronym> type.
-</p>
-<a name="index-mml_002ddnd_002dprotocol_002dalist"></a>
-<a name="index-mml_002ddnd_002dattach_002doptions"></a>
-<p>If your Emacs supports drag and drop, you can also drop the file in the
-Message buffer.  The variable <code>mml-dnd-protocol-alist</code> specifies
-what kind of action is done when you drop a file into the Message
-buffer.  The variable <code>mml-dnd-attach-options</code> controls which
-<acronym>MIME</acronym> options you want to specify when dropping a file.  If it
-is a list, valid members are <code>type</code>, <code>description</code> and
-<code>disposition</code>.  <code>disposition</code> implies <code>type</code>.  If it is
-<code>nil</code>, don&rsquo;t ask for options.  If it is <code>t</code>, ask the user
-whether or not to specify options.
-</p>
-<p>You can also create arbitrarily complex multiparts using the <acronym>MML</acronym>
-language (see <a href="../emacs-mime/Composing.html#Composing">Composing</a> in <cite>The Emacs MIME
-Manual</cite>).
-</p>
+  <div class="header">
+    <p>Next: <a href="IDNA.html#IDNA" accesskey="n" rel=
+    "next">IDNA</a>, Previous: <a href="Insertion.html#Insertion"
+    accesskey="p" rel="prev">Insertion</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="MIME-1" id="MIME-1"></a>
 
+  <h3 class="section">2.5 MIME</h3><a name="index-MML" id=
+  "index-MML"></a> <a name="index-MIME" id="index-MIME"></a>
+  <a name="index-multipart" id="index-multipart"></a> <a name=
+  "index-attachment" id="index-attachment"></a>
 
+  <p>Message is a <acronym>MIME</acronym>-compliant posting agent.
+  The user generally doesn&rsquo;t have to do anything to make the
+  <acronym>MIME</acronym> happen&mdash;Message will automatically
+  add the <code>Content-Type</code> and
+  <code>Content-Transfer-Encoding</code> headers.</p><a name=
+  "index-mml_002dattach_002dfile" id=
+  "index-mml_002dattach_002dfile"></a> <a name=
+  "index-C_002dc-C_002da" id="index-C_002dc-C_002da"></a>
 
+  <p>The most typical thing users want to use the multipart things
+  in <acronym>MIME</acronym> for is to add
+  &ldquo;attachments&rdquo; to mail they send out. This can be done
+  with the <kbd>C-c C-a</kbd> command (<kbd>M-x
+  mml-attach-file</kbd>), which will prompt for a file name and a
+  <acronym>MIME</acronym> type.</p><a name=
+  "index-mml_002ddnd_002dprotocol_002dalist" id=
+  "index-mml_002ddnd_002dprotocol_002dalist"></a> <a name=
+  "index-mml_002ddnd_002dattach_002doptions" id=
+  "index-mml_002ddnd_002dattach_002doptions"></a>
+
+  <p>If your Emacs supports drag and drop, you can also drop the
+  file in the Message buffer. The variable
+  <code>mml-dnd-protocol-alist</code> specifies what kind of action
+  is done when you drop a file into the Message buffer. The
+  variable <code>mml-dnd-attach-options</code> controls which
+  <acronym>MIME</acronym> options you want to specify when dropping
+  a file. If it is a list, valid members are <code>type</code>,
+  <code>description</code> and <code>disposition</code>.
+  <code>disposition</code> implies <code>type</code>. If it is
+  <code>nil</code>, don&rsquo;t ask for options. If it is
+  <code>t</code>, ask the user whether or not to specify
+  options.</p>
+
+  <p>You can also create arbitrarily complex multiparts using the
+  <acronym>MML</acronym> language (see <a href=
+  "../emacs-mime/Composing.html#Composing">Composing</a> in
+  <cite>The Emacs MIME Manual</cite>).</p>
 </body>
 </html>

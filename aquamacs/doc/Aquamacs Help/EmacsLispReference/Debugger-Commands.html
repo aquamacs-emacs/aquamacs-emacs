@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,171 +19,240 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Debugger Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Debugger Commands">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Debugger Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugger.html#Debugger" rel="up" title="Debugger">
-<link href="Invoking-the-Debugger.html#Invoking-the-Debugger" rel="next" title="Invoking the Debugger">
-<link href="Using-Debugger.html#Using-Debugger" rel="prev" title="Using Debugger">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Debugger Commands</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Debugger Commands" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Debugger Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugger.html#Debugger" rel="up" title="Debugger" />
+  <link href="Invoking-the-Debugger.html#Invoking-the-Debugger"
+  rel="next" title="Invoking the Debugger" />
+  <link href="Using-Debugger.html#Using-Debugger" rel="prev" title=
+  "Using Debugger" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Debugger-Commands" id="Debugger-Commands"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Invoking-the-Debugger.html#Invoking-the-Debugger" accesskey=
+    "n" rel="next">Invoking the Debugger</a>, Previous: <a href=
+    "Using-Debugger.html#Using-Debugger" accesskey="p" rel=
+    "prev">Using Debugger</a>, Up: <a href="Debugger.html#Debugger"
+    accesskey="u" rel="up">Debugger</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Debugger-Commands-1" id="Debugger-Commands-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Debugger-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Invoking-the-Debugger.html#Invoking-the-Debugger" accesskey="n" rel="next">Invoking the Debugger</a>, Previous: <a href="Using-Debugger.html#Using-Debugger" accesskey="p" rel="prev">Using Debugger</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Debugger-Commands-1"></a>
-<h4 class="subsection">17.1.6 Debugger Commands</h4>
-<a name="index-debugger-command-list"></a>
+  <h4 class="subsection">17.1.6 Debugger Commands</h4><a name=
+  "index-debugger-command-list" id=
+  "index-debugger-command-list"></a>
 
-<p>The debugger buffer (in Debugger mode) provides special commands in
-addition to the usual Emacs commands.  The most important use of
-debugger commands is for stepping through code, so that you can see
-how control flows.  The debugger can step through the control
-structures of an interpreted function, but cannot do so in a
-byte-compiled function.  If you would like to step through a
-byte-compiled function, replace it with an interpreted definition of
-the same function.  (To do this, visit the source for the function and
-type <kbd>C-M-x</kbd> on its definition.)  You cannot use the Lisp debugger
-to step through a primitive function.
-</p>
-<p>Here is a list of Debugger mode commands:
-</p>
-<dl compact="compact">
-<dt><kbd>c</kbd></dt>
-<dd><p>Exit the debugger and continue execution.  This resumes execution of
-the program as if the debugger had never been entered (aside from any
-side-effects that you caused by changing variable values or data
-structures while inside the debugger).
-</p>
-</dd>
-<dt><kbd>d</kbd></dt>
-<dd><p>Continue execution, but enter the debugger the next time any Lisp
-function is called.  This allows you to step through the
-subexpressions of an expression, seeing what values the subexpressions
-compute, and what else they do.
-</p>
-<p>The stack frame made for the function call which enters the debugger in
-this way will be flagged automatically so that the debugger will be
-called again when the frame is exited.  You can use the <kbd>u</kbd> command
-to cancel this flag.
-</p>
-</dd>
-<dt><kbd>b</kbd></dt>
-<dd><p>Flag the current frame so that the debugger will be entered when the
-frame is exited.  Frames flagged in this way are marked with stars
-in the backtrace buffer.
-</p>
-</dd>
-<dt><kbd>u</kbd></dt>
-<dd><p>Don&rsquo;t enter the debugger when the current frame is exited.  This
-cancels a <kbd>b</kbd> command on that frame.  The visible effect is to
-remove the star from the line in the backtrace buffer.
-</p>
-</dd>
-<dt><kbd>j</kbd></dt>
-<dd><p>Flag the current frame like <kbd>b</kbd>.  Then continue execution like
-<kbd>c</kbd>, but temporarily disable break-on-entry for all functions that
-are set up to do so by <code>debug-on-entry</code>.
-</p>
-</dd>
-<dt><kbd>e</kbd></dt>
-<dd><p>Read a Lisp expression in the minibuffer, evaluate it (with the
-relevant lexical environment, if applicable), and print the
-value in the echo area.  The debugger alters certain important
-variables, and the current buffer, as part of its operation; <kbd>e</kbd>
-temporarily restores their values from outside the debugger, so you can
-examine and change them.  This makes the debugger more transparent.  By
-contrast, <kbd>M-:</kbd> does nothing special in the debugger; it shows you
-the variable values within the debugger.
-</p>
-</dd>
-<dt><kbd>R</kbd></dt>
-<dd><p>Like <kbd>e</kbd>, but also save the result of evaluation in the
-buffer <samp>*Debugger-record*</samp>.
-</p>
-</dd>
-<dt><kbd>q</kbd></dt>
-<dd><p>Terminate the program being debugged; return to top-level Emacs
-command execution.
-</p>
-<p>If the debugger was entered due to a <kbd>C-g</kbd> but you really want
-to quit, and not debug, use the <kbd>q</kbd> command.
-</p>
-</dd>
-<dt><kbd>r</kbd></dt>
-<dd><p>Return a value from the debugger.  The value is computed by reading an
-expression with the minibuffer and evaluating it.
-</p>
-<p>The <kbd>r</kbd> command is useful when the debugger was invoked due to exit
-from a Lisp call frame (as requested with <kbd>b</kbd> or by entering the
-frame with <kbd>d</kbd>); then the value specified in the <kbd>r</kbd> command is
-used as the value of that frame.  It is also useful if you call
-<code>debug</code> and use its return value.  Otherwise, <kbd>r</kbd> has the same
-effect as <kbd>c</kbd>, and the specified return value does not matter.
-</p>
-<p>You can&rsquo;t use <kbd>r</kbd> when the debugger was entered due to an error.
-</p>
-</dd>
-<dt><kbd>l</kbd></dt>
-<dd><p>Display a list of functions that will invoke the debugger when called.
-This is a list of functions that are set to break on entry by means of
-<code>debug-on-entry</code>.
-</p>
-</dd>
-<dt><kbd>v</kbd></dt>
-<dd><p>Toggle the display of local variables of the current stack frame.
-</p></dd>
-</dl>
+  <p>The debugger buffer (in Debugger mode) provides special
+  commands in addition to the usual Emacs commands. The most
+  important use of debugger commands is for stepping through code,
+  so that you can see how control flows. The debugger can step
+  through the control structures of an interpreted function, but
+  cannot do so in a byte-compiled function. If you would like to
+  step through a byte-compiled function, replace it with an
+  interpreted definition of the same function. (To do this, visit
+  the source for the function and type <kbd>C-M-x</kbd> on its
+  definition.) You cannot use the Lisp debugger to step through a
+  primitive function.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Invoking-the-Debugger.html#Invoking-the-Debugger" accesskey="n" rel="next">Invoking the Debugger</a>, Previous: <a href="Using-Debugger.html#Using-Debugger" accesskey="p" rel="prev">Using Debugger</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Here is a list of Debugger mode commands:</p>
 
+  <dl compact="compact">
+    <dt><kbd>c</kbd></dt>
 
+    <dd>
+      <p>Exit the debugger and continue execution. This resumes
+      execution of the program as if the debugger had never been
+      entered (aside from any side-effects that you caused by
+      changing variable values or data structures while inside the
+      debugger).</p>
+    </dd>
 
+    <dt><kbd>d</kbd></dt>
+
+    <dd>
+      <p>Continue execution, but enter the debugger the next time
+      any Lisp function is called. This allows you to step through
+      the subexpressions of an expression, seeing what values the
+      subexpressions compute, and what else they do.</p>
+
+      <p>The stack frame made for the function call which enters
+      the debugger in this way will be flagged automatically so
+      that the debugger will be called again when the frame is
+      exited. You can use the <kbd>u</kbd> command to cancel this
+      flag.</p>
+    </dd>
+
+    <dt><kbd>b</kbd></dt>
+
+    <dd>
+      <p>Flag the current frame so that the debugger will be
+      entered when the frame is exited. Frames flagged in this way
+      are marked with stars in the backtrace buffer.</p>
+    </dd>
+
+    <dt><kbd>u</kbd></dt>
+
+    <dd>
+      <p>Don&rsquo;t enter the debugger when the current frame is
+      exited. This cancels a <kbd>b</kbd> command on that frame.
+      The visible effect is to remove the star from the line in the
+      backtrace buffer.</p>
+    </dd>
+
+    <dt><kbd>j</kbd></dt>
+
+    <dd>
+      <p>Flag the current frame like <kbd>b</kbd>. Then continue
+      execution like <kbd>c</kbd>, but temporarily disable
+      break-on-entry for all functions that are set up to do so by
+      <code>debug-on-entry</code>.</p>
+    </dd>
+
+    <dt><kbd>e</kbd></dt>
+
+    <dd>
+      <p>Read a Lisp expression in the minibuffer, evaluate it
+      (with the relevant lexical environment, if applicable), and
+      print the value in the echo area. The debugger alters certain
+      important variables, and the current buffer, as part of its
+      operation; <kbd>e</kbd> temporarily restores their values
+      from outside the debugger, so you can examine and change
+      them. This makes the debugger more transparent. By contrast,
+      <kbd>M-:</kbd> does nothing special in the debugger; it shows
+      you the variable values within the debugger.</p>
+    </dd>
+
+    <dt><kbd>R</kbd></dt>
+
+    <dd>
+      <p>Like <kbd>e</kbd>, but also save the result of evaluation
+      in the buffer <samp>*Debugger-record*</samp>.</p>
+    </dd>
+
+    <dt><kbd>q</kbd></dt>
+
+    <dd>
+      <p>Terminate the program being debugged; return to top-level
+      Emacs command execution.</p>
+
+      <p>If the debugger was entered due to a <kbd>C-g</kbd> but
+      you really want to quit, and not debug, use the <kbd>q</kbd>
+      command.</p>
+    </dd>
+
+    <dt><kbd>r</kbd></dt>
+
+    <dd>
+      <p>Return a value from the debugger. The value is computed by
+      reading an expression with the minibuffer and evaluating
+      it.</p>
+
+      <p>The <kbd>r</kbd> command is useful when the debugger was
+      invoked due to exit from a Lisp call frame (as requested with
+      <kbd>b</kbd> or by entering the frame with <kbd>d</kbd>);
+      then the value specified in the <kbd>r</kbd> command is used
+      as the value of that frame. It is also useful if you call
+      <code>debug</code> and use its return value. Otherwise,
+      <kbd>r</kbd> has the same effect as <kbd>c</kbd>, and the
+      specified return value does not matter.</p>
+
+      <p>You can&rsquo;t use <kbd>r</kbd> when the debugger was
+      entered due to an error.</p>
+    </dd>
+
+    <dt><kbd>l</kbd></dt>
+
+    <dd>
+      <p>Display a list of functions that will invoke the debugger
+      when called. This is a list of functions that are set to
+      break on entry by means of <code>debug-on-entry</code>.</p>
+    </dd>
+
+    <dt><kbd>v</kbd></dt>
+
+    <dd>
+      <p>Toggle the display of local variables of the current stack
+      frame.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Invoking-the-Debugger.html#Invoking-the-Debugger" accesskey=
+    "n" rel="next">Invoking the Debugger</a>, Previous: <a href=
+    "Using-Debugger.html#Using-Debugger" accesskey="p" rel=
+    "prev">Using Debugger</a>, Up: <a href="Debugger.html#Debugger"
+    accesskey="u" rel="up">Debugger</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

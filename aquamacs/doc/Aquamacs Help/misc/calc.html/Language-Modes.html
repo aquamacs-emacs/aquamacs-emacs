@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,130 +18,259 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Language Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Language Modes">
-<meta name="keywords" content="GNU Emacs Calc Manual: Language Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mode-Settings.html#Mode-Settings" rel="up" title="Mode Settings">
-<link href="Normal-Language-Modes.html#Normal-Language-Modes" rel="next" title="Normal Language Modes">
-<link href="Labels.html#Labels" rel="prev" title="Labels">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Language Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Language Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Language Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mode-Settings.html#Mode-Settings" rel="up" title=
+  "Mode Settings" />
+  <link href="Normal-Language-Modes.html#Normal-Language-Modes"
+  rel="next" title="Normal Language Modes" />
+  <link href="Labels.html#Labels" rel="prev" title="Labels" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Language-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Modes-Variable.html#Modes-Variable" accesskey="n" rel="next">Modes Variable</a>, Previous: <a href="Display-Modes.html#Display-Modes" accesskey="p" rel="prev">Display Modes</a>, Up: <a href="Mode-Settings.html#Mode-Settings" accesskey="u" rel="up">Mode Settings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Language-Modes-1"></a>
-<h3 class="section">6.8 Language Modes</h3>
+<body lang="en" xml:lang="en">
+  <a name="Language-Modes" id="Language-Modes"></a>
 
-<p>The commands in this section change Calc to use a different notation for
-entry and display of formulas, corresponding to the conventions of some
-other common language such as Pascal or LaTeX.  Objects displayed on the
-stack or yanked from the Calculator to an editing buffer will be formatted
-in the current language; objects entered in algebraic entry or yanked from
-another buffer will be interpreted according to the current language.
-</p>
-<p>The current language has no effect on things written to or read from the
-trail buffer, nor does it affect numeric entry.  Only algebraic entry is
-affected.  You can make even algebraic entry ignore the current language
-and use the standard notation by giving a numeric prefix, e.g., <kbd>C-u '</kbd>.
-</p>
-<p>For example, suppose the formula &lsquo;<samp>2*a[1] + atan(a[2])</samp>&rsquo; occurs in a C
-program; elsewhere in the program you need the derivatives of this formula
-with respect to &lsquo;<samp>a[1]</samp>&rsquo; and &lsquo;<samp>a[2]</samp>&rsquo;.  First, type <kbd>d C</kbd>
-to switch to C notation.  Now use <code>C-u C-x * g</code> to grab the formula
-into the Calculator, <kbd>a d a[1] <span class="key">RET</span></kbd> to differentiate with respect
-to the first variable, and <kbd>C-x * y</kbd> to yank the formula for the derivative
-back into your C program.  Press <kbd>U</kbd> to undo the differentiation and
-repeat with <kbd>a d a[2] <span class="key">RET</span></kbd> for the other derivative.
-</p>
-<p>Without being switched into C mode first, Calc would have misinterpreted
-the brackets in &lsquo;<samp>a[1]</samp>&rsquo; and &lsquo;<samp>a[2]</samp>&rsquo;, would not have known that
-<code>atan</code> was equivalent to Calc&rsquo;s built-in <code>arctan</code> function,
-and would have written the formula back with notations (like implicit
-multiplication) which would not have been valid for a C program.
-</p>
-<p>As another example, suppose you are maintaining a C program and a LaTeX
-document, each of which needs a copy of the same formula.  You can grab the
-formula from the program in C mode, switch to LaTeX mode, and yank the
-formula into the document in LaTeX math-mode format.
-</p>
-<p>Language modes are selected by typing the letter <kbd>d</kbd> followed by a
-shifted letter key.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Normal-Language-Modes.html#Normal-Language-Modes" accesskey="1">Normal Language Modes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal" accesskey="2">C FORTRAN Pascal</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes" accesskey="3">TeX and LaTeX Language Modes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Eqn-Language-Mode.html#Eqn-Language-Mode" accesskey="4">Eqn Language Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Yacas-Language-Mode.html#Yacas-Language-Mode" accesskey="5">Yacas Language Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Maxima-Language-Mode.html#Maxima-Language-Mode" accesskey="6">Maxima Language Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Giac-Language-Mode.html#Giac-Language-Mode" accesskey="7">Giac Language Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mathematica-Language-Mode.html#Mathematica-Language-Mode" accesskey="8">Mathematica Language Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Maple-Language-Mode.html#Maple-Language-Mode" accesskey="9">Maple Language Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Compositions.html#Compositions">Compositions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Modes-Variable.html#Modes-Variable"
+    accesskey="n" rel="next">Modes Variable</a>, Previous: <a href=
+    "Display-Modes.html#Display-Modes" accesskey="p" rel=
+    "prev">Display Modes</a>, Up: <a href=
+    "Mode-Settings.html#Mode-Settings" accesskey="u" rel="up">Mode
+    Settings</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Language-Modes-1" id="Language-Modes-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Modes-Variable.html#Modes-Variable" accesskey="n" rel="next">Modes Variable</a>, Previous: <a href="Display-Modes.html#Display-Modes" accesskey="p" rel="prev">Display Modes</a>, Up: <a href="Mode-Settings.html#Mode-Settings" accesskey="u" rel="up">Mode Settings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">6.8 Language Modes</h3>
 
+  <p>The commands in this section change Calc to use a different
+  notation for entry and display of formulas, corresponding to the
+  conventions of some other common language such as Pascal or
+  LaTeX. Objects displayed on the stack or yanked from the
+  Calculator to an editing buffer will be formatted in the current
+  language; objects entered in algebraic entry or yanked from
+  another buffer will be interpreted according to the current
+  language.</p>
 
+  <p>The current language has no effect on things written to or
+  read from the trail buffer, nor does it affect numeric entry.
+  Only algebraic entry is affected. You can make even algebraic
+  entry ignore the current language and use the standard notation
+  by giving a numeric prefix, e.g., <kbd>C-u '</kbd>.</p>
 
+  <p>For example, suppose the formula &lsquo;<samp>2*a[1] +
+  atan(a[2])</samp>&rsquo; occurs in a C program; elsewhere in the
+  program you need the derivatives of this formula with respect to
+  &lsquo;<samp>a[1]</samp>&rsquo; and
+  &lsquo;<samp>a[2]</samp>&rsquo;. First, type <kbd>d C</kbd> to
+  switch to C notation. Now use <code>C-u C-x * g</code> to grab
+  the formula into the Calculator, <kbd>a d a[1] <span class=
+  "key">RET</span></kbd> to differentiate with respect to the first
+  variable, and <kbd>C-x * y</kbd> to yank the formula for the
+  derivative back into your C program. Press <kbd>U</kbd> to undo
+  the differentiation and repeat with <kbd>a d a[2] <span class=
+  "key">RET</span></kbd> for the other derivative.</p>
+
+  <p>Without being switched into C mode first, Calc would have
+  misinterpreted the brackets in &lsquo;<samp>a[1]</samp>&rsquo;
+  and &lsquo;<samp>a[2]</samp>&rsquo;, would not have known that
+  <code>atan</code> was equivalent to Calc&rsquo;s built-in
+  <code>arctan</code> function, and would have written the formula
+  back with notations (like implicit multiplication) which would
+  not have been valid for a C program.</p>
+
+  <p>As another example, suppose you are maintaining a C program
+  and a LaTeX document, each of which needs a copy of the same
+  formula. You can grab the formula from the program in C mode,
+  switch to LaTeX mode, and yank the formula into the document in
+  LaTeX math-mode format.</p>
+
+  <p>Language modes are selected by typing the letter <kbd>d</kbd>
+  followed by a shifted letter key.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Normal-Language-Modes.html#Normal-Language-Modes" accesskey=
+      "1">Normal Language Modes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "C-FORTRAN-Pascal.html#C-FORTRAN-Pascal" accesskey="2">C
+      FORTRAN Pascal</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes"
+      accesskey="3">TeX and LaTeX Language Modes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Eqn-Language-Mode.html#Eqn-Language-Mode" accesskey="4">Eqn
+      Language Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Yacas-Language-Mode.html#Yacas-Language-Mode" accesskey=
+      "5">Yacas Language Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Maxima-Language-Mode.html#Maxima-Language-Mode" accesskey=
+      "6">Maxima Language Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Giac-Language-Mode.html#Giac-Language-Mode" accesskey=
+      "7">Giac Language Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mathematica-Language-Mode.html#Mathematica-Language-Mode"
+      accesskey="8">Mathematica Language Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Maple-Language-Mode.html#Maple-Language-Mode" accesskey=
+      "9">Maple Language Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Compositions.html#Compositions">Compositions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Modes-Variable.html#Modes-Variable"
+    accesskey="n" rel="next">Modes Variable</a>, Previous: <a href=
+    "Display-Modes.html#Display-Modes" accesskey="p" rel=
+    "prev">Display Modes</a>, Up: <a href=
+    "Mode-Settings.html#Mode-Settings" accesskey="u" rel="up">Mode
+    Settings</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

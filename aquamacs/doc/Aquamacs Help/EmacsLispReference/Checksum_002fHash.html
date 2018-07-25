@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,136 +19,194 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Checksum/Hash</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Checksum/Hash">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Checksum/Hash">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" rel="next" title="Parsing HTML/XML">
-<link href="Base-64.html#Base-64" rel="prev" title="Base 64">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Checksum/Hash</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Checksum/Hash" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Checksum/Hash" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" rel=
+  "next" title="Parsing HTML/XML" />
+  <link href="Base-64.html#Base-64" rel="prev" title="Base 64" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Checksum_002fHash" id="Checksum_002fHash"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" accesskey="n"
+    rel="next">Parsing HTML/XML</a>, Previous: <a href=
+    "Base-64.html#Base-64" accesskey="p" rel="prev">Base 64</a>,
+    Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Checksum_002fHash-1" id="Checksum_002fHash-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Checksum_002fHash"></a>
-<div class="header">
-<p>
-Next: <a href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" accesskey="n" rel="next">Parsing HTML/XML</a>, Previous: <a href="Base-64.html#Base-64" accesskey="p" rel="prev">Base 64</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Checksum_002fHash-1"></a>
-<h3 class="section">31.25 Checksum/Hash</h3>
-<a name="index-MD5-checksum"></a>
-<a name="index-SHA-hash"></a>
-<a name="index-hash_002c-cryptographic"></a>
-<a name="index-cryptographic-hash"></a>
+  <h3 class="section">31.25 Checksum/Hash</h3><a name=
+  "index-MD5-checksum" id="index-MD5-checksum"></a> <a name=
+  "index-SHA-hash" id="index-SHA-hash"></a> <a name=
+  "index-hash_002c-cryptographic" id=
+  "index-hash_002c-cryptographic"></a> <a name=
+  "index-cryptographic-hash" id="index-cryptographic-hash"></a>
 
-<p>Emacs has built-in support for computing <em>cryptographic hashes</em>.
-A cryptographic hash, or <em>checksum</em>, is a digital fingerprint
-of a piece of data (e.g., a block of text) which can be used to check
-that you have an unaltered copy of that data.
-</p>
-<a name="index-message-digest"></a>
-<p>Emacs supports several common cryptographic hash algorithms: MD5,
-SHA-1, SHA-2, SHA-224, SHA-256, SHA-384 and SHA-512.  MD5 is the
-oldest of these algorithms, and is commonly used in <em>message
-digests</em> to check the integrity of messages transmitted over a
-network.  MD5 is not collision resistant (i.e., it is possible to
-deliberately design different pieces of data which have the same MD5
-hash), so you should not used it for anything security-related.  A
-similar theoretical weakness also exists in SHA-1.  Therefore, for
-security-related applications you should use the other hash types,
-such as SHA-2.
-</p>
-<dl>
-<dt><a name="index-secure_002dhash"></a>Function: <strong>secure-hash</strong> <em>algorithm object &amp;optional start end binary</em></dt>
-<dd><p>This function returns a hash for <var>object</var>.  The argument
-<var>algorithm</var> is a symbol stating which hash to compute: one of
-<code>md5</code>, <code>sha1</code>, <code>sha224</code>, <code>sha256</code>, <code>sha384</code>
-or <code>sha512</code>.  The argument <var>object</var> should be a buffer or a
-string.
-</p>
-<p>The optional arguments <var>start</var> and <var>end</var> are character
-positions specifying the portion of <var>object</var> to compute the
-message digest for.  If they are <code>nil</code> or omitted, the hash is
-computed for the whole of <var>object</var>.
-</p>
-<p>If the argument <var>binary</var> is omitted or <code>nil</code>, the function
-returns the <em>text form</em> of the hash, as an ordinary Lisp string.
-If <var>binary</var> is non-<code>nil</code>, it returns the hash in <em>binary
-form</em>, as a sequence of bytes stored in a unibyte string.
-</p>
-<p>This function does not compute the hash directly from the internal
-representation of <var>object</var>&rsquo;s text (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).
-Instead, it encodes the text using a coding system (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>), and computes the hash from that encoded text.  If
-<var>object</var> is a buffer, the coding system used is the one which
-would be chosen by default for writing the text into a file.  If
-<var>object</var> is a string, the user&rsquo;s preferred coding system is used
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Recognize-Coding.html#Recognize-Coding">Recognize Coding</a> in <cite>GNU Emacs Manual</cite>).
-</p></dd></dl>
+  <p>Emacs has built-in support for computing <em>cryptographic
+  hashes</em>. A cryptographic hash, or <em>checksum</em>, is a
+  digital fingerprint of a piece of data (e.g., a block of text)
+  which can be used to check that you have an unaltered copy of
+  that data.</p><a name="index-message-digest" id=
+  "index-message-digest"></a>
 
-<dl>
-<dt><a name="index-md5"></a>Function: <strong>md5</strong> <em>object &amp;optional start end coding-system noerror</em></dt>
-<dd><p>This function returns an MD5 hash.  It is semi-obsolete, since for
-most purposes it is equivalent to calling <code>secure-hash</code> with
-<code>md5</code> as the <var>algorithm</var> argument.  The <var>object</var>,
-<var>start</var> and <var>end</var> arguments have the same meanings as in
-<code>secure-hash</code>.
-</p>
-<p>If <var>coding-system</var> is non-<code>nil</code>, it specifies a coding system
-to use to encode the text; if omitted or <code>nil</code>, the default
-coding system is used, like in <code>secure-hash</code>.
-</p>
-<p>Normally, <code>md5</code> signals an error if the text can&rsquo;t be encoded
-using the specified or chosen coding system.  However, if
-<var>noerror</var> is non-<code>nil</code>, it silently uses <code>raw-text</code>
-coding instead.
-</p></dd></dl>
+  <p>Emacs supports several common cryptographic hash algorithms:
+  MD5, SHA-1, SHA-2, SHA-224, SHA-256, SHA-384 and SHA-512. MD5 is
+  the oldest of these algorithms, and is commonly used in
+  <em>message digests</em> to check the integrity of messages
+  transmitted over a network. MD5 is not collision resistant (i.e.,
+  it is possible to deliberately design different pieces of data
+  which have the same MD5 hash), so you should not used it for
+  anything security-related. A similar theoretical weakness also
+  exists in SHA-1. Therefore, for security-related applications you
+  should use the other hash types, such as SHA-2.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" accesskey="n" rel="next">Parsing HTML/XML</a>, Previous: <a href="Base-64.html#Base-64" accesskey="p" rel="prev">Base 64</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-secure_002dhash" id=
+    "index-secure_002dhash"></a>Function:
+    <strong>secure-hash</strong> <em>algorithm object &amp;optional
+    start end binary</em></dt>
 
+    <dd>
+      <p>This function returns a hash for <var>object</var>. The
+      argument <var>algorithm</var> is a symbol stating which hash
+      to compute: one of <code>md5</code>, <code>sha1</code>,
+      <code>sha224</code>, <code>sha256</code>, <code>sha384</code>
+      or <code>sha512</code>. The argument <var>object</var> should
+      be a buffer or a string.</p>
 
+      <p>The optional arguments <var>start</var> and <var>end</var>
+      are character positions specifying the portion of
+      <var>object</var> to compute the message digest for. If they
+      are <code>nil</code> or omitted, the hash is computed for the
+      whole of <var>object</var>.</p>
 
+      <p>If the argument <var>binary</var> is omitted or
+      <code>nil</code>, the function returns the <em>text form</em>
+      of the hash, as an ordinary Lisp string. If <var>binary</var>
+      is non-<code>nil</code>, it returns the hash in <em>binary
+      form</em>, as a sequence of bytes stored in a unibyte
+      string.</p>
+
+      <p>This function does not compute the hash directly from the
+      internal representation of <var>object</var>&rsquo;s text
+      (see <a href=
+      "Text-Representations.html#Text-Representations">Text
+      Representations</a>). Instead, it encodes the text using a
+      coding system (see <a href=
+      "Coding-Systems.html#Coding-Systems">Coding Systems</a>), and
+      computes the hash from that encoded text. If
+      <var>object</var> is a buffer, the coding system used is the
+      one which would be chosen by default for writing the text
+      into a file. If <var>object</var> is a string, the
+      user&rsquo;s preferred coding system is used (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Recognize-Coding.html#Recognize-Coding">
+      Recognize Coding</a> in <cite>GNU Emacs Manual</cite>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-md5" id="index-md5"></a>Function:
+    <strong>md5</strong> <em>object &amp;optional start end
+    coding-system noerror</em></dt>
+
+    <dd>
+      <p>This function returns an MD5 hash. It is semi-obsolete,
+      since for most purposes it is equivalent to calling
+      <code>secure-hash</code> with <code>md5</code> as the
+      <var>algorithm</var> argument. The <var>object</var>,
+      <var>start</var> and <var>end</var> arguments have the same
+      meanings as in <code>secure-hash</code>.</p>
+
+      <p>If <var>coding-system</var> is non-<code>nil</code>, it
+      specifies a coding system to use to encode the text; if
+      omitted or <code>nil</code>, the default coding system is
+      used, like in <code>secure-hash</code>.</p>
+
+      <p>Normally, <code>md5</code> signals an error if the text
+      can&rsquo;t be encoded using the specified or chosen coding
+      system. However, if <var>noerror</var> is
+      non-<code>nil</code>, it silently uses <code>raw-text</code>
+      coding instead.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" accesskey="n"
+    rel="next">Parsing HTML/XML</a>, Previous: <a href=
+    "Base-64.html#Base-64" accesskey="p" rel="prev">Base 64</a>,
+    Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1987, 2001-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,84 +14,128 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>VIP: Repeating and Undoing Modifications</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="VIP: Repeating and Undoing Modifications">
-<meta name="keywords" content="VIP: Repeating and Undoing Modifications">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" rel="index" title="GNU Free Documentation License">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Modifying-Commands.html#Modifying-Commands" rel="up" title="Modifying Commands">
-<link href="Other-Vi-Commands.html#Other-Vi-Commands" rel="next" title="Other Vi Commands">
-<link href="Change-Commands.html#Change-Commands" rel="prev" title="Change Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>VIP: Repeating and Undoing Modifications</title>
+  <meta name="description" content=
+  "VIP: Repeating and Undoing Modifications" />
+  <meta name="keywords" content=
+  "VIP: Repeating and Undoing Modifications" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+  rel="index" title="GNU Free Documentation License" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Modifying-Commands.html#Modifying-Commands" rel="up"
+  title="Modifying Commands" />
+  <link href="Other-Vi-Commands.html#Other-Vi-Commands" rel="next"
+  title="Other Vi Commands" />
+  <link href="Change-Commands.html#Change-Commands" rel="prev"
+  title="Change Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Repeating-and-Undoing-Modifications"></a>
-<div class="header">
-<p>
-Previous: <a href="Change-Commands.html#Change-Commands" accesskey="p" rel="prev">Change Commands</a>, Up: <a href="Modifying-Commands.html#Modifying-Commands" accesskey="u" rel="up">Modifying Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Repeating-and-Undoing-Modifications-1"></a>
-<h4 class="subsection">2.9.5 Repeating and Undoing Modifications</h4>
+<body lang="en" xml:lang="en">
+  <a name="Repeating-and-Undoing-Modifications" id=
+  "Repeating-and-Undoing-Modifications"></a>
 
-<p>VIP records the previous modifying command, so that it is easy to repeat
-it.  It is also very easy to undo changes made by modifying commands.
-</p>
-<dl compact="compact">
-<dt><kbd>u</kbd></dt>
-<dd><a name="index-165-u-_0028vip_002dundo_0029-1"></a>
-<p>Undo the last change.  You can undo more by repeating undo by the repeat
-command &lsquo;<samp>.</samp>&rsquo;.  For example, you can undo 5 previous changes by typing
-&lsquo;<samp>u....</samp>&rsquo;.  If you type &lsquo;<samp>uu</samp>&rsquo;, then the second &lsquo;<samp>u</samp>&rsquo; undoes the
-first undo command (<code>vip-undo</code>).
-</p></dd>
-<dt><kbd>.</kbd></dt>
-<dd><a name="index-056-_002e-_0028vip_002drepeat_0029-1"></a>
-<p>Repeat the last modifying command.  Given count <var>n</var> it becomes the new
-count for the repeated command.  Otherwise, the count for the last
-modifying command is used again (<code>vip-repeat</code>).
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Previous: <a href="Change-Commands.html#Change-Commands"
+    accesskey="p" rel="prev">Change Commands</a>, Up: <a href=
+    "Modifying-Commands.html#Modifying-Commands" accesskey="u" rel=
+    "up">Modifying Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Repeating-and-Undoing-Modifications-1" id=
+  "Repeating-and-Undoing-Modifications-1"></a>
 
+  <h4 class="subsection">2.9.5 Repeating and Undoing
+  Modifications</h4>
 
+  <p>VIP records the previous modifying command, so that it is easy
+  to repeat it. It is also very easy to undo changes made by
+  modifying commands.</p>
 
+  <dl compact="compact">
+    <dt><kbd>u</kbd></dt>
 
+    <dd>
+      <a name="index-165-u-_0028vip_002dundo_0029-1" id=
+      "index-165-u-_0028vip_002dundo_0029-1"></a>
+
+      <p>Undo the last change. You can undo more by repeating undo
+      by the repeat command &lsquo;<samp>.</samp>&rsquo;. For
+      example, you can undo 5 previous changes by typing
+      &lsquo;<samp>u....</samp>&rsquo;. If you type
+      &lsquo;<samp>uu</samp>&rsquo;, then the second
+      &lsquo;<samp>u</samp>&rsquo; undoes the first undo command
+      (<code>vip-undo</code>).</p>
+    </dd>
+
+    <dt><kbd>.</kbd></dt>
+
+    <dd>
+      <a name="index-056-_002e-_0028vip_002drepeat_0029-1" id=
+      "index-056-_002e-_0028vip_002drepeat_0029-1"></a>
+
+      <p>Repeat the last modifying command. Given count
+      <var>n</var> it becomes the new count for the repeated
+      command. Otherwise, the count for the last modifying command
+      is used again (<code>vip-repeat</code>).</p>
+    </dd>
+  </dl>
 </body>
 </html>

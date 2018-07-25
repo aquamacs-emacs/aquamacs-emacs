@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,115 +19,163 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Displaying Faces</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Displaying Faces">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Displaying Faces">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Faces.html#Faces" rel="up" title="Faces">
-<link href="Face-Remapping.html#Face-Remapping" rel="next" title="Face Remapping">
-<link href="Attribute-Functions.html#Attribute-Functions" rel="prev" title="Attribute Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Displaying Faces</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Displaying Faces" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Displaying Faces" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Faces.html#Faces" rel="up" title="Faces" />
+  <link href="Face-Remapping.html#Face-Remapping" rel="next" title=
+  "Face Remapping" />
+  <link href="Attribute-Functions.html#Attribute-Functions" rel=
+  "prev" title="Attribute Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Displaying-Faces" id="Displaying-Faces"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Face-Remapping.html#Face-Remapping"
+    accesskey="n" rel="next">Face Remapping</a>, Previous: <a href=
+    "Attribute-Functions.html#Attribute-Functions" accesskey="p"
+    rel="prev">Attribute Functions</a>, Up: <a href=
+    "Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Displaying-Faces-1" id="Displaying-Faces-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Displaying-Faces"></a>
-<div class="header">
-<p>
-Next: <a href="Face-Remapping.html#Face-Remapping" accesskey="n" rel="next">Face Remapping</a>, Previous: <a href="Attribute-Functions.html#Attribute-Functions" accesskey="p" rel="prev">Attribute Functions</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Displaying-Faces-1"></a>
-<h4 class="subsection">37.12.4 Displaying Faces</h4>
-<a name="index-displaying-faces"></a>
-<a name="index-face-merging"></a>
+  <h4 class="subsection">37.12.4 Displaying Faces</h4><a name=
+  "index-displaying-faces" id="index-displaying-faces"></a>
+  <a name="index-face-merging" id="index-face-merging"></a>
 
-<p>When Emacs displays a given piece of text, the visual appearance of
-the text may be determined by faces drawn from different sources.  If
-these various sources together specify more than one face for a
-particular character, Emacs merges the attributes of the various
-faces.  Here is the order in which Emacs merges the faces, from
-highest to lowest priority:
-</p>
-<ul>
-<li> If the text consists of a special glyph, the glyph can specify a
-particular face.  See <a href="Glyphs.html#Glyphs">Glyphs</a>.
+  <p>When Emacs displays a given piece of text, the visual
+  appearance of the text may be determined by faces drawn from
+  different sources. If these various sources together specify more
+  than one face for a particular character, Emacs merges the
+  attributes of the various faces. Here is the order in which Emacs
+  merges the faces, from highest to lowest priority:</p>
 
-</li><li> If the text lies within an active region, Emacs highlights it using
-the <code>region</code> face.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Standard-Faces.html#Standard-Faces">Standard Faces</a> in <cite>The GNU Emacs
-Manual</cite>.
+  <ul>
+    <li>If the text consists of a special glyph, the glyph can
+    specify a particular face. See <a href=
+    "Glyphs.html#Glyphs">Glyphs</a>.</li>
 
-</li><li> If the text lies within an overlay with a non-<code>nil</code> <code>face</code>
-property, Emacs applies the face(s) specified by that property.  If
-the overlay has a <code>mouse-face</code> property and the mouse is near
-enough to the overlay, Emacs applies the face or face attributes
-specified by the <code>mouse-face</code> property instead.  See <a href="Overlay-Properties.html#Overlay-Properties">Overlay Properties</a>.
+    <li>If the text lies within an active region, Emacs highlights
+    it using the <code>region</code> face. See <a href=
+    "http://www.gnu.org/software/emacs/manual/html_node/emacs/Standard-Faces.html#Standard-Faces">
+    Standard Faces</a> in <cite>The GNU Emacs Manual</cite>.</li>
 
-<p>When multiple overlays cover one character, an overlay with higher
-priority overrides those with lower priority.  See <a href="Overlays.html#Overlays">Overlays</a>.
-</p>
-</li><li> If the text contains a <code>face</code> or <code>mouse-face</code> property,
-Emacs applies the specified faces and face attributes.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>.  (This is how Font Lock mode faces are applied.
-See <a href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>.)
+    <li>If the text lies within an overlay with a
+    non-<code>nil</code> <code>face</code> property, Emacs applies
+    the face(s) specified by that property. If the overlay has a
+    <code>mouse-face</code> property and the mouse is near enough
+    to the overlay, Emacs applies the face or face attributes
+    specified by the <code>mouse-face</code> property instead. See
+    <a href="Overlay-Properties.html#Overlay-Properties">Overlay
+    Properties</a>.
 
-</li><li> If the text lies within the mode line of the selected window, Emacs
-applies the <code>mode-line</code> face.  For the mode line of a
-non-selected window, Emacs applies the <code>mode-line-inactive</code> face.
-For a header line, Emacs applies the <code>header-line</code> face.
+      <p>When multiple overlays cover one character, an overlay
+      with higher priority overrides those with lower priority. See
+      <a href="Overlays.html#Overlays">Overlays</a>.</p>
+    </li>
 
-</li><li> If any given attribute has not been specified during the preceding
-steps, Emacs applies the attribute of the <code>default</code> face.
-</li></ul>
+    <li>If the text contains a <code>face</code> or
+    <code>mouse-face</code> property, Emacs applies the specified
+    faces and face attributes. See <a href=
+    "Special-Properties.html#Special-Properties">Special
+    Properties</a>. (This is how Font Lock mode faces are applied.
+    See <a href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock
+    Mode</a>.)</li>
 
-<p>At each stage, if a face has a valid <code>:inherit</code> attribute,
-Emacs treats any attribute with an <code>unspecified</code> value as having
-the corresponding value drawn from the parent face(s).  see <a href="Face-Attributes.html#Face-Attributes">Face Attributes</a>.  Note that the parent face(s) may also leave the
-attribute unspecified; in that case, the attribute remains unspecified
-at the next level of face merging.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Face-Remapping.html#Face-Remapping" accesskey="n" rel="next">Face Remapping</a>, Previous: <a href="Attribute-Functions.html#Attribute-Functions" accesskey="p" rel="prev">Attribute Functions</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>If the text lies within the mode line of the selected
+    window, Emacs applies the <code>mode-line</code> face. For the
+    mode line of a non-selected window, Emacs applies the
+    <code>mode-line-inactive</code> face. For a header line, Emacs
+    applies the <code>header-line</code> face.</li>
 
+    <li>If any given attribute has not been specified during the
+    preceding steps, Emacs applies the attribute of the
+    <code>default</code> face.</li>
+  </ul>
 
+  <p>At each stage, if a face has a valid <code>:inherit</code>
+  attribute, Emacs treats any attribute with an
+  <code>unspecified</code> value as having the corresponding value
+  drawn from the parent face(s). see <a href=
+  "Face-Attributes.html#Face-Attributes">Face Attributes</a>. Note
+  that the parent face(s) may also leave the attribute unspecified;
+  in that case, the attribute remains unspecified at the next level
+  of face merging.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Face-Remapping.html#Face-Remapping"
+    accesskey="n" rel="next">Face Remapping</a>, Previous: <a href=
+    "Attribute-Functions.html#Attribute-Functions" accesskey="p"
+    rel="prev">Attribute Functions</a>, Up: <a href=
+    "Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

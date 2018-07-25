@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,108 +19,160 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Generic Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Generic Modes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Generic Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Major-Modes.html#Major-Modes" rel="up" title="Major Modes">
-<link href="Example-Major-Modes.html#Example-Major-Modes" rel="next" title="Example Major Modes">
-<link href="Tabulated-List-Mode.html#Tabulated-List-Mode" rel="prev" title="Tabulated List Mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Generic Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Generic Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Generic Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Major-Modes.html#Major-Modes" rel="up" title=
+  "Major Modes" />
+  <link href="Example-Major-Modes.html#Example-Major-Modes" rel=
+  "next" title="Example Major Modes" />
+  <link href="Tabulated-List-Mode.html#Tabulated-List-Mode" rel=
+  "prev" title="Tabulated List Mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Generic-Modes" id="Generic-Modes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Example-Major-Modes.html#Example-Major-Modes"
+    accesskey="n" rel="next">Example Major Modes</a>, Previous:
+    <a href="Tabulated-List-Mode.html#Tabulated-List-Mode"
+    accesskey="p" rel="prev">Tabulated List Mode</a>, Up: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major
+    Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Generic-Modes-1" id="Generic-Modes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Generic-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Example-Major-Modes.html#Example-Major-Modes" accesskey="n" rel="next">Example Major Modes</a>, Previous: <a href="Tabulated-List-Mode.html#Tabulated-List-Mode" accesskey="p" rel="prev">Tabulated List Mode</a>, Up: <a href="Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Generic-Modes-1"></a>
-<h4 class="subsection">22.2.8 Generic Modes</h4>
-<a name="index-generic-mode"></a>
+  <h4 class="subsection">22.2.8 Generic Modes</h4><a name=
+  "index-generic-mode" id="index-generic-mode"></a>
 
-<p><em>Generic modes</em> are simple major modes with basic support for
-comment syntax and Font Lock mode.  To define a generic mode, use the
-macro <code>define-generic-mode</code>.  See the file <samp>generic-x.el</samp>
-for some examples of the use of <code>define-generic-mode</code>.
-</p>
-<dl>
-<dt><a name="index-define_002dgeneric_002dmode"></a>Macro: <strong>define-generic-mode</strong> <em>mode comment-list keyword-list font-lock-list auto-mode-list function-list &amp;optional docstring</em></dt>
-<dd><p>This macro defines a generic mode command named <var>mode</var> (a symbol,
-not quoted).  The optional argument <var>docstring</var> is the
-documentation for the mode command.  If you do not supply it,
-<code>define-generic-mode</code> generates one by default.
-</p>
-<p>The argument <var>comment-list</var> is a list in which each element is
-either a character, a string of one or two characters, or a cons cell.
-A character or a string is set up in the mode&rsquo;s syntax table as a
-comment starter.  If the entry is a cons cell, the <small>CAR</small> is set
-up as a comment starter and the <small>CDR</small> as a comment ender.
-(Use <code>nil</code> for the latter if you want comments to end at the end
-of the line.)  Note that the syntax table mechanism has limitations
-about what comment starters and enders are actually possible.
-See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.
-</p>
-<p>The argument <var>keyword-list</var> is a list of keywords to highlight
-with <code>font-lock-keyword-face</code>.  Each keyword should be a string.
-Meanwhile, <var>font-lock-list</var> is a list of additional expressions to
-highlight.  Each element of this list should have the same form as an
-element of <code>font-lock-keywords</code>.  See <a href="Search_002dbased-Fontification.html#Search_002dbased-Fontification">Search-based Fontification</a>.
-</p>
-<p>The argument <var>auto-mode-list</var> is a list of regular expressions to
-add to the variable <code>auto-mode-alist</code>.  They are added by the execution
-of the <code>define-generic-mode</code> form, not by expanding the macro call.
-</p>
-<p>Finally, <var>function-list</var> is a list of functions for the mode
-command to call for additional setup.  It calls these functions just
-before it runs the mode hook variable <code><var>mode</var>-hook</code>.
-</p></dd></dl>
+  <p><em>Generic modes</em> are simple major modes with basic
+  support for comment syntax and Font Lock mode. To define a
+  generic mode, use the macro <code>define-generic-mode</code>. See
+  the file <samp>generic-x.el</samp> for some examples of the use
+  of <code>define-generic-mode</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Example-Major-Modes.html#Example-Major-Modes" accesskey="n" rel="next">Example Major Modes</a>, Previous: <a href="Tabulated-List-Mode.html#Tabulated-List-Mode" accesskey="p" rel="prev">Tabulated List Mode</a>, Up: <a href="Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-define_002dgeneric_002dmode" id=
+    "index-define_002dgeneric_002dmode"></a>Macro:
+    <strong>define-generic-mode</strong> <em>mode comment-list
+    keyword-list font-lock-list auto-mode-list function-list
+    &amp;optional docstring</em></dt>
 
+    <dd>
+      <p>This macro defines a generic mode command named
+      <var>mode</var> (a symbol, not quoted). The optional argument
+      <var>docstring</var> is the documentation for the mode
+      command. If you do not supply it,
+      <code>define-generic-mode</code> generates one by
+      default.</p>
 
+      <p>The argument <var>comment-list</var> is a list in which
+      each element is either a character, a string of one or two
+      characters, or a cons cell. A character or a string is set up
+      in the mode&rsquo;s syntax table as a comment starter. If the
+      entry is a cons cell, the <small>CAR</small> is set up as a
+      comment starter and the <small>CDR</small> as a comment
+      ender. (Use <code>nil</code> for the latter if you want
+      comments to end at the end of the line.) Note that the syntax
+      table mechanism has limitations about what comment starters
+      and enders are actually possible. See <a href=
+      "Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.</p>
 
+      <p>The argument <var>keyword-list</var> is a list of keywords
+      to highlight with <code>font-lock-keyword-face</code>. Each
+      keyword should be a string. Meanwhile,
+      <var>font-lock-list</var> is a list of additional expressions
+      to highlight. Each element of this list should have the same
+      form as an element of <code>font-lock-keywords</code>. See
+      <a href=
+      "Search_002dbased-Fontification.html#Search_002dbased-Fontification">
+      Search-based Fontification</a>.</p>
+
+      <p>The argument <var>auto-mode-list</var> is a list of
+      regular expressions to add to the variable
+      <code>auto-mode-alist</code>. They are added by the execution
+      of the <code>define-generic-mode</code> form, not by
+      expanding the macro call.</p>
+
+      <p>Finally, <var>function-list</var> is a list of functions
+      for the mode command to call for additional setup. It calls
+      these functions just before it runs the mode hook variable
+      <code><var>mode</var>-hook</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Example-Major-Modes.html#Example-Major-Modes"
+    accesskey="n" rel="next">Example Major Modes</a>, Previous:
+    <a href="Tabulated-List-Mode.html#Tabulated-List-Mode"
+    accesskey="p" rel="prev">Tabulated List Mode</a>, Up: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major
+    Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

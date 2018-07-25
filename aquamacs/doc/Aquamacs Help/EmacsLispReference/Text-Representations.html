@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,234 +19,350 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Text Representations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Text Representations">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Text Representations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up" title="Non-ASCII Characters">
-<link href="Disabling-Multibyte.html#Disabling-Multibyte" rel="next" title="Disabling Multibyte">
-<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="prev" title="Non-ASCII Characters">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Text
+  Representations</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Text Representations" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Text Representations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up"
+  title="Non-ASCII Characters" />
+  <link href="Disabling-Multibyte.html#Disabling-Multibyte" rel=
+  "next" title="Disabling Multibyte" />
+  <link href=
+  "Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel=
+  "prev" title="Non-ASCII Characters" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Text-Representations" id="Text-Representations"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Disabling-Multibyte.html#Disabling-Multibyte"
+    accesskey="n" rel="next">Disabling Multibyte</a>, Up: <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Text-Representations-1" id="Text-Representations-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Text-Representations"></a>
-<div class="header">
-<p>
-Next: <a href="Disabling-Multibyte.html#Disabling-Multibyte" accesskey="n" rel="next">Disabling Multibyte</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Text-Representations-1"></a>
-<h3 class="section">32.1 Text Representations</h3>
-<a name="index-text-representation"></a>
+  <h3 class="section">32.1 Text Representations</h3><a name=
+  "index-text-representation" id="index-text-representation"></a>
 
-<p>Emacs buffers and strings support a large repertoire of characters
-from many different scripts, allowing users to type and display text
-in almost any known written language.
-</p>
-<a name="index-character-codepoint"></a>
-<a name="index-codespace"></a>
-<a name="index-Unicode"></a>
-<p>To support this multitude of characters and scripts, Emacs closely
-follows the <em>Unicode Standard</em>.  The Unicode Standard assigns a
-unique number, called a <em>codepoint</em>, to each and every character.
-The range of codepoints defined by Unicode, or the Unicode
-<em>codespace</em>, is <code>0..#x10FFFF</code> (in hexadecimal notation),
-inclusive.  Emacs extends this range with codepoints in the range
-<code>#x110000..#x3FFFFF</code>, which it uses for representing characters
-that are not unified with Unicode and <em>raw 8-bit bytes</em> that
-cannot be interpreted as characters.  Thus, a character codepoint in
-Emacs is a 22-bit integer.
-</p>
-<a name="index-internal-representation-of-characters"></a>
-<a name="index-characters_002c-representation-in-buffers-and-strings"></a>
-<a name="index-multibyte-text"></a>
-<p>To conserve memory, Emacs does not hold fixed-length 22-bit numbers
-that are codepoints of text characters within buffers and strings.
-Rather, Emacs uses a variable-length internal representation of
-characters, that stores each character as a sequence of 1 to 5 8-bit
-bytes, depending on the magnitude of its codepoint<a name="DOCF15" href="#FOOT15"><sup>15</sup></a>.  For example, any <acronym>ASCII</acronym> character takes up only 1
-byte, a Latin-1 character takes up 2 bytes, etc.  We call this
-representation of text <em>multibyte</em>.
-</p>
-<p>Outside Emacs, characters can be represented in many different
-encodings, such as ISO-8859-1, GB-2312, Big-5, etc.  Emacs converts
-between these external encodings and its internal representation, as
-appropriate, when it reads text into a buffer or a string, or when it
-writes text to a disk file or passes it to some other process.
-</p>
-<p>Occasionally, Emacs needs to hold and manipulate encoded text or
-binary non-text data in its buffers or strings.  For example, when
-Emacs visits a file, it first reads the file&rsquo;s text verbatim into a
-buffer, and only then converts it to the internal representation.
-Before the conversion, the buffer holds encoded text.
-</p>
-<a name="index-unibyte-text"></a>
-<p>Encoded text is not really text, as far as Emacs is concerned, but
-rather a sequence of raw 8-bit bytes.  We call buffers and strings
-that hold encoded text <em>unibyte</em> buffers and strings, because
-Emacs treats them as a sequence of individual bytes.  Usually, Emacs
-displays unibyte buffers and strings as octal codes such as
-<code>\237</code>.  We recommend that you never use unibyte buffers and
-strings except for manipulating encoded text or binary non-text data.
-</p>
-<p>In a buffer, the buffer-local value of the variable
-<code>enable-multibyte-characters</code> specifies the representation used.
-The representation for a string is determined and recorded in the string
-when the string is constructed.
-</p>
-<dl>
-<dt><a name="index-enable_002dmultibyte_002dcharacters"></a>Variable: <strong>enable-multibyte-characters</strong></dt>
-<dd><p>This variable specifies the current buffer&rsquo;s text representation.
-If it is non-<code>nil</code>, the buffer contains multibyte text; otherwise,
-it contains unibyte encoded text or binary non-text data.
-</p>
-<p>You cannot set this variable directly; instead, use the function
-<code>set-buffer-multibyte</code> to change a buffer&rsquo;s representation.
-</p></dd></dl>
+  <p>Emacs buffers and strings support a large repertoire of
+  characters from many different scripts, allowing users to type
+  and display text in almost any known written
+  language.</p><a name="index-character-codepoint" id=
+  "index-character-codepoint"></a> <a name="index-codespace" id=
+  "index-codespace"></a> <a name="index-Unicode" id=
+  "index-Unicode"></a>
 
-<dl>
-<dt><a name="index-position_002dbytes"></a>Function: <strong>position-bytes</strong> <em>position</em></dt>
-<dd><p>Buffer positions are measured in character units.  This function
-returns the byte-position corresponding to buffer position
-<var>position</var> in the current buffer.  This is 1 at the start of the
-buffer, and counts upward in bytes.  If <var>position</var> is out of
-range, the value is <code>nil</code>.
-</p></dd></dl>
+  <p>To support this multitude of characters and scripts, Emacs
+  closely follows the <em>Unicode Standard</em>. The Unicode
+  Standard assigns a unique number, called a <em>codepoint</em>, to
+  each and every character. The range of codepoints defined by
+  Unicode, or the Unicode <em>codespace</em>, is
+  <code>0..#x10FFFF</code> (in hexadecimal notation), inclusive.
+  Emacs extends this range with codepoints in the range
+  <code>#x110000..#x3FFFFF</code>, which it uses for representing
+  characters that are not unified with Unicode and <em>raw 8-bit
+  bytes</em> that cannot be interpreted as characters. Thus, a
+  character codepoint in Emacs is a 22-bit integer.</p><a name=
+  "index-internal-representation-of-characters" id=
+  "index-internal-representation-of-characters"></a> <a name=
+  "index-characters_002c-representation-in-buffers-and-strings" id=
+  "index-characters_002c-representation-in-buffers-and-strings"></a>
+  <a name="index-multibyte-text" id="index-multibyte-text"></a>
 
-<dl>
-<dt><a name="index-byte_002dto_002dposition"></a>Function: <strong>byte-to-position</strong> <em>byte-position</em></dt>
-<dd><p>Return the buffer position, in character units, corresponding to given
-<var>byte-position</var> in the current buffer.  If <var>byte-position</var> is
-out of range, the value is <code>nil</code>.  In a multibyte buffer, an
-arbitrary value of <var>byte-position</var> can be not at character
-boundary, but inside a multibyte sequence representing a single
-character; in this case, this function returns the buffer position of
-the character whose multibyte sequence includes <var>byte-position</var>.
-In other words, the value does not change for all byte positions that
-belong to the same character.
-</p></dd></dl>
+  <p>To conserve memory, Emacs does not hold fixed-length 22-bit
+  numbers that are codepoints of text characters within buffers and
+  strings. Rather, Emacs uses a variable-length internal
+  representation of characters, that stores each character as a
+  sequence of 1 to 5 8-bit bytes, depending on the magnitude of its
+  codepoint<a name="DOCF15" href="#FOOT15" id=
+  "DOCF15"><sup>15</sup></a>. For example, any
+  <acronym>ASCII</acronym> character takes up only 1 byte, a
+  Latin-1 character takes up 2 bytes, etc. We call this
+  representation of text <em>multibyte</em>.</p>
 
-<a name="index-convert-file-byte-to-buffer-position"></a>
-<a name="index-convert-buffer-position-to-file-byte"></a>
-<p>The following two functions are useful when a Lisp program needs to
-map buffer positions to byte offsets in a file visited by the buffer.
-</p>
-<dl>
-<dt><a name="index-bufferpos_002dto_002dfilepos"></a>Function: <strong>bufferpos-to-filepos</strong> <em>position &amp;optional quality coding-system</em></dt>
-<dd><p>This function is similar to <code>position-bytes</code>, but instead of byte
-position in the current buffer it returns the offset from the
-beginning of the current buffer&rsquo;s file of the byte that corresponds to
-the given character <var>position</var> in the buffer.  The conversion
-requires to know how the text is encoded in the buffer&rsquo;s file; this is
-what the <var>coding-system</var> argument is for, defaulting to the value
-of <code>buffer-file-coding-system</code>.  The optional argument
-<var>quality</var> specifies how accurate the result should be; it should
-be one of the following:
-</p>
-<dl compact="compact">
-<dt><code>exact</code></dt>
-<dd><p>The result must be accurate.  The function may need to encode and
-decode a large part of the buffer.
-</p></dd>
-<dt><code>approximate</code></dt>
-<dd><p>The value can be an approximation.  The function may avoid expensive
-processing and return an inexact result.
-</p></dd>
-<dt><code>nil</code></dt>
-<dd><p>If the exact result needs expensive processing, the function will
-return <code>nil</code> rather than an approximation.  This is the default
-if the argument is omitted.
-</p></dd>
-</dl>
-</dd></dl>
+  <p>Outside Emacs, characters can be represented in many different
+  encodings, such as ISO-8859-1, GB-2312, Big-5, etc. Emacs
+  converts between these external encodings and its internal
+  representation, as appropriate, when it reads text into a buffer
+  or a string, or when it writes text to a disk file or passes it
+  to some other process.</p>
 
-<dl>
-<dt><a name="index-filepos_002dto_002dbufferpos"></a>Function: <strong>filepos-to-bufferpos</strong> <em>byte &amp;optional quality coding-system</em></dt>
-<dd><p>This function returns the buffer position corresponding to a file
-position specified by <var>byte</var>, a zero-base byte offset from the
-file&rsquo;s beginning.  The function performs the conversion opposite to
-what <code>bufferpos-to-filepos</code> does.  Optional arguments
-<var>quality</var> and <var>coding-system</var> have the same meaning and values
-as for <code>bufferpos-to-filepos</code>.
-</p></dd></dl>
+  <p>Occasionally, Emacs needs to hold and manipulate encoded text
+  or binary non-text data in its buffers or strings. For example,
+  when Emacs visits a file, it first reads the file&rsquo;s text
+  verbatim into a buffer, and only then converts it to the internal
+  representation. Before the conversion, the buffer holds encoded
+  text.</p><a name="index-unibyte-text" id=
+  "index-unibyte-text"></a>
 
-<dl>
-<dt><a name="index-multibyte_002dstring_002dp"></a>Function: <strong>multibyte-string-p</strong> <em>string</em></dt>
-<dd><p>Return <code>t</code> if <var>string</var> is a multibyte string, <code>nil</code>
-otherwise.  This function also returns <code>nil</code> if <var>string</var> is
-some object other than a string.
-</p></dd></dl>
+  <p>Encoded text is not really text, as far as Emacs is concerned,
+  but rather a sequence of raw 8-bit bytes. We call buffers and
+  strings that hold encoded text <em>unibyte</em> buffers and
+  strings, because Emacs treats them as a sequence of individual
+  bytes. Usually, Emacs displays unibyte buffers and strings as
+  octal codes such as <code>\237</code>. We recommend that you
+  never use unibyte buffers and strings except for manipulating
+  encoded text or binary non-text data.</p>
 
-<dl>
-<dt><a name="index-string_002dbytes"></a>Function: <strong>string-bytes</strong> <em>string</em></dt>
-<dd><a name="index-string_002c-number-of-bytes"></a>
-<p>This function returns the number of bytes in <var>string</var>.
-If <var>string</var> is a multibyte string, this can be greater than
-<code>(length <var>string</var>)</code>.
-</p></dd></dl>
+  <p>In a buffer, the buffer-local value of the variable
+  <code>enable-multibyte-characters</code> specifies the
+  representation used. The representation for a string is
+  determined and recorded in the string when the string is
+  constructed.</p>
 
-<dl>
-<dt><a name="index-unibyte_002dstring"></a>Function: <strong>unibyte-string</strong> <em>&amp;rest bytes</em></dt>
-<dd><p>This function concatenates all its argument <var>bytes</var> and makes the
-result a unibyte string.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-enable_002dmultibyte_002dcharacters" id=
+    "index-enable_002dmultibyte_002dcharacters"></a>Variable:
+    <strong>enable-multibyte-characters</strong></dt>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <dd>
+      <p>This variable specifies the current buffer&rsquo;s text
+      representation. If it is non-<code>nil</code>, the buffer
+      contains multibyte text; otherwise, it contains unibyte
+      encoded text or binary non-text data.</p>
 
-<h3><a name="FOOT15" href="#DOCF15">(15)</a></h3>
-<p>This internal representation is based on one of the encodings defined
-by the Unicode Standard, called <em>UTF-8</em>, for representing any
-Unicode codepoint, but Emacs extends UTF-8 to represent the additional
-codepoints it uses for raw 8-bit bytes and characters not unified with
-Unicode.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Disabling-Multibyte.html#Disabling-Multibyte" accesskey="n" rel="next">Disabling Multibyte</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>You cannot set this variable directly; instead, use the
+      function <code>set-buffer-multibyte</code> to change a
+      buffer&rsquo;s representation.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-position_002dbytes" id=
+    "index-position_002dbytes"></a>Function:
+    <strong>position-bytes</strong> <em>position</em></dt>
 
+    <dd>
+      <p>Buffer positions are measured in character units. This
+      function returns the byte-position corresponding to buffer
+      position <var>position</var> in the current buffer. This is 1
+      at the start of the buffer, and counts upward in bytes. If
+      <var>position</var> is out of range, the value is
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-byte_002dto_002dposition" id=
+    "index-byte_002dto_002dposition"></a>Function:
+    <strong>byte-to-position</strong> <em>byte-position</em></dt>
+
+    <dd>
+      <p>Return the buffer position, in character units,
+      corresponding to given <var>byte-position</var> in the
+      current buffer. If <var>byte-position</var> is out of range,
+      the value is <code>nil</code>. In a multibyte buffer, an
+      arbitrary value of <var>byte-position</var> can be not at
+      character boundary, but inside a multibyte sequence
+      representing a single character; in this case, this function
+      returns the buffer position of the character whose multibyte
+      sequence includes <var>byte-position</var>. In other words,
+      the value does not change for all byte positions that belong
+      to the same character.</p>
+    </dd>
+  </dl><a name="index-convert-file-byte-to-buffer-position" id=
+  "index-convert-file-byte-to-buffer-position"></a> <a name=
+  "index-convert-buffer-position-to-file-byte" id=
+  "index-convert-buffer-position-to-file-byte"></a>
+
+  <p>The following two functions are useful when a Lisp program
+  needs to map buffer positions to byte offsets in a file visited
+  by the buffer.</p>
+
+  <dl>
+    <dt><a name="index-bufferpos_002dto_002dfilepos" id=
+    "index-bufferpos_002dto_002dfilepos"></a>Function:
+    <strong>bufferpos-to-filepos</strong> <em>position
+    &amp;optional quality coding-system</em></dt>
+
+    <dd>
+      <p>This function is similar to <code>position-bytes</code>,
+      but instead of byte position in the current buffer it returns
+      the offset from the beginning of the current buffer&rsquo;s
+      file of the byte that corresponds to the given character
+      <var>position</var> in the buffer. The conversion requires to
+      know how the text is encoded in the buffer&rsquo;s file; this
+      is what the <var>coding-system</var> argument is for,
+      defaulting to the value of
+      <code>buffer-file-coding-system</code>. The optional argument
+      <var>quality</var> specifies how accurate the result should
+      be; it should be one of the following:</p>
+
+      <dl compact="compact">
+        <dt><code>exact</code></dt>
+
+        <dd>
+          <p>The result must be accurate. The function may need to
+          encode and decode a large part of the buffer.</p>
+        </dd>
+
+        <dt><code>approximate</code></dt>
+
+        <dd>
+          <p>The value can be an approximation. The function may
+          avoid expensive processing and return an inexact
+          result.</p>
+        </dd>
+
+        <dt><code>nil</code></dt>
+
+        <dd>
+          <p>If the exact result needs expensive processing, the
+          function will return <code>nil</code> rather than an
+          approximation. This is the default if the argument is
+          omitted.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-filepos_002dto_002dbufferpos" id=
+    "index-filepos_002dto_002dbufferpos"></a>Function:
+    <strong>filepos-to-bufferpos</strong> <em>byte &amp;optional
+    quality coding-system</em></dt>
+
+    <dd>
+      <p>This function returns the buffer position corresponding to
+      a file position specified by <var>byte</var>, a zero-base
+      byte offset from the file&rsquo;s beginning. The function
+      performs the conversion opposite to what
+      <code>bufferpos-to-filepos</code> does. Optional arguments
+      <var>quality</var> and <var>coding-system</var> have the same
+      meaning and values as for
+      <code>bufferpos-to-filepos</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-multibyte_002dstring_002dp" id=
+    "index-multibyte_002dstring_002dp"></a>Function:
+    <strong>multibyte-string-p</strong> <em>string</em></dt>
+
+    <dd>
+      <p>Return <code>t</code> if <var>string</var> is a multibyte
+      string, <code>nil</code> otherwise. This function also
+      returns <code>nil</code> if <var>string</var> is some object
+      other than a string.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-string_002dbytes" id=
+    "index-string_002dbytes"></a>Function:
+    <strong>string-bytes</strong> <em>string</em></dt>
+
+    <dd>
+      <a name="index-string_002c-number-of-bytes" id=
+      "index-string_002c-number-of-bytes"></a>
+
+      <p>This function returns the number of bytes in
+      <var>string</var>. If <var>string</var> is a multibyte
+      string, this can be greater than <code>(length
+      <var>string</var>)</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-unibyte_002dstring" id=
+    "index-unibyte_002dstring"></a>Function:
+    <strong>unibyte-string</strong> <em>&amp;rest bytes</em></dt>
+
+    <dd>
+      <p>This function concatenates all its argument
+      <var>bytes</var> and makes the result a unibyte string.</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT15" href="#DOCF15" id="FOOT15">(15)</a></h3>
+
+    <p>This internal representation is based on one of the
+    encodings defined by the Unicode Standard, called
+    <em>UTF-8</em>, for representing any Unicode codepoint, but
+    Emacs extends UTF-8 to represent the additional codepoints it
+    uses for raw 8-bit bytes and characters not unified with
+    Unicode.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Disabling-Multibyte.html#Disabling-Multibyte"
+    accesskey="n" rel="next">Disabling Multibyte</a>, Up: <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

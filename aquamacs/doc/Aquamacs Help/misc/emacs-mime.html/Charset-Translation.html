@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the Emacs MIME interface functionality.
 
 Copyright © 1998-2016 Free Software Foundation, Inc.
@@ -14,120 +16,169 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs MIME Manual: Charset Translation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs MIME Manual: Charset Translation">
-<meta name="keywords" content="Emacs MIME Manual: Charset Translation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Composing.html#Composing" rel="up" title="Composing">
-<link href="Conversion.html#Conversion" rel="next" title="Conversion">
-<link href="Encoding-Customization.html#Encoding-Customization" rel="prev" title="Encoding Customization">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs MIME Manual: Charset Translation</title>
+  <meta name="description" content=
+  "Emacs MIME Manual: Charset Translation" />
+  <meta name="keywords" content=
+  "Emacs MIME Manual: Charset Translation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Composing.html#Composing" rel="up" title=
+  "Composing" />
+  <link href="Conversion.html#Conversion" rel="next" title=
+  "Conversion" />
+  <link href="Encoding-Customization.html#Encoding-Customization"
+  rel="prev" title="Encoding Customization" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Charset-Translation"></a>
-<div class="header">
-<p>
-Next: <a href="Conversion.html#Conversion" accesskey="n" rel="next">Conversion</a>, Previous: <a href="Encoding-Customization.html#Encoding-Customization" accesskey="p" rel="prev">Encoding Customization</a>, Up: <a href="Composing.html#Composing" accesskey="u" rel="up">Composing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Charset-Translation-1"></a>
-<h3 class="section">2.5 Charset Translation</h3>
-<a name="index-charsets"></a>
+<body lang="en" xml:lang="en">
+  <a name="Charset-Translation" id="Charset-Translation"></a>
 
-<p>During translation from <acronym>MML</acronym> to <acronym>MIME</acronym>, for each
-<acronym>MIME</acronym> part which has been composed inside Emacs, an appropriate
-charset has to be chosen.
-</p>
-<a name="index-mail_002dparse_002dcharset"></a>
-<p>If you are running a non-<small>MULE</small> Emacs, this process is simple: If the
-part contains any non-<acronym>ASCII</acronym> (8-bit) characters, the <acronym>MIME</acronym> charset
-given by <code>mail-parse-charset</code> (a symbol) is used.  (Never set this
-variable directly, though.  If you want to change the default charset,
-please consult the documentation of the package which you use to process
-<acronym>MIME</acronym> messages.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/message/Various-Message-Variables.html#Various-Message-Variables">Various Message Variables</a> in <cite>      Message Manual</cite>, for example.)
-If there are only <acronym>ASCII</acronym> characters, the <acronym>MIME</acronym> charset US-ASCII is
-used, of course.
-</p>
-<a name="index-MULE"></a>
-<a name="index-UTF_002d8"></a>
-<a name="index-Unicode"></a>
-<a name="index-mm_002dmime_002dmule_002dcharset_002dalist"></a>
-<p>Things are slightly more complicated when running Emacs with <small>MULE</small>
-support.  In this case, a list of the <small>MULE</small> charsets used in the
-part is obtained, and the <small>MULE</small> charsets are translated to
-<acronym>MIME</acronym> charsets by consulting the table provided by Emacs itself
-or the variable <code>mm-mime-mule-charset-alist</code> for XEmacs.
-If this results in a single <acronym>MIME</acronym> charset, this is used to encode
-the part.  But if the resulting list of <acronym>MIME</acronym> charsets contains more
-than one element, two things can happen: If it is possible to encode the
-part via UTF-8, this charset is used.  (For this, Emacs must support
-the <code>utf-8</code> coding system, and the part must consist entirely of
-characters which have Unicode counterparts.)  If UTF-8 is not available
-for some reason, the part is split into several ones, so that each one
-can be encoded with a single <acronym>MIME</acronym> charset.  The part can only be
-split at line boundaries, though&mdash;if more than one <acronym>MIME</acronym> charset is
-required to encode a single line, it is not possible to encode the part.
-</p>
-<p>When running Emacs with <small>MULE</small> support, the preferences for which
-coding system to use is inherited from Emacs itself.  This means that
-if Emacs is set up to prefer UTF-8, it will be used when encoding
-messages.  You can modify this by altering the
-<code>mm-coding-system-priorities</code> variable though (see <a href="Encoding-Customization.html#Encoding-Customization">Encoding Customization</a>).
-</p>
-<p>The charset to be used can be overridden by setting the <code>charset</code>
-<acronym>MML</acronym> tag (see <a href="MML-Definition.html#MML-Definition">MML Definition</a>) when composing the message.
-</p>
-<p>The encoding of characters (quoted-printable, 8bit, etc.) is orthogonal
-to the discussion here, and is controlled by the variables
-<code>mm-body-charset-encoding-alist</code> and
-<code>mm-content-transfer-encoding-defaults</code> (see <a href="Encoding-Customization.html#Encoding-Customization">Encoding Customization</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Conversion.html#Conversion" accesskey="n" rel="next">Conversion</a>, Previous: <a href="Encoding-Customization.html#Encoding-Customization" accesskey="p" rel="prev">Encoding Customization</a>, Up: <a href="Composing.html#Composing" accesskey="u" rel="up">Composing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Conversion.html#Conversion" accesskey="n"
+    rel="next">Conversion</a>, Previous: <a href=
+    "Encoding-Customization.html#Encoding-Customization" accesskey=
+    "p" rel="prev">Encoding Customization</a>, Up: <a href=
+    "Composing.html#Composing" accesskey="u" rel="up">Composing</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Charset-Translation-1" id="Charset-Translation-1"></a>
 
+  <h3 class="section">2.5 Charset Translation</h3><a name=
+  "index-charsets" id="index-charsets"></a>
 
+  <p>During translation from <acronym>MML</acronym> to
+  <acronym>MIME</acronym>, for each <acronym>MIME</acronym> part
+  which has been composed inside Emacs, an appropriate charset has
+  to be chosen.</p><a name="index-mail_002dparse_002dcharset" id=
+  "index-mail_002dparse_002dcharset"></a>
 
+  <p>If you are running a non-<small>MULE</small> Emacs, this
+  process is simple: If the part contains any
+  non-<acronym>ASCII</acronym> (8-bit) characters, the
+  <acronym>MIME</acronym> charset given by
+  <code>mail-parse-charset</code> (a symbol) is used. (Never set
+  this variable directly, though. If you want to change the default
+  charset, please consult the documentation of the package which
+  you use to process <acronym>MIME</acronym> messages. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/message/Various-Message-Variables.html#Various-Message-Variables">
+  Various Message Variables</a> in <cite>Message Manual</cite>, for
+  example.) If there are only <acronym>ASCII</acronym> characters,
+  the <acronym>MIME</acronym> charset US-ASCII is used, of
+  course.</p><a name="index-MULE" id="index-MULE"></a> <a name=
+  "index-UTF_002d8" id="index-UTF_002d8"></a> <a name=
+  "index-Unicode" id="index-Unicode"></a> <a name=
+  "index-mm_002dmime_002dmule_002dcharset_002dalist" id=
+  "index-mm_002dmime_002dmule_002dcharset_002dalist"></a>
+
+  <p>Things are slightly more complicated when running Emacs with
+  <small>MULE</small> support. In this case, a list of the
+  <small>MULE</small> charsets used in the part is obtained, and
+  the <small>MULE</small> charsets are translated to
+  <acronym>MIME</acronym> charsets by consulting the table provided
+  by Emacs itself or the variable
+  <code>mm-mime-mule-charset-alist</code> for XEmacs. If this
+  results in a single <acronym>MIME</acronym> charset, this is used
+  to encode the part. But if the resulting list of
+  <acronym>MIME</acronym> charsets contains more than one element,
+  two things can happen: If it is possible to encode the part via
+  UTF-8, this charset is used. (For this, Emacs must support the
+  <code>utf-8</code> coding system, and the part must consist
+  entirely of characters which have Unicode counterparts.) If UTF-8
+  is not available for some reason, the part is split into several
+  ones, so that each one can be encoded with a single
+  <acronym>MIME</acronym> charset. The part can only be split at
+  line boundaries, though&mdash;if more than one
+  <acronym>MIME</acronym> charset is required to encode a single
+  line, it is not possible to encode the part.</p>
+
+  <p>When running Emacs with <small>MULE</small> support, the
+  preferences for which coding system to use is inherited from
+  Emacs itself. This means that if Emacs is set up to prefer UTF-8,
+  it will be used when encoding messages. You can modify this by
+  altering the <code>mm-coding-system-priorities</code> variable
+  though (see <a href=
+  "Encoding-Customization.html#Encoding-Customization">Encoding
+  Customization</a>).</p>
+
+  <p>The charset to be used can be overridden by setting the
+  <code>charset</code> <acronym>MML</acronym> tag (see <a href=
+  "MML-Definition.html#MML-Definition">MML Definition</a>) when
+  composing the message.</p>
+
+  <p>The encoding of characters (quoted-printable, 8bit, etc.) is
+  orthogonal to the discussion here, and is controlled by the
+  variables <code>mm-body-charset-encoding-alist</code> and
+  <code>mm-content-transfer-encoding-defaults</code> (see <a href=
+  "Encoding-Customization.html#Encoding-Customization">Encoding
+  Customization</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Conversion.html#Conversion" accesskey="n"
+    rel="next">Conversion</a>, Previous: <a href=
+    "Encoding-Customization.html#Encoding-Customization" accesskey=
+    "p" rel="prev">Encoding Customization</a>, Up: <a href=
+    "Composing.html#Composing" accesskey="u" rel="up">Composing</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

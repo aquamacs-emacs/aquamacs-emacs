@@ -1,15 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Organization - Common Lisp Extensions</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Common Lisp Extensions">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Overview.html#Overview" title="Overview">
-<link rel="prev" href="Usage.html#Usage" title="Usage">
-<link rel="next" href="Installation.html#Installation" title="Installation">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Organization - Common Lisp Extensions</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Common Lisp Extensions" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Overview.html#Overview" title="Overview" />
+  <link rel="prev" href="Usage.html#Usage" title="Usage" />
+  <link rel="next" href="Installation.html#Installation" title=
+  "Installation" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -27,8 +34,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,57 +47,79 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Organization"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Installation.html#Installation">Installation</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Usage.html#Usage">Usage</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Overview.html#Overview">Overview</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Organization" id="Organization"></a>
 
-<h3 class="section">2.2 Organization</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Installation.html#Installation">Installation</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Usage.html#Usage">Usage</a>, Up:&nbsp;<a rel="up" accesskey=
+    "u" href="Overview.html#Overview">Overview</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">The Common Lisp package is organized into four files:
+  <h3 class="section">2.2 Organization</h3>
 
-     <dl>
-<dt><samp><span class="file">cl.el</span></samp><dd>This is the &ldquo;main&rdquo; file, which contains basic functions
-and information about the package.  This file is relatively
-compact&mdash;about 700 lines.
+  <p class="noindent">The Common Lisp package is organized into
+  four files:</p>
 
-     <br><dt><samp><span class="file">cl-extra.el</span></samp><dd>This file contains the larger, more complex or unusual functions. 
-It is kept separate so that packages which only want to use Common
-Lisp fundamentals like the <code>cadr</code> function won't need to pay
-the overhead of loading the more advanced functions.
+  <dl>
+    <dt><samp><span class="file">cl.el</span></samp></dt>
 
-     <br><dt><samp><span class="file">cl-seq.el</span></samp><dd>This file contains most of the advanced functions for operating
-on sequences or lists, such as <code>delete-if</code> and <code>assoc*</code>.
+    <dd>This is the &ldquo;main&rdquo; file, which contains basic
+    functions and information about the package. This file is
+    relatively compact&mdash;about 700 lines.<br /></dd>
 
-     <br><dt><samp><span class="file">cl-macs.el</span></samp><dd>This file contains the features of the packages which are macros
-instead of functions.  Macros expand when the caller is compiled,
-not when it is run, so the macros generally only need to be
-present when the byte-compiler is running (or when the macros are
-used in uncompiled code such as a <samp><span class="file">.emacs</span></samp> file).  Most of
-the macros of this package are isolated in <samp><span class="file">cl-macs.el</span></samp> so
-that they won't take up memory unless you are compiling. 
-</dl>
+    <dt><samp><span class="file">cl-extra.el</span></samp></dt>
 
-   <p>The file <samp><span class="file">cl.el</span></samp> includes all necessary <code>autoload</code>
-commands for the functions and macros in the other three files. 
-All you have to do is <code>(require 'cl)</code>, and <samp><span class="file">cl.el</span></samp>
-will take care of pulling in the other files when they are
-needed.
+    <dd>This file contains the larger, more complex or unusual
+    functions. It is kept separate so that packages which only want
+    to use Common Lisp fundamentals like the <code>cadr</code>
+    function won't need to pay the overhead of loading the more
+    advanced functions.<br /></dd>
 
-   <p>There is another file, <samp><span class="file">cl-compat.el</span></samp>, which defines some
-routines from the older <samp><span class="file">cl.el</span></samp> package that are not otherwise
-present in the new package.  This includes internal routines
-like <code>setelt</code> and <code>zip-lists</code>, deprecated features
-like <code>defkeyword</code>, and an emulation of the old-style
-multiple-values feature.  This file is obsolete and should not be used
-in new code.  See <a href="Old-CL-Compatibility.html#Old-CL-Compatibility">Old CL Compatibility</a>.
+    <dt><samp><span class="file">cl-seq.el</span></samp></dt>
 
-   </body></html>
+    <dd>This file contains most of the advanced functions for
+    operating on sequences or lists, such as <code>delete-if</code>
+    and <code>assoc*</code>.<br /></dd>
 
+    <dt><samp><span class="file">cl-macs.el</span></samp></dt>
+
+    <dd>This file contains the features of the packages which are
+    macros instead of functions. Macros expand when the caller is
+    compiled, not when it is run, so the macros generally only need
+    to be present when the byte-compiler is running (or when the
+    macros are used in uncompiled code such as a <samp><span class=
+    "file">.emacs</span></samp> file). Most of the macros of this
+    package are isolated in <samp><span class=
+    "file">cl-macs.el</span></samp> so that they won't take up
+    memory unless you are compiling.</dd>
+  </dl>
+
+  <p>The file <samp><span class="file">cl.el</span></samp> includes
+  all necessary <code>autoload</code> commands for the functions
+  and macros in the other three files. All you have to do is
+  <code>(require 'cl)</code>, and <samp><span class=
+  "file">cl.el</span></samp> will take care of pulling in the other
+  files when they are needed.</p>
+
+  <p>There is another file, <samp><span class=
+  "file">cl-compat.el</span></samp>, which defines some routines
+  from the older <samp><span class="file">cl.el</span></samp>
+  package that are not otherwise present in the new package. This
+  includes internal routines like <code>setelt</code> and
+  <code>zip-lists</code>, deprecated features like
+  <code>defkeyword</code>, and an emulation of the old-style
+  multiple-values feature. This file is obsolete and should not be
+  used in new code. See <a href=
+  "Old-CL-Compatibility.html#Old-CL-Compatibility">Old CL
+  Compatibility</a>.</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,164 +19,235 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Change Hooks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Change Hooks">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Change Hooks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="next" title="Non-ASCII Characters">
-<link href="Atomic-Changes.html#Atomic-Changes" rel="prev" title="Atomic Changes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Change Hooks</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Change Hooks" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Change Hooks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href=
+  "Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel=
+  "next" title="Non-ASCII Characters" />
+  <link href="Atomic-Changes.html#Atomic-Changes" rel="prev" title=
+  "Atomic Changes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Change-Hooks" id="Change-Hooks"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Atomic-Changes.html#Atomic-Changes"
+    accesskey="p" rel="prev">Atomic Changes</a>, Up: <a href=
+    "Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Change-Hooks-1" id="Change-Hooks-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Change-Hooks"></a>
-<div class="header">
-<p>
-Previous: <a href="Atomic-Changes.html#Atomic-Changes" accesskey="p" rel="prev">Atomic Changes</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Change-Hooks-1"></a>
-<h3 class="section">31.28 Change Hooks</h3>
-<a name="index-change-hooks"></a>
-<a name="index-hooks-for-text-changes"></a>
+  <h3 class="section">31.28 Change Hooks</h3><a name=
+  "index-change-hooks" id="index-change-hooks"></a> <a name=
+  "index-hooks-for-text-changes" id=
+  "index-hooks-for-text-changes"></a>
 
-<p>These hook variables let you arrange to take notice of changes in
-buffers (or in a particular buffer, if you make them buffer-local).
-See also <a href="Special-Properties.html#Special-Properties">Special Properties</a>, for how to detect changes to
-specific parts of the text.
-</p>
-<p>The functions you use in these hooks should save and restore the match
-data if they do anything that uses regular expressions; otherwise, they
-will interfere in bizarre ways with the editing operations that call
-them.
-</p>
-<dl>
-<dt><a name="index-before_002dchange_002dfunctions"></a>Variable: <strong>before-change-functions</strong></dt>
-<dd><p>This variable holds a list of functions to call when Emacs is about to
-modify a buffer.  Each function gets two arguments, the beginning and
-end of the region that is about to change, represented as integers.
-The buffer that is about to change is always the current buffer when
-the function is called.
-</p></dd></dl>
+  <p>These hook variables let you arrange to take notice of changes
+  in buffers (or in a particular buffer, if you make them
+  buffer-local). See also <a href=
+  "Special-Properties.html#Special-Properties">Special
+  Properties</a>, for how to detect changes to specific parts of
+  the text.</p>
 
-<dl>
-<dt><a name="index-after_002dchange_002dfunctions"></a>Variable: <strong>after-change-functions</strong></dt>
-<dd><p>This variable holds a list of functions to call after Emacs modifies a
-buffer.  Each function receives three arguments: the beginning and end
-of the region just changed, and the length of the text that existed
-before the change.  All three arguments are integers.  The buffer that
-has been changed is always the current buffer when the function is
-called.
-</p>
-<p>The length of the old text is the difference between the buffer
-positions before and after that text as it was before the change.  As
-for the changed text, its length is simply the difference between the
-first two arguments.
-</p></dd></dl>
+  <p>The functions you use in these hooks should save and restore
+  the match data if they do anything that uses regular expressions;
+  otherwise, they will interfere in bizarre ways with the editing
+  operations that call them.</p>
 
-<p>Output of messages into the <samp>*Messages*</samp> buffer does not call
-these functions, and neither do certain internal buffer changes, such
-as changes in buffers created by Emacs internally for certain jobs,
-that should not be visible to Lisp programs.
-</p>
-<p>Do <em>not</em> expect the before-change hooks and the after-change
-hooks be called in balanced pairs around each buffer change.  Also
-don&rsquo;t expect the before-change hooks to be called for every chunk of
-text Emacs is about to delete.  These hooks are provided on the
-assumption that Lisp programs will use either before- or the
-after-change hooks, but not both, and the boundaries of the region
-where the changes happen might include more than just the actual
-changed text, or even lump together several changes done piecemeal.
-</p>
-<dl>
-<dt><a name="index-combine_002dafter_002dchange_002dcalls"></a>Macro: <strong>combine-after-change-calls</strong> <em>body&hellip;</em></dt>
-<dd><p>The macro executes <var>body</var> normally, but arranges to call the
-after-change functions just once for a series of several changes&mdash;if
-that seems safe.
-</p>
-<p>If a program makes several text changes in the same area of the buffer,
-using the macro <code>combine-after-change-calls</code> around that part of
-the program can make it run considerably faster when after-change hooks
-are in use.  When the after-change hooks are ultimately called, the
-arguments specify a portion of the buffer including all of the changes
-made within the <code>combine-after-change-calls</code> body.
-</p>
-<p><strong>Warning:</strong> You must not alter the values of
-<code>after-change-functions</code> within
-the body of a <code>combine-after-change-calls</code> form.
-</p>
-<p><strong>Warning:</strong> if the changes you combine occur in widely scattered
-parts of the buffer, this will still work, but it is not advisable,
-because it may lead to inefficient behavior for some change hook
-functions.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-before_002dchange_002dfunctions" id=
+    "index-before_002dchange_002dfunctions"></a>Variable:
+    <strong>before-change-functions</strong></dt>
 
-<dl>
-<dt><a name="index-first_002dchange_002dhook"></a>Variable: <strong>first-change-hook</strong></dt>
-<dd><p>This variable is a normal hook that is run whenever a buffer is changed
-that was previously in the unmodified state.
-</p></dd></dl>
+    <dd>
+      <p>This variable holds a list of functions to call when Emacs
+      is about to modify a buffer. Each function gets two
+      arguments, the beginning and end of the region that is about
+      to change, represented as integers. The buffer that is about
+      to change is always the current buffer when the function is
+      called.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-inhibit_002dmodification_002dhooks"></a>Variable: <strong>inhibit-modification-hooks</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, all of the change hooks are
-disabled; none of them run.  This affects all the hook variables
-described above in this section, as well as the hooks attached to
-certain special text properties (see <a href="Special-Properties.html#Special-Properties">Special Properties</a>) and overlay
-properties (see <a href="Overlay-Properties.html#Overlay-Properties">Overlay Properties</a>).
-</p>
-<p>Also, this variable is bound to non-<code>nil</code> while running those
-same hook variables, so that by default modifying the buffer from
-a modification hook does not cause other modification hooks to be run.
-If you do want modification hooks to be run in a particular piece of
-code that is itself run from a modification hook, then rebind locally
-<code>inhibit-modification-hooks</code> to <code>nil</code>.
-</p></dd></dl>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Atomic-Changes.html#Atomic-Changes" accesskey="p" rel="prev">Atomic Changes</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-after_002dchange_002dfunctions" id=
+    "index-after_002dchange_002dfunctions"></a>Variable:
+    <strong>after-change-functions</strong></dt>
 
+    <dd>
+      <p>This variable holds a list of functions to call after
+      Emacs modifies a buffer. Each function receives three
+      arguments: the beginning and end of the region just changed,
+      and the length of the text that existed before the change.
+      All three arguments are integers. The buffer that has been
+      changed is always the current buffer when the function is
+      called.</p>
 
+      <p>The length of the old text is the difference between the
+      buffer positions before and after that text as it was before
+      the change. As for the changed text, its length is simply the
+      difference between the first two arguments.</p>
+    </dd>
+  </dl>
 
+  <p>Output of messages into the <samp>*Messages*</samp> buffer
+  does not call these functions, and neither do certain internal
+  buffer changes, such as changes in buffers created by Emacs
+  internally for certain jobs, that should not be visible to Lisp
+  programs.</p>
+
+  <p>Do <em>not</em> expect the before-change hooks and the
+  after-change hooks be called in balanced pairs around each buffer
+  change. Also don&rsquo;t expect the before-change hooks to be
+  called for every chunk of text Emacs is about to delete. These
+  hooks are provided on the assumption that Lisp programs will use
+  either before- or the after-change hooks, but not both, and the
+  boundaries of the region where the changes happen might include
+  more than just the actual changed text, or even lump together
+  several changes done piecemeal.</p>
+
+  <dl>
+    <dt><a name="index-combine_002dafter_002dchange_002dcalls" id=
+    "index-combine_002dafter_002dchange_002dcalls"></a>Macro:
+    <strong>combine-after-change-calls</strong>
+    <em>body&hellip;</em></dt>
+
+    <dd>
+      <p>The macro executes <var>body</var> normally, but arranges
+      to call the after-change functions just once for a series of
+      several changes&mdash;if that seems safe.</p>
+
+      <p>If a program makes several text changes in the same area
+      of the buffer, using the macro
+      <code>combine-after-change-calls</code> around that part of
+      the program can make it run considerably faster when
+      after-change hooks are in use. When the after-change hooks
+      are ultimately called, the arguments specify a portion of the
+      buffer including all of the changes made within the
+      <code>combine-after-change-calls</code> body.</p>
+
+      <p><strong>Warning:</strong> You must not alter the values of
+      <code>after-change-functions</code> within the body of a
+      <code>combine-after-change-calls</code> form.</p>
+
+      <p><strong>Warning:</strong> if the changes you combine occur
+      in widely scattered parts of the buffer, this will still
+      work, but it is not advisable, because it may lead to
+      inefficient behavior for some change hook functions.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-first_002dchange_002dhook" id=
+    "index-first_002dchange_002dhook"></a>Variable:
+    <strong>first-change-hook</strong></dt>
+
+    <dd>
+      <p>This variable is a normal hook that is run whenever a
+      buffer is changed that was previously in the unmodified
+      state.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-inhibit_002dmodification_002dhooks" id=
+    "index-inhibit_002dmodification_002dhooks"></a>Variable:
+    <strong>inhibit-modification-hooks</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, all of the
+      change hooks are disabled; none of them run. This affects all
+      the hook variables described above in this section, as well
+      as the hooks attached to certain special text properties (see
+      <a href="Special-Properties.html#Special-Properties">Special
+      Properties</a>) and overlay properties (see <a href=
+      "Overlay-Properties.html#Overlay-Properties">Overlay
+      Properties</a>).</p>
+
+      <p>Also, this variable is bound to non-<code>nil</code> while
+      running those same hook variables, so that by default
+      modifying the buffer from a modification hook does not cause
+      other modification hooks to be run. If you do want
+      modification hooks to be run in a particular piece of code
+      that is itself run from a modification hook, then rebind
+      locally <code>inhibit-modification-hooks</code> to
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Atomic-Changes.html#Atomic-Changes"
+    accesskey="p" rel="prev">Atomic Changes</a>, Up: <a href=
+    "Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

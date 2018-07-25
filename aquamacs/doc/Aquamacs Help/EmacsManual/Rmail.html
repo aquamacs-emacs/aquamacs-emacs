@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,123 +20,323 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Rmail</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Rmail">
-<meta name="keywords" content="GNU Emacs Manual: Rmail">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Rmail-Basics.html#Rmail-Basics" rel="next" title="Rmail Basics">
-<link href="Mail-Methods.html#Mail-Methods" rel="prev" title="Mail Methods">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Rmail</title>
+  <meta name="description" content="GNU Emacs Manual: Rmail" />
+  <meta name="keywords" content="GNU Emacs Manual: Rmail" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Rmail-Basics.html#Rmail-Basics" rel="next" title=
+  "Rmail Basics" />
+  <link href="Mail-Methods.html#Mail-Methods" rel="prev" title=
+  "Mail Methods" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Rmail" id="Rmail"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Gnus.html#Gnus" accesskey="n" rel=
+    "next">Gnus</a>, Previous: <a href=
+    "Sending-Mail.html#Sending-Mail" accesskey="p" rel=
+    "prev">Sending Mail</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Reading-Mail-with-Rmail" id=
+  "Reading-Mail-with-Rmail"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Rmail"></a>
-<div class="header">
-<p>
-Next: <a href="Gnus.html#Gnus" accesskey="n" rel="next">Gnus</a>, Previous: <a href="Sending-Mail.html#Sending-Mail" accesskey="p" rel="prev">Sending Mail</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Reading-Mail-with-Rmail"></a>
-<h2 class="chapter">33 Reading Mail with Rmail</h2>
-<a name="index-Rmail"></a>
-<a name="index-reading-mail"></a>
-<a name="index-rmail"></a>
-<a name="index-rmail_002dmode"></a>
-<a name="index-rmail_002dmode_002dhook"></a>
+  <h2 class="chapter">33 Reading Mail with Rmail</h2><a name=
+  "index-Rmail" id="index-Rmail"></a> <a name="index-reading-mail"
+  id="index-reading-mail"></a> <a name="index-rmail" id=
+  "index-rmail"></a> <a name="index-rmail_002dmode" id=
+  "index-rmail_002dmode"></a> <a name=
+  "index-rmail_002dmode_002dhook" id=
+  "index-rmail_002dmode_002dhook"></a>
 
-<p>Rmail is an Emacs subsystem for reading and disposing of mail that
-you receive.  Rmail stores mail messages in files called Rmail files.
-Reading the messages in an Rmail file is done in a special major mode,
-Rmail mode, which redefines most letters to run commands for managing mail.
-</p><table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Basics.html#Rmail-Basics" accesskey="1">Basic</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic concepts of Rmail, and simple use.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Scrolling.html#Rmail-Scrolling" accesskey="2">Scroll</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Scrolling through a message.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Motion.html#Rmail-Motion" accesskey="3">Motion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving to another message.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Deletion.html#Rmail-Deletion" accesskey="4">Deletion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Deleting and expunging messages.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Inbox.html#Rmail-Inbox" accesskey="5">Inbox</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How mail gets into the Rmail file.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Files.html#Rmail-Files" accesskey="6">Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using multiple Rmail files.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Output.html#Rmail-Output" accesskey="7">Output</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Copying messages out to files.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Labels.html#Rmail-Labels" accesskey="8">Labels</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Classifying messages by labeling them.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Attributes.html#Rmail-Attributes" accesskey="9">Attrs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Certain standard labels, called attributes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Reply.html#Rmail-Reply">Reply</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Sending replies to messages you are viewing.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Summary.html#Rmail-Summary">Summary</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Summaries show brief info on many messages.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Sorting.html#Rmail-Sorting">Sort</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Sorting messages in Rmail.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Display.html#Rmail-Display">Display</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Rmail displays a message; customization.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Coding.html#Rmail-Coding">Coding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Rmail handles decoding character sets.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Editing.html#Rmail-Editing">Editing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Editing message text and headers in Rmail.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Digest.html#Rmail-Digest">Digest</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Extracting the messages from a digest message.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Rmail-Rot13.html#Rmail-Rot13">Rot13</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading messages encoded in the rot13 code.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Movemail.html#Movemail">Movemail</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">More details of fetching new mail.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Remote-Mailboxes.html#Remote-Mailboxes">Remote Mailboxes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Retrieving mail from remote mailboxes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Other-Mailbox-Formats.html#Other-Mailbox-Formats">Other Mailbox Formats</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Retrieving mail from local mailboxes in
-                             various formats.
-</td></tr>
-</table>
+  <p>Rmail is an Emacs subsystem for reading and disposing of mail
+  that you receive. Rmail stores mail messages in files called
+  Rmail files. Reading the messages in an Rmail file is done in a
+  special major mode, Rmail mode, which redefines most letters to
+  run commands for managing mail.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Gnus.html#Gnus" accesskey="n" rel="next">Gnus</a>, Previous: <a href="Sending-Mail.html#Sending-Mail" accesskey="p" rel="prev">Sending Mail</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Basics.html#Rmail-Basics" accesskey=
+      "1">Basic</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Basic concepts of Rmail, and
+      simple use.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Scrolling.html#Rmail-Scrolling" accesskey=
+      "2">Scroll</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Scrolling through a
+      message.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Motion.html#Rmail-Motion" accesskey=
+      "3">Motion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Moving to another message.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Deletion.html#Rmail-Deletion" accesskey=
+      "4">Deletion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Deleting and expunging
+      messages.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Inbox.html#Rmail-Inbox" accesskey="5">Inbox</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How mail gets into the Rmail
+      file.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Files.html#Rmail-Files" accesskey="6">Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Using multiple Rmail
+      files.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Output.html#Rmail-Output" accesskey=
+      "7">Output</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Copying messages out to
+      files.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Labels.html#Rmail-Labels" accesskey=
+      "8">Labels</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Classifying messages by
+      labeling them.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Attributes.html#Rmail-Attributes" accesskey=
+      "9">Attrs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Certain standard labels, called
+      attributes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Reply.html#Rmail-Reply">Reply</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Sending replies to messages you
+      are viewing.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Summary.html#Rmail-Summary">Summary</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Summaries show brief info on
+      many messages.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Sorting.html#Rmail-Sorting">Sort</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Sorting messages in Rmail.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Display.html#Rmail-Display">Display</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How Rmail displays a message;
+      customization.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Coding.html#Rmail-Coding">Coding</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How Rmail handles decoding
+      character sets.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Editing.html#Rmail-Editing">Editing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Editing message text and
+      headers in Rmail.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Digest.html#Rmail-Digest">Digest</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Extracting the messages from a
+      digest message.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Rmail-Rot13.html#Rmail-Rot13">Rot13</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading messages encoded in the
+      rot13 code.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Movemail.html#Movemail">Movemail</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">More details of fetching new
+      mail.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Remote-Mailboxes.html#Remote-Mailboxes">Remote
+      Mailboxes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Retrieving mail from remote
+      mailboxes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Other-Mailbox-Formats.html#Other-Mailbox-Formats">Other
+      Mailbox Formats</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Retrieving mail from local
+      mailboxes in various formats.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Gnus.html#Gnus" accesskey="n" rel=
+    "next">Gnus</a>, Previous: <a href=
+    "Sending-Mail.html#Sending-Mail" accesskey="p" rel=
+    "prev">Sending Mail</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

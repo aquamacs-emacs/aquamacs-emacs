@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,119 +18,165 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Defining Index Macros</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Defining Index Macros">
-<meta name="keywords" content="RefTeX User Manual: Defining Index Macros">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Index-Support.html#Index-Support" rel="up" title="Index Support">
-<link href="Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences" rel="next" title="Viewing Cross-References">
-<link href="Builtin-Index-Macros.html#Builtin-Index-Macros" rel="prev" title="Builtin Index Macros">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Defining Index Macros</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Defining Index Macros" />
+  <meta name="keywords" content=
+  "RefTeX User Manual: Defining Index Macros" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Index-Support.html#Index-Support" rel="up" title=
+  "Index Support" />
+  <link href=
+  "Viewing-Cross_002dReferences.html#Viewing-Cross_002dReferences"
+  rel="next" title="Viewing Cross-References" />
+  <link href="Builtin-Index-Macros.html#Builtin-Index-Macros" rel=
+  "prev" title="Builtin Index Macros" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Index-Macros"></a>
-<div class="header">
-<p>
-Previous: <a href="Builtin-Index-Macros.html#Builtin-Index-Macros" accesskey="p" rel="prev">Builtin Index Macros</a>, Up: <a href="Index-Support.html#Index-Support" accesskey="u" rel="up">Index Support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Index-Macros-1"></a>
-<h3 class="section">5.5 Defining Index Macros</h3>
-<a name="index-Defining-Index-Macros"></a>
-<a name="index-Index-macros_002c-defining"></a>
-<a name="index-reftex_002dindex_002dmacros-1"></a>
+<body lang="en" xml:lang="en">
+  <a name="Defining-Index-Macros" id="Defining-Index-Macros"></a>
 
-<p>When writing a document with an index you will probably define
-additional macros which make entries into the index.
-Let&rsquo;s look at an example.
-</p>
-<div class="example">
-<pre class="example">\newcommand{\ix}[1]{#1\index{#1}}
+  <div class="header">
+    <p>Previous: <a href=
+    "Builtin-Index-Macros.html#Builtin-Index-Macros" accesskey="p"
+    rel="prev">Builtin Index Macros</a>, Up: <a href=
+    "Index-Support.html#Index-Support" accesskey="u" rel="up">Index
+    Support</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Index-Macros-1" id=
+  "Defining-Index-Macros-1"></a>
+
+  <h3 class="section">5.5 Defining Index Macros</h3><a name=
+  "index-Defining-Index-Macros" id=
+  "index-Defining-Index-Macros"></a> <a name=
+  "index-Index-macros_002c-defining" id=
+  "index-Index-macros_002c-defining"></a> <a name=
+  "index-reftex_002dindex_002dmacros-1" id=
+  "index-reftex_002dindex_002dmacros-1"></a>
+
+  <p>When writing a document with an index you will probably define
+  additional macros which make entries into the index. Let&rsquo;s
+  look at an example.</p>
+
+  <div class="example">
+    <pre class="example">
+\newcommand{\ix}[1]{#1\index{#1}}
 \newcommand{\nindex}[1]{\textit{#1}\index[name]{#1}}
 \newcommand{\astobj}[1]{\index{Astronomical Objects!#1}}
-</pre></div>
+</pre>
+  </div>
 
-<p>The first macro <code>\ix</code> typesets its argument in the text and places
-it into the index.  The second macro <code>\nindex</code> typesets its
-argument in the text and places it into a separate index with the tag
-&lsquo;<samp>name</samp>&rsquo;<a name="DOCF6" href="#FOOT6"><sup>6</sup></a>.  The last macro also places its argument into the index, but as
-subitems under the main index entry &lsquo;<samp>Astronomical Objects</samp>&rsquo;.  Here
-is how to make RefTeX recognize and correctly interpret these
-macros, first with Emacs Lisp.
-</p>
-<div class="lisp">
-<pre class="lisp">(setq reftex-index-macros
-      '((&quot;\\ix{*}&quot; &quot;idx&quot; ?x &quot;&quot; nil nil)
-        (&quot;\\nindex{*}&quot; &quot;name&quot; ?n &quot;&quot; nil nil)
-        (&quot;\\astobj{*}&quot; &quot;idx&quot; ?o &quot;Astronomical Objects!&quot; nil t)))
-</pre></div>
+  <p>The first macro <code>\ix</code> typesets its argument in the
+  text and places it into the index. The second macro
+  <code>\nindex</code> typesets its argument in the text and places
+  it into a separate index with the tag
+  &lsquo;<samp>name</samp>&rsquo;<a name="DOCF6" href="#FOOT6" id=
+  "DOCF6"><sup>6</sup></a>. The last macro also places its argument
+  into the index, but as subitems under the main index entry
+  &lsquo;<samp>Astronomical Objects</samp>&rsquo;. Here is how to
+  make RefTeX recognize and correctly interpret these macros, first
+  with Emacs Lisp.</p>
 
-<p>Note that the index tag is &lsquo;<samp>idx</samp>&rsquo; for the main index, and
-&lsquo;<samp>name</samp>&rsquo; for the name index.  &lsquo;<samp>idx</samp>&rsquo; and &lsquo;<samp>glo</samp>&rsquo; are reserved
-for the default index and for the glossary.
-</p>
-<p>The character arguments <code>?x</code>, <code>?n</code>, and <code>?o</code> are for
-quick identification of these macros when RefTeX inserts new
-index entries with <code>reftex-index</code>.  These codes need to be
-unique. <code>?i</code>, <code>?I</code>, and <code>?g</code> are reserved for the
-<code>\index</code>, <code>\index*</code>, and <code>\glossary</code> macros,
-respectively.
-</p>
-<p>The following string is empty unless your macro adds a superordinate
-entry to the index key; this is the case for the <code>\astobj</code> macro.
-</p>
-<p>The next entry can be a hook function to exclude certain matches, it
-almost always can be <code>nil</code>.
-</p>
-<p>The final element in the list indicates if the text being indexed needs
-to be repeated outside the macro.  For the normal index macros, this
-should be <code>t</code>.  Only if the macro typesets the entry in the text
-(like <code>\ix</code> and <code>\nindex</code> in the example do), this should be
-<code>nil</code>.
-</p>
-<p>To do the same thing with customize, you need to fill in the templates
-like this:
-</p>
-<div class="example">
-<pre class="example">Repeat:
+  <div class="lisp">
+    <pre class="lisp">
+(setq reftex-index-macros
+      '(("\\ix{*}" "idx" ?x "" nil nil)
+        ("\\nindex{*}" "name" ?n "" nil nil)
+        ("\\astobj{*}" "idx" ?o "Astronomical Objects!" nil t)))
+</pre>
+  </div>
+
+  <p>Note that the index tag is &lsquo;<samp>idx</samp>&rsquo; for
+  the main index, and &lsquo;<samp>name</samp>&rsquo; for the name
+  index. &lsquo;<samp>idx</samp>&rsquo; and
+  &lsquo;<samp>glo</samp>&rsquo; are reserved for the default index
+  and for the glossary.</p>
+
+  <p>The character arguments <code>?x</code>, <code>?n</code>, and
+  <code>?o</code> are for quick identification of these macros when
+  RefTeX inserts new index entries with <code>reftex-index</code>.
+  These codes need to be unique. <code>?i</code>, <code>?I</code>,
+  and <code>?g</code> are reserved for the <code>\index</code>,
+  <code>\index*</code>, and <code>\glossary</code> macros,
+  respectively.</p>
+
+  <p>The following string is empty unless your macro adds a
+  superordinate entry to the index key; this is the case for the
+  <code>\astobj</code> macro.</p>
+
+  <p>The next entry can be a hook function to exclude certain
+  matches, it almost always can be <code>nil</code>.</p>
+
+  <p>The final element in the list indicates if the text being
+  indexed needs to be repeated outside the macro. For the normal
+  index macros, this should be <code>t</code>. Only if the macro
+  typesets the entry in the text (like <code>\ix</code> and
+  <code>\nindex</code> in the example do), this should be
+  <code>nil</code>.</p>
+
+  <p>To do the same thing with customize, you need to fill in the
+  templates like this:</p>
+
+  <div class="example">
+    <pre class="example">
+Repeat:
 [INS] [DEL] List:
             Macro with args: \ix{*}
             Index Tag      : [Value Menu] String: idx
@@ -151,36 +199,47 @@ like this:
             Exclusion hook : nil
             Repeat Outside : [Toggle]  on (non-nil)
 [INS]
-</pre></div>
+</pre>
+  </div>
 
-<p>With the macro <code>\ix</code> defined, you may want to change the default
-macro used for indexing a text phrase (see <a href="Creating-Index-Entries.html#Creating-Index-Entries">Creating Index Entries</a>).
-This would be done like this
-</p>
-<div class="lisp">
-<pre class="lisp">(setq reftex-index-default-macro '(?x &quot;idx&quot;))
-</pre></div>
+  <p>With the macro <code>\ix</code> defined, you may want to
+  change the default macro used for indexing a text phrase (see
+  <a href=
+  "Creating-Index-Entries.html#Creating-Index-Entries">Creating
+  Index Entries</a>). This would be done like this</p>
 
-<p>which specifies that the macro identified with the character <code>?x</code> (the
-<code>\ix</code> macro) should be used for indexing phrases and words already
-in the buffer with <kbd>C-c /</kbd> (<code>reftex-index-selection-or-word</code>).
-The index tag is &quot;idx&quot;.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <div class="lisp">
+    <pre class="lisp">
+(setq reftex-index-default-macro '(?x "idx"))
+</pre>
+  </div>
 
-<h3><a name="FOOT6" href="#DOCF6">(6)</a></h3>
-<p>We are using the syntax of the <samp>index</samp> package
-here.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Builtin-Index-Macros.html#Builtin-Index-Macros" accesskey="p" rel="prev">Builtin Index Macros</a>, Up: <a href="Index-Support.html#Index-Support" accesskey="u" rel="up">Index Support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>which specifies that the macro identified with the character
+  <code>?x</code> (the <code>\ix</code> macro) should be used for
+  indexing phrases and words already in the buffer with <kbd>C-c
+  /</kbd> (<code>reftex-index-selection-or-word</code>). The index
+  tag is "idx".</p>
 
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT6" href="#DOCF6" id="FOOT6">(6)</a></h3>
+
+    <p>We are using the syntax of the <samp>index</samp> package
+    here.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Builtin-Index-Macros.html#Builtin-Index-Macros" accesskey="p"
+    rel="prev">Builtin Index Macros</a>, Up: <a href=
+    "Index-Support.html#Index-Support" accesskey="u" rel="up">Index
+    Support</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

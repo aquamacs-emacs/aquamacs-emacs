@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,112 +20,177 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Deletion and Killing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Deletion and Killing">
-<meta name="keywords" content="GNU Emacs Manual: Deletion and Killing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Killing.html#Killing" rel="up" title="Killing">
-<link href="Deletion.html#Deletion" rel="next" title="Deletion">
-<link href="Killing.html#Killing" rel="prev" title="Killing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Deletion and Killing</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Deletion and Killing" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Deletion and Killing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Killing.html#Killing" rel="up" title="Killing" />
+  <link href="Deletion.html#Deletion" rel="next" title=
+  "Deletion" />
+  <link href="Killing.html#Killing" rel="prev" title="Killing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Deletion-and-Killing" id="Deletion-and-Killing"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Yanking.html#Yanking" accesskey="n" rel=
+    "next">Yanking</a>, Up: <a href="Killing.html#Killing"
+    accesskey="u" rel="up">Killing</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Deletion-and-Killing-1" id="Deletion-and-Killing-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Deletion-and-Killing"></a>
-<div class="header">
-<p>
-Next: <a href="Yanking.html#Yanking" accesskey="n" rel="next">Yanking</a>, Up: <a href="Killing.html#Killing" accesskey="u" rel="up">Killing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Deletion-and-Killing-1"></a>
-<h3 class="section">12.1 Deletion and Killing</h3>
+  <h3 class="section">12.1 Deletion and Killing</h3><a name=
+  "index-killing-text" id="index-killing-text"></a> <a name=
+  "index-cutting-text" id="index-cutting-text"></a> <a name=
+  "index-deletion" id="index-deletion"></a>
 
-<a name="index-killing-text"></a>
-<a name="index-cutting-text"></a>
-<a name="index-deletion"></a>
-<p>Most commands which erase text from the buffer save it in the kill
-ring.  These are known as <em>kill</em> commands, and their names
-normally contain the word &lsquo;<samp>kill</samp>&rsquo; (e.g., <code>kill-line</code>).  The
-kill ring stores several recent kills, not just the last one, so
-killing is a very safe operation: you don&rsquo;t have to worry much about
-losing text that you previously killed.  The kill ring is shared by
-all buffers, so text that is killed in one buffer can be yanked into
-another buffer.
-</p>
-<p>When you use <kbd>C-/</kbd> (<code>undo</code>) to undo a kill command
-(see <a href="Undo.html#Undo">Undo</a>), that brings the killed text back into the buffer, but
-does not remove it from the kill ring.
-</p>
-<p>On graphical displays, killing text also copies it to the system
-clipboard.  See <a href="Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>.
-</p>
-<p>Commands that erase text but do not save it in the kill ring are
-known as <em>delete</em> commands; their names usually contain the word
-&lsquo;<samp>delete</samp>&rsquo;.  These include <kbd>C-d</kbd> (<code>delete-char</code>) and
-<tt class="key">DEL</tt> (<code>delete-backward-char</code>), which delete only one
-character at a time, and those commands that delete only spaces or
-newlines.  Commands that can erase significant amounts of nontrivial
-data generally do a kill operation instead.
-</p>
-<p>You can also use the mouse to kill and yank.  See <a href="Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Deletion.html#Deletion" accesskey="1">Deletion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Commands for deleting small amounts of text and
-                          blank areas.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Killing-by-Lines.html#Killing-by-Lines" accesskey="2">Killing by Lines</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to kill entire lines of text at one time.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Other-Kill-Commands.html#Other-Kill-Commands" accesskey="3">Other Kill Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Commands to kill large regions of text and
-                          syntactic units such as words and sentences.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Kill-Options.html#Kill-Options" accesskey="4">Kill Options</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Options that affect killing.
-</td></tr>
-</table>
+  <p>Most commands which erase text from the buffer save it in the
+  kill ring. These are known as <em>kill</em> commands, and their
+  names normally contain the word &lsquo;<samp>kill</samp>&rsquo;
+  (e.g., <code>kill-line</code>). The kill ring stores several
+  recent kills, not just the last one, so killing is a very safe
+  operation: you don&rsquo;t have to worry much about losing text
+  that you previously killed. The kill ring is shared by all
+  buffers, so text that is killed in one buffer can be yanked into
+  another buffer.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Yanking.html#Yanking" accesskey="n" rel="next">Yanking</a>, Up: <a href="Killing.html#Killing" accesskey="u" rel="up">Killing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When you use <kbd>C-/</kbd> (<code>undo</code>) to undo a kill
+  command (see <a href="Undo.html#Undo">Undo</a>), that brings the
+  killed text back into the buffer, but does not remove it from the
+  kill ring.</p>
 
+  <p>On graphical displays, killing text also copies it to the
+  system clipboard. See <a href=
+  "Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>.</p>
 
+  <p>Commands that erase text but do not save it in the kill ring
+  are known as <em>delete</em> commands; their names usually
+  contain the word &lsquo;<samp>delete</samp>&rsquo;. These include
+  <kbd>C-d</kbd> (<code>delete-char</code>) and <tt class=
+  "key">DEL</tt> (<code>delete-backward-char</code>), which delete
+  only one character at a time, and those commands that delete only
+  spaces or newlines. Commands that can erase significant amounts
+  of nontrivial data generally do a kill operation instead.</p>
 
+  <p>You can also use the mouse to kill and yank. See <a href=
+  "Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Deletion.html#Deletion" accesskey="1">Deletion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Commands for deleting small
+      amounts of text and blank areas.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Killing-by-Lines.html#Killing-by-Lines" accesskey=
+      "2">Killing by Lines</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to kill entire lines of
+      text at one time.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Other-Kill-Commands.html#Other-Kill-Commands" accesskey=
+      "3">Other Kill Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Commands to kill large regions
+      of text and syntactic units such as words and sentences.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Kill-Options.html#Kill-Options" accesskey="4">Kill
+      Options</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Options that affect
+      killing.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Yanking.html#Yanking" accesskey="n" rel=
+    "next">Yanking</a>, Up: <a href="Killing.html#Killing"
+    accesskey="u" rel="up">Killing</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

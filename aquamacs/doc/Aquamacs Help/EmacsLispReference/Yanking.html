@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,163 +19,239 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Yanking</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Yanking">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Yanking">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-Kill-Ring.html#The-Kill-Ring" rel="up" title="The Kill Ring">
-<link href="Yank-Commands.html#Yank-Commands" rel="next" title="Yank Commands">
-<link href="Kill-Functions.html#Kill-Functions" rel="prev" title="Kill Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Yanking</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Yanking" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Yanking" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-Kill-Ring.html#The-Kill-Ring" rel="up" title=
+  "The Kill Ring" />
+  <link href="Yank-Commands.html#Yank-Commands" rel="next" title=
+  "Yank Commands" />
+  <link href="Kill-Functions.html#Kill-Functions" rel="prev" title=
+  "Kill Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Yanking" id="Yanking"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Yank-Commands.html#Yank-Commands" accesskey=
+    "n" rel="next">Yank Commands</a>, Previous: <a href=
+    "Kill-Functions.html#Kill-Functions" accesskey="p" rel=
+    "prev">Kill Functions</a>, Up: <a href=
+    "The-Kill-Ring.html#The-Kill-Ring" accesskey="u" rel="up">The
+    Kill Ring</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Yanking-1" id="Yanking-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Yanking"></a>
-<div class="header">
-<p>
-Next: <a href="Yank-Commands.html#Yank-Commands" accesskey="n" rel="next">Yank Commands</a>, Previous: <a href="Kill-Functions.html#Kill-Functions" accesskey="p" rel="prev">Kill Functions</a>, Up: <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey="u" rel="up">The Kill Ring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Yanking-1"></a>
-<h4 class="subsection">31.8.3 Yanking</h4>
+  <h4 class="subsection">31.8.3 Yanking</h4>
 
-<p>Yanking means inserting text from the kill ring, but it does not
-insert the text blindly.  The <code>yank</code> command, and related
-commands, use <code>insert-for-yank</code> to perform special processing on
-the text before it is inserted.
-</p>
-<dl>
-<dt><a name="index-insert_002dfor_002dyank"></a>Function: <strong>insert-for-yank</strong> <em>string</em></dt>
-<dd><p>This function works like <code>insert</code>, except that it processes the
-text in <var>string</var> according to the <code>yank-handler</code> text
-property, as well as the variables <code>yank-handled-properties</code> and
-<code>yank-excluded-properties</code> (see below), before inserting the
-result into the current buffer.
-</p></dd></dl>
+  <p>Yanking means inserting text from the kill ring, but it does
+  not insert the text blindly. The <code>yank</code> command, and
+  related commands, use <code>insert-for-yank</code> to perform
+  special processing on the text before it is inserted.</p>
 
-<dl>
-<dt><a name="index-insert_002dbuffer_002dsubstring_002das_002dyank"></a>Function: <strong>insert-buffer-substring-as-yank</strong> <em>buf &amp;optional start end</em></dt>
-<dd><p>This function resembles <code>insert-buffer-substring</code>, except that it
-processes the text according to <code>yank-handled-properties</code> and
-<code>yank-excluded-properties</code>.  (It does not handle the
-<code>yank-handler</code> property, which does not normally occur in buffer
-text anyway.)
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-insert_002dfor_002dyank" id=
+    "index-insert_002dfor_002dyank"></a>Function:
+    <strong>insert-for-yank</strong> <em>string</em></dt>
 
-<p>If you put a <code>yank-handler</code> text property on all or part of a
-string, that alters how <code>insert-for-yank</code> inserts the string.  If
-different parts of the string have different <code>yank-handler</code>
-values (comparison being done with <code>eq</code>), each substring is
-handled separately.  The property value must be a list of one to four
-elements, with the following format (where elements after the first
-may be omitted):
-</p>
-<div class="example">
-<pre class="example">(<var>function</var> <var>param</var> <var>noexclude</var> <var>undo</var>)
-</pre></div>
+    <dd>
+      <p>This function works like <code>insert</code>, except that
+      it processes the text in <var>string</var> according to the
+      <code>yank-handler</code> text property, as well as the
+      variables <code>yank-handled-properties</code> and
+      <code>yank-excluded-properties</code> (see below), before
+      inserting the result into the current buffer.</p>
+    </dd>
+  </dl>
 
-<p>Here is what the elements do:
-</p>
-<dl compact="compact">
-<dt><var>function</var></dt>
-<dd><p>When <var>function</var> is non-<code>nil</code>, it is called instead of
-<code>insert</code> to insert the string, with one argument&mdash;the string to
-insert.
-</p>
-</dd>
-<dt><var>param</var></dt>
-<dd><p>If <var>param</var> is present and non-<code>nil</code>, it replaces <var>string</var>
-(or the substring of <var>string</var> being processed) as the object
-passed to <var>function</var> (or <code>insert</code>).  For example, if
-<var>function</var> is <code>yank-rectangle</code>, <var>param</var> should be a list
-of strings to insert as a rectangle.
-</p>
-</dd>
-<dt><var>noexclude</var></dt>
-<dd><p>If <var>noexclude</var> is present and non-<code>nil</code>, that disables the
-normal action of <code>yank-handled-properties</code> and
-<code>yank-excluded-properties</code> on the inserted string.
-</p>
-</dd>
-<dt><var>undo</var></dt>
-<dd><p>If <var>undo</var> is present and non-<code>nil</code>, it is a function that will be
-called by <code>yank-pop</code> to undo the insertion of the current object.
-It is called with two arguments, the start and end of the current
-region.  <var>function</var> can set <code>yank-undo-function</code> to override
-the <var>undo</var> value.
-</p></dd>
-</dl>
+  <dl>
+    <dt><a name=
+    "index-insert_002dbuffer_002dsubstring_002das_002dyank" id=
+    "index-insert_002dbuffer_002dsubstring_002das_002dyank"></a>Function:
+    <strong>insert-buffer-substring-as-yank</strong> <em>buf
+    &amp;optional start end</em></dt>
 
-<a name="index-yanking-and-text-properties"></a>
-<dl>
-<dt><a name="index-yank_002dhandled_002dproperties"></a>User Option: <strong>yank-handled-properties</strong></dt>
-<dd><p>This variable specifies special text property handling conditions for
-yanked text.  It takes effect after the text has been inserted (either
-normally, or via the <code>yank-handler</code> property), and prior to
-<code>yank-excluded-properties</code> taking effect.
-</p>
-<p>The value should be an alist of elements <code>(<var>prop</var>
-. <var>fun</var>)</code>.  Each alist element is handled in order.  The inserted
-text is scanned for stretches of text having text properties <code>eq</code>
-to <var>prop</var>; for each such stretch, <var>fun</var> is called with three
-arguments: the value of the property, and the start and end positions
-of the text.
-</p></dd></dl>
+    <dd>
+      <p>This function resembles
+      <code>insert-buffer-substring</code>, except that it
+      processes the text according to
+      <code>yank-handled-properties</code> and
+      <code>yank-excluded-properties</code>. (It does not handle
+      the <code>yank-handler</code> property, which does not
+      normally occur in buffer text anyway.)</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-yank_002dexcluded_002dproperties"></a>User Option: <strong>yank-excluded-properties</strong></dt>
-<dd><p>The value of this variable is the list of properties to remove from
-inserted text.  Its default value contains properties that might lead
-to annoying results, such as causing the text to respond to the mouse
-or specifying key bindings.  It takes effect after
-<code>yank-handled-properties</code>.
-</p></dd></dl>
+  <p>If you put a <code>yank-handler</code> text property on all or
+  part of a string, that alters how <code>insert-for-yank</code>
+  inserts the string. If different parts of the string have
+  different <code>yank-handler</code> values (comparison being done
+  with <code>eq</code>), each substring is handled separately. The
+  property value must be a list of one to four elements, with the
+  following format (where elements after the first may be
+  omitted):</p>
 
+  <div class="example">
+    <pre class="example">
+(<var>function</var> <var>param</var> <var>noexclude</var> <var>undo</var>)
+</pre>
+  </div>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Yank-Commands.html#Yank-Commands" accesskey="n" rel="next">Yank Commands</a>, Previous: <a href="Kill-Functions.html#Kill-Functions" accesskey="p" rel="prev">Kill Functions</a>, Up: <a href="The-Kill-Ring.html#The-Kill-Ring" accesskey="u" rel="up">The Kill Ring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Here is what the elements do:</p>
 
+  <dl compact="compact">
+    <dt><var>function</var></dt>
 
+    <dd>
+      <p>When <var>function</var> is non-<code>nil</code>, it is
+      called instead of <code>insert</code> to insert the string,
+      with one argument&mdash;the string to insert.</p>
+    </dd>
 
+    <dt><var>param</var></dt>
+
+    <dd>
+      <p>If <var>param</var> is present and non-<code>nil</code>,
+      it replaces <var>string</var> (or the substring of
+      <var>string</var> being processed) as the object passed to
+      <var>function</var> (or <code>insert</code>). For example, if
+      <var>function</var> is <code>yank-rectangle</code>,
+      <var>param</var> should be a list of strings to insert as a
+      rectangle.</p>
+    </dd>
+
+    <dt><var>noexclude</var></dt>
+
+    <dd>
+      <p>If <var>noexclude</var> is present and
+      non-<code>nil</code>, that disables the normal action of
+      <code>yank-handled-properties</code> and
+      <code>yank-excluded-properties</code> on the inserted
+      string.</p>
+    </dd>
+
+    <dt><var>undo</var></dt>
+
+    <dd>
+      <p>If <var>undo</var> is present and non-<code>nil</code>, it
+      is a function that will be called by <code>yank-pop</code> to
+      undo the insertion of the current object. It is called with
+      two arguments, the start and end of the current region.
+      <var>function</var> can set <code>yank-undo-function</code>
+      to override the <var>undo</var> value.</p>
+    </dd>
+  </dl><a name="index-yanking-and-text-properties" id=
+  "index-yanking-and-text-properties"></a>
+
+  <dl>
+    <dt><a name="index-yank_002dhandled_002dproperties" id=
+    "index-yank_002dhandled_002dproperties"></a>User Option:
+    <strong>yank-handled-properties</strong></dt>
+
+    <dd>
+      <p>This variable specifies special text property handling
+      conditions for yanked text. It takes effect after the text
+      has been inserted (either normally, or via the
+      <code>yank-handler</code> property), and prior to
+      <code>yank-excluded-properties</code> taking effect.</p>
+
+      <p>The value should be an alist of elements
+      <code>(<var>prop</var> . <var>fun</var>)</code>. Each alist
+      element is handled in order. The inserted text is scanned for
+      stretches of text having text properties <code>eq</code> to
+      <var>prop</var>; for each such stretch, <var>fun</var> is
+      called with three arguments: the value of the property, and
+      the start and end positions of the text.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-yank_002dexcluded_002dproperties" id=
+    "index-yank_002dexcluded_002dproperties"></a>User Option:
+    <strong>yank-excluded-properties</strong></dt>
+
+    <dd>
+      <p>The value of this variable is the list of properties to
+      remove from inserted text. Its default value contains
+      properties that might lead to annoying results, such as
+      causing the text to respond to the mouse or specifying key
+      bindings. It takes effect after
+      <code>yank-handled-properties</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Yank-Commands.html#Yank-Commands" accesskey=
+    "n" rel="next">Yank Commands</a>, Previous: <a href=
+    "Kill-Functions.html#Kill-Functions" accesskey="p" rel=
+    "prev">Kill Functions</a>, Up: <a href=
+    "The-Kill-Ring.html#The-Kill-Ring" accesskey="u" rel="up">The
+    Kill Ring</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

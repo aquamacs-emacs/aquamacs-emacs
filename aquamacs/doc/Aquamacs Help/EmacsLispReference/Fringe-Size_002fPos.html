@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,127 +19,192 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Fringe Size/Pos</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Fringe Size/Pos">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Fringe Size/Pos">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Fringes.html#Fringes" rel="up" title="Fringes">
-<link href="Fringe-Indicators.html#Fringe-Indicators" rel="next" title="Fringe Indicators">
-<link href="Fringes.html#Fringes" rel="prev" title="Fringes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Fringe Size/Pos</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Fringe Size/Pos" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Fringe Size/Pos" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Fringes.html#Fringes" rel="up" title="Fringes" />
+  <link href="Fringe-Indicators.html#Fringe-Indicators" rel="next"
+  title="Fringe Indicators" />
+  <link href="Fringes.html#Fringes" rel="prev" title="Fringes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Fringe-Size_002fPos" id="Fringe-Size_002fPos"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Fringe-Indicators.html#Fringe-Indicators"
+    accesskey="n" rel="next">Fringe Indicators</a>, Up: <a href=
+    "Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Fringe-Size-and-Position" id=
+  "Fringe-Size-and-Position"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Fringe-Size_002fPos"></a>
-<div class="header">
-<p>
-Next: <a href="Fringe-Indicators.html#Fringe-Indicators" accesskey="n" rel="next">Fringe Indicators</a>, Up: <a href="Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Fringe-Size-and-Position"></a>
-<h4 class="subsection">37.13.1 Fringe Size and Position</h4>
+  <h4 class="subsection">37.13.1 Fringe Size and Position</h4>
 
-<p>The following buffer-local variables control the position and width
-of fringes in windows showing that buffer.
-</p>
-<dl>
-<dt><a name="index-fringes_002doutside_002dmargins"></a>Variable: <strong>fringes-outside-margins</strong></dt>
-<dd><p>The fringes normally appear between the display margins and the window
-text.  If the value is non-<code>nil</code>, they appear outside the display
-margins.  See <a href="Display-Margins.html#Display-Margins">Display Margins</a>.
-</p></dd></dl>
+  <p>The following buffer-local variables control the position and
+  width of fringes in windows showing that buffer.</p>
 
-<dl>
-<dt><a name="index-left_002dfringe_002dwidth"></a>Variable: <strong>left-fringe-width</strong></dt>
-<dd><p>This variable, if non-<code>nil</code>, specifies the width of the left
-fringe in pixels.  A value of <code>nil</code> means to use the left fringe
-width from the window&rsquo;s frame.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-fringes_002doutside_002dmargins" id=
+    "index-fringes_002doutside_002dmargins"></a>Variable:
+    <strong>fringes-outside-margins</strong></dt>
 
-<dl>
-<dt><a name="index-right_002dfringe_002dwidth"></a>Variable: <strong>right-fringe-width</strong></dt>
-<dd><p>This variable, if non-<code>nil</code>, specifies the width of the right
-fringe in pixels.  A value of <code>nil</code> means to use the right fringe
-width from the window&rsquo;s frame.
-</p></dd></dl>
+    <dd>
+      <p>The fringes normally appear between the display margins
+      and the window text. If the value is non-<code>nil</code>,
+      they appear outside the display margins. See <a href=
+      "Display-Margins.html#Display-Margins">Display
+      Margins</a>.</p>
+    </dd>
+  </dl>
 
-<p>Any buffer which does not specify values for these variables uses
-the values specified by the <code>left-fringe</code> and <code>right-fringe</code>
-frame parameters (see <a href="Layout-Parameters.html#Layout-Parameters">Layout Parameters</a>).
-</p>
-<p>The above variables actually take effect via the function
-<code>set-window-buffer</code> (see <a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>), which calls
-<code>set-window-fringes</code> as a subroutine.  If you change one of these
-variables, the fringe display is not updated in existing windows
-showing the buffer, unless you call <code>set-window-buffer</code> again in
-each affected window.  You can also use <code>set-window-fringes</code> to
-control the fringe display in individual windows.
-</p>
-<dl>
-<dt><a name="index-set_002dwindow_002dfringes"></a>Function: <strong>set-window-fringes</strong> <em>window left &amp;optional right outside-margins</em></dt>
-<dd><p>This function sets the fringe widths of window <var>window</var>.
-If <var>window</var> is <code>nil</code>, the selected window is used.
-</p>
-<p>The argument <var>left</var> specifies the width in pixels of the left
-fringe, and likewise <var>right</var> for the right fringe.  A value of
-<code>nil</code> for either one stands for the default width.  If
-<var>outside-margins</var> is non-<code>nil</code>, that specifies that fringes
-should appear outside of the display margins.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-left_002dfringe_002dwidth" id=
+    "index-left_002dfringe_002dwidth"></a>Variable:
+    <strong>left-fringe-width</strong></dt>
 
-<dl>
-<dt><a name="index-window_002dfringes"></a>Function: <strong>window-fringes</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function returns information about the fringes of a window
-<var>window</var>.  If <var>window</var> is omitted or <code>nil</code>, the selected
-window is used.  The value has the form <code>(<var>left-width</var>
-<var>right-width</var> <var>outside-margins</var>)</code>.
-</p></dd></dl>
+    <dd>
+      <p>This variable, if non-<code>nil</code>, specifies the
+      width of the left fringe in pixels. A value of
+      <code>nil</code> means to use the left fringe width from the
+      window&rsquo;s frame.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-right_002dfringe_002dwidth" id=
+    "index-right_002dfringe_002dwidth"></a>Variable:
+    <strong>right-fringe-width</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Fringe-Indicators.html#Fringe-Indicators" accesskey="n" rel="next">Fringe Indicators</a>, Up: <a href="Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This variable, if non-<code>nil</code>, specifies the
+      width of the right fringe in pixels. A value of
+      <code>nil</code> means to use the right fringe width from the
+      window&rsquo;s frame.</p>
+    </dd>
+  </dl>
 
+  <p>Any buffer which does not specify values for these variables
+  uses the values specified by the <code>left-fringe</code> and
+  <code>right-fringe</code> frame parameters (see <a href=
+  "Layout-Parameters.html#Layout-Parameters">Layout
+  Parameters</a>).</p>
 
+  <p>The above variables actually take effect via the function
+  <code>set-window-buffer</code> (see <a href=
+  "Buffers-and-Windows.html#Buffers-and-Windows">Buffers and
+  Windows</a>), which calls <code>set-window-fringes</code> as a
+  subroutine. If you change one of these variables, the fringe
+  display is not updated in existing windows showing the buffer,
+  unless you call <code>set-window-buffer</code> again in each
+  affected window. You can also use <code>set-window-fringes</code>
+  to control the fringe display in individual windows.</p>
 
+  <dl>
+    <dt><a name="index-set_002dwindow_002dfringes" id=
+    "index-set_002dwindow_002dfringes"></a>Function:
+    <strong>set-window-fringes</strong> <em>window left
+    &amp;optional right outside-margins</em></dt>
+
+    <dd>
+      <p>This function sets the fringe widths of window
+      <var>window</var>. If <var>window</var> is <code>nil</code>,
+      the selected window is used.</p>
+
+      <p>The argument <var>left</var> specifies the width in pixels
+      of the left fringe, and likewise <var>right</var> for the
+      right fringe. A value of <code>nil</code> for either one
+      stands for the default width. If <var>outside-margins</var>
+      is non-<code>nil</code>, that specifies that fringes should
+      appear outside of the display margins.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-window_002dfringes" id=
+    "index-window_002dfringes"></a>Function:
+    <strong>window-fringes</strong> <em>&amp;optional
+    window</em></dt>
+
+    <dd>
+      <p>This function returns information about the fringes of a
+      window <var>window</var>. If <var>window</var> is omitted or
+      <code>nil</code>, the selected window is used. The value has
+      the form <code>(<var>left-width</var> <var>right-width</var>
+      <var>outside-margins</var>)</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Fringe-Indicators.html#Fringe-Indicators"
+    accesskey="n" rel="next">Fringe Indicators</a>, Up: <a href=
+    "Fringes.html#Fringes" accesskey="u" rel="up">Fringes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

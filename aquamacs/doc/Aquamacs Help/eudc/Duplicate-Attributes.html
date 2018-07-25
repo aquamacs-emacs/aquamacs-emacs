@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Duplicate Attributes - Emacs Unified Directory Client (EUDC) Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Emacs Unified Directory Client (EUDC) Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Querying-Servers.html#Querying-Servers" title="Querying Servers">
-<link rel="prev" href="Return-Attributes.html#Return-Attributes" title="Return Attributes">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Duplicate Attributes - Emacs Unified Directory Client
+  (EUDC) Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Emacs Unified Directory Client (EUDC) Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Querying-Servers.html#Querying-Servers"
+  title="Querying Servers" />
+  <link rel="prev" href="Return-Attributes.html#Return-Attributes"
+  title="Return Attributes" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents EUDC v1.30b.
 
 EUDC is the Emacs Unified Directory Client, a common interface to
@@ -30,8 +40,10 @@ Copyright (C) 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -41,64 +53,96 @@ Copyright (C) 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Duplicate-Attributes"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Return-Attributes.html#Return-Attributes">Return Attributes</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Querying-Servers.html#Querying-Servers">Querying Servers</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Duplicate-Attributes" id="Duplicate-Attributes"></a>
 
-<h4 class="subsection">3.1.3 Duplicate Attributes</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Return-Attributes.html#Return-Attributes">Return
+    Attributes</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Querying-Servers.html#Querying-Servers">Querying
+    Servers</a></p>
+    <hr />
+  </div>
 
-<p>Directory standards may authorize different instances of the same
-attribute in a record. For instance the record of a person may contain
-several email fields containing different email addresses. When using
-a QI directory server this is difficult to distinguish from attributes
-having multi-line values such as the postal address that may contain a
-line for the street and another one for the zip code and city name. In
-both cases, EUDC will consider the attribute duplicated.
+  <h4 class="subsection">3.1.3 Duplicate Attributes</h4>
 
-   <p>EUDC has several methods to deal with duplicated attributes. The
-available methods are:
+  <p>Directory standards may authorize different instances of the
+  same attribute in a record. For instance the record of a person
+  may contain several email fields containing different email
+  addresses. When using a QI directory server this is difficult to
+  distinguish from attributes having multi-line values such as the
+  postal address that may contain a line for the street and another
+  one for the zip code and city name. In both cases, EUDC will
+  consider the attribute duplicated.</p>
 
-     <dl>
-<dt><code>list</code><dd>Makes a list with the different values of the duplicate attribute. The
-record is returned with only one instance of the attribute with a list
-of all the different values as a value. This is the default method that
-is used to handle duplicate fields for which no other method has been
-specified. 
-<br><dt><code>first</code><dd>Discards all the duplicate values of the field keeping only the first
-one. 
-<br><dt><code>concat</code><dd>Concatenates the different values using a newline as a separator. The
-record keeps only one instance of the field the value of which is a
-single multi-line string. 
-<br><dt><code>duplicate</code><dd>Duplicates the whole record into as many instances as there are different
-values for the field. This is the default for the email field. Thus a
-record containing 3 different email addresses is duplicated into three
-different records each having a single email address. This is
-particularly useful in combination with <code>select</code> as the method to
-handle multiple matches in inline expansion queries (see <a href="Inline-Query-Expansion.html#Inline-Query-Expansion">Inline Query Expansion</a>) because you are presented with the 3 addresses in a
-selection buffer
-</dl>
+  <p>EUDC has several methods to deal with duplicated attributes.
+  The available methods are:</p>
 
-   <p>Because a method may not be applicable to all fields, the variable
-<code>eudc-duplicate-attribute-handling-method</code> lets you specify either a
-default method for all fields or a method for each individual field.
+  <dl>
+    <dt><code>list</code></dt>
 
-<div class="defun">
-&mdash; Variable: <b>eudc-duplicate-attribute-handling-method</b><var><a name="index-eudc_002dduplicate_002dattribute_002dhandling_002dmethod-6"></a></var><br>
-<blockquote><p>A method to handle entries containing duplicate attributes.  This is
-either an alist of elements <code>(</code><var>attr</var><code> . </code><var>method</var><code>)</code>, or a symbol
-<var>method</var>.  The alist form of the variable associates a method to an
-individual attribute name; the second form specifies a method applicable
-to all attribute names. Available methods are: <code>list</code>,
-<code>first</code>, <code>concat</code>, and <code>duplicate</code> (see above).  The default is
-<code>list</code>. 
-</p></blockquote></div>
+    <dd>Makes a list with the different values of the duplicate
+    attribute. The record is returned with only one instance of the
+    attribute with a list of all the different values as a value.
+    This is the default method that is used to handle duplicate
+    fields for which no other method has been specified.<br /></dd>
 
-   </body></html>
+    <dt><code>first</code></dt>
 
+    <dd>Discards all the duplicate values of the field keeping only
+    the first one.<br /></dd>
+
+    <dt><code>concat</code></dt>
+
+    <dd>Concatenates the different values using a newline as a
+    separator. The record keeps only one instance of the field the
+    value of which is a single multi-line string.<br /></dd>
+
+    <dt><code>duplicate</code></dt>
+
+    <dd>Duplicates the whole record into as many instances as there
+    are different values for the field. This is the default for the
+    email field. Thus a record containing 3 different email
+    addresses is duplicated into three different records each
+    having a single email address. This is particularly useful in
+    combination with <code>select</code> as the method to handle
+    multiple matches in inline expansion queries (see <a href=
+    "Inline-Query-Expansion.html#Inline-Query-Expansion">Inline
+    Query Expansion</a>) because you are presented with the 3
+    addresses in a selection buffer</dd>
+  </dl>
+
+  <p>Because a method may not be applicable to all fields, the
+  variable <code>eudc-duplicate-attribute-handling-method</code>
+  lets you specify either a default method for all fields or a
+  method for each individual field.</p>
+
+  <div class="defun">
+    &mdash; Variable:
+    <b>eudc-duplicate-attribute-handling-method</b><var><a name=
+    "index-eudc_002dduplicate_002dattribute_002dhandling_002dmethod-6"
+    id=
+    "index-eudc_002dduplicate_002dattribute_002dhandling_002dmethod-6"></a></var><br />
+
+
+    <blockquote>
+      <p>A method to handle entries containing duplicate
+      attributes. This is either an alist of elements
+      <code>(</code><var>attr</var> <code>.</code>
+      <var>method</var><code>)</code>, or a symbol
+      <var>method</var>. The alist form of the variable associates
+      a method to an individual attribute name; the second form
+      specifies a method applicable to all attribute names.
+      Available methods are: <code>list</code>, <code>first</code>,
+      <code>concat</code>, and <code>duplicate</code> (see above).
+      The default is <code>list</code>.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

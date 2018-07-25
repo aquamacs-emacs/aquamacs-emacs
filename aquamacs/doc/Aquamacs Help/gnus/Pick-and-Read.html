@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Pick and Read - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Alternative-Approaches.html#Alternative-Approaches" title="Alternative Approaches">
-<link rel="next" href="Binary-Groups.html#Binary-Groups" title="Binary Groups">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Pick and Read - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Alternative-Approaches.html#Alternative-Approaches" title=
+  "Alternative Approaches" />
+  <link rel="next" href="Binary-Groups.html#Binary-Groups" title=
+  "Binary Groups" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,77 +47,134 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Pick-and-Read"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Binary-Groups.html#Binary-Groups">Binary Groups</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Alternative-Approaches.html#Alternative-Approaches">Alternative Approaches</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Pick-and-Read" id="Pick-and-Read"></a>
 
-<h4 class="subsection">3.24.1 Pick and Read</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Binary-Groups.html#Binary-Groups">Binary Groups</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Alternative-Approaches.html#Alternative-Approaches">Alternative
+    Approaches</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-pick-and-read-1547"></a>
-Some newsreaders (like <code>nn</code> and, uhm, <code>Netnews</code> on VM/CMS) use
-a two-phased reading interface.  The user first marks in a summary
-buffer the articles she wants to read.  Then she starts reading the
-articles with just an article buffer displayed.
+  <h4 class="subsection">3.24.1 Pick and Read</h4>
 
-   <p><a name="index-gnus_002dpick_002dmode-1548"></a><a name="index-M_002dx-gnus_002dpick_002dmode-1549"></a>Gnus provides a summary buffer minor mode that allows
-this&mdash;<code>gnus-pick-mode</code>.  This basically means that a few process
-mark commands become one-keystroke commands to allow easy marking, and
-it provides one additional command for switching to the summary buffer.
+  <p><a name="index-pick-and-read-1547" id=
+  "index-pick-and-read-1547"></a> Some newsreaders (like
+  <code>nn</code> and, uhm, <code>Netnews</code> on VM/CMS) use a
+  two-phased reading interface. The user first marks in a summary
+  buffer the articles she wants to read. Then she starts reading
+  the articles with just an article buffer displayed.</p>
 
-   <p>Here are the available keystrokes when using pick mode:
+  <p><a name="index-gnus_002dpick_002dmode-1548" id=
+  "index-gnus_002dpick_002dmode-1548"></a><a name=
+  "index-M_002dx-gnus_002dpick_002dmode-1549" id=
+  "index-M_002dx-gnus_002dpick_002dmode-1549"></a>Gnus provides a
+  summary buffer minor mode that allows
+  this&mdash;<code>gnus-pick-mode</code>. This basically means that
+  a few process mark commands become one-keystroke commands to
+  allow easy marking, and it provides one additional command for
+  switching to the summary buffer.</p>
 
-     <dl>
-<dt><kbd>.</kbd><dd><a name="index-g_t_002e-_0028Pick_0029-1550"></a><a name="index-gnus_002dpick_002darticle_002dor_002dthread-1551"></a>Pick the article or thread on the current line
-(<code>gnus-pick-article-or-thread</code>).  If the variable
-<code>gnus-thread-hide-subtree</code> is true, then this key selects the
-entire thread when used at the first article of the thread.  Otherwise,
-it selects just the article.  If given a numerical prefix, go to that
-thread or article and pick it.  (The line number is normally displayed
-at the beginning of the summary pick lines.)
+  <p>Here are the available keystrokes when using pick mode:</p>
 
-     <br><dt><kbd>SPACE</kbd><dd><a name="index-SPACE-_0028Pick_0029-1552"></a><a name="index-gnus_002dpick_002dnext_002dpage-1553"></a>Scroll the summary buffer up one page (<code>gnus-pick-next-page</code>).  If
-at the end of the buffer, start reading the picked articles.
+  <dl>
+    <dt><kbd>.</kbd></dt>
 
-     <br><dt><kbd>u</kbd><dd><a name="index-u-_0028Pick_0029-1554"></a><a name="index-gnus_002dpick_002dunmark_002darticle_002dor_002dthread_002e-1555"></a>Unpick the thread or article
-(<code>gnus-pick-unmark-article-or-thread</code>).  If the variable
-<code>gnus-thread-hide-subtree</code> is true, then this key unpicks the
-thread if used at the first article of the thread.  Otherwise it unpicks
-just the article.  You can give this key a numerical prefix to unpick
-the thread or article at that line.
+    <dd><a name="index-g_t_002e-_0028Pick_0029-1550" id=
+    "index-g_t_002e-_0028Pick_0029-1550"></a><a name=
+    "index-gnus_002dpick_002darticle_002dor_002dthread-1551" id=
+    "index-gnus_002dpick_002darticle_002dor_002dthread-1551"></a>Pick
+    the article or thread on the current line
+    (<code>gnus-pick-article-or-thread</code>). If the variable
+    <code>gnus-thread-hide-subtree</code> is true, then this key
+    selects the entire thread when used at the first article of the
+    thread. Otherwise, it selects just the article. If given a
+    numerical prefix, go to that thread or article and pick it.
+    (The line number is normally displayed at the beginning of the
+    summary pick lines.)<br /></dd>
 
-     <br><dt><kbd>RET</kbd><dd><a name="index-RET-_0028Pick_0029-1556"></a><a name="index-gnus_002dpick_002dstart_002dreading-1557"></a><a name="index-gnus_002dpick_002ddisplay_002dsummary-1558"></a>Start reading the picked articles (<code>gnus-pick-start-reading</code>).  If
-given a prefix, mark all unpicked articles as read first.  If
-<code>gnus-pick-display-summary</code> is non-<code>nil</code>, the summary buffer
-will still be visible when you are reading.
+    <dt><kbd>SPACE</kbd></dt>
 
-   </dl>
+    <dd><a name="index-SPACE-_0028Pick_0029-1552" id=
+    "index-SPACE-_0028Pick_0029-1552"></a><a name=
+    "index-gnus_002dpick_002dnext_002dpage-1553" id=
+    "index-gnus_002dpick_002dnext_002dpage-1553"></a>Scroll the
+    summary buffer up one page (<code>gnus-pick-next-page</code>).
+    If at the end of the buffer, start reading the picked
+    articles.<br /></dd>
 
-   <p>All the normal summary mode commands are still available in the
-pick-mode, with the exception of <kbd>u</kbd>.  However <kbd>!</kbd> is available
-which is mapped to the same function
-<code>gnus-summary-tick-article-forward</code>.
+    <dt><kbd>u</kbd></dt>
 
-   <p>If this sounds like a good idea to you, you could say:
+    <dd><a name="index-u-_0028Pick_0029-1554" id=
+    "index-u-_0028Pick_0029-1554"></a><a name=
+    "index-gnus_002dpick_002dunmark_002darticle_002dor_002dthread_002e-1555"
+    id=
+    "index-gnus_002dpick_002dunmark_002darticle_002dor_002dthread_002e-1555"></a>Unpick
+    the thread or article
+    (<code>gnus-pick-unmark-article-or-thread</code>). If the
+    variable <code>gnus-thread-hide-subtree</code> is true, then
+    this key unpicks the thread if used at the first article of the
+    thread. Otherwise it unpicks just the article. You can give
+    this key a numerical prefix to unpick the thread or article at
+    that line.<br /></dd>
 
-<pre class="lisp">     (add-hook 'gnus-summary-mode-hook 'gnus-pick-mode)
+    <dt><kbd>RET</kbd></dt>
+
+    <dd><a name="index-RET-_0028Pick_0029-1556" id=
+    "index-RET-_0028Pick_0029-1556"></a><a name=
+    "index-gnus_002dpick_002dstart_002dreading-1557" id=
+    "index-gnus_002dpick_002dstart_002dreading-1557"></a><a name=
+    "index-gnus_002dpick_002ddisplay_002dsummary-1558" id=
+    "index-gnus_002dpick_002ddisplay_002dsummary-1558"></a>Start
+    reading the picked articles
+    (<code>gnus-pick-start-reading</code>). If given a prefix, mark
+    all unpicked articles as read first. If
+    <code>gnus-pick-display-summary</code> is non-<code>nil</code>,
+    the summary buffer will still be visible when you are
+    reading.</dd>
+  </dl>
+
+  <p>All the normal summary mode commands are still available in
+  the pick-mode, with the exception of <kbd>u</kbd>. However
+  <kbd>!</kbd> is available which is mapped to the same function
+  <code>gnus-summary-tick-article-forward</code>.</p>
+
+  <p>If this sounds like a good idea to you, you could say:</p>
+  <pre class="lisp">
+     (add-hook 'gnus-summary-mode-hook 'gnus-pick-mode)
 </pre>
-   <p><a name="index-gnus_002dpick_002dmode_002dhook-1559"></a><code>gnus-pick-mode-hook</code> is run in pick minor mode buffers.
 
-   <p><a name="index-gnus_002dmark_002dunpicked_002darticles_002das_002dread-1560"></a>If <code>gnus-mark-unpicked-articles-as-read</code> is non-<code>nil</code>, mark
-all unpicked articles as read.  The default is <code>nil</code>.
+  <p><a name="index-gnus_002dpick_002dmode_002dhook-1559" id=
+  "index-gnus_002dpick_002dmode_002dhook-1559"></a><code>gnus-pick-mode-hook</code>
+  is run in pick minor mode buffers.</p>
 
-   <p><a name="index-gnus_002dsummary_002dpick_002dline_002dformat-1561"></a>The summary line format in pick mode is slightly different from the
-standard format.  At the beginning of each line the line number is
-displayed.  The pick mode line format is controlled by the
-<code>gnus-summary-pick-line-format</code> variable (see <a href="Formatting-Variables.html#Formatting-Variables">Formatting Variables</a>).  It accepts the same format specs that
-<code>gnus-summary-line-format</code> does (see <a href="Summary-Buffer-Lines.html#Summary-Buffer-Lines">Summary Buffer Lines</a>).
+  <p><a name=
+  "index-gnus_002dmark_002dunpicked_002darticles_002das_002dread-1560"
+  id=
+  "index-gnus_002dmark_002dunpicked_002darticles_002das_002dread-1560">
+  </a>If <code>gnus-mark-unpicked-articles-as-read</code> is
+  non-<code>nil</code>, mark all unpicked articles as read. The
+  default is <code>nil</code>.</p>
 
-   </body></html>
-
+  <p><a name=
+  "index-gnus_002dsummary_002dpick_002dline_002dformat-1561" id=
+  "index-gnus_002dsummary_002dpick_002dline_002dformat-1561"></a>The
+  summary line format in pick mode is slightly different from the
+  standard format. At the beginning of each line the line number is
+  displayed. The pick mode line format is controlled by the
+  <code>gnus-summary-pick-line-format</code> variable (see <a href=
+  "Formatting-Variables.html#Formatting-Variables">Formatting
+  Variables</a>). It accepts the same format specs that
+  <code>gnus-summary-line-format</code> does (see <a href=
+  "Summary-Buffer-Lines.html#Summary-Buffer-Lines">Summary Buffer
+  Lines</a>).</p>
+</body>
+</html>

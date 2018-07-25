@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,154 +19,221 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Byte-Code Objects</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Byte-Code Objects">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Byte-Code Objects">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Byte-Compilation.html#Byte-Compilation" rel="up" title="Byte Compilation">
-<link href="Disassembly.html#Disassembly" rel="next" title="Disassembly">
-<link href="Compiler-Errors.html#Compiler-Errors" rel="prev" title="Compiler Errors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Byte-Code Objects</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Byte-Code Objects" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Byte-Code Objects" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Byte-Compilation.html#Byte-Compilation" rel="up"
+  title="Byte Compilation" />
+  <link href="Disassembly.html#Disassembly" rel="next" title=
+  "Disassembly" />
+  <link href="Compiler-Errors.html#Compiler-Errors" rel="prev"
+  title="Compiler Errors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Byte_002dCode-Objects" id="Byte_002dCode-Objects"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Disassembly.html#Disassembly" accesskey="n"
+    rel="next">Disassembly</a>, Previous: <a href=
+    "Compiler-Errors.html#Compiler-Errors" accesskey="p" rel=
+    "prev">Compiler Errors</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Byte_002dCode-Function-Objects" id=
+  "Byte_002dCode-Function-Objects"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Byte_002dCode-Objects"></a>
-<div class="header">
-<p>
-Next: <a href="Disassembly.html#Disassembly" accesskey="n" rel="next">Disassembly</a>, Previous: <a href="Compiler-Errors.html#Compiler-Errors" accesskey="p" rel="prev">Compiler Errors</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Byte_002dCode-Function-Objects"></a>
-<h3 class="section">16.7 Byte-Code Function Objects</h3>
-<a name="index-compiled-function"></a>
-<a name="index-byte_002dcode-function"></a>
-<a name="index-byte_002dcode-object"></a>
+  <h3 class="section">16.7 Byte-Code Function Objects</h3><a name=
+  "index-compiled-function" id="index-compiled-function"></a>
+  <a name="index-byte_002dcode-function" id=
+  "index-byte_002dcode-function"></a> <a name=
+  "index-byte_002dcode-object" id="index-byte_002dcode-object"></a>
 
-<p>Byte-compiled functions have a special data type: they are
-<em>byte-code function objects</em>.  Whenever such an object appears as
-a function to be called, Emacs uses the byte-code interpreter to
-execute the byte-code.
-</p>
-<p>Internally, a byte-code function object is much like a vector; its
-elements can be accessed using <code>aref</code>.  Its printed
-representation is like that for a vector, with an additional &lsquo;<samp>#</samp>&rsquo;
-before the opening &lsquo;<samp>[</samp>&rsquo;.  It must have at least four elements;
-there is no maximum number, but only the first six elements have any
-normal use.  They are:
-</p>
-<dl compact="compact">
-<dt><var>argdesc</var></dt>
-<dd><p>The descriptor of the arguments.  This can either be a list of
-arguments, as described in <a href="Argument-List.html#Argument-List">Argument List</a>, or an integer encoding
-the required number of arguments.  In the latter case, the value of
-the descriptor specifies the minimum number of arguments in the bits
-zero to 6, and the maximum number of arguments in bits 8 to 14.  If
-the argument list uses <code>&amp;rest</code>, then bit 7 is set; otherwise it&rsquo;s
-cleared.
-</p>
-<p>If <var>argdesc</var> is a list, the arguments will be dynamically bound
-before executing the byte code.  If <var>argdesc</var> is an integer, the
-arguments will be instead pushed onto the stack of the byte-code
-interpreter, before executing the code.
-</p>
-</dd>
-<dt><var>byte-code</var></dt>
-<dd><p>The string containing the byte-code instructions.
-</p>
-</dd>
-<dt><var>constants</var></dt>
-<dd><p>The vector of Lisp objects referenced by the byte code.  These include
-symbols used as function names and variable names.
-</p>
-</dd>
-<dt><var>stacksize</var></dt>
-<dd><p>The maximum stack size this function needs.
-</p>
-</dd>
-<dt><var>docstring</var></dt>
-<dd><p>The documentation string (if any); otherwise, <code>nil</code>.  The value may
-be a number or a list, in case the documentation string is stored in a
-file.  Use the function <code>documentation</code> to get the real
-documentation string (see <a href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>).
-</p>
-</dd>
-<dt><var>interactive</var></dt>
-<dd><p>The interactive spec (if any).  This can be a string or a Lisp
-expression.  It is <code>nil</code> for a function that isn&rsquo;t interactive.
-</p></dd>
-</dl>
+  <p>Byte-compiled functions have a special data type: they are
+  <em>byte-code function objects</em>. Whenever such an object
+  appears as a function to be called, Emacs uses the byte-code
+  interpreter to execute the byte-code.</p>
 
-<p>Here&rsquo;s an example of a byte-code function object, in printed
-representation.  It is the definition of the command
-<code>backward-sexp</code>.
-</p>
-<div class="example">
-<pre class="example">#[256
-  &quot;\211\204^G^@\300\262^A\301^A[!\207&quot;
+  <p>Internally, a byte-code function object is much like a vector;
+  its elements can be accessed using <code>aref</code>. Its printed
+  representation is like that for a vector, with an additional
+  &lsquo;<samp>#</samp>&rsquo; before the opening
+  &lsquo;<samp>[</samp>&rsquo;. It must have at least four
+  elements; there is no maximum number, but only the first six
+  elements have any normal use. They are:</p>
+
+  <dl compact="compact">
+    <dt><var>argdesc</var></dt>
+
+    <dd>
+      <p>The descriptor of the arguments. This can either be a list
+      of arguments, as described in <a href=
+      "Argument-List.html#Argument-List">Argument List</a>, or an
+      integer encoding the required number of arguments. In the
+      latter case, the value of the descriptor specifies the
+      minimum number of arguments in the bits zero to 6, and the
+      maximum number of arguments in bits 8 to 14. If the argument
+      list uses <code>&amp;rest</code>, then bit 7 is set;
+      otherwise it&rsquo;s cleared.</p>
+
+      <p>If <var>argdesc</var> is a list, the arguments will be
+      dynamically bound before executing the byte code. If
+      <var>argdesc</var> is an integer, the arguments will be
+      instead pushed onto the stack of the byte-code interpreter,
+      before executing the code.</p>
+    </dd>
+
+    <dt><var>byte-code</var></dt>
+
+    <dd>
+      <p>The string containing the byte-code instructions.</p>
+    </dd>
+
+    <dt><var>constants</var></dt>
+
+    <dd>
+      <p>The vector of Lisp objects referenced by the byte code.
+      These include symbols used as function names and variable
+      names.</p>
+    </dd>
+
+    <dt><var>stacksize</var></dt>
+
+    <dd>
+      <p>The maximum stack size this function needs.</p>
+    </dd>
+
+    <dt><var>docstring</var></dt>
+
+    <dd>
+      <p>The documentation string (if any); otherwise,
+      <code>nil</code>. The value may be a number or a list, in
+      case the documentation string is stored in a file. Use the
+      function <code>documentation</code> to get the real
+      documentation string (see <a href=
+      "Accessing-Documentation.html#Accessing-Documentation">Accessing
+      Documentation</a>).</p>
+    </dd>
+
+    <dt><var>interactive</var></dt>
+
+    <dd>
+      <p>The interactive spec (if any). This can be a string or a
+      Lisp expression. It is <code>nil</code> for a function that
+      isn&rsquo;t interactive.</p>
+    </dd>
+  </dl>
+
+  <p>Here&rsquo;s an example of a byte-code function object, in
+  printed representation. It is the definition of the command
+  <code>backward-sexp</code>.</p>
+
+  <div class="example">
+    <pre class="example">
+#[256
+  "\211\204^G^@\300\262^A\301^A[!\207"
   [1 forward-sexp]
   3
   1793299
-  &quot;^p&quot;]
-</pre></div>
+  "^p"]
+</pre>
+  </div>
 
-<p>The primitive way to create a byte-code object is with
-<code>make-byte-code</code>:
-</p>
-<dl>
-<dt><a name="index-make_002dbyte_002dcode"></a>Function: <strong>make-byte-code</strong> <em>&amp;rest elements</em></dt>
-<dd><p>This function constructs and returns a byte-code function object
-with <var>elements</var> as its elements.
-</p></dd></dl>
+  <p>The primitive way to create a byte-code object is with
+  <code>make-byte-code</code>:</p>
 
-<p>You should not try to come up with the elements for a byte-code
-function yourself, because if they are inconsistent, Emacs may crash
-when you call the function.  Always leave it to the byte compiler to
-create these objects; it makes the elements consistent (we hope).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Disassembly.html#Disassembly" accesskey="n" rel="next">Disassembly</a>, Previous: <a href="Compiler-Errors.html#Compiler-Errors" accesskey="p" rel="prev">Compiler Errors</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-make_002dbyte_002dcode" id=
+    "index-make_002dbyte_002dcode"></a>Function:
+    <strong>make-byte-code</strong> <em>&amp;rest
+    elements</em></dt>
 
+    <dd>
+      <p>This function constructs and returns a byte-code function
+      object with <var>elements</var> as its elements.</p>
+    </dd>
+  </dl>
 
+  <p>You should not try to come up with the elements for a
+  byte-code function yourself, because if they are inconsistent,
+  Emacs may crash when you call the function. Always leave it to
+  the byte compiler to create these objects; it makes the elements
+  consistent (we hope).</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Disassembly.html#Disassembly" accesskey="n"
+    rel="next">Disassembly</a>, Previous: <a href=
+    "Compiler-Errors.html#Compiler-Errors" accesskey="p" rel=
+    "prev">Compiler Errors</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

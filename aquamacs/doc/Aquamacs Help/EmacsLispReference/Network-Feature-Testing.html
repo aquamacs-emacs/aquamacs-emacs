@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,107 +19,161 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Network Feature Testing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Network Feature Testing">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Network Feature Testing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Low_002dLevel-Network.html#Low_002dLevel-Network" rel="up" title="Low-Level Network">
-<link href="Misc-Network.html#Misc-Network" rel="next" title="Misc Network">
-<link href="Network-Options.html#Network-Options" rel="prev" title="Network Options">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Network Feature
+  Testing</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Network Feature Testing" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Network Feature Testing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Low_002dLevel-Network.html#Low_002dLevel-Network"
+  rel="up" title="Low-Level Network" />
+  <link href="Misc-Network.html#Misc-Network" rel="next" title=
+  "Misc Network" />
+  <link href="Network-Options.html#Network-Options" rel="prev"
+  title="Network Options" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Network-Feature-Testing" id=
+  "Network-Feature-Testing"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Network-Options.html#Network-Options"
+    accesskey="p" rel="prev">Network Options</a>, Up: <a href=
+    "Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey=
+    "u" rel="up">Low-Level Network</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Testing-Availability-of-Network-Features" id=
+  "Testing-Availability-of-Network-Features"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Network-Feature-Testing"></a>
-<div class="header">
-<p>
-Previous: <a href="Network-Options.html#Network-Options" accesskey="p" rel="prev">Network Options</a>, Up: <a href="Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey="u" rel="up">Low-Level Network</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Testing-Availability-of-Network-Features"></a>
-<h4 class="subsection">36.17.3 Testing Availability of Network Features</h4>
+  <h4 class="subsection">36.17.3 Testing Availability of Network
+  Features</h4>
 
-<p>To test for the availability of a given network feature, use
-<code>featurep</code> like this:
-</p>
-<div class="example">
-<pre class="example">(featurep 'make-network-process '(<var>keyword</var> <var>value</var>))
-</pre></div>
+  <p>To test for the availability of a given network feature, use
+  <code>featurep</code> like this:</p>
 
-<p>The result of this form is <code>t</code> if it works to specify
-<var>keyword</var> with value <var>value</var> in <code>make-network-process</code>.
-Here are some of the <var>keyword</var>&mdash;<var>value</var> pairs you can test in
-this way.
-</p>
-<dl compact="compact">
-<dt><code>(:nowait t)</code></dt>
-<dd><p>Non-<code>nil</code> if non-blocking connect is supported.
-</p></dd>
-<dt><code>(:type datagram)</code></dt>
-<dd><p>Non-<code>nil</code> if datagrams are supported.
-</p></dd>
-<dt><code>(:family local)</code></dt>
-<dd><p>Non-<code>nil</code> if local (a.k.a. &ldquo;UNIX domain&rdquo;) sockets are supported.
-</p></dd>
-<dt><code>(:family ipv6)</code></dt>
-<dd><p>Non-<code>nil</code> if IPv6 is supported.
-</p></dd>
-<dt><code>(:service t)</code></dt>
-<dd><p>Non-<code>nil</code> if the system can select the port for a server.
-</p></dd>
-</dl>
+  <div class="example">
+    <pre class="example">
+(featurep 'make-network-process '(<var>keyword</var> <var>value</var>))
+</pre>
+  </div>
 
-<p>To test for the availability of a given network option, use
-<code>featurep</code> like this:
-</p>
-<div class="example">
-<pre class="example">(featurep 'make-network-process '<var>keyword</var>)
-</pre></div>
+  <p>The result of this form is <code>t</code> if it works to
+  specify <var>keyword</var> with value <var>value</var> in
+  <code>make-network-process</code>. Here are some of the
+  <var>keyword</var>&mdash;<var>value</var> pairs you can test in
+  this way.</p>
 
-<p>The accepted <var>keyword</var> values are <code>:bindtodevice</code>, etc.
-For the complete list, see <a href="Network-Options.html#Network-Options">Network Options</a>.  This form returns
-non-<code>nil</code> if that particular network option is supported by
-<code>make-network-process</code> (or <code>set-network-process-option</code>).
-</p>
+  <dl compact="compact">
+    <dt><code>(:nowait t)</code></dt>
 
+    <dd>
+      <p>Non-<code>nil</code> if non-blocking connect is
+      supported.</p>
+    </dd>
 
+    <dt><code>(:type datagram)</code></dt>
 
+    <dd>
+      <p>Non-<code>nil</code> if datagrams are supported.</p>
+    </dd>
+
+    <dt><code>(:family local)</code></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> if local (a.k.a. &ldquo;UNIX
+      domain&rdquo;) sockets are supported.</p>
+    </dd>
+
+    <dt><code>(:family ipv6)</code></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> if IPv6 is supported.</p>
+    </dd>
+
+    <dt><code>(:service t)</code></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> if the system can select the port for
+      a server.</p>
+    </dd>
+  </dl>
+
+  <p>To test for the availability of a given network option, use
+  <code>featurep</code> like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(featurep 'make-network-process '<var>keyword</var>)
+</pre>
+  </div>
+
+  <p>The accepted <var>keyword</var> values are
+  <code>:bindtodevice</code>, etc. For the complete list, see
+  <a href="Network-Options.html#Network-Options">Network
+  Options</a>. This form returns non-<code>nil</code> if that
+  particular network option is supported by
+  <code>make-network-process</code> (or
+  <code>set-network-process-option</code>).</p>
 </body>
 </html>

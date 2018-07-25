@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,190 +19,333 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Disassembly</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Disassembly">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Disassembly">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Byte-Compilation.html#Byte-Compilation" rel="up" title="Byte Compilation">
-<link href="Debugging.html#Debugging" rel="next" title="Debugging">
-<link href="Byte_002dCode-Objects.html#Byte_002dCode-Objects" rel="prev" title="Byte-Code Objects">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Disassembly</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Disassembly" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Disassembly" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Byte-Compilation.html#Byte-Compilation" rel="up"
+  title="Byte Compilation" />
+  <link href="Debugging.html#Debugging" rel="next" title=
+  "Debugging" />
+  <link href="Byte_002dCode-Objects.html#Byte_002dCode-Objects"
+  rel="prev" title="Byte-Code Objects" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Disassembly" id="Disassembly"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Byte_002dCode-Objects.html#Byte_002dCode-Objects" accesskey=
+    "p" rel="prev">Byte-Code Objects</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Disassembled-Byte_002dCode" id=
+  "Disassembled-Byte_002dCode"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Disassembly"></a>
-<div class="header">
-<p>
-Previous: <a href="Byte_002dCode-Objects.html#Byte_002dCode-Objects" accesskey="p" rel="prev">Byte-Code Objects</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Disassembled-Byte_002dCode"></a>
-<h3 class="section">16.8 Disassembled Byte-Code</h3>
-<a name="index-disassembled-byte_002dcode"></a>
+  <h3 class="section">16.8 Disassembled Byte-Code</h3><a name=
+  "index-disassembled-byte_002dcode" id=
+  "index-disassembled-byte_002dcode"></a>
 
-<p>People do not write byte-code; that job is left to the byte
-compiler.  But we provide a disassembler to satisfy a cat-like
-curiosity.  The disassembler converts the byte-compiled code into
-human-readable form.
-</p>
-<p>The byte-code interpreter is implemented as a simple stack machine.
-It pushes values onto a stack of its own, then pops them off to use them
-in calculations whose results are themselves pushed back on the stack.
-When a byte-code function returns, it pops a value off the stack and
-returns it as the value of the function.
-</p>
-<p>In addition to the stack, byte-code functions can use, bind, and set
-ordinary Lisp variables, by transferring values between variables and
-the stack.
-</p>
-<dl>
-<dt><a name="index-disassemble"></a>Command: <strong>disassemble</strong> <em>object &amp;optional buffer-or-name</em></dt>
-<dd><p>This command displays the disassembled code for <var>object</var>.  In
-interactive use, or if <var>buffer-or-name</var> is <code>nil</code> or omitted,
-the output goes in a buffer named <samp>*Disassemble*</samp>.  If
-<var>buffer-or-name</var> is non-<code>nil</code>, it must be a buffer or the
-name of an existing buffer.  Then the output goes there, at point, and
-point is left before the output.
-</p>
-<p>The argument <var>object</var> can be a function name, a lambda expression
-(see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>), or a byte-code object (see <a href="Byte_002dCode-Objects.html#Byte_002dCode-Objects">Byte-Code Objects</a>).  If it is a lambda expression, <code>disassemble</code> compiles
-it and disassembles the resulting compiled code.
-</p></dd></dl>
+  <p>People do not write byte-code; that job is left to the byte
+  compiler. But we provide a disassembler to satisfy a cat-like
+  curiosity. The disassembler converts the byte-compiled code into
+  human-readable form.</p>
 
-<p>Here are two examples of using the <code>disassemble</code> function.  We
-have added explanatory comments to help you relate the byte-code to the
-Lisp source; these do not appear in the output of <code>disassemble</code>.
-</p>
-<div class="example">
-<pre class="example">(defun factorial (integer)
-  &quot;Compute factorial of an integer.&quot;
+  <p>The byte-code interpreter is implemented as a simple stack
+  machine. It pushes values onto a stack of its own, then pops them
+  off to use them in calculations whose results are themselves
+  pushed back on the stack. When a byte-code function returns, it
+  pops a value off the stack and returns it as the value of the
+  function.</p>
+
+  <p>In addition to the stack, byte-code functions can use, bind,
+  and set ordinary Lisp variables, by transferring values between
+  variables and the stack.</p>
+
+  <dl>
+    <dt><a name="index-disassemble" id=
+    "index-disassemble"></a>Command: <strong>disassemble</strong>
+    <em>object &amp;optional buffer-or-name</em></dt>
+
+    <dd>
+      <p>This command displays the disassembled code for
+      <var>object</var>. In interactive use, or if
+      <var>buffer-or-name</var> is <code>nil</code> or omitted, the
+      output goes in a buffer named <samp>*Disassemble*</samp>. If
+      <var>buffer-or-name</var> is non-<code>nil</code>, it must be
+      a buffer or the name of an existing buffer. Then the output
+      goes there, at point, and point is left before the
+      output.</p>
+
+      <p>The argument <var>object</var> can be a function name, a
+      lambda expression (see <a href=
+      "Lambda-Expressions.html#Lambda-Expressions">Lambda
+      Expressions</a>), or a byte-code object (see <a href=
+      "Byte_002dCode-Objects.html#Byte_002dCode-Objects">Byte-Code
+      Objects</a>). If it is a lambda expression,
+      <code>disassemble</code> compiles it and disassembles the
+      resulting compiled code.</p>
+    </dd>
+  </dl>
+
+  <p>Here are two examples of using the <code>disassemble</code>
+  function. We have added explanatory comments to help you relate
+  the byte-code to the Lisp source; these do not appear in the
+  output of <code>disassemble</code>.</p>
+
+  <div class="example">
+    <pre class="example">
+(defun factorial (integer)
+  "Compute factorial of an integer."
   (if (= 1 integer) 1
     (* integer (factorial (1- integer)))))
      &rArr; factorial
-</pre><pre class="example">
-</pre><pre class="example">(factorial 4)
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(factorial 4)
      &rArr; 24
-</pre><pre class="example">
-</pre><pre class="example">(disassemble 'factorial)
-     ⊣ byte-code for factorial:
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(disassemble 'factorial)
+     &acirc;&Scaron;&pound; byte-code for factorial:
  doc: Compute factorial of an integer.
  args: (integer)
-</pre><pre class="example">
-</pre><pre class="example">0   varref   integer      ; <span class="roman">Get the value of <code>integer</code> and</span>
-                          ;   <span class="roman">push it onto the stack.</span>
-1   constant 1            ; <span class="roman">Push 1 onto stack.</span>
-</pre><pre class="example">2   eqlsign               ; <span class="roman">Pop top two values off stack, compare</span>
-                          ;   <span class="roman">them, and push result onto stack.</span>
-</pre><pre class="example">3   goto-if-nil 1         ; <span class="roman">Pop and test top of stack;</span>
-                          ;   <span class="roman">if <code>nil</code>, go to 1, else continue.</span>
-6   constant 1            ; <span class="roman">Push 1 onto top of stack.</span>
-7   return                ; <span class="roman">Return the top element of the stack.</span>
-</pre><pre class="example">8:1 varref   integer      ; <span class="roman">Push value of <code>integer</code> onto stack.</span>
-9   constant factorial    ; <span class="roman">Push <code>factorial</code> onto stack.</span>
-10  varref   integer      ; <span class="roman">Push value of <code>integer</code> onto stack.</span>
-11  sub1                  ; <span class="roman">Pop <code>integer</code>, decrement value,</span>
-                          ;   <span class="roman">push new value onto stack.</span>
-12  call     1            ; <span class="roman">Call function <code>factorial</code> using first</span>
-                          ;   <span class="roman">(i.e., top) stack element as argument;</span>
-                          ;   <span class="roman">push returned value onto stack.</span>
-</pre><pre class="example">13 mult                   ; <span class="roman">Pop top two values off stack, multiply</span>
-                          ;   <span class="roman">them, and push result onto stack.</span>
-14 return                 ; <span class="roman">Return the top element of the stack.</span>
-</pre></div>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+0   varref   integer      ; <span class=
+"roman">Get the value of <code>integer</code> and</span>
+                          ;   <span class=
+"roman">push it onto the stack.</span>
+1   constant 1            ; <span class=
+"roman">Push 1 onto stack.</span>
+</pre>
+    <pre class="example">
+2   eqlsign               ; <span class=
+"roman">Pop top two values off stack, compare</span>
+                          ;   <span class=
+"roman">them, and push result onto stack.</span>
+</pre>
+    <pre class="example">
+3   goto-if-nil 1         ; <span class=
+"roman">Pop and test top of stack;</span>
+                          ;   <span class=
+"roman">if <code>nil</code>, go to 1, else continue.</span>
+6   constant 1            ; <span class=
+"roman">Push 1 onto top of stack.</span>
+7   return                ; <span class=
+"roman">Return the top element of the stack.</span>
+</pre>
+    <pre class="example">
+8:1 varref   integer      ; <span class=
+"roman">Push value of <code>integer</code> onto stack.</span>
+9   constant factorial    ; <span class=
+"roman">Push <code>factorial</code> onto stack.</span>
+10  varref   integer      ; <span class=
+"roman">Push value of <code>integer</code> onto stack.</span>
+11  sub1                  ; <span class=
+"roman">Pop <code>integer</code>, decrement value,</span>
+                          ;   <span class=
+"roman">push new value onto stack.</span>
+12  call     1            ; <span class=
+"roman">Call function <code>factorial</code> using first</span>
+                          ;   <span class=
+"roman">(i.e., top) stack element as argument;</span>
+                          ;   <span class=
+"roman">push returned value onto stack.</span>
+</pre>
+    <pre class="example">
+13 mult                   ; <span class=
+"roman">Pop top two values off stack, multiply</span>
+                          ;   <span class=
+"roman">them, and push result onto stack.</span>
+14 return                 ; <span class=
+"roman">Return the top element of the stack.</span>
+</pre>
+  </div>
 
-<p>The <code>silly-loop</code> function is somewhat more complex:
-</p>
-<div class="example">
-<pre class="example">(defun silly-loop (n)
-  &quot;Return time before and after N iterations of a loop.&quot;
+  <p>The <code>silly-loop</code> function is somewhat more
+  complex:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun silly-loop (n)
+  "Return time before and after N iterations of a loop."
   (let ((t1 (current-time-string)))
     (while (&gt; (setq n (1- n))
               0))
     (list t1 (current-time-string))))
      &rArr; silly-loop
-</pre><pre class="example">
-</pre><pre class="example">(disassemble 'silly-loop)
-     ⊣ byte-code for silly-loop:
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(disassemble 'silly-loop)
+     &acirc;&Scaron;&pound; byte-code for silly-loop:
  doc: Return time before and after N iterations of a loop.
  args: (n)
-</pre><pre class="example">
-</pre><pre class="example">0   constant current-time-string  ; <span class="roman">Push <code>current-time-string</code></span>
-                                  ;   <span class="roman">onto top of stack.</span>
-</pre><pre class="example">1   call     0            ; <span class="roman">Call <code>current-time-string</code> with no</span>
-                          ;   <span class="roman">argument, push result onto stack.</span>
-</pre><pre class="example">2   varbind  t1           ; <span class="roman">Pop stack and bind <code>t1</code> to popped value.</span>
-</pre><pre class="example">3:1 varref   n            ; <span class="roman">Get value of <code>n</code> from the environment</span>
-                          ;   <span class="roman">and push the value on the stack.</span>
-4   sub1                  ; <span class="roman">Subtract 1 from top of stack.</span>
-</pre><pre class="example">5   dup                   ; <span class="roman">Duplicate top of stack; i.e., copy the top</span>
-                          ;   <span class="roman">of the stack and push copy onto stack.</span>
-6   varset   n            ; <span class="roman">Pop the top of the stack,</span>
-                          ;   <span class="roman">and bind <code>n</code> to the value.</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+0   constant current-time-string  ; <span class=
+"roman">Push <code>current-time-string</code></span>
+                                  ;   <span class=
+"roman">onto top of stack.</span>
+</pre>
+    <pre class="example">
+1   call     0            ; <span class=
+"roman">Call <code>current-time-string</code> with no</span>
+                          ;   <span class=
+"roman">argument, push result onto stack.</span>
+</pre>
+    <pre class="example">
+2   varbind  t1           ; <span class=
+"roman">Pop stack and bind <code>t1</code> to popped value.</span>
+</pre>
+    <pre class="example">
+3:1 varref   n            ; <span class=
+"roman">Get value of <code>n</code> from the environment</span>
+                          ;   <span class=
+"roman">and push the value on the stack.</span>
+4   sub1                  ; <span class=
+"roman">Subtract 1 from top of stack.</span>
+</pre>
+    <pre class="example">
+5   dup                   ; <span class=
+"roman">Duplicate top of stack; i.e., copy the top</span>
+                          ;   <span class=
+"roman">of the stack and push copy onto stack.</span>
+6   varset   n            ; <span class=
+"roman">Pop the top of the stack,</span>
+                          ;   <span class=
+"roman">and bind <code>n</code> to the value.</span>
 
-;; <span class="roman">(In effect, the sequence <code>dup varset</code> copies the top of the stack</span>
-;; <span class="roman">into the value of <code>n</code> without popping it.)</span>
-</pre><pre class="example">
-</pre><pre class="example">7   constant 0            ; <span class="roman">Push 0 onto stack.</span>
-8   gtr                   ; <span class="roman">Pop top two values off stack,</span>
-                          ;   <span class="roman">test if <var>n</var> is greater than 0</span>
-                          ;   <span class="roman">and push result onto stack.</span>
-</pre><pre class="example">9   goto-if-not-nil 1     ; <span class="roman">Goto 1 if <code>n</code> &gt; 0</span>
-                          ;   <span class="roman">(this continues the while loop)</span>
-                          ;   <span class="roman">else continue.</span>
-</pre><pre class="example">12  varref   t1           ; <span class="roman">Push value of <code>t1</code> onto stack.</span>
-13  constant current-time-string  ; <span class="roman">Push <code>current-time-string</code></span>
-                                  ;   <span class="roman">onto the top of the stack.</span>
-14  call     0            ; <span class="roman">Call <code>current-time-string</code> again.</span>
-</pre><pre class="example">15  unbind   1            ; <span class="roman">Unbind <code>t1</code> in local environment.</span>
-16  list2                 ; <span class="roman">Pop top two elements off stack, create a</span>
-                          ;   <span class="roman">list of them, and push it onto stack.</span>
-17  return                ; <span class="roman">Return value of the top of stack.</span>
-</pre></div>
+;; <span class=
+"roman">(In effect, the sequence <code>dup varset</code> copies the top of the stack</span>
+;; <span class=
+"roman">into the value of <code>n</code> without popping it.)</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+7   constant 0            ; <span class=
+"roman">Push 0 onto stack.</span>
+8   gtr                   ; <span class=
+"roman">Pop top two values off stack,</span>
+                          ;   <span class=
+"roman">test if <var>n</var> is greater than 0</span>
+                          ;   <span class=
+"roman">and push result onto stack.</span>
+</pre>
+    <pre class="example">
+9   goto-if-not-nil 1     ; <span class=
+"roman">Goto 1 if <code>n</code> &gt; 0</span>
+                          ;   <span class=
+"roman">(this continues the while loop)</span>
+                          ;   <span class=
+"roman">else continue.</span>
+</pre>
+    <pre class="example">
+12  varref   t1           ; <span class=
+"roman">Push value of <code>t1</code> onto stack.</span>
+13  constant current-time-string  ; <span class=
+"roman">Push <code>current-time-string</code></span>
+                                  ;   <span class=
+"roman">onto the top of the stack.</span>
+14  call     0            ; <span class=
+"roman">Call <code>current-time-string</code> again.</span>
+</pre>
+    <pre class="example">
+15  unbind   1            ; <span class=
+"roman">Unbind <code>t1</code> in local environment.</span>
+16  list2                 ; <span class=
+"roman">Pop top two elements off stack, create a</span>
+                          ;   <span class=
+"roman">list of them, and push it onto stack.</span>
+17  return                ; <span class=
+"roman">Return value of the top of stack.</span>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Byte_002dCode-Objects.html#Byte_002dCode-Objects" accesskey="p" rel="prev">Byte-Code Objects</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Previous: <a href=
+    "Byte_002dCode-Objects.html#Byte_002dCode-Objects" accesskey=
+    "p" rel="prev">Byte-Code Objects</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

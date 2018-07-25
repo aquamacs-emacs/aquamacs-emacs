@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,168 +19,242 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Expansion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Expansion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Expansion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Macros.html#Macros" rel="up" title="Macros">
-<link href="Compiling-Macros.html#Compiling-Macros" rel="next" title="Compiling Macros">
-<link href="Simple-Macro.html#Simple-Macro" rel="prev" title="Simple Macro">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Expansion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Expansion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Expansion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Macros.html#Macros" rel="up" title="Macros" />
+  <link href="Compiling-Macros.html#Compiling-Macros" rel="next"
+  title="Compiling Macros" />
+  <link href="Simple-Macro.html#Simple-Macro" rel="prev" title=
+  "Simple Macro" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Expansion" id="Expansion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Compiling-Macros.html#Compiling-Macros"
+    accesskey="n" rel="next">Compiling Macros</a>, Previous:
+    <a href="Simple-Macro.html#Simple-Macro" accesskey="p" rel=
+    "prev">Simple Macro</a>, Up: <a href="Macros.html#Macros"
+    accesskey="u" rel="up">Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Expansion-of-a-Macro-Call" id=
+  "Expansion-of-a-Macro-Call"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Expansion"></a>
-<div class="header">
-<p>
-Next: <a href="Compiling-Macros.html#Compiling-Macros" accesskey="n" rel="next">Compiling Macros</a>, Previous: <a href="Simple-Macro.html#Simple-Macro" accesskey="p" rel="prev">Simple Macro</a>, Up: <a href="Macros.html#Macros" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Expansion-of-a-Macro-Call"></a>
-<h3 class="section">13.2 Expansion of a Macro Call</h3>
-<a name="index-expansion-of-macros"></a>
-<a name="index-macro-call"></a>
+  <h3 class="section">13.2 Expansion of a Macro Call</h3><a name=
+  "index-expansion-of-macros" id="index-expansion-of-macros"></a>
+  <a name="index-macro-call" id="index-macro-call"></a>
 
-<p>A macro call looks just like a function call in that it is a list which
-starts with the name of the macro.  The rest of the elements of the list
-are the arguments of the macro.
-</p>
-<p>Evaluation of the macro call begins like evaluation of a function call
-except for one crucial difference: the macro arguments are the actual
-expressions appearing in the macro call.  They are not evaluated before
-they are given to the macro definition.  By contrast, the arguments of a
-function are results of evaluating the elements of the function call
-list.
-</p>
-<p>Having obtained the arguments, Lisp invokes the macro definition just
-as a function is invoked.  The argument variables of the macro are bound
-to the argument values from the macro call, or to a list of them in the
-case of a <code>&amp;rest</code> argument.  And the macro body executes and
-returns its value just as a function body does.
-</p>
-<p>The second crucial difference between macros and functions is that
-the value returned by the macro body is an alternate Lisp expression,
-also known as the <em>expansion</em> of the macro.  The Lisp interpreter
-proceeds to evaluate the expansion as soon as it comes back from the
-macro.
-</p>
-<p>Since the expansion is evaluated in the normal manner, it may contain
-calls to other macros.  It may even be a call to the same macro, though
-this is unusual.
-</p>
-<p>Note that Emacs tries to expand macros when loading an uncompiled
-Lisp file.  This is not always possible, but if it is, it speeds up
-subsequent execution.  See <a href="How-Programs-Do-Loading.html#How-Programs-Do-Loading">How Programs Do Loading</a>.
-</p>
-<p>You can see the expansion of a given macro call by calling
-<code>macroexpand</code>.
-</p>
-<dl>
-<dt><a name="index-macroexpand"></a>Function: <strong>macroexpand</strong> <em>form &amp;optional environment</em></dt>
-<dd><a name="index-macro-expansion"></a>
-<p>This function expands <var>form</var>, if it is a macro call.  If the result
-is another macro call, it is expanded in turn, until something which is
-not a macro call results.  That is the value returned by
-<code>macroexpand</code>.  If <var>form</var> is not a macro call to begin with, it
-is returned as given.
-</p>
-<p>Note that <code>macroexpand</code> does not look at the subexpressions of
-<var>form</var> (although some macro definitions may do so).  Even if they
-are macro calls themselves, <code>macroexpand</code> does not expand them.
-</p>
-<p>The function <code>macroexpand</code> does not expand calls to inline functions.
-Normally there is no need for that, since a call to an inline function is
-no harder to understand than a call to an ordinary function.
-</p>
-<p>If <var>environment</var> is provided, it specifies an alist of macro
-definitions that shadow the currently defined macros.  Byte compilation
-uses this feature.
-</p>
-<div class="example">
-<pre class="example">(defmacro inc (var)
+  <p>A macro call looks just like a function call in that it is a
+  list which starts with the name of the macro. The rest of the
+  elements of the list are the arguments of the macro.</p>
+
+  <p>Evaluation of the macro call begins like evaluation of a
+  function call except for one crucial difference: the macro
+  arguments are the actual expressions appearing in the macro call.
+  They are not evaluated before they are given to the macro
+  definition. By contrast, the arguments of a function are results
+  of evaluating the elements of the function call list.</p>
+
+  <p>Having obtained the arguments, Lisp invokes the macro
+  definition just as a function is invoked. The argument variables
+  of the macro are bound to the argument values from the macro
+  call, or to a list of them in the case of a
+  <code>&amp;rest</code> argument. And the macro body executes and
+  returns its value just as a function body does.</p>
+
+  <p>The second crucial difference between macros and functions is
+  that the value returned by the macro body is an alternate Lisp
+  expression, also known as the <em>expansion</em> of the macro.
+  The Lisp interpreter proceeds to evaluate the expansion as soon
+  as it comes back from the macro.</p>
+
+  <p>Since the expansion is evaluated in the normal manner, it may
+  contain calls to other macros. It may even be a call to the same
+  macro, though this is unusual.</p>
+
+  <p>Note that Emacs tries to expand macros when loading an
+  uncompiled Lisp file. This is not always possible, but if it is,
+  it speeds up subsequent execution. See <a href=
+  "How-Programs-Do-Loading.html#How-Programs-Do-Loading">How
+  Programs Do Loading</a>.</p>
+
+  <p>You can see the expansion of a given macro call by calling
+  <code>macroexpand</code>.</p>
+
+  <dl>
+    <dt><a name="index-macroexpand" id=
+    "index-macroexpand"></a>Function: <strong>macroexpand</strong>
+    <em>form &amp;optional environment</em></dt>
+
+    <dd>
+      <a name="index-macro-expansion" id=
+      "index-macro-expansion"></a>
+
+      <p>This function expands <var>form</var>, if it is a macro
+      call. If the result is another macro call, it is expanded in
+      turn, until something which is not a macro call results. That
+      is the value returned by <code>macroexpand</code>. If
+      <var>form</var> is not a macro call to begin with, it is
+      returned as given.</p>
+
+      <p>Note that <code>macroexpand</code> does not look at the
+      subexpressions of <var>form</var> (although some macro
+      definitions may do so). Even if they are macro calls
+      themselves, <code>macroexpand</code> does not expand
+      them.</p>
+
+      <p>The function <code>macroexpand</code> does not expand
+      calls to inline functions. Normally there is no need for
+      that, since a call to an inline function is no harder to
+      understand than a call to an ordinary function.</p>
+
+      <p>If <var>environment</var> is provided, it specifies an
+      alist of macro definitions that shadow the currently defined
+      macros. Byte compilation uses this feature.</p>
+
+      <div class="example">
+        <pre class="example">
+(defmacro inc (var)
     (list 'setq var (list '1+ var)))
-</pre><pre class="example">
-</pre><pre class="example">(macroexpand '(inc r))
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(macroexpand '(inc r))
      &rArr; (setq r (1+ r))
-</pre><pre class="example">
-</pre><pre class="example">(defmacro inc2 (var1 var2)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(defmacro inc2 (var1 var2)
     (list 'progn (list 'inc var1) (list 'inc var2)))
-</pre><pre class="example">
-</pre><pre class="example">(macroexpand '(inc2 r s))
-     &rArr; (progn (inc r) (inc s))  ; <span class="roman"><code>inc</code> not expanded here.</span>
-</pre></div>
-</dd></dl>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(macroexpand '(inc2 r s))
+     &rArr; (progn (inc r) (inc s))  ; <span class=
+"roman"><code>inc</code> not expanded here.</span>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-macroexpand_002dall" id=
+    "index-macroexpand_002dall"></a>Function:
+    <strong>macroexpand-all</strong> <em>form &amp;optional
+    environment</em></dt>
 
-<dl>
-<dt><a name="index-macroexpand_002dall"></a>Function: <strong>macroexpand-all</strong> <em>form &amp;optional environment</em></dt>
-<dd><p><code>macroexpand-all</code> expands macros like <code>macroexpand</code>, but
-will look for and expand all macros in <var>form</var>, not just at the
-top-level.  If no macros are expanded, the return value is <code>eq</code>
-to <var>form</var>.
-</p>
-<p>Repeating the example used for <code>macroexpand</code> above with
-<code>macroexpand-all</code>, we see that <code>macroexpand-all</code> <em>does</em>
-expand the embedded calls to <code>inc</code>:
-</p>
-<div class="example">
-<pre class="example">(macroexpand-all '(inc2 r s))
+    <dd>
+      <p><code>macroexpand-all</code> expands macros like
+      <code>macroexpand</code>, but will look for and expand all
+      macros in <var>form</var>, not just at the top-level. If no
+      macros are expanded, the return value is <code>eq</code> to
+      <var>form</var>.</p>
+
+      <p>Repeating the example used for <code>macroexpand</code>
+      above with <code>macroexpand-all</code>, we see that
+      <code>macroexpand-all</code> <em>does</em> expand the
+      embedded calls to <code>inc</code>:</p>
+
+      <div class="example">
+        <pre class="example">
+(macroexpand-all '(inc2 r s))
      &rArr; (progn (setq r (1+ r)) (setq s (1+ s)))
-</pre></div>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-</dd></dl>
+  <dl>
+    <dt><a name="index-macroexpand_002d1" id=
+    "index-macroexpand_002d1"></a>Function:
+    <strong>macroexpand-1</strong> <em>form &amp;optional
+    environment</em></dt>
 
-<dl>
-<dt><a name="index-macroexpand_002d1"></a>Function: <strong>macroexpand-1</strong> <em>form &amp;optional environment</em></dt>
-<dd><p>This function expands macros like <code>macroexpand</code>, but it only
-performs one step of the expansion: if the result is another macro
-call, <code>macroexpand-1</code> will not expand it.
-</p></dd></dl>
+    <dd>
+      <p>This function expands macros like
+      <code>macroexpand</code>, but it only performs one step of
+      the expansion: if the result is another macro call,
+      <code>macroexpand-1</code> will not expand it.</p>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Compiling-Macros.html#Compiling-Macros" accesskey="n" rel="next">Compiling Macros</a>, Previous: <a href="Simple-Macro.html#Simple-Macro" accesskey="p" rel="prev">Simple Macro</a>, Up: <a href="Macros.html#Macros" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Compiling-Macros.html#Compiling-Macros"
+    accesskey="n" rel="next">Compiling Macros</a>, Previous:
+    <a href="Simple-Macro.html#Simple-Macro" accesskey="p" rel=
+    "prev">Simple Macro</a>, Up: <a href="Macros.html#Macros"
+    accesskey="u" rel="up">Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

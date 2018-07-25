@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,230 +18,312 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Algebraic Manipulation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Algebraic Manipulation">
-<meta name="keywords" content="GNU Emacs Calc Manual: Algebraic Manipulation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Algebra.html#Algebra" rel="up" title="Algebra">
-<link href="Simplifying-Formulas.html#Simplifying-Formulas" rel="next" title="Simplifying Formulas">
-<link href="Rearranging-with-Selections.html#Rearranging-with-Selections" rel="prev" title="Rearranging with Selections">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Algebraic Manipulation</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Algebraic Manipulation" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Algebraic Manipulation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Algebra.html#Algebra" rel="up" title="Algebra" />
+  <link href="Simplifying-Formulas.html#Simplifying-Formulas" rel=
+  "next" title="Simplifying Formulas" />
+  <link href=
+  "Rearranging-with-Selections.html#Rearranging-with-Selections"
+  rel="prev" title="Rearranging with Selections" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Algebraic-Manipulation"></a>
-<div class="header">
-<p>
-Next: <a href="Simplifying-Formulas.html#Simplifying-Formulas" accesskey="n" rel="next">Simplifying Formulas</a>, Previous: <a href="Selecting-Subformulas.html#Selecting-Subformulas" accesskey="p" rel="prev">Selecting Subformulas</a>, Up: <a href="Algebra.html#Algebra" accesskey="u" rel="up">Algebra</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Algebraic-Manipulation-1"></a>
-<h3 class="section">10.2 Algebraic Manipulation</h3>
+<body lang="en" xml:lang="en">
+  <a name="Algebraic-Manipulation" id="Algebraic-Manipulation"></a>
 
-<p>The commands in this section perform general-purpose algebraic
-manipulations.  They work on the whole formula at the top of the
-stack (unless, of course, you have made a selection in that
-formula).
-</p>
-<p>Many algebra commands prompt for a variable name or formula.  If you
-answer the prompt with a blank line, the variable or formula is taken
-from top-of-stack, and the normal argument for the command is taken
-from the second-to-top stack level.
-</p>
-<a name="index-a-v"></a>
-<a name="index-calc_002dalg_002devaluate"></a>
-<p>The <kbd>a v</kbd> (<code>calc-alg-evaluate</code>) command performs the normal
-default simplifications on a formula; for example, &lsquo;<samp>a - -b</samp>&rsquo; is
-changed to &lsquo;<samp>a + b</samp>&rsquo;.  These simplifications are normally done
-automatically on all Calc results, so this command is useful only if
-you have turned default simplifications off with an <kbd>m O</kbd>
-command.  See <a href="Simplification-Modes.html#Simplification-Modes">Simplification Modes</a>.
-</p>
-<p>It is often more convenient to type <kbd>=</kbd>, which is like <kbd>a v</kbd>
-but which also substitutes stored values for variables in the formula.
-Use <kbd>a v</kbd> if you want the variables to ignore their stored values.
-</p>
-<p>If you give a numeric prefix argument of 2 to <kbd>a v</kbd>, it simplifies
-using Calc&rsquo;s algebraic simplifications; see <a href="Simplifying-Formulas.html#Simplifying-Formulas">Simplifying Formulas</a>.
-If you give a numeric prefix of 3 or more, it uses Extended
-Simplification mode (<kbd>a e</kbd>).
-</p>
-<p>If you give a negative prefix argument <i>-1</i>, <i>-2</i>, or <i>-3</i>,
-it simplifies in the corresponding mode but only works on the top-level
-function call of the formula.  For example, &lsquo;<samp>(2 + 3) * (2 + 3)</samp>&rsquo; will
-simplify to &lsquo;<samp>(2 + 3)^2</samp>&rsquo;, without simplifying the sub-formulas
-&lsquo;<samp>2 + 3</samp>&rsquo;.  As another example, typing <kbd>V R +</kbd> to sum the vector
-&lsquo;<samp>[1, 2, 3, 4]</samp>&rsquo; produces the formula &lsquo;<samp>reduce(add, [1, 2, 3, 4])</samp>&rsquo;
-in No-Simplify mode.  Using <kbd>a v</kbd> will evaluate this all the way to
-10; using <kbd>C-u - a v</kbd> will evaluate it only to &lsquo;<samp>1 + 2 + 3 + 4</samp>&rsquo;.
-(See <a href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>.)
-</p>
-<a name="index-evalv"></a>
-<a name="index-evalvn"></a>
-<p>The <kbd>=</kbd> command corresponds to the <code>evalv</code> function, and
-the related <kbd>N</kbd> command, which is like <kbd>=</kbd> but temporarily
-disables Symbolic mode (<kbd>m s</kbd>) during the evaluation, corresponds
-to the <code>evalvn</code> function.  (These commands interpret their prefix
-arguments differently than <kbd>a v</kbd>; <kbd>=</kbd> treats the prefix as
-the number of stack elements to evaluate at once, and <kbd>N</kbd> treats
-it as a temporary different working precision.)
-</p>
-<p>The <code>evalvn</code> function can take an alternate working precision
-as an optional second argument.  This argument can be either an
-integer, to set the precision absolutely, or a vector containing
-a single integer, to adjust the precision relative to the current
-precision.  Note that <code>evalvn</code> with a larger than current
-precision will do the calculation at this higher precision, but the
-result will as usual be rounded back down to the current precision
-afterward.  For example, &lsquo;<samp>evalvn(pi - 3.1415)</samp>&rsquo; at a precision
-of 12 will return &lsquo;<samp>9.265359e-5</samp>&rsquo;; &lsquo;<samp>evalvn(pi - 3.1415, 30)</samp>&rsquo;
-will return &lsquo;<samp>9.26535897932e-5</samp>&rsquo; (computing a 25-digit result which
-is then rounded down to 12); and &lsquo;<samp>evalvn(pi - 3.1415, [-2])</samp>&rsquo;
-will return &lsquo;<samp>9.2654e-5</samp>&rsquo;.
-</p>
-<a name="index-a-_0022"></a>
-<a name="index-calc_002dexpand_002dformula"></a>
-<p>The <kbd>a &quot;</kbd> (<code>calc-expand-formula</code>) command expands functions
-into their defining formulas wherever possible.  For example,
-&lsquo;<samp>deg(x^2)</samp>&rsquo; is changed to &lsquo;<samp>180 x^2 / pi</samp>&rsquo;.  Most functions,
-like <code>sin</code> and <code>gcd</code>, are not defined by simple formulas
-and so are unaffected by this command.  One important class of
-functions which <em>can</em> be expanded is the user-defined functions
-created by the <kbd>Z F</kbd> command.  See <a href="Algebraic-Definitions.html#Algebraic-Definitions">Algebraic Definitions</a>.
-Other functions which <kbd>a &quot;</kbd> can expand include the probability
-distribution functions, most of the financial functions, and the
-hyperbolic and inverse hyperbolic functions.  A numeric prefix argument
-affects <kbd>a &quot;</kbd> in the same way as it does <kbd>a v</kbd>:  A positive
-argument expands all functions in the formula and then simplifies in
-various ways; a negative argument expands and simplifies only the
-top-level function call.
-</p>
-<a name="index-a-M"></a>
-<a name="index-calc_002dmap_002dequation"></a>
-<a name="index-mapeq"></a>
-<p>The <kbd>a M</kbd> (<code>calc-map-equation</code>) [<code>mapeq</code>] command applies
-a given function or operator to one or more equations.  It is analogous
-to <kbd>V M</kbd>, which operates on vectors instead of equations.
-see <a href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>.  For example, <kbd>a M S</kbd> changes
-&lsquo;<samp>x = y+1</samp>&rsquo; to &lsquo;<samp>sin(x) = sin(y+1)</samp>&rsquo;, and <kbd>a M +</kbd> with
-&lsquo;<samp>x = y+1</samp>&rsquo; and &lsquo;<samp>6</samp>&rsquo; on the stack produces &lsquo;<samp>x+6 = y+7</samp>&rsquo;.
-With two equations on the stack, <kbd>a M +</kbd> would add the lefthand
-sides together and the righthand sides together to get the two
-respective sides of a new equation.
-</p>
-<p>Mapping also works on inequalities.  Mapping two similar inequalities
-produces another inequality of the same type.  Mapping an inequality
-with an equation produces an inequality of the same type.  Mapping a
-&lsquo;<samp>&lt;=</samp>&rsquo; with a &lsquo;<samp>&lt;</samp>&rsquo; or &lsquo;<samp>!=</samp>&rsquo; (not-equal) produces a &lsquo;<samp>&lt;</samp>&rsquo;.
-If inequalities with opposite direction (e.g., &lsquo;<samp>&lt;</samp>&rsquo; and &lsquo;<samp>&gt;</samp>&rsquo;)
-are mapped, the direction of the second inequality is reversed to
-match the first:  Using <kbd>a M +</kbd> on &lsquo;<samp>a &lt; b</samp>&rsquo; and &lsquo;<samp>a &gt; 2</samp>&rsquo;
-reverses the latter to get &lsquo;<samp>2 &lt; a</samp>&rsquo;, which then allows the
-combination &lsquo;<samp>a + 2 &lt; b + a</samp>&rsquo;, which the algebraic simplifications
-can reduce to &lsquo;<samp>2 &lt; b</samp>&rsquo;.
-</p>
-<p>Using <kbd>a M *</kbd>, <kbd>a M /</kbd>, <kbd>a M n</kbd>, or <kbd>a M &amp;</kbd> to negate
-or invert an inequality will reverse the direction of the inequality.
-Other adjustments to inequalities are <em>not</em> done automatically;
-<kbd>a M S</kbd> will change &lsquo;<samp>x&nbsp;&lt;&nbsp;y</samp>&rsquo;<!-- /@w --> to &lsquo;<samp>sin(x) &lt; sin(y)</samp>&rsquo; even
-though this is not true for all values of the variables.
-</p>
-<a name="index-H-a-M"></a>
-<a name="index-mapeqp"></a>
-<p>With the Hyperbolic flag, <kbd>H a M</kbd> [<code>mapeqp</code>] does a plain
-mapping operation without reversing the direction of any inequalities.
-Thus, <kbd>H a M &amp;</kbd> would change <kbd>x &gt; 2</kbd> to <kbd>1/x &gt; 0.5</kbd>.
-(This change is mathematically incorrect, but perhaps you were
-fixing an inequality which was already incorrect.)
-</p>
-<a name="index-I-a-M"></a>
-<a name="index-mapeqr"></a>
-<p>With the Inverse flag, <kbd>I a M</kbd> [<code>mapeqr</code>] always reverses
-the direction of the inequality.  You might use <kbd>I a M C</kbd> to
-change &lsquo;<samp>x &lt; y</samp>&rsquo; to &lsquo;<samp>cos(x) &gt; cos(y)</samp>&rsquo; if you know you are
-working with small positive angles.
-</p>
-<a name="index-a-b"></a>
-<a name="index-calc_002dsubstitute"></a>
-<a name="index-subst"></a>
-<p>The <kbd>a b</kbd> (<code>calc-substitute</code>) [<code>subst</code>] command substitutes
-all occurrences
-of some variable or sub-expression of an expression with a new
-sub-expression.  For example, substituting &lsquo;<samp>sin(x)</samp>&rsquo; with &lsquo;<samp>cos(y)</samp>&rsquo;
-in &lsquo;<samp>2 sin(x)^2 + x sin(x) + sin(2 x)</samp>&rsquo; produces
-&lsquo;<samp>2 cos(y)^2 + x cos(y) + sin(2&nbsp;x)<!-- /@w --></samp>&rsquo;.
-Note that this is a purely structural substitution; the lone &lsquo;<samp>x</samp>&rsquo; and
-the &lsquo;<samp>sin(2 x)</samp>&rsquo; stayed the same because they did not look like
-&lsquo;<samp>sin(x)</samp>&rsquo;.  See <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>, for a more general method for
-doing substitutions.
-</p>
-<p>The <kbd>a b</kbd> command normally prompts for two formulas, the old
-one and the new one.  If you enter a blank line for the first
-prompt, all three arguments are taken from the stack (new, then old,
-then target expression).  If you type an old formula but then enter a
-blank line for the new one, the new formula is taken from top-of-stack
-and the target from second-to-top.  If you answer both prompts, the
-target is taken from top-of-stack as usual.
-</p>
-<p>Note that <kbd>a b</kbd> has no understanding of commutativity or
-associativity.  The pattern &lsquo;<samp>x+y</samp>&rsquo; will not match the formula
-&lsquo;<samp>y+x</samp>&rsquo;.  Also, &lsquo;<samp>y+z</samp>&rsquo; will not match inside the formula &lsquo;<samp>x+y+z</samp>&rsquo;
-because the &lsquo;<samp>+</samp>&rsquo; operator is left-associative, so the &ldquo;deep
-structure&rdquo; of that formula is &lsquo;<samp>(x+y) + z</samp>&rsquo;.  Use <kbd>d U</kbd>
-(<code>calc-unformatted-language</code>) mode to see the true structure of
-a formula.  The rewrite rule mechanism, discussed later, does not have
-these limitations.
-</p>
-<p>As an algebraic function, <code>subst</code> takes three arguments:
-Target expression, old, new.  Note that <code>subst</code> is always
-evaluated immediately, even if its arguments are variables, so if
-you wish to put a call to <code>subst</code> onto the stack you must
-turn the default simplifications off first (with <kbd>m O</kbd>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Simplifying-Formulas.html#Simplifying-Formulas" accesskey="n" rel="next">Simplifying Formulas</a>, Previous: <a href="Selecting-Subformulas.html#Selecting-Subformulas" accesskey="p" rel="prev">Selecting Subformulas</a>, Up: <a href="Algebra.html#Algebra" accesskey="u" rel="up">Algebra</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Simplifying-Formulas.html#Simplifying-Formulas" accesskey="n"
+    rel="next">Simplifying Formulas</a>, Previous: <a href=
+    "Selecting-Subformulas.html#Selecting-Subformulas" accesskey=
+    "p" rel="prev">Selecting Subformulas</a>, Up: <a href=
+    "Algebra.html#Algebra" accesskey="u" rel="up">Algebra</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Algebraic-Manipulation-1" id=
+  "Algebraic-Manipulation-1"></a>
 
+  <h3 class="section">10.2 Algebraic Manipulation</h3>
 
+  <p>The commands in this section perform general-purpose algebraic
+  manipulations. They work on the whole formula at the top of the
+  stack (unless, of course, you have made a selection in that
+  formula).</p>
 
+  <p>Many algebra commands prompt for a variable name or formula.
+  If you answer the prompt with a blank line, the variable or
+  formula is taken from top-of-stack, and the normal argument for
+  the command is taken from the second-to-top stack
+  level.</p><a name="index-a-v" id="index-a-v"></a> <a name=
+  "index-calc_002dalg_002devaluate" id=
+  "index-calc_002dalg_002devaluate"></a>
+
+  <p>The <kbd>a v</kbd> (<code>calc-alg-evaluate</code>) command
+  performs the normal default simplifications on a formula; for
+  example, &lsquo;<samp>a - -b</samp>&rsquo; is changed to
+  &lsquo;<samp>a + b</samp>&rsquo;. These simplifications are
+  normally done automatically on all Calc results, so this command
+  is useful only if you have turned default simplifications off
+  with an <kbd>m O</kbd> command. See <a href=
+  "Simplification-Modes.html#Simplification-Modes">Simplification
+  Modes</a>.</p>
+
+  <p>It is often more convenient to type <kbd>=</kbd>, which is
+  like <kbd>a v</kbd> but which also substitutes stored values for
+  variables in the formula. Use <kbd>a v</kbd> if you want the
+  variables to ignore their stored values.</p>
+
+  <p>If you give a numeric prefix argument of 2 to <kbd>a v</kbd>,
+  it simplifies using Calc&rsquo;s algebraic simplifications; see
+  <a href=
+  "Simplifying-Formulas.html#Simplifying-Formulas">Simplifying
+  Formulas</a>. If you give a numeric prefix of 3 or more, it uses
+  Extended Simplification mode (<kbd>a e</kbd>).</p>
+
+  <p>If you give a negative prefix argument <i>-1</i>, <i>-2</i>,
+  or <i>-3</i>, it simplifies in the corresponding mode but only
+  works on the top-level function call of the formula. For example,
+  &lsquo;<samp>(2 + 3) * (2 + 3)</samp>&rsquo; will simplify to
+  &lsquo;<samp>(2 + 3)^2</samp>&rsquo;, without simplifying the
+  sub-formulas &lsquo;<samp>2 + 3</samp>&rsquo;. As another
+  example, typing <kbd>V R +</kbd> to sum the vector
+  &lsquo;<samp>[1, 2, 3, 4]</samp>&rsquo; produces the formula
+  &lsquo;<samp>reduce(add, [1, 2, 3, 4])</samp>&rsquo; in
+  No-Simplify mode. Using <kbd>a v</kbd> will evaluate this all the
+  way to 10; using <kbd>C-u - a v</kbd> will evaluate it only to
+  &lsquo;<samp>1 + 2 + 3 + 4</samp>&rsquo;. (See <a href=
+  "Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and
+  Mapping</a>.)</p><a name="index-evalv" id="index-evalv"></a>
+  <a name="index-evalvn" id="index-evalvn"></a>
+
+  <p>The <kbd>=</kbd> command corresponds to the <code>evalv</code>
+  function, and the related <kbd>N</kbd> command, which is like
+  <kbd>=</kbd> but temporarily disables Symbolic mode (<kbd>m
+  s</kbd>) during the evaluation, corresponds to the
+  <code>evalvn</code> function. (These commands interpret their
+  prefix arguments differently than <kbd>a v</kbd>; <kbd>=</kbd>
+  treats the prefix as the number of stack elements to evaluate at
+  once, and <kbd>N</kbd> treats it as a temporary different working
+  precision.)</p>
+
+  <p>The <code>evalvn</code> function can take an alternate working
+  precision as an optional second argument. This argument can be
+  either an integer, to set the precision absolutely, or a vector
+  containing a single integer, to adjust the precision relative to
+  the current precision. Note that <code>evalvn</code> with a
+  larger than current precision will do the calculation at this
+  higher precision, but the result will as usual be rounded back
+  down to the current precision afterward. For example,
+  &lsquo;<samp>evalvn(pi - 3.1415)</samp>&rsquo; at a precision of
+  12 will return &lsquo;<samp>9.265359e-5</samp>&rsquo;;
+  &lsquo;<samp>evalvn(pi - 3.1415, 30)</samp>&rsquo; will return
+  &lsquo;<samp>9.26535897932e-5</samp>&rsquo; (computing a 25-digit
+  result which is then rounded down to 12); and
+  &lsquo;<samp>evalvn(pi - 3.1415, [-2])</samp>&rsquo; will return
+  &lsquo;<samp>9.2654e-5</samp>&rsquo;.</p><a name="index-a-_0022"
+  id="index-a-_0022"></a> <a name=
+  "index-calc_002dexpand_002dformula" id=
+  "index-calc_002dexpand_002dformula"></a>
+
+  <p>The <kbd>a "</kbd> (<code>calc-expand-formula</code>) command
+  expands functions into their defining formulas wherever possible.
+  For example, &lsquo;<samp>deg(x^2)</samp>&rsquo; is changed to
+  &lsquo;<samp>180 x^2 / pi</samp>&rsquo;. Most functions, like
+  <code>sin</code> and <code>gcd</code>, are not defined by simple
+  formulas and so are unaffected by this command. One important
+  class of functions which <em>can</em> be expanded is the
+  user-defined functions created by the <kbd>Z F</kbd> command. See
+  <a href=
+  "Algebraic-Definitions.html#Algebraic-Definitions">Algebraic
+  Definitions</a>. Other functions which <kbd>a "</kbd> can expand
+  include the probability distribution functions, most of the
+  financial functions, and the hyperbolic and inverse hyperbolic
+  functions. A numeric prefix argument affects <kbd>a "</kbd> in
+  the same way as it does <kbd>a v</kbd>: A positive argument
+  expands all functions in the formula and then simplifies in
+  various ways; a negative argument expands and simplifies only the
+  top-level function call.</p><a name="index-a-M" id=
+  "index-a-M"></a> <a name="index-calc_002dmap_002dequation" id=
+  "index-calc_002dmap_002dequation"></a> <a name="index-mapeq" id=
+  "index-mapeq"></a>
+
+  <p>The <kbd>a M</kbd> (<code>calc-map-equation</code>)
+  [<code>mapeq</code>] command applies a given function or operator
+  to one or more equations. It is analogous to <kbd>V M</kbd>,
+  which operates on vectors instead of equations. see <a href=
+  "Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and
+  Mapping</a>. For example, <kbd>a M S</kbd> changes &lsquo;<samp>x
+  = y+1</samp>&rsquo; to &lsquo;<samp>sin(x) =
+  sin(y+1)</samp>&rsquo;, and <kbd>a M +</kbd> with &lsquo;<samp>x
+  = y+1</samp>&rsquo; and &lsquo;<samp>6</samp>&rsquo; on the stack
+  produces &lsquo;<samp>x+6 = y+7</samp>&rsquo;. With two equations
+  on the stack, <kbd>a M +</kbd> would add the lefthand sides
+  together and the righthand sides together to get the two
+  respective sides of a new equation.</p>
+
+  <p>Mapping also works on inequalities. Mapping two similar
+  inequalities produces another inequality of the same type.
+  Mapping an inequality with an equation produces an inequality of
+  the same type. Mapping a &lsquo;<samp>&lt;=</samp>&rsquo; with a
+  &lsquo;<samp>&lt;</samp>&rsquo; or &lsquo;<samp>!=</samp>&rsquo;
+  (not-equal) produces a &lsquo;<samp>&lt;</samp>&rsquo;. If
+  inequalities with opposite direction (e.g.,
+  &lsquo;<samp>&lt;</samp>&rsquo; and
+  &lsquo;<samp>&gt;</samp>&rsquo;) are mapped, the direction of the
+  second inequality is reversed to match the first: Using <kbd>a M
+  +</kbd> on &lsquo;<samp>a &lt; b</samp>&rsquo; and &lsquo;<samp>a
+  &gt; 2</samp>&rsquo; reverses the latter to get &lsquo;<samp>2
+  &lt; a</samp>&rsquo;, which then allows the combination
+  &lsquo;<samp>a + 2 &lt; b + a</samp>&rsquo;, which the algebraic
+  simplifications can reduce to &lsquo;<samp>2 &lt;
+  b</samp>&rsquo;.</p>
+
+  <p>Using <kbd>a M *</kbd>, <kbd>a M /</kbd>, <kbd>a M n</kbd>, or
+  <kbd>a M &amp;</kbd> to negate or invert an inequality will
+  reverse the direction of the inequality. Other adjustments to
+  inequalities are <em>not</em> done automatically; <kbd>a M
+  S</kbd> will change &lsquo;<samp>x&nbsp;&lt;&nbsp;y</samp>&rsquo;
+  <!-- /@w --> to &lsquo;<samp>sin(x) &lt; sin(y)</samp>&rsquo;
+  even though this is not true for all values of the
+  variables.</p><a name="index-H-a-M" id="index-H-a-M"></a>
+  <a name="index-mapeqp" id="index-mapeqp"></a>
+
+  <p>With the Hyperbolic flag, <kbd>H a M</kbd>
+  [<code>mapeqp</code>] does a plain mapping operation without
+  reversing the direction of any inequalities. Thus, <kbd>H a M
+  &amp;</kbd> would change <kbd>x &gt; 2</kbd> to <kbd>1/x &gt;
+  0.5</kbd>. (This change is mathematically incorrect, but perhaps
+  you were fixing an inequality which was already
+  incorrect.)</p><a name="index-I-a-M" id="index-I-a-M"></a>
+  <a name="index-mapeqr" id="index-mapeqr"></a>
+
+  <p>With the Inverse flag, <kbd>I a M</kbd> [<code>mapeqr</code>]
+  always reverses the direction of the inequality. You might use
+  <kbd>I a M C</kbd> to change &lsquo;<samp>x &lt; y</samp>&rsquo;
+  to &lsquo;<samp>cos(x) &gt; cos(y)</samp>&rsquo; if you know you
+  are working with small positive angles.</p><a name="index-a-b"
+  id="index-a-b"></a> <a name="index-calc_002dsubstitute" id=
+  "index-calc_002dsubstitute"></a> <a name="index-subst" id=
+  "index-subst"></a>
+
+  <p>The <kbd>a b</kbd> (<code>calc-substitute</code>)
+  [<code>subst</code>] command substitutes all occurrences of some
+  variable or sub-expression of an expression with a new
+  sub-expression. For example, substituting
+  &lsquo;<samp>sin(x)</samp>&rsquo; with
+  &lsquo;<samp>cos(y)</samp>&rsquo; in &lsquo;<samp>2 sin(x)^2 + x
+  sin(x) + sin(2 x)</samp>&rsquo; produces &lsquo;<samp>2 cos(y)^2
+  + x cos(y) + sin(2&nbsp;x)<!-- /@w --></samp>&rsquo;. Note that
+  this is a purely structural substitution; the lone
+  &lsquo;<samp>x</samp>&rsquo; and the &lsquo;<samp>sin(2
+  x)</samp>&rsquo; stayed the same because they did not look like
+  &lsquo;<samp>sin(x)</samp>&rsquo;. See <a href=
+  "Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>, for a more
+  general method for doing substitutions.</p>
+
+  <p>The <kbd>a b</kbd> command normally prompts for two formulas,
+  the old one and the new one. If you enter a blank line for the
+  first prompt, all three arguments are taken from the stack (new,
+  then old, then target expression). If you type an old formula but
+  then enter a blank line for the new one, the new formula is taken
+  from top-of-stack and the target from second-to-top. If you
+  answer both prompts, the target is taken from top-of-stack as
+  usual.</p>
+
+  <p>Note that <kbd>a b</kbd> has no understanding of commutativity
+  or associativity. The pattern &lsquo;<samp>x+y</samp>&rsquo; will
+  not match the formula &lsquo;<samp>y+x</samp>&rsquo;. Also,
+  &lsquo;<samp>y+z</samp>&rsquo; will not match inside the formula
+  &lsquo;<samp>x+y+z</samp>&rsquo; because the
+  &lsquo;<samp>+</samp>&rsquo; operator is left-associative, so the
+  &ldquo;deep structure&rdquo; of that formula is
+  &lsquo;<samp>(x+y) + z</samp>&rsquo;. Use <kbd>d U</kbd>
+  (<code>calc-unformatted-language</code>) mode to see the true
+  structure of a formula. The rewrite rule mechanism, discussed
+  later, does not have these limitations.</p>
+
+  <p>As an algebraic function, <code>subst</code> takes three
+  arguments: Target expression, old, new. Note that
+  <code>subst</code> is always evaluated immediately, even if its
+  arguments are variables, so if you wish to put a call to
+  <code>subst</code> onto the stack you must turn the default
+  simplifications off first (with <kbd>m O</kbd>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Simplifying-Formulas.html#Simplifying-Formulas" accesskey="n"
+    rel="next">Simplifying Formulas</a>, Previous: <a href=
+    "Selecting-Subformulas.html#Selecting-Subformulas" accesskey=
+    "p" rel="prev">Selecting Subformulas</a>, Up: <a href=
+    "Algebra.html#Algebra" accesskey="u" rel="up">Algebra</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

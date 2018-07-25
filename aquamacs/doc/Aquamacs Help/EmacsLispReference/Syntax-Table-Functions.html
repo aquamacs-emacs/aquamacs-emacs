@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,199 +19,328 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Syntax Table Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Syntax Table Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Syntax Table Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Syntax-Tables.html#Syntax-Tables" rel="up" title="Syntax Tables">
-<link href="Syntax-Properties.html#Syntax-Properties" rel="next" title="Syntax Properties">
-<link href="Syntax-Flags.html#Syntax-Flags" rel="prev" title="Syntax Flags">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Syntax Table
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Syntax Table Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Syntax Table Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Syntax-Tables.html#Syntax-Tables" rel="up" title=
+  "Syntax Tables" />
+  <link href="Syntax-Properties.html#Syntax-Properties" rel="next"
+  title="Syntax Properties" />
+  <link href="Syntax-Flags.html#Syntax-Flags" rel="prev" title=
+  "Syntax Flags" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Syntax-Table-Functions" id="Syntax-Table-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Syntax-Properties.html#Syntax-Properties"
+    accesskey="n" rel="next">Syntax Properties</a>, Previous:
+    <a href="Syntax-Descriptors.html#Syntax-Descriptors" accesskey=
+    "p" rel="prev">Syntax Descriptors</a>, Up: <a href=
+    "Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Syntax-Table-Functions-1" id=
+  "Syntax-Table-Functions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Syntax-Table-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Syntax-Properties.html#Syntax-Properties" accesskey="n" rel="next">Syntax Properties</a>, Previous: <a href="Syntax-Descriptors.html#Syntax-Descriptors" accesskey="p" rel="prev">Syntax Descriptors</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Syntax-Table-Functions-1"></a>
-<h3 class="section">34.3 Syntax Table Functions</h3>
+  <h3 class="section">34.3 Syntax Table Functions</h3>
 
-<p>In this section we describe functions for creating, accessing and
-altering syntax tables.
-</p>
-<dl>
-<dt><a name="index-make_002dsyntax_002dtable"></a>Function: <strong>make-syntax-table</strong> <em>&amp;optional table</em></dt>
-<dd><p>This function creates a new syntax table.  If <var>table</var> is
-non-<code>nil</code>, the parent of the new syntax table is <var>table</var>;
-otherwise, the parent is the standard syntax table.
-</p>
-<p>In the new syntax table, all characters are initially given the
-&ldquo;inherit&rdquo; (&lsquo;<samp>@</samp>&rsquo;) syntax class, i.e., their syntax is inherited
-from the parent table (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).
-</p></dd></dl>
+  <p>In this section we describe functions for creating, accessing
+  and altering syntax tables.</p>
 
-<dl>
-<dt><a name="index-copy_002dsyntax_002dtable"></a>Function: <strong>copy-syntax-table</strong> <em>&amp;optional table</em></dt>
-<dd><p>This function constructs a copy of <var>table</var> and returns it.  If
-<var>table</var> is omitted or <code>nil</code>, it returns a copy of the
-standard syntax table.  Otherwise, an error is signaled if <var>table</var>
-is not a syntax table.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-make_002dsyntax_002dtable" id=
+    "index-make_002dsyntax_002dtable"></a>Function:
+    <strong>make-syntax-table</strong> <em>&amp;optional
+    table</em></dt>
 
-<dl>
-<dt><a name="index-modify_002dsyntax_002dentry"></a>Command: <strong>modify-syntax-entry</strong> <em>char syntax-descriptor  &amp;optional table</em></dt>
-<dd><a name="index-syntax-entry_002c-setting"></a>
-<p>This function sets the syntax entry for <var>char</var> according to
-<var>syntax-descriptor</var>.  <var>char</var> must be a character, or a cons
-cell of the form <code>(<var>min</var> . <var>max</var>)</code>; in the latter case,
-the function sets the syntax entries for all characters in the range
-between <var>min</var> and <var>max</var>, inclusive.
-</p>
-<p>The syntax is changed only for <var>table</var>, which defaults to the
-current buffer&rsquo;s syntax table, and not in any other syntax table.
-</p>
-<p>The argument <var>syntax-descriptor</var> is a syntax descriptor, i.e., a
-string whose first character is a syntax class designator and whose
-second and subsequent characters optionally specify a matching
-character and syntax flags.  See <a href="Syntax-Descriptors.html#Syntax-Descriptors">Syntax Descriptors</a>.  An error is
-signaled if <var>syntax-descriptor</var> is not a valid syntax descriptor.
-</p>
-<p>This function always returns <code>nil</code>.  The old syntax information in
-the table for this character is discarded.
-</p>
-<div class="example">
-<pre class="example"><span class="roman">Examples:</span>
-</pre><pre class="example">
-;; <span class="roman">Put the space character in class whitespace.</span>
-(modify-syntax-entry ?\s &quot; &quot;)
+    <dd>
+      <p>This function creates a new syntax table. If
+      <var>table</var> is non-<code>nil</code>, the parent of the
+      new syntax table is <var>table</var>; otherwise, the parent
+      is the standard syntax table.</p>
+
+      <p>In the new syntax table, all characters are initially
+      given the &ldquo;inherit&rdquo;
+      (&lsquo;<samp>@</samp>&rsquo;) syntax class, i.e., their
+      syntax is inherited from the parent table (see <a href=
+      "Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class
+      Table</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-copy_002dsyntax_002dtable" id=
+    "index-copy_002dsyntax_002dtable"></a>Function:
+    <strong>copy-syntax-table</strong> <em>&amp;optional
+    table</em></dt>
+
+    <dd>
+      <p>This function constructs a copy of <var>table</var> and
+      returns it. If <var>table</var> is omitted or
+      <code>nil</code>, it returns a copy of the standard syntax
+      table. Otherwise, an error is signaled if <var>table</var> is
+      not a syntax table.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-modify_002dsyntax_002dentry" id=
+    "index-modify_002dsyntax_002dentry"></a>Command:
+    <strong>modify-syntax-entry</strong> <em>char syntax-descriptor
+    &amp;optional table</em></dt>
+
+    <dd>
+      <a name="index-syntax-entry_002c-setting" id=
+      "index-syntax-entry_002c-setting"></a>
+
+      <p>This function sets the syntax entry for <var>char</var>
+      according to <var>syntax-descriptor</var>. <var>char</var>
+      must be a character, or a cons cell of the form
+      <code>(<var>min</var> . <var>max</var>)</code>; in the latter
+      case, the function sets the syntax entries for all characters
+      in the range between <var>min</var> and <var>max</var>,
+      inclusive.</p>
+
+      <p>The syntax is changed only for <var>table</var>, which
+      defaults to the current buffer&rsquo;s syntax table, and not
+      in any other syntax table.</p>
+
+      <p>The argument <var>syntax-descriptor</var> is a syntax
+      descriptor, i.e., a string whose first character is a syntax
+      class designator and whose second and subsequent characters
+      optionally specify a matching character and syntax flags. See
+      <a href="Syntax-Descriptors.html#Syntax-Descriptors">Syntax
+      Descriptors</a>. An error is signaled if
+      <var>syntax-descriptor</var> is not a valid syntax
+      descriptor.</p>
+
+      <p>This function always returns <code>nil</code>. The old
+      syntax information in the table for this character is
+      discarded.</p>
+
+      <div class="example">
+        <pre class="example">
+<span class="roman">Examples:</span>
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">Put the space character in class whitespace.</span>
+(modify-syntax-entry ?\s " ")
      &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Make &lsquo;<samp>$</samp>&rsquo; an open parenthesis character,</span>
-;;   <span class="roman">with &lsquo;<samp>^</samp>&rsquo; as its matching close.</span>
-(modify-syntax-entry ?$ &quot;(^&quot;)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">Make &lsquo;<samp>$</samp>&rsquo; an open parenthesis character,</span>
+;;   <span class=
+"roman">with &lsquo;<samp>^</samp>&rsquo; as its matching close.</span>
+(modify-syntax-entry ?$ "(^")
      &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Make &lsquo;<samp>^</samp>&rsquo; a close parenthesis character,</span>
-;;   <span class="roman">with &lsquo;<samp>$</samp>&rsquo; as its matching open.</span>
-(modify-syntax-entry ?^ &quot;)$&quot;)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">Make &lsquo;<samp>^</samp>&rsquo; a close parenthesis character,</span>
+;;   <span class=
+"roman">with &lsquo;<samp>$</samp>&rsquo; as its matching open.</span>
+(modify-syntax-entry ?^ ")$")
      &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Make &lsquo;<samp>/</samp>&rsquo; a punctuation character,</span>
-;;   <span class="roman">the first character of a start-comment sequence,</span>
-;;   <span class="roman">and the second character of an end-comment sequence.</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">Make &lsquo;<samp>/</samp>&rsquo; a punctuation character,</span>
+;;   <span class=
+"roman">the first character of a start-comment sequence,</span>
+;;   <span class=
+"roman">and the second character of an end-comment sequence.</span>
 ;;   <span class="roman">This is used in C mode.</span>
-(modify-syntax-entry ?/ &quot;. 14&quot;)
+(modify-syntax-entry ?/ ". 14")
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-char_002dsyntax"></a>Function: <strong>char-syntax</strong> <em>character</em></dt>
-<dd><p>This function returns the syntax class of <var>character</var>, represented
-by its designator character (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).  This
-returns <em>only</em> the class, not its matching character or syntax
-flags.
-</p>
-<p>The following examples apply to C mode.  (We use <code>string</code> to make
-it easier to see the character returned by <code>char-syntax</code>.)
-</p>
-<div class="example">
-<pre class="example">;; Space characters have whitespace syntax class.
+  <dl>
+    <dt><a name="index-char_002dsyntax" id=
+    "index-char_002dsyntax"></a>Function:
+    <strong>char-syntax</strong> <em>character</em></dt>
+
+    <dd>
+      <p>This function returns the syntax class of
+      <var>character</var>, represented by its designator character
+      (see <a href=
+      "Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class
+      Table</a>). This returns <em>only</em> the class, not its
+      matching character or syntax flags.</p>
+
+      <p>The following examples apply to C mode. (We use
+      <code>string</code> to make it easier to see the character
+      returned by <code>char-syntax</code>.)</p>
+
+      <div class="example">
+        <pre class="example">
+;; Space characters have whitespace syntax class.
 (string (char-syntax ?\s))
-     &rArr; &quot; &quot;
-</pre><pre class="example">
-</pre><pre class="example">;; Forward slash characters have punctuation syntax.
+     &rArr; " "
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; Forward slash characters have punctuation syntax.
 ;; Note that this <code>char-syntax</code> call does not reveal
 ;; that it is also part of comment-start and -end sequences.
 (string (char-syntax ?/))
-     &rArr; &quot;.&quot;
-</pre><pre class="example">
-</pre><pre class="example">;; Open parenthesis characters have open parenthesis syntax.
+     &rArr; "."
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; Open parenthesis characters have open parenthesis syntax.
 ;; Note that this <code>char-syntax</code> call does not reveal that
 ;; it has a matching character, &lsquo;<samp>)</samp>&rsquo;.
 (string (char-syntax ?\())
-     &rArr; &quot;(&quot;
-</pre></div>
+     &rArr; "("
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-</dd></dl>
+  <dl>
+    <dt><a name="index-set_002dsyntax_002dtable" id=
+    "index-set_002dsyntax_002dtable"></a>Function:
+    <strong>set-syntax-table</strong> <em>table</em></dt>
 
-<dl>
-<dt><a name="index-set_002dsyntax_002dtable"></a>Function: <strong>set-syntax-table</strong> <em>table</em></dt>
-<dd><p>This function makes <var>table</var> the syntax table for the current buffer.
-It returns <var>table</var>.
-</p></dd></dl>
+    <dd>
+      <p>This function makes <var>table</var> the syntax table for
+      the current buffer. It returns <var>table</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-syntax_002dtable"></a>Function: <strong>syntax-table</strong></dt>
-<dd><p>This function returns the current syntax table, which is the table for
-the current buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-syntax_002dtable" id=
+    "index-syntax_002dtable"></a>Function:
+    <strong>syntax-table</strong></dt>
 
-<dl>
-<dt><a name="index-describe_002dsyntax"></a>Command: <strong>describe-syntax</strong> <em>&amp;optional buffer</em></dt>
-<dd><p>This command displays the contents of the syntax table of
-<var>buffer</var> (by default, the current buffer) in a help buffer.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the current syntax table, which is
+      the table for the current buffer.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-with_002dsyntax_002dtable"></a>Macro: <strong>with-syntax-table</strong> <em>table body&hellip;</em></dt>
-<dd><p>This macro executes <var>body</var> using <var>table</var> as the current syntax
-table.  It returns the value of the last form in <var>body</var>, after
-restoring the old current syntax table.
-</p>
-<p>Since each buffer has its own current syntax table, we should make that
-more precise: <code>with-syntax-table</code> temporarily alters the current
-syntax table of whichever buffer is current at the time the macro
-execution starts.  Other buffers are not affected.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-describe_002dsyntax" id=
+    "index-describe_002dsyntax"></a>Command:
+    <strong>describe-syntax</strong> <em>&amp;optional
+    buffer</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Syntax-Properties.html#Syntax-Properties" accesskey="n" rel="next">Syntax Properties</a>, Previous: <a href="Syntax-Descriptors.html#Syntax-Descriptors" accesskey="p" rel="prev">Syntax Descriptors</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This command displays the contents of the syntax table of
+      <var>buffer</var> (by default, the current buffer) in a help
+      buffer.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-with_002dsyntax_002dtable" id=
+    "index-with_002dsyntax_002dtable"></a>Macro:
+    <strong>with-syntax-table</strong> <em>table
+    body&hellip;</em></dt>
 
+    <dd>
+      <p>This macro executes <var>body</var> using <var>table</var>
+      as the current syntax table. It returns the value of the last
+      form in <var>body</var>, after restoring the old current
+      syntax table.</p>
 
+      <p>Since each buffer has its own current syntax table, we
+      should make that more precise: <code>with-syntax-table</code>
+      temporarily alters the current syntax table of whichever
+      buffer is current at the time the macro execution starts.
+      Other buffers are not affected.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Syntax-Properties.html#Syntax-Properties"
+    accesskey="n" rel="next">Syntax Properties</a>, Previous:
+    <a href="Syntax-Descriptors.html#Syntax-Descriptors" accesskey=
+    "p" rel="prev">Syntax Descriptors</a>, Up: <a href=
+    "Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

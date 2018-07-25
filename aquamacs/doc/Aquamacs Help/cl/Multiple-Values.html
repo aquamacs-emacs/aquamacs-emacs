@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Multiple Values - Common Lisp Extensions</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Common Lisp Extensions">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Control-Structure.html#Control-Structure" title="Control Structure">
-<link rel="prev" href="Loop-Facility.html#Loop-Facility" title="Loop Facility">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Multiple Values - Common Lisp Extensions</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Common Lisp Extensions" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Control-Structure.html#Control-Structure"
+  title="Control Structure" />
+  <link rel="prev" href="Loop-Facility.html#Loop-Facility" title=
+  "Loop Facility" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -26,8 +34,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,58 +47,79 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Multiple-Values"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Loop-Facility.html#Loop-Facility">Loop Facility</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structure.html#Control-Structure">Control Structure</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Multiple-Values" id="Multiple-Values"></a>
 
-<h3 class="section">5.8 Multiple Values</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Loop-Facility.html#Loop-Facility">Loop Facility</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Control-Structure.html#Control-Structure">Control
+    Structure</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">Common Lisp functions can return zero or more results.  Emacs Lisp
-functions, by contrast, always return exactly one result.  This
-package makes no attempt to emulate Common Lisp multiple return
-values; Emacs versions of Common Lisp functions that return more
-than one value either return just the first value (as in
-<code>compiler-macroexpand</code>) or return a list of values (as in
-<code>get-setf-method</code>).  This package <em>does</em> define placeholders
-for the Common Lisp functions that work with multiple values, but
-in Emacs Lisp these functions simply operate on lists instead. 
-The <code>values</code> form, for example, is a synonym for <code>list</code>
-in Emacs.
+  <h3 class="section">5.8 Multiple Values</h3>
 
-<div class="defun">
-&mdash; Special Form: <b>multiple-value-bind</b> (<var>var<small class="dots">...</small></var>)<var> values-form forms<small class="dots">...</small><a name="index-multiple_002dvalue_002dbind-53"></a></var><br>
-<blockquote><p>This form evaluates <var>values-form</var>, which must return a list of
-values.  It then binds the <var>var</var>s to these respective values,
-as if by <code>let</code>, and then executes the body <var>forms</var>. 
-If there are more <var>var</var>s than values, the extra <var>var</var>s
-are bound to <code>nil</code>.  If there are fewer <var>var</var>s than
-values, the excess values are ignored. 
-</p></blockquote></div>
+  <p class="noindent">Common Lisp functions can return zero or more
+  results. Emacs Lisp functions, by contrast, always return exactly
+  one result. This package makes no attempt to emulate Common Lisp
+  multiple return values; Emacs versions of Common Lisp functions
+  that return more than one value either return just the first
+  value (as in <code>compiler-macroexpand</code>) or return a list
+  of values (as in <code>get-setf-method</code>). This package
+  <em>does</em> define placeholders for the Common Lisp functions
+  that work with multiple values, but in Emacs Lisp these functions
+  simply operate on lists instead. The <code>values</code> form,
+  for example, is a synonym for <code>list</code> in Emacs.</p>
 
-<div class="defun">
-&mdash; Special Form: <b>multiple-value-setq</b> (<var>var<small class="dots">...</small></var>)<var> form<a name="index-multiple_002dvalue_002dsetq-54"></a></var><br>
-<blockquote><p>This form evaluates <var>form</var>, which must return a list of values. 
-It then sets the <var>var</var>s to these respective values, as if by
-<code>setq</code>.  Extra <var>var</var>s or values are treated the same as
-in <code>multiple-value-bind</code>. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Special Form: <b>multiple-value-bind</b>
+    (<var>var<small class="dots">...</small></var>)
+    <var>values-form forms<small class="dots">...</small><a name=
+    "index-multiple_002dvalue_002dbind-53" id=
+    "index-multiple_002dvalue_002dbind-53"></a></var><br />
 
-   <p>The older Quiroz package attempted a more faithful (but still
-imperfect) emulation of Common Lisp multiple values.  The old
-method &ldquo;usually&rdquo; simulated true multiple values quite well,
-but under certain circumstances would leave spurious return
-values in memory where a later, unrelated <code>multiple-value-bind</code>
-form would see them.
+    <blockquote>
+      <p>This form evaluates <var>values-form</var>, which must
+      return a list of values. It then binds the <var>var</var>s to
+      these respective values, as if by <code>let</code>, and then
+      executes the body <var>forms</var>. If there are more
+      <var>var</var>s than values, the extra <var>var</var>s are
+      bound to <code>nil</code>. If there are fewer <var>var</var>s
+      than values, the excess values are ignored.</p>
+    </blockquote>
+  </div>
 
-   <p>Since a perfect emulation is not feasible in Emacs Lisp, this
-package opts to keep it as simple and predictable as possible.
+  <div class="defun">
+    &mdash; Special Form: <b>multiple-value-setq</b>
+    (<var>var<small class="dots">...</small></var>)
+    <var>form<a name="index-multiple_002dvalue_002dsetq-54" id=
+    "index-multiple_002dvalue_002dsetq-54"></a></var><br />
 
-   </body></html>
+    <blockquote>
+      <p>This form evaluates <var>form</var>, which must return a
+      list of values. It then sets the <var>var</var>s to these
+      respective values, as if by <code>setq</code>. Extra
+      <var>var</var>s or values are treated the same as in
+      <code>multiple-value-bind</code>.</p>
+    </blockquote>
+  </div>
 
+  <p>The older Quiroz package attempted a more faithful (but still
+  imperfect) emulation of Common Lisp multiple values. The old
+  method &ldquo;usually&rdquo; simulated true multiple values quite
+  well, but under certain circumstances would leave spurious return
+  values in memory where a later, unrelated
+  <code>multiple-value-bind</code> form would see them.</p>
+
+  <p>Since a perfect emulation is not feasible in Emacs Lisp, this
+  package opts to keep it as simple and predictable as
+  possible.</p>
+</body>
+</html>

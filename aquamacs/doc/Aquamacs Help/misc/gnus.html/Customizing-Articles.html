@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,318 +14,463 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Customizing Articles</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Customizing Articles">
-<meta name="keywords" content="Gnus Manual: Customizing Articles">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Article-Buffer.html#Article-Buffer" rel="up" title="Article Buffer">
-<link href="Article-Keymap.html#Article-Keymap" rel="next" title="Article Keymap">
-<link href="HTML.html#HTML" rel="prev" title="HTML">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Customizing Articles</title>
+  <meta name="description" content=
+  "Gnus Manual: Customizing Articles" />
+  <meta name="keywords" content=
+  "Gnus Manual: Customizing Articles" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Article-Buffer.html#Article-Buffer" rel="up" title=
+  "Article Buffer" />
+  <link href="Article-Keymap.html#Article-Keymap" rel="next" title=
+  "Article Keymap" />
+  <link href="HTML.html#HTML" rel="prev" title="HTML" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Customizing-Articles"></a>
-<div class="header">
-<p>
-Next: <a href="Article-Keymap.html#Article-Keymap" accesskey="n" rel="next">Article Keymap</a>, Previous: <a href="HTML.html#HTML" accesskey="p" rel="prev">HTML</a>, Up: <a href="Article-Buffer.html#Article-Buffer" accesskey="u" rel="up">Article Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Customizing-Articles-1"></a>
-<h3 class="section">4.4 Customizing Articles</h3>
-<a name="index-article-customization"></a>
+<body lang="en" xml:lang="en">
+  <a name="Customizing-Articles" id="Customizing-Articles"></a>
 
-<p>A slew of functions for customizing how the articles are to look like
-exist.  You can call these functions interactively
-(see <a href="Article-Washing.html#Article-Washing">Article Washing</a>), or you can have them
-called automatically when you select the articles.
-</p>
-<p>To have them called automatically, you should set the corresponding
-&ldquo;treatment&rdquo; variable.  For instance, to have headers hidden, you&rsquo;d set
-<code>gnus-treat-hide-headers</code>.  Below is a list of variables that can
-be set, but first we discuss the values these variables can have.
-</p>
-<p>Note: Some values, while valid, make little sense.  Check the list below
-for sensible values.
-</p>
-<ol>
-<li> <code>nil</code>: Don&rsquo;t do this treatment.
+  <div class="header">
+    <p>Next: <a href="Article-Keymap.html#Article-Keymap"
+    accesskey="n" rel="next">Article Keymap</a>, Previous: <a href=
+    "HTML.html#HTML" accesskey="p" rel="prev">HTML</a>, Up:
+    <a href="Article-Buffer.html#Article-Buffer" accesskey="u" rel=
+    "up">Article Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Customizing-Articles-1" id="Customizing-Articles-1"></a>
 
-</li><li> <code>t</code>: Do this treatment on all body parts.
+  <h3 class="section">4.4 Customizing Articles</h3><a name=
+  "index-article-customization" id=
+  "index-article-customization"></a>
 
-</li><li> <code>head</code>: Do the treatment on the headers.
+  <p>A slew of functions for customizing how the articles are to
+  look like exist. You can call these functions interactively (see
+  <a href="Article-Washing.html#Article-Washing">Article
+  Washing</a>), or you can have them called automatically when you
+  select the articles.</p>
 
-</li><li> <code>first</code>: Do this treatment on the first body part.
+  <p>To have them called automatically, you should set the
+  corresponding &ldquo;treatment&rdquo; variable. For instance, to
+  have headers hidden, you&rsquo;d set
+  <code>gnus-treat-hide-headers</code>. Below is a list of
+  variables that can be set, but first we discuss the values these
+  variables can have.</p>
 
-</li><li> <code>last</code>: Do this treatment on the last body part.
+  <p>Note: Some values, while valid, make little sense. Check the
+  list below for sensible values.</p>
 
-</li><li> An integer: Do this treatment on all body parts that have a length less
-than this number.
+  <ol>
+    <li><code>nil</code>: Don&rsquo;t do this treatment.</li>
 
-</li><li> A list of strings: Do this treatment on all body parts that are in
-articles that are read in groups that have names that match one of the
-regexps in the list.
+    <li><code>t</code>: Do this treatment on all body parts.</li>
 
-</li><li> A list where the first element is not a string:
+    <li><code>head</code>: Do the treatment on the headers.</li>
 
-<p>The list is evaluated recursively.  The first element of the list is a
-predicate.  The following predicates are recognized: <code>or</code>,
-<code>and</code>, <code>not</code> and <code>typep</code>.  Here&rsquo;s an example:
-</p>
-<div class="lisp">
-<pre class="lisp">(or last
-    (typep &quot;text/x-vcard&quot;))
-</pre></div>
+    <li><code>first</code>: Do this treatment on the first body
+    part.</li>
 
-</li><li> A function: the function is called with no arguments and should return
-<code>nil</code> or non-<code>nil</code>.  The current article is available in the
-buffer named by <code>gnus-article-buffer</code>.
+    <li><code>last</code>: Do this treatment on the last body
+    part.</li>
 
-</li></ol>
+    <li>An integer: Do this treatment on all body parts that have a
+    length less than this number.</li>
 
-<p>You may have noticed that the word <em>part</em> is used here.  This refers
-to the fact that some messages are <acronym>MIME</acronym> multipart articles that may
-be divided into several parts.  Articles that are not multiparts are
-considered to contain just a single part.
-</p>
-<a name="index-gnus_002darticle_002dtreat_002dtypes"></a>
-<p>Are the treatments applied to all sorts of multipart parts?  Yes, if you
-want to, but by default, only &lsquo;<samp>text/plain</samp>&rsquo; parts are given the
-treatment.  This is controlled by the <code>gnus-article-treat-types</code>
-variable, which is a list of regular expressions that are matched to the
-type of the part.  This variable is ignored if the value of the
-controlling variable is a predicate list, as described above.
-</p>
+    <li>A list of strings: Do this treatment on all body parts that
+    are in articles that are read in groups that have names that
+    match one of the regexps in the list.</li>
 
-<p>The following treatment options are available.  The easiest way to
-customize this is to examine the <code>gnus-article-treat</code> customization
-group.  Values in parenthesis are suggested sensible values.  Others are
-possible but those listed are probably sufficient for most people.
-</p>
-<dl compact="compact">
-<dt><code>gnus-treat-buttonize (t, integer)</code></dt>
-<dt><code>gnus-treat-buttonize-head (head)</code></dt>
-<dd>
-<p>See <a href="Article-Buttons.html#Article-Buttons">Article Buttons</a>.
-</p>
-</dd>
-<dt><code>gnus-treat-capitalize-sentences (t, integer)</code></dt>
-<dt><code>gnus-treat-overstrike (t, integer)</code></dt>
-<dt><code>gnus-treat-strip-cr (t, integer)</code></dt>
-<dt><code>gnus-treat-strip-headers-in-body (t, integer)</code></dt>
-<dt><code>gnus-treat-strip-leading-blank-lines (t, first, integer)</code></dt>
-<dt><code>gnus-treat-strip-multiple-blank-lines (t, integer)</code></dt>
-<dt><code>gnus-treat-strip-pem (t, last, integer)</code></dt>
-<dt><code>gnus-treat-strip-trailing-blank-lines (t, last, integer)</code></dt>
-<dt><code>gnus-treat-unsplit-urls (t, integer)</code></dt>
-<dt><code>gnus-treat-wash-html (t, integer)</code></dt>
-<dd>
-<p>See <a href="Article-Washing.html#Article-Washing">Article Washing</a>.
-</p>
-</dd>
-<dt><code>gnus-treat-date (head)</code></dt>
-<dd>
-<p>This will transform/add date headers according to the
-<code>gnus-article-date-headers</code> variable.  This is a list of Date
-headers to display.  The formats available are:
-</p>
-<dl compact="compact">
-<dt><code>ut</code></dt>
-<dd><p>Universal time, aka GMT, aka ZULU.
-</p>
-</dd>
-<dt><code>local</code></dt>
-<dd><p>The user&rsquo;s local time zone.
-</p>
-</dd>
-<dt><code>english</code></dt>
-<dd><p>A semi-readable English sentence.
-</p>
-</dd>
-<dt><code>lapsed</code></dt>
-<dd><p>The time elapsed since the message was posted.
-</p>
-</dd>
-<dt><code>combined-lapsed</code></dt>
-<dd><p>Both the original date header and a (shortened) elapsed time.
-</p>
-</dd>
-<dt><code>original</code></dt>
-<dd><p>The original date header.
-</p>
-</dd>
-<dt><code>iso8601</code></dt>
-<dd><p>ISO8601 format, i.e., &ldquo;2010-11-23T22:05:21&rdquo;.
-</p>
-</dd>
-<dt><code>user-defined</code></dt>
-<dd><p>A format done according to the <code>gnus-article-time-format</code>
-variable.
-</p>
-</dd>
-</dl>
+    <li>A list where the first element is not a string:
 
-<p>See <a href="Article-Date.html#Article-Date">Article Date</a>.
-</p>
-</dd>
-<dt><code>gnus-treat-from-picon (head)</code></dt>
-<dt><code>gnus-treat-mail-picon (head)</code></dt>
-<dt><code>gnus-treat-newsgroups-picon (head)</code></dt>
-<dd>
-<p>See <a href="Picons.html#Picons">Picons</a>.
-</p>
-</dd>
-<dt><code>gnus-treat-from-gravatar (head)</code></dt>
-<dt><code>gnus-treat-mail-gravatar (head)</code></dt>
-<dd>
-<p>See <a href="Gravatars.html#Gravatars">Gravatars</a>.
-</p>
-</dd>
-<dt><code>gnus-treat-display-smileys (t, integer)</code></dt>
-<dt><code>gnus-treat-body-boundary (head)</code></dt>
-<dd>
-<a name="index-gnus_002dbody_002dboundary_002ddelimiter"></a>
-<p>Adds a delimiter between header and body, the string used as delimiter
-is controlled by <code>gnus-body-boundary-delimiter</code>.
-</p>
-<p>See <a href="Smileys.html#Smileys">Smileys</a>.
-</p>
-<a name="index-gnus_002dtreat_002ddisplay_002dx_002dface"></a>
-</dd>
-<dt><code>gnus-treat-display-x-face (head)</code></dt>
-<dd>
-<p>See <a href="X_002dFace.html#X_002dFace">X-Face</a>.
-</p>
-<a name="index-gnus_002dtreat_002ddisplay_002dface"></a>
-</dd>
-<dt><code>gnus-treat-display-face (head)</code></dt>
-<dd>
-<p>See <a href="Face.html#Face">Face</a>.
-</p>
-<a name="index-gnus_002dtreat_002demphasize"></a>
-</dd>
-<dt><code>gnus-treat-emphasize (t, head, integer)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dfill_002darticle"></a>
-</dd>
-<dt><code>gnus-treat-fill-article (t, integer)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dfill_002dlong_002dlines"></a>
-</dd>
-<dt><code>gnus-treat-fill-long-lines (t, integer)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dhide_002dboring_002dheaders"></a>
-</dd>
-<dt><code>gnus-treat-hide-boring-headers (head)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dhide_002dcitation"></a>
-</dd>
-<dt><code>gnus-treat-hide-citation (t, integer)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dhide_002dcitation_002dmaybe"></a>
-</dd>
-<dt><code>gnus-treat-hide-citation-maybe (t, integer)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dhide_002dheaders"></a>
-</dd>
-<dt><code>gnus-treat-hide-headers (head)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dhide_002dsignature"></a>
-</dd>
-<dt><code>gnus-treat-hide-signature (t, last)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dstrip_002dbanner"></a>
-</dd>
-<dt><code>gnus-treat-strip-banner (t, last)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dstrip_002dlist_002didentifiers"></a>
-</dd>
-<dt><code>gnus-treat-strip-list-identifiers (head)</code></dt>
-<dd>
-<p>See <a href="Article-Hiding.html#Article-Hiding">Article Hiding</a>.
-</p>
-<a name="index-gnus_002dtreat_002dhighlight_002dcitation"></a>
-</dd>
-<dt><code>gnus-treat-highlight-citation (t, integer)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dhighlight_002dheaders"></a>
-</dd>
-<dt><code>gnus-treat-highlight-headers (head)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dhighlight_002dsignature"></a>
-</dd>
-<dt><code>gnus-treat-highlight-signature (t, last, integer)</code></dt>
-<dd>
-<p>See <a href="Article-Highlighting.html#Article-Highlighting">Article Highlighting</a>.
-</p>
-<a name="index-gnus_002dtreat_002dplay_002dsounds"></a>
-</dd>
-<dt><code>gnus-treat-play-sounds</code></dt>
-<dt><code>gnus-treat-ansi-sequences (t)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dx_002dpgp_002dsig"></a>
-</dd>
-<dt><code>gnus-treat-x-pgp-sig (head)</code></dt>
-<dd>
-<a name="index-gnus_002dtreat_002dunfold_002dheaders"></a>
-</dd>
-<dt><code>gnus-treat-unfold-headers (head)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dfold_002dheaders"></a>
-</dd>
-<dt><code>gnus-treat-fold-headers (head)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dfold_002dnewsgroups"></a>
-</dd>
-<dt><code>gnus-treat-fold-newsgroups (head)</code></dt>
-<dd><a name="index-gnus_002dtreat_002dleading_002dwhitespace"></a>
-</dd>
-<dt><code>gnus-treat-leading-whitespace (head)</code></dt>
-<dd>
-<p>See <a href="Article-Header.html#Article-Header">Article Header</a>.
-</p>
+      <p>The list is evaluated recursively. The first element of
+      the list is a predicate. The following predicates are
+      recognized: <code>or</code>, <code>and</code>,
+      <code>not</code> and <code>typep</code>. Here&rsquo;s an
+      example:</p>
 
-</dd>
-</dl>
+      <div class="lisp">
+        <pre class="lisp">
+(or last
+    (typep "text/x-vcard"))
+</pre>
+      </div>
+    </li>
 
-<a name="index-gnus_002dpart_002ddisplay_002dhook"></a>
-<p>You can, of course, write your own functions to be called from
-<code>gnus-part-display-hook</code>.  The functions are called narrowed to the
-part, and you can do anything you like, pretty much.  There is no
-information that you have to keep in the buffer&mdash;you can change
-everything.
-</p>
+    <li>A function: the function is called with no arguments and
+    should return <code>nil</code> or non-<code>nil</code>. The
+    current article is available in the buffer named by
+    <code>gnus-article-buffer</code>.</li>
+  </ol>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Article-Keymap.html#Article-Keymap" accesskey="n" rel="next">Article Keymap</a>, Previous: <a href="HTML.html#HTML" accesskey="p" rel="prev">HTML</a>, Up: <a href="Article-Buffer.html#Article-Buffer" accesskey="u" rel="up">Article Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>You may have noticed that the word <em>part</em> is used here.
+  This refers to the fact that some messages are
+  <acronym>MIME</acronym> multipart articles that may be divided
+  into several parts. Articles that are not multiparts are
+  considered to contain just a single part.</p><a name=
+  "index-gnus_002darticle_002dtreat_002dtypes" id=
+  "index-gnus_002darticle_002dtreat_002dtypes"></a>
 
+  <p>Are the treatments applied to all sorts of multipart parts?
+  Yes, if you want to, but by default, only
+  &lsquo;<samp>text/plain</samp>&rsquo; parts are given the
+  treatment. This is controlled by the
+  <code>gnus-article-treat-types</code> variable, which is a list
+  of regular expressions that are matched to the type of the part.
+  This variable is ignored if the value of the controlling variable
+  is a predicate list, as described above.</p>
 
+  <p>The following treatment options are available. The easiest way
+  to customize this is to examine the
+  <code>gnus-article-treat</code> customization group. Values in
+  parenthesis are suggested sensible values. Others are possible
+  but those listed are probably sufficient for most people.</p>
 
+  <dl compact="compact">
+    <dt><code>gnus-treat-buttonize (t, integer)</code></dt>
+
+    <dt><code>gnus-treat-buttonize-head (head)</code></dt>
+
+    <dd>
+      <p>See <a href="Article-Buttons.html#Article-Buttons">Article
+      Buttons</a>.</p>
+    </dd>
+
+    <dt><code>gnus-treat-capitalize-sentences (t,
+    integer)</code></dt>
+
+    <dt><code>gnus-treat-overstrike (t, integer)</code></dt>
+
+    <dt><code>gnus-treat-strip-cr (t, integer)</code></dt>
+
+    <dt><code>gnus-treat-strip-headers-in-body (t,
+    integer)</code></dt>
+
+    <dt><code>gnus-treat-strip-leading-blank-lines (t, first,
+    integer)</code></dt>
+
+    <dt><code>gnus-treat-strip-multiple-blank-lines (t,
+    integer)</code></dt>
+
+    <dt><code>gnus-treat-strip-pem (t, last, integer)</code></dt>
+
+    <dt><code>gnus-treat-strip-trailing-blank-lines (t, last,
+    integer)</code></dt>
+
+    <dt><code>gnus-treat-unsplit-urls (t, integer)</code></dt>
+
+    <dt><code>gnus-treat-wash-html (t, integer)</code></dt>
+
+    <dd>
+      <p>See <a href="Article-Washing.html#Article-Washing">Article
+      Washing</a>.</p>
+    </dd>
+
+    <dt><code>gnus-treat-date (head)</code></dt>
+
+    <dd>
+      <p>This will transform/add date headers according to the
+      <code>gnus-article-date-headers</code> variable. This is a
+      list of Date headers to display. The formats available
+      are:</p>
+
+      <dl compact="compact">
+        <dt><code>ut</code></dt>
+
+        <dd>
+          <p>Universal time, aka GMT, aka ZULU.</p>
+        </dd>
+
+        <dt><code>local</code></dt>
+
+        <dd>
+          <p>The user&rsquo;s local time zone.</p>
+        </dd>
+
+        <dt><code>english</code></dt>
+
+        <dd>
+          <p>A semi-readable English sentence.</p>
+        </dd>
+
+        <dt><code>lapsed</code></dt>
+
+        <dd>
+          <p>The time elapsed since the message was posted.</p>
+        </dd>
+
+        <dt><code>combined-lapsed</code></dt>
+
+        <dd>
+          <p>Both the original date header and a (shortened)
+          elapsed time.</p>
+        </dd>
+
+        <dt><code>original</code></dt>
+
+        <dd>
+          <p>The original date header.</p>
+        </dd>
+
+        <dt><code>iso8601</code></dt>
+
+        <dd>
+          <p>ISO8601 format, i.e.,
+          &ldquo;2010-11-23T22:05:21&rdquo;.</p>
+        </dd>
+
+        <dt><code>user-defined</code></dt>
+
+        <dd>
+          <p>A format done according to the
+          <code>gnus-article-time-format</code> variable.</p>
+        </dd>
+      </dl>
+
+      <p>See <a href="Article-Date.html#Article-Date">Article
+      Date</a>.</p>
+    </dd>
+
+    <dt><code>gnus-treat-from-picon (head)</code></dt>
+
+    <dt><code>gnus-treat-mail-picon (head)</code></dt>
+
+    <dt><code>gnus-treat-newsgroups-picon (head)</code></dt>
+
+    <dd>
+      <p>See <a href="Picons.html#Picons">Picons</a>.</p>
+    </dd>
+
+    <dt><code>gnus-treat-from-gravatar (head)</code></dt>
+
+    <dt><code>gnus-treat-mail-gravatar (head)</code></dt>
+
+    <dd>
+      <p>See <a href="Gravatars.html#Gravatars">Gravatars</a>.</p>
+    </dd>
+
+    <dt><code>gnus-treat-display-smileys (t, integer)</code></dt>
+
+    <dt><code>gnus-treat-body-boundary (head)</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dbody_002dboundary_002ddelimiter" id=
+      "index-gnus_002dbody_002dboundary_002ddelimiter"></a>
+
+      <p>Adds a delimiter between header and body, the string used
+      as delimiter is controlled by
+      <code>gnus-body-boundary-delimiter</code>.</p>
+
+      <p>See <a href=
+      "Smileys.html#Smileys">Smileys</a>.</p><a name="index-gnus_002dtreat_002ddisplay_002dx_002dface"
+      id="index-gnus_002dtreat_002ddisplay_002dx_002dface"></a>
+    </dd>
+
+    <dt><code>gnus-treat-display-x-face (head)</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "X_002dFace.html#X_002dFace">X-Face</a>.</p><a name=
+      "index-gnus_002dtreat_002ddisplay_002dface" id=
+      "index-gnus_002dtreat_002ddisplay_002dface"></a>
+    </dd>
+
+    <dt><code>gnus-treat-display-face (head)</code></dt>
+
+    <dd>
+      <p>See <a href="Face.html#Face">Face</a>.</p><a name=
+      "index-gnus_002dtreat_002demphasize" id=
+      "index-gnus_002dtreat_002demphasize"></a>
+    </dd>
+
+    <dt><code>gnus-treat-emphasize (t, head, integer)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dfill_002darticle" id=
+    "index-gnus_002dtreat_002dfill_002darticle"></a></dd>
+
+    <dt><code>gnus-treat-fill-article (t, integer)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dfill_002dlong_002dlines"
+    id="index-gnus_002dtreat_002dfill_002dlong_002dlines"></a></dd>
+
+    <dt><code>gnus-treat-fill-long-lines (t, integer)</code></dt>
+
+    <dd><a name=
+    "index-gnus_002dtreat_002dhide_002dboring_002dheaders" id=
+    "index-gnus_002dtreat_002dhide_002dboring_002dheaders"></a></dd>
+
+    <dt><code>gnus-treat-hide-boring-headers (head)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dhide_002dcitation" id=
+    "index-gnus_002dtreat_002dhide_002dcitation"></a></dd>
+
+    <dt><code>gnus-treat-hide-citation (t, integer)</code></dt>
+
+    <dd><a name=
+    "index-gnus_002dtreat_002dhide_002dcitation_002dmaybe" id=
+    "index-gnus_002dtreat_002dhide_002dcitation_002dmaybe"></a></dd>
+
+    <dt><code>gnus-treat-hide-citation-maybe (t,
+    integer)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dhide_002dheaders" id=
+    "index-gnus_002dtreat_002dhide_002dheaders"></a></dd>
+
+    <dt><code>gnus-treat-hide-headers (head)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dhide_002dsignature" id=
+    "index-gnus_002dtreat_002dhide_002dsignature"></a></dd>
+
+    <dt><code>gnus-treat-hide-signature (t, last)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dstrip_002dbanner" id=
+    "index-gnus_002dtreat_002dstrip_002dbanner"></a></dd>
+
+    <dt><code>gnus-treat-strip-banner (t, last)</code></dt>
+
+    <dd><a name=
+    "index-gnus_002dtreat_002dstrip_002dlist_002didentifiers" id=
+    "index-gnus_002dtreat_002dstrip_002dlist_002didentifiers"></a></dd>
+
+    <dt><code>gnus-treat-strip-list-identifiers (head)</code></dt>
+
+    <dd>
+      <p>See <a href="Article-Hiding.html#Article-Hiding">Article
+      Hiding</a>.</p><a name=
+      "index-gnus_002dtreat_002dhighlight_002dcitation" id=
+      "index-gnus_002dtreat_002dhighlight_002dcitation"></a>
+    </dd>
+
+    <dt><code>gnus-treat-highlight-citation (t,
+    integer)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dhighlight_002dheaders"
+    id="index-gnus_002dtreat_002dhighlight_002dheaders"></a></dd>
+
+    <dt><code>gnus-treat-highlight-headers (head)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dhighlight_002dsignature"
+    id="index-gnus_002dtreat_002dhighlight_002dsignature"></a></dd>
+
+    <dt><code>gnus-treat-highlight-signature (t, last,
+    integer)</code></dt>
+
+    <dd>
+      <p>See <a href=
+      "Article-Highlighting.html#Article-Highlighting">Article
+      Highlighting</a>.</p><a name=
+      "index-gnus_002dtreat_002dplay_002dsounds" id=
+      "index-gnus_002dtreat_002dplay_002dsounds"></a>
+    </dd>
+
+    <dt><code>gnus-treat-play-sounds</code></dt>
+
+    <dt><code>gnus-treat-ansi-sequences (t)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dx_002dpgp_002dsig" id=
+    "index-gnus_002dtreat_002dx_002dpgp_002dsig"></a></dd>
+
+    <dt><code>gnus-treat-x-pgp-sig (head)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dunfold_002dheaders" id=
+    "index-gnus_002dtreat_002dunfold_002dheaders"></a></dd>
+
+    <dt><code>gnus-treat-unfold-headers (head)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dfold_002dheaders" id=
+    "index-gnus_002dtreat_002dfold_002dheaders"></a></dd>
+
+    <dt><code>gnus-treat-fold-headers (head)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dfold_002dnewsgroups" id=
+    "index-gnus_002dtreat_002dfold_002dnewsgroups"></a></dd>
+
+    <dt><code>gnus-treat-fold-newsgroups (head)</code></dt>
+
+    <dd><a name="index-gnus_002dtreat_002dleading_002dwhitespace"
+    id="index-gnus_002dtreat_002dleading_002dwhitespace"></a></dd>
+
+    <dt><code>gnus-treat-leading-whitespace (head)</code></dt>
+
+    <dd>
+      <p>See <a href="Article-Header.html#Article-Header">Article
+      Header</a>.</p>
+    </dd>
+  </dl><a name="index-gnus_002dpart_002ddisplay_002dhook" id=
+  "index-gnus_002dpart_002ddisplay_002dhook"></a>
+
+  <p>You can, of course, write your own functions to be called from
+  <code>gnus-part-display-hook</code>. The functions are called
+  narrowed to the part, and you can do anything you like, pretty
+  much. There is no information that you have to keep in the
+  buffer&mdash;you can change everything.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Article-Keymap.html#Article-Keymap"
+    accesskey="n" rel="next">Article Keymap</a>, Previous: <a href=
+    "HTML.html#HTML" accesskey="p" rel="prev">HTML</a>, Up:
+    <a href="Article-Buffer.html#Article-Buffer" accesskey="u" rel=
+    "up">Article Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

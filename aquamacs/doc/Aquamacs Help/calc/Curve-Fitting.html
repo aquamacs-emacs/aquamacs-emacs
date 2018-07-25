@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Curve Fitting - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Algebra.html#Algebra" title="Algebra">
-<link rel="prev" href="Numerical-Solutions.html#Numerical-Solutions" title="Numerical Solutions">
-<link rel="next" href="Summations.html#Summations" title="Summations">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Curve Fitting - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Algebra.html#Algebra" title="Algebra" />
+  <link rel="prev" href=
+  "Numerical-Solutions.html#Numerical-Solutions" title=
+  "Numerical Solutions" />
+  <link rel="next" href="Summations.html#Summations" title=
+  "Summations" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +38,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,41 +51,67 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Curve-Fitting"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Summations.html#Summations">Summations</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Numerical-Solutions.html#Numerical-Solutions">Numerical Solutions</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Algebra.html#Algebra">Algebra</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Curve-Fitting" id="Curve-Fitting"></a>
 
-<h3 class="section">11.8 Curve Fitting</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Summations.html#Summations">Summations</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Numerical-Solutions.html#Numerical-Solutions">Numerical
+    Solutions</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Algebra.html#Algebra">Algebra</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">The <kbd>a F</kbd> command fits a set of data to a <dfn>model formula</dfn>,
-such as &lsquo;<samp><span class="samp">y = m x + b</span></samp>&rsquo; where &lsquo;<samp><span class="samp">m</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; are parameters
-to be determined.  For a typical set of measured data there will be
-no single &lsquo;<samp><span class="samp">m</span></samp>&rsquo; and &lsquo;<samp><span class="samp">b</span></samp>&rsquo; that exactly fit the data; in this
-case, Calc chooses values of the parameters that provide the closest
-possible fit.  The model formula can be entered in various ways after
-the key sequence <kbd>a F</kbd> is pressed.
+  <h3 class="section">11.8 Curve Fitting</h3>
 
-   <p>If the letter <kbd>P</kbd> is pressed after <kbd>a F</kbd> but before the model
-description is entered, the data as well as the model formula will be
-plotted after the formula is determined.  This will be indicated by a
-&ldquo;P&rdquo; in the minibuffer after the help message.
+  <p class="noindent">The <kbd>a F</kbd> command fits a set of data
+  to a <dfn>model formula</dfn>, such as &lsquo;<samp><span class=
+  "samp">y = m x + b</span></samp>&rsquo; where
+  &lsquo;<samp><span class="samp">m</span></samp>&rsquo; and
+  &lsquo;<samp><span class="samp">b</span></samp>&rsquo; are
+  parameters to be determined. For a typical set of measured data
+  there will be no single &lsquo;<samp><span class=
+  "samp">m</span></samp>&rsquo; and &lsquo;<samp><span class=
+  "samp">b</span></samp>&rsquo; that exactly fit the data; in this
+  case, Calc chooses values of the parameters that provide the
+  closest possible fit. The model formula can be entered in various
+  ways after the key sequence <kbd>a F</kbd> is pressed.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Linear-Fits.html#Linear-Fits">Linear Fits</a>
-<li><a accesskey="2" href="Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits">Polynomial and Multilinear Fits</a>
-<li><a accesskey="3" href="Error-Estimates-for-Fits.html#Error-Estimates-for-Fits">Error Estimates for Fits</a>
-<li><a accesskey="4" href="Standard-Nonlinear-Models.html#Standard-Nonlinear-Models">Standard Nonlinear Models</a>
-<li><a accesskey="5" href="Curve-Fitting-Details.html#Curve-Fitting-Details">Curve Fitting Details</a>
-<li><a accesskey="6" href="Interpolation.html#Interpolation">Interpolation</a>
-</ul>
+  <p>If the letter <kbd>P</kbd> is pressed after <kbd>a F</kbd> but
+  before the model description is entered, the data as well as the
+  model formula will be plotted after the formula is determined.
+  This will be indicated by a &ldquo;P&rdquo; in the minibuffer
+  after the help message.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href="Linear-Fits.html#Linear-Fits">Linear
+    Fits</a></li>
 
+    <li><a accesskey="2" href=
+    "Polynomial-and-Multilinear-Fits.html#Polynomial-and-Multilinear-Fits">
+    Polynomial and Multilinear Fits</a></li>
+
+    <li><a accesskey="3" href=
+    "Error-Estimates-for-Fits.html#Error-Estimates-for-Fits">Error
+    Estimates for Fits</a></li>
+
+    <li><a accesskey="4" href=
+    "Standard-Nonlinear-Models.html#Standard-Nonlinear-Models">Standard
+    Nonlinear Models</a></li>
+
+    <li><a accesskey="5" href=
+    "Curve-Fitting-Details.html#Curve-Fitting-Details">Curve
+    Fitting Details</a></li>
+
+    <li><a accesskey="6" href=
+    "Interpolation.html#Interpolation">Interpolation</a></li>
+  </ul>
+</body>
+</html>

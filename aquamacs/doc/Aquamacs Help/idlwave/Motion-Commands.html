@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Motion Commands - IDLWAVE User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="IDLWAVE User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" title="The IDLWAVE Major Mode">
-<link rel="prev" href="Doc-Header.html#Doc-Header" title="Doc Header">
-<link rel="next" href="Misc-Options.html#Misc-Options" title="Misc Options">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Motion Commands - IDLWAVE User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="IDLWAVE User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" title=
+  "The IDLWAVE Major Mode" />
+  <link rel="prev" href="Doc-Header.html#Doc-Header" title=
+  "Doc Header" />
+  <link rel="next" href="Misc-Options.html#Misc-Options" title=
+  "Misc Options" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -31,8 +41,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,55 +54,123 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Motion-Commands"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Misc-Options.html#Misc-Options">Misc Options</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Doc-Header.html#Doc-Header">Doc Header</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The IDLWAVE Major Mode</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Motion-Commands" id="Motion-Commands"></a>
 
-<h3 class="section">4.11 Motion Commands</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Misc-Options.html#Misc-Options">Misc Options</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Doc-Header.html#Doc-Header">Doc Header</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href=
+    "The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The
+    IDLWAVE Major Mode</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Motion-commands-221"></a><a name="index-Program-structure_002c-moving-through-222"></a><a name="index-Code-structure_002c-moving-through-223"></a><a name="index-g_t_0040file_007bFunc_002dmenu_007d_002c-XEmacs-package-224"></a><a name="index-g_t_0040file_007bImenu_007d_002c-Emacs-package-225"></a><a name="index-Function-definitions_002c-jumping-to-226"></a><a name="index-Procedure-definitions_002c-jumping-to-227"></a>
-IDLWAVE supports both <samp><span class="file">Imenu</span></samp> and <samp><span class="file">Func-menu</span></samp>, two packages
-which make it easy to jump to the definitions of functions and
-procedures in the current file with a pop-up selection.  To bind
-<samp><span class="file">Imenu</span></samp> to a mouse-press, use in your <samp><span class="file">.emacs</span></samp>:
+  <h3 class="section">4.11 Motion Commands</h3>
 
-<pre class="lisp">     (define-key global-map [S-down-mouse-3] 'imenu)
+  <p><a name="index-Motion-commands-221" id=
+  "index-Motion-commands-221"></a><a name=
+  "index-Program-structure_002c-moving-through-222" id=
+  "index-Program-structure_002c-moving-through-222"></a><a name=
+  "index-Code-structure_002c-moving-through-223" id=
+  "index-Code-structure_002c-moving-through-223"></a><a name=
+  "index-g_t_0040file_007bFunc_002dmenu_007d_002c-XEmacs-package-224"
+  id=
+  "index-g_t_0040file_007bFunc_002dmenu_007d_002c-XEmacs-package-224"></a><a name="index-g_t_0040file_007bImenu_007d_002c-Emacs-package-225"
+  id=
+  "index-g_t_0040file_007bImenu_007d_002c-Emacs-package-225"></a><a name="index-Function-definitions_002c-jumping-to-226"
+  id="index-Function-definitions_002c-jumping-to-226"></a><a name=
+  "index-Procedure-definitions_002c-jumping-to-227" id=
+  "index-Procedure-definitions_002c-jumping-to-227"></a> IDLWAVE
+  supports both <samp><span class="file">Imenu</span></samp> and
+  <samp><span class="file">Func-menu</span></samp>, two packages
+  which make it easy to jump to the definitions of functions and
+  procedures in the current file with a pop-up selection. To bind
+  <samp><span class="file">Imenu</span></samp> to a mouse-press,
+  use in your <samp><span class="file">.emacs</span></samp>:</p>
+  <pre class="lisp">
+     (define-key global-map [S-down-mouse-3] 'imenu)
 </pre>
-   <p><a name="index-g_t_0040file_007bSpeedbar_007d_002c-Emacs-package-228"></a>
-In addition, <samp><span class="file">Speedbar</span></samp> support allows convenient navigation of a
-source tree of IDL routine files, quickly stepping to routine
-definitions.  See <code>Tools-&gt;Display Speedbar</code>.
 
-   <p>Several commands allow you to move quickly through the structure of an
-IDL program:
+  <p><a name=
+  "index-g_t_0040file_007bSpeedbar_007d_002c-Emacs-package-228" id=
+  "index-g_t_0040file_007bSpeedbar_007d_002c-Emacs-package-228"></a>
+  In addition, <samp><span class="file">Speedbar</span></samp>
+  support allows convenient navigation of a source tree of IDL
+  routine files, quickly stepping to routine definitions. See
+  <code>Tools-&gt;Display Speedbar</code>.</p>
 
-   <p><table summary=""><tr align="left"><td valign="top" width="15%"><kbd>C-M-a</kbd>
-</td><td valign="top" width="85%">Beginning of subprogram
-<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>C-M-e</kbd>
-</td><td valign="top" width="85%">End of subprogram
-<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>C-c {</kbd>
-</td><td valign="top" width="85%">Beginning of block (stay inside the block)
-<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>C-c }</kbd>
-</td><td valign="top" width="85%">End of block (stay inside the block)
-<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>C-M-n</kbd>
-</td><td valign="top" width="85%">Forward block (on same level)
-<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>C-M-p</kbd>
-</td><td valign="top" width="85%">Backward block (on same level)
-<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>C-M-d</kbd>
-</td><td valign="top" width="85%">Down block (enters a block)
-<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>C-M-u</kbd>
-</td><td valign="top" width="85%">Backward up block (leaves a block)
-<br></td></tr><tr align="left"><td valign="top" width="15%"><kbd>C-c C-n</kbd>
-</td><td valign="top" width="85%">Next Statement
-   <br></td></tr></table>
+  <p>Several commands allow you to move quickly through the
+  structure of an IDL program:</p>
 
-   </body></html>
+  <table summary="">
+    <tr align="left">
+      <td valign="top" width="15%"><kbd>C-M-a</kbd></td>
 
+      <td valign="top" width="85%">Beginning of
+      subprogram<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="15%"><kbd>C-M-e</kbd></td>
+
+      <td valign="top" width="85%">End of subprogram<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="15%"><kbd>C-c {</kbd></td>
+
+      <td valign="top" width="85%">Beginning of block (stay inside
+      the block)<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="15%"><kbd>C-c }</kbd></td>
+
+      <td valign="top" width="85%">End of block (stay inside the
+      block)<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="15%"><kbd>C-M-n</kbd></td>
+
+      <td valign="top" width="85%">Forward block (on same
+      level)<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="15%"><kbd>C-M-p</kbd></td>
+
+      <td valign="top" width="85%">Backward block (on same
+      level)<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="15%"><kbd>C-M-d</kbd></td>
+
+      <td valign="top" width="85%">Down block (enters a
+      block)<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="15%"><kbd>C-M-u</kbd></td>
+
+      <td valign="top" width="85%">Backward up block (leaves a
+      block)<br /></td>
+    </tr>
+
+    <tr align="left">
+      <td valign="top" width="15%"><kbd>C-c C-n</kbd></td>
+
+      <td valign="top" width="85%">Next Statement<br /></td>
+    </tr>
+  </table>
+</body>
+</html>

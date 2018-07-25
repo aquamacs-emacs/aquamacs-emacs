@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,89 +16,134 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Wisent Semantic</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Wisent Semantic">
-<meta name="keywords" content="Wisent Parser Development: Wisent Semantic">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="top">
-<link href="Grammar-styles.html#Grammar-styles" rel="next" title="Grammar styles">
-<link href="Debugging-actions.html#Debugging-actions" rel="prev" title="Debugging actions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Wisent Semantic</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Wisent Semantic" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Wisent Semantic" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="top" />
+  <link href="Grammar-styles.html#Grammar-styles" rel="next" title=
+  "Grammar styles" />
+  <link href="Debugging-actions.html#Debugging-actions" rel="prev"
+  title="Debugging actions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Wisent-Semantic"></a>
-<div class="header">
-<p>
-Next: <a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" accesskey="n" rel="next">GNU Free Documentation License</a>, Previous: <a href="Wisent-Parsing.html#Wisent-Parsing" accesskey="p" rel="prev">Wisent Parsing</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-to-use-Wisent-with-Semantic"></a>
-<h2 class="chapter">4 How to use Wisent with Semantic</h2>
+<body lang="en" xml:lang="en">
+  <a name="Wisent-Semantic" id="Wisent-Semantic"></a>
 
-<a name="index-tags"></a>
-<p>This section presents how the Wisent&rsquo;s parser can be used to produce
-<em>tags</em> for the <i>Semantic</i> tool set.
-</p>
-<p><i>Semantic</i> tags form a hierarchy of Emacs Lisp data structures that
-describes a program in a way independent of programming languages.
-Tags map program declarations, like functions, methods, variables,
-data types, classes, includes, grammar rules, etc..
-</p>
-<a name="index-WY-grammar-format"></a>
-<p>To use the Wisent parser with <i>Semantic</i> you have to define
-your grammar in <em>WY</em> form, a grammar format very close
-to the one used by Bison.
-</p>
-<p>Please See <a href="../grammar-fw/index.html#Top">(grammar-fw)Semantic Grammar Framework Manual</a>
-for more information on <i>Semantic</i> grammars.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Grammar-styles.html#Grammar-styles" accesskey="1">Grammar styles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Wisent-Lex.html#Wisent-Lex" accesskey="2">Wisent Lex</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href=
+    "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+    accesskey="n" rel="next">GNU Free Documentation License</a>,
+    Previous: <a href="Wisent-Parsing.html#Wisent-Parsing"
+    accesskey="p" rel="prev">Wisent Parsing</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="How-to-use-Wisent-with-Semantic" id=
+  "How-to-use-Wisent-with-Semantic"></a>
 
+  <h2 class="chapter">4 How to use Wisent with
+  Semantic</h2><a name="index-tags" id="index-tags"></a>
 
+  <p>This section presents how the Wisent&rsquo;s parser can be
+  used to produce <em>tags</em> for the <i>Semantic</i> tool
+  set.</p>
 
+  <p><i>Semantic</i> tags form a hierarchy of Emacs Lisp data
+  structures that describes a program in a way independent of
+  programming languages. Tags map program declarations, like
+  functions, methods, variables, data types, classes, includes,
+  grammar rules, etc..</p><a name="index-WY-grammar-format" id=
+  "index-WY-grammar-format"></a>
 
+  <p>To use the Wisent parser with <i>Semantic</i> you have to
+  define your grammar in <em>WY</em> form, a grammar format very
+  close to the one used by Bison.</p>
+
+  <p>Please See <a href=
+  "../grammar-fw/index.html#Top">(grammar-fw)Semantic Grammar
+  Framework Manual</a> for more information on <i>Semantic</i>
+  grammars.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Grammar-styles.html#Grammar-styles" accesskey="1">Grammar
+      styles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Wisent-Lex.html#Wisent-Lex" accesskey="2">Wisent
+      Lex</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,88 +20,121 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Routine Source</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Routine Source">
-<meta name="keywords" content="IDLWAVE User Manual: Routine Source">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" rel="up" title="The IDLWAVE Major Mode">
-<link href="Resolving-Routines.html#Resolving-Routines" rel="next" title="Resolving Routines">
-<link href="Structure-Tag-Completion.html#Structure-Tag-Completion" rel="prev" title="Structure Tag Completion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Routine Source</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Routine Source" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Routine Source" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode"
+  rel="up" title="The IDLWAVE Major Mode" />
+  <link href="Resolving-Routines.html#Resolving-Routines" rel=
+  "next" title="Resolving Routines" />
+  <link href=
+  "Structure-Tag-Completion.html#Structure-Tag-Completion" rel=
+  "prev" title="Structure Tag Completion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Routine-Source"></a>
-<div class="header">
-<p>
-Next: <a href="Resolving-Routines.html#Resolving-Routines" accesskey="n" rel="next">Resolving Routines</a>, Previous: <a href="Completion.html#Completion" accesskey="p" rel="prev">Completion</a>, Up: <a href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" accesskey="u" rel="up">The IDLWAVE Major Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Routine-Source-1"></a>
-<h3 class="section">4.5 Routine Source</h3>
-<a name="index-Routine-source-file"></a>
-<a name="index-Module-source-file"></a>
-<a name="index-Source-file_002c-of-a-routine"></a>
-<a name="index-C_002dc-C_002dv"></a>
-<p>In addition to clicking on a <i>Source:</i> line in the routine info
-window, there is another way to quickly visit the source file of a
-routine.  The command <kbd>C-c C-v</kbd> (<code>idlwave-find-module</code>) asks
-for a module name, offering the same default as
-<code>idlwave-routine-info</code> would have used, taken from nearby buffer
-contents.  In the minibuffer, specify a complete routine name (including
-any class part).  IDLWAVE will display the source file in another
-window, positioned at the routine in question.  You can also limit this
-to a routine in the current buffer only, with completion, and a
-context-sensitive default, by using a single prefix (<kbd>C-u C-c C-v</kbd>)
-or the convenience binding <kbd>C-c C-t</kbd>.
-</p>
-<a name="index-Buffers_002c-killing"></a>
-<a name="index-Killing-autoloaded-buffers"></a>
-<p>Since getting the source of a routine into a buffer is so easy with
-IDLWAVE, too many buffers visiting different IDL source files are
-sometimes created.  The special command <kbd>C-c C-k</kbd>
-(<code>idlwave-kill-autoloaded-buffers</code>) can be used to easily remove
-these buffers.
-</p>
+<body lang="en" xml:lang="en">
+  <a name="Routine-Source" id="Routine-Source"></a>
 
+  <div class="header">
+    <p>Next: <a href="Resolving-Routines.html#Resolving-Routines"
+    accesskey="n" rel="next">Resolving Routines</a>, Previous:
+    <a href="Completion.html#Completion" accesskey="p" rel=
+    "prev">Completion</a>, Up: <a href=
+    "The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" accesskey=
+    "u" rel="up">The IDLWAVE Major Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Routine-Source-1" id="Routine-Source-1"></a>
 
+  <h3 class="section">4.5 Routine Source</h3><a name=
+  "index-Routine-source-file" id="index-Routine-source-file"></a>
+  <a name="index-Module-source-file" id=
+  "index-Module-source-file"></a> <a name=
+  "index-Source-file_002c-of-a-routine" id=
+  "index-Source-file_002c-of-a-routine"></a> <a name=
+  "index-C_002dc-C_002dv" id="index-C_002dc-C_002dv"></a>
 
+  <p>In addition to clicking on a <i>Source:</i> line in the
+  routine info window, there is another way to quickly visit the
+  source file of a routine. The command <kbd>C-c C-v</kbd>
+  (<code>idlwave-find-module</code>) asks for a module name,
+  offering the same default as <code>idlwave-routine-info</code>
+  would have used, taken from nearby buffer contents. In the
+  minibuffer, specify a complete routine name (including any class
+  part). IDLWAVE will display the source file in another window,
+  positioned at the routine in question. You can also limit this to
+  a routine in the current buffer only, with completion, and a
+  context-sensitive default, by using a single prefix (<kbd>C-u C-c
+  C-v</kbd>) or the convenience binding <kbd>C-c
+  C-t</kbd>.</p><a name="index-Buffers_002c-killing" id=
+  "index-Buffers_002c-killing"></a> <a name=
+  "index-Killing-autoloaded-buffers" id=
+  "index-Killing-autoloaded-buffers"></a>
+
+  <p>Since getting the source of a routine into a buffer is so easy
+  with IDLWAVE, too many buffers visiting different IDL source
+  files are sometimes created. The special command <kbd>C-c
+  C-k</kbd> (<code>idlwave-kill-autoloaded-buffers</code>) can be
+  used to easily remove these buffers.</p>
 </body>
 </html>

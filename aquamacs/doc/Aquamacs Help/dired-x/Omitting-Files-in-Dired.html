@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Omitting Files in Dired - Dired Extra Version 2 User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Dired Extra Version 2 User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Installation.html#Installation" title="Installation">
-<link rel="next" href="Local-Variables.html#Local-Variables" title="Local Variables">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Omitting Files in Dired - Dired Extra Version 2 User's
+  Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Dired Extra Version 2 User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Installation.html#Installation" title=
+  "Installation" />
+  <link rel="next" href="Local-Variables.html#Local-Variables"
+  title="Local Variables" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004,
 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -24,8 +34,10 @@ Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,57 +47,93 @@ Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Omitting-Files-in-Dired"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Local-Variables.html#Local-Variables">Local Variables</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Installation.html#Installation">Installation</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Omitting-Files-in-Dired" id=
+    "Omitting-Files-in-Dired"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h2 class="chapter">3 Omitting Files in Dired</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Local-Variables.html#Local-Variables">Local Variables</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Installation.html#Installation">Installation</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-<p><a name="index-Omitting-Files-in-Dired-6"></a><a name="index-Uninteresting-files-7"></a><dfn>Omitting</dfn> a file means removing it from the directory listing.  Omitting
-is useful for keeping Dired buffers free of &ldquo;uninteresting&rdquo; files (for
-instance, auto-save, auxiliary, backup, and revision control files) so that
-the user can concentrate on the interesting files.  Like hidden files, omitted
-files are never seen by Dired.  Omitting differs from hiding in several
-respects:
+  <h2 class="chapter">3 Omitting Files in Dired</h2>
 
-     <ul>
-<li>Omitting works on individual files, not on directories; an entire directory
-cannot be omitted (though each of its files could be).
+  <p><a name="index-Omitting-Files-in-Dired-6" id=
+  "index-Omitting-Files-in-Dired-6"></a><a name=
+  "index-Uninteresting-files-7" id=
+  "index-Uninteresting-files-7"></a><dfn>Omitting</dfn> a file
+  means removing it from the directory listing. Omitting is useful
+  for keeping Dired buffers free of &ldquo;uninteresting&rdquo;
+  files (for instance, auto-save, auxiliary, backup, and revision
+  control files) so that the user can concentrate on the
+  interesting files. Like hidden files, omitted files are never
+  seen by Dired. Omitting differs from hiding in several
+  respects:</p>
 
-     <li>Omitting is wholesale; if omitting is turned on for a Dired buffer, then all
-uninteresting files listed in that buffer are omitted.  The user does not omit
-(or unomit) files one at a time.
+  <ul>
+    <li>Omitting works on individual files, not on directories; an
+    entire directory cannot be omitted (though each of its files
+    could be).</li>
 
-     <li>Omitting can be automatic; uninteresting file lines in the buffer can be
-removed before the user ever sees them.
+    <li>Omitting is wholesale; if omitting is turned on for a Dired
+    buffer, then all uninteresting files listed in that buffer are
+    omitted. The user does not omit (or unomit) files one at a
+    time.</li>
 
-     <li>Marked files are never omitted. 
-</ul>
+    <li>Omitting can be automatic; uninteresting file lines in the
+    buffer can be removed before the user ever sees them.</li>
 
-     <dl>
-<dt><kbd>M-o</kbd><dd><a name="index-M_002do-8"></a><a name="index-dired_002domit_002dmode-9"></a>(<code>dired-omit-mode</code>) Toggle between displaying and omitting
-&ldquo;uninteresting&rdquo; files. 
-<br><dt><kbd>* O</kbd><dd><a name="index-g_t_002a-O-10"></a><a name="index-dired_002dmark_002domitted-11"></a>(<code>dired-mark-omitted</code>) Mark &ldquo;uninteresting&rdquo; files. 
-</dl>
+    <li>Marked files are never omitted.</li>
+  </ul>
 
-<p class="noindent">In order to make Dired Omit work you first need to load <samp><span class="file">dired-x.el</span></samp>
-inside <code>dired-load-hook</code> (see <a href="Installation.html#Installation">Installation</a>) and then evaluate
-<code>(dired-omit-mode 1)</code> in some way (see <a href="Omitting-Variables.html#Omitting-Variables">Omitting Variables</a>).
+  <dl>
+    <dt><kbd>M-o</kbd></dt>
 
-<ul class="menu">
-<li><a accesskey="1" href="Omitting-Variables.html#Omitting-Variables">Omitting Variables</a>
-<li><a accesskey="2" href="Omitting-Examples.html#Omitting-Examples">Omitting Examples</a>
-<li><a accesskey="3" href="Omitting-Technical.html#Omitting-Technical">Omitting Technical</a>
-</ul>
+    <dd><a name="index-M_002do-8" id="index-M_002do-8"></a><a name=
+    "index-dired_002domit_002dmode-9" id=
+    "index-dired_002domit_002dmode-9"></a>(<code>dired-omit-mode</code>)
+    Toggle between displaying and omitting
+    &ldquo;uninteresting&rdquo; files.<br /></dd>
 
-   </body></html>
+    <dt><kbd>* O</kbd></dt>
 
+    <dd><a name="index-g_t_002a-O-10" id=
+    "index-g_t_002a-O-10"></a><a name=
+    "index-dired_002dmark_002domitted-11" id=
+    "index-dired_002dmark_002domitted-11"></a>(<code>dired-mark-omitted</code>)
+    Mark &ldquo;uninteresting&rdquo; files.</dd>
+  </dl>
+
+  <p class="noindent">In order to make Dired Omit work you first
+  need to load <samp><span class="file">dired-x.el</span></samp>
+  inside <code>dired-load-hook</code> (see <a href=
+  "Installation.html#Installation">Installation</a>) and then
+  evaluate <code>(dired-omit-mode 1)</code> in some way (see
+  <a href="Omitting-Variables.html#Omitting-Variables">Omitting
+  Variables</a>).</p>
+
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Omitting-Variables.html#Omitting-Variables">Omitting
+    Variables</a></li>
+
+    <li><a accesskey="2" href=
+    "Omitting-Examples.html#Omitting-Examples">Omitting
+    Examples</a></li>
+
+    <li><a accesskey="3" href=
+    "Omitting-Technical.html#Omitting-Technical">Omitting
+    Technical</a></li>
+  </ul>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,155 +14,201 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: The problem of spam</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: The problem of spam">
-<meta name="keywords" content="Gnus Manual: The problem of spam">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" rel="up" title="Thwarting Email Spam">
-<link href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" rel="next" title="Anti-Spam Basics">
-<link href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" rel="prev" title="Thwarting Email Spam">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: The problem of spam</title>
+  <meta name="description" content=
+  "Gnus Manual: The problem of spam" />
+  <meta name="keywords" content=
+  "Gnus Manual: The problem of spam" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" rel=
+  "up" title="Thwarting Email Spam" />
+  <link href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" rel=
+  "next" title="Anti-Spam Basics" />
+  <link href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" rel=
+  "prev" title="Thwarting Email Spam" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-problem-of-spam"></a>
-<div class="header">
-<p>
-Next: <a href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" accesskey="n" rel="next">Anti-Spam Basics</a>, Up: <a href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u" rel="up">Thwarting Email Spam</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-problem-of-spam-1"></a>
-<h4 class="subsection">9.16.1 The problem of spam</h4>
-<a name="index-email-spam-1"></a>
-<a name="index-spam-filtering-approaches"></a>
-<a name="index-filtering-approaches_002c-spam"></a>
-<a name="index-UCE-1"></a>
-<a name="index-unsolicited-commercial-email-1"></a>
+<body lang="en" xml:lang="en">
+  <a name="The-problem-of-spam" id="The-problem-of-spam"></a>
 
-<p>First, some background on spam.
-</p>
-<p>If you have access to e-mail, you are familiar with spam (technically
-termed <acronym>UCE</acronym>, Unsolicited Commercial E-mail).  Simply put, it
-exists because e-mail delivery is very cheap compared to paper mail,
-so only a very small percentage of people need to respond to an UCE to
-make it worthwhile to the advertiser.  Ironically, one of the most
-common spams is the one offering a database of e-mail addresses for
-further spamming.  Senders of spam are usually called <em>spammers</em>,
-but terms like <em>vermin</em>, <em>scum</em>, <em>sociopaths</em>, and
-<em>morons</em> are in common use as well.
-</p>
-<p>Spam comes from a wide variety of sources.  It is simply impossible to
-dispose of all spam without discarding useful messages.  A good
-example is the TMDA system, which requires senders
-unknown to you to confirm themselves as legitimate senders before
-their e-mail can reach you.  Without getting into the technical side
-of TMDA, a downside is clearly that e-mail from legitimate sources may
-be discarded if those sources can&rsquo;t or won&rsquo;t confirm themselves
-through the TMDA system.  Another problem with TMDA is that it
-requires its users to have a basic understanding of e-mail delivery
-and processing.
-</p>
-<p>The simplest approach to filtering spam is filtering, at the mail
-server or when you sort through incoming mail.  If you get 200 spam
-messages per day from &lsquo;<samp>random-address@vmadmin.com</samp>&rsquo;, you block
-&lsquo;<samp>vmadmin.com</samp>&rsquo;.  If you get 200 messages about &lsquo;<samp>VIAGRA</samp>&rsquo;, you
-discard all messages with &lsquo;<samp>VIAGRA</samp>&rsquo; in the message.  If you get
-lots of spam from Bulgaria, for example, you try to filter all mail
-from Bulgarian IPs.
-</p>
-<p>This, unfortunately, is a great way to discard legitimate e-mail.  The
-risks of blocking a whole country (Bulgaria, Norway, Nigeria, China,
-etc.) or even a continent (Asia, Africa, Europe, etc.) from contacting
-you should be obvious, so don&rsquo;t do it if you have the choice.
-</p>
-<p>In another instance, the very informative and useful RISKS digest has
-been blocked by overzealous mail filters because it <strong>contained</strong>
-words that were common in spam messages.  Nevertheless, in isolated
-cases, with great care, direct filtering of mail can be useful.
-</p>
-<p>Another approach to filtering e-mail is the distributed spam
-processing, for instance DCC implements such a system.  In essence,
-<var>N</var> systems around the world agree that a machine <var>X</var> in
-Ghana, Estonia, or California is sending out spam e-mail, and these
-<var>N</var> systems enter <var>X</var> or the spam e-mail from <var>X</var> into a
-database.  The criteria for spam detection vary&mdash;it may be the number
-of messages sent, the content of the messages, and so on.  When a user
-of the distributed processing system wants to find out if a message is
-spam, he consults one of those <var>N</var> systems.
-</p>
-<p>Distributed spam processing works very well against spammers that send
-a large number of messages at once, but it requires the user to set up
-fairly complicated checks.  There are commercial and free distributed
-spam processing systems.  Distributed spam processing has its risks as
-well.  For instance legitimate e-mail senders have been accused of
-sending spam, and their web sites and mailing lists have been shut
-down for some time because of the incident.
-</p>
-<p>The statistical approach to spam filtering is also popular.  It is
-based on a statistical analysis of previous spam messages.  Usually
-the analysis is a simple word frequency count, with perhaps pairs of
-words or 3-word combinations thrown into the mix.  Statistical
-analysis of spam works very well in most of the cases, but it can
-classify legitimate e-mail as spam in some cases.  It takes time to
-run the analysis, the full message must be analyzed, and the user has
-to store the database of spam analysis.  Statistical analysis on the
-server is gaining popularity.  This has the advantage of letting the
-user Just Read Mail, but has the disadvantage that it&rsquo;s harder to tell
-the server that it has misclassified mail.
-</p>
-<p>Fighting spam is not easy, no matter what anyone says.  There is no
-magic switch that will distinguish Viagra ads from Mom&rsquo;s e-mails.
-Even people are having a hard time telling spam apart from non-spam,
-because spammers are actively looking to fool us into thinking they
-are Mom, essentially.  Spamming is irritating, irresponsible, and
-idiotic behavior from a bunch of people who think the world owes them
-a favor.  We hope the following sections will help you in fighting the
-spam plague.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" accesskey="n" rel="next">Anti-Spam Basics</a>, Up: <a href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u" rel="up">Thwarting Email Spam</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" accesskey="n"
+    rel="next">Anti-Spam Basics</a>, Up: <a href=
+    "Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u"
+    rel="up">Thwarting Email Spam</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-problem-of-spam-1" id="The-problem-of-spam-1"></a>
 
+  <h4 class="subsection">9.16.1 The problem of spam</h4><a name=
+  "index-email-spam-1" id="index-email-spam-1"></a> <a name=
+  "index-spam-filtering-approaches" id=
+  "index-spam-filtering-approaches"></a> <a name=
+  "index-filtering-approaches_002c-spam" id=
+  "index-filtering-approaches_002c-spam"></a> <a name="index-UCE-1"
+  id="index-UCE-1"></a> <a name=
+  "index-unsolicited-commercial-email-1" id=
+  "index-unsolicited-commercial-email-1"></a>
 
+  <p>First, some background on spam.</p>
 
+  <p>If you have access to e-mail, you are familiar with spam
+  (technically termed <acronym>UCE</acronym>, Unsolicited
+  Commercial E-mail). Simply put, it exists because e-mail delivery
+  is very cheap compared to paper mail, so only a very small
+  percentage of people need to respond to an UCE to make it
+  worthwhile to the advertiser. Ironically, one of the most common
+  spams is the one offering a database of e-mail addresses for
+  further spamming. Senders of spam are usually called
+  <em>spammers</em>, but terms like <em>vermin</em>, <em>scum</em>,
+  <em>sociopaths</em>, and <em>morons</em> are in common use as
+  well.</p>
+
+  <p>Spam comes from a wide variety of sources. It is simply
+  impossible to dispose of all spam without discarding useful
+  messages. A good example is the TMDA system, which requires
+  senders unknown to you to confirm themselves as legitimate
+  senders before their e-mail can reach you. Without getting into
+  the technical side of TMDA, a downside is clearly that e-mail
+  from legitimate sources may be discarded if those sources
+  can&rsquo;t or won&rsquo;t confirm themselves through the TMDA
+  system. Another problem with TMDA is that it requires its users
+  to have a basic understanding of e-mail delivery and
+  processing.</p>
+
+  <p>The simplest approach to filtering spam is filtering, at the
+  mail server or when you sort through incoming mail. If you get
+  200 spam messages per day from
+  &lsquo;<samp>random-address@vmadmin.com</samp>&rsquo;, you block
+  &lsquo;<samp>vmadmin.com</samp>&rsquo;. If you get 200 messages
+  about &lsquo;<samp>VIAGRA</samp>&rsquo;, you discard all messages
+  with &lsquo;<samp>VIAGRA</samp>&rsquo; in the message. If you get
+  lots of spam from Bulgaria, for example, you try to filter all
+  mail from Bulgarian IPs.</p>
+
+  <p>This, unfortunately, is a great way to discard legitimate
+  e-mail. The risks of blocking a whole country (Bulgaria, Norway,
+  Nigeria, China, etc.) or even a continent (Asia, Africa, Europe,
+  etc.) from contacting you should be obvious, so don&rsquo;t do it
+  if you have the choice.</p>
+
+  <p>In another instance, the very informative and useful RISKS
+  digest has been blocked by overzealous mail filters because it
+  <strong>contained</strong> words that were common in spam
+  messages. Nevertheless, in isolated cases, with great care,
+  direct filtering of mail can be useful.</p>
+
+  <p>Another approach to filtering e-mail is the distributed spam
+  processing, for instance DCC implements such a system. In
+  essence, <var>N</var> systems around the world agree that a
+  machine <var>X</var> in Ghana, Estonia, or California is sending
+  out spam e-mail, and these <var>N</var> systems enter
+  <var>X</var> or the spam e-mail from <var>X</var> into a
+  database. The criteria for spam detection vary&mdash;it may be
+  the number of messages sent, the content of the messages, and so
+  on. When a user of the distributed processing system wants to
+  find out if a message is spam, he consults one of those
+  <var>N</var> systems.</p>
+
+  <p>Distributed spam processing works very well against spammers
+  that send a large number of messages at once, but it requires the
+  user to set up fairly complicated checks. There are commercial
+  and free distributed spam processing systems. Distributed spam
+  processing has its risks as well. For instance legitimate e-mail
+  senders have been accused of sending spam, and their web sites
+  and mailing lists have been shut down for some time because of
+  the incident.</p>
+
+  <p>The statistical approach to spam filtering is also popular. It
+  is based on a statistical analysis of previous spam messages.
+  Usually the analysis is a simple word frequency count, with
+  perhaps pairs of words or 3-word combinations thrown into the
+  mix. Statistical analysis of spam works very well in most of the
+  cases, but it can classify legitimate e-mail as spam in some
+  cases. It takes time to run the analysis, the full message must
+  be analyzed, and the user has to store the database of spam
+  analysis. Statistical analysis on the server is gaining
+  popularity. This has the advantage of letting the user Just Read
+  Mail, but has the disadvantage that it&rsquo;s harder to tell the
+  server that it has misclassified mail.</p>
+
+  <p>Fighting spam is not easy, no matter what anyone says. There
+  is no magic switch that will distinguish Viagra ads from
+  Mom&rsquo;s e-mails. Even people are having a hard time telling
+  spam apart from non-spam, because spammers are actively looking
+  to fool us into thinking they are Mom, essentially. Spamming is
+  irritating, irresponsible, and idiotic behavior from a bunch of
+  people who think the world owes them a favor. We hope the
+  following sections will help you in fighting the spam plague.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Anti_002dSpam-Basics.html#Anti_002dSpam-Basics" accesskey="n"
+    rel="next">Anti-Spam Basics</a>, Up: <a href=
+    "Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u"
+    rel="up">Thwarting Email Spam</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

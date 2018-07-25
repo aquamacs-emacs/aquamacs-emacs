@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Charsets - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
-<link rel="prev" href="MIME-Commands.html#MIME-Commands" title="MIME Commands">
-<link rel="next" href="Article-Commands.html#Article-Commands" title="Article Commands">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Charsets - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Summary-Buffer.html#Summary-Buffer" title=
+  "Summary Buffer" />
+  <link rel="prev" href="MIME-Commands.html#MIME-Commands" title=
+  "MIME Commands" />
+  <link rel="next" href="Article-Commands.html#Article-Commands"
+  title="Article Commands" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +35,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,86 +48,133 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Charsets"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Article-Commands.html#Article-Commands">Article Commands</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="MIME-Commands.html#MIME-Commands">MIME Commands</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Charsets" id="Charsets"></a>
 
-<h3 class="section">3.20 Charsets</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Article-Commands.html#Article-Commands">Article Commands</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "MIME-Commands.html#MIME-Commands">MIME Commands</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Summary-Buffer.html#Summary-Buffer">Summary Buffer</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-charsets-1491"></a>
-People use different charsets, and we have <acronym>MIME</acronym> to let us know what
-charsets they use.  Or rather, we wish we had.  Many people use
-newsreaders and mailers that do not understand or use <acronym>MIME</acronym>, and
-just send out messages without saying what character sets they use.  To
-help a bit with this, some local news hierarchies have policies that say
-what character set is the default.  For instance, the &lsquo;<samp><span class="samp">fj</span></samp>&rsquo;
-hierarchy uses <code>iso-2022-jp</code>.
+  <h3 class="section">3.20 Charsets</h3>
 
-   <p><a name="index-gnus_002dgroup_002dcharset_002dalist-1492"></a>This knowledge is encoded in the <code>gnus-group-charset-alist</code>
-variable, which is an alist of regexps (use the first item to match full
-group names) and default charsets to be used when reading these groups.
+  <p><a name="index-charsets-1491" id="index-charsets-1491"></a>
+  People use different charsets, and we have
+  <acronym>MIME</acronym> to let us know what charsets they use. Or
+  rather, we wish we had. Many people use newsreaders and mailers
+  that do not understand or use <acronym>MIME</acronym>, and just
+  send out messages without saying what character sets they use. To
+  help a bit with this, some local news hierarchies have policies
+  that say what character set is the default. For instance, the
+  &lsquo;<samp><span class="samp">fj</span></samp>&rsquo; hierarchy
+  uses <code>iso-2022-jp</code>.</p>
 
-   <p><a name="index-gnus_002dnewsgroup_002dignored_002dcharsets-1493"></a>In addition, some people do use soi-disant <acronym>MIME</acronym>-aware agents that
-aren't.  These blithely mark messages as being in <code>iso-8859-1</code>
-even if they really are in <code>koi-8</code>.  To help here, the
-<code>gnus-newsgroup-ignored-charsets</code> variable can be used.  The
-charsets that are listed here will be ignored.  The variable can be
-set on a group-by-group basis using the group parameters (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>).  The default value is <code>(unknown-8bit x-unknown)</code>,
-which includes values some agents insist on having in there.
+  <p><a name="index-gnus_002dgroup_002dcharset_002dalist-1492" id=
+  "index-gnus_002dgroup_002dcharset_002dalist-1492"></a>This
+  knowledge is encoded in the <code>gnus-group-charset-alist</code>
+  variable, which is an alist of regexps (use the first item to
+  match full group names) and default charsets to be used when
+  reading these groups.</p>
 
-   <p><a name="index-gnus_002dgroup_002dposting_002dcharset_002dalist-1494"></a>When posting, <code>gnus-group-posting-charset-alist</code> is used to
-determine which charsets should not be encoded using the <acronym>MIME</acronym>
-encodings.  For instance, some hierarchies discourage using
-quoted-printable header encoding.
+  <p><a name=
+  "index-gnus_002dnewsgroup_002dignored_002dcharsets-1493" id=
+  "index-gnus_002dnewsgroup_002dignored_002dcharsets-1493"></a>In
+  addition, some people do use soi-disant
+  <acronym>MIME</acronym>-aware agents that aren't. These blithely
+  mark messages as being in <code>iso-8859-1</code> even if they
+  really are in <code>koi-8</code>. To help here, the
+  <code>gnus-newsgroup-ignored-charsets</code> variable can be
+  used. The charsets that are listed here will be ignored. The
+  variable can be set on a group-by-group basis using the group
+  parameters (see <a href=
+  "Group-Parameters.html#Group-Parameters">Group Parameters</a>).
+  The default value is <code>(unknown-8bit x-unknown)</code>, which
+  includes values some agents insist on having in there.</p>
 
-   <p>This variable is an alist of regexps and permitted unencoded charsets
-for posting.  Each element of the alist has the form <code>(</code><var>test
-header body-list</var><code>)</code>, where:
+  <p><a name=
+  "index-gnus_002dgroup_002dposting_002dcharset_002dalist-1494" id=
+  "index-gnus_002dgroup_002dposting_002dcharset_002dalist-1494"></a>When
+  posting, <code>gnus-group-posting-charset-alist</code> is used to
+  determine which charsets should not be encoded using the
+  <acronym>MIME</acronym> encodings. For instance, some hierarchies
+  discourage using quoted-printable header encoding.</p>
 
-     <dl>
-<dt><var>test</var><dd>is either a regular expression matching the newsgroup header or a
-variable to query,
-<br><dt><var>header</var><dd>is the charset which may be left unencoded in the header (<code>nil</code>
-means encode all charsets),
-<br><dt><var>body-list</var><dd>is a list of charsets which may be encoded using 8bit content-transfer
-encoding in the body, or one of the special values <code>nil</code> (always
-encode using quoted-printable) or <code>t</code> (always use 8bit). 
-</dl>
+  <p>This variable is an alist of regexps and permitted unencoded
+  charsets for posting. Each element of the alist has the form
+  <code>(</code><var>test header body-list</var><code>)</code>,
+  where:</p>
 
-   <p><a name="index-Russian-1495"></a><a name="index-koi8_002dr-1496"></a><a name="index-koi8_002du-1497"></a><a name="index-iso_002d8859_002d5-1498"></a><a name="index-coding-system-aliases-1499"></a><a name="index-preferred-charset-1500"></a>
-See <a href="../emacs-mime/Encoding-Customization.html#Encoding-Customization">Encoding Customization</a>, for additional variables that control which
-MIME charsets are used when sending messages.
+  <dl>
+    <dt><var>test</var></dt>
 
-   <p>Other charset tricks that may be useful, although not Gnus-specific:
+    <dd>is either a regular expression matching the newsgroup
+    header or a variable to query,<br /></dd>
 
-   <p>If there are several <acronym>MIME</acronym> charsets that encode the same Emacs
-charset, you can choose what charset to use by saying the following:
+    <dt><var>header</var></dt>
 
-<pre class="lisp">     (put-charset-property 'cyrillic-iso8859-5
+    <dd>is the charset which may be left unencoded in the header
+    (<code>nil</code> means encode all charsets),<br /></dd>
+
+    <dt><var>body-list</var></dt>
+
+    <dd>is a list of charsets which may be encoded using 8bit
+    content-transfer encoding in the body, or one of the special
+    values <code>nil</code> (always encode using quoted-printable)
+    or <code>t</code> (always use 8bit).</dd>
+  </dl>
+
+  <p><a name="index-Russian-1495" id=
+  "index-Russian-1495"></a><a name="index-koi8_002dr-1496" id=
+  "index-koi8_002dr-1496"></a><a name="index-koi8_002du-1497" id=
+  "index-koi8_002du-1497"></a><a name=
+  "index-iso_002d8859_002d5-1498" id=
+  "index-iso_002d8859_002d5-1498"></a><a name=
+  "index-coding-system-aliases-1499" id=
+  "index-coding-system-aliases-1499"></a><a name=
+  "index-preferred-charset-1500" id=
+  "index-preferred-charset-1500"></a> See <a href=
+  "../emacs-mime/Encoding-Customization.html#Encoding-Customization">
+  Encoding Customization</a>, for additional variables that control
+  which MIME charsets are used when sending messages.</p>
+
+  <p>Other charset tricks that may be useful, although not
+  Gnus-specific:</p>
+
+  <p>If there are several <acronym>MIME</acronym> charsets that
+  encode the same Emacs charset, you can choose what charset to use
+  by saying the following:</p>
+  <pre class="lisp">
+     (put-charset-property 'cyrillic-iso8859-5
                            'preferred-coding-system 'koi8-r)
 </pre>
-   <p>This means that Russian will be encoded using <code>koi8-r</code> instead of
-the default <code>iso-8859-5</code> <acronym>MIME</acronym> charset.
 
-   <p>If you want to read messages in <code>koi8-u</code>, you can cheat and say
+  <p>This means that Russian will be encoded using
+  <code>koi8-r</code> instead of the default
+  <code>iso-8859-5</code> <acronym>MIME</acronym> charset.</p>
 
-<pre class="lisp">     (define-coding-system-alias 'koi8-u 'koi8-r)
+  <p>If you want to read messages in <code>koi8-u</code>, you can
+  cheat and say</p>
+  <pre class="lisp">
+     (define-coding-system-alias 'koi8-u 'koi8-r)
 </pre>
-   <p>This will almost do the right thing.
 
-   <p>And finally, to read charsets like <code>windows-1251</code>, you can say
-something like
+  <p>This will almost do the right thing.</p>
 
-<pre class="lisp">     (codepage-setup 1251)
+  <p>And finally, to read charsets like <code>windows-1251</code>,
+  you can say something like</p>
+  <pre class="lisp">
+     (codepage-setup 1251)
      (define-coding-system-alias 'windows-1251 'cp1251)
 </pre>
-   </body></html>
-
+</body>
+</html>

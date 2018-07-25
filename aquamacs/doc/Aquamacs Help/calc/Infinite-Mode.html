@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Infinite Mode - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Calculation-Modes.html#Calculation-Modes" title="Calculation Modes">
-<link rel="prev" href="Fraction-Mode.html#Fraction-Mode" title="Fraction Mode">
-<link rel="next" href="Symbolic-Mode.html#Symbolic-Mode" title="Symbolic Mode">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Infinite Mode - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Calculation-Modes.html#Calculation-Modes"
+  title="Calculation Modes" />
+  <link rel="prev" href="Fraction-Mode.html#Fraction-Mode" title=
+  "Fraction Mode" />
+  <link rel="next" href="Symbolic-Mode.html#Symbolic-Mode" title=
+  "Symbolic Mode" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +38,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,51 +51,78 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Infinite-Mode"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Symbolic-Mode.html#Symbolic-Mode">Symbolic Mode</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Fraction-Mode.html#Fraction-Mode">Fraction Mode</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Calculation-Modes.html#Calculation-Modes">Calculation Modes</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Infinite-Mode" id="Infinite-Mode"></a>
 
-<h4 class="subsection">7.4.4 Infinite Mode</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Symbolic-Mode.html#Symbolic-Mode">Symbolic Mode</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Fraction-Mode.html#Fraction-Mode">Fraction Mode</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Calculation-Modes.html#Calculation-Modes">Calculation
+    Modes</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-Infinite-mode-424"></a>The Calculator normally treats results like &lsquo;<samp><span class="samp">1 / 0</span></samp>&rsquo; as errors;
-formulas like this are left in unsimplified form.  But Calc can be
-put into a mode where such calculations instead produce &ldquo;infinite&rdquo;
-results.
+  <h4 class="subsection">7.4.4 Infinite Mode</h4>
 
-   <p><a name="index-m-i-425"></a><a name="index-calc_002dinfinite_002dmode-426"></a>The <kbd>m i</kbd> (<code>calc-infinite-mode</code>) command turns this mode
-on and off.  When the mode is off, infinities do not arise except
-in calculations that already had infinities as inputs.  (One exception
-is that infinite open intervals like &lsquo;<samp><span class="samp">[0 .. inf)</span></samp>&rsquo; can be
-generated; however, intervals closed at infinity (&lsquo;<samp><span class="samp">[0 .. inf]</span></samp>&rsquo;)
-will not be generated when Infinite mode is off.)
+  <p class="noindent"><a name="index-Infinite-mode-424" id=
+  "index-Infinite-mode-424"></a>The Calculator normally treats
+  results like &lsquo;<samp><span class="samp">1 /
+  0</span></samp>&rsquo; as errors; formulas like this are left in
+  unsimplified form. But Calc can be put into a mode where such
+  calculations instead produce &ldquo;infinite&rdquo; results.</p>
 
-   <p>With Infinite mode turned on, &lsquo;<samp><span class="samp">1 / 0</span></samp>&rsquo; will generate <code>uinf</code>,
-an undirected infinity.  See <a href="Infinities.html#Infinities">Infinities</a>, for a discussion of the
-difference between <code>inf</code> and <code>uinf</code>.  Also, &lsquo;<samp><span class="samp">0 / 0</span></samp>&rsquo;
-evaluates to <code>nan</code>, the &ldquo;indeterminate&rdquo; symbol.  Various other
-functions can also return infinities in this mode; for example,
-&lsquo;<samp><span class="samp">ln(0) = -inf</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">gamma(-7) = uinf</span></samp>&rsquo;.  Once again,
-note that &lsquo;<samp><span class="samp">exp(inf) = inf</span></samp>&rsquo; regardless of Infinite mode because
-this calculation has infinity as an input.
+  <p><a name="index-m-i-425" id="index-m-i-425"></a><a name=
+  "index-calc_002dinfinite_002dmode-426" id=
+  "index-calc_002dinfinite_002dmode-426"></a>The <kbd>m i</kbd>
+  (<code>calc-infinite-mode</code>) command turns this mode on and
+  off. When the mode is off, infinities do not arise except in
+  calculations that already had infinities as inputs. (One
+  exception is that infinite open intervals like
+  &lsquo;<samp><span class="samp">[0 .. inf)</span></samp>&rsquo;
+  can be generated; however, intervals closed at infinity
+  (&lsquo;<samp><span class="samp">[0 .. inf]</span></samp>&rsquo;)
+  will not be generated when Infinite mode is off.)</p>
 
-   <p><a name="index-Positive-Infinite-mode-427"></a>The <kbd>m i</kbd> command with a numeric prefix argument of zero,
-i.e., <kbd>C-u 0 m i</kbd>, turns on a Positive Infinite mode in
-which zero is treated as positive instead of being directionless. 
-Thus, &lsquo;<samp><span class="samp">1 / 0 = inf</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-1 / 0 = -inf</span></samp>&rsquo; in this mode. 
-Note that zero never actually has a sign in Calc; there are no
-separate representations for <i>+0</i> and <i>-0</i>.  Positive
-Infinite mode merely changes the interpretation given to the
-single symbol, &lsquo;<samp><span class="samp">0</span></samp>&rsquo;.  One consequence of this is that, while
-you might expect &lsquo;<samp><span class="samp">1 / -0 = -inf</span></samp>&rsquo;, actually &lsquo;<samp><span class="samp">1 / -0</span></samp>&rsquo;
-is equivalent to &lsquo;<samp><span class="samp">1 / 0</span></samp>&rsquo;, which is equal to positive <code>inf</code>.
+  <p>With Infinite mode turned on, &lsquo;<samp><span class=
+  "samp">1 / 0</span></samp>&rsquo; will generate
+  <code>uinf</code>, an undirected infinity. See <a href=
+  "Infinities.html#Infinities">Infinities</a>, for a discussion of
+  the difference between <code>inf</code> and <code>uinf</code>.
+  Also, &lsquo;<samp><span class="samp">0 / 0</span></samp>&rsquo;
+  evaluates to <code>nan</code>, the &ldquo;indeterminate&rdquo;
+  symbol. Various other functions can also return infinities in
+  this mode; for example, &lsquo;<samp><span class="samp">ln(0) =
+  -inf</span></samp>&rsquo;, and &lsquo;<samp><span class=
+  "samp">gamma(-7) = uinf</span></samp>&rsquo;. Once again, note
+  that &lsquo;<samp><span class="samp">exp(inf) =
+  inf</span></samp>&rsquo; regardless of Infinite mode because this
+  calculation has infinity as an input.</p>
 
-   </body></html>
-
+  <p><a name="index-Positive-Infinite-mode-427" id=
+  "index-Positive-Infinite-mode-427"></a>The <kbd>m i</kbd> command
+  with a numeric prefix argument of zero, i.e., <kbd>C-u 0 m
+  i</kbd>, turns on a Positive Infinite mode in which zero is
+  treated as positive instead of being directionless. Thus,
+  &lsquo;<samp><span class="samp">1 / 0 = inf</span></samp>&rsquo;
+  and &lsquo;<samp><span class="samp">-1 / 0 =
+  -inf</span></samp>&rsquo; in this mode. Note that zero never
+  actually has a sign in Calc; there are no separate
+  representations for <i>+0</i> and <i>-0</i>. Positive Infinite
+  mode merely changes the interpretation given to the single
+  symbol, &lsquo;<samp><span class="samp">0</span></samp>&rsquo;.
+  One consequence of this is that, while you might expect
+  &lsquo;<samp><span class="samp">1 / -0 =
+  -inf</span></samp>&rsquo;, actually &lsquo;<samp><span class=
+  "samp">1 / -0</span></samp>&rsquo; is equivalent to
+  &lsquo;<samp><span class="samp">1 / 0</span></samp>&rsquo;, which
+  is equal to positive <code>inf</code>.</p>
+</body>
+</html>

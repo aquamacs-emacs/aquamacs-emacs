@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,116 +16,170 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Macro Bindings</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Macro Bindings">
-<meta name="keywords" content="Common Lisp Extensions: Macro Bindings">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variable-Bindings.html#Variable-Bindings" rel="up" title="Variable Bindings">
-<link href="Conditionals.html#Conditionals" rel="next" title="Conditionals">
-<link href="Function-Bindings.html#Function-Bindings" rel="prev" title="Function Bindings">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Macro Bindings</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Macro Bindings" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Macro Bindings" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variable-Bindings.html#Variable-Bindings" rel="up"
+  title="Variable Bindings" />
+  <link href="Conditionals.html#Conditionals" rel="next" title=
+  "Conditionals" />
+  <link href="Function-Bindings.html#Function-Bindings" rel="prev"
+  title="Function Bindings" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Macro-Bindings"></a>
-<div class="header">
-<p>
-Previous: <a href="Function-Bindings.html#Function-Bindings" accesskey="p" rel="prev">Function Bindings</a>, Up: <a href="Variable-Bindings.html#Variable-Bindings" accesskey="u" rel="up">Variable Bindings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Macro-Bindings-1"></a>
-<h4 class="subsection">4.3.3 Macro Bindings</h4>
+<body lang="en" xml:lang="en">
+  <a name="Macro-Bindings" id="Macro-Bindings"></a>
 
-<p>These forms create local macros and &ldquo;symbol macros&rdquo;.
-</p>
-<dl>
-<dt><a name="index-cl_002dmacrolet"></a>Macro: <strong>cl-macrolet</strong> <em>(bindings&hellip;) forms&hellip;</em></dt>
-<dd><p>This form is analogous to <code>cl-flet</code>, but for macros instead of
-functions.  Each <var>binding</var> is a list of the same form as the
-arguments to <code>cl-defmacro</code> (i.e., a macro name, argument list,
-and macro-expander forms).  The macro is defined accordingly for
-use within the body of the <code>cl-macrolet</code>.
-</p>
-<p>Because of the nature of macros, <code>cl-macrolet</code> is always lexically
-scoped.  The <code>cl-macrolet</code> binding will
-affect only calls that appear physically within the body
-<var>forms</var>, possibly after expansion of other macros in the
-body.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href="Function-Bindings.html#Function-Bindings"
+    accesskey="p" rel="prev">Function Bindings</a>, Up: <a href=
+    "Variable-Bindings.html#Variable-Bindings" accesskey="u" rel=
+    "up">Variable Bindings</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Macro-Bindings-1" id="Macro-Bindings-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dsymbol_002dmacrolet"></a>Macro: <strong>cl-symbol-macrolet</strong> <em>(bindings&hellip;) forms&hellip;</em></dt>
-<dd><p>This form creates <em>symbol macros</em>, which are macros that look
-like variable references rather than function calls.  Each
-<var>binding</var> is a list &lsquo;<samp>(<var>var</var> <var>expansion</var>)</samp>&rsquo;;
-any reference to <var>var</var> within the body <var>forms</var> is
-replaced by <var>expansion</var>.
-</p>
-<div class="example">
-<pre class="example">(setq bar '(5 . 9))
+  <h4 class="subsection">4.3.3 Macro Bindings</h4>
+
+  <p>These forms create local macros and &ldquo;symbol
+  macros&rdquo;.</p>
+
+  <dl>
+    <dt><a name="index-cl_002dmacrolet" id=
+    "index-cl_002dmacrolet"></a>Macro: <strong>cl-macrolet</strong>
+    <em>(bindings&hellip;) forms&hellip;</em></dt>
+
+    <dd>
+      <p>This form is analogous to <code>cl-flet</code>, but for
+      macros instead of functions. Each <var>binding</var> is a
+      list of the same form as the arguments to
+      <code>cl-defmacro</code> (i.e., a macro name, argument list,
+      and macro-expander forms). The macro is defined accordingly
+      for use within the body of the <code>cl-macrolet</code>.</p>
+
+      <p>Because of the nature of macros, <code>cl-macrolet</code>
+      is always lexically scoped. The <code>cl-macrolet</code>
+      binding will affect only calls that appear physically within
+      the body <var>forms</var>, possibly after expansion of other
+      macros in the body.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dsymbol_002dmacrolet" id=
+    "index-cl_002dsymbol_002dmacrolet"></a>Macro:
+    <strong>cl-symbol-macrolet</strong> <em>(bindings&hellip;)
+    forms&hellip;</em></dt>
+
+    <dd>
+      <p>This form creates <em>symbol macros</em>, which are macros
+      that look like variable references rather than function
+      calls. Each <var>binding</var> is a list
+      &lsquo;<samp>(<var>var</var>
+      <var>expansion</var>)</samp>&rsquo;; any reference to
+      <var>var</var> within the body <var>forms</var> is replaced
+      by <var>expansion</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq bar '(5 . 9))
 (cl-symbol-macrolet ((foo (car bar)))
   (cl-incf foo))
 bar
      &rArr; (6 . 9)
-</pre></div>
+</pre>
+      </div>
 
-<p>A <code>setq</code> of a symbol macro is treated the same as a <code>setf</code>.
-I.e., <code>(setq foo 4)</code> in the above would be equivalent to
-<code>(setf foo 4)</code>, which in turn expands to <code>(setf (car bar) 4)</code>.
-</p>
-<p>Likewise, a <code>let</code> or <code>let*</code> binding a symbol macro is
-treated like a <code>cl-letf</code> or <code>cl-letf*</code>.  This differs from true
-Common Lisp, where the rules of lexical scoping cause a <code>let</code>
-binding to shadow a <code>symbol-macrolet</code> binding.  In this package,
-such shadowing does not occur, even when <code>lexical-binding</code> is
-<code>t</code>.  (This behavior predates the addition of lexical binding to
-Emacs Lisp, and may change in future to respect <code>lexical-binding</code>.)
-At present in this package, only <code>lexical-let</code> and
-<code>lexical-let*</code> will shadow a symbol macro.  See <a href="Obsolete-Lexical-Binding.html#Obsolete-Lexical-Binding">Obsolete Lexical Binding</a>.
-</p>
-<p>There is no analogue of <code>defmacro</code> for symbol macros; all symbol
-macros are local.  A typical use of <code>cl-symbol-macrolet</code> is in the
-expansion of another macro:
-</p>
-<div class="example">
-<pre class="example">(cl-defmacro my-dolist ((x list) &amp;rest body)
+      <p>A <code>setq</code> of a symbol macro is treated the same
+      as a <code>setf</code>. I.e., <code>(setq foo 4)</code> in
+      the above would be equivalent to <code>(setf foo 4)</code>,
+      which in turn expands to <code>(setf (car bar) 4)</code>.</p>
+
+      <p>Likewise, a <code>let</code> or <code>let*</code> binding
+      a symbol macro is treated like a <code>cl-letf</code> or
+      <code>cl-letf*</code>. This differs from true Common Lisp,
+      where the rules of lexical scoping cause a <code>let</code>
+      binding to shadow a <code>symbol-macrolet</code> binding. In
+      this package, such shadowing does not occur, even when
+      <code>lexical-binding</code> is <code>t</code>. (This
+      behavior predates the addition of lexical binding to Emacs
+      Lisp, and may change in future to respect
+      <code>lexical-binding</code>.) At present in this package,
+      only <code>lexical-let</code> and <code>lexical-let*</code>
+      will shadow a symbol macro. See <a href=
+      "Obsolete-Lexical-Binding.html#Obsolete-Lexical-Binding">Obsolete
+      Lexical Binding</a>.</p>
+
+      <p>There is no analogue of <code>defmacro</code> for symbol
+      macros; all symbol macros are local. A typical use of
+      <code>cl-symbol-macrolet</code> is in the expansion of
+      another macro:</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-defmacro my-dolist ((x list) &amp;rest body)
   (let ((var (cl-gensym)))
     (list 'cl-loop 'for var 'on list 'do
           (cl-list* 'cl-symbol-macrolet
@@ -134,37 +190,49 @@ expansion of another macro:
 (my-dolist (x mylist) (cl-incf x))
 mylist
      &rArr; (2 3 4 5)
-</pre></div>
+</pre>
+      </div>
 
-<p>In this example, the <code>my-dolist</code> macro is similar to <code>dolist</code>
-(see <a href="Iteration.html#Iteration">Iteration</a>) except that the variable <code>x</code> becomes a true
-reference onto the elements of the list.  The <code>my-dolist</code> call
-shown here expands to
-</p>
-<div class="example">
-<pre class="example">(cl-loop for G1234 on mylist do
+      <p>In this example, the <code>my-dolist</code> macro is
+      similar to <code>dolist</code> (see <a href=
+      "Iteration.html#Iteration">Iteration</a>) except that the
+      variable <code>x</code> becomes a true reference onto the
+      elements of the list. The <code>my-dolist</code> call shown
+      here expands to</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop for G1234 on mylist do
       (cl-symbol-macrolet ((x (car G1234)))
         (cl-incf x)))
-</pre></div>
+</pre>
+      </div>
 
-<p>which in turn expands to
-</p>
-<div class="example">
-<pre class="example">(cl-loop for G1234 on mylist do (cl-incf (car G1234)))
-</pre></div>
+      <p>which in turn expands to</p>
 
-<p>See <a href="Loop-Facility.html#Loop-Facility">Loop Facility</a>, for a description of the <code>cl-loop</code> macro.
-This package defines a nonstandard <code>in-ref</code> loop clause that
-works much like <code>my-dolist</code>.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+(cl-loop for G1234 on mylist do (cl-incf (car G1234)))
+</pre>
+      </div>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Function-Bindings.html#Function-Bindings" accesskey="p" rel="prev">Function Bindings</a>, Up: <a href="Variable-Bindings.html#Variable-Bindings" accesskey="u" rel="up">Variable Bindings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>See <a href="Loop-Facility.html#Loop-Facility">Loop
+      Facility</a>, for a description of the <code>cl-loop</code>
+      macro. This package defines a nonstandard <code>in-ref</code>
+      loop clause that works much like <code>my-dolist</code>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Previous: <a href="Function-Bindings.html#Function-Bindings"
+    accesskey="p" rel="prev">Function Bindings</a>, Up: <a href=
+    "Variable-Bindings.html#Variable-Bindings" accesskey="u" rel=
+    "up">Variable Bindings</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

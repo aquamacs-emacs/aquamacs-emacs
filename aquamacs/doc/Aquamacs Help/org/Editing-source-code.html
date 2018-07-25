@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Editing source code - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Working-With-Source-Code.html#Working-With-Source-Code" title="Working With Source Code">
-<link rel="prev" href="Structure-of-code-blocks.html#Structure-of-code-blocks" title="Structure of code blocks">
-<link rel="next" href="Exporting-code-blocks.html#Exporting-code-blocks" title="Exporting code blocks">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Editing source code - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Working-With-Source-Code.html#Working-With-Source-Code" title=
+  "Working With Source Code" />
+  <link rel="prev" href=
+  "Structure-of-code-blocks.html#Structure-of-code-blocks" title=
+  "Structure of code blocks" />
+  <link rel="next" href=
+  "Exporting-code-blocks.html#Exporting-code-blocks" title=
+  "Exporting code blocks" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +45,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,44 +58,70 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Editing-source-code"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Exporting-code-blocks.html#Exporting-code-blocks">Exporting code blocks</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Structure-of-code-blocks.html#Structure-of-code-blocks">Structure of code blocks</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Working-With-Source-Code.html#Working-With-Source-Code">Working With Source Code</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Editing-source-code" id="Editing-source-code"></a>
 
-<h3 class="section">14.2 Editing source code</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Exporting-code-blocks.html#Exporting-code-blocks">Exporting
+    code blocks</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href=
+    "Structure-of-code-blocks.html#Structure-of-code-blocks">Structure
+    of code blocks</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Working-With-Source-Code.html#Working-With-Source-Code">Working
+    With Source Code</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-code-block_002c-editing-1692"></a><a name="index-source-code_002c-editing-1693"></a>
-<a name="index-C_002dc-_0027-1694"></a>Use <kbd>C-c '</kbd> to edit the current code block. This brings up
-a language major-mode edit buffer containing the body of the code
-block. Saving this buffer will write the new contents back to the Org
-buffer. Use <kbd>C-c '</kbd> again to exit.
+  <h3 class="section">14.2 Editing source code</h3>
 
-   <p>The <code>org-src-mode</code> minor mode will be active in the edit buffer. The
-following variables can be used to configure the behavior of the edit
-buffer. See also the customization group <code>org-edit-structure</code> for
-further configuration options.
+  <p><a name="index-code-block_002c-editing-1692" id=
+  "index-code-block_002c-editing-1692"></a><a name=
+  "index-source-code_002c-editing-1693" id=
+  "index-source-code_002c-editing-1693"></a> <a name=
+  "index-C_002dc-_0027-1694" id="index-C_002dc-_0027-1694"></a>Use
+  <kbd>C-c '</kbd> to edit the current code block. This brings up a
+  language major-mode edit buffer containing the body of the code
+  block. Saving this buffer will write the new contents back to the
+  Org buffer. Use <kbd>C-c '</kbd> again to exit.</p>
 
-     <dl>
-<dt><code>org-src-lang-modes</code><dd>If an Emacs major-mode named <code>&lt;lang&gt;-mode</code> exists, where
-<code>&lt;lang&gt;</code> is the language named in the header line of the code block,
-then the edit buffer will be placed in that major-mode. This variable
-can be used to map arbitrary language names to existing major modes. 
-<br><dt><code>org-src-window-setup</code><dd>Controls the way Emacs windows are rearranged when the edit buffer is created. 
-<br><dt><code>org-src-preserve-indentation</code><dd>This variable is especially useful for tangling languages such as
-Python, in which whitespace indentation in the output is critical. 
-<br><dt><code>org-src-ask-before-returning-to-edit-buffer</code><dd>By default, Org will ask before returning to an open edit buffer. Set
-this variable to nil to switch without asking. 
-</dl>
+  <p>The <code>org-src-mode</code> minor mode will be active in the
+  edit buffer. The following variables can be used to configure the
+  behavior of the edit buffer. See also the customization group
+  <code>org-edit-structure</code> for further configuration
+  options.</p>
 
-<!-- node-name,  next,  previous,  up -->
-<!-- Exporting code blocks, Extracting source code, Editing source code, Working With Source Code -->
-   </body></html>
+  <dl>
+    <dt><code>org-src-lang-modes</code></dt>
 
+    <dd>If an Emacs major-mode named <code>&lt;lang&gt;-mode</code>
+    exists, where <code>&lt;lang&gt;</code> is the language named
+    in the header line of the code block, then the edit buffer will
+    be placed in that major-mode. This variable can be used to map
+    arbitrary language names to existing major modes.<br /></dd>
+
+    <dt><code>org-src-window-setup</code></dt>
+
+    <dd>Controls the way Emacs windows are rearranged when the edit
+    buffer is created.<br /></dd>
+
+    <dt><code>org-src-preserve-indentation</code></dt>
+
+    <dd>This variable is especially useful for tangling languages
+    such as Python, in which whitespace indentation in the output
+    is critical.<br /></dd>
+
+    <dt>
+    <code>org-src-ask-before-returning-to-edit-buffer</code></dt>
+
+    <dd>By default, Org will ask before returning to an open edit
+    buffer. Set this variable to nil to switch without asking.</dd>
+  </dl><!-- node-name,  next,  previous,  up -->
+  <!-- Exporting code blocks, Extracting source code, Editing source code, Working With Source Code -->
+</body>
+</html>

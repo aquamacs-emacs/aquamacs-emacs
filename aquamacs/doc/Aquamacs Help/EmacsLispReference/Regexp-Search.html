@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,290 +19,434 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Regexp Search</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Regexp Search">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Regexp Search">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Searching-and-Matching.html#Searching-and-Matching" rel="up" title="Searching and Matching">
-<link href="POSIX-Regexps.html#POSIX-Regexps" rel="next" title="POSIX Regexps">
-<link href="Regexp-Functions.html#Regexp-Functions" rel="prev" title="Regexp Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Regexp Search</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Regexp Search" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Regexp Search" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Searching-and-Matching.html#Searching-and-Matching"
+  rel="up" title="Searching and Matching" />
+  <link href="POSIX-Regexps.html#POSIX-Regexps" rel="next" title=
+  "POSIX Regexps" />
+  <link href="Regexp-Functions.html#Regexp-Functions" rel="prev"
+  title="Regexp Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Regexp-Search" id="Regexp-Search"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="POSIX-Regexps.html#POSIX-Regexps" accesskey=
+    "n" rel="next">POSIX Regexps</a>, Previous: <a href=
+    "Regular-Expressions.html#Regular-Expressions" accesskey="p"
+    rel="prev">Regular Expressions</a>, Up: <a href=
+    "Searching-and-Matching.html#Searching-and-Matching" accesskey=
+    "u" rel="up">Searching and Matching</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Regular-Expression-Searching" id=
+  "Regular-Expression-Searching"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Regexp-Search"></a>
-<div class="header">
-<p>
-Next: <a href="POSIX-Regexps.html#POSIX-Regexps" accesskey="n" rel="next">POSIX Regexps</a>, Previous: <a href="Regular-Expressions.html#Regular-Expressions" accesskey="p" rel="prev">Regular Expressions</a>, Up: <a href="Searching-and-Matching.html#Searching-and-Matching" accesskey="u" rel="up">Searching and Matching</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Regular-Expression-Searching"></a>
-<h3 class="section">33.4 Regular Expression Searching</h3>
-<a name="index-regular-expression-searching"></a>
-<a name="index-regexp-searching"></a>
-<a name="index-searching-for-regexp"></a>
+  <h3 class="section">33.4 Regular Expression
+  Searching</h3><a name="index-regular-expression-searching" id=
+  "index-regular-expression-searching"></a> <a name=
+  "index-regexp-searching" id="index-regexp-searching"></a>
+  <a name="index-searching-for-regexp" id=
+  "index-searching-for-regexp"></a>
 
-<p>In GNU Emacs, you can search for the next match for a regular
-expression (see <a href="Syntax-of-Regexps.html#Syntax-of-Regexps">Syntax of Regexps</a>) either incrementally or not.
-For incremental search commands, see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Regexp-Search.html#Regexp-Search">Regular
-Expression Search</a> in <cite>The GNU Emacs Manual</cite>.  Here we describe
-only the search functions useful in programs.  The principal one is
-<code>re-search-forward</code>.
-</p>
-<p>These search functions convert the regular expression to multibyte if
-the buffer is multibyte; they convert the regular expression to unibyte
-if the buffer is unibyte.  See <a href="Text-Representations.html#Text-Representations">Text Representations</a>.
-</p>
-<dl>
-<dt><a name="index-re_002dsearch_002dforward"></a>Command: <strong>re-search-forward</strong> <em>regexp &amp;optional limit noerror count</em></dt>
-<dd><p>This function searches forward in the current buffer for a string of
-text that is matched by the regular expression <var>regexp</var>.  The
-function skips over any amount of text that is not matched by
-<var>regexp</var>, and leaves point at the end of the first match found.
-It returns the new value of point.
-</p>
-<p>If <var>limit</var> is non-<code>nil</code>, it must be a position in the current
-buffer.  It specifies the upper bound to the search.  No match
-extending after that position is accepted.  If <var>limit</var> is omitted
-or <code>nil</code>, it defaults to the end of the accessible portion of the
-buffer.
-</p>
-<p>What <code>re-search-forward</code> does when the search fails depends on
-the value of <var>noerror</var>:
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>Signal a <code>search-failed</code> error.
-</p></dd>
-<dt><code>t</code></dt>
-<dd><p>Do nothing and return <code>nil</code>.
-</p></dd>
-<dt>anything else</dt>
-<dd><p>Move point to <var>limit</var> (or the end of the accessible portion of the
-buffer) and return <code>nil</code>.
-</p></dd>
-</dl>
+  <p>In GNU Emacs, you can search for the next match for a regular
+  expression (see <a href=
+  "Syntax-of-Regexps.html#Syntax-of-Regexps">Syntax of Regexps</a>)
+  either incrementally or not. For incremental search commands, see
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Regexp-Search.html#Regexp-Search">
+  Regular Expression Search</a> in <cite>The GNU Emacs
+  Manual</cite>. Here we describe only the search functions useful
+  in programs. The principal one is
+  <code>re-search-forward</code>.</p>
 
-<p>The argument <var>noerror</var> only affects valid searches which fail to
-find a match.  Invalid arguments cause errors regardless of
-<var>noerror</var>.
-</p>
-<p>If <var>count</var> is a positive number <var>n</var>, the search is done
-<var>n</var> times; each successive search starts at the end of the
-previous match.  If all these successive searches succeed, the
-function call succeeds, moving point and returning its new value.
-Otherwise the function call fails, with results depending on the value
-of <var>noerror</var>, as described above.  If <var>count</var> is a negative
-number -<var>n</var>, the search is done <var>n</var> times in the opposite
-(backward) direction.
-</p>
-<p>In the following example, point is initially before the &lsquo;<samp>T</samp>&rsquo;.
-Evaluating the search call moves point to the end of that line (between
-the &lsquo;<samp>t</samp>&rsquo; of &lsquo;<samp>hat</samp>&rsquo; and the newline).
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
-I read &quot;&lowast;The cat in the hat
-comes back&quot; twice.
+  <p>These search functions convert the regular expression to
+  multibyte if the buffer is multibyte; they convert the regular
+  expression to unibyte if the buffer is unibyte. See <a href=
+  "Text-Representations.html#Text-Representations">Text
+  Representations</a>.</p>
+
+  <dl>
+    <dt><a name="index-re_002dsearch_002dforward" id=
+    "index-re_002dsearch_002dforward"></a>Command:
+    <strong>re-search-forward</strong> <em>regexp &amp;optional
+    limit noerror count</em></dt>
+
+    <dd>
+      <p>This function searches forward in the current buffer for a
+      string of text that is matched by the regular expression
+      <var>regexp</var>. The function skips over any amount of text
+      that is not matched by <var>regexp</var>, and leaves point at
+      the end of the first match found. It returns the new value of
+      point.</p>
+
+      <p>If <var>limit</var> is non-<code>nil</code>, it must be a
+      position in the current buffer. It specifies the upper bound
+      to the search. No match extending after that position is
+      accepted. If <var>limit</var> is omitted or <code>nil</code>,
+      it defaults to the end of the accessible portion of the
+      buffer.</p>
+
+      <p>What <code>re-search-forward</code> does when the search
+      fails depends on the value of <var>noerror</var>:</p>
+
+      <dl compact="compact">
+        <dt><code>nil</code></dt>
+
+        <dd>
+          <p>Signal a <code>search-failed</code> error.</p>
+        </dd>
+
+        <dt><code>t</code></dt>
+
+        <dd>
+          <p>Do nothing and return <code>nil</code>.</p>
+        </dd>
+
+        <dt>anything else</dt>
+
+        <dd>
+          <p>Move point to <var>limit</var> (or the end of the
+          accessible portion of the buffer) and return
+          <code>nil</code>.</p>
+        </dd>
+      </dl>
+
+      <p>The argument <var>noerror</var> only affects valid
+      searches which fail to find a match. Invalid arguments cause
+      errors regardless of <var>noerror</var>.</p>
+
+      <p>If <var>count</var> is a positive number <var>n</var>, the
+      search is done <var>n</var> times; each successive search
+      starts at the end of the previous match. If all these
+      successive searches succeed, the function call succeeds,
+      moving point and returning its new value. Otherwise the
+      function call fails, with results depending on the value of
+      <var>noerror</var>, as described above. If <var>count</var>
+      is a negative number -<var>n</var>, the search is done
+      <var>n</var> times in the opposite (backward) direction.</p>
+
+      <p>In the following example, point is initially before the
+      &lsquo;<samp>T</samp>&rsquo;. Evaluating the search call
+      moves point to the end of that line (between the
+      &lsquo;<samp>t</samp>&rsquo; of
+      &lsquo;<samp>hat</samp>&rsquo; and the newline).</p>
+
+      <div class="example">
+        <pre class="example">
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(re-search-forward &quot;[a-z]+&quot; nil t 5)
+I read "&lowast;The cat in the hat
+comes back" twice.
+---------- Buffer: foo ----------
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(re-search-forward "[a-z]+" nil t 5)
      &rArr; 27
 
 ---------- Buffer: foo ----------
-I read &quot;The cat in the hat&lowast;
-comes back&quot; twice.
+I read "The cat in the hat&lowast;
+comes back" twice.
 ---------- Buffer: foo ----------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-re_002dsearch_002dbackward"></a>Command: <strong>re-search-backward</strong> <em>regexp &amp;optional limit noerror count</em></dt>
-<dd><p>This function searches backward in the current buffer for a string of
-text that is matched by the regular expression <var>regexp</var>, leaving
-point at the beginning of the first text found.
-</p>
-<p>This function is analogous to <code>re-search-forward</code>, but they are not
-simple mirror images.  <code>re-search-forward</code> finds the match whose
-beginning is as close as possible to the starting point.  If
-<code>re-search-backward</code> were a perfect mirror image, it would find the
-match whose end is as close as possible.  However, in fact it finds the
-match whose beginning is as close as possible (and yet ends before the
-starting point).  The reason for this is that matching a regular
-expression at a given spot always works from beginning to end, and
-starts at a specified beginning position.
-</p>
-<p>A true mirror-image of <code>re-search-forward</code> would require a special
-feature for matching regular expressions from end to beginning.  It&rsquo;s
-not worth the trouble of implementing that.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-re_002dsearch_002dbackward" id=
+    "index-re_002dsearch_002dbackward"></a>Command:
+    <strong>re-search-backward</strong> <em>regexp &amp;optional
+    limit noerror count</em></dt>
 
-<dl>
-<dt><a name="index-string_002dmatch"></a>Function: <strong>string-match</strong> <em>regexp string &amp;optional start</em></dt>
-<dd><p>This function returns the index of the start of the first match for
-the regular expression <var>regexp</var> in <var>string</var>, or <code>nil</code> if
-there is no match.  If <var>start</var> is non-<code>nil</code>, the search starts
-at that index in <var>string</var>.
-</p>
-<p>For example,
-</p>
-<div class="example">
-<pre class="example">(string-match
- &quot;quick&quot; &quot;The quick brown fox jumped quickly.&quot;)
+    <dd>
+      <p>This function searches backward in the current buffer for
+      a string of text that is matched by the regular expression
+      <var>regexp</var>, leaving point at the beginning of the
+      first text found.</p>
+
+      <p>This function is analogous to
+      <code>re-search-forward</code>, but they are not simple
+      mirror images. <code>re-search-forward</code> finds the match
+      whose beginning is as close as possible to the starting
+      point. If <code>re-search-backward</code> were a perfect
+      mirror image, it would find the match whose end is as close
+      as possible. However, in fact it finds the match whose
+      beginning is as close as possible (and yet ends before the
+      starting point). The reason for this is that matching a
+      regular expression at a given spot always works from
+      beginning to end, and starts at a specified beginning
+      position.</p>
+
+      <p>A true mirror-image of <code>re-search-forward</code>
+      would require a special feature for matching regular
+      expressions from end to beginning. It&rsquo;s not worth the
+      trouble of implementing that.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-string_002dmatch" id=
+    "index-string_002dmatch"></a>Function:
+    <strong>string-match</strong> <em>regexp string &amp;optional
+    start</em></dt>
+
+    <dd>
+      <p>This function returns the index of the start of the first
+      match for the regular expression <var>regexp</var> in
+      <var>string</var>, or <code>nil</code> if there is no match.
+      If <var>start</var> is non-<code>nil</code>, the search
+      starts at that index in <var>string</var>.</p>
+
+      <p>For example,</p>
+
+      <div class="example">
+        <pre class="example">
+(string-match
+ "quick" "The quick brown fox jumped quickly.")
      &rArr; 4
-</pre><pre class="example">(string-match
- &quot;quick&quot; &quot;The quick brown fox jumped quickly.&quot; 8)
+</pre>
+        <pre class="example">
+(string-match
+ "quick" "The quick brown fox jumped quickly." 8)
      &rArr; 27
-</pre></div>
+</pre>
+      </div>
 
-<p>The index of the first character of the
-string is 0, the index of the second character is 1, and so on.
-</p>
-<p>If this function finds a match, the index of the first character beyond
-the match is available as <code>(match-end 0)</code>.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
-</p>
-<div class="example">
-<pre class="example">(string-match
- &quot;quick&quot; &quot;The quick brown fox jumped quickly.&quot; 8)
+      <p>The index of the first character of the string is 0, the
+      index of the second character is 1, and so on.</p>
+
+      <p>If this function finds a match, the index of the first
+      character beyond the match is available as <code>(match-end
+      0)</code>. See <a href="Match-Data.html#Match-Data">Match
+      Data</a>.</p>
+
+      <div class="example">
+        <pre class="example">
+(string-match
+ "quick" "The quick brown fox jumped quickly." 8)
      &rArr; 27
-</pre><pre class="example">
-</pre><pre class="example">(match-end 0)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(match-end 0)
      &rArr; 32
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-string_002dmatch_002dp"></a>Function: <strong>string-match-p</strong> <em>regexp string &amp;optional start</em></dt>
-<dd><p>This predicate function does what <code>string-match</code> does, but it
-avoids modifying the match data.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-string_002dmatch_002dp" id=
+    "index-string_002dmatch_002dp"></a>Function:
+    <strong>string-match-p</strong> <em>regexp string &amp;optional
+    start</em></dt>
 
-<dl>
-<dt><a name="index-looking_002dat"></a>Function: <strong>looking-at</strong> <em>regexp</em></dt>
-<dd><p>This function determines whether the text in the current buffer directly
-following point matches the regular expression <var>regexp</var>.  &ldquo;Directly
-following&rdquo; means precisely that: the search is &ldquo;anchored&rdquo; and it can
-succeed only starting with the first character following point.  The
-result is <code>t</code> if so, <code>nil</code> otherwise.
-</p>
-<p>This function does not move point, but it does update the match data.
-See <a href="Match-Data.html#Match-Data">Match Data</a>.  If you need to test for a match without modifying
-the match data, use <code>looking-at-p</code>, described below.
-</p>
-<p>In this example, point is located directly before the &lsquo;<samp>T</samp>&rsquo;.  If it
-were anywhere else, the result would be <code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
-I read &quot;&lowast;The cat in the hat
-comes back&quot; twice.
+    <dd>
+      <p>This predicate function does what
+      <code>string-match</code> does, but it avoids modifying the
+      match data.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-looking_002dat" id=
+    "index-looking_002dat"></a>Function:
+    <strong>looking-at</strong> <em>regexp</em></dt>
+
+    <dd>
+      <p>This function determines whether the text in the current
+      buffer directly following point matches the regular
+      expression <var>regexp</var>. &ldquo;Directly
+      following&rdquo; means precisely that: the search is
+      &ldquo;anchored&rdquo; and it can succeed only starting with
+      the first character following point. The result is
+      <code>t</code> if so, <code>nil</code> otherwise.</p>
+
+      <p>This function does not move point, but it does update the
+      match data. See <a href="Match-Data.html#Match-Data">Match
+      Data</a>. If you need to test for a match without modifying
+      the match data, use <code>looking-at-p</code>, described
+      below.</p>
+
+      <p>In this example, point is located directly before the
+      &lsquo;<samp>T</samp>&rsquo;. If it were anywhere else, the
+      result would be <code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+---------- Buffer: foo ----------
+I read "&lowast;The cat in the hat
+comes back" twice.
 ---------- Buffer: foo ----------
 
-(looking-at &quot;The cat in the hat$&quot;)
+(looking-at "The cat in the hat$")
      &rArr; t
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-looking_002dback"></a>Function: <strong>looking-back</strong> <em>regexp limit &amp;optional greedy</em></dt>
-<dd><p>This function returns <code>t</code> if <var>regexp</var> matches the text
-immediately before point (i.e., ending at point), and <code>nil</code> otherwise.
-</p>
-<p>Because regular expression matching works only going forward, this is
-implemented by searching backwards from point for a match that ends at
-point.  That can be quite slow if it has to search a long distance.
-You can bound the time required by specifying a non-<code>nil</code> value
-for <var>limit</var>, which says not to search before <var>limit</var>.  In this
-case, the match that is found must begin at or after <var>limit</var>.
-Here&rsquo;s an example:
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
-I read &quot;&lowast;The cat in the hat
-comes back&quot; twice.
+  <dl>
+    <dt><a name="index-looking_002dback" id=
+    "index-looking_002dback"></a>Function:
+    <strong>looking-back</strong> <em>regexp limit &amp;optional
+    greedy</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>regexp</var>
+      matches the text immediately before point (i.e., ending at
+      point), and <code>nil</code> otherwise.</p>
+
+      <p>Because regular expression matching works only going
+      forward, this is implemented by searching backwards from
+      point for a match that ends at point. That can be quite slow
+      if it has to search a long distance. You can bound the time
+      required by specifying a non-<code>nil</code> value for
+      <var>limit</var>, which says not to search before
+      <var>limit</var>. In this case, the match that is found must
+      begin at or after <var>limit</var>. Here&rsquo;s an
+      example:</p>
+
+      <div class="example">
+        <pre class="example">
+---------- Buffer: foo ----------
+I read "&lowast;The cat in the hat
+comes back" twice.
 ---------- Buffer: foo ----------
 
-(looking-back &quot;read \&quot;&quot; 3)
+(looking-back "read \"" 3)
      &rArr; t
-(looking-back &quot;read \&quot;&quot; 4)
+(looking-back "read \"" 4)
      &rArr; nil
-</pre></div>
+</pre>
+      </div>
 
-<p>If <var>greedy</var> is non-<code>nil</code>, this function extends the match
-backwards as far as possible, stopping when a single additional
-previous character cannot be part of a match for <var>regexp</var>.  When
-the match is extended, its starting position is allowed to occur
-before <var>limit</var>.
-</p>
-<p>As a general recommendation, try to avoid using <code>looking-back</code>
-wherever possible, since it is slow.  For this reason, there are no
-plans to add a <code>looking-back-p</code> function.
-</p></dd></dl>
+      <p>If <var>greedy</var> is non-<code>nil</code>, this
+      function extends the match backwards as far as possible,
+      stopping when a single additional previous character cannot
+      be part of a match for <var>regexp</var>. When the match is
+      extended, its starting position is allowed to occur before
+      <var>limit</var>.</p>
 
-<dl>
-<dt><a name="index-looking_002dat_002dp"></a>Function: <strong>looking-at-p</strong> <em>regexp</em></dt>
-<dd><p>This predicate function works like <code>looking-at</code>, but without
-updating the match data.
-</p></dd></dl>
+      <p>As a general recommendation, try to avoid using
+      <code>looking-back</code> wherever possible, since it is
+      slow. For this reason, there are no plans to add a
+      <code>looking-back-p</code> function.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-search_002dspaces_002dregexp"></a>Variable: <strong>search-spaces-regexp</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, it should be a regular expression
-that says how to search for whitespace.  In that case, any group of
-spaces in a regular expression being searched for stands for use of
-this regular expression.  However, spaces inside of constructs such as
-&lsquo;<samp>[&hellip;]</samp>&rsquo; and &lsquo;<samp>*</samp>&rsquo;, &lsquo;<samp>+</samp>&rsquo;, &lsquo;<samp>?</samp>&rsquo; are not affected by
-<code>search-spaces-regexp</code>.
-</p>
-<p>Since this variable affects all regular expression search and match
-constructs, you should bind it temporarily for as small as possible
-a part of the code.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-looking_002dat_002dp" id=
+    "index-looking_002dat_002dp"></a>Function:
+    <strong>looking-at-p</strong> <em>regexp</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="POSIX-Regexps.html#POSIX-Regexps" accesskey="n" rel="next">POSIX Regexps</a>, Previous: <a href="Regular-Expressions.html#Regular-Expressions" accesskey="p" rel="prev">Regular Expressions</a>, Up: <a href="Searching-and-Matching.html#Searching-and-Matching" accesskey="u" rel="up">Searching and Matching</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This predicate function works like
+      <code>looking-at</code>, but without updating the match
+      data.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-search_002dspaces_002dregexp" id=
+    "index-search_002dspaces_002dregexp"></a>Variable:
+    <strong>search-spaces-regexp</strong></dt>
 
+    <dd>
+      <p>If this variable is non-<code>nil</code>, it should be a
+      regular expression that says how to search for whitespace. In
+      that case, any group of spaces in a regular expression being
+      searched for stands for use of this regular expression.
+      However, spaces inside of constructs such as
+      &lsquo;<samp>[&hellip;]</samp>&rsquo; and
+      &lsquo;<samp>*</samp>&rsquo;, &lsquo;<samp>+</samp>&rsquo;,
+      &lsquo;<samp>?</samp>&rsquo; are not affected by
+      <code>search-spaces-regexp</code>.</p>
 
+      <p>Since this variable affects all regular expression search
+      and match constructs, you should bind it temporarily for as
+      small as possible a part of the code.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="POSIX-Regexps.html#POSIX-Regexps" accesskey=
+    "n" rel="next">POSIX Regexps</a>, Previous: <a href=
+    "Regular-Expressions.html#Regular-Expressions" accesskey="p"
+    rel="prev">Regular Expressions</a>, Up: <a href=
+    "Searching-and-Matching.html#Searching-and-Matching" accesskey=
+    "u" rel="up">Searching and Matching</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

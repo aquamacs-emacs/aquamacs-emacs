@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,154 +20,218 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Regexp Search</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Regexp Search">
-<meta name="keywords" content="GNU Emacs Manual: Regexp Search">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Search.html#Search" rel="up" title="Search">
-<link href="Regexps.html#Regexps" rel="next" title="Regexps">
-<link href="Symbol-Search.html#Symbol-Search" rel="prev" title="Symbol Search">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Regexp Search</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Regexp Search" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Regexp Search" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Search.html#Search" rel="up" title="Search" />
+  <link href="Regexps.html#Regexps" rel="next" title="Regexps" />
+  <link href="Symbol-Search.html#Symbol-Search" rel="prev" title=
+  "Symbol Search" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Regexp-Search" id="Regexp-Search"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Regexps.html#Regexps" accesskey="n" rel=
+    "next">Regexps</a>, Previous: <a href=
+    "Symbol-Search.html#Symbol-Search" accesskey="p" rel=
+    "prev">Symbol Search</a>, Up: <a href="Search.html#Search"
+    accesskey="u" rel="up">Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Regular-Expression-Search" id=
+  "Regular-Expression-Search"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Regexp-Search"></a>
-<div class="header">
-<p>
-Next: <a href="Regexps.html#Regexps" accesskey="n" rel="next">Regexps</a>, Previous: <a href="Symbol-Search.html#Symbol-Search" accesskey="p" rel="prev">Symbol Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Regular-Expression-Search"></a>
-<h3 class="section">15.5 Regular Expression Search</h3>
-<a name="index-regexp-search"></a>
-<a name="index-search-for-a-regular-expression"></a>
+  <h3 class="section">15.5 Regular Expression Search</h3><a name=
+  "index-regexp-search" id="index-regexp-search"></a> <a name=
+  "index-search-for-a-regular-expression" id=
+  "index-search-for-a-regular-expression"></a>
 
-<p>A <em>regular expression</em> (or <em>regexp</em> for short) is a pattern
-that denotes a class of alternative strings to match.  Emacs
-provides both incremental and nonincremental ways to search for a
-match for a regexp.  The syntax of regular expressions is explained in
-the next section.
-</p>
-<dl compact="compact">
-<dt><kbd>C-M-s</kbd></dt>
-<dd><p>Begin incremental regexp search (<code>isearch-forward-regexp</code>).
-</p></dd>
-<dt><kbd>C-M-r</kbd></dt>
-<dd><p>Begin reverse incremental regexp search (<code>isearch-backward-regexp</code>).
-</p></dd>
-</dl>
+  <p>A <em>regular expression</em> (or <em>regexp</em> for short)
+  is a pattern that denotes a class of alternative strings to
+  match. Emacs provides both incremental and nonincremental ways to
+  search for a match for a regexp. The syntax of regular
+  expressions is explained in the next section.</p>
 
-<a name="index-C_002dM_002ds"></a>
-<a name="index-isearch_002dforward_002dregexp"></a>
-<a name="index-C_002dM_002dr"></a>
-<a name="index-isearch_002dbackward_002dregexp"></a>
-<p>Incremental search for a regexp is done by typing <kbd>C-M-s</kbd>
-(<code>isearch-forward-regexp</code>), by invoking <kbd>C-s</kbd> with a
-prefix argument (whose value does not matter), or by typing <kbd>M-r</kbd>
-within a forward incremental search.  This command reads a
-search string incrementally just like <kbd>C-s</kbd>, but it treats the
-search string as a regexp rather than looking for an exact match
-against the text in the buffer.  Each time you add text to the search
-string, you make the regexp longer, and the new regexp is searched
-for.  To search backward for a regexp, use <kbd>C-M-r</kbd>
-(<code>isearch-backward-regexp</code>), <kbd>C-r</kbd> with a prefix argument,
-or <kbd>M-r</kbd> within a backward incremental search.
-</p>
-<a name="index-regexp_002dsearch_002dring_002dmax"></a>
-<p>All of the special key sequences in an ordinary incremental search
-(see <a href="Special-Isearch.html#Special-Isearch">Special Isearch</a>) do similar things in an incremental regexp
-search.  For instance, typing <kbd>C-s</kbd> immediately after starting the
-search retrieves the last incremental search regexp used and searches
-forward for it.  Incremental regexp and non-regexp searches have
-independent defaults.  They also have separate search rings, which you
-can access with <kbd>M-p</kbd> and <kbd>M-n</kbd>.  The maximum number of search
-regexps saved in the search ring is determined by the value of
-<code>regexp-search-ring-max</code>, 16 by default.
-</p>
-<p>Unlike ordinary incremental search, incremental regexp search
-does not use lax space matching by default.  To toggle this feature
-use <kbd>M-s <span class="key">SPC</span></kbd> (<code>isearch-toggle-lax-whitespace</code>).
-Then any <tt class="key">SPC</tt> typed in incremental regexp search will match
-any sequence of one or more whitespace characters.  The variable
-<code>search-whitespace-regexp</code> specifies the regexp for the lax
-space matching.  See <a href="Special-Isearch.html#Special-Isearch">Special Isearch</a>.
-</p>
-<p>Also unlike ordinary incremental search, incremental regexp search
-cannot use character folding (see <a href="Lax-Search.html#Lax-Search">Lax Search</a>).  (If you toggle
-character folding during incremental regexp search with <kbd>M-s '</kbd>,
-the search becomes a non-regexp search and the search pattern you
-typed is interpreted as a literal string.)
-</p>
-<p>In some cases, adding characters to the regexp in an incremental
-regexp search can make the cursor move back and start again.  For
-example, if you have searched for &lsquo;<samp>foo</samp>&rsquo; and you add &lsquo;<samp>\|bar</samp>&rsquo;,
-the cursor backs up in case the first &lsquo;<samp>bar</samp>&rsquo; precedes the first
-&lsquo;<samp>foo</samp>&rsquo;.  See <a href="Regexps.html#Regexps">Regexps</a>.
-</p>
-<p>Forward and backward regexp search are not symmetrical, because
-regexp matching in Emacs always operates forward, starting with the
-beginning of the regexp.  Thus, forward regexp search scans forward,
-trying a forward match at each possible starting position.  Backward
-regexp search scans backward, trying a forward match at each possible
-starting position.  These search methods are not mirror images.
-</p>
-<a name="index-re_002dsearch_002dforward"></a>
-<a name="index-re_002dsearch_002dbackward"></a>
-<p>Nonincremental search for a regexp is done with the commands
-<code>re-search-forward</code> and <code>re-search-backward</code>.  You can
-invoke these with <kbd>M-x</kbd>, or by way of incremental regexp search
-with <kbd>C-M-s <span class="key">RET</span></kbd> and <kbd>C-M-r <span class="key">RET</span></kbd>.  When you invoke
-these commands with <kbd>M-x</kbd>, they search for the exact regexp you
-specify, and thus don&rsquo;t support any lax-search features (see <a href="Lax-Search.html#Lax-Search">Lax Search</a>) except case folding.
-</p>
-<p>If you use the incremental regexp search commands with a prefix
-argument, they perform ordinary string search, like
-<code>isearch-forward</code> and <code>isearch-backward</code>.  See <a href="Incremental-Search.html#Incremental-Search">Incremental Search</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Regexps.html#Regexps" accesskey="n" rel="next">Regexps</a>, Previous: <a href="Symbol-Search.html#Symbol-Search" accesskey="p" rel="prev">Symbol Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>C-M-s</kbd></dt>
 
+    <dd>
+      <p>Begin incremental regexp search
+      (<code>isearch-forward-regexp</code>).</p>
+    </dd>
 
+    <dt><kbd>C-M-r</kbd></dt>
 
+    <dd>
+      <p>Begin reverse incremental regexp search
+      (<code>isearch-backward-regexp</code>).</p>
+    </dd>
+  </dl><a name="index-C_002dM_002ds" id="index-C_002dM_002ds"></a>
+  <a name="index-isearch_002dforward_002dregexp" id=
+  "index-isearch_002dforward_002dregexp"></a> <a name=
+  "index-C_002dM_002dr" id="index-C_002dM_002dr"></a> <a name=
+  "index-isearch_002dbackward_002dregexp" id=
+  "index-isearch_002dbackward_002dregexp"></a>
+
+  <p>Incremental search for a regexp is done by typing
+  <kbd>C-M-s</kbd> (<code>isearch-forward-regexp</code>), by
+  invoking <kbd>C-s</kbd> with a prefix argument (whose value does
+  not matter), or by typing <kbd>M-r</kbd> within a forward
+  incremental search. This command reads a search string
+  incrementally just like <kbd>C-s</kbd>, but it treats the search
+  string as a regexp rather than looking for an exact match against
+  the text in the buffer. Each time you add text to the search
+  string, you make the regexp longer, and the new regexp is
+  searched for. To search backward for a regexp, use
+  <kbd>C-M-r</kbd> (<code>isearch-backward-regexp</code>),
+  <kbd>C-r</kbd> with a prefix argument, or <kbd>M-r</kbd> within a
+  backward incremental search.</p><a name=
+  "index-regexp_002dsearch_002dring_002dmax" id=
+  "index-regexp_002dsearch_002dring_002dmax"></a>
+
+  <p>All of the special key sequences in an ordinary incremental
+  search (see <a href=
+  "Special-Isearch.html#Special-Isearch">Special Isearch</a>) do
+  similar things in an incremental regexp search. For instance,
+  typing <kbd>C-s</kbd> immediately after starting the search
+  retrieves the last incremental search regexp used and searches
+  forward for it. Incremental regexp and non-regexp searches have
+  independent defaults. They also have separate search rings, which
+  you can access with <kbd>M-p</kbd> and <kbd>M-n</kbd>. The
+  maximum number of search regexps saved in the search ring is
+  determined by the value of <code>regexp-search-ring-max</code>,
+  16 by default.</p>
+
+  <p>Unlike ordinary incremental search, incremental regexp search
+  does not use lax space matching by default. To toggle this
+  feature use <kbd>M-s <span class="key">SPC</span></kbd>
+  (<code>isearch-toggle-lax-whitespace</code>). Then any <tt class=
+  "key">SPC</tt> typed in incremental regexp search will match any
+  sequence of one or more whitespace characters. The variable
+  <code>search-whitespace-regexp</code> specifies the regexp for
+  the lax space matching. See <a href=
+  "Special-Isearch.html#Special-Isearch">Special Isearch</a>.</p>
+
+  <p>Also unlike ordinary incremental search, incremental regexp
+  search cannot use character folding (see <a href=
+  "Lax-Search.html#Lax-Search">Lax Search</a>). (If you toggle
+  character folding during incremental regexp search with <kbd>M-s
+  '</kbd>, the search becomes a non-regexp search and the search
+  pattern you typed is interpreted as a literal string.)</p>
+
+  <p>In some cases, adding characters to the regexp in an
+  incremental regexp search can make the cursor move back and start
+  again. For example, if you have searched for
+  &lsquo;<samp>foo</samp>&rsquo; and you add
+  &lsquo;<samp>\|bar</samp>&rsquo;, the cursor backs up in case the
+  first &lsquo;<samp>bar</samp>&rsquo; precedes the first
+  &lsquo;<samp>foo</samp>&rsquo;. See <a href=
+  "Regexps.html#Regexps">Regexps</a>.</p>
+
+  <p>Forward and backward regexp search are not symmetrical,
+  because regexp matching in Emacs always operates forward,
+  starting with the beginning of the regexp. Thus, forward regexp
+  search scans forward, trying a forward match at each possible
+  starting position. Backward regexp search scans backward, trying
+  a forward match at each possible starting position. These search
+  methods are not mirror images.</p><a name=
+  "index-re_002dsearch_002dforward" id=
+  "index-re_002dsearch_002dforward"></a> <a name=
+  "index-re_002dsearch_002dbackward" id=
+  "index-re_002dsearch_002dbackward"></a>
+
+  <p>Nonincremental search for a regexp is done with the commands
+  <code>re-search-forward</code> and
+  <code>re-search-backward</code>. You can invoke these with
+  <kbd>M-x</kbd>, or by way of incremental regexp search with
+  <kbd>C-M-s <span class="key">RET</span></kbd> and <kbd>C-M-r
+  <span class="key">RET</span></kbd>. When you invoke these
+  commands with <kbd>M-x</kbd>, they search for the exact regexp
+  you specify, and thus don&rsquo;t support any lax-search features
+  (see <a href="Lax-Search.html#Lax-Search">Lax Search</a>) except
+  case folding.</p>
+
+  <p>If you use the incremental regexp search commands with a
+  prefix argument, they perform ordinary string search, like
+  <code>isearch-forward</code> and <code>isearch-backward</code>.
+  See <a href=
+  "Incremental-Search.html#Incremental-Search">Incremental
+  Search</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Regexps.html#Regexps" accesskey="n" rel=
+    "next">Regexps</a>, Previous: <a href=
+    "Symbol-Search.html#Symbol-Search" accesskey="p" rel=
+    "prev">Symbol Search</a>, Up: <a href="Search.html#Search"
+    accesskey="u" rel="up">Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

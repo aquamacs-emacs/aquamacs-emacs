@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Matching Commands - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title="Rewrite Rules">
-<link rel="prev" href="Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules" title="Selections with Rewrite Rules">
-<link rel="next" href="Automatic-Rewrites.html#Automatic-Rewrites" title="Automatic Rewrites">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Matching Commands - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Rewrite-Rules.html#Rewrite-Rules" title=
+  "Rewrite Rules" />
+  <link rel="prev" href=
+  "Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules"
+  title="Selections with Rewrite Rules" />
+  <link rel="next" href=
+  "Automatic-Rewrites.html#Automatic-Rewrites" title=
+  "Automatic Rewrites" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +40,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,54 +53,78 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Matching-Commands"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Automatic-Rewrites.html#Automatic-Rewrites">Automatic Rewrites</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules">Selections with Rewrite Rules</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Matching-Commands" id="Matching-Commands"></a>
 
-<h4 class="subsection">11.11.10 Matching Commands</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Automatic-Rewrites.html#Automatic-Rewrites">Automatic
+    Rewrites</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href=
+    "Selections-with-Rewrite-Rules.html#Selections-with-Rewrite-Rules">Selections
+    with Rewrite Rules</a>, Up:&nbsp;<a rel="up" accesskey="u"
+    href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-a-m-1944"></a><a name="index-calc_002dmatch-1945"></a><a name="index-match-1946"></a>The <kbd>a m</kbd> (<code>calc-match</code>) [<code>match</code>] function takes a
-vector of formulas and a rewrite-rule-style pattern, and produces
-a vector of all formulas which match the pattern.  The command
-prompts you to enter the pattern; as for <kbd>a r</kbd>, you can enter
-a single pattern (i.e., a formula with meta-variables), or a
-vector of patterns, or a variable which contains patterns, or
-you can give a blank response in which case the patterns are taken
-from the top of the stack.  The pattern set will be compiled once
-and saved if it is stored in a variable.  If there are several
-patterns in the set, vector elements are kept if they match any
-of the patterns.
+  <h4 class="subsection">11.11.10 Matching Commands</h4>
 
-   <p>For example, &lsquo;<samp><span class="samp">match(a+b, [x, x+y, x-y, 7, x+y+z])</span></samp>&rsquo;
-will return &lsquo;<samp><span class="samp">[x+y, x-y, x+y+z]</span></samp>&rsquo;.
+  <p class="noindent"><a name="index-a-m-1944" id=
+  "index-a-m-1944"></a><a name="index-calc_002dmatch-1945" id=
+  "index-calc_002dmatch-1945"></a><a name="index-match-1946" id=
+  "index-match-1946"></a>The <kbd>a m</kbd>
+  (<code>calc-match</code>) [<code>match</code>] function takes a
+  vector of formulas and a rewrite-rule-style pattern, and produces
+  a vector of all formulas which match the pattern. The command
+  prompts you to enter the pattern; as for <kbd>a r</kbd>, you can
+  enter a single pattern (i.e., a formula with meta-variables), or
+  a vector of patterns, or a variable which contains patterns, or
+  you can give a blank response in which case the patterns are
+  taken from the top of the stack. The pattern set will be compiled
+  once and saved if it is stored in a variable. If there are
+  several patterns in the set, vector elements are kept if they
+  match any of the patterns.</p>
 
-   <p>The <code>import</code> mechanism is not available for pattern sets.
+  <p>For example, &lsquo;<samp><span class="samp">match(a+b, [x,
+  x+y, x-y, 7, x+y+z])</span></samp>&rsquo; will return
+  &lsquo;<samp><span class="samp">[x+y, x-y,
+  x+y+z]</span></samp>&rsquo;.</p>
 
-   <p>The <kbd>a m</kbd> command can also be used to extract all vector elements
-which satisfy any condition:  The pattern &lsquo;<samp><span class="samp">x :: x&gt;0</span></samp>&rsquo; will select
-all the positive vector elements.
+  <p>The <code>import</code> mechanism is not available for pattern
+  sets.</p>
 
-   <p><a name="index-I-a-m-1947"></a><a name="index-matchnot-1948"></a>With the Inverse flag [<code>matchnot</code>], this command extracts all
-vector elements which do <em>not</em> match the given pattern.
+  <p>The <kbd>a m</kbd> command can also be used to extract all
+  vector elements which satisfy any condition: The pattern
+  &lsquo;<samp><span class="samp">x :: x&gt;0</span></samp>&rsquo;
+  will select all the positive vector elements.</p>
 
-   <p><a name="index-matches-1949"></a>There is also a function &lsquo;<samp><span class="samp">matches(</span><var>x</var><span class="samp">, </span><var>p</var><span class="samp">)</span></samp>&rsquo; which
-evaluates to 1 if expression <var>x</var> matches pattern <var>p</var>, or
-to 0 otherwise.  This is sometimes useful for including into the
-conditional clauses of other rewrite rules.
+  <p><a name="index-I-a-m-1947" id="index-I-a-m-1947"></a><a name=
+  "index-matchnot-1948" id="index-matchnot-1948"></a>With the
+  Inverse flag [<code>matchnot</code>], this command extracts all
+  vector elements which do <em>not</em> match the given
+  pattern.</p>
 
-   <p><a name="index-vmatches-1950"></a>The function <code>vmatches</code> is just like <code>matches</code>, except
-that if the match succeeds it returns a vector of assignments to
-the meta-variables instead of the number 1.  For example,
-&lsquo;<samp><span class="samp">vmatches(f(1,2), f(a,b))</span></samp>&rsquo; returns &lsquo;<samp><span class="samp">[a := 1, b := 2]</span></samp>&rsquo;. 
-If the match fails, the function returns the number 0.
+  <p><a name="index-matches-1949" id="index-matches-1949"></a>There
+  is also a function &lsquo;<samp><span class=
+  "samp">matches(</span><var>x</var><span class="samp">,</span>
+  <var>p</var><span class="samp">)</span></samp>&rsquo; which
+  evaluates to 1 if expression <var>x</var> matches pattern
+  <var>p</var>, or to 0 otherwise. This is sometimes useful for
+  including into the conditional clauses of other rewrite
+  rules.</p>
 
-   </body></html>
-
+  <p><a name="index-vmatches-1950" id="index-vmatches-1950"></a>The
+  function <code>vmatches</code> is just like <code>matches</code>,
+  except that if the match succeeds it returns a vector of
+  assignments to the meta-variables instead of the number 1. For
+  example, &lsquo;<samp><span class="samp">vmatches(f(1,2),
+  f(a,b))</span></samp>&rsquo; returns &lsquo;<samp><span class=
+  "samp">[a := 1, b := 2]</span></samp>&rsquo;. If the match fails,
+  the function returns the number 0.</p>
+</body>
+</html>

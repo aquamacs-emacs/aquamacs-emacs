@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,113 +19,151 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Random Numbers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Random Numbers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Random Numbers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numbers.html#Numbers" rel="up" title="Numbers">
-<link href="Strings-and-Characters.html#Strings-and-Characters" rel="next" title="Strings and Characters">
-<link href="Math-Functions.html#Math-Functions" rel="prev" title="Math Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Random Numbers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Random Numbers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Random Numbers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numbers.html#Numbers" rel="up" title="Numbers" />
+  <link href="Strings-and-Characters.html#Strings-and-Characters"
+  rel="next" title="Strings and Characters" />
+  <link href="Math-Functions.html#Math-Functions" rel="prev" title=
+  "Math Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Random-Numbers" id="Random-Numbers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Math-Functions.html#Math-Functions"
+    accesskey="p" rel="prev">Math Functions</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Random-Numbers-1" id="Random-Numbers-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Random-Numbers"></a>
-<div class="header">
-<p>
-Previous: <a href="Math-Functions.html#Math-Functions" accesskey="p" rel="prev">Math Functions</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Random-Numbers-1"></a>
-<h3 class="section">3.10 Random Numbers</h3>
-<a name="index-random-numbers"></a>
+  <h3 class="section">3.10 Random Numbers</h3><a name=
+  "index-random-numbers" id="index-random-numbers"></a>
 
-<p>A deterministic computer program cannot generate true random
-numbers.  For most purposes, <em>pseudo-random numbers</em> suffice.  A
-series of pseudo-random numbers is generated in a deterministic
-fashion.  The numbers are not truly random, but they have certain
-properties that mimic a random series.  For example, all possible
-values occur equally often in a pseudo-random series.
-</p>
-<a name="index-seed_002c-for-random-number-generation"></a>
-<p>Pseudo-random numbers are generated from a <em>seed value</em>.  Starting from
-any given seed, the <code>random</code> function always generates the same
-sequence of numbers.  By default, Emacs initializes the random seed at
-startup, in such a way that the sequence of values of <code>random</code>
-(with overwhelming likelihood) differs in each Emacs run.
-</p>
-<p>Sometimes you want the random number sequence to be repeatable.  For
-example, when debugging a program whose behavior depends on the random
-number sequence, it is helpful to get the same behavior in each
-program run.  To make the sequence repeat, execute <code>(random &quot;&quot;)</code>.
-This sets the seed to a constant value for your particular Emacs
-executable (though it may differ for other Emacs builds).  You can use
-other strings to choose various seed values.
-</p>
-<dl>
-<dt><a name="index-random"></a>Function: <strong>random</strong> <em>&amp;optional limit</em></dt>
-<dd><p>This function returns a pseudo-random integer.  Repeated calls return a
-series of pseudo-random integers.
-</p>
-<p>If <var>limit</var> is a positive integer, the value is chosen to be
-nonnegative and less than <var>limit</var>.  Otherwise, the value might be
-any integer representable in Lisp, i.e., an integer between
-<code>most-negative-fixnum</code> and <code>most-positive-fixnum</code>
-(see <a href="Integer-Basics.html#Integer-Basics">Integer Basics</a>).
-</p>
-<p>If <var>limit</var> is <code>t</code>, it means to choose a new seed as if Emacs
-were restarting, typically from the system entropy.  On systems
-lacking entropy pools, choose the seed from less-random volatile data
-such as the current time.
-</p>
-<p>If <var>limit</var> is a string, it means to choose a new seed based on the
-string&rsquo;s contents.
-</p>
-</dd></dl>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Math-Functions.html#Math-Functions" accesskey="p" rel="prev">Math Functions</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A deterministic computer program cannot generate true random
+  numbers. For most purposes, <em>pseudo-random numbers</em>
+  suffice. A series of pseudo-random numbers is generated in a
+  deterministic fashion. The numbers are not truly random, but they
+  have certain properties that mimic a random series. For example,
+  all possible values occur equally often in a pseudo-random
+  series.</p><a name="index-seed_002c-for-random-number-generation"
+  id="index-seed_002c-for-random-number-generation"></a>
 
+  <p>Pseudo-random numbers are generated from a <em>seed
+  value</em>. Starting from any given seed, the <code>random</code>
+  function always generates the same sequence of numbers. By
+  default, Emacs initializes the random seed at startup, in such a
+  way that the sequence of values of <code>random</code> (with
+  overwhelming likelihood) differs in each Emacs run.</p>
 
+  <p>Sometimes you want the random number sequence to be
+  repeatable. For example, when debugging a program whose behavior
+  depends on the random number sequence, it is helpful to get the
+  same behavior in each program run. To make the sequence repeat,
+  execute <code>(random "")</code>. This sets the seed to a
+  constant value for your particular Emacs executable (though it
+  may differ for other Emacs builds). You can use other strings to
+  choose various seed values.</p>
 
+  <dl>
+    <dt><a name="index-random" id="index-random"></a>Function:
+    <strong>random</strong> <em>&amp;optional limit</em></dt>
+
+    <dd>
+      <p>This function returns a pseudo-random integer. Repeated
+      calls return a series of pseudo-random integers.</p>
+
+      <p>If <var>limit</var> is a positive integer, the value is
+      chosen to be nonnegative and less than <var>limit</var>.
+      Otherwise, the value might be any integer representable in
+      Lisp, i.e., an integer between
+      <code>most-negative-fixnum</code> and
+      <code>most-positive-fixnum</code> (see <a href=
+      "Integer-Basics.html#Integer-Basics">Integer Basics</a>).</p>
+
+      <p>If <var>limit</var> is <code>t</code>, it means to choose
+      a new seed as if Emacs were restarting, typically from the
+      system entropy. On systems lacking entropy pools, choose the
+      seed from less-random volatile data such as the current
+      time.</p>
+
+      <p>If <var>limit</var> is a string, it means to choose a new
+      seed based on the string&rsquo;s contents.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Math-Functions.html#Math-Functions"
+    accesskey="p" rel="prev">Math Functions</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

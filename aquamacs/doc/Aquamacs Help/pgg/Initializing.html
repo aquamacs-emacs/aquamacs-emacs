@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Initializing - PGG 0.1</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="PGG 0.1">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Architecture.html#Architecture" title="Architecture">
-<link rel="next" href="Back-end-methods.html#Back-end-methods" title="Back end methods">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Initializing - PGG 0.1</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="PGG 0.1" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Architecture.html#Architecture" title=
+  "Architecture" />
+  <link rel="next" href="Back-end-methods.html#Back-end-methods"
+  title="Back end methods" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file describes PGG 0.1, an Emacs interface to various
 PGP implementations.
 
@@ -27,8 +35,10 @@ Copyright (C) 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,35 +48,43 @@ Copyright (C) 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Initializing"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Back-end-methods.html#Back-end-methods">Back end methods</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Architecture.html#Architecture">Architecture</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Initializing" id="Initializing"></a>
 
-<h3 class="section">4.1 Initializing</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Back-end-methods.html#Back-end-methods">Back end methods</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Architecture.html#Architecture">Architecture</a></p>
+    <hr />
+  </div>
 
-<p>A scheme must be initialized before it is used. 
-It had better guarantee to keep only one instance of a scheme.
+  <h3 class="section">4.1 Initializing</h3>
 
-   <p>The following code is snipped out of <samp><span class="file">pgg-gpg.el</span></samp>.  Once an
-instance of <code>pgg-gpg</code> scheme is initialized, it's stored to the
-variable <code>pgg-scheme-gpg-instance</code> and will be reused from now on.
+  <p>A scheme must be initialized before it is used. It had better
+  guarantee to keep only one instance of a scheme.</p>
 
-<pre class="lisp">     (defvar pgg-scheme-gpg-instance nil)
+  <p>The following code is snipped out of <samp><span class=
+  "file">pgg-gpg.el</span></samp>. Once an instance of
+  <code>pgg-gpg</code> scheme is initialized, it's stored to the
+  variable <code>pgg-scheme-gpg-instance</code> and will be reused
+  from now on.</p>
+  <pre class="lisp">
+     (defvar pgg-scheme-gpg-instance nil)
      
      (defun pgg-make-scheme-gpg ()
        (or pgg-scheme-gpg-instance
            (setq pgg-scheme-gpg-instance
                  (luna-make-entity 'pgg-scheme-gpg))))
 </pre>
-   <p>The name of the function must follow the
-regulation&mdash;<code>pgg-make-scheme-</code> follows the back end name.
 
-   </body></html>
-
+  <p>The name of the function must follow the
+  regulation&mdash;<code>pgg-make-scheme-</code> follows the back
+  end name.</p>
+</body>
+</html>

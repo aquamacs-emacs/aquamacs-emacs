@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,143 +20,216 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Continued Statement Indentation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Continued Statement Indentation">
-<meta name="keywords" content="IDLWAVE User Manual: Continued Statement Indentation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Code-Formatting.html#Code-Formatting" rel="up" title="Code Formatting">
-<link href="Comment-Indentation.html#Comment-Indentation" rel="next" title="Comment Indentation">
-<link href="Code-Indentation.html#Code-Indentation" rel="prev" title="Code Indentation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Continued Statement
+  Indentation</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Continued Statement Indentation" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Continued Statement Indentation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Code-Formatting.html#Code-Formatting" rel="up" title=
+  "Code Formatting" />
+  <link href="Comment-Indentation.html#Comment-Indentation" rel=
+  "next" title="Comment Indentation" />
+  <link href="Code-Indentation.html#Code-Indentation" rel="prev"
+  title="Code Indentation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Continued-Statement-Indentation"></a>
-<div class="header">
-<p>
-Next: <a href="Comment-Indentation.html#Comment-Indentation" accesskey="n" rel="next">Comment Indentation</a>, Previous: <a href="Code-Indentation.html#Code-Indentation" accesskey="p" rel="prev">Code Indentation</a>, Up: <a href="Code-Formatting.html#Code-Formatting" accesskey="u" rel="up">Code Formatting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Continued-Statement-Indentation-1"></a>
-<h4 class="subsection">4.1.2 Continued Statement Indentation</h4>
-<a name="index-Indentation_002c-continued-statement"></a>
-<a name="index-Continued-statement-indentation"></a>
-<p>Continuation lines (following a line ending with <code>$</code>) can receive a
-fixed indentation offset from the main level, but in several situations
-IDLWAVE can use a special form of indentation which aligns continued
-statements more naturally.  Special indentation is calculated for
-continued routine definition statements and calls, enclosing parentheses
-(like function calls, structure/class definitions, explicit structures
-or lists, etc.), and continued assignments.  An attempt is made to line
-up with the first non-whitespace character after the relevant opening
-punctuation mark (<code>,</code>,<code>(</code>,<code>{</code>,<code>[</code>,<code>=</code>).  For
-lines without any non-comment characters on the line with the opening
-punctuation, the continued line(s) are aligned just past the
-punctuation.  An example:
-</p>
-<div class="example">
-<pre class="example">function foo, a, b,  $
+<body lang="en" xml:lang="en">
+  <a name="Continued-Statement-Indentation" id=
+  "Continued-Statement-Indentation"></a>
+
+  <div class="header">
+    <p>Next: <a href="Comment-Indentation.html#Comment-Indentation"
+    accesskey="n" rel="next">Comment Indentation</a>, Previous:
+    <a href="Code-Indentation.html#Code-Indentation" accesskey="p"
+    rel="prev">Code Indentation</a>, Up: <a href=
+    "Code-Formatting.html#Code-Formatting" accesskey="u" rel=
+    "up">Code Formatting</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Continued-Statement-Indentation-1" id=
+  "Continued-Statement-Indentation-1"></a>
+
+  <h4 class="subsection">4.1.2 Continued Statement
+  Indentation</h4><a name=
+  "index-Indentation_002c-continued-statement" id=
+  "index-Indentation_002c-continued-statement"></a> <a name=
+  "index-Continued-statement-indentation" id=
+  "index-Continued-statement-indentation"></a>
+
+  <p>Continuation lines (following a line ending with
+  <code>$</code>) can receive a fixed indentation offset from the
+  main level, but in several situations IDLWAVE can use a special
+  form of indentation which aligns continued statements more
+  naturally. Special indentation is calculated for continued
+  routine definition statements and calls, enclosing parentheses
+  (like function calls, structure/class definitions, explicit
+  structures or lists, etc.), and continued assignments. An attempt
+  is made to line up with the first non-whitespace character after
+  the relevant opening punctuation mark
+  (<code>,</code>,<code>(</code>,<code>{</code>,<code>[</code>,<code>=</code>).
+  For lines without any non-comment characters on the line with the
+  opening punctuation, the continued line(s) are aligned just past
+  the punctuation. An example:</p>
+
+  <div class="example">
+    <pre class="example">
+function foo, a, b,  $
               c, d
   bar =  sin( a + b + $
               c + d)
 end
-</pre></div>
+</pre>
+  </div>
 
-<p>The only drawback to this special continued statement indentation is
-that it consumes more space, e.g., for long function names or left hand
-sides of an assignment:
-</p>
-<div class="example">
-<pre class="example">function thisfunctionnameisverylongsoitwillleavelittleroom, a, b, $
+  <p>The only drawback to this special continued statement
+  indentation is that it consumes more space, e.g., for long
+  function names or left hand sides of an assignment:</p>
+
+  <div class="example">
+    <pre class="example">
+function thisfunctionnameisverylongsoitwillleavelittleroom, a, b, $
                                                             c, d
-</pre></div>
+</pre>
+  </div>
 
-<p>You can instruct IDLWAVE when to avoid using this special continuation
-indentation by setting the variable
-<code>idlwave-max-extra-continuation-indent</code>, which specifies the
-maximum additional indentation beyond the basic indent to be
-tolerated, otherwise defaulting to a fixed-offset from the enclosing
-indent (the size of which offset is set in
-<code>idlwave-continuation-indent</code>).  As a special case, continuations
-of routine calls without any arguments or keywords will <em>not</em>
-align the continued line, under the assumption that you continued
-because you needed the space.
-</p>
-<p>Also, since the indentation level can be somewhat dynamic in continued
-statements with special continuation indentation, especially if
-<code>idlwave-max-extra-continuation-indent</code> is small, the key
-<kbd>C-u <span class="key">TAB</span></kbd> will re-indent all lines in the current statement.
-Note that <code>idlwave-indent-to-open-paren</code>, if non-<code>nil</code>,
-overrides the <code>idlwave-max-extra-continuation-indent</code> limit, for
-parentheses only, forcing them always to line up.
-</p>
+  <p>You can instruct IDLWAVE when to avoid using this special
+  continuation indentation by setting the variable
+  <code>idlwave-max-extra-continuation-indent</code>, which
+  specifies the maximum additional indentation beyond the basic
+  indent to be tolerated, otherwise defaulting to a fixed-offset
+  from the enclosing indent (the size of which offset is set in
+  <code>idlwave-continuation-indent</code>). As a special case,
+  continuations of routine calls without any arguments or keywords
+  will <em>not</em> align the continued line, under the assumption
+  that you continued because you needed the space.</p>
 
-<dl>
-<dt><a name="index-idlwave_002dcontinuation_002dindent"></a>User Option: <strong>idlwave-continuation-indent</strong> <em>(<code>2</code>)</em></dt>
-<dd><p>Extra indentation applied to normal continuation lines.
-</p></dd></dl>
+  <p>Also, since the indentation level can be somewhat dynamic in
+  continued statements with special continuation indentation,
+  especially if <code>idlwave-max-extra-continuation-indent</code>
+  is small, the key <kbd>C-u <span class="key">TAB</span></kbd>
+  will re-indent all lines in the current statement. Note that
+  <code>idlwave-indent-to-open-paren</code>, if
+  non-<code>nil</code>, overrides the
+  <code>idlwave-max-extra-continuation-indent</code> limit, for
+  parentheses only, forcing them always to line up.</p>
 
-<dl>
-<dt><a name="index-idlwave_002dmax_002dextra_002dcontinuation_002dindent"></a>User Option: <strong>idlwave-max-extra-continuation-indent</strong> <em>(<code>20</code>)</em></dt>
-<dd><p>The maximum additional indentation (over the basic continuation-indent)
-that will be permitted for special continues.  To effectively disable
-special continuation indentation, set to <code>0</code>.  To enable it
-constantly, set to a large number (like <code>100</code>).  Note that the
-indentation in a long continued statement never decreases from line to
-line, outside of nested parentheses statements.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-idlwave_002dcontinuation_002dindent" id=
+    "index-idlwave_002dcontinuation_002dindent"></a>User Option:
+    <strong>idlwave-continuation-indent</strong>
+    <em>(<code>2</code>)</em></dt>
 
-<dl>
-<dt><a name="index-idlwave_002dindent_002dto_002dopen_002dparen"></a>User Option: <strong>idlwave-indent-to-open-paren</strong> <em>(<code>t</code>)</em></dt>
-<dd><p>Non-<code>nil</code> means indent continuation lines to innermost open
-parenthesis, regardless of whether the
-<code>idlwave-max-extra-continuation-indent</code> limit is satisfied.
-</p></dd></dl>
+    <dd>
+      <p>Extra indentation applied to normal continuation
+      lines.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Comment-Indentation.html#Comment-Indentation" accesskey="n" rel="next">Comment Indentation</a>, Previous: <a href="Code-Indentation.html#Code-Indentation" accesskey="p" rel="prev">Code Indentation</a>, Up: <a href="Code-Formatting.html#Code-Formatting" accesskey="u" rel="up">Code Formatting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dmax_002dextra_002dcontinuation_002dindent"
+    id=
+    "index-idlwave_002dmax_002dextra_002dcontinuation_002dindent"></a>User
+    Option: <strong>idlwave-max-extra-continuation-indent</strong>
+    <em>(<code>20</code>)</em></dt>
 
+    <dd>
+      <p>The maximum additional indentation (over the basic
+      continuation-indent) that will be permitted for special
+      continues. To effectively disable special continuation
+      indentation, set to <code>0</code>. To enable it constantly,
+      set to a large number (like <code>100</code>). Note that the
+      indentation in a long continued statement never decreases
+      from line to line, outside of nested parentheses
+      statements.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-idlwave_002dindent_002dto_002dopen_002dparen" id=
+    "index-idlwave_002dindent_002dto_002dopen_002dparen"></a>User
+    Option: <strong>idlwave-indent-to-open-paren</strong>
+    <em>(<code>t</code>)</em></dt>
 
+    <dd>
+      <p>Non-<code>nil</code> means indent continuation lines to
+      innermost open parenthesis, regardless of whether the
+      <code>idlwave-max-extra-continuation-indent</code> limit is
+      satisfied.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Comment-Indentation.html#Comment-Indentation"
+    accesskey="n" rel="next">Comment Indentation</a>, Previous:
+    <a href="Code-Indentation.html#Code-Indentation" accesskey="p"
+    rel="prev">Code Indentation</a>, Up: <a href=
+    "Code-Formatting.html#Code-Formatting" accesskey="u" rel=
+    "up">Code Formatting</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

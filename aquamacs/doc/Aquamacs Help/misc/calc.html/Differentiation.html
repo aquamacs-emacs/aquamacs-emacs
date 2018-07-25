@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,123 +18,172 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Differentiation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Differentiation">
-<meta name="keywords" content="GNU Emacs Calc Manual: Differentiation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Calculus.html#Calculus" rel="up" title="Calculus">
-<link href="Integration.html#Integration" rel="next" title="Integration">
-<link href="Calculus.html#Calculus" rel="prev" title="Calculus">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Differentiation</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Differentiation" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Differentiation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Calculus.html#Calculus" rel="up" title="Calculus" />
+  <link href="Integration.html#Integration" rel="next" title=
+  "Integration" />
+  <link href="Calculus.html#Calculus" rel="prev" title=
+  "Calculus" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Differentiation"></a>
-<div class="header">
-<p>
-Next: <a href="Integration.html#Integration" accesskey="n" rel="next">Integration</a>, Previous: <a href="Calculus.html#Calculus" accesskey="p" rel="prev">Calculus</a>, Up: <a href="Calculus.html#Calculus" accesskey="u" rel="up">Calculus</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Differentiation-1"></a>
-<h4 class="subsection">10.5.1 Differentiation</h4>
+<body lang="en" xml:lang="en">
+  <a name="Differentiation" id="Differentiation"></a>
 
-<a name="index-a-d"></a>
-<a name="index-H-a-d"></a>
-<a name="index-calc_002dderivative"></a>
-<a name="index-deriv-1"></a>
-<a name="index-tderiv-1"></a>
-<p>The <kbd>a d</kbd> (<code>calc-derivative</code>) [<code>deriv</code>] command computes
-the derivative of the expression on the top of the stack with respect to
-some variable, which it will prompt you to enter.  Normally, variables
-in the formula other than the specified differentiation variable are
-considered constant, i.e., &lsquo;<samp>deriv(y,x)</samp>&rsquo; is reduced to zero.  With
-the Hyperbolic flag, the <code>tderiv</code> (total derivative) operation is used
-instead, in which derivatives of variables are not reduced to zero
-unless those variables are known to be &ldquo;constant,&rdquo; i.e., independent
-of any other variables.  (The built-in special variables like <code>pi</code>
-are considered constant, as are variables that have been declared
-<code>const</code>; see <a href="Declarations.html#Declarations">Declarations</a>.)
-</p>
-<p>With a numeric prefix argument <var>n</var>, this command computes the
-<var>n</var>th derivative.
-</p>
-<p>When working with trigonometric functions, it is best to switch to
-Radians mode first (with <kbd>m&nbsp;r</kbd><!-- /@w -->).  The derivative of &lsquo;<samp>sin(x)</samp>&rsquo;
-in degrees is &lsquo;<samp>(pi/180) cos(x)</samp>&rsquo;, probably not the expected
-answer!
-</p>
-<p>If you use the <code>deriv</code> function directly in an algebraic formula,
-you can write &lsquo;<samp>deriv(f,x,x0)</samp>&rsquo; which represents the derivative
-of &lsquo;<samp>f</samp>&rsquo; with respect to &lsquo;<samp>x</samp>&rsquo;, evaluated at the point
-&lsquo;<samp>x=x0</samp>&rsquo;.
-</p>
-<p>If the formula being differentiated contains functions which Calc does
-not know, the derivatives of those functions are produced by adding
-primes (apostrophe characters).  For example, &lsquo;<samp>deriv(f(2x), x)</samp>&rsquo;
-produces &lsquo;<samp>2 f'(2 x)</samp>&rsquo;, where the function <code>f'</code> represents the
-derivative of <code>f</code>.
-</p>
-<p>For functions you have defined with the <kbd>Z F</kbd> command, Calc expands
-the functions according to their defining formulas unless you have
-also defined <code>f'</code> suitably.  For example, suppose we define
-&lsquo;<samp>sinc(x) = sin(x)/x</samp>&rsquo; using <kbd>Z F</kbd>.  If we then differentiate
-the formula &lsquo;<samp>sinc(2 x)</samp>&rsquo;, the formula will be expanded to
-&lsquo;<samp>sin(2 x) / (2 x)</samp>&rsquo; and differentiated.  However, if we also
-define &lsquo;<samp>sinc'(x) = dsinc(x)</samp>&rsquo;, say, then Calc will write the
-result as &lsquo;<samp>2 dsinc(2 x)</samp>&rsquo;.  See <a href="Algebraic-Definitions.html#Algebraic-Definitions">Algebraic Definitions</a>.
-</p>
-<p>For multi-argument functions &lsquo;<samp>f(x,y,z)</samp>&rsquo;, the derivative with respect
-to the first argument is written &lsquo;<samp>f'(x,y,z)</samp>&rsquo;; derivatives with
-respect to the other arguments are &lsquo;<samp>f'2(x,y,z)</samp>&rsquo; and &lsquo;<samp>f'3(x,y,z)</samp>&rsquo;.
-Various higher-order derivatives can be formed in the obvious way, e.g.,
-&lsquo;<samp>f'<var></var>'(x)</samp>&rsquo; (the second derivative of <code>f</code>) or
-&lsquo;<samp>f'<var></var>'2'3(x,y,z)</samp>&rsquo; (<code>f</code> differentiated with respect to each
-argument once).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Integration.html#Integration" accesskey="n" rel="next">Integration</a>, Previous: <a href="Calculus.html#Calculus" accesskey="p" rel="prev">Calculus</a>, Up: <a href="Calculus.html#Calculus" accesskey="u" rel="up">Calculus</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Integration.html#Integration" accesskey="n"
+    rel="next">Integration</a>, Previous: <a href=
+    "Calculus.html#Calculus" accesskey="p" rel="prev">Calculus</a>,
+    Up: <a href="Calculus.html#Calculus" accesskey="u" rel=
+    "up">Calculus</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Differentiation-1" id="Differentiation-1"></a>
 
+  <h4 class="subsection">10.5.1 Differentiation</h4><a name=
+  "index-a-d" id="index-a-d"></a> <a name="index-H-a-d" id=
+  "index-H-a-d"></a> <a name="index-calc_002dderivative" id=
+  "index-calc_002dderivative"></a> <a name="index-deriv-1" id=
+  "index-deriv-1"></a> <a name="index-tderiv-1" id=
+  "index-tderiv-1"></a>
 
+  <p>The <kbd>a d</kbd> (<code>calc-derivative</code>)
+  [<code>deriv</code>] command computes the derivative of the
+  expression on the top of the stack with respect to some variable,
+  which it will prompt you to enter. Normally, variables in the
+  formula other than the specified differentiation variable are
+  considered constant, i.e., &lsquo;<samp>deriv(y,x)</samp>&rsquo;
+  is reduced to zero. With the Hyperbolic flag, the
+  <code>tderiv</code> (total derivative) operation is used instead,
+  in which derivatives of variables are not reduced to zero unless
+  those variables are known to be &ldquo;constant,&rdquo; i.e.,
+  independent of any other variables. (The built-in special
+  variables like <code>pi</code> are considered constant, as are
+  variables that have been declared <code>const</code>; see
+  <a href="Declarations.html#Declarations">Declarations</a>.)</p>
 
+  <p>With a numeric prefix argument <var>n</var>, this command
+  computes the <var>n</var>th derivative.</p>
+
+  <p>When working with trigonometric functions, it is best to
+  switch to Radians mode first (with <kbd>m&nbsp;r</kbd>
+  <!-- /@w -->). The derivative of
+  &lsquo;<samp>sin(x)</samp>&rsquo; in degrees is
+  &lsquo;<samp>(pi/180) cos(x)</samp>&rsquo;, probably not the
+  expected answer!</p>
+
+  <p>If you use the <code>deriv</code> function directly in an
+  algebraic formula, you can write
+  &lsquo;<samp>deriv(f,x,x0)</samp>&rsquo; which represents the
+  derivative of &lsquo;<samp>f</samp>&rsquo; with respect to
+  &lsquo;<samp>x</samp>&rsquo;, evaluated at the point
+  &lsquo;<samp>x=x0</samp>&rsquo;.</p>
+
+  <p>If the formula being differentiated contains functions which
+  Calc does not know, the derivatives of those functions are
+  produced by adding primes (apostrophe characters). For example,
+  &lsquo;<samp>deriv(f(2x), x)</samp>&rsquo; produces
+  &lsquo;<samp>2 f'(2 x)</samp>&rsquo;, where the function
+  <code>f'</code> represents the derivative of <code>f</code>.</p>
+
+  <p>For functions you have defined with the <kbd>Z F</kbd>
+  command, Calc expands the functions according to their defining
+  formulas unless you have also defined <code>f'</code> suitably.
+  For example, suppose we define &lsquo;<samp>sinc(x) =
+  sin(x)/x</samp>&rsquo; using <kbd>Z F</kbd>. If we then
+  differentiate the formula &lsquo;<samp>sinc(2 x)</samp>&rsquo;,
+  the formula will be expanded to &lsquo;<samp>sin(2 x) / (2
+  x)</samp>&rsquo; and differentiated. However, if we also define
+  &lsquo;<samp>sinc'(x) = dsinc(x)</samp>&rsquo;, say, then Calc
+  will write the result as &lsquo;<samp>2 dsinc(2 x)</samp>&rsquo;.
+  See <a href=
+  "Algebraic-Definitions.html#Algebraic-Definitions">Algebraic
+  Definitions</a>.</p>
+
+  <p>For multi-argument functions
+  &lsquo;<samp>f(x,y,z)</samp>&rsquo;, the derivative with respect
+  to the first argument is written
+  &lsquo;<samp>f'(x,y,z)</samp>&rsquo;; derivatives with respect to
+  the other arguments are &lsquo;<samp>f'2(x,y,z)</samp>&rsquo; and
+  &lsquo;<samp>f'3(x,y,z)</samp>&rsquo;. Various higher-order
+  derivatives can be formed in the obvious way, e.g.,
+  &lsquo;<samp>f''(x)</samp>&rsquo; (the second derivative of
+  <code>f</code>) or &lsquo;<samp>f''2'3(x,y,z)</samp>&rsquo;
+  (<code>f</code> differentiated with respect to each argument
+  once).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Integration.html#Integration" accesskey="n"
+    rel="next">Integration</a>, Previous: <a href=
+    "Calculus.html#Calculus" accesskey="p" rel="prev">Calculus</a>,
+    Up: <a href="Calculus.html#Calculus" accesskey="u" rel=
+    "up">Calculus</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,264 +19,432 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: File Local Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: File Local Variables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: File Local Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variables.html#Variables" rel="up" title="Variables">
-<link href="Directory-Local-Variables.html#Directory-Local-Variables" rel="next" title="Directory Local Variables">
-<link href="Default-Value.html#Default-Value" rel="prev" title="Default Value">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: File Local
+  Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: File Local Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: File Local Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variables.html#Variables" rel="up" title=
+  "Variables" />
+  <link href=
+  "Directory-Local-Variables.html#Directory-Local-Variables" rel=
+  "next" title="Directory Local Variables" />
+  <link href="Default-Value.html#Default-Value" rel="prev" title=
+  "Default Value" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="File-Local-Variables" id="File-Local-Variables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Directory-Local-Variables.html#Directory-Local-Variables"
+    accesskey="n" rel="next">Directory Local Variables</a>,
+    Previous: <a href=
+    "Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables"
+    accesskey="p" rel="prev">Buffer-Local Variables</a>, Up:
+    <a href="Variables.html#Variables" accesskey="u" rel=
+    "up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="File-Local-Variables-1" id="File-Local-Variables-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="File-Local-Variables"></a>
-<div class="header">
-<p>
-Next: <a href="Directory-Local-Variables.html#Directory-Local-Variables" accesskey="n" rel="next">Directory Local Variables</a>, Previous: <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" accesskey="p" rel="prev">Buffer-Local Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="File-Local-Variables-1"></a>
-<h3 class="section">11.11 File Local Variables</h3>
-<a name="index-file-local-variables"></a>
+  <h3 class="section">11.11 File Local Variables</h3><a name=
+  "index-file-local-variables" id="index-file-local-variables"></a>
 
-<p>A file can specify local variable values; Emacs uses these to create
-buffer-local bindings for those variables in the buffer visiting that
-file.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Variables.html#File-Variables">Local Variables in Files</a> in <cite>The
-GNU Emacs Manual</cite>, for basic information about file-local variables.
-This section describes the functions and variables that affect how
-file-local variables are processed.
-</p>
-<p>If a file-local variable could specify an arbitrary function or Lisp
-expression that would be called later, visiting a file could take over
-your Emacs.  Emacs protects against this by automatically setting only
-those file-local variables whose specified values are known to be
-safe.  Other file-local variables are set only if the user agrees.
-</p>
-<p>For additional safety, <code>read-circle</code> is temporarily bound to
-<code>nil</code> when Emacs reads file-local variables (see <a href="Input-Functions.html#Input-Functions">Input Functions</a>).  This prevents the Lisp reader from recognizing circular
-and shared Lisp structures (see <a href="Circular-Objects.html#Circular-Objects">Circular Objects</a>).
-</p>
-<dl>
-<dt><a name="index-enable_002dlocal_002dvariables"></a>User Option: <strong>enable-local-variables</strong></dt>
-<dd><p>This variable controls whether to process file-local variables.
-The possible values are:
-</p>
-<dl compact="compact">
-<dt><code>t</code> (the default)</dt>
-<dd><p>Set the safe variables, and query (once) about any unsafe variables.
-</p></dd>
-<dt><code>:safe</code></dt>
-<dd><p>Set only the safe variables and do not query.
-</p></dd>
-<dt><code>:all</code></dt>
-<dd><p>Set all the variables and do not query.
-</p></dd>
-<dt><code>nil</code></dt>
-<dd><p>Don&rsquo;t set any variables.
-</p></dd>
-<dt>anything else</dt>
-<dd><p>Query (once) about all the variables.
-</p></dd>
-</dl>
-</dd></dl>
+  <p>A file can specify local variable values; Emacs uses these to
+  create buffer-local bindings for those variables in the buffer
+  visiting that file. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Variables.html#File-Variables">
+  Local Variables in Files</a> in <cite>The GNU Emacs
+  Manual</cite>, for basic information about file-local variables.
+  This section describes the functions and variables that affect
+  how file-local variables are processed.</p>
 
-<dl>
-<dt><a name="index-inhibit_002dlocal_002dvariables_002dregexps"></a>Variable: <strong>inhibit-local-variables-regexps</strong></dt>
-<dd><p>This is a list of regular expressions.  If a file has a name
-matching an element of this list, then it is not scanned for
-any form of file-local variable.  For examples of why you might want
-to use this, see <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>.
-</p></dd></dl>
+  <p>If a file-local variable could specify an arbitrary function
+  or Lisp expression that would be called later, visiting a file
+  could take over your Emacs. Emacs protects against this by
+  automatically setting only those file-local variables whose
+  specified values are known to be safe. Other file-local variables
+  are set only if the user agrees.</p>
 
-<dl>
-<dt><a name="index-hack_002dlocal_002dvariables"></a>Function: <strong>hack-local-variables</strong> <em>&amp;optional mode-only</em></dt>
-<dd><p>This function parses, and binds or evaluates as appropriate, any local
-variables specified by the contents of the current buffer.  The variable
-<code>enable-local-variables</code> has its effect here.  However, this
-function does not look for the &lsquo;<samp>mode:</samp>&rsquo; local variable in the
-&lsquo;<samp><span class="nolinebreak">-*-</span></samp>&rsquo;<!-- /@w --> line.  <code>set-auto-mode</code> does that, also taking
-<code>enable-local-variables</code> into account (see <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>).
-</p>
-<p>This function works by walking the alist stored in
-<code>file-local-variables-alist</code> and applying each local variable in
-turn.  It calls <code>before-hack-local-variables-hook</code> and
-<code>hack-local-variables-hook</code> before and after applying the
-variables, respectively.  It only calls the before-hook if the alist
-is non-<code>nil</code>; it always calls the other hook.  This
-function ignores a &lsquo;<samp>mode</samp>&rsquo; element if it specifies the same major
-mode as the buffer already has.
-</p>
-<p>If the optional argument <var>mode-only</var> is non-<code>nil</code>, then all
-this function does is return a symbol specifying the major mode,
-if the &lsquo;<samp><span class="nolinebreak">-*-</span></samp>&rsquo;<!-- /@w --> line or the local variables list specifies one,
-and <code>nil</code> otherwise.  It does not set the mode nor any other
-file-local variable.
-</p></dd></dl>
+  <p>For additional safety, <code>read-circle</code> is temporarily
+  bound to <code>nil</code> when Emacs reads file-local variables
+  (see <a href="Input-Functions.html#Input-Functions">Input
+  Functions</a>). This prevents the Lisp reader from recognizing
+  circular and shared Lisp structures (see <a href=
+  "Circular-Objects.html#Circular-Objects">Circular
+  Objects</a>).</p>
 
-<dl>
-<dt><a name="index-file_002dlocal_002dvariables_002dalist"></a>Variable: <strong>file-local-variables-alist</strong></dt>
-<dd><p>This buffer-local variable holds the alist of file-local variable
-settings.  Each element of the alist is of the form
-<code>(<var>var</var>&nbsp;.&nbsp;<var>value</var>)</code><!-- /@w -->, where <var>var</var> is a symbol of
-the local variable and <var>value</var> is its value.  When Emacs visits a
-file, it first collects all the file-local variables into this alist,
-and then the <code>hack-local-variables</code> function applies them one by
-one.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-enable_002dlocal_002dvariables" id=
+    "index-enable_002dlocal_002dvariables"></a>User Option:
+    <strong>enable-local-variables</strong></dt>
 
-<dl>
-<dt><a name="index-before_002dhack_002dlocal_002dvariables_002dhook"></a>Variable: <strong>before-hack-local-variables-hook</strong></dt>
-<dd><p>Emacs calls this hook immediately before applying file-local variables
-stored in <code>file-local-variables-alist</code>.
-</p></dd></dl>
+    <dd>
+      <p>This variable controls whether to process file-local
+      variables. The possible values are:</p>
 
-<dl>
-<dt><a name="index-hack_002dlocal_002dvariables_002dhook"></a>Variable: <strong>hack-local-variables-hook</strong></dt>
-<dd><p>Emacs calls this hook immediately after it finishes applying
-file-local variables stored in <code>file-local-variables-alist</code>.
-</p></dd></dl>
+      <dl compact="compact">
+        <dt><code>t</code> (the default)</dt>
 
-<a name="index-safe-local-variable"></a>
-<p>You can specify safe values for a variable with a
-<code>safe-local-variable</code> property.  The property has to be a
-function of one argument; any value is safe if the function returns
-non-<code>nil</code> given that value.  Many commonly-encountered file
-variables have <code>safe-local-variable</code> properties; these include
-<code>fill-column</code>, <code>fill-prefix</code>, and <code>indent-tabs-mode</code>.
-For boolean-valued variables that are safe, use <code>booleanp</code> as the
-property value.
-</p>
-<p>When defining a user option using <code>defcustom</code>, you can set its
-<code>safe-local-variable</code> property by adding the arguments
-<code>:safe <var>function</var></code> to <code>defcustom</code> (see <a href="Variable-Definitions.html#Variable-Definitions">Variable Definitions</a>).
-</p>
-<dl>
-<dt><a name="index-safe_002dlocal_002dvariable_002dvalues"></a>User Option: <strong>safe-local-variable-values</strong></dt>
-<dd><p>This variable provides another way to mark some variable values as
-safe.  It is a list of cons cells <code>(<var>var</var> . <var>val</var>)</code>,
-where <var>var</var> is a variable name and <var>val</var> is a value which is
-safe for that variable.
-</p>
-<p>When Emacs asks the user whether or not to obey a set of file-local
-variable specifications, the user can choose to mark them as safe.
-Doing so adds those variable/value pairs to
-<code>safe-local-variable-values</code>, and saves it to the user&rsquo;s custom
-file.
-</p></dd></dl>
+        <dd>
+          <p>Set the safe variables, and query (once) about any
+          unsafe variables.</p>
+        </dd>
 
-<dl>
-<dt><a name="index-safe_002dlocal_002dvariable_002dp"></a>Function: <strong>safe-local-variable-p</strong> <em>sym val</em></dt>
-<dd><p>This function returns non-<code>nil</code> if it is safe to give <var>sym</var>
-the value <var>val</var>, based on the above criteria.
-</p></dd></dl>
+        <dt><code>:safe</code></dt>
 
-<p>Some variables are considered <em>risky</em>.  If a variable is risky,
-it is never entered automatically into
-<code>safe-local-variable-values</code>; Emacs always queries before setting
-a risky variable, unless the user explicitly allows a value by
-customizing <code>safe-local-variable-values</code> directly.
-</p>
-<p>Any variable whose name has a non-<code>nil</code>
-<code>risky-local-variable</code> property is considered risky.  When you
-define a user option using <code>defcustom</code>, you can set its
-<code>risky-local-variable</code> property by adding the arguments
-<code>:risky <var>value</var></code> to <code>defcustom</code> (see <a href="Variable-Definitions.html#Variable-Definitions">Variable Definitions</a>).  In addition, any variable whose name ends in any of
-&lsquo;<samp>-command</samp>&rsquo;, &lsquo;<samp>-frame-alist</samp>&rsquo;, &lsquo;<samp>-function</samp>&rsquo;,
-&lsquo;<samp>-functions</samp>&rsquo;, &lsquo;<samp>-hook</samp>&rsquo;, &lsquo;<samp>-hooks</samp>&rsquo;, &lsquo;<samp>-form</samp>&rsquo;,
-&lsquo;<samp>-forms</samp>&rsquo;, &lsquo;<samp>-map</samp>&rsquo;, &lsquo;<samp>-map-alist</samp>&rsquo;, &lsquo;<samp>-mode-alist</samp>&rsquo;,
-&lsquo;<samp>-program</samp>&rsquo;, or &lsquo;<samp>-predicate</samp>&rsquo; is automatically considered
-risky.  The variables &lsquo;<samp>font-lock-keywords</samp>&rsquo;,
-&lsquo;<samp>font-lock-keywords</samp>&rsquo; followed by a digit, and
-&lsquo;<samp>font-lock-syntactic-keywords</samp>&rsquo; are also considered risky.
-</p>
-<dl>
-<dt><a name="index-risky_002dlocal_002dvariable_002dp"></a>Function: <strong>risky-local-variable-p</strong> <em>sym</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>sym</var> is a risky variable,
-based on the above criteria.
-</p></dd></dl>
+        <dd>
+          <p>Set only the safe variables and do not query.</p>
+        </dd>
 
-<dl>
-<dt><a name="index-ignored_002dlocal_002dvariables"></a>Variable: <strong>ignored-local-variables</strong></dt>
-<dd><p>This variable holds a list of variables that should not be given local
-values by files.  Any value specified for one of these variables is
-completely ignored.
-</p></dd></dl>
+        <dt><code>:all</code></dt>
 
-<p>The &lsquo;<samp>Eval:</samp>&rsquo; &ldquo;variable&rdquo; is also a potential loophole, so Emacs
-normally asks for confirmation before handling it.
-</p>
-<dl>
-<dt><a name="index-enable_002dlocal_002deval"></a>User Option: <strong>enable-local-eval</strong></dt>
-<dd><p>This variable controls processing of &lsquo;<samp>Eval:</samp>&rsquo; in &lsquo;<samp>-*-</samp>&rsquo; lines
-or local variables
-lists in files being visited.  A value of <code>t</code> means process them
-unconditionally; <code>nil</code> means ignore them; anything else means ask
-the user what to do for each file.  The default value is <code>maybe</code>.
-</p></dd></dl>
+        <dd>
+          <p>Set all the variables and do not query.</p>
+        </dd>
 
-<dl>
-<dt><a name="index-safe_002dlocal_002deval_002dforms"></a>User Option: <strong>safe-local-eval-forms</strong></dt>
-<dd><p>This variable holds a list of expressions that are safe to
-evaluate when found in the &lsquo;<samp>Eval:</samp>&rsquo; &ldquo;variable&rdquo; in a file
-local variables list.
-</p></dd></dl>
+        <dt><code>nil</code></dt>
 
-<p>If the expression is a function call and the function has a
-<code>safe-local-eval-function</code> property, the property value
-determines whether the expression is safe to evaluate.  The property
-value can be a predicate to call to test the expression, a list of
-such predicates (it&rsquo;s safe if any predicate succeeds), or <code>t</code>
-(always safe provided the arguments are constant).
-</p>
-<p>Text properties are also potential loopholes, since their values
-could include functions to call.  So Emacs discards all text
-properties from string values specified for file-local variables.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Directory-Local-Variables.html#Directory-Local-Variables" accesskey="n" rel="next">Directory Local Variables</a>, Previous: <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" accesskey="p" rel="prev">Buffer-Local Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+        <dd>
+          <p>Don&rsquo;t set any variables.</p>
+        </dd>
 
+        <dt>anything else</dt>
 
+        <dd>
+          <p>Query (once) about all the variables.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-inhibit_002dlocal_002dvariables_002dregexps"
+    id=
+    "index-inhibit_002dlocal_002dvariables_002dregexps"></a>Variable:
+    <strong>inhibit-local-variables-regexps</strong></dt>
+
+    <dd>
+      <p>This is a list of regular expressions. If a file has a
+      name matching an element of this list, then it is not scanned
+      for any form of file-local variable. For examples of why you
+      might want to use this, see <a href=
+      "Auto-Major-Mode.html#Auto-Major-Mode">Auto Major
+      Mode</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-hack_002dlocal_002dvariables" id=
+    "index-hack_002dlocal_002dvariables"></a>Function:
+    <strong>hack-local-variables</strong> <em>&amp;optional
+    mode-only</em></dt>
+
+    <dd>
+      <p>This function parses, and binds or evaluates as
+      appropriate, any local variables specified by the contents of
+      the current buffer. The variable
+      <code>enable-local-variables</code> has its effect here.
+      However, this function does not look for the
+      &lsquo;<samp>mode:</samp>&rsquo; local variable in the
+      &lsquo;<samp><span class=
+      "nolinebreak">-*-</span></samp>&rsquo;<!-- /@w --> line.
+      <code>set-auto-mode</code> does that, also taking
+      <code>enable-local-variables</code> into account (see
+      <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major
+      Mode</a>).</p>
+
+      <p>This function works by walking the alist stored in
+      <code>file-local-variables-alist</code> and applying each
+      local variable in turn. It calls
+      <code>before-hack-local-variables-hook</code> and
+      <code>hack-local-variables-hook</code> before and after
+      applying the variables, respectively. It only calls the
+      before-hook if the alist is non-<code>nil</code>; it always
+      calls the other hook. This function ignores a
+      &lsquo;<samp>mode</samp>&rsquo; element if it specifies the
+      same major mode as the buffer already has.</p>
+
+      <p>If the optional argument <var>mode-only</var> is
+      non-<code>nil</code>, then all this function does is return a
+      symbol specifying the major mode, if the
+      &lsquo;<samp><span class=
+      "nolinebreak">-*-</span></samp>&rsquo;<!-- /@w --> line or
+      the local variables list specifies one, and <code>nil</code>
+      otherwise. It does not set the mode nor any other file-local
+      variable.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-file_002dlocal_002dvariables_002dalist" id=
+    "index-file_002dlocal_002dvariables_002dalist"></a>Variable:
+    <strong>file-local-variables-alist</strong></dt>
+
+    <dd>
+      <p>This buffer-local variable holds the alist of file-local
+      variable settings. Each element of the alist is of the form
+      <code>(<var>var</var>&nbsp;.&nbsp;<var>value</var>)</code>
+      <!-- /@w -->, where <var>var</var> is a symbol of the local
+      variable and <var>value</var> is its value. When Emacs visits
+      a file, it first collects all the file-local variables into
+      this alist, and then the <code>hack-local-variables</code>
+      function applies them one by one.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-before_002dhack_002dlocal_002dvariables_002dhook" id=
+    "index-before_002dhack_002dlocal_002dvariables_002dhook"></a>Variable:
+    <strong>before-hack-local-variables-hook</strong></dt>
+
+    <dd>
+      <p>Emacs calls this hook immediately before applying
+      file-local variables stored in
+      <code>file-local-variables-alist</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-hack_002dlocal_002dvariables_002dhook" id=
+    "index-hack_002dlocal_002dvariables_002dhook"></a>Variable:
+    <strong>hack-local-variables-hook</strong></dt>
+
+    <dd>
+      <p>Emacs calls this hook immediately after it finishes
+      applying file-local variables stored in
+      <code>file-local-variables-alist</code>.</p>
+    </dd>
+  </dl><a name="index-safe-local-variable" id=
+  "index-safe-local-variable"></a>
+
+  <p>You can specify safe values for a variable with a
+  <code>safe-local-variable</code> property. The property has to be
+  a function of one argument; any value is safe if the function
+  returns non-<code>nil</code> given that value. Many
+  commonly-encountered file variables have
+  <code>safe-local-variable</code> properties; these include
+  <code>fill-column</code>, <code>fill-prefix</code>, and
+  <code>indent-tabs-mode</code>. For boolean-valued variables that
+  are safe, use <code>booleanp</code> as the property value.</p>
+
+  <p>When defining a user option using <code>defcustom</code>, you
+  can set its <code>safe-local-variable</code> property by adding
+  the arguments <code>:safe <var>function</var></code> to
+  <code>defcustom</code> (see <a href=
+  "Variable-Definitions.html#Variable-Definitions">Variable
+  Definitions</a>).</p>
+
+  <dl>
+    <dt><a name="index-safe_002dlocal_002dvariable_002dvalues" id=
+    "index-safe_002dlocal_002dvariable_002dvalues"></a>User Option:
+    <strong>safe-local-variable-values</strong></dt>
+
+    <dd>
+      <p>This variable provides another way to mark some variable
+      values as safe. It is a list of cons cells
+      <code>(<var>var</var> . <var>val</var>)</code>, where
+      <var>var</var> is a variable name and <var>val</var> is a
+      value which is safe for that variable.</p>
+
+      <p>When Emacs asks the user whether or not to obey a set of
+      file-local variable specifications, the user can choose to
+      mark them as safe. Doing so adds those variable/value pairs
+      to <code>safe-local-variable-values</code>, and saves it to
+      the user&rsquo;s custom file.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-safe_002dlocal_002dvariable_002dp" id=
+    "index-safe_002dlocal_002dvariable_002dp"></a>Function:
+    <strong>safe-local-variable-p</strong> <em>sym val</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if it is safe
+      to give <var>sym</var> the value <var>val</var>, based on the
+      above criteria.</p>
+    </dd>
+  </dl>
+
+  <p>Some variables are considered <em>risky</em>. If a variable is
+  risky, it is never entered automatically into
+  <code>safe-local-variable-values</code>; Emacs always queries
+  before setting a risky variable, unless the user explicitly
+  allows a value by customizing
+  <code>safe-local-variable-values</code> directly.</p>
+
+  <p>Any variable whose name has a non-<code>nil</code>
+  <code>risky-local-variable</code> property is considered risky.
+  When you define a user option using <code>defcustom</code>, you
+  can set its <code>risky-local-variable</code> property by adding
+  the arguments <code>:risky <var>value</var></code> to
+  <code>defcustom</code> (see <a href=
+  "Variable-Definitions.html#Variable-Definitions">Variable
+  Definitions</a>). In addition, any variable whose name ends in
+  any of &lsquo;<samp>-command</samp>&rsquo;,
+  &lsquo;<samp>-frame-alist</samp>&rsquo;,
+  &lsquo;<samp>-function</samp>&rsquo;,
+  &lsquo;<samp>-functions</samp>&rsquo;,
+  &lsquo;<samp>-hook</samp>&rsquo;,
+  &lsquo;<samp>-hooks</samp>&rsquo;,
+  &lsquo;<samp>-form</samp>&rsquo;,
+  &lsquo;<samp>-forms</samp>&rsquo;,
+  &lsquo;<samp>-map</samp>&rsquo;,
+  &lsquo;<samp>-map-alist</samp>&rsquo;,
+  &lsquo;<samp>-mode-alist</samp>&rsquo;,
+  &lsquo;<samp>-program</samp>&rsquo;, or
+  &lsquo;<samp>-predicate</samp>&rsquo; is automatically considered
+  risky. The variables
+  &lsquo;<samp>font-lock-keywords</samp>&rsquo;,
+  &lsquo;<samp>font-lock-keywords</samp>&rsquo; followed by a
+  digit, and
+  &lsquo;<samp>font-lock-syntactic-keywords</samp>&rsquo; are also
+  considered risky.</p>
+
+  <dl>
+    <dt><a name="index-risky_002dlocal_002dvariable_002dp" id=
+    "index-risky_002dlocal_002dvariable_002dp"></a>Function:
+    <strong>risky-local-variable-p</strong> <em>sym</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>sym</var> is a risky variable, based on the above
+      criteria.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ignored_002dlocal_002dvariables" id=
+    "index-ignored_002dlocal_002dvariables"></a>Variable:
+    <strong>ignored-local-variables</strong></dt>
+
+    <dd>
+      <p>This variable holds a list of variables that should not be
+      given local values by files. Any value specified for one of
+      these variables is completely ignored.</p>
+    </dd>
+  </dl>
+
+  <p>The &lsquo;<samp>Eval:</samp>&rsquo; &ldquo;variable&rdquo; is
+  also a potential loophole, so Emacs normally asks for
+  confirmation before handling it.</p>
+
+  <dl>
+    <dt><a name="index-enable_002dlocal_002deval" id=
+    "index-enable_002dlocal_002deval"></a>User Option:
+    <strong>enable-local-eval</strong></dt>
+
+    <dd>
+      <p>This variable controls processing of
+      &lsquo;<samp>Eval:</samp>&rsquo; in
+      &lsquo;<samp>-*-</samp>&rsquo; lines or local variables lists
+      in files being visited. A value of <code>t</code> means
+      process them unconditionally; <code>nil</code> means ignore
+      them; anything else means ask the user what to do for each
+      file. The default value is <code>maybe</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-safe_002dlocal_002deval_002dforms" id=
+    "index-safe_002dlocal_002deval_002dforms"></a>User Option:
+    <strong>safe-local-eval-forms</strong></dt>
+
+    <dd>
+      <p>This variable holds a list of expressions that are safe to
+      evaluate when found in the &lsquo;<samp>Eval:</samp>&rsquo;
+      &ldquo;variable&rdquo; in a file local variables list.</p>
+    </dd>
+  </dl>
+
+  <p>If the expression is a function call and the function has a
+  <code>safe-local-eval-function</code> property, the property
+  value determines whether the expression is safe to evaluate. The
+  property value can be a predicate to call to test the expression,
+  a list of such predicates (it&rsquo;s safe if any predicate
+  succeeds), or <code>t</code> (always safe provided the arguments
+  are constant).</p>
+
+  <p>Text properties are also potential loopholes, since their
+  values could include functions to call. So Emacs discards all
+  text properties from string values specified for file-local
+  variables.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Directory-Local-Variables.html#Directory-Local-Variables"
+    accesskey="n" rel="next">Directory Local Variables</a>,
+    Previous: <a href=
+    "Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables"
+    accesskey="p" rel="prev">Buffer-Local Variables</a>, Up:
+    <a href="Variables.html#Variables" accesskey="u" rel=
+    "up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

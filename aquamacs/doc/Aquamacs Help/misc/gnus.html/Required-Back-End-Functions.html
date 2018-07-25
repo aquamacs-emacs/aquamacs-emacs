@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,88 +14,130 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Required Back End Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Required Back End Functions">
-<meta name="keywords" content="Gnus Manual: Required Back End Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Back-End-Interface.html#Back-End-Interface" rel="up" title="Back End Interface">
-<link href="Optional-Back-End-Functions.html#Optional-Back-End-Functions" rel="next" title="Optional Back End Functions">
-<link href="Back-End-Interface.html#Back-End-Interface" rel="prev" title="Back End Interface">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Required Back End Functions</title>
+  <meta name="description" content=
+  "Gnus Manual: Required Back End Functions" />
+  <meta name="keywords" content=
+  "Gnus Manual: Required Back End Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Back-End-Interface.html#Back-End-Interface" rel="up"
+  title="Back End Interface" />
+  <link href=
+  "Optional-Back-End-Functions.html#Optional-Back-End-Functions"
+  rel="next" title="Optional Back End Functions" />
+  <link href="Back-End-Interface.html#Back-End-Interface" rel=
+  "prev" title="Back End Interface" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Required-Back-End-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Optional-Back-End-Functions.html#Optional-Back-End-Functions" accesskey="n" rel="next">Optional Back End Functions</a>, Up: <a href="Back-End-Interface.html#Back-End-Interface" accesskey="u" rel="up">Back End Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Required-Back-End-Functions-1"></a>
-<h4 class="subsubsection">11.7.2.1 Required Back End Functions</h4>
+<body lang="en" xml:lang="en">
+  <a name="Required-Back-End-Functions" id=
+  "Required-Back-End-Functions"></a>
 
-<dl compact="compact">
-<dt><code>(nnchoke-retrieve-headers ARTICLES &amp;optional GROUP SERVER FETCH-OLD)</code></dt>
-<dd>
-<p><var>articles</var> is either a range of article numbers or a list of
-<code>Message-ID</code>s.  Current back ends do not fully support either&mdash;only
-sequences (lists) of article numbers, and most back ends do not support
-retrieval of <code>Message-ID</code>s.  But they should try for both.
-</p>
-<p>The result data should either be HEADs or <acronym>NOV</acronym> lines, and the result
-value should either be <code>headers</code> or <code>nov</code> to reflect this.
-This might later be expanded to <code>various</code>, which will be a mixture
-of HEADs and <acronym>NOV</acronym> lines, but this is currently not supported by Gnus.
-</p>
-<p>If <var>fetch-old</var> is non-<code>nil</code> it says to try fetching &ldquo;extra
-headers&rdquo;, in some meaning of the word.  This is generally done by
-fetching (at most) <var>fetch-old</var> extra headers less than the smallest
-article number in <code>articles</code>, and filling the gaps as well.  The
-presence of this parameter can be ignored if the back end finds it
-cumbersome to follow the request.  If this is non-<code>nil</code> and not a
-number, do maximum fetches.
-</p>
-<p>Here&rsquo;s an example HEAD:
-</p>
-<div class="example">
-<pre class="example">221 1056 Article retrieved.
+  <div class="header">
+    <p>Next: <a href=
+    "Optional-Back-End-Functions.html#Optional-Back-End-Functions"
+    accesskey="n" rel="next">Optional Back End Functions</a>, Up:
+    <a href="Back-End-Interface.html#Back-End-Interface" accesskey=
+    "u" rel="up">Back End Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Required-Back-End-Functions-1" id=
+  "Required-Back-End-Functions-1"></a>
+
+  <h4 class="subsubsection">11.7.2.1 Required Back End
+  Functions</h4>
+
+  <dl compact="compact">
+    <dt><code>(nnchoke-retrieve-headers ARTICLES &amp;optional
+    GROUP SERVER FETCH-OLD)</code></dt>
+
+    <dd>
+      <p><var>articles</var> is either a range of article numbers
+      or a list of <code>Message-ID</code>s. Current back ends do
+      not fully support either&mdash;only sequences (lists) of
+      article numbers, and most back ends do not support retrieval
+      of <code>Message-ID</code>s. But they should try for
+      both.</p>
+
+      <p>The result data should either be HEADs or
+      <acronym>NOV</acronym> lines, and the result value should
+      either be <code>headers</code> or <code>nov</code> to reflect
+      this. This might later be expanded to <code>various</code>,
+      which will be a mixture of HEADs and <acronym>NOV</acronym>
+      lines, but this is currently not supported by Gnus.</p>
+
+      <p>If <var>fetch-old</var> is non-<code>nil</code> it says to
+      try fetching &ldquo;extra headers&rdquo;, in some meaning of
+      the word. This is generally done by fetching (at most)
+      <var>fetch-old</var> extra headers less than the smallest
+      article number in <code>articles</code>, and filling the gaps
+      as well. The presence of this parameter can be ignored if the
+      back end finds it cumbersome to follow the request. If this
+      is non-<code>nil</code> and not a number, do maximum
+      fetches.</p>
+
+      <p>Here&rsquo;s an example HEAD:</p>
+
+      <div class="example">
+        <pre class="example">
+221 1056 Article retrieved.
 Path: ifi.uio.no!sturles
 From: sturles@ifi.uio.no (Sturle Sunde)
 Newsgroups: ifi.discussion
@@ -105,213 +149,254 @@ Message-ID: &lt;38o8e1$a0o@holmenkollen.ifi.uio.no&gt;
 References: &lt;38jdmq$4qu@visbur.ifi.uio.no&gt;
 NNTP-Posting-Host: holmenkollen.ifi.uio.no
 .
-</pre></div>
+</pre>
+      </div>
 
-<p>So a <code>headers</code> return value would imply that there&rsquo;s a number of
-these in the data buffer.
-</p>
-<p>Here&rsquo;s a BNF definition of such a buffer:
-</p>
-<div class="example">
-<pre class="example">headers        = *head
+      <p>So a <code>headers</code> return value would imply that
+      there&rsquo;s a number of these in the data buffer.</p>
+
+      <p>Here&rsquo;s a BNF definition of such a buffer:</p>
+
+      <div class="example">
+        <pre class="example">
+headers        = *head
 head           = error / valid-head
-error-message  = [ &quot;4&quot; / &quot;5&quot; ] 2number &quot; &quot; &lt;error message&gt; eol
-valid-head     = valid-message *header &quot;.&quot; eol
-valid-message  = &quot;221 &quot; &lt;number&gt; &quot; Article retrieved.&quot; eol
+error-message  = [ "4" / "5" ] 2number " " &lt;error message&gt; eol
+valid-head     = valid-message *header "." eol
+valid-message  = "221 " &lt;number&gt; " Article retrieved." eol
 header         = &lt;text&gt; eol
-</pre></div>
+</pre>
+      </div><a name="index-BNF" id="index-BNF"></a>
 
-<a name="index-BNF"></a>
-<p>(The version of BNF used here is the one used in RFC822.)
-</p>
-<p>If the return value is <code>nov</code>, the data buffer should contain
-<em>network overview database</em> lines.  These are basically fields
-separated by tabs.
-</p>
-<div class="example">
-<pre class="example">nov-buffer = *nov-line
+      <p>(The version of BNF used here is the one used in
+      RFC822.)</p>
+
+      <p>If the return value is <code>nov</code>, the data buffer
+      should contain <em>network overview database</em> lines.
+      These are basically fields separated by tabs.</p>
+
+      <div class="example">
+        <pre class="example">
+nov-buffer = *nov-line
 nov-line   = field 7*8[ &lt;TAB&gt; field ] eol
 field      = &lt;text except TAB&gt;
-</pre></div>
+</pre>
+      </div>
 
-<p>For a closer look at what should be in those fields,
-see <a href="Headers.html#Headers">Headers</a>.
-</p>
+      <p>For a closer look at what should be in those fields, see
+      <a href="Headers.html#Headers">Headers</a>.</p>
+    </dd>
 
-</dd>
-<dt><code>(nnchoke-open-server SERVER &amp;optional DEFINITIONS)</code></dt>
-<dd>
-<p><var>server</var> is here the virtual server name.  <var>definitions</var> is a
-list of <code>(VARIABLE VALUE)</code> pairs that define this virtual server.
-</p>
-<p>If the server can&rsquo;t be opened, no error should be signaled.  The back end
-may then choose to refuse further attempts at connecting to this
-server.  In fact, it should do so.
-</p>
-<p>If the server is opened already, this function should return a
-non-<code>nil</code> value.  There should be no data returned.
-</p>
+    <dt><code>(nnchoke-open-server SERVER &amp;optional
+    DEFINITIONS)</code></dt>
 
-</dd>
-<dt><code>(nnchoke-close-server &amp;optional SERVER)</code></dt>
-<dd>
-<p>Close connection to <var>server</var> and free all resources connected
-to it.  Return <code>nil</code> if the server couldn&rsquo;t be closed for some
-reason.
-</p>
-<p>There should be no data returned.
-</p>
+    <dd>
+      <p><var>server</var> is here the virtual server name.
+      <var>definitions</var> is a list of <code>(VARIABLE
+      VALUE)</code> pairs that define this virtual server.</p>
 
-</dd>
-<dt><code>(nnchoke-request-close)</code></dt>
-<dd>
-<p>Close connection to all servers and free all resources that the back end
-have reserved.  All buffers that have been created by that back end
-should be killed.  (Not the <code>nntp-server-buffer</code>, though.)  This
-function is generally only called when Gnus is shutting down.
-</p>
-<p>There should be no data returned.
-</p>
+      <p>If the server can&rsquo;t be opened, no error should be
+      signaled. The back end may then choose to refuse further
+      attempts at connecting to this server. In fact, it should do
+      so.</p>
 
-</dd>
-<dt><code>(nnchoke-server-opened &amp;optional SERVER)</code></dt>
-<dd>
-<p>If <var>server</var> is the current virtual server, and the connection to the
-physical server is alive, then this function should return a
-non-<code>nil</code> value.  This function should under no circumstances
-attempt to reconnect to a server we have lost connection to.
-</p>
-<p>There should be no data returned.
-</p>
+      <p>If the server is opened already, this function should
+      return a non-<code>nil</code> value. There should be no data
+      returned.</p>
+    </dd>
 
-</dd>
-<dt><code>(nnchoke-status-message &amp;optional SERVER)</code></dt>
-<dd>
-<p>This function should return the last error message from <var>server</var>.
-</p>
-<p>There should be no data returned.
-</p>
+    <dt><code>(nnchoke-close-server &amp;optional
+    SERVER)</code></dt>
 
-</dd>
-<dt><code>(nnchoke-request-article ARTICLE &amp;optional GROUP SERVER TO-BUFFER)</code></dt>
-<dd>
-<p>The result data from this function should be the article specified by
-<var>article</var>.  This might either be a <code>Message-ID</code> or a number.
-It is optional whether to implement retrieval by <code>Message-ID</code>, but
-it would be nice if that were possible.
-</p>
-<p>If <var>to-buffer</var> is non-<code>nil</code>, the result data should be returned
-in this buffer instead of the normal data buffer.  This is to make it
-possible to avoid copying large amounts of data from one buffer to
-another, while Gnus mainly requests articles to be inserted directly
-into its article buffer.
-</p>
-<p>If it is at all possible, this function should return a cons cell where
-the <code>car</code> is the group name the article was fetched from, and the <code>cdr</code> is
-the article number.  This will enable Gnus to find out what the real
-group and article numbers are when fetching articles by
-<code>Message-ID</code>.  If this isn&rsquo;t possible, <code>t</code> should be returned
-on successful article retrieval.
-</p>
+    <dd>
+      <p>Close connection to <var>server</var> and free all
+      resources connected to it. Return <code>nil</code> if the
+      server couldn&rsquo;t be closed for some reason.</p>
 
-</dd>
-<dt><code>(nnchoke-request-group GROUP &amp;optional SERVER FAST INFO)</code></dt>
-<dd>
-<p>Get data on <var>group</var>.  This function also has the side effect of
-making <var>group</var> the current group.
-</p>
-<p>If <var>fast</var>, don&rsquo;t bother to return useful data, just make <var>group</var>
-the current group.
-</p>
-<p>If <var>info</var>, it allows the backend to update the group info
-structure.
-</p>
-<p>Here&rsquo;s an example of some result data and a definition of the same:
-</p>
-<div class="example">
-<pre class="example">211 56 1000 1059 ifi.discussion
-</pre></div>
+      <p>There should be no data returned.</p>
+    </dd>
 
-<p>The first number is the status, which should be 211.  Next is the
-total number of articles in the group, the lowest article number, the
-highest article number, and finally the group name.  Note that the total
-number of articles may be less than one might think while just
-considering the highest and lowest article numbers, but some articles
-may have been canceled.  Gnus just discards the total-number, so
-whether one should take the bother to generate it properly (if that is a
-problem) is left as an exercise to the reader.  If the group contains no
-articles, the lowest article number should be reported as 1 and the
-highest as 0.
-</p>
-<div class="example">
-<pre class="example">group-status = [ error / info ] eol
-error        = [ &quot;4&quot; / &quot;5&quot; ] 2&lt;number&gt; &quot; &quot; &lt;Error message&gt;
-info         = &quot;211 &quot; 3* [ &lt;number&gt; &quot; &quot; ] &lt;string&gt;
-</pre></div>
+    <dt><code>(nnchoke-request-close)</code></dt>
 
+    <dd>
+      <p>Close connection to all servers and free all resources
+      that the back end have reserved. All buffers that have been
+      created by that back end should be killed. (Not the
+      <code>nntp-server-buffer</code>, though.) This function is
+      generally only called when Gnus is shutting down.</p>
 
-</dd>
-<dt><code>(nnchoke-close-group GROUP &amp;optional SERVER)</code></dt>
-<dd>
-<p>Close <var>group</var> and free any resources connected to it.  This will be
-a no-op on most back ends.
-</p>
-<p>There should be no data returned.
-</p>
+      <p>There should be no data returned.</p>
+    </dd>
 
-</dd>
-<dt><code>(nnchoke-request-list &amp;optional SERVER)</code></dt>
-<dd>
-<p>Return a list of all groups available on <var>server</var>.  And that means
-<em>all</em>.
-</p>
-<p>Here&rsquo;s an example from a server that only carries two groups:
-</p>
-<div class="example">
-<pre class="example">ifi.test 0000002200 0000002000 y
+    <dt><code>(nnchoke-server-opened &amp;optional
+    SERVER)</code></dt>
+
+    <dd>
+      <p>If <var>server</var> is the current virtual server, and
+      the connection to the physical server is alive, then this
+      function should return a non-<code>nil</code> value. This
+      function should under no circumstances attempt to reconnect
+      to a server we have lost connection to.</p>
+
+      <p>There should be no data returned.</p>
+    </dd>
+
+    <dt><code>(nnchoke-status-message &amp;optional
+    SERVER)</code></dt>
+
+    <dd>
+      <p>This function should return the last error message from
+      <var>server</var>.</p>
+
+      <p>There should be no data returned.</p>
+    </dd>
+
+    <dt><code>(nnchoke-request-article ARTICLE &amp;optional GROUP
+    SERVER TO-BUFFER)</code></dt>
+
+    <dd>
+      <p>The result data from this function should be the article
+      specified by <var>article</var>. This might either be a
+      <code>Message-ID</code> or a number. It is optional whether
+      to implement retrieval by <code>Message-ID</code>, but it
+      would be nice if that were possible.</p>
+
+      <p>If <var>to-buffer</var> is non-<code>nil</code>, the
+      result data should be returned in this buffer instead of the
+      normal data buffer. This is to make it possible to avoid
+      copying large amounts of data from one buffer to another,
+      while Gnus mainly requests articles to be inserted directly
+      into its article buffer.</p>
+
+      <p>If it is at all possible, this function should return a
+      cons cell where the <code>car</code> is the group name the
+      article was fetched from, and the <code>cdr</code> is the
+      article number. This will enable Gnus to find out what the
+      real group and article numbers are when fetching articles by
+      <code>Message-ID</code>. If this isn&rsquo;t possible,
+      <code>t</code> should be returned on successful article
+      retrieval.</p>
+    </dd>
+
+    <dt><code>(nnchoke-request-group GROUP &amp;optional SERVER
+    FAST INFO)</code></dt>
+
+    <dd>
+      <p>Get data on <var>group</var>. This function also has the
+      side effect of making <var>group</var> the current group.</p>
+
+      <p>If <var>fast</var>, don&rsquo;t bother to return useful
+      data, just make <var>group</var> the current group.</p>
+
+      <p>If <var>info</var>, it allows the backend to update the
+      group info structure.</p>
+
+      <p>Here&rsquo;s an example of some result data and a
+      definition of the same:</p>
+
+      <div class="example">
+        <pre class="example">
+211 56 1000 1059 ifi.discussion
+</pre>
+      </div>
+
+      <p>The first number is the status, which should be 211. Next
+      is the total number of articles in the group, the lowest
+      article number, the highest article number, and finally the
+      group name. Note that the total number of articles may be
+      less than one might think while just considering the highest
+      and lowest article numbers, but some articles may have been
+      canceled. Gnus just discards the total-number, so whether one
+      should take the bother to generate it properly (if that is a
+      problem) is left as an exercise to the reader. If the group
+      contains no articles, the lowest article number should be
+      reported as 1 and the highest as 0.</p>
+
+      <div class="example">
+        <pre class="example">
+group-status = [ error / info ] eol
+error        = [ "4" / "5" ] 2&lt;number&gt; " " &lt;Error message&gt;
+info         = "211 " 3* [ &lt;number&gt; " " ] &lt;string&gt;
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>(nnchoke-close-group GROUP &amp;optional
+    SERVER)</code></dt>
+
+    <dd>
+      <p>Close <var>group</var> and free any resources connected to
+      it. This will be a no-op on most back ends.</p>
+
+      <p>There should be no data returned.</p>
+    </dd>
+
+    <dt><code>(nnchoke-request-list &amp;optional
+    SERVER)</code></dt>
+
+    <dd>
+      <p>Return a list of all groups available on
+      <var>server</var>. And that means <em>all</em>.</p>
+
+      <p>Here&rsquo;s an example from a server that only carries
+      two groups:</p>
+
+      <div class="example">
+        <pre class="example">
+ifi.test 0000002200 0000002000 y
 ifi.discussion 3324 3300 n
-</pre></div>
+</pre>
+      </div>
 
-<p>On each line we have a group name, then the highest article number in
-that group, the lowest article number, and finally a flag.  If the group
-contains no articles, the lowest article number should be reported as 1
-and the highest as 0.
-</p>
-<div class="example">
-<pre class="example">active-file = *active-line
-active-line = name &quot; &quot; &lt;number&gt; &quot; &quot; &lt;number&gt; &quot; &quot; flags eol
+      <p>On each line we have a group name, then the highest
+      article number in that group, the lowest article number, and
+      finally a flag. If the group contains no articles, the lowest
+      article number should be reported as 1 and the highest as
+      0.</p>
+
+      <div class="example">
+        <pre class="example">
+active-file = *active-line
+active-line = name " " &lt;number&gt; " " &lt;number&gt; " " flags eol
 name        = &lt;string&gt;
-flags       = &quot;n&quot; / &quot;y&quot; / &quot;m&quot; / &quot;x&quot; / &quot;j&quot; / &quot;=&quot; name
-</pre></div>
+flags       = "n" / "y" / "m" / "x" / "j" / "=" name
+</pre>
+      </div>
 
-<p>The flag says whether the group is read-only (&lsquo;<samp>n</samp>&rsquo;), is moderated
-(&lsquo;<samp>m</samp>&rsquo;), is dead (&lsquo;<samp>x</samp>&rsquo;), is aliased to some other group
-(&lsquo;<samp>=other-group</samp>&rsquo;) or none of the above (&lsquo;<samp>y</samp>&rsquo;).
-</p>
+      <p>The flag says whether the group is read-only
+      (&lsquo;<samp>n</samp>&rsquo;), is moderated
+      (&lsquo;<samp>m</samp>&rsquo;), is dead
+      (&lsquo;<samp>x</samp>&rsquo;), is aliased to some other
+      group (&lsquo;<samp>=other-group</samp>&rsquo;) or none of
+      the above (&lsquo;<samp>y</samp>&rsquo;).</p>
+    </dd>
 
-</dd>
-<dt><code>(nnchoke-request-post &amp;optional SERVER)</code></dt>
-<dd>
-<p>This function should post the current buffer.  It might return whether
-the posting was successful or not, but that&rsquo;s not required.  If, for
-instance, the posting is done asynchronously, it has generally not been
-completed by the time this function concludes.  In that case, this
-function should set up some kind of sentinel to beep the user loud and
-clear if the posting could not be completed.
-</p>
-<p>There should be no result data from this function.
-</p>
-</dd>
-</dl>
+    <dt><code>(nnchoke-request-post &amp;optional
+    SERVER)</code></dt>
 
+    <dd>
+      <p>This function should post the current buffer. It might
+      return whether the posting was successful or not, but
+      that&rsquo;s not required. If, for instance, the posting is
+      done asynchronously, it has generally not been completed by
+      the time this function concludes. In that case, this function
+      should set up some kind of sentinel to beep the user loud and
+      clear if the posting could not be completed.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Optional-Back-End-Functions.html#Optional-Back-End-Functions" accesskey="n" rel="next">Optional Back End Functions</a>, Up: <a href="Back-End-Interface.html#Back-End-Interface" accesskey="u" rel="up">Back End Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>There should be no result data from this function.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Optional-Back-End-Functions.html#Optional-Back-End-Functions"
+    accesskey="n" rel="next">Optional Back End Functions</a>, Up:
+    <a href="Back-End-Interface.html#Back-End-Interface" accesskey=
+    "u" rel="up">Back End Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

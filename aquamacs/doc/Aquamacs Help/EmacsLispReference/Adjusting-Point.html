@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,94 +19,140 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Adjusting Point</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Adjusting Point">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Adjusting Point">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Input-Events.html#Input-Events" rel="next" title="Input Events">
-<link href="Command-Loop-Info.html#Command-Loop-Info" rel="prev" title="Command Loop Info">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Adjusting Point</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Adjusting Point" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Adjusting Point" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Input-Events.html#Input-Events" rel="next" title=
+  "Input Events" />
+  <link href="Command-Loop-Info.html#Command-Loop-Info" rel="prev"
+  title="Command Loop Info" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Adjusting-Point" id="Adjusting-Point"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Input-Events.html#Input-Events" accesskey="n"
+    rel="next">Input Events</a>, Previous: <a href=
+    "Command-Loop-Info.html#Command-Loop-Info" accesskey="p" rel=
+    "prev">Command Loop Info</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Adjusting-Point-After-Commands" id=
+  "Adjusting-Point-After-Commands"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Adjusting-Point"></a>
-<div class="header">
-<p>
-Next: <a href="Input-Events.html#Input-Events" accesskey="n" rel="next">Input Events</a>, Previous: <a href="Command-Loop-Info.html#Command-Loop-Info" accesskey="p" rel="prev">Command Loop Info</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Adjusting-Point-After-Commands"></a>
-<h3 class="section">20.6 Adjusting Point After Commands</h3>
-<a name="index-adjusting-point"></a>
-<a name="index-invisible_002fintangible-text_002c-and-point"></a>
-<a name="index-display-property_002c-and-point-display"></a>
-<a name="index-composition-property_002c-and-point-display"></a>
+  <h3 class="section">20.6 Adjusting Point After
+  Commands</h3><a name="index-adjusting-point" id=
+  "index-adjusting-point"></a> <a name=
+  "index-invisible_002fintangible-text_002c-and-point" id=
+  "index-invisible_002fintangible-text_002c-and-point"></a>
+  <a name="index-display-property_002c-and-point-display" id=
+  "index-display-property_002c-and-point-display"></a> <a name=
+  "index-composition-property_002c-and-point-display" id=
+  "index-composition-property_002c-and-point-display"></a>
 
-<p>It is not easy to display a value of point in the middle of a
-sequence of text that has the <code>display</code>, <code>composition</code> or
-is invisible.  Therefore, after a command finishes and returns to the
-command loop, if point is within such a sequence, the command loop
-normally moves point to the edge of the sequence.
-</p>
-<p>A command can inhibit this feature by setting the variable
-<code>disable-point-adjustment</code>:
-</p>
-<dl>
-<dt><a name="index-disable_002dpoint_002dadjustment"></a>Variable: <strong>disable-point-adjustment</strong></dt>
-<dd><p>If this variable is non-<code>nil</code> when a command returns to the
-command loop, then the command loop does not check for those text
-properties, and does not move point out of sequences that have them.
-</p>
-<p>The command loop sets this variable to <code>nil</code> before each command,
-so if a command sets it, the effect applies only to that command.
-</p></dd></dl>
+  <p>It is not easy to display a value of point in the middle of a
+  sequence of text that has the <code>display</code>,
+  <code>composition</code> or is invisible. Therefore, after a
+  command finishes and returns to the command loop, if point is
+  within such a sequence, the command loop normally moves point to
+  the edge of the sequence.</p>
 
-<dl>
-<dt><a name="index-global_002ddisable_002dpoint_002dadjustment"></a>Variable: <strong>global-disable-point-adjustment</strong></dt>
-<dd><p>If you set this variable to a non-<code>nil</code> value, the feature of
-moving point out of these sequences is completely turned off.
-</p></dd></dl>
+  <p>A command can inhibit this feature by setting the variable
+  <code>disable-point-adjustment</code>:</p>
 
+  <dl>
+    <dt><a name="index-disable_002dpoint_002dadjustment" id=
+    "index-disable_002dpoint_002dadjustment"></a>Variable:
+    <strong>disable-point-adjustment</strong></dt>
 
+    <dd>
+      <p>If this variable is non-<code>nil</code> when a command
+      returns to the command loop, then the command loop does not
+      check for those text properties, and does not move point out
+      of sequences that have them.</p>
 
+      <p>The command loop sets this variable to <code>nil</code>
+      before each command, so if a command sets it, the effect
+      applies only to that command.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-global_002ddisable_002dpoint_002dadjustment"
+    id=
+    "index-global_002ddisable_002dpoint_002dadjustment"></a>Variable:
+    <strong>global-disable-point-adjustment</strong></dt>
+
+    <dd>
+      <p>If you set this variable to a non-<code>nil</code> value,
+      the feature of moving point out of these sequences is
+      completely turned off.</p>
+    </dd>
+  </dl>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,165 +19,228 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Repeat Events</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Repeat Events">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Repeat Events">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Input-Events.html#Input-Events" rel="up" title="Input Events">
-<link href="Motion-Events.html#Motion-Events" rel="next" title="Motion Events">
-<link href="Button_002dDown-Events.html#Button_002dDown-Events" rel="prev" title="Button-Down Events">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Repeat Events</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Repeat Events" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Repeat Events" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Input-Events.html#Input-Events" rel="up" title=
+  "Input Events" />
+  <link href="Motion-Events.html#Motion-Events" rel="next" title=
+  "Motion Events" />
+  <link href="Button_002dDown-Events.html#Button_002dDown-Events"
+  rel="prev" title="Button-Down Events" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Repeat-Events" id="Repeat-Events"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Motion-Events.html#Motion-Events" accesskey=
+    "n" rel="next">Motion Events</a>, Previous: <a href=
+    "Button_002dDown-Events.html#Button_002dDown-Events" accesskey=
+    "p" rel="prev">Button-Down Events</a>, Up: <a href=
+    "Input-Events.html#Input-Events" accesskey="u" rel="up">Input
+    Events</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Repeat-Events-1" id="Repeat-Events-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Repeat-Events"></a>
-<div class="header">
-<p>
-Next: <a href="Motion-Events.html#Motion-Events" accesskey="n" rel="next">Motion Events</a>, Previous: <a href="Button_002dDown-Events.html#Button_002dDown-Events" accesskey="p" rel="prev">Button-Down Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Repeat-Events-1"></a>
-<h4 class="subsection">20.7.7 Repeat Events</h4>
-<a name="index-repeat-events"></a>
-<a name="index-double_002dclick-events"></a>
-<a name="index-triple_002dclick-events"></a>
-<a name="index-mouse-events_002c-repeated"></a>
+  <h4 class="subsection">20.7.7 Repeat Events</h4><a name=
+  "index-repeat-events" id="index-repeat-events"></a> <a name=
+  "index-double_002dclick-events" id=
+  "index-double_002dclick-events"></a> <a name=
+  "index-triple_002dclick-events" id=
+  "index-triple_002dclick-events"></a> <a name=
+  "index-mouse-events_002c-repeated" id=
+  "index-mouse-events_002c-repeated"></a>
 
-<p>If you press the same mouse button more than once in quick succession
-without moving the mouse, Emacs generates special <em>repeat</em> mouse
-events for the second and subsequent presses.
-</p>
-<p>The most common repeat events are <em>double-click</em> events.  Emacs
-generates a double-click event when you click a button twice; the event
-happens when you release the button (as is normal for all click
-events).
-</p>
-<p>The event type of a double-click event contains the prefix
-&lsquo;<samp>double-</samp>&rsquo;.  Thus, a double click on the second mouse button with
-<tt class="key">meta</tt> held down comes to the Lisp program as
-<code>M-double-mouse-2</code>.  If a double-click event has no binding, the
-binding of the corresponding ordinary click event is used to execute
-it.  Thus, you need not pay attention to the double click feature
-unless you really want to.
-</p>
-<p>When the user performs a double click, Emacs generates first an ordinary
-click event, and then a double-click event.  Therefore, you must design
-the command binding of the double click event to assume that the
-single-click command has already run.  It must produce the desired
-results of a double click, starting from the results of a single click.
-</p>
-<p>This is convenient, if the meaning of a double click somehow builds
-on the meaning of a single click&mdash;which is recommended user interface
-design practice for double clicks.
-</p>
-<p>If you click a button, then press it down again and start moving the
-mouse with the button held down, then you get a <em>double-drag</em> event
-when you ultimately release the button.  Its event type contains
-&lsquo;<samp>double-drag</samp>&rsquo; instead of just &lsquo;<samp>drag</samp>&rsquo;.  If a double-drag event
-has no binding, Emacs looks for an alternate binding as if the event
-were an ordinary drag.
-</p>
-<p>Before the double-click or double-drag event, Emacs generates a
-<em>double-down</em> event when the user presses the button down for the
-second time.  Its event type contains &lsquo;<samp>double-down</samp>&rsquo; instead of just
-&lsquo;<samp>down</samp>&rsquo;.  If a double-down event has no binding, Emacs looks for an
-alternate binding as if the event were an ordinary button-down event.
-If it finds no binding that way either, the double-down event is
-ignored.
-</p>
-<p>To summarize, when you click a button and then press it again right
-away, Emacs generates a down event and a click event for the first
-click, a double-down event when you press the button again, and finally
-either a double-click or a double-drag event.
-</p>
-<p>If you click a button twice and then press it again, all in quick
-succession, Emacs generates a <em>triple-down</em> event, followed by
-either a <em>triple-click</em> or a <em>triple-drag</em>.  The event types of
-these events contain &lsquo;<samp>triple</samp>&rsquo; instead of &lsquo;<samp>double</samp>&rsquo;.  If any
-triple event has no binding, Emacs uses the binding that it would use
-for the corresponding double event.
-</p>
-<p>If you click a button three or more times and then press it again, the
-events for the presses beyond the third are all triple events.  Emacs
-does not have separate event types for quadruple, quintuple, etc.
-events.  However, you can look at the event list to find out precisely
-how many times the button was pressed.
-</p>
-<dl>
-<dt><a name="index-event_002dclick_002dcount"></a>Function: <strong>event-click-count</strong> <em>event</em></dt>
-<dd><p>This function returns the number of consecutive button presses that led
-up to <var>event</var>.  If <var>event</var> is a double-down, double-click or
-double-drag event, the value is 2.  If <var>event</var> is a triple event,
-the value is 3 or greater.  If <var>event</var> is an ordinary mouse event
-(not a repeat event), the value is 1.
-</p></dd></dl>
+  <p>If you press the same mouse button more than once in quick
+  succession without moving the mouse, Emacs generates special
+  <em>repeat</em> mouse events for the second and subsequent
+  presses.</p>
 
-<dl>
-<dt><a name="index-double_002dclick_002dfuzz"></a>User Option: <strong>double-click-fuzz</strong></dt>
-<dd><p>To generate repeat events, successive mouse button presses must be at
-approximately the same screen position.  The value of
-<code>double-click-fuzz</code> specifies the maximum number of pixels the
-mouse may be moved (horizontally or vertically) between two successive
-clicks to make a double-click.
-</p>
-<p>This variable is also the threshold for motion of the mouse to count
-as a drag.
-</p></dd></dl>
+  <p>The most common repeat events are <em>double-click</em>
+  events. Emacs generates a double-click event when you click a
+  button twice; the event happens when you release the button (as
+  is normal for all click events).</p>
 
-<dl>
-<dt><a name="index-double_002dclick_002dtime"></a>User Option: <strong>double-click-time</strong></dt>
-<dd><p>To generate repeat events, the number of milliseconds between
-successive button presses must be less than the value of
-<code>double-click-time</code>.  Setting <code>double-click-time</code> to
-<code>nil</code> disables multi-click detection entirely.  Setting it to
-<code>t</code> removes the time limit; Emacs then detects multi-clicks by
-position only.
-</p></dd></dl>
+  <p>The event type of a double-click event contains the prefix
+  &lsquo;<samp>double-</samp>&rsquo;. Thus, a double click on the
+  second mouse button with <tt class="key">meta</tt> held down
+  comes to the Lisp program as <code>M-double-mouse-2</code>. If a
+  double-click event has no binding, the binding of the
+  corresponding ordinary click event is used to execute it. Thus,
+  you need not pay attention to the double click feature unless you
+  really want to.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Motion-Events.html#Motion-Events" accesskey="n" rel="next">Motion Events</a>, Previous: <a href="Button_002dDown-Events.html#Button_002dDown-Events" accesskey="p" rel="prev">Button-Down Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When the user performs a double click, Emacs generates first
+  an ordinary click event, and then a double-click event.
+  Therefore, you must design the command binding of the double
+  click event to assume that the single-click command has already
+  run. It must produce the desired results of a double click,
+  starting from the results of a single click.</p>
 
+  <p>This is convenient, if the meaning of a double click somehow
+  builds on the meaning of a single click&mdash;which is
+  recommended user interface design practice for double clicks.</p>
 
+  <p>If you click a button, then press it down again and start
+  moving the mouse with the button held down, then you get a
+  <em>double-drag</em> event when you ultimately release the
+  button. Its event type contains
+  &lsquo;<samp>double-drag</samp>&rsquo; instead of just
+  &lsquo;<samp>drag</samp>&rsquo;. If a double-drag event has no
+  binding, Emacs looks for an alternate binding as if the event
+  were an ordinary drag.</p>
 
+  <p>Before the double-click or double-drag event, Emacs generates
+  a <em>double-down</em> event when the user presses the button
+  down for the second time. Its event type contains
+  &lsquo;<samp>double-down</samp>&rsquo; instead of just
+  &lsquo;<samp>down</samp>&rsquo;. If a double-down event has no
+  binding, Emacs looks for an alternate binding as if the event
+  were an ordinary button-down event. If it finds no binding that
+  way either, the double-down event is ignored.</p>
+
+  <p>To summarize, when you click a button and then press it again
+  right away, Emacs generates a down event and a click event for
+  the first click, a double-down event when you press the button
+  again, and finally either a double-click or a double-drag
+  event.</p>
+
+  <p>If you click a button twice and then press it again, all in
+  quick succession, Emacs generates a <em>triple-down</em> event,
+  followed by either a <em>triple-click</em> or a
+  <em>triple-drag</em>. The event types of these events contain
+  &lsquo;<samp>triple</samp>&rsquo; instead of
+  &lsquo;<samp>double</samp>&rsquo;. If any triple event has no
+  binding, Emacs uses the binding that it would use for the
+  corresponding double event.</p>
+
+  <p>If you click a button three or more times and then press it
+  again, the events for the presses beyond the third are all triple
+  events. Emacs does not have separate event types for quadruple,
+  quintuple, etc. events. However, you can look at the event list
+  to find out precisely how many times the button was pressed.</p>
+
+  <dl>
+    <dt><a name="index-event_002dclick_002dcount" id=
+    "index-event_002dclick_002dcount"></a>Function:
+    <strong>event-click-count</strong> <em>event</em></dt>
+
+    <dd>
+      <p>This function returns the number of consecutive button
+      presses that led up to <var>event</var>. If <var>event</var>
+      is a double-down, double-click or double-drag event, the
+      value is 2. If <var>event</var> is a triple event, the value
+      is 3 or greater. If <var>event</var> is an ordinary mouse
+      event (not a repeat event), the value is 1.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-double_002dclick_002dfuzz" id=
+    "index-double_002dclick_002dfuzz"></a>User Option:
+    <strong>double-click-fuzz</strong></dt>
+
+    <dd>
+      <p>To generate repeat events, successive mouse button presses
+      must be at approximately the same screen position. The value
+      of <code>double-click-fuzz</code> specifies the maximum
+      number of pixels the mouse may be moved (horizontally or
+      vertically) between two successive clicks to make a
+      double-click.</p>
+
+      <p>This variable is also the threshold for motion of the
+      mouse to count as a drag.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-double_002dclick_002dtime" id=
+    "index-double_002dclick_002dtime"></a>User Option:
+    <strong>double-click-time</strong></dt>
+
+    <dd>
+      <p>To generate repeat events, the number of milliseconds
+      between successive button presses must be less than the value
+      of <code>double-click-time</code>. Setting
+      <code>double-click-time</code> to <code>nil</code> disables
+      multi-click detection entirely. Setting it to <code>t</code>
+      removes the time limit; Emacs then detects multi-clicks by
+      position only.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Motion-Events.html#Motion-Events" accesskey=
+    "n" rel="next">Motion Events</a>, Previous: <a href=
+    "Button_002dDown-Events.html#Button_002dDown-Events" accesskey=
+    "p" rel="prev">Button-Down Events</a>, Up: <a href=
+    "Input-Events.html#Input-Events" accesskey="u" rel="up">Input
+    Events</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

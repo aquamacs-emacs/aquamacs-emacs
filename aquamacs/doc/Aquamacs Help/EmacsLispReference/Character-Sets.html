@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,201 +19,323 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Character Sets</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Character Sets">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Character Sets">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up" title="Non-ASCII Characters">
-<link href="Scanning-Charsets.html#Scanning-Charsets" rel="next" title="Scanning Charsets">
-<link href="Character-Properties.html#Character-Properties" rel="prev" title="Character Properties">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Character Sets</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Character Sets" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Character Sets" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up"
+  title="Non-ASCII Characters" />
+  <link href="Scanning-Charsets.html#Scanning-Charsets" rel="next"
+  title="Scanning Charsets" />
+  <link href="Character-Properties.html#Character-Properties" rel=
+  "prev" title="Character Properties" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Character-Sets" id="Character-Sets"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Scanning-Charsets.html#Scanning-Charsets"
+    accesskey="n" rel="next">Scanning Charsets</a>, Previous:
+    <a href="Character-Properties.html#Character-Properties"
+    accesskey="p" rel="prev">Character Properties</a>, Up: <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Character-Sets-1" id="Character-Sets-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Character-Sets"></a>
-<div class="header">
-<p>
-Next: <a href="Scanning-Charsets.html#Scanning-Charsets" accesskey="n" rel="next">Scanning Charsets</a>, Previous: <a href="Character-Properties.html#Character-Properties" accesskey="p" rel="prev">Character Properties</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Character-Sets-1"></a>
-<h3 class="section">32.7 Character Sets</h3>
-<a name="index-character-sets"></a>
+  <h3 class="section">32.7 Character Sets</h3><a name=
+  "index-character-sets" id="index-character-sets"></a> <a name=
+  "index-charset" id="index-charset"></a> <a name=
+  "index-coded-character-set" id="index-coded-character-set"></a>
 
-<a name="index-charset"></a>
-<a name="index-coded-character-set"></a>
-<p>An Emacs <em>character set</em>, or <em>charset</em>, is a set of characters
-in which each character is assigned a numeric code point.  (The
-Unicode Standard calls this a <em>coded character set</em>.)  Each Emacs
-charset has a name which is a symbol.  A single character can belong
-to any number of different character sets, but it will generally have
-a different code point in each charset.  Examples of character sets
-include <code>ascii</code>, <code>iso-8859-1</code>, <code>greek-iso8859-7</code>, and
-<code>windows-1255</code>.  The code point assigned to a character in a
-charset is usually different from its code point used in Emacs buffers
-and strings.
-</p>
-<a name="index-emacs_002c-a-charset"></a>
-<a name="index-unicode_002c-a-charset"></a>
-<a name="index-eight_002dbit_002c-a-charset"></a>
-<p>Emacs defines several special character sets.  The character set
-<code>unicode</code> includes all the characters whose Emacs code points are
-in the range <code>0..#x10FFFF</code>.  The character set <code>emacs</code>
-includes all <acronym>ASCII</acronym> and non-<acronym>ASCII</acronym> characters.
-Finally, the <code>eight-bit</code> charset includes the 8-bit raw bytes;
-Emacs uses it to represent raw bytes encountered in text.
-</p>
-<dl>
-<dt><a name="index-charsetp"></a>Function: <strong>charsetp</strong> <em>object</em></dt>
-<dd><p>Returns <code>t</code> if <var>object</var> is a symbol that names a character set,
-<code>nil</code> otherwise.
-</p></dd></dl>
+  <p>An Emacs <em>character set</em>, or <em>charset</em>, is a set
+  of characters in which each character is assigned a numeric code
+  point. (The Unicode Standard calls this a <em>coded character
+  set</em>.) Each Emacs charset has a name which is a symbol. A
+  single character can belong to any number of different character
+  sets, but it will generally have a different code point in each
+  charset. Examples of character sets include <code>ascii</code>,
+  <code>iso-8859-1</code>, <code>greek-iso8859-7</code>, and
+  <code>windows-1255</code>. The code point assigned to a character
+  in a charset is usually different from its code point used in
+  Emacs buffers and strings.</p><a name=
+  "index-emacs_002c-a-charset" id="index-emacs_002c-a-charset"></a>
+  <a name="index-unicode_002c-a-charset" id=
+  "index-unicode_002c-a-charset"></a> <a name=
+  "index-eight_002dbit_002c-a-charset" id=
+  "index-eight_002dbit_002c-a-charset"></a>
 
-<dl>
-<dt><a name="index-charset_002dlist"></a>Variable: <strong>charset-list</strong></dt>
-<dd><p>The value is a list of all defined character set names.
-</p></dd></dl>
+  <p>Emacs defines several special character sets. The character
+  set <code>unicode</code> includes all the characters whose Emacs
+  code points are in the range <code>0..#x10FFFF</code>. The
+  character set <code>emacs</code> includes all
+  <acronym>ASCII</acronym> and non-<acronym>ASCII</acronym>
+  characters. Finally, the <code>eight-bit</code> charset includes
+  the 8-bit raw bytes; Emacs uses it to represent raw bytes
+  encountered in text.</p>
 
-<dl>
-<dt><a name="index-charset_002dpriority_002dlist"></a>Function: <strong>charset-priority-list</strong> <em>&amp;optional highestp</em></dt>
-<dd><p>This function returns a list of all defined character sets ordered by
-their priority.  If <var>highestp</var> is non-<code>nil</code>, the function
-returns a single character set of the highest priority.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-charsetp" id="index-charsetp"></a>Function:
+    <strong>charsetp</strong> <em>object</em></dt>
 
-<dl>
-<dt><a name="index-set_002dcharset_002dpriority"></a>Function: <strong>set-charset-priority</strong> <em>&amp;rest charsets</em></dt>
-<dd><p>This function makes <var>charsets</var> the highest priority character sets.
-</p></dd></dl>
+    <dd>
+      <p>Returns <code>t</code> if <var>object</var> is a symbol
+      that names a character set, <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-char_002dcharset"></a>Function: <strong>char-charset</strong> <em>character &amp;optional restriction</em></dt>
-<dd><p>This function returns the name of the character set of highest
-priority that <var>character</var> belongs to.  <acronym>ASCII</acronym> characters
-are an exception: for them, this function always returns <code>ascii</code>.
-</p>
-<p>If <var>restriction</var> is non-<code>nil</code>, it should be a list of
-charsets to search.  Alternatively, it can be a coding system, in
-which case the returned charset must be supported by that coding
-system (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-charset_002dlist" id=
+    "index-charset_002dlist"></a>Variable:
+    <strong>charset-list</strong></dt>
 
-<dl>
-<dt><a name="index-charset_002dplist"></a>Function: <strong>charset-plist</strong> <em>charset</em></dt>
-<dd><p>This function returns the property list of the character set
-<var>charset</var>.  Although <var>charset</var> is a symbol, this is not the
-same as the property list of that symbol.  Charset properties include
-important information about the charset, such as its documentation
-string, short name, etc.
-</p></dd></dl>
+    <dd>
+      <p>The value is a list of all defined character set
+      names.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-put_002dcharset_002dproperty"></a>Function: <strong>put-charset-property</strong> <em>charset propname value</em></dt>
-<dd><p>This function sets the <var>propname</var> property of <var>charset</var> to the
-given <var>value</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-charset_002dpriority_002dlist" id=
+    "index-charset_002dpriority_002dlist"></a>Function:
+    <strong>charset-priority-list</strong> <em>&amp;optional
+    highestp</em></dt>
 
-<dl>
-<dt><a name="index-get_002dcharset_002dproperty"></a>Function: <strong>get-charset-property</strong> <em>charset propname</em></dt>
-<dd><p>This function returns the value of <var>charset</var>s property
-<var>propname</var>.
-</p></dd></dl>
+    <dd>
+      <p>This function returns a list of all defined character sets
+      ordered by their priority. If <var>highestp</var> is
+      non-<code>nil</code>, the function returns a single character
+      set of the highest priority.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-list_002dcharset_002dchars"></a>Command: <strong>list-charset-chars</strong> <em>charset</em></dt>
-<dd><p>This command displays a list of characters in the character set
-<var>charset</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dcharset_002dpriority" id=
+    "index-set_002dcharset_002dpriority"></a>Function:
+    <strong>set-charset-priority</strong> <em>&amp;rest
+    charsets</em></dt>
 
-<p>Emacs can convert between its internal representation of a character
-and the character&rsquo;s codepoint in a specific charset.  The following
-two functions support these conversions.
-</p>
-<dl>
-<dt><a name="index-decode_002dchar"></a>Function: <strong>decode-char</strong> <em>charset code-point</em></dt>
-<dd><p>This function decodes a character that is assigned a <var>code-point</var>
-in <var>charset</var>, to the corresponding Emacs character, and returns
-it.  If <var>charset</var> doesn&rsquo;t contain a character of that code point,
-the value is <code>nil</code>.  If <var>code-point</var> doesn&rsquo;t fit in a Lisp
-integer (see <a href="Integer-Basics.html#Integer-Basics">most-positive-fixnum</a>), it can be
-specified as a cons cell <code>(<var>high</var> . <var>low</var>)</code>, where
-<var>low</var> are the lower 16 bits of the value and <var>high</var> are the
-high 16 bits.
-</p></dd></dl>
+    <dd>
+      <p>This function makes <var>charsets</var> the highest
+      priority character sets.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-encode_002dchar"></a>Function: <strong>encode-char</strong> <em>char charset</em></dt>
-<dd><p>This function returns the code point assigned to the character
-<var>char</var> in <var>charset</var>.  If the result does not fit in a Lisp
-integer, it is returned as a cons cell <code>(<var>high</var> . <var>low</var>)</code>
-that fits the second argument of <code>decode-char</code> above.  If
-<var>charset</var> doesn&rsquo;t have a codepoint for <var>char</var>, the value is
-<code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-char_002dcharset" id=
+    "index-char_002dcharset"></a>Function:
+    <strong>char-charset</strong> <em>character &amp;optional
+    restriction</em></dt>
 
-<p>The following function comes in handy for applying a certain
-function to all or part of the characters in a charset:
-</p>
-<dl>
-<dt><a name="index-map_002dcharset_002dchars"></a>Function: <strong>map-charset-chars</strong> <em>function charset &amp;optional arg from-code to-code</em></dt>
-<dd><p>Call <var>function</var> for characters in <var>charset</var>.  <var>function</var>
-is called with two arguments.  The first one is a cons cell
-<code>(<var>from</var> .  <var>to</var>)</code>, where <var>from</var> and <var>to</var>
-indicate a range of characters contained in charset.  The second
-argument passed to <var>function</var> is <var>arg</var>.
-</p>
-<p>By default, the range of codepoints passed to <var>function</var> includes
-all the characters in <var>charset</var>, but optional arguments
-<var>from-code</var> and <var>to-code</var> limit that to the range of
-characters between these two codepoints of <var>charset</var>.  If either
-of them is <code>nil</code>, it defaults to the first or last codepoint of
-<var>charset</var>, respectively.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the name of the character set of
+      highest priority that <var>character</var> belongs to.
+      <acronym>ASCII</acronym> characters are an exception: for
+      them, this function always returns <code>ascii</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Scanning-Charsets.html#Scanning-Charsets" accesskey="n" rel="next">Scanning Charsets</a>, Previous: <a href="Character-Properties.html#Character-Properties" accesskey="p" rel="prev">Character Properties</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If <var>restriction</var> is non-<code>nil</code>, it
+      should be a list of charsets to search. Alternatively, it can
+      be a coding system, in which case the returned charset must
+      be supported by that coding system (see <a href=
+      "Coding-Systems.html#Coding-Systems">Coding Systems</a>).</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-charset_002dplist" id=
+    "index-charset_002dplist"></a>Function:
+    <strong>charset-plist</strong> <em>charset</em></dt>
 
+    <dd>
+      <p>This function returns the property list of the character
+      set <var>charset</var>. Although <var>charset</var> is a
+      symbol, this is not the same as the property list of that
+      symbol. Charset properties include important information
+      about the charset, such as its documentation string, short
+      name, etc.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-put_002dcharset_002dproperty" id=
+    "index-put_002dcharset_002dproperty"></a>Function:
+    <strong>put-charset-property</strong> <em>charset propname
+    value</em></dt>
+
+    <dd>
+      <p>This function sets the <var>propname</var> property of
+      <var>charset</var> to the given <var>value</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-get_002dcharset_002dproperty" id=
+    "index-get_002dcharset_002dproperty"></a>Function:
+    <strong>get-charset-property</strong> <em>charset
+    propname</em></dt>
+
+    <dd>
+      <p>This function returns the value of <var>charset</var>s
+      property <var>propname</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-list_002dcharset_002dchars" id=
+    "index-list_002dcharset_002dchars"></a>Command:
+    <strong>list-charset-chars</strong> <em>charset</em></dt>
+
+    <dd>
+      <p>This command displays a list of characters in the
+      character set <var>charset</var>.</p>
+    </dd>
+  </dl>
+
+  <p>Emacs can convert between its internal representation of a
+  character and the character&rsquo;s codepoint in a specific
+  charset. The following two functions support these
+  conversions.</p>
+
+  <dl>
+    <dt><a name="index-decode_002dchar" id=
+    "index-decode_002dchar"></a>Function:
+    <strong>decode-char</strong> <em>charset code-point</em></dt>
+
+    <dd>
+      <p>This function decodes a character that is assigned a
+      <var>code-point</var> in <var>charset</var>, to the
+      corresponding Emacs character, and returns it. If
+      <var>charset</var> doesn&rsquo;t contain a character of that
+      code point, the value is <code>nil</code>. If
+      <var>code-point</var> doesn&rsquo;t fit in a Lisp integer
+      (see <a href=
+      "Integer-Basics.html#Integer-Basics">most-positive-fixnum</a>),
+      it can be specified as a cons cell <code>(<var>high</var> .
+      <var>low</var>)</code>, where <var>low</var> are the lower 16
+      bits of the value and <var>high</var> are the high 16
+      bits.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-encode_002dchar" id=
+    "index-encode_002dchar"></a>Function:
+    <strong>encode-char</strong> <em>char charset</em></dt>
+
+    <dd>
+      <p>This function returns the code point assigned to the
+      character <var>char</var> in <var>charset</var>. If the
+      result does not fit in a Lisp integer, it is returned as a
+      cons cell <code>(<var>high</var> . <var>low</var>)</code>
+      that fits the second argument of <code>decode-char</code>
+      above. If <var>charset</var> doesn&rsquo;t have a codepoint
+      for <var>char</var>, the value is <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <p>The following function comes in handy for applying a certain
+  function to all or part of the characters in a charset:</p>
+
+  <dl>
+    <dt><a name="index-map_002dcharset_002dchars" id=
+    "index-map_002dcharset_002dchars"></a>Function:
+    <strong>map-charset-chars</strong> <em>function charset
+    &amp;optional arg from-code to-code</em></dt>
+
+    <dd>
+      <p>Call <var>function</var> for characters in
+      <var>charset</var>. <var>function</var> is called with two
+      arguments. The first one is a cons cell
+      <code>(<var>from</var> . <var>to</var>)</code>, where
+      <var>from</var> and <var>to</var> indicate a range of
+      characters contained in charset. The second argument passed
+      to <var>function</var> is <var>arg</var>.</p>
+
+      <p>By default, the range of codepoints passed to
+      <var>function</var> includes all the characters in
+      <var>charset</var>, but optional arguments
+      <var>from-code</var> and <var>to-code</var> limit that to the
+      range of characters between these two codepoints of
+      <var>charset</var>. If either of them is <code>nil</code>, it
+      defaults to the first or last codepoint of
+      <var>charset</var>, respectively.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Scanning-Charsets.html#Scanning-Charsets"
+    accesskey="n" rel="next">Scanning Charsets</a>, Previous:
+    <a href="Character-Properties.html#Character-Properties"
+    accesskey="p" rel="prev">Character Properties</a>, Up: <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

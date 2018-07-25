@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,295 +19,438 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Tool Bar</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Tool Bar">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Tool Bar">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Menu-Keymaps.html#Menu-Keymaps" rel="up" title="Menu Keymaps">
-<link href="Modifying-Menus.html#Modifying-Menus" rel="next" title="Modifying Menus">
-<link href="Menu-Bar.html#Menu-Bar" rel="prev" title="Menu Bar">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Tool Bar</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Tool Bar" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Tool Bar" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Menu-Keymaps.html#Menu-Keymaps" rel="up" title=
+  "Menu Keymaps" />
+  <link href="Modifying-Menus.html#Modifying-Menus" rel="next"
+  title="Modifying Menus" />
+  <link href="Menu-Bar.html#Menu-Bar" rel="prev" title=
+  "Menu Bar" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Tool-Bar" id="Tool-Bar"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Modifying-Menus.html#Modifying-Menus"
+    accesskey="n" rel="next">Modifying Menus</a>, Previous:
+    <a href="Menu-Bar.html#Menu-Bar" accesskey="p" rel="prev">Menu
+    Bar</a>, Up: <a href="Menu-Keymaps.html#Menu-Keymaps"
+    accesskey="u" rel="up">Menu Keymaps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Tool-bars" id="Tool-bars"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Tool-Bar"></a>
-<div class="header">
-<p>
-Next: <a href="Modifying-Menus.html#Modifying-Menus" accesskey="n" rel="next">Modifying Menus</a>, Previous: <a href="Menu-Bar.html#Menu-Bar" accesskey="p" rel="prev">Menu Bar</a>, Up: <a href="Menu-Keymaps.html#Menu-Keymaps" accesskey="u" rel="up">Menu Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Tool-bars"></a>
-<h4 class="subsection">21.17.6 Tool bars</h4>
-<a name="index-tool-bar"></a>
+  <h4 class="subsection">21.17.6 Tool bars</h4><a name=
+  "index-tool-bar" id="index-tool-bar"></a>
 
-<p>A <em>tool bar</em> is a row of clickable icons at the top of a frame,
-just below the menu bar.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Tool-Bars.html#Tool-Bars">Tool Bars</a> in <cite>The GNU Emacs
-Manual</cite>.  Emacs normally shows a tool bar on graphical displays.
-</p>
-<p>On each frame, the frame parameter <code>tool-bar-lines</code> controls
-how many lines&rsquo; worth of height to reserve for the tool bar.  A zero
-value suppresses the tool bar.  If the value is nonzero, and
-<code>auto-resize-tool-bars</code> is non-<code>nil</code>, the tool bar expands
-and contracts automatically as needed to hold the specified contents.
-If the value is <code>grow-only</code>, the tool bar expands automatically,
-but does not contract automatically.
-</p>
-<p>The tool bar contents are controlled by a menu keymap attached to a
-fake function key called <code>tool-bar</code> (much like the way the menu
-bar is controlled).  So you define a tool bar item using
-<code>define-key</code>, like this:
-</p>
-<div class="example">
-<pre class="example">(define-key global-map [tool-bar <var>key</var>] <var>item</var>)
-</pre></div>
+  <p>A <em>tool bar</em> is a row of clickable icons at the top of
+  a frame, just below the menu bar. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Tool-Bars.html#Tool-Bars">
+  Tool Bars</a> in <cite>The GNU Emacs Manual</cite>. Emacs
+  normally shows a tool bar on graphical displays.</p>
 
-<p>where <var>key</var> is a fake function key to distinguish this item from
-other items, and <var>item</var> is a menu item key binding (see <a href="Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu Items</a>), which says how to display this item and how it behaves.
-</p>
-<p>The usual menu keymap item properties, <code>:visible</code>,
-<code>:enable</code>, <code>:button</code>, and <code>:filter</code>, are useful in
-tool bar bindings and have their normal meanings.  The <var>real-binding</var>
-in the item must be a command, not a keymap; in other words, it does not
-work to define a tool bar icon as a prefix key.
-</p>
-<p>The <code>:help</code> property specifies a help-echo string to display
-while the mouse is on that item.  This is displayed in the same way as
-<code>help-echo</code> text properties (see <a href="Special-Properties.html#Help-display">Help display</a>).
-</p>
-<p>In addition, you should use the <code>:image</code> property;
-this is how you specify the image to display in the tool bar:
-</p>
-<dl compact="compact">
-<dt><code>:image <var>image</var></code></dt>
-<dd><p><var>image</var> is either a single image specification (see <a href="Images.html#Images">Images</a>) or
-a vector of four image specifications.  If you use a vector of four,
-one of them is used, depending on circumstances:
-</p>
-<dl compact="compact">
-<dt>item 0</dt>
-<dd><p>Used when the item is enabled and selected.
-</p></dd>
-<dt>item 1</dt>
-<dd><p>Used when the item is enabled and deselected.
-</p></dd>
-<dt>item 2</dt>
-<dd><p>Used when the item is disabled and selected.
-</p></dd>
-<dt>item 3</dt>
-<dd><p>Used when the item is disabled and deselected.
-</p></dd>
-</dl>
-</dd>
-</dl>
+  <p>On each frame, the frame parameter <code>tool-bar-lines</code>
+  controls how many lines&rsquo; worth of height to reserve for the
+  tool bar. A zero value suppresses the tool bar. If the value is
+  nonzero, and <code>auto-resize-tool-bars</code> is
+  non-<code>nil</code>, the tool bar expands and contracts
+  automatically as needed to hold the specified contents. If the
+  value is <code>grow-only</code>, the tool bar expands
+  automatically, but does not contract automatically.</p>
 
-<p>The GTK+ and NS versions of Emacs ignores items 1 to 3, because disabled and/or
-deselected images are autocomputed from item 0.
-</p>
-<p>If <var>image</var> is a single image specification, Emacs draws the tool bar
-button in disabled state by applying an edge-detection algorithm to the
-image.
-</p>
-<p>The <code>:rtl</code> property specifies an alternative image to use for
-right-to-left languages.  Only the GTK+ version of Emacs supports this
-at present.
-</p>
-<p>Like the menu bar, the tool bar can display separators (see <a href="Menu-Separators.html#Menu-Separators">Menu Separators</a>).  Tool bar separators are vertical rather than
-horizontal, though, and only a single style is supported.  They are
-represented in the tool bar keymap by <code>(menu-item &quot;--&quot;)</code> entries;
-properties like <code>:visible</code> are not supported for tool bar
-separators.  Separators are rendered natively in GTK+ and Nextstep
-tool bars; in the other cases, they are rendered using an image of a
-vertical line.
-</p>
-<p>The default tool bar is defined so that items specific to editing do not
-appear for major modes whose command symbol has a <code>mode-class</code>
-property of <code>special</code> (see <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>).  Major
-modes may add items to the global bar by binding <code>[tool-bar
-<var>foo</var>]</code> in their local map.  It makes sense for some major modes to
-replace the default tool bar items completely, since not many can be
-accommodated conveniently, and the default bindings make this easy by
-using an indirection through <code>tool-bar-map</code>.
-</p>
-<dl>
-<dt><a name="index-tool_002dbar_002dmap"></a>Variable: <strong>tool-bar-map</strong></dt>
-<dd><p>By default, the global map binds <code>[tool-bar]</code> as follows:
-</p>
-<div class="example">
-<pre class="example">(global-set-key [tool-bar]
-                `(menu-item ,(purecopy &quot;tool bar&quot;) ignore
+  <p>The tool bar contents are controlled by a menu keymap attached
+  to a fake function key called <code>tool-bar</code> (much like
+  the way the menu bar is controlled). So you define a tool bar
+  item using <code>define-key</code>, like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(define-key global-map [tool-bar <var>key</var>] <var>item</var>)
+</pre>
+  </div>
+
+  <p>where <var>key</var> is a fake function key to distinguish
+  this item from other items, and <var>item</var> is a menu item
+  key binding (see <a href=
+  "Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu
+  Items</a>), which says how to display this item and how it
+  behaves.</p>
+
+  <p>The usual menu keymap item properties, <code>:visible</code>,
+  <code>:enable</code>, <code>:button</code>, and
+  <code>:filter</code>, are useful in tool bar bindings and have
+  their normal meanings. The <var>real-binding</var> in the item
+  must be a command, not a keymap; in other words, it does not work
+  to define a tool bar icon as a prefix key.</p>
+
+  <p>The <code>:help</code> property specifies a help-echo string
+  to display while the mouse is on that item. This is displayed in
+  the same way as <code>help-echo</code> text properties (see
+  <a href="Special-Properties.html#Help-display">Help
+  display</a>).</p>
+
+  <p>In addition, you should use the <code>:image</code> property;
+  this is how you specify the image to display in the tool bar:</p>
+
+  <dl compact="compact">
+    <dt><code>:image <var>image</var></code></dt>
+
+    <dd>
+      <p><var>image</var> is either a single image specification
+      (see <a href="Images.html#Images">Images</a>) or a vector of
+      four image specifications. If you use a vector of four, one
+      of them is used, depending on circumstances:</p>
+
+      <dl compact="compact">
+        <dt>item 0</dt>
+
+        <dd>
+          <p>Used when the item is enabled and selected.</p>
+        </dd>
+
+        <dt>item 1</dt>
+
+        <dd>
+          <p>Used when the item is enabled and deselected.</p>
+        </dd>
+
+        <dt>item 2</dt>
+
+        <dd>
+          <p>Used when the item is disabled and selected.</p>
+        </dd>
+
+        <dt>item 3</dt>
+
+        <dd>
+          <p>Used when the item is disabled and deselected.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <p>The GTK+ and NS versions of Emacs ignores items 1 to 3,
+  because disabled and/or deselected images are autocomputed from
+  item 0.</p>
+
+  <p>If <var>image</var> is a single image specification, Emacs
+  draws the tool bar button in disabled state by applying an
+  edge-detection algorithm to the image.</p>
+
+  <p>The <code>:rtl</code> property specifies an alternative image
+  to use for right-to-left languages. Only the GTK+ version of
+  Emacs supports this at present.</p>
+
+  <p>Like the menu bar, the tool bar can display separators (see
+  <a href="Menu-Separators.html#Menu-Separators">Menu
+  Separators</a>). Tool bar separators are vertical rather than
+  horizontal, though, and only a single style is supported. They
+  are represented in the tool bar keymap by <code>(menu-item
+  "--")</code> entries; properties like <code>:visible</code> are
+  not supported for tool bar separators. Separators are rendered
+  natively in GTK+ and Nextstep tool bars; in the other cases, they
+  are rendered using an image of a vertical line.</p>
+
+  <p>The default tool bar is defined so that items specific to
+  editing do not appear for major modes whose command symbol has a
+  <code>mode-class</code> property of <code>special</code> (see
+  <a href=
+  "Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode
+  Conventions</a>). Major modes may add items to the global bar by
+  binding <code>[tool-bar <var>foo</var>]</code> in their local
+  map. It makes sense for some major modes to replace the default
+  tool bar items completely, since not many can be accommodated
+  conveniently, and the default bindings make this easy by using an
+  indirection through <code>tool-bar-map</code>.</p>
+
+  <dl>
+    <dt><a name="index-tool_002dbar_002dmap" id=
+    "index-tool_002dbar_002dmap"></a>Variable:
+    <strong>tool-bar-map</strong></dt>
+
+    <dd>
+      <p>By default, the global map binds <code>[tool-bar]</code>
+      as follows:</p>
+
+      <div class="example">
+        <pre class="example">
+(global-set-key [tool-bar]
+                `(menu-item ,(purecopy "tool bar") ignore
                             :filter tool-bar-make-keymap))
-</pre></div>
+</pre>
+      </div>
 
-<p>The function <code>tool-bar-make-keymap</code>, in turn, derives the actual
-tool bar map dynamically from the value of the variable
-<code>tool-bar-map</code>.  Hence, you should normally adjust the default
-(global) tool bar by changing that map.  Some major modes, such as
-Info mode, completely replace the global tool bar by making
-<code>tool-bar-map</code> buffer-local and setting it to a different keymap.
-</p></dd></dl>
+      <p>The function <code>tool-bar-make-keymap</code>, in turn,
+      derives the actual tool bar map dynamically from the value of
+      the variable <code>tool-bar-map</code>. Hence, you should
+      normally adjust the default (global) tool bar by changing
+      that map. Some major modes, such as Info mode, completely
+      replace the global tool bar by making
+      <code>tool-bar-map</code> buffer-local and setting it to a
+      different keymap.</p>
+    </dd>
+  </dl>
 
-<p>There are two convenience functions for defining tool bar items, as
-follows.
-</p>
-<dl>
-<dt><a name="index-tool_002dbar_002dadd_002ditem"></a>Function: <strong>tool-bar-add-item</strong> <em>icon def key &amp;rest props</em></dt>
-<dd><p>This function adds an item to the tool bar by modifying
-<code>tool-bar-map</code>.  The image to use is defined by <var>icon</var>, which
-is the base name of an XPM, XBM or PBM image file to be located by
-<code>find-image</code>.  Given a value &lsquo;<samp>&quot;exit&quot;</samp>&rsquo;, say, <samp>exit.xpm</samp>,
-<samp>exit.pbm</samp> and <samp>exit.xbm</samp> would be searched for in that order
-on a color display.  On a monochrome display, the search order is
-&lsquo;<samp>.pbm</samp>&rsquo;, &lsquo;<samp>.xbm</samp>&rsquo; and &lsquo;<samp>.xpm</samp>&rsquo;.  The binding to use is the
-command <var>def</var>, and <var>key</var> is the fake function key symbol in the
-prefix keymap.  The remaining arguments <var>props</var> are additional
-property list elements to add to the menu item specification.
-</p>
-<p>To define items in some local map, bind <code>tool-bar-map</code> with
-<code>let</code> around calls of this function:
-</p><div class="example">
-<pre class="example">(defvar foo-tool-bar-map
+  <p>There are two convenience functions for defining tool bar
+  items, as follows.</p>
+
+  <dl>
+    <dt><a name="index-tool_002dbar_002dadd_002ditem" id=
+    "index-tool_002dbar_002dadd_002ditem"></a>Function:
+    <strong>tool-bar-add-item</strong> <em>icon def key &amp;rest
+    props</em></dt>
+
+    <dd>
+      <p>This function adds an item to the tool bar by modifying
+      <code>tool-bar-map</code>. The image to use is defined by
+      <var>icon</var>, which is the base name of an XPM, XBM or PBM
+      image file to be located by <code>find-image</code>. Given a
+      value &lsquo;<samp>"exit"</samp>&rsquo;, say,
+      <samp>exit.xpm</samp>, <samp>exit.pbm</samp> and
+      <samp>exit.xbm</samp> would be searched for in that order on
+      a color display. On a monochrome display, the search order is
+      &lsquo;<samp>.pbm</samp>&rsquo;,
+      &lsquo;<samp>.xbm</samp>&rsquo; and
+      &lsquo;<samp>.xpm</samp>&rsquo;. The binding to use is the
+      command <var>def</var>, and <var>key</var> is the fake
+      function key symbol in the prefix keymap. The remaining
+      arguments <var>props</var> are additional property list
+      elements to add to the menu item specification.</p>
+
+      <p>To define items in some local map, bind
+      <code>tool-bar-map</code> with <code>let</code> around calls
+      of this function:</p>
+
+      <div class="example">
+        <pre class="example">
+(defvar foo-tool-bar-map
   (let ((tool-bar-map (make-sparse-keymap)))
     (tool-bar-add-item &hellip;)
     &hellip;
     tool-bar-map))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-tool_002dbar_002dadd_002ditem_002dfrom_002dmenu"></a>Function: <strong>tool-bar-add-item-from-menu</strong> <em>command icon &amp;optional map &amp;rest props</em></dt>
-<dd><p>This function is a convenience for defining tool bar items which are
-consistent with existing menu bar bindings.  The binding of
-<var>command</var> is looked up in the menu bar in <var>map</var> (default
-<code>global-map</code>) and modified to add an image specification for
-<var>icon</var>, which is found in the same way as by
-<code>tool-bar-add-item</code>.  The resulting binding is then placed in
-<code>tool-bar-map</code>, so use this function only for global tool bar
-items.
-</p>
-<p><var>map</var> must contain an appropriate keymap bound to
-<code>[menu-bar]</code>.  The remaining arguments <var>props</var> are additional
-property list elements to add to the menu item specification.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-tool_002dbar_002dadd_002ditem_002dfrom_002dmenu" id=
+    "index-tool_002dbar_002dadd_002ditem_002dfrom_002dmenu"></a>Function:
+    <strong>tool-bar-add-item-from-menu</strong> <em>command icon
+    &amp;optional map &amp;rest props</em></dt>
 
-<dl>
-<dt><a name="index-tool_002dbar_002dlocal_002ditem_002dfrom_002dmenu"></a>Function: <strong>tool-bar-local-item-from-menu</strong> <em>command icon in-map &amp;optional from-map &amp;rest props</em></dt>
-<dd><p>This function is used for making non-global tool bar items.  Use it
-like <code>tool-bar-add-item-from-menu</code> except that <var>in-map</var>
-specifies the local map to make the definition in.  The argument
-<var>from-map</var> is like the <var>map</var> argument of
-<code>tool-bar-add-item-from-menu</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function is a convenience for defining tool bar items
+      which are consistent with existing menu bar bindings. The
+      binding of <var>command</var> is looked up in the menu bar in
+      <var>map</var> (default <code>global-map</code>) and modified
+      to add an image specification for <var>icon</var>, which is
+      found in the same way as by <code>tool-bar-add-item</code>.
+      The resulting binding is then placed in
+      <code>tool-bar-map</code>, so use this function only for
+      global tool bar items.</p>
 
-<dl>
-<dt><a name="index-auto_002dresize_002dtool_002dbars"></a>Variable: <strong>auto-resize-tool-bars</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, the tool bar automatically resizes to
-show all defined tool bar items&mdash;but not larger than a quarter of the
-frame&rsquo;s height.
-</p>
-<p>If the value is <code>grow-only</code>, the tool bar expands automatically,
-but does not contract automatically.  To contract the tool bar, the
-user has to redraw the frame by entering <kbd>C-l</kbd>.
-</p>
-<p>If Emacs is built with GTK or Nextstep, the tool bar can only show one
-line, so this variable has no effect.
-</p></dd></dl>
+      <p><var>map</var> must contain an appropriate keymap bound to
+      <code>[menu-bar]</code>. The remaining arguments
+      <var>props</var> are additional property list elements to add
+      to the menu item specification.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-auto_002draise_002dtool_002dbar_002dbuttons"></a>Variable: <strong>auto-raise-tool-bar-buttons</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, tool bar items display
-in raised form when the mouse moves over them.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-tool_002dbar_002dlocal_002ditem_002dfrom_002dmenu" id=
+    "index-tool_002dbar_002dlocal_002ditem_002dfrom_002dmenu"></a>Function:
+    <strong>tool-bar-local-item-from-menu</strong> <em>command icon
+    in-map &amp;optional from-map &amp;rest props</em></dt>
 
-<dl>
-<dt><a name="index-tool_002dbar_002dbutton_002dmargin"></a>Variable: <strong>tool-bar-button-margin</strong></dt>
-<dd><p>This variable specifies an extra margin to add around tool bar items.
-The value is an integer, a number of pixels.  The default is 4.
-</p></dd></dl>
+    <dd>
+      <p>This function is used for making non-global tool bar
+      items. Use it like <code>tool-bar-add-item-from-menu</code>
+      except that <var>in-map</var> specifies the local map to make
+      the definition in. The argument <var>from-map</var> is like
+      the <var>map</var> argument of
+      <code>tool-bar-add-item-from-menu</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-tool_002dbar_002dbutton_002drelief"></a>Variable: <strong>tool-bar-button-relief</strong></dt>
-<dd><p>This variable specifies the shadow width for tool bar items.
-The value is an integer, a number of pixels.  The default is 1.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-auto_002dresize_002dtool_002dbars" id=
+    "index-auto_002dresize_002dtool_002dbars"></a>Variable:
+    <strong>auto-resize-tool-bars</strong></dt>
 
-<dl>
-<dt><a name="index-tool_002dbar_002dborder"></a>Variable: <strong>tool-bar-border</strong></dt>
-<dd><p>This variable specifies the height of the border drawn below the tool
-bar area.  An integer specifies height as a number of pixels.
-If the value is one of <code>internal-border-width</code> (the default) or
-<code>border-width</code>, the tool bar border height corresponds to the
-corresponding frame parameter.
-</p></dd></dl>
+    <dd>
+      <p>If this variable is non-<code>nil</code>, the tool bar
+      automatically resizes to show all defined tool bar
+      items&mdash;but not larger than a quarter of the
+      frame&rsquo;s height.</p>
 
-<p>You can define a special meaning for clicking on a tool bar item with
-the shift, control, meta, etc., modifiers.  You do this by setting up
-additional items that relate to the original item through the fake
-function keys.  Specifically, the additional items should use the
-modified versions of the same fake function key used to name the
-original item.
-</p>
-<p>Thus, if the original item was defined this way,
-</p>
-<div class="example">
-<pre class="example">(define-key global-map [tool-bar shell]
-  '(menu-item &quot;Shell&quot; shell
-              :image (image :type xpm :file &quot;shell.xpm&quot;)))
-</pre></div>
+      <p>If the value is <code>grow-only</code>, the tool bar
+      expands automatically, but does not contract automatically.
+      To contract the tool bar, the user has to redraw the frame by
+      entering <kbd>C-l</kbd>.</p>
 
-<p>then here is how you can define clicking on the same tool bar image with
-the shift modifier:
-</p>
-<div class="example">
-<pre class="example">(define-key global-map [tool-bar S-shell] 'some-command)
-</pre></div>
+      <p>If Emacs is built with GTK or Nextstep, the tool bar can
+      only show one line, so this variable has no effect.</p>
+    </dd>
+  </dl>
 
-<p>See <a href="Function-Keys.html#Function-Keys">Function Keys</a>, for more information about how to add modifiers to
-function keys.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Modifying-Menus.html#Modifying-Menus" accesskey="n" rel="next">Modifying Menus</a>, Previous: <a href="Menu-Bar.html#Menu-Bar" accesskey="p" rel="prev">Menu Bar</a>, Up: <a href="Menu-Keymaps.html#Menu-Keymaps" accesskey="u" rel="up">Menu Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-auto_002draise_002dtool_002dbar_002dbuttons"
+    id=
+    "index-auto_002draise_002dtool_002dbar_002dbuttons"></a>Variable:
+    <strong>auto-raise-tool-bar-buttons</strong></dt>
 
+    <dd>
+      <p>If this variable is non-<code>nil</code>, tool bar items
+      display in raised form when the mouse moves over them.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-tool_002dbar_002dbutton_002dmargin" id=
+    "index-tool_002dbar_002dbutton_002dmargin"></a>Variable:
+    <strong>tool-bar-button-margin</strong></dt>
 
+    <dd>
+      <p>This variable specifies an extra margin to add around tool
+      bar items. The value is an integer, a number of pixels. The
+      default is 4.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-tool_002dbar_002dbutton_002drelief" id=
+    "index-tool_002dbar_002dbutton_002drelief"></a>Variable:
+    <strong>tool-bar-button-relief</strong></dt>
+
+    <dd>
+      <p>This variable specifies the shadow width for tool bar
+      items. The value is an integer, a number of pixels. The
+      default is 1.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-tool_002dbar_002dborder" id=
+    "index-tool_002dbar_002dborder"></a>Variable:
+    <strong>tool-bar-border</strong></dt>
+
+    <dd>
+      <p>This variable specifies the height of the border drawn
+      below the tool bar area. An integer specifies height as a
+      number of pixels. If the value is one of
+      <code>internal-border-width</code> (the default) or
+      <code>border-width</code>, the tool bar border height
+      corresponds to the corresponding frame parameter.</p>
+    </dd>
+  </dl>
+
+  <p>You can define a special meaning for clicking on a tool bar
+  item with the shift, control, meta, etc., modifiers. You do this
+  by setting up additional items that relate to the original item
+  through the fake function keys. Specifically, the additional
+  items should use the modified versions of the same fake function
+  key used to name the original item.</p>
+
+  <p>Thus, if the original item was defined this way,</p>
+
+  <div class="example">
+    <pre class="example">
+(define-key global-map [tool-bar shell]
+  '(menu-item "Shell" shell
+              :image (image :type xpm :file "shell.xpm")))
+</pre>
+  </div>
+
+  <p>then here is how you can define clicking on the same tool bar
+  image with the shift modifier:</p>
+
+  <div class="example">
+    <pre class="example">
+(define-key global-map [tool-bar S-shell] 'some-command)
+</pre>
+  </div>
+
+  <p>See <a href="Function-Keys.html#Function-Keys">Function
+  Keys</a>, for more information about how to add modifiers to
+  function keys.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Modifying-Menus.html#Modifying-Menus"
+    accesskey="n" rel="next">Modifying Menus</a>, Previous:
+    <a href="Menu-Bar.html#Menu-Bar" accesskey="p" rel="prev">Menu
+    Bar</a>, Up: <a href="Menu-Keymaps.html#Menu-Keymaps"
+    accesskey="u" rel="up">Menu Keymaps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

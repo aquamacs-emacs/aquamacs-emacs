@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,110 +19,156 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Emulating Mode Line</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Emulating Mode Line">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Emulating Mode Line">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mode-Line-Format.html#Mode-Line-Format" rel="up" title="Mode Line Format">
-<link href="Imenu.html#Imenu" rel="next" title="Imenu">
-<link href="Header-Lines.html#Header-Lines" rel="prev" title="Header Lines">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Emulating Mode
+  Line</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Emulating Mode Line" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Emulating Mode Line" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mode-Line-Format.html#Mode-Line-Format" rel="up"
+  title="Mode Line Format" />
+  <link href="Imenu.html#Imenu" rel="next" title="Imenu" />
+  <link href="Header-Lines.html#Header-Lines" rel="prev" title=
+  "Header Lines" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Emulating-Mode-Line" id="Emulating-Mode-Line"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Header-Lines.html#Header-Lines"
+    accesskey="p" rel="prev">Header Lines</a>, Up: <a href=
+    "Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel=
+    "up">Mode Line Format</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Emulating-Mode-Line-Formatting" id=
+  "Emulating-Mode-Line-Formatting"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Emulating-Mode-Line"></a>
-<div class="header">
-<p>
-Previous: <a href="Header-Lines.html#Header-Lines" accesskey="p" rel="prev">Header Lines</a>, Up: <a href="Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel="up">Mode Line Format</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Emulating-Mode-Line-Formatting"></a>
-<h4 class="subsection">22.4.8 Emulating Mode Line Formatting</h4>
+  <h4 class="subsection">22.4.8 Emulating Mode Line Formatting</h4>
 
-<p>You can use the function <code>format-mode-line</code> to compute the text
-that would appear in a mode line or header line based on a certain
-mode line construct.
-</p>
-<dl>
-<dt><a name="index-format_002dmode_002dline"></a>Function: <strong>format-mode-line</strong> <em>format &amp;optional face window buffer</em></dt>
-<dd><p>This function formats a line of text according to <var>format</var> as if it
-were generating the mode line for <var>window</var>, but it also returns the
-text as a string.  The argument <var>window</var> defaults to the selected
-window.  If <var>buffer</var> is non-<code>nil</code>, all the information used is
-taken from <var>buffer</var>; by default, it comes from <var>window</var>&rsquo;s
-buffer.
-</p>
-<p>The value string normally has text properties that correspond to the
-faces, keymaps, etc., that the mode line would have.  Any character for
-which no <code>face</code> property is specified by <var>format</var> gets a
-default value determined by <var>face</var>.  If <var>face</var> is <code>t</code>, that
-stands for either <code>mode-line</code> if <var>window</var> is selected,
-otherwise <code>mode-line-inactive</code>.  If <var>face</var> is <code>nil</code> or
-omitted, that stands for the default face.  If <var>face</var> is an integer,
-the value returned by this function will have no text properties.
-</p>
-<p>You can also specify other valid faces as the value of <var>face</var>.
-If specified, that face provides the <code>face</code> property for characters
-whose face is not specified by <var>format</var>.
-</p>
-<p>Note that using <code>mode-line</code>, <code>mode-line-inactive</code>, or
-<code>header-line</code> as <var>face</var> will actually redisplay the mode line
-or the header line, respectively, using the current definitions of the
-corresponding face, in addition to returning the formatted string.
-(Other faces do not cause redisplay.)
-</p>
-<p>For example, <code>(format-mode-line header-line-format)</code> returns the
-text that would appear in the selected window&rsquo;s header line (<code>&quot;&quot;</code>
-if it has no header line).  <code>(format-mode-line header-line-format
-'header-line)</code> returns the same text, with each character
-carrying the face that it will have in the header line itself, and also
-redraws the header line.
-</p></dd></dl>
+  <p>You can use the function <code>format-mode-line</code> to
+  compute the text that would appear in a mode line or header line
+  based on a certain mode line construct.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Header-Lines.html#Header-Lines" accesskey="p" rel="prev">Header Lines</a>, Up: <a href="Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel="up">Mode Line Format</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-format_002dmode_002dline" id=
+    "index-format_002dmode_002dline"></a>Function:
+    <strong>format-mode-line</strong> <em>format &amp;optional face
+    window buffer</em></dt>
 
+    <dd>
+      <p>This function formats a line of text according to
+      <var>format</var> as if it were generating the mode line for
+      <var>window</var>, but it also returns the text as a string.
+      The argument <var>window</var> defaults to the selected
+      window. If <var>buffer</var> is non-<code>nil</code>, all the
+      information used is taken from <var>buffer</var>; by default,
+      it comes from <var>window</var>&rsquo;s buffer.</p>
 
+      <p>The value string normally has text properties that
+      correspond to the faces, keymaps, etc., that the mode line
+      would have. Any character for which no <code>face</code>
+      property is specified by <var>format</var> gets a default
+      value determined by <var>face</var>. If <var>face</var> is
+      <code>t</code>, that stands for either <code>mode-line</code>
+      if <var>window</var> is selected, otherwise
+      <code>mode-line-inactive</code>. If <var>face</var> is
+      <code>nil</code> or omitted, that stands for the default
+      face. If <var>face</var> is an integer, the value returned by
+      this function will have no text properties.</p>
 
+      <p>You can also specify other valid faces as the value of
+      <var>face</var>. If specified, that face provides the
+      <code>face</code> property for characters whose face is not
+      specified by <var>format</var>.</p>
+
+      <p>Note that using <code>mode-line</code>,
+      <code>mode-line-inactive</code>, or <code>header-line</code>
+      as <var>face</var> will actually redisplay the mode line or
+      the header line, respectively, using the current definitions
+      of the corresponding face, in addition to returning the
+      formatted string. (Other faces do not cause redisplay.)</p>
+
+      <p>For example, <code>(format-mode-line
+      header-line-format)</code> returns the text that would appear
+      in the selected window&rsquo;s header line (<code>""</code>
+      if it has no header line). <code>(format-mode-line
+      header-line-format 'header-line)</code> returns the same
+      text, with each character carrying the face that it will have
+      in the header line itself, and also redraws the header
+      line.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Header-Lines.html#Header-Lines"
+    accesskey="p" rel="prev">Header Lines</a>, Up: <a href=
+    "Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel=
+    "up">Mode Line Format</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

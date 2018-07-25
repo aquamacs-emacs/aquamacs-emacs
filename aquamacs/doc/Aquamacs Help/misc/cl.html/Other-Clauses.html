@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,117 +16,162 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Other Clauses</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Other Clauses">
-<meta name="keywords" content="Common Lisp Extensions: Other Clauses">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Loop-Facility.html#Loop-Facility" rel="up" title="Loop Facility">
-<link href="Multiple-Values.html#Multiple-Values" rel="next" title="Multiple Values">
-<link href="Accumulation-Clauses.html#Accumulation-Clauses" rel="prev" title="Accumulation Clauses">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Other Clauses</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Other Clauses" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Other Clauses" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Loop-Facility.html#Loop-Facility" rel="up" title=
+  "Loop Facility" />
+  <link href="Multiple-Values.html#Multiple-Values" rel="next"
+  title="Multiple Values" />
+  <link href="Accumulation-Clauses.html#Accumulation-Clauses" rel=
+  "prev" title="Accumulation Clauses" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Other-Clauses"></a>
-<div class="header">
-<p>
-Previous: <a href="Accumulation-Clauses.html#Accumulation-Clauses" accesskey="p" rel="prev">Accumulation Clauses</a>, Up: <a href="Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Other-Clauses-1"></a>
-<h4 class="subsection">4.7.6 Other Clauses</h4>
+<body lang="en" xml:lang="en">
+  <a name="Other-Clauses" id="Other-Clauses"></a>
 
-<p>This section describes the remaining loop clauses.
-</p>
-<dl compact="compact">
-<dt><code>with <var>var</var> = <var>value</var></code></dt>
-<dd><p>This clause binds a variable to a value around the loop, but
-otherwise leaves the variable alone during the loop.  The following
-loops are basically equivalent:
-</p>
-<div class="example">
-<pre class="example">(cl-loop with x = 17 do &hellip;)
+  <div class="header">
+    <p>Previous: <a href=
+    "Accumulation-Clauses.html#Accumulation-Clauses" accesskey="p"
+    rel="prev">Accumulation Clauses</a>, Up: <a href=
+    "Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop
+    Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Other-Clauses-1" id="Other-Clauses-1"></a>
+
+  <h4 class="subsection">4.7.6 Other Clauses</h4>
+
+  <p>This section describes the remaining loop clauses.</p>
+
+  <dl compact="compact">
+    <dt><code>with <var>var</var> = <var>value</var></code></dt>
+
+    <dd>
+      <p>This clause binds a variable to a value around the loop,
+      but otherwise leaves the variable alone during the loop. The
+      following loops are basically equivalent:</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop with x = 17 do &hellip;)
 (let ((x 17)) (cl-loop do &hellip;))
 (cl-loop for x = 17 then x do &hellip;)
-</pre></div>
+</pre>
+      </div>
 
-<p>Naturally, the variable <var>var</var> might be used for some purpose
-in the rest of the loop.  For example:
-</p>
-<div class="example">
-<pre class="example">(cl-loop for x in my-list  with res = nil  do (push x res)
+      <p>Naturally, the variable <var>var</var> might be used for
+      some purpose in the rest of the loop. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop for x in my-list  with res = nil  do (push x res)
          finally return res)
-</pre></div>
+</pre>
+      </div>
 
-<p>This loop inserts the elements of <code>my-list</code> at the front of
-a new list being accumulated in <code>res</code>, then returns the
-list <code>res</code> at the end of the loop.  The effect is similar
-to that of a <code>collect</code> clause, but the list gets reversed
-by virtue of the fact that elements are being pushed onto the
-front of <code>res</code> rather than the end.
-</p>
-<p>If you omit the <code>=</code> term, the variable is initialized to
-<code>nil</code>.  (Thus the &lsquo;<samp>= nil</samp>&rsquo; in the above example is
-unnecessary.)
-</p>
-<p>Bindings made by <code>with</code> are sequential by default, as if
-by <code>let*</code>.  Just like <code>for</code> clauses, <code>with</code> clauses
-can be linked with <code>and</code> to cause the bindings to be made by
-<code>let</code> instead.
-</p>
-</dd>
-<dt><code>if <var>condition</var> <var>clause</var></code></dt>
-<dd><p>This clause executes the following loop clause only if the specified
-condition is true.  The following <var>clause</var> should be an accumulation,
-<code>do</code>, <code>return</code>, <code>if</code>, or <code>unless</code> clause.
-Several clauses may be linked by separating them with <code>and</code>.
-These clauses may be followed by <code>else</code> and a clause or clauses
-to execute if the condition was false.  The whole construct may
-optionally be followed by the word <code>end</code> (which may be used to
-disambiguate an <code>else</code> or <code>and</code> in a nested <code>if</code>).
-</p>
-<p>The actual non-<code>nil</code> value of the condition form is available
-by the name <code>it</code> in the &ldquo;then&rdquo; part.  For example:
-</p>
-<div class="example">
-<pre class="example">(setq funny-numbers '(6 13 -1))
+      <p>This loop inserts the elements of <code>my-list</code> at
+      the front of a new list being accumulated in
+      <code>res</code>, then returns the list <code>res</code> at
+      the end of the loop. The effect is similar to that of a
+      <code>collect</code> clause, but the list gets reversed by
+      virtue of the fact that elements are being pushed onto the
+      front of <code>res</code> rather than the end.</p>
+
+      <p>If you omit the <code>=</code> term, the variable is
+      initialized to <code>nil</code>. (Thus the &lsquo;<samp>=
+      nil</samp>&rsquo; in the above example is unnecessary.)</p>
+
+      <p>Bindings made by <code>with</code> are sequential by
+      default, as if by <code>let*</code>. Just like
+      <code>for</code> clauses, <code>with</code> clauses can be
+      linked with <code>and</code> to cause the bindings to be made
+      by <code>let</code> instead.</p>
+    </dd>
+
+    <dt><code>if <var>condition</var> <var>clause</var></code></dt>
+
+    <dd>
+      <p>This clause executes the following loop clause only if the
+      specified condition is true. The following <var>clause</var>
+      should be an accumulation, <code>do</code>,
+      <code>return</code>, <code>if</code>, or <code>unless</code>
+      clause. Several clauses may be linked by separating them with
+      <code>and</code>. These clauses may be followed by
+      <code>else</code> and a clause or clauses to execute if the
+      condition was false. The whole construct may optionally be
+      followed by the word <code>end</code> (which may be used to
+      disambiguate an <code>else</code> or <code>and</code> in a
+      nested <code>if</code>).</p>
+
+      <p>The actual non-<code>nil</code> value of the condition
+      form is available by the name <code>it</code> in the
+      &ldquo;then&rdquo; part. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq funny-numbers '(6 13 -1))
      &rArr; (6 13 -1)
 (cl-loop for x below 10
          if (cl-oddp x)
@@ -138,102 +185,136 @@ by the name <code>it</code> in the &ldquo;then&rdquo; part.  For example:
      &rArr; (6 7 13 -1)
 (cl-loop &lt;<span class="roman">same thing again</span>&gt;)
         &rArr; (13 -1)
-</pre></div>
+</pre>
+      </div>
 
-<p>Note the use of <code>and</code> to put two clauses into the &ldquo;then&rdquo;
-part, one of which is itself an <code>if</code> clause.  Note also that
-<code>end</code>, while normally optional, was necessary here to make
-it clear that the <code>else</code> refers to the outermost <code>if</code>
-clause.  In the first case, the loop returns a vector of lists
-of the odd and even values of <var>x</var>.  In the second case, the
-odd number 7 is one of the <code>funny-numbers</code> so the loop
-returns early; the actual returned value is based on the result
-of the <code>memq</code> call.
-</p>
-</dd>
-<dt><code>when <var>condition</var> <var>clause</var></code></dt>
-<dd><p>This clause is just a synonym for <code>if</code>.
-</p>
-</dd>
-<dt><code>unless <var>condition</var> <var>clause</var></code></dt>
-<dd><p>The <code>unless</code> clause is just like <code>if</code> except that the
-sense of the condition is reversed.
-</p>
-</dd>
-<dt><code>named <var>name</var></code></dt>
-<dd><p>This clause gives a name other than <code>nil</code> to the implicit
-block surrounding the loop.  The <var>name</var> is the symbol to be
-used as the block name.
-</p>
-</dd>
-<dt><code>initially [do] <var>forms</var>&hellip;</code></dt>
-<dd><p>This keyword introduces one or more Lisp forms which will be
-executed before the loop itself begins (but after any variables
-requested by <code>for</code> or <code>with</code> have been bound to their
-initial values).  <code>initially</code> clauses can appear anywhere;
-if there are several, they are executed in the order they appear
-in the loop.  The keyword <code>do</code> is optional.
-</p>
-</dd>
-<dt><code>finally [do] <var>forms</var>&hellip;</code></dt>
-<dd><p>This introduces Lisp forms which will be executed after the loop
-finishes (say, on request of a <code>for</code> or <code>while</code>).
-<code>initially</code> and <code>finally</code> clauses may appear anywhere
-in the loop construct, but they are executed (in the specified
-order) at the beginning or end, respectively, of the loop.
-</p>
-</dd>
-<dt><code>finally return <var>form</var></code></dt>
-<dd><p>This says that <var>form</var> should be executed after the loop
-is done to obtain a return value.  (Without this, or some other
-clause like <code>collect</code> or <code>return</code>, the loop will simply
-return <code>nil</code>.)  Variables bound by <code>for</code>, <code>with</code>,
-or <code>into</code> will still contain their final values when <var>form</var>
-is executed.
-</p>
-</dd>
-<dt><code>do <var>forms</var>&hellip;</code></dt>
-<dd><p>The word <code>do</code> may be followed by any number of Lisp expressions
-which are executed as an implicit <code>progn</code> in the body of the
-loop.  Many of the examples in this section illustrate the use of
-<code>do</code>.
-</p>
-</dd>
-<dt><code>return <var>form</var></code></dt>
-<dd><p>This clause causes the loop to return immediately.  The following
-Lisp form is evaluated to give the return value of the loop
-form.  The <code>finally</code> clauses, if any, are not executed.
-Of course, <code>return</code> is generally used inside an <code>if</code> or
-<code>unless</code>, as its use in a top-level loop clause would mean
-the loop would never get to &ldquo;loop&rdquo; more than once.
-</p>
-<p>The clause &lsquo;<samp>return <var>form</var></samp>&rsquo; is equivalent to
-&lsquo;<samp>do (cl-return <var>form</var>)</samp>&rsquo; (or <code>cl-return-from</code> if the loop
-was named).  The <code>return</code> clause is implemented a bit more
-efficiently, though.
-</p></dd>
-</dl>
+      <p>Note the use of <code>and</code> to put two clauses into
+      the &ldquo;then&rdquo; part, one of which is itself an
+      <code>if</code> clause. Note also that <code>end</code>,
+      while normally optional, was necessary here to make it clear
+      that the <code>else</code> refers to the outermost
+      <code>if</code> clause. In the first case, the loop returns a
+      vector of lists of the odd and even values of <var>x</var>.
+      In the second case, the odd number 7 is one of the
+      <code>funny-numbers</code> so the loop returns early; the
+      actual returned value is based on the result of the
+      <code>memq</code> call.</p>
+    </dd>
 
-<p>While there is no high-level way to add user extensions to <code>cl-loop</code>,
-this package does offer two properties called <code>cl-loop-handler</code>
-and <code>cl-loop-for-handler</code> which are functions to be called when a
-given symbol is encountered as a top-level loop clause or <code>for</code>
-clause, respectively.  Consult the source code in file
-<samp>cl-macs.el</samp> for details.
-</p>
-<p>This package&rsquo;s <code>cl-loop</code> macro is compatible with that of Common
-Lisp, except that a few features are not implemented:  <code>loop-finish</code>
-and data-type specifiers.  Naturally, the <code>for</code> clauses that
-iterate over keymaps, overlays, intervals, frames, windows, and
-buffers are Emacs-specific extensions.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Accumulation-Clauses.html#Accumulation-Clauses" accesskey="p" rel="prev">Accumulation Clauses</a>, Up: <a href="Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><code>when <var>condition</var>
+    <var>clause</var></code></dt>
 
+    <dd>
+      <p>This clause is just a synonym for <code>if</code>.</p>
+    </dd>
 
+    <dt><code>unless <var>condition</var>
+    <var>clause</var></code></dt>
 
+    <dd>
+      <p>The <code>unless</code> clause is just like
+      <code>if</code> except that the sense of the condition is
+      reversed.</p>
+    </dd>
+
+    <dt><code>named <var>name</var></code></dt>
+
+    <dd>
+      <p>This clause gives a name other than <code>nil</code> to
+      the implicit block surrounding the loop. The <var>name</var>
+      is the symbol to be used as the block name.</p>
+    </dd>
+
+    <dt><code>initially [do] <var>forms</var>&hellip;</code></dt>
+
+    <dd>
+      <p>This keyword introduces one or more Lisp forms which will
+      be executed before the loop itself begins (but after any
+      variables requested by <code>for</code> or <code>with</code>
+      have been bound to their initial values).
+      <code>initially</code> clauses can appear anywhere; if there
+      are several, they are executed in the order they appear in
+      the loop. The keyword <code>do</code> is optional.</p>
+    </dd>
+
+    <dt><code>finally [do] <var>forms</var>&hellip;</code></dt>
+
+    <dd>
+      <p>This introduces Lisp forms which will be executed after
+      the loop finishes (say, on request of a <code>for</code> or
+      <code>while</code>). <code>initially</code> and
+      <code>finally</code> clauses may appear anywhere in the loop
+      construct, but they are executed (in the specified order) at
+      the beginning or end, respectively, of the loop.</p>
+    </dd>
+
+    <dt><code>finally return <var>form</var></code></dt>
+
+    <dd>
+      <p>This says that <var>form</var> should be executed after
+      the loop is done to obtain a return value. (Without this, or
+      some other clause like <code>collect</code> or
+      <code>return</code>, the loop will simply return
+      <code>nil</code>.) Variables bound by <code>for</code>,
+      <code>with</code>, or <code>into</code> will still contain
+      their final values when <var>form</var> is executed.</p>
+    </dd>
+
+    <dt><code>do <var>forms</var>&hellip;</code></dt>
+
+    <dd>
+      <p>The word <code>do</code> may be followed by any number of
+      Lisp expressions which are executed as an implicit
+      <code>progn</code> in the body of the loop. Many of the
+      examples in this section illustrate the use of
+      <code>do</code>.</p>
+    </dd>
+
+    <dt><code>return <var>form</var></code></dt>
+
+    <dd>
+      <p>This clause causes the loop to return immediately. The
+      following Lisp form is evaluated to give the return value of
+      the loop form. The <code>finally</code> clauses, if any, are
+      not executed. Of course, <code>return</code> is generally
+      used inside an <code>if</code> or <code>unless</code>, as its
+      use in a top-level loop clause would mean the loop would
+      never get to &ldquo;loop&rdquo; more than once.</p>
+
+      <p>The clause &lsquo;<samp>return
+      <var>form</var></samp>&rsquo; is equivalent to
+      &lsquo;<samp>do (cl-return <var>form</var>)</samp>&rsquo; (or
+      <code>cl-return-from</code> if the loop was named). The
+      <code>return</code> clause is implemented a bit more
+      efficiently, though.</p>
+    </dd>
+  </dl>
+
+  <p>While there is no high-level way to add user extensions to
+  <code>cl-loop</code>, this package does offer two properties
+  called <code>cl-loop-handler</code> and
+  <code>cl-loop-for-handler</code> which are functions to be called
+  when a given symbol is encountered as a top-level loop clause or
+  <code>for</code> clause, respectively. Consult the source code in
+  file <samp>cl-macs.el</samp> for details.</p>
+
+  <p>This package&rsquo;s <code>cl-loop</code> macro is compatible
+  with that of Common Lisp, except that a few features are not
+  implemented: <code>loop-finish</code> and data-type specifiers.
+  Naturally, the <code>for</code> clauses that iterate over
+  keymaps, overlays, intervals, frames, windows, and buffers are
+  Emacs-specific extensions.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Accumulation-Clauses.html#Accumulation-Clauses" accesskey="p"
+    rel="prev">Accumulation Clauses</a>, Up: <a href=
+    "Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop
+    Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

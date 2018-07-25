@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for ERC as distributed with Emacs 25.1.
 
 Copyright (C) 2005-2016 Free Software Foundation, Inc.
@@ -17,251 +19,383 @@ modify this GNU manual."
 All Emacs Lisp code contained in this document may be used, distributed,
 and modified without restriction. -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>ERC Manual: Connecting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="ERC Manual: Connecting">
-<meta name="keywords" content="ERC Manual: Connecting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Advanced-Usage.html#Advanced-Usage" rel="up" title="Advanced Usage">
-<link href="Sample-Configuration.html#Sample-Configuration" rel="next" title="Sample Configuration">
-<link href="Advanced-Usage.html#Advanced-Usage" rel="prev" title="Advanced Usage">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>ERC Manual: Connecting</title>
+  <meta name="description" content="ERC Manual: Connecting" />
+  <meta name="keywords" content="ERC Manual: Connecting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Advanced-Usage.html#Advanced-Usage" rel="up" title=
+  "Advanced Usage" />
+  <link href="Sample-Configuration.html#Sample-Configuration" rel=
+  "next" title="Sample Configuration" />
+  <link href="Advanced-Usage.html#Advanced-Usage" rel="prev" title=
+  "Advanced Usage" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Connecting"></a>
-<div class="header">
-<p>
-Next: <a href="Sample-Configuration.html#Sample-Configuration" accesskey="n" rel="next">Sample Configuration</a>, Up: <a href="Advanced-Usage.html#Advanced-Usage" accesskey="u" rel="up">Advanced Usage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Connecting-to-an-IRC-Server"></a>
-<h3 class="section">5.1 Connecting to an IRC Server</h3>
-<a name="index-connecting"></a>
+<body lang="en" xml:lang="en">
+  <a name="Connecting" id="Connecting"></a>
 
-<p>The easiest way to connect to an IRC server is to call <kbd>M-x erc</kbd>.
-If you want to assign this function to a keystroke, the following will
-help you figure out its parameters.
-</p>
-<dl>
-<dt><a name="index-erc"></a>Function: <strong>erc</strong></dt>
-<dd><p>Select connection parameters and run ERC.
-Non-interactively, it takes the following keyword arguments.
-</p>
-<ul>
-<li> <var>server</var>
-</li><li> <var>port</var>
-</li><li> <var>nick</var>
-</li><li> <var>password</var>
-</li><li> <var>full-name</var>
-</li></ul>
+  <div class="header">
+    <p>Next: <a href=
+    "Sample-Configuration.html#Sample-Configuration" accesskey="n"
+    rel="next">Sample Configuration</a>, Up: <a href=
+    "Advanced-Usage.html#Advanced-Usage" accesskey="u" rel=
+    "up">Advanced Usage</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Connecting-to-an-IRC-Server" id=
+  "Connecting-to-an-IRC-Server"></a>
 
-<p>That is, if called with the following arguments, <var>server</var> and
-<var>full-name</var> will be set to those values, whereas
-<code>erc-compute-port</code>, <code>erc-compute-nick</code> and
-<code>erc-compute-full-name</code> will be invoked for the values of the other
-parameters.
-</p>
-<div class="example">
-<pre class="example">(erc :server &quot;irc.freenode.net&quot; :full-name &quot;Harry S Truman&quot;)
-</pre></div>
-</dd></dl>
+  <h3 class="section">5.1 Connecting to an IRC Server</h3><a name=
+  "index-connecting" id="index-connecting"></a>
 
-<a name="Server"></a>
-<h4 class="subheading">Server</h4>
+  <p>The easiest way to connect to an IRC server is to call
+  <kbd>M-x erc</kbd>. If you want to assign this function to a
+  keystroke, the following will help you figure out its
+  parameters.</p>
 
-<dl>
-<dt><a name="index-erc_002dcompute_002dserver"></a>Function: <strong>erc-compute-server</strong> <em>&amp;optional server</em></dt>
-<dd><p>Return an IRC server name.
-</p>
-<p>This tries a number of increasingly more default methods until a non-<code>nil</code>
-value is found.
-</p>
-<ul>
-<li> <var>server</var> (the argument passed to this function)
-</li><li> The <code>erc-server</code> option
-</li><li> The value of the IRCSERVER environment variable
-</li><li> The <code>erc-default-server</code> variable
-</li></ul>
+  <dl>
+    <dt><a name="index-erc" id="index-erc"></a>Function:
+    <strong>erc</strong></dt>
 
-</dd></dl>
+    <dd>
+      <p>Select connection parameters and run ERC.
+      Non-interactively, it takes the following keyword
+      arguments.</p>
 
-<dl>
-<dt><a name="index-erc_002dserver"></a>User Option: <strong>erc-server</strong></dt>
-<dd><p>IRC server to use if one is not provided.
-</p></dd></dl>
+      <ul>
+        <li><var>server</var></li>
 
-<a name="Port"></a>
-<h4 class="subheading">Port</h4>
+        <li><var>port</var></li>
 
-<dl>
-<dt><a name="index-erc_002dcompute_002dport"></a>Function: <strong>erc-compute-port</strong> <em>&amp;optional port</em></dt>
-<dd><p>Return a port for an IRC server.
-</p>
-<p>This tries a number of increasingly more default methods until a non-<code>nil</code>
-value is found.
-</p>
-<ul>
-<li> <var>port</var> (the argument passed to this function)
-</li><li> The <code>erc-port</code> option
-</li><li> The <code>erc-default-port</code> variable
-</li></ul>
+        <li><var>nick</var></li>
 
-</dd></dl>
+        <li><var>password</var></li>
 
-<dl>
-<dt><a name="index-erc_002dport"></a>User Option: <strong>erc-port</strong></dt>
-<dd><p>IRC port to use if not specified.
-</p>
-<p>This can be either a string or a number.
-</p></dd></dl>
+        <li><var>full-name</var></li>
+      </ul>
 
-<a name="Nick"></a>
-<h4 class="subheading">Nick</h4>
+      <p>That is, if called with the following arguments,
+      <var>server</var> and <var>full-name</var> will be set to
+      those values, whereas <code>erc-compute-port</code>,
+      <code>erc-compute-nick</code> and
+      <code>erc-compute-full-name</code> will be invoked for the
+      values of the other parameters.</p>
 
-<dl>
-<dt><a name="index-erc_002dcompute_002dnick"></a>Function: <strong>erc-compute-nick</strong> <em>&amp;optional nick</em></dt>
-<dd><p>Return user&rsquo;s IRC nick.
-</p>
-<p>This tries a number of increasingly more default methods until a
-non-<code>nil</code> value is found.
-</p>
-<ul>
-<li> <var>nick</var> (the argument passed to this function)
-</li><li> The <code>erc-nick</code> option
-</li><li> The value of the IRCNICK environment variable
-</li><li> The result from the <code>user-login-name</code> function
-</li></ul>
+      <div class="example">
+        <pre class="example">
+(erc :server "irc.freenode.net" :full-name "Harry S Truman")
+</pre>
+      </div>
+    </dd>
+  </dl><a name="Server" id="Server"></a>
 
-</dd></dl>
+  <h4 class="subheading">Server</h4>
 
-<dl>
-<dt><a name="index-erc_002dnick"></a>User Option: <strong>erc-nick</strong></dt>
-<dd><p>Nickname to use if one is not provided.
-</p>
-<p>This can be either a string, or a list of strings.
-In the latter case, if the first nick in the list is already in use,
-other nicks are tried in the list order.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-erc_002dcompute_002dserver" id=
+    "index-erc_002dcompute_002dserver"></a>Function:
+    <strong>erc-compute-server</strong> <em>&amp;optional
+    server</em></dt>
 
-<dl>
-<dt><a name="index-erc_002dformat_002dnick_002dfunction"></a>User Option: <strong>erc-format-nick-function</strong></dt>
-<dd><p>A function to format a nickname for message display
-</p>
-<p>You can set this to <code>erc-format-@nick</code> to display user mode prefix
-</p></dd></dl>
+    <dd>
+      <p>Return an IRC server name.</p>
 
-<div class="example">
-<pre class="example">(setq erc-format-nick-function 'erc-format-@nick)
-</pre></div>
+      <p>This tries a number of increasingly more default methods
+      until a non-<code>nil</code> value is found.</p>
 
-<dl>
-<dt><a name="index-erc_002dnick_002duniquifier"></a>User Option: <strong>erc-nick-uniquifier</strong></dt>
-<dd><p>The string to append to the nick if it is already in use.
-</p></dd></dl>
+      <ul>
+        <li><var>server</var> (the argument passed to this
+        function)</li>
 
-<dl>
-<dt><a name="index-erc_002dtry_002dnew_002dnick_002dp"></a>User Option: <strong>erc-try-new-nick-p</strong></dt>
-<dd><p>If the nickname you chose isn&rsquo;t available, and this option is non-<code>nil</code>,
-ERC should automatically attempt to connect with another nickname.
-</p>
-<p>You can manually set another nickname with the /NICK command.
-</p></dd></dl>
+        <li>The <code>erc-server</code> option</li>
 
-<a name="Password"></a>
-<h4 class="subheading">Password</h4>
-<a name="index-password"></a>
+        <li>The value of the IRCSERVER environment variable</li>
 
-<dl>
-<dt><a name="index-erc_002dprompt_002dfor_002dpassword"></a>User Option: <strong>erc-prompt-for-password</strong></dt>
-<dd><p>If non-<code>nil</code> (the default), <kbd>M-x erc</kbd> prompts for a password.
-</p></dd></dl>
+        <li>The <code>erc-default-server</code> variable</li>
+      </ul>
+    </dd>
+  </dl>
 
-<p>If you prefer, you can set this option to <code>nil</code> and use the
-<code>auth-source</code> mechanism to store your password.  For instance, if
-you use <samp>~/.authinfo</samp> as your auth-source backend, then put
-something like the following in that file:
-</p>
-<div class="example">
-<pre class="example">machine irc.example.net login &quot;#fsf&quot; password sEcReT
-</pre></div>
+  <dl>
+    <dt><a name="index-erc_002dserver" id=
+    "index-erc_002dserver"></a>User Option:
+    <strong>erc-server</strong></dt>
 
-<p>ERC also consults <code>auth-source</code> to find any channel keys required
-for the channels that you wish to autojoin, as specified by the
-variable <code>erc-autojoin-channels-alist</code>.
-</p>
-<p>For more details, see <a href="../auth/index.html#Top">auth-source</a> in <cite>Emacs auth-source Library</cite>.
-</p>
+    <dd>
+      <p>IRC server to use if one is not provided.</p>
+    </dd>
+  </dl><a name="Port" id="Port"></a>
 
-<a name="Full-name"></a>
-<h4 class="subheading">Full name</h4>
+  <h4 class="subheading">Port</h4>
 
-<dl>
-<dt><a name="index-erc_002dcompute_002dfull_002dname"></a>Function: <strong>erc-compute-full-name</strong> <em>&amp;optional full-name</em></dt>
-<dd><p>Return user&rsquo;s full name.
-</p>
-<p>This tries a number of increasingly more default methods until a
-non-<code>nil</code> value is found.
-</p>
-<ul>
-<li> <var>full-name</var> (the argument passed to this function)
-</li><li> The <code>erc-user-full-name</code> option
-</li><li> The value of the IRCNAME environment variable
-</li><li> The result from the <code>user-full-name</code> function
-</li></ul>
+  <dl>
+    <dt><a name="index-erc_002dcompute_002dport" id=
+    "index-erc_002dcompute_002dport"></a>Function:
+    <strong>erc-compute-port</strong> <em>&amp;optional
+    port</em></dt>
 
-</dd></dl>
+    <dd>
+      <p>Return a port for an IRC server.</p>
 
-<dl>
-<dt><a name="index-erc_002duser_002dfull_002dname"></a>User Option: <strong>erc-user-full-name</strong></dt>
-<dd><p>User full name.
-</p>
-<p>This can be either a string or a function to call.
-</p></dd></dl>
+      <p>This tries a number of increasingly more default methods
+      until a non-<code>nil</code> value is found.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Sample-Configuration.html#Sample-Configuration" accesskey="n" rel="next">Sample Configuration</a>, Up: <a href="Advanced-Usage.html#Advanced-Usage" accesskey="u" rel="up">Advanced Usage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <ul>
+        <li><var>port</var> (the argument passed to this
+        function)</li>
 
+        <li>The <code>erc-port</code> option</li>
 
+        <li>The <code>erc-default-port</code> variable</li>
+      </ul>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-erc_002dport" id=
+    "index-erc_002dport"></a>User Option:
+    <strong>erc-port</strong></dt>
+
+    <dd>
+      <p>IRC port to use if not specified.</p>
+
+      <p>This can be either a string or a number.</p>
+    </dd>
+  </dl><a name="Nick" id="Nick"></a>
+
+  <h4 class="subheading">Nick</h4>
+
+  <dl>
+    <dt><a name="index-erc_002dcompute_002dnick" id=
+    "index-erc_002dcompute_002dnick"></a>Function:
+    <strong>erc-compute-nick</strong> <em>&amp;optional
+    nick</em></dt>
+
+    <dd>
+      <p>Return user&rsquo;s IRC nick.</p>
+
+      <p>This tries a number of increasingly more default methods
+      until a non-<code>nil</code> value is found.</p>
+
+      <ul>
+        <li><var>nick</var> (the argument passed to this
+        function)</li>
+
+        <li>The <code>erc-nick</code> option</li>
+
+        <li>The value of the IRCNICK environment variable</li>
+
+        <li>The result from the <code>user-login-name</code>
+        function</li>
+      </ul>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-erc_002dnick" id=
+    "index-erc_002dnick"></a>User Option:
+    <strong>erc-nick</strong></dt>
+
+    <dd>
+      <p>Nickname to use if one is not provided.</p>
+
+      <p>This can be either a string, or a list of strings. In the
+      latter case, if the first nick in the list is already in use,
+      other nicks are tried in the list order.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-erc_002dformat_002dnick_002dfunction" id=
+    "index-erc_002dformat_002dnick_002dfunction"></a>User Option:
+    <strong>erc-format-nick-function</strong></dt>
+
+    <dd>
+      <p>A function to format a nickname for message display</p>
+
+      <p>You can set this to <code>erc-format-@nick</code> to
+      display user mode prefix</p>
+    </dd>
+  </dl>
+
+  <div class="example">
+    <pre class="example">
+(setq erc-format-nick-function 'erc-format-@nick)
+</pre>
+  </div>
+
+  <dl>
+    <dt><a name="index-erc_002dnick_002duniquifier" id=
+    "index-erc_002dnick_002duniquifier"></a>User Option:
+    <strong>erc-nick-uniquifier</strong></dt>
+
+    <dd>
+      <p>The string to append to the nick if it is already in
+      use.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-erc_002dtry_002dnew_002dnick_002dp" id=
+    "index-erc_002dtry_002dnew_002dnick_002dp"></a>User Option:
+    <strong>erc-try-new-nick-p</strong></dt>
+
+    <dd>
+      <p>If the nickname you chose isn&rsquo;t available, and this
+      option is non-<code>nil</code>, ERC should automatically
+      attempt to connect with another nickname.</p>
+
+      <p>You can manually set another nickname with the /NICK
+      command.</p>
+    </dd>
+  </dl><a name="Password" id="Password"></a>
+
+  <h4 class="subheading">Password</h4><a name="index-password" id=
+  "index-password"></a>
+
+  <dl>
+    <dt><a name="index-erc_002dprompt_002dfor_002dpassword" id=
+    "index-erc_002dprompt_002dfor_002dpassword"></a>User Option:
+    <strong>erc-prompt-for-password</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code> (the default), <kbd>M-x erc</kbd>
+      prompts for a password.</p>
+    </dd>
+  </dl>
+
+  <p>If you prefer, you can set this option to <code>nil</code> and
+  use the <code>auth-source</code> mechanism to store your
+  password. For instance, if you use <samp>~/.authinfo</samp> as
+  your auth-source backend, then put something like the following
+  in that file:</p>
+
+  <div class="example">
+    <pre class="example">
+machine irc.example.net login "#fsf" password sEcReT
+</pre>
+  </div>
+
+  <p>ERC also consults <code>auth-source</code> to find any channel
+  keys required for the channels that you wish to autojoin, as
+  specified by the variable
+  <code>erc-autojoin-channels-alist</code>.</p>
+
+  <p>For more details, see <a href=
+  "../auth/index.html#Top">auth-source</a> in <cite>Emacs
+  auth-source Library</cite>.</p><a name="Full-name" id=
+  "Full-name"></a>
+
+  <h4 class="subheading">Full name</h4>
+
+  <dl>
+    <dt><a name="index-erc_002dcompute_002dfull_002dname" id=
+    "index-erc_002dcompute_002dfull_002dname"></a>Function:
+    <strong>erc-compute-full-name</strong> <em>&amp;optional
+    full-name</em></dt>
+
+    <dd>
+      <p>Return user&rsquo;s full name.</p>
+
+      <p>This tries a number of increasingly more default methods
+      until a non-<code>nil</code> value is found.</p>
+
+      <ul>
+        <li><var>full-name</var> (the argument passed to this
+        function)</li>
+
+        <li>The <code>erc-user-full-name</code> option</li>
+
+        <li>The value of the IRCNAME environment variable</li>
+
+        <li>The result from the <code>user-full-name</code>
+        function</li>
+      </ul>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-erc_002duser_002dfull_002dname" id=
+    "index-erc_002duser_002dfull_002dname"></a>User Option:
+    <strong>erc-user-full-name</strong></dt>
+
+    <dd>
+      <p>User full name.</p>
+
+      <p>This can be either a string or a function to call.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Sample-Configuration.html#Sample-Configuration" accesskey="n"
+    rel="next">Sample Configuration</a>, Up: <a href=
+    "Advanced-Usage.html#Advanced-Usage" accesskey="u" rel=
+    "up">Advanced Usage</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

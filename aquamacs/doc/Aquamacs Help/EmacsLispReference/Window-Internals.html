@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,315 +19,482 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Window Internals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Window Internals">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Window Internals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Object-Internals.html#Object-Internals" rel="up" title="Object Internals">
-<link href="Process-Internals.html#Process-Internals" rel="next" title="Process Internals">
-<link href="Buffer-Internals.html#Buffer-Internals" rel="prev" title="Buffer Internals">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Window Internals</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Window Internals" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Window Internals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Object-Internals.html#Object-Internals" rel="up"
+  title="Object Internals" />
+  <link href="Process-Internals.html#Process-Internals" rel="next"
+  title="Process Internals" />
+  <link href="Buffer-Internals.html#Buffer-Internals" rel="prev"
+  title="Buffer Internals" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Window-Internals" id="Window-Internals"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Process-Internals.html#Process-Internals"
+    accesskey="n" rel="next">Process Internals</a>, Previous:
+    <a href="Buffer-Internals.html#Buffer-Internals" accesskey="p"
+    rel="prev">Buffer Internals</a>, Up: <a href=
+    "Object-Internals.html#Object-Internals" accesskey="u" rel=
+    "up">Object Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Window-Internals-1" id="Window-Internals-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Window-Internals"></a>
-<div class="header">
-<p>
-Next: <a href="Process-Internals.html#Process-Internals" accesskey="n" rel="next">Process Internals</a>, Previous: <a href="Buffer-Internals.html#Buffer-Internals" accesskey="p" rel="prev">Buffer Internals</a>, Up: <a href="Object-Internals.html#Object-Internals" accesskey="u" rel="up">Object Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Window-Internals-1"></a>
-<h4 class="subsection">E.8.2 Window Internals</h4>
-<a name="index-internals_002c-of-window"></a>
-<a name="index-window-internals"></a>
+  <h4 class="subsection">E.8.2 Window Internals</h4><a name=
+  "index-internals_002c-of-window" id=
+  "index-internals_002c-of-window"></a> <a name=
+  "index-window-internals" id="index-window-internals"></a>
 
-<p>The fields of a window (for a complete list, see the definition of
-<code>struct window</code> in <samp>window.h</samp>) include:
-</p>
-<dl compact="compact">
-<dt><code>frame</code></dt>
-<dd><p>The frame that this window is on.
-</p>
-</dd>
-<dt><code>mini_p</code></dt>
-<dd><p>Non-<code>nil</code> if this window is a minibuffer window.
-</p>
-</dd>
-<dt><code>parent</code></dt>
-<dd><p>Internally, Emacs arranges windows in a tree; each group of siblings has
-a parent window whose area includes all the siblings.  This field points
-to a window&rsquo;s parent.
-</p>
-<p>Parent windows do not display buffers, and play little role in display
-except to shape their child windows.  Emacs Lisp programs usually have
-no access to the parent windows; they operate on the windows at the
-leaves of the tree, which actually display buffers.
-</p>
-</dd>
-<dt><code>hchild</code></dt>
-<dt><code>vchild</code></dt>
-<dd><p>These fields contain the window&rsquo;s leftmost child and its topmost child
-respectively.  <code>hchild</code> is used if the window is subdivided
-horizontally by child windows, and <code>vchild</code> if it is subdivided
-vertically.  In a live window, only one of <code>hchild</code>, <code>vchild</code>,
-and <code>buffer</code> (q.v.) is non-<code>nil</code>.
-</p>
-</dd>
-<dt><code>next</code></dt>
-<dt><code>prev</code></dt>
-<dd><p>The next sibling and previous sibling of this window.  <code>next</code> is
-<code>nil</code> if the window is the right-most or bottom-most in its group;
-<code>prev</code> is <code>nil</code> if it is the left-most or top-most in its
-group.
-</p>
-</dd>
-<dt><code>left_col</code></dt>
-<dd><p>The left-hand edge of the window, measured in columns, relative to the
-leftmost column in the frame (column 0).
-</p>
-</dd>
-<dt><code>top_line</code></dt>
-<dd><p>The top edge of the window, measured in lines, relative to the topmost
-line in the frame (line 0).
-</p>
-</dd>
-<dt><code>total_cols</code></dt>
-<dt><code>total_lines</code></dt>
-<dd><p>The width and height of the window, measured in columns and lines
-respectively.  The width includes the scroll bar and fringes, and/or
-the separator line on the right of the window (if any).
-</p>
-</dd>
-<dt><code>buffer</code></dt>
-<dd><p>The buffer that the window is displaying.
-</p>
-</dd>
-<dt><code>start</code></dt>
-<dd><p>A marker pointing to the position in the buffer that is the first
-character displayed in the window.
-</p>
-</dd>
-<dt><code>pointm</code></dt>
-<dd><a name="index-window-point-internals"></a>
-<p>This is the value of point in the current buffer when this window is
-selected; when it is not selected, it retains its previous value.
-</p>
-</dd>
-<dt><code>force_start</code></dt>
-<dd><p>If this flag is non-<code>nil</code>, it says that the window has been
-scrolled explicitly by the Lisp program.  This affects what the next
-redisplay does if point is off the screen: instead of scrolling the
-window to show the text around point, it moves point to a location that
-is on the screen.
-</p>
-</dd>
-<dt><code>frozen_window_start_p</code></dt>
-<dd><p>This field is set temporarily to 1 to indicate to redisplay that
-<code>start</code> of this window should not be changed, even if point
-gets invisible.
-</p>
-</dd>
-<dt><code>start_at_line_beg</code></dt>
-<dd><p>Non-<code>nil</code> means current value of <code>start</code> was the beginning of a line
-when it was chosen.
-</p>
-</dd>
-<dt><code>use_time</code></dt>
-<dd><p>This is the last time that the window was selected.  The function
-<code>get-lru-window</code> uses this field.
-</p>
-</dd>
-<dt><code>sequence_number</code></dt>
-<dd><p>A unique number assigned to this window when it was created.
-</p>
-</dd>
-<dt><code>last_modified</code></dt>
-<dd><p>The <code>modiff</code> field of the window&rsquo;s buffer, as of the last time
-a redisplay completed in this window.
-</p>
-</dd>
-<dt><code>last_overlay_modified</code></dt>
-<dd><p>The <code>overlay_modiff</code> field of the window&rsquo;s buffer, as of the last
-time a redisplay completed in this window.
-</p>
-</dd>
-<dt><code>last_point</code></dt>
-<dd><p>The buffer&rsquo;s value of point, as of the last time a redisplay completed
-in this window.
-</p>
-</dd>
-<dt><code>last_had_star</code></dt>
-<dd><p>A non-<code>nil</code> value means the window&rsquo;s buffer was modified when the
-window was last updated.
-</p>
-</dd>
-<dt><code>vertical_scroll_bar</code></dt>
-<dd><p>This window&rsquo;s vertical scroll bar.
-</p>
-</dd>
-<dt><code>left_margin_cols</code></dt>
-<dt><code>right_margin_cols</code></dt>
-<dd><p>The widths of the left and right margins in this window.  A value of
-<code>nil</code> means no margin.
-</p>
-</dd>
-<dt><code>left_fringe_width</code></dt>
-<dt><code>right_fringe_width</code></dt>
-<dd><p>The widths of the left and right fringes in this window.  A value of
-<code>nil</code> or <code>t</code> means use the values of the frame.
-</p>
-</dd>
-<dt><code>fringes_outside_margins</code></dt>
-<dd><p>A non-<code>nil</code> value means the fringes outside the display margins;
-othersize they are between the margin and the text.
-</p>
-</dd>
-<dt><code>window_end_pos</code></dt>
-<dd><p>This is computed as <code>z</code> minus the buffer position of the last glyph
-in the current matrix of the window.  The value is only valid if
-<code>window_end_valid</code> is not <code>nil</code>.
-</p>
-</dd>
-<dt><code>window_end_bytepos</code></dt>
-<dd><p>The byte position corresponding to <code>window_end_pos</code>.
-</p>
-</dd>
-<dt><code>window_end_vpos</code></dt>
-<dd><p>The window-relative vertical position of the line containing
-<code>window_end_pos</code>.
-</p>
-</dd>
-<dt><code>window_end_valid</code></dt>
-<dd><p>This field is set to a non-<code>nil</code> value if <code>window_end_pos</code> is truly
-valid.  This is <code>nil</code> if nontrivial redisplay is pre-empted, since in that
-case the display that <code>window_end_pos</code> was computed for did not get
-onto the screen.
-</p>
-</dd>
-<dt><code>cursor</code></dt>
-<dd><p>A structure describing where the cursor is in this window.
-</p>
-</dd>
-<dt><code>last_cursor</code></dt>
-<dd><p>The value of <code>cursor</code> as of the last redisplay that finished.
-</p>
-</dd>
-<dt><code>phys_cursor</code></dt>
-<dd><p>A structure describing where the cursor of this window physically is.
-</p>
-</dd>
-<dt><code>phys_cursor_type</code></dt>
-<dt><code>phys_cursor_height</code></dt>
-<dt><code>phys_cursor_width</code></dt>
-<dd><p>The type, height, and width of the cursor that was last displayed on
-this window.
-</p>
-</dd>
-<dt><code>phys_cursor_on_p</code></dt>
-<dd><p>This field is non-zero if the cursor is physically on.
-</p>
-</dd>
-<dt><code>cursor_off_p</code></dt>
-<dd><p>Non-zero means the cursor in this window is logically off.  This is
-used for blinking the cursor.
-</p>
-</dd>
-<dt><code>last_cursor_off_p</code></dt>
-<dd><p>This field contains the value of <code>cursor_off_p</code> as of the time of
-the last redisplay.
-</p>
-</dd>
-<dt><code>must_be_updated_p</code></dt>
-<dd><p>This is set to 1 during redisplay when this window must be updated.
-</p>
-</dd>
-<dt><code>hscroll</code></dt>
-<dd><p>This is the number of columns that the display in the window is scrolled
-horizontally to the left.  Normally, this is 0.
-</p>
-</dd>
-<dt><code>vscroll</code></dt>
-<dd><p>Vertical scroll amount, in pixels.  Normally, this is 0.
-</p>
-</dd>
-<dt><code>dedicated</code></dt>
-<dd><p>Non-<code>nil</code> if this window is dedicated to its buffer.
-</p>
-</dd>
-<dt><code>display_table</code></dt>
-<dd><p>The window&rsquo;s display table, or <code>nil</code> if none is specified for it.
-</p>
-</dd>
-<dt><code>update_mode_line</code></dt>
-<dd><p>Non-<code>nil</code> means this window&rsquo;s mode line needs to be updated.
-</p>
-</dd>
-<dt><code>base_line_number</code></dt>
-<dd><p>The line number of a certain position in the buffer, or <code>nil</code>.
-This is used for displaying the line number of point in the mode line.
-</p>
-</dd>
-<dt><code>base_line_pos</code></dt>
-<dd><p>The position in the buffer for which the line number is known, or
-<code>nil</code> meaning none is known.  If it is a buffer, don&rsquo;t display
-the line number as long as the window shows that buffer.
-</p>
-</dd>
-<dt><code>column_number_displayed</code></dt>
-<dd><p>The column number currently displayed in this window&rsquo;s mode line, or <code>nil</code>
-if column numbers are not being displayed.
-</p>
-</dd>
-<dt><code>current_matrix</code></dt>
-<dt><code>desired_matrix</code></dt>
-<dd><p>Glyph matrices describing the current and desired display of this window.
-</p></dd>
-</dl>
+  <p>The fields of a window (for a complete list, see the
+  definition of <code>struct window</code> in
+  <samp>window.h</samp>) include:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Process-Internals.html#Process-Internals" accesskey="n" rel="next">Process Internals</a>, Previous: <a href="Buffer-Internals.html#Buffer-Internals" accesskey="p" rel="prev">Buffer Internals</a>, Up: <a href="Object-Internals.html#Object-Internals" accesskey="u" rel="up">Object Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><code>frame</code></dt>
 
+    <dd>
+      <p>The frame that this window is on.</p>
+    </dd>
 
+    <dt><code>mini_p</code></dt>
 
+    <dd>
+      <p>Non-<code>nil</code> if this window is a minibuffer
+      window.</p>
+    </dd>
+
+    <dt><code>parent</code></dt>
+
+    <dd>
+      <p>Internally, Emacs arranges windows in a tree; each group
+      of siblings has a parent window whose area includes all the
+      siblings. This field points to a window&rsquo;s parent.</p>
+
+      <p>Parent windows do not display buffers, and play little
+      role in display except to shape their child windows. Emacs
+      Lisp programs usually have no access to the parent windows;
+      they operate on the windows at the leaves of the tree, which
+      actually display buffers.</p>
+    </dd>
+
+    <dt><code>hchild</code></dt>
+
+    <dt><code>vchild</code></dt>
+
+    <dd>
+      <p>These fields contain the window&rsquo;s leftmost child and
+      its topmost child respectively. <code>hchild</code> is used
+      if the window is subdivided horizontally by child windows,
+      and <code>vchild</code> if it is subdivided vertically. In a
+      live window, only one of <code>hchild</code>,
+      <code>vchild</code>, and <code>buffer</code> (q.v.) is
+      non-<code>nil</code>.</p>
+    </dd>
+
+    <dt><code>next</code></dt>
+
+    <dt><code>prev</code></dt>
+
+    <dd>
+      <p>The next sibling and previous sibling of this window.
+      <code>next</code> is <code>nil</code> if the window is the
+      right-most or bottom-most in its group; <code>prev</code> is
+      <code>nil</code> if it is the left-most or top-most in its
+      group.</p>
+    </dd>
+
+    <dt><code>left_col</code></dt>
+
+    <dd>
+      <p>The left-hand edge of the window, measured in columns,
+      relative to the leftmost column in the frame (column 0).</p>
+    </dd>
+
+    <dt><code>top_line</code></dt>
+
+    <dd>
+      <p>The top edge of the window, measured in lines, relative to
+      the topmost line in the frame (line 0).</p>
+    </dd>
+
+    <dt><code>total_cols</code></dt>
+
+    <dt><code>total_lines</code></dt>
+
+    <dd>
+      <p>The width and height of the window, measured in columns
+      and lines respectively. The width includes the scroll bar and
+      fringes, and/or the separator line on the right of the window
+      (if any).</p>
+    </dd>
+
+    <dt><code>buffer</code></dt>
+
+    <dd>
+      <p>The buffer that the window is displaying.</p>
+    </dd>
+
+    <dt><code>start</code></dt>
+
+    <dd>
+      <p>A marker pointing to the position in the buffer that is
+      the first character displayed in the window.</p>
+    </dd>
+
+    <dt><code>pointm</code></dt>
+
+    <dd>
+      <a name="index-window-point-internals" id=
+      "index-window-point-internals"></a>
+
+      <p>This is the value of point in the current buffer when this
+      window is selected; when it is not selected, it retains its
+      previous value.</p>
+    </dd>
+
+    <dt><code>force_start</code></dt>
+
+    <dd>
+      <p>If this flag is non-<code>nil</code>, it says that the
+      window has been scrolled explicitly by the Lisp program. This
+      affects what the next redisplay does if point is off the
+      screen: instead of scrolling the window to show the text
+      around point, it moves point to a location that is on the
+      screen.</p>
+    </dd>
+
+    <dt><code>frozen_window_start_p</code></dt>
+
+    <dd>
+      <p>This field is set temporarily to 1 to indicate to
+      redisplay that <code>start</code> of this window should not
+      be changed, even if point gets invisible.</p>
+    </dd>
+
+    <dt><code>start_at_line_beg</code></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means current value of
+      <code>start</code> was the beginning of a line when it was
+      chosen.</p>
+    </dd>
+
+    <dt><code>use_time</code></dt>
+
+    <dd>
+      <p>This is the last time that the window was selected. The
+      function <code>get-lru-window</code> uses this field.</p>
+    </dd>
+
+    <dt><code>sequence_number</code></dt>
+
+    <dd>
+      <p>A unique number assigned to this window when it was
+      created.</p>
+    </dd>
+
+    <dt><code>last_modified</code></dt>
+
+    <dd>
+      <p>The <code>modiff</code> field of the window&rsquo;s
+      buffer, as of the last time a redisplay completed in this
+      window.</p>
+    </dd>
+
+    <dt><code>last_overlay_modified</code></dt>
+
+    <dd>
+      <p>The <code>overlay_modiff</code> field of the
+      window&rsquo;s buffer, as of the last time a redisplay
+      completed in this window.</p>
+    </dd>
+
+    <dt><code>last_point</code></dt>
+
+    <dd>
+      <p>The buffer&rsquo;s value of point, as of the last time a
+      redisplay completed in this window.</p>
+    </dd>
+
+    <dt><code>last_had_star</code></dt>
+
+    <dd>
+      <p>A non-<code>nil</code> value means the window&rsquo;s
+      buffer was modified when the window was last updated.</p>
+    </dd>
+
+    <dt><code>vertical_scroll_bar</code></dt>
+
+    <dd>
+      <p>This window&rsquo;s vertical scroll bar.</p>
+    </dd>
+
+    <dt><code>left_margin_cols</code></dt>
+
+    <dt><code>right_margin_cols</code></dt>
+
+    <dd>
+      <p>The widths of the left and right margins in this window. A
+      value of <code>nil</code> means no margin.</p>
+    </dd>
+
+    <dt><code>left_fringe_width</code></dt>
+
+    <dt><code>right_fringe_width</code></dt>
+
+    <dd>
+      <p>The widths of the left and right fringes in this window. A
+      value of <code>nil</code> or <code>t</code> means use the
+      values of the frame.</p>
+    </dd>
+
+    <dt><code>fringes_outside_margins</code></dt>
+
+    <dd>
+      <p>A non-<code>nil</code> value means the fringes outside the
+      display margins; othersize they are between the margin and
+      the text.</p>
+    </dd>
+
+    <dt><code>window_end_pos</code></dt>
+
+    <dd>
+      <p>This is computed as <code>z</code> minus the buffer
+      position of the last glyph in the current matrix of the
+      window. The value is only valid if
+      <code>window_end_valid</code> is not <code>nil</code>.</p>
+    </dd>
+
+    <dt><code>window_end_bytepos</code></dt>
+
+    <dd>
+      <p>The byte position corresponding to
+      <code>window_end_pos</code>.</p>
+    </dd>
+
+    <dt><code>window_end_vpos</code></dt>
+
+    <dd>
+      <p>The window-relative vertical position of the line
+      containing <code>window_end_pos</code>.</p>
+    </dd>
+
+    <dt><code>window_end_valid</code></dt>
+
+    <dd>
+      <p>This field is set to a non-<code>nil</code> value if
+      <code>window_end_pos</code> is truly valid. This is
+      <code>nil</code> if nontrivial redisplay is pre-empted, since
+      in that case the display that <code>window_end_pos</code> was
+      computed for did not get onto the screen.</p>
+    </dd>
+
+    <dt><code>cursor</code></dt>
+
+    <dd>
+      <p>A structure describing where the cursor is in this
+      window.</p>
+    </dd>
+
+    <dt><code>last_cursor</code></dt>
+
+    <dd>
+      <p>The value of <code>cursor</code> as of the last redisplay
+      that finished.</p>
+    </dd>
+
+    <dt><code>phys_cursor</code></dt>
+
+    <dd>
+      <p>A structure describing where the cursor of this window
+      physically is.</p>
+    </dd>
+
+    <dt><code>phys_cursor_type</code></dt>
+
+    <dt><code>phys_cursor_height</code></dt>
+
+    <dt><code>phys_cursor_width</code></dt>
+
+    <dd>
+      <p>The type, height, and width of the cursor that was last
+      displayed on this window.</p>
+    </dd>
+
+    <dt><code>phys_cursor_on_p</code></dt>
+
+    <dd>
+      <p>This field is non-zero if the cursor is physically on.</p>
+    </dd>
+
+    <dt><code>cursor_off_p</code></dt>
+
+    <dd>
+      <p>Non-zero means the cursor in this window is logically off.
+      This is used for blinking the cursor.</p>
+    </dd>
+
+    <dt><code>last_cursor_off_p</code></dt>
+
+    <dd>
+      <p>This field contains the value of <code>cursor_off_p</code>
+      as of the time of the last redisplay.</p>
+    </dd>
+
+    <dt><code>must_be_updated_p</code></dt>
+
+    <dd>
+      <p>This is set to 1 during redisplay when this window must be
+      updated.</p>
+    </dd>
+
+    <dt><code>hscroll</code></dt>
+
+    <dd>
+      <p>This is the number of columns that the display in the
+      window is scrolled horizontally to the left. Normally, this
+      is 0.</p>
+    </dd>
+
+    <dt><code>vscroll</code></dt>
+
+    <dd>
+      <p>Vertical scroll amount, in pixels. Normally, this is
+      0.</p>
+    </dd>
+
+    <dt><code>dedicated</code></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> if this window is dedicated to its
+      buffer.</p>
+    </dd>
+
+    <dt><code>display_table</code></dt>
+
+    <dd>
+      <p>The window&rsquo;s display table, or <code>nil</code> if
+      none is specified for it.</p>
+    </dd>
+
+    <dt><code>update_mode_line</code></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means this window&rsquo;s mode line
+      needs to be updated.</p>
+    </dd>
+
+    <dt><code>base_line_number</code></dt>
+
+    <dd>
+      <p>The line number of a certain position in the buffer, or
+      <code>nil</code>. This is used for displaying the line number
+      of point in the mode line.</p>
+    </dd>
+
+    <dt><code>base_line_pos</code></dt>
+
+    <dd>
+      <p>The position in the buffer for which the line number is
+      known, or <code>nil</code> meaning none is known. If it is a
+      buffer, don&rsquo;t display the line number as long as the
+      window shows that buffer.</p>
+    </dd>
+
+    <dt><code>column_number_displayed</code></dt>
+
+    <dd>
+      <p>The column number currently displayed in this
+      window&rsquo;s mode line, or <code>nil</code> if column
+      numbers are not being displayed.</p>
+    </dd>
+
+    <dt><code>current_matrix</code></dt>
+
+    <dt><code>desired_matrix</code></dt>
+
+    <dd>
+      <p>Glyph matrices describing the current and desired display
+      of this window.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Process-Internals.html#Process-Internals"
+    accesskey="n" rel="next">Process Internals</a>, Previous:
+    <a href="Buffer-Internals.html#Buffer-Internals" accesskey="p"
+    rel="prev">Buffer Internals</a>, Up: <a href=
+    "Object-Internals.html#Object-Internals" accesskey="u" rel=
+    "up">Object Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

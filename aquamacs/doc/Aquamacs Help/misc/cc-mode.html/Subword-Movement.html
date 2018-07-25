@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,140 +16,299 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Subword Movement</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Subword Movement">
-<meta name="keywords" content="CC Mode Manual: Subword Movement">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="Other-Commands.html#Other-Commands" rel="next" title="Other Commands">
-<link href="Hungry-WS-Deletion.html#Hungry-WS-Deletion" rel="prev" title="Hungry WS Deletion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Subword Movement</title>
+  <meta name="description" content=
+  "CC Mode Manual: Subword Movement" />
+  <meta name="keywords" content=
+  "CC Mode Manual: Subword Movement" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="Other-Commands.html#Other-Commands" rel="next" title=
+  "Other Commands" />
+  <link href="Hungry-WS-Deletion.html#Hungry-WS-Deletion" rel=
+  "prev" title="Hungry WS Deletion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Subword-Movement"></a>
-<div class="header">
-<p>
-Next: <a href="Other-Commands.html#Other-Commands" accesskey="n" rel="next">Other Commands</a>, Previous: <a href="Hungry-WS-Deletion.html#Hungry-WS-Deletion" accesskey="p" rel="prev">Hungry WS Deletion</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Subword-Movement-and-Editing"></a>
-<h3 class="section">4.9 Subword Movement and Editing</h3>
+<body lang="en" xml:lang="en">
+  <a name="Subword-Movement" id="Subword-Movement"></a>
 
-<a name="index-nomenclature"></a>
-<a name="index-subword"></a>
-<p>In spite of the GNU Coding Standards, it is popular to name a symbol
-by mixing uppercase and lowercase letters, e.g., &lsquo;<samp>GtkWidget</samp>&rsquo;,
-&lsquo;<samp>EmacsFrameClass</samp>&rsquo;, or &lsquo;<samp>NSGraphicsContext</samp>&rsquo;.  Here we call
-these mixed case symbols <em>nomenclatures</em>.  Also, each capitalized
-(or completely uppercase) part of a nomenclature is called a
-<em>subword</em>.  Here are some examples:
-</p>
-<table>
-<tr><td>Nomenclature</td><td>Subwords</td></tr>
-<tr><td>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</td></tr>
-<tr><td>&lsquo;<samp>GtkWindow</samp>&rsquo;</td><td>&lsquo;<samp>Gtk</samp>&rsquo; and &lsquo;<samp>Window</samp>&rsquo;</td></tr>
-<tr><td>&lsquo;<samp>EmacsFrameClass</samp>&rsquo;</td><td>&lsquo;<samp>Emacs</samp>&rsquo;, &lsquo;<samp>Frame</samp>&rsquo;, and &lsquo;<samp>Class</samp>&rsquo;</td></tr>
-<tr><td>&lsquo;<samp>NSGraphicsContext</samp>&rsquo;</td><td>&lsquo;<samp>NS</samp>&rsquo;, &lsquo;<samp>Graphics</samp>&rsquo;, and &lsquo;<samp>Context</samp>&rsquo;</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Other-Commands.html#Other-Commands"
+    accesskey="n" rel="next">Other Commands</a>, Previous: <a href=
+    "Hungry-WS-Deletion.html#Hungry-WS-Deletion" accesskey="p" rel=
+    "prev">Hungry WS Deletion</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Subword-Movement-and-Editing" id=
+  "Subword-Movement-and-Editing"></a>
 
-<p>The subword minor mode replaces the basic word oriented movement and
-editing commands with variants that recognize subwords in a
-nomenclature and treat them as separate words:
-</p>
-<a name="index-c_002dforward_002dsubword"></a>
-<a name="index-forward_002dsubword-_0028c_002d_0029"></a>
-<a name="index-c_002dbackward_002dsubword"></a>
-<a name="index-backward_002dsubword-_0028c_002d_0029"></a>
-<a name="index-c_002dmark_002dsubword"></a>
-<a name="index-mark_002dsubword-_0028c_002d_0029"></a>
-<a name="index-c_002dkill_002dsubword"></a>
-<a name="index-kill_002dsubword-_0028c_002d_0029"></a>
-<a name="index-c_002dbackward_002dkill_002dsubword"></a>
-<a name="index-backward_002dkill_002dsubword-_0028c_002d_0029"></a>
-<a name="index-c_002dtranspose_002dsubwords"></a>
-<a name="index-transpose_002dsubwords-_0028c_002d_0029"></a>
-<a name="index-c_002dcapitalize_002dsubword"></a>
-<a name="index-capitalize_002dsubword-_0028c_002d_0029"></a>
-<a name="index-c_002dupcase_002dsubword"></a>
-<a name="index-upcase_002dsubword-_0028c_002d_0029"></a>
-<a name="index-c_002ddowncase_002dsubword"></a>
-<a name="index-downcase_002dsubword-_0028c_002d_0029"></a>
-<table>
-<tr><td width="20%">Key</td><td width="40%">Word oriented command</td><td width="40%">Subword oriented command</td></tr>
-<tr><td width="20%">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-</td></tr>
-<tr><td width="20%"><kbd>M-f</kbd></td><td width="40%"><code>forward-word</code></td><td width="40%"><code>c-forward-subword</code></td></tr>
-<tr><td width="20%"><kbd>M-b</kbd></td><td width="40%"><code>backward-word</code></td><td width="40%"><code>c-backward-subword</code></td></tr>
-<tr><td width="20%"><kbd>M-@</kbd></td><td width="40%"><code>mark-word</code></td><td width="40%"><code>c-mark-subword</code></td></tr>
-<tr><td width="20%"><kbd>M-d</kbd></td><td width="40%"><code>kill-word</code></td><td width="40%"><code>c-kill-subword</code></td></tr>
-<tr><td width="20%"><kbd>M-DEL</kbd></td><td width="40%"><code>backward-kill-word</code></td><td width="40%"><code>c-backward-kill-subword</code></td></tr>
-<tr><td width="20%"><kbd>M-t</kbd></td><td width="40%"><code>transpose-words</code></td><td width="40%"><code>c-transpose-subwords</code></td></tr>
-<tr><td width="20%"><kbd>M-c</kbd></td><td width="40%"><code>capitalize-word</code></td><td width="40%"><code>c-capitalize-subword</code></td></tr>
-<tr><td width="20%"><kbd>M-u</kbd></td><td width="40%"><code>upcase-word</code></td><td width="40%"><code>c-upcase-subword</code></td></tr>
-<tr><td width="20%"><kbd>M-l</kbd></td><td width="40%"><code>downcase-word</code></td><td width="40%"><code>c-downcase-subword</code></td></tr>
-</table>
+  <h3 class="section">4.9 Subword Movement and Editing</h3><a name=
+  "index-nomenclature" id="index-nomenclature"></a> <a name=
+  "index-subword" id="index-subword"></a>
 
-<p>Note that if you have changed the key bindings for the word oriented
-commands in your <samp>.emacs</samp> or a similar place, the keys you have
-configured are also used for the corresponding subword oriented
-commands.
-</p>
-<p>Type <kbd>C-c C-w</kbd> to toggle subword mode on and off.  To make the
-mode turn on automatically, put the following code in your
-<samp>.emacs</samp>:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'c-mode-common-hook
+  <p>In spite of the GNU Coding Standards, it is popular to name a
+  symbol by mixing uppercase and lowercase letters, e.g.,
+  &lsquo;<samp>GtkWidget</samp>&rsquo;,
+  &lsquo;<samp>EmacsFrameClass</samp>&rsquo;, or
+  &lsquo;<samp>NSGraphicsContext</samp>&rsquo;. Here we call these
+  mixed case symbols <em>nomenclatures</em>. Also, each capitalized
+  (or completely uppercase) part of a nomenclature is called a
+  <em>subword</em>. Here are some examples:</p>
+
+  <table>
+    <tr>
+      <td>Nomenclature</td>
+
+      <td>Subwords</td>
+    </tr>
+
+    <tr>
+      <td>
+      &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</td>
+    </tr>
+
+    <tr>
+      <td>&lsquo;<samp>GtkWindow</samp>&rsquo;</td>
+
+      <td>&lsquo;<samp>Gtk</samp>&rsquo; and
+      &lsquo;<samp>Window</samp>&rsquo;</td>
+    </tr>
+
+    <tr>
+      <td>&lsquo;<samp>EmacsFrameClass</samp>&rsquo;</td>
+
+      <td>&lsquo;<samp>Emacs</samp>&rsquo;,
+      &lsquo;<samp>Frame</samp>&rsquo;, and
+      &lsquo;<samp>Class</samp>&rsquo;</td>
+    </tr>
+
+    <tr>
+      <td>&lsquo;<samp>NSGraphicsContext</samp>&rsquo;</td>
+
+      <td>&lsquo;<samp>NS</samp>&rsquo;,
+      &lsquo;<samp>Graphics</samp>&rsquo;, and
+      &lsquo;<samp>Context</samp>&rsquo;</td>
+    </tr>
+  </table>
+
+  <p>The subword minor mode replaces the basic word oriented
+  movement and editing commands with variants that recognize
+  subwords in a nomenclature and treat them as separate
+  words:</p><a name="index-c_002dforward_002dsubword" id=
+  "index-c_002dforward_002dsubword"></a> <a name=
+  "index-forward_002dsubword-_0028c_002d_0029" id=
+  "index-forward_002dsubword-_0028c_002d_0029"></a> <a name=
+  "index-c_002dbackward_002dsubword" id=
+  "index-c_002dbackward_002dsubword"></a> <a name=
+  "index-backward_002dsubword-_0028c_002d_0029" id=
+  "index-backward_002dsubword-_0028c_002d_0029"></a> <a name=
+  "index-c_002dmark_002dsubword" id=
+  "index-c_002dmark_002dsubword"></a> <a name=
+  "index-mark_002dsubword-_0028c_002d_0029" id=
+  "index-mark_002dsubword-_0028c_002d_0029"></a> <a name=
+  "index-c_002dkill_002dsubword" id=
+  "index-c_002dkill_002dsubword"></a> <a name=
+  "index-kill_002dsubword-_0028c_002d_0029" id=
+  "index-kill_002dsubword-_0028c_002d_0029"></a> <a name=
+  "index-c_002dbackward_002dkill_002dsubword" id=
+  "index-c_002dbackward_002dkill_002dsubword"></a> <a name=
+  "index-backward_002dkill_002dsubword-_0028c_002d_0029" id=
+  "index-backward_002dkill_002dsubword-_0028c_002d_0029"></a>
+  <a name="index-c_002dtranspose_002dsubwords" id=
+  "index-c_002dtranspose_002dsubwords"></a> <a name=
+  "index-transpose_002dsubwords-_0028c_002d_0029" id=
+  "index-transpose_002dsubwords-_0028c_002d_0029"></a> <a name=
+  "index-c_002dcapitalize_002dsubword" id=
+  "index-c_002dcapitalize_002dsubword"></a> <a name=
+  "index-capitalize_002dsubword-_0028c_002d_0029" id=
+  "index-capitalize_002dsubword-_0028c_002d_0029"></a> <a name=
+  "index-c_002dupcase_002dsubword" id=
+  "index-c_002dupcase_002dsubword"></a> <a name=
+  "index-upcase_002dsubword-_0028c_002d_0029" id=
+  "index-upcase_002dsubword-_0028c_002d_0029"></a> <a name=
+  "index-c_002ddowncase_002dsubword" id=
+  "index-c_002ddowncase_002dsubword"></a> <a name=
+  "index-downcase_002dsubword-_0028c_002d_0029" id=
+  "index-downcase_002dsubword-_0028c_002d_0029"></a>
+
+  <table>
+    <tr>
+      <td width="20%">Key</td>
+
+      <td width="40%">Word oriented command</td>
+
+      <td width="40%">Subword oriented command</td>
+    </tr>
+
+    <tr>
+      <td width="20%">
+      &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-</td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>M-f</kbd></td>
+
+      <td width="40%"><code>forward-word</code></td>
+
+      <td width="40%"><code>c-forward-subword</code></td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>M-b</kbd></td>
+
+      <td width="40%"><code>backward-word</code></td>
+
+      <td width="40%"><code>c-backward-subword</code></td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>M-@</kbd></td>
+
+      <td width="40%"><code>mark-word</code></td>
+
+      <td width="40%"><code>c-mark-subword</code></td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>M-d</kbd></td>
+
+      <td width="40%"><code>kill-word</code></td>
+
+      <td width="40%"><code>c-kill-subword</code></td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>M-DEL</kbd></td>
+
+      <td width="40%"><code>backward-kill-word</code></td>
+
+      <td width="40%"><code>c-backward-kill-subword</code></td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>M-t</kbd></td>
+
+      <td width="40%"><code>transpose-words</code></td>
+
+      <td width="40%"><code>c-transpose-subwords</code></td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>M-c</kbd></td>
+
+      <td width="40%"><code>capitalize-word</code></td>
+
+      <td width="40%"><code>c-capitalize-subword</code></td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>M-u</kbd></td>
+
+      <td width="40%"><code>upcase-word</code></td>
+
+      <td width="40%"><code>c-upcase-subword</code></td>
+    </tr>
+
+    <tr>
+      <td width="20%"><kbd>M-l</kbd></td>
+
+      <td width="40%"><code>downcase-word</code></td>
+
+      <td width="40%"><code>c-downcase-subword</code></td>
+    </tr>
+  </table>
+
+  <p>Note that if you have changed the key bindings for the word
+  oriented commands in your <samp>.emacs</samp> or a similar place,
+  the keys you have configured are also used for the corresponding
+  subword oriented commands.</p>
+
+  <p>Type <kbd>C-c C-w</kbd> to toggle subword mode on and off. To
+  make the mode turn on automatically, put the following code in
+  your <samp>.emacs</samp>:</p>
+
+  <div class="example">
+    <pre class="example">
+(add-hook 'c-mode-common-hook
           (lambda () (subword-mode 1)))
-</pre></div>
+</pre>
+  </div>
 
-<p>As a bonus, you can also use <code>subword-mode</code> in non-CC Mode
-buffers by typing <kbd>M-x subword-mode</kbd>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Other-Commands.html#Other-Commands" accesskey="n" rel="next">Other Commands</a>, Previous: <a href="Hungry-WS-Deletion.html#Hungry-WS-Deletion" accesskey="p" rel="prev">Hungry WS Deletion</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>As a bonus, you can also use <code>subword-mode</code> in
+  non-CC Mode buffers by typing <kbd>M-x subword-mode</kbd>.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Other-Commands.html#Other-Commands"
+    accesskey="n" rel="next">Other Commands</a>, Previous: <a href=
+    "Hungry-WS-Deletion.html#Hungry-WS-Deletion" accesskey="p" rel=
+    "prev">Hungry WS Deletion</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

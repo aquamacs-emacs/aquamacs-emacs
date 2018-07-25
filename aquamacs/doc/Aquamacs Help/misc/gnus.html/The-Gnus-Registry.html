@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,122 +14,198 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: The Gnus Registry</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: The Gnus Registry">
-<meta name="keywords" content="Gnus Manual: The Gnus Registry">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Various.html#Various" rel="up" title="Various">
-<link href="Gnus-Registry-Setup.html#Gnus-Registry-Setup" rel="next" title="Gnus Registry Setup">
-<link href="Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary" rel="prev" title="Low-level interface to the spam-stat dictionary">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: The Gnus Registry</title>
+  <meta name="description" content=
+  "Gnus Manual: The Gnus Registry" />
+  <meta name="keywords" content="Gnus Manual: The Gnus Registry" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Various.html#Various" rel="up" title="Various" />
+  <link href="Gnus-Registry-Setup.html#Gnus-Registry-Setup" rel=
+  "next" title="Gnus Registry Setup" />
+  <link href=
+  "Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary"
+  rel="prev" title=
+  "Low-level interface to the spam-stat dictionary" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-Gnus-Registry"></a>
-<div class="header">
-<p>
-Next: <a href="Other-modes.html#Other-modes" accesskey="n" rel="next">Other modes</a>, Previous: <a href="Spam-Package.html#Spam-Package" accesskey="p" rel="prev">Spam Package</a>, Up: <a href="Various.html#Various" accesskey="u" rel="up">Various</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Gnus-Registry-1"></a>
-<h3 class="section">9.18 The Gnus Registry</h3>
-<a name="index-registry"></a>
-<a name="index-split"></a>
-<a name="index-track"></a>
+<body lang="en" xml:lang="en">
+  <a name="The-Gnus-Registry" id="The-Gnus-Registry"></a>
 
-<p>The Gnus registry is a package that tracks messages by their
-Message-ID across all backends.  This allows Gnus users to do several
-cool things, be the envy of the locals, get free haircuts, and be
-experts on world issues.  Well, maybe not all of those, but the
-features are pretty cool.
-</p>
-<p>Although they will be explained in detail shortly, here&rsquo;s a quick list
-of said features in case your attention span is...  never mind.
-</p>
-<ol>
-<li> Split messages to their parent
+  <div class="header">
+    <p>Next: <a href="Other-modes.html#Other-modes" accesskey="n"
+    rel="next">Other modes</a>, Previous: <a href=
+    "Spam-Package.html#Spam-Package" accesskey="p" rel="prev">Spam
+    Package</a>, Up: <a href="Various.html#Various" accesskey="u"
+    rel="up">Various</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Gnus-Registry-1" id="The-Gnus-Registry-1"></a>
 
-<p>This keeps discussions in the same group.  You can use the subject and
-the sender in addition to the Message-ID.  Several strategies are
-available.
-</p>
-</li><li> Refer to messages by ID
+  <h3 class="section">9.18 The Gnus Registry</h3><a name=
+  "index-registry" id="index-registry"></a> <a name="index-split"
+  id="index-split"></a> <a name="index-track" id="index-track"></a>
 
-<p>Commands like <code>gnus-summary-refer-parent-article</code> can take
-advantage of the registry to jump to the referred article, regardless
-of the group the message is in.
-</p>
-</li><li> Store custom flags and keywords
+  <p>The Gnus registry is a package that tracks messages by their
+  Message-ID across all backends. This allows Gnus users to do
+  several cool things, be the envy of the locals, get free
+  haircuts, and be experts on world issues. Well, maybe not all of
+  those, but the features are pretty cool.</p>
 
-<p>The registry can store custom flags and keywords for a message.  For
-instance, you can mark a message &ldquo;To-Do&rdquo; this way and the flag will
-persist whether the message is in the nnimap, nnml, nnmaildir,
-etc. backends.
-</p>
-</li><li> Store arbitrary data
+  <p>Although they will be explained in detail shortly,
+  here&rsquo;s a quick list of said features in case your attention
+  span is... never mind.</p>
 
-<p>Through a simple ELisp API, the registry can remember any data for a
-message.  A built-in inverse map, when activated, allows quick lookups
-of all messages matching a particular set of criteria.
-</p></li></ol>
+  <ol>
+    <li>Split messages to their parent
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Gnus-Registry-Setup.html#Gnus-Registry-Setup" accesskey="1">Gnus Registry Setup</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Registry-Article-Refer-Method.html#Registry-Article-Refer-Method" accesskey="2">Registry Article Refer Method</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Fancy-splitting-to-parent.html#Fancy-splitting-to-parent" accesskey="3">Fancy splitting to parent</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Store-custom-flags-and-keywords.html#Store-custom-flags-and-keywords" accesskey="4">Store custom flags and keywords</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Store-arbitrary-data.html#Store-arbitrary-data" accesskey="5">Store arbitrary data</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+      <p>This keeps discussions in the same group. You can use the
+      subject and the sender in addition to the Message-ID. Several
+      strategies are available.</p>
+    </li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Other-modes.html#Other-modes" accesskey="n" rel="next">Other modes</a>, Previous: <a href="Spam-Package.html#Spam-Package" accesskey="p" rel="prev">Spam Package</a>, Up: <a href="Various.html#Various" accesskey="u" rel="up">Various</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>Refer to messages by ID
 
+      <p>Commands like
+      <code>gnus-summary-refer-parent-article</code> can take
+      advantage of the registry to jump to the referred article,
+      regardless of the group the message is in.</p>
+    </li>
 
+    <li>Store custom flags and keywords
 
+      <p>The registry can store custom flags and keywords for a
+      message. For instance, you can mark a message
+      &ldquo;To-Do&rdquo; this way and the flag will persist
+      whether the message is in the nnimap, nnml, nnmaildir, etc.
+      backends.</p>
+    </li>
+
+    <li>Store arbitrary data
+
+      <p>Through a simple ELisp API, the registry can remember any
+      data for a message. A built-in inverse map, when activated,
+      allows quick lookups of all messages matching a particular
+      set of criteria.</p>
+    </li>
+  </ol>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Gnus-Registry-Setup.html#Gnus-Registry-Setup" accesskey=
+      "1">Gnus Registry Setup</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Registry-Article-Refer-Method.html#Registry-Article-Refer-Method"
+      accesskey="2">Registry Article Refer Method</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Fancy-splitting-to-parent.html#Fancy-splitting-to-parent"
+      accesskey="3">Fancy splitting to parent</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Store-custom-flags-and-keywords.html#Store-custom-flags-and-keywords"
+      accesskey="4">Store custom flags and keywords</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Store-arbitrary-data.html#Store-arbitrary-data" accesskey=
+      "5">Store arbitrary data</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Other-modes.html#Other-modes" accesskey="n"
+    rel="next">Other modes</a>, Previous: <a href=
+    "Spam-Package.html#Spam-Package" accesskey="p" rel="prev">Spam
+    Package</a>, Up: <a href="Various.html#Various" accesskey="u"
+    rel="up">Various</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

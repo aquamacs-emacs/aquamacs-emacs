@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,142 +18,186 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Radix Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Radix Modes">
-<meta name="keywords" content="GNU Emacs Calc Manual: Radix Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display-Modes.html#Display-Modes" rel="up" title="Display Modes">
-<link href="Grouping-Digits.html#Grouping-Digits" rel="next" title="Grouping Digits">
-<link href="Display-Modes.html#Display-Modes" rel="prev" title="Display Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Radix Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Radix Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Radix Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display-Modes.html#Display-Modes" rel="up" title=
+  "Display Modes" />
+  <link href="Grouping-Digits.html#Grouping-Digits" rel="next"
+  title="Grouping Digits" />
+  <link href="Display-Modes.html#Display-Modes" rel="prev" title=
+  "Display Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Radix-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Grouping-Digits.html#Grouping-Digits" accesskey="n" rel="next">Grouping Digits</a>, Previous: <a href="Display-Modes.html#Display-Modes" accesskey="p" rel="prev">Display Modes</a>, Up: <a href="Display-Modes.html#Display-Modes" accesskey="u" rel="up">Display Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Radix-Modes-1"></a>
-<h4 class="subsection">6.7.1 Radix Modes</h4>
+<body lang="en" xml:lang="en">
+  <a name="Radix-Modes" id="Radix-Modes"></a>
 
-<a name="index-Radix-display"></a>
-<a name="index-Non_002ddecimal-numbers"></a>
-<a name="index-Decimal-and-non_002ddecimal-numbers"></a>
-<p>Calc normally displays numbers in decimal (<em>base-10</em> or <em>radix-10</em>)
-notation.  Calc can actually display in any radix from two (binary) to 36.
-When the radix is above 10, the letters <code>A</code> to <code>Z</code> are used as
-digits.  When entering such a number, letter keys are interpreted as
-potential digits rather than terminating numeric entry mode.
-</p>
-<a name="index-d-2"></a>
-<a name="index-d-8"></a>
-<a name="index-d-6"></a>
-<a name="index-d-0"></a>
-<a name="index-Hexadecimal-integers"></a>
-<a name="index-Octal-integers"></a>
-<p>The key sequences <kbd>d 2</kbd>, <kbd>d 8</kbd>, <kbd>d 6</kbd>, and <kbd>d 0</kbd> select
-binary, octal, hexadecimal, and decimal as the current display radix,
-respectively.  Numbers can always be entered in any radix, though the
-current radix is used as a default if you press <kbd>#</kbd> without any initial
-digits.  A number entered without a <kbd>#</kbd> is <em>always</em> interpreted
-as decimal.
-</p>
-<a name="index-d-r"></a>
-<a name="index-calc_002dradix"></a>
-<p>To set the radix generally, use <kbd>d r</kbd> (<code>calc-radix</code>) and enter
-an integer from 2 to 36.  You can specify the radix as a numeric prefix
-argument; otherwise you will be prompted for it.
-</p>
-<a name="index-d-z"></a>
-<a name="index-calc_002dleading_002dzeros"></a>
-<a name="index-Leading-zeros"></a>
-<p>Integers normally are displayed with however many digits are necessary to
-represent the integer and no more.  The <kbd>d z</kbd> (<code>calc-leading-zeros</code>)
-command causes integers to be padded out with leading zeros according to the
-current binary word size.  (See <a href="Binary-Functions.html#Binary-Functions">Binary Functions</a>, for a discussion of
-word size.)  If the absolute value of the word size is &lsquo;<samp>w</samp>&rsquo;, all integers
-are displayed with at least enough digits to represent
-&lsquo;<samp>(2^w)-1</samp>&rsquo;
-in the current radix.  (Larger integers will still be displayed in their
-entirety.)
-</p>
-<a name="index-Two_0027s-complements"></a>
-<p>Calc can display &lsquo;<samp>w</samp>&rsquo;-bit integers using two&rsquo;s complement
-notation, although this is most useful with the binary, octal and
-hexadecimal display modes.  This option is selected by using the
-<kbd>O</kbd> option prefix before setting the display radix, and a negative word
-size might be appropriate (see <a href="Binary-Functions.html#Binary-Functions">Binary Functions</a>). In two&rsquo;s
-complement notation, the integers in the (nearly) symmetric interval
-from
-&lsquo;<samp>-2^(w-1)</samp>&rsquo;
-to
-&lsquo;<samp>2^(w-1)-1</samp>&rsquo;
-are represented by the integers from &lsquo;<samp>0</samp>&rsquo; to &lsquo;<samp>2^w-1</samp>&rsquo;:
-the integers from &lsquo;<samp>0</samp>&rsquo; to
-&lsquo;<samp>2^(w-1)-1</samp>&rsquo;
-are represented by themselves and the integers from
-&lsquo;<samp>-2^(w-1)</samp>&rsquo;
-to &lsquo;<samp>-1</samp>&rsquo; are represented by the integers from
-&lsquo;<samp>2^(w-1)</samp>&rsquo;
-to &lsquo;<samp>2^w-1</samp>&rsquo; (the integer &lsquo;<samp>k</samp>&rsquo; is represented by &lsquo;<samp>k+2^w</samp>&rsquo;).
-Calc will display a two&rsquo;s complement integer by the radix (either
-&lsquo;<samp>2</samp>&rsquo;, &lsquo;<samp>8</samp>&rsquo; or &lsquo;<samp>16</samp>&rsquo;), two <kbd>#</kbd> symbols, and then its
-representation (including any leading zeros necessary to include all
-&lsquo;<samp>w</samp>&rsquo; bits).  In a two&rsquo;s complement display mode, numbers that
-are not displayed in two&rsquo;s complement notation (i.e., that aren&rsquo;t
-integers from
-&lsquo;<samp>-2^(w-1)</samp>&rsquo;
-to
-&lsquo;<samp>2^(w-1)-1</samp>&rsquo;)
-will be represented using Calc&rsquo;s usual notation (in the appropriate
-radix).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Grouping-Digits.html#Grouping-Digits" accesskey="n" rel="next">Grouping Digits</a>, Previous: <a href="Display-Modes.html#Display-Modes" accesskey="p" rel="prev">Display Modes</a>, Up: <a href="Display-Modes.html#Display-Modes" accesskey="u" rel="up">Display Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Grouping-Digits.html#Grouping-Digits"
+    accesskey="n" rel="next">Grouping Digits</a>, Previous:
+    <a href="Display-Modes.html#Display-Modes" accesskey="p" rel=
+    "prev">Display Modes</a>, Up: <a href=
+    "Display-Modes.html#Display-Modes" accesskey="u" rel=
+    "up">Display Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Radix-Modes-1" id="Radix-Modes-1"></a>
 
+  <h4 class="subsection">6.7.1 Radix Modes</h4><a name=
+  "index-Radix-display" id="index-Radix-display"></a> <a name=
+  "index-Non_002ddecimal-numbers" id=
+  "index-Non_002ddecimal-numbers"></a> <a name=
+  "index-Decimal-and-non_002ddecimal-numbers" id=
+  "index-Decimal-and-non_002ddecimal-numbers"></a>
 
+  <p>Calc normally displays numbers in decimal (<em>base-10</em> or
+  <em>radix-10</em>) notation. Calc can actually display in any
+  radix from two (binary) to 36. When the radix is above 10, the
+  letters <code>A</code> to <code>Z</code> are used as digits. When
+  entering such a number, letter keys are interpreted as potential
+  digits rather than terminating numeric entry mode.</p><a name=
+  "index-d-2" id="index-d-2"></a> <a name="index-d-8" id=
+  "index-d-8"></a> <a name="index-d-6" id="index-d-6"></a> <a name=
+  "index-d-0" id="index-d-0"></a> <a name=
+  "index-Hexadecimal-integers" id="index-Hexadecimal-integers"></a>
+  <a name="index-Octal-integers" id="index-Octal-integers"></a>
 
+  <p>The key sequences <kbd>d 2</kbd>, <kbd>d 8</kbd>, <kbd>d
+  6</kbd>, and <kbd>d 0</kbd> select binary, octal, hexadecimal,
+  and decimal as the current display radix, respectively. Numbers
+  can always be entered in any radix, though the current radix is
+  used as a default if you press <kbd>#</kbd> without any initial
+  digits. A number entered without a <kbd>#</kbd> is
+  <em>always</em> interpreted as decimal.</p><a name="index-d-r"
+  id="index-d-r"></a> <a name="index-calc_002dradix" id=
+  "index-calc_002dradix"></a>
+
+  <p>To set the radix generally, use <kbd>d r</kbd>
+  (<code>calc-radix</code>) and enter an integer from 2 to 36. You
+  can specify the radix as a numeric prefix argument; otherwise you
+  will be prompted for it.</p><a name="index-d-z" id=
+  "index-d-z"></a> <a name="index-calc_002dleading_002dzeros" id=
+  "index-calc_002dleading_002dzeros"></a> <a name=
+  "index-Leading-zeros" id="index-Leading-zeros"></a>
+
+  <p>Integers normally are displayed with however many digits are
+  necessary to represent the integer and no more. The <kbd>d
+  z</kbd> (<code>calc-leading-zeros</code>) command causes integers
+  to be padded out with leading zeros according to the current
+  binary word size. (See <a href=
+  "Binary-Functions.html#Binary-Functions">Binary Functions</a>,
+  for a discussion of word size.) If the absolute value of the word
+  size is &lsquo;<samp>w</samp>&rsquo;, all integers are displayed
+  with at least enough digits to represent
+  &lsquo;<samp>(2^w)-1</samp>&rsquo; in the current radix. (Larger
+  integers will still be displayed in their entirety.)</p><a name=
+  "index-Two_0027s-complements" id=
+  "index-Two_0027s-complements"></a>
+
+  <p>Calc can display &lsquo;<samp>w</samp>&rsquo;-bit integers
+  using two&rsquo;s complement notation, although this is most
+  useful with the binary, octal and hexadecimal display modes. This
+  option is selected by using the <kbd>O</kbd> option prefix before
+  setting the display radix, and a negative word size might be
+  appropriate (see <a href=
+  "Binary-Functions.html#Binary-Functions">Binary Functions</a>).
+  In two&rsquo;s complement notation, the integers in the (nearly)
+  symmetric interval from &lsquo;<samp>-2^(w-1)</samp>&rsquo; to
+  &lsquo;<samp>2^(w-1)-1</samp>&rsquo; are represented by the
+  integers from &lsquo;<samp>0</samp>&rsquo; to
+  &lsquo;<samp>2^w-1</samp>&rsquo;: the integers from
+  &lsquo;<samp>0</samp>&rsquo; to
+  &lsquo;<samp>2^(w-1)-1</samp>&rsquo; are represented by
+  themselves and the integers from
+  &lsquo;<samp>-2^(w-1)</samp>&rsquo; to
+  &lsquo;<samp>-1</samp>&rsquo; are represented by the integers
+  from &lsquo;<samp>2^(w-1)</samp>&rsquo; to
+  &lsquo;<samp>2^w-1</samp>&rsquo; (the integer
+  &lsquo;<samp>k</samp>&rsquo; is represented by
+  &lsquo;<samp>k+2^w</samp>&rsquo;). Calc will display a
+  two&rsquo;s complement integer by the radix (either
+  &lsquo;<samp>2</samp>&rsquo;, &lsquo;<samp>8</samp>&rsquo; or
+  &lsquo;<samp>16</samp>&rsquo;), two <kbd>#</kbd> symbols, and
+  then its representation (including any leading zeros necessary to
+  include all &lsquo;<samp>w</samp>&rsquo; bits). In a two&rsquo;s
+  complement display mode, numbers that are not displayed in
+  two&rsquo;s complement notation (i.e., that aren&rsquo;t integers
+  from &lsquo;<samp>-2^(w-1)</samp>&rsquo; to
+  &lsquo;<samp>2^(w-1)-1</samp>&rsquo;) will be represented using
+  Calc&rsquo;s usual notation (in the appropriate radix).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Grouping-Digits.html#Grouping-Digits"
+    accesskey="n" rel="next">Grouping Digits</a>, Previous:
+    <a href="Display-Modes.html#Display-Modes" accesskey="p" rel=
+    "prev">Display Modes</a>, Up: <a href=
+    "Display-Modes.html#Display-Modes" accesskey="u" rel=
+    "up">Display Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

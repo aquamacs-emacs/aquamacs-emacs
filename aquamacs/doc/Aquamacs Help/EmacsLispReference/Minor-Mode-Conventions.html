@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,198 +19,275 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Minor Mode Conventions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Minor Mode Conventions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Minor Mode Conventions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Minor-Modes.html#Minor-Modes" rel="up" title="Minor Modes">
-<link href="Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes" rel="next" title="Keymaps and Minor Modes">
-<link href="Minor-Modes.html#Minor-Modes" rel="prev" title="Minor Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Minor Mode
+  Conventions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Minor Mode Conventions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Minor Mode Conventions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Minor-Modes.html#Minor-Modes" rel="up" title=
+  "Minor Modes" />
+  <link href="Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes"
+  rel="next" title="Keymaps and Minor Modes" />
+  <link href="Minor-Modes.html#Minor-Modes" rel="prev" title=
+  "Minor Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Minor-Mode-Conventions" id="Minor-Mode-Conventions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes"
+    accesskey="n" rel="next">Keymaps and Minor Modes</a>, Up:
+    <a href="Minor-Modes.html#Minor-Modes" accesskey="u" rel=
+    "up">Minor Modes</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Conventions-for-Writing-Minor-Modes" id=
+  "Conventions-for-Writing-Minor-Modes"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Minor-Mode-Conventions"></a>
-<div class="header">
-<p>
-Next: <a href="Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes" accesskey="n" rel="next">Keymaps and Minor Modes</a>, Up: <a href="Minor-Modes.html#Minor-Modes" accesskey="u" rel="up">Minor Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Conventions-for-Writing-Minor-Modes"></a>
-<h4 class="subsection">22.3.1 Conventions for Writing Minor Modes</h4>
-<a name="index-minor-mode-conventions"></a>
-<a name="index-conventions-for-writing-minor-modes"></a>
+  <h4 class="subsection">22.3.1 Conventions for Writing Minor
+  Modes</h4><a name="index-minor-mode-conventions" id=
+  "index-minor-mode-conventions"></a> <a name=
+  "index-conventions-for-writing-minor-modes" id=
+  "index-conventions-for-writing-minor-modes"></a>
 
-<p>There are conventions for writing minor modes just as there are for
-major modes.  These conventions are described below.  The easiest way to
-follow them is to use the macro <code>define-minor-mode</code>.
-See <a href="Defining-Minor-Modes.html#Defining-Minor-Modes">Defining Minor Modes</a>.
-</p>
-<ul>
-<li> <a name="index-mode-variable"></a>
-Define a variable whose name ends in &lsquo;<samp>-mode</samp>&rsquo;.  We call this the
-<em>mode variable</em>.  The minor mode command should set this variable.
-The value will be <code>nil</code> if the mode is disabled, and non-<code>nil</code>
-if the mode is enabled.  The variable should be buffer-local if the
-minor mode is buffer-local.
+  <p>There are conventions for writing minor modes just as there
+  are for major modes. These conventions are described below. The
+  easiest way to follow them is to use the macro
+  <code>define-minor-mode</code>. See <a href=
+  "Defining-Minor-Modes.html#Defining-Minor-Modes">Defining Minor
+  Modes</a>.</p>
 
-<p>This variable is used in conjunction with the <code>minor-mode-alist</code> to
-display the minor mode name in the mode line.  It also determines
-whether the minor mode keymap is active, via <code>minor-mode-map-alist</code>
-(see <a href="Controlling-Active-Maps.html#Controlling-Active-Maps">Controlling Active Maps</a>).  Individual commands or hooks can
-also check its value.
-</p>
-</li><li> Define a command, called the <em>mode command</em>, whose name is the same
-as the mode variable.  Its job is to set the value of the mode variable,
-plus anything else that needs to be done to actually enable or disable
-the mode&rsquo;s features.
+  <ul>
+    <li>
+      <a name="index-mode-variable" id="index-mode-variable"></a>
+      Define a variable whose name ends in
+      &lsquo;<samp>-mode</samp>&rsquo;. We call this the <em>mode
+      variable</em>. The minor mode command should set this
+      variable. The value will be <code>nil</code> if the mode is
+      disabled, and non-<code>nil</code> if the mode is enabled.
+      The variable should be buffer-local if the minor mode is
+      buffer-local.
 
-<p>The mode command should accept one optional argument.  If called
-interactively with no prefix argument, it should toggle the mode
-(i.e., enable if it is disabled, and disable if it is enabled).  If
-called interactively with a prefix argument, it should enable the mode
-if the argument is positive and disable it otherwise.
-</p>
-<p>If the mode command is called from Lisp (i.e., non-interactively), it
-should enable the mode if the argument is omitted or <code>nil</code>; it
-should toggle the mode if the argument is the symbol <code>toggle</code>;
-otherwise it should treat the argument in the same way as for an
-interactive call with a numeric prefix argument, as described above.
-</p>
-<p>The following example shows how to implement this behavior (it is
-similar to the code generated by the <code>define-minor-mode</code> macro):
-</p>
-<div class="example">
-<pre class="example">(interactive (list (or current-prefix-arg 'toggle)))
+      <p>This variable is used in conjunction with the
+      <code>minor-mode-alist</code> to display the minor mode name
+      in the mode line. It also determines whether the minor mode
+      keymap is active, via <code>minor-mode-map-alist</code> (see
+      <a href=
+      "Controlling-Active-Maps.html#Controlling-Active-Maps">Controlling
+      Active Maps</a>). Individual commands or hooks can also check
+      its value.</p>
+    </li>
+
+    <li>Define a command, called the <em>mode command</em>, whose
+    name is the same as the mode variable. Its job is to set the
+    value of the mode variable, plus anything else that needs to be
+    done to actually enable or disable the mode&rsquo;s features.
+
+      <p>The mode command should accept one optional argument. If
+      called interactively with no prefix argument, it should
+      toggle the mode (i.e., enable if it is disabled, and disable
+      if it is enabled). If called interactively with a prefix
+      argument, it should enable the mode if the argument is
+      positive and disable it otherwise.</p>
+
+      <p>If the mode command is called from Lisp (i.e.,
+      non-interactively), it should enable the mode if the argument
+      is omitted or <code>nil</code>; it should toggle the mode if
+      the argument is the symbol <code>toggle</code>; otherwise it
+      should treat the argument in the same way as for an
+      interactive call with a numeric prefix argument, as described
+      above.</p>
+
+      <p>The following example shows how to implement this behavior
+      (it is similar to the code generated by the
+      <code>define-minor-mode</code> macro):</p>
+
+      <div class="example">
+        <pre class="example">
+(interactive (list (or current-prefix-arg 'toggle)))
 (let ((enable (if (eq arg 'toggle)
-                  (not foo-mode) ; <span class="roman">this mode&rsquo;s mode variable</span>
+                  (not foo-mode) ; <span class=
+"roman">this mode&rsquo;s mode variable</span>
                 (&gt; (prefix-numeric-value arg) 0))))
   (if enable
       <var>do-enable</var>
     <var>do-disable</var>))
-</pre></div>
+</pre>
+      </div>
 
-<p>The reason for this somewhat complex behavior is that it lets users
-easily toggle the minor mode interactively, and also lets the minor mode
-be easily enabled in a mode hook, like this:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'text-mode-hook 'foo-mode)
-</pre></div>
+      <p>The reason for this somewhat complex behavior is that it
+      lets users easily toggle the minor mode interactively, and
+      also lets the minor mode be easily enabled in a mode hook,
+      like this:</p>
 
-<p>This behaves correctly whether or not <code>foo-mode</code> was already
-enabled, since the <code>foo-mode</code> mode command unconditionally enables
-the minor mode when it is called from Lisp with no argument.  Disabling
-a minor mode in a mode hook is a little uglier:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'text-mode-hook (lambda () (foo-mode -1)))
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(add-hook 'text-mode-hook 'foo-mode)
+</pre>
+      </div>
 
-<p>However, this is not very commonly done.
-</p>
-</li><li> Add an element to <code>minor-mode-alist</code> for each minor mode
-(see <a href="Mode-Line-Variables.html#Definition-of-minor_002dmode_002dalist">Definition of minor-mode-alist</a>), if you want to indicate the
-minor mode in the mode line.  This element should be a list of the
-following form:
+      <p>This behaves correctly whether or not
+      <code>foo-mode</code> was already enabled, since the
+      <code>foo-mode</code> mode command unconditionally enables
+      the minor mode when it is called from Lisp with no argument.
+      Disabling a minor mode in a mode hook is a little uglier:</p>
 
-<div class="smallexample">
-<pre class="smallexample">(<var>mode-variable</var> <var>string</var>)
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(add-hook 'text-mode-hook (lambda () (foo-mode -1)))
+</pre>
+      </div>
 
-<p>Here <var>mode-variable</var> is the variable that controls enabling of the
-minor mode, and <var>string</var> is a short string, starting with a space,
-to represent the mode in the mode line.  These strings must be short so
-that there is room for several of them at once.
-</p>
-<p>When you add an element to <code>minor-mode-alist</code>, use <code>assq</code> to
-check for an existing element, to avoid duplication.  For example:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(unless (assq 'leif-mode minor-mode-alist)
-  (push '(leif-mode &quot; Leif&quot;) minor-mode-alist))
-</pre></div>
+      <p>However, this is not very commonly done.</p>
+    </li>
 
-<p>or like this, using <code>add-to-list</code> (see <a href="List-Variables.html#List-Variables">List Variables</a>):
-</p>
-<div class="smallexample">
-<pre class="smallexample">(add-to-list 'minor-mode-alist '(leif-mode &quot; Leif&quot;))
-</pre></div>
-</li></ul>
+    <li>Add an element to <code>minor-mode-alist</code> for each
+    minor mode (see <a href=
+    "Mode-Line-Variables.html#Definition-of-minor_002dmode_002dalist">
+      Definition of minor-mode-alist</a>), if you want to indicate
+      the minor mode in the mode line. This element should be a
+      list of the following form:
 
-<p>In addition, several major mode conventions apply to minor modes as
-well: those regarding the names of global symbols, the use of a hook at
-the end of the initialization function, and the use of keymaps and other
-tables.
-</p>
-<p>The minor mode should, if possible, support enabling and disabling via
-Custom (see <a href="Customization.html#Customization">Customization</a>).  To do this, the mode variable should be
-defined with <code>defcustom</code>, usually with <code>:type 'boolean</code>.  If
-just setting the variable is not sufficient to enable the mode, you
-should also specify a <code>:set</code> method which enables the mode by
-invoking the mode command.  Note in the variable&rsquo;s documentation string
-that setting the variable other than via Custom may not take effect.
-Also, mark the definition with an autoload cookie (see <a href="Autoload.html#autoload-cookie">autoload cookie</a>), and specify a <code>:require</code> so that customizing the variable
-will load the library that defines the mode.  For example:
-</p>
-<div class="smallexample">
-<pre class="smallexample">;;;###autoload
+      <div class="smallexample">
+        <pre class="smallexample">
+(<var>mode-variable</var> <var>string</var>)
+</pre>
+      </div>
+
+      <p>Here <var>mode-variable</var> is the variable that
+      controls enabling of the minor mode, and <var>string</var> is
+      a short string, starting with a space, to represent the mode
+      in the mode line. These strings must be short so that there
+      is room for several of them at once.</p>
+
+      <p>When you add an element to <code>minor-mode-alist</code>,
+      use <code>assq</code> to check for an existing element, to
+      avoid duplication. For example:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(unless (assq 'leif-mode minor-mode-alist)
+  (push '(leif-mode " Leif") minor-mode-alist))
+</pre>
+      </div>
+
+      <p>or like this, using <code>add-to-list</code> (see <a href=
+      "List-Variables.html#List-Variables">List Variables</a>):</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(add-to-list 'minor-mode-alist '(leif-mode " Leif"))
+</pre>
+      </div>
+    </li>
+  </ul>
+
+  <p>In addition, several major mode conventions apply to minor
+  modes as well: those regarding the names of global symbols, the
+  use of a hook at the end of the initialization function, and the
+  use of keymaps and other tables.</p>
+
+  <p>The minor mode should, if possible, support enabling and
+  disabling via Custom (see <a href=
+  "Customization.html#Customization">Customization</a>). To do
+  this, the mode variable should be defined with
+  <code>defcustom</code>, usually with <code>:type 'boolean</code>.
+  If just setting the variable is not sufficient to enable the
+  mode, you should also specify a <code>:set</code> method which
+  enables the mode by invoking the mode command. Note in the
+  variable&rsquo;s documentation string that setting the variable
+  other than via Custom may not take effect. Also, mark the
+  definition with an autoload cookie (see <a href=
+  "Autoload.html#autoload-cookie">autoload cookie</a>), and specify
+  a <code>:require</code> so that customizing the variable will
+  load the library that defines the mode. For example:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+;;;###autoload
 (defcustom msb-mode nil
-  &quot;Toggle msb-mode.
+  "Toggle msb-mode.
 Setting this variable directly does not take effect;
-use either \\[customize] or the function `msb-mode'.&quot;
+use either \\[customize] or the function `msb-mode'."
   :set 'custom-set-minor-mode
   :initialize 'custom-initialize-default
-  :version &quot;20.4&quot;
+  :version "20.4"
   :type    'boolean
   :group   'msb
   :require 'msb)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes" accesskey="n" rel="next">Keymaps and Minor Modes</a>, Up: <a href="Minor-Modes.html#Minor-Modes" accesskey="u" rel="up">Minor Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Keymaps-and-Minor-Modes.html#Keymaps-and-Minor-Modes"
+    accesskey="n" rel="next">Keymaps and Minor Modes</a>, Up:
+    <a href="Minor-Modes.html#Minor-Modes" accesskey="u" rel=
+    "up">Minor Modes</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

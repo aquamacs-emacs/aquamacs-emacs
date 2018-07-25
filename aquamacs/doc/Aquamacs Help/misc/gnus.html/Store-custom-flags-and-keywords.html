@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,104 +14,151 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Store custom flags and keywords</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Store custom flags and keywords">
-<meta name="keywords" content="Gnus Manual: Store custom flags and keywords">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-Gnus-Registry.html#The-Gnus-Registry" rel="up" title="The Gnus Registry">
-<link href="Store-arbitrary-data.html#Store-arbitrary-data" rel="next" title="Store arbitrary data">
-<link href="Fancy-splitting-to-parent.html#Fancy-splitting-to-parent" rel="prev" title="Fancy splitting to parent">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Store custom flags and keywords</title>
+  <meta name="description" content=
+  "Gnus Manual: Store custom flags and keywords" />
+  <meta name="keywords" content=
+  "Gnus Manual: Store custom flags and keywords" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-Gnus-Registry.html#The-Gnus-Registry" rel="up"
+  title="The Gnus Registry" />
+  <link href="Store-arbitrary-data.html#Store-arbitrary-data" rel=
+  "next" title="Store arbitrary data" />
+  <link href=
+  "Fancy-splitting-to-parent.html#Fancy-splitting-to-parent" rel=
+  "prev" title="Fancy splitting to parent" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Store-custom-flags-and-keywords"></a>
-<div class="header">
-<p>
-Next: <a href="Store-arbitrary-data.html#Store-arbitrary-data" accesskey="n" rel="next">Store arbitrary data</a>, Previous: <a href="Fancy-splitting-to-parent.html#Fancy-splitting-to-parent" accesskey="p" rel="prev">Fancy splitting to parent</a>, Up: <a href="The-Gnus-Registry.html#The-Gnus-Registry" accesskey="u" rel="up">The Gnus Registry</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Store-custom-flags-and-keywords-1"></a>
-<h4 class="subsection">9.18.4 Store custom flags and keywords</h4>
+<body lang="en" xml:lang="en">
+  <a name="Store-custom-flags-and-keywords" id=
+  "Store-custom-flags-and-keywords"></a>
 
-<p>The registry lets you set custom flags and keywords per message.  You
-can use the Gnus-&gt;Registry Marks menu or the <kbd>M M x</kbd> keyboard
-shortcuts, where <code>x</code> is the first letter of the mark&rsquo;s name.
-</p>
-<dl>
-<dt><a name="index-gnus_002dregistry_002dmarks"></a>Variable: <strong>gnus-registry-marks</strong></dt>
-<dd><p>The custom marks that the registry can use.  You can modify the
-default list, if you like.  If you do, you&rsquo;ll have to exit Emacs
-before they take effect (you can also unload the registry and reload
-it or evaluate the specific macros you&rsquo;ll need, but you probably don&rsquo;t
-want to bother).  Use the Customize interface to modify the list.
-</p>
-<p>By default this list has the <code>Important</code>, <code>Work</code>,
-<code>Personal</code>, <code>To-Do</code>, and <code>Later</code> marks.  They all have
-keyboard shortcuts like <kbd>M M i</kbd> for Important, using the first
-letter.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Store-arbitrary-data.html#Store-arbitrary-data" accesskey="n"
+    rel="next">Store arbitrary data</a>, Previous: <a href=
+    "Fancy-splitting-to-parent.html#Fancy-splitting-to-parent"
+    accesskey="p" rel="prev">Fancy splitting to parent</a>, Up:
+    <a href="The-Gnus-Registry.html#The-Gnus-Registry" accesskey=
+    "u" rel="up">The Gnus Registry</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Store-custom-flags-and-keywords-1" id=
+  "Store-custom-flags-and-keywords-1"></a>
 
-<dl>
-<dt><a name="index-gnus_002dregistry_002dmark_002darticle"></a>Function: <strong>gnus-registry-mark-article</strong></dt>
-<dd><p>Call this function to mark an article with a custom registry mark.  It
-will offer the available marks for completion.
-</p></dd></dl>
+  <h4 class="subsection">9.18.4 Store custom flags and
+  keywords</h4>
 
-<p>You can use <code>defalias</code> to install a summary line formatting
-function that will show the registry marks.  There are two flavors of
-this function, either showing the marks as single characters, using
-their <code>:char</code> property, or showing the marks as full strings.
-</p>
-<div class="lisp">
-<pre class="lisp">;; show the marks as single characters (see the :char property in
+  <p>The registry lets you set custom flags and keywords per
+  message. You can use the Gnus-&gt;Registry Marks menu or the
+  <kbd>M M x</kbd> keyboard shortcuts, where <code>x</code> is the
+  first letter of the mark&rsquo;s name.</p>
+
+  <dl>
+    <dt><a name="index-gnus_002dregistry_002dmarks" id=
+    "index-gnus_002dregistry_002dmarks"></a>Variable:
+    <strong>gnus-registry-marks</strong></dt>
+
+    <dd>
+      <p>The custom marks that the registry can use. You can modify
+      the default list, if you like. If you do, you&rsquo;ll have
+      to exit Emacs before they take effect (you can also unload
+      the registry and reload it or evaluate the specific macros
+      you&rsquo;ll need, but you probably don&rsquo;t want to
+      bother). Use the Customize interface to modify the list.</p>
+
+      <p>By default this list has the <code>Important</code>,
+      <code>Work</code>, <code>Personal</code>, <code>To-Do</code>,
+      and <code>Later</code> marks. They all have keyboard
+      shortcuts like <kbd>M M i</kbd> for Important, using the
+      first letter.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-gnus_002dregistry_002dmark_002darticle" id=
+    "index-gnus_002dregistry_002dmark_002darticle"></a>Function:
+    <strong>gnus-registry-mark-article</strong></dt>
+
+    <dd>
+      <p>Call this function to mark an article with a custom
+      registry mark. It will offer the available marks for
+      completion.</p>
+    </dd>
+  </dl>
+
+  <p>You can use <code>defalias</code> to install a summary line
+  formatting function that will show the registry marks. There are
+  two flavors of this function, either showing the marks as single
+  characters, using their <code>:char</code> property, or showing
+  the marks as full strings.</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+;; show the marks as single characters (see the :char property in
 ;; 'gnus-registry-marks'):
 ;; (defalias 'gnus-user-format-function-M 'gnus-registry-article-marks-to-chars)
 
 ;; show the marks by name (see 'gnus-registry-marks'):
 ;; (defalias 'gnus-user-format-function-M 'gnus-registry-article-marks-to-names)
-</pre></div>
-
-
-
-
-
+</pre>
+  </div>
 </body>
 </html>

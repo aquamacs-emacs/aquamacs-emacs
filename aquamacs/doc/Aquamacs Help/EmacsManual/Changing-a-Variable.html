@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,151 +20,215 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Changing a Variable</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Changing a Variable">
-<meta name="keywords" content="GNU Emacs Manual: Changing a Variable">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Easy-Customization.html#Easy-Customization" rel="up" title="Easy Customization">
-<link href="Saving-Customizations.html#Saving-Customizations" rel="next" title="Saving Customizations">
-<link href="Browsing-Custom.html#Browsing-Custom" rel="prev" title="Browsing Custom">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Changing a Variable</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Changing a Variable" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Changing a Variable" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Easy-Customization.html#Easy-Customization" rel="up"
+  title="Easy Customization" />
+  <link href="Saving-Customizations.html#Saving-Customizations"
+  rel="next" title="Saving Customizations" />
+  <link href="Browsing-Custom.html#Browsing-Custom" rel="prev"
+  title="Browsing Custom" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Changing-a-Variable" id="Changing-a-Variable"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Saving-Customizations.html#Saving-Customizations" accesskey=
+    "n" rel="next">Saving Customizations</a>, Previous: <a href=
+    "Browsing-Custom.html#Browsing-Custom" accesskey="p" rel=
+    "prev">Browsing Custom</a>, Up: <a href=
+    "Easy-Customization.html#Easy-Customization" accesskey="u" rel=
+    "up">Easy Customization</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Changing-a-Variable-1" id="Changing-a-Variable-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Changing-a-Variable"></a>
-<div class="header">
-<p>
-Next: <a href="Saving-Customizations.html#Saving-Customizations" accesskey="n" rel="next">Saving Customizations</a>, Previous: <a href="Browsing-Custom.html#Browsing-Custom" accesskey="p" rel="prev">Browsing Custom</a>, Up: <a href="Easy-Customization.html#Easy-Customization" accesskey="u" rel="up">Easy Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Changing-a-Variable-1"></a>
-<h4 class="subsection">51.1.3 Changing a Variable</h4>
+  <h4 class="subsection">51.1.3 Changing a Variable</h4>
 
-<p>Here is an example of what a variable, or user option, looks like in
-the customization buffer:
-</p>
-<div class="smallexample">
-<pre class="smallexample">[Hide] Kill Ring Max: 60
+  <p>Here is an example of what a variable, or user option, looks
+  like in the customization buffer:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+[Hide] Kill Ring Max: 60
    [State]: STANDARD.
    Maximum length of kill ring before oldest elements are thrown away.
-</pre></div>
+</pre>
+  </div>
 
-<p>The first line shows that the variable is named
-<code>kill-ring-max</code>, formatted as &lsquo;<samp>Kill Ring Max</samp>&rsquo; for easier
-viewing.  Its value is &lsquo;<samp>60</samp>&rsquo;.  The button labeled &lsquo;<samp>[Hide]</samp>&rsquo;,
-if activated, hides the variable&rsquo;s value and state; this is useful to
-avoid cluttering up the customization buffer with very long values
-(for this reason, variables that have very long values may start out
-hidden).  If you use the &lsquo;<samp>[Hide]</samp>&rsquo; button, it changes to
-&lsquo;<samp>[Show Value]</samp>&rsquo;, which you can activate to reveal the value and
-state.  On a graphical display, the &lsquo;<samp>[Hide]</samp>&rsquo; and &lsquo;<samp>[Show
-Value]</samp>&rsquo; buttons are replaced with graphical triangles pointing
-downwards and rightwards respectively.
-</p>
-<p>The line after the variable name indicates the <em>customization
-state</em> of the variable: in this example, &lsquo;<samp>STANDARD</samp>&rsquo; means you
-have not changed the variable, so its value is the default one.  The
-&lsquo;<samp>[State]</samp>&rsquo; button gives a menu of operations for customizing the
-variable.
-</p>
-<p>Below the customization state is the documentation for the variable.
-This is the same documentation that would be shown by the <kbd>C-h v</kbd>
-command (see <a href="Examining.html#Examining">Examining</a>).  If the documentation is more than one
-line long, only one line may be shown.  If so, that line ends with a
-&lsquo;<samp>[More]</samp>&rsquo; button; activate this to see the full documentation.
-</p>
-<a name="index-user-options_002c-changing"></a>
-<a name="index-customizing-variables"></a>
-<a name="index-variables_002c-changing"></a>
-<p>To enter a new value for &lsquo;<samp>Kill Ring Max</samp>&rsquo;, just move point to
-the value and edit it.  For example, type <kbd>M-d</kbd> to delete the
-&lsquo;<samp>60</samp>&rsquo; and type in another number.  As you begin to alter the text,
-the &lsquo;<samp>[State]</samp>&rsquo; line will change:
-</p>
-<div class="smallexample">
-<pre class="smallexample">[State]: EDITED, shown value does not take effect until you
+  <p>The first line shows that the variable is named
+  <code>kill-ring-max</code>, formatted as &lsquo;<samp>Kill Ring
+  Max</samp>&rsquo; for easier viewing. Its value is
+  &lsquo;<samp>60</samp>&rsquo;. The button labeled
+  &lsquo;<samp>[Hide]</samp>&rsquo;, if activated, hides the
+  variable&rsquo;s value and state; this is useful to avoid
+  cluttering up the customization buffer with very long values (for
+  this reason, variables that have very long values may start out
+  hidden). If you use the &lsquo;<samp>[Hide]</samp>&rsquo; button,
+  it changes to &lsquo;<samp>[Show Value]</samp>&rsquo;, which you
+  can activate to reveal the value and state. On a graphical
+  display, the &lsquo;<samp>[Hide]</samp>&rsquo; and
+  &lsquo;<samp>[Show Value]</samp>&rsquo; buttons are replaced with
+  graphical triangles pointing downwards and rightwards
+  respectively.</p>
+
+  <p>The line after the variable name indicates the
+  <em>customization state</em> of the variable: in this example,
+  &lsquo;<samp>STANDARD</samp>&rsquo; means you have not changed
+  the variable, so its value is the default one. The
+  &lsquo;<samp>[State]</samp>&rsquo; button gives a menu of
+  operations for customizing the variable.</p>
+
+  <p>Below the customization state is the documentation for the
+  variable. This is the same documentation that would be shown by
+  the <kbd>C-h v</kbd> command (see <a href=
+  "Examining.html#Examining">Examining</a>). If the documentation
+  is more than one line long, only one line may be shown. If so,
+  that line ends with a &lsquo;<samp>[More]</samp>&rsquo; button;
+  activate this to see the full documentation.</p><a name=
+  "index-user-options_002c-changing" id=
+  "index-user-options_002c-changing"></a> <a name=
+  "index-customizing-variables" id=
+  "index-customizing-variables"></a> <a name=
+  "index-variables_002c-changing" id=
+  "index-variables_002c-changing"></a>
+
+  <p>To enter a new value for &lsquo;<samp>Kill Ring
+  Max</samp>&rsquo;, just move point to the value and edit it. For
+  example, type <kbd>M-d</kbd> to delete the
+  &lsquo;<samp>60</samp>&rsquo; and type in another number. As you
+  begin to alter the text, the &lsquo;<samp>[State]</samp>&rsquo;
+  line will change:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+[State]: EDITED, shown value does not take effect until you
          set or save it.
-</pre></div>
+</pre>
+  </div>
 
-<p>Editing the value does not make it take effect right away.  To do
-that, you must <em>set</em> the variable by activating the &lsquo;<samp>[State]</samp>&rsquo;
-button and choosing &lsquo;<samp>Set for Current Session</samp>&rsquo;.  Then the
-variable&rsquo;s state becomes:
-</p>
-<div class="smallexample">
-<pre class="smallexample">[State]: SET for current session only.
-</pre></div>
+  <p>Editing the value does not make it take effect right away. To
+  do that, you must <em>set</em> the variable by activating the
+  &lsquo;<samp>[State]</samp>&rsquo; button and choosing
+  &lsquo;<samp>Set for Current Session</samp>&rsquo;. Then the
+  variable&rsquo;s state becomes:</p>
 
-<p>You don&rsquo;t have to worry about specifying a value that is not valid;
-the &lsquo;<samp>Set for Current Session</samp>&rsquo; operation checks for validity and
-will not install an unacceptable value.
-</p>
-<a name="index-M_002dTAB-_0028customization-buffer_0029"></a>
-<a name="index-C_002dM_002di-_0028customization-buffer_0029"></a>
-<a name="index-widget_002dcomplete"></a>
-<p>While editing certain kinds of values, such as file names, directory
-names, and Emacs command names, you can perform completion with
-<kbd>C-M-i</kbd> (<code>widget-complete</code>), or the equivalent keys
-<kbd>M-<span class="key">TAB</span></kbd> or <kbd><span class="key">ESC</span> <span class="key">TAB</span></kbd>.  This behaves much
-like minibuffer completion (see <a href="Completion.html#Completion">Completion</a>).
-</p>
-<p>Typing <tt class="key">RET</tt> on an editable value field moves point forward to
-the next field or button, like <tt class="key">TAB</tt>.  You can thus type <tt class="key">RET</tt>
-when you are finished editing a field, to move on to the next button
-or field.  To insert a newline within an editable field, use <kbd>C-o</kbd>
-or <kbd>C-q C-j</kbd>.
-</p>
-<p>For some variables, there is only a fixed set of legitimate values,
-and you are not allowed to edit the value directly.  Instead, a
-&lsquo;<samp>[Value Menu]</samp>&rsquo; button appears before the value; activating this
-button presents a choice of values.  For a boolean &ldquo;on or off&rdquo;
-value, the button says &lsquo;<samp>[Toggle]</samp>&rsquo;, and flips the value.  After
-using the &lsquo;<samp>[Value Menu]</samp>&rsquo; or &lsquo;<samp>[Toggle]</samp>&rsquo; button, you must
-again set the variable to make the chosen value take effect.
-</p>
-<p>Some variables have values with complex structure.  For example, the
-value of <code>minibuffer-frame-alist</code> is an association list.  Here
-is how it appears in the customization buffer:
-</p>
-<div class="smallexample">
-<pre class="smallexample">[Hide] Minibuffer Frame Alist:
+  <div class="smallexample">
+    <pre class="smallexample">
+[State]: SET for current session only.
+</pre>
+  </div>
+
+  <p>You don&rsquo;t have to worry about specifying a value that is
+  not valid; the &lsquo;<samp>Set for Current Session</samp>&rsquo;
+  operation checks for validity and will not install an
+  unacceptable value.</p><a name=
+  "index-M_002dTAB-_0028customization-buffer_0029" id=
+  "index-M_002dTAB-_0028customization-buffer_0029"></a> <a name=
+  "index-C_002dM_002di-_0028customization-buffer_0029" id=
+  "index-C_002dM_002di-_0028customization-buffer_0029"></a>
+  <a name="index-widget_002dcomplete" id=
+  "index-widget_002dcomplete"></a>
+
+  <p>While editing certain kinds of values, such as file names,
+  directory names, and Emacs command names, you can perform
+  completion with <kbd>C-M-i</kbd> (<code>widget-complete</code>),
+  or the equivalent keys <kbd>M-<span class="key">TAB</span></kbd>
+  or <kbd><span class="key">ESC</span> <span class=
+  "key">TAB</span></kbd>. This behaves much like minibuffer
+  completion (see <a href=
+  "Completion.html#Completion">Completion</a>).</p>
+
+  <p>Typing <tt class="key">RET</tt> on an editable value field
+  moves point forward to the next field or button, like <tt class=
+  "key">TAB</tt>. You can thus type <tt class="key">RET</tt> when
+  you are finished editing a field, to move on to the next button
+  or field. To insert a newline within an editable field, use
+  <kbd>C-o</kbd> or <kbd>C-q C-j</kbd>.</p>
+
+  <p>For some variables, there is only a fixed set of legitimate
+  values, and you are not allowed to edit the value directly.
+  Instead, a &lsquo;<samp>[Value Menu]</samp>&rsquo; button appears
+  before the value; activating this button presents a choice of
+  values. For a boolean &ldquo;on or off&rdquo; value, the button
+  says &lsquo;<samp>[Toggle]</samp>&rsquo;, and flips the value.
+  After using the &lsquo;<samp>[Value Menu]</samp>&rsquo; or
+  &lsquo;<samp>[Toggle]</samp>&rsquo; button, you must again set
+  the variable to make the chosen value take effect.</p>
+
+  <p>Some variables have values with complex structure. For
+  example, the value of <code>minibuffer-frame-alist</code> is an
+  association list. Here is how it appears in the customization
+  buffer:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+[Hide] Minibuffer Frame Alist:
 [INS] [DEL] Parameter: width
             Value: 80
 [INS] [DEL] Parameter: height
@@ -170,90 +236,125 @@ is how it appears in the customization buffer:
 [INS]
    [ State ]: STANDARD.
    Alist of parameters for the initial minibuffer frame. [Hide]
-   <span class="roman">[&hellip;more lines of documentation&hellip;]</span>
-</pre></div>
+   <span class=
+"roman">[&hellip;more lines of documentation&hellip;]</span>
+</pre>
+  </div>
 
-<p>In this case, each association in the list consists of two items, one
-labeled &lsquo;<samp>Parameter</samp>&rsquo; and one labeled &lsquo;<samp>Value</samp>&rsquo;; both are
-editable fields.  You can delete an association from the list with the
-&lsquo;<samp>[DEL]</samp>&rsquo; button next to it.  To add an association, use the
-&lsquo;<samp>[INS]</samp>&rsquo; button at the position where you want to insert it; the
-very last &lsquo;<samp>[INS]</samp>&rsquo; button inserts at the end of the list.
-</p>
-<a name="index-saving-a-setting"></a>
-<a name="index-settings_002c-how-to-save"></a>
-<p>When you set a variable, the new value takes effect only in the
-current Emacs session.  To <em>save</em> the value for future sessions,
-use the &lsquo;<samp>[State]</samp>&rsquo; button and select the &lsquo;<samp>Save for Future
-Sessions</samp>&rsquo; operation.  See <a href="Saving-Customizations.html#Saving-Customizations">Saving Customizations</a>.
-</p>
-<p>You can also restore the variable to its standard value by using the
-&lsquo;<samp>[State]</samp>&rsquo; button and selecting the &lsquo;<samp>Erase Customization</samp>&rsquo;
-operation.  There are actually four reset operations:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>Undo Edits</samp>&rsquo;</dt>
-<dd><p>If you have modified but not yet set the variable, this restores the
-text in the customization buffer to match the actual value.
-</p>
-</dd>
-<dt>&lsquo;<samp>Reset to Saved</samp>&rsquo;</dt>
-<dd><p>This restores the value of the variable to the last saved value,
-and updates the text accordingly.
-</p>
-</dd>
-<dt>&lsquo;<samp>Erase Customization</samp>&rsquo;</dt>
-<dd><p>This sets the variable to its standard value.  Any saved value that
-you have is also eliminated.
-</p>
-</dd>
-<dt>&lsquo;<samp>Set to Backup Value</samp>&rsquo;</dt>
-<dd><p>This sets the variable to a previous value that was set in the
-customization buffer in this session.  If you customize a variable
-and then reset it, which discards the customized value,
-you can get the discarded value back again with this operation.
-</p></dd>
-</dl>
+  <p>In this case, each association in the list consists of two
+  items, one labeled &lsquo;<samp>Parameter</samp>&rsquo; and one
+  labeled &lsquo;<samp>Value</samp>&rsquo;; both are editable
+  fields. You can delete an association from the list with the
+  &lsquo;<samp>[DEL]</samp>&rsquo; button next to it. To add an
+  association, use the &lsquo;<samp>[INS]</samp>&rsquo; button at
+  the position where you want to insert it; the very last
+  &lsquo;<samp>[INS]</samp>&rsquo; button inserts at the end of the
+  list.</p><a name="index-saving-a-setting" id=
+  "index-saving-a-setting"></a> <a name=
+  "index-settings_002c-how-to-save" id=
+  "index-settings_002c-how-to-save"></a>
 
-<a name="index-comments-on-customized-settings"></a>
-<p>Sometimes it is useful to record a comment about a specific
-customization.  Use the &lsquo;<samp>Add Comment</samp>&rsquo; item from the
-&lsquo;<samp>[State]</samp>&rsquo; menu to create a field for entering the comment.
-</p>
-<p>Near the top of the customization buffer are two lines of buttons:
-</p>
-<div class="smallexample">
-<pre class="smallexample"> [Set for Current Session] [Save for Future Sessions]
+  <p>When you set a variable, the new value takes effect only in
+  the current Emacs session. To <em>save</em> the value for future
+  sessions, use the &lsquo;<samp>[State]</samp>&rsquo; button and
+  select the &lsquo;<samp>Save for Future Sessions</samp>&rsquo;
+  operation. See <a href=
+  "Saving-Customizations.html#Saving-Customizations">Saving
+  Customizations</a>.</p>
+
+  <p>You can also restore the variable to its standard value by
+  using the &lsquo;<samp>[State]</samp>&rsquo; button and selecting
+  the &lsquo;<samp>Erase Customization</samp>&rsquo; operation.
+  There are actually four reset operations:</p>
+
+  <dl compact="compact">
+    <dt>&lsquo;<samp>Undo Edits</samp>&rsquo;</dt>
+
+    <dd>
+      <p>If you have modified but not yet set the variable, this
+      restores the text in the customization buffer to match the
+      actual value.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>Reset to Saved</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This restores the value of the variable to the last saved
+      value, and updates the text accordingly.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>Erase Customization</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This sets the variable to its standard value. Any saved
+      value that you have is also eliminated.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>Set to Backup Value</samp>&rsquo;</dt>
+
+    <dd>
+      <p>This sets the variable to a previous value that was set in
+      the customization buffer in this session. If you customize a
+      variable and then reset it, which discards the customized
+      value, you can get the discarded value back again with this
+      operation.</p>
+    </dd>
+  </dl><a name="index-comments-on-customized-settings" id=
+  "index-comments-on-customized-settings"></a>
+
+  <p>Sometimes it is useful to record a comment about a specific
+  customization. Use the &lsquo;<samp>Add Comment</samp>&rsquo;
+  item from the &lsquo;<samp>[State]</samp>&rsquo; menu to create a
+  field for entering the comment.</p>
+
+  <p>Near the top of the customization buffer are two lines of
+  buttons:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+ [Set for Current Session] [Save for Future Sessions]
  [Undo Edits] [Reset to Saved] [Erase Customization]   [Exit]
-</pre></div>
+</pre>
+  </div>
 
-<p>Each of the first five buttons performs the stated operation&mdash;set,
-save, reset, etc.&mdash;on all the settings in the buffer that could
-meaningfully be affected.  They do not operate on settings that are
-hidden, nor on subgroups that are hidden or not visible in the buffer.
-</p>
-<a name="index-C_002dc-C_002dc-_0028customization-buffer_0029"></a>
-<a name="index-C_002dx-C_002dc-_0028customization-buffer_0029"></a>
-<a name="index-Custom_002dset"></a>
-<a name="index-Custom_002dsave"></a>
-<p>The command <kbd>C-c C-c</kbd> (<code>Custom-set</code>) is equivalent to using
-the &lsquo;<samp>[Set for Current Session]</samp>&rsquo; button.  The command <kbd>C-x
-C-s</kbd> (<code>Custom-save</code>) is like using the &lsquo;<samp>[Save for Future
-Sessions]</samp>&rsquo; button.
-</p>
-<a name="index-custom_002dbuffer_002ddone_002dkill"></a>
-<p>The &lsquo;<samp>[Exit]</samp>&rsquo; button switches out of the customization buffer,
-and buries the buffer at the bottom of the buffer list.  To make it
-kill the customization buffer instead, change the variable
-<code>custom-buffer-done-kill</code> to <code>t</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Saving-Customizations.html#Saving-Customizations" accesskey="n" rel="next">Saving Customizations</a>, Previous: <a href="Browsing-Custom.html#Browsing-Custom" accesskey="p" rel="prev">Browsing Custom</a>, Up: <a href="Easy-Customization.html#Easy-Customization" accesskey="u" rel="up">Easy Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Each of the first five buttons performs the stated
+  operation&mdash;set, save, reset, etc.&mdash;on all the settings
+  in the buffer that could meaningfully be affected. They do not
+  operate on settings that are hidden, nor on subgroups that are
+  hidden or not visible in the buffer.</p><a name=
+  "index-C_002dc-C_002dc-_0028customization-buffer_0029" id=
+  "index-C_002dc-C_002dc-_0028customization-buffer_0029"></a>
+  <a name="index-C_002dx-C_002dc-_0028customization-buffer_0029"
+  id="index-C_002dx-C_002dc-_0028customization-buffer_0029"></a>
+  <a name="index-Custom_002dset" id="index-Custom_002dset"></a>
+  <a name="index-Custom_002dsave" id="index-Custom_002dsave"></a>
 
+  <p>The command <kbd>C-c C-c</kbd> (<code>Custom-set</code>) is
+  equivalent to using the &lsquo;<samp>[Set for Current
+  Session]</samp>&rsquo; button. The command <kbd>C-x C-s</kbd>
+  (<code>Custom-save</code>) is like using the &lsquo;<samp>[Save
+  for Future Sessions]</samp>&rsquo; button.</p><a name=
+  "index-custom_002dbuffer_002ddone_002dkill" id=
+  "index-custom_002dbuffer_002ddone_002dkill"></a>
 
+  <p>The &lsquo;<samp>[Exit]</samp>&rsquo; button switches out of
+  the customization buffer, and buries the buffer at the bottom of
+  the buffer list. To make it kill the customization buffer
+  instead, change the variable <code>custom-buffer-done-kill</code>
+  to <code>t</code>.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href=
+    "Saving-Customizations.html#Saving-Customizations" accesskey=
+    "n" rel="next">Saving Customizations</a>, Previous: <a href=
+    "Browsing-Custom.html#Browsing-Custom" accesskey="p" rel=
+    "prev">Browsing Custom</a>, Up: <a href=
+    "Easy-Customization.html#Easy-Customization" accesskey="u" rel=
+    "up">Easy Customization</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

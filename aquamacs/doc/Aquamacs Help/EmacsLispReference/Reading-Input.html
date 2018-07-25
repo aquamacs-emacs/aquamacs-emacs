@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,92 +19,175 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Reading Input</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Reading Input">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Reading Input">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Key-Sequence-Input.html#Key-Sequence-Input" rel="next" title="Key Sequence Input">
-<link href="Strings-of-Events.html#Strings-of-Events" rel="prev" title="Strings of Events">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Reading Input</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Reading Input" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Reading Input" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Key-Sequence-Input.html#Key-Sequence-Input" rel=
+  "next" title="Key Sequence Input" />
+  <link href="Strings-of-Events.html#Strings-of-Events" rel="prev"
+  title="Strings of Events" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Reading-Input" id="Reading-Input"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Special-Events.html#Special-Events"
+    accesskey="n" rel="next">Special Events</a>, Previous: <a href=
+    "Input-Events.html#Input-Events" accesskey="p" rel="prev">Input
+    Events</a>, Up: <a href="Command-Loop.html#Command-Loop"
+    accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Reading-Input-1" id="Reading-Input-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Reading-Input"></a>
-<div class="header">
-<p>
-Next: <a href="Special-Events.html#Special-Events" accesskey="n" rel="next">Special Events</a>, Previous: <a href="Input-Events.html#Input-Events" accesskey="p" rel="prev">Input Events</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Reading-Input-1"></a>
-<h3 class="section">20.8 Reading Input</h3>
-<a name="index-read-input"></a>
-<a name="index-keyboard-input"></a>
+  <h3 class="section">20.8 Reading Input</h3><a name=
+  "index-read-input" id="index-read-input"></a> <a name=
+  "index-keyboard-input" id="index-keyboard-input"></a>
 
-<p>The editor command loop reads key sequences using the function
-<code>read-key-sequence</code>, which uses <code>read-event</code>.  These and other
-functions for event input are also available for use in Lisp programs.
-See also <code>momentary-string-display</code> in <a href="Temporary-Displays.html#Temporary-Displays">Temporary Displays</a>,
-and <code>sit-for</code> in <a href="Waiting.html#Waiting">Waiting</a>.  See <a href="Terminal-Input.html#Terminal-Input">Terminal Input</a>, for
-functions and variables for controlling terminal input modes and
-debugging terminal input.
-</p>
-<p>For higher-level input facilities, see <a href="Minibuffers.html#Minibuffers">Minibuffers</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Key-Sequence-Input.html#Key-Sequence-Input" accesskey="1">Key Sequence Input</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to read one key sequence.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Reading-One-Event.html#Reading-One-Event" accesskey="2">Reading One Event</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to read just one event.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Event-Mod.html#Event-Mod" accesskey="3">Event Mod</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Emacs modifies events as they are read.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Invoking-the-Input-Method.html#Invoking-the-Input-Method" accesskey="4">Invoking the Input Method</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How reading an event uses the input method.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Quoted-Character-Input.html#Quoted-Character-Input" accesskey="5">Quoted Character Input</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Asking the user to specify a character.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Event-Input-Misc.html#Event-Input-Misc" accesskey="6">Event Input Misc</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to reread or throw away input events.
-</td></tr>
-</table>
+  <p>The editor command loop reads key sequences using the function
+  <code>read-key-sequence</code>, which uses
+  <code>read-event</code>. These and other functions for event
+  input are also available for use in Lisp programs. See also
+  <code>momentary-string-display</code> in <a href=
+  "Temporary-Displays.html#Temporary-Displays">Temporary
+  Displays</a>, and <code>sit-for</code> in <a href=
+  "Waiting.html#Waiting">Waiting</a>. See <a href=
+  "Terminal-Input.html#Terminal-Input">Terminal Input</a>, for
+  functions and variables for controlling terminal input modes and
+  debugging terminal input.</p>
 
+  <p>For higher-level input facilities, see <a href=
+  "Minibuffers.html#Minibuffers">Minibuffers</a>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Key-Sequence-Input.html#Key-Sequence-Input" accesskey=
+      "1">Key Sequence Input</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">How to read one key
+      sequence.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Reading-One-Event.html#Reading-One-Event" accesskey=
+      "2">Reading One Event</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to read just one
+      event.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Event-Mod.html#Event-Mod" accesskey="3">Event Mod</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How Emacs modifies events as
+      they are read.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Invoking-the-Input-Method.html#Invoking-the-Input-Method"
+      accesskey="4">Invoking the Input Method</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How reading an event uses the
+      input method.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Quoted-Character-Input.html#Quoted-Character-Input"
+      accesskey="5">Quoted Character Input</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Asking the user to specify a
+      character.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Event-Input-Misc.html#Event-Input-Misc" accesskey="6">Event
+      Input Misc</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to reread or throw away
+      input events.</td>
+    </tr>
+  </table>
 </body>
 </html>

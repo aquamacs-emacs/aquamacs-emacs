@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,134 +16,217 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: CC Hooks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: CC Hooks">
-<meta name="keywords" content="CC Mode Manual: CC Hooks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Config-Basics.html#Config-Basics" rel="up" title="Config Basics">
-<link href="Style-Variables.html#Style-Variables" rel="next" title="Style Variables">
-<link href="Config-Basics.html#Config-Basics" rel="prev" title="Config Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: CC Hooks</title>
+  <meta name="description" content="CC Mode Manual: CC Hooks" />
+  <meta name="keywords" content="CC Mode Manual: CC Hooks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Config-Basics.html#Config-Basics" rel="up" title=
+  "Config Basics" />
+  <link href="Style-Variables.html#Style-Variables" rel="next"
+  title="Style Variables" />
+  <link href="Config-Basics.html#Config-Basics" rel="prev" title=
+  "Config Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="CC-Hooks"></a>
-<div class="header">
-<p>
-Next: <a href="Style-Variables.html#Style-Variables" accesskey="n" rel="next">Style Variables</a>, Previous: <a href="Config-Basics.html#Config-Basics" accesskey="p" rel="prev">Config Basics</a>, Up: <a href="Config-Basics.html#Config-Basics" accesskey="u" rel="up">Config Basics</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Hooks"></a>
-<h3 class="section">6.1 Hooks</h3>
-<a name="index-mode-hooks"></a>
+<body lang="en" xml:lang="en">
+  <a name="CC-Hooks" id="CC-Hooks"></a>
 
-<p>CC Mode provides several hooks that you can use to customize the
-mode for your coding style.  The main hook is
-<code>c-mode-common-hook</code>; typically, you&rsquo;ll put the bulk of your
-customizations here.  In addition, each language mode has its own
-hook, allowing you to fine tune your settings individually for the
-different CC Mode languages, and there is a package initialization
-hook.  Finally, there is <code>c-special-indent-hook</code>, which enables
-you to solve anomalous indentation problems.  It is described in
-<a href="Other-Indentation.html#Other-Indentation">Other Indentation</a>, not here.  All these hooks adhere to the
-standard Emacs conventions.
-</p>
-<p>When you open a buffer, CC Mode first initializes it with the
-currently active style (see <a href="Styles.html#Styles">Styles</a>).  Then it calls
-<code>c-mode-common-hook</code>, and finally it calls the language-specific
-hook.  Thus, any style settings done in these hooks will override
-those set by <code>c-default-style</code>.
-</p>
-<dl>
-<dt><a name="index-c_002dinitialization_002dhook"></a>Variable: <strong>c-initialization-hook</strong></dt>
-<dd><a name="index-initialization_002dhook-_0028c_002d_0029"></a>
-<p>Hook run only once per Emacs session, when CC Mode is initialized.
-This is a good place to change key bindings (or add new ones) in any
-of the CC Mode key maps.  See <a href="Sample-Init-File.html#Sample-Init-File">Sample Init File</a>.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Style-Variables.html#Style-Variables"
+    accesskey="n" rel="next">Style Variables</a>, Previous:
+    <a href="Config-Basics.html#Config-Basics" accesskey="p" rel=
+    "prev">Config Basics</a>, Up: <a href=
+    "Config-Basics.html#Config-Basics" accesskey="u" rel=
+    "up">Config Basics</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Hooks" id="Hooks"></a>
 
-<dl>
-<dt><a name="index-c_002dmode_002dcommon_002dhook"></a>Variable: <strong>c-mode-common-hook</strong></dt>
-<dd><a name="index-mode_002dcommon_002dhook-_0028c_002d_0029"></a>
-<p>Common hook across all languages.  It&rsquo;s run immediately before the
-language specific hook.
-</p></dd></dl>
+  <h3 class="section">6.1 Hooks</h3><a name="index-mode-hooks" id=
+  "index-mode-hooks"></a>
 
-<dl>
-<dt><a name="index-c_002dmode_002dhook"></a>Variable: <strong>c-mode-hook</strong></dt>
-<dt><a name="index-c_002b_002b_002dmode_002dhook"></a>Variable: <strong>c++-mode-hook</strong></dt>
-<dt><a name="index-objc_002dmode_002dhook"></a>Variable: <strong>objc-mode-hook</strong></dt>
-<dt><a name="index-java_002dmode_002dhook"></a>Variable: <strong>java-mode-hook</strong></dt>
-<dt><a name="index-idl_002dmode_002dhook"></a>Variable: <strong>idl-mode-hook</strong></dt>
-<dt><a name="index-pike_002dmode_002dhook"></a>Variable: <strong>pike-mode-hook</strong></dt>
-<dt><a name="index-awk_002dmode_002dhook"></a>Variable: <strong>awk-mode-hook</strong></dt>
-<dd><p>The language specific mode hooks.  The appropriate one is run as the
-last thing when you enter that language mode.
-</p></dd></dl>
+  <p>CC Mode provides several hooks that you can use to customize
+  the mode for your coding style. The main hook is
+  <code>c-mode-common-hook</code>; typically, you&rsquo;ll put the
+  bulk of your customizations here. In addition, each language mode
+  has its own hook, allowing you to fine tune your settings
+  individually for the different CC Mode languages, and there is a
+  package initialization hook. Finally, there is
+  <code>c-special-indent-hook</code>, which enables you to solve
+  anomalous indentation problems. It is described in <a href=
+  "Other-Indentation.html#Other-Indentation">Other Indentation</a>,
+  not here. All these hooks adhere to the standard Emacs
+  conventions.</p>
 
-<p>Although these hooks are variables defined in CC Mode, you can give
-them values before CC Mode&rsquo;s code is loaded&mdash;indeed, this is the
-only way to use <code>c-initialization-hook</code>.  Their values aren&rsquo;t
-overwritten when CC Mode gets loaded.
-</p>
-<p>Here&rsquo;s a simplified example of what you can add to your <samp>.emacs</samp>
-file to do things whenever any CC Mode language is edited.  See the
-Emacs manuals for more information on customizing Emacs via hooks.
-See <a href="Sample-Init-File.html#Sample-Init-File">Sample Init File</a>, for a more complete sample <samp>.emacs</samp>
-file.
-</p>
-<div class="example">
-<pre class="example">(defun my-c-mode-common-hook ()
+  <p>When you open a buffer, CC Mode first initializes it with the
+  currently active style (see <a href=
+  "Styles.html#Styles">Styles</a>). Then it calls
+  <code>c-mode-common-hook</code>, and finally it calls the
+  language-specific hook. Thus, any style settings done in these
+  hooks will override those set by
+  <code>c-default-style</code>.</p>
+
+  <dl>
+    <dt><a name="index-c_002dinitialization_002dhook" id=
+    "index-c_002dinitialization_002dhook"></a>Variable:
+    <strong>c-initialization-hook</strong></dt>
+
+    <dd>
+      <a name="index-initialization_002dhook-_0028c_002d_0029" id=
+      "index-initialization_002dhook-_0028c_002d_0029"></a>
+
+      <p>Hook run only once per Emacs session, when CC Mode is
+      initialized. This is a good place to change key bindings (or
+      add new ones) in any of the CC Mode key maps. See <a href=
+      "Sample-Init-File.html#Sample-Init-File">Sample Init
+      File</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-c_002dmode_002dcommon_002dhook" id=
+    "index-c_002dmode_002dcommon_002dhook"></a>Variable:
+    <strong>c-mode-common-hook</strong></dt>
+
+    <dd>
+      <a name="index-mode_002dcommon_002dhook-_0028c_002d_0029" id=
+      "index-mode_002dcommon_002dhook-_0028c_002d_0029"></a>
+
+      <p>Common hook across all languages. It&rsquo;s run
+      immediately before the language specific hook.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-c_002dmode_002dhook" id=
+    "index-c_002dmode_002dhook"></a>Variable:
+    <strong>c-mode-hook</strong></dt>
+
+    <dt><a name="index-c_002b_002b_002dmode_002dhook" id=
+    "index-c_002b_002b_002dmode_002dhook"></a>Variable:
+    <strong>c++-mode-hook</strong></dt>
+
+    <dt><a name="index-objc_002dmode_002dhook" id=
+    "index-objc_002dmode_002dhook"></a>Variable:
+    <strong>objc-mode-hook</strong></dt>
+
+    <dt><a name="index-java_002dmode_002dhook" id=
+    "index-java_002dmode_002dhook"></a>Variable:
+    <strong>java-mode-hook</strong></dt>
+
+    <dt><a name="index-idl_002dmode_002dhook" id=
+    "index-idl_002dmode_002dhook"></a>Variable:
+    <strong>idl-mode-hook</strong></dt>
+
+    <dt><a name="index-pike_002dmode_002dhook" id=
+    "index-pike_002dmode_002dhook"></a>Variable:
+    <strong>pike-mode-hook</strong></dt>
+
+    <dt><a name="index-awk_002dmode_002dhook" id=
+    "index-awk_002dmode_002dhook"></a>Variable:
+    <strong>awk-mode-hook</strong></dt>
+
+    <dd>
+      <p>The language specific mode hooks. The appropriate one is
+      run as the last thing when you enter that language mode.</p>
+    </dd>
+  </dl>
+
+  <p>Although these hooks are variables defined in CC Mode, you can
+  give them values before CC Mode&rsquo;s code is
+  loaded&mdash;indeed, this is the only way to use
+  <code>c-initialization-hook</code>. Their values aren&rsquo;t
+  overwritten when CC Mode gets loaded.</p>
+
+  <p>Here&rsquo;s a simplified example of what you can add to your
+  <samp>.emacs</samp> file to do things whenever any CC Mode
+  language is edited. See the Emacs manuals for more information on
+  customizing Emacs via hooks. See <a href=
+  "Sample-Init-File.html#Sample-Init-File">Sample Init File</a>,
+  for a more complete sample <samp>.emacs</samp> file.</p>
+
+  <div class="example">
+    <pre class="example">
+(defun my-c-mode-common-hook ()
   ;; my customizations for all of c-mode and related modes
   (no-case-fold-search)
   )
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Style-Variables.html#Style-Variables" accesskey="n" rel="next">Style Variables</a>, Previous: <a href="Config-Basics.html#Config-Basics" accesskey="p" rel="prev">Config Basics</a>, Up: <a href="Config-Basics.html#Config-Basics" accesskey="u" rel="up">Config Basics</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Style-Variables.html#Style-Variables"
+    accesskey="n" rel="next">Style Variables</a>, Previous:
+    <a href="Config-Basics.html#Config-Basics" accesskey="p" rel=
+    "prev">Config Basics</a>, Up: <a href=
+    "Config-Basics.html#Config-Basics" accesskey="u" rel=
+    "up">Config Basics</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

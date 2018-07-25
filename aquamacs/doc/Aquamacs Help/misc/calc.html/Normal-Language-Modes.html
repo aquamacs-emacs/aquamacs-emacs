@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,166 +18,226 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Normal Language Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Normal Language Modes">
-<meta name="keywords" content="GNU Emacs Calc Manual: Normal Language Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Language-Modes.html#Language-Modes" rel="up" title="Language Modes">
-<link href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal" rel="next" title="C FORTRAN Pascal">
-<link href="Language-Modes.html#Language-Modes" rel="prev" title="Language Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Normal Language Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Normal Language Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Normal Language Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Language-Modes.html#Language-Modes" rel="up" title=
+  "Language Modes" />
+  <link href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal" rel="next"
+  title="C FORTRAN Pascal" />
+  <link href="Language-Modes.html#Language-Modes" rel="prev" title=
+  "Language Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Normal-Language-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal" accesskey="n" rel="next">C FORTRAN Pascal</a>, Previous: <a href="Language-Modes.html#Language-Modes" accesskey="p" rel="prev">Language Modes</a>, Up: <a href="Language-Modes.html#Language-Modes" accesskey="u" rel="up">Language Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Normal-Language-Modes-1"></a>
-<h4 class="subsection">6.8.1 Normal Language Modes</h4>
+<body lang="en" xml:lang="en">
+  <a name="Normal-Language-Modes" id="Normal-Language-Modes"></a>
 
-<a name="index-d-N"></a>
-<a name="index-calc_002dnormal_002dlanguage"></a>
-<p>The <kbd>d N</kbd> (<code>calc-normal-language</code>) command selects the usual
-notation for Calc formulas, as described in the rest of this manual.
-Matrices are displayed in a multi-line tabular format, but all other
-objects are written in linear form, as they would be typed from the
-keyboard.
-</p>
-<a name="index-d-O"></a>
-<a name="index-calc_002dflat_002dlanguage"></a>
-<a name="index-Matrix-display"></a>
-<p>The <kbd>d O</kbd> (<code>calc-flat-language</code>) command selects a language
-identical with the normal one, except that matrices are written in
-one-line form along with everything else.  In some applications this
-form may be more suitable for yanking data into other buffers.
-</p>
-<a name="index-d-b"></a>
-<a name="index-calc_002dline_002dbreaking"></a>
-<a name="index-Line-breaking"></a>
-<a name="index-Breaking-up-long-lines"></a>
-<p>Even in one-line mode, long formulas or vectors will still be split
-across multiple lines if they exceed the width of the Calculator window.
-The <kbd>d b</kbd> (<code>calc-line-breaking</code>) command turns this line-breaking
-feature on and off.  (It works independently of the current language.)
-If you give a numeric prefix argument of five or greater to the <kbd>d b</kbd>
-command, that argument will specify the line width used when breaking
-long lines.
-</p>
-<a name="index-d-B"></a>
-<a name="index-calc_002dbig_002dlanguage"></a>
-<p>The <kbd>d B</kbd> (<code>calc-big-language</code>) command selects a language
-which uses textual approximations to various mathematical notations,
-such as powers, quotients, and square roots:
-</p>
-<div class="example">
-<pre class="example">  ____________
+  <div class="header">
+    <p>Next: <a href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal"
+    accesskey="n" rel="next">C FORTRAN Pascal</a>, Previous:
+    <a href="Language-Modes.html#Language-Modes" accesskey="p" rel=
+    "prev">Language Modes</a>, Up: <a href=
+    "Language-Modes.html#Language-Modes" accesskey="u" rel=
+    "up">Language Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Normal-Language-Modes-1" id=
+  "Normal-Language-Modes-1"></a>
+
+  <h4 class="subsection">6.8.1 Normal Language Modes</h4><a name=
+  "index-d-N" id="index-d-N"></a> <a name=
+  "index-calc_002dnormal_002dlanguage" id=
+  "index-calc_002dnormal_002dlanguage"></a>
+
+  <p>The <kbd>d N</kbd> (<code>calc-normal-language</code>) command
+  selects the usual notation for Calc formulas, as described in the
+  rest of this manual. Matrices are displayed in a multi-line
+  tabular format, but all other objects are written in linear form,
+  as they would be typed from the keyboard.</p><a name="index-d-O"
+  id="index-d-O"></a> <a name="index-calc_002dflat_002dlanguage"
+  id="index-calc_002dflat_002dlanguage"></a> <a name=
+  "index-Matrix-display" id="index-Matrix-display"></a>
+
+  <p>The <kbd>d O</kbd> (<code>calc-flat-language</code>) command
+  selects a language identical with the normal one, except that
+  matrices are written in one-line form along with everything else.
+  In some applications this form may be more suitable for yanking
+  data into other buffers.</p><a name="index-d-b" id=
+  "index-d-b"></a> <a name="index-calc_002dline_002dbreaking" id=
+  "index-calc_002dline_002dbreaking"></a> <a name=
+  "index-Line-breaking" id="index-Line-breaking"></a> <a name=
+  "index-Breaking-up-long-lines" id=
+  "index-Breaking-up-long-lines"></a>
+
+  <p>Even in one-line mode, long formulas or vectors will still be
+  split across multiple lines if they exceed the width of the
+  Calculator window. The <kbd>d b</kbd>
+  (<code>calc-line-breaking</code>) command turns this
+  line-breaking feature on and off. (It works independently of the
+  current language.) If you give a numeric prefix argument of five
+  or greater to the <kbd>d b</kbd> command, that argument will
+  specify the line width used when breaking long lines.</p><a name=
+  "index-d-B" id="index-d-B"></a> <a name=
+  "index-calc_002dbig_002dlanguage" id=
+  "index-calc_002dbig_002dlanguage"></a>
+
+  <p>The <kbd>d B</kbd> (<code>calc-big-language</code>) command
+  selects a language which uses textual approximations to various
+  mathematical notations, such as powers, quotients, and square
+  roots:</p>
+
+  <div class="example">
+    <pre class="example">
+  ____________
  | a + 1    2
  | ----- + c
 \|   b
-</pre></div>
+</pre>
+  </div>
 
-<p>in place of &lsquo;<samp>sqrt((a+1)/b + c^2)</samp>&rsquo;.
-</p>
-<p>Subscripts like &lsquo;<samp>a_i</samp>&rsquo; are displayed as actual subscripts in Big
-mode.  Double subscripts, &lsquo;<samp>a_i_j</samp>&rsquo; (&lsquo;<samp>subscr(subscr(a, i), j)</samp>&rsquo;)
-are displayed as &lsquo;<samp>a</samp>&rsquo; with subscripts separated by commas:
-&lsquo;<samp>i, j</samp>&rsquo;.  They must still be entered in the usual underscore
-notation.
-</p>
-<p>One slight ambiguity of Big notation is that
-</p>
-<div class="example">
-<pre class="example">  3
+  <p>in place of &lsquo;<samp>sqrt((a+1)/b +
+  c^2)</samp>&rsquo;.</p>
+
+  <p>Subscripts like &lsquo;<samp>a_i</samp>&rsquo; are displayed
+  as actual subscripts in Big mode. Double subscripts,
+  &lsquo;<samp>a_i_j</samp>&rsquo; (&lsquo;<samp>subscr(subscr(a,
+  i), j)</samp>&rsquo;) are displayed as
+  &lsquo;<samp>a</samp>&rsquo; with subscripts separated by commas:
+  &lsquo;<samp>i, j</samp>&rsquo;. They must still be entered in
+  the usual underscore notation.</p>
+
+  <p>One slight ambiguity of Big notation is that</p>
+
+  <div class="example">
+    <pre class="example">
+  3
 - -
   4
-</pre></div>
+</pre>
+  </div>
 
-<p>can represent either the negative rational number &lsquo;<samp>-3:4</samp>&rsquo;, or the
-actual expression &lsquo;<samp>-(3/4)</samp>&rsquo;; but the latter formula would normally
-never be displayed because it would immediately be evaluated to
-&lsquo;<samp>-3:4</samp>&rsquo; or &lsquo;<samp>-0.75</samp>&rsquo;, so this ambiguity is not a problem in
-typical use.
-</p>
-<p>Non-decimal numbers are displayed with subscripts.  Thus there is no
-way to tell the difference between &lsquo;<samp>16#C2</samp>&rsquo; and &lsquo;<samp>C2_16</samp>&rsquo;,
-though generally you will know which interpretation is correct.
-Logarithms &lsquo;<samp>log(x,b)</samp>&rsquo; and &lsquo;<samp>log10(x)</samp>&rsquo; also use subscripts
-in Big mode.
-</p>
-<p>In Big mode, stack entries often take up several lines.  To aid
-readability, stack entries are separated by a blank line in this mode.
-You may find it useful to expand the Calc window&rsquo;s height using
-<kbd>C-x ^</kbd> (<code>enlarge-window</code>) or to make the Calc window the only
-one on the screen with <kbd>C-x 1</kbd> (<code>delete-other-windows</code>).
-</p>
-<p>Long lines are currently not rearranged to fit the window width in
-Big mode, so you may need to use the <kbd>&lt;</kbd> and <kbd>&gt;</kbd> keys
-to scroll across a wide formula.  For really big formulas, you may
-even need to use <kbd>{</kbd> and <kbd>}</kbd> to scroll up and down.
-</p>
-<a name="index-d-U"></a>
-<a name="index-calc_002dunformatted_002dlanguage"></a>
-<p>The <kbd>d U</kbd> (<code>calc-unformatted-language</code>) command altogether disables
-the use of operator notation in formulas.  In this mode, the formula
-shown above would be displayed:
-</p>
-<div class="example">
-<pre class="example">sqrt(add(div(add(a, 1), b), pow(c, 2)))
-</pre></div>
+  <p>can represent either the negative rational number
+  &lsquo;<samp>-3:4</samp>&rsquo;, or the actual expression
+  &lsquo;<samp>-(3/4)</samp>&rsquo;; but the latter formula would
+  normally never be displayed because it would immediately be
+  evaluated to &lsquo;<samp>-3:4</samp>&rsquo; or
+  &lsquo;<samp>-0.75</samp>&rsquo;, so this ambiguity is not a
+  problem in typical use.</p>
 
-<p>These four modes differ only in display format, not in the format
-expected for algebraic entry.  The standard Calc operators work in
-all four modes, and unformatted notation works in any language mode
-(except that Mathematica mode expects square brackets instead of
-parentheses).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal" accesskey="n" rel="next">C FORTRAN Pascal</a>, Previous: <a href="Language-Modes.html#Language-Modes" accesskey="p" rel="prev">Language Modes</a>, Up: <a href="Language-Modes.html#Language-Modes" accesskey="u" rel="up">Language Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Non-decimal numbers are displayed with subscripts. Thus there
+  is no way to tell the difference between
+  &lsquo;<samp>16#C2</samp>&rsquo; and
+  &lsquo;<samp>C2_16</samp>&rsquo;, though generally you will know
+  which interpretation is correct. Logarithms
+  &lsquo;<samp>log(x,b)</samp>&rsquo; and
+  &lsquo;<samp>log10(x)</samp>&rsquo; also use subscripts in Big
+  mode.</p>
 
+  <p>In Big mode, stack entries often take up several lines. To aid
+  readability, stack entries are separated by a blank line in this
+  mode. You may find it useful to expand the Calc window&rsquo;s
+  height using <kbd>C-x ^</kbd> (<code>enlarge-window</code>) or to
+  make the Calc window the only one on the screen with <kbd>C-x
+  1</kbd> (<code>delete-other-windows</code>).</p>
 
+  <p>Long lines are currently not rearranged to fit the window
+  width in Big mode, so you may need to use the <kbd>&lt;</kbd> and
+  <kbd>&gt;</kbd> keys to scroll across a wide formula. For really
+  big formulas, you may even need to use <kbd>{</kbd> and
+  <kbd>}</kbd> to scroll up and down.</p><a name="index-d-U" id=
+  "index-d-U"></a> <a name=
+  "index-calc_002dunformatted_002dlanguage" id=
+  "index-calc_002dunformatted_002dlanguage"></a>
 
+  <p>The <kbd>d U</kbd> (<code>calc-unformatted-language</code>)
+  command altogether disables the use of operator notation in
+  formulas. In this mode, the formula shown above would be
+  displayed:</p>
+
+  <div class="example">
+    <pre class="example">
+sqrt(add(div(add(a, 1), b), pow(c, 2)))
+</pre>
+  </div>
+
+  <p>These four modes differ only in display format, not in the
+  format expected for algebraic entry. The standard Calc operators
+  work in all four modes, and unformatted notation works in any
+  language mode (except that Mathematica mode expects square
+  brackets instead of parentheses).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="C-FORTRAN-Pascal.html#C-FORTRAN-Pascal"
+    accesskey="n" rel="next">C FORTRAN Pascal</a>, Previous:
+    <a href="Language-Modes.html#Language-Modes" accesskey="p" rel=
+    "prev">Language Modes</a>, Up: <a href=
+    "Language-Modes.html#Language-Modes" accesskey="u" rel=
+    "up">Language Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,211 +19,319 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Interactive Call</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Interactive Call">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Interactive Call">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Distinguish-Interactive.html#Distinguish-Interactive" rel="next" title="Distinguish Interactive">
-<link href="Generic-Commands.html#Generic-Commands" rel="prev" title="Generic Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Interactive Call</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Interactive Call" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Interactive Call" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Distinguish-Interactive.html#Distinguish-Interactive"
+  rel="next" title="Distinguish Interactive" />
+  <link href="Generic-Commands.html#Generic-Commands" rel="prev"
+  title="Generic Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Interactive-Call" id="Interactive-Call"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Distinguish-Interactive.html#Distinguish-Interactive"
+    accesskey="n" rel="next">Distinguish Interactive</a>, Previous:
+    <a href="Defining-Commands.html#Defining-Commands" accesskey=
+    "p" rel="prev">Defining Commands</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Interactive-Call-1" id="Interactive-Call-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Interactive-Call"></a>
-<div class="header">
-<p>
-Next: <a href="Distinguish-Interactive.html#Distinguish-Interactive" accesskey="n" rel="next">Distinguish Interactive</a>, Previous: <a href="Defining-Commands.html#Defining-Commands" accesskey="p" rel="prev">Defining Commands</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Interactive-Call-1"></a>
-<h3 class="section">20.3 Interactive Call</h3>
-<a name="index-interactive-call"></a>
+  <h3 class="section">20.3 Interactive Call</h3><a name=
+  "index-interactive-call" id="index-interactive-call"></a>
 
-<p>After the command loop has translated a key sequence into a command,
-it invokes that command using the function <code>command-execute</code>.  If
-the command is a function, <code>command-execute</code> calls
-<code>call-interactively</code>, which reads the arguments and calls the
-command.  You can also call these functions yourself.
-</p>
-<p>Note that the term &ldquo;command&rdquo;, in this context, refers to an
-interactively callable function (or function-like object), or a
-keyboard macro.  It does not refer to the key sequence used to invoke
-a command (see <a href="Keymaps.html#Keymaps">Keymaps</a>).
-</p>
-<dl>
-<dt><a name="index-commandp"></a>Function: <strong>commandp</strong> <em>object &amp;optional for-call-interactively</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a command.
-Otherwise, it returns <code>nil</code>.
-</p>
-<p>Commands include strings and vectors (which are treated as keyboard
-macros), lambda expressions that contain a top-level
-<code>interactive</code> form (see <a href="Using-Interactive.html#Using-Interactive">Using Interactive</a>), byte-code
-function objects made from such lambda expressions, autoload objects
-that are declared as interactive (non-<code>nil</code> fourth argument to
-<code>autoload</code>), and some primitive functions.  Also, a symbol is
-considered a command if it has a non-<code>nil</code>
-<code>interactive-form</code> property, or if its function definition
-satisfies <code>commandp</code>.
-</p>
-<p>If <var>for-call-interactively</var> is non-<code>nil</code>, then
-<code>commandp</code> returns <code>t</code> only for objects that
-<code>call-interactively</code> could call&mdash;thus, not for keyboard macros.
-</p>
-<p>See <code>documentation</code> in <a href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>, for a
-realistic example of using <code>commandp</code>.
-</p></dd></dl>
+  <p>After the command loop has translated a key sequence into a
+  command, it invokes that command using the function
+  <code>command-execute</code>. If the command is a function,
+  <code>command-execute</code> calls
+  <code>call-interactively</code>, which reads the arguments and
+  calls the command. You can also call these functions
+  yourself.</p>
 
-<dl>
-<dt><a name="index-call_002dinteractively"></a>Function: <strong>call-interactively</strong> <em>command &amp;optional record-flag keys</em></dt>
-<dd><p>This function calls the interactively callable function <var>command</var>,
-providing arguments according to its interactive calling specifications.
-It returns whatever <var>command</var> returns.
-</p>
-<p>If, for instance, you have a function with the following signature:
-</p>
-<div class="example">
-<pre class="example">(defun foo (begin end)
-  (interactive &quot;r&quot;)
+  <p>Note that the term &ldquo;command&rdquo;, in this context,
+  refers to an interactively callable function (or function-like
+  object), or a keyboard macro. It does not refer to the key
+  sequence used to invoke a command (see <a href=
+  "Keymaps.html#Keymaps">Keymaps</a>).</p>
+
+  <dl>
+    <dt><a name="index-commandp" id="index-commandp"></a>Function:
+    <strong>commandp</strong> <em>object &amp;optional
+    for-call-interactively</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a command. Otherwise, it returns <code>nil</code>.</p>
+
+      <p>Commands include strings and vectors (which are treated as
+      keyboard macros), lambda expressions that contain a top-level
+      <code>interactive</code> form (see <a href=
+      "Using-Interactive.html#Using-Interactive">Using
+      Interactive</a>), byte-code function objects made from such
+      lambda expressions, autoload objects that are declared as
+      interactive (non-<code>nil</code> fourth argument to
+      <code>autoload</code>), and some primitive functions. Also, a
+      symbol is considered a command if it has a
+      non-<code>nil</code> <code>interactive-form</code> property,
+      or if its function definition satisfies
+      <code>commandp</code>.</p>
+
+      <p>If <var>for-call-interactively</var> is
+      non-<code>nil</code>, then <code>commandp</code> returns
+      <code>t</code> only for objects that
+      <code>call-interactively</code> could call&mdash;thus, not
+      for keyboard macros.</p>
+
+      <p>See <code>documentation</code> in <a href=
+      "Accessing-Documentation.html#Accessing-Documentation">Accessing
+      Documentation</a>, for a realistic example of using
+      <code>commandp</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-call_002dinteractively" id=
+    "index-call_002dinteractively"></a>Function:
+    <strong>call-interactively</strong> <em>command &amp;optional
+    record-flag keys</em></dt>
+
+    <dd>
+      <p>This function calls the interactively callable function
+      <var>command</var>, providing arguments according to its
+      interactive calling specifications. It returns whatever
+      <var>command</var> returns.</p>
+
+      <p>If, for instance, you have a function with the following
+      signature:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun foo (begin end)
+  (interactive "r")
   ...)
-</pre></div>
+</pre>
+      </div>
 
-<p>then saying
-</p>
-<div class="example">
-<pre class="example">(call-interactively 'foo)
-</pre></div>
+      <p>then saying</p>
 
-<p>will call <code>foo</code> with the region (<code>point</code> and <code>mark</code>) as
-the arguments.
-</p>
-<p>An error is signaled if <var>command</var> is not a function or if it
-cannot be called interactively (i.e., is not a command).  Note that
-keyboard macros (strings and vectors) are not accepted, even though
-they are considered commands, because they are not functions.  If
-<var>command</var> is a symbol, then <code>call-interactively</code> uses its
-function definition.
-</p>
-<a name="index-record-command-history"></a>
-<p>If <var>record-flag</var> is non-<code>nil</code>, then this command and its
-arguments are unconditionally added to the list <code>command-history</code>.
-Otherwise, the command is added only if it uses the minibuffer to read
-an argument.  See <a href="Command-History.html#Command-History">Command History</a>.
-</p>
-<p>The argument <var>keys</var>, if given, should be a vector which specifies
-the sequence of events to supply if the command inquires which events
-were used to invoke it.  If <var>keys</var> is omitted or <code>nil</code>, the
-default is the return value of <code>this-command-keys-vector</code>.
-See <a href="Command-Loop-Info.html#Definition-of-this_002dcommand_002dkeys_002dvector">Definition of this-command-keys-vector</a>.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+(call-interactively 'foo)
+</pre>
+      </div>
 
-<dl>
-<dt><a name="index-funcall_002dinteractively"></a>Function: <strong>funcall-interactively</strong> <em>function &amp;rest arguments</em></dt>
-<dd><p>This function works like <code>funcall</code> (see <a href="Calling-Functions.html#Calling-Functions">Calling Functions</a>),
-but it makes the call look like an interactive invocation: a call to
-<code>called-interactively-p</code> inside <var>function</var> will return
-<code>t</code>.  If <var>function</var> is not a command, it is called without
-signaling an error.
-</p></dd></dl>
+      <p>will call <code>foo</code> with the region
+      (<code>point</code> and <code>mark</code>) as the
+      arguments.</p>
 
-<dl>
-<dt><a name="index-command_002dexecute"></a>Function: <strong>command-execute</strong> <em>command &amp;optional record-flag keys special</em></dt>
-<dd><a name="index-keyboard-macro-execution"></a>
-<p>This function executes <var>command</var>.  The argument <var>command</var> must
-satisfy the <code>commandp</code> predicate; i.e., it must be an interactively
-callable function or a keyboard macro.
-</p>
-<p>A string or vector as <var>command</var> is executed with
-<code>execute-kbd-macro</code>.  A function is passed to
-<code>call-interactively</code> (see above), along with the
-<var>record-flag</var> and <var>keys</var> arguments.
-</p>
-<p>If <var>command</var> is a symbol, its function definition is used in its
-place.  A symbol with an <code>autoload</code> definition counts as a
-command if it was declared to stand for an interactively callable
-function.  Such a definition is handled by loading the specified
-library and then rechecking the definition of the symbol.
-</p>
-<p>The argument <var>special</var>, if given, means to ignore the prefix
-argument and not clear it.  This is used for executing special events
-(see <a href="Special-Events.html#Special-Events">Special Events</a>).
-</p></dd></dl>
+      <p>An error is signaled if <var>command</var> is not a
+      function or if it cannot be called interactively (i.e., is
+      not a command). Note that keyboard macros (strings and
+      vectors) are not accepted, even though they are considered
+      commands, because they are not functions. If
+      <var>command</var> is a symbol, then
+      <code>call-interactively</code> uses its function
+      definition.</p><a name="index-record-command-history" id=
+      "index-record-command-history"></a>
 
-<dl>
-<dt><a name="index-execute_002dextended_002dcommand"></a>Command: <strong>execute-extended-command</strong> <em>prefix-argument</em></dt>
-<dd><a name="index-read-command-name"></a>
-<p>This function reads a command name from the minibuffer using
-<code>completing-read</code> (see <a href="Completion.html#Completion">Completion</a>).  Then it uses
-<code>command-execute</code> to call the specified command.  Whatever that
-command returns becomes the value of <code>execute-extended-command</code>.
-</p>
-<a name="index-execute-with-prefix-argument"></a>
-<p>If the command asks for a prefix argument, it receives the value
-<var>prefix-argument</var>.  If <code>execute-extended-command</code> is called
-interactively, the current raw prefix argument is used for
-<var>prefix-argument</var>, and thus passed on to whatever command is run.
-</p>
-<a name="index-M_002dx"></a>
-<p><code>execute-extended-command</code> is the normal definition of <kbd>M-x</kbd>,
-so it uses the string &lsquo;<samp><span class="nolinebreak">M-x</span>&nbsp;</samp>&rsquo;<!-- /@w --> as a prompt.  (It would be better
-to take the prompt from the events used to invoke
-<code>execute-extended-command</code>, but that is painful to implement.)  A
-description of the value of the prefix argument, if any, also becomes
-part of the prompt.
-</p>
-<div class="example">
-<pre class="example">(execute-extended-command 3)
+      <p>If <var>record-flag</var> is non-<code>nil</code>, then
+      this command and its arguments are unconditionally added to
+      the list <code>command-history</code>. Otherwise, the command
+      is added only if it uses the minibuffer to read an argument.
+      See <a href="Command-History.html#Command-History">Command
+      History</a>.</p>
+
+      <p>The argument <var>keys</var>, if given, should be a vector
+      which specifies the sequence of events to supply if the
+      command inquires which events were used to invoke it. If
+      <var>keys</var> is omitted or <code>nil</code>, the default
+      is the return value of <code>this-command-keys-vector</code>.
+      See <a href=
+      "Command-Loop-Info.html#Definition-of-this_002dcommand_002dkeys_002dvector">
+      Definition of this-command-keys-vector</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-funcall_002dinteractively" id=
+    "index-funcall_002dinteractively"></a>Function:
+    <strong>funcall-interactively</strong> <em>function &amp;rest
+    arguments</em></dt>
+
+    <dd>
+      <p>This function works like <code>funcall</code> (see
+      <a href="Calling-Functions.html#Calling-Functions">Calling
+      Functions</a>), but it makes the call look like an
+      interactive invocation: a call to
+      <code>called-interactively-p</code> inside
+      <var>function</var> will return <code>t</code>. If
+      <var>function</var> is not a command, it is called without
+      signaling an error.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-command_002dexecute" id=
+    "index-command_002dexecute"></a>Function:
+    <strong>command-execute</strong> <em>command &amp;optional
+    record-flag keys special</em></dt>
+
+    <dd>
+      <a name="index-keyboard-macro-execution" id=
+      "index-keyboard-macro-execution"></a>
+
+      <p>This function executes <var>command</var>. The argument
+      <var>command</var> must satisfy the <code>commandp</code>
+      predicate; i.e., it must be an interactively callable
+      function or a keyboard macro.</p>
+
+      <p>A string or vector as <var>command</var> is executed with
+      <code>execute-kbd-macro</code>. A function is passed to
+      <code>call-interactively</code> (see above), along with the
+      <var>record-flag</var> and <var>keys</var> arguments.</p>
+
+      <p>If <var>command</var> is a symbol, its function definition
+      is used in its place. A symbol with an <code>autoload</code>
+      definition counts as a command if it was declared to stand
+      for an interactively callable function. Such a definition is
+      handled by loading the specified library and then rechecking
+      the definition of the symbol.</p>
+
+      <p>The argument <var>special</var>, if given, means to ignore
+      the prefix argument and not clear it. This is used for
+      executing special events (see <a href=
+      "Special-Events.html#Special-Events">Special Events</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-execute_002dextended_002dcommand" id=
+    "index-execute_002dextended_002dcommand"></a>Command:
+    <strong>execute-extended-command</strong>
+    <em>prefix-argument</em></dt>
+
+    <dd>
+      <a name="index-read-command-name" id=
+      "index-read-command-name"></a>
+
+      <p>This function reads a command name from the minibuffer
+      using <code>completing-read</code> (see <a href=
+      "Completion.html#Completion">Completion</a>). Then it uses
+      <code>command-execute</code> to call the specified command.
+      Whatever that command returns becomes the value of
+      <code>execute-extended-command</code>.</p><a name=
+      "index-execute-with-prefix-argument" id=
+      "index-execute-with-prefix-argument"></a>
+
+      <p>If the command asks for a prefix argument, it receives the
+      value <var>prefix-argument</var>. If
+      <code>execute-extended-command</code> is called
+      interactively, the current raw prefix argument is used for
+      <var>prefix-argument</var>, and thus passed on to whatever
+      command is run.</p><a name="index-M_002dx" id=
+      "index-M_002dx"></a>
+
+      <p><code>execute-extended-command</code> is the normal
+      definition of <kbd>M-x</kbd>, so it uses the string
+      &lsquo;<samp><span class=
+      "nolinebreak">M-x</span>&nbsp;</samp>&rsquo;<!-- /@w --> as a
+      prompt. (It would be better to take the prompt from the
+      events used to invoke <code>execute-extended-command</code>,
+      but that is painful to implement.) A description of the value
+      of the prefix argument, if any, also becomes part of the
+      prompt.</p>
+
+      <div class="example">
+        <pre class="example">
+(execute-extended-command 3)
 ---------- Buffer: Minibuffer ----------
 3 M-x forward-word RET
 ---------- Buffer: Minibuffer ----------
      &rArr; t
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Distinguish-Interactive.html#Distinguish-Interactive" accesskey="n" rel="next">Distinguish Interactive</a>, Previous: <a href="Defining-Commands.html#Defining-Commands" accesskey="p" rel="prev">Defining Commands</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Distinguish-Interactive.html#Distinguish-Interactive"
+    accesskey="n" rel="next">Distinguish Interactive</a>, Previous:
+    <a href="Defining-Commands.html#Defining-Commands" accesskey=
+    "p" rel="prev">Defining Commands</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

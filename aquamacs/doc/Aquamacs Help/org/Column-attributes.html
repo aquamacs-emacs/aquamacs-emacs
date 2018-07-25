@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Column attributes - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Defining-columns.html#Defining-columns" title="Defining columns">
-<link rel="prev" href="Scope-of-column-definitions.html#Scope-of-column-definitions" title="Scope of column definitions">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Column attributes - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Defining-columns.html#Defining-columns"
+  title="Defining columns" />
+  <link rel="prev" href=
+  "Scope-of-column-definitions.html#Scope-of-column-definitions"
+  title="Scope of column definitions" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -32,8 +41,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -43,104 +54,170 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Column-attributes"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Scope-of-column-definitions.html#Scope-of-column-definitions">Scope of column definitions</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Defining-columns.html#Defining-columns">Defining columns</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Column-attributes" id="Column-attributes"></a>
 
-<h5 class="subsubsection">7.5.1.2 Column attributes</h5>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Scope-of-column-definitions.html#Scope-of-column-definitions">Scope
+    of column definitions</a>, Up:&nbsp;<a rel="up" accesskey="u"
+    href="Defining-columns.html#Defining-columns">Defining
+    columns</a></p>
+    <hr />
+  </div>
 
-<p>A column definition sets the attributes of a column.  The general
-definition looks like this:
+  <h5 class="subsubsection">7.5.1.2 Column attributes</h5>
 
-<pre class="example">      %[<var>width</var>]<var>property</var>[(<var>title</var>)][{<var>summary-type</var>}]
+  <p>A column definition sets the attributes of a column. The
+  general definition looks like this:</p>
+  <pre class="example">
+      %[<var>width</var>]<var>property</var>[(<var>title</var>)][{<var>summary-type</var>}]
 </pre>
-   <p class="noindent">Except for the percent sign and the property name, all items are
-optional.  The individual parts have the following meaning:
 
-<pre class="example">     <var>width</var>           <span class="roman">An integer specifying the width of the column in characters.</span>
-                     <span class="roman">If omitted, the width will be determined automatically.</span>
-     <var>property</var>        <span class="roman">The property that should be edited in this column.</span>
-                     <span class="roman">Special properties representing meta data are allowed here</span>
-                     <span class="roman">as well (see <a href="Special-properties.html#Special-properties">Special properties</a>)</span>
-     <var>title</var>     <span class="roman">The header text for the column. If omitted, the property</span>
+  <p class="noindent">Except for the percent sign and the property
+  name, all items are optional. The individual parts have the
+  following meaning:</p>
+  <pre class="example">
+     <var>width</var>           <span class=
+"roman">An integer specifying the width of the column in characters.</span>
+                     <span class=
+"roman">If omitted, the width will be determined automatically.</span>
+     <var>property</var>        <span class=
+"roman">The property that should be edited in this column.</span>
+                     <span class=
+"roman">Special properties representing meta data are allowed here</span>
+                     <span class="roman">as well (see <a href=
+"Special-properties.html#Special-properties">Special properties</a>)</span>
+     <var>title</var>     <span class=
+"roman">The header text for the column. If omitted, the property</span>
                      <span class="roman">name is used.</span>
-     {<var>summary-type</var>}  <span class="roman">The summary type.  If specified, the column values for</span>
-                     <span class="roman">parent nodes are computed from the children.</span>
-                     <span class="roman">Supported summary types are:</span>
-                     {+}       <span class="roman">Sum numbers in this column.</span>
-                     {+;%.1f}  <span class="roman">Like &lsquo;</span><samp><span class="samp">+</span></samp><span class="roman">&rsquo;, but format result with &lsquo;</span><samp><span class="samp">%.1f</span></samp><span class="roman">&rsquo;.</span>
-                     {$}       <span class="roman">Currency, short for &lsquo;</span><samp><span class="samp">+;%.2f</span></samp><span class="roman">&rsquo;.</span>
-                     {:}       <span class="roman">Sum times, HH:MM, plain numbers are hours.</span>
-                     {X}       <span class="roman">Checkbox status, &lsquo;</span><samp><span class="samp">[X]</span></samp><span class="roman">&rsquo; if all children are &lsquo;</span><samp><span class="samp">[X]</span></samp><span class="roman">&rsquo;.</span>
-                     {X/}      <span class="roman">Checkbox status, &lsquo;</span><samp><span class="samp">[n/m]</span></samp><span class="roman">&rsquo;.</span>
-                     {X%}      <span class="roman">Checkbox status, &lsquo;</span><samp><span class="samp">[n%]</span></samp><span class="roman">&rsquo;.</span>
-                     {min}     <span class="roman">Smallest number in column.</span>
-                     {max}     <span class="roman">Largest number.</span>
-                     {mean}    <span class="roman">Arithmetic mean of numbers.</span>
-                     {:min}    <span class="roman">Smallest time value in column.</span>
-                     {:max}    <span class="roman">Largest time value.</span>
-                     {:mean}   <span class="roman">Arithmetic mean of time values.</span>
-                     {@min}    <span class="roman">Minimum age (in days/hours/mins/seconds).</span>
-                     {@max}    <span class="roman">Maximum age (in days/hours/mins/seconds).</span>
-                     {@mean}   <span class="roman">Arithmetic mean of ages (in days/hours/mins/seconds).</span>
-                     {est+}    <span class="roman">Add low-high estimates.</span>
+     {<var>summary-type</var>}  <span class=
+"roman">The summary type.  If specified, the column values for</span>
+                     <span class=
+"roman">parent nodes are computed from the children.</span>
+                     <span class=
+"roman">Supported summary types are:</span>
+                     {+}       <span class=
+"roman">Sum numbers in this column.</span>
+                     {+;%.1f}  <span class=
+"roman">Like &lsquo;</span><samp><span class=
+"samp">+</span></samp><span class=
+"roman">&rsquo;, but format result with &lsquo;</span><samp><span class="samp">%.1f</span></samp><span class="roman">&rsquo;.</span>
+                     {$}       <span class=
+"roman">Currency, short for &lsquo;</span><samp><span class=
+"samp">+;%.2f</span></samp><span class="roman">&rsquo;.</span>
+                     {:}       <span class=
+"roman">Sum times, HH:MM, plain numbers are hours.</span>
+                     {X}       <span class=
+"roman">Checkbox status, &lsquo;</span><samp><span class=
+"samp">[X]</span></samp><span class=
+"roman">&rsquo; if all children are &lsquo;</span><samp><span class="samp">[X]</span></samp><span class="roman">&rsquo;.</span>
+                     {X/}      <span class=
+"roman">Checkbox status, &lsquo;</span><samp><span class=
+"samp">[n/m]</span></samp><span class="roman">&rsquo;.</span>
+                     {X%}      <span class=
+"roman">Checkbox status, &lsquo;</span><samp><span class=
+"samp">[n%]</span></samp><span class="roman">&rsquo;.</span>
+                     {min}     <span class=
+"roman">Smallest number in column.</span>
+                     {max}     <span class=
+"roman">Largest number.</span>
+                     {mean}    <span class=
+"roman">Arithmetic mean of numbers.</span>
+                     {:min}    <span class=
+"roman">Smallest time value in column.</span>
+                     {:max}    <span class=
+"roman">Largest time value.</span>
+                     {:mean}   <span class=
+"roman">Arithmetic mean of time values.</span>
+                     {@min}    <span class=
+"roman">Minimum age (in days/hours/mins/seconds).</span>
+                     {@max}    <span class=
+"roman">Maximum age (in days/hours/mins/seconds).</span>
+                     {@mean}   <span class=
+"roman">Arithmetic mean of ages (in days/hours/mins/seconds).</span>
+                     {est+}    <span class=
+"roman">Add low-high estimates.</span>
 </pre>
-   <p class="noindent">Be aware that you can only have one summary type for any property you
-include. Subsequent columns referencing the same property will all display the
-same summary information.
 
-   <p>The <code>est+</code> summary type requires further explanation.  It is used for
-combining estimates, expressed as low-high ranges.  For example, instead
-of estimating a particular task will take 5 days, you might estimate it as
-5-6 days if you're fairly confident you know how much work is required, or
-1-10 days if you don't really know what needs to be done.  Both ranges
-average at 5.5 days, but the first represents a more predictable delivery.
+  <p class="noindent">Be aware that you can only have one summary
+  type for any property you include. Subsequent columns referencing
+  the same property will all display the same summary
+  information.</p>
 
-   <p>When combining a set of such estimates, simply adding the lows and highs
-produces an unrealistically wide result. Instead, <code>est+</code> adds the
-statistical mean and variance of the sub-tasks, generating a final estimate
-from the sum.  For example, suppose you had ten tasks, each of which was
-estimated at 0.5 to 2 days of work.  Straight addition produces an estimate
-of 5 to 20 days, representing what to expect if everything goes either
-extremely well or extremely poorly. In contrast, <code>est+</code> estimates the
-full job more realistically, at 10-15 days.
+  <p>The <code>est+</code> summary type requires further
+  explanation. It is used for combining estimates, expressed as
+  low-high ranges. For example, instead of estimating a particular
+  task will take 5 days, you might estimate it as 5-6 days if
+  you're fairly confident you know how much work is required, or
+  1-10 days if you don't really know what needs to be done. Both
+  ranges average at 5.5 days, but the first represents a more
+  predictable delivery.</p>
 
-   <p>Here is an example for a complete columns definition, along with allowed
-values.
+  <p>When combining a set of such estimates, simply adding the lows
+  and highs produces an unrealistically wide result. Instead,
+  <code>est+</code> adds the statistical mean and variance of the
+  sub-tasks, generating a final estimate from the sum. For example,
+  suppose you had ten tasks, each of which was estimated at 0.5 to
+  2 days of work. Straight addition produces an estimate of 5 to 20
+  days, representing what to expect if everything goes either
+  extremely well or extremely poorly. In contrast,
+  <code>est+</code> estimates the full job more realistically, at
+  10-15 days.</p>
 
-<pre class="example">     :COLUMNS:  %25ITEM %9Approved(Approved?){X} %Owner %11Status \<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+  <p>Here is an example for a complete columns definition, along
+  with allowed values.</p>
+  <pre class="example">
+     :COLUMNS:  %25ITEM %9Approved(Approved?){X} %Owner %11Status \<a rel="footnote"
+href="#fn-1" name="fnd-1" id="fnd-1"><sup>1</sup></a>
                         %10Time_Estimate{:} %CLOCKSUM
      :Owner_ALL:    Tammy Mark Karl Lisa Don
      :Status_ALL:   "In progress" "Not started yet" "Finished" ""
      :Approved_ALL: "[ ]" "[X]"
 </pre>
-   <p class="noindent">The first column, &lsquo;<samp><span class="samp">%25ITEM</span></samp>&rsquo;, means the first 25 characters of the
-item itself, i.e. of the headline.  You probably always should start the
-column definition with the &lsquo;<samp><span class="samp">ITEM</span></samp>&rsquo; specifier.  The other specifiers
-create columns &lsquo;<samp><span class="samp">Owner</span></samp>&rsquo; with a list of names as allowed values, for
-&lsquo;<samp><span class="samp">Status</span></samp>&rsquo; with four different possible values, and for a checkbox
-field &lsquo;<samp><span class="samp">Approved</span></samp>&rsquo;.  When no width is given after the &lsquo;<samp><span class="samp">%</span></samp>&rsquo;
-character, the column will be exactly as wide as it needs to be in order
-to fully display all values.  The &lsquo;<samp><span class="samp">Approved</span></samp>&rsquo; column does have a
-modified title (&lsquo;<samp><span class="samp">Approved?</span></samp>&rsquo;, with a question mark).  Summaries will
-be created for the &lsquo;<samp><span class="samp">Time_Estimate</span></samp>&rsquo; column by adding time duration
-expressions like HH:MM, and for the &lsquo;<samp><span class="samp">Approved</span></samp>&rsquo; column, by providing
-an &lsquo;<samp><span class="samp">[X]</span></samp>&rsquo; status if all children have been checked.  The
-&lsquo;<samp><span class="samp">CLOCKSUM</span></samp>&rsquo; column is special, it lists the sum of CLOCK intervals
-in the subtree.
 
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Please note that the COLUMNS definition must be on a single line&mdash;it is wrapped here only because of formatting constraints.</p>
+  <p class="noindent">The first column, &lsquo;<samp><span class=
+  "samp">%25ITEM</span></samp>&rsquo;, means the first 25
+  characters of the item itself, i.e. of the headline. You probably
+  always should start the column definition with the
+  &lsquo;<samp><span class="samp">ITEM</span></samp>&rsquo;
+  specifier. The other specifiers create columns
+  &lsquo;<samp><span class="samp">Owner</span></samp>&rsquo; with a
+  list of names as allowed values, for &lsquo;<samp><span class=
+  "samp">Status</span></samp>&rsquo; with four different possible
+  values, and for a checkbox field &lsquo;<samp><span class=
+  "samp">Approved</span></samp>&rsquo;. When no width is given
+  after the &lsquo;<samp><span class="samp">%</span></samp>&rsquo;
+  character, the column will be exactly as wide as it needs to be
+  in order to fully display all values. The
+  &lsquo;<samp><span class="samp">Approved</span></samp>&rsquo;
+  column does have a modified title (&lsquo;<samp><span class=
+  "samp">Approved?</span></samp>&rsquo;, with a question mark).
+  Summaries will be created for the &lsquo;<samp><span class=
+  "samp">Time_Estimate</span></samp>&rsquo; column by adding time
+  duration expressions like HH:MM, and for the
+  &lsquo;<samp><span class="samp">Approved</span></samp>&rsquo;
+  column, by providing an &lsquo;<samp><span class=
+  "samp">[X]</span></samp>&rsquo; status if all children have been
+  checked. The &lsquo;<samp><span class=
+  "samp">CLOCKSUM</span></samp>&rsquo; column is special, it lists
+  the sum of CLOCK intervals in the subtree.</p>
 
-   <hr></div>
+  <div class="footnote">
+    <hr />
 
-   </body></html>
+    <h4>Footnotes</h4>
 
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> Please note that the COLUMNS definition
+    must be on a single line&mdash;it is wrapped here only because
+    of formatting constraints.</p>
+    <hr />
+  </div>
+</body>
+</html>

@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Nesting and Fixed Points - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Reducing-and-Mapping.html#Reducing-and-Mapping" title="Reducing and Mapping">
-<link rel="prev" href="Reducing.html#Reducing" title="Reducing">
-<link rel="next" href="Generalized-Products.html#Generalized-Products" title="Generalized Products">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Nesting and Fixed Points - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Reducing-and-Mapping.html#Reducing-and-Mapping" title=
+  "Reducing and Mapping" />
+  <link rel="prev" href="Reducing.html#Reducing" title=
+  "Reducing" />
+  <link rel="next" href=
+  "Generalized-Products.html#Generalized-Products" title=
+  "Generalized Products" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +40,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,82 +53,138 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Nesting-and-Fixed-Points"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Generalized-Products.html#Generalized-Products">Generalized Products</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Reducing.html#Reducing">Reducing</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Nesting-and-Fixed-Points" id=
+    "Nesting-and-Fixed-Points"></a>
 
-<h4 class="subsection">10.8.4 Nesting and Fixed Points</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Generalized-Products.html#Generalized-Products">Generalized
+    Products</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Reducing.html#Reducing">Reducing</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href=
+    "Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and
+    Mapping</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-H-v-R-1535"></a><a name="index-H-V-R-1536"></a><a name="index-nest-1537"></a>The <kbd>H V R</kbd> [<code>nest</code>] command applies a function to a given
-argument repeatedly.  It takes two values, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and &lsquo;<samp><span class="samp">n</span></samp>&rsquo;, from
-the stack, where &lsquo;<samp><span class="samp">n</span></samp>&rsquo; must be an integer.  It then applies the
-function nested &lsquo;<samp><span class="samp">n</span></samp>&rsquo; times; if the function is &lsquo;<samp><span class="samp">f</span></samp>&rsquo; and &lsquo;<samp><span class="samp">n</span></samp>&rsquo;
-is 3, the result is &lsquo;<samp><span class="samp">f(f(f(a)))</span></samp>&rsquo;.  The number &lsquo;<samp><span class="samp">n</span></samp>&rsquo; may be
-negative if Calc knows an inverse for the function &lsquo;<samp><span class="samp">f</span></samp>&rsquo;; for
-example, &lsquo;<samp><span class="samp">nest(sin, a, -2)</span></samp>&rsquo; returns &lsquo;<samp><span class="samp">arcsin(arcsin(a))</span></samp>&rsquo;.
+  <h4 class="subsection">10.8.4 Nesting and Fixed Points</h4>
 
-   <p><a name="index-H-v-U-1538"></a><a name="index-H-V-U-1539"></a><a name="index-anest-1540"></a>The <kbd>H V U</kbd> [<code>anest</code>] command is an accumulating version of
-<code>nest</code>:  It returns a vector of &lsquo;<samp><span class="samp">n+1</span></samp>&rsquo; values, e.g.,
-&lsquo;<samp><span class="samp">[a, f(a), f(f(a)), f(f(f(a)))]</span></samp>&rsquo;.  If &lsquo;<samp><span class="samp">n</span></samp>&rsquo; is negative and
-&lsquo;<samp><span class="samp">F</span></samp>&rsquo; is the inverse of &lsquo;<samp><span class="samp">f</span></samp>&rsquo;, then the result is of the
-form &lsquo;<samp><span class="samp">[a, F(a), F(F(a)), F(F(F(a)))]</span></samp>&rsquo;.
+  <p class="noindent"><a name="index-H-v-R-1535" id=
+  "index-H-v-R-1535"></a><a name="index-H-V-R-1536" id=
+  "index-H-V-R-1536"></a><a name="index-nest-1537" id=
+  "index-nest-1537"></a>The <kbd>H V R</kbd> [<code>nest</code>]
+  command applies a function to a given argument repeatedly. It
+  takes two values, &lsquo;<samp><span class=
+  "samp">a</span></samp>&rsquo; and &lsquo;<samp><span class=
+  "samp">n</span></samp>&rsquo;, from the stack, where
+  &lsquo;<samp><span class="samp">n</span></samp>&rsquo; must be an
+  integer. It then applies the function nested
+  &lsquo;<samp><span class="samp">n</span></samp>&rsquo; times; if
+  the function is &lsquo;<samp><span class=
+  "samp">f</span></samp>&rsquo; and &lsquo;<samp><span class=
+  "samp">n</span></samp>&rsquo; is 3, the result is
+  &lsquo;<samp><span class="samp">f(f(f(a)))</span></samp>&rsquo;.
+  The number &lsquo;<samp><span class="samp">n</span></samp>&rsquo;
+  may be negative if Calc knows an inverse for the function
+  &lsquo;<samp><span class="samp">f</span></samp>&rsquo;; for
+  example, &lsquo;<samp><span class="samp">nest(sin, a,
+  -2)</span></samp>&rsquo; returns &lsquo;<samp><span class=
+  "samp">arcsin(arcsin(a))</span></samp>&rsquo;.</p>
 
-   <p><a name="index-H-I-v-R-1541"></a><a name="index-H-I-V-R-1542"></a><a name="index-fixp-1543"></a><a name="index-Fixed-points-1544"></a>The <kbd>H I V R</kbd> [<code>fixp</code>] command is like <kbd>H V R</kbd>, except
-that it takes only an &lsquo;<samp><span class="samp">a</span></samp>&rsquo; value from the stack; the function is
-applied until it reaches a &ldquo;fixed point,&rdquo; i.e., until the result
-no longer changes.
+  <p><a name="index-H-v-U-1538" id="index-H-v-U-1538"></a><a name=
+  "index-H-V-U-1539" id="index-H-V-U-1539"></a><a name=
+  "index-anest-1540" id="index-anest-1540"></a>The <kbd>H V U</kbd>
+  [<code>anest</code>] command is an accumulating version of
+  <code>nest</code>: It returns a vector of
+  &lsquo;<samp><span class="samp">n+1</span></samp>&rsquo; values,
+  e.g., &lsquo;<samp><span class="samp">[a, f(a), f(f(a)),
+  f(f(f(a)))]</span></samp>&rsquo;. If &lsquo;<samp><span class=
+  "samp">n</span></samp>&rsquo; is negative and
+  &lsquo;<samp><span class="samp">F</span></samp>&rsquo; is the
+  inverse of &lsquo;<samp><span class=
+  "samp">f</span></samp>&rsquo;, then the result is of the form
+  &lsquo;<samp><span class="samp">[a, F(a), F(F(a)),
+  F(F(F(a)))]</span></samp>&rsquo;.</p>
 
-   <p><a name="index-H-I-v-U-1545"></a><a name="index-H-I-V-U-1546"></a><a name="index-afixp-1547"></a>The <kbd>H I V U</kbd> [<code>afixp</code>] command is an accumulating <code>fixp</code>. 
-The first element of the return vector will be the initial value &lsquo;<samp><span class="samp">a</span></samp>&rsquo;;
-the last element will be the final result that would have been returned
-by <code>fixp</code>.
+  <p><a name="index-H-I-v-R-1541" id=
+  "index-H-I-v-R-1541"></a><a name="index-H-I-V-R-1542" id=
+  "index-H-I-V-R-1542"></a><a name="index-fixp-1543" id=
+  "index-fixp-1543"></a><a name="index-Fixed-points-1544" id=
+  "index-Fixed-points-1544"></a>The <kbd>H I V R</kbd>
+  [<code>fixp</code>] command is like <kbd>H V R</kbd>, except that
+  it takes only an &lsquo;<samp><span class=
+  "samp">a</span></samp>&rsquo; value from the stack; the function
+  is applied until it reaches a &ldquo;fixed point,&rdquo; i.e.,
+  until the result no longer changes.</p>
 
-   <p>For example, 0.739085 is a fixed point of the cosine function (in radians):
-&lsquo;<samp><span class="samp">cos(0.739085) = 0.739085</span></samp>&rsquo;.  You can find this value by putting, say,
-1.0 on the stack and typing <kbd>H I V U C</kbd>.  (We use the accumulating
-version so we can see the intermediate results:  &lsquo;<samp><span class="samp">[1, 0.540302, 0.857553,
-0.65329, ...]</span></samp>&rsquo;.  With a precision of six, this command will take 36 steps
-to converge to 0.739085.)
+  <p><a name="index-H-I-v-U-1545" id=
+  "index-H-I-v-U-1545"></a><a name="index-H-I-V-U-1546" id=
+  "index-H-I-V-U-1546"></a><a name="index-afixp-1547" id=
+  "index-afixp-1547"></a>The <kbd>H I V U</kbd>
+  [<code>afixp</code>] command is an accumulating
+  <code>fixp</code>. The first element of the return vector will be
+  the initial value &lsquo;<samp><span class=
+  "samp">a</span></samp>&rsquo;; the last element will be the final
+  result that would have been returned by <code>fixp</code>.</p>
 
-   <p>Newton's method for finding roots is a classic example of iteration
-to a fixed point.  To find the square root of five starting with an
-initial guess, Newton's method would look for a fixed point of the
-function &lsquo;<samp><span class="samp">(x + 5/x) / 2</span></samp>&rsquo;.  Putting a guess of 1 on the stack
-and typing <kbd>H I V R ' ($ + 5/$)/2 &lt;RET&gt;</kbd> quickly yields the result
-2.23607.  This is equivalent to using the <kbd>a R</kbd> (<code>calc-find-root</code>)
-command to find a root of the equation &lsquo;<samp><span class="samp">x^2 = 5</span></samp>&rsquo;.
+  <p>For example, 0.739085 is a fixed point of the cosine function
+  (in radians): &lsquo;<samp><span class="samp">cos(0.739085) =
+  0.739085</span></samp>&rsquo;. You can find this value by
+  putting, say, 1.0 on the stack and typing <kbd>H I V U C</kbd>.
+  (We use the accumulating version so we can see the intermediate
+  results: &lsquo;<samp><span class="samp">[1, 0.540302, 0.857553,
+  0.65329, ...]</span></samp>&rsquo;. With a precision of six, this
+  command will take 36 steps to converge to 0.739085.)</p>
 
-   <p>These examples used numbers for &lsquo;<samp><span class="samp">a</span></samp>&rsquo; values.  Calc keeps applying
-the function until two successive results are equal to within the
-current precision.  For complex numbers, both the real parts and the
-imaginary parts must be equal to within the current precision.  If
-&lsquo;<samp><span class="samp">a</span></samp>&rsquo; is a formula (say, a variable name), then the function is
-applied until two successive results are exactly the same formula. 
-It is up to you to ensure that the function will eventually converge;
-if it doesn't, you may have to press <kbd>C-g</kbd> to stop the Calculator.
+  <p>Newton's method for finding roots is a classic example of
+  iteration to a fixed point. To find the square root of five
+  starting with an initial guess, Newton's method would look for a
+  fixed point of the function &lsquo;<samp><span class="samp">(x +
+  5/x) / 2</span></samp>&rsquo;. Putting a guess of 1 on the stack
+  and typing <kbd>H I V R ' ($ + 5/$)/2 &lt;RET&gt;</kbd> quickly
+  yields the result 2.23607. This is equivalent to using the <kbd>a
+  R</kbd> (<code>calc-find-root</code>) command to find a root of
+  the equation &lsquo;<samp><span class="samp">x^2 =
+  5</span></samp>&rsquo;.</p>
 
-   <p>The algebraic <code>fixp</code> function takes two optional arguments, &lsquo;<samp><span class="samp">n</span></samp>&rsquo;
-and &lsquo;<samp><span class="samp">tol</span></samp>&rsquo;.  The first is the maximum number of steps to be allowed,
-and must be either an integer or the symbol &lsquo;<samp><span class="samp">inf</span></samp>&rsquo; (infinity, the
-default).  The second is a convergence tolerance.  If a tolerance is
-specified, all results during the calculation must be numbers, not
-formulas, and the iteration stops when the magnitude of the difference
-between two successive results is less than or equal to the tolerance. 
-(This implies that a tolerance of zero iterates until the results are
-exactly equal.)
+  <p>These examples used numbers for &lsquo;<samp><span class=
+  "samp">a</span></samp>&rsquo; values. Calc keeps applying the
+  function until two successive results are equal to within the
+  current precision. For complex numbers, both the real parts and
+  the imaginary parts must be equal to within the current
+  precision. If &lsquo;<samp><span class=
+  "samp">a</span></samp>&rsquo; is a formula (say, a variable
+  name), then the function is applied until two successive results
+  are exactly the same formula. It is up to you to ensure that the
+  function will eventually converge; if it doesn't, you may have to
+  press <kbd>C-g</kbd> to stop the Calculator.</p>
 
-   <p>Putting it all together, &lsquo;<samp><span class="samp">fixp(&lt;(# + A/#)/2&gt;, B, 20, 1e-10)</span></samp>&rsquo;
-computes the square root of &lsquo;<samp><span class="samp">A</span></samp>&rsquo; given the initial guess &lsquo;<samp><span class="samp">B</span></samp>&rsquo;,
-stopping when the result is correct within the specified tolerance, or
-when 20 steps have been taken, whichever is sooner.
+  <p>The algebraic <code>fixp</code> function takes two optional
+  arguments, &lsquo;<samp><span class="samp">n</span></samp>&rsquo;
+  and &lsquo;<samp><span class="samp">tol</span></samp>&rsquo;. The
+  first is the maximum number of steps to be allowed, and must be
+  either an integer or the symbol &lsquo;<samp><span class=
+  "samp">inf</span></samp>&rsquo; (infinity, the default). The
+  second is a convergence tolerance. If a tolerance is specified,
+  all results during the calculation must be numbers, not formulas,
+  and the iteration stops when the magnitude of the difference
+  between two successive results is less than or equal to the
+  tolerance. (This implies that a tolerance of zero iterates until
+  the results are exactly equal.)</p>
 
-   </body></html>
-
+  <p>Putting it all together, &lsquo;<samp><span class=
+  "samp">fixp(&lt;(# + A/#)/2&gt;, B, 20,
+  1e-10)</span></samp>&rsquo; computes the square root of
+  &lsquo;<samp><span class="samp">A</span></samp>&rsquo; given the
+  initial guess &lsquo;<samp><span class=
+  "samp">B</span></samp>&rsquo;, stopping when the result is
+  correct within the specified tolerance, or when 20 steps have
+  been taken, whichever is sooner.</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,155 +19,224 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Network Options</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Network Options">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Network Options">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Low_002dLevel-Network.html#Low_002dLevel-Network" rel="up" title="Low-Level Network">
-<link href="Network-Feature-Testing.html#Network-Feature-Testing" rel="next" title="Network Feature Testing">
-<link href="Network-Processes.html#Network-Processes" rel="prev" title="Network Processes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Network Options</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Network Options" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Network Options" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Low_002dLevel-Network.html#Low_002dLevel-Network"
+  rel="up" title="Low-Level Network" />
+  <link href="Network-Feature-Testing.html#Network-Feature-Testing"
+  rel="next" title="Network Feature Testing" />
+  <link href="Network-Processes.html#Network-Processes" rel="prev"
+  title="Network Processes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Network-Options" id="Network-Options"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Network-Feature-Testing.html#Network-Feature-Testing"
+    accesskey="n" rel="next">Network Feature Testing</a>, Previous:
+    <a href="Network-Processes.html#Network-Processes" accesskey=
+    "p" rel="prev">Network Processes</a>, Up: <a href=
+    "Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey=
+    "u" rel="up">Low-Level Network</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Network-Options-1" id="Network-Options-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Network-Options"></a>
-<div class="header">
-<p>
-Next: <a href="Network-Feature-Testing.html#Network-Feature-Testing" accesskey="n" rel="next">Network Feature Testing</a>, Previous: <a href="Network-Processes.html#Network-Processes" accesskey="p" rel="prev">Network Processes</a>, Up: <a href="Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey="u" rel="up">Low-Level Network</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Network-Options-1"></a>
-<h4 class="subsection">36.17.2 Network Options</h4>
+  <h4 class="subsection">36.17.2 Network Options</h4>
 
-<p>The following network options can be specified when you create a
-network process.  Except for <code>:reuseaddr</code>, you can also set or
-modify these options later, using <code>set-network-process-option</code>.
-</p>
-<p>For a server process, the options specified with
-<code>make-network-process</code> are not inherited by the client
-connections, so you will need to set the necessary options for each
-child connection as it is created.
-</p>
-<dl compact="compact">
-<dt>:bindtodevice <var>device-name</var></dt>
-<dd><p>If <var>device-name</var> is a non-empty string identifying a network
-interface name (see <code>network-interface-list</code>), only handle
-packets received on that interface.  If <var>device-name</var> is <code>nil</code>
-(the default), handle packets received on any interface.
-</p>
-<p>Using this option may require special privileges on some systems.
-</p>
-</dd>
-<dt>:broadcast <var>broadcast-flag</var></dt>
-<dd><p>If <var>broadcast-flag</var> is non-<code>nil</code> for a datagram process, the
-process will receive datagram packet sent to a broadcast address, and
-be able to send packets to a broadcast address.  This is ignored for a stream
-connection.
-</p>
-</dd>
-<dt>:dontroute <var>dontroute-flag</var></dt>
-<dd><p>If <var>dontroute-flag</var> is non-<code>nil</code>, the process can only send
-to hosts on the same network as the local host.
-</p>
-</dd>
-<dt>:keepalive <var>keepalive-flag</var></dt>
-<dd><p>If <var>keepalive-flag</var> is non-<code>nil</code> for a stream connection,
-enable exchange of low-level keep-alive messages.
-</p>
-</dd>
-<dt>:linger <var>linger-arg</var></dt>
-<dd><p>If <var>linger-arg</var> is non-<code>nil</code>, wait for successful
-transmission of all queued packets on the connection before it is
-deleted (see <code>delete-process</code>).  If <var>linger-arg</var> is an
-integer, it specifies the maximum time in seconds to wait for queued
-packets to be sent before closing the connection.  The default is
-<code>nil</code>, which means to discard unsent queued packets when the
-process is deleted.
-</p>
-</dd>
-<dt>:oobinline <var>oobinline-flag</var></dt>
-<dd><p>If <var>oobinline-flag</var> is non-<code>nil</code> for a stream connection,
-receive out-of-band data in the normal data stream.  Otherwise, ignore
-out-of-band data.
-</p>
-</dd>
-<dt>:priority <var>priority</var></dt>
-<dd><p>Set the priority for packets sent on this connection to the integer
-<var>priority</var>.  The interpretation of this number is protocol
-specific; such as setting the TOS (type of service) field on IP
-packets sent on this connection.  It may also have system dependent
-effects, such as selecting a specific output queue on the network
-interface.
-</p>
-</dd>
-<dt>:reuseaddr <var>reuseaddr-flag</var></dt>
-<dd><p>If <var>reuseaddr-flag</var> is non-<code>nil</code> (the default) for a stream
-server process, allow this server to reuse a specific port number (see
-<code>:service</code>), unless another process on this host is already
-listening on that port.  If <var>reuseaddr-flag</var> is <code>nil</code>, there
-may be a period of time after the last use of that port (by any
-process on the host) where it is not possible to make a new server on
-that port.
-</p></dd>
-</dl>
+  <p>The following network options can be specified when you create
+  a network process. Except for <code>:reuseaddr</code>, you can
+  also set or modify these options later, using
+  <code>set-network-process-option</code>.</p>
 
-<dl>
-<dt><a name="index-set_002dnetwork_002dprocess_002doption"></a>Function: <strong>set-network-process-option</strong> <em>process option value &amp;optional no-error</em></dt>
-<dd><p>This function sets or modifies a network option for network process
-<var>process</var>.  The accepted options and values are as for
-<code>make-network-process</code>.  If <var>no-error</var> is non-<code>nil</code>,
-this function returns <code>nil</code> instead of signaling an error if
-<var>option</var> is not a supported option.  If the function successfully
-completes, it returns <code>t</code>.
-</p>
-<p>The current setting of an option is available via the
-<code>process-contact</code> function.
-</p></dd></dl>
+  <p>For a server process, the options specified with
+  <code>make-network-process</code> are not inherited by the client
+  connections, so you will need to set the necessary options for
+  each child connection as it is created.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Network-Feature-Testing.html#Network-Feature-Testing" accesskey="n" rel="next">Network Feature Testing</a>, Previous: <a href="Network-Processes.html#Network-Processes" accesskey="p" rel="prev">Network Processes</a>, Up: <a href="Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey="u" rel="up">Low-Level Network</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt>:bindtodevice <var>device-name</var></dt>
 
+    <dd>
+      <p>If <var>device-name</var> is a non-empty string
+      identifying a network interface name (see
+      <code>network-interface-list</code>), only handle packets
+      received on that interface. If <var>device-name</var> is
+      <code>nil</code> (the default), handle packets received on
+      any interface.</p>
 
+      <p>Using this option may require special privileges on some
+      systems.</p>
+    </dd>
 
+    <dt>:broadcast <var>broadcast-flag</var></dt>
+
+    <dd>
+      <p>If <var>broadcast-flag</var> is non-<code>nil</code> for a
+      datagram process, the process will receive datagram packet
+      sent to a broadcast address, and be able to send packets to a
+      broadcast address. This is ignored for a stream
+      connection.</p>
+    </dd>
+
+    <dt>:dontroute <var>dontroute-flag</var></dt>
+
+    <dd>
+      <p>If <var>dontroute-flag</var> is non-<code>nil</code>, the
+      process can only send to hosts on the same network as the
+      local host.</p>
+    </dd>
+
+    <dt>:keepalive <var>keepalive-flag</var></dt>
+
+    <dd>
+      <p>If <var>keepalive-flag</var> is non-<code>nil</code> for a
+      stream connection, enable exchange of low-level keep-alive
+      messages.</p>
+    </dd>
+
+    <dt>:linger <var>linger-arg</var></dt>
+
+    <dd>
+      <p>If <var>linger-arg</var> is non-<code>nil</code>, wait for
+      successful transmission of all queued packets on the
+      connection before it is deleted (see
+      <code>delete-process</code>). If <var>linger-arg</var> is an
+      integer, it specifies the maximum time in seconds to wait for
+      queued packets to be sent before closing the connection. The
+      default is <code>nil</code>, which means to discard unsent
+      queued packets when the process is deleted.</p>
+    </dd>
+
+    <dt>:oobinline <var>oobinline-flag</var></dt>
+
+    <dd>
+      <p>If <var>oobinline-flag</var> is non-<code>nil</code> for a
+      stream connection, receive out-of-band data in the normal
+      data stream. Otherwise, ignore out-of-band data.</p>
+    </dd>
+
+    <dt>:priority <var>priority</var></dt>
+
+    <dd>
+      <p>Set the priority for packets sent on this connection to
+      the integer <var>priority</var>. The interpretation of this
+      number is protocol specific; such as setting the TOS (type of
+      service) field on IP packets sent on this connection. It may
+      also have system dependent effects, such as selecting a
+      specific output queue on the network interface.</p>
+    </dd>
+
+    <dt>:reuseaddr <var>reuseaddr-flag</var></dt>
+
+    <dd>
+      <p>If <var>reuseaddr-flag</var> is non-<code>nil</code> (the
+      default) for a stream server process, allow this server to
+      reuse a specific port number (see <code>:service</code>),
+      unless another process on this host is already listening on
+      that port. If <var>reuseaddr-flag</var> is <code>nil</code>,
+      there may be a period of time after the last use of that port
+      (by any process on the host) where it is not possible to make
+      a new server on that port.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dnetwork_002dprocess_002doption" id=
+    "index-set_002dnetwork_002dprocess_002doption"></a>Function:
+    <strong>set-network-process-option</strong> <em>process option
+    value &amp;optional no-error</em></dt>
+
+    <dd>
+      <p>This function sets or modifies a network option for
+      network process <var>process</var>. The accepted options and
+      values are as for <code>make-network-process</code>. If
+      <var>no-error</var> is non-<code>nil</code>, this function
+      returns <code>nil</code> instead of signaling an error if
+      <var>option</var> is not a supported option. If the function
+      successfully completes, it returns <code>t</code>.</p>
+
+      <p>The current setting of an option is available via the
+      <code>process-contact</code> function.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Network-Feature-Testing.html#Network-Feature-Testing"
+    accesskey="n" rel="next">Network Feature Testing</a>, Previous:
+    <a href="Network-Processes.html#Network-Processes" accesskey=
+    "p" rel="prev">Network Processes</a>, Up: <a href=
+    "Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey=
+    "u" rel="up">Low-Level Network</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

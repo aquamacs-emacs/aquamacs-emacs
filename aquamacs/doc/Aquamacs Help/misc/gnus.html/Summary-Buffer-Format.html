@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,101 +14,168 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Summary Buffer Format</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Summary Buffer Format">
-<meta name="keywords" content="Gnus Manual: Summary Buffer Format">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Summary-Buffer-Lines.html#Summary-Buffer-Lines" rel="next" title="Summary Buffer Lines">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="prev" title="Summary Buffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Summary Buffer Format</title>
+  <meta name="description" content=
+  "Gnus Manual: Summary Buffer Format" />
+  <meta name="keywords" content=
+  "Gnus Manual: Summary Buffer Format" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Summary-Buffer-Lines.html#Summary-Buffer-Lines" rel=
+  "next" title="Summary Buffer Lines" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="prev" title=
+  "Summary Buffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Summary-Buffer-Format"></a>
-<div class="header">
-<p>
-Next: <a href="Summary-Maneuvering.html#Summary-Maneuvering" accesskey="n" rel="next">Summary Maneuvering</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Summary-Buffer-Format-1"></a>
-<h3 class="section">3.1 Summary Buffer Format</h3>
-<a name="index-summary-buffer-format"></a>
+<body lang="en" xml:lang="en">
+  <a name="Summary-Buffer-Format" id="Summary-Buffer-Format"></a>
 
+  <div class="header">
+    <p>Next: <a href="Summary-Maneuvering.html#Summary-Maneuvering"
+    accesskey="n" rel="next">Summary Maneuvering</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Summary-Buffer-Format-1" id=
+  "Summary-Buffer-Format-1"></a>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Summary-Buffer-Lines.html#Summary-Buffer-Lines" accesskey="1">Summary Buffer Lines</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You can specify how summary lines should look.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="To-From-Newsgroups.html#To-From-Newsgroups" accesskey="2">To From Newsgroups</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to not display your own name.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Summary-Buffer-Mode-Line.html#Summary-Buffer-Mode-Line" accesskey="3">Summary Buffer Mode Line</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You can say how the mode line should look.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Summary-Highlighting.html#Summary-Highlighting" accesskey="4">Summary Highlighting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Making the summary buffer all pretty and nice.
-</td></tr>
-</table>
+  <h3 class="section">3.1 Summary Buffer Format</h3><a name=
+  "index-summary-buffer-format" id=
+  "index-summary-buffer-format"></a>
 
-<a name="index-mail_002dextract_002daddress_002dcomponents"></a>
-<a name="index-gnus_002dextract_002daddress_002dcomponents"></a>
-<a name="index-gnus_002dextract_002daddress_002dcomponents-1"></a>
-<p>Gnus will use the value of the <code>gnus-extract-address-components</code>
-variable as a function for getting the name and address parts of a
-<code>From</code> header.  Two pre-defined functions exist:
-<code>gnus-extract-address-components</code>, which is the default, quite
-fast, and too simplistic solution; and
-<code>mail-extract-address-components</code>, which works very nicely, but is
-slower.  The default function will return the wrong answer in 5% of the
-cases.  If this is unacceptable to you, use the other function instead:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-extract-address-components
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Summary-Buffer-Lines.html#Summary-Buffer-Lines" accesskey=
+      "1">Summary Buffer Lines</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">You can specify how summary
+      lines should look.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "To-From-Newsgroups.html#To-From-Newsgroups" accesskey="2">To
+      From Newsgroups</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to not display your own
+      name.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Summary-Buffer-Mode-Line.html#Summary-Buffer-Mode-Line"
+      accesskey="3">Summary Buffer Mode Line</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">You can say how the mode line
+      should look.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Summary-Highlighting.html#Summary-Highlighting" accesskey=
+      "4">Summary Highlighting</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Making the summary buffer all
+      pretty and nice.</td>
+    </tr>
+  </table><a name=
+  "index-mail_002dextract_002daddress_002dcomponents" id=
+  "index-mail_002dextract_002daddress_002dcomponents"></a> <a name=
+  "index-gnus_002dextract_002daddress_002dcomponents" id=
+  "index-gnus_002dextract_002daddress_002dcomponents"></a> <a name=
+  "index-gnus_002dextract_002daddress_002dcomponents-1" id=
+  "index-gnus_002dextract_002daddress_002dcomponents-1"></a>
+
+  <p>Gnus will use the value of the
+  <code>gnus-extract-address-components</code> variable as a
+  function for getting the name and address parts of a
+  <code>From</code> header. Two pre-defined functions exist:
+  <code>gnus-extract-address-components</code>, which is the
+  default, quite fast, and too simplistic solution; and
+  <code>mail-extract-address-components</code>, which works very
+  nicely, but is slower. The default function will return the wrong
+  answer in 5% of the cases. If this is unacceptable to you, use
+  the other function instead:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-extract-address-components
       'mail-extract-address-components)
-</pre></div>
+</pre>
+  </div><a name="index-gnus_002dsummary_002dsame_002dsubject" id=
+  "index-gnus_002dsummary_002dsame_002dsubject"></a>
 
-<a name="index-gnus_002dsummary_002dsame_002dsubject"></a>
-<p><code>gnus-summary-same-subject</code> is a string indicating that the current
-article has the same subject as the previous.  This string will be used
-with those specs that require it.  The default is <code>&quot;&quot;</code>.
-</p>
-
-
-
-
+  <p><code>gnus-summary-same-subject</code> is a string indicating
+  that the current article has the same subject as the previous.
+  This string will be used with those specs that require it. The
+  default is <code>""</code>.</p>
 </body>
 </html>

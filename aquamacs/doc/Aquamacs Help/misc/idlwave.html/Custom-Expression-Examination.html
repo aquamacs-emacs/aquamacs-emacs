@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,144 +20,198 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Custom Expression Examination</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Custom Expression Examination">
-<meta name="keywords" content="IDLWAVE User Manual: Custom Expression Examination">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" rel="up" title="The IDLWAVE Shell">
-<link href="Acknowledgments.html#Acknowledgments" rel="next" title="Acknowledgments">
-<link href="Examining-Variables.html#Examining-Variables" rel="prev" title="Examining Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Custom Expression Examination</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Custom Expression Examination" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Custom Expression Examination" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" rel="up"
+  title="The IDLWAVE Shell" />
+  <link href="Acknowledgments.html#Acknowledgments" rel="next"
+  title="Acknowledgments" />
+  <link href="Examining-Variables.html#Examining-Variables" rel=
+  "prev" title="Examining Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Custom-Expression-Examination"></a>
-<div class="header">
-<p>
-Previous: <a href="Examining-Variables.html#Examining-Variables" accesskey="p" rel="prev">Examining Variables</a>, Up: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" accesskey="u" rel="up">The IDLWAVE Shell</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Custom-Expression-Examination-1"></a>
-<h3 class="section">5.6 Custom Expression Examination</h3>
-<a name="index-Expressions_002c-custom-examination"></a>
-<a name="index-Custom-expression-examination"></a>
+<body lang="en" xml:lang="en">
+  <a name="Custom-Expression-Examination" id=
+  "Custom-Expression-Examination"></a>
 
-<p>The variety of possible variable and expression examination commands is
-endless (just look, for instance, at the keyword list to
-<code>widget_info()</code>).  Rather than attempt to include them all, IDLWAVE
-provides two easy methods to customize your own commands, with a special
-mouse examine command, and two macros for generating your own examine
-key and mouse bindings.
-</p>
-<p>The most powerful and flexible mouse examine command of all is
-available on <kbd>C-S-mouse-2</kbd>.  Just as for all the other mouse
-examine commands, it permits click or drag expression selection, but
-instead of sending hard-coded commands to the shell, it pops-up a
-customizable selection list of examine functions to choose among,
-configured with the <code>idlwave-shell-examine-alist</code>
-variable<a name="DOCF6" href="#FOOT6"><sup>6</sup></a>.  This variable is a list of key-value pairs (an
-<em>alist</em> in Emacs parlance), where the key gives a name to be
-shown for the examine command, and the value is the command strings
-itself, in which the text <code>___</code> (three underscores) will be
-replaced by the selected expression before being sent to the shell.
-An example might be key <code>Structure Help</code> with value
-<code>help,___,/STRUCTURE</code>.  In that case, you&rsquo;d be prompted with
-<em>Structure Help</em>, which might send something like
-<code>help,var,/STRUCTURE</code> to the shell for output.
-<code>idlwave-shell-examine-alist</code> comes configured by default with a
-large list of examine commands, but you can easily customize it to add
-your own.
-</p>
-<p>In addition to configuring the functions available to the pop-up mouse
-command, you can easily create your own customized bindings to inspect
-expressions using the two convenience macros
-<code>idlwave-shell-examine</code> and <code>idlwave-shell-mouse-examine</code>.
-These create keyboard or mouse-based custom inspections of variables,
-sharing all the same properties of the built-in examine commands.
-Both functions take a single string argument sharing the syntax of the
-<code>idlwave-shell-examine-alist</code> values, e.g.:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-hook 'idlwave-shell-mode-hook
+  <div class="header">
+    <p>Previous: <a href=
+    "Examining-Variables.html#Examining-Variables" accesskey="p"
+    rel="prev">Examining Variables</a>, Up: <a href=
+    "The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" accesskey="u" rel=
+    "up">The IDLWAVE Shell</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Custom-Expression-Examination-1" id=
+  "Custom-Expression-Examination-1"></a>
+
+  <h3 class="section">5.6 Custom Expression
+  Examination</h3><a name="index-Expressions_002c-custom-examination"
+  id="index-Expressions_002c-custom-examination"></a> <a name=
+  "index-Custom-expression-examination" id=
+  "index-Custom-expression-examination"></a>
+
+  <p>The variety of possible variable and expression examination
+  commands is endless (just look, for instance, at the keyword list
+  to <code>widget_info()</code>). Rather than attempt to include
+  them all, IDLWAVE provides two easy methods to customize your own
+  commands, with a special mouse examine command, and two macros
+  for generating your own examine key and mouse bindings.</p>
+
+  <p>The most powerful and flexible mouse examine command of all is
+  available on <kbd>C-S-mouse-2</kbd>. Just as for all the other
+  mouse examine commands, it permits click or drag expression
+  selection, but instead of sending hard-coded commands to the
+  shell, it pops-up a customizable selection list of examine
+  functions to choose among, configured with the
+  <code>idlwave-shell-examine-alist</code> variable<a name="DOCF6"
+  href="#FOOT6" id="DOCF6"><sup>6</sup></a>. This variable is a
+  list of key-value pairs (an <em>alist</em> in Emacs parlance),
+  where the key gives a name to be shown for the examine command,
+  and the value is the command strings itself, in which the text
+  <code>___</code> (three underscores) will be replaced by the
+  selected expression before being sent to the shell. An example
+  might be key <code>Structure Help</code> with value
+  <code>help,___,/STRUCTURE</code>. In that case, you&rsquo;d be
+  prompted with <em>Structure Help</em>, which might send something
+  like <code>help,var,/STRUCTURE</code> to the shell for output.
+  <code>idlwave-shell-examine-alist</code> comes configured by
+  default with a large list of examine commands, but you can easily
+  customize it to add your own.</p>
+
+  <p>In addition to configuring the functions available to the
+  pop-up mouse command, you can easily create your own customized
+  bindings to inspect expressions using the two convenience macros
+  <code>idlwave-shell-examine</code> and
+  <code>idlwave-shell-mouse-examine</code>. These create keyboard
+  or mouse-based custom inspections of variables, sharing all the
+  same properties of the built-in examine commands. Both functions
+  take a single string argument sharing the syntax of the
+  <code>idlwave-shell-examine-alist</code> values, e.g.:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(add-hook 'idlwave-shell-mode-hook
           (lambda ()
             (idlwave-shell-define-key-both [s-down-mouse-2]
                                  (idlwave-shell-mouse-examine
-                                  &quot;print, size(___,/DIMENSIONS)&quot;))
+                                  "print, size(___,/DIMENSIONS)"))
             (idlwave-shell-define-key-both [f9] (idlwave-shell-examine
-                                       &quot;print, size(___,/DIMENSIONS)&quot;))
+                                       "print, size(___,/DIMENSIONS)"))
             (idlwave-shell-define-key-both [f10] (idlwave-shell-examine
-                                        &quot;print,size(___,/TNAME)&quot;))
+                                        "print,size(___,/TNAME)"))
             (idlwave-shell-define-key-both [f11] (idlwave-shell-examine
-                                        &quot;help,___,/STRUCTURE&quot;))))
-</pre></div>
+                                        "help,___,/STRUCTURE"))))
+</pre>
+  </div>
 
-<p>Now pressing <tt class="key">f9</tt>, or middle-mouse dragging with the
-<tt class="key">SUPER</tt> key depressed, will print the dimensions of the nearby or
-highlighted expression.  Pressing <tt class="key">f10</tt> will give the type string,
-and <tt class="key">f11</tt> will show the contents of a nearby structure.  As you can
-see, the possibilities are only marginally finite.
-</p>
-<dl>
-<dt><a name="index-idlwave_002dshell_002dexamine_002dalist"></a>User Option: <strong>idlwave-shell-examine-alist</strong></dt>
-<dd><p>An alist of examine commands in which the keys name the command and
-are displayed in the selection pop-up, and the values are custom IDL
-examine command strings to send, after all instances of <code>___</code>
-(three underscores) are replaced by the indicated expression.
-</p></dd></dl>
+  <p>Now pressing <tt class="key">f9</tt>, or middle-mouse dragging
+  with the <tt class="key">SUPER</tt> key depressed, will print the
+  dimensions of the nearby or highlighted expression. Pressing
+  <tt class="key">f10</tt> will give the type string, and
+  <tt class="key">f11</tt> will show the contents of a nearby
+  structure. As you can see, the possibilities are only marginally
+  finite.</p>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl>
+    <dt><a name="index-idlwave_002dshell_002dexamine_002dalist" id=
+    "index-idlwave_002dshell_002dexamine_002dalist"></a>User
+    Option: <strong>idlwave-shell-examine-alist</strong></dt>
 
-<h3><a name="FOOT6" href="#DOCF6">(6)</a></h3>
-<p>In Electric Debug Mode (see <a href="Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug Mode</a>), the key <kbd>x</kbd> provides a single-character shortcut interface
-to the same examine functions for the expression at point or marked by
-the region.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Examining-Variables.html#Examining-Variables" accesskey="p" rel="prev">Examining Variables</a>, Up: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" accesskey="u" rel="up">The IDLWAVE Shell</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>An alist of examine commands in which the keys name the
+      command and are displayed in the selection pop-up, and the
+      values are custom IDL examine command strings to send, after
+      all instances of <code>___</code> (three underscores) are
+      replaced by the indicated expression.</p>
+    </dd>
+  </dl>
 
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT6" href="#DOCF6" id="FOOT6">(6)</a></h3>
+
+    <p>In Electric Debug Mode (see <a href=
+    "Electric-Debug-Mode.html#Electric-Debug-Mode">Electric Debug
+    Mode</a>), the key <kbd>x</kbd> provides a single-character
+    shortcut interface to the same examine functions for the
+    expression at point or marked by the region.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Examining-Variables.html#Examining-Variables" accesskey="p"
+    rel="prev">Examining Variables</a>, Up: <a href=
+    "The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" accesskey="u" rel=
+    "up">The IDLWAVE Shell</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

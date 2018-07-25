@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,93 +19,127 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Compiling Macros</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Compiling Macros">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Compiling Macros">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Macros.html#Macros" rel="up" title="Macros">
-<link href="Defining-Macros.html#Defining-Macros" rel="next" title="Defining Macros">
-<link href="Expansion.html#Expansion" rel="prev" title="Expansion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Compiling Macros</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Compiling Macros" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Compiling Macros" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Macros.html#Macros" rel="up" title="Macros" />
+  <link href="Defining-Macros.html#Defining-Macros" rel="next"
+  title="Defining Macros" />
+  <link href="Expansion.html#Expansion" rel="prev" title=
+  "Expansion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Compiling-Macros" id="Compiling-Macros"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Defining-Macros.html#Defining-Macros"
+    accesskey="n" rel="next">Defining Macros</a>, Previous:
+    <a href="Expansion.html#Expansion" accesskey="p" rel=
+    "prev">Expansion</a>, Up: <a href="Macros.html#Macros"
+    accesskey="u" rel="up">Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Macros-and-Byte-Compilation" id=
+  "Macros-and-Byte-Compilation"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Compiling-Macros"></a>
-<div class="header">
-<p>
-Next: <a href="Defining-Macros.html#Defining-Macros" accesskey="n" rel="next">Defining Macros</a>, Previous: <a href="Expansion.html#Expansion" accesskey="p" rel="prev">Expansion</a>, Up: <a href="Macros.html#Macros" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Macros-and-Byte-Compilation"></a>
-<h3 class="section">13.3 Macros and Byte Compilation</h3>
-<a name="index-byte_002dcompiling-macros"></a>
+  <h3 class="section">13.3 Macros and Byte Compilation</h3><a name=
+  "index-byte_002dcompiling-macros" id=
+  "index-byte_002dcompiling-macros"></a>
 
-<p>You might ask why we take the trouble to compute an expansion for a
-macro and then evaluate the expansion.  Why not have the macro body
-produce the desired results directly?  The reason has to do with
-compilation.
-</p>
-<p>When a macro call appears in a Lisp program being compiled, the Lisp
-compiler calls the macro definition just as the interpreter would, and
-receives an expansion.  But instead of evaluating this expansion, it
-compiles the expansion as if it had appeared directly in the program.
-As a result, the compiled code produces the value and side effects
-intended for the macro, but executes at full compiled speed.  This would
-not work if the macro body computed the value and side effects
-itself&mdash;they would be computed at compile time, which is not useful.
-</p>
-<p>In order for compilation of macro calls to work, the macros must
-already be defined in Lisp when the calls to them are compiled.  The
-compiler has a special feature to help you do this: if a file being
-compiled contains a <code>defmacro</code> form, the macro is defined
-temporarily for the rest of the compilation of that file.
-</p>
-<p>Byte-compiling a file also executes any <code>require</code> calls at
-top-level in the file, so you can ensure that necessary macro
-definitions are available during compilation by requiring the files
-that define them (see <a href="Named-Features.html#Named-Features">Named Features</a>).  To avoid loading the macro
-definition files when someone <em>runs</em> the compiled program, write
-<code>eval-when-compile</code> around the <code>require</code> calls (see <a href="Eval-During-Compile.html#Eval-During-Compile">Eval During Compile</a>).
-</p>
+  <p>You might ask why we take the trouble to compute an expansion
+  for a macro and then evaluate the expansion. Why not have the
+  macro body produce the desired results directly? The reason has
+  to do with compilation.</p>
 
+  <p>When a macro call appears in a Lisp program being compiled,
+  the Lisp compiler calls the macro definition just as the
+  interpreter would, and receives an expansion. But instead of
+  evaluating this expansion, it compiles the expansion as if it had
+  appeared directly in the program. As a result, the compiled code
+  produces the value and side effects intended for the macro, but
+  executes at full compiled speed. This would not work if the macro
+  body computed the value and side effects itself&mdash;they would
+  be computed at compile time, which is not useful.</p>
 
+  <p>In order for compilation of macro calls to work, the macros
+  must already be defined in Lisp when the calls to them are
+  compiled. The compiler has a special feature to help you do this:
+  if a file being compiled contains a <code>defmacro</code> form,
+  the macro is defined temporarily for the rest of the compilation
+  of that file.</p>
 
+  <p>Byte-compiling a file also executes any <code>require</code>
+  calls at top-level in the file, so you can ensure that necessary
+  macro definitions are available during compilation by requiring
+  the files that define them (see <a href=
+  "Named-Features.html#Named-Features">Named Features</a>). To
+  avoid loading the macro definition files when someone
+  <em>runs</em> the compiled program, write
+  <code>eval-when-compile</code> around the <code>require</code>
+  calls (see <a href=
+  "Eval-During-Compile.html#Eval-During-Compile">Eval During
+  Compile</a>).</p>
 </body>
 </html>

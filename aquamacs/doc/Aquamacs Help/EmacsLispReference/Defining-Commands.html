@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,115 +19,195 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Defining Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Defining Commands">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Defining Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Using-Interactive.html#Using-Interactive" rel="next" title="Using Interactive">
-<link href="Command-Overview.html#Command-Overview" rel="prev" title="Command Overview">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Defining Commands</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Defining Commands" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Defining Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Using-Interactive.html#Using-Interactive" rel="next"
+  title="Using Interactive" />
+  <link href="Command-Overview.html#Command-Overview" rel="prev"
+  title="Command Overview" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Defining-Commands" id="Defining-Commands"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Interactive-Call.html#Interactive-Call"
+    accesskey="n" rel="next">Interactive Call</a>, Previous:
+    <a href="Command-Overview.html#Command-Overview" accesskey="p"
+    rel="prev">Command Overview</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Commands-1" id="Defining-Commands-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Interactive-Call.html#Interactive-Call" accesskey="n" rel="next">Interactive Call</a>, Previous: <a href="Command-Overview.html#Command-Overview" accesskey="p" rel="prev">Command Overview</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Commands-1"></a>
-<h3 class="section">20.2 Defining Commands</h3>
-<a name="index-defining-commands"></a>
-<a name="index-commands_002c-defining"></a>
-<a name="index-functions_002c-making-them-interactive"></a>
-<a name="index-interactive-function"></a>
+  <h3 class="section">20.2 Defining Commands</h3><a name=
+  "index-defining-commands" id="index-defining-commands"></a>
+  <a name="index-commands_002c-defining" id=
+  "index-commands_002c-defining"></a> <a name=
+  "index-functions_002c-making-them-interactive" id=
+  "index-functions_002c-making-them-interactive"></a> <a name=
+  "index-interactive-function" id="index-interactive-function"></a>
 
-<p>The special form <code>interactive</code> turns a Lisp function into a
-command.  The <code>interactive</code> form must be located at top-level in
-the function body, usually as the first form in the body; this applies
-to both lambda expressions (see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>) and
-<code>defun</code> forms (see <a href="Defining-Functions.html#Defining-Functions">Defining Functions</a>).  This form does
-nothing during the actual execution of the function; its presence
-serves as a flag, telling the Emacs command loop that the function can
-be called interactively.  The argument of the <code>interactive</code> form
-specifies how the arguments for an interactive call should be read.
-</p>
-<a name="index-interactive_002dform-property"></a>
-<p>Alternatively, an <code>interactive</code> form may be specified in a
-function symbol&rsquo;s <code>interactive-form</code> property.  A non-<code>nil</code>
-value for this property takes precedence over any <code>interactive</code>
-form in the function body itself.  This feature is seldom used.
-</p>
-<a name="The-interactive_002donly-property"></a><a name="index-interactive_002donly-property"></a>
-<p>Sometimes, a function is only intended to be called interactively,
-never directly from Lisp.  In that case, give the function a
-non-<code>nil</code> <code>interactive-only</code> property, either directly
-or via <code>declare</code> (see <a href="Declare-Form.html#Declare-Form">Declare Form</a>).  This causes the
-byte compiler to warn if the command is called from Lisp.  The output
-of <code>describe-function</code> will include similar information.
-The value of the property can be: a string, which the byte-compiler
-will use directly in its warning (it should end with a period, and not
-start with a capital, e.g., <code>&quot;use (system-name) instead.&quot;</code>); <code>t</code>; any
-other symbol, which should be an alternative function to use in Lisp
-code.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Using-Interactive.html#Using-Interactive" accesskey="1">Using Interactive</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">General rules for <code>interactive</code>.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Interactive-Codes.html#Interactive-Codes" accesskey="2">Interactive Codes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The standard letter-codes for reading arguments
-                             in various ways.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Interactive-Examples.html#Interactive-Examples" accesskey="3">Interactive Examples</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Examples of how to read interactive arguments.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Generic-Commands.html#Generic-Commands" accesskey="4">Generic Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Select among command alternatives.
-</td></tr>
-</table>
+  <p>The special form <code>interactive</code> turns a Lisp
+  function into a command. The <code>interactive</code> form must
+  be located at top-level in the function body, usually as the
+  first form in the body; this applies to both lambda expressions
+  (see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda
+  Expressions</a>) and <code>defun</code> forms (see <a href=
+  "Defining-Functions.html#Defining-Functions">Defining
+  Functions</a>). This form does nothing during the actual
+  execution of the function; its presence serves as a flag, telling
+  the Emacs command loop that the function can be called
+  interactively. The argument of the <code>interactive</code> form
+  specifies how the arguments for an interactive call should be
+  read.</p><a name="index-interactive_002dform-property" id=
+  "index-interactive_002dform-property"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Interactive-Call.html#Interactive-Call" accesskey="n" rel="next">Interactive Call</a>, Previous: <a href="Command-Overview.html#Command-Overview" accesskey="p" rel="prev">Command Overview</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Alternatively, an <code>interactive</code> form may be
+  specified in a function symbol&rsquo;s
+  <code>interactive-form</code> property. A non-<code>nil</code>
+  value for this property takes precedence over any
+  <code>interactive</code> form in the function body itself. This
+  feature is seldom used.</p><a name=
+  "The-interactive_002donly-property" id=
+  "The-interactive_002donly-property"></a><a name=
+  "index-interactive_002donly-property" id=
+  "index-interactive_002donly-property"></a>
 
+  <p>Sometimes, a function is only intended to be called
+  interactively, never directly from Lisp. In that case, give the
+  function a non-<code>nil</code> <code>interactive-only</code>
+  property, either directly or via <code>declare</code> (see
+  <a href="Declare-Form.html#Declare-Form">Declare Form</a>). This
+  causes the byte compiler to warn if the command is called from
+  Lisp. The output of <code>describe-function</code> will include
+  similar information. The value of the property can be: a string,
+  which the byte-compiler will use directly in its warning (it
+  should end with a period, and not start with a capital, e.g.,
+  <code>"use (system-name) instead."</code>); <code>t</code>; any
+  other symbol, which should be an alternative function to use in
+  Lisp code.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Using-Interactive.html#Using-Interactive" accesskey=
+      "1">Using Interactive</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">General rules for
+      <code>interactive</code>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Interactive-Codes.html#Interactive-Codes" accesskey=
+      "2">Interactive Codes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">The standard letter-codes for
+      reading arguments in various ways.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Interactive-Examples.html#Interactive-Examples" accesskey=
+      "3">Interactive Examples</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Examples of how to read
+      interactive arguments.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Generic-Commands.html#Generic-Commands" accesskey=
+      "4">Generic Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Select among command
+      alternatives.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Interactive-Call.html#Interactive-Call"
+    accesskey="n" rel="next">Interactive Call</a>, Previous:
+    <a href="Command-Overview.html#Command-Overview" accesskey="p"
+    rel="prev">Command Overview</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

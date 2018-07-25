@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,98 +18,139 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Yanking Into Stack</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Yanking Into Stack">
-<meta name="keywords" content="GNU Emacs Calc Manual: Yanking Into Stack">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Kill-and-Yank.html#Kill-and-Yank" rel="up" title="Kill and Yank">
-<link href="Saving-Into-Registers.html#Saving-Into-Registers" rel="next" title="Saving Into Registers">
-<link href="Killing-From-Stack.html#Killing-From-Stack" rel="prev" title="Killing From Stack">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Yanking Into Stack</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Yanking Into Stack" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Yanking Into Stack" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Kill-and-Yank.html#Kill-and-Yank" rel="up" title=
+  "Kill and Yank" />
+  <link href="Saving-Into-Registers.html#Saving-Into-Registers"
+  rel="next" title="Saving Into Registers" />
+  <link href="Killing-From-Stack.html#Killing-From-Stack" rel=
+  "prev" title="Killing From Stack" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Yanking-Into-Stack"></a>
-<div class="header">
-<p>
-Next: <a href="Saving-Into-Registers.html#Saving-Into-Registers" accesskey="n" rel="next">Saving Into Registers</a>, Previous: <a href="Killing-From-Stack.html#Killing-From-Stack" accesskey="p" rel="prev">Killing From Stack</a>, Up: <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Yanking-into-the-Stack"></a>
-<h3 class="section">14.2 Yanking into the Stack</h3>
+<body lang="en" xml:lang="en">
+  <a name="Yanking-Into-Stack" id="Yanking-Into-Stack"></a>
 
-<a name="index-C_002dy"></a>
-<a name="index-calc_002dyank"></a>
-<p>The <kbd>C-y</kbd> command yanks the most recently killed text back into the
-Calculator.  It pushes this value onto the top of the stack regardless of
-the cursor position.  In general it re-parses the killed text as a number
-or formula (or a list of these separated by commas or newlines).  However if
-the thing being yanked is something that was just killed from the Calculator
-itself, its full internal structure is yanked.  For example, if you have
-set the floating-point display mode to show only four significant digits,
-then killing and re-yanking 3.14159 (which displays as 3.142) will yank the
-full 3.14159, even though yanking it into any other buffer would yank the
-number in its displayed form, 3.142.  (Since the default display modes
-show all objects to their full precision, this feature normally makes no
-difference.)
-</p>
-<p>The <kbd>C-y</kbd> command can be given a prefix, which will interpret the
-text being yanked with a different radix.  If the text being yanked can be
-interpreted as a binary, octal, hexadecimal, or decimal number, then a
-prefix of <kbd>2</kbd>, <kbd>8</kbd>, <kbd>6</kbd> or <kbd>0</kbd> will have Calc
-interpret the yanked text as a number in the appropriate base.  For example,
-if &lsquo;<samp>111</samp>&rsquo; has just been killed and is yanked into Calc with a command
-of <kbd>C-2 C-y</kbd>, then the number &lsquo;<samp>7</samp>&rsquo; will be put on the stack.
-If you use the plain prefix <kbd>C-u</kbd>, then you will be prompted for a
-base to use, which can be any integer from 2 to 36.  If Calc doesn&rsquo;t
-allow the text being yanked to be read in a different base (such as if
-the text is an algebraic expression), then the prefix will have no
-effect.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Saving-Into-Registers.html#Saving-Into-Registers" accesskey="n" rel="next">Saving Into Registers</a>, Previous: <a href="Killing-From-Stack.html#Killing-From-Stack" accesskey="p" rel="prev">Killing From Stack</a>, Up: <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Saving-Into-Registers.html#Saving-Into-Registers" accesskey=
+    "n" rel="next">Saving Into Registers</a>, Previous: <a href=
+    "Killing-From-Stack.html#Killing-From-Stack" accesskey="p" rel=
+    "prev">Killing From Stack</a>, Up: <a href=
+    "Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill
+    and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Yanking-into-the-Stack" id="Yanking-into-the-Stack"></a>
 
+  <h3 class="section">14.2 Yanking into the Stack</h3><a name=
+  "index-C_002dy" id="index-C_002dy"></a> <a name=
+  "index-calc_002dyank" id="index-calc_002dyank"></a>
 
+  <p>The <kbd>C-y</kbd> command yanks the most recently killed text
+  back into the Calculator. It pushes this value onto the top of
+  the stack regardless of the cursor position. In general it
+  re-parses the killed text as a number or formula (or a list of
+  these separated by commas or newlines). However if the thing
+  being yanked is something that was just killed from the
+  Calculator itself, its full internal structure is yanked. For
+  example, if you have set the floating-point display mode to show
+  only four significant digits, then killing and re-yanking 3.14159
+  (which displays as 3.142) will yank the full 3.14159, even though
+  yanking it into any other buffer would yank the number in its
+  displayed form, 3.142. (Since the default display modes show all
+  objects to their full precision, this feature normally makes no
+  difference.)</p>
 
+  <p>The <kbd>C-y</kbd> command can be given a prefix, which will
+  interpret the text being yanked with a different radix. If the
+  text being yanked can be interpreted as a binary, octal,
+  hexadecimal, or decimal number, then a prefix of <kbd>2</kbd>,
+  <kbd>8</kbd>, <kbd>6</kbd> or <kbd>0</kbd> will have Calc
+  interpret the yanked text as a number in the appropriate base.
+  For example, if &lsquo;<samp>111</samp>&rsquo; has just been
+  killed and is yanked into Calc with a command of <kbd>C-2
+  C-y</kbd>, then the number &lsquo;<samp>7</samp>&rsquo; will be
+  put on the stack. If you use the plain prefix <kbd>C-u</kbd>,
+  then you will be prompted for a base to use, which can be any
+  integer from 2 to 36. If Calc doesn&rsquo;t allow the text being
+  yanked to be read in a different base (such as if the text is an
+  algebraic expression), then the prefix will have no effect.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Saving-Into-Registers.html#Saving-Into-Registers" accesskey=
+    "n" rel="next">Saving Into Registers</a>, Previous: <a href=
+    "Killing-From-Stack.html#Killing-From-Stack" accesskey="p" rel=
+    "prev">Killing From Stack</a>, Up: <a href=
+    "Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill
+    and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

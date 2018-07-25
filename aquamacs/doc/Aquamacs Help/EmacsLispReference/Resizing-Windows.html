@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,336 +19,524 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Resizing Windows</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Resizing Windows">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Resizing Windows">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Preserving-Window-Sizes.html#Preserving-Window-Sizes" rel="next" title="Preserving Window Sizes">
-<link href="Window-Sizes.html#Window-Sizes" rel="prev" title="Window Sizes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Resizing Windows</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Resizing Windows" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Resizing Windows" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Preserving-Window-Sizes.html#Preserving-Window-Sizes"
+  rel="next" title="Preserving Window Sizes" />
+  <link href="Window-Sizes.html#Window-Sizes" rel="prev" title=
+  "Window Sizes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Resizing-Windows" id="Resizing-Windows"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Preserving-Window-Sizes.html#Preserving-Window-Sizes"
+    accesskey="n" rel="next">Preserving Window Sizes</a>, Previous:
+    <a href="Window-Sizes.html#Window-Sizes" accesskey="p" rel=
+    "prev">Window Sizes</a>, Up: <a href="Windows.html#Windows"
+    accesskey="u" rel="up">Windows</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Resizing-Windows-1" id="Resizing-Windows-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Resizing-Windows"></a>
-<div class="header">
-<p>
-Next: <a href="Preserving-Window-Sizes.html#Preserving-Window-Sizes" accesskey="n" rel="next">Preserving Window Sizes</a>, Previous: <a href="Window-Sizes.html#Window-Sizes" accesskey="p" rel="prev">Window Sizes</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Resizing-Windows-1"></a>
-<h3 class="section">27.4 Resizing Windows</h3>
-<a name="index-window-resizing"></a>
-<a name="index-resize-window"></a>
-<a name="index-changing-window-size"></a>
-<a name="index-window-size_002c-changing"></a>
+  <h3 class="section">27.4 Resizing Windows</h3><a name=
+  "index-window-resizing" id="index-window-resizing"></a> <a name=
+  "index-resize-window" id="index-resize-window"></a> <a name=
+  "index-changing-window-size" id="index-changing-window-size"></a>
+  <a name="index-window-size_002c-changing" id=
+  "index-window-size_002c-changing"></a>
 
-<p>This section describes functions for resizing a window without
-changing the size of its frame.  Because live windows do not overlap,
-these functions are meaningful only on frames that contain two or more
-windows: resizing a window also changes the size of a neighboring
-window.  If there is just one window on a frame, its size cannot be
-changed except by resizing the frame (see <a href="Size-and-Position.html#Size-and-Position">Size and Position</a>).
-</p>
-<p>Except where noted, these functions also accept internal windows as
-arguments.  Resizing an internal window causes its child windows to be
-resized to fit the same space.
-</p>
-<dl>
-<dt><a name="index-window_002dresizable"></a>Function: <strong>window-resizable</strong> <em>window delta &amp;optional horizontal ignore pixelwise</em></dt>
-<dd><p>This function returns <var>delta</var> if the size of <var>window</var> can be
-changed vertically by <var>delta</var> lines.  If the optional argument
-<var>horizontal</var> is non-<code>nil</code>, it instead returns <var>delta</var> if
-<var>window</var> can be resized horizontally by <var>delta</var> columns.  It
-does not actually change the window size.
-</p>
-<p>If <var>window</var> is <code>nil</code>, it defaults to the selected window.
-</p>
-<p>A positive value of <var>delta</var> means to check whether the window can be
-enlarged by that number of lines or columns; a negative value of
-<var>delta</var> means to check whether the window can be shrunk by that many
-lines or columns.  If <var>delta</var> is non-zero, a return value of 0 means
-that the window cannot be resized.
-</p>
-<p>Normally, the variables <code>window-min-height</code> and
-<code>window-min-width</code> specify the smallest allowable window size
-(see <a href="Window-Sizes.html#Window-Sizes">Window Sizes</a>).  However, if the optional argument <var>ignore</var>
-is non-<code>nil</code>, this function ignores <code>window-min-height</code> and
-<code>window-min-width</code>, as well as <code>window-size-fixed</code>.  Instead,
-it considers the minimum-height window to be one consisting of a header
-and a mode line, a horizontal scrollbar and a bottom divider (if any),
-plus a text area one line tall; and a minimum-width window as one
-consisting of fringes, margins, a scroll bar and a right divider (if
-any), plus a text area two columns wide.
-</p>
-<p>If the optional argument <var>pixelwise</var> is non-<code>nil</code>,
-<var>delta</var> is interpreted as pixels.
-</p></dd></dl>
+  <p>This section describes functions for resizing a window without
+  changing the size of its frame. Because live windows do not
+  overlap, these functions are meaningful only on frames that
+  contain two or more windows: resizing a window also changes the
+  size of a neighboring window. If there is just one window on a
+  frame, its size cannot be changed except by resizing the frame
+  (see <a href="Size-and-Position.html#Size-and-Position">Size and
+  Position</a>).</p>
 
-<dl>
-<dt><a name="index-window_002dresize"></a>Function: <strong>window-resize</strong> <em>window delta &amp;optional horizontal ignore pixelwise</em></dt>
-<dd><p>This function resizes <var>window</var> by <var>delta</var> increments.  If
-<var>horizontal</var> is <code>nil</code>, it changes the height by <var>delta</var>
-lines; otherwise, it changes the width by <var>delta</var> columns.  A
-positive <var>delta</var> means to enlarge the window, and a negative
-<var>delta</var> means to shrink it.
-</p>
-<p>If <var>window</var> is <code>nil</code>, it defaults to the selected window.  If
-the window cannot be resized as demanded, an error is signaled.
-</p>
-<p>The optional argument <var>ignore</var> has the same meaning as for the
-function <code>window-resizable</code> above.
-</p>
-<p>If the optional argument <var>pixelwise</var> is non-<code>nil</code>,
-<var>delta</var> will be interpreted as pixels.
-</p>
-<p>The choice of which window edges this function alters depends on the
-values of the option <code>window-combination-resize</code> and the
-combination limits of the involved windows; in some cases, it may alter
-both edges.  See <a href="Recombining-Windows.html#Recombining-Windows">Recombining Windows</a>.  To resize by moving only the
-bottom or right edge of a window, use the function
-<code>adjust-window-trailing-edge</code>.
-</p></dd></dl>
+  <p>Except where noted, these functions also accept internal
+  windows as arguments. Resizing an internal window causes its
+  child windows to be resized to fit the same space.</p>
 
+  <dl>
+    <dt><a name="index-window_002dresizable" id=
+    "index-window_002dresizable"></a>Function:
+    <strong>window-resizable</strong> <em>window delta
+    &amp;optional horizontal ignore pixelwise</em></dt>
 
-<dl>
-<dt><a name="index-adjust_002dwindow_002dtrailing_002dedge"></a>Function: <strong>adjust-window-trailing-edge</strong> <em>window delta &amp;optional horizontal pixelwise</em></dt>
-<dd><p>This function moves <var>window</var>&rsquo;s bottom edge by <var>delta</var> lines.
-If optional argument <var>horizontal</var> is non-<code>nil</code>, it instead
-moves the right edge by <var>delta</var> columns.  If <var>window</var> is
-<code>nil</code>, it defaults to the selected window.
-</p>
-<p>If the optional argument <var>pixelwise</var> is non-<code>nil</code>,
-<var>delta</var> is interpreted as pixels.
-</p>
-<p>A positive <var>delta</var> moves the edge downwards or to the right; a
-negative <var>delta</var> moves it upwards or to the left.  If the edge
-cannot be moved as far as specified by <var>delta</var>, this function
-moves it as far as possible but does not signal a error.
-</p>
-<p>This function tries to resize windows adjacent to the edge that is
-moved.  If this is not possible for some reason (e.g., if that adjacent
-window is fixed-size), it may resize other windows.
-</p></dd></dl>
+    <dd>
+      <p>This function returns <var>delta</var> if the size of
+      <var>window</var> can be changed vertically by
+      <var>delta</var> lines. If the optional argument
+      <var>horizontal</var> is non-<code>nil</code>, it instead
+      returns <var>delta</var> if <var>window</var> can be resized
+      horizontally by <var>delta</var> columns. It does not
+      actually change the window size.</p>
 
-<a name="index-pixelwise_002c-resizing-windows"></a>
-<dl>
-<dt><a name="index-window_002dresize_002dpixelwise"></a>User Option: <strong>window-resize-pixelwise</strong></dt>
-<dd><p>If the value of this option is non-<code>nil</code>, Emacs resizes windows in
-units of pixels.  This currently affects functions like
-<code>split-window</code> (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>), <code>maximize-window</code>,
-<code>minimize-window</code>, <code>fit-window-to-buffer</code>,
-<code>fit-frame-to-buffer</code> and
-<code>shrink-window-if-larger-than-buffer</code> (all listed below).
-</p>
-<p>Note that when a frame&rsquo;s pixel size is not a multiple of its character
-size, at least one window may get resized pixelwise even if this
-option is <code>nil</code>.  The default value is <code>nil</code>.
-</p></dd></dl>
+      <p>If <var>window</var> is <code>nil</code>, it defaults to
+      the selected window.</p>
 
-<p>The following commands resize windows in more specific ways.  When
-called interactively, they act on the selected window.
-</p>
-<dl>
-<dt><a name="index-fit_002dwindow_002dto_002dbuffer"></a>Command: <strong>fit-window-to-buffer</strong> <em>&amp;optional window max-height min-height max-width min-width preserve-size</em></dt>
-<dd><p>This command adjusts the height or width of <var>window</var> to fit the text
-in it.  It returns non-<code>nil</code> if it was able to resize <var>window</var>,
-and <code>nil</code> otherwise.  If <var>window</var> is omitted or <code>nil</code>, it
-defaults to the selected window.  Otherwise, it should be a live window.
-</p>
-<p>If <var>window</var> is part of a vertical combination, this function adjusts
-<var>window</var>&rsquo;s height.  The new height is calculated from the actual
-height of the accessible portion of its buffer.  The optional argument
-<var>max-height</var>, if non-<code>nil</code>, specifies the maximum total height
-that this function can give <var>window</var>.  The optional argument
-<var>min-height</var>, if non-<code>nil</code>, specifies the minimum total height
-that it can give, which overrides the variable <code>window-min-height</code>.
-Both <var>max-height</var> and <var>min-height</var> are specified in lines and
-include mode and header line and a bottom divider, if any.
-</p>
-<p>If <var>window</var> is part of a horizontal combination and the value of the
-option <code>fit-window-to-buffer-horizontally</code> (see below) is
-non-<code>nil</code>, this function adjusts <var>window</var>&rsquo;s height.  The new
-width of <var>window</var> is calculated from the maximum length of its
-buffer&rsquo;s lines that follow the current start position of <var>window</var>.
-The optional argument <var>max-width</var> specifies a maximum width and
-defaults to the width of <var>window</var>&rsquo;s frame.  The optional argument
-<var>min-width</var> specifies a minimum width and defaults to
-<code>window-min-width</code>.  Both <var>max-width</var> and <var>min-width</var> are
-specified in columns and include fringes, margins and scrollbars, if
-any.
-</p>
-<p>The optional argument <var>preserve-size</var>, if non-<code>nil</code>, will
-install a parameter to preserve the size of <var>window</var> during future
-resize operations (see <a href="Preserving-Window-Sizes.html#Preserving-Window-Sizes">Preserving Window Sizes</a>).
-</p>
-<p>If the option <code>fit-frame-to-buffer</code> (see below) is non-<code>nil</code>,
-this function will try to resize the frame of <var>window</var> to fit its
-contents by calling <code>fit-frame-to-buffer</code> (see below).
-</p></dd></dl>
+      <p>A positive value of <var>delta</var> means to check
+      whether the window can be enlarged by that number of lines or
+      columns; a negative value of <var>delta</var> means to check
+      whether the window can be shrunk by that many lines or
+      columns. If <var>delta</var> is non-zero, a return value of 0
+      means that the window cannot be resized.</p>
 
-<dl>
-<dt><a name="index-fit_002dwindow_002dto_002dbuffer_002dhorizontally"></a>User Option: <strong>fit-window-to-buffer-horizontally</strong></dt>
-<dd><p>If this is non-<code>nil</code>, <code>fit-window-to-buffer</code> can resize
-windows horizontally.  If this is <code>nil</code> (the default)
-<code>fit-window-to-buffer</code> never resizes windows horizontally.  If this
-is <code>only</code>, it can resize windows horizontally only.  Any other
-value means <code>fit-window-to-buffer</code> can resize windows in both
-dimensions.
-</p></dd></dl>
+      <p>Normally, the variables <code>window-min-height</code> and
+      <code>window-min-width</code> specify the smallest allowable
+      window size (see <a href=
+      "Window-Sizes.html#Window-Sizes">Window Sizes</a>). However,
+      if the optional argument <var>ignore</var> is
+      non-<code>nil</code>, this function ignores
+      <code>window-min-height</code> and
+      <code>window-min-width</code>, as well as
+      <code>window-size-fixed</code>. Instead, it considers the
+      minimum-height window to be one consisting of a header and a
+      mode line, a horizontal scrollbar and a bottom divider (if
+      any), plus a text area one line tall; and a minimum-width
+      window as one consisting of fringes, margins, a scroll bar
+      and a right divider (if any), plus a text area two columns
+      wide.</p>
 
-<dl>
-<dt><a name="index-fit_002dframe_002dto_002dbuffer-1"></a>User Option: <strong>fit-frame-to-buffer</strong></dt>
-<dd><p>If this option is non-<code>nil</code>, <code>fit-window-to-buffer</code> can fit a
-frame to its buffer.  A frame is fit if and only if its root window is a
-live window and this option is non-<code>nil</code>.  If this is
-<code>horizontally</code>, frames are fit horizontally only.  If this is
-<code>vertically</code>, frames are fit vertically only.  Any other
-non-<code>nil</code> value means frames can be resized in both dimensions.
-</p></dd></dl>
+      <p>If the optional argument <var>pixelwise</var> is
+      non-<code>nil</code>, <var>delta</var> is interpreted as
+      pixels.</p>
+    </dd>
+  </dl>
 
-<p>If you have a frame that displays only one window, you can fit that
-frame to its buffer using the command <code>fit-frame-to-buffer</code>.
-</p>
-<dl>
-<dt><a name="index-fit_002dframe_002dto_002dbuffer"></a>Command: <strong>fit-frame-to-buffer</strong> <em>&amp;optional frame max-height min-height max-width min-width only</em></dt>
-<dd><p>This command adjusts the size of <var>frame</var> to display the contents of
-its buffer exactly.  <var>frame</var> can be any live frame and defaults to
-the selected one.  Fitting is done only if <var>frame</var>&rsquo;s root window is
-live.  The arguments <var>max-height</var>, <var>min-height</var>, <var>max-width</var>
-and <var>min-width</var> specify bounds on the new total size of
-<var>frame</var>&rsquo;s root window.  <var>min-height</var> and <var>min-width</var> default
-to the values of <code>window-min-height</code> and <code>window-min-width</code>
-respectively.
-</p>
-<p>If the optional argument <var>only</var> is <code>vertically</code>, this function
-may resize the frame vertically only.  If <var>only</var> is
-<code>horizontally</code>, it may resize the frame horizontally only.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-window_002dresize" id=
+    "index-window_002dresize"></a>Function:
+    <strong>window-resize</strong> <em>window delta &amp;optional
+    horizontal ignore pixelwise</em></dt>
 
-<p>The behavior of <code>fit-frame-to-buffer</code> can be controlled with the
-help of the two options listed next.
-</p>
-<dl>
-<dt><a name="index-fit_002dframe_002dto_002dbuffer_002dmargins"></a>User Option: <strong>fit-frame-to-buffer-margins</strong></dt>
-<dd><p>This option can be used to specify margins around frames to be fit by
-<code>fit-frame-to-buffer</code>.  Such margins can be useful to avoid, for
-example, that such frames overlap the taskbar.
-</p>
-<p>It specifies the numbers of pixels to be left free on the left, above,
-the right, and below a frame that shall be fit.  The default specifies
-<code>nil</code> for each which means to use no margins.  The value specified
-here can be overridden for a specific frame by that frame&rsquo;s
-<code>fit-frame-to-buffer-margins</code> parameter, if present.
-</p></dd></dl>
+    <dd>
+      <p>This function resizes <var>window</var> by
+      <var>delta</var> increments. If <var>horizontal</var> is
+      <code>nil</code>, it changes the height by <var>delta</var>
+      lines; otherwise, it changes the width by <var>delta</var>
+      columns. A positive <var>delta</var> means to enlarge the
+      window, and a negative <var>delta</var> means to shrink
+      it.</p>
 
-<dl>
-<dt><a name="index-fit_002dframe_002dto_002dbuffer_002dsizes"></a>User Option: <strong>fit-frame-to-buffer-sizes</strong></dt>
-<dd><p>This option specifies size boundaries for <code>fit-frame-to-buffer</code>.
-It specifies the total maximum and minimum lines and maximum and minimum
-columns of the root window of any frame that shall be fit to its buffer.
-If any of these values is non-<code>nil</code>, it overrides the corresponding
-argument of <code>fit-frame-to-buffer</code>.
-</p></dd></dl>
+      <p>If <var>window</var> is <code>nil</code>, it defaults to
+      the selected window. If the window cannot be resized as
+      demanded, an error is signaled.</p>
 
-<dl>
-<dt><a name="index-shrink_002dwindow_002dif_002dlarger_002dthan_002dbuffer"></a>Command: <strong>shrink-window-if-larger-than-buffer</strong> <em>&amp;optional window</em></dt>
-<dd><p>This command attempts to reduce <var>window</var>&rsquo;s height as much as
-possible while still showing its full buffer, but no less than
-<code>window-min-height</code> lines.  The return value is non-<code>nil</code> if
-the window was resized, and <code>nil</code> otherwise.  If <var>window</var> is
-omitted or <code>nil</code>, it defaults to the selected window.  Otherwise,
-it should be a live window.
-</p>
-<p>This command does nothing if the window is already too short to
-display all of its buffer, or if any of the buffer is scrolled
-off-screen, or if the window is the only live window in its frame.
-</p>
-<p>This command calls <code>fit-window-to-buffer</code> (see above) to do its
-work.
-</p></dd></dl>
+      <p>The optional argument <var>ignore</var> has the same
+      meaning as for the function <code>window-resizable</code>
+      above.</p>
 
+      <p>If the optional argument <var>pixelwise</var> is
+      non-<code>nil</code>, <var>delta</var> will be interpreted as
+      pixels.</p>
 
-<a name="index-balancing-window-sizes"></a>
-<dl>
-<dt><a name="index-balance_002dwindows"></a>Command: <strong>balance-windows</strong> <em>&amp;optional window-or-frame</em></dt>
-<dd><p>This function balances windows in a way that gives more space to
-full-width and/or full-height windows.  If <var>window-or-frame</var>
-specifies a frame, it balances all windows on that frame.  If
-<var>window-or-frame</var> specifies a window, it balances only that window
-and its siblings (see <a href="Windows-and-Frames.html#Windows-and-Frames">Windows and Frames</a>).
-</p></dd></dl>
+      <p>The choice of which window edges this function alters
+      depends on the values of the option
+      <code>window-combination-resize</code> and the combination
+      limits of the involved windows; in some cases, it may alter
+      both edges. See <a href=
+      "Recombining-Windows.html#Recombining-Windows">Recombining
+      Windows</a>. To resize by moving only the bottom or right
+      edge of a window, use the function
+      <code>adjust-window-trailing-edge</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-balance_002dwindows_002darea"></a>Command: <strong>balance-windows-area</strong></dt>
-<dd><p>This function attempts to give all windows on the selected frame
-approximately the same share of the screen area.  Full-width or
-full-height windows are not given more space than other windows.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-adjust_002dwindow_002dtrailing_002dedge" id=
+    "index-adjust_002dwindow_002dtrailing_002dedge"></a>Function:
+    <strong>adjust-window-trailing-edge</strong> <em>window delta
+    &amp;optional horizontal pixelwise</em></dt>
 
-<a name="index-maximizing-windows"></a>
-<dl>
-<dt><a name="index-maximize_002dwindow"></a>Command: <strong>maximize-window</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function attempts to make <var>window</var> as large as possible, in
-both dimensions, without resizing its frame or deleting other windows.
-If <var>window</var> is omitted or <code>nil</code>, it defaults to the selected
-window.
-</p></dd></dl>
+    <dd>
+      <p>This function moves <var>window</var>&rsquo;s bottom edge
+      by <var>delta</var> lines. If optional argument
+      <var>horizontal</var> is non-<code>nil</code>, it instead
+      moves the right edge by <var>delta</var> columns. If
+      <var>window</var> is <code>nil</code>, it defaults to the
+      selected window.</p>
 
-<a name="index-minimizing-windows"></a>
-<dl>
-<dt><a name="index-minimize_002dwindow"></a>Command: <strong>minimize-window</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function attempts to make <var>window</var> as small as possible, in
-both dimensions, without deleting it or resizing its frame.  If
-<var>window</var> is omitted or <code>nil</code>, it defaults to the selected
-window.
-</p></dd></dl>
+      <p>If the optional argument <var>pixelwise</var> is
+      non-<code>nil</code>, <var>delta</var> is interpreted as
+      pixels.</p>
 
+      <p>A positive <var>delta</var> moves the edge downwards or to
+      the right; a negative <var>delta</var> moves it upwards or to
+      the left. If the edge cannot be moved as far as specified by
+      <var>delta</var>, this function moves it as far as possible
+      but does not signal a error.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Preserving-Window-Sizes.html#Preserving-Window-Sizes" accesskey="n" rel="next">Preserving Window Sizes</a>, Previous: <a href="Window-Sizes.html#Window-Sizes" accesskey="p" rel="prev">Window Sizes</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This function tries to resize windows adjacent to the edge
+      that is moved. If this is not possible for some reason (e.g.,
+      if that adjacent window is fixed-size), it may resize other
+      windows.</p>
+    </dd>
+  </dl><a name="index-pixelwise_002c-resizing-windows" id=
+  "index-pixelwise_002c-resizing-windows"></a>
 
+  <dl>
+    <dt><a name="index-window_002dresize_002dpixelwise" id=
+    "index-window_002dresize_002dpixelwise"></a>User Option:
+    <strong>window-resize-pixelwise</strong></dt>
 
+    <dd>
+      <p>If the value of this option is non-<code>nil</code>, Emacs
+      resizes windows in units of pixels. This currently affects
+      functions like <code>split-window</code> (see <a href=
+      "Splitting-Windows.html#Splitting-Windows">Splitting
+      Windows</a>), <code>maximize-window</code>,
+      <code>minimize-window</code>,
+      <code>fit-window-to-buffer</code>,
+      <code>fit-frame-to-buffer</code> and
+      <code>shrink-window-if-larger-than-buffer</code> (all listed
+      below).</p>
 
+      <p>Note that when a frame&rsquo;s pixel size is not a
+      multiple of its character size, at least one window may get
+      resized pixelwise even if this option is <code>nil</code>.
+      The default value is <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <p>The following commands resize windows in more specific ways.
+  When called interactively, they act on the selected window.</p>
+
+  <dl>
+    <dt><a name="index-fit_002dwindow_002dto_002dbuffer" id=
+    "index-fit_002dwindow_002dto_002dbuffer"></a>Command:
+    <strong>fit-window-to-buffer</strong> <em>&amp;optional window
+    max-height min-height max-width min-width
+    preserve-size</em></dt>
+
+    <dd>
+      <p>This command adjusts the height or width of
+      <var>window</var> to fit the text in it. It returns
+      non-<code>nil</code> if it was able to resize
+      <var>window</var>, and <code>nil</code> otherwise. If
+      <var>window</var> is omitted or <code>nil</code>, it defaults
+      to the selected window. Otherwise, it should be a live
+      window.</p>
+
+      <p>If <var>window</var> is part of a vertical combination,
+      this function adjusts <var>window</var>&rsquo;s height. The
+      new height is calculated from the actual height of the
+      accessible portion of its buffer. The optional argument
+      <var>max-height</var>, if non-<code>nil</code>, specifies the
+      maximum total height that this function can give
+      <var>window</var>. The optional argument
+      <var>min-height</var>, if non-<code>nil</code>, specifies the
+      minimum total height that it can give, which overrides the
+      variable <code>window-min-height</code>. Both
+      <var>max-height</var> and <var>min-height</var> are specified
+      in lines and include mode and header line and a bottom
+      divider, if any.</p>
+
+      <p>If <var>window</var> is part of a horizontal combination
+      and the value of the option
+      <code>fit-window-to-buffer-horizontally</code> (see below) is
+      non-<code>nil</code>, this function adjusts
+      <var>window</var>&rsquo;s height. The new width of
+      <var>window</var> is calculated from the maximum length of
+      its buffer&rsquo;s lines that follow the current start
+      position of <var>window</var>. The optional argument
+      <var>max-width</var> specifies a maximum width and defaults
+      to the width of <var>window</var>&rsquo;s frame. The optional
+      argument <var>min-width</var> specifies a minimum width and
+      defaults to <code>window-min-width</code>. Both
+      <var>max-width</var> and <var>min-width</var> are specified
+      in columns and include fringes, margins and scrollbars, if
+      any.</p>
+
+      <p>The optional argument <var>preserve-size</var>, if
+      non-<code>nil</code>, will install a parameter to preserve
+      the size of <var>window</var> during future resize operations
+      (see <a href=
+      "Preserving-Window-Sizes.html#Preserving-Window-Sizes">Preserving
+      Window Sizes</a>).</p>
+
+      <p>If the option <code>fit-frame-to-buffer</code> (see below)
+      is non-<code>nil</code>, this function will try to resize the
+      frame of <var>window</var> to fit its contents by calling
+      <code>fit-frame-to-buffer</code> (see below).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-fit_002dwindow_002dto_002dbuffer_002dhorizontally" id=
+    "index-fit_002dwindow_002dto_002dbuffer_002dhorizontally"></a>User
+    Option: <strong>fit-window-to-buffer-horizontally</strong></dt>
+
+    <dd>
+      <p>If this is non-<code>nil</code>,
+      <code>fit-window-to-buffer</code> can resize windows
+      horizontally. If this is <code>nil</code> (the default)
+      <code>fit-window-to-buffer</code> never resizes windows
+      horizontally. If this is <code>only</code>, it can resize
+      windows horizontally only. Any other value means
+      <code>fit-window-to-buffer</code> can resize windows in both
+      dimensions.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-fit_002dframe_002dto_002dbuffer-1" id=
+    "index-fit_002dframe_002dto_002dbuffer-1"></a>User Option:
+    <strong>fit-frame-to-buffer</strong></dt>
+
+    <dd>
+      <p>If this option is non-<code>nil</code>,
+      <code>fit-window-to-buffer</code> can fit a frame to its
+      buffer. A frame is fit if and only if its root window is a
+      live window and this option is non-<code>nil</code>. If this
+      is <code>horizontally</code>, frames are fit horizontally
+      only. If this is <code>vertically</code>, frames are fit
+      vertically only. Any other non-<code>nil</code> value means
+      frames can be resized in both dimensions.</p>
+    </dd>
+  </dl>
+
+  <p>If you have a frame that displays only one window, you can fit
+  that frame to its buffer using the command
+  <code>fit-frame-to-buffer</code>.</p>
+
+  <dl>
+    <dt><a name="index-fit_002dframe_002dto_002dbuffer" id=
+    "index-fit_002dframe_002dto_002dbuffer"></a>Command:
+    <strong>fit-frame-to-buffer</strong> <em>&amp;optional frame
+    max-height min-height max-width min-width only</em></dt>
+
+    <dd>
+      <p>This command adjusts the size of <var>frame</var> to
+      display the contents of its buffer exactly. <var>frame</var>
+      can be any live frame and defaults to the selected one.
+      Fitting is done only if <var>frame</var>&rsquo;s root window
+      is live. The arguments <var>max-height</var>,
+      <var>min-height</var>, <var>max-width</var> and
+      <var>min-width</var> specify bounds on the new total size of
+      <var>frame</var>&rsquo;s root window. <var>min-height</var>
+      and <var>min-width</var> default to the values of
+      <code>window-min-height</code> and
+      <code>window-min-width</code> respectively.</p>
+
+      <p>If the optional argument <var>only</var> is
+      <code>vertically</code>, this function may resize the frame
+      vertically only. If <var>only</var> is
+      <code>horizontally</code>, it may resize the frame
+      horizontally only.</p>
+    </dd>
+  </dl>
+
+  <p>The behavior of <code>fit-frame-to-buffer</code> can be
+  controlled with the help of the two options listed next.</p>
+
+  <dl>
+    <dt><a name="index-fit_002dframe_002dto_002dbuffer_002dmargins"
+    id="index-fit_002dframe_002dto_002dbuffer_002dmargins"></a>User
+    Option: <strong>fit-frame-to-buffer-margins</strong></dt>
+
+    <dd>
+      <p>This option can be used to specify margins around frames
+      to be fit by <code>fit-frame-to-buffer</code>. Such margins
+      can be useful to avoid, for example, that such frames overlap
+      the taskbar.</p>
+
+      <p>It specifies the numbers of pixels to be left free on the
+      left, above, the right, and below a frame that shall be fit.
+      The default specifies <code>nil</code> for each which means
+      to use no margins. The value specified here can be overridden
+      for a specific frame by that frame&rsquo;s
+      <code>fit-frame-to-buffer-margins</code> parameter, if
+      present.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-fit_002dframe_002dto_002dbuffer_002dsizes"
+    id="index-fit_002dframe_002dto_002dbuffer_002dsizes"></a>User
+    Option: <strong>fit-frame-to-buffer-sizes</strong></dt>
+
+    <dd>
+      <p>This option specifies size boundaries for
+      <code>fit-frame-to-buffer</code>. It specifies the total
+      maximum and minimum lines and maximum and minimum columns of
+      the root window of any frame that shall be fit to its buffer.
+      If any of these values is non-<code>nil</code>, it overrides
+      the corresponding argument of
+      <code>fit-frame-to-buffer</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-shrink_002dwindow_002dif_002dlarger_002dthan_002dbuffer"
+    id=
+    "index-shrink_002dwindow_002dif_002dlarger_002dthan_002dbuffer">
+    </a>Command:
+    <strong>shrink-window-if-larger-than-buffer</strong>
+    <em>&amp;optional window</em></dt>
+
+    <dd>
+      <p>This command attempts to reduce <var>window</var>&rsquo;s
+      height as much as possible while still showing its full
+      buffer, but no less than <code>window-min-height</code>
+      lines. The return value is non-<code>nil</code> if the window
+      was resized, and <code>nil</code> otherwise. If
+      <var>window</var> is omitted or <code>nil</code>, it defaults
+      to the selected window. Otherwise, it should be a live
+      window.</p>
+
+      <p>This command does nothing if the window is already too
+      short to display all of its buffer, or if any of the buffer
+      is scrolled off-screen, or if the window is the only live
+      window in its frame.</p>
+
+      <p>This command calls <code>fit-window-to-buffer</code> (see
+      above) to do its work.</p>
+    </dd>
+  </dl><a name="index-balancing-window-sizes" id=
+  "index-balancing-window-sizes"></a>
+
+  <dl>
+    <dt><a name="index-balance_002dwindows" id=
+    "index-balance_002dwindows"></a>Command:
+    <strong>balance-windows</strong> <em>&amp;optional
+    window-or-frame</em></dt>
+
+    <dd>
+      <p>This function balances windows in a way that gives more
+      space to full-width and/or full-height windows. If
+      <var>window-or-frame</var> specifies a frame, it balances all
+      windows on that frame. If <var>window-or-frame</var>
+      specifies a window, it balances only that window and its
+      siblings (see <a href=
+      "Windows-and-Frames.html#Windows-and-Frames">Windows and
+      Frames</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-balance_002dwindows_002darea" id=
+    "index-balance_002dwindows_002darea"></a>Command:
+    <strong>balance-windows-area</strong></dt>
+
+    <dd>
+      <p>This function attempts to give all windows on the selected
+      frame approximately the same share of the screen area.
+      Full-width or full-height windows are not given more space
+      than other windows.</p>
+    </dd>
+  </dl><a name="index-maximizing-windows" id=
+  "index-maximizing-windows"></a>
+
+  <dl>
+    <dt><a name="index-maximize_002dwindow" id=
+    "index-maximize_002dwindow"></a>Command:
+    <strong>maximize-window</strong> <em>&amp;optional
+    window</em></dt>
+
+    <dd>
+      <p>This function attempts to make <var>window</var> as large
+      as possible, in both dimensions, without resizing its frame
+      or deleting other windows. If <var>window</var> is omitted or
+      <code>nil</code>, it defaults to the selected window.</p>
+    </dd>
+  </dl><a name="index-minimizing-windows" id=
+  "index-minimizing-windows"></a>
+
+  <dl>
+    <dt><a name="index-minimize_002dwindow" id=
+    "index-minimize_002dwindow"></a>Command:
+    <strong>minimize-window</strong> <em>&amp;optional
+    window</em></dt>
+
+    <dd>
+      <p>This function attempts to make <var>window</var> as small
+      as possible, in both dimensions, without deleting it or
+      resizing its frame. If <var>window</var> is omitted or
+      <code>nil</code>, it defaults to the selected window.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Preserving-Window-Sizes.html#Preserving-Window-Sizes"
+    accesskey="n" rel="next">Preserving Window Sizes</a>, Previous:
+    <a href="Window-Sizes.html#Window-Sizes" accesskey="p" rel=
+    "prev">Window Sizes</a>, Up: <a href="Windows.html#Windows"
+    accesskey="u" rel="up">Windows</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

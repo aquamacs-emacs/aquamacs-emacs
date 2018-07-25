@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,111 +19,171 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Predicates on Numbers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Predicates on Numbers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Predicates on Numbers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numbers.html#Numbers" rel="up" title="Numbers">
-<link href="Comparison-of-Numbers.html#Comparison-of-Numbers" rel="next" title="Comparison of Numbers">
-<link href="Float-Basics.html#Float-Basics" rel="prev" title="Float Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Predicates on
+  Numbers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Predicates on Numbers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Predicates on Numbers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numbers.html#Numbers" rel="up" title="Numbers" />
+  <link href="Comparison-of-Numbers.html#Comparison-of-Numbers"
+  rel="next" title="Comparison of Numbers" />
+  <link href="Float-Basics.html#Float-Basics" rel="prev" title=
+  "Float Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Predicates-on-Numbers" id="Predicates-on-Numbers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Comparison-of-Numbers.html#Comparison-of-Numbers" accesskey=
+    "n" rel="next">Comparison of Numbers</a>, Previous: <a href=
+    "Float-Basics.html#Float-Basics" accesskey="p" rel="prev">Float
+    Basics</a>, Up: <a href="Numbers.html#Numbers" accesskey="u"
+    rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Type-Predicates-for-Numbers" id=
+  "Type-Predicates-for-Numbers"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Predicates-on-Numbers"></a>
-<div class="header">
-<p>
-Next: <a href="Comparison-of-Numbers.html#Comparison-of-Numbers" accesskey="n" rel="next">Comparison of Numbers</a>, Previous: <a href="Float-Basics.html#Float-Basics" accesskey="p" rel="prev">Float Basics</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Type-Predicates-for-Numbers"></a>
-<h3 class="section">3.3 Type Predicates for Numbers</h3>
-<a name="index-predicates-for-numbers"></a>
+  <h3 class="section">3.3 Type Predicates for Numbers</h3><a name=
+  "index-predicates-for-numbers" id=
+  "index-predicates-for-numbers"></a>
 
-<p>The functions in this section test for numbers, or for a specific
-type of number.  The functions <code>integerp</code> and <code>floatp</code> can
-take any type of Lisp object as argument (they would not be of much
-use otherwise), but the <code>zerop</code> predicate requires a number as
-its argument.  See also <code>integer-or-marker-p</code> and
-<code>number-or-marker-p</code>, in <a href="Predicates-on-Markers.html#Predicates-on-Markers">Predicates on Markers</a>.
-</p>
-<dl>
-<dt><a name="index-floatp"></a>Function: <strong>floatp</strong> <em>object</em></dt>
-<dd><p>This predicate tests whether its argument is floating point
-and returns <code>t</code> if so, <code>nil</code> otherwise.
-</p></dd></dl>
+  <p>The functions in this section test for numbers, or for a
+  specific type of number. The functions <code>integerp</code> and
+  <code>floatp</code> can take any type of Lisp object as argument
+  (they would not be of much use otherwise), but the
+  <code>zerop</code> predicate requires a number as its argument.
+  See also <code>integer-or-marker-p</code> and
+  <code>number-or-marker-p</code>, in <a href=
+  "Predicates-on-Markers.html#Predicates-on-Markers">Predicates on
+  Markers</a>.</p>
 
-<dl>
-<dt><a name="index-integerp"></a>Function: <strong>integerp</strong> <em>object</em></dt>
-<dd><p>This predicate tests whether its argument is an integer, and returns
-<code>t</code> if so, <code>nil</code> otherwise.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-floatp" id="index-floatp"></a>Function:
+    <strong>floatp</strong> <em>object</em></dt>
 
-<dl>
-<dt><a name="index-numberp"></a>Function: <strong>numberp</strong> <em>object</em></dt>
-<dd><p>This predicate tests whether its argument is a number (either integer or
-floating point), and returns <code>t</code> if so, <code>nil</code> otherwise.
-</p></dd></dl>
+    <dd>
+      <p>This predicate tests whether its argument is floating
+      point and returns <code>t</code> if so, <code>nil</code>
+      otherwise.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-natnump"></a>Function: <strong>natnump</strong> <em>object</em></dt>
-<dd><a name="index-natural-numbers"></a>
-<p>This predicate (whose name comes from the phrase &ldquo;natural number&rdquo;)
-tests to see whether its argument is a nonnegative integer, and
-returns <code>t</code> if so, <code>nil</code> otherwise.  0 is considered
-non-negative.
-</p>
-<a name="index-wholenump"></a>
-<p><code>wholenump</code> is a synonym for <code>natnump</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-integerp" id="index-integerp"></a>Function:
+    <strong>integerp</strong> <em>object</em></dt>
 
-<dl>
-<dt><a name="index-zerop"></a>Function: <strong>zerop</strong> <em>number</em></dt>
-<dd><p>This predicate tests whether its argument is zero, and returns <code>t</code>
-if so, <code>nil</code> otherwise.  The argument must be a number.
-</p>
-<p><code>(zerop x)</code> is equivalent to <code>(= x 0)</code>.
-</p></dd></dl>
+    <dd>
+      <p>This predicate tests whether its argument is an integer,
+      and returns <code>t</code> if so, <code>nil</code>
+      otherwise.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-numberp" id="index-numberp"></a>Function:
+    <strong>numberp</strong> <em>object</em></dt>
 
+    <dd>
+      <p>This predicate tests whether its argument is a number
+      (either integer or floating point), and returns
+      <code>t</code> if so, <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-natnump" id="index-natnump"></a>Function:
+    <strong>natnump</strong> <em>object</em></dt>
 
+    <dd>
+      <a name="index-natural-numbers" id=
+      "index-natural-numbers"></a>
+
+      <p>This predicate (whose name comes from the phrase
+      &ldquo;natural number&rdquo;) tests to see whether its
+      argument is a nonnegative integer, and returns <code>t</code>
+      if so, <code>nil</code> otherwise. 0 is considered
+      non-negative.</p><a name="index-wholenump" id=
+      "index-wholenump"></a>
+
+      <p><code>wholenump</code> is a synonym for
+      <code>natnump</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-zerop" id="index-zerop"></a>Function:
+    <strong>zerop</strong> <em>number</em></dt>
+
+    <dd>
+      <p>This predicate tests whether its argument is zero, and
+      returns <code>t</code> if so, <code>nil</code> otherwise. The
+      argument must be a number.</p>
+
+      <p><code>(zerop x)</code> is equivalent to <code>(= x
+      0)</code>.</p>
+    </dd>
+  </dl>
 </body>
 </html>

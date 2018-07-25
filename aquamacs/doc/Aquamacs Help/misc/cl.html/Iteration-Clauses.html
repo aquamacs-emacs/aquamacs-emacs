@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,136 +16,202 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Iteration Clauses</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Iteration Clauses">
-<meta name="keywords" content="Common Lisp Extensions: Iteration Clauses">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Loop-Facility.html#Loop-Facility" rel="up" title="Loop Facility">
-<link href="Accumulation-Clauses.html#Accumulation-Clauses" rel="next" title="Accumulation Clauses">
-<link href="For-Clauses.html#For-Clauses" rel="prev" title="For Clauses">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Iteration Clauses</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Iteration Clauses" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Iteration Clauses" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Loop-Facility.html#Loop-Facility" rel="up" title=
+  "Loop Facility" />
+  <link href="Accumulation-Clauses.html#Accumulation-Clauses" rel=
+  "next" title="Accumulation Clauses" />
+  <link href="For-Clauses.html#For-Clauses" rel="prev" title=
+  "For Clauses" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Iteration-Clauses"></a>
-<div class="header">
-<p>
-Next: <a href="Accumulation-Clauses.html#Accumulation-Clauses" accesskey="n" rel="next">Accumulation Clauses</a>, Previous: <a href="For-Clauses.html#For-Clauses" accesskey="p" rel="prev">For Clauses</a>, Up: <a href="Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Iteration-Clauses-1"></a>
-<h4 class="subsection">4.7.4 Iteration Clauses</h4>
+<body lang="en" xml:lang="en">
+  <a name="Iteration-Clauses" id="Iteration-Clauses"></a>
 
-<p>Aside from <code>for</code> clauses, there are several other loop clauses
-that control the way the loop operates.  They might be used by
-themselves, or in conjunction with one or more <code>for</code> clauses.
-</p>
-<dl compact="compact">
-<dt><code>repeat <var>integer</var></code></dt>
-<dd><p>This clause simply counts up to the specified number using an
-internal temporary variable.  The loops
-</p>
-<div class="example">
-<pre class="example">(cl-loop repeat (1+ n) do &hellip;)
+  <div class="header">
+    <p>Next: <a href=
+    "Accumulation-Clauses.html#Accumulation-Clauses" accesskey="n"
+    rel="next">Accumulation Clauses</a>, Previous: <a href=
+    "For-Clauses.html#For-Clauses" accesskey="p" rel="prev">For
+    Clauses</a>, Up: <a href="Loop-Facility.html#Loop-Facility"
+    accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Iteration-Clauses-1" id="Iteration-Clauses-1"></a>
+
+  <h4 class="subsection">4.7.4 Iteration Clauses</h4>
+
+  <p>Aside from <code>for</code> clauses, there are several other
+  loop clauses that control the way the loop operates. They might
+  be used by themselves, or in conjunction with one or more
+  <code>for</code> clauses.</p>
+
+  <dl compact="compact">
+    <dt><code>repeat <var>integer</var></code></dt>
+
+    <dd>
+      <p>This clause simply counts up to the specified number using
+      an internal temporary variable. The loops</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop repeat (1+ n) do &hellip;)
 (cl-loop for temp to n do &hellip;)
-</pre></div>
+</pre>
+      </div>
 
-<p>are identical except that the second one forces you to choose
-a name for a variable you aren&rsquo;t actually going to use.
-</p>
-</dd>
-<dt><code>while <var>condition</var></code></dt>
-<dd><p>This clause stops the loop when the specified condition (any Lisp
-expression) becomes <code>nil</code>.  For example, the following two
-loops are equivalent, except for the implicit <code>nil</code> block
-that surrounds the second one:
-</p>
-<div class="example">
-<pre class="example">(while <var>cond</var> <var>forms</var>&hellip;)
+      <p>are identical except that the second one forces you to
+      choose a name for a variable you aren&rsquo;t actually going
+      to use.</p>
+    </dd>
+
+    <dt><code>while <var>condition</var></code></dt>
+
+    <dd>
+      <p>This clause stops the loop when the specified condition
+      (any Lisp expression) becomes <code>nil</code>. For example,
+      the following two loops are equivalent, except for the
+      implicit <code>nil</code> block that surrounds the second
+      one:</p>
+
+      <div class="example">
+        <pre class="example">
+(while <var>cond</var> <var>forms</var>&hellip;)
 (cl-loop while <var>cond</var> do <var>forms</var>&hellip;)
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>until <var>condition</var></code></dt>
-<dd><p>This clause stops the loop when the specified condition is true,
-i.e., non-<code>nil</code>.
-</p>
-</dd>
-<dt><code>always <var>condition</var></code></dt>
-<dd><p>This clause stops the loop when the specified condition is <code>nil</code>.
-Unlike <code>while</code>, it stops the loop using <code>return nil</code> so that
-the <code>finally</code> clauses are not executed.  If all the conditions
-were non-<code>nil</code>, the loop returns <code>t</code>:
-</p>
-<div class="example">
-<pre class="example">(if (cl-loop for size in size-list always (&gt; size 10))
+    <dt><code>until <var>condition</var></code></dt>
+
+    <dd>
+      <p>This clause stops the loop when the specified condition is
+      true, i.e., non-<code>nil</code>.</p>
+    </dd>
+
+    <dt><code>always <var>condition</var></code></dt>
+
+    <dd>
+      <p>This clause stops the loop when the specified condition is
+      <code>nil</code>. Unlike <code>while</code>, it stops the
+      loop using <code>return nil</code> so that the
+      <code>finally</code> clauses are not executed. If all the
+      conditions were non-<code>nil</code>, the loop returns
+      <code>t</code>:</p>
+
+      <div class="example">
+        <pre class="example">
+(if (cl-loop for size in size-list always (&gt; size 10))
     (some-big-sizes)
   (no-big-sizes))
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>never <var>condition</var></code></dt>
-<dd><p>This clause is like <code>always</code>, except that the loop returns
-<code>t</code> if any conditions were false, or <code>nil</code> otherwise.
-</p>
-</dd>
-<dt><code>thereis <var>condition</var></code></dt>
-<dd><p>This clause stops the loop when the specified form is non-<code>nil</code>;
-in this case, it returns that non-<code>nil</code> value.  If all the
-values were <code>nil</code>, the loop returns <code>nil</code>.
-</p>
-</dd>
-<dt><code>iter-by <var>iterator</var></code></dt>
-<dd><p>This clause iterates over the values from the specified form, an
-iterator object.  See (see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Generators.html#Generators">Generators</a> in <cite>GNU Emacs Lisp
-Reference Manual</cite>).
-</p></dd>
-</dl>
+    <dt><code>never <var>condition</var></code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Accumulation-Clauses.html#Accumulation-Clauses" accesskey="n" rel="next">Accumulation Clauses</a>, Previous: <a href="For-Clauses.html#For-Clauses" accesskey="p" rel="prev">For Clauses</a>, Up: <a href="Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This clause is like <code>always</code>, except that the
+      loop returns <code>t</code> if any conditions were false, or
+      <code>nil</code> otherwise.</p>
+    </dd>
 
+    <dt><code>thereis <var>condition</var></code></dt>
 
+    <dd>
+      <p>This clause stops the loop when the specified form is
+      non-<code>nil</code>; in this case, it returns that
+      non-<code>nil</code> value. If all the values were
+      <code>nil</code>, the loop returns <code>nil</code>.</p>
+    </dd>
 
+    <dt><code>iter-by <var>iterator</var></code></dt>
+
+    <dd>
+      <p>This clause iterates over the values from the specified
+      form, an iterator object. See (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/elisp/Generators.html#Generators">
+      Generators</a> in <cite>GNU Emacs Lisp Reference
+      Manual</cite>).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Accumulation-Clauses.html#Accumulation-Clauses" accesskey="n"
+    rel="next">Accumulation Clauses</a>, Previous: <a href=
+    "For-Clauses.html#For-Clauses" accesskey="p" rel="prev">For
+    Clauses</a>, Up: <a href="Loop-Facility.html#Loop-Facility"
+    accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

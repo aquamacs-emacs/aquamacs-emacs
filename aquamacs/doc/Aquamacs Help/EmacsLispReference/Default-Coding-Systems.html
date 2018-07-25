@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,279 +19,426 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Default Coding Systems</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Default Coding Systems">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Default Coding Systems">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Coding-Systems.html#Coding-Systems" rel="up" title="Coding Systems">
-<link href="Specifying-Coding-Systems.html#Specifying-Coding-Systems" rel="next" title="Specifying Coding Systems">
-<link href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems" rel="prev" title="User-Chosen Coding Systems">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Default Coding
+  Systems</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Default Coding Systems" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Default Coding Systems" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Coding-Systems.html#Coding-Systems" rel="up" title=
+  "Coding Systems" />
+  <link href=
+  "Specifying-Coding-Systems.html#Specifying-Coding-Systems" rel=
+  "next" title="Specifying Coding Systems" />
+  <link href=
+  "User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems"
+  rel="prev" title="User-Chosen Coding Systems" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Default-Coding-Systems" id="Default-Coding-Systems"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Specifying-Coding-Systems.html#Specifying-Coding-Systems"
+    accesskey="n" rel="next">Specifying Coding Systems</a>,
+    Previous: <a href=
+    "User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems"
+    accesskey="p" rel="prev">User-Chosen Coding Systems</a>, Up:
+    <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel=
+    "up">Coding Systems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Default-Coding-Systems-1" id=
+  "Default-Coding-Systems-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Default-Coding-Systems"></a>
-<div class="header">
-<p>
-Next: <a href="Specifying-Coding-Systems.html#Specifying-Coding-Systems" accesskey="n" rel="next">Specifying Coding Systems</a>, Previous: <a href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems" accesskey="p" rel="prev">User-Chosen Coding Systems</a>, Up: <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel="up">Coding Systems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Default-Coding-Systems-1"></a>
-<h4 class="subsection">32.10.5 Default Coding Systems</h4>
-<a name="index-default-coding-system"></a>
-<a name="index-coding-system_002c-automatically-determined"></a>
+  <h4 class="subsection">32.10.5 Default Coding
+  Systems</h4><a name="index-default-coding-system" id=
+  "index-default-coding-system"></a> <a name=
+  "index-coding-system_002c-automatically-determined" id=
+  "index-coding-system_002c-automatically-determined"></a>
 
-<p>This section describes variables that specify the default coding
-system for certain files or when running certain subprograms, and the
-function that I/O operations use to access them.
-</p>
-<p>The idea of these variables is that you set them once and for all to the
-defaults you want, and then do not change them again.  To specify a
-particular coding system for a particular operation in a Lisp program,
-don&rsquo;t change these variables; instead, override them using
-<code>coding-system-for-read</code> and <code>coding-system-for-write</code>
-(see <a href="Specifying-Coding-Systems.html#Specifying-Coding-Systems">Specifying Coding Systems</a>).
-</p>
-<a name="index-file-contents_002c-and-default-coding-system"></a>
-<dl>
-<dt><a name="index-auto_002dcoding_002dregexp_002dalist"></a>User Option: <strong>auto-coding-regexp-alist</strong></dt>
-<dd><p>This variable is an alist of text patterns and corresponding coding
-systems.  Each element has the form <code>(<var>regexp</var>
-. <var>coding-system</var>)</code>; a file whose first few kilobytes match
-<var>regexp</var> is decoded with <var>coding-system</var> when its contents are
-read into a buffer.  The settings in this alist take priority over
-<code>coding:</code> tags in the files and the contents of
-<code>file-coding-system-alist</code> (see below).  The default value is set
-so that Emacs automatically recognizes mail files in Babyl format and
-reads them with no code conversions.
-</p></dd></dl>
+  <p>This section describes variables that specify the default
+  coding system for certain files or when running certain
+  subprograms, and the function that I/O operations use to access
+  them.</p>
 
-<a name="index-file-name_002c-and-default-coding-system"></a>
-<dl>
-<dt><a name="index-file_002dcoding_002dsystem_002dalist"></a>User Option: <strong>file-coding-system-alist</strong></dt>
-<dd><p>This variable is an alist that specifies the coding systems to use for
-reading and writing particular files.  Each element has the form
-<code>(<var>pattern</var> . <var>coding</var>)</code>, where <var>pattern</var> is a regular
-expression that matches certain file names.  The element applies to file
-names that match <var>pattern</var>.
-</p>
-<p>The <small>CDR</small> of the element, <var>coding</var>, should be either a coding
-system, a cons cell containing two coding systems, or a function name (a
-symbol with a function definition).  If <var>coding</var> is a coding system,
-that coding system is used for both reading the file and writing it.  If
-<var>coding</var> is a cons cell containing two coding systems, its <small>CAR</small>
-specifies the coding system for decoding, and its <small>CDR</small> specifies the
-coding system for encoding.
-</p>
-<p>If <var>coding</var> is a function name, the function should take one
-argument, a list of all arguments passed to
-<code>find-operation-coding-system</code>.  It must return a coding system
-or a cons cell containing two coding systems.  This value has the same
-meaning as described above.
-</p>
-<p>If <var>coding</var> (or what returned by the above function) is
-<code>undecided</code>, the normal code-detection is performed.
-</p></dd></dl>
+  <p>The idea of these variables is that you set them once and for
+  all to the defaults you want, and then do not change them again.
+  To specify a particular coding system for a particular operation
+  in a Lisp program, don&rsquo;t change these variables; instead,
+  override them using <code>coding-system-for-read</code> and
+  <code>coding-system-for-write</code> (see <a href=
+  "Specifying-Coding-Systems.html#Specifying-Coding-Systems">Specifying
+  Coding Systems</a>).</p><a name=
+  "index-file-contents_002c-and-default-coding-system" id=
+  "index-file-contents_002c-and-default-coding-system"></a>
 
-<dl>
-<dt><a name="index-auto_002dcoding_002dalist"></a>User Option: <strong>auto-coding-alist</strong></dt>
-<dd><p>This variable is an alist that specifies the coding systems to use for
-reading and writing particular files.  Its form is like that of
-<code>file-coding-system-alist</code>, but, unlike the latter, this variable
-takes priority over any <code>coding:</code> tags in the file.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-auto_002dcoding_002dregexp_002dalist" id=
+    "index-auto_002dcoding_002dregexp_002dalist"></a>User Option:
+    <strong>auto-coding-regexp-alist</strong></dt>
 
-<a name="index-program-name_002c-and-default-coding-system"></a>
-<dl>
-<dt><a name="index-process_002dcoding_002dsystem_002dalist"></a>Variable: <strong>process-coding-system-alist</strong></dt>
-<dd><p>This variable is an alist specifying which coding systems to use for a
-subprocess, depending on which program is running in the subprocess.  It
-works like <code>file-coding-system-alist</code>, except that <var>pattern</var> is
-matched against the program name used to start the subprocess.  The coding
-system or systems specified in this alist are used to initialize the
-coding systems used for I/O to the subprocess, but you can specify
-other coding systems later using <code>set-process-coding-system</code>.
-</p></dd></dl>
+    <dd>
+      <p>This variable is an alist of text patterns and
+      corresponding coding systems. Each element has the form
+      <code>(<var>regexp</var> . <var>coding-system</var>)</code>;
+      a file whose first few kilobytes match <var>regexp</var> is
+      decoded with <var>coding-system</var> when its contents are
+      read into a buffer. The settings in this alist take priority
+      over <code>coding:</code> tags in the files and the contents
+      of <code>file-coding-system-alist</code> (see below). The
+      default value is set so that Emacs automatically recognizes
+      mail files in Babyl format and reads them with no code
+      conversions.</p>
+    </dd>
+  </dl><a name="index-file-name_002c-and-default-coding-system" id=
+  "index-file-name_002c-and-default-coding-system"></a>
 
-<p><strong>Warning:</strong> Coding systems such as <code>undecided</code>, which
-determine the coding system from the data, do not work entirely reliably
-with asynchronous subprocess output.  This is because Emacs handles
-asynchronous subprocess output in batches, as it arrives.  If the coding
-system leaves the character code conversion unspecified, or leaves the
-end-of-line conversion unspecified, Emacs must try to detect the proper
-conversion from one batch at a time, and this does not always work.
-</p>
-<p>Therefore, with an asynchronous subprocess, if at all possible, use a
-coding system which determines both the character code conversion and
-the end of line conversion&mdash;that is, one like <code>latin-1-unix</code>,
-rather than <code>undecided</code> or <code>latin-1</code>.
-</p>
-<a name="index-port-number_002c-and-default-coding-system"></a>
-<a name="index-network-service-name_002c-and-default-coding-system"></a>
-<dl>
-<dt><a name="index-network_002dcoding_002dsystem_002dalist"></a>Variable: <strong>network-coding-system-alist</strong></dt>
-<dd><p>This variable is an alist that specifies the coding system to use for
-network streams.  It works much like <code>file-coding-system-alist</code>,
-with the difference that the <var>pattern</var> in an element may be either a
-port number or a regular expression.  If it is a regular expression, it
-is matched against the network service name used to open the network
-stream.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-file_002dcoding_002dsystem_002dalist" id=
+    "index-file_002dcoding_002dsystem_002dalist"></a>User Option:
+    <strong>file-coding-system-alist</strong></dt>
 
-<dl>
-<dt><a name="index-default_002dprocess_002dcoding_002dsystem"></a>Variable: <strong>default-process-coding-system</strong></dt>
-<dd><p>This variable specifies the coding systems to use for subprocess (and
-network stream) input and output, when nothing else specifies what to
-do.
-</p>
-<p>The value should be a cons cell of the form <code>(<var>input-coding</var>
-. <var>output-coding</var>)</code>.  Here <var>input-coding</var> applies to input from
-the subprocess, and <var>output-coding</var> applies to output to it.
-</p></dd></dl>
+    <dd>
+      <p>This variable is an alist that specifies the coding
+      systems to use for reading and writing particular files. Each
+      element has the form <code>(<var>pattern</var> .
+      <var>coding</var>)</code>, where <var>pattern</var> is a
+      regular expression that matches certain file names. The
+      element applies to file names that match
+      <var>pattern</var>.</p>
 
-<a name="index-default-coding-system_002c-functions-to-determine"></a>
-<dl>
-<dt><a name="index-auto_002dcoding_002dfunctions"></a>User Option: <strong>auto-coding-functions</strong></dt>
-<dd><p>This variable holds a list of functions that try to determine a
-coding system for a file based on its undecoded contents.
-</p>
-<p>Each function in this list should be written to look at text in the
-current buffer, but should not modify it in any way.  The buffer will
-contain undecoded text of parts of the file.  Each function should
-take one argument, <var>size</var>, which tells it how many characters to
-look at, starting from point.  If the function succeeds in determining
-a coding system for the file, it should return that coding system.
-Otherwise, it should return <code>nil</code>.
-</p>
-<p>If a file has a &lsquo;<samp>coding:</samp>&rsquo; tag, that takes precedence, so these
-functions won&rsquo;t be called.
-</p></dd></dl>
+      <p>The <small>CDR</small> of the element, <var>coding</var>,
+      should be either a coding system, a cons cell containing two
+      coding systems, or a function name (a symbol with a function
+      definition). If <var>coding</var> is a coding system, that
+      coding system is used for both reading the file and writing
+      it. If <var>coding</var> is a cons cell containing two coding
+      systems, its <small>CAR</small> specifies the coding system
+      for decoding, and its <small>CDR</small> specifies the coding
+      system for encoding.</p>
 
-<dl>
-<dt><a name="index-find_002dauto_002dcoding"></a>Function: <strong>find-auto-coding</strong> <em>filename size</em></dt>
-<dd><p>This function tries to determine a suitable coding system for
-<var>filename</var>.  It examines the buffer visiting the named file, using
-the variables documented above in sequence, until it finds a match for
-one of the rules specified by these variables.  It then returns a cons
-cell of the form <code>(<var>coding</var> . <var>source</var>)</code>, where
-<var>coding</var> is the coding system to use and <var>source</var> is a symbol,
-one of <code>auto-coding-alist</code>, <code>auto-coding-regexp-alist</code>,
-<code>:coding</code>, or <code>auto-coding-functions</code>, indicating which one
-supplied the matching rule.  The value <code>:coding</code> means the coding
-system was specified by the <code>coding:</code> tag in the file
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Specify-Coding.html#Specify-Coding">coding tag</a> in <cite>The GNU Emacs Manual</cite>).
-The order of looking for a matching rule is <code>auto-coding-alist</code>
-first, then <code>auto-coding-regexp-alist</code>, then the <code>coding:</code>
-tag, and lastly <code>auto-coding-functions</code>.  If no matching rule was
-found, the function returns <code>nil</code>.
-</p>
-<p>The second argument <var>size</var> is the size of text, in characters,
-following point.  The function examines text only within <var>size</var>
-characters after point.  Normally, the buffer should be positioned at
-the beginning when this function is called, because one of the places
-for the <code>coding:</code> tag is the first one or two lines of the file;
-in that case, <var>size</var> should be the size of the buffer.
-</p></dd></dl>
+      <p>If <var>coding</var> is a function name, the function
+      should take one argument, a list of all arguments passed to
+      <code>find-operation-coding-system</code>. It must return a
+      coding system or a cons cell containing two coding systems.
+      This value has the same meaning as described above.</p>
 
-<dl>
-<dt><a name="index-set_002dauto_002dcoding"></a>Function: <strong>set-auto-coding</strong> <em>filename size</em></dt>
-<dd><p>This function returns a suitable coding system for file
-<var>filename</var>.  It uses <code>find-auto-coding</code> to find the coding
-system.  If no coding system could be determined, the function returns
-<code>nil</code>.  The meaning of the argument <var>size</var> is like in
-<code>find-auto-coding</code>.
-</p></dd></dl>
+      <p>If <var>coding</var> (or what returned by the above
+      function) is <code>undecided</code>, the normal
+      code-detection is performed.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-find_002doperation_002dcoding_002dsystem"></a>Function: <strong>find-operation-coding-system</strong> <em>operation &amp;rest arguments</em></dt>
-<dd><p>This function returns the coding system to use (by default) for
-performing <var>operation</var> with <var>arguments</var>.  The value has this
-form:
-</p>
-<div class="example">
-<pre class="example">(<var>decoding-system</var> . <var>encoding-system</var>)
-</pre></div>
+  <dl>
+    <dt><a name="index-auto_002dcoding_002dalist" id=
+    "index-auto_002dcoding_002dalist"></a>User Option:
+    <strong>auto-coding-alist</strong></dt>
 
-<p>The first element, <var>decoding-system</var>, is the coding system to use
-for decoding (in case <var>operation</var> does decoding), and
-<var>encoding-system</var> is the coding system for encoding (in case
-<var>operation</var> does encoding).
-</p>
-<p>The argument <var>operation</var> is a symbol; it should be one of
-<code>write-region</code>, <code>start-process</code>, <code>call-process</code>,
-<code>call-process-region</code>, <code>insert-file-contents</code>, or
-<code>open-network-stream</code>.  These are the names of the Emacs I/O
-primitives that can do character code and eol conversion.
-</p>
-<p>The remaining arguments should be the same arguments that might be given
-to the corresponding I/O primitive.  Depending on the primitive, one
-of those arguments is selected as the <em>target</em>.  For example, if
-<var>operation</var> does file I/O, whichever argument specifies the file
-name is the target.  For subprocess primitives, the process name is the
-target.  For <code>open-network-stream</code>, the target is the service name
-or port number.
-</p>
-<p>Depending on <var>operation</var>, this function looks up the target in
-<code>file-coding-system-alist</code>, <code>process-coding-system-alist</code>,
-or <code>network-coding-system-alist</code>.  If the target is found in the
-alist, <code>find-operation-coding-system</code> returns its association in
-the alist; otherwise it returns <code>nil</code>.
-</p>
-<p>If <var>operation</var> is <code>insert-file-contents</code>, the argument
-corresponding to the target may be a cons cell of the form
-<code>(<var>filename</var> . <var>buffer</var>)</code>.  In that case, <var>filename</var>
-is a file name to look up in <code>file-coding-system-alist</code>, and
-<var>buffer</var> is a buffer that contains the file&rsquo;s contents (not yet
-decoded).  If <code>file-coding-system-alist</code> specifies a function to
-call for this file, and that function needs to examine the file&rsquo;s
-contents (as it usually does), it should examine the contents of
-<var>buffer</var> instead of reading the file.
-</p></dd></dl>
+    <dd>
+      <p>This variable is an alist that specifies the coding
+      systems to use for reading and writing particular files. Its
+      form is like that of <code>file-coding-system-alist</code>,
+      but, unlike the latter, this variable takes priority over any
+      <code>coding:</code> tags in the file.</p>
+    </dd>
+  </dl><a name="index-program-name_002c-and-default-coding-system"
+  id="index-program-name_002c-and-default-coding-system"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Specifying-Coding-Systems.html#Specifying-Coding-Systems" accesskey="n" rel="next">Specifying Coding Systems</a>, Previous: <a href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems" accesskey="p" rel="prev">User-Chosen Coding Systems</a>, Up: <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel="up">Coding Systems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-process_002dcoding_002dsystem_002dalist" id=
+    "index-process_002dcoding_002dsystem_002dalist"></a>Variable:
+    <strong>process-coding-system-alist</strong></dt>
 
+    <dd>
+      <p>This variable is an alist specifying which coding systems
+      to use for a subprocess, depending on which program is
+      running in the subprocess. It works like
+      <code>file-coding-system-alist</code>, except that
+      <var>pattern</var> is matched against the program name used
+      to start the subprocess. The coding system or systems
+      specified in this alist are used to initialize the coding
+      systems used for I/O to the subprocess, but you can specify
+      other coding systems later using
+      <code>set-process-coding-system</code>.</p>
+    </dd>
+  </dl>
 
+  <p><strong>Warning:</strong> Coding systems such as
+  <code>undecided</code>, which determine the coding system from
+  the data, do not work entirely reliably with asynchronous
+  subprocess output. This is because Emacs handles asynchronous
+  subprocess output in batches, as it arrives. If the coding system
+  leaves the character code conversion unspecified, or leaves the
+  end-of-line conversion unspecified, Emacs must try to detect the
+  proper conversion from one batch at a time, and this does not
+  always work.</p>
 
+  <p>Therefore, with an asynchronous subprocess, if at all
+  possible, use a coding system which determines both the character
+  code conversion and the end of line conversion&mdash;that is, one
+  like <code>latin-1-unix</code>, rather than
+  <code>undecided</code> or <code>latin-1</code>.</p><a name=
+  "index-port-number_002c-and-default-coding-system" id=
+  "index-port-number_002c-and-default-coding-system"></a> <a name=
+  "index-network-service-name_002c-and-default-coding-system" id=
+  "index-network-service-name_002c-and-default-coding-system"></a>
+
+  <dl>
+    <dt><a name="index-network_002dcoding_002dsystem_002dalist" id=
+    "index-network_002dcoding_002dsystem_002dalist"></a>Variable:
+    <strong>network-coding-system-alist</strong></dt>
+
+    <dd>
+      <p>This variable is an alist that specifies the coding system
+      to use for network streams. It works much like
+      <code>file-coding-system-alist</code>, with the difference
+      that the <var>pattern</var> in an element may be either a
+      port number or a regular expression. If it is a regular
+      expression, it is matched against the network service name
+      used to open the network stream.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-default_002dprocess_002dcoding_002dsystem"
+    id=
+    "index-default_002dprocess_002dcoding_002dsystem"></a>Variable:
+    <strong>default-process-coding-system</strong></dt>
+
+    <dd>
+      <p>This variable specifies the coding systems to use for
+      subprocess (and network stream) input and output, when
+      nothing else specifies what to do.</p>
+
+      <p>The value should be a cons cell of the form
+      <code>(<var>input-coding</var> .
+      <var>output-coding</var>)</code>. Here
+      <var>input-coding</var> applies to input from the subprocess,
+      and <var>output-coding</var> applies to output to it.</p>
+    </dd>
+  </dl><a name=
+  "index-default-coding-system_002c-functions-to-determine" id=
+  "index-default-coding-system_002c-functions-to-determine"></a>
+
+  <dl>
+    <dt><a name="index-auto_002dcoding_002dfunctions" id=
+    "index-auto_002dcoding_002dfunctions"></a>User Option:
+    <strong>auto-coding-functions</strong></dt>
+
+    <dd>
+      <p>This variable holds a list of functions that try to
+      determine a coding system for a file based on its undecoded
+      contents.</p>
+
+      <p>Each function in this list should be written to look at
+      text in the current buffer, but should not modify it in any
+      way. The buffer will contain undecoded text of parts of the
+      file. Each function should take one argument,
+      <var>size</var>, which tells it how many characters to look
+      at, starting from point. If the function succeeds in
+      determining a coding system for the file, it should return
+      that coding system. Otherwise, it should return
+      <code>nil</code>.</p>
+
+      <p>If a file has a &lsquo;<samp>coding:</samp>&rsquo; tag,
+      that takes precedence, so these functions won&rsquo;t be
+      called.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-find_002dauto_002dcoding" id=
+    "index-find_002dauto_002dcoding"></a>Function:
+    <strong>find-auto-coding</strong> <em>filename size</em></dt>
+
+    <dd>
+      <p>This function tries to determine a suitable coding system
+      for <var>filename</var>. It examines the buffer visiting the
+      named file, using the variables documented above in sequence,
+      until it finds a match for one of the rules specified by
+      these variables. It then returns a cons cell of the form
+      <code>(<var>coding</var> . <var>source</var>)</code>, where
+      <var>coding</var> is the coding system to use and
+      <var>source</var> is a symbol, one of
+      <code>auto-coding-alist</code>,
+      <code>auto-coding-regexp-alist</code>, <code>:coding</code>,
+      or <code>auto-coding-functions</code>, indicating which one
+      supplied the matching rule. The value <code>:coding</code>
+      means the coding system was specified by the
+      <code>coding:</code> tag in the file (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Specify-Coding.html#Specify-Coding">
+      coding tag</a> in <cite>The GNU Emacs Manual</cite>). The
+      order of looking for a matching rule is
+      <code>auto-coding-alist</code> first, then
+      <code>auto-coding-regexp-alist</code>, then the
+      <code>coding:</code> tag, and lastly
+      <code>auto-coding-functions</code>. If no matching rule was
+      found, the function returns <code>nil</code>.</p>
+
+      <p>The second argument <var>size</var> is the size of text,
+      in characters, following point. The function examines text
+      only within <var>size</var> characters after point. Normally,
+      the buffer should be positioned at the beginning when this
+      function is called, because one of the places for the
+      <code>coding:</code> tag is the first one or two lines of the
+      file; in that case, <var>size</var> should be the size of the
+      buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dauto_002dcoding" id=
+    "index-set_002dauto_002dcoding"></a>Function:
+    <strong>set-auto-coding</strong> <em>filename size</em></dt>
+
+    <dd>
+      <p>This function returns a suitable coding system for file
+      <var>filename</var>. It uses <code>find-auto-coding</code> to
+      find the coding system. If no coding system could be
+      determined, the function returns <code>nil</code>. The
+      meaning of the argument <var>size</var> is like in
+      <code>find-auto-coding</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-find_002doperation_002dcoding_002dsystem"
+    id="index-find_002doperation_002dcoding_002dsystem"></a>Function:
+    <strong>find-operation-coding-system</strong> <em>operation
+    &amp;rest arguments</em></dt>
+
+    <dd>
+      <p>This function returns the coding system to use (by
+      default) for performing <var>operation</var> with
+      <var>arguments</var>. The value has this form:</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>decoding-system</var> . <var>encoding-system</var>)
+</pre>
+      </div>
+
+      <p>The first element, <var>decoding-system</var>, is the
+      coding system to use for decoding (in case
+      <var>operation</var> does decoding), and
+      <var>encoding-system</var> is the coding system for encoding
+      (in case <var>operation</var> does encoding).</p>
+
+      <p>The argument <var>operation</var> is a symbol; it should
+      be one of <code>write-region</code>,
+      <code>start-process</code>, <code>call-process</code>,
+      <code>call-process-region</code>,
+      <code>insert-file-contents</code>, or
+      <code>open-network-stream</code>. These are the names of the
+      Emacs I/O primitives that can do character code and eol
+      conversion.</p>
+
+      <p>The remaining arguments should be the same arguments that
+      might be given to the corresponding I/O primitive. Depending
+      on the primitive, one of those arguments is selected as the
+      <em>target</em>. For example, if <var>operation</var> does
+      file I/O, whichever argument specifies the file name is the
+      target. For subprocess primitives, the process name is the
+      target. For <code>open-network-stream</code>, the target is
+      the service name or port number.</p>
+
+      <p>Depending on <var>operation</var>, this function looks up
+      the target in <code>file-coding-system-alist</code>,
+      <code>process-coding-system-alist</code>, or
+      <code>network-coding-system-alist</code>. If the target is
+      found in the alist, <code>find-operation-coding-system</code>
+      returns its association in the alist; otherwise it returns
+      <code>nil</code>.</p>
+
+      <p>If <var>operation</var> is
+      <code>insert-file-contents</code>, the argument corresponding
+      to the target may be a cons cell of the form
+      <code>(<var>filename</var> . <var>buffer</var>)</code>. In
+      that case, <var>filename</var> is a file name to look up in
+      <code>file-coding-system-alist</code>, and <var>buffer</var>
+      is a buffer that contains the file&rsquo;s contents (not yet
+      decoded). If <code>file-coding-system-alist</code> specifies
+      a function to call for this file, and that function needs to
+      examine the file&rsquo;s contents (as it usually does), it
+      should examine the contents of <var>buffer</var> instead of
+      reading the file.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Specifying-Coding-Systems.html#Specifying-Coding-Systems"
+    accesskey="n" rel="next">Specifying Coding Systems</a>,
+    Previous: <a href=
+    "User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems"
+    accesskey="p" rel="prev">User-Chosen Coding Systems</a>, Up:
+    <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel=
+    "up">Coding Systems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

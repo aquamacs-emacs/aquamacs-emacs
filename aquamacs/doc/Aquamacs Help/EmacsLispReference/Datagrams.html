@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,93 +19,135 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Datagrams</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Datagrams">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Datagrams">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Processes.html#Processes" rel="up" title="Processes">
-<link href="Low_002dLevel-Network.html#Low_002dLevel-Network" rel="next" title="Low-Level Network">
-<link href="Network-Servers.html#Network-Servers" rel="prev" title="Network Servers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Datagrams</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Datagrams" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Datagrams" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Processes.html#Processes" rel="up" title=
+  "Processes" />
+  <link href="Low_002dLevel-Network.html#Low_002dLevel-Network"
+  rel="next" title="Low-Level Network" />
+  <link href="Network-Servers.html#Network-Servers" rel="prev"
+  title="Network Servers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Datagrams" id="Datagrams"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey=
+    "n" rel="next">Low-Level Network</a>, Previous: <a href=
+    "Network-Servers.html#Network-Servers" accesskey="p" rel=
+    "prev">Network Servers</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Datagrams-1" id="Datagrams-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Datagrams"></a>
-<div class="header">
-<p>
-Next: <a href="Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey="n" rel="next">Low-Level Network</a>, Previous: <a href="Network-Servers.html#Network-Servers" accesskey="p" rel="prev">Network Servers</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Datagrams-1"></a>
-<h3 class="section">36.16 Datagrams</h3>
-<a name="index-datagrams"></a>
+  <h3 class="section">36.16 Datagrams</h3><a name="index-datagrams"
+  id="index-datagrams"></a>
 
-<p>A <em>datagram</em> connection communicates with individual packets rather
-than streams of data.  Each call to <code>process-send</code> sends one
-datagram packet (see <a href="Input-to-Processes.html#Input-to-Processes">Input to Processes</a>), and each datagram
-received results in one call to the filter function.
-</p>
-<p>The datagram connection doesn&rsquo;t have to talk with the same remote
-peer all the time.  It has a <em>remote peer address</em> which specifies
-where to send datagrams to.  Each time an incoming datagram is passed
-to the filter function, the peer address is set to the address that
-datagram came from; that way, if the filter function sends a datagram,
-it will go back to that place.  You can specify the remote peer
-address when you create the datagram connection using the
-<code>:remote</code> keyword.  You can change it later on by calling
-<code>set-process-datagram-address</code>.
-</p>
-<dl>
-<dt><a name="index-process_002ddatagram_002daddress"></a>Function: <strong>process-datagram-address</strong> <em>process</em></dt>
-<dd><p>If <var>process</var> is a datagram connection or server, this function
-returns its remote peer address.
-</p></dd></dl>
+  <p>A <em>datagram</em> connection communicates with individual
+  packets rather than streams of data. Each call to
+  <code>process-send</code> sends one datagram packet (see <a href=
+  "Input-to-Processes.html#Input-to-Processes">Input to
+  Processes</a>), and each datagram received results in one call to
+  the filter function.</p>
 
-<dl>
-<dt><a name="index-set_002dprocess_002ddatagram_002daddress"></a>Function: <strong>set-process-datagram-address</strong> <em>process address</em></dt>
-<dd><p>If <var>process</var> is a datagram connection or server, this function
-sets its remote peer address to <var>address</var>.
-</p></dd></dl>
+  <p>The datagram connection doesn&rsquo;t have to talk with the
+  same remote peer all the time. It has a <em>remote peer
+  address</em> which specifies where to send datagrams to. Each
+  time an incoming datagram is passed to the filter function, the
+  peer address is set to the address that datagram came from; that
+  way, if the filter function sends a datagram, it will go back to
+  that place. You can specify the remote peer address when you
+  create the datagram connection using the <code>:remote</code>
+  keyword. You can change it later on by calling
+  <code>set-process-datagram-address</code>.</p>
 
+  <dl>
+    <dt><a name="index-process_002ddatagram_002daddress" id=
+    "index-process_002ddatagram_002daddress"></a>Function:
+    <strong>process-datagram-address</strong> <em>process</em></dt>
 
+    <dd>
+      <p>If <var>process</var> is a datagram connection or server,
+      this function returns its remote peer address.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-set_002dprocess_002ddatagram_002daddress"
+    id="index-set_002dprocess_002ddatagram_002daddress"></a>Function:
+    <strong>set-process-datagram-address</strong> <em>process
+    address</em></dt>
 
+    <dd>
+      <p>If <var>process</var> is a datagram connection or server,
+      this function sets its remote peer address to
+      <var>address</var>.</p>
+    </dd>
+  </dl>
 </body>
 </html>

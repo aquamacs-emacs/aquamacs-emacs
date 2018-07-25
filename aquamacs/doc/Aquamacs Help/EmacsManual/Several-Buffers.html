@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,281 +20,449 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Several Buffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Several Buffers">
-<meta name="keywords" content="GNU Emacs Manual: Several Buffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffers.html#Buffers" rel="up" title="Buffers">
-<link href="Indirect-Buffers.html#Indirect-Buffers" rel="next" title="Indirect Buffers">
-<link href="Kill-Buffer.html#Kill-Buffer" rel="prev" title="Kill Buffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Several Buffers</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Several Buffers" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Several Buffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffers.html#Buffers" rel="up" title="Buffers" />
+  <link href="Indirect-Buffers.html#Indirect-Buffers" rel="next"
+  title="Indirect Buffers" />
+  <link href="Kill-Buffer.html#Kill-Buffer" rel="prev" title=
+  "Kill Buffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Several-Buffers" id="Several-Buffers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Indirect-Buffers.html#Indirect-Buffers"
+    accesskey="n" rel="next">Indirect Buffers</a>, Previous:
+    <a href="Kill-Buffer.html#Kill-Buffer" accesskey="p" rel=
+    "prev">Kill Buffer</a>, Up: <a href="Buffers.html#Buffers"
+    accesskey="u" rel="up">Buffers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Operating-on-Several-Buffers" id=
+  "Operating-on-Several-Buffers"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Several-Buffers"></a>
-<div class="header">
-<p>
-Next: <a href="Indirect-Buffers.html#Indirect-Buffers" accesskey="n" rel="next">Indirect Buffers</a>, Previous: <a href="Kill-Buffer.html#Kill-Buffer" accesskey="p" rel="prev">Kill Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Operating-on-Several-Buffers"></a>
-<h3 class="section">19.5 Operating on Several Buffers</h3>
-<a name="index-Buffer-Menu"></a>
+  <h3 class="section">19.5 Operating on Several
+  Buffers</h3><a name="index-Buffer-Menu" id=
+  "index-Buffer-Menu"></a>
 
-<dl compact="compact">
-<dt><kbd>M-x buffer-menu</kbd></dt>
-<dd><p>Begin editing a buffer listing all Emacs buffers.
-</p></dd>
-<dt><kbd>M-x buffer-menu-other-window</kbd></dt>
-<dd><p>Similar, but do it in another window.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>M-x buffer-menu</kbd></dt>
 
-<p>The <em>Buffer Menu</em> opened by <kbd>C-x C-b</kbd> (see <a href="List-Buffers.html#List-Buffers">List Buffers</a>)
-does not merely list buffers.  It also allows you to perform various
-operations on buffers, through an interface similar to Dired
-(see <a href="Dired.html#Dired">Dired</a>).  You can save buffers, kill them (here called
-<em>deleting</em> them, for consistency with Dired), or display them.
-</p>
-<a name="index-buffer_002dmenu"></a>
-<a name="index-buffer_002dmenu_002dother_002dwindow"></a>
-<p>To use the Buffer Menu, type <kbd>C-x C-b</kbd> and switch to the window
-displaying the <samp>*Buffer List*</samp> buffer.  You can also type
-<kbd>M-x buffer-menu</kbd> to open the Buffer Menu in the selected window.
-Alternatively, the command <kbd>M-x buffer-menu-other-window</kbd> opens
-the Buffer Menu in another window, and selects that window.
-</p>
-<p>The Buffer Menu is a read-only buffer, and can be changed only
-through the special commands described in this section.  The usual
-cursor motion commands can be used in this buffer.  The following
-commands apply to the buffer described on the current line:
-</p>
-<dl compact="compact">
-<dt><kbd>d</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002ddelete"></a>
-<a name="index-d-_0028Buffer-Menu_0029"></a>
-<p>Flag the buffer for deletion (killing), then move point to the next
-line (<code>Buffer-menu-delete</code>).  The deletion flag is indicated by
-the character &lsquo;<samp>D</samp>&rsquo; on the line, before the buffer name.  The
-deletion occurs only when you type the <kbd>x</kbd> command (see below).
-</p>
-</dd>
-<dt><kbd>C-d</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002ddelete_002dbackwards"></a>
-<a name="index-C_002dd-_0028Buffer-Menu_0029"></a>
-<p>Like <kbd>d</kbd>, but move point up instead of down
-(<code>Buffer-menu-delete-backwards</code>).
-</p>
-</dd>
-<dt><kbd>s</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dsave"></a>
-<a name="index-s-_0028Buffer-Menu_0029"></a>
-<p>Flag the buffer for saving (<code>Buffer-menu-save</code>).  The save flag
-is indicated by the character &lsquo;<samp>S</samp>&rsquo; on the line, before the buffer
-name.  The saving occurs only when you type <kbd>x</kbd>.  You may request
-both saving and deletion for the same buffer.
-</p>
-</dd>
-<dt><kbd>x</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dexecute"></a>
-<a name="index-x-_0028Buffer-Menu_0029"></a>
-<p>Perform all flagged deletions and saves (<code>Buffer-menu-execute</code>).
-</p>
-</dd>
-<dt><kbd>u</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dunmark"></a>
-<a name="index-u-_0028Buffer-Menu_0029"></a>
-<p>Remove all flags from the current line, and move down
-(<code>Buffer-menu-unmark</code>).
-</p>
-</dd>
-<dt><kbd><span class="key">DEL</span></kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dbackup_002dunmark"></a>
-<a name="index-DEL-_0028Buffer-Menu_0029"></a>
-<p>Move to the previous line and remove all flags on that line
-(<code>Buffer-menu-backup-unmark</code>).
-</p></dd>
-</dl>
+    <dd>
+      <p>Begin editing a buffer listing all Emacs buffers.</p>
+    </dd>
 
-<p>The commands for adding or removing flags, <kbd>d</kbd>, <kbd>C-d</kbd>, <kbd>s</kbd>
-and <kbd>u</kbd>, all accept a numeric argument as a repeat count.
-</p>
-<p>The following commands operate immediately on the buffer listed on
-the current line.  They also accept a numeric argument as a repeat
-count.
-</p>
-<dl compact="compact">
-<dt><kbd>~</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dnot_002dmodified"></a>
-<a name="index-_007e-_0028Buffer-Menu_0029"></a>
-<p>Mark the buffer as unmodified (<code>Buffer-menu-not-modified</code>).
-See <a href="Save-Commands.html#Save-Commands">Save Commands</a>.
-</p>
-</dd>
-<dt><kbd>%</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dtoggle_002dread_002donly"></a>
-<a name="index-_0025-_0028Buffer-Menu_0029"></a>
-<p>Toggle the buffer&rsquo;s read-only status
-(<code>Buffer-menu-toggle-read-only</code>).  See <a href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>.
-</p>
-</dd>
-<dt><kbd>t</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dvisit_002dtags_002dtable"></a>
-<a name="index-_0025-_0028Buffer-Menu_0029-1"></a>
-<p>Visit the buffer as a tags table
-(<code>Buffer-menu-visit-tags-table</code>).  See <a href="Select-Tags-Table.html#Select-Tags-Table">Select Tags Table</a>.
-</p></dd>
-</dl>
+    <dt><kbd>M-x buffer-menu-other-window</kbd></dt>
 
-<p>The following commands are used to select another buffer or buffers:
-</p>
-<dl compact="compact">
-<dt><kbd>q</kbd></dt>
-<dd><a name="index-quit_002dwindow"></a>
-<a name="index-q-_0028Buffer-Menu_0029"></a>
-<p>Quit the Buffer Menu (<code>quit-window</code>).  The most recent formerly
-visible buffer is displayed in its place.
-</p>
-</dd>
-<dt><kbd><span class="key">RET</span></kbd></dt>
-<dt><kbd>f</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dthis_002dwindow"></a>
-<a name="index-f-_0028Buffer-Menu_0029"></a>
-<a name="index-RET-_0028Buffer-Menu_0029"></a>
-<p>Select this line&rsquo;s buffer, replacing the <samp>*Buffer List*</samp> buffer
-in its window (<code>Buffer-menu-this-window</code>).
-</p>
-</dd>
-<dt><kbd>o</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dother_002dwindow"></a>
-<a name="index-o-_0028Buffer-Menu_0029"></a>
-<p>Select this line&rsquo;s buffer in another window, as if by <kbd>C-x 4 b</kbd>,
-leaving <samp>*Buffer List*</samp> visible
-(<code>Buffer-menu-other-window</code>).
-</p>
-</dd>
-<dt><kbd>C-o</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dswitch_002dother_002dwindow"></a>
-<a name="index-C_002do-_0028Buffer-Menu_0029"></a>
-<p>Display this line&rsquo;s buffer in another window, without selecting it
-(<code>Buffer-menu-switch-other-window</code>).
-</p>
-</dd>
-<dt><kbd>1</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002d1_002dwindow"></a>
-<a name="index-1-_0028Buffer-Menu_0029"></a>
-<p>Select this line&rsquo;s buffer in a full-frame window
-(<code>Buffer-menu-1-window</code>).
-</p>
-</dd>
-<dt><kbd>2</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002d2_002dwindow"></a>
-<a name="index-2-_0028Buffer-Menu_0029"></a>
-<p>Set up two windows on the current frame, with this line&rsquo;s buffer
-selected in one, and a previously current buffer (aside from
-<samp>*Buffer List*</samp>) in the other (<code>Buffer-menu-2-window</code>).
-</p>
-</dd>
-<dt><kbd>b</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dbury"></a>
-<a name="index-b-_0028Buffer-Menu_0029"></a>
-<p>Bury this line&rsquo;s buffer (<code>Buffer-menu-bury</code>).
-</p>
-</dd>
-<dt><kbd>m</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dmark"></a>
-<a name="index-m-_0028Buffer-Menu_0029"></a>
-<p>Mark this line&rsquo;s buffer to be displayed in another window if you exit
-with the <kbd>v</kbd> command (<code>Buffer-menu-mark</code>).  The display flag
-is indicated by the character &lsquo;<samp>&gt;</samp>&rsquo; at the beginning of the line.
-(A single buffer may not have both deletion and display flags.)
-</p>
-</dd>
-<dt><kbd>v</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dselect"></a>
-<a name="index-v-_0028Buffer-Menu_0029"></a>
-<p>Select this line&rsquo;s buffer, and also display in other windows any
-buffers flagged with the <kbd>m</kbd> command (<code>Buffer-menu-select</code>).
-If you have not flagged any buffers, this command is equivalent to
-<kbd>1</kbd>.
-</p></dd>
-</dl>
+    <dd>
+      <p>Similar, but do it in another window.</p>
+    </dd>
+  </dl>
 
-<p>The following commands affect the entire buffer list:
-</p>
-<dl compact="compact">
-<dt><kbd>S</kbd></dt>
-<dd><a name="index-tabulated_002dlist_002dsort"></a>
-<a name="index-S-_0028Buffer-Menu_0029"></a>
-<p>Sort the Buffer Menu entries according to their values in the column
-at point.  With a numeric prefix argument <var>n</var>, sort according to
-the <var>n</var>-th column (<code>tabulated-list-sort</code>).
-</p>
-</dd>
-<dt><kbd>T</kbd></dt>
-<dd><a name="index-Buffer_002dmenu_002dtoggle_002dfiles_002donly"></a>
-<a name="index-T-_0028Buffer-Menu_0029"></a>
-<p>Delete, or reinsert, lines for non-file buffers
-(<code>Buffer-menu-toggle-files-only</code>).  This command toggles the
-inclusion of such buffers in the buffer list.
-</p></dd>
-</dl>
+  <p>The <em>Buffer Menu</em> opened by <kbd>C-x C-b</kbd> (see
+  <a href="List-Buffers.html#List-Buffers">List Buffers</a>) does
+  not merely list buffers. It also allows you to perform various
+  operations on buffers, through an interface similar to Dired (see
+  <a href="Dired.html#Dired">Dired</a>). You can save buffers, kill
+  them (here called <em>deleting</em> them, for consistency with
+  Dired), or display them.</p><a name="index-buffer_002dmenu" id=
+  "index-buffer_002dmenu"></a> <a name=
+  "index-buffer_002dmenu_002dother_002dwindow" id=
+  "index-buffer_002dmenu_002dother_002dwindow"></a>
 
-<p>Normally, the buffer <samp>*Buffer List*</samp> is not updated
-automatically when buffers are created and killed; its contents are
-just text.  If you have created, deleted or renamed buffers, the way
-to update <samp>*Buffer List*</samp> to show what you have done is to type
-<kbd>g</kbd> (<code>revert-buffer</code>).  You can make this happen regularly
-every <code>auto-revert-interval</code> seconds if you enable Auto Revert
-mode in this buffer, as long as it is not marked modified.  Global
-Auto Revert mode applies to the <samp>*Buffer List*</samp> buffer only if
-<code>global-auto-revert-non-file-buffers</code> is non-<code>nil</code>.
-See <a href="Autorevert.html#Autorevert">global-auto-revert-non-file-buffers</a>, for details.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Indirect-Buffers.html#Indirect-Buffers" accesskey="n" rel="next">Indirect Buffers</a>, Previous: <a href="Kill-Buffer.html#Kill-Buffer" accesskey="p" rel="prev">Kill Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>To use the Buffer Menu, type <kbd>C-x C-b</kbd> and switch to
+  the window displaying the <samp>*Buffer List*</samp> buffer. You
+  can also type <kbd>M-x buffer-menu</kbd> to open the Buffer Menu
+  in the selected window. Alternatively, the command <kbd>M-x
+  buffer-menu-other-window</kbd> opens the Buffer Menu in another
+  window, and selects that window.</p>
 
+  <p>The Buffer Menu is a read-only buffer, and can be changed only
+  through the special commands described in this section. The usual
+  cursor motion commands can be used in this buffer. The following
+  commands apply to the buffer described on the current line:</p>
 
+  <dl compact="compact">
+    <dt><kbd>d</kbd></dt>
 
+    <dd>
+      <a name="index-Buffer_002dmenu_002ddelete" id=
+      "index-Buffer_002dmenu_002ddelete"></a> <a name=
+      "index-d-_0028Buffer-Menu_0029" id=
+      "index-d-_0028Buffer-Menu_0029"></a>
+
+      <p>Flag the buffer for deletion (killing), then move point to
+      the next line (<code>Buffer-menu-delete</code>). The deletion
+      flag is indicated by the character
+      &lsquo;<samp>D</samp>&rsquo; on the line, before the buffer
+      name. The deletion occurs only when you type the <kbd>x</kbd>
+      command (see below).</p>
+    </dd>
+
+    <dt><kbd>C-d</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002ddelete_002dbackwards" id=
+      "index-Buffer_002dmenu_002ddelete_002dbackwards"></a>
+      <a name="index-C_002dd-_0028Buffer-Menu_0029" id=
+      "index-C_002dd-_0028Buffer-Menu_0029"></a>
+
+      <p>Like <kbd>d</kbd>, but move point up instead of down
+      (<code>Buffer-menu-delete-backwards</code>).</p>
+    </dd>
+
+    <dt><kbd>s</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dsave" id=
+      "index-Buffer_002dmenu_002dsave"></a> <a name=
+      "index-s-_0028Buffer-Menu_0029" id=
+      "index-s-_0028Buffer-Menu_0029"></a>
+
+      <p>Flag the buffer for saving
+      (<code>Buffer-menu-save</code>). The save flag is indicated
+      by the character &lsquo;<samp>S</samp>&rsquo; on the line,
+      before the buffer name. The saving occurs only when you type
+      <kbd>x</kbd>. You may request both saving and deletion for
+      the same buffer.</p>
+    </dd>
+
+    <dt><kbd>x</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dexecute" id=
+      "index-Buffer_002dmenu_002dexecute"></a> <a name=
+      "index-x-_0028Buffer-Menu_0029" id=
+      "index-x-_0028Buffer-Menu_0029"></a>
+
+      <p>Perform all flagged deletions and saves
+      (<code>Buffer-menu-execute</code>).</p>
+    </dd>
+
+    <dt><kbd>u</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dunmark" id=
+      "index-Buffer_002dmenu_002dunmark"></a> <a name=
+      "index-u-_0028Buffer-Menu_0029" id=
+      "index-u-_0028Buffer-Menu_0029"></a>
+
+      <p>Remove all flags from the current line, and move down
+      (<code>Buffer-menu-unmark</code>).</p>
+    </dd>
+
+    <dt><kbd><span class="key">DEL</span></kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dbackup_002dunmark" id=
+      "index-Buffer_002dmenu_002dbackup_002dunmark"></a> <a name=
+      "index-DEL-_0028Buffer-Menu_0029" id=
+      "index-DEL-_0028Buffer-Menu_0029"></a>
+
+      <p>Move to the previous line and remove all flags on that
+      line (<code>Buffer-menu-backup-unmark</code>).</p>
+    </dd>
+  </dl>
+
+  <p>The commands for adding or removing flags, <kbd>d</kbd>,
+  <kbd>C-d</kbd>, <kbd>s</kbd> and <kbd>u</kbd>, all accept a
+  numeric argument as a repeat count.</p>
+
+  <p>The following commands operate immediately on the buffer
+  listed on the current line. They also accept a numeric argument
+  as a repeat count.</p>
+
+  <dl compact="compact">
+    <dt><kbd>~</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dnot_002dmodified" id=
+      "index-Buffer_002dmenu_002dnot_002dmodified"></a> <a name=
+      "index-_007e-_0028Buffer-Menu_0029" id=
+      "index-_007e-_0028Buffer-Menu_0029"></a>
+
+      <p>Mark the buffer as unmodified
+      (<code>Buffer-menu-not-modified</code>). See <a href=
+      "Save-Commands.html#Save-Commands">Save Commands</a>.</p>
+    </dd>
+
+    <dt><kbd>%</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dtoggle_002dread_002donly"
+      id="index-Buffer_002dmenu_002dtoggle_002dread_002donly"></a>
+      <a name="index-_0025-_0028Buffer-Menu_0029" id=
+      "index-_0025-_0028Buffer-Menu_0029"></a>
+
+      <p>Toggle the buffer&rsquo;s read-only status
+      (<code>Buffer-menu-toggle-read-only</code>). See <a href=
+      "Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>.</p>
+    </dd>
+
+    <dt><kbd>t</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dvisit_002dtags_002dtable"
+      id="index-Buffer_002dmenu_002dvisit_002dtags_002dtable"></a>
+      <a name="index-_0025-_0028Buffer-Menu_0029-1" id=
+      "index-_0025-_0028Buffer-Menu_0029-1"></a>
+
+      <p>Visit the buffer as a tags table
+      (<code>Buffer-menu-visit-tags-table</code>). See <a href=
+      "Select-Tags-Table.html#Select-Tags-Table">Select Tags
+      Table</a>.</p>
+    </dd>
+  </dl>
+
+  <p>The following commands are used to select another buffer or
+  buffers:</p>
+
+  <dl compact="compact">
+    <dt><kbd>q</kbd></dt>
+
+    <dd>
+      <a name="index-quit_002dwindow" id=
+      "index-quit_002dwindow"></a> <a name=
+      "index-q-_0028Buffer-Menu_0029" id=
+      "index-q-_0028Buffer-Menu_0029"></a>
+
+      <p>Quit the Buffer Menu (<code>quit-window</code>). The most
+      recent formerly visible buffer is displayed in its place.</p>
+    </dd>
+
+    <dt><kbd><span class="key">RET</span></kbd></dt>
+
+    <dt><kbd>f</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dthis_002dwindow" id=
+      "index-Buffer_002dmenu_002dthis_002dwindow"></a> <a name=
+      "index-f-_0028Buffer-Menu_0029" id=
+      "index-f-_0028Buffer-Menu_0029"></a> <a name=
+      "index-RET-_0028Buffer-Menu_0029" id=
+      "index-RET-_0028Buffer-Menu_0029"></a>
+
+      <p>Select this line&rsquo;s buffer, replacing the
+      <samp>*Buffer List*</samp> buffer in its window
+      (<code>Buffer-menu-this-window</code>).</p>
+    </dd>
+
+    <dt><kbd>o</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dother_002dwindow" id=
+      "index-Buffer_002dmenu_002dother_002dwindow"></a> <a name=
+      "index-o-_0028Buffer-Menu_0029" id=
+      "index-o-_0028Buffer-Menu_0029"></a>
+
+      <p>Select this line&rsquo;s buffer in another window, as if
+      by <kbd>C-x 4 b</kbd>, leaving <samp>*Buffer List*</samp>
+      visible (<code>Buffer-menu-other-window</code>).</p>
+    </dd>
+
+    <dt><kbd>C-o</kbd></dt>
+
+    <dd>
+      <a name=
+      "index-Buffer_002dmenu_002dswitch_002dother_002dwindow" id=
+      "index-Buffer_002dmenu_002dswitch_002dother_002dwindow"></a>
+      <a name="index-C_002do-_0028Buffer-Menu_0029" id=
+      "index-C_002do-_0028Buffer-Menu_0029"></a>
+
+      <p>Display this line&rsquo;s buffer in another window,
+      without selecting it
+      (<code>Buffer-menu-switch-other-window</code>).</p>
+    </dd>
+
+    <dt><kbd>1</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002d1_002dwindow" id=
+      "index-Buffer_002dmenu_002d1_002dwindow"></a> <a name=
+      "index-1-_0028Buffer-Menu_0029" id=
+      "index-1-_0028Buffer-Menu_0029"></a>
+
+      <p>Select this line&rsquo;s buffer in a full-frame window
+      (<code>Buffer-menu-1-window</code>).</p>
+    </dd>
+
+    <dt><kbd>2</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002d2_002dwindow" id=
+      "index-Buffer_002dmenu_002d2_002dwindow"></a> <a name=
+      "index-2-_0028Buffer-Menu_0029" id=
+      "index-2-_0028Buffer-Menu_0029"></a>
+
+      <p>Set up two windows on the current frame, with this
+      line&rsquo;s buffer selected in one, and a previously current
+      buffer (aside from <samp>*Buffer List*</samp>) in the other
+      (<code>Buffer-menu-2-window</code>).</p>
+    </dd>
+
+    <dt><kbd>b</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dbury" id=
+      "index-Buffer_002dmenu_002dbury"></a> <a name=
+      "index-b-_0028Buffer-Menu_0029" id=
+      "index-b-_0028Buffer-Menu_0029"></a>
+
+      <p>Bury this line&rsquo;s buffer
+      (<code>Buffer-menu-bury</code>).</p>
+    </dd>
+
+    <dt><kbd>m</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dmark" id=
+      "index-Buffer_002dmenu_002dmark"></a> <a name=
+      "index-m-_0028Buffer-Menu_0029" id=
+      "index-m-_0028Buffer-Menu_0029"></a>
+
+      <p>Mark this line&rsquo;s buffer to be displayed in another
+      window if you exit with the <kbd>v</kbd> command
+      (<code>Buffer-menu-mark</code>). The display flag is
+      indicated by the character &lsquo;<samp>&gt;</samp>&rsquo; at
+      the beginning of the line. (A single buffer may not have both
+      deletion and display flags.)</p>
+    </dd>
+
+    <dt><kbd>v</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dselect" id=
+      "index-Buffer_002dmenu_002dselect"></a> <a name=
+      "index-v-_0028Buffer-Menu_0029" id=
+      "index-v-_0028Buffer-Menu_0029"></a>
+
+      <p>Select this line&rsquo;s buffer, and also display in other
+      windows any buffers flagged with the <kbd>m</kbd> command
+      (<code>Buffer-menu-select</code>). If you have not flagged
+      any buffers, this command is equivalent to <kbd>1</kbd>.</p>
+    </dd>
+  </dl>
+
+  <p>The following commands affect the entire buffer list:</p>
+
+  <dl compact="compact">
+    <dt><kbd>S</kbd></dt>
+
+    <dd>
+      <a name="index-tabulated_002dlist_002dsort" id=
+      "index-tabulated_002dlist_002dsort"></a> <a name=
+      "index-S-_0028Buffer-Menu_0029" id=
+      "index-S-_0028Buffer-Menu_0029"></a>
+
+      <p>Sort the Buffer Menu entries according to their values in
+      the column at point. With a numeric prefix argument
+      <var>n</var>, sort according to the <var>n</var>-th column
+      (<code>tabulated-list-sort</code>).</p>
+    </dd>
+
+    <dt><kbd>T</kbd></dt>
+
+    <dd>
+      <a name="index-Buffer_002dmenu_002dtoggle_002dfiles_002donly"
+      id="index-Buffer_002dmenu_002dtoggle_002dfiles_002donly"></a>
+      <a name="index-T-_0028Buffer-Menu_0029" id=
+      "index-T-_0028Buffer-Menu_0029"></a>
+
+      <p>Delete, or reinsert, lines for non-file buffers
+      (<code>Buffer-menu-toggle-files-only</code>). This command
+      toggles the inclusion of such buffers in the buffer list.</p>
+    </dd>
+  </dl>
+
+  <p>Normally, the buffer <samp>*Buffer List*</samp> is not updated
+  automatically when buffers are created and killed; its contents
+  are just text. If you have created, deleted or renamed buffers,
+  the way to update <samp>*Buffer List*</samp> to show what you
+  have done is to type <kbd>g</kbd> (<code>revert-buffer</code>).
+  You can make this happen regularly every
+  <code>auto-revert-interval</code> seconds if you enable Auto
+  Revert mode in this buffer, as long as it is not marked modified.
+  Global Auto Revert mode applies to the <samp>*Buffer List*</samp>
+  buffer only if <code>global-auto-revert-non-file-buffers</code>
+  is non-<code>nil</code>. See <a href=
+  "Autorevert.html#Autorevert">global-auto-revert-non-file-buffers</a>,
+  for details.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Indirect-Buffers.html#Indirect-Buffers"
+    accesskey="n" rel="next">Indirect Buffers</a>, Previous:
+    <a href="Kill-Buffer.html#Kill-Buffer" accesskey="p" rel=
+    "prev">Kill Buffer</a>, Up: <a href="Buffers.html#Buffers"
+    accesskey="u" rel="up">Buffers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

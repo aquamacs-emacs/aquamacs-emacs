@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,264 +16,434 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Matching tags and properties</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Matching tags and properties">
-<meta name="keywords" content="The Org Manual: Matching tags and properties">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Built_002din-agenda-views.html#Built_002din-agenda-views" rel="up" title="Built-in agenda views">
-<link href="Timeline.html#Timeline" rel="next" title="Timeline">
-<link href="Global-TODO-list.html#Global-TODO-list" rel="prev" title="Global TODO list">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Matching tags and properties</title>
+  <meta name="description" content=
+  "The Org Manual: Matching tags and properties" />
+  <meta name="keywords" content=
+  "The Org Manual: Matching tags and properties" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Built_002din-agenda-views.html#Built_002din-agenda-views" rel=
+  "up" title="Built-in agenda views" />
+  <link href="Timeline.html#Timeline" rel="next" title=
+  "Timeline" />
+  <link href="Global-TODO-list.html#Global-TODO-list" rel="prev"
+  title="Global TODO list" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Matching-tags-and-properties"></a>
-<div class="header">
-<p>
-Next: <a href="Timeline.html#Timeline" accesskey="n" rel="next">Timeline</a>, Previous: <a href="Global-TODO-list.html#Global-TODO-list" accesskey="p" rel="prev">Global TODO list</a>, Up: <a href="Built_002din-agenda-views.html#Built_002din-agenda-views" accesskey="u" rel="up">Built-in agenda views</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Matching-tags-and-properties-1"></a>
-<h4 class="subsection">10.3.3 Matching tags and properties</h4>
-<a name="index-matching_002c-of-tags"></a>
-<a name="index-matching_002c-of-properties"></a>
-<a name="index-tags-view"></a>
-<a name="index-match-view"></a>
+<body lang="en" xml:lang="en">
+  <a name="Matching-tags-and-properties" id=
+  "Matching-tags-and-properties"></a>
 
-<p>If headlines in the agenda files are marked with <em>tags</em> (see <a href="Tags.html#Tags">Tags</a>),
-or have properties (see <a href="Properties-and-Columns.html#Properties-and-Columns">Properties and Columns</a>), you can select headlines
-based on this metadata and collect them into an agenda buffer.  The match
-syntax described here also applies when creating sparse trees with <kbd>C-c /
-m</kbd>.
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002dc-a-m-2"></a>
-<a name="index-org_002dtags_002dview-4"></a>
-</dd>
-<dt><kbd><kbd>C-c a m</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-tags-view</code>)</kbd></dt>
-<dd><p>Produce a list of all headlines that match a given set of tags.  The
-command prompts for a selection criterion, which is a boolean logic
-expression with tags, like &lsquo;<samp>+work+urgent-withboss</samp>&rsquo; or
-&lsquo;<samp>work|home</samp>&rsquo; (see <a href="Tags.html#Tags">Tags</a>).  If you often need a specific search,
-define a custom command for it (see <a href="Agenda-dispatcher.html#Agenda-dispatcher">Agenda dispatcher</a>).
-<a name="index-C_002dc-a-M-2"></a>
-<a name="index-org_002dtags_002dview-5"></a>
-</p></dd>
-<dt><kbd><kbd>C-c a M</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-tags-view</code>)</kbd></dt>
-<dd><a name="index-org_002dtags_002dmatch_002dlist_002dsublevels-3"></a>
-<a name="index-org_002dagenda_002dtags_002dtodo_002dhonor_002dignore_002doptions"></a>
-<p>Like <kbd>C-c a m</kbd>, but only select headlines that are also TODO items in a
-not-DONE state and force checking subitems (see variable
-<code>org-tags-match-list-sublevels</code>).  To exclude scheduled/deadline items,
-see the variable <code>org-agenda-tags-todo-honor-ignore-options</code>.  Matching
-specific TODO keywords together with a tags match is also possible, see
-<a href="Tag-searches.html#Tag-searches">Tag searches</a>.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Timeline.html#Timeline" accesskey="n" rel=
+    "next">Timeline</a>, Previous: <a href=
+    "Global-TODO-list.html#Global-TODO-list" accesskey="p" rel=
+    "prev">Global TODO list</a>, Up: <a href=
+    "Built_002din-agenda-views.html#Built_002din-agenda-views"
+    accesskey="u" rel="up">Built-in agenda views</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Matching-tags-and-properties-1" id=
+  "Matching-tags-and-properties-1"></a>
 
-<p>The commands available in the tags list are described in <a href="Agenda-commands.html#Agenda-commands">Agenda commands</a>.
-</p>
-<a name="Match-syntax"></a>
-<h4 class="subsubheading">Match syntax</h4>
+  <h4 class="subsection">10.3.3 Matching tags and
+  properties</h4><a name="index-matching_002c-of-tags" id=
+  "index-matching_002c-of-tags"></a> <a name=
+  "index-matching_002c-of-properties" id=
+  "index-matching_002c-of-properties"></a> <a name=
+  "index-tags-view" id="index-tags-view"></a> <a name=
+  "index-match-view" id="index-match-view"></a>
 
-<a name="index-Boolean-logic_002c-for-tag_002fproperty-searches"></a>
-<p>A search string can use Boolean operators &lsquo;<samp>&amp;</samp>&rsquo; for <code>AND</code> and
-&lsquo;<samp>|</samp>&rsquo; for <code>OR</code>.  &lsquo;<samp>&amp;</samp>&rsquo; binds more strongly than &lsquo;<samp>|</samp>&rsquo;.
-Parentheses are not implemented.  Each element in the search is either a
-tag, a regular expression matching tags, or an expression like
-<code>PROPERTY OPERATOR VALUE</code> with a comparison operator, accessing a
-property value.  Each element may be preceded by &lsquo;<samp>-</samp>&rsquo;, to select
-against it, and &lsquo;<samp>+</samp>&rsquo; is syntactic sugar for positive selection.  The
-<code>AND</code> operator &lsquo;<samp>&amp;</samp>&rsquo; is optional when &lsquo;<samp>+</samp>&rsquo; or &lsquo;<samp>-</samp>&rsquo; is
-present.  Here are some examples, using only tags.
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>work</samp>&rsquo;</dt>
-<dd><p>Select headlines tagged &lsquo;<samp>:work:</samp>&rsquo;.
-</p></dd>
-<dt>&lsquo;<samp>work&amp;boss</samp>&rsquo;</dt>
-<dd><p>Select headlines tagged &lsquo;<samp>:work:</samp>&rsquo; and &lsquo;<samp>:boss:</samp>&rsquo;.
-</p></dd>
-<dt>&lsquo;<samp>+work-boss</samp>&rsquo;</dt>
-<dd><p>Select headlines tagged &lsquo;<samp>:work:</samp>&rsquo;, but discard those also tagged
-&lsquo;<samp>:boss:</samp>&rsquo;.
-</p></dd>
-<dt>&lsquo;<samp>work|laptop</samp>&rsquo;</dt>
-<dd><p>Selects lines tagged &lsquo;<samp>:work:</samp>&rsquo; or &lsquo;<samp>:laptop:</samp>&rsquo;.
-</p></dd>
-<dt>&lsquo;<samp>work|laptop+night</samp>&rsquo;</dt>
-<dd><p>Like before, but require the &lsquo;<samp>:laptop:</samp>&rsquo; lines to be tagged also
-&lsquo;<samp>:night:</samp>&rsquo;.
-</p></dd>
-</dl>
+  <p>If headlines in the agenda files are marked with <em>tags</em>
+  (see <a href="Tags.html#Tags">Tags</a>), or have properties (see
+  <a href=
+  "Properties-and-Columns.html#Properties-and-Columns">Properties
+  and Columns</a>), you can select headlines based on this metadata
+  and collect them into an agenda buffer. The match syntax
+  described here also applies when creating sparse trees with
+  <kbd>C-c / m</kbd>.</p>
 
-<a name="index-regular-expressions_002c-with-tags-search"></a>
-<p>Instead of a tag, you may also specify a regular expression enclosed in curly
-braces.  For example,
-&lsquo;<samp>work+{^boss.*}</samp>&rsquo; matches headlines that contain the tag
-&lsquo;<samp>:work:</samp>&rsquo; and any tag <i>starting</i> with &lsquo;<samp>boss</samp>&rsquo;.
-</p>
-<a name="index-group-tags_002c-as-regular-expressions"></a>
-<p>Group tags (see <a href="Tag-groups.html#Tag-groups">Tag groups</a>) are expanded as regular expressions.  E.g.,
-if &lsquo;<samp>:work:</samp>&rsquo; is a group tag for the group &lsquo;<samp>:work:lab:conf:</samp>&rsquo;, then
-searching for &lsquo;<samp>work</samp>&rsquo; will search for &lsquo;<samp>{\(?:work\|lab\|conf\)}</samp>&rsquo;
-and searching for &lsquo;<samp>-work</samp>&rsquo; will search for all headlines but those with
-one of the tag in the group (i.e., &lsquo;<samp>-{\(?:work\|lab\|conf\)}</samp>&rsquo;).
-</p>
-<a name="index-TODO-keyword-matching_002c-with-tags-search"></a>
-<a name="index-level_002c-require-for-tags_002fproperty-match"></a>
-<a name="index-category_002c-require-for-tags_002fproperty-match"></a>
-<a name="index-org_002dodd_002dlevels_002donly"></a>
-<p>You may also test for properties (see <a href="Properties-and-Columns.html#Properties-and-Columns">Properties and Columns</a>) at the same
-time as matching tags.  The properties may be real properties, or special
-properties that represent other metadata (see <a href="Special-properties.html#Special-properties">Special properties</a>).  For
-example, the &ldquo;property&rdquo; <code>TODO</code> represents the TODO keyword of the
-entry and the &ldquo;property&rdquo; <code>PRIORITY</code> represents the PRIORITY keyword of
-the entry.  The ITEM special property cannot currently be used in tags/property
-searches<a name="DOCF104" href="#FOOT104"><sup>104</sup></a>.
-</p>
-<p>Except the see <a href="Special-properties.html#Special-properties">Special properties</a>, one other &ldquo;property&rdquo; can also be
-used. <code>LEVEL</code> represents the level of an entry.  So a search
-&lsquo;<samp>+LEVEL=3+boss-TODO=&quot;DONE&quot;</samp>&rsquo; lists all level three headlines that have
-the tag &lsquo;<samp>boss</samp>&rsquo; and are <em>not</em> marked with the TODO keyword DONE.
-In buffers with <code>org-odd-levels-only</code> set, &lsquo;<samp>LEVEL</samp>&rsquo; does not count
-the number of stars, but &lsquo;<samp>LEVEL=2</samp>&rsquo; will correspond to 3 stars etc.
-</p>
-<p>Here are more examples:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>work+TODO=&quot;WAITING&quot;</samp>&rsquo;</dt>
-<dd><p>Select &lsquo;<samp>:work:</samp>&rsquo;-tagged TODO lines with the specific TODO
-keyword &lsquo;<samp>WAITING</samp>&rsquo;.
-</p></dd>
-<dt>&lsquo;<samp>work+TODO=&quot;WAITING&quot;|home+TODO=&quot;WAITING&quot;</samp>&rsquo;</dt>
-<dd><p>Waiting tasks both at work and at home.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-a-m-2" id="index-C_002dc-a-m-2"></a>
+    <a name="index-org_002dtags_002dview-4" id=
+    "index-org_002dtags_002dview-4"></a></dd>
 
-<p>When matching properties, a number of different operators can be used to test
-the value of a property.  Here is a complex example:
-</p>
-<div class="example">
-<pre class="example">+work-boss+PRIORITY=&quot;A&quot;+Coffee=&quot;unlimited&quot;+Effort&lt;2         \
-         +With={Sarah\|Denny}+SCHEDULED&gt;=&quot;&lt;2008-10-11&gt;&quot;
-</pre></div>
+    <dt><kbd><kbd>C-c a m</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-tags-view</code>)</kbd></dt>
 
-<p>The type of comparison will depend on how the comparison value is written:
-</p><ul class="no-bullet">
-<li>- If the comparison value is a plain number, a numerical comparison is done,
-and the allowed operators are &lsquo;<samp>&lt;</samp>&rsquo;, &lsquo;<samp>=</samp>&rsquo;, &lsquo;<samp>&gt;</samp>&rsquo;, &lsquo;<samp>&lt;=</samp>&rsquo;,
-&lsquo;<samp>&gt;=</samp>&rsquo;, and &lsquo;<samp>&lt;&gt;</samp>&rsquo;.
-</li><li>- If the comparison value is enclosed in double-quotes,
-a string comparison is done, and the same operators are allowed.
-</li><li>- If the comparison value is enclosed in double-quotes <em>and</em> angular
-brackets (like &lsquo;<samp>DEADLINE&lt;=&quot;&lt;2008-12-24 18:30&gt;&quot;</samp>&rsquo;), both values are
-assumed to be date/time specifications in the standard Org way, and the
-comparison will be done accordingly.  Special values that will be recognized
-are <code>&quot;&lt;now&gt;&quot;</code> for now (including time), and <code>&quot;&lt;today&gt;&quot;</code>, and
-<code>&quot;&lt;tomorrow&gt;&quot;</code> for these days at 00:00 hours, i.e., without a time
-specification.  Also strings like <code>&quot;&lt;+5d&gt;&quot;</code> or <code>&quot;&lt;-2m&gt;&quot;</code> with units
-<code>d</code>, <code>w</code>, <code>m</code>, and <code>y</code> for day, week, month, and year,
-respectively, can be used.
-</li><li>- If the comparison value is enclosed
-in curly braces, a regexp match is performed, with &lsquo;<samp>=</samp>&rsquo; meaning that the
-regexp matches the property value, and &lsquo;<samp>&lt;&gt;</samp>&rsquo; meaning that it does not
-match.
-</li></ul>
+    <dd>
+      <p>Produce a list of all headlines that match a given set of
+      tags. The command prompts for a selection criterion, which is
+      a boolean logic expression with tags, like
+      &lsquo;<samp>+work+urgent-withboss</samp>&rsquo; or
+      &lsquo;<samp>work|home</samp>&rsquo; (see <a href=
+      "Tags.html#Tags">Tags</a>). If you often need a specific
+      search, define a custom command for it (see <a href=
+      "Agenda-dispatcher.html#Agenda-dispatcher">Agenda
+      dispatcher</a>). <a name="index-C_002dc-a-M-2" id=
+      "index-C_002dc-a-M-2"></a> <a name=
+      "index-org_002dtags_002dview-5" id=
+      "index-org_002dtags_002dview-5"></a></p>
+    </dd>
 
-<p>So the search string in the example finds entries tagged &lsquo;<samp>:work:</samp>&rsquo; but
-not &lsquo;<samp>:boss:</samp>&rsquo;, which also have a priority value &lsquo;<samp>A</samp>&rsquo;, a
-&lsquo;<samp>:Coffee:</samp>&rsquo; property with the value &lsquo;<samp>unlimited</samp>&rsquo;, an &lsquo;<samp>Effort</samp>&rsquo;
-property that is numerically smaller than 2, a &lsquo;<samp>:With:</samp>&rsquo; property that is
-matched by the regular expression &lsquo;<samp>Sarah\|Denny</samp>&rsquo;, and that are scheduled
-on or after October 11, 2008.
-</p>
-<p>Accessing TODO, LEVEL, and CATEGORY during a search is fast.  Accessing any
-other properties will slow down the search.  However, once you have paid the
-price by accessing one property, testing additional properties is cheap
-again.
-</p>
-<p>You can configure Org mode to use property inheritance during a search, but
-beware that this can slow down searches considerably.  See <a href="Property-inheritance.html#Property-inheritance">Property inheritance</a>, for details.
-</p>
-<p>For backward compatibility, and also for typing speed, there is also a
-different way to test TODO states in a search.  For this, terminate the
-tags/property part of the search string (which may include several terms
-connected with &lsquo;<samp>|</samp>&rsquo;) with a &lsquo;<samp>/</samp>&rsquo; and then specify a Boolean
-expression just for TODO keywords.  The syntax is then similar to that for
-tags, but should be applied with care: for example, a positive selection on
-several TODO keywords cannot meaningfully be combined with boolean AND.
-However, <em>negative selection</em> combined with AND can be meaningful.  To
-make sure that only lines are checked that actually have any TODO keyword
-(resulting in a speed-up), use <kbd>C-c a M</kbd>, or equivalently start the TODO
-part after the slash with &lsquo;<samp>!</samp>&rsquo;.  Using <kbd>C-c a M</kbd> or &lsquo;<samp>/!</samp>&rsquo; will
-not match TODO keywords in a DONE state.  Examples:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>work/WAITING</samp>&rsquo;</dt>
-<dd><p>Same as &lsquo;<samp>work+TODO=&quot;WAITING&quot;</samp>&rsquo;
-</p></dd>
-<dt>&lsquo;<samp>work/!-WAITING-NEXT</samp>&rsquo;</dt>
-<dd><p>Select &lsquo;<samp>:work:</samp>&rsquo;-tagged TODO lines that are neither &lsquo;<samp>WAITING</samp>&rsquo;
-nor &lsquo;<samp>NEXT</samp>&rsquo;
-</p></dd>
-<dt>&lsquo;<samp>work/!+WAITING|+NEXT</samp>&rsquo;</dt>
-<dd><p>Select &lsquo;<samp>:work:</samp>&rsquo;-tagged TODO lines that are either &lsquo;<samp>WAITING</samp>&rsquo; or
-&lsquo;<samp>NEXT</samp>&rsquo;.
-</p></dd>
-</dl>
+    <dt><kbd><kbd>C-c a M</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-tags-view</code>)</kbd></dt>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <dd>
+      <a name=
+      "index-org_002dtags_002dmatch_002dlist_002dsublevels-3" id=
+      "index-org_002dtags_002dmatch_002dlist_002dsublevels-3"></a>
+      <a name=
+      "index-org_002dagenda_002dtags_002dtodo_002dhonor_002dignore_002doptions"
+      id=
+      "index-org_002dagenda_002dtags_002dtodo_002dhonor_002dignore_002doptions">
+      </a>
 
-<h3><a name="FOOT104" href="#DOCF104">(104)</a></h3>
-<p>But see <a href="Special-agenda-views.html#x_002dagenda_002dskip_002dentry_002dregexp">skipping entries based on regexp</a>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Timeline.html#Timeline" accesskey="n" rel="next">Timeline</a>, Previous: <a href="Global-TODO-list.html#Global-TODO-list" accesskey="p" rel="prev">Global TODO list</a>, Up: <a href="Built_002din-agenda-views.html#Built_002din-agenda-views" accesskey="u" rel="up">Built-in agenda views</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Like <kbd>C-c a m</kbd>, but only select headlines that
+      are also TODO items in a not-DONE state and force checking
+      subitems (see variable
+      <code>org-tags-match-list-sublevels</code>). To exclude
+      scheduled/deadline items, see the variable
+      <code>org-agenda-tags-todo-honor-ignore-options</code>.
+      Matching specific TODO keywords together with a tags match is
+      also possible, see <a href=
+      "Tag-searches.html#Tag-searches">Tag searches</a>.</p>
+    </dd>
+  </dl>
 
+  <p>The commands available in the tags list are described in
+  <a href="Agenda-commands.html#Agenda-commands">Agenda
+  commands</a>.</p><a name="Match-syntax" id="Match-syntax"></a>
 
+  <h4 class="subsubheading">Match syntax</h4><a name=
+  "index-Boolean-logic_002c-for-tag_002fproperty-searches" id=
+  "index-Boolean-logic_002c-for-tag_002fproperty-searches"></a>
 
+  <p>A search string can use Boolean operators
+  &lsquo;<samp>&amp;</samp>&rsquo; for <code>AND</code> and
+  &lsquo;<samp>|</samp>&rsquo; for <code>OR</code>.
+  &lsquo;<samp>&amp;</samp>&rsquo; binds more strongly than
+  &lsquo;<samp>|</samp>&rsquo;. Parentheses are not implemented.
+  Each element in the search is either a tag, a regular expression
+  matching tags, or an expression like <code>PROPERTY OPERATOR
+  VALUE</code> with a comparison operator, accessing a property
+  value. Each element may be preceded by
+  &lsquo;<samp>-</samp>&rsquo;, to select against it, and
+  &lsquo;<samp>+</samp>&rsquo; is syntactic sugar for positive
+  selection. The <code>AND</code> operator
+  &lsquo;<samp>&amp;</samp>&rsquo; is optional when
+  &lsquo;<samp>+</samp>&rsquo; or &lsquo;<samp>-</samp>&rsquo; is
+  present. Here are some examples, using only tags.</p>
+
+  <dl compact="compact">
+    <dt>&lsquo;<samp>work</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Select headlines tagged
+      &lsquo;<samp>:work:</samp>&rsquo;.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>work&amp;boss</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Select headlines tagged &lsquo;<samp>:work:</samp>&rsquo;
+      and &lsquo;<samp>:boss:</samp>&rsquo;.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>+work-boss</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Select headlines tagged &lsquo;<samp>:work:</samp>&rsquo;,
+      but discard those also tagged
+      &lsquo;<samp>:boss:</samp>&rsquo;.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>work|laptop</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Selects lines tagged &lsquo;<samp>:work:</samp>&rsquo; or
+      &lsquo;<samp>:laptop:</samp>&rsquo;.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>work|laptop+night</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Like before, but require the
+      &lsquo;<samp>:laptop:</samp>&rsquo; lines to be tagged also
+      &lsquo;<samp>:night:</samp>&rsquo;.</p>
+    </dd>
+  </dl><a name="index-regular-expressions_002c-with-tags-search"
+  id="index-regular-expressions_002c-with-tags-search"></a>
+
+  <p>Instead of a tag, you may also specify a regular expression
+  enclosed in curly braces. For example,
+  &lsquo;<samp>work+{^boss.*}</samp>&rsquo; matches headlines that
+  contain the tag &lsquo;<samp>:work:</samp>&rsquo; and any tag
+  <i>starting</i> with &lsquo;<samp>boss</samp>&rsquo;.</p><a name=
+  "index-group-tags_002c-as-regular-expressions" id=
+  "index-group-tags_002c-as-regular-expressions"></a>
+
+  <p>Group tags (see <a href="Tag-groups.html#Tag-groups">Tag
+  groups</a>) are expanded as regular expressions. E.g., if
+  &lsquo;<samp>:work:</samp>&rsquo; is a group tag for the group
+  &lsquo;<samp>:work:lab:conf:</samp>&rsquo;, then searching for
+  &lsquo;<samp>work</samp>&rsquo; will search for
+  &lsquo;<samp>{\(?:work\|lab\|conf\)}</samp>&rsquo; and searching
+  for &lsquo;<samp>-work</samp>&rsquo; will search for all
+  headlines but those with one of the tag in the group (i.e.,
+  &lsquo;<samp>-{\(?:work\|lab\|conf\)}</samp>&rsquo;).</p><a name=
+  "index-TODO-keyword-matching_002c-with-tags-search" id=
+  "index-TODO-keyword-matching_002c-with-tags-search"></a> <a name=
+  "index-level_002c-require-for-tags_002fproperty-match" id=
+  "index-level_002c-require-for-tags_002fproperty-match"></a>
+  <a name="index-category_002c-require-for-tags_002fproperty-match"
+  id="index-category_002c-require-for-tags_002fproperty-match"></a>
+  <a name="index-org_002dodd_002dlevels_002donly" id=
+  "index-org_002dodd_002dlevels_002donly"></a>
+
+  <p>You may also test for properties (see <a href=
+  "Properties-and-Columns.html#Properties-and-Columns">Properties
+  and Columns</a>) at the same time as matching tags. The
+  properties may be real properties, or special properties that
+  represent other metadata (see <a href=
+  "Special-properties.html#Special-properties">Special
+  properties</a>). For example, the &ldquo;property&rdquo;
+  <code>TODO</code> represents the TODO keyword of the entry and
+  the &ldquo;property&rdquo; <code>PRIORITY</code> represents the
+  PRIORITY keyword of the entry. The ITEM special property cannot
+  currently be used in tags/property searches<a name="DOCF104"
+  href="#FOOT104" id="DOCF104"><sup>104</sup></a>.</p>
+
+  <p>Except the see <a href=
+  "Special-properties.html#Special-properties">Special
+  properties</a>, one other &ldquo;property&rdquo; can also be
+  used. <code>LEVEL</code> represents the level of an entry. So a
+  search &lsquo;<samp>+LEVEL=3+boss-TODO="DONE"</samp>&rsquo; lists
+  all level three headlines that have the tag
+  &lsquo;<samp>boss</samp>&rsquo; and are <em>not</em> marked with
+  the TODO keyword DONE. In buffers with
+  <code>org-odd-levels-only</code> set,
+  &lsquo;<samp>LEVEL</samp>&rsquo; does not count the number of
+  stars, but &lsquo;<samp>LEVEL=2</samp>&rsquo; will correspond to
+  3 stars etc.</p>
+
+  <p>Here are more examples:</p>
+
+  <dl compact="compact">
+    <dt>&lsquo;<samp>work+TODO="WAITING"</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Select &lsquo;<samp>:work:</samp>&rsquo;-tagged TODO lines
+      with the specific TODO keyword
+      &lsquo;<samp>WAITING</samp>&rsquo;.</p>
+    </dd>
+
+    <dt>
+    &lsquo;<samp>work+TODO="WAITING"|home+TODO="WAITING"</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Waiting tasks both at work and at home.</p>
+    </dd>
+  </dl>
+
+  <p>When matching properties, a number of different operators can
+  be used to test the value of a property. Here is a complex
+  example:</p>
+
+  <div class="example">
+    <pre class="example">
++work-boss+PRIORITY="A"+Coffee="unlimited"+Effort&lt;2         \
+         +With={Sarah\|Denny}+SCHEDULED&gt;="&lt;2008-10-11&gt;"
+</pre>
+  </div>
+
+  <p>The type of comparison will depend on how the comparison value
+  is written:</p>
+
+  <ul class="no-bullet">
+    <li>- If the comparison value is a plain number, a numerical
+    comparison is done, and the allowed operators are
+    &lsquo;<samp>&lt;</samp>&rsquo;, &lsquo;<samp>=</samp>&rsquo;,
+    &lsquo;<samp>&gt;</samp>&rsquo;,
+    &lsquo;<samp>&lt;=</samp>&rsquo;,
+    &lsquo;<samp>&gt;=</samp>&rsquo;, and
+    &lsquo;<samp>&lt;&gt;</samp>&rsquo;.</li>
+
+    <li>- If the comparison value is enclosed in double-quotes, a
+    string comparison is done, and the same operators are
+    allowed.</li>
+
+    <li>- If the comparison value is enclosed in double-quotes
+    <em>and</em> angular brackets (like
+    &lsquo;<samp>DEADLINE&lt;="&lt;2008-12-24
+    18:30&gt;"</samp>&rsquo;), both values are assumed to be
+    date/time specifications in the standard Org way, and the
+    comparison will be done accordingly. Special values that will
+    be recognized are <code>"&lt;now&gt;"</code> for now (including
+    time), and <code>"&lt;today&gt;"</code>, and
+    <code>"&lt;tomorrow&gt;"</code> for these days at 00:00 hours,
+    i.e., without a time specification. Also strings like
+    <code>"&lt;+5d&gt;"</code> or <code>"&lt;-2m&gt;"</code> with
+    units <code>d</code>, <code>w</code>, <code>m</code>, and
+    <code>y</code> for day, week, month, and year, respectively,
+    can be used.</li>
+
+    <li>- If the comparison value is enclosed in curly braces, a
+    regexp match is performed, with &lsquo;<samp>=</samp>&rsquo;
+    meaning that the regexp matches the property value, and
+    &lsquo;<samp>&lt;&gt;</samp>&rsquo; meaning that it does not
+    match.</li>
+  </ul>
+
+  <p>So the search string in the example finds entries tagged
+  &lsquo;<samp>:work:</samp>&rsquo; but not
+  &lsquo;<samp>:boss:</samp>&rsquo;, which also have a priority
+  value &lsquo;<samp>A</samp>&rsquo;, a
+  &lsquo;<samp>:Coffee:</samp>&rsquo; property with the value
+  &lsquo;<samp>unlimited</samp>&rsquo;, an
+  &lsquo;<samp>Effort</samp>&rsquo; property that is numerically
+  smaller than 2, a &lsquo;<samp>:With:</samp>&rsquo; property that
+  is matched by the regular expression
+  &lsquo;<samp>Sarah\|Denny</samp>&rsquo;, and that are scheduled
+  on or after October 11, 2008.</p>
+
+  <p>Accessing TODO, LEVEL, and CATEGORY during a search is fast.
+  Accessing any other properties will slow down the search.
+  However, once you have paid the price by accessing one property,
+  testing additional properties is cheap again.</p>
+
+  <p>You can configure Org mode to use property inheritance during
+  a search, but beware that this can slow down searches
+  considerably. See <a href=
+  "Property-inheritance.html#Property-inheritance">Property
+  inheritance</a>, for details.</p>
+
+  <p>For backward compatibility, and also for typing speed, there
+  is also a different way to test TODO states in a search. For
+  this, terminate the tags/property part of the search string
+  (which may include several terms connected with
+  &lsquo;<samp>|</samp>&rsquo;) with a &lsquo;<samp>/</samp>&rsquo;
+  and then specify a Boolean expression just for TODO keywords. The
+  syntax is then similar to that for tags, but should be applied
+  with care: for example, a positive selection on several TODO
+  keywords cannot meaningfully be combined with boolean AND.
+  However, <em>negative selection</em> combined with AND can be
+  meaningful. To make sure that only lines are checked that
+  actually have any TODO keyword (resulting in a speed-up), use
+  <kbd>C-c a M</kbd>, or equivalently start the TODO part after the
+  slash with &lsquo;<samp>!</samp>&rsquo;. Using <kbd>C-c a M</kbd>
+  or &lsquo;<samp>/!</samp>&rsquo; will not match TODO keywords in
+  a DONE state. Examples:</p>
+
+  <dl compact="compact">
+    <dt>&lsquo;<samp>work/WAITING</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Same as &lsquo;<samp>work+TODO="WAITING"</samp>&rsquo;</p>
+    </dd>
+
+    <dt>&lsquo;<samp>work/!-WAITING-NEXT</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Select &lsquo;<samp>:work:</samp>&rsquo;-tagged TODO lines
+      that are neither &lsquo;<samp>WAITING</samp>&rsquo; nor
+      &lsquo;<samp>NEXT</samp>&rsquo;</p>
+    </dd>
+
+    <dt>&lsquo;<samp>work/!+WAITING|+NEXT</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Select &lsquo;<samp>:work:</samp>&rsquo;-tagged TODO lines
+      that are either &lsquo;<samp>WAITING</samp>&rsquo; or
+      &lsquo;<samp>NEXT</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT104" href="#DOCF104" id=
+    "FOOT104">(104)</a></h3>
+
+    <p>But see <a href=
+    "Special-agenda-views.html#x_002dagenda_002dskip_002dentry_002dregexp">
+    skipping entries based on regexp</a>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Timeline.html#Timeline" accesskey="n" rel=
+    "next">Timeline</a>, Previous: <a href=
+    "Global-TODO-list.html#Global-TODO-list" accesskey="p" rel=
+    "prev">Global TODO list</a>, Up: <a href=
+    "Built_002din-agenda-views.html#Built_002din-agenda-views"
+    accesskey="u" rel="up">Built-in agenda views</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

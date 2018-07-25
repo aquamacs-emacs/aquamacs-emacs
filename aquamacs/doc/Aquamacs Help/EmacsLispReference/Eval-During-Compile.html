@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,150 +19,216 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Eval During Compile</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Eval During Compile">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Eval During Compile">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Byte-Compilation.html#Byte-Compilation" rel="up" title="Byte Compilation">
-<link href="Compiler-Errors.html#Compiler-Errors" rel="next" title="Compiler Errors">
-<link href="Dynamic-Loading.html#Dynamic-Loading" rel="prev" title="Dynamic Loading">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Eval During
+  Compile</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Eval During Compile" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Eval During Compile" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Byte-Compilation.html#Byte-Compilation" rel="up"
+  title="Byte Compilation" />
+  <link href="Compiler-Errors.html#Compiler-Errors" rel="next"
+  title="Compiler Errors" />
+  <link href="Dynamic-Loading.html#Dynamic-Loading" rel="prev"
+  title="Dynamic Loading" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Eval-During-Compile" id="Eval-During-Compile"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Compiler-Errors.html#Compiler-Errors"
+    accesskey="n" rel="next">Compiler Errors</a>, Previous:
+    <a href="Dynamic-Loading.html#Dynamic-Loading" accesskey="p"
+    rel="prev">Dynamic Loading</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Evaluation-During-Compilation" id=
+  "Evaluation-During-Compilation"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Eval-During-Compile"></a>
-<div class="header">
-<p>
-Next: <a href="Compiler-Errors.html#Compiler-Errors" accesskey="n" rel="next">Compiler Errors</a>, Previous: <a href="Dynamic-Loading.html#Dynamic-Loading" accesskey="p" rel="prev">Dynamic Loading</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Evaluation-During-Compilation"></a>
-<h3 class="section">16.5 Evaluation During Compilation</h3>
-<a name="index-eval-during-compilation"></a>
+  <h3 class="section">16.5 Evaluation During
+  Compilation</h3><a name="index-eval-during-compilation" id=
+  "index-eval-during-compilation"></a>
 
-<p>These features permit you to write code to be evaluated during
-compilation of a program.
-</p>
-<dl>
-<dt><a name="index-eval_002dand_002dcompile"></a>Special Form: <strong>eval-and-compile</strong> <em>body&hellip;</em></dt>
-<dd><p>This form marks <var>body</var> to be evaluated both when you compile the
-containing code and when you run it (whether compiled or not).
-</p>
-<p>You can get a similar result by putting <var>body</var> in a separate file
-and referring to that file with <code>require</code>.  That method is
-preferable when <var>body</var> is large.  Effectively <code>require</code> is
-automatically <code>eval-and-compile</code>, the package is loaded both when
-compiling and executing.
-</p>
-<p><code>autoload</code> is also effectively <code>eval-and-compile</code> too.  It&rsquo;s
-recognized when compiling, so uses of such a function don&rsquo;t produce
-&ldquo;not known to be defined&rdquo; warnings.
-</p>
-<p>Most uses of <code>eval-and-compile</code> are fairly sophisticated.
-</p>
-<p>If a macro has a helper function to build its result, and that macro
-is used both locally and outside the package, then
-<code>eval-and-compile</code> should be used to get the helper both when
-compiling and then later when running.
-</p>
-<p>If functions are defined programmatically (with <code>fset</code> say), then
-<code>eval-and-compile</code> can be used to have that done at compile-time
-as well as run-time, so calls to those functions are checked (and
-warnings about &ldquo;not known to be defined&rdquo; suppressed).
-</p></dd></dl>
+  <p>These features permit you to write code to be evaluated during
+  compilation of a program.</p>
 
-<dl>
-<dt><a name="index-eval_002dwhen_002dcompile"></a>Special Form: <strong>eval-when-compile</strong> <em>body&hellip;</em></dt>
-<dd><p>This form marks <var>body</var> to be evaluated at compile time but not when
-the compiled program is loaded.  The result of evaluation by the
-compiler becomes a constant which appears in the compiled program.  If
-you load the source file, rather than compiling it, <var>body</var> is
-evaluated normally.
-</p>
-<a name="index-compile_002dtime-constant"></a>
-<p>If you have a constant that needs some calculation to produce,
-<code>eval-when-compile</code> can do that at compile-time.  For example,
-</p>
-<div class="lisp">
-<pre class="lisp">(defvar my-regexp
-  (eval-when-compile (regexp-opt '(&quot;aaa&quot; &quot;aba&quot; &quot;abb&quot;))))
-</pre></div>
+  <dl>
+    <dt><a name="index-eval_002dand_002dcompile" id=
+    "index-eval_002dand_002dcompile"></a>Special Form:
+    <strong>eval-and-compile</strong> <em>body&hellip;</em></dt>
 
-<a name="index-macros_002c-at-compile-time"></a>
-<p>If you&rsquo;re using another package, but only need macros from it (the
-byte compiler will expand those), then <code>eval-when-compile</code> can be
-used to load it for compiling, but not executing.  For example,
-</p>
-<div class="lisp">
-<pre class="lisp">(eval-when-compile
+    <dd>
+      <p>This form marks <var>body</var> to be evaluated both when
+      you compile the containing code and when you run it (whether
+      compiled or not).</p>
+
+      <p>You can get a similar result by putting <var>body</var> in
+      a separate file and referring to that file with
+      <code>require</code>. That method is preferable when
+      <var>body</var> is large. Effectively <code>require</code> is
+      automatically <code>eval-and-compile</code>, the package is
+      loaded both when compiling and executing.</p>
+
+      <p><code>autoload</code> is also effectively
+      <code>eval-and-compile</code> too. It&rsquo;s recognized when
+      compiling, so uses of such a function don&rsquo;t produce
+      &ldquo;not known to be defined&rdquo; warnings.</p>
+
+      <p>Most uses of <code>eval-and-compile</code> are fairly
+      sophisticated.</p>
+
+      <p>If a macro has a helper function to build its result, and
+      that macro is used both locally and outside the package, then
+      <code>eval-and-compile</code> should be used to get the
+      helper both when compiling and then later when running.</p>
+
+      <p>If functions are defined programmatically (with
+      <code>fset</code> say), then <code>eval-and-compile</code>
+      can be used to have that done at compile-time as well as
+      run-time, so calls to those functions are checked (and
+      warnings about &ldquo;not known to be defined&rdquo;
+      suppressed).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-eval_002dwhen_002dcompile" id=
+    "index-eval_002dwhen_002dcompile"></a>Special Form:
+    <strong>eval-when-compile</strong> <em>body&hellip;</em></dt>
+
+    <dd>
+      <p>This form marks <var>body</var> to be evaluated at compile
+      time but not when the compiled program is loaded. The result
+      of evaluation by the compiler becomes a constant which
+      appears in the compiled program. If you load the source file,
+      rather than compiling it, <var>body</var> is evaluated
+      normally.</p><a name="index-compile_002dtime-constant" id=
+      "index-compile_002dtime-constant"></a>
+
+      <p>If you have a constant that needs some calculation to
+      produce, <code>eval-when-compile</code> can do that at
+      compile-time. For example,</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(defvar my-regexp
+  (eval-when-compile (regexp-opt '("aaa" "aba" "abb"))))
+</pre>
+      </div><a name="index-macros_002c-at-compile-time" id=
+      "index-macros_002c-at-compile-time"></a>
+
+      <p>If you&rsquo;re using another package, but only need
+      macros from it (the byte compiler will expand those), then
+      <code>eval-when-compile</code> can be used to load it for
+      compiling, but not executing. For example,</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(eval-when-compile
   (require 'my-macro-package))
-</pre></div>
+</pre>
+      </div>
 
-<p>The same sort of thing goes for macros and <code>defsubst</code> functions
-defined locally and only for use within the file.  They are needed for
-compiling the file, but in most cases they are not needed for
-execution of the compiled file.  For example,
-</p>
-<div class="lisp">
-<pre class="lisp">(eval-when-compile
+      <p>The same sort of thing goes for macros and
+      <code>defsubst</code> functions defined locally and only for
+      use within the file. They are needed for compiling the file,
+      but in most cases they are not needed for execution of the
+      compiled file. For example,</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(eval-when-compile
   (unless (fboundp 'some-new-thing)
     (defmacro 'some-new-thing ()
       (compatibility code))))
-</pre></div>
+</pre>
+      </div>
 
-<p>This is often good for code that&rsquo;s only a fallback for compatibility
-with other versions of Emacs.
-</p>
-<p><strong>Common Lisp Note:</strong> At top level, <code>eval-when-compile</code> is analogous to the Common
-Lisp idiom <code>(eval-when (compile eval) &hellip;)</code>.  Elsewhere, the
-Common Lisp &lsquo;<samp>#.</samp>&rsquo; reader macro (but not when interpreting) is closer
-to what <code>eval-when-compile</code> does.
-</p></dd></dl>
+      <p>This is often good for code that&rsquo;s only a fallback
+      for compatibility with other versions of Emacs.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Compiler-Errors.html#Compiler-Errors" accesskey="n" rel="next">Compiler Errors</a>, Previous: <a href="Dynamic-Loading.html#Dynamic-Loading" accesskey="p" rel="prev">Dynamic Loading</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p><strong>Common Lisp Note:</strong> At top level,
+      <code>eval-when-compile</code> is analogous to the Common
+      Lisp idiom <code>(eval-when (compile eval) &hellip;)</code>.
+      Elsewhere, the Common Lisp &lsquo;<samp>#.</samp>&rsquo;
+      reader macro (but not when interpreting) is closer to what
+      <code>eval-when-compile</code> does.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Compiler-Errors.html#Compiler-Errors"
+    accesskey="n" rel="next">Compiler Errors</a>, Previous:
+    <a href="Dynamic-Loading.html#Dynamic-Loading" accesskey="p"
+    rel="prev">Dynamic Loading</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

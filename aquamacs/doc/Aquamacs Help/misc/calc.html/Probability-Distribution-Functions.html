@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,179 +18,225 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Probability Distribution Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Probability Distribution Functions">
-<meta name="keywords" content="GNU Emacs Calc Manual: Probability Distribution Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Scientific-Functions.html#Scientific-Functions" rel="up" title="Scientific Functions">
-<link href="Matrix-Functions.html#Matrix-Functions" rel="next" title="Matrix Functions">
-<link href="Combinatorial-Functions.html#Combinatorial-Functions" rel="prev" title="Combinatorial Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Probability Distribution
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Probability Distribution Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Probability Distribution Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Scientific-Functions.html#Scientific-Functions" rel=
+  "up" title="Scientific Functions" />
+  <link href="Matrix-Functions.html#Matrix-Functions" rel="next"
+  title="Matrix Functions" />
+  <link href="Combinatorial-Functions.html#Combinatorial-Functions"
+  rel="prev" title="Combinatorial Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Probability-Distribution-Functions"></a>
-<div class="header">
-<p>
-Previous: <a href="Combinatorial-Functions.html#Combinatorial-Functions" accesskey="p" rel="prev">Combinatorial Functions</a>, Up: <a href="Scientific-Functions.html#Scientific-Functions" accesskey="u" rel="up">Scientific Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Probability-Distribution-Functions-1"></a>
-<h3 class="section">8.7 Probability Distribution Functions</h3>
+<body lang="en" xml:lang="en">
+  <a name="Probability-Distribution-Functions" id=
+  "Probability-Distribution-Functions"></a>
 
-<p>The functions in this section compute various probability distributions.
-For continuous distributions, this is the integral of the probability
-density function from &lsquo;<samp>x</samp>&rsquo; to infinity.  (These are the &ldquo;upper
-tail&rdquo; distribution functions; there are also corresponding &ldquo;lower
-tail&rdquo; functions which integrate from minus infinity to &lsquo;<samp>x</samp>&rsquo;.)
-For discrete distributions, the upper tail function gives the sum
-from &lsquo;<samp>x</samp>&rsquo; to infinity; the lower tail function gives the sum
-from minus infinity up to, but not including,&nbsp;<!-- /@w -->&lsquo;<samp>x</samp>&rsquo;.
-</p>
-<p>To integrate from &lsquo;<samp>x</samp>&rsquo; to &lsquo;<samp>y</samp>&rsquo;, just use the distribution
-function twice and subtract.  For example, the probability that a
-Gaussian random variable with mean 2 and standard deviation 1 will
-lie in the range from 2.5 to 2.8 is &lsquo;<samp>utpn(2.5,2,1) - utpn(2.8,2,1)</samp>&rsquo;
-(&ldquo;the probability that it is greater than 2.5, but not greater than 2.8&rdquo;),
-or equivalently &lsquo;<samp>ltpn(2.8,2,1) - ltpn(2.5,2,1)</samp>&rsquo;.
-</p>
-<a name="index-k-B"></a>
-<a name="index-I-k-B"></a>
-<a name="index-calc_002dutpb"></a>
-<a name="index-utpb"></a>
-<a name="index-ltpb"></a>
-<p>The <kbd>k B</kbd> (<code>calc-utpb</code>) [<code>utpb</code>] function uses the
-binomial distribution.  Push the parameters <var>n</var>, <var>p</var>, and
-then <var>x</var> onto the stack; the result (&lsquo;<samp>utpb(x,n,p)</samp>&rsquo;) is the
-probability that an event will occur <var>x</var> or more times out
-of <var>n</var> trials, if its probability of occurring in any given
-trial is <var>p</var>.  The <kbd>I k B</kbd> [<code>ltpb</code>] function is
-the probability that the event will occur fewer than <var>x</var> times.
-</p>
-<p>The other probability distribution functions similarly take the
-form <kbd>k <var>X</var></kbd> (<code>calc-utp<var>x</var></code>) [<code>utp<var>x</var></code>]
-and <kbd>I k <var>X</var></kbd> [<code>ltp<var>x</var></code>], for various letters
-<var>x</var>.  The arguments to the algebraic functions are the value of
-the random variable first, then whatever other parameters define the
-distribution.  Note these are among the few Calc functions where the
-order of the arguments in algebraic form differs from the order of
-arguments as found on the stack.  (The random variable comes last on
-the stack, so that you can type, e.g., <kbd>2 <span class="key">RET</span> 1 <span class="key">RET</span> 2.5
-k N M-<span class="key">RET</span> <span class="key">DEL</span> 2.8 k N -</kbd>, using <kbd>M-<span class="key">RET</span> <span class="key">DEL</span></kbd> to
-recover the original arguments but substitute a new value for &lsquo;<samp>x</samp>&rsquo;.)
-</p>
-<a name="index-k-C"></a>
-<a name="index-calc_002dutpc"></a>
-<a name="index-utpc"></a>
-<a name="index-I-k-C"></a>
-<a name="index-ltpc"></a>
-<p>The &lsquo;<samp>utpc(x,v)</samp>&rsquo; function uses the chi-square distribution with
-&lsquo;<samp>v</samp>&rsquo;
-degrees of freedom.  It is the probability that a model is
-correct if its chi-square statistic is &lsquo;<samp>x</samp>&rsquo;.
-</p>
-<a name="index-k-F"></a>
-<a name="index-calc_002dutpf"></a>
-<a name="index-utpf"></a>
-<a name="index-I-k-F"></a>
-<a name="index-ltpf"></a>
-<p>The &lsquo;<samp>utpf(F,v1,v2)</samp>&rsquo; function uses the F distribution, used in
-various statistical tests.  The parameters
-&lsquo;<samp>v1</samp>&rsquo;
-and
-&lsquo;<samp>v2</samp>&rsquo;
-are the degrees of freedom in the numerator and denominator,
-respectively, used in computing the statistic &lsquo;<samp>F</samp>&rsquo;.
-</p>
-<a name="index-k-N"></a>
-<a name="index-calc_002dutpn"></a>
-<a name="index-utpn"></a>
-<a name="index-I-k-N"></a>
-<a name="index-ltpn"></a>
-<p>The &lsquo;<samp>utpn(x,m,s)</samp>&rsquo; function uses a normal (Gaussian) distribution
-with mean &lsquo;<samp>m</samp>&rsquo; and standard deviation
-&lsquo;<samp>s</samp>&rsquo;.
-It is the probability that such a normal-distributed random variable
-would exceed &lsquo;<samp>x</samp>&rsquo;.
-</p>
-<a name="index-k-P"></a>
-<a name="index-calc_002dutpp"></a>
-<a name="index-utpp"></a>
-<a name="index-I-k-P"></a>
-<a name="index-ltpp"></a>
-<p>The &lsquo;<samp>utpp(n,x)</samp>&rsquo; function uses a Poisson distribution with
-mean &lsquo;<samp>x</samp>&rsquo;.  It is the probability that &lsquo;<samp>n</samp>&rsquo; or more such
-Poisson random events will occur.
-</p>
-<a name="index-k-T"></a>
-<a name="index-calc_002dltpt"></a>
-<a name="index-utpt"></a>
-<a name="index-I-k-T"></a>
-<a name="index-ltpt"></a>
-<p>The &lsquo;<samp>utpt(t,v)</samp>&rsquo; function uses the Student&rsquo;s &ldquo;t&rdquo; distribution
-with
-&lsquo;<samp>v</samp>&rsquo;
-degrees of freedom.  It is the probability that a
-t-distributed random variable will be greater than &lsquo;<samp>t</samp>&rsquo;.
-(Note:  This computes the distribution function
-&lsquo;<samp>A(t|v)</samp>&rsquo;
-where
-&lsquo;<samp>A(0|v) = 1</samp>&rsquo;
-and
-&lsquo;<samp>A(inf|v) -&gt; 0</samp>&rsquo;.
-The <code>UTPT</code> operation on the HP-48 uses a different definition which
-returns half of Calc&rsquo;s value:  &lsquo;<samp>UTPT(t,v) = .5*utpt(t,v)</samp>&rsquo;.)
-</p>
-<p>While Calc does not provide inverses of the probability distribution
-functions, the <kbd>a R</kbd> command can be used to solve for the inverse.
-Since the distribution functions are monotonic, <kbd>a R</kbd> is guaranteed
-to be able to find a solution given any initial guess.
-See <a href="Numerical-Solutions.html#Numerical-Solutions">Numerical Solutions</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Combinatorial-Functions.html#Combinatorial-Functions" accesskey="p" rel="prev">Combinatorial Functions</a>, Up: <a href="Scientific-Functions.html#Scientific-Functions" accesskey="u" rel="up">Scientific Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Previous: <a href=
+    "Combinatorial-Functions.html#Combinatorial-Functions"
+    accesskey="p" rel="prev">Combinatorial Functions</a>, Up:
+    <a href="Scientific-Functions.html#Scientific-Functions"
+    accesskey="u" rel="up">Scientific Functions</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Probability-Distribution-Functions-1" id=
+  "Probability-Distribution-Functions-1"></a>
 
+  <h3 class="section">8.7 Probability Distribution Functions</h3>
 
+  <p>The functions in this section compute various probability
+  distributions. For continuous distributions, this is the integral
+  of the probability density function from
+  &lsquo;<samp>x</samp>&rsquo; to infinity. (These are the
+  &ldquo;upper tail&rdquo; distribution functions; there are also
+  corresponding &ldquo;lower tail&rdquo; functions which integrate
+  from minus infinity to &lsquo;<samp>x</samp>&rsquo;.) For
+  discrete distributions, the upper tail function gives the sum
+  from &lsquo;<samp>x</samp>&rsquo; to infinity; the lower tail
+  function gives the sum from minus infinity up to, but not
+  including,&nbsp;<!-- /@w -->&lsquo;<samp>x</samp>&rsquo;.</p>
 
+  <p>To integrate from &lsquo;<samp>x</samp>&rsquo; to
+  &lsquo;<samp>y</samp>&rsquo;, just use the distribution function
+  twice and subtract. For example, the probability that a Gaussian
+  random variable with mean 2 and standard deviation 1 will lie in
+  the range from 2.5 to 2.8 is &lsquo;<samp>utpn(2.5,2,1) -
+  utpn(2.8,2,1)</samp>&rsquo; (&ldquo;the probability that it is
+  greater than 2.5, but not greater than 2.8&rdquo;), or
+  equivalently &lsquo;<samp>ltpn(2.8,2,1) -
+  ltpn(2.5,2,1)</samp>&rsquo;.</p><a name="index-k-B" id=
+  "index-k-B"></a> <a name="index-I-k-B" id="index-I-k-B"></a>
+  <a name="index-calc_002dutpb" id="index-calc_002dutpb"></a>
+  <a name="index-utpb" id="index-utpb"></a> <a name="index-ltpb"
+  id="index-ltpb"></a>
+
+  <p>The <kbd>k B</kbd> (<code>calc-utpb</code>)
+  [<code>utpb</code>] function uses the binomial distribution. Push
+  the parameters <var>n</var>, <var>p</var>, and then <var>x</var>
+  onto the stack; the result
+  (&lsquo;<samp>utpb(x,n,p)</samp>&rsquo;) is the probability that
+  an event will occur <var>x</var> or more times out of
+  <var>n</var> trials, if its probability of occurring in any given
+  trial is <var>p</var>. The <kbd>I k B</kbd> [<code>ltpb</code>]
+  function is the probability that the event will occur fewer than
+  <var>x</var> times.</p>
+
+  <p>The other probability distribution functions similarly take
+  the form <kbd>k <var>X</var></kbd>
+  (<code>calc-utp<var>x</var></code>)
+  [<code>utp<var>x</var></code>] and <kbd>I k <var>X</var></kbd>
+  [<code>ltp<var>x</var></code>], for various letters <var>x</var>.
+  The arguments to the algebraic functions are the value of the
+  random variable first, then whatever other parameters define the
+  distribution. Note these are among the few Calc functions where
+  the order of the arguments in algebraic form differs from the
+  order of arguments as found on the stack. (The random variable
+  comes last on the stack, so that you can type, e.g., <kbd>2
+  <span class="key">RET</span> 1 <span class="key">RET</span> 2.5 k
+  N M-<span class="key">RET</span> <span class="key">DEL</span> 2.8
+  k N -</kbd>, using <kbd>M-<span class="key">RET</span>
+  <span class="key">DEL</span></kbd> to recover the original
+  arguments but substitute a new value for
+  &lsquo;<samp>x</samp>&rsquo;.)</p><a name="index-k-C" id=
+  "index-k-C"></a> <a name="index-calc_002dutpc" id=
+  "index-calc_002dutpc"></a> <a name="index-utpc" id=
+  "index-utpc"></a> <a name="index-I-k-C" id="index-I-k-C"></a>
+  <a name="index-ltpc" id="index-ltpc"></a>
+
+  <p>The &lsquo;<samp>utpc(x,v)</samp>&rsquo; function uses the
+  chi-square distribution with &lsquo;<samp>v</samp>&rsquo; degrees
+  of freedom. It is the probability that a model is correct if its
+  chi-square statistic is &lsquo;<samp>x</samp>&rsquo;.</p><a name=
+  "index-k-F" id="index-k-F"></a> <a name="index-calc_002dutpf" id=
+  "index-calc_002dutpf"></a> <a name="index-utpf" id=
+  "index-utpf"></a> <a name="index-I-k-F" id="index-I-k-F"></a>
+  <a name="index-ltpf" id="index-ltpf"></a>
+
+  <p>The &lsquo;<samp>utpf(F,v1,v2)</samp>&rsquo; function uses the
+  F distribution, used in various statistical tests. The parameters
+  &lsquo;<samp>v1</samp>&rsquo; and &lsquo;<samp>v2</samp>&rsquo;
+  are the degrees of freedom in the numerator and denominator,
+  respectively, used in computing the statistic
+  &lsquo;<samp>F</samp>&rsquo;.</p><a name="index-k-N" id=
+  "index-k-N"></a> <a name="index-calc_002dutpn" id=
+  "index-calc_002dutpn"></a> <a name="index-utpn" id=
+  "index-utpn"></a> <a name="index-I-k-N" id="index-I-k-N"></a>
+  <a name="index-ltpn" id="index-ltpn"></a>
+
+  <p>The &lsquo;<samp>utpn(x,m,s)</samp>&rsquo; function uses a
+  normal (Gaussian) distribution with mean
+  &lsquo;<samp>m</samp>&rsquo; and standard deviation
+  &lsquo;<samp>s</samp>&rsquo;. It is the probability that such a
+  normal-distributed random variable would exceed
+  &lsquo;<samp>x</samp>&rsquo;.</p><a name="index-k-P" id=
+  "index-k-P"></a> <a name="index-calc_002dutpp" id=
+  "index-calc_002dutpp"></a> <a name="index-utpp" id=
+  "index-utpp"></a> <a name="index-I-k-P" id="index-I-k-P"></a>
+  <a name="index-ltpp" id="index-ltpp"></a>
+
+  <p>The &lsquo;<samp>utpp(n,x)</samp>&rsquo; function uses a
+  Poisson distribution with mean &lsquo;<samp>x</samp>&rsquo;. It
+  is the probability that &lsquo;<samp>n</samp>&rsquo; or more such
+  Poisson random events will occur.</p><a name="index-k-T" id=
+  "index-k-T"></a> <a name="index-calc_002dltpt" id=
+  "index-calc_002dltpt"></a> <a name="index-utpt" id=
+  "index-utpt"></a> <a name="index-I-k-T" id="index-I-k-T"></a>
+  <a name="index-ltpt" id="index-ltpt"></a>
+
+  <p>The &lsquo;<samp>utpt(t,v)</samp>&rsquo; function uses the
+  Student&rsquo;s &ldquo;t&rdquo; distribution with
+  &lsquo;<samp>v</samp>&rsquo; degrees of freedom. It is the
+  probability that a t-distributed random variable will be greater
+  than &lsquo;<samp>t</samp>&rsquo;. (Note: This computes the
+  distribution function &lsquo;<samp>A(t|v)</samp>&rsquo; where
+  &lsquo;<samp>A(0|v) = 1</samp>&rsquo; and &lsquo;<samp>A(inf|v)
+  -&gt; 0</samp>&rsquo;. The <code>UTPT</code> operation on the
+  HP-48 uses a different definition which returns half of
+  Calc&rsquo;s value: &lsquo;<samp>UTPT(t,v) =
+  .5*utpt(t,v)</samp>&rsquo;.)</p>
+
+  <p>While Calc does not provide inverses of the probability
+  distribution functions, the <kbd>a R</kbd> command can be used to
+  solve for the inverse. Since the distribution functions are
+  monotonic, <kbd>a R</kbd> is guaranteed to be able to find a
+  solution given any initial guess. See <a href=
+  "Numerical-Solutions.html#Numerical-Solutions">Numerical
+  Solutions</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Combinatorial-Functions.html#Combinatorial-Functions"
+    accesskey="p" rel="prev">Combinatorial Functions</a>, Up:
+    <a href="Scientific-Functions.html#Scientific-Functions"
+    accesskey="u" rel="up">Scientific Functions</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,214 +19,339 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Equality Predicates</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Equality Predicates">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Equality Predicates">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lisp-Data-Types.html#Lisp-Data-Types" rel="up" title="Lisp Data Types">
-<link href="Numbers.html#Numbers" rel="next" title="Numbers">
-<link href="Type-Predicates.html#Type-Predicates" rel="prev" title="Type Predicates">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Equality
+  Predicates</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Equality Predicates" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Equality Predicates" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lisp-Data-Types.html#Lisp-Data-Types" rel="up" title=
+  "Lisp Data Types" />
+  <link href="Numbers.html#Numbers" rel="next" title="Numbers" />
+  <link href="Type-Predicates.html#Type-Predicates" rel="prev"
+  title="Type Predicates" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Equality-Predicates" id="Equality-Predicates"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Type-Predicates.html#Type-Predicates"
+    accesskey="p" rel="prev">Type Predicates</a>, Up: <a href=
+    "Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel=
+    "up">Lisp Data Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Equality-Predicates-1" id="Equality-Predicates-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Equality-Predicates"></a>
-<div class="header">
-<p>
-Previous: <a href="Type-Predicates.html#Type-Predicates" accesskey="p" rel="prev">Type Predicates</a>, Up: <a href="Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel="up">Lisp Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Equality-Predicates-1"></a>
-<h3 class="section">2.7 Equality Predicates</h3>
-<a name="index-equality"></a>
+  <h3 class="section">2.7 Equality Predicates</h3><a name=
+  "index-equality" id="index-equality"></a>
 
-<p>Here we describe functions that test for equality between two
-objects.  Other functions test equality of contents between objects of
-specific types, e.g., strings.  For these predicates, see the
-appropriate chapter describing the data type.
-</p>
-<dl>
-<dt><a name="index-eq"></a>Function: <strong>eq</strong> <em>object1 object2</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object1</var> and <var>object2</var> are
-the same object, and <code>nil</code> otherwise.
-</p>
-<p>If <var>object1</var> and <var>object2</var> are integers with the same value,
-they are considered to be the same object (i.e., <code>eq</code> returns
-<code>t</code>).  If <var>object1</var> and <var>object2</var> are symbols with the
-same name, they are normally the same object&mdash;but see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a> for exceptions.  For other types (e.g., lists, vectors,
-strings), two arguments with the same contents or elements are not
-necessarily <code>eq</code> to each other: they are <code>eq</code> only if they
-are the same object, meaning that a change in the contents of one will
-be reflected by the same change in the contents of the other.
-</p>
-<div class="example">
-<pre class="example">(eq 'foo 'foo)
+  <p>Here we describe functions that test for equality between two
+  objects. Other functions test equality of contents between
+  objects of specific types, e.g., strings. For these predicates,
+  see the appropriate chapter describing the data type.</p>
+
+  <dl>
+    <dt><a name="index-eq" id="index-eq"></a>Function:
+    <strong>eq</strong> <em>object1 object2</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object1</var>
+      and <var>object2</var> are the same object, and
+      <code>nil</code> otherwise.</p>
+
+      <p>If <var>object1</var> and <var>object2</var> are integers
+      with the same value, they are considered to be the same
+      object (i.e., <code>eq</code> returns <code>t</code>). If
+      <var>object1</var> and <var>object2</var> are symbols with
+      the same name, they are normally the same object&mdash;but
+      see <a href="Creating-Symbols.html#Creating-Symbols">Creating
+      Symbols</a> for exceptions. For other types (e.g., lists,
+      vectors, strings), two arguments with the same contents or
+      elements are not necessarily <code>eq</code> to each other:
+      they are <code>eq</code> only if they are the same object,
+      meaning that a change in the contents of one will be
+      reflected by the same change in the contents of the
+      other.</p>
+
+      <div class="example">
+        <pre class="example">
+(eq 'foo 'foo)
      &rArr; t
-</pre><pre class="example">
-</pre><pre class="example">(eq 456 456)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(eq 456 456)
      &rArr; t
-</pre><pre class="example">
-</pre><pre class="example">(eq &quot;asdf&quot; &quot;asdf&quot;)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(eq "asdf" "asdf")
      &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">(eq &quot;&quot; &quot;&quot;)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(eq "" "")
      &rArr; t
-;; <span class="roman">This exception occurs because Emacs Lisp</span>
-;; <span class="roman">makes just one multibyte empty string, to save space.</span>
-</pre><pre class="example">
-</pre><pre class="example">(eq '(1 (2 (3))) '(1 (2 (3))))
+;; <span class=
+"roman">This exception occurs because Emacs Lisp</span>
+;; <span class=
+"roman">makes just one multibyte empty string, to save space.</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(eq '(1 (2 (3))) '(1 (2 (3))))
      &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">(setq foo '(1 (2 (3))))
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(setq foo '(1 (2 (3))))
      &rArr; (1 (2 (3)))
 (eq foo foo)
      &rArr; t
 (eq foo '(1 (2 (3))))
      &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">(eq [(1 2) 3] [(1 2) 3])
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(eq [(1 2) 3] [(1 2) 3])
      &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">(eq (point-marker) (point-marker))
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(eq (point-marker) (point-marker))
      &rArr; nil
-</pre></div>
+</pre>
+      </div>
 
-<p>The <code>make-symbol</code> function returns an uninterned symbol, distinct
-from the symbol that is used if you write the name in a Lisp expression.
-Distinct symbols with the same name are not <code>eq</code>.  See <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>.
-</p>
-<div class="example">
-<pre class="example">(eq (make-symbol &quot;foo&quot;) 'foo)
-     &rArr; nil
-</pre></div>
-</dd></dl>
+      <p>The <code>make-symbol</code> function returns an
+      uninterned symbol, distinct from the symbol that is used if
+      you write the name in a Lisp expression. Distinct symbols
+      with the same name are not <code>eq</code>. See <a href=
+      "Creating-Symbols.html#Creating-Symbols">Creating
+      Symbols</a>.</p>
 
-<dl>
-<dt><a name="index-equal"></a>Function: <strong>equal</strong> <em>object1 object2</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object1</var> and <var>object2</var> have
-equal components, and <code>nil</code> otherwise.  Whereas <code>eq</code> tests
-if its arguments are the same object, <code>equal</code> looks inside
-nonidentical arguments to see if their elements or contents are the
-same.  So, if two objects are <code>eq</code>, they are <code>equal</code>, but
-the converse is not always true.
-</p>
-<div class="example">
-<pre class="example">(equal 'foo 'foo)
-     &rArr; t
-</pre><pre class="example">
-</pre><pre class="example">(equal 456 456)
-     &rArr; t
-</pre><pre class="example">
-</pre><pre class="example">(equal &quot;asdf&quot; &quot;asdf&quot;)
-     &rArr; t
-</pre><pre class="example">(eq &quot;asdf&quot; &quot;asdf&quot;)
+      <div class="example">
+        <pre class="example">
+(eq (make-symbol "foo") 'foo)
      &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">(equal '(1 (2 (3))) '(1 (2 (3))))
-     &rArr; t
-</pre><pre class="example">(eq '(1 (2 (3))) '(1 (2 (3))))
-     &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">(equal [(1 2) 3] [(1 2) 3])
-     &rArr; t
-</pre><pre class="example">(eq [(1 2) 3] [(1 2) 3])
-     &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">(equal (point-marker) (point-marker))
-     &rArr; t
-</pre><pre class="example">
-</pre><pre class="example">(eq (point-marker) (point-marker))
-     &rArr; nil
-</pre></div>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>Comparison of strings is case-sensitive, but does not take account of
-text properties&mdash;it compares only the characters in the strings.
-See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.  Use <code>equal-including-properties</code> to also
-compare text properties.  For technical reasons, a unibyte string and
-a multibyte string are <code>equal</code> if and only if they contain the
-same sequence of character codes and all these codes are either in the
-range 0 through 127 (<acronym>ASCII</acronym>) or 160 through 255
-(<code>eight-bit-graphic</code>).  (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).
-</p>
-<div class="example">
-<pre class="example">(equal &quot;asdf&quot; &quot;ASDF&quot;)
+  <dl>
+    <dt><a name="index-equal" id="index-equal"></a>Function:
+    <strong>equal</strong> <em>object1 object2</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object1</var>
+      and <var>object2</var> have equal components, and
+      <code>nil</code> otherwise. Whereas <code>eq</code> tests if
+      its arguments are the same object, <code>equal</code> looks
+      inside nonidentical arguments to see if their elements or
+      contents are the same. So, if two objects are
+      <code>eq</code>, they are <code>equal</code>, but the
+      converse is not always true.</p>
+
+      <div class="example">
+        <pre class="example">
+(equal 'foo 'foo)
+     &rArr; t
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(equal 456 456)
+     &rArr; t
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(equal "asdf" "asdf")
+     &rArr; t
+</pre>
+        <pre class="example">
+(eq "asdf" "asdf")
      &rArr; nil
-</pre></div>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(equal '(1 (2 (3))) '(1 (2 (3))))
+     &rArr; t
+</pre>
+        <pre class="example">
+(eq '(1 (2 (3))) '(1 (2 (3))))
+     &rArr; nil
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(equal [(1 2) 3] [(1 2) 3])
+     &rArr; t
+</pre>
+        <pre class="example">
+(eq [(1 2) 3] [(1 2) 3])
+     &rArr; nil
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(equal (point-marker) (point-marker))
+     &rArr; t
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(eq (point-marker) (point-marker))
+     &rArr; nil
+</pre>
+      </div>
 
-<p>However, two distinct buffers are never considered <code>equal</code>, even if
-their textual contents are the same.
-</p></dd></dl>
+      <p>Comparison of strings is case-sensitive, but does not take
+      account of text properties&mdash;it compares only the
+      characters in the strings. See <a href=
+      "Text-Properties.html#Text-Properties">Text Properties</a>.
+      Use <code>equal-including-properties</code> to also compare
+      text properties. For technical reasons, a unibyte string and
+      a multibyte string are <code>equal</code> if and only if they
+      contain the same sequence of character codes and all these
+      codes are either in the range 0 through 127
+      (<acronym>ASCII</acronym>) or 160 through 255
+      (<code>eight-bit-graphic</code>). (see <a href=
+      "Text-Representations.html#Text-Representations">Text
+      Representations</a>).</p>
 
-<p>The test for equality is implemented recursively; for example, given
-two cons cells <var>x</var> and <var>y</var>, <code>(equal <var>x</var> <var>y</var>)</code>
-returns <code>t</code> if and only if both the expressions below return
-<code>t</code>:
-</p>
-<div class="example">
-<pre class="example">(equal (car <var>x</var>) (car <var>y</var>))
+      <div class="example">
+        <pre class="example">
+(equal "asdf" "ASDF")
+     &rArr; nil
+</pre>
+      </div>
+
+      <p>However, two distinct buffers are never considered
+      <code>equal</code>, even if their textual contents are the
+      same.</p>
+    </dd>
+  </dl>
+
+  <p>The test for equality is implemented recursively; for example,
+  given two cons cells <var>x</var> and <var>y</var>, <code>(equal
+  <var>x</var> <var>y</var>)</code> returns <code>t</code> if and
+  only if both the expressions below return <code>t</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(equal (car <var>x</var>) (car <var>y</var>))
 (equal (cdr <var>x</var>) (cdr <var>y</var>))
-</pre></div>
+</pre>
+  </div>
 
-<p>Because of this recursive method, circular lists may therefore cause
-infinite recursion (leading to an error).
-</p>
-<dl>
-<dt><a name="index-equal_002dincluding_002dproperties"></a>Function: <strong>equal-including-properties</strong> <em>object1 object2</em></dt>
-<dd><p>This function behaves like <code>equal</code> in all cases but also requires
-that for two strings to be equal, they have the same text properties.
-</p>
-<div class="example">
-<pre class="example">(equal &quot;asdf&quot; (propertize &quot;asdf&quot; 'asdf t))
+  <p>Because of this recursive method, circular lists may therefore
+  cause infinite recursion (leading to an error).</p>
+
+  <dl>
+    <dt><a name="index-equal_002dincluding_002dproperties" id=
+    "index-equal_002dincluding_002dproperties"></a>Function:
+    <strong>equal-including-properties</strong> <em>object1
+    object2</em></dt>
+
+    <dd>
+      <p>This function behaves like <code>equal</code> in all cases
+      but also requires that for two strings to be equal, they have
+      the same text properties.</p>
+
+      <div class="example">
+        <pre class="example">
+(equal "asdf" (propertize "asdf" 'asdf t))
      &rArr; t
-</pre><pre class="example">(equal-including-properties &quot;asdf&quot;
-                            (propertize &quot;asdf&quot; 'asdf t))
+</pre>
+        <pre class="example">
+(equal-including-properties "asdf"
+                            (propertize "asdf" 'asdf t))
      &rArr; nil
-</pre></div>
-</dd></dl>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Type-Predicates.html#Type-Predicates" accesskey="p" rel="prev">Type Predicates</a>, Up: <a href="Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel="up">Lisp Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Previous: <a href="Type-Predicates.html#Type-Predicates"
+    accesskey="p" rel="prev">Type Predicates</a>, Up: <a href=
+    "Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel=
+    "up">Lisp Data Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

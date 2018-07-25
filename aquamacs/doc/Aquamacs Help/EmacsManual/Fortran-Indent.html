@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,83 +20,153 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Fortran Indent</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Fortran Indent">
-<meta name="keywords" content="GNU Emacs Manual: Fortran Indent">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Fortran.html#Fortran" rel="up" title="Fortran">
-<link href="ForIndent-Commands.html#ForIndent-Commands" rel="next" title="ForIndent Commands">
-<link href="Fortran-Motion.html#Fortran-Motion" rel="prev" title="Fortran Motion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Fortran Indent</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Fortran Indent" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Fortran Indent" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Fortran.html#Fortran" rel="up" title="Fortran" />
+  <link href="ForIndent-Commands.html#ForIndent-Commands" rel=
+  "next" title="ForIndent Commands" />
+  <link href="Fortran-Motion.html#Fortran-Motion" rel="prev" title=
+  "Fortran Motion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Fortran-Indent" id="Fortran-Indent"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Fortran-Comments.html#Fortran-Comments"
+    accesskey="n" rel="next">Fortran Comments</a>, Previous:
+    <a href="Fortran-Motion.html#Fortran-Motion" accesskey="p" rel=
+    "prev">Fortran Motion</a>, Up: <a href="Fortran.html#Fortran"
+    accesskey="u" rel="up">Fortran</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Fortran-Indentation" id="Fortran-Indentation"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Fortran-Indent"></a>
-<div class="header">
-<p>
-Next: <a href="Fortran-Comments.html#Fortran-Comments" accesskey="n" rel="next">Fortran Comments</a>, Previous: <a href="Fortran-Motion.html#Fortran-Motion" accesskey="p" rel="prev">Fortran Motion</a>, Up: <a href="Fortran.html#Fortran" accesskey="u" rel="up">Fortran</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Fortran-Indentation"></a>
-<h4 class="subsection">26.14.2 Fortran Indentation</h4>
+  <h4 class="subsection">26.14.2 Fortran Indentation</h4>
 
-<p>Special commands and features are needed for indenting fixed (or tab)
-form Fortran code in order to make sure various syntactic entities (line
-numbers, comment line indicators and continuation line flags) appear in
-the required columns.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="ForIndent-Commands.html#ForIndent-Commands" accesskey="1">Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Commands for indenting and filling Fortran.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="ForIndent-Cont.html#ForIndent-Cont" accesskey="2">Contline</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How continuation lines indent.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="ForIndent-Num.html#ForIndent-Num" accesskey="3">Numbers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How line numbers auto-indent.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="ForIndent-Conv.html#ForIndent-Conv" accesskey="4">Conv</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Conventions you must obey to avoid trouble.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="ForIndent-Vars.html#ForIndent-Vars" accesskey="5">Vars</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Variables controlling Fortran indent style.
-</td></tr>
-</table>
+  <p>Special commands and features are needed for indenting fixed
+  (or tab) form Fortran code in order to make sure various
+  syntactic entities (line numbers, comment line indicators and
+  continuation line flags) appear in the required columns.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "ForIndent-Commands.html#ForIndent-Commands" accesskey=
+      "1">Commands</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Commands for indenting and
+      filling Fortran.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "ForIndent-Cont.html#ForIndent-Cont" accesskey=
+      "2">Contline</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How continuation lines
+      indent.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "ForIndent-Num.html#ForIndent-Num" accesskey=
+      "3">Numbers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How line numbers
+      auto-indent.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "ForIndent-Conv.html#ForIndent-Conv" accesskey=
+      "4">Conv</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Conventions you must obey to
+      avoid trouble.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "ForIndent-Vars.html#ForIndent-Vars" accesskey=
+      "5">Vars</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Variables controlling Fortran
+      indent style.</td>
+    </tr>
+  </table>
 </body>
 </html>

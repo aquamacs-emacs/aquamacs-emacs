@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Format Description - Forms Mode User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Forms Mode User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Control-File-Format.html#Control-File-Format" title="Control File Format">
-<link rel="next" href="Modifying-Forms-Contents.html#Modifying-Forms-Contents" title="Modifying Forms Contents">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Format Description - Forms Mode User's Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Forms Mode User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Control-File-Format.html#Control-File-Format" title=
+  "Control File Format" />
+  <link rel="next" href=
+  "Modifying-Forms-Contents.html#Modifying-Forms-Contents" title=
+  "Modifying Forms Contents" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Forms mode, a form-editing major mode for GNU Emacs.
 
 Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
@@ -26,8 +36,10 @@ Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,61 +49,88 @@ Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Format-Description"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Modifying-Forms-Contents.html#Modifying-Forms-Contents">Modifying Forms Contents</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Control-File-Format.html#Control-File-Format">Control File Format</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Format-Description" id="Format-Description"></a>
 
-<h2 class="chapter">6 The Format Description</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Modifying-Forms-Contents.html#Modifying-Forms-Contents">Modifying
+    Forms Contents</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href="Control-File-Format.html#Control-File-Format">Control
+    File Format</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-forms_002dformat_002dlist-57"></a>  The variable <code>forms-format-list</code> specifies the format of the data
-in the data file, and how to convert the data for display in Forms mode. 
-Its value must be a list of Forms mode <dfn>formatting elements</dfn>, each
-of which can be a string, a number, a Lisp list, or a Lisp symbol that
-evaluates to one of those.  The formatting elements are processed in the
-order they appear in the list.
+  <h2 class="chapter">6 The Format Description</h2>
 
-     <dl>
-<dt><var>string</var><dd>A string formatting element is inserted in the forms &ldquo;as is,&rdquo; as text
-that the user cannot alter.
+  <p><a name="index-forms_002dformat_002dlist-57" id=
+  "index-forms_002dformat_002dlist-57"></a> The variable
+  <code>forms-format-list</code> specifies the format of the data
+  in the data file, and how to convert the data for display in
+  Forms mode. Its value must be a list of Forms mode
+  <dfn>formatting elements</dfn>, each of which can be a string, a
+  number, a Lisp list, or a Lisp symbol that evaluates to one of
+  those. The formatting elements are processed in the order they
+  appear in the list.</p>
 
-     <br><dt><var>number</var><dd>A number element selects a field of the record.  The contents of this
-field are inserted in the display at this point.  Field numbers count
-starting from 1 (one).
+  <dl>
+    <dt><var>string</var></dt>
 
-     <br><dt><var>list</var><dd>A formatting element that is a list specifies a function call.  This
-function is called every time a record is displayed, and its result,
-which must be a string, is inserted in the display text.  The function
-should do nothing but returning a string.
+    <dd>A string formatting element is inserted in the forms
+    &ldquo;as is,&rdquo; as text that the user cannot
+    alter.<br /></dd>
 
-     <p><a name="index-forms_002dfields-58"></a>The function you call can access the fields of the record as a list in
-the variable
-<code>forms-fields</code>.
+    <dt><var>number</var></dt>
 
-     <br><dt><var>symbol</var><dd>A symbol used as a formatting element should evaluate to a string, number,
-or list; the value is interpreted as a formatting element, as described
-above. 
-</dl>
+    <dd>A number element selects a field of the record. The
+    contents of this field are inserted in the display at this
+    point. Field numbers count starting from 1 (one).<br /></dd>
 
-   <p>If a record does not contain the number of fields as specified in
-<code>forms-number-of-fields</code>, a warning message will be printed.  Excess
-fields are ignored, missing fields are set to empty.
+    <dt><var>list</var></dt>
 
-   <p>The control file which displays <samp><span class="file">/etc/passwd</span></samp> file as demonstrated
-in the beginning of this manual might look as follows:
+    <dd>
+      A formatting element that is a list specifies a function
+      call. This function is called every time a record is
+      displayed, and its result, which must be a string, is
+      inserted in the display text. The function should do nothing
+      but returning a string.
 
-<pre class="example">     ;; <span class="roman">This demo visits </span><samp><span class="file">/etc/passwd</span></samp><span class="roman">.</span>
+      <p><a name="index-forms_002dfields-58" id=
+      "index-forms_002dfields-58"></a>The function you call can
+      access the fields of the record as a list in the variable
+      <code>forms-fields</code>.<br /></p>
+    </dd>
+
+    <dt><var>symbol</var></dt>
+
+    <dd>A symbol used as a formatting element should evaluate to a
+    string, number, or list; the value is interpreted as a
+    formatting element, as described above.</dd>
+  </dl>
+
+  <p>If a record does not contain the number of fields as specified
+  in <code>forms-number-of-fields</code>, a warning message will be
+  printed. Excess fields are ignored, missing fields are set to
+  empty.</p>
+
+  <p>The control file which displays <samp><span class=
+  "file">/etc/passwd</span></samp> file as demonstrated in the
+  beginning of this manual might look as follows:</p>
+  <pre class="example">
+     ;; <span class=
+"roman">This demo visits </span><samp><span class=
+"file">/etc/passwd</span></samp><span class="roman">.</span>
      
      (setq forms-file "/etc/passwd")
      (setq forms-number-of-fields 7)
-     (setq forms-read-only t)                 ; <span class="roman">to make sure</span>
+     (setq forms-read-only t)                 ; <span class=
+"roman">to make sure</span>
      (setq forms-field-sep ":")
      ;; <span class="roman">Don't allow multi-line fields.</span>
      (setq forms-multi-line nil)
@@ -110,10 +149,12 @@ in the beginning of this manual might look as follows:
             "Shell: "    7
             "\n"))
 </pre>
-   <p>When you construct the value of  <code>forms-format-list</code>, you should
-usually either quote the whole value, like this,
 
-<pre class="example">     (setq forms-format-list
+  <p>When you construct the value of
+  <code>forms-format-list</code>, you should usually either quote
+  the whole value, like this,</p>
+  <pre class="example">
+     (setq forms-format-list
           '(
             "====== " forms-file " ======\n\n"
             "User : "    1
@@ -121,9 +162,11 @@ usually either quote the whole value, like this,
             ...
            ))
 </pre>
-   <p class="noindent">or quote the elements which are lists, like this:
 
-<pre class="example">     (setq forms-format-list
+  <p class="noindent">or quote the elements which are lists, like
+  this:</p>
+  <pre class="example">
+     (setq forms-format-list
            (list
             "====== " forms-file " ======\n\n"
             "User : "    1
@@ -131,14 +174,17 @@ usually either quote the whole value, like this,
             ...
            ))
 </pre>
-   <p>Forms mode validates the contents of <code>forms-format-list</code> when you
-visit a database.  If there are errors, processing is aborted with an
-error message which includes a descriptive text.  See <a href="Error-Messages.html#Error-Messages">Error Messages</a>,
-for a detailed list of error messages.
 
-   <p>If no <code>forms-format-list</code> is specified, Forms mode will supply a
-default format list.  This list contains the name of the file being
-visited, and a simple label for each field indicating the field number.
+  <p>Forms mode validates the contents of
+  <code>forms-format-list</code> when you visit a database. If
+  there are errors, processing is aborted with an error message
+  which includes a descriptive text. See <a href=
+  "Error-Messages.html#Error-Messages">Error Messages</a>, for a
+  detailed list of error messages.</p>
 
-   </body></html>
-
+  <p>If no <code>forms-format-list</code> is specified, Forms mode
+  will supply a default format list. This list contains the name of
+  the file being visited, and a simple label for each field
+  indicating the field number.</p>
+</body>
+</html>

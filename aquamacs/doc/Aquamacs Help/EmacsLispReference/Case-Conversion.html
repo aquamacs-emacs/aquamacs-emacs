@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,182 +19,269 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Case Conversion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Case Conversion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Case Conversion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Strings-and-Characters.html#Strings-and-Characters" rel="up" title="Strings and Characters">
-<link href="Case-Tables.html#Case-Tables" rel="next" title="Case Tables">
-<link href="Formatting-Strings.html#Formatting-Strings" rel="prev" title="Formatting Strings">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Case Conversion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Case Conversion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Case Conversion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Strings-and-Characters.html#Strings-and-Characters"
+  rel="up" title="Strings and Characters" />
+  <link href="Case-Tables.html#Case-Tables" rel="next" title=
+  "Case Tables" />
+  <link href="Formatting-Strings.html#Formatting-Strings" rel=
+  "prev" title="Formatting Strings" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Case-Conversion" id="Case-Conversion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Case-Tables.html#Case-Tables" accesskey="n"
+    rel="next">Case Tables</a>, Previous: <a href=
+    "Formatting-Strings.html#Formatting-Strings" accesskey="p" rel=
+    "prev">Formatting Strings</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Case-Conversion-in-Lisp" id=
+  "Case-Conversion-in-Lisp"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Case-Conversion"></a>
-<div class="header">
-<p>
-Next: <a href="Case-Tables.html#Case-Tables" accesskey="n" rel="next">Case Tables</a>, Previous: <a href="Formatting-Strings.html#Formatting-Strings" accesskey="p" rel="prev">Formatting Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Case-Conversion-in-Lisp"></a>
-<h3 class="section">4.8 Case Conversion in Lisp</h3>
-<a name="index-upper-case"></a>
-<a name="index-lower-case"></a>
-<a name="index-character-case"></a>
-<a name="index-case-conversion-in-Lisp"></a>
+  <h3 class="section">4.8 Case Conversion in Lisp</h3><a name=
+  "index-upper-case" id="index-upper-case"></a> <a name=
+  "index-lower-case" id="index-lower-case"></a> <a name=
+  "index-character-case" id="index-character-case"></a> <a name=
+  "index-case-conversion-in-Lisp" id=
+  "index-case-conversion-in-Lisp"></a>
 
-<p>The character case functions change the case of single characters or
-of the contents of strings.  The functions normally convert only
-alphabetic characters (the letters &lsquo;<samp>A</samp>&rsquo; through &lsquo;<samp>Z</samp>&rsquo; and
-&lsquo;<samp>a</samp>&rsquo; through &lsquo;<samp>z</samp>&rsquo;, as well as non-<acronym>ASCII</acronym> letters); other
-characters are not altered.  You can specify a different case
-conversion mapping by specifying a case table (see <a href="Case-Tables.html#Case-Tables">Case Tables</a>).
-</p>
-<p>These functions do not modify the strings that are passed to them as
-arguments.
-</p>
-<p>The examples below use the characters &lsquo;<samp>X</samp>&rsquo; and &lsquo;<samp>x</samp>&rsquo; which have
-<acronym>ASCII</acronym> codes 88 and 120 respectively.
-</p>
-<dl>
-<dt><a name="index-downcase"></a>Function: <strong>downcase</strong> <em>string-or-char</em></dt>
-<dd><p>This function converts <var>string-or-char</var>, which should be either a
-character or a string, to lower case.
-</p>
-<p>When <var>string-or-char</var> is a string, this function returns a new
-string in which each letter in the argument that is upper case is
-converted to lower case.  When <var>string-or-char</var> is a character,
-this function returns the corresponding lower case character (an
-integer); if the original character is lower case, or is not a letter,
-the return value is equal to the original character.
-</p>
-<div class="example">
-<pre class="example">(downcase &quot;The cat in the hat&quot;)
-     &rArr; &quot;the cat in the hat&quot;
+  <p>The character case functions change the case of single
+  characters or of the contents of strings. The functions normally
+  convert only alphabetic characters (the letters
+  &lsquo;<samp>A</samp>&rsquo; through &lsquo;<samp>Z</samp>&rsquo;
+  and &lsquo;<samp>a</samp>&rsquo; through
+  &lsquo;<samp>z</samp>&rsquo;, as well as
+  non-<acronym>ASCII</acronym> letters); other characters are not
+  altered. You can specify a different case conversion mapping by
+  specifying a case table (see <a href=
+  "Case-Tables.html#Case-Tables">Case Tables</a>).</p>
+
+  <p>These functions do not modify the strings that are passed to
+  them as arguments.</p>
+
+  <p>The examples below use the characters
+  &lsquo;<samp>X</samp>&rsquo; and &lsquo;<samp>x</samp>&rsquo;
+  which have <acronym>ASCII</acronym> codes 88 and 120
+  respectively.</p>
+
+  <dl>
+    <dt><a name="index-downcase" id="index-downcase"></a>Function:
+    <strong>downcase</strong> <em>string-or-char</em></dt>
+
+    <dd>
+      <p>This function converts <var>string-or-char</var>, which
+      should be either a character or a string, to lower case.</p>
+
+      <p>When <var>string-or-char</var> is a string, this function
+      returns a new string in which each letter in the argument
+      that is upper case is converted to lower case. When
+      <var>string-or-char</var> is a character, this function
+      returns the corresponding lower case character (an integer);
+      if the original character is lower case, or is not a letter,
+      the return value is equal to the original character.</p>
+
+      <div class="example">
+        <pre class="example">
+(downcase "The cat in the hat")
+     &rArr; "the cat in the hat"
 
 (downcase ?X)
      &rArr; 120
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-upcase"></a>Function: <strong>upcase</strong> <em>string-or-char</em></dt>
-<dd><p>This function converts <var>string-or-char</var>, which should be either a
-character or a string, to upper case.
-</p>
-<p>When <var>string-or-char</var> is a string, this function returns a new
-string in which each letter in the argument that is lower case is
-converted to upper case.  When <var>string-or-char</var> is a character,
-this function returns the corresponding upper case character (an
-integer); if the original character is upper case, or is not a letter,
-the return value is equal to the original character.
-</p>
-<div class="example">
-<pre class="example">(upcase &quot;The cat in the hat&quot;)
-     &rArr; &quot;THE CAT IN THE HAT&quot;
+  <dl>
+    <dt><a name="index-upcase" id="index-upcase"></a>Function:
+    <strong>upcase</strong> <em>string-or-char</em></dt>
+
+    <dd>
+      <p>This function converts <var>string-or-char</var>, which
+      should be either a character or a string, to upper case.</p>
+
+      <p>When <var>string-or-char</var> is a string, this function
+      returns a new string in which each letter in the argument
+      that is lower case is converted to upper case. When
+      <var>string-or-char</var> is a character, this function
+      returns the corresponding upper case character (an integer);
+      if the original character is upper case, or is not a letter,
+      the return value is equal to the original character.</p>
+
+      <div class="example">
+        <pre class="example">
+(upcase "The cat in the hat")
+     &rArr; "THE CAT IN THE HAT"
 
 (upcase ?x)
      &rArr; 88
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-capitalize"></a>Function: <strong>capitalize</strong> <em>string-or-char</em></dt>
-<dd><a name="index-capitalization"></a>
-<p>This function capitalizes strings or characters.  If
-<var>string-or-char</var> is a string, the function returns a new string
-whose contents are a copy of <var>string-or-char</var> in which each word
-has been capitalized.  This means that the first character of each
-word is converted to upper case, and the rest are converted to lower
-case.
-</p>
-<p>The definition of a word is any sequence of consecutive characters that
-are assigned to the word constituent syntax class in the current syntax
-table (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).
-</p>
-<p>When <var>string-or-char</var> is a character, this function does the same
-thing as <code>upcase</code>.
-</p>
-<div class="example">
-<pre class="example">(capitalize &quot;The cat in the hat&quot;)
-     &rArr; &quot;The Cat In The Hat&quot;
-</pre><pre class="example">
-</pre><pre class="example">(capitalize &quot;THE 77TH-HATTED CAT&quot;)
-     &rArr; &quot;The 77th-Hatted Cat&quot;
-</pre><pre class="example">
-</pre><pre class="example">(capitalize ?x)
+  <dl>
+    <dt><a name="index-capitalize" id=
+    "index-capitalize"></a>Function: <strong>capitalize</strong>
+    <em>string-or-char</em></dt>
+
+    <dd>
+      <a name="index-capitalization" id="index-capitalization"></a>
+
+      <p>This function capitalizes strings or characters. If
+      <var>string-or-char</var> is a string, the function returns a
+      new string whose contents are a copy of
+      <var>string-or-char</var> in which each word has been
+      capitalized. This means that the first character of each word
+      is converted to upper case, and the rest are converted to
+      lower case.</p>
+
+      <p>The definition of a word is any sequence of consecutive
+      characters that are assigned to the word constituent syntax
+      class in the current syntax table (see <a href=
+      "Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class
+      Table</a>).</p>
+
+      <p>When <var>string-or-char</var> is a character, this
+      function does the same thing as <code>upcase</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(capitalize "The cat in the hat")
+     &rArr; "The Cat In The Hat"
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(capitalize "THE 77TH-HATTED CAT")
+     &rArr; "The 77th-Hatted Cat"
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(capitalize ?x)
      &rArr; 88
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-upcase_002dinitials"></a>Function: <strong>upcase-initials</strong> <em>string-or-char</em></dt>
-<dd><p>If <var>string-or-char</var> is a string, this function capitalizes the
-initials of the words in <var>string-or-char</var>, without altering any
-letters other than the initials.  It returns a new string whose
-contents are a copy of <var>string-or-char</var>, in which each word has
-had its initial letter converted to upper case.
-</p>
-<p>The definition of a word is any sequence of consecutive characters that
-are assigned to the word constituent syntax class in the current syntax
-table (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).
-</p>
-<p>When the argument to <code>upcase-initials</code> is a character,
-<code>upcase-initials</code> has the same result as <code>upcase</code>.
-</p>
-<div class="example">
-<pre class="example">(upcase-initials &quot;The CAT in the hAt&quot;)
-     &rArr; &quot;The CAT In The HAt&quot;
-</pre></div>
-</dd></dl>
+  <dl>
+    <dt><a name="index-upcase_002dinitials" id=
+    "index-upcase_002dinitials"></a>Function:
+    <strong>upcase-initials</strong> <em>string-or-char</em></dt>
 
-<p>See <a href="Text-Comparison.html#Text-Comparison">Text Comparison</a>, for functions that compare strings; some of
-them ignore case differences, or can optionally ignore case differences.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Case-Tables.html#Case-Tables" accesskey="n" rel="next">Case Tables</a>, Previous: <a href="Formatting-Strings.html#Formatting-Strings" accesskey="p" rel="prev">Formatting Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>If <var>string-or-char</var> is a string, this function
+      capitalizes the initials of the words in
+      <var>string-or-char</var>, without altering any letters other
+      than the initials. It returns a new string whose contents are
+      a copy of <var>string-or-char</var>, in which each word has
+      had its initial letter converted to upper case.</p>
 
+      <p>The definition of a word is any sequence of consecutive
+      characters that are assigned to the word constituent syntax
+      class in the current syntax table (see <a href=
+      "Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class
+      Table</a>).</p>
 
+      <p>When the argument to <code>upcase-initials</code> is a
+      character, <code>upcase-initials</code> has the same result
+      as <code>upcase</code>.</p>
 
+      <div class="example">
+        <pre class="example">
+(upcase-initials "The CAT in the hAt")
+     &rArr; "The CAT In The HAt"
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <p>See <a href="Text-Comparison.html#Text-Comparison">Text
+  Comparison</a>, for functions that compare strings; some of them
+  ignore case differences, or can optionally ignore case
+  differences.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Case-Tables.html#Case-Tables" accesskey="n"
+    rel="next">Case Tables</a>, Previous: <a href=
+    "Formatting-Strings.html#Formatting-Strings" accesskey="p" rel=
+    "prev">Formatting Strings</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

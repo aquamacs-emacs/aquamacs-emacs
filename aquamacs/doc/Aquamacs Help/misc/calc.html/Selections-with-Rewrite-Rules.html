@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,139 +18,195 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Selections with Rewrite Rules</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Selections with Rewrite Rules">
-<meta name="keywords" content="GNU Emacs Calc Manual: Selections with Rewrite Rules">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Rewrite-Rules.html#Rewrite-Rules" rel="up" title="Rewrite Rules">
-<link href="Matching-Commands.html#Matching-Commands" rel="next" title="Matching Commands">
-<link href="Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules" rel="prev" title="Multi-Phase Rewrite Rules">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Selections with Rewrite
+  Rules</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Selections with Rewrite Rules" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Selections with Rewrite Rules" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Rewrite-Rules.html#Rewrite-Rules" rel="up" title=
+  "Rewrite Rules" />
+  <link href="Matching-Commands.html#Matching-Commands" rel="next"
+  title="Matching Commands" />
+  <link href=
+  "Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules"
+  rel="prev" title="Multi-Phase Rewrite Rules" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Selections-with-Rewrite-Rules"></a>
-<div class="header">
-<p>
-Next: <a href="Matching-Commands.html#Matching-Commands" accesskey="n" rel="next">Matching Commands</a>, Previous: <a href="Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules" accesskey="p" rel="prev">Multi-Phase Rewrite Rules</a>, Up: <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel="up">Rewrite Rules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Selections-with-Rewrite-Rules-1"></a>
-<h4 class="subsection">10.11.9 Selections with Rewrite Rules</h4>
+<body lang="en" xml:lang="en">
+  <a name="Selections-with-Rewrite-Rules" id=
+  "Selections-with-Rewrite-Rules"></a>
 
-<p>If a sub-formula of the current formula is selected (as by <kbd>j s</kbd>;
-see <a href="Selecting-Subformulas.html#Selecting-Subformulas">Selecting Subformulas</a>), the <kbd>a r</kbd> (<code>calc-rewrite</code>)
-command applies only to that sub-formula.  Together with a negative
-prefix argument, you can use this fact to apply a rewrite to one
-specific part of a formula without affecting any other parts.
-</p>
-<a name="index-j-r"></a>
-<a name="index-calc_002drewrite_002dselection"></a>
-<p>The <kbd>j r</kbd> (<code>calc-rewrite-selection</code>) command allows more
-sophisticated operations on selections.  This command prompts for
-the rules in the same way as <kbd>a r</kbd>, but it then applies those
-rules to the whole formula in question even though a sub-formula
-of it has been selected.  However, the selected sub-formula will
-first have been surrounded by a &lsquo;<samp>select( )</samp>&rsquo; function call.
-(Calc&rsquo;s evaluator does not understand the function name <code>select</code>;
-this is only a tag used by the <kbd>j r</kbd> command.)
-</p>
-<p>For example, suppose the formula on the stack is &lsquo;<samp>2 (a + b)^2</samp>&rsquo;
-and the sub-formula &lsquo;<samp>a + b</samp>&rsquo; is selected.  This formula will
-be rewritten to &lsquo;<samp>2 select(a + b)^2</samp>&rsquo; and then the rewrite
-rules will be applied in the usual way.  The rewrite rules can
-include references to <code>select</code> to tell where in the pattern
-the selected sub-formula should appear.
-</p>
-<p>If there is still exactly one &lsquo;<samp>select( )</samp>&rsquo; function call in
-the formula after rewriting is done, it indicates which part of
-the formula should be selected afterwards.  Otherwise, the
-formula will be unselected.
-</p>
-<p>You can make <kbd>j r</kbd> act much like <kbd>a r</kbd> by enclosing both parts
-of the rewrite rule with &lsquo;<samp>select()</samp>&rsquo;.  However, <kbd>j r</kbd>
-allows you to use the current selection in more flexible ways.
-Suppose you wished to make a rule which removed the exponent from
-the selected term; the rule &lsquo;<samp>select(a)^x := select(a)</samp>&rsquo; would
-work.  In the above example, it would rewrite &lsquo;<samp>2 select(a + b)^2</samp>&rsquo;
-to &lsquo;<samp>2 select(a + b)</samp>&rsquo;.  This would then be returned to the
-stack as &lsquo;<samp>2 (a + b)</samp>&rsquo; with the &lsquo;<samp>a + b</samp>&rsquo; selected.
-</p>
-<p>The <kbd>j r</kbd> command uses one iteration by default, unlike
-<kbd>a r</kbd> which defaults to 100 iterations.  A numeric prefix
-argument affects <kbd>j r</kbd> in the same way as <kbd>a r</kbd>.
-See <a href="Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules">Nested Formulas with Rewrite Rules</a>.
-</p>
-<p>As with other selection commands, <kbd>j r</kbd> operates on the stack
-entry that contains the cursor.  (If the cursor is on the top-of-stack
-&lsquo;<samp>.</samp>&rsquo; marker, it works as if the cursor were on the formula
-at stack level 1.)
-</p>
-<p>If you don&rsquo;t specify a set of rules, the rules are taken from the
-top of the stack, just as with <kbd>a r</kbd>.  In this case, the
-cursor must indicate stack entry 2 or above as the formula to be
-rewritten (otherwise the same formula would be used as both the
-target and the rewrite rules).
-</p>
-<p>If the indicated formula has no selection, the cursor position within
-the formula temporarily selects a sub-formula for the purposes of this
-command.  If the cursor is not on any sub-formula (e.g., it is in
-the line-number area to the left of the formula), the &lsquo;<samp>select( )</samp>&rsquo;
-markers are ignored by the rewrite mechanism and the rules are allowed
-to apply anywhere in the formula.
-</p>
-<p>As a special feature, the normal <kbd>a r</kbd> command also ignores
-&lsquo;<samp>select( )</samp>&rsquo; calls in rewrite rules.  For example, if you used the
-above rule &lsquo;<samp>select(a)^x := select(a)</samp>&rsquo; with <kbd>a r</kbd>, it would apply
-the rule as if it were &lsquo;<samp>a^x := a</samp>&rsquo;.  Thus, you can write general
-purpose rules with &lsquo;<samp>select( )</samp>&rsquo; hints inside them so that they
-will &ldquo;do the right thing&rdquo; in both <kbd>a r</kbd> and <kbd>j r</kbd>,
-both with and without selections.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Matching-Commands.html#Matching-Commands" accesskey="n" rel="next">Matching Commands</a>, Previous: <a href="Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules" accesskey="p" rel="prev">Multi-Phase Rewrite Rules</a>, Up: <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel="up">Rewrite Rules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Matching-Commands.html#Matching-Commands"
+    accesskey="n" rel="next">Matching Commands</a>, Previous:
+    <a href=
+    "Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules"
+    accesskey="p" rel="prev">Multi-Phase Rewrite Rules</a>, Up:
+    <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel=
+    "up">Rewrite Rules</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Selections-with-Rewrite-Rules-1" id=
+  "Selections-with-Rewrite-Rules-1"></a>
 
+  <h4 class="subsection">10.11.9 Selections with Rewrite Rules</h4>
 
+  <p>If a sub-formula of the current formula is selected (as by
+  <kbd>j s</kbd>; see <a href=
+  "Selecting-Subformulas.html#Selecting-Subformulas">Selecting
+  Subformulas</a>), the <kbd>a r</kbd> (<code>calc-rewrite</code>)
+  command applies only to that sub-formula. Together with a
+  negative prefix argument, you can use this fact to apply a
+  rewrite to one specific part of a formula without affecting any
+  other parts.</p><a name="index-j-r" id="index-j-r"></a> <a name=
+  "index-calc_002drewrite_002dselection" id=
+  "index-calc_002drewrite_002dselection"></a>
 
+  <p>The <kbd>j r</kbd> (<code>calc-rewrite-selection</code>)
+  command allows more sophisticated operations on selections. This
+  command prompts for the rules in the same way as <kbd>a r</kbd>,
+  but it then applies those rules to the whole formula in question
+  even though a sub-formula of it has been selected. However, the
+  selected sub-formula will first have been surrounded by a
+  &lsquo;<samp>select( )</samp>&rsquo; function call. (Calc&rsquo;s
+  evaluator does not understand the function name
+  <code>select</code>; this is only a tag used by the <kbd>j
+  r</kbd> command.)</p>
+
+  <p>For example, suppose the formula on the stack is
+  &lsquo;<samp>2 (a + b)^2</samp>&rsquo; and the sub-formula
+  &lsquo;<samp>a + b</samp>&rsquo; is selected. This formula will
+  be rewritten to &lsquo;<samp>2 select(a + b)^2</samp>&rsquo; and
+  then the rewrite rules will be applied in the usual way. The
+  rewrite rules can include references to <code>select</code> to
+  tell where in the pattern the selected sub-formula should
+  appear.</p>
+
+  <p>If there is still exactly one &lsquo;<samp>select(
+  )</samp>&rsquo; function call in the formula after rewriting is
+  done, it indicates which part of the formula should be selected
+  afterwards. Otherwise, the formula will be unselected.</p>
+
+  <p>You can make <kbd>j r</kbd> act much like <kbd>a r</kbd> by
+  enclosing both parts of the rewrite rule with
+  &lsquo;<samp>select()</samp>&rsquo;. However, <kbd>j r</kbd>
+  allows you to use the current selection in more flexible ways.
+  Suppose you wished to make a rule which removed the exponent from
+  the selected term; the rule &lsquo;<samp>select(a)^x :=
+  select(a)</samp>&rsquo; would work. In the above example, it
+  would rewrite &lsquo;<samp>2 select(a + b)^2</samp>&rsquo; to
+  &lsquo;<samp>2 select(a + b)</samp>&rsquo;. This would then be
+  returned to the stack as &lsquo;<samp>2 (a + b)</samp>&rsquo;
+  with the &lsquo;<samp>a + b</samp>&rsquo; selected.</p>
+
+  <p>The <kbd>j r</kbd> command uses one iteration by default,
+  unlike <kbd>a r</kbd> which defaults to 100 iterations. A numeric
+  prefix argument affects <kbd>j r</kbd> in the same way as <kbd>a
+  r</kbd>. See <a href=
+  "Nested-Formulas-with-Rewrite-Rules.html#Nested-Formulas-with-Rewrite-Rules">
+  Nested Formulas with Rewrite Rules</a>.</p>
+
+  <p>As with other selection commands, <kbd>j r</kbd> operates on
+  the stack entry that contains the cursor. (If the cursor is on
+  the top-of-stack &lsquo;<samp>.</samp>&rsquo; marker, it works as
+  if the cursor were on the formula at stack level 1.)</p>
+
+  <p>If you don&rsquo;t specify a set of rules, the rules are taken
+  from the top of the stack, just as with <kbd>a r</kbd>. In this
+  case, the cursor must indicate stack entry 2 or above as the
+  formula to be rewritten (otherwise the same formula would be used
+  as both the target and the rewrite rules).</p>
+
+  <p>If the indicated formula has no selection, the cursor position
+  within the formula temporarily selects a sub-formula for the
+  purposes of this command. If the cursor is not on any sub-formula
+  (e.g., it is in the line-number area to the left of the formula),
+  the &lsquo;<samp>select( )</samp>&rsquo; markers are ignored by
+  the rewrite mechanism and the rules are allowed to apply anywhere
+  in the formula.</p>
+
+  <p>As a special feature, the normal <kbd>a r</kbd> command also
+  ignores &lsquo;<samp>select( )</samp>&rsquo; calls in rewrite
+  rules. For example, if you used the above rule
+  &lsquo;<samp>select(a)^x := select(a)</samp>&rsquo; with <kbd>a
+  r</kbd>, it would apply the rule as if it were &lsquo;<samp>a^x
+  := a</samp>&rsquo;. Thus, you can write general purpose rules
+  with &lsquo;<samp>select( )</samp>&rsquo; hints inside them so
+  that they will &ldquo;do the right thing&rdquo; in both <kbd>a
+  r</kbd> and <kbd>j r</kbd>, both with and without selections.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Matching-Commands.html#Matching-Commands"
+    accesskey="n" rel="next">Matching Commands</a>, Previous:
+    <a href=
+    "Multi_002dPhase-Rewrite-Rules.html#Multi_002dPhase-Rewrite-Rules"
+    accesskey="p" rel="prev">Multi-Phase Rewrite Rules</a>, Up:
+    <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel=
+    "up">Rewrite Rules</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

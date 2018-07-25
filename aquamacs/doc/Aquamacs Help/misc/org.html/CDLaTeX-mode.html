@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,130 +16,185 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: CDLaTeX mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: CDLaTeX mode">
-<meta name="keywords" content="The Org Manual: CDLaTeX mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Embedded-LaTeX.html#Embedded-LaTeX" rel="up" title="Embedded LaTeX">
-<link href="Special-blocks.html#Special-blocks" rel="next" title="Special blocks">
-<link href="Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments" rel="prev" title="Previewing LaTeX fragments">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: CDLaTeX mode</title>
+  <meta name="description" content=
+  "The Org Manual: CDLaTeX mode" />
+  <meta name="keywords" content="The Org Manual: CDLaTeX mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Embedded-LaTeX.html#Embedded-LaTeX" rel="up" title=
+  "Embedded LaTeX" />
+  <link href="Special-blocks.html#Special-blocks" rel="next" title=
+  "Special blocks" />
+  <link href=
+  "Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments" rel=
+  "prev" title="Previewing LaTeX fragments" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="CDLaTeX-mode"></a>
-<div class="header">
-<p>
-Previous: <a href="Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments" accesskey="p" rel="prev">Previewing LaTeX fragments</a>, Up: <a href="Embedded-LaTeX.html#Embedded-LaTeX" accesskey="u" rel="up">Embedded LaTeX</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-CDLaTeX-to-enter-math"></a>
-<h4 class="subsection">11.7.5 Using CDLaTeX to enter math</h4>
-<a name="index-CDLaTeX"></a>
+<body lang="en" xml:lang="en">
+  <a name="CDLaTeX-mode" id="CDLaTeX-mode"></a>
 
-<p>CDLaTeX mode is a minor mode that is normally used in combination with a
-major LaTeX mode like AUCTeX in order to speed-up insertion of
-environments and math templates.  Inside Org mode, you can make use of
-some of the features of CDLaTeX mode.  You need to install
-<samp>cdlatex.el</samp> and <samp>texmathp.el</samp> (the latter comes also with
-AUCTeX) from <a href="http://www.astro.uva.nl/~dominik/Tools/cdlatex">http://www.astro.uva.nl/~dominik/Tools/cdlatex</a>.
-Don&rsquo;t use CDLaTeX mode itself under Org mode, but use the light
-version <code>org-cdlatex-mode</code> that comes as part of Org mode.  Turn it
-on for the current buffer with <kbd>M-x org-cdlatex-mode RET</kbd>, or for all
-Org files with
-</p>
-<div class="lisp">
-<pre class="lisp">(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-</pre></div>
+  <div class="header">
+    <p>Previous: <a href=
+    "Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments"
+    accesskey="p" rel="prev">Previewing LaTeX fragments</a>, Up:
+    <a href="Embedded-LaTeX.html#Embedded-LaTeX" accesskey="u" rel=
+    "up">Embedded LaTeX</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-CDLaTeX-to-enter-math" id=
+  "Using-CDLaTeX-to-enter-math"></a>
 
-<p>When this mode is enabled, the following features are present (for more
-details see the documentation of CDLaTeX mode):
-</p><ul>
-<li> <a name="index-C_002dc-_007b-1"></a>
-Environment templates can be inserted with <kbd>C-c {</kbd>.
-</li><li> <a name="index-TAB-6"></a>
-The <tt class="key">TAB</tt> key will do template expansion if the cursor is inside a
-LaTeX fragment<a name="DOCF131" href="#FOOT131"><sup>131</sup></a>.  For example, <tt class="key">TAB</tt> will
-expand <code>fr</code> to <code>\frac{}{}</code> and position the cursor
-correctly inside the first brace.  Another <tt class="key">TAB</tt> will get you into
-the second brace.  Even outside fragments, <tt class="key">TAB</tt> will expand
-environment abbreviations at the beginning of a line.  For example, if
-you write &lsquo;<samp>equ</samp>&rsquo; at the beginning of a line and press <tt class="key">TAB</tt>,
-this abbreviation will be expanded to an <code>equation</code> environment.
-To get a list of all abbreviations, type <kbd>M-x cdlatex-command-help RET</kbd>.
-</li><li> <a name="index-_005f"></a>
-<a name="index-_005e-2"></a>
-<a name="index-cdlatex_002dsimplify_002dsub_002dsuper_002dscripts"></a>
-Pressing <kbd>_</kbd> and <kbd>^</kbd> inside a LaTeX fragment will insert these
-characters together with a pair of braces.  If you use <tt class="key">TAB</tt> to move
-out of the braces, and if the braces surround only a single character or
-macro, they are removed again (depending on the variable
-<code>cdlatex-simplify-sub-super-scripts</code>).
-</li><li> <a name="index-_0060"></a>
-Pressing the grave accent <kbd>`</kbd> followed by a character inserts math
-macros, also outside LaTeX fragments.  If you wait more than 1.5 seconds
-after the grave accent, a help window will pop up.
-</li><li> <a name="index-_0027"></a>
-Pressing the apostrophe <kbd>'</kbd> followed by another character modifies
-the symbol before point with an accent or a font.  If you wait more than
-1.5 seconds after the apostrophe, a help window will pop up.  Character
-modification will work only inside LaTeX fragments; outside the quote
-is normal.
-</li></ul>
+  <h4 class="subsection">11.7.5 Using CDLaTeX to enter
+  math</h4><a name="index-CDLaTeX" id="index-CDLaTeX"></a>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>CDLaTeX mode is a minor mode that is normally used in
+  combination with a major LaTeX mode like AUCTeX in order to
+  speed-up insertion of environments and math templates. Inside Org
+  mode, you can make use of some of the features of CDLaTeX mode.
+  You need to install <samp>cdlatex.el</samp> and
+  <samp>texmathp.el</samp> (the latter comes also with AUCTeX) from
+  <a href=
+  "http://www.astro.uva.nl/~dominik/Tools/cdlatex">http://www.astro.uva.nl/~dominik/Tools/cdlatex</a>.
+  Don&rsquo;t use CDLaTeX mode itself under Org mode, but use the
+  light version <code>org-cdlatex-mode</code> that comes as part of
+  Org mode. Turn it on for the current buffer with <kbd>M-x
+  org-cdlatex-mode RET</kbd>, or for all Org files with</p>
 
-<h3><a name="FOOT131" href="#DOCF131">(131)</a></h3>
-<p>Org mode has a method to test if the cursor is
-inside such a fragment, see the documentation of the function
-<code>org-inside-LaTeX-fragment-p</code>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments" accesskey="p" rel="prev">Previewing LaTeX fragments</a>, Up: <a href="Embedded-LaTeX.html#Embedded-LaTeX" accesskey="u" rel="up">Embedded LaTeX</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="lisp">
+    <pre class="lisp">
+(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+</pre>
+  </div>
 
+  <p>When this mode is enabled, the following features are present
+  (for more details see the documentation of CDLaTeX mode):</p>
 
+  <ul>
+    <li><a name="index-C_002dc-_007b-1" id=
+    "index-C_002dc-_007b-1"></a> Environment templates can be
+    inserted with <kbd>C-c {</kbd>.</li>
 
+    <li><a name="index-TAB-6" id="index-TAB-6"></a> The <tt class=
+    "key">TAB</tt> key will do template expansion if the cursor is
+    inside a LaTeX fragment<a name="DOCF131" href="#FOOT131" id=
+    "DOCF131"><sup>131</sup></a>. For example, <tt class=
+    "key">TAB</tt> will expand <code>fr</code> to
+    <code>\frac{}{}</code> and position the cursor correctly inside
+    the first brace. Another <tt class="key">TAB</tt> will get you
+    into the second brace. Even outside fragments, <tt class=
+    "key">TAB</tt> will expand environment abbreviations at the
+    beginning of a line. For example, if you write
+    &lsquo;<samp>equ</samp>&rsquo; at the beginning of a line and
+    press <tt class="key">TAB</tt>, this abbreviation will be
+    expanded to an <code>equation</code> environment. To get a list
+    of all abbreviations, type <kbd>M-x cdlatex-command-help
+    RET</kbd>.</li>
+
+    <li><a name="index-_005f" id="index-_005f"></a> <a name=
+    "index-_005e-2" id="index-_005e-2"></a> <a name=
+    "index-cdlatex_002dsimplify_002dsub_002dsuper_002dscripts" id=
+    "index-cdlatex_002dsimplify_002dsub_002dsuper_002dscripts"></a>
+    Pressing <kbd>_</kbd> and <kbd>^</kbd> inside a LaTeX fragment
+    will insert these characters together with a pair of braces. If
+    you use <tt class="key">TAB</tt> to move out of the braces, and
+    if the braces surround only a single character or macro, they
+    are removed again (depending on the variable
+    <code>cdlatex-simplify-sub-super-scripts</code>).</li>
+
+    <li><a name="index-_0060" id="index-_0060"></a> Pressing the
+    grave accent <kbd>`</kbd> followed by a character inserts math
+    macros, also outside LaTeX fragments. If you wait more than 1.5
+    seconds after the grave accent, a help window will pop up.</li>
+
+    <li><a name="index-_0027" id="index-_0027"></a> Pressing the
+    apostrophe <kbd>'</kbd> followed by another character modifies
+    the symbol before point with an accent or a font. If you wait
+    more than 1.5 seconds after the apostrophe, a help window will
+    pop up. Character modification will work only inside LaTeX
+    fragments; outside the quote is normal.</li>
+  </ul>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT131" href="#DOCF131" id=
+    "FOOT131">(131)</a></h3>
+
+    <p>Org mode has a method to test if the cursor is inside such a
+    fragment, see the documentation of the function
+    <code>org-inside-LaTeX-fragment-p</code>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments"
+    accesskey="p" rel="prev">Previewing LaTeX fragments</a>, Up:
+    <a href="Embedded-LaTeX.html#Embedded-LaTeX" accesskey="u" rel=
+    "up">Embedded LaTeX</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

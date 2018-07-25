@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,330 +19,512 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Regexp Backslash</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Regexp Backslash">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Regexp Backslash">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Syntax-of-Regexps.html#Syntax-of-Regexps" rel="up" title="Syntax of Regexps">
-<link href="Regexp-Example.html#Regexp-Example" rel="next" title="Regexp Example">
-<link href="Char-Classes.html#Char-Classes" rel="prev" title="Char Classes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Regexp Backslash</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Regexp Backslash" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Regexp Backslash" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Syntax-of-Regexps.html#Syntax-of-Regexps" rel="up"
+  title="Syntax of Regexps" />
+  <link href="Regexp-Example.html#Regexp-Example" rel="next" title=
+  "Regexp Example" />
+  <link href="Char-Classes.html#Char-Classes" rel="prev" title=
+  "Char Classes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Regexp-Backslash" id="Regexp-Backslash"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Char-Classes.html#Char-Classes"
+    accesskey="p" rel="prev">Char Classes</a>, Up: <a href=
+    "Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey="u" rel=
+    "up">Syntax of Regexps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Backslash-Constructs-in-Regular-Expressions" id=
+  "Backslash-Constructs-in-Regular-Expressions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Regexp-Backslash"></a>
-<div class="header">
-<p>
-Previous: <a href="Char-Classes.html#Char-Classes" accesskey="p" rel="prev">Char Classes</a>, Up: <a href="Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey="u" rel="up">Syntax of Regexps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Backslash-Constructs-in-Regular-Expressions"></a>
-<h4 class="subsubsection">33.3.1.3 Backslash Constructs in Regular Expressions</h4>
-<a name="index-backslash-in-regular-expressions"></a>
+  <h4 class="subsubsection">33.3.1.3 Backslash Constructs in
+  Regular Expressions</h4><a name=
+  "index-backslash-in-regular-expressions" id=
+  "index-backslash-in-regular-expressions"></a>
 
-<p>For the most part, &lsquo;<samp>\</samp>&rsquo; followed by any character matches only
-that character.  However, there are several exceptions: certain
-sequences starting with &lsquo;<samp>\</samp>&rsquo; that have special meanings.  Here is
-a table of the special &lsquo;<samp>\</samp>&rsquo; constructs.
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>\|</samp>&rsquo;</dt>
-<dd><a name="index-_007c-in-regexp"></a>
-<a name="index-regexp-alternative"></a>
-<p>specifies an alternative.
-Two regular expressions <var>a</var> and <var>b</var> with &lsquo;<samp>\|</samp>&rsquo; in
-between form an expression that matches anything that either <var>a</var> or
-<var>b</var> matches.
-</p>
-<p>Thus, &lsquo;<samp>foo\|bar</samp>&rsquo; matches either &lsquo;<samp>foo</samp>&rsquo; or &lsquo;<samp>bar</samp>&rsquo;
-but no other string.
-</p>
-<p>&lsquo;<samp>\|</samp>&rsquo; applies to the largest possible surrounding expressions.  Only a
-surrounding &lsquo;<samp>\( &hellip; \)</samp>&rsquo; grouping can limit the grouping power of
-&lsquo;<samp>\|</samp>&rsquo;.
-</p>
-<p>If you need full backtracking capability to handle multiple uses of
-&lsquo;<samp>\|</samp>&rsquo;, use the POSIX regular expression functions (see <a href="POSIX-Regexps.html#POSIX-Regexps">POSIX Regexps</a>).
-</p>
-</dd>
-<dt>&lsquo;<samp>\{<var>m</var>\}</samp>&rsquo;</dt>
-<dd><p>is a postfix operator that repeats the previous pattern exactly <var>m</var>
-times.  Thus, &lsquo;<samp>x\{5\}</samp>&rsquo; matches the string &lsquo;<samp>xxxxx</samp>&rsquo;
-and nothing else.  &lsquo;<samp>c[ad]\{3\}r</samp>&rsquo; matches string such as
-&lsquo;<samp>caaar</samp>&rsquo;, &lsquo;<samp>cdddr</samp>&rsquo;, &lsquo;<samp>cadar</samp>&rsquo;, and so on.
-</p>
-</dd>
-<dt>&lsquo;<samp>\{<var>m</var>,<var>n</var>\}</samp>&rsquo;</dt>
-<dd><p>is a more general postfix operator that specifies repetition with a
-minimum of <var>m</var> repeats and a maximum of <var>n</var> repeats.  If <var>m</var>
-is omitted, the minimum is 0; if <var>n</var> is omitted, there is no
-maximum.
-</p>
-<p>For example, &lsquo;<samp>c[ad]\{1,2\}r</samp>&rsquo; matches the strings &lsquo;<samp>car</samp>&rsquo;,
-&lsquo;<samp>cdr</samp>&rsquo;, &lsquo;<samp>caar</samp>&rsquo;, &lsquo;<samp>cadr</samp>&rsquo;, &lsquo;<samp>cdar</samp>&rsquo;, and &lsquo;<samp>cddr</samp>&rsquo;, and
-nothing else.<br>
-&lsquo;<samp>\{0,1\}</samp>&rsquo; or &lsquo;<samp>\{,1\}</samp>&rsquo; is equivalent to &lsquo;<samp>?</samp>&rsquo;.<br>
-&lsquo;<samp>\{0,\}</samp>&rsquo; or &lsquo;<samp>\{,\}</samp>&rsquo; is equivalent to &lsquo;<samp>*</samp>&rsquo;.<br>
-&lsquo;<samp>\{1,\}</samp>&rsquo; is equivalent to &lsquo;<samp>+</samp>&rsquo;.
-</p>
-</dd>
-<dt>&lsquo;<samp>\( &hellip; \)</samp>&rsquo;</dt>
-<dd><a name="index-_0028-in-regexp"></a>
-<a name="index-_0029-in-regexp"></a>
-<a name="index-regexp-grouping"></a>
-<p>is a grouping construct that serves three purposes:
-</p>
-<ol>
-<li> To enclose a set of &lsquo;<samp>\|</samp>&rsquo; alternatives for other operations.  Thus,
-the regular expression &lsquo;<samp>\(foo\|bar\)x</samp>&rsquo; matches either &lsquo;<samp>foox</samp>&rsquo;
-or &lsquo;<samp>barx</samp>&rsquo;.
+  <p>For the most part, &lsquo;<samp>\</samp>&rsquo; followed by
+  any character matches only that character. However, there are
+  several exceptions: certain sequences starting with
+  &lsquo;<samp>\</samp>&rsquo; that have special meanings. Here is
+  a table of the special &lsquo;<samp>\</samp>&rsquo;
+  constructs.</p>
 
-</li><li> To enclose a complicated expression for the postfix operators &lsquo;<samp>*</samp>&rsquo;,
-&lsquo;<samp>+</samp>&rsquo; and &lsquo;<samp>?</samp>&rsquo; to operate on.  Thus, &lsquo;<samp>ba\(na\)*</samp>&rsquo; matches
-&lsquo;<samp>ba</samp>&rsquo;, &lsquo;<samp>bana</samp>&rsquo;, &lsquo;<samp>banana</samp>&rsquo;, &lsquo;<samp>bananana</samp>&rsquo;, etc., with any
-number (zero or more) of &lsquo;<samp>na</samp>&rsquo; strings.
+  <dl compact="compact">
+    <dt>&lsquo;<samp>\|</samp>&rsquo;</dt>
 
-</li><li> To record a matched substring for future reference with
-&lsquo;<samp>\<var>digit</var></samp>&rsquo; (see below).
-</li></ol>
+    <dd>
+      <a name="index-_007c-in-regexp" id=
+      "index-_007c-in-regexp"></a> <a name=
+      "index-regexp-alternative" id="index-regexp-alternative"></a>
 
-<p>This last application is not a consequence of the idea of a
-parenthetical grouping; it is a separate feature that was assigned as a
-second meaning to the same &lsquo;<samp>\( &hellip; \)</samp>&rsquo; construct because, in
-practice, there was usually no conflict between the two meanings.  But
-occasionally there is a conflict, and that led to the introduction of
-shy groups.
-</p>
-</dd>
-<dt>&lsquo;<samp>\(?: &hellip; \)</samp>&rsquo;</dt>
-<dd><a name="index-shy-groups"></a>
-<a name="index-non_002dcapturing-group"></a>
-<a name="index-unnumbered-group"></a>
-<a name="index-_0028_003f_003a-in-regexp"></a>
-<p>is the <em>shy group</em> construct.  A shy group serves the first two
-purposes of an ordinary group (controlling the nesting of other
-operators), but it does not get a number, so you cannot refer back to
-its value with &lsquo;<samp>\<var>digit</var></samp>&rsquo;.  Shy groups are particularly
-useful for mechanically-constructed regular expressions, because they
-can be added automatically without altering the numbering of ordinary,
-non-shy groups.
-</p>
-<p>Shy groups are also called <em>non-capturing</em> or <em>unnumbered
-groups</em>.
-</p>
-</dd>
-<dt>&lsquo;<samp>\(?<var>num</var>: &hellip; \)</samp>&rsquo;</dt>
-<dd><p>is the <em>explicitly numbered group</em> construct.  Normal groups get
-their number implicitly, based on their position, which can be
-inconvenient.  This construct allows you to force a particular group
-number.  There is no particular restriction on the numbering,
-e.g., you can have several groups with the same number in which case
-the last one to match (i.e., the rightmost match) will win.
-Implicitly numbered groups always get the smallest integer larger than
-the one of any previous group.
-</p>
-</dd>
-<dt>&lsquo;<samp>\<var>digit</var></samp>&rsquo;</dt>
-<dd><p>matches the same text that matched the <var>digit</var>th occurrence of a
-grouping (&lsquo;<samp>\( &hellip; \)</samp>&rsquo;) construct.
-</p>
-<p>In other words, after the end of a group, the matcher remembers the
-beginning and end of the text matched by that group.  Later on in the
-regular expression you can use &lsquo;<samp>\</samp>&rsquo; followed by <var>digit</var> to
-match that same text, whatever it may have been.
-</p>
-<p>The strings matching the first nine grouping constructs appearing in
-the entire regular expression passed to a search or matching function
-are assigned numbers 1 through 9 in the order that the open
-parentheses appear in the regular expression.  So you can use
-&lsquo;<samp>\1</samp>&rsquo; through &lsquo;<samp>\9</samp>&rsquo; to refer to the text matched by the
-corresponding grouping constructs.
-</p>
-<p>For example, &lsquo;<samp>\(.*\)\1</samp>&rsquo; matches any newline-free string that is
-composed of two identical halves.  The &lsquo;<samp>\(.*\)</samp>&rsquo; matches the first
-half, which may be anything, but the &lsquo;<samp>\1</samp>&rsquo; that follows must match
-the same exact text.
-</p>
-<p>If a &lsquo;<samp>\( &hellip; \)</samp>&rsquo; construct matches more than once (which can
-happen, for instance, if it is followed by &lsquo;<samp>*</samp>&rsquo;), only the last
-match is recorded.
-</p>
-<p>If a particular grouping construct in the regular expression was never
-matched&mdash;for instance, if it appears inside of an alternative that
-wasn&rsquo;t used, or inside of a repetition that repeated zero times&mdash;then
-the corresponding &lsquo;<samp>\<var>digit</var></samp>&rsquo; construct never matches
-anything.  To use an artificial example, &lsquo;<samp>\(foo\(b*\)\|lose\)\2</samp>&rsquo;
-cannot match &lsquo;<samp>lose</samp>&rsquo;: the second alternative inside the larger
-group matches it, but then &lsquo;<samp>\2</samp>&rsquo; is undefined and can&rsquo;t match
-anything.  But it can match &lsquo;<samp>foobb</samp>&rsquo;, because the first
-alternative matches &lsquo;<samp>foob</samp>&rsquo; and &lsquo;<samp>\2</samp>&rsquo; matches &lsquo;<samp>b</samp>&rsquo;.
-</p>
-</dd>
-<dt>&lsquo;<samp>\w</samp>&rsquo;</dt>
-<dd><a name="index-_005cw-in-regexp"></a>
-<p>matches any word-constituent character.  The editor syntax table
-determines which characters these are.  See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.
-</p>
-</dd>
-<dt>&lsquo;<samp>\W</samp>&rsquo;</dt>
-<dd><a name="index-_005cW-in-regexp"></a>
-<p>matches any character that is not a word constituent.
-</p>
-</dd>
-<dt>&lsquo;<samp>\s<var>code</var></samp>&rsquo;</dt>
-<dd><a name="index-_005cs-in-regexp"></a>
-<p>matches any character whose syntax is <var>code</var>.  Here <var>code</var> is a
-character that represents a syntax code: thus, &lsquo;<samp>w</samp>&rsquo; for word
-constituent, &lsquo;<samp>-</samp>&rsquo; for whitespace, &lsquo;<samp>(</samp>&rsquo; for open parenthesis,
-etc.  To represent whitespace syntax, use either &lsquo;<samp>-</samp>&rsquo; or a space
-character.  See <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>, for a list of syntax codes and
-the characters that stand for them.
-</p>
-</dd>
-<dt>&lsquo;<samp>\S<var>code</var></samp>&rsquo;</dt>
-<dd><a name="index-_005cS-in-regexp"></a>
-<p>matches any character whose syntax is not <var>code</var>.
-</p>
-<a name="index-category_002c-regexp-search-for"></a>
-</dd>
-<dt>&lsquo;<samp>\c<var>c</var></samp>&rsquo;</dt>
-<dd><p>matches any character whose category is <var>c</var>.  Here <var>c</var> is a
-character that represents a category: thus, &lsquo;<samp>c</samp>&rsquo; for Chinese
-characters or &lsquo;<samp>g</samp>&rsquo; for Greek characters in the standard category
-table.  You can see the list of all the currently defined categories
-with <kbd>M-x describe-categories <span class="key">RET</span></kbd>.  You can also define
-your own categories in addition to the standard ones using the
-<code>define-category</code> function (see <a href="Categories.html#Categories">Categories</a>).
-</p>
-</dd>
-<dt>&lsquo;<samp>\C<var>c</var></samp>&rsquo;</dt>
-<dd><p>matches any character whose category is not <var>c</var>.
-</p></dd>
-</dl>
+      <p>specifies an alternative. Two regular expressions
+      <var>a</var> and <var>b</var> with
+      &lsquo;<samp>\|</samp>&rsquo; in between form an expression
+      that matches anything that either <var>a</var> or
+      <var>b</var> matches.</p>
 
-<p>The following regular expression constructs match the empty string&mdash;that is,
-they don&rsquo;t use up any characters&mdash;but whether they match depends on the
-context.  For all, the beginning and end of the accessible portion of
-the buffer are treated as if they were the actual beginning and end of
-the buffer.
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>\`</samp>&rsquo;</dt>
-<dd><a name="index-_005c_0060-in-regexp"></a>
-<p>matches the empty string, but only at the beginning
-of the buffer or string being matched against.
-</p>
-</dd>
-<dt>&lsquo;<samp>\'</samp>&rsquo;</dt>
-<dd><a name="index-_005c_0027-in-regexp"></a>
-<p>matches the empty string, but only at the end of
-the buffer or string being matched against.
-</p>
-</dd>
-<dt>&lsquo;<samp>\=</samp>&rsquo;</dt>
-<dd><a name="index-_005c_003d-in-regexp"></a>
-<p>matches the empty string, but only at point.
-(This construct is not defined when matching against a string.)
-</p>
-</dd>
-<dt>&lsquo;<samp>\b</samp>&rsquo;</dt>
-<dd><a name="index-_005cb-in-regexp"></a>
-<p>matches the empty string, but only at the beginning or
-end of a word.  Thus, &lsquo;<samp>\bfoo\b</samp>&rsquo; matches any occurrence of
-&lsquo;<samp>foo</samp>&rsquo; as a separate word.  &lsquo;<samp>\bballs?\b</samp>&rsquo; matches
-&lsquo;<samp>ball</samp>&rsquo; or &lsquo;<samp>balls</samp>&rsquo; as a separate word.
-</p>
-<p>&lsquo;<samp>\b</samp>&rsquo; matches at the beginning or end of the buffer (or string)
-regardless of what text appears next to it.
-</p>
-</dd>
-<dt>&lsquo;<samp>\B</samp>&rsquo;</dt>
-<dd><a name="index-_005cB-in-regexp"></a>
-<p>matches the empty string, but <em>not</em> at the beginning or
-end of a word, nor at the beginning or end of the buffer (or string).
-</p>
-</dd>
-<dt>&lsquo;<samp>\&lt;</samp>&rsquo;</dt>
-<dd><a name="index-_005c_003c-in-regexp"></a>
-<p>matches the empty string, but only at the beginning of a word.
-&lsquo;<samp>\&lt;</samp>&rsquo; matches at the beginning of the buffer (or string) only if a
-word-constituent character follows.
-</p>
-</dd>
-<dt>&lsquo;<samp>\&gt;</samp>&rsquo;</dt>
-<dd><a name="index-_005c_003e-in-regexp"></a>
-<p>matches the empty string, but only at the end of a word.  &lsquo;<samp>\&gt;</samp>&rsquo;
-matches at the end of the buffer (or string) only if the contents end
-with a word-constituent character.
-</p>
-</dd>
-<dt>&lsquo;<samp>\_&lt;</samp>&rsquo;</dt>
-<dd><a name="index-_005c_005f_003c-in-regexp"></a>
-<p>matches the empty string, but only at the beginning of a symbol.  A
-symbol is a sequence of one or more word or symbol constituent
-characters.  &lsquo;<samp>\_&lt;</samp>&rsquo; matches at the beginning of the buffer (or
-string) only if a symbol-constituent character follows.
-</p>
-</dd>
-<dt>&lsquo;<samp>\_&gt;</samp>&rsquo;</dt>
-<dd><a name="index-_005c_005f_003e-in-regexp"></a>
-<p>matches the empty string, but only at the end of a symbol.  &lsquo;<samp>\_&gt;</samp>&rsquo;
-matches at the end of the buffer (or string) only if the contents end
-with a symbol-constituent character.
-</p></dd>
-</dl>
+      <p>Thus, &lsquo;<samp>foo\|bar</samp>&rsquo; matches either
+      &lsquo;<samp>foo</samp>&rsquo; or
+      &lsquo;<samp>bar</samp>&rsquo; but no other string.</p>
 
-<a name="index-invalid_002dregexp"></a>
-<p>Not every string is a valid regular expression.  For example, a string
-that ends inside a character alternative without a terminating &lsquo;<samp>]</samp>&rsquo;
-is invalid, and so is a string that ends with a single &lsquo;<samp>\</samp>&rsquo;.  If
-an invalid regular expression is passed to any of the search functions,
-an <code>invalid-regexp</code> error is signaled.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Char-Classes.html#Char-Classes" accesskey="p" rel="prev">Char Classes</a>, Up: <a href="Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey="u" rel="up">Syntax of Regexps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>&lsquo;<samp>\|</samp>&rsquo; applies to the largest
+      possible surrounding expressions. Only a surrounding
+      &lsquo;<samp>\( &hellip; \)</samp>&rsquo; grouping can limit
+      the grouping power of &lsquo;<samp>\|</samp>&rsquo;.</p>
 
+      <p>If you need full backtracking capability to handle
+      multiple uses of &lsquo;<samp>\|</samp>&rsquo;, use the POSIX
+      regular expression functions (see <a href=
+      "POSIX-Regexps.html#POSIX-Regexps">POSIX Regexps</a>).</p>
+    </dd>
 
+    <dt>&lsquo;<samp>\{<var>m</var>\}</samp>&rsquo;</dt>
 
+    <dd>
+      <p>is a postfix operator that repeats the previous pattern
+      exactly <var>m</var> times. Thus,
+      &lsquo;<samp>x\{5\}</samp>&rsquo; matches the string
+      &lsquo;<samp>xxxxx</samp>&rsquo; and nothing else.
+      &lsquo;<samp>c[ad]\{3\}r</samp>&rsquo; matches string such as
+      &lsquo;<samp>caaar</samp>&rsquo;,
+      &lsquo;<samp>cdddr</samp>&rsquo;,
+      &lsquo;<samp>cadar</samp>&rsquo;, and so on.</p>
+    </dd>
+
+    <dt>
+    &lsquo;<samp>\{<var>m</var>,<var>n</var>\}</samp>&rsquo;</dt>
+
+    <dd>
+      <p>is a more general postfix operator that specifies
+      repetition with a minimum of <var>m</var> repeats and a
+      maximum of <var>n</var> repeats. If <var>m</var> is omitted,
+      the minimum is 0; if <var>n</var> is omitted, there is no
+      maximum.</p>
+
+      <p>For example, &lsquo;<samp>c[ad]\{1,2\}r</samp>&rsquo;
+      matches the strings &lsquo;<samp>car</samp>&rsquo;,
+      &lsquo;<samp>cdr</samp>&rsquo;,
+      &lsquo;<samp>caar</samp>&rsquo;,
+      &lsquo;<samp>cadr</samp>&rsquo;,
+      &lsquo;<samp>cdar</samp>&rsquo;, and
+      &lsquo;<samp>cddr</samp>&rsquo;, and nothing else.<br />
+      &lsquo;<samp>\{0,1\}</samp>&rsquo; or
+      &lsquo;<samp>\{,1\}</samp>&rsquo; is equivalent to
+      &lsquo;<samp>?</samp>&rsquo;.<br />
+      &lsquo;<samp>\{0,\}</samp>&rsquo; or
+      &lsquo;<samp>\{,\}</samp>&rsquo; is equivalent to
+      &lsquo;<samp>*</samp>&rsquo;.<br />
+      &lsquo;<samp>\{1,\}</samp>&rsquo; is equivalent to
+      &lsquo;<samp>+</samp>&rsquo;.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\( &hellip; \)</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_0028-in-regexp" id=
+      "index-_0028-in-regexp"></a> <a name="index-_0029-in-regexp"
+      id="index-_0029-in-regexp"></a> <a name=
+      "index-regexp-grouping" id="index-regexp-grouping"></a>
+
+      <p>is a grouping construct that serves three purposes:</p>
+
+      <ol>
+        <li>To enclose a set of &lsquo;<samp>\|</samp>&rsquo;
+        alternatives for other operations. Thus, the regular
+        expression &lsquo;<samp>\(foo\|bar\)x</samp>&rsquo; matches
+        either &lsquo;<samp>foox</samp>&rsquo; or
+        &lsquo;<samp>barx</samp>&rsquo;.</li>
+
+        <li>To enclose a complicated expression for the postfix
+        operators &lsquo;<samp>*</samp>&rsquo;,
+        &lsquo;<samp>+</samp>&rsquo; and
+        &lsquo;<samp>?</samp>&rsquo; to operate on. Thus,
+        &lsquo;<samp>ba\(na\)*</samp>&rsquo; matches
+        &lsquo;<samp>ba</samp>&rsquo;,
+        &lsquo;<samp>bana</samp>&rsquo;,
+        &lsquo;<samp>banana</samp>&rsquo;,
+        &lsquo;<samp>bananana</samp>&rsquo;, etc., with any number
+        (zero or more) of &lsquo;<samp>na</samp>&rsquo;
+        strings.</li>
+
+        <li>To record a matched substring for future reference with
+        &lsquo;<samp>\<var>digit</var></samp>&rsquo; (see
+        below).</li>
+      </ol>
+
+      <p>This last application is not a consequence of the idea of
+      a parenthetical grouping; it is a separate feature that was
+      assigned as a second meaning to the same &lsquo;<samp>\(
+      &hellip; \)</samp>&rsquo; construct because, in practice,
+      there was usually no conflict between the two meanings. But
+      occasionally there is a conflict, and that led to the
+      introduction of shy groups.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\(?: &hellip; \)</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-shy-groups" id="index-shy-groups"></a>
+      <a name="index-non_002dcapturing-group" id=
+      "index-non_002dcapturing-group"></a> <a name=
+      "index-unnumbered-group" id="index-unnumbered-group"></a>
+      <a name="index-_0028_003f_003a-in-regexp" id=
+      "index-_0028_003f_003a-in-regexp"></a>
+
+      <p>is the <em>shy group</em> construct. A shy group serves
+      the first two purposes of an ordinary group (controlling the
+      nesting of other operators), but it does not get a number, so
+      you cannot refer back to its value with
+      &lsquo;<samp>\<var>digit</var></samp>&rsquo;. Shy groups are
+      particularly useful for mechanically-constructed regular
+      expressions, because they can be added automatically without
+      altering the numbering of ordinary, non-shy groups.</p>
+
+      <p>Shy groups are also called <em>non-capturing</em> or
+      <em>unnumbered groups</em>.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\(?<var>num</var>: &hellip;
+    \)</samp>&rsquo;</dt>
+
+    <dd>
+      <p>is the <em>explicitly numbered group</em> construct.
+      Normal groups get their number implicitly, based on their
+      position, which can be inconvenient. This construct allows
+      you to force a particular group number. There is no
+      particular restriction on the numbering, e.g., you can have
+      several groups with the same number in which case the last
+      one to match (i.e., the rightmost match) will win. Implicitly
+      numbered groups always get the smallest integer larger than
+      the one of any previous group.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\<var>digit</var></samp>&rsquo;</dt>
+
+    <dd>
+      <p>matches the same text that matched the <var>digit</var>th
+      occurrence of a grouping (&lsquo;<samp>\( &hellip;
+      \)</samp>&rsquo;) construct.</p>
+
+      <p>In other words, after the end of a group, the matcher
+      remembers the beginning and end of the text matched by that
+      group. Later on in the regular expression you can use
+      &lsquo;<samp>\</samp>&rsquo; followed by <var>digit</var> to
+      match that same text, whatever it may have been.</p>
+
+      <p>The strings matching the first nine grouping constructs
+      appearing in the entire regular expression passed to a search
+      or matching function are assigned numbers 1 through 9 in the
+      order that the open parentheses appear in the regular
+      expression. So you can use &lsquo;<samp>\1</samp>&rsquo;
+      through &lsquo;<samp>\9</samp>&rsquo; to refer to the text
+      matched by the corresponding grouping constructs.</p>
+
+      <p>For example, &lsquo;<samp>\(.*\)\1</samp>&rsquo; matches
+      any newline-free string that is composed of two identical
+      halves. The &lsquo;<samp>\(.*\)</samp>&rsquo; matches the
+      first half, which may be anything, but the
+      &lsquo;<samp>\1</samp>&rsquo; that follows must match the
+      same exact text.</p>
+
+      <p>If a &lsquo;<samp>\( &hellip; \)</samp>&rsquo; construct
+      matches more than once (which can happen, for instance, if it
+      is followed by &lsquo;<samp>*</samp>&rsquo;), only the last
+      match is recorded.</p>
+
+      <p>If a particular grouping construct in the regular
+      expression was never matched&mdash;for instance, if it
+      appears inside of an alternative that wasn&rsquo;t used, or
+      inside of a repetition that repeated zero times&mdash;then
+      the corresponding
+      &lsquo;<samp>\<var>digit</var></samp>&rsquo; construct never
+      matches anything. To use an artificial example,
+      &lsquo;<samp>\(foo\(b*\)\|lose\)\2</samp>&rsquo; cannot match
+      &lsquo;<samp>lose</samp>&rsquo;: the second alternative
+      inside the larger group matches it, but then
+      &lsquo;<samp>\2</samp>&rsquo; is undefined and can&rsquo;t
+      match anything. But it can match
+      &lsquo;<samp>foobb</samp>&rsquo;, because the first
+      alternative matches &lsquo;<samp>foob</samp>&rsquo; and
+      &lsquo;<samp>\2</samp>&rsquo; matches
+      &lsquo;<samp>b</samp>&rsquo;.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\w</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005cw-in-regexp" id=
+      "index-_005cw-in-regexp"></a>
+
+      <p>matches any word-constituent character. The editor syntax
+      table determines which characters these are. See <a href=
+      "Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\W</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005cW-in-regexp" id=
+      "index-_005cW-in-regexp"></a>
+
+      <p>matches any character that is not a word constituent.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\s<var>code</var></samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005cs-in-regexp" id=
+      "index-_005cs-in-regexp"></a>
+
+      <p>matches any character whose syntax is <var>code</var>.
+      Here <var>code</var> is a character that represents a syntax
+      code: thus, &lsquo;<samp>w</samp>&rsquo; for word
+      constituent, &lsquo;<samp>-</samp>&rsquo; for whitespace,
+      &lsquo;<samp>(</samp>&rsquo; for open parenthesis, etc. To
+      represent whitespace syntax, use either
+      &lsquo;<samp>-</samp>&rsquo; or a space character. See
+      <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax
+      Class Table</a>, for a list of syntax codes and the
+      characters that stand for them.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\S<var>code</var></samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005cS-in-regexp" id=
+      "index-_005cS-in-regexp"></a>
+
+      <p>matches any character whose syntax is not
+      <var>code</var>.</p><a name=
+      "index-category_002c-regexp-search-for" id=
+      "index-category_002c-regexp-search-for"></a>
+    </dd>
+
+    <dt>&lsquo;<samp>\c<var>c</var></samp>&rsquo;</dt>
+
+    <dd>
+      <p>matches any character whose category is <var>c</var>. Here
+      <var>c</var> is a character that represents a category: thus,
+      &lsquo;<samp>c</samp>&rsquo; for Chinese characters or
+      &lsquo;<samp>g</samp>&rsquo; for Greek characters in the
+      standard category table. You can see the list of all the
+      currently defined categories with <kbd>M-x
+      describe-categories <span class="key">RET</span></kbd>. You
+      can also define your own categories in addition to the
+      standard ones using the <code>define-category</code> function
+      (see <a href=
+      "Categories.html#Categories">Categories</a>).</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\C<var>c</var></samp>&rsquo;</dt>
+
+    <dd>
+      <p>matches any character whose category is not
+      <var>c</var>.</p>
+    </dd>
+  </dl>
+
+  <p>The following regular expression constructs match the empty
+  string&mdash;that is, they don&rsquo;t use up any
+  characters&mdash;but whether they match depends on the context.
+  For all, the beginning and end of the accessible portion of the
+  buffer are treated as if they were the actual beginning and end
+  of the buffer.</p>
+
+  <dl compact="compact">
+    <dt>&lsquo;<samp>\`</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005c_0060-in-regexp" id=
+      "index-_005c_0060-in-regexp"></a>
+
+      <p>matches the empty string, but only at the beginning of the
+      buffer or string being matched against.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\'</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005c_0027-in-regexp" id=
+      "index-_005c_0027-in-regexp"></a>
+
+      <p>matches the empty string, but only at the end of the
+      buffer or string being matched against.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\=</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005c_003d-in-regexp" id=
+      "index-_005c_003d-in-regexp"></a>
+
+      <p>matches the empty string, but only at point. (This
+      construct is not defined when matching against a string.)</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\b</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005cb-in-regexp" id=
+      "index-_005cb-in-regexp"></a>
+
+      <p>matches the empty string, but only at the beginning or end
+      of a word. Thus, &lsquo;<samp>\bfoo\b</samp>&rsquo; matches
+      any occurrence of &lsquo;<samp>foo</samp>&rsquo; as a
+      separate word. &lsquo;<samp>\bballs?\b</samp>&rsquo; matches
+      &lsquo;<samp>ball</samp>&rsquo; or
+      &lsquo;<samp>balls</samp>&rsquo; as a separate word.</p>
+
+      <p>&lsquo;<samp>\b</samp>&rsquo; matches at the beginning or
+      end of the buffer (or string) regardless of what text appears
+      next to it.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\B</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005cB-in-regexp" id=
+      "index-_005cB-in-regexp"></a>
+
+      <p>matches the empty string, but <em>not</em> at the
+      beginning or end of a word, nor at the beginning or end of
+      the buffer (or string).</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\&lt;</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005c_003c-in-regexp" id=
+      "index-_005c_003c-in-regexp"></a>
+
+      <p>matches the empty string, but only at the beginning of a
+      word. &lsquo;<samp>\&lt;</samp>&rsquo; matches at the
+      beginning of the buffer (or string) only if a
+      word-constituent character follows.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\&gt;</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005c_003e-in-regexp" id=
+      "index-_005c_003e-in-regexp"></a>
+
+      <p>matches the empty string, but only at the end of a word.
+      &lsquo;<samp>\&gt;</samp>&rsquo; matches at the end of the
+      buffer (or string) only if the contents end with a
+      word-constituent character.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\_&lt;</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005c_005f_003c-in-regexp" id=
+      "index-_005c_005f_003c-in-regexp"></a>
+
+      <p>matches the empty string, but only at the beginning of a
+      symbol. A symbol is a sequence of one or more word or symbol
+      constituent characters. &lsquo;<samp>\_&lt;</samp>&rsquo;
+      matches at the beginning of the buffer (or string) only if a
+      symbol-constituent character follows.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>\_&gt;</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-_005c_005f_003e-in-regexp" id=
+      "index-_005c_005f_003e-in-regexp"></a>
+
+      <p>matches the empty string, but only at the end of a symbol.
+      &lsquo;<samp>\_&gt;</samp>&rsquo; matches at the end of the
+      buffer (or string) only if the contents end with a
+      symbol-constituent character.</p>
+    </dd>
+  </dl><a name="index-invalid_002dregexp" id=
+  "index-invalid_002dregexp"></a>
+
+  <p>Not every string is a valid regular expression. For example, a
+  string that ends inside a character alternative without a
+  terminating &lsquo;<samp>]</samp>&rsquo; is invalid, and so is a
+  string that ends with a single &lsquo;<samp>\</samp>&rsquo;. If
+  an invalid regular expression is passed to any of the search
+  functions, an <code>invalid-regexp</code> error is signaled.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Char-Classes.html#Char-Classes"
+    accesskey="p" rel="prev">Char Classes</a>, Up: <a href=
+    "Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey="u" rel=
+    "up">Syntax of Regexps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the Emacs MIME interface functionality.
 
 Copyright © 1998-2016 Free Software Foundation, Inc.
@@ -14,168 +16,236 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs MIME Manual: Encoding Customization</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs MIME Manual: Encoding Customization">
-<meta name="keywords" content="Emacs MIME Manual: Encoding Customization">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Composing.html#Composing" rel="up" title="Composing">
-<link href="Charset-Translation.html#Charset-Translation" rel="next" title="Charset Translation">
-<link href="Advanced-MML-Example.html#Advanced-MML-Example" rel="prev" title="Advanced MML Example">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs MIME Manual: Encoding Customization</title>
+  <meta name="description" content=
+  "Emacs MIME Manual: Encoding Customization" />
+  <meta name="keywords" content=
+  "Emacs MIME Manual: Encoding Customization" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Composing.html#Composing" rel="up" title=
+  "Composing" />
+  <link href="Charset-Translation.html#Charset-Translation" rel=
+  "next" title="Charset Translation" />
+  <link href="Advanced-MML-Example.html#Advanced-MML-Example" rel=
+  "prev" title="Advanced MML Example" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Encoding-Customization"></a>
-<div class="header">
-<p>
-Next: <a href="Charset-Translation.html#Charset-Translation" accesskey="n" rel="next">Charset Translation</a>, Previous: <a href="Advanced-MML-Example.html#Advanced-MML-Example" accesskey="p" rel="prev">Advanced MML Example</a>, Up: <a href="Composing.html#Composing" accesskey="u" rel="up">Composing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Encoding-Customization-1"></a>
-<h3 class="section">2.4 Encoding Customization</h3>
+<body lang="en" xml:lang="en">
+  <a name="Encoding-Customization" id="Encoding-Customization"></a>
 
-<dl compact="compact">
-<dt><code>mm-body-charset-encoding-alist</code></dt>
-<dd><a name="index-mm_002dbody_002dcharset_002dencoding_002dalist"></a>
-<p>Mapping from <acronym>MIME</acronym> charset to encoding to use.  This variable is
-usually used except, e.g., when other requirements force a specific
-encoding (digitally signed messages require 7bit encodings).  The
-default is
-</p>
-<div class="lisp">
-<pre class="lisp">((iso-2022-jp . 7bit)
+  <div class="header">
+    <p>Next: <a href="Charset-Translation.html#Charset-Translation"
+    accesskey="n" rel="next">Charset Translation</a>, Previous:
+    <a href="Advanced-MML-Example.html#Advanced-MML-Example"
+    accesskey="p" rel="prev">Advanced MML Example</a>, Up: <a href=
+    "Composing.html#Composing" accesskey="u" rel="up">Composing</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Encoding-Customization-1" id=
+  "Encoding-Customization-1"></a>
+
+  <h3 class="section">2.4 Encoding Customization</h3>
+
+  <dl compact="compact">
+    <dt><code>mm-body-charset-encoding-alist</code></dt>
+
+    <dd>
+      <a name=
+      "index-mm_002dbody_002dcharset_002dencoding_002dalist" id=
+      "index-mm_002dbody_002dcharset_002dencoding_002dalist"></a>
+
+      <p>Mapping from <acronym>MIME</acronym> charset to encoding
+      to use. This variable is usually used except, e.g., when
+      other requirements force a specific encoding (digitally
+      signed messages require 7bit encodings). The default is</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+((iso-2022-jp . 7bit)
  (iso-2022-jp-2 . 7bit)
  (utf-16 . base64)
  (utf-16be . base64)
  (utf-16le . base64))
-</pre></div>
+</pre>
+      </div>
 
-<p>As an example, if you do not want to have ISO-8859-1 characters
-quoted-printable encoded, you may add <code>(iso-8859-1 . 8bit)</code> to
-this variable.  You can override this setting on a per-message basis
-by using the <code>encoding</code> <acronym>MML</acronym> tag (see <a href="MML-Definition.html#MML-Definition">MML Definition</a>).
-</p>
-</dd>
-<dt><code>mm-coding-system-priorities</code></dt>
-<dd><a name="index-mm_002dcoding_002dsystem_002dpriorities"></a>
-<p>Prioritize coding systems to use for outgoing messages.  The default
-is <code>nil</code>, which means to use the defaults in Emacs, but is
-<code>(iso-8859-1 iso-2022-jp utf-8)</code> when running Emacs in the Japanese
-language environment.  It is a list of coding system symbols (aliases of
-coding systems are also allowed, use <kbd>M-x describe-coding-system</kbd> to
-make sure you are specifying correct coding system names).  For example,
-if you have configured Emacs to prefer UTF-8, but wish that outgoing
-messages should be sent in ISO-8859-1 if possible, you can set this
-variable to <code>(iso-8859-1)</code>.  You can override this setting on a
-per-message basis by using the <code>charset</code> <acronym>MML</acronym> tag
-(see <a href="MML-Definition.html#MML-Definition">MML Definition</a>).
-</p>
-<p>As different hierarchies prefer different charsets, you may want to set
-<code>mm-coding-system-priorities</code> according to the hierarchy in Gnus.
-Here&rsquo;s an example:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'gnus-newsgroup-variables 'mm-coding-system-priorities)
+      <p>As an example, if you do not want to have ISO-8859-1
+      characters quoted-printable encoded, you may add
+      <code>(iso-8859-1 . 8bit)</code> to this variable. You can
+      override this setting on a per-message basis by using the
+      <code>encoding</code> <acronym>MML</acronym> tag (see
+      <a href="MML-Definition.html#MML-Definition">MML
+      Definition</a>).</p>
+    </dd>
+
+    <dt><code>mm-coding-system-priorities</code></dt>
+
+    <dd>
+      <a name="index-mm_002dcoding_002dsystem_002dpriorities" id=
+      "index-mm_002dcoding_002dsystem_002dpriorities"></a>
+
+      <p>Prioritize coding systems to use for outgoing messages.
+      The default is <code>nil</code>, which means to use the
+      defaults in Emacs, but is <code>(iso-8859-1 iso-2022-jp
+      utf-8)</code> when running Emacs in the Japanese language
+      environment. It is a list of coding system symbols (aliases
+      of coding systems are also allowed, use <kbd>M-x
+      describe-coding-system</kbd> to make sure you are specifying
+      correct coding system names). For example, if you have
+      configured Emacs to prefer UTF-8, but wish that outgoing
+      messages should be sent in ISO-8859-1 if possible, you can
+      set this variable to <code>(iso-8859-1)</code>. You can
+      override this setting on a per-message basis by using the
+      <code>charset</code> <acronym>MML</acronym> tag (see <a href=
+      "MML-Definition.html#MML-Definition">MML Definition</a>).</p>
+
+      <p>As different hierarchies prefer different charsets, you
+      may want to set <code>mm-coding-system-priorities</code>
+      according to the hierarchy in Gnus. Here&rsquo;s an
+      example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(add-to-list 'gnus-newsgroup-variables 'mm-coding-system-priorities)
 (setq gnus-parameters
       (nconc
        ;; Some charsets are just examples!
-       '((&quot;^cn\\.&quot; ;; Chinese
+       '(("^cn\\." ;; Chinese
           (mm-coding-system-priorities
            '(iso-8859-1 cn-big5 chinese-iso-7bit utf-8)))
-         (&quot;^cz\\.\\|^pl\\.&quot; ;; Central and Eastern European
+         ("^cz\\.\\|^pl\\." ;; Central and Eastern European
           (mm-coding-system-priorities '(iso-8859-2 utf-8)))
-         (&quot;^de\\.&quot; ;; German language
+         ("^de\\." ;; German language
           (mm-coding-system-priorities '(iso-8859-1 iso-8859-15 utf-8)))
-         (&quot;^fr\\.&quot; ;; French
+         ("^fr\\." ;; French
           (mm-coding-system-priorities '(iso-8859-15 iso-8859-1 utf-8)))
-         (&quot;^fj\\.&quot; ;; Japanese
+         ("^fj\\." ;; Japanese
           (mm-coding-system-priorities
            '(iso-8859-1 iso-2022-jp utf-8)))
-         (&quot;^ru\\.&quot; ;; Cyrillic
+         ("^ru\\." ;; Cyrillic
           (mm-coding-system-priorities
            '(koi8-r iso-8859-5 iso-8859-1 utf-8))))
        gnus-parameters))
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>mm-content-transfer-encoding-defaults</code></dt>
-<dd><a name="index-mm_002dcontent_002dtransfer_002dencoding_002ddefaults"></a>
-<p>Mapping from <acronym>MIME</acronym> types to encoding to use.  This variable is usually
-used except, e.g., when other requirements force a safer encoding
-(digitally signed messages require 7bit encoding).  Besides the normal
-<acronym>MIME</acronym> encodings, <code>qp-or-base64</code> may be used to indicate that for
-each case the most efficient of quoted-printable and base64 should be
-used.
-</p>
-<p><code>qp-or-base64</code> has another effect.  It will fold long lines so that
-MIME parts may not be broken by MTA.  So do <code>quoted-printable</code> and
-<code>base64</code>.
-</p>
-<p>Note that it affects body encoding only when a part is a raw forwarded
-message (which will be made by <code>gnus-summary-mail-forward</code> with the
-arg 2 for example) or is neither the &lsquo;<samp>text/*</samp>&rsquo; type nor the
-&lsquo;<samp>message/*</samp>&rsquo; type.  Even though in those cases, you can override
-this setting on a per-message basis by using the <code>encoding</code>
-<acronym>MML</acronym> tag (see <a href="MML-Definition.html#MML-Definition">MML Definition</a>).
-</p>
-</dd>
-<dt><code>mm-use-ultra-safe-encoding</code></dt>
-<dd><a name="index-mm_002duse_002dultra_002dsafe_002dencoding"></a>
-<p>When this is non-<code>nil</code>, it means that textual parts are encoded as
-quoted-printable if they contain lines longer than 76 characters or
-starting with &quot;From &quot; in the body.  Non-7bit encodings (8bit, binary)
-are generally disallowed.  This reduce the probability that a non-8bit
-clean MTA or MDA changes the message.  This should never be set
-directly, but bound by other functions when necessary (e.g., when
-encoding messages that are to be digitally signed).
-</p>
-</dd>
-</dl>
+    <dt><code>mm-content-transfer-encoding-defaults</code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Charset-Translation.html#Charset-Translation" accesskey="n" rel="next">Charset Translation</a>, Previous: <a href="Advanced-MML-Example.html#Advanced-MML-Example" accesskey="p" rel="prev">Advanced MML Example</a>, Up: <a href="Composing.html#Composing" accesskey="u" rel="up">Composing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name=
+      "index-mm_002dcontent_002dtransfer_002dencoding_002ddefaults"
+      id=
+      "index-mm_002dcontent_002dtransfer_002dencoding_002ddefaults">
+      </a>
 
+      <p>Mapping from <acronym>MIME</acronym> types to encoding to
+      use. This variable is usually used except, e.g., when other
+      requirements force a safer encoding (digitally signed
+      messages require 7bit encoding). Besides the normal
+      <acronym>MIME</acronym> encodings, <code>qp-or-base64</code>
+      may be used to indicate that for each case the most efficient
+      of quoted-printable and base64 should be used.</p>
 
+      <p><code>qp-or-base64</code> has another effect. It will fold
+      long lines so that MIME parts may not be broken by MTA. So do
+      <code>quoted-printable</code> and <code>base64</code>.</p>
 
+      <p>Note that it affects body encoding only when a part is a
+      raw forwarded message (which will be made by
+      <code>gnus-summary-mail-forward</code> with the arg 2 for
+      example) or is neither the &lsquo;<samp>text/*</samp>&rsquo;
+      type nor the &lsquo;<samp>message/*</samp>&rsquo; type. Even
+      though in those cases, you can override this setting on a
+      per-message basis by using the <code>encoding</code>
+      <acronym>MML</acronym> tag (see <a href=
+      "MML-Definition.html#MML-Definition">MML Definition</a>).</p>
+    </dd>
+
+    <dt><code>mm-use-ultra-safe-encoding</code></dt>
+
+    <dd>
+      <a name="index-mm_002duse_002dultra_002dsafe_002dencoding"
+      id="index-mm_002duse_002dultra_002dsafe_002dencoding"></a>
+
+      <p>When this is non-<code>nil</code>, it means that textual
+      parts are encoded as quoted-printable if they contain lines
+      longer than 76 characters or starting with "From " in the
+      body. Non-7bit encodings (8bit, binary) are generally
+      disallowed. This reduce the probability that a non-8bit clean
+      MTA or MDA changes the message. This should never be set
+      directly, but bound by other functions when necessary (e.g.,
+      when encoding messages that are to be digitally signed).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Charset-Translation.html#Charset-Translation"
+    accesskey="n" rel="next">Charset Translation</a>, Previous:
+    <a href="Advanced-MML-Example.html#Advanced-MML-Example"
+    accesskey="p" rel="prev">Advanced MML Example</a>, Up: <a href=
+    "Composing.html#Composing" accesskey="u" rel="up">Composing</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

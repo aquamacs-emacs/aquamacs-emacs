@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents nXML mode, an Emacs major mode for editing
 XML with RELAX NG support.
 
@@ -15,110 +17,151 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>nXML Mode: Using multiple schema locating files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="nXML Mode: Using multiple schema locating files">
-<meta name="keywords" content="nXML Mode: Using multiple schema locating files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Schema-locating-files.html#Schema-locating-files" rel="up" title="Schema locating files">
-<link href="DTDs.html#DTDs" rel="next" title="DTDs">
-<link href="Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files" rel="prev" title="Using type identifiers in schema locating files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>nXML Mode: Using multiple schema locating files</title>
+  <meta name="description" content=
+  "nXML Mode: Using multiple schema locating files" />
+  <meta name="keywords" content=
+  "nXML Mode: Using multiple schema locating files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Schema-locating-files.html#Schema-locating-files"
+  rel="up" title="Schema locating files" />
+  <link href="DTDs.html#DTDs" rel="next" title="DTDs" />
+  <link href=
+  "Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files"
+  rel="prev" title=
+  "Using type identifiers in schema locating files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-multiple-schema-locating-files"></a>
-<div class="header">
-<p>
-Previous: <a href="Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files" accesskey="p" rel="prev">Using type identifiers in schema locating files</a>, Up: <a href="Schema-locating-files.html#Schema-locating-files" accesskey="u" rel="up">Schema locating files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Using-multiple-schema-locating-files-1"></a>
-<h4 class="subsection">6.2.5 Using multiple schema locating files</h4>
+<body lang="en" xml:lang="en">
+  <a name="Using-multiple-schema-locating-files" id=
+  "Using-multiple-schema-locating-files"></a>
 
-<p>The &lsquo;<samp>include</samp>&rsquo; element includes rules from another
-schema locating file.  The behavior is exactly as if the rules from
-that file were included in place of the &lsquo;<samp>include</samp>&rsquo; element.
-Relative URIs are resolved into absolute URIs before the inclusion is
-performed. For example,
-</p>
-<div class="example">
-<pre class="example">&lt;include rules=&quot;../rules.xml&quot;/&gt;
-</pre></div>
+  <div class="header">
+    <p>Previous: <a href=
+    "Using-type-identifiers-in-schema-locating-files.html#Using-type-identifiers-in-schema-locating-files"
+    accesskey="p" rel="prev">Using type identifiers in schema
+    locating files</a>, Up: <a href=
+    "Schema-locating-files.html#Schema-locating-files" accesskey=
+    "u" rel="up">Schema locating files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-multiple-schema-locating-files-1" id=
+  "Using-multiple-schema-locating-files-1"></a>
 
-<p>includes the rules from &lsquo;<samp>rules.xml</samp>&rsquo;.
-</p>
-<p>The process of locating a schema takes as input a list of schema
-locating files.  The rules in all these files and in the files they
-include are resolved into a single list of rules, which are applied
-strictly in order.  Sometimes this order is not what is needed.
-For example, suppose you have two schema locating files, a private
-file
-</p>
-<div class="example">
-<pre class="example">&lt;locatingRules xmlns=&quot;http://thaiopensource.com/ns/locating-rules/1.0&quot;&gt;
-  &lt;namespace ns=&quot;http://www.w3.org/1999/xhtml&quot; uri=&quot;xhtml.rnc&quot;/&gt;
+  <h4 class="subsection">6.2.5 Using multiple schema locating
+  files</h4>
+
+  <p>The &lsquo;<samp>include</samp>&rsquo; element includes rules
+  from another schema locating file. The behavior is exactly as if
+  the rules from that file were included in place of the
+  &lsquo;<samp>include</samp>&rsquo; element. Relative URIs are
+  resolved into absolute URIs before the inclusion is performed.
+  For example,</p>
+
+  <div class="example">
+    <pre class="example">
+&lt;include rules="../rules.xml"/&gt;
+</pre>
+  </div>
+
+  <p>includes the rules from
+  &lsquo;<samp>rules.xml</samp>&rsquo;.</p>
+
+  <p>The process of locating a schema takes as input a list of
+  schema locating files. The rules in all these files and in the
+  files they include are resolved into a single list of rules,
+  which are applied strictly in order. Sometimes this order is not
+  what is needed. For example, suppose you have two schema locating
+  files, a private file</p>
+
+  <div class="example">
+    <pre class="example">
+&lt;locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0"&gt;
+  &lt;namespace ns="http://www.w3.org/1999/xhtml" uri="xhtml.rnc"/&gt;
 &lt;/locatingRules&gt;
-</pre></div>
+</pre>
+  </div>
 
-<p>followed by a public file
-</p>
-<div class="example">
-<pre class="example">&lt;locatingRules xmlns=&quot;http://thaiopensource.com/ns/locating-rules/1.0&quot;&gt;
-  &lt;transformURI pathSuffix=&quot;.xml&quot; replacePathSuffix=&quot;.rnc&quot;/&gt;
-  &lt;namespace ns=&quot;http://www.w3.org/1999/XSL/Transform&quot; typeId=&quot;XSLT&quot;/&gt;
+  <p>followed by a public file</p>
+
+  <div class="example">
+    <pre class="example">
+&lt;locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0"&gt;
+  &lt;transformURI pathSuffix=".xml" replacePathSuffix=".rnc"/&gt;
+  &lt;namespace ns="http://www.w3.org/1999/XSL/Transform" typeId="XSLT"/&gt;
 &lt;/locatingRules&gt;
-</pre></div>
+</pre>
+  </div>
 
-<p>The effect of these two files is that the XHTML &lsquo;<samp>namespace</samp>&rsquo;
-rule takes precedence over the &lsquo;<samp>transformURI</samp>&rsquo; rule, which
-is almost certainly not what is needed.  This can be solved by adding
-an &lsquo;<samp>applyFollowingRules</samp>&rsquo; to the private file.
-</p>
-<div class="example">
-<pre class="example">&lt;locatingRules xmlns=&quot;http://thaiopensource.com/ns/locating-rules/1.0&quot;&gt;
-  &lt;applyFollowingRules ruleType=&quot;transformURI&quot;/&gt;
-  &lt;namespace ns=&quot;http://www.w3.org/1999/xhtml&quot; uri=&quot;xhtml.rnc&quot;/&gt;
+  <p>The effect of these two files is that the XHTML
+  &lsquo;<samp>namespace</samp>&rsquo; rule takes precedence over
+  the &lsquo;<samp>transformURI</samp>&rsquo; rule, which is almost
+  certainly not what is needed. This can be solved by adding an
+  &lsquo;<samp>applyFollowingRules</samp>&rsquo; to the private
+  file.</p>
+
+  <div class="example">
+    <pre class="example">
+&lt;locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0"&gt;
+  &lt;applyFollowingRules ruleType="transformURI"/&gt;
+  &lt;namespace ns="http://www.w3.org/1999/xhtml" uri="xhtml.rnc"/&gt;
 &lt;/locatingRules&gt;
-</pre></div>
-
-
-
-
+</pre>
+  </div>
 </body>
 </html>

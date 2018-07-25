@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Tree Display - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
-<link rel="prev" href="Alternative-Approaches.html#Alternative-Approaches" title="Alternative Approaches">
-<link rel="next" href="Mail-Group-Commands.html#Mail-Group-Commands" title="Mail Group Commands">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Tree Display - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Summary-Buffer.html#Summary-Buffer" title=
+  "Summary Buffer" />
+  <link rel="prev" href=
+  "Alternative-Approaches.html#Alternative-Approaches" title=
+  "Alternative Approaches" />
+  <link rel="next" href=
+  "Mail-Group-Commands.html#Mail-Group-Commands" title=
+  "Mail Group Commands" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +37,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,95 +50,189 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Tree-Display"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Mail-Group-Commands.html#Mail-Group-Commands">Mail Group Commands</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Alternative-Approaches.html#Alternative-Approaches">Alternative Approaches</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Tree-Display" id="Tree-Display"></a>
 
-<h3 class="section">3.25 Tree Display</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Mail-Group-Commands.html#Mail-Group-Commands">Mail Group
+    Commands</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href=
+    "Alternative-Approaches.html#Alternative-Approaches">Alternative
+    Approaches</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Summary-Buffer.html#Summary-Buffer">Summary Buffer</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-trees-1568"></a>
-<a name="index-gnus_002duse_002dtrees-1569"></a>If you don't like the normal Gnus summary display, you might try setting
-<code>gnus-use-trees</code> to <code>t</code>.  This will create (by default) an
-additional <dfn>tree buffer</dfn>.  You can execute all summary mode commands
-in the tree buffer.
+  <h3 class="section">3.25 Tree Display</h3>
 
-   <p>There are a few variables to customize the tree display, of course:
+  <p><a name="index-trees-1568" id="index-trees-1568"></a> <a name=
+  "index-gnus_002duse_002dtrees-1569" id=
+  "index-gnus_002duse_002dtrees-1569"></a>If you don't like the
+  normal Gnus summary display, you might try setting
+  <code>gnus-use-trees</code> to <code>t</code>. This will create
+  (by default) an additional <dfn>tree buffer</dfn>. You can
+  execute all summary mode commands in the tree buffer.</p>
 
-     <dl>
-<dt><code>gnus-tree-mode-hook</code><dd><a name="index-gnus_002dtree_002dmode_002dhook-1570"></a>A hook called in all tree mode buffers.
+  <p>There are a few variables to customize the tree display, of
+  course:</p>
 
-     <br><dt><code>gnus-tree-mode-line-format</code><dd><a name="index-gnus_002dtree_002dmode_002dline_002dformat-1571"></a>A format string for the mode bar in the tree mode buffers (see <a href="Mode-Line-Formatting.html#Mode-Line-Formatting">Mode Line Formatting</a>).  The default is &lsquo;<samp><span class="samp">Gnus: %%b %S %Z</span></samp>&rsquo;.  For a list
-of valid specs, see <a href="Summary-Buffer-Mode-Line.html#Summary-Buffer-Mode-Line">Summary Buffer Mode Line</a>.
+  <dl>
+    <dt><code>gnus-tree-mode-hook</code></dt>
 
-     <br><dt><code>gnus-selected-tree-face</code><dd><a name="index-gnus_002dselected_002dtree_002dface-1572"></a>Face used for highlighting the selected article in the tree buffer.  The
-default is <code>modeline</code>.
+    <dd><a name="index-gnus_002dtree_002dmode_002dhook-1570" id=
+    "index-gnus_002dtree_002dmode_002dhook-1570"></a>A hook called
+    in all tree mode buffers.<br /></dd>
 
-     <br><dt><code>gnus-tree-line-format</code><dd><a name="index-gnus_002dtree_002dline_002dformat-1573"></a>A format string for the tree nodes.  The name is a bit of a misnomer,
-though&mdash;it doesn't define a line, but just the node.  The default value
-is &lsquo;<samp><span class="samp">%(%[%3,3n%]%)</span></samp>&rsquo;, which displays the first three characters of
-the name of the poster.  It is vital that all nodes are of the same
-length, so you <em>must</em> use &lsquo;<samp><span class="samp">%4,4n</span></samp>&rsquo;-like specifiers.
+    <dt><code>gnus-tree-mode-line-format</code></dt>
 
-     <p>Valid specs are:
+    <dd><a name=
+    "index-gnus_002dtree_002dmode_002dline_002dformat-1571" id=
+    "index-gnus_002dtree_002dmode_002dline_002dformat-1571"></a>A
+    format string for the mode bar in the tree mode buffers (see
+    <a href="Mode-Line-Formatting.html#Mode-Line-Formatting">Mode
+    Line Formatting</a>). The default is &lsquo;<samp><span class=
+    "samp">Gnus: %%b %S %Z</span></samp>&rsquo;. For a list of
+    valid specs, see <a href=
+    "Summary-Buffer-Mode-Line.html#Summary-Buffer-Mode-Line">Summary
+    Buffer Mode Line</a>.<br /></dd>
 
-          <dl>
-<dt>&lsquo;<samp><span class="samp">n</span></samp>&rsquo;<dd>The name of the poster. 
-<br><dt>&lsquo;<samp><span class="samp">f</span></samp>&rsquo;<dd>The <code>From</code> header. 
-<br><dt>&lsquo;<samp><span class="samp">N</span></samp>&rsquo;<dd>The number of the article. 
-<br><dt>&lsquo;<samp><span class="samp">[</span></samp>&rsquo;<dd>The opening bracket. 
-<br><dt>&lsquo;<samp><span class="samp">]</span></samp>&rsquo;<dd>The closing bracket. 
-<br><dt>&lsquo;<samp><span class="samp">s</span></samp>&rsquo;<dd>The subject. 
-</dl>
+    <dt><code>gnus-selected-tree-face</code></dt>
 
-     <p>See <a href="Formatting-Variables.html#Formatting-Variables">Formatting Variables</a>.
+    <dd><a name="index-gnus_002dselected_002dtree_002dface-1572"
+    id="index-gnus_002dselected_002dtree_002dface-1572"></a>Face
+    used for highlighting the selected article in the tree buffer.
+    The default is <code>modeline</code>.<br /></dd>
 
-     <p>Variables related to the display are:
+    <dt><code>gnus-tree-line-format</code></dt>
 
-          <dl>
-<dt><code>gnus-tree-brackets</code><dd><a name="index-gnus_002dtree_002dbrackets-1574"></a>This is used for differentiating between &ldquo;real&rdquo; articles and
-&ldquo;sparse&rdquo; articles.  The format is
-          <pre class="example">               ((<var>real-open</var> . <var>real-close</var>)
+    <dd>
+      <a name="index-gnus_002dtree_002dline_002dformat-1573" id=
+      "index-gnus_002dtree_002dline_002dformat-1573"></a>A format
+      string for the tree nodes. The name is a bit of a misnomer,
+      though&mdash;it doesn't define a line, but just the node. The
+      default value is &lsquo;<samp><span class=
+      "samp">%(%[%3,3n%]%)</span></samp>&rsquo;, which displays the
+      first three characters of the name of the poster. It is vital
+      that all nodes are of the same length, so you <em>must</em>
+      use &lsquo;<samp><span class=
+      "samp">%4,4n</span></samp>&rsquo;-like specifiers.
+
+      <p>Valid specs are:</p>
+
+      <dl>
+        <dt>&lsquo;<samp><span class=
+        "samp">n</span></samp>&rsquo;</dt>
+
+        <dd>The name of the poster.<br /></dd>
+
+        <dt>&lsquo;<samp><span class=
+        "samp">f</span></samp>&rsquo;</dt>
+
+        <dd>The <code>From</code> header.<br /></dd>
+
+        <dt>&lsquo;<samp><span class=
+        "samp">N</span></samp>&rsquo;</dt>
+
+        <dd>The number of the article.<br /></dd>
+
+        <dt>&lsquo;<samp><span class=
+        "samp">[</span></samp>&rsquo;</dt>
+
+        <dd>The opening bracket.<br /></dd>
+
+        <dt>&lsquo;<samp><span class=
+        "samp">]</span></samp>&rsquo;</dt>
+
+        <dd>The closing bracket.<br /></dd>
+
+        <dt>&lsquo;<samp><span class=
+        "samp">s</span></samp>&rsquo;</dt>
+
+        <dd>The subject.</dd>
+      </dl>
+
+      <p>See <a href=
+      "Formatting-Variables.html#Formatting-Variables">Formatting
+      Variables</a>.</p>
+
+      <p>Variables related to the display are:</p>
+
+      <dl>
+        <dt><code>gnus-tree-brackets</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dtree_002dbrackets-1574" id=
+          "index-gnus_002dtree_002dbrackets-1574"></a>This is used
+          for differentiating between &ldquo;real&rdquo; articles
+          and &ldquo;sparse&rdquo; articles. The format is
+          <pre class="example">
+               ((<var>real-open</var> . <var>real-close</var>)
                 (<var>sparse-open</var> . <var>sparse-close</var>)
                 (<var>dummy-open</var> . <var>dummy-close</var>))
 </pre>
-          <p>and the default is <code>((?[ . ?]) (?( . ?)) (?{ . ?}) (?&lt; . ?&gt;))</code>.
 
-          <br><dt><code>gnus-tree-parent-child-edges</code><dd><a name="index-gnus_002dtree_002dparent_002dchild_002dedges-1575"></a>This is a list that contains the characters used for connecting parent
-nodes to their children.  The default is <code>(?- ?\\ ?|)</code>.
+          <p>and the default is <code>((?[ . ?]) (?( . ?)) (?{ .
+          ?}) (?&lt; . ?&gt;))</code>.<br /></p>
+        </dd>
 
-     </dl>
+        <dt><code>gnus-tree-parent-child-edges</code></dt>
 
-     <br><dt><code>gnus-tree-minimize-window</code><dd><a name="index-gnus_002dtree_002dminimize_002dwindow-1576"></a>If this variable is non-<code>nil</code>, Gnus will try to keep the tree
-buffer as small as possible to allow more room for the other Gnus
-windows.  If this variable is a number, the tree buffer will never be
-higher than that number.  The default is <code>t</code>.  Note that if you
-have several windows displayed side-by-side in a frame and the tree
-buffer is one of these, minimizing the tree window will also resize all
-other windows displayed next to it.
+        <dd><a name=
+        "index-gnus_002dtree_002dparent_002dchild_002dedges-1575"
+        id=
+        "index-gnus_002dtree_002dparent_002dchild_002dedges-1575"></a>This
+        is a list that contains the characters used for connecting
+        parent nodes to their children. The default is <code>(?-
+        ?\\ ?|)</code>.</dd>
+      </dl><br />
+    </dd>
 
-     <p>You may also wish to add the following hook to keep the window minimized
-at all times:
+    <dt><code>gnus-tree-minimize-window</code></dt>
 
-     <pre class="lisp">          (add-hook 'gnus-configure-windows-hook
+    <dd>
+      <a name="index-gnus_002dtree_002dminimize_002dwindow-1576"
+      id="index-gnus_002dtree_002dminimize_002dwindow-1576"></a>If
+      this variable is non-<code>nil</code>, Gnus will try to keep
+      the tree buffer as small as possible to allow more room for
+      the other Gnus windows. If this variable is a number, the
+      tree buffer will never be higher than that number. The
+      default is <code>t</code>. Note that if you have several
+      windows displayed side-by-side in a frame and the tree buffer
+      is one of these, minimizing the tree window will also resize
+      all other windows displayed next to it.
+
+      <p>You may also wish to add the following hook to keep the
+      window minimized at all times:</p>
+      <pre class="lisp">
+          (add-hook 'gnus-configure-windows-hook
                     'gnus-tree-perhaps-minimize)
-</pre>
-     <br><dt><code>gnus-generate-tree-function</code><dd><a name="index-gnus_002dgenerate_002dtree_002dfunction-1577"></a><a name="index-gnus_002dgenerate_002dhorizontal_002dtree-1578"></a><a name="index-gnus_002dgenerate_002dvertical_002dtree-1579"></a>The function that actually generates the thread tree.  Two predefined
-functions are available: <code>gnus-generate-horizontal-tree</code> and
-<code>gnus-generate-vertical-tree</code> (which is the default).
+</pre><br />
+    </dd>
 
-   </dl>
+    <dt><code>gnus-generate-tree-function</code></dt>
 
-   <p>Here's an example from a horizontal tree buffer:
+    <dd><a name=
+    "index-gnus_002dgenerate_002dtree_002dfunction-1577" id=
+    "index-gnus_002dgenerate_002dtree_002dfunction-1577"></a><a name="index-gnus_002dgenerate_002dhorizontal_002dtree-1578"
+    id=
+    "index-gnus_002dgenerate_002dhorizontal_002dtree-1578"></a><a name="index-gnus_002dgenerate_002dvertical_002dtree-1579"
+    id="index-gnus_002dgenerate_002dvertical_002dtree-1579"></a>The
+    function that actually generates the thread tree. Two
+    predefined functions are available:
+    <code>gnus-generate-horizontal-tree</code> and
+    <code>gnus-generate-vertical-tree</code> (which is the
+    default).</dd>
+  </dl>
 
-<pre class="example">     {***}-(***)-[odd]-[Gun]
+  <p>Here's an example from a horizontal tree buffer:</p>
+  <pre class="example">
+     {***}-(***)-[odd]-[Gun]
           |      \[Jan]
           |      \[odd]-[Eri]
           |      \(***)-[Eri]
@@ -133,9 +241,11 @@ functions are available: <code>gnus-generate-horizontal-tree</code> and
           \[Gun]
           \[Gun]-[Jor]
 </pre>
-   <p>Here's the same thread displayed in a vertical tree buffer:
 
-<pre class="example">     {***}
+  <p>Here's the same thread displayed in a vertical tree
+  buffer:</p>
+  <pre class="example">
+     {***}
        |--------------------------\-----\-----\
      (***)                         [Bjo] [Gun] [Gun]
        |--\-----\-----\                          |
@@ -145,11 +255,13 @@ functions are available: <code>gnus-generate-horizontal-tree</code> and
                                |
                              [Paa]
 </pre>
-   <p>If you're using horizontal trees, it might be nice to display the trees
-side-by-side with the summary buffer.  You could add something like the
-following to your <samp><span class="file">~/.gnus.el</span></samp> file:
 
-<pre class="lisp">     (setq gnus-use-trees t
+  <p>If you're using horizontal trees, it might be nice to display
+  the trees side-by-side with the summary buffer. You could add
+  something like the following to your <samp><span class=
+  "file">~/.gnus.el</span></samp> file:</p>
+  <pre class="lisp">
+     (setq gnus-use-trees t
            gnus-generate-tree-function 'gnus-generate-horizontal-tree
            gnus-tree-minimize-window nil)
      (gnus-add-configuration
@@ -160,7 +272,8 @@ following to your <samp><span class="file">~/.gnus.el</span></samp> file:
                               (tree 1.0))
                   (article 1.0))))
 </pre>
-   <p>See <a href="Window-Layout.html#Window-Layout">Window Layout</a>.
 
-   </body></html>
-
+  <p>See <a href="Window-Layout.html#Window-Layout">Window
+  Layout</a>.</p>
+</body>
+</html>

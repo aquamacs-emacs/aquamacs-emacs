@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,133 +20,187 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Interactive Shell</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Interactive Shell">
-<meta name="keywords" content="GNU Emacs Manual: Interactive Shell">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Shell.html#Shell" rel="up" title="Shell">
-<link href="Shell-Mode.html#Shell-Mode" rel="next" title="Shell Mode">
-<link href="Single-Shell.html#Single-Shell" rel="prev" title="Single Shell">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Interactive Shell</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Interactive Shell" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Interactive Shell" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Shell.html#Shell" rel="up" title="Shell" />
+  <link href="Shell-Mode.html#Shell-Mode" rel="next" title=
+  "Shell Mode" />
+  <link href="Single-Shell.html#Single-Shell" rel="prev" title=
+  "Single Shell" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Interactive-Shell" id="Interactive-Shell"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Shell-Mode.html#Shell-Mode" accesskey="n"
+    rel="next">Shell Mode</a>, Previous: <a href=
+    "Single-Shell.html#Single-Shell" accesskey="p" rel=
+    "prev">Single Shell</a>, Up: <a href="Shell.html#Shell"
+    accesskey="u" rel="up">Shell</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Interactive-Subshell" id="Interactive-Subshell"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Interactive-Shell"></a>
-<div class="header">
-<p>
-Next: <a href="Shell-Mode.html#Shell-Mode" accesskey="n" rel="next">Shell Mode</a>, Previous: <a href="Single-Shell.html#Single-Shell" accesskey="p" rel="prev">Single Shell</a>, Up: <a href="Shell.html#Shell" accesskey="u" rel="up">Shell</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Interactive-Subshell"></a>
-<h3 class="section">40.2 Interactive Subshell</h3>
+  <h3 class="section">40.2 Interactive Subshell</h3><a name=
+  "index-shell" id="index-shell"></a>
 
-<a name="index-shell"></a>
-<p>To run a subshell interactively, type <kbd>M-x shell</kbd>.  This creates
-(or reuses) a buffer named <samp>*shell*</samp>, and runs a shell subprocess
-with input coming from and output going to that buffer.  That is to
-say, any terminal output from the subshell goes into the buffer,
-advancing point, and any terminal input for the subshell comes from
-text in the buffer.  To give input to the subshell, go to the end of
-the buffer and type the input, terminated by <tt class="key">RET</tt>.
-</p>
-<p>By default, when the subshell is invoked interactively, the
-<samp>*shell*</samp> buffer is displayed in a new window.  This behavior can
-be customized via <code>display-buffer-alist</code> (see <a href="Window-Choice.html#Window-Choice">Window Choice</a>).
-</p>
-<p>While the subshell is waiting or running a command, you can switch
-windows or buffers and perform other editing in Emacs.  Emacs inserts
-the output from the subshell into the Shell buffer whenever it has
-time to process it (e.g., while waiting for keyboard input).
-</p>
-<a name="index-comint_002dhighlight_002dinput-face"></a>
-<a name="index-comint_002dhighlight_002dprompt-face"></a>
-<p>In the Shell buffer, prompts are displayed with the face
-<code>comint-highlight-prompt</code>, and submitted input lines are
-displayed with the face <code>comint-highlight-input</code>.  This makes it
-easier to distinguish input lines from the shell output.
-See <a href="Faces.html#Faces">Faces</a>.
-</p>
-<p>To make multiple subshells, invoke <kbd>M-x shell</kbd> with a prefix
-argument (e.g., <kbd>C-u M-x shell</kbd>).  Then the command will read a
-buffer name, and create (or reuse) a subshell in that buffer.  You can
-also rename the <samp>*shell*</samp> buffer using <kbd>M-x rename-uniquely</kbd>,
-then create a new <samp>*shell*</samp> buffer using plain <kbd>M-x shell</kbd>.
-Subshells in different buffers run independently and in parallel.
-</p>
-<a name="index-explicit_002dshell_002dfile_002dname"></a>
-<a name="index-environment-variables-for-subshells"></a>
-<a name="index-ESHELL-environment-variable"></a>
-<a name="index-SHELL-environment-variable"></a>
-<p>To specify the shell file name used by <kbd>M-x shell</kbd>, customize
-the variable <code>explicit-shell-file-name</code>.  If this is <code>nil</code>
-(the default), Emacs uses the environment variable <code>ESHELL</code> if it
-exists.  Otherwise, it usually uses the variable
-<code>shell-file-name</code> (see <a href="Single-Shell.html#Single-Shell">Single Shell</a>); but if the default
-directory is remote (see <a href="Remote-Files.html#Remote-Files">Remote Files</a>), it prompts you for the
-shell file name.
-</p>
-<p>Emacs sends the new shell the contents of the file
-<samp>~/.emacs_<var>shellname</var></samp> as input, if it exists, where
-<var>shellname</var> is the name of the file that the shell was loaded
-from.  For example, if you use bash, the file sent to it is
-<samp>~/.emacs_bash</samp>.  If this file is not found, Emacs tries with
-<samp>~/.emacs.d/init_<var>shellname</var>.sh</samp>.
-</p>
-<p>To specify a coding system for the shell, you can use the command
-<kbd>C-x <span class="key">RET</span> c</kbd> immediately before <kbd>M-x shell</kbd>.  You can
-also change the coding system for a running subshell by typing
-<kbd>C-x <span class="key">RET</span> p</kbd> in the shell buffer.  See <a href="Communication-Coding.html#Communication-Coding">Communication Coding</a>.
-</p>
-<a name="index-INSIDE_005fEMACS-environment-variable"></a>
-<p>Emacs sets the environment variable <code>INSIDE_EMACS</code> in the
-subshell to &lsquo;<samp><var>version</var>,comint</samp>&rsquo;, where <var>version</var> is the
-Emacs version (e.g., &lsquo;<samp>24.1</samp>&rsquo;).  Programs can check this variable
-to determine whether they are running inside an Emacs subshell.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Shell-Mode.html#Shell-Mode" accesskey="n" rel="next">Shell Mode</a>, Previous: <a href="Single-Shell.html#Single-Shell" accesskey="p" rel="prev">Single Shell</a>, Up: <a href="Shell.html#Shell" accesskey="u" rel="up">Shell</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>To run a subshell interactively, type <kbd>M-x shell</kbd>.
+  This creates (or reuses) a buffer named <samp>*shell*</samp>, and
+  runs a shell subprocess with input coming from and output going
+  to that buffer. That is to say, any terminal output from the
+  subshell goes into the buffer, advancing point, and any terminal
+  input for the subshell comes from text in the buffer. To give
+  input to the subshell, go to the end of the buffer and type the
+  input, terminated by <tt class="key">RET</tt>.</p>
 
+  <p>By default, when the subshell is invoked interactively, the
+  <samp>*shell*</samp> buffer is displayed in a new window. This
+  behavior can be customized via <code>display-buffer-alist</code>
+  (see <a href="Window-Choice.html#Window-Choice">Window
+  Choice</a>).</p>
 
+  <p>While the subshell is waiting or running a command, you can
+  switch windows or buffers and perform other editing in Emacs.
+  Emacs inserts the output from the subshell into the Shell buffer
+  whenever it has time to process it (e.g., while waiting for
+  keyboard input).</p><a name=
+  "index-comint_002dhighlight_002dinput-face" id=
+  "index-comint_002dhighlight_002dinput-face"></a> <a name=
+  "index-comint_002dhighlight_002dprompt-face" id=
+  "index-comint_002dhighlight_002dprompt-face"></a>
 
+  <p>In the Shell buffer, prompts are displayed with the face
+  <code>comint-highlight-prompt</code>, and submitted input lines
+  are displayed with the face <code>comint-highlight-input</code>.
+  This makes it easier to distinguish input lines from the shell
+  output. See <a href="Faces.html#Faces">Faces</a>.</p>
+
+  <p>To make multiple subshells, invoke <kbd>M-x shell</kbd> with a
+  prefix argument (e.g., <kbd>C-u M-x shell</kbd>). Then the
+  command will read a buffer name, and create (or reuse) a subshell
+  in that buffer. You can also rename the <samp>*shell*</samp>
+  buffer using <kbd>M-x rename-uniquely</kbd>, then create a new
+  <samp>*shell*</samp> buffer using plain <kbd>M-x shell</kbd>.
+  Subshells in different buffers run independently and in
+  parallel.</p><a name="index-explicit_002dshell_002dfile_002dname"
+  id="index-explicit_002dshell_002dfile_002dname"></a> <a name=
+  "index-environment-variables-for-subshells" id=
+  "index-environment-variables-for-subshells"></a> <a name=
+  "index-ESHELL-environment-variable" id=
+  "index-ESHELL-environment-variable"></a> <a name=
+  "index-SHELL-environment-variable" id=
+  "index-SHELL-environment-variable"></a>
+
+  <p>To specify the shell file name used by <kbd>M-x shell</kbd>,
+  customize the variable <code>explicit-shell-file-name</code>. If
+  this is <code>nil</code> (the default), Emacs uses the
+  environment variable <code>ESHELL</code> if it exists. Otherwise,
+  it usually uses the variable <code>shell-file-name</code> (see
+  <a href="Single-Shell.html#Single-Shell">Single Shell</a>); but
+  if the default directory is remote (see <a href=
+  "Remote-Files.html#Remote-Files">Remote Files</a>), it prompts
+  you for the shell file name.</p>
+
+  <p>Emacs sends the new shell the contents of the file
+  <samp>~/.emacs_<var>shellname</var></samp> as input, if it
+  exists, where <var>shellname</var> is the name of the file that
+  the shell was loaded from. For example, if you use bash, the file
+  sent to it is <samp>~/.emacs_bash</samp>. If this file is not
+  found, Emacs tries with
+  <samp>~/.emacs.d/init_<var>shellname</var>.sh</samp>.</p>
+
+  <p>To specify a coding system for the shell, you can use the
+  command <kbd>C-x <span class="key">RET</span> c</kbd> immediately
+  before <kbd>M-x shell</kbd>. You can also change the coding
+  system for a running subshell by typing <kbd>C-x <span class=
+  "key">RET</span> p</kbd> in the shell buffer. See <a href=
+  "Communication-Coding.html#Communication-Coding">Communication
+  Coding</a>.</p><a name=
+  "index-INSIDE_005fEMACS-environment-variable" id=
+  "index-INSIDE_005fEMACS-environment-variable"></a>
+
+  <p>Emacs sets the environment variable <code>INSIDE_EMACS</code>
+  in the subshell to
+  &lsquo;<samp><var>version</var>,comint</samp>&rsquo;, where
+  <var>version</var> is the Emacs version (e.g.,
+  &lsquo;<samp>24.1</samp>&rsquo;). Programs can check this
+  variable to determine whether they are running inside an Emacs
+  subshell.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Shell-Mode.html#Shell-Mode" accesskey="n"
+    rel="next">Shell Mode</a>, Previous: <a href=
+    "Single-Shell.html#Single-Shell" accesskey="p" rel=
+    "prev">Single Shell</a>, Up: <a href="Shell.html#Shell"
+    accesskey="u" rel="up">Shell</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

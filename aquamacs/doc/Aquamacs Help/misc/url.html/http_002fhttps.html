@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the manual for the url Emacs Lisp library.
 
 Copyright (C) 1993-1999, 2002, 2004-2016 Free Software
@@ -15,95 +17,161 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>URL Programmer&rsquo;s Manual: http/https</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="URL Programmer&rsquo;s Manual: http/https">
-<meta name="keywords" content="URL Programmer&rsquo;s Manual: http/https">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Supported-URL-Types.html#Supported-URL-Types" rel="up" title="Supported URL Types">
-<link href="Cookies.html#Cookies" rel="next" title="Cookies">
-<link href="Supported-URL-Types.html#Supported-URL-Types" rel="prev" title="Supported URL Types">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>URL Programmer&rsquo;s Manual: http/https</title>
+  <meta name="description" content=
+  "URL Programmer&rsquo;s Manual: http/https" />
+  <meta name="keywords" content=
+  "URL Programmer&rsquo;s Manual: http/https" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Supported-URL-Types.html#Supported-URL-Types" rel=
+  "up" title="Supported URL Types" />
+  <link href="Cookies.html#Cookies" rel="next" title="Cookies" />
+  <link href="Supported-URL-Types.html#Supported-URL-Types" rel=
+  "prev" title="Supported URL Types" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="http_002fhttps"></a>
-<div class="header">
-<p>
-Next: <a href="file_002fftp.html#file_002fftp" accesskey="n" rel="next">file/ftp</a>, Up: <a href="Supported-URL-Types.html#Supported-URL-Types" accesskey="u" rel="up">Supported URL Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="http-and-https"></a>
-<h3 class="section">4.1 <code>http</code> and <code>https</code></h3>
+<body lang="en" xml:lang="en">
+  <a name="http_002fhttps" id="http_002fhttps"></a>
 
-<p>The <code>http</code> scheme refers to the Hypertext Transfer Protocol.  The
-<code>url</code> library supports HTTP version 1.1, specified in RFC 2616.
-Its default port is 80.
-</p>
-<p>The <code>https</code> scheme is a secure version of <code>http</code>, with
-transmission via SSL.  It is defined in RFC 2069, and its default port
-is 443.  When using <code>https</code>, the <code>url</code> library performs SSL
-encryption via the <code>ssl</code> library, by forcing the <code>ssl</code>
-gateway method to be used.  See <a href="Gateways-in-general.html#Gateways-in-general">Gateways in general</a>.
-</p>
-<dl>
-<dt><a name="index-url_002dhonor_002drefresh_002drequests"></a>User Option: <strong>url-honor-refresh-requests</strong></dt>
-<dd><p>If this option is non-<code>nil</code> (the default), the <code>url</code> library
-honors the HTTP &lsquo;<samp>Refresh</samp>&rsquo; header, which is used by servers to
-direct clients to reload documents from the same URL or a or different
-one.  If the value is <code>nil</code>, the &lsquo;<samp>Refresh</samp>&rsquo; header is
-ignored; any other value means to ask the user on each request.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="file_002fftp.html#file_002fftp" accesskey="n"
+    rel="next">file/ftp</a>, Up: <a href=
+    "Supported-URL-Types.html#Supported-URL-Types" accesskey="u"
+    rel="up">Supported URL Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="http-and-https" id="http-and-https"></a>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Cookies.html#Cookies" accesskey="1">Cookies</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="HTTP-language_002fcoding.html#HTTP-language_002fcoding" accesskey="2">HTTP language/coding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="HTTP-URL-Options.html#HTTP-URL-Options" accesskey="3">HTTP URL Options</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dealing-with-HTTP-documents.html#Dealing-with-HTTP-documents" accesskey="4">Dealing with HTTP documents</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <h3 class="section">4.1 <code>http</code> and
+  <code>https</code></h3>
 
+  <p>The <code>http</code> scheme refers to the Hypertext Transfer
+  Protocol. The <code>url</code> library supports HTTP version 1.1,
+  specified in RFC 2616. Its default port is 80.</p>
 
+  <p>The <code>https</code> scheme is a secure version of
+  <code>http</code>, with transmission via SSL. It is defined in
+  RFC 2069, and its default port is 443. When using
+  <code>https</code>, the <code>url</code> library performs SSL
+  encryption via the <code>ssl</code> library, by forcing the
+  <code>ssl</code> gateway method to be used. See <a href=
+  "Gateways-in-general.html#Gateways-in-general">Gateways in
+  general</a>.</p>
 
+  <dl>
+    <dt><a name="index-url_002dhonor_002drefresh_002drequests" id=
+    "index-url_002dhonor_002drefresh_002drequests"></a>User Option:
+    <strong>url-honor-refresh-requests</strong></dt>
 
+    <dd>
+      <p>If this option is non-<code>nil</code> (the default), the
+      <code>url</code> library honors the HTTP
+      &lsquo;<samp>Refresh</samp>&rsquo; header, which is used by
+      servers to direct clients to reload documents from the same
+      URL or a or different one. If the value is <code>nil</code>,
+      the &lsquo;<samp>Refresh</samp>&rsquo; header is ignored; any
+      other value means to ask the user on each request.</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Cookies.html#Cookies" accesskey="1">Cookies</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "HTTP-language_002fcoding.html#HTTP-language_002fcoding"
+      accesskey="2">HTTP language/coding</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "HTTP-URL-Options.html#HTTP-URL-Options" accesskey="3">HTTP
+      URL Options</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dealing-with-HTTP-documents.html#Dealing-with-HTTP-documents"
+      accesskey="4">Dealing with HTTP documents</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

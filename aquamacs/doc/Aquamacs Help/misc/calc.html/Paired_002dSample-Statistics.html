@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,115 +18,156 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Paired-Sample Statistics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Paired-Sample Statistics">
-<meta name="keywords" content="GNU Emacs Calc Manual: Paired-Sample Statistics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Statistical-Operations.html#Statistical-Operations" rel="up" title="Statistical Operations">
-<link href="Reducing-and-Mapping.html#Reducing-and-Mapping" rel="next" title="Reducing and Mapping">
-<link href="Single_002dVariable-Statistics.html#Single_002dVariable-Statistics" rel="prev" title="Single-Variable Statistics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Paired-Sample Statistics</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Paired-Sample Statistics" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Paired-Sample Statistics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Statistical-Operations.html#Statistical-Operations"
+  rel="up" title="Statistical Operations" />
+  <link href="Reducing-and-Mapping.html#Reducing-and-Mapping" rel=
+  "next" title="Reducing and Mapping" />
+  <link href=
+  "Single_002dVariable-Statistics.html#Single_002dVariable-Statistics"
+  rel="prev" title="Single-Variable Statistics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Paired_002dSample-Statistics"></a>
-<div class="header">
-<p>
-Previous: <a href="Single_002dVariable-Statistics.html#Single_002dVariable-Statistics" accesskey="p" rel="prev">Single-Variable Statistics</a>, Up: <a href="Statistical-Operations.html#Statistical-Operations" accesskey="u" rel="up">Statistical Operations</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Paired_002dSample-Statistics-1"></a>
-<h4 class="subsection">9.7.2 Paired-Sample Statistics</h4>
+<body lang="en" xml:lang="en">
+  <a name="Paired_002dSample-Statistics" id=
+  "Paired_002dSample-Statistics"></a>
 
-<p>The functions in this section take two arguments, which must be
-vectors of equal size.  The vectors are each flattened in the same
-way as by the single-variable statistical functions.  Given a numeric
-prefix argument of 1, these functions instead take one object from
-the stack, which must be an
-Nx2
-matrix of data values.  Once again, variable names can be used in place
-of actual vectors and matrices.
-</p>
-<a name="index-u-C"></a>
-<a name="index-calc_002dvector_002dcovariance"></a>
-<a name="index-vcov"></a>
-<a name="index-Covariance"></a>
-<p>The <kbd>u C</kbd> (<code>calc-vector-covariance</code>) [<code>vcov</code>] command
-computes the sample covariance of two vectors.  The covariance
-of vectors <var>x</var> and <var>y</var> is the sum of the products of the
-differences between the elements of <var>x</var> and the mean of <var>x</var>
-times the differences between the corresponding elements of <var>y</var>
-and the mean of <var>y</var>, all divided by &lsquo;<samp>N-1</samp>&rsquo;.  Note that
-the variance of a vector is just the covariance of the vector
-with itself.  Once again, if the inputs are error forms the
-errors are used as weight factors.  If both <var>x</var> and <var>y</var>
-are composed of error forms, the error for a given data point
-is taken as the square root of the sum of the squares of the two
-input errors.
-</p>
-<a name="index-I-u-C"></a>
-<a name="index-calc_002dvector_002dpop_002dcovariance"></a>
-<a name="index-vpcov"></a>
-<p>The <kbd>I u C</kbd> (<code>calc-vector-pop-covariance</code>) [<code>vpcov</code>]
-command computes the population covariance, which is the same as the
-sample covariance computed by <kbd>u C</kbd> except dividing by &lsquo;<samp>N</samp>&rsquo;
-instead of &lsquo;<samp>N-1</samp>&rsquo;.
-</p>
-<a name="index-H-u-C"></a>
-<a name="index-calc_002dvector_002dcorrelation"></a>
-<a name="index-vcorr"></a>
-<a name="index-Correlation-coefficient"></a>
-<a name="index-Linear-correlation"></a>
-<p>The <kbd>H u C</kbd> (<code>calc-vector-correlation</code>) [<code>vcorr</code>]
-command computes the linear correlation coefficient of two vectors.
-This is defined by the covariance of the vectors divided by the
-product of their standard deviations.  (There is no difference
-between sample or population statistics here.)
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Single_002dVariable-Statistics.html#Single_002dVariable-Statistics" accesskey="p" rel="prev">Single-Variable Statistics</a>, Up: <a href="Statistical-Operations.html#Statistical-Operations" accesskey="u" rel="up">Statistical Operations</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Previous: <a href=
+    "Single_002dVariable-Statistics.html#Single_002dVariable-Statistics"
+    accesskey="p" rel="prev">Single-Variable Statistics</a>, Up:
+    <a href="Statistical-Operations.html#Statistical-Operations"
+    accesskey="u" rel="up">Statistical Operations</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Paired_002dSample-Statistics-1" id=
+  "Paired_002dSample-Statistics-1"></a>
 
+  <h4 class="subsection">9.7.2 Paired-Sample Statistics</h4>
 
+  <p>The functions in this section take two arguments, which must
+  be vectors of equal size. The vectors are each flattened in the
+  same way as by the single-variable statistical functions. Given a
+  numeric prefix argument of 1, these functions instead take one
+  object from the stack, which must be an Nx2 matrix of data
+  values. Once again, variable names can be used in place of actual
+  vectors and matrices.</p><a name="index-u-C" id="index-u-C"></a>
+  <a name="index-calc_002dvector_002dcovariance" id=
+  "index-calc_002dvector_002dcovariance"></a> <a name="index-vcov"
+  id="index-vcov"></a> <a name="index-Covariance" id=
+  "index-Covariance"></a>
 
+  <p>The <kbd>u C</kbd> (<code>calc-vector-covariance</code>)
+  [<code>vcov</code>] command computes the sample covariance of two
+  vectors. The covariance of vectors <var>x</var> and <var>y</var>
+  is the sum of the products of the differences between the
+  elements of <var>x</var> and the mean of <var>x</var> times the
+  differences between the corresponding elements of <var>y</var>
+  and the mean of <var>y</var>, all divided by
+  &lsquo;<samp>N-1</samp>&rsquo;. Note that the variance of a
+  vector is just the covariance of the vector with itself. Once
+  again, if the inputs are error forms the errors are used as
+  weight factors. If both <var>x</var> and <var>y</var> are
+  composed of error forms, the error for a given data point is
+  taken as the square root of the sum of the squares of the two
+  input errors.</p><a name="index-I-u-C" id="index-I-u-C"></a>
+  <a name="index-calc_002dvector_002dpop_002dcovariance" id=
+  "index-calc_002dvector_002dpop_002dcovariance"></a> <a name=
+  "index-vpcov" id="index-vpcov"></a>
+
+  <p>The <kbd>I u C</kbd> (<code>calc-vector-pop-covariance</code>)
+  [<code>vpcov</code>] command computes the population covariance,
+  which is the same as the sample covariance computed by <kbd>u
+  C</kbd> except dividing by &lsquo;<samp>N</samp>&rsquo; instead
+  of &lsquo;<samp>N-1</samp>&rsquo;.</p><a name="index-H-u-C" id=
+  "index-H-u-C"></a> <a name=
+  "index-calc_002dvector_002dcorrelation" id=
+  "index-calc_002dvector_002dcorrelation"></a> <a name=
+  "index-vcorr" id="index-vcorr"></a> <a name=
+  "index-Correlation-coefficient" id=
+  "index-Correlation-coefficient"></a> <a name=
+  "index-Linear-correlation" id="index-Linear-correlation"></a>
+
+  <p>The <kbd>H u C</kbd> (<code>calc-vector-correlation</code>)
+  [<code>vcorr</code>] command computes the linear correlation
+  coefficient of two vectors. This is defined by the covariance of
+  the vectors divided by the product of their standard deviations.
+  (There is no difference between sample or population statistics
+  here.)</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Single_002dVariable-Statistics.html#Single_002dVariable-Statistics"
+    accesskey="p" rel="prev">Single-Variable Statistics</a>, Up:
+    <a href="Statistical-Operations.html#Statistical-Operations"
+    accesskey="u" rel="up">Statistical Operations</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

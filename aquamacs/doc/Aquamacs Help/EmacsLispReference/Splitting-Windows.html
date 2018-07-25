@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,143 +19,199 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Splitting Windows</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Splitting Windows">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Splitting Windows">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Deleting-Windows.html#Deleting-Windows" rel="next" title="Deleting Windows">
-<link href="Preserving-Window-Sizes.html#Preserving-Window-Sizes" rel="prev" title="Preserving Window Sizes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Splitting Windows</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Splitting Windows" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Splitting Windows" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Deleting-Windows.html#Deleting-Windows" rel="next"
+  title="Deleting Windows" />
+  <link href="Preserving-Window-Sizes.html#Preserving-Window-Sizes"
+  rel="prev" title="Preserving Window Sizes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Splitting-Windows" id="Splitting-Windows"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Deleting-Windows.html#Deleting-Windows"
+    accesskey="n" rel="next">Deleting Windows</a>, Previous:
+    <a href="Preserving-Window-Sizes.html#Preserving-Window-Sizes"
+    accesskey="p" rel="prev">Preserving Window Sizes</a>, Up:
+    <a href="Windows.html#Windows" accesskey="u" rel=
+    "up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Splitting-Windows-1" id="Splitting-Windows-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Splitting-Windows"></a>
-<div class="header">
-<p>
-Next: <a href="Deleting-Windows.html#Deleting-Windows" accesskey="n" rel="next">Deleting Windows</a>, Previous: <a href="Preserving-Window-Sizes.html#Preserving-Window-Sizes" accesskey="p" rel="prev">Preserving Window Sizes</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Splitting-Windows-1"></a>
-<h3 class="section">27.6 Splitting Windows</h3>
-<a name="index-splitting-windows"></a>
-<a name="index-window-splitting"></a>
+  <h3 class="section">27.6 Splitting Windows</h3><a name=
+  "index-splitting-windows" id="index-splitting-windows"></a>
+  <a name="index-window-splitting" id="index-window-splitting"></a>
 
-<p>This section describes functions for creating a new window by
-<em>splitting</em> an existing one.
-</p>
-<dl>
-<dt><a name="index-split_002dwindow"></a>Function: <strong>split-window</strong> <em>&amp;optional window size side pixelwise</em></dt>
-<dd><p>This function creates a new live window next to the window
-<var>window</var>.  If <var>window</var> is omitted or <code>nil</code>, it defaults
-to the selected window.  That window is split, and reduced in
-size.  The space is taken up by the new window, which is returned.
-</p>
-<p>The optional second argument <var>size</var> determines the sizes of
-<var>window</var> and/or the new window.  If it is omitted or <code>nil</code>,
-both windows are given equal sizes; if there is an odd line, it is
-allocated to the new window.  If <var>size</var> is a positive number,
-<var>window</var> is given <var>size</var> lines (or columns, depending on the
-value of <var>side</var>).  If <var>size</var> is a negative number, the new
-window is given −<var>size</var> lines (or columns).
-</p>
-<p>If <var>size</var> is <code>nil</code>, this function obeys the variables
-<code>window-min-height</code> and <code>window-min-width</code> (see <a href="Window-Sizes.html#Window-Sizes">Window Sizes</a>).  Thus, it signals an error if splitting would result in making
-a window smaller than those variables specify.  However, a
-non-<code>nil</code> value for <var>size</var> causes those variables to be
-ignored; in that case, the smallest allowable window is considered to be
-one that has space for a text area one line tall and/or two columns
-wide.
-</p>
-<p>Hence, if <var>size</var> is specified, it&rsquo;s the caller&rsquo;s responsibility to
-check whether the emanating windows are large enough to encompass all
-areas like a mode line or a scroll bar.  The function
-<code>window-min-size</code> (see <a href="Window-Sizes.html#Window-Sizes">Window Sizes</a>) can be used to determine
-the minimum requirements of <var>window</var> in this regard.  Since the new
-window usually inherits areas like the mode line or the scroll bar
-from <var>window</var>, that function is also a good guess for the minimum
-size of the new window.  The caller should specify a smaller size only
-if it correspondingly removes an inherited area before the next
-redisplay.
-</p>
-<p>The optional third argument <var>side</var> determines the position of the
-new window relative to <var>window</var>.  If it is <code>nil</code> or
-<code>below</code>, the new window is placed below <var>window</var>.  If it is
-<code>above</code>, the new window is placed above <var>window</var>.  In both
-these cases, <var>size</var> specifies a total window height, in lines.
-</p>
-<p>If <var>side</var> is <code>t</code> or <code>right</code>, the new window is placed on
-the right of <var>window</var>.  If <var>side</var> is <code>left</code>, the new
-window is placed on the left of <var>window</var>.  In both these cases,
-<var>size</var> specifies a total window width, in columns.
-</p>
-<p>The optional fourth argument <var>pixelwise</var>, if non-<code>nil</code>, means
-to interpret <var>size</var> in units of pixels, instead of lines and
-columns.
-</p>
-<p>If <var>window</var> is a live window, the new window inherits various
-properties from it, including margins and scroll bars.  If
-<var>window</var> is an internal window, the new window inherits the
-properties of the window selected within <var>window</var>&rsquo;s frame.
-</p>
-<p>The behavior of this function may be altered by the window parameters
-of <var>window</var>, so long as the variable
-<code>ignore-window-parameters</code> is <code>nil</code>.  If the value of
-the <code>split-window</code> window parameter is <code>t</code>, this function
-ignores all other window parameters.  Otherwise, if the value of the
-<code>split-window</code> window parameter is a function, that function is
-called with the arguments <var>window</var>, <var>size</var>, and <var>side</var>, in
-lieu of the usual action of <code>split-window</code>.  Otherwise, this
-function obeys the <code>window-atom</code> or <code>window-side</code> window
-parameter, if any.  See <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>.
-</p></dd></dl>
+  <p>This section describes functions for creating a new window by
+  <em>splitting</em> an existing one.</p>
 
-<p>As an example, here is a sequence of <code>split-window</code> calls that
-yields the window configuration discussed in <a href="Windows-and-Frames.html#Windows-and-Frames">Windows and Frames</a>.
-This example demonstrates splitting a live window as well as splitting
-an internal window.  We begin with a frame containing a single window
-(a live root window), which we denote by <var>W4</var>.  Calling
-<code>(split-window W4)</code> yields this window configuration:
-</p>
-<div class="smallexample">
-<pre class="smallexample">     ______________________________________
+  <dl>
+    <dt><a name="index-split_002dwindow" id=
+    "index-split_002dwindow"></a>Function:
+    <strong>split-window</strong> <em>&amp;optional window size
+    side pixelwise</em></dt>
+
+    <dd>
+      <p>This function creates a new live window next to the window
+      <var>window</var>. If <var>window</var> is omitted or
+      <code>nil</code>, it defaults to the selected window. That
+      window is split, and reduced in size. The space is taken up
+      by the new window, which is returned.</p>
+
+      <p>The optional second argument <var>size</var> determines
+      the sizes of <var>window</var> and/or the new window. If it
+      is omitted or <code>nil</code>, both windows are given equal
+      sizes; if there is an odd line, it is allocated to the new
+      window. If <var>size</var> is a positive number,
+      <var>window</var> is given <var>size</var> lines (or columns,
+      depending on the value of <var>side</var>). If
+      <var>size</var> is a negative number, the new window is given
+      &acirc;&circ;&rsquo;<var>size</var> lines (or columns).</p>
+
+      <p>If <var>size</var> is <code>nil</code>, this function
+      obeys the variables <code>window-min-height</code> and
+      <code>window-min-width</code> (see <a href=
+      "Window-Sizes.html#Window-Sizes">Window Sizes</a>). Thus, it
+      signals an error if splitting would result in making a window
+      smaller than those variables specify. However, a
+      non-<code>nil</code> value for <var>size</var> causes those
+      variables to be ignored; in that case, the smallest allowable
+      window is considered to be one that has space for a text area
+      one line tall and/or two columns wide.</p>
+
+      <p>Hence, if <var>size</var> is specified, it&rsquo;s the
+      caller&rsquo;s responsibility to check whether the emanating
+      windows are large enough to encompass all areas like a mode
+      line or a scroll bar. The function
+      <code>window-min-size</code> (see <a href=
+      "Window-Sizes.html#Window-Sizes">Window Sizes</a>) can be
+      used to determine the minimum requirements of
+      <var>window</var> in this regard. Since the new window
+      usually inherits areas like the mode line or the scroll bar
+      from <var>window</var>, that function is also a good guess
+      for the minimum size of the new window. The caller should
+      specify a smaller size only if it correspondingly removes an
+      inherited area before the next redisplay.</p>
+
+      <p>The optional third argument <var>side</var> determines the
+      position of the new window relative to <var>window</var>. If
+      it is <code>nil</code> or <code>below</code>, the new window
+      is placed below <var>window</var>. If it is
+      <code>above</code>, the new window is placed above
+      <var>window</var>. In both these cases, <var>size</var>
+      specifies a total window height, in lines.</p>
+
+      <p>If <var>side</var> is <code>t</code> or
+      <code>right</code>, the new window is placed on the right of
+      <var>window</var>. If <var>side</var> is <code>left</code>,
+      the new window is placed on the left of <var>window</var>. In
+      both these cases, <var>size</var> specifies a total window
+      width, in columns.</p>
+
+      <p>The optional fourth argument <var>pixelwise</var>, if
+      non-<code>nil</code>, means to interpret <var>size</var> in
+      units of pixels, instead of lines and columns.</p>
+
+      <p>If <var>window</var> is a live window, the new window
+      inherits various properties from it, including margins and
+      scroll bars. If <var>window</var> is an internal window, the
+      new window inherits the properties of the window selected
+      within <var>window</var>&rsquo;s frame.</p>
+
+      <p>The behavior of this function may be altered by the window
+      parameters of <var>window</var>, so long as the variable
+      <code>ignore-window-parameters</code> is <code>nil</code>. If
+      the value of the <code>split-window</code> window parameter
+      is <code>t</code>, this function ignores all other window
+      parameters. Otherwise, if the value of the
+      <code>split-window</code> window parameter is a function,
+      that function is called with the arguments <var>window</var>,
+      <var>size</var>, and <var>side</var>, in lieu of the usual
+      action of <code>split-window</code>. Otherwise, this function
+      obeys the <code>window-atom</code> or
+      <code>window-side</code> window parameter, if any. See
+      <a href="Window-Parameters.html#Window-Parameters">Window
+      Parameters</a>.</p>
+    </dd>
+  </dl>
+
+  <p>As an example, here is a sequence of <code>split-window</code>
+  calls that yields the window configuration discussed in <a href=
+  "Windows-and-Frames.html#Windows-and-Frames">Windows and
+  Frames</a>. This example demonstrates splitting a live window as
+  well as splitting an internal window. We begin with a frame
+  containing a single window (a live root window), which we denote
+  by <var>W4</var>. Calling <code>(split-window W4)</code> yields
+  this window configuration:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+     ______________________________________
     | ____________________________________ |
     ||                                    ||
     ||                                    ||
@@ -166,18 +224,22 @@ an internal window.  We begin with a frame containing a single window
     ||_________________W5_________________||
     |__________________W3__________________|
 
-</pre></div>
+</pre>
+  </div>
 
-<p>The <code>split-window</code> call has created a new live window, denoted by
-<var>W5</var>.  It has also created a new internal window, denoted by
-<var>W3</var>, which becomes the root window and the parent of both
-<var>W4</var> and <var>W5</var>.
-</p>
-<p>Next, we call <code>(split-window W3 nil 'left)</code>, passing the
-internal window <var>W3</var> as the argument.  The result:
-</p>
-<div class="smallexample">
-<pre class="smallexample">     ______________________________________
+  <p>The <code>split-window</code> call has created a new live
+  window, denoted by <var>W5</var>. It has also created a new
+  internal window, denoted by <var>W3</var>, which becomes the root
+  window and the parent of both <var>W4</var> and
+  <var>W5</var>.</p>
+
+  <p>Next, we call <code>(split-window W3 nil 'left)</code>,
+  passing the internal window <var>W3</var> as the argument. The
+  result:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+     ______________________________________
     | ______  ____________________________ |
     ||      || __________________________ ||
     ||      |||                          |||
@@ -190,52 +252,79 @@ internal window <var>W3</var> as the argument.  The result:
     ||      |||____________W5____________|||
     ||__W2__||_____________W3_____________ |
     |__________________W1__________________|
-</pre></div>
+</pre>
+  </div>
 
-<p>A new live window <var>W2</var> is created, to the left of the internal
-window <var>W3</var>.  A new internal window <var>W1</var> is created, becoming
-the new root window.
-</p>
-<p>For interactive use, Emacs provides two commands which always split
-the selected window.  These call <code>split-window</code> internally.
-</p>
-<dl>
-<dt><a name="index-split_002dwindow_002dright"></a>Command: <strong>split-window-right</strong> <em>&amp;optional size</em></dt>
-<dd><p>This function splits the selected window into two side-by-side
-windows, putting the selected window on the left.  If <var>size</var> is
-positive, the left window gets <var>size</var> columns; if <var>size</var> is
-negative, the right window gets −<var>size</var> columns.
-</p></dd></dl>
+  <p>A new live window <var>W2</var> is created, to the left of the
+  internal window <var>W3</var>. A new internal window
+  <var>W1</var> is created, becoming the new root window.</p>
 
-<dl>
-<dt><a name="index-split_002dwindow_002dbelow"></a>Command: <strong>split-window-below</strong> <em>&amp;optional size</em></dt>
-<dd><p>This function splits the selected window into two windows, one above
-the other, leaving the upper window selected.  If <var>size</var> is
-positive, the upper window gets <var>size</var> lines; if <var>size</var> is
-negative, the lower window gets −<var>size</var> lines.
-</p></dd></dl>
+  <p>For interactive use, Emacs provides two commands which always
+  split the selected window. These call <code>split-window</code>
+  internally.</p>
 
-<dl>
-<dt><a name="index-split_002dwindow_002dkeep_002dpoint"></a>User Option: <strong>split-window-keep-point</strong></dt>
-<dd><p>If the value of this variable is non-<code>nil</code> (the default),
-<code>split-window-below</code> behaves as described above.
-</p>
-<p>If it is <code>nil</code>, <code>split-window-below</code> adjusts point in each
-of the two windows to minimize redisplay.  (This is useful on slow
-terminals.)  It selects whichever window contains the screen line that
-point was previously on.  Note that this only affects
-<code>split-window-below</code>, not the lower-level <code>split-window</code>
-function.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-split_002dwindow_002dright" id=
+    "index-split_002dwindow_002dright"></a>Command:
+    <strong>split-window-right</strong> <em>&amp;optional
+    size</em></dt>
 
+    <dd>
+      <p>This function splits the selected window into two
+      side-by-side windows, putting the selected window on the
+      left. If <var>size</var> is positive, the left window gets
+      <var>size</var> columns; if <var>size</var> is negative, the
+      right window gets &acirc;&circ;&rsquo;<var>size</var>
+      columns.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Deleting-Windows.html#Deleting-Windows" accesskey="n" rel="next">Deleting Windows</a>, Previous: <a href="Preserving-Window-Sizes.html#Preserving-Window-Sizes" accesskey="p" rel="prev">Preserving Window Sizes</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-split_002dwindow_002dbelow" id=
+    "index-split_002dwindow_002dbelow"></a>Command:
+    <strong>split-window-below</strong> <em>&amp;optional
+    size</em></dt>
 
+    <dd>
+      <p>This function splits the selected window into two windows,
+      one above the other, leaving the upper window selected. If
+      <var>size</var> is positive, the upper window gets
+      <var>size</var> lines; if <var>size</var> is negative, the
+      lower window gets &acirc;&circ;&rsquo;<var>size</var>
+      lines.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-split_002dwindow_002dkeep_002dpoint" id=
+    "index-split_002dwindow_002dkeep_002dpoint"></a>User Option:
+    <strong>split-window-keep-point</strong></dt>
 
+    <dd>
+      <p>If the value of this variable is non-<code>nil</code> (the
+      default), <code>split-window-below</code> behaves as
+      described above.</p>
+
+      <p>If it is <code>nil</code>, <code>split-window-below</code>
+      adjusts point in each of the two windows to minimize
+      redisplay. (This is useful on slow terminals.) It selects
+      whichever window contains the screen line that point was
+      previously on. Note that this only affects
+      <code>split-window-below</code>, not the lower-level
+      <code>split-window</code> function.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Deleting-Windows.html#Deleting-Windows"
+    accesskey="n" rel="next">Deleting Windows</a>, Previous:
+    <a href="Preserving-Window-Sizes.html#Preserving-Window-Sizes"
+    accesskey="p" rel="prev">Preserving Window Sizes</a>, Up:
+    <a href="Windows.html#Windows" accesskey="u" rel=
+    "up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

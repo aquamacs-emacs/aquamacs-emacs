@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,118 +19,169 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Abbrev Table Properties</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Abbrev Table Properties">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Abbrev Table Properties">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Abbrevs.html#Abbrevs" rel="up" title="Abbrevs">
-<link href="Processes.html#Processes" rel="next" title="Processes">
-<link href="Abbrev-Properties.html#Abbrev-Properties" rel="prev" title="Abbrev Properties">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Abbrev Table
+  Properties</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Abbrev Table Properties" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Abbrev Table Properties" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Abbrevs.html#Abbrevs" rel="up" title="Abbrevs" />
+  <link href="Processes.html#Processes" rel="next" title=
+  "Processes" />
+  <link href="Abbrev-Properties.html#Abbrev-Properties" rel="prev"
+  title="Abbrev Properties" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Abbrev-Table-Properties" id=
+  "Abbrev-Table-Properties"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Abbrev-Properties.html#Abbrev-Properties"
+    accesskey="p" rel="prev">Abbrev Properties</a>, Up: <a href=
+    "Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Abbrev-Table-Properties-1" id=
+  "Abbrev-Table-Properties-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Abbrev-Table-Properties"></a>
-<div class="header">
-<p>
-Previous: <a href="Abbrev-Properties.html#Abbrev-Properties" accesskey="p" rel="prev">Abbrev Properties</a>, Up: <a href="Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Abbrev-Table-Properties-1"></a>
-<h3 class="section">35.7 Abbrev Table Properties</h3>
-<a name="index-abbrev-table-properties"></a>
+  <h3 class="section">35.7 Abbrev Table Properties</h3><a name=
+  "index-abbrev-table-properties" id=
+  "index-abbrev-table-properties"></a>
 
-<p>Like abbrevs, abbrev tables have properties, some of which influence
-the way they work.  You can provide them as arguments to
-<code>define-abbrev-table</code>, and manipulate them with the functions:
-</p>
-<dl>
-<dt><a name="index-abbrev_002dtable_002dput"></a>Function: <strong>abbrev-table-put</strong> <em>table prop val</em></dt>
-<dd><p>Set the property <var>prop</var> of abbrev table <var>table</var> to value <var>val</var>.
-</p></dd></dl>
+  <p>Like abbrevs, abbrev tables have properties, some of which
+  influence the way they work. You can provide them as arguments to
+  <code>define-abbrev-table</code>, and manipulate them with the
+  functions:</p>
 
-<dl>
-<dt><a name="index-abbrev_002dtable_002dget"></a>Function: <strong>abbrev-table-get</strong> <em>table prop</em></dt>
-<dd><p>Return the property <var>prop</var> of abbrev table <var>table</var>, or <code>nil</code>
-if the abbrev has no such property.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-abbrev_002dtable_002dput" id=
+    "index-abbrev_002dtable_002dput"></a>Function:
+    <strong>abbrev-table-put</strong> <em>table prop val</em></dt>
 
-<p>The following properties have special meaning:
-</p>
-<dl compact="compact">
-<dt><code>:enable-function</code></dt>
-<dd><p>This is like the <code>:enable-function</code> abbrev property except that
-it applies to all abbrevs in the table.  It is used before even trying
-to find the abbrev before point, so it can dynamically modify the
-abbrev table.
-</p>
-</dd>
-<dt><code>:case-fixed</code></dt>
-<dd><p>This is like the <code>:case-fixed</code> abbrev property except that it
-applies to all abbrevs in the table.
-</p>
-</dd>
-<dt><code>:regexp</code></dt>
-<dd><p>If non-<code>nil</code>, this property is a regular expression that
-indicates how to extract the name of the abbrev before point, before
-looking it up in the table.  When the regular expression matches
-before point, the abbrev name is expected to be in submatch 1.
-If this property is <code>nil</code>, the default is to use
-<code>backward-word</code> and <code>forward-word</code> to find the name.  This
-property allows the use of abbrevs whose name contains characters of
-non-word syntax.
-</p>
-</dd>
-<dt><code>:parents</code></dt>
-<dd><p>This property holds a list of tables from which to inherit
-other abbrevs.
-</p>
-</dd>
-<dt><code>:abbrev-table-modiff</code></dt>
-<dd><p>This property holds a counter incremented each time a new abbrev is
-added to the table.
-</p>
-</dd>
-</dl>
+    <dd>
+      <p>Set the property <var>prop</var> of abbrev table
+      <var>table</var> to value <var>val</var>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-abbrev_002dtable_002dget" id=
+    "index-abbrev_002dtable_002dget"></a>Function:
+    <strong>abbrev-table-get</strong> <em>table prop</em></dt>
 
+    <dd>
+      <p>Return the property <var>prop</var> of abbrev table
+      <var>table</var>, or <code>nil</code> if the abbrev has no
+      such property.</p>
+    </dd>
+  </dl>
 
+  <p>The following properties have special meaning:</p>
+
+  <dl compact="compact">
+    <dt><code>:enable-function</code></dt>
+
+    <dd>
+      <p>This is like the <code>:enable-function</code> abbrev
+      property except that it applies to all abbrevs in the table.
+      It is used before even trying to find the abbrev before
+      point, so it can dynamically modify the abbrev table.</p>
+    </dd>
+
+    <dt><code>:case-fixed</code></dt>
+
+    <dd>
+      <p>This is like the <code>:case-fixed</code> abbrev property
+      except that it applies to all abbrevs in the table.</p>
+    </dd>
+
+    <dt><code>:regexp</code></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, this property is a regular
+      expression that indicates how to extract the name of the
+      abbrev before point, before looking it up in the table. When
+      the regular expression matches before point, the abbrev name
+      is expected to be in submatch 1. If this property is
+      <code>nil</code>, the default is to use
+      <code>backward-word</code> and <code>forward-word</code> to
+      find the name. This property allows the use of abbrevs whose
+      name contains characters of non-word syntax.</p>
+    </dd>
+
+    <dt><code>:parents</code></dt>
+
+    <dd>
+      <p>This property holds a list of tables from which to inherit
+      other abbrevs.</p>
+    </dd>
+
+    <dt><code>:abbrev-table-modiff</code></dt>
+
+    <dd>
+      <p>This property holds a counter incremented each time a new
+      abbrev is added to the table.</p>
+    </dd>
+  </dl>
 </body>
 </html>

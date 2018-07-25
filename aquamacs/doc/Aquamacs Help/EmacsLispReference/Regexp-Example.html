@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,128 +19,183 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Regexp Example</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Regexp Example">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Regexp Example">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Regular-Expressions.html#Regular-Expressions" rel="up" title="Regular Expressions">
-<link href="Regexp-Functions.html#Regexp-Functions" rel="next" title="Regexp Functions">
-<link href="Regexp-Backslash.html#Regexp-Backslash" rel="prev" title="Regexp Backslash">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Regexp Example</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Regexp Example" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Regexp Example" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Regular-Expressions.html#Regular-Expressions" rel=
+  "up" title="Regular Expressions" />
+  <link href="Regexp-Functions.html#Regexp-Functions" rel="next"
+  title="Regexp Functions" />
+  <link href="Regexp-Backslash.html#Regexp-Backslash" rel="prev"
+  title="Regexp Backslash" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Regexp-Example" id="Regexp-Example"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Regexp-Functions.html#Regexp-Functions"
+    accesskey="n" rel="next">Regexp Functions</a>, Previous:
+    <a href="Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey=
+    "p" rel="prev">Syntax of Regexps</a>, Up: <a href=
+    "Regular-Expressions.html#Regular-Expressions" accesskey="u"
+    rel="up">Regular Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Complex-Regexp-Example" id="Complex-Regexp-Example"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Regexp-Example"></a>
-<div class="header">
-<p>
-Next: <a href="Regexp-Functions.html#Regexp-Functions" accesskey="n" rel="next">Regexp Functions</a>, Previous: <a href="Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey="p" rel="prev">Syntax of Regexps</a>, Up: <a href="Regular-Expressions.html#Regular-Expressions" accesskey="u" rel="up">Regular Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Complex-Regexp-Example"></a>
-<h4 class="subsection">33.3.2 Complex Regexp Example</h4>
+  <h4 class="subsection">33.3.2 Complex Regexp Example</h4>
 
-<p>Here is a complicated regexp which was formerly used by Emacs to
-recognize the end of a sentence together with any whitespace that
-follows.  (Nowadays Emacs uses a similar but more complex default
-regexp constructed by the function <code>sentence-end</code>.
-See <a href="Standard-Regexps.html#Standard-Regexps">Standard Regexps</a>.)
-</p>
-<p>Below, we show first the regexp as a string in Lisp syntax (to
-distinguish spaces from tab characters), and then the result of
-evaluating it.  The string constant begins and ends with a
-double-quote.  &lsquo;<samp>\&quot;</samp>&rsquo; stands for a double-quote as part of the
-string, &lsquo;<samp>\\</samp>&rsquo; for a backslash as part of the string, &lsquo;<samp>\t</samp>&rsquo; for a
-tab and &lsquo;<samp>\n</samp>&rsquo; for a newline.
-</p>
-<div class="example">
-<pre class="example">&quot;[.?!][]\&quot;')}]*\\($\\| $\\|\t\\|&nbsp;&nbsp;\\)[ \t\n]*&quot;
-     &rArr; &quot;[.?!][]\&quot;')}]*\\($\\| $\\|  \\|&nbsp;&nbsp;\\)[
-]*&quot;
-</pre></div>
+  <p>Here is a complicated regexp which was formerly used by Emacs
+  to recognize the end of a sentence together with any whitespace
+  that follows. (Nowadays Emacs uses a similar but more complex
+  default regexp constructed by the function
+  <code>sentence-end</code>. See <a href=
+  "Standard-Regexps.html#Standard-Regexps">Standard
+  Regexps</a>.)</p>
 
-<p>In the output, tab and newline appear as themselves.
-</p>
-<p>This regular expression contains four parts in succession and can be
-deciphered as follows:
-</p>
-<dl compact="compact">
-<dt><code>[.?!]</code></dt>
-<dd><p>The first part of the pattern is a character alternative that matches
-any one of three characters: period, question mark, and exclamation
-mark.  The match must begin with one of these three characters.  (This
-is one point where the new default regexp used by Emacs differs from
-the old.  The new value also allows some non-<acronym>ASCII</acronym>
-characters that end a sentence without any following whitespace.)
-</p>
-</dd>
-<dt><code>[]\&quot;')}]*</code></dt>
-<dd><p>The second part of the pattern matches any closing braces and quotation
-marks, zero or more of them, that may follow the period, question mark
-or exclamation mark.  The <code>\&quot;</code> is Lisp syntax for a double-quote in
-a string.  The &lsquo;<samp>*</samp>&rsquo; at the end indicates that the immediately
-preceding regular expression (a character alternative, in this case) may be
-repeated zero or more times.
-</p>
-</dd>
-<dt><code>\\($\\|&nbsp;$\\|\t\\|&nbsp;&nbsp;\\)</code></dt>
-<dd><p>The third part of the pattern matches the whitespace that follows the
-end of a sentence: the end of a line (optionally with a space), or a
-tab, or two spaces.  The double backslashes mark the parentheses and
-vertical bars as regular expression syntax; the parentheses delimit a
-group and the vertical bars separate alternatives.  The dollar sign is
-used to match the end of a line.
-</p>
-</dd>
-<dt><code>[ \t\n]*</code></dt>
-<dd><p>Finally, the last part of the pattern matches any additional whitespace
-beyond the minimum needed to end a sentence.
-</p></dd>
-</dl>
+  <p>Below, we show first the regexp as a string in Lisp syntax (to
+  distinguish spaces from tab characters), and then the result of
+  evaluating it. The string constant begins and ends with a
+  double-quote. &lsquo;<samp>\"</samp>&rsquo; stands for a
+  double-quote as part of the string, &lsquo;<samp>\\</samp>&rsquo;
+  for a backslash as part of the string,
+  &lsquo;<samp>\t</samp>&rsquo; for a tab and
+  &lsquo;<samp>\n</samp>&rsquo; for a newline.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Regexp-Functions.html#Regexp-Functions" accesskey="n" rel="next">Regexp Functions</a>, Previous: <a href="Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey="p" rel="prev">Syntax of Regexps</a>, Up: <a href="Regular-Expressions.html#Regular-Expressions" accesskey="u" rel="up">Regular Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="example">
+    <pre class="example">
+"[.?!][]\"')}]*\\($\\| $\\|\t\\|  \\)[ \t\n]*"
+     &rArr; "[.?!][]\"')}]*\\($\\| $\\|  \\|  \\)[
+]*"
+</pre>
+  </div>
 
+  <p>In the output, tab and newline appear as themselves.</p>
 
+  <p>This regular expression contains four parts in succession and
+  can be deciphered as follows:</p>
 
+  <dl compact="compact">
+    <dt><code>[.?!]</code></dt>
+
+    <dd>
+      <p>The first part of the pattern is a character alternative
+      that matches any one of three characters: period, question
+      mark, and exclamation mark. The match must begin with one of
+      these three characters. (This is one point where the new
+      default regexp used by Emacs differs from the old. The new
+      value also allows some non-<acronym>ASCII</acronym>
+      characters that end a sentence without any following
+      whitespace.)</p>
+    </dd>
+
+    <dt><code>[]\"')}]*</code></dt>
+
+    <dd>
+      <p>The second part of the pattern matches any closing braces
+      and quotation marks, zero or more of them, that may follow
+      the period, question mark or exclamation mark. The
+      <code>\"</code> is Lisp syntax for a double-quote in a
+      string. The &lsquo;<samp>*</samp>&rsquo; at the end indicates
+      that the immediately preceding regular expression (a
+      character alternative, in this case) may be repeated zero or
+      more times.</p>
+    </dd>
+
+    <dt><code>\\($\\|&nbsp;$\\|\t\\|&nbsp;&nbsp;\\)</code></dt>
+
+    <dd>
+      <p>The third part of the pattern matches the whitespace that
+      follows the end of a sentence: the end of a line (optionally
+      with a space), or a tab, or two spaces. The double
+      backslashes mark the parentheses and vertical bars as regular
+      expression syntax; the parentheses delimit a group and the
+      vertical bars separate alternatives. The dollar sign is used
+      to match the end of a line.</p>
+    </dd>
+
+    <dt><code>[ \t\n]*</code></dt>
+
+    <dd>
+      <p>Finally, the last part of the pattern matches any
+      additional whitespace beyond the minimum needed to end a
+      sentence.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Regexp-Functions.html#Regexp-Functions"
+    accesskey="n" rel="next">Regexp Functions</a>, Previous:
+    <a href="Syntax-of-Regexps.html#Syntax-of-Regexps" accesskey=
+    "p" rel="prev">Syntax of Regexps</a>, Up: <a href=
+    "Regular-Expressions.html#Regular-Expressions" accesskey="u"
+    rel="up">Regular Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

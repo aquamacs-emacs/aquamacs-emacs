@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Eshell, the Emacs shell.
 
 Copyright (C) 1999-2016 Free Software Foundation, Inc.
@@ -14,131 +16,198 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Eshell: The Emacs Shell: Dollars Expansion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Eshell: The Emacs Shell: Dollars Expansion">
-<meta name="keywords" content="Eshell: The Emacs Shell: Dollars Expansion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Expansion.html#Expansion" rel="up" title="Expansion">
-<link href="Globbing.html#Globbing" rel="next" title="Globbing">
-<link href="Expansion.html#Expansion" rel="prev" title="Expansion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Eshell: The Emacs Shell: Dollars Expansion</title>
+  <meta name="description" content=
+  "Eshell: The Emacs Shell: Dollars Expansion" />
+  <meta name="keywords" content=
+  "Eshell: The Emacs Shell: Dollars Expansion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Expansion.html#Expansion" rel="up" title=
+  "Expansion" />
+  <link href="Globbing.html#Globbing" rel="next" title=
+  "Globbing" />
+  <link href="Expansion.html#Expansion" rel="prev" title=
+  "Expansion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dollars-Expansion"></a>
-<div class="header">
-<p>
-Next: <a href="Globbing.html#Globbing" accesskey="n" rel="next">Globbing</a>, Up: <a href="Expansion.html#Expansion" accesskey="u" rel="up">Expansion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Dollars-Expansion-1"></a>
-<h3 class="section">3.1 Dollars Expansion</h3>
-<p>Eshell has different <code>$</code> expansion syntax from other shells.  There
-are some similarities, but don&rsquo;t let these lull you into a false sense
-of familiarity.
-</p>
-<dl compact="compact">
-<dt><code>$var</code></dt>
-<dd><p>Expands to the value bound to <code>var</code>.  This is the main way to use
-variables in command invocations.
-</p>
-</dd>
-<dt><code>$#var</code></dt>
-<dd><p>Expands to the length of the value bound to <code>var</code>.  Raises an error
-if the value is not a sequence
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences</a> in <cite>The Emacs Lisp Reference Manual</cite>).
-</p>
-</dd>
-<dt><code>$(lisp)</code></dt>
-<dd><p>Expands to the result of evaluating the S-expression <code>(lisp)</code>.  On
-its own, this is identical to just <code>(lisp)</code>, but with the <code>$</code>,
-it can be used in a string, such as &lsquo;<samp>/some/path/$(lisp).txt</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>${command}</code></dt>
-<dd><p>Returns the output of <code>command</code>, which can be any valid Eshell
-command invocation, and may even contain expansions.
-</p>
-</dd>
-<dt><code>$var[i]</code></dt>
-<dd><p>Expands to the <code>i</code>th element of the value bound to <code>var</code>.  If
-the value is a string, it will be split at whitespace to make it a list.
-Again, raises an error if the value is not a sequence.
-</p>
-</dd>
-<dt><code>$var[: i]</code></dt>
-<dd><p>As above, but now splitting occurs at the colon character.
-</p>
-</dd>
-<dt><code>$var[: i j]</code></dt>
-<dd><p>As above, but instead of returning just a string, it now returns a list
-of two strings.  If the result is being interpolated into a larger
-string, this list will be flattened into one big string, with each
-element separated by a space.
-</p>
-</dd>
-<dt><code>$var[&quot;\\\\&quot; i]</code></dt>
-<dd><p>Separate on backslash characters.  Actually, the first argument &ndash; if it
-doesn&rsquo;t have the form of a number, or a plain variable name &ndash; can be
-any regular expression.  So to split on numbers, use &lsquo;<samp>$var[&quot;[0-9]+&quot; 10 20]</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>$var[hello]</code></dt>
-<dd><p>Calls <code>assoc</code> on <code>var</code> with <code>&quot;hello&quot;</code>, expecting it to be
-an alist (see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Association-List-Type.html#Association-List-Type">Association Lists</a> in <cite>The Emacs Lisp Reference Manual</cite>).
-</p>
-</dd>
-<dt><code>$#var[hello]</code></dt>
-<dd><p>Returns the length of the cdr of the element of <code>var</code> who car is equal
-to <code>&quot;hello&quot;</code>.
-</p>
-</dd>
-</dl>
+<body lang="en" xml:lang="en">
+  <a name="Dollars-Expansion" id="Dollars-Expansion"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Globbing.html#Globbing" accesskey="n" rel="next">Globbing</a>, Up: <a href="Expansion.html#Expansion" accesskey="u" rel="up">Expansion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Globbing.html#Globbing" accesskey="n" rel=
+    "next">Globbing</a>, Up: <a href="Expansion.html#Expansion"
+    accesskey="u" rel="up">Expansion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Dollars-Expansion-1" id="Dollars-Expansion-1"></a>
 
+  <h3 class="section">3.1 Dollars Expansion</h3>
 
+  <p>Eshell has different <code>$</code> expansion syntax from
+  other shells. There are some similarities, but don&rsquo;t let
+  these lull you into a false sense of familiarity.</p>
 
+  <dl compact="compact">
+    <dt><code>$var</code></dt>
+
+    <dd>
+      <p>Expands to the value bound to <code>var</code>. This is
+      the main way to use variables in command invocations.</p>
+    </dd>
+
+    <dt><code>$#var</code></dt>
+
+    <dd>
+      <p>Expands to the length of the value bound to
+      <code>var</code>. Raises an error if the value is not a
+      sequence (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/elisp/Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">
+      Sequences</a> in <cite>The Emacs Lisp Reference
+      Manual</cite>).</p>
+    </dd>
+
+    <dt><code>$(lisp)</code></dt>
+
+    <dd>
+      <p>Expands to the result of evaluating the S-expression
+      <code>(lisp)</code>. On its own, this is identical to just
+      <code>(lisp)</code>, but with the <code>$</code>, it can be
+      used in a string, such as
+      &lsquo;<samp>/some/path/$(lisp).txt</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><code>${command}</code></dt>
+
+    <dd>
+      <p>Returns the output of <code>command</code>, which can be
+      any valid Eshell command invocation, and may even contain
+      expansions.</p>
+    </dd>
+
+    <dt><code>$var[i]</code></dt>
+
+    <dd>
+      <p>Expands to the <code>i</code>th element of the value bound
+      to <code>var</code>. If the value is a string, it will be
+      split at whitespace to make it a list. Again, raises an error
+      if the value is not a sequence.</p>
+    </dd>
+
+    <dt><code>$var[: i]</code></dt>
+
+    <dd>
+      <p>As above, but now splitting occurs at the colon
+      character.</p>
+    </dd>
+
+    <dt><code>$var[: i j]</code></dt>
+
+    <dd>
+      <p>As above, but instead of returning just a string, it now
+      returns a list of two strings. If the result is being
+      interpolated into a larger string, this list will be
+      flattened into one big string, with each element separated by
+      a space.</p>
+    </dd>
+
+    <dt><code>$var["\\\\" i]</code></dt>
+
+    <dd>
+      <p>Separate on backslash characters. Actually, the first
+      argument &ndash; if it doesn&rsquo;t have the form of a
+      number, or a plain variable name &ndash; can be any regular
+      expression. So to split on numbers, use
+      &lsquo;<samp>$var["[0-9]+" 10 20]</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><code>$var[hello]</code></dt>
+
+    <dd>
+      <p>Calls <code>assoc</code> on <code>var</code> with
+      <code>"hello"</code>, expecting it to be an alist (see
+      <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/elisp/Association-List-Type.html#Association-List-Type">
+      Association Lists</a> in <cite>The Emacs Lisp Reference
+      Manual</cite>).</p>
+    </dd>
+
+    <dt><code>$#var[hello]</code></dt>
+
+    <dd>
+      <p>Returns the length of the cdr of the element of
+      <code>var</code> who car is equal to
+      <code>"hello"</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Globbing.html#Globbing" accesskey="n" rel=
+    "next">Globbing</a>, Up: <a href="Expansion.html#Expansion"
+    accesskey="u" rel="up">Expansion</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,139 +16,190 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Inheritance</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Inheritance">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Inheritance">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Building-Classes.html#Building-Classes" rel="up" title="Building Classes">
-<link href="Slot-Options.html#Slot-Options" rel="next" title="Slot Options">
-<link href="Building-Classes.html#Building-Classes" rel="prev" title="Building Classes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Inheritance</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Inheritance" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Inheritance" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="Building-Classes.html#Building-Classes" rel="up"
+  title="Building Classes" />
+  <link href="Slot-Options.html#Slot-Options" rel="next" title=
+  "Slot Options" />
+  <link href="Building-Classes.html#Building-Classes" rel="prev"
+  title="Building Classes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Inheritance"></a>
-<div class="header">
-<p>
-Next: <a href="Slot-Options.html#Slot-Options" accesskey="n" rel="next">Slot Options</a>, Up: <a href="Building-Classes.html#Building-Classes" accesskey="u" rel="up">Building Classes</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Inheritance-1"></a>
-<h3 class="section">3.1 Inheritance</h3>
+<body lang="en" xml:lang="en">
+  <a name="Inheritance" id="Inheritance"></a>
 
-<p><em>Inheritance</em> is a basic feature of an object-oriented language.
-In <i>EIEIO</i>, a defined class specifies the super classes from which it
-inherits by using the second argument to <code>defclass</code>.  Here is an
-example:
-</p>
-<div class="example">
-<pre class="example">(defclass my-baseclass ()
+  <div class="header">
+    <p>Next: <a href="Slot-Options.html#Slot-Options" accesskey="n"
+    rel="next">Slot Options</a>, Up: <a href=
+    "Building-Classes.html#Building-Classes" accesskey="u" rel=
+    "up">Building Classes</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Inheritance-1" id="Inheritance-1"></a>
+
+  <h3 class="section">3.1 Inheritance</h3>
+
+  <p><em>Inheritance</em> is a basic feature of an object-oriented
+  language. In <i>EIEIO</i>, a defined class specifies the super
+  classes from which it inherits by using the second argument to
+  <code>defclass</code>. Here is an example:</p>
+
+  <div class="example">
+    <pre class="example">
+(defclass my-baseclass ()
    ((slot-A :initarg :slot-A)
     (slot-B :initarg :slot-B))
-  &quot;My Baseclass.&quot;)
-</pre></div>
+  "My Baseclass.")
+</pre>
+  </div>
 
-<p>To subclass from <code>my-baseclass</code>, we specify it in the superclass
-list:
-</p>
-<div class="example">
-<pre class="example">(defclass my-subclass (my-baseclass)
+  <p>To subclass from <code>my-baseclass</code>, we specify it in
+  the superclass list:</p>
+
+  <div class="example">
+    <pre class="example">
+(defclass my-subclass (my-baseclass)
    ((specific-slot-A :initarg specific-slot-A)
     )
-   &quot;My subclass of my-baseclass&quot;)
-</pre></div>
+   "My subclass of my-baseclass")
+</pre>
+  </div>
 
-<p>Instances of <code>my-subclass</code> will inherit <code>slot-A</code> and
-<code>slot-B</code>, in addition to having <code>specific-slot-A</code> from the
-declaration of <code>my-subclass</code>.
-</p>
-<p><i>EIEIO</i> also supports multiple inheritance.  Suppose we define a
-second baseclass, perhaps an &ldquo;interface&rdquo; class, like this:
-</p>
-<div class="example">
-<pre class="example">(defclass my-interface ()
+  <p>Instances of <code>my-subclass</code> will inherit
+  <code>slot-A</code> and <code>slot-B</code>, in addition to
+  having <code>specific-slot-A</code> from the declaration of
+  <code>my-subclass</code>.</p>
+
+  <p><i>EIEIO</i> also supports multiple inheritance. Suppose we
+  define a second baseclass, perhaps an &ldquo;interface&rdquo;
+  class, like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(defclass my-interface ()
    ((interface-slot :initarg :interface-slot))
-   &quot;An interface to special behavior.&quot;
+   "An interface to special behavior."
    :abstract t)
-</pre></div>
+</pre>
+  </div>
 
-<p>The interface class defines a special <code>interface-slot</code>, and also
-specifies itself as abstract.  Abstract classes cannot be
-instantiated.  It is not required to make interfaces abstract, but it
-is a good programming practice.
-</p>
-<p>We can now modify our definition of <code>my-subclass</code> to use this
-interface class, together with our original base class:
-</p>
-<div class="example">
-<pre class="example">(defclass my-subclass (my-baseclass my-interface)
+  <p>The interface class defines a special
+  <code>interface-slot</code>, and also specifies itself as
+  abstract. Abstract classes cannot be instantiated. It is not
+  required to make interfaces abstract, but it is a good
+  programming practice.</p>
+
+  <p>We can now modify our definition of <code>my-subclass</code>
+  to use this interface class, together with our original base
+  class:</p>
+
+  <div class="example">
+    <pre class="example">
+(defclass my-subclass (my-baseclass my-interface)
    ((specific-slot-A :initarg specific-slot-A)
     )
-   &quot;My subclass of my-baseclass&quot;)
-</pre></div>
+   "My subclass of my-baseclass")
+</pre>
+  </div>
 
-<p>With this, <code>my-subclass</code> also has <code>interface-slot</code>.
-</p>
-<p>If <code>my-baseclass</code> and <code>my-interface</code> had slots with the same
-name, then the superclass showing up in the list first defines the
-slot attributes.
-</p>
-<p>Inheritance in <i>EIEIO</i> is more than just combining different slots.
-It is also important in method invocation.  <a href="Methods.html#Methods">Methods</a>.
-</p>
-<p>If a method is called on an instance of <code>my-subclass</code>, and that
-method only has an implementation on <code>my-baseclass</code>, or perhaps
-<code>my-interface</code>, then the implementation for the baseclass is
-called.
-</p>
-<p>If there is a method implementation for <code>my-subclass</code>, and
-another in <code>my-baseclass</code>, the implementation for
-<code>my-subclass</code> can call up to the superclass as well.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Slot-Options.html#Slot-Options" accesskey="n" rel="next">Slot Options</a>, Up: <a href="Building-Classes.html#Building-Classes" accesskey="u" rel="up">Building Classes</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>With this, <code>my-subclass</code> also has
+  <code>interface-slot</code>.</p>
 
+  <p>If <code>my-baseclass</code> and <code>my-interface</code> had
+  slots with the same name, then the superclass showing up in the
+  list first defines the slot attributes.</p>
 
+  <p>Inheritance in <i>EIEIO</i> is more than just combining
+  different slots. It is also important in method invocation.
+  <a href="Methods.html#Methods">Methods</a>.</p>
 
+  <p>If a method is called on an instance of
+  <code>my-subclass</code>, and that method only has an
+  implementation on <code>my-baseclass</code>, or perhaps
+  <code>my-interface</code>, then the implementation for the
+  baseclass is called.</p>
+
+  <p>If there is a method implementation for
+  <code>my-subclass</code>, and another in
+  <code>my-baseclass</code>, the implementation for
+  <code>my-subclass</code> can call up to the superclass as
+  well.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Slot-Options.html#Slot-Options" accesskey="n"
+    rel="next">Slot Options</a>, Up: <a href=
+    "Building-Classes.html#Building-Classes" accesskey="u" rel=
+    "up">Building Classes</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,268 +20,375 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: TeX Print</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: TeX Print">
-<meta name="keywords" content="GNU Emacs Manual: TeX Print">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="TeX-Mode.html#TeX-Mode" rel="up" title="TeX Mode">
-<link href="TeX-Misc.html#TeX-Misc" rel="next" title="TeX Misc">
-<link href="LaTeX-Editing.html#LaTeX-Editing" rel="prev" title="LaTeX Editing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: TeX Print</title>
+  <meta name="description" content="GNU Emacs Manual: TeX Print" />
+  <meta name="keywords" content="GNU Emacs Manual: TeX Print" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="TeX-Mode.html#TeX-Mode" rel="up" title="TeX Mode" />
+  <link href="TeX-Misc.html#TeX-Misc" rel="next" title=
+  "TeX Misc" />
+  <link href="LaTeX-Editing.html#LaTeX-Editing" rel="prev" title=
+  "LaTeX Editing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="TeX-Print" id="TeX-Print"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="TeX-Misc.html#TeX-Misc" accesskey="n" rel=
+    "next">TeX Misc</a>, Previous: <a href=
+    "LaTeX-Editing.html#LaTeX-Editing" accesskey="p" rel=
+    "prev">LaTeX Editing</a>, Up: <a href="TeX-Mode.html#TeX-Mode"
+    accesskey="u" rel="up">TeX Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="TeX-Printing-Commands" id="TeX-Printing-Commands"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="TeX-Print"></a>
-<div class="header">
-<p>
-Next: <a href="TeX-Misc.html#TeX-Misc" accesskey="n" rel="next">TeX Misc</a>, Previous: <a href="LaTeX-Editing.html#LaTeX-Editing" accesskey="p" rel="prev">LaTeX Editing</a>, Up: <a href="TeX-Mode.html#TeX-Mode" accesskey="u" rel="up">TeX Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="TeX-Printing-Commands"></a>
-<h4 class="subsection">25.11.3 TeX Printing Commands</h4>
+  <h4 class="subsection">25.11.3 TeX Printing Commands</h4>
 
-<p>You can invoke TeX as an subprocess of Emacs, supplying either
-the entire contents of the buffer or just part of it (e.g., one
-chapter of a larger document).
-</p>
-<dl compact="compact">
-<dt><kbd>C-c C-b</kbd></dt>
-<dd><p>Invoke TeX on the entire current buffer (<code>tex-buffer</code>).
-</p></dd>
-<dt><kbd>C-c C-r</kbd></dt>
-<dd><p>Invoke TeX on the current region, together with the buffer&rsquo;s header
-(<code>tex-region</code>).
-</p></dd>
-<dt><kbd>C-c C-f</kbd></dt>
-<dd><p>Invoke TeX on the current file (<code>tex-file</code>).
-</p>
-</dd>
-<dt><kbd>C-c C-v</kbd></dt>
-<dd><p>Preview the output from the last <kbd>C-c C-r</kbd>, <kbd>C-c C-b</kbd>, or <kbd>C-c
-C-f</kbd> command (<code>tex-view</code>).
-</p>
-</dd>
-<dt><kbd>C-c C-p</kbd></dt>
-<dd><p>Print the output from the last <kbd>C-c C-b</kbd>, <kbd>C-c C-r</kbd>, or
-<kbd>C-c C-f</kbd> command (<code>tex-print</code>).
-</p>
-</dd>
-<dt><kbd>C-c <span class="key">TAB</span></kbd></dt>
-<dd><p>Invoke BibTeX on the current file (<code>tex-bibtex-file</code>).
-</p></dd>
-<dt><kbd>C-c C-l</kbd></dt>
-<dd><p>Recenter the window showing output from TeX so that the last line
-can be seen (<code>tex-recenter-output-buffer</code>).
-</p></dd>
-<dt><kbd>C-c C-k</kbd></dt>
-<dd><p>Kill the TeX subprocess (<code>tex-kill-job</code>).
-</p></dd>
-<dt><kbd>C-c C-c</kbd></dt>
-<dd><p>Invoke some other compilation command on the entire current buffer
-(<code>tex-compile</code>).
-</p></dd>
-</dl>
+  <p>You can invoke TeX as an subprocess of Emacs, supplying either
+  the entire contents of the buffer or just part of it (e.g., one
+  chapter of a larger document).</p>
 
-<a name="index-tex_002dbuffer"></a>
-<a name="index-C_002dc-C_002db-_0028TeX-mode_0029"></a>
-<a name="index-tex_002dview"></a>
-<a name="index-C_002dc-C_002dv-_0028TeX-mode_0029"></a>
-<a name="index-tex_002dprint"></a>
-<a name="index-C_002dc-C_002dp-_0028TeX-mode_0029"></a>
-<p>To pass the current buffer through TeX, type <kbd>C-c C-b</kbd>
-(<code>tex-buffer</code>).  The formatted output goes in a temporary file,
-normally a <samp>.dvi</samp> file.  Afterwards, you can type <kbd>C-c C-v</kbd>
-(<code>tex-view</code>) to launch an external program, such as
-<code>xdvi</code>, to view this output file.  You can also type <kbd>C-c
-C-p</kbd> (<code>tex-print</code>) to print a hardcopy of the output file.
-</p>
-<a name="index-TEXINPUTS-environment-variable"></a>
-<a name="index-tex_002ddirectory"></a>
-<p>By default, <kbd>C-c C-b</kbd> runs TeX in the current directory.  The
-output of TeX also goes in this directory.  To run TeX in a
-different directory, change the variable <code>tex-directory</code> to the
-desired directory name.  If your environment variable <code>TEXINPUTS</code>
-contains relative directory names, or if your files contains
-&lsquo;<samp>\input</samp>&rsquo; commands with relative file names, then
-<code>tex-directory</code> <em>must</em> be <code>&quot;.&quot;</code> or you will get the
-wrong results.  Otherwise, it is safe to specify some other directory,
-such as <code>&quot;/tmp&quot;</code>.
-</p>
-<a name="index-tex_002drun_002dcommand"></a>
-<a name="index-latex_002drun_002dcommand"></a>
-<a name="index-tex_002ddvi_002dview_002dcommand"></a>
-<a name="index-tex_002ddvi_002dprint_002dcommand"></a>
-<a name="index-tex_002dprint_002dfile_002dextension"></a>
-<p>The buffer&rsquo;s TeX variant determines what shell command <kbd>C-c
-C-b</kbd> actually runs.  In Plain TeX mode, it is specified by the
-variable <code>tex-run-command</code>, which defaults to <code>&quot;tex&quot;</code>.  In
-LaTeX mode, it is specified by <code>latex-run-command</code>, which
-defaults to <code>&quot;latex&quot;</code>.  The shell command that <kbd>C-c C-v</kbd> runs
-to view the <samp>.dvi</samp> output is determined by the variable
-<code>tex-dvi-view-command</code>, regardless of the TeX variant.  The
-shell command that <kbd>C-c C-p</kbd> runs to print the output is
-determined by the variable <code>tex-dvi-print-command</code>.  The variable
-<code>tex-print-file-extension</code> can be set to the required file
-extension for viewing and printing TeX-compiled files.  For
-example, you can set it to <samp>.pdf</samp>, and update
-<code>tex-dvi-view-command</code> and <code>tex-dvi-print-command</code>
-accordingly.
-</p>
-<p>Normally, Emacs automatically appends the output file name to the
-shell command strings described in the preceding paragraph.  For
-example, if <code>tex-dvi-view-command</code> is <code>&quot;xdvi&quot;</code>, <kbd>C-c
-C-v</kbd> runs <code>xdvi <var>output-file-name</var></code>.  In some cases,
-however, the file name needs to be embedded in the command, e.g., if
-you need to provide the file name as an argument to one command whose
-output is piped to another.  You can specify where to put the file
-name with &lsquo;<samp>*</samp>&rsquo; in the command string.  For example,
-</p>
-<div class="example">
-<pre class="example">(setq tex-dvi-print-command &quot;dvips -f * | lpr&quot;)
-</pre></div>
+  <dl compact="compact">
+    <dt><kbd>C-c C-b</kbd></dt>
 
-<a name="index-tex_002dkill_002djob"></a>
-<a name="index-C_002dc-C_002dk-_0028TeX-mode_0029"></a>
-<a name="index-tex_002drecenter_002doutput_002dbuffer"></a>
-<a name="index-C_002dc-C_002dl-_0028TeX-mode_0029"></a>
-<p>The terminal output from TeX, including any error messages,
-appears in a buffer called <samp>*tex-shell*</samp>.  If TeX gets an
-error, you can switch to this buffer and feed it input (this works as
-in Shell mode; see <a href="Interactive-Shell.html#Interactive-Shell">Interactive Shell</a>).  Without switching to this
-buffer you can scroll it so that its last line is visible by typing
-<kbd>C-c C-l</kbd>.
-</p>
-<p>Type <kbd>C-c C-k</kbd> (<code>tex-kill-job</code>) to kill the TeX process if
-you see that its output is no longer useful.  Using <kbd>C-c C-b</kbd> or
-<kbd>C-c C-r</kbd> also kills any TeX process still running.
-</p>
-<a name="index-tex_002dregion"></a>
-<a name="index-C_002dc-C_002dr-_0028TeX-mode_0029"></a>
-<p>You can also pass an arbitrary region through TeX by typing
-<kbd>C-c C-r</kbd> (<code>tex-region</code>).  This is tricky, however, because
-most files of TeX input contain commands at the beginning to set
-parameters and define macros, without which no later part of the file
-will format correctly.  To solve this problem, <kbd>C-c C-r</kbd> allows
-you to designate a part of the file as containing essential commands;
-it is included before the specified region as part of the input to
-TeX.  The designated part of the file is called the <em>header</em>.
-</p>
-<a name="index-header-_0028TeX-mode_0029"></a>
-<p>To indicate the bounds of the header in Plain TeX mode, you insert two
-special strings in the file.  Insert &lsquo;<samp>%**start of header</samp>&rsquo; before the
-header, and &lsquo;<samp>%**end of header</samp>&rsquo; after it.  Each string must appear
-entirely on one line, but there may be other text on the line before or
-after.  The lines containing the two strings are included in the header.
-If &lsquo;<samp>%**start of header</samp>&rsquo; does not appear within the first 100 lines of
-the buffer, <kbd>C-c C-r</kbd> assumes that there is no header.
-</p>
-<p>In LaTeX mode, the header begins with &lsquo;<samp>\documentclass</samp>&rsquo; or
-&lsquo;<samp>\documentstyle</samp>&rsquo; and ends with &lsquo;<samp>\begin{document}</samp>&rsquo;.  These
-are commands that LaTeX requires you to use in any case, so nothing
-special needs to be done to identify the header.
-</p>
-<a name="index-tex_002dfile"></a>
-<a name="index-C_002dc-C_002df-_0028TeX-mode_0029"></a>
-<p>The commands (<code>tex-buffer</code>) and (<code>tex-region</code>) do all of their
-work in a temporary directory, and do not have available any of the auxiliary
-files needed by TeX for cross-references; these commands are generally
-not suitable for running the final copy in which all of the cross-references
-need to be correct.
-</p>
-<p>When you want the auxiliary files for cross references, use <kbd>C-c
-C-f</kbd> (<code>tex-file</code>) which runs TeX on the current buffer&rsquo;s file,
-in that file&rsquo;s directory.  Before running TeX, it offers to save any
-modified buffers.  Generally, you need to use (<code>tex-file</code>) twice to
-get the cross-references right.
-</p>
-<a name="index-tex_002dstart_002doptions"></a>
-<p>The value of the variable <code>tex-start-options</code> specifies
-options for the TeX run.
-</p>
-<a name="index-tex_002dstart_002dcommands"></a>
-<p>The value of the variable <code>tex-start-commands</code> specifies TeX
-commands for starting TeX.  The default value causes TeX to run
-in nonstop mode.  To run TeX interactively, set the variable to
-<code>&quot;&quot;</code>.
-</p>
-<a name="index-tex_002dmain_002dfile"></a>
-<p>Large TeX documents are often split into several files&mdash;one main
-file, plus subfiles.  Running TeX on a subfile typically does not
-work; you have to run it on the main file.  In order to make
-<code>tex-file</code> useful when you are editing a subfile, you can set the
-variable <code>tex-main-file</code> to the name of the main file.  Then
-<code>tex-file</code> runs TeX on that file.
-</p>
-<p>The most convenient way to use <code>tex-main-file</code> is to specify it
-in a local variable list in each of the subfiles.  See <a href="File-Variables.html#File-Variables">File Variables</a>.
-</p>
-<a name="index-tex_002dbibtex_002dfile"></a>
-<a name="index-C_002dc-TAB-_0028TeX-mode_0029"></a>
-<a name="index-tex_002dbibtex_002dcommand"></a>
-<p>For LaTeX files, you can use BibTeX to process the auxiliary
-file for the current buffer&rsquo;s file.  BibTeX looks up bibliographic
-citations in a data base and prepares the cited references for the
-bibliography section.  The command <kbd>C-c <span class="key">TAB</span></kbd>
-(<code>tex-bibtex-file</code>) runs the shell command
-(<code>tex-bibtex-command</code>) to produce a &lsquo;<samp>.bbl</samp>&rsquo; file for the
-current buffer&rsquo;s file.  Generally, you need to do <kbd>C-c C-f</kbd>
-(<code>tex-file</code>) once to generate the &lsquo;<samp>.aux</samp>&rsquo; file, then do
-<kbd>C-c <span class="key">TAB</span></kbd> (<code>tex-bibtex-file</code>), and then repeat <kbd>C-c C-f</kbd>
-(<code>tex-file</code>) twice more to get the cross-references correct.
-</p>
-<a name="index-tex_002dcompile"></a>
-<a name="index-C_002dc-C_002dc-_0028TeX-mode_0029"></a>
-<p>To invoke some other compilation program on the current TeX
-buffer, type <kbd>C-c C-c</kbd> (<code>tex-compile</code>).  This command knows
-how to pass arguments to many common programs, including
-<samp>pdflatex</samp>, <samp>yap</samp>, <samp>xdvi</samp>, and <samp>dvips</samp>.  You can
-select your desired compilation program using the standard completion
-keys (see <a href="Completion.html#Completion">Completion</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="TeX-Misc.html#TeX-Misc" accesskey="n" rel="next">TeX Misc</a>, Previous: <a href="LaTeX-Editing.html#LaTeX-Editing" accesskey="p" rel="prev">LaTeX Editing</a>, Up: <a href="TeX-Mode.html#TeX-Mode" accesskey="u" rel="up">TeX Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Invoke TeX on the entire current buffer
+      (<code>tex-buffer</code>).</p>
+    </dd>
 
+    <dt><kbd>C-c C-r</kbd></dt>
 
+    <dd>
+      <p>Invoke TeX on the current region, together with the
+      buffer&rsquo;s header (<code>tex-region</code>).</p>
+    </dd>
 
+    <dt><kbd>C-c C-f</kbd></dt>
+
+    <dd>
+      <p>Invoke TeX on the current file
+      (<code>tex-file</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-v</kbd></dt>
+
+    <dd>
+      <p>Preview the output from the last <kbd>C-c C-r</kbd>,
+      <kbd>C-c C-b</kbd>, or <kbd>C-c C-f</kbd> command
+      (<code>tex-view</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-p</kbd></dt>
+
+    <dd>
+      <p>Print the output from the last <kbd>C-c C-b</kbd>,
+      <kbd>C-c C-r</kbd>, or <kbd>C-c C-f</kbd> command
+      (<code>tex-print</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c <span class="key">TAB</span></kbd></dt>
+
+    <dd>
+      <p>Invoke BibTeX on the current file
+      (<code>tex-bibtex-file</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-l</kbd></dt>
+
+    <dd>
+      <p>Recenter the window showing output from TeX so that the
+      last line can be seen
+      (<code>tex-recenter-output-buffer</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-k</kbd></dt>
+
+    <dd>
+      <p>Kill the TeX subprocess (<code>tex-kill-job</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-c</kbd></dt>
+
+    <dd>
+      <p>Invoke some other compilation command on the entire
+      current buffer (<code>tex-compile</code>).</p>
+    </dd>
+  </dl><a name="index-tex_002dbuffer" id=
+  "index-tex_002dbuffer"></a> <a name=
+  "index-C_002dc-C_002db-_0028TeX-mode_0029" id=
+  "index-C_002dc-C_002db-_0028TeX-mode_0029"></a> <a name=
+  "index-tex_002dview" id="index-tex_002dview"></a> <a name=
+  "index-C_002dc-C_002dv-_0028TeX-mode_0029" id=
+  "index-C_002dc-C_002dv-_0028TeX-mode_0029"></a> <a name=
+  "index-tex_002dprint" id="index-tex_002dprint"></a> <a name=
+  "index-C_002dc-C_002dp-_0028TeX-mode_0029" id=
+  "index-C_002dc-C_002dp-_0028TeX-mode_0029"></a>
+
+  <p>To pass the current buffer through TeX, type <kbd>C-c
+  C-b</kbd> (<code>tex-buffer</code>). The formatted output goes in
+  a temporary file, normally a <samp>.dvi</samp> file. Afterwards,
+  you can type <kbd>C-c C-v</kbd> (<code>tex-view</code>) to launch
+  an external program, such as <code>xdvi</code>, to view this
+  output file. You can also type <kbd>C-c C-p</kbd>
+  (<code>tex-print</code>) to print a hardcopy of the output
+  file.</p><a name="index-TEXINPUTS-environment-variable" id=
+  "index-TEXINPUTS-environment-variable"></a> <a name=
+  "index-tex_002ddirectory" id="index-tex_002ddirectory"></a>
+
+  <p>By default, <kbd>C-c C-b</kbd> runs TeX in the current
+  directory. The output of TeX also goes in this directory. To run
+  TeX in a different directory, change the variable
+  <code>tex-directory</code> to the desired directory name. If your
+  environment variable <code>TEXINPUTS</code> contains relative
+  directory names, or if your files contains
+  &lsquo;<samp>\input</samp>&rsquo; commands with relative file
+  names, then <code>tex-directory</code> <em>must</em> be
+  <code>"."</code> or you will get the wrong results. Otherwise, it
+  is safe to specify some other directory, such as
+  <code>"/tmp"</code>.</p><a name="index-tex_002drun_002dcommand"
+  id="index-tex_002drun_002dcommand"></a> <a name=
+  "index-latex_002drun_002dcommand" id=
+  "index-latex_002drun_002dcommand"></a> <a name=
+  "index-tex_002ddvi_002dview_002dcommand" id=
+  "index-tex_002ddvi_002dview_002dcommand"></a> <a name=
+  "index-tex_002ddvi_002dprint_002dcommand" id=
+  "index-tex_002ddvi_002dprint_002dcommand"></a> <a name=
+  "index-tex_002dprint_002dfile_002dextension" id=
+  "index-tex_002dprint_002dfile_002dextension"></a>
+
+  <p>The buffer&rsquo;s TeX variant determines what shell command
+  <kbd>C-c C-b</kbd> actually runs. In Plain TeX mode, it is
+  specified by the variable <code>tex-run-command</code>, which
+  defaults to <code>"tex"</code>. In LaTeX mode, it is specified by
+  <code>latex-run-command</code>, which defaults to
+  <code>"latex"</code>. The shell command that <kbd>C-c C-v</kbd>
+  runs to view the <samp>.dvi</samp> output is determined by the
+  variable <code>tex-dvi-view-command</code>, regardless of the TeX
+  variant. The shell command that <kbd>C-c C-p</kbd> runs to print
+  the output is determined by the variable
+  <code>tex-dvi-print-command</code>. The variable
+  <code>tex-print-file-extension</code> can be set to the required
+  file extension for viewing and printing TeX-compiled files. For
+  example, you can set it to <samp>.pdf</samp>, and update
+  <code>tex-dvi-view-command</code> and
+  <code>tex-dvi-print-command</code> accordingly.</p>
+
+  <p>Normally, Emacs automatically appends the output file name to
+  the shell command strings described in the preceding paragraph.
+  For example, if <code>tex-dvi-view-command</code> is
+  <code>"xdvi"</code>, <kbd>C-c C-v</kbd> runs <code>xdvi
+  <var>output-file-name</var></code>. In some cases, however, the
+  file name needs to be embedded in the command, e.g., if you need
+  to provide the file name as an argument to one command whose
+  output is piped to another. You can specify where to put the file
+  name with &lsquo;<samp>*</samp>&rsquo; in the command string. For
+  example,</p>
+
+  <div class="example">
+    <pre class="example">
+(setq tex-dvi-print-command "dvips -f * | lpr")
+</pre>
+  </div><a name="index-tex_002dkill_002djob" id=
+  "index-tex_002dkill_002djob"></a> <a name=
+  "index-C_002dc-C_002dk-_0028TeX-mode_0029" id=
+  "index-C_002dc-C_002dk-_0028TeX-mode_0029"></a> <a name=
+  "index-tex_002drecenter_002doutput_002dbuffer" id=
+  "index-tex_002drecenter_002doutput_002dbuffer"></a> <a name=
+  "index-C_002dc-C_002dl-_0028TeX-mode_0029" id=
+  "index-C_002dc-C_002dl-_0028TeX-mode_0029"></a>
+
+  <p>The terminal output from TeX, including any error messages,
+  appears in a buffer called <samp>*tex-shell*</samp>. If TeX gets
+  an error, you can switch to this buffer and feed it input (this
+  works as in Shell mode; see <a href=
+  "Interactive-Shell.html#Interactive-Shell">Interactive
+  Shell</a>). Without switching to this buffer you can scroll it so
+  that its last line is visible by typing <kbd>C-c C-l</kbd>.</p>
+
+  <p>Type <kbd>C-c C-k</kbd> (<code>tex-kill-job</code>) to kill
+  the TeX process if you see that its output is no longer useful.
+  Using <kbd>C-c C-b</kbd> or <kbd>C-c C-r</kbd> also kills any TeX
+  process still running.</p><a name="index-tex_002dregion" id=
+  "index-tex_002dregion"></a> <a name=
+  "index-C_002dc-C_002dr-_0028TeX-mode_0029" id=
+  "index-C_002dc-C_002dr-_0028TeX-mode_0029"></a>
+
+  <p>You can also pass an arbitrary region through TeX by typing
+  <kbd>C-c C-r</kbd> (<code>tex-region</code>). This is tricky,
+  however, because most files of TeX input contain commands at the
+  beginning to set parameters and define macros, without which no
+  later part of the file will format correctly. To solve this
+  problem, <kbd>C-c C-r</kbd> allows you to designate a part of the
+  file as containing essential commands; it is included before the
+  specified region as part of the input to TeX. The designated part
+  of the file is called the <em>header</em>.</p><a name=
+  "index-header-_0028TeX-mode_0029" id=
+  "index-header-_0028TeX-mode_0029"></a>
+
+  <p>To indicate the bounds of the header in Plain TeX mode, you
+  insert two special strings in the file. Insert
+  &lsquo;<samp>%**start of header</samp>&rsquo; before the header,
+  and &lsquo;<samp>%**end of header</samp>&rsquo; after it. Each
+  string must appear entirely on one line, but there may be other
+  text on the line before or after. The lines containing the two
+  strings are included in the header. If &lsquo;<samp>%**start of
+  header</samp>&rsquo; does not appear within the first 100 lines
+  of the buffer, <kbd>C-c C-r</kbd> assumes that there is no
+  header.</p>
+
+  <p>In LaTeX mode, the header begins with
+  &lsquo;<samp>\documentclass</samp>&rsquo; or
+  &lsquo;<samp>\documentstyle</samp>&rsquo; and ends with
+  &lsquo;<samp>\begin{document}</samp>&rsquo;. These are commands
+  that LaTeX requires you to use in any case, so nothing special
+  needs to be done to identify the header.</p><a name=
+  "index-tex_002dfile" id="index-tex_002dfile"></a> <a name=
+  "index-C_002dc-C_002df-_0028TeX-mode_0029" id=
+  "index-C_002dc-C_002df-_0028TeX-mode_0029"></a>
+
+  <p>The commands (<code>tex-buffer</code>) and
+  (<code>tex-region</code>) do all of their work in a temporary
+  directory, and do not have available any of the auxiliary files
+  needed by TeX for cross-references; these commands are generally
+  not suitable for running the final copy in which all of the
+  cross-references need to be correct.</p>
+
+  <p>When you want the auxiliary files for cross references, use
+  <kbd>C-c C-f</kbd> (<code>tex-file</code>) which runs TeX on the
+  current buffer&rsquo;s file, in that file&rsquo;s directory.
+  Before running TeX, it offers to save any modified buffers.
+  Generally, you need to use (<code>tex-file</code>) twice to get
+  the cross-references right.</p><a name=
+  "index-tex_002dstart_002doptions" id=
+  "index-tex_002dstart_002doptions"></a>
+
+  <p>The value of the variable <code>tex-start-options</code>
+  specifies options for the TeX run.</p><a name=
+  "index-tex_002dstart_002dcommands" id=
+  "index-tex_002dstart_002dcommands"></a>
+
+  <p>The value of the variable <code>tex-start-commands</code>
+  specifies TeX commands for starting TeX. The default value causes
+  TeX to run in nonstop mode. To run TeX interactively, set the
+  variable to <code>""</code>.</p><a name=
+  "index-tex_002dmain_002dfile" id=
+  "index-tex_002dmain_002dfile"></a>
+
+  <p>Large TeX documents are often split into several
+  files&mdash;one main file, plus subfiles. Running TeX on a
+  subfile typically does not work; you have to run it on the main
+  file. In order to make <code>tex-file</code> useful when you are
+  editing a subfile, you can set the variable
+  <code>tex-main-file</code> to the name of the main file. Then
+  <code>tex-file</code> runs TeX on that file.</p>
+
+  <p>The most convenient way to use <code>tex-main-file</code> is
+  to specify it in a local variable list in each of the subfiles.
+  See <a href="File-Variables.html#File-Variables">File
+  Variables</a>.</p><a name="index-tex_002dbibtex_002dfile" id=
+  "index-tex_002dbibtex_002dfile"></a> <a name=
+  "index-C_002dc-TAB-_0028TeX-mode_0029" id=
+  "index-C_002dc-TAB-_0028TeX-mode_0029"></a> <a name=
+  "index-tex_002dbibtex_002dcommand" id=
+  "index-tex_002dbibtex_002dcommand"></a>
+
+  <p>For LaTeX files, you can use BibTeX to process the auxiliary
+  file for the current buffer&rsquo;s file. BibTeX looks up
+  bibliographic citations in a data base and prepares the cited
+  references for the bibliography section. The command <kbd>C-c
+  <span class="key">TAB</span></kbd> (<code>tex-bibtex-file</code>)
+  runs the shell command (<code>tex-bibtex-command</code>) to
+  produce a &lsquo;<samp>.bbl</samp>&rsquo; file for the current
+  buffer&rsquo;s file. Generally, you need to do <kbd>C-c C-f</kbd>
+  (<code>tex-file</code>) once to generate the
+  &lsquo;<samp>.aux</samp>&rsquo; file, then do <kbd>C-c
+  <span class="key">TAB</span></kbd>
+  (<code>tex-bibtex-file</code>), and then repeat <kbd>C-c
+  C-f</kbd> (<code>tex-file</code>) twice more to get the
+  cross-references correct.</p><a name="index-tex_002dcompile" id=
+  "index-tex_002dcompile"></a> <a name=
+  "index-C_002dc-C_002dc-_0028TeX-mode_0029" id=
+  "index-C_002dc-C_002dc-_0028TeX-mode_0029"></a>
+
+  <p>To invoke some other compilation program on the current TeX
+  buffer, type <kbd>C-c C-c</kbd> (<code>tex-compile</code>). This
+  command knows how to pass arguments to many common programs,
+  including <samp>pdflatex</samp>, <samp>yap</samp>,
+  <samp>xdvi</samp>, and <samp>dvips</samp>. You can select your
+  desired compilation program using the standard completion keys
+  (see <a href="Completion.html#Completion">Completion</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="TeX-Misc.html#TeX-Misc" accesskey="n" rel=
+    "next">TeX Misc</a>, Previous: <a href=
+    "LaTeX-Editing.html#LaTeX-Editing" accesskey="p" rel=
+    "prev">LaTeX Editing</a>, Up: <a href="TeX-Mode.html#TeX-Mode"
+    accesskey="u" rel="up">TeX Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

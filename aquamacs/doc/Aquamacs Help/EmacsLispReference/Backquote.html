@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,132 +19,188 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Backquote</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Backquote">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Backquote">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Evaluation.html#Evaluation" rel="up" title="Evaluation">
-<link href="Eval.html#Eval" rel="next" title="Eval">
-<link href="Quoting.html#Quoting" rel="prev" title="Quoting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Backquote</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Backquote" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Backquote" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Evaluation.html#Evaluation" rel="up" title=
+  "Evaluation" />
+  <link href="Eval.html#Eval" rel="next" title="Eval" />
+  <link href="Quoting.html#Quoting" rel="prev" title="Quoting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Backquote" id="Backquote"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Eval.html#Eval" accesskey="n" rel=
+    "next">Eval</a>, Previous: <a href="Quoting.html#Quoting"
+    accesskey="p" rel="prev">Quoting</a>, Up: <a href=
+    "Evaluation.html#Evaluation" accesskey="u" rel=
+    "up">Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Backquote-1" id="Backquote-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Backquote"></a>
-<div class="header">
-<p>
-Next: <a href="Eval.html#Eval" accesskey="n" rel="next">Eval</a>, Previous: <a href="Quoting.html#Quoting" accesskey="p" rel="prev">Quoting</a>, Up: <a href="Evaluation.html#Evaluation" accesskey="u" rel="up">Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Backquote-1"></a>
-<h3 class="section">9.4 Backquote</h3>
-<a name="index-backquote-_0028list-substitution_0029"></a>
-<a name="index-_0060-_0028list-substitution_0029"></a>
-<a name="index-_0060"></a>
+  <h3 class="section">9.4 Backquote</h3><a name=
+  "index-backquote-_0028list-substitution_0029" id=
+  "index-backquote-_0028list-substitution_0029"></a> <a name=
+  "index-_0060-_0028list-substitution_0029" id=
+  "index-_0060-_0028list-substitution_0029"></a> <a name=
+  "index-_0060" id="index-_0060"></a>
 
-<p><em>Backquote constructs</em> allow you to quote a list, but
-selectively evaluate elements of that list.  In the simplest case, it
-is identical to the special form <code>quote</code>
-(described in the previous section; see <a href="Quoting.html#Quoting">Quoting</a>).
-For example, these two forms yield identical results:
-</p>
-<div class="example">
-<pre class="example">`(a list of (+ 2 3) elements)
+  <p><em>Backquote constructs</em> allow you to quote a list, but
+  selectively evaluate elements of that list. In the simplest case,
+  it is identical to the special form <code>quote</code> (described
+  in the previous section; see <a href=
+  "Quoting.html#Quoting">Quoting</a>). For example, these two forms
+  yield identical results:</p>
+
+  <div class="example">
+    <pre class="example">
+`(a list of (+ 2 3) elements)
      &rArr; (a list of (+ 2 3) elements)
-</pre><pre class="example">'(a list of (+ 2 3) elements)
+</pre>
+    <pre class="example">
+'(a list of (+ 2 3) elements)
      &rArr; (a list of (+ 2 3) elements)
-</pre></div>
+</pre>
+  </div><a name="index-_002c-_0028with-backquote_0029" id=
+  "index-_002c-_0028with-backquote_0029"></a>
 
-<a name="index-_002c-_0028with-backquote_0029"></a>
-<p>The special marker &lsquo;<samp>,</samp>&rsquo; inside of the argument to backquote
-indicates a value that isn&rsquo;t constant.  The Emacs Lisp evaluator
-evaluates the argument of &lsquo;<samp>,</samp>&rsquo;, and puts the value in the list
-structure:
-</p>
-<div class="example">
-<pre class="example">`(a list of ,(+ 2 3) elements)
+  <p>The special marker &lsquo;<samp>,</samp>&rsquo; inside of the
+  argument to backquote indicates a value that isn&rsquo;t
+  constant. The Emacs Lisp evaluator evaluates the argument of
+  &lsquo;<samp>,</samp>&rsquo;, and puts the value in the list
+  structure:</p>
+
+  <div class="example">
+    <pre class="example">
+`(a list of ,(+ 2 3) elements)
      &rArr; (a list of 5 elements)
-</pre></div>
+</pre>
+  </div>
 
-<p>Substitution with &lsquo;<samp>,</samp>&rsquo; is allowed at deeper levels of the list
-structure also.  For example:
-</p>
-<div class="example">
-<pre class="example">`(1 2 (3 ,(+ 4 5)))
+  <p>Substitution with &lsquo;<samp>,</samp>&rsquo; is allowed at
+  deeper levels of the list structure also. For example:</p>
+
+  <div class="example">
+    <pre class="example">
+`(1 2 (3 ,(+ 4 5)))
      &rArr; (1 2 (3 9))
-</pre></div>
+</pre>
+  </div><a name="index-_002c_0040-_0028with-backquote_0029" id=
+  "index-_002c_0040-_0028with-backquote_0029"></a> <a name=
+  "index-splicing-_0028with-backquote_0029" id=
+  "index-splicing-_0028with-backquote_0029"></a>
 
-<a name="index-_002c_0040-_0028with-backquote_0029"></a>
-<a name="index-splicing-_0028with-backquote_0029"></a>
-<p>You can also <em>splice</em> an evaluated value into the resulting list,
-using the special marker &lsquo;<samp>,@</samp>&rsquo;.  The elements of the spliced list
-become elements at the same level as the other elements of the resulting
-list.  The equivalent code without using &lsquo;<samp>`</samp>&rsquo; is often unreadable.
-Here are some examples:
-</p>
-<div class="example">
-<pre class="example">(setq some-list '(2 3))
+  <p>You can also <em>splice</em> an evaluated value into the
+  resulting list, using the special marker
+  &lsquo;<samp>,@</samp>&rsquo;. The elements of the spliced list
+  become elements at the same level as the other elements of the
+  resulting list. The equivalent code without using
+  &lsquo;<samp>`</samp>&rsquo; is often unreadable. Here are some
+  examples:</p>
+
+  <div class="example">
+    <pre class="example">
+(setq some-list '(2 3))
      &rArr; (2 3)
-</pre><pre class="example">(cons 1 (append some-list '(4) some-list))
+</pre>
+    <pre class="example">
+(cons 1 (append some-list '(4) some-list))
      &rArr; (1 2 3 4 2 3)
-</pre><pre class="example">`(1 ,@some-list 4 ,@some-list)
+</pre>
+    <pre class="example">
+`(1 ,@some-list 4 ,@some-list)
      &rArr; (1 2 3 4 2 3)
-</pre><pre class="example">
-</pre><pre class="example">(setq list '(hack foo bar))
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(setq list '(hack foo bar))
      &rArr; (hack foo bar)
-</pre><pre class="example">(cons 'use
+</pre>
+    <pre class="example">
+(cons 'use
   (cons 'the
     (cons 'words (append (cdr list) '(as elements)))))
      &rArr; (use the words foo bar as elements)
-</pre><pre class="example">`(use the words ,@(cdr list) as elements)
+</pre>
+    <pre class="example">
+`(use the words ,@(cdr list) as elements)
      &rArr; (use the words foo bar as elements)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Eval.html#Eval" accesskey="n" rel="next">Eval</a>, Previous: <a href="Quoting.html#Quoting" accesskey="p" rel="prev">Quoting</a>, Up: <a href="Evaluation.html#Evaluation" accesskey="u" rel="up">Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Eval.html#Eval" accesskey="n" rel=
+    "next">Eval</a>, Previous: <a href="Quoting.html#Quoting"
+    accesskey="p" rel="prev">Quoting</a>, Up: <a href=
+    "Evaluation.html#Evaluation" accesskey="u" rel=
+    "up">Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

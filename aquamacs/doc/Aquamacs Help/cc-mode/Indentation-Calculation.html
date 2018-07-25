@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Indentation Calculation - CC Mode Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="CC Mode Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" title="Indentation Engine Basics">
-<link rel="prev" href="Syntactic-Symbols.html#Syntactic-Symbols" title="Syntactic Symbols">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Indentation Calculation - CC Mode Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="CC Mode Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Indentation-Engine-Basics.html#Indentation-Engine-Basics" title=
+  "Indentation Engine Basics" />
+  <link rel="prev" href="Syntactic-Symbols.html#Syntactic-Symbols"
+  title="Syntactic Symbols" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
@@ -27,8 +36,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,68 +49,85 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Indentation-Calculation"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation Engine Basics</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Indentation-Calculation" id=
+    "Indentation-Calculation"></a>
 
-<!-- node-name, next, previous, up -->
-<h3 class="section">10.3 Indentation Calculation</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Syntactic-Symbols.html#Syntactic-Symbols">Syntactic
+    Symbols</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation
+    Engine Basics</a></p>
+    <hr />
+  </div><!-- node-name, next, previous, up -->
 
-<p><a name="index-indentation-479"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+  <h3 class="section">10.3 Indentation Calculation</h3>
 
-   <p>Indentation for a line is calculated from the syntactic context
-(see <a href="Syntactic-Analysis.html#Syntactic-Analysis">Syntactic Analysis</a>).
+  <p><a name="index-indentation-479" id=
+  "index-indentation-479"></a><!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --></p>
 
-   <p>First, a buffer position is found whose column will be the base for the
-indentation calculation.  It's the anchor position in the first
-syntactic element that provides one that is used.  If no syntactic
-element has an anchor position then column zero is used.
+  <p>Indentation for a line is calculated from the syntactic
+  context (see <a href=
+  "Syntactic-Analysis.html#Syntactic-Analysis">Syntactic
+  Analysis</a>).</p>
 
-   <p>Second, the syntactic symbols in each syntactic element are looked up
-in the <code>c-offsets-alist</code> style variable
-(see <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>), which is an association list of syntactic
-symbols and the offsets to apply for those symbols.  These offsets are
-added together with the base column to produce the new indentation
-column.
+  <p>First, a buffer position is found whose column will be the
+  base for the indentation calculation. It's the anchor position in
+  the first syntactic element that provides one that is used. If no
+  syntactic element has an anchor position then column zero is
+  used.</p>
 
-   <p>Let's use our two code examples above to see how this works.  Here is
-our first example again:
+  <p>Second, the syntactic symbols in each syntactic element are
+  looked up in the <code>c-offsets-alist</code> style variable (see
+  <a href=
+  "c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>),
+  which is an association list of syntactic symbols and the offsets
+  to apply for those symbols. These offsets are added together with
+  the base column to produce the new indentation column.</p>
 
-<pre class="example">      1: void swap( int&amp; a, int&amp; b )
+  <p>Let's use our two code examples above to see how this works.
+  Here is our first example again:</p>
+  <pre class="example">
+      1: void swap( int&amp; a, int&amp; b )
       2: {
       3:     int tmp = a;
       4:     a = b;
       5:     b = tmp;
       6: }
 </pre>
-   <p>Let's say point is on line 3 and we hit the &lt;TAB&gt; key to reindent
-the line.  The syntactic context for that line is:
 
-<pre class="example">     ((defun-block-intro 29))
+  <p>Let's say point is on line 3 and we hit the &lt;TAB&gt; key to
+  reindent the line. The syntactic context for that line is:</p>
+  <pre class="example">
+     ((defun-block-intro 29))
 </pre>
-   <p class="noindent">Since buffer position 29 is the first and only anchor position in the
-list, CC Mode goes there and asks for the current column.  This brace
-is in column zero, so CC Mode uses &lsquo;<samp><span class="samp">0</span></samp>&rsquo; as the base column.
 
-   <p>Next, CC Mode looks up <code>defun-block-intro</code> in the
-<code>c-offsets-alist</code> style variable.  Let's say it finds the value
-&lsquo;<samp><span class="samp">4</span></samp>&rsquo;; it adds this to the base column &lsquo;<samp><span class="samp">0</span></samp>&rsquo;, yielding a running
-total indentation of 4 spaces.
+  <p class="noindent">Since buffer position 29 is the first and
+  only anchor position in the list, CC Mode goes there and asks for
+  the current column. This brace is in column zero, so CC Mode uses
+  &lsquo;<samp><span class="samp">0</span></samp>&rsquo; as the
+  base column.</p>
 
-   <p>Since there is only one syntactic element on the list for this line,
-indentation calculation is complete, and the total indentation for the
-line is 4 spaces.
+  <p>Next, CC Mode looks up <code>defun-block-intro</code> in the
+  <code>c-offsets-alist</code> style variable. Let's say it finds
+  the value &lsquo;<samp><span class="samp">4</span></samp>&rsquo;;
+  it adds this to the base column &lsquo;<samp><span class=
+  "samp">0</span></samp>&rsquo;, yielding a running total
+  indentation of 4 spaces.</p>
 
-   <p>Here's another example:
+  <p>Since there is only one syntactic element on the list for this
+  line, indentation calculation is complete, and the total
+  indentation for the line is 4 spaces.</p>
 
-<pre class="example">      1: int add( int val, int incr, int doit )
+  <p>Here's another example:</p>
+  <pre class="example">
+      1: int add( int val, int incr, int doit )
       2: {
       3:     if( doit )
       4:         {
@@ -108,34 +136,44 @@ line is 4 spaces.
       7:     return( val );
       8: }
 </pre>
-   <p>If we were to hit <kbd>TAB</kbd> on line 4 in the above example, the same
-basic process is performed, despite the differences in the syntactic
-context.  The context for this line is:
 
-<pre class="example">     ((substatement-open 46))
+  <p>If we were to hit <kbd>TAB</kbd> on line 4 in the above
+  example, the same basic process is performed, despite the
+  differences in the syntactic context. The context for this line
+  is:</p>
+  <pre class="example">
+     ((substatement-open 46))
 </pre>
-   <p>Here, CC Mode goes to buffer position 46, which is the &lsquo;<samp><span class="samp">i</span></samp>&rsquo; in
-<code>if</code> on line 3.  This character is in the fourth column on that
-line so the base column is &lsquo;<samp><span class="samp">4</span></samp>&rsquo;.  Then CC Mode looks up the
-<code>substatement-open</code> symbol in <code>c-offsets-alist</code>.  Let's say it
-finds the value &lsquo;<samp><span class="samp">4</span></samp>&rsquo;.  It's added with the base column and yields an
-indentation for the line of 8 spaces.
 
-   <p>Simple, huh?
+  <p>Here, CC Mode goes to buffer position 46, which is the
+  &lsquo;<samp><span class="samp">i</span></samp>&rsquo; in
+  <code>if</code> on line 3. This character is in the fourth column
+  on that line so the base column is &lsquo;<samp><span class=
+  "samp">4</span></samp>&rsquo;. Then CC Mode looks up the
+  <code>substatement-open</code> symbol in
+  <code>c-offsets-alist</code>. Let's say it finds the value
+  &lsquo;<samp><span class="samp">4</span></samp>&rsquo;. It's
+  added with the base column and yields an indentation for the line
+  of 8 spaces.</p>
 
-   <p>Actually, it's a bit more complicated than that since the entries on
-<code>c-offsets-alist</code> can be much more than plain offsets. 
-See <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>, for the full story.
+  <p>Simple, huh?</p>
 
-   <p>Anyway, the mode usually just does The Right Thing without you having to
-think about it in this much detail.  But when customizing indentation,
-it's helpful to understand the general indentation model being used.
+  <p>Actually, it's a bit more complicated than that since the
+  entries on <code>c-offsets-alist</code> can be much more than
+  plain offsets. See <a href=
+  "c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>,
+  for the full story.</p>
 
-   <p>As you configure CC Mode, you might want to set the variable
-<code>c-echo-syntactic-information-p</code> to non-<code>nil</code> so that the
-syntactic context and calculated offset always is echoed in the
-minibuffer when you hit <kbd>TAB</kbd>.
+  <p>Anyway, the mode usually just does The Right Thing without you
+  having to think about it in this much detail. But when
+  customizing indentation, it's helpful to understand the general
+  indentation model being used.</p>
 
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-   </body></html>
-
+  <p>As you configure CC Mode, you might want to set the variable
+  <code>c-echo-syntactic-information-p</code> to
+  non-<code>nil</code> so that the syntactic context and calculated
+  offset always is echoed in the minibuffer when you hit
+  <kbd>TAB</kbd>. 
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --></p>
+</body>
+</html>

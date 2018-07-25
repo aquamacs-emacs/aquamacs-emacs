@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,117 +19,167 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: The Region</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: The Region">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: The Region">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Markers.html#Markers" rel="up" title="Markers">
-<link href="Text.html#Text" rel="next" title="Text">
-<link href="The-Mark.html#The-Mark" rel="prev" title="The Mark">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: The Region</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: The Region" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: The Region" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Markers.html#Markers" rel="up" title="Markers" />
+  <link href="Text.html#Text" rel="next" title="Text" />
+  <link href="The-Mark.html#The-Mark" rel="prev" title=
+  "The Mark" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="The-Region" id="The-Region"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="The-Mark.html#The-Mark" accesskey="p"
+    rel="prev">The Mark</a>, Up: <a href="Markers.html#Markers"
+    accesskey="u" rel="up">Markers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Region-1" id="The-Region-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-Region"></a>
-<div class="header">
-<p>
-Previous: <a href="The-Mark.html#The-Mark" accesskey="p" rel="prev">The Mark</a>, Up: <a href="Markers.html#Markers" accesskey="u" rel="up">Markers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Region-1"></a>
-<h3 class="section">30.8 The Region</h3>
-<a name="index-region"></a>
+  <h3 class="section">30.8 The Region</h3><a name="index-region"
+  id="index-region"></a>
 
-<p>The text between point and the mark is known as <em>the region</em>.
-Various functions operate on text delimited by point and the mark, but
-only those functions specifically related to the region itself are
-described here.
-</p>
-<p>The next two functions signal an error if the mark does not point
-anywhere.  If Transient Mark mode is enabled and
-<code>mark-even-if-inactive</code> is <code>nil</code>, they also signal an error
-if the mark is inactive.
-</p>
-<dl>
-<dt><a name="index-region_002dbeginning"></a>Function: <strong>region-beginning</strong></dt>
-<dd><p>This function returns the position of the beginning of the region (as
-an integer).  This is the position of either point or the mark,
-whichever is smaller.
-</p></dd></dl>
+  <p>The text between point and the mark is known as <em>the
+  region</em>. Various functions operate on text delimited by point
+  and the mark, but only those functions specifically related to
+  the region itself are described here.</p>
 
-<dl>
-<dt><a name="index-region_002dend"></a>Function: <strong>region-end</strong></dt>
-<dd><p>This function returns the position of the end of the region (as an
-integer).  This is the position of either point or the mark, whichever is
-larger.
-</p></dd></dl>
+  <p>The next two functions signal an error if the mark does not
+  point anywhere. If Transient Mark mode is enabled and
+  <code>mark-even-if-inactive</code> is <code>nil</code>, they also
+  signal an error if the mark is inactive.</p>
 
-<p>Instead of using <code>region-beginning</code> and <code>region-end</code>, a
-command designed to operate on a region should normally use
-<code>interactive</code> with the &lsquo;<samp>r</samp>&rsquo; specification to find the
-beginning and end of the region.  This lets other Lisp programs
-specify the bounds explicitly as arguments.  See <a href="Interactive-Codes.html#Interactive-Codes">Interactive Codes</a>.
-</p>
-<dl>
-<dt><a name="index-use_002dregion_002dp"></a>Function: <strong>use-region-p</strong></dt>
-<dd><p>This function returns <code>t</code> if Transient Mark mode is enabled, the
-mark is active, and there is a valid region in the buffer.  This
-function is intended to be used by commands that operate on the
-region, instead of on text near point, when the mark is active.
-</p>
-<a name="index-empty-region"></a>
-<a name="index-use_002dempty_002dactive_002dregion"></a>
-<p>A region is valid if it has a non-zero size, or if the user option
-<code>use-empty-active-region</code> is non-<code>nil</code> (by default, it is
-<code>nil</code>).  The function <code>region-active-p</code> is similar to
-<code>use-region-p</code>, but considers all regions as valid.  In most
-cases, you should not use <code>region-active-p</code>, since if the region
-is empty it is often more appropriate to operate on point.
-</p></dd></dl>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="The-Mark.html#The-Mark" accesskey="p" rel="prev">The Mark</a>, Up: <a href="Markers.html#Markers" accesskey="u" rel="up">Markers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-region_002dbeginning" id=
+    "index-region_002dbeginning"></a>Function:
+    <strong>region-beginning</strong></dt>
 
+    <dd>
+      <p>This function returns the position of the beginning of the
+      region (as an integer). This is the position of either point
+      or the mark, whichever is smaller.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-region_002dend" id=
+    "index-region_002dend"></a>Function:
+    <strong>region-end</strong></dt>
 
+    <dd>
+      <p>This function returns the position of the end of the
+      region (as an integer). This is the position of either point
+      or the mark, whichever is larger.</p>
+    </dd>
+  </dl>
+
+  <p>Instead of using <code>region-beginning</code> and
+  <code>region-end</code>, a command designed to operate on a
+  region should normally use <code>interactive</code> with the
+  &lsquo;<samp>r</samp>&rsquo; specification to find the beginning
+  and end of the region. This lets other Lisp programs specify the
+  bounds explicitly as arguments. See <a href=
+  "Interactive-Codes.html#Interactive-Codes">Interactive
+  Codes</a>.</p>
+
+  <dl>
+    <dt><a name="index-use_002dregion_002dp" id=
+    "index-use_002dregion_002dp"></a>Function:
+    <strong>use-region-p</strong></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if Transient Mark
+      mode is enabled, the mark is active, and there is a valid
+      region in the buffer. This function is intended to be used by
+      commands that operate on the region, instead of on text near
+      point, when the mark is active.</p><a name=
+      "index-empty-region" id="index-empty-region"></a> <a name=
+      "index-use_002dempty_002dactive_002dregion" id=
+      "index-use_002dempty_002dactive_002dregion"></a>
+
+      <p>A region is valid if it has a non-zero size, or if the
+      user option <code>use-empty-active-region</code> is
+      non-<code>nil</code> (by default, it is <code>nil</code>).
+      The function <code>region-active-p</code> is similar to
+      <code>use-region-p</code>, but considers all regions as
+      valid. In most cases, you should not use
+      <code>region-active-p</code>, since if the region is empty it
+      is often more appropriate to operate on point.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="The-Mark.html#The-Mark" accesskey="p"
+    rel="prev">The Mark</a>, Up: <a href="Markers.html#Markers"
+    accesskey="u" rel="up">Markers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,106 +29,168 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: Working with unprintable characters</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: Working with unprintable characters">
-<meta name="keywords" content="GNU Emacs FAQ: Working with unprintable characters">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Common-requests.html#Common-requests" rel="up" title="Common requests">
-<link href="Searching-for_002freplacing-newlines.html#Searching-for_002freplacing-newlines" rel="next" title="Searching for/replacing newlines">
-<link href="Controlling-case-sensitivity.html#Controlling-case-sensitivity" rel="prev" title="Controlling case sensitivity">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: Working with unprintable characters</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: Working with unprintable characters" />
+  <meta name="keywords" content=
+  "GNU Emacs FAQ: Working with unprintable characters" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Common-requests.html#Common-requests" rel="up" title=
+  "Common requests" />
+  <link href=
+  "Searching-for_002freplacing-newlines.html#Searching-for_002freplacing-newlines"
+  rel="next" title="Searching for/replacing newlines" />
+  <link href=
+  "Controlling-case-sensitivity.html#Controlling-case-sensitivity"
+  rel="prev" title="Controlling case sensitivity" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Working-with-unprintable-characters"></a>
-<div class="header">
-<p>
-Next: <a href="Searching-for_002freplacing-newlines.html#Searching-for_002freplacing-newlines" accesskey="n" rel="next">Searching for/replacing newlines</a>, Previous: <a href="Controlling-case-sensitivity.html#Controlling-case-sensitivity" accesskey="p" rel="prev">Controlling case sensitivity</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-do-I-search-for_002c-delete_002c-or-replace-unprintable-_0028eight_002dbit-or-control_0029-characters_003f"></a>
-<h3 class="section">5.12 How do I search for, delete, or replace unprintable (eight-bit or control) characters?</h3>
-<a name="index-Unprintable-characters_002c-working-with"></a>
-<a name="index-Working-with-unprintable-characters"></a>
-<a name="index-Control-characters_002c-working-with"></a>
-<a name="index-Eight_002dbit-characters_002c-working-with"></a>
-<a name="index-Searching-for-unprintable-characters"></a>
-<a name="index-Regexps-and-unprintable-characters"></a>
+<body lang="en" xml:lang="en">
+  <a name="Working-with-unprintable-characters" id=
+  "Working-with-unprintable-characters"></a>
 
-<p>To search for a single character that appears in the buffer as, for
-example, &lsquo;<samp>\237</samp>&rsquo;, you can type <kbd>C-s C-q 2 3 7</kbd>.
-Searching for <strong>all</strong> unprintable characters is best done with a
-regular expression (<em>regexp</em>) search.  The easiest regexp to use for
-the unprintable chars is the complement of the regexp for the printable
-chars.
-</p>
-<ul>
-<li> Regexp for the printable chars: &lsquo;<samp>[\t\n\r\f -~]</samp>&rsquo;
+  <div class="header">
+    <p>Next: <a href=
+    "Searching-for_002freplacing-newlines.html#Searching-for_002freplacing-newlines"
+    accesskey="n" rel="next">Searching for/replacing newlines</a>,
+    Previous: <a href=
+    "Controlling-case-sensitivity.html#Controlling-case-sensitivity"
+    accesskey="p" rel="prev">Controlling case sensitivity</a>, Up:
+    <a href="Common-requests.html#Common-requests" accesskey="u"
+    rel="up">Common requests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name=
+  "How-do-I-search-for_002c-delete_002c-or-replace-unprintable-_0028eight_002dbit-or-control_0029-characters_003f"
+  id=
+  "How-do-I-search-for_002c-delete_002c-or-replace-unprintable-_0028eight_002dbit-or-control_0029-characters_003f"></a>
 
-</li><li> Regexp for the unprintable chars: &lsquo;<samp>[^\t\n\r\f -~]</samp>&rsquo;
+  <h3 class="section">5.12 How do I search for, delete, or replace
+  unprintable (eight-bit or control) characters?</h3><a name=
+  "index-Unprintable-characters_002c-working-with" id=
+  "index-Unprintable-characters_002c-working-with"></a> <a name=
+  "index-Working-with-unprintable-characters" id=
+  "index-Working-with-unprintable-characters"></a> <a name=
+  "index-Control-characters_002c-working-with" id=
+  "index-Control-characters_002c-working-with"></a> <a name=
+  "index-Eight_002dbit-characters_002c-working-with" id=
+  "index-Eight_002dbit-characters_002c-working-with"></a> <a name=
+  "index-Searching-for-unprintable-characters" id=
+  "index-Searching-for-unprintable-characters"></a> <a name=
+  "index-Regexps-and-unprintable-characters" id=
+  "index-Regexps-and-unprintable-characters"></a>
 
-</li></ul>
+  <p>To search for a single character that appears in the buffer
+  as, for example, &lsquo;<samp>\237</samp>&rsquo;, you can type
+  <kbd>C-s C-q 2 3 7</kbd>. Searching for <strong>all</strong>
+  unprintable characters is best done with a regular expression
+  (<em>regexp</em>) search. The easiest regexp to use for the
+  unprintable chars is the complement of the regexp for the
+  printable chars.</p>
 
-<p>To type these special characters in an interactive argument to
-<code>isearch-forward-regexp</code> or <code>re-search-forward</code>, you need to
-use <kbd>C-q</kbd>.  (&lsquo;<samp>\t</samp>&rsquo;, &lsquo;<samp>\n</samp>&rsquo;, &lsquo;<samp>\r</samp>&rsquo;, and &lsquo;<samp>\f</samp>&rsquo; stand
-respectively for <tt class="key">TAB</tt>, <tt class="key">LFD</tt>, <tt class="key">RET</tt>, and <kbd>C-l</kbd>.)  So,
-to search for unprintable characters using <code>re-search-forward</code>:
-</p>
-<p><kbd>M-x re-search-forward <span class="key">RET</span> [^ <span class="key">TAB</span> C-q <span class="key">LFD</span> C-q <span class="key">RET</span> C-q C-l <span class="key">SPC</span> -~] <span class="key">RET</span></kbd>
-</p>
-<p>Using <code>isearch-forward-regexp</code>:
-</p>
-<p><kbd>C-M-s [^ <span class="key">TAB</span> <span class="key">LFD</span> C-q <span class="key">RET</span> C-q C-l <span class="key">SPC</span> -~]</kbd>
-</p>
-<p>To delete all unprintable characters, simply use replace-regexp:
-</p>
-<p><kbd>M-x replace-regexp <span class="key">RET</span> [^ <span class="key">TAB</span> C-q <span class="key">LFD</span> C-q <span class="key">RET</span> C-q C-l <span class="key">SPC</span> -~] <span class="key">RET</span> <span class="key">RET</span></kbd>
-</p>
-<p>Replacing is similar to the above.  To replace all unprintable
-characters with a colon, use:
-</p>
-<p>M-x replace-regexp <tt class="key">RET</tt> [^ <tt class="key">TAB</tt> C-q <tt class="key">LFD</tt> C-q <tt class="key">RET</tt> C-q C-l <tt class="key">SPC</tt> -~] <tt class="key">RET</tt> : <tt class="key">RET</tt>
-</p>
+  <ul>
+    <li>Regexp for the printable chars: &lsquo;<samp>[\t\n\r\f
+    -~]</samp>&rsquo;</li>
 
+    <li>Regexp for the unprintable chars: &lsquo;<samp>[^\t\n\r\f
+    -~]</samp>&rsquo;</li>
+  </ul>
 
+  <p>To type these special characters in an interactive argument to
+  <code>isearch-forward-regexp</code> or
+  <code>re-search-forward</code>, you need to use <kbd>C-q</kbd>.
+  (&lsquo;<samp>\t</samp>&rsquo;, &lsquo;<samp>\n</samp>&rsquo;,
+  &lsquo;<samp>\r</samp>&rsquo;, and &lsquo;<samp>\f</samp>&rsquo;
+  stand respectively for <tt class="key">TAB</tt>, <tt class=
+  "key">LFD</tt>, <tt class="key">RET</tt>, and <kbd>C-l</kbd>.)
+  So, to search for unprintable characters using
+  <code>re-search-forward</code>:</p>
 
+  <p><kbd>M-x re-search-forward <span class="key">RET</span> [^
+  <span class="key">TAB</span> C-q <span class="key">LFD</span> C-q
+  <span class="key">RET</span> C-q C-l <span class="key">SPC</span>
+  -~] <span class="key">RET</span></kbd></p>
+
+  <p>Using <code>isearch-forward-regexp</code>:</p>
+
+  <p><kbd>C-M-s [^ <span class="key">TAB</span> <span class=
+  "key">LFD</span> C-q <span class="key">RET</span> C-q C-l
+  <span class="key">SPC</span> -~]</kbd></p>
+
+  <p>To delete all unprintable characters, simply use
+  replace-regexp:</p>
+
+  <p><kbd>M-x replace-regexp <span class="key">RET</span> [^
+  <span class="key">TAB</span> C-q <span class="key">LFD</span> C-q
+  <span class="key">RET</span> C-q C-l <span class="key">SPC</span>
+  -~] <span class="key">RET</span> <span class=
+  "key">RET</span></kbd></p>
+
+  <p>Replacing is similar to the above. To replace all unprintable
+  characters with a colon, use:</p>
+
+  <p>M-x replace-regexp <tt class="key">RET</tt> [^ <tt class=
+  "key">TAB</tt> C-q <tt class="key">LFD</tt> C-q <tt class=
+  "key">RET</tt> C-q C-l <tt class="key">SPC</tt> -~] <tt class=
+  "key">RET</tt> : <tt class="key">RET</tt></p>
 </body>
 </html>

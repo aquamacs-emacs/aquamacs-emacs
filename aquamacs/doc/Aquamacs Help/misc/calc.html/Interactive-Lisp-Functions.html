@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,133 +18,220 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Interactive Lisp Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Interactive Lisp Functions">
-<meta name="keywords" content="GNU Emacs Calc Manual: Interactive Lisp Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Internals.html#Internals" rel="up" title="Internals">
-<link href="Stack-Lisp-Functions.html#Stack-Lisp-Functions" rel="next" title="Stack Lisp Functions">
-<link href="Data-Type-Formats.html#Data-Type-Formats" rel="prev" title="Data Type Formats">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Interactive Lisp Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Interactive Lisp Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Interactive Lisp Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Internals.html#Internals" rel="up" title=
+  "Internals" />
+  <link href="Stack-Lisp-Functions.html#Stack-Lisp-Functions" rel=
+  "next" title="Stack Lisp Functions" />
+  <link href="Data-Type-Formats.html#Data-Type-Formats" rel="prev"
+  title="Data Type Formats" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Interactive-Lisp-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Stack-Lisp-Functions.html#Stack-Lisp-Functions" accesskey="n" rel="next">Stack Lisp Functions</a>, Previous: <a href="Data-Type-Formats.html#Data-Type-Formats" accesskey="p" rel="prev">Data Type Formats</a>, Up: <a href="Internals.html#Internals" accesskey="u" rel="up">Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Interactive-Functions"></a>
-<h4 class="subsubsection">17.5.7.2 Interactive Functions</h4>
+<body lang="en" xml:lang="en">
+  <a name="Interactive-Lisp-Functions" id=
+  "Interactive-Lisp-Functions"></a>
 
-<p>The functions described here are used in implementing interactive Calc
-commands.  Note that this list is not exhaustive!  If there is an
-existing command that behaves similarly to the one you want to define,
-you may find helpful tricks by checking the source code for that command.
-</p>
-<dl>
-<dt><a name="index-calc_002dset_002dcommand_002dflag-1"></a>Function: <strong>calc-set-command-flag</strong> <em>flag</em></dt>
-<dd><p>Set the command flag <var>flag</var>.  This is generally a Lisp symbol, but
-may in fact be anything.  The effect is to add <var>flag</var> to the list
-stored in the variable <code>calc-command-flags</code>, unless it is already
-there.  See <a href="Defining-Simple-Commands.html#Defining-Simple-Commands">Defining Simple Commands</a>.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Stack-Lisp-Functions.html#Stack-Lisp-Functions" accesskey="n"
+    rel="next">Stack Lisp Functions</a>, Previous: <a href=
+    "Data-Type-Formats.html#Data-Type-Formats" accesskey="p" rel=
+    "prev">Data Type Formats</a>, Up: <a href=
+    "Internals.html#Internals" accesskey="u" rel="up">Internals</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Interactive-Functions" id="Interactive-Functions"></a>
 
-<dl>
-<dt><a name="index-calc_002dclear_002dcommand_002dflag"></a>Function: <strong>calc-clear-command-flag</strong> <em>flag</em></dt>
-<dd><p>If <var>flag</var> appears among the list of currently-set command flags,
-remove it from that list.
-</p></dd></dl>
+  <h4 class="subsubsection">17.5.7.2 Interactive Functions</h4>
 
-<dl>
-<dt><a name="index-calc_002drecord_002dundo"></a>Function: <strong>calc-record-undo</strong> <em>rec</em></dt>
-<dd><p>Add the &ldquo;undo record&rdquo; <var>rec</var> to the list of steps to take if the
-current operation should need to be undone.  Stack push and pop functions
-automatically call <code>calc-record-undo</code>, so the kinds of undo records
-you might need to create take the form &lsquo;<samp>(set <var>sym</var> <var>value</var>)</samp>&rsquo;,
-which says that the Lisp variable <var>sym</var> was changed and had previously
-contained <var>value</var>; &lsquo;<samp>(store <var>var</var> <var>value</var>)</samp>&rsquo; which says that
-the Calc variable <var>var</var> (a string which is the name of the symbol that
-contains the variable&rsquo;s value) was stored and its previous value was
-<var>value</var> (either a Calc data object, or <code>nil</code> if the variable was
-previously void); or &lsquo;<samp>(eval <var>undo</var> <var>redo</var> <var>args</var> &hellip;)</samp>&rsquo;,
-which means that to undo requires calling the function &lsquo;<samp>(<var>undo</var>
-<var>args</var> &hellip;)</samp>&rsquo; and, if the undo is later redone, calling
-&lsquo;<samp>(<var>redo</var> <var>args</var> &hellip;)</samp>&rsquo;.
-</p></dd></dl>
+  <p>The functions described here are used in implementing
+  interactive Calc commands. Note that this list is not exhaustive!
+  If there is an existing command that behaves similarly to the one
+  you want to define, you may find helpful tricks by checking the
+  source code for that command.</p>
 
-<dl>
-<dt><a name="index-calc_002drecord_002dwhy"></a>Function: <strong>calc-record-why</strong> <em>msg args</em></dt>
-<dd><p>Record the error or warning message <var>msg</var>, which is normally a string.
-This message will be replayed if the user types <kbd>w</kbd> (<code>calc-why</code>);
-if the message string begins with a &lsquo;<samp>*</samp>&rsquo;, it is considered important
-enough to display even if the user doesn&rsquo;t type <kbd>w</kbd>.  If one or more
-<var>args</var> are present, the displayed message will be of the form,
-&lsquo;<samp><var>msg</var>: <var>arg1</var>, <var>arg2</var>, &hellip;</samp>&rsquo;, where the arguments are
-formatted on the assumption that they are either strings or Calc objects of
-some sort.  If <var>msg</var> is a symbol, it is the name of a Calc predicate
-(such as <code>integerp</code> or <code>numvecp</code>) which the arguments did not
-satisfy; it is expanded to a suitable string such as &ldquo;Expected an
-integer.&rdquo;  The <code>reject-arg</code> function calls <code>calc-record-why</code>
-automatically; see <a href="Predicates.html#Predicates">Predicates</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-calc_002dset_002dcommand_002dflag-1" id=
+    "index-calc_002dset_002dcommand_002dflag-1"></a>Function:
+    <strong>calc-set-command-flag</strong> <em>flag</em></dt>
 
-<dl>
-<dt><a name="index-calc_002dis_002dinverse"></a>Function: <strong>calc-is-inverse</strong></dt>
-<dd><p>This predicate returns true if the current command is inverse,
-i.e., if the Inverse (<kbd>I</kbd> key) flag was set.
-</p></dd></dl>
+    <dd>
+      <p>Set the command flag <var>flag</var>. This is generally a
+      Lisp symbol, but may in fact be anything. The effect is to
+      add <var>flag</var> to the list stored in the variable
+      <code>calc-command-flags</code>, unless it is already there.
+      See <a href=
+      "Defining-Simple-Commands.html#Defining-Simple-Commands">Defining
+      Simple Commands</a>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-calc_002dis_002dhyperbolic"></a>Function: <strong>calc-is-hyperbolic</strong></dt>
-<dd><p>This predicate is the analogous function for the <kbd>H</kbd> key.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-calc_002dclear_002dcommand_002dflag" id=
+    "index-calc_002dclear_002dcommand_002dflag"></a>Function:
+    <strong>calc-clear-command-flag</strong> <em>flag</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Stack-Lisp-Functions.html#Stack-Lisp-Functions" accesskey="n" rel="next">Stack Lisp Functions</a>, Previous: <a href="Data-Type-Formats.html#Data-Type-Formats" accesskey="p" rel="prev">Data Type Formats</a>, Up: <a href="Internals.html#Internals" accesskey="u" rel="up">Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>If <var>flag</var> appears among the list of currently-set
+      command flags, remove it from that list.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-calc_002drecord_002dundo" id=
+    "index-calc_002drecord_002dundo"></a>Function:
+    <strong>calc-record-undo</strong> <em>rec</em></dt>
 
+    <dd>
+      <p>Add the &ldquo;undo record&rdquo; <var>rec</var> to the
+      list of steps to take if the current operation should need to
+      be undone. Stack push and pop functions automatically call
+      <code>calc-record-undo</code>, so the kinds of undo records
+      you might need to create take the form &lsquo;<samp>(set
+      <var>sym</var> <var>value</var>)</samp>&rsquo;, which says
+      that the Lisp variable <var>sym</var> was changed and had
+      previously contained <var>value</var>; &lsquo;<samp>(store
+      <var>var</var> <var>value</var>)</samp>&rsquo; which says
+      that the Calc variable <var>var</var> (a string which is the
+      name of the symbol that contains the variable&rsquo;s value)
+      was stored and its previous value was <var>value</var>
+      (either a Calc data object, or <code>nil</code> if the
+      variable was previously void); or &lsquo;<samp>(eval
+      <var>undo</var> <var>redo</var> <var>args</var>
+      &hellip;)</samp>&rsquo;, which means that to undo requires
+      calling the function &lsquo;<samp>(<var>undo</var>
+      <var>args</var> &hellip;)</samp>&rsquo; and, if the undo is
+      later redone, calling &lsquo;<samp>(<var>redo</var>
+      <var>args</var> &hellip;)</samp>&rsquo;.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-calc_002drecord_002dwhy" id=
+    "index-calc_002drecord_002dwhy"></a>Function:
+    <strong>calc-record-why</strong> <em>msg args</em></dt>
+
+    <dd>
+      <p>Record the error or warning message <var>msg</var>, which
+      is normally a string. This message will be replayed if the
+      user types <kbd>w</kbd> (<code>calc-why</code>); if the
+      message string begins with a &lsquo;<samp>*</samp>&rsquo;, it
+      is considered important enough to display even if the user
+      doesn&rsquo;t type <kbd>w</kbd>. If one or more
+      <var>args</var> are present, the displayed message will be of
+      the form, &lsquo;<samp><var>msg</var>: <var>arg1</var>,
+      <var>arg2</var>, &hellip;</samp>&rsquo;, where the arguments
+      are formatted on the assumption that they are either strings
+      or Calc objects of some sort. If <var>msg</var> is a symbol,
+      it is the name of a Calc predicate (such as
+      <code>integerp</code> or <code>numvecp</code>) which the
+      arguments did not satisfy; it is expanded to a suitable
+      string such as &ldquo;Expected an integer.&rdquo; The
+      <code>reject-arg</code> function calls
+      <code>calc-record-why</code> automatically; see <a href=
+      "Predicates.html#Predicates">Predicates</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-calc_002dis_002dinverse" id=
+    "index-calc_002dis_002dinverse"></a>Function:
+    <strong>calc-is-inverse</strong></dt>
+
+    <dd>
+      <p>This predicate returns true if the current command is
+      inverse, i.e., if the Inverse (<kbd>I</kbd> key) flag was
+      set.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-calc_002dis_002dhyperbolic" id=
+    "index-calc_002dis_002dhyperbolic"></a>Function:
+    <strong>calc-is-hyperbolic</strong></dt>
+
+    <dd>
+      <p>This predicate is the analogous function for the
+      <kbd>H</kbd> key.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Stack-Lisp-Functions.html#Stack-Lisp-Functions" accesskey="n"
+    rel="next">Stack Lisp Functions</a>, Previous: <a href=
+    "Data-Type-Formats.html#Data-Type-Formats" accesskey="p" rel=
+    "prev">Data Type Formats</a>, Up: <a href=
+    "Internals.html#Internals" accesskey="u" rel="up">Internals</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

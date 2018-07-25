@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,164 +19,262 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Default Value</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Default Value">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Default Value">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" rel="up" title="Buffer-Local Variables">
-<link href="File-Local-Variables.html#File-Local-Variables" rel="next" title="File Local Variables">
-<link href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal" rel="prev" title="Creating Buffer-Local">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Default Value</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Default Value" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Default Value" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" rel=
+  "up" title="Buffer-Local Variables" />
+  <link href="File-Local-Variables.html#File-Local-Variables" rel=
+  "next" title="File Local Variables" />
+  <link href=
+  "Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal" rel=
+  "prev" title="Creating Buffer-Local" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Default-Value" id="Default-Value"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal"
+    accesskey="p" rel="prev">Creating Buffer-Local</a>, Up:
+    <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables"
+    accesskey="u" rel="up">Buffer-Local Variables</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Default-Value-of-a-Buffer_002dLocal-Variable" id=
+  "The-Default-Value-of-a-Buffer_002dLocal-Variable"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Default-Value"></a>
-<div class="header">
-<p>
-Previous: <a href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal" accesskey="p" rel="prev">Creating Buffer-Local</a>, Up: <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" accesskey="u" rel="up">Buffer-Local Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Default-Value-of-a-Buffer_002dLocal-Variable"></a>
-<h4 class="subsection">11.10.3 The Default Value of a Buffer-Local Variable</h4>
-<a name="index-default-value"></a>
+  <h4 class="subsection">11.10.3 The Default Value of a
+  Buffer-Local Variable</h4><a name="index-default-value" id=
+  "index-default-value"></a>
 
-<p>The global value of a variable with buffer-local bindings is also
-called the <em>default</em> value, because it is the value that is in
-effect whenever neither the current buffer nor the selected frame has
-its own binding for the variable.
-</p>
-<p>The functions <code>default-value</code> and <code>setq-default</code> access and
-change a variable&rsquo;s default value regardless of whether the current
-buffer has a buffer-local binding.  For example, you could use
-<code>setq-default</code> to change the default setting of
-<code>paragraph-start</code> for most buffers; and this would work even when
-you are in a C or Lisp mode buffer that has a buffer-local value for
-this variable.
-</p>
-<p>The special forms <code>defvar</code> and <code>defconst</code> also set the
-default value (if they set the variable at all), rather than any
-buffer-local value.
-</p>
-<dl>
-<dt><a name="index-default_002dvalue"></a>Function: <strong>default-value</strong> <em>symbol</em></dt>
-<dd><p>This function returns <var>symbol</var>&rsquo;s default value.  This is the value
-that is seen in buffers and frames that do not have their own values for
-this variable.  If <var>symbol</var> is not buffer-local, this is equivalent
-to <code>symbol-value</code> (see <a href="Accessing-Variables.html#Accessing-Variables">Accessing Variables</a>).
-</p></dd></dl>
+  <p>The global value of a variable with buffer-local bindings is
+  also called the <em>default</em> value, because it is the value
+  that is in effect whenever neither the current buffer nor the
+  selected frame has its own binding for the variable.</p>
 
-<dl>
-<dt><a name="index-default_002dboundp"></a>Function: <strong>default-boundp</strong> <em>symbol</em></dt>
-<dd><p>The function <code>default-boundp</code> tells you whether <var>symbol</var>&rsquo;s
-default value is nonvoid.  If <code>(default-boundp 'foo)</code> returns
-<code>nil</code>, then <code>(default-value 'foo)</code> would get an error.
-</p>
-<p><code>default-boundp</code> is to <code>default-value</code> as <code>boundp</code> is to
-<code>symbol-value</code>.
-</p></dd></dl>
+  <p>The functions <code>default-value</code> and
+  <code>setq-default</code> access and change a variable&rsquo;s
+  default value regardless of whether the current buffer has a
+  buffer-local binding. For example, you could use
+  <code>setq-default</code> to change the default setting of
+  <code>paragraph-start</code> for most buffers; and this would
+  work even when you are in a C or Lisp mode buffer that has a
+  buffer-local value for this variable.</p>
 
-<dl>
-<dt><a name="index-setq_002ddefault"></a>Special Form: <strong>setq-default</strong> <em>[symbol form]&hellip;</em></dt>
-<dd><p>This special form gives each <var>symbol</var> a new default value, which is
-the result of evaluating the corresponding <var>form</var>.  It does not
-evaluate <var>symbol</var>, but does evaluate <var>form</var>.  The value of the
-<code>setq-default</code> form is the value of the last <var>form</var>.
-</p>
-<p>If a <var>symbol</var> is not buffer-local for the current buffer, and is not
-marked automatically buffer-local, <code>setq-default</code> has the same
-effect as <code>setq</code>.  If <var>symbol</var> is buffer-local for the current
-buffer, then this changes the value that other buffers will see (as long
-as they don&rsquo;t have a buffer-local value), but not the value that the
-current buffer sees.
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">In buffer &lsquo;<samp>foo</samp>&rsquo;:</span>
+  <p>The special forms <code>defvar</code> and
+  <code>defconst</code> also set the default value (if they set the
+  variable at all), rather than any buffer-local value.</p>
+
+  <dl>
+    <dt><a name="index-default_002dvalue" id=
+    "index-default_002dvalue"></a>Function:
+    <strong>default-value</strong> <em>symbol</em></dt>
+
+    <dd>
+      <p>This function returns <var>symbol</var>&rsquo;s default
+      value. This is the value that is seen in buffers and frames
+      that do not have their own values for this variable. If
+      <var>symbol</var> is not buffer-local, this is equivalent to
+      <code>symbol-value</code> (see <a href=
+      "Accessing-Variables.html#Accessing-Variables">Accessing
+      Variables</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-default_002dboundp" id=
+    "index-default_002dboundp"></a>Function:
+    <strong>default-boundp</strong> <em>symbol</em></dt>
+
+    <dd>
+      <p>The function <code>default-boundp</code> tells you whether
+      <var>symbol</var>&rsquo;s default value is nonvoid. If
+      <code>(default-boundp 'foo)</code> returns <code>nil</code>,
+      then <code>(default-value 'foo)</code> would get an
+      error.</p>
+
+      <p><code>default-boundp</code> is to
+      <code>default-value</code> as <code>boundp</code> is to
+      <code>symbol-value</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-setq_002ddefault" id=
+    "index-setq_002ddefault"></a>Special Form:
+    <strong>setq-default</strong> <em>[symbol
+    form]&hellip;</em></dt>
+
+    <dd>
+      <p>This special form gives each <var>symbol</var> a new
+      default value, which is the result of evaluating the
+      corresponding <var>form</var>. It does not evaluate
+      <var>symbol</var>, but does evaluate <var>form</var>. The
+      value of the <code>setq-default</code> form is the value of
+      the last <var>form</var>.</p>
+
+      <p>If a <var>symbol</var> is not buffer-local for the current
+      buffer, and is not marked automatically buffer-local,
+      <code>setq-default</code> has the same effect as
+      <code>setq</code>. If <var>symbol</var> is buffer-local for
+      the current buffer, then this changes the value that other
+      buffers will see (as long as they don&rsquo;t have a
+      buffer-local value), but not the value that the current
+      buffer sees.</p>
+
+      <div class="example">
+        <pre class="example">
+;; <span class=
+"roman">In buffer &lsquo;<samp>foo</samp>&rsquo;:</span>
 (make-local-variable 'buffer-local)
      &rArr; buffer-local
-</pre><pre class="example">(setq buffer-local 'value-in-foo)
+</pre>
+        <pre class="example">
+(setq buffer-local 'value-in-foo)
      &rArr; value-in-foo
-</pre><pre class="example">(setq-default buffer-local 'new-default)
+</pre>
+        <pre class="example">
+(setq-default buffer-local 'new-default)
      &rArr; new-default
-</pre><pre class="example">buffer-local
+</pre>
+        <pre class="example">
+buffer-local
      &rArr; value-in-foo
-</pre><pre class="example">(default-value 'buffer-local)
+</pre>
+        <pre class="example">
+(default-value 'buffer-local)
      &rArr; new-default
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">In (the new) buffer &lsquo;<samp>bar</samp>&rsquo;:</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">In (the new) buffer &lsquo;<samp>bar</samp>&rsquo;:</span>
 buffer-local
      &rArr; new-default
-</pre><pre class="example">(default-value 'buffer-local)
+</pre>
+        <pre class="example">
+(default-value 'buffer-local)
      &rArr; new-default
-</pre><pre class="example">(setq buffer-local 'another-default)
+</pre>
+        <pre class="example">
+(setq buffer-local 'another-default)
      &rArr; another-default
-</pre><pre class="example">(default-value 'buffer-local)
+</pre>
+        <pre class="example">
+(default-value 'buffer-local)
      &rArr; another-default
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Back in buffer &lsquo;<samp>foo</samp>&rsquo;:</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">Back in buffer &lsquo;<samp>foo</samp>&rsquo;:</span>
 buffer-local
      &rArr; value-in-foo
 (default-value 'buffer-local)
      &rArr; another-default
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-set_002ddefault"></a>Function: <strong>set-default</strong> <em>symbol value</em></dt>
-<dd><p>This function is like <code>setq-default</code>, except that <var>symbol</var> is
-an ordinary evaluated argument.
-</p>
-<div class="example">
-<pre class="example">(set-default (car '(a b c)) 23)
+  <dl>
+    <dt><a name="index-set_002ddefault" id=
+    "index-set_002ddefault"></a>Function:
+    <strong>set-default</strong> <em>symbol value</em></dt>
+
+    <dd>
+      <p>This function is like <code>setq-default</code>, except
+      that <var>symbol</var> is an ordinary evaluated argument.</p>
+
+      <div class="example">
+        <pre class="example">
+(set-default (car '(a b c)) 23)
      &rArr; 23
-</pre><pre class="example">(default-value 'a)
+</pre>
+        <pre class="example">
+(default-value 'a)
      &rArr; 23
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal" accesskey="p" rel="prev">Creating Buffer-Local</a>, Up: <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" accesskey="u" rel="up">Buffer-Local Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Previous: <a href=
+    "Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal"
+    accesskey="p" rel="prev">Creating Buffer-Local</a>, Up:
+    <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables"
+    accesskey="u" rel="up">Buffer-Local Variables</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

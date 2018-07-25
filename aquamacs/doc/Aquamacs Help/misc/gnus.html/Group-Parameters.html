@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,598 +14,842 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Group Parameters</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Group Parameters">
-<meta name="keywords" content="Gnus Manual: Group Parameters">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Group-Buffer.html#Group-Buffer" rel="up" title="Group Buffer">
-<link href="Listing-Groups.html#Listing-Groups" rel="next" title="Listing Groups">
-<link href="Foreign-Groups.html#Foreign-Groups" rel="prev" title="Foreign Groups">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Group Parameters</title>
+  <meta name="description" content=
+  "Gnus Manual: Group Parameters" />
+  <meta name="keywords" content="Gnus Manual: Group Parameters" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Group-Buffer.html#Group-Buffer" rel="up" title=
+  "Group Buffer" />
+  <link href="Listing-Groups.html#Listing-Groups" rel="next" title=
+  "Listing Groups" />
+  <link href="Foreign-Groups.html#Foreign-Groups" rel="prev" title=
+  "Foreign Groups" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Group-Parameters"></a>
-<div class="header">
-<p>
-Next: <a href="Listing-Groups.html#Listing-Groups" accesskey="n" rel="next">Listing Groups</a>, Previous: <a href="Foreign-Groups.html#Foreign-Groups" accesskey="p" rel="prev">Foreign Groups</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Group-Parameters-1"></a>
-<h3 class="section">2.10 Group Parameters</h3>
-<a name="index-group-parameters"></a>
+<body lang="en" xml:lang="en">
+  <a name="Group-Parameters" id="Group-Parameters"></a>
 
-<p>The group parameters store information local to a particular group.
-</p>
-<p>Use the <kbd>G p</kbd> or the <kbd>G c</kbd> command to edit group parameters of a
-group.  (<kbd>G p</kbd> presents you with a Lisp-based interface, <kbd>G c</kbd>
-presents you with a Customize-like interface.  The latter helps avoid
-silly Lisp errors.)  You might also be interested in reading about topic
-parameters (see <a href="Topic-Parameters.html#Topic-Parameters">Topic Parameters</a>).
-Additionally, you can set group parameters via the
-<code>gnus-parameters</code> variable, see below.
-</p>
-<p>Here&rsquo;s an example group parameter list:
-</p>
-<div class="example">
-<pre class="example">((to-address . &quot;ding@gnus.org&quot;)
+  <div class="header">
+    <p>Next: <a href="Listing-Groups.html#Listing-Groups"
+    accesskey="n" rel="next">Listing Groups</a>, Previous: <a href=
+    "Foreign-Groups.html#Foreign-Groups" accesskey="p" rel=
+    "prev">Foreign Groups</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Group-Parameters-1" id="Group-Parameters-1"></a>
+
+  <h3 class="section">2.10 Group Parameters</h3><a name=
+  "index-group-parameters" id="index-group-parameters"></a>
+
+  <p>The group parameters store information local to a particular
+  group.</p>
+
+  <p>Use the <kbd>G p</kbd> or the <kbd>G c</kbd> command to edit
+  group parameters of a group. (<kbd>G p</kbd> presents you with a
+  Lisp-based interface, <kbd>G c</kbd> presents you with a
+  Customize-like interface. The latter helps avoid silly Lisp
+  errors.) You might also be interested in reading about topic
+  parameters (see <a href=
+  "Topic-Parameters.html#Topic-Parameters">Topic Parameters</a>).
+  Additionally, you can set group parameters via the
+  <code>gnus-parameters</code> variable, see below.</p>
+
+  <p>Here&rsquo;s an example group parameter list:</p>
+
+  <div class="example">
+    <pre class="example">
+((to-address . "ding@gnus.org")
  (auto-expire . t))
-</pre></div>
+</pre>
+  </div>
 
-<p>We see that each element consists of a &ldquo;dotted pair&rdquo;&mdash;the thing before
-the dot is the key, while the thing after the dot is the value.  All the
-parameters have this form <em>except</em> local variable specs, which are
-not dotted pairs, but proper lists.
-</p>
-<p>Some parameters have correspondent customizable variables, each of which
-is an alist of regexps and values.
-</p>
-<p>The following group parameters can be used:
-</p>
-<dl compact="compact">
-<dt><code>to-address</code></dt>
-<dd><a name="index-to_002daddress"></a>
-<p>Address used by when doing followups and new posts.
-</p>
-<div class="example">
-<pre class="example">(to-address . &quot;some@where.com&quot;)
-</pre></div>
+  <p>We see that each element consists of a &ldquo;dotted
+  pair&rdquo;&mdash;the thing before the dot is the key, while the
+  thing after the dot is the value. All the parameters have this
+  form <em>except</em> local variable specs, which are not dotted
+  pairs, but proper lists.</p>
 
-<p>This is primarily useful in mail groups that represent closed mailing
-lists&mdash;mailing lists where it&rsquo;s expected that everybody that writes to
-the mailing list is subscribed to it.  Since using this parameter
-ensures that the mail only goes to the mailing list itself, it means
-that members won&rsquo;t receive two copies of your followups.
-</p>
-<p>Using <code>to-address</code> will actually work whether the group is foreign
-or not.  Let&rsquo;s say there&rsquo;s a group on the server that is called
-&lsquo;<samp>fa.4ad-l</samp>&rsquo;.  This is a real newsgroup, but the server has gotten
-the articles from a mail-to-news gateway.  Posting directly to this
-group is therefore impossible&mdash;you have to send mail to the mailing
-list address instead.
-</p>
-<p>See also <code>gnus-parameter-to-address-alist</code>.
-</p>
-</dd>
-<dt><code>to-list</code></dt>
-<dd><a name="index-to_002dlist"></a>
-<p>Address used when doing <kbd>a</kbd> in that group.
-</p>
-<div class="example">
-<pre class="example">(to-list . &quot;some@where.com&quot;)
-</pre></div>
+  <p>Some parameters have correspondent customizable variables,
+  each of which is an alist of regexps and values.</p>
 
-<p>It is totally ignored
-when doing a followup&mdash;except that if it is present in a news group,
-you&rsquo;ll get mail group semantics when doing <kbd>f</kbd>.
-</p>
-<p>If you do an <kbd>a</kbd> command in a mail group and you have neither a
-<code>to-list</code> group parameter nor a <code>to-address</code> group parameter,
-then a <code>to-list</code> group parameter will be added automatically upon
-sending the message if <code>gnus-add-to-list</code> is set to <code>t</code>.
-<a name="index-gnus_002dadd_002dto_002dlist"></a>
-</p>
-<a name="index-gnus_002dmailing_002dlist_002dmode"></a>
-<a name="index-mail-list-groups"></a>
-<p>If this variable is set, <code>gnus-mailing-list-mode</code> is turned on when
-entering summary buffer.
-</p>
-<p>See also <code>gnus-parameter-to-list-alist</code>.
-</p>
-<a name="subscribed"></a></dd>
-<dt><code>subscribed</code></dt>
-<dd><a name="index-subscribed"></a>
-<a name="index-Mail_002dFollowup_002dTo"></a>
-<a name="index-gnus_002dfind_002dsubscribed_002daddresses"></a>
-<p>If this parameter is set to <code>t</code>, Gnus will consider the
-to-address and to-list parameters for this group as addresses of
-mailing lists you are subscribed to.  Giving Gnus this information is
-(only) a first step in getting it to generate correct Mail-Followup-To
-headers for your posts to these lists.  The second step is to put the
-following in your <samp>.gnus.el</samp>
-</p>
-<div class="lisp">
-<pre class="lisp">(setq message-subscribed-address-functions
+  <p>The following group parameters can be used:</p>
+
+  <dl compact="compact">
+    <dt><code>to-address</code></dt>
+
+    <dd>
+      <a name="index-to_002daddress" id="index-to_002daddress"></a>
+
+      <p>Address used by when doing followups and new posts.</p>
+
+      <div class="example">
+        <pre class="example">
+(to-address . "some@where.com")
+</pre>
+      </div>
+
+      <p>This is primarily useful in mail groups that represent
+      closed mailing lists&mdash;mailing lists where it&rsquo;s
+      expected that everybody that writes to the mailing list is
+      subscribed to it. Since using this parameter ensures that the
+      mail only goes to the mailing list itself, it means that
+      members won&rsquo;t receive two copies of your followups.</p>
+
+      <p>Using <code>to-address</code> will actually work whether
+      the group is foreign or not. Let&rsquo;s say there&rsquo;s a
+      group on the server that is called
+      &lsquo;<samp>fa.4ad-l</samp>&rsquo;. This is a real
+      newsgroup, but the server has gotten the articles from a
+      mail-to-news gateway. Posting directly to this group is
+      therefore impossible&mdash;you have to send mail to the
+      mailing list address instead.</p>
+
+      <p>See also <code>gnus-parameter-to-address-alist</code>.</p>
+    </dd>
+
+    <dt><code>to-list</code></dt>
+
+    <dd>
+      <a name="index-to_002dlist" id="index-to_002dlist"></a>
+
+      <p>Address used when doing <kbd>a</kbd> in that group.</p>
+
+      <div class="example">
+        <pre class="example">
+(to-list . "some@where.com")
+</pre>
+      </div>
+
+      <p>It is totally ignored when doing a followup&mdash;except
+      that if it is present in a news group, you&rsquo;ll get mail
+      group semantics when doing <kbd>f</kbd>.</p>
+
+      <p>If you do an <kbd>a</kbd> command in a mail group and you
+      have neither a <code>to-list</code> group parameter nor a
+      <code>to-address</code> group parameter, then a
+      <code>to-list</code> group parameter will be added
+      automatically upon sending the message if
+      <code>gnus-add-to-list</code> is set to <code>t</code>.
+      <a name="index-gnus_002dadd_002dto_002dlist" id=
+      "index-gnus_002dadd_002dto_002dlist"></a></p><a name=
+      "index-gnus_002dmailing_002dlist_002dmode" id=
+      "index-gnus_002dmailing_002dlist_002dmode"></a> <a name=
+      "index-mail-list-groups" id="index-mail-list-groups"></a>
+
+      <p>If this variable is set,
+      <code>gnus-mailing-list-mode</code> is turned on when
+      entering summary buffer.</p>
+
+      <p>See also
+      <code>gnus-parameter-to-list-alist</code>.</p><a name=
+      "subscribed" id="subscribed"></a>
+    </dd>
+
+    <dt><code>subscribed</code></dt>
+
+    <dd>
+      <a name="index-subscribed" id="index-subscribed"></a>
+      <a name="index-Mail_002dFollowup_002dTo" id=
+      "index-Mail_002dFollowup_002dTo"></a> <a name=
+      "index-gnus_002dfind_002dsubscribed_002daddresses" id=
+      "index-gnus_002dfind_002dsubscribed_002daddresses"></a>
+
+      <p>If this parameter is set to <code>t</code>, Gnus will
+      consider the to-address and to-list parameters for this group
+      as addresses of mailing lists you are subscribed to. Giving
+      Gnus this information is (only) a first step in getting it to
+      generate correct Mail-Followup-To headers for your posts to
+      these lists. The second step is to put the following in your
+      <samp>.gnus.el</samp></p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq message-subscribed-address-functions
       '(gnus-find-subscribed-addresses))
-</pre></div>
+</pre>
+      </div>
 
-<p>See <a href="http://www.gnu.org/software/emacs/manual/html_node/message/Mailing-Lists.html#Mailing-Lists">Mailing Lists</a> in <cite>The Message Manual</cite>, for
-a complete treatment of available MFT support.
-</p>
-</dd>
-<dt><code>visible</code></dt>
-<dd><a name="index-visible"></a>
-<p>If the group parameter list has the element <code>(visible . t)</code>,
-that group will always be visible in the Group buffer, regardless
-of whether it has any unread articles.
-</p>
-<p>This parameter cannot be set via <code>gnus-parameters</code>.  See
-<code>gnus-permanently-visible-groups</code> as an alternative.
-</p>
-</dd>
-<dt><code>broken-reply-to</code></dt>
-<dd><a name="index-broken_002dreply_002dto"></a>
-<p>Elements like <code>(broken-reply-to . t)</code> signals that <code>Reply-To</code>
-headers in this group are to be ignored, and for the header to be hidden
-if <code>reply-to</code> is part of <code>gnus-boring-article-headers</code>.  This
-can be useful if you&rsquo;re reading a mailing list group where the listserv
-has inserted <code>Reply-To</code> headers that point back to the listserv
-itself.  That is broken behavior.  So there!
-</p>
-</dd>
-<dt><code>to-group</code></dt>
-<dd><a name="index-to_002dgroup"></a>
-<p>Elements like <code>(to-group . &quot;some.group.name&quot;)</code> means that all
-posts in that group will be sent to <code>some.group.name</code>.
-</p>
-</dd>
-<dt><code>newsgroup</code></dt>
-<dd><a name="index-newsgroup"></a>
-<p>If you have <code>(newsgroup . t)</code> in the group parameter list, Gnus
-will treat all responses as if they were responses to news articles.
-This can be useful if you have a mail group that&rsquo;s really a mirror of a
-news group.
-</p>
-</dd>
-<dt><code>gcc-self</code></dt>
-<dd><a name="index-gcc_002dself"></a>
-<p>If <code>(gcc-self . t)</code> is present in the group parameter list, newly
-composed messages will be <code>gcc</code>d to the current group.  If
-<code>(gcc-self . none)</code> is present, no <code>Gcc:</code> header will be
-generated, if <code>(gcc-self . &quot;group&quot;)</code> is present, this string will
-be inserted literally as a <code>Gcc:</code> header.  It should be a group
-name.  The <code>gcc-self</code> value may also be a list of strings and
-<code>t</code>, e.g., <code>(gcc-self &quot;group1&quot; &quot;group2&quot; t)</code> means to
-<code>gcc</code> the newly composed message into the groups <code>&quot;group1&quot;</code>
-and <code>&quot;group2&quot;</code>, and into the current group.  The <code>gcc-self</code>
-parameter takes precedence over any default <code>Gcc</code> rules as
-described later (see <a href="Archived-Messages.html#Archived-Messages">Archived Messages</a>), with the exception for
-messages to resend.
-</p>
-<p><strong>Caveat</strong>: Adding <code>(gcc-self . t)</code> to the parameter list of
-<code>nntp</code> groups (or the like) isn&rsquo;t valid.  An <code>nntp</code> server
-doesn&rsquo;t accept articles.
-</p>
-</dd>
-<dt><code>auto-expire</code></dt>
-<dd><a name="index-auto_002dexpire"></a>
-<a name="index-expiring-mail"></a>
-<p>If the group parameter has an element that looks like <code>(auto-expire
-. t)</code>, all articles read will be marked as expirable.  For an
-alternative approach, see <a href="Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>.
-</p>
-<p>See also <code>gnus-auto-expirable-newsgroups</code>.
-</p>
-</dd>
-<dt><code>total-expire</code></dt>
-<dd><a name="index-total_002dexpire"></a>
-<a name="index-expiring-mail-1"></a>
-<p>If the group parameter has an element that looks like
-<code>(total-expire . t)</code>, all read articles will be put through the
-expiry process, even if they are not marked as expirable.  Use with
-caution.  Unread, ticked and dormant articles are not eligible for
-expiry.
-</p>
-<p>See also <code>gnus-total-expirable-newsgroups</code>.
-</p>
-</dd>
-<dt><code>expiry-wait</code></dt>
-<dd><a name="index-expiry_002dwait"></a>
-<a name="index-nnmail_002dexpiry_002dwait_002dfunction"></a>
-<p>If the group parameter has an element that looks like
-<code>(expiry-wait . 10)</code>, this value will override any
-<code>nnmail-expiry-wait</code> and <code>nnmail-expiry-wait-function</code>
-(see <a href="Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>) when expiring expirable messages.  The value
-can either be a number of days (not necessarily an integer) or the
-symbols <code>never</code> or <code>immediate</code>.
-</p>
-</dd>
-<dt><code>expiry-target</code></dt>
-<dd><a name="index-expiry_002dtarget"></a>
-<p>Where expired messages end up.  This parameter overrides
-<code>nnmail-expiry-target</code>.
-</p>
-</dd>
-<dt><code>score-file</code></dt>
-<dd><a name="index-score-file-group-parameter"></a>
-<p>Elements that look like <code>(score-file . &quot;file&quot;)</code> will make
-<samp>file</samp> into the current score file for the group in question.  All
-interactive score entries will be put into this file.
-</p>
-</dd>
-<dt><code>adapt-file</code></dt>
-<dd><a name="index-adapt-file-group-parameter"></a>
-<p>Elements that look like <code>(adapt-file . &quot;file&quot;)</code> will make
-<samp>file</samp> into the current adaptive file for the group in question.
-All adaptive score entries will be put into this file.
-</p>
-</dd>
-<dt><code>admin-address</code></dt>
-<dd><a name="index-admin_002daddress"></a>
-<p>When unsubscribing from a mailing list you should never send the
-unsubscription notice to the mailing list itself.  Instead, you&rsquo;d send
-messages to the administrative address.  This parameter allows you to
-put the admin address somewhere convenient.
-</p>
-</dd>
-<dt><code>display</code></dt>
-<dd><a name="index-display"></a>
-<p>Elements that look like <code>(display . MODE)</code> say which articles to
-display on entering the group.  Valid values are:
-</p>
-<dl compact="compact">
-<dt><code>all</code></dt>
-<dd><p>Display all articles, both read and unread.
-</p>
-</dd>
-<dt><code>an integer</code></dt>
-<dd><p>Display the last <var>integer</var> articles in the group.  This is the same as
-entering the group with <kbd>C-u <var>integer</var></kbd>.
-</p>
-</dd>
-<dt><code>default</code></dt>
-<dd><p>Display the default visible articles, which normally includes unread and
-ticked articles.
-</p>
-</dd>
-<dt><code>an array</code></dt>
-<dd><p>Display articles that satisfy a predicate.
-</p>
-<p>Here are some examples:
-</p>
-<dl compact="compact">
-<dt><code>[unread]</code></dt>
-<dd><p>Display only unread articles.
-</p>
-</dd>
-<dt><code>[not expire]</code></dt>
-<dd><p>Display everything except expirable articles.
-</p>
-</dd>
-<dt><code>[and (not reply) (not expire)]</code></dt>
-<dd><p>Display everything except expirable and articles you&rsquo;ve already
-responded to.
-</p></dd>
-</dl>
+      <p>See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/message/Mailing-Lists.html#Mailing-Lists">
+      Mailing Lists</a> in <cite>The Message Manual</cite>, for a
+      complete treatment of available MFT support.</p>
+    </dd>
 
-<p>The available operators are <code>not</code>, <code>and</code> and <code>or</code>.
-Predicates include <code>tick</code>, <code>unsend</code>, <code>undownload</code>,
-<code>unread</code>, <code>dormant</code>, <code>expire</code>, <code>reply</code>,
-<code>killed</code>, <code>bookmark</code>, <code>score</code>, <code>save</code>,
-<code>cache</code>, <code>forward</code>, and <code>unseen</code>.
-</p>
-</dd>
-</dl>
+    <dt><code>visible</code></dt>
 
-<p>The <code>display</code> parameter works by limiting the summary buffer to
-the subset specified.  You can pop the limit by using the <kbd>/ w</kbd>
-command (see <a href="Limiting.html#Limiting">Limiting</a>).
-</p>
-</dd>
-<dt><code>comment</code></dt>
-<dd><a name="index-comment"></a>
-<p>Elements that look like <code>(comment . &quot;This is a comment&quot;)</code> are
-arbitrary comments on the group.  You can display comments in the
-group line (see <a href="Group-Line-Specification.html#Group-Line-Specification">Group Line Specification</a>).
-</p>
-</dd>
-<dt><code>charset</code></dt>
-<dd><a name="index-charset"></a>
-<p>Elements that look like <code>(charset . iso-8859-1)</code> will make
-<code>iso-8859-1</code> the default charset; that is, the charset that will be
-used for all articles that do not specify a charset.
-</p>
-<p>See also <code>gnus-group-charset-alist</code>.
-</p>
-</dd>
-<dt><code>ignored-charsets</code></dt>
-<dd><a name="index-ignored_002dcharset"></a>
-<p>Elements that look like <code>(ignored-charsets x-unknown iso-8859-1)</code>
-will make <code>iso-8859-1</code> and <code>x-unknown</code> ignored; that is, the
-default charset will be used for decoding articles.
-</p>
-<p>See also <code>gnus-group-ignored-charsets-alist</code>.
-</p>
-</dd>
-<dt><code>posting-style</code></dt>
-<dd><a name="index-posting_002dstyle"></a>
-<p>You can store additional posting style information for this group
-here (see <a href="Posting-Styles.html#Posting-Styles">Posting Styles</a>).  The format is that of an entry in the
-<code>gnus-posting-styles</code> alist, except that there&rsquo;s no regexp matching
-the group name (of course).  Style elements in this group parameter will
-take precedence over the ones found in <code>gnus-posting-styles</code>.
-</p>
-<p>For instance, if you want a funky name and signature in this group only,
-instead of hacking <code>gnus-posting-styles</code>, you could put something
-like this in the group parameters:
-</p>
-<div class="example">
-<pre class="example">(posting-style
-  (name &quot;Funky Name&quot;)
-  (&quot;X-Message-SMTP-Method&quot; &quot;smtp smtp.example.org 587&quot;)
-  (&quot;X-My-Header&quot; &quot;Funky Value&quot;)
-  (signature &quot;Funky Signature&quot;))
-</pre></div>
+    <dd>
+      <a name="index-visible" id="index-visible"></a>
 
-<p>If you&rsquo;re using topics to organize your group buffer
-(see <a href="Group-Topics.html#Group-Topics">Group Topics</a>), note that posting styles can also be set in
-the topics parameters.  Posting styles in topic parameters apply to all
-groups in this topic.  More precisely, the posting-style settings for a
-group result from the hierarchical merging of all posting-style
-entries in the parameters of this group and all the topics it belongs
-to.
-</p>
+      <p>If the group parameter list has the element <code>(visible
+      . t)</code>, that group will always be visible in the Group
+      buffer, regardless of whether it has any unread articles.</p>
 
-</dd>
-<dt><code>post-method</code></dt>
-<dd><a name="index-post_002dmethod"></a>
-<p>If it is set, the value is used as the method for posting message
-instead of <code>gnus-post-method</code>.
-</p>
-</dd>
-<dt><code>mail-source</code></dt>
-<dd><a name="index-mail_002dsource"></a>
-<p>If it is set, and the setting of <code>mail-sources</code> includes a
-<code>group</code> mail source (see <a href="Mail-Sources.html#Mail-Sources">Mail Sources</a>), the value is a
-mail source for this group.
-</p>
-</dd>
-<dt><code>banner</code></dt>
-<dd><a name="index-banner"></a>
-<p>An item like <code>(banner . <var>regexp</var>)</code> causes any part of an article
-that matches the regular expression <var>regexp</var> to be stripped.  Instead of
-<var>regexp</var>, you can also use the symbol <code>signature</code> which strips the
-last signature or any of the elements of the alist
-<code>gnus-article-banner-alist</code>.
-</p>
-</dd>
-<dt><code>sieve</code></dt>
-<dd><a name="index-sieve"></a>
-<p>This parameter contains a Sieve test that should match incoming mail
-that should be placed in this group.  From this group parameter, a
-Sieve &lsquo;<samp>IF</samp>&rsquo; control structure is generated, having the test as the
-condition and &lsquo;<samp>fileinto &quot;group.name&quot;;</samp>&rsquo; as the body.
-</p>
-<p>For example, if the &lsquo;<samp>INBOX.list.sieve</samp>&rsquo; group has the <code>(sieve
-address &quot;sender&quot; &quot;sieve-admin@extundo.com&quot;)</code> group parameter, when
-translating the group parameter into a Sieve script (see <a href="Sieve-Commands.html#Sieve-Commands">Sieve Commands</a>) the following Sieve code is generated:
-</p>
-<div class="example">
-<pre class="example">if address &quot;sender&quot; &quot;sieve-admin@extundo.com&quot; {
-        fileinto &quot;INBOX.list.sieve&quot;;
+      <p>This parameter cannot be set via
+      <code>gnus-parameters</code>. See
+      <code>gnus-permanently-visible-groups</code> as an
+      alternative.</p>
+    </dd>
+
+    <dt><code>broken-reply-to</code></dt>
+
+    <dd>
+      <a name="index-broken_002dreply_002dto" id=
+      "index-broken_002dreply_002dto"></a>
+
+      <p>Elements like <code>(broken-reply-to . t)</code> signals
+      that <code>Reply-To</code> headers in this group are to be
+      ignored, and for the header to be hidden if
+      <code>reply-to</code> is part of
+      <code>gnus-boring-article-headers</code>. This can be useful
+      if you&rsquo;re reading a mailing list group where the
+      listserv has inserted <code>Reply-To</code> headers that
+      point back to the listserv itself. That is broken behavior.
+      So there!</p>
+    </dd>
+
+    <dt><code>to-group</code></dt>
+
+    <dd>
+      <a name="index-to_002dgroup" id="index-to_002dgroup"></a>
+
+      <p>Elements like <code>(to-group . "some.group.name")</code>
+      means that all posts in that group will be sent to
+      <code>some.group.name</code>.</p>
+    </dd>
+
+    <dt><code>newsgroup</code></dt>
+
+    <dd>
+      <a name="index-newsgroup" id="index-newsgroup"></a>
+
+      <p>If you have <code>(newsgroup . t)</code> in the group
+      parameter list, Gnus will treat all responses as if they were
+      responses to news articles. This can be useful if you have a
+      mail group that&rsquo;s really a mirror of a news group.</p>
+    </dd>
+
+    <dt><code>gcc-self</code></dt>
+
+    <dd>
+      <a name="index-gcc_002dself" id="index-gcc_002dself"></a>
+
+      <p>If <code>(gcc-self . t)</code> is present in the group
+      parameter list, newly composed messages will be
+      <code>gcc</code>d to the current group. If <code>(gcc-self .
+      none)</code> is present, no <code>Gcc:</code> header will be
+      generated, if <code>(gcc-self . "group")</code> is present,
+      this string will be inserted literally as a <code>Gcc:</code>
+      header. It should be a group name. The <code>gcc-self</code>
+      value may also be a list of strings and <code>t</code>, e.g.,
+      <code>(gcc-self "group1" "group2" t)</code> means to
+      <code>gcc</code> the newly composed message into the groups
+      <code>"group1"</code> and <code>"group2"</code>, and into the
+      current group. The <code>gcc-self</code> parameter takes
+      precedence over any default <code>Gcc</code> rules as
+      described later (see <a href=
+      "Archived-Messages.html#Archived-Messages">Archived
+      Messages</a>), with the exception for messages to resend.</p>
+
+      <p><strong>Caveat</strong>: Adding <code>(gcc-self .
+      t)</code> to the parameter list of <code>nntp</code> groups
+      (or the like) isn&rsquo;t valid. An <code>nntp</code> server
+      doesn&rsquo;t accept articles.</p>
+    </dd>
+
+    <dt><code>auto-expire</code></dt>
+
+    <dd>
+      <a name="index-auto_002dexpire" id=
+      "index-auto_002dexpire"></a> <a name="index-expiring-mail"
+      id="index-expiring-mail"></a>
+
+      <p>If the group parameter has an element that looks like
+      <code>(auto-expire . t)</code>, all articles read will be
+      marked as expirable. For an alternative approach, see
+      <a href="Expiring-Mail.html#Expiring-Mail">Expiring
+      Mail</a>.</p>
+
+      <p>See also <code>gnus-auto-expirable-newsgroups</code>.</p>
+    </dd>
+
+    <dt><code>total-expire</code></dt>
+
+    <dd>
+      <a name="index-total_002dexpire" id=
+      "index-total_002dexpire"></a> <a name="index-expiring-mail-1"
+      id="index-expiring-mail-1"></a>
+
+      <p>If the group parameter has an element that looks like
+      <code>(total-expire . t)</code>, all read articles will be
+      put through the expiry process, even if they are not marked
+      as expirable. Use with caution. Unread, ticked and dormant
+      articles are not eligible for expiry.</p>
+
+      <p>See also <code>gnus-total-expirable-newsgroups</code>.</p>
+    </dd>
+
+    <dt><code>expiry-wait</code></dt>
+
+    <dd>
+      <a name="index-expiry_002dwait" id=
+      "index-expiry_002dwait"></a> <a name=
+      "index-nnmail_002dexpiry_002dwait_002dfunction" id=
+      "index-nnmail_002dexpiry_002dwait_002dfunction"></a>
+
+      <p>If the group parameter has an element that looks like
+      <code>(expiry-wait . 10)</code>, this value will override any
+      <code>nnmail-expiry-wait</code> and
+      <code>nnmail-expiry-wait-function</code> (see <a href=
+      "Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>) when
+      expiring expirable messages. The value can either be a number
+      of days (not necessarily an integer) or the symbols
+      <code>never</code> or <code>immediate</code>.</p>
+    </dd>
+
+    <dt><code>expiry-target</code></dt>
+
+    <dd>
+      <a name="index-expiry_002dtarget" id=
+      "index-expiry_002dtarget"></a>
+
+      <p>Where expired messages end up. This parameter overrides
+      <code>nnmail-expiry-target</code>.</p>
+    </dd>
+
+    <dt><code>score-file</code></dt>
+
+    <dd>
+      <a name="index-score-file-group-parameter" id=
+      "index-score-file-group-parameter"></a>
+
+      <p>Elements that look like <code>(score-file . "file")</code>
+      will make <samp>file</samp> into the current score file for
+      the group in question. All interactive score entries will be
+      put into this file.</p>
+    </dd>
+
+    <dt><code>adapt-file</code></dt>
+
+    <dd>
+      <a name="index-adapt-file-group-parameter" id=
+      "index-adapt-file-group-parameter"></a>
+
+      <p>Elements that look like <code>(adapt-file . "file")</code>
+      will make <samp>file</samp> into the current adaptive file
+      for the group in question. All adaptive score entries will be
+      put into this file.</p>
+    </dd>
+
+    <dt><code>admin-address</code></dt>
+
+    <dd>
+      <a name="index-admin_002daddress" id=
+      "index-admin_002daddress"></a>
+
+      <p>When unsubscribing from a mailing list you should never
+      send the unsubscription notice to the mailing list itself.
+      Instead, you&rsquo;d send messages to the administrative
+      address. This parameter allows you to put the admin address
+      somewhere convenient.</p>
+    </dd>
+
+    <dt><code>display</code></dt>
+
+    <dd>
+      <a name="index-display" id="index-display"></a>
+
+      <p>Elements that look like <code>(display . MODE)</code> say
+      which articles to display on entering the group. Valid values
+      are:</p>
+
+      <dl compact="compact">
+        <dt><code>all</code></dt>
+
+        <dd>
+          <p>Display all articles, both read and unread.</p>
+        </dd>
+
+        <dt><code>an integer</code></dt>
+
+        <dd>
+          <p>Display the last <var>integer</var> articles in the
+          group. This is the same as entering the group with
+          <kbd>C-u <var>integer</var></kbd>.</p>
+        </dd>
+
+        <dt><code>default</code></dt>
+
+        <dd>
+          <p>Display the default visible articles, which normally
+          includes unread and ticked articles.</p>
+        </dd>
+
+        <dt><code>an array</code></dt>
+
+        <dd>
+          <p>Display articles that satisfy a predicate.</p>
+
+          <p>Here are some examples:</p>
+
+          <dl compact="compact">
+            <dt><code>[unread]</code></dt>
+
+            <dd>
+              <p>Display only unread articles.</p>
+            </dd>
+
+            <dt><code>[not expire]</code></dt>
+
+            <dd>
+              <p>Display everything except expirable articles.</p>
+            </dd>
+
+            <dt><code>[and (not reply) (not expire)]</code></dt>
+
+            <dd>
+              <p>Display everything except expirable and articles
+              you&rsquo;ve already responded to.</p>
+            </dd>
+          </dl>
+
+          <p>The available operators are <code>not</code>,
+          <code>and</code> and <code>or</code>. Predicates include
+          <code>tick</code>, <code>unsend</code>,
+          <code>undownload</code>, <code>unread</code>,
+          <code>dormant</code>, <code>expire</code>,
+          <code>reply</code>, <code>killed</code>,
+          <code>bookmark</code>, <code>score</code>,
+          <code>save</code>, <code>cache</code>,
+          <code>forward</code>, and <code>unseen</code>.</p>
+        </dd>
+      </dl>
+
+      <p>The <code>display</code> parameter works by limiting the
+      summary buffer to the subset specified. You can pop the limit
+      by using the <kbd>/ w</kbd> command (see <a href=
+      "Limiting.html#Limiting">Limiting</a>).</p>
+    </dd>
+
+    <dt><code>comment</code></dt>
+
+    <dd>
+      <a name="index-comment" id="index-comment"></a>
+
+      <p>Elements that look like <code>(comment . "This is a
+      comment")</code> are arbitrary comments on the group. You can
+      display comments in the group line (see <a href=
+      "Group-Line-Specification.html#Group-Line-Specification">Group
+      Line Specification</a>).</p>
+    </dd>
+
+    <dt><code>charset</code></dt>
+
+    <dd>
+      <a name="index-charset" id="index-charset"></a>
+
+      <p>Elements that look like <code>(charset .
+      iso-8859-1)</code> will make <code>iso-8859-1</code> the
+      default charset; that is, the charset that will be used for
+      all articles that do not specify a charset.</p>
+
+      <p>See also <code>gnus-group-charset-alist</code>.</p>
+    </dd>
+
+    <dt><code>ignored-charsets</code></dt>
+
+    <dd>
+      <a name="index-ignored_002dcharset" id=
+      "index-ignored_002dcharset"></a>
+
+      <p>Elements that look like <code>(ignored-charsets x-unknown
+      iso-8859-1)</code> will make <code>iso-8859-1</code> and
+      <code>x-unknown</code> ignored; that is, the default charset
+      will be used for decoding articles.</p>
+
+      <p>See also
+      <code>gnus-group-ignored-charsets-alist</code>.</p>
+    </dd>
+
+    <dt><code>posting-style</code></dt>
+
+    <dd>
+      <a name="index-posting_002dstyle" id=
+      "index-posting_002dstyle"></a>
+
+      <p>You can store additional posting style information for
+      this group here (see <a href=
+      "Posting-Styles.html#Posting-Styles">Posting Styles</a>). The
+      format is that of an entry in the
+      <code>gnus-posting-styles</code> alist, except that
+      there&rsquo;s no regexp matching the group name (of course).
+      Style elements in this group parameter will take precedence
+      over the ones found in <code>gnus-posting-styles</code>.</p>
+
+      <p>For instance, if you want a funky name and signature in
+      this group only, instead of hacking
+      <code>gnus-posting-styles</code>, you could put something
+      like this in the group parameters:</p>
+
+      <div class="example">
+        <pre class="example">
+(posting-style
+  (name "Funky Name")
+  ("X-Message-SMTP-Method" "smtp smtp.example.org 587")
+  ("X-My-Header" "Funky Value")
+  (signature "Funky Signature"))
+</pre>
+      </div>
+
+      <p>If you&rsquo;re using topics to organize your group buffer
+      (see <a href="Group-Topics.html#Group-Topics">Group
+      Topics</a>), note that posting styles can also be set in the
+      topics parameters. Posting styles in topic parameters apply
+      to all groups in this topic. More precisely, the
+      posting-style settings for a group result from the
+      hierarchical merging of all posting-style entries in the
+      parameters of this group and all the topics it belongs
+      to.</p>
+    </dd>
+
+    <dt><code>post-method</code></dt>
+
+    <dd>
+      <a name="index-post_002dmethod" id=
+      "index-post_002dmethod"></a>
+
+      <p>If it is set, the value is used as the method for posting
+      message instead of <code>gnus-post-method</code>.</p>
+    </dd>
+
+    <dt><code>mail-source</code></dt>
+
+    <dd>
+      <a name="index-mail_002dsource" id=
+      "index-mail_002dsource"></a>
+
+      <p>If it is set, and the setting of <code>mail-sources</code>
+      includes a <code>group</code> mail source (see <a href=
+      "Mail-Sources.html#Mail-Sources">Mail Sources</a>), the value
+      is a mail source for this group.</p>
+    </dd>
+
+    <dt><code>banner</code></dt>
+
+    <dd>
+      <a name="index-banner" id="index-banner"></a>
+
+      <p>An item like <code>(banner . <var>regexp</var>)</code>
+      causes any part of an article that matches the regular
+      expression <var>regexp</var> to be stripped. Instead of
+      <var>regexp</var>, you can also use the symbol
+      <code>signature</code> which strips the last signature or any
+      of the elements of the alist
+      <code>gnus-article-banner-alist</code>.</p>
+    </dd>
+
+    <dt><code>sieve</code></dt>
+
+    <dd>
+      <a name="index-sieve" id="index-sieve"></a>
+
+      <p>This parameter contains a Sieve test that should match
+      incoming mail that should be placed in this group. From this
+      group parameter, a Sieve &lsquo;<samp>IF</samp>&rsquo;
+      control structure is generated, having the test as the
+      condition and &lsquo;<samp>fileinto
+      "group.name";</samp>&rsquo; as the body.</p>
+
+      <p>For example, if the
+      &lsquo;<samp>INBOX.list.sieve</samp>&rsquo; group has the
+      <code>(sieve address "sender"
+      "sieve-admin@extundo.com")</code> group parameter, when
+      translating the group parameter into a Sieve script (see
+      <a href="Sieve-Commands.html#Sieve-Commands">Sieve
+      Commands</a>) the following Sieve code is generated:</p>
+
+      <div class="example">
+        <pre class="example">
+if address "sender" "sieve-admin@extundo.com" {
+        fileinto "INBOX.list.sieve";
 }
-</pre></div>
+</pre>
+      </div>
 
-<p>To generate tests for multiple email-addresses use a group parameter
-like <code>(sieve address &quot;sender&quot; (&quot;name@one.org&quot; else@two.org&quot;))</code>.
-When generating a sieve script (see <a href="Sieve-Commands.html#Sieve-Commands">Sieve Commands</a>) Sieve code
-like the following is generated:
-</p>
-<div class="example">
-<pre class="example">if address &quot;sender&quot; [&quot;name@one.org&quot;, &quot;else@two.org&quot;] {
-        fileinto &quot;INBOX.list.sieve&quot;;
+      <p>To generate tests for multiple email-addresses use a group
+      parameter like <code>(sieve address "sender" ("name@one.org"
+      else@two.org"))</code>. When generating a sieve script (see
+      <a href="Sieve-Commands.html#Sieve-Commands">Sieve
+      Commands</a>) Sieve code like the following is generated:</p>
+
+      <div class="example">
+        <pre class="example">
+if address "sender" ["name@one.org", "else@two.org"] {
+        fileinto "INBOX.list.sieve";
 }
-</pre></div>
+</pre>
+      </div>
 
-<p>You can also use regexp expansions in the rules:
-</p>
-<div class="example">
-<pre class="example">(sieve header :regex &quot;list-id&quot; &quot;&lt;c++std-\\1.accu.org&gt;&quot;)
-</pre></div>
+      <p>You can also use regexp expansions in the rules:</p>
 
-<p>See see <a href="Sieve-Commands.html#Sieve-Commands">Sieve Commands</a> for commands and variables that might be of
-interest in relation to the sieve parameter.
-</p>
-<p>The Sieve language is described in RFC 3028.  See <a href="../sieve/index.html#Top">Top</a> in <cite>Emacs Sieve</cite>.
-</p>
-</dd>
-<dt><code>(agent parameters)</code></dt>
-<dd><p>If the agent has been enabled, you can set any of its parameters to
-control the behavior of the agent in individual groups.  See Agent
-Parameters in <a href="Category-Syntax.html#Category-Syntax">Category Syntax</a>.  Most users will choose to set
-agent parameters in either an agent category or group topic to
-minimize the configuration effort.
-</p>
-</dd>
-<dt><code>(<var>variable</var> <var>form</var>)</code></dt>
-<dd><p>You can use the group parameters to set variables local to the group you
-are entering.  If you want to turn threading off in &lsquo;<samp>news.answers</samp>&rsquo;,
-you could put <code>(gnus-show-threads nil)</code> in the group parameters of
-that group.  <code>gnus-show-threads</code> will be made into a local variable
-in the summary buffer you enter, and the form <code>nil</code> will be
-<code>eval</code>ed there.
-</p>
-<p>Note that this feature sets the variable locally to the summary buffer
-if and only if <var>variable</var> has been bound as a variable.  Otherwise,
-only evaluating the form will take place.  So, you may want to bind the
-variable in advance using <code>defvar</code> or other if the result of the
-form needs to be set to it.
-</p>
-<p>But some variables are evaluated in the article buffer, or in the
-message buffer (of a reply or followup or otherwise newly created
-message).  As a workaround, it might help to add the variable in
-question to <code>gnus-newsgroup-variables</code>.  See <a href="Various-Summary-Stuff.html#Various-Summary-Stuff">Various Summary Stuff</a>.  So if you want to set <code>message-from-style</code> via the group
-parameters, then you may need the following statement elsewhere in your
-<samp>~/.gnus.el</samp> file:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'gnus-newsgroup-variables 'message-from-style)
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(sieve header :regex "list-id" "&lt;c++std-\\1.accu.org&gt;")
+</pre>
+      </div>
 
-<a name="index-gnus_002dlist_002didentifiers"></a>
-<p>A use for this feature is to remove a mailing list identifier tag in
-the subject fields of articles.  E.g., if the news group
-</p>
-<div class="example">
-<pre class="example">nntp+news.gnus.org:gmane.text.docbook.apps
-</pre></div>
+      <p>See see <a href="Sieve-Commands.html#Sieve-Commands">Sieve
+      Commands</a> for commands and variables that might be of
+      interest in relation to the sieve parameter.</p>
 
-<p>has the tag &lsquo;<samp>DOC-BOOK-APPS:</samp>&rsquo; in the subject of all articles, this
-tag can be removed from the article subjects in the summary buffer for
-the group by putting <code>(gnus-list-identifiers &quot;DOCBOOK-APPS:&quot;)</code>
-into the group parameters for the group.
-</p>
-<p>This can also be used as a group-specific hook function.  If you want to
-hear a beep when you enter a group, you could put something like
-<code>(dummy-variable (ding))</code> in the parameters of that group.  If
-<code>dummy-variable</code> has been bound (see above), it will be set to the
-(meaningless) result of the <code>(ding)</code> form.
-</p>
-<p>Alternatively, since the VARIABLE becomes local to the group, this
-pattern can be used to temporarily change a hook.  For example, if the
-following is added to a group parameter
-</p>
-<div class="lisp">
-<pre class="lisp">(gnus-summary-prepared-hook
-  (lambda nil (local-set-key &quot;d&quot; (local-key-binding &quot;n&quot;))))
-</pre></div>
+      <p>The Sieve language is described in RFC 3028. See <a href=
+      "../sieve/index.html#Top">Top</a> in <cite>Emacs
+      Sieve</cite>.</p>
+    </dd>
 
-<p>when the group is entered, the &rsquo;d&rsquo; key will not mark the article as
-expired.
-</p>
-</dd>
-</dl>
+    <dt><code>(agent parameters)</code></dt>
 
-<a name="index-gnus_002dparameters"></a>
-<p>Group parameters can be set via the <code>gnus-parameters</code> variable too.
-But some variables, such as <code>visible</code>, have no effect (For this
-case see <code>gnus-permanently-visible-groups</code> as an alternative.).
-For example:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-parameters
-      '((&quot;mail\\..*&quot;
+    <dd>
+      <p>If the agent has been enabled, you can set any of its
+      parameters to control the behavior of the agent in individual
+      groups. See Agent Parameters in <a href=
+      "Category-Syntax.html#Category-Syntax">Category Syntax</a>.
+      Most users will choose to set agent parameters in either an
+      agent category or group topic to minimize the configuration
+      effort.</p>
+    </dd>
+
+    <dt><code>(<var>variable</var> <var>form</var>)</code></dt>
+
+    <dd>
+      <p>You can use the group parameters to set variables local to
+      the group you are entering. If you want to turn threading off
+      in &lsquo;<samp>news.answers</samp>&rsquo;, you could put
+      <code>(gnus-show-threads nil)</code> in the group parameters
+      of that group. <code>gnus-show-threads</code> will be made
+      into a local variable in the summary buffer you enter, and
+      the form <code>nil</code> will be <code>eval</code>ed
+      there.</p>
+
+      <p>Note that this feature sets the variable locally to the
+      summary buffer if and only if <var>variable</var> has been
+      bound as a variable. Otherwise, only evaluating the form will
+      take place. So, you may want to bind the variable in advance
+      using <code>defvar</code> or other if the result of the form
+      needs to be set to it.</p>
+
+      <p>But some variables are evaluated in the article buffer, or
+      in the message buffer (of a reply or followup or otherwise
+      newly created message). As a workaround, it might help to add
+      the variable in question to
+      <code>gnus-newsgroup-variables</code>. See <a href=
+      "Various-Summary-Stuff.html#Various-Summary-Stuff">Various
+      Summary Stuff</a>. So if you want to set
+      <code>message-from-style</code> via the group parameters,
+      then you may need the following statement elsewhere in your
+      <samp>~/.gnus.el</samp> file:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(add-to-list 'gnus-newsgroup-variables 'message-from-style)
+</pre>
+      </div><a name="index-gnus_002dlist_002didentifiers" id=
+      "index-gnus_002dlist_002didentifiers"></a>
+
+      <p>A use for this feature is to remove a mailing list
+      identifier tag in the subject fields of articles. E.g., if
+      the news group</p>
+
+      <div class="example">
+        <pre class="example">
+nntp+news.gnus.org:gmane.text.docbook.apps
+</pre>
+      </div>
+
+      <p>has the tag &lsquo;<samp>DOC-BOOK-APPS:</samp>&rsquo; in
+      the subject of all articles, this tag can be removed from the
+      article subjects in the summary buffer for the group by
+      putting <code>(gnus-list-identifiers "DOCBOOK-APPS:")</code>
+      into the group parameters for the group.</p>
+
+      <p>This can also be used as a group-specific hook function.
+      If you want to hear a beep when you enter a group, you could
+      put something like <code>(dummy-variable (ding))</code> in
+      the parameters of that group. If <code>dummy-variable</code>
+      has been bound (see above), it will be set to the
+      (meaningless) result of the <code>(ding)</code> form.</p>
+
+      <p>Alternatively, since the VARIABLE becomes local to the
+      group, this pattern can be used to temporarily change a hook.
+      For example, if the following is added to a group
+      parameter</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(gnus-summary-prepared-hook
+  (lambda nil (local-set-key "d" (local-key-binding "n"))))
+</pre>
+      </div>
+
+      <p>when the group is entered, the &rsquo;d&rsquo; key will
+      not mark the article as expired.</p>
+    </dd>
+  </dl><a name="index-gnus_002dparameters" id=
+  "index-gnus_002dparameters"></a>
+
+  <p>Group parameters can be set via the
+  <code>gnus-parameters</code> variable too. But some variables,
+  such as <code>visible</code>, have no effect (For this case see
+  <code>gnus-permanently-visible-groups</code> as an alternative.).
+  For example:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-parameters
+      '(("mail\\..*"
          (gnus-show-threads nil)
          (gnus-use-scoring nil)
          (gnus-summary-line-format
-          &quot;%U%R%z%I%(%[%d:%ub%-23,23f%]%) %s\n&quot;)
+          "%U%R%z%I%(%[%d:%ub%-23,23f%]%) %s\n")
          (gcc-self . t)
          (display . all))
 
-        (&quot;^nnimap:\\(foo.bar\\)$&quot;
-         (to-group . &quot;\\1&quot;))
+        ("^nnimap:\\(foo.bar\\)$"
+         (to-group . "\\1"))
 
-        (&quot;mail\\.me&quot;
+        ("mail\\.me"
          (gnus-use-scoring t))
 
-        (&quot;list\\..*&quot;
+        ("list\\..*"
          (total-expire . t)
          (broken-reply-to . t))))
-</pre></div>
+</pre>
+  </div>
 
-<p>All clauses that matches the group name will be used, but the last
-setting &ldquo;wins&rdquo;.  So if you have two clauses that both match the
-group name, and both set, say <code>display</code>, the last setting will
-override the first.
-</p>
-<p>Parameters that are strings will be subjected to regexp substitution,
-as the <code>to-group</code> example shows.
-</p>
-<a name="index-gnus_002dparameters_002dcase_002dfold_002dsearch"></a>
-<p>By default, whether comparing the group name and one of those regexps
-specified in <code>gnus-parameters</code> is done in a case-sensitive manner
-or a case-insensitive manner depends on the value of
-<code>case-fold-search</code> at the time when the comparison is done.  The
-value of <code>case-fold-search</code> is typically <code>t</code>; it means, for
-example, the element <code>(&quot;INBOX\\.FOO&quot; (total-expire . t))</code> might be
-applied to both the &lsquo;<samp>INBOX.FOO</samp>&rsquo; group and the &lsquo;<samp>INBOX.foo</samp>&rsquo;
-group.  If you want to make those regexps always case-sensitive, set the
-value of the <code>gnus-parameters-case-fold-search</code> variable to
-<code>nil</code>.  Otherwise, set it to <code>t</code> if you want to compare them
-always in a case-insensitive manner.
-</p>
-<p>You can define different sorting to different groups via
-<code>gnus-parameters</code>.  Here is an example to sort an <acronym>NNTP</acronym>
-group by reverse date to see the latest news at the top and an
-<acronym>RSS</acronym> group by subject.  In this example, the first group is the
-Debian daily news group <code>gmane.linux.debian.user.news</code> from
-news.gmane.org.  The <acronym>RSS</acronym> group corresponds to the Debian
-weekly news RSS feed
-<a href="http://packages.debian.org/unstable/newpkg_main.en.rdf">http://packages.debian.org/unstable/newpkg_main.en.rdf</a>,
-See <a href="RSS.html#RSS">RSS</a>.
-</p>
-<div class="lisp">
-<pre class="lisp">(setq
+  <p>All clauses that matches the group name will be used, but the
+  last setting &ldquo;wins&rdquo;. So if you have two clauses that
+  both match the group name, and both set, say
+  <code>display</code>, the last setting will override the
+  first.</p>
+
+  <p>Parameters that are strings will be subjected to regexp
+  substitution, as the <code>to-group</code> example
+  shows.</p><a name=
+  "index-gnus_002dparameters_002dcase_002dfold_002dsearch" id=
+  "index-gnus_002dparameters_002dcase_002dfold_002dsearch"></a>
+
+  <p>By default, whether comparing the group name and one of those
+  regexps specified in <code>gnus-parameters</code> is done in a
+  case-sensitive manner or a case-insensitive manner depends on the
+  value of <code>case-fold-search</code> at the time when the
+  comparison is done. The value of <code>case-fold-search</code> is
+  typically <code>t</code>; it means, for example, the element
+  <code>("INBOX\\.FOO" (total-expire . t))</code> might be applied
+  to both the &lsquo;<samp>INBOX.FOO</samp>&rsquo; group and the
+  &lsquo;<samp>INBOX.foo</samp>&rsquo; group. If you want to make
+  those regexps always case-sensitive, set the value of the
+  <code>gnus-parameters-case-fold-search</code> variable to
+  <code>nil</code>. Otherwise, set it to <code>t</code> if you want
+  to compare them always in a case-insensitive manner.</p>
+
+  <p>You can define different sorting to different groups via
+  <code>gnus-parameters</code>. Here is an example to sort an
+  <acronym>NNTP</acronym> group by reverse date to see the latest
+  news at the top and an <acronym>RSS</acronym> group by subject.
+  In this example, the first group is the Debian daily news group
+  <code>gmane.linux.debian.user.news</code> from news.gmane.org.
+  The <acronym>RSS</acronym> group corresponds to the Debian weekly
+  news RSS feed <a href=
+  "http://packages.debian.org/unstable/newpkg_main.en.rdf">http://packages.debian.org/unstable/newpkg_main.en.rdf</a>,
+  See <a href="RSS.html#RSS">RSS</a>.</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq
  gnus-parameters
- '((&quot;nntp.*gmane\\.debian\\.user\\.news&quot;
+ '(("nntp.*gmane\\.debian\\.user\\.news"
     (gnus-show-threads nil)
     (gnus-article-sort-functions '((not gnus-article-sort-by-date)))
     (gnus-use-adaptive-scoring nil)
     (gnus-use-scoring nil))
-   (&quot;nnrss.*debian&quot;
+   ("nnrss.*debian"
     (gnus-show-threads nil)
     (gnus-article-sort-functions 'gnus-article-sort-by-subject)
     (gnus-use-adaptive-scoring nil)
     (gnus-use-scoring t)
     (gnus-score-find-score-files-function 'gnus-score-find-single)
-    (gnus-summary-line-format &quot;%U%R%z%d %I%(%[ %s %]%)\n&quot;))))
-</pre></div>
+    (gnus-summary-line-format "%U%R%z%d %I%(%[ %s %]%)\n"))))
+</pre>
+  </div>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Listing-Groups.html#Listing-Groups" accesskey="n" rel="next">Listing Groups</a>, Previous: <a href="Foreign-Groups.html#Foreign-Groups" accesskey="p" rel="prev">Foreign Groups</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Listing-Groups.html#Listing-Groups"
+    accesskey="n" rel="next">Listing Groups</a>, Previous: <a href=
+    "Foreign-Groups.html#Foreign-Groups" accesskey="p" rel=
+    "prev">Foreign Groups</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

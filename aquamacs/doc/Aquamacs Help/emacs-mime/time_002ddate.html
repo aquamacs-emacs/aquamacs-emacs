@@ -1,15 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>time-date - Emacs MIME Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Emacs MIME Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Basic-Functions.html#Basic-Functions" title="Basic Functions">
-<link rel="prev" href="rfc2047.html#rfc2047" title="rfc2047">
-<link rel="next" href="qp.html#qp" title="qp">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>time-date - Emacs MIME Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Emacs MIME Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Basic-Functions.html#Basic-Functions" title=
+  "Basic Functions" />
+  <link rel="prev" href="rfc2047.html#rfc2047" title="rfc2047" />
+  <link rel="next" href="qp.html#qp" title="qp" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the Emacs MIME interface functionality.
 
 Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
@@ -27,8 +35,10 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,32 +48,38 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="time-date"></a>
-<a name="time_002ddate"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="qp.html#qp">qp</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="rfc2047.html#rfc2047">rfc2047</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Basic-Functions.html#Basic-Functions">Basic Functions</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="time-date" id="time-date"></a> <a name="time_002ddate"
+    id="time_002ddate"></a>
 
-<h3 class="section">4.5 time-date</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "qp.html#qp">qp</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href="rfc2047.html#rfc2047">rfc2047</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Basic-Functions.html#Basic-Functions">Basic Functions</a></p>
+    <hr />
+  </div>
 
-<p>While not really a part of the <acronym>MIME</acronym> library, it is convenient to
-document this library here.  It deals with parsing <code>Date</code> headers
-and manipulating time.  (Not by using tesseracts, though, I'm sorry to
-say.)
+  <h3 class="section">4.5 time-date</h3>
 
-   <p>These functions convert between five formats: A date string, an Emacs
-time structure, a decoded time list, a second number, and a day number.
+  <p>While not really a part of the <acronym>MIME</acronym>
+  library, it is convenient to document this library here. It deals
+  with parsing <code>Date</code> headers and manipulating time.
+  (Not by using tesseracts, though, I'm sorry to say.)</p>
 
-   <p>Here's a bunch of time/date/second/day examples:
+  <p>These functions convert between five formats: A date string,
+  an Emacs time structure, a decoded time list, a second number,
+  and a day number.</p>
 
-<pre class="example">     (parse-time-string "Sat Sep 12 12:21:54 1998 +0200")
+  <p>Here's a bunch of time/date/second/day examples:</p>
+  <pre class="example">
+     (parse-time-string "Sat Sep 12 12:21:54 1998 +0200")
      &rArr; (54 21 12 12 9 1998 6 nil 7200)
      
      (date-to-time "Sat Sep 12 12:21:54 1998 +0200")
@@ -105,67 +121,111 @@ time structure, a decoded time list, a second number, and a day number.
        (date-to-time "Mon, 01 Jan 2001 02:22:26 GMT")))
      &rArr; 4.146122685185185
 </pre>
-   <p>And finally, we have <code>safe-date-to-time</code>, which does the same as
-<code>date-to-time</code>, but returns a zero time if the date is
-syntactically malformed.
 
-   <p>The five data representations used are the following:
+  <p>And finally, we have <code>safe-date-to-time</code>, which
+  does the same as <code>date-to-time</code>, but returns a zero
+  time if the date is syntactically malformed.</p>
 
-     <dl>
-<dt><var>date</var><dd>An RFC822 (or similar) date string.  For instance: <code>"Sat Sep 12
-12:21:54 1998 +0200"</code>.
+  <p>The five data representations used are the following:</p>
 
-     <br><dt><var>time</var><dd>An internal Emacs time.  For instance: <code>(13818 26466)</code>.
+  <dl>
+    <dt><var>date</var></dt>
 
-     <br><dt><var>seconds</var><dd>A floating point representation of the internal Emacs time.  For
-instance: <code>905595714.0</code>.
+    <dd>An RFC822 (or similar) date string. For instance:
+    <code>"Sat Sep 12 12:21:54 1998 +0200"</code>.<br /></dd>
 
-     <br><dt><var>days</var><dd>An integer number representing the number of days since 00000101.  For
-instance: <code>729644</code>.
+    <dt><var>time</var></dt>
 
-     <br><dt><var>decoded time</var><dd>A list of decoded time.  For instance: <code>(54 21 12 12 9 1998 6 t
-7200)</code>. 
-</dl>
+    <dd>An internal Emacs time. For instance: <code>(13818
+    26466)</code>.<br /></dd>
 
-   <p>All the examples above represent the same moment.
+    <dt><var>seconds</var></dt>
 
-   <p>These are the functions available:
+    <dd>A floating point representation of the internal Emacs time.
+    For instance: <code>905595714.0</code>.<br /></dd>
 
-     <dl>
-<dt><code>date-to-time</code><dd>Take a date and return a time.
+    <dt><var>days</var></dt>
 
-     <br><dt><code>time-to-seconds</code><dd>Take a time and return seconds.  Note that Emacs has a built-in
-function, <code>float-time</code>, that does this.
+    <dd>An integer number representing the number of days since
+    00000101. For instance: <code>729644</code>.<br /></dd>
 
-     <br><dt><code>seconds-to-time</code><dd>Take seconds and return a time.
+    <dt><var>decoded time</var></dt>
 
-     <br><dt><code>time-to-days</code><dd>Take a time and return days.
+    <dd>A list of decoded time. For instance: <code>(54 21 12 12 9
+    1998 6 t 7200)</code>.</dd>
+  </dl>
 
-     <br><dt><code>days-to-time</code><dd>Take days and return a time.
+  <p>All the examples above represent the same moment.</p>
 
-     <br><dt><code>date-to-day</code><dd>Take a date and return days.
+  <p>These are the functions available:</p>
 
-     <br><dt><code>time-to-number-of-days</code><dd>Take a time and return the number of days that represents.
+  <dl>
+    <dt><code>date-to-time</code></dt>
 
-     <br><dt><code>safe-date-to-time</code><dd>Take a date and return a time.  If the date is not syntactically valid,
-return a &ldquo;zero&rdquo; time.
+    <dd>Take a date and return a time.<br /></dd>
 
-     <br><dt><code>time-less-p</code><dd>Take two times and say whether the first time is less (i. e., earlier)
-than the second time.
+    <dt><code>time-to-seconds</code></dt>
 
-     <br><dt><code>time-since</code><dd>Take a time and return a time saying how long it was since that time.
+    <dd>Take a time and return seconds. Note that Emacs has a
+    built-in function, <code>float-time</code>, that does
+    this.<br /></dd>
 
-     <br><dt><code>subtract-time</code><dd>Take two times and subtract the second from the first.  I. e., return
-the time between the two times.
+    <dt><code>seconds-to-time</code></dt>
 
-     <br><dt><code>days-between</code><dd>Take two days and return the number of days between those two days.
+    <dd>Take seconds and return a time.<br /></dd>
 
-     <br><dt><code>date-leap-year-p</code><dd>Take a year number and say whether it's a leap year.
+    <dt><code>time-to-days</code></dt>
 
-     <br><dt><code>time-to-day-in-year</code><dd>Take a time and return the day number within the year that the time is
-in.
+    <dd>Take a time and return days.<br /></dd>
 
-   </dl>
+    <dt><code>days-to-time</code></dt>
 
-   </body></html>
+    <dd>Take days and return a time.<br /></dd>
 
+    <dt><code>date-to-day</code></dt>
+
+    <dd>Take a date and return days.<br /></dd>
+
+    <dt><code>time-to-number-of-days</code></dt>
+
+    <dd>Take a time and return the number of days that
+    represents.<br /></dd>
+
+    <dt><code>safe-date-to-time</code></dt>
+
+    <dd>Take a date and return a time. If the date is not
+    syntactically valid, return a &ldquo;zero&rdquo;
+    time.<br /></dd>
+
+    <dt><code>time-less-p</code></dt>
+
+    <dd>Take two times and say whether the first time is less (i.
+    e., earlier) than the second time.<br /></dd>
+
+    <dt><code>time-since</code></dt>
+
+    <dd>Take a time and return a time saying how long it was since
+    that time.<br /></dd>
+
+    <dt><code>subtract-time</code></dt>
+
+    <dd>Take two times and subtract the second from the first. I.
+    e., return the time between the two times.<br /></dd>
+
+    <dt><code>days-between</code></dt>
+
+    <dd>Take two days and return the number of days between those
+    two days.<br /></dd>
+
+    <dt><code>date-leap-year-p</code></dt>
+
+    <dd>Take a year number and say whether it's a leap
+    year.<br /></dd>
+
+    <dt><code>time-to-day-in-year</code></dt>
+
+    <dd>Take a time and return the day number within the year that
+    the time is in.</dd>
+  </dl>
+</body>
+</html>

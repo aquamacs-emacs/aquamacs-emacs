@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,116 +16,162 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Common Lisp Compatibility</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Common Lisp Compatibility">
-<meta name="keywords" content="Common Lisp Extensions: Common Lisp Compatibility">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Porting-Common-Lisp.html#Porting-Common-Lisp" rel="next" title="Porting Common Lisp">
-<link href="Efficiency-Concerns.html#Efficiency-Concerns" rel="prev" title="Efficiency Concerns">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Common Lisp Compatibility</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Common Lisp Compatibility" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Common Lisp Compatibility" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Porting-Common-Lisp.html#Porting-Common-Lisp" rel=
+  "next" title="Porting Common Lisp" />
+  <link href="Efficiency-Concerns.html#Efficiency-Concerns" rel=
+  "prev" title="Efficiency Concerns" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Common-Lisp-Compatibility"></a>
-<div class="header">
-<p>
-Next: <a href="Porting-Common-Lisp.html#Porting-Common-Lisp" accesskey="n" rel="next">Porting Common Lisp</a>, Previous: <a href="Efficiency-Concerns.html#Efficiency-Concerns" accesskey="p" rel="prev">Efficiency Concerns</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Common-Lisp-Compatibility-1"></a>
-<h2 class="appendix">Appendix B Common Lisp Compatibility</h2>
+<body lang="en" xml:lang="en">
+  <a name="Common-Lisp-Compatibility" id=
+  "Common-Lisp-Compatibility"></a>
 
-<p>The following is a list of some of the most important
-incompatibilities between this package and Common Lisp as documented
-in Steele (2nd edition).
-</p>
-<p>The word <code>cl-defun</code> is required instead of <code>defun</code> in order
-to use extended Common Lisp argument lists in a function.  Likewise,
-<code>cl-defmacro</code> and <code>cl-function</code> are versions of those forms
-which understand full-featured argument lists.  The <code>&amp;whole</code>
-keyword does not work in <code>cl-defmacro</code> argument lists (except
-inside recursive argument lists).
-</p>
-<p>The <code>equal</code> predicate does not distinguish
-between IEEE floating-point plus and minus zero.  The <code>cl-equalp</code>
-predicate has several differences with Common Lisp; see <a href="Predicates.html#Predicates">Predicates</a>.
-</p>
-<p>The <code>cl-do-all-symbols</code> form is the same as <code>cl-do-symbols</code>
-with no <var>obarray</var> argument.  In Common Lisp, this form would
-iterate over all symbols in all packages.  Since Emacs obarrays
-are not a first-class package mechanism, there is no way for
-<code>cl-do-all-symbols</code> to locate any but the default obarray.
-</p>
-<p>The <code>cl-loop</code> macro is complete except that <code>loop-finish</code>
-and type specifiers are unimplemented.
-</p>
-<p>The multiple-value return facility treats lists as multiple
-values, since Emacs Lisp cannot support multiple return values
-directly.  The macros will be compatible with Common Lisp if
-<code>cl-values</code> or <code>cl-values-list</code> is always used to return to
-a <code>cl-multiple-value-bind</code> or other multiple-value receiver;
-if <code>cl-values</code> is used without <code>cl-multiple-value-&hellip;</code>
-or vice-versa the effect will be different from Common Lisp.
-</p>
-<p>Many Common Lisp declarations are ignored, and others match
-the Common Lisp standard in concept but not in detail.  For
-example, local <code>special</code> declarations, which are purely
-advisory in Emacs Lisp, do not rigorously obey the scoping rules
-set down in Steele&rsquo;s book.
-</p>
-<p>The variable <code>cl--gensym-counter</code> starts out with zero.
-</p>
-<p>The <code>cl-defstruct</code> facility is compatible, except that structures
-are of type <code>:type vector :named</code> by default rather than some
-special, distinct type.  Also, the <code>:type</code> slot option is ignored.
-</p>
-<p>The second argument of <code>cl-check-type</code> is treated differently.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Porting-Common-Lisp.html#Porting-Common-Lisp" accesskey="n" rel="next">Porting Common Lisp</a>, Previous: <a href="Efficiency-Concerns.html#Efficiency-Concerns" accesskey="p" rel="prev">Efficiency Concerns</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Porting-Common-Lisp.html#Porting-Common-Lisp"
+    accesskey="n" rel="next">Porting Common Lisp</a>, Previous:
+    <a href="Efficiency-Concerns.html#Efficiency-Concerns"
+    accesskey="p" rel="prev">Efficiency Concerns</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Common-Lisp-Compatibility-1" id=
+  "Common-Lisp-Compatibility-1"></a>
 
+  <h2 class="appendix">Appendix B Common Lisp Compatibility</h2>
 
+  <p>The following is a list of some of the most important
+  incompatibilities between this package and Common Lisp as
+  documented in Steele (2nd edition).</p>
 
+  <p>The word <code>cl-defun</code> is required instead of
+  <code>defun</code> in order to use extended Common Lisp argument
+  lists in a function. Likewise, <code>cl-defmacro</code> and
+  <code>cl-function</code> are versions of those forms which
+  understand full-featured argument lists. The
+  <code>&amp;whole</code> keyword does not work in
+  <code>cl-defmacro</code> argument lists (except inside recursive
+  argument lists).</p>
+
+  <p>The <code>equal</code> predicate does not distinguish between
+  IEEE floating-point plus and minus zero. The
+  <code>cl-equalp</code> predicate has several differences with
+  Common Lisp; see <a href=
+  "Predicates.html#Predicates">Predicates</a>.</p>
+
+  <p>The <code>cl-do-all-symbols</code> form is the same as
+  <code>cl-do-symbols</code> with no <var>obarray</var> argument.
+  In Common Lisp, this form would iterate over all symbols in all
+  packages. Since Emacs obarrays are not a first-class package
+  mechanism, there is no way for <code>cl-do-all-symbols</code> to
+  locate any but the default obarray.</p>
+
+  <p>The <code>cl-loop</code> macro is complete except that
+  <code>loop-finish</code> and type specifiers are
+  unimplemented.</p>
+
+  <p>The multiple-value return facility treats lists as multiple
+  values, since Emacs Lisp cannot support multiple return values
+  directly. The macros will be compatible with Common Lisp if
+  <code>cl-values</code> or <code>cl-values-list</code> is always
+  used to return to a <code>cl-multiple-value-bind</code> or other
+  multiple-value receiver; if <code>cl-values</code> is used
+  without <code>cl-multiple-value-&hellip;</code> or vice-versa the
+  effect will be different from Common Lisp.</p>
+
+  <p>Many Common Lisp declarations are ignored, and others match
+  the Common Lisp standard in concept but not in detail. For
+  example, local <code>special</code> declarations, which are
+  purely advisory in Emacs Lisp, do not rigorously obey the scoping
+  rules set down in Steele&rsquo;s book.</p>
+
+  <p>The variable <code>cl--gensym-counter</code> starts out with
+  zero.</p>
+
+  <p>The <code>cl-defstruct</code> facility is compatible, except
+  that structures are of type <code>:type vector :named</code> by
+  default rather than some special, distinct type. Also, the
+  <code>:type</code> slot option is ignored.</p>
+
+  <p>The second argument of <code>cl-check-type</code> is treated
+  differently.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Porting-Common-Lisp.html#Porting-Common-Lisp"
+    accesskey="n" rel="next">Porting Common Lisp</a>, Previous:
+    <a href="Efficiency-Concerns.html#Efficiency-Concerns"
+    accesskey="p" rel="prev">Efficiency Concerns</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

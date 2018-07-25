@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,127 +19,347 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: System Interface</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: System Interface">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: System Interface">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Starting-Up.html#Starting-Up" rel="next" title="Starting Up">
-<link href="Bidirectional-Display.html#Bidirectional-Display" rel="prev" title="Bidirectional Display">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: System Interface</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: System Interface" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: System Interface" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Starting-Up.html#Starting-Up" rel="next" title=
+  "Starting Up" />
+  <link href="Bidirectional-Display.html#Bidirectional-Display"
+  rel="prev" title="Bidirectional Display" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="System-Interface" id="System-Interface"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Packaging.html#Packaging" accesskey="n" rel=
+    "next">Packaging</a>, Previous: <a href="Display.html#Display"
+    accesskey="p" rel="prev">Display</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Operating-System-Interface" id=
+  "Operating-System-Interface"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="System-Interface"></a>
-<div class="header">
-<p>
-Next: <a href="Packaging.html#Packaging" accesskey="n" rel="next">Packaging</a>, Previous: <a href="Display.html#Display" accesskey="p" rel="prev">Display</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Operating-System-Interface"></a>
-<h2 class="chapter">38 Operating System Interface</h2>
+  <h2 class="chapter">38 Operating System Interface</h2>
 
-<p>This chapter is about starting and getting out of Emacs, access to
-values in the operating system environment, and terminal input, output.
-</p>
-<p>See <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>, for related information.  See <a href="Display.html#Display">Display</a>, for
-additional operating system status information pertaining to the
-terminal and the screen.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Starting-Up.html#Starting-Up" accesskey="1">Starting Up</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Customizing Emacs startup processing.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Getting-Out.html#Getting-Out" accesskey="2">Getting Out</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How exiting works (permanent or temporary).
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="System-Environment.html#System-Environment" accesskey="3">System Environment</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Distinguish the name and kind of system.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="User-Identification.html#User-Identification" accesskey="4">User Identification</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Finding the name and user id of the user.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Time-of-Day.html#Time-of-Day" accesskey="5">Time of Day</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting the current time.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Time-Zone-Rules.html#Time-Zone-Rules" accesskey="6">Time Zone Rules</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Rules for time zones and daylight saving time.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Time-Conversion.html#Time-Conversion" accesskey="7">Time Conversion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Converting a time from numeric form to
-                          calendrical data and vice versa.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Time-Parsing.html#Time-Parsing" accesskey="8">Time Parsing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Converting a time from numeric form to text
-                          and vice versa.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Processor-Run-Time.html#Processor-Run-Time" accesskey="9">Processor Run Time</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting the run time used by Emacs.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Time-Calculations.html#Time-Calculations">Time Calculations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Adding, subtracting, comparing times, etc.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Timers.html#Timers">Timers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Setting a timer to call a function at a certain time.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Idle-Timers.html#Idle-Timers">Idle Timers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Setting a timer to call a function when Emacs has
-                          been idle for a certain length of time.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Terminal-Input.html#Terminal-Input">Terminal Input</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Accessing and recording terminal input.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Terminal-Output.html#Terminal-Output">Terminal Output</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling and recording terminal output.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Sound-Output.html#Sound-Output">Sound Output</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Playing sounds on the computer&rsquo;s speaker.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="X11-Keysyms.html#X11-Keysyms">X11 Keysyms</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Operating on key symbols for X Windows.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Batch-Mode.html#Batch-Mode">Batch Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Running Emacs without terminal interaction.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Session-Management.html#Session-Management">Session Management</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Saving and restoring state with X Session Management.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Desktop-Notifications.html#Desktop-Notifications">Desktop Notifications</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Desktop notifications.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="File-Notifications.html#File-Notifications">File Notifications</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">File notifications.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dynamic-Libraries.html#Dynamic-Libraries">Dynamic Libraries</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">On-demand loading of support libraries.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Security-Considerations.html#Security-Considerations">Security Considerations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Running Emacs in an unfriendly environment.
-</td></tr>
-</table>
+  <p>This chapter is about starting and getting out of Emacs,
+  access to values in the operating system environment, and
+  terminal input, output.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Packaging.html#Packaging" accesskey="n" rel="next">Packaging</a>, Previous: <a href="Display.html#Display" accesskey="p" rel="prev">Display</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>See <a href="Building-Emacs.html#Building-Emacs">Building
+  Emacs</a>, for related information. See <a href=
+  "Display.html#Display">Display</a>, for additional operating
+  system status information pertaining to the terminal and the
+  screen.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Starting-Up.html#Starting-Up" accesskey="1">Starting
+      Up</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Customizing Emacs startup
+      processing.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Getting-Out.html#Getting-Out" accesskey="2">Getting
+      Out</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How exiting works (permanent or
+      temporary).</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "System-Environment.html#System-Environment" accesskey=
+      "3">System Environment</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Distinguish the name and kind
+      of system.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "User-Identification.html#User-Identification" accesskey=
+      "4">User Identification</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Finding the name and user id of
+      the user.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Time-of-Day.html#Time-of-Day" accesskey="5">Time of
+      Day</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Getting the current time.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Time-Zone-Rules.html#Time-Zone-Rules" accesskey="6">Time
+      Zone Rules</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Rules for time zones and
+      daylight saving time.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Time-Conversion.html#Time-Conversion" accesskey="7">Time
+      Conversion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Converting a time from numeric
+      form to calendrical data and vice versa.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Time-Parsing.html#Time-Parsing" accesskey="8">Time
+      Parsing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Converting a time from numeric
+      form to text and vice versa.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Processor-Run-Time.html#Processor-Run-Time" accesskey=
+      "9">Processor Run Time</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Getting the run time used by
+      Emacs.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Time-Calculations.html#Time-Calculations">Time
+      Calculations</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Adding, subtracting, comparing
+      times, etc.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Timers.html#Timers">Timers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Setting a timer to call a
+      function at a certain time.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Idle-Timers.html#Idle-Timers">Idle Timers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Setting a timer to call a
+      function when Emacs has been idle for a certain length of
+      time.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Terminal-Input.html#Terminal-Input">Terminal Input</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Accessing and recording
+      terminal input.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Terminal-Output.html#Terminal-Output">Terminal
+      Output</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Controlling and recording
+      terminal output.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Sound-Output.html#Sound-Output">Sound Output</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Playing sounds on the
+      computer&rsquo;s speaker.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "X11-Keysyms.html#X11-Keysyms">X11 Keysyms</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Operating on key symbols for X
+      Windows.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Batch-Mode.html#Batch-Mode">Batch Mode</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Running Emacs without terminal
+      interaction.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Session-Management.html#Session-Management">Session
+      Management</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Saving and restoring state with
+      X Session Management.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Desktop-Notifications.html#Desktop-Notifications">Desktop
+      Notifications</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Desktop notifications.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "File-Notifications.html#File-Notifications">File
+      Notifications</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">File notifications.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dynamic-Libraries.html#Dynamic-Libraries">Dynamic
+      Libraries</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">On-demand loading of support
+      libraries.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Security-Considerations.html#Security-Considerations">Security
+      Considerations</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Running Emacs in an unfriendly
+      environment.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Packaging.html#Packaging" accesskey="n" rel=
+    "next">Packaging</a>, Previous: <a href="Display.html#Display"
+    accesskey="p" rel="prev">Display</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

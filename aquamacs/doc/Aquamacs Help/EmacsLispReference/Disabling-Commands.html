@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,129 +19,191 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Disabling Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Disabling Commands">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Disabling Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Command-History.html#Command-History" rel="next" title="Command History">
-<link href="Recursive-Editing.html#Recursive-Editing" rel="prev" title="Recursive Editing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Disabling
+  Commands</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Disabling Commands" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Disabling Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Command-History.html#Command-History" rel="next"
+  title="Command History" />
+  <link href="Recursive-Editing.html#Recursive-Editing" rel="prev"
+  title="Recursive Editing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Disabling-Commands" id="Disabling-Commands"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Command-History.html#Command-History"
+    accesskey="n" rel="next">Command History</a>, Previous:
+    <a href="Recursive-Editing.html#Recursive-Editing" accesskey=
+    "p" rel="prev">Recursive Editing</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Disabling-Commands-1" id="Disabling-Commands-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Disabling-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Command-History.html#Command-History" accesskey="n" rel="next">Command History</a>, Previous: <a href="Recursive-Editing.html#Recursive-Editing" accesskey="p" rel="prev">Recursive Editing</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Disabling-Commands-1"></a>
-<h3 class="section">20.14 Disabling Commands</h3>
-<a name="index-disabled-command"></a>
+  <h3 class="section">20.14 Disabling Commands</h3><a name=
+  "index-disabled-command" id="index-disabled-command"></a>
 
-<p><em>Disabling a command</em> marks the command as requiring user
-confirmation before it can be executed.  Disabling is used for commands
-which might be confusing to beginning users, to prevent them from using
-the commands by accident.
-</p>
-<a name="index-disabled"></a>
-<p>The low-level mechanism for disabling a command is to put a
-non-<code>nil</code> <code>disabled</code> property on the Lisp symbol for the
-command.  These properties are normally set up by the user&rsquo;s
-init file (see <a href="Init-File.html#Init-File">Init File</a>) with Lisp expressions such as this:
-</p>
-<div class="example">
-<pre class="example">(put 'upcase-region 'disabled t)
-</pre></div>
+  <p><em>Disabling a command</em> marks the command as requiring
+  user confirmation before it can be executed. Disabling is used
+  for commands which might be confusing to beginning users, to
+  prevent them from using the commands by accident.</p><a name=
+  "index-disabled" id="index-disabled"></a>
 
-<p>For a few commands, these properties are present by default (you can
-remove them in your init file if you wish).
-</p>
-<p>If the value of the <code>disabled</code> property is a string, the message
-saying the command is disabled includes that string.  For example:
-</p>
-<div class="example">
-<pre class="example">(put 'delete-region 'disabled
-     &quot;Text deleted this way cannot be yanked back!\n&quot;)
-</pre></div>
+  <p>The low-level mechanism for disabling a command is to put a
+  non-<code>nil</code> <code>disabled</code> property on the Lisp
+  symbol for the command. These properties are normally set up by
+  the user&rsquo;s init file (see <a href=
+  "Init-File.html#Init-File">Init File</a>) with Lisp expressions
+  such as this:</p>
 
-<p>See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Disabling.html#Disabling">Disabling</a> in <cite>The GNU Emacs Manual</cite>, for the details on
-what happens when a disabled command is invoked interactively.
-Disabling a command has no effect on calling it as a function from Lisp
-programs.
-</p>
-<dl>
-<dt><a name="index-enable_002dcommand"></a>Command: <strong>enable-command</strong> <em>command</em></dt>
-<dd><p>Allow <var>command</var> (a symbol) to be executed without special
-confirmation from now on, and alter the user&rsquo;s init file (see <a href="Init-File.html#Init-File">Init File</a>) so that this will apply to future sessions.
-</p></dd></dl>
+  <div class="example">
+    <pre class="example">
+(put 'upcase-region 'disabled t)
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-disable_002dcommand"></a>Command: <strong>disable-command</strong> <em>command</em></dt>
-<dd><p>Require special confirmation to execute <var>command</var> from now on, and
-alter the user&rsquo;s init file so that this will apply to future sessions.
-</p></dd></dl>
+  <p>For a few commands, these properties are present by default
+  (you can remove them in your init file if you wish).</p>
 
-<dl>
-<dt><a name="index-disabled_002dcommand_002dfunction"></a>Variable: <strong>disabled-command-function</strong></dt>
-<dd><p>The value of this variable should be a function.  When the user
-invokes a disabled command interactively, this function is called
-instead of the disabled command.  It can use <code>this-command-keys</code>
-to determine what the user typed to run the command, and thus find the
-command itself.
-</p>
-<p>The value may also be <code>nil</code>.  Then all commands work normally,
-even disabled ones.
-</p>
-<p>By default, the value is a function that asks the user whether to
-proceed.
-</p></dd></dl>
+  <p>If the value of the <code>disabled</code> property is a
+  string, the message saying the command is disabled includes that
+  string. For example:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Command-History.html#Command-History" accesskey="n" rel="next">Command History</a>, Previous: <a href="Recursive-Editing.html#Recursive-Editing" accesskey="p" rel="prev">Recursive Editing</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="example">
+    <pre class="example">
+(put 'delete-region 'disabled
+     "Text deleted this way cannot be yanked back!\n")
+</pre>
+  </div>
 
+  <p>See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Disabling.html#Disabling">
+  Disabling</a> in <cite>The GNU Emacs Manual</cite>, for the
+  details on what happens when a disabled command is invoked
+  interactively. Disabling a command has no effect on calling it as
+  a function from Lisp programs.</p>
 
+  <dl>
+    <dt><a name="index-enable_002dcommand" id=
+    "index-enable_002dcommand"></a>Command:
+    <strong>enable-command</strong> <em>command</em></dt>
 
+    <dd>
+      <p>Allow <var>command</var> (a symbol) to be executed without
+      special confirmation from now on, and alter the user&rsquo;s
+      init file (see <a href="Init-File.html#Init-File">Init
+      File</a>) so that this will apply to future sessions.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-disable_002dcommand" id=
+    "index-disable_002dcommand"></a>Command:
+    <strong>disable-command</strong> <em>command</em></dt>
+
+    <dd>
+      <p>Require special confirmation to execute <var>command</var>
+      from now on, and alter the user&rsquo;s init file so that
+      this will apply to future sessions.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-disabled_002dcommand_002dfunction" id=
+    "index-disabled_002dcommand_002dfunction"></a>Variable:
+    <strong>disabled-command-function</strong></dt>
+
+    <dd>
+      <p>The value of this variable should be a function. When the
+      user invokes a disabled command interactively, this function
+      is called instead of the disabled command. It can use
+      <code>this-command-keys</code> to determine what the user
+      typed to run the command, and thus find the command
+      itself.</p>
+
+      <p>The value may also be <code>nil</code>. Then all commands
+      work normally, even disabled ones.</p>
+
+      <p>By default, the value is a function that asks the user
+      whether to proceed.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Command-History.html#Command-History"
+    accesskey="n" rel="next">Command History</a>, Previous:
+    <a href="Recursive-Editing.html#Recursive-Editing" accesskey=
+    "p" rel="prev">Recursive Editing</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

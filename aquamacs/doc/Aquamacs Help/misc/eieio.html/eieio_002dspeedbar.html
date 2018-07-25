@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,171 +16,295 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: eieio-speedbar</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: eieio-speedbar">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: eieio-speedbar">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Base-Classes.html#Base-Classes" rel="up" title="Base Classes">
-<link href="Browsing.html#Browsing" rel="next" title="Browsing">
-<link href="eieio_002dnamed.html#eieio_002dnamed" rel="prev" title="eieio-named">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  eieio-speedbar</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: eieio-speedbar" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: eieio-speedbar" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="Base-Classes.html#Base-Classes" rel="up" title=
+  "Base Classes" />
+  <link href="Browsing.html#Browsing" rel="next" title=
+  "Browsing" />
+  <link href="eieio_002dnamed.html#eieio_002dnamed" rel="prev"
+  title="eieio-named" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="eieio_002dspeedbar"></a>
-<div class="header">
-<p>
-Previous: <a href="eieio_002dnamed.html#eieio_002dnamed" accesskey="p" rel="prev">eieio-named</a>, Up: <a href="Base-Classes.html#Base-Classes" accesskey="u" rel="up">Base Classes</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="eieio_002dspeedbar-1"></a>
-<h3 class="section">12.6 <code>eieio-speedbar</code></h3>
+<body lang="en" xml:lang="en">
+  <a name="eieio_002dspeedbar" id="eieio_002dspeedbar"></a>
 
-<p>This class is in package <samp>eieio-speedbar</samp>.
-</p>
-<p>If a series of class instances map to a tree structure, it is possible
-to cause your classes to be displayable in Speedbar.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/speedbar/index.html#Top">(speedbar)Top</a>.
-Inheriting from these classes will enable a speedbar major display mode
-with a minimum of effort.
-</p>
-<dl>
-<dt><a name="index-eieio_002dspeedbar"></a>Class: <strong>eieio-speedbar</strong> <em>buttontype buttonface</em></dt>
-<dd><p>Enables base speedbar display for a class.
-<a name="index-speedbar_002dmake_002dtag_002dline"></a>
-The slot <var>buttontype</var> is any of the symbols allowed by the
-function <code>speedbar-make-tag-line</code> for the <var>exp-button-type</var>
-argument See <a href="http://www.gnu.org/software/emacs/manual/html_node/speedbar/Extending.html#Extending">(speedbar)Extending</a>.
-The slot <var>buttonface</var> is the face to use for the text of the string
-displayed in speedbar.
-The slots <var>buttontype</var> and <var>buttonface</var> are class allocated
-slots, and do not take up space in your instances.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href="eieio_002dnamed.html#eieio_002dnamed"
+    accesskey="p" rel="prev">eieio-named</a>, Up: <a href=
+    "Base-Classes.html#Base-Classes" accesskey="u" rel="up">Base
+    Classes</a> &nbsp; [<a href="Function-Index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="eieio_002dspeedbar-1" id="eieio_002dspeedbar-1"></a>
 
-<dl>
-<dt><a name="index-eieio_002dspeedbar_002ddirectory_002dbutton"></a>Class: <strong>eieio-speedbar-directory-button</strong> <em>buttontype buttonface</em></dt>
-<dd><p>This class inherits from <code>eieio-speedbar</code> and initializes
-<var>buttontype</var> and <var>buttonface</var> to appear as directory level lines.
-</p></dd></dl>
+  <h3 class="section">12.6 <code>eieio-speedbar</code></h3>
 
-<dl>
-<dt><a name="index-eieio_002dspeedbar_002dfile_002dbutton"></a>Class: <strong>eieio-speedbar-file-button</strong> <em>buttontype buttonface</em></dt>
-<dd><p>This class inherits from <code>eieio-speedbar</code> and initializes
-<var>buttontype</var> and <var>buttonface</var> to appear as file level lines.
-</p></dd></dl>
+  <p>This class is in package <samp>eieio-speedbar</samp>.</p>
 
-<p>To use these classes, inherit from one of them in you class.  You can
-use multiple inheritance with them safely.  To customize your class for
-speedbar display, override the default values for <var>buttontype</var> and
-<var>buttonface</var> to get the desired effects.
-</p>
-<p>Useful methods to define for your new class include:
-</p>
-<dl>
-<dt><a name="index-eieio_002dspeedbar_002dderive_002dline_002dpath-on-eieio_002dspeedbar"></a>Method on eieio-speedbar: <strong>eieio-speedbar-derive-line-path</strong> <em>obj depth</em></dt>
-<dd><p>Return a string representing a directory associated with an instance
-of <var>obj</var>.  <var>depth</var> can be used to index how many levels of
-indentation have been opened by the user where <var>obj</var> is shown.
-</p></dd></dl>
+  <p>If a series of class instances map to a tree structure, it is
+  possible to cause your classes to be displayable in Speedbar. See
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/speedbar/index.html#Top">
+  (speedbar)Top</a>. Inheriting from these classes will enable a
+  speedbar major display mode with a minimum of effort.</p>
 
+  <dl>
+    <dt><a name="index-eieio_002dspeedbar" id=
+    "index-eieio_002dspeedbar"></a>Class:
+    <strong>eieio-speedbar</strong> <em>buttontype
+    buttonface</em></dt>
 
-<dl>
-<dt><a name="index-eieio_002dspeedbar_002ddescription-on-eieio_002dspeedbar"></a>Method on eieio-speedbar: <strong>eieio-speedbar-description</strong> <em>obj</em></dt>
-<dd><p>Return a string description of <var>OBJ</var>.
-This is shown in the minibuffer or tooltip when the mouse hovers over
-this instance in speedbar.
-</p></dd></dl>
+    <dd>
+      <p>Enables base speedbar display for a class. <a name=
+      "index-speedbar_002dmake_002dtag_002dline" id=
+      "index-speedbar_002dmake_002dtag_002dline"></a> The slot
+      <var>buttontype</var> is any of the symbols allowed by the
+      function <code>speedbar-make-tag-line</code> for the
+      <var>exp-button-type</var> argument See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/speedbar/Extending.html#Extending">
+      (speedbar)Extending</a>. The slot <var>buttonface</var> is
+      the face to use for the text of the string displayed in
+      speedbar. The slots <var>buttontype</var> and
+      <var>buttonface</var> are class allocated slots, and do not
+      take up space in your instances.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-eieio_002dspeedbar_002dchild_002ddescription-on-eieio_002dspeedbar"></a>Method on eieio-speedbar: <strong>eieio-speedbar-child-description</strong> <em>obj</em></dt>
-<dd><p>Return a string representing a description of a child node of <var>obj</var>
-when that child is not an object.  It is often useful to just use
-item info helper functions such as <code>speedbar-item-info-file-helper</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-eieio_002dspeedbar_002ddirectory_002dbutton"
+    id=
+    "index-eieio_002dspeedbar_002ddirectory_002dbutton"></a>Class:
+    <strong>eieio-speedbar-directory-button</strong> <em>buttontype
+    buttonface</em></dt>
 
-<dl>
-<dt><a name="index-eieio_002dspeedbar_002dobject_002dbuttonname-on-eieio_002dspeedbar"></a>Method on eieio-speedbar: <strong>eieio-speedbar-object-buttonname</strong> <em>obj</em></dt>
-<dd><p>Return a string which is the text displayed in speedbar for <var>obj</var>.
-</p></dd></dl>
+    <dd>
+      <p>This class inherits from <code>eieio-speedbar</code> and
+      initializes <var>buttontype</var> and <var>buttonface</var>
+      to appear as directory level lines.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-eieio_002dspeedbar_002dobject_002dchildren-on-eieio_002dspeedbar"></a>Method on eieio-speedbar: <strong>eieio-speedbar-object-children</strong> <em>obj</em></dt>
-<dd><p>Return a list of children of <var>obj</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-eieio_002dspeedbar_002dfile_002dbutton" id=
+    "index-eieio_002dspeedbar_002dfile_002dbutton"></a>Class:
+    <strong>eieio-speedbar-file-button</strong> <em>buttontype
+    buttonface</em></dt>
 
-<dl>
-<dt><a name="index-eieio_002dspeedbar_002dchild_002dmake_002dtag_002dlines-on-eieio_002dspeedbar"></a>Method on eieio-speedbar: <strong>eieio-speedbar-child-make-tag-lines</strong> <em>obj depth</em></dt>
-<dd><p>This method inserts a list of speedbar tag lines for <var>obj</var> to
-represent its children.  Implement this method for your class
-if your children are not objects themselves.  You still need to
-implement <code>eieio-speedbar-object-children</code>.
-</p>
-<p>In this method, use techniques specified in the Speedbar manual.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/speedbar/Extending.html#Extending">(speedbar)Extending</a>.
-</p></dd></dl>
+    <dd>
+      <p>This class inherits from <code>eieio-speedbar</code> and
+      initializes <var>buttontype</var> and <var>buttonface</var>
+      to appear as file level lines.</p>
+    </dd>
+  </dl>
 
-<p>Some other functions you will need to learn to use are:
-</p>
-<dl>
-<dt><a name="index-make_002dmap"></a>eieio-speedbar-create: <strong>make-map</strong> <em>key-map menu name toplevelfn</em></dt>
-<dd><p>Register your object display mode with speedbar.
-<var>make-map</var> is a function which initialized you keymap.
-<var>key-map</var> is a symbol you keymap is installed into.
-<var>menu</var> is an easy menu vector representing menu items specific to your
-object display.
-<var>name</var> is a short string to use as a name identifying you mode.
-<var>toplevelfn</var> is a function called which must return a list of
-objects representing those in the instance system you wish to browse in
-speedbar.
-</p>
-<p>Read the Extending chapter in the speedbar manual for more information
-on how speedbar modes work
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/speedbar/Extending.html#Extending">(speedbar)Extending</a>.
-</p></dd></dl>
+  <p>To use these classes, inherit from one of them in you class.
+  You can use multiple inheritance with them safely. To customize
+  your class for speedbar display, override the default values for
+  <var>buttontype</var> and <var>buttonface</var> to get the
+  desired effects.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="eieio_002dnamed.html#eieio_002dnamed" accesskey="p" rel="prev">eieio-named</a>, Up: <a href="Base-Classes.html#Base-Classes" accesskey="u" rel="up">Base Classes</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Useful methods to define for your new class include:</p>
 
+  <dl>
+    <dt><a name=
+    "index-eieio_002dspeedbar_002dderive_002dline_002dpath-on-eieio_002dspeedbar"
+    id=
+    "index-eieio_002dspeedbar_002dderive_002dline_002dpath-on-eieio_002dspeedbar">
+    </a>Method on eieio-speedbar:
+    <strong>eieio-speedbar-derive-line-path</strong> <em>obj
+    depth</em></dt>
 
+    <dd>
+      <p>Return a string representing a directory associated with
+      an instance of <var>obj</var>. <var>depth</var> can be used
+      to index how many levels of indentation have been opened by
+      the user where <var>obj</var> is shown.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-eieio_002dspeedbar_002ddescription-on-eieio_002dspeedbar"
+    id=
+    "index-eieio_002dspeedbar_002ddescription-on-eieio_002dspeedbar">
+    </a>Method on eieio-speedbar:
+    <strong>eieio-speedbar-description</strong> <em>obj</em></dt>
+
+    <dd>
+      <p>Return a string description of <var>OBJ</var>. This is
+      shown in the minibuffer or tooltip when the mouse hovers over
+      this instance in speedbar.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-eieio_002dspeedbar_002dchild_002ddescription-on-eieio_002dspeedbar"
+    id=
+    "index-eieio_002dspeedbar_002dchild_002ddescription-on-eieio_002dspeedbar">
+    </a>Method on eieio-speedbar:
+    <strong>eieio-speedbar-child-description</strong>
+    <em>obj</em></dt>
+
+    <dd>
+      <p>Return a string representing a description of a child node
+      of <var>obj</var> when that child is not an object. It is
+      often useful to just use item info helper functions such as
+      <code>speedbar-item-info-file-helper</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-eieio_002dspeedbar_002dobject_002dbuttonname-on-eieio_002dspeedbar"
+    id=
+    "index-eieio_002dspeedbar_002dobject_002dbuttonname-on-eieio_002dspeedbar">
+    </a>Method on eieio-speedbar:
+    <strong>eieio-speedbar-object-buttonname</strong>
+    <em>obj</em></dt>
+
+    <dd>
+      <p>Return a string which is the text displayed in speedbar
+      for <var>obj</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-eieio_002dspeedbar_002dobject_002dchildren-on-eieio_002dspeedbar"
+    id=
+    "index-eieio_002dspeedbar_002dobject_002dchildren-on-eieio_002dspeedbar">
+    </a>Method on eieio-speedbar:
+    <strong>eieio-speedbar-object-children</strong>
+    <em>obj</em></dt>
+
+    <dd>
+      <p>Return a list of children of <var>obj</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-eieio_002dspeedbar_002dchild_002dmake_002dtag_002dlines-on-eieio_002dspeedbar"
+    id=
+    "index-eieio_002dspeedbar_002dchild_002dmake_002dtag_002dlines-on-eieio_002dspeedbar">
+    </a>Method on eieio-speedbar:
+    <strong>eieio-speedbar-child-make-tag-lines</strong> <em>obj
+    depth</em></dt>
+
+    <dd>
+      <p>This method inserts a list of speedbar tag lines for
+      <var>obj</var> to represent its children. Implement this
+      method for your class if your children are not objects
+      themselves. You still need to implement
+      <code>eieio-speedbar-object-children</code>.</p>
+
+      <p>In this method, use techniques specified in the Speedbar
+      manual. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/speedbar/Extending.html#Extending">
+      (speedbar)Extending</a>.</p>
+    </dd>
+  </dl>
+
+  <p>Some other functions you will need to learn to use are:</p>
+
+  <dl>
+    <dt><a name="index-make_002dmap" id=
+    "index-make_002dmap"></a>eieio-speedbar-create:
+    <strong>make-map</strong> <em>key-map menu name
+    toplevelfn</em></dt>
+
+    <dd>
+      <p>Register your object display mode with speedbar.
+      <var>make-map</var> is a function which initialized you
+      keymap. <var>key-map</var> is a symbol you keymap is
+      installed into. <var>menu</var> is an easy menu vector
+      representing menu items specific to your object display.
+      <var>name</var> is a short string to use as a name
+      identifying you mode. <var>toplevelfn</var> is a function
+      called which must return a list of objects representing those
+      in the instance system you wish to browse in speedbar.</p>
+
+      <p>Read the Extending chapter in the speedbar manual for more
+      information on how speedbar modes work See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/speedbar/Extending.html#Extending">
+      (speedbar)Extending</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="eieio_002dnamed.html#eieio_002dnamed"
+    accesskey="p" rel="prev">eieio-named</a>, Up: <a href=
+    "Base-Classes.html#Base-Classes" accesskey="u" rel="up">Base
+    Classes</a> &nbsp; [<a href="Function-Index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

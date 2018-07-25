@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,127 +19,194 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Making Buttons</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Making Buttons">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Making Buttons">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buttons.html#Buttons" rel="up" title="Buttons">
-<link href="Manipulating-Buttons.html#Manipulating-Buttons" rel="next" title="Manipulating Buttons">
-<link href="Button-Types.html#Button-Types" rel="prev" title="Button Types">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Making Buttons</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Making Buttons" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Making Buttons" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buttons.html#Buttons" rel="up" title="Buttons" />
+  <link href="Manipulating-Buttons.html#Manipulating-Buttons" rel=
+  "next" title="Manipulating Buttons" />
+  <link href="Button-Types.html#Button-Types" rel="prev" title=
+  "Button Types" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Making-Buttons" id="Making-Buttons"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Manipulating-Buttons.html#Manipulating-Buttons" accesskey="n"
+    rel="next">Manipulating Buttons</a>, Previous: <a href=
+    "Button-Types.html#Button-Types" accesskey="p" rel=
+    "prev">Button Types</a>, Up: <a href="Buttons.html#Buttons"
+    accesskey="u" rel="up">Buttons</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Making-Buttons-1" id="Making-Buttons-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Making-Buttons"></a>
-<div class="header">
-<p>
-Next: <a href="Manipulating-Buttons.html#Manipulating-Buttons" accesskey="n" rel="next">Manipulating Buttons</a>, Previous: <a href="Button-Types.html#Button-Types" accesskey="p" rel="prev">Button Types</a>, Up: <a href="Buttons.html#Buttons" accesskey="u" rel="up">Buttons</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Making-Buttons-1"></a>
-<h4 class="subsection">37.19.3 Making Buttons</h4>
-<a name="index-making-buttons"></a>
+  <h4 class="subsection">37.19.3 Making Buttons</h4><a name=
+  "index-making-buttons" id="index-making-buttons"></a>
 
-<p>Buttons are associated with a region of text, using an overlay or
-text properties to hold button-specific information, all of which are
-initialized from the button&rsquo;s type (which defaults to the built-in
-button type <code>button</code>).  Like all Emacs text, the appearance of
-the button is governed by the <code>face</code> property; by default (via
-the <code>face</code> property inherited from the <code>button</code> button-type)
-this is a simple underline, like a typical web-page link.
-</p>
-<p>For convenience, there are two sorts of button-creation functions,
-those that add button properties to an existing region of a buffer,
-called <code>make-...button</code>, and those that also insert the button
-text, called <code>insert-...button</code>.
-</p>
-<p>The button-creation functions all take the <code>&amp;rest</code> argument
-<var>properties</var>, which should be a sequence of <var>property value</var>
-pairs, specifying properties to add to the button; see <a href="Button-Properties.html#Button-Properties">Button Properties</a>.  In addition, the keyword argument <code>:type</code> may be
-used to specify a button-type from which to inherit other properties;
-see <a href="Button-Types.html#Button-Types">Button Types</a>.  Any properties not explicitly specified
-during creation will be inherited from the button&rsquo;s type (if the type
-defines such a property).
-</p>
-<p>The following functions add a button using an overlay
-(see <a href="Overlays.html#Overlays">Overlays</a>) to hold the button properties:
-</p>
-<dl>
-<dt><a name="index-make_002dbutton"></a>Function: <strong>make-button</strong> <em>beg end &amp;rest properties</em></dt>
-<dd><p>This makes a button from <var>beg</var> to <var>end</var> in the
-current buffer, and returns it.
-</p></dd></dl>
+  <p>Buttons are associated with a region of text, using an overlay
+  or text properties to hold button-specific information, all of
+  which are initialized from the button&rsquo;s type (which
+  defaults to the built-in button type <code>button</code>). Like
+  all Emacs text, the appearance of the button is governed by the
+  <code>face</code> property; by default (via the <code>face</code>
+  property inherited from the <code>button</code> button-type) this
+  is a simple underline, like a typical web-page link.</p>
 
-<dl>
-<dt><a name="index-insert_002dbutton"></a>Function: <strong>insert-button</strong> <em>label &amp;rest properties</em></dt>
-<dd><p>This insert a button with the label <var>label</var> at point,
-and returns it.
-</p></dd></dl>
+  <p>For convenience, there are two sorts of button-creation
+  functions, those that add button properties to an existing region
+  of a buffer, called <code>make-...button</code>, and those that
+  also insert the button text, called
+  <code>insert-...button</code>.</p>
 
-<p>The following functions are similar, but using text properties
-(see <a href="Text-Properties.html#Text-Properties">Text Properties</a>) to hold the button properties.  Such buttons
-do not add markers to the buffer, so editing in the buffer does not
-slow down if there is an extremely large numbers of buttons.  However,
-if there is an existing face text property on the text (e.g., a face
-assigned by Font Lock mode), the button face may not be visible.  Both
-of these functions return the starting position of the new button.
-</p>
-<dl>
-<dt><a name="index-make_002dtext_002dbutton"></a>Function: <strong>make-text-button</strong> <em>beg end &amp;rest properties</em></dt>
-<dd><p>This makes a button from <var>beg</var> to <var>end</var> in the current buffer,
-using text properties.
-</p></dd></dl>
+  <p>The button-creation functions all take the
+  <code>&amp;rest</code> argument <var>properties</var>, which
+  should be a sequence of <var>property value</var> pairs,
+  specifying properties to add to the button; see <a href=
+  "Button-Properties.html#Button-Properties">Button Properties</a>.
+  In addition, the keyword argument <code>:type</code> may be used
+  to specify a button-type from which to inherit other properties;
+  see <a href="Button-Types.html#Button-Types">Button Types</a>.
+  Any properties not explicitly specified during creation will be
+  inherited from the button&rsquo;s type (if the type defines such
+  a property).</p>
 
-<dl>
-<dt><a name="index-insert_002dtext_002dbutton"></a>Function: <strong>insert-text-button</strong> <em>label &amp;rest properties</em></dt>
-<dd><p>This inserts a button with the label <var>label</var> at point, using text
-properties.
-</p></dd></dl>
+  <p>The following functions add a button using an overlay (see
+  <a href="Overlays.html#Overlays">Overlays</a>) to hold the button
+  properties:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Manipulating-Buttons.html#Manipulating-Buttons" accesskey="n" rel="next">Manipulating Buttons</a>, Previous: <a href="Button-Types.html#Button-Types" accesskey="p" rel="prev">Button Types</a>, Up: <a href="Buttons.html#Buttons" accesskey="u" rel="up">Buttons</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-make_002dbutton" id=
+    "index-make_002dbutton"></a>Function:
+    <strong>make-button</strong> <em>beg end &amp;rest
+    properties</em></dt>
 
+    <dd>
+      <p>This makes a button from <var>beg</var> to <var>end</var>
+      in the current buffer, and returns it.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-insert_002dbutton" id=
+    "index-insert_002dbutton"></a>Function:
+    <strong>insert-button</strong> <em>label &amp;rest
+    properties</em></dt>
 
+    <dd>
+      <p>This insert a button with the label <var>label</var> at
+      point, and returns it.</p>
+    </dd>
+  </dl>
+
+  <p>The following functions are similar, but using text properties
+  (see <a href="Text-Properties.html#Text-Properties">Text
+  Properties</a>) to hold the button properties. Such buttons do
+  not add markers to the buffer, so editing in the buffer does not
+  slow down if there is an extremely large numbers of buttons.
+  However, if there is an existing face text property on the text
+  (e.g., a face assigned by Font Lock mode), the button face may
+  not be visible. Both of these functions return the starting
+  position of the new button.</p>
+
+  <dl>
+    <dt><a name="index-make_002dtext_002dbutton" id=
+    "index-make_002dtext_002dbutton"></a>Function:
+    <strong>make-text-button</strong> <em>beg end &amp;rest
+    properties</em></dt>
+
+    <dd>
+      <p>This makes a button from <var>beg</var> to <var>end</var>
+      in the current buffer, using text properties.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-insert_002dtext_002dbutton" id=
+    "index-insert_002dtext_002dbutton"></a>Function:
+    <strong>insert-text-button</strong> <em>label &amp;rest
+    properties</em></dt>
+
+    <dd>
+      <p>This inserts a button with the label <var>label</var> at
+      point, using text properties.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Manipulating-Buttons.html#Manipulating-Buttons" accesskey="n"
+    rel="next">Manipulating Buttons</a>, Previous: <a href=
+    "Button-Types.html#Button-Types" accesskey="p" rel=
+    "prev">Button Types</a>, Up: <a href="Buttons.html#Buttons"
+    accesskey="u" rel="up">Buttons</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

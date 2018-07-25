@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,114 +16,163 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Obsolete Lexical Binding</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Obsolete Lexical Binding">
-<meta name="keywords" content="Common Lisp Extensions: Obsolete Lexical Binding">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Obsolete-Features.html#Obsolete-Features" rel="up" title="Obsolete Features">
-<link href="Obsolete-Macros.html#Obsolete-Macros" rel="next" title="Obsolete Macros">
-<link href="Obsolete-Features.html#Obsolete-Features" rel="prev" title="Obsolete Features">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Obsolete Lexical Binding</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Obsolete Lexical Binding" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Obsolete Lexical Binding" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Obsolete-Features.html#Obsolete-Features" rel="up"
+  title="Obsolete Features" />
+  <link href="Obsolete-Macros.html#Obsolete-Macros" rel="next"
+  title="Obsolete Macros" />
+  <link href="Obsolete-Features.html#Obsolete-Features" rel="prev"
+  title="Obsolete Features" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Obsolete-Lexical-Binding"></a>
-<div class="header">
-<p>
-Next: <a href="Obsolete-Macros.html#Obsolete-Macros" accesskey="n" rel="next">Obsolete Macros</a>, Up: <a href="Obsolete-Features.html#Obsolete-Features" accesskey="u" rel="up">Obsolete Features</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Obsolete-Lexical-Binding-1"></a>
-<h3 class="appendixsec">D.1 Obsolete Lexical Binding</h3>
+<body lang="en" xml:lang="en">
+  <a name="Obsolete-Lexical-Binding" id=
+  "Obsolete-Lexical-Binding"></a>
 
-<p>The following macros are extensions to Common Lisp, where all bindings
-are lexical unless declared otherwise.  These features are likewise
-obsolete since the introduction of true lexical binding in Emacs 24.1.
-</p>
-<dl>
-<dt><a name="index-lexical_002dlet"></a>Macro: <strong>lexical-let</strong> <em>(bindings&hellip;) forms&hellip;</em></dt>
-<dd><p>This form is exactly like <code>let</code> except that the bindings it
-establishes are purely lexical.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Obsolete-Macros.html#Obsolete-Macros"
+    accesskey="n" rel="next">Obsolete Macros</a>, Up: <a href=
+    "Obsolete-Features.html#Obsolete-Features" accesskey="u" rel=
+    "up">Obsolete Features</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Obsolete-Lexical-Binding-1" id=
+  "Obsolete-Lexical-Binding-1"></a>
 
-<p>Lexical bindings are similar to local variables in a language like C:
-Only the code physically within the body of the <code>lexical-let</code>
-(after macro expansion) may refer to the bound variables.
-</p>
-<div class="example">
-<pre class="example">(setq a 5)
+  <h3 class="appendixsec">D.1 Obsolete Lexical Binding</h3>
+
+  <p>The following macros are extensions to Common Lisp, where all
+  bindings are lexical unless declared otherwise. These features
+  are likewise obsolete since the introduction of true lexical
+  binding in Emacs 24.1.</p>
+
+  <dl>
+    <dt><a name="index-lexical_002dlet" id=
+    "index-lexical_002dlet"></a>Macro: <strong>lexical-let</strong>
+    <em>(bindings&hellip;) forms&hellip;</em></dt>
+
+    <dd>
+      <p>This form is exactly like <code>let</code> except that the
+      bindings it establishes are purely lexical.</p>
+    </dd>
+  </dl>
+
+  <p>Lexical bindings are similar to local variables in a language
+  like C: Only the code physically within the body of the
+  <code>lexical-let</code> (after macro expansion) may refer to the
+  bound variables.</p>
+
+  <div class="example">
+    <pre class="example">
+(setq a 5)
 (defun foo (b) (+ a b))
 (let ((a 2)) (foo a))
      &rArr; 4
 (lexical-let ((a 2)) (foo a))
      &rArr; 7
-</pre></div>
+</pre>
+  </div>
 
-<p>In this example, a regular <code>let</code> binding of <code>a</code> actually
-makes a temporary change to the global variable <code>a</code>, so <code>foo</code>
-is able to see the binding of <code>a</code> to 2.  But <code>lexical-let</code>
-actually creates a distinct local variable <code>a</code> for use within its
-body, without any effect on the global variable of the same name.
-</p>
-<p>The most important use of lexical bindings is to create <em>closures</em>.
-A closure is a function object that refers to an outside lexical
-variable (see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Closures.html#Closures">Closures</a> in <cite>GNU Emacs Lisp Reference Manual</cite>).
-For example:
-</p>
-<div class="example">
-<pre class="example">(defun make-adder (n)
+  <p>In this example, a regular <code>let</code> binding of
+  <code>a</code> actually makes a temporary change to the global
+  variable <code>a</code>, so <code>foo</code> is able to see the
+  binding of <code>a</code> to 2. But <code>lexical-let</code>
+  actually creates a distinct local variable <code>a</code> for use
+  within its body, without any effect on the global variable of the
+  same name.</p>
+
+  <p>The most important use of lexical bindings is to create
+  <em>closures</em>. A closure is a function object that refers to
+  an outside lexical variable (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Closures.html#Closures">
+  Closures</a> in <cite>GNU Emacs Lisp Reference Manual</cite>).
+  For example:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun make-adder (n)
   (lexical-let ((n n))
     (function (lambda (m) (+ n m)))))
 (setq add17 (make-adder 17))
 (funcall add17 4)
      &rArr; 21
-</pre></div>
+</pre>
+  </div>
 
-<p>The call <code>(make-adder 17)</code> returns a function object which adds
-17 to its argument.  If <code>let</code> had been used instead of
-<code>lexical-let</code>, the function object would have referred to the
-global <code>n</code>, which would have been bound to 17 only during the
-call to <code>make-adder</code> itself.
-</p>
-<div class="example">
-<pre class="example">(defun make-counter ()
+  <p>The call <code>(make-adder 17)</code> returns a function
+  object which adds 17 to its argument. If <code>let</code> had
+  been used instead of <code>lexical-let</code>, the function
+  object would have referred to the global <code>n</code>, which
+  would have been bound to 17 only during the call to
+  <code>make-adder</code> itself.</p>
+
+  <div class="example">
+    <pre class="example">
+(defun make-counter ()
   (lexical-let ((n 0))
     (cl-function (lambda (&amp;optional (m 1)) (cl-incf n m)))))
 (setq count-1 (make-counter))
@@ -136,56 +187,71 @@ call to <code>make-adder</code> itself.
      &rArr; 19
 (funcall count-2)
      &rArr; 6
-</pre></div>
+</pre>
+  </div>
 
-<p>Here we see that each call to <code>make-counter</code> creates a distinct
-local variable <code>n</code>, which serves as a private counter for the
-function object that is returned.
-</p>
-<p>Closed-over lexical variables persist until the last reference to
-them goes away, just like all other Lisp objects.  For example,
-<code>count-2</code> refers to a function object which refers to an
-instance of the variable <code>n</code>; this is the only reference
-to that variable, so after <code>(setq count-2 nil)</code> the garbage
-collector would be able to delete this instance of <code>n</code>.
-Of course, if a <code>lexical-let</code> does not actually create any
-closures, then the lexical variables are free as soon as the
-<code>lexical-let</code> returns.
-</p>
-<p>Many closures are used only during the extent of the bindings they
-refer to; these are known as &ldquo;downward funargs&rdquo; in Lisp parlance.
-When a closure is used in this way, regular Emacs Lisp dynamic
-bindings suffice and will be more efficient than <code>lexical-let</code>
-closures:
-</p>
-<div class="example">
-<pre class="example">(defun add-to-list (x list)
+  <p>Here we see that each call to <code>make-counter</code>
+  creates a distinct local variable <code>n</code>, which serves as
+  a private counter for the function object that is returned.</p>
+
+  <p>Closed-over lexical variables persist until the last reference
+  to them goes away, just like all other Lisp objects. For example,
+  <code>count-2</code> refers to a function object which refers to
+  an instance of the variable <code>n</code>; this is the only
+  reference to that variable, so after <code>(setq count-2
+  nil)</code> the garbage collector would be able to delete this
+  instance of <code>n</code>. Of course, if a
+  <code>lexical-let</code> does not actually create any closures,
+  then the lexical variables are free as soon as the
+  <code>lexical-let</code> returns.</p>
+
+  <p>Many closures are used only during the extent of the bindings
+  they refer to; these are known as &ldquo;downward funargs&rdquo;
+  in Lisp parlance. When a closure is used in this way, regular
+  Emacs Lisp dynamic bindings suffice and will be more efficient
+  than <code>lexical-let</code> closures:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun add-to-list (x list)
   (mapcar (lambda (y) (+ x y))) list)
 (add-to-list 7 '(1 2 5))
      &rArr; (8 9 12)
-</pre></div>
+</pre>
+  </div>
 
-<p>Since this lambda is only used while <code>x</code> is still bound,
-it is not necessary to make a true closure out of it.
-</p>
-<p>You can use <code>defun</code> or <code>flet</code> inside a <code>lexical-let</code>
-to create a named closure.  If several closures are created in the
-body of a single <code>lexical-let</code>, they all close over the same
-instance of the lexical variable.
-</p>
-<dl>
-<dt><a name="index-lexical_002dlet_002a"></a>Macro: <strong>lexical-let*</strong> <em>(bindings&hellip;) forms&hellip;</em></dt>
-<dd><p>This form is just like <code>lexical-let</code>, except that the bindings
-are made sequentially in the manner of <code>let*</code>.
-</p></dd></dl>
+  <p>Since this lambda is only used while <code>x</code> is still
+  bound, it is not necessary to make a true closure out of it.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Obsolete-Macros.html#Obsolete-Macros" accesskey="n" rel="next">Obsolete Macros</a>, Up: <a href="Obsolete-Features.html#Obsolete-Features" accesskey="u" rel="up">Obsolete Features</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>You can use <code>defun</code> or <code>flet</code> inside a
+  <code>lexical-let</code> to create a named closure. If several
+  closures are created in the body of a single
+  <code>lexical-let</code>, they all close over the same instance
+  of the lexical variable.</p>
 
+  <dl>
+    <dt><a name="index-lexical_002dlet_002a" id=
+    "index-lexical_002dlet_002a"></a>Macro:
+    <strong>lexical-let*</strong> <em>(bindings&hellip;)
+    forms&hellip;</em></dt>
 
+    <dd>
+      <p>This form is just like <code>lexical-let</code>, except
+      that the bindings are made sequentially in the manner of
+      <code>let*</code>.</p>
+    </dd>
+  </dl>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Obsolete-Macros.html#Obsolete-Macros"
+    accesskey="n" rel="next">Obsolete Macros</a>, Up: <a href=
+    "Obsolete-Features.html#Obsolete-Features" accesskey="u" rel=
+    "up">Obsolete Features</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

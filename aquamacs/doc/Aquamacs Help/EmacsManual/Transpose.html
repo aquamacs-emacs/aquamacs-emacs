@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,131 +20,181 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Transpose</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Transpose">
-<meta name="keywords" content="GNU Emacs Manual: Transpose">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Fixit.html#Fixit" rel="up" title="Fixit">
-<link href="Fixing-Case.html#Fixing-Case" rel="next" title="Fixing Case">
-<link href="Undo.html#Undo" rel="prev" title="Undo">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Transpose</title>
+  <meta name="description" content="GNU Emacs Manual: Transpose" />
+  <meta name="keywords" content="GNU Emacs Manual: Transpose" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Fixit.html#Fixit" rel="up" title="Fixit" />
+  <link href="Fixing-Case.html#Fixing-Case" rel="next" title=
+  "Fixing Case" />
+  <link href="Undo.html#Undo" rel="prev" title="Undo" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Transpose" id="Transpose"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Fixing-Case.html#Fixing-Case" accesskey="n"
+    rel="next">Fixing Case</a>, Previous: <a href="Undo.html#Undo"
+    accesskey="p" rel="prev">Undo</a>, Up: <a href=
+    "Fixit.html#Fixit" accesskey="u" rel="up">Fixit</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Transposing-Text" id="Transposing-Text"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Transpose"></a>
-<div class="header">
-<p>
-Next: <a href="Fixing-Case.html#Fixing-Case" accesskey="n" rel="next">Fixing Case</a>, Previous: <a href="Undo.html#Undo" accesskey="p" rel="prev">Undo</a>, Up: <a href="Fixit.html#Fixit" accesskey="u" rel="up">Fixit</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Transposing-Text"></a>
-<h3 class="section">16.2 Transposing Text</h3>
+  <h3 class="section">16.2 Transposing Text</h3>
 
-<dl compact="compact">
-<dt><kbd>C-t</kbd></dt>
-<dd><p>Transpose two characters (<code>transpose-chars</code>).
-</p></dd>
-<dt><kbd>M-t</kbd></dt>
-<dd><p>Transpose two words (<code>transpose-words</code>).
-</p></dd>
-<dt><kbd>C-M-t</kbd></dt>
-<dd><p>Transpose two balanced expressions (<code>transpose-sexps</code>).
-</p></dd>
-<dt><kbd>C-x C-t</kbd></dt>
-<dd><p>Transpose two lines (<code>transpose-lines</code>).
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>C-t</kbd></dt>
 
-<a name="index-C_002dt"></a>
-<a name="index-transpose_002dchars"></a>
-<p>The common error of transposing two characters can be fixed, when they
-are adjacent, with the <kbd>C-t</kbd> command (<code>transpose-chars</code>).  Normally,
-<kbd>C-t</kbd> transposes the two characters on either side of point.  When
-given at the end of a line, rather than transposing the last character of
-the line with the newline, which would be useless, <kbd>C-t</kbd> transposes the
-last two characters on the line.  So, if you catch your transposition error
-right away, you can fix it with just a <kbd>C-t</kbd>.  If you don&rsquo;t catch it so
-fast, you must move the cursor back between the two transposed
-characters before you type <kbd>C-t</kbd>.  If you transposed a space with
-the last character of the word before it, the word motion commands are
-a good way of getting there.  Otherwise, a reverse search (<kbd>C-r</kbd>)
-is often the best way.  See <a href="Search.html#Search">Search</a>.
-</p>
-<a name="index-C_002dx-C_002dt"></a>
-<a name="index-transpose_002dlines"></a>
-<a name="index-M_002dt"></a>
-<a name="index-transpose_002dwords"></a>
-<p><kbd>M-t</kbd> transposes the word before point with the word after point
-(<code>transpose-words</code>).  It moves point forward over a word,
-dragging the word preceding or containing point forward as well.  The
-punctuation characters between the words do not move.  For example,
-&lsquo;<samp>FOO,&nbsp;BAR</samp>&rsquo;<!-- /@w --> transposes into &lsquo;<samp>BAR,&nbsp;FOO</samp>&rsquo;<!-- /@w --> rather than
-&lsquo;<samp>BAR&nbsp;FOO,<!-- /@w --></samp>&rsquo;.
-</p>
-<p><kbd>C-M-t</kbd> (<code>transpose-sexps</code>) is a similar command for
-transposing two expressions (see <a href="Expressions.html#Expressions">Expressions</a>), and <kbd>C-x C-t</kbd>
-(<code>transpose-lines</code>) exchanges lines.  They work like <kbd>M-t</kbd>
-except as regards what units of text they transpose.
-</p>
-<p>A numeric argument to a transpose command serves as a repeat count: it
-tells the transpose command to move the character (word, expression, line)
-before or containing point across several other characters (words,
-expressions, lines).  For example, <kbd>C-u 3 C-t</kbd> moves the character before
-point forward across three other characters.  It would change
-&lsquo;<samp>f&lowast;oobar</samp>&rsquo; into &lsquo;<samp>oobf&lowast;ar</samp>&rsquo;.  This is equivalent to
-repeating <kbd>C-t</kbd> three times.  <kbd>C-u - 4 M-t</kbd> moves the word
-before point backward across four words.  <kbd>C-u - C-M-t</kbd> would cancel
-the effect of plain <kbd>C-M-t</kbd>.
-</p>
-<p>A numeric argument of zero is assigned a special meaning (because
-otherwise a command with a repeat count of zero would do nothing): to
-transpose the character (word, expression, line) ending after point
-with the one ending after the mark.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Fixing-Case.html#Fixing-Case" accesskey="n" rel="next">Fixing Case</a>, Previous: <a href="Undo.html#Undo" accesskey="p" rel="prev">Undo</a>, Up: <a href="Fixit.html#Fixit" accesskey="u" rel="up">Fixit</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Transpose two characters
+      (<code>transpose-chars</code>).</p>
+    </dd>
 
+    <dt><kbd>M-t</kbd></dt>
 
+    <dd>
+      <p>Transpose two words (<code>transpose-words</code>).</p>
+    </dd>
 
+    <dt><kbd>C-M-t</kbd></dt>
+
+    <dd>
+      <p>Transpose two balanced expressions
+      (<code>transpose-sexps</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x C-t</kbd></dt>
+
+    <dd>
+      <p>Transpose two lines (<code>transpose-lines</code>).</p>
+    </dd>
+  </dl><a name="index-C_002dt" id="index-C_002dt"></a> <a name=
+  "index-transpose_002dchars" id="index-transpose_002dchars"></a>
+
+  <p>The common error of transposing two characters can be fixed,
+  when they are adjacent, with the <kbd>C-t</kbd> command
+  (<code>transpose-chars</code>). Normally, <kbd>C-t</kbd>
+  transposes the two characters on either side of point. When given
+  at the end of a line, rather than transposing the last character
+  of the line with the newline, which would be useless,
+  <kbd>C-t</kbd> transposes the last two characters on the line.
+  So, if you catch your transposition error right away, you can fix
+  it with just a <kbd>C-t</kbd>. If you don&rsquo;t catch it so
+  fast, you must move the cursor back between the two transposed
+  characters before you type <kbd>C-t</kbd>. If you transposed a
+  space with the last character of the word before it, the word
+  motion commands are a good way of getting there. Otherwise, a
+  reverse search (<kbd>C-r</kbd>) is often the best way. See
+  <a href="Search.html#Search">Search</a>.</p><a name=
+  "index-C_002dx-C_002dt" id="index-C_002dx-C_002dt"></a> <a name=
+  "index-transpose_002dlines" id="index-transpose_002dlines"></a>
+  <a name="index-M_002dt" id="index-M_002dt"></a> <a name=
+  "index-transpose_002dwords" id="index-transpose_002dwords"></a>
+
+  <p><kbd>M-t</kbd> transposes the word before point with the word
+  after point (<code>transpose-words</code>). It moves point
+  forward over a word, dragging the word preceding or containing
+  point forward as well. The punctuation characters between the
+  words do not move. For example,
+  &lsquo;<samp>FOO,&nbsp;BAR</samp>&rsquo;<!-- /@w --> transposes
+  into &lsquo;<samp>BAR,&nbsp;FOO</samp>&rsquo;<!-- /@w --> rather
+  than &lsquo;<samp>BAR&nbsp;FOO,<!-- /@w --></samp>&rsquo;.</p>
+
+  <p><kbd>C-M-t</kbd> (<code>transpose-sexps</code>) is a similar
+  command for transposing two expressions (see <a href=
+  "Expressions.html#Expressions">Expressions</a>), and <kbd>C-x
+  C-t</kbd> (<code>transpose-lines</code>) exchanges lines. They
+  work like <kbd>M-t</kbd> except as regards what units of text
+  they transpose.</p>
+
+  <p>A numeric argument to a transpose command serves as a repeat
+  count: it tells the transpose command to move the character
+  (word, expression, line) before or containing point across
+  several other characters (words, expressions, lines). For
+  example, <kbd>C-u 3 C-t</kbd> moves the character before point
+  forward across three other characters. It would change
+  &lsquo;<samp>f&lowast;oobar</samp>&rsquo; into
+  &lsquo;<samp>oobf&lowast;ar</samp>&rsquo;. This is equivalent to
+  repeating <kbd>C-t</kbd> three times. <kbd>C-u - 4 M-t</kbd>
+  moves the word before point backward across four words. <kbd>C-u
+  - C-M-t</kbd> would cancel the effect of plain
+  <kbd>C-M-t</kbd>.</p>
+
+  <p>A numeric argument of zero is assigned a special meaning
+  (because otherwise a command with a repeat count of zero would do
+  nothing): to transpose the character (word, expression, line)
+  ending after point with the one ending after the mark.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Fixing-Case.html#Fixing-Case" accesskey="n"
+    rel="next">Fixing Case</a>, Previous: <a href="Undo.html#Undo"
+    accesskey="p" rel="prev">Undo</a>, Up: <a href=
+    "Fixit.html#Fixit" accesskey="u" rel="up">Fixit</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,157 +19,225 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Inheritance and Keymaps</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Inheritance and Keymaps">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Inheritance and Keymaps">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
-<link href="Prefix-Keys.html#Prefix-Keys" rel="next" title="Prefix Keys">
-<link href="Creating-Keymaps.html#Creating-Keymaps" rel="prev" title="Creating Keymaps">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Inheritance and
+  Keymaps</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Inheritance and Keymaps" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Inheritance and Keymaps" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keymaps.html#Keymaps" rel="up" title="Keymaps" />
+  <link href="Prefix-Keys.html#Prefix-Keys" rel="next" title=
+  "Prefix Keys" />
+  <link href="Creating-Keymaps.html#Creating-Keymaps" rel="prev"
+  title="Creating Keymaps" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Inheritance-and-Keymaps" id=
+  "Inheritance-and-Keymaps"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Prefix-Keys.html#Prefix-Keys" accesskey="n"
+    rel="next">Prefix Keys</a>, Previous: <a href=
+    "Creating-Keymaps.html#Creating-Keymaps" accesskey="p" rel=
+    "prev">Creating Keymaps</a>, Up: <a href="Keymaps.html#Keymaps"
+    accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Inheritance-and-Keymaps-1" id=
+  "Inheritance-and-Keymaps-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Inheritance-and-Keymaps"></a>
-<div class="header">
-<p>
-Next: <a href="Prefix-Keys.html#Prefix-Keys" accesskey="n" rel="next">Prefix Keys</a>, Previous: <a href="Creating-Keymaps.html#Creating-Keymaps" accesskey="p" rel="prev">Creating Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Inheritance-and-Keymaps-1"></a>
-<h3 class="section">21.5 Inheritance and Keymaps</h3>
-<a name="index-keymap-inheritance"></a>
-<a name="index-inheritance_002c-keymap"></a>
+  <h3 class="section">21.5 Inheritance and Keymaps</h3><a name=
+  "index-keymap-inheritance" id="index-keymap-inheritance"></a>
+  <a name="index-inheritance_002c-keymap" id=
+  "index-inheritance_002c-keymap"></a>
 
-<p>A keymap can inherit the bindings of another keymap, which we call the
-<em>parent keymap</em>.  Such a keymap looks like this:
-</p>
-<div class="example">
-<pre class="example">(keymap <var>elements</var>&hellip; . <var>parent-keymap</var>)
-</pre></div>
+  <p>A keymap can inherit the bindings of another keymap, which we
+  call the <em>parent keymap</em>. Such a keymap looks like
+  this:</p>
 
-<p>The effect is that this keymap inherits all the bindings of
-<var>parent-keymap</var>, whatever they may be at the time a key is looked up,
-but can add to them or override them with <var>elements</var>.
-</p>
-<p>If you change the bindings in <var>parent-keymap</var> using
-<code>define-key</code> or other key-binding functions, these changed
-bindings are visible in the inheriting keymap, unless shadowed by the
-bindings made by <var>elements</var>.  The converse is not true: if you use
-<code>define-key</code> to change bindings in the inheriting keymap, these
-changes are recorded in <var>elements</var>, but have no effect on
-<var>parent-keymap</var>.
-</p>
-<p>The proper way to construct a keymap with a parent is to use
-<code>set-keymap-parent</code>; if you have code that directly constructs a
-keymap with a parent, please convert the program to use
-<code>set-keymap-parent</code> instead.
-</p>
-<dl>
-<dt><a name="index-keymap_002dparent"></a>Function: <strong>keymap-parent</strong> <em>keymap</em></dt>
-<dd><p>This returns the parent keymap of <var>keymap</var>.  If <var>keymap</var>
-has no parent, <code>keymap-parent</code> returns <code>nil</code>.
-</p></dd></dl>
+  <div class="example">
+    <pre class="example">
+(keymap <var>elements</var>&hellip; . <var>parent-keymap</var>)
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-set_002dkeymap_002dparent"></a>Function: <strong>set-keymap-parent</strong> <em>keymap parent</em></dt>
-<dd><p>This sets the parent keymap of <var>keymap</var> to <var>parent</var>, and returns
-<var>parent</var>.  If <var>parent</var> is <code>nil</code>, this function gives
-<var>keymap</var> no parent at all.
-</p>
-<p>If <var>keymap</var> has submaps (bindings for prefix keys), they too receive
-new parent keymaps that reflect what <var>parent</var> specifies for those
-prefix keys.
-</p></dd></dl>
+  <p>The effect is that this keymap inherits all the bindings of
+  <var>parent-keymap</var>, whatever they may be at the time a key
+  is looked up, but can add to them or override them with
+  <var>elements</var>.</p>
 
-<p>Here is an example showing how to make a keymap that inherits
-from <code>text-mode-map</code>:
-</p>
-<div class="example">
-<pre class="example">(let ((map (make-sparse-keymap)))
+  <p>If you change the bindings in <var>parent-keymap</var> using
+  <code>define-key</code> or other key-binding functions, these
+  changed bindings are visible in the inheriting keymap, unless
+  shadowed by the bindings made by <var>elements</var>. The
+  converse is not true: if you use <code>define-key</code> to
+  change bindings in the inheriting keymap, these changes are
+  recorded in <var>elements</var>, but have no effect on
+  <var>parent-keymap</var>.</p>
+
+  <p>The proper way to construct a keymap with a parent is to use
+  <code>set-keymap-parent</code>; if you have code that directly
+  constructs a keymap with a parent, please convert the program to
+  use <code>set-keymap-parent</code> instead.</p>
+
+  <dl>
+    <dt><a name="index-keymap_002dparent" id=
+    "index-keymap_002dparent"></a>Function:
+    <strong>keymap-parent</strong> <em>keymap</em></dt>
+
+    <dd>
+      <p>This returns the parent keymap of <var>keymap</var>. If
+      <var>keymap</var> has no parent, <code>keymap-parent</code>
+      returns <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dkeymap_002dparent" id=
+    "index-set_002dkeymap_002dparent"></a>Function:
+    <strong>set-keymap-parent</strong> <em>keymap parent</em></dt>
+
+    <dd>
+      <p>This sets the parent keymap of <var>keymap</var> to
+      <var>parent</var>, and returns <var>parent</var>. If
+      <var>parent</var> is <code>nil</code>, this function gives
+      <var>keymap</var> no parent at all.</p>
+
+      <p>If <var>keymap</var> has submaps (bindings for prefix
+      keys), they too receive new parent keymaps that reflect what
+      <var>parent</var> specifies for those prefix keys.</p>
+    </dd>
+  </dl>
+
+  <p>Here is an example showing how to make a keymap that inherits
+  from <code>text-mode-map</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(let ((map (make-sparse-keymap)))
   (set-keymap-parent map text-mode-map)
   map)
-</pre></div>
+</pre>
+  </div>
 
-<p>A non-sparse keymap can have a parent too, but this is not very
-useful.  A non-sparse keymap always specifies something as the binding
-for every numeric character code without modifier bits, even if it is
-<code>nil</code>, so these character&rsquo;s bindings are never inherited from
-the parent keymap.
-</p>
-<a name="index-keymap-inheritance-from-multiple-maps"></a>
-<p>Sometimes you want to make a keymap that inherits from more than one
-map.  You can use the function <code>make-composed-keymap</code> for this.
-</p>
-<dl>
-<dt><a name="index-make_002dcomposed_002dkeymap"></a>Function: <strong>make-composed-keymap</strong> <em>maps &amp;optional parent</em></dt>
-<dd><p>This function returns a new keymap composed of the existing keymap(s)
-<var>maps</var>, and optionally inheriting from a parent keymap
-<var>parent</var>.  <var>maps</var> can be a single keymap or a list of more
-than one.  When looking up a key in the resulting new map, Emacs
-searches in each of the <var>maps</var> in turn, and then in <var>parent</var>,
-stopping at the first match.  A <code>nil</code> binding in any one of
-<var>maps</var> overrides any binding in <var>parent</var>, but it does not
-override any non-<code>nil</code> binding in any other of the <var>maps</var>.
-</p></dd></dl>
+  <p>A non-sparse keymap can have a parent too, but this is not
+  very useful. A non-sparse keymap always specifies something as
+  the binding for every numeric character code without modifier
+  bits, even if it is <code>nil</code>, so these character&rsquo;s
+  bindings are never inherited from the parent keymap.</p><a name=
+  "index-keymap-inheritance-from-multiple-maps" id=
+  "index-keymap-inheritance-from-multiple-maps"></a>
 
-<p>For example, here is how Emacs sets the parent of
-<code>help-mode-map</code>, such that it inherits from both
-<code>button-buffer-map</code> and <code>special-mode-map</code>:
-</p>
-<div class="example">
-<pre class="example">(defvar help-mode-map
+  <p>Sometimes you want to make a keymap that inherits from more
+  than one map. You can use the function
+  <code>make-composed-keymap</code> for this.</p>
+
+  <dl>
+    <dt><a name="index-make_002dcomposed_002dkeymap" id=
+    "index-make_002dcomposed_002dkeymap"></a>Function:
+    <strong>make-composed-keymap</strong> <em>maps &amp;optional
+    parent</em></dt>
+
+    <dd>
+      <p>This function returns a new keymap composed of the
+      existing keymap(s) <var>maps</var>, and optionally inheriting
+      from a parent keymap <var>parent</var>. <var>maps</var> can
+      be a single keymap or a list of more than one. When looking
+      up a key in the resulting new map, Emacs searches in each of
+      the <var>maps</var> in turn, and then in <var>parent</var>,
+      stopping at the first match. A <code>nil</code> binding in
+      any one of <var>maps</var> overrides any binding in
+      <var>parent</var>, but it does not override any
+      non-<code>nil</code> binding in any other of the
+      <var>maps</var>.</p>
+    </dd>
+  </dl>
+
+  <p>For example, here is how Emacs sets the parent of
+  <code>help-mode-map</code>, such that it inherits from both
+  <code>button-buffer-map</code> and
+  <code>special-mode-map</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(defvar help-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map
       (make-composed-keymap button-buffer-map special-mode-map))
     ... map) ... )
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Prefix-Keys.html#Prefix-Keys" accesskey="n" rel="next">Prefix Keys</a>, Previous: <a href="Creating-Keymaps.html#Creating-Keymaps" accesskey="p" rel="prev">Creating Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Prefix-Keys.html#Prefix-Keys" accesskey="n"
+    rel="next">Prefix Keys</a>, Previous: <a href=
+    "Creating-Keymaps.html#Creating-Keymaps" accesskey="p" rel=
+    "prev">Creating Keymaps</a>, Up: <a href="Keymaps.html#Keymaps"
+    accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

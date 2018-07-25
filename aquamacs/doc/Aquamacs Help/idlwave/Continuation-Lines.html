@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Continuation Lines - IDLWAVE User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="IDLWAVE User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Code-Formatting.html#Code-Formatting" title="Code Formatting">
-<link rel="prev" href="Comment-Indentation.html#Comment-Indentation" title="Comment Indentation">
-<link rel="next" href="Syntax-Highlighting.html#Syntax-Highlighting" title="Syntax Highlighting">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Continuation Lines - IDLWAVE User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="IDLWAVE User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Code-Formatting.html#Code-Formatting" title=
+  "Code Formatting" />
+  <link rel="prev" href=
+  "Comment-Indentation.html#Comment-Indentation" title=
+  "Comment Indentation" />
+  <link rel="next" href=
+  "Syntax-Highlighting.html#Syntax-Highlighting" title=
+  "Syntax Highlighting" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -31,8 +42,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,38 +55,61 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Continuation-Lines"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Syntax-Highlighting.html#Syntax-Highlighting">Syntax Highlighting</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Comment-Indentation.html#Comment-Indentation">Comment Indentation</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Code-Formatting.html#Code-Formatting">Code Formatting</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Continuation-Lines" id="Continuation-Lines"></a>
 
-<h4 class="subsection">4.1.4 Continuation Lines and Filling</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Syntax-Highlighting.html#Syntax-Highlighting">Syntax
+    Highlighting</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href="Comment-Indentation.html#Comment-Indentation">Comment
+    Indentation</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Code-Formatting.html#Code-Formatting">Code Formatting</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Continuation-lines-40"></a><a name="index-Line-splitting-41"></a><a name="index-String-splitting-42"></a><a name="index-Splitting_002c-of-lines-43"></a>
-<a name="index-M_002d_0040key_007bRET_007d-44"></a>In IDL, a newline character terminates a statement unless preceded by a
-&lsquo;<samp><span class="samp">$</span></samp>&rsquo;.  If you would like to start a continuation line, use
-<kbd>M-&lt;RET&gt;</kbd>, which calls the command <code>idlwave-split-line</code>. 
-It inserts the continuation character &lsquo;<samp><span class="samp">$</span></samp>&rsquo;, terminates the line and
-indents the new line.  The command <kbd>M-&lt;RET&gt;</kbd> can also be invoked
-inside a string to split it at that point, in which case the &lsquo;<samp><span class="samp">+</span></samp>&rsquo;
-concatenation operator is used.
+  <h4 class="subsection">4.1.4 Continuation Lines and Filling</h4>
 
-   <p><a name="index-Filling-45"></a><a name="index-g_t_0040code_007bauto_002dfill_002dmode_007d-46"></a><a name="index-Hanging-paragraphs-47"></a>When filling comment paragraphs, IDLWAVE overloads the normal filling
-functions and uses a function which creates the hanging paragraphs
-customary in IDL routine headers.  When <code>auto-fill-mode</code> is turned
-on (toggle with <kbd>C-c C-a</kbd>), comments will be auto-filled.  If the
-first line of a paragraph contains a match for
-<code>idlwave-hang-indent-regexp</code> (a dash-space by default), subsequent
-lines are positioned to line up after it, as in the following example.
+  <p><a name="index-Continuation-lines-40" id=
+  "index-Continuation-lines-40"></a><a name=
+  "index-Line-splitting-41" id=
+  "index-Line-splitting-41"></a><a name="index-String-splitting-42"
+  id="index-String-splitting-42"></a><a name=
+  "index-Splitting_002c-of-lines-43" id=
+  "index-Splitting_002c-of-lines-43"></a> <a name=
+  "index-M_002d_0040key_007bRET_007d-44" id=
+  "index-M_002d_0040key_007bRET_007d-44"></a>In IDL, a newline
+  character terminates a statement unless preceded by a
+  &lsquo;<samp><span class="samp">$</span></samp>&rsquo;. If you
+  would like to start a continuation line, use
+  <kbd>M-&lt;RET&gt;</kbd>, which calls the command
+  <code>idlwave-split-line</code>. It inserts the continuation
+  character &lsquo;<samp><span class="samp">$</span></samp>&rsquo;,
+  terminates the line and indents the new line. The command
+  <kbd>M-&lt;RET&gt;</kbd> can also be invoked inside a string to
+  split it at that point, in which case the
+  &lsquo;<samp><span class="samp">+</span></samp>&rsquo;
+  concatenation operator is used.</p>
 
-<pre class="example">     ;=================================
+  <p><a name="index-Filling-45" id="index-Filling-45"></a><a name=
+  "index-g_t_0040code_007bauto_002dfill_002dmode_007d-46" id=
+  "index-g_t_0040code_007bauto_002dfill_002dmode_007d-46"></a><a name="index-Hanging-paragraphs-47"
+  id="index-Hanging-paragraphs-47"></a>When filling comment
+  paragraphs, IDLWAVE overloads the normal filling functions and
+  uses a function which creates the hanging paragraphs customary in
+  IDL routine headers. When <code>auto-fill-mode</code> is turned
+  on (toggle with <kbd>C-c C-a</kbd>), comments will be
+  auto-filled. If the first line of a paragraph contains a match
+  for <code>idlwave-hang-indent-regexp</code> (a dash-space by
+  default), subsequent lines are positioned to line up after it, as
+  in the following example.</p>
+  <pre class="example">
+     ;=================================
      ; x - an array containing
      ;     lots of interesting numbers.
      ;
@@ -82,46 +118,94 @@ lines are positioned to line up after it, as in the following example.
      ;     to describe it.
      ;=================================
 </pre>
-   <p><a name="index-M_002dq-48"></a>You can also refill a comment at any time paragraph with <kbd>M-q</kbd>. 
-Comment delimiting lines as in the above example, consisting of one or
-more &lsquo;<samp><span class="samp">;</span></samp>&rsquo; followed by one or more of the characters &lsquo;<samp><span class="samp">+=-_*</span></samp>&rsquo;,
-are kept in place, as is.
 
-<div class="defun">
-&mdash; User Option: <b>idlwave-fill-comment-line-only</b> (<code>t</code>)<var><a name="index-idlwave_002dfill_002dcomment_002dline_002donly-49"></a></var><br>
-<blockquote><p>Non-<code>nil</code> means auto fill will only operate on comment lines. 
-</p></blockquote></div>
+  <p><a name="index-M_002dq-48" id="index-M_002dq-48"></a>You can
+  also refill a comment at any time paragraph with <kbd>M-q</kbd>.
+  Comment delimiting lines as in the above example, consisting of
+  one or more &lsquo;<samp><span class=
+  "samp">;</span></samp>&rsquo; followed by one or more of the
+  characters &lsquo;<samp><span class=
+  "samp">+=-_*</span></samp>&rsquo;, are kept in place, as is.</p>
 
-<div class="defun">
-&mdash; User Option: <b>idlwave-auto-fill-split-string</b> (<code>t</code>)<var><a name="index-idlwave_002dauto_002dfill_002dsplit_002dstring-50"></a></var><br>
-<blockquote><p>Non-<code>nil</code> means auto fill will split strings with the IDL &lsquo;<samp><span class="samp">+</span></samp>&rsquo;
-operator. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; User Option: <b>idlwave-fill-comment-line-only</b>
+    (<code>t</code>)<var><a name=
+    "index-idlwave_002dfill_002dcomment_002dline_002donly-49" id=
+    "index-idlwave_002dfill_002dcomment_002dline_002donly-49"></a></var><br />
 
-<div class="defun">
-&mdash; User Option: <b>idlwave-split-line-string</b> (<code>t</code>)<var><a name="index-idlwave_002dsplit_002dline_002dstring-51"></a></var><br>
-<blockquote><p>Non-<code>nil</code> means <code>idlwave-split-line</code> will split strings with
-&lsquo;<samp><span class="samp">+</span></samp>&rsquo;. 
-</p></blockquote></div>
 
-<div class="defun">
-&mdash; User Option: <b>idlwave-hanging-indent</b> (<code>t</code>)<var><a name="index-idlwave_002dhanging_002dindent-52"></a></var><br>
-<blockquote><p>Non-<code>nil</code> means comment paragraphs are indented under the hanging
-indent given by <code>idlwave-hang-indent-regexp</code> match in the first
-line of the paragraph. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Non-<code>nil</code> means auto fill will only operate on
+      comment lines.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; User Option: <b>idlwave-hang-indent-regexp</b> (<code>"- "</code>)<var><a name="index-idlwave_002dhang_002dindent_002dregexp-53"></a></var><br>
-<blockquote><p>Regular expression matching the position of the hanging indent
-in the first line of a comment paragraph. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; User Option: <b>idlwave-auto-fill-split-string</b>
+    (<code>t</code>)<var><a name=
+    "index-idlwave_002dauto_002dfill_002dsplit_002dstring-50" id=
+    "index-idlwave_002dauto_002dfill_002dsplit_002dstring-50"></a></var><br />
 
-<div class="defun">
-&mdash; User Option: <b>idlwave-use-last-hang-indent</b> (<code>nil</code>)<var><a name="index-idlwave_002duse_002dlast_002dhang_002dindent-54"></a></var><br>
-<blockquote><p>Non-<code>nil</code> means use last match on line for
-<code>idlwave-indent-regexp</code>. 
-</p></blockquote></div>
 
-   </body></html>
+    <blockquote>
+      <p>Non-<code>nil</code> means auto fill will split strings
+      with the IDL &lsquo;<samp><span class=
+      "samp">+</span></samp>&rsquo; operator.</p>
+    </blockquote>
+  </div>
 
+  <div class="defun">
+    &mdash; User Option: <b>idlwave-split-line-string</b>
+    (<code>t</code>)<var><a name=
+    "index-idlwave_002dsplit_002dline_002dstring-51" id=
+    "index-idlwave_002dsplit_002dline_002dstring-51"></a></var><br />
+
+
+    <blockquote>
+      <p>Non-<code>nil</code> means <code>idlwave-split-line</code>
+      will split strings with &lsquo;<samp><span class=
+      "samp">+</span></samp>&rsquo;.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; User Option: <b>idlwave-hanging-indent</b>
+    (<code>t</code>)<var><a name=
+    "index-idlwave_002dhanging_002dindent-52" id=
+    "index-idlwave_002dhanging_002dindent-52"></a></var><br />
+
+    <blockquote>
+      <p>Non-<code>nil</code> means comment paragraphs are indented
+      under the hanging indent given by
+      <code>idlwave-hang-indent-regexp</code> match in the first
+      line of the paragraph.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; User Option: <b>idlwave-hang-indent-regexp</b>
+    (<code>"- "</code>)<var><a name=
+    "index-idlwave_002dhang_002dindent_002dregexp-53" id=
+    "index-idlwave_002dhang_002dindent_002dregexp-53"></a></var><br />
+
+
+    <blockquote>
+      <p>Regular expression matching the position of the hanging
+      indent in the first line of a comment paragraph.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; User Option: <b>idlwave-use-last-hang-indent</b>
+    (<code>nil</code>)<var><a name=
+    "index-idlwave_002duse_002dlast_002dhang_002dindent-54" id=
+    "index-idlwave_002duse_002dlast_002dhang_002dindent-54"></a></var><br />
+
+
+    <blockquote>
+      <p>Non-<code>nil</code> means use last match on line for
+      <code>idlwave-indent-regexp</code>.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

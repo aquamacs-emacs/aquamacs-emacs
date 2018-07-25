@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,184 +19,284 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Window History</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Window History">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Window History">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Dedicated-Windows.html#Dedicated-Windows" rel="next" title="Dedicated Windows">
-<link href="Choosing-Window-Options.html#Choosing-Window-Options" rel="prev" title="Choosing Window Options">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Window History</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Window History" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Window History" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Dedicated-Windows.html#Dedicated-Windows" rel="next"
+  title="Dedicated Windows" />
+  <link href="Choosing-Window-Options.html#Choosing-Window-Options"
+  rel="prev" title="Choosing Window Options" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Window-History" id="Window-History"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Dedicated-Windows.html#Dedicated-Windows"
+    accesskey="n" rel="next">Dedicated Windows</a>, Previous:
+    <a href="Choosing-Window-Options.html#Choosing-Window-Options"
+    accesskey="p" rel="prev">Choosing Window Options</a>, Up:
+    <a href="Windows.html#Windows" accesskey="u" rel=
+    "up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Window-History-1" id="Window-History-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Window-History"></a>
-<div class="header">
-<p>
-Next: <a href="Dedicated-Windows.html#Dedicated-Windows" accesskey="n" rel="next">Dedicated Windows</a>, Previous: <a href="Choosing-Window-Options.html#Choosing-Window-Options" accesskey="p" rel="prev">Choosing Window Options</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Window-History-1"></a>
-<h3 class="section">27.16 Window History</h3>
-<a name="index-window-history"></a>
+  <h3 class="section">27.16 Window History</h3><a name=
+  "index-window-history" id="index-window-history"></a>
 
-<p>Each window remembers in a list the buffers it has previously displayed,
-and the order in which these buffers were removed from it.  This history
-is used, for example, by <code>replace-buffer-in-windows</code>
-(see <a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>).  The list is automatically maintained by
-Emacs, but you can use the following functions to explicitly inspect or
-alter it:
-</p>
-<dl>
-<dt><a name="index-window_002dprev_002dbuffers"></a>Function: <strong>window-prev-buffers</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function returns a list specifying the previous contents of
-<var>window</var>.  The optional argument <var>window</var> should be a live
-window and defaults to the selected one.
-</p>
-<p>Each list element has the form <code>(<var>buffer</var> <var>window-start</var>
-<var>window-pos</var>)</code>, where <var>buffer</var> is a buffer previously shown in
-the window, <var>window-start</var> is the window start position
-(see <a href="Window-Start-and-End.html#Window-Start-and-End">Window Start and End</a>) when that buffer was last shown, and
-<var>window-pos</var> is the point position (see <a href="Window-Point.html#Window-Point">Window Point</a>) when
-that buffer was last shown in <var>window</var>.
-</p>
-<p>The list is ordered so that earlier elements correspond to more
-recently-shown buffers, and the first element usually corresponds to the
-buffer most recently removed from the window.
-</p></dd></dl>
+  <p>Each window remembers in a list the buffers it has previously
+  displayed, and the order in which these buffers were removed from
+  it. This history is used, for example, by
+  <code>replace-buffer-in-windows</code> (see <a href=
+  "Buffers-and-Windows.html#Buffers-and-Windows">Buffers and
+  Windows</a>). The list is automatically maintained by Emacs, but
+  you can use the following functions to explicitly inspect or
+  alter it:</p>
 
-<dl>
-<dt><a name="index-set_002dwindow_002dprev_002dbuffers"></a>Function: <strong>set-window-prev-buffers</strong> <em>window prev-buffers</em></dt>
-<dd><p>This function sets <var>window</var>&rsquo;s previous buffers to the value of
-<var>prev-buffers</var>.  The argument <var>window</var> must be a live window
-and defaults to the selected one.  The argument <var>prev-buffers</var>
-should be a list of the same form as that returned by
-<code>window-prev-buffers</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-window_002dprev_002dbuffers" id=
+    "index-window_002dprev_002dbuffers"></a>Function:
+    <strong>window-prev-buffers</strong> <em>&amp;optional
+    window</em></dt>
 
-<p>In addition, each buffer maintains a list of <em>next buffers</em>, which
-is a list of buffers re-shown by <code>switch-to-prev-buffer</code> (see
-below).  This list is mainly used by <code>switch-to-prev-buffer</code> and
-<code>switch-to-next-buffer</code> for choosing buffers to switch to.
-</p>
-<dl>
-<dt><a name="index-window_002dnext_002dbuffers"></a>Function: <strong>window-next-buffers</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function returns the list of buffers recently re-shown in
-<var>window</var> via <code>switch-to-prev-buffer</code>.  The <var>window</var>
-argument must denote a live window or <code>nil</code> (meaning the selected
-window).
-</p></dd></dl>
+    <dd>
+      <p>This function returns a list specifying the previous
+      contents of <var>window</var>. The optional argument
+      <var>window</var> should be a live window and defaults to the
+      selected one.</p>
 
-<dl>
-<dt><a name="index-set_002dwindow_002dnext_002dbuffers"></a>Function: <strong>set-window-next-buffers</strong> <em>window next-buffers</em></dt>
-<dd><p>This function sets the next buffer list of <var>window</var> to
-<var>next-buffers</var>.  The <var>window</var> argument should be a live window
-or <code>nil</code> (meaning the selected window).  The argument
-<var>next-buffers</var> should be a list of buffers.
-</p></dd></dl>
+      <p>Each list element has the form <code>(<var>buffer</var>
+      <var>window-start</var> <var>window-pos</var>)</code>, where
+      <var>buffer</var> is a buffer previously shown in the window,
+      <var>window-start</var> is the window start position (see
+      <a href=
+      "Window-Start-and-End.html#Window-Start-and-End">Window Start
+      and End</a>) when that buffer was last shown, and
+      <var>window-pos</var> is the point position (see <a href=
+      "Window-Point.html#Window-Point">Window Point</a>) when that
+      buffer was last shown in <var>window</var>.</p>
 
-<p>The following commands can be used to cycle through the global buffer
-list, much like <code>bury-buffer</code> and <code>unbury-buffer</code>.  However,
-they cycle according to the specified window&rsquo;s history list, rather
-than the global buffer list.  In addition, they restore
-window-specific window start and point positions, and may show a
-buffer even if it is already shown in another window.  The
-<code>switch-to-prev-buffer</code> command, in particular, is used by
-<code>replace-buffer-in-windows</code>, <code>bury-buffer</code> and
-<code>quit-window</code> to find a replacement buffer for a window.
-</p>
-<dl>
-<dt><a name="index-switch_002dto_002dprev_002dbuffer"></a>Command: <strong>switch-to-prev-buffer</strong> <em>&amp;optional window bury-or-kill</em></dt>
-<dd><p>This command displays the previous buffer in <var>window</var>.  The
-argument <var>window</var> should be a live window or <code>nil</code> (meaning
-the selected window).  If the optional argument <var>bury-or-kill</var> is
-non-<code>nil</code>, this means that the buffer currently shown in
-<var>window</var> is about to be buried or killed and consequently should
-not be switched to in future invocations of this command.
-</p>
-<p>The previous buffer is usually the buffer shown before the buffer
-currently shown in <var>window</var>.  However, a buffer that has been buried
-or killed, or has been already shown by a recent invocation of
-<code>switch-to-prev-buffer</code>, does not qualify as previous buffer.
-</p>
-<p>If repeated invocations of this command have already shown all buffers
-previously shown in <var>window</var>, further invocations will show buffers
-from the buffer list of the frame <var>window</var> appears on (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>), trying to skip buffers that are already shown in another window
-on that frame.
-</p></dd></dl>
+      <p>The list is ordered so that earlier elements correspond to
+      more recently-shown buffers, and the first element usually
+      corresponds to the buffer most recently removed from the
+      window.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-switch_002dto_002dnext_002dbuffer"></a>Command: <strong>switch-to-next-buffer</strong> <em>&amp;optional window</em></dt>
-<dd><p>This command switches to the next buffer in <var>window</var>, thus undoing
-the effect of the last <code>switch-to-prev-buffer</code> command in
-<var>window</var>.  The argument <var>window</var> must be a live window and
-defaults to the selected one.
-</p>
-<p>If there is no recent invocation of <code>switch-to-prev-buffer</code> that
-can be undone, this function tries to show a buffer from the buffer list
-of the frame <var>window</var> appears on (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dwindow_002dprev_002dbuffers" id=
+    "index-set_002dwindow_002dprev_002dbuffers"></a>Function:
+    <strong>set-window-prev-buffers</strong> <em>window
+    prev-buffers</em></dt>
 
-<p>By default <code>switch-to-prev-buffer</code> and <code>switch-to-next-buffer</code>
-can switch to a buffer that is already shown in another window on the
-same frame.  The following option can be used to override this behavior.
-</p>
-<dl>
-<dt><a name="index-switch_002dto_002dvisible_002dbuffer"></a>User Option: <strong>switch-to-visible-buffer</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, <code>switch-to-prev-buffer</code> and
-<code>switch-to-next-buffer</code> may switch to a buffer that is already
-visible on the same frame, provided the buffer was shown in the
-relevant window before.  If it is <code>nil</code>,
-<code>switch-to-prev-buffer</code> and <code>switch-to-next-buffer</code> always
-try to avoid switching to a buffer that is already visible in another
-window on the same frame.  The default is <code>t</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function sets <var>window</var>&rsquo;s previous
+      buffers to the value of <var>prev-buffers</var>. The argument
+      <var>window</var> must be a live window and defaults to the
+      selected one. The argument <var>prev-buffers</var> should be
+      a list of the same form as that returned by
+      <code>window-prev-buffers</code>.</p>
+    </dd>
+  </dl>
 
+  <p>In addition, each buffer maintains a list of <em>next
+  buffers</em>, which is a list of buffers re-shown by
+  <code>switch-to-prev-buffer</code> (see below). This list is
+  mainly used by <code>switch-to-prev-buffer</code> and
+  <code>switch-to-next-buffer</code> for choosing buffers to switch
+  to.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Dedicated-Windows.html#Dedicated-Windows" accesskey="n" rel="next">Dedicated Windows</a>, Previous: <a href="Choosing-Window-Options.html#Choosing-Window-Options" accesskey="p" rel="prev">Choosing Window Options</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-window_002dnext_002dbuffers" id=
+    "index-window_002dnext_002dbuffers"></a>Function:
+    <strong>window-next-buffers</strong> <em>&amp;optional
+    window</em></dt>
 
+    <dd>
+      <p>This function returns the list of buffers recently
+      re-shown in <var>window</var> via
+      <code>switch-to-prev-buffer</code>. The <var>window</var>
+      argument must denote a live window or <code>nil</code>
+      (meaning the selected window).</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-set_002dwindow_002dnext_002dbuffers" id=
+    "index-set_002dwindow_002dnext_002dbuffers"></a>Function:
+    <strong>set-window-next-buffers</strong> <em>window
+    next-buffers</em></dt>
 
+    <dd>
+      <p>This function sets the next buffer list of
+      <var>window</var> to <var>next-buffers</var>. The
+      <var>window</var> argument should be a live window or
+      <code>nil</code> (meaning the selected window). The argument
+      <var>next-buffers</var> should be a list of buffers.</p>
+    </dd>
+  </dl>
+
+  <p>The following commands can be used to cycle through the global
+  buffer list, much like <code>bury-buffer</code> and
+  <code>unbury-buffer</code>. However, they cycle according to the
+  specified window&rsquo;s history list, rather than the global
+  buffer list. In addition, they restore window-specific window
+  start and point positions, and may show a buffer even if it is
+  already shown in another window. The
+  <code>switch-to-prev-buffer</code> command, in particular, is
+  used by <code>replace-buffer-in-windows</code>,
+  <code>bury-buffer</code> and <code>quit-window</code> to find a
+  replacement buffer for a window.</p>
+
+  <dl>
+    <dt><a name="index-switch_002dto_002dprev_002dbuffer" id=
+    "index-switch_002dto_002dprev_002dbuffer"></a>Command:
+    <strong>switch-to-prev-buffer</strong> <em>&amp;optional window
+    bury-or-kill</em></dt>
+
+    <dd>
+      <p>This command displays the previous buffer in
+      <var>window</var>. The argument <var>window</var> should be a
+      live window or <code>nil</code> (meaning the selected
+      window). If the optional argument <var>bury-or-kill</var> is
+      non-<code>nil</code>, this means that the buffer currently
+      shown in <var>window</var> is about to be buried or killed
+      and consequently should not be switched to in future
+      invocations of this command.</p>
+
+      <p>The previous buffer is usually the buffer shown before the
+      buffer currently shown in <var>window</var>. However, a
+      buffer that has been buried or killed, or has been already
+      shown by a recent invocation of
+      <code>switch-to-prev-buffer</code>, does not qualify as
+      previous buffer.</p>
+
+      <p>If repeated invocations of this command have already shown
+      all buffers previously shown in <var>window</var>, further
+      invocations will show buffers from the buffer list of the
+      frame <var>window</var> appears on (see <a href=
+      "Buffer-List.html#Buffer-List">Buffer List</a>), trying to
+      skip buffers that are already shown in another window on that
+      frame.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-switch_002dto_002dnext_002dbuffer" id=
+    "index-switch_002dto_002dnext_002dbuffer"></a>Command:
+    <strong>switch-to-next-buffer</strong> <em>&amp;optional
+    window</em></dt>
+
+    <dd>
+      <p>This command switches to the next buffer in
+      <var>window</var>, thus undoing the effect of the last
+      <code>switch-to-prev-buffer</code> command in
+      <var>window</var>. The argument <var>window</var> must be a
+      live window and defaults to the selected one.</p>
+
+      <p>If there is no recent invocation of
+      <code>switch-to-prev-buffer</code> that can be undone, this
+      function tries to show a buffer from the buffer list of the
+      frame <var>window</var> appears on (see <a href=
+      "Buffer-List.html#Buffer-List">Buffer List</a>).</p>
+    </dd>
+  </dl>
+
+  <p>By default <code>switch-to-prev-buffer</code> and
+  <code>switch-to-next-buffer</code> can switch to a buffer that is
+  already shown in another window on the same frame. The following
+  option can be used to override this behavior.</p>
+
+  <dl>
+    <dt><a name="index-switch_002dto_002dvisible_002dbuffer" id=
+    "index-switch_002dto_002dvisible_002dbuffer"></a>User Option:
+    <strong>switch-to-visible-buffer</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>,
+      <code>switch-to-prev-buffer</code> and
+      <code>switch-to-next-buffer</code> may switch to a buffer
+      that is already visible on the same frame, provided the
+      buffer was shown in the relevant window before. If it is
+      <code>nil</code>, <code>switch-to-prev-buffer</code> and
+      <code>switch-to-next-buffer</code> always try to avoid
+      switching to a buffer that is already visible in another
+      window on the same frame. The default is <code>t</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Dedicated-Windows.html#Dedicated-Windows"
+    accesskey="n" rel="next">Dedicated Windows</a>, Previous:
+    <a href="Choosing-Window-Options.html#Choosing-Window-Options"
+    accesskey="p" rel="prev">Choosing Window Options</a>, Up:
+    <a href="Windows.html#Windows" accesskey="u" rel=
+    "up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

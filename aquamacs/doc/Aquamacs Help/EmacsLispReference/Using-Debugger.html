@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,124 +19,164 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Using Debugger</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Using Debugger">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Using Debugger">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugger.html#Debugger" rel="up" title="Debugger">
-<link href="Debugger-Commands.html#Debugger-Commands" rel="next" title="Debugger Commands">
-<link href="Explicit-Debug.html#Explicit-Debug" rel="prev" title="Explicit Debug">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Using Debugger</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Using Debugger" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Using Debugger" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugger.html#Debugger" rel="up" title="Debugger" />
+  <link href="Debugger-Commands.html#Debugger-Commands" rel="next"
+  title="Debugger Commands" />
+  <link href="Explicit-Debug.html#Explicit-Debug" rel="prev" title=
+  "Explicit Debug" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Using-Debugger" id="Using-Debugger"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Debugger-Commands.html#Debugger-Commands"
+    accesskey="n" rel="next">Debugger Commands</a>, Previous:
+    <a href="Explicit-Debug.html#Explicit-Debug" accesskey="p" rel=
+    "prev">Explicit Debug</a>, Up: <a href="Debugger.html#Debugger"
+    accesskey="u" rel="up">Debugger</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-the-Debugger" id="Using-the-Debugger"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-Debugger"></a>
-<div class="header">
-<p>
-Next: <a href="Debugger-Commands.html#Debugger-Commands" accesskey="n" rel="next">Debugger Commands</a>, Previous: <a href="Explicit-Debug.html#Explicit-Debug" accesskey="p" rel="prev">Explicit Debug</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-the-Debugger"></a>
-<h4 class="subsection">17.1.5 Using the Debugger</h4>
+  <h4 class="subsection">17.1.5 Using the Debugger</h4>
 
-<p>When the debugger is entered, it displays the previously selected
-buffer in one window and a buffer named <samp>*Backtrace*</samp> in another
-window.  The backtrace buffer contains one line for each level of Lisp
-function execution currently going on.  At the beginning of this buffer
-is a message describing the reason that the debugger was invoked (such
-as the error message and associated data, if it was invoked due to an
-error).
-</p>
-<a name="index-debugger_002dbury_002dor_002dkill"></a>
-<p>The backtrace buffer is read-only and uses a special major mode,
-Debugger mode, in which letters are defined as debugger commands.  The
-usual Emacs editing commands are available; thus, you can switch windows
-to examine the buffer that was being edited at the time of the error,
-switch buffers, visit files, or do any other sort of editing.  However,
-the debugger is a recursive editing level (see <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>)
-and it is wise to go back to the backtrace buffer and exit the debugger
-(with the <kbd>q</kbd> command) when you are finished with it.  Exiting
-the debugger gets out of the recursive edit and buries the backtrace
-buffer.  (You can customize what the <kbd>q</kbd> command does with the
-backtrace buffer by setting the variable <code>debugger-bury-or-kill</code>.
-For example, set it to <code>kill</code> if you prefer to kill the buffer
-rather than bury it.  Consult the variable&rsquo;s documentation for more
-possibilities.)
-</p>
-<p>When the debugger has been entered, the <code>debug-on-error</code>
-variable is temporarily set according to
-<code>eval-expression-debug-on-error</code>.  If the latter variable is
-non-<code>nil</code>, <code>debug-on-error</code> will temporarily be set to
-<code>t</code>.  This means that any further errors that occur while doing a
-debugging session will (by default) trigger another backtrace.  If
-this is not what you want, you can either set
-<code>eval-expression-debug-on-error</code> to <code>nil</code>, or set
-<code>debug-on-error</code> to <code>nil</code> in <code>debugger-mode-hook</code>.
-</p>
-<a name="index-current-stack-frame"></a>
-<p>The backtrace buffer shows you the functions that are executing and
-their argument values.  It also allows you to specify a stack frame by
-moving point to the line describing that frame.  (A stack frame is the
-place where the Lisp interpreter records information about a particular
-invocation of a function.)  The frame whose line point is on is
-considered the <em>current frame</em>.  Some of the debugger commands
-operate on the current frame.  If a line starts with a star, that means
-that exiting that frame will call the debugger again.  This is useful
-for examining the return value of a function.
-</p>
-<p>If a function name is underlined, that means the debugger knows
-where its source code is located.  You can click with the mouse on
-that name, or move to it and type <tt class="key">RET</tt>, to visit the source code.
-</p>
-<p>The debugger itself must be run byte-compiled, since it makes
-assumptions about how many stack frames are used for the debugger
-itself.  These assumptions are false if the debugger is running
-interpreted.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Debugger-Commands.html#Debugger-Commands" accesskey="n" rel="next">Debugger Commands</a>, Previous: <a href="Explicit-Debug.html#Explicit-Debug" accesskey="p" rel="prev">Explicit Debug</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When the debugger is entered, it displays the previously
+  selected buffer in one window and a buffer named
+  <samp>*Backtrace*</samp> in another window. The backtrace buffer
+  contains one line for each level of Lisp function execution
+  currently going on. At the beginning of this buffer is a message
+  describing the reason that the debugger was invoked (such as the
+  error message and associated data, if it was invoked due to an
+  error).</p><a name="index-debugger_002dbury_002dor_002dkill" id=
+  "index-debugger_002dbury_002dor_002dkill"></a>
 
+  <p>The backtrace buffer is read-only and uses a special major
+  mode, Debugger mode, in which letters are defined as debugger
+  commands. The usual Emacs editing commands are available; thus,
+  you can switch windows to examine the buffer that was being
+  edited at the time of the error, switch buffers, visit files, or
+  do any other sort of editing. However, the debugger is a
+  recursive editing level (see <a href=
+  "Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>)
+  and it is wise to go back to the backtrace buffer and exit the
+  debugger (with the <kbd>q</kbd> command) when you are finished
+  with it. Exiting the debugger gets out of the recursive edit and
+  buries the backtrace buffer. (You can customize what the
+  <kbd>q</kbd> command does with the backtrace buffer by setting
+  the variable <code>debugger-bury-or-kill</code>. For example, set
+  it to <code>kill</code> if you prefer to kill the buffer rather
+  than bury it. Consult the variable&rsquo;s documentation for more
+  possibilities.)</p>
 
+  <p>When the debugger has been entered, the
+  <code>debug-on-error</code> variable is temporarily set according
+  to <code>eval-expression-debug-on-error</code>. If the latter
+  variable is non-<code>nil</code>, <code>debug-on-error</code>
+  will temporarily be set to <code>t</code>. This means that any
+  further errors that occur while doing a debugging session will
+  (by default) trigger another backtrace. If this is not what you
+  want, you can either set
+  <code>eval-expression-debug-on-error</code> to <code>nil</code>,
+  or set <code>debug-on-error</code> to <code>nil</code> in
+  <code>debugger-mode-hook</code>.</p><a name=
+  "index-current-stack-frame" id="index-current-stack-frame"></a>
 
+  <p>The backtrace buffer shows you the functions that are
+  executing and their argument values. It also allows you to
+  specify a stack frame by moving point to the line describing that
+  frame. (A stack frame is the place where the Lisp interpreter
+  records information about a particular invocation of a function.)
+  The frame whose line point is on is considered the <em>current
+  frame</em>. Some of the debugger commands operate on the current
+  frame. If a line starts with a star, that means that exiting that
+  frame will call the debugger again. This is useful for examining
+  the return value of a function.</p>
+
+  <p>If a function name is underlined, that means the debugger
+  knows where its source code is located. You can click with the
+  mouse on that name, or move to it and type <tt class=
+  "key">RET</tt>, to visit the source code.</p>
+
+  <p>The debugger itself must be run byte-compiled, since it makes
+  assumptions about how many stack frames are used for the debugger
+  itself. These assumptions are false if the debugger is running
+  interpreted.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Debugger-Commands.html#Debugger-Commands"
+    accesskey="n" rel="next">Debugger Commands</a>, Previous:
+    <a href="Explicit-Debug.html#Explicit-Debug" accesskey="p" rel=
+    "prev">Explicit Debug</a>, Up: <a href="Debugger.html#Debugger"
+    accesskey="u" rel="up">Debugger</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

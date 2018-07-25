@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,120 +18,168 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Yanking Into Buffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Yanking Into Buffers">
-<meta name="keywords" content="GNU Emacs Calc Manual: Yanking Into Buffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Kill-and-Yank.html#Kill-and-Yank" rel="up" title="Kill and Yank">
-<link href="X-Cut-and-Paste.html#X-Cut-and-Paste" rel="next" title="X Cut and Paste">
-<link href="Grabbing-From-Buffers.html#Grabbing-From-Buffers" rel="prev" title="Grabbing From Buffers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Yanking Into Buffers</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Yanking Into Buffers" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Yanking Into Buffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Kill-and-Yank.html#Kill-and-Yank" rel="up" title=
+  "Kill and Yank" />
+  <link href="X-Cut-and-Paste.html#X-Cut-and-Paste" rel="next"
+  title="X Cut and Paste" />
+  <link href="Grabbing-From-Buffers.html#Grabbing-From-Buffers"
+  rel="prev" title="Grabbing From Buffers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Yanking-Into-Buffers"></a>
-<div class="header">
-<p>
-Next: <a href="X-Cut-and-Paste.html#X-Cut-and-Paste" accesskey="n" rel="next">X Cut and Paste</a>, Previous: <a href="Grabbing-From-Buffers.html#Grabbing-From-Buffers" accesskey="p" rel="prev">Grabbing From Buffers</a>, Up: <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Yanking-into-Other-Buffers"></a>
-<h3 class="section">14.6 Yanking into Other Buffers</h3>
+<body lang="en" xml:lang="en">
+  <a name="Yanking-Into-Buffers" id="Yanking-Into-Buffers"></a>
 
-<a name="index-y"></a>
-<a name="index-calc_002dcopy_002dto_002dbuffer"></a>
-<p>The plain <kbd>y</kbd> (<code>calc-copy-to-buffer</code>) command inserts the number
-at the top of the stack into the most recently used normal editing buffer.
-(More specifically, this is the most recently used buffer which is displayed
-in a window and whose name does not begin with &lsquo;<samp>*</samp>&rsquo;.  If there is no
-such buffer, this is the most recently used buffer except for Calculator
-and Calc Trail buffers.)  The number is inserted exactly as it appears and
-without a newline.  (If line-numbering is enabled, the line number is
-normally not included.)  The number is <em>not</em> removed from the stack.
-</p>
-<p>With a prefix argument, <kbd>y</kbd> inserts several numbers, one per line.
-A positive argument inserts the specified number of values from the top
-of the stack.  A negative argument inserts the &lsquo;<samp>n</samp>&rsquo;th value from the
-top of the stack.  An argument of zero inserts the entire stack.  Note
-that <kbd>y</kbd> with an argument of 1 is slightly different from <kbd>y</kbd>
-with no argument; the former always copies full lines, whereas the
-latter strips off the trailing newline.
-</p>
-<p>With a lone <kbd>C-u</kbd> as a prefix argument, <kbd>y</kbd> <em>replaces</em> the
-region in the other buffer with the yanked text, then quits the
-Calculator, leaving you in that buffer.  A typical use would be to use
-<kbd>C-x * g</kbd> to read a region of data into the Calculator, operate on the
-data to produce a new matrix, then type <kbd>C-u y</kbd> to replace the
-original data with the new data.  One might wish to alter the matrix
-display style (see <a href="Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats">Vector and Matrix Formats</a>) or change the current
-display language (see <a href="Language-Modes.html#Language-Modes">Language Modes</a>) before doing this.  Also, note
-that this command replaces a linear region of text (as grabbed by
-<kbd>C-x * g</kbd>), not a rectangle (as grabbed by <kbd>C-x * r</kbd>).
-</p>
-<p>If the editing buffer is in overwrite (as opposed to insert) mode,
-and the <kbd>C-u</kbd> prefix was not used, then the yanked number will
-overwrite the characters following point rather than being inserted
-before those characters.  The usual conventions of overwrite mode
-are observed; for example, characters will be inserted at the end of
-a line rather than overflowing onto the next line.  Yanking a multi-line
-object such as a matrix in overwrite mode overwrites the next <var>n</var>
-lines in the buffer, lengthening or shortening each line as necessary.
-Finally, if the thing being yanked is a simple integer or floating-point
-number (like &lsquo;<samp>-1.2345e-3</samp>&rsquo;) and the characters following point also
-make up such a number, then Calc will replace that number with the new
-number, lengthening or shortening as necessary.  The concept of
-&ldquo;overwrite mode&rdquo; has thus been generalized from overwriting characters
-to overwriting one complete number with another.
-</p>
-<a name="index-C_002dx-_002a-y"></a>
-<p>The <kbd>C-x * y</kbd> key sequence is equivalent to <kbd>y</kbd> except that
-it can be typed anywhere, not just in Calc.  This provides an easy
-way to guarantee that Calc knows which editing buffer you want to use!
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="X-Cut-and-Paste.html#X-Cut-and-Paste" accesskey="n" rel="next">X Cut and Paste</a>, Previous: <a href="Grabbing-From-Buffers.html#Grabbing-From-Buffers" accesskey="p" rel="prev">Grabbing From Buffers</a>, Up: <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel="up">Kill and Yank</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="X-Cut-and-Paste.html#X-Cut-and-Paste"
+    accesskey="n" rel="next">X Cut and Paste</a>, Previous:
+    <a href="Grabbing-From-Buffers.html#Grabbing-From-Buffers"
+    accesskey="p" rel="prev">Grabbing From Buffers</a>, Up:
+    <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel=
+    "up">Kill and Yank</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Yanking-into-Other-Buffers" id=
+  "Yanking-into-Other-Buffers"></a>
 
+  <h3 class="section">14.6 Yanking into Other Buffers</h3><a name=
+  "index-y" id="index-y"></a> <a name=
+  "index-calc_002dcopy_002dto_002dbuffer" id=
+  "index-calc_002dcopy_002dto_002dbuffer"></a>
 
+  <p>The plain <kbd>y</kbd> (<code>calc-copy-to-buffer</code>)
+  command inserts the number at the top of the stack into the most
+  recently used normal editing buffer. (More specifically, this is
+  the most recently used buffer which is displayed in a window and
+  whose name does not begin with &lsquo;<samp>*</samp>&rsquo;. If
+  there is no such buffer, this is the most recently used buffer
+  except for Calculator and Calc Trail buffers.) The number is
+  inserted exactly as it appears and without a newline. (If
+  line-numbering is enabled, the line number is normally not
+  included.) The number is <em>not</em> removed from the stack.</p>
 
+  <p>With a prefix argument, <kbd>y</kbd> inserts several numbers,
+  one per line. A positive argument inserts the specified number of
+  values from the top of the stack. A negative argument inserts the
+  &lsquo;<samp>n</samp>&rsquo;th value from the top of the stack.
+  An argument of zero inserts the entire stack. Note that
+  <kbd>y</kbd> with an argument of 1 is slightly different from
+  <kbd>y</kbd> with no argument; the former always copies full
+  lines, whereas the latter strips off the trailing newline.</p>
+
+  <p>With a lone <kbd>C-u</kbd> as a prefix argument, <kbd>y</kbd>
+  <em>replaces</em> the region in the other buffer with the yanked
+  text, then quits the Calculator, leaving you in that buffer. A
+  typical use would be to use <kbd>C-x * g</kbd> to read a region
+  of data into the Calculator, operate on the data to produce a new
+  matrix, then type <kbd>C-u y</kbd> to replace the original data
+  with the new data. One might wish to alter the matrix display
+  style (see <a href=
+  "Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats">Vector
+  and Matrix Formats</a>) or change the current display language
+  (see <a href="Language-Modes.html#Language-Modes">Language
+  Modes</a>) before doing this. Also, note that this command
+  replaces a linear region of text (as grabbed by <kbd>C-x *
+  g</kbd>), not a rectangle (as grabbed by <kbd>C-x * r</kbd>).</p>
+
+  <p>If the editing buffer is in overwrite (as opposed to insert)
+  mode, and the <kbd>C-u</kbd> prefix was not used, then the yanked
+  number will overwrite the characters following point rather than
+  being inserted before those characters. The usual conventions of
+  overwrite mode are observed; for example, characters will be
+  inserted at the end of a line rather than overflowing onto the
+  next line. Yanking a multi-line object such as a matrix in
+  overwrite mode overwrites the next <var>n</var> lines in the
+  buffer, lengthening or shortening each line as necessary.
+  Finally, if the thing being yanked is a simple integer or
+  floating-point number (like
+  &lsquo;<samp>-1.2345e-3</samp>&rsquo;) and the characters
+  following point also make up such a number, then Calc will
+  replace that number with the new number, lengthening or
+  shortening as necessary. The concept of &ldquo;overwrite
+  mode&rdquo; has thus been generalized from overwriting characters
+  to overwriting one complete number with another.</p><a name=
+  "index-C_002dx-_002a-y" id="index-C_002dx-_002a-y"></a>
+
+  <p>The <kbd>C-x * y</kbd> key sequence is equivalent to
+  <kbd>y</kbd> except that it can be typed anywhere, not just in
+  Calc. This provides an easy way to guarantee that Calc knows
+  which editing buffer you want to use!</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="X-Cut-and-Paste.html#X-Cut-and-Paste"
+    accesskey="n" rel="next">X Cut and Paste</a>, Previous:
+    <a href="Grabbing-From-Buffers.html#Grabbing-From-Buffers"
+    accesskey="p" rel="prev">Grabbing From Buffers</a>, Up:
+    <a href="Kill-and-Yank.html#Kill-and-Yank" accesskey="u" rel=
+    "up">Kill and Yank</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

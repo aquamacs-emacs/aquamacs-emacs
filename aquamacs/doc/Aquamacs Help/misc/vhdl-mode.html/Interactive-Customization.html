@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents VHDL Mode, an Emacs mode for editing VHDL code.
 
 Copyright (C) 1995-2008, 2010, 2012, 2015-2016 Free Software
@@ -15,143 +17,200 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>VHDL Mode, an Emacs mode for editing VHDL code: Interactive Customization</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="VHDL Mode, an Emacs mode for editing VHDL code: Interactive Customization">
-<meta name="keywords" content="VHDL Mode, an Emacs mode for editing VHDL code: Interactive Customization">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customizing-Indentation.html#Customizing-Indentation" rel="up" title="Customizing Indentation">
-<link href="Permanent-Customization.html#Permanent-Customization" rel="next" title="Permanent Customization">
-<link href="Customizing-Indentation.html#Customizing-Indentation" rel="prev" title="Customizing Indentation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>VHDL Mode, an Emacs mode for editing VHDL code:
+  Interactive Customization</title>
+  <meta name="description" content=
+  "VHDL Mode, an Emacs mode for editing VHDL code: Interactive Customization" />
+  <meta name="keywords" content=
+  "VHDL Mode, an Emacs mode for editing VHDL code: Interactive Customization" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customizing-Indentation.html#Customizing-Indentation"
+  rel="up" title="Customizing Indentation" />
+  <link href="Permanent-Customization.html#Permanent-Customization"
+  rel="next" title="Permanent Customization" />
+  <link href="Customizing-Indentation.html#Customizing-Indentation"
+  rel="prev" title="Customizing Indentation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Interactive-Customization"></a>
-<div class="header">
-<p>
-Next: <a href="Permanent-Customization.html#Permanent-Customization" accesskey="n" rel="next">Permanent Customization</a>, Up: <a href="Customizing-Indentation.html#Customizing-Indentation" accesskey="u" rel="up">Customizing Indentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Interactive-Customization-1"></a>
-<h3 class="section">4.1 Interactive Customization</h3>
-<a name="index-Interactive-Customization"></a>
+<body lang="en" xml:lang="en">
+  <a name="Interactive-Customization" id=
+  "Interactive-Customization"></a>
 
-<p>As an example of how to customize indentation, let&rsquo;s change the
-style of the example above from:
-</p><div class="example">
-<pre class="example">
+  <div class="header">
+    <p>Next: <a href=
+    "Permanent-Customization.html#Permanent-Customization"
+    accesskey="n" rel="next">Permanent Customization</a>, Up:
+    <a href="Customizing-Indentation.html#Customizing-Indentation"
+    accesskey="u" rel="up">Customizing Indentation</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Interactive-Customization-1" id=
+  "Interactive-Customization-1"></a>
+
+  <h3 class="section">4.1 Interactive Customization</h3><a name=
+  "index-Interactive-Customization" id=
+  "index-Interactive-Customization"></a>
+
+  <p>As an example of how to customize indentation, let&rsquo;s
+  change the style of the example above from:</p>
+
+  <div class="example">
+    <pre class="example">
   1: inverter : process
   2: begin
   3:   q &lt;= not d;
   4:   wait on d;
   5: end inverter;
 
-</pre></div>
-<p>to:
-</p><div class="example">
-<pre class="example">
+</pre>
+  </div>
+
+  <p>to:</p>
+
+  <div class="example">
+    <pre class="example">
   1: inverter : process
   2: begin
   3:     q &lt;= not d;
   4:     wait on d;
   5: end inverter;
 
-</pre></div>
+</pre>
+  </div>
 
-<p>In other words, we want to change the indentation of the statements
-inside the inverter process.  Notice that the construct we want to
-change starts on line 3.  To change the indentation of a line, we need
-to see which syntactic component affect the offset calculations for that
-line.  Hitting <kbd>C-c C-x</kbd> on line 3 yields:
-</p><div class="example">
-<pre class="example">
+  <p>In other words, we want to change the indentation of the
+  statements inside the inverter process. Notice that the construct
+  we want to change starts on line 3. To change the indentation of
+  a line, we need to see which syntactic component affect the
+  offset calculations for that line. Hitting <kbd>C-c C-x</kbd> on
+  line 3 yields:</p>
+
+  <div class="example">
+    <pre class="example">
 ((statement-block-intro . 20))
 
-</pre></div>
+</pre>
+  </div><a name="index-vhdl_002dset_002doffset-1" id=
+  "index-vhdl_002dset_002doffset-1"></a> <a name=
+  "index-set_002doffset-_0028vhdl_002d_0029-1" id=
+  "index-set_002doffset-_0028vhdl_002d_0029-1"></a> <a name=
+  "index-C_002dc-O" id="index-C_002dc-O"></a>
 
-<a name="index-vhdl_002dset_002doffset-1"></a>
-<a name="index-set_002doffset-_0028vhdl_002d_0029-1"></a>
-<a name="index-C_002dc-O"></a>
-<p>So we know that to change the offset of the first signal assignment, we need to
-change the indentation for the <code>statement-block-intro</code> syntactic
-symbol.  To do this interactively, just hit <kbd>C-c O</kbd>
-(<code>vhdl-set-offset</code>).  This prompts you for the syntactic symbol to
-change, providing a reasonable default.  In this case, the default is
-<code>statement-block-intro</code>, which is just the syntactic symbol we want to
-change!
-</p>
-<p>After you hit return, VHDL Mode will then prompt you for the new
-offset value, with the old value as the default.  The default in this
-case is &lsquo;<samp>+</samp>&rsquo;, so hit backspace to delete the &lsquo;<samp>+</samp>&rsquo;, then hit
-&lsquo;<samp>++</samp>&rsquo; and <kbd>RET</kbd>.  This will associate an offset of twice the
-basic indent with the syntactic symbol <code>statement-block-intro</code> in
-the <code>vhdl-offsets-alist</code> variable.
-</p>
-<a name="index-vhdl_002dindent_002ddefun"></a>
-<a name="index-indent_002ddefun-_0028vhdl_002d_0029"></a>
-<p>To check your changes quickly, just enter <kbd>M-x vhdl-indent-defun</kbd> to
-reindent the entire function.  The example should now look like:
-</p><div class="example">
-<pre class="example">
+  <p>So we know that to change the offset of the first signal
+  assignment, we need to change the indentation for the
+  <code>statement-block-intro</code> syntactic symbol. To do this
+  interactively, just hit <kbd>C-c O</kbd>
+  (<code>vhdl-set-offset</code>). This prompts you for the
+  syntactic symbol to change, providing a reasonable default. In
+  this case, the default is <code>statement-block-intro</code>,
+  which is just the syntactic symbol we want to change!</p>
+
+  <p>After you hit return, VHDL Mode will then prompt you for the
+  new offset value, with the old value as the default. The default
+  in this case is &lsquo;<samp>+</samp>&rsquo;, so hit backspace to
+  delete the &lsquo;<samp>+</samp>&rsquo;, then hit
+  &lsquo;<samp>++</samp>&rsquo; and <kbd>RET</kbd>. This will
+  associate an offset of twice the basic indent with the syntactic
+  symbol <code>statement-block-intro</code> in the
+  <code>vhdl-offsets-alist</code> variable.</p><a name=
+  "index-vhdl_002dindent_002ddefun" id=
+  "index-vhdl_002dindent_002ddefun"></a> <a name=
+  "index-indent_002ddefun-_0028vhdl_002d_0029" id=
+  "index-indent_002ddefun-_0028vhdl_002d_0029"></a>
+
+  <p>To check your changes quickly, just enter <kbd>M-x
+  vhdl-indent-defun</kbd> to reindent the entire function. The
+  example should now look like:</p>
+
+  <div class="example">
+    <pre class="example">
   1: inverter : process
   2: begin
   3:     q &lt;= not d;
   4:     wait on d;
   5: end inverter;
 
-</pre></div>
+</pre>
+  </div>
 
-<p>Notice how just changing the offset on line 3 is all we needed to do.
-Since the other affected lines are indented relative to line 3, they are
-automatically indented the way you&rsquo;d expect.  For more complicated
-examples, this may not always work.  The general approach to take is to
-always start adjusting offsets for lines higher up in the file, then
-re-indent and see if any following lines need further adjustments.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Permanent-Customization.html#Permanent-Customization" accesskey="n" rel="next">Permanent Customization</a>, Up: <a href="Customizing-Indentation.html#Customizing-Indentation" accesskey="u" rel="up">Customizing Indentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Notice how just changing the offset on line 3 is all we needed
+  to do. Since the other affected lines are indented relative to
+  line 3, they are automatically indented the way you&rsquo;d
+  expect. For more complicated examples, this may not always work.
+  The general approach to take is to always start adjusting offsets
+  for lines higher up in the file, then re-indent and see if any
+  following lines need further adjustments.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Permanent-Customization.html#Permanent-Customization"
+    accesskey="n" rel="next">Permanent Customization</a>, Up:
+    <a href="Customizing-Indentation.html#Customizing-Indentation"
+    accesskey="u" rel="up">Customizing Indentation</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

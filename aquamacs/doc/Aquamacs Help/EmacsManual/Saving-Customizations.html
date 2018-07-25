@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,128 +20,182 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Saving Customizations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Saving Customizations">
-<meta name="keywords" content="GNU Emacs Manual: Saving Customizations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Easy-Customization.html#Easy-Customization" rel="up" title="Easy Customization">
-<link href="Face-Customization.html#Face-Customization" rel="next" title="Face Customization">
-<link href="Changing-a-Variable.html#Changing-a-Variable" rel="prev" title="Changing a Variable">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Saving Customizations</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Saving Customizations" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Saving Customizations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Easy-Customization.html#Easy-Customization" rel="up"
+  title="Easy Customization" />
+  <link href="Face-Customization.html#Face-Customization" rel=
+  "next" title="Face Customization" />
+  <link href="Changing-a-Variable.html#Changing-a-Variable" rel=
+  "prev" title="Changing a Variable" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Saving-Customizations" id="Saving-Customizations"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Face-Customization.html#Face-Customization"
+    accesskey="n" rel="next">Face Customization</a>, Previous:
+    <a href="Changing-a-Variable.html#Changing-a-Variable"
+    accesskey="p" rel="prev">Changing a Variable</a>, Up: <a href=
+    "Easy-Customization.html#Easy-Customization" accesskey="u" rel=
+    "up">Easy Customization</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Saving-Customizations-1" id=
+  "Saving-Customizations-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Saving-Customizations"></a>
-<div class="header">
-<p>
-Next: <a href="Face-Customization.html#Face-Customization" accesskey="n" rel="next">Face Customization</a>, Previous: <a href="Changing-a-Variable.html#Changing-a-Variable" accesskey="p" rel="prev">Changing a Variable</a>, Up: <a href="Easy-Customization.html#Easy-Customization" accesskey="u" rel="up">Easy Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Saving-Customizations-1"></a>
-<h4 class="subsection">51.1.4 Saving Customizations</h4>
+  <h4 class="subsection">51.1.4 Saving Customizations</h4>
 
-<p>In the customization buffer, you can <em>save</em> a customization
-setting by choosing the &lsquo;<samp>Save for Future Sessions</samp>&rsquo; choice from
-its &lsquo;<samp>[State]</samp>&rsquo; button.  The <kbd>C-x C-s</kbd> (<code>Custom-save</code>)
-command, or the &lsquo;<samp>[Save for Future Sessions]</samp>&rsquo; button at the top of
-the customization buffer, saves all applicable settings in the buffer.
-</p>
-<p>Saving works by writing code to a file, usually your initialization
-file (see <a href="Init-File.html#Init-File">Init File</a>).  Future Emacs sessions automatically read
-this file at startup, which sets up the customizations again.
-</p>
-<a name="index-custom_002dfile"></a>
-<p>You can choose to save customizations somewhere other than your
-initialization file.  To make this work, you must add a couple of
-lines of code to your initialization file, to set the variable
-<code>custom-file</code> to the name of the desired file, and to load that
-file.  For example:
-</p>
-<div class="example">
-<pre class="example">(setq custom-file &quot;~/.emacs-custom.el&quot;)
+  <p>In the customization buffer, you can <em>save</em> a
+  customization setting by choosing the &lsquo;<samp>Save for
+  Future Sessions</samp>&rsquo; choice from its
+  &lsquo;<samp>[State]</samp>&rsquo; button. The <kbd>C-x C-s</kbd>
+  (<code>Custom-save</code>) command, or the &lsquo;<samp>[Save for
+  Future Sessions]</samp>&rsquo; button at the top of the
+  customization buffer, saves all applicable settings in the
+  buffer.</p>
+
+  <p>Saving works by writing code to a file, usually your
+  initialization file (see <a href="Init-File.html#Init-File">Init
+  File</a>). Future Emacs sessions automatically read this file at
+  startup, which sets up the customizations again.</p><a name=
+  "index-custom_002dfile" id="index-custom_002dfile"></a>
+
+  <p>You can choose to save customizations somewhere other than
+  your initialization file. To make this work, you must add a
+  couple of lines of code to your initialization file, to set the
+  variable <code>custom-file</code> to the name of the desired
+  file, and to load that file. For example:</p>
+
+  <div class="example">
+    <pre class="example">
+(setq custom-file "~/.emacs-custom.el")
 (load custom-file)
-</pre></div>
+</pre>
+  </div>
 
-<p>You can even specify different customization files for different
-Emacs versions, like this:
-</p>
-<div class="example">
-<pre class="example">(cond ((&lt; emacs-major-version 22)
+  <p>You can even specify different customization files for
+  different Emacs versions, like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(cond ((&lt; emacs-major-version 22)
        ;; <span class="roman">Emacs 21 customization.</span>
-       (setq custom-file &quot;~/.custom-21.el&quot;))
+       (setq custom-file "~/.custom-21.el"))
       ((and (= emacs-major-version 22)
             (&lt; emacs-minor-version 3))
-       ;; <span class="roman">Emacs 22 customization, before version 22.3.</span>
-       (setq custom-file &quot;~/.custom-22.el&quot;))
+       ;; <span class=
+"roman">Emacs 22 customization, before version 22.3.</span>
+       (setq custom-file "~/.custom-22.el"))
       (t
        ;; <span class="roman">Emacs version 22.3 or later.</span>
-       (setq custom-file &quot;~/.emacs-custom.el&quot;)))
+       (setq custom-file "~/.emacs-custom.el")))
 
 (load custom-file)
-</pre></div>
+</pre>
+  </div>
 
-<p>If Emacs was invoked with the <samp>-q</samp> or <samp>--no-init-file</samp>
-options (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>), it will not let you save your
-customizations in your initialization file.  This is because saving
-customizations from such a session would wipe out all the other
-customizations you might have on your initialization file.
-</p>
-<a name="index-unsaved-customizations_002c-reminder-to-save"></a>
-<a name="index-custom_002dprompt_002dcustomize_002dunsaved_002doptions"></a>
-<p>Please note that any customizations you have not chosen to save for
-future sessions will be lost when you terminate Emacs.  If you&rsquo;d like
-to be prompted about unsaved customizations at termination time, add
-the following to your initialization file:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'kill-emacs-query-functions
+  <p>If Emacs was invoked with the <samp>-q</samp> or
+  <samp>--no-init-file</samp> options (see <a href=
+  "Initial-Options.html#Initial-Options">Initial Options</a>), it
+  will not let you save your customizations in your initialization
+  file. This is because saving customizations from such a session
+  would wipe out all the other customizations you might have on
+  your initialization file.</p><a name=
+  "index-unsaved-customizations_002c-reminder-to-save" id=
+  "index-unsaved-customizations_002c-reminder-to-save"></a>
+  <a name="index-custom_002dprompt_002dcustomize_002dunsaved_002doptions"
+  id=
+  "index-custom_002dprompt_002dcustomize_002dunsaved_002doptions"></a>
+
+  <p>Please note that any customizations you have not chosen to
+  save for future sessions will be lost when you terminate Emacs.
+  If you&rsquo;d like to be prompted about unsaved customizations
+  at termination time, add the following to your initialization
+  file:</p>
+
+  <div class="example">
+    <pre class="example">
+(add-hook 'kill-emacs-query-functions
           'custom-prompt-customize-unsaved-options)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Face-Customization.html#Face-Customization" accesskey="n" rel="next">Face Customization</a>, Previous: <a href="Changing-a-Variable.html#Changing-a-Variable" accesskey="p" rel="prev">Changing a Variable</a>, Up: <a href="Easy-Customization.html#Easy-Customization" accesskey="u" rel="up">Easy Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Face-Customization.html#Face-Customization"
+    accesskey="n" rel="next">Face Customization</a>, Previous:
+    <a href="Changing-a-Variable.html#Changing-a-Variable"
+    accesskey="p" rel="prev">Changing a Variable</a>, Up: <a href=
+    "Easy-Customization.html#Easy-Customization" accesskey="u" rel=
+    "up">Easy Customization</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,100 +14,214 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Choosing a Mail Back End</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Choosing a Mail Back End">
-<meta name="keywords" content="Gnus Manual: Choosing a Mail Back End">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Getting-Mail.html#Getting-Mail" rel="up" title="Getting Mail">
-<link href="Unix-Mail-Box.html#Unix-Mail-Box" rel="next" title="Unix Mail Box">
-<link href="Not-Reading-Mail.html#Not-Reading-Mail" rel="prev" title="Not Reading Mail">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Choosing a Mail Back End</title>
+  <meta name="description" content=
+  "Gnus Manual: Choosing a Mail Back End" />
+  <meta name="keywords" content=
+  "Gnus Manual: Choosing a Mail Back End" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Getting-Mail.html#Getting-Mail" rel="up" title=
+  "Getting Mail" />
+  <link href="Unix-Mail-Box.html#Unix-Mail-Box" rel="next" title=
+  "Unix Mail Box" />
+  <link href="Not-Reading-Mail.html#Not-Reading-Mail" rel="prev"
+  title="Not Reading Mail" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Choosing-a-Mail-Back-End"></a>
-<div class="header">
-<p>
-Previous: <a href="Not-Reading-Mail.html#Not-Reading-Mail" accesskey="p" rel="prev">Not Reading Mail</a>, Up: <a href="Getting-Mail.html#Getting-Mail" accesskey="u" rel="up">Getting Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Choosing-a-Mail-Back-End-1"></a>
-<h4 class="subsection">6.4.13 Choosing a Mail Back End</h4>
+<body lang="en" xml:lang="en">
+  <a name="Choosing-a-Mail-Back-End" id=
+  "Choosing-a-Mail-Back-End"></a>
 
-<p>Gnus will read the mail spool when you activate a mail group.  The mail
-file is first copied to your home directory.  What happens after that
-depends on what format you want to store your mail in.
-</p>
-<p>There are six different mail back ends in the standard Gnus, and more
-back ends are available separately.  The mail back end most people use
-(because it is possibly the fastest) is <code>nnml</code> (see <a href="Mail-Spool.html#Mail-Spool">Mail Spool</a>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Unix-Mail-Box.html#Unix-Mail-Box" accesskey="1">Unix Mail Box</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using the (quite) standard Un*x mbox.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Babyl.html#Babyl" accesskey="2">Babyl</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Babyl was used by older versions of Rmail.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mail-Spool.html#Mail-Spool" accesskey="3">Mail Spool</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Store your mail in a private spool?
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="MH-Spool.html#MH-Spool" accesskey="4">MH Spool</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An mhspool-like back end.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Maildir.html#Maildir" accesskey="5">Maildir</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Another one-file-per-message format.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="nnmaildir-Group-Parameters.html#nnmaildir-Group-Parameters" accesskey="6">nnmaildir Group Parameters</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Article-Identification.html#Article-Identification" accesskey="7">Article Identification</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="NOV-Data.html#NOV-Data" accesskey="8">NOV Data</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Article-Marks.html#Article-Marks" accesskey="9">Article Marks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mail-Folders.html#Mail-Folders">Mail Folders</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Having one file for each group.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Comparing-Mail-Back-Ends.html#Comparing-Mail-Back-Ends">Comparing Mail Back Ends</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An in-depth looks at pros and cons.
-</td></tr>
-</table>
+  <div class="header">
+    <p>Previous: <a href="Not-Reading-Mail.html#Not-Reading-Mail"
+    accesskey="p" rel="prev">Not Reading Mail</a>, Up: <a href=
+    "Getting-Mail.html#Getting-Mail" accesskey="u" rel="up">Getting
+    Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Choosing-a-Mail-Back-End-1" id=
+  "Choosing-a-Mail-Back-End-1"></a>
 
+  <h4 class="subsection">6.4.13 Choosing a Mail Back End</h4>
 
+  <p>Gnus will read the mail spool when you activate a mail group.
+  The mail file is first copied to your home directory. What
+  happens after that depends on what format you want to store your
+  mail in.</p>
 
+  <p>There are six different mail back ends in the standard Gnus,
+  and more back ends are available separately. The mail back end
+  most people use (because it is possibly the fastest) is
+  <code>nnml</code> (see <a href="Mail-Spool.html#Mail-Spool">Mail
+  Spool</a>).</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Unix-Mail-Box.html#Unix-Mail-Box" accesskey="1">Unix Mail
+      Box</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Using the (quite) standard Un*x
+      mbox.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Babyl.html#Babyl" accesskey="2">Babyl</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Babyl was used by older
+      versions of Rmail.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mail-Spool.html#Mail-Spool" accesskey="3">Mail
+      Spool</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Store your mail in a private
+      spool?</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "MH-Spool.html#MH-Spool" accesskey="4">MH Spool</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">An mhspool-like back end.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Maildir.html#Maildir" accesskey="5">Maildir</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Another one-file-per-message
+      format.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "nnmaildir-Group-Parameters.html#nnmaildir-Group-Parameters"
+      accesskey="6">nnmaildir Group Parameters</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Article-Identification.html#Article-Identification"
+      accesskey="7">Article Identification</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "NOV-Data.html#NOV-Data" accesskey="8">NOV Data</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Article-Marks.html#Article-Marks" accesskey="9">Article
+      Marks</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mail-Folders.html#Mail-Folders">Mail Folders</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Having one file for each
+      group.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Comparing-Mail-Back-Ends.html#Comparing-Mail-Back-Ends">Comparing
+      Mail Back Ends</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">An in-depth looks at pros and
+      cons.</td>
+    </tr>
+  </table>
 </body>
 </html>

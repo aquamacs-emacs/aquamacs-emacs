@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Forms Example - Forms Mode User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Forms Mode User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="index.html#Top" title="Top">
-<link rel="next" href="Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode" title="Entering and Exiting Forms Mode">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Forms Example - Forms Mode User's Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Forms Mode User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="index.html#Top" title="Top" />
+  <link rel="next" href=
+  "Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode"
+  title="Entering and Exiting Forms Mode" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Forms mode, a form-editing major mode for GNU Emacs.
 
 Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
@@ -26,8 +34,10 @@ Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,24 +47,30 @@ Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Forms-Example"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode">Entering and Exiting Forms Mode</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="index.html#Top">Top</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Forms-Example" id="Forms-Example"></a>
 
-<h2 class="chapter">1 Forms Example</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Entering-and-Exiting-Forms-Mode.html#Entering-and-Exiting-Forms-Mode">Entering
+    and Exiting Forms Mode</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href="index.html#Top">Top</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href="index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>Let's illustrate Forms mode with an example.  Suppose you are looking at
-the <samp><span class="file">/etc/passwd</span></samp> file, and the screen looks like this:
+  <h2 class="chapter">1 Forms Example</h2>
 
-<pre class="example">     ====== /etc/passwd ======
+  <p>Let's illustrate Forms mode with an example. Suppose you are
+  looking at the <samp><span class="file">/etc/passwd</span></samp>
+  file, and the screen looks like this:</p>
+  <pre class="example">
+     ====== /etc/passwd ======
      
      User : root   Uid: 0   Gid: 1
      
@@ -64,22 +80,32 @@ the <samp><span class="file">/etc/passwd</span></samp> file, and the screen look
      
      Shell: /bin/sh
 </pre>
-   <p>As you can see, the familiar fields from the entry for the super user
-are all there, but instead of being colon-separated on one single line,
-they make up a forms.
 
-   <p>The contents of the forms consist of the contents of the fields of the
-record (e.g. &lsquo;<samp><span class="samp">root</span></samp>&rsquo;, &lsquo;<samp><span class="samp">0</span></samp>&rsquo;, &lsquo;<samp><span class="samp">1</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Super User</span></samp>&rsquo;)
-interspersed with normal text (e.g &lsquo;<samp><span class="samp">User : </span></samp>&rsquo;, &lsquo;<samp><span class="samp">Uid: </span></samp>&rsquo;).
+  <p>As you can see, the familiar fields from the entry for the
+  super user are all there, but instead of being colon-separated on
+  one single line, they make up a forms.</p>
 
-   <p>If you modify the contents of the fields, Forms mode will analyze your
-changes and update the file appropriately.  You cannot modify the
-interspersed explanatory text (unless you go to some trouble about it),
-because that is marked read-only (see <a href="../elisp/Text-Properties.html#Text-Properties">Text Properties</a>).
+  <p>The contents of the forms consist of the contents of the
+  fields of the record (e.g. &lsquo;<samp><span class=
+  "samp">root</span></samp>&rsquo;, &lsquo;<samp><span class=
+  "samp">0</span></samp>&rsquo;, &lsquo;<samp><span class=
+  "samp">1</span></samp>&rsquo;, &lsquo;<samp><span class=
+  "samp">Super User</span></samp>&rsquo;) interspersed with normal
+  text (e.g &lsquo;<samp><span class="samp">User :</span></samp>
+  &rsquo;, &lsquo;<samp><span class="samp">Uid:</span></samp>
+  &rsquo;).</p>
 
-   <p>The Forms mode control file specifies the relationship between the
-format of <samp><span class="file">/etc/passwd</span></samp> and what appears on the screen in Forms
-mode.  See <a href="Control-File-Format.html#Control-File-Format">Control File Format</a>.
+  <p>If you modify the contents of the fields, Forms mode will
+  analyze your changes and update the file appropriately. You
+  cannot modify the interspersed explanatory text (unless you go to
+  some trouble about it), because that is marked read-only (see
+  <a href="../elisp/Text-Properties.html#Text-Properties">Text
+  Properties</a>).</p>
 
-   </body></html>
-
+  <p>The Forms mode control file specifies the relationship between
+  the format of <samp><span class="file">/etc/passwd</span></samp>
+  and what appears on the screen in Forms mode. See <a href=
+  "Control-File-Format.html#Control-File-Format">Control File
+  Format</a>.</p>
+</body>
+</html>

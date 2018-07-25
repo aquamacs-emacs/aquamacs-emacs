@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,149 +16,219 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Class Options</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Class Options">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Class Options">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Building-Classes.html#Building-Classes" rel="up" title="Building Classes">
-<link href="Making-New-Objects.html#Making-New-Objects" rel="next" title="Making New Objects">
-<link href="Slot-Options.html#Slot-Options" rel="prev" title="Slot Options">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects:
+  Class Options</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Class Options" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Class Options" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="Building-Classes.html#Building-Classes" rel="up"
+  title="Building Classes" />
+  <link href="Making-New-Objects.html#Making-New-Objects" rel=
+  "next" title="Making New Objects" />
+  <link href="Slot-Options.html#Slot-Options" rel="prev" title=
+  "Slot Options" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Class-Options"></a>
-<div class="header">
-<p>
-Previous: <a href="Slot-Options.html#Slot-Options" accesskey="p" rel="prev">Slot Options</a>, Up: <a href="Building-Classes.html#Building-Classes" accesskey="u" rel="up">Building Classes</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Class-Options-1"></a>
-<h3 class="section">3.3 Class Options</h3>
+<body lang="en" xml:lang="en">
+  <a name="Class-Options" id="Class-Options"></a>
 
-<p>In the <var>options-and-doc</var> arguments to <code>defclass</code>, the
-following class options may be specified:
-</p>
-<dl compact="compact">
-<dt><code>:documentation</code></dt>
-<dd><p>A documentation string for this class.
-</p>
-<p>If an Emacs-style documentation string is also provided, then this
-option is ignored.  An Emacs-style documentation string is not
-prefixed by the <code>:documentation</code> tag, and appears after the list
-of slots, and before the options.
-</p>
-</dd>
-<dt><code>:allow-nil-initform</code></dt>
-<dd><p>If this option is non-<code>nil</code>, and the <code>:initform</code> is <code>nil</code>, but
-the <code>:type</code> is specifies something such as <code>string</code> then allow
-this to pass.  The default is to have this option be off.  This is
-implemented as an alternative to unbound slots.
-</p>
-<p>This options is specific to Emacs, and is not in the CLOS spec.
-</p>
-</dd>
-<dt><code>:abstract</code></dt>
-<dd><p>A class which is <code>:abstract</code> cannot be instantiated, and instead
-is used to define an interface which subclasses should implement.
-</p>
-<p>This option is specific to Emacs, and is not in the CLOS spec.
-</p>
-</dd>
-<dt><code>:custom-groups</code></dt>
-<dd><p>This is a list of groups that can be customized within this class.  This
-slot is auto-generated when a class is created and need not be
-specified.  It can be retrieved with the <code>class-option</code> command,
-however, to see what groups are available.
-</p>
-<p>This option is specific to Emacs, and is not in the CLOS spec.
-</p>
-</dd>
-<dt><code>:method-invocation-order</code></dt>
-<dd><p>This controls the order in which method resolution occurs for
-<code>:primary</code> methods in cases of multiple inheritance.  The order
-affects which method is called first in a tree, and if
-<code>call-next-method</code> is used, it controls the order in which the
-stack of methods are run.
-</p>
-<p>Valid values are:
-</p>
-<dl compact="compact">
-<dt><code>:breadth-first</code></dt>
-<dd><p>Search for methods in the class hierarchy in breadth first order.
-This is the default.
-</p></dd>
-<dt><code>:depth-first</code></dt>
-<dd><p>Search for methods in the class hierarchy in a depth first order.
-</p></dd>
-<dt><code>:c3</code></dt>
-<dd><p>Searches for methods in a linearized way that most closely matches
-what CLOS does when a monotonic class structure is defined.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Previous: <a href="Slot-Options.html#Slot-Options"
+    accesskey="p" rel="prev">Slot Options</a>, Up: <a href=
+    "Building-Classes.html#Building-Classes" accesskey="u" rel=
+    "up">Building Classes</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Class-Options-1" id="Class-Options-1"></a>
 
-<p>See <a href="Method-Invocation.html#Method-Invocation">Method Invocation</a>, for more on method invocation order.
-</p>
-</dd>
-<dt><code>:metaclass</code></dt>
-<dd><p>Unsupported CLOS option.  Enables the use of a different base class other
-than <code>standard-class</code>.
-</p>
-</dd>
-<dt><code>:default-initargs</code></dt>
-<dd><p>Unsupported CLOS option.  Specifies a list of initargs to be used when
-creating new objects.  As far as I can tell, this duplicates the
-function of <code>:initform</code>.
-</p></dd>
-</dl>
+  <h3 class="section">3.3 Class Options</h3>
 
-<p>See <a href="CLOS-compatibility.html#CLOS-compatibility">CLOS compatibility</a>, for more details on CLOS tags versus
-<i>EIEIO</i>-specific tags.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Slot-Options.html#Slot-Options" accesskey="p" rel="prev">Slot Options</a>, Up: <a href="Building-Classes.html#Building-Classes" accesskey="u" rel="up">Building Classes</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In the <var>options-and-doc</var> arguments to
+  <code>defclass</code>, the following class options may be
+  specified:</p>
 
+  <dl compact="compact">
+    <dt><code>:documentation</code></dt>
 
+    <dd>
+      <p>A documentation string for this class.</p>
 
+      <p>If an Emacs-style documentation string is also provided,
+      then this option is ignored. An Emacs-style documentation
+      string is not prefixed by the <code>:documentation</code>
+      tag, and appears after the list of slots, and before the
+      options.</p>
+    </dd>
+
+    <dt><code>:allow-nil-initform</code></dt>
+
+    <dd>
+      <p>If this option is non-<code>nil</code>, and the
+      <code>:initform</code> is <code>nil</code>, but the
+      <code>:type</code> is specifies something such as
+      <code>string</code> then allow this to pass. The default is
+      to have this option be off. This is implemented as an
+      alternative to unbound slots.</p>
+
+      <p>This options is specific to Emacs, and is not in the CLOS
+      spec.</p>
+    </dd>
+
+    <dt><code>:abstract</code></dt>
+
+    <dd>
+      <p>A class which is <code>:abstract</code> cannot be
+      instantiated, and instead is used to define an interface
+      which subclasses should implement.</p>
+
+      <p>This option is specific to Emacs, and is not in the CLOS
+      spec.</p>
+    </dd>
+
+    <dt><code>:custom-groups</code></dt>
+
+    <dd>
+      <p>This is a list of groups that can be customized within
+      this class. This slot is auto-generated when a class is
+      created and need not be specified. It can be retrieved with
+      the <code>class-option</code> command, however, to see what
+      groups are available.</p>
+
+      <p>This option is specific to Emacs, and is not in the CLOS
+      spec.</p>
+    </dd>
+
+    <dt><code>:method-invocation-order</code></dt>
+
+    <dd>
+      <p>This controls the order in which method resolution occurs
+      for <code>:primary</code> methods in cases of multiple
+      inheritance. The order affects which method is called first
+      in a tree, and if <code>call-next-method</code> is used, it
+      controls the order in which the stack of methods are run.</p>
+
+      <p>Valid values are:</p>
+
+      <dl compact="compact">
+        <dt><code>:breadth-first</code></dt>
+
+        <dd>
+          <p>Search for methods in the class hierarchy in breadth
+          first order. This is the default.</p>
+        </dd>
+
+        <dt><code>:depth-first</code></dt>
+
+        <dd>
+          <p>Search for methods in the class hierarchy in a depth
+          first order.</p>
+        </dd>
+
+        <dt><code>:c3</code></dt>
+
+        <dd>
+          <p>Searches for methods in a linearized way that most
+          closely matches what CLOS does when a monotonic class
+          structure is defined.</p>
+        </dd>
+      </dl>
+
+      <p>See <a href=
+      "Method-Invocation.html#Method-Invocation">Method
+      Invocation</a>, for more on method invocation order.</p>
+    </dd>
+
+    <dt><code>:metaclass</code></dt>
+
+    <dd>
+      <p>Unsupported CLOS option. Enables the use of a different
+      base class other than <code>standard-class</code>.</p>
+    </dd>
+
+    <dt><code>:default-initargs</code></dt>
+
+    <dd>
+      <p>Unsupported CLOS option. Specifies a list of initargs to
+      be used when creating new objects. As far as I can tell, this
+      duplicates the function of <code>:initform</code>.</p>
+    </dd>
+  </dl>
+
+  <p>See <a href="CLOS-compatibility.html#CLOS-compatibility">CLOS
+  compatibility</a>, for more details on CLOS tags versus
+  <i>EIEIO</i>-specific tags.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Slot-Options.html#Slot-Options"
+    accesskey="p" rel="prev">Slot Options</a>, Up: <a href=
+    "Building-Classes.html#Building-Classes" accesskey="u" rel=
+    "up">Building Classes</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

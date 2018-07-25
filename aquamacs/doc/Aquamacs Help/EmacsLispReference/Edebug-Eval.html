@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,96 +19,131 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Edebug Eval</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Edebug Eval">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Edebug Eval">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="Eval-List.html#Eval-List" rel="next" title="Eval List">
-<link href="Edebug-Views.html#Edebug-Views" rel="prev" title="Edebug Views">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Edebug Eval</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Edebug Eval" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Edebug Eval" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="Eval-List.html#Eval-List" rel="next" title=
+  "Eval List" />
+  <link href="Edebug-Views.html#Edebug-Views" rel="prev" title=
+  "Edebug Views" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Edebug-Eval" id="Edebug-Eval"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Eval-List.html#Eval-List" accesskey="n" rel=
+    "next">Eval List</a>, Previous: <a href=
+    "Edebug-Views.html#Edebug-Views" accesskey="p" rel=
+    "prev">Edebug Views</a>, Up: <a href="Edebug.html#Edebug"
+    accesskey="u" rel="up">Edebug</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Evaluation-2" id="Evaluation-2"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Edebug-Eval"></a>
-<div class="header">
-<p>
-Next: <a href="Eval-List.html#Eval-List" accesskey="n" rel="next">Eval List</a>, Previous: <a href="Edebug-Views.html#Edebug-Views" accesskey="p" rel="prev">Edebug Views</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Evaluation-2"></a>
-<h4 class="subsection">17.2.9 Evaluation</h4>
+  <h4 class="subsection">17.2.9 Evaluation</h4>
 
-<p>While within Edebug, you can evaluate expressions as if Edebug
-were not running.  Edebug tries to be invisible to the expression&rsquo;s
-evaluation and printing.  Evaluation of expressions that cause side
-effects will work as expected, except for changes to data that Edebug
-explicitly saves and restores.  See <a href="The-Outside-Context.html#The-Outside-Context">The Outside Context</a>, for details
-on this process.
-</p>
-<dl compact="compact">
-<dt><kbd>e <var>exp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Evaluate expression <var>exp</var> in the context outside of Edebug
-(<code>edebug-eval-expression</code>).  That is, Edebug tries to minimize its
-interference with the evaluation.
-</p>
-</dd>
-<dt><kbd>M-: <var>exp</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Evaluate expression <var>exp</var> in the context of Edebug itself
-(<code>eval-expression</code>).
-</p>
-</dd>
-<dt><kbd>C-x C-e</kbd></dt>
-<dd><p>Evaluate the expression before point, in the context outside of Edebug
-(<code>edebug-eval-last-sexp</code>).
-</p></dd>
-</dl>
+  <p>While within Edebug, you can evaluate expressions as if Edebug
+  were not running. Edebug tries to be invisible to the
+  expression&rsquo;s evaluation and printing. Evaluation of
+  expressions that cause side effects will work as expected, except
+  for changes to data that Edebug explicitly saves and restores.
+  See <a href="The-Outside-Context.html#The-Outside-Context">The
+  Outside Context</a>, for details on this process.</p>
 
-<a name="index-lexical-binding-_0028Edebug_0029"></a>
-<p>Edebug supports evaluation of expressions containing references to
-lexically bound symbols created by the following constructs in
-<samp>cl.el</samp>: <code>lexical-let</code>, <code>macrolet</code>, and
-<code>symbol-macrolet</code>.
-</p>
+  <dl compact="compact">
+    <dt><kbd>e <var>exp</var> <span class=
+    "key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Evaluate expression <var>exp</var> in the context outside
+      of Edebug (<code>edebug-eval-expression</code>). That is,
+      Edebug tries to minimize its interference with the
+      evaluation.</p>
+    </dd>
 
+    <dt><kbd>M-: <var>exp</var> <span class=
+    "key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Evaluate expression <var>exp</var> in the context of
+      Edebug itself (<code>eval-expression</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x C-e</kbd></dt>
+
+    <dd>
+      <p>Evaluate the expression before point, in the context
+      outside of Edebug (<code>edebug-eval-last-sexp</code>).</p>
+    </dd>
+  </dl><a name="index-lexical-binding-_0028Edebug_0029" id=
+  "index-lexical-binding-_0028Edebug_0029"></a>
+
+  <p>Edebug supports evaluation of expressions containing
+  references to lexically bound symbols created by the following
+  constructs in <samp>cl.el</samp>: <code>lexical-let</code>,
+  <code>macrolet</code>, and <code>symbol-macrolet</code>.</p>
 </body>
 </html>

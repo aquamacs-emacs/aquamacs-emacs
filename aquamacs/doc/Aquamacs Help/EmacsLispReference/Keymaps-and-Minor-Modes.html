@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,85 +19,124 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Keymaps and Minor Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Keymaps and Minor Modes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Keymaps and Minor Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Minor-Modes.html#Minor-Modes" rel="up" title="Minor Modes">
-<link href="Defining-Minor-Modes.html#Defining-Minor-Modes" rel="next" title="Defining Minor Modes">
-<link href="Minor-Mode-Conventions.html#Minor-Mode-Conventions" rel="prev" title="Minor Mode Conventions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Keymaps and Minor
+  Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Keymaps and Minor Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Keymaps and Minor Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Minor-Modes.html#Minor-Modes" rel="up" title=
+  "Minor Modes" />
+  <link href="Defining-Minor-Modes.html#Defining-Minor-Modes" rel=
+  "next" title="Defining Minor Modes" />
+  <link href="Minor-Mode-Conventions.html#Minor-Mode-Conventions"
+  rel="prev" title="Minor Mode Conventions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Keymaps-and-Minor-Modes" id=
+  "Keymaps-and-Minor-Modes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Defining-Minor-Modes.html#Defining-Minor-Modes" accesskey="n"
+    rel="next">Defining Minor Modes</a>, Previous: <a href=
+    "Minor-Mode-Conventions.html#Minor-Mode-Conventions" accesskey=
+    "p" rel="prev">Minor Mode Conventions</a>, Up: <a href=
+    "Minor-Modes.html#Minor-Modes" accesskey="u" rel="up">Minor
+    Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Keymaps-and-Minor-Modes-1" id=
+  "Keymaps-and-Minor-Modes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Keymaps-and-Minor-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Defining-Minor-Modes.html#Defining-Minor-Modes" accesskey="n" rel="next">Defining Minor Modes</a>, Previous: <a href="Minor-Mode-Conventions.html#Minor-Mode-Conventions" accesskey="p" rel="prev">Minor Mode Conventions</a>, Up: <a href="Minor-Modes.html#Minor-Modes" accesskey="u" rel="up">Minor Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Keymaps-and-Minor-Modes-1"></a>
-<h4 class="subsection">22.3.2 Keymaps and Minor Modes</h4>
+  <h4 class="subsection">22.3.2 Keymaps and Minor Modes</h4>
 
-<p>Each minor mode can have its own keymap, which is active when the mode
-is enabled.  To set up a keymap for a minor mode, add an element to the
-alist <code>minor-mode-map-alist</code>.  See <a href="Controlling-Active-Maps.html#Definition-of-minor_002dmode_002dmap_002dalist">Definition of minor-mode-map-alist</a>.
-</p>
-<a name="index-self_002dinsert_002dcommand_002c-minor-modes"></a>
-<p>One use of minor mode keymaps is to modify the behavior of certain
-self-inserting characters so that they do something else as well as
-self-insert.  (Another way to customize <code>self-insert-command</code> is
-through <code>post-self-insert-hook</code>.  Apart from this, the facilities
-for customizing <code>self-insert-command</code> are limited to special cases,
-designed for abbrevs and Auto Fill mode.  Do not try substituting your
-own definition of <code>self-insert-command</code> for the standard one.  The
-editor command loop handles this function specially.)
-</p>
-<p>Minor modes may bind commands to key sequences consisting of <kbd>C-c</kbd>
-followed by a punctuation character.  However, sequences consisting of
-<kbd>C-c</kbd> followed by one of <kbd>{}&lt;&gt;:;</kbd>, or a control character or
-digit, are reserved for major modes.  Also, <kbd>C-c <var>letter</var></kbd> is
-reserved for users.  See <a href="Key-Binding-Conventions.html#Key-Binding-Conventions">Key Binding Conventions</a>.
-</p>
+  <p>Each minor mode can have its own keymap, which is active when
+  the mode is enabled. To set up a keymap for a minor mode, add an
+  element to the alist <code>minor-mode-map-alist</code>. See
+  <a href=
+  "Controlling-Active-Maps.html#Definition-of-minor_002dmode_002dmap_002dalist">
+  Definition of minor-mode-map-alist</a>.</p><a name=
+  "index-self_002dinsert_002dcommand_002c-minor-modes" id=
+  "index-self_002dinsert_002dcommand_002c-minor-modes"></a>
 
+  <p>One use of minor mode keymaps is to modify the behavior of
+  certain self-inserting characters so that they do something else
+  as well as self-insert. (Another way to customize
+  <code>self-insert-command</code> is through
+  <code>post-self-insert-hook</code>. Apart from this, the
+  facilities for customizing <code>self-insert-command</code> are
+  limited to special cases, designed for abbrevs and Auto Fill
+  mode. Do not try substituting your own definition of
+  <code>self-insert-command</code> for the standard one. The editor
+  command loop handles this function specially.)</p>
 
-
+  <p>Minor modes may bind commands to key sequences consisting of
+  <kbd>C-c</kbd> followed by a punctuation character. However,
+  sequences consisting of <kbd>C-c</kbd> followed by one of
+  <kbd>{}&lt;&gt;:;</kbd>, or a control character or digit, are
+  reserved for major modes. Also, <kbd>C-c <var>letter</var></kbd>
+  is reserved for users. See <a href=
+  "Key-Binding-Conventions.html#Key-Binding-Conventions">Key
+  Binding Conventions</a>.</p>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,72 +19,105 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Catch and Throw</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Catch and Throw">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Catch and Throw">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Nonlocal-Exits.html#Nonlocal-Exits" rel="up" title="Nonlocal Exits">
-<link href="Examples-of-Catch.html#Examples-of-Catch" rel="next" title="Examples of Catch">
-<link href="Nonlocal-Exits.html#Nonlocal-Exits" rel="prev" title="Nonlocal Exits">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Catch and Throw</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Catch and Throw" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Catch and Throw" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Nonlocal-Exits.html#Nonlocal-Exits" rel="up" title=
+  "Nonlocal Exits" />
+  <link href="Examples-of-Catch.html#Examples-of-Catch" rel="next"
+  title="Examples of Catch" />
+  <link href="Nonlocal-Exits.html#Nonlocal-Exits" rel="prev" title=
+  "Nonlocal Exits" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Catch-and-Throw" id="Catch-and-Throw"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Examples-of-Catch.html#Examples-of-Catch"
+    accesskey="n" rel="next">Examples of Catch</a>, Up: <a href=
+    "Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel=
+    "up">Nonlocal Exits</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Explicit-Nonlocal-Exits_003a-catch-and-throw" id=
+  "Explicit-Nonlocal-Exits_003a-catch-and-throw"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Catch-and-Throw"></a>
-<div class="header">
-<p>
-Next: <a href="Examples-of-Catch.html#Examples-of-Catch" accesskey="n" rel="next">Examples of Catch</a>, Up: <a href="Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel="up">Nonlocal Exits</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Explicit-Nonlocal-Exits_003a-catch-and-throw"></a>
-<h4 class="subsection">10.6.1 Explicit Nonlocal Exits: <code>catch</code> and <code>throw</code></h4>
+  <h4 class="subsection">10.6.1 Explicit Nonlocal Exits:
+  <code>catch</code> and <code>throw</code></h4>
 
-<p>Most control constructs affect only the flow of control within the
-construct itself.  The function <code>throw</code> is the exception to this
-rule of normal program execution: it performs a nonlocal exit on
-request.  (There are other exceptions, but they are for error handling
-only.)  <code>throw</code> is used inside a <code>catch</code>, and jumps back to
-that <code>catch</code>.  For example:
-</p>
-<div class="example">
-<pre class="example">(defun foo-outer ()
+  <p>Most control constructs affect only the flow of control within
+  the construct itself. The function <code>throw</code> is the
+  exception to this rule of normal program execution: it performs a
+  nonlocal exit on request. (There are other exceptions, but they
+  are for error handling only.) <code>throw</code> is used inside a
+  <code>catch</code>, and jumps back to that <code>catch</code>.
+  For example:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun foo-outer ()
   (catch 'foo
     (foo-inner)))
 
@@ -91,91 +126,127 @@ that <code>catch</code>.  For example:
   (if x
       (throw 'foo t))
   &hellip;)
-</pre></div>
+</pre>
+  </div>
 
-<p>The <code>throw</code> form, if executed, transfers control straight back to
-the corresponding <code>catch</code>, which returns immediately.  The code
-following the <code>throw</code> is not executed.  The second argument of
-<code>throw</code> is used as the return value of the <code>catch</code>.
-</p>
-<p>The function <code>throw</code> finds the matching <code>catch</code> based on the
-first argument: it searches for a <code>catch</code> whose first argument is
-<code>eq</code> to the one specified in the <code>throw</code>.  If there is more
-than one applicable <code>catch</code>, the innermost one takes precedence.
-Thus, in the above example, the <code>throw</code> specifies <code>foo</code>, and
-the <code>catch</code> in <code>foo-outer</code> specifies the same symbol, so that
-<code>catch</code> is the applicable one (assuming there is no other matching
-<code>catch</code> in between).
-</p>
-<p>Executing <code>throw</code> exits all Lisp constructs up to the matching
-<code>catch</code>, including function calls.  When binding constructs such
-as <code>let</code> or function calls are exited in this way, the bindings
-are unbound, just as they are when these constructs exit normally
-(see <a href="Local-Variables.html#Local-Variables">Local Variables</a>).  Likewise, <code>throw</code> restores the buffer
-and position saved by <code>save-excursion</code> (see <a href="Excursions.html#Excursions">Excursions</a>), and
-the narrowing status saved by <code>save-restriction</code>.  It also runs
-any cleanups established with the <code>unwind-protect</code> special form
-when it exits that form (see <a href="Cleanups.html#Cleanups">Cleanups</a>).
-</p>
-<p>The <code>throw</code> need not appear lexically within the <code>catch</code>
-that it jumps to.  It can equally well be called from another function
-called within the <code>catch</code>.  As long as the <code>throw</code> takes place
-chronologically after entry to the <code>catch</code>, and chronologically
-before exit from it, it has access to that <code>catch</code>.  This is why
-<code>throw</code> can be used in commands such as <code>exit-recursive-edit</code>
-that throw back to the editor command loop (see <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>).
-</p>
-<a name="index-CL-note_002d_002d_002donly-throw-in-Emacs"></a>
-<blockquote>
-<p><b>Common Lisp note:</b> Most other versions of Lisp, including Common Lisp,
-have several ways of transferring control nonsequentially: <code>return</code>,
-<code>return-from</code>, and <code>go</code>, for example.  Emacs Lisp has only
-<code>throw</code>.  The <samp>cl-lib</samp> library provides versions of some of
-these.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/cl/Blocks-and-Exits.html#Blocks-and-Exits">Blocks and Exits</a> in <cite>Common Lisp Extensions</cite>.
-</p></blockquote>
+  <p>The <code>throw</code> form, if executed, transfers control
+  straight back to the corresponding <code>catch</code>, which
+  returns immediately. The code following the <code>throw</code> is
+  not executed. The second argument of <code>throw</code> is used
+  as the return value of the <code>catch</code>.</p>
 
-<dl>
-<dt><a name="index-catch"></a>Special Form: <strong>catch</strong> <em>tag body&hellip;</em></dt>
-<dd><a name="index-tag-on-run-time-stack"></a>
-<p><code>catch</code> establishes a return point for the <code>throw</code> function.
-The return point is distinguished from other such return points by
-<var>tag</var>, which may be any Lisp object except <code>nil</code>.  The argument
-<var>tag</var> is evaluated normally before the return point is established.
-</p>
-<p>With the return point in effect, <code>catch</code> evaluates the forms of the
-<var>body</var> in textual order.  If the forms execute normally (without
-error or nonlocal exit) the value of the last body form is returned from
-the <code>catch</code>.
-</p>
-<p>If a <code>throw</code> is executed during the execution of <var>body</var>,
-specifying the same value <var>tag</var>, the <code>catch</code> form exits
-immediately; the value it returns is whatever was specified as the
-second argument of <code>throw</code>.
-</p></dd></dl>
+  <p>The function <code>throw</code> finds the matching
+  <code>catch</code> based on the first argument: it searches for a
+  <code>catch</code> whose first argument is <code>eq</code> to the
+  one specified in the <code>throw</code>. If there is more than
+  one applicable <code>catch</code>, the innermost one takes
+  precedence. Thus, in the above example, the <code>throw</code>
+  specifies <code>foo</code>, and the <code>catch</code> in
+  <code>foo-outer</code> specifies the same symbol, so that
+  <code>catch</code> is the applicable one (assuming there is no
+  other matching <code>catch</code> in between).</p>
 
-<dl>
-<dt><a name="index-throw"></a>Function: <strong>throw</strong> <em>tag value</em></dt>
-<dd><p>The purpose of <code>throw</code> is to return from a return point previously
-established with <code>catch</code>.  The argument <var>tag</var> is used to choose
-among the various existing return points; it must be <code>eq</code> to the value
-specified in the <code>catch</code>.  If multiple return points match <var>tag</var>,
-the innermost one is used.
-</p>
-<p>The argument <var>value</var> is used as the value to return from that
-<code>catch</code>.
-</p>
-<a name="index-no_002dcatch"></a>
-<p>If no return point is in effect with tag <var>tag</var>, then a <code>no-catch</code>
-error is signaled with data <code>(<var>tag</var> <var>value</var>)</code>.
-</p></dd></dl>
+  <p>Executing <code>throw</code> exits all Lisp constructs up to
+  the matching <code>catch</code>, including function calls. When
+  binding constructs such as <code>let</code> or function calls are
+  exited in this way, the bindings are unbound, just as they are
+  when these constructs exit normally (see <a href=
+  "Local-Variables.html#Local-Variables">Local Variables</a>).
+  Likewise, <code>throw</code> restores the buffer and position
+  saved by <code>save-excursion</code> (see <a href=
+  "Excursions.html#Excursions">Excursions</a>), and the narrowing
+  status saved by <code>save-restriction</code>. It also runs any
+  cleanups established with the <code>unwind-protect</code> special
+  form when it exits that form (see <a href=
+  "Cleanups.html#Cleanups">Cleanups</a>).</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Examples-of-Catch.html#Examples-of-Catch" accesskey="n" rel="next">Examples of Catch</a>, Up: <a href="Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel="up">Nonlocal Exits</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The <code>throw</code> need not appear lexically within the
+  <code>catch</code> that it jumps to. It can equally well be
+  called from another function called within the
+  <code>catch</code>. As long as the <code>throw</code> takes place
+  chronologically after entry to the <code>catch</code>, and
+  chronologically before exit from it, it has access to that
+  <code>catch</code>. This is why <code>throw</code> can be used in
+  commands such as <code>exit-recursive-edit</code> that throw back
+  to the editor command loop (see <a href=
+  "Recursive-Editing.html#Recursive-Editing">Recursive
+  Editing</a>).</p><a name=
+  "index-CL-note_002d_002d_002donly-throw-in-Emacs" id=
+  "index-CL-note_002d_002d_002donly-throw-in-Emacs"></a>
 
+  <blockquote>
+    <p><b>Common Lisp note:</b> Most other versions of Lisp,
+    including Common Lisp, have several ways of transferring
+    control nonsequentially: <code>return</code>,
+    <code>return-from</code>, and <code>go</code>, for example.
+    Emacs Lisp has only <code>throw</code>. The <samp>cl-lib</samp>
+    library provides versions of some of these. See <a href=
+    "http://www.gnu.org/software/emacs/manual/html_node/cl/Blocks-and-Exits.html#Blocks-and-Exits">
+    Blocks and Exits</a> in <cite>Common Lisp
+    Extensions</cite>.</p>
+  </blockquote>
 
+  <dl>
+    <dt><a name="index-catch" id="index-catch"></a>Special Form:
+    <strong>catch</strong> <em>tag body&hellip;</em></dt>
 
+    <dd>
+      <a name="index-tag-on-run-time-stack" id=
+      "index-tag-on-run-time-stack"></a>
+
+      <p><code>catch</code> establishes a return point for the
+      <code>throw</code> function. The return point is
+      distinguished from other such return points by
+      <var>tag</var>, which may be any Lisp object except
+      <code>nil</code>. The argument <var>tag</var> is evaluated
+      normally before the return point is established.</p>
+
+      <p>With the return point in effect, <code>catch</code>
+      evaluates the forms of the <var>body</var> in textual order.
+      If the forms execute normally (without error or nonlocal
+      exit) the value of the last body form is returned from the
+      <code>catch</code>.</p>
+
+      <p>If a <code>throw</code> is executed during the execution
+      of <var>body</var>, specifying the same value <var>tag</var>,
+      the <code>catch</code> form exits immediately; the value it
+      returns is whatever was specified as the second argument of
+      <code>throw</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-throw" id="index-throw"></a>Function:
+    <strong>throw</strong> <em>tag value</em></dt>
+
+    <dd>
+      <p>The purpose of <code>throw</code> is to return from a
+      return point previously established with <code>catch</code>.
+      The argument <var>tag</var> is used to choose among the
+      various existing return points; it must be <code>eq</code> to
+      the value specified in the <code>catch</code>. If multiple
+      return points match <var>tag</var>, the innermost one is
+      used.</p>
+
+      <p>The argument <var>value</var> is used as the value to
+      return from that <code>catch</code>.</p><a name=
+      "index-no_002dcatch" id="index-no_002dcatch"></a>
+
+      <p>If no return point is in effect with tag <var>tag</var>,
+      then a <code>no-catch</code> error is signaled with data
+      <code>(<var>tag</var> <var>value</var>)</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Examples-of-Catch.html#Examples-of-Catch"
+    accesskey="n" rel="next">Examples of Catch</a>, Up: <a href=
+    "Nonlocal-Exits.html#Nonlocal-Exits" accesskey="u" rel=
+    "up">Nonlocal Exits</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

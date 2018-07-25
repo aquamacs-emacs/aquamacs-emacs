@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,153 +19,238 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Mode-Specific Indent</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Mode-Specific Indent">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Mode-Specific Indent">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Indentation.html#Indentation" rel="up" title="Indentation">
-<link href="Region-Indent.html#Region-Indent" rel="next" title="Region Indent">
-<link href="Primitive-Indent.html#Primitive-Indent" rel="prev" title="Primitive Indent">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Mode-Specific
+  Indent</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Mode-Specific Indent" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Mode-Specific Indent" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Indentation.html#Indentation" rel="up" title=
+  "Indentation" />
+  <link href="Region-Indent.html#Region-Indent" rel="next" title=
+  "Region Indent" />
+  <link href="Primitive-Indent.html#Primitive-Indent" rel="prev"
+  title="Primitive Indent" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Mode_002dSpecific-Indent" id=
+  "Mode_002dSpecific-Indent"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Region-Indent.html#Region-Indent" accesskey=
+    "n" rel="next">Region Indent</a>, Previous: <a href=
+    "Primitive-Indent.html#Primitive-Indent" accesskey="p" rel=
+    "prev">Primitive Indent</a>, Up: <a href=
+    "Indentation.html#Indentation" accesskey="u" rel=
+    "up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Indentation-Controlled-by-Major-Mode" id=
+  "Indentation-Controlled-by-Major-Mode"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Mode_002dSpecific-Indent"></a>
-<div class="header">
-<p>
-Next: <a href="Region-Indent.html#Region-Indent" accesskey="n" rel="next">Region Indent</a>, Previous: <a href="Primitive-Indent.html#Primitive-Indent" accesskey="p" rel="prev">Primitive Indent</a>, Up: <a href="Indentation.html#Indentation" accesskey="u" rel="up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Indentation-Controlled-by-Major-Mode"></a>
-<h4 class="subsection">31.17.2 Indentation Controlled by Major Mode</h4>
+  <h4 class="subsection">31.17.2 Indentation Controlled by Major
+  Mode</h4>
 
-<p>An important function of each major mode is to customize the <tt class="key">TAB</tt>
-key to indent properly for the language being edited.  This section
-describes the mechanism of the <tt class="key">TAB</tt> key and how to control it.
-The functions in this section return unpredictable values.
-</p>
-<dl>
-<dt><a name="index-indent_002dfor_002dtab_002dcommand"></a>Command: <strong>indent-for-tab-command</strong> <em>&amp;optional rigid</em></dt>
-<dd><p>This is the command bound to <tt class="key">TAB</tt> in most editing modes.  Its
-usual action is to indent the current line, but it can alternatively
-insert a tab character or indent a region.
-</p>
-<p>Here is what it does:
-</p>
-<ul>
-<li> First, it checks whether Transient Mark mode is enabled and the region
-is active.  If so, it called <code>indent-region</code> to indent all the
-text in the region (see <a href="Region-Indent.html#Region-Indent">Region Indent</a>).
+  <p>An important function of each major mode is to customize the
+  <tt class="key">TAB</tt> key to indent properly for the language
+  being edited. This section describes the mechanism of the
+  <tt class="key">TAB</tt> key and how to control it. The functions
+  in this section return unpredictable values.</p>
 
-</li><li> Otherwise, if the indentation function in <code>indent-line-function</code>
-is <code>indent-to-left-margin</code> (a trivial command that inserts a tab
-character), or if the variable <code>tab-always-indent</code> specifies that
-a tab character ought to be inserted (see below), then it inserts a
-tab character.
+  <dl>
+    <dt><a name="index-indent_002dfor_002dtab_002dcommand" id=
+    "index-indent_002dfor_002dtab_002dcommand"></a>Command:
+    <strong>indent-for-tab-command</strong> <em>&amp;optional
+    rigid</em></dt>
 
-</li><li> Otherwise, it indents the current line; this is done by calling the
-function in <code>indent-line-function</code>.  If the line is already
-indented, and the value of <code>tab-always-indent</code> is <code>complete</code>
-(see below), it tries completing the text at point.
-</li></ul>
+    <dd>
+      <p>This is the command bound to <tt class="key">TAB</tt> in
+      most editing modes. Its usual action is to indent the current
+      line, but it can alternatively insert a tab character or
+      indent a region.</p>
 
-<p>If <var>rigid</var> is non-<code>nil</code> (interactively, with a prefix
-argument), then after this command indents a line or inserts a tab, it
-also rigidly indents the entire balanced expression which starts at
-the beginning of the current line, in order to reflect the new
-indentation.  This argument is ignored if the command indents the
-region.
-</p></dd></dl>
+      <p>Here is what it does:</p>
 
-<dl>
-<dt><a name="index-indent_002dline_002dfunction"></a>Variable: <strong>indent-line-function</strong></dt>
-<dd><p>This variable&rsquo;s value is the function to be used by
-<code>indent-for-tab-command</code>, and various other indentation commands,
-to indent the current line.  It is usually assigned by the major mode;
-for instance, Lisp mode sets it to <code>lisp-indent-line</code>, C mode
-sets it to <code>c-indent-line</code>, and so on.  The default value is
-<code>indent-relative</code>.  See <a href="Auto_002dIndentation.html#Auto_002dIndentation">Auto-Indentation</a>.
-</p></dd></dl>
+      <ul>
+        <li>First, it checks whether Transient Mark mode is enabled
+        and the region is active. If so, it called
+        <code>indent-region</code> to indent all the text in the
+        region (see <a href=
+        "Region-Indent.html#Region-Indent">Region Indent</a>).</li>
 
-<dl>
-<dt><a name="index-indent_002daccording_002dto_002dmode"></a>Command: <strong>indent-according-to-mode</strong></dt>
-<dd><p>This command calls the function in <code>indent-line-function</code> to
-indent the current line in a way appropriate for the current major mode.
-</p></dd></dl>
+        <li>Otherwise, if the indentation function in
+        <code>indent-line-function</code> is
+        <code>indent-to-left-margin</code> (a trivial command that
+        inserts a tab character), or if the variable
+        <code>tab-always-indent</code> specifies that a tab
+        character ought to be inserted (see below), then it inserts
+        a tab character.</li>
 
-<dl>
-<dt><a name="index-newline_002dand_002dindent"></a>Command: <strong>newline-and-indent</strong></dt>
-<dd><p>This function inserts a newline, then indents the new line (the one
-following the newline just inserted) according to the major mode.  It
-does indentation by calling <code>indent-according-to-mode</code>.
-</p></dd></dl>
+        <li>Otherwise, it indents the current line; this is done by
+        calling the function in <code>indent-line-function</code>.
+        If the line is already indented, and the value of
+        <code>tab-always-indent</code> is <code>complete</code>
+        (see below), it tries completing the text at point.</li>
+      </ul>
 
-<dl>
-<dt><a name="index-reindent_002dthen_002dnewline_002dand_002dindent"></a>Command: <strong>reindent-then-newline-and-indent</strong></dt>
-<dd><p>This command reindents the current line, inserts a newline at point,
-and then indents the new line (the one following the newline just
-inserted).  It does indentation on both lines by calling
-<code>indent-according-to-mode</code>.
-</p></dd></dl>
+      <p>If <var>rigid</var> is non-<code>nil</code>
+      (interactively, with a prefix argument), then after this
+      command indents a line or inserts a tab, it also rigidly
+      indents the entire balanced expression which starts at the
+      beginning of the current line, in order to reflect the new
+      indentation. This argument is ignored if the command indents
+      the region.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-tab_002dalways_002dindent"></a>User Option: <strong>tab-always-indent</strong></dt>
-<dd><p>This variable can be used to customize the behavior of the <tt class="key">TAB</tt>
-(<code>indent-for-tab-command</code>) command.  If the value is <code>t</code>
-(the default), the command normally just indents the current line.  If
-the value is <code>nil</code>, the command indents the current line only if
-point is at the left margin or in the line&rsquo;s indentation; otherwise,
-it inserts a tab character.  If the value is <code>complete</code>, the
-command first tries to indent the current line, and if the line was
-already indented, it calls <code>completion-at-point</code> to complete the
-text at point (see <a href="Completion-in-Buffers.html#Completion-in-Buffers">Completion in Buffers</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-indent_002dline_002dfunction" id=
+    "index-indent_002dline_002dfunction"></a>Variable:
+    <strong>indent-line-function</strong></dt>
 
+    <dd>
+      <p>This variable&rsquo;s value is the function to be used by
+      <code>indent-for-tab-command</code>, and various other
+      indentation commands, to indent the current line. It is
+      usually assigned by the major mode; for instance, Lisp mode
+      sets it to <code>lisp-indent-line</code>, C mode sets it to
+      <code>c-indent-line</code>, and so on. The default value is
+      <code>indent-relative</code>. See <a href=
+      "Auto_002dIndentation.html#Auto_002dIndentation">Auto-Indentation</a>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Region-Indent.html#Region-Indent" accesskey="n" rel="next">Region Indent</a>, Previous: <a href="Primitive-Indent.html#Primitive-Indent" accesskey="p" rel="prev">Primitive Indent</a>, Up: <a href="Indentation.html#Indentation" accesskey="u" rel="up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-indent_002daccording_002dto_002dmode" id=
+    "index-indent_002daccording_002dto_002dmode"></a>Command:
+    <strong>indent-according-to-mode</strong></dt>
 
+    <dd>
+      <p>This command calls the function in
+      <code>indent-line-function</code> to indent the current line
+      in a way appropriate for the current major mode.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-newline_002dand_002dindent" id=
+    "index-newline_002dand_002dindent"></a>Command:
+    <strong>newline-and-indent</strong></dt>
 
+    <dd>
+      <p>This function inserts a newline, then indents the new line
+      (the one following the newline just inserted) according to
+      the major mode. It does indentation by calling
+      <code>indent-according-to-mode</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-reindent_002dthen_002dnewline_002dand_002dindent" id=
+    "index-reindent_002dthen_002dnewline_002dand_002dindent"></a>Command:
+    <strong>reindent-then-newline-and-indent</strong></dt>
+
+    <dd>
+      <p>This command reindents the current line, inserts a newline
+      at point, and then indents the new line (the one following
+      the newline just inserted). It does indentation on both lines
+      by calling <code>indent-according-to-mode</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-tab_002dalways_002dindent" id=
+    "index-tab_002dalways_002dindent"></a>User Option:
+    <strong>tab-always-indent</strong></dt>
+
+    <dd>
+      <p>This variable can be used to customize the behavior of the
+      <tt class="key">TAB</tt>
+      (<code>indent-for-tab-command</code>) command. If the value
+      is <code>t</code> (the default), the command normally just
+      indents the current line. If the value is <code>nil</code>,
+      the command indents the current line only if point is at the
+      left margin or in the line&rsquo;s indentation; otherwise, it
+      inserts a tab character. If the value is
+      <code>complete</code>, the command first tries to indent the
+      current line, and if the line was already indented, it calls
+      <code>completion-at-point</code> to complete the text at
+      point (see <a href=
+      "Completion-in-Buffers.html#Completion-in-Buffers">Completion
+      in Buffers</a>).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Region-Indent.html#Region-Indent" accesskey=
+    "n" rel="next">Region Indent</a>, Previous: <a href=
+    "Primitive-Indent.html#Primitive-Indent" accesskey="p" rel=
+    "prev">Primitive Indent</a>, Up: <a href=
+    "Indentation.html#Indentation" accesskey="u" rel=
+    "up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

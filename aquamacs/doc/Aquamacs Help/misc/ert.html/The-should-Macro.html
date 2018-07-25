@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2008, 2010-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,81 +14,113 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Lisp Regression Testing: The should Macro</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Lisp Regression Testing: The should Macro">
-<meta name="keywords" content="Emacs Lisp Regression Testing: The should Macro">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="How-to-Write-Tests.html#How-to-Write-Tests" rel="up" title="How to Write Tests">
-<link href="Expected-Failures.html#Expected-Failures" rel="next" title="Expected Failures">
-<link href="How-to-Write-Tests.html#How-to-Write-Tests" rel="prev" title="How to Write Tests">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Lisp Regression Testing: The should Macro</title>
+  <meta name="description" content=
+  "Emacs Lisp Regression Testing: The should Macro" />
+  <meta name="keywords" content=
+  "Emacs Lisp Regression Testing: The should Macro" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="How-to-Write-Tests.html#How-to-Write-Tests" rel="up"
+  title="How to Write Tests" />
+  <link href="Expected-Failures.html#Expected-Failures" rel="next"
+  title="Expected Failures" />
+  <link href="How-to-Write-Tests.html#How-to-Write-Tests" rel=
+  "prev" title="How to Write Tests" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-should-Macro"></a>
-<div class="header">
-<p>
-Next: <a href="Expected-Failures.html#Expected-Failures" accesskey="n" rel="next">Expected Failures</a>, Up: <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel="up">How to Write Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="The-should-Macro-1"></a>
-<h3 class="section">3.1 The <code>should</code> Macro</h3>
+<body lang="en" xml:lang="en">
+  <a name="The-should-Macro" id="The-should-Macro"></a>
 
-<p>Test bodies can include arbitrary code; but to be useful, they need to
-check whether the code being tested (or <em>code under test</em>)
-does what it is supposed to do.  The macro <code>should</code> is similar to
-<code>cl-assert</code> from the cl package
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/cl/Assertions.html#Assertions">Assertions</a> in <cite>Common Lisp Extensions</cite>),
-but analyzes its argument form and records information that ERT can
-display to help debugging.
-</p>
-<p>This test definition
-</p>
-<div class="lisp">
-<pre class="lisp">(ert-deftest addition-test ()
+  <div class="header">
+    <p>Next: <a href="Expected-Failures.html#Expected-Failures"
+    accesskey="n" rel="next">Expected Failures</a>, Up: <a href=
+    "How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel=
+    "up">How to Write Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="The-should-Macro-1" id="The-should-Macro-1"></a>
+
+  <h3 class="section">3.1 The <code>should</code> Macro</h3>
+
+  <p>Test bodies can include arbitrary code; but to be useful, they
+  need to check whether the code being tested (or <em>code under
+  test</em>) does what it is supposed to do. The macro
+  <code>should</code> is similar to <code>cl-assert</code> from the
+  cl package (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/cl/Assertions.html#Assertions">
+  Assertions</a> in <cite>Common Lisp Extensions</cite>), but
+  analyzes its argument form and records information that ERT can
+  display to help debugging.</p>
+
+  <p>This test definition</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(ert-deftest addition-test ()
   (should (= (+ 1 2) 4)))
-</pre></div>
+</pre>
+  </div>
 
-<p>will produce this output when run via <kbd>M-x ert</kbd>:
-</p>
-<div class="example">
-<pre class="example">F addition-test
+  <p>will produce this output when run via <kbd>M-x ert</kbd>:</p>
+
+  <div class="example">
+    <pre class="example">
+F addition-test
     (ert-test-failed
      ((should
        (=
@@ -95,47 +129,55 @@ display to help debugging.
       :form
       (= 3 4)
       :value nil))
-</pre></div>
+</pre>
+  </div>
 
-<p>In this example, <code>should</code> recorded the fact that (= (+ 1 2) 4)
-reduced to (= 3 4) before it reduced to <code>nil</code>.  When debugging why the
-test failed, it helps to know that the function <code>+</code> returned 3
-here.  ERT records the return value for any predicate called directly
-within <code>should</code>.
-</p>
-<p>In addition to <code>should</code>, ERT provides <code>should-not</code>, which
-checks that the predicate returns <code>nil</code>, and <code>should-error</code>, which
-checks that the form called within it signals an error.  An example
-use of <code>should-error</code>:
-</p>
-<div class="lisp">
-<pre class="lisp">(ert-deftest test-divide-by-zero ()
+  <p>In this example, <code>should</code> recorded the fact that (=
+  (+ 1 2) 4) reduced to (= 3 4) before it reduced to
+  <code>nil</code>. When debugging why the test failed, it helps to
+  know that the function <code>+</code> returned 3 here. ERT
+  records the return value for any predicate called directly within
+  <code>should</code>.</p>
+
+  <p>In addition to <code>should</code>, ERT provides
+  <code>should-not</code>, which checks that the predicate returns
+  <code>nil</code>, and <code>should-error</code>, which checks
+  that the form called within it signals an error. An example use
+  of <code>should-error</code>:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(ert-deftest test-divide-by-zero ()
   (should-error (/ 1 0)
                 :type 'arith-error))
-</pre></div>
+</pre>
+  </div>
 
-<p>This checks that dividing one by zero signals an error of type
-<code>arith-error</code>.  The <code>:type</code> argument to <code>should-error</code>
-is optional; if absent, any type of error is accepted.
-<code>should-error</code> returns an error description of the error that was
-signaled, to allow additional checks to be made.  The error
-description has the format <code>(ERROR-SYMBOL . DATA)</code>.
-</p>
-<p>There is no <code>should-not-error</code> macro since tests that signal an
-error fail anyway, so <code>should-not-error</code> is effectively the
-default.
-</p>
-<p>See <a href="Understanding-Explanations.html#Understanding-Explanations">Understanding Explanations</a>, for more details on what
-<code>should</code> reports.
-</p>
+  <p>This checks that dividing one by zero signals an error of type
+  <code>arith-error</code>. The <code>:type</code> argument to
+  <code>should-error</code> is optional; if absent, any type of
+  error is accepted. <code>should-error</code> returns an error
+  description of the error that was signaled, to allow additional
+  checks to be made. The error description has the format
+  <code>(ERROR-SYMBOL . DATA)</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Expected-Failures.html#Expected-Failures" accesskey="n" rel="next">Expected Failures</a>, Up: <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel="up">How to Write Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+  <p>There is no <code>should-not-error</code> macro since tests
+  that signal an error fail anyway, so
+  <code>should-not-error</code> is effectively the default.</p>
 
+  <p>See <a href=
+  "Understanding-Explanations.html#Understanding-Explanations">Understanding
+  Explanations</a>, for more details on what <code>should</code>
+  reports.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Expected-Failures.html#Expected-Failures"
+    accesskey="n" rel="next">Expected Failures</a>, Up: <a href=
+    "How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel=
+    "up">How to Write Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

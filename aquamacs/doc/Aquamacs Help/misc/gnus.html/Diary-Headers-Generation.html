@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,84 +14,116 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Diary Headers Generation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Diary Headers Generation">
-<meta name="keywords" content="Gnus Manual: Diary Headers Generation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-Gnus-Diary-Library.html#The-Gnus-Diary-Library" rel="up" title="The Gnus Diary Library">
-<link href="Diary-Group-Parameters.html#Diary-Group-Parameters" rel="next" title="Diary Group Parameters">
-<link href="Diary-Articles-Sorting.html#Diary-Articles-Sorting" rel="prev" title="Diary Articles Sorting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Diary Headers Generation</title>
+  <meta name="description" content=
+  "Gnus Manual: Diary Headers Generation" />
+  <meta name="keywords" content=
+  "Gnus Manual: Diary Headers Generation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-Gnus-Diary-Library.html#The-Gnus-Diary-Library"
+  rel="up" title="The Gnus Diary Library" />
+  <link href="Diary-Group-Parameters.html#Diary-Group-Parameters"
+  rel="next" title="Diary Group Parameters" />
+  <link href="Diary-Articles-Sorting.html#Diary-Articles-Sorting"
+  rel="prev" title="Diary Articles Sorting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Diary-Headers-Generation"></a>
-<div class="header">
-<p>
-Next: <a href="Diary-Group-Parameters.html#Diary-Group-Parameters" accesskey="n" rel="next">Diary Group Parameters</a>, Previous: <a href="Diary-Articles-Sorting.html#Diary-Articles-Sorting" accesskey="p" rel="prev">Diary Articles Sorting</a>, Up: <a href="The-Gnus-Diary-Library.html#The-Gnus-Diary-Library" accesskey="u" rel="up">The Gnus Diary Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Diary-Headers-Generation-1"></a>
-<h4 class="subsubsection">6.8.2.3 Diary Headers Generation</h4>
-<a name="index-diary-headers-generation"></a>
-<a name="index-gnus_002ddiary_002dcheck_002dmessage"></a>
+<body lang="en" xml:lang="en">
+  <a name="Diary-Headers-Generation" id=
+  "Diary-Headers-Generation"></a>
 
-<p><code>gnus-diary</code> provides a function called
-<code>gnus-diary-check-message</code> to help you handle the <code>X-Diary-*</code>
-headers.  This function ensures that the current message contains all the
-required diary headers, and prompts you for values or corrections if
-needed.
-</p>
-<p>This function is hooked into the <code>nndiary</code> back end, so that
-moving or copying an article to a diary group will trigger it
-automatically.  It is also bound to <kbd>C-c C-f d</kbd> in
-<code>message-mode</code> and <code>article-edit-mode</code> in order to ease the
-process of converting a usual mail to a diary one.
-</p>
-<p>This function takes a prefix argument which will force prompting of
-all diary headers, regardless of their presence or validity.  That way,
-you can very easily reschedule an already valid diary message, for
-instance.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Diary-Group-Parameters.html#Diary-Group-Parameters" accesskey=
+    "n" rel="next">Diary Group Parameters</a>, Previous: <a href=
+    "Diary-Articles-Sorting.html#Diary-Articles-Sorting" accesskey=
+    "p" rel="prev">Diary Articles Sorting</a>, Up: <a href=
+    "The-Gnus-Diary-Library.html#The-Gnus-Diary-Library" accesskey=
+    "u" rel="up">The Gnus Diary Library</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Diary-Headers-Generation-1" id=
+  "Diary-Headers-Generation-1"></a>
 
+  <h4 class="subsubsection">6.8.2.3 Diary Headers
+  Generation</h4><a name="index-diary-headers-generation" id=
+  "index-diary-headers-generation"></a> <a name=
+  "index-gnus_002ddiary_002dcheck_002dmessage" id=
+  "index-gnus_002ddiary_002dcheck_002dmessage"></a>
 
+  <p><code>gnus-diary</code> provides a function called
+  <code>gnus-diary-check-message</code> to help you handle the
+  <code>X-Diary-*</code> headers. This function ensures that the
+  current message contains all the required diary headers, and
+  prompts you for values or corrections if needed.</p>
 
+  <p>This function is hooked into the <code>nndiary</code> back
+  end, so that moving or copying an article to a diary group will
+  trigger it automatically. It is also bound to <kbd>C-c C-f
+  d</kbd> in <code>message-mode</code> and
+  <code>article-edit-mode</code> in order to ease the process of
+  converting a usual mail to a diary one.</p>
+
+  <p>This function takes a prefix argument which will force
+  prompting of all diary headers, regardless of their presence or
+  validity. That way, you can very easily reschedule an already
+  valid diary message, for instance.</p>
 </body>
 </html>

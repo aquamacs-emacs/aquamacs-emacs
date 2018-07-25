@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Truncating the Stack - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Display-Modes.html#Display-Modes" title="Display Modes">
-<link rel="prev" href="Date-Formats.html#Date-Formats" title="Date Formats">
-<link rel="next" href="Justification.html#Justification" title="Justification">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Truncating the Stack - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Display-Modes.html#Display-Modes" title=
+  "Display Modes" />
+  <link rel="prev" href="Date-Formats.html#Date-Formats" title=
+  "Date Formats" />
+  <link rel="next" href="Justification.html#Justification" title=
+  "Justification" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +38,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,42 +51,71 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Truncating-the-Stack"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Justification.html#Justification">Justification</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Date-Formats.html#Date-Formats">Date Formats</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Display-Modes.html#Display-Modes">Display Modes</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Truncating-the-Stack" id="Truncating-the-Stack"></a>
 
-<h4 class="subsection">7.7.8 Truncating the Stack</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Justification.html#Justification">Justification</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Date-Formats.html#Date-Formats">Date Formats</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Display-Modes.html#Display-Modes">Display Modes</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-d-t-527"></a><a name="index-calc_002dtruncate_002dstack-528"></a><a name="index-Truncating-the-stack-529"></a><a name="index-Narrowing-the-stack-530"></a>The <kbd>d t</kbd> (<code>calc-truncate-stack</code>) command moves the &lsquo;<samp><span class="samp">.</span></samp>&rsquo;
-line that marks the top-of-stack up or down in the Calculator buffer. 
-The number right above that line is considered to the be at the top of
-the stack.  Any numbers below that line are &ldquo;hidden&rdquo; from all stack
-operations (although still visible to the user).  This is similar to the
-Emacs &ldquo;narrowing&rdquo; feature, except that the values below the &lsquo;<samp><span class="samp">.</span></samp>&rsquo;
-are <em>visible</em>, just temporarily frozen.  This feature allows you to
-keep several independent calculations running at once in different parts
-of the stack, or to apply a certain command to an element buried deep in
-the stack.
+  <h4 class="subsection">7.7.8 Truncating the Stack</h4>
 
-   <p>Pressing <kbd>d t</kbd> by itself moves the &lsquo;<samp><span class="samp">.</span></samp>&rsquo; to the line the cursor
-is on.  Thus, this line and all those below it become hidden.  To un-hide
-these lines, move down to the end of the buffer and press <kbd>d&nbsp;t</kbd><!-- /@w -->. 
-With a positive numeric prefix argument &lsquo;<samp><span class="samp">n</span></samp>&rsquo;, <kbd>d t</kbd> hides the
-bottom &lsquo;<samp><span class="samp">n</span></samp>&rsquo; values in the buffer.  With a negative argument, it hides
-all but the top &lsquo;<samp><span class="samp">n</span></samp>&rsquo; values.  With an argument of zero, it hides zero
-values, i.e., moves the &lsquo;<samp><span class="samp">.</span></samp>&rsquo; all the way down to the bottom.
+  <p class="noindent"><a name="index-d-t-527" id=
+  "index-d-t-527"></a><a name=
+  "index-calc_002dtruncate_002dstack-528" id=
+  "index-calc_002dtruncate_002dstack-528"></a><a name=
+  "index-Truncating-the-stack-529" id=
+  "index-Truncating-the-stack-529"></a><a name=
+  "index-Narrowing-the-stack-530" id=
+  "index-Narrowing-the-stack-530"></a>The <kbd>d t</kbd>
+  (<code>calc-truncate-stack</code>) command moves the
+  &lsquo;<samp><span class="samp">.</span></samp>&rsquo; line that
+  marks the top-of-stack up or down in the Calculator buffer. The
+  number right above that line is considered to the be at the top
+  of the stack. Any numbers below that line are
+  &ldquo;hidden&rdquo; from all stack operations (although still
+  visible to the user). This is similar to the Emacs
+  &ldquo;narrowing&rdquo; feature, except that the values below the
+  &lsquo;<samp><span class="samp">.</span></samp>&rsquo; are
+  <em>visible</em>, just temporarily frozen. This feature allows
+  you to keep several independent calculations running at once in
+  different parts of the stack, or to apply a certain command to an
+  element buried deep in the stack.</p>
 
-   <p><a name="index-d-_005b-531"></a><a name="index-calc_002dtruncate_002dup-532"></a><a name="index-d-_005d-533"></a><a name="index-calc_002dtruncate_002ddown-534"></a>The <kbd>d [</kbd> (<code>calc-truncate-up</code>) and <kbd>d ]</kbd>
-(<code>calc-truncate-down</code>) commands move the &lsquo;<samp><span class="samp">.</span></samp>&rsquo; up or down one
-line at a time (or several lines with a prefix argument).
+  <p>Pressing <kbd>d t</kbd> by itself moves the
+  &lsquo;<samp><span class="samp">.</span></samp>&rsquo; to the
+  line the cursor is on. Thus, this line and all those below it
+  become hidden. To un-hide these lines, move down to the end of
+  the buffer and press <kbd>d&nbsp;t</kbd><!-- /@w -->. With a
+  positive numeric prefix argument &lsquo;<samp><span class=
+  "samp">n</span></samp>&rsquo;, <kbd>d t</kbd> hides the bottom
+  &lsquo;<samp><span class="samp">n</span></samp>&rsquo; values in
+  the buffer. With a negative argument, it hides all but the top
+  &lsquo;<samp><span class="samp">n</span></samp>&rsquo; values.
+  With an argument of zero, it hides zero values, i.e., moves the
+  &lsquo;<samp><span class="samp">.</span></samp>&rsquo; all the
+  way down to the bottom.</p>
 
-   </body></html>
-
+  <p><a name="index-d-_005b-531" id=
+  "index-d-_005b-531"></a><a name="index-calc_002dtruncate_002dup-532"
+  id="index-calc_002dtruncate_002dup-532"></a><a name=
+  "index-d-_005d-533" id="index-d-_005d-533"></a><a name=
+  "index-calc_002dtruncate_002ddown-534" id=
+  "index-calc_002dtruncate_002ddown-534"></a>The <kbd>d [</kbd>
+  (<code>calc-truncate-up</code>) and <kbd>d ]</kbd>
+  (<code>calc-truncate-down</code>) commands move the
+  &lsquo;<samp><span class="samp">.</span></samp>&rsquo; up or down
+  one line at a time (or several lines with a prefix argument).</p>
+</body>
+</html>

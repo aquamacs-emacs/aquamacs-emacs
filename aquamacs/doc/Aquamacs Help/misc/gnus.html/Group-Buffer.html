@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,118 +14,297 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Group Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Group Buffer">
-<meta name="keywords" content="Gnus Manual: Group Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Group-Buffer-Format.html#Group-Buffer-Format" rel="next" title="Group Buffer Format">
-<link href="Startup-Variables.html#Startup-Variables" rel="prev" title="Startup Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Group Buffer</title>
+  <meta name="description" content="Gnus Manual: Group Buffer" />
+  <meta name="keywords" content="Gnus Manual: Group Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Group-Buffer-Format.html#Group-Buffer-Format" rel=
+  "next" title="Group Buffer Format" />
+  <link href="Startup-Variables.html#Startup-Variables" rel="prev"
+  title="Startup Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Group-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="n" rel="next">Summary Buffer</a>, Previous: <a href="Starting-Up.html#Starting-Up" accesskey="p" rel="prev">Starting Up</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Group-Buffer-1"></a>
-<h2 class="chapter">2 Group Buffer</h2>
-<a name="index-group-buffer"></a>
+<body lang="en" xml:lang="en">
+  <a name="Group-Buffer" id="Group-Buffer"></a>
 
+  <div class="header">
+    <p>Next: <a href="Summary-Buffer.html#Summary-Buffer"
+    accesskey="n" rel="next">Summary Buffer</a>, Previous: <a href=
+    "Starting-Up.html#Starting-Up" accesskey="p" rel=
+    "prev">Starting Up</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Group-Buffer-1" id="Group-Buffer-1"></a>
 
+  <h2 class="chapter">2 Group Buffer</h2><a name=
+  "index-group-buffer" id="index-group-buffer"></a>
 
-<p>The <em>group buffer</em> lists all (or parts) of the available groups.  It
-is the first buffer shown when Gnus starts, and will never be killed as
-long as Gnus is active.
-</p>
+  <p>The <em>group buffer</em> lists all (or parts) of the
+  available groups. It is the first buffer shown when Gnus starts,
+  and will never be killed as long as Gnus is active.</p>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Group-Buffer-Format.html#Group-Buffer-Format" accesskey="1">Group Buffer Format</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Information listed and how you can change it.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Group-Maneuvering.html#Group-Maneuvering" accesskey="2">Group Maneuvering</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Commands for moving in the group buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Selecting-a-Group.html#Selecting-a-Group" accesskey="3">Selecting a Group</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Actually reading news.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Subscription-Commands.html#Subscription-Commands" accesskey="4">Subscription Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Unsubscribing, killing, subscribing.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Group-Data.html#Group-Data" accesskey="5">Group Data</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Changing the info for a group.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Group-Levels.html#Group-Levels" accesskey="6">Group Levels</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Levels?  What are those, then?
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Group-Score.html#Group-Score" accesskey="7">Group Score</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A mechanism for finding out what groups you like.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Marking-Groups.html#Marking-Groups" accesskey="8">Marking Groups</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You can mark groups for later processing.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Foreign-Groups.html#Foreign-Groups" accesskey="9">Foreign Groups</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating and editing groups.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Each group may have different parameters set.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Listing-Groups.html#Listing-Groups">Listing Groups</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Gnus can list various subsets of the groups.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Sorting-Groups.html#Sorting-Groups">Sorting Groups</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Re-arrange the group order.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Group-Maintenance.html#Group-Maintenance">Group Maintenance</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Maintaining a tidy <samp>.newsrc</samp> file.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Browse-Foreign-Server.html#Browse-Foreign-Server">Browse Foreign Server</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You can browse a server.  See what it has to offer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Exiting-Gnus.html#Exiting-Gnus">Exiting Gnus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Stop reading news and get some work done.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Group-Topics.html#Group-Topics">Group Topics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A folding group mode divided into topics.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Non_002dASCII-Group-Names.html#Non_002dASCII-Group-Names">Non-ASCII Group Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Accessing groups of non-English names.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Misc-Group-Stuff.html#Misc-Group-Stuff">Misc Group Stuff</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Other stuff that you can to do.
-</td></tr>
-</table>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Group-Buffer-Format.html#Group-Buffer-Format" accesskey=
+      "1">Group Buffer Format</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="n" rel="next">Summary Buffer</a>, Previous: <a href="Starting-Up.html#Starting-Up" accesskey="p" rel="prev">Starting Up</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <td align="left" valign="top">Information listed and how you
+      can change it.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Group-Maneuvering.html#Group-Maneuvering" accesskey=
+      "2">Group Maneuvering</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Commands for moving in the
+      group buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Selecting-a-Group.html#Selecting-a-Group" accesskey=
+      "3">Selecting a Group</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Actually reading news.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Subscription-Commands.html#Subscription-Commands" accesskey=
+      "4">Subscription Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Unsubscribing, killing,
+      subscribing.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Group-Data.html#Group-Data" accesskey="5">Group
+      Data</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Changing the info for a
+      group.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Group-Levels.html#Group-Levels" accesskey="6">Group
+      Levels</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Levels? What are those,
+      then?</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Group-Score.html#Group-Score" accesskey="7">Group
+      Score</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A mechanism for finding out
+      what groups you like.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Marking-Groups.html#Marking-Groups" accesskey="8">Marking
+      Groups</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">You can mark groups for later
+      processing.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Foreign-Groups.html#Foreign-Groups" accesskey="9">Foreign
+      Groups</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Creating and editing
+      groups.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Group-Parameters.html#Group-Parameters">Group
+      Parameters</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Each group may have different
+      parameters set.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Listing-Groups.html#Listing-Groups">Listing Groups</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Gnus can list various subsets
+      of the groups.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Sorting-Groups.html#Sorting-Groups">Sorting Groups</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Re-arrange the group
+      order.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Group-Maintenance.html#Group-Maintenance">Group
+      Maintenance</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Maintaining a tidy
+      <samp>.newsrc</samp> file.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Browse-Foreign-Server.html#Browse-Foreign-Server">Browse
+      Foreign Server</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">You can browse a server. See
+      what it has to offer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Exiting-Gnus.html#Exiting-Gnus">Exiting Gnus</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Stop reading news and get some
+      work done.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Group-Topics.html#Group-Topics">Group Topics</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A folding group mode divided
+      into topics.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Non_002dASCII-Group-Names.html#Non_002dASCII-Group-Names">Non-ASCII
+      Group Names</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Accessing groups of non-English
+      names.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Misc-Group-Stuff.html#Misc-Group-Stuff">Misc Group
+      Stuff</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Other stuff that you can to
+      do.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Summary-Buffer.html#Summary-Buffer"
+    accesskey="n" rel="next">Summary Buffer</a>, Previous: <a href=
+    "Starting-Up.html#Starting-Up" accesskey="p" rel=
+    "prev">Starting Up</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

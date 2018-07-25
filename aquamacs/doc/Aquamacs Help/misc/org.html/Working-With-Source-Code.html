@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,121 +16,266 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Working With Source Code</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Working With Source Code">
-<meta name="keywords" content="The Org Manual: Working With Source Code">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Structure-of-code-blocks.html#Structure-of-code-blocks" rel="next" title="Structure of code blocks">
-<link href="Triggering-publication.html#Triggering-publication" rel="prev" title="Triggering publication">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Working With Source Code</title>
+  <meta name="description" content=
+  "The Org Manual: Working With Source Code" />
+  <meta name="keywords" content=
+  "The Org Manual: Working With Source Code" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href=
+  "Structure-of-code-blocks.html#Structure-of-code-blocks" rel=
+  "next" title="Structure of code blocks" />
+  <link href="Triggering-publication.html#Triggering-publication"
+  rel="prev" title="Triggering publication" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Working-With-Source-Code"></a>
-<div class="header">
-<p>
-Next: <a href="Miscellaneous.html#Miscellaneous" accesskey="n" rel="next">Miscellaneous</a>, Previous: <a href="Publishing.html#Publishing" accesskey="p" rel="prev">Publishing</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Working-with-source-code"></a>
-<h2 class="chapter">14 Working with source code</h2>
-<a name="index-Schulte_002c-Eric"></a>
-<a name="index-Davison_002c-Dan"></a>
-<a name="index-source-code_002c-working-with"></a>
+<body lang="en" xml:lang="en">
+  <a name="Working-With-Source-Code" id=
+  "Working-With-Source-Code"></a>
 
-<p>Source code can be included in Org mode documents using a &lsquo;<samp>src</samp>&rsquo; block,
-e.g.:
-</p>
-<div class="example">
-<pre class="example">#+BEGIN_SRC emacs-lisp
+  <div class="header">
+    <p>Next: <a href="Miscellaneous.html#Miscellaneous" accesskey=
+    "n" rel="next">Miscellaneous</a>, Previous: <a href=
+    "Publishing.html#Publishing" accesskey="p" rel=
+    "prev">Publishing</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Working-with-source-code" id=
+  "Working-with-source-code"></a>
+
+  <h2 class="chapter">14 Working with source code</h2><a name=
+  "index-Schulte_002c-Eric" id="index-Schulte_002c-Eric"></a>
+  <a name="index-Davison_002c-Dan" id="index-Davison_002c-Dan"></a>
+  <a name="index-source-code_002c-working-with" id=
+  "index-source-code_002c-working-with"></a>
+
+  <p>Source code can be included in Org mode documents using a
+  &lsquo;<samp>src</samp>&rsquo; block, e.g.:</p>
+
+  <div class="example">
+    <pre class="example">
+#+BEGIN_SRC emacs-lisp
   (defun org-xor (a b)
-     &quot;Exclusive or.&quot;
+     "Exclusive or."
      (if a (not b) b))
 #+END_SRC
-</pre></div>
+</pre>
+  </div>
 
-<p>Org mode provides a number of features for working with live source code,
-including editing of code blocks in their native major-mode, evaluation of
-code blocks, converting code blocks into source files (known as <em>tangling</em>
-in literate programming), and exporting code blocks and their
-results in several formats.  This functionality was contributed by Eric
-Schulte and Dan Davison, and was originally named Org-babel.
-</p>
-<p>The following sections describe Org mode&rsquo;s code block handling facilities.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Structure-of-code-blocks.html#Structure-of-code-blocks" accesskey="1">Structure of code blocks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Code block syntax described
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Editing-source-code.html#Editing-source-code" accesskey="2">Editing source code</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Language major-mode editing
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Exporting-code-blocks.html#Exporting-code-blocks" accesskey="3">Exporting code blocks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Export contents and/or results
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Extracting-source-code.html#Extracting-source-code" accesskey="4">Extracting source code</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Create pure source code files
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Evaluating-code-blocks.html#Evaluating-code-blocks" accesskey="5">Evaluating code blocks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Place results of evaluation in the Org mode buffer
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Library-of-Babel.html#Library-of-Babel" accesskey="6">Library of Babel</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Use and contribute to a library of useful code blocks
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Languages.html#Languages" accesskey="7">Languages</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">List of supported code block languages
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Header-arguments.html#Header-arguments" accesskey="8">Header arguments</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Configure code block functionality
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Results-of-evaluation.html#Results-of-evaluation" accesskey="9">Results of evaluation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How evaluation results are handled
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Noweb-reference-syntax.html#Noweb-reference-syntax">Noweb reference syntax</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Literate programming in Org mode
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Key-bindings-and-useful-functions.html#Key-bindings-and-useful-functions">Key bindings and useful functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Work quickly with code blocks
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Batch-execution.html#Batch-execution">Batch execution</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Call functions from the command line
-</td></tr>
-</table>
+  <p>Org mode provides a number of features for working with live
+  source code, including editing of code blocks in their native
+  major-mode, evaluation of code blocks, converting code blocks
+  into source files (known as <em>tangling</em> in literate
+  programming), and exporting code blocks and their results in
+  several formats. This functionality was contributed by Eric
+  Schulte and Dan Davison, and was originally named Org-babel.</p>
 
+  <p>The following sections describe Org mode&rsquo;s code block
+  handling facilities.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Miscellaneous.html#Miscellaneous" accesskey="n" rel="next">Miscellaneous</a>, Previous: <a href="Publishing.html#Publishing" accesskey="p" rel="prev">Publishing</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Structure-of-code-blocks.html#Structure-of-code-blocks"
+      accesskey="1">Structure of code blocks</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Code block syntax
+      described</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Editing-source-code.html#Editing-source-code" accesskey=
+      "2">Editing source code</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Language major-mode
+      editing</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Exporting-code-blocks.html#Exporting-code-blocks" accesskey=
+      "3">Exporting code blocks</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Export contents and/or
+      results</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Extracting-source-code.html#Extracting-source-code"
+      accesskey="4">Extracting source code</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Create pure source code
+      files</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Evaluating-code-blocks.html#Evaluating-code-blocks"
+      accesskey="5">Evaluating code blocks</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Place results of evaluation in
+      the Org mode buffer</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Library-of-Babel.html#Library-of-Babel" accesskey=
+      "6">Library of Babel</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Use and contribute to a library
+      of useful code blocks</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Languages.html#Languages" accesskey="7">Languages</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">List of supported code block
+      languages</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Header-arguments.html#Header-arguments" accesskey="8">Header
+      arguments</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Configure code block
+      functionality</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Results-of-evaluation.html#Results-of-evaluation" accesskey=
+      "9">Results of evaluation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How evaluation results are
+      handled</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Noweb-reference-syntax.html#Noweb-reference-syntax">Noweb
+      reference syntax</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Literate programming in Org
+      mode</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Key-bindings-and-useful-functions.html#Key-bindings-and-useful-functions">
+      Key bindings and useful functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Work quickly with code
+      blocks</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Batch-execution.html#Batch-execution">Batch
+      execution</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Call functions from the command
+      line</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Miscellaneous.html#Miscellaneous" accesskey=
+    "n" rel="next">Miscellaneous</a>, Previous: <a href=
+    "Publishing.html#Publishing" accesskey="p" rel=
+    "prev">Publishing</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

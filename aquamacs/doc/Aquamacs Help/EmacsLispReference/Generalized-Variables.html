@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,86 +19,134 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Generalized Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Generalized Variables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Generalized Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variables.html#Variables" rel="up" title="Variables">
-<link href="Setting-Generalized-Variables.html#Setting-Generalized-Variables" rel="next" title="Setting Generalized Variables">
-<link href="Variables-with-Restricted-Values.html#Variables-with-Restricted-Values" rel="prev" title="Variables with Restricted Values">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Generalized
+  Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Generalized Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Generalized Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variables.html#Variables" rel="up" title=
+  "Variables" />
+  <link href=
+  "Setting-Generalized-Variables.html#Setting-Generalized-Variables"
+  rel="next" title="Setting Generalized Variables" />
+  <link href=
+  "Variables-with-Restricted-Values.html#Variables-with-Restricted-Values"
+  rel="prev" title="Variables with Restricted Values" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Generalized-Variables" id="Generalized-Variables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Variables-with-Restricted-Values.html#Variables-with-Restricted-Values"
+    accesskey="p" rel="prev">Variables with Restricted Values</a>,
+    Up: <a href="Variables.html#Variables" accesskey="u" rel=
+    "up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Generalized-Variables-1" id=
+  "Generalized-Variables-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Generalized-Variables"></a>
-<div class="header">
-<p>
-Previous: <a href="Variables-with-Restricted-Values.html#Variables-with-Restricted-Values" accesskey="p" rel="prev">Variables with Restricted Values</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Generalized-Variables-1"></a>
-<h3 class="section">11.15 Generalized Variables</h3>
+  <h3 class="section">11.15 Generalized Variables</h3><a name=
+  "index-generalized-variable" id="index-generalized-variable"></a>
+  <a name="index-place-form" id="index-place-form"></a>
 
-<a name="index-generalized-variable"></a>
-<a name="index-place-form"></a>
-<p>A <em>generalized variable</em> or <em>place form</em> is one of the many places
-in Lisp memory where values can be stored.  The simplest place form is
-a regular Lisp variable.  But the <small>CAR</small>s and <small>CDR</small>s of lists, elements
-of arrays, properties of symbols, and many other locations are also
-places where Lisp values are stored.
-</p>
-<p>Generalized variables are analogous to lvalues in the C
-language, where &lsquo;<samp>x = a[i]</samp>&rsquo; gets an element from an array
-and &lsquo;<samp>a[i] = x</samp>&rsquo; stores an element using the same notation.
-Just as certain forms like <code>a[i]</code> can be lvalues in C, there
-is a set of forms that can be generalized variables in Lisp.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Setting-Generalized-Variables.html#Setting-Generalized-Variables" accesskey="1">Setting Generalized Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The <code>setf</code> macro.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Adding-Generalized-Variables.html#Adding-Generalized-Variables" accesskey="2">Adding Generalized Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Defining new <code>setf</code> forms.
-</td></tr>
-</table>
+  <p>A <em>generalized variable</em> or <em>place form</em> is one
+  of the many places in Lisp memory where values can be stored. The
+  simplest place form is a regular Lisp variable. But the
+  <small>CAR</small>s and <small>CDR</small>s of lists, elements of
+  arrays, properties of symbols, and many other locations are also
+  places where Lisp values are stored.</p>
 
+  <p>Generalized variables are analogous to lvalues in the C
+  language, where &lsquo;<samp>x = a[i]</samp>&rsquo; gets an
+  element from an array and &lsquo;<samp>a[i] = x</samp>&rsquo;
+  stores an element using the same notation. Just as certain forms
+  like <code>a[i]</code> can be lvalues in C, there is a set of
+  forms that can be generalized variables in Lisp.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Setting-Generalized-Variables.html#Setting-Generalized-Variables"
+      accesskey="1">Setting Generalized Variables</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">The <code>setf</code>
+      macro.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Adding-Generalized-Variables.html#Adding-Generalized-Variables"
+      accesskey="2">Adding Generalized Variables</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Defining new <code>setf</code>
+      forms.</td>
+    </tr>
+  </table>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,135 +19,201 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Parsing HTML/XML</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Parsing HTML/XML">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Parsing HTML/XML">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Document-Object-Model.html#Document-Object-Model" rel="next" title="Document Object Model">
-<link href="Checksum_002fHash.html#Checksum_002fHash" rel="prev" title="Checksum/Hash">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Parsing HTML/XML</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Parsing HTML/XML" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Parsing HTML/XML" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Document-Object-Model.html#Document-Object-Model"
+  rel="next" title="Document Object Model" />
+  <link href="Checksum_002fHash.html#Checksum_002fHash" rel="prev"
+  title="Checksum/Hash" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Parsing-HTML_002fXML" id="Parsing-HTML_002fXML"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Atomic-Changes.html#Atomic-Changes"
+    accesskey="n" rel="next">Atomic Changes</a>, Previous: <a href=
+    "Checksum_002fHash.html#Checksum_002fHash" accesskey="p" rel=
+    "prev">Checksum/Hash</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Parsing-HTML-and-XML" id="Parsing-HTML-and-XML"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Parsing-HTML_002fXML"></a>
-<div class="header">
-<p>
-Next: <a href="Atomic-Changes.html#Atomic-Changes" accesskey="n" rel="next">Atomic Changes</a>, Previous: <a href="Checksum_002fHash.html#Checksum_002fHash" accesskey="p" rel="prev">Checksum/Hash</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Parsing-HTML-and-XML"></a>
-<h3 class="section">31.26 Parsing HTML and XML</h3>
-<a name="index-parsing-html"></a>
+  <h3 class="section">31.26 Parsing HTML and XML</h3><a name=
+  "index-parsing-html" id="index-parsing-html"></a>
 
-<p>When Emacs is compiled with libxml2 support, the following functions
-are available to parse HTML or XML text into Lisp object trees.
-</p>
-<dl>
-<dt><a name="index-libxml_002dparse_002dhtml_002dregion"></a>Function: <strong>libxml-parse-html-region</strong> <em>start end &amp;optional base-url discard-comments</em></dt>
-<dd><p>This function parses the text between <var>start</var> and <var>end</var> as
-HTML, and returns a list representing the HTML <em>parse tree</em>.  It
-attempts to handle real-world HTML by robustly coping with syntax
-mistakes.
-</p>
-<p>The optional argument <var>base-url</var>, if non-<code>nil</code>, should be a
-string specifying the base URL for relative URLs occurring in links.
-</p>
-<p>If the optional argument <var>discard-comments</var> is non-<code>nil</code>,
-then the parse tree is created without any comments.
-</p>
-<p>In the parse tree, each HTML node is represented by a list in which
-the first element is a symbol representing the node name, the second
-element is an alist of node attributes, and the remaining elements are
-the subnodes.
-</p>
-<p>The following example demonstrates this.  Given this (malformed) HTML
-document:
-</p>
-<div class="example">
-<pre class="example">&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body width=101&gt;&lt;div class=thing&gt;Foo&lt;div&gt;Yes
-</pre></div>
+  <p>When Emacs is compiled with libxml2 support, the following
+  functions are available to parse HTML or XML text into Lisp
+  object trees.</p>
 
-<p>A call to <code>libxml-parse-html-region</code> returns this <acronym>DOM</acronym>
-(document object model):
-</p>
-<div class="example">
-<pre class="example">(html nil
+  <dl>
+    <dt><a name="index-libxml_002dparse_002dhtml_002dregion" id=
+    "index-libxml_002dparse_002dhtml_002dregion"></a>Function:
+    <strong>libxml-parse-html-region</strong> <em>start end
+    &amp;optional base-url discard-comments</em></dt>
+
+    <dd>
+      <p>This function parses the text between <var>start</var> and
+      <var>end</var> as HTML, and returns a list representing the
+      HTML <em>parse tree</em>. It attempts to handle real-world
+      HTML by robustly coping with syntax mistakes.</p>
+
+      <p>The optional argument <var>base-url</var>, if
+      non-<code>nil</code>, should be a string specifying the base
+      URL for relative URLs occurring in links.</p>
+
+      <p>If the optional argument <var>discard-comments</var> is
+      non-<code>nil</code>, then the parse tree is created without
+      any comments.</p>
+
+      <p>In the parse tree, each HTML node is represented by a list
+      in which the first element is a symbol representing the node
+      name, the second element is an alist of node attributes, and
+      the remaining elements are the subnodes.</p>
+
+      <p>The following example demonstrates this. Given this
+      (malformed) HTML document:</p>
+
+      <div class="example">
+        <pre class="example">
+&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body width=101&gt;&lt;div class=thing&gt;Foo&lt;div&gt;Yes
+</pre>
+      </div>
+
+      <p>A call to <code>libxml-parse-html-region</code> returns
+      this <acronym>DOM</acronym> (document object model):</p>
+
+      <div class="example">
+        <pre class="example">
+(html nil
  (head nil)
- (body ((width . &quot;101&quot;))
-  (div ((class . &quot;thing&quot;))
-   &quot;Foo&quot;
+ (body ((width . "101"))
+  (div ((class . "thing"))
+   "Foo"
    (div nil
-    &quot;Yes&quot;))))
-</pre></div>
-</dd></dl>
+    "Yes"))))
+</pre>
+      </div>
+    </dd>
+  </dl><a name="index-rendering-html" id=
+  "index-rendering-html"></a>
 
-<a name="index-rendering-html"></a>
-<dl>
-<dt><a name="index-shr_002dinsert_002ddocument"></a>Function: <strong>shr-insert-document</strong> <em>dom</em></dt>
-<dd><p>This function renders the parsed HTML in <var>dom</var> into the current
-buffer.  The argument <var>dom</var> should be a list as generated by
-<code>libxml-parse-html-region</code>.  This function is, e.g., used by
-<a href="../eww/index.html#Top">EWW</a> in <cite>The Emacs Web Wowser Manual</cite>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-shr_002dinsert_002ddocument" id=
+    "index-shr_002dinsert_002ddocument"></a>Function:
+    <strong>shr-insert-document</strong> <em>dom</em></dt>
 
-<a name="index-parsing-xml"></a>
-<dl>
-<dt><a name="index-libxml_002dparse_002dxml_002dregion"></a>Function: <strong>libxml-parse-xml-region</strong> <em>start end &amp;optional base-url discard-comments</em></dt>
-<dd><p>This function is the same as <code>libxml-parse-html-region</code>, except
-that it parses the text as XML rather than HTML (so it is stricter
-about syntax).
-</p></dd></dl>
+    <dd>
+      <p>This function renders the parsed HTML in <var>dom</var>
+      into the current buffer. The argument <var>dom</var> should
+      be a list as generated by
+      <code>libxml-parse-html-region</code>. This function is,
+      e.g., used by <a href="../eww/index.html#Top">EWW</a> in
+      <cite>The Emacs Web Wowser Manual</cite>.</p>
+    </dd>
+  </dl><a name="index-parsing-xml" id="index-parsing-xml"></a>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Document-Object-Model.html#Document-Object-Model" accesskey="1">Document Object Model</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Access, manipulate and search the <acronym>DOM</acronym>.
-</td></tr>
-</table>
+  <dl>
+    <dt><a name="index-libxml_002dparse_002dxml_002dregion" id=
+    "index-libxml_002dparse_002dxml_002dregion"></a>Function:
+    <strong>libxml-parse-xml-region</strong> <em>start end
+    &amp;optional base-url discard-comments</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Atomic-Changes.html#Atomic-Changes" accesskey="n" rel="next">Atomic Changes</a>, Previous: <a href="Checksum_002fHash.html#Checksum_002fHash" accesskey="p" rel="prev">Checksum/Hash</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function is the same as
+      <code>libxml-parse-html-region</code>, except that it parses
+      the text as XML rather than HTML (so it is stricter about
+      syntax).</p>
+    </dd>
+  </dl>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Document-Object-Model.html#Document-Object-Model" accesskey=
+      "1">Document Object Model</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Access, manipulate and search
+      the <acronym>DOM</acronym>.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Atomic-Changes.html#Atomic-Changes"
+    accesskey="n" rel="next">Atomic Changes</a>, Previous: <a href=
+    "Checksum_002fHash.html#Checksum_002fHash" accesskey="p" rel=
+    "prev">Checksum/Hash</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

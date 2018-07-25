@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,155 +16,242 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Implementation Parameters</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Implementation Parameters">
-<meta name="keywords" content="Common Lisp Extensions: Implementation Parameters">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numbers.html#Numbers" rel="up" title="Numbers">
-<link href="Sequences.html#Sequences" rel="next" title="Sequences">
-<link href="Random-Numbers.html#Random-Numbers" rel="prev" title="Random Numbers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Implementation Parameters</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Implementation Parameters" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Implementation Parameters" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numbers.html#Numbers" rel="up" title="Numbers" />
+  <link href="Sequences.html#Sequences" rel="next" title=
+  "Sequences" />
+  <link href="Random-Numbers.html#Random-Numbers" rel="prev" title=
+  "Random Numbers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Implementation-Parameters"></a>
-<div class="header">
-<p>
-Previous: <a href="Random-Numbers.html#Random-Numbers" accesskey="p" rel="prev">Random Numbers</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Implementation-Parameters-1"></a>
-<h3 class="section">8.4 Implementation Parameters</h3>
+<body lang="en" xml:lang="en">
+  <a name="Implementation-Parameters" id=
+  "Implementation-Parameters"></a>
 
-<p>This package defines several useful constants having to do with
-floating-point numbers.
-</p>
-<p>It determines their values by exercising the computer&rsquo;s
-floating-point arithmetic in various ways.  Because this operation
-might be slow, the code for initializing them is kept in a separate
-function that must be called before the parameters can be used.
-</p>
-<dl>
-<dt><a name="index-cl_002dfloat_002dlimits"></a>Function: <strong>cl-float-limits</strong></dt>
-<dd><p>This function makes sure that the Common Lisp floating-point parameters
-like <code>cl-most-positive-float</code> have been initialized.  Until it is
-called, these parameters will be <code>nil</code>.
-If the parameters have already been initialized, the function returns
-immediately.
-</p>
-<p>The algorithm makes assumptions that will be valid for almost all
-machines, but will fail if the machine&rsquo;s arithmetic is extremely
-unusual, e.g., decimal.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href="Random-Numbers.html#Random-Numbers"
+    accesskey="p" rel="prev">Random Numbers</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Implementation-Parameters-1" id=
+  "Implementation-Parameters-1"></a>
 
-<p>Since true Common Lisp supports up to four different floating-point
-precisions, it has families of constants like
-<code>most-positive-single-float</code>, <code>most-positive-double-float</code>,
-<code>most-positive-long-float</code>, and so on.  Emacs has only one
-floating-point precision, so this package omits the precision word
-from the constants&rsquo; names.
-</p>
-<dl>
-<dt><a name="index-cl_002dmost_002dpositive_002dfloat"></a>Variable: <strong>cl-most-positive-float</strong></dt>
-<dd><p>This constant equals the largest value a Lisp float can hold.
-For those systems whose arithmetic supports infinities, this is
-the largest <em>finite</em> value.  For IEEE machines, the value
-is approximately <code>1.79e+308</code>.
-</p></dd></dl>
+  <h3 class="section">8.4 Implementation Parameters</h3>
 
-<dl>
-<dt><a name="index-cl_002dmost_002dnegative_002dfloat"></a>Variable: <strong>cl-most-negative-float</strong></dt>
-<dd><p>This constant equals the most negative value a Lisp float can hold.
-(It is assumed to be equal to <code>(- cl-most-positive-float)</code>.)
-</p></dd></dl>
+  <p>This package defines several useful constants having to do
+  with floating-point numbers.</p>
 
-<dl>
-<dt><a name="index-cl_002dleast_002dpositive_002dfloat"></a>Variable: <strong>cl-least-positive-float</strong></dt>
-<dd><p>This constant equals the smallest Lisp float value greater than zero.
-For IEEE machines, it is about <code>4.94e-324</code> if denormals are
-supported or <code>2.22e-308</code> if not.
-</p></dd></dl>
+  <p>It determines their values by exercising the computer&rsquo;s
+  floating-point arithmetic in various ways. Because this operation
+  might be slow, the code for initializing them is kept in a
+  separate function that must be called before the parameters can
+  be used.</p>
 
-<dl>
-<dt><a name="index-cl_002dleast_002dpositive_002dnormalized_002dfloat"></a>Variable: <strong>cl-least-positive-normalized-float</strong></dt>
-<dd><p>This constant equals the smallest <em>normalized</em> Lisp float greater
-than zero, i.e., the smallest value for which IEEE denormalization
-will not result in a loss of precision.  For IEEE machines, this
-value is about <code>2.22e-308</code>.  For machines that do not support
-the concept of denormalization and gradual underflow, this constant
-will always equal <code>cl-least-positive-float</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dfloat_002dlimits" id=
+    "index-cl_002dfloat_002dlimits"></a>Function:
+    <strong>cl-float-limits</strong></dt>
 
-<dl>
-<dt><a name="index-cl_002dleast_002dnegative_002dfloat"></a>Variable: <strong>cl-least-negative-float</strong></dt>
-<dd><p>This constant is the negative counterpart of <code>cl-least-positive-float</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function makes sure that the Common Lisp
+      floating-point parameters like
+      <code>cl-most-positive-float</code> have been initialized.
+      Until it is called, these parameters will be
+      <code>nil</code>. If the parameters have already been
+      initialized, the function returns immediately.</p>
 
-<dl>
-<dt><a name="index-cl_002dleast_002dnegative_002dnormalized_002dfloat"></a>Variable: <strong>cl-least-negative-normalized-float</strong></dt>
-<dd><p>This constant is the negative counterpart of
-<code>cl-least-positive-normalized-float</code>.
-</p></dd></dl>
+      <p>The algorithm makes assumptions that will be valid for
+      almost all machines, but will fail if the machine&rsquo;s
+      arithmetic is extremely unusual, e.g., decimal.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dfloat_002depsilon"></a>Variable: <strong>cl-float-epsilon</strong></dt>
-<dd><p>This constant is the smallest positive Lisp float that can be added
-to 1.0 to produce a distinct value.  Adding a smaller number to 1.0
-will yield 1.0 again due to roundoff.  For IEEE machines, epsilon
-is about <code>2.22e-16</code>.
-</p></dd></dl>
+  <p>Since true Common Lisp supports up to four different
+  floating-point precisions, it has families of constants like
+  <code>most-positive-single-float</code>,
+  <code>most-positive-double-float</code>,
+  <code>most-positive-long-float</code>, and so on. Emacs has only
+  one floating-point precision, so this package omits the precision
+  word from the constants&rsquo; names.</p>
 
-<dl>
-<dt><a name="index-cl_002dfloat_002dnegative_002depsilon"></a>Variable: <strong>cl-float-negative-epsilon</strong></dt>
-<dd><p>This is the smallest positive value that can be subtracted from
-1.0 to produce a distinct value.  For IEEE machines, it is about
-<code>1.11e-16</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dmost_002dpositive_002dfloat" id=
+    "index-cl_002dmost_002dpositive_002dfloat"></a>Variable:
+    <strong>cl-most-positive-float</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Random-Numbers.html#Random-Numbers" accesskey="p" rel="prev">Random Numbers</a>, Up: <a href="Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This constant equals the largest value a Lisp float can
+      hold. For those systems whose arithmetic supports infinities,
+      this is the largest <em>finite</em> value. For IEEE machines,
+      the value is approximately <code>1.79e+308</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dmost_002dnegative_002dfloat" id=
+    "index-cl_002dmost_002dnegative_002dfloat"></a>Variable:
+    <strong>cl-most-negative-float</strong></dt>
 
+    <dd>
+      <p>This constant equals the most negative value a Lisp float
+      can hold. (It is assumed to be equal to <code>(-
+      cl-most-positive-float)</code>.)</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dleast_002dpositive_002dfloat" id=
+    "index-cl_002dleast_002dpositive_002dfloat"></a>Variable:
+    <strong>cl-least-positive-float</strong></dt>
+
+    <dd>
+      <p>This constant equals the smallest Lisp float value greater
+      than zero. For IEEE machines, it is about
+      <code>4.94e-324</code> if denormals are supported or
+      <code>2.22e-308</code> if not.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-cl_002dleast_002dpositive_002dnormalized_002dfloat" id=
+    "index-cl_002dleast_002dpositive_002dnormalized_002dfloat"></a>Variable:
+    <strong>cl-least-positive-normalized-float</strong></dt>
+
+    <dd>
+      <p>This constant equals the smallest <em>normalized</em> Lisp
+      float greater than zero, i.e., the smallest value for which
+      IEEE denormalization will not result in a loss of precision.
+      For IEEE machines, this value is about
+      <code>2.22e-308</code>. For machines that do not support the
+      concept of denormalization and gradual underflow, this
+      constant will always equal
+      <code>cl-least-positive-float</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dleast_002dnegative_002dfloat" id=
+    "index-cl_002dleast_002dnegative_002dfloat"></a>Variable:
+    <strong>cl-least-negative-float</strong></dt>
+
+    <dd>
+      <p>This constant is the negative counterpart of
+      <code>cl-least-positive-float</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-cl_002dleast_002dnegative_002dnormalized_002dfloat" id=
+    "index-cl_002dleast_002dnegative_002dnormalized_002dfloat"></a>Variable:
+    <strong>cl-least-negative-normalized-float</strong></dt>
+
+    <dd>
+      <p>This constant is the negative counterpart of
+      <code>cl-least-positive-normalized-float</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dfloat_002depsilon" id=
+    "index-cl_002dfloat_002depsilon"></a>Variable:
+    <strong>cl-float-epsilon</strong></dt>
+
+    <dd>
+      <p>This constant is the smallest positive Lisp float that can
+      be added to 1.0 to produce a distinct value. Adding a smaller
+      number to 1.0 will yield 1.0 again due to roundoff. For IEEE
+      machines, epsilon is about <code>2.22e-16</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dfloat_002dnegative_002depsilon" id=
+    "index-cl_002dfloat_002dnegative_002depsilon"></a>Variable:
+    <strong>cl-float-negative-epsilon</strong></dt>
+
+    <dd>
+      <p>This is the smallest positive value that can be subtracted
+      from 1.0 to produce a distinct value. For IEEE machines, it
+      is about <code>1.11e-16</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Random-Numbers.html#Random-Numbers"
+    accesskey="p" rel="prev">Random Numbers</a>, Up: <a href=
+    "Numbers.html#Numbers" accesskey="u" rel="up">Numbers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

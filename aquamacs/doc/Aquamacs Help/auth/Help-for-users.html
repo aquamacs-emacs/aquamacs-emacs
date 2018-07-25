@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Help for users - Emacs auth-source Library 0.2</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Emacs auth-source Library 0.2">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Overview.html#Overview" title="Overview">
-<link rel="next" href="Secret-Service-API.html#Secret-Service-API" title="Secret Service API">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Help for users - Emacs auth-source Library 0.2</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Emacs auth-source Library 0.2" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Overview.html#Overview" title=
+  "Overview" />
+  <link rel="next" href=
+  "Secret-Service-API.html#Secret-Service-API" title=
+  "Secret Service API" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file describes the Emacs auth-source library.
 
 Copyright (C) 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -31,8 +41,10 @@ Copyright (C) 2008, 2009, 2010 Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,136 +54,170 @@ Copyright (C) 2008, 2009, 2010 Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Help-for-users"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Secret-Service-API.html#Secret-Service-API">Secret Service API</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Overview.html#Overview">Overview</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Help-for-users" id="Help-for-users"></a>
 
-<h2 class="chapter">2 Help for users</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Secret-Service-API.html#Secret-Service-API">Secret Service
+    API</a>, Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Overview.html#Overview">Overview</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>&ldquo;Netrc&rdquo; files are a de facto standard.  They look like this:
-<pre class="example">     machine <var>mymachine</var> login <var>myloginname</var> password <var>mypassword</var> port <var>myport</var>
+  <h2 class="chapter">2 Help for users</h2>
+
+  <p>&ldquo;Netrc&rdquo; files are a de facto standard. They look
+  like this:</p>
+  <pre class="example">
+     machine <var>mymachine</var> login <var>myloginname</var> password <var>mypassword</var> port <var>myport</var>
 </pre>
-   <p>The machine is the server (either a DNS name or an IP address).
 
-   <p>The port is optional.  If it's missing, auth-source will assume any
-port is OK.  Actually the port is a protocol name or a port number so
-you can have separate entries for port <var>143</var> and for protocol
-<var>imap</var> if you fancy that.  Anyway, you can just omit the port if
-you don't need it.
+  <p>The machine is the server (either a DNS name or an IP
+  address).</p>
 
-   <p>The login and password are simply your login credentials to the server.
+  <p>The port is optional. If it's missing, auth-source will assume
+  any port is OK. Actually the port is a protocol name or a port
+  number so you can have separate entries for port <var>143</var>
+  and for protocol <var>imap</var> if you fancy that. Anyway, you
+  can just omit the port if you don't need it.</p>
 
-   <p>&ldquo;Netrc&rdquo; files are usually called <code>.authinfo</code> or <code>.netrc</code>;
-nowadays <code>.authinfo</code> seems to be more popular and the auth-source
-library encourages this confusion by making it the default, as you'll
-see later.
+  <p>The login and password are simply your login credentials to
+  the server.</p>
 
-   <p>If you have problems with the port, set <code>auth-source-debug</code> to
-<code>t</code> and see what port the library is checking in the
-<code>*Messages*</code> buffer.  Ditto for any other problems, your first
-step is always to see what's being checked.  The second step, of
-course, is to write a blog entry about it and wait for the answer in
-the comments.
+  <p>&ldquo;Netrc&rdquo; files are usually called
+  <code>.authinfo</code> or <code>.netrc</code>; nowadays
+  <code>.authinfo</code> seems to be more popular and the
+  auth-source library encourages this confusion by making it the
+  default, as you'll see later.</p>
 
-   <p>You can customize the variable <code>auth-sources</code>.  The following may
-be needed if you are using an older version of Emacs or if the
-auth-source library is not loaded for some other reason.
+  <p>If you have problems with the port, set
+  <code>auth-source-debug</code> to <code>t</code> and see what
+  port the library is checking in the <code>*Messages*</code>
+  buffer. Ditto for any other problems, your first step is always
+  to see what's being checked. The second step, of course, is to
+  write a blog entry about it and wait for the answer in the
+  comments.</p>
 
-<pre class="lisp">     (require 'auth-source)             ;; probably not necessary
+  <p>You can customize the variable <code>auth-sources</code>. The
+  following may be needed if you are using an older version of
+  Emacs or if the auth-source library is not loaded for some other
+  reason.</p>
+  <pre class="lisp">
+     (require 'auth-source)             ;; probably not necessary
      (customize-variable 'auth-sources) ;; optional, do it once
 </pre>
-   <div class="defun">
-&mdash; Variable: <b>auth-sources</b><var><a name="index-auth_002dsources-1"></a></var><br>
-<blockquote>
-        <p>The <code>auth-sources</code> variable tells the auth-source library where
-your netrc files or Secret Service API collection items live for a
-particular host and protocol.  While you can get fancy, the default
-and simplest configuration is:
 
-     <pre class="lisp">          ;;; old default: required :host and :protocol, not needed anymore
+  <div class="defun">
+    &mdash; Variable: <b>auth-sources</b><var><a name=
+    "index-auth_002dsources-1" id=
+    "index-auth_002dsources-1"></a></var><br />
+
+    <blockquote>
+      <p>The <code>auth-sources</code> variable tells the
+      auth-source library where your netrc files or Secret Service
+      API collection items live for a particular host and protocol.
+      While you can get fancy, the default and simplest
+      configuration is:</p>
+      <pre class="lisp">
+          ;;; old default: required :host and :protocol, not needed anymore
           (setq auth-sources '((:source "~/.authinfo.gpg" :host t :protocol t)))
           ;;; mostly equivalent (see below about fallbacks) but shorter:
           (setq auth-sources '((:source "~/.authinfo.gpg")))
 </pre>
-        <p>This says &ldquo;for any host and any protocol, use just that one file.&rdquo;
-Sweet simplicity.  In fact, the latter is already the default, so
-unless you want to move your netrc file, it will just work if you have
-that file.  Make sure it exists.
 
-        <p>By adding multiple entries to <code>auth-sources</code> with a particular
-host or protocol, you can have specific netrc files for that host or
-protocol.  Usually this is unnecessary but may make sense if you have
-shared netrc files or some other unusual setup (90% of Emacs users
-have unusual setups and the remaining 10% are <em>really</em> unusual).
+      <p>This says &ldquo;for any host and any protocol, use just
+      that one file.&rdquo; Sweet simplicity. In fact, the latter
+      is already the default, so unless you want to move your netrc
+      file, it will just work if you have that file. Make sure it
+      exists.</p>
 
-        <p>Here's an example that uses the Secret Service API for all lookups,
-using the default collection:
+      <p>By adding multiple entries to <code>auth-sources</code>
+      with a particular host or protocol, you can have specific
+      netrc files for that host or protocol. Usually this is
+      unnecessary but may make sense if you have shared netrc files
+      or some other unusual setup (90% of Emacs users have unusual
+      setups and the remaining 10% are <em>really</em>
+      unusual).</p>
 
-     <pre class="lisp">          (setq auth-sources '((:source (:secrets default))))
+      <p>Here's an example that uses the Secret Service API for all
+      lookups, using the default collection:</p>
+      <pre class="lisp">
+          (setq auth-sources '((:source (:secrets default))))
 </pre>
-        <p>And here's a mixed example, using two sources:
 
-     <pre class="lisp">          (setq auth-sources '((:source (:secrets default) :host "myserver" :user "joe")
+      <p>And here's a mixed example, using two sources:</p>
+      <pre class="lisp">
+          (setq auth-sources '((:source (:secrets default) :host "myserver" :user "joe")
                                (:source "~/.authinfo.gpg")))
 </pre>
-        <p>The best match is determined by order (starts from the bottom) only
-for the first pass, where things are checked exactly.  In the example
-above, the first pass would find a single match for host
-<code>myserver</code>.  The netrc choice would fail because it matches any
-host and protocol implicitly (as a <em>fallback</em>).  A specified
-value of <code>:host t</code> in <code>auth-sources</code> is considered a match
-on the first pass, unlike a missing <code>:host</code>.
 
-        <p>Now if you look for host <code>missing</code>, it won't match either source
-explicitly.  The second pass (the <em>fallback</em> pass) will look at
-all the implicit matches and collect them.  They will be scored and
-returned sorted by score.  The score is based on the number of
-explicit parameters that matched. See the <code>auth-pick</code> function
-for details.
+      <p>The best match is determined by order (starts from the
+      bottom) only for the first pass, where things are checked
+      exactly. In the example above, the first pass would find a
+      single match for host <code>myserver</code>. The netrc choice
+      would fail because it matches any host and protocol
+      implicitly (as a <em>fallback</em>). A specified value of
+      <code>:host t</code> in <code>auth-sources</code> is
+      considered a match on the first pass, unlike a missing
+      <code>:host</code>.</p>
 
-        </blockquote></div>
+      <p>Now if you look for host <code>missing</code>, it won't
+      match either source explicitly. The second pass (the
+      <em>fallback</em> pass) will look at all the implicit matches
+      and collect them. They will be scored and returned sorted by
+      score. The score is based on the number of explicit
+      parameters that matched. See the <code>auth-pick</code>
+      function for details.</p>
+    </blockquote>
+  </div>
 
-   <p>If you don't customize <code>auth-sources</code>, you'll have to live with
-the defaults: any host and any port are looked up in the netrc
-file <code>~/.authinfo.gpg</code>, which is a GnuPG encrypted file
-(see <a href="GnuPG-and-EasyPG-Assistant-Configuration.html#GnuPG-and-EasyPG-Assistant-Configuration">GnuPG and EasyPG Assistant Configuration</a>).
+  <p>If you don't customize <code>auth-sources</code>, you'll have
+  to live with the defaults: any host and any port are looked up in
+  the netrc file <code>~/.authinfo.gpg</code>, which is a GnuPG
+  encrypted file (see <a href=
+  "GnuPG-and-EasyPG-Assistant-Configuration.html#GnuPG-and-EasyPG-Assistant-Configuration">
+  GnuPG and EasyPG Assistant Configuration</a>).</p>
 
-   <p>The simplest working netrc line example is one without a port.
-
-<pre class="example">     machine YOURMACHINE login YOU password YOURPASSWORD
+  <p>The simplest working netrc line example is one without a
+  port.</p>
+  <pre class="example">
+     machine YOURMACHINE login YOU password YOURPASSWORD
 </pre>
-   <p>This will match any authentication port.  Simple, right?  But what if
-there's a SMTP server on port 433 of that machine that needs a
-different password from the IMAP server?
 
-<pre class="example">     machine YOURMACHINE login YOU password SMTPPASSWORD port 433
+  <p>This will match any authentication port. Simple, right? But
+  what if there's a SMTP server on port 433 of that machine that
+  needs a different password from the IMAP server?</p>
+  <pre class="example">
+     machine YOURMACHINE login YOU password SMTPPASSWORD port 433
      machine YOURMACHINE login YOU password GENERALPASSWORD
 </pre>
-   <p>For url-auth authentication (HTTP/HTTPS), you need to put this in your
-netrc file:
 
-<pre class="example">     machine yourmachine.com:80 port http login testuser password testpass
+  <p>For url-auth authentication (HTTP/HTTPS), you need to put this
+  in your netrc file:</p>
+  <pre class="example">
+     machine yourmachine.com:80 port http login testuser password testpass
 </pre>
-   <p>This will match any realm and authentication method (basic or digest)
-over HTTP.  HTTPS is set up similarly.  If you want finer controls,
-explore the url-auth source code and variables.
 
-   <p>For Tramp authentication, use:
+  <p>This will match any realm and authentication method (basic or
+  digest) over HTTP. HTTPS is set up similarly. If you want finer
+  controls, explore the url-auth source code and variables.</p>
 
-<pre class="example">     machine yourmachine.com port scp login testuser password testpass
+  <p>For Tramp authentication, use:</p>
+  <pre class="example">
+     machine yourmachine.com port scp login testuser password testpass
 </pre>
-   <p>Note that the port denotes the Tramp connection method.  When you
-don't use a port entry, you match any Tramp method, as explained
-earlier.  Since Tramp has about 88 connection methods, this may be
-necessary if you have an unusual (see earlier comment on those) setup.
 
-   </body></html>
-
+  <p>Note that the port denotes the Tramp connection method. When
+  you don't use a port entry, you match any Tramp method, as
+  explained earlier. Since Tramp has about 88 connection methods,
+  this may be necessary if you have an unusual (see earlier comment
+  on those) setup.</p>
+</body>
+</html>

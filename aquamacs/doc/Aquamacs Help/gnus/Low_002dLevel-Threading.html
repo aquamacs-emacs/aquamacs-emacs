@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Low-Level Threading - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Customizing-Threading.html#Customizing-Threading" title="Customizing Threading">
-<link rel="prev" href="More-Threading.html#More-Threading" title="More Threading">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Low-Level Threading - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Customizing-Threading.html#Customizing-Threading" title=
+  "Customizing Threading" />
+  <link rel="prev" href="More-Threading.html#More-Threading" title=
+  "More Threading" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,32 +47,50 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Low-Level-Threading"></a>
-<a name="Low_002dLevel-Threading"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="More-Threading.html#More-Threading">More Threading</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Customizing-Threading.html#Customizing-Threading">Customizing Threading</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Low-Level-Threading" id="Low-Level-Threading"></a>
+    <a name="Low_002dLevel-Threading" id=
+    "Low_002dLevel-Threading"></a>
 
-<h5 class="subsubsection">3.9.1.4 Low-Level Threading</h5>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "More-Threading.html#More-Threading">More Threading</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Customizing-Threading.html#Customizing-Threading">Customizing
+    Threading</a></p>
+    <hr />
+  </div>
 
-     <dl>
-<dt><code>gnus-parse-headers-hook</code><dd><a name="index-gnus_002dparse_002dheaders_002dhook-974"></a>Hook run before parsing any headers.
+  <h5 class="subsubsection">3.9.1.4 Low-Level Threading</h5>
 
-     <br><dt><code>gnus-alter-header-function</code><dd><a name="index-gnus_002dalter_002dheader_002dfunction-975"></a>If non-<code>nil</code>, this function will be called to allow alteration of
-article header structures.  The function is called with one parameter,
-the article header vector, which it may alter in any way.  For instance,
-if you have a mail-to-news gateway which alters the <code>Message-ID</code>s
-in systematic ways (by adding prefixes and such), you can use this
-variable to un-scramble the <code>Message-ID</code>s so that they are more
-meaningful.  Here's one example:
+  <dl>
+    <dt><code>gnus-parse-headers-hook</code></dt>
 
-     <pre class="lisp">          (setq gnus-alter-header-function 'my-alter-message-id)
+    <dd><a name="index-gnus_002dparse_002dheaders_002dhook-974" id=
+    "index-gnus_002dparse_002dheaders_002dhook-974"></a>Hook run
+    before parsing any headers.<br /></dd>
+
+    <dt><code>gnus-alter-header-function</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dalter_002dheader_002dfunction-975"
+      id="index-gnus_002dalter_002dheader_002dfunction-975"></a>If
+      non-<code>nil</code>, this function will be called to allow
+      alteration of article header structures. The function is
+      called with one parameter, the article header vector, which
+      it may alter in any way. For instance, if you have a
+      mail-to-news gateway which alters the
+      <code>Message-ID</code>s in systematic ways (by adding
+      prefixes and such), you can use this variable to un-scramble
+      the <code>Message-ID</code>s so that they are more
+      meaningful. Here's one example:
+      <pre class="lisp">
+          (setq gnus-alter-header-function 'my-alter-message-id)
           
           (defun my-alter-message-id (header)
             (let ((id (mail-header-id header)))
@@ -70,7 +100,7 @@ meaningful.  Here's one example:
                  (concat (match-string 1 id) "@" (match-string 2 id))
                  header))))
 </pre>
-     </dl>
-
-   </body></html>
-
+    </dd>
+  </dl>
+</body>
+</html>

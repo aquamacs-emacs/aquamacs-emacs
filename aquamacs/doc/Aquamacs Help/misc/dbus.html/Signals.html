@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,210 +14,283 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Using of D-Bus: Signals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Using of D-Bus: Signals">
-<meta name="keywords" content="Using of D-Bus: Signals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Alternative-Buses.html#Alternative-Buses" rel="next" title="Alternative Buses">
-<link href="Receiving-Method-Calls.html#Receiving-Method-Calls" rel="prev" title="Receiving Method Calls">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Using of D-Bus: Signals</title>
+  <meta name="description" content="Using of D-Bus: Signals" />
+  <meta name="keywords" content="Using of D-Bus: Signals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Alternative-Buses.html#Alternative-Buses" rel="next"
+  title="Alternative Buses" />
+  <link href="Receiving-Method-Calls.html#Receiving-Method-Calls"
+  rel="prev" title="Receiving Method Calls" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Signals"></a>
-<div class="header">
-<p>
-Next: <a href="Alternative-Buses.html#Alternative-Buses" accesskey="n" rel="next">Alternative Buses</a>, Previous: <a href="Receiving-Method-Calls.html#Receiving-Method-Calls" accesskey="p" rel="prev">Receiving Method Calls</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sending-and-receiving-signals_002e"></a>
-<h2 class="chapter">7 Sending and receiving signals.</h2>
-<a name="index-signals"></a>
+<body lang="en" xml:lang="en">
+  <a name="Signals" id="Signals"></a>
 
-<p>Signals are one way messages.  They carry input parameters, which are
-received by all objects which have registered for such a signal.
-</p>
-<dl>
-<dt><a name="index-dbus_002dsend_002dsignal"></a>Function: <strong>dbus-send-signal</strong> <em>bus service path interface signal &amp;rest args</em></dt>
-<dd><p>This function is similar to <code>dbus-call-method</code>.  The difference
-is, that there are no returning output parameters.
-</p>
-<p>The function emits <var>signal</var> on the D-Bus <var>bus</var>.  <var>bus</var> is
-either the symbol <code>:system</code> or the symbol <code>:session</code>.  It
-doesn&rsquo;t matter whether another object has registered for <var>signal</var>.
-</p>
-<p>Signals can be unicast or broadcast messages.  For broadcast messages,
-<var>service</var> must be <code>nil</code>.  Otherwise, <var>service</var> is the
-D-Bus service name the signal is sent to as unicast
-message.<a name="DOCF6" href="#FOOT6"><sup>6</sup></a>  <var>path</var> is the D-Bus object path
-<var>signal</var> is sent from.  <var>interface</var> is an interface available
-at <var>path</var>.  It must provide <var>signal</var>.
-</p>
-<p>All other arguments args are passed to <var>signal</var> as arguments.
-They are converted into D-Bus types as described in <a href="Type-Conversion.html#Type-Conversion">Type Conversion</a>.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-send-signal
+  <div class="header">
+    <p>Next: <a href="Alternative-Buses.html#Alternative-Buses"
+    accesskey="n" rel="next">Alternative Buses</a>, Previous:
+    <a href="Receiving-Method-Calls.html#Receiving-Method-Calls"
+    accesskey="p" rel="prev">Receiving Method Calls</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sending-and-receiving-signals_002e" id=
+  "Sending-and-receiving-signals_002e"></a>
+
+  <h2 class="chapter">7 Sending and receiving signals.</h2><a name=
+  "index-signals" id="index-signals"></a>
+
+  <p>Signals are one way messages. They carry input parameters,
+  which are received by all objects which have registered for such
+  a signal.</p>
+
+  <dl>
+    <dt><a name="index-dbus_002dsend_002dsignal" id=
+    "index-dbus_002dsend_002dsignal"></a>Function:
+    <strong>dbus-send-signal</strong> <em>bus service path
+    interface signal &amp;rest args</em></dt>
+
+    <dd>
+      <p>This function is similar to <code>dbus-call-method</code>.
+      The difference is, that there are no returning output
+      parameters.</p>
+
+      <p>The function emits <var>signal</var> on the D-Bus
+      <var>bus</var>. <var>bus</var> is either the symbol
+      <code>:system</code> or the symbol <code>:session</code>. It
+      doesn&rsquo;t matter whether another object has registered
+      for <var>signal</var>.</p>
+
+      <p>Signals can be unicast or broadcast messages. For
+      broadcast messages, <var>service</var> must be
+      <code>nil</code>. Otherwise, <var>service</var> is the D-Bus
+      service name the signal is sent to as unicast
+      message.<a name="DOCF6" href="#FOOT6" id=
+      "DOCF6"><sup>6</sup></a> <var>path</var> is the D-Bus object
+      path <var>signal</var> is sent from. <var>interface</var> is
+      an interface available at <var>path</var>. It must provide
+      <var>signal</var>.</p>
+
+      <p>All other arguments args are passed to <var>signal</var>
+      as arguments. They are converted into D-Bus types as
+      described in <a href=
+      "Type-Conversion.html#Type-Conversion">Type Conversion</a>.
+      Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-send-signal
   :session nil dbus-path-emacs
-  (concat dbus-interface-emacs &quot;.FileManager&quot;) &quot;FileModified&quot;
-  &quot;/home/albinus/.emacs&quot;)
-</pre></div>
-</dd></dl>
+  (concat dbus-interface-emacs ".FileManager") "FileModified"
+  "/home/albinus/.emacs")
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-dbus_002dregister_002dsignal"></a>Function: <strong>dbus-register-signal</strong> <em>bus service path interface signal handler &amp;rest args</em></dt>
-<dd><p>With this function, an application registers for a signal on the D-Bus
-<var>bus</var>.
-</p>
-<p><var>bus</var> is either the symbol <code>:system</code> or the symbol
-<code>:session</code>.
-</p>
-<p><var>service</var> is the D-Bus service name used by the sending D-Bus
-object.  It can be either a known name or the unique name of the D-Bus
-object sending the signal.  A known name will be mapped onto the
-unique name of the object, owning <var>service</var> at registration time.
-When the corresponding D-Bus object disappears, signals won&rsquo;t be
-received any longer.
-</p>
-<p><var>path</var> is the corresponding D-Bus object path, <var>service</var> is
-registered at.  <var>interface</var> is an interface offered by
-<var>service</var>.  It must provide <var>signal</var>.
-</p>
-<p><var>service</var>, <var>path</var>, <var>interface</var> and <var>signal</var> can be
-<code>nil</code>.  This is interpreted as a wildcard for the respective
-argument.
-</p>
-<p><var>handler</var> is a Lisp function to be called when the <var>signal</var> is
-received.  It must accept as arguments the output parameters
-<var>signal</var> is sending.
-</p>
-<p>The remaining arguments <var>args</var> can be keywords or keyword string
-pairs.<a name="DOCF7" href="#FOOT7"><sup>7</sup></a>  The meaning
-is as follows:
-</p>
-<ul>
-<li> <code>:argN</code> <var>string</var>:<br>
-<code>:pathN</code> <var>string</var>:<br>
-This stands for the Nth argument of the signal.  <code>:pathN</code>
-arguments can be used for object path wildcard matches as specified by
-D-Bus, while an <code>:argN</code> argument requires an exact match.
+  <dl>
+    <dt><a name="index-dbus_002dregister_002dsignal" id=
+    "index-dbus_002dregister_002dsignal"></a>Function:
+    <strong>dbus-register-signal</strong> <em>bus service path
+    interface signal handler &amp;rest args</em></dt>
 
-</li><li> <code>:arg-namespace</code> <var>string</var>:<br>
-Register for the signals, which first argument defines the service or
-interface namespace <var>string</var>.
+    <dd>
+      <p>With this function, an application registers for a signal
+      on the D-Bus <var>bus</var>.</p>
 
-</li><li> <code>:path-namespace</code> <var>string</var>:<br>
-Register for the object path namespace <var>string</var>.  All signals sent
-from an object path, which has <var>string</var> as the preceding string,
-are matched.  This requires <var>path</var> to be <code>nil</code>.
+      <p><var>bus</var> is either the symbol <code>:system</code>
+      or the symbol <code>:session</code>.</p>
 
-</li><li> <code>:eavesdrop</code>:<br>
-Register for unicast signals which are not directed to the D-Bus
-object Emacs is registered at D-Bus BUS, if the security policy of BUS
-allows this.  Otherwise, this argument is ignored.
-</li></ul>
+      <p><var>service</var> is the D-Bus service name used by the
+      sending D-Bus object. It can be either a known name or the
+      unique name of the D-Bus object sending the signal. A known
+      name will be mapped onto the unique name of the object,
+      owning <var>service</var> at registration time. When the
+      corresponding D-Bus object disappears, signals won&rsquo;t be
+      received any longer.</p>
 
-<p><code>dbus-register-signal</code> returns a Lisp object, which can be used
-as argument in <code>dbus-unregister-object</code> for removing the
-registration for <var>signal</var>.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(defun my-dbus-signal-handler (device)
-  (message &quot;Device %s added&quot; device))
+      <p><var>path</var> is the corresponding D-Bus object path,
+      <var>service</var> is registered at. <var>interface</var> is
+      an interface offered by <var>service</var>. It must provide
+      <var>signal</var>.</p>
+
+      <p><var>service</var>, <var>path</var>, <var>interface</var>
+      and <var>signal</var> can be <code>nil</code>. This is
+      interpreted as a wildcard for the respective argument.</p>
+
+      <p><var>handler</var> is a Lisp function to be called when
+      the <var>signal</var> is received. It must accept as
+      arguments the output parameters <var>signal</var> is
+      sending.</p>
+
+      <p>The remaining arguments <var>args</var> can be keywords or
+      keyword string pairs.<a name="DOCF7" href="#FOOT7" id=
+      "DOCF7"><sup>7</sup></a> The meaning is as follows:</p>
+
+      <ul>
+        <li><code>:argN</code> <var>string</var>:<br />
+        <code>:pathN</code> <var>string</var>:<br />
+        This stands for the Nth argument of the signal.
+        <code>:pathN</code> arguments can be used for object path
+        wildcard matches as specified by D-Bus, while an
+        <code>:argN</code> argument requires an exact match.</li>
+
+        <li><code>:arg-namespace</code> <var>string</var>:<br />
+        Register for the signals, which first argument defines the
+        service or interface namespace <var>string</var>.</li>
+
+        <li><code>:path-namespace</code> <var>string</var>:<br />
+        Register for the object path namespace <var>string</var>.
+        All signals sent from an object path, which has
+        <var>string</var> as the preceding string, are matched.
+        This requires <var>path</var> to be <code>nil</code>.</li>
+
+        <li><code>:eavesdrop</code>:<br />
+        Register for unicast signals which are not directed to the
+        D-Bus object Emacs is registered at D-Bus BUS, if the
+        security policy of BUS allows this. Otherwise, this
+        argument is ignored.</li>
+      </ul>
+
+      <p><code>dbus-register-signal</code> returns a Lisp object,
+      which can be used as argument in
+      <code>dbus-unregister-object</code> for removing the
+      registration for <var>signal</var>. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(defun my-dbus-signal-handler (device)
+  (message "Device %s added" device))
 
 &rArr; my-dbus-signal-handler
 
 (dbus-register-signal
-  :system &quot;org.freedesktop.Hal&quot; &quot;/org/freedesktop/Hal/Manager&quot;
-  &quot;org.freedesktop.Hal.Manager&quot; &quot;DeviceAdded&quot;
+  :system "org.freedesktop.Hal" "/org/freedesktop/Hal/Manager"
+  "org.freedesktop.Hal.Manager" "DeviceAdded"
   'my-dbus-signal-handler)
 
-&rArr; ((:signal :system &quot;org.freedesktop.Hal.Manager&quot; &quot;DeviceAdded&quot;)
-    (&quot;org.freedesktop.Hal&quot; &quot;/org/freedesktop/Hal/Manager&quot;
+&rArr; ((:signal :system "org.freedesktop.Hal.Manager" "DeviceAdded")
+    ("org.freedesktop.Hal" "/org/freedesktop/Hal/Manager"
      my-signal-handler))
-</pre></div>
+</pre>
+      </div>
 
-<p>As we know from the introspection data of interface
-&lsquo;<samp>org.freedesktop.Hal.Manager</samp>&rsquo;, the signal &lsquo;<samp>DeviceAdded</samp>&rsquo;
-provides one single parameter, which is mapped into a Lisp string.
-The callback function <code>my-dbus-signal-handler</code> must define one
-single string argument therefore.  Plugging an USB device to your
-machine, when registered for signal &lsquo;<samp>DeviceAdded</samp>&rsquo;, will show you
-which objects the GNU/Linux <code>hal</code> daemon adds.
-</p>
-<p>Some of the match rules have been added to a later version of D-Bus.
-In order to test the availability of such features, you could register
-for a dummy signal, and check the result:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-ignore-errors
+      <p>As we know from the introspection data of interface
+      &lsquo;<samp>org.freedesktop.Hal.Manager</samp>&rsquo;, the
+      signal &lsquo;<samp>DeviceAdded</samp>&rsquo; provides one
+      single parameter, which is mapped into a Lisp string. The
+      callback function <code>my-dbus-signal-handler</code> must
+      define one single string argument therefore. Plugging an USB
+      device to your machine, when registered for signal
+      &lsquo;<samp>DeviceAdded</samp>&rsquo;, will show you which
+      objects the GNU/Linux <code>hal</code> daemon adds.</p>
+
+      <p>Some of the match rules have been added to a later version
+      of D-Bus. In order to test the availability of such features,
+      you could register for a dummy signal, and check the
+      result:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-ignore-errors
   (dbus-register-signal
-    :system nil nil nil nil 'ignore :path-namespace &quot;/invalid/path&quot;))
+    :system nil nil nil nil 'ignore :path-namespace "/invalid/path"))
 
 &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <div class="footnote">
+    <hr />
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+    <h4 class="footnotes-heading">Footnotes</h4>
 
-<h3><a name="FOOT6" href="#DOCF6">(6)</a></h3>
-<p>For backward compatibility, a broadcast message is
-also emitted if <var>service</var> is the known or unique name Emacs is
-registered at D-Bus <var>bus</var>.</p>
-<h3><a name="FOOT7" href="#DOCF7">(7)</a></h3>
-<p>For backward compatibility, the arguments <var>args</var>
-can also be just strings.  They stand for the respective arguments of
-<var>signal</var> in their order, and are used for filtering as well.  A
-<code>nil</code> argument might be used to preserve the order.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Alternative-Buses.html#Alternative-Buses" accesskey="n" rel="next">Alternative Buses</a>, Previous: <a href="Receiving-Method-Calls.html#Receiving-Method-Calls" accesskey="p" rel="prev">Receiving Method Calls</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <h3><a name="FOOT6" href="#DOCF6" id="FOOT6">(6)</a></h3>
 
+    <p>For backward compatibility, a broadcast message is also
+    emitted if <var>service</var> is the known or unique name Emacs
+    is registered at D-Bus <var>bus</var>.</p>
 
+    <h3><a name="FOOT7" href="#DOCF7" id="FOOT7">(7)</a></h3>
 
+    <p>For backward compatibility, the arguments <var>args</var>
+    can also be just strings. They stand for the respective
+    arguments of <var>signal</var> in their order, and are used for
+    filtering as well. A <code>nil</code> argument might be used to
+    preserve the order.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Alternative-Buses.html#Alternative-Buses"
+    accesskey="n" rel="next">Alternative Buses</a>, Previous:
+    <a href="Receiving-Method-Calls.html#Receiving-Method-Calls"
+    accesskey="p" rel="prev">Receiving Method Calls</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-1997, 2001-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,252 +14,415 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Viper Is a Package for Emacs Rebels: File and Buffer Handling</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Viper Is a Package for Emacs Rebels: File and Buffer Handling">
-<meta name="keywords" content="Viper Is a Package for Emacs Rebels: File and Buffer Handling">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Commands.html#Commands" rel="up" title="Commands">
-<link href="Mapping.html#Mapping" rel="next" title="Mapping">
-<link href="Display.html#Display" rel="prev" title="Display">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Viper Is a Package for Emacs Rebels: File and Buffer
+  Handling</title>
+  <meta name="description" content=
+  "Viper Is a Package for Emacs Rebels: File and Buffer Handling" />
+  <meta name="keywords" content=
+  "Viper Is a Package for Emacs Rebels: File and Buffer Handling" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Commands.html#Commands" rel="up" title="Commands" />
+  <link href="Mapping.html#Mapping" rel="next" title="Mapping" />
+  <link href="Display.html#Display" rel="prev" title="Display" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="File-and-Buffer-Handling"></a>
-<div class="header">
-<p>
-Next: <a href="Mapping.html#Mapping" accesskey="n" rel="next">Mapping</a>, Previous: <a href="Display.html#Display" accesskey="p" rel="prev">Display</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="File-and-Buffer-Handling-1"></a>
-<h3 class="section">4.4 File and Buffer Handling</h3>
+<body lang="en" xml:lang="en">
+  <a name="File-and-Buffer-Handling" id=
+  "File-and-Buffer-Handling"></a>
 
-<a name="index-multiple-files-1"></a>
+  <div class="header">
+    <p>Next: <a href="Mapping.html#Mapping" accesskey="n" rel=
+    "next">Mapping</a>, Previous: <a href="Display.html#Display"
+    accesskey="p" rel="prev">Display</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="File-and-Buffer-Handling-1" id=
+  "File-and-Buffer-Handling-1"></a>
 
-<p>In all file handling commands, space should be typed before entering the file
-name.  If you need to type a modifier, such as <kbd>&gt;&gt;</kbd> or <kbd>!</kbd>, don&rsquo;t
-put any space between the command and the modifier.
-</p>
-<p>Note that many Ex commands, e.g., <kbd>:w</kbd>, accept command arguments. The
-effect is that the command would start acting on the current region. For
-instance, if the current region spans the lines 11 through 22, then if you
-type <kbd>1:w</kbd> you would see &lsquo;<samp>:11,22w</samp>&rsquo; in the minibuffer.
-</p>
-<dl compact="compact">
-<dt><kbd>:q</kbd></dt>
-<dd><p>Quit buffer except if modified.
-</p></dd>
-<dt><kbd>:q!</kbd></dt>
-<dd><p>Quit buffer without checking.  In Viper, these two commands
-are identical.  Confirmation is required if exiting modified buffers that
-visit files.
-</p></dd>
-<dt><kbd>:suspend</kbd></dt>
-<dt><kbd>:stop</kbd></dt>
-<dd><p>Suspend Viper
-</p></dd>
-<dt><kbd>:[x,y] w</kbd></dt>
-<dd><p>Write the file.  Viper makes sure that a final newline is always added to
-any file where this newline is missing.  This is done by setting Emacs
-variable <code>require-final-newline</code> to <code>t</code>.  If you don&rsquo;t like this
-feature, use <code>setq-default</code> to set <code>require-final-newline</code> to
-<code>nil</code>.  This must be done in the Viper customization file.
-</p></dd>
-<dt><kbd>:[x,y] w &lt;name&gt;</kbd></dt>
-<dd><p>Write to the file &lt;name&gt;.
-</p></dd>
-<dt><kbd>:[x,y] w&gt;&gt; &lt;name&gt;</kbd></dt>
-<dd><p>Append the buffer to the file &lt;name&gt;.  There should be no space between
-<kbd>w</kbd> and <kbd>&gt;&gt;</kbd>.  Type space after the <kbd>&gt;&gt;</kbd> and see what happens.
-</p></dd>
-<dt><kbd>:w! &lt;name&gt;</kbd></dt>
-<dd><p>Overwrite the file &lt;name&gt;.  In Viper, <kbd>:w</kbd> and <kbd>:w!</kbd> are identical.
-Confirmation is required for writing to an existing file (if this is not
-the file the buffer is visiting) or to a read-only file.
-</p></dd>
-<dt><kbd>:x,y w &lt;name&gt;</kbd></dt>
-<dd><p>Write lines x through y to the file &lt;name&gt;.
-</p></dd>
-<dt><kbd>:wq</kbd></dt>
-<dd><p>Write the file and kill buffer.
-</p></dd>
-<dt><kbd>:r &lt;file&gt; [&lt;file&gt; ...]</kbd></dt>
-<dd><p>Read file into a buffer, inserting its contents after the current line.
-</p></dd>
-<dt><kbd>:xit</kbd></dt>
-<dd><p>Same as <kbd>:wq</kbd>.
-</p></dd>
-<dt><kbd>:Write</kbd></dt>
-<dt><kbd>:W</kbd></dt>
-<dd><p>Save all unsaved buffers, asking for confirmation.
-</p></dd>
-<dt><kbd>:WWrite</kbd></dt>
-<dt><kbd>:WW</kbd></dt>
-<dd><p>Like <kbd>W</kbd>, but without asking for confirmation.
-</p></dd>
-<dt><kbd>ZZ</kbd></dt>
-<dd><p>Save current buffer and kill it.  If user level is 1, then save all files
-and kill Emacs.  Killing Emacs is the wrong way to use it, so you should
-switch to higher user levels as soon as possible.
-</p></dd>
-<dt><kbd>:x [&lt;file&gt;]</kbd></dt>
-<dd><p>Save and kill buffer.
-</p></dd>
-<dt><kbd>:x! [&lt;file&gt;]</kbd></dt>
-<dd><p><kbd>:w![&lt;file&gt;]</kbd> and <kbd>:q</kbd>.
-</p></dd>
-<dt><kbd>:pre</kbd></dt>
-<dd><p>Preserve the file&mdash;autosave buffers.
-</p></dd>
-<dt><kbd>:rec</kbd></dt>
-<dd><p>Recover file from autosave.
-</p></dd>
-<dt><kbd>:f [&lt;file&gt;]</kbd></dt>
-<dd><p>without the argument, prints file name and character/line information afout
-the currently visited file. With an argument, sets the currently visited
-filename to <samp>file</samp>.
-</p></dd>
-<dt><kbd>:cd [&lt;dir&gt;]</kbd></dt>
-<dd><p>Set the working directory to &lt;dir&gt; (default home directory).
-</p></dd>
-<dt><kbd>:pwd</kbd></dt>
-<dd><p>Print present working directory.
-</p></dd>
-<dt><kbd>:e [+&lt;cmd&gt;] &lt;files&gt;</kbd></dt>
-<dd><p>Edit files.  If no filename is given, edit the file visited by the current
-buffer.  If buffer was modified or the file changed on disk, ask for
-confirmation.  Unlike Vi, Viper allows <kbd>:e</kbd> to take multiple arguments.
-The first file is edited the same way as in Vi.  The rest are visited
-in the usual Emacs way.
-</p></dd>
-<dt><kbd>:e! [+&lt;cmd&gt;] &lt;files&gt;</kbd></dt>
-<dd><p>Re-edit file.  If no filename, re-edit current file.
-In Viper, unlike Vi, <kbd>e!</kbd> is identical to <kbd>:e</kbd>.  In both cases, the
-user is asked to confirm if there is a danger of discarding changes to a
-buffer.
-</p></dd>
-<dt><kbd>:q!</kbd></dt>
-<dd><p>Quit Vi without writing.
-</p></dd>
-<dt><kbd>C-^</kbd></dt>
-<dd><p>Edit the alternate (normally the previous) file.
-</p></dd>
-<dt><kbd>:rew</kbd></dt>
-<dd><p>Obsolete
-</p></dd>
-<dt><kbd>:args</kbd></dt>
-<dd><p>List files not shown anywhere with counts for next
-</p></dd>
-<dt><kbd>:n [count]  [+&lt;cmd&gt;] [&lt;files&gt;]</kbd></dt>
-<dd><p>Edit &lt;count&gt; file, or edit files.  The count comes from <kbd>:args</kbd>.
-</p></dd>
-<dt><kbd>:N [count] [+&lt;cmd&gt;] [&lt;files&gt;]</kbd></dt>
-<dd><p>Like <kbd>:n</kbd>, but the meaning of the variable
-<var>ex-cycle-other-window</var> is reversed.
-</p></dd>
-<dt><kbd>:b</kbd></dt>
-<dd><p>Switch to another buffer.  If <var>ex-cycle-other-window</var> is <code>t</code>,
-switch in another window.  Buffer completion is supported.
-The variable <var>viper-read-buffer-function</var> controls which function is
-actually used to read the buffer name. The default is <code>read-buffer</code>,
-but better alternatives are also available in Emacs (e.g.,
-<code>ido-read-buffer</code>).
-<a name="index-viper_002dread_002dbuffer_002dfunction"></a>
-</p></dd>
-<dt><kbd>:B</kbd></dt>
-<dd><p>Like <kbd>:b</kbd>, but the meaning of <var>ex-cycle-other-window</var> is reversed.
-</p></dd>
-<dt><kbd>:&lt;address&gt;r &lt;name&gt;</kbd></dt>
-<dd><p>Read the file &lt;name&gt; into the buffer after the line &lt;address&gt;.
-</p></dd>
-<dt><kbd>v, V, C-v</kbd></dt>
-<dd><p>Edit a file in current or another window, or in another frame.  File name
-is typed in minibuffer.  File completion and history are supported.
-</p></dd>
-</dl>
-<a name="index-v-1"></a>
-<a name="index-V-1"></a>
-<a name="index-Ex-args-1"></a>
-<a name="index-Ex-rew"></a>
-<a name="index-C_002d_005e"></a>
-<a name="index-Ex-e_0021-_005b_003cfiles_003e_005d"></a>
-<a name="index-Ex-e-_005b_003cfiles_003e_005d"></a>
-<a name="index-Ex-edit-_005b_003cfiles_003e_005d"></a>
-<a name="index-Ex-edit_0021-_005b_003cfiles_003e_005d"></a>
-<a name="index-Ex-q_0021-1"></a>
-<a name="index-Ex-q"></a>
-<a name="index-Ex-quit"></a>
-<a name="index-Ex-quit_0021"></a>
-<a name="index-Ex-f"></a>
-<a name="index-Ex-rec-1"></a>
-<a name="index-Ex-r"></a>
-<a name="index-Ex-read"></a>
-<a name="index-Ex-pre-1"></a>
-<a name="index-ZZ"></a>
-<a name="index-Ex-wq"></a>
-<a name="index-Ex-w-_003cfile_003e"></a>
-<a name="index-Ex-w_0021-_003cfile_003e"></a>
-<a name="index-Ex-w-_003e_003e-_003cfile_003e"></a>
-<a name="index-Ex-write-_003cfile_003e"></a>
-<a name="index-Ex-write_0021-_003cfile_003e"></a>
-<a name="index-Ex-write-_003e_003e-_003cfile_003e"></a>
-<a name="index-Ex-W"></a>
-<a name="index-Ex-WW"></a>
-<a name="index-Ex-Write"></a>
-<a name="index-Ex-WWrite"></a>
-<a name="index-Ex-WWrite-1"></a>
-<a name="index-Ex-x"></a>
-<a name="index-Ex-x_0021"></a>
-<a name="index-Ex-suspend"></a>
-<a name="index-Ex-stop"></a>
-<a name="index-Ex-n-_005b_003ccount_003e-_007c-_003cfile_003e_005d"></a>
-<a name="index-Ex-cd-_005b_003cdir_003e_005d"></a>
-<a name="index-Ex-pwd-1"></a>
+  <h3 class="section">4.4 File and Buffer Handling</h3><a name=
+  "index-multiple-files-1" id="index-multiple-files-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Mapping.html#Mapping" accesskey="n" rel="next">Mapping</a>, Previous: <a href="Display.html#Display" accesskey="p" rel="prev">Display</a>, Up: <a href="Commands.html#Commands" accesskey="u" rel="up">Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In all file handling commands, space should be typed before
+  entering the file name. If you need to type a modifier, such as
+  <kbd>&gt;&gt;</kbd> or <kbd>!</kbd>, don&rsquo;t put any space
+  between the command and the modifier.</p>
 
+  <p>Note that many Ex commands, e.g., <kbd>:w</kbd>, accept
+  command arguments. The effect is that the command would start
+  acting on the current region. For instance, if the current region
+  spans the lines 11 through 22, then if you type <kbd>1:w</kbd>
+  you would see &lsquo;<samp>:11,22w</samp>&rsquo; in the
+  minibuffer.</p>
 
+  <dl compact="compact">
+    <dt><kbd>:q</kbd></dt>
 
+    <dd>
+      <p>Quit buffer except if modified.</p>
+    </dd>
+
+    <dt><kbd>:q!</kbd></dt>
+
+    <dd>
+      <p>Quit buffer without checking. In Viper, these two commands
+      are identical. Confirmation is required if exiting modified
+      buffers that visit files.</p>
+    </dd>
+
+    <dt><kbd>:suspend</kbd></dt>
+
+    <dt><kbd>:stop</kbd></dt>
+
+    <dd>
+      <p>Suspend Viper</p>
+    </dd>
+
+    <dt><kbd>:[x,y] w</kbd></dt>
+
+    <dd>
+      <p>Write the file. Viper makes sure that a final newline is
+      always added to any file where this newline is missing. This
+      is done by setting Emacs variable
+      <code>require-final-newline</code> to <code>t</code>. If you
+      don&rsquo;t like this feature, use <code>setq-default</code>
+      to set <code>require-final-newline</code> to
+      <code>nil</code>. This must be done in the Viper
+      customization file.</p>
+    </dd>
+
+    <dt><kbd>:[x,y] w &lt;name&gt;</kbd></dt>
+
+    <dd>
+      <p>Write to the file &lt;name&gt;.</p>
+    </dd>
+
+    <dt><kbd>:[x,y] w&gt;&gt; &lt;name&gt;</kbd></dt>
+
+    <dd>
+      <p>Append the buffer to the file &lt;name&gt;. There should
+      be no space between <kbd>w</kbd> and <kbd>&gt;&gt;</kbd>.
+      Type space after the <kbd>&gt;&gt;</kbd> and see what
+      happens.</p>
+    </dd>
+
+    <dt><kbd>:w! &lt;name&gt;</kbd></dt>
+
+    <dd>
+      <p>Overwrite the file &lt;name&gt;. In Viper, <kbd>:w</kbd>
+      and <kbd>:w!</kbd> are identical. Confirmation is required
+      for writing to an existing file (if this is not the file the
+      buffer is visiting) or to a read-only file.</p>
+    </dd>
+
+    <dt><kbd>:x,y w &lt;name&gt;</kbd></dt>
+
+    <dd>
+      <p>Write lines x through y to the file &lt;name&gt;.</p>
+    </dd>
+
+    <dt><kbd>:wq</kbd></dt>
+
+    <dd>
+      <p>Write the file and kill buffer.</p>
+    </dd>
+
+    <dt><kbd>:r &lt;file&gt; [&lt;file&gt; ...]</kbd></dt>
+
+    <dd>
+      <p>Read file into a buffer, inserting its contents after the
+      current line.</p>
+    </dd>
+
+    <dt><kbd>:xit</kbd></dt>
+
+    <dd>
+      <p>Same as <kbd>:wq</kbd>.</p>
+    </dd>
+
+    <dt><kbd>:Write</kbd></dt>
+
+    <dt><kbd>:W</kbd></dt>
+
+    <dd>
+      <p>Save all unsaved buffers, asking for confirmation.</p>
+    </dd>
+
+    <dt><kbd>:WWrite</kbd></dt>
+
+    <dt><kbd>:WW</kbd></dt>
+
+    <dd>
+      <p>Like <kbd>W</kbd>, but without asking for
+      confirmation.</p>
+    </dd>
+
+    <dt><kbd>ZZ</kbd></dt>
+
+    <dd>
+      <p>Save current buffer and kill it. If user level is 1, then
+      save all files and kill Emacs. Killing Emacs is the wrong way
+      to use it, so you should switch to higher user levels as soon
+      as possible.</p>
+    </dd>
+
+    <dt><kbd>:x [&lt;file&gt;]</kbd></dt>
+
+    <dd>
+      <p>Save and kill buffer.</p>
+    </dd>
+
+    <dt><kbd>:x! [&lt;file&gt;]</kbd></dt>
+
+    <dd>
+      <p><kbd>:w![&lt;file&gt;]</kbd> and <kbd>:q</kbd>.</p>
+    </dd>
+
+    <dt><kbd>:pre</kbd></dt>
+
+    <dd>
+      <p>Preserve the file&mdash;autosave buffers.</p>
+    </dd>
+
+    <dt><kbd>:rec</kbd></dt>
+
+    <dd>
+      <p>Recover file from autosave.</p>
+    </dd>
+
+    <dt><kbd>:f [&lt;file&gt;]</kbd></dt>
+
+    <dd>
+      <p>without the argument, prints file name and character/line
+      information afout the currently visited file. With an
+      argument, sets the currently visited filename to
+      <samp>file</samp>.</p>
+    </dd>
+
+    <dt><kbd>:cd [&lt;dir&gt;]</kbd></dt>
+
+    <dd>
+      <p>Set the working directory to &lt;dir&gt; (default home
+      directory).</p>
+    </dd>
+
+    <dt><kbd>:pwd</kbd></dt>
+
+    <dd>
+      <p>Print present working directory.</p>
+    </dd>
+
+    <dt><kbd>:e [+&lt;cmd&gt;] &lt;files&gt;</kbd></dt>
+
+    <dd>
+      <p>Edit files. If no filename is given, edit the file visited
+      by the current buffer. If buffer was modified or the file
+      changed on disk, ask for confirmation. Unlike Vi, Viper
+      allows <kbd>:e</kbd> to take multiple arguments. The first
+      file is edited the same way as in Vi. The rest are visited in
+      the usual Emacs way.</p>
+    </dd>
+
+    <dt><kbd>:e! [+&lt;cmd&gt;] &lt;files&gt;</kbd></dt>
+
+    <dd>
+      <p>Re-edit file. If no filename, re-edit current file. In
+      Viper, unlike Vi, <kbd>e!</kbd> is identical to
+      <kbd>:e</kbd>. In both cases, the user is asked to confirm if
+      there is a danger of discarding changes to a buffer.</p>
+    </dd>
+
+    <dt><kbd>:q!</kbd></dt>
+
+    <dd>
+      <p>Quit Vi without writing.</p>
+    </dd>
+
+    <dt><kbd>C-^</kbd></dt>
+
+    <dd>
+      <p>Edit the alternate (normally the previous) file.</p>
+    </dd>
+
+    <dt><kbd>:rew</kbd></dt>
+
+    <dd>
+      <p>Obsolete</p>
+    </dd>
+
+    <dt><kbd>:args</kbd></dt>
+
+    <dd>
+      <p>List files not shown anywhere with counts for next</p>
+    </dd>
+
+    <dt><kbd>:n [count] [+&lt;cmd&gt;] [&lt;files&gt;]</kbd></dt>
+
+    <dd>
+      <p>Edit &lt;count&gt; file, or edit files. The count comes
+      from <kbd>:args</kbd>.</p>
+    </dd>
+
+    <dt><kbd>:N [count] [+&lt;cmd&gt;] [&lt;files&gt;]</kbd></dt>
+
+    <dd>
+      <p>Like <kbd>:n</kbd>, but the meaning of the variable
+      <var>ex-cycle-other-window</var> is reversed.</p>
+    </dd>
+
+    <dt><kbd>:b</kbd></dt>
+
+    <dd>
+      <p>Switch to another buffer. If
+      <var>ex-cycle-other-window</var> is <code>t</code>, switch in
+      another window. Buffer completion is supported. The variable
+      <var>viper-read-buffer-function</var> controls which function
+      is actually used to read the buffer name. The default is
+      <code>read-buffer</code>, but better alternatives are also
+      available in Emacs (e.g., <code>ido-read-buffer</code>).
+      <a name="index-viper_002dread_002dbuffer_002dfunction" id=
+      "index-viper_002dread_002dbuffer_002dfunction"></a></p>
+    </dd>
+
+    <dt><kbd>:B</kbd></dt>
+
+    <dd>
+      <p>Like <kbd>:b</kbd>, but the meaning of
+      <var>ex-cycle-other-window</var> is reversed.</p>
+    </dd>
+
+    <dt><kbd>:&lt;address&gt;r &lt;name&gt;</kbd></dt>
+
+    <dd>
+      <p>Read the file &lt;name&gt; into the buffer after the line
+      &lt;address&gt;.</p>
+    </dd>
+
+    <dt><kbd>v, V, C-v</kbd></dt>
+
+    <dd>
+      <p>Edit a file in current or another window, or in another
+      frame. File name is typed in minibuffer. File completion and
+      history are supported.</p>
+    </dd>
+  </dl><a name="index-v-1" id="index-v-1"></a> <a name="index-V-1"
+  id="index-V-1"></a> <a name="index-Ex-args-1" id=
+  "index-Ex-args-1"></a> <a name="index-Ex-rew" id=
+  "index-Ex-rew"></a> <a name="index-C_002d_005e" id=
+  "index-C_002d_005e"></a> <a name=
+  "index-Ex-e_0021-_005b_003cfiles_003e_005d" id=
+  "index-Ex-e_0021-_005b_003cfiles_003e_005d"></a> <a name=
+  "index-Ex-e-_005b_003cfiles_003e_005d" id=
+  "index-Ex-e-_005b_003cfiles_003e_005d"></a> <a name=
+  "index-Ex-edit-_005b_003cfiles_003e_005d" id=
+  "index-Ex-edit-_005b_003cfiles_003e_005d"></a> <a name=
+  "index-Ex-edit_0021-_005b_003cfiles_003e_005d" id=
+  "index-Ex-edit_0021-_005b_003cfiles_003e_005d"></a> <a name=
+  "index-Ex-q_0021-1" id="index-Ex-q_0021-1"></a> <a name=
+  "index-Ex-q" id="index-Ex-q"></a> <a name="index-Ex-quit" id=
+  "index-Ex-quit"></a> <a name="index-Ex-quit_0021" id=
+  "index-Ex-quit_0021"></a> <a name="index-Ex-f" id=
+  "index-Ex-f"></a> <a name="index-Ex-rec-1" id=
+  "index-Ex-rec-1"></a> <a name="index-Ex-r" id="index-Ex-r"></a>
+  <a name="index-Ex-read" id="index-Ex-read"></a> <a name=
+  "index-Ex-pre-1" id="index-Ex-pre-1"></a> <a name="index-ZZ" id=
+  "index-ZZ"></a> <a name="index-Ex-wq" id="index-Ex-wq"></a>
+  <a name="index-Ex-w-_003cfile_003e" id=
+  "index-Ex-w-_003cfile_003e"></a> <a name=
+  "index-Ex-w_0021-_003cfile_003e" id=
+  "index-Ex-w_0021-_003cfile_003e"></a> <a name=
+  "index-Ex-w-_003e_003e-_003cfile_003e" id=
+  "index-Ex-w-_003e_003e-_003cfile_003e"></a> <a name=
+  "index-Ex-write-_003cfile_003e" id=
+  "index-Ex-write-_003cfile_003e"></a> <a name=
+  "index-Ex-write_0021-_003cfile_003e" id=
+  "index-Ex-write_0021-_003cfile_003e"></a> <a name=
+  "index-Ex-write-_003e_003e-_003cfile_003e" id=
+  "index-Ex-write-_003e_003e-_003cfile_003e"></a> <a name=
+  "index-Ex-W" id="index-Ex-W"></a> <a name="index-Ex-WW" id=
+  "index-Ex-WW"></a> <a name="index-Ex-Write" id=
+  "index-Ex-Write"></a> <a name="index-Ex-WWrite" id=
+  "index-Ex-WWrite"></a> <a name="index-Ex-WWrite-1" id=
+  "index-Ex-WWrite-1"></a> <a name="index-Ex-x" id=
+  "index-Ex-x"></a> <a name="index-Ex-x_0021" id=
+  "index-Ex-x_0021"></a> <a name="index-Ex-suspend" id=
+  "index-Ex-suspend"></a> <a name="index-Ex-stop" id=
+  "index-Ex-stop"></a> <a name=
+  "index-Ex-n-_005b_003ccount_003e-_007c-_003cfile_003e_005d" id=
+  "index-Ex-n-_005b_003ccount_003e-_007c-_003cfile_003e_005d"></a>
+  <a name="index-Ex-cd-_005b_003cdir_003e_005d" id=
+  "index-Ex-cd-_005b_003cdir_003e_005d"></a> <a name=
+  "index-Ex-pwd-1" id="index-Ex-pwd-1"></a>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Mapping.html#Mapping" accesskey="n" rel=
+    "next">Mapping</a>, Previous: <a href="Display.html#Display"
+    accesskey="p" rel="prev">Display</a>, Up: <a href=
+    "Commands.html#Commands" accesskey="u" rel="up">Commands</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

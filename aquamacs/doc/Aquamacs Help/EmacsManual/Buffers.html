@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,132 +20,230 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Buffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Buffers">
-<meta name="keywords" content="GNU Emacs Manual: Buffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Select-Buffer.html#Select-Buffer" rel="next" title="Select Buffer">
-<link href="Filesets.html#Filesets" rel="prev" title="Filesets">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Buffers</title>
+  <meta name="description" content="GNU Emacs Manual: Buffers" />
+  <meta name="keywords" content="GNU Emacs Manual: Buffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Select-Buffer.html#Select-Buffer" rel="next" title=
+  "Select Buffer" />
+  <link href="Filesets.html#Filesets" rel="prev" title=
+  "Filesets" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Buffers" id="Buffers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Windows.html#Windows" accesskey="n" rel=
+    "next">Windows</a>, Previous: <a href="Files.html#Files"
+    accesskey="p" rel="prev">Files</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-Multiple-Buffers" id="Using-Multiple-Buffers"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Buffers"></a>
-<div class="header">
-<p>
-Next: <a href="Windows.html#Windows" accesskey="n" rel="next">Windows</a>, Previous: <a href="Files.html#Files" accesskey="p" rel="prev">Files</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-Multiple-Buffers"></a>
-<h2 class="chapter">19 Using Multiple Buffers</h2>
+  <h2 class="chapter">19 Using Multiple Buffers</h2><a name=
+  "index-buffers" id="index-buffers"></a>
 
-<a name="index-buffers"></a>
-<p>The text you are editing in Emacs resides in an object called a
-<em>buffer</em>.  Each time you visit a file, a buffer is used to hold
-the file&rsquo;s text.  Each time you invoke Dired, a buffer is used to hold
-the directory listing.  If you send a message with <kbd>C-x m</kbd>, a
-buffer is used to hold the text of the message.  When you ask for a
-command&rsquo;s documentation, that appears in a buffer named <samp>*Help*</samp>.
-</p>
-<p>Each buffer has a unique name, which can be of any length.  When a
-buffer is displayed in a window, its name is shown in the mode line
-(see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).  The distinction between upper and lower case
-matters in buffer names.  Most buffers are made by visiting files, and
-their names are derived from the files&rsquo; names; however, you can also
-create an empty buffer with any name you want.  A newly started Emacs
-has several buffers, including one named <samp>*scratch*</samp>, which can
-be used for evaluating Lisp expressions and is not associated with any
-file (see <a href="Lisp-Interaction.html#Lisp-Interaction">Lisp Interaction</a>).
-</p>
-<a name="index-selected-buffer"></a>
-<a name="index-current-buffer"></a>
-<p>At any time, one and only one buffer is <em>selected</em>; we call it
-the <em>current buffer</em>.  We sometimes say that a command operates on
-&ldquo;the buffer&rdquo;; this really means that it operates on the current
-buffer.  When there is only one Emacs window, the buffer displayed in
-that window is current.  When there are multiple windows, the buffer
-displayed in the <em>selected window</em> is current.  See <a href="Windows.html#Windows">Windows</a>.
-</p>
-<p>Aside from its textual contents, each buffer records several pieces
-of information, such as what file it is visiting (if any), whether it
-is modified, and what major mode and minor modes are in effect
-(see <a href="Modes.html#Modes">Modes</a>).  These are stored in <em>buffer-local
-variables</em>&mdash;variables that can have a different value in each buffer.
-See <a href="Locals.html#Locals">Locals</a>.
-</p>
-<a name="index-buffer-size_002c-maximum"></a>
-<p>A buffer&rsquo;s size cannot be larger than some maximum, which is defined
-by the largest buffer position representable by <em>Emacs integers</em>.
-This is because Emacs tracks buffer positions using that data type.
-For typical 64-bit machines, this maximum buffer size is <em>2^{61} - 2</em>
-bytes, or about 2 EiB.  For typical 32-bit machines, the maximum is
-usually <em>2^{29} - 2</em> bytes, or about 512 MiB.  Buffer sizes are
-also limited by the amount of memory in the system.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Select-Buffer.html#Select-Buffer" accesskey="1">Select Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating a new buffer or reselecting an old one.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="List-Buffers.html#List-Buffers" accesskey="2">List Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting a list of buffers that exist.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Misc-Buffer.html#Misc-Buffer" accesskey="3">Misc Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Renaming; changing read-only status; copying text.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Kill-Buffer.html#Kill-Buffer" accesskey="4">Kill Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Killing buffers you no longer need.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Several-Buffers.html#Several-Buffers" accesskey="5">Several Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to go through the list of all buffers
-                          and operate variously on several of them.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Indirect-Buffers.html#Indirect-Buffers" accesskey="6">Indirect Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An indirect buffer shares the text of another buffer.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Buffer-Convenience.html#Buffer-Convenience" accesskey="7">Buffer Convenience</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Convenience and customization features for
-                          buffer handling.
-</td></tr>
-</table>
+  <p>The text you are editing in Emacs resides in an object called
+  a <em>buffer</em>. Each time you visit a file, a buffer is used
+  to hold the file&rsquo;s text. Each time you invoke Dired, a
+  buffer is used to hold the directory listing. If you send a
+  message with <kbd>C-x m</kbd>, a buffer is used to hold the text
+  of the message. When you ask for a command&rsquo;s documentation,
+  that appears in a buffer named <samp>*Help*</samp>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Windows.html#Windows" accesskey="n" rel="next">Windows</a>, Previous: <a href="Files.html#Files" accesskey="p" rel="prev">Files</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Each buffer has a unique name, which can be of any length.
+  When a buffer is displayed in a window, its name is shown in the
+  mode line (see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).
+  The distinction between upper and lower case matters in buffer
+  names. Most buffers are made by visiting files, and their names
+  are derived from the files&rsquo; names; however, you can also
+  create an empty buffer with any name you want. A newly started
+  Emacs has several buffers, including one named
+  <samp>*scratch*</samp>, which can be used for evaluating Lisp
+  expressions and is not associated with any file (see <a href=
+  "Lisp-Interaction.html#Lisp-Interaction">Lisp
+  Interaction</a>).</p><a name="index-selected-buffer" id=
+  "index-selected-buffer"></a> <a name="index-current-buffer" id=
+  "index-current-buffer"></a>
 
+  <p>At any time, one and only one buffer is <em>selected</em>; we
+  call it the <em>current buffer</em>. We sometimes say that a
+  command operates on &ldquo;the buffer&rdquo;; this really means
+  that it operates on the current buffer. When there is only one
+  Emacs window, the buffer displayed in that window is current.
+  When there are multiple windows, the buffer displayed in the
+  <em>selected window</em> is current. See <a href=
+  "Windows.html#Windows">Windows</a>.</p>
 
+  <p>Aside from its textual contents, each buffer records several
+  pieces of information, such as what file it is visiting (if any),
+  whether it is modified, and what major mode and minor modes are
+  in effect (see <a href="Modes.html#Modes">Modes</a>). These are
+  stored in <em>buffer-local variables</em>&mdash;variables that
+  can have a different value in each buffer. See <a href=
+  "Locals.html#Locals">Locals</a>.</p><a name=
+  "index-buffer-size_002c-maximum" id=
+  "index-buffer-size_002c-maximum"></a>
 
+  <p>A buffer&rsquo;s size cannot be larger than some maximum,
+  which is defined by the largest buffer position representable by
+  <em>Emacs integers</em>. This is because Emacs tracks buffer
+  positions using that data type. For typical 64-bit machines, this
+  maximum buffer size is <em>2^{61} - 2</em> bytes, or about 2 EiB.
+  For typical 32-bit machines, the maximum is usually <em>2^{29} -
+  2</em> bytes, or about 512 MiB. Buffer sizes are also limited by
+  the amount of memory in the system.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Select-Buffer.html#Select-Buffer" accesskey="1">Select
+      Buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Creating a new buffer or
+      reselecting an old one.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "List-Buffers.html#List-Buffers" accesskey="2">List
+      Buffers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Getting a list of buffers that
+      exist.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Misc-Buffer.html#Misc-Buffer" accesskey="3">Misc
+      Buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Renaming; changing read-only
+      status; copying text.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Kill-Buffer.html#Kill-Buffer" accesskey="4">Kill
+      Buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Killing buffers you no longer
+      need.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Several-Buffers.html#Several-Buffers" accesskey="5">Several
+      Buffers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to go through the list of
+      all buffers and operate variously on several of them.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Indirect-Buffers.html#Indirect-Buffers" accesskey=
+      "6">Indirect Buffers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">An indirect buffer shares the
+      text of another buffer.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Buffer-Convenience.html#Buffer-Convenience" accesskey=
+      "7">Buffer Convenience</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Convenience and customization
+      features for buffer handling.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Windows.html#Windows" accesskey="n" rel=
+    "next">Windows</a>, Previous: <a href="Files.html#Files"
+    accesskey="p" rel="prev">Files</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

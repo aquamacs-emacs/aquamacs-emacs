@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -15,96 +17,126 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Flymake 0.3: Determining whether syntax check is possible</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Flymake 0.3: Determining whether syntax check is possible">
-<meta name="keywords" content="GNU Flymake 0.3: Determining whether syntax check is possible">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Flymake-Implementation.html#Flymake-Implementation" rel="up" title="Flymake Implementation">
-<link href="Making-a-temporary-copy.html#Making-a-temporary-copy" rel="next" title="Making a temporary copy">
-<link href="Flymake-Implementation.html#Flymake-Implementation" rel="prev" title="Flymake Implementation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Flymake 0.3: Determining whether syntax check is
+  possible</title>
+  <meta name="description" content=
+  "GNU Flymake 0.3: Determining whether syntax check is possible" />
+  <meta name="keywords" content=
+  "GNU Flymake 0.3: Determining whether syntax check is possible" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Flymake-Implementation.html#Flymake-Implementation"
+  rel="up" title="Flymake Implementation" />
+  <link href="Making-a-temporary-copy.html#Making-a-temporary-copy"
+  rel="next" title="Making a temporary copy" />
+  <link href="Flymake-Implementation.html#Flymake-Implementation"
+  rel="prev" title="Flymake Implementation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Determining-whether-syntax-check-is-possible"></a>
-<div class="header">
-<p>
-Next: <a href="Making-a-temporary-copy.html#Making-a-temporary-copy" accesskey="n" rel="next">Making a temporary copy</a>, Up: <a href="Flymake-Implementation.html#Flymake-Implementation" accesskey="u" rel="up">Flymake Implementation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Determining-whether-syntax-check-is-possible-1"></a>
-<h3 class="section">5.1 Determining whether syntax check is possible</h3>
-<a name="index-Syntax-check-models"></a>
-<a name="index-Master-file"></a>
+<body lang="en" xml:lang="en">
+  <a name="Determining-whether-syntax-check-is-possible" id=
+  "Determining-whether-syntax-check-is-possible"></a>
 
-<p>Syntax check is considered possible if there&rsquo;s an entry in
-<code>flymake-allowed-file-name-masks</code> matching buffer&rsquo;s filename and
-its <code>init-function</code> returns non-<code>nil</code> value.
-</p>
-<p>Two syntax check modes are distinguished:
-</p>
-<ol>
-<li> Buffer can be syntax checked in a standalone fashion, that is, the
-file (its temporary copy, in fact) can be passed over to the compiler to
-do the syntax check.  Examples are C/C++ (.c, .cpp) and Java (.java)
-sources.
+  <div class="header">
+    <p>Next: <a href=
+    "Making-a-temporary-copy.html#Making-a-temporary-copy"
+    accesskey="n" rel="next">Making a temporary copy</a>, Up:
+    <a href="Flymake-Implementation.html#Flymake-Implementation"
+    accesskey="u" rel="up">Flymake Implementation</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Determining-whether-syntax-check-is-possible-1" id=
+  "Determining-whether-syntax-check-is-possible-1"></a>
 
-</li><li> Buffer can be syntax checked, but additional file, called master file,
-is required to perform this operation.  A master file is a file that
-includes the current file, so that running a syntax check tool on it
-will also check syntax in the current file.  Examples are C/C++ (.h,
-.hpp) headers.
+  <h3 class="section">5.1 Determining whether syntax check is
+  possible</h3><a name="index-Syntax-check-models" id=
+  "index-Syntax-check-models"></a> <a name="index-Master-file" id=
+  "index-Master-file"></a>
 
-</li></ol>
+  <p>Syntax check is considered possible if there&rsquo;s an entry
+  in <code>flymake-allowed-file-name-masks</code> matching
+  buffer&rsquo;s filename and its <code>init-function</code>
+  returns non-<code>nil</code> value.</p>
 
-<p>These modes are handled inside init/cleanup/getfname functions, see
-<a href="Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool">Adding support for a new syntax check tool</a>.
-</p>
-<p>Flymake contains implementations of all functionality required to
-support different syntax check modes described above (making temporary
-copies, finding master files, etc.), as well as some tool-specific
-(routines for Make, Ant, etc.) code.
-</p>
+  <p>Two syntax check modes are distinguished:</p>
 
+  <ol>
+    <li>Buffer can be syntax checked in a standalone fashion, that
+    is, the file (its temporary copy, in fact) can be passed over
+    to the compiler to do the syntax check. Examples are C/C++ (.c,
+    .cpp) and Java (.java) sources.</li>
 
+    <li>Buffer can be syntax checked, but additional file, called
+    master file, is required to perform this operation. A master
+    file is a file that includes the current file, so that running
+    a syntax check tool on it will also check syntax in the current
+    file. Examples are C/C++ (.h, .hpp) headers.</li>
+  </ol>
 
+  <p>These modes are handled inside init/cleanup/getfname
+  functions, see <a href=
+  "Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool">
+  Adding support for a new syntax check tool</a>.</p>
 
+  <p>Flymake contains implementations of all functionality required
+  to support different syntax check modes described above (making
+  temporary copies, finding master files, etc.), as well as some
+  tool-specific (routines for Make, Ant, etc.) code.</p>
 </body>
 </html>

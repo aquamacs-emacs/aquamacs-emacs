@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,110 +19,168 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Searching and Case</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Searching and Case">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Searching and Case">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Searching-and-Matching.html#Searching-and-Matching" rel="up" title="Searching and Matching">
-<link href="Regular-Expressions.html#Regular-Expressions" rel="next" title="Regular Expressions">
-<link href="String-Search.html#String-Search" rel="prev" title="String Search">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Searching and
+  Case</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Searching and Case" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Searching and Case" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Searching-and-Matching.html#Searching-and-Matching"
+  rel="up" title="Searching and Matching" />
+  <link href="Regular-Expressions.html#Regular-Expressions" rel=
+  "next" title="Regular Expressions" />
+  <link href="String-Search.html#String-Search" rel="prev" title=
+  "String Search" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Searching-and-Case" id="Searching-and-Case"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Regular-Expressions.html#Regular-Expressions"
+    accesskey="n" rel="next">Regular Expressions</a>, Previous:
+    <a href="String-Search.html#String-Search" accesskey="p" rel=
+    "prev">String Search</a>, Up: <a href=
+    "Searching-and-Matching.html#Searching-and-Matching" accesskey=
+    "u" rel="up">Searching and Matching</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Searching-and-Case-1" id="Searching-and-Case-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Searching-and-Case"></a>
-<div class="header">
-<p>
-Next: <a href="Regular-Expressions.html#Regular-Expressions" accesskey="n" rel="next">Regular Expressions</a>, Previous: <a href="String-Search.html#String-Search" accesskey="p" rel="prev">String Search</a>, Up: <a href="Searching-and-Matching.html#Searching-and-Matching" accesskey="u" rel="up">Searching and Matching</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Searching-and-Case-1"></a>
-<h3 class="section">33.2 Searching and Case</h3>
-<a name="index-searching-and-case"></a>
+  <h3 class="section">33.2 Searching and Case</h3><a name=
+  "index-searching-and-case" id="index-searching-and-case"></a>
 
-<p>By default, searches in Emacs ignore the case of the text they are
-searching through; if you specify searching for &lsquo;<samp>FOO</samp>&rsquo;, then
-&lsquo;<samp>Foo</samp>&rsquo; or &lsquo;<samp>foo</samp>&rsquo; is also considered a match.  This applies to
-regular expressions, too; thus, &lsquo;<samp>[aB]</samp>&rsquo; would match &lsquo;<samp>a</samp>&rsquo; or
-&lsquo;<samp>A</samp>&rsquo; or &lsquo;<samp>b</samp>&rsquo; or &lsquo;<samp>B</samp>&rsquo;.
-</p>
-<p>If you do not want this feature, set the variable
-<code>case-fold-search</code> to <code>nil</code>.  Then all letters must match
-exactly, including case.  This is a buffer-local variable; altering the
-variable affects only the current buffer.  (See <a href="Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal">Intro to Buffer-Local</a>.)  Alternatively, you may change the default value.
-In Lisp code, you will more typically use <code>let</code> to bind
-<code>case-fold-search</code> to the desired value.
-</p>
-<p>Note that the user-level incremental search feature handles case
-distinctions differently.  When the search string contains only lower
-case letters, the search ignores case, but when the search string
-contains one or more upper case letters, the search becomes
-case-sensitive.  But this has nothing to do with the searching
-functions used in Lisp code.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Incremental-Search.html#Incremental-Search">Incremental Search</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<dl>
-<dt><a name="index-case_002dfold_002dsearch"></a>User Option: <strong>case-fold-search</strong></dt>
-<dd><p>This buffer-local variable determines whether searches should ignore
-case.  If the variable is <code>nil</code> they do not ignore case; otherwise
-(and by default) they do ignore case.
-</p></dd></dl>
+  <p>By default, searches in Emacs ignore the case of the text they
+  are searching through; if you specify searching for
+  &lsquo;<samp>FOO</samp>&rsquo;, then
+  &lsquo;<samp>Foo</samp>&rsquo; or &lsquo;<samp>foo</samp>&rsquo;
+  is also considered a match. This applies to regular expressions,
+  too; thus, &lsquo;<samp>[aB]</samp>&rsquo; would match
+  &lsquo;<samp>a</samp>&rsquo; or &lsquo;<samp>A</samp>&rsquo; or
+  &lsquo;<samp>b</samp>&rsquo; or &lsquo;<samp>B</samp>&rsquo;.</p>
 
-<dl>
-<dt><a name="index-case_002dreplace"></a>User Option: <strong>case-replace</strong></dt>
-<dd><p>This variable determines whether the higher-level replacement
-functions should preserve case.  If the variable is <code>nil</code>, that
-means to use the replacement text verbatim.  A non-<code>nil</code> value
-means to convert the case of the replacement text according to the
-text being replaced.
-</p>
-<p>This variable is used by passing it as an argument to the function
-<code>replace-match</code>.  See <a href="Replacing-Match.html#Replacing-Match">Replacing Match</a>.
-</p></dd></dl>
+  <p>If you do not want this feature, set the variable
+  <code>case-fold-search</code> to <code>nil</code>. Then all
+  letters must match exactly, including case. This is a
+  buffer-local variable; altering the variable affects only the
+  current buffer. (See <a href=
+  "Intro-to-Buffer_002dLocal.html#Intro-to-Buffer_002dLocal">Intro
+  to Buffer-Local</a>.) Alternatively, you may change the default
+  value. In Lisp code, you will more typically use <code>let</code>
+  to bind <code>case-fold-search</code> to the desired value.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Regular-Expressions.html#Regular-Expressions" accesskey="n" rel="next">Regular Expressions</a>, Previous: <a href="String-Search.html#String-Search" accesskey="p" rel="prev">String Search</a>, Up: <a href="Searching-and-Matching.html#Searching-and-Matching" accesskey="u" rel="up">Searching and Matching</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Note that the user-level incremental search feature handles
+  case distinctions differently. When the search string contains
+  only lower case letters, the search ignores case, but when the
+  search string contains one or more upper case letters, the search
+  becomes case-sensitive. But this has nothing to do with the
+  searching functions used in Lisp code. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Incremental-Search.html#Incremental-Search">
+  Incremental Search</a> in <cite>The GNU Emacs Manual</cite>.</p>
 
+  <dl>
+    <dt><a name="index-case_002dfold_002dsearch" id=
+    "index-case_002dfold_002dsearch"></a>User Option:
+    <strong>case-fold-search</strong></dt>
 
+    <dd>
+      <p>This buffer-local variable determines whether searches
+      should ignore case. If the variable is <code>nil</code> they
+      do not ignore case; otherwise (and by default) they do ignore
+      case.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-case_002dreplace" id=
+    "index-case_002dreplace"></a>User Option:
+    <strong>case-replace</strong></dt>
+
+    <dd>
+      <p>This variable determines whether the higher-level
+      replacement functions should preserve case. If the variable
+      is <code>nil</code>, that means to use the replacement text
+      verbatim. A non-<code>nil</code> value means to convert the
+      case of the replacement text according to the text being
+      replaced.</p>
+
+      <p>This variable is used by passing it as an argument to the
+      function <code>replace-match</code>. See <a href=
+      "Replacing-Match.html#Replacing-Match">Replacing
+      Match</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Regular-Expressions.html#Regular-Expressions"
+    accesskey="n" rel="next">Regular Expressions</a>, Previous:
+    <a href="String-Search.html#String-Search" accesskey="p" rel=
+    "prev">String Search</a>, Up: <a href=
+    "Searching-and-Matching.html#Searching-and-Matching" accesskey=
+    "u" rel="up">Searching and Matching</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,214 +19,343 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Edebug Options</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Edebug Options">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Edebug Options">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="Syntax-Errors.html#Syntax-Errors" rel="next" title="Syntax Errors">
-<link href="Specification-Examples.html#Specification-Examples" rel="prev" title="Specification Examples">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Edebug Options</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Edebug Options" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Edebug Options" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="Syntax-Errors.html#Syntax-Errors" rel="next" title=
+  "Syntax Errors" />
+  <link href="Specification-Examples.html#Specification-Examples"
+  rel="prev" title="Specification Examples" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Edebug-Options" id="Edebug-Options"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Edebug-and-Macros.html#Edebug-and-Macros"
+    accesskey="p" rel="prev">Edebug and Macros</a>, Up: <a href=
+    "Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Edebug-Options-1" id="Edebug-Options-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Edebug-Options"></a>
-<div class="header">
-<p>
-Previous: <a href="Edebug-and-Macros.html#Edebug-and-Macros" accesskey="p" rel="prev">Edebug and Macros</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Edebug-Options-1"></a>
-<h4 class="subsection">17.2.16 Edebug Options</h4>
+  <h4 class="subsection">17.2.16 Edebug Options</h4>
 
-<p>These options affect the behavior of Edebug:
-</p>
-<dl>
-<dt><a name="index-edebug_002dsetup_002dhook"></a>User Option: <strong>edebug-setup-hook</strong></dt>
-<dd><p>Functions to call before Edebug is used.  Each time it is set to a new
-value, Edebug will call those functions once and then
-reset <code>edebug-setup-hook</code> to <code>nil</code>.  You could use this to
-load up Edebug specifications associated with a package you are using,
-but only when you also use Edebug.
-See <a href="Instrumenting.html#Instrumenting">Instrumenting</a>.
-</p></dd></dl>
+  <p>These options affect the behavior of Edebug:</p>
 
-<dl>
-<dt><a name="index-edebug_002dall_002ddefs"></a>User Option: <strong>edebug-all-defs</strong></dt>
-<dd><p>If this is non-<code>nil</code>, normal evaluation of defining forms such as
-<code>defun</code> and <code>defmacro</code> instruments them for Edebug.  This
-applies to <code>eval-defun</code>, <code>eval-region</code>, <code>eval-buffer</code>,
-and <code>eval-current-buffer</code>.
-</p>
-<p>Use the command <kbd>M-x edebug-all-defs</kbd> to toggle the value of this
-option.  See <a href="Instrumenting.html#Instrumenting">Instrumenting</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-edebug_002dsetup_002dhook" id=
+    "index-edebug_002dsetup_002dhook"></a>User Option:
+    <strong>edebug-setup-hook</strong></dt>
 
-<dl>
-<dt><a name="index-edebug_002dall_002dforms"></a>User Option: <strong>edebug-all-forms</strong></dt>
-<dd><p>If this is non-<code>nil</code>, the commands <code>eval-defun</code>,
-<code>eval-region</code>, <code>eval-buffer</code>, and <code>eval-current-buffer</code>
-instrument all forms, even those that don&rsquo;t define anything.
-This doesn&rsquo;t apply to loading or evaluations in the minibuffer.
-</p>
-<p>Use the command <kbd>M-x edebug-all-forms</kbd> to toggle the value of this
-option.  See <a href="Instrumenting.html#Instrumenting">Instrumenting</a>.
-</p></dd></dl>
+    <dd>
+      <p>Functions to call before Edebug is used. Each time it is
+      set to a new value, Edebug will call those functions once and
+      then reset <code>edebug-setup-hook</code> to
+      <code>nil</code>. You could use this to load up Edebug
+      specifications associated with a package you are using, but
+      only when you also use Edebug. See <a href=
+      "Instrumenting.html#Instrumenting">Instrumenting</a>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-edebug_002dsave_002dwindows"></a>User Option: <strong>edebug-save-windows</strong></dt>
-<dd><p>If this is non-<code>nil</code>, Edebug saves and restores the window
-configuration.  That takes some time, so if your program does not care
-what happens to the window configurations, it is better to set this
-variable to <code>nil</code>.
-</p>
-<p>If the value is a list, only the listed windows are saved and
-restored.
-</p>
-<p>You can use the <kbd>W</kbd> command in Edebug to change this variable
-interactively.  See <a href="Edebug-Display-Update.html#Edebug-Display-Update">Edebug Display Update</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-edebug_002dall_002ddefs" id=
+    "index-edebug_002dall_002ddefs"></a>User Option:
+    <strong>edebug-all-defs</strong></dt>
 
-<dl>
-<dt><a name="index-edebug_002dsave_002ddisplayed_002dbuffer_002dpoints"></a>User Option: <strong>edebug-save-displayed-buffer-points</strong></dt>
-<dd><p>If this is non-<code>nil</code>, Edebug saves and restores point in all
-displayed buffers.
-</p>
-<p>Saving and restoring point in other buffers is necessary if you are
-debugging code that changes the point of a buffer that is displayed in
-a non-selected window.  If Edebug or the user then selects the window,
-point in that buffer will move to the window&rsquo;s value of point.
-</p>
-<p>Saving and restoring point in all buffers is expensive, since it
-requires selecting each window twice, so enable this only if you need
-it.  See <a href="Edebug-Display-Update.html#Edebug-Display-Update">Edebug Display Update</a>.
-</p></dd></dl>
+    <dd>
+      <p>If this is non-<code>nil</code>, normal evaluation of
+      defining forms such as <code>defun</code> and
+      <code>defmacro</code> instruments them for Edebug. This
+      applies to <code>eval-defun</code>, <code>eval-region</code>,
+      <code>eval-buffer</code>, and
+      <code>eval-current-buffer</code>.</p>
 
-<dl>
-<dt><a name="index-edebug_002dinitial_002dmode"></a>User Option: <strong>edebug-initial-mode</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, it specifies the initial execution
-mode for Edebug when it is first activated.  Possible values are
-<code>step</code>, <code>next</code>, <code>go</code>, <code>Go-nonstop</code>, <code>trace</code>,
-<code>Trace-fast</code>, <code>continue</code>, and <code>Continue-fast</code>.
-</p>
-<p>The default value is <code>step</code>.  This variable can be set
-interactively with <kbd>C-x C-a C-m</kbd> (<code>edebug-set-initial-mode</code>).
-See <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug Execution Modes</a>.
-</p></dd></dl>
+      <p>Use the command <kbd>M-x edebug-all-defs</kbd> to toggle
+      the value of this option. See <a href=
+      "Instrumenting.html#Instrumenting">Instrumenting</a>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-edebug_002dtrace-1"></a>User Option: <strong>edebug-trace</strong></dt>
-<dd><p>If this is non-<code>nil</code>, trace each function entry and exit.
-Tracing output is displayed in a buffer named <samp>*edebug-trace*</samp>, one
-function entry or exit per line, indented by the recursion level.
-</p>
-<p>Also see <code>edebug-tracing</code>, in <a href="Trace-Buffer.html#Trace-Buffer">Trace Buffer</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-edebug_002dall_002dforms" id=
+    "index-edebug_002dall_002dforms"></a>User Option:
+    <strong>edebug-all-forms</strong></dt>
 
-<dl>
-<dt><a name="index-edebug_002dtest_002dcoverage"></a>User Option: <strong>edebug-test-coverage</strong></dt>
-<dd><p>If non-<code>nil</code>, Edebug tests coverage of all expressions debugged.
-See <a href="Coverage-Testing.html#Coverage-Testing">Coverage Testing</a>.
-</p></dd></dl>
+    <dd>
+      <p>If this is non-<code>nil</code>, the commands
+      <code>eval-defun</code>, <code>eval-region</code>,
+      <code>eval-buffer</code>, and
+      <code>eval-current-buffer</code> instrument all forms, even
+      those that don&rsquo;t define anything. This doesn&rsquo;t
+      apply to loading or evaluations in the minibuffer.</p>
 
-<dl>
-<dt><a name="index-edebug_002dcontinue_002dkbd_002dmacro"></a>User Option: <strong>edebug-continue-kbd-macro</strong></dt>
-<dd><p>If non-<code>nil</code>, continue defining or executing any keyboard macro
-that is executing outside of Edebug.   Use this with caution since it is not
-debugged.
-See <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug Execution Modes</a>.
-</p></dd></dl>
+      <p>Use the command <kbd>M-x edebug-all-forms</kbd> to toggle
+      the value of this option. See <a href=
+      "Instrumenting.html#Instrumenting">Instrumenting</a>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-edebug_002dunwrap_002dresults"></a>User Option: <strong>edebug-unwrap-results</strong></dt>
-<dd><p>If non-<code>nil</code>, Edebug tries to remove any of its own
-instrumentation when showing the results of expressions.  This is
-relevant when debugging macros where the results of expressions are
-themselves instrumented expressions.  As a very artificial example,
-suppose that the example function <code>fac</code> has been instrumented,
-and consider a macro of the form:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defmacro test () &quot;Edebug example.&quot;
+  <dl>
+    <dt><a name="index-edebug_002dsave_002dwindows" id=
+    "index-edebug_002dsave_002dwindows"></a>User Option:
+    <strong>edebug-save-windows</strong></dt>
+
+    <dd>
+      <p>If this is non-<code>nil</code>, Edebug saves and restores
+      the window configuration. That takes some time, so if your
+      program does not care what happens to the window
+      configurations, it is better to set this variable to
+      <code>nil</code>.</p>
+
+      <p>If the value is a list, only the listed windows are saved
+      and restored.</p>
+
+      <p>You can use the <kbd>W</kbd> command in Edebug to change
+      this variable interactively. See <a href=
+      "Edebug-Display-Update.html#Edebug-Display-Update">Edebug
+      Display Update</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-edebug_002dsave_002ddisplayed_002dbuffer_002dpoints" id=
+    "index-edebug_002dsave_002ddisplayed_002dbuffer_002dpoints"></a>User
+    Option:
+    <strong>edebug-save-displayed-buffer-points</strong></dt>
+
+    <dd>
+      <p>If this is non-<code>nil</code>, Edebug saves and restores
+      point in all displayed buffers.</p>
+
+      <p>Saving and restoring point in other buffers is necessary
+      if you are debugging code that changes the point of a buffer
+      that is displayed in a non-selected window. If Edebug or the
+      user then selects the window, point in that buffer will move
+      to the window&rsquo;s value of point.</p>
+
+      <p>Saving and restoring point in all buffers is expensive,
+      since it requires selecting each window twice, so enable this
+      only if you need it. See <a href=
+      "Edebug-Display-Update.html#Edebug-Display-Update">Edebug
+      Display Update</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-edebug_002dinitial_002dmode" id=
+    "index-edebug_002dinitial_002dmode"></a>User Option:
+    <strong>edebug-initial-mode</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, it specifies the
+      initial execution mode for Edebug when it is first activated.
+      Possible values are <code>step</code>, <code>next</code>,
+      <code>go</code>, <code>Go-nonstop</code>, <code>trace</code>,
+      <code>Trace-fast</code>, <code>continue</code>, and
+      <code>Continue-fast</code>.</p>
+
+      <p>The default value is <code>step</code>. This variable can
+      be set interactively with <kbd>C-x C-a C-m</kbd>
+      (<code>edebug-set-initial-mode</code>). See <a href=
+      "Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug
+      Execution Modes</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-edebug_002dtrace-1" id=
+    "index-edebug_002dtrace-1"></a>User Option:
+    <strong>edebug-trace</strong></dt>
+
+    <dd>
+      <p>If this is non-<code>nil</code>, trace each function entry
+      and exit. Tracing output is displayed in a buffer named
+      <samp>*edebug-trace*</samp>, one function entry or exit per
+      line, indented by the recursion level.</p>
+
+      <p>Also see <code>edebug-tracing</code>, in <a href=
+      "Trace-Buffer.html#Trace-Buffer">Trace Buffer</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-edebug_002dtest_002dcoverage" id=
+    "index-edebug_002dtest_002dcoverage"></a>User Option:
+    <strong>edebug-test-coverage</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, Edebug tests coverage of all
+      expressions debugged. See <a href=
+      "Coverage-Testing.html#Coverage-Testing">Coverage
+      Testing</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-edebug_002dcontinue_002dkbd_002dmacro" id=
+    "index-edebug_002dcontinue_002dkbd_002dmacro"></a>User Option:
+    <strong>edebug-continue-kbd-macro</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, continue defining or executing
+      any keyboard macro that is executing outside of Edebug. Use
+      this with caution since it is not debugged. See <a href=
+      "Edebug-Execution-Modes.html#Edebug-Execution-Modes">Edebug
+      Execution Modes</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-edebug_002dunwrap_002dresults" id=
+    "index-edebug_002dunwrap_002dresults"></a>User Option:
+    <strong>edebug-unwrap-results</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, Edebug tries to remove any of its
+      own instrumentation when showing the results of expressions.
+      This is relevant when debugging macros where the results of
+      expressions are themselves instrumented expressions. As a
+      very artificial example, suppose that the example function
+      <code>fac</code> has been instrumented, and consider a macro
+      of the form:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(defmacro test () "Edebug example."
   (if (symbol-function 'fac)
       &hellip;))
-</pre></div>
+</pre>
+      </div>
 
-<p>If you instrument the <code>test</code> macro and step through it, then by
-default the result of the <code>symbol-function</code> call has numerous
-<code>edebug-after</code> and <code>edebug-before</code> forms, which can make it
-difficult to see the actual result.  If
-<code>edebug-unwrap-results</code> is non-<code>nil</code>, Edebug tries to remove
-these forms from the result.
-</p></dd></dl>
+      <p>If you instrument the <code>test</code> macro and step
+      through it, then by default the result of the
+      <code>symbol-function</code> call has numerous
+      <code>edebug-after</code> and <code>edebug-before</code>
+      forms, which can make it difficult to see the actual result.
+      If <code>edebug-unwrap-results</code> is
+      non-<code>nil</code>, Edebug tries to remove these forms from
+      the result.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-edebug_002don_002derror"></a>User Option: <strong>edebug-on-error</strong></dt>
-<dd><p>Edebug binds <code>debug-on-error</code> to this value, if
-<code>debug-on-error</code> was previously <code>nil</code>.  See <a href="Trapping-Errors.html#Trapping-Errors">Trapping Errors</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-edebug_002don_002derror" id=
+    "index-edebug_002don_002derror"></a>User Option:
+    <strong>edebug-on-error</strong></dt>
 
-<dl>
-<dt><a name="index-edebug_002don_002dquit"></a>User Option: <strong>edebug-on-quit</strong></dt>
-<dd><p>Edebug binds <code>debug-on-quit</code> to this value, if
-<code>debug-on-quit</code> was previously <code>nil</code>.  See <a href="Trapping-Errors.html#Trapping-Errors">Trapping Errors</a>.
-</p></dd></dl>
+    <dd>
+      <p>Edebug binds <code>debug-on-error</code> to this value, if
+      <code>debug-on-error</code> was previously <code>nil</code>.
+      See <a href="Trapping-Errors.html#Trapping-Errors">Trapping
+      Errors</a>.</p>
+    </dd>
+  </dl>
 
-<p>If you change the values of <code>edebug-on-error</code> or
-<code>edebug-on-quit</code> while Edebug is active, their values won&rsquo;t be used
-until the <em>next</em> time Edebug is invoked via a new command.
-</p>
-<dl>
-<dt><a name="index-edebug_002dglobal_002dbreak_002dcondition"></a>User Option: <strong>edebug-global-break-condition</strong></dt>
-<dd><p>If non-<code>nil</code>, an expression to test for at every stop point.  If
-the result is non-<code>nil</code>, then break.  Errors are ignored.
-See <a href="Global-Break-Condition.html#Global-Break-Condition">Global Break Condition</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-edebug_002don_002dquit" id=
+    "index-edebug_002don_002dquit"></a>User Option:
+    <strong>edebug-on-quit</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Edebug-and-Macros.html#Edebug-and-Macros" accesskey="p" rel="prev">Edebug and Macros</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Edebug binds <code>debug-on-quit</code> to this value, if
+      <code>debug-on-quit</code> was previously <code>nil</code>.
+      See <a href="Trapping-Errors.html#Trapping-Errors">Trapping
+      Errors</a>.</p>
+    </dd>
+  </dl>
 
+  <p>If you change the values of <code>edebug-on-error</code> or
+  <code>edebug-on-quit</code> while Edebug is active, their values
+  won&rsquo;t be used until the <em>next</em> time Edebug is
+  invoked via a new command.</p>
 
+  <dl>
+    <dt><a name="index-edebug_002dglobal_002dbreak_002dcondition"
+    id="index-edebug_002dglobal_002dbreak_002dcondition"></a>User
+    Option: <strong>edebug-global-break-condition</strong></dt>
 
+    <dd>
+      <p>If non-<code>nil</code>, an expression to test for at
+      every stop point. If the result is non-<code>nil</code>, then
+      break. Errors are ignored. See <a href=
+      "Global-Break-Condition.html#Global-Break-Condition">Global
+      Break Condition</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Edebug-and-Macros.html#Edebug-and-Macros"
+    accesskey="p" rel="prev">Edebug and Macros</a>, Up: <a href=
+    "Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

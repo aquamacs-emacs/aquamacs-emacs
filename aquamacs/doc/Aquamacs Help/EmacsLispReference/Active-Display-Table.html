@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,115 +19,182 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Active Display Table</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Active Display Table">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Active Display Table">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Character-Display.html#Character-Display" rel="up" title="Character Display">
-<link href="Glyphs.html#Glyphs" rel="next" title="Glyphs">
-<link href="Display-Tables.html#Display-Tables" rel="prev" title="Display Tables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Active Display
+  Table</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Active Display Table" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Active Display Table" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Character-Display.html#Character-Display" rel="up"
+  title="Character Display" />
+  <link href="Glyphs.html#Glyphs" rel="next" title="Glyphs" />
+  <link href="Display-Tables.html#Display-Tables" rel="prev" title=
+  "Display Tables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Active-Display-Table" id="Active-Display-Table"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Glyphs.html#Glyphs" accesskey="n" rel=
+    "next">Glyphs</a>, Previous: <a href=
+    "Display-Tables.html#Display-Tables" accesskey="p" rel=
+    "prev">Display Tables</a>, Up: <a href=
+    "Character-Display.html#Character-Display" accesskey="u" rel=
+    "up">Character Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Active-Display-Table-1" id="Active-Display-Table-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Active-Display-Table"></a>
-<div class="header">
-<p>
-Next: <a href="Glyphs.html#Glyphs" accesskey="n" rel="next">Glyphs</a>, Previous: <a href="Display-Tables.html#Display-Tables" accesskey="p" rel="prev">Display Tables</a>, Up: <a href="Character-Display.html#Character-Display" accesskey="u" rel="up">Character Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Active-Display-Table-1"></a>
-<h4 class="subsection">37.22.3 Active Display Table</h4>
-<a name="index-active-display-table"></a>
+  <h4 class="subsection">37.22.3 Active Display Table</h4><a name=
+  "index-active-display-table" id="index-active-display-table"></a>
 
-<p>Each window can specify a display table, and so can each buffer.
-The window&rsquo;s display table, if there is one, takes precedence over the
-buffer&rsquo;s display table.  If neither exists, Emacs tries to use the
-standard display table; if that is <code>nil</code>, Emacs uses the usual
-character display conventions (see <a href="Usual-Display.html#Usual-Display">Usual Display</a>).
-</p>
-<p>Note that display tables affect how the mode line is displayed, so
-if you want to force redisplay of the mode line using a new display
-table, call <code>force-mode-line-update</code> (see <a href="Mode-Line-Format.html#Mode-Line-Format">Mode Line Format</a>).
-</p>
-<dl>
-<dt><a name="index-window_002ddisplay_002dtable"></a>Function: <strong>window-display-table</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function returns <var>window</var>&rsquo;s display table, or <code>nil</code> if
-there is none.  The default for <var>window</var> is the selected window.
-</p></dd></dl>
+  <p>Each window can specify a display table, and so can each
+  buffer. The window&rsquo;s display table, if there is one, takes
+  precedence over the buffer&rsquo;s display table. If neither
+  exists, Emacs tries to use the standard display table; if that is
+  <code>nil</code>, Emacs uses the usual character display
+  conventions (see <a href="Usual-Display.html#Usual-Display">Usual
+  Display</a>).</p>
 
-<dl>
-<dt><a name="index-set_002dwindow_002ddisplay_002dtable"></a>Function: <strong>set-window-display-table</strong> <em>window table</em></dt>
-<dd><p>This function sets the display table of <var>window</var> to <var>table</var>.
-The argument <var>table</var> should be either a display table or
-<code>nil</code>.
-</p></dd></dl>
+  <p>Note that display tables affect how the mode line is
+  displayed, so if you want to force redisplay of the mode line
+  using a new display table, call
+  <code>force-mode-line-update</code> (see <a href=
+  "Mode-Line-Format.html#Mode-Line-Format">Mode Line
+  Format</a>).</p>
 
-<dl>
-<dt><a name="index-buffer_002ddisplay_002dtable"></a>Variable: <strong>buffer-display-table</strong></dt>
-<dd><p>This variable is automatically buffer-local in all buffers; its value
-specifies the buffer&rsquo;s display table.  If it is <code>nil</code>, there is
-no buffer display table.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-window_002ddisplay_002dtable" id=
+    "index-window_002ddisplay_002dtable"></a>Function:
+    <strong>window-display-table</strong> <em>&amp;optional
+    window</em></dt>
 
-<dl>
-<dt><a name="index-standard_002ddisplay_002dtable"></a>Variable: <strong>standard-display-table</strong></dt>
-<dd><p>The value of this variable is the standard display table, which is
-used when Emacs is displaying a buffer in a window with neither a
-window display table nor a buffer display table defined, or when Emacs
-is outputting text to the standard output or error streams.  Although its
-default is typically <code>nil</code>, in an interactive session if the
-terminal cannot display curved quotes, its default maps curved quotes
-to ASCII approximations.  See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.
-</p></dd></dl>
+    <dd>
+      <p>This function returns <var>window</var>&rsquo;s display
+      table, or <code>nil</code> if there is none. The default for
+      <var>window</var> is the selected window.</p>
+    </dd>
+  </dl>
 
-<p>The <samp>disp-table</samp> library defines several functions for changing
-the standard display table.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Glyphs.html#Glyphs" accesskey="n" rel="next">Glyphs</a>, Previous: <a href="Display-Tables.html#Display-Tables" accesskey="p" rel="prev">Display Tables</a>, Up: <a href="Character-Display.html#Character-Display" accesskey="u" rel="up">Character Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-set_002dwindow_002ddisplay_002dtable" id=
+    "index-set_002dwindow_002ddisplay_002dtable"></a>Function:
+    <strong>set-window-display-table</strong> <em>window
+    table</em></dt>
 
+    <dd>
+      <p>This function sets the display table of <var>window</var>
+      to <var>table</var>. The argument <var>table</var> should be
+      either a display table or <code>nil</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-buffer_002ddisplay_002dtable" id=
+    "index-buffer_002ddisplay_002dtable"></a>Variable:
+    <strong>buffer-display-table</strong></dt>
 
+    <dd>
+      <p>This variable is automatically buffer-local in all
+      buffers; its value specifies the buffer&rsquo;s display
+      table. If it is <code>nil</code>, there is no buffer display
+      table.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-standard_002ddisplay_002dtable" id=
+    "index-standard_002ddisplay_002dtable"></a>Variable:
+    <strong>standard-display-table</strong></dt>
+
+    <dd>
+      <p>The value of this variable is the standard display table,
+      which is used when Emacs is displaying a buffer in a window
+      with neither a window display table nor a buffer display
+      table defined, or when Emacs is outputting text to the
+      standard output or error streams. Although its default is
+      typically <code>nil</code>, in an interactive session if the
+      terminal cannot display curved quotes, its default maps
+      curved quotes to ASCII approximations. See <a href=
+      "Keys-in-Documentation.html#Keys-in-Documentation">Keys in
+      Documentation</a>.</p>
+    </dd>
+  </dl>
+
+  <p>The <samp>disp-table</samp> library defines several functions
+  for changing the standard display table.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Glyphs.html#Glyphs" accesskey="n" rel=
+    "next">Glyphs</a>, Previous: <a href=
+    "Display-Tables.html#Display-Tables" accesskey="p" rel=
+    "prev">Display Tables</a>, Up: <a href=
+    "Character-Display.html#Character-Display" accesskey="u" rel=
+    "up">Character Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

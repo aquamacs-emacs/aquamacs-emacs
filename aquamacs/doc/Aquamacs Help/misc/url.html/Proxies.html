@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the manual for the url Emacs Lisp library.
 
 Copyright (C) 1993-1999, 2002, 2004-2016 Free Software
@@ -15,121 +17,179 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>URL Programmer&rsquo;s Manual: Proxies</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="URL Programmer&rsquo;s Manual: Proxies">
-<meta name="keywords" content="URL Programmer&rsquo;s Manual: Proxies">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="General-Facilities.html#General-Facilities" rel="up" title="General Facilities">
-<link href="Gateways-in-general.html#Gateways-in-general" rel="next" title="Gateways in general">
-<link href="Disk-Caching.html#Disk-Caching" rel="prev" title="Disk Caching">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>URL Programmer&rsquo;s Manual: Proxies</title>
+  <meta name="description" content=
+  "URL Programmer&rsquo;s Manual: Proxies" />
+  <meta name="keywords" content=
+  "URL Programmer&rsquo;s Manual: Proxies" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="General-Facilities.html#General-Facilities" rel="up"
+  title="General Facilities" />
+  <link href="Gateways-in-general.html#Gateways-in-general" rel=
+  "next" title="Gateways in general" />
+  <link href="Disk-Caching.html#Disk-Caching" rel="prev" title=
+  "Disk Caching" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Proxies"></a>
-<div class="header">
-<p>
-Next: <a href="Gateways-in-general.html#Gateways-in-general" accesskey="n" rel="next">Gateways in general</a>, Previous: <a href="Disk-Caching.html#Disk-Caching" accesskey="p" rel="prev">Disk Caching</a>, Up: <a href="General-Facilities.html#General-Facilities" accesskey="u" rel="up">General Facilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Proxies-and-Gatewaying"></a>
-<h3 class="section">5.2 Proxies and Gatewaying</h3>
+<body lang="en" xml:lang="en">
+  <a name="Proxies" id="Proxies"></a>
 
-<a name="index-proxy-servers"></a>
-<a name="index-proxies"></a>
-<a name="index-environment-variables"></a>
-<a name="index-HTTP_005fPROXY"></a>
-<p>Proxy servers are commonly used to provide gateways through firewalls
-or as caches serving some more-or-less local network.  Each protocol
-(HTTP, FTP, etc.) can have a different gateway server.  Proxying is
-conventionally configured commonly amongst different programs through
-environment variables of the form <code><var>protocol</var>_proxy</code>, where
-<var>protocol</var> is one of the supported network protocols (<code>http</code>,
-<code>ftp</code> etc.).  The library recognizes such variables in either
-upper or lower case.  Their values are of one of the forms:
-</p><ul>
-<li> <code><var>host</var>:<var>port</var></code>
-</li><li> A full URL;
-</li><li> Simply a host name.
-</li></ul>
+  <div class="header">
+    <p>Next: <a href="Gateways-in-general.html#Gateways-in-general"
+    accesskey="n" rel="next">Gateways in general</a>, Previous:
+    <a href="Disk-Caching.html#Disk-Caching" accesskey="p" rel=
+    "prev">Disk Caching</a>, Up: <a href=
+    "General-Facilities.html#General-Facilities" accesskey="u" rel=
+    "up">General Facilities</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Proxies-and-Gatewaying" id="Proxies-and-Gatewaying"></a>
 
-<a name="index-NO_005fPROXY"></a>
-<p>The <code>NO_PROXY</code> environment variable specifies URLs that should be
-excluded from proxying (on servers that should be contacted directly).
-This should be a comma-separated list of hostnames, domain names, or a
-mixture of both.  Asterisks can be used as wildcards, but other
-clients may not support that.  Domain names may be indicated by a
-leading dot.  For example:
-</p><div class="example">
-<pre class="example">NO_PROXY=&quot;*.aventail.com,home.com,.seanet.com&quot;
-</pre></div>
-<p>says to contact all machines in the &lsquo;<samp>aventail.com</samp>&rsquo; and
-&lsquo;<samp>seanet.com</samp>&rsquo; domains directly, as well as the machine named
-&lsquo;<samp>home.com</samp>&rsquo;.  If <code>NO_PROXY</code> isn&rsquo;t defined, <code>no_PROXY</code>
-and <code>no_proxy</code> are also tried, in that order.
-</p>
-<p>Proxies may also be specified directly in Lisp.
-</p>
-<dl>
-<dt><a name="index-url_002dproxy_002dservices"></a>User Option: <strong>url-proxy-services</strong></dt>
-<dd><p>This variable is an alist of URL schemes and proxy servers that
-gateway them.  The items are of the form <code>(<var>scheme</var>&nbsp;.&nbsp;<var>host</var>:<var>portnumber</var>)</code><!-- /@w -->, says that the URL <var>scheme</var> is
-gatewayed through <var>portnumber</var> on the specified <var>host</var>.  An
-exception is the pseudo scheme <code>&quot;no_proxy&quot;</code>, which is paired with
-a regexp matching host names not to be proxied.  This variable is
-initialized from the environment as above.
-</p>
-<div class="example">
-<pre class="example">(setq url-proxy-services
-      '((&quot;http&quot;     . &quot;proxy.aventail.com:80&quot;)
-        (&quot;no_proxy&quot; . &quot;^.*\\(aventail\\|seanet\\)\\.com&quot;)))
-</pre></div>
-</dd></dl>
+  <h3 class="section">5.2 Proxies and Gatewaying</h3><a name=
+  "index-proxy-servers" id="index-proxy-servers"></a> <a name=
+  "index-proxies" id="index-proxies"></a> <a name=
+  "index-environment-variables" id=
+  "index-environment-variables"></a> <a name="index-HTTP_005fPROXY"
+  id="index-HTTP_005fPROXY"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Gateways-in-general.html#Gateways-in-general" accesskey="n" rel="next">Gateways in general</a>, Previous: <a href="Disk-Caching.html#Disk-Caching" accesskey="p" rel="prev">Disk Caching</a>, Up: <a href="General-Facilities.html#General-Facilities" accesskey="u" rel="up">General Facilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Proxy servers are commonly used to provide gateways through
+  firewalls or as caches serving some more-or-less local network.
+  Each protocol (HTTP, FTP, etc.) can have a different gateway
+  server. Proxying is conventionally configured commonly amongst
+  different programs through environment variables of the form
+  <code><var>protocol</var>_proxy</code>, where <var>protocol</var>
+  is one of the supported network protocols (<code>http</code>,
+  <code>ftp</code> etc.). The library recognizes such variables in
+  either upper or lower case. Their values are of one of the
+  forms:</p>
 
+  <ul>
+    <li><code><var>host</var>:<var>port</var></code></li>
 
+    <li>A full URL;</li>
 
+    <li>Simply a host name.</li>
+  </ul><a name="index-NO_005fPROXY" id="index-NO_005fPROXY"></a>
+
+  <p>The <code>NO_PROXY</code> environment variable specifies URLs
+  that should be excluded from proxying (on servers that should be
+  contacted directly). This should be a comma-separated list of
+  hostnames, domain names, or a mixture of both. Asterisks can be
+  used as wildcards, but other clients may not support that. Domain
+  names may be indicated by a leading dot. For example:</p>
+
+  <div class="example">
+    <pre class="example">
+NO_PROXY="*.aventail.com,home.com,.seanet.com"
+</pre>
+  </div>
+
+  <p>says to contact all machines in the
+  &lsquo;<samp>aventail.com</samp>&rsquo; and
+  &lsquo;<samp>seanet.com</samp>&rsquo; domains directly, as well
+  as the machine named &lsquo;<samp>home.com</samp>&rsquo;. If
+  <code>NO_PROXY</code> isn&rsquo;t defined, <code>no_PROXY</code>
+  and <code>no_proxy</code> are also tried, in that order.</p>
+
+  <p>Proxies may also be specified directly in Lisp.</p>
+
+  <dl>
+    <dt><a name="index-url_002dproxy_002dservices" id=
+    "index-url_002dproxy_002dservices"></a>User Option:
+    <strong>url-proxy-services</strong></dt>
+
+    <dd>
+      <p>This variable is an alist of URL schemes and proxy servers
+      that gateway them. The items are of the form
+      <code>(<var>scheme</var>&nbsp;.&nbsp;<var>host</var>:<var>portnumber</var>)</code><!-- /@w -->,
+      says that the URL <var>scheme</var> is gatewayed through
+      <var>portnumber</var> on the specified <var>host</var>. An
+      exception is the pseudo scheme <code>"no_proxy"</code>, which
+      is paired with a regexp matching host names not to be
+      proxied. This variable is initialized from the environment as
+      above.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq url-proxy-services
+      '(("http"     . "proxy.aventail.com:80")
+        ("no_proxy" . "^.*\\(aventail\\|seanet\\)\\.com")))
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Gateways-in-general.html#Gateways-in-general"
+    accesskey="n" rel="next">Gateways in general</a>, Previous:
+    <a href="Disk-Caching.html#Disk-Caching" accesskey="p" rel=
+    "prev">Disk Caching</a>, Up: <a href=
+    "General-Facilities.html#General-Facilities" accesskey="u" rel=
+    "up">General Facilities</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

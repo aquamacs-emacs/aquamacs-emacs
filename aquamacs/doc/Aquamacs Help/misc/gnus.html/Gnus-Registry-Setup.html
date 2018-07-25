@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,157 +14,230 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Gnus Registry Setup</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Gnus Registry Setup">
-<meta name="keywords" content="Gnus Manual: Gnus Registry Setup">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-Gnus-Registry.html#The-Gnus-Registry" rel="up" title="The Gnus Registry">
-<link href="Registry-Article-Refer-Method.html#Registry-Article-Refer-Method" rel="next" title="Registry Article Refer Method">
-<link href="The-Gnus-Registry.html#The-Gnus-Registry" rel="prev" title="The Gnus Registry">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Gnus Registry Setup</title>
+  <meta name="description" content=
+  "Gnus Manual: Gnus Registry Setup" />
+  <meta name="keywords" content=
+  "Gnus Manual: Gnus Registry Setup" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-Gnus-Registry.html#The-Gnus-Registry" rel="up"
+  title="The Gnus Registry" />
+  <link href=
+  "Registry-Article-Refer-Method.html#Registry-Article-Refer-Method"
+  rel="next" title="Registry Article Refer Method" />
+  <link href="The-Gnus-Registry.html#The-Gnus-Registry" rel="prev"
+  title="The Gnus Registry" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Gnus-Registry-Setup"></a>
-<div class="header">
-<p>
-Next: <a href="Registry-Article-Refer-Method.html#Registry-Article-Refer-Method" accesskey="n" rel="next">Registry Article Refer Method</a>, Up: <a href="The-Gnus-Registry.html#The-Gnus-Registry" accesskey="u" rel="up">The Gnus Registry</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Gnus-Registry-Setup-1"></a>
-<h4 class="subsection">9.18.1 Gnus Registry Setup</h4>
+<body lang="en" xml:lang="en">
+  <a name="Gnus-Registry-Setup" id="Gnus-Registry-Setup"></a>
 
-<p>Fortunately, setting up the Gnus registry is pretty easy:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-registry-max-entries 2500)
+  <div class="header">
+    <p>Next: <a href=
+    "Registry-Article-Refer-Method.html#Registry-Article-Refer-Method"
+    accesskey="n" rel="next">Registry Article Refer Method</a>, Up:
+    <a href="The-Gnus-Registry.html#The-Gnus-Registry" accesskey=
+    "u" rel="up">The Gnus Registry</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Gnus-Registry-Setup-1" id="Gnus-Registry-Setup-1"></a>
+
+  <h4 class="subsection">9.18.1 Gnus Registry Setup</h4>
+
+  <p>Fortunately, setting up the Gnus registry is pretty easy:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-registry-max-entries 2500)
 
 (gnus-registry-initialize)
-</pre></div>
+</pre>
+  </div>
 
-<p>This adds registry saves to Gnus newsrc saves (which happen on exit
-and when you press <kbd>s</kbd> from the <samp>*Group*</samp> buffer.  It also
-adds registry calls to article actions in Gnus (copy, move, etc.) so
-it&rsquo;s not easy to undo the initialization.  See
-<code>gnus-registry-initialize</code> for the gory details.
-</p>
-<p>Here are other settings used by the author of the registry (understand
-what they do before you copy them blindly).
-</p>
-<div class="lisp">
-<pre class="lisp">(setq
+  <p>This adds registry saves to Gnus newsrc saves (which happen on
+  exit and when you press <kbd>s</kbd> from the
+  <samp>*Group*</samp> buffer. It also adds registry calls to
+  article actions in Gnus (copy, move, etc.) so it&rsquo;s not easy
+  to undo the initialization. See
+  <code>gnus-registry-initialize</code> for the gory details.</p>
+
+  <p>Here are other settings used by the author of the registry
+  (understand what they do before you copy them blindly).</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq
  gnus-registry-split-strategy 'majority
- gnus-registry-ignored-groups '((&quot;nntp&quot; t)
-                                (&quot;nnrss&quot; t)
-                                (&quot;spam&quot; t)
-                                (&quot;train&quot; t))
+ gnus-registry-ignored-groups '(("nntp" t)
+                                ("nnrss" t)
+                                ("spam" t)
+                                ("train" t))
  gnus-registry-max-entries 500000
  ;; this is the default
  gnus-registry-track-extra '(sender subject))
-</pre></div>
+</pre>
+  </div>
 
-<p>They say: keep a lot of messages around, track messages by sender and
-subject (not just parent Message-ID), and when the registry splits
-incoming mail, use a majority rule to decide where messages should go
-if there&rsquo;s more than one possibility.  In addition, the registry
-should ignore messages in groups that match &ldquo;nntp&rdquo;, &ldquo;nnrss&rdquo;,
-&ldquo;spam&rdquo;, or &ldquo;train.&rdquo;
-</p>
-<p>You are doubtless impressed by all this, but you ask: &ldquo;I am a Gnus
-user, I customize to live.  Give me more.&rdquo;  Here you go, these are
-the general settings.
-</p>
-<dl>
-<dt><a name="index-gnus_002dregistry_002dunfollowed_002dgroups"></a>Variable: <strong>gnus-registry-unfollowed-groups</strong></dt>
-<dd><p>The groups that will not be followed by
-<code>gnus-registry-split-fancy-with-parent</code>.  They will still be
-remembered by the registry.  This is a list of regular expressions.
-By default any group name that ends with &ldquo;delayed&rdquo;, &ldquo;drafts&rdquo;,
-&ldquo;queue&rdquo;, or &ldquo;INBOX&rdquo;, belongs to the nnmairix backend, or contains
-the word &ldquo;archive&rdquo; is not followed.
-</p></dd></dl>
+  <p>They say: keep a lot of messages around, track messages by
+  sender and subject (not just parent Message-ID), and when the
+  registry splits incoming mail, use a majority rule to decide
+  where messages should go if there&rsquo;s more than one
+  possibility. In addition, the registry should ignore messages in
+  groups that match &ldquo;nntp&rdquo;, &ldquo;nnrss&rdquo;,
+  &ldquo;spam&rdquo;, or &ldquo;train.&rdquo;</p>
 
-<dl>
-<dt><a name="index-gnus_002dregistry_002dmax_002dentries"></a>Variable: <strong>gnus-registry-max-entries</strong></dt>
-<dd><p>The number (an integer or <code>nil</code> for unlimited) of entries the
-registry will keep.  If the registry has reached or exceeded this
-size, it will reject insertion of new entries.
-</p></dd></dl>
+  <p>You are doubtless impressed by all this, but you ask: &ldquo;I
+  am a Gnus user, I customize to live. Give me more.&rdquo; Here
+  you go, these are the general settings.</p>
 
-<dl>
-<dt><a name="index-gnus_002dregistry_002dprune_002dfactor"></a>Variable: <strong>gnus-registry-prune-factor</strong></dt>
-<dd><p>This option (a float between 0 and 1) controls how much the registry
-is cut back during pruning.  In order to prevent constant pruning, the
-registry will be pruned back to less than
-<code>gnus-registry-max-entries</code>.  This option controls exactly how
-much less: the target is calculated as the maximum number of entries
-minus the maximum number times this factor.  The default is 0.1:
-i.e., if your registry is limited to 50000 entries, pruning will try to
-cut back to 45000 entries.  Entries with keys marked as precious will
-not be pruned.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-gnus_002dregistry_002dunfollowed_002dgroups"
+    id=
+    "index-gnus_002dregistry_002dunfollowed_002dgroups"></a>Variable:
+    <strong>gnus-registry-unfollowed-groups</strong></dt>
 
-<dl>
-<dt><a name="index-gnus_002dregistry_002ddefault_002dsort_002dfunction"></a>Variable: <strong>gnus-registry-default-sort-function</strong></dt>
-<dd><p>This option specifies how registry entries are sorted during pruning.
-If a function is given, it should sort least valuable entries first,
-as pruning starts from the beginning of the list.  The default value
-is <code>gnus-registry-sort-by-creation-time</code>, which proposes the
-oldest entries for pruning.  Set to nil to perform no sorting, which
-will speed up the pruning process.
-</p></dd></dl>
+    <dd>
+      <p>The groups that will not be followed by
+      <code>gnus-registry-split-fancy-with-parent</code>. They will
+      still be remembered by the registry. This is a list of
+      regular expressions. By default any group name that ends with
+      &ldquo;delayed&rdquo;, &ldquo;drafts&rdquo;,
+      &ldquo;queue&rdquo;, or &ldquo;INBOX&rdquo;, belongs to the
+      nnmairix backend, or contains the word &ldquo;archive&rdquo;
+      is not followed.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-gnus_002dregistry_002dcache_002dfile"></a>Variable: <strong>gnus-registry-cache-file</strong></dt>
-<dd><p>The file where the registry will be stored between Gnus sessions.  By
-default the file name is <code>.gnus.registry.eieio</code> in the same
-directory as your <code>.newsrc.eld</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-gnus_002dregistry_002dmax_002dentries" id=
+    "index-gnus_002dregistry_002dmax_002dentries"></a>Variable:
+    <strong>gnus-registry-max-entries</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Registry-Article-Refer-Method.html#Registry-Article-Refer-Method" accesskey="n" rel="next">Registry Article Refer Method</a>, Up: <a href="The-Gnus-Registry.html#The-Gnus-Registry" accesskey="u" rel="up">The Gnus Registry</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>The number (an integer or <code>nil</code> for unlimited)
+      of entries the registry will keep. If the registry has
+      reached or exceeded this size, it will reject insertion of
+      new entries.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-gnus_002dregistry_002dprune_002dfactor" id=
+    "index-gnus_002dregistry_002dprune_002dfactor"></a>Variable:
+    <strong>gnus-registry-prune-factor</strong></dt>
 
+    <dd>
+      <p>This option (a float between 0 and 1) controls how much
+      the registry is cut back during pruning. In order to prevent
+      constant pruning, the registry will be pruned back to less
+      than <code>gnus-registry-max-entries</code>. This option
+      controls exactly how much less: the target is calculated as
+      the maximum number of entries minus the maximum number times
+      this factor. The default is 0.1: i.e., if your registry is
+      limited to 50000 entries, pruning will try to cut back to
+      45000 entries. Entries with keys marked as precious will not
+      be pruned.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-gnus_002dregistry_002ddefault_002dsort_002dfunction" id=
+    "index-gnus_002dregistry_002ddefault_002dsort_002dfunction"></a>Variable:
+    <strong>gnus-registry-default-sort-function</strong></dt>
+
+    <dd>
+      <p>This option specifies how registry entries are sorted
+      during pruning. If a function is given, it should sort least
+      valuable entries first, as pruning starts from the beginning
+      of the list. The default value is
+      <code>gnus-registry-sort-by-creation-time</code>, which
+      proposes the oldest entries for pruning. Set to nil to
+      perform no sorting, which will speed up the pruning
+      process.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-gnus_002dregistry_002dcache_002dfile" id=
+    "index-gnus_002dregistry_002dcache_002dfile"></a>Variable:
+    <strong>gnus-registry-cache-file</strong></dt>
+
+    <dd>
+      <p>The file where the registry will be stored between Gnus
+      sessions. By default the file name is
+      <code>.gnus.registry.eieio</code> in the same directory as
+      your <code>.newsrc.eld</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Registry-Article-Refer-Method.html#Registry-Article-Refer-Method"
+    accesskey="n" rel="next">Registry Article Refer Method</a>, Up:
+    <a href="The-Gnus-Registry.html#The-Gnus-Registry" accesskey=
+    "u" rel="up">The Gnus Registry</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

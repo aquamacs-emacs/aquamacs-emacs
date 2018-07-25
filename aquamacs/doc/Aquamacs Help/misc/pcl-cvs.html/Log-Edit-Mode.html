@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1991-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,94 +14,128 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>PCL-CVS&mdash;Emacs Front-End to CVS: Log Edit Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="PCL-CVS&mdash;Emacs Front-End to CVS: Log Edit Mode">
-<meta name="keywords" content="PCL-CVS&mdash;Emacs Front-End to CVS: Log Edit Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-and-Variable-Index.html#Function-and-Variable-Index" rel="index" title="Function and Variable Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Log-View-Mode.html#Log-View-Mode" rel="next" title="Log View Mode">
-<link href="Miscellaneous-commands.html#Miscellaneous-commands" rel="prev" title="Miscellaneous commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>PCL-CVS&mdash;Emacs Front-End to CVS: Log Edit
+  Mode</title>
+  <meta name="description" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Log Edit Mode" />
+  <meta name="keywords" content=
+  "PCL-CVS&mdash;Emacs Front-End to CVS: Log Edit Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Function-and-Variable-Index.html#Function-and-Variable-Index"
+  rel="index" title="Function and Variable Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Log-View-Mode.html#Log-View-Mode" rel="next" title=
+  "Log View Mode" />
+  <link href="Miscellaneous-commands.html#Miscellaneous-commands"
+  rel="prev" title="Miscellaneous commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Log-Edit-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="Log-View-Mode.html#Log-View-Mode" accesskey="n" rel="next">Log View Mode</a>, Previous: <a href="Commands.html#Commands" accesskey="p" rel="prev">Commands</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-and-Variable-Index.html#Function-and-Variable-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Editing-a-Log-Message"></a>
-<h2 class="chapter">6 Editing a Log Message</h2>
+<body lang="en" xml:lang="en">
+  <a name="Log-Edit-Mode" id="Log-Edit-Mode"></a>
 
-<a name="index-Log-Edit-mode"></a>
-<a name="index-mode_002c-Log-Edit"></a>
-<p>Buffers for entering/editing log messages for changes which are about
-to be committed are put into Log Edit mode.
-</p>
-<p>Sometimes the log buffer contains default text when you enter it,
-typically the last log message entered.  If it does, mark and point
-are set around the entire contents of the buffer so that it is easy to
-kill the contents of the buffer with <kbd>C-w</kbd>.
-</p>
-<a name="index-log_002dedit_002dinsert_002dchangelog"></a>
-<p>If you work by writing entries in the <samp>ChangeLog</samp>
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Change-Log.html#Change-Log">Change Log</a> in <cite>The GNU Emacs Manual</cite>) and then commit the change under revision
-control, you can generate the Log Edit text from the ChangeLog using
-<kbd>C-c C-a</kbd> (<kbd>log-edit-insert-changelog</kbd>).  This looks for
-entries for the file(s) concerned in the top entry in the ChangeLog
-and uses those paragraphs as the log text.  This text is only inserted
-if the top entry was made under your user name on the current date.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Change-Logs-and-VC.html#Change-Logs-and-VC">Change Logs and VC</a> in <cite>The GNU Emacs Manual</cite>, for the opposite way of
-working&mdash;generating ChangeLog entries from the revision control log.
-</p>
-<p>In the Log Edit buffer, <kbd>C-c C-f</kbd> (<kbd>M-x log-edit-show-files</kbd>)
-shows the list of files to be committed in case you need to check
-that.
-</p>
-<p>When you have finished editing the log message, type <kbd>C-c C-c</kbd> to
-exit the buffer and commit the change.
-</p>
+  <div class="header">
+    <p>Next: <a href="Log-View-Mode.html#Log-View-Mode" accesskey=
+    "n" rel="next">Log View Mode</a>, Previous: <a href=
+    "Commands.html#Commands" accesskey="p" rel="prev">Commands</a>,
+    Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-and-Variable-Index.html#Function-and-Variable-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Editing-a-Log-Message" id="Editing-a-Log-Message"></a>
 
+  <h2 class="chapter">6 Editing a Log Message</h2><a name=
+  "index-Log-Edit-mode" id="index-Log-Edit-mode"></a> <a name=
+  "index-mode_002c-Log-Edit" id="index-mode_002c-Log-Edit"></a>
 
+  <p>Buffers for entering/editing log messages for changes which
+  are about to be committed are put into Log Edit mode.</p>
 
+  <p>Sometimes the log buffer contains default text when you enter
+  it, typically the last log message entered. If it does, mark and
+  point are set around the entire contents of the buffer so that it
+  is easy to kill the contents of the buffer with
+  <kbd>C-w</kbd>.</p><a name=
+  "index-log_002dedit_002dinsert_002dchangelog" id=
+  "index-log_002dedit_002dinsert_002dchangelog"></a>
 
+  <p>If you work by writing entries in the <samp>ChangeLog</samp>
+  (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Change-Log.html#Change-Log">
+  Change Log</a> in <cite>The GNU Emacs Manual</cite>) and then
+  commit the change under revision control, you can generate the
+  Log Edit text from the ChangeLog using <kbd>C-c C-a</kbd>
+  (<kbd>log-edit-insert-changelog</kbd>). This looks for entries
+  for the file(s) concerned in the top entry in the ChangeLog and
+  uses those paragraphs as the log text. This text is only inserted
+  if the top entry was made under your user name on the current
+  date. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Change-Logs-and-VC.html#Change-Logs-and-VC">
+  Change Logs and VC</a> in <cite>The GNU Emacs Manual</cite>, for
+  the opposite way of working&mdash;generating ChangeLog entries
+  from the revision control log.</p>
+
+  <p>In the Log Edit buffer, <kbd>C-c C-f</kbd> (<kbd>M-x
+  log-edit-show-files</kbd>) shows the list of files to be
+  committed in case you need to check that.</p>
+
+  <p>When you have finished editing the log message, type <kbd>C-c
+  C-c</kbd> to exit the buffer and commit the change.</p>
 </body>
 </html>

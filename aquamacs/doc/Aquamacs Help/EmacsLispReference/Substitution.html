@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,117 +19,168 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Substitution</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Substitution">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Substitution">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Registers.html#Registers" rel="next" title="Registers">
-<link href="Not-Intervals.html#Not-Intervals" rel="prev" title="Not Intervals">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Substitution</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Substitution" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Substitution" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Registers.html#Registers" rel="next" title=
+  "Registers" />
+  <link href="Not-Intervals.html#Not-Intervals" rel="prev" title=
+  "Not Intervals" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Substitution" id="Substitution"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Registers.html#Registers" accesskey="n" rel=
+    "next">Registers</a>, Previous: <a href=
+    "Text-Properties.html#Text-Properties" accesskey="p" rel=
+    "prev">Text Properties</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Substituting-for-a-Character-Code" id=
+  "Substituting-for-a-Character-Code"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Substitution"></a>
-<div class="header">
-<p>
-Next: <a href="Registers.html#Registers" accesskey="n" rel="next">Registers</a>, Previous: <a href="Text-Properties.html#Text-Properties" accesskey="p" rel="prev">Text Properties</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Substituting-for-a-Character-Code"></a>
-<h3 class="section">31.20 Substituting for a Character Code</h3>
-<a name="index-replace-characters-in-region"></a>
-<a name="index-substitute-characters"></a>
+  <h3 class="section">31.20 Substituting for a Character
+  Code</h3><a name="index-replace-characters-in-region" id=
+  "index-replace-characters-in-region"></a> <a name=
+  "index-substitute-characters" id=
+  "index-substitute-characters"></a>
 
-<p>The following functions replace characters within a specified region
-based on their character codes.
-</p>
-<dl>
-<dt><a name="index-subst_002dchar_002din_002dregion"></a>Function: <strong>subst-char-in-region</strong> <em>start end old-char new-char &amp;optional noundo</em></dt>
-<dd><a name="index-replace-characters"></a>
-<p>This function replaces all occurrences of the character <var>old-char</var>
-with the character <var>new-char</var> in the region of the current buffer
-defined by <var>start</var> and <var>end</var>.
-</p>
-<a name="index-undo-avoidance"></a>
-<p>If <var>noundo</var> is non-<code>nil</code>, then <code>subst-char-in-region</code> does
-not record the change for undo and does not mark the buffer as modified.
-This was useful for controlling the old selective display feature
-(see <a href="Selective-Display.html#Selective-Display">Selective Display</a>).
-</p>
-<p><code>subst-char-in-region</code> does not move point and returns
-<code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">---------- Buffer: foo ----------
+  <p>The following functions replace characters within a specified
+  region based on their character codes.</p>
+
+  <dl>
+    <dt><a name="index-subst_002dchar_002din_002dregion" id=
+    "index-subst_002dchar_002din_002dregion"></a>Function:
+    <strong>subst-char-in-region</strong> <em>start end old-char
+    new-char &amp;optional noundo</em></dt>
+
+    <dd>
+      <a name="index-replace-characters" id=
+      "index-replace-characters"></a>
+
+      <p>This function replaces all occurrences of the character
+      <var>old-char</var> with the character <var>new-char</var> in
+      the region of the current buffer defined by <var>start</var>
+      and <var>end</var>.</p><a name="index-undo-avoidance" id=
+      "index-undo-avoidance"></a>
+
+      <p>If <var>noundo</var> is non-<code>nil</code>, then
+      <code>subst-char-in-region</code> does not record the change
+      for undo and does not mark the buffer as modified. This was
+      useful for controlling the old selective display feature (see
+      <a href="Selective-Display.html#Selective-Display">Selective
+      Display</a>).</p>
+
+      <p><code>subst-char-in-region</code> does not move point and
+      returns <code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+---------- Buffer: foo ----------
 This is the contents of the buffer before.
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(subst-char-in-region 1 20 ?i ?X)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(subst-char-in-region 1 20 ?i ?X)
      &rArr; nil
 
 ---------- Buffer: foo ----------
 ThXs Xs the contents of the buffer before.
 ---------- Buffer: foo ----------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-translate_002dregion"></a>Command: <strong>translate-region</strong> <em>start end table</em></dt>
-<dd><p>This function applies a translation table to the characters in the
-buffer between positions <var>start</var> and <var>end</var>.
-</p>
-<p>The translation table <var>table</var> is a string or a char-table;
-<code>(aref <var>table</var> <var>ochar</var>)</code> gives the translated character
-corresponding to <var>ochar</var>.  If <var>table</var> is a string, any
-characters with codes larger than the length of <var>table</var> are not
-altered by the translation.
-</p>
-<p>The return value of <code>translate-region</code> is the number of
-characters that were actually changed by the translation.  This does
-not count characters that were mapped into themselves in the
-translation table.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-translate_002dregion" id=
+    "index-translate_002dregion"></a>Command:
+    <strong>translate-region</strong> <em>start end table</em></dt>
 
+    <dd>
+      <p>This function applies a translation table to the
+      characters in the buffer between positions <var>start</var>
+      and <var>end</var>.</p>
 
+      <p>The translation table <var>table</var> is a string or a
+      char-table; <code>(aref <var>table</var>
+      <var>ochar</var>)</code> gives the translated character
+      corresponding to <var>ochar</var>. If <var>table</var> is a
+      string, any characters with codes larger than the length of
+      <var>table</var> are not altered by the translation.</p>
 
-
+      <p>The return value of <code>translate-region</code> is the
+      number of characters that were actually changed by the
+      translation. This does not count characters that were mapped
+      into themselves in the translation table.</p>
+    </dd>
+  </dl>
 </body>
 </html>

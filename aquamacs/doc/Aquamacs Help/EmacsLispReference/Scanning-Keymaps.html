@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,229 +19,340 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Scanning Keymaps</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Scanning Keymaps">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Scanning Keymaps">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
-<link href="Menu-Keymaps.html#Menu-Keymaps" rel="next" title="Menu Keymaps">
-<link href="Key-Binding-Commands.html#Key-Binding-Commands" rel="prev" title="Key Binding Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Scanning Keymaps</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Scanning Keymaps" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Scanning Keymaps" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keymaps.html#Keymaps" rel="up" title="Keymaps" />
+  <link href="Menu-Keymaps.html#Menu-Keymaps" rel="next" title=
+  "Menu Keymaps" />
+  <link href="Key-Binding-Commands.html#Key-Binding-Commands" rel=
+  "prev" title="Key Binding Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Scanning-Keymaps" id="Scanning-Keymaps"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Menu-Keymaps.html#Menu-Keymaps" accesskey="n"
+    rel="next">Menu Keymaps</a>, Previous: <a href=
+    "Key-Binding-Commands.html#Key-Binding-Commands" accesskey="p"
+    rel="prev">Key Binding Commands</a>, Up: <a href=
+    "Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Scanning-Keymaps-1" id="Scanning-Keymaps-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Scanning-Keymaps"></a>
-<div class="header">
-<p>
-Next: <a href="Menu-Keymaps.html#Menu-Keymaps" accesskey="n" rel="next">Menu Keymaps</a>, Previous: <a href="Key-Binding-Commands.html#Key-Binding-Commands" accesskey="p" rel="prev">Key Binding Commands</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Scanning-Keymaps-1"></a>
-<h3 class="section">21.16 Scanning Keymaps</h3>
-<a name="index-scanning-keymaps"></a>
-<a name="index-keymaps_002c-scanning"></a>
+  <h3 class="section">21.16 Scanning Keymaps</h3><a name=
+  "index-scanning-keymaps" id="index-scanning-keymaps"></a>
+  <a name="index-keymaps_002c-scanning" id=
+  "index-keymaps_002c-scanning"></a>
 
-<p>This section describes functions used to scan all the current keymaps
-for the sake of printing help information.
-</p>
-<dl>
-<dt><a name="index-accessible_002dkeymaps"></a>Function: <strong>accessible-keymaps</strong> <em>keymap &amp;optional prefix</em></dt>
-<dd><p>This function returns a list of all the keymaps that can be reached (via
-zero or more prefix keys) from <var>keymap</var>.  The value is an
-association list with elements of the form <code>(<var>key</var> .
-<var>map</var>)</code>, where <var>key</var> is a prefix key whose definition in
-<var>keymap</var> is <var>map</var>.
-</p>
-<p>The elements of the alist are ordered so that the <var>key</var> increases
-in length.  The first element is always <code>([] . <var>keymap</var>)</code>,
-because the specified keymap is accessible from itself with a prefix of
-no events.
-</p>
-<p>If <var>prefix</var> is given, it should be a prefix key sequence; then
-<code>accessible-keymaps</code> includes only the submaps whose prefixes start
-with <var>prefix</var>.  These elements look just as they do in the value of
-<code>(accessible-keymaps)</code>; the only difference is that some elements
-are omitted.
-</p>
-<p>In the example below, the returned alist indicates that the key
-<tt class="key">ESC</tt>, which is displayed as &lsquo;<samp>^[</samp>&rsquo;, is a prefix key whose
-definition is the sparse keymap <code>(keymap (83 . center-paragraph)
-(115 . foo))</code>.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(accessible-keymaps (current-local-map))
+  <p>This section describes functions used to scan all the current
+  keymaps for the sake of printing help information.</p>
+
+  <dl>
+    <dt><a name="index-accessible_002dkeymaps" id=
+    "index-accessible_002dkeymaps"></a>Function:
+    <strong>accessible-keymaps</strong> <em>keymap &amp;optional
+    prefix</em></dt>
+
+    <dd>
+      <p>This function returns a list of all the keymaps that can
+      be reached (via zero or more prefix keys) from
+      <var>keymap</var>. The value is an association list with
+      elements of the form <code>(<var>key</var> .
+      <var>map</var>)</code>, where <var>key</var> is a prefix key
+      whose definition in <var>keymap</var> is <var>map</var>.</p>
+
+      <p>The elements of the alist are ordered so that the
+      <var>key</var> increases in length. The first element is
+      always <code>([] . <var>keymap</var>)</code>, because the
+      specified keymap is accessible from itself with a prefix of
+      no events.</p>
+
+      <p>If <var>prefix</var> is given, it should be a prefix key
+      sequence; then <code>accessible-keymaps</code> includes only
+      the submaps whose prefixes start with <var>prefix</var>.
+      These elements look just as they do in the value of
+      <code>(accessible-keymaps)</code>; the only difference is
+      that some elements are omitted.</p>
+
+      <p>In the example below, the returned alist indicates that
+      the key <tt class="key">ESC</tt>, which is displayed as
+      &lsquo;<samp>^[</samp>&rsquo;, is a prefix key whose
+      definition is the sparse keymap <code>(keymap (83 .
+      center-paragraph) (115 . foo))</code>.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(accessible-keymaps (current-local-map))
 &rArr;(([] keymap
-      (27 keymap   ; <span class="roman">Note this keymap for <tt class="key">ESC</tt> is repeated below.</span>
+      (27 keymap   ; <span class=
+"roman">Note this keymap for <tt class=
+"key">ESC</tt> is repeated below.</span>
           (83 . center-paragraph)
           (115 . center-line))
       (9 . tab-to-tab-stop))
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">   (&quot;^[&quot; keymap
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+   ("^[" keymap
     (83 . center-paragraph)
     (115 . foo)))
-</pre></div>
+</pre>
+      </div>
 
-<p>In the following example, <kbd>C-h</kbd> is a prefix key that uses a sparse
-keymap starting with <code>(keymap (118 . describe-variable)&hellip;)</code>.
-Another prefix, <kbd>C-x 4</kbd>, uses a keymap which is also the value of
-the variable <code>ctl-x-4-map</code>.  The event <code>mode-line</code> is one of
-several dummy events used as prefixes for mouse actions in special parts
-of a window.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(accessible-keymaps (current-global-map))
+      <p>In the following example, <kbd>C-h</kbd> is a prefix key
+      that uses a sparse keymap starting with <code>(keymap (118 .
+      describe-variable)&hellip;)</code>. Another prefix, <kbd>C-x
+      4</kbd>, uses a keymap which is also the value of the
+      variable <code>ctl-x-4-map</code>. The event
+      <code>mode-line</code> is one of several dummy events used as
+      prefixes for mouse actions in special parts of a window.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(accessible-keymaps (current-global-map))
 &rArr; (([] keymap [set-mark-command beginning-of-line &hellip;
                    delete-backward-char])
-</pre><pre class="smallexample">    (&quot;^H&quot; keymap (118 . describe-variable) &hellip;
+</pre>
+        <pre class="smallexample">
+    ("^H" keymap (118 . describe-variable) &hellip;
      (8 . help-for-help))
-</pre><pre class="smallexample">    (&quot;^X&quot; keymap [x-flush-mouse-queue &hellip;
+</pre>
+        <pre class="smallexample">
+    ("^X" keymap [x-flush-mouse-queue &hellip;
      backward-kill-sentence])
-</pre><pre class="smallexample">    (&quot;^[&quot; keymap [mark-sexp backward-sexp &hellip;
+</pre>
+        <pre class="smallexample">
+    ("^[" keymap [mark-sexp backward-sexp &hellip;
      backward-kill-word])
-</pre><pre class="smallexample">    (&quot;^X4&quot; keymap (15 . display-buffer) &hellip;)
-</pre><pre class="smallexample">    ([mode-line] keymap
+</pre>
+        <pre class="smallexample">
+    ("^X4" keymap (15 . display-buffer) &hellip;)
+</pre>
+        <pre class="smallexample">
+    ([mode-line] keymap
      (S-mouse-2 . mouse-split-window-horizontally) &hellip;))
-</pre></div>
+</pre>
+      </div>
 
-<p>These are not all the keymaps you would see in actuality.
-</p></dd></dl>
+      <p>These are not all the keymaps you would see in
+      actuality.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-map_002dkeymap"></a>Function: <strong>map-keymap</strong> <em>function keymap</em></dt>
-<dd><p>The function <code>map-keymap</code> calls <var>function</var> once
-for each binding in <var>keymap</var>.  It passes two arguments,
-the event type and the value of the binding.  If <var>keymap</var>
-has a parent, the parent&rsquo;s bindings are included as well.
-This works recursively: if the parent has itself a parent, then the
-grandparent&rsquo;s bindings are also included and so on.
-</p>
-<p>This function is the cleanest way to examine all the bindings
-in a keymap.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-map_002dkeymap" id=
+    "index-map_002dkeymap"></a>Function:
+    <strong>map-keymap</strong> <em>function keymap</em></dt>
 
-<dl>
-<dt><a name="index-where_002dis_002dinternal"></a>Function: <strong>where-is-internal</strong> <em>command &amp;optional keymap firstonly noindirect no-remap</em></dt>
-<dd><p>This function is a subroutine used by the <code>where-is</code> command
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Help.html#Help">Help</a> in <cite>The GNU Emacs Manual</cite>).  It returns a list
-of all key sequences (of any length) that are bound to <var>command</var> in a
-set of keymaps.
-</p>
-<p>The argument <var>command</var> can be any object; it is compared with all
-keymap entries using <code>eq</code>.
-</p>
-<p>If <var>keymap</var> is <code>nil</code>, then the maps used are the current active
-keymaps, disregarding <code>overriding-local-map</code> (that is, pretending
-its value is <code>nil</code>).  If <var>keymap</var> is a keymap, then the
-maps searched are <var>keymap</var> and the global keymap.  If <var>keymap</var>
-is a list of keymaps, only those keymaps are searched.
-</p>
-<p>Usually it&rsquo;s best to use <code>overriding-local-map</code> as the expression
-for <var>keymap</var>.  Then <code>where-is-internal</code> searches precisely
-the keymaps that are active.  To search only the global map, pass the
-value <code>(keymap)</code> (an empty keymap) as <var>keymap</var>.
-</p>
-<p>If <var>firstonly</var> is <code>non-ascii</code>, then the value is a single
-vector representing the first key sequence found, rather than a list of
-all possible key sequences.  If <var>firstonly</var> is <code>t</code>, then the
-value is the first key sequence, except that key sequences consisting
-entirely of <acronym>ASCII</acronym> characters (or meta variants of <acronym>ASCII</acronym>
-characters) are preferred to all other key sequences and that the
-return value can never be a menu binding.
-</p>
-<p>If <var>noindirect</var> is non-<code>nil</code>, <code>where-is-internal</code> doesn&rsquo;t look
-inside menu-items to find their commands.  This makes it possible to search for
-a menu-item itself.
-</p>
-<p>The fifth argument, <var>no-remap</var>, determines how this function
-treats command remappings (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>).  There are two
-cases of interest:
-</p>
-<dl compact="compact">
-<dt>If a command <var>other-command</var> is remapped to <var>command</var>:</dt>
-<dd><p>If <var>no-remap</var> is <code>nil</code>, find the bindings for
-<var>other-command</var> and treat them as though they are also bindings
-for <var>command</var>.  If <var>no-remap</var> is non-<code>nil</code>, include the
-vector <code>[remap <var>other-command</var>]</code> in the list of possible key
-sequences, instead of finding those bindings.
-</p>
-</dd>
-<dt>If <var>command</var> is remapped to <var>other-command</var>:</dt>
-<dd><p>If <var>no-remap</var> is <code>nil</code>, return the bindings for
-<var>other-command</var> rather than <var>command</var>.  If <var>no-remap</var> is
-non-<code>nil</code>, return the bindings for <var>command</var>, ignoring the
-fact that it is remapped.
-</p></dd>
-</dl>
-</dd></dl>
+    <dd>
+      <p>The function <code>map-keymap</code> calls
+      <var>function</var> once for each binding in
+      <var>keymap</var>. It passes two arguments, the event type
+      and the value of the binding. If <var>keymap</var> has a
+      parent, the parent&rsquo;s bindings are included as well.
+      This works recursively: if the parent has itself a parent,
+      then the grandparent&rsquo;s bindings are also included and
+      so on.</p>
 
-<dl>
-<dt><a name="index-describe_002dbindings"></a>Command: <strong>describe-bindings</strong> <em>&amp;optional prefix buffer-or-name</em></dt>
-<dd><p>This function creates a listing of all current key bindings, and
-displays it in a buffer named <samp>*Help*</samp>.  The text is grouped by
-modes&mdash;minor modes first, then the major mode, then global bindings.
-</p>
-<p>If <var>prefix</var> is non-<code>nil</code>, it should be a prefix key; then the
-listing includes only keys that start with <var>prefix</var>.
-</p>
-<p>When several characters with consecutive <acronym>ASCII</acronym> codes have the
-same definition, they are shown together, as
-&lsquo;<samp><var>firstchar</var>..<var>lastchar</var></samp>&rsquo;.  In this instance, you need to
-know the <acronym>ASCII</acronym> codes to understand which characters this means.
-For example, in the default global map, the characters &lsquo;<samp><span class="key">SPC</span>
-.. ~</samp>&rsquo; are described by a single line.  <tt class="key">SPC</tt> is <acronym>ASCII</acronym> 32,
-<kbd>~</kbd> is <acronym>ASCII</acronym> 126, and the characters between them include all
-the normal printing characters, (e.g., letters, digits, punctuation,
-etc.); all these characters are bound to <code>self-insert-command</code>.
-</p>
-<p>If <var>buffer-or-name</var> is non-<code>nil</code>, it should be a buffer or a
-buffer name.  Then <code>describe-bindings</code> lists that buffer&rsquo;s bindings,
-instead of the current buffer&rsquo;s.
-</p></dd></dl>
+      <p>This function is the cleanest way to examine all the
+      bindings in a keymap.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Menu-Keymaps.html#Menu-Keymaps" accesskey="n" rel="next">Menu Keymaps</a>, Previous: <a href="Key-Binding-Commands.html#Key-Binding-Commands" accesskey="p" rel="prev">Key Binding Commands</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-where_002dis_002dinternal" id=
+    "index-where_002dis_002dinternal"></a>Function:
+    <strong>where-is-internal</strong> <em>command &amp;optional
+    keymap firstonly noindirect no-remap</em></dt>
 
+    <dd>
+      <p>This function is a subroutine used by the
+      <code>where-is</code> command (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Help.html#Help">
+      Help</a> in <cite>The GNU Emacs Manual</cite>). It returns a
+      list of all key sequences (of any length) that are bound to
+      <var>command</var> in a set of keymaps.</p>
 
+      <p>The argument <var>command</var> can be any object; it is
+      compared with all keymap entries using <code>eq</code>.</p>
 
+      <p>If <var>keymap</var> is <code>nil</code>, then the maps
+      used are the current active keymaps, disregarding
+      <code>overriding-local-map</code> (that is, pretending its
+      value is <code>nil</code>). If <var>keymap</var> is a keymap,
+      then the maps searched are <var>keymap</var> and the global
+      keymap. If <var>keymap</var> is a list of keymaps, only those
+      keymaps are searched.</p>
+
+      <p>Usually it&rsquo;s best to use
+      <code>overriding-local-map</code> as the expression for
+      <var>keymap</var>. Then <code>where-is-internal</code>
+      searches precisely the keymaps that are active. To search
+      only the global map, pass the value <code>(keymap)</code> (an
+      empty keymap) as <var>keymap</var>.</p>
+
+      <p>If <var>firstonly</var> is <code>non-ascii</code>, then
+      the value is a single vector representing the first key
+      sequence found, rather than a list of all possible key
+      sequences. If <var>firstonly</var> is <code>t</code>, then
+      the value is the first key sequence, except that key
+      sequences consisting entirely of <acronym>ASCII</acronym>
+      characters (or meta variants of <acronym>ASCII</acronym>
+      characters) are preferred to all other key sequences and that
+      the return value can never be a menu binding.</p>
+
+      <p>If <var>noindirect</var> is non-<code>nil</code>,
+      <code>where-is-internal</code> doesn&rsquo;t look inside
+      menu-items to find their commands. This makes it possible to
+      search for a menu-item itself.</p>
+
+      <p>The fifth argument, <var>no-remap</var>, determines how
+      this function treats command remappings (see <a href=
+      "Remapping-Commands.html#Remapping-Commands">Remapping
+      Commands</a>). There are two cases of interest:</p>
+
+      <dl compact="compact">
+        <dt>If a command <var>other-command</var> is remapped to
+        <var>command</var>:</dt>
+
+        <dd>
+          <p>If <var>no-remap</var> is <code>nil</code>, find the
+          bindings for <var>other-command</var> and treat them as
+          though they are also bindings for <var>command</var>. If
+          <var>no-remap</var> is non-<code>nil</code>, include the
+          vector <code>[remap <var>other-command</var>]</code> in
+          the list of possible key sequences, instead of finding
+          those bindings.</p>
+        </dd>
+
+        <dt>If <var>command</var> is remapped to
+        <var>other-command</var>:</dt>
+
+        <dd>
+          <p>If <var>no-remap</var> is <code>nil</code>, return the
+          bindings for <var>other-command</var> rather than
+          <var>command</var>. If <var>no-remap</var> is
+          non-<code>nil</code>, return the bindings for
+          <var>command</var>, ignoring the fact that it is
+          remapped.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-describe_002dbindings" id=
+    "index-describe_002dbindings"></a>Command:
+    <strong>describe-bindings</strong> <em>&amp;optional prefix
+    buffer-or-name</em></dt>
+
+    <dd>
+      <p>This function creates a listing of all current key
+      bindings, and displays it in a buffer named
+      <samp>*Help*</samp>. The text is grouped by modes&mdash;minor
+      modes first, then the major mode, then global bindings.</p>
+
+      <p>If <var>prefix</var> is non-<code>nil</code>, it should be
+      a prefix key; then the listing includes only keys that start
+      with <var>prefix</var>.</p>
+
+      <p>When several characters with consecutive
+      <acronym>ASCII</acronym> codes have the same definition, they
+      are shown together, as
+      &lsquo;<samp><var>firstchar</var>..<var>lastchar</var></samp>&rsquo;.
+      In this instance, you need to know the
+      <acronym>ASCII</acronym> codes to understand which characters
+      this means. For example, in the default global map, the
+      characters &lsquo;<samp><span class="key">SPC</span> ..
+      ~</samp>&rsquo; are described by a single line. <tt class=
+      "key">SPC</tt> is <acronym>ASCII</acronym> 32, <kbd>~</kbd>
+      is <acronym>ASCII</acronym> 126, and the characters between
+      them include all the normal printing characters, (e.g.,
+      letters, digits, punctuation, etc.); all these characters are
+      bound to <code>self-insert-command</code>.</p>
+
+      <p>If <var>buffer-or-name</var> is non-<code>nil</code>, it
+      should be a buffer or a buffer name. Then
+      <code>describe-bindings</code> lists that buffer&rsquo;s
+      bindings, instead of the current buffer&rsquo;s.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Menu-Keymaps.html#Menu-Keymaps" accesskey="n"
+    rel="next">Menu Keymaps</a>, Previous: <a href=
+    "Key-Binding-Commands.html#Key-Binding-Commands" accesskey="p"
+    rel="prev">Key Binding Commands</a>, Up: <a href=
+    "Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

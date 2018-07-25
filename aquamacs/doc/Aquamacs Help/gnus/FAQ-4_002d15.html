@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>FAQ 4-15 - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="FAQ-4-_002d-Reading-messages.html#FAQ-4-_002d-Reading-messages" title="FAQ 4 - Reading messages">
-<link rel="prev" href="FAQ-4_002d14.html#FAQ-4_002d14" title="FAQ 4-14">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>FAQ 4-15 - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "FAQ-4-_002d-Reading-messages.html#FAQ-4-_002d-Reading-messages"
+  title="FAQ 4 - Reading messages" />
+  <link rel="prev" href="FAQ-4_002d14.html#FAQ-4_002d14" title=
+  "FAQ 4-14" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,55 +47,60 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="FAQ-4-15"></a>
-<a name="FAQ-4_002d15"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-4_002d14.html#FAQ-4_002d14">FAQ 4-14</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-4-_002d-Reading-messages.html#FAQ-4-_002d-Reading-messages">FAQ 4 - Reading messages</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="FAQ-4-15" id="FAQ-4-15"></a> <a name="FAQ-4_002d15"
+    id="FAQ-4_002d15"></a>
 
-<h5 class="subsubheading">Question 4.15</h5>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "FAQ-4_002d14.html#FAQ-4_002d14">FAQ 4-14</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href=
+    "FAQ-4-_002d-Reading-messages.html#FAQ-4-_002d-Reading-messages">FAQ
+    4 - Reading messages</a></p>
+    <hr />
+  </div>
 
-<p>How to split incoming mails in several groups?
+  <h5 class="subsubheading">Question 4.15</h5>
 
-<h5 class="subsubheading">Answer</h5>
+  <p>How to split incoming mails in several groups?</p>
 
-<p>Gnus offers two possibilities for splitting mail, the easy
-nnmail-split-methods and the more powerful Fancy Mail
-Splitting. I'll only talk about the first one, refer to
-the manual, node "Fancy Mail Splitting" for the latter.
+  <h5 class="subsubheading">Answer</h5>
 
-   <p>The value of nnmail-split-methods is a list, each element
-is a list which stands for a splitting rule. Each rule has
-the form "group where matching articles should go to",
-"regular expression which has to be matched", the first
-rule which matches wins. The last rule must always be a
-general rule (regular expression .*) which denotes where
-articles should go which don't match any other rule. If
-the folder doesn't exist yet, it will be created as soon
-as an article lands there.  By default the mail will be
-send to all groups whose rules match. If you
-don't want that (you probably don't want), say
+  <p>Gnus offers two possibilities for splitting mail, the easy
+  nnmail-split-methods and the more powerful Fancy Mail Splitting.
+  I'll only talk about the first one, refer to the manual, node
+  "Fancy Mail Splitting" for the latter.</p>
 
-<pre class="example">     (setq nnmail-crosspost nil)
+  <p>The value of nnmail-split-methods is a list, each element is a
+  list which stands for a splitting rule. Each rule has the form
+  "group where matching articles should go to", "regular expression
+  which has to be matched", the first rule which matches wins. The
+  last rule must always be a general rule (regular expression .*)
+  which denotes where articles should go which don't match any
+  other rule. If the folder doesn't exist yet, it will be created
+  as soon as an article lands there. By default the mail will be
+  send to all groups whose rules match. If you don't want that (you
+  probably don't want), say</p>
+  <pre class="example">
+     (setq nnmail-crosspost nil)
 </pre>
-   <p class="noindent">in ~/.gnus.el.
 
-   <p>An example might be better than thousand words, so here's
-my nnmail-split-methods. Note that I send duplicates in a
-special group and that the default group is spam, since I
-filter all mails out which are from some list I'm
-subscribed to or which are addressed directly to me
-before. Those rules kill about 80% of the Spam which
-reaches me (Email addresses are changed to prevent spammers
-from using them):
+  <p class="noindent">in ~/.gnus.el.</p>
 
-<pre class="example">     (setq nnmail-split-methods
+  <p>An example might be better than thousand words, so here's my
+  nnmail-split-methods. Note that I send duplicates in a special
+  group and that the default group is spam, since I filter all
+  mails out which are from some list I'm subscribed to or which are
+  addressed directly to me before. Those rules kill about 80% of
+  the Spam which reaches me (Email addresses are changed to prevent
+  spammers from using them):</p>
+  <pre class="example">
+     (setq nnmail-split-methods
        '(("duplicates" "^Gnus-Warning:.*duplicate")
          ("XEmacs-NT" "^\\(To:\\|CC:\\).*localpart@xemacs.invalid.*")
          ("Gnus-Tut" "^\\(To:\\|CC:\\).*localpart@socha.invalid.*")
@@ -107,7 +124,7 @@ from using them):
          ("Inbox" "^\\(CC:\\|To:\\).*\\(my\ name\\|address@one.invalid\\|adress@two.invalid\\)")
          ("Spam" "")))
 </pre>
-   <p class="noindent">
 
-   </body></html>
-
+  <p class="noindent"></p>
+</body>
+</html>

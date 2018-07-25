@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2000-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,270 +14,414 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Emacs Widget Library: Defining New Widgets</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Emacs Widget Library: Defining New Widgets">
-<meta name="keywords" content="The Emacs Widget Library: Defining New Widgets">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Widget-Browser.html#Widget-Browser" rel="next" title="Widget Browser">
-<link href="Widget-Properties.html#Widget-Properties" rel="prev" title="Widget Properties">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Emacs Widget Library: Defining New Widgets</title>
+  <meta name="description" content=
+  "The Emacs Widget Library: Defining New Widgets" />
+  <meta name="keywords" content=
+  "The Emacs Widget Library: Defining New Widgets" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Widget-Browser.html#Widget-Browser" rel="next" title=
+  "Widget Browser" />
+  <link href="Widget-Properties.html#Widget-Properties" rel="prev"
+  title="Widget Properties" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-New-Widgets"></a>
-<div class="header">
-<p>
-Next: <a href="Widget-Browser.html#Widget-Browser" accesskey="n" rel="next">Widget Browser</a>, Previous: <a href="Widget-Properties.html#Widget-Properties" accesskey="p" rel="prev">Widget Properties</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-New-Widgets-1"></a>
-<h2 class="chapter">8 Defining New Widgets</h2>
-<a name="index-new-widgets"></a>
-<a name="index-defining-new-widgets"></a>
+<body lang="en" xml:lang="en">
+  <a name="Defining-New-Widgets" id="Defining-New-Widgets"></a>
 
-<p>You can define specialized widgets with <code>define-widget</code>.  It allows
-you to create a shorthand for more complex widgets, including specifying
-component widgets and new default values for the keyword
-arguments.
-</p>
-<dl>
-<dt><a name="index-define_002dwidget"></a>Function: <strong>define-widget</strong> <em>name class doc &amp;rest args</em></dt>
-<dd><p>Define a new widget type named <var>name</var> from <code>class</code>.
-</p>
-<p><var>name</var> and class should both be symbols, <code>class</code> should be one
-of the existing widget types.
-</p>
-<p>The third argument <var>doc</var> is a documentation string for the widget.
-</p>
-<p>After the new widget has been defined, the following two calls will
-create identical widgets:
-</p>
-<ul>
-<li> <div class="lisp">
-<pre class="lisp">(widget-create <var>name</var>)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Widget-Browser.html#Widget-Browser"
+    accesskey="n" rel="next">Widget Browser</a>, Previous: <a href=
+    "Widget-Properties.html#Widget-Properties" accesskey="p" rel=
+    "prev">Widget Properties</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-New-Widgets-1" id="Defining-New-Widgets-1"></a>
 
-</li><li> <div class="lisp">
-<pre class="lisp">(apply widget-create <var>class</var> <var>args</var>)
-</pre></div>
-</li></ul>
+  <h2 class="chapter">8 Defining New Widgets</h2><a name=
+  "index-new-widgets" id="index-new-widgets"></a> <a name=
+  "index-defining-new-widgets" id="index-defining-new-widgets"></a>
 
-</dd></dl>
+  <p>You can define specialized widgets with
+  <code>define-widget</code>. It allows you to create a shorthand
+  for more complex widgets, including specifying component widgets
+  and new default values for the keyword arguments.</p>
 
-<p>Using <code>define-widget</code> just stores the definition of the widget type
-in the <code>widget-type</code> property of <var>name</var>, which is what
-<code>widget-create</code> uses.
-</p>
-<p>If you only want to specify defaults for keywords with no complex
-conversions, you can use <code>identity</code> as your conversion function.
-</p>
-<p>The following additional keyword arguments are useful when defining new
-widgets:
-</p><dl compact="compact">
-<dd><a name="index-convert_002dwidget-keyword"></a>
-</dd>
-<dt><code>:convert-widget</code></dt>
-<dd><p>Function to convert a widget type before creating a widget of that
-type.  It takes a widget type as an argument, and returns the converted
-widget type.  When a widget is created, this function is called for the
-widget type and all the widget&rsquo;s parent types, most derived first.
-</p>
-<p>The following predefined functions can be used here:
-</p>
-<dl>
-<dt><a name="index-widget_002dtypes_002dconvert_002dwidget"></a>Function: <strong>widget-types-convert-widget</strong> <em>widget</em></dt>
-<dd><p>Convert <code>:args</code> as widget types in <var>widget</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-define_002dwidget" id=
+    "index-define_002dwidget"></a>Function:
+    <strong>define-widget</strong> <em>name class doc &amp;rest
+    args</em></dt>
 
-<dl>
-<dt><a name="index-widget_002dvalue_002dconvert_002dwidget"></a>Function: <strong>widget-value-convert-widget</strong> <em>widget</em></dt>
-<dd><p>Initialize <code>:value</code> from <code>:args</code> in <var>widget</var>.
-</p></dd></dl>
+    <dd>
+      <p>Define a new widget type named <var>name</var> from
+      <code>class</code>.</p>
 
-<a name="index-copy-keyword"></a>
-</dd>
-<dt><code>:copy</code></dt>
-<dd><p>Function to deep copy a widget type.  It takes a shallow copy of the
-widget type as an argument (made by <code>copy-sequence</code>), and returns a
-deep copy.  The purpose of this is to avoid having different instances
-of combined widgets share nested attributes.
-</p>
-<p>The following predefined functions can be used here:
-</p>
-<dl>
-<dt><a name="index-widget_002dtypes_002dcopy"></a>Function: <strong>widget-types-copy</strong> <em>widget</em></dt>
-<dd><p>Copy <code>:args</code> as widget types in <var>widget</var>.
-</p></dd></dl>
+      <p><var>name</var> and class should both be symbols,
+      <code>class</code> should be one of the existing widget
+      types.</p>
 
-<a name="index-value_002dto_002dinternal-keyword"></a>
-</dd>
-<dt><code>:value-to-internal</code></dt>
-<dd><p>Function to convert the value to the internal format.  The function
-takes two arguments, a widget and an external value, and returns the
-internal value.  The function is called on the present <code>:value</code>
-when the widget is created, and on any value set later with
-<code>widget-value-set</code>.
-</p>
-<a name="index-value_002dto_002dexternal-keyword"></a>
-</dd>
-<dt><code>:value-to-external</code></dt>
-<dd><p>Function to convert the value to the external format.  The function
-takes two arguments, a widget and an internal value, and returns the
-external value.  The function is called on the present <code>:value</code>
-when the widget is created, and on any value set later with
-<code>widget-value-set</code>.
-</p>
-<a name="index-create-keyword"></a>
-</dd>
-<dt><code>:create</code></dt>
-<dd><p>Function to create a widget from scratch.  The function takes one
-argument, a widget type, and creates a widget of that type, inserts it
-in the buffer, and returns a widget object.
-</p>
-<a name="index-delete-keyword"></a>
-</dd>
-<dt><code>:delete</code></dt>
-<dd><p>Function to delete a widget.  The function takes one argument, a widget,
-and should remove all traces of the widget from the buffer.
-</p>
-<p>The default value is:
-</p>
-<dl>
-<dt><a name="index-widget_002ddefault_002ddelete"></a>Function: <strong>widget-default-delete</strong> <em>widget</em></dt>
-<dd><p>Remove <var>widget</var> from the buffer.
-Delete all <code>:children</code> and <code>:buttons</code> in <var>widget</var>.
-</p></dd></dl>
+      <p>The third argument <var>doc</var> is a documentation
+      string for the widget.</p>
 
-<p>In most cases you should not change this value, but instead use
-<code>:value-delete</code> to make any additional cleanup.
-</p>
-<a name="index-value_002dcreate-keyword"></a>
-</dd>
-<dt><code>:value-create</code></dt>
-<dd><p>Function to expand the &lsquo;<samp>%v</samp>&rsquo; escape in the format string.  It will
-be called with the widget as its argument and should insert a
-representation of the widget&rsquo;s value in the buffer.
-</p>
-<p>Nested widgets should be listed in <code>:children</code> or <code>:buttons</code>
-to make sure they are automatically deleted.
-</p>
-<a name="index-value_002ddelete-keyword"></a>
-</dd>
-<dt><code>:value-delete</code></dt>
-<dd><p>Should remove the representation of the widget&rsquo;s value from the buffer.
-It will be called with the widget as its argument.  It doesn&rsquo;t have to
-remove the text, but it should release markers and delete nested widgets
-if these are not listed in <code>:children</code> or <code>:buttons</code>.
-</p>
-<a name="index-value_002dget-keyword"></a>
-</dd>
-<dt><code>:value-get</code></dt>
-<dd><p>Function to extract the value of a widget, as it is displayed in the
-buffer.
-</p>
-<p>The following predefined function can be used here:
-</p>
-<dl>
-<dt><a name="index-widget_002dvalue_002dvalue_002dget"></a>Function: <strong>widget-value-value-get</strong> <em>widget</em></dt>
-<dd><p>Return the <code>:value</code> property of <var>widget</var>.
-</p></dd></dl>
+      <p>After the new widget has been defined, the following two
+      calls will create identical widgets:</p>
 
-<a name="index-format_002dhandler-keyword"></a>
-</dd>
-<dt><code>:format-handler</code></dt>
-<dd><p>Function to handle unknown &lsquo;<samp>%</samp>&rsquo; escapes in the format string.  It
-will be called with the widget and the character that follows the
-&lsquo;<samp>%</samp>&rsquo; as arguments.  You can set this to allow your widget to handle
-non-standard escapes.
-</p>
-<a name="index-widget_002ddefault_002dformat_002dhandler"></a>
-<p>You should end up calling <code>widget-default-format-handler</code> to handle
-unknown escape sequences, which will handle the &lsquo;<samp>%h</samp>&rsquo; and any future
-escape sequences, as well as give an error for unknown escapes.
-</p>
-<a name="index-action-keyword"></a>
-</dd>
-<dt><code>:action</code></dt>
-<dd><p>Function to handle user initiated events.  By default, <code>:notify</code>
-the parent.
-</p>
-<p>The following predefined function can be used here:
-</p>
-<dl>
-<dt><a name="index-widget_002dparent_002daction"></a>Function: <strong>widget-parent-action</strong> <em>widget &amp;optional event</em></dt>
-<dd><p>Tell <code>:parent</code> of <var>widget</var> to handle the <code>:action</code>.
-Optional <var>event</var> is the event that triggered the action.
-</p></dd></dl>
+      <ul>
+        <li>
+          <div class="lisp">
+            <pre class="lisp">
+(widget-create <var>name</var>)
+</pre>
+          </div>
+        </li>
 
-<a name="index-prompt_002dvalue-keyword"></a>
-</dd>
-<dt><code>:prompt-value</code></dt>
-<dd><p>Function to prompt for a value in the minibuffer.  The function should
-take four arguments, <var>widget</var>, <var>prompt</var>, <var>value</var>, and
-<var>unbound</var> and should return a value for widget entered by the user.
-<var>prompt</var> is the prompt to use.  <var>value</var> is the default value to
-use, unless <var>unbound</var> is non-<code>nil</code>, in which case there is no default
-value.  The function should read the value using the method most natural
-for this widget, and does not have to check that it matches.
-</p></dd>
-</dl>
+        <li>
+          <div class="lisp">
+            <pre class="lisp">
+(apply widget-create <var>class</var> <var>args</var>)
+</pre>
+          </div>
+        </li>
+      </ul>
+    </dd>
+  </dl>
 
-<p>If you want to define a new widget from scratch, use the <code>default</code>
-widget as its base.
-</p>
-<dl>
-<dt><a name="index-default"></a>Widget: <strong>default</strong></dt>
-<dd><p>Widget used as a base for other widgets.
-</p>
-<p>It provides most of the functionality that is referred to as &ldquo;by
-default&rdquo; in this text.
-</p></dd></dl>
+  <p>Using <code>define-widget</code> just stores the definition of
+  the widget type in the <code>widget-type</code> property of
+  <var>name</var>, which is what <code>widget-create</code>
+  uses.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Widget-Browser.html#Widget-Browser" accesskey="n" rel="next">Widget Browser</a>, Previous: <a href="Widget-Properties.html#Widget-Properties" accesskey="p" rel="prev">Widget Properties</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If you only want to specify defaults for keywords with no
+  complex conversions, you can use <code>identity</code> as your
+  conversion function.</p>
 
+  <p>The following additional keyword arguments are useful when
+  defining new widgets:</p>
 
+  <dl compact="compact">
+    <dd><a name="index-convert_002dwidget-keyword" id=
+    "index-convert_002dwidget-keyword"></a></dd>
 
+    <dt><code>:convert-widget</code></dt>
+
+    <dd>
+      <p>Function to convert a widget type before creating a widget
+      of that type. It takes a widget type as an argument, and
+      returns the converted widget type. When a widget is created,
+      this function is called for the widget type and all the
+      widget&rsquo;s parent types, most derived first.</p>
+
+      <p>The following predefined functions can be used here:</p>
+
+      <dl>
+        <dt><a name="index-widget_002dtypes_002dconvert_002dwidget"
+        id=
+        "index-widget_002dtypes_002dconvert_002dwidget"></a>Function:
+        <strong>widget-types-convert-widget</strong>
+        <em>widget</em></dt>
+
+        <dd>
+          <p>Convert <code>:args</code> as widget types in
+          <var>widget</var>.</p>
+        </dd>
+      </dl>
+
+      <dl>
+        <dt><a name="index-widget_002dvalue_002dconvert_002dwidget"
+        id=
+        "index-widget_002dvalue_002dconvert_002dwidget"></a>Function:
+        <strong>widget-value-convert-widget</strong>
+        <em>widget</em></dt>
+
+        <dd>
+          <p>Initialize <code>:value</code> from <code>:args</code>
+          in <var>widget</var>.</p>
+        </dd>
+      </dl><a name="index-copy-keyword" id=
+      "index-copy-keyword"></a>
+    </dd>
+
+    <dt><code>:copy</code></dt>
+
+    <dd>
+      <p>Function to deep copy a widget type. It takes a shallow
+      copy of the widget type as an argument (made by
+      <code>copy-sequence</code>), and returns a deep copy. The
+      purpose of this is to avoid having different instances of
+      combined widgets share nested attributes.</p>
+
+      <p>The following predefined functions can be used here:</p>
+
+      <dl>
+        <dt><a name="index-widget_002dtypes_002dcopy" id=
+        "index-widget_002dtypes_002dcopy"></a>Function:
+        <strong>widget-types-copy</strong> <em>widget</em></dt>
+
+        <dd>
+          <p>Copy <code>:args</code> as widget types in
+          <var>widget</var>.</p>
+        </dd>
+      </dl><a name="index-value_002dto_002dinternal-keyword" id=
+      "index-value_002dto_002dinternal-keyword"></a>
+    </dd>
+
+    <dt><code>:value-to-internal</code></dt>
+
+    <dd>
+      <p>Function to convert the value to the internal format. The
+      function takes two arguments, a widget and an external value,
+      and returns the internal value. The function is called on the
+      present <code>:value</code> when the widget is created, and
+      on any value set later with
+      <code>widget-value-set</code>.</p><a name=
+      "index-value_002dto_002dexternal-keyword" id=
+      "index-value_002dto_002dexternal-keyword"></a>
+    </dd>
+
+    <dt><code>:value-to-external</code></dt>
+
+    <dd>
+      <p>Function to convert the value to the external format. The
+      function takes two arguments, a widget and an internal value,
+      and returns the external value. The function is called on the
+      present <code>:value</code> when the widget is created, and
+      on any value set later with
+      <code>widget-value-set</code>.</p><a name=
+      "index-create-keyword" id="index-create-keyword"></a>
+    </dd>
+
+    <dt><code>:create</code></dt>
+
+    <dd>
+      <p>Function to create a widget from scratch. The function
+      takes one argument, a widget type, and creates a widget of
+      that type, inserts it in the buffer, and returns a widget
+      object.</p><a name="index-delete-keyword" id=
+      "index-delete-keyword"></a>
+    </dd>
+
+    <dt><code>:delete</code></dt>
+
+    <dd>
+      <p>Function to delete a widget. The function takes one
+      argument, a widget, and should remove all traces of the
+      widget from the buffer.</p>
+
+      <p>The default value is:</p>
+
+      <dl>
+        <dt><a name="index-widget_002ddefault_002ddelete" id=
+        "index-widget_002ddefault_002ddelete"></a>Function:
+        <strong>widget-default-delete</strong> <em>widget</em></dt>
+
+        <dd>
+          <p>Remove <var>widget</var> from the buffer. Delete all
+          <code>:children</code> and <code>:buttons</code> in
+          <var>widget</var>.</p>
+        </dd>
+      </dl>
+
+      <p>In most cases you should not change this value, but
+      instead use <code>:value-delete</code> to make any additional
+      cleanup.</p><a name="index-value_002dcreate-keyword" id=
+      "index-value_002dcreate-keyword"></a>
+    </dd>
+
+    <dt><code>:value-create</code></dt>
+
+    <dd>
+      <p>Function to expand the &lsquo;<samp>%v</samp>&rsquo;
+      escape in the format string. It will be called with the
+      widget as its argument and should insert a representation of
+      the widget&rsquo;s value in the buffer.</p>
+
+      <p>Nested widgets should be listed in <code>:children</code>
+      or <code>:buttons</code> to make sure they are automatically
+      deleted.</p><a name="index-value_002ddelete-keyword" id=
+      "index-value_002ddelete-keyword"></a>
+    </dd>
+
+    <dt><code>:value-delete</code></dt>
+
+    <dd>
+      <p>Should remove the representation of the widget&rsquo;s
+      value from the buffer. It will be called with the widget as
+      its argument. It doesn&rsquo;t have to remove the text, but
+      it should release markers and delete nested widgets if these
+      are not listed in <code>:children</code> or
+      <code>:buttons</code>.</p><a name=
+      "index-value_002dget-keyword" id=
+      "index-value_002dget-keyword"></a>
+    </dd>
+
+    <dt><code>:value-get</code></dt>
+
+    <dd>
+      <p>Function to extract the value of a widget, as it is
+      displayed in the buffer.</p>
+
+      <p>The following predefined function can be used here:</p>
+
+      <dl>
+        <dt><a name="index-widget_002dvalue_002dvalue_002dget" id=
+        "index-widget_002dvalue_002dvalue_002dget"></a>Function:
+        <strong>widget-value-value-get</strong>
+        <em>widget</em></dt>
+
+        <dd>
+          <p>Return the <code>:value</code> property of
+          <var>widget</var>.</p>
+        </dd>
+      </dl><a name="index-format_002dhandler-keyword" id=
+      "index-format_002dhandler-keyword"></a>
+    </dd>
+
+    <dt><code>:format-handler</code></dt>
+
+    <dd>
+      <p>Function to handle unknown &lsquo;<samp>%</samp>&rsquo;
+      escapes in the format string. It will be called with the
+      widget and the character that follows the
+      &lsquo;<samp>%</samp>&rsquo; as arguments. You can set this
+      to allow your widget to handle non-standard
+      escapes.</p><a name=
+      "index-widget_002ddefault_002dformat_002dhandler" id=
+      "index-widget_002ddefault_002dformat_002dhandler"></a>
+
+      <p>You should end up calling
+      <code>widget-default-format-handler</code> to handle unknown
+      escape sequences, which will handle the
+      &lsquo;<samp>%h</samp>&rsquo; and any future escape
+      sequences, as well as give an error for unknown
+      escapes.</p><a name="index-action-keyword" id=
+      "index-action-keyword"></a>
+    </dd>
+
+    <dt><code>:action</code></dt>
+
+    <dd>
+      <p>Function to handle user initiated events. By default,
+      <code>:notify</code> the parent.</p>
+
+      <p>The following predefined function can be used here:</p>
+
+      <dl>
+        <dt><a name="index-widget_002dparent_002daction" id=
+        "index-widget_002dparent_002daction"></a>Function:
+        <strong>widget-parent-action</strong> <em>widget
+        &amp;optional event</em></dt>
+
+        <dd>
+          <p>Tell <code>:parent</code> of <var>widget</var> to
+          handle the <code>:action</code>. Optional
+          <var>event</var> is the event that triggered the
+          action.</p>
+        </dd>
+      </dl><a name="index-prompt_002dvalue-keyword" id=
+      "index-prompt_002dvalue-keyword"></a>
+    </dd>
+
+    <dt><code>:prompt-value</code></dt>
+
+    <dd>
+      <p>Function to prompt for a value in the minibuffer. The
+      function should take four arguments, <var>widget</var>,
+      <var>prompt</var>, <var>value</var>, and <var>unbound</var>
+      and should return a value for widget entered by the user.
+      <var>prompt</var> is the prompt to use. <var>value</var> is
+      the default value to use, unless <var>unbound</var> is
+      non-<code>nil</code>, in which case there is no default
+      value. The function should read the value using the method
+      most natural for this widget, and does not have to check that
+      it matches.</p>
+    </dd>
+  </dl>
+
+  <p>If you want to define a new widget from scratch, use the
+  <code>default</code> widget as its base.</p>
+
+  <dl>
+    <dt><a name="index-default" id="index-default"></a>Widget:
+    <strong>default</strong></dt>
+
+    <dd>
+      <p>Widget used as a base for other widgets.</p>
+
+      <p>It provides most of the functionality that is referred to
+      as &ldquo;by default&rdquo; in this text.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Widget-Browser.html#Widget-Browser"
+    accesskey="n" rel="next">Widget Browser</a>, Previous: <a href=
+    "Widget-Properties.html#Widget-Properties" accesskey="p" rel=
+    "prev">Widget Properties</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

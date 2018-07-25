@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,149 +19,218 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Point</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Point">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Point">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Positions.html#Positions" rel="up" title="Positions">
-<link href="Motion.html#Motion" rel="next" title="Motion">
-<link href="Positions.html#Positions" rel="prev" title="Positions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Point</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Point" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Point" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Positions.html#Positions" rel="up" title=
+  "Positions" />
+  <link href="Motion.html#Motion" rel="next" title="Motion" />
+  <link href="Positions.html#Positions" rel="prev" title=
+  "Positions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Point" id="Point"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Motion.html#Motion" accesskey="n" rel=
+    "next">Motion</a>, Up: <a href="Positions.html#Positions"
+    accesskey="u" rel="up">Positions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Point-1" id="Point-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Point"></a>
-<div class="header">
-<p>
-Next: <a href="Motion.html#Motion" accesskey="n" rel="next">Motion</a>, Up: <a href="Positions.html#Positions" accesskey="u" rel="up">Positions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Point-1"></a>
-<h3 class="section">29.1 Point</h3>
-<a name="index-point"></a>
+  <h3 class="section">29.1 Point</h3><a name="index-point" id=
+  "index-point"></a>
 
-<p><em>Point</em> is a special buffer position used by many editing
-commands, including the self-inserting typed characters and text
-insertion functions.  Other commands move point through the text
-to allow editing and insertion at different places.
-</p>
-<p>Like other positions, point designates a place between two characters
-(or before the first character, or after the last character), rather
-than a particular character.  Usually terminals display the cursor over
-the character that immediately follows point; point is actually before
-the character on which the cursor sits.
-</p>
-<a name="index-point-with-narrowing"></a>
-<p>The value of point is a number no less than 1, and no greater than the
-buffer size plus 1.  If narrowing is in effect (see <a href="Narrowing.html#Narrowing">Narrowing</a>), then
-point is constrained to fall within the accessible portion of the buffer
-(possibly at one end of it).
-</p>
-<p>Each buffer has its own value of point, which is independent of the
-value of point in other buffers.  Each window also has a value of point,
-which is independent of the value of point in other windows on the same
-buffer.  This is why point can have different values in various windows
-that display the same buffer.  When a buffer appears in only one window,
-the buffer&rsquo;s point and the window&rsquo;s point normally have the same value,
-so the distinction is rarely important.  See <a href="Window-Point.html#Window-Point">Window Point</a>, for more
-details.
-</p>
-<dl>
-<dt><a name="index-point-1"></a>Function: <strong>point</strong></dt>
-<dd><a name="index-current-buffer-position"></a>
-<p>This function returns the value of point in the current buffer,
-as an integer.
-</p>
-<div class="example">
-<pre class="example">(point)
+  <p><em>Point</em> is a special buffer position used by many
+  editing commands, including the self-inserting typed characters
+  and text insertion functions. Other commands move point through
+  the text to allow editing and insertion at different places.</p>
+
+  <p>Like other positions, point designates a place between two
+  characters (or before the first character, or after the last
+  character), rather than a particular character. Usually terminals
+  display the cursor over the character that immediately follows
+  point; point is actually before the character on which the cursor
+  sits.</p><a name="index-point-with-narrowing" id=
+  "index-point-with-narrowing"></a>
+
+  <p>The value of point is a number no less than 1, and no greater
+  than the buffer size plus 1. If narrowing is in effect (see
+  <a href="Narrowing.html#Narrowing">Narrowing</a>), then point is
+  constrained to fall within the accessible portion of the buffer
+  (possibly at one end of it).</p>
+
+  <p>Each buffer has its own value of point, which is independent
+  of the value of point in other buffers. Each window also has a
+  value of point, which is independent of the value of point in
+  other windows on the same buffer. This is why point can have
+  different values in various windows that display the same buffer.
+  When a buffer appears in only one window, the buffer&rsquo;s
+  point and the window&rsquo;s point normally have the same value,
+  so the distinction is rarely important. See <a href=
+  "Window-Point.html#Window-Point">Window Point</a>, for more
+  details.</p>
+
+  <dl>
+    <dt><a name="index-point-1" id="index-point-1"></a>Function:
+    <strong>point</strong></dt>
+
+    <dd>
+      <a name="index-current-buffer-position" id=
+      "index-current-buffer-position"></a>
+
+      <p>This function returns the value of point in the current
+      buffer, as an integer.</p>
+
+      <div class="example">
+        <pre class="example">
+(point)
      &rArr; 175
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-point_002dmin"></a>Function: <strong>point-min</strong></dt>
-<dd><p>This function returns the minimum accessible value of point in the
-current buffer.  This is normally 1, but if narrowing is in effect, it
-is the position of the start of the region that you narrowed to.
-(See <a href="Narrowing.html#Narrowing">Narrowing</a>.)
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-point_002dmin" id=
+    "index-point_002dmin"></a>Function:
+    <strong>point-min</strong></dt>
 
-<dl>
-<dt><a name="index-point_002dmax"></a>Function: <strong>point-max</strong></dt>
-<dd><p>This function returns the maximum accessible value of point in the
-current buffer.  This is <code>(1+ (buffer-size))</code>, unless narrowing is
-in effect, in which case it is the position of the end of the region
-that you narrowed to.  (See <a href="Narrowing.html#Narrowing">Narrowing</a>.)
-</p></dd></dl>
+    <dd>
+      <p>This function returns the minimum accessible value of
+      point in the current buffer. This is normally 1, but if
+      narrowing is in effect, it is the position of the start of
+      the region that you narrowed to. (See <a href=
+      "Narrowing.html#Narrowing">Narrowing</a>.)</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-buffer_002dend"></a>Function: <strong>buffer-end</strong> <em>flag</em></dt>
-<dd><p>This function returns <code>(point-max)</code> if <var>flag</var> is greater than
-0, <code>(point-min)</code> otherwise.  The argument <var>flag</var> must be a
-number.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-point_002dmax" id=
+    "index-point_002dmax"></a>Function:
+    <strong>point-max</strong></dt>
 
-<dl>
-<dt><a name="index-buffer_002dsize"></a>Function: <strong>buffer-size</strong> <em>&amp;optional buffer</em></dt>
-<dd><p>This function returns the total number of characters in the current
-buffer.  In the absence of any narrowing (see <a href="Narrowing.html#Narrowing">Narrowing</a>),
-<code>point-max</code> returns a value one larger than this.
-</p>
-<p>If you specify a buffer, <var>buffer</var>, then the value is the
-size of <var>buffer</var>.
-</p>
-<div class="example">
-<pre class="example">(buffer-size)
+    <dd>
+      <p>This function returns the maximum accessible value of
+      point in the current buffer. This is <code>(1+
+      (buffer-size))</code>, unless narrowing is in effect, in
+      which case it is the position of the end of the region that
+      you narrowed to. (See <a href=
+      "Narrowing.html#Narrowing">Narrowing</a>.)</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-buffer_002dend" id=
+    "index-buffer_002dend"></a>Function:
+    <strong>buffer-end</strong> <em>flag</em></dt>
+
+    <dd>
+      <p>This function returns <code>(point-max)</code> if
+      <var>flag</var> is greater than 0, <code>(point-min)</code>
+      otherwise. The argument <var>flag</var> must be a number.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-buffer_002dsize" id=
+    "index-buffer_002dsize"></a>Function:
+    <strong>buffer-size</strong> <em>&amp;optional buffer</em></dt>
+
+    <dd>
+      <p>This function returns the total number of characters in
+      the current buffer. In the absence of any narrowing (see
+      <a href="Narrowing.html#Narrowing">Narrowing</a>),
+      <code>point-max</code> returns a value one larger than
+      this.</p>
+
+      <p>If you specify a buffer, <var>buffer</var>, then the value
+      is the size of <var>buffer</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(buffer-size)
      &rArr; 35
-</pre><pre class="example">(point-max)
+</pre>
+        <pre class="example">
+(point-max)
      &rArr; 36
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Motion.html#Motion" accesskey="n" rel="next">Motion</a>, Up: <a href="Positions.html#Positions" accesskey="u" rel="up">Positions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Motion.html#Motion" accesskey="n" rel=
+    "next">Motion</a>, Up: <a href="Positions.html#Positions"
+    accesskey="u" rel="up">Positions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

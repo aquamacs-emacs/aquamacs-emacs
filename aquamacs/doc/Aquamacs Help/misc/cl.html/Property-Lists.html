@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,151 +16,219 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Property Lists</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Property Lists">
-<meta name="keywords" content="Common Lisp Extensions: Property Lists">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Symbols.html#Symbols" rel="up" title="Symbols">
-<link href="Creating-Symbols.html#Creating-Symbols" rel="next" title="Creating Symbols">
-<link href="Symbols.html#Symbols" rel="prev" title="Symbols">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Property Lists</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Property Lists" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Property Lists" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Symbols.html#Symbols" rel="up" title="Symbols" />
+  <link href="Creating-Symbols.html#Creating-Symbols" rel="next"
+  title="Creating Symbols" />
+  <link href="Symbols.html#Symbols" rel="prev" title="Symbols" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Property-Lists"></a>
-<div class="header">
-<p>
-Next: <a href="Creating-Symbols.html#Creating-Symbols" accesskey="n" rel="next">Creating Symbols</a>, Up: <a href="Symbols.html#Symbols" accesskey="u" rel="up">Symbols</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Property-Lists-1"></a>
-<h3 class="section">7.1 Property Lists</h3>
+<body lang="en" xml:lang="en">
+  <a name="Property-Lists" id="Property-Lists"></a>
 
-<p>These functions augment the standard Emacs Lisp functions <code>get</code>
-and <code>put</code> for operating on properties attached to symbols.
-There are also functions for working with property lists as
-first-class data structures not attached to particular symbols.
-</p>
-<dl>
-<dt><a name="index-cl_002dget"></a>Function: <strong>cl-get</strong> <em>symbol property &amp;optional default</em></dt>
-<dd><p>This function is like <code>get</code>, except that if the property is
-not found, the <var>default</var> argument provides the return value.
-(The Emacs Lisp <code>get</code> function always uses <code>nil</code> as
-the default; this package&rsquo;s <code>cl-get</code> is equivalent to Common
-Lisp&rsquo;s <code>get</code>.)
-</p>
-<p>The <code>cl-get</code> function is <code>setf</code>-able; when used in this
-fashion, the <var>default</var> argument is allowed but ignored.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Creating-Symbols.html#Creating-Symbols"
+    accesskey="n" rel="next">Creating Symbols</a>, Up: <a href=
+    "Symbols.html#Symbols" accesskey="u" rel="up">Symbols</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Property-Lists-1" id="Property-Lists-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dremprop"></a>Function: <strong>cl-remprop</strong> <em>symbol property</em></dt>
-<dd><p>This function removes the entry for <var>property</var> from the property
-list of <var>symbol</var>.  It returns a true value if the property was
-indeed found and removed, or <code>nil</code> if there was no such property.
-(This function was probably omitted from Emacs originally because,
-since <code>get</code> did not allow a <var>default</var>, it was very difficult
-to distinguish between a missing property and a property whose value
-was <code>nil</code>; thus, setting a property to <code>nil</code> was close
-enough to <code>cl-remprop</code> for most purposes.)
-</p></dd></dl>
+  <h3 class="section">7.1 Property Lists</h3>
 
-<dl>
-<dt><a name="index-cl_002dgetf"></a>Function: <strong>cl-getf</strong> <em>place property &amp;optional default</em></dt>
-<dd><p>This function scans the list <var>place</var> as if it were a property
-list, i.e., a list of alternating property names and values.  If
-an even-numbered element of <var>place</var> is found which is <code>eq</code>
-to <var>property</var>, the following odd-numbered element is returned.
-Otherwise, <var>default</var> is returned (or <code>nil</code> if no default
-is given).
-</p>
-<p>In particular,
-</p>
-<div class="example">
-<pre class="example">(get sym prop)  &equiv;  (cl-getf (symbol-plist sym) prop)
-</pre></div>
+  <p>These functions augment the standard Emacs Lisp functions
+  <code>get</code> and <code>put</code> for operating on properties
+  attached to symbols. There are also functions for working with
+  property lists as first-class data structures not attached to
+  particular symbols.</p>
 
-<p>It is valid to use <code>cl-getf</code> as a <code>setf</code> place, in which case
-its <var>place</var> argument must itself be a valid <code>setf</code> place.
-The <var>default</var> argument, if any, is ignored in this context.
-The effect is to change (via <code>setcar</code>) the value cell in the
-list that corresponds to <var>property</var>, or to cons a new property-value
-pair onto the list if the property is not yet present.
-</p>
-<div class="example">
-<pre class="example">(put sym prop val) &equiv; (setf (cl-getf (symbol-plist sym) prop) val)
-</pre></div>
+  <dl>
+    <dt><a name="index-cl_002dget" id=
+    "index-cl_002dget"></a>Function: <strong>cl-get</strong>
+    <em>symbol property &amp;optional default</em></dt>
 
-<p>The <code>get</code> and <code>cl-get</code> functions are also <code>setf</code>-able.
-The fact that <code>default</code> is ignored can sometimes be useful:
-</p>
-<div class="example">
-<pre class="example">(cl-incf (cl-get 'foo 'usage-count 0))
-</pre></div>
+    <dd>
+      <p>This function is like <code>get</code>, except that if the
+      property is not found, the <var>default</var> argument
+      provides the return value. (The Emacs Lisp <code>get</code>
+      function always uses <code>nil</code> as the default; this
+      package&rsquo;s <code>cl-get</code> is equivalent to Common
+      Lisp&rsquo;s <code>get</code>.)</p>
 
-<p>Here, symbol <code>foo</code>&rsquo;s <code>usage-count</code> property is incremented
-if it exists, or set to 1 (an incremented 0) otherwise.
-</p>
-<p>When not used as a <code>setf</code> form, <code>cl-getf</code> is just a regular
-function and its <var>place</var> argument can actually be any Lisp
-expression.
-</p></dd></dl>
+      <p>The <code>cl-get</code> function is
+      <code>setf</code>-able; when used in this fashion, the
+      <var>default</var> argument is allowed but ignored.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dremf"></a>Macro: <strong>cl-remf</strong> <em>place property</em></dt>
-<dd><p>This macro removes the property-value pair for <var>property</var> from
-the property list stored at <var>place</var>, which is any <code>setf</code>-able
-place expression.  It returns true if the property was found.  Note
-that if <var>property</var> happens to be first on the list, this will
-effectively do a <code>(setf <var>place</var> (cddr <var>place</var>))</code>,
-whereas if it occurs later, this simply uses <code>setcdr</code> to splice
-out the property and value cells.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dremprop" id=
+    "index-cl_002dremprop"></a>Function:
+    <strong>cl-remprop</strong> <em>symbol property</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Creating-Symbols.html#Creating-Symbols" accesskey="n" rel="next">Creating Symbols</a>, Up: <a href="Symbols.html#Symbols" accesskey="u" rel="up">Symbols</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function removes the entry for <var>property</var>
+      from the property list of <var>symbol</var>. It returns a
+      true value if the property was indeed found and removed, or
+      <code>nil</code> if there was no such property. (This
+      function was probably omitted from Emacs originally because,
+      since <code>get</code> did not allow a <var>default</var>, it
+      was very difficult to distinguish between a missing property
+      and a property whose value was <code>nil</code>; thus,
+      setting a property to <code>nil</code> was close enough to
+      <code>cl-remprop</code> for most purposes.)</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dgetf" id=
+    "index-cl_002dgetf"></a>Function: <strong>cl-getf</strong>
+    <em>place property &amp;optional default</em></dt>
 
+    <dd>
+      <p>This function scans the list <var>place</var> as if it
+      were a property list, i.e., a list of alternating property
+      names and values. If an even-numbered element of
+      <var>place</var> is found which is <code>eq</code> to
+      <var>property</var>, the following odd-numbered element is
+      returned. Otherwise, <var>default</var> is returned (or
+      <code>nil</code> if no default is given).</p>
 
+      <p>In particular,</p>
+
+      <div class="example">
+        <pre class="example">
+(get sym prop)  &equiv;  (cl-getf (symbol-plist sym) prop)
+</pre>
+      </div>
+
+      <p>It is valid to use <code>cl-getf</code> as a
+      <code>setf</code> place, in which case its <var>place</var>
+      argument must itself be a valid <code>setf</code> place. The
+      <var>default</var> argument, if any, is ignored in this
+      context. The effect is to change (via <code>setcar</code>)
+      the value cell in the list that corresponds to
+      <var>property</var>, or to cons a new property-value pair
+      onto the list if the property is not yet present.</p>
+
+      <div class="example">
+        <pre class="example">
+(put sym prop val) &equiv; (setf (cl-getf (symbol-plist sym) prop) val)
+</pre>
+      </div>
+
+      <p>The <code>get</code> and <code>cl-get</code> functions are
+      also <code>setf</code>-able. The fact that
+      <code>default</code> is ignored can sometimes be useful:</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-incf (cl-get 'foo 'usage-count 0))
+</pre>
+      </div>
+
+      <p>Here, symbol <code>foo</code>&rsquo;s
+      <code>usage-count</code> property is incremented if it
+      exists, or set to 1 (an incremented 0) otherwise.</p>
+
+      <p>When not used as a <code>setf</code> form,
+      <code>cl-getf</code> is just a regular function and its
+      <var>place</var> argument can actually be any Lisp
+      expression.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dremf" id=
+    "index-cl_002dremf"></a>Macro: <strong>cl-remf</strong>
+    <em>place property</em></dt>
+
+    <dd>
+      <p>This macro removes the property-value pair for
+      <var>property</var> from the property list stored at
+      <var>place</var>, which is any <code>setf</code>-able place
+      expression. It returns true if the property was found. Note
+      that if <var>property</var> happens to be first on the list,
+      this will effectively do a <code>(setf <var>place</var> (cddr
+      <var>place</var>))</code>, whereas if it occurs later, this
+      simply uses <code>setcdr</code> to splice out the property
+      and value cells.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Creating-Symbols.html#Creating-Symbols"
+    accesskey="n" rel="next">Creating Symbols</a>, Up: <a href=
+    "Symbols.html#Symbols" accesskey="u" rel="up">Symbols</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

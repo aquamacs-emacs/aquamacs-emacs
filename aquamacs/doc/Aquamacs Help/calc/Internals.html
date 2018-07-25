@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Internals - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Lisp-Definitions.html#Lisp-Definitions" title="Lisp Definitions">
-<link rel="prev" href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs" title="Calling Calc from Your Programs">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Internals - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Lisp-Definitions.html#Lisp-Definitions"
+  title="Lisp Definitions" />
+  <link rel="prev" href=
+  "Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs"
+  title="Calling Calc from Your Programs" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -28,8 +37,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -39,55 +50,95 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Internals"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">Calling Calc from Your Programs</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Lisp-Definitions.html#Lisp-Definitions">Lisp Definitions</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Internals" id="Internals"></a>
 
-<h4 class="subsection">18.5.7 Calculator Internals</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Calling-Calc-from-Your-Programs.html#Calling-Calc-from-Your-Programs">Calling
+    Calc from Your Programs</a>, Up:&nbsp;<a rel="up" accesskey="u"
+    href="Lisp-Definitions.html#Lisp-Definitions">Lisp
+    Definitions</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">This section describes the Lisp functions defined by the Calculator that
-may be of use to user-written Calculator programs (as described in the
-rest of this chapter).  These functions are shown by their names as they
-conventionally appear in <code>defmath</code>.  Their full Lisp names are
-generally gotten by prepending &lsquo;<samp><span class="samp">calcFunc-</span></samp>&rsquo; or &lsquo;<samp><span class="samp">math-</span></samp>&rsquo; to their
-apparent names.  (Names that begin with &lsquo;<samp><span class="samp">calc-</span></samp>&rsquo; are already in
-their full Lisp form.)  You can use the actual full names instead if you
-prefer them, or if you are calling these functions from regular Lisp.
+  <h4 class="subsection">18.5.7 Calculator Internals</h4>
 
-   <p>The functions described here are scattered throughout the various
-Calc component files.  Note that <samp><span class="file">calc.el</span></samp> includes <code>autoload</code>s
-for only a few component files; when Calc wants to call an advanced
-function it calls &lsquo;<samp><span class="samp">(calc-extensions)</span></samp>&rsquo; first; this function
-autoloads <samp><span class="file">calc-ext.el</span></samp>, which in turn autoloads all the functions
-in the remaining component files.
+  <p class="noindent">This section describes the Lisp functions
+  defined by the Calculator that may be of use to user-written
+  Calculator programs (as described in the rest of this chapter).
+  These functions are shown by their names as they conventionally
+  appear in <code>defmath</code>. Their full Lisp names are
+  generally gotten by prepending &lsquo;<samp><span class=
+  "samp">calcFunc-</span></samp>&rsquo; or
+  &lsquo;<samp><span class="samp">math-</span></samp>&rsquo; to
+  their apparent names. (Names that begin with
+  &lsquo;<samp><span class="samp">calc-</span></samp>&rsquo; are
+  already in their full Lisp form.) You can use the actual full
+  names instead if you prefer them, or if you are calling these
+  functions from regular Lisp.</p>
 
-   <p>Because <code>defmath</code> itself uses the extensions, user-written code
-generally always executes with the extensions already loaded, so
-normally you can use any Calc function and be confident that it will
-be autoloaded for you when necessary.  If you are doing something
-special, check carefully to make sure each function you are using is
-from <samp><span class="file">calc.el</span></samp> or its components, and call &lsquo;<samp><span class="samp">(calc-extensions)</span></samp>&rsquo;
-before using any function based in <samp><span class="file">calc-ext.el</span></samp> if you can't
-prove this file will already be loaded.
+  <p>The functions described here are scattered throughout the
+  various Calc component files. Note that <samp><span class=
+  "file">calc.el</span></samp> includes <code>autoload</code>s for
+  only a few component files; when Calc wants to call an advanced
+  function it calls &lsquo;<samp><span class=
+  "samp">(calc-extensions)</span></samp>&rsquo; first; this
+  function autoloads <samp><span class=
+  "file">calc-ext.el</span></samp>, which in turn autoloads all the
+  functions in the remaining component files.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Data-Type-Formats.html#Data-Type-Formats">Data Type Formats</a>
-<li><a accesskey="2" href="Interactive-Lisp-Functions.html#Interactive-Lisp-Functions">Interactive Lisp Functions</a>
-<li><a accesskey="3" href="Stack-Lisp-Functions.html#Stack-Lisp-Functions">Stack Lisp Functions</a>
-<li><a accesskey="4" href="Predicates.html#Predicates">Predicates</a>
-<li><a accesskey="5" href="Computational-Lisp-Functions.html#Computational-Lisp-Functions">Computational Lisp Functions</a>
-<li><a accesskey="6" href="Vector-Lisp-Functions.html#Vector-Lisp-Functions">Vector Lisp Functions</a>
-<li><a accesskey="7" href="Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions">Symbolic Lisp Functions</a>
-<li><a accesskey="8" href="Formatting-Lisp-Functions.html#Formatting-Lisp-Functions">Formatting Lisp Functions</a>
-<li><a accesskey="9" href="Hooks.html#Hooks">Hooks</a>
-</ul>
+  <p>Because <code>defmath</code> itself uses the extensions,
+  user-written code generally always executes with the extensions
+  already loaded, so normally you can use any Calc function and be
+  confident that it will be autoloaded for you when necessary. If
+  you are doing something special, check carefully to make sure
+  each function you are using is from <samp><span class=
+  "file">calc.el</span></samp> or its components, and call
+  &lsquo;<samp><span class=
+  "samp">(calc-extensions)</span></samp>&rsquo; before using any
+  function based in <samp><span class=
+  "file">calc-ext.el</span></samp> if you can't prove this file
+  will already be loaded.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Data-Type-Formats.html#Data-Type-Formats">Data Type
+    Formats</a></li>
 
+    <li><a accesskey="2" href=
+    "Interactive-Lisp-Functions.html#Interactive-Lisp-Functions">Interactive
+    Lisp Functions</a></li>
+
+    <li><a accesskey="3" href=
+    "Stack-Lisp-Functions.html#Stack-Lisp-Functions">Stack Lisp
+    Functions</a></li>
+
+    <li><a accesskey="4" href=
+    "Predicates.html#Predicates">Predicates</a></li>
+
+    <li><a accesskey="5" href=
+    "Computational-Lisp-Functions.html#Computational-Lisp-Functions">
+    Computational Lisp Functions</a></li>
+
+    <li><a accesskey="6" href=
+    "Vector-Lisp-Functions.html#Vector-Lisp-Functions">Vector Lisp
+    Functions</a></li>
+
+    <li><a accesskey="7" href=
+    "Symbolic-Lisp-Functions.html#Symbolic-Lisp-Functions">Symbolic
+    Lisp Functions</a></li>
+
+    <li><a accesskey="8" href=
+    "Formatting-Lisp-Functions.html#Formatting-Lisp-Functions">Formatting
+    Lisp Functions</a></li>
+
+    <li><a accesskey="9" href="Hooks.html#Hooks">Hooks</a></li>
+  </ul>
+</body>
+</html>

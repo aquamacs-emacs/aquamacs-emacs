@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,105 +14,135 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>SRecoder Manual: Developing Template Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="SRecoder Manual: Developing Template Functions">
-<meta name="keywords" content="SRecoder Manual: Developing Template Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Template-Naming-Conventions.html#Template-Naming-Conventions" rel="next" title="Template Naming Conventions">
-<link href="Language-Arguments.html#Language-Arguments" rel="prev" title="Language Arguments">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>SRecoder Manual: Developing Template Functions</title>
+  <meta name="description" content=
+  "SRecoder Manual: Developing Template Functions" />
+  <meta name="keywords" content=
+  "SRecoder Manual: Developing Template Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href=
+  "Template-Naming-Conventions.html#Template-Naming-Conventions"
+  rel="next" title="Template Naming Conventions" />
+  <link href="Language-Arguments.html#Language-Arguments" rel=
+  "prev" title="Language Arguments" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Developing-Template-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Template-Naming-Conventions.html#Template-Naming-Conventions" accesskey="n" rel="next">Template Naming Conventions</a>, Previous: <a href="Dictionaries.html#Dictionaries" accesskey="p" rel="prev">Dictionaries</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Developing-Template-Functions-1"></a>
-<h2 class="chapter">7 Developing Template Functions</h2>
+<body lang="en" xml:lang="en">
+  <a name="Developing-Template-Functions" id=
+  "Developing-Template-Functions"></a>
 
-<p>You can develop your own custom template insertion functions.
-Doing so is relatively simple, and requires that you write an Emacs
-Lisp command.
-</p>
-<p>If the built in commands don&rsquo;t provide enough options, you will need
-to write your own function in order to provide your dictionaries with
-the values needed for custom templates.
-</p>
-<p>In this way, you can build your own code generator for any language
-based on a set of predefined macros whos values you need to derive
-from Emacs Lisp code yourself.
-</p>
-<p>For example:
-</p>
-<div class="example">
-<pre class="example">(defun my-srecode-insert (template-name)
-  &quot;Insert the template TEMPLATE-NAME into the current buffer at point.&quot;
+  <div class="header">
+    <p>Next: <a href=
+    "Template-Naming-Conventions.html#Template-Naming-Conventions"
+    accesskey="n" rel="next">Template Naming Conventions</a>,
+    Previous: <a href="Dictionaries.html#Dictionaries" accesskey=
+    "p" rel="prev">Dictionaries</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Developing-Template-Functions-1" id=
+  "Developing-Template-Functions-1"></a>
+
+  <h2 class="chapter">7 Developing Template Functions</h2>
+
+  <p>You can develop your own custom template insertion functions.
+  Doing so is relatively simple, and requires that you write an
+  Emacs Lisp command.</p>
+
+  <p>If the built in commands don&rsquo;t provide enough options,
+  you will need to write your own function in order to provide your
+  dictionaries with the values needed for custom templates.</p>
+
+  <p>In this way, you can build your own code generator for any
+  language based on a set of predefined macros whos values you need
+  to derive from Emacs Lisp code yourself.</p>
+
+  <p>For example:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun my-srecode-insert (template-name)
+  "Insert the template TEMPLATE-NAME into the current buffer at point."
 
   ;; Read in a template name.
-  (interactive (list (srecode-read-template-name &quot;Template Name: &quot;)))
+  (interactive (list (srecode-read-template-name "Template Name: ")))
   (if (not (srecode-table))
-      (error &quot;No template table found for mode %s&quot; major-mode))
+      (error "No template table found for mode %s" major-mode))
   (let ((temp (srecode-template-get-table (srecode-table) template-name))
 
        ;; Create a new dictionary
-	(newdict (srecode-create-dictionary)))
+        (newdict (srecode-create-dictionary)))
 
     (if (not temp)
-        (error &quot;No Template named %s&quot; template-name))
+        (error "No Template named %s" template-name))
 
     ;; Add some values into the dictionary!
-    (srecode-dictionary-set-value newdict &quot;FOO&quot; (my-get-value-of-foo))
+    (srecode-dictionary-set-value newdict "FOO" (my-get-value-of-foo))
     ;; Optionally show a section
-    (srecode-dictionary-show-section newdict &quot;BLARG&quot;)
+    (srecode-dictionary-show-section newdict "BLARG")
 
     ;; Add in several items over a loop
     (let ((my-stuff (get-my-stuff-list)))
        (while my-stuff
           (let ((subdict (srecode-dictionary-add-section-dictionary
-                             newdict &quot;LOOP&quot;)))
-             (srecode-dictionary-set-value subdict &quot;NAME&quot; (nth 0 my-stuff))
-             (srecode-dictionary-set-value subdict &quot;ARG&quot; (nth 1 my-stuff))
-             (srecode-dictionary-set-value subdict &quot;MOOSE&quot; (nth 2 my-stuff))
+                             newdict "LOOP")))
+             (srecode-dictionary-set-value subdict "NAME" (nth 0 my-stuff))
+             (srecode-dictionary-set-value subdict "ARG" (nth 1 my-stuff))
+             (srecode-dictionary-set-value subdict "MOOSE" (nth 2 my-stuff))
              )
           (setq my-stuff (cdr my-stuff)))
 
@@ -120,81 +152,131 @@ from Emacs Lisp code yourself.
     ;; Do the expansion
     (srecode-insert-fcn temp newdict)
     ))
-</pre></div>
+</pre>
+  </div>
 
-<p>Lets look at the key functions involved above:
-</p>
-<a name="Interactive-Completion_003a"></a>
-<h3 class="section">7.1 Interactive Completion:</h3>
+  <p>Lets look at the key functions involved above:</p><a name=
+  "Interactive-Completion_003a" id=
+  "Interactive-Completion_003a"></a>
 
-<dl>
-<dt><a name="index-srecode_002dread_002dtemplate_002dname"></a>Function: <strong>srecode-read-template-name</strong> <em>prompt</em></dt>
-<dd><a name="srecode_002dread_002dtemplate_002dname"></a><p>Completing read for Semantic Recoder template names.
-<var>prompt</var> is used to query for the name of the template desired.
-</p></dd></dl>
+  <h3 class="section">7.1 Interactive Completion:</h3>
 
-<a name="Template-Lookup"></a>
-<h3 class="section">7.2 Template Lookup</h3>
+  <dl>
+    <dt><a name="index-srecode_002dread_002dtemplate_002dname" id=
+    "index-srecode_002dread_002dtemplate_002dname"></a>Function:
+    <strong>srecode-read-template-name</strong>
+    <em>prompt</em></dt>
 
-<p>Even if your program does not query the user for a template name, you
-will need to locate a template.  First, you need to locate the table
-to look the template up in.
-</p>
-<dl>
-<dt><a name="index-srecode_002dtable"></a>Function: <strong>srecode-table</strong> <em>&amp;optional mode</em></dt>
-<dd><a name="srecode_002dtable"></a><p>Return the currently active Semantic Recoder table for this buffer.
-Optional argument <var>MODE</var> specifies the mode table to use.
-</p></dd></dl>
+    <dd>
+      <a name="srecode_002dread_002dtemplate_002dname" id=
+      "srecode_002dread_002dtemplate_002dname"></a>
 
+      <p>Completing read for Semantic Recoder template names.
+      <var>prompt</var> is used to query for the name of the
+      template desired.</p>
+    </dd>
+  </dl><a name="Template-Lookup" id="Template-Lookup"></a>
 
-<dl>
-<dt><a name="index-srecode_002dtemplate_002dget_002dtable"></a>Function: <strong>srecode-template-get-table</strong> <em>tab template-name &amp;optional context application</em></dt>
-<dd><a name="srecode_002dtemplate_002dget_002dtable"></a><p>Find in the template in mode table <var>TAB</var>, the template with <var>TEMPLATE-NAME</var>.
-Optional argument <var>CONTEXT</var> specifies a context a particular template
-would belong to.
-Optional argument <var>APPLICATION</var> restricts searches to only template tables
-belonging to a specific application.  If <var>APPLICATION</var> is <code>nil</code>, then only
-tables that do not belong to an application will be searched.
-</p></dd></dl>
+  <h3 class="section">7.2 Template Lookup</h3>
 
-<p>For purposes of an <i>SRecode</i> application, it is important to decide
-what to call your application, and use that with this method call.
-</p>
-<a name="Creating-dictionaries"></a>
-<h3 class="section">7.3 Creating dictionaries</h3>
+  <p>Even if your program does not query the user for a template
+  name, you will need to locate a template. First, you need to
+  locate the table to look the template up in.</p>
 
-<p>Several dictionary calls are made in this example, including:
-</p><dl compact="compact">
-<dt><code>srecode-create-dictionary</code></dt>
-<dt><code>srecode-dictionary-set-value</code></dt>
-<dt><code>srecode-dictionary-show-section</code></dt>
-<dt><code>srecode-dictionary-add-section-dictionary</code></dt>
-</dl>
+  <dl>
+    <dt><a name="index-srecode_002dtable" id=
+    "index-srecode_002dtable"></a>Function:
+    <strong>srecode-table</strong> <em>&amp;optional mode</em></dt>
 
-<p>These are documented more fully <a href="Dictionaries.html#Dictionaries">Dictionaries</a>.
-</p>
-<p>Also used is <code>srecode-resolve-arguments</code>.  To learn more about
-that, see <a href="Argument-Resolution.html#Argument-Resolution">Argument Resolution</a>.
-</p>
-<a name="Template-Insertion-Commands"></a>
-<h3 class="section">7.4 Template Insertion Commands</h3>
+    <dd>
+      <a name="srecode_002dtable" id="srecode_002dtable"></a>
 
-<p>There are several ways to insert a template.  It is easiest to just
-start with the main entry point.
-</p>
-<dl>
-<dt><a name="index-srecode_002dinsert_002dfcn"></a>Function: <strong>srecode-insert-fcn</strong> <em>template dictionary &amp;optional stream</em></dt>
-<dd><a name="srecode_002dinsert_002dfcn"></a><p>Insert <var>template</var> using <var>dictionary</var> into <var>stream</var>.
-If <var>stream</var> is <code>nil</code>, then use the current buffer.
-</p></dd></dl>
+      <p>Return the currently active Semantic Recoder table for
+      this buffer. Optional argument <var>MODE</var> specifies the
+      mode table to use.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Template-Naming-Conventions.html#Template-Naming-Conventions" accesskey="n" rel="next">Template Naming Conventions</a>, Previous: <a href="Dictionaries.html#Dictionaries" accesskey="p" rel="prev">Dictionaries</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-srecode_002dtemplate_002dget_002dtable" id=
+    "index-srecode_002dtemplate_002dget_002dtable"></a>Function:
+    <strong>srecode-template-get-table</strong> <em>tab
+    template-name &amp;optional context application</em></dt>
 
+    <dd>
+      <a name="srecode_002dtemplate_002dget_002dtable" id=
+      "srecode_002dtemplate_002dget_002dtable"></a>
 
+      <p>Find in the template in mode table <var>TAB</var>, the
+      template with <var>TEMPLATE-NAME</var>. Optional argument
+      <var>CONTEXT</var> specifies a context a particular template
+      would belong to. Optional argument <var>APPLICATION</var>
+      restricts searches to only template tables belonging to a
+      specific application. If <var>APPLICATION</var> is
+      <code>nil</code>, then only tables that do not belong to an
+      application will be searched.</p>
+    </dd>
+  </dl>
 
+  <p>For purposes of an <i>SRecode</i> application, it is important
+  to decide what to call your application, and use that with this
+  method call.</p><a name="Creating-dictionaries" id=
+  "Creating-dictionaries"></a>
+
+  <h3 class="section">7.3 Creating dictionaries</h3>
+
+  <p>Several dictionary calls are made in this example,
+  including:</p>
+
+  <dl compact="compact">
+    <dt><code>srecode-create-dictionary</code></dt>
+
+    <dt><code>srecode-dictionary-set-value</code></dt>
+
+    <dt><code>srecode-dictionary-show-section</code></dt>
+
+    <dt><code>srecode-dictionary-add-section-dictionary</code></dt>
+  </dl>
+
+  <p>These are documented more fully <a href=
+  "Dictionaries.html#Dictionaries">Dictionaries</a>.</p>
+
+  <p>Also used is <code>srecode-resolve-arguments</code>. To learn
+  more about that, see <a href=
+  "Argument-Resolution.html#Argument-Resolution">Argument
+  Resolution</a>.</p><a name="Template-Insertion-Commands" id=
+  "Template-Insertion-Commands"></a>
+
+  <h3 class="section">7.4 Template Insertion Commands</h3>
+
+  <p>There are several ways to insert a template. It is easiest to
+  just start with the main entry point.</p>
+
+  <dl>
+    <dt><a name="index-srecode_002dinsert_002dfcn" id=
+    "index-srecode_002dinsert_002dfcn"></a>Function:
+    <strong>srecode-insert-fcn</strong> <em>template dictionary
+    &amp;optional stream</em></dt>
+
+    <dd>
+      <a name="srecode_002dinsert_002dfcn" id=
+      "srecode_002dinsert_002dfcn"></a>
+
+      <p>Insert <var>template</var> using <var>dictionary</var>
+      into <var>stream</var>. If <var>stream</var> is
+      <code>nil</code>, then use the current buffer.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Template-Naming-Conventions.html#Template-Naming-Conventions"
+    accesskey="n" rel="next">Template Naming Conventions</a>,
+    Previous: <a href="Dictionaries.html#Dictionaries" accesskey=
+    "p" rel="prev">Dictionaries</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

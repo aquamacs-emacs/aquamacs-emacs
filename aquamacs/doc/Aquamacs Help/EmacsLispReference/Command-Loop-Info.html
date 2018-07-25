@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,224 +19,360 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Command Loop Info</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Command Loop Info">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Command Loop Info">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Adjusting-Point.html#Adjusting-Point" rel="next" title="Adjusting Point">
-<link href="Distinguish-Interactive.html#Distinguish-Interactive" rel="prev" title="Distinguish Interactive">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Command Loop Info</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Command Loop Info" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Command Loop Info" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Adjusting-Point.html#Adjusting-Point" rel="next"
+  title="Adjusting Point" />
+  <link href="Distinguish-Interactive.html#Distinguish-Interactive"
+  rel="prev" title="Distinguish Interactive" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Command-Loop-Info" id="Command-Loop-Info"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Adjusting-Point.html#Adjusting-Point"
+    accesskey="n" rel="next">Adjusting Point</a>, Previous:
+    <a href="Distinguish-Interactive.html#Distinguish-Interactive"
+    accesskey="p" rel="prev">Distinguish Interactive</a>, Up:
+    <a href="Command-Loop.html#Command-Loop" accesskey="u" rel=
+    "up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Information-from-the-Command-Loop" id=
+  "Information-from-the-Command-Loop"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Command-Loop-Info"></a>
-<div class="header">
-<p>
-Next: <a href="Adjusting-Point.html#Adjusting-Point" accesskey="n" rel="next">Adjusting Point</a>, Previous: <a href="Distinguish-Interactive.html#Distinguish-Interactive" accesskey="p" rel="prev">Distinguish Interactive</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Information-from-the-Command-Loop"></a>
-<h3 class="section">20.5 Information from the Command Loop</h3>
-<a name="index-command-loop-variables"></a>
+  <h3 class="section">20.5 Information from the Command
+  Loop</h3><a name="index-command-loop-variables" id=
+  "index-command-loop-variables"></a>
 
-<p>The editor command loop sets several Lisp variables to keep status
-records for itself and for commands that are run.  With the exception of
-<code>this-command</code> and <code>last-command</code> it&rsquo;s generally a bad idea to
-change any of these variables in a Lisp program.
-</p>
-<dl>
-<dt><a name="index-last_002dcommand"></a>Variable: <strong>last-command</strong></dt>
-<dd><p>This variable records the name of the previous command executed by the
-command loop (the one before the current command).  Normally the value
-is a symbol with a function definition, but this is not guaranteed.
-</p>
-<p>The value is copied from <code>this-command</code> when a command returns to
-the command loop, except when the command has specified a prefix
-argument for the following command.
-</p>
-<p>This variable is always local to the current terminal and cannot be
-buffer-local.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
-</p></dd></dl>
+  <p>The editor command loop sets several Lisp variables to keep
+  status records for itself and for commands that are run. With the
+  exception of <code>this-command</code> and
+  <code>last-command</code> it&rsquo;s generally a bad idea to
+  change any of these variables in a Lisp program.</p>
 
-<dl>
-<dt><a name="index-real_002dlast_002dcommand"></a>Variable: <strong>real-last-command</strong></dt>
-<dd><p>This variable is set up by Emacs just like <code>last-command</code>,
-but never altered by Lisp programs.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-last_002dcommand" id=
+    "index-last_002dcommand"></a>Variable:
+    <strong>last-command</strong></dt>
 
-<dl>
-<dt><a name="index-last_002drepeatable_002dcommand"></a>Variable: <strong>last-repeatable-command</strong></dt>
-<dd><p>This variable stores the most recently executed command that was not
-part of an input event.  This is the command <code>repeat</code> will try to
-repeat, See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Repeating.html#Repeating">Repeating</a> in <cite>The GNU Emacs Manual</cite>.
-</p></dd></dl>
+    <dd>
+      <p>This variable records the name of the previous command
+      executed by the command loop (the one before the current
+      command). Normally the value is a symbol with a function
+      definition, but this is not guaranteed.</p>
 
-<dl>
-<dt><a name="index-this_002dcommand"></a>Variable: <strong>this-command</strong></dt>
-<dd><a name="index-current-command"></a>
-<p>This variable records the name of the command now being executed by
-the editor command loop.  Like <code>last-command</code>, it is normally a symbol
-with a function definition.
-</p>
-<p>The command loop sets this variable just before running a command, and
-copies its value into <code>last-command</code> when the command finishes
-(unless the command specified a prefix argument for the following
-command).
-</p>
-<a name="index-kill-command-repetition"></a>
-<p>Some commands set this variable during their execution, as a flag for
-whatever command runs next.  In particular, the functions for killing text
-set <code>this-command</code> to <code>kill-region</code> so that any kill commands
-immediately following will know to append the killed text to the
-previous kill.
-</p></dd></dl>
+      <p>The value is copied from <code>this-command</code> when a
+      command returns to the command loop, except when the command
+      has specified a prefix argument for the following
+      command.</p>
 
-<p>If you do not want a particular command to be recognized as the previous
-command in the case where it got an error, you must code that command to
-prevent this.  One way is to set <code>this-command</code> to <code>t</code> at the
-beginning of the command, and set <code>this-command</code> back to its proper
-value at the end, like this:
-</p>
-<div class="example">
-<pre class="example">(defun foo (args&hellip;)
+      <p>This variable is always local to the current terminal and
+      cannot be buffer-local. See <a href=
+      "Multiple-Terminals.html#Multiple-Terminals">Multiple
+      Terminals</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-real_002dlast_002dcommand" id=
+    "index-real_002dlast_002dcommand"></a>Variable:
+    <strong>real-last-command</strong></dt>
+
+    <dd>
+      <p>This variable is set up by Emacs just like
+      <code>last-command</code>, but never altered by Lisp
+      programs.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-last_002drepeatable_002dcommand" id=
+    "index-last_002drepeatable_002dcommand"></a>Variable:
+    <strong>last-repeatable-command</strong></dt>
+
+    <dd>
+      <p>This variable stores the most recently executed command
+      that was not part of an input event. This is the command
+      <code>repeat</code> will try to repeat, See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Repeating.html#Repeating">
+      Repeating</a> in <cite>The GNU Emacs Manual</cite>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-this_002dcommand" id=
+    "index-this_002dcommand"></a>Variable:
+    <strong>this-command</strong></dt>
+
+    <dd>
+      <a name="index-current-command" id=
+      "index-current-command"></a>
+
+      <p>This variable records the name of the command now being
+      executed by the editor command loop. Like
+      <code>last-command</code>, it is normally a symbol with a
+      function definition.</p>
+
+      <p>The command loop sets this variable just before running a
+      command, and copies its value into <code>last-command</code>
+      when the command finishes (unless the command specified a
+      prefix argument for the following command).</p><a name=
+      "index-kill-command-repetition" id=
+      "index-kill-command-repetition"></a>
+
+      <p>Some commands set this variable during their execution, as
+      a flag for whatever command runs next. In particular, the
+      functions for killing text set <code>this-command</code> to
+      <code>kill-region</code> so that any kill commands
+      immediately following will know to append the killed text to
+      the previous kill.</p>
+    </dd>
+  </dl>
+
+  <p>If you do not want a particular command to be recognized as
+  the previous command in the case where it got an error, you must
+  code that command to prevent this. One way is to set
+  <code>this-command</code> to <code>t</code> at the beginning of
+  the command, and set <code>this-command</code> back to its proper
+  value at the end, like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun foo (args&hellip;)
   (interactive &hellip;)
   (let ((old-this-command this-command))
     (setq this-command t)
     <span class="roman">&hellip;do the work&hellip;</span>
     (setq this-command old-this-command)))
-</pre></div>
+</pre>
+  </div>
 
-<p>We do not bind <code>this-command</code> with <code>let</code> because that would
-restore the old value in case of error&mdash;a feature of <code>let</code> which
-in this case does precisely what we want to avoid.
-</p>
-<dl>
-<dt><a name="index-this_002doriginal_002dcommand"></a>Variable: <strong>this-original-command</strong></dt>
-<dd><p>This has the same value as <code>this-command</code> except when command
-remapping occurs (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>).  In that case,
-<code>this-command</code> gives the command actually run (the result of
-remapping), and <code>this-original-command</code> gives the command that
-was specified to run but remapped into another command.
-</p></dd></dl>
+  <p>We do not bind <code>this-command</code> with <code>let</code>
+  because that would restore the old value in case of error&mdash;a
+  feature of <code>let</code> which in this case does precisely
+  what we want to avoid.</p>
 
-<dl>
-<dt><a name="index-this_002dcommand_002dkeys"></a>Function: <strong>this-command-keys</strong></dt>
-<dd><p>This function returns a string or vector containing the key sequence
-that invoked the present command, plus any previous commands that
-generated the prefix argument for this command.  Any events read by the
-command using <code>read-event</code> without a timeout get tacked on to the end.
-</p>
-<p>However, if the command has called <code>read-key-sequence</code>, it
-returns the last read key sequence.  See <a href="Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence Input</a>.  The
-value is a string if all events in the sequence were characters that
-fit in a string.  See <a href="Input-Events.html#Input-Events">Input Events</a>.
-</p>
-<div class="example">
-<pre class="example">(this-command-keys)
-;; <span class="roman">Now use <kbd>C-u C-x C-e</kbd> to evaluate that.</span>
-     &rArr; &quot;^U^X^E&quot;
-</pre></div>
-</dd></dl>
+  <dl>
+    <dt><a name="index-this_002doriginal_002dcommand" id=
+    "index-this_002doriginal_002dcommand"></a>Variable:
+    <strong>this-original-command</strong></dt>
 
-<dl>
-<dt><a name="index-this_002dcommand_002dkeys_002dvector"></a>Function: <strong>this-command-keys-vector</strong></dt>
-<dd><a name="Definition-of-this_002dcommand_002dkeys_002dvector"></a><p>Like <code>this-command-keys</code>, except that it always returns the events
-in a vector, so you don&rsquo;t need to deal with the complexities of storing
-input events in a string (see <a href="Strings-of-Events.html#Strings-of-Events">Strings of Events</a>).
-</p></dd></dl>
+    <dd>
+      <p>This has the same value as <code>this-command</code>
+      except when command remapping occurs (see <a href=
+      "Remapping-Commands.html#Remapping-Commands">Remapping
+      Commands</a>). In that case, <code>this-command</code> gives
+      the command actually run (the result of remapping), and
+      <code>this-original-command</code> gives the command that was
+      specified to run but remapped into another command.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-clear_002dthis_002dcommand_002dkeys"></a>Function: <strong>clear-this-command-keys</strong> <em>&amp;optional keep-record</em></dt>
-<dd><p>This function empties out the table of events for
-<code>this-command-keys</code> to return.  Unless <var>keep-record</var> is
-non-<code>nil</code>, it also empties the records that the function
-<code>recent-keys</code> (see <a href="Recording-Input.html#Recording-Input">Recording Input</a>) will subsequently return.
-This is useful after reading a password, to prevent the password from
-echoing inadvertently as part of the next command in certain cases.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-this_002dcommand_002dkeys" id=
+    "index-this_002dcommand_002dkeys"></a>Function:
+    <strong>this-command-keys</strong></dt>
 
-<dl>
-<dt><a name="index-last_002dnonmenu_002devent"></a>Variable: <strong>last-nonmenu-event</strong></dt>
-<dd><p>This variable holds the last input event read as part of a key sequence,
-not counting events resulting from mouse menus.
-</p>
-<p>One use of this variable is for telling <code>x-popup-menu</code> where to pop
-up a menu.  It is also used internally by <code>y-or-n-p</code>
-(see <a href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries">Yes-or-No Queries</a>).
-</p></dd></dl>
+    <dd>
+      <p>This function returns a string or vector containing the
+      key sequence that invoked the present command, plus any
+      previous commands that generated the prefix argument for this
+      command. Any events read by the command using
+      <code>read-event</code> without a timeout get tacked on to
+      the end.</p>
 
-<dl>
-<dt><a name="index-last_002dcommand_002devent"></a>Variable: <strong>last-command-event</strong></dt>
-<dd><p>This variable is set to the last input event that was read by the
-command loop as part of a command.  The principal use of this variable
-is in <code>self-insert-command</code>, which uses it to decide which
-character to insert.
-</p>
-<div class="example">
-<pre class="example">last-command-event
-;; <span class="roman">Now use <kbd>C-u C-x C-e</kbd> to evaluate that.</span>
+      <p>However, if the command has called
+      <code>read-key-sequence</code>, it returns the last read key
+      sequence. See <a href=
+      "Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence
+      Input</a>. The value is a string if all events in the
+      sequence were characters that fit in a string. See <a href=
+      "Input-Events.html#Input-Events">Input Events</a>.</p>
+
+      <div class="example">
+        <pre class="example">
+(this-command-keys)
+;; <span class=
+"roman">Now use <kbd>C-u C-x C-e</kbd> to evaluate that.</span>
+     &rArr; "^U^X^E"
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-this_002dcommand_002dkeys_002dvector" id=
+    "index-this_002dcommand_002dkeys_002dvector"></a>Function:
+    <strong>this-command-keys-vector</strong></dt>
+
+    <dd>
+      <a name="Definition-of-this_002dcommand_002dkeys_002dvector"
+      id="Definition-of-this_002dcommand_002dkeys_002dvector"></a>
+
+      <p>Like <code>this-command-keys</code>, except that it always
+      returns the events in a vector, so you don&rsquo;t need to
+      deal with the complexities of storing input events in a
+      string (see <a href=
+      "Strings-of-Events.html#Strings-of-Events">Strings of
+      Events</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-clear_002dthis_002dcommand_002dkeys" id=
+    "index-clear_002dthis_002dcommand_002dkeys"></a>Function:
+    <strong>clear-this-command-keys</strong> <em>&amp;optional
+    keep-record</em></dt>
+
+    <dd>
+      <p>This function empties out the table of events for
+      <code>this-command-keys</code> to return. Unless
+      <var>keep-record</var> is non-<code>nil</code>, it also
+      empties the records that the function
+      <code>recent-keys</code> (see <a href=
+      "Recording-Input.html#Recording-Input">Recording Input</a>)
+      will subsequently return. This is useful after reading a
+      password, to prevent the password from echoing inadvertently
+      as part of the next command in certain cases.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-last_002dnonmenu_002devent" id=
+    "index-last_002dnonmenu_002devent"></a>Variable:
+    <strong>last-nonmenu-event</strong></dt>
+
+    <dd>
+      <p>This variable holds the last input event read as part of a
+      key sequence, not counting events resulting from mouse
+      menus.</p>
+
+      <p>One use of this variable is for telling
+      <code>x-popup-menu</code> where to pop up a menu. It is also
+      used internally by <code>y-or-n-p</code> (see <a href=
+      "Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries">Yes-or-No
+      Queries</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-last_002dcommand_002devent" id=
+    "index-last_002dcommand_002devent"></a>Variable:
+    <strong>last-command-event</strong></dt>
+
+    <dd>
+      <p>This variable is set to the last input event that was read
+      by the command loop as part of a command. The principal use
+      of this variable is in <code>self-insert-command</code>,
+      which uses it to decide which character to insert.</p>
+
+      <div class="example">
+        <pre class="example">
+last-command-event
+;; <span class=
+"roman">Now use <kbd>C-u C-x C-e</kbd> to evaluate that.</span>
      &rArr; 5
-</pre></div>
+</pre>
+      </div>
 
-<p>The value is 5 because that is the <acronym>ASCII</acronym> code for <kbd>C-e</kbd>.
-</p></dd></dl>
+      <p>The value is 5 because that is the
+      <acronym>ASCII</acronym> code for <kbd>C-e</kbd>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-last_002devent_002dframe"></a>Variable: <strong>last-event-frame</strong></dt>
-<dd><p>This variable records which frame the last input event was directed to.
-Usually this is the frame that was selected when the event was
-generated, but if that frame has redirected input focus to another
-frame, the value is the frame to which the event was redirected.
-See <a href="Input-Focus.html#Input-Focus">Input Focus</a>.
-</p>
-<p>If the last event came from a keyboard macro, the value is <code>macro</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-last_002devent_002dframe" id=
+    "index-last_002devent_002dframe"></a>Variable:
+    <strong>last-event-frame</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Adjusting-Point.html#Adjusting-Point" accesskey="n" rel="next">Adjusting Point</a>, Previous: <a href="Distinguish-Interactive.html#Distinguish-Interactive" accesskey="p" rel="prev">Distinguish Interactive</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This variable records which frame the last input event was
+      directed to. Usually this is the frame that was selected when
+      the event was generated, but if that frame has redirected
+      input focus to another frame, the value is the frame to which
+      the event was redirected. See <a href=
+      "Input-Focus.html#Input-Focus">Input Focus</a>.</p>
 
+      <p>If the last event came from a keyboard macro, the value is
+      <code>macro</code>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Adjusting-Point.html#Adjusting-Point"
+    accesskey="n" rel="next">Adjusting Point</a>, Previous:
+    <a href="Distinguish-Interactive.html#Distinguish-Interactive"
+    accesskey="p" rel="prev">Distinguish Interactive</a>, Up:
+    <a href="Command-Loop.html#Command-Loop" accesskey="u" rel=
+    "up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

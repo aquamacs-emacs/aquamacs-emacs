@@ -1,15 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Complex Numbers - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Data-Types.html#Data-Types" title="Data Types">
-<link rel="prev" href="Floats.html#Floats" title="Floats">
-<link rel="next" href="Infinities.html#Infinities" title="Infinities">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Complex Numbers - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Data-Types.html#Data-Types" title=
+  "Data Types" />
+  <link rel="prev" href="Floats.html#Floats" title="Floats" />
+  <link rel="next" href="Infinities.html#Infinities" title=
+  "Infinities" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +37,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,52 +50,67 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Complex-Numbers"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Infinities.html#Infinities">Infinities</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Floats.html#Floats">Floats</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Data-Types.html#Data-Types">Data Types</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Complex-Numbers" id="Complex-Numbers"></a>
 
-<h3 class="section">5.4 Complex Numbers</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Infinities.html#Infinities">Infinities</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Floats.html#Floats">Floats</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="Data-Types.html#Data-Types">Data
+    Types</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-Complex-numbers-241"></a>There are two supported formats for complex numbers: rectangular and
-polar.  The default format is rectangular, displayed in the form
-&lsquo;<samp><span class="samp">(</span><var>real</var><span class="samp">,</span><var>imag</var><span class="samp">)</span></samp>&rsquo; where <var>real</var> is the real part and
-<var>imag</var> is the imaginary part, each of which may be any real number. 
-Rectangular complex numbers can also be displayed in &lsquo;<samp><var>a</var><span class="samp">+</span><var>b</var><span class="samp">i</span></samp>&rsquo;
-notation; see <a href="Complex-Formats.html#Complex-Formats">Complex Formats</a>.
+  <h3 class="section">5.4 Complex Numbers</h3>
 
-   <p>Polar complex numbers are displayed in the form
-<!-- `@tfn{(}@var{r}@tfn{;}@math{\theta}@tfn{)}' -->
-`<tt>(</tt><var>r</var><tt>;</tt><var>theta</var><tt>)</tt>'
-where <var>r</var> is the nonnegative magnitude and
-<!-- @math{\theta} -->
-<var>theta</var>
-is the argument or phase angle.  The range of
-<!-- @math{\theta} -->
-<var>theta</var>
-depends on the current angular mode (see <a href="Angular-Modes.html#Angular-Modes">Angular Modes</a>); it is
-generally between <i>-180</i> and <i>+180</i> degrees or the equivalent range
-in radians.
+  <p class="noindent"><a name="index-Complex-numbers-241" id=
+  "index-Complex-numbers-241"></a>There are two supported formats
+  for complex numbers: rectangular and polar. The default format is
+  rectangular, displayed in the form &lsquo;<samp><span class=
+  "samp">(</span><var>real</var><span class=
+  "samp">,</span><var>imag</var><span class=
+  "samp">)</span></samp>&rsquo; where <var>real</var> is the real
+  part and <var>imag</var> is the imaginary part, each of which may
+  be any real number. Rectangular complex numbers can also be
+  displayed in &lsquo;<samp><var>a</var><span class=
+  "samp">+</span><var>b</var><span class=
+  "samp">i</span></samp>&rsquo; notation; see <a href=
+  "Complex-Formats.html#Complex-Formats">Complex Formats</a>.</p>
 
-   <p>Complex numbers are entered in stages using incomplete objects. 
-See <a href="Incomplete-Objects.html#Incomplete-Objects">Incomplete Objects</a>.
+  <p>Polar complex numbers are displayed in the form 
+  <!-- `@tfn{(}@var{r}@tfn{;}@math{\theta}@tfn{)}' -->
+  `<tt>(</tt><var>r</var><tt>;</tt><var>theta</var><tt>)</tt>'
+  where <var>r</var> is the nonnegative magnitude and 
+  <!-- @math{\theta} -->
+  <var>theta</var> is the argument or phase angle. The range of 
+  <!-- @math{\theta} -->
+  <var>theta</var> depends on the current angular mode (see
+  <a href="Angular-Modes.html#Angular-Modes">Angular Modes</a>); it
+  is generally between <i>-180</i> and <i>+180</i> degrees or the
+  equivalent range in radians.</p>
 
-   <p>Operations on rectangular complex numbers yield rectangular complex
-results, and similarly for polar complex numbers.  Where the two types
-are mixed, or where new complex numbers arise (as for the square root of
-a negative real), the current <dfn>Polar mode</dfn> is used to determine the
-type.  See <a href="Polar-Mode.html#Polar-Mode">Polar Mode</a>.
+  <p>Complex numbers are entered in stages using incomplete
+  objects. See <a href=
+  "Incomplete-Objects.html#Incomplete-Objects">Incomplete
+  Objects</a>.</p>
 
-   <p>A complex result in which the imaginary part is zero (or the phase angle
-is 0 or 180 degrees or &lsquo;<samp><span class="samp">pi</span></samp>&rsquo; radians) is automatically converted to a real
-number.
+  <p>Operations on rectangular complex numbers yield rectangular
+  complex results, and similarly for polar complex numbers. Where
+  the two types are mixed, or where new complex numbers arise (as
+  for the square root of a negative real), the current <dfn>Polar
+  mode</dfn> is used to determine the type. See <a href=
+  "Polar-Mode.html#Polar-Mode">Polar Mode</a>.</p>
 
-   </body></html>
-
+  <p>A complex result in which the imaginary part is zero (or the
+  phase angle is 0 or 180 degrees or &lsquo;<samp><span class=
+  "samp">pi</span></samp>&rsquo; radians) is automatically
+  converted to a real number.</p>
+</body>
+</html>

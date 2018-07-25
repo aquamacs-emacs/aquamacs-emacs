@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,184 +19,278 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Quitting Windows</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Quitting Windows">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Quitting Windows">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Window-Point.html#Window-Point" rel="next" title="Window Point">
-<link href="Dedicated-Windows.html#Dedicated-Windows" rel="prev" title="Dedicated Windows">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Quitting Windows</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Quitting Windows" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Quitting Windows" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Window-Point.html#Window-Point" rel="next" title=
+  "Window Point" />
+  <link href="Dedicated-Windows.html#Dedicated-Windows" rel="prev"
+  title="Dedicated Windows" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Quitting-Windows" id="Quitting-Windows"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Window-Point.html#Window-Point" accesskey="n"
+    rel="next">Window Point</a>, Previous: <a href=
+    "Dedicated-Windows.html#Dedicated-Windows" accesskey="p" rel=
+    "prev">Dedicated Windows</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Quitting-Windows-1" id="Quitting-Windows-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Quitting-Windows"></a>
-<div class="header">
-<p>
-Next: <a href="Window-Point.html#Window-Point" accesskey="n" rel="next">Window Point</a>, Previous: <a href="Dedicated-Windows.html#Dedicated-Windows" accesskey="p" rel="prev">Dedicated Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Quitting-Windows-1"></a>
-<h3 class="section">27.18 Quitting Windows</h3>
+  <h3 class="section">27.18 Quitting Windows</h3>
 
-<p>When you want to get rid of a window used for displaying a buffer, you
-can call <code>delete-window</code> or <code>delete-windows-on</code>
-(see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>) to remove that window from its frame.  If the
-buffer is shown on a separate frame, you might want to call
-<code>delete-frame</code> (see <a href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>) instead.  If, on the other
-hand, a window has been reused for displaying the buffer, you might
-prefer showing the buffer previously shown in that window, by calling the
-function <code>switch-to-prev-buffer</code> (see <a href="Window-History.html#Window-History">Window History</a>).
-Finally, you might want to either bury (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>) or kill
-(see <a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>) the window&rsquo;s buffer.
-</p>
-<p>The following command uses information on how the window for
-displaying the buffer was obtained in the first place, thus attempting
-to automate the above decisions for you.
-</p>
-<dl>
-<dt><a name="index-quit_002dwindow"></a>Command: <strong>quit-window</strong> <em>&amp;optional kill window</em></dt>
-<dd><p>This command quits <var>window</var> and buries its buffer.  The argument
-<var>window</var> must be a live window and defaults to the selected one.
-With prefix argument <var>kill</var> non-<code>nil</code>, it kills the buffer
-instead of burying it.  It calls the function <code>quit-restore-window</code>
-described next to deal with the window and its buffer.
-</p></dd></dl>
+  <p>When you want to get rid of a window used for displaying a
+  buffer, you can call <code>delete-window</code> or
+  <code>delete-windows-on</code> (see <a href=
+  "Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>) to
+  remove that window from its frame. If the buffer is shown on a
+  separate frame, you might want to call <code>delete-frame</code>
+  (see <a href="Deleting-Frames.html#Deleting-Frames">Deleting
+  Frames</a>) instead. If, on the other hand, a window has been
+  reused for displaying the buffer, you might prefer showing the
+  buffer previously shown in that window, by calling the function
+  <code>switch-to-prev-buffer</code> (see <a href=
+  "Window-History.html#Window-History">Window History</a>).
+  Finally, you might want to either bury (see <a href=
+  "Buffer-List.html#Buffer-List">Buffer List</a>) or kill (see
+  <a href="Killing-Buffers.html#Killing-Buffers">Killing
+  Buffers</a>) the window&rsquo;s buffer.</p>
 
-<dl>
-<dt><a name="index-quit_002drestore_002dwindow"></a>Function: <strong>quit-restore-window</strong> <em>&amp;optional window bury-or-kill</em></dt>
-<dd><p>This function tries to restore the state of <var>window</var> that existed
-before its buffer was displayed in it.  The optional argument
-<var>window</var> must be a live window and defaults to the selected one.
-</p>
-<p>If <var>window</var> was created specially for displaying its buffer, this
-function deletes <var>window</var> provided its frame contains at least one
-other live window.  If <var>window</var> is the only window on its frame and
-there are other frames on the frame&rsquo;s terminal, the value of the
-optional argument <var>bury-or-kill</var> determines how to proceed with the
-window.  If <var>bury-or-kill</var> equals <code>kill</code>, the frame is deleted
-unconditionally.  Otherwise, the fate of the frame is determined by
-calling <code>frame-auto-hide-function</code> (see below) with that frame as
-sole argument.
-</p>
-<p>Otherwise, this function tries to redisplay the buffer previously shown
-in <var>window</var>.  It also tries to restore the window start
-(see <a href="Window-Start-and-End.html#Window-Start-and-End">Window Start and End</a>) and point (see <a href="Window-Point.html#Window-Point">Window Point</a>)
-positions of the previously shown buffer.  If, in addition,
-<var>window</var>&rsquo;s buffer was temporarily resized, this function will also
-try to restore the original height of <var>window</var>.
-</p>
-<p>The cases described so far require that the buffer shown in <var>window</var>
-is still the buffer displayed by the last buffer display function for
-this window.  If another buffer has been shown in the meantime, or the
-buffer previously shown no longer exists, this function calls
-<code>switch-to-prev-buffer</code> (see <a href="Window-History.html#Window-History">Window History</a>) to show some other
-buffer instead.
-</p>
-<p>The optional argument <var>bury-or-kill</var> specifies how to deal with
-<var>window</var>&rsquo;s buffer.  The following values are handled:
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>This means to not deal with the buffer in any particular way.  As a
-consequence, if <var>window</var> is not deleted, invoking
-<code>switch-to-prev-buffer</code> will usually show the buffer again.
-</p>
-</dd>
-<dt><code>append</code></dt>
-<dd><p>This means that if <var>window</var> is not deleted, its buffer is moved to
-the end of <var>window</var>&rsquo;s list of previous buffers, so it&rsquo;s less likely
-that a future invocation of <code>switch-to-prev-buffer</code> will switch to
-it.  Also, it moves the buffer to the end of the frame&rsquo;s buffer list.
-</p>
-</dd>
-<dt><code>bury</code></dt>
-<dd><p>This means that if <var>window</var> is not deleted, its buffer is removed
-from <var>window</var>&rsquo;s list of previous buffers.  Also, it moves the buffer
-to the end of the frame&rsquo;s buffer list.  This value provides the most
-reliable remedy to not have <code>switch-to-prev-buffer</code> switch to this
-buffer again without killing the buffer.
-</p>
-</dd>
-<dt><code>kill</code></dt>
-<dd><p>This means to kill <var>window</var>&rsquo;s buffer.
-</p></dd>
-</dl>
+  <p>The following command uses information on how the window for
+  displaying the buffer was obtained in the first place, thus
+  attempting to automate the above decisions for you.</p>
 
-<p><code>quit-restore-window</code> bases its decisions on information stored in
-<var>window</var>&rsquo;s <code>quit-restore</code> window parameter (see <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>), and resets that parameter to <code>nil</code> after it&rsquo;s done.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-quit_002dwindow" id=
+    "index-quit_002dwindow"></a>Command:
+    <strong>quit-window</strong> <em>&amp;optional kill
+    window</em></dt>
 
-<p>The following option specifies how to deal with a frame containing just
-one window that should be either quit, or whose buffer should be buried.
-</p>
-<dl>
-<dt><a name="index-frame_002dauto_002dhide_002dfunction"></a>User Option: <strong>frame-auto-hide-function</strong></dt>
-<dd><p>The function specified by this option is called to automatically hide
-frames.  This function is called with one argument&mdash;a frame.
-</p>
-<p>The function specified here is called by <code>bury-buffer</code>
-(see <a href="Buffer-List.html#Buffer-List">Buffer List</a>) when the selected window is dedicated and shows
-the buffer to bury.  It is also called by <code>quit-restore-window</code>
-(see above) when the frame of the window to quit has been specially
-created for displaying that window&rsquo;s buffer and the buffer is not
-killed.
-</p>
-<p>The default is to call <code>iconify-frame</code> (see <a href="Visibility-of-Frames.html#Visibility-of-Frames">Visibility of Frames</a>).  Alternatively, you may specify either <code>delete-frame</code>
-(see <a href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>) to remove the frame from its display,
-<code>ignore</code> to leave the frame unchanged, or any other function that
-can take a frame as its sole argument.
-</p>
-<p>Note that the function specified by this option is called only if the
-specified frame contains just one live window and there is at least one
-other frame on the same terminal.
-</p></dd></dl>
+    <dd>
+      <p>This command quits <var>window</var> and buries its
+      buffer. The argument <var>window</var> must be a live window
+      and defaults to the selected one. With prefix argument
+      <var>kill</var> non-<code>nil</code>, it kills the buffer
+      instead of burying it. It calls the function
+      <code>quit-restore-window</code> described next to deal with
+      the window and its buffer.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-quit_002drestore_002dwindow" id=
+    "index-quit_002drestore_002dwindow"></a>Function:
+    <strong>quit-restore-window</strong> <em>&amp;optional window
+    bury-or-kill</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Window-Point.html#Window-Point" accesskey="n" rel="next">Window Point</a>, Previous: <a href="Dedicated-Windows.html#Dedicated-Windows" accesskey="p" rel="prev">Dedicated Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function tries to restore the state of
+      <var>window</var> that existed before its buffer was
+      displayed in it. The optional argument <var>window</var> must
+      be a live window and defaults to the selected one.</p>
 
+      <p>If <var>window</var> was created specially for displaying
+      its buffer, this function deletes <var>window</var> provided
+      its frame contains at least one other live window. If
+      <var>window</var> is the only window on its frame and there
+      are other frames on the frame&rsquo;s terminal, the value of
+      the optional argument <var>bury-or-kill</var> determines how
+      to proceed with the window. If <var>bury-or-kill</var> equals
+      <code>kill</code>, the frame is deleted unconditionally.
+      Otherwise, the fate of the frame is determined by calling
+      <code>frame-auto-hide-function</code> (see below) with that
+      frame as sole argument.</p>
 
+      <p>Otherwise, this function tries to redisplay the buffer
+      previously shown in <var>window</var>. It also tries to
+      restore the window start (see <a href=
+      "Window-Start-and-End.html#Window-Start-and-End">Window Start
+      and End</a>) and point (see <a href=
+      "Window-Point.html#Window-Point">Window Point</a>) positions
+      of the previously shown buffer. If, in addition,
+      <var>window</var>&rsquo;s buffer was temporarily resized,
+      this function will also try to restore the original height of
+      <var>window</var>.</p>
 
+      <p>The cases described so far require that the buffer shown
+      in <var>window</var> is still the buffer displayed by the
+      last buffer display function for this window. If another
+      buffer has been shown in the meantime, or the buffer
+      previously shown no longer exists, this function calls
+      <code>switch-to-prev-buffer</code> (see <a href=
+      "Window-History.html#Window-History">Window History</a>) to
+      show some other buffer instead.</p>
+
+      <p>The optional argument <var>bury-or-kill</var> specifies
+      how to deal with <var>window</var>&rsquo;s buffer. The
+      following values are handled:</p>
+
+      <dl compact="compact">
+        <dt><code>nil</code></dt>
+
+        <dd>
+          <p>This means to not deal with the buffer in any
+          particular way. As a consequence, if <var>window</var> is
+          not deleted, invoking <code>switch-to-prev-buffer</code>
+          will usually show the buffer again.</p>
+        </dd>
+
+        <dt><code>append</code></dt>
+
+        <dd>
+          <p>This means that if <var>window</var> is not deleted,
+          its buffer is moved to the end of
+          <var>window</var>&rsquo;s list of previous buffers, so
+          it&rsquo;s less likely that a future invocation of
+          <code>switch-to-prev-buffer</code> will switch to it.
+          Also, it moves the buffer to the end of the frame&rsquo;s
+          buffer list.</p>
+        </dd>
+
+        <dt><code>bury</code></dt>
+
+        <dd>
+          <p>This means that if <var>window</var> is not deleted,
+          its buffer is removed from <var>window</var>&rsquo;s list
+          of previous buffers. Also, it moves the buffer to the end
+          of the frame&rsquo;s buffer list. This value provides the
+          most reliable remedy to not have
+          <code>switch-to-prev-buffer</code> switch to this buffer
+          again without killing the buffer.</p>
+        </dd>
+
+        <dt><code>kill</code></dt>
+
+        <dd>
+          <p>This means to kill <var>window</var>&rsquo;s
+          buffer.</p>
+        </dd>
+      </dl>
+
+      <p><code>quit-restore-window</code> bases its decisions on
+      information stored in <var>window</var>&rsquo;s
+      <code>quit-restore</code> window parameter (see <a href=
+      "Window-Parameters.html#Window-Parameters">Window
+      Parameters</a>), and resets that parameter to
+      <code>nil</code> after it&rsquo;s done.</p>
+    </dd>
+  </dl>
+
+  <p>The following option specifies how to deal with a frame
+  containing just one window that should be either quit, or whose
+  buffer should be buried.</p>
+
+  <dl>
+    <dt><a name="index-frame_002dauto_002dhide_002dfunction" id=
+    "index-frame_002dauto_002dhide_002dfunction"></a>User Option:
+    <strong>frame-auto-hide-function</strong></dt>
+
+    <dd>
+      <p>The function specified by this option is called to
+      automatically hide frames. This function is called with one
+      argument&mdash;a frame.</p>
+
+      <p>The function specified here is called by
+      <code>bury-buffer</code> (see <a href=
+      "Buffer-List.html#Buffer-List">Buffer List</a>) when the
+      selected window is dedicated and shows the buffer to bury. It
+      is also called by <code>quit-restore-window</code> (see
+      above) when the frame of the window to quit has been
+      specially created for displaying that window&rsquo;s buffer
+      and the buffer is not killed.</p>
+
+      <p>The default is to call <code>iconify-frame</code> (see
+      <a href=
+      "Visibility-of-Frames.html#Visibility-of-Frames">Visibility
+      of Frames</a>). Alternatively, you may specify either
+      <code>delete-frame</code> (see <a href=
+      "Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>)
+      to remove the frame from its display, <code>ignore</code> to
+      leave the frame unchanged, or any other function that can
+      take a frame as its sole argument.</p>
+
+      <p>Note that the function specified by this option is called
+      only if the specified frame contains just one live window and
+      there is at least one other frame on the same terminal.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Window-Point.html#Window-Point" accesskey="n"
+    rel="next">Window Point</a>, Previous: <a href=
+    "Dedicated-Windows.html#Dedicated-Windows" accesskey="p" rel=
+    "prev">Dedicated Windows</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

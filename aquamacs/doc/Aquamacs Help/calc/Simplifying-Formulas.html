@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Simplifying Formulas - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Algebra.html#Algebra" title="Algebra">
-<link rel="prev" href="Algebraic-Manipulation.html#Algebraic-Manipulation" title="Algebraic Manipulation">
-<link rel="next" href="Polynomials.html#Polynomials" title="Polynomials">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Simplifying Formulas - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Algebra.html#Algebra" title="Algebra" />
+  <link rel="prev" href=
+  "Algebraic-Manipulation.html#Algebraic-Manipulation" title=
+  "Algebraic Manipulation" />
+  <link rel="next" href="Polynomials.html#Polynomials" title=
+  "Polynomials" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +38,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,63 +51,106 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Simplifying-Formulas"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Polynomials.html#Polynomials">Polynomials</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Algebraic-Manipulation.html#Algebraic-Manipulation">Algebraic Manipulation</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Algebra.html#Algebra">Algebra</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Simplifying-Formulas" id="Simplifying-Formulas"></a>
 
-<h3 class="section">11.3 Simplifying Formulas</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Polynomials.html#Polynomials">Polynomials</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Algebraic-Manipulation.html#Algebraic-Manipulation">Algebraic
+    Manipulation</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Algebra.html#Algebra">Algebra</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-a-s-1691"></a><a name="index-I-a-s-1692"></a><a name="index-H-a-s-1693"></a><a name="index-calc_002dsimplify-1694"></a><a name="index-simplify-1695"></a>The <kbd>a s</kbd> (<code>calc-simplify</code>) [<code>simplify</code>] command applies
-various algebraic rules to simplify a formula.  This includes rules which
-are not part of the default simplifications because they may be too slow
-to apply all the time, or may not be desirable all of the time.  For
-example, non-adjacent terms of sums are combined, as in &lsquo;<samp><span class="samp">a + b + 2 a</span></samp>&rsquo;
-to &lsquo;<samp><span class="samp">b + 3 a</span></samp>&rsquo;, and some formulas like &lsquo;<samp><span class="samp">sin(arcsin(x))</span></samp>&rsquo; are
-simplified to &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.
+  <h3 class="section">11.3 Simplifying Formulas</h3>
 
-   <p>The sections below describe all the various kinds of algebraic
-simplifications Calc provides in full detail.  None of Calc's
-simplification commands are designed to pull rabbits out of hats;
-they simply apply certain specific rules to put formulas into
-less redundant or more pleasing forms.  Serious algebra in Calc
-must be done manually, usually with a combination of selections
-and rewrite rules.  See <a href="Rearranging-with-Selections.html#Rearranging-with-Selections">Rearranging with Selections</a>. 
-See <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>.
+  <p class="noindent"><a name="index-a-s-1691" id=
+  "index-a-s-1691"></a><a name="index-I-a-s-1692" id=
+  "index-I-a-s-1692"></a><a name="index-H-a-s-1693" id=
+  "index-H-a-s-1693"></a><a name="index-calc_002dsimplify-1694" id=
+  "index-calc_002dsimplify-1694"></a><a name="index-simplify-1695"
+  id="index-simplify-1695"></a>The <kbd>a s</kbd>
+  (<code>calc-simplify</code>) [<code>simplify</code>] command
+  applies various algebraic rules to simplify a formula. This
+  includes rules which are not part of the default simplifications
+  because they may be too slow to apply all the time, or may not be
+  desirable all of the time. For example, non-adjacent terms of
+  sums are combined, as in &lsquo;<samp><span class="samp">a + b +
+  2 a</span></samp>&rsquo; to &lsquo;<samp><span class="samp">b + 3
+  a</span></samp>&rsquo;, and some formulas like
+  &lsquo;<samp><span class=
+  "samp">sin(arcsin(x))</span></samp>&rsquo; are simplified to
+  &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.</p>
 
-   <p>See <a href="Simplification-Modes.html#Simplification-Modes">Simplification Modes</a>, for commands to control what level of
-simplification occurs automatically.  Normally only the &ldquo;default
-simplifications&rdquo; occur.
+  <p>The sections below describe all the various kinds of algebraic
+  simplifications Calc provides in full detail. None of Calc's
+  simplification commands are designed to pull rabbits out of hats;
+  they simply apply certain specific rules to put formulas into
+  less redundant or more pleasing forms. Serious algebra in Calc
+  must be done manually, usually with a combination of selections
+  and rewrite rules. See <a href=
+  "Rearranging-with-Selections.html#Rearranging-with-Selections">Rearranging
+  with Selections</a>. See <a href=
+  "Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>.</p>
 
-   <p>There are some simplifications that, while sometimes useful, are never
-done automatically.  For example, the <kbd>I</kbd> prefix can be given to
-<kbd>a s</kbd>; the <kbd>I a s</kbd> command will change any trigonometric
-function to the appropriate combination of &lsquo;<samp><span class="samp">sin</span></samp>&rsquo;s and &lsquo;<samp><span class="samp">cos</span></samp>&rsquo;s
-before simplifying.  This can be useful in simplifying even mildly
-complicated trigonometric expressions.  For example, while <kbd>a s</kbd>
-can reduce &lsquo;<samp><span class="samp">sin(x) csc(x)</span></samp>&rsquo; to &lsquo;<samp><span class="samp">1</span></samp>&rsquo;, it will not simplify
-&lsquo;<samp><span class="samp">sin(x)^2 csc(x)</span></samp>&rsquo;.  The command <kbd>I a s</kbd> can be used to
-simplify this latter expression; it will transform &lsquo;<samp><span class="samp">sin(x)^2
-csc(x)</span></samp>&rsquo; into &lsquo;<samp><span class="samp">sin(x)</span></samp>&rsquo;.  However, <kbd>I a s</kbd> will also perform
-some &ldquo;simplifications&rdquo; which may not be desired; for example, it
-will transform &lsquo;<samp><span class="samp">tan(x)^2</span></samp>&rsquo; into &lsquo;<samp><span class="samp">sin(x)^2 / cos(x)^2</span></samp>&rsquo;.  The
-Hyperbolic prefix <kbd>H</kbd> can be used similarly; the <kbd>H a s</kbd> will
-replace any hyperbolic functions in the formula with the appropriate
-combinations of &lsquo;<samp><span class="samp">sinh</span></samp>&rsquo;s and &lsquo;<samp><span class="samp">cosh</span></samp>&rsquo;s before simplifying.
+  <p>See <a href=
+  "Simplification-Modes.html#Simplification-Modes">Simplification
+  Modes</a>, for commands to control what level of simplification
+  occurs automatically. Normally only the &ldquo;default
+  simplifications&rdquo; occur.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Default-Simplifications.html#Default-Simplifications">Default Simplifications</a>
-<li><a accesskey="2" href="Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic Simplifications</a>
-<li><a accesskey="3" href="Unsafe-Simplifications.html#Unsafe-Simplifications">Unsafe Simplifications</a>
-<li><a accesskey="4" href="Simplification-of-Units.html#Simplification-of-Units">Simplification of Units</a>
-</ul>
+  <p>There are some simplifications that, while sometimes useful,
+  are never done automatically. For example, the <kbd>I</kbd>
+  prefix can be given to <kbd>a s</kbd>; the <kbd>I a s</kbd>
+  command will change any trigonometric function to the appropriate
+  combination of &lsquo;<samp><span class=
+  "samp">sin</span></samp>&rsquo;s and &lsquo;<samp><span class=
+  "samp">cos</span></samp>&rsquo;s before simplifying. This can be
+  useful in simplifying even mildly complicated trigonometric
+  expressions. For example, while <kbd>a s</kbd> can reduce
+  &lsquo;<samp><span class="samp">sin(x)
+  csc(x)</span></samp>&rsquo; to &lsquo;<samp><span class=
+  "samp">1</span></samp>&rsquo;, it will not simplify
+  &lsquo;<samp><span class="samp">sin(x)^2
+  csc(x)</span></samp>&rsquo;. The command <kbd>I a s</kbd> can be
+  used to simplify this latter expression; it will transform
+  &lsquo;<samp><span class="samp">sin(x)^2
+  csc(x)</span></samp>&rsquo; into &lsquo;<samp><span class=
+  "samp">sin(x)</span></samp>&rsquo;. However, <kbd>I a s</kbd>
+  will also perform some &ldquo;simplifications&rdquo; which may
+  not be desired; for example, it will transform
+  &lsquo;<samp><span class="samp">tan(x)^2</span></samp>&rsquo;
+  into &lsquo;<samp><span class="samp">sin(x)^2 /
+  cos(x)^2</span></samp>&rsquo;. The Hyperbolic prefix <kbd>H</kbd>
+  can be used similarly; the <kbd>H a s</kbd> will replace any
+  hyperbolic functions in the formula with the appropriate
+  combinations of &lsquo;<samp><span class=
+  "samp">sinh</span></samp>&rsquo;s and &lsquo;<samp><span class=
+  "samp">cosh</span></samp>&rsquo;s before simplifying.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Default-Simplifications.html#Default-Simplifications">Default
+    Simplifications</a></li>
 
+    <li><a accesskey="2" href=
+    "Algebraic-Simplifications.html#Algebraic-Simplifications">Algebraic
+    Simplifications</a></li>
+
+    <li><a accesskey="3" href=
+    "Unsafe-Simplifications.html#Unsafe-Simplifications">Unsafe
+    Simplifications</a></li>
+
+    <li><a accesskey="4" href=
+    "Simplification-of-Units.html#Simplification-of-Units">Simplification
+    of Units</a></li>
+  </ul>
+</body>
+</html>

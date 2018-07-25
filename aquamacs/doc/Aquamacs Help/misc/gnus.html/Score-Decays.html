@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,88 +14,118 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Score Decays</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Score Decays">
-<meta name="keywords" content="Gnus Manual: Score Decays">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Scoring.html#Scoring" rel="up" title="Scoring">
-<link href="Searching.html#Searching" rel="next" title="Searching">
-<link href="Advanced-Scoring-Tips.html#Advanced-Scoring-Tips" rel="prev" title="Advanced Scoring Tips">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Score Decays</title>
+  <meta name="description" content="Gnus Manual: Score Decays" />
+  <meta name="keywords" content="Gnus Manual: Score Decays" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Scoring.html#Scoring" rel="up" title="Scoring" />
+  <link href="Searching.html#Searching" rel="next" title=
+  "Searching" />
+  <link href="Advanced-Scoring-Tips.html#Advanced-Scoring-Tips"
+  rel="prev" title="Advanced Scoring Tips" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Score-Decays"></a>
-<div class="header">
-<p>
-Previous: <a href="Advanced-Scoring.html#Advanced-Scoring" accesskey="p" rel="prev">Advanced Scoring</a>, Up: <a href="Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Score-Decays-1"></a>
-<h3 class="section">7.16 Score Decays</h3>
-<a name="index-score-decays"></a>
-<a name="index-decays"></a>
+<body lang="en" xml:lang="en">
+  <a name="Score-Decays" id="Score-Decays"></a>
 
-<p>You may find that your scores have a tendency to grow without
-bounds, especially if you&rsquo;re using adaptive scoring.  If scores get too
-big, they lose all meaning&mdash;they simply max out and it&rsquo;s difficult to
-use them in any sensible way.
-</p>
-<a name="index-gnus_002ddecay_002dscores"></a>
-<a name="index-gnus_002ddecay_002dscore"></a>
-<a name="index-gnus_002ddecay_002dscore_002dfunction"></a>
-<p>Gnus provides a mechanism for decaying scores to help with this problem.
-When score files are loaded and <code>gnus-decay-scores</code> is
-non-<code>nil</code>, Gnus will run the score files through the decaying
-mechanism thereby lowering the scores of all non-permanent score rules.
-If <code>gnus-decay-scores</code> is a regexp, only score files matching this
-regexp are treated.  E.g., you may set it to &lsquo;<samp>\\.ADAPT\\'</samp>&rsquo; if only
-<em>adaptive</em> score files should be decayed.  The decay itself if
-performed by the <code>gnus-decay-score-function</code> function, which is
-<code>gnus-decay-score</code> by default.  Here&rsquo;s the definition of that
-function:
-</p>
-<div class="lisp">
-<pre class="lisp">(defun gnus-decay-score (score)
-  &quot;Decay SCORE according to `gnus-score-decay-constant'
-and `gnus-score-decay-scale'.&quot;
+  <div class="header">
+    <p>Previous: <a href="Advanced-Scoring.html#Advanced-Scoring"
+    accesskey="p" rel="prev">Advanced Scoring</a>, Up: <a href=
+    "Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Score-Decays-1" id="Score-Decays-1"></a>
+
+  <h3 class="section">7.16 Score Decays</h3><a name=
+  "index-score-decays" id="index-score-decays"></a> <a name=
+  "index-decays" id="index-decays"></a>
+
+  <p>You may find that your scores have a tendency to grow without
+  bounds, especially if you&rsquo;re using adaptive scoring. If
+  scores get too big, they lose all meaning&mdash;they simply max
+  out and it&rsquo;s difficult to use them in any sensible
+  way.</p><a name="index-gnus_002ddecay_002dscores" id=
+  "index-gnus_002ddecay_002dscores"></a> <a name=
+  "index-gnus_002ddecay_002dscore" id=
+  "index-gnus_002ddecay_002dscore"></a> <a name=
+  "index-gnus_002ddecay_002dscore_002dfunction" id=
+  "index-gnus_002ddecay_002dscore_002dfunction"></a>
+
+  <p>Gnus provides a mechanism for decaying scores to help with
+  this problem. When score files are loaded and
+  <code>gnus-decay-scores</code> is non-<code>nil</code>, Gnus will
+  run the score files through the decaying mechanism thereby
+  lowering the scores of all non-permanent score rules. If
+  <code>gnus-decay-scores</code> is a regexp, only score files
+  matching this regexp are treated. E.g., you may set it to
+  &lsquo;<samp>\\.ADAPT\\'</samp>&rsquo; if only <em>adaptive</em>
+  score files should be decayed. The decay itself if performed by
+  the <code>gnus-decay-score-function</code> function, which is
+  <code>gnus-decay-score</code> by default. Here&rsquo;s the
+  definition of that function:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(defun gnus-decay-score (score)
+  "Decay SCORE according to `gnus-score-decay-constant'
+and `gnus-score-decay-scale'."
   (let ((n (- score
               (* (if (&lt; score 0) -1 1)
                  (min (abs score)
@@ -105,38 +137,46 @@ and `gnus-score-decay-scale'.&quot;
              ;; number below the half of the maximum integer.
              (&gt; (abs n) (lsh -1 -2)))
         (string-to-number
-         (car (split-string (number-to-string n) &quot;\\.&quot;)))
+         (car (split-string (number-to-string n) "\\.")))
       (floor n))))
-</pre></div>
+</pre>
+  </div><a name="index-gnus_002dscore_002ddecay_002dscale" id=
+  "index-gnus_002dscore_002ddecay_002dscale"></a> <a name=
+  "index-gnus_002dscore_002ddecay_002dconstant" id=
+  "index-gnus_002dscore_002ddecay_002dconstant"></a>
 
-<a name="index-gnus_002dscore_002ddecay_002dscale"></a>
-<a name="index-gnus_002dscore_002ddecay_002dconstant"></a>
-<p><code>gnus-score-decay-constant</code> is 3 by default and
-<code>gnus-score-decay-scale</code> is 0.05.  This should cause the following:
-</p>
-<ol>
-<li> Scores between -3 and 3 will be set to 0 when this function is called.
+  <p><code>gnus-score-decay-constant</code> is 3 by default and
+  <code>gnus-score-decay-scale</code> is 0.05. This should cause
+  the following:</p>
 
-</li><li> Scores with magnitudes between 3 and 60 will be shrunk by 3.
+  <ol>
+    <li>Scores between -3 and 3 will be set to 0 when this function
+    is called.</li>
 
-</li><li> Scores with magnitudes greater than 60 will be shrunk by 5% of the
-score.
-</li></ol>
+    <li>Scores with magnitudes between 3 and 60 will be shrunk by
+    3.</li>
 
-<p>If you don&rsquo;t like this decay function, write your own.  It is called
-with the score to be decayed as its only parameter, and it should return
-the new score, which should be an integer.
-</p>
-<p>Gnus will try to decay scores once a day.  If you haven&rsquo;t run Gnus for
-four days, Gnus will decay the scores four times, for instance.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Advanced-Scoring.html#Advanced-Scoring" accesskey="p" rel="prev">Advanced Scoring</a>, Up: <a href="Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>Scores with magnitudes greater than 60 will be shrunk by 5%
+    of the score.</li>
+  </ol>
 
+  <p>If you don&rsquo;t like this decay function, write your own.
+  It is called with the score to be decayed as its only parameter,
+  and it should return the new score, which should be an
+  integer.</p>
 
+  <p>Gnus will try to decay scores once a day. If you haven&rsquo;t
+  run Gnus for four days, Gnus will decay the scores four times,
+  for instance.</p>
+  <hr />
 
+  <div class="header">
+    <p>Previous: <a href="Advanced-Scoring.html#Advanced-Scoring"
+    accesskey="p" rel="prev">Advanced Scoring</a>, Up: <a href=
+    "Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

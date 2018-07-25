@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,223 +19,313 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Library Search</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Library Search">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Library Search">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Loading.html#Loading" rel="up" title="Loading">
-<link href="Loading-Non_002dASCII.html#Loading-Non_002dASCII" rel="next" title="Loading Non-ASCII">
-<link href="Load-Suffixes.html#Load-Suffixes" rel="prev" title="Load Suffixes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Library Search</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Library Search" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Library Search" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Loading.html#Loading" rel="up" title="Loading" />
+  <link href="Loading-Non_002dASCII.html#Loading-Non_002dASCII"
+  rel="next" title="Loading Non-ASCII" />
+  <link href="Load-Suffixes.html#Load-Suffixes" rel="prev" title=
+  "Load Suffixes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Library-Search" id="Library-Search"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Loading-Non_002dASCII.html#Loading-Non_002dASCII" accesskey=
+    "n" rel="next">Loading Non-ASCII</a>, Previous: <a href=
+    "Load-Suffixes.html#Load-Suffixes" accesskey="p" rel=
+    "prev">Load Suffixes</a>, Up: <a href="Loading.html#Loading"
+    accesskey="u" rel="up">Loading</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Library-Search-1" id="Library-Search-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Library-Search"></a>
-<div class="header">
-<p>
-Next: <a href="Loading-Non_002dASCII.html#Loading-Non_002dASCII" accesskey="n" rel="next">Loading Non-ASCII</a>, Previous: <a href="Load-Suffixes.html#Load-Suffixes" accesskey="p" rel="prev">Load Suffixes</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Library-Search-1"></a>
-<h3 class="section">15.3 Library Search</h3>
-<a name="index-library-search"></a>
-<a name="index-find-library"></a>
+  <h3 class="section">15.3 Library Search</h3><a name=
+  "index-library-search" id="index-library-search"></a> <a name=
+  "index-find-library" id="index-find-library"></a>
 
-<p>When Emacs loads a Lisp library, it searches for the library
-in a list of directories specified by the variable <code>load-path</code>.
-</p>
-<dl>
-<dt><a name="index-load_002dpath"></a>Variable: <strong>load-path</strong></dt>
-<dd><p>The value of this variable is a list of directories to search when
-loading files with <code>load</code>.  Each element is a string (which must be
-a directory name) or <code>nil</code> (which stands for the current working
-directory).
-</p></dd></dl>
+  <p>When Emacs loads a Lisp library, it searches for the library
+  in a list of directories specified by the variable
+  <code>load-path</code>.</p>
 
-<p>When Emacs starts up, it sets up the value of <code>load-path</code>
-in several steps.  First, it initializes <code>load-path</code> using
-default locations set when Emacs was compiled.  Normally, this
-is a directory something like
-</p>
-<div class="example">
-<pre class="example">&quot;/usr/local/share/emacs/<var>version</var>/lisp&quot;
-</pre></div>
+  <dl>
+    <dt><a name="index-load_002dpath" id=
+    "index-load_002dpath"></a>Variable:
+    <strong>load-path</strong></dt>
 
-<p>(In this and the following examples, replace <samp>/usr/local</samp> with
-the installation prefix appropriate for your Emacs.)
-These directories contain the standard Lisp files that come with
-Emacs.  If Emacs cannot find them, it will not start correctly.
-</p>
-<p>If you run Emacs from the directory where it was built&mdash;that is, an
-executable that has not been formally installed&mdash;Emacs instead
-initializes <code>load-path</code> using the <samp>lisp</samp>
-directory in the directory containing the sources from which it
-was built.
-If you built Emacs in a separate directory from the
-sources, it also adds the lisp directories from the build directory.
-(In all cases, elements are represented as absolute file names.)
-</p>
-<a name="index-site_002dlisp-directories"></a>
-<p>Unless you start Emacs with the <samp>--no-site-lisp</samp> option,
-it then adds two more <samp>site-lisp</samp> directories to the front of
-<code>load-path</code>.  These are intended for locally installed Lisp files,
-and are normally of the form:
-</p>
-<div class="example">
-<pre class="example">&quot;/usr/local/share/emacs/<var>version</var>/site-lisp&quot;
-</pre></div>
+    <dd>
+      <p>The value of this variable is a list of directories to
+      search when loading files with <code>load</code>. Each
+      element is a string (which must be a directory name) or
+      <code>nil</code> (which stands for the current working
+      directory).</p>
+    </dd>
+  </dl>
 
-<p>and
-</p>
-<div class="example">
-<pre class="example">&quot;/usr/local/share/emacs/site-lisp&quot;
-</pre></div>
+  <p>When Emacs starts up, it sets up the value of
+  <code>load-path</code> in several steps. First, it initializes
+  <code>load-path</code> using default locations set when Emacs was
+  compiled. Normally, this is a directory something like</p>
 
-<p>The first one is for locally installed files for a specific Emacs
-version; the second is for locally installed files meant for use
-with all installed Emacs versions.  (If Emacs is running uninstalled,
-it also adds <samp>site-lisp</samp> directories from the source and build
-directories, if they exist.  Normally these directories do not contain
-<samp>site-lisp</samp> directories.)
-</p>
-<a name="index-EMACSLOADPATH-environment-variable"></a>
-<p>If the environment variable <code>EMACSLOADPATH</code> is set, it modifies
-the above initialization procedure.  Emacs initializes
-<code>load-path</code> based on the value of the environment variable.
-</p>
-<p>The syntax of <code>EMACSLOADPATH</code> is the same as used for <code>PATH</code>;
-directory names are separated by &lsquo;<samp>:</samp>&rsquo; (or &lsquo;<samp>;</samp>&rsquo;, on some
-operating systems).
-Here is an example of how to set <code>EMACSLOADPATH</code> variable (from a
-<code>sh</code>-style shell):
-</p>
-<div class="example">
-<pre class="example">export EMACSLOADPATH=/home/foo/.emacs.d/lisp:
-</pre></div>
+  <div class="example">
+    <pre class="example">
+"/usr/local/share/emacs/<var>version</var>/lisp"
+</pre>
+  </div>
 
-<p>An empty element in the value of the environment variable, whether
-trailing (as in the above example), leading, or embedded, is replaced
-by the default value of <code>load-path</code> as determined by the standard
-initialization procedure.  If there are no such empty elements, then
-<code>EMACSLOADPATH</code> specifies the entire <code>load-path</code>.  You must
-include either an empty element, or the explicit path to the directory
-containing the standard Lisp files, else Emacs will not function.
-(Another way to modify <code>load-path</code> is to use the <samp>-L</samp>
-command-line option when starting Emacs; see below.)
-</p>
-<p>For each directory in <code>load-path</code>, Emacs then checks to see if
-it contains a file <samp>subdirs.el</samp>, and if so, loads it.  The
-<samp>subdirs.el</samp> file is created when Emacs is built/installed,
-and contains code that causes Emacs to add any subdirectories of those
-directories to <code>load-path</code>.  Both immediate subdirectories and
-subdirectories multiple levels down are added.  But it excludes
-subdirectories whose names do not start with a letter or digit, and
-subdirectories named <samp>RCS</samp> or <samp>CVS</samp>, and subdirectories
-containing a file named <samp>.nosearch</samp>.
-</p>
-<p>Next, Emacs adds any extra load directories that you specify using the
-<samp>-L</samp> command-line option (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Action-Arguments.html#Action-Arguments">Action Arguments</a> in <cite>The
-GNU Emacs Manual</cite>).  It also adds the directories where optional
-packages are installed, if any (see <a href="Packaging-Basics.html#Packaging-Basics">Packaging Basics</a>).
-</p>
-<p>It is common to add code to one&rsquo;s init file (see <a href="Init-File.html#Init-File">Init File</a>) to
-add one or more directories to <code>load-path</code>.  For example:
-</p>
-<div class="example">
-<pre class="example">(push &quot;~/.emacs.d/lisp&quot; load-path)
-</pre></div>
+  <p>(In this and the following examples, replace
+  <samp>/usr/local</samp> with the installation prefix appropriate
+  for your Emacs.) These directories contain the standard Lisp
+  files that come with Emacs. If Emacs cannot find them, it will
+  not start correctly.</p>
 
-<p>Dumping Emacs uses a special value of <code>load-path</code>.  If you use
-a <samp>site-load.el</samp> or <samp>site-init.el</samp> file to customize the
-dumped Emacs (see <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>), any changes to <code>load-path</code>
-that these files make will be lost after dumping.
-</p>
-<dl>
-<dt><a name="index-locate_002dlibrary"></a>Command: <strong>locate-library</strong> <em>library &amp;optional nosuffix path interactive-call</em></dt>
-<dd><p>This command finds the precise file name for library <var>library</var>.  It
-searches for the library in the same way <code>load</code> does, and the
-argument <var>nosuffix</var> has the same meaning as in <code>load</code>: don&rsquo;t
-add suffixes &lsquo;<samp>.elc</samp>&rsquo; or &lsquo;<samp>.el</samp>&rsquo; to the specified name
-<var>library</var>.
-</p>
-<p>If the <var>path</var> is non-<code>nil</code>, that list of directories is used
-instead of <code>load-path</code>.
-</p>
-<p>When <code>locate-library</code> is called from a program, it returns the file
-name as a string.  When the user runs <code>locate-library</code>
-interactively, the argument <var>interactive-call</var> is <code>t</code>, and this
-tells <code>locate-library</code> to display the file name in the echo area.
-</p></dd></dl>
+  <p>If you run Emacs from the directory where it was
+  built&mdash;that is, an executable that has not been formally
+  installed&mdash;Emacs instead initializes <code>load-path</code>
+  using the <samp>lisp</samp> directory in the directory containing
+  the sources from which it was built. If you built Emacs in a
+  separate directory from the sources, it also adds the lisp
+  directories from the build directory. (In all cases, elements are
+  represented as absolute file names.)</p><a name=
+  "index-site_002dlisp-directories" id=
+  "index-site_002dlisp-directories"></a>
 
-<a name="index-shadowed-Lisp-files"></a>
-<dl>
-<dt><a name="index-list_002dload_002dpath_002dshadows"></a>Command: <strong>list-load-path-shadows</strong> <em>&amp;optional stringp</em></dt>
-<dd><p>This command shows a list of <em>shadowed</em> Emacs Lisp files.  A
-shadowed file is one that will not normally be loaded, despite being
-in a directory on <code>load-path</code>, due to the existence of another
-similarly-named file in a directory earlier on <code>load-path</code>.
-</p>
-<p>For instance, suppose <code>load-path</code> is set to
-</p>
-<div class="example">
-<pre class="example">  (&quot;/opt/emacs/site-lisp&quot; &quot;/usr/share/emacs/23.3/lisp&quot;)
-</pre></div>
+  <p>Unless you start Emacs with the <samp>--no-site-lisp</samp>
+  option, it then adds two more <samp>site-lisp</samp> directories
+  to the front of <code>load-path</code>. These are intended for
+  locally installed Lisp files, and are normally of the form:</p>
 
-<p>and that both these directories contain a file named <samp>foo.el</samp>.
-Then <code>(require 'foo)</code> never loads the file in the second
-directory.  Such a situation might indicate a problem in the way Emacs
-was installed.
-</p>
-<p>When called from Lisp, this function prints a message listing the
-shadowed files, instead of displaying them in a buffer.  If the
-optional argument <code>stringp</code> is non-<code>nil</code>, it instead returns
-the shadowed files as a string.
-</p></dd></dl>
+  <div class="example">
+    <pre class="example">
+"/usr/local/share/emacs/<var>version</var>/site-lisp"
+</pre>
+  </div>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Loading-Non_002dASCII.html#Loading-Non_002dASCII" accesskey="n" rel="next">Loading Non-ASCII</a>, Previous: <a href="Load-Suffixes.html#Load-Suffixes" accesskey="p" rel="prev">Load Suffixes</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>and</p>
 
+  <div class="example">
+    <pre class="example">
+"/usr/local/share/emacs/site-lisp"
+</pre>
+  </div>
 
+  <p>The first one is for locally installed files for a specific
+  Emacs version; the second is for locally installed files meant
+  for use with all installed Emacs versions. (If Emacs is running
+  uninstalled, it also adds <samp>site-lisp</samp> directories from
+  the source and build directories, if they exist. Normally these
+  directories do not contain <samp>site-lisp</samp>
+  directories.)</p><a name=
+  "index-EMACSLOADPATH-environment-variable" id=
+  "index-EMACSLOADPATH-environment-variable"></a>
 
+  <p>If the environment variable <code>EMACSLOADPATH</code> is set,
+  it modifies the above initialization procedure. Emacs initializes
+  <code>load-path</code> based on the value of the environment
+  variable.</p>
+
+  <p>The syntax of <code>EMACSLOADPATH</code> is the same as used
+  for <code>PATH</code>; directory names are separated by
+  &lsquo;<samp>:</samp>&rsquo; (or &lsquo;<samp>;</samp>&rsquo;, on
+  some operating systems). Here is an example of how to set
+  <code>EMACSLOADPATH</code> variable (from a <code>sh</code>-style
+  shell):</p>
+
+  <div class="example">
+    <pre class="example">
+export EMACSLOADPATH=/home/foo/.emacs.d/lisp:
+</pre>
+  </div>
+
+  <p>An empty element in the value of the environment variable,
+  whether trailing (as in the above example), leading, or embedded,
+  is replaced by the default value of <code>load-path</code> as
+  determined by the standard initialization procedure. If there are
+  no such empty elements, then <code>EMACSLOADPATH</code> specifies
+  the entire <code>load-path</code>. You must include either an
+  empty element, or the explicit path to the directory containing
+  the standard Lisp files, else Emacs will not function. (Another
+  way to modify <code>load-path</code> is to use the
+  <samp>-L</samp> command-line option when starting Emacs; see
+  below.)</p>
+
+  <p>For each directory in <code>load-path</code>, Emacs then
+  checks to see if it contains a file <samp>subdirs.el</samp>, and
+  if so, loads it. The <samp>subdirs.el</samp> file is created when
+  Emacs is built/installed, and contains code that causes Emacs to
+  add any subdirectories of those directories to
+  <code>load-path</code>. Both immediate subdirectories and
+  subdirectories multiple levels down are added. But it excludes
+  subdirectories whose names do not start with a letter or digit,
+  and subdirectories named <samp>RCS</samp> or <samp>CVS</samp>,
+  and subdirectories containing a file named
+  <samp>.nosearch</samp>.</p>
+
+  <p>Next, Emacs adds any extra load directories that you specify
+  using the <samp>-L</samp> command-line option (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Action-Arguments.html#Action-Arguments">
+  Action Arguments</a> in <cite>The GNU Emacs Manual</cite>). It
+  also adds the directories where optional packages are installed,
+  if any (see <a href=
+  "Packaging-Basics.html#Packaging-Basics">Packaging
+  Basics</a>).</p>
+
+  <p>It is common to add code to one&rsquo;s init file (see
+  <a href="Init-File.html#Init-File">Init File</a>) to add one or
+  more directories to <code>load-path</code>. For example:</p>
+
+  <div class="example">
+    <pre class="example">
+(push "~/.emacs.d/lisp" load-path)
+</pre>
+  </div>
+
+  <p>Dumping Emacs uses a special value of <code>load-path</code>.
+  If you use a <samp>site-load.el</samp> or
+  <samp>site-init.el</samp> file to customize the dumped Emacs (see
+  <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>),
+  any changes to <code>load-path</code> that these files make will
+  be lost after dumping.</p>
+
+  <dl>
+    <dt><a name="index-locate_002dlibrary" id=
+    "index-locate_002dlibrary"></a>Command:
+    <strong>locate-library</strong> <em>library &amp;optional
+    nosuffix path interactive-call</em></dt>
+
+    <dd>
+      <p>This command finds the precise file name for library
+      <var>library</var>. It searches for the library in the same
+      way <code>load</code> does, and the argument
+      <var>nosuffix</var> has the same meaning as in
+      <code>load</code>: don&rsquo;t add suffixes
+      &lsquo;<samp>.elc</samp>&rsquo; or
+      &lsquo;<samp>.el</samp>&rsquo; to the specified name
+      <var>library</var>.</p>
+
+      <p>If the <var>path</var> is non-<code>nil</code>, that list
+      of directories is used instead of <code>load-path</code>.</p>
+
+      <p>When <code>locate-library</code> is called from a program,
+      it returns the file name as a string. When the user runs
+      <code>locate-library</code> interactively, the argument
+      <var>interactive-call</var> is <code>t</code>, and this tells
+      <code>locate-library</code> to display the file name in the
+      echo area.</p>
+    </dd>
+  </dl><a name="index-shadowed-Lisp-files" id=
+  "index-shadowed-Lisp-files"></a>
+
+  <dl>
+    <dt><a name="index-list_002dload_002dpath_002dshadows" id=
+    "index-list_002dload_002dpath_002dshadows"></a>Command:
+    <strong>list-load-path-shadows</strong> <em>&amp;optional
+    stringp</em></dt>
+
+    <dd>
+      <p>This command shows a list of <em>shadowed</em> Emacs Lisp
+      files. A shadowed file is one that will not normally be
+      loaded, despite being in a directory on
+      <code>load-path</code>, due to the existence of another
+      similarly-named file in a directory earlier on
+      <code>load-path</code>.</p>
+
+      <p>For instance, suppose <code>load-path</code> is set to</p>
+
+      <div class="example">
+        <pre class="example">
+  ("/opt/emacs/site-lisp" "/usr/share/emacs/23.3/lisp")
+</pre>
+      </div>
+
+      <p>and that both these directories contain a file named
+      <samp>foo.el</samp>. Then <code>(require 'foo)</code> never
+      loads the file in the second directory. Such a situation
+      might indicate a problem in the way Emacs was installed.</p>
+
+      <p>When called from Lisp, this function prints a message
+      listing the shadowed files, instead of displaying them in a
+      buffer. If the optional argument <code>stringp</code> is
+      non-<code>nil</code>, it instead returns the shadowed files
+      as a string.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Loading-Non_002dASCII.html#Loading-Non_002dASCII" accesskey=
+    "n" rel="next">Loading Non-ASCII</a>, Previous: <a href=
+    "Load-Suffixes.html#Load-Suffixes" accesskey="p" rel=
+    "prev">Load Suffixes</a>, Up: <a href="Loading.html#Loading"
+    accesskey="u" rel="up">Loading</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

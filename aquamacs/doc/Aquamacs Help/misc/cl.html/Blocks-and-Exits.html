@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,149 +16,220 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Blocks and Exits</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Blocks and Exits">
-<meta name="keywords" content="Common Lisp Extensions: Blocks and Exits">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Control-Structure.html#Control-Structure" rel="up" title="Control Structure">
-<link href="Iteration.html#Iteration" rel="next" title="Iteration">
-<link href="Conditionals.html#Conditionals" rel="prev" title="Conditionals">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Blocks and Exits</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Blocks and Exits" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Blocks and Exits" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Control-Structure.html#Control-Structure" rel="up"
+  title="Control Structure" />
+  <link href="Iteration.html#Iteration" rel="next" title=
+  "Iteration" />
+  <link href="Conditionals.html#Conditionals" rel="prev" title=
+  "Conditionals" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Blocks-and-Exits"></a>
-<div class="header">
-<p>
-Next: <a href="Iteration.html#Iteration" accesskey="n" rel="next">Iteration</a>, Previous: <a href="Conditionals.html#Conditionals" accesskey="p" rel="prev">Conditionals</a>, Up: <a href="Control-Structure.html#Control-Structure" accesskey="u" rel="up">Control Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Blocks-and-Exits-1"></a>
-<h3 class="section">4.5 Blocks and Exits</h3>
-<a name="index-block"></a>
+<body lang="en" xml:lang="en">
+  <a name="Blocks-and-Exits" id="Blocks-and-Exits"></a>
 
-<p>Common Lisp <em>blocks</em> provide a non-local exit mechanism very
-similar to <code>catch</code> and <code>throw</code>, with lexical scoping.
-This package actually implements <code>cl-block</code>
-in terms of <code>catch</code>; however, the lexical scoping allows the
-byte-compiler to omit the costly <code>catch</code> step if the
-body of the block does not actually <code>cl-return-from</code> the block.
-</p>
-<dl>
-<dt><a name="index-cl_002dblock"></a>Macro: <strong>cl-block</strong> <em>name forms&hellip;</em></dt>
-<dd><p>The <var>forms</var> are evaluated as if by a <code>progn</code>.  However,
-if any of the <var>forms</var> execute <code>(cl-return-from <var>name</var>)</code>,
-they will jump out and return directly from the <code>cl-block</code> form.
-The <code>cl-block</code> returns the result of the last <var>form</var> unless
-a <code>cl-return-from</code> occurs.
-</p>
-<p>The <code>cl-block</code>/<code>cl-return-from</code> mechanism is quite similar to
-the <code>catch</code>/<code>throw</code> mechanism.  The main differences are
-that block <var>name</var>s are unevaluated symbols, rather than forms
-(such as quoted symbols) that evaluate to a tag at run-time; and
-also that blocks are always lexically scoped.
-In a dynamically scoped <code>catch</code>, functions called from the
-<code>catch</code> body can also <code>throw</code> to the <code>catch</code>.  This
-is not an option for <code>cl-block</code>, where
-the <code>cl-return-from</code> referring to a block name must appear
-physically within the <var>forms</var> that make up the body of the block.
-They may not appear within other called functions, although they may
-appear within macro expansions or <code>lambda</code>s in the body.  Block
-names and <code>catch</code> names form independent name-spaces.
-</p>
-<p>In true Common Lisp, <code>defun</code> and <code>defmacro</code> surround
-the function or expander bodies with implicit blocks with the
-same name as the function or macro.  This does not occur in Emacs
-Lisp, but this package provides <code>cl-defun</code> and <code>cl-defmacro</code>
-forms, which do create the implicit block.
-</p>
-<p>The Common Lisp looping constructs defined by this package,
-such as <code>cl-loop</code> and <code>cl-dolist</code>, also create implicit blocks
-just as in Common Lisp.
-</p>
-<p>Because they are implemented in terms of Emacs Lisp&rsquo;s <code>catch</code>
-and <code>throw</code>, blocks have the same overhead as actual
-<code>catch</code> constructs (roughly two function calls).  However,
-the byte compiler will optimize away the <code>catch</code>
-if the block does
-not in fact contain any <code>cl-return</code> or <code>cl-return-from</code> calls
-that jump to it.  This means that <code>cl-do</code> loops and <code>cl-defun</code>
-functions that don&rsquo;t use <code>cl-return</code> don&rsquo;t pay the overhead to
-support it.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Iteration.html#Iteration" accesskey="n" rel=
+    "next">Iteration</a>, Previous: <a href=
+    "Conditionals.html#Conditionals" accesskey="p" rel=
+    "prev">Conditionals</a>, Up: <a href=
+    "Control-Structure.html#Control-Structure" accesskey="u" rel=
+    "up">Control Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Blocks-and-Exits-1" id="Blocks-and-Exits-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dreturn_002dfrom"></a>Macro: <strong>cl-return-from</strong> <em>name [result]</em></dt>
-<dd><p>This macro returns from the block named <var>name</var>, which must be
-an (unevaluated) symbol.  If a <var>result</var> form is specified, it
-is evaluated to produce the result returned from the <code>block</code>.
-Otherwise, <code>nil</code> is returned.
-</p></dd></dl>
+  <h3 class="section">4.5 Blocks and Exits</h3><a name=
+  "index-block" id="index-block"></a>
 
-<dl>
-<dt><a name="index-cl_002dreturn"></a>Macro: <strong>cl-return</strong> <em>[result]</em></dt>
-<dd><p>This macro is exactly like <code>(cl-return-from nil <var>result</var>)</code>.
-Common Lisp loops like <code>cl-do</code> and <code>cl-dolist</code> implicitly enclose
-themselves in <code>nil</code> blocks.
-</p></dd></dl>
+  <p>Common Lisp <em>blocks</em> provide a non-local exit mechanism
+  very similar to <code>catch</code> and <code>throw</code>, with
+  lexical scoping. This package actually implements
+  <code>cl-block</code> in terms of <code>catch</code>; however,
+  the lexical scoping allows the byte-compiler to omit the costly
+  <code>catch</code> step if the body of the block does not
+  actually <code>cl-return-from</code> the block.</p>
 
-<dl>
-<dt><a name="index-cl_002dtagbody"></a>Macro: <strong>cl-tagbody</strong> <em>&amp;rest labels-or-statements</em></dt>
-<dd><p>This macro executes statements while allowing for control transfer to
-user-defined labels.  Each element of <var>labels-or-statements</var> can
-be either a label (an integer or a symbol), or a cons-cell
-(a statement).  This distinction is made before macroexpansion.
-Statements are executed in sequence, discarding any return value.
-Any statement can transfer control at any time to the statements that follow
-one of the labels with the special form <code>(go <var>label</var>)</code>.
-Labels have lexical scope and dynamic extent.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dblock" id=
+    "index-cl_002dblock"></a>Macro: <strong>cl-block</strong>
+    <em>name forms&hellip;</em></dt>
 
+    <dd>
+      <p>The <var>forms</var> are evaluated as if by a
+      <code>progn</code>. However, if any of the <var>forms</var>
+      execute <code>(cl-return-from <var>name</var>)</code>, they
+      will jump out and return directly from the
+      <code>cl-block</code> form. The <code>cl-block</code> returns
+      the result of the last <var>form</var> unless a
+      <code>cl-return-from</code> occurs.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Iteration.html#Iteration" accesskey="n" rel="next">Iteration</a>, Previous: <a href="Conditionals.html#Conditionals" accesskey="p" rel="prev">Conditionals</a>, Up: <a href="Control-Structure.html#Control-Structure" accesskey="u" rel="up">Control Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>The <code>cl-block</code>/<code>cl-return-from</code>
+      mechanism is quite similar to the
+      <code>catch</code>/<code>throw</code> mechanism. The main
+      differences are that block <var>name</var>s are unevaluated
+      symbols, rather than forms (such as quoted symbols) that
+      evaluate to a tag at run-time; and also that blocks are
+      always lexically scoped. In a dynamically scoped
+      <code>catch</code>, functions called from the
+      <code>catch</code> body can also <code>throw</code> to the
+      <code>catch</code>. This is not an option for
+      <code>cl-block</code>, where the <code>cl-return-from</code>
+      referring to a block name must appear physically within the
+      <var>forms</var> that make up the body of the block. They may
+      not appear within other called functions, although they may
+      appear within macro expansions or <code>lambda</code>s in the
+      body. Block names and <code>catch</code> names form
+      independent name-spaces.</p>
 
+      <p>In true Common Lisp, <code>defun</code> and
+      <code>defmacro</code> surround the function or expander
+      bodies with implicit blocks with the same name as the
+      function or macro. This does not occur in Emacs Lisp, but
+      this package provides <code>cl-defun</code> and
+      <code>cl-defmacro</code> forms, which do create the implicit
+      block.</p>
 
+      <p>The Common Lisp looping constructs defined by this
+      package, such as <code>cl-loop</code> and
+      <code>cl-dolist</code>, also create implicit blocks just as
+      in Common Lisp.</p>
 
+      <p>Because they are implemented in terms of Emacs
+      Lisp&rsquo;s <code>catch</code> and <code>throw</code>,
+      blocks have the same overhead as actual <code>catch</code>
+      constructs (roughly two function calls). However, the byte
+      compiler will optimize away the <code>catch</code> if the
+      block does not in fact contain any <code>cl-return</code> or
+      <code>cl-return-from</code> calls that jump to it. This means
+      that <code>cl-do</code> loops and <code>cl-defun</code>
+      functions that don&rsquo;t use <code>cl-return</code>
+      don&rsquo;t pay the overhead to support it.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dreturn_002dfrom" id=
+    "index-cl_002dreturn_002dfrom"></a>Macro:
+    <strong>cl-return-from</strong> <em>name [result]</em></dt>
+
+    <dd>
+      <p>This macro returns from the block named <var>name</var>,
+      which must be an (unevaluated) symbol. If a <var>result</var>
+      form is specified, it is evaluated to produce the result
+      returned from the <code>block</code>. Otherwise,
+      <code>nil</code> is returned.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dreturn" id=
+    "index-cl_002dreturn"></a>Macro: <strong>cl-return</strong>
+    <em>[result]</em></dt>
+
+    <dd>
+      <p>This macro is exactly like <code>(cl-return-from nil
+      <var>result</var>)</code>. Common Lisp loops like
+      <code>cl-do</code> and <code>cl-dolist</code> implicitly
+      enclose themselves in <code>nil</code> blocks.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dtagbody" id=
+    "index-cl_002dtagbody"></a>Macro: <strong>cl-tagbody</strong>
+    <em>&amp;rest labels-or-statements</em></dt>
+
+    <dd>
+      <p>This macro executes statements while allowing for control
+      transfer to user-defined labels. Each element of
+      <var>labels-or-statements</var> can be either a label (an
+      integer or a symbol), or a cons-cell (a statement). This
+      distinction is made before macroexpansion. Statements are
+      executed in sequence, discarding any return value. Any
+      statement can transfer control at any time to the statements
+      that follow one of the labels with the special form <code>(go
+      <var>label</var>)</code>. Labels have lexical scope and
+      dynamic extent.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Iteration.html#Iteration" accesskey="n" rel=
+    "next">Iteration</a>, Previous: <a href=
+    "Conditionals.html#Conditionals" accesskey="p" rel=
+    "prev">Conditionals</a>, Up: <a href=
+    "Control-Structure.html#Control-Structure" accesskey="u" rel=
+    "up">Control Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

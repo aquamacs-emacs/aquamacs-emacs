@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -15,89 +17,123 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Flymake 0.3: Parsing the output</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Flymake 0.3: Parsing the output">
-<meta name="keywords" content="GNU Flymake 0.3: Parsing the output">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Flymake-Implementation.html#Flymake-Implementation" rel="up" title="Flymake Implementation">
-<link href="Highlighting-erroneous-lines.html#Highlighting-erroneous-lines" rel="next" title="Highlighting erroneous lines">
-<link href="Starting-the-syntax-check-process.html#Starting-the-syntax-check-process" rel="prev" title="Starting the syntax check process">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Flymake 0.3: Parsing the output</title>
+  <meta name="description" content=
+  "GNU Flymake 0.3: Parsing the output" />
+  <meta name="keywords" content=
+  "GNU Flymake 0.3: Parsing the output" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Flymake-Implementation.html#Flymake-Implementation"
+  rel="up" title="Flymake Implementation" />
+  <link href=
+  "Highlighting-erroneous-lines.html#Highlighting-erroneous-lines"
+  rel="next" title="Highlighting erroneous lines" />
+  <link href=
+  "Starting-the-syntax-check-process.html#Starting-the-syntax-check-process"
+  rel="prev" title="Starting the syntax check process" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Parsing-the-output"></a>
-<div class="header">
-<p>
-Next: <a href="Highlighting-erroneous-lines.html#Highlighting-erroneous-lines" accesskey="n" rel="next">Highlighting erroneous lines</a>, Previous: <a href="Starting-the-syntax-check-process.html#Starting-the-syntax-check-process" accesskey="p" rel="prev">Starting the syntax check process</a>, Up: <a href="Flymake-Implementation.html#Flymake-Implementation" accesskey="u" rel="up">Flymake Implementation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Parsing-the-output-1"></a>
-<h3 class="section">5.7 Parsing the output</h3>
-<a name="index-Parsing-the-output"></a>
+<body lang="en" xml:lang="en">
+  <a name="Parsing-the-output" id="Parsing-the-output"></a>
 
-<p>The output generated by the syntax check tool is parsed in the process
-filter/sentinel using the error message patterns stored in the
-<code>flymake-err-line-patterns</code> variable.  This variable contains a
-list of items of the form <code>(regexp file-idx line-idx
-err-text-idx)</code>, used to determine whether a particular line is an
-error message and extract file name, line number and error text,
-respectively.  Error type (error/warning) is also guessed by matching
-error text with the &rsquo;<code>^[wW]arning</code>&rsquo; pattern.  Anything that was not
-classified as a warning is considered an error.  Type is then used to
-sort error menu items, which shows error messages first.
-</p>
-<p>Flymake is also able to interpret error message patterns missing err-text-idx
-information.  This is done by merely taking the rest of the matched line
-(<code>(substring line (match-end 0))</code>) as error text.  This trick allows
-making use of a huge collection of error message line patterns from
-<code>compile.el</code>.  All these error patterns are appended to
-the end of <code>flymake-err-line-patterns</code>.
-</p>
-<p>The error information obtained is saved in a buffer local
-variable.  The buffer for which the process output belongs is
-determined from the process-id<!-- /@w -->-&gt;<!-- /@w -->buffer mapping updated
-after every process launch/exit.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Highlighting-erroneous-lines.html#Highlighting-erroneous-lines"
+    accesskey="n" rel="next">Highlighting erroneous lines</a>,
+    Previous: <a href=
+    "Starting-the-syntax-check-process.html#Starting-the-syntax-check-process"
+    accesskey="p" rel="prev">Starting the syntax check process</a>,
+    Up: <a href=
+    "Flymake-Implementation.html#Flymake-Implementation" accesskey=
+    "u" rel="up">Flymake Implementation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Parsing-the-output-1" id="Parsing-the-output-1"></a>
 
+  <h3 class="section">5.7 Parsing the output</h3><a name=
+  "index-Parsing-the-output" id="index-Parsing-the-output"></a>
 
+  <p>The output generated by the syntax check tool is parsed in the
+  process filter/sentinel using the error message patterns stored
+  in the <code>flymake-err-line-patterns</code> variable. This
+  variable contains a list of items of the form <code>(regexp
+  file-idx line-idx err-text-idx)</code>, used to determine whether
+  a particular line is an error message and extract file name, line
+  number and error text, respectively. Error type (error/warning)
+  is also guessed by matching error text with the
+  &rsquo;<code>^[wW]arning</code>&rsquo; pattern. Anything that was
+  not classified as a warning is considered an error. Type is then
+  used to sort error menu items, which shows error messages
+  first.</p>
 
+  <p>Flymake is also able to interpret error message patterns
+  missing err-text-idx information. This is done by merely taking
+  the rest of the matched line (<code>(substring line (match-end
+  0))</code>) as error text. This trick allows making use of a huge
+  collection of error message line patterns from
+  <code>compile.el</code>. All these error patterns are appended to
+  the end of <code>flymake-err-line-patterns</code>.</p>
+
+  <p>The error information obtained is saved in a buffer local
+  variable. The buffer for which the process output belongs is
+  determined from the process-id<!-- /@w -->-&gt;<!-- /@w -->buffer
+  mapping updated after every process launch/exit.</p>
 </body>
 </html>

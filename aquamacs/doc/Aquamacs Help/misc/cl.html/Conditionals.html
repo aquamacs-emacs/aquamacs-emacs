@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,143 +16,217 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Conditionals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Conditionals">
-<meta name="keywords" content="Common Lisp Extensions: Conditionals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Control-Structure.html#Control-Structure" rel="up" title="Control Structure">
-<link href="Blocks-and-Exits.html#Blocks-and-Exits" rel="next" title="Blocks and Exits">
-<link href="Macro-Bindings.html#Macro-Bindings" rel="prev" title="Macro Bindings">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Conditionals</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Conditionals" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Conditionals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Control-Structure.html#Control-Structure" rel="up"
+  title="Control Structure" />
+  <link href="Blocks-and-Exits.html#Blocks-and-Exits" rel="next"
+  title="Blocks and Exits" />
+  <link href="Macro-Bindings.html#Macro-Bindings" rel="prev" title=
+  "Macro Bindings" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Conditionals"></a>
-<div class="header">
-<p>
-Next: <a href="Blocks-and-Exits.html#Blocks-and-Exits" accesskey="n" rel="next">Blocks and Exits</a>, Previous: <a href="Variable-Bindings.html#Variable-Bindings" accesskey="p" rel="prev">Variable Bindings</a>, Up: <a href="Control-Structure.html#Control-Structure" accesskey="u" rel="up">Control Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Conditionals-1"></a>
-<h3 class="section">4.4 Conditionals</h3>
+<body lang="en" xml:lang="en">
+  <a name="Conditionals" id="Conditionals"></a>
 
-<p>These conditional forms augment Emacs Lisp&rsquo;s simple <code>if</code>,
-<code>and</code>, <code>or</code>, and <code>cond</code> forms.
-</p>
-<dl>
-<dt><a name="index-cl_002dcase"></a>Macro: <strong>cl-case</strong> <em>keyform clause&hellip;</em></dt>
-<dd><p>This macro evaluates <var>keyform</var>, then compares it with the key
-values listed in the various <var>clause</var>s.  Whichever clause matches
-the key is executed; comparison is done by <code>eql</code>.  If no clause
-matches, the <code>cl-case</code> form returns <code>nil</code>.  The clauses are
-of the form
-</p>
-<div class="example">
-<pre class="example">(<var>keylist</var> <var>body-forms</var>&hellip;)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Blocks-and-Exits.html#Blocks-and-Exits"
+    accesskey="n" rel="next">Blocks and Exits</a>, Previous:
+    <a href="Variable-Bindings.html#Variable-Bindings" accesskey=
+    "p" rel="prev">Variable Bindings</a>, Up: <a href=
+    "Control-Structure.html#Control-Structure" accesskey="u" rel=
+    "up">Control Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Conditionals-1" id="Conditionals-1"></a>
 
-<p>where <var>keylist</var> is a list of key values.  If there is exactly
-one value, and it is not a cons cell or the symbol <code>nil</code> or
-<code>t</code>, then it can be used by itself as a <var>keylist</var> without
-being enclosed in a list.  All key values in the <code>cl-case</code> form
-must be distinct.  The final clauses may use <code>t</code> in place of
-a <var>keylist</var> to indicate a default clause that should be taken
-if none of the other clauses match.  (The symbol <code>otherwise</code>
-is also recognized in place of <code>t</code>.  To make a clause that
-matches the actual symbol <code>t</code>, <code>nil</code>, or <code>otherwise</code>,
-enclose the symbol in a list.)
-</p>
-<p>For example, this expression reads a keystroke, then does one of
-four things depending on whether it is an &lsquo;<samp>a</samp>&rsquo;, a &lsquo;<samp>b</samp>&rsquo;,
-a <tt class="key">RET</tt> or <kbd>C-j</kbd>, or anything else.
-</p>
-<div class="example">
-<pre class="example">(cl-case (read-char)
+  <h3 class="section">4.4 Conditionals</h3>
+
+  <p>These conditional forms augment Emacs Lisp&rsquo;s simple
+  <code>if</code>, <code>and</code>, <code>or</code>, and
+  <code>cond</code> forms.</p>
+
+  <dl>
+    <dt><a name="index-cl_002dcase" id=
+    "index-cl_002dcase"></a>Macro: <strong>cl-case</strong>
+    <em>keyform clause&hellip;</em></dt>
+
+    <dd>
+      <p>This macro evaluates <var>keyform</var>, then compares it
+      with the key values listed in the various <var>clause</var>s.
+      Whichever clause matches the key is executed; comparison is
+      done by <code>eql</code>. If no clause matches, the
+      <code>cl-case</code> form returns <code>nil</code>. The
+      clauses are of the form</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>keylist</var> <var>body-forms</var>&hellip;)
+</pre>
+      </div>
+
+      <p>where <var>keylist</var> is a list of key values. If there
+      is exactly one value, and it is not a cons cell or the symbol
+      <code>nil</code> or <code>t</code>, then it can be used by
+      itself as a <var>keylist</var> without being enclosed in a
+      list. All key values in the <code>cl-case</code> form must be
+      distinct. The final clauses may use <code>t</code> in place
+      of a <var>keylist</var> to indicate a default clause that
+      should be taken if none of the other clauses match. (The
+      symbol <code>otherwise</code> is also recognized in place of
+      <code>t</code>. To make a clause that matches the actual
+      symbol <code>t</code>, <code>nil</code>, or
+      <code>otherwise</code>, enclose the symbol in a list.)</p>
+
+      <p>For example, this expression reads a keystroke, then does
+      one of four things depending on whether it is an
+      &lsquo;<samp>a</samp>&rsquo;, a &lsquo;<samp>b</samp>&rsquo;,
+      a <tt class="key">RET</tt> or <kbd>C-j</kbd>, or anything
+      else.</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-case (read-char)
   (?a (do-a-thing))
   (?b (do-b-thing))
   ((?\r ?\n) (do-ret-thing))
   (t (do-other-thing)))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002decase"></a>Macro: <strong>cl-ecase</strong> <em>keyform clause&hellip;</em></dt>
-<dd><p>This macro is just like <code>cl-case</code>, except that if the key does
-not match any of the clauses, an error is signaled rather than
-simply returning <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002decase" id=
+    "index-cl_002decase"></a>Macro: <strong>cl-ecase</strong>
+    <em>keyform clause&hellip;</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dtypecase"></a>Macro: <strong>cl-typecase</strong> <em>keyform clause&hellip;</em></dt>
-<dd><p>This macro is a version of <code>cl-case</code> that checks for types
-rather than values.  Each <var>clause</var> is of the form
-&lsquo;<samp>(<var>type</var> <var>body</var>&hellip;)</samp>&rsquo;.  See <a href="Type-Predicates.html#Type-Predicates">Type Predicates</a>,
-for a description of type specifiers.  For example,
-</p>
-<div class="example">
-<pre class="example">(cl-typecase x
+    <dd>
+      <p>This macro is just like <code>cl-case</code>, except that
+      if the key does not match any of the clauses, an error is
+      signaled rather than simply returning <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dtypecase" id=
+    "index-cl_002dtypecase"></a>Macro: <strong>cl-typecase</strong>
+    <em>keyform clause&hellip;</em></dt>
+
+    <dd>
+      <p>This macro is a version of <code>cl-case</code> that
+      checks for types rather than values. Each <var>clause</var>
+      is of the form &lsquo;<samp>(<var>type</var>
+      <var>body</var>&hellip;)</samp>&rsquo;. See <a href=
+      "Type-Predicates.html#Type-Predicates">Type Predicates</a>,
+      for a description of type specifiers. For example,</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-typecase x
   (integer (munch-integer x))
   (float (munch-float x))
   (string (munch-integer (string-to-int x)))
   (t (munch-anything x)))
-</pre></div>
+</pre>
+      </div>
 
-<p>The type specifier <code>t</code> matches any type of object; the word
-<code>otherwise</code> is also allowed.  To make one clause match any of
-several types, use an <code>(or &hellip;)</code> type specifier.
-</p></dd></dl>
+      <p>The type specifier <code>t</code> matches any type of
+      object; the word <code>otherwise</code> is also allowed. To
+      make one clause match any of several types, use an <code>(or
+      &hellip;)</code> type specifier.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002detypecase"></a>Macro: <strong>cl-etypecase</strong> <em>keyform clause&hellip;</em></dt>
-<dd><p>This macro is just like <code>cl-typecase</code>, except that if the key does
-not match any of the clauses, an error is signaled rather than
-simply returning <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002detypecase" id=
+    "index-cl_002detypecase"></a>Macro:
+    <strong>cl-etypecase</strong> <em>keyform
+    clause&hellip;</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Blocks-and-Exits.html#Blocks-and-Exits" accesskey="n" rel="next">Blocks and Exits</a>, Previous: <a href="Variable-Bindings.html#Variable-Bindings" accesskey="p" rel="prev">Variable Bindings</a>, Up: <a href="Control-Structure.html#Control-Structure" accesskey="u" rel="up">Control Structure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This macro is just like <code>cl-typecase</code>, except
+      that if the key does not match any of the clauses, an error
+      is signaled rather than simply returning
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Blocks-and-Exits.html#Blocks-and-Exits"
+    accesskey="n" rel="next">Blocks and Exits</a>, Previous:
+    <a href="Variable-Bindings.html#Variable-Bindings" accesskey=
+    "p" rel="prev">Variable Bindings</a>, Up: <a href=
+    "Control-Structure.html#Control-Structure" accesskey="u" rel=
+    "up">Control Structure</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

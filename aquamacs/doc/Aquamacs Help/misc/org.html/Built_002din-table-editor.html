@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,358 +16,587 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Built-in table editor</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Built-in table editor">
-<meta name="keywords" content="The Org Manual: Built-in table editor">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Tables.html#Tables" rel="up" title="Tables">
-<link href="Column-width-and-alignment.html#Column-width-and-alignment" rel="next" title="Column width and alignment">
-<link href="Tables.html#Tables" rel="prev" title="Tables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Built-in table editor</title>
+  <meta name="description" content=
+  "The Org Manual: Built-in table editor" />
+  <meta name="keywords" content=
+  "The Org Manual: Built-in table editor" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Tables.html#Tables" rel="up" title="Tables" />
+  <link href=
+  "Column-width-and-alignment.html#Column-width-and-alignment" rel=
+  "next" title="Column width and alignment" />
+  <link href="Tables.html#Tables" rel="prev" title="Tables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Built_002din-table-editor"></a>
-<div class="header">
-<p>
-Next: <a href="Column-width-and-alignment.html#Column-width-and-alignment" accesskey="n" rel="next">Column width and alignment</a>, Previous: <a href="Tables.html#Tables" accesskey="p" rel="prev">Tables</a>, Up: <a href="Tables.html#Tables" accesskey="u" rel="up">Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-built_002din-table-editor"></a>
-<h3 class="section">3.1 The built-in table editor</h3>
-<a name="index-table-editor_002c-built_002din"></a>
+<body lang="en" xml:lang="en">
+  <a name="Built_002din-table-editor" id=
+  "Built_002din-table-editor"></a>
 
-<p>Org makes it easy to format tables in plain ASCII.  Any line with &lsquo;<samp>|</samp>&rsquo; as
-the first non-whitespace character is considered part of a table.  &lsquo;<samp>|</samp>&rsquo;
-is also the column separator<a name="DOCF26" href="#FOOT26"><sup>26</sup></a>.  A table
-might look like this:
-</p>
-<div class="example">
-<pre class="example">| Name  | Phone | Age |
+  <div class="header">
+    <p>Next: <a href=
+    "Column-width-and-alignment.html#Column-width-and-alignment"
+    accesskey="n" rel="next">Column width and alignment</a>,
+    Previous: <a href="Tables.html#Tables" accesskey="p" rel=
+    "prev">Tables</a>, Up: <a href="Tables.html#Tables" accesskey=
+    "u" rel="up">Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-built_002din-table-editor" id=
+  "The-built_002din-table-editor"></a>
+
+  <h3 class="section">3.1 The built-in table editor</h3><a name=
+  "index-table-editor_002c-built_002din" id=
+  "index-table-editor_002c-built_002din"></a>
+
+  <p>Org makes it easy to format tables in plain ASCII. Any line
+  with &lsquo;<samp>|</samp>&rsquo; as the first non-whitespace
+  character is considered part of a table.
+  &lsquo;<samp>|</samp>&rsquo; is also the column separator<a name=
+  "DOCF26" href="#FOOT26" id="DOCF26"><sup>26</sup></a>. A table
+  might look like this:</p>
+
+  <div class="example">
+    <pre class="example">
+| Name  | Phone | Age |
 |-------+-------+-----|
 | Peter |  1234 |  17 |
 | Anna  |  4321 |  25 |
-</pre></div>
+</pre>
+  </div>
 
-<p>A table is re-aligned automatically each time you press <tt class="key">TAB</tt> or
-<tt class="key">RET</tt> or <kbd>C-c C-c</kbd> inside the table.  <tt class="key">TAB</tt> also moves to
-the next field (<tt class="key">RET</tt> to the next row) and creates new table rows
-at the end of the table or before horizontal lines.  The indentation
-of the table is set by the first line.  Any line starting with
-&lsquo;<samp>|-</samp>&rsquo; is considered as a horizontal separator line and will be
-expanded on the next re-align to span the whole table width.  So, to
-create the above table, you would only type
-</p>
-<div class="example">
-<pre class="example">|Name|Phone|Age|
+  <p>A table is re-aligned automatically each time you press
+  <tt class="key">TAB</tt> or <tt class="key">RET</tt> or <kbd>C-c
+  C-c</kbd> inside the table. <tt class="key">TAB</tt> also moves
+  to the next field (<tt class="key">RET</tt> to the next row) and
+  creates new table rows at the end of the table or before
+  horizontal lines. The indentation of the table is set by the
+  first line. Any line starting with &lsquo;<samp>|-</samp>&rsquo;
+  is considered as a horizontal separator line and will be expanded
+  on the next re-align to span the whole table width. So, to create
+  the above table, you would only type</p>
+
+  <div class="example">
+    <pre class="example">
+|Name|Phone|Age|
 |-
-</pre></div>
+</pre>
+  </div>
 
-<p>and then press <tt class="key">TAB</tt> to align the table and start filling in
-fields.  Even faster would be to type <code>|Name|Phone|Age</code> followed by
-<kbd>C-c <span class="key">RET</span></kbd>.
-</p>
-<a name="index-org_002denable_002dtable_002deditor"></a>
-<a name="index-org_002dtable_002dauto_002dblank_002dfield"></a>
-<p>When typing text into a field, Org treats <tt class="key">DEL</tt>,
-<tt class="key">Backspace</tt>, and all character keys in a special way, so that
-inserting and deleting avoids shifting other fields.  Also, when
-typing <em>immediately after the cursor was moved into a new field
-with <kbd><span class="key">TAB</span></kbd>, <kbd>S-<span class="key">TAB</span></kbd> or <kbd><span class="key">RET</span></kbd></em>, the
-field is automatically made blank.  If this behavior is too
-unpredictable for you, configure the options
-<code>org-enable-table-editor</code> and <code>org-table-auto-blank-field</code>.
-</p>
-<dl compact="compact">
-<dt><kbd><b>Creation and conversion</b></kbd></dt>
-<dd><a name="index-C_002dc-_007c"></a>
-<a name="index-org_002dtable_002dcreate_002dor_002dconvert_002dfrom_002dregion"></a>
-</dd>
-<dt><kbd><kbd>C-c |</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-create-or-convert-from-region</code>)</kbd></dt>
-<dd><p>Convert the active region to table.  If every line contains at least one
-TAB character, the function assumes that the material is tab separated.
-If every line contains a comma, comma-separated values (CSV) are assumed.
-If not, lines are split at whitespace into fields.  You can use a prefix
-argument to force a specific separator: <kbd>C-u</kbd> forces CSV, <kbd>C-u
-C-u</kbd> forces TAB, and a numeric argument N indicates that at least N
-consecutive spaces, or alternatively a TAB will be the separator.
-<br>
-If there is no active region, this command creates an empty Org
-table.  But it is easier just to start typing, like
-<kbd>|Name|Phone|Age <span class="key">RET</span> |- <span class="key">TAB</span></kbd>.
-</p>
-</dd>
-<dt><kbd><b>Re-aligning and field motion</b></kbd></dt>
-<dd><a name="index-C_002dc-C_002dc-2"></a>
-<a name="index-org_002dtable_002dalign"></a>
-</dd>
-<dt><kbd><kbd>C-c C-c</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-align</code>)</kbd></dt>
-<dd><p>Re-align the table and don&rsquo;t move to another field.
-<a name="index-_003cTAB_003e"></a>
-<a name="index-org_002dtable_002dnext_002dfield"></a>
-</p></dd>
-<dt><kbd><kbd>&lt;TAB&gt;</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-next-field</code>)</kbd></dt>
-<dd><p>Re-align the table, move to the next field.  Creates a new row if
-necessary.
-<a name="index-S_002dTAB-1"></a>
-<a name="index-org_002dtable_002dprevious_002dfield"></a>
-</p></dd>
-<dt><kbd><kbd>S-<span class="key">TAB</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-previous-field</code>)</kbd></dt>
-<dd><p>Re-align, move to previous field.
-<a name="index-RET"></a>
-<a name="index-org_002dtable_002dnext_002drow"></a>
-</p></dd>
-<dt><kbd><kbd><span class="key">RET</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-next-row</code>)</kbd></dt>
-<dd><p>Re-align the table and move down to next row.  Creates a new row if
-necessary.  At the beginning or end of a line, <tt class="key">RET</tt> still does
-NEWLINE, so it can be used to split a table.
-<a name="index-M_002da"></a>
-<a name="index-org_002dtable_002dbeginning_002dof_002dfield"></a>
-</p></dd>
-<dt><kbd><kbd>M-a</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-beginning-of-field</code>)</kbd></dt>
-<dd><p>Move to beginning of the current table field, or on to the previous field.
-<a name="index-M_002de"></a>
-<a name="index-org_002dtable_002dend_002dof_002dfield"></a>
-</p></dd>
-<dt><kbd><kbd>M-e</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-end-of-field</code>)</kbd></dt>
-<dd><p>Move to end of the current table field, or on to the next field.
-</p>
-</dd>
-<dt><kbd><b>Column and row editing</b></kbd></dt>
-<dd><a name="index-M_002dleft-2"></a>
-<a name="index-M_002dright-2"></a>
-<a name="index-org_002dtable_002dmove_002dcolumn_002dleft"></a>
-<a name="index-org_002dtable_002dmove_002dcolumn_002dright"></a>
-</dd>
-<dt><kbd><kbd>M-<span class="key">left</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-move-column-left</code>)</kbd></dt>
-<dt><kbd><kbd>M-<span class="key">right</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-move-column-right</code>)</kbd></dt>
-<dd><p>Move the current column left/right.
-<a name="index-M_002dS_002dleft-2"></a>
-<a name="index-org_002dtable_002ddelete_002dcolumn"></a>
-</p></dd>
-<dt><kbd><kbd>M-S-<span class="key">left</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-delete-column</code>)</kbd></dt>
-<dd><p>Kill the current column.
-<a name="index-M_002dS_002dright-2"></a>
-<a name="index-org_002dtable_002dinsert_002dcolumn"></a>
-</p></dd>
-<dt><kbd><kbd>M-S-<span class="key">right</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-insert-column</code>)</kbd></dt>
-<dd><p>Insert a new column to the left of the cursor position.
-<a name="index-M_002dup-1"></a>
-<a name="index-M_002ddown-1"></a>
-<a name="index-org_002dtable_002dmove_002drow_002dup"></a>
-<a name="index-org_002dtable_002dmove_002drow_002ddown"></a>
-</p></dd>
-<dt><kbd><kbd>M-<span class="key">up</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-move-row-up</code>)</kbd></dt>
-<dt><kbd><kbd>M-<span class="key">down</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-move-row-down</code>)</kbd></dt>
-<dd><p>Move the current row up/down.
-<a name="index-M_002dS_002dup-1"></a>
-<a name="index-org_002dtable_002dkill_002drow"></a>
-</p></dd>
-<dt><kbd><kbd>M-S-<span class="key">up</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-kill-row</code>)</kbd></dt>
-<dd><p>Kill the current row or horizontal line.
-<a name="index-M_002dS_002ddown-1"></a>
-<a name="index-org_002dtable_002dinsert_002drow"></a>
-</p></dd>
-<dt><kbd><kbd>M-S-<span class="key">down</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-insert-row</code>)</kbd></dt>
-<dd><p>Insert a new row above the current row.  With a prefix argument, the line is
-created below the current one.
-<a name="index-C_002dc-_002d-1"></a>
-<a name="index-org_002dtable_002dinsert_002dhline"></a>
-</p></dd>
-<dt><kbd><kbd>C-c -</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-insert-hline</code>)</kbd></dt>
-<dd><p>Insert a horizontal line below current row.  With a prefix argument, the line
-is created above the current line.
-<a name="index-C_002dc-RET"></a>
-<a name="index-org_002dtable_002dhline_002dand_002dmove"></a>
-</p></dd>
-<dt><kbd><kbd>C-c <span class="key">RET</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-hline-and-move</code>)</kbd></dt>
-<dd><p>Insert a horizontal line below current row, and move the cursor into the row
-below that line.
-<a name="index-C_002dc-_005e-2"></a>
-<a name="index-org_002dtable_002dsort_002dlines"></a>
-</p></dd>
-<dt><kbd><kbd>C-c ^</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-sort-lines</code>)</kbd></dt>
-<dd><p>Sort the table lines in the region.  The position of point indicates the
-column to be used for sorting, and the range of lines is the range
-between the nearest horizontal separator lines, or the entire table.  If
-point is before the first column, you will be prompted for the sorting
-column.  If there is an active region, the mark specifies the first line
-and the sorting column, while point should be in the last line to be
-included into the sorting.  The command prompts for the sorting type
-(alphabetically, numerically, or by time).  When called with a prefix
-argument, alphabetic sorting will be case-sensitive.
-</p>
-</dd>
-<dt><kbd><b>Regions</b></kbd></dt>
-<dd><a name="index-C_002dc-C_002dx-M_002dw-1"></a>
-<a name="index-org_002dtable_002dcopy_002dregion"></a>
-</dd>
-<dt><kbd><kbd>C-c C-x M-w</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-copy-region</code>)</kbd></dt>
-<dd><p>Copy a rectangular region from a table to a special clipboard.  Point and
-mark determine edge fields of the rectangle.  If there is no active region,
-copy just the current field.  The process ignores horizontal separator lines.
-<a name="index-C_002dc-C_002dx-C_002dw-1"></a>
-<a name="index-org_002dtable_002dcut_002dregion"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-x C-w</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-cut-region</code>)</kbd></dt>
-<dd><p>Copy a rectangular region from a table to a special clipboard, and
-blank all fields in the rectangle.  So this is the &ldquo;cut&rdquo; operation.
-<a name="index-C_002dc-C_002dx-C_002dy-1"></a>
-<a name="index-org_002dtable_002dpaste_002drectangle"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-x C-y</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-paste-rectangle</code>)</kbd></dt>
-<dd><p>Paste a rectangular region into a table.
-The upper left corner ends up in the current field.  All involved fields
-will be overwritten.  If the rectangle does not fit into the present table,
-the table is enlarged as needed.  The process ignores horizontal separator
-lines.
-<a name="index-M_002dRET-2"></a>
-<a name="index-org_002dtable_002dwrap_002dregion"></a>
-</p></dd>
-<dt><kbd><kbd>M-<span class="key">RET</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-wrap-region</code>)</kbd></dt>
-<dd><p>Split the current field at the cursor position and move the rest to the line
-below.  If there is an active region, and both point and mark are in the same
-column, the text in the column is wrapped to minimum width for the given
-number of lines.  A numeric prefix argument may be used to change the number
-of desired lines.  If there is no region, but you specify a prefix argument,
-the current field is made blank, and the content is appended to the field
-above.
-</p>
-</dd>
-<dt><kbd><b>Calculations</b></kbd></dt>
-<dd><a name="index-formula_002c-in-tables"></a>
-<a name="index-calculations_002c-in-tables"></a>
-<a name="index-region_002c-active-1"></a>
-<a name="index-active-region-1"></a>
-<a name="index-transient-mark-mode-1"></a>
-<a name="index-C_002dc-_002b"></a>
-<a name="index-org_002dtable_002dsum"></a>
-</dd>
-<dt><kbd><kbd>C-c +</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-sum</code>)</kbd></dt>
-<dd><p>Sum the numbers in the current column, or in the rectangle defined by
-the active region.  The result is shown in the echo area and can
-be inserted with <kbd>C-y</kbd>.
-<a name="index-S_002dRET"></a>
-<a name="index-org_002dtable_002dcopy_002ddown"></a>
-</p></dd>
-<dt><kbd><kbd>S-<span class="key">RET</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-copy-down</code>)</kbd></dt>
-<dd><a name="index-org_002dtable_002dcopy_002dincrement"></a>
-<p>When current field is empty, copy from first non-empty field above.  When not
-empty, copy current field down to next row and move cursor along with it.
-Depending on the option <code>org-table-copy-increment</code>, integer field
-values will be incremented during copy.  Integers that are too large will not
-be incremented.  Also, a <code>0</code> prefix argument temporarily disables the
-increment.  This key is also used by shift-selection and related modes
-(see <a href="Conflicts.html#Conflicts">Conflicts</a>).
-</p>
-</dd>
-<dt><kbd><b>Miscellaneous</b></kbd></dt>
-<dd><a name="index-C_002dc-_0060"></a>
-<a name="index-org_002dtable_002dedit_002dfield"></a>
-</dd>
-<dt><kbd><kbd>C-c `</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-edit-field</code>)</kbd></dt>
-<dd><p>Edit the current field in a separate window.  This is useful for fields that
-are not fully visible (see <a href="Column-width-and-alignment.html#Column-width-and-alignment">Column width and alignment</a>).  When called with
-a <kbd>C-u</kbd> prefix, just make the full field visible, so that it can be
-edited in place.  When called with two <kbd>C-u</kbd> prefixes, make the editor
-window follow the cursor through the table and always show the current
-field.  The follow mode exits automatically when the cursor leaves the table,
-or when you repeat this command with <kbd>C-u C-u C-c `</kbd>.
-</p></dd>
-<dt><kbd>M-x org-table-import RET</kbd></dt>
-<dd><p>Import a file as a table.  The table should be TAB or whitespace
-separated.  Use, for example, to import a spreadsheet table or data
-from a database, because these programs generally can write
-TAB-separated text files.  This command works by inserting the file into
-the buffer and then converting the region to a table.  Any prefix
-argument is passed on to the converter, which uses it to determine the
-separator.
-<a name="index-C_002dc-_007c-1"></a>
-<a name="index-org_002dtable_002dcreate_002dor_002dconvert_002dfrom_002dregion-1"></a>
-</p></dd>
-<dt><kbd><kbd>C-c |</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-create-or-convert-from-region</code>)</kbd></dt>
-<dd><p>Tables can also be imported by pasting tabular text into the Org
-buffer, selecting the pasted text with <kbd>C-x C-x</kbd> and then using the
-<kbd>C-c |</kbd> command (see above under <i>Creation and conversion</i>).
-</p></dd>
-<dt><kbd>M-x org-table-export RET</kbd></dt>
-<dd><a name="index-org_002dtable_002dexport"></a>
-<a name="index-org_002dtable_002dexport_002ddefault_002dformat"></a>
-<p>Export the table, by default as a TAB-separated file.  Use for data
-exchange with, for example, spreadsheet or database programs.  The format
-used to export the file can be configured in the option
-<code>org-table-export-default-format</code>.  You may also use properties
-<code>TABLE_EXPORT_FILE</code> and <code>TABLE_EXPORT_FORMAT</code> to specify the file
-name and the format for table export in a subtree.  Org supports quite
-general formats for exported tables.  The exporter format is the same as the
-format used by Orgtbl radio tables, see <a href="Translator-functions.html#Translator-functions">Translator functions</a>, for a
-detailed description.
-</p></dd>
-</dl>
+  <p>and then press <tt class="key">TAB</tt> to align the table and
+  start filling in fields. Even faster would be to type
+  <code>|Name|Phone|Age</code> followed by <kbd>C-c <span class=
+  "key">RET</span></kbd>.</p><a name=
+  "index-org_002denable_002dtable_002deditor" id=
+  "index-org_002denable_002dtable_002deditor"></a> <a name=
+  "index-org_002dtable_002dauto_002dblank_002dfield" id=
+  "index-org_002dtable_002dauto_002dblank_002dfield"></a>
 
-<p>If you don&rsquo;t like the automatic table editor because it gets in your
-way on lines which you would like to start with &lsquo;<samp>|</samp>&rsquo;, you can turn
-it off with
-</p>
-<div class="lisp">
-<pre class="lisp">(setq org-enable-table-editor nil)
-</pre></div>
+  <p>When typing text into a field, Org treats <tt class=
+  "key">DEL</tt>, <tt class="key">Backspace</tt>, and all character
+  keys in a special way, so that inserting and deleting avoids
+  shifting other fields. Also, when typing <em>immediately after
+  the cursor was moved into a new field with <kbd><span class=
+  "key">TAB</span></kbd>, <kbd>S-<span class="key">TAB</span></kbd>
+  or <kbd><span class="key">RET</span></kbd></em>, the field is
+  automatically made blank. If this behavior is too unpredictable
+  for you, configure the options
+  <code>org-enable-table-editor</code> and
+  <code>org-table-auto-blank-field</code>.</p>
 
-<p>Then the only table command that still works is
-<kbd>C-c C-c</kbd> to do a manual re-align.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl compact="compact">
+    <dt><kbd><b>Creation and conversion</b></kbd></dt>
 
-<h3><a name="FOOT26" href="#DOCF26">(26)</a></h3>
-<p>To insert a vertical bar into a table
-field, use <code>\vert</code> or, inside a word <code>abc\vert{}def</code>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Column-width-and-alignment.html#Column-width-and-alignment" accesskey="n" rel="next">Column width and alignment</a>, Previous: <a href="Tables.html#Tables" accesskey="p" rel="prev">Tables</a>, Up: <a href="Tables.html#Tables" accesskey="u" rel="up">Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd><a name="index-C_002dc-_007c" id="index-C_002dc-_007c"></a>
+    <a name=
+    "index-org_002dtable_002dcreate_002dor_002dconvert_002dfrom_002dregion"
+    id=
+    "index-org_002dtable_002dcreate_002dor_002dconvert_002dfrom_002dregion">
+    </a></dd>
 
+    <dt><kbd><kbd>C-c |</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-create-or-convert-from-region</code>)</kbd></dt>
 
+    <dd>
+      <p>Convert the active region to table. If every line contains
+      at least one TAB character, the function assumes that the
+      material is tab separated. If every line contains a comma,
+      comma-separated values (CSV) are assumed. If not, lines are
+      split at whitespace into fields. You can use a prefix
+      argument to force a specific separator: <kbd>C-u</kbd> forces
+      CSV, <kbd>C-u C-u</kbd> forces TAB, and a numeric argument N
+      indicates that at least N consecutive spaces, or
+      alternatively a TAB will be the separator.<br />
+      If there is no active region, this command creates an empty
+      Org table. But it is easier just to start typing, like
+      <kbd>|Name|Phone|Age <span class="key">RET</span> |-
+      <span class="key">TAB</span></kbd>.</p>
+    </dd>
 
+    <dt><kbd><b>Re-aligning and field motion</b></kbd></dt>
+
+    <dd><a name="index-C_002dc-C_002dc-2" id=
+    "index-C_002dc-C_002dc-2"></a> <a name=
+    "index-org_002dtable_002dalign" id=
+    "index-org_002dtable_002dalign"></a></dd>
+
+    <dt><kbd><kbd>C-c C-c</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-align</code>)</kbd></dt>
+
+    <dd>
+      <p>Re-align the table and don&rsquo;t move to another field.
+      <a name="index-_003cTAB_003e" id="index-_003cTAB_003e"></a>
+      <a name="index-org_002dtable_002dnext_002dfield" id=
+      "index-org_002dtable_002dnext_002dfield"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>&lt;TAB&gt;</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-next-field</code>)</kbd></dt>
+
+    <dd>
+      <p>Re-align the table, move to the next field. Creates a new
+      row if necessary. <a name="index-S_002dTAB-1" id=
+      "index-S_002dTAB-1"></a> <a name=
+      "index-org_002dtable_002dprevious_002dfield" id=
+      "index-org_002dtable_002dprevious_002dfield"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>S-<span class="key">TAB</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-previous-field</code>)</kbd></dt>
+
+    <dd>
+      <p>Re-align, move to previous field. <a name="index-RET" id=
+      "index-RET"></a> <a name=
+      "index-org_002dtable_002dnext_002drow" id=
+      "index-org_002dtable_002dnext_002drow"></a></p>
+    </dd>
+
+    <dt><kbd><kbd><span class="key">RET</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-next-row</code>)</kbd></dt>
+
+    <dd>
+      <p>Re-align the table and move down to next row. Creates a
+      new row if necessary. At the beginning or end of a line,
+      <tt class="key">RET</tt> still does NEWLINE, so it can be
+      used to split a table. <a name="index-M_002da" id=
+      "index-M_002da"></a> <a name=
+      "index-org_002dtable_002dbeginning_002dof_002dfield" id=
+      "index-org_002dtable_002dbeginning_002dof_002dfield"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>M-a</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-beginning-of-field</code>)</kbd></dt>
+
+    <dd>
+      <p>Move to beginning of the current table field, or on to the
+      previous field. <a name="index-M_002de" id=
+      "index-M_002de"></a> <a name=
+      "index-org_002dtable_002dend_002dof_002dfield" id=
+      "index-org_002dtable_002dend_002dof_002dfield"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>M-e</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-end-of-field</code>)</kbd></dt>
+
+    <dd>
+      <p>Move to end of the current table field, or on to the next
+      field.</p>
+    </dd>
+
+    <dt><kbd><b>Column and row editing</b></kbd></dt>
+
+    <dd><a name="index-M_002dleft-2" id="index-M_002dleft-2"></a>
+    <a name="index-M_002dright-2" id="index-M_002dright-2"></a>
+    <a name="index-org_002dtable_002dmove_002dcolumn_002dleft" id=
+    "index-org_002dtable_002dmove_002dcolumn_002dleft"></a>
+    <a name="index-org_002dtable_002dmove_002dcolumn_002dright" id=
+    "index-org_002dtable_002dmove_002dcolumn_002dright"></a></dd>
+
+    <dt><kbd><kbd>M-<span class="key">left</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-move-column-left</code>)</kbd></dt>
+
+    <dt><kbd><kbd>M-<span class="key">right</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-move-column-right</code>)</kbd></dt>
+
+    <dd>
+      <p>Move the current column left/right. <a name=
+      "index-M_002dS_002dleft-2" id="index-M_002dS_002dleft-2"></a>
+      <a name="index-org_002dtable_002ddelete_002dcolumn" id=
+      "index-org_002dtable_002ddelete_002dcolumn"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>M-S-<span class="key">left</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-delete-column</code>)</kbd></dt>
+
+    <dd>
+      <p>Kill the current column. <a name=
+      "index-M_002dS_002dright-2" id=
+      "index-M_002dS_002dright-2"></a> <a name=
+      "index-org_002dtable_002dinsert_002dcolumn" id=
+      "index-org_002dtable_002dinsert_002dcolumn"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>M-S-<span class="key">right</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-insert-column</code>)</kbd></dt>
+
+    <dd>
+      <p>Insert a new column to the left of the cursor position.
+      <a name="index-M_002dup-1" id="index-M_002dup-1"></a>
+      <a name="index-M_002ddown-1" id="index-M_002ddown-1"></a>
+      <a name="index-org_002dtable_002dmove_002drow_002dup" id=
+      "index-org_002dtable_002dmove_002drow_002dup"></a> <a name=
+      "index-org_002dtable_002dmove_002drow_002ddown" id=
+      "index-org_002dtable_002dmove_002drow_002ddown"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>M-<span class="key">up</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-move-row-up</code>)</kbd></dt>
+
+    <dt><kbd><kbd>M-<span class="key">down</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-move-row-down</code>)</kbd></dt>
+
+    <dd>
+      <p>Move the current row up/down. <a name=
+      "index-M_002dS_002dup-1" id="index-M_002dS_002dup-1"></a>
+      <a name="index-org_002dtable_002dkill_002drow" id=
+      "index-org_002dtable_002dkill_002drow"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>M-S-<span class="key">up</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-kill-row</code>)</kbd></dt>
+
+    <dd>
+      <p>Kill the current row or horizontal line. <a name=
+      "index-M_002dS_002ddown-1" id="index-M_002dS_002ddown-1"></a>
+      <a name="index-org_002dtable_002dinsert_002drow" id=
+      "index-org_002dtable_002dinsert_002drow"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>M-S-<span class="key">down</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-insert-row</code>)</kbd></dt>
+
+    <dd>
+      <p>Insert a new row above the current row. With a prefix
+      argument, the line is created below the current one. <a name=
+      "index-C_002dc-_002d-1" id="index-C_002dc-_002d-1"></a>
+      <a name="index-org_002dtable_002dinsert_002dhline" id=
+      "index-org_002dtable_002dinsert_002dhline"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c -</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-insert-hline</code>)</kbd></dt>
+
+    <dd>
+      <p>Insert a horizontal line below current row. With a prefix
+      argument, the line is created above the current line.
+      <a name="index-C_002dc-RET" id="index-C_002dc-RET"></a>
+      <a name="index-org_002dtable_002dhline_002dand_002dmove" id=
+      "index-org_002dtable_002dhline_002dand_002dmove"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c <span class="key">RET</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-hline-and-move</code>)</kbd></dt>
+
+    <dd>
+      <p>Insert a horizontal line below current row, and move the
+      cursor into the row below that line. <a name=
+      "index-C_002dc-_005e-2" id="index-C_002dc-_005e-2"></a>
+      <a name="index-org_002dtable_002dsort_002dlines" id=
+      "index-org_002dtable_002dsort_002dlines"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c ^</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-sort-lines</code>)</kbd></dt>
+
+    <dd>
+      <p>Sort the table lines in the region. The position of point
+      indicates the column to be used for sorting, and the range of
+      lines is the range between the nearest horizontal separator
+      lines, or the entire table. If point is before the first
+      column, you will be prompted for the sorting column. If there
+      is an active region, the mark specifies the first line and
+      the sorting column, while point should be in the last line to
+      be included into the sorting. The command prompts for the
+      sorting type (alphabetically, numerically, or by time). When
+      called with a prefix argument, alphabetic sorting will be
+      case-sensitive.</p>
+    </dd>
+
+    <dt><kbd><b>Regions</b></kbd></dt>
+
+    <dd><a name="index-C_002dc-C_002dx-M_002dw-1" id=
+    "index-C_002dc-C_002dx-M_002dw-1"></a> <a name=
+    "index-org_002dtable_002dcopy_002dregion" id=
+    "index-org_002dtable_002dcopy_002dregion"></a></dd>
+
+    <dt><kbd><kbd>C-c C-x M-w</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-copy-region</code>)</kbd></dt>
+
+    <dd>
+      <p>Copy a rectangular region from a table to a special
+      clipboard. Point and mark determine edge fields of the
+      rectangle. If there is no active region, copy just the
+      current field. The process ignores horizontal separator
+      lines. <a name="index-C_002dc-C_002dx-C_002dw-1" id=
+      "index-C_002dc-C_002dx-C_002dw-1"></a> <a name=
+      "index-org_002dtable_002dcut_002dregion" id=
+      "index-org_002dtable_002dcut_002dregion"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-x C-w</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-cut-region</code>)</kbd></dt>
+
+    <dd>
+      <p>Copy a rectangular region from a table to a special
+      clipboard, and blank all fields in the rectangle. So this is
+      the &ldquo;cut&rdquo; operation. <a name=
+      "index-C_002dc-C_002dx-C_002dy-1" id=
+      "index-C_002dc-C_002dx-C_002dy-1"></a> <a name=
+      "index-org_002dtable_002dpaste_002drectangle" id=
+      "index-org_002dtable_002dpaste_002drectangle"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-x C-y</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-paste-rectangle</code>)</kbd></dt>
+
+    <dd>
+      <p>Paste a rectangular region into a table. The upper left
+      corner ends up in the current field. All involved fields will
+      be overwritten. If the rectangle does not fit into the
+      present table, the table is enlarged as needed. The process
+      ignores horizontal separator lines. <a name=
+      "index-M_002dRET-2" id="index-M_002dRET-2"></a> <a name=
+      "index-org_002dtable_002dwrap_002dregion" id=
+      "index-org_002dtable_002dwrap_002dregion"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>M-<span class="key">RET</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-wrap-region</code>)</kbd></dt>
+
+    <dd>
+      <p>Split the current field at the cursor position and move
+      the rest to the line below. If there is an active region, and
+      both point and mark are in the same column, the text in the
+      column is wrapped to minimum width for the given number of
+      lines. A numeric prefix argument may be used to change the
+      number of desired lines. If there is no region, but you
+      specify a prefix argument, the current field is made blank,
+      and the content is appended to the field above.</p>
+    </dd>
+
+    <dt><kbd><b>Calculations</b></kbd></dt>
+
+    <dd><a name="index-formula_002c-in-tables" id=
+    "index-formula_002c-in-tables"></a> <a name=
+    "index-calculations_002c-in-tables" id=
+    "index-calculations_002c-in-tables"></a> <a name=
+    "index-region_002c-active-1" id=
+    "index-region_002c-active-1"></a> <a name=
+    "index-active-region-1" id="index-active-region-1"></a>
+    <a name="index-transient-mark-mode-1" id=
+    "index-transient-mark-mode-1"></a> <a name=
+    "index-C_002dc-_002b" id="index-C_002dc-_002b"></a> <a name=
+    "index-org_002dtable_002dsum" id=
+    "index-org_002dtable_002dsum"></a></dd>
+
+    <dt><kbd><kbd>C-c +</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-sum</code>)</kbd></dt>
+
+    <dd>
+      <p>Sum the numbers in the current column, or in the rectangle
+      defined by the active region. The result is shown in the echo
+      area and can be inserted with <kbd>C-y</kbd>. <a name=
+      "index-S_002dRET" id="index-S_002dRET"></a> <a name=
+      "index-org_002dtable_002dcopy_002ddown" id=
+      "index-org_002dtable_002dcopy_002ddown"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>S-<span class="key">RET</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-copy-down</code>)</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dtable_002dcopy_002dincrement" id=
+      "index-org_002dtable_002dcopy_002dincrement"></a>
+
+      <p>When current field is empty, copy from first non-empty
+      field above. When not empty, copy current field down to next
+      row and move cursor along with it. Depending on the option
+      <code>org-table-copy-increment</code>, integer field values
+      will be incremented during copy. Integers that are too large
+      will not be incremented. Also, a <code>0</code> prefix
+      argument temporarily disables the increment. This key is also
+      used by shift-selection and related modes (see <a href=
+      "Conflicts.html#Conflicts">Conflicts</a>).</p>
+    </dd>
+
+    <dt><kbd><b>Miscellaneous</b></kbd></dt>
+
+    <dd><a name="index-C_002dc-_0060" id="index-C_002dc-_0060"></a>
+    <a name="index-org_002dtable_002dedit_002dfield" id=
+    "index-org_002dtable_002dedit_002dfield"></a></dd>
+
+    <dt><kbd><kbd>C-c `</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-edit-field</code>)</kbd></dt>
+
+    <dd>
+      <p>Edit the current field in a separate window. This is
+      useful for fields that are not fully visible (see <a href=
+      "Column-width-and-alignment.html#Column-width-and-alignment">Column
+      width and alignment</a>). When called with a <kbd>C-u</kbd>
+      prefix, just make the full field visible, so that it can be
+      edited in place. When called with two <kbd>C-u</kbd>
+      prefixes, make the editor window follow the cursor through
+      the table and always show the current field. The follow mode
+      exits automatically when the cursor leaves the table, or when
+      you repeat this command with <kbd>C-u C-u C-c `</kbd>.</p>
+    </dd>
+
+    <dt><kbd>M-x org-table-import RET</kbd></dt>
+
+    <dd>
+      <p>Import a file as a table. The table should be TAB or
+      whitespace separated. Use, for example, to import a
+      spreadsheet table or data from a database, because these
+      programs generally can write TAB-separated text files. This
+      command works by inserting the file into the buffer and then
+      converting the region to a table. Any prefix argument is
+      passed on to the converter, which uses it to determine the
+      separator. <a name="index-C_002dc-_007c-1" id=
+      "index-C_002dc-_007c-1"></a> <a name=
+      "index-org_002dtable_002dcreate_002dor_002dconvert_002dfrom_002dregion-1"
+      id=
+      "index-org_002dtable_002dcreate_002dor_002dconvert_002dfrom_002dregion-1">
+      </a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c |</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-table-create-or-convert-from-region</code>)</kbd></dt>
+
+    <dd>
+      <p>Tables can also be imported by pasting tabular text into
+      the Org buffer, selecting the pasted text with <kbd>C-x
+      C-x</kbd> and then using the <kbd>C-c |</kbd> command (see
+      above under <i>Creation and conversion</i>).</p>
+    </dd>
+
+    <dt><kbd>M-x org-table-export RET</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dtable_002dexport" id=
+      "index-org_002dtable_002dexport"></a> <a name=
+      "index-org_002dtable_002dexport_002ddefault_002dformat" id=
+      "index-org_002dtable_002dexport_002ddefault_002dformat"></a>
+
+      <p>Export the table, by default as a TAB-separated file. Use
+      for data exchange with, for example, spreadsheet or database
+      programs. The format used to export the file can be
+      configured in the option
+      <code>org-table-export-default-format</code>. You may also
+      use properties <code>TABLE_EXPORT_FILE</code> and
+      <code>TABLE_EXPORT_FORMAT</code> to specify the file name and
+      the format for table export in a subtree. Org supports quite
+      general formats for exported tables. The exporter format is
+      the same as the format used by Orgtbl radio tables, see
+      <a href=
+      "Translator-functions.html#Translator-functions">Translator
+      functions</a>, for a detailed description.</p>
+    </dd>
+  </dl>
+
+  <p>If you don&rsquo;t like the automatic table editor because it
+  gets in your way on lines which you would like to start with
+  &lsquo;<samp>|</samp>&rsquo;, you can turn it off with</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq org-enable-table-editor nil)
+</pre>
+  </div>
+
+  <p>Then the only table command that still works is <kbd>C-c
+  C-c</kbd> to do a manual re-align.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT26" href="#DOCF26" id="FOOT26">(26)</a></h3>
+
+    <p>To insert a vertical bar into a table field, use
+    <code>\vert</code> or, inside a word
+    <code>abc\vert{}def</code>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Column-width-and-alignment.html#Column-width-and-alignment"
+    accesskey="n" rel="next">Column width and alignment</a>,
+    Previous: <a href="Tables.html#Tables" accesskey="p" rel=
+    "prev">Tables</a>, Up: <a href="Tables.html#Tables" accesskey=
+    "u" rel="up">Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for ERC as distributed with Emacs 25.1.
 
 Copyright (C) 2005-2016 Free Software Foundation, Inc.
@@ -17,234 +19,340 @@ modify this GNU manual."
 All Emacs Lisp code contained in this document may be used, distributed,
 and modified without restriction. -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>ERC Manual: Modules</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="ERC Manual: Modules">
-<meta name="keywords" content="ERC Manual: Modules">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Advanced-Usage.html#Advanced-Usage" rel="next" title="Advanced Usage">
-<link href="Keystroke-Summary.html#Keystroke-Summary" rel="prev" title="Keystroke Summary">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>ERC Manual: Modules</title>
+  <meta name="description" content="ERC Manual: Modules" />
+  <meta name="keywords" content="ERC Manual: Modules" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Advanced-Usage.html#Advanced-Usage" rel="next" title=
+  "Advanced Usage" />
+  <link href="Keystroke-Summary.html#Keystroke-Summary" rel="prev"
+  title="Keystroke Summary" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Modules"></a>
-<div class="header">
-<p>
-Next: <a href="Advanced-Usage.html#Advanced-Usage" accesskey="n" rel="next">Advanced Usage</a>, Previous: <a href="Keystroke-Summary.html#Keystroke-Summary" accesskey="p" rel="prev">Keystroke Summary</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Modules-1"></a>
-<h2 class="chapter">4 Modules</h2>
-<a name="index-modules"></a>
+<body lang="en" xml:lang="en">
+  <a name="Modules" id="Modules"></a>
 
-<p>One way to add functionality to ERC is to customize which of its many
-modules are loaded.
-</p>
-<p>There is a spiffy customize interface, which may be reached by typing
-<kbd>M-x customize-option erc-modules RET</kbd>.  Alternatively, set
-<code>erc-modules</code> manually and then call <code>erc-update-modules</code>.
-</p>
-<p>The following is a list of available modules.
-</p>
-<dl compact="compact">
-<dd>
-<a name="index-modules_002c-autoaway"></a>
-</dd>
-<dt><code>autoaway</code></dt>
-<dd><p>Set away status automatically
-</p>
-<a name="index-modules_002c-autojoin"></a>
-</dd>
-<dt><code>autojoin</code></dt>
-<dd><p>Join channels automatically
-</p>
-<a name="index-modules_002c-bbdb"></a>
-</dd>
-<dt><code>bbdb</code></dt>
-<dd><p>Integrate with the Big Brother Database
-</p>
-<a name="index-modules_002c-button"></a>
-</dd>
-<dt><code>button</code></dt>
-<dd><p>Buttonize URLs, nicknames, and other text
-</p>
-<a name="index-modules_002c-capab_002didentify"></a>
-</dd>
-<dt><code>capab-identify</code></dt>
-<dd><p>Mark unidentified users on freenode and other servers supporting CAPAB.
-</p>
-<a name="index-modules_002c-completion"></a>
-<a name="index-modules_002c-pcomplete"></a>
-</dd>
-<dt><code>completion (aka pcomplete)</code></dt>
-<dd><p>Complete nicknames and commands (programmable)
-</p>
-<a name="index-modules_002c-fill"></a>
-</dd>
-<dt><code>fill</code></dt>
-<dd><p>Wrap long lines
-</p>
-<a name="index-modules_002c-identd"></a>
-</dd>
-<dt><code>identd</code></dt>
-<dd><p>Launch an identd server on port 8113
-</p>
-<a name="index-modules_002c-irccontrols"></a>
-</dd>
-<dt><code>irccontrols</code></dt>
-<dd><p>Highlight or remove IRC control characters
-</p>
-<a name="index-modules_002c-log"></a>
-</dd>
-<dt><code>log</code></dt>
-<dd><p>Save buffers in logs
-</p>
-<a name="index-modules_002c-match"></a>
-</dd>
-<dt><code>match</code></dt>
-<dd><p>Highlight pals, fools, and other keywords
-</p>
-<a name="index-modules_002c-menu"></a>
-</dd>
-<dt><code>menu</code></dt>
-<dd><p>Display a menu in ERC buffers
-</p>
-<a name="index-modules_002c-netsplit"></a>
-</dd>
-<dt><code>netsplit</code></dt>
-<dd><p>Detect netsplits
-</p>
-<a name="index-modules_002c-noncommands"></a>
-</dd>
-<dt><code>noncommands</code></dt>
-<dd><p>Don&rsquo;t display non-IRC commands after evaluation
-</p>
-<a name="index-modules_002c-notify"></a>
-</dd>
-<dt><code>notify</code></dt>
-<dd><p>Notify when the online status of certain users changes
-</p>
-<a name="index-modules_002c-notifications"></a>
-</dd>
-<dt><code>notifications</code></dt>
-<dd><p>Send you a notification when you get a private message,
-or your nickname is mentioned
-</p>
-<a name="index-modules_002c-page"></a>
-</dd>
-<dt><code>page</code></dt>
-<dd><p>Process CTCP PAGE requests from IRC
-</p>
-<a name="index-modules_002c-readonly"></a>
-</dd>
-<dt><code>readonly</code></dt>
-<dd><p>Make displayed lines read-only
-</p>
-<a name="index-modules_002c-replace"></a>
-</dd>
-<dt><code>replace</code></dt>
-<dd><p>Replace text in messages
-</p>
-<a name="index-modules_002c-ring"></a>
-</dd>
-<dt><code>ring</code></dt>
-<dd><p>Enable an input history
-</p>
-<a name="index-modules_002c-scrolltobottom"></a>
-</dd>
-<dt><code>scrolltobottom</code></dt>
-<dd><p>Scroll to the bottom of the buffer
-</p>
-<a name="index-modules_002c-services"></a>
-</dd>
-<dt><code>services</code></dt>
-<dd><p>Identify to Nickserv (IRC Services) automatically
-</p>
-<a name="index-modules_002c-smiley"></a>
-</dd>
-<dt><code>smiley</code></dt>
-<dd><p>Convert smileys to pretty icons
-</p>
-<a name="index-modules_002c-sound"></a>
-</dd>
-<dt><code>sound</code></dt>
-<dd><p>Play sounds when you receive CTCP SOUND requests
-</p>
-<a name="index-modules_002c-spelling"></a>
-</dd>
-<dt><code>spelling</code></dt>
-<dd><p>Check spelling of messages
-</p>
-<a name="index-modules_002c-stamp"></a>
-</dd>
-<dt><code>stamp</code></dt>
-<dd><p>Add timestamps to messages
-</p>
-<a name="index-modules_002c-track"></a>
-</dd>
-<dt><code>track</code></dt>
-<dd><p>Track channel activity in the mode-line
-</p>
-<a name="index-modules_002c-truncate"></a>
-</dd>
-<dt><code>truncate</code></dt>
-<dd><p>Truncate buffers to a certain size
-</p>
-<a name="index-modules_002c-unmorse"></a>
-</dd>
-<dt><code>unmorse</code></dt>
-<dd><p>Translate morse code in messages
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Advanced-Usage.html#Advanced-Usage"
+    accesskey="n" rel="next">Advanced Usage</a>, Previous: <a href=
+    "Keystroke-Summary.html#Keystroke-Summary" accesskey="p" rel=
+    "prev">Keystroke Summary</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Modules-1" id="Modules-1"></a>
 
+  <h2 class="chapter">4 Modules</h2><a name="index-modules" id=
+  "index-modules"></a>
 
+  <p>One way to add functionality to ERC is to customize which of
+  its many modules are loaded.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Advanced-Usage.html#Advanced-Usage" accesskey="n" rel="next">Advanced Usage</a>, Previous: <a href="Keystroke-Summary.html#Keystroke-Summary" accesskey="p" rel="prev">Keystroke Summary</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>There is a spiffy customize interface, which may be reached by
+  typing <kbd>M-x customize-option erc-modules RET</kbd>.
+  Alternatively, set <code>erc-modules</code> manually and then
+  call <code>erc-update-modules</code>.</p>
 
+  <p>The following is a list of available modules.</p>
 
+  <dl compact="compact">
+    <dd><a name="index-modules_002c-autoaway" id=
+    "index-modules_002c-autoaway"></a></dd>
 
+    <dt><code>autoaway</code></dt>
+
+    <dd>
+      <p>Set away status automatically</p><a name=
+      "index-modules_002c-autojoin" id=
+      "index-modules_002c-autojoin"></a>
+    </dd>
+
+    <dt><code>autojoin</code></dt>
+
+    <dd>
+      <p>Join channels automatically</p><a name=
+      "index-modules_002c-bbdb" id="index-modules_002c-bbdb"></a>
+    </dd>
+
+    <dt><code>bbdb</code></dt>
+
+    <dd>
+      <p>Integrate with the Big Brother Database</p><a name=
+      "index-modules_002c-button" id=
+      "index-modules_002c-button"></a>
+    </dd>
+
+    <dt><code>button</code></dt>
+
+    <dd>
+      <p>Buttonize URLs, nicknames, and other text</p><a name=
+      "index-modules_002c-capab_002didentify" id=
+      "index-modules_002c-capab_002didentify"></a>
+    </dd>
+
+    <dt><code>capab-identify</code></dt>
+
+    <dd>
+      <p>Mark unidentified users on freenode and other servers
+      supporting CAPAB.</p><a name="index-modules_002c-completion"
+      id="index-modules_002c-completion"></a> <a name=
+      "index-modules_002c-pcomplete" id=
+      "index-modules_002c-pcomplete"></a>
+    </dd>
+
+    <dt><code>completion (aka pcomplete)</code></dt>
+
+    <dd>
+      <p>Complete nicknames and commands (programmable)</p><a name=
+      "index-modules_002c-fill" id="index-modules_002c-fill"></a>
+    </dd>
+
+    <dt><code>fill</code></dt>
+
+    <dd>
+      <p>Wrap long lines</p><a name="index-modules_002c-identd" id=
+      "index-modules_002c-identd"></a>
+    </dd>
+
+    <dt><code>identd</code></dt>
+
+    <dd>
+      <p>Launch an identd server on port 8113</p><a name=
+      "index-modules_002c-irccontrols" id=
+      "index-modules_002c-irccontrols"></a>
+    </dd>
+
+    <dt><code>irccontrols</code></dt>
+
+    <dd>
+      <p>Highlight or remove IRC control characters</p><a name=
+      "index-modules_002c-log" id="index-modules_002c-log"></a>
+    </dd>
+
+    <dt><code>log</code></dt>
+
+    <dd>
+      <p>Save buffers in logs</p><a name="index-modules_002c-match"
+      id="index-modules_002c-match"></a>
+    </dd>
+
+    <dt><code>match</code></dt>
+
+    <dd>
+      <p>Highlight pals, fools, and other keywords</p><a name=
+      "index-modules_002c-menu" id="index-modules_002c-menu"></a>
+    </dd>
+
+    <dt><code>menu</code></dt>
+
+    <dd>
+      <p>Display a menu in ERC buffers</p><a name=
+      "index-modules_002c-netsplit" id=
+      "index-modules_002c-netsplit"></a>
+    </dd>
+
+    <dt><code>netsplit</code></dt>
+
+    <dd>
+      <p>Detect netsplits</p><a name=
+      "index-modules_002c-noncommands" id=
+      "index-modules_002c-noncommands"></a>
+    </dd>
+
+    <dt><code>noncommands</code></dt>
+
+    <dd>
+      <p>Don&rsquo;t display non-IRC commands after
+      evaluation</p><a name="index-modules_002c-notify" id=
+      "index-modules_002c-notify"></a>
+    </dd>
+
+    <dt><code>notify</code></dt>
+
+    <dd>
+      <p>Notify when the online status of certain users
+      changes</p><a name="index-modules_002c-notifications" id=
+      "index-modules_002c-notifications"></a>
+    </dd>
+
+    <dt><code>notifications</code></dt>
+
+    <dd>
+      <p>Send you a notification when you get a private message, or
+      your nickname is mentioned</p><a name=
+      "index-modules_002c-page" id="index-modules_002c-page"></a>
+    </dd>
+
+    <dt><code>page</code></dt>
+
+    <dd>
+      <p>Process CTCP PAGE requests from IRC</p><a name=
+      "index-modules_002c-readonly" id=
+      "index-modules_002c-readonly"></a>
+    </dd>
+
+    <dt><code>readonly</code></dt>
+
+    <dd>
+      <p>Make displayed lines read-only</p><a name=
+      "index-modules_002c-replace" id=
+      "index-modules_002c-replace"></a>
+    </dd>
+
+    <dt><code>replace</code></dt>
+
+    <dd>
+      <p>Replace text in messages</p><a name=
+      "index-modules_002c-ring" id="index-modules_002c-ring"></a>
+    </dd>
+
+    <dt><code>ring</code></dt>
+
+    <dd>
+      <p>Enable an input history</p><a name=
+      "index-modules_002c-scrolltobottom" id=
+      "index-modules_002c-scrolltobottom"></a>
+    </dd>
+
+    <dt><code>scrolltobottom</code></dt>
+
+    <dd>
+      <p>Scroll to the bottom of the buffer</p><a name=
+      "index-modules_002c-services" id=
+      "index-modules_002c-services"></a>
+    </dd>
+
+    <dt><code>services</code></dt>
+
+    <dd>
+      <p>Identify to Nickserv (IRC Services)
+      automatically</p><a name="index-modules_002c-smiley" id=
+      "index-modules_002c-smiley"></a>
+    </dd>
+
+    <dt><code>smiley</code></dt>
+
+    <dd>
+      <p>Convert smileys to pretty icons</p><a name=
+      "index-modules_002c-sound" id="index-modules_002c-sound"></a>
+    </dd>
+
+    <dt><code>sound</code></dt>
+
+    <dd>
+      <p>Play sounds when you receive CTCP SOUND
+      requests</p><a name="index-modules_002c-spelling" id=
+      "index-modules_002c-spelling"></a>
+    </dd>
+
+    <dt><code>spelling</code></dt>
+
+    <dd>
+      <p>Check spelling of messages</p><a name=
+      "index-modules_002c-stamp" id="index-modules_002c-stamp"></a>
+    </dd>
+
+    <dt><code>stamp</code></dt>
+
+    <dd>
+      <p>Add timestamps to messages</p><a name=
+      "index-modules_002c-track" id="index-modules_002c-track"></a>
+    </dd>
+
+    <dt><code>track</code></dt>
+
+    <dd>
+      <p>Track channel activity in the mode-line</p><a name=
+      "index-modules_002c-truncate" id=
+      "index-modules_002c-truncate"></a>
+    </dd>
+
+    <dt><code>truncate</code></dt>
+
+    <dd>
+      <p>Truncate buffers to a certain size</p><a name=
+      "index-modules_002c-unmorse" id=
+      "index-modules_002c-unmorse"></a>
+    </dd>
+
+    <dt><code>unmorse</code></dt>
+
+    <dd>
+      <p>Translate morse code in messages</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Advanced-Usage.html#Advanced-Usage"
+    accesskey="n" rel="next">Advanced Usage</a>, Previous: <a href=
+    "Keystroke-Summary.html#Keystroke-Summary" accesskey="p" rel=
+    "prev">Keystroke Summary</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

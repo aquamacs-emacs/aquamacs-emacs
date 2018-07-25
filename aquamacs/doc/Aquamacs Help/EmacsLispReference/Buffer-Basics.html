@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,110 +19,150 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Buffer Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Buffer Basics">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Buffer Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffers.html#Buffers" rel="up" title="Buffers">
-<link href="Current-Buffer.html#Current-Buffer" rel="next" title="Current Buffer">
-<link href="Buffers.html#Buffers" rel="prev" title="Buffers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Buffer Basics</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Buffer Basics" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Buffer Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffers.html#Buffers" rel="up" title="Buffers" />
+  <link href="Current-Buffer.html#Current-Buffer" rel="next" title=
+  "Current Buffer" />
+  <link href="Buffers.html#Buffers" rel="prev" title="Buffers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Buffer-Basics" id="Buffer-Basics"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Current-Buffer.html#Current-Buffer"
+    accesskey="n" rel="next">Current Buffer</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Buffer-Basics-1" id="Buffer-Basics-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Buffer-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Current-Buffer.html#Current-Buffer" accesskey="n" rel="next">Current Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Buffer-Basics-1"></a>
-<h3 class="section">26.1 Buffer Basics</h3>
+  <h3 class="section">26.1 Buffer Basics</h3>
 
-<p>A <em>buffer</em> is a Lisp object containing text to be edited.  Buffers
-are used to hold the contents of files that are being visited; there may
-also be buffers that are not visiting files.  Although several buffers
-normally exist, only one buffer is designated the <em>current
-buffer</em> at any time.  Most editing commands act on the contents of the
-current buffer.  Each buffer, including the current buffer, may or may
-not be displayed in any windows.
-</p>
-<p>Buffers in Emacs editing are objects that have distinct names and hold
-text that can be edited.  Buffers appear to Lisp programs as a special
-data type.  You can think of the contents of a buffer as a string that
-you can extend; insertions and deletions may occur in any part of the
-buffer.  See <a href="Text.html#Text">Text</a>.
-</p>
-<p>A Lisp buffer object contains numerous pieces of information.  Some of
-this information is directly accessible to the programmer through
-variables, while other information is accessible only through
-special-purpose functions.  For example, the visited file name is
-directly accessible through a variable, while the value of point is
-accessible only through a primitive function.
-</p>
-<p>Buffer-specific information that is directly accessible is stored in
-<em>buffer-local</em> variable bindings, which are variable values that are
-effective only in a particular buffer.  This feature allows each buffer
-to override the values of certain variables.  Most major modes override
-variables such as <code>fill-column</code> or <code>comment-column</code> in this
-way.  For more information about buffer-local variables and functions
-related to them, see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>.
-</p>
-<p>For functions and variables related to visiting files in buffers, see
-<a href="Visiting-Files.html#Visiting-Files">Visiting Files</a> and <a href="Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>.  For functions and
-variables related to the display of buffers in windows, see
-<a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>.
-</p>
-<dl>
-<dt><a name="index-bufferp"></a>Function: <strong>bufferp</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a buffer,
-<code>nil</code> otherwise.
-</p></dd></dl>
+  <p>A <em>buffer</em> is a Lisp object containing text to be
+  edited. Buffers are used to hold the contents of files that are
+  being visited; there may also be buffers that are not visiting
+  files. Although several buffers normally exist, only one buffer
+  is designated the <em>current buffer</em> at any time. Most
+  editing commands act on the contents of the current buffer. Each
+  buffer, including the current buffer, may or may not be displayed
+  in any windows.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Current-Buffer.html#Current-Buffer" accesskey="n" rel="next">Current Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Buffers in Emacs editing are objects that have distinct names
+  and hold text that can be edited. Buffers appear to Lisp programs
+  as a special data type. You can think of the contents of a buffer
+  as a string that you can extend; insertions and deletions may
+  occur in any part of the buffer. See <a href=
+  "Text.html#Text">Text</a>.</p>
 
+  <p>A Lisp buffer object contains numerous pieces of information.
+  Some of this information is directly accessible to the programmer
+  through variables, while other information is accessible only
+  through special-purpose functions. For example, the visited file
+  name is directly accessible through a variable, while the value
+  of point is accessible only through a primitive function.</p>
 
+  <p>Buffer-specific information that is directly accessible is
+  stored in <em>buffer-local</em> variable bindings, which are
+  variable values that are effective only in a particular buffer.
+  This feature allows each buffer to override the values of certain
+  variables. Most major modes override variables such as
+  <code>fill-column</code> or <code>comment-column</code> in this
+  way. For more information about buffer-local variables and
+  functions related to them, see <a href=
+  "Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local
+  Variables</a>.</p>
 
+  <p>For functions and variables related to visiting files in
+  buffers, see <a href=
+  "Visiting-Files.html#Visiting-Files">Visiting Files</a> and
+  <a href="Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>.
+  For functions and variables related to the display of buffers in
+  windows, see <a href=
+  "Buffers-and-Windows.html#Buffers-and-Windows">Buffers and
+  Windows</a>.</p>
+
+  <dl>
+    <dt><a name="index-bufferp" id="index-bufferp"></a>Function:
+    <strong>bufferp</strong> <em>object</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a buffer, <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Current-Buffer.html#Current-Buffer"
+    accesskey="n" rel="next">Current Buffer</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

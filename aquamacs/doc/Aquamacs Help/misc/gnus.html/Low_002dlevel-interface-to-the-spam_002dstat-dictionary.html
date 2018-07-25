@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,164 +14,265 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Low-level interface to the spam-stat dictionary</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Low-level interface to the spam-stat dictionary">
-<meta name="keywords" content="Gnus Manual: Low-level interface to the spam-stat dictionary">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Statistics-Package.html#Spam-Statistics-Package" rel="up" title="Spam Statistics Package">
-<link href="The-Gnus-Registry.html#The-Gnus-Registry" rel="next" title="The Gnus Registry">
-<link href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat" rel="prev" title="Splitting mail using spam-stat">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Low-level interface to the spam-stat
+  dictionary</title>
+  <meta name="description" content=
+  "Gnus Manual: Low-level interface to the spam-stat dictionary" />
+  <meta name="keywords" content=
+  "Gnus Manual: Low-level interface to the spam-stat dictionary" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Statistics-Package.html#Spam-Statistics-Package"
+  rel="up" title="Spam Statistics Package" />
+  <link href="The-Gnus-Registry.html#The-Gnus-Registry" rel="next"
+  title="The Gnus Registry" />
+  <link href=
+  "Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat"
+  rel="prev" title="Splitting mail using spam-stat" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Low_002dlevel-interface-to-the-spam_002dstat-dictionary"></a>
-<div class="header">
-<p>
-Previous: <a href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat" accesskey="p" rel="prev">Splitting mail using spam-stat</a>, Up: <a href="Spam-Statistics-Package.html#Spam-Statistics-Package" accesskey="u" rel="up">Spam Statistics Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Low_002dlevel-interface-to-the-spam_002dstat-dictionary-1"></a>
-<h4 class="subsubsection">9.17.8.3 Low-level interface to the spam-stat dictionary</h4>
+<body lang="en" xml:lang="en">
+  <a name="Low_002dlevel-interface-to-the-spam_002dstat-dictionary"
+  id="Low_002dlevel-interface-to-the-spam_002dstat-dictionary"></a>
 
-<p>The main interface to using <code>spam-stat</code>, are the following functions:
-</p>
-<dl>
-<dt><a name="index-spam_002dstat_002dbuffer_002dis_002dspam"></a>Function: <strong>spam-stat-buffer-is-spam</strong></dt>
-<dd><p>Called in a buffer, that buffer is considered to be a new spam mail.
-Use this for new mail that has not been processed before.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href=
+    "Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat"
+    accesskey="p" rel="prev">Splitting mail using spam-stat</a>,
+    Up: <a href=
+    "Spam-Statistics-Package.html#Spam-Statistics-Package"
+    accesskey="u" rel="up">Spam Statistics Package</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name=
+  "Low_002dlevel-interface-to-the-spam_002dstat-dictionary-1" id=
+  "Low_002dlevel-interface-to-the-spam_002dstat-dictionary-1"></a>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dbuffer_002dis_002dno_002dspam"></a>Function: <strong>spam-stat-buffer-is-no-spam</strong></dt>
-<dd><p>Called in a buffer, that buffer is considered to be a new non-spam
-mail.  Use this for new mail that has not been processed before.
-</p></dd></dl>
+  <h4 class="subsubsection">9.17.8.3 Low-level interface to the
+  spam-stat dictionary</h4>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dbuffer_002dchange_002dto_002dspam"></a>Function: <strong>spam-stat-buffer-change-to-spam</strong></dt>
-<dd><p>Called in a buffer, that buffer is no longer considered to be normal
-mail but spam.  Use this to change the status of a mail that has
-already been processed as non-spam.
-</p></dd></dl>
+  <p>The main interface to using <code>spam-stat</code>, are the
+  following functions:</p>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dbuffer_002dchange_002dto_002dnon_002dspam"></a>Function: <strong>spam-stat-buffer-change-to-non-spam</strong></dt>
-<dd><p>Called in a buffer, that buffer is no longer considered to be spam but
-normal mail.  Use this to change the status of a mail that has already
-been processed as spam.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-spam_002dstat_002dbuffer_002dis_002dspam"
+    id="index-spam_002dstat_002dbuffer_002dis_002dspam"></a>Function:
+    <strong>spam-stat-buffer-is-spam</strong></dt>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dsave-1"></a>Function: <strong>spam-stat-save</strong></dt>
-<dd><p>Save the hash table to the file.  The filename used is stored in the
-variable <code>spam-stat-file</code>.
-</p></dd></dl>
+    <dd>
+      <p>Called in a buffer, that buffer is considered to be a new
+      spam mail. Use this for new mail that has not been processed
+      before.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dload"></a>Function: <strong>spam-stat-load</strong></dt>
-<dd><p>Load the hash table from a file.  The filename used is stored in the
-variable <code>spam-stat-file</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-spam_002dstat_002dbuffer_002dis_002dno_002dspam" id=
+    "index-spam_002dstat_002dbuffer_002dis_002dno_002dspam"></a>Function:
+    <strong>spam-stat-buffer-is-no-spam</strong></dt>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dscore_002dword"></a>Function: <strong>spam-stat-score-word</strong></dt>
-<dd><p>Return the spam score for a word.
-</p></dd></dl>
+    <dd>
+      <p>Called in a buffer, that buffer is considered to be a new
+      non-spam mail. Use this for new mail that has not been
+      processed before.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dscore_002dbuffer"></a>Function: <strong>spam-stat-score-buffer</strong></dt>
-<dd><p>Return the spam score for a buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-spam_002dstat_002dbuffer_002dchange_002dto_002dspam" id=
+    "index-spam_002dstat_002dbuffer_002dchange_002dto_002dspam"></a>Function:
+    <strong>spam-stat-buffer-change-to-spam</strong></dt>
 
-<dl>
-<dt><a name="index-spam_002dstat_002dsplit_002dfancy"></a>Function: <strong>spam-stat-split-fancy</strong></dt>
-<dd><p>Use this function for fancy mail splitting.  Add the rule &lsquo;<samp>(:
-spam-stat-split-fancy)</samp>&rsquo; to <code>nnmail-split-fancy</code>
-</p></dd></dl>
+    <dd>
+      <p>Called in a buffer, that buffer is no longer considered to
+      be normal mail but spam. Use this to change the status of a
+      mail that has already been processed as non-spam.</p>
+    </dd>
+  </dl>
 
-<p>Make sure you load the dictionary before using it.  This requires the
-following in your <samp>~/.gnus.el</samp> file:
-</p>
-<div class="lisp">
-<pre class="lisp">(require 'spam-stat)
+  <dl>
+    <dt><a name=
+    "index-spam_002dstat_002dbuffer_002dchange_002dto_002dnon_002dspam"
+    id=
+    "index-spam_002dstat_002dbuffer_002dchange_002dto_002dnon_002dspam">
+    </a>Function:
+    <strong>spam-stat-buffer-change-to-non-spam</strong></dt>
+
+    <dd>
+      <p>Called in a buffer, that buffer is no longer considered to
+      be spam but normal mail. Use this to change the status of a
+      mail that has already been processed as spam.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-spam_002dstat_002dsave-1" id=
+    "index-spam_002dstat_002dsave-1"></a>Function:
+    <strong>spam-stat-save</strong></dt>
+
+    <dd>
+      <p>Save the hash table to the file. The filename used is
+      stored in the variable <code>spam-stat-file</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-spam_002dstat_002dload" id=
+    "index-spam_002dstat_002dload"></a>Function:
+    <strong>spam-stat-load</strong></dt>
+
+    <dd>
+      <p>Load the hash table from a file. The filename used is
+      stored in the variable <code>spam-stat-file</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-spam_002dstat_002dscore_002dword" id=
+    "index-spam_002dstat_002dscore_002dword"></a>Function:
+    <strong>spam-stat-score-word</strong></dt>
+
+    <dd>
+      <p>Return the spam score for a word.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-spam_002dstat_002dscore_002dbuffer" id=
+    "index-spam_002dstat_002dscore_002dbuffer"></a>Function:
+    <strong>spam-stat-score-buffer</strong></dt>
+
+    <dd>
+      <p>Return the spam score for a buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-spam_002dstat_002dsplit_002dfancy" id=
+    "index-spam_002dstat_002dsplit_002dfancy"></a>Function:
+    <strong>spam-stat-split-fancy</strong></dt>
+
+    <dd>
+      <p>Use this function for fancy mail splitting. Add the rule
+      &lsquo;<samp>(: spam-stat-split-fancy)</samp>&rsquo; to
+      <code>nnmail-split-fancy</code></p>
+    </dd>
+  </dl>
+
+  <p>Make sure you load the dictionary before using it. This
+  requires the following in your <samp>~/.gnus.el</samp> file:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(require 'spam-stat)
 (spam-stat-load)
-</pre></div>
+</pre>
+  </div>
 
-<p>Typical test will involve calls to the following functions:
-</p>
-<div class="smallexample">
-<pre class="smallexample">Reset: (setq spam-stat (make-hash-table :test 'equal))
-Learn spam: (spam-stat-process-spam-directory &quot;~/Mail/mail/spam&quot;)
-Learn non-spam: (spam-stat-process-non-spam-directory &quot;~/Mail/mail/misc&quot;)
+  <p>Typical test will involve calls to the following
+  functions:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+Reset: (setq spam-stat (make-hash-table :test 'equal))
+Learn spam: (spam-stat-process-spam-directory "~/Mail/mail/spam")
+Learn non-spam: (spam-stat-process-non-spam-directory "~/Mail/mail/misc")
 Save table: (spam-stat-save)
 File size: (nth 7 (file-attributes spam-stat-file))
 Number of words: (hash-table-count spam-stat)
-Test spam: (spam-stat-test-directory &quot;~/Mail/mail/spam&quot;)
-Test non-spam: (spam-stat-test-directory &quot;~/Mail/mail/misc&quot;)
+Test spam: (spam-stat-test-directory "~/Mail/mail/spam")
+Test non-spam: (spam-stat-test-directory "~/Mail/mail/misc")
 Reduce table size: (spam-stat-reduce-size)
 Save table: (spam-stat-save)
 File size: (nth 7 (file-attributes spam-stat-file))
 Number of words: (hash-table-count spam-stat)
-Test spam: (spam-stat-test-directory &quot;~/Mail/mail/spam&quot;)
-Test non-spam: (spam-stat-test-directory &quot;~/Mail/mail/misc&quot;)
-</pre></div>
+Test spam: (spam-stat-test-directory "~/Mail/mail/spam")
+Test non-spam: (spam-stat-test-directory "~/Mail/mail/misc")
+</pre>
+  </div>
 
-<p>Here is how you would create your dictionary:
-</p>
-<div class="smallexample">
-<pre class="smallexample">Reset: (setq spam-stat (make-hash-table :test 'equal))
-Learn spam: (spam-stat-process-spam-directory &quot;~/Mail/mail/spam&quot;)
-Learn non-spam: (spam-stat-process-non-spam-directory &quot;~/Mail/mail/misc&quot;)
+  <p>Here is how you would create your dictionary:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+Reset: (setq spam-stat (make-hash-table :test 'equal))
+Learn spam: (spam-stat-process-spam-directory "~/Mail/mail/spam")
+Learn non-spam: (spam-stat-process-non-spam-directory "~/Mail/mail/misc")
 Repeat for any other non-spam group you need...
 Reduce table size: (spam-stat-reduce-size)
 Save table: (spam-stat-save)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat" accesskey="p" rel="prev">Splitting mail using spam-stat</a>, Up: <a href="Spam-Statistics-Package.html#Spam-Statistics-Package" accesskey="u" rel="up">Spam Statistics Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Previous: <a href=
+    "Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat"
+    accesskey="p" rel="prev">Splitting mail using spam-stat</a>,
+    Up: <a href=
+    "Spam-Statistics-Package.html#Spam-Statistics-Package"
+    accesskey="u" rel="up">Spam Statistics Package</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

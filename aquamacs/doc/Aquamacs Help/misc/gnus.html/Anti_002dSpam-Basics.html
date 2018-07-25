@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,134 +14,185 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Anti-Spam Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Anti-Spam Basics">
-<meta name="keywords" content="Gnus Manual: Anti-Spam Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" rel="up" title="Thwarting Email Spam">
-<link href="SpamAssassin.html#SpamAssassin" rel="next" title="SpamAssassin">
-<link href="The-problem-of-spam.html#The-problem-of-spam" rel="prev" title="The problem of spam">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Anti-Spam Basics</title>
+  <meta name="description" content=
+  "Gnus Manual: Anti-Spam Basics" />
+  <meta name="keywords" content="Gnus Manual: Anti-Spam Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" rel=
+  "up" title="Thwarting Email Spam" />
+  <link href="SpamAssassin.html#SpamAssassin" rel="next" title=
+  "SpamAssassin" />
+  <link href="The-problem-of-spam.html#The-problem-of-spam" rel=
+  "prev" title="The problem of spam" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Anti_002dSpam-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="SpamAssassin.html#SpamAssassin" accesskey="n" rel="next">SpamAssassin</a>, Previous: <a href="The-problem-of-spam.html#The-problem-of-spam" accesskey="p" rel="prev">The problem of spam</a>, Up: <a href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u" rel="up">Thwarting Email Spam</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Anti_002dSpam-Basics-1"></a>
-<h4 class="subsection">9.16.2 Anti-Spam Basics</h4>
-<a name="index-email-spam-2"></a>
-<a name="index-spam-1"></a>
-<a name="index-UCE-2"></a>
-<a name="index-unsolicited-commercial-email-2"></a>
+<body lang="en" xml:lang="en">
+  <a name="Anti_002dSpam-Basics" id="Anti_002dSpam-Basics"></a>
 
-<p>One way of dealing with spam is having Gnus split out all spam into a
-&lsquo;<samp>spam</samp>&rsquo; mail group (see <a href="Splitting-Mail.html#Splitting-Mail">Splitting Mail</a>).
-</p>
-<p>First, pick one (1) valid mail address that you can be reached at, and
-put it in your <code>From</code> header of all your news articles.  (I&rsquo;ve
-chosen &lsquo;<samp>larsi@trym.ifi.uio.no</samp>&rsquo;, but for many addresses on the form
-&lsquo;<samp>larsi+usenet@ifi.uio.no</samp>&rsquo; will be a better choice.  Ask your
-sysadmin whether your sendmail installation accepts keywords in the local
-part of the mail address.)
-</p>
-<div class="lisp">
-<pre class="lisp">(setq message-default-news-headers
-      &quot;From: Lars Magne Ingebrigtsen &lt;larsi@trym.ifi.uio.no&gt;\n&quot;)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="SpamAssassin.html#SpamAssassin" accesskey="n"
+    rel="next">SpamAssassin</a>, Previous: <a href=
+    "The-problem-of-spam.html#The-problem-of-spam" accesskey="p"
+    rel="prev">The problem of spam</a>, Up: <a href=
+    "Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u"
+    rel="up">Thwarting Email Spam</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Anti_002dSpam-Basics-1" id="Anti_002dSpam-Basics-1"></a>
 
-<p>Then put the following split rule in <code>nnmail-split-fancy</code>
-(see <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail Splitting</a>):
-</p>
-<div class="lisp">
-<pre class="lisp">(...
- (to &quot;larsi@trym.ifi.uio.no&quot;
-     (| (&quot;subject&quot; &quot;re:.*&quot; &quot;misc&quot;)
-        (&quot;references&quot; &quot;.*@.*&quot; &quot;misc&quot;)
-        &quot;spam&quot;))
+  <h4 class="subsection">9.16.2 Anti-Spam Basics</h4><a name=
+  "index-email-spam-2" id="index-email-spam-2"></a> <a name=
+  "index-spam-1" id="index-spam-1"></a> <a name="index-UCE-2" id=
+  "index-UCE-2"></a> <a name="index-unsolicited-commercial-email-2"
+  id="index-unsolicited-commercial-email-2"></a>
+
+  <p>One way of dealing with spam is having Gnus split out all spam
+  into a &lsquo;<samp>spam</samp>&rsquo; mail group (see <a href=
+  "Splitting-Mail.html#Splitting-Mail">Splitting Mail</a>).</p>
+
+  <p>First, pick one (1) valid mail address that you can be reached
+  at, and put it in your <code>From</code> header of all your news
+  articles. (I&rsquo;ve chosen
+  &lsquo;<samp>larsi@trym.ifi.uio.no</samp>&rsquo;, but for many
+  addresses on the form
+  &lsquo;<samp>larsi+usenet@ifi.uio.no</samp>&rsquo; will be a
+  better choice. Ask your sysadmin whether your sendmail
+  installation accepts keywords in the local part of the mail
+  address.)</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq message-default-news-headers
+      "From: Lars Magne Ingebrigtsen &lt;larsi@trym.ifi.uio.no&gt;\n")
+</pre>
+  </div>
+
+  <p>Then put the following split rule in
+  <code>nnmail-split-fancy</code> (see <a href=
+  "Fancy-Mail-Splitting.html#Fancy-Mail-Splitting">Fancy Mail
+  Splitting</a>):</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(...
+ (to "larsi@trym.ifi.uio.no"
+     (| ("subject" "re:.*" "misc")
+        ("references" ".*@.*" "misc")
+        "spam"))
  ...)
-</pre></div>
+</pre>
+  </div>
 
-<p>This says that all mail to this address is suspect, but if it has a
-<code>Subject</code> that starts with a &lsquo;<samp>Re:</samp>&rsquo; or has a <code>References</code>
-header, it&rsquo;s probably ok.  All the rest goes to the &lsquo;<samp>spam</samp>&rsquo; group.
-(This idea probably comes from Tim Pierce.)
-</p>
-<p>In addition, many mail spammers talk directly to your <acronym>SMTP</acronym> server
-and do not include your email address explicitly in the <code>To</code>
-header.  Why they do this is unknown&mdash;perhaps it&rsquo;s to thwart this
-thwarting scheme?  In any case, this is trivial to deal with&mdash;you just
-put anything not addressed to you in the &lsquo;<samp>spam</samp>&rsquo; group by ending
-your fancy split rule in this way:
-</p>
-<div class="lisp">
-<pre class="lisp">(
+  <p>This says that all mail to this address is suspect, but if it
+  has a <code>Subject</code> that starts with a
+  &lsquo;<samp>Re:</samp>&rsquo; or has a <code>References</code>
+  header, it&rsquo;s probably ok. All the rest goes to the
+  &lsquo;<samp>spam</samp>&rsquo; group. (This idea probably comes
+  from Tim Pierce.)</p>
+
+  <p>In addition, many mail spammers talk directly to your
+  <acronym>SMTP</acronym> server and do not include your email
+  address explicitly in the <code>To</code> header. Why they do
+  this is unknown&mdash;perhaps it&rsquo;s to thwart this thwarting
+  scheme? In any case, this is trivial to deal with&mdash;you just
+  put anything not addressed to you in the
+  &lsquo;<samp>spam</samp>&rsquo; group by ending your fancy split
+  rule in this way:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(
  ...
- (to &quot;larsi&quot; &quot;misc&quot;)
- &quot;spam&quot;)
-</pre></div>
+ (to "larsi" "misc")
+ "spam")
+</pre>
+  </div>
 
-<p>In my experience, this will sort virtually everything into the right
-group.  You still have to check the &lsquo;<samp>spam</samp>&rsquo; group from time to time to
-check for legitimate mail, though.  If you feel like being a good net
-citizen, you can even send off complaints to the proper authorities on
-each unsolicited commercial email&mdash;at your leisure.
-</p>
-<p>This works for me.  It allows people an easy way to contact me (they can
-just press <kbd>r</kbd> in the usual way), and I&rsquo;m not bothered at all with
-spam.  It&rsquo;s a win-win situation.  Forging <code>From</code> headers to point
-to non-existent domains is yucky, in my opinion.
-</p>
-<p>Be careful with this approach.  Spammers are wise to it.
-</p>
+  <p>In my experience, this will sort virtually everything into the
+  right group. You still have to check the
+  &lsquo;<samp>spam</samp>&rsquo; group from time to time to check
+  for legitimate mail, though. If you feel like being a good net
+  citizen, you can even send off complaints to the proper
+  authorities on each unsolicited commercial email&mdash;at your
+  leisure.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="SpamAssassin.html#SpamAssassin" accesskey="n" rel="next">SpamAssassin</a>, Previous: <a href="The-problem-of-spam.html#The-problem-of-spam" accesskey="p" rel="prev">The problem of spam</a>, Up: <a href="Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u" rel="up">Thwarting Email Spam</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>This works for me. It allows people an easy way to contact me
+  (they can just press <kbd>r</kbd> in the usual way), and
+  I&rsquo;m not bothered at all with spam. It&rsquo;s a win-win
+  situation. Forging <code>From</code> headers to point to
+  non-existent domains is yucky, in my opinion.</p>
 
+  <p>Be careful with this approach. Spammers are wise to it.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="SpamAssassin.html#SpamAssassin" accesskey="n"
+    rel="next">SpamAssassin</a>, Previous: <a href=
+    "The-problem-of-spam.html#The-problem-of-spam" accesskey="p"
+    rel="prev">The problem of spam</a>, Up: <a href=
+    "Thwarting-Email-Spam.html#Thwarting-Email-Spam" accesskey="u"
+    rel="up">Thwarting Email Spam</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

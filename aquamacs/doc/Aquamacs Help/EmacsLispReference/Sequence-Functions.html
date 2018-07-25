@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,254 +19,414 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Sequence Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Sequence Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Sequence Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up" title="Sequences Arrays Vectors">
-<link href="Arrays.html#Arrays" rel="next" title="Arrays">
-<link href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="prev" title="Sequences Arrays Vectors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Sequence
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Sequence Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Sequence Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up"
+  title="Sequences Arrays Vectors" />
+  <link href="Arrays.html#Arrays" rel="next" title="Arrays" />
+  <link href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel=
+  "prev" title="Sequences Arrays Vectors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Sequence-Functions" id="Sequence-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Arrays.html#Arrays" accesskey="n" rel=
+    "next">Arrays</a>, Up: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sequences" id="Sequences"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sequence-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Arrays.html#Arrays" accesskey="n" rel="next">Arrays</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sequences"></a>
-<h3 class="section">6.1 Sequences</h3>
+  <h3 class="section">6.1 Sequences</h3>
 
-<p>This section describes functions that accept any kind of sequence.
-</p>
-<dl>
-<dt><a name="index-sequencep"></a>Function: <strong>sequencep</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a list, vector,
-string, bool-vector, or char-table, <code>nil</code> otherwise.
-</p></dd></dl>
+  <p>This section describes functions that accept any kind of
+  sequence.</p>
 
-<dl>
-<dt><a name="index-length"></a>Function: <strong>length</strong> <em>sequence</em></dt>
-<dd><a name="index-string-length"></a>
-<a name="index-list-length"></a>
-<a name="index-vector-length"></a>
-<a name="index-sequence-length"></a>
-<a name="index-char_002dtable-length"></a>
-<a name="Definition-of-length"></a><p>This function returns the number of elements in <var>sequence</var>.  If
-<var>sequence</var> is a dotted list, a <code>wrong-type-argument</code> error is
-signaled.  Circular lists may cause an infinite loop.  For a
-char-table, the value returned is always one more than the maximum
-Emacs character code.
-</p>
-<p>See <a href="List-Elements.html#Definition-of-safe_002dlength">Definition of safe-length</a>, for the related function <code>safe-length</code>.
-</p>
-<div class="example">
-<pre class="example">(length '(1 2 3))
+  <dl>
+    <dt><a name="index-sequencep" id=
+    "index-sequencep"></a>Function: <strong>sequencep</strong>
+    <em>object</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a list, vector, string, bool-vector, or char-table,
+      <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-length" id="index-length"></a>Function:
+    <strong>length</strong> <em>sequence</em></dt>
+
+    <dd>
+      <a name="index-string-length" id="index-string-length"></a>
+      <a name="index-list-length" id="index-list-length"></a>
+      <a name="index-vector-length" id="index-vector-length"></a>
+      <a name="index-sequence-length" id=
+      "index-sequence-length"></a> <a name=
+      "index-char_002dtable-length" id=
+      "index-char_002dtable-length"></a> <a name=
+      "Definition-of-length" id="Definition-of-length"></a>
+
+      <p>This function returns the number of elements in
+      <var>sequence</var>. If <var>sequence</var> is a dotted list,
+      a <code>wrong-type-argument</code> error is signaled.
+      Circular lists may cause an infinite loop. For a char-table,
+      the value returned is always one more than the maximum Emacs
+      character code.</p>
+
+      <p>See <a href=
+      "List-Elements.html#Definition-of-safe_002dlength">Definition
+      of safe-length</a>, for the related function
+      <code>safe-length</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(length '(1 2 3))
     &rArr; 3
-</pre><pre class="example">(length ())
+</pre>
+        <pre class="example">
+(length ())
     &rArr; 0
-</pre><pre class="example">(length &quot;foobar&quot;)
+</pre>
+        <pre class="example">
+(length "foobar")
     &rArr; 6
-</pre><pre class="example">(length [1 2 3])
+</pre>
+        <pre class="example">
+(length [1 2 3])
     &rArr; 3
-</pre><pre class="example">(length (make-bool-vector 5 nil))
+</pre>
+        <pre class="example">
+(length (make-bool-vector 5 nil))
     &rArr; 5
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>See also <code>string-bytes</code>, in <a href="Text-Representations.html#Text-Representations">Text Representations</a>.
-</p>
-<p>If you need to compute the width of a string on display, you should use
-<code>string-width</code> (see <a href="Size-of-Displayed-Text.html#Size-of-Displayed-Text">Size of Displayed Text</a>), not <code>length</code>,
-since <code>length</code> only counts the number of characters, but does not
-account for the display width of each character.
-</p>
-<dl>
-<dt><a name="index-elt"></a>Function: <strong>elt</strong> <em>sequence index</em></dt>
-<dd><a name="Definition-of-elt"></a><a name="index-elements-of-sequences"></a>
-<p>This function returns the element of <var>sequence</var> indexed by
-<var>index</var>.  Legitimate values of <var>index</var> are integers ranging
-from 0 up to one less than the length of <var>sequence</var>.  If
-<var>sequence</var> is a list, out-of-range values behave as for
-<code>nth</code>.  See <a href="List-Elements.html#Definition-of-nth">Definition of nth</a>.  Otherwise, out-of-range values
-trigger an <code>args-out-of-range</code> error.
-</p>
-<div class="example">
-<pre class="example">(elt [1 2 3 4] 2)
+  <p>See also <code>string-bytes</code>, in <a href=
+  "Text-Representations.html#Text-Representations">Text
+  Representations</a>.</p>
+
+  <p>If you need to compute the width of a string on display, you
+  should use <code>string-width</code> (see <a href=
+  "Size-of-Displayed-Text.html#Size-of-Displayed-Text">Size of
+  Displayed Text</a>), not <code>length</code>, since
+  <code>length</code> only counts the number of characters, but
+  does not account for the display width of each character.</p>
+
+  <dl>
+    <dt><a name="index-elt" id="index-elt"></a>Function:
+    <strong>elt</strong> <em>sequence index</em></dt>
+
+    <dd>
+      <a name="Definition-of-elt" id=
+      "Definition-of-elt"></a><a name="index-elements-of-sequences"
+      id="index-elements-of-sequences"></a>
+
+      <p>This function returns the element of <var>sequence</var>
+      indexed by <var>index</var>. Legitimate values of
+      <var>index</var> are integers ranging from 0 up to one less
+      than the length of <var>sequence</var>. If
+      <var>sequence</var> is a list, out-of-range values behave as
+      for <code>nth</code>. See <a href=
+      "List-Elements.html#Definition-of-nth">Definition of nth</a>.
+      Otherwise, out-of-range values trigger an
+      <code>args-out-of-range</code> error.</p>
+
+      <div class="example">
+        <pre class="example">
+(elt [1 2 3 4] 2)
      &rArr; 3
-</pre><pre class="example">(elt '(1 2 3 4) 2)
+</pre>
+        <pre class="example">
+(elt '(1 2 3 4) 2)
      &rArr; 3
-</pre><pre class="example">;; <span class="roman">We use <code>string</code> to show clearly which character <code>elt</code> returns.</span>
-(string (elt &quot;1234&quot; 2))
-     &rArr; &quot;3&quot;
-</pre><pre class="example">(elt [1 2 3 4] 4)
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">We use <code>string</code> to show clearly which character <code>elt</code> returns.</span>
+(string (elt "1234" 2))
+     &rArr; "3"
+</pre>
+        <pre class="example">
+(elt [1 2 3 4] 4)
      error&rarr; Args out of range: [1 2 3 4], 4
-</pre><pre class="example">(elt [1 2 3 4] -1)
+</pre>
+        <pre class="example">
+(elt [1 2 3 4] -1)
      error&rarr; Args out of range: [1 2 3 4], -1
-</pre></div>
+</pre>
+      </div>
 
-<p>This function generalizes <code>aref</code> (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>) and
-<code>nth</code> (see <a href="List-Elements.html#Definition-of-nth">Definition of nth</a>).
-</p></dd></dl>
+      <p>This function generalizes <code>aref</code> (see <a href=
+      "Array-Functions.html#Array-Functions">Array Functions</a>)
+      and <code>nth</code> (see <a href=
+      "List-Elements.html#Definition-of-nth">Definition of
+      nth</a>).</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-copy_002dsequence"></a>Function: <strong>copy-sequence</strong> <em>sequence</em></dt>
-<dd><a name="index-copying-sequences"></a>
-<p>This function returns a copy of <var>sequence</var>.  The copy is the same
-type of object as the original sequence, and it has the same elements
-in the same order.
-</p>
-<p>Storing a new element into the copy does not affect the original
-<var>sequence</var>, and vice versa.  However, the elements of the new
-sequence are not copies; they are identical (<code>eq</code>) to the elements
-of the original.  Therefore, changes made within these elements, as
-found via the copied sequence, are also visible in the original
-sequence.
-</p>
-<p>If the sequence is a string with text properties, the property list in
-the copy is itself a copy, not shared with the original&rsquo;s property
-list.  However, the actual values of the properties are shared.
-See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.
-</p>
-<p>This function does not work for dotted lists.  Trying to copy a
-circular list may cause an infinite loop.
-</p>
-<p>See also <code>append</code> in <a href="Building-Lists.html#Building-Lists">Building Lists</a>, <code>concat</code> in
-<a href="Creating-Strings.html#Creating-Strings">Creating Strings</a>, and <code>vconcat</code> in <a href="Vector-Functions.html#Vector-Functions">Vector Functions</a>,
-for other ways to copy sequences.
-</p>
-<div class="example">
-<pre class="example">(setq bar '(1 2))
+  <dl>
+    <dt><a name="index-copy_002dsequence" id=
+    "index-copy_002dsequence"></a>Function:
+    <strong>copy-sequence</strong> <em>sequence</em></dt>
+
+    <dd>
+      <a name="index-copying-sequences" id=
+      "index-copying-sequences"></a>
+
+      <p>This function returns a copy of <var>sequence</var>. The
+      copy is the same type of object as the original sequence, and
+      it has the same elements in the same order.</p>
+
+      <p>Storing a new element into the copy does not affect the
+      original <var>sequence</var>, and vice versa. However, the
+      elements of the new sequence are not copies; they are
+      identical (<code>eq</code>) to the elements of the original.
+      Therefore, changes made within these elements, as found via
+      the copied sequence, are also visible in the original
+      sequence.</p>
+
+      <p>If the sequence is a string with text properties, the
+      property list in the copy is itself a copy, not shared with
+      the original&rsquo;s property list. However, the actual
+      values of the properties are shared. See <a href=
+      "Text-Properties.html#Text-Properties">Text
+      Properties</a>.</p>
+
+      <p>This function does not work for dotted lists. Trying to
+      copy a circular list may cause an infinite loop.</p>
+
+      <p>See also <code>append</code> in <a href=
+      "Building-Lists.html#Building-Lists">Building Lists</a>,
+      <code>concat</code> in <a href=
+      "Creating-Strings.html#Creating-Strings">Creating
+      Strings</a>, and <code>vconcat</code> in <a href=
+      "Vector-Functions.html#Vector-Functions">Vector
+      Functions</a>, for other ways to copy sequences.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq bar '(1 2))
      &rArr; (1 2)
-</pre><pre class="example">(setq x (vector 'foo bar))
+</pre>
+        <pre class="example">
+(setq x (vector 'foo bar))
      &rArr; [foo (1 2)]
-</pre><pre class="example">(setq y (copy-sequence x))
+</pre>
+        <pre class="example">
+(setq y (copy-sequence x))
      &rArr; [foo (1 2)]
-</pre><pre class="example">
-</pre><pre class="example">(eq x y)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(eq x y)
      &rArr; nil
-</pre><pre class="example">(equal x y)
+</pre>
+        <pre class="example">
+(equal x y)
      &rArr; t
-</pre><pre class="example">(eq (elt x 1) (elt y 1))
+</pre>
+        <pre class="example">
+(eq (elt x 1) (elt y 1))
      &rArr; t
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Replacing an element of one sequence.</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class="roman">Replacing an element of one sequence.</span>
 (aset x 0 'quux)
 x &rArr; [quux (1 2)]
 y &rArr; [foo (1 2)]
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Modifying the inside of a shared element.</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">Modifying the inside of a shared element.</span>
 (setcar (aref x 1) 69)
 x &rArr; [quux (69 2)]
 y &rArr; [foo (69 2)]
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-reverse"></a>Function: <strong>reverse</strong> <em>sequence</em></dt>
-<dd><a name="index-string-reverse"></a>
-<a name="index-list-reverse"></a>
-<a name="index-vector-reverse"></a>
-<a name="index-sequence-reverse"></a>
-<p>This function creates a new sequence whose elements are the elements
-of <var>sequence</var>, but in reverse order.  The original argument <var>sequence</var>
-is <em>not</em> altered.  Note that char-tables cannot be reversed.
-</p>
-<div class="example">
-<pre class="example">(setq x '(1 2 3 4))
+  <dl>
+    <dt><a name="index-reverse" id="index-reverse"></a>Function:
+    <strong>reverse</strong> <em>sequence</em></dt>
+
+    <dd>
+      <a name="index-string-reverse" id="index-string-reverse"></a>
+      <a name="index-list-reverse" id="index-list-reverse"></a>
+      <a name="index-vector-reverse" id="index-vector-reverse"></a>
+      <a name="index-sequence-reverse" id=
+      "index-sequence-reverse"></a>
+
+      <p>This function creates a new sequence whose elements are
+      the elements of <var>sequence</var>, but in reverse order.
+      The original argument <var>sequence</var> is <em>not</em>
+      altered. Note that char-tables cannot be reversed.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq x '(1 2 3 4))
      &rArr; (1 2 3 4)
-</pre><pre class="example">(reverse x)
+</pre>
+        <pre class="example">
+(reverse x)
      &rArr; (4 3 2 1)
 x
      &rArr; (1 2 3 4)
-</pre><pre class="example">(setq x [1 2 3 4])
+</pre>
+        <pre class="example">
+(setq x [1 2 3 4])
      &rArr; [1 2 3 4]
-</pre><pre class="example">(reverse x)
+</pre>
+        <pre class="example">
+(reverse x)
      &rArr; [4 3 2 1]
 x
      &rArr; [1 2 3 4]
-</pre><pre class="example">(setq x &quot;xyzzy&quot;)
-     &rArr; &quot;xyzzy&quot;
-</pre><pre class="example">(reverse x)
-     &rArr; &quot;yzzyx&quot;
+</pre>
+        <pre class="example">
+(setq x "xyzzy")
+     &rArr; "xyzzy"
+</pre>
+        <pre class="example">
+(reverse x)
+     &rArr; "yzzyx"
 x
-     &rArr; &quot;xyzzy&quot;
-</pre></div>
-</dd></dl>
+     &rArr; "xyzzy"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-nreverse"></a>Function: <strong>nreverse</strong> <em>sequence</em></dt>
-<dd><a name="index-reversing-a-string"></a>
-<a name="index-reversing-a-list"></a>
-<a name="index-reversing-a-vector"></a>
-<p>This function reverses the order of the elements of <var>sequence</var>.
-Unlike <code>reverse</code> the original <var>sequence</var> may be modified.
-</p>
-<p>For example:
-</p>
-<div class="example">
-<pre class="example">(setq x '(a b c))
+  <dl>
+    <dt><a name="index-nreverse" id="index-nreverse"></a>Function:
+    <strong>nreverse</strong> <em>sequence</em></dt>
+
+    <dd>
+      <a name="index-reversing-a-string" id=
+      "index-reversing-a-string"></a> <a name=
+      "index-reversing-a-list" id="index-reversing-a-list"></a>
+      <a name="index-reversing-a-vector" id=
+      "index-reversing-a-vector"></a>
+
+      <p>This function reverses the order of the elements of
+      <var>sequence</var>. Unlike <code>reverse</code> the original
+      <var>sequence</var> may be modified.</p>
+
+      <p>For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq x '(a b c))
      &rArr; (a b c)
-</pre><pre class="example">x
+</pre>
+        <pre class="example">
+x
      &rArr; (a b c)
 (nreverse x)
      &rArr; (c b a)
-</pre><pre class="example">;; <span class="roman">The cons cell that was first is now last.</span>
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">The cons cell that was first is now last.</span>
 x
      &rArr; (a)
-</pre></div>
+</pre>
+      </div>
 
-<p>To avoid confusion, we usually store the result of <code>nreverse</code>
-back in the same variable which held the original list:
-</p>
-<div class="example">
-<pre class="example">(setq x (nreverse x))
-</pre></div>
+      <p>To avoid confusion, we usually store the result of
+      <code>nreverse</code> back in the same variable which held
+      the original list:</p>
 
-<p>Here is the <code>nreverse</code> of our favorite example, <code>(a b c)</code>,
-presented graphically:
-</p>
-<div class="smallexample">
-<pre class="smallexample"><span class="roman">Original list head:</span>                       <span class="roman">Reversed list:</span>
+      <div class="example">
+        <pre class="example">
+(setq x (nreverse x))
+</pre>
+      </div>
+
+      <p>Here is the <code>nreverse</code> of our favorite example,
+      <code>(a b c)</code>, presented graphically:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+<span class=
+"roman">Original list head:</span>                       <span class="roman">Reversed list:</span>
  -------------        -------------        ------------
 | car  | cdr  |      | car  | cdr  |      | car | cdr  |
 |   a  |  nil |&lt;--   |   b  |   o  |&lt;--   |   c |   o  |
@@ -272,615 +434,1018 @@ presented graphically:
  -------------    |   --------- | -    |   -------- | -
                   |             |      |            |
                    -------------        ------------
-</pre></div>
+</pre>
+      </div>
 
-<p>For the vector, it is even simpler because you don&rsquo;t need setq:
-</p>
-<div class="example">
-<pre class="example">(setq x [1 2 3 4])
+      <p>For the vector, it is even simpler because you don&rsquo;t
+      need setq:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq x [1 2 3 4])
      &rArr; [1 2 3 4]
 (nreverse x)
      &rArr; [4 3 2 1]
 x
      &rArr; [4 3 2 1]
-</pre></div>
+</pre>
+      </div>
 
-<p>Note that unlike <code>reverse</code>, this function doesn&rsquo;t work with strings.
-Although you can alter string data by using <code>aset</code>, it is strongly
-encouraged to treat strings as immutable.
-</p>
-</dd></dl>
+      <p>Note that unlike <code>reverse</code>, this function
+      doesn&rsquo;t work with strings. Although you can alter
+      string data by using <code>aset</code>, it is strongly
+      encouraged to treat strings as immutable.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-sort"></a>Function: <strong>sort</strong> <em>sequence predicate</em></dt>
-<dd><a name="index-stable-sort"></a>
-<a name="index-sorting-lists"></a>
-<a name="index-sorting-vectors"></a>
-<p>This function sorts <var>sequence</var> stably.  Note that this function doesn&rsquo;t work
-for all sequences; it may be used only for lists and vectors.  If <var>sequence</var>
-is a list, it is modified destructively.  This functions returns the sorted
-<var>sequence</var> and compares elements using <var>predicate</var>.  A stable sort is
-one in which elements with equal sort keys maintain their relative order before
-and after the sort.  Stability is important when successive sorts are used to
-order elements according to different criteria.
-</p>
-<p>The argument <var>predicate</var> must be a function that accepts two
-arguments.  It is called with two elements of <var>sequence</var>.  To get an
-increasing order sort, the <var>predicate</var> should return non-<code>nil</code> if the
-first element is &ldquo;less&rdquo; than the second, or <code>nil</code> if not.
-</p>
-<p>The comparison function <var>predicate</var> must give reliable results for
-any given pair of arguments, at least within a single call to
-<code>sort</code>.  It must be <em>antisymmetric</em>; that is, if <var>a</var> is
-less than <var>b</var>, <var>b</var> must not be less than <var>a</var>.  It must be
-<em>transitive</em>&mdash;that is, if <var>a</var> is less than <var>b</var>, and <var>b</var>
-is less than <var>c</var>, then <var>a</var> must be less than <var>c</var>.  If you
-use a comparison function which does not meet these requirements, the
-result of <code>sort</code> is unpredictable.
-</p>
-<p>The destructive aspect of <code>sort</code> for lists is that it rearranges the
-cons cells forming <var>sequence</var> by changing <small>CDR</small>s.  A nondestructive
-sort function would create new cons cells to store the elements in their
-sorted order.  If you wish to make a sorted copy without destroying the
-original, copy it first with <code>copy-sequence</code> and then sort.
-</p>
-<p>Sorting does not change the <small>CAR</small>s of the cons cells in <var>sequence</var>;
-the cons cell that originally contained the element <code>a</code> in
-<var>sequence</var> still has <code>a</code> in its <small>CAR</small> after sorting, but it now
-appears in a different position in the list due to the change of
-<small>CDR</small>s.  For example:
-</p>
-<div class="example">
-<pre class="example">(setq nums '(1 3 2 6 5 4 0))
+  <dl>
+    <dt><a name="index-sort" id="index-sort"></a>Function:
+    <strong>sort</strong> <em>sequence predicate</em></dt>
+
+    <dd>
+      <a name="index-stable-sort" id="index-stable-sort"></a>
+      <a name="index-sorting-lists" id="index-sorting-lists"></a>
+      <a name="index-sorting-vectors" id=
+      "index-sorting-vectors"></a>
+
+      <p>This function sorts <var>sequence</var> stably. Note that
+      this function doesn&rsquo;t work for all sequences; it may be
+      used only for lists and vectors. If <var>sequence</var> is a
+      list, it is modified destructively. This functions returns
+      the sorted <var>sequence</var> and compares elements using
+      <var>predicate</var>. A stable sort is one in which elements
+      with equal sort keys maintain their relative order before and
+      after the sort. Stability is important when successive sorts
+      are used to order elements according to different
+      criteria.</p>
+
+      <p>The argument <var>predicate</var> must be a function that
+      accepts two arguments. It is called with two elements of
+      <var>sequence</var>. To get an increasing order sort, the
+      <var>predicate</var> should return non-<code>nil</code> if
+      the first element is &ldquo;less&rdquo; than the second, or
+      <code>nil</code> if not.</p>
+
+      <p>The comparison function <var>predicate</var> must give
+      reliable results for any given pair of arguments, at least
+      within a single call to <code>sort</code>. It must be
+      <em>antisymmetric</em>; that is, if <var>a</var> is less than
+      <var>b</var>, <var>b</var> must not be less than
+      <var>a</var>. It must be <em>transitive</em>&mdash;that is,
+      if <var>a</var> is less than <var>b</var>, and <var>b</var>
+      is less than <var>c</var>, then <var>a</var> must be less
+      than <var>c</var>. If you use a comparison function which
+      does not meet these requirements, the result of
+      <code>sort</code> is unpredictable.</p>
+
+      <p>The destructive aspect of <code>sort</code> for lists is
+      that it rearranges the cons cells forming <var>sequence</var>
+      by changing <small>CDR</small>s. A nondestructive sort
+      function would create new cons cells to store the elements in
+      their sorted order. If you wish to make a sorted copy without
+      destroying the original, copy it first with
+      <code>copy-sequence</code> and then sort.</p>
+
+      <p>Sorting does not change the <small>CAR</small>s of the
+      cons cells in <var>sequence</var>; the cons cell that
+      originally contained the element <code>a</code> in
+      <var>sequence</var> still has <code>a</code> in its
+      <small>CAR</small> after sorting, but it now appears in a
+      different position in the list due to the change of
+      <small>CDR</small>s. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq nums '(1 3 2 6 5 4 0))
      &rArr; (1 3 2 6 5 4 0)
-</pre><pre class="example">(sort nums '&lt;)
+</pre>
+        <pre class="example">
+(sort nums '&lt;)
      &rArr; (0 1 2 3 4 5 6)
-</pre><pre class="example">nums
+</pre>
+        <pre class="example">
+nums
      &rArr; (1 2 3 4 5 6)
-</pre></div>
+</pre>
+      </div>
 
-<p><strong>Warning</strong>: Note that the list in <code>nums</code> no longer contains
-0; this is the same cons cell that it was before, but it is no longer
-the first one in the list.  Don&rsquo;t assume a variable that formerly held
-the argument now holds the entire sorted list!  Instead, save the result
-of <code>sort</code> and use that.  Most often we store the result back into
-the variable that held the original list:
-</p>
-<div class="example">
-<pre class="example">(setq nums (sort nums '&lt;))
-</pre></div>
+      <p><strong>Warning</strong>: Note that the list in
+      <code>nums</code> no longer contains 0; this is the same cons
+      cell that it was before, but it is no longer the first one in
+      the list. Don&rsquo;t assume a variable that formerly held
+      the argument now holds the entire sorted list! Instead, save
+      the result of <code>sort</code> and use that. Most often we
+      store the result back into the variable that held the
+      original list:</p>
 
-<p>For the better understanding of what stable sort is, consider the following
-vector example.  After sorting, all items whose <code>car</code> is 8 are grouped
-at the beginning of <code>vector</code>, but their relative order is preserved.
-All items whose <code>car</code> is 9 are grouped at the end of <code>vector</code>,
-but their relative order is also preserved:
-</p>
-<div class="example">
-<pre class="example">(setq
+      <div class="example">
+        <pre class="example">
+(setq nums (sort nums '&lt;))
+</pre>
+      </div>
+
+      <p>For the better understanding of what stable sort is,
+      consider the following vector example. After sorting, all
+      items whose <code>car</code> is 8 are grouped at the
+      beginning of <code>vector</code>, but their relative order is
+      preserved. All items whose <code>car</code> is 9 are grouped
+      at the end of <code>vector</code>, but their relative order
+      is also preserved:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq
   vector
-  (vector '(8 . &quot;xxx&quot;) '(9 . &quot;aaa&quot;) '(8 . &quot;bbb&quot;) '(9 . &quot;zzz&quot;)
-          '(9 . &quot;ppp&quot;) '(8 . &quot;ttt&quot;) '(8 . &quot;eee&quot;) '(9 . &quot;fff&quot;)))
-     &rArr; [(8 . &quot;xxx&quot;) (9 . &quot;aaa&quot;) (8 . &quot;bbb&quot;) (9 . &quot;zzz&quot;)
-         (9 . &quot;ppp&quot;) (8 . &quot;ttt&quot;) (8 . &quot;eee&quot;) (9 . &quot;fff&quot;)]
-</pre><pre class="example">(sort vector (lambda (x y) (&lt; (car x) (car y))))
-     &rArr; [(8 . &quot;xxx&quot;) (8 . &quot;bbb&quot;) (8 . &quot;ttt&quot;) (8 . &quot;eee&quot;)
-         (9 . &quot;aaa&quot;) (9 . &quot;zzz&quot;) (9 . &quot;ppp&quot;) (9 . &quot;fff&quot;)]
-</pre></div>
+  (vector '(8 . "xxx") '(9 . "aaa") '(8 . "bbb") '(9 . "zzz")
+          '(9 . "ppp") '(8 . "ttt") '(8 . "eee") '(9 . "fff")))
+     &rArr; [(8 . "xxx") (9 . "aaa") (8 . "bbb") (9 . "zzz")
+         (9 . "ppp") (8 . "ttt") (8 . "eee") (9 . "fff")]
+</pre>
+        <pre class="example">
+(sort vector (lambda (x y) (&lt; (car x) (car y))))
+     &rArr; [(8 . "xxx") (8 . "bbb") (8 . "ttt") (8 . "eee")
+         (9 . "aaa") (9 . "zzz") (9 . "ppp") (9 . "fff")]
+</pre>
+      </div>
 
-<p>See <a href="Sorting.html#Sorting">Sorting</a>, for more functions that perform sorting.
-See <code>documentation</code> in <a href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>, for a
-useful example of <code>sort</code>.
-</p></dd></dl>
+      <p>See <a href="Sorting.html#Sorting">Sorting</a>, for more
+      functions that perform sorting. See
+      <code>documentation</code> in <a href=
+      "Accessing-Documentation.html#Accessing-Documentation">Accessing
+      Documentation</a>, for a useful example of
+      <code>sort</code>.</p>
+    </dd>
+  </dl><a name="index-sequence-functions-in-seq" id=
+  "index-sequence-functions-in-seq"></a> <a name=
+  "index-seq-library" id="index-seq-library"></a>
 
-<a name="index-sequence-functions-in-seq"></a>
-<a name="index-seq-library"></a>
-<p>The <samp>seq.el</samp> library provides the following additional sequence
-manipulation macros and functions, prefixed with <code>seq-</code>.  To use
-them, you must first load the <samp>seq</samp> library.
-</p>
-<p>All functions defined in this library are free of side-effects;
-i.e., they do not modify any sequence (list, vector, or string) that
-you pass as an argument.  Unless otherwise stated, the result is a
-sequence of the same type as the input.  For those functions that take
-a predicate, this should be a function of one argument.
-</p>
-<p>The <samp>seq.el</samp> library can be extended to work with additional
-types of sequential data-structures.  For that purpose, all functions
-are defined using <code>cl-defgeneric</code>.  See <a href="Generic-Functions.html#Generic-Functions">Generic Functions</a>, for
-more details about using <code>cl-defgeneric</code> for adding extensions.
-</p>
-<dl>
-<dt><a name="index-seq_002delt"></a>Function: <strong>seq-elt</strong> <em>sequence index</em></dt>
-<dd><p>This function returns the element of <var>sequence</var> at the specified
-<var>index</var>, which is an integer whose valid value range is zero to
-one less than the length of <var>sequence</var>.  For out-of-range values
-on built-in sequence types, <code>seq-elt</code> behaves like <code>elt</code>.
-For the details, see <a href="#Definition-of-elt">Definition of elt</a>.
-</p>
-<div class="example">
-<pre class="example">(seq-elt [1 2 3 4] 2)
+  <p>The <samp>seq.el</samp> library provides the following
+  additional sequence manipulation macros and functions, prefixed
+  with <code>seq-</code>. To use them, you must first load the
+  <samp>seq</samp> library.</p>
+
+  <p>All functions defined in this library are free of
+  side-effects; i.e., they do not modify any sequence (list,
+  vector, or string) that you pass as an argument. Unless otherwise
+  stated, the result is a sequence of the same type as the input.
+  For those functions that take a predicate, this should be a
+  function of one argument.</p>
+
+  <p>The <samp>seq.el</samp> library can be extended to work with
+  additional types of sequential data-structures. For that purpose,
+  all functions are defined using <code>cl-defgeneric</code>. See
+  <a href="Generic-Functions.html#Generic-Functions">Generic
+  Functions</a>, for more details about using
+  <code>cl-defgeneric</code> for adding extensions.</p>
+
+  <dl>
+    <dt><a name="index-seq_002delt" id=
+    "index-seq_002delt"></a>Function: <strong>seq-elt</strong>
+    <em>sequence index</em></dt>
+
+    <dd>
+      <p>This function returns the element of <var>sequence</var>
+      at the specified <var>index</var>, which is an integer whose
+      valid value range is zero to one less than the length of
+      <var>sequence</var>. For out-of-range values on built-in
+      sequence types, <code>seq-elt</code> behaves like
+      <code>elt</code>. For the details, see <a href=
+      "#Definition-of-elt">Definition of elt</a>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-elt [1 2 3 4] 2)
 &rArr; 3
-</pre></div>
+</pre>
+      </div>
 
-<p><code>seq-elt</code> returns places settable using <code>setf</code>
-(see <a href="Setting-Generalized-Variables.html#Setting-Generalized-Variables">Setting Generalized Variables</a>).
-</p>
-<div class="example">
-<pre class="example">(setq vec [1 2 3 4])
+      <p><code>seq-elt</code> returns places settable using
+      <code>setf</code> (see <a href=
+      "Setting-Generalized-Variables.html#Setting-Generalized-Variables">
+      Setting Generalized Variables</a>).</p>
+
+      <div class="example">
+        <pre class="example">
+(setq vec [1 2 3 4])
 (setf (seq-elt vec 2) 5)
 vec
 &rArr; [1 2 5 4]
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dlength"></a>Function: <strong>seq-length</strong> <em>sequence</em></dt>
-<dd><p>This function returns the number of elements in <var>sequence</var>.  For
-built-in sequence types, <code>seq-length</code> behaves like <code>length</code>.
-See <a href="#Definition-of-length">Definition of length</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-seq_002dlength" id=
+    "index-seq_002dlength"></a>Function:
+    <strong>seq-length</strong> <em>sequence</em></dt>
 
-<dl>
-<dt><a name="index-seqp"></a>Function: <strong>seqp</strong> <em>sequence</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>sequence</var> is a sequence
-(a list or array), or any additional type of sequence defined via
-<samp>seq.el</samp> generic functions.
-</p>
-<div class="example">
-<pre class="example">(seqp [1 2])
+    <dd>
+      <p>This function returns the number of elements in
+      <var>sequence</var>. For built-in sequence types,
+      <code>seq-length</code> behaves like <code>length</code>. See
+      <a href="#Definition-of-length">Definition of length</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-seqp" id="index-seqp"></a>Function:
+    <strong>seqp</strong> <em>sequence</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>sequence</var> is a sequence (a list or array), or any
+      additional type of sequence defined via <samp>seq.el</samp>
+      generic functions.</p>
+
+      <div class="example">
+        <pre class="example">
+(seqp [1 2])
 &rArr; t
-</pre><pre class="example">(seqp 2)
+</pre>
+        <pre class="example">
+(seqp 2)
 &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002ddrop"></a>Function: <strong>seq-drop</strong> <em>sequence n</em></dt>
-<dd><p>This function returns all but the first <var>n</var> (an integer)
-elements of <var>sequence</var>.  If <var>n</var> is negative or zero,
-the result is <var>sequence</var>.
-</p>
-<div class="example">
-<pre class="example">(seq-drop [1 2 3 4 5 6] 3)
+  <dl>
+    <dt><a name="index-seq_002ddrop" id=
+    "index-seq_002ddrop"></a>Function: <strong>seq-drop</strong>
+    <em>sequence n</em></dt>
+
+    <dd>
+      <p>This function returns all but the first <var>n</var> (an
+      integer) elements of <var>sequence</var>. If <var>n</var> is
+      negative or zero, the result is <var>sequence</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-drop [1 2 3 4 5 6] 3)
 &rArr; [4 5 6]
-</pre><pre class="example">(seq-drop &quot;hello world&quot; -4)
-&rArr; &quot;hello world&quot;
-</pre></div>
-</dd></dl>
+</pre>
+        <pre class="example">
+(seq-drop "hello world" -4)
+&rArr; "hello world"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dtake"></a>Function: <strong>seq-take</strong> <em>sequence n</em></dt>
-<dd><p>This function returns the first <var>n</var> (an integer) elements of
-<var>sequence</var>.  If <var>n</var> is negative or zero, the result
-is <code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-take '(1 2 3 4) 3)
+  <dl>
+    <dt><a name="index-seq_002dtake" id=
+    "index-seq_002dtake"></a>Function: <strong>seq-take</strong>
+    <em>sequence n</em></dt>
+
+    <dd>
+      <p>This function returns the first <var>n</var> (an integer)
+      elements of <var>sequence</var>. If <var>n</var> is negative
+      or zero, the result is <code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-take '(1 2 3 4) 3)
 &rArr; (1 2 3)
-</pre><pre class="example">(seq-take [1 2 3 4] 0)
+</pre>
+        <pre class="example">
+(seq-take [1 2 3 4] 0)
 &rArr; []
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dtake_002dwhile"></a>Function: <strong>seq-take-while</strong> <em>predicate sequence</em></dt>
-<dd><p>This function returns the members of <var>sequence</var> in order,
-stopping before the first one for which <var>predicate</var> returns <code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-take-while (lambda (elt) (&gt; elt 0)) '(1 2 3 -1 -2))
+  <dl>
+    <dt><a name="index-seq_002dtake_002dwhile" id=
+    "index-seq_002dtake_002dwhile"></a>Function:
+    <strong>seq-take-while</strong> <em>predicate
+    sequence</em></dt>
+
+    <dd>
+      <p>This function returns the members of <var>sequence</var>
+      in order, stopping before the first one for which
+      <var>predicate</var> returns <code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-take-while (lambda (elt) (&gt; elt 0)) '(1 2 3 -1 -2))
 &rArr; (1 2 3)
-</pre><pre class="example">(seq-take-while (lambda (elt) (&gt; elt 0)) [-1 4 6])
+</pre>
+        <pre class="example">
+(seq-take-while (lambda (elt) (&gt; elt 0)) [-1 4 6])
 &rArr; []
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002ddrop_002dwhile"></a>Function: <strong>seq-drop-while</strong> <em>predicate sequence</em></dt>
-<dd><p>This function returns the members of <var>sequence</var> in order,
-starting from the first one for which <var>predicate</var> returns <code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-drop-while (lambda (elt) (&gt; elt 0)) '(1 2 3 -1 -2))
+  <dl>
+    <dt><a name="index-seq_002ddrop_002dwhile" id=
+    "index-seq_002ddrop_002dwhile"></a>Function:
+    <strong>seq-drop-while</strong> <em>predicate
+    sequence</em></dt>
+
+    <dd>
+      <p>This function returns the members of <var>sequence</var>
+      in order, starting from the first one for which
+      <var>predicate</var> returns <code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-drop-while (lambda (elt) (&gt; elt 0)) '(1 2 3 -1 -2))
 &rArr; (-1 -2)
-</pre><pre class="example">(seq-drop-while (lambda (elt) (&lt; elt 0)) [1 4 6])
+</pre>
+        <pre class="example">
+(seq-drop-while (lambda (elt) (&lt; elt 0)) [1 4 6])
 &rArr; [1 4 6]
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002ddo"></a>Function: <strong>seq-do</strong> <em>function sequence</em></dt>
-<dd><p>This function applies <var>function</var> to each element of
-<var>sequence</var> in turn (presumably for side effects), and returns
-<var>sequence</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-seq_002ddo" id=
+    "index-seq_002ddo"></a>Function: <strong>seq-do</strong>
+    <em>function sequence</em></dt>
 
-<dl>
-<dt><a name="index-seq_002dmap"></a>Function: <strong>seq-map</strong> <em>function sequence</em></dt>
-<dd><p>This function returns the result of applying <var>function</var> to each
-element of <var>sequence</var>.  The returned value is a list.
-</p>
-<div class="example">
-<pre class="example">(seq-map #'1+ '(2 4 6))
+    <dd>
+      <p>This function applies <var>function</var> to each element
+      of <var>sequence</var> in turn (presumably for side effects),
+      and returns <var>sequence</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-seq_002dmap" id=
+    "index-seq_002dmap"></a>Function: <strong>seq-map</strong>
+    <em>function sequence</em></dt>
+
+    <dd>
+      <p>This function returns the result of applying
+      <var>function</var> to each element of <var>sequence</var>.
+      The returned value is a list.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-map #'1+ '(2 4 6))
 &rArr; (3 5 7)
-</pre><pre class="example">(seq-map #'symbol-name [foo bar])
-&rArr; (&quot;foo&quot; &quot;bar&quot;)
-</pre></div>
-</dd></dl>
+</pre>
+        <pre class="example">
+(seq-map #'symbol-name [foo bar])
+&rArr; ("foo" "bar")
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dmapn"></a>Function: <strong>seq-mapn</strong> <em>function &amp;rest sequences</em></dt>
-<dd><p>This function returns the result of applying <var>function</var> to each
-element of <var>sequences</var>.  The arity (see <a href="What-Is-a-Function.html#What-Is-a-Function">sub-arity</a>) of <var>function</var> must match the number of sequences.
-Mapping stops at the end of the shortest sequence, and the returned
-value is a list.
-</p>
-<div class="example">
-<pre class="example">(seq-mapn #'+ '(2 4 6) '(20 40 60))
+  <dl>
+    <dt><a name="index-seq_002dmapn" id=
+    "index-seq_002dmapn"></a>Function: <strong>seq-mapn</strong>
+    <em>function &amp;rest sequences</em></dt>
+
+    <dd>
+      <p>This function returns the result of applying
+      <var>function</var> to each element of <var>sequences</var>.
+      The arity (see <a href=
+      "What-Is-a-Function.html#What-Is-a-Function">sub-arity</a>)
+      of <var>function</var> must match the number of sequences.
+      Mapping stops at the end of the shortest sequence, and the
+      returned value is a list.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-mapn #'+ '(2 4 6) '(20 40 60))
 &rArr; (22 44 66)
-</pre><pre class="example">(seq-mapn #'concat '(&quot;moskito&quot; &quot;bite&quot;) [&quot;bee&quot; &quot;sting&quot;])
-&rArr; (&quot;moskitobee&quot; &quot;bitesting&quot;)
-</pre></div>
-</dd></dl>
+</pre>
+        <pre class="example">
+(seq-mapn #'concat '("moskito" "bite") ["bee" "sting"])
+&rArr; ("moskitobee" "bitesting")
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dfilter"></a>Function: <strong>seq-filter</strong> <em>predicate sequence</em></dt>
-<dd><a name="index-filtering-sequences"></a>
-<p>This function returns a list of all the elements in <var>sequence</var>
-for which <var>predicate</var> returns non-<code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-filter (lambda (elt) (&gt; elt 0)) [1 -1 3 -3 5])
+  <dl>
+    <dt><a name="index-seq_002dfilter" id=
+    "index-seq_002dfilter"></a>Function:
+    <strong>seq-filter</strong> <em>predicate sequence</em></dt>
+
+    <dd>
+      <a name="index-filtering-sequences" id=
+      "index-filtering-sequences"></a>
+
+      <p>This function returns a list of all the elements in
+      <var>sequence</var> for which <var>predicate</var> returns
+      non-<code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-filter (lambda (elt) (&gt; elt 0)) [1 -1 3 -3 5])
 &rArr; (1 3 5)
-</pre><pre class="example">(seq-filter (lambda (elt) (&gt; elt 0)) '(-1 -3 -5))
+</pre>
+        <pre class="example">
+(seq-filter (lambda (elt) (&gt; elt 0)) '(-1 -3 -5))
 &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dremove"></a>Function: <strong>seq-remove</strong> <em>predicate sequence</em></dt>
-<dd><a name="index-removing-from-sequences"></a>
-<p>This function returns a list of all the elements in <var>sequence</var>
-for which <var>predicate</var> returns <code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-remove (lambda (elt) (&gt; elt 0)) [1 -1 3 -3 5])
+  <dl>
+    <dt><a name="index-seq_002dremove" id=
+    "index-seq_002dremove"></a>Function:
+    <strong>seq-remove</strong> <em>predicate sequence</em></dt>
+
+    <dd>
+      <a name="index-removing-from-sequences" id=
+      "index-removing-from-sequences"></a>
+
+      <p>This function returns a list of all the elements in
+      <var>sequence</var> for which <var>predicate</var> returns
+      <code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-remove (lambda (elt) (&gt; elt 0)) [1 -1 3 -3 5])
 &rArr; (-1 -3)
-</pre><pre class="example">(seq-remove (lambda (elt) (&lt; elt 0)) '(-1 -3 -5))
+</pre>
+        <pre class="example">
+(seq-remove (lambda (elt) (&lt; elt 0)) '(-1 -3 -5))
 &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dreduce"></a>Function: <strong>seq-reduce</strong> <em>function sequence initial-value</em></dt>
-<dd><a name="index-reducing-sequences"></a>
-<p>This function returns the result of calling <var>function</var> with
-<var>initial-value</var> and the first element of <var>sequence</var>, then calling
-<var>function</var> with that result and the second element of <var>sequence</var>,
-then with that result and the third element of <var>sequence</var>, etc.
-<var>function</var> should be a function of two arguments.  If
-<var>sequence</var> is empty, this returns <var>initial-value</var> without
-calling <var>function</var>.
-</p>
-<div class="example">
-<pre class="example">(seq-reduce #'+ [1 2 3 4] 0)
+  <dl>
+    <dt><a name="index-seq_002dreduce" id=
+    "index-seq_002dreduce"></a>Function:
+    <strong>seq-reduce</strong> <em>function sequence
+    initial-value</em></dt>
+
+    <dd>
+      <a name="index-reducing-sequences" id=
+      "index-reducing-sequences"></a>
+
+      <p>This function returns the result of calling
+      <var>function</var> with <var>initial-value</var> and the
+      first element of <var>sequence</var>, then calling
+      <var>function</var> with that result and the second element
+      of <var>sequence</var>, then with that result and the third
+      element of <var>sequence</var>, etc. <var>function</var>
+      should be a function of two arguments. If <var>sequence</var>
+      is empty, this returns <var>initial-value</var> without
+      calling <var>function</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-reduce #'+ [1 2 3 4] 0)
 &rArr; 10
-</pre><pre class="example">(seq-reduce #'+ '(1 2 3 4) 5)
+</pre>
+        <pre class="example">
+(seq-reduce #'+ '(1 2 3 4) 5)
 &rArr; 15
-</pre><pre class="example">(seq-reduce #'+ '() 3)
+</pre>
+        <pre class="example">
+(seq-reduce #'+ '() 3)
 &rArr; 3
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dsome"></a>Function: <strong>seq-some</strong> <em>predicate sequence</em></dt>
-<dd><p>This function returns the first non-<code>nil</code> value returned by
-applying <var>predicate</var> to each element of <var>sequence</var> in turn.
-</p>
-<div class="example">
-<pre class="example">(seq-some #'numberp [&quot;abc&quot; 1 nil])
+  <dl>
+    <dt><a name="index-seq_002dsome" id=
+    "index-seq_002dsome"></a>Function: <strong>seq-some</strong>
+    <em>predicate sequence</em></dt>
+
+    <dd>
+      <p>This function returns the first non-<code>nil</code> value
+      returned by applying <var>predicate</var> to each element of
+      <var>sequence</var> in turn.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-some #'numberp ["abc" 1 nil])
 &rArr; t
-</pre><pre class="example">(seq-some #'numberp [&quot;abc&quot; &quot;def&quot;])
+</pre>
+        <pre class="example">
+(seq-some #'numberp ["abc" "def"])
 &rArr; nil
-</pre><pre class="example">(seq-some #'null [&quot;abc&quot; 1 nil])
+</pre>
+        <pre class="example">
+(seq-some #'null ["abc" 1 nil])
 &rArr; t
-</pre><pre class="example">(seq-some #'1+ [2 4 6])
+</pre>
+        <pre class="example">
+(seq-some #'1+ [2 4 6])
 &rArr; 3
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dfind"></a>Function: <strong>seq-find</strong> <em>predicate sequence &amp;optional default</em></dt>
-<dd><p>This function returns the first element in <var>sequence</var> for which
-<var>predicate</var> returns non-<code>nil</code>.  If no element matches
-<var>predicate</var>, the function returns <var>default</var>.
-</p>
-<p>Note that this function has an ambiguity if the found element is
-identical to <var>default</var>, as in that case it cannot be known whether
-an element was found or not.
-</p>
-<div class="example">
-<pre class="example">(seq-find #'numberp [&quot;abc&quot; 1 nil])
+  <dl>
+    <dt><a name="index-seq_002dfind" id=
+    "index-seq_002dfind"></a>Function: <strong>seq-find</strong>
+    <em>predicate sequence &amp;optional default</em></dt>
+
+    <dd>
+      <p>This function returns the first element in
+      <var>sequence</var> for which <var>predicate</var> returns
+      non-<code>nil</code>. If no element matches
+      <var>predicate</var>, the function returns
+      <var>default</var>.</p>
+
+      <p>Note that this function has an ambiguity if the found
+      element is identical to <var>default</var>, as in that case
+      it cannot be known whether an element was found or not.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-find #'numberp ["abc" 1 nil])
 &rArr; 1
-</pre><pre class="example">(seq-find #'numberp [&quot;abc&quot; &quot;def&quot;])
+</pre>
+        <pre class="example">
+(seq-find #'numberp ["abc" "def"])
 &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002devery_002dp"></a>Function: <strong>seq-every-p</strong> <em>predicate sequence</em></dt>
-<dd><p>This function returns non-<code>nil</code> if applying <var>predicate</var>
-to every element of <var>sequence</var> returns non-<code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-every-p #'numberp [2 4 6])
+  <dl>
+    <dt><a name="index-seq_002devery_002dp" id=
+    "index-seq_002devery_002dp"></a>Function:
+    <strong>seq-every-p</strong> <em>predicate sequence</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if applying
+      <var>predicate</var> to every element of <var>sequence</var>
+      returns non-<code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-every-p #'numberp [2 4 6])
 &rArr; t
-</pre><pre class="example">(seq-some #'numberp [2 4 &quot;6&quot;])
+</pre>
+        <pre class="example">
+(seq-some #'numberp [2 4 "6"])
 &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dempty_002dp"></a>Function: <strong>seq-empty-p</strong> <em>sequence</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>sequence</var> is empty.
-</p>
-<div class="example">
-<pre class="example">(seq-empty-p &quot;not empty&quot;)
+  <dl>
+    <dt><a name="index-seq_002dempty_002dp" id=
+    "index-seq_002dempty_002dp"></a>Function:
+    <strong>seq-empty-p</strong> <em>sequence</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>sequence</var> is empty.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-empty-p "not empty")
 &rArr; nil
-</pre><pre class="example">(seq-empty-p &quot;&quot;)
+</pre>
+        <pre class="example">
+(seq-empty-p "")
 &rArr; t
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dcount"></a>Function: <strong>seq-count</strong> <em>predicate sequence</em></dt>
-<dd><p>This function returns the number of elements in <var>sequence</var> for which
-<var>predicate</var> returns non-<code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-count (lambda (elt) (&gt; elt 0)) [-1 2 0 3 -2])
+  <dl>
+    <dt><a name="index-seq_002dcount" id=
+    "index-seq_002dcount"></a>Function: <strong>seq-count</strong>
+    <em>predicate sequence</em></dt>
+
+    <dd>
+      <p>This function returns the number of elements in
+      <var>sequence</var> for which <var>predicate</var> returns
+      non-<code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-count (lambda (elt) (&gt; elt 0)) [-1 2 0 3 -2])
 &rArr; 2
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl><a name="index-sorting-sequences" id=
+  "index-sorting-sequences"></a>
 
-<a name="index-sorting-sequences"></a>
-<dl>
-<dt><a name="index-seq_002dsort"></a>Function: <strong>seq-sort</strong> <em>function sequence</em></dt>
-<dd><p>This function returns a copy of <var>sequence</var> that is sorted
-according to <var>function</var>, a function of two arguments that returns
-non-<code>nil</code> if the first argument should sort before the second.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-seq_002dsort" id=
+    "index-seq_002dsort"></a>Function: <strong>seq-sort</strong>
+    <em>function sequence</em></dt>
 
-<dl>
-<dt><a name="index-seq_002dcontains"></a>Function: <strong>seq-contains</strong> <em>sequence elt &amp;optional function</em></dt>
-<dd><p>This function returns the first element in <var>sequence</var> that is equal to
-<var>elt</var>.  If the optional argument <var>function</var> is non-<code>nil</code>,
-it is a function of two arguments to use instead of the default <code>equal</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-contains '(symbol1 symbol2) 'symbol1)
+    <dd>
+      <p>This function returns a copy of <var>sequence</var> that
+      is sorted according to <var>function</var>, a function of two
+      arguments that returns non-<code>nil</code> if the first
+      argument should sort before the second.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-seq_002dcontains" id=
+    "index-seq_002dcontains"></a>Function:
+    <strong>seq-contains</strong> <em>sequence elt &amp;optional
+    function</em></dt>
+
+    <dd>
+      <p>This function returns the first element in
+      <var>sequence</var> that is equal to <var>elt</var>. If the
+      optional argument <var>function</var> is
+      non-<code>nil</code>, it is a function of two arguments to
+      use instead of the default <code>equal</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-contains '(symbol1 symbol2) 'symbol1)
 &rArr; symbol1
-</pre><pre class="example">(seq-contains '(symbol1 symbol2) 'symbol3)
+</pre>
+        <pre class="example">
+(seq-contains '(symbol1 symbol2) 'symbol3)
 &rArr; nil
-</pre></div>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-</dd></dl>
+  <dl>
+    <dt><a name="index-seq_002dposition" id=
+    "index-seq_002dposition"></a>Function:
+    <strong>seq-position</strong> <em>sequence elt &amp;optional
+    function</em></dt>
 
-<dl>
-<dt><a name="index-seq_002dposition"></a>Function: <strong>seq-position</strong> <em>sequence elt &amp;optional function</em></dt>
-<dd><p>This function returns the index of the first element in
-<var>sequence</var> that is equal to <var>elt</var>.  If the optional argument
-<var>function</var> is non-<code>nil</code>, it is a function of two arguments to
-use instead of the default <code>equal</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-position '(a b c) 'b)
+    <dd>
+      <p>This function returns the index of the first element in
+      <var>sequence</var> that is equal to <var>elt</var>. If the
+      optional argument <var>function</var> is
+      non-<code>nil</code>, it is a function of two arguments to
+      use instead of the default <code>equal</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-position '(a b c) 'b)
 &rArr; 1
-</pre><pre class="example">(seq-position '(a b c) 'd)
+</pre>
+        <pre class="example">
+(seq-position '(a b c) 'd)
 &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-seq_002duniq" id=
+    "index-seq_002duniq"></a>Function: <strong>seq-uniq</strong>
+    <em>sequence &amp;optional function</em></dt>
 
-<dl>
-<dt><a name="index-seq_002duniq"></a>Function: <strong>seq-uniq</strong> <em>sequence &amp;optional function</em></dt>
-<dd><p>This function returns a list of the elements of <var>sequence</var> with
-duplicates removed.  If the optional argument <var>function</var> is non-<code>nil</code>,
-it is a function of two arguments to use instead of the default <code>equal</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-uniq '(1 2 2 1 3))
+    <dd>
+      <p>This function returns a list of the elements of
+      <var>sequence</var> with duplicates removed. If the optional
+      argument <var>function</var> is non-<code>nil</code>, it is a
+      function of two arguments to use instead of the default
+      <code>equal</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-uniq '(1 2 2 1 3))
 &rArr; (1 2 3)
-</pre><pre class="example">(seq-uniq '(1 2 2.0 1.0) #'=)
+</pre>
+        <pre class="example">
+(seq-uniq '(1 2 2.0 1.0) #'=)
 &rArr; [3 4]
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dsubseq"></a>Function: <strong>seq-subseq</strong> <em>sequence start &amp;optional end</em></dt>
-<dd><p>This function returns a subset of <var>sequence</var> from <var>start</var>
-to <var>end</var>, both integers (<var>end</var> defaults to the last element).
-If <var>start</var> or <var>end</var> is negative, it counts from the end of
-<var>sequence</var>.
-</p>
-<div class="example">
-<pre class="example">(seq-subseq '(1 2 3 4 5) 1)
+  <dl>
+    <dt><a name="index-seq_002dsubseq" id=
+    "index-seq_002dsubseq"></a>Function:
+    <strong>seq-subseq</strong> <em>sequence start &amp;optional
+    end</em></dt>
+
+    <dd>
+      <p>This function returns a subset of <var>sequence</var> from
+      <var>start</var> to <var>end</var>, both integers
+      (<var>end</var> defaults to the last element). If
+      <var>start</var> or <var>end</var> is negative, it counts
+      from the end of <var>sequence</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-subseq '(1 2 3 4 5) 1)
 &rArr; (2 3 4 5)
-</pre><pre class="example">(seq-subseq '[1 2 3 4 5] 1 3)
+</pre>
+        <pre class="example">
+(seq-subseq '[1 2 3 4 5] 1 3)
 &rArr; [2 3]
-</pre><pre class="example">(seq-subseq '[1 2 3 4 5] -3 -1)
+</pre>
+        <pre class="example">
+(seq-subseq '[1 2 3 4 5] -3 -1)
 &rArr; [3 4]
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dconcatenate"></a>Function: <strong>seq-concatenate</strong> <em>type &amp;rest sequences</em></dt>
-<dd><p>This function returns a sequence of type <var>type</var> made of the
-concatenation of <var>sequences</var>.  <var>type</var> may be: <code>vector</code>,
-<code>list</code> or <code>string</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-concatenate 'list '(1 2) '(3 4) [5 6])
+  <dl>
+    <dt><a name="index-seq_002dconcatenate" id=
+    "index-seq_002dconcatenate"></a>Function:
+    <strong>seq-concatenate</strong> <em>type &amp;rest
+    sequences</em></dt>
+
+    <dd>
+      <p>This function returns a sequence of type <var>type</var>
+      made of the concatenation of <var>sequences</var>.
+      <var>type</var> may be: <code>vector</code>,
+      <code>list</code> or <code>string</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-concatenate 'list '(1 2) '(3 4) [5 6])
 &rArr; (1 2 3 5 6)
-</pre><pre class="example">(seq-concatenate 'string &quot;Hello &quot; &quot;world&quot;)
-&rArr; &quot;Hello world&quot;
-</pre></div>
-</dd></dl>
+</pre>
+        <pre class="example">
+(seq-concatenate 'string "Hello " "world")
+&rArr; "Hello world"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dmapcat"></a>Function: <strong>seq-mapcat</strong> <em>function sequence &amp;optional type</em></dt>
-<dd><p>This function returns the result of applying <code>seq-concatenate</code>
-to the result of applying <var>function</var> to each element of
-<var>sequence</var>.  The result is a sequence of type <var>type</var>, or a
-list if <var>type</var> is <code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-mapcat #'seq-reverse '((3 2 1) (6 5 4)))
+  <dl>
+    <dt><a name="index-seq_002dmapcat" id=
+    "index-seq_002dmapcat"></a>Function:
+    <strong>seq-mapcat</strong> <em>function sequence &amp;optional
+    type</em></dt>
+
+    <dd>
+      <p>This function returns the result of applying
+      <code>seq-concatenate</code> to the result of applying
+      <var>function</var> to each element of <var>sequence</var>.
+      The result is a sequence of type <var>type</var>, or a list
+      if <var>type</var> is <code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-mapcat #'seq-reverse '((3 2 1) (6 5 4)))
 &rArr; (1 2 3 4 5 6)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dpartition"></a>Function: <strong>seq-partition</strong> <em>sequence n</em></dt>
-<dd><p>This function returns a list of the elements of <var>sequence</var>
-grouped into sub-sequences of length <var>n</var>.  The last sequence may
-contain less elements than <var>n</var>.  <var>n</var> must be an integer.  If
-<var>n</var> is a negative integer or 0, the return value is <code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-partition '(0 1 2 3 4 5 6 7) 3)
+  <dl>
+    <dt><a name="index-seq_002dpartition" id=
+    "index-seq_002dpartition"></a>Function:
+    <strong>seq-partition</strong> <em>sequence n</em></dt>
+
+    <dd>
+      <p>This function returns a list of the elements of
+      <var>sequence</var> grouped into sub-sequences of length
+      <var>n</var>. The last sequence may contain less elements
+      than <var>n</var>. <var>n</var> must be an integer. If
+      <var>n</var> is a negative integer or 0, the return value is
+      <code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-partition '(0 1 2 3 4 5 6 7) 3)
 &rArr; ((0 1 2) (3 4 5) (6 7))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dintersection"></a>Function: <strong>seq-intersection</strong> <em>sequence1 sequence2 &amp;optional function</em></dt>
-<dd><p>This function returns a list of the elements that appear both in
-<var>sequence1</var> and <var>sequence2</var>.  If the optional argument
-<var>function</var> is non-<code>nil</code>, it is a function of two arguments to
-use to compare elements instead of the default <code>equal</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-intersection [2 3 4 5] [1 3 5 6 7])
+  <dl>
+    <dt><a name="index-seq_002dintersection" id=
+    "index-seq_002dintersection"></a>Function:
+    <strong>seq-intersection</strong> <em>sequence1 sequence2
+    &amp;optional function</em></dt>
+
+    <dd>
+      <p>This function returns a list of the elements that appear
+      both in <var>sequence1</var> and <var>sequence2</var>. If the
+      optional argument <var>function</var> is
+      non-<code>nil</code>, it is a function of two arguments to
+      use to compare elements instead of the default
+      <code>equal</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-intersection [2 3 4 5] [1 3 5 6 7])
 &rArr; (3 5)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-seq_002ddifference" id=
+    "index-seq_002ddifference"></a>Function:
+    <strong>seq-difference</strong> <em>sequence1 sequence2
+    &amp;optional function</em></dt>
 
-<dl>
-<dt><a name="index-seq_002ddifference"></a>Function: <strong>seq-difference</strong> <em>sequence1 sequence2 &amp;optional function</em></dt>
-<dd><p>This function returns a list of the elements that appear in
-<var>sequence1</var> but not in <var>sequence2</var>.  If the optional argument
-<var>function</var> is non-<code>nil</code>, it is a function of two arguments to
-use to compare elements instead of the default <code>equal</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-difference '(2 3 4 5) [1 3 5 6 7])
+    <dd>
+      <p>This function returns a list of the elements that appear
+      in <var>sequence1</var> but not in <var>sequence2</var>. If
+      the optional argument <var>function</var> is
+      non-<code>nil</code>, it is a function of two arguments to
+      use to compare elements instead of the default
+      <code>equal</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-difference '(2 3 4 5) [1 3 5 6 7])
 &rArr; (2 4)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dgroup_002dby"></a>Function: <strong>seq-group-by</strong> <em>function sequence</em></dt>
-<dd><p>This function separates the elements of <var>sequence</var> into an alist
-whose keys are the result of applying <var>function</var> to each element
-of <var>sequence</var>.  Keys are compared using <code>equal</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-group-by #'integerp '(1 2.1 3 2 3.2))
+  <dl>
+    <dt><a name="index-seq_002dgroup_002dby" id=
+    "index-seq_002dgroup_002dby"></a>Function:
+    <strong>seq-group-by</strong> <em>function sequence</em></dt>
+
+    <dd>
+      <p>This function separates the elements of
+      <var>sequence</var> into an alist whose keys are the result
+      of applying <var>function</var> to each element of
+      <var>sequence</var>. Keys are compared using
+      <code>equal</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-group-by #'integerp '(1 2.1 3 2 3.2))
 &rArr; ((t 1 3 2) (nil 2.1 3.2))
-</pre><pre class="example">(seq-group-by #'car '((a 1) (b 2) (a 3) (c 4)))
+</pre>
+        <pre class="example">
+(seq-group-by #'car '((a 1) (b 2) (a 3) (c 4)))
 &rArr; ((b (b 2)) (a (a 1) (a 3)) (c (c 4)))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dinto"></a>Function: <strong>seq-into</strong> <em>sequence type</em></dt>
-<dd><p>This function converts the sequence <var>sequence</var> into a sequence
-of type <var>type</var>.  <var>type</var> can be one of the following symbols:
-<code>vector</code>, <code>string</code> or <code>list</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-into [1 2 3] 'list)
+  <dl>
+    <dt><a name="index-seq_002dinto" id=
+    "index-seq_002dinto"></a>Function: <strong>seq-into</strong>
+    <em>sequence type</em></dt>
+
+    <dd>
+      <p>This function converts the sequence <var>sequence</var>
+      into a sequence of type <var>type</var>. <var>type</var> can
+      be one of the following symbols: <code>vector</code>,
+      <code>string</code> or <code>list</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-into [1 2 3] 'list)
 &rArr; (1 2 3)
-</pre><pre class="example">(seq-into nil 'vector)
+</pre>
+        <pre class="example">
+(seq-into nil 'vector)
 &rArr; []
-</pre><pre class="example">(seq-into &quot;hello&quot; 'vector)
+</pre>
+        <pre class="example">
+(seq-into "hello" 'vector)
 &rArr; [104 101 108 108 111]
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dmin"></a>Function: <strong>seq-min</strong> <em>sequence</em></dt>
-<dd><p>This function returns the smallest element of <var>sequence</var>.  The
-elements of <var>sequence</var> must be numbers or markers
-(see <a href="Markers.html#Markers">Markers</a>).
-</p>
-<div class="example">
-<pre class="example">(seq-min [3 1 2])
+  <dl>
+    <dt><a name="index-seq_002dmin" id=
+    "index-seq_002dmin"></a>Function: <strong>seq-min</strong>
+    <em>sequence</em></dt>
+
+    <dd>
+      <p>This function returns the smallest element of
+      <var>sequence</var>. The elements of <var>sequence</var> must
+      be numbers or markers (see <a href=
+      "Markers.html#Markers">Markers</a>).</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-min [3 1 2])
 &rArr; 1
-</pre><pre class="example">(seq-min &quot;Hello&quot;)
+</pre>
+        <pre class="example">
+(seq-min "Hello")
 &rArr; 72
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002dmax"></a>Function: <strong>seq-max</strong> <em>sequence</em></dt>
-<dd><p>This function returns the largest element of <var>sequence</var>.  The
-elements of <var>sequence</var> must be numbers or markers.
-</p>
-<div class="example">
-<pre class="example">(seq-max [1 3 2])
+  <dl>
+    <dt><a name="index-seq_002dmax" id=
+    "index-seq_002dmax"></a>Function: <strong>seq-max</strong>
+    <em>sequence</em></dt>
+
+    <dd>
+      <p>This function returns the largest element of
+      <var>sequence</var>. The elements of <var>sequence</var> must
+      be numbers or markers.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-max [1 3 2])
 &rArr; 3
-</pre><pre class="example">(seq-max &quot;Hello&quot;)
+</pre>
+        <pre class="example">
+(seq-max "Hello")
 &rArr; 111
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-seq_002ddoseq"></a>Macro: <strong>seq-doseq</strong> <em>(var sequence) body&hellip;</em></dt>
-<dd><a name="index-sequence-iteration"></a>
-<p>This macro is like <code>dolist</code> (see <a href="Iteration.html#Iteration">dolist</a>), except
-that <var>sequence</var> can be a list, vector or string.  This is
-primarily useful for side-effects.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-seq_002ddoseq" id=
+    "index-seq_002ddoseq"></a>Macro: <strong>seq-doseq</strong>
+    <em>(var sequence) body&hellip;</em></dt>
 
-<dl>
-<dt><a name="index-seq_002dlet"></a>Macro: <strong>seq-let</strong> <em>arguments sequence body&hellip;</em></dt>
-<dd><a name="index-sequence-destructuring"></a>
-<p>This macro binds the variables defined in <var>arguments</var> to the
-elements of <var>sequence</var>.  <var>arguments</var> can themselves include
-sequences, allowing for nested destructuring.
-</p>
-<p>The <var>arguments</var> sequence can also include the <code>&amp;rest</code> marker
-followed by a variable name to be bound to the rest of
-<code>sequence</code>.
-</p>
-<div class="example">
-<pre class="example">(seq-let [first second] [1 2 3 4]
+    <dd>
+      <a name="index-sequence-iteration" id=
+      "index-sequence-iteration"></a>
+
+      <p>This macro is like <code>dolist</code> (see <a href=
+      "Iteration.html#Iteration">dolist</a>), except that
+      <var>sequence</var> can be a list, vector or string. This is
+      primarily useful for side-effects.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-seq_002dlet" id=
+    "index-seq_002dlet"></a>Macro: <strong>seq-let</strong>
+    <em>arguments sequence body&hellip;</em></dt>
+
+    <dd>
+      <a name="index-sequence-destructuring" id=
+      "index-sequence-destructuring"></a>
+
+      <p>This macro binds the variables defined in
+      <var>arguments</var> to the elements of <var>sequence</var>.
+      <var>arguments</var> can themselves include sequences,
+      allowing for nested destructuring.</p>
+
+      <p>The <var>arguments</var> sequence can also include the
+      <code>&amp;rest</code> marker followed by a variable name to
+      be bound to the rest of <code>sequence</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(seq-let [first second] [1 2 3 4]
   (list first second))
 &rArr; (1 2)
-</pre><pre class="example">(seq-let (_ a _ b) '(1 2 3 4)
+</pre>
+        <pre class="example">
+(seq-let (_ a _ b) '(1 2 3 4)
   (list a b))
 &rArr; (2 4)
-</pre><pre class="example">(seq-let [a [b [c]]] [1 [2 [3]]]
+</pre>
+        <pre class="example">
+(seq-let [a [b [c]]] [1 [2 [3]]]
   (list a b c))
 &rArr; (1 2 3)
-</pre><pre class="example">(seq-let [a b &amp;rest others] [1 2 3 4]
+</pre>
+        <pre class="example">
+(seq-let [a b &amp;rest others] [1 2 3 4]
   others)
-</pre><pre class="example">&rArr; [3 4]
-</pre></div>
-</dd></dl>
+</pre>
+        <pre class="example">
+&rArr; [3 4]
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Arrays.html#Arrays" accesskey="n" rel="next">Arrays</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Arrays.html#Arrays" accesskey="n" rel=
+    "next">Arrays</a>, Up: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

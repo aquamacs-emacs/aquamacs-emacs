@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,130 +19,202 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Standard Regexps</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Standard Regexps">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Standard Regexps">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Searching-and-Matching.html#Searching-and-Matching" rel="up" title="Searching and Matching">
-<link href="Syntax-Tables.html#Syntax-Tables" rel="next" title="Syntax Tables">
-<link href="Search-and-Replace.html#Search-and-Replace" rel="prev" title="Search and Replace">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Standard Regexps</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Standard Regexps" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Standard Regexps" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Searching-and-Matching.html#Searching-and-Matching"
+  rel="up" title="Searching and Matching" />
+  <link href="Syntax-Tables.html#Syntax-Tables" rel="next" title=
+  "Syntax Tables" />
+  <link href="Search-and-Replace.html#Search-and-Replace" rel=
+  "prev" title="Search and Replace" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Standard-Regexps" id="Standard-Regexps"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Search-and-Replace.html#Search-and-Replace" accesskey="p" rel=
+    "prev">Search and Replace</a>, Up: <a href=
+    "Searching-and-Matching.html#Searching-and-Matching" accesskey=
+    "u" rel="up">Searching and Matching</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Standard-Regular-Expressions-Used-in-Editing" id=
+  "Standard-Regular-Expressions-Used-in-Editing"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Standard-Regexps"></a>
-<div class="header">
-<p>
-Previous: <a href="Search-and-Replace.html#Search-and-Replace" accesskey="p" rel="prev">Search and Replace</a>, Up: <a href="Searching-and-Matching.html#Searching-and-Matching" accesskey="u" rel="up">Searching and Matching</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Standard-Regular-Expressions-Used-in-Editing"></a>
-<h3 class="section">33.8 Standard Regular Expressions Used in Editing</h3>
-<a name="index-regexps-used-standardly-in-editing"></a>
-<a name="index-standard-regexps-used-in-editing"></a>
+  <h3 class="section">33.8 Standard Regular Expressions Used in
+  Editing</h3><a name="index-regexps-used-standardly-in-editing"
+  id="index-regexps-used-standardly-in-editing"></a> <a name=
+  "index-standard-regexps-used-in-editing" id=
+  "index-standard-regexps-used-in-editing"></a>
 
-<p>This section describes some variables that hold regular expressions
-used for certain purposes in editing:
-</p>
-<dl>
-<dt><a name="index-page_002ddelimiter"></a>User Option: <strong>page-delimiter</strong></dt>
-<dd><p>This is the regular expression describing line-beginnings that separate
-pages.  The default value is <code>&quot;^\014&quot;</code> (i.e., <code>&quot;^^L&quot;</code> or
-<code>&quot;^\C-l&quot;</code>); this matches a line that starts with a formfeed
-character.
-</p></dd></dl>
+  <p>This section describes some variables that hold regular
+  expressions used for certain purposes in editing:</p>
 
-<p>The following two regular expressions should <em>not</em> assume the
-match always starts at the beginning of a line; they should not use
-&lsquo;<samp>^</samp>&rsquo; to anchor the match.  Most often, the paragraph commands do
-check for a match only at the beginning of a line, which means that
-&lsquo;<samp>^</samp>&rsquo; would be superfluous.  When there is a nonzero left margin,
-they accept matches that start after the left margin.  In that case, a
-&lsquo;<samp>^</samp>&rsquo; would be incorrect.  However, a &lsquo;<samp>^</samp>&rsquo; is harmless in modes
-where a left margin is never used.
-</p>
-<dl>
-<dt><a name="index-paragraph_002dseparate"></a>User Option: <strong>paragraph-separate</strong></dt>
-<dd><p>This is the regular expression for recognizing the beginning of a line
-that separates paragraphs.  (If you change this, you may have to
-change <code>paragraph-start</code> also.)  The default value is
-<code>&quot;[&nbsp;\t\f]*$&quot;</code><!-- /@w -->, which matches a line that consists entirely of
-spaces, tabs, and form feeds (after its left margin).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-page_002ddelimiter" id=
+    "index-page_002ddelimiter"></a>User Option:
+    <strong>page-delimiter</strong></dt>
 
-<dl>
-<dt><a name="index-paragraph_002dstart"></a>User Option: <strong>paragraph-start</strong></dt>
-<dd><p>This is the regular expression for recognizing the beginning of a line
-that starts <em>or</em> separates paragraphs.  The default value is
-<code>&quot;\f\\|[&nbsp;\t]*$&quot;</code><!-- /@w -->, which matches a line containing only
-whitespace or starting with a form feed (after its left margin).
-</p></dd></dl>
+    <dd>
+      <p>This is the regular expression describing line-beginnings
+      that separate pages. The default value is
+      <code>"^\014"</code> (i.e., <code>"^^L"</code> or
+      <code>"^\C-l"</code>); this matches a line that starts with a
+      formfeed character.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-sentence_002dend-1"></a>User Option: <strong>sentence-end</strong></dt>
-<dd><p>If non-<code>nil</code>, the value should be a regular expression describing
-the end of a sentence, including the whitespace following the
-sentence.  (All paragraph boundaries also end sentences, regardless.)
-</p>
-<p>If the value is <code>nil</code>, as it is by default, then the function
-<code>sentence-end</code> constructs the regexp.  That is why you
-should always call the function <code>sentence-end</code> to obtain the
-regexp to be used to recognize the end of a sentence.
-</p></dd></dl>
+  <p>The following two regular expressions should <em>not</em>
+  assume the match always starts at the beginning of a line; they
+  should not use &lsquo;<samp>^</samp>&rsquo; to anchor the match.
+  Most often, the paragraph commands do check for a match only at
+  the beginning of a line, which means that
+  &lsquo;<samp>^</samp>&rsquo; would be superfluous. When there is
+  a nonzero left margin, they accept matches that start after the
+  left margin. In that case, a &lsquo;<samp>^</samp>&rsquo; would
+  be incorrect. However, a &lsquo;<samp>^</samp>&rsquo; is harmless
+  in modes where a left margin is never used.</p>
 
-<dl>
-<dt><a name="index-sentence_002dend"></a>Function: <strong>sentence-end</strong></dt>
-<dd><p>This function returns the value of the variable <code>sentence-end</code>,
-if non-<code>nil</code>.  Otherwise it returns a default value based on the
-values of the variables <code>sentence-end-double-space</code>
-(see <a href="Filling.html#Definition-of-sentence_002dend_002ddouble_002dspace">Definition of sentence-end-double-space</a>),
-<code>sentence-end-without-period</code>, and
-<code>sentence-end-without-space</code>.
-</p></dd></dl>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Search-and-Replace.html#Search-and-Replace" accesskey="p" rel="prev">Search and Replace</a>, Up: <a href="Searching-and-Matching.html#Searching-and-Matching" accesskey="u" rel="up">Searching and Matching</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-paragraph_002dseparate" id=
+    "index-paragraph_002dseparate"></a>User Option:
+    <strong>paragraph-separate</strong></dt>
 
+    <dd>
+      <p>This is the regular expression for recognizing the
+      beginning of a line that separates paragraphs. (If you change
+      this, you may have to change <code>paragraph-start</code>
+      also.) The default value is <code>"[&nbsp;\t\f]*$"</code>
+      <!-- /@w -->, which matches a line that consists entirely of
+      spaces, tabs, and form feeds (after its left margin).</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-paragraph_002dstart" id=
+    "index-paragraph_002dstart"></a>User Option:
+    <strong>paragraph-start</strong></dt>
 
+    <dd>
+      <p>This is the regular expression for recognizing the
+      beginning of a line that starts <em>or</em> separates
+      paragraphs. The default value is
+      <code>"\f\\|[&nbsp;\t]*$"</code><!-- /@w -->, which matches a
+      line containing only whitespace or starting with a form feed
+      (after its left margin).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-sentence_002dend-1" id=
+    "index-sentence_002dend-1"></a>User Option:
+    <strong>sentence-end</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, the value should be a regular
+      expression describing the end of a sentence, including the
+      whitespace following the sentence. (All paragraph boundaries
+      also end sentences, regardless.)</p>
+
+      <p>If the value is <code>nil</code>, as it is by default,
+      then the function <code>sentence-end</code> constructs the
+      regexp. That is why you should always call the function
+      <code>sentence-end</code> to obtain the regexp to be used to
+      recognize the end of a sentence.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-sentence_002dend" id=
+    "index-sentence_002dend"></a>Function:
+    <strong>sentence-end</strong></dt>
+
+    <dd>
+      <p>This function returns the value of the variable
+      <code>sentence-end</code>, if non-<code>nil</code>. Otherwise
+      it returns a default value based on the values of the
+      variables <code>sentence-end-double-space</code> (see
+      <a href="Filling.html#Definition-of-sentence_002dend_002ddouble_002dspace">
+      Definition of sentence-end-double-space</a>),
+      <code>sentence-end-without-period</code>, and
+      <code>sentence-end-without-space</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Search-and-Replace.html#Search-and-Replace" accesskey="p" rel=
+    "prev">Search and Replace</a>, Up: <a href=
+    "Searching-and-Matching.html#Searching-and-Matching" accesskey=
+    "u" rel="up">Searching and Matching</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

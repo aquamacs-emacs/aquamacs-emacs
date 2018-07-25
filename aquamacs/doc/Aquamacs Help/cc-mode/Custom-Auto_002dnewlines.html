@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Custom Auto-newlines - CC Mode Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="CC Mode Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking" title="Custom Filling and Breaking">
-<link rel="next" href="Clean_002dups.html#Clean_002dups" title="Clean-ups">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Custom Auto-newlines - CC Mode Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="CC Mode Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking"
+  title="Custom Filling and Breaking" />
+  <link rel="next" href="Clean_002dups.html#Clean_002dups" title=
+  "Clean-ups" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
@@ -27,8 +36,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,65 +49,91 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Custom-Auto-newlines"></a>
-<a name="Custom-Auto_002dnewlines"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Clean_002dups.html#Clean_002dups">Clean-ups</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking">Custom Filling and Breaking</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Custom-Auto-newlines" id="Custom-Auto-newlines"></a>
+    <a name="Custom-Auto_002dnewlines" id=
+    "Custom-Auto_002dnewlines"></a>
 
-<!-- node-name, next, previous, up -->
-<h2 class="chapter">8 Customizing Auto-newlines</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Clean_002dups.html#Clean_002dups">Clean-ups</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Custom-Filling-and-Breaking.html#Custom-Filling-and-Breaking">Custom
+    Filling and Breaking</a>, Up:&nbsp;<a rel="up" accesskey="u"
+    href="index.html#Top">Top</a></p>
+    <hr />
+  </div><!-- node-name, next, previous, up -->
 
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p>CC Mode determines whether to insert auto-newlines in two basically
-different ways, depending on the character just typed:
+  <h2 class="chapter">8 Customizing Auto-newlines</h2>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
-     <dl>
-<dt>Braces and Colons<dd>CC Mode first determines the syntactic context of the brace or colon
-(see <a href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>), then looks for a corresponding element in
-an alist.  This element specifies where to put newlines - this is any
-combination of before and after the brace or colon.  If no alist
-element is found, newlines are inserted both before and after a brace,
-but none are inserted around a colon.  See <a href="Hanging-Braces.html#Hanging-Braces">Hanging Braces</a> and
-<a href="Hanging-Colons.html#Hanging-Colons">Hanging Colons</a>.
+  <p>CC Mode determines whether to insert auto-newlines in two
+  basically different ways, depending on the character just
+  typed:</p>
 
-     <br><dt>Semicolons and Commas<dd>The variable <code>c-hanging-semi&amp;comma-criteria</code> contains a list of
-functions which determine whether to insert a newline after a newly
-typed semicolon or comma.  See <a href="Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas">Hanging Semicolons and Commas</a>. 
-</dl>
+  <dl>
+    <dt>Braces and Colons</dt>
 
-   <p>The names of these configuration variables contain &lsquo;<samp><span class="samp">hanging</span></samp>&rsquo;
-because they let you <dfn>hang</dfn> the pertinent characters.  A character
-which introduces a C construct is said to <dfn>hang on the right</dfn> when
-it appears at the end of a line after other code, being separated by a
-line break from the construct it introduces, like the opening brace in:
+    <dd>CC Mode first determines the syntactic context of the brace
+    or colon (see <a href=
+    "Syntactic-Symbols.html#Syntactic-Symbols">Syntactic
+    Symbols</a>), then looks for a corresponding element in an
+    alist. This element specifies where to put newlines - this is
+    any combination of before and after the brace or colon. If no
+    alist element is found, newlines are inserted both before and
+    after a brace, but none are inserted around a colon. See
+    <a href="Hanging-Braces.html#Hanging-Braces">Hanging Braces</a>
+    and <a href="Hanging-Colons.html#Hanging-Colons">Hanging
+    Colons</a>.<br /></dd>
 
-<pre class="example">     while (i &lt; MAX) {
+    <dt>Semicolons and Commas</dt>
+
+    <dd>The variable <code>c-hanging-semi&amp;comma-criteria</code>
+    contains a list of functions which determine whether to insert
+    a newline after a newly typed semicolon or comma. See <a href=
+    "Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas">
+    Hanging Semicolons and Commas</a>.</dd>
+  </dl>
+
+  <p>The names of these configuration variables contain
+  &lsquo;<samp><span class="samp">hanging</span></samp>&rsquo;
+  because they let you <dfn>hang</dfn> the pertinent characters. A
+  character which introduces a C construct is said to <dfn>hang on
+  the right</dfn> when it appears at the end of a line after other
+  code, being separated by a line break from the construct it
+  introduces, like the opening brace in:</p>
+  <pre class="example">
+     while (i &lt; MAX) {
          total += entry[i];
          entry [i++] = 0;
      }
 </pre>
-   <p class="noindent">A character <dfn>hangs on the left</dfn> when it appears at the start of
-the line after the construct it closes off, like the above closing
-brace.
 
-   <p>The next chapter, &ldquo;Clean-ups&rdquo;, describes how to configure CC Mode
-to remove these automatically added newlines in certain specific
-circumstances.  See <a href="Clean_002dups.html#Clean_002dups">Clean-ups</a>.
+  <p class="noindent">A character <dfn>hangs on the left</dfn> when
+  it appears at the start of the line after the construct it closes
+  off, like the above closing brace.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Hanging-Braces.html#Hanging-Braces">Hanging Braces</a>
-<li><a accesskey="2" href="Hanging-Colons.html#Hanging-Colons">Hanging Colons</a>
-<li><a accesskey="3" href="Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas">Hanging Semicolons and Commas</a>
-</ul>
+  <p>The next chapter, &ldquo;Clean-ups&rdquo;, describes how to
+  configure CC Mode to remove these automatically added newlines in
+  certain specific circumstances. See <a href=
+  "Clean_002dups.html#Clean_002dups">Clean-ups</a>.</p>
 
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Hanging-Braces.html#Hanging-Braces">Hanging Braces</a></li>
 
+    <li><a accesskey="2" href=
+    "Hanging-Colons.html#Hanging-Colons">Hanging Colons</a></li>
+
+    <li><a accesskey="3" href=
+    "Hanging-Semicolons-and-Commas.html#Hanging-Semicolons-and-Commas">
+    Hanging Semicolons and Commas</a></li>
+  </ul>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+</body>
+</html>

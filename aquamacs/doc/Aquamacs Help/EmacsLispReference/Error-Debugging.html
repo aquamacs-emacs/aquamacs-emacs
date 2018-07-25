@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,177 +19,266 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Error Debugging</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Error Debugging">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Error Debugging">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugger.html#Debugger" rel="up" title="Debugger">
-<link href="Infinite-Loops.html#Infinite-Loops" rel="next" title="Infinite Loops">
-<link href="Debugger.html#Debugger" rel="prev" title="Debugger">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Error Debugging</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Error Debugging" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Error Debugging" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugger.html#Debugger" rel="up" title="Debugger" />
+  <link href="Infinite-Loops.html#Infinite-Loops" rel="next" title=
+  "Infinite Loops" />
+  <link href="Debugger.html#Debugger" rel="prev" title=
+  "Debugger" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Error-Debugging" id="Error-Debugging"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Infinite-Loops.html#Infinite-Loops"
+    accesskey="n" rel="next">Infinite Loops</a>, Up: <a href=
+    "Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Entering-the-Debugger-on-an-Error" id=
+  "Entering-the-Debugger-on-an-Error"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Error-Debugging"></a>
-<div class="header">
-<p>
-Next: <a href="Infinite-Loops.html#Infinite-Loops" accesskey="n" rel="next">Infinite Loops</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Entering-the-Debugger-on-an-Error"></a>
-<h4 class="subsection">17.1.1 Entering the Debugger on an Error</h4>
-<a name="index-error-debugging"></a>
-<a name="index-debugging-errors"></a>
+  <h4 class="subsection">17.1.1 Entering the Debugger on an
+  Error</h4><a name="index-error-debugging" id=
+  "index-error-debugging"></a> <a name="index-debugging-errors" id=
+  "index-debugging-errors"></a>
 
-<p>The most important time to enter the debugger is when a Lisp error
-happens.  This allows you to investigate the immediate causes of the
-error.
-</p>
-<p>However, entry to the debugger is not a normal consequence of an
-error.  Many commands signal Lisp errors when invoked inappropriately,
-and during ordinary editing it would be very inconvenient to enter the
-debugger each time this happens.  So if you want errors to enter the
-debugger, set the variable <code>debug-on-error</code> to non-<code>nil</code>.
-(The command <code>toggle-debug-on-error</code> provides an easy way to do
-this.)
-</p>
-<dl>
-<dt><a name="index-debug_002don_002derror"></a>User Option: <strong>debug-on-error</strong></dt>
-<dd><p>This variable determines whether the debugger is called when an error
-is signaled and not handled.  If <code>debug-on-error</code> is <code>t</code>,
-all kinds of errors call the debugger, except those listed in
-<code>debug-ignored-errors</code> (see below).  If it is <code>nil</code>, none
-call the debugger.
-</p>
-<p>The value can also be a list of error conditions (see <a href="Signaling-Errors.html#Signaling-Errors">Signaling Errors</a>).  Then the debugger is called only for error conditions in
-this list (except those also listed in <code>debug-ignored-errors</code>).
-For example, if you set <code>debug-on-error</code> to the list
-<code>(void-variable)</code>, the debugger is only called for errors about a
-variable that has no value.
-</p>
-<p>Note that <code>eval-expression-debug-on-error</code> overrides this
-variable in some cases; see below.
-</p>
-<p>When this variable is non-<code>nil</code>, Emacs does not create an error
-handler around process filter functions and sentinels.  Therefore,
-errors in these functions also invoke the debugger.  See <a href="Processes.html#Processes">Processes</a>.
-</p></dd></dl>
+  <p>The most important time to enter the debugger is when a Lisp
+  error happens. This allows you to investigate the immediate
+  causes of the error.</p>
 
-<dl>
-<dt><a name="index-debug_002dignored_002derrors"></a>User Option: <strong>debug-ignored-errors</strong></dt>
-<dd><p>This variable specifies errors which should not enter the debugger,
-regardless of the value of <code>debug-on-error</code>.  Its value is a list
-of error condition symbols and/or regular expressions.  If the error
-has any of those condition symbols, or if the error message matches
-any of the regular expressions, then that error does not enter the
-debugger.
-</p>
-<p>The normal value of this variable includes <code>user-error</code>, as well
-as several errors that happen often during editing but rarely result
-from bugs in Lisp programs.  However, &ldquo;rarely&rdquo; is not &ldquo;never&rdquo;; if
-your program fails with an error that matches this list, you may try
-changing this list to debug the error.  The easiest way is usually to
-set <code>debug-ignored-errors</code> to <code>nil</code>.
-</p></dd></dl>
+  <p>However, entry to the debugger is not a normal consequence of
+  an error. Many commands signal Lisp errors when invoked
+  inappropriately, and during ordinary editing it would be very
+  inconvenient to enter the debugger each time this happens. So if
+  you want errors to enter the debugger, set the variable
+  <code>debug-on-error</code> to non-<code>nil</code>. (The command
+  <code>toggle-debug-on-error</code> provides an easy way to do
+  this.)</p>
 
-<dl>
-<dt><a name="index-eval_002dexpression_002ddebug_002don_002derror"></a>User Option: <strong>eval-expression-debug-on-error</strong></dt>
-<dd><p>If this variable has a non-<code>nil</code> value (the default), running the
-command <code>eval-expression</code> causes <code>debug-on-error</code> to be
-temporarily bound to to <code>t</code>.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Lisp-Eval.html#Lisp-Eval">Evaluating
-Emacs-Lisp Expressions</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<p>If <code>eval-expression-debug-on-error</code> is <code>nil</code>, then the value
-of <code>debug-on-error</code> is not changed during <code>eval-expression</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-debug_002don_002derror" id=
+    "index-debug_002don_002derror"></a>User Option:
+    <strong>debug-on-error</strong></dt>
 
-<dl>
-<dt><a name="index-debug_002don_002dsignal"></a>User Option: <strong>debug-on-signal</strong></dt>
-<dd><p>Normally, errors caught by <code>condition-case</code> never invoke the
-debugger.  The <code>condition-case</code> gets a chance to handle the error
-before the debugger gets a chance.
-</p>
-<p>If you change <code>debug-on-signal</code> to a non-<code>nil</code> value, the
-debugger gets the first chance at every error, regardless of the
-presence of <code>condition-case</code>.  (To invoke the debugger, the error
-must still fulfill the criteria specified by <code>debug-on-error</code> and
-<code>debug-ignored-errors</code>.)
-</p>
-<p><strong>Warning:</strong> Setting this variable to non-<code>nil</code> may have
-annoying effects.  Various parts of Emacs catch errors in the normal
-course of affairs, and you may not even realize that errors happen
-there.  If you need to debug code wrapped in <code>condition-case</code>,
-consider using <code>condition-case-unless-debug</code> (see <a href="Handling-Errors.html#Handling-Errors">Handling Errors</a>).
-</p></dd></dl>
+    <dd>
+      <p>This variable determines whether the debugger is called
+      when an error is signaled and not handled. If
+      <code>debug-on-error</code> is <code>t</code>, all kinds of
+      errors call the debugger, except those listed in
+      <code>debug-ignored-errors</code> (see below). If it is
+      <code>nil</code>, none call the debugger.</p>
 
-<dl>
-<dt><a name="index-debug_002don_002devent"></a>User Option: <strong>debug-on-event</strong></dt>
-<dd><p>If you set <code>debug-on-event</code> to a special event (see <a href="Special-Events.html#Special-Events">Special Events</a>), Emacs will try to enter the debugger as soon as it receives
-this event, bypassing <code>special-event-map</code>.  At present, the only
-supported values correspond to the signals <code>SIGUSR1</code> and
-<code>SIGUSR2</code> (this is the default).  This can be helpful when
-<code>inhibit-quit</code> is set and Emacs is not otherwise responding.
-</p></dd></dl>
+      <p>The value can also be a list of error conditions (see
+      <a href="Signaling-Errors.html#Signaling-Errors">Signaling
+      Errors</a>). Then the debugger is called only for error
+      conditions in this list (except those also listed in
+      <code>debug-ignored-errors</code>). For example, if you set
+      <code>debug-on-error</code> to the list
+      <code>(void-variable)</code>, the debugger is only called for
+      errors about a variable that has no value.</p>
 
-<a name="index-message_002c-finding-what-causes-a-particular-message"></a>
-<dl>
-<dt><a name="index-debug_002don_002dmessage"></a>Variable: <strong>debug-on-message</strong></dt>
-<dd><p>If you set <code>debug-on-message</code> to a regular expression,
-Emacs will enter the debugger if it displays a matching message in the
-echo area.  For example, this can be useful when trying to find the
-cause of a particular message.
-</p></dd></dl>
+      <p>Note that <code>eval-expression-debug-on-error</code>
+      overrides this variable in some cases; see below.</p>
 
-<p>To debug an error that happens during loading of the init
-file, use the option &lsquo;<samp>--debug-init</samp>&rsquo;.  This binds
-<code>debug-on-error</code> to <code>t</code> while loading the init file, and
-bypasses the <code>condition-case</code> which normally catches errors in the
-init file.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Infinite-Loops.html#Infinite-Loops" accesskey="n" rel="next">Infinite Loops</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>When this variable is non-<code>nil</code>, Emacs does not
+      create an error handler around process filter functions and
+      sentinels. Therefore, errors in these functions also invoke
+      the debugger. See <a href=
+      "Processes.html#Processes">Processes</a>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-debug_002dignored_002derrors" id=
+    "index-debug_002dignored_002derrors"></a>User Option:
+    <strong>debug-ignored-errors</strong></dt>
 
+    <dd>
+      <p>This variable specifies errors which should not enter the
+      debugger, regardless of the value of
+      <code>debug-on-error</code>. Its value is a list of error
+      condition symbols and/or regular expressions. If the error
+      has any of those condition symbols, or if the error message
+      matches any of the regular expressions, then that error does
+      not enter the debugger.</p>
 
+      <p>The normal value of this variable includes
+      <code>user-error</code>, as well as several errors that
+      happen often during editing but rarely result from bugs in
+      Lisp programs. However, &ldquo;rarely&rdquo; is not
+      &ldquo;never&rdquo;; if your program fails with an error that
+      matches this list, you may try changing this list to debug
+      the error. The easiest way is usually to set
+      <code>debug-ignored-errors</code> to <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-eval_002dexpression_002ddebug_002don_002derror" id=
+    "index-eval_002dexpression_002ddebug_002don_002derror"></a>User
+    Option: <strong>eval-expression-debug-on-error</strong></dt>
+
+    <dd>
+      <p>If this variable has a non-<code>nil</code> value (the
+      default), running the command <code>eval-expression</code>
+      causes <code>debug-on-error</code> to be temporarily bound to
+      to <code>t</code>. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Lisp-Eval.html#Lisp-Eval">
+      Evaluating Emacs-Lisp Expressions</a> in <cite>The GNU Emacs
+      Manual</cite>.</p>
+
+      <p>If <code>eval-expression-debug-on-error</code> is
+      <code>nil</code>, then the value of
+      <code>debug-on-error</code> is not changed during
+      <code>eval-expression</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-debug_002don_002dsignal" id=
+    "index-debug_002don_002dsignal"></a>User Option:
+    <strong>debug-on-signal</strong></dt>
+
+    <dd>
+      <p>Normally, errors caught by <code>condition-case</code>
+      never invoke the debugger. The <code>condition-case</code>
+      gets a chance to handle the error before the debugger gets a
+      chance.</p>
+
+      <p>If you change <code>debug-on-signal</code> to a
+      non-<code>nil</code> value, the debugger gets the first
+      chance at every error, regardless of the presence of
+      <code>condition-case</code>. (To invoke the debugger, the
+      error must still fulfill the criteria specified by
+      <code>debug-on-error</code> and
+      <code>debug-ignored-errors</code>.)</p>
+
+      <p><strong>Warning:</strong> Setting this variable to
+      non-<code>nil</code> may have annoying effects. Various parts
+      of Emacs catch errors in the normal course of affairs, and
+      you may not even realize that errors happen there. If you
+      need to debug code wrapped in <code>condition-case</code>,
+      consider using <code>condition-case-unless-debug</code> (see
+      <a href="Handling-Errors.html#Handling-Errors">Handling
+      Errors</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-debug_002don_002devent" id=
+    "index-debug_002don_002devent"></a>User Option:
+    <strong>debug-on-event</strong></dt>
+
+    <dd>
+      <p>If you set <code>debug-on-event</code> to a special event
+      (see <a href="Special-Events.html#Special-Events">Special
+      Events</a>), Emacs will try to enter the debugger as soon as
+      it receives this event, bypassing
+      <code>special-event-map</code>. At present, the only
+      supported values correspond to the signals
+      <code>SIGUSR1</code> and <code>SIGUSR2</code> (this is the
+      default). This can be helpful when <code>inhibit-quit</code>
+      is set and Emacs is not otherwise responding.</p>
+    </dd>
+  </dl><a name=
+  "index-message_002c-finding-what-causes-a-particular-message" id=
+  "index-message_002c-finding-what-causes-a-particular-message"></a>
+
+  <dl>
+    <dt><a name="index-debug_002don_002dmessage" id=
+    "index-debug_002don_002dmessage"></a>Variable:
+    <strong>debug-on-message</strong></dt>
+
+    <dd>
+      <p>If you set <code>debug-on-message</code> to a regular
+      expression, Emacs will enter the debugger if it displays a
+      matching message in the echo area. For example, this can be
+      useful when trying to find the cause of a particular
+      message.</p>
+    </dd>
+  </dl>
+
+  <p>To debug an error that happens during loading of the init
+  file, use the option &lsquo;<samp>--debug-init</samp>&rsquo;.
+  This binds <code>debug-on-error</code> to <code>t</code> while
+  loading the init file, and bypasses the
+  <code>condition-case</code> which normally catches errors in the
+  init file.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Infinite-Loops.html#Infinite-Loops"
+    accesskey="n" rel="next">Infinite Loops</a>, Up: <a href=
+    "Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

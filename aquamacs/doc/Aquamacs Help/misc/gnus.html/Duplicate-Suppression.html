@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,143 +14,204 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Duplicate Suppression</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Duplicate Suppression">
-<meta name="keywords" content="Gnus Manual: Duplicate Suppression">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Security.html#Security" rel="next" title="Security">
-<link href="Crosspost-Handling.html#Crosspost-Handling" rel="prev" title="Crosspost Handling">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Duplicate Suppression</title>
+  <meta name="description" content=
+  "Gnus Manual: Duplicate Suppression" />
+  <meta name="keywords" content=
+  "Gnus Manual: Duplicate Suppression" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Security.html#Security" rel="next" title=
+  "Security" />
+  <link href="Crosspost-Handling.html#Crosspost-Handling" rel=
+  "prev" title="Crosspost Handling" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Duplicate-Suppression"></a>
-<div class="header">
-<p>
-Next: <a href="Security.html#Security" accesskey="n" rel="next">Security</a>, Previous: <a href="Crosspost-Handling.html#Crosspost-Handling" accesskey="p" rel="prev">Crosspost Handling</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Duplicate-Suppression-1"></a>
-<h3 class="section">3.30 Duplicate Suppression</h3>
+<body lang="en" xml:lang="en">
+  <a name="Duplicate-Suppression" id="Duplicate-Suppression"></a>
 
-<p>By default, Gnus tries to make sure that you don&rsquo;t have to read the same
-article more than once by utilizing the crossposting mechanism
-(see <a href="Crosspost-Handling.html#Crosspost-Handling">Crosspost Handling</a>).  However, that simple and efficient
-approach may not work satisfactory for some users for various
-reasons.
-</p>
-<ol>
-<li> The <acronym>NNTP</acronym> server may fail to generate the <code>Xref</code> header.  This
-is evil and not very common.
+  <div class="header">
+    <p>Next: <a href="Security.html#Security" accesskey="n" rel=
+    "next">Security</a>, Previous: <a href=
+    "Crosspost-Handling.html#Crosspost-Handling" accesskey="p" rel=
+    "prev">Crosspost Handling</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Duplicate-Suppression-1" id=
+  "Duplicate-Suppression-1"></a>
 
-</li><li> The <acronym>NNTP</acronym> server may fail to include the <code>Xref</code> header in the
-<samp>.overview</samp> data bases.  This is evil and all too common, alas.
+  <h3 class="section">3.30 Duplicate Suppression</h3>
 
-</li><li> You may be reading the same group (or several related groups) from
-different <acronym>NNTP</acronym> servers.
+  <p>By default, Gnus tries to make sure that you don&rsquo;t have
+  to read the same article more than once by utilizing the
+  crossposting mechanism (see <a href=
+  "Crosspost-Handling.html#Crosspost-Handling">Crosspost
+  Handling</a>). However, that simple and efficient approach may
+  not work satisfactory for some users for various reasons.</p>
 
-</li><li> You may be getting mail that duplicates articles posted to groups.
-</li></ol>
+  <ol>
+    <li>The <acronym>NNTP</acronym> server may fail to generate the
+    <code>Xref</code> header. This is evil and not very
+    common.</li>
 
-<p>I&rsquo;m sure there are other situations where <code>Xref</code> handling fails as
-well, but these four are the most common situations.
-</p>
-<p>If, and only if, <code>Xref</code> handling fails for you, then you may
-consider switching on <em>duplicate suppression</em>.  If you do so, Gnus
-will remember the <code>Message-ID</code>s of all articles you have read or
-otherwise marked as read, and then, as if by magic, mark them as read
-all subsequent times you see them&mdash;in <em>all</em> groups.  Using this
-mechanism is quite likely to be somewhat inefficient, but not overly
-so.  It&rsquo;s certainly preferable to reading the same articles more than
-once.
-</p>
-<p>Duplicate suppression is not a very subtle instrument.  It&rsquo;s more like a
-sledge hammer than anything else.  It works in a very simple
-fashion&mdash;if you have marked an article as read, it adds this Message-ID
-to a cache.  The next time it sees this Message-ID, it will mark the
-article as read with the &lsquo;<samp>M</samp>&rsquo; mark.  It doesn&rsquo;t care what group it
-saw the article in.
-</p>
-<dl compact="compact">
-<dt><code>gnus-suppress-duplicates</code></dt>
-<dd><a name="index-gnus_002dsuppress_002dduplicates"></a>
-<p>If non-<code>nil</code>, suppress duplicates.
-</p>
-</dd>
-<dt><code>gnus-save-duplicate-list</code></dt>
-<dd><a name="index-gnus_002dsave_002dduplicate_002dlist"></a>
-<p>If non-<code>nil</code>, save the list of duplicates to a file.  This will
-make startup and shutdown take longer, so the default is <code>nil</code>.
-However, this means that only duplicate articles read in a single Gnus
-session are suppressed.
-</p>
-</dd>
-<dt><code>gnus-duplicate-list-length</code></dt>
-<dd><a name="index-gnus_002dduplicate_002dlist_002dlength"></a>
-<p>This variable says how many <code>Message-ID</code>s to keep in the duplicate
-suppression list.  The default is 10000.
-</p>
-</dd>
-<dt><code>gnus-duplicate-file</code></dt>
-<dd><a name="index-gnus_002dduplicate_002dfile"></a>
-<p>The name of the file to store the duplicate suppression list in.  The
-default is <samp>~/News/suppression</samp>.
-</p></dd>
-</dl>
+    <li>The <acronym>NNTP</acronym> server may fail to include the
+    <code>Xref</code> header in the <samp>.overview</samp> data
+    bases. This is evil and all too common, alas.</li>
 
-<p>If you have a tendency to stop and start Gnus often, setting
-<code>gnus-save-duplicate-list</code> to <code>t</code> is probably a good idea.  If
-you leave Gnus running for weeks on end, you may have it <code>nil</code>.  On
-the other hand, saving the list makes startup and shutdown much slower,
-so that means that if you stop and start Gnus often, you should set
-<code>gnus-save-duplicate-list</code> to <code>nil</code>.  Uhm.  I&rsquo;ll leave this up
-to you to figure out, I think.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Security.html#Security" accesskey="n" rel="next">Security</a>, Previous: <a href="Crosspost-Handling.html#Crosspost-Handling" accesskey="p" rel="prev">Crosspost Handling</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>You may be reading the same group (or several related
+    groups) from different <acronym>NNTP</acronym> servers.</li>
 
+    <li>You may be getting mail that duplicates articles posted to
+    groups.</li>
+  </ol>
 
+  <p>I&rsquo;m sure there are other situations where
+  <code>Xref</code> handling fails as well, but these four are the
+  most common situations.</p>
 
+  <p>If, and only if, <code>Xref</code> handling fails for you,
+  then you may consider switching on <em>duplicate
+  suppression</em>. If you do so, Gnus will remember the
+  <code>Message-ID</code>s of all articles you have read or
+  otherwise marked as read, and then, as if by magic, mark them as
+  read all subsequent times you see them&mdash;in <em>all</em>
+  groups. Using this mechanism is quite likely to be somewhat
+  inefficient, but not overly so. It&rsquo;s certainly preferable
+  to reading the same articles more than once.</p>
+
+  <p>Duplicate suppression is not a very subtle instrument.
+  It&rsquo;s more like a sledge hammer than anything else. It works
+  in a very simple fashion&mdash;if you have marked an article as
+  read, it adds this Message-ID to a cache. The next time it sees
+  this Message-ID, it will mark the article as read with the
+  &lsquo;<samp>M</samp>&rsquo; mark. It doesn&rsquo;t care what
+  group it saw the article in.</p>
+
+  <dl compact="compact">
+    <dt><code>gnus-suppress-duplicates</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dsuppress_002dduplicates" id=
+      "index-gnus_002dsuppress_002dduplicates"></a>
+
+      <p>If non-<code>nil</code>, suppress duplicates.</p>
+    </dd>
+
+    <dt><code>gnus-save-duplicate-list</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dsave_002dduplicate_002dlist" id=
+      "index-gnus_002dsave_002dduplicate_002dlist"></a>
+
+      <p>If non-<code>nil</code>, save the list of duplicates to a
+      file. This will make startup and shutdown take longer, so the
+      default is <code>nil</code>. However, this means that only
+      duplicate articles read in a single Gnus session are
+      suppressed.</p>
+    </dd>
+
+    <dt><code>gnus-duplicate-list-length</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dduplicate_002dlist_002dlength" id=
+      "index-gnus_002dduplicate_002dlist_002dlength"></a>
+
+      <p>This variable says how many <code>Message-ID</code>s to
+      keep in the duplicate suppression list. The default is
+      10000.</p>
+    </dd>
+
+    <dt><code>gnus-duplicate-file</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dduplicate_002dfile" id=
+      "index-gnus_002dduplicate_002dfile"></a>
+
+      <p>The name of the file to store the duplicate suppression
+      list in. The default is <samp>~/News/suppression</samp>.</p>
+    </dd>
+  </dl>
+
+  <p>If you have a tendency to stop and start Gnus often, setting
+  <code>gnus-save-duplicate-list</code> to <code>t</code> is
+  probably a good idea. If you leave Gnus running for weeks on end,
+  you may have it <code>nil</code>. On the other hand, saving the
+  list makes startup and shutdown much slower, so that means that
+  if you stop and start Gnus often, you should set
+  <code>gnus-save-duplicate-list</code> to <code>nil</code>. Uhm.
+  I&rsquo;ll leave this up to you to figure out, I think.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Security.html#Security" accesskey="n" rel=
+    "next">Security</a>, Previous: <a href=
+    "Crosspost-Handling.html#Crosspost-Handling" accesskey="p" rel=
+    "prev">Crosspost Handling</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

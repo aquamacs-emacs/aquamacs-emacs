@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Selecting a Server - Emacs Unified Directory Client (EUDC) Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Emacs Unified Directory Client (EUDC) Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Querying-Servers.html#Querying-Servers" title="Querying Servers">
-<link rel="prev" href="Querying-Servers.html#Querying-Servers" title="Querying Servers">
-<link rel="next" href="Return-Attributes.html#Return-Attributes" title="Return Attributes">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Selecting a Server - Emacs Unified Directory Client (EUDC)
+  Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Emacs Unified Directory Client (EUDC) Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Querying-Servers.html#Querying-Servers"
+  title="Querying Servers" />
+  <link rel="prev" href="Querying-Servers.html#Querying-Servers"
+  title="Querying Servers" />
+  <link rel="next" href="Return-Attributes.html#Return-Attributes"
+  title="Return Attributes" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents EUDC v1.30b.
 
 EUDC is the Emacs Unified Directory Client, a common interface to
@@ -31,8 +42,10 @@ Copyright (C) 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,58 +55,87 @@ Copyright (C) 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Selecting-a-Server"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Return-Attributes.html#Return-Attributes">Return Attributes</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Querying-Servers.html#Querying-Servers">Querying Servers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Querying-Servers.html#Querying-Servers">Querying Servers</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Selecting-a-Server" id="Selecting-a-Server"></a>
 
-<h4 class="subsection">3.1.1 Selecting a Server</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Return-Attributes.html#Return-Attributes">Return
+    Attributes</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Querying-Servers.html#Querying-Servers">Querying
+    Servers</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Querying-Servers.html#Querying-Servers">Querying
+    Servers</a></p>
+    <hr />
+  </div>
 
-<p>Before doing any query you will need to set the directory server.  You
-need to specify the name of the host machine running the server software
-and the protocol to use. If you do not set the server in any fashion,
-EUDC will ask you for one when you make your first query.
+  <h4 class="subsection">3.1.1 Selecting a Server</h4>
 
-   <p>You can set the server by selecting one from your hotlist of servers
-(see <a href="The-Server-Hotlist.html#The-Server-Hotlist">The Server Hotlist</a>) available in the &lsquo;<samp><span class="samp">Server</span></samp>&rsquo; submenu or
-by selecting &lsquo;<samp><span class="samp">New Server</span></samp>&rsquo; in that same menu.
+  <p>Before doing any query you will need to set the directory
+  server. You need to specify the name of the host machine running
+  the server software and the protocol to use. If you do not set
+  the server in any fashion, EUDC will ask you for one when you
+  make your first query.</p>
 
-   <p>LDAP servers generally require some configuration before you can perform
-queries on them.  In particular, the <dfn>search base</dfn> must be
-configured.  If the server you select has no configured search base then
-EUDC will propose you to configure it at this point.  A customization
-buffer will be displayed where you can edit the search base and other
-parameters for the server.
+  <p>You can set the server by selecting one from your hotlist of
+  servers (see <a href=
+  "The-Server-Hotlist.html#The-Server-Hotlist">The Server
+  Hotlist</a>) available in the &lsquo;<samp><span class=
+  "samp">Server</span></samp>&rsquo; submenu or by selecting
+  &lsquo;<samp><span class="samp">New Server</span></samp>&rsquo;
+  in that same menu.</p>
 
-<div class="defun">
-&mdash; Variable: <b>eudc-server</b><var><a name="index-eudc_002dserver-1"></a></var><br>
-<blockquote><p>The name or IP address of the remote directory server. A TCP port number
-may be specified by appending a colon and a number to the name of the
-server. You will not need this unless your server runs on a port other
-than the default (which depends on the protocol). 
-If the directory server resides on your own computer (which is the case
-if you use the BBDB back end) then `localhost' is a reasonable value but
-it will be ignored anyway. 
-</p></blockquote></div>
+  <p>LDAP servers generally require some configuration before you
+  can perform queries on them. In particular, the <dfn>search
+  base</dfn> must be configured. If the server you select has no
+  configured search base then EUDC will propose you to configure it
+  at this point. A customization buffer will be displayed where you
+  can edit the search base and other parameters for the server.</p>
 
-<div class="defun">
-&mdash; Variable: <b>eudc-protocol</b><var><a name="index-eudc_002dprotocol-2"></a></var><br>
-<blockquote><p>The directory protocol to use to query the server.  Currently supported
-protocols in this version of EUDC are <code>ph</code>, <code>ldap</code> and <code>bbdb</code>. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Variable: <b>eudc-server</b><var><a name=
+    "index-eudc_002dserver-1" id=
+    "index-eudc_002dserver-1"></a></var><br />
 
-<div class="defun">
-&mdash; Command: <b>eudc-set-server</b><var><a name="index-eudc_002dset_002dserver-3"></a></var><br>
-<blockquote><p>This command accessible from &lsquo;<samp><span class="samp">New Server</span></samp>&rsquo; submenu lets you specify a
-new directory server and protocol. 
-</p></blockquote></div>
+    <blockquote>
+      <p>The name or IP address of the remote directory server. A
+      TCP port number may be specified by appending a colon and a
+      number to the name of the server. You will not need this
+      unless your server runs on a port other than the default
+      (which depends on the protocol). If the directory server
+      resides on your own computer (which is the case if you use
+      the BBDB back end) then `localhost' is a reasonable value but
+      it will be ignored anyway.</p>
+    </blockquote>
+  </div>
 
-   </body></html>
+  <div class="defun">
+    &mdash; Variable: <b>eudc-protocol</b><var><a name=
+    "index-eudc_002dprotocol-2" id=
+    "index-eudc_002dprotocol-2"></a></var><br />
 
+    <blockquote>
+      <p>The directory protocol to use to query the server.
+      Currently supported protocols in this version of EUDC are
+      <code>ph</code>, <code>ldap</code> and <code>bbdb</code>.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Command: <b>eudc-set-server</b><var><a name=
+    "index-eudc_002dset_002dserver-3" id=
+    "index-eudc_002dset_002dserver-3"></a></var><br />
+
+    <blockquote>
+      <p>This command accessible from &lsquo;<samp><span class=
+      "samp">New Server</span></samp>&rsquo; submenu lets you
+      specify a new directory server and protocol.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

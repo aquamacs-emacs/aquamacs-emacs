@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,147 +19,234 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Advising Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Advising Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Advising Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Core-Advising-Primitives.html#Core-Advising-Primitives" rel="next" title="Core Advising Primitives">
-<link href="Closures.html#Closures" rel="prev" title="Closures">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Advising
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Advising Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Advising Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href=
+  "Core-Advising-Primitives.html#Core-Advising-Primitives" rel=
+  "next" title="Core Advising Primitives" />
+  <link href="Closures.html#Closures" rel="prev" title=
+  "Closures" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Advising-Functions" id="Advising-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Obsolete-Functions.html#Obsolete-Functions"
+    accesskey="n" rel="next">Obsolete Functions</a>, Previous:
+    <a href="Closures.html#Closures" accesskey="p" rel=
+    "prev">Closures</a>, Up: <a href="Functions.html#Functions"
+    accesskey="u" rel="up">Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Advising-Emacs-Lisp-Functions" id=
+  "Advising-Emacs-Lisp-Functions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Advising-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Obsolete-Functions.html#Obsolete-Functions" accesskey="n" rel="next">Obsolete Functions</a>, Previous: <a href="Closures.html#Closures" accesskey="p" rel="prev">Closures</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Advising-Emacs-Lisp-Functions"></a>
-<h3 class="section">12.11 Advising Emacs Lisp Functions</h3>
-<a name="index-advising-functions"></a>
-<a name="index-piece-of-advice"></a>
+  <h3 class="section">12.11 Advising Emacs Lisp
+  Functions</h3><a name="index-advising-functions" id=
+  "index-advising-functions"></a> <a name="index-piece-of-advice"
+  id="index-piece-of-advice"></a>
 
-<p>When you need to modify a function defined in another library, or when you need
-to modify a hook like <code><var>foo</var>-function</code>, a process filter, or basically
-any variable or object field which holds a function value, you can use the
-appropriate setter function, such as <code>fset</code> or <code>defun</code> for named
-functions, <code>setq</code> for hook variables, or <code>set-process-filter</code> for
-process filters, but those are often too blunt, completely throwing away the
-previous value.
-</p>
-<p>The <em>advice</em> feature lets you add to the existing definition of
-a function, by <em>advising the function</em>.  This is a cleaner method
-than redefining the whole function.
-</p>
-<p>Emacs&rsquo;s advice system provides two sets of primitives for that: the core set,
-for function values held in variables and object fields (with the corresponding
-primitives being <code>add-function</code> and <code>remove-function</code>) and another
-set layered on top of it for named functions (with the main primitives being
-<code>advice-add</code> and <code>advice-remove</code>).
-</p>
-<p>For example, in order to trace the calls to the process filter of a process
-<var>proc</var>, you could use:
-</p>
-<div class="example">
-<pre class="example">(defun my-tracing-function (proc string)
-  (message &quot;Proc %S received %S&quot; proc string))
+  <p>When you need to modify a function defined in another library,
+  or when you need to modify a hook like
+  <code><var>foo</var>-function</code>, a process filter, or
+  basically any variable or object field which holds a function
+  value, you can use the appropriate setter function, such as
+  <code>fset</code> or <code>defun</code> for named functions,
+  <code>setq</code> for hook variables, or
+  <code>set-process-filter</code> for process filters, but those
+  are often too blunt, completely throwing away the previous
+  value.</p>
+
+  <p>The <em>advice</em> feature lets you add to the existing
+  definition of a function, by <em>advising the function</em>. This
+  is a cleaner method than redefining the whole function.</p>
+
+  <p>Emacs&rsquo;s advice system provides two sets of primitives
+  for that: the core set, for function values held in variables and
+  object fields (with the corresponding primitives being
+  <code>add-function</code> and <code>remove-function</code>) and
+  another set layered on top of it for named functions (with the
+  main primitives being <code>advice-add</code> and
+  <code>advice-remove</code>).</p>
+
+  <p>For example, in order to trace the calls to the process filter
+  of a process <var>proc</var>, you could use:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun my-tracing-function (proc string)
+  (message "Proc %S received %S" proc string))
 
 (add-function :before (process-filter <var>proc</var>) #'my-tracing-function)
-</pre></div>
+</pre>
+  </div>
 
-<p>This will cause the process&rsquo;s output to be passed to <code>my-tracing-function</code>
-before being passed to the original process filter.  <code>my-tracing-function</code>
-receives the same arguments as the original function.  When you&rsquo;re done with
-it, you can revert to the untraced behavior with:
-</p>
-<div class="example">
-<pre class="example">(remove-function (process-filter <var>proc</var>) #'my-tracing-function)
-</pre></div>
+  <p>This will cause the process&rsquo;s output to be passed to
+  <code>my-tracing-function</code> before being passed to the
+  original process filter. <code>my-tracing-function</code>
+  receives the same arguments as the original function. When
+  you&rsquo;re done with it, you can revert to the untraced
+  behavior with:</p>
 
-<p>Similarly, if you want to trace the execution of the function named
-<code>display-buffer</code>, you could use:
-</p>
-<div class="example">
-<pre class="example">(defun his-tracing-function (orig-fun &amp;rest args)
-  (message &quot;display-buffer called with args %S&quot; args)
+  <div class="example">
+    <pre class="example">
+(remove-function (process-filter <var>proc</var>) #'my-tracing-function)
+</pre>
+  </div>
+
+  <p>Similarly, if you want to trace the execution of the function
+  named <code>display-buffer</code>, you could use:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun his-tracing-function (orig-fun &amp;rest args)
+  (message "display-buffer called with args %S" args)
   (let ((res (apply orig-fun args)))
-    (message &quot;display-buffer returned %S&quot; res)
+    (message "display-buffer returned %S" res)
     res))
 
 (advice-add 'display-buffer :around #'his-tracing-function)
-</pre></div>
+</pre>
+  </div>
 
-<p>Here, <code>his-tracing-function</code> is called instead of the original function
-and receives the original function (additionally to that function&rsquo;s arguments)
-as argument, so it can call it if and when it needs to.
-When you&rsquo;re tired of seeing this output, you can revert to the untraced
-behavior with:
-</p>
-<div class="example">
-<pre class="example">(advice-remove 'display-buffer #'his-tracing-function)
-</pre></div>
+  <p>Here, <code>his-tracing-function</code> is called instead of
+  the original function and receives the original function
+  (additionally to that function&rsquo;s arguments) as argument, so
+  it can call it if and when it needs to. When you&rsquo;re tired
+  of seeing this output, you can revert to the untraced behavior
+  with:</p>
 
-<p>The arguments <code>:before</code> and <code>:around</code> used in the above examples
-specify how the two functions are composed, since there are many different
-ways to do it.  The added function is also called a piece of <em>advice</em>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Core-Advising-Primitives.html#Core-Advising-Primitives" accesskey="1">Core Advising Primitives</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Primitives to manipulate advice.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Advising-Named-Functions.html#Advising-Named-Functions" accesskey="2">Advising Named Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Advising named functions.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Advice-combinators.html#Advice-combinators" accesskey="3">Advice combinators</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Ways to compose advice.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Porting-old-advice.html#Porting-old-advice" accesskey="4">Porting old advice</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Adapting code using the old defadvice.
-</td></tr>
-</table>
+  <div class="example">
+    <pre class="example">
+(advice-remove 'display-buffer #'his-tracing-function)
+</pre>
+  </div>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Obsolete-Functions.html#Obsolete-Functions" accesskey="n" rel="next">Obsolete Functions</a>, Previous: <a href="Closures.html#Closures" accesskey="p" rel="prev">Closures</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The arguments <code>:before</code> and <code>:around</code>
+  used in the above examples specify how the two functions are
+  composed, since there are many different ways to do it. The added
+  function is also called a piece of <em>advice</em>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Core-Advising-Primitives.html#Core-Advising-Primitives"
+      accesskey="1">Core Advising Primitives</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Primitives to manipulate
+      advice.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Advising-Named-Functions.html#Advising-Named-Functions"
+      accesskey="2">Advising Named Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Advising named functions.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Advice-combinators.html#Advice-combinators" accesskey=
+      "3">Advice combinators</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Ways to compose advice.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Porting-old-advice.html#Porting-old-advice" accesskey=
+      "4">Porting old advice</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Adapting code using the old
+      defadvice.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Obsolete-Functions.html#Obsolete-Functions"
+    accesskey="n" rel="next">Obsolete Functions</a>, Previous:
+    <a href="Closures.html#Closures" accesskey="p" rel=
+    "prev">Closures</a>, Up: <a href="Functions.html#Functions"
+    accesskey="u" rel="up">Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

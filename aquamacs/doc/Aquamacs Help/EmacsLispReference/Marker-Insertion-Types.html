@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,91 +19,138 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Marker Insertion Types</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Marker Insertion Types">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Marker Insertion Types">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Markers.html#Markers" rel="up" title="Markers">
-<link href="Moving-Markers.html#Moving-Markers" rel="next" title="Moving Markers">
-<link href="Information-from-Markers.html#Information-from-Markers" rel="prev" title="Information from Markers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Marker Insertion
+  Types</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Marker Insertion Types" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Marker Insertion Types" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Markers.html#Markers" rel="up" title="Markers" />
+  <link href="Moving-Markers.html#Moving-Markers" rel="next" title=
+  "Moving Markers" />
+  <link href=
+  "Information-from-Markers.html#Information-from-Markers" rel=
+  "prev" title="Information from Markers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Marker-Insertion-Types" id="Marker-Insertion-Types"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Moving-Markers.html#Moving-Markers"
+    accesskey="n" rel="next">Moving Markers</a>, Previous: <a href=
+    "Information-from-Markers.html#Information-from-Markers"
+    accesskey="p" rel="prev">Information from Markers</a>, Up:
+    <a href="Markers.html#Markers" accesskey="u" rel=
+    "up">Markers</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Marker-Insertion-Types-1" id=
+  "Marker-Insertion-Types-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Marker-Insertion-Types"></a>
-<div class="header">
-<p>
-Next: <a href="Moving-Markers.html#Moving-Markers" accesskey="n" rel="next">Moving Markers</a>, Previous: <a href="Information-from-Markers.html#Information-from-Markers" accesskey="p" rel="prev">Information from Markers</a>, Up: <a href="Markers.html#Markers" accesskey="u" rel="up">Markers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Marker-Insertion-Types-1"></a>
-<h3 class="section">30.5 Marker Insertion Types</h3>
+  <h3 class="section">30.5 Marker Insertion Types</h3><a name=
+  "index-insertion-type-of-a-marker" id=
+  "index-insertion-type-of-a-marker"></a>
 
-<a name="index-insertion-type-of-a-marker"></a>
-<p>When you insert text directly at the place where a marker points,
-there are two possible ways to relocate that marker: it can point before
-the inserted text, or point after it.  You can specify which one a given
-marker should do by setting its <em>insertion type</em>.  Note that use of
-<code>insert-before-markers</code> ignores markers&rsquo; insertion types, always
-relocating a marker to point after the inserted text.
-</p>
-<dl>
-<dt><a name="index-set_002dmarker_002dinsertion_002dtype"></a>Function: <strong>set-marker-insertion-type</strong> <em>marker type</em></dt>
-<dd><p>This function sets the insertion type of marker <var>marker</var> to
-<var>type</var>.  If <var>type</var> is <code>t</code>, <var>marker</var> will advance when
-text is inserted at its position.  If <var>type</var> is <code>nil</code>,
-<var>marker</var> does not advance when text is inserted there.
-</p></dd></dl>
+  <p>When you insert text directly at the place where a marker
+  points, there are two possible ways to relocate that marker: it
+  can point before the inserted text, or point after it. You can
+  specify which one a given marker should do by setting its
+  <em>insertion type</em>. Note that use of
+  <code>insert-before-markers</code> ignores markers&rsquo;
+  insertion types, always relocating a marker to point after the
+  inserted text.</p>
 
-<dl>
-<dt><a name="index-marker_002dinsertion_002dtype"></a>Function: <strong>marker-insertion-type</strong> <em>marker</em></dt>
-<dd><p>This function reports the current insertion type of <var>marker</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dmarker_002dinsertion_002dtype" id=
+    "index-set_002dmarker_002dinsertion_002dtype"></a>Function:
+    <strong>set-marker-insertion-type</strong> <em>marker
+    type</em></dt>
 
-<p>All functions that create markers without accepting an argument that
-specifies the insertion type, create them with insertion type
-<code>nil</code> (see <a href="Creating-Markers.html#Creating-Markers">Creating Markers</a>).  Also, the mark has, by
-default, insertion type <code>nil</code>.
-</p>
+    <dd>
+      <p>This function sets the insertion type of marker
+      <var>marker</var> to <var>type</var>. If <var>type</var> is
+      <code>t</code>, <var>marker</var> will advance when text is
+      inserted at its position. If <var>type</var> is
+      <code>nil</code>, <var>marker</var> does not advance when
+      text is inserted there.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-marker_002dinsertion_002dtype" id=
+    "index-marker_002dinsertion_002dtype"></a>Function:
+    <strong>marker-insertion-type</strong> <em>marker</em></dt>
 
+    <dd>
+      <p>This function reports the current insertion type of
+      <var>marker</var>.</p>
+    </dd>
+  </dl>
 
+  <p>All functions that create markers without accepting an
+  argument that specifies the insertion type, create them with
+  insertion type <code>nil</code> (see <a href=
+  "Creating-Markers.html#Creating-Markers">Creating Markers</a>).
+  Also, the mark has, by default, insertion type
+  <code>nil</code>.</p>
 </body>
 </html>

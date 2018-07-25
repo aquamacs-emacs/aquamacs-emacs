@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Query Form - Emacs Unified Directory Client (EUDC) Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Emacs Unified Directory Client (EUDC) Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Usage.html#Usage" title="Usage">
-<link rel="prev" href="Querying-Servers.html#Querying-Servers" title="Querying Servers">
-<link rel="next" href="Display-of-Query-Results.html#Display-of-Query-Results" title="Display of Query Results">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Query Form - Emacs Unified Directory Client (EUDC)
+  Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Emacs Unified Directory Client (EUDC) Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Usage.html#Usage" title="Usage" />
+  <link rel="prev" href="Querying-Servers.html#Querying-Servers"
+  title="Querying Servers" />
+  <link rel="next" href=
+  "Display-of-Query-Results.html#Display-of-Query-Results" title=
+  "Display of Query Results" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents EUDC v1.30b.
 
 EUDC is the Emacs Unified Directory Client, a common interface to
@@ -31,8 +42,10 @@ Copyright (C) 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,74 +55,119 @@ Copyright (C) 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Query-Form"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Display-of-Query-Results.html#Display-of-Query-Results">Display of Query Results</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Querying-Servers.html#Querying-Servers">Querying Servers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Usage.html#Usage">Usage</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Query-Form" id="Query-Form"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h3 class="section">3.2 Query Form</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Display-of-Query-Results.html#Display-of-Query-Results">Display
+    of Query Results</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Querying-Servers.html#Querying-Servers">Querying Servers</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Usage.html#Usage">Usage</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-<p>The simplest way to query your directory server is to use the query
-form. You display the query form with the &lsquo;<samp><span class="samp">Query with Form</span></samp>&rsquo; menu
-item or by invoking the command <kbd>M-x eudc-query-form</kbd>. The attribute
-names presented in this form are defined by the
-<code>eudc-query-form-attributes</code> variable (unless a non-<code>nil</code>
-argument is supplied to <code>eudc-query-form</code>).
+  <h3 class="section">3.2 Query Form</h3>
 
-   <p>Since the different directory protocols to which EUDC interfaces may
-use different names for equivalent attributes, EUDC defines its own set
-of attribute names and a mapping between these names and their
-protocol-specific equivalent through the variable
-<code>eudc-protocol-attributes-translation-alist</code>.  Names currently
-defined by EUDC are <code>name</code>, <code>firstname</code>, <code>email</code> and
-<code>phone</code>.
+  <p>The simplest way to query your directory server is to use the
+  query form. You display the query form with the
+  &lsquo;<samp><span class="samp">Query with
+  Form</span></samp>&rsquo; menu item or by invoking the command
+  <kbd>M-x eudc-query-form</kbd>. The attribute names presented in
+  this form are defined by the
+  <code>eudc-query-form-attributes</code> variable (unless a
+  non-<code>nil</code> argument is supplied to
+  <code>eudc-query-form</code>).</p>
 
-<div class="defun">
-&mdash; Variable: <b>eudc-query-form-attributes</b><var><a name="index-eudc_002dquery_002dform_002dattributes-7"></a></var><br>
-<blockquote><p><a name="index-eudc_002dget_002dattribute_002dlist-8"></a>A list of attributes presented in the query form.  Attribute names in
-this list should be either EUDC attribute names or valid attribute
-names.  You can get a list of valid attribute names for the current
-protocol with the &lsquo;<samp><span class="samp">List Valid Attribute Names</span></samp>&rsquo; menu item or the
-<kbd>M-x eudc-get-attribute-list</kbd> command.  Defaults to <code>name</code>,
-<code>email</code> and <code>phone</code>. 
-</p></blockquote></div>
+  <p>Since the different directory protocols to which EUDC
+  interfaces may use different names for equivalent attributes,
+  EUDC defines its own set of attribute names and a mapping between
+  these names and their protocol-specific equivalent through the
+  variable <code>eudc-protocol-attributes-translation-alist</code>.
+  Names currently defined by EUDC are <code>name</code>,
+  <code>firstname</code>, <code>email</code> and
+  <code>phone</code>.</p>
 
-<div class="defun">
-&mdash; Command: <b>eudc-query-form</b><var> get-fields-from-server<a name="index-eudc_002dquery_002dform-9"></a></var><br>
-<blockquote><p>Display a form to query the directory server.  If given a non-<code>nil</code>
-argument the function first queries the server for the existing fields
-and displays a corresponding form.  Not all protocols may support a
-non-<code>nil</code> argument here. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Variable:
+    <b>eudc-query-form-attributes</b><var><a name="index-eudc_002dquery_002dform_002dattributes-7"
+    id=
+    "index-eudc_002dquery_002dform_002dattributes-7"></a></var><br />
 
-   <p>Since the names of the fields may not be explicit enough or adapted to
-be directly displayed as prompt strings in the form, the variable
-<code>eudc-user-attribute-names-alist</code> lets you define more explicit
-names for directory attribute names.  This variable is ignored if
-<code>eudc-use-raw-directory-names</code> is non-<code>nil</code>.
 
-<div class="defun">
-&mdash; Variable: <b>eudc-user-attribute-names-alist</b><var><a name="index-eudc_002duser_002dattribute_002dnames_002dalist-10"></a></var><br>
-<blockquote><p>This is an alist of user-defined names for the directory attributes used in
-query/response forms. Prompt strings for attributes that are not in this
-alist are derived by splitting the attribute name at underscores and
-capitalizing the individual words. 
-</p></blockquote></div>
+    <blockquote>
+      <p><a name="index-eudc_002dget_002dattribute_002dlist-8" id=
+      "index-eudc_002dget_002dattribute_002dlist-8"></a>A list of
+      attributes presented in the query form. Attribute names in
+      this list should be either EUDC attribute names or valid
+      attribute names. You can get a list of valid attribute names
+      for the current protocol with the &lsquo;<samp><span class=
+      "samp">List Valid Attribute Names</span></samp>&rsquo; menu
+      item or the <kbd>M-x eudc-get-attribute-list</kbd> command.
+      Defaults to <code>name</code>, <code>email</code> and
+      <code>phone</code>.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Variable: <b>eudc-use-raw-directory-names</b><var><a name="index-eudc_002duse_002draw_002ddirectory_002dnames-11"></a></var><br>
-<blockquote><p>If non-<code>nil</code>, use attributes names as defined in the directory. 
-Otherwise, directory query/response forms display the user attribute
-names defined in <code>eudc-user-attribute-names-alist</code>. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Command: <b>eudc-query-form</b>
+    <var>get-fields-from-server<a name=
+    "index-eudc_002dquery_002dform-9" id=
+    "index-eudc_002dquery_002dform-9"></a></var><br />
 
-   </body></html>
+    <blockquote>
+      <p>Display a form to query the directory server. If given a
+      non-<code>nil</code> argument the function first queries the
+      server for the existing fields and displays a corresponding
+      form. Not all protocols may support a non-<code>nil</code>
+      argument here.</p>
+    </blockquote>
+  </div>
 
+  <p>Since the names of the fields may not be explicit enough or
+  adapted to be directly displayed as prompt strings in the form,
+  the variable <code>eudc-user-attribute-names-alist</code> lets
+  you define more explicit names for directory attribute names.
+  This variable is ignored if
+  <code>eudc-use-raw-directory-names</code> is
+  non-<code>nil</code>.</p>
+
+  <div class="defun">
+    &mdash; Variable:
+    <b>eudc-user-attribute-names-alist</b><var><a name=
+    "index-eudc_002duser_002dattribute_002dnames_002dalist-10" id=
+    "index-eudc_002duser_002dattribute_002dnames_002dalist-10"></a></var><br />
+
+
+    <blockquote>
+      <p>This is an alist of user-defined names for the directory
+      attributes used in query/response forms. Prompt strings for
+      attributes that are not in this alist are derived by
+      splitting the attribute name at underscores and capitalizing
+      the individual words.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Variable:
+    <b>eudc-use-raw-directory-names</b><var><a name=
+    "index-eudc_002duse_002draw_002ddirectory_002dnames-11" id=
+    "index-eudc_002duse_002draw_002ddirectory_002dnames-11"></a></var><br />
+
+
+    <blockquote>
+      <p>If non-<code>nil</code>, use attributes names as defined
+      in the directory. Otherwise, directory query/response forms
+      display the user attribute names defined in
+      <code>eudc-user-attribute-names-alist</code>.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

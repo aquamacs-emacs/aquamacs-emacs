@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,195 +18,257 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Undo Tutorial</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Undo Tutorial">
-<meta name="keywords" content="GNU Emacs Calc Manual: Undo Tutorial">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Basic-Tutorial.html#Basic-Tutorial" rel="up" title="Basic Tutorial">
-<link href="Modes-Tutorial.html#Modes-Tutorial" rel="next" title="Modes Tutorial">
-<link href="Algebraic-Tutorial.html#Algebraic-Tutorial" rel="prev" title="Algebraic Tutorial">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Undo Tutorial</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Undo Tutorial" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Undo Tutorial" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Basic-Tutorial.html#Basic-Tutorial" rel="up" title=
+  "Basic Tutorial" />
+  <link href="Modes-Tutorial.html#Modes-Tutorial" rel="next" title=
+  "Modes Tutorial" />
+  <link href="Algebraic-Tutorial.html#Algebraic-Tutorial" rel=
+  "prev" title="Algebraic Tutorial" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Undo-Tutorial"></a>
-<div class="header">
-<p>
-Next: <a href="Modes-Tutorial.html#Modes-Tutorial" accesskey="n" rel="next">Modes Tutorial</a>, Previous: <a href="Algebraic-Tutorial.html#Algebraic-Tutorial" accesskey="p" rel="prev">Algebraic Tutorial</a>, Up: <a href="Basic-Tutorial.html#Basic-Tutorial" accesskey="u" rel="up">Basic Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Undo-and-Redo"></a>
-<h4 class="subsection">2.1.3 Undo and Redo</h4>
+<body lang="en" xml:lang="en">
+  <a name="Undo-Tutorial" id="Undo-Tutorial"></a>
 
-<p>If you make a mistake, you can usually correct it by pressing shift-<kbd>U</kbd>,
-the &ldquo;undo&rdquo; command.  First, clear the stack (<kbd>M-0 <span class="key">DEL</span></kbd>) and exit
-and restart Calc (<kbd>C-x * * C-x * *</kbd>) to make sure things start off
-with a clean slate.  Now:
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  2          2:  2          1:  8          2:  2          1:  6
+  <div class="header">
+    <p>Next: <a href="Modes-Tutorial.html#Modes-Tutorial"
+    accesskey="n" rel="next">Modes Tutorial</a>, Previous: <a href=
+    "Algebraic-Tutorial.html#Algebraic-Tutorial" accesskey="p" rel=
+    "prev">Algebraic Tutorial</a>, Up: <a href=
+    "Basic-Tutorial.html#Basic-Tutorial" accesskey="u" rel=
+    "up">Basic Tutorial</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Undo-and-Redo" id="Undo-and-Redo"></a>
+
+  <h4 class="subsection">2.1.3 Undo and Redo</h4>
+
+  <p>If you make a mistake, you can usually correct it by pressing
+  shift-<kbd>U</kbd>, the &ldquo;undo&rdquo; command. First, clear
+  the stack (<kbd>M-0 <span class="key">DEL</span></kbd>) and exit
+  and restart Calc (<kbd>C-x * * C-x * *</kbd>) to make sure things
+  start off with a clean slate. Now:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  2          2:  2          1:  8          2:  2          1:  6
     .          1:  3              .          1:  3              .
                    .                             .
 
-   2 <span class="key">RET</span>           3              ^              U              *
-</pre></div>
+   2 <span class=
+"key">RET</span>           3              ^              U              *
+</pre>
+  </div>
 
-<p>You can undo any number of times.  Calc keeps a complete record of
-all you have done since you last opened the Calc window.  After the
-above example, you could type:
-</p>
-<div class="smallexample">
-<pre class="smallexample">1:  6          2:  2          1:  2              .              .
+  <p>You can undo any number of times. Calc keeps a complete record
+  of all you have done since you last opened the Calc window. After
+  the above example, you could type:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+1:  6          2:  2          1:  2              .              .
     .          1:  3              .
                    .
                                                              (error)
                    U              U              U              U
-</pre></div>
+</pre>
+  </div>
 
-<p>You can also type <kbd>D</kbd> to &ldquo;redo&rdquo; a command that you have undone
-mistakenly.
-</p>
-<div class="smallexample">
-<pre class="smallexample">    .          1:  2          2:  2          1:  6          1:  6
+  <p>You can also type <kbd>D</kbd> to &ldquo;redo&rdquo; a command
+  that you have undone mistakenly.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+    .          1:  2          2:  2          1:  6          1:  6
                    .          1:  3              .              .
                                   .
                                                              (error)
                    D              D              D              D
-</pre></div>
+</pre>
+  </div>
 
-<p>It was not possible to redo past the &lsquo;<samp>6</samp>&rsquo;, since that was placed there
-by something other than an undo command.
-</p>
-<a name="index-Time-travel"></a>
-<p>You can think of undo and redo as a sort of &ldquo;time machine.&rdquo;  Press
-<kbd>U</kbd> to go backward in time, <kbd>D</kbd> to go forward.  If you go
-backward and do something (like <kbd>*</kbd>) then, as any science fiction
-reader knows, you have changed your future and you cannot go forward
-again.  Thus, the inability to redo past the &lsquo;<samp>6</samp>&rsquo; even though there
-was an earlier undo command.
-</p>
-<p>You can always recall an earlier result using the Trail.  We&rsquo;ve ignored
-the trail so far, but it has been faithfully recording everything we
-did since we loaded the Calculator.  If the Trail is not displayed,
-press <kbd>t d</kbd> now to turn it on.
-</p>
-<p>Let&rsquo;s try grabbing an earlier result.  The &lsquo;<samp>8</samp>&rsquo; we computed was
-undone by a <kbd>U</kbd> command, and was lost even to Redo when we pressed
-<kbd>*</kbd>, but it&rsquo;s still there in the trail.  There should be a little
-&lsquo;<samp>&gt;</samp>&rsquo; arrow (the <em>trail pointer</em>) resting on the last trail
-entry.  If there isn&rsquo;t, press <kbd>t ]</kbd> to reset the trail pointer.
-Now, press <kbd>t&nbsp;p</kbd><!-- /@w --> to move the arrow onto the line containing
-&lsquo;<samp>8</samp>&rsquo;, and press <kbd>t&nbsp;y</kbd><!-- /@w --> to &ldquo;yank&rdquo; that number back onto the
-stack.
-</p>
-<p>If you press <kbd>t ]</kbd> again, you will see that even our Yank command
-went into the trail.
-</p>
-<p>Let&rsquo;s go further back in time.  Earlier in the tutorial we computed
-a huge integer using the formula &lsquo;<samp>2^3^4</samp>&rsquo;.  We don&rsquo;t remember
-what it was, but the first digits were &ldquo;241&rdquo;.  Press <kbd>t r</kbd>
-(which stands for trail-search-reverse), then type <kbd>241</kbd>.
-The trail cursor will jump back to the next previous occurrence of
-the string &ldquo;241&rdquo; in the trail.  This is just a regular Emacs
-incremental search; you can now press <kbd>C-s</kbd> or <kbd>C-r</kbd> to
-continue the search forwards or backwards as you like.
-</p>
-<p>To finish the search, press <tt class="key">RET</tt>.  This halts the incremental
-search and leaves the trail pointer at the thing we found.  Now we
-can type <kbd>t y</kbd> to yank that number onto the stack.  If we hadn&rsquo;t
-remembered the &ldquo;241&rdquo;, we could simply have searched for <kbd>2^3^4</kbd>,
-then pressed <kbd><span class="key">RET</span> t n</kbd> to halt and then move to the next item.
-</p>
-<p>You may have noticed that all the trail-related commands begin with
-the letter <kbd>t</kbd>.  (The store-and-recall commands, on the other hand,
-all began with <kbd>s</kbd>.)  Calc has so many commands that there aren&rsquo;t
-enough keys for all of them, so various commands are grouped into
-two-letter sequences where the first letter is called the <em>prefix</em>
-key.  If you type a prefix key by accident, you can press <kbd>C-g</kbd>
-to cancel it.  (In fact, you can press <kbd>C-g</kbd> to cancel almost
-anything in Emacs.)  To get help on a prefix key, press that key
-followed by <kbd>?</kbd>.  Some prefixes have several lines of help,
-so you need to press <kbd>?</kbd> repeatedly to see them all.
-You can also type <kbd>h h</kbd> to see all the help at once.
-</p>
-<p>Try pressing <kbd>t ?</kbd> now.  You will see a line of the form,
-</p>
-<div class="smallexample">
-<pre class="smallexample">trail/time: Display; Fwd, Back; Next, Prev, Here, [, ]; Yank:  [MORE]  t-
-</pre></div>
+  <p>It was not possible to redo past the
+  &lsquo;<samp>6</samp>&rsquo;, since that was placed there by
+  something other than an undo command.</p><a name=
+  "index-Time-travel" id="index-Time-travel"></a>
 
-<p>The word &ldquo;trail&rdquo; indicates that the <kbd>t</kbd> prefix key contains
-trail-related commands.  Each entry on the line shows one command,
-with a single capital letter showing which letter you press to get
-that command.  We have used <kbd>t n</kbd>, <kbd>t p</kbd>, <kbd>t ]</kbd>, and
-<kbd>t y</kbd> so far.  The &lsquo;<samp>[MORE]</samp>&rsquo; means you can press <kbd>?</kbd>
-again to see more <kbd>t</kbd>-prefix commands.  Notice that the commands
-are roughly divided (by semicolons) into related groups.
-</p>
-<p>When you are in the help display for a prefix key, the prefix is
-still active.  If you press another key, like <kbd>y</kbd> for example,
-it will be interpreted as a <kbd>t y</kbd> command.  If all you wanted
-was to look at the help messages, press <kbd>C-g</kbd> afterwards to cancel
-the prefix.
-</p>
-<p>One more way to correct an error is by editing the stack entries.
-The actual Stack buffer is marked read-only and must not be edited
-directly, but you can press <kbd>`</kbd> (grave accent)
-to edit a stack entry.
-</p>
-<p>Try entering &lsquo;<samp>3.141439</samp>&rsquo; now.  If this is supposed to represent
-&lsquo;<samp>pi</samp>&rsquo;, it&rsquo;s got several errors.  Press <kbd>`</kbd> to edit this number.
-Now use the normal Emacs cursor motion and editing keys to change
-the second 4 to a 5, and to transpose the 3 and the 9.  When you
-press <tt class="key">RET</tt>, the number on the stack will be replaced by your
-new number.  This works for formulas, vectors, and all other types
-of values you can put on the stack.  The <kbd>`</kbd> key also works
-during entry of a number or algebraic formula.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Modes-Tutorial.html#Modes-Tutorial" accesskey="n" rel="next">Modes Tutorial</a>, Previous: <a href="Algebraic-Tutorial.html#Algebraic-Tutorial" accesskey="p" rel="prev">Algebraic Tutorial</a>, Up: <a href="Basic-Tutorial.html#Basic-Tutorial" accesskey="u" rel="up">Basic Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>You can think of undo and redo as a sort of &ldquo;time
+  machine.&rdquo; Press <kbd>U</kbd> to go backward in time,
+  <kbd>D</kbd> to go forward. If you go backward and do something
+  (like <kbd>*</kbd>) then, as any science fiction reader knows,
+  you have changed your future and you cannot go forward again.
+  Thus, the inability to redo past the &lsquo;<samp>6</samp>&rsquo;
+  even though there was an earlier undo command.</p>
 
+  <p>You can always recall an earlier result using the Trail.
+  We&rsquo;ve ignored the trail so far, but it has been faithfully
+  recording everything we did since we loaded the Calculator. If
+  the Trail is not displayed, press <kbd>t d</kbd> now to turn it
+  on.</p>
 
+  <p>Let&rsquo;s try grabbing an earlier result. The
+  &lsquo;<samp>8</samp>&rsquo; we computed was undone by a
+  <kbd>U</kbd> command, and was lost even to Redo when we pressed
+  <kbd>*</kbd>, but it&rsquo;s still there in the trail. There
+  should be a little &lsquo;<samp>&gt;</samp>&rsquo; arrow (the
+  <em>trail pointer</em>) resting on the last trail entry. If there
+  isn&rsquo;t, press <kbd>t ]</kbd> to reset the trail pointer.
+  Now, press <kbd>t&nbsp;p</kbd><!-- /@w --> to move the arrow onto
+  the line containing &lsquo;<samp>8</samp>&rsquo;, and press
+  <kbd>t&nbsp;y</kbd><!-- /@w --> to &ldquo;yank&rdquo; that number
+  back onto the stack.</p>
 
+  <p>If you press <kbd>t ]</kbd> again, you will see that even our
+  Yank command went into the trail.</p>
+
+  <p>Let&rsquo;s go further back in time. Earlier in the tutorial
+  we computed a huge integer using the formula
+  &lsquo;<samp>2^3^4</samp>&rsquo;. We don&rsquo;t remember what it
+  was, but the first digits were &ldquo;241&rdquo;. Press <kbd>t
+  r</kbd> (which stands for trail-search-reverse), then type
+  <kbd>241</kbd>. The trail cursor will jump back to the next
+  previous occurrence of the string &ldquo;241&rdquo; in the trail.
+  This is just a regular Emacs incremental search; you can now
+  press <kbd>C-s</kbd> or <kbd>C-r</kbd> to continue the search
+  forwards or backwards as you like.</p>
+
+  <p>To finish the search, press <tt class="key">RET</tt>. This
+  halts the incremental search and leaves the trail pointer at the
+  thing we found. Now we can type <kbd>t y</kbd> to yank that
+  number onto the stack. If we hadn&rsquo;t remembered the
+  &ldquo;241&rdquo;, we could simply have searched for
+  <kbd>2^3^4</kbd>, then pressed <kbd><span class="key">RET</span>
+  t n</kbd> to halt and then move to the next item.</p>
+
+  <p>You may have noticed that all the trail-related commands begin
+  with the letter <kbd>t</kbd>. (The store-and-recall commands, on
+  the other hand, all began with <kbd>s</kbd>.) Calc has so many
+  commands that there aren&rsquo;t enough keys for all of them, so
+  various commands are grouped into two-letter sequences where the
+  first letter is called the <em>prefix</em> key. If you type a
+  prefix key by accident, you can press <kbd>C-g</kbd> to cancel
+  it. (In fact, you can press <kbd>C-g</kbd> to cancel almost
+  anything in Emacs.) To get help on a prefix key, press that key
+  followed by <kbd>?</kbd>. Some prefixes have several lines of
+  help, so you need to press <kbd>?</kbd> repeatedly to see them
+  all. You can also type <kbd>h h</kbd> to see all the help at
+  once.</p>
+
+  <p>Try pressing <kbd>t ?</kbd> now. You will see a line of the
+  form,</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+trail/time: Display; Fwd, Back; Next, Prev, Here, [, ]; Yank:  [MORE]  t-
+</pre>
+  </div>
+
+  <p>The word &ldquo;trail&rdquo; indicates that the <kbd>t</kbd>
+  prefix key contains trail-related commands. Each entry on the
+  line shows one command, with a single capital letter showing
+  which letter you press to get that command. We have used <kbd>t
+  n</kbd>, <kbd>t p</kbd>, <kbd>t ]</kbd>, and <kbd>t y</kbd> so
+  far. The &lsquo;<samp>[MORE]</samp>&rsquo; means you can press
+  <kbd>?</kbd> again to see more <kbd>t</kbd>-prefix commands.
+  Notice that the commands are roughly divided (by semicolons) into
+  related groups.</p>
+
+  <p>When you are in the help display for a prefix key, the prefix
+  is still active. If you press another key, like <kbd>y</kbd> for
+  example, it will be interpreted as a <kbd>t y</kbd> command. If
+  all you wanted was to look at the help messages, press
+  <kbd>C-g</kbd> afterwards to cancel the prefix.</p>
+
+  <p>One more way to correct an error is by editing the stack
+  entries. The actual Stack buffer is marked read-only and must not
+  be edited directly, but you can press <kbd>`</kbd> (grave accent)
+  to edit a stack entry.</p>
+
+  <p>Try entering &lsquo;<samp>3.141439</samp>&rsquo; now. If this
+  is supposed to represent &lsquo;<samp>pi</samp>&rsquo;,
+  it&rsquo;s got several errors. Press <kbd>`</kbd> to edit this
+  number. Now use the normal Emacs cursor motion and editing keys
+  to change the second 4 to a 5, and to transpose the 3 and the 9.
+  When you press <tt class="key">RET</tt>, the number on the stack
+  will be replaced by your new number. This works for formulas,
+  vectors, and all other types of values you can put on the stack.
+  The <kbd>`</kbd> key also works during entry of a number or
+  algebraic formula.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Modes-Tutorial.html#Modes-Tutorial"
+    accesskey="n" rel="next">Modes Tutorial</a>, Previous: <a href=
+    "Algebraic-Tutorial.html#Algebraic-Tutorial" accesskey="p" rel=
+    "prev">Algebraic Tutorial</a>, Up: <a href=
+    "Basic-Tutorial.html#Basic-Tutorial" accesskey="u" rel=
+    "up">Basic Tutorial</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

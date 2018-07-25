@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,139 +16,187 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Start nonterminals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Start nonterminals">
-<meta name="keywords" content="Wisent Parser Development: Start nonterminals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Grammar-styles.html#Grammar-styles" rel="up" title="Grammar styles">
-<link href="Useful-functions.html#Useful-functions" rel="next" title="Useful functions">
-<link href="Mixed-style.html#Mixed-style" rel="prev" title="Mixed style">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Start nonterminals</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Start nonterminals" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Start nonterminals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Grammar-styles.html#Grammar-styles" rel="up" title=
+  "Grammar styles" />
+  <link href="Useful-functions.html#Useful-functions" rel="next"
+  title="Useful functions" />
+  <link href="Mixed-style.html#Mixed-style" rel="prev" title=
+  "Mixed style" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Start-nonterminals"></a>
-<div class="header">
-<p>
-Next: <a href="Useful-functions.html#Useful-functions" accesskey="n" rel="next">Useful functions</a>, Previous: <a href="Mixed-style.html#Mixed-style" accesskey="p" rel="prev">Mixed style</a>, Up: <a href="Grammar-styles.html#Grammar-styles" accesskey="u" rel="up">Grammar styles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Start-nonterminals-1"></a>
-<h4 class="subsection">4.1.4 Start nonterminals</h4>
+<body lang="en" xml:lang="en">
+  <a name="Start-nonterminals" id="Start-nonterminals"></a>
 
-<a name="index-start-nonterminals"></a>
-<a name="index-reparse_002dsymbol-property"></a>
-<p>When you write a grammar for <i>Semantic</i>, it is important to carefully
-indicate the start nonterminals.  Each one defines an entry point in
-the grammar, and after parsing its semantic value is returned to the
-back-end iterative engine.  Consequently:
-</p>
-<p><strong>The semantic value of a start nonterminal must be a produced
-by a TAG like grammar macro</strong>.
-</p>
-<p>Start nonterminals are declared by <code>%start</code> statements.  When
-nothing is specified the first nonterminal that appears in the grammar
-is the start nonterminal.
-</p>
-<p>Generally, the following nonterminals must be declared as start
-symbols:
-</p>
-<ul>
-<li> The main grammar entry point
-<blockquote>
-<p>Of course!
-</p></blockquote>
+  <div class="header">
+    <p>Next: <a href="Useful-functions.html#Useful-functions"
+    accesskey="n" rel="next">Useful functions</a>, Previous:
+    <a href="Mixed-style.html#Mixed-style" accesskey="p" rel=
+    "prev">Mixed style</a>, Up: <a href=
+    "Grammar-styles.html#Grammar-styles" accesskey="u" rel=
+    "up">Grammar styles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Start-nonterminals-1" id="Start-nonterminals-1"></a>
 
-</li><li> nonterminals passed to <code>EXPAND</code>/<code>EXPANDFULL</code>
-<blockquote>
-<p>These grammar macros recursively parse a part of input data, based on
-rules of the given nonterminal.
-</p>
-<p>For example, the following will parse &lsquo;<samp>PAREN_BLOCK</samp>&rsquo; data using
-the &lsquo;<samp>formal_parameters</samp>&rsquo; rules:
-</p>
-<div class="example">
-<pre class="example">formal_parameter_list
+  <h4 class="subsection">4.1.4 Start nonterminals</h4><a name=
+  "index-start-nonterminals" id="index-start-nonterminals"></a>
+  <a name="index-reparse_002dsymbol-property" id=
+  "index-reparse_002dsymbol-property"></a>
+
+  <p>When you write a grammar for <i>Semantic</i>, it is important
+  to carefully indicate the start nonterminals. Each one defines an
+  entry point in the grammar, and after parsing its semantic value
+  is returned to the back-end iterative engine. Consequently:</p>
+
+  <p><strong>The semantic value of a start nonterminal must be a
+  produced by a TAG like grammar macro</strong>.</p>
+
+  <p>Start nonterminals are declared by <code>%start</code>
+  statements. When nothing is specified the first nonterminal that
+  appears in the grammar is the start nonterminal.</p>
+
+  <p>Generally, the following nonterminals must be declared as
+  start symbols:</p>
+
+  <ul>
+    <li>The main grammar entry point
+
+      <blockquote>
+        <p>Of course!</p>
+      </blockquote>
+    </li>
+
+    <li>nonterminals passed to
+    <code>EXPAND</code>/<code>EXPANDFULL</code>
+
+      <blockquote>
+        <p>These grammar macros recursively parse a part of input
+        data, based on rules of the given nonterminal.</p>
+
+        <p>For example, the following will parse
+        &lsquo;<samp>PAREN_BLOCK</samp>&rsquo; data using the
+        &lsquo;<samp>formal_parameters</samp>&rsquo; rules:</p>
+
+        <div class="example">
+          <pre class="example">
+formal_parameter_list
   : PAREN_BLOCK
     (EXPANDFULL $1 formal_parameters)
   ;
-</pre></div>
+</pre>
+        </div>
 
-<p>The semantic value of &lsquo;<samp>formal_parameters</samp>&rsquo; becomes the value of
-the <code>EXPANDFULL</code> expression.  It is a list of <i>Semantic</i> tags
-spliced in the tags tree.
-</p>
-<p>Because the automaton must know that &lsquo;<samp>formal_parameters</samp>&rsquo; is a
-start symbol, you must declare it like this:
-</p>
-<div class="example">
-<pre class="example">%start formal_parameters
-</pre></div>
-</blockquote>
-</li></ul>
+        <p>The semantic value of
+        &lsquo;<samp>formal_parameters</samp>&rsquo; becomes the
+        value of the <code>EXPANDFULL</code> expression. It is a
+        list of <i>Semantic</i> tags spliced in the tags tree.</p>
 
-<a name="index-incremental-re_002dparse"></a>
-<a name="index-reparse_002dsymbol"></a>
-<p>The <code>EXPANDFULL</code> macro has a side effect it is important to know,
-related to the incremental re-parse mechanism of <i>Semantic</i>: the
-nonterminal symbol parameter passed to <code>EXPANDFULL</code> also becomes
-the <code>reparse-symbol</code> property of the tag returned by the
-<code>EXPANDFULL</code> expression.
-</p>
-<p>When buffer&rsquo;s data mapped by a tag is modified, <i>Semantic</i>
-schedules an incremental re-parse of that data, using the tag&rsquo;s
-<code>reparse-symbol</code> property as start nonterminal.
-</p>
-<p><strong>The rules associated to such start symbols must be carefully
-reviewed to ensure that the incremental parser will work!</strong>
-</p>
-<p>Things are a little bit different when the grammar is written in Bison
-style.
-</p>
-<p><strong>The <code>reparse-symbol</code> property is set to the nonterminal
-symbol the rule that explicitly uses <code>EXPANDTAG</code> belongs to.</strong>
-</p>
-<p>For example:
-</p>
-<div class="example">
-<pre class="example">rule:
+        <p>Because the automaton must know that
+        &lsquo;<samp>formal_parameters</samp>&rsquo; is a start
+        symbol, you must declare it like this:</p>
+
+        <div class="example">
+          <pre class="example">
+%start formal_parameters
+</pre>
+        </div>
+      </blockquote>
+    </li>
+  </ul><a name="index-incremental-re_002dparse" id=
+  "index-incremental-re_002dparse"></a> <a name=
+  "index-reparse_002dsymbol" id="index-reparse_002dsymbol"></a>
+
+  <p>The <code>EXPANDFULL</code> macro has a side effect it is
+  important to know, related to the incremental re-parse mechanism
+  of <i>Semantic</i>: the nonterminal symbol parameter passed to
+  <code>EXPANDFULL</code> also becomes the
+  <code>reparse-symbol</code> property of the tag returned by the
+  <code>EXPANDFULL</code> expression.</p>
+
+  <p>When buffer&rsquo;s data mapped by a tag is modified,
+  <i>Semantic</i> schedules an incremental re-parse of that data,
+  using the tag&rsquo;s <code>reparse-symbol</code> property as
+  start nonterminal.</p>
+
+  <p><strong>The rules associated to such start symbols must be
+  carefully reviewed to ensure that the incremental parser will
+  work!</strong></p>
+
+  <p>Things are a little bit different when the grammar is written
+  in Bison style.</p>
+
+  <p><strong>The <code>reparse-symbol</code> property is set to the
+  nonterminal symbol the rule that explicitly uses
+  <code>EXPANDTAG</code> belongs to.</strong></p>
+
+  <p>For example:</p>
+
+  <div class="example">
+    <pre class="example">
+rule:
     rhs
     (let* ((rhs $1)
            name type comps prec action elt)
@@ -155,21 +205,28 @@ symbol the rule that explicitly uses <code>EXPANDTAG</code> belongs to.</strong>
        (TAG name 'rule :type type :value comps :prec prec :expr action)
        ))
   ;
-</pre></div>
+</pre>
+  </div>
 
-<p>Set the <code>reparse-symbol</code> property of the expanded tag to
-&lsquo;<samp>rule</samp>&rsquo;.  A important consequence is that:
-</p>
-<p><strong>Every nonterminal having any rule that calls <code>EXPANDTAG</code>
-in a semantic action, should be declared as a start symbol!</strong>
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Useful-functions.html#Useful-functions" accesskey="n" rel="next">Useful functions</a>, Previous: <a href="Mixed-style.html#Mixed-style" accesskey="p" rel="prev">Mixed style</a>, Up: <a href="Grammar-styles.html#Grammar-styles" accesskey="u" rel="up">Grammar styles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Set the <code>reparse-symbol</code> property of the expanded
+  tag to &lsquo;<samp>rule</samp>&rsquo;. A important consequence
+  is that:</p>
 
+  <p><strong>Every nonterminal having any rule that calls
+  <code>EXPANDTAG</code> in a semantic action, should be declared
+  as a start symbol!</strong></p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Useful-functions.html#Useful-functions"
+    accesskey="n" rel="next">Useful functions</a>, Previous:
+    <a href="Mixed-style.html#Mixed-style" accesskey="p" rel=
+    "prev">Mixed style</a>, Up: <a href=
+    "Grammar-styles.html#Grammar-styles" accesskey="u" rel=
+    "up">Grammar styles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

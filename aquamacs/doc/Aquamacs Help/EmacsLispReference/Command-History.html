@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,104 +19,147 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Command History</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Command History">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Command History">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Keyboard-Macros.html#Keyboard-Macros" rel="next" title="Keyboard Macros">
-<link href="Disabling-Commands.html#Disabling-Commands" rel="prev" title="Disabling Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Command History</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Command History" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Command History" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Keyboard-Macros.html#Keyboard-Macros" rel="next"
+  title="Keyboard Macros" />
+  <link href="Disabling-Commands.html#Disabling-Commands" rel=
+  "prev" title="Disabling Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Command-History" id="Command-History"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Keyboard-Macros.html#Keyboard-Macros"
+    accesskey="n" rel="next">Keyboard Macros</a>, Previous:
+    <a href="Disabling-Commands.html#Disabling-Commands" accesskey=
+    "p" rel="prev">Disabling Commands</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Command-History-1" id="Command-History-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Command-History"></a>
-<div class="header">
-<p>
-Next: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="n" rel="next">Keyboard Macros</a>, Previous: <a href="Disabling-Commands.html#Disabling-Commands" accesskey="p" rel="prev">Disabling Commands</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Command-History-1"></a>
-<h3 class="section">20.15 Command History</h3>
-<a name="index-command-history"></a>
-<a name="index-complex-command"></a>
-<a name="index-history-of-commands"></a>
+  <h3 class="section">20.15 Command History</h3><a name=
+  "index-command-history" id="index-command-history"></a> <a name=
+  "index-complex-command" id="index-complex-command"></a> <a name=
+  "index-history-of-commands" id="index-history-of-commands"></a>
 
-<p>The command loop keeps a history of the complex commands that have
-been executed, to make it convenient to repeat these commands.  A
-<em>complex command</em> is one for which the interactive argument reading
-uses the minibuffer.  This includes any <kbd>M-x</kbd> command, any
-<kbd>M-:</kbd> command, and any command whose <code>interactive</code>
-specification reads an argument from the minibuffer.  Explicit use of
-the minibuffer during the execution of the command itself does not cause
-the command to be considered complex.
-</p>
-<dl>
-<dt><a name="index-command_002dhistory"></a>Variable: <strong>command-history</strong></dt>
-<dd><p>This variable&rsquo;s value is a list of recent complex commands, each
-represented as a form to evaluate.  It continues to accumulate all
-complex commands for the duration of the editing session, but when it
-reaches the maximum size (see <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>), the oldest
-elements are deleted as new ones are added.
-</p>
-<div class="example">
-<pre class="example">command-history
-&rArr; ((switch-to-buffer &quot;chistory.texi&quot;)
-    (describe-key &quot;^X^[&quot;)
-    (visit-tags-table &quot;~/emacs/src/&quot;)
-    (find-tag &quot;repeat-complex-command&quot;))
-</pre></div>
-</dd></dl>
+  <p>The command loop keeps a history of the complex commands that
+  have been executed, to make it convenient to repeat these
+  commands. A <em>complex command</em> is one for which the
+  interactive argument reading uses the minibuffer. This includes
+  any <kbd>M-x</kbd> command, any <kbd>M-:</kbd> command, and any
+  command whose <code>interactive</code> specification reads an
+  argument from the minibuffer. Explicit use of the minibuffer
+  during the execution of the command itself does not cause the
+  command to be considered complex.</p>
 
-<p>This history list is actually a special case of minibuffer history
-(see <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>), with one special twist: the elements are
-expressions rather than strings.
-</p>
-<p>There are a number of commands devoted to the editing and recall of
-previous commands.  The commands <code>repeat-complex-command</code>, and
-<code>list-command-history</code> are described in the user manual
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Repetition.html#Repetition">Repetition</a> in <cite>The GNU Emacs Manual</cite>).  Within the
-minibuffer, the usual minibuffer history commands are available.
-</p>
+  <dl>
+    <dt><a name="index-command_002dhistory" id=
+    "index-command_002dhistory"></a>Variable:
+    <strong>command-history</strong></dt>
 
+    <dd>
+      <p>This variable&rsquo;s value is a list of recent complex
+      commands, each represented as a form to evaluate. It
+      continues to accumulate all complex commands for the duration
+      of the editing session, but when it reaches the maximum size
+      (see <a href=
+      "Minibuffer-History.html#Minibuffer-History">Minibuffer
+      History</a>), the oldest elements are deleted as new ones are
+      added.</p>
 
+      <div class="example">
+        <pre class="example">
+command-history
+&rArr; ((switch-to-buffer "chistory.texi")
+    (describe-key "^X^[")
+    (visit-tags-table "~/emacs/src/")
+    (find-tag "repeat-complex-command"))
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <p>This history list is actually a special case of minibuffer
+  history (see <a href=
+  "Minibuffer-History.html#Minibuffer-History">Minibuffer
+  History</a>), with one special twist: the elements are
+  expressions rather than strings.</p>
+
+  <p>There are a number of commands devoted to the editing and
+  recall of previous commands. The commands
+  <code>repeat-complex-command</code>, and
+  <code>list-command-history</code> are described in the user
+  manual (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Repetition.html#Repetition">
+  Repetition</a> in <cite>The GNU Emacs Manual</cite>). Within the
+  minibuffer, the usual minibuffer history commands are
+  available.</p>
 </body>
 </html>

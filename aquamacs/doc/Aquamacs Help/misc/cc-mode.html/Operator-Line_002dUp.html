@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,199 +16,314 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Operator Line-Up</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Operator Line-Up">
-<meta name="keywords" content="CC Mode Manual: Operator Line-Up">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Line_002dUp-Functions.html#Line_002dUp-Functions" rel="up" title="Line-Up Functions">
-<link href="Comment-Line_002dUp.html#Comment-Line_002dUp" rel="next" title="Comment Line-Up">
-<link href="List-Line_002dUp.html#List-Line_002dUp" rel="prev" title="List Line-Up">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Operator Line-Up</title>
+  <meta name="description" content=
+  "CC Mode Manual: Operator Line-Up" />
+  <meta name="keywords" content=
+  "CC Mode Manual: Operator Line-Up" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Line_002dUp-Functions.html#Line_002dUp-Functions"
+  rel="up" title="Line-Up Functions" />
+  <link href="Comment-Line_002dUp.html#Comment-Line_002dUp" rel=
+  "next" title="Comment Line-Up" />
+  <link href="List-Line_002dUp.html#List-Line_002dUp" rel="prev"
+  title="List Line-Up" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Operator-Line_002dUp"></a>
-<div class="header">
-<p>
-Next: <a href="Comment-Line_002dUp.html#Comment-Line_002dUp" accesskey="n" rel="next">Comment Line-Up</a>, Previous: <a href="List-Line_002dUp.html#List-Line_002dUp" accesskey="p" rel="prev">List Line-Up</a>, Up: <a href="Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey="u" rel="up">Line-Up Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Operator-Line_002dUp-Functions"></a>
-<h4 class="subsection">11.3.3 Operator Line-Up Functions</h4>
+<body lang="en" xml:lang="en">
+  <a name="Operator-Line_002dUp" id="Operator-Line_002dUp"></a>
 
-<p>The line-up functions here calculate the indentation for lines which
-start with an operator, by lining it up with something on the previous
-line.
-</p>
-<dl>
-<dt><a name="index-c_002dlineup_002dargcont"></a>Function: <strong>c-lineup-argcont</strong></dt>
-<dd><a name="index-lineup_002dargcont-_0028c_002d_0029"></a>
-<p>Line up a continued argument.  E.g.:
-</p>
-<div class="example">
-<pre class="example">foo (xyz, aaa + bbb + ccc
-          + ddd + eee + fff);  &lt;- <i>c-lineup-argcont</i></pre></div>
+  <div class="header">
+    <p>Next: <a href="Comment-Line_002dUp.html#Comment-Line_002dUp"
+    accesskey="n" rel="next">Comment Line-Up</a>, Previous:
+    <a href="List-Line_002dUp.html#List-Line_002dUp" accesskey="p"
+    rel="prev">List Line-Up</a>, Up: <a href=
+    "Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey=
+    "u" rel="up">Line-Up Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Operator-Line_002dUp-Functions" id=
+  "Operator-Line_002dUp-Functions"></a>
 
-<p>Only continuation lines like this are touched, <code>nil</code> is returned on
-lines which are the start of an argument.
-</p>
-<p>Within a gcc <code>asm</code> block, <code>:</code> is recognized as an argument
-separator, but of course only between operand specifications, not in the
-expressions for the operands.
-</p>
-<p><em>Works with:&nbsp;</em> <code>arglist-cont</code>, <code>arglist-cont-nonempty</code>.
-</p></dd></dl>
+  <h4 class="subsection">11.3.3 Operator Line-Up Functions</h4>
 
+  <p>The line-up functions here calculate the indentation for lines
+  which start with an operator, by lining it up with something on
+  the previous line.</p>
 
-<dl>
-<dt><a name="index-c_002dlineup_002darglist_002doperators"></a>Function: <strong>c-lineup-arglist-operators</strong></dt>
-<dd><a name="index-lineup_002darglist_002doperators-_0028c_002d_0029"></a>
-<p>Line up lines starting with an infix operator under the open paren.
-Return <code>nil</code> on lines that don&rsquo;t start with an operator, to leave
-those cases to other line-up functions.  Example:
-</p>
-<div class="example">
-<pre class="example">if (  x &lt; 10
+  <dl>
+    <dt><a name="index-c_002dlineup_002dargcont" id=
+    "index-c_002dlineup_002dargcont"></a>Function:
+    <strong>c-lineup-argcont</strong></dt>
+
+    <dd>
+      <a name="index-lineup_002dargcont-_0028c_002d_0029" id=
+      "index-lineup_002dargcont-_0028c_002d_0029"></a>
+
+      <p>Line up a continued argument. E.g.:</p>
+
+      <div class="example">
+        <pre class="example">
+foo (xyz, aaa + bbb + ccc
+          + ddd + eee + fff);  &lt;- <i>c-lineup-argcont</i>
+</pre>
+      </div>
+
+      <p>Only continuation lines like this are touched,
+      <code>nil</code> is returned on lines which are the start of
+      an argument.</p>
+
+      <p>Within a gcc <code>asm</code> block, <code>:</code> is
+      recognized as an argument separator, but of course only
+      between operand specifications, not in the expressions for
+      the operands.</p>
+
+      <p><em>Works with:&nbsp;</em> <code>arglist-cont</code>,
+      <code>arglist-cont-nonempty</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-c_002dlineup_002darglist_002doperators" id=
+    "index-c_002dlineup_002darglist_002doperators"></a>Function:
+    <strong>c-lineup-arglist-operators</strong></dt>
+
+    <dd>
+      <a name=
+      "index-lineup_002darglist_002doperators-_0028c_002d_0029" id=
+      "index-lineup_002darglist_002doperators-_0028c_002d_0029"></a>
+
+      <p>Line up lines starting with an infix operator under the
+      open paren. Return <code>nil</code> on lines that don&rsquo;t
+      start with an operator, to leave those cases to other line-up
+      functions. Example:</p>
+
+      <div class="example">
+        <pre class="example">
+if (  x &lt; 10
    || at_limit (x,     &lt;- <i>c-lineup-arglist-operators</i>                list)  &lt;- <i>c-lineup-arglist-operators<span class="roman"> returns nil</span></i>   )
-</pre></div>
+</pre>
+      </div>
 
-<p>Since this function doesn&rsquo;t do anything for lines without an infix
-operator you typically want to use it together with some other lineup
-settings, e.g., as follows (the <code>arglist-close</code> setting is just a
-suggestion to get a consistent style):
-</p>
-<div class="example">
-<pre class="example">(c-set-offset 'arglist-cont
+      <p>Since this function doesn&rsquo;t do anything for lines
+      without an infix operator you typically want to use it
+      together with some other lineup settings, e.g., as follows
+      (the <code>arglist-close</code> setting is just a suggestion
+      to get a consistent style):</p>
+
+      <div class="example">
+        <pre class="example">
+(c-set-offset 'arglist-cont
               '(c-lineup-arglist-operators 0))
 (c-set-offset 'arglist-cont-nonempty
               '(c-lineup-arglist-operators c-lineup-arglist))
 (c-set-offset 'arglist-close
               '(c-lineup-arglist-close-under-paren))
-</pre></div>
+</pre>
+      </div>
 
-<p><em>Works with:&nbsp;</em> <code>arglist-cont</code>, <code>arglist-cont-nonempty</code>.
-</p></dd></dl>
+      <p><em>Works with:&nbsp;</em> <code>arglist-cont</code>,
+      <code>arglist-cont-nonempty</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-c_002dlineup_002dassignments" id=
+    "index-c_002dlineup_002dassignments"></a>Function:
+    <strong>c-lineup-assignments</strong></dt>
 
-<dl>
-<dt><a name="index-c_002dlineup_002dassignments"></a>Function: <strong>c-lineup-assignments</strong></dt>
-<dd><a name="index-lineup_002dassignments-_0028c_002d_0029"></a>
-<p>Line up the current line after the assignment operator on the first line
-in the statement.  If there isn&rsquo;t any, return <code>nil</code> to allow stacking with
-other line-up functions.  If the current line contains an assignment
-operator too, try to align it with the first one.
-</p>
-<p><em>Works with:&nbsp;</em> <code>topmost-intro-cont</code>, <code>statement-cont</code>,
-<code>arglist-cont</code>, <code>arglist-cont-nonempty</code>.
-</p>
-</dd></dl>
+    <dd>
+      <a name="index-lineup_002dassignments-_0028c_002d_0029" id=
+      "index-lineup_002dassignments-_0028c_002d_0029"></a>
 
+      <p>Line up the current line after the assignment operator on
+      the first line in the statement. If there isn&rsquo;t any,
+      return <code>nil</code> to allow stacking with other line-up
+      functions. If the current line contains an assignment
+      operator too, try to align it with the first one.</p>
 
-<dl>
-<dt><a name="index-c_002dlineup_002dmath"></a>Function: <strong>c-lineup-math</strong></dt>
-<dd><a name="index-lineup_002dmath-_0028c_002d_0029"></a>
-<p>Like <code>c-lineup-assignments</code> but indent with <code>c-basic-offset</code>
-if no assignment operator was found on the first line.  I.e., this
-function is the same as specifying a list <code>(c-lineup-assignments
-+)</code>.  It&rsquo;s provided for compatibility with old configurations.
-</p>
-<p><em>Works with:&nbsp;</em> <code>topmost-intro-cont</code>, <code>statement-cont</code>,
-<code>arglist-cont</code>, <code>arglist-cont-nonempty</code>.
-</p></dd></dl>
+      <p><em>Works with:&nbsp;</em>
+      <code>topmost-intro-cont</code>, <code>statement-cont</code>,
+      <code>arglist-cont</code>,
+      <code>arglist-cont-nonempty</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-c_002dlineup_002dmath" id=
+    "index-c_002dlineup_002dmath"></a>Function:
+    <strong>c-lineup-math</strong></dt>
 
-<dl>
-<dt><a name="index-c_002dlineup_002dcascaded_002dcalls"></a>Function: <strong>c-lineup-cascaded-calls</strong></dt>
-<dd><a name="index-lineup_002dcascaded_002dcalls-_0028c_002d_0029"></a>
-<p>Line up &ldquo;cascaded calls&rdquo; under each other.  If the line begins with
-<code>-&gt;</code> or <code>.</code> and the preceding line ends with one or more
-function calls preceded by the same token, then the arrow is lined up
-with the first of those tokens.  E.g.:
-</p>
-<div class="example">
-<pre class="example">r = proc-&gt;add(17)-&gt;add(18)
-        -&gt;add(19) +         &lt;- <i>c-lineup-cascaded-calls</i>  offset;                   &lt;- <i>c-lineup-cascaded-calls<span class="roman"> (inactive)</span></i></pre></div>
+    <dd>
+      <a name="index-lineup_002dmath-_0028c_002d_0029" id=
+      "index-lineup_002dmath-_0028c_002d_0029"></a>
 
-<p>In any other situation <code>nil</code> is returned to allow use in list
-expressions.
-</p>
-<p><em>Works with:&nbsp;</em> <code>topmost-intro-cont</code>, <code>statement-cont</code>,
-<code>arglist-cont</code>, <code>arglist-cont-nonempty</code>.
-</p></dd></dl>
+      <p>Like <code>c-lineup-assignments</code> but indent with
+      <code>c-basic-offset</code> if no assignment operator was
+      found on the first line. I.e., this function is the same as
+      specifying a list <code>(c-lineup-assignments +)</code>.
+      It&rsquo;s provided for compatibility with old
+      configurations.</p>
 
+      <p><em>Works with:&nbsp;</em>
+      <code>topmost-intro-cont</code>, <code>statement-cont</code>,
+      <code>arglist-cont</code>,
+      <code>arglist-cont-nonempty</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-c_002dlineup_002dstreamop"></a>Function: <strong>c-lineup-streamop</strong></dt>
-<dd><a name="index-lineup_002dstreamop-_0028c_002d_0029"></a>
-<p>Line up C++ stream operators (i.e., &lsquo;<samp>&lt;&lt;</samp>&rsquo; and &lsquo;<samp>&gt;&gt;</samp>&rsquo;).
-</p>
-<p><em>Works with:&nbsp;</em> <code>stream-op</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-c_002dlineup_002dcascaded_002dcalls" id=
+    "index-c_002dlineup_002dcascaded_002dcalls"></a>Function:
+    <strong>c-lineup-cascaded-calls</strong></dt>
 
+    <dd>
+      <a name=
+      "index-lineup_002dcascaded_002dcalls-_0028c_002d_0029" id=
+      "index-lineup_002dcascaded_002dcalls-_0028c_002d_0029"></a>
 
-<dl>
-<dt><a name="index-c_002dlineup_002dstring_002dcont"></a>Function: <strong>c-lineup-string-cont</strong></dt>
-<dd><a name="index-lineup_002dstring_002dcont-_0028c_002d_0029"></a>
-<p>Line up a continued string under the one it continues.  A continued
-string in this sense is where a string literal follows directly after
-another one.  E.g.:
-</p>
-<div class="example">
-<pre class="example">result = prefix + &quot;A message &quot;
-                  &quot;string.&quot;;    &lt;- <i>c-lineup-string-cont</i></pre></div>
+      <p>Line up &ldquo;cascaded calls&rdquo; under each other. If
+      the line begins with <code>-&gt;</code> or <code>.</code> and
+      the preceding line ends with one or more function calls
+      preceded by the same token, then the arrow is lined up with
+      the first of those tokens. E.g.:</p>
 
-<p><code>nil</code> is returned in other situations, to allow stacking with other
-lineup functions.
-</p>
-<p><em>Works with:&nbsp;</em> <code>topmost-intro-cont</code>, <code>statement-cont</code>,
-<code>arglist-cont</code>, <code>arglist-cont-nonempty</code>.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+r = proc-&gt;add(17)-&gt;add(18)
+        -&gt;add(19) +         &lt;- <i>c-lineup-cascaded-calls</i>  offset;                   &lt;- <i>c-lineup-cascaded-calls<span class="roman"> (inactive)</span></i>
+</pre>
+      </div>
 
+      <p>In any other situation <code>nil</code> is returned to
+      allow use in list expressions.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Comment-Line_002dUp.html#Comment-Line_002dUp" accesskey="n" rel="next">Comment Line-Up</a>, Previous: <a href="List-Line_002dUp.html#List-Line_002dUp" accesskey="p" rel="prev">List Line-Up</a>, Up: <a href="Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey="u" rel="up">Line-Up Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p><em>Works with:&nbsp;</em>
+      <code>topmost-intro-cont</code>, <code>statement-cont</code>,
+      <code>arglist-cont</code>,
+      <code>arglist-cont-nonempty</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-c_002dlineup_002dstreamop" id=
+    "index-c_002dlineup_002dstreamop"></a>Function:
+    <strong>c-lineup-streamop</strong></dt>
 
+    <dd>
+      <a name="index-lineup_002dstreamop-_0028c_002d_0029" id=
+      "index-lineup_002dstreamop-_0028c_002d_0029"></a>
 
+      <p>Line up C++ stream operators (i.e.,
+      &lsquo;<samp>&lt;&lt;</samp>&rsquo; and
+      &lsquo;<samp>&gt;&gt;</samp>&rsquo;).</p>
+
+      <p><em>Works with:&nbsp;</em> <code>stream-op</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-c_002dlineup_002dstring_002dcont" id=
+    "index-c_002dlineup_002dstring_002dcont"></a>Function:
+    <strong>c-lineup-string-cont</strong></dt>
+
+    <dd>
+      <a name="index-lineup_002dstring_002dcont-_0028c_002d_0029"
+      id="index-lineup_002dstring_002dcont-_0028c_002d_0029"></a>
+
+      <p>Line up a continued string under the one it continues. A
+      continued string in this sense is where a string literal
+      follows directly after another one. E.g.:</p>
+
+      <div class="example">
+        <pre class="example">
+result = prefix + "A message "
+                  "string.";    &lt;- <i>c-lineup-string-cont</i>
+</pre>
+      </div>
+
+      <p><code>nil</code> is returned in other situations, to allow
+      stacking with other lineup functions.</p>
+
+      <p><em>Works with:&nbsp;</em>
+      <code>topmost-intro-cont</code>, <code>statement-cont</code>,
+      <code>arglist-cont</code>,
+      <code>arglist-cont-nonempty</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Comment-Line_002dUp.html#Comment-Line_002dUp"
+    accesskey="n" rel="next">Comment Line-Up</a>, Previous:
+    <a href="List-Line_002dUp.html#List-Line_002dUp" accesskey="p"
+    rel="prev">List Line-Up</a>, Up: <a href=
+    "Line_002dUp-Functions.html#Line_002dUp-Functions" accesskey=
+    "u" rel="up">Line-Up Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

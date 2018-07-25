@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,176 +19,276 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Time Conversion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Time Conversion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Time Conversion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="System-Interface.html#System-Interface" rel="up" title="System Interface">
-<link href="Time-Parsing.html#Time-Parsing" rel="next" title="Time Parsing">
-<link href="Time-Zone-Rules.html#Time-Zone-Rules" rel="prev" title="Time Zone Rules">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Time Conversion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Time Conversion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Time Conversion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="System-Interface.html#System-Interface" rel="up"
+  title="System Interface" />
+  <link href="Time-Parsing.html#Time-Parsing" rel="next" title=
+  "Time Parsing" />
+  <link href="Time-Zone-Rules.html#Time-Zone-Rules" rel="prev"
+  title="Time Zone Rules" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Time-Conversion" id="Time-Conversion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Time-Parsing.html#Time-Parsing" accesskey="n"
+    rel="next">Time Parsing</a>, Previous: <a href=
+    "Time-Zone-Rules.html#Time-Zone-Rules" accesskey="p" rel=
+    "prev">Time Zone Rules</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Time-Conversion-1" id="Time-Conversion-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Time-Conversion"></a>
-<div class="header">
-<p>
-Next: <a href="Time-Parsing.html#Time-Parsing" accesskey="n" rel="next">Time Parsing</a>, Previous: <a href="Time-Zone-Rules.html#Time-Zone-Rules" accesskey="p" rel="prev">Time Zone Rules</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Time-Conversion-1"></a>
-<h3 class="section">38.7 Time Conversion</h3>
-<a name="index-calendrical-information"></a>
-<a name="index-time-conversion"></a>
+  <h3 class="section">38.7 Time Conversion</h3><a name=
+  "index-calendrical-information" id=
+  "index-calendrical-information"></a> <a name=
+  "index-time-conversion" id="index-time-conversion"></a>
 
-<p>These functions convert time values (see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>) into
-calendrical information and vice versa.
-</p>
-<p>Many 32-bit operating systems are limited to system times containing
-32 bits of information in their seconds component; these systems
-typically handle only the times from 1901-12-13 20:45:52 through
-2038-01-19 03:14:07 Universal Time.  However, 64-bit and some 32-bit operating
-systems have larger seconds components, and can represent times far in
-the past or future.
-</p>
-<p>Time conversion functions always use the Gregorian calendar, even
-for dates before the Gregorian calendar was introduced.  Year numbers
-count the number of years since the year 1 B.C., and do not skip zero
-as traditional Gregorian years do; for example, the year number
-−37 represents the Gregorian year 38 B.C.
-</p>
-<dl>
-<dt><a name="index-decode_002dtime"></a>Function: <strong>decode-time</strong> <em>&amp;optional time zone</em></dt>
-<dd><p>This function converts a time value into calendrical information.  If
-you don&rsquo;t specify <var>time</var>, it decodes the current time, and similarly
-<var>zone</var> defaults to the current time zone rule.  See <a href="Time-Zone-Rules.html#Time-Zone-Rules">Time Zone Rules</a>.
-The return value is a list of nine elements, as follows:
-</p>
-<div class="example">
-<pre class="example">(<var>seconds</var> <var>minutes</var> <var>hour</var> <var>day</var> <var>month</var> <var>year</var> <var>dow</var> <var>dst</var> <var>utcoff</var>)
-</pre></div>
+  <p>These functions convert time values (see <a href=
+  "Time-of-Day.html#Time-of-Day">Time of Day</a>) into calendrical
+  information and vice versa.</p>
 
-<p>Here is what the elements mean:
-</p>
-<dl compact="compact">
-<dt><var>seconds</var></dt>
-<dd><p>The number of seconds past the minute, as an integer between 0 and 59.
-On some operating systems, this is 60 for leap seconds.
-</p></dd>
-<dt><var>minutes</var></dt>
-<dd><p>The number of minutes past the hour, as an integer between 0 and 59.
-</p></dd>
-<dt><var>hour</var></dt>
-<dd><p>The hour of the day, as an integer between 0 and 23.
-</p></dd>
-<dt><var>day</var></dt>
-<dd><p>The day of the month, as an integer between 1 and 31.
-</p></dd>
-<dt><var>month</var></dt>
-<dd><p>The month of the year, as an integer between 1 and 12.
-</p></dd>
-<dt><var>year</var></dt>
-<dd><p>The year, an integer typically greater than 1900.
-</p></dd>
-<dt><var>dow</var></dt>
-<dd><p>The day of week, as an integer between 0 and 6, where 0 stands for
-Sunday.
-</p></dd>
-<dt><var>dst</var></dt>
-<dd><p><code>t</code> if daylight saving time is effect, otherwise <code>nil</code>.
-</p></dd>
-<dt><var>utcoff</var></dt>
-<dd><p>An integer indicating the Universal Time offset in seconds, i.e., the number of
-seconds east of Greenwich.
-</p></dd>
-</dl>
+  <p>Many 32-bit operating systems are limited to system times
+  containing 32 bits of information in their seconds component;
+  these systems typically handle only the times from 1901-12-13
+  20:45:52 through 2038-01-19 03:14:07 Universal Time. However,
+  64-bit and some 32-bit operating systems have larger seconds
+  components, and can represent times far in the past or
+  future.</p>
 
-<p><strong>Common Lisp Note:</strong> Common Lisp has different meanings for
-<var>dow</var> and <var>utcoff</var>.
-</p></dd></dl>
+  <p>Time conversion functions always use the Gregorian calendar,
+  even for dates before the Gregorian calendar was introduced. Year
+  numbers count the number of years since the year 1 B.C., and do
+  not skip zero as traditional Gregorian years do; for example, the
+  year number &acirc;&circ;&rsquo;37 represents the Gregorian year
+  38 B.C.</p>
 
-<dl>
-<dt><a name="index-encode_002dtime"></a>Function: <strong>encode-time</strong> <em>seconds minutes hour day month year &amp;optional zone</em></dt>
-<dd><p>This function is the inverse of <code>decode-time</code>.  It converts seven
-items of calendrical data into a list-of-integer time value.  For the
-meanings of the arguments, see the table above under
-<code>decode-time</code>.
-</p>
-<p>Year numbers less than 100 are not treated specially.  If you want them
-to stand for years above 1900, or years above 2000, you must alter them
-yourself before you call <code>encode-time</code>.
-</p>
-<p>The optional argument <var>zone</var> defaults to the current time zone rule.
-See <a href="Time-Zone-Rules.html#Time-Zone-Rules">Time Zone Rules</a>.
-In addition to the usual time zone rule values, it can also be a list
-(as you would get from <code>current-time-zone</code>) or an integer (as
-from <code>decode-time</code>), applied without any further alteration for
-daylight saving time.
-</p>
-<p>If you pass more than seven arguments to <code>encode-time</code>, the first
-six are used as <var>seconds</var> through <var>year</var>, the last argument is
-used as <var>zone</var>, and the arguments in between are ignored.  This
-feature makes it possible to use the elements of a list returned by
-<code>decode-time</code> as the arguments to <code>encode-time</code>, like this:
-</p>
-<div class="example">
-<pre class="example">(apply 'encode-time (decode-time &hellip;))
-</pre></div>
+  <dl>
+    <dt><a name="index-decode_002dtime" id=
+    "index-decode_002dtime"></a>Function:
+    <strong>decode-time</strong> <em>&amp;optional time
+    zone</em></dt>
 
-<p>You can perform simple date arithmetic by using out-of-range values for
-the <var>seconds</var>, <var>minutes</var>, <var>hour</var>, <var>day</var>, and <var>month</var>
-arguments; for example, day 0 means the day preceding the given month.
-</p>
-<p>The operating system puts limits on the range of possible time values;
-if you try to encode a time that is out of range, an error results.
-For instance, years before 1970 do not work on some systems;
-on others, years as early as 1901 do work.
-</p></dd></dl>
+    <dd>
+      <p>This function converts a time value into calendrical
+      information. If you don&rsquo;t specify <var>time</var>, it
+      decodes the current time, and similarly <var>zone</var>
+      defaults to the current time zone rule. See <a href=
+      "Time-Zone-Rules.html#Time-Zone-Rules">Time Zone Rules</a>.
+      The return value is a list of nine elements, as follows:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Time-Parsing.html#Time-Parsing" accesskey="n" rel="next">Time Parsing</a>, Previous: <a href="Time-Zone-Rules.html#Time-Zone-Rules" accesskey="p" rel="prev">Time Zone Rules</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <div class="example">
+        <pre class="example">
+(<var>seconds</var> <var>minutes</var> <var>hour</var> <var>day</var> <var>month</var> <var>year</var> <var>dow</var> <var>dst</var> <var>utcoff</var>)
+</pre>
+      </div>
 
+      <p>Here is what the elements mean:</p>
 
+      <dl compact="compact">
+        <dt><var>seconds</var></dt>
 
+        <dd>
+          <p>The number of seconds past the minute, as an integer
+          between 0 and 59. On some operating systems, this is 60
+          for leap seconds.</p>
+        </dd>
+
+        <dt><var>minutes</var></dt>
+
+        <dd>
+          <p>The number of minutes past the hour, as an integer
+          between 0 and 59.</p>
+        </dd>
+
+        <dt><var>hour</var></dt>
+
+        <dd>
+          <p>The hour of the day, as an integer between 0 and
+          23.</p>
+        </dd>
+
+        <dt><var>day</var></dt>
+
+        <dd>
+          <p>The day of the month, as an integer between 1 and
+          31.</p>
+        </dd>
+
+        <dt><var>month</var></dt>
+
+        <dd>
+          <p>The month of the year, as an integer between 1 and
+          12.</p>
+        </dd>
+
+        <dt><var>year</var></dt>
+
+        <dd>
+          <p>The year, an integer typically greater than 1900.</p>
+        </dd>
+
+        <dt><var>dow</var></dt>
+
+        <dd>
+          <p>The day of week, as an integer between 0 and 6, where
+          0 stands for Sunday.</p>
+        </dd>
+
+        <dt><var>dst</var></dt>
+
+        <dd>
+          <p><code>t</code> if daylight saving time is effect,
+          otherwise <code>nil</code>.</p>
+        </dd>
+
+        <dt><var>utcoff</var></dt>
+
+        <dd>
+          <p>An integer indicating the Universal Time offset in
+          seconds, i.e., the number of seconds east of
+          Greenwich.</p>
+        </dd>
+      </dl>
+
+      <p><strong>Common Lisp Note:</strong> Common Lisp has
+      different meanings for <var>dow</var> and
+      <var>utcoff</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-encode_002dtime" id=
+    "index-encode_002dtime"></a>Function:
+    <strong>encode-time</strong> <em>seconds minutes hour day month
+    year &amp;optional zone</em></dt>
+
+    <dd>
+      <p>This function is the inverse of <code>decode-time</code>.
+      It converts seven items of calendrical data into a
+      list-of-integer time value. For the meanings of the
+      arguments, see the table above under
+      <code>decode-time</code>.</p>
+
+      <p>Year numbers less than 100 are not treated specially. If
+      you want them to stand for years above 1900, or years above
+      2000, you must alter them yourself before you call
+      <code>encode-time</code>.</p>
+
+      <p>The optional argument <var>zone</var> defaults to the
+      current time zone rule. See <a href=
+      "Time-Zone-Rules.html#Time-Zone-Rules">Time Zone Rules</a>.
+      In addition to the usual time zone rule values, it can also
+      be a list (as you would get from
+      <code>current-time-zone</code>) or an integer (as from
+      <code>decode-time</code>), applied without any further
+      alteration for daylight saving time.</p>
+
+      <p>If you pass more than seven arguments to
+      <code>encode-time</code>, the first six are used as
+      <var>seconds</var> through <var>year</var>, the last argument
+      is used as <var>zone</var>, and the arguments in between are
+      ignored. This feature makes it possible to use the elements
+      of a list returned by <code>decode-time</code> as the
+      arguments to <code>encode-time</code>, like this:</p>
+
+      <div class="example">
+        <pre class="example">
+(apply 'encode-time (decode-time &hellip;))
+</pre>
+      </div>
+
+      <p>You can perform simple date arithmetic by using
+      out-of-range values for the <var>seconds</var>,
+      <var>minutes</var>, <var>hour</var>, <var>day</var>, and
+      <var>month</var> arguments; for example, day 0 means the day
+      preceding the given month.</p>
+
+      <p>The operating system puts limits on the range of possible
+      time values; if you try to encode a time that is out of
+      range, an error results. For instance, years before 1970 do
+      not work on some systems; on others, years as early as 1901
+      do work.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Time-Parsing.html#Time-Parsing" accesskey="n"
+    rel="next">Time Parsing</a>, Previous: <a href=
+    "Time-Zone-Rules.html#Time-Zone-Rules" accesskey="p" rel=
+    "prev">Time Zone Rules</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

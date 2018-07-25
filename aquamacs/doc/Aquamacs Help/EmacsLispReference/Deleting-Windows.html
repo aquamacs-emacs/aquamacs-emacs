@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,158 +19,232 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Deleting Windows</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Deleting Windows">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Deleting Windows">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Recombining-Windows.html#Recombining-Windows" rel="next" title="Recombining Windows">
-<link href="Splitting-Windows.html#Splitting-Windows" rel="prev" title="Splitting Windows">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Deleting Windows</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Deleting Windows" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Deleting Windows" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Recombining-Windows.html#Recombining-Windows" rel=
+  "next" title="Recombining Windows" />
+  <link href="Splitting-Windows.html#Splitting-Windows" rel="prev"
+  title="Splitting Windows" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Deleting-Windows" id="Deleting-Windows"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Recombining-Windows.html#Recombining-Windows"
+    accesskey="n" rel="next">Recombining Windows</a>, Previous:
+    <a href="Splitting-Windows.html#Splitting-Windows" accesskey=
+    "p" rel="prev">Splitting Windows</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Deleting-Windows-1" id="Deleting-Windows-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Deleting-Windows"></a>
-<div class="header">
-<p>
-Next: <a href="Recombining-Windows.html#Recombining-Windows" accesskey="n" rel="next">Recombining Windows</a>, Previous: <a href="Splitting-Windows.html#Splitting-Windows" accesskey="p" rel="prev">Splitting Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Deleting-Windows-1"></a>
-<h3 class="section">27.7 Deleting Windows</h3>
-<a name="index-deleting-windows"></a>
+  <h3 class="section">27.7 Deleting Windows</h3><a name=
+  "index-deleting-windows" id="index-deleting-windows"></a>
 
-<p><em>Deleting</em> a window removes it from the frame&rsquo;s window tree.  If
-the window is a live window, it disappears from the screen.  If the
-window is an internal window, its child windows are deleted too.
-</p>
-<p>Even after a window is deleted, it continues to exist as a Lisp
-object, until there are no more references to it.  Window deletion can
-be reversed, by restoring a saved window configuration (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).
-</p>
-<dl>
-<dt><a name="index-delete_002dwindow"></a>Command: <strong>delete-window</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function removes <var>window</var> from display and returns
-<code>nil</code>.  If <var>window</var> is omitted or <code>nil</code>, it defaults to
-the selected window.  If deleting the window would leave no more
-windows in the window tree (e.g., if it is the only live window in the
-frame), an error is signaled.
-</p>
-<p>By default, the space taken up by <var>window</var> is given to one of its
-adjacent sibling windows, if any.  However, if the variable
-<code>window-combination-resize</code> is non-<code>nil</code>, the space is
-proportionally distributed among any remaining windows in the same
-window combination.  See <a href="Recombining-Windows.html#Recombining-Windows">Recombining Windows</a>.
-</p>
-<p>The behavior of this function may be altered by the window parameters
-of <var>window</var>, so long as the variable
-<code>ignore-window-parameters</code> is <code>nil</code>.  If the value of
-the <code>delete-window</code> window parameter is <code>t</code>, this function
-ignores all other window parameters.  Otherwise, if the value of the
-<code>delete-window</code> window parameter is a function, that function is
-called with the argument <var>window</var>, in lieu of the usual action of
-<code>delete-window</code>.  Otherwise, this function obeys the
-<code>window-atom</code> or <code>window-side</code> window parameter, if any.
-See <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>.
-</p></dd></dl>
+  <p><em>Deleting</em> a window removes it from the frame&rsquo;s
+  window tree. If the window is a live window, it disappears from
+  the screen. If the window is an internal window, its child
+  windows are deleted too.</p>
 
-<dl>
-<dt><a name="index-delete_002dother_002dwindows"></a>Command: <strong>delete-other-windows</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function makes <var>window</var> fill its frame, by deleting other
-windows as necessary.  If <var>window</var> is omitted or <code>nil</code>, it
-defaults to the selected window.  The return value is <code>nil</code>.
-</p>
-<p>The behavior of this function may be altered by the window parameters
-of <var>window</var>, so long as the variable
-<code>ignore-window-parameters</code> is <code>nil</code>.  If the value of
-the <code>delete-other-windows</code> window parameter is <code>t</code>, this
-function ignores all other window parameters.  Otherwise, if the value
-of the <code>delete-other-windows</code> window parameter is a function,
-that function is called with the argument <var>window</var>, in lieu of the
-usual action of <code>delete-other-windows</code>.  Otherwise, this function
-obeys the <code>window-atom</code> or <code>window-side</code> window parameter,
-if any.  See <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>.
-</p></dd></dl>
+  <p>Even after a window is deleted, it continues to exist as a
+  Lisp object, until there are no more references to it. Window
+  deletion can be reversed, by restoring a saved window
+  configuration (see <a href=
+  "Window-Configurations.html#Window-Configurations">Window
+  Configurations</a>).</p>
 
-<dl>
-<dt><a name="index-delete_002dwindows_002don"></a>Command: <strong>delete-windows-on</strong> <em>&amp;optional buffer-or-name frame</em></dt>
-<dd><p>This function deletes all windows showing <var>buffer-or-name</var>, by
-calling <code>delete-window</code> on those windows.  <var>buffer-or-name</var>
-should be a buffer, or the name of a buffer; if omitted or <code>nil</code>,
-it defaults to the current buffer.  If there are no windows showing
-the specified buffer, this function does nothing.  If the specified
-buffer is a minibuffer, an error is signaled.
-</p>
-<p>If there is a dedicated window showing the buffer, and that window is
-the only one on its frame, this function also deletes that frame if it
-is not the only frame on the terminal.
-</p>
-<p>The optional argument <var>frame</var> specifies which frames to operate
-on:
-</p>
-<ul>
-<li> <code>nil</code>
-means operate on all frames.
-</li><li> <code>t</code>
-means operate on the selected frame.
-</li><li> <code>visible</code>
-means operate on all visible frames.
-</li><li> <code>0</code>
-means operate on all visible or iconified frames.
-</li><li> A frame
-means operate on that frame.
-</li></ul>
+  <dl>
+    <dt><a name="index-delete_002dwindow" id=
+    "index-delete_002dwindow"></a>Command:
+    <strong>delete-window</strong> <em>&amp;optional
+    window</em></dt>
 
-<p>Note that this argument does not have the same meaning as in other
-functions which scan all live windows (see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).  Specifically, the meanings of <code>t</code> and <code>nil</code> here
-are the opposite of what they are in those other functions.
-</p></dd></dl>
+    <dd>
+      <p>This function removes <var>window</var> from display and
+      returns <code>nil</code>. If <var>window</var> is omitted or
+      <code>nil</code>, it defaults to the selected window. If
+      deleting the window would leave no more windows in the window
+      tree (e.g., if it is the only live window in the frame), an
+      error is signaled.</p>
 
+      <p>By default, the space taken up by <var>window</var> is
+      given to one of its adjacent sibling windows, if any.
+      However, if the variable
+      <code>window-combination-resize</code> is
+      non-<code>nil</code>, the space is proportionally distributed
+      among any remaining windows in the same window combination.
+      See <a href=
+      "Recombining-Windows.html#Recombining-Windows">Recombining
+      Windows</a>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Recombining-Windows.html#Recombining-Windows" accesskey="n" rel="next">Recombining Windows</a>, Previous: <a href="Splitting-Windows.html#Splitting-Windows" accesskey="p" rel="prev">Splitting Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>The behavior of this function may be altered by the window
+      parameters of <var>window</var>, so long as the variable
+      <code>ignore-window-parameters</code> is <code>nil</code>. If
+      the value of the <code>delete-window</code> window parameter
+      is <code>t</code>, this function ignores all other window
+      parameters. Otherwise, if the value of the
+      <code>delete-window</code> window parameter is a function,
+      that function is called with the argument <var>window</var>,
+      in lieu of the usual action of <code>delete-window</code>.
+      Otherwise, this function obeys the <code>window-atom</code>
+      or <code>window-side</code> window parameter, if any. See
+      <a href="Window-Parameters.html#Window-Parameters">Window
+      Parameters</a>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-delete_002dother_002dwindows" id=
+    "index-delete_002dother_002dwindows"></a>Command:
+    <strong>delete-other-windows</strong> <em>&amp;optional
+    window</em></dt>
 
+    <dd>
+      <p>This function makes <var>window</var> fill its frame, by
+      deleting other windows as necessary. If <var>window</var> is
+      omitted or <code>nil</code>, it defaults to the selected
+      window. The return value is <code>nil</code>.</p>
 
+      <p>The behavior of this function may be altered by the window
+      parameters of <var>window</var>, so long as the variable
+      <code>ignore-window-parameters</code> is <code>nil</code>. If
+      the value of the <code>delete-other-windows</code> window
+      parameter is <code>t</code>, this function ignores all other
+      window parameters. Otherwise, if the value of the
+      <code>delete-other-windows</code> window parameter is a
+      function, that function is called with the argument
+      <var>window</var>, in lieu of the usual action of
+      <code>delete-other-windows</code>. Otherwise, this function
+      obeys the <code>window-atom</code> or
+      <code>window-side</code> window parameter, if any. See
+      <a href="Window-Parameters.html#Window-Parameters">Window
+      Parameters</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-delete_002dwindows_002don" id=
+    "index-delete_002dwindows_002don"></a>Command:
+    <strong>delete-windows-on</strong> <em>&amp;optional
+    buffer-or-name frame</em></dt>
+
+    <dd>
+      <p>This function deletes all windows showing
+      <var>buffer-or-name</var>, by calling
+      <code>delete-window</code> on those windows.
+      <var>buffer-or-name</var> should be a buffer, or the name of
+      a buffer; if omitted or <code>nil</code>, it defaults to the
+      current buffer. If there are no windows showing the specified
+      buffer, this function does nothing. If the specified buffer
+      is a minibuffer, an error is signaled.</p>
+
+      <p>If there is a dedicated window showing the buffer, and
+      that window is the only one on its frame, this function also
+      deletes that frame if it is not the only frame on the
+      terminal.</p>
+
+      <p>The optional argument <var>frame</var> specifies which
+      frames to operate on:</p>
+
+      <ul>
+        <li><code>nil</code> means operate on all frames.</li>
+
+        <li><code>t</code> means operate on the selected
+        frame.</li>
+
+        <li><code>visible</code> means operate on all visible
+        frames.</li>
+
+        <li><code>0</code> means operate on all visible or
+        iconified frames.</li>
+
+        <li>A frame means operate on that frame.</li>
+      </ul>
+
+      <p>Note that this argument does not have the same meaning as
+      in other functions which scan all live windows (see <a href=
+      "Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic
+      Window Ordering</a>). Specifically, the meanings of
+      <code>t</code> and <code>nil</code> here are the opposite of
+      what they are in those other functions.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Recombining-Windows.html#Recombining-Windows"
+    accesskey="n" rel="next">Recombining Windows</a>, Previous:
+    <a href="Splitting-Windows.html#Splitting-Windows" accesskey=
+    "p" rel="prev">Splitting Windows</a>, Up: <a href=
+    "Windows.html#Windows" accesskey="u" rel="up">Windows</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

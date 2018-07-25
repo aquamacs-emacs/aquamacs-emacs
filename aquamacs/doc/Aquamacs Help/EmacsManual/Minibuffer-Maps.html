@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,88 +20,134 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Minibuffer Maps</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Minibuffer Maps">
-<meta name="keywords" content="GNU Emacs Manual: Minibuffer Maps">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Key-Bindings.html#Key-Bindings" rel="up" title="Key Bindings">
-<link href="Rebinding.html#Rebinding" rel="next" title="Rebinding">
-<link href="Local-Keymaps.html#Local-Keymaps" rel="prev" title="Local Keymaps">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Minibuffer Maps</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Minibuffer Maps" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Minibuffer Maps" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Key-Bindings.html#Key-Bindings" rel="up" title=
+  "Key Bindings" />
+  <link href="Rebinding.html#Rebinding" rel="next" title=
+  "Rebinding" />
+  <link href="Local-Keymaps.html#Local-Keymaps" rel="prev" title=
+  "Local Keymaps" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Minibuffer-Maps" id="Minibuffer-Maps"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Rebinding.html#Rebinding" accesskey="n" rel=
+    "next">Rebinding</a>, Previous: <a href=
+    "Local-Keymaps.html#Local-Keymaps" accesskey="p" rel=
+    "prev">Local Keymaps</a>, Up: <a href=
+    "Key-Bindings.html#Key-Bindings" accesskey="u" rel="up">Key
+    Bindings</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Minibuffer-Keymaps" id="Minibuffer-Keymaps"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Minibuffer-Maps"></a>
-<div class="header">
-<p>
-Next: <a href="Rebinding.html#Rebinding" accesskey="n" rel="next">Rebinding</a>, Previous: <a href="Local-Keymaps.html#Local-Keymaps" accesskey="p" rel="prev">Local Keymaps</a>, Up: <a href="Key-Bindings.html#Key-Bindings" accesskey="u" rel="up">Key Bindings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Minibuffer-Keymaps"></a>
-<h4 class="subsection">51.3.4 Minibuffer Keymaps</h4>
+  <h4 class="subsection">51.3.4 Minibuffer Keymaps</h4><a name=
+  "index-minibuffer-keymaps" id="index-minibuffer-keymaps"></a>
+  <a name="index-minibuffer_002dlocal_002dmap" id=
+  "index-minibuffer_002dlocal_002dmap"></a> <a name=
+  "index-minibuffer_002dlocal_002dns_002dmap" id=
+  "index-minibuffer_002dlocal_002dns_002dmap"></a> <a name=
+  "index-minibuffer_002dlocal_002dcompletion_002dmap" id=
+  "index-minibuffer_002dlocal_002dcompletion_002dmap"></a> <a name=
+  "index-minibuffer_002dlocal_002dmust_002dmatch_002dmap" id=
+  "index-minibuffer_002dlocal_002dmust_002dmatch_002dmap"></a>
+  <a name=
+  "index-minibuffer_002dlocal_002dfilename_002dcompletion_002dmap"
+  id=
+  "index-minibuffer_002dlocal_002dfilename_002dcompletion_002dmap"></a>
+  <a name=
+  "index-minibuffer_002dlocal_002dfilename_002dmust_002dmatch_002dmap"
+  id=
+  "index-minibuffer_002dlocal_002dfilename_002dmust_002dmatch_002dmap">
+  </a>
 
-<a name="index-minibuffer-keymaps"></a>
-<a name="index-minibuffer_002dlocal_002dmap"></a>
-<a name="index-minibuffer_002dlocal_002dns_002dmap"></a>
-<a name="index-minibuffer_002dlocal_002dcompletion_002dmap"></a>
-<a name="index-minibuffer_002dlocal_002dmust_002dmatch_002dmap"></a>
-<a name="index-minibuffer_002dlocal_002dfilename_002dcompletion_002dmap"></a>
-<a name="index-minibuffer_002dlocal_002dfilename_002dmust_002dmatch_002dmap"></a>
-<p>The minibuffer has its own set of local keymaps; they contain various
-completion and exit commands.
-</p>
-<ul>
-<li> <code>minibuffer-local-map</code> is used for ordinary input (no completion).
-</li><li> <code>minibuffer-local-ns-map</code> is similar, except that <tt class="key">SPC</tt> exits
-just like <tt class="key">RET</tt>.
-</li><li> <code>minibuffer-local-completion-map</code> is for permissive completion.
-</li><li> <code>minibuffer-local-must-match-map</code> is for strict completion and
-for cautious completion.
-</li><li> <code>minibuffer-local-filename-completion-map</code> and
-<code>minibuffer-local-filename-must-match-map</code> are like the two
-previous ones, but they are specifically for file name completion.
-They do not bind <tt class="key">SPC</tt>.
-</li></ul>
+  <p>The minibuffer has its own set of local keymaps; they contain
+  various completion and exit commands.</p>
 
+  <ul>
+    <li><code>minibuffer-local-map</code> is used for ordinary
+    input (no completion).</li>
 
+    <li><code>minibuffer-local-ns-map</code> is similar, except
+    that <tt class="key">SPC</tt> exits just like <tt class=
+    "key">RET</tt>.</li>
 
+    <li><code>minibuffer-local-completion-map</code> is for
+    permissive completion.</li>
 
+    <li><code>minibuffer-local-must-match-map</code> is for strict
+    completion and for cautious completion.</li>
+
+    <li><code>minibuffer-local-filename-completion-map</code> and
+    <code>minibuffer-local-filename-must-match-map</code> are like
+    the two previous ones, but they are specifically for file name
+    completion. They do not bind <tt class="key">SPC</tt>.</li>
+  </ul>
 </body>
 </html>

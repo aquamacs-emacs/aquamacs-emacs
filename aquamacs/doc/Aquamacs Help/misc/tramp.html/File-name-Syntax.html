@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,141 +14,192 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to
 copy and modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>TRAMP User Manual: File name Syntax</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="TRAMP User Manual: File name Syntax">
-<meta name="keywords" content="TRAMP User Manual: File name Syntax">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Usage.html#Usage" rel="up" title="Usage">
-<link href="File-name-completion.html#File-name-completion" rel="next" title="File name completion">
-<link href="Usage.html#Usage" rel="prev" title="Usage">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>TRAMP User Manual: File name Syntax</title>
+  <meta name="description" content=
+  "TRAMP User Manual: File name Syntax" />
+  <meta name="keywords" content=
+  "TRAMP User Manual: File name Syntax" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Usage.html#Usage" rel="up" title="Usage" />
+  <link href="File-name-completion.html#File-name-completion" rel=
+  "next" title="File name completion" />
+  <link href="Usage.html#Usage" rel="prev" title="Usage" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="File-name-Syntax"></a>
-<div class="header">
-<p>
-Next: <a href="File-name-completion.html#File-name-completion" accesskey="n" rel="next">File name completion</a>, Up: <a href="Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="TRAMP-file-name-conventions"></a>
-<h3 class="section">5.1 <small>TRAMP</small> file name conventions</h3>
-<a name="index-file-name-syntax"></a>
-<a name="index-file-name-examples"></a>
+<body lang="en" xml:lang="en">
+  <a name="File-name-Syntax" id="File-name-Syntax"></a>
 
-<p><samp>/host:localfilename</samp>
-opens file <var>localfilename</var> on the remote host <var>host</var>, using
-the default method.  See <a href="Default-Method.html#Default-Method">Default Method</a>.
-</p>
-<dl compact="compact">
-<dt><samp>/melancholia:.emacs</samp></dt>
-<dd><p>For the file <samp>.emacs</samp> located in the home directory, on the host
-<code>melancholia</code>.
-</p>
-</dd>
-<dt><samp>/melancholia.danann.net:.emacs</samp></dt>
-<dd><p>For the file <samp>.emacs</samp> specified using the fully qualified domain name of
-the host.
-</p>
-</dd>
-<dt><samp>/melancholia:~/.emacs</samp></dt>
-<dd><p>For the file <samp>.emacs</samp> specified using the <samp>~</samp>, which is expanded.
-</p>
-</dd>
-<dt><samp>/melancholia:~daniel/.emacs</samp></dt>
-<dd><p>For the file <samp>.emacs</samp> located in <code>daniel</code>&rsquo;s home directory
-on the host, <code>melancholia</code>.  The <samp>~&lt;user&gt;</samp> construct is
-expanded to the home directory of that user on the remote host.
-</p>
-</dd>
-<dt><samp>/melancholia:/etc/squid.conf</samp></dt>
-<dd><p>For the file <samp>/etc/squid.conf</samp> on the host <code>melancholia</code>.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "File-name-completion.html#File-name-completion" accesskey="n"
+    rel="next">File name completion</a>, Up: <a href=
+    "Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="TRAMP-file-name-conventions" id=
+  "TRAMP-file-name-conventions"></a>
 
-<p><var>host</var> can take IPv4 or IPv6 address, as in
-<samp>/127.0.0.1:.emacs</samp> or
-<samp>/[::1]:.emacs</samp>.
-For syntactical reasons, IPv6 addresses must be embedded in square
-brackets <samp>[</samp> and <samp>]</samp>.
-</p>
-<p>By default, <small>TRAMP</small> will use the current local user name as the
-remote user name for log in to the remote host.  Specifying a different
-name using the proper syntax will override this default behavior:
-</p>
-<div class="example">
-<pre class="example">/user@host:path/to.file
-</pre></div>
+  <h3 class="section">5.1 <small>TRAMP</small> file name
+  conventions</h3><a name="index-file-name-syntax" id=
+  "index-file-name-syntax"></a> <a name="index-file-name-examples"
+  id="index-file-name-examples"></a>
 
-<p><samp>/daniel@melancholia:.emacs</samp> is for file
-<samp>.emacs</samp> in <code>daniel</code>&rsquo;s home directory on the host,
-<code>melancholia</code>.
-</p>
-<p>Specify other file access methods (see <a href="Inline-methods.html#Inline-methods">Inline methods</a>,
-see <a href="External-methods.html#External-methods">External methods</a>) as part of the file name.
-</p>
-<p>Method name comes before user name, as in
-<samp>/<var>method</var>:</samp> (Note the trailing
-colon).
-The syntax specifications for user, host, and file do not change.
-</p>
-<p>To connect to the host <code>melancholia</code> as <code>daniel</code>, using
-<samp>ssh</samp> method for <samp>.emacs</samp> in <code>daniel</code>&rsquo;s home
-directory, the full specification is:
-<samp>/ssh:daniel@melancholia:.emacs</samp>.
-</p>
-<p>A remote file name containing a host name, which is the same string as
-a method name, is not allowed.
-</p>
-<p>For specifying port numbers, affix <samp>#&lt;port&gt;</samp> to the host
-name.  For example: <samp>/ssh:daniel@melancholia#42:.emacs</samp>.
-</p>
+  <p><samp>/host:localfilename</samp> opens file
+  <var>localfilename</var> on the remote host <var>host</var>,
+  using the default method. See <a href=
+  "Default-Method.html#Default-Method">Default Method</a>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="File-name-completion.html#File-name-completion" accesskey="n" rel="next">File name completion</a>, Up: <a href="Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><samp>/melancholia:.emacs</samp></dt>
 
+    <dd>
+      <p>For the file <samp>.emacs</samp> located in the home
+      directory, on the host <code>melancholia</code>.</p>
+    </dd>
 
+    <dt><samp>/melancholia.danann.net:.emacs</samp></dt>
 
+    <dd>
+      <p>For the file <samp>.emacs</samp> specified using the fully
+      qualified domain name of the host.</p>
+    </dd>
+
+    <dt><samp>/melancholia:~/.emacs</samp></dt>
+
+    <dd>
+      <p>For the file <samp>.emacs</samp> specified using the
+      <samp>~</samp>, which is expanded.</p>
+    </dd>
+
+    <dt><samp>/melancholia:~daniel/.emacs</samp></dt>
+
+    <dd>
+      <p>For the file <samp>.emacs</samp> located in
+      <code>daniel</code>&rsquo;s home directory on the host,
+      <code>melancholia</code>. The <samp>~&lt;user&gt;</samp>
+      construct is expanded to the home directory of that user on
+      the remote host.</p>
+    </dd>
+
+    <dt><samp>/melancholia:/etc/squid.conf</samp></dt>
+
+    <dd>
+      <p>For the file <samp>/etc/squid.conf</samp> on the host
+      <code>melancholia</code>.</p>
+    </dd>
+  </dl>
+
+  <p><var>host</var> can take IPv4 or IPv6 address, as in
+  <samp>/127.0.0.1:.emacs</samp> or <samp>/[::1]:.emacs</samp>. For
+  syntactical reasons, IPv6 addresses must be embedded in square
+  brackets <samp>[</samp> and <samp>]</samp>.</p>
+
+  <p>By default, <small>TRAMP</small> will use the current local
+  user name as the remote user name for log in to the remote host.
+  Specifying a different name using the proper syntax will override
+  this default behavior:</p>
+
+  <div class="example">
+    <pre class="example">
+/user@host:path/to.file
+</pre>
+  </div>
+
+  <p><samp>/daniel@melancholia:.emacs</samp> is for file
+  <samp>.emacs</samp> in <code>daniel</code>&rsquo;s home directory
+  on the host, <code>melancholia</code>.</p>
+
+  <p>Specify other file access methods (see <a href=
+  "Inline-methods.html#Inline-methods">Inline methods</a>, see
+  <a href="External-methods.html#External-methods">External
+  methods</a>) as part of the file name.</p>
+
+  <p>Method name comes before user name, as in
+  <samp>/<var>method</var>:</samp> (Note the trailing colon). The
+  syntax specifications for user, host, and file do not change.</p>
+
+  <p>To connect to the host <code>melancholia</code> as
+  <code>daniel</code>, using <samp>ssh</samp> method for
+  <samp>.emacs</samp> in <code>daniel</code>&rsquo;s home
+  directory, the full specification is:
+  <samp>/ssh:daniel@melancholia:.emacs</samp>.</p>
+
+  <p>A remote file name containing a host name, which is the same
+  string as a method name, is not allowed.</p>
+
+  <p>For specifying port numbers, affix <samp>#&lt;port&gt;</samp>
+  to the host name. For example:
+  <samp>/ssh:daniel@melancholia#42:.emacs</samp>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "File-name-completion.html#File-name-completion" accesskey="n"
+    rel="next">File name completion</a>, Up: <a href=
+    "Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

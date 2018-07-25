@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,104 +18,148 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Vectors and Matrices</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Vectors and Matrices">
-<meta name="keywords" content="GNU Emacs Calc Manual: Vectors and Matrices">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Data-Types.html#Data-Types" rel="up" title="Data Types">
-<link href="Strings.html#Strings" rel="next" title="Strings">
-<link href="Infinities.html#Infinities" rel="prev" title="Infinities">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Vectors and Matrices</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Vectors and Matrices" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Vectors and Matrices" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Data-Types.html#Data-Types" rel="up" title=
+  "Data Types" />
+  <link href="Strings.html#Strings" rel="next" title="Strings" />
+  <link href="Infinities.html#Infinities" rel="prev" title=
+  "Infinities" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Vectors-and-Matrices"></a>
-<div class="header">
-<p>
-Next: <a href="Strings.html#Strings" accesskey="n" rel="next">Strings</a>, Previous: <a href="Infinities.html#Infinities" accesskey="p" rel="prev">Infinities</a>, Up: <a href="Data-Types.html#Data-Types" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Vectors-and-Matrices-1"></a>
-<h3 class="section">4.6 Vectors and Matrices</h3>
+<body lang="en" xml:lang="en">
+  <a name="Vectors-and-Matrices" id="Vectors-and-Matrices"></a>
 
-<a name="index-Vectors"></a>
-<a name="index-Plain-vectors"></a>
-<a name="index-Matrices"></a>
-<p>The <em>vector</em> data type is flexible and general.  A vector is simply a
-list of zero or more data objects.  When these objects are numbers, the
-whole is a vector in the mathematical sense.  When these objects are
-themselves vectors of equal (nonzero) length, the whole is a <em>matrix</em>.
-A vector which is not a matrix is referred to here as a <em>plain vector</em>.
-</p>
-<p>A vector is displayed as a list of values separated by commas and enclosed
-in square brackets:  &lsquo;<samp>[1, 2, 3]</samp>&rsquo;.  Thus the following is a 2 row by
-3 column matrix:  &lsquo;<samp>[[1, 2, 3], [4, 5, 6]]</samp>&rsquo;.  Vectors, like complex
-numbers, are entered as incomplete objects.  See <a href="Incomplete-Objects.html#Incomplete-Objects">Incomplete Objects</a>.
-During algebraic entry, vectors are entered all at once in the usual
-brackets-and-commas form.  Matrices may be entered algebraically as nested
-vectors, or using the shortcut notation &lsquo;<samp>[1,&nbsp;2,&nbsp;3;&nbsp;4,&nbsp;5,&nbsp;6]</samp>&rsquo;<!-- /@w -->,
-with rows separated by semicolons.  The commas may usually be omitted
-when entering vectors:  &lsquo;<samp>[1 2 3]</samp>&rsquo;.  Curly braces may be used in
-place of brackets: &lsquo;<samp>{1, 2, 3}</samp>&rsquo;, but the commas are required in
-this case.
-</p>
-<p>Traditional vector and matrix arithmetic is also supported;
-see <a href="Basic-Arithmetic.html#Basic-Arithmetic">Basic Arithmetic</a> and see <a href="Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>.
-Many other operations are applied to vectors element-wise.  For example,
-the complex conjugate of a vector is a vector of the complex conjugates
-of its elements.
-</p>
-<a name="index-vec"></a>
-<p>Algebraic functions for building vectors include &lsquo;<samp>vec(a, b, c)</samp>&rsquo;
-to build &lsquo;<samp>[a, b, c]</samp>&rsquo;, &lsquo;<samp>cvec(a, n, m)</samp>&rsquo; to build an
-<var>n</var>x<var>m</var>
-matrix of &lsquo;<samp>a</samp>&rsquo;s, and &lsquo;<samp>index(n)</samp>&rsquo; to build a vector of integers
-from 1 to &lsquo;<samp>n</samp>&rsquo;.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Strings.html#Strings" accesskey="n" rel="next">Strings</a>, Previous: <a href="Infinities.html#Infinities" accesskey="p" rel="prev">Infinities</a>, Up: <a href="Data-Types.html#Data-Types" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Strings.html#Strings" accesskey="n" rel=
+    "next">Strings</a>, Previous: <a href=
+    "Infinities.html#Infinities" accesskey="p" rel=
+    "prev">Infinities</a>, Up: <a href="Data-Types.html#Data-Types"
+    accesskey="u" rel="up">Data Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Vectors-and-Matrices-1" id="Vectors-and-Matrices-1"></a>
 
+  <h3 class="section">4.6 Vectors and Matrices</h3><a name=
+  "index-Vectors" id="index-Vectors"></a> <a name=
+  "index-Plain-vectors" id="index-Plain-vectors"></a> <a name=
+  "index-Matrices" id="index-Matrices"></a>
 
+  <p>The <em>vector</em> data type is flexible and general. A
+  vector is simply a list of zero or more data objects. When these
+  objects are numbers, the whole is a vector in the mathematical
+  sense. When these objects are themselves vectors of equal
+  (nonzero) length, the whole is a <em>matrix</em>. A vector which
+  is not a matrix is referred to here as a <em>plain
+  vector</em>.</p>
 
+  <p>A vector is displayed as a list of values separated by commas
+  and enclosed in square brackets: &lsquo;<samp>[1, 2,
+  3]</samp>&rsquo;. Thus the following is a 2 row by 3 column
+  matrix: &lsquo;<samp>[[1, 2, 3], [4, 5, 6]]</samp>&rsquo;.
+  Vectors, like complex numbers, are entered as incomplete objects.
+  See <a href=
+  "Incomplete-Objects.html#Incomplete-Objects">Incomplete
+  Objects</a>. During algebraic entry, vectors are entered all at
+  once in the usual brackets-and-commas form. Matrices may be
+  entered algebraically as nested vectors, or using the shortcut
+  notation
+  &lsquo;<samp>[1,&nbsp;2,&nbsp;3;&nbsp;4,&nbsp;5,&nbsp;6]</samp>&rsquo;<!-- /@w -->,
+  with rows separated by semicolons. The commas may usually be
+  omitted when entering vectors: &lsquo;<samp>[1 2
+  3]</samp>&rsquo;. Curly braces may be used in place of brackets:
+  &lsquo;<samp>{1, 2, 3}</samp>&rsquo;, but the commas are required
+  in this case.</p>
+
+  <p>Traditional vector and matrix arithmetic is also supported;
+  see <a href="Basic-Arithmetic.html#Basic-Arithmetic">Basic
+  Arithmetic</a> and see <a href=
+  "Matrix-Functions.html#Matrix-Functions">Matrix Functions</a>.
+  Many other operations are applied to vectors element-wise. For
+  example, the complex conjugate of a vector is a vector of the
+  complex conjugates of its elements.</p><a name="index-vec" id=
+  "index-vec"></a>
+
+  <p>Algebraic functions for building vectors include
+  &lsquo;<samp>vec(a, b, c)</samp>&rsquo; to build &lsquo;<samp>[a,
+  b, c]</samp>&rsquo;, &lsquo;<samp>cvec(a, n, m)</samp>&rsquo; to
+  build an <var>n</var>x<var>m</var> matrix of
+  &lsquo;<samp>a</samp>&rsquo;s, and
+  &lsquo;<samp>index(n)</samp>&rsquo; to build a vector of integers
+  from 1 to &lsquo;<samp>n</samp>&rsquo;.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Strings.html#Strings" accesskey="n" rel=
+    "next">Strings</a>, Previous: <a href=
+    "Infinities.html#Infinities" accesskey="p" rel=
+    "prev">Infinities</a>, Up: <a href="Data-Types.html#Data-Types"
+    accesskey="u" rel="up">Data Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Using Regi - Supercite User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Supercite User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine" title="Configuring the Citation Engine">
-<link rel="prev" href="Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine" title="Configuring the Citation Engine">
-<link rel="next" href="Frames-You-Can-Customize.html#Frames-You-Can-Customize" title="Frames You Can Customize">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Using Regi - Supercite User's Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Supercite User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine"
+  title="Configuring the Citation Engine" />
+  <link rel="prev" href=
+  "Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine"
+  title="Configuring the Citation Engine" />
+  <link rel="next" href=
+  "Frames-You-Can-Customize.html#Frames-You-Can-Customize" title=
+  "Frames You Can Customize" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This document describes Supercite, an Emacs package for citing and
 attributing replies to mail and news messages.
 
@@ -28,8 +40,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -39,100 +53,158 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Using-Regi"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Frames-You-Can-Customize.html#Frames-You-Can-Customize">Frames You Can Customize</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine">Configuring the Citation Engine</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine">Configuring the Citation Engine</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Using-Regi" id="Using-Regi"></a>
 
-   <p><a name="index-regi_002dinterpret-214"></a><a name="index-eval-215"></a><a name="index-looking_002dat-216"></a>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Frames-You-Can-Customize.html#Frames-You-Can-Customize">Frames
+    You Can Customize</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine">Configuring
+    the Citation Engine</a>, Up:&nbsp;<a rel="up" accesskey="u"
+    href=
+    "Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine">Configuring
+    the Citation Engine</a></p>
+    <hr />
+  </div>
 
-<h3 class="section">8.1 Using Regi</h3>
+  <p><a name="index-regi_002dinterpret-214" id=
+  "index-regi_002dinterpret-214"></a><a name="index-eval-215" id=
+  "index-eval-215"></a><a name="index-looking_002dat-216" id=
+  "index-looking_002dat-216"></a></p>
 
-<p>Regi works by interpreting frames with the function
-<code>regi-interpret</code>.  A frame is a list of arbitrary size where each
-element is a entry of the following form:
+  <h3 class="section">8.1 Using Regi</h3>
 
-<pre class="example">     (<var>pred</var> <var>func</var> [<var>negate-p</var> [<var>case-fold-search</var>]])
+  <p>Regi works by interpreting frames with the function
+  <code>regi-interpret</code>. A frame is a list of arbitrary size
+  where each element is a entry of the following form:</p>
+  <pre class="example">
+     (<var>pred</var> <var>func</var> [<var>negate-p</var> [<var>case-fold-search</var>]])
 </pre>
-   <p>Regi starts with the first entry in a frame, evaluating the <var>pred</var>
-of that entry against the beginning of the line that &lsquo;<samp><span class="samp">point</span></samp>&rsquo; is on. 
-If the <var>pred</var> evaluates to true (or false if the optional
-<var>negate-p</var> is non-<code>nil</code>), then the <var>func</var> for that entry is
-<code>eval</code>uated.  How processing continues is determined by the return
-value for <var>func</var>, and is described below.  If <var>pred</var> was false
-the next entry in the frame is checked until all entries have been
-matched against the current line.  If no entry matches, &lsquo;<samp><span class="samp">point</span></samp>&rsquo; is
-moved forward one line and the frame is reset to the first entry.
 
-   <p><var>pred</var> can be a string, a variable, a list or one of the following
-symbols: <code>t</code>, <code>begin</code>, <code>end</code>, or <code>every</code>.  If
-<var>pred</var> is a string, or a variable or list that <code>eval</code>uates to a
-string, it is interpreted as a regular expression.  This regexp is
-matched against the current line, from the beginning, using
-<code>looking-at</code>.  This match folds case if the optional
-<var>case-fold-search</var> is non-<code>nil</code>.  If <var>pred</var> is not a
-string, or does not <code>eval</code>uate to a string, it is interpreted as a
-binary value (<code>nil</code> or non-<code>nil</code>).
+  <p>Regi starts with the first entry in a frame, evaluating the
+  <var>pred</var> of that entry against the beginning of the line
+  that &lsquo;<samp><span class="samp">point</span></samp>&rsquo;
+  is on. If the <var>pred</var> evaluates to true (or false if the
+  optional <var>negate-p</var> is non-<code>nil</code>), then the
+  <var>func</var> for that entry is <code>eval</code>uated. How
+  processing continues is determined by the return value for
+  <var>func</var>, and is described below. If <var>pred</var> was
+  false the next entry in the frame is checked until all entries
+  have been matched against the current line. If no entry matches,
+  &lsquo;<samp><span class="samp">point</span></samp>&rsquo; is
+  moved forward one line and the frame is reset to the first
+  entry.</p>
 
-   <p>The four special symbol values for <var>pred</var> are recognized:
+  <p><var>pred</var> can be a string, a variable, a list or one of
+  the following symbols: <code>t</code>, <code>begin</code>,
+  <code>end</code>, or <code>every</code>. If <var>pred</var> is a
+  string, or a variable or list that <code>eval</code>uates to a
+  string, it is interpreted as a regular expression. This regexp is
+  matched against the current line, from the beginning, using
+  <code>looking-at</code>. This match folds case if the optional
+  <var>case-fold-search</var> is non-<code>nil</code>. If
+  <var>pred</var> is not a string, or does not
+  <code>eval</code>uate to a string, it is interpreted as a binary
+  value (<code>nil</code> or non-<code>nil</code>).</p>
 
-     <dl>
-<dt><code>t</code><dd>Always produces a true outcome. 
-<br><dt><code>begin</code><dd>Always executed before the frame is interpreted. This can be used to
-initialize some global variables for example. 
-<br><dt><code>end</code><dd>Always executed after frame interpreting is completed. This can be used
-to perform any necessary post-processing. 
-<br><dt><code>every</code><dd>Executes whenever the frame is reset, usually after the entire frame has
-been matched against the current line. 
-</dl>
+  <p>The four special symbol values for <var>pred</var> are
+  recognized:</p>
 
-   <p>Note that <var>negate-p</var> and <var>case-fold-search</var> are ignored if
-<var>pred</var> is one of these special symbols.  Only the first occurrence of
-each symbol in a frame is used; any duplicates are ignored.  Also
-note that for performance reasons, the entries associated with these
-symbols are removed from the frame during the main interpreting loop.
+  <dl>
+    <dt><code>t</code></dt>
 
-   <p>Your <var>func</var> can return certain values which control continued Regi
-processing.  By default, if your <var>func</var> returns <code>nil</code> (as it
-should be careful to do explicitly), Regi will reset the frame to the
-first entry, and advance &lsquo;<samp><span class="samp">point</span></samp>&rsquo; to the beginning of the next line. 
-If a list is returned from your function, it can contain any combination
-of the following elements:
+    <dd>Always produces a true outcome.<br /></dd>
 
-     <dl>
-<dt>the symbol <code>continue</code><dd>This tells Regi to continue processing entries after a match, instead of
-resetting the frame and moving &lsquo;<samp><span class="samp">point</span></samp>&rsquo;. In this way, lines of text
-can have multiple matches, but you have to be careful to avoid entering
-infinite loops.
+    <dt><code>begin</code></dt>
 
-     <br><dt>the symbol <code>abort</code><dd>This tells Regi to terminate frame processing. However, any <code>end</code>
-entry is still processed.
+    <dd>Always executed before the frame is interpreted. This can
+    be used to initialize some global variables for
+    example.<br /></dd>
 
-     <br><dt>the list <code>(frame . </code><var>newframe</var><code>)</code><dd>This tells Regi to substitute <var>newframe</var> as the frame it is
-interpreting.  In other words, your <var>func</var> can modify the Regi frame
-on the fly.  <var>newframe</var> can be a variable containing a frame, or it
-can be the frame in-lined.
+    <dt><code>end</code></dt>
 
-     <br><dt>the list <code>(step . </code><var>step</var><code>)</code><dd>Tells Regi to move <var>step</var> number of lines forward as it continues
-processing. By default, Regi moves forward one line.  <var>step</var> can be
-zero or negative of course, but watch out for infinite loops. 
-</dl>
+    <dd>Always executed after frame interpreting is completed. This
+    can be used to perform any necessary
+    post-processing.<br /></dd>
 
-   <p>During execution of your <var>func</var>, the following variables will be
-temporarily bound to some useful information:
+    <dt><code>every</code></dt>
 
-     <dl>
-<dt><code>curline</code><dd>The current line in the buffer that Regi is <code>looking-at</code>, as a string. 
-<br><dt><code>curframe</code><dd>The current frame being interpreted. 
-<br><dt><code>curentry</code><dd>The current frame entry being interpreted. 
-</dl>
+    <dd>Executes whenever the frame is reset, usually after the
+    entire frame has been matched against the current line.</dd>
+  </dl>
 
-   </body></html>
+  <p>Note that <var>negate-p</var> and <var>case-fold-search</var>
+  are ignored if <var>pred</var> is one of these special symbols.
+  Only the first occurrence of each symbol in a frame is used; any
+  duplicates are ignored. Also note that for performance reasons,
+  the entries associated with these symbols are removed from the
+  frame during the main interpreting loop.</p>
 
+  <p>Your <var>func</var> can return certain values which control
+  continued Regi processing. By default, if your <var>func</var>
+  returns <code>nil</code> (as it should be careful to do
+  explicitly), Regi will reset the frame to the first entry, and
+  advance &lsquo;<samp><span class=
+  "samp">point</span></samp>&rsquo; to the beginning of the next
+  line. If a list is returned from your function, it can contain
+  any combination of the following elements:</p>
+
+  <dl>
+    <dt>the symbol <code>continue</code></dt>
+
+    <dd>This tells Regi to continue processing entries after a
+    match, instead of resetting the frame and moving
+    &lsquo;<samp><span class="samp">point</span></samp>&rsquo;. In
+    this way, lines of text can have multiple matches, but you have
+    to be careful to avoid entering infinite loops.<br /></dd>
+
+    <dt>the symbol <code>abort</code></dt>
+
+    <dd>This tells Regi to terminate frame processing. However, any
+    <code>end</code> entry is still processed.<br /></dd>
+
+    <dt>the list <code>(frame .</code>
+    <var>newframe</var><code>)</code></dt>
+
+    <dd>This tells Regi to substitute <var>newframe</var> as the
+    frame it is interpreting. In other words, your <var>func</var>
+    can modify the Regi frame on the fly. <var>newframe</var> can
+    be a variable containing a frame, or it can be the frame
+    in-lined.<br /></dd>
+
+    <dt>the list <code>(step .</code>
+    <var>step</var><code>)</code></dt>
+
+    <dd>Tells Regi to move <var>step</var> number of lines forward
+    as it continues processing. By default, Regi moves forward one
+    line. <var>step</var> can be zero or negative of course, but
+    watch out for infinite loops.</dd>
+  </dl>
+
+  <p>During execution of your <var>func</var>, the following
+  variables will be temporarily bound to some useful
+  information:</p>
+
+  <dl>
+    <dt><code>curline</code></dt>
+
+    <dd>The current line in the buffer that Regi is
+    <code>looking-at</code>, as a string.<br /></dd>
+
+    <dt><code>curframe</code></dt>
+
+    <dd>The current frame being interpreted.<br /></dd>
+
+    <dt><code>curentry</code></dt>
+
+    <dd>The current frame entry being interpreted.</dd>
+  </dl>
+</body>
+</html>

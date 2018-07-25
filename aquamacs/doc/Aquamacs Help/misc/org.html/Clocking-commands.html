@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,214 +16,362 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Clocking commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Clocking commands">
-<meta name="keywords" content="The Org Manual: Clocking commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Clocking-work-time.html#Clocking-work-time" rel="up" title="Clocking work time">
-<link href="The-clock-table.html#The-clock-table" rel="next" title="The clock table">
-<link href="Clocking-work-time.html#Clocking-work-time" rel="prev" title="Clocking work time">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Clocking commands</title>
+  <meta name="description" content=
+  "The Org Manual: Clocking commands" />
+  <meta name="keywords" content=
+  "The Org Manual: Clocking commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Clocking-work-time.html#Clocking-work-time" rel="up"
+  title="Clocking work time" />
+  <link href="The-clock-table.html#The-clock-table" rel="next"
+  title="The clock table" />
+  <link href="Clocking-work-time.html#Clocking-work-time" rel=
+  "prev" title="Clocking work time" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Clocking-commands"></a>
-<div class="header">
-<p>
-Next: <a href="The-clock-table.html#The-clock-table" accesskey="n" rel="next">The clock table</a>, Previous: <a href="Clocking-work-time.html#Clocking-work-time" accesskey="p" rel="prev">Clocking work time</a>, Up: <a href="Clocking-work-time.html#Clocking-work-time" accesskey="u" rel="up">Clocking work time</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Clocking-commands-1"></a>
-<h4 class="subsection">8.4.1 Clocking commands</h4>
+<body lang="en" xml:lang="en">
+  <a name="Clocking-commands" id="Clocking-commands"></a>
 
-<dl compact="compact">
-<dd><a name="index-C_002dc-C_002dx-C_002di"></a>
-<a name="index-org_002dclock_002din"></a>
-</dd>
-<dt><kbd><kbd>C-c C-x C-i</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-in</code>)</kbd></dt>
-<dd><a name="index-org_002dclock_002dinto_002ddrawer"></a>
-<a name="index-org_002dclock_002dcontinuously"></a>
-<a name="index-property_002c-LOG_005fINTO_005fDRAWER-1"></a>
-<p>Start the clock on the current item (clock-in).  This inserts the CLOCK
-keyword together with a timestamp.  If this is not the first clocking of
-this item, the multiple CLOCK lines will be wrapped into a
-<code>:LOGBOOK:</code> drawer (see also the variable
-<code>org-clock-into-drawer</code>).  You can also overrule
-the setting of this variable for a subtree by setting a
-<code>CLOCK_INTO_DRAWER</code> or <code>LOG_INTO_DRAWER</code> property.
-When called with a <kbd>C-u</kbd> prefix argument,
-select the task from a list of recently clocked tasks.  With two <kbd>C-u
-C-u</kbd> prefixes, clock into the task at point and mark it as the default task;
-the default task will then always be available with letter <kbd>d</kbd> when
-selecting a clocking task.  With three <kbd>C-u C-u C-u</kbd> prefixes, force
-continuous clocking by starting the clock when the last clock stopped.<br>
-<a name="index-property_003a-CLOCK_005fMODELINE_005fTOTAL"></a>
-<a name="index-property_003a-LAST_005fREPEAT"></a>
-<a name="index-org_002dclock_002dmodeline_002dtotal"></a>
-While the clock is running, the current clocking time is shown in the mode
-line, along with the title of the task.  The clock time shown will be all
-time ever clocked for this task and its children.  If the task has an effort
-estimate (see <a href="Effort-estimates.html#Effort-estimates">Effort estimates</a>), the mode line displays the current
-clocking time against it<a name="DOCF81" href="#FOOT81"><sup>81</sup></a>  If the task
-is a repeating one (see <a href="Repeated-tasks.html#Repeated-tasks">Repeated tasks</a>), only the time since the last
-reset of the task <a name="DOCF82" href="#FOOT82"><sup>82</sup></a>
-will be shown.  More control over what time is shown can be exercised with
-the <code>CLOCK_MODELINE_TOTAL</code> property.  It may have the values
-<code>current</code> to show only the current clocking instance, <code>today</code> to
-show all time clocked on this tasks today (see also the variable
-<code>org-extend-today-until</code>), <code>all</code> to include all time, or
-<code>auto</code> which is the default<a name="DOCF83" href="#FOOT83"><sup>83</sup></a>.<br> Clicking with <kbd>mouse-1</kbd> onto the
-mode line entry will pop up a menu with clocking options.
-<a name="index-C_002dc-C_002dx-C_002do"></a>
-<a name="index-org_002dclock_002dout"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-x C-o</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-out</code>)</kbd></dt>
-<dd><a name="index-org_002dlog_002dnote_002dclock_002dout"></a>
-<p>Stop the clock (clock-out).  This inserts another timestamp at the same
-location where the clock was last started.  It also directly computes
-the resulting time in inserts it after the time range as &lsquo;<samp>=&gt;
-HH:MM</samp>&rsquo;.  See the variable <code>org-log-note-clock-out</code> for the
-possibility to record an additional note together with the clock-out
-timestamp<a name="DOCF84" href="#FOOT84"><sup>84</sup></a>.
-<a name="index-C_002dc-C_002dx-C_002dx"></a>
-<a name="index-org_002dclock_002din_002dlast"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-x C-x</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-in-last</code>)</kbd></dt>
-<dd><a name="index-org_002dclock_002dcontinuously-1"></a>
-<p>Reclock the last clocked task.  With one <kbd>C-u</kbd> prefix argument,
-select the task from the clock history.  With two <kbd>C-u</kbd> prefixes,
-force continuous clocking by starting the clock when the last clock
-stopped.
-<a name="index-C_002dc-C_002dx-C_002de"></a>
-<a name="index-org_002dclock_002dmodify_002deffort_002destimate"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-x C-e</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-modify-effort-estimate</code>)</kbd></dt>
-<dd><p>Update the effort estimate for the current clock task.
-<a name="index-C_002dc-C_002dy-1"></a>
-<a name="index-C_002dc-C_002dc-12"></a>
-<a name="index-C_002dc-C_002dc-13"></a>
-<a name="index-C_002dc-C_002dy-2"></a>
-<a name="index-org_002devaluate_002dtime_002drange-1"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-c</kbd> &nbsp;<span class="roman">or</span> &nbsp;<kbd>C-c C-y</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-evaluate-time-range</code>)</kbd></dt>
-<dd><p>Recompute the time interval after changing one of the timestamps.  This
-is only necessary if you edit the timestamps directly.  If you change
-them with <kbd>S-<span class="key">cursor</span></kbd> keys, the update is automatic.
-<a name="index-C_002dS_002dup_002fdown"></a>
-<a name="index-org_002dclock_002dtimestamps_002dup_002fdown"></a>
-</p></dd>
-<dt><kbd><kbd>C-S-<span class="key">up/down</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-timestamps-up/down</code>)</kbd></dt>
-<dd><p>On <code>CLOCK</code> log lines, increase/decrease both timestamps so that the
-clock duration keeps the same.
-<a name="index-S_002dM_002dup_002fdown"></a>
-<a name="index-org_002dtimestamp_002dup_002fdown"></a>
-</p></dd>
-<dt><kbd><kbd>S-M-<span class="key">up/down</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-timestamp-up/down</code>)</kbd></dt>
-<dd><p>On <code>CLOCK</code> log lines, increase/decrease the timestamp at point and
-the one of the previous (or the next clock) timestamp by the same duration.
-For example, if you hit <kbd>S-M-<span class="key">up</span></kbd> to increase a clocked-out timestamp
-by five minutes, then the clocked-in timestamp of the next clock will be
-increased by five minutes.
-<a name="index-C_002dc-C_002dt-1"></a>
-<a name="index-org_002dtodo-1"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-t</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-todo</code>)</kbd></dt>
-<dd><p>Changing the TODO state of an item to DONE automatically stops the clock
-if it is running in this same item.
-<a name="index-C_002dc-C_002dx-C_002dq"></a>
-<a name="index-org_002dclock_002dcancel"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-x C-q</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-cancel</code>)</kbd></dt>
-<dd><p>Cancel the current clock.  This is useful if a clock was started by
-mistake, or if you ended up working on something else.
-<a name="index-C_002dc-C_002dx-C_002dj"></a>
-<a name="index-org_002dclock_002dgoto"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-x C-j</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-goto</code>)</kbd></dt>
-<dd><p>Jump to the headline of the currently clocked in task.  With a <kbd>C-u</kbd>
-prefix arg, select the target task from a list of recently clocked tasks.
-<a name="index-C_002dc-C_002dx-C_002dd"></a>
-<a name="index-org_002dclock_002ddisplay"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-x C-d</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-display</code>)</kbd></dt>
-<dd><a name="index-org_002dremove_002dhighlights_002dwith_002dchange-1"></a>
-<p>Display time summaries for each subtree in the current buffer.  This puts
-overlays at the end of each headline, showing the total time recorded under
-that heading, including the time of any subheadings.  You can use visibility
-cycling to study the tree, but the overlays disappear when you change the
-buffer (see variable <code>org-remove-highlights-with-change</code>) or press
-<kbd>C-c C-c</kbd>.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="The-clock-table.html#The-clock-table"
+    accesskey="n" rel="next">The clock table</a>, Previous:
+    <a href="Clocking-work-time.html#Clocking-work-time" accesskey=
+    "p" rel="prev">Clocking work time</a>, Up: <a href=
+    "Clocking-work-time.html#Clocking-work-time" accesskey="u" rel=
+    "up">Clocking work time</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Clocking-commands-1" id="Clocking-commands-1"></a>
 
-<p>The <kbd>l</kbd> key may be used in the timeline (see <a href="Timeline.html#Timeline">Timeline</a>) and in
-the agenda (see <a href="Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily agenda</a>) to show which tasks have been
-worked on or closed during a day.
-</p>
-<p><strong>Important:</strong> note that both <code>org-clock-out</code> and
-<code>org-clock-in-last</code> can have a global keybinding and will not
-modify the window disposition.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <h4 class="subsection">8.4.1 Clocking commands</h4>
 
-<h3><a name="FOOT81" href="#DOCF81">(81)</a></h3>
-<p>To add an effort estimate &ldquo;on the fly&rdquo;,
-hook a function doing this to <code>org-clock-in-prepare-hook</code>.</p>
-<h3><a name="FOOT82" href="#DOCF82">(82)</a></h3>
-<p>as recorded by the <code>LAST_REPEAT</code> property</p>
-<h3><a name="FOOT83" href="#DOCF83">(83)</a></h3>
-<p>See also the variable
-<code>org-clock-modeline-total</code>.</p>
-<h3><a name="FOOT84" href="#DOCF84">(84)</a></h3>
-<p>The corresponding in-buffer setting is:
-<code>#+STARTUP: lognoteclock-out</code></p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="The-clock-table.html#The-clock-table" accesskey="n" rel="next">The clock table</a>, Previous: <a href="Clocking-work-time.html#Clocking-work-time" accesskey="p" rel="prev">Clocking work time</a>, Up: <a href="Clocking-work-time.html#Clocking-work-time" accesskey="u" rel="up">Clocking work time</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-C_002dx-C_002di" id=
+    "index-C_002dc-C_002dx-C_002di"></a> <a name=
+    "index-org_002dclock_002din" id=
+    "index-org_002dclock_002din"></a></dd>
 
+    <dt><kbd><kbd>C-c C-x C-i</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-in</code>)</kbd></dt>
 
+    <dd>
+      <a name="index-org_002dclock_002dinto_002ddrawer" id=
+      "index-org_002dclock_002dinto_002ddrawer"></a> <a name=
+      "index-org_002dclock_002dcontinuously" id=
+      "index-org_002dclock_002dcontinuously"></a> <a name=
+      "index-property_002c-LOG_005fINTO_005fDRAWER-1" id=
+      "index-property_002c-LOG_005fINTO_005fDRAWER-1"></a>
 
+      <p>Start the clock on the current item (clock-in). This
+      inserts the CLOCK keyword together with a timestamp. If this
+      is not the first clocking of this item, the multiple CLOCK
+      lines will be wrapped into a <code>:LOGBOOK:</code> drawer
+      (see also the variable <code>org-clock-into-drawer</code>).
+      You can also overrule the setting of this variable for a
+      subtree by setting a <code>CLOCK_INTO_DRAWER</code> or
+      <code>LOG_INTO_DRAWER</code> property. When called with a
+      <kbd>C-u</kbd> prefix argument, select the task from a list
+      of recently clocked tasks. With two <kbd>C-u C-u</kbd>
+      prefixes, clock into the task at point and mark it as the
+      default task; the default task will then always be available
+      with letter <kbd>d</kbd> when selecting a clocking task. With
+      three <kbd>C-u C-u C-u</kbd> prefixes, force continuous
+      clocking by starting the clock when the last clock
+      stopped.<br />
+      <a name="index-property_003a-CLOCK_005fMODELINE_005fTOTAL"
+      id="index-property_003a-CLOCK_005fMODELINE_005fTOTAL"></a>
+      <a name="index-property_003a-LAST_005fREPEAT" id=
+      "index-property_003a-LAST_005fREPEAT"></a> <a name=
+      "index-org_002dclock_002dmodeline_002dtotal" id=
+      "index-org_002dclock_002dmodeline_002dtotal"></a> While the
+      clock is running, the current clocking time is shown in the
+      mode line, along with the title of the task. The clock time
+      shown will be all time ever clocked for this task and its
+      children. If the task has an effort estimate (see <a href=
+      "Effort-estimates.html#Effort-estimates">Effort
+      estimates</a>), the mode line displays the current clocking
+      time against it<a name="DOCF81" href="#FOOT81" id=
+      "DOCF81"><sup>81</sup></a> If the task is a repeating one
+      (see <a href="Repeated-tasks.html#Repeated-tasks">Repeated
+      tasks</a>), only the time since the last reset of the task
+      <a name="DOCF82" href="#FOOT82" id="DOCF82"><sup>82</sup></a>
+      will be shown. More control over what time is shown can be
+      exercised with the <code>CLOCK_MODELINE_TOTAL</code>
+      property. It may have the values <code>current</code> to show
+      only the current clocking instance, <code>today</code> to
+      show all time clocked on this tasks today (see also the
+      variable <code>org-extend-today-until</code>),
+      <code>all</code> to include all time, or <code>auto</code>
+      which is the default<a name="DOCF83" href="#FOOT83" id=
+      "DOCF83"><sup>83</sup></a>.<br />
+      Clicking with <kbd>mouse-1</kbd> onto the mode line entry
+      will pop up a menu with clocking options. <a name=
+      "index-C_002dc-C_002dx-C_002do" id=
+      "index-C_002dc-C_002dx-C_002do"></a> <a name=
+      "index-org_002dclock_002dout" id=
+      "index-org_002dclock_002dout"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-x C-o</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-out</code>)</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dlog_002dnote_002dclock_002dout" id=
+      "index-org_002dlog_002dnote_002dclock_002dout"></a>
+
+      <p>Stop the clock (clock-out). This inserts another timestamp
+      at the same location where the clock was last started. It
+      also directly computes the resulting time in inserts it after
+      the time range as &lsquo;<samp>=&gt; HH:MM</samp>&rsquo;. See
+      the variable <code>org-log-note-clock-out</code> for the
+      possibility to record an additional note together with the
+      clock-out timestamp<a name="DOCF84" href="#FOOT84" id=
+      "DOCF84"><sup>84</sup></a>. <a name=
+      "index-C_002dc-C_002dx-C_002dx" id=
+      "index-C_002dc-C_002dx-C_002dx"></a> <a name=
+      "index-org_002dclock_002din_002dlast" id=
+      "index-org_002dclock_002din_002dlast"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-x C-x</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-in-last</code>)</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dclock_002dcontinuously-1" id=
+      "index-org_002dclock_002dcontinuously-1"></a>
+
+      <p>Reclock the last clocked task. With one <kbd>C-u</kbd>
+      prefix argument, select the task from the clock history. With
+      two <kbd>C-u</kbd> prefixes, force continuous clocking by
+      starting the clock when the last clock stopped. <a name=
+      "index-C_002dc-C_002dx-C_002de" id=
+      "index-C_002dc-C_002dx-C_002de"></a> <a name=
+      "index-org_002dclock_002dmodify_002deffort_002destimate" id=
+      "index-org_002dclock_002dmodify_002deffort_002destimate"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-x C-e</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-modify-effort-estimate</code>)</kbd></dt>
+
+    <dd>
+      <p>Update the effort estimate for the current clock task.
+      <a name="index-C_002dc-C_002dy-1" id=
+      "index-C_002dc-C_002dy-1"></a> <a name=
+      "index-C_002dc-C_002dc-12" id="index-C_002dc-C_002dc-12"></a>
+      <a name="index-C_002dc-C_002dc-13" id=
+      "index-C_002dc-C_002dc-13"></a> <a name=
+      "index-C_002dc-C_002dy-2" id="index-C_002dc-C_002dy-2"></a>
+      <a name="index-org_002devaluate_002dtime_002drange-1" id=
+      "index-org_002devaluate_002dtime_002drange-1"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-c</kbd> &nbsp;<span class="roman">or</span>
+    &nbsp;<kbd>C-c C-y</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-evaluate-time-range</code>)</kbd></dt>
+
+    <dd>
+      <p>Recompute the time interval after changing one of the
+      timestamps. This is only necessary if you edit the timestamps
+      directly. If you change them with <kbd>S-<span class=
+      "key">cursor</span></kbd> keys, the update is automatic.
+      <a name="index-C_002dS_002dup_002fdown" id=
+      "index-C_002dS_002dup_002fdown"></a> <a name=
+      "index-org_002dclock_002dtimestamps_002dup_002fdown" id=
+      "index-org_002dclock_002dtimestamps_002dup_002fdown"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-S-<span class="key">up/down</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-timestamps-up/down</code>)</kbd></dt>
+
+    <dd>
+      <p>On <code>CLOCK</code> log lines, increase/decrease both
+      timestamps so that the clock duration keeps the same.
+      <a name="index-S_002dM_002dup_002fdown" id=
+      "index-S_002dM_002dup_002fdown"></a> <a name=
+      "index-org_002dtimestamp_002dup_002fdown" id=
+      "index-org_002dtimestamp_002dup_002fdown"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>S-M-<span class="key">up/down</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-timestamp-up/down</code>)</kbd></dt>
+
+    <dd>
+      <p>On <code>CLOCK</code> log lines, increase/decrease the
+      timestamp at point and the one of the previous (or the next
+      clock) timestamp by the same duration. For example, if you
+      hit <kbd>S-M-<span class="key">up</span></kbd> to increase a
+      clocked-out timestamp by five minutes, then the clocked-in
+      timestamp of the next clock will be increased by five
+      minutes. <a name="index-C_002dc-C_002dt-1" id=
+      "index-C_002dc-C_002dt-1"></a> <a name="index-org_002dtodo-1"
+      id="index-org_002dtodo-1"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-t</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-todo</code>)</kbd></dt>
+
+    <dd>
+      <p>Changing the TODO state of an item to DONE automatically
+      stops the clock if it is running in this same item. <a name=
+      "index-C_002dc-C_002dx-C_002dq" id=
+      "index-C_002dc-C_002dx-C_002dq"></a> <a name=
+      "index-org_002dclock_002dcancel" id=
+      "index-org_002dclock_002dcancel"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-x C-q</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-cancel</code>)</kbd></dt>
+
+    <dd>
+      <p>Cancel the current clock. This is useful if a clock was
+      started by mistake, or if you ended up working on something
+      else. <a name="index-C_002dc-C_002dx-C_002dj" id=
+      "index-C_002dc-C_002dx-C_002dj"></a> <a name=
+      "index-org_002dclock_002dgoto" id=
+      "index-org_002dclock_002dgoto"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-x C-j</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-goto</code>)</kbd></dt>
+
+    <dd>
+      <p>Jump to the headline of the currently clocked in task.
+      With a <kbd>C-u</kbd> prefix arg, select the target task from
+      a list of recently clocked tasks. <a name=
+      "index-C_002dc-C_002dx-C_002dd" id=
+      "index-C_002dc-C_002dx-C_002dd"></a> <a name=
+      "index-org_002dclock_002ddisplay" id=
+      "index-org_002dclock_002ddisplay"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-x C-d</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-display</code>)</kbd></dt>
+
+    <dd>
+      <a name=
+      "index-org_002dremove_002dhighlights_002dwith_002dchange-1"
+      id=
+      "index-org_002dremove_002dhighlights_002dwith_002dchange-1"></a>
+
+      <p>Display time summaries for each subtree in the current
+      buffer. This puts overlays at the end of each headline,
+      showing the total time recorded under that heading, including
+      the time of any subheadings. You can use visibility cycling
+      to study the tree, but the overlays disappear when you change
+      the buffer (see variable
+      <code>org-remove-highlights-with-change</code>) or press
+      <kbd>C-c C-c</kbd>.</p>
+    </dd>
+  </dl>
+
+  <p>The <kbd>l</kbd> key may be used in the timeline (see <a href=
+  "Timeline.html#Timeline">Timeline</a>) and in the agenda (see
+  <a href=
+  "Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily
+  agenda</a>) to show which tasks have been worked on or closed
+  during a day.</p>
+
+  <p><strong>Important:</strong> note that both
+  <code>org-clock-out</code> and <code>org-clock-in-last</code> can
+  have a global keybinding and will not modify the window
+  disposition.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT81" href="#DOCF81" id="FOOT81">(81)</a></h3>
+
+    <p>To add an effort estimate &ldquo;on the fly&rdquo;, hook a
+    function doing this to
+    <code>org-clock-in-prepare-hook</code>.</p>
+
+    <h3><a name="FOOT82" href="#DOCF82" id="FOOT82">(82)</a></h3>
+
+    <p>as recorded by the <code>LAST_REPEAT</code> property</p>
+
+    <h3><a name="FOOT83" href="#DOCF83" id="FOOT83">(83)</a></h3>
+
+    <p>See also the variable
+    <code>org-clock-modeline-total</code>.</p>
+
+    <h3><a name="FOOT84" href="#DOCF84" id="FOOT84">(84)</a></h3>
+
+    <p>The corresponding in-buffer setting is: <code>#+STARTUP:
+    lognoteclock-out</code></p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="The-clock-table.html#The-clock-table"
+    accesskey="n" rel="next">The clock table</a>, Previous:
+    <a href="Clocking-work-time.html#Clocking-work-time" accesskey=
+    "p" rel="prev">Clocking work time</a>, Up: <a href=
+    "Clocking-work-time.html#Clocking-work-time" accesskey="u" rel=
+    "up">Clocking work time</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,127 +19,210 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Defining Menus</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Defining Menus">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Defining Menus">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Menu-Keymaps.html#Menu-Keymaps" rel="up" title="Menu Keymaps">
-<link href="Simple-Menu-Items.html#Simple-Menu-Items" rel="next" title="Simple Menu Items">
-<link href="Menu-Keymaps.html#Menu-Keymaps" rel="prev" title="Menu Keymaps">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Defining Menus</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Defining Menus" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Defining Menus" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Menu-Keymaps.html#Menu-Keymaps" rel="up" title=
+  "Menu Keymaps" />
+  <link href="Simple-Menu-Items.html#Simple-Menu-Items" rel="next"
+  title="Simple Menu Items" />
+  <link href="Menu-Keymaps.html#Menu-Keymaps" rel="prev" title=
+  "Menu Keymaps" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Defining-Menus" id="Defining-Menus"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Mouse-Menus.html#Mouse-Menus" accesskey="n"
+    rel="next">Mouse Menus</a>, Up: <a href=
+    "Menu-Keymaps.html#Menu-Keymaps" accesskey="u" rel="up">Menu
+    Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Menus-1" id="Defining-Menus-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Menus"></a>
-<div class="header">
-<p>
-Next: <a href="Mouse-Menus.html#Mouse-Menus" accesskey="n" rel="next">Mouse Menus</a>, Up: <a href="Menu-Keymaps.html#Menu-Keymaps" accesskey="u" rel="up">Menu Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Menus-1"></a>
-<h4 class="subsection">21.17.1 Defining Menus</h4>
-<a name="index-defining-menus"></a>
-<a name="index-menu-prompt-string"></a>
-<a name="index-prompt-string-_0028of-menu_0029"></a>
-<a name="index-menu-item"></a>
+  <h4 class="subsection">21.17.1 Defining Menus</h4><a name=
+  "index-defining-menus" id="index-defining-menus"></a> <a name=
+  "index-menu-prompt-string" id="index-menu-prompt-string"></a>
+  <a name="index-prompt-string-_0028of-menu_0029" id=
+  "index-prompt-string-_0028of-menu_0029"></a> <a name=
+  "index-menu-item" id="index-menu-item"></a>
 
-<p>A keymap acts as a menu if it has an <em>overall prompt string</em>,
-which is a string that appears as an element of the keymap.
-(See <a href="Format-of-Keymaps.html#Format-of-Keymaps">Format of Keymaps</a>.)  The string should describe the purpose of
-the menu&rsquo;s commands.  Emacs displays the overall prompt string as the
-menu title in some cases, depending on the toolkit (if any) used for
-displaying menus.<a name="DOCF12" href="#FOOT12"><sup>12</sup></a>  Keyboard menus also display the
-overall prompt string.
-</p>
-<p>The easiest way to construct a keymap with a prompt string is to
-specify the string as an argument when you call <code>make-keymap</code>,
-<code>make-sparse-keymap</code> (see <a href="Creating-Keymaps.html#Creating-Keymaps">Creating Keymaps</a>), or
-<code>define-prefix-command</code> (see <a href="Prefix-Keys.html#Definition-of-define_002dprefix_002dcommand">Definition of define-prefix-command</a>).  If you do not want the keymap to operate as
-a menu, don&rsquo;t specify a prompt string for it.
-</p>
-<dl>
-<dt><a name="index-keymap_002dprompt"></a>Function: <strong>keymap-prompt</strong> <em>keymap</em></dt>
-<dd><p>This function returns the overall prompt string of <var>keymap</var>,
-or <code>nil</code> if it has none.
-</p></dd></dl>
+  <p>A keymap acts as a menu if it has an <em>overall prompt
+  string</em>, which is a string that appears as an element of the
+  keymap. (See <a href=
+  "Format-of-Keymaps.html#Format-of-Keymaps">Format of
+  Keymaps</a>.) The string should describe the purpose of the
+  menu&rsquo;s commands. Emacs displays the overall prompt string
+  as the menu title in some cases, depending on the toolkit (if
+  any) used for displaying menus.<a name="DOCF12" href="#FOOT12"
+  id="DOCF12"><sup>12</sup></a> Keyboard menus also display the
+  overall prompt string.</p>
 
-<p>The menu&rsquo;s items are the bindings in the keymap.  Each binding
-associates an event type to a definition, but the event types have no
-significance for the menu appearance.  (Usually we use pseudo-events,
-symbols that the keyboard cannot generate, as the event types for menu
-item bindings.)  The menu is generated entirely from the bindings that
-correspond in the keymap to these events.
-</p>
-<p>The order of items in the menu is the same as the order of bindings in
-the keymap.  Since <code>define-key</code> puts new bindings at the front, you
-should define the menu items starting at the bottom of the menu and
-moving to the top, if you care about the order.  When you add an item to
-an existing menu, you can specify its position in the menu using
-<code>define-key-after</code> (see <a href="Modifying-Menus.html#Modifying-Menus">Modifying Menus</a>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Simple-Menu-Items.html#Simple-Menu-Items" accesskey="1">Simple Menu Items</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A simple kind of menu key binding.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Extended-Menu-Items.html#Extended-Menu-Items" accesskey="2">Extended Menu Items</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">More complex menu item definitions.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Menu-Separators.html#Menu-Separators" accesskey="3">Menu Separators</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Drawing a horizontal line through a menu.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Alias-Menu-Items.html#Alias-Menu-Items" accesskey="4">Alias Menu Items</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using command aliases in menu items.
-</td></tr>
-</table>
+  <p>The easiest way to construct a keymap with a prompt string is
+  to specify the string as an argument when you call
+  <code>make-keymap</code>, <code>make-sparse-keymap</code> (see
+  <a href="Creating-Keymaps.html#Creating-Keymaps">Creating
+  Keymaps</a>), or <code>define-prefix-command</code> (see <a href=
+  "Prefix-Keys.html#Definition-of-define_002dprefix_002dcommand">Definition
+  of define-prefix-command</a>). If you do not want the keymap to
+  operate as a menu, don&rsquo;t specify a prompt string for
+  it.</p>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl>
+    <dt><a name="index-keymap_002dprompt" id=
+    "index-keymap_002dprompt"></a>Function:
+    <strong>keymap-prompt</strong> <em>keymap</em></dt>
 
-<h3><a name="FOOT12" href="#DOCF12">(12)</a></h3>
-<p>It is required for menus which do not use a
-toolkit, e.g., on a text terminal.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Mouse-Menus.html#Mouse-Menus" accesskey="n" rel="next">Mouse Menus</a>, Up: <a href="Menu-Keymaps.html#Menu-Keymaps" accesskey="u" rel="up">Menu Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns the overall prompt string of
+      <var>keymap</var>, or <code>nil</code> if it has none.</p>
+    </dd>
+  </dl>
 
+  <p>The menu&rsquo;s items are the bindings in the keymap. Each
+  binding associates an event type to a definition, but the event
+  types have no significance for the menu appearance. (Usually we
+  use pseudo-events, symbols that the keyboard cannot generate, as
+  the event types for menu item bindings.) The menu is generated
+  entirely from the bindings that correspond in the keymap to these
+  events.</p>
 
+  <p>The order of items in the menu is the same as the order of
+  bindings in the keymap. Since <code>define-key</code> puts new
+  bindings at the front, you should define the menu items starting
+  at the bottom of the menu and moving to the top, if you care
+  about the order. When you add an item to an existing menu, you
+  can specify its position in the menu using
+  <code>define-key-after</code> (see <a href=
+  "Modifying-Menus.html#Modifying-Menus">Modifying Menus</a>).</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Simple-Menu-Items.html#Simple-Menu-Items" accesskey=
+      "1">Simple Menu Items</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A simple kind of menu key
+      binding.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Extended-Menu-Items.html#Extended-Menu-Items" accesskey=
+      "2">Extended Menu Items</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">More complex menu item
+      definitions.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Menu-Separators.html#Menu-Separators" accesskey="3">Menu
+      Separators</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Drawing a horizontal line
+      through a menu.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Alias-Menu-Items.html#Alias-Menu-Items" accesskey="4">Alias
+      Menu Items</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Using command aliases in menu
+      items.</td>
+    </tr>
+  </table>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT12" href="#DOCF12" id="FOOT12">(12)</a></h3>
+
+    <p>It is required for menus which do not use a toolkit, e.g.,
+    on a text terminal.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Mouse-Menus.html#Mouse-Menus" accesskey="n"
+    rel="next">Mouse Menus</a>, Up: <a href=
+    "Menu-Keymaps.html#Menu-Keymaps" accesskey="u" rel="up">Menu
+    Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

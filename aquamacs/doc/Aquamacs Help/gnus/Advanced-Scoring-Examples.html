@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Advanced Scoring Examples - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Advanced-Scoring.html#Advanced-Scoring" title="Advanced Scoring">
-<link rel="prev" href="Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax" title="Advanced Scoring Syntax">
-<link rel="next" href="Advanced-Scoring-Tips.html#Advanced-Scoring-Tips" title="Advanced Scoring Tips">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Advanced Scoring Examples - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Advanced-Scoring.html#Advanced-Scoring"
+  title="Advanced Scoring" />
+  <link rel="prev" href=
+  "Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax" title=
+  "Advanced Scoring Syntax" />
+  <link rel="next" href=
+  "Advanced-Scoring-Tips.html#Advanced-Scoring-Tips" title=
+  "Advanced Scoring Tips" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +37,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,57 +50,70 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Advanced-Scoring-Examples"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Advanced-Scoring-Tips.html#Advanced-Scoring-Tips">Advanced Scoring Tips</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax">Advanced Scoring Syntax</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Scoring.html#Advanced-Scoring">Advanced Scoring</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Advanced-Scoring-Examples" id=
+    "Advanced-Scoring-Examples"></a>
 
-<h4 class="subsection">7.15.2 Advanced Scoring Examples</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Advanced-Scoring-Tips.html#Advanced-Scoring-Tips">Advanced
+    Scoring Tips</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href=
+    "Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax">Advanced
+    Scoring Syntax</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Advanced-Scoring.html#Advanced-Scoring">Advanced
+    Scoring</a></p>
+    <hr />
+  </div>
 
-<p>Please note that the following examples are score file rules.  To
-make a complete score file from them, surround them with another pair
-of parentheses.
+  <h4 class="subsection">7.15.2 Advanced Scoring Examples</h4>
 
-   <p>Let's say you want to increase the score of articles written by Lars
-when he's talking about Gnus:
+  <p>Please note that the following examples are score file rules.
+  To make a complete score file from them, surround them with
+  another pair of parentheses.</p>
 
-<pre class="example">     ((&amp;
+  <p>Let's say you want to increase the score of articles written
+  by Lars when he's talking about Gnus:</p>
+  <pre class="example">
+     ((&amp;
        ("from" "Lars Ingebrigtsen")
        ("subject" "Gnus"))
       1000)
 </pre>
-   <p>Quite simple, huh?
 
-   <p>When he writes long articles, he sometimes has something nice to say:
+  <p>Quite simple, huh?</p>
 
-<pre class="example">     ((&amp;
+  <p>When he writes long articles, he sometimes has something nice
+  to say:</p>
+  <pre class="example">
+     ((&amp;
        ("from" "Lars Ingebrigtsen")
        (|
         ("subject" "Gnus")
         ("lines" 100 &gt;)))
       1000)
 </pre>
-   <p>However, when he responds to things written by Reig Eigil Logge, you
-really don't want to read what he's written:
 
-<pre class="example">     ((&amp;
+  <p>However, when he responds to things written by Reig Eigil
+  Logge, you really don't want to read what he's written:</p>
+  <pre class="example">
+     ((&amp;
        ("from" "Lars Ingebrigtsen")
        (1- ("from" "Reig Eigil Logge")))
       -100000)
 </pre>
-   <p>Everybody that follows up Redmondo when he writes about disappearing
-socks should have their scores raised, but only when they talk about
-white socks.  However, when Lars talks about socks, it's usually not
-very interesting:
 
-<pre class="example">     ((&amp;
+  <p>Everybody that follows up Redmondo when he writes about
+  disappearing socks should have their scores raised, but only when
+  they talk about white socks. However, when Lars talks about
+  socks, it's usually not very interesting:</p>
+  <pre class="example">
+     ((&amp;
        (1-
         (&amp;
          ("from" "redmondo@.*no" r)
@@ -95,17 +122,19 @@ very interesting:
        ("body" "white.*socks"))
       1000)
 </pre>
-   <p>Suppose you're reading a high volume group and you're only interested
-in replies. The plan is to score down all articles that don't have
-subject that begin with "Re:", "Fw:" or "Fwd:" and then score up all
-parents of articles that have subjects that begin with reply marks.
 
-<pre class="example">     ((! ("subject" "re:\\|fwd?:" r))
+  <p>Suppose you're reading a high volume group and you're only
+  interested in replies. The plan is to score down all articles
+  that don't have subject that begin with "Re:", "Fw:" or "Fwd:"
+  and then score up all parents of articles that have subjects that
+  begin with reply marks.</p>
+  <pre class="example">
+     ((! ("subject" "re:\\|fwd?:" r))
        -200)
      ((1- ("subject" "re:\\|fwd?:" r))
        200)
 </pre>
-   <p>The possibilities are endless.
 
-   </body></html>
-
+  <p>The possibilities are endless.</p>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,160 +19,219 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Pop-Up Menus</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Pop-Up Menus">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Pop-Up Menus">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Frames.html#Frames" rel="up" title="Frames">
-<link href="Dialog-Boxes.html#Dialog-Boxes" rel="next" title="Dialog Boxes">
-<link href="Mouse-Position.html#Mouse-Position" rel="prev" title="Mouse Position">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Pop-Up Menus</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Pop-Up Menus" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Pop-Up Menus" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Frames.html#Frames" rel="up" title="Frames" />
+  <link href="Dialog-Boxes.html#Dialog-Boxes" rel="next" title=
+  "Dialog Boxes" />
+  <link href="Mouse-Position.html#Mouse-Position" rel="prev" title=
+  "Mouse Position" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Pop_002dUp-Menus" id="Pop_002dUp-Menus"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Dialog-Boxes.html#Dialog-Boxes" accesskey="n"
+    rel="next">Dialog Boxes</a>, Previous: <a href=
+    "Mouse-Position.html#Mouse-Position" accesskey="p" rel=
+    "prev">Mouse Position</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Pop_002dUp-Menus-1" id="Pop_002dUp-Menus-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Pop_002dUp-Menus"></a>
-<div class="header">
-<p>
-Next: <a href="Dialog-Boxes.html#Dialog-Boxes" accesskey="n" rel="next">Dialog Boxes</a>, Previous: <a href="Mouse-Position.html#Mouse-Position" accesskey="p" rel="prev">Mouse Position</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Pop_002dUp-Menus-1"></a>
-<h3 class="section">28.16 Pop-Up Menus</h3>
-<a name="index-menus_002c-popup"></a>
+  <h3 class="section">28.16 Pop-Up Menus</h3><a name=
+  "index-menus_002c-popup" id="index-menus_002c-popup"></a>
 
-<p>A Lisp program can pop up a menu so that the user can choose an
-alternative with the mouse.  On a text terminal, if the mouse is not
-available, the user can choose an alternative using the keyboard
-motion keys&mdash;<kbd>C-n</kbd>, <kbd>C-p</kbd>, or up- and down-arrow keys.
-</p>
-<dl>
-<dt><a name="index-x_002dpopup_002dmenu"></a>Function: <strong>x-popup-menu</strong> <em>position menu</em></dt>
-<dd><p>This function displays a pop-up menu and returns an indication of
-what selection the user makes.
-</p>
-<p>The argument <var>position</var> specifies where on the screen to put the
-top left corner of the menu.  It can be either a mouse button event
-(which says to put the menu where the user actuated the button) or a
-list of this form:
-</p>
-<div class="example">
-<pre class="example">((<var>xoffset</var> <var>yoffset</var>) <var>window</var>)
-</pre></div>
+  <p>A Lisp program can pop up a menu so that the user can choose
+  an alternative with the mouse. On a text terminal, if the mouse
+  is not available, the user can choose an alternative using the
+  keyboard motion keys&mdash;<kbd>C-n</kbd>, <kbd>C-p</kbd>, or up-
+  and down-arrow keys.</p>
 
-<p>where <var>xoffset</var> and <var>yoffset</var> are coordinates, measured in
-pixels, counting from the top left corner of <var>window</var>.  <var>window</var>
-may be a window or a frame.
-</p>
-<p>If <var>position</var> is <code>t</code>, it means to use the current mouse
-position (or the top-left corner of the frame if the mouse is not
-available on a text terminal).  If <var>position</var> is <code>nil</code>, it
-means to precompute the key binding equivalents for the keymaps
-specified in <var>menu</var>, without actually displaying or popping up the
-menu.
-</p>
-<p>The argument <var>menu</var> says what to display in the menu.  It can be a
-keymap or a list of keymaps (see <a href="Menu-Keymaps.html#Menu-Keymaps">Menu Keymaps</a>).  In this case, the
-return value is the list of events corresponding to the user&rsquo;s choice.
-This list has more than one element if the choice occurred in a
-submenu.  (Note that <code>x-popup-menu</code> does not actually execute the
-command bound to that sequence of events.)  On text terminals and
-toolkits that support menu titles, the title is taken from the prompt
-string of <var>menu</var> if <var>menu</var> is a keymap, or from the prompt
-string of the first keymap in <var>menu</var> if it is a list of keymaps
-(see <a href="Defining-Menus.html#Defining-Menus">Defining Menus</a>).
-</p>
-<p>Alternatively, <var>menu</var> can have the following form:
-</p>
-<div class="example">
-<pre class="example">(<var>title</var> <var>pane1</var> <var>pane2</var>...)
-</pre></div>
+  <dl>
+    <dt><a name="index-x_002dpopup_002dmenu" id=
+    "index-x_002dpopup_002dmenu"></a>Function:
+    <strong>x-popup-menu</strong> <em>position menu</em></dt>
 
-<p>where each pane is a list of form
-</p>
-<div class="example">
-<pre class="example">(<var>title</var> <var>item1</var> <var>item2</var>...)
-</pre></div>
+    <dd>
+      <p>This function displays a pop-up menu and returns an
+      indication of what selection the user makes.</p>
 
-<p>Each <var>item</var> should be a cons cell, <code>(<var>line</var> . <var>value</var>)</code>,
-where <var>line</var> is a string and <var>value</var> is the value to return if
-that <var>line</var> is chosen.  Unlike in a menu keymap, a <code>nil</code>
-<var>value</var> does not make the menu item non-selectable.
-Alternatively, each <var>item</var> can be a string rather than a cons
-cell; this makes a non-selectable menu item.
-</p>
-<p>If the user gets rid of the menu without making a valid choice, for
-instance by clicking the mouse away from a valid choice or by typing
-<kbd>C-g</kbd>, then this normally results in a quit and
-<code>x-popup-menu</code> does not return.  But if <var>position</var> is a mouse
-button event (indicating that the user invoked the menu with the
-mouse) then no quit occurs and <code>x-popup-menu</code> returns <code>nil</code>.
-</p></dd></dl>
+      <p>The argument <var>position</var> specifies where on the
+      screen to put the top left corner of the menu. It can be
+      either a mouse button event (which says to put the menu where
+      the user actuated the button) or a list of this form:</p>
 
-<p><strong>Usage note:</strong> Don&rsquo;t use <code>x-popup-menu</code> to display a menu
-if you could do the job with a prefix key defined with a menu keymap.
-If you use a menu keymap to implement a menu, <kbd>C-h c</kbd> and <kbd>C-h
-a</kbd> can see the individual items in that menu and provide help for them.
-If instead you implement the menu by defining a command that calls
-<code>x-popup-menu</code>, the help facilities cannot know what happens inside
-that command, so they cannot give any help for the menu&rsquo;s items.
-</p>
-<p>The menu bar mechanism, which lets you switch between submenus by
-moving the mouse, cannot look within the definition of a command to see
-that it calls <code>x-popup-menu</code>.  Therefore, if you try to implement a
-submenu using <code>x-popup-menu</code>, it cannot work with the menu bar in
-an integrated fashion.  This is why all menu bar submenus are
-implemented with menu keymaps within the parent menu, and never with
-<code>x-popup-menu</code>.  See <a href="Menu-Bar.html#Menu-Bar">Menu Bar</a>.
-</p>
-<p>If you want a menu bar submenu to have contents that vary, you should
-still use a menu keymap to implement it.  To make the contents vary, add
-a hook function to <code>menu-bar-update-hook</code> to update the contents of
-the menu keymap as necessary.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Dialog-Boxes.html#Dialog-Boxes" accesskey="n" rel="next">Dialog Boxes</a>, Previous: <a href="Mouse-Position.html#Mouse-Position" accesskey="p" rel="prev">Mouse Position</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <div class="example">
+        <pre class="example">
+((<var>xoffset</var> <var>yoffset</var>) <var>window</var>)
+</pre>
+      </div>
 
+      <p>where <var>xoffset</var> and <var>yoffset</var> are
+      coordinates, measured in pixels, counting from the top left
+      corner of <var>window</var>. <var>window</var> may be a
+      window or a frame.</p>
 
+      <p>If <var>position</var> is <code>t</code>, it means to use
+      the current mouse position (or the top-left corner of the
+      frame if the mouse is not available on a text terminal). If
+      <var>position</var> is <code>nil</code>, it means to
+      precompute the key binding equivalents for the keymaps
+      specified in <var>menu</var>, without actually displaying or
+      popping up the menu.</p>
 
+      <p>The argument <var>menu</var> says what to display in the
+      menu. It can be a keymap or a list of keymaps (see <a href=
+      "Menu-Keymaps.html#Menu-Keymaps">Menu Keymaps</a>). In this
+      case, the return value is the list of events corresponding to
+      the user&rsquo;s choice. This list has more than one element
+      if the choice occurred in a submenu. (Note that
+      <code>x-popup-menu</code> does not actually execute the
+      command bound to that sequence of events.) On text terminals
+      and toolkits that support menu titles, the title is taken
+      from the prompt string of <var>menu</var> if <var>menu</var>
+      is a keymap, or from the prompt string of the first keymap in
+      <var>menu</var> if it is a list of keymaps (see <a href=
+      "Defining-Menus.html#Defining-Menus">Defining Menus</a>).</p>
+
+      <p>Alternatively, <var>menu</var> can have the following
+      form:</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>title</var> <var>pane1</var> <var>pane2</var>...)
+</pre>
+      </div>
+
+      <p>where each pane is a list of form</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>title</var> <var>item1</var> <var>item2</var>...)
+</pre>
+      </div>
+
+      <p>Each <var>item</var> should be a cons cell,
+      <code>(<var>line</var> . <var>value</var>)</code>, where
+      <var>line</var> is a string and <var>value</var> is the value
+      to return if that <var>line</var> is chosen. Unlike in a menu
+      keymap, a <code>nil</code> <var>value</var> does not make the
+      menu item non-selectable. Alternatively, each <var>item</var>
+      can be a string rather than a cons cell; this makes a
+      non-selectable menu item.</p>
+
+      <p>If the user gets rid of the menu without making a valid
+      choice, for instance by clicking the mouse away from a valid
+      choice or by typing <kbd>C-g</kbd>, then this normally
+      results in a quit and <code>x-popup-menu</code> does not
+      return. But if <var>position</var> is a mouse button event
+      (indicating that the user invoked the menu with the mouse)
+      then no quit occurs and <code>x-popup-menu</code> returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <p><strong>Usage note:</strong> Don&rsquo;t use
+  <code>x-popup-menu</code> to display a menu if you could do the
+  job with a prefix key defined with a menu keymap. If you use a
+  menu keymap to implement a menu, <kbd>C-h c</kbd> and <kbd>C-h
+  a</kbd> can see the individual items in that menu and provide
+  help for them. If instead you implement the menu by defining a
+  command that calls <code>x-popup-menu</code>, the help facilities
+  cannot know what happens inside that command, so they cannot give
+  any help for the menu&rsquo;s items.</p>
+
+  <p>The menu bar mechanism, which lets you switch between submenus
+  by moving the mouse, cannot look within the definition of a
+  command to see that it calls <code>x-popup-menu</code>.
+  Therefore, if you try to implement a submenu using
+  <code>x-popup-menu</code>, it cannot work with the menu bar in an
+  integrated fashion. This is why all menu bar submenus are
+  implemented with menu keymaps within the parent menu, and never
+  with <code>x-popup-menu</code>. See <a href=
+  "Menu-Bar.html#Menu-Bar">Menu Bar</a>.</p>
+
+  <p>If you want a menu bar submenu to have contents that vary, you
+  should still use a menu keymap to implement it. To make the
+  contents vary, add a hook function to
+  <code>menu-bar-update-hook</code> to update the contents of the
+  menu keymap as necessary.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Dialog-Boxes.html#Dialog-Boxes" accesskey="n"
+    rel="next">Dialog Boxes</a>, Previous: <a href=
+    "Mouse-Position.html#Mouse-Position" accesskey="p" rel=
+    "prev">Mouse Position</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

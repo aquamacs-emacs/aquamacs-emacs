@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,218 +16,340 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Mapping over Sequences</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Mapping over Sequences">
-<meta name="keywords" content="Common Lisp Extensions: Mapping over Sequences">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sequences.html#Sequences" rel="up" title="Sequences">
-<link href="Sequence-Functions.html#Sequence-Functions" rel="next" title="Sequence Functions">
-<link href="Sequence-Basics.html#Sequence-Basics" rel="prev" title="Sequence Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Mapping over Sequences</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Mapping over Sequences" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Mapping over Sequences" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Sequences.html#Sequences" rel="up" title=
+  "Sequences" />
+  <link href="Sequence-Functions.html#Sequence-Functions" rel=
+  "next" title="Sequence Functions" />
+  <link href="Sequence-Basics.html#Sequence-Basics" rel="prev"
+  title="Sequence Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Mapping-over-Sequences"></a>
-<div class="header">
-<p>
-Next: <a href="Sequence-Functions.html#Sequence-Functions" accesskey="n" rel="next">Sequence Functions</a>, Previous: <a href="Sequence-Basics.html#Sequence-Basics" accesskey="p" rel="prev">Sequence Basics</a>, Up: <a href="Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Mapping-over-Sequences-1"></a>
-<h3 class="section">9.2 Mapping over Sequences</h3>
+<body lang="en" xml:lang="en">
+  <a name="Mapping-over-Sequences" id="Mapping-over-Sequences"></a>
 
-<p>These functions &ldquo;map&rdquo; the function you specify over the elements
-of lists or arrays.  They are all variations on the theme of the
-built-in function <code>mapcar</code>.
-</p>
-<dl>
-<dt><a name="index-cl_002dmapcar"></a>Function: <strong>cl-mapcar</strong> <em>function seq &amp;rest more-seqs</em></dt>
-<dd><p>This function calls <var>function</var> on successive parallel sets of
-elements from its argument sequences.  Given a single <var>seq</var>
-argument it is equivalent to <code>mapcar</code>; given <var>n</var> sequences,
-it calls the function with the first elements of each of the sequences
-as the <var>n</var> arguments to yield the first element of the result
-list, then with the second elements, and so on.  The mapping stops as
-soon as the shortest sequence runs out.  The argument sequences may
-be any mixture of lists, strings, and vectors; the return sequence
-is always a list.
-</p>
-<p>Common Lisp&rsquo;s <code>mapcar</code> accepts multiple arguments but works
-only on lists; Emacs Lisp&rsquo;s <code>mapcar</code> accepts a single sequence
-argument.  This package&rsquo;s <code>cl-mapcar</code> works as a compatible
-superset of both.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Sequence-Functions.html#Sequence-Functions"
+    accesskey="n" rel="next">Sequence Functions</a>, Previous:
+    <a href="Sequence-Basics.html#Sequence-Basics" accesskey="p"
+    rel="prev">Sequence Basics</a>, Up: <a href=
+    "Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Mapping-over-Sequences-1" id=
+  "Mapping-over-Sequences-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dmap"></a>Function: <strong>cl-map</strong> <em>result-type function seq &amp;rest more-seqs</em></dt>
-<dd><p>This function maps <var>function</var> over the argument sequences,
-just like <code>cl-mapcar</code>, but it returns a sequence of type
-<var>result-type</var> rather than a list.  <var>result-type</var> must
-be one of the following symbols: <code>vector</code>, <code>string</code>,
-<code>list</code> (in which case the effect is the same as for
-<code>cl-mapcar</code>), or <code>nil</code> (in which case the results are
-thrown away and <code>cl-map</code> returns <code>nil</code>).
-</p></dd></dl>
+  <h3 class="section">9.2 Mapping over Sequences</h3>
 
-<dl>
-<dt><a name="index-cl_002dmaplist"></a>Function: <strong>cl-maplist</strong> <em>function list &amp;rest more-lists</em></dt>
-<dd><p>This function calls <var>function</var> on each of its argument lists,
-then on the <small>CDR</small>s of those lists, and so on, until the
-shortest list runs out.  The results are returned in the form
-of a list.  Thus, <code>cl-maplist</code> is like <code>cl-mapcar</code> except
-that it passes in the list pointers themselves rather than the
-<small>CAR</small>s of the advancing pointers.
-</p></dd></dl>
+  <p>These functions &ldquo;map&rdquo; the function you specify
+  over the elements of lists or arrays. They are all variations on
+  the theme of the built-in function <code>mapcar</code>.</p>
 
-<dl>
-<dt><a name="index-cl_002dmapc"></a>Function: <strong>cl-mapc</strong> <em>function seq &amp;rest more-seqs</em></dt>
-<dd><p>This function is like <code>cl-mapcar</code>, except that the values returned
-by <var>function</var> are ignored and thrown away rather than being
-collected into a list.  The return value of <code>cl-mapc</code> is <var>seq</var>,
-the first sequence.  This function is more general than the Emacs
-primitive <code>mapc</code>.  (Note that this function is called
-<code>cl-mapc</code> even in <samp>cl.el</samp>, rather than <code>mapc*</code> as you
-might expect.)
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dmapcar" id=
+    "index-cl_002dmapcar"></a>Function: <strong>cl-mapcar</strong>
+    <em>function seq &amp;rest more-seqs</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dmapl"></a>Function: <strong>cl-mapl</strong> <em>function list &amp;rest more-lists</em></dt>
-<dd><p>This function is like <code>cl-maplist</code>, except that it throws away
-the values returned by <var>function</var>.
-</p></dd></dl>
+    <dd>
+      <p>This function calls <var>function</var> on successive
+      parallel sets of elements from its argument sequences. Given
+      a single <var>seq</var> argument it is equivalent to
+      <code>mapcar</code>; given <var>n</var> sequences, it calls
+      the function with the first elements of each of the sequences
+      as the <var>n</var> arguments to yield the first element of
+      the result list, then with the second elements, and so on.
+      The mapping stops as soon as the shortest sequence runs out.
+      The argument sequences may be any mixture of lists, strings,
+      and vectors; the return sequence is always a list.</p>
 
-<dl>
-<dt><a name="index-cl_002dmapcan"></a>Function: <strong>cl-mapcan</strong> <em>function seq &amp;rest more-seqs</em></dt>
-<dd><p>This function is like <code>cl-mapcar</code>, except that it concatenates
-the return values (which must be lists) using <code>nconc</code>,
-rather than simply collecting them into a list.
-</p></dd></dl>
+      <p>Common Lisp&rsquo;s <code>mapcar</code> accepts multiple
+      arguments but works only on lists; Emacs Lisp&rsquo;s
+      <code>mapcar</code> accepts a single sequence argument. This
+      package&rsquo;s <code>cl-mapcar</code> works as a compatible
+      superset of both.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dmapcon"></a>Function: <strong>cl-mapcon</strong> <em>function list &amp;rest more-lists</em></dt>
-<dd><p>This function is like <code>cl-maplist</code>, except that it concatenates
-the return values using <code>nconc</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dmap" id=
+    "index-cl_002dmap"></a>Function: <strong>cl-map</strong>
+    <em>result-type function seq &amp;rest more-seqs</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dsome"></a>Function: <strong>cl-some</strong> <em>predicate seq &amp;rest more-seqs</em></dt>
-<dd><p>This function calls <var>predicate</var> on each element of <var>seq</var>
-in turn; if <var>predicate</var> returns a non-<code>nil</code> value,
-<code>cl-some</code> returns that value, otherwise it returns <code>nil</code>.
-Given several sequence arguments, it steps through the sequences
-in parallel until the shortest one runs out, just as in
-<code>cl-mapcar</code>.  You can rely on the left-to-right order in which
-the elements are visited, and on the fact that mapping stops
-immediately as soon as <var>predicate</var> returns non-<code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function maps <var>function</var> over the argument
+      sequences, just like <code>cl-mapcar</code>, but it returns a
+      sequence of type <var>result-type</var> rather than a list.
+      <var>result-type</var> must be one of the following symbols:
+      <code>vector</code>, <code>string</code>, <code>list</code>
+      (in which case the effect is the same as for
+      <code>cl-mapcar</code>), or <code>nil</code> (in which case
+      the results are thrown away and <code>cl-map</code> returns
+      <code>nil</code>).</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002devery"></a>Function: <strong>cl-every</strong> <em>predicate seq &amp;rest more-seqs</em></dt>
-<dd><p>This function calls <var>predicate</var> on each element of the sequence(s)
-in turn; it returns <code>nil</code> as soon as <var>predicate</var> returns
-<code>nil</code> for any element, or <code>t</code> if the predicate was true
-for all elements.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dmaplist" id=
+    "index-cl_002dmaplist"></a>Function:
+    <strong>cl-maplist</strong> <em>function list &amp;rest
+    more-lists</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dnotany"></a>Function: <strong>cl-notany</strong> <em>predicate seq &amp;rest more-seqs</em></dt>
-<dd><p>This function calls <var>predicate</var> on each element of the sequence(s)
-in turn; it returns <code>nil</code> as soon as <var>predicate</var> returns
-a non-<code>nil</code> value for any element, or <code>t</code> if the predicate
-was <code>nil</code> for all elements.
-</p></dd></dl>
+    <dd>
+      <p>This function calls <var>function</var> on each of its
+      argument lists, then on the <small>CDR</small>s of those
+      lists, and so on, until the shortest list runs out. The
+      results are returned in the form of a list. Thus,
+      <code>cl-maplist</code> is like <code>cl-mapcar</code> except
+      that it passes in the list pointers themselves rather than
+      the <small>CAR</small>s of the advancing pointers.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dnotevery"></a>Function: <strong>cl-notevery</strong> <em>predicate seq &amp;rest more-seqs</em></dt>
-<dd><p>This function calls <var>predicate</var> on each element of the sequence(s)
-in turn; it returns a non-<code>nil</code> value as soon as <var>predicate</var>
-returns <code>nil</code> for any element, or <code>nil</code> if the predicate was
-true for all elements.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dmapc" id=
+    "index-cl_002dmapc"></a>Function: <strong>cl-mapc</strong>
+    <em>function seq &amp;rest more-seqs</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dreduce"></a>Function: <strong>cl-reduce</strong> <em>function seq <tt>&amp;key :from-end :start :end :initial-value :key</tt></em></dt>
-<dd><p>This function combines the elements of <var>seq</var> using an associative
-binary operation.  Suppose <var>function</var> is <code>*</code> and <var>seq</var> is
-the list <code>(2 3 4 5)</code>.  The first two elements of the list are
-combined with <code>(* 2 3) = 6</code>; this is combined with the next
-element, <code>(* 6 4) = 24</code>, and that is combined with the final
-element: <code>(* 24 5) = 120</code>.  Note that the <code>*</code> function happens
-to be self-reducing, so that <code>(* 2 3 4 5)</code> has the same effect as
-an explicit call to <code>cl-reduce</code>.
-</p>
-<p>If <code>:from-end</code> is true, the reduction is right-associative instead
-of left-associative:
-</p>
-<div class="example">
-<pre class="example">(cl-reduce '- '(1 2 3 4))
+    <dd>
+      <p>This function is like <code>cl-mapcar</code>, except that
+      the values returned by <var>function</var> are ignored and
+      thrown away rather than being collected into a list. The
+      return value of <code>cl-mapc</code> is <var>seq</var>, the
+      first sequence. This function is more general than the Emacs
+      primitive <code>mapc</code>. (Note that this function is
+      called <code>cl-mapc</code> even in <samp>cl.el</samp>,
+      rather than <code>mapc*</code> as you might expect.)</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dmapl" id=
+    "index-cl_002dmapl"></a>Function: <strong>cl-mapl</strong>
+    <em>function list &amp;rest more-lists</em></dt>
+
+    <dd>
+      <p>This function is like <code>cl-maplist</code>, except that
+      it throws away the values returned by
+      <var>function</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dmapcan" id=
+    "index-cl_002dmapcan"></a>Function: <strong>cl-mapcan</strong>
+    <em>function seq &amp;rest more-seqs</em></dt>
+
+    <dd>
+      <p>This function is like <code>cl-mapcar</code>, except that
+      it concatenates the return values (which must be lists) using
+      <code>nconc</code>, rather than simply collecting them into a
+      list.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dmapcon" id=
+    "index-cl_002dmapcon"></a>Function: <strong>cl-mapcon</strong>
+    <em>function list &amp;rest more-lists</em></dt>
+
+    <dd>
+      <p>This function is like <code>cl-maplist</code>, except that
+      it concatenates the return values using
+      <code>nconc</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dsome" id=
+    "index-cl_002dsome"></a>Function: <strong>cl-some</strong>
+    <em>predicate seq &amp;rest more-seqs</em></dt>
+
+    <dd>
+      <p>This function calls <var>predicate</var> on each element
+      of <var>seq</var> in turn; if <var>predicate</var> returns a
+      non-<code>nil</code> value, <code>cl-some</code> returns that
+      value, otherwise it returns <code>nil</code>. Given several
+      sequence arguments, it steps through the sequences in
+      parallel until the shortest one runs out, just as in
+      <code>cl-mapcar</code>. You can rely on the left-to-right
+      order in which the elements are visited, and on the fact that
+      mapping stops immediately as soon as <var>predicate</var>
+      returns non-<code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002devery" id=
+    "index-cl_002devery"></a>Function: <strong>cl-every</strong>
+    <em>predicate seq &amp;rest more-seqs</em></dt>
+
+    <dd>
+      <p>This function calls <var>predicate</var> on each element
+      of the sequence(s) in turn; it returns <code>nil</code> as
+      soon as <var>predicate</var> returns <code>nil</code> for any
+      element, or <code>t</code> if the predicate was true for all
+      elements.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dnotany" id=
+    "index-cl_002dnotany"></a>Function: <strong>cl-notany</strong>
+    <em>predicate seq &amp;rest more-seqs</em></dt>
+
+    <dd>
+      <p>This function calls <var>predicate</var> on each element
+      of the sequence(s) in turn; it returns <code>nil</code> as
+      soon as <var>predicate</var> returns a non-<code>nil</code>
+      value for any element, or <code>t</code> if the predicate was
+      <code>nil</code> for all elements.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dnotevery" id=
+    "index-cl_002dnotevery"></a>Function:
+    <strong>cl-notevery</strong> <em>predicate seq &amp;rest
+    more-seqs</em></dt>
+
+    <dd>
+      <p>This function calls <var>predicate</var> on each element
+      of the sequence(s) in turn; it returns a non-<code>nil</code>
+      value as soon as <var>predicate</var> returns
+      <code>nil</code> for any element, or <code>nil</code> if the
+      predicate was true for all elements.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dreduce" id=
+    "index-cl_002dreduce"></a>Function: <strong>cl-reduce</strong>
+    <em>function seq <tt>&amp;key :from-end :start :end
+    :initial-value :key</tt></em></dt>
+
+    <dd>
+      <p>This function combines the elements of <var>seq</var>
+      using an associative binary operation. Suppose
+      <var>function</var> is <code>*</code> and <var>seq</var> is
+      the list <code>(2 3 4 5)</code>. The first two elements of
+      the list are combined with <code>(* 2 3) = 6</code>; this is
+      combined with the next element, <code>(* 6 4) = 24</code>,
+      and that is combined with the final element: <code>(* 24 5) =
+      120</code>. Note that the <code>*</code> function happens to
+      be self-reducing, so that <code>(* 2 3 4 5)</code> has the
+      same effect as an explicit call to
+      <code>cl-reduce</code>.</p>
+
+      <p>If <code>:from-end</code> is true, the reduction is
+      right-associative instead of left-associative:</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-reduce '- '(1 2 3 4))
         &equiv; (- (- (- 1 2) 3) 4) &rArr; -8
 (cl-reduce '- '(1 2 3 4) :from-end t)
         &equiv; (- 1 (- 2 (- 3 4))) &rArr; -2
-</pre></div>
+</pre>
+      </div>
 
-<p>If <code>:key</code> is specified, it is a function of one argument, which
-is called on each of the sequence elements in turn.
-</p>
-<p>If <code>:initial-value</code> is specified, it is effectively added to the
-front (or rear in the case of <code>:from-end</code>) of the sequence.
-The <code>:key</code> function is <em>not</em> applied to the initial value.
-</p>
-<p>If the sequence, including the initial value, has exactly one element
-then that element is returned without ever calling <var>function</var>.
-If the sequence is empty (and there is no initial value), then
-<var>function</var> is called with no arguments to obtain the return value.
-</p></dd></dl>
+      <p>If <code>:key</code> is specified, it is a function of one
+      argument, which is called on each of the sequence elements in
+      turn.</p>
 
-<p>All of these mapping operations can be expressed conveniently in
-terms of the <code>cl-loop</code> macro.  In compiled code, <code>cl-loop</code> will
-be faster since it generates the loop as in-line code with no
-function calls.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Sequence-Functions.html#Sequence-Functions" accesskey="n" rel="next">Sequence Functions</a>, Previous: <a href="Sequence-Basics.html#Sequence-Basics" accesskey="p" rel="prev">Sequence Basics</a>, Up: <a href="Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If <code>:initial-value</code> is specified, it is
+      effectively added to the front (or rear in the case of
+      <code>:from-end</code>) of the sequence. The
+      <code>:key</code> function is <em>not</em> applied to the
+      initial value.</p>
 
+      <p>If the sequence, including the initial value, has exactly
+      one element then that element is returned without ever
+      calling <var>function</var>. If the sequence is empty (and
+      there is no initial value), then <var>function</var> is
+      called with no arguments to obtain the return value.</p>
+    </dd>
+  </dl>
 
+  <p>All of these mapping operations can be expressed conveniently
+  in terms of the <code>cl-loop</code> macro. In compiled code,
+  <code>cl-loop</code> will be faster since it generates the loop
+  as in-line code with no function calls.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Sequence-Functions.html#Sequence-Functions"
+    accesskey="n" rel="next">Sequence Functions</a>, Previous:
+    <a href="Sequence-Basics.html#Sequence-Basics" accesskey="p"
+    rel="prev">Sequence Basics</a>, Up: <a href=
+    "Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

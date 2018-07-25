@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Forms mode, a form-editing major mode for GNU Emacs.
 
 Copyright (C) 1989, 1997, 2001-2016 Free Software Foundation, Inc.
@@ -14,223 +16,317 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Forms Mode User&rsquo;s Manual: Control File Format</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Forms Mode User&rsquo;s Manual: Control File Format">
-<meta name="keywords" content="Forms Mode User&rsquo;s Manual: Control File Format">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Format-Description.html#Format-Description" rel="next" title="Format Description">
-<link href="Data-File-Format.html#Data-File-Format" rel="prev" title="Data File Format">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Forms Mode User&rsquo;s Manual: Control File
+  Format</title>
+  <meta name="description" content=
+  "Forms Mode User&rsquo;s Manual: Control File Format" />
+  <meta name="keywords" content=
+  "Forms Mode User&rsquo;s Manual: Control File Format" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Format-Description.html#Format-Description" rel=
+  "next" title="Format Description" />
+  <link href="Data-File-Format.html#Data-File-Format" rel="prev"
+  title="Data File Format" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Control-File-Format"></a>
-<div class="header">
-<p>
-Next: <a href="Format-Description.html#Format-Description" accesskey="n" rel="next">Format Description</a>, Previous: <a href="Data-File-Format.html#Data-File-Format" accesskey="p" rel="prev">Data File Format</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Control-File-Format-1"></a>
-<h2 class="chapter">5 Control File Format</h2>
+<body lang="en" xml:lang="en">
+  <a name="Control-File-Format" id="Control-File-Format"></a>
 
-<a name="index-control-file"></a>
-<p>The Forms mode <em>control file</em> serves two purposes.  First, it names
-the data file to use, and defines its format and properties.  Second,
-the Emacs buffer it occupies is used by Forms mode to display the forms.
-</p>
-<p>The contents of the control file are evaluated as a Lisp program.  It
-should set the following Lisp variables to suitable values:
-</p>
-<dl compact="compact">
-<dd><a name="index-forms_002dfile"></a>
-</dd>
-<dt><code>forms-file</code></dt>
-<dd><p>This variable specifies the name of the data file.  Example:
-</p>
-<div class="example">
-<pre class="example">(setq forms-file &quot;my/data-file&quot;)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Format-Description.html#Format-Description"
+    accesskey="n" rel="next">Format Description</a>, Previous:
+    <a href="Data-File-Format.html#Data-File-Format" accesskey="p"
+    rel="prev">Data File Format</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Control-File-Format-1" id="Control-File-Format-1"></a>
 
-<p>If the control file doesn&rsquo;t set <code>forms-file</code>, Forms mode
-reports an error.
-</p>
-<a name="index-forms_002dformat_002dlist"></a>
-</dd>
-<dt><code>forms-format-list</code></dt>
-<dd><p>This variable describes the way the fields of the record are formatted on
-the screen.  For details, see <a href="Format-Description.html#Format-Description">Format Description</a>.
-</p>
-<a name="index-forms_002dnumber_002dof_002dfields"></a>
-</dd>
-<dt><code>forms-number-of-fields</code></dt>
-<dd><p>This variable holds the number of fields in each record of the data
-file.  Example:
-</p>
-<div class="example">
-<pre class="example">(setq forms-number-of-fields 10)
-</pre></div>
-</dd>
-</dl>
+  <h2 class="chapter">5 Control File Format</h2><a name=
+  "index-control-file" id="index-control-file"></a>
 
-<p>If the control file does not set <code>forms-format-list</code> a default
-format is used.  In this situation, Forms mode will deduce the number of
-fields from the data file providing this file exists and
-<code>forms-number-of-records</code> has not been set in the control file.
-</p>
-<p>The control file can optionally set the following additional Forms mode
-variables.  Most of them have default values that are good for most
-applications.
-</p>
-<dl compact="compact">
-<dd><a name="index-forms_002dfield_002dsep-1"></a>
-</dd>
-<dt><code>forms-field-sep</code></dt>
-<dd><p>This variable may be used to designate the string which separates the
-fields in the records of the data file.  If not set, it defaults to the
-string <code>&quot;\t&quot;</code> (a Tab character).  Example:
-</p>
-<div class="example">
-<pre class="example">(setq forms-field-sep &quot;\t&quot;)
-</pre></div>
+  <p>The Forms mode <em>control file</em> serves two purposes.
+  First, it names the data file to use, and defines its format and
+  properties. Second, the Emacs buffer it occupies is used by Forms
+  mode to display the forms.</p>
 
-<a name="index-forms_002dread_002donly"></a>
-</dd>
-<dt><code>forms-read-only</code></dt>
-<dd><p>If the value is non-<code>nil</code>, the data file is treated read-only.  (Forms
-mode also treats the data file as read-only if you don&rsquo;t have access to
-write it.)  Example:
-</p>
-<div class="example">
-<pre class="example">(set forms-read-only t)
-</pre></div>
+  <p>The contents of the control file are evaluated as a Lisp
+  program. It should set the following Lisp variables to suitable
+  values:</p>
 
-<a name="index-forms_002dmulti_002dline-1"></a>
-</dd>
-<dt><code>forms-multi-line</code></dt>
-<dd><p>This variable specifies the <em>pseudo newline</em> separator that allows
-multi-line fields.  This separator goes between the &ldquo;lines&rdquo; within a
-field&mdash;thus, the field doesn&rsquo;t really contain multiple lines, but it
-appears that way when displayed in Forms mode.  If the value is
-<code>nil</code>, multi-line text fields are prohibited.  The pseudo newline
-must not be a character contained in <code>forms-field-sep</code>.
-</p>
-<p>The default value is <code>&quot;\^k&quot;</code>, the character Control-K.  Example:
-</p>
-<div class="example">
-<pre class="example">(setq forms-multi-line &quot;\^k&quot;)
-</pre></div>
+  <dl compact="compact">
+    <dd><a name="index-forms_002dfile" id=
+    "index-forms_002dfile"></a></dd>
 
+    <dt><code>forms-file</code></dt>
 
-<a name="index-forms_002dread_002dfile_002dfilter"></a>
-</dd>
-<dt><code>forms-read-file-filter</code></dt>
-<dd><p>This variable holds the name of a function to be called after the data
-file has been read in. This can be used to transform the contents of the
-data file into a format more suitable for forms processing.
-If it is <code>nil</code>, no function is called.  For example, to maintain a
-gzipped database:
-</p>
-<div class="example">
-<pre class="example">(defun gzip-read-file-filter ()
+    <dd>
+      <p>This variable specifies the name of the data file.
+      Example:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq forms-file "my/data-file")
+</pre>
+      </div>
+
+      <p>If the control file doesn&rsquo;t set
+      <code>forms-file</code>, Forms mode reports an
+      error.</p><a name="index-forms_002dformat_002dlist" id=
+      "index-forms_002dformat_002dlist"></a>
+    </dd>
+
+    <dt><code>forms-format-list</code></dt>
+
+    <dd>
+      <p>This variable describes the way the fields of the record
+      are formatted on the screen. For details, see <a href=
+      "Format-Description.html#Format-Description">Format
+      Description</a>.</p><a name=
+      "index-forms_002dnumber_002dof_002dfields" id=
+      "index-forms_002dnumber_002dof_002dfields"></a>
+    </dd>
+
+    <dt><code>forms-number-of-fields</code></dt>
+
+    <dd>
+      <p>This variable holds the number of fields in each record of
+      the data file. Example:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq forms-number-of-fields 10)
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <p>If the control file does not set
+  <code>forms-format-list</code> a default format is used. In this
+  situation, Forms mode will deduce the number of fields from the
+  data file providing this file exists and
+  <code>forms-number-of-records</code> has not been set in the
+  control file.</p>
+
+  <p>The control file can optionally set the following additional
+  Forms mode variables. Most of them have default values that are
+  good for most applications.</p>
+
+  <dl compact="compact">
+    <dd><a name="index-forms_002dfield_002dsep-1" id=
+    "index-forms_002dfield_002dsep-1"></a></dd>
+
+    <dt><code>forms-field-sep</code></dt>
+
+    <dd>
+      <p>This variable may be used to designate the string which
+      separates the fields in the records of the data file. If not
+      set, it defaults to the string <code>"\t"</code> (a Tab
+      character). Example:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq forms-field-sep "\t")
+</pre>
+      </div><a name="index-forms_002dread_002donly" id=
+      "index-forms_002dread_002donly"></a>
+    </dd>
+
+    <dt><code>forms-read-only</code></dt>
+
+    <dd>
+      <p>If the value is non-<code>nil</code>, the data file is
+      treated read-only. (Forms mode also treats the data file as
+      read-only if you don&rsquo;t have access to write it.)
+      Example:</p>
+
+      <div class="example">
+        <pre class="example">
+(set forms-read-only t)
+</pre>
+      </div><a name="index-forms_002dmulti_002dline-1" id=
+      "index-forms_002dmulti_002dline-1"></a>
+    </dd>
+
+    <dt><code>forms-multi-line</code></dt>
+
+    <dd>
+      <p>This variable specifies the <em>pseudo newline</em>
+      separator that allows multi-line fields. This separator goes
+      between the &ldquo;lines&rdquo; within a field&mdash;thus,
+      the field doesn&rsquo;t really contain multiple lines, but it
+      appears that way when displayed in Forms mode. If the value
+      is <code>nil</code>, multi-line text fields are prohibited.
+      The pseudo newline must not be a character contained in
+      <code>forms-field-sep</code>.</p>
+
+      <p>The default value is <code>"\^k"</code>, the character
+      Control-K. Example:</p>
+
+      <div class="example">
+        <pre class="example">
+(setq forms-multi-line "\^k")
+</pre>
+      </div><a name="index-forms_002dread_002dfile_002dfilter" id=
+      "index-forms_002dread_002dfile_002dfilter"></a>
+    </dd>
+
+    <dt><code>forms-read-file-filter</code></dt>
+
+    <dd>
+      <p>This variable holds the name of a function to be called
+      after the data file has been read in. This can be used to
+      transform the contents of the data file into a format more
+      suitable for forms processing. If it is <code>nil</code>, no
+      function is called. For example, to maintain a gzipped
+      database:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun gzip-read-file-filter ()
   (shell-command-on-region (point-min) (point-max)
-                           &quot;gzip -d&quot; t t))
+                           "gzip -d" t t))
 (setq forms-read-file-filter 'gzip-read-file-filter)
-</pre></div>
+</pre>
+      </div><a name="index-forms_002dwrite_002dfile_002dfilter" id=
+      "index-forms_002dwrite_002dfile_002dfilter"></a>
+    </dd>
 
-<a name="index-forms_002dwrite_002dfile_002dfilter"></a>
-</dd>
-<dt><code>forms-write-file-filter</code></dt>
-<dd><p>This variable holds the name of a function to be called before writing
-out the contents of the data file.
-This can be used to undo the effects of <code>forms-read-file-filter</code>.
-If it is <code>nil</code>, no function is called.  Example:
-</p>
-<div class="example">
-<pre class="example">(defun gzip-write-file-filter ()
+    <dt><code>forms-write-file-filter</code></dt>
+
+    <dd>
+      <p>This variable holds the name of a function to be called
+      before writing out the contents of the data file. This can be
+      used to undo the effects of
+      <code>forms-read-file-filter</code>. If it is
+      <code>nil</code>, no function is called. Example:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun gzip-write-file-filter ()
   (make-variable-buffer-local 'require-final-newline)
   (setq require-final-newline nil)
   (shell-command-on-region (point-min) (point-max)
-                           &quot;gzip&quot; t t))
+                           "gzip" t t))
 (setq forms-write-file-filter 'gzip-write-file-filter)
-</pre></div>
+</pre>
+      </div><a name="index-forms_002dnew_002drecord_002dfilter" id=
+      "index-forms_002dnew_002drecord_002dfilter"></a>
+    </dd>
 
-<a name="index-forms_002dnew_002drecord_002dfilter"></a>
-</dd>
-<dt><code>forms-new-record-filter</code></dt>
-<dd><p>This variable holds a function to be called whenever a new record is created
-to supply default values for fields.  If it is <code>nil</code>, no function is
-called.
-See <a href="Modifying-Forms-Contents.html#Modifying-Forms-Contents">Modifying Forms Contents</a>, for details.
-</p>
-<a name="index-forms_002dmodified_002drecord_002dfilter"></a>
-</dd>
-<dt><code>forms-modified-record-filter</code></dt>
-<dd><p>This variable holds a function to be called whenever a record is
-modified, just before updating the Forms data file.  If it is
-<code>nil</code>, no function is called.
-See <a href="Modifying-Forms-Contents.html#Modifying-Forms-Contents">Modifying Forms Contents</a>, for details.
-</p>
-<a name="index-forms_002dinsert_002dafter"></a>
-</dd>
-<dt><code>forms-insert-after</code></dt>
-<dd><p>If this variable is not <code>nil</code>, new records are created <em>after</em> the
-current record. Also, upon visiting a file, the initial position will be
-at the last record instead of the first one.
-</p>
-<a name="index-forms_002dcheck_002dnumber_002dof_002dfields"></a>
-</dd>
-<dt><code>forms-check-number-of-fields</code></dt>
-<dd><p>Normally each record is checked to contain the correct number of fields.
-Under certain circumstances, this can be undesirable.
-If this variable is set to <code>nil</code>, these checks will be bypassed.
-</p></dd>
-</dl>
+    <dt><code>forms-new-record-filter</code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Format-Description.html#Format-Description" accesskey="n" rel="next">Format Description</a>, Previous: <a href="Data-File-Format.html#Data-File-Format" accesskey="p" rel="prev">Data File Format</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This variable holds a function to be called whenever a new
+      record is created to supply default values for fields. If it
+      is <code>nil</code>, no function is called. See <a href=
+      "Modifying-Forms-Contents.html#Modifying-Forms-Contents">Modifying
+      Forms Contents</a>, for details.</p><a name=
+      "index-forms_002dmodified_002drecord_002dfilter" id=
+      "index-forms_002dmodified_002drecord_002dfilter"></a>
+    </dd>
 
+    <dt><code>forms-modified-record-filter</code></dt>
 
+    <dd>
+      <p>This variable holds a function to be called whenever a
+      record is modified, just before updating the Forms data file.
+      If it is <code>nil</code>, no function is called. See
+      <a href="Modifying-Forms-Contents.html#Modifying-Forms-Contents">
+      Modifying Forms Contents</a>, for details.</p><a name=
+      "index-forms_002dinsert_002dafter" id=
+      "index-forms_002dinsert_002dafter"></a>
+    </dd>
 
+    <dt><code>forms-insert-after</code></dt>
+
+    <dd>
+      <p>If this variable is not <code>nil</code>, new records are
+      created <em>after</em> the current record. Also, upon
+      visiting a file, the initial position will be at the last
+      record instead of the first one.</p><a name=
+      "index-forms_002dcheck_002dnumber_002dof_002dfields" id=
+      "index-forms_002dcheck_002dnumber_002dof_002dfields"></a>
+    </dd>
+
+    <dt><code>forms-check-number-of-fields</code></dt>
+
+    <dd>
+      <p>Normally each record is checked to contain the correct
+      number of fields. Under certain circumstances, this can be
+      undesirable. If this variable is set to <code>nil</code>,
+      these checks will be bypassed.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Format-Description.html#Format-Description"
+    accesskey="n" rel="next">Format Description</a>, Previous:
+    <a href="Data-File-Format.html#Data-File-Format" accesskey="p"
+    rel="prev">Data File Format</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

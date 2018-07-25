@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the Ido package for GNU Emacs.
 
 Copyright (C) 2013-2016 Free Software Foundation, Inc.
@@ -14,197 +16,254 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Interactive Do: Interactive Substring Matching</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Interactive Do: Interactive Substring Matching">
-<meta name="keywords" content="Interactive Do: Interactive Substring Matching">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Variable-Index.html#Variable-Index" rel="index" title="Variable Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Matching.html#Matching" rel="up" title="Matching">
-<link href="Prefix-Matching.html#Prefix-Matching" rel="next" title="Prefix Matching">
-<link href="Matching.html#Matching" rel="prev" title="Matching">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Interactive Do: Interactive Substring Matching</title>
+  <meta name="description" content=
+  "Interactive Do: Interactive Substring Matching" />
+  <meta name="keywords" content=
+  "Interactive Do: Interactive Substring Matching" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Variable-Index.html#Variable-Index" rel="index"
+  title="Variable Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Matching.html#Matching" rel="up" title="Matching" />
+  <link href="Prefix-Matching.html#Prefix-Matching" rel="next"
+  title="Prefix Matching" />
+  <link href="Matching.html#Matching" rel="prev" title=
+  "Matching" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Interactive-Substring-Matching"></a>
-<div class="header">
-<p>
-Next: <a href="Prefix-Matching.html#Prefix-Matching" accesskey="n" rel="next">Prefix Matching</a>, Up: <a href="Matching.html#Matching" accesskey="u" rel="up">Matching</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Variable-Index.html#Variable-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Interactive-Substring-Matching-1"></a>
-<h3 class="section">2.1 Interactive Substring Matching</h3>
-<a name="index-interactive-substring-matching"></a>
-<a name="index-substring_002c-interactive-matching"></a>
-<a name="index-matching_002c-using-substring"></a>
+<body lang="en" xml:lang="en">
+  <a name="Interactive-Substring-Matching" id=
+  "Interactive-Substring-Matching"></a>
 
-<p>As you type in a substring, the list of buffers or files currently
-matching the substring are displayed as you type.  The list is
-ordered so that the most recent buffers or files visited come at
-the start of the list.
-</p>
-<p>The buffer or file at the start of the list will be the one visited
-when you press <tt class="key">RET</tt>.  By typing more of the substring, the list
-is narrowed down so that gradually the buffer or file you want will be
-at the top of the list.  Alternatively, you can use <kbd>C-s</kbd> and
-<kbd>C-r</kbd> (or the right and left arrow keys) to rotate buffer or file
-names in the list until the one you want is at the top of the list.
-</p>
-<p>Completion is also available so that you can see what is common to
-all of the matching buffers or files as you type.
-</p>
-<p>For example, if there are two buffers called <samp>123456</samp> and
-<samp>123</samp>, with <samp>123456</samp> the most recent, when using
-<code>ido-switch-buffer</code>, you first of all get presented with the list
-of all the buffers
-</p>
-<div class="example">
-<pre class="example">Buffer: {123456 | 123}
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Prefix-Matching.html#Prefix-Matching"
+    accesskey="n" rel="next">Prefix Matching</a>, Up: <a href=
+    "Matching.html#Matching" accesskey="u" rel="up">Matching</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Variable-Index.html#Variable-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Interactive-Substring-Matching-1" id=
+  "Interactive-Substring-Matching-1"></a>
 
-<p>If you then press <kbd>2</kbd>:
-</p>
-<div class="example">
-<pre class="example">Buffer: 2[3]{123456 | 123}
-</pre></div>
+  <h3 class="section">2.1 Interactive Substring
+  Matching</h3><a name="index-interactive-substring-matching" id=
+  "index-interactive-substring-matching"></a> <a name=
+  "index-substring_002c-interactive-matching" id=
+  "index-substring_002c-interactive-matching"></a> <a name=
+  "index-matching_002c-using-substring" id=
+  "index-matching_002c-using-substring"></a>
 
-<p>The list in {...} are the matching buffers, most recent first
-(buffers visible in the current frame are put at the end of the list
-by default).  At any time you can select the item at the head of the
-list by pressing <tt class="key">RET</tt>.  You can also put the first element at the
-end of the list by pressing <kbd>C-s</kbd> or <kbd>&lt;right&gt;</kbd>, or bring the
-last element to the head of the list by pressing <kbd>C-r</kbd> or
-<kbd>&lt;left&gt;</kbd>.
-</p>
-<p>The item in [...] indicates what can be added to your input by
-pressing <tt class="key">TAB</tt> (<code>ido-complete</code>).  In this case, you will get
-&quot;3&quot; added to your input.
-</p>
-<p>So, press <tt class="key">TAB</tt>:
-</p>
-<div class="example">
-<pre class="example">Buffer: 23{123456 | 123}
-</pre></div>
+  <p>As you type in a substring, the list of buffers or files
+  currently matching the substring are displayed as you type. The
+  list is ordered so that the most recent buffers or files visited
+  come at the start of the list.</p>
 
-<p>At this point, you still have two matching buffers.  If you want the
-first buffer in the list, you can simply press <tt class="key">RET</tt>.  If you want
-the second in the list, you can press <kbd>C-s</kbd> to move it to the top
-of the list and then press <tt class="key">RET</tt> to select it.
-</p>
-<p>However, if you type <kbd>4</kbd>, you&rsquo;ll only have one match left:
-</p>
-<div class="example">
-<pre class="example">Buffer: 234[123456]
-</pre></div>
+  <p>The buffer or file at the start of the list will be the one
+  visited when you press <tt class="key">RET</tt>. By typing more
+  of the substring, the list is narrowed down so that gradually the
+  buffer or file you want will be at the top of the list.
+  Alternatively, you can use <kbd>C-s</kbd> and <kbd>C-r</kbd> (or
+  the right and left arrow keys) to rotate buffer or file names in
+  the list until the one you want is at the top of the list.</p>
 
-<p>Since there is only one matching buffer left, it is given in [] and it
-is shown in the <code>ido-only-match</code> face (ForestGreen).  You can now
-press <tt class="key">TAB</tt> or <tt class="key">RET</tt> to go to that buffer.
-</p>
-<p>If you want to create a new buffer named <samp>234</samp>, you can press
-<kbd>C-j</kbd> (<code>ido-select-text</code>) instead of <tt class="key">TAB</tt> or <tt class="key">RET</tt>.
-</p>
-<p>If instead, you type <kbd>a</kbd>:
-</p>
-<div class="example">
-<pre class="example">Buffer: 234a [No match]
-</pre></div>
+  <p>Completion is also available so that you can see what is
+  common to all of the matching buffers or files as you type.</p>
 
-<p>There are no matching buffers.  If you press <tt class="key">RET</tt> or <tt class="key">TAB</tt>,
-you can be prompted to create a new buffer called <samp>234a</samp>.
-</p>
-<p>Of course, where this function comes in really useful is when you can
-specify the buffer using only a few keystrokes.  In the above example,
-the quickest way to get to the <samp>123456</samp> file would be just to
-type <kbd>4</kbd> and then <tt class="key">RET</tt> (assuming there isn&rsquo;t any newer buffer
-with <kbd>4</kbd> in its name).
-</p>
-<p>Likewise, if you use <kbd>C-x C-f</kbd> (<code>ido-find-file</code>), the list of
-files and directories in the current directory is provided in the same
-fashion as the buffers above.  The files and directories are normally
-sorted in alphabetical order, but the most recently visited directory
-is placed first to speed up navigating to directories that you have
-visited recently.
-</p>
-<p>In addition to scrolling through the list using <kbd>&lt;right&gt;</kbd> and
-<kbd>&lt;left&gt;</kbd>, you can use <kbd>&lt;up&gt;</kbd> and <kbd>&lt;down&gt;</kbd> to quickly
-scroll the list to the next or previous subdirectory.
-</p>
-<p>To go down into a subdirectory, and continue the file selection on
-the files in that directory, simply move the directory to the head
-of the list and hit <tt class="key">RET</tt>.
-</p>
-<p>To go up to the parent directory, delete any partial file name already
-specified (e.g., using <tt class="key">DEL</tt>) and hit <tt class="key">DEL</tt>.
-</p>
+  <p>For example, if there are two buffers called
+  <samp>123456</samp> and <samp>123</samp>, with
+  <samp>123456</samp> the most recent, when using
+  <code>ido-switch-buffer</code>, you first of all get presented
+  with the list of all the buffers</p>
 
-<a name="index-root-directory"></a>
-<a name="index-home-directory"></a>
-<p>To go to the root directory (on the current drive), enter two slashes.
-On MS-DOS or Windows, to select the root of another drive, enter
-&lsquo;<samp>X:/</samp>&rsquo; where &lsquo;<samp>X</samp>&rsquo; is the drive letter.  To go to the home
-directory, enter &lsquo;<samp>~/</samp>&rsquo;.  To enter Dired for this directory, use
-<kbd>C-d</kbd>.
-</p>
-<a name="index-ftp-hosts"></a>
-<p>You can also visit files on other hosts using the ange-ftp
-notations &lsquo;<samp>/host:</samp>&rsquo; and &lsquo;<samp>/user@host:</samp>&rsquo;.
-</p>
-<p>You can type <kbd>M-p</kbd> and <kbd>M-n</kbd> to change to previous/next
-directories from the history, <kbd>M-s</kbd> to search for a file matching
-your input, and <kbd>M-k</kbd> to remove the current directory from the history.
-</p>
-<p>If for some reason you cannot specify the proper file using
-<code>ido-find-file</code>, you can press <kbd>C-f</kbd> to enter the normal
-<code>find-file</code>.  You can also press <kbd>C-b</kbd> to drop into
-<code>ido-switch-buffer</code>.
-</p>
+  <div class="example">
+    <pre class="example">
+Buffer: {123456 | 123}
+</pre>
+  </div>
 
+  <p>If you then press <kbd>2</kbd>:</p>
 
+  <div class="example">
+    <pre class="example">
+Buffer: 2[3]{123456 | 123}
+</pre>
+  </div>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Prefix-Matching.html#Prefix-Matching" accesskey="n" rel="next">Prefix Matching</a>, Up: <a href="Matching.html#Matching" accesskey="u" rel="up">Matching</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Variable-Index.html#Variable-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The list in {...} are the matching buffers, most recent first
+  (buffers visible in the current frame are put at the end of the
+  list by default). At any time you can select the item at the head
+  of the list by pressing <tt class="key">RET</tt>. You can also
+  put the first element at the end of the list by pressing
+  <kbd>C-s</kbd> or <kbd>&lt;right&gt;</kbd>, or bring the last
+  element to the head of the list by pressing <kbd>C-r</kbd> or
+  <kbd>&lt;left&gt;</kbd>.</p>
 
+  <p>The item in [...] indicates what can be added to your input by
+  pressing <tt class="key">TAB</tt> (<code>ido-complete</code>). In
+  this case, you will get "3" added to your input.</p>
 
+  <p>So, press <tt class="key">TAB</tt>:</p>
 
+  <div class="example">
+    <pre class="example">
+Buffer: 23{123456 | 123}
+</pre>
+  </div>
+
+  <p>At this point, you still have two matching buffers. If you
+  want the first buffer in the list, you can simply press
+  <tt class="key">RET</tt>. If you want the second in the list, you
+  can press <kbd>C-s</kbd> to move it to the top of the list and
+  then press <tt class="key">RET</tt> to select it.</p>
+
+  <p>However, if you type <kbd>4</kbd>, you&rsquo;ll only have one
+  match left:</p>
+
+  <div class="example">
+    <pre class="example">
+Buffer: 234[123456]
+</pre>
+  </div>
+
+  <p>Since there is only one matching buffer left, it is given in
+  [] and it is shown in the <code>ido-only-match</code> face
+  (ForestGreen). You can now press <tt class="key">TAB</tt> or
+  <tt class="key">RET</tt> to go to that buffer.</p>
+
+  <p>If you want to create a new buffer named <samp>234</samp>, you
+  can press <kbd>C-j</kbd> (<code>ido-select-text</code>) instead
+  of <tt class="key">TAB</tt> or <tt class="key">RET</tt>.</p>
+
+  <p>If instead, you type <kbd>a</kbd>:</p>
+
+  <div class="example">
+    <pre class="example">
+Buffer: 234a [No match]
+</pre>
+  </div>
+
+  <p>There are no matching buffers. If you press <tt class=
+  "key">RET</tt> or <tt class="key">TAB</tt>, you can be prompted
+  to create a new buffer called <samp>234a</samp>.</p>
+
+  <p>Of course, where this function comes in really useful is when
+  you can specify the buffer using only a few keystrokes. In the
+  above example, the quickest way to get to the <samp>123456</samp>
+  file would be just to type <kbd>4</kbd> and then <tt class=
+  "key">RET</tt> (assuming there isn&rsquo;t any newer buffer with
+  <kbd>4</kbd> in its name).</p>
+
+  <p>Likewise, if you use <kbd>C-x C-f</kbd>
+  (<code>ido-find-file</code>), the list of files and directories
+  in the current directory is provided in the same fashion as the
+  buffers above. The files and directories are normally sorted in
+  alphabetical order, but the most recently visited directory is
+  placed first to speed up navigating to directories that you have
+  visited recently.</p>
+
+  <p>In addition to scrolling through the list using
+  <kbd>&lt;right&gt;</kbd> and <kbd>&lt;left&gt;</kbd>, you can use
+  <kbd>&lt;up&gt;</kbd> and <kbd>&lt;down&gt;</kbd> to quickly
+  scroll the list to the next or previous subdirectory.</p>
+
+  <p>To go down into a subdirectory, and continue the file
+  selection on the files in that directory, simply move the
+  directory to the head of the list and hit <tt class=
+  "key">RET</tt>.</p>
+
+  <p>To go up to the parent directory, delete any partial file name
+  already specified (e.g., using <tt class="key">DEL</tt>) and hit
+  <tt class="key">DEL</tt>.</p><a name="index-root-directory" id=
+  "index-root-directory"></a> <a name="index-home-directory" id=
+  "index-home-directory"></a>
+
+  <p>To go to the root directory (on the current drive), enter two
+  slashes. On MS-DOS or Windows, to select the root of another
+  drive, enter &lsquo;<samp>X:/</samp>&rsquo; where
+  &lsquo;<samp>X</samp>&rsquo; is the drive letter. To go to the
+  home directory, enter &lsquo;<samp>~/</samp>&rsquo;. To enter
+  Dired for this directory, use <kbd>C-d</kbd>.</p><a name=
+  "index-ftp-hosts" id="index-ftp-hosts"></a>
+
+  <p>You can also visit files on other hosts using the ange-ftp
+  notations &lsquo;<samp>/host:</samp>&rsquo; and
+  &lsquo;<samp>/user@host:</samp>&rsquo;.</p>
+
+  <p>You can type <kbd>M-p</kbd> and <kbd>M-n</kbd> to change to
+  previous/next directories from the history, <kbd>M-s</kbd> to
+  search for a file matching your input, and <kbd>M-k</kbd> to
+  remove the current directory from the history.</p>
+
+  <p>If for some reason you cannot specify the proper file using
+  <code>ido-find-file</code>, you can press <kbd>C-f</kbd> to enter
+  the normal <code>find-file</code>. You can also press
+  <kbd>C-b</kbd> to drop into <code>ido-switch-buffer</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Prefix-Matching.html#Prefix-Matching"
+    accesskey="n" rel="next">Prefix Matching</a>, Up: <a href=
+    "Matching.html#Matching" accesskey="u" rel="up">Matching</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Variable-Index.html#Variable-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

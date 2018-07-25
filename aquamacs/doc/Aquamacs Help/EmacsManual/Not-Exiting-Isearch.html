@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,145 +20,213 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Not Exiting Isearch</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Not Exiting Isearch">
-<meta name="keywords" content="GNU Emacs Manual: Not Exiting Isearch">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Incremental-Search.html#Incremental-Search" rel="up" title="Incremental Search">
-<link href="Isearch-Minibuffer.html#Isearch-Minibuffer" rel="next" title="Isearch Minibuffer">
-<link href="Special-Isearch.html#Special-Isearch" rel="prev" title="Special Isearch">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Not Exiting Isearch</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Not Exiting Isearch" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Not Exiting Isearch" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Incremental-Search.html#Incremental-Search" rel="up"
+  title="Incremental Search" />
+  <link href="Isearch-Minibuffer.html#Isearch-Minibuffer" rel=
+  "next" title="Isearch Minibuffer" />
+  <link href="Special-Isearch.html#Special-Isearch" rel="prev"
+  title="Special Isearch" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Not-Exiting-Isearch" id="Not-Exiting-Isearch"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Isearch-Minibuffer.html#Isearch-Minibuffer"
+    accesskey="n" rel="next">Isearch Minibuffer</a>, Previous:
+    <a href="Special-Isearch.html#Special-Isearch" accesskey="p"
+    rel="prev">Special Isearch</a>, Up: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="u" rel=
+    "up">Incremental Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Not-Exiting-Incremental-Search" id=
+  "Not-Exiting-Incremental-Search"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Not-Exiting-Isearch"></a>
-<div class="header">
-<p>
-Next: <a href="Isearch-Minibuffer.html#Isearch-Minibuffer" accesskey="n" rel="next">Isearch Minibuffer</a>, Previous: <a href="Special-Isearch.html#Special-Isearch" accesskey="p" rel="prev">Special Isearch</a>, Up: <a href="Incremental-Search.html#Incremental-Search" accesskey="u" rel="up">Incremental Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Not-Exiting-Incremental-Search"></a>
-<h4 class="subsection">15.1.6 Not Exiting Incremental Search</h4>
+  <h4 class="subsection">15.1.6 Not Exiting Incremental Search</h4>
 
-<p>This subsection describes how to control whether typing a command not
-specifically meaningful is searches exits the search before executing
-the command.  It also describes two categories of commands which you
-can type without exiting the current incremental search, even though
-they are not themselves part of incremental search.
-</p>
-<a name="index-search_002dexit_002doption"></a>
-<p>Normally, typing a command that is not bound by the incremental
-search exits the search before executing the command.  Thus, the
-command operates on the buffer from which you invoked the search.
-However, if you customize the variable <code>search-exit-option</code> to
-<code>nil</code>, the characters which you type that are not interpreted by
-the incremental search are simply appended to the search string.  This
-is so you could include in the search string control characters, such
-as <kbd>C-a</kbd>, that would normally exit the search and invoke the
-command bound to them on the buffer.
-</p>
-<dl compact="compact">
-<dt>Prefix Arguments</dt>
-<dd><a name="index-prefix-argument-commands_002c-during-incremental-search"></a>
-<a name="index-isearch_002dallow_002dprefix"></a>
-<p>In incremental search, when you type a command that specifies a
-prefix argument (see <a href="Arguments.html#Arguments">Arguments</a>), by default it will apply either
-to the next action in the search or to the command that exits the
-search.  In other words, entering a prefix argument will not by itself
-terminate the search.
-</p>
-<p>In previous versions of Emacs, entering a prefix argument always
-terminated the search.  You can revert to this behavior by setting the
-variable <code>isearch-allow-prefix</code> to <code>nil</code>.
-</p>
-<p>When <code>isearch-allow-scroll</code> is non-<code>nil</code> (see below),
-prefix arguments always have the default behavior described above,
-i.e., they don&rsquo;t terminate the search, even if
-<code>isearch-allow-prefix</code> is <code>nil</code>.
-</p>
-</dd>
-<dt>Scrolling Commands</dt>
-<dd><a name="index-scrolling-commands_002c-during-incremental-search"></a>
-<a name="index-isearch_002dallow_002dscroll"></a>
-<p>Normally, scrolling commands exit incremental search.  If you change
-the variable <code>isearch-allow-scroll</code> to a non-<code>nil</code> value,
-that enables the use of the scroll-bar, as well as keyboard scrolling
-commands like <kbd>C-v</kbd>, <kbd>M-v</kbd>, and <kbd>C-l</kbd> (see <a href="Scrolling.html#Scrolling">Scrolling</a>).
-This applies only to calling these commands via their bound key
-sequences&mdash;typing <kbd>M-x</kbd> will still exit the search.  You can give
-prefix arguments to these commands in the usual way.  This feature
-won&rsquo;t let you scroll the current match out of visibility, however.
-</p>
-<p>The <code>isearch-allow-scroll</code> feature also affects some other
-commands, such as <kbd>C-x 2</kbd> (<code>split-window-below</code>) and
-<kbd>C-x ^</kbd> (<code>enlarge-window</code>), which don&rsquo;t exactly scroll but do
-affect where the text appears on the screen.  It applies to any
-command whose name has a non-<code>nil</code> <code>isearch-scroll</code>
-property.  So you can control which commands are affected by changing
-these properties.
-</p>
-<a name="index-prevent-commands-from-exiting-incremental-search"></a>
-<p>For example, to make <kbd>C-h l</kbd> usable within an incremental search
-in all future Emacs sessions, use <kbd>C-h c</kbd> to find what command it
-runs (see <a href="Key-Help.html#Key-Help">Key Help</a>), which is <code>view-lossage</code>.  Then you can
-put the following line in your init file (see <a href="Init-File.html#Init-File">Init File</a>):
-</p>
-<div class="example">
-<pre class="example">(put 'view-lossage 'isearch-scroll t)
-</pre></div>
+  <p>This subsection describes how to control whether typing a
+  command not specifically meaningful is searches exits the search
+  before executing the command. It also describes two categories of
+  commands which you can type without exiting the current
+  incremental search, even though they are not themselves part of
+  incremental search.</p><a name="index-search_002dexit_002doption"
+  id="index-search_002dexit_002doption"></a>
 
-<p>This feature can be applied to any command that doesn&rsquo;t permanently
-change point, the buffer contents, the match data, the current buffer,
-or the selected window and frame.  The command must not itself attempt
-an incremental search.  This feature is disabled if
-<code>isearch-allow-scroll</code> is <code>nil</code> (which it is by default).
-</p></dd>
-</dl>
+  <p>Normally, typing a command that is not bound by the
+  incremental search exits the search before executing the command.
+  Thus, the command operates on the buffer from which you invoked
+  the search. However, if you customize the variable
+  <code>search-exit-option</code> to <code>nil</code>, the
+  characters which you type that are not interpreted by the
+  incremental search are simply appended to the search string. This
+  is so you could include in the search string control characters,
+  such as <kbd>C-a</kbd>, that would normally exit the search and
+  invoke the command bound to them on the buffer.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Isearch-Minibuffer.html#Isearch-Minibuffer" accesskey="n" rel="next">Isearch Minibuffer</a>, Previous: <a href="Special-Isearch.html#Special-Isearch" accesskey="p" rel="prev">Special Isearch</a>, Up: <a href="Incremental-Search.html#Incremental-Search" accesskey="u" rel="up">Incremental Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt>Prefix Arguments</dt>
 
+    <dd>
+      <a name=
+      "index-prefix-argument-commands_002c-during-incremental-search"
+      id=
+      "index-prefix-argument-commands_002c-during-incremental-search">
+      </a> <a name="index-isearch_002dallow_002dprefix" id=
+      "index-isearch_002dallow_002dprefix"></a>
 
+      <p>In incremental search, when you type a command that
+      specifies a prefix argument (see <a href=
+      "Arguments.html#Arguments">Arguments</a>), by default it will
+      apply either to the next action in the search or to the
+      command that exits the search. In other words, entering a
+      prefix argument will not by itself terminate the search.</p>
 
+      <p>In previous versions of Emacs, entering a prefix argument
+      always terminated the search. You can revert to this behavior
+      by setting the variable <code>isearch-allow-prefix</code> to
+      <code>nil</code>.</p>
+
+      <p>When <code>isearch-allow-scroll</code> is
+      non-<code>nil</code> (see below), prefix arguments always
+      have the default behavior described above, i.e., they
+      don&rsquo;t terminate the search, even if
+      <code>isearch-allow-prefix</code> is <code>nil</code>.</p>
+    </dd>
+
+    <dt>Scrolling Commands</dt>
+
+    <dd>
+      <a name=
+      "index-scrolling-commands_002c-during-incremental-search" id=
+      "index-scrolling-commands_002c-during-incremental-search"></a>
+      <a name="index-isearch_002dallow_002dscroll" id=
+      "index-isearch_002dallow_002dscroll"></a>
+
+      <p>Normally, scrolling commands exit incremental search. If
+      you change the variable <code>isearch-allow-scroll</code> to
+      a non-<code>nil</code> value, that enables the use of the
+      scroll-bar, as well as keyboard scrolling commands like
+      <kbd>C-v</kbd>, <kbd>M-v</kbd>, and <kbd>C-l</kbd> (see
+      <a href="Scrolling.html#Scrolling">Scrolling</a>). This
+      applies only to calling these commands via their bound key
+      sequences&mdash;typing <kbd>M-x</kbd> will still exit the
+      search. You can give prefix arguments to these commands in
+      the usual way. This feature won&rsquo;t let you scroll the
+      current match out of visibility, however.</p>
+
+      <p>The <code>isearch-allow-scroll</code> feature also affects
+      some other commands, such as <kbd>C-x 2</kbd>
+      (<code>split-window-below</code>) and <kbd>C-x ^</kbd>
+      (<code>enlarge-window</code>), which don&rsquo;t exactly
+      scroll but do affect where the text appears on the screen. It
+      applies to any command whose name has a non-<code>nil</code>
+      <code>isearch-scroll</code> property. So you can control
+      which commands are affected by changing these
+      properties.</p><a name=
+      "index-prevent-commands-from-exiting-incremental-search" id=
+      "index-prevent-commands-from-exiting-incremental-search"></a>
+
+      <p>For example, to make <kbd>C-h l</kbd> usable within an
+      incremental search in all future Emacs sessions, use <kbd>C-h
+      c</kbd> to find what command it runs (see <a href=
+      "Key-Help.html#Key-Help">Key Help</a>), which is
+      <code>view-lossage</code>. Then you can put the following
+      line in your init file (see <a href=
+      "Init-File.html#Init-File">Init File</a>):</p>
+
+      <div class="example">
+        <pre class="example">
+(put 'view-lossage 'isearch-scroll t)
+</pre>
+      </div>
+
+      <p>This feature can be applied to any command that
+      doesn&rsquo;t permanently change point, the buffer contents,
+      the match data, the current buffer, or the selected window
+      and frame. The command must not itself attempt an incremental
+      search. This feature is disabled if
+      <code>isearch-allow-scroll</code> is <code>nil</code> (which
+      it is by default).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Isearch-Minibuffer.html#Isearch-Minibuffer"
+    accesskey="n" rel="next">Isearch Minibuffer</a>, Previous:
+    <a href="Special-Isearch.html#Special-Isearch" accesskey="p"
+    rel="prev">Special Isearch</a>, Up: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="u" rel=
+    "up">Incremental Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

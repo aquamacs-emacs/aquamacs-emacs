@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,148 +14,203 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Article Caching</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Article Caching">
-<meta name="keywords" content="Gnus Manual: Article Caching">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Persistent-Articles.html#Persistent-Articles" rel="next" title="Persistent Articles">
-<link href="Asynchronous-Fetching.html#Asynchronous-Fetching" rel="prev" title="Asynchronous Fetching">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Article Caching</title>
+  <meta name="description" content=
+  "Gnus Manual: Article Caching" />
+  <meta name="keywords" content="Gnus Manual: Article Caching" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Persistent-Articles.html#Persistent-Articles" rel=
+  "next" title="Persistent Articles" />
+  <link href="Asynchronous-Fetching.html#Asynchronous-Fetching"
+  rel="prev" title="Asynchronous Fetching" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Article-Caching"></a>
-<div class="header">
-<p>
-Next: <a href="Persistent-Articles.html#Persistent-Articles" accesskey="n" rel="next">Persistent Articles</a>, Previous: <a href="Asynchronous-Fetching.html#Asynchronous-Fetching" accesskey="p" rel="prev">Asynchronous Fetching</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Article-Caching-1"></a>
-<h3 class="section">3.12 Article Caching</h3>
-<a name="index-article-caching"></a>
-<a name="index-caching"></a>
+<body lang="en" xml:lang="en">
+  <a name="Article-Caching" id="Article-Caching"></a>
 
-<p>If you have an <em>extremely</em> slow <acronym>NNTP</acronym> connection, you may
-consider turning article caching on.  Each article will then be stored
-locally under your home directory.  As you may surmise, this could
-potentially use <em>huge</em> amounts of disk space, as well as eat up all
-your inodes so fast it will make your head swim.  In vodka.
-</p>
-<p>Used carefully, though, it could be just an easier way to save articles.
-</p>
-<a name="index-gnus_002duse_002dlong_002dfile_002dname"></a>
-<a name="index-gnus_002dcache_002ddirectory"></a>
-<a name="index-gnus_002duse_002dcache"></a>
-<p>To turn caching on, set <code>gnus-use-cache</code> to <code>t</code>.  By default,
-all articles ticked or marked as dormant will then be copied
-over to your local cache (<code>gnus-cache-directory</code>).  Whether this
-cache is flat or hierarchical is controlled by the
-<code>gnus-use-long-file-name</code> variable, as usual.
-</p>
-<p>When re-selecting a ticked or dormant article, it will be fetched from the
-cache instead of from the server.  As articles in your cache will never
-expire, this might serve as a method of saving articles while still
-keeping them where they belong.  Just mark all articles you want to save
-as dormant, and don&rsquo;t worry.
-</p>
-<p>When an article is marked as read, is it removed from the cache.
-</p>
-<a name="index-gnus_002dcache_002dremove_002darticles"></a>
-<a name="index-gnus_002dcache_002denter_002darticles"></a>
-<p>The entering/removal of articles from the cache is controlled by the
-<code>gnus-cache-enter-articles</code> and <code>gnus-cache-remove-articles</code>
-variables.  Both are lists of symbols.  The first is <code>(ticked
-dormant)</code> by default, meaning that ticked and dormant articles will be
-put in the cache.  The latter is <code>(read)</code> by default, meaning that
-articles marked as read are removed from the cache.  Possibly
-symbols in these two lists are <code>ticked</code>, <code>dormant</code>,
-<code>unread</code> and <code>read</code>.
-</p>
-<a name="index-gnus_002djog_002dcache"></a>
-<p>So where does the massive article-fetching and storing come into the
-picture?  The <code>gnus-jog-cache</code> command will go through all
-subscribed newsgroups, request all unread articles, score them, and
-store them in the cache.  You should only ever, ever ever ever, use this
-command if 1) your connection to the <acronym>NNTP</acronym> server is really, really,
-really slow and 2) you have a really, really, really huge disk.
-Seriously.  One way to cut down on the number of articles downloaded is
-to score unwanted articles down and have them marked as read.  They will
-not then be downloaded by this command.
-</p>
-<a name="index-gnus_002duncacheable_002dgroups"></a>
-<a name="index-gnus_002dcacheable_002dgroups"></a>
-<p>It is likely that you do not want caching on all groups.  For instance,
-if your <code>nnml</code> mail is located under your home directory, it makes no
-sense to cache it somewhere else under your home directory.  Unless you
-feel that it&rsquo;s neat to use twice as much space.
-</p>
-<p>To limit the caching, you could set <code>gnus-cacheable-groups</code> to a
-regexp of groups to cache, &lsquo;<samp>^nntp</samp>&rsquo; for instance, or set the
-<code>gnus-uncacheable-groups</code> regexp to &lsquo;<samp>^nnml</samp>&rsquo;, for instance.
-Both variables are <code>nil</code> by default.  If a group matches both
-variables, the group is not cached.
-</p>
-<a name="index-gnus_002dcache_002dgenerate_002dnov_002ddatabases"></a>
-<a name="index-gnus_002dcache_002dgenerate_002dactive"></a>
-<a name="index-gnus_002dcache_002dactive_002dfile"></a>
-<p>The cache stores information on what articles it contains in its active
-file (<code>gnus-cache-active-file</code>).  If this file (or any other parts
-of the cache) becomes all messed up for some reason or other, Gnus
-offers two functions that will try to set things right.  <kbd>M-x
-gnus-cache-generate-nov-databases</kbd> will (re)build all the <acronym>NOV</acronym>
-files, and <kbd>gnus-cache-generate-active</kbd> will (re)generate the active
-file.
-</p>
-<a name="index-gnus_002dcache_002dmove_002dcache"></a>
-<p><code>gnus-cache-move-cache</code> will move your whole
-<code>gnus-cache-directory</code> to some other location.  You get asked to
-where, isn&rsquo;t that cool?
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Persistent-Articles.html#Persistent-Articles" accesskey="n" rel="next">Persistent Articles</a>, Previous: <a href="Asynchronous-Fetching.html#Asynchronous-Fetching" accesskey="p" rel="prev">Asynchronous Fetching</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Persistent-Articles.html#Persistent-Articles"
+    accesskey="n" rel="next">Persistent Articles</a>, Previous:
+    <a href="Asynchronous-Fetching.html#Asynchronous-Fetching"
+    accesskey="p" rel="prev">Asynchronous Fetching</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Article-Caching-1" id="Article-Caching-1"></a>
 
+  <h3 class="section">3.12 Article Caching</h3><a name=
+  "index-article-caching" id="index-article-caching"></a> <a name=
+  "index-caching" id="index-caching"></a>
 
+  <p>If you have an <em>extremely</em> slow <acronym>NNTP</acronym>
+  connection, you may consider turning article caching on. Each
+  article will then be stored locally under your home directory. As
+  you may surmise, this could potentially use <em>huge</em> amounts
+  of disk space, as well as eat up all your inodes so fast it will
+  make your head swim. In vodka.</p>
 
+  <p>Used carefully, though, it could be just an easier way to save
+  articles.</p><a name=
+  "index-gnus_002duse_002dlong_002dfile_002dname" id=
+  "index-gnus_002duse_002dlong_002dfile_002dname"></a> <a name=
+  "index-gnus_002dcache_002ddirectory" id=
+  "index-gnus_002dcache_002ddirectory"></a> <a name=
+  "index-gnus_002duse_002dcache" id=
+  "index-gnus_002duse_002dcache"></a>
+
+  <p>To turn caching on, set <code>gnus-use-cache</code> to
+  <code>t</code>. By default, all articles ticked or marked as
+  dormant will then be copied over to your local cache
+  (<code>gnus-cache-directory</code>). Whether this cache is flat
+  or hierarchical is controlled by the
+  <code>gnus-use-long-file-name</code> variable, as usual.</p>
+
+  <p>When re-selecting a ticked or dormant article, it will be
+  fetched from the cache instead of from the server. As articles in
+  your cache will never expire, this might serve as a method of
+  saving articles while still keeping them where they belong. Just
+  mark all articles you want to save as dormant, and don&rsquo;t
+  worry.</p>
+
+  <p>When an article is marked as read, is it removed from the
+  cache.</p><a name="index-gnus_002dcache_002dremove_002darticles"
+  id="index-gnus_002dcache_002dremove_002darticles"></a> <a name=
+  "index-gnus_002dcache_002denter_002darticles" id=
+  "index-gnus_002dcache_002denter_002darticles"></a>
+
+  <p>The entering/removal of articles from the cache is controlled
+  by the <code>gnus-cache-enter-articles</code> and
+  <code>gnus-cache-remove-articles</code> variables. Both are lists
+  of symbols. The first is <code>(ticked dormant)</code> by
+  default, meaning that ticked and dormant articles will be put in
+  the cache. The latter is <code>(read)</code> by default, meaning
+  that articles marked as read are removed from the cache. Possibly
+  symbols in these two lists are <code>ticked</code>,
+  <code>dormant</code>, <code>unread</code> and
+  <code>read</code>.</p><a name="index-gnus_002djog_002dcache" id=
+  "index-gnus_002djog_002dcache"></a>
+
+  <p>So where does the massive article-fetching and storing come
+  into the picture? The <code>gnus-jog-cache</code> command will go
+  through all subscribed newsgroups, request all unread articles,
+  score them, and store them in the cache. You should only ever,
+  ever ever ever, use this command if 1) your connection to the
+  <acronym>NNTP</acronym> server is really, really, really slow and
+  2) you have a really, really, really huge disk. Seriously. One
+  way to cut down on the number of articles downloaded is to score
+  unwanted articles down and have them marked as read. They will
+  not then be downloaded by this command.</p><a name=
+  "index-gnus_002duncacheable_002dgroups" id=
+  "index-gnus_002duncacheable_002dgroups"></a> <a name=
+  "index-gnus_002dcacheable_002dgroups" id=
+  "index-gnus_002dcacheable_002dgroups"></a>
+
+  <p>It is likely that you do not want caching on all groups. For
+  instance, if your <code>nnml</code> mail is located under your
+  home directory, it makes no sense to cache it somewhere else
+  under your home directory. Unless you feel that it&rsquo;s neat
+  to use twice as much space.</p>
+
+  <p>To limit the caching, you could set
+  <code>gnus-cacheable-groups</code> to a regexp of groups to
+  cache, &lsquo;<samp>^nntp</samp>&rsquo; for instance, or set the
+  <code>gnus-uncacheable-groups</code> regexp to
+  &lsquo;<samp>^nnml</samp>&rsquo;, for instance. Both variables
+  are <code>nil</code> by default. If a group matches both
+  variables, the group is not cached.</p><a name=
+  "index-gnus_002dcache_002dgenerate_002dnov_002ddatabases" id=
+  "index-gnus_002dcache_002dgenerate_002dnov_002ddatabases"></a>
+  <a name="index-gnus_002dcache_002dgenerate_002dactive" id=
+  "index-gnus_002dcache_002dgenerate_002dactive"></a> <a name=
+  "index-gnus_002dcache_002dactive_002dfile" id=
+  "index-gnus_002dcache_002dactive_002dfile"></a>
+
+  <p>The cache stores information on what articles it contains in
+  its active file (<code>gnus-cache-active-file</code>). If this
+  file (or any other parts of the cache) becomes all messed up for
+  some reason or other, Gnus offers two functions that will try to
+  set things right. <kbd>M-x
+  gnus-cache-generate-nov-databases</kbd> will (re)build all the
+  <acronym>NOV</acronym> files, and
+  <kbd>gnus-cache-generate-active</kbd> will (re)generate the
+  active file.</p><a name="index-gnus_002dcache_002dmove_002dcache"
+  id="index-gnus_002dcache_002dmove_002dcache"></a>
+
+  <p><code>gnus-cache-move-cache</code> will move your whole
+  <code>gnus-cache-directory</code> to some other location. You get
+  asked to where, isn&rsquo;t that cool?</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Persistent-Articles.html#Persistent-Articles"
+    accesskey="n" rel="next">Persistent Articles</a>, Previous:
+    <a href="Asynchronous-Fetching.html#Asynchronous-Fetching"
+    accesskey="p" rel="prev">Asynchronous Fetching</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

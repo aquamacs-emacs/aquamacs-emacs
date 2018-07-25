@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,105 +18,148 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Composition Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Composition Basics">
-<meta name="keywords" content="GNU Emacs Calc Manual: Composition Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Compositions.html#Compositions" rel="up" title="Compositions">
-<link href="Horizontal-Compositions.html#Horizontal-Compositions" rel="next" title="Horizontal Compositions">
-<link href="Compositions.html#Compositions" rel="prev" title="Compositions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Composition Basics</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Composition Basics" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Composition Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Compositions.html#Compositions" rel="up" title=
+  "Compositions" />
+  <link href="Horizontal-Compositions.html#Horizontal-Compositions"
+  rel="next" title="Horizontal Compositions" />
+  <link href="Compositions.html#Compositions" rel="prev" title=
+  "Compositions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Composition-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Horizontal-Compositions.html#Horizontal-Compositions" accesskey="n" rel="next">Horizontal Compositions</a>, Previous: <a href="Compositions.html#Compositions" accesskey="p" rel="prev">Compositions</a>, Up: <a href="Compositions.html#Compositions" accesskey="u" rel="up">Compositions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Composition-Basics-1"></a>
-<h4 class="subsubsection">6.8.10.1 Composition Basics</h4>
+<body lang="en" xml:lang="en">
+  <a name="Composition-Basics" id="Composition-Basics"></a>
 
-<p>Compositions are generally formed by stacking formulas together
-horizontally or vertically in various ways.  Those formulas are
-themselves compositions.  TeX users will find this analogous
-to TeX&rsquo;s &ldquo;boxes.&rdquo;  Each multi-line composition has a
-<em>baseline</em>; horizontal compositions use the baselines to
-decide how formulas should be positioned relative to one another.
-For example, in the Big mode formula
-</p>
-<div class="example">
-<pre class="example">          2
+  <div class="header">
+    <p>Next: <a href=
+    "Horizontal-Compositions.html#Horizontal-Compositions"
+    accesskey="n" rel="next">Horizontal Compositions</a>, Previous:
+    <a href="Compositions.html#Compositions" accesskey="p" rel=
+    "prev">Compositions</a>, Up: <a href=
+    "Compositions.html#Compositions" accesskey="u" rel=
+    "up">Compositions</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Composition-Basics-1" id="Composition-Basics-1"></a>
+
+  <h4 class="subsubsection">6.8.10.1 Composition Basics</h4>
+
+  <p>Compositions are generally formed by stacking formulas
+  together horizontally or vertically in various ways. Those
+  formulas are themselves compositions. TeX users will find this
+  analogous to TeX&rsquo;s &ldquo;boxes.&rdquo; Each multi-line
+  composition has a <em>baseline</em>; horizontal compositions use
+  the baselines to decide how formulas should be positioned
+  relative to one another. For example, in the Big mode formula</p>
+
+  <div class="example">
+    <pre class="example">
+          2
      a + b
 17 + ------
        c
-</pre></div>
+</pre>
+  </div>
 
-<p>the second term of the sum is four lines tall and has line three as
-its baseline.  Thus when the term is combined with 17, line three
-is placed on the same level as the baseline of 17.
-</p>
+  <p>the second term of the sum is four lines tall and has line
+  three as its baseline. Thus when the term is combined with 17,
+  line three is placed on the same level as the baseline of 17.</p>
 
-<p>Another important composition concept is <em>precedence</em>.  This is
-an integer that represents the binding strength of various operators.
-For example, &lsquo;<samp>*</samp>&rsquo; has higher precedence (195) than &lsquo;<samp>+</samp>&rsquo; (180),
-which means that &lsquo;<samp>(a * b) + c</samp>&rsquo; will be formatted without the
-parentheses, but &lsquo;<samp>a * (b + c)</samp>&rsquo; will keep the parentheses.
-</p>
-<p>The operator table used by normal and Big language modes has the
-following precedences:
-</p>
-<div class="example">
-<pre class="example">_     1200    <span class="roman">(subscripts)</span>
-%     1100    <span class="roman">(as in n</span>%<span class="roman">)</span>
-!     1000    <span class="roman">(as in </span>!<span class="roman">n)</span>
+  <p>Another important composition concept is <em>precedence</em>.
+  This is an integer that represents the binding strength of
+  various operators. For example, &lsquo;<samp>*</samp>&rsquo; has
+  higher precedence (195) than &lsquo;<samp>+</samp>&rsquo; (180),
+  which means that &lsquo;<samp>(a * b) + c</samp>&rsquo; will be
+  formatted without the parentheses, but &lsquo;<samp>a * (b +
+  c)</samp>&rsquo; will keep the parentheses.</p>
+
+  <p>The operator table used by normal and Big language modes has
+  the following precedences:</p>
+
+  <div class="example">
+    <pre class="example">
+_     1200    <span class="roman">(subscripts)</span>
+%     1100    <span class="roman">(as in n</span>%<span class=
+"roman">)</span>
+!     1000    <span class="roman">(as in </span>!<span class=
+"roman">n)</span>
 mod    400
 +/-    300
-!!     210    <span class="roman">(as in n</span>!!<span class="roman">)</span>
-!      210    <span class="roman">(as in n</span>!<span class="roman">)</span>
+!!     210    <span class="roman">(as in n</span>!!<span class=
+"roman">)</span>
+!      210    <span class="roman">(as in n</span>!<span class=
+"roman">)</span>
 ^      200
--      197    <span class="roman">(as in </span>-<span class="roman">n)</span>
-*      195    <span class="roman">(or implicit multiplication)</span>
+-      197    <span class="roman">(as in </span>-<span class=
+"roman">n)</span>
+*      195    <span class=
+"roman">(or implicit multiplication)</span>
 / % \  190
-+ -    180    <span class="roman">(as in a</span>+<span class="roman">b)</span>
++ -    180    <span class="roman">(as in a</span>+<span class=
+"roman">b)</span>
 |      170
 &lt; =    160    <span class="roman">(and other relations)</span>
 &amp;&amp;     110
@@ -126,82 +171,101 @@ mod    400
 :=      50
 ::      45
 =&gt;      40
-</pre></div>
+</pre>
+  </div>
 
-<p>The general rule is that if an operator with precedence &lsquo;<samp>n</samp>&rsquo;
-occurs as an argument to an operator with precedence &lsquo;<samp>m</samp>&rsquo;, then
-the argument is enclosed in parentheses if &lsquo;<samp>n &lt; m</samp>&rsquo;.  Top-level
-expressions and expressions which are function arguments, vector
-components, etc., are formatted with precedence zero (so that they
-normally never get additional parentheses).
-</p>
-<p>For binary left-associative operators like &lsquo;<samp>+</samp>&rsquo;, the righthand
-argument is actually formatted with one-higher precedence than shown
-in the table.  This makes sure &lsquo;<samp>(a + b) + c</samp>&rsquo; omits the parentheses,
-but the unnatural form &lsquo;<samp>a + (b + c)</samp>&rsquo; keeps its parentheses.
-Right-associative operators like &lsquo;<samp>^</samp>&rsquo; format the lefthand argument
-with one-higher precedence.
-</p>
-<a name="index-cprec"></a>
-<p>The <code>cprec</code> function formats an expression with an arbitrary
-precedence.  For example, &lsquo;<samp>cprec(abc, 185)</samp>&rsquo; will combine into
-sums and products as follows:  &lsquo;<samp>7 + abc</samp>&rsquo;, &lsquo;<samp>7 (abc)</samp>&rsquo; (because
-this <code>cprec</code> form has higher precedence than addition, but lower
-precedence than multiplication).
-</p>
+  <p>The general rule is that if an operator with precedence
+  &lsquo;<samp>n</samp>&rsquo; occurs as an argument to an operator
+  with precedence &lsquo;<samp>m</samp>&rsquo;, then the argument
+  is enclosed in parentheses if &lsquo;<samp>n &lt;
+  m</samp>&rsquo;. Top-level expressions and expressions which are
+  function arguments, vector components, etc., are formatted with
+  precedence zero (so that they normally never get additional
+  parentheses).</p>
 
-<p>A final composition issue is <em>line breaking</em>.  Calc uses two
-different strategies for &ldquo;flat&rdquo; and &ldquo;non-flat&rdquo; compositions.
-A non-flat composition is anything that appears on multiple lines
-(not counting line breaking).  Examples would be matrices and Big
-mode powers and quotients.  Non-flat compositions are displayed
-exactly as specified.  If they come out wider than the current
-window, you must use horizontal scrolling (<kbd>&lt;</kbd> and <kbd>&gt;</kbd>) to
-view them.
-</p>
-<p>Flat compositions, on the other hand, will be broken across several
-lines if they are too wide to fit the window.  Certain points in a
-composition are noted internally as <em>break points</em>.  Calc&rsquo;s
-general strategy is to fill each line as much as possible, then to
-move down to the next line starting at the first break point that
-didn&rsquo;t fit.  However, the line breaker understands the hierarchical
-structure of formulas.  It will not break an &ldquo;inner&rdquo; formula if
-it can use an earlier break point from an &ldquo;outer&rdquo; formula instead.
-For example, a vector of sums might be formatted as:
-</p>
-<div class="example">
-<pre class="example">[ a + b + c, d + e + f,
+  <p>For binary left-associative operators like
+  &lsquo;<samp>+</samp>&rsquo;, the righthand argument is actually
+  formatted with one-higher precedence than shown in the table.
+  This makes sure &lsquo;<samp>(a + b) + c</samp>&rsquo; omits the
+  parentheses, but the unnatural form &lsquo;<samp>a + (b +
+  c)</samp>&rsquo; keeps its parentheses. Right-associative
+  operators like &lsquo;<samp>^</samp>&rsquo; format the lefthand
+  argument with one-higher precedence.</p><a name="index-cprec" id=
+  "index-cprec"></a>
+
+  <p>The <code>cprec</code> function formats an expression with an
+  arbitrary precedence. For example, &lsquo;<samp>cprec(abc,
+  185)</samp>&rsquo; will combine into sums and products as
+  follows: &lsquo;<samp>7 + abc</samp>&rsquo;, &lsquo;<samp>7
+  (abc)</samp>&rsquo; (because this <code>cprec</code> form has
+  higher precedence than addition, but lower precedence than
+  multiplication).</p>
+
+  <p>A final composition issue is <em>line breaking</em>. Calc uses
+  two different strategies for &ldquo;flat&rdquo; and
+  &ldquo;non-flat&rdquo; compositions. A non-flat composition is
+  anything that appears on multiple lines (not counting line
+  breaking). Examples would be matrices and Big mode powers and
+  quotients. Non-flat compositions are displayed exactly as
+  specified. If they come out wider than the current window, you
+  must use horizontal scrolling (<kbd>&lt;</kbd> and
+  <kbd>&gt;</kbd>) to view them.</p>
+
+  <p>Flat compositions, on the other hand, will be broken across
+  several lines if they are too wide to fit the window. Certain
+  points in a composition are noted internally as <em>break
+  points</em>. Calc&rsquo;s general strategy is to fill each line
+  as much as possible, then to move down to the next line starting
+  at the first break point that didn&rsquo;t fit. However, the line
+  breaker understands the hierarchical structure of formulas. It
+  will not break an &ldquo;inner&rdquo; formula if it can use an
+  earlier break point from an &ldquo;outer&rdquo; formula instead.
+  For example, a vector of sums might be formatted as:</p>
+
+  <div class="example">
+    <pre class="example">
+[ a + b + c, d + e + f,
   g + h + i, j + k + l, m ]
-</pre></div>
+</pre>
+  </div>
 
-<p>If the &lsquo;<samp>m</samp>&rsquo; can fit, then so, it seems, could the &lsquo;<samp>g</samp>&rsquo;.
-But Calc prefers to break at the comma since the comma is part
-of a &ldquo;more outer&rdquo; formula.  Calc would break at a plus sign
-only if it had to, say, if the very first sum in the vector had
-itself been too large to fit.
-</p>
-<p>Of the composition functions described below, only <code>choriz</code>
-generates break points.  The <code>bstring</code> function (see <a href="Strings.html#Strings">Strings</a>)
-also generates breakable items:  A break point is added after every
-space (or group of spaces) except for spaces at the very beginning or
-end of the string.
-</p>
-<p>Composition functions themselves count as levels in the formula
-hierarchy, so a <code>choriz</code> that is a component of a larger
-<code>choriz</code> will be less likely to be broken.  As a special case,
-if a <code>bstring</code> occurs as a component of a <code>choriz</code> or
-<code>choriz</code>-like object (such as a vector or a list of arguments
-in a function call), then the break points in that <code>bstring</code>
-will be on the same level as the break points of the surrounding
-object.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Horizontal-Compositions.html#Horizontal-Compositions" accesskey="n" rel="next">Horizontal Compositions</a>, Previous: <a href="Compositions.html#Compositions" accesskey="p" rel="prev">Compositions</a>, Up: <a href="Compositions.html#Compositions" accesskey="u" rel="up">Compositions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If the &lsquo;<samp>m</samp>&rsquo; can fit, then so, it
+  seems, could the &lsquo;<samp>g</samp>&rsquo;. But Calc prefers
+  to break at the comma since the comma is part of a &ldquo;more
+  outer&rdquo; formula. Calc would break at a plus sign only if it
+  had to, say, if the very first sum in the vector had itself been
+  too large to fit.</p>
 
+  <p>Of the composition functions described below, only
+  <code>choriz</code> generates break points. The
+  <code>bstring</code> function (see <a href=
+  "Strings.html#Strings">Strings</a>) also generates breakable
+  items: A break point is added after every space (or group of
+  spaces) except for spaces at the very beginning or end of the
+  string.</p>
 
+  <p>Composition functions themselves count as levels in the
+  formula hierarchy, so a <code>choriz</code> that is a component
+  of a larger <code>choriz</code> will be less likely to be broken.
+  As a special case, if a <code>bstring</code> occurs as a
+  component of a <code>choriz</code> or <code>choriz</code>-like
+  object (such as a vector or a list of arguments in a function
+  call), then the break points in that <code>bstring</code> will be
+  on the same level as the break points of the surrounding
+  object.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href=
+    "Horizontal-Compositions.html#Horizontal-Compositions"
+    accesskey="n" rel="next">Horizontal Compositions</a>, Previous:
+    <a href="Compositions.html#Compositions" accesskey="p" rel=
+    "prev">Compositions</a>, Up: <a href=
+    "Compositions.html#Compositions" accesskey="u" rel=
+    "up">Compositions</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

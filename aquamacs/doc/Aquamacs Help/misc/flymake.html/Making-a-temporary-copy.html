@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -15,93 +17,131 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Flymake 0.3: Making a temporary copy</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Flymake 0.3: Making a temporary copy">
-<meta name="keywords" content="GNU Flymake 0.3: Making a temporary copy">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Flymake-Implementation.html#Flymake-Implementation" rel="up" title="Flymake Implementation">
-<link href="Locating-a-master-file.html#Locating-a-master-file" rel="next" title="Locating a master file">
-<link href="Determining-whether-syntax-check-is-possible.html#Determining-whether-syntax-check-is-possible" rel="prev" title="Determining whether syntax check is possible">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Flymake 0.3: Making a temporary copy</title>
+  <meta name="description" content=
+  "GNU Flymake 0.3: Making a temporary copy" />
+  <meta name="keywords" content=
+  "GNU Flymake 0.3: Making a temporary copy" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Flymake-Implementation.html#Flymake-Implementation"
+  rel="up" title="Flymake Implementation" />
+  <link href="Locating-a-master-file.html#Locating-a-master-file"
+  rel="next" title="Locating a master file" />
+  <link href=
+  "Determining-whether-syntax-check-is-possible.html#Determining-whether-syntax-check-is-possible"
+  rel="prev" title=
+  "Determining whether syntax check is possible" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Making-a-temporary-copy"></a>
-<div class="header">
-<p>
-Next: <a href="Locating-a-master-file.html#Locating-a-master-file" accesskey="n" rel="next">Locating a master file</a>, Previous: <a href="Determining-whether-syntax-check-is-possible.html#Determining-whether-syntax-check-is-possible" accesskey="p" rel="prev">Determining whether syntax check is possible</a>, Up: <a href="Flymake-Implementation.html#Flymake-Implementation" accesskey="u" rel="up">Flymake Implementation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Making-a-temporary-copy-1"></a>
-<h3 class="section">5.2 Making a temporary copy</h3>
-<a name="index-Temporary-copy-of-the-buffer"></a>
-<a name="index-Master-file-1"></a>
+<body lang="en" xml:lang="en">
+  <a name="Making-a-temporary-copy" id=
+  "Making-a-temporary-copy"></a>
 
-<p>After the possibility of the syntax check has been determined, a
-temporary copy of the current buffer is made so that the most recent
-unsaved changes could be seen by the syntax check tool.  Making a copy
-is quite straightforward in a standalone case (mode <code>1</code>), as it&rsquo;s
-just saving buffer contents to a temporary file.
-</p>
-<p>Things get trickier, however, when master file is involved, as it
-requires to
-</p>
-<ul>
-<li> locate a master file
-</li><li> patch it to include the current file using its new (temporary)
-name.
-</li></ul>
+  <div class="header">
+    <p>Next: <a href=
+    "Locating-a-master-file.html#Locating-a-master-file" accesskey=
+    "n" rel="next">Locating a master file</a>, Previous: <a href=
+    "Determining-whether-syntax-check-is-possible.html#Determining-whether-syntax-check-is-possible"
+    accesskey="p" rel="prev">Determining whether syntax check is
+    possible</a>, Up: <a href=
+    "Flymake-Implementation.html#Flymake-Implementation" accesskey=
+    "u" rel="up">Flymake Implementation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Making-a-temporary-copy-1" id=
+  "Making-a-temporary-copy-1"></a>
 
-<p>Locating a master file is discussed in the following section.
-</p>
-<p>Patching just changes all appropriate lines of the master file so that they
-use the new (temporary) name of the current file.  For example, suppose current
-file name is <code>file.h</code>, the master file is <code>file.cpp</code>, and
-it includes current file via <code>#include &quot;file.h&quot;</code>.  Current file&rsquo;s copy
-is saved to file <code>file_flymake.h</code>, so the include line must be
-changed to <code>#include &quot;file_flymake.h&quot;</code>.  Finally, patched master file
-is saved to <code>file_flymake_master.cpp</code>, and the last one is passed to
-the syntax check tool.
-</p>
+  <h3 class="section">5.2 Making a temporary copy</h3><a name=
+  "index-Temporary-copy-of-the-buffer" id=
+  "index-Temporary-copy-of-the-buffer"></a> <a name=
+  "index-Master-file-1" id="index-Master-file-1"></a>
 
+  <p>After the possibility of the syntax check has been determined,
+  a temporary copy of the current buffer is made so that the most
+  recent unsaved changes could be seen by the syntax check tool.
+  Making a copy is quite straightforward in a standalone case (mode
+  <code>1</code>), as it&rsquo;s just saving buffer contents to a
+  temporary file.</p>
 
+  <p>Things get trickier, however, when master file is involved, as
+  it requires to</p>
 
+  <ul>
+    <li>locate a master file</li>
+
+    <li>patch it to include the current file using its new
+    (temporary) name.</li>
+  </ul>
+
+  <p>Locating a master file is discussed in the following
+  section.</p>
+
+  <p>Patching just changes all appropriate lines of the master file
+  so that they use the new (temporary) name of the current file.
+  For example, suppose current file name is <code>file.h</code>,
+  the master file is <code>file.cpp</code>, and it includes current
+  file via <code>#include "file.h"</code>. Current file&rsquo;s
+  copy is saved to file <code>file_flymake.h</code>, so the include
+  line must be changed to <code>#include "file_flymake.h"</code>.
+  Finally, patched master file is saved to
+  <code>file_flymake_master.cpp</code>, and the last one is passed
+  to the syntax check tool.</p>
 </body>
 </html>

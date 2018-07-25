@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,155 +19,202 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: C Integer Types</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: C Integer Types">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: C Integer Types">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" rel="up" title="GNU Emacs Internals">
-<link href="Standard-Errors.html#Standard-Errors" rel="next" title="Standard Errors">
-<link href="Process-Internals.html#Process-Internals" rel="prev" title="Process Internals">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: C Integer Types</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: C Integer Types" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: C Integer Types" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" rel=
+  "up" title="GNU Emacs Internals" />
+  <link href="Standard-Errors.html#Standard-Errors" rel="next"
+  title="Standard Errors" />
+  <link href="Process-Internals.html#Process-Internals" rel="prev"
+  title="Process Internals" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="C-Integer-Types" id="C-Integer-Types"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Object-Internals.html#Object-Internals"
+    accesskey="p" rel="prev">Object Internals</a>, Up: <a href=
+    "GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u"
+    rel="up">GNU Emacs Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="C-Integer-Types-1" id="C-Integer-Types-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="C-Integer-Types"></a>
-<div class="header">
-<p>
-Previous: <a href="Object-Internals.html#Object-Internals" accesskey="p" rel="prev">Object Internals</a>, Up: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="C-Integer-Types-1"></a>
-<h3 class="section">E.9 C Integer Types</h3>
-<a name="index-integer-types-_0028C-programming-language_0029"></a>
+  <h3 class="section">E.9 C Integer Types</h3><a name=
+  "index-integer-types-_0028C-programming-language_0029" id=
+  "index-integer-types-_0028C-programming-language_0029"></a>
 
-<p>Here are some guidelines for use of integer types in the Emacs C
-source code.  These guidelines sometimes give competing advice; common
-sense is advised.
-</p>
-<ul>
-<li> Avoid arbitrary limits.  For example, avoid <code>int len = strlen
-(s);</code> unless the length of <code>s</code> is required for other reasons to
-fit in <code>int</code> range.
+  <p>Here are some guidelines for use of integer types in the Emacs
+  C source code. These guidelines sometimes give competing advice;
+  common sense is advised.</p>
 
-</li><li> Do not assume that signed integer arithmetic wraps around on overflow.
-This is no longer true of Emacs porting targets: signed integer
-overflow has undefined behavior in practice, and can dump core or
-even cause earlier or later code to behave illogically.  Unsigned
-overflow does wrap around reliably, modulo a power of two.
+  <ul>
+    <li>Avoid arbitrary limits. For example, avoid <code>int len =
+    strlen (s);</code> unless the length of <code>s</code> is
+    required for other reasons to fit in <code>int</code>
+    range.</li>
 
-</li><li> Prefer signed types to unsigned, as code gets confusing when signed
-and unsigned types are combined.  Many other guidelines assume that
-types are signed; in the rarer cases where unsigned types are needed,
-similar advice may apply to the unsigned counterparts (e.g.,
-<code>size_t</code> instead of <code>ptrdiff_t</code>, or <code>uintptr_t</code> instead
-of <code>intptr_t</code>).
+    <li>Do not assume that signed integer arithmetic wraps around
+    on overflow. This is no longer true of Emacs porting targets:
+    signed integer overflow has undefined behavior in practice, and
+    can dump core or even cause earlier or later code to behave
+    illogically. Unsigned overflow does wrap around reliably,
+    modulo a power of two.</li>
 
-</li><li> Prefer <code>int</code> for Emacs character codes, in the range 0 .. 0x3FFFFF.
-More generally, prefer <code>int</code> for integers known to be in
-<code>int</code> range, e.g., screen column counts.
+    <li>Prefer signed types to unsigned, as code gets confusing
+    when signed and unsigned types are combined. Many other
+    guidelines assume that types are signed; in the rarer cases
+    where unsigned types are needed, similar advice may apply to
+    the unsigned counterparts (e.g., <code>size_t</code> instead of
+    <code>ptrdiff_t</code>, or <code>uintptr_t</code> instead of
+    <code>intptr_t</code>).</li>
 
-</li><li> Prefer <code>ptrdiff_t</code> for sizes, i.e., for integers bounded by the
-maximum size of any individual C object or by the maximum number of
-elements in any C array.  This is part of Emacs&rsquo;s general preference
-for signed types.  Using <code>ptrdiff_t</code> limits objects to
-<code>PTRDIFF_MAX</code> bytes, but larger objects would cause trouble
-anyway since they would break pointer subtraction, so this does not
-impose an arbitrary limit.
+    <li>Prefer <code>int</code> for Emacs character codes, in the
+    range 0 .. 0x3FFFFF. More generally, prefer <code>int</code>
+    for integers known to be in <code>int</code> range, e.g.,
+    screen column counts.</li>
 
-</li><li> Avoid <code>ssize_t</code> except when communicating to low-level APIs that
-have <code>ssize_t</code>-related limitations.  Although it&rsquo;s equivalent to
-<code>ptrdiff_t</code> on typical platforms, <code>ssize_t</code> is occasionally
-narrower, so using it for size-related calculations could overflow.
-Also, <code>ptrdiff_t</code> is more ubiquitous and better-standardized, has
-standard <code>printf</code> formats, and is the basis for Emacs&rsquo;s internal
-size-overflow checking.  When using <code>ssize_t</code>, please note that
-POSIX requires support only for values in the range −1 ..
-<code>SSIZE_MAX</code>.
+    <li>Prefer <code>ptrdiff_t</code> for sizes, i.e., for integers
+    bounded by the maximum size of any individual C object or by
+    the maximum number of elements in any C array. This is part of
+    Emacs&rsquo;s general preference for signed types. Using
+    <code>ptrdiff_t</code> limits objects to
+    <code>PTRDIFF_MAX</code> bytes, but larger objects would cause
+    trouble anyway since they would break pointer subtraction, so
+    this does not impose an arbitrary limit.</li>
 
-</li><li> Prefer <code>intptr_t</code> for internal representations of pointers, or
-for integers bounded only by the number of objects that can exist at
-any given time or by the total number of bytes that can be allocated.
-Currently Emacs sometimes uses other types when <code>intptr_t</code> would
-be better; fixing this is lower priority, as the code works as-is on
-Emacs&rsquo;s current porting targets.
+    <li>Avoid <code>ssize_t</code> except when communicating to
+    low-level APIs that have <code>ssize_t</code>-related
+    limitations. Although it&rsquo;s equivalent to
+    <code>ptrdiff_t</code> on typical platforms,
+    <code>ssize_t</code> is occasionally narrower, so using it for
+    size-related calculations could overflow. Also,
+    <code>ptrdiff_t</code> is more ubiquitous and
+    better-standardized, has standard <code>printf</code> formats,
+    and is the basis for Emacs&rsquo;s internal size-overflow
+    checking. When using <code>ssize_t</code>, please note that
+    POSIX requires support only for values in the range
+    &acirc;&circ;&rsquo;1 .. <code>SSIZE_MAX</code>.</li>
 
-</li><li> Prefer the Emacs-defined type <code>EMACS_INT</code> for representing values
-converted to or from Emacs Lisp fixnums, as fixnum arithmetic is based
-on <code>EMACS_INT</code>.
+    <li>Prefer <code>intptr_t</code> for internal representations
+    of pointers, or for integers bounded only by the number of
+    objects that can exist at any given time or by the total number
+    of bytes that can be allocated. Currently Emacs sometimes uses
+    other types when <code>intptr_t</code> would be better; fixing
+    this is lower priority, as the code works as-is on
+    Emacs&rsquo;s current porting targets.</li>
 
-</li><li> When representing a system value (such as a file size or a count of
-seconds since the Epoch), prefer the corresponding system type (e.g.,
-<code>off_t</code>, <code>time_t</code>).  Do not assume that a system type is
-signed, unless this assumption is known to be safe.  For example,
-although <code>off_t</code> is always signed, <code>time_t</code> need not be.
+    <li>Prefer the Emacs-defined type <code>EMACS_INT</code> for
+    representing values converted to or from Emacs Lisp fixnums, as
+    fixnum arithmetic is based on <code>EMACS_INT</code>.</li>
 
-</li><li> Prefer the Emacs-defined type <code>printmax_t</code> for representing
-values that might be any signed integer that can be printed,
-using a <code>printf</code>-family function.
+    <li>When representing a system value (such as a file size or a
+    count of seconds since the Epoch), prefer the corresponding
+    system type (e.g., <code>off_t</code>, <code>time_t</code>). Do
+    not assume that a system type is signed, unless this assumption
+    is known to be safe. For example, although <code>off_t</code>
+    is always signed, <code>time_t</code> need not be.</li>
 
-</li><li> Prefer <code>intmax_t</code> for representing values that might be any
-signed integer value.
+    <li>Prefer the Emacs-defined type <code>printmax_t</code> for
+    representing values that might be any signed integer that can
+    be printed, using a <code>printf</code>-family function.</li>
 
-</li><li> Prefer <code>bool</code>, <code>false</code> and <code>true</code> for booleans.
-Using <code>bool</code> can make programs easier to read and a bit faster than
-using <code>int</code>.  Although it is also OK to use <code>int</code>, <code>0</code>
-and <code>1</code>, this older style is gradually being phased out.  When
-using <code>bool</code>, respect the limitations of the replacement
-implementation of <code>bool</code>, as documented in the source file
-<samp>lib/stdbool.in.h</samp>.  In particular, boolean bitfields should be of type
-<code>bool_bf</code>, not <code>bool</code>, so that they work correctly even when
-compiling Objective C with standard GCC.
+    <li>Prefer <code>intmax_t</code> for representing values that
+    might be any signed integer value.</li>
 
-</li><li> In bitfields, prefer <code>unsigned int</code> or <code>signed int</code> to
-<code>int</code>, as <code>int</code> is less portable: it might be signed, and
-might not be.  Single-bit bit fields should be <code>unsigned int</code> or
-<code>bool_bf</code> so that their values are 0 or 1.
-</li></ul>
+    <li>Prefer <code>bool</code>, <code>false</code> and
+    <code>true</code> for booleans. Using <code>bool</code> can
+    make programs easier to read and a bit faster than using
+    <code>int</code>. Although it is also OK to use
+    <code>int</code>, <code>0</code> and <code>1</code>, this older
+    style is gradually being phased out. When using
+    <code>bool</code>, respect the limitations of the replacement
+    implementation of <code>bool</code>, as documented in the
+    source file <samp>lib/stdbool.in.h</samp>. In particular,
+    boolean bitfields should be of type <code>bool_bf</code>, not
+    <code>bool</code>, so that they work correctly even when
+    compiling Objective C with standard GCC.</li>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Object-Internals.html#Object-Internals" accesskey="p" rel="prev">Object Internals</a>, Up: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>In bitfields, prefer <code>unsigned int</code> or
+    <code>signed int</code> to <code>int</code>, as
+    <code>int</code> is less portable: it might be signed, and
+    might not be. Single-bit bit fields should be <code>unsigned
+    int</code> or <code>bool_bf</code> so that their values are 0
+    or 1.</li>
+  </ul>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Previous: <a href="Object-Internals.html#Object-Internals"
+    accesskey="p" rel="prev">Object Internals</a>, Up: <a href=
+    "GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u"
+    rel="up">GNU Emacs Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

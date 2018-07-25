@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,96 +14,131 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Creating a Virtual Server</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Creating a Virtual Server">
-<meta name="keywords" content="Gnus Manual: Creating a Virtual Server">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Server-Buffer.html#Server-Buffer" rel="up" title="Server Buffer">
-<link href="Server-Variables.html#Server-Variables" rel="next" title="Server Variables">
-<link href="Example-Methods.html#Example-Methods" rel="prev" title="Example Methods">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Creating a Virtual Server</title>
+  <meta name="description" content=
+  "Gnus Manual: Creating a Virtual Server" />
+  <meta name="keywords" content=
+  "Gnus Manual: Creating a Virtual Server" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Server-Buffer.html#Server-Buffer" rel="up" title=
+  "Server Buffer" />
+  <link href="Server-Variables.html#Server-Variables" rel="next"
+  title="Server Variables" />
+  <link href="Example-Methods.html#Example-Methods" rel="prev"
+  title="Example Methods" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-a-Virtual-Server"></a>
-<div class="header">
-<p>
-Next: <a href="Server-Variables.html#Server-Variables" accesskey="n" rel="next">Server Variables</a>, Previous: <a href="Example-Methods.html#Example-Methods" accesskey="p" rel="prev">Example Methods</a>, Up: <a href="Server-Buffer.html#Server-Buffer" accesskey="u" rel="up">Server Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-a-Virtual-Server-1"></a>
-<h4 class="subsection">6.1.4 Creating a Virtual Server</h4>
+<body lang="en" xml:lang="en">
+  <a name="Creating-a-Virtual-Server" id=
+  "Creating-a-Virtual-Server"></a>
 
-<p>If you&rsquo;re saving lots of articles in the cache by using persistent
-articles, you may want to create a virtual server to read the cache.
-</p>
-<p>First you need to add a new server.  The <kbd>a</kbd> command does that.  It
-would probably be best to use <code>nnml</code> to read the cache.  You
-could also use <code>nnspool</code> or <code>nnmh</code>, though.
-</p>
-<p>Type <kbd>a nnml RET cache RET</kbd>.
-</p>
-<p>You should now have a brand new <code>nnml</code> virtual server called
-&lsquo;<samp>cache</samp>&rsquo;.  You now need to edit it to have the right definitions.
-Type <kbd>e</kbd> to edit the server.  You&rsquo;ll be entered into a buffer that
-will contain the following:
-</p>
-<div class="lisp">
-<pre class="lisp">(nnml &quot;cache&quot;)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Server-Variables.html#Server-Variables"
+    accesskey="n" rel="next">Server Variables</a>, Previous:
+    <a href="Example-Methods.html#Example-Methods" accesskey="p"
+    rel="prev">Example Methods</a>, Up: <a href=
+    "Server-Buffer.html#Server-Buffer" accesskey="u" rel=
+    "up">Server Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-a-Virtual-Server-1" id=
+  "Creating-a-Virtual-Server-1"></a>
 
-<p>Change that to:
-</p>
-<div class="lisp">
-<pre class="lisp">(nnml &quot;cache&quot;
-         (nnml-directory &quot;~/News/cache/&quot;)
-         (nnml-active-file &quot;~/News/cache/active&quot;))
-</pre></div>
+  <h4 class="subsection">6.1.4 Creating a Virtual Server</h4>
 
-<p>Type <kbd>C-c C-c</kbd> to return to the server buffer.  If you now press
-<kbd>RET</kbd> over this virtual server, you should be entered into a browse
-buffer, and you should be able to enter any of the groups displayed.
-</p>
+  <p>If you&rsquo;re saving lots of articles in the cache by using
+  persistent articles, you may want to create a virtual server to
+  read the cache.</p>
 
+  <p>First you need to add a new server. The <kbd>a</kbd> command
+  does that. It would probably be best to use <code>nnml</code> to
+  read the cache. You could also use <code>nnspool</code> or
+  <code>nnmh</code>, though.</p>
 
+  <p>Type <kbd>a nnml RET cache RET</kbd>.</p>
 
+  <p>You should now have a brand new <code>nnml</code> virtual
+  server called &lsquo;<samp>cache</samp>&rsquo;. You now need to
+  edit it to have the right definitions. Type <kbd>e</kbd> to edit
+  the server. You&rsquo;ll be entered into a buffer that will
+  contain the following:</p>
 
+  <div class="lisp">
+    <pre class="lisp">
+(nnml "cache")
+</pre>
+  </div>
+
+  <p>Change that to:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(nnml "cache"
+         (nnml-directory "~/News/cache/")
+         (nnml-active-file "~/News/cache/active"))
+</pre>
+  </div>
+
+  <p>Type <kbd>C-c C-c</kbd> to return to the server buffer. If you
+  now press <kbd>RET</kbd> over this virtual server, you should be
+  entered into a browse buffer, and you should be able to enter any
+  of the groups displayed.</p>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,81 +18,112 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Debugging Rewrites</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Debugging Rewrites">
-<meta name="keywords" content="GNU Emacs Calc Manual: Debugging Rewrites">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Rewrite-Rules.html#Rewrite-Rules" rel="up" title="Rewrite Rules">
-<link href="Examples-of-Rewrite-Rules.html#Examples-of-Rewrite-Rules" rel="next" title="Examples of Rewrite Rules">
-<link href="Automatic-Rewrites.html#Automatic-Rewrites" rel="prev" title="Automatic Rewrites">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Debugging Rewrites</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Debugging Rewrites" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Debugging Rewrites" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Rewrite-Rules.html#Rewrite-Rules" rel="up" title=
+  "Rewrite Rules" />
+  <link href=
+  "Examples-of-Rewrite-Rules.html#Examples-of-Rewrite-Rules" rel=
+  "next" title="Examples of Rewrite Rules" />
+  <link href="Automatic-Rewrites.html#Automatic-Rewrites" rel=
+  "prev" title="Automatic Rewrites" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Debugging-Rewrites"></a>
-<div class="header">
-<p>
-Next: <a href="Examples-of-Rewrite-Rules.html#Examples-of-Rewrite-Rules" accesskey="n" rel="next">Examples of Rewrite Rules</a>, Previous: <a href="Automatic-Rewrites.html#Automatic-Rewrites" accesskey="p" rel="prev">Automatic Rewrites</a>, Up: <a href="Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel="up">Rewrite Rules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Debugging-Rewrites-1"></a>
-<h4 class="subsection">10.11.12 Debugging Rewrites</h4>
+<body lang="en" xml:lang="en">
+  <a name="Debugging-Rewrites" id="Debugging-Rewrites"></a>
 
-<p>If a buffer named <samp>*Trace*</samp> exists, the rewrite mechanism will
-record some useful information there as it operates.  The original
-formula is written there, as is the result of each successful rewrite,
-and the final result of the rewriting.  All phase changes are also
-noted.
-</p>
-<p>Calc always appends to <samp>*Trace*</samp>.  You must empty this buffer
-yourself periodically if it is in danger of growing unwieldy.
-</p>
-<p>Note that the rewriting mechanism is substantially slower when the
-<samp>*Trace*</samp> buffer exists, even if the buffer is not visible on
-the screen.  Once you are done, you will probably want to kill this
-buffer (with <kbd>C-x k *Trace* <span class="key">RET</span></kbd>).  If you leave it in
-existence and forget about it, all your future rewrite commands will
-be needlessly slow.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Examples-of-Rewrite-Rules.html#Examples-of-Rewrite-Rules"
+    accesskey="n" rel="next">Examples of Rewrite Rules</a>,
+    Previous: <a href="Automatic-Rewrites.html#Automatic-Rewrites"
+    accesskey="p" rel="prev">Automatic Rewrites</a>, Up: <a href=
+    "Rewrite-Rules.html#Rewrite-Rules" accesskey="u" rel=
+    "up">Rewrite Rules</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Debugging-Rewrites-1" id="Debugging-Rewrites-1"></a>
 
+  <h4 class="subsection">10.11.12 Debugging Rewrites</h4>
 
+  <p>If a buffer named <samp>*Trace*</samp> exists, the rewrite
+  mechanism will record some useful information there as it
+  operates. The original formula is written there, as is the result
+  of each successful rewrite, and the final result of the
+  rewriting. All phase changes are also noted.</p>
 
+  <p>Calc always appends to <samp>*Trace*</samp>. You must empty
+  this buffer yourself periodically if it is in danger of growing
+  unwieldy.</p>
+
+  <p>Note that the rewriting mechanism is substantially slower when
+  the <samp>*Trace*</samp> buffer exists, even if the buffer is not
+  visible on the screen. Once you are done, you will probably want
+  to kill this buffer (with <kbd>C-x k *Trace* <span class=
+  "key">RET</span></kbd>). If you leave it in existence and forget
+  about it, all your future rewrite commands will be needlessly
+  slow.</p>
 </body>
 </html>

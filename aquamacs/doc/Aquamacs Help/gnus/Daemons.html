@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Daemons - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Various.html#Various" title="Various">
-<link rel="prev" href="Highlighting-and-Menus.html#Highlighting-and-Menus" title="Highlighting and Menus">
-<link rel="next" href="Undo.html#Undo" title="Undo">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Daemons - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Various.html#Various" title="Various" />
+  <link rel="prev" href=
+  "Highlighting-and-Menus.html#Highlighting-and-Menus" title=
+  "Highlighting and Menus" />
+  <link rel="next" href="Undo.html#Undo" title="Undo" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,87 +47,124 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Daemons"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Undo.html#Undo">Undo</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Highlighting-and-Menus.html#Highlighting-and-Menus">Highlighting and Menus</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Various.html#Various">Various</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Daemons" id="Daemons"></a>
 
-<h3 class="section">9.10 Daemons</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Undo.html#Undo">Undo</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Highlighting-and-Menus.html#Highlighting-and-Menus">Highlighting
+    and Menus</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Various.html#Various">Various</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-demons-2644"></a><a name="index-daemons-2645"></a>
-Gnus, being larger than any program ever written (allegedly), does lots
-of strange stuff that you may wish to have done while you're not
-present.  For instance, you may want it to check for new mail once in a
-while.  Or you may want it to close down all connections to all servers
-when you leave Emacs idle.  And stuff like that.
+  <h3 class="section">9.10 Daemons</h3>
 
-   <p>Gnus will let you do stuff like that by defining various
-<dfn>handlers</dfn>.  Each handler consists of three elements:  A
-<var>function</var>, a <var>time</var>, and an <var>idle</var> parameter.
+  <p><a name="index-demons-2644" id=
+  "index-demons-2644"></a><a name="index-daemons-2645" id=
+  "index-daemons-2645"></a> Gnus, being larger than any program
+  ever written (allegedly), does lots of strange stuff that you may
+  wish to have done while you're not present. For instance, you may
+  want it to check for new mail once in a while. Or you may want it
+  to close down all connections to all servers when you leave Emacs
+  idle. And stuff like that.</p>
 
-   <p>Here's an example of a handler that closes connections when Emacs has
-been idle for thirty minutes:
+  <p>Gnus will let you do stuff like that by defining various
+  <dfn>handlers</dfn>. Each handler consists of three elements: A
+  <var>function</var>, a <var>time</var>, and an <var>idle</var>
+  parameter.</p>
 
-<pre class="lisp">     (gnus-demon-close-connections nil 30)
+  <p>Here's an example of a handler that closes connections when
+  Emacs has been idle for thirty minutes:</p>
+  <pre class="lisp">
+     (gnus-demon-close-connections nil 30)
 </pre>
-   <p>Here's a handler that scans for <acronym>PGP</acronym> headers every hour when
-Emacs is idle:
 
-<pre class="lisp">     (gnus-demon-scan-pgp 60 t)
+  <p>Here's a handler that scans for <acronym>PGP</acronym> headers
+  every hour when Emacs is idle:</p>
+  <pre class="lisp">
+     (gnus-demon-scan-pgp 60 t)
 </pre>
-   <p>This <var>time</var> parameter and that <var>idle</var> parameter work together
-in a strange, but wonderful fashion.  Basically, if <var>idle</var> is
-<code>nil</code>, then the function will be called every <var>time</var> minutes.
 
-   <p>If <var>idle</var> is <code>t</code>, then the function will be called after
-<var>time</var> minutes only if Emacs is idle.  So if Emacs is never idle,
-the function will never be called.  But once Emacs goes idle, the
-function will be called every <var>time</var> minutes.
+  <p>This <var>time</var> parameter and that <var>idle</var>
+  parameter work together in a strange, but wonderful fashion.
+  Basically, if <var>idle</var> is <code>nil</code>, then the
+  function will be called every <var>time</var> minutes.</p>
 
-   <p>If <var>idle</var> is a number and <var>time</var> is a number, the function will
-be called every <var>time</var> minutes only when Emacs has been idle for
-<var>idle</var> minutes.
+  <p>If <var>idle</var> is <code>t</code>, then the function will
+  be called after <var>time</var> minutes only if Emacs is idle. So
+  if Emacs is never idle, the function will never be called. But
+  once Emacs goes idle, the function will be called every
+  <var>time</var> minutes.</p>
 
-   <p>If <var>idle</var> is a number and <var>time</var> is <code>nil</code>, the function
-will be called once every time Emacs has been idle for <var>idle</var>
-minutes.
+  <p>If <var>idle</var> is a number and <var>time</var> is a
+  number, the function will be called every <var>time</var> minutes
+  only when Emacs has been idle for <var>idle</var> minutes.</p>
 
-   <p>And if <var>time</var> is a string, it should look like &lsquo;<samp><span class="samp">07:31</span></samp>&rsquo;, and
-the function will then be called once every day somewhere near that
-time.  Modified by the <var>idle</var> parameter, of course.
+  <p>If <var>idle</var> is a number and <var>time</var> is
+  <code>nil</code>, the function will be called once every time
+  Emacs has been idle for <var>idle</var> minutes.</p>
 
-   <p><a name="index-gnus_002ddemon_002dtimestep-2646"></a>(When I say &ldquo;minute&rdquo; here, I really mean <code>gnus-demon-timestep</code>
-seconds.  This is 60 by default.  If you change that variable,
-all the timings in the handlers will be affected.)
+  <p>And if <var>time</var> is a string, it should look like
+  &lsquo;<samp><span class="samp">07:31</span></samp>&rsquo;, and
+  the function will then be called once every day somewhere near
+  that time. Modified by the <var>idle</var> parameter, of
+  course.</p>
 
-   <p>So, if you want to add a handler, you could put something like this in
-your <samp><span class="file">~/.gnus.el</span></samp> file:
+  <p><a name="index-gnus_002ddemon_002dtimestep-2646" id=
+  "index-gnus_002ddemon_002dtimestep-2646"></a>(When I say
+  &ldquo;minute&rdquo; here, I really mean
+  <code>gnus-demon-timestep</code> seconds. This is 60 by default.
+  If you change that variable, all the timings in the handlers will
+  be affected.)</p>
 
-   <p><a name="index-gnus_002ddemon_002dadd_002dhandler-2647"></a>
-<pre class="lisp">     (gnus-demon-add-handler 'gnus-demon-close-connections 30 t)
+  <p>So, if you want to add a handler, you could put something like
+  this in your <samp><span class="file">~/.gnus.el</span></samp>
+  file:</p>
+
+  <p><a name="index-gnus_002ddemon_002dadd_002dhandler-2647" id=
+  "index-gnus_002ddemon_002dadd_002dhandler-2647"></a></p>
+  <pre class="lisp">
+     (gnus-demon-add-handler 'gnus-demon-close-connections 30 t)
 </pre>
-   <p><a name="index-gnus_002ddemon_002dadd_002dscanmail-2648"></a><a name="index-gnus_002ddemon_002dadd_002drescan-2649"></a><a name="index-gnus_002ddemon_002dadd_002dscan_002dtimestamps-2650"></a><a name="index-gnus_002ddemon_002dadd_002ddisconnection-2651"></a>Some ready-made functions to do this have been created:
-<code>gnus-demon-add-disconnection</code>,
-<code>gnus-demon-add-nntp-close-connection</code>,
-<code>gnus-demon-add-scan-timestamps</code>, <code>gnus-demon-add-rescan</code>, and
-<code>gnus-demon-add-scanmail</code>.  Just put those functions in your
-<samp><span class="file">~/.gnus.el</span></samp> if you want those abilities.
 
-   <p><a name="index-gnus_002ddemon_002dinit-2652"></a><a name="index-gnus_002ddemon_002dcancel-2653"></a><a name="index-gnus_002ddemon_002dhandlers-2654"></a>If you add handlers to <code>gnus-demon-handlers</code> directly, you should
-run <code>gnus-demon-init</code> to make the changes take hold.  To cancel all
-daemons, you can use the <code>gnus-demon-cancel</code> function.
+  <p><a name="index-gnus_002ddemon_002dadd_002dscanmail-2648" id=
+  "index-gnus_002ddemon_002dadd_002dscanmail-2648"></a><a name=
+  "index-gnus_002ddemon_002dadd_002drescan-2649" id=
+  "index-gnus_002ddemon_002dadd_002drescan-2649"></a><a name=
+  "index-gnus_002ddemon_002dadd_002dscan_002dtimestamps-2650" id=
+  "index-gnus_002ddemon_002dadd_002dscan_002dtimestamps-2650"></a><a name="index-gnus_002ddemon_002dadd_002ddisconnection-2651"
+  id="index-gnus_002ddemon_002dadd_002ddisconnection-2651"></a>Some
+  ready-made functions to do this have been created:
+  <code>gnus-demon-add-disconnection</code>,
+  <code>gnus-demon-add-nntp-close-connection</code>,
+  <code>gnus-demon-add-scan-timestamps</code>,
+  <code>gnus-demon-add-rescan</code>, and
+  <code>gnus-demon-add-scanmail</code>. Just put those functions in
+  your <samp><span class="file">~/.gnus.el</span></samp> if you
+  want those abilities.</p>
 
-   <p>Note that adding daemons can be pretty naughty if you over do it.  Adding
-functions that scan all news and mail from all servers every two seconds
-is a sure-fire way of getting booted off any respectable system.  So
-behave.
+  <p><a name="index-gnus_002ddemon_002dinit-2652" id=
+  "index-gnus_002ddemon_002dinit-2652"></a><a name=
+  "index-gnus_002ddemon_002dcancel-2653" id=
+  "index-gnus_002ddemon_002dcancel-2653"></a><a name=
+  "index-gnus_002ddemon_002dhandlers-2654" id=
+  "index-gnus_002ddemon_002dhandlers-2654"></a>If you add handlers
+  to <code>gnus-demon-handlers</code> directly, you should run
+  <code>gnus-demon-init</code> to make the changes take hold. To
+  cancel all daemons, you can use the
+  <code>gnus-demon-cancel</code> function.</p>
 
-   </body></html>
-
+  <p>Note that adding daemons can be pretty naughty if you over do
+  it. Adding functions that scan all news and mail from all servers
+  every two seconds is a sure-fire way of getting booted off any
+  respectable system. So behave.</p>
+</body>
+</html>

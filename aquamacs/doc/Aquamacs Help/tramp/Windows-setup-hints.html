@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Windows setup hints - TRAMP User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="TRAMP User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Configuration.html#Configuration" title="Configuration">
-<link rel="prev" href="Remote-shell-setup.html#Remote-shell-setup" title="Remote shell setup">
-<link rel="next" href="Auto_002dsave-and-Backup.html#Auto_002dsave-and-Backup" title="Auto-save and Backup">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Windows setup hints - TRAMP User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="TRAMP User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Configuration.html#Configuration" title=
+  "Configuration" />
+  <link rel="prev" href=
+  "Remote-shell-setup.html#Remote-shell-setup" title=
+  "Remote shell setup" />
+  <link rel="next" href=
+  "Auto_002dsave-and-Backup.html#Auto_002dsave-and-Backup" title=
+  "Auto-save and Backup" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +36,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,57 +49,89 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Windows-setup-hints"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Auto_002dsave-and-Backup.html#Auto_002dsave-and-Backup">Auto-save and Backup</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Remote-shell-setup.html#Remote-shell-setup">Remote shell setup</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Configuration.html#Configuration">Configuration</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Windows-setup-hints" id="Windows-setup-hints"></a>
 
-<h3 class="section">4.17 Issues with Cygwin ssh</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Auto_002dsave-and-Backup.html#Auto_002dsave-and-Backup">Auto-save
+    and Backup</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Remote-shell-setup.html#Remote-shell-setup">Remote shell
+    setup</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Configuration.html#Configuration">Configuration</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Cygwin_002c-issues-167"></a>
-This section needs a lot of work!  Please help.
+  <h3 class="section">4.17 Issues with Cygwin ssh</h3>
 
-   <p><a name="index-method-sshx-with-Cygwin-168"></a><a name="index-sshx-method-with-Cygwin-169"></a>The recent Cygwin installation of <samp><span class="command">ssh</span></samp> works only with a
-Cygwinized GNU Emacs.  You can check it by typing <kbd>M-x
-eshell</kbd>, and starting <kbd>ssh test.machine</kbd>.  The problem is evident
-if you see a message like this:
+  <p><a name="index-Cygwin_002c-issues-167" id=
+  "index-Cygwin_002c-issues-167"></a> This section needs a lot of
+  work! Please help.</p>
 
-<pre class="example">     Pseudo-terminal will not be allocated because stdin is not a terminal.
+  <p><a name="index-method-sshx-with-Cygwin-168" id=
+  "index-method-sshx-with-Cygwin-168"></a><a name=
+  "index-sshx-method-with-Cygwin-169" id=
+  "index-sshx-method-with-Cygwin-169"></a>The recent Cygwin
+  installation of <samp><span class="command">ssh</span></samp>
+  works only with a Cygwinized GNU Emacs. You can check it by
+  typing <kbd>M-x eshell</kbd>, and starting <kbd>ssh
+  test.machine</kbd>. The problem is evident if you see a message
+  like this:</p>
+  <pre class="example">
+     Pseudo-terminal will not be allocated because stdin is not a terminal.
 </pre>
-   <p>Older <samp><span class="command">ssh</span></samp> versions of Cygwin are told to cooperate with
-<span class="sc">tramp</span> selecting <samp><span class="option">sshx</span></samp> as the connection method.  You
-can find information about setting up Cygwin in their FAQ at
-<a href="http://cygwin.com/faq/">http://cygwin.com/faq/</a>.
 
-   <p><a name="index-method-scpx-with-Cygwin-170"></a><a name="index-scpx-method-with-Cygwin-171"></a>If you wish to use the <samp><span class="option">scpx</span></samp> connection method, then you might
-have the problem that GNU Emacs calls <samp><span class="command">scp</span></samp> with a
-Windows filename such as <code>c:/foo</code>.  The Cygwin version of
-<samp><span class="command">scp</span></samp> does not know about Windows filenames and interprets
-this as a remote filename on the host <code>c</code>.
+  <p>Older <samp><span class="command">ssh</span></samp> versions
+  of Cygwin are told to cooperate with <span class=
+  "sc">tramp</span> selecting <samp><span class=
+  "option">sshx</span></samp> as the connection method. You can
+  find information about setting up Cygwin in their FAQ at <a href=
+  "http://cygwin.com/faq/">http://cygwin.com/faq/</a>.</p>
 
-   <p>One possible workaround is to write a wrapper script for <samp><span class="option">scp</span></samp>
-which converts the Windows filename to a Cygwinized filename.
+  <p><a name="index-method-scpx-with-Cygwin-170" id=
+  "index-method-scpx-with-Cygwin-170"></a><a name=
+  "index-scpx-method-with-Cygwin-171" id=
+  "index-scpx-method-with-Cygwin-171"></a>If you wish to use the
+  <samp><span class="option">scpx</span></samp> connection method,
+  then you might have the problem that GNU Emacs calls
+  <samp><span class="command">scp</span></samp> with a Windows
+  filename such as <code>c:/foo</code>. The Cygwin version of
+  <samp><span class="command">scp</span></samp> does not know about
+  Windows filenames and interprets this as a remote filename on the
+  host <code>c</code>.</p>
 
-   <p><a name="index-Cygwin-and-ssh_002dagent-172"></a><a name="index-SSH_005fAUTH_005fSOCK-and-_0040value_007bemacsname_007d-on-Windows-173"></a>If you want to use either <samp><span class="option">ssh</span></samp> based method on Windows, then
-you might encounter problems with <samp><span class="command">ssh-agent</span></samp>.  Using this
-program, you can avoid typing the pass-phrase every time you log in. 
-However, if you start GNU Emacs from a desktop shortcut, then
-the environment variable <code>SSH_AUTH_SOCK</code> is not set and so
-GNU Emacs and thus <span class="sc">tramp</span> and thus <samp><span class="command">ssh</span></samp> and
-<samp><span class="command">scp</span></samp> started from <span class="sc">tramp</span> cannot communicate with
-<samp><span class="command">ssh-agent</span></samp>.  It works better to start GNU Emacs from
-the shell.
+  <p>One possible workaround is to write a wrapper script for
+  <samp><span class="option">scp</span></samp> which converts the
+  Windows filename to a Cygwinized filename.</p>
 
-   <p>If anyone knows how to start <samp><span class="command">ssh-agent</span></samp> under Windows in such a
-way that desktop shortcuts can profit, please holler.  I don't really
-know anything at all about Windows<small class="dots">...</small>
+  <p><a name="index-Cygwin-and-ssh_002dagent-172" id=
+  "index-Cygwin-and-ssh_002dagent-172"></a><a name=
+  "index-SSH_005fAUTH_005fSOCK-and-_0040value_007bemacsname_007d-on-Windows-173"
+  id=
+  "index-SSH_005fAUTH_005fSOCK-and-_0040value_007bemacsname_007d-on-Windows-173"></a>If
+  you want to use either <samp><span class=
+  "option">ssh</span></samp> based method on Windows, then you
+  might encounter problems with <samp><span class=
+  "command">ssh-agent</span></samp>. Using this program, you can
+  avoid typing the pass-phrase every time you log in. However, if
+  you start GNU Emacs from a desktop shortcut, then the environment
+  variable <code>SSH_AUTH_SOCK</code> is not set and so GNU Emacs
+  and thus <span class="sc">tramp</span> and thus
+  <samp><span class="command">ssh</span></samp> and
+  <samp><span class="command">scp</span></samp> started from
+  <span class="sc">tramp</span> cannot communicate with
+  <samp><span class="command">ssh-agent</span></samp>. It works
+  better to start GNU Emacs from the shell.</p>
 
-   </body></html>
-
+  <p>If anyone knows how to start <samp><span class=
+  "command">ssh-agent</span></samp> under Windows in such a way
+  that desktop shortcuts can profit, please holler. I don't really
+  know anything at all about Windows<small class=
+  "dots">...</small></p>
+</body>
+</html>

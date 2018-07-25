@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,138 +20,192 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Dynamic Abbrevs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Dynamic Abbrevs">
-<meta name="keywords" content="GNU Emacs Manual: Dynamic Abbrevs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Abbrevs.html#Abbrevs" rel="up" title="Abbrevs">
-<link href="Dabbrev-Customization.html#Dabbrev-Customization" rel="next" title="Dabbrev Customization">
-<link href="Saving-Abbrevs.html#Saving-Abbrevs" rel="prev" title="Saving Abbrevs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Dynamic Abbrevs</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Dynamic Abbrevs" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Dynamic Abbrevs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Abbrevs.html#Abbrevs" rel="up" title="Abbrevs" />
+  <link href="Dabbrev-Customization.html#Dabbrev-Customization"
+  rel="next" title="Dabbrev Customization" />
+  <link href="Saving-Abbrevs.html#Saving-Abbrevs" rel="prev" title=
+  "Saving Abbrevs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Dynamic-Abbrevs" id="Dynamic-Abbrevs"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Dabbrev-Customization.html#Dabbrev-Customization" accesskey=
+    "n" rel="next">Dabbrev Customization</a>, Previous: <a href=
+    "Saving-Abbrevs.html#Saving-Abbrevs" accesskey="p" rel=
+    "prev">Saving Abbrevs</a>, Up: <a href="Abbrevs.html#Abbrevs"
+    accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Dynamic-Abbrev-Expansion" id=
+  "Dynamic-Abbrev-Expansion"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dynamic-Abbrevs"></a>
-<div class="header">
-<p>
-Next: <a href="Dabbrev-Customization.html#Dabbrev-Customization" accesskey="n" rel="next">Dabbrev Customization</a>, Previous: <a href="Saving-Abbrevs.html#Saving-Abbrevs" accesskey="p" rel="prev">Saving Abbrevs</a>, Up: <a href="Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Dynamic-Abbrev-Expansion"></a>
-<h3 class="section">29.6 Dynamic Abbrev Expansion</h3>
+  <h3 class="section">29.6 Dynamic Abbrev Expansion</h3>
 
-<p>The abbrev facility described above operates automatically as you
-insert text, but all abbrevs must be defined explicitly.  By contrast,
-<em>dynamic abbrevs</em> allow the meanings of abbreviations to be
-determined automatically from the contents of the buffer, but dynamic
-abbrev expansion happens only when you request it explicitly.
-</p>
-<a name="index-M_002d_002f"></a>
-<a name="index-C_002dM_002d_002f"></a>
-<a name="index-dabbrev_002dexpand"></a>
-<a name="index-dabbrev_002dcompletion"></a>
-<dl compact="compact">
-<dt><kbd>M-/</kbd></dt>
-<dd><p>Expand the word in the buffer before point as a <em>dynamic abbrev</em>,
-by searching in the buffer for words starting with that abbreviation
-(<code>dabbrev-expand</code>).
-</p>
-</dd>
-<dt><kbd>C-M-/</kbd></dt>
-<dd><p>Complete the word before point as a dynamic abbrev
-(<code>dabbrev-completion</code>).
-</p></dd>
-</dl>
+  <p>The abbrev facility described above operates automatically as
+  you insert text, but all abbrevs must be defined explicitly. By
+  contrast, <em>dynamic abbrevs</em> allow the meanings of
+  abbreviations to be determined automatically from the contents of
+  the buffer, but dynamic abbrev expansion happens only when you
+  request it explicitly.</p><a name="index-M_002d_002f" id=
+  "index-M_002d_002f"></a> <a name="index-C_002dM_002d_002f" id=
+  "index-C_002dM_002d_002f"></a> <a name="index-dabbrev_002dexpand"
+  id="index-dabbrev_002dexpand"></a> <a name=
+  "index-dabbrev_002dcompletion" id=
+  "index-dabbrev_002dcompletion"></a>
 
-<a name="index-dabbrev_002dlimit"></a>
-<p>For example, if the buffer contains &lsquo;<samp>does this follow </samp>&rsquo; and you
-type <kbd>f o M-/</kbd>, the effect is to insert &lsquo;<samp>follow</samp>&rsquo; because that
-is the last word in the buffer that starts with &lsquo;<samp>fo</samp>&rsquo;.  A numeric
-argument to <kbd>M-/</kbd> says to take the second, third, etc. distinct
-expansion found looking backward from point.  Repeating <kbd>M-/</kbd>
-searches for an alternative expansion by looking farther back.  After
-scanning all the text before point, it searches the text after point.
-The variable <code>dabbrev-limit</code>, if non-<code>nil</code>, specifies how far
-away in the buffer to search for an expansion.
-</p>
-<a name="index-dabbrev_002dcheck_002dall_002dbuffers"></a>
-<p>After scanning the current buffer, <kbd>M-/</kbd> normally searches other
-buffers, unless you have set <code>dabbrev-check-all-buffers</code> to
-<code>nil</code>.
-</p>
-<a name="index-dabbrev_002dignored_002dbuffer_002dregexps"></a>
-<p>For finer control over which buffers to scan, customize the variable
-<code>dabbrev-ignored-buffer-regexps</code>.  Its value is a list of regular
-expressions.  If a buffer&rsquo;s name matches any of these regular
-expressions, dynamic abbrev expansion skips that buffer.
-</p>
-<p>A negative argument to <kbd>M-/</kbd>, as in <kbd>C-u - M-/</kbd>, says to
-search first for expansions after point, then other buffers, and
-consider expansions before point only as a last resort.  If you repeat
-the <kbd>M-/</kbd> to look for another expansion, do not specify an
-argument.  Repeating <kbd>M-/</kbd> cycles through all the expansions after
-point and then the expansions before point.
-</p>
-<p>After you have expanded a dynamic abbrev, you can copy additional
-words that follow the expansion in its original context.  Simply type
-<kbd><span class="key">SPC</span> M-/</kbd> for each additional word you want to copy.  The
-spacing and punctuation between words is copied along with the words.
-</p>
-<p>The command <kbd>C-M-/</kbd> (<code>dabbrev-completion</code>) performs
-completion of a dynamic abbrev.  Instead of trying the possible
-expansions one by one, it finds all of them, then inserts the text
-that they have in common.  If they have nothing in common, <kbd>C-M-/</kbd>
-displays a list of completions, from which you can select a choice in
-the usual manner.  See <a href="Completion.html#Completion">Completion</a>.
-</p>
-<p>Dynamic abbrev expansion is completely independent of Abbrev mode; the
-expansion of a word with <kbd>M-/</kbd> is completely independent of whether
-it has a definition as an ordinary abbrev.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Dabbrev-Customization.html#Dabbrev-Customization" accesskey="n" rel="next">Dabbrev Customization</a>, Previous: <a href="Saving-Abbrevs.html#Saving-Abbrevs" accesskey="p" rel="prev">Saving Abbrevs</a>, Up: <a href="Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>M-/</kbd></dt>
 
+    <dd>
+      <p>Expand the word in the buffer before point as a
+      <em>dynamic abbrev</em>, by searching in the buffer for words
+      starting with that abbreviation
+      (<code>dabbrev-expand</code>).</p>
+    </dd>
 
+    <dt><kbd>C-M-/</kbd></dt>
 
+    <dd>
+      <p>Complete the word before point as a dynamic abbrev
+      (<code>dabbrev-completion</code>).</p>
+    </dd>
+  </dl><a name="index-dabbrev_002dlimit" id=
+  "index-dabbrev_002dlimit"></a>
+
+  <p>For example, if the buffer contains &lsquo;<samp>does this
+  follow</samp> &rsquo; and you type <kbd>f o M-/</kbd>, the effect
+  is to insert &lsquo;<samp>follow</samp>&rsquo; because that is
+  the last word in the buffer that starts with
+  &lsquo;<samp>fo</samp>&rsquo;. A numeric argument to
+  <kbd>M-/</kbd> says to take the second, third, etc. distinct
+  expansion found looking backward from point. Repeating
+  <kbd>M-/</kbd> searches for an alternative expansion by looking
+  farther back. After scanning all the text before point, it
+  searches the text after point. The variable
+  <code>dabbrev-limit</code>, if non-<code>nil</code>, specifies
+  how far away in the buffer to search for an
+  expansion.</p><a name="index-dabbrev_002dcheck_002dall_002dbuffers"
+  id="index-dabbrev_002dcheck_002dall_002dbuffers"></a>
+
+  <p>After scanning the current buffer, <kbd>M-/</kbd> normally
+  searches other buffers, unless you have set
+  <code>dabbrev-check-all-buffers</code> to
+  <code>nil</code>.</p><a name=
+  "index-dabbrev_002dignored_002dbuffer_002dregexps" id=
+  "index-dabbrev_002dignored_002dbuffer_002dregexps"></a>
+
+  <p>For finer control over which buffers to scan, customize the
+  variable <code>dabbrev-ignored-buffer-regexps</code>. Its value
+  is a list of regular expressions. If a buffer&rsquo;s name
+  matches any of these regular expressions, dynamic abbrev
+  expansion skips that buffer.</p>
+
+  <p>A negative argument to <kbd>M-/</kbd>, as in <kbd>C-u -
+  M-/</kbd>, says to search first for expansions after point, then
+  other buffers, and consider expansions before point only as a
+  last resort. If you repeat the <kbd>M-/</kbd> to look for another
+  expansion, do not specify an argument. Repeating <kbd>M-/</kbd>
+  cycles through all the expansions after point and then the
+  expansions before point.</p>
+
+  <p>After you have expanded a dynamic abbrev, you can copy
+  additional words that follow the expansion in its original
+  context. Simply type <kbd><span class="key">SPC</span> M-/</kbd>
+  for each additional word you want to copy. The spacing and
+  punctuation between words is copied along with the words.</p>
+
+  <p>The command <kbd>C-M-/</kbd> (<code>dabbrev-completion</code>)
+  performs completion of a dynamic abbrev. Instead of trying the
+  possible expansions one by one, it finds all of them, then
+  inserts the text that they have in common. If they have nothing
+  in common, <kbd>C-M-/</kbd> displays a list of completions, from
+  which you can select a choice in the usual manner. See <a href=
+  "Completion.html#Completion">Completion</a>.</p>
+
+  <p>Dynamic abbrev expansion is completely independent of Abbrev
+  mode; the expansion of a word with <kbd>M-/</kbd> is completely
+  independent of whether it has a definition as an ordinary
+  abbrev.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Dabbrev-Customization.html#Dabbrev-Customization" accesskey=
+    "n" rel="next">Dabbrev Customization</a>, Previous: <a href=
+    "Saving-Abbrevs.html#Saving-Abbrevs" accesskey="p" rel=
+    "prev">Saving Abbrevs</a>, Up: <a href="Abbrevs.html#Abbrevs"
+    accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

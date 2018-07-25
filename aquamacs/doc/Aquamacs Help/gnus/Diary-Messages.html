@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Diary Messages - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="The-NNDiary-Back-End.html#The-NNDiary-Back-End" title="The NNDiary Back End">
-<link rel="next" href="Running-NNDiary.html#Running-NNDiary" title="Running NNDiary">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Diary Messages - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "The-NNDiary-Back-End.html#The-NNDiary-Back-End" title=
+  "The NNDiary Back End" />
+  <link rel="next" href="Running-NNDiary.html#Running-NNDiary"
+  title="Running NNDiary" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,54 +47,75 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Diary-Messages"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Running-NNDiary.html#Running-NNDiary">Running NNDiary</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="The-NNDiary-Back-End.html#The-NNDiary-Back-End">The NNDiary Back End</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Diary-Messages" id="Diary-Messages"></a>
 
-<h5 class="subsubsection">6.8.1.1 Diary Messages</h5>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Running-NNDiary.html#Running-NNDiary">Running NNDiary</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "The-NNDiary-Back-End.html#The-NNDiary-Back-End">The NNDiary
+    Back End</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-nndiary-messages-2289"></a><a name="index-nndiary-mails-2290"></a>
-<code>nndiary</code> messages are just normal ones, except for the mandatory
-presence of 7 special headers.  These headers are of the form
-<code>X-Diary-&lt;something&gt;</code>, <code>&lt;something&gt;</code> being one of
-<code>Minute</code>, <code>Hour</code>, <code>Dom</code>, <code>Month</code>, <code>Year</code>,
-<code>Time-Zone</code> and <code>Dow</code>.  <code>Dom</code> means &ldquo;Day of Month&rdquo;, and
-<code>dow</code> means &ldquo;Day of Week&rdquo;.  These headers actually behave like
-crontab specifications and define the event date(s):
+  <h5 class="subsubsection">6.8.1.1 Diary Messages</h5>
 
-     <ul>
-<li>For all headers except the <code>Time-Zone</code> one, a header value is
-either a star (meaning all possible values), or a list of fields
-(separated by a comma). 
-<li>A field is either an integer, or a range. 
-<li>A range is two integers separated by a dash. 
-<li>Possible integer values are 0&ndash;59 for <code>Minute</code>, 0&ndash;23 for
-<code>Hour</code>, 1&ndash;31 for <code>Dom</code>, 1&ndash;12 for <code>Month</code>, above 1971
-for <code>Year</code> and 0&ndash;6 for <code>Dow</code> (0 meaning Sunday). 
-<li>As a special case, a star in either <code>Dom</code> or <code>Dow</code> doesn't
-mean &ldquo;all possible values&rdquo;, but &ldquo;use only the other field&rdquo;.  Note
-that if both are star'ed, the use of either one gives the same result. 
-<li>The <code>Time-Zone</code> header is special in that it can only have one
-value (<code>GMT</code>, for instance).  A star doesn't mean &ldquo;all possible
-values&rdquo; (because it makes no sense), but &ldquo;the current local time
-zone&rdquo;.  Most of the time, you'll be using a star here.  However, for a
-list of available time zone values, see the variable
-<code>nndiary-headers</code>. 
-</ul>
+  <p><a name="index-nndiary-messages-2289" id=
+  "index-nndiary-messages-2289"></a><a name=
+  "index-nndiary-mails-2290" id="index-nndiary-mails-2290"></a>
+  <code>nndiary</code> messages are just normal ones, except for
+  the mandatory presence of 7 special headers. These headers are of
+  the form <code>X-Diary-&lt;something&gt;</code>,
+  <code>&lt;something&gt;</code> being one of <code>Minute</code>,
+  <code>Hour</code>, <code>Dom</code>, <code>Month</code>,
+  <code>Year</code>, <code>Time-Zone</code> and <code>Dow</code>.
+  <code>Dom</code> means &ldquo;Day of Month&rdquo;, and
+  <code>dow</code> means &ldquo;Day of Week&rdquo;. These headers
+  actually behave like crontab specifications and define the event
+  date(s):</p>
 
-   <p>As a concrete example, here are the diary headers to add to your message
-for specifying &ldquo;Each Monday and each 1st of month, at 12:00, 20:00,
-21:00, 22:00, 23:00 and 24:00, from 1999 to 2010&rdquo; (I'll let you find
-what to do then):
+  <ul>
+    <li>For all headers except the <code>Time-Zone</code> one, a
+    header value is either a star (meaning all possible values), or
+    a list of fields (separated by a comma).</li>
 
-<pre class="example">     X-Diary-Minute: 0
+    <li>A field is either an integer, or a range.</li>
+
+    <li>A range is two integers separated by a dash.</li>
+
+    <li>Possible integer values are 0&ndash;59 for
+    <code>Minute</code>, 0&ndash;23 for <code>Hour</code>,
+    1&ndash;31 for <code>Dom</code>, 1&ndash;12 for
+    <code>Month</code>, above 1971 for <code>Year</code> and
+    0&ndash;6 for <code>Dow</code> (0 meaning Sunday).</li>
+
+    <li>As a special case, a star in either <code>Dom</code> or
+    <code>Dow</code> doesn't mean &ldquo;all possible
+    values&rdquo;, but &ldquo;use only the other field&rdquo;. Note
+    that if both are star'ed, the use of either one gives the same
+    result.</li>
+
+    <li>The <code>Time-Zone</code> header is special in that it can
+    only have one value (<code>GMT</code>, for instance). A star
+    doesn't mean &ldquo;all possible values&rdquo; (because it
+    makes no sense), but &ldquo;the current local time zone&rdquo;.
+    Most of the time, you'll be using a star here. However, for a
+    list of available time zone values, see the variable
+    <code>nndiary-headers</code>.</li>
+  </ul>
+
+  <p>As a concrete example, here are the diary headers to add to
+  your message for specifying &ldquo;Each Monday and each 1st of
+  month, at 12:00, 20:00, 21:00, 22:00, 23:00 and 24:00, from 1999
+  to 2010&rdquo; (I'll let you find what to do then):</p>
+  <pre class="example">
+     X-Diary-Minute: 0
      X-Diary-Hour: 12, 20-24
      X-Diary-Dom: 1
      X-Diary-Month: *
@@ -90,5 +123,5 @@ what to do then):
      X-Diary-Dow: 1
      X-Diary-Time-Zone: *
 </pre>
-   </body></html>
-
+</body>
+</html>

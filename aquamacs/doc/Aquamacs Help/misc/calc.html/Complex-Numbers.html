@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,96 +18,127 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Complex Numbers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Complex Numbers">
-<meta name="keywords" content="GNU Emacs Calc Manual: Complex Numbers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Data-Types.html#Data-Types" rel="up" title="Data Types">
-<link href="Infinities.html#Infinities" rel="next" title="Infinities">
-<link href="Floats.html#Floats" rel="prev" title="Floats">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Complex Numbers</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Complex Numbers" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Complex Numbers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Data-Types.html#Data-Types" rel="up" title=
+  "Data Types" />
+  <link href="Infinities.html#Infinities" rel="next" title=
+  "Infinities" />
+  <link href="Floats.html#Floats" rel="prev" title="Floats" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Complex-Numbers"></a>
-<div class="header">
-<p>
-Next: <a href="Infinities.html#Infinities" accesskey="n" rel="next">Infinities</a>, Previous: <a href="Floats.html#Floats" accesskey="p" rel="prev">Floats</a>, Up: <a href="Data-Types.html#Data-Types" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Complex-Numbers-1"></a>
-<h3 class="section">4.4 Complex Numbers</h3>
+<body lang="en" xml:lang="en">
+  <a name="Complex-Numbers" id="Complex-Numbers"></a>
 
-<a name="index-Complex-numbers"></a>
-<p>There are two supported formats for complex numbers: rectangular and
-polar.  The default format is rectangular, displayed in the form
-&lsquo;<samp>(<var>real</var>,<var>imag</var>)</samp>&rsquo; where <var>real</var> is the real part and
-<var>imag</var> is the imaginary part, each of which may be any real number.
-Rectangular complex numbers can also be displayed in &lsquo;<samp><var>a</var>+<var>b</var>i</samp>&rsquo;
-notation; see <a href="Complex-Formats.html#Complex-Formats">Complex Formats</a>.
-</p>
-<p>Polar complex numbers are displayed in the form
-&lsquo;<tt>(</tt><var>r</var><tt>;</tt><var>theta</var><tt>)</tt>&rsquo;
-where <var>r</var> is the nonnegative magnitude and
-<var>theta</var>
-is the argument or phase angle.  The range of
-<var>theta</var>
-depends on the current angular mode (see <a href="Angular-Modes.html#Angular-Modes">Angular Modes</a>); it is
-generally between <i>-180</i> and <i>+180</i> degrees or the equivalent range
-in radians.
-</p>
-<p>Complex numbers are entered in stages using incomplete objects.
-See <a href="Incomplete-Objects.html#Incomplete-Objects">Incomplete Objects</a>.
-</p>
-<p>Operations on rectangular complex numbers yield rectangular complex
-results, and similarly for polar complex numbers.  Where the two types
-are mixed, or where new complex numbers arise (as for the square root of
-a negative real), the current <em>Polar mode</em> is used to determine the
-type.  See <a href="Polar-Mode.html#Polar-Mode">Polar Mode</a>.
-</p>
-<p>A complex result in which the imaginary part is zero (or the phase angle
-is 0 or 180 degrees or &lsquo;<samp>pi</samp>&rsquo; radians) is automatically converted to a real
-number.
-</p>
+  <div class="header">
+    <p>Next: <a href="Infinities.html#Infinities" accesskey="n"
+    rel="next">Infinities</a>, Previous: <a href=
+    "Floats.html#Floats" accesskey="p" rel="prev">Floats</a>, Up:
+    <a href="Data-Types.html#Data-Types" accesskey="u" rel=
+    "up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Complex-Numbers-1" id="Complex-Numbers-1"></a>
 
+  <h3 class="section">4.4 Complex Numbers</h3><a name=
+  "index-Complex-numbers" id="index-Complex-numbers"></a>
 
+  <p>There are two supported formats for complex numbers:
+  rectangular and polar. The default format is rectangular,
+  displayed in the form
+  &lsquo;<samp>(<var>real</var>,<var>imag</var>)</samp>&rsquo;
+  where <var>real</var> is the real part and <var>imag</var> is the
+  imaginary part, each of which may be any real number. Rectangular
+  complex numbers can also be displayed in
+  &lsquo;<samp><var>a</var>+<var>b</var>i</samp>&rsquo; notation;
+  see <a href="Complex-Formats.html#Complex-Formats">Complex
+  Formats</a>.</p>
 
+  <p>Polar complex numbers are displayed in the form
+  &lsquo;<tt>(</tt><var>r</var><tt>;</tt><var>theta</var><tt>)</tt>&rsquo;
+  where <var>r</var> is the nonnegative magnitude and
+  <var>theta</var> is the argument or phase angle. The range of
+  <var>theta</var> depends on the current angular mode (see
+  <a href="Angular-Modes.html#Angular-Modes">Angular Modes</a>); it
+  is generally between <i>-180</i> and <i>+180</i> degrees or the
+  equivalent range in radians.</p>
+
+  <p>Complex numbers are entered in stages using incomplete
+  objects. See <a href=
+  "Incomplete-Objects.html#Incomplete-Objects">Incomplete
+  Objects</a>.</p>
+
+  <p>Operations on rectangular complex numbers yield rectangular
+  complex results, and similarly for polar complex numbers. Where
+  the two types are mixed, or where new complex numbers arise (as
+  for the square root of a negative real), the current <em>Polar
+  mode</em> is used to determine the type. See <a href=
+  "Polar-Mode.html#Polar-Mode">Polar Mode</a>.</p>
+
+  <p>A complex result in which the imaginary part is zero (or the
+  phase angle is 0 or 180 degrees or &lsquo;<samp>pi</samp>&rsquo;
+  radians) is automatically converted to a real number.</p>
 </body>
 </html>

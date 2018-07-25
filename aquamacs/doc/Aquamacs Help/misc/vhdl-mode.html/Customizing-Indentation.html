@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents VHDL Mode, an Emacs mode for editing VHDL code.
 
 Copyright (C) 1995-2008, 2010, 2012, 2015-2016 Free Software
@@ -15,130 +17,222 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>VHDL Mode, an Emacs mode for editing VHDL code: Customizing Indentation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="VHDL Mode, an Emacs mode for editing VHDL code: Customizing Indentation">
-<meta name="keywords" content="VHDL Mode, an Emacs mode for editing VHDL code: Customizing Indentation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Interactive-Customization.html#Interactive-Customization" rel="next" title="Interactive Customization">
-<link href="Indentation-Calculation.html#Indentation-Calculation" rel="prev" title="Indentation Calculation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>VHDL Mode, an Emacs mode for editing VHDL code:
+  Customizing Indentation</title>
+  <meta name="description" content=
+  "VHDL Mode, an Emacs mode for editing VHDL code: Customizing Indentation" />
+  <meta name="keywords" content=
+  "VHDL Mode, an Emacs mode for editing VHDL code: Customizing Indentation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href=
+  "Interactive-Customization.html#Interactive-Customization" rel=
+  "next" title="Interactive Customization" />
+  <link href="Indentation-Calculation.html#Indentation-Calculation"
+  rel="prev" title="Indentation Calculation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Customizing-Indentation"></a>
-<div class="header">
-<p>
-Next: <a href="Syntactic-Symbols.html#Syntactic-Symbols" accesskey="n" rel="next">Syntactic Symbols</a>, Previous: <a href="New-Indentation-Engine.html#New-Indentation-Engine" accesskey="p" rel="prev">New Indentation Engine</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Customizing-Indentation-1"></a>
-<h2 class="chapter">4 Customizing Indentation</h2>
-<a name="index-Customizing-Indentation"></a>
+<body lang="en" xml:lang="en">
+  <a name="Customizing-Indentation" id=
+  "Customizing-Indentation"></a>
 
-<a name="index-vhdl_002dset_002doffset"></a>
-<a name="index-set_002doffset-_0028vhdl_002d_0029"></a>
-<p>The <code>vhdl-offsets-alist</code> variable is where you customize all your
-indentations.  You simply need to decide what additional offset you want
-to add for every syntactic symbol.  You can use the command <kbd>C-c
-O</kbd> (<code>vhdl-set-offset</code>) as the way to set offsets, both
-interactively and from your mode hook.  Also, you can set up
-<em>styles</em> of indentation.  Most likely, you&rsquo;ll find one of the
-pre-defined styles will suit your needs, but if not, this section will
-describe how to set up basic editing configurations.  See <a href="Styles.html#Styles">Styles</a>, for
-an explanation of how to set up named styles.
-</p>
-<a name="index-vhdl_002dbasic_002doffset"></a>
-<a name="index-basic_002doffset-_0028vhdl_002d_0029"></a>
-<p>As mentioned previously, the variable <code>vhdl-offsets-alist</code> is an
-association list between syntactic symbols and the offsets to be applied
-for those symbols.  In fact, these offset values can be an integer, a
-function or variable name, or one of the following symbols: <code>+</code>,
-<code>-</code>, <code>++</code>, <code>--</code>, <code>*</code>, or <code>/</code>.  The symbol
-values have the following meanings:
-</p>
-<ul>
-<li> <code>+</code>  &ndash;  1 x <code>vhdl-basic-offset</code>
-</li><li> <code>-</code>  &ndash;  -1 x <code>vhdl-basic-offset</code>
-</li><li> <code>++</code> &ndash;  2 x <code>vhdl-basic-offset</code>
-</li><li> <code>--</code> &ndash;  -2 x <code>vhdl-basic-offset</code>
-</li><li> <code>*</code>  &ndash;  0.5 x <code>vhdl-basic-offset</code>
-</li><li> <code>/</code>  &ndash;  -0.5 x <code>vhdl-basic-offset</code>
+  <div class="header">
+    <p>Next: <a href="Syntactic-Symbols.html#Syntactic-Symbols"
+    accesskey="n" rel="next">Syntactic Symbols</a>, Previous:
+    <a href="New-Indentation-Engine.html#New-Indentation-Engine"
+    accesskey="p" rel="prev">New Indentation Engine</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Customizing-Indentation-1" id=
+  "Customizing-Indentation-1"></a>
 
-</li></ul>
+  <h2 class="chapter">4 Customizing Indentation</h2><a name=
+  "index-Customizing-Indentation" id=
+  "index-Customizing-Indentation"></a> <a name=
+  "index-vhdl_002dset_002doffset" id=
+  "index-vhdl_002dset_002doffset"></a> <a name=
+  "index-set_002doffset-_0028vhdl_002d_0029" id=
+  "index-set_002doffset-_0028vhdl_002d_0029"></a>
 
-<p>So, for example, because most of the default offsets are defined in
-terms of <code>+</code>, <code>-</code>, and <code>0</code>, if you like the general
-indentation style, but you use 2 spaces instead of 4 spaces per level,
-you can probably achieve your style just by changing
-<code>vhdl-basic-offset</code> like so (in your <samp>.emacs</samp> file):
-</p><div class="example">
-<pre class="example">
+  <p>The <code>vhdl-offsets-alist</code> variable is where you
+  customize all your indentations. You simply need to decide what
+  additional offset you want to add for every syntactic symbol. You
+  can use the command <kbd>C-c O</kbd>
+  (<code>vhdl-set-offset</code>) as the way to set offsets, both
+  interactively and from your mode hook. Also, you can set up
+  <em>styles</em> of indentation. Most likely, you&rsquo;ll find
+  one of the pre-defined styles will suit your needs, but if not,
+  this section will describe how to set up basic editing
+  configurations. See <a href="Styles.html#Styles">Styles</a>, for
+  an explanation of how to set up named styles.</p><a name=
+  "index-vhdl_002dbasic_002doffset" id=
+  "index-vhdl_002dbasic_002doffset"></a> <a name=
+  "index-basic_002doffset-_0028vhdl_002d_0029" id=
+  "index-basic_002doffset-_0028vhdl_002d_0029"></a>
+
+  <p>As mentioned previously, the variable
+  <code>vhdl-offsets-alist</code> is an association list between
+  syntactic symbols and the offsets to be applied for those
+  symbols. In fact, these offset values can be an integer, a
+  function or variable name, or one of the following symbols:
+  <code>+</code>, <code>-</code>, <code>++</code>, <code>--</code>,
+  <code>*</code>, or <code>/</code>. The symbol values have the
+  following meanings:</p>
+
+  <ul>
+    <li><code>+</code> &ndash; 1 x
+    <code>vhdl-basic-offset</code></li>
+
+    <li><code>-</code> &ndash; -1 x
+    <code>vhdl-basic-offset</code></li>
+
+    <li><code>++</code> &ndash; 2 x
+    <code>vhdl-basic-offset</code></li>
+
+    <li><code>--</code> &ndash; -2 x
+    <code>vhdl-basic-offset</code></li>
+
+    <li><code>*</code> &ndash; 0.5 x
+    <code>vhdl-basic-offset</code></li>
+
+    <li><code>/</code> &ndash; -0.5 x
+    <code>vhdl-basic-offset</code></li>
+  </ul>
+
+  <p>So, for example, because most of the default offsets are
+  defined in terms of <code>+</code>, <code>-</code>, and
+  <code>0</code>, if you like the general indentation style, but
+  you use 2 spaces instead of 4 spaces per level, you can probably
+  achieve your style just by changing
+  <code>vhdl-basic-offset</code> like so (in your
+  <samp>.emacs</samp> file):</p>
+
+  <div class="example">
+    <pre class="example">
 (setq vhdl-basic-offset 2)
 
-</pre></div>
+</pre>
+  </div>
 
-<p>To change indentation styles more radically, you will want to change the
-value associated with the syntactic symbols in the
-<code>vhdl-offsets-alist</code> variable.  First, I&rsquo;ll show you how to do that
-interactively, then I&rsquo;ll describe how to make changes to your
-<samp>.emacs</samp> file so that your changes are more permanent.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Interactive-Customization.html#Interactive-Customization" accesskey="1">Interactive Customization</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Permanent-Customization.html#Permanent-Customization" accesskey="2">Permanent Customization</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Styles.html#Styles" accesskey="3">Styles</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Advanced-Customizations.html#Advanced-Customizations" accesskey="4">Advanced Customizations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <p>To change indentation styles more radically, you will want to
+  change the value associated with the syntactic symbols in the
+  <code>vhdl-offsets-alist</code> variable. First, I&rsquo;ll show
+  you how to do that interactively, then I&rsquo;ll describe how to
+  make changes to your <samp>.emacs</samp> file so that your
+  changes are more permanent.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Syntactic-Symbols.html#Syntactic-Symbols" accesskey="n" rel="next">Syntactic Symbols</a>, Previous: <a href="New-Indentation-Engine.html#New-Indentation-Engine" accesskey="p" rel="prev">New Indentation Engine</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Interactive-Customization.html#Interactive-Customization"
+      accesskey="1">Interactive Customization</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top"></td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Permanent-Customization.html#Permanent-Customization"
+      accesskey="2">Permanent Customization</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Styles.html#Styles" accesskey="3">Styles</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Advanced-Customizations.html#Advanced-Customizations"
+      accesskey="4">Advanced Customizations</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Syntactic-Symbols.html#Syntactic-Symbols"
+    accesskey="n" rel="next">Syntactic Symbols</a>, Previous:
+    <a href="New-Indentation-Engine.html#New-Indentation-Engine"
+    accesskey="p" rel="prev">New Indentation Engine</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

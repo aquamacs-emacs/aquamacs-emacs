@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,104 +14,134 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Moderation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Moderation">
-<meta name="keywords" content="Gnus Manual: Moderation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Various.html#Various" rel="up" title="Various">
-<link href="Fetching-a-Group.html#Fetching-a-Group" rel="next" title="Fetching a Group">
-<link href="Predicate-Specifiers.html#Predicate-Specifiers" rel="prev" title="Predicate Specifiers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Moderation</title>
+  <meta name="description" content="Gnus Manual: Moderation" />
+  <meta name="keywords" content="Gnus Manual: Moderation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Various.html#Various" rel="up" title="Various" />
+  <link href="Fetching-a-Group.html#Fetching-a-Group" rel="next"
+  title="Fetching a Group" />
+  <link href="Predicate-Specifiers.html#Predicate-Specifiers" rel=
+  "prev" title="Predicate Specifiers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Moderation"></a>
-<div class="header">
-<p>
-Next: <a href="Fetching-a-Group.html#Fetching-a-Group" accesskey="n" rel="next">Fetching a Group</a>, Previous: <a href="Predicate-Specifiers.html#Predicate-Specifiers" accesskey="p" rel="prev">Predicate Specifiers</a>, Up: <a href="Various.html#Various" accesskey="u" rel="up">Various</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Moderation-1"></a>
-<h3 class="section">9.12 Moderation</h3>
-<a name="index-moderation"></a>
+<body lang="en" xml:lang="en">
+  <a name="Moderation" id="Moderation"></a>
 
-<p>If you are a moderator, you can use the <samp>gnus-mdrtn.el</samp> package.
-It is not included in the standard Gnus package.  Write a mail to
-&lsquo;<samp>larsi@gnus.org</samp>&rsquo; and state what group you moderate, and you&rsquo;ll
-get a copy.
-</p>
-<p>The moderation package is implemented as a minor mode for summary
-buffers.  Put
-</p>
-<div class="lisp">
-<pre class="lisp">(add-hook 'gnus-summary-mode-hook 'gnus-moderate)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Fetching-a-Group.html#Fetching-a-Group"
+    accesskey="n" rel="next">Fetching a Group</a>, Previous:
+    <a href="Predicate-Specifiers.html#Predicate-Specifiers"
+    accesskey="p" rel="prev">Predicate Specifiers</a>, Up: <a href=
+    "Various.html#Various" accesskey="u" rel="up">Various</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Moderation-1" id="Moderation-1"></a>
 
-<p>in your <samp>~/.gnus.el</samp> file.
-</p>
-<p>If you are the moderator of &lsquo;<samp>rec.zoofle</samp>&rsquo;, this is how it&rsquo;s
-supposed to work:
-</p>
-<ol>
-<li> You split your incoming mail by matching on
-&lsquo;<samp>Newsgroups:.*rec.zoofle</samp>&rsquo;, which will put all the to-be-posted
-articles in some mail group&mdash;for instance, &lsquo;<samp>nnml:rec.zoofle</samp>&rsquo;.
+  <h3 class="section">9.12 Moderation</h3><a name=
+  "index-moderation" id="index-moderation"></a>
 
-</li><li> You enter that group once in a while and post articles using the <kbd>e</kbd>
-(edit-and-post) or <kbd>s</kbd> (just send unedited) commands.
+  <p>If you are a moderator, you can use the
+  <samp>gnus-mdrtn.el</samp> package. It is not included in the
+  standard Gnus package. Write a mail to
+  &lsquo;<samp>larsi@gnus.org</samp>&rsquo; and state what group
+  you moderate, and you&rsquo;ll get a copy.</p>
 
-</li><li> If, while reading the &lsquo;<samp>rec.zoofle</samp>&rsquo; newsgroup, you happen upon some
-articles that weren&rsquo;t approved by you, you can cancel them with the
-<kbd>c</kbd> command.
-</li></ol>
+  <p>The moderation package is implemented as a minor mode for
+  summary buffers. Put</p>
 
-<p>To use moderation mode in these two groups, say:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-moderated-list
-      &quot;^nnml:rec.zoofle$\\|^rec.zoofle$&quot;)
-</pre></div>
+  <div class="lisp">
+    <pre class="lisp">
+(add-hook 'gnus-summary-mode-hook 'gnus-moderate)
+</pre>
+  </div>
 
+  <p>in your <samp>~/.gnus.el</samp> file.</p>
 
+  <p>If you are the moderator of
+  &lsquo;<samp>rec.zoofle</samp>&rsquo;, this is how it&rsquo;s
+  supposed to work:</p>
 
+  <ol>
+    <li>You split your incoming mail by matching on
+    &lsquo;<samp>Newsgroups:.*rec.zoofle</samp>&rsquo;, which will
+    put all the to-be-posted articles in some mail group&mdash;for
+    instance, &lsquo;<samp>nnml:rec.zoofle</samp>&rsquo;.</li>
 
+    <li>You enter that group once in a while and post articles
+    using the <kbd>e</kbd> (edit-and-post) or <kbd>s</kbd> (just
+    send unedited) commands.</li>
 
+    <li>If, while reading the &lsquo;<samp>rec.zoofle</samp>&rsquo;
+    newsgroup, you happen upon some articles that weren&rsquo;t
+    approved by you, you can cancel them with the <kbd>c</kbd>
+    command.</li>
+  </ol>
+
+  <p>To use moderation mode in these two groups, say:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-moderated-list
+      "^nnml:rec.zoofle$\\|^rec.zoofle$")
+</pre>
+  </div>
 </body>
 </html>

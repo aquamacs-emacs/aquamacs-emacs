@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,134 +19,200 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Basic Faces</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Basic Faces">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Basic Faces">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Faces.html#Faces" rel="up" title="Faces">
-<link href="Font-Selection.html#Font-Selection" rel="next" title="Font Selection">
-<link href="Auto-Faces.html#Auto-Faces" rel="prev" title="Auto Faces">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Basic Faces</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Basic Faces" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Basic Faces" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Faces.html#Faces" rel="up" title="Faces" />
+  <link href="Font-Selection.html#Font-Selection" rel="next" title=
+  "Font Selection" />
+  <link href="Auto-Faces.html#Auto-Faces" rel="prev" title=
+  "Auto Faces" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Basic-Faces" id="Basic-Faces"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Font-Selection.html#Font-Selection"
+    accesskey="n" rel="next">Font Selection</a>, Previous: <a href=
+    "Auto-Faces.html#Auto-Faces" accesskey="p" rel="prev">Auto
+    Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel=
+    "up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Faces-1" id="Basic-Faces-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Faces"></a>
-<div class="header">
-<p>
-Next: <a href="Font-Selection.html#Font-Selection" accesskey="n" rel="next">Font Selection</a>, Previous: <a href="Auto-Faces.html#Auto-Faces" accesskey="p" rel="prev">Auto Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Faces-1"></a>
-<h4 class="subsection">37.12.8 Basic Faces</h4>
-<a name="index-basic-faces"></a>
+  <h4 class="subsection">37.12.8 Basic Faces</h4><a name=
+  "index-basic-faces" id="index-basic-faces"></a>
 
-<p>If your Emacs Lisp program needs to assign some faces to text, it is
-often a good idea to use certain existing faces or inherit from them,
-rather than defining entirely new faces.  This way, if other users
-have customized the basic faces to give Emacs a certain look, your
-program will fit in without additional customization.
-</p>
-<p>Some of the basic faces defined in Emacs are listed below.  In
-addition to these, you might want to make use of the Font Lock faces
-for syntactic highlighting, if highlighting is not already handled by
-Font Lock mode, or if some Font Lock faces are not in use.
-See <a href="Faces-for-Font-Lock.html#Faces-for-Font-Lock">Faces for Font Lock</a>.
-</p>
-<dl compact="compact">
-<dt><code>default</code></dt>
-<dd><p>The default face, whose attributes are all specified.  All other faces
-implicitly inherit from it: any unspecified attribute defaults to the
-attribute on this face (see <a href="Face-Attributes.html#Face-Attributes">Face Attributes</a>).
-</p>
-</dd>
-<dt><code>bold</code></dt>
-<dt><code>italic</code></dt>
-<dt><code>bold-italic</code></dt>
-<dt><code>underline</code></dt>
-<dt><code>fixed-pitch</code></dt>
-<dt><code>variable-pitch</code></dt>
-<dd><p>These have the attributes indicated by their names (e.g., <code>bold</code>
-has a bold <code>:weight</code> attribute), with all other attributes
-unspecified (and so given by <code>default</code>).
-</p>
-</dd>
-<dt><code>shadow</code></dt>
-<dd><p>For dimmed-out text.  For example, it is used for the ignored
-part of a filename in the minibuffer (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Minibuffer-File.html#Minibuffer-File">Minibuffers for File Names</a> in <cite>The GNU Emacs Manual</cite>).
-</p>
-</dd>
-<dt><code>link</code></dt>
-<dt><code>link-visited</code></dt>
-<dd><p>For clickable text buttons that send the user to a different
-buffer or location.
-</p>
-</dd>
-<dt><code>highlight</code></dt>
-<dd><p>For stretches of text that should temporarily stand out.  For example,
-it is commonly assigned to the <code>mouse-face</code> property for cursor
-highlighting (see <a href="Special-Properties.html#Special-Properties">Special Properties</a>).
-</p>
-</dd>
-<dt><code>match</code></dt>
-<dt><code>isearch</code></dt>
-<dt><code>lazy-highlight</code></dt>
-<dd><p>For text matching (respectively) permanent search matches, interactive
-search matches, and lazy highlighting other matches than the current
-interactive one.
-</p>
-</dd>
-<dt><code>error</code></dt>
-<dt><code>warning</code></dt>
-<dt><code>success</code></dt>
-<dd><p>For text concerning errors, warnings, or successes.  For example,
-these are used for messages in <samp>*Compilation*</samp> buffers.
-</p></dd>
-</dl>
+  <p>If your Emacs Lisp program needs to assign some faces to text,
+  it is often a good idea to use certain existing faces or inherit
+  from them, rather than defining entirely new faces. This way, if
+  other users have customized the basic faces to give Emacs a
+  certain look, your program will fit in without additional
+  customization.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Font-Selection.html#Font-Selection" accesskey="n" rel="next">Font Selection</a>, Previous: <a href="Auto-Faces.html#Auto-Faces" accesskey="p" rel="prev">Auto Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Some of the basic faces defined in Emacs are listed below. In
+  addition to these, you might want to make use of the Font Lock
+  faces for syntactic highlighting, if highlighting is not already
+  handled by Font Lock mode, or if some Font Lock faces are not in
+  use. See <a href=
+  "Faces-for-Font-Lock.html#Faces-for-Font-Lock">Faces for Font
+  Lock</a>.</p>
 
+  <dl compact="compact">
+    <dt><code>default</code></dt>
 
+    <dd>
+      <p>The default face, whose attributes are all specified. All
+      other faces implicitly inherit from it: any unspecified
+      attribute defaults to the attribute on this face (see
+      <a href="Face-Attributes.html#Face-Attributes">Face
+      Attributes</a>).</p>
+    </dd>
 
+    <dt><code>bold</code></dt>
+
+    <dt><code>italic</code></dt>
+
+    <dt><code>bold-italic</code></dt>
+
+    <dt><code>underline</code></dt>
+
+    <dt><code>fixed-pitch</code></dt>
+
+    <dt><code>variable-pitch</code></dt>
+
+    <dd>
+      <p>These have the attributes indicated by their names (e.g.,
+      <code>bold</code> has a bold <code>:weight</code> attribute),
+      with all other attributes unspecified (and so given by
+      <code>default</code>).</p>
+    </dd>
+
+    <dt><code>shadow</code></dt>
+
+    <dd>
+      <p>For dimmed-out text. For example, it is used for the
+      ignored part of a filename in the minibuffer (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Minibuffer-File.html#Minibuffer-File">
+      Minibuffers for File Names</a> in <cite>The GNU Emacs
+      Manual</cite>).</p>
+    </dd>
+
+    <dt><code>link</code></dt>
+
+    <dt><code>link-visited</code></dt>
+
+    <dd>
+      <p>For clickable text buttons that send the user to a
+      different buffer or location.</p>
+    </dd>
+
+    <dt><code>highlight</code></dt>
+
+    <dd>
+      <p>For stretches of text that should temporarily stand out.
+      For example, it is commonly assigned to the
+      <code>mouse-face</code> property for cursor highlighting (see
+      <a href="Special-Properties.html#Special-Properties">Special
+      Properties</a>).</p>
+    </dd>
+
+    <dt><code>match</code></dt>
+
+    <dt><code>isearch</code></dt>
+
+    <dt><code>lazy-highlight</code></dt>
+
+    <dd>
+      <p>For text matching (respectively) permanent search matches,
+      interactive search matches, and lazy highlighting other
+      matches than the current interactive one.</p>
+    </dd>
+
+    <dt><code>error</code></dt>
+
+    <dt><code>warning</code></dt>
+
+    <dt><code>success</code></dt>
+
+    <dd>
+      <p>For text concerning errors, warnings, or successes. For
+      example, these are used for messages in
+      <samp>*Compilation*</samp> buffers.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Font-Selection.html#Font-Selection"
+    accesskey="n" rel="next">Font Selection</a>, Previous: <a href=
+    "Auto-Faces.html#Auto-Faces" accesskey="p" rel="prev">Auto
+    Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel=
+    "up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

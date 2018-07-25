@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,150 +18,202 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Storing Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Storing Variables">
-<meta name="keywords" content="GNU Emacs Calc Manual: Storing Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Store-and-Recall.html#Store-and-Recall" rel="up" title="Store and Recall">
-<link href="Recalling-Variables.html#Recalling-Variables" rel="next" title="Recalling Variables">
-<link href="Store-and-Recall.html#Store-and-Recall" rel="prev" title="Store and Recall">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Storing Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Storing Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Storing Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Store-and-Recall.html#Store-and-Recall" rel="up"
+  title="Store and Recall" />
+  <link href="Recalling-Variables.html#Recalling-Variables" rel=
+  "next" title="Recalling Variables" />
+  <link href="Store-and-Recall.html#Store-and-Recall" rel="prev"
+  title="Store and Recall" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Storing-Variables"></a>
-<div class="header">
-<p>
-Next: <a href="Recalling-Variables.html#Recalling-Variables" accesskey="n" rel="next">Recalling Variables</a>, Previous: <a href="Store-and-Recall.html#Store-and-Recall" accesskey="p" rel="prev">Store and Recall</a>, Up: <a href="Store-and-Recall.html#Store-and-Recall" accesskey="u" rel="up">Store and Recall</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Storing-Variables-1"></a>
-<h3 class="section">12.1 Storing Variables</h3>
+<body lang="en" xml:lang="en">
+  <a name="Storing-Variables" id="Storing-Variables"></a>
 
-<a name="index-s-s"></a>
-<a name="index-calc_002dstore"></a>
-<a name="index-Storing-variables"></a>
-<a name="index-Quick-variables"></a>
-<a name="index-q0"></a>
-<a name="index-q9"></a>
-<p>The <kbd>s s</kbd> (<code>calc-store</code>) command stores the value at the top of
-the stack into a specified variable.  It prompts you to enter the
-name of the variable.  If you press a single digit, the value is stored
-immediately in one of the &ldquo;quick&rdquo; variables <code>q0</code> through
-<code>q9</code>.  Or you can enter any variable name.
-</p>
-<a name="index-s-t"></a>
-<a name="index-calc_002dstore_002dinto"></a>
-<p>The <kbd>s s</kbd> command leaves the stored value on the stack.  There is
-also an <kbd>s t</kbd> (<code>calc-store-into</code>) command, which removes a
-value from the stack and stores it in a variable.
-</p>
-<p>If the top of stack value is an equation &lsquo;<samp>a = 7</samp>&rsquo; or assignment
-&lsquo;<samp>a := 7</samp>&rsquo; with a variable on the lefthand side, then Calc will
-assign that variable with that value by default, i.e., if you type
-<kbd>s s <span class="key">RET</span></kbd> or <kbd>s t <span class="key">RET</span></kbd>.  In this example, the
-value 7 would be stored in the variable &lsquo;<samp>a</samp>&rsquo;.  (If you do type
-a variable name at the prompt, the top-of-stack value is stored in
-its entirety, even if it is an equation:  &lsquo;<samp>s s b <span class="key">RET</span></samp>&rsquo;
-with &lsquo;<samp>a := 7</samp>&rsquo; on the stack stores &lsquo;<samp>a := 7</samp>&rsquo; in <code>b</code>.)
-</p>
-<p>In fact, the top of stack value can be a vector of equations or
-assignments with different variables on their lefthand sides; the
-default will be to store all the variables with their corresponding
-righthand sides simultaneously.
-</p>
-<p>It is also possible to type an equation or assignment directly at
-the prompt for the <kbd>s s</kbd> or <kbd>s t</kbd> command:  <kbd>s s foo = 7</kbd>.
-In this case the expression to the right of the <kbd>=</kbd> or <kbd>:=</kbd>
-symbol is evaluated as if by the <kbd>=</kbd> command, and that value is
-stored in the variable.  No value is taken from the stack; <kbd>s s</kbd>
-and <kbd>s t</kbd> are equivalent when used in this way.
-</p>
-<a name="index-s-0_002d9"></a>
-<a name="index-t-0_002d9"></a>
-<p>The prefix keys <kbd>s</kbd> and <kbd>t</kbd> may be followed immediately by a
-digit; <kbd>s 9</kbd> is equivalent to <kbd>s s 9</kbd>, and <kbd>t 9</kbd> is
-equivalent to <kbd>s t 9</kbd>.  (The <kbd>t</kbd> prefix is otherwise used
-for trail and time/date commands.)
-</p>
-<a name="index-s-_002b"></a>
-<a name="index-s-_002d"></a>
-<a name="index-s-_002a"></a>
-<a name="index-s-_002f"></a>
-<a name="index-s-_005e"></a>
-<a name="index-s-_007c"></a>
-<a name="index-s-n"></a>
-<a name="index-s-_0026"></a>
-<a name="index-s-_005b"></a>
-<a name="index-s-_005d"></a>
-<a name="index-calc_002dstore_002dplus"></a>
-<a name="index-calc_002dstore_002dminus"></a>
-<a name="index-calc_002dstore_002dtimes"></a>
-<a name="index-calc_002dstore_002ddiv"></a>
-<a name="index-calc_002dstore_002dpower"></a>
-<a name="index-calc_002dstore_002dconcat"></a>
-<a name="index-calc_002dstore_002dneg"></a>
-<a name="index-calc_002dstore_002dinv"></a>
-<a name="index-calc_002dstore_002ddecr"></a>
-<a name="index-calc_002dstore_002dincr"></a>
-<p>There are also several &ldquo;arithmetic store&rdquo; commands.  For example,
-<kbd>s +</kbd> removes a value from the stack and adds it to the specified
-variable.  The other arithmetic stores are <kbd>s -</kbd>, <kbd>s *</kbd>, <kbd>s /</kbd>,
-<kbd>s ^</kbd>, and <kbd>s&nbsp;|</kbd><!-- /@w --> (vector concatenation), plus <kbd>s n</kbd> and
-<kbd>s &amp;</kbd> which negate or invert the value in a variable, and <kbd>s&nbsp;[</kbd><!-- /@w -->
-and <kbd>s ]</kbd> which decrease or increase a variable by one.
-</p>
-<p>All the arithmetic stores accept the Inverse prefix to reverse the
-order of the operands.  If &lsquo;<samp>v</samp>&rsquo; represents the contents of the
-variable, and &lsquo;<samp>a</samp>&rsquo; is the value drawn from the stack, then regular
-<kbd>s&nbsp;<span class="nolinebreak">-</span></kbd><!-- /@w --> assigns
-&lsquo;<samp>v := v - a</samp>&rsquo;,
-but <kbd>I s -</kbd> assigns
-&lsquo;<samp>v := a - v</samp>&rsquo;.
-While <kbd>I s *</kbd> might seem pointless, it is
-useful if matrix multiplication is involved.  Actually, all the
-arithmetic stores use formulas designed to behave usefully both
-forwards and backwards:
-</p>
-<div class="example">
-<pre class="example">s +        v := v + a          v := a + v
+  <div class="header">
+    <p>Next: <a href="Recalling-Variables.html#Recalling-Variables"
+    accesskey="n" rel="next">Recalling Variables</a>, Previous:
+    <a href="Store-and-Recall.html#Store-and-Recall" accesskey="p"
+    rel="prev">Store and Recall</a>, Up: <a href=
+    "Store-and-Recall.html#Store-and-Recall" accesskey="u" rel=
+    "up">Store and Recall</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Storing-Variables-1" id="Storing-Variables-1"></a>
+
+  <h3 class="section">12.1 Storing Variables</h3><a name=
+  "index-s-s" id="index-s-s"></a> <a name="index-calc_002dstore"
+  id="index-calc_002dstore"></a> <a name="index-Storing-variables"
+  id="index-Storing-variables"></a> <a name="index-Quick-variables"
+  id="index-Quick-variables"></a> <a name="index-q0" id=
+  "index-q0"></a> <a name="index-q9" id="index-q9"></a>
+
+  <p>The <kbd>s s</kbd> (<code>calc-store</code>) command stores
+  the value at the top of the stack into a specified variable. It
+  prompts you to enter the name of the variable. If you press a
+  single digit, the value is stored immediately in one of the
+  &ldquo;quick&rdquo; variables <code>q0</code> through
+  <code>q9</code>. Or you can enter any variable name.</p><a name=
+  "index-s-t" id="index-s-t"></a> <a name=
+  "index-calc_002dstore_002dinto" id=
+  "index-calc_002dstore_002dinto"></a>
+
+  <p>The <kbd>s s</kbd> command leaves the stored value on the
+  stack. There is also an <kbd>s t</kbd>
+  (<code>calc-store-into</code>) command, which removes a value
+  from the stack and stores it in a variable.</p>
+
+  <p>If the top of stack value is an equation &lsquo;<samp>a =
+  7</samp>&rsquo; or assignment &lsquo;<samp>a := 7</samp>&rsquo;
+  with a variable on the lefthand side, then Calc will assign that
+  variable with that value by default, i.e., if you type <kbd>s s
+  <span class="key">RET</span></kbd> or <kbd>s t <span class=
+  "key">RET</span></kbd>. In this example, the value 7 would be
+  stored in the variable &lsquo;<samp>a</samp>&rsquo;. (If you do
+  type a variable name at the prompt, the top-of-stack value is
+  stored in its entirety, even if it is an equation: &lsquo;<samp>s
+  s b <span class="key">RET</span></samp>&rsquo; with
+  &lsquo;<samp>a := 7</samp>&rsquo; on the stack stores
+  &lsquo;<samp>a := 7</samp>&rsquo; in <code>b</code>.)</p>
+
+  <p>In fact, the top of stack value can be a vector of equations
+  or assignments with different variables on their lefthand sides;
+  the default will be to store all the variables with their
+  corresponding righthand sides simultaneously.</p>
+
+  <p>It is also possible to type an equation or assignment directly
+  at the prompt for the <kbd>s s</kbd> or <kbd>s t</kbd> command:
+  <kbd>s s foo = 7</kbd>. In this case the expression to the right
+  of the <kbd>=</kbd> or <kbd>:=</kbd> symbol is evaluated as if by
+  the <kbd>=</kbd> command, and that value is stored in the
+  variable. No value is taken from the stack; <kbd>s s</kbd> and
+  <kbd>s t</kbd> are equivalent when used in this way.</p><a name=
+  "index-s-0_002d9" id="index-s-0_002d9"></a> <a name=
+  "index-t-0_002d9" id="index-t-0_002d9"></a>
+
+  <p>The prefix keys <kbd>s</kbd> and <kbd>t</kbd> may be followed
+  immediately by a digit; <kbd>s 9</kbd> is equivalent to <kbd>s s
+  9</kbd>, and <kbd>t 9</kbd> is equivalent to <kbd>s t 9</kbd>.
+  (The <kbd>t</kbd> prefix is otherwise used for trail and
+  time/date commands.)</p><a name="index-s-_002b" id=
+  "index-s-_002b"></a> <a name="index-s-_002d" id=
+  "index-s-_002d"></a> <a name="index-s-_002a" id=
+  "index-s-_002a"></a> <a name="index-s-_002f" id=
+  "index-s-_002f"></a> <a name="index-s-_005e" id=
+  "index-s-_005e"></a> <a name="index-s-_007c" id=
+  "index-s-_007c"></a> <a name="index-s-n" id="index-s-n"></a>
+  <a name="index-s-_0026" id="index-s-_0026"></a> <a name=
+  "index-s-_005b" id="index-s-_005b"></a> <a name="index-s-_005d"
+  id="index-s-_005d"></a> <a name="index-calc_002dstore_002dplus"
+  id="index-calc_002dstore_002dplus"></a> <a name=
+  "index-calc_002dstore_002dminus" id=
+  "index-calc_002dstore_002dminus"></a> <a name=
+  "index-calc_002dstore_002dtimes" id=
+  "index-calc_002dstore_002dtimes"></a> <a name=
+  "index-calc_002dstore_002ddiv" id=
+  "index-calc_002dstore_002ddiv"></a> <a name=
+  "index-calc_002dstore_002dpower" id=
+  "index-calc_002dstore_002dpower"></a> <a name=
+  "index-calc_002dstore_002dconcat" id=
+  "index-calc_002dstore_002dconcat"></a> <a name=
+  "index-calc_002dstore_002dneg" id=
+  "index-calc_002dstore_002dneg"></a> <a name=
+  "index-calc_002dstore_002dinv" id=
+  "index-calc_002dstore_002dinv"></a> <a name=
+  "index-calc_002dstore_002ddecr" id=
+  "index-calc_002dstore_002ddecr"></a> <a name=
+  "index-calc_002dstore_002dincr" id=
+  "index-calc_002dstore_002dincr"></a>
+
+  <p>There are also several &ldquo;arithmetic store&rdquo;
+  commands. For example, <kbd>s +</kbd> removes a value from the
+  stack and adds it to the specified variable. The other arithmetic
+  stores are <kbd>s -</kbd>, <kbd>s *</kbd>, <kbd>s /</kbd>, <kbd>s
+  ^</kbd>, and <kbd>s&nbsp;|</kbd><!-- /@w --> (vector
+  concatenation), plus <kbd>s n</kbd> and <kbd>s &amp;</kbd> which
+  negate or invert the value in a variable, and <kbd>s&nbsp;[</kbd>
+  <!-- /@w -->
+  and <kbd>s ]</kbd> which decrease or increase a variable by
+  one.</p>
+
+  <p>All the arithmetic stores accept the Inverse prefix to reverse
+  the order of the operands. If &lsquo;<samp>v</samp>&rsquo;
+  represents the contents of the variable, and
+  &lsquo;<samp>a</samp>&rsquo; is the value drawn from the stack,
+  then regular <kbd>s&nbsp;<span class="nolinebreak">-</span></kbd>
+  <!-- /@w --> assigns &lsquo;<samp>v := v - a</samp>&rsquo;, but
+  <kbd>I s -</kbd> assigns &lsquo;<samp>v := a - v</samp>&rsquo;.
+  While <kbd>I s *</kbd> might seem pointless, it is useful if
+  matrix multiplication is involved. Actually, all the arithmetic
+  stores use formulas designed to behave usefully both forwards and
+  backwards:</p>
+
+  <div class="example">
+    <pre class="example">
+s +        v := v + a          v := a + v
 s -        v := v - a          v := a - v
 s *        v := v * a          v := a * v
 s /        v := v / a          v := a / v
@@ -169,113 +223,142 @@ s n        v := v / (-1)       v := (-1) / v
 s &amp;        v := v ^ (-1)       v := (-1) ^ v
 s [        v := v - 1          v := 1 - v
 s ]        v := v - (-1)       v := (-1) - v
-</pre></div>
+</pre>
+  </div>
 
-<p>In the last four cases, a numeric prefix argument will be used in
-place of the number one.  (For example, <kbd>M-2 s ]</kbd> increases
-a variable by 2, and <kbd>M-2 I s ]</kbd> replaces a variable by
-minus-two minus the variable.
-</p>
-<p>The first six arithmetic stores can also be typed <kbd>s t +</kbd>, <kbd>s t -</kbd>,
-etc.  The commands <kbd>s s +</kbd>, <kbd>s s -</kbd>, and so on are analogous
-arithmetic stores that don&rsquo;t remove the value &lsquo;<samp>a</samp>&rsquo; from the stack.
-</p>
-<p>All arithmetic stores report the new value of the variable in the
-Trail for your information.  They signal an error if the variable
-previously had no stored value.  If default simplifications have been
-turned off, the arithmetic stores temporarily turn them on for numeric
-arguments only (i.e., they temporarily do an <kbd>m N</kbd> command).
-See <a href="Simplification-Modes.html#Simplification-Modes">Simplification Modes</a>.  Large vectors put in the trail by
-these commands always use abbreviated (<kbd>t .</kbd>) mode.
-</p>
-<a name="index-s-m"></a>
-<a name="index-calc_002dstore_002dmap"></a>
-<p>The <kbd>s m</kbd> command is a general way to adjust a variable&rsquo;s value
-using any Calc function.  It is a &ldquo;mapping&rdquo; command analogous to
-<kbd>V M</kbd>, <kbd>V R</kbd>, etc.  See <a href="Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and Mapping</a>, to see
-how to specify a function for a mapping command.  Basically,
-all you do is type the Calc command key that would invoke that
-function normally.  For example, <kbd>s m n</kbd> applies the <kbd>n</kbd>
-key to negate the contents of the variable, so <kbd>s m n</kbd> is
-equivalent to <kbd>s n</kbd>.  Also, <kbd>s m Q</kbd> takes the square root
-of the value stored in a variable, <kbd>s m v v</kbd> uses <kbd>v v</kbd> to
-reverse the vector stored in the variable, and <kbd>s m H I S</kbd>
-takes the hyperbolic arcsine of the variable contents.
-</p>
-<p>If the mapping function takes two or more arguments, the additional
-arguments are taken from the stack; the old value of the variable
-is provided as the first argument.  Thus <kbd>s m -</kbd> with &lsquo;<samp>a</samp>&rsquo;
-on the stack computes &lsquo;<samp>v - a</samp>&rsquo;, just like <kbd>s -</kbd>.  With the
-Inverse prefix, the variable&rsquo;s original value becomes the <em>last</em>
-argument instead of the first.  Thus <kbd>I s m -</kbd> is also
-equivalent to <kbd>I s -</kbd>.
-</p>
-<a name="index-s-x"></a>
-<a name="index-calc_002dstore_002dexchange"></a>
-<p>The <kbd>s x</kbd> (<code>calc-store-exchange</code>) command exchanges the value
-of a variable with the value on the top of the stack.  Naturally, the
-variable must already have a stored value for this to work.
-</p>
-<p>You can type an equation or assignment at the <kbd>s x</kbd> prompt.  The
-command <kbd>s x a=6</kbd> takes no values from the stack; instead, it
-pushes the old value of &lsquo;<samp>a</samp>&rsquo; on the stack and stores &lsquo;<samp>a = 6</samp>&rsquo;.
-</p>
-<a name="index-s-u"></a>
-<a name="index-calc_002dunstore"></a>
-<a name="index-Void-variables"></a>
-<a name="index-Un_002dstoring-variables"></a>
-<p>Until you store something in them, most variables are &ldquo;void,&rdquo; that is,
-they contain no value at all.  If they appear in an algebraic formula
-they will be left alone even if you press <kbd>=</kbd> (<code>calc-evaluate</code>).
-The <kbd>s u</kbd> (<code>calc-unstore</code>) command returns a variable to the
-void state.
-</p>
-<a name="index-s-c"></a>
-<a name="index-calc_002dcopy_002dvariable"></a>
-<p>The <kbd>s c</kbd> (<code>calc-copy-variable</code>) command copies the stored
-value of one variable to another.  One way it differs from a simple
-<kbd>s r</kbd> followed by an <kbd>s t</kbd> (aside from saving keystrokes) is
-that the value never goes on the stack and thus is never rounded,
-evaluated, or simplified in any way; it is not even rounded down to the
-current precision.
-</p>
-<p>The only variables with predefined values are the &ldquo;special constants&rdquo;
-<code>pi</code>, <code>e</code>, <code>i</code>, <code>phi</code>, and <code>gamma</code>.  You are free
-to unstore these variables or to store new values into them if you like,
-although some of the algebraic-manipulation functions may assume these
-variables represent their standard values.  Calc displays a warning if
-you change the value of one of these variables, or of one of the other
-special variables <code>inf</code>, <code>uinf</code>, and <code>nan</code> (which are
-normally void).
-</p>
-<p>Note that <code>pi</code> doesn&rsquo;t actually have 3.14159265359 stored in it,
-but rather a special magic value that evaluates to &lsquo;<samp>pi</samp>&rsquo; at the current
-precision.  Likewise <code>e</code>, <code>i</code>, and <code>phi</code> evaluate
-according to the current precision or polar mode.  If you recall a value
-from <code>pi</code> and store it back, this magic property will be lost.  The
-magic property is preserved, however, when a variable is copied with
-<kbd>s c</kbd>.
-</p>
-<a name="index-s-k"></a>
-<a name="index-calc_002dcopy_002dspecial_002dconstant"></a>
-<p>If one of the &ldquo;special constants&rdquo; is redefined (or undefined) so that
-it no longer has its magic property, the property can be restored with
-<kbd>s k</kbd> (<code>calc-copy-special-constant</code>).  This command will prompt
-for a special constant and a variable to store it in, and so a special
-constant can be stored in any variable.  Here, the special constant that
-you enter doesn&rsquo;t depend on the value of the corresponding variable;
-<code>pi</code> will represent 3.14159&hellip; regardless of what is currently
-stored in the Calc variable <code>pi</code>.  If one of the other special
-variables, <code>inf</code>, <code>uinf</code> or <code>nan</code>, is given a value, its
-original behavior can be restored by voiding it with <kbd>s u</kbd>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Recalling-Variables.html#Recalling-Variables" accesskey="n" rel="next">Recalling Variables</a>, Previous: <a href="Store-and-Recall.html#Store-and-Recall" accesskey="p" rel="prev">Store and Recall</a>, Up: <a href="Store-and-Recall.html#Store-and-Recall" accesskey="u" rel="up">Store and Recall</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In the last four cases, a numeric prefix argument will be used
+  in place of the number one. (For example, <kbd>M-2 s ]</kbd>
+  increases a variable by 2, and <kbd>M-2 I s ]</kbd> replaces a
+  variable by minus-two minus the variable.</p>
 
+  <p>The first six arithmetic stores can also be typed <kbd>s t
+  +</kbd>, <kbd>s t -</kbd>, etc. The commands <kbd>s s +</kbd>,
+  <kbd>s s -</kbd>, and so on are analogous arithmetic stores that
+  don&rsquo;t remove the value &lsquo;<samp>a</samp>&rsquo; from
+  the stack.</p>
 
+  <p>All arithmetic stores report the new value of the variable in
+  the Trail for your information. They signal an error if the
+  variable previously had no stored value. If default
+  simplifications have been turned off, the arithmetic stores
+  temporarily turn them on for numeric arguments only (i.e., they
+  temporarily do an <kbd>m N</kbd> command). See <a href=
+  "Simplification-Modes.html#Simplification-Modes">Simplification
+  Modes</a>. Large vectors put in the trail by these commands
+  always use abbreviated (<kbd>t .</kbd>) mode.</p><a name=
+  "index-s-m" id="index-s-m"></a> <a name=
+  "index-calc_002dstore_002dmap" id=
+  "index-calc_002dstore_002dmap"></a>
 
+  <p>The <kbd>s m</kbd> command is a general way to adjust a
+  variable&rsquo;s value using any Calc function. It is a
+  &ldquo;mapping&rdquo; command analogous to <kbd>V M</kbd>, <kbd>V
+  R</kbd>, etc. See <a href=
+  "Reducing-and-Mapping.html#Reducing-and-Mapping">Reducing and
+  Mapping</a>, to see how to specify a function for a mapping
+  command. Basically, all you do is type the Calc command key that
+  would invoke that function normally. For example, <kbd>s m
+  n</kbd> applies the <kbd>n</kbd> key to negate the contents of
+  the variable, so <kbd>s m n</kbd> is equivalent to <kbd>s
+  n</kbd>. Also, <kbd>s m Q</kbd> takes the square root of the
+  value stored in a variable, <kbd>s m v v</kbd> uses <kbd>v
+  v</kbd> to reverse the vector stored in the variable, and <kbd>s
+  m H I S</kbd> takes the hyperbolic arcsine of the variable
+  contents.</p>
+
+  <p>If the mapping function takes two or more arguments, the
+  additional arguments are taken from the stack; the old value of
+  the variable is provided as the first argument. Thus <kbd>s m
+  -</kbd> with &lsquo;<samp>a</samp>&rsquo; on the stack computes
+  &lsquo;<samp>v - a</samp>&rsquo;, just like <kbd>s -</kbd>. With
+  the Inverse prefix, the variable&rsquo;s original value becomes
+  the <em>last</em> argument instead of the first. Thus <kbd>I s m
+  -</kbd> is also equivalent to <kbd>I s -</kbd>.</p><a name=
+  "index-s-x" id="index-s-x"></a> <a name=
+  "index-calc_002dstore_002dexchange" id=
+  "index-calc_002dstore_002dexchange"></a>
+
+  <p>The <kbd>s x</kbd> (<code>calc-store-exchange</code>) command
+  exchanges the value of a variable with the value on the top of
+  the stack. Naturally, the variable must already have a stored
+  value for this to work.</p>
+
+  <p>You can type an equation or assignment at the <kbd>s x</kbd>
+  prompt. The command <kbd>s x a=6</kbd> takes no values from the
+  stack; instead, it pushes the old value of
+  &lsquo;<samp>a</samp>&rsquo; on the stack and stores
+  &lsquo;<samp>a = 6</samp>&rsquo;.</p><a name="index-s-u" id=
+  "index-s-u"></a> <a name="index-calc_002dunstore" id=
+  "index-calc_002dunstore"></a> <a name="index-Void-variables" id=
+  "index-Void-variables"></a> <a name=
+  "index-Un_002dstoring-variables" id=
+  "index-Un_002dstoring-variables"></a>
+
+  <p>Until you store something in them, most variables are
+  &ldquo;void,&rdquo; that is, they contain no value at all. If
+  they appear in an algebraic formula they will be left alone even
+  if you press <kbd>=</kbd> (<code>calc-evaluate</code>). The
+  <kbd>s u</kbd> (<code>calc-unstore</code>) command returns a
+  variable to the void state.</p><a name="index-s-c" id=
+  "index-s-c"></a> <a name="index-calc_002dcopy_002dvariable" id=
+  "index-calc_002dcopy_002dvariable"></a>
+
+  <p>The <kbd>s c</kbd> (<code>calc-copy-variable</code>) command
+  copies the stored value of one variable to another. One way it
+  differs from a simple <kbd>s r</kbd> followed by an <kbd>s
+  t</kbd> (aside from saving keystrokes) is that the value never
+  goes on the stack and thus is never rounded, evaluated, or
+  simplified in any way; it is not even rounded down to the current
+  precision.</p>
+
+  <p>The only variables with predefined values are the
+  &ldquo;special constants&rdquo; <code>pi</code>, <code>e</code>,
+  <code>i</code>, <code>phi</code>, and <code>gamma</code>. You are
+  free to unstore these variables or to store new values into them
+  if you like, although some of the algebraic-manipulation
+  functions may assume these variables represent their standard
+  values. Calc displays a warning if you change the value of one of
+  these variables, or of one of the other special variables
+  <code>inf</code>, <code>uinf</code>, and <code>nan</code> (which
+  are normally void).</p>
+
+  <p>Note that <code>pi</code> doesn&rsquo;t actually have
+  3.14159265359 stored in it, but rather a special magic value that
+  evaluates to &lsquo;<samp>pi</samp>&rsquo; at the current
+  precision. Likewise <code>e</code>, <code>i</code>, and
+  <code>phi</code> evaluate according to the current precision or
+  polar mode. If you recall a value from <code>pi</code> and store
+  it back, this magic property will be lost. The magic property is
+  preserved, however, when a variable is copied with <kbd>s
+  c</kbd>.</p><a name="index-s-k" id="index-s-k"></a> <a name=
+  "index-calc_002dcopy_002dspecial_002dconstant" id=
+  "index-calc_002dcopy_002dspecial_002dconstant"></a>
+
+  <p>If one of the &ldquo;special constants&rdquo; is redefined (or
+  undefined) so that it no longer has its magic property, the
+  property can be restored with <kbd>s k</kbd>
+  (<code>calc-copy-special-constant</code>). This command will
+  prompt for a special constant and a variable to store it in, and
+  so a special constant can be stored in any variable. Here, the
+  special constant that you enter doesn&rsquo;t depend on the value
+  of the corresponding variable; <code>pi</code> will represent
+  3.14159&hellip; regardless of what is currently stored in the
+  Calc variable <code>pi</code>. If one of the other special
+  variables, <code>inf</code>, <code>uinf</code> or
+  <code>nan</code>, is given a value, its original behavior can be
+  restored by voiding it with <kbd>s u</kbd>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Recalling-Variables.html#Recalling-Variables"
+    accesskey="n" rel="next">Recalling Variables</a>, Previous:
+    <a href="Store-and-Recall.html#Store-and-Recall" accesskey="p"
+    rel="prev">Store and Recall</a>, Up: <a href=
+    "Store-and-Recall.html#Store-and-Recall" accesskey="u" rel=
+    "up">Store and Recall</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,274 +14,445 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Summary Mail Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Summary Mail Commands">
-<meta name="keywords" content="Gnus Manual: Summary Mail Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Reply-Followup-and-Post.html#Reply-Followup-and-Post" rel="up" title="Reply Followup and Post">
-<link href="Summary-Post-Commands.html#Summary-Post-Commands" rel="next" title="Summary Post Commands">
-<link href="Reply-Followup-and-Post.html#Reply-Followup-and-Post" rel="prev" title="Reply Followup and Post">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Summary Mail Commands</title>
+  <meta name="description" content=
+  "Gnus Manual: Summary Mail Commands" />
+  <meta name="keywords" content=
+  "Gnus Manual: Summary Mail Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Reply-Followup-and-Post.html#Reply-Followup-and-Post"
+  rel="up" title="Reply Followup and Post" />
+  <link href="Summary-Post-Commands.html#Summary-Post-Commands"
+  rel="next" title="Summary Post Commands" />
+  <link href="Reply-Followup-and-Post.html#Reply-Followup-and-Post"
+  rel="prev" title="Reply Followup and Post" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Summary-Mail-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Summary-Post-Commands.html#Summary-Post-Commands" accesskey="n" rel="next">Summary Post Commands</a>, Up: <a href="Reply-Followup-and-Post.html#Reply-Followup-and-Post" accesskey="u" rel="up">Reply Followup and Post</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Summary-Mail-Commands-1"></a>
-<h4 class="subsection">3.5.1 Summary Mail Commands</h4>
-<a name="index-mail"></a>
-<a name="index-composing-mail"></a>
+<body lang="en" xml:lang="en">
+  <a name="Summary-Mail-Commands" id="Summary-Mail-Commands"></a>
 
-<p>Commands for composing a mail message:
-</p>
-<dl compact="compact">
-<dt><kbd>S r</kbd></dt>
-<dt><kbd>r</kbd></dt>
-<dd><a name="index-S-r-_0028Summary_0029"></a>
-<a name="index-r-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dreply"></a>
-<p>Mail a reply to the author of the current article
-(<code>gnus-summary-reply</code>).
-</p>
-</dd>
-<dt><kbd>S R</kbd></dt>
-<dt><kbd>R</kbd></dt>
-<dd><a name="index-R-_0028Summary_0029"></a>
-<a name="index-S-R-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dreply_002dwith_002doriginal"></a>
-<p>Mail a reply to the author of the current article and include the
-original message (<code>gnus-summary-reply-with-original</code>).  This
-command uses the process/prefix convention.
-</p>
-</dd>
-<dt><kbd>S w</kbd></dt>
-<dd><a name="index-S-w-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dwide_002dreply"></a>
-<p>Mail a wide reply to the author of the current article
-(<code>gnus-summary-wide-reply</code>).  A <em>wide reply</em> is a reply that
-goes out to all people listed in the <code>To</code>, <code>From</code> (or
-<code>Reply-to</code>) and <code>Cc</code> headers.  If <code>Mail-Followup-To</code> is
-present, that&rsquo;s used instead.
-</p>
-</dd>
-<dt><kbd>S W</kbd></dt>
-<dd><a name="index-S-W-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dwide_002dreply_002dwith_002doriginal"></a>
-<p>Mail a wide reply to the current article and include the original
-message (<code>gnus-summary-wide-reply-with-original</code>).  This command uses
-the process/prefix convention, but only uses the headers from the
-first article to determine the recipients.
-</p>
-</dd>
-<dt><kbd>S L</kbd></dt>
-<dd><a name="index-S-L-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dreply_002dto_002dlist_002dwith_002doriginal"></a>
-<p>When replying to a message from a mailing list, send a reply to that
-message to the mailing list, and include the original message
-(<code>gnus-summary-reply-to-list-with-original</code>).
-</p>
-</dd>
-<dt><kbd>S v</kbd></dt>
-<dd><a name="index-S-v-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dvery_002dwide_002dreply"></a>
-<p>Mail a very wide reply to the author of the current article
-(<code>gnus-summary-wide-reply</code>).  A <em>very wide reply</em> is a reply
-that goes out to all people listed in the <code>To</code>, <code>From</code> (or
-<code>Reply-to</code>) and <code>Cc</code> headers in all the process/prefixed
-articles.  This command uses the process/prefix convention.
-</p>
-</dd>
-<dt><kbd>S V</kbd></dt>
-<dd><a name="index-S-V-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dvery_002dwide_002dreply_002dwith_002doriginal"></a>
-<p>Mail a very wide reply to the author of the current article and include the
-original message (<code>gnus-summary-very-wide-reply-with-original</code>).  This
-command uses the process/prefix convention.
-</p>
-</dd>
-<dt><kbd>S B r</kbd></dt>
-<dd><a name="index-S-B-r-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dreply_002dbroken_002dreply_002dto"></a>
-<p>Mail a reply to the author of the current article but ignore the
-<code>Reply-To</code> field (<code>gnus-summary-reply-broken-reply-to</code>).
-If you need this because a mailing list incorrectly sets a
-<code>Reply-To</code> header pointing to the list, you probably want to set
-the <code>broken-reply-to</code> group parameter instead, so things will work
-correctly.  See <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>.
-</p>
-</dd>
-<dt><kbd>S B R</kbd></dt>
-<dd><a name="index-S-B-R-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dreply_002dbroken_002dreply_002dto_002dwith_002doriginal"></a>
-<p>Mail a reply to the author of the current article and include the
-original message but ignore the <code>Reply-To</code> field
-(<code>gnus-summary-reply-broken-reply-to-with-original</code>).
-</p>
-</dd>
-<dt><kbd>S o m</kbd></dt>
-<dt><kbd>C-c C-f</kbd></dt>
-<dd><a name="index-S-o-m-_0028Summary_0029"></a>
-<a name="index-C_002dc-C_002df-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dmail_002dforward"></a>
-<p>Forward the current article to some other person
-(<code>gnus-summary-mail-forward</code>).  If no prefix is given, the message
-is forwarded according to the value of (<code>message-forward-as-mime</code>)
-and (<code>message-forward-show-mml</code>); if the prefix is 1, decode the
-message and forward directly inline; if the prefix is 2, forward message
-as an rfc822 <acronym>MIME</acronym> section; if the prefix is 3, decode message and
-forward as an rfc822 <acronym>MIME</acronym> section; if the prefix is 4, forward message
-directly inline; otherwise, the message is forwarded as no prefix given
-but use the flipped value of (<code>message-forward-as-mime</code>).  By
-default, the message is decoded and forwarded as an rfc822 <acronym>MIME</acronym>
-section.
-</p>
-</dd>
-<dt><kbd>S m</kbd></dt>
-<dt><kbd>m</kbd></dt>
-<dd><a name="index-m-_0028Summary_0029"></a>
-<a name="index-S-m-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dmail_002dother_002dwindow"></a>
-<p>Prepare a mail (<code>gnus-summary-mail-other-window</code>).  By default, use
-the posting style of the current group.  If given a prefix, disable that.
-If the prefix is 1, prompt for a group name to find the posting style.
-</p>
-</dd>
-<dt><kbd>S i</kbd></dt>
-<dd><a name="index-S-i-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dnews_002dother_002dwindow"></a>
-<p>Prepare a news (<code>gnus-summary-news-other-window</code>).  By default,
-post to the current group.  If given a prefix, disable that.  If the
-prefix is 1, prompt for a group to post to.
-</p>
-<p>This function actually prepares a news even when using mail groups.
-This is useful for &ldquo;posting&rdquo; messages to mail groups without actually
-sending them over the network: they&rsquo;re just saved directly to the group
-in question.  The corresponding back end must have a request-post method
-for this to work though.
-</p>
-</dd>
-<dt><kbd>S D b</kbd></dt>
-<dd><a name="index-S-D-b-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dresend_002dbounced_002dmail"></a>
-<a name="index-bouncing-mail"></a>
-<p>If you have sent a mail, but the mail was bounced back to you for some
-reason (wrong address, transient failure), you can use this command to
-resend that bounced mail (<code>gnus-summary-resend-bounced-mail</code>).  You
-will be popped into a mail buffer where you can edit the headers before
-sending the mail off again.  If you give a prefix to this command, and
-the bounced mail is a reply to some other mail, Gnus will try to fetch
-that mail and display it for easy perusal of its headers.  This might
-very well fail, though.
-</p>
-</dd>
-<dt><kbd>S D r</kbd></dt>
-<dd><a name="index-S-D-r-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dresend_002dmessage"></a>
-<p>Not to be confused with the previous command,
-<code>gnus-summary-resend-message</code> will prompt you for an address to
-send the current message off to, and then send it to that place.  The
-headers of the message won&rsquo;t be altered&mdash;but lots of headers that say
-<code>Resent-To</code>, <code>Resent-From</code> and so on will be added.  This
-means that you actually send a mail to someone that has a <code>To</code>
-header that (probably) points to yourself.  This will confuse people.
-So, natcherly you&rsquo;ll only do that if you&rsquo;re really eVIl.
-</p>
-<p>This command is mainly used if you have several accounts and want to
-ship a mail to a different account of yours.  (If you&rsquo;re both
-<code>root</code> and <code>postmaster</code> and get a mail for <code>postmaster</code>
-to the <code>root</code> account, you may want to resend it to
-<code>postmaster</code>.  Ordnung muss sein!
-</p>
-<p>This command understands the process/prefix convention
-(see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).
-</p>
-</dd>
-<dt><kbd>S D e</kbd></dt>
-<dd><a name="index-S-D-e-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dresend_002dmessage_002dedit"></a>
+  <div class="header">
+    <p>Next: <a href=
+    "Summary-Post-Commands.html#Summary-Post-Commands" accesskey=
+    "n" rel="next">Summary Post Commands</a>, Up: <a href=
+    "Reply-Followup-and-Post.html#Reply-Followup-and-Post"
+    accesskey="u" rel="up">Reply Followup and Post</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Summary-Mail-Commands-1" id=
+  "Summary-Mail-Commands-1"></a>
 
-<p>Like the previous command, but will allow you to edit the message as
-if it were a new message before resending.
-</p>
-</dd>
-<dt><kbd>S O m</kbd></dt>
-<dd><a name="index-S-O-m-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002ddigest_002dmail_002dforward"></a>
-<p>Digest the current series (see <a href="Decoding-Articles.html#Decoding-Articles">Decoding Articles</a>) and forward the
-result using mail (<code>gnus-uu-digest-mail-forward</code>).  This command
-uses the process/prefix convention (see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).
-</p>
-</dd>
-<dt><kbd>S M-c</kbd></dt>
-<dd><a name="index-S-M_002dc-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dmail_002dcrosspost_002dcomplaint"></a>
-<a name="index-crossposting"></a>
-<a name="index-excessive-crossposting"></a>
-<p>Send a complaint about excessive crossposting to the author of the
-current article (<code>gnus-summary-mail-crosspost-complaint</code>).
-</p>
-<a name="index-gnus_002dcrosspost_002dcomplaint"></a>
-<p>This command is provided as a way to fight back against the current
-crossposting pandemic that&rsquo;s sweeping Usenet.  It will compose a reply
-using the <code>gnus-crosspost-complaint</code> variable as a preamble.  This
-command understands the process/prefix convention
-(see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>) and will prompt you before sending each mail.
-</p>
-</dd>
-</dl>
+  <h4 class="subsection">3.5.1 Summary Mail Commands</h4><a name=
+  "index-mail" id="index-mail"></a> <a name="index-composing-mail"
+  id="index-composing-mail"></a>
 
-<p>Also See <a href="http://www.gnu.org/software/emacs/manual/html_node/message/Header-Commands.html#Header-Commands">Header Commands</a> in <cite>The Message
-Manual</cite>, for more information.
-</p>
+  <p>Commands for composing a mail message:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Summary-Post-Commands.html#Summary-Post-Commands" accesskey="n" rel="next">Summary Post Commands</a>, Up: <a href="Reply-Followup-and-Post.html#Reply-Followup-and-Post" accesskey="u" rel="up">Reply Followup and Post</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>S r</kbd></dt>
 
+    <dt><kbd>r</kbd></dt>
 
+    <dd>
+      <a name="index-S-r-_0028Summary_0029" id=
+      "index-S-r-_0028Summary_0029"></a> <a name=
+      "index-r-_0028Summary_0029" id=
+      "index-r-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dreply" id=
+      "index-gnus_002dsummary_002dreply"></a>
 
+      <p>Mail a reply to the author of the current article
+      (<code>gnus-summary-reply</code>).</p>
+    </dd>
+
+    <dt><kbd>S R</kbd></dt>
+
+    <dt><kbd>R</kbd></dt>
+
+    <dd>
+      <a name="index-R-_0028Summary_0029" id=
+      "index-R-_0028Summary_0029"></a> <a name=
+      "index-S-R-_0028Summary_0029" id=
+      "index-S-R-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dreply_002dwith_002doriginal" id=
+      "index-gnus_002dsummary_002dreply_002dwith_002doriginal"></a>
+
+      <p>Mail a reply to the author of the current article and
+      include the original message
+      (<code>gnus-summary-reply-with-original</code>). This command
+      uses the process/prefix convention.</p>
+    </dd>
+
+    <dt><kbd>S w</kbd></dt>
+
+    <dd>
+      <a name="index-S-w-_0028Summary_0029" id=
+      "index-S-w-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dwide_002dreply" id=
+      "index-gnus_002dsummary_002dwide_002dreply"></a>
+
+      <p>Mail a wide reply to the author of the current article
+      (<code>gnus-summary-wide-reply</code>). A <em>wide reply</em>
+      is a reply that goes out to all people listed in the
+      <code>To</code>, <code>From</code> (or <code>Reply-to</code>)
+      and <code>Cc</code> headers. If <code>Mail-Followup-To</code>
+      is present, that&rsquo;s used instead.</p>
+    </dd>
+
+    <dt><kbd>S W</kbd></dt>
+
+    <dd>
+      <a name="index-S-W-_0028Summary_0029" id=
+      "index-S-W-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dwide_002dreply_002dwith_002doriginal"
+      id=
+      "index-gnus_002dsummary_002dwide_002dreply_002dwith_002doriginal">
+      </a>
+
+      <p>Mail a wide reply to the current article and include the
+      original message
+      (<code>gnus-summary-wide-reply-with-original</code>). This
+      command uses the process/prefix convention, but only uses the
+      headers from the first article to determine the
+      recipients.</p>
+    </dd>
+
+    <dt><kbd>S L</kbd></dt>
+
+    <dd>
+      <a name="index-S-L-_0028Summary_0029" id=
+      "index-S-L-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dreply_002dto_002dlist_002dwith_002doriginal"
+      id=
+      "index-gnus_002dsummary_002dreply_002dto_002dlist_002dwith_002doriginal">
+      </a>
+
+      <p>When replying to a message from a mailing list, send a
+      reply to that message to the mailing list, and include the
+      original message
+      (<code>gnus-summary-reply-to-list-with-original</code>).</p>
+    </dd>
+
+    <dt><kbd>S v</kbd></dt>
+
+    <dd>
+      <a name="index-S-v-_0028Summary_0029" id=
+      "index-S-v-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dvery_002dwide_002dreply" id=
+      "index-gnus_002dsummary_002dvery_002dwide_002dreply"></a>
+
+      <p>Mail a very wide reply to the author of the current
+      article (<code>gnus-summary-wide-reply</code>). A <em>very
+      wide reply</em> is a reply that goes out to all people listed
+      in the <code>To</code>, <code>From</code> (or
+      <code>Reply-to</code>) and <code>Cc</code> headers in all the
+      process/prefixed articles. This command uses the
+      process/prefix convention.</p>
+    </dd>
+
+    <dt><kbd>S V</kbd></dt>
+
+    <dd>
+      <a name="index-S-V-_0028Summary_0029" id=
+      "index-S-V-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dvery_002dwide_002dreply_002dwith_002doriginal"
+      id=
+      "index-gnus_002dsummary_002dvery_002dwide_002dreply_002dwith_002doriginal">
+      </a>
+
+      <p>Mail a very wide reply to the author of the current
+      article and include the original message
+      (<code>gnus-summary-very-wide-reply-with-original</code>).
+      This command uses the process/prefix convention.</p>
+    </dd>
+
+    <dt><kbd>S B r</kbd></dt>
+
+    <dd>
+      <a name="index-S-B-r-_0028Summary_0029" id=
+      "index-S-B-r-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dreply_002dbroken_002dreply_002dto"
+      id=
+      "index-gnus_002dsummary_002dreply_002dbroken_002dreply_002dto">
+      </a>
+
+      <p>Mail a reply to the author of the current article but
+      ignore the <code>Reply-To</code> field
+      (<code>gnus-summary-reply-broken-reply-to</code>). If you
+      need this because a mailing list incorrectly sets a
+      <code>Reply-To</code> header pointing to the list, you
+      probably want to set the <code>broken-reply-to</code> group
+      parameter instead, so things will work correctly. See
+      <a href="Group-Parameters.html#Group-Parameters">Group
+      Parameters</a>.</p>
+    </dd>
+
+    <dt><kbd>S B R</kbd></dt>
+
+    <dd>
+      <a name="index-S-B-R-_0028Summary_0029" id=
+      "index-S-B-R-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dreply_002dbroken_002dreply_002dto_002dwith_002doriginal"
+      id=
+      "index-gnus_002dsummary_002dreply_002dbroken_002dreply_002dto_002dwith_002doriginal">
+      </a>
+
+      <p>Mail a reply to the author of the current article and
+      include the original message but ignore the
+      <code>Reply-To</code> field
+      (<code>gnus-summary-reply-broken-reply-to-with-original</code>).</p>
+    </dd>
+
+    <dt><kbd>S o m</kbd></dt>
+
+    <dt><kbd>C-c C-f</kbd></dt>
+
+    <dd>
+      <a name="index-S-o-m-_0028Summary_0029" id=
+      "index-S-o-m-_0028Summary_0029"></a> <a name=
+      "index-C_002dc-C_002df-_0028Summary_0029" id=
+      "index-C_002dc-C_002df-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dmail_002dforward" id=
+      "index-gnus_002dsummary_002dmail_002dforward"></a>
+
+      <p>Forward the current article to some other person
+      (<code>gnus-summary-mail-forward</code>). If no prefix is
+      given, the message is forwarded according to the value of
+      (<code>message-forward-as-mime</code>) and
+      (<code>message-forward-show-mml</code>); if the prefix is 1,
+      decode the message and forward directly inline; if the prefix
+      is 2, forward message as an rfc822 <acronym>MIME</acronym>
+      section; if the prefix is 3, decode message and forward as an
+      rfc822 <acronym>MIME</acronym> section; if the prefix is 4,
+      forward message directly inline; otherwise, the message is
+      forwarded as no prefix given but use the flipped value of
+      (<code>message-forward-as-mime</code>). By default, the
+      message is decoded and forwarded as an rfc822
+      <acronym>MIME</acronym> section.</p>
+    </dd>
+
+    <dt><kbd>S m</kbd></dt>
+
+    <dt><kbd>m</kbd></dt>
+
+    <dd>
+      <a name="index-m-_0028Summary_0029" id=
+      "index-m-_0028Summary_0029"></a> <a name=
+      "index-S-m-_0028Summary_0029" id=
+      "index-S-m-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dmail_002dother_002dwindow" id=
+      "index-gnus_002dsummary_002dmail_002dother_002dwindow"></a>
+
+      <p>Prepare a mail
+      (<code>gnus-summary-mail-other-window</code>). By default,
+      use the posting style of the current group. If given a
+      prefix, disable that. If the prefix is 1, prompt for a group
+      name to find the posting style.</p>
+    </dd>
+
+    <dt><kbd>S i</kbd></dt>
+
+    <dd>
+      <a name="index-S-i-_0028Summary_0029" id=
+      "index-S-i-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dnews_002dother_002dwindow" id=
+      "index-gnus_002dsummary_002dnews_002dother_002dwindow"></a>
+
+      <p>Prepare a news
+      (<code>gnus-summary-news-other-window</code>). By default,
+      post to the current group. If given a prefix, disable that.
+      If the prefix is 1, prompt for a group to post to.</p>
+
+      <p>This function actually prepares a news even when using
+      mail groups. This is useful for &ldquo;posting&rdquo;
+      messages to mail groups without actually sending them over
+      the network: they&rsquo;re just saved directly to the group
+      in question. The corresponding back end must have a
+      request-post method for this to work though.</p>
+    </dd>
+
+    <dt><kbd>S D b</kbd></dt>
+
+    <dd>
+      <a name="index-S-D-b-_0028Summary_0029" id=
+      "index-S-D-b-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dresend_002dbounced_002dmail" id=
+      "index-gnus_002dsummary_002dresend_002dbounced_002dmail"></a>
+      <a name="index-bouncing-mail" id="index-bouncing-mail"></a>
+
+      <p>If you have sent a mail, but the mail was bounced back to
+      you for some reason (wrong address, transient failure), you
+      can use this command to resend that bounced mail
+      (<code>gnus-summary-resend-bounced-mail</code>). You will be
+      popped into a mail buffer where you can edit the headers
+      before sending the mail off again. If you give a prefix to
+      this command, and the bounced mail is a reply to some other
+      mail, Gnus will try to fetch that mail and display it for
+      easy perusal of its headers. This might very well fail,
+      though.</p>
+    </dd>
+
+    <dt><kbd>S D r</kbd></dt>
+
+    <dd>
+      <a name="index-S-D-r-_0028Summary_0029" id=
+      "index-S-D-r-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dresend_002dmessage" id=
+      "index-gnus_002dsummary_002dresend_002dmessage"></a>
+
+      <p>Not to be confused with the previous command,
+      <code>gnus-summary-resend-message</code> will prompt you for
+      an address to send the current message off to, and then send
+      it to that place. The headers of the message won&rsquo;t be
+      altered&mdash;but lots of headers that say
+      <code>Resent-To</code>, <code>Resent-From</code> and so on
+      will be added. This means that you actually send a mail to
+      someone that has a <code>To</code> header that (probably)
+      points to yourself. This will confuse people. So, natcherly
+      you&rsquo;ll only do that if you&rsquo;re really eVIl.</p>
+
+      <p>This command is mainly used if you have several accounts
+      and want to ship a mail to a different account of yours. (If
+      you&rsquo;re both <code>root</code> and
+      <code>postmaster</code> and get a mail for
+      <code>postmaster</code> to the <code>root</code> account, you
+      may want to resend it to <code>postmaster</code>. Ordnung
+      muss sein!</p>
+
+      <p>This command understands the process/prefix convention
+      (see <a href=
+      "Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).</p>
+    </dd>
+
+    <dt><kbd>S D e</kbd></dt>
+
+    <dd>
+      <a name="index-S-D-e-_0028Summary_0029" id=
+      "index-S-D-e-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dresend_002dmessage_002dedit" id=
+      "index-gnus_002dsummary_002dresend_002dmessage_002dedit"></a>
+
+      <p>Like the previous command, but will allow you to edit the
+      message as if it were a new message before resending.</p>
+    </dd>
+
+    <dt><kbd>S O m</kbd></dt>
+
+    <dd>
+      <a name="index-S-O-m-_0028Summary_0029" id=
+      "index-S-O-m-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002ddigest_002dmail_002dforward" id=
+      "index-gnus_002duu_002ddigest_002dmail_002dforward"></a>
+
+      <p>Digest the current series (see <a href=
+      "Decoding-Articles.html#Decoding-Articles">Decoding
+      Articles</a>) and forward the result using mail
+      (<code>gnus-uu-digest-mail-forward</code>). This command uses
+      the process/prefix convention (see <a href=
+      "Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).</p>
+    </dd>
+
+    <dt><kbd>S M-c</kbd></dt>
+
+    <dd>
+      <a name="index-S-M_002dc-_0028Summary_0029" id=
+      "index-S-M_002dc-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dmail_002dcrosspost_002dcomplaint"
+      id=
+      "index-gnus_002dsummary_002dmail_002dcrosspost_002dcomplaint">
+      </a> <a name="index-crossposting" id=
+      "index-crossposting"></a> <a name=
+      "index-excessive-crossposting" id=
+      "index-excessive-crossposting"></a>
+
+      <p>Send a complaint about excessive crossposting to the
+      author of the current article
+      (<code>gnus-summary-mail-crosspost-complaint</code>).</p><a name="index-gnus_002dcrosspost_002dcomplaint"
+      id="index-gnus_002dcrosspost_002dcomplaint"></a>
+
+      <p>This command is provided as a way to fight back against
+      the current crossposting pandemic that&rsquo;s sweeping
+      Usenet. It will compose a reply using the
+      <code>gnus-crosspost-complaint</code> variable as a preamble.
+      This command understands the process/prefix convention (see
+      <a href=
+      "Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>)
+      and will prompt you before sending each mail.</p>
+    </dd>
+  </dl>
+
+  <p>Also See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/message/Header-Commands.html#Header-Commands">
+  Header Commands</a> in <cite>The Message Manual</cite>, for more
+  information.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Summary-Post-Commands.html#Summary-Post-Commands" accesskey=
+    "n" rel="next">Summary Post Commands</a>, Up: <a href=
+    "Reply-Followup-and-Post.html#Reply-Followup-and-Post"
+    accesskey="u" rel="up">Reply Followup and Post</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

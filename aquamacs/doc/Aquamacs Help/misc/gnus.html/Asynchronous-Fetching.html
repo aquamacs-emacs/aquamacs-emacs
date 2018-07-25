@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,170 +14,230 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Asynchronous Fetching</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Asynchronous Fetching">
-<meta name="keywords" content="Gnus Manual: Asynchronous Fetching">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Article-Caching.html#Article-Caching" rel="next" title="Article Caching">
-<link href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer" rel="prev" title="Sorting the Summary Buffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Asynchronous Fetching</title>
+  <meta name="description" content=
+  "Gnus Manual: Asynchronous Fetching" />
+  <meta name="keywords" content=
+  "Gnus Manual: Asynchronous Fetching" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Article-Caching.html#Article-Caching" rel="next"
+  title="Article Caching" />
+  <link href=
+  "Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer" rel=
+  "prev" title="Sorting the Summary Buffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Asynchronous-Fetching"></a>
-<div class="header">
-<p>
-Next: <a href="Article-Caching.html#Article-Caching" accesskey="n" rel="next">Article Caching</a>, Previous: <a href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer" accesskey="p" rel="prev">Sorting the Summary Buffer</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Asynchronous-Article-Fetching"></a>
-<h3 class="section">3.11 Asynchronous Article Fetching</h3>
-<a name="index-asynchronous-article-fetching"></a>
-<a name="index-article-pre_002dfetch"></a>
-<a name="index-pre_002dfetch"></a>
+<body lang="en" xml:lang="en">
+  <a name="Asynchronous-Fetching" id="Asynchronous-Fetching"></a>
 
-<p>If you read your news from an <acronym>NNTP</acronym> server that&rsquo;s far away, the
-network latencies may make reading articles a chore.  You have to wait
-for a while after pressing <kbd>n</kbd> to go to the next article before the
-article appears.  Why can&rsquo;t Gnus just go ahead and fetch the article
-while you are reading the previous one?  Why not, indeed.
-</p>
-<p>First, some caveats.  There are some pitfalls to using asynchronous
-article fetching, especially the way Gnus does it.
-</p>
-<p>Let&rsquo;s say you are reading article 1, which is short, and article 2 is
-quite long, and you are not interested in reading that.  Gnus does not
-know this, so it goes ahead and fetches article 2.  You decide to read
-article 3, but since Gnus is in the process of fetching article 2, the
-connection is blocked.
-</p>
-<p>To avoid these situations, Gnus will open two (count &rsquo;em two)
-connections to the server.  Some people may think this isn&rsquo;t a very nice
-thing to do, but I don&rsquo;t see any real alternatives.  Setting up that
-extra connection takes some time, so Gnus startup will be slower.
-</p>
-<p>Gnus will fetch more articles than you will read.  This will mean that
-the link between your machine and the <acronym>NNTP</acronym> server will become more
-loaded than if you didn&rsquo;t use article pre-fetch.  The server itself will
-also become more loaded&mdash;both with the extra article requests, and the
-extra connection.
-</p>
-<p>Ok, so now you know that you shouldn&rsquo;t really use this thing&hellip; unless
-you really want to.
-</p>
-<a name="index-gnus_002dasynchronous"></a>
-<p>Here&rsquo;s how:  Set <code>gnus-asynchronous</code> to <code>t</code>.  The rest should
-happen automatically.
-</p>
-<a name="index-gnus_002duse_002darticle_002dprefetch"></a>
-<p>You can control how many articles are to be pre-fetched by setting
-<code>gnus-use-article-prefetch</code>.  This is 30 by default, which means
-that when you read an article in the group, the back end will pre-fetch
-the next 30 articles.  If this variable is <code>t</code>, the back end will
-pre-fetch all the articles it can without bound.  If it is
-<code>nil</code>, no pre-fetching will be done.
-</p>
-<a name="index-gnus_002dasync_002dprefetch_002darticle_002dp"></a>
-<a name="index-gnus_002dasync_002dunread_002dp"></a>
-<p>There are probably some articles that you don&rsquo;t want to pre-fetch&mdash;read
-articles, for instance.  The <code>gnus-async-prefetch-article-p</code>
-variable controls whether an article is to be pre-fetched.  This
-function should return non-<code>nil</code> when the article in question is
-to be pre-fetched.  The default is <code>gnus-async-unread-p</code>, which
-returns <code>nil</code> on read articles.  The function is called with an
-article data structure as the only parameter.
-</p>
-<p>If, for instance, you wish to pre-fetch only unread articles shorter
-than 100 lines, you could say something like:
-</p>
-<div class="lisp">
-<pre class="lisp">(defun my-async-short-unread-p (data)
-  &quot;Return non-nil for short, unread articles.&quot;
+  <div class="header">
+    <p>Next: <a href="Article-Caching.html#Article-Caching"
+    accesskey="n" rel="next">Article Caching</a>, Previous:
+    <a href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer"
+    accesskey="p" rel="prev">Sorting the Summary Buffer</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Asynchronous-Article-Fetching" id=
+  "Asynchronous-Article-Fetching"></a>
+
+  <h3 class="section">3.11 Asynchronous Article
+  Fetching</h3><a name="index-asynchronous-article-fetching" id=
+  "index-asynchronous-article-fetching"></a> <a name=
+  "index-article-pre_002dfetch" id=
+  "index-article-pre_002dfetch"></a> <a name="index-pre_002dfetch"
+  id="index-pre_002dfetch"></a>
+
+  <p>If you read your news from an <acronym>NNTP</acronym> server
+  that&rsquo;s far away, the network latencies may make reading
+  articles a chore. You have to wait for a while after pressing
+  <kbd>n</kbd> to go to the next article before the article
+  appears. Why can&rsquo;t Gnus just go ahead and fetch the article
+  while you are reading the previous one? Why not, indeed.</p>
+
+  <p>First, some caveats. There are some pitfalls to using
+  asynchronous article fetching, especially the way Gnus does
+  it.</p>
+
+  <p>Let&rsquo;s say you are reading article 1, which is short, and
+  article 2 is quite long, and you are not interested in reading
+  that. Gnus does not know this, so it goes ahead and fetches
+  article 2. You decide to read article 3, but since Gnus is in the
+  process of fetching article 2, the connection is blocked.</p>
+
+  <p>To avoid these situations, Gnus will open two (count &rsquo;em
+  two) connections to the server. Some people may think this
+  isn&rsquo;t a very nice thing to do, but I don&rsquo;t see any
+  real alternatives. Setting up that extra connection takes some
+  time, so Gnus startup will be slower.</p>
+
+  <p>Gnus will fetch more articles than you will read. This will
+  mean that the link between your machine and the
+  <acronym>NNTP</acronym> server will become more loaded than if
+  you didn&rsquo;t use article pre-fetch. The server itself will
+  also become more loaded&mdash;both with the extra article
+  requests, and the extra connection.</p>
+
+  <p>Ok, so now you know that you shouldn&rsquo;t really use this
+  thing&hellip; unless you really want to.</p><a name=
+  "index-gnus_002dasynchronous" id=
+  "index-gnus_002dasynchronous"></a>
+
+  <p>Here&rsquo;s how: Set <code>gnus-asynchronous</code> to
+  <code>t</code>. The rest should happen automatically.</p><a name=
+  "index-gnus_002duse_002darticle_002dprefetch" id=
+  "index-gnus_002duse_002darticle_002dprefetch"></a>
+
+  <p>You can control how many articles are to be pre-fetched by
+  setting <code>gnus-use-article-prefetch</code>. This is 30 by
+  default, which means that when you read an article in the group,
+  the back end will pre-fetch the next 30 articles. If this
+  variable is <code>t</code>, the back end will pre-fetch all the
+  articles it can without bound. If it is <code>nil</code>, no
+  pre-fetching will be done.</p><a name=
+  "index-gnus_002dasync_002dprefetch_002darticle_002dp" id=
+  "index-gnus_002dasync_002dprefetch_002darticle_002dp"></a>
+  <a name="index-gnus_002dasync_002dunread_002dp" id=
+  "index-gnus_002dasync_002dunread_002dp"></a>
+
+  <p>There are probably some articles that you don&rsquo;t want to
+  pre-fetch&mdash;read articles, for instance. The
+  <code>gnus-async-prefetch-article-p</code> variable controls
+  whether an article is to be pre-fetched. This function should
+  return non-<code>nil</code> when the article in question is to be
+  pre-fetched. The default is <code>gnus-async-unread-p</code>,
+  which returns <code>nil</code> on read articles. The function is
+  called with an article data structure as the only parameter.</p>
+
+  <p>If, for instance, you wish to pre-fetch only unread articles
+  shorter than 100 lines, you could say something like:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(defun my-async-short-unread-p (data)
+  "Return non-nil for short, unread articles."
   (and (gnus-data-unread-p data)
        (&lt; (mail-header-lines (gnus-data-header data))
           100)))
 
 (setq gnus-async-prefetch-article-p 'my-async-short-unread-p)
-</pre></div>
+</pre>
+  </div>
 
-<p>These functions will be called many, many times, so they should
-preferably be short and sweet to avoid slowing down Gnus too much.
-It&rsquo;s probably a good idea to byte-compile things like this.
-</p>
-<a name="index-gnus_002dasync_002dpost_002dfetch_002dfunction"></a>
-<a name="index-gnus_002dhtml_002dprefetch_002dimages"></a>
-<p>After an article has been prefetched, this
-<code>gnus-async-post-fetch-function</code> will be called.  The buffer will
-be narrowed to the region of the article that was fetched.  A useful
-value would be <code>gnus-html-prefetch-images</code>, which will prefetch
-and store images referenced in the article, so that you don&rsquo;t have to
-wait for them to be fetched when you read the article.  This is useful
-for <acronym>HTML</acronym> messages that have external images.
-</p>
-<a name="index-gnus_002dprefetched_002darticle_002ddeletion_002dstrategy"></a>
-<p>Articles have to be removed from the asynch buffer sooner or later.  The
-<code>gnus-prefetched-article-deletion-strategy</code> says when to remove
-articles.  This is a list that may contain the following elements:
-</p>
-<dl compact="compact">
-<dt><code>read</code></dt>
-<dd><p>Remove articles when they are read.
-</p>
-</dd>
-<dt><code>exit</code></dt>
-<dd><p>Remove articles when exiting the group.
-</p></dd>
-</dl>
+  <p>These functions will be called many, many times, so they
+  should preferably be short and sweet to avoid slowing down Gnus
+  too much. It&rsquo;s probably a good idea to byte-compile things
+  like this.</p><a name=
+  "index-gnus_002dasync_002dpost_002dfetch_002dfunction" id=
+  "index-gnus_002dasync_002dpost_002dfetch_002dfunction"></a>
+  <a name="index-gnus_002dhtml_002dprefetch_002dimages" id=
+  "index-gnus_002dhtml_002dprefetch_002dimages"></a>
 
-<p>The default value is <code>(read exit)</code>.
-</p>
+  <p>After an article has been prefetched, this
+  <code>gnus-async-post-fetch-function</code> will be called. The
+  buffer will be narrowed to the region of the article that was
+  fetched. A useful value would be
+  <code>gnus-html-prefetch-images</code>, which will prefetch and
+  store images referenced in the article, so that you don&rsquo;t
+  have to wait for them to be fetched when you read the article.
+  This is useful for <acronym>HTML</acronym> messages that have
+  external images.</p><a name=
+  "index-gnus_002dprefetched_002darticle_002ddeletion_002dstrategy"
+  id=
+  "index-gnus_002dprefetched_002darticle_002ddeletion_002dstrategy"></a>
 
+  <p>Articles have to be removed from the asynch buffer sooner or
+  later. The <code>gnus-prefetched-article-deletion-strategy</code>
+  says when to remove articles. This is a list that may contain the
+  following elements:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Article-Caching.html#Article-Caching" accesskey="n" rel="next">Article Caching</a>, Previous: <a href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer" accesskey="p" rel="prev">Sorting the Summary Buffer</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><code>read</code></dt>
 
+    <dd>
+      <p>Remove articles when they are read.</p>
+    </dd>
 
+    <dt><code>exit</code></dt>
 
+    <dd>
+      <p>Remove articles when exiting the group.</p>
+    </dd>
+  </dl>
+
+  <p>The default value is <code>(read exit)</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Article-Caching.html#Article-Caching"
+    accesskey="n" rel="next">Article Caching</a>, Previous:
+    <a href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer"
+    accesskey="p" rel="prev">Sorting the Summary Buffer</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

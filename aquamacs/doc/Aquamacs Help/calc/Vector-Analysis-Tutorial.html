@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Vector Analysis Tutorial - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" title="Vector/Matrix Tutorial">
-<link rel="prev" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial" title="Vector/Matrix Tutorial">
-<link rel="next" href="Matrix-Tutorial.html#Matrix-Tutorial" title="Matrix Tutorial">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Vector Analysis Tutorial - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial"
+  title="Vector/Matrix Tutorial" />
+  <link rel="prev" href=
+  "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial"
+  title="Vector/Matrix Tutorial" />
+  <link rel="next" href="Matrix-Tutorial.html#Matrix-Tutorial"
+  title="Matrix Tutorial" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +40,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,112 +53,140 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Vector-Analysis-Tutorial"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Matrix-Tutorial.html#Matrix-Tutorial">Matrix Tutorial</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial">Vector/Matrix Tutorial</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial">Vector/Matrix Tutorial</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Vector-Analysis-Tutorial" id=
+    "Vector-Analysis-Tutorial"></a>
 
-<h4 class="subsection">3.3.1 Vector Analysis</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Matrix-Tutorial.html#Matrix-Tutorial">Matrix Tutorial</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial">Vector/Matrix
+    Tutorial</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Vector_002fMatrix-Tutorial.html#Vector_002fMatrix-Tutorial">Vector/Matrix
+    Tutorial</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">If you add two vectors, the result is a vector of the sums of the
-elements, taken pairwise.
+  <h4 class="subsection">3.3.1 Vector Analysis</h4>
 
-<pre class="smallexample">     1:  [1, 2, 3]     2:  [1, 2, 3]     1:  [8, 8, 3]
+  <p class="noindent">If you add two vectors, the result is a
+  vector of the sums of the elements, taken pairwise.</p>
+  <pre class="smallexample">
+     1:  [1, 2, 3]     2:  [1, 2, 3]     1:  [8, 8, 3]
          .             1:  [7, 6, 0]         .
                            .
      
          [1,2,3]  s 1      [7 6 0]  s 2      +
 </pre>
-   <p class="noindent">Note that we can separate the vector elements with either commas or
-spaces.  This is true whether we are using incomplete vectors or
-algebraic entry.  The <kbd>s 1</kbd> and <kbd>s 2</kbd> commands save these
-vectors so we can easily reuse them later.
 
-   <p>If you multiply two vectors, the result is the sum of the products
-of the elements taken pairwise.  This is called the <dfn>dot product</dfn>
-of the vectors.
+  <p class="noindent">Note that we can separate the vector elements
+  with either commas or spaces. This is true whether we are using
+  incomplete vectors or algebraic entry. The <kbd>s 1</kbd> and
+  <kbd>s 2</kbd> commands save these vectors so we can easily reuse
+  them later.</p>
 
-<pre class="smallexample">     2:  [1, 2, 3]     1:  19
+  <p>If you multiply two vectors, the result is the sum of the
+  products of the elements taken pairwise. This is called the
+  <dfn>dot product</dfn> of the vectors.</p>
+  <pre class="smallexample">
+     2:  [1, 2, 3]     1:  19
      1:  [7, 6, 0]         .
          .
      
          r 1 r 2           *
 </pre>
-   <p><a name="index-Dot-product-33"></a>The dot product of two vectors is equal to the product of their
-lengths times the cosine of the angle between them.  (Here the vector
-is interpreted as a line from the origin &lsquo;<samp><span class="samp">(0,0,0)</span></samp>&rsquo; to the
-specified point in three-dimensional space.)  The <kbd>A</kbd>
-(absolute value) command can be used to compute the length of a
-vector.
 
-<pre class="smallexample">     3:  19            3:  19          1:  0.550782    1:  56.579
+  <p><a name="index-Dot-product-33" id=
+  "index-Dot-product-33"></a>The dot product of two vectors is
+  equal to the product of their lengths times the cosine of the
+  angle between them. (Here the vector is interpreted as a line
+  from the origin &lsquo;<samp><span class=
+  "samp">(0,0,0)</span></samp>&rsquo; to the specified point in
+  three-dimensional space.) The <kbd>A</kbd> (absolute value)
+  command can be used to compute the length of a vector.</p>
+  <pre class="smallexample">
+     3:  19            3:  19          1:  0.550782    1:  56.579
      2:  [1, 2, 3]     2:  3.741657        .               .
      1:  [7, 6, 0]     1:  9.219544
          .                 .
      
          M-&lt;RET&gt;             M-2 A          * /             I C
 </pre>
-   <p class="noindent">First we recall the arguments to the dot product command, then
-we compute the absolute values of the top two stack entries to
-obtain the lengths of the vectors, then we divide the dot product
-by the product of the lengths to get the cosine of the angle. 
-The inverse cosine finds that the angle between the vectors
-is about 56 degrees.
 
-   <p><a name="index-Cross-product-34"></a><a name="index-Perpendicular-vectors-35"></a>The <dfn>cross product</dfn> of two vectors is a vector whose length
-is the product of the lengths of the inputs times the sine of the
-angle between them, and whose direction is perpendicular to both
-input vectors.  Unlike the dot product, the cross product is
-defined only for three-dimensional vectors.  Let's double-check
-our computation of the angle using the cross product.
+  <p class="noindent">First we recall the arguments to the dot
+  product command, then we compute the absolute values of the top
+  two stack entries to obtain the lengths of the vectors, then we
+  divide the dot product by the product of the lengths to get the
+  cosine of the angle. The inverse cosine finds that the angle
+  between the vectors is about 56 degrees.</p>
 
-<pre class="smallexample">     2:  [1, 2, 3]  3:  [-18, 21, -8]  1:  [-0.52, 0.61, -0.23]  1:  56.579
+  <p><a name="index-Cross-product-34" id=
+  "index-Cross-product-34"></a><a name=
+  "index-Perpendicular-vectors-35" id=
+  "index-Perpendicular-vectors-35"></a>The <dfn>cross product</dfn>
+  of two vectors is a vector whose length is the product of the
+  lengths of the inputs times the sine of the angle between them,
+  and whose direction is perpendicular to both input vectors.
+  Unlike the dot product, the cross product is defined only for
+  three-dimensional vectors. Let's double-check our computation of
+  the angle using the cross product.</p>
+  <pre class="smallexample">
+     2:  [1, 2, 3]  3:  [-18, 21, -8]  1:  [-0.52, 0.61, -0.23]  1:  56.579
      1:  [7, 6, 0]  2:  [1, 2, 3]          .                         .
          .          1:  [7, 6, 0]
                         .
      
          r 1 r 2        V C  s 3  M-&lt;RET&gt;    M-2 A * /                 A I S
 </pre>
-   <p class="noindent">First we recall the original vectors and compute their cross product,
-which we also store for later reference.  Now we divide the vector
-by the product of the lengths of the original vectors.  The length of
-this vector should be the sine of the angle; sure enough, it is!
 
-<!-- [fix-ref General Mode Commands] -->
-   <p>Vector-related commands generally begin with the <kbd>v</kbd> prefix key. 
-Some are uppercase letters and some are lowercase.  To make it easier
-to type these commands, the shift-<kbd>V</kbd> prefix key acts the same as
-the <kbd>v</kbd> key.  (See <a href="General-Mode-Commands.html#General-Mode-Commands">General Mode Commands</a>, for a way to make all
-prefix keys have this property.)
+  <p class="noindent">First we recall the original vectors and
+  compute their cross product, which we also store for later
+  reference. Now we divide the vector by the product of the lengths
+  of the original vectors. The length of this vector should be the
+  sine of the angle; sure enough, it is! 
+  <!-- [fix-ref General Mode Commands] --></p>
 
-   <p>If we take the dot product of two perpendicular vectors we expect
-to get zero, since the cosine of 90 degrees is zero.  Let's check
-that the cross product is indeed perpendicular to both inputs:
+  <p>Vector-related commands generally begin with the <kbd>v</kbd>
+  prefix key. Some are uppercase letters and some are lowercase. To
+  make it easier to type these commands, the shift-<kbd>V</kbd>
+  prefix key acts the same as the <kbd>v</kbd> key. (See <a href=
+  "General-Mode-Commands.html#General-Mode-Commands">General Mode
+  Commands</a>, for a way to make all prefix keys have this
+  property.)</p>
 
-<pre class="smallexample">     2:  [1, 2, 3]      1:  0          2:  [7, 6, 0]      1:  0
+  <p>If we take the dot product of two perpendicular vectors we
+  expect to get zero, since the cosine of 90 degrees is zero. Let's
+  check that the cross product is indeed perpendicular to both
+  inputs:</p>
+  <pre class="smallexample">
+     2:  [1, 2, 3]      1:  0          2:  [7, 6, 0]      1:  0
      1:  [-18, 21, -8]      .          1:  [-18, 21, -8]      .
          .                                 .
      
          r 1 r 3            *          &lt;DEL&gt; r 2 r 3            *
 </pre>
-   <p><a name="index-Normalizing-a-vector-36"></a><a name="index-Unit-vectors-37"></a>(&bull;) <strong>Exercise 1.</strong>  Given a vector on the top of the
-stack, what keystrokes would you use to <dfn>normalize</dfn> the
-vector, i.e., to reduce its length to one without changing its
-direction?  See <a href="Vector-Answer-1.html#Vector-Answer-1">1</a>. (&bull;)
 
-   <p>(&bull;) <strong>Exercise 2.</strong>  Suppose a certain particle can be
-at any of several positions along a ruler.  You have a list of
-those positions in the form of a vector, and another list of the
-probabilities for the particle to be at the corresponding positions. 
-Find the average position of the particle. 
-See <a href="Vector-Answer-2.html#Vector-Answer-2">2</a>. (&bull;)
+  <p><a name="index-Normalizing-a-vector-36" id=
+  "index-Normalizing-a-vector-36"></a><a name=
+  "index-Unit-vectors-37" id="index-Unit-vectors-37"></a>(&bull;)
+  <strong>Exercise 1.</strong> Given a vector on the top of the
+  stack, what keystrokes would you use to <dfn>normalize</dfn> the
+  vector, i.e., to reduce its length to one without changing its
+  direction? See <a href=
+  "Vector-Answer-1.html#Vector-Answer-1">1</a>. (&bull;)</p>
 
-   </body></html>
-
+  <p>(&bull;) <strong>Exercise 2.</strong> Suppose a certain
+  particle can be at any of several positions along a ruler. You
+  have a list of those positions in the form of a vector, and
+  another list of the probabilities for the particle to be at the
+  corresponding positions. Find the average position of the
+  particle. See <a href=
+  "Vector-Answer-2.html#Vector-Answer-2">2</a>. (&bull;)</p>
+</body>
+</html>

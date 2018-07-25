@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,287 +16,440 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Filtering/limiting agenda items</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Filtering/limiting agenda items">
-<meta name="keywords" content="The Org Manual: Filtering/limiting agenda items">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Presentation-and-sorting.html#Presentation-and-sorting" rel="up" title="Presentation and sorting">
-<link href="Agenda-commands.html#Agenda-commands" rel="next" title="Agenda commands">
-<link href="Sorting-agenda-items.html#Sorting-agenda-items" rel="prev" title="Sorting agenda items">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Filtering/limiting agenda items</title>
+  <meta name="description" content=
+  "The Org Manual: Filtering/limiting agenda items" />
+  <meta name="keywords" content=
+  "The Org Manual: Filtering/limiting agenda items" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Presentation-and-sorting.html#Presentation-and-sorting" rel="up"
+  title="Presentation and sorting" />
+  <link href="Agenda-commands.html#Agenda-commands" rel="next"
+  title="Agenda commands" />
+  <link href="Sorting-agenda-items.html#Sorting-agenda-items" rel=
+  "prev" title="Sorting agenda items" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  dt.c1 {font-style: italic}
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Filtering_002flimiting-agenda-items"></a>
-<div class="header">
-<p>
-Previous: <a href="Sorting-agenda-items.html#Sorting-agenda-items" accesskey="p" rel="prev">Sorting agenda items</a>, Up: <a href="Presentation-and-sorting.html#Presentation-and-sorting" accesskey="u" rel="up">Presentation and sorting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Filtering_002flimiting-agenda-items-1"></a>
-<h4 class="subsection">10.4.4 Filtering/limiting agenda items</h4>
+<body lang="en" xml:lang="en">
+  <a name="Filtering_002flimiting-agenda-items" id=
+  "Filtering_002flimiting-agenda-items"></a>
 
-<p>Agenda built-in or customized commands are statically defined.  Agenda
-filters and limits provide two ways of dynamically narrowing down the list of
-agenda entries: <em>fitlers</em> and <em>limits</em>.  Filters only act on the
-display of the items, while limits take effect before the list of agenda
-entries is built.  Filter are more often used interactively, while limits are
-mostly useful when defined as local variables within custom agenda commands.
-</p>
-<a name="Filtering-in-the-agenda"></a>
-<h4 class="subsubheading">Filtering in the agenda</h4>
-<a name="index-filtering_002c-by-tag_002c-category_002c-top-headline-and-effort_002c-in-agenda"></a>
-<a name="index-tag-filtering_002c-in-agenda"></a>
-<a name="index-category-filtering_002c-in-agenda"></a>
-<a name="index-top-headline-filtering_002c-in-agenda"></a>
-<a name="index-effort-filtering_002c-in-agenda"></a>
-<a name="index-query-editing_002c-in-agenda"></a>
+  <div class="header">
+    <p>Previous: <a href=
+    "Sorting-agenda-items.html#Sorting-agenda-items" accesskey="p"
+    rel="prev">Sorting agenda items</a>, Up: <a href=
+    "Presentation-and-sorting.html#Presentation-and-sorting"
+    accesskey="u" rel="up">Presentation and sorting</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Filtering_002flimiting-agenda-items-1" id=
+  "Filtering_002flimiting-agenda-items-1"></a>
 
-<dl compact="compact">
-<dd><a name="index-_002f"></a>
-<a name="index-org_002dagenda_002dfilter_002dby_002dtag"></a>
-</dd>
-<dt><kbd><kbd>/</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-by-tag</code>)</kbd></dt>
-<dd><a name="index-org_002dagenda_002dtag_002dfilter_002dpreset"></a>
-<p>Filter the agenda view with respect to a tag and/or effort estimates.  The
-difference between this and a custom agenda command is that filtering is very
-fast, so that you can switch quickly between different filters without having
-to recreate the agenda.<a name="DOCF107" href="#FOOT107"><sup>107</sup></a>
-</p>
-<p>You will be prompted for a tag selection letter; <tt class="key">SPC</tt> will mean any tag at
-all.  Pressing <tt class="key">TAB</tt> at that prompt will offer use completion to select a
-tag (including any tags that do not have a selection character).  The command
-then hides all entries that do not contain or inherit this tag.  When called
-with prefix arg, remove the entries that <em>do</em> have the tag.  A second
-<kbd>/</kbd> at the prompt will turn off the filter and unhide any hidden entries.
-If the first key you press is either <kbd>+</kbd> or <kbd>-</kbd>, the previous filter
-will be narrowed by requiring or forbidding the selected additional tag.
-Instead of pressing <kbd>+</kbd> or <kbd>-</kbd> after <kbd>/</kbd>, you can also
-immediately use the <kbd>\</kbd> command.
-</p>
-<a name="index-org_002dsort_002dagenda_002dnoeffort_002dis_002dhigh"></a>
-<p>In order to filter for effort estimates, you should set up allowed
-efforts globally, for example
-</p><div class="lisp">
-<pre class="lisp">(setq org-global-properties
-    '((&quot;Effort_ALL&quot;. &quot;0 0:10 0:30 1:00 2:00 3:00 4:00&quot;)))
-</pre></div>
-<p>You can then filter for an effort by first typing an operator, one of
-<kbd>&lt;</kbd>, <kbd>&gt;</kbd>, and <kbd>=</kbd>, and then the one-digit index of an effort
-estimate in your array of allowed values, where <kbd>0</kbd> means the 10th value.
-The filter will then restrict to entries with effort smaller-or-equal, equal,
-or larger-or-equal than the selected value.  If the digits 0&ndash;9 are not used
-as fast access keys to tags, you can also simply press the index digit
-directly without an operator.  In this case, <kbd>&lt;</kbd> will be assumed.  For
-application of the operator, entries without a defined effort will be treated
-according to the value of <code>org-sort-agenda-noeffort-is-high</code>.  To filter
-for tasks without effort definition, press <kbd>?</kbd> as the operator.
-</p>
-<p>Org also supports automatic, context-aware tag filtering.  If the variable
-<code>org-agenda-auto-exclude-function</code> is set to a user-defined function,
-that function can decide which tags should be excluded from the agenda
-automatically.  Once this is set, the <kbd>/</kbd> command then accepts <kbd>RET</kbd>
-as a sub-option key and runs the auto exclusion logic.  For example, let&rsquo;s
-say you use a <code>Net</code> tag to identify tasks which need network access, an
-<code>Errand</code> tag for errands in town, and a <code>Call</code> tag for making phone
-calls.  You could auto-exclude these tags based on the availability of the
-Internet, and outside of business hours, with something like this:
-</p>
-<div class="smalllisp">
-<pre class="smalllisp">(defun org-my-auto-exclude-function (tag)
+  <h4 class="subsection">10.4.4 Filtering/limiting agenda
+  items</h4>
+
+  <p>Agenda built-in or customized commands are statically defined.
+  Agenda filters and limits provide two ways of dynamically
+  narrowing down the list of agenda entries: <em>fitlers</em> and
+  <em>limits</em>. Filters only act on the display of the items,
+  while limits take effect before the list of agenda entries is
+  built. Filter are more often used interactively, while limits are
+  mostly useful when defined as local variables within custom
+  agenda commands.</p><a name="Filtering-in-the-agenda" id=
+  "Filtering-in-the-agenda"></a>
+
+  <h4 class="subsubheading">Filtering in the agenda</h4><a name=
+  "index-filtering_002c-by-tag_002c-category_002c-top-headline-and-effort_002c-in-agenda"
+  id=
+  "index-filtering_002c-by-tag_002c-category_002c-top-headline-and-effort_002c-in-agenda"></a>
+  <a name="index-tag-filtering_002c-in-agenda" id=
+  "index-tag-filtering_002c-in-agenda"></a> <a name=
+  "index-category-filtering_002c-in-agenda" id=
+  "index-category-filtering_002c-in-agenda"></a> <a name=
+  "index-top-headline-filtering_002c-in-agenda" id=
+  "index-top-headline-filtering_002c-in-agenda"></a> <a name=
+  "index-effort-filtering_002c-in-agenda" id=
+  "index-effort-filtering_002c-in-agenda"></a> <a name=
+  "index-query-editing_002c-in-agenda" id=
+  "index-query-editing_002c-in-agenda"></a>
+
+  <dl compact="compact">
+    <dd><a name="index-_002f" id="index-_002f"></a> <a name=
+    "index-org_002dagenda_002dfilter_002dby_002dtag" id=
+    "index-org_002dagenda_002dfilter_002dby_002dtag"></a></dd>
+
+    <dt><kbd><kbd>/</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-by-tag</code>)</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dagenda_002dtag_002dfilter_002dpreset"
+      id="index-org_002dagenda_002dtag_002dfilter_002dpreset"></a>
+
+      <p>Filter the agenda view with respect to a tag and/or effort
+      estimates. The difference between this and a custom agenda
+      command is that filtering is very fast, so that you can
+      switch quickly between different filters without having to
+      recreate the agenda.<a name="DOCF107" href="#FOOT107" id=
+      "DOCF107"><sup>107</sup></a></p>
+
+      <p>You will be prompted for a tag selection letter;
+      <tt class="key">SPC</tt> will mean any tag at all. Pressing
+      <tt class="key">TAB</tt> at that prompt will offer use
+      completion to select a tag (including any tags that do not
+      have a selection character). The command then hides all
+      entries that do not contain or inherit this tag. When called
+      with prefix arg, remove the entries that <em>do</em> have the
+      tag. A second <kbd>/</kbd> at the prompt will turn off the
+      filter and unhide any hidden entries. If the first key you
+      press is either <kbd>+</kbd> or <kbd>-</kbd>, the previous
+      filter will be narrowed by requiring or forbidding the
+      selected additional tag. Instead of pressing <kbd>+</kbd> or
+      <kbd>-</kbd> after <kbd>/</kbd>, you can also immediately use
+      the <kbd>\</kbd> command.</p><a name=
+      "index-org_002dsort_002dagenda_002dnoeffort_002dis_002dhigh"
+      id=
+      "index-org_002dsort_002dagenda_002dnoeffort_002dis_002dhigh"></a>
+
+      <p>In order to filter for effort estimates, you should set up
+      allowed efforts globally, for example</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq org-global-properties
+    '(("Effort_ALL". "0 0:10 0:30 1:00 2:00 3:00 4:00")))
+</pre>
+      </div>
+
+      <p>You can then filter for an effort by first typing an
+      operator, one of <kbd>&lt;</kbd>, <kbd>&gt;</kbd>, and
+      <kbd>=</kbd>, and then the one-digit index of an effort
+      estimate in your array of allowed values, where <kbd>0</kbd>
+      means the 10th value. The filter will then restrict to
+      entries with effort smaller-or-equal, equal, or
+      larger-or-equal than the selected value. If the digits
+      0&ndash;9 are not used as fast access keys to tags, you can
+      also simply press the index digit directly without an
+      operator. In this case, <kbd>&lt;</kbd> will be assumed. For
+      application of the operator, entries without a defined effort
+      will be treated according to the value of
+      <code>org-sort-agenda-noeffort-is-high</code>. To filter for
+      tasks without effort definition, press <kbd>?</kbd> as the
+      operator.</p>
+
+      <p>Org also supports automatic, context-aware tag filtering.
+      If the variable <code>org-agenda-auto-exclude-function</code>
+      is set to a user-defined function, that function can decide
+      which tags should be excluded from the agenda automatically.
+      Once this is set, the <kbd>/</kbd> command then accepts
+      <kbd>RET</kbd> as a sub-option key and runs the auto
+      exclusion logic. For example, let&rsquo;s say you use a
+      <code>Net</code> tag to identify tasks which need network
+      access, an <code>Errand</code> tag for errands in town, and a
+      <code>Call</code> tag for making phone calls. You could
+      auto-exclude these tags based on the availability of the
+      Internet, and outside of business hours, with something like
+      this:</p>
+
+      <div class="smalllisp">
+        <pre class="smalllisp">
+(defun org-my-auto-exclude-function (tag)
   (and (cond
-        ((string= tag &quot;Net&quot;)
-         (/= 0 (call-process &quot;/sbin/ping&quot; nil nil nil
-                             &quot;-c1&quot; &quot;-q&quot; &quot;-t1&quot; &quot;mail.gnu.org&quot;)))
-        ((or (string= tag &quot;Errand&quot;) (string= tag &quot;Call&quot;))
+        ((string= tag "Net")
+         (/= 0 (call-process "/sbin/ping" nil nil nil
+                             "-c1" "-q" "-t1" "mail.gnu.org")))
+        ((or (string= tag "Errand") (string= tag "Call"))
          (let ((hour (nth 2 (decode-time))))
            (or (&lt; hour 8) (&gt; hour 21)))))
-       (concat &quot;-&quot; tag)))
+       (concat "-" tag)))
 
 (setq org-agenda-auto-exclude-function 'org-my-auto-exclude-function)
-</pre></div>
+</pre>
+      </div><a name="index-_005c" id="index-_005c"></a> <a name=
+      "index-org_002dagenda_002dfilter_002dby_002dtag_002drefine"
+      id=
+      "index-org_002dagenda_002dfilter_002dby_002dtag_002drefine"></a>
+    </dd>
 
-<a name="index-_005c"></a>
-<a name="index-org_002dagenda_002dfilter_002dby_002dtag_002drefine"></a>
-</dd>
-<dt><kbd><kbd>\</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-by-tag-refine</code>)</kbd></dt>
-<dd><p>Narrow the current agenda filter by an additional condition.  When called with
-prefix arg, remove the entries that <em>do</em> have the tag, or that do match
-the effort criterion.  You can achieve the same effect by pressing <kbd>+</kbd> or
-<kbd>-</kbd> as the first key after the <kbd>/</kbd> command.
-</p>
-<a name="index-_005b"></a>
-<a name="index-_005d"></a>
-<a name="index-_007b"></a>
-<a name="index-_007d"></a>
-</dd>
-<dt><kbd>[ ] { }</kbd></dt>
-<dd><dl compact="compact">
-<dt><i><span class="roman">in</span> search view</i></dt>
-<dd><p>add new search words (<kbd>[</kbd> and <kbd>]</kbd>) or new regular expressions
-(<kbd>{</kbd> and <kbd>}</kbd>) to the query string.  The opening bracket/brace will
-add a positive search term prefixed by &lsquo;<samp>+</samp>&rsquo;, indicating that this search
-term <i>must</i> occur/match in the entry.  The closing bracket/brace will add a
-negative search term which <i>must not</i> occur/match in the entry for it to be
-selected.
-</p></dd>
-</dl>
+    <dt><kbd><kbd>\</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-by-tag-refine</code>)</kbd></dt>
 
-<a name="index-_003c-3"></a>
-<a name="index-org_002dagenda_002dfilter_002dby_002dcategory"></a>
-</dd>
-<dt><kbd><kbd>&lt;</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-by-category</code>)</kbd></dt>
-<dd><a name="index-org_002dagenda_002dcategory_002dfilter_002dpreset"></a>
+    <dd>
+      <p>Narrow the current agenda filter by an additional
+      condition. When called with prefix arg, remove the entries
+      that <em>do</em> have the tag, or that do match the effort
+      criterion. You can achieve the same effect by pressing
+      <kbd>+</kbd> or <kbd>-</kbd> as the first key after the
+      <kbd>/</kbd> command.</p><a name="index-_005b" id=
+      "index-_005b"></a> <a name="index-_005d" id=
+      "index-_005d"></a> <a name="index-_007b" id=
+      "index-_007b"></a> <a name="index-_007d" id=
+      "index-_007d"></a>
+    </dd>
 
-<p>Filter the current agenda view with respect to the category of the item at
-point.  Pressing <code>&lt;</code> another time will remove this filter.  You can add
-a filter preset through the option <code>org-agenda-category-filter-preset</code>
-(see below.)
-</p>
-<a name="index-_005e"></a>
-<a name="index-org_002dagenda_002dfilter_002dby_002dtop_002dheadline"></a>
-</dd>
-<dt><kbd><kbd>^</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-by-top-headline</code>)</kbd></dt>
-<dd><p>Filter the current agenda view and only display the siblings and the parent
-headline of the one at point.
-</p>
-<a name="index-_003d"></a>
-<a name="index-org_002dagenda_002dfilter_002dby_002dregexp"></a>
-</dd>
-<dt><kbd><kbd>=</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-by-regexp</code>)</kbd></dt>
-<dd><a name="index-org_002dagenda_002dregexp_002dfilter_002dpreset"></a>
+    <dt><kbd>[ ] { }</kbd></dt>
 
-<p>Filter the agenda view by a regular expression: only show agenda entries
-matching the regular expression the user entered.  When called with a prefix
-argument, it will filter <em>out</em> entries matching the regexp.  With two
-universal prefix arguments, it will remove all the regexp filters, which can
-be accumulated.  You can add a filter preset through the option
-<code>org-agenda-category-filter-preset</code> (see below.)
-</p>
-<a name="index-_007c"></a>
-<a name="index-org_002dagenda_002dfilter_002dremove_002dall"></a>
-</dd>
-<dt><kbd><kbd>|</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-remove-all</code>)</kbd></dt>
-<dd><p>Remove all filters in the current agenda view.
-</p></dd>
-</dl>
+    <dd>
+      <dl compact="compact">
+        <dt class="c1"><span class="roman">in</span> search
+        view</dt>
 
-<a name="Setting-limits-for-the-agenda"></a>
-<h4 class="subsubheading">Setting limits for the agenda</h4>
-<a name="index-limits_002c-in-agenda"></a>
-<a name="index-org_002dagenda_002dmax_002dentries"></a>
-<a name="index-org_002dagenda_002dmax_002deffort"></a>
-<a name="index-org_002dagenda_002dmax_002dtodos"></a>
-<a name="index-org_002dagenda_002dmax_002dtags"></a>
+        <dd>
+          <p>add new search words (<kbd>[</kbd> and <kbd>]</kbd>)
+          or new regular expressions (<kbd>{</kbd> and
+          <kbd>}</kbd>) to the query string. The opening
+          bracket/brace will add a positive search term prefixed by
+          &lsquo;<samp>+</samp>&rsquo;, indicating that this search
+          term <i>must</i> occur/match in the entry. The closing
+          bracket/brace will add a negative search term which
+          <i>must not</i> occur/match in the entry for it to be
+          selected.</p>
+        </dd>
+      </dl><a name="index-_003c-3" id="index-_003c-3"></a> <a name=
+      "index-org_002dagenda_002dfilter_002dby_002dcategory" id=
+      "index-org_002dagenda_002dfilter_002dby_002dcategory"></a>
+    </dd>
 
-<p>Here is a list of options that you can set, either globally, or locally in
-your custom agenda viewssee <a href="Custom-agenda-views.html#Custom-agenda-views">Custom agenda views</a>.
-</p>
-<dl compact="compact">
-<dt><var>org-agenda-max-entries</var></dt>
-<dd><p>Limit the number of entries.
-</p></dd>
-<dt><var>org-agenda-max-effort</var></dt>
-<dd><p>Limit the duration of accumulated efforts (as minutes).
-</p></dd>
-<dt><var>org-agenda-max-todos</var></dt>
-<dd><p>Limit the number of entries with TODO keywords.
-</p></dd>
-<dt><var>org-agenda-max-tags</var></dt>
-<dd><p>Limit the number of tagged entries.
-</p></dd>
-</dl>
+    <dt><kbd><kbd>&lt;</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-by-category</code>)</kbd></dt>
 
-<p>When set to a positive integer, each option will exclude entries from other
-categories: for example, <code>(setq org-agenda-max-effort 100)</code> will limit
-the agenda to 100 minutes of effort and exclude any entry that as no effort
-property.  If you want to include entries with no effort property, use a
-negative value for <code>org-agenda-max-effort</code>.
-</p>
-<p>One useful setup is to use <code>org-agenda-max-entries</code> locally in a custom
-command.  For example, this custom command will display the next five entries
-with a <code>NEXT</code> TODO keyword.
-</p>
-<div class="smalllisp">
-<pre class="smalllisp">(setq org-agenda-custom-commands
-      '((&quot;n&quot; todo &quot;NEXT&quot;
+    <dd>
+      <a name=
+      "index-org_002dagenda_002dcategory_002dfilter_002dpreset" id=
+      "index-org_002dagenda_002dcategory_002dfilter_002dpreset"></a>
+
+      <p>Filter the current agenda view with respect to the
+      category of the item at point. Pressing <code>&lt;</code>
+      another time will remove this filter. You can add a filter
+      preset through the option
+      <code>org-agenda-category-filter-preset</code> (see
+      below.)</p><a name="index-_005e" id="index-_005e"></a>
+      <a name=
+      "index-org_002dagenda_002dfilter_002dby_002dtop_002dheadline"
+      id=
+      "index-org_002dagenda_002dfilter_002dby_002dtop_002dheadline">
+      </a>
+    </dd>
+
+    <dt><kbd><kbd>^</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-by-top-headline</code>)</kbd></dt>
+
+    <dd>
+      <p>Filter the current agenda view and only display the
+      siblings and the parent headline of the one at
+      point.</p><a name="index-_003d" id="index-_003d"></a>
+      <a name="index-org_002dagenda_002dfilter_002dby_002dregexp"
+      id="index-org_002dagenda_002dfilter_002dby_002dregexp"></a>
+    </dd>
+
+    <dt><kbd><kbd>=</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-by-regexp</code>)</kbd></dt>
+
+    <dd>
+      <a name=
+      "index-org_002dagenda_002dregexp_002dfilter_002dpreset" id=
+      "index-org_002dagenda_002dregexp_002dfilter_002dpreset"></a>
+
+      <p>Filter the agenda view by a regular expression: only show
+      agenda entries matching the regular expression the user
+      entered. When called with a prefix argument, it will filter
+      <em>out</em> entries matching the regexp. With two universal
+      prefix arguments, it will remove all the regexp filters,
+      which can be accumulated. You can add a filter preset through
+      the option <code>org-agenda-category-filter-preset</code>
+      (see below.)</p><a name="index-_007c" id="index-_007c"></a>
+      <a name="index-org_002dagenda_002dfilter_002dremove_002dall"
+      id="index-org_002dagenda_002dfilter_002dremove_002dall"></a>
+    </dd>
+
+    <dt><kbd><kbd>|</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-filter-remove-all</code>)</kbd></dt>
+
+    <dd>
+      <p>Remove all filters in the current agenda view.</p>
+    </dd>
+  </dl><a name="Setting-limits-for-the-agenda" id=
+  "Setting-limits-for-the-agenda"></a>
+
+  <h4 class="subsubheading">Setting limits for the
+  agenda</h4><a name="index-limits_002c-in-agenda" id=
+  "index-limits_002c-in-agenda"></a> <a name=
+  "index-org_002dagenda_002dmax_002dentries" id=
+  "index-org_002dagenda_002dmax_002dentries"></a> <a name=
+  "index-org_002dagenda_002dmax_002deffort" id=
+  "index-org_002dagenda_002dmax_002deffort"></a> <a name=
+  "index-org_002dagenda_002dmax_002dtodos" id=
+  "index-org_002dagenda_002dmax_002dtodos"></a> <a name=
+  "index-org_002dagenda_002dmax_002dtags" id=
+  "index-org_002dagenda_002dmax_002dtags"></a>
+
+  <p>Here is a list of options that you can set, either globally,
+  or locally in your custom agenda viewssee <a href=
+  "Custom-agenda-views.html#Custom-agenda-views">Custom agenda
+  views</a>.</p>
+
+  <dl compact="compact">
+    <dt><var>org-agenda-max-entries</var></dt>
+
+    <dd>
+      <p>Limit the number of entries.</p>
+    </dd>
+
+    <dt><var>org-agenda-max-effort</var></dt>
+
+    <dd>
+      <p>Limit the duration of accumulated efforts (as
+      minutes).</p>
+    </dd>
+
+    <dt><var>org-agenda-max-todos</var></dt>
+
+    <dd>
+      <p>Limit the number of entries with TODO keywords.</p>
+    </dd>
+
+    <dt><var>org-agenda-max-tags</var></dt>
+
+    <dd>
+      <p>Limit the number of tagged entries.</p>
+    </dd>
+  </dl>
+
+  <p>When set to a positive integer, each option will exclude
+  entries from other categories: for example, <code>(setq
+  org-agenda-max-effort 100)</code> will limit the agenda to 100
+  minutes of effort and exclude any entry that as no effort
+  property. If you want to include entries with no effort property,
+  use a negative value for <code>org-agenda-max-effort</code>.</p>
+
+  <p>One useful setup is to use <code>org-agenda-max-entries</code>
+  locally in a custom command. For example, this custom command
+  will display the next five entries with a <code>NEXT</code> TODO
+  keyword.</p>
+
+  <div class="smalllisp">
+    <pre class="smalllisp">
+(setq org-agenda-custom-commands
+      '(("n" todo "NEXT"
          ((org-agenda-max-entries 5)))))
-</pre></div>
+</pre>
+  </div>
 
-<p>Once you mark one of these five entry as <code>DONE</code>, rebuilding the agenda
-will again the next five entries again, including the first entry that was
-excluded so far.
-</p>
-<p>You can also dynamically set temporary limits<a name="DOCF108" href="#FOOT108"><sup>108</sup></a>:
-</p>
-<dl compact="compact">
-<dd><a name="index-_007e"></a>
-<a name="index-org_002dagenda_002dlimit_002dinteractively"></a>
-</dd>
-<dt><kbd><kbd>~</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-limit-interactively</code>)</kbd></dt>
-<dd><p>This prompts for the type of limit to apply and its value.
-</p></dd>
-</dl>
+  <p>Once you mark one of these five entry as <code>DONE</code>,
+  rebuilding the agenda will again the next five entries again,
+  including the first entry that was excluded so far.</p>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>You can also dynamically set temporary limits<a name="DOCF108"
+  href="#FOOT108" id="DOCF108"><sup>108</sup></a>:</p>
 
-<h3><a name="FOOT107" href="#DOCF107">(107)</a></h3>
-<p>Custom commands can preset a filter by
-binding the variable <code>org-agenda-tag-filter-preset</code> as an option.  This
-filter will then be applied to the view and persist as a basic filter through
-refreshes and more secondary filtering.  The filter is a global property of
-the entire agenda view&mdash;in a block agenda, you should only set this in the
-global options section, not in the section of an individual block.</p>
-<h3><a name="FOOT108" href="#DOCF108">(108)</a></h3>
-<p>Those temporary limits
-are lost when rebuilding the agenda.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Sorting-agenda-items.html#Sorting-agenda-items" accesskey="p" rel="prev">Sorting agenda items</a>, Up: <a href="Presentation-and-sorting.html#Presentation-and-sorting" accesskey="u" rel="up">Presentation and sorting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dd><a name="index-_007e" id="index-_007e"></a> <a name=
+    "index-org_002dagenda_002dlimit_002dinteractively" id=
+    "index-org_002dagenda_002dlimit_002dinteractively"></a></dd>
 
+    <dt><kbd><kbd>~</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-limit-interactively</code>)</kbd></dt>
 
+    <dd>
+      <p>This prompts for the type of limit to apply and its
+      value.</p>
+    </dd>
+  </dl>
 
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT107" href="#DOCF107" id=
+    "FOOT107">(107)</a></h3>
+
+    <p>Custom commands can preset a filter by binding the variable
+    <code>org-agenda-tag-filter-preset</code> as an option. This
+    filter will then be applied to the view and persist as a basic
+    filter through refreshes and more secondary filtering. The
+    filter is a global property of the entire agenda view&mdash;in
+    a block agenda, you should only set this in the global options
+    section, not in the section of an individual block.</p>
+
+    <h3><a name="FOOT108" href="#DOCF108" id=
+    "FOOT108">(108)</a></h3>
+
+    <p>Those temporary limits are lost when rebuilding the
+    agenda.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Sorting-agenda-items.html#Sorting-agenda-items" accesskey="p"
+    rel="prev">Sorting agenda items</a>, Up: <a href=
+    "Presentation-and-sorting.html#Presentation-and-sorting"
+    accesskey="u" rel="up">Presentation and sorting</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

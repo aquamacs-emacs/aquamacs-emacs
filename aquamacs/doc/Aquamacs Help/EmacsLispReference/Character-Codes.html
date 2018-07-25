@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,131 +19,204 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Character Codes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Character Codes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Character Codes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up" title="Non-ASCII Characters">
-<link href="Character-Properties.html#Character-Properties" rel="next" title="Character Properties">
-<link href="Selecting-a-Representation.html#Selecting-a-Representation" rel="prev" title="Selecting a Representation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Character Codes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Character Codes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Character Codes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up"
+  title="Non-ASCII Characters" />
+  <link href="Character-Properties.html#Character-Properties" rel=
+  "next" title="Character Properties" />
+  <link href=
+  "Selecting-a-Representation.html#Selecting-a-Representation" rel=
+  "prev" title="Selecting a Representation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Character-Codes" id="Character-Codes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Character-Properties.html#Character-Properties" accesskey="n"
+    rel="next">Character Properties</a>, Previous: <a href=
+    "Selecting-a-Representation.html#Selecting-a-Representation"
+    accesskey="p" rel="prev">Selecting a Representation</a>, Up:
+    <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Character-Codes-1" id="Character-Codes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Character-Codes"></a>
-<div class="header">
-<p>
-Next: <a href="Character-Properties.html#Character-Properties" accesskey="n" rel="next">Character Properties</a>, Previous: <a href="Selecting-a-Representation.html#Selecting-a-Representation" accesskey="p" rel="prev">Selecting a Representation</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Character-Codes-1"></a>
-<h3 class="section">32.5 Character Codes</h3>
-<a name="index-character-codes"></a>
+  <h3 class="section">32.5 Character Codes</h3><a name=
+  "index-character-codes" id="index-character-codes"></a>
 
-<p>The unibyte and multibyte text representations use different
-character codes.  The valid character codes for unibyte representation
-range from 0 to <code>#xFF</code> (255)&mdash;the values that can fit in one
-byte.  The valid character codes for multibyte representation range
-from 0 to <code>#x3FFFFF</code>.  In this code space, values 0 through
-<code>#x7F</code> (127) are for <acronym>ASCII</acronym> characters, and values
-<code>#x80</code> (128) through <code>#x3FFF7F</code> (4194175) are for
-non-<acronym>ASCII</acronym> characters.
-</p>
-<p>Emacs character codes are a superset of the Unicode standard.
-Values 0 through <code>#x10FFFF</code> (1114111) correspond to Unicode
-characters of the same codepoint; values <code>#x110000</code> (1114112)
-through <code>#x3FFF7F</code> (4194175) represent characters that are not
-unified with Unicode; and values <code>#x3FFF80</code> (4194176) through
-<code>#x3FFFFF</code> (4194303) represent eight-bit raw bytes.
-</p>
-<dl>
-<dt><a name="index-characterp"></a>Function: <strong>characterp</strong> <em>charcode</em></dt>
-<dd><p>This returns <code>t</code> if <var>charcode</var> is a valid character, and
-<code>nil</code> otherwise.
-</p>
-<div class="example">
-<pre class="example">(characterp 65)
+  <p>The unibyte and multibyte text representations use different
+  character codes. The valid character codes for unibyte
+  representation range from 0 to <code>#xFF</code> (255)&mdash;the
+  values that can fit in one byte. The valid character codes for
+  multibyte representation range from 0 to <code>#x3FFFFF</code>.
+  In this code space, values 0 through <code>#x7F</code> (127) are
+  for <acronym>ASCII</acronym> characters, and values
+  <code>#x80</code> (128) through <code>#x3FFF7F</code> (4194175)
+  are for non-<acronym>ASCII</acronym> characters.</p>
+
+  <p>Emacs character codes are a superset of the Unicode standard.
+  Values 0 through <code>#x10FFFF</code> (1114111) correspond to
+  Unicode characters of the same codepoint; values
+  <code>#x110000</code> (1114112) through <code>#x3FFF7F</code>
+  (4194175) represent characters that are not unified with Unicode;
+  and values <code>#x3FFF80</code> (4194176) through
+  <code>#x3FFFFF</code> (4194303) represent eight-bit raw
+  bytes.</p>
+
+  <dl>
+    <dt><a name="index-characterp" id=
+    "index-characterp"></a>Function: <strong>characterp</strong>
+    <em>charcode</em></dt>
+
+    <dd>
+      <p>This returns <code>t</code> if <var>charcode</var> is a
+      valid character, and <code>nil</code> otherwise.</p>
+
+      <div class="example">
+        <pre class="example">
+(characterp 65)
      &rArr; t
-</pre><pre class="example">(characterp 4194303)
+</pre>
+        <pre class="example">
+(characterp 4194303)
      &rArr; t
-</pre><pre class="example">(characterp 4194304)
+</pre>
+        <pre class="example">
+(characterp 4194304)
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl><a name="index-maximum-value-of-character-codepoint" id=
+  "index-maximum-value-of-character-codepoint"></a> <a name=
+  "index-codepoint_002c-largest-value" id=
+  "index-codepoint_002c-largest-value"></a>
 
-<a name="index-maximum-value-of-character-codepoint"></a>
-<a name="index-codepoint_002c-largest-value"></a>
-<dl>
-<dt><a name="index-max_002dchar"></a>Function: <strong>max-char</strong></dt>
-<dd><p>This function returns the largest value that a valid character
-codepoint can have.
-</p>
-<div class="example">
-<pre class="example">(characterp (max-char))
+  <dl>
+    <dt><a name="index-max_002dchar" id=
+    "index-max_002dchar"></a>Function:
+    <strong>max-char</strong></dt>
+
+    <dd>
+      <p>This function returns the largest value that a valid
+      character codepoint can have.</p>
+
+      <div class="example">
+        <pre class="example">
+(characterp (max-char))
      &rArr; t
-</pre><pre class="example">(characterp (1+ (max-char)))
+</pre>
+        <pre class="example">
+(characterp (1+ (max-char)))
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-get_002dbyte"></a>Function: <strong>get-byte</strong> <em>&amp;optional pos string</em></dt>
-<dd><p>This function returns the byte at character position <var>pos</var> in the
-current buffer.  If the current buffer is unibyte, this is literally
-the byte at that position.  If the buffer is multibyte, byte values of
-<acronym>ASCII</acronym> characters are the same as character codepoints,
-whereas eight-bit raw bytes are converted to their 8-bit codes.  The
-function signals an error if the character at <var>pos</var> is
-non-<acronym>ASCII</acronym>.
-</p>
-<p>The optional argument <var>string</var> means to get a byte value from that
-string instead of the current buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-get_002dbyte" id=
+    "index-get_002dbyte"></a>Function: <strong>get-byte</strong>
+    <em>&amp;optional pos string</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Character-Properties.html#Character-Properties" accesskey="n" rel="next">Character Properties</a>, Previous: <a href="Selecting-a-Representation.html#Selecting-a-Representation" accesskey="p" rel="prev">Selecting a Representation</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns the byte at character position
+      <var>pos</var> in the current buffer. If the current buffer
+      is unibyte, this is literally the byte at that position. If
+      the buffer is multibyte, byte values of
+      <acronym>ASCII</acronym> characters are the same as character
+      codepoints, whereas eight-bit raw bytes are converted to
+      their 8-bit codes. The function signals an error if the
+      character at <var>pos</var> is
+      non-<acronym>ASCII</acronym>.</p>
 
+      <p>The optional argument <var>string</var> means to get a
+      byte value from that string instead of the current
+      buffer.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Character-Properties.html#Character-Properties" accesskey="n"
+    rel="next">Character Properties</a>, Previous: <a href=
+    "Selecting-a-Representation.html#Selecting-a-Representation"
+    accesskey="p" rel="prev">Selecting a Representation</a>, Up:
+    <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

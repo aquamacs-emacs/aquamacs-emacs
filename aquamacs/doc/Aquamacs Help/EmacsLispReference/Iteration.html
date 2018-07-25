@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,153 +19,223 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Iteration</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Iteration">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Iteration">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Control-Structures.html#Control-Structures" rel="up" title="Control Structures">
-<link href="Generators.html#Generators" rel="next" title="Generators">
-<link href="Combining-Conditions.html#Combining-Conditions" rel="prev" title="Combining Conditions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Iteration</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Iteration" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Iteration" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Control-Structures.html#Control-Structures" rel="up"
+  title="Control Structures" />
+  <link href="Generators.html#Generators" rel="next" title=
+  "Generators" />
+  <link href="Combining-Conditions.html#Combining-Conditions" rel=
+  "prev" title="Combining Conditions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Iteration" id="Iteration"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Generators.html#Generators" accesskey="n"
+    rel="next">Generators</a>, Previous: <a href=
+    "Combining-Conditions.html#Combining-Conditions" accesskey="p"
+    rel="prev">Combining Conditions</a>, Up: <a href=
+    "Control-Structures.html#Control-Structures" accesskey="u" rel=
+    "up">Control Structures</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Iteration-1" id="Iteration-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Iteration"></a>
-<div class="header">
-<p>
-Next: <a href="Generators.html#Generators" accesskey="n" rel="next">Generators</a>, Previous: <a href="Combining-Conditions.html#Combining-Conditions" accesskey="p" rel="prev">Combining Conditions</a>, Up: <a href="Control-Structures.html#Control-Structures" accesskey="u" rel="up">Control Structures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Iteration-1"></a>
-<h3 class="section">10.4 Iteration</h3>
-<a name="index-iteration"></a>
-<a name="index-recursion"></a>
+  <h3 class="section">10.4 Iteration</h3><a name="index-iteration"
+  id="index-iteration"></a> <a name="index-recursion" id=
+  "index-recursion"></a>
 
-<p>Iteration means executing part of a program repetitively.  For
-example, you might want to repeat some computation once for each element
-of a list, or once for each integer from 0 to <var>n</var>.  You can do this
-in Emacs Lisp with the special form <code>while</code>:
-</p>
-<dl>
-<dt><a name="index-while"></a>Special Form: <strong>while</strong> <em>condition forms&hellip;</em></dt>
-<dd><p><code>while</code> first evaluates <var>condition</var>.  If the result is
-non-<code>nil</code>, it evaluates <var>forms</var> in textual order.  Then it
-reevaluates <var>condition</var>, and if the result is non-<code>nil</code>, it
-evaluates <var>forms</var> again.  This process repeats until <var>condition</var>
-evaluates to <code>nil</code>.
-</p>
-<p>There is no limit on the number of iterations that may occur.  The loop
-will continue until either <var>condition</var> evaluates to <code>nil</code> or
-until an error or <code>throw</code> jumps out of it (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
-</p>
-<p>The value of a <code>while</code> form is always <code>nil</code>.
-</p>
-<div class="example">
-<pre class="example">(setq num 0)
+  <p>Iteration means executing part of a program repetitively. For
+  example, you might want to repeat some computation once for each
+  element of a list, or once for each integer from 0 to
+  <var>n</var>. You can do this in Emacs Lisp with the special form
+  <code>while</code>:</p>
+
+  <dl>
+    <dt><a name="index-while" id="index-while"></a>Special Form:
+    <strong>while</strong> <em>condition forms&hellip;</em></dt>
+
+    <dd>
+      <p><code>while</code> first evaluates <var>condition</var>.
+      If the result is non-<code>nil</code>, it evaluates
+      <var>forms</var> in textual order. Then it reevaluates
+      <var>condition</var>, and if the result is
+      non-<code>nil</code>, it evaluates <var>forms</var> again.
+      This process repeats until <var>condition</var> evaluates to
+      <code>nil</code>.</p>
+
+      <p>There is no limit on the number of iterations that may
+      occur. The loop will continue until either
+      <var>condition</var> evaluates to <code>nil</code> or until
+      an error or <code>throw</code> jumps out of it (see <a href=
+      "Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).</p>
+
+      <p>The value of a <code>while</code> form is always
+      <code>nil</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq num 0)
      &rArr; 0
-</pre><pre class="example">(while (&lt; num 4)
-  (princ (format &quot;Iteration %d.&quot; num))
+</pre>
+        <pre class="example">
+(while (&lt; num 4)
+  (princ (format "Iteration %d." num))
   (setq num (1+ num)))
-     ⊣ Iteration 0.
-     ⊣ Iteration 1.
-     ⊣ Iteration 2.
-     ⊣ Iteration 3.
+     &acirc;&Scaron;&pound; Iteration 0.
+     &acirc;&Scaron;&pound; Iteration 1.
+     &acirc;&Scaron;&pound; Iteration 2.
+     &acirc;&Scaron;&pound; Iteration 3.
      &rArr; nil
-</pre></div>
+</pre>
+      </div>
 
-<p>To write a repeat-until loop, which will execute something on each
-iteration and then do the end-test, put the body followed by the
-end-test in a <code>progn</code> as the first argument of <code>while</code>, as
-shown here:
-</p>
-<div class="example">
-<pre class="example">(while (progn
+      <p>To write a repeat-until loop, which will execute something
+      on each iteration and then do the end-test, put the body
+      followed by the end-test in a <code>progn</code> as the first
+      argument of <code>while</code>, as shown here:</p>
+
+      <div class="example">
+        <pre class="example">
+(while (progn
          (forward-line 1)
-         (not (looking-at &quot;^$&quot;))))
-</pre></div>
+         (not (looking-at "^$"))))
+</pre>
+      </div>
 
-<p>This moves forward one line and continues moving by lines until it
-reaches an empty line.  It is peculiar in that the <code>while</code> has no
-body, just the end test (which also does the real work of moving point).
-</p></dd></dl>
+      <p>This moves forward one line and continues moving by lines
+      until it reaches an empty line. It is peculiar in that the
+      <code>while</code> has no body, just the end test (which also
+      does the real work of moving point).</p>
+    </dd>
+  </dl>
 
-<p>The <code>dolist</code> and <code>dotimes</code> macros provide convenient ways to
-write two common kinds of loops.
-</p>
-<dl>
-<dt><a name="index-dolist"></a>Macro: <strong>dolist</strong> <em>(var list [result]) body&hellip;</em></dt>
-<dd><p>This construct executes <var>body</var> once for each element of
-<var>list</var>, binding the variable <var>var</var> locally to hold the current
-element.  Then it returns the value of evaluating <var>result</var>, or
-<code>nil</code> if <var>result</var> is omitted.  For example, here is how you
-could use <code>dolist</code> to define the <code>reverse</code> function:
-</p>
-<div class="example">
-<pre class="example">(defun reverse (list)
+  <p>The <code>dolist</code> and <code>dotimes</code> macros
+  provide convenient ways to write two common kinds of loops.</p>
+
+  <dl>
+    <dt><a name="index-dolist" id="index-dolist"></a>Macro:
+    <strong>dolist</strong> <em>(var list [result])
+    body&hellip;</em></dt>
+
+    <dd>
+      <p>This construct executes <var>body</var> once for each
+      element of <var>list</var>, binding the variable
+      <var>var</var> locally to hold the current element. Then it
+      returns the value of evaluating <var>result</var>, or
+      <code>nil</code> if <var>result</var> is omitted. For
+      example, here is how you could use <code>dolist</code> to
+      define the <code>reverse</code> function:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun reverse (list)
   (let (value)
     (dolist (elt list value)
       (setq value (cons elt value)))))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-dotimes"></a>Macro: <strong>dotimes</strong> <em>(var count [result]) body&hellip;</em></dt>
-<dd><p>This construct executes <var>body</var> once for each integer from 0
-(inclusive) to <var>count</var> (exclusive), binding the variable <var>var</var>
-to the integer for the current iteration.  Then it returns the value
-of evaluating <var>result</var>, or <code>nil</code> if <var>result</var> is omitted.
-Here is an example of using <code>dotimes</code> to do something 100 times:
-</p>
-<div class="example">
-<pre class="example">(dotimes (i 100)
-  (insert &quot;I will not obey absurd orders\n&quot;))
-</pre></div>
-</dd></dl>
+  <dl>
+    <dt><a name="index-dotimes" id="index-dotimes"></a>Macro:
+    <strong>dotimes</strong> <em>(var count [result])
+    body&hellip;</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Generators.html#Generators" accesskey="n" rel="next">Generators</a>, Previous: <a href="Combining-Conditions.html#Combining-Conditions" accesskey="p" rel="prev">Combining Conditions</a>, Up: <a href="Control-Structures.html#Control-Structures" accesskey="u" rel="up">Control Structures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This construct executes <var>body</var> once for each
+      integer from 0 (inclusive) to <var>count</var> (exclusive),
+      binding the variable <var>var</var> to the integer for the
+      current iteration. Then it returns the value of evaluating
+      <var>result</var>, or <code>nil</code> if <var>result</var>
+      is omitted. Here is an example of using <code>dotimes</code>
+      to do something 100 times:</p>
 
+      <div class="example">
+        <pre class="example">
+(dotimes (i 100)
+  (insert "I will not obey absurd orders\n"))
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Generators.html#Generators" accesskey="n"
+    rel="next">Generators</a>, Previous: <a href=
+    "Combining-Conditions.html#Combining-Conditions" accesskey="p"
+    rel="prev">Combining Conditions</a>, Up: <a href=
+    "Control-Structures.html#Control-Structures" accesskey="u" rel=
+    "up">Control Structures</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

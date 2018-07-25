@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Score Decays - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Scoring.html#Scoring" title="Scoring">
-<link rel="prev" href="Advanced-Scoring.html#Advanced-Scoring" title="Advanced Scoring">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Score Decays - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Scoring.html#Scoring" title="Scoring" />
+  <link rel="prev" href="Advanced-Scoring.html#Advanced-Scoring"
+  title="Advanced Scoring" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +32,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,37 +45,53 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Score-Decays"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Advanced-Scoring.html#Advanced-Scoring">Advanced Scoring</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Scoring.html#Scoring">Scoring</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Score-Decays" id="Score-Decays"></a>
 
-<h3 class="section">7.16 Score Decays</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Advanced-Scoring.html#Advanced-Scoring">Advanced Scoring</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Scoring.html#Scoring">Scoring</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-score-decays-2534"></a><a name="index-decays-2535"></a>
-You may find that your scores have a tendency to grow without
-bounds, especially if you're using adaptive scoring.  If scores get too
-big, they lose all meaning&mdash;they simply max out and it's difficult to
-use them in any sensible way.
+  <h3 class="section">7.16 Score Decays</h3>
 
-   <p><a name="index-gnus_002ddecay_002dscores-2536"></a><a name="index-gnus_002ddecay_002dscore-2537"></a><a name="index-gnus_002ddecay_002dscore_002dfunction-2538"></a>Gnus provides a mechanism for decaying scores to help with this problem. 
-When score files are loaded and <code>gnus-decay-scores</code> is
-non-<code>nil</code>, Gnus will run the score files through the decaying
-mechanism thereby lowering the scores of all non-permanent score rules. 
-If <code>gnus-decay-scores</code> is a regexp, only score files matching this
-regexp are treated.  E.g. you may set it to &lsquo;<samp><span class="samp">\\.ADAPT\\'</span></samp>&rsquo; if only
-<em>adaptive</em> score files should be decayed.  The decay itself if
-performed by the <code>gnus-decay-score-function</code> function, which is
-<code>gnus-decay-score</code> by default.  Here's the definition of that
-function:
+  <p><a name="index-score-decays-2534" id=
+  "index-score-decays-2534"></a><a name="index-decays-2535" id=
+  "index-decays-2535"></a> You may find that your scores have a
+  tendency to grow without bounds, especially if you're using
+  adaptive scoring. If scores get too big, they lose all
+  meaning&mdash;they simply max out and it's difficult to use them
+  in any sensible way.</p>
 
-<pre class="lisp">     (defun gnus-decay-score (score)
+  <p><a name="index-gnus_002ddecay_002dscores-2536" id=
+  "index-gnus_002ddecay_002dscores-2536"></a><a name=
+  "index-gnus_002ddecay_002dscore-2537" id=
+  "index-gnus_002ddecay_002dscore-2537"></a><a name=
+  "index-gnus_002ddecay_002dscore_002dfunction-2538" id=
+  "index-gnus_002ddecay_002dscore_002dfunction-2538"></a>Gnus
+  provides a mechanism for decaying scores to help with this
+  problem. When score files are loaded and
+  <code>gnus-decay-scores</code> is non-<code>nil</code>, Gnus will
+  run the score files through the decaying mechanism thereby
+  lowering the scores of all non-permanent score rules. If
+  <code>gnus-decay-scores</code> is a regexp, only score files
+  matching this regexp are treated. E.g. you may set it to
+  &lsquo;<samp><span class="samp">\\.ADAPT\\'</span></samp>&rsquo;
+  if only <em>adaptive</em> score files should be decayed. The
+  decay itself if performed by the
+  <code>gnus-decay-score-function</code> function, which is
+  <code>gnus-decay-score</code> by default. Here's the definition
+  of that function:</p>
+  <pre class="lisp">
+     (defun gnus-decay-score (score)
        "Decay SCORE according to `gnus-score-decay-constant'
      and `gnus-score-decay-scale'."
        (let ((n (- score
@@ -82,24 +108,31 @@ function:
               (car (split-string (number-to-string n) "\\.")))
            (floor n))))
 </pre>
-   <p><a name="index-gnus_002dscore_002ddecay_002dscale-2539"></a><a name="index-gnus_002dscore_002ddecay_002dconstant-2540"></a><code>gnus-score-decay-constant</code> is 3 by default and
-<code>gnus-score-decay-scale</code> is 0.05.  This should cause the following:
 
-     <ol type=1 start=1>
-<li>Scores between -3 and 3 will be set to 0 when this function is called.
+  <p><a name="index-gnus_002dscore_002ddecay_002dscale-2539" id=
+  "index-gnus_002dscore_002ddecay_002dscale-2539"></a><a name=
+  "index-gnus_002dscore_002ddecay_002dconstant-2540" id=
+  "index-gnus_002dscore_002ddecay_002dconstant-2540"></a><code>gnus-score-decay-constant</code>
+  is 3 by default and <code>gnus-score-decay-scale</code> is 0.05.
+  This should cause the following:</p>
 
-     <li>Scores with magnitudes between 3 and 60 will be shrunk by 3.
+  <ol type="1" start="1">
+    <li>Scores between -3 and 3 will be set to 0 when this function
+    is called.</li>
 
-     <li>Scores with magnitudes greater than 60 will be shrunk by 5% of the
-score.
-        </ol>
+    <li>Scores with magnitudes between 3 and 60 will be shrunk by
+    3.</li>
 
-   <p>If you don't like this decay function, write your own.  It is called
-with the score to be decayed as its only parameter, and it should return
-the new score, which should be an integer.
+    <li>Scores with magnitudes greater than 60 will be shrunk by 5%
+    of the score.</li>
+  </ol>
 
-   <p>Gnus will try to decay scores once a day.  If you haven't run Gnus for
-four days, Gnus will decay the scores four times, for instance.
+  <p>If you don't like this decay function, write your own. It is
+  called with the score to be decayed as its only parameter, and it
+  should return the new score, which should be an integer.</p>
 
-   </body></html>
-
+  <p>Gnus will try to decay scores once a day. If you haven't run
+  Gnus for four days, Gnus will decay the scores four times, for
+  instance.</p>
+</body>
+</html>

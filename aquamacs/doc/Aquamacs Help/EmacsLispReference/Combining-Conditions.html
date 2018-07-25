@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,183 +19,266 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Combining Conditions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Combining Conditions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Combining Conditions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Control-Structures.html#Control-Structures" rel="up" title="Control Structures">
-<link href="Iteration.html#Iteration" rel="next" title="Iteration">
-<link href="Pattern-matching-case-statement.html#Pattern-matching-case-statement" rel="prev" title="Pattern matching case statement">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Combining
+  Conditions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Combining Conditions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Combining Conditions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Control-Structures.html#Control-Structures" rel="up"
+  title="Control Structures" />
+  <link href="Iteration.html#Iteration" rel="next" title=
+  "Iteration" />
+  <link href=
+  "Pattern-matching-case-statement.html#Pattern-matching-case-statement"
+  rel="prev" title="Pattern matching case statement" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Combining-Conditions" id="Combining-Conditions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Iteration.html#Iteration" accesskey="n" rel=
+    "next">Iteration</a>, Previous: <a href=
+    "Conditionals.html#Conditionals" accesskey="p" rel=
+    "prev">Conditionals</a>, Up: <a href=
+    "Control-Structures.html#Control-Structures" accesskey="u" rel=
+    "up">Control Structures</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Constructs-for-Combining-Conditions" id=
+  "Constructs-for-Combining-Conditions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Combining-Conditions"></a>
-<div class="header">
-<p>
-Next: <a href="Iteration.html#Iteration" accesskey="n" rel="next">Iteration</a>, Previous: <a href="Conditionals.html#Conditionals" accesskey="p" rel="prev">Conditionals</a>, Up: <a href="Control-Structures.html#Control-Structures" accesskey="u" rel="up">Control Structures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Constructs-for-Combining-Conditions"></a>
-<h3 class="section">10.3 Constructs for Combining Conditions</h3>
-<a name="index-combining-conditions"></a>
+  <h3 class="section">10.3 Constructs for Combining
+  Conditions</h3><a name="index-combining-conditions" id=
+  "index-combining-conditions"></a>
 
-<p>This section describes three constructs that are often used together
-with <code>if</code> and <code>cond</code> to express complicated conditions.  The
-constructs <code>and</code> and <code>or</code> can also be used individually as
-kinds of multiple conditional constructs.
-</p>
-<dl>
-<dt><a name="index-not"></a>Function: <strong>not</strong> <em>condition</em></dt>
-<dd><p>This function tests for the falsehood of <var>condition</var>.  It returns
-<code>t</code> if <var>condition</var> is <code>nil</code>, and <code>nil</code> otherwise.
-The function <code>not</code> is identical to <code>null</code>, and we recommend
-using the name <code>null</code> if you are testing for an empty list.
-</p></dd></dl>
+  <p>This section describes three constructs that are often used
+  together with <code>if</code> and <code>cond</code> to express
+  complicated conditions. The constructs <code>and</code> and
+  <code>or</code> can also be used individually as kinds of
+  multiple conditional constructs.</p>
 
-<dl>
-<dt><a name="index-and"></a>Special Form: <strong>and</strong> <em>conditions&hellip;</em></dt>
-<dd><p>The <code>and</code> special form tests whether all the <var>conditions</var> are
-true.  It works by evaluating the <var>conditions</var> one by one in the
-order written.
-</p>
-<p>If any of the <var>conditions</var> evaluates to <code>nil</code>, then the result
-of the <code>and</code> must be <code>nil</code> regardless of the remaining
-<var>conditions</var>; so <code>and</code> returns <code>nil</code> right away, ignoring
-the remaining <var>conditions</var>.
-</p>
-<p>If all the <var>conditions</var> turn out non-<code>nil</code>, then the value of
-the last of them becomes the value of the <code>and</code> form.  Just
-<code>(and)</code>, with no <var>conditions</var>, returns <code>t</code>, appropriate
-because all the <var>conditions</var> turned out non-<code>nil</code>.  (Think
-about it; which one did not?)
-</p>
-<p>Here is an example.  The first condition returns the integer 1, which is
-not <code>nil</code>.  Similarly, the second condition returns the integer 2,
-which is not <code>nil</code>.  The third condition is <code>nil</code>, so the
-remaining condition is never evaluated.
-</p>
-<div class="example">
-<pre class="example">(and (print 1) (print 2) nil (print 3))
-     ⊣ 1
-     ⊣ 2
+  <dl>
+    <dt><a name="index-not" id="index-not"></a>Function:
+    <strong>not</strong> <em>condition</em></dt>
+
+    <dd>
+      <p>This function tests for the falsehood of
+      <var>condition</var>. It returns <code>t</code> if
+      <var>condition</var> is <code>nil</code>, and
+      <code>nil</code> otherwise. The function <code>not</code> is
+      identical to <code>null</code>, and we recommend using the
+      name <code>null</code> if you are testing for an empty
+      list.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-and" id="index-and"></a>Special Form:
+    <strong>and</strong> <em>conditions&hellip;</em></dt>
+
+    <dd>
+      <p>The <code>and</code> special form tests whether all the
+      <var>conditions</var> are true. It works by evaluating the
+      <var>conditions</var> one by one in the order written.</p>
+
+      <p>If any of the <var>conditions</var> evaluates to
+      <code>nil</code>, then the result of the <code>and</code>
+      must be <code>nil</code> regardless of the remaining
+      <var>conditions</var>; so <code>and</code> returns
+      <code>nil</code> right away, ignoring the remaining
+      <var>conditions</var>.</p>
+
+      <p>If all the <var>conditions</var> turn out
+      non-<code>nil</code>, then the value of the last of them
+      becomes the value of the <code>and</code> form. Just
+      <code>(and)</code>, with no <var>conditions</var>, returns
+      <code>t</code>, appropriate because all the
+      <var>conditions</var> turned out non-<code>nil</code>. (Think
+      about it; which one did not?)</p>
+
+      <p>Here is an example. The first condition returns the
+      integer 1, which is not <code>nil</code>. Similarly, the
+      second condition returns the integer 2, which is not
+      <code>nil</code>. The third condition is <code>nil</code>, so
+      the remaining condition is never evaluated.</p>
+
+      <div class="example">
+        <pre class="example">
+(and (print 1) (print 2) nil (print 3))
+     &acirc;&Scaron;&pound; 1
+     &acirc;&Scaron;&pound; 2
 &rArr; nil
-</pre></div>
+</pre>
+      </div>
 
-<p>Here is a more realistic example of using <code>and</code>:
-</p>
-<div class="example">
-<pre class="example">(if (and (consp foo) (eq (car foo) 'x))
-    (message &quot;foo is a list starting with x&quot;))
-</pre></div>
+      <p>Here is a more realistic example of using
+      <code>and</code>:</p>
 
-<p>Note that <code>(car foo)</code> is not executed if <code>(consp foo)</code> returns
-<code>nil</code>, thus avoiding an error.
-</p>
-<p><code>and</code> expressions can also be written using either <code>if</code> or
-<code>cond</code>.  Here&rsquo;s how:
-</p>
-<div class="example">
-<pre class="example">(and <var>arg1</var> <var>arg2</var> <var>arg3</var>)
+      <div class="example">
+        <pre class="example">
+(if (and (consp foo) (eq (car foo) 'x))
+    (message "foo is a list starting with x"))
+</pre>
+      </div>
+
+      <p>Note that <code>(car foo)</code> is not executed if
+      <code>(consp foo)</code> returns <code>nil</code>, thus
+      avoiding an error.</p>
+
+      <p><code>and</code> expressions can also be written using
+      either <code>if</code> or <code>cond</code>. Here&rsquo;s
+      how:</p>
+
+      <div class="example">
+        <pre class="example">
+(and <var>arg1</var> <var>arg2</var> <var>arg3</var>)
 &equiv;
 (if <var>arg1</var> (if <var>arg2</var> <var>arg3</var>))
 &equiv;
 (cond (<var>arg1</var> (cond (<var>arg2</var> <var>arg3</var>))))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-or"></a>Special Form: <strong>or</strong> <em>conditions&hellip;</em></dt>
-<dd><p>The <code>or</code> special form tests whether at least one of the
-<var>conditions</var> is true.  It works by evaluating all the
-<var>conditions</var> one by one in the order written.
-</p>
-<p>If any of the <var>conditions</var> evaluates to a non-<code>nil</code> value, then
-the result of the <code>or</code> must be non-<code>nil</code>; so <code>or</code> returns
-right away, ignoring the remaining <var>conditions</var>.  The value it
-returns is the non-<code>nil</code> value of the condition just evaluated.
-</p>
-<p>If all the <var>conditions</var> turn out <code>nil</code>, then the <code>or</code>
-expression returns <code>nil</code>.  Just <code>(or)</code>, with no
-<var>conditions</var>, returns <code>nil</code>, appropriate because all the
-<var>conditions</var> turned out <code>nil</code>.  (Think about it; which one
-did not?)
-</p>
-<p>For example, this expression tests whether <code>x</code> is either
-<code>nil</code> or the integer zero:
-</p>
-<div class="example">
-<pre class="example">(or (eq x nil) (eq x 0))
-</pre></div>
+  <dl>
+    <dt><a name="index-or" id="index-or"></a>Special Form:
+    <strong>or</strong> <em>conditions&hellip;</em></dt>
 
-<p>Like the <code>and</code> construct, <code>or</code> can be written in terms of
-<code>cond</code>.  For example:
-</p>
-<div class="example">
-<pre class="example">(or <var>arg1</var> <var>arg2</var> <var>arg3</var>)
+    <dd>
+      <p>The <code>or</code> special form tests whether at least
+      one of the <var>conditions</var> is true. It works by
+      evaluating all the <var>conditions</var> one by one in the
+      order written.</p>
+
+      <p>If any of the <var>conditions</var> evaluates to a
+      non-<code>nil</code> value, then the result of the
+      <code>or</code> must be non-<code>nil</code>; so
+      <code>or</code> returns right away, ignoring the remaining
+      <var>conditions</var>. The value it returns is the
+      non-<code>nil</code> value of the condition just
+      evaluated.</p>
+
+      <p>If all the <var>conditions</var> turn out
+      <code>nil</code>, then the <code>or</code> expression returns
+      <code>nil</code>. Just <code>(or)</code>, with no
+      <var>conditions</var>, returns <code>nil</code>, appropriate
+      because all the <var>conditions</var> turned out
+      <code>nil</code>. (Think about it; which one did not?)</p>
+
+      <p>For example, this expression tests whether <code>x</code>
+      is either <code>nil</code> or the integer zero:</p>
+
+      <div class="example">
+        <pre class="example">
+(or (eq x nil) (eq x 0))
+</pre>
+      </div>
+
+      <p>Like the <code>and</code> construct, <code>or</code> can
+      be written in terms of <code>cond</code>. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(or <var>arg1</var> <var>arg2</var> <var>arg3</var>)
 &equiv;
 (cond (<var>arg1</var>)
       (<var>arg2</var>)
       (<var>arg3</var>))
-</pre></div>
+</pre>
+      </div>
 
-<p>You could almost write <code>or</code> in terms of <code>if</code>, but not quite:
-</p>
-<div class="example">
-<pre class="example">(if <var>arg1</var> <var>arg1</var>
+      <p>You could almost write <code>or</code> in terms of
+      <code>if</code>, but not quite:</p>
+
+      <div class="example">
+        <pre class="example">
+(if <var>arg1</var> <var>arg1</var>
   (if <var>arg2</var> <var>arg2</var>
     <var>arg3</var>))
-</pre></div>
+</pre>
+      </div>
 
-<p>This is not completely equivalent because it can evaluate <var>arg1</var> or
-<var>arg2</var> twice.  By contrast, <code>(or <var>arg1</var> <var>arg2</var>
-<var>arg3</var>)</code> never evaluates any argument more than once.
-</p></dd></dl>
+      <p>This is not completely equivalent because it can evaluate
+      <var>arg1</var> or <var>arg2</var> twice. By contrast,
+      <code>(or <var>arg1</var> <var>arg2</var>
+      <var>arg3</var>)</code> never evaluates any argument more
+      than once.</p>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Iteration.html#Iteration" accesskey="n" rel="next">Iteration</a>, Previous: <a href="Conditionals.html#Conditionals" accesskey="p" rel="prev">Conditionals</a>, Up: <a href="Control-Structures.html#Control-Structures" accesskey="u" rel="up">Control Structures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Iteration.html#Iteration" accesskey="n" rel=
+    "next">Iteration</a>, Previous: <a href=
+    "Conditionals.html#Conditionals" accesskey="p" rel=
+    "prev">Conditionals</a>, Up: <a href=
+    "Control-Structures.html#Control-Structures" accesskey="u" rel=
+    "up">Control Structures</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

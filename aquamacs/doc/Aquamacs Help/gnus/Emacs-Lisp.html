@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Emacs Lisp - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Emacs-for-Heathens.html#Emacs-for-Heathens" title="Emacs for Heathens">
-<link rel="prev" href="Keystrokes.html#Keystrokes" title="Keystrokes">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Emacs Lisp - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Emacs-for-Heathens.html#Emacs-for-Heathens"
+  title="Emacs for Heathens" />
+  <link rel="prev" href="Keystrokes.html#Keystrokes" title=
+  "Keystrokes" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +33,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,75 +46,97 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Emacs-Lisp"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Keystrokes.html#Keystrokes">Keystrokes</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Emacs-for-Heathens.html#Emacs-for-Heathens">Emacs for Heathens</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Emacs-Lisp" id="Emacs-Lisp"></a>
 
-<h4 class="subsection">11.8.2 Emacs Lisp</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Keystrokes.html#Keystrokes">Keystrokes</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href=
+    "Emacs-for-Heathens.html#Emacs-for-Heathens">Emacs for
+    Heathens</a></p>
+    <hr />
+  </div>
 
-<p>Emacs is the King of Editors because it's really a Lisp interpreter. 
-Each and every key you tap runs some Emacs Lisp code snippet, and since
-Emacs Lisp is an interpreted language, that means that you can configure
-any key to run any arbitrary code.  You just, like, do it.
+  <h4 class="subsection">11.8.2 Emacs Lisp</h4>
 
-   <p>Gnus is written in Emacs Lisp, and is run as a bunch of interpreted
-functions.  (These are byte-compiled for speed, but it's still
-interpreted.)  If you decide that you don't like the way Gnus does
-certain things, it's trivial to have it do something a different way. 
-(Well, at least if you know how to write Lisp code.)  However, that's
-beyond the scope of this manual, so we are simply going to talk about
-some common constructs that you normally use in your <samp><span class="file">~/.gnus.el</span></samp>
-file to customize Gnus.  (You can also use the <samp><span class="file">~/.emacs</span></samp> file, but
-in order to set things of Gnus up, it is much better to use the
-<samp><span class="file">~/.gnus.el</span></samp> file, See <a href="Startup-Files.html#Startup-Files">Startup Files</a>.)
+  <p>Emacs is the King of Editors because it's really a Lisp
+  interpreter. Each and every key you tap runs some Emacs Lisp code
+  snippet, and since Emacs Lisp is an interpreted language, that
+  means that you can configure any key to run any arbitrary code.
+  You just, like, do it.</p>
 
-   <p>If you want to set the variable <code>gnus-florgbnize</code> to four (4), you
-write the following:
+  <p>Gnus is written in Emacs Lisp, and is run as a bunch of
+  interpreted functions. (These are byte-compiled for speed, but
+  it's still interpreted.) If you decide that you don't like the
+  way Gnus does certain things, it's trivial to have it do
+  something a different way. (Well, at least if you know how to
+  write Lisp code.) However, that's beyond the scope of this
+  manual, so we are simply going to talk about some common
+  constructs that you normally use in your <samp><span class=
+  "file">~/.gnus.el</span></samp> file to customize Gnus. (You can
+  also use the <samp><span class="file">~/.emacs</span></samp>
+  file, but in order to set things of Gnus up, it is much better to
+  use the <samp><span class="file">~/.gnus.el</span></samp> file,
+  See <a href="Startup-Files.html#Startup-Files">Startup
+  Files</a>.)</p>
 
-<pre class="lisp">     (setq gnus-florgbnize 4)
+  <p>If you want to set the variable <code>gnus-florgbnize</code>
+  to four (4), you write the following:</p>
+  <pre class="lisp">
+     (setq gnus-florgbnize 4)
 </pre>
-   <p>This function (really &ldquo;special form&rdquo;) <code>setq</code> is the one that can
-set a variable to some value.  This is really all you need to know.  Now
-you can go and fill your <samp><span class="file">~/.gnus.el</span></samp> file with lots of these to
-change how Gnus works.
 
-   <p>If you have put that thing in your <samp><span class="file">~/.gnus.el</span></samp> file, it will be
-read and <code>eval</code>ed (which is Lisp-ese for &ldquo;run&rdquo;) the next time you
-start Gnus.  If you want to change the variable right away, simply say
-<kbd>C-x C-e</kbd> after the closing parenthesis.  That will <code>eval</code> the
-previous &ldquo;form&rdquo;, which is a simple <code>setq</code> statement here.
+  <p>This function (really &ldquo;special form&rdquo;)
+  <code>setq</code> is the one that can set a variable to some
+  value. This is really all you need to know. Now you can go and
+  fill your <samp><span class="file">~/.gnus.el</span></samp> file
+  with lots of these to change how Gnus works.</p>
 
-   <p>Go ahead&mdash;just try it, if you're located at your Emacs.  After you
-<kbd>C-x C-e</kbd>, you will see &lsquo;<samp><span class="samp">4</span></samp>&rsquo; appear in the echo area, which
-is the return value of the form you <code>eval</code>ed.
+  <p>If you have put that thing in your <samp><span class=
+  "file">~/.gnus.el</span></samp> file, it will be read and
+  <code>eval</code>ed (which is Lisp-ese for &ldquo;run&rdquo;) the
+  next time you start Gnus. If you want to change the variable
+  right away, simply say <kbd>C-x C-e</kbd> after the closing
+  parenthesis. That will <code>eval</code> the previous
+  &ldquo;form&rdquo;, which is a simple <code>setq</code> statement
+  here.</p>
 
-   <p>Some pitfalls:
+  <p>Go ahead&mdash;just try it, if you're located at your Emacs.
+  After you <kbd>C-x C-e</kbd>, you will see
+  &lsquo;<samp><span class="samp">4</span></samp>&rsquo; appear in
+  the echo area, which is the return value of the form you
+  <code>eval</code>ed.</p>
 
-   <p>If the manual says &ldquo;set <code>gnus-read-active-file</code> to <code>some</code>&rdquo;,
-that means:
+  <p>Some pitfalls:</p>
 
-<pre class="lisp">     (setq gnus-read-active-file 'some)
+  <p>If the manual says &ldquo;set
+  <code>gnus-read-active-file</code> to <code>some</code>&rdquo;,
+  that means:</p>
+  <pre class="lisp">
+     (setq gnus-read-active-file 'some)
 </pre>
-   <p>On the other hand, if the manual says &ldquo;set <code>gnus-nntp-server-file</code> to
-&lsquo;<samp><span class="samp">/etc/nntpserver</span></samp>&rsquo;&rdquo;, that means:
 
-<pre class="lisp">     (setq gnus-nntp-server-file "/etc/nntpserver")
+  <p>On the other hand, if the manual says &ldquo;set
+  <code>gnus-nntp-server-file</code> to &lsquo;<samp><span class=
+  "samp">/etc/nntpserver</span></samp>&rsquo;&rdquo;, that
+  means:</p>
+  <pre class="lisp">
+     (setq gnus-nntp-server-file "/etc/nntpserver")
 </pre>
-   <p>So be careful not to mix up strings (the latter) with symbols (the
-former).  The manual is unambiguous, but it can be confusing.
 
-<!-- \input texinfo @c -*-texinfo-*- -->
-<!-- Uncomment 1st line before texing this file alone. -->
-<!-- %**start of header -->
-<!-- Copyright (C) 1995, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, -->
-<!-- 2009, 2010 Free Software Foundation, Inc. -->
-<!-- %**end of header -->
-   </body></html>
-
+  <p>So be careful not to mix up strings (the latter) with symbols
+  (the former). The manual is unambiguous, but it can be confusing.
+  <!-- \input texinfo @c -*-texinfo-*- -->
+  <!-- Uncomment 1st line before texing this file alone. -->
+  <!-- %**start of header -->
+  <!-- Copyright (C) 1995, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, -->
+  <!-- 2009, 2010 Free Software Foundation, Inc. -->
+  <!-- %**end of header --></p>
+</body>
+</html>

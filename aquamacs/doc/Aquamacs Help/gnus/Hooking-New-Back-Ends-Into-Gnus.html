@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Hooking New Back Ends Into Gnus - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Back-End-Interface.html#Back-End-Interface" title="Back End Interface">
-<link rel="prev" href="Writing-New-Back-Ends.html#Writing-New-Back-Ends" title="Writing New Back Ends">
-<link rel="next" href="Mail_002dlike-Back-Ends.html#Mail_002dlike-Back-Ends" title="Mail-like Back Ends">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Hooking New Back Ends Into Gnus - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Back-End-Interface.html#Back-End-Interface"
+  title="Back End Interface" />
+  <link rel="prev" href=
+  "Writing-New-Back-Ends.html#Writing-New-Back-Ends" title=
+  "Writing New Back Ends" />
+  <link rel="next" href=
+  "Mail_002dlike-Back-Ends.html#Mail_002dlike-Back-Ends" title=
+  "Mail-like Back Ends" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +37,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,49 +50,88 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Hooking-New-Back-Ends-Into-Gnus"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Mail_002dlike-Back-Ends.html#Mail_002dlike-Back-Ends">Mail-like Back Ends</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Writing-New-Back-Ends.html#Writing-New-Back-Ends">Writing New Back Ends</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Back-End-Interface.html#Back-End-Interface">Back End Interface</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Hooking-New-Back-Ends-Into-Gnus" id=
+    "Hooking-New-Back-Ends-Into-Gnus"></a>
 
-<h5 class="subsubsection">11.7.2.5 Hooking New Back Ends Into Gnus</h5>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Mail_002dlike-Back-Ends.html#Mail_002dlike-Back-Ends">Mail-like
+    Back Ends</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Writing-New-Back-Ends.html#Writing-New-Back-Ends">Writing
+    New Back Ends</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Back-End-Interface.html#Back-End-Interface">Back End
+    Interface</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-gnus_002dvalid_002dselect_002dmethods-3048"></a><a name="index-gnus_002ddeclare_002dbackend-3049"></a>Having Gnus start using your new back end is rather easy&mdash;you just
-declare it with the <code>gnus-declare-backend</code> functions.  This will
-enter the back end into the <code>gnus-valid-select-methods</code> variable.
+  <h5 class="subsubsection">11.7.2.5 Hooking New Back Ends Into
+  Gnus</h5>
 
-   <p><code>gnus-declare-backend</code> takes two parameters&mdash;the back end name and
-an arbitrary number of <dfn>abilities</dfn>.
+  <p><a name="index-gnus_002dvalid_002dselect_002dmethods-3048" id=
+  "index-gnus_002dvalid_002dselect_002dmethods-3048"></a><a name=
+  "index-gnus_002ddeclare_002dbackend-3049" id=
+  "index-gnus_002ddeclare_002dbackend-3049"></a>Having Gnus start
+  using your new back end is rather easy&mdash;you just declare it
+  with the <code>gnus-declare-backend</code> functions. This will
+  enter the back end into the
+  <code>gnus-valid-select-methods</code> variable.</p>
 
-   <p>Here's an example:
+  <p><code>gnus-declare-backend</code> takes two
+  parameters&mdash;the back end name and an arbitrary number of
+  <dfn>abilities</dfn>.</p>
 
-<pre class="lisp">     (gnus-declare-backend "nnchoke" 'mail 'respool 'address)
+  <p>Here's an example:</p>
+  <pre class="lisp">
+     (gnus-declare-backend "nnchoke" 'mail 'respool 'address)
 </pre>
-   <p>The above line would then go in the <samp><span class="file">nnchoke.el</span></samp> file.
 
-   <p>The abilities can be:
+  <p>The above line would then go in the <samp><span class=
+  "file">nnchoke.el</span></samp> file.</p>
 
-     <dl>
-<dt><code>mail</code><dd>This is a mailish back end&mdash;followups should (probably) go via mail. 
-<br><dt><code>post</code><dd>This is a newsish back end&mdash;followups should (probably) go via news. 
-<br><dt><code>post-mail</code><dd>This back end supports both mail and news. 
-<br><dt><code>none</code><dd>This is neither a post nor mail back end&mdash;it's something completely
-different. 
-<br><dt><code>respool</code><dd>It supports respooling&mdash;or rather, it is able to modify its source
-articles and groups. 
-<br><dt><code>address</code><dd>The name of the server should be in the virtual server name.  This is
-true for almost all back ends. 
-<br><dt><code>prompt-address</code><dd>The user should be prompted for an address when doing commands like
-<kbd>B</kbd> in the group buffer.  This is true for back ends like
-<code>nntp</code>, but not <code>nnmbox</code>, for instance. 
-</dl>
+  <p>The abilities can be:</p>
 
-   </body></html>
+  <dl>
+    <dt><code>mail</code></dt>
 
+    <dd>This is a mailish back end&mdash;followups should
+    (probably) go via mail.<br /></dd>
+
+    <dt><code>post</code></dt>
+
+    <dd>This is a newsish back end&mdash;followups should
+    (probably) go via news.<br /></dd>
+
+    <dt><code>post-mail</code></dt>
+
+    <dd>This back end supports both mail and news.<br /></dd>
+
+    <dt><code>none</code></dt>
+
+    <dd>This is neither a post nor mail back end&mdash;it's
+    something completely different.<br /></dd>
+
+    <dt><code>respool</code></dt>
+
+    <dd>It supports respooling&mdash;or rather, it is able to
+    modify its source articles and groups.<br /></dd>
+
+    <dt><code>address</code></dt>
+
+    <dd>The name of the server should be in the virtual server
+    name. This is true for almost all back ends.<br /></dd>
+
+    <dt><code>prompt-address</code></dt>
+
+    <dd>The user should be prompted for an address when doing
+    commands like <kbd>B</kbd> in the group buffer. This is true
+    for back ends like <code>nntp</code>, but not
+    <code>nnmbox</code>, for instance.</dd>
+  </dl>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,222 +19,342 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Testing Accessibility</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Testing Accessibility">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Testing Accessibility">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Information-about-Files.html#Information-about-Files" rel="up" title="Information about Files">
-<link href="Kinds-of-Files.html#Kinds-of-Files" rel="next" title="Kinds of Files">
-<link href="Information-about-Files.html#Information-about-Files" rel="prev" title="Information about Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Testing
+  Accessibility</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Testing Accessibility" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Testing Accessibility" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Information-about-Files.html#Information-about-Files"
+  rel="up" title="Information about Files" />
+  <link href="Kinds-of-Files.html#Kinds-of-Files" rel="next" title=
+  "Kinds of Files" />
+  <link href="Information-about-Files.html#Information-about-Files"
+  rel="prev" title="Information about Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Testing-Accessibility" id="Testing-Accessibility"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Kinds-of-Files.html#Kinds-of-Files"
+    accesskey="n" rel="next">Kinds of Files</a>, Up: <a href=
+    "Information-about-Files.html#Information-about-Files"
+    accesskey="u" rel="up">Information about Files</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Testing-Accessibility-1" id=
+  "Testing-Accessibility-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Testing-Accessibility"></a>
-<div class="header">
-<p>
-Next: <a href="Kinds-of-Files.html#Kinds-of-Files" accesskey="n" rel="next">Kinds of Files</a>, Up: <a href="Information-about-Files.html#Information-about-Files" accesskey="u" rel="up">Information about Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Testing-Accessibility-1"></a>
-<h4 class="subsection">24.6.1 Testing Accessibility</h4>
-<a name="index-accessibility-of-a-file"></a>
-<a name="index-file-accessibility"></a>
+  <h4 class="subsection">24.6.1 Testing Accessibility</h4><a name=
+  "index-accessibility-of-a-file" id=
+  "index-accessibility-of-a-file"></a> <a name=
+  "index-file-accessibility" id="index-file-accessibility"></a>
 
-<p>These functions test for permission to access a file for reading,
-writing, or execution.  Unless explicitly stated otherwise, they
-recursively follow symbolic links for their file name arguments, at
-all levels (at the level of the file itself and at all levels of
-parent directories).
-</p>
-<p>On some operating systems, more complex sets of access permissions
-can be specified, via mechanisms such as Access Control Lists (ACLs).
-See <a href="Extended-Attributes.html#Extended-Attributes">Extended Attributes</a>, for how to query and set those
-permissions.
-</p>
-<dl>
-<dt><a name="index-file_002dexists_002dp"></a>Function: <strong>file-exists-p</strong> <em>filename</em></dt>
-<dd><p>This function returns <code>t</code> if a file named <var>filename</var> appears
-to exist.  This does not mean you can necessarily read the file, only
-that you can find out its attributes.  (On Unix and GNU/Linux, this is
-true if the file exists and you have execute permission on the
-containing directories, regardless of the permissions of the file
-itself.)
-</p>
-<p>If the file does not exist, or if access control policies prevent you
-from finding its attributes, this function returns <code>nil</code>.
-</p>
-<p>Directories are files, so <code>file-exists-p</code> returns <code>t</code> when
-given a directory name.  However, symbolic links are treated
-specially; <code>file-exists-p</code> returns <code>t</code> for a symbolic link
-name only if the target file exists.
-</p></dd></dl>
+  <p>These functions test for permission to access a file for
+  reading, writing, or execution. Unless explicitly stated
+  otherwise, they recursively follow symbolic links for their file
+  name arguments, at all levels (at the level of the file itself
+  and at all levels of parent directories).</p>
 
-<dl>
-<dt><a name="index-file_002dreadable_002dp"></a>Function: <strong>file-readable-p</strong> <em>filename</em></dt>
-<dd><p>This function returns <code>t</code> if a file named <var>filename</var> exists
-and you can read it.  It returns <code>nil</code> otherwise.
-</p></dd></dl>
+  <p>On some operating systems, more complex sets of access
+  permissions can be specified, via mechanisms such as Access
+  Control Lists (ACLs). See <a href=
+  "Extended-Attributes.html#Extended-Attributes">Extended
+  Attributes</a>, for how to query and set those permissions.</p>
 
-<dl>
-<dt><a name="index-file_002dexecutable_002dp"></a>Function: <strong>file-executable-p</strong> <em>filename</em></dt>
-<dd><p>This function returns <code>t</code> if a file named <var>filename</var> exists and
-you can execute it.  It returns <code>nil</code> otherwise.  On Unix and
-GNU/Linux, if the file is a directory, execute permission means you can
-check the existence and attributes of files inside the directory, and
-open those files if their modes permit.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-file_002dexists_002dp" id=
+    "index-file_002dexists_002dp"></a>Function:
+    <strong>file-exists-p</strong> <em>filename</em></dt>
 
-<dl>
-<dt><a name="index-file_002dwritable_002dp"></a>Function: <strong>file-writable-p</strong> <em>filename</em></dt>
-<dd><p>This function returns <code>t</code> if the file <var>filename</var> can be written
-or created by you, and <code>nil</code> otherwise.  A file is writable if the
-file exists and you can write it.  It is creatable if it does not exist,
-but the specified directory does exist and you can write in that
-directory.
-</p>
-<p>In the example below, <samp>foo</samp> is not writable because the parent
-directory does not exist, even though the user could create such a
-directory.
-</p>
-<div class="example">
-<pre class="example">(file-writable-p &quot;~/no-such-dir/foo&quot;)
+    <dd>
+      <p>This function returns <code>t</code> if a file named
+      <var>filename</var> appears to exist. This does not mean you
+      can necessarily read the file, only that you can find out its
+      attributes. (On Unix and GNU/Linux, this is true if the file
+      exists and you have execute permission on the containing
+      directories, regardless of the permissions of the file
+      itself.)</p>
+
+      <p>If the file does not exist, or if access control policies
+      prevent you from finding its attributes, this function
+      returns <code>nil</code>.</p>
+
+      <p>Directories are files, so <code>file-exists-p</code>
+      returns <code>t</code> when given a directory name. However,
+      symbolic links are treated specially;
+      <code>file-exists-p</code> returns <code>t</code> for a
+      symbolic link name only if the target file exists.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-file_002dreadable_002dp" id=
+    "index-file_002dreadable_002dp"></a>Function:
+    <strong>file-readable-p</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if a file named
+      <var>filename</var> exists and you can read it. It returns
+      <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-file_002dexecutable_002dp" id=
+    "index-file_002dexecutable_002dp"></a>Function:
+    <strong>file-executable-p</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if a file named
+      <var>filename</var> exists and you can execute it. It returns
+      <code>nil</code> otherwise. On Unix and GNU/Linux, if the
+      file is a directory, execute permission means you can check
+      the existence and attributes of files inside the directory,
+      and open those files if their modes permit.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-file_002dwritable_002dp" id=
+    "index-file_002dwritable_002dp"></a>Function:
+    <strong>file-writable-p</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if the file
+      <var>filename</var> can be written or created by you, and
+      <code>nil</code> otherwise. A file is writable if the file
+      exists and you can write it. It is creatable if it does not
+      exist, but the specified directory does exist and you can
+      write in that directory.</p>
+
+      <p>In the example below, <samp>foo</samp> is not writable
+      because the parent directory does not exist, even though the
+      user could create such a directory.</p>
+
+      <div class="example">
+        <pre class="example">
+(file-writable-p "~/no-such-dir/foo")
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-file_002daccessible_002ddirectory_002dp"></a>Function: <strong>file-accessible-directory-p</strong> <em>dirname</em></dt>
-<dd><p>This function returns <code>t</code> if you have permission to open existing
-files in the directory whose name as a file is <var>dirname</var>;
-otherwise (or if there is no such directory), it returns <code>nil</code>.
-The value of <var>dirname</var> may be either a directory name (such as
-<samp>/foo/</samp>) or the file name of a file which is a directory
-(such as <samp>/foo</samp>, without the final slash).
-</p>
-<p>For example, from the following we deduce that any attempt to read a
-file in <samp>/foo/</samp> will give an error:
-</p>
-<div class="example">
-<pre class="example">(file-accessible-directory-p &quot;/foo&quot;)
+  <dl>
+    <dt><a name="index-file_002daccessible_002ddirectory_002dp" id=
+    "index-file_002daccessible_002ddirectory_002dp"></a>Function:
+    <strong>file-accessible-directory-p</strong>
+    <em>dirname</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if you have
+      permission to open existing files in the directory whose name
+      as a file is <var>dirname</var>; otherwise (or if there is no
+      such directory), it returns <code>nil</code>. The value of
+      <var>dirname</var> may be either a directory name (such as
+      <samp>/foo/</samp>) or the file name of a file which is a
+      directory (such as <samp>/foo</samp>, without the final
+      slash).</p>
+
+      <p>For example, from the following we deduce that any attempt
+      to read a file in <samp>/foo/</samp> will give an error:</p>
+
+      <div class="example">
+        <pre class="example">
+(file-accessible-directory-p "/foo")
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-access_002dfile"></a>Function: <strong>access-file</strong> <em>filename string</em></dt>
-<dd><p>This function opens file <var>filename</var> for reading, then closes it and
-returns <code>nil</code>.  However, if the open fails, it signals an error
-using <var>string</var> as the error message text.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-access_002dfile" id=
+    "index-access_002dfile"></a>Function:
+    <strong>access-file</strong> <em>filename string</em></dt>
 
-<dl>
-<dt><a name="index-file_002downership_002dpreserved_002dp"></a>Function: <strong>file-ownership-preserved-p</strong> <em>filename &amp;optional group</em></dt>
-<dd><p>This function returns <code>t</code> if deleting the file <var>filename</var> and
-then creating it anew would keep the file&rsquo;s owner unchanged.  It also
-returns <code>t</code> for nonexistent files.
-</p>
-<p>If the optional argument <var>group</var> is non-<code>nil</code>, this function
-also checks that the file&rsquo;s group would be unchanged.
-</p>
-<p>If <var>filename</var> is a symbolic link, then, unlike the other functions
-discussed here, <code>file-ownership-preserved-p</code> does <em>not</em>
-replace <var>filename</var> with its target.  However, it does recursively
-follow symbolic links at all levels of parent directories.
-</p></dd></dl>
+    <dd>
+      <p>This function opens file <var>filename</var> for reading,
+      then closes it and returns <code>nil</code>. However, if the
+      open fails, it signals an error using <var>string</var> as
+      the error message text.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-file_002dmodes"></a>Function: <strong>file-modes</strong> <em>filename</em></dt>
-<dd><a name="index-mode-bits"></a>
-<a name="index-file-permissions"></a>
-<a name="index-permissions_002c-file"></a>
-<a name="index-file-modes"></a>
-<p>This function returns the <em>mode bits</em> of <var>filename</var>&mdash;an
-integer summarizing its read, write, and execution permissions.
-Symbolic links in <var>filename</var> are recursively followed at all
-levels.  If the file does not exist, the return value is <code>nil</code>.
-</p>
-<p>See <a href="http://www.gnu.org/software/coreutils/manual/html_node/File-permissions.html#File-permissions">File permissions</a> in <cite>The <small>GNU</small> <code>Coreutils</code>
-Manual</cite>, for a description of mode bits.  For example, if the
-low-order bit is 1, the file is executable by all users; if the
-second-lowest-order bit is 1, the file is writable by all users; etc.
-The highest possible value is 4095 (7777 octal), meaning that everyone
-has read, write, and execute permission, the <acronym>SUID</acronym> bit is set
-for both others and group, and the sticky bit is set.
-</p>
-<p>See <a href="Changing-Files.html#Changing-Files">Changing Files</a>, for the <code>set-file-modes</code> function, which
-can be used to set these permissions.
-</p>
-<div class="example">
-<pre class="example">(file-modes &quot;~/junk/diffs&quot;)
-     &rArr; 492               ; <span class="roman">Decimal integer.</span>
-</pre><pre class="example">(format &quot;%o&quot; 492)
-     &rArr; &quot;754&quot;             ; <span class="roman">Convert to octal.</span>
-</pre><pre class="example">
-</pre><pre class="example">(set-file-modes &quot;~/junk/diffs&quot; #o666)
+  <dl>
+    <dt><a name="index-file_002downership_002dpreserved_002dp" id=
+    "index-file_002downership_002dpreserved_002dp"></a>Function:
+    <strong>file-ownership-preserved-p</strong> <em>filename
+    &amp;optional group</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if deleting the file
+      <var>filename</var> and then creating it anew would keep the
+      file&rsquo;s owner unchanged. It also returns <code>t</code>
+      for nonexistent files.</p>
+
+      <p>If the optional argument <var>group</var> is
+      non-<code>nil</code>, this function also checks that the
+      file&rsquo;s group would be unchanged.</p>
+
+      <p>If <var>filename</var> is a symbolic link, then, unlike
+      the other functions discussed here,
+      <code>file-ownership-preserved-p</code> does <em>not</em>
+      replace <var>filename</var> with its target. However, it does
+      recursively follow symbolic links at all levels of parent
+      directories.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-file_002dmodes" id=
+    "index-file_002dmodes"></a>Function:
+    <strong>file-modes</strong> <em>filename</em></dt>
+
+    <dd>
+      <a name="index-mode-bits" id="index-mode-bits"></a> <a name=
+      "index-file-permissions" id="index-file-permissions"></a>
+      <a name="index-permissions_002c-file" id=
+      "index-permissions_002c-file"></a> <a name="index-file-modes"
+      id="index-file-modes"></a>
+
+      <p>This function returns the <em>mode bits</em> of
+      <var>filename</var>&mdash;an integer summarizing its read,
+      write, and execution permissions. Symbolic links in
+      <var>filename</var> are recursively followed at all levels.
+      If the file does not exist, the return value is
+      <code>nil</code>.</p>
+
+      <p>See <a href=
+      "http://www.gnu.org/software/coreutils/manual/html_node/File-permissions.html#File-permissions">
+      File permissions</a> in <cite>The <small>GNU</small>
+      <code>Coreutils</code> Manual</cite>, for a description of
+      mode bits. For example, if the low-order bit is 1, the file
+      is executable by all users; if the second-lowest-order bit is
+      1, the file is writable by all users; etc. The highest
+      possible value is 4095 (7777 octal), meaning that everyone
+      has read, write, and execute permission, the
+      <acronym>SUID</acronym> bit is set for both others and group,
+      and the sticky bit is set.</p>
+
+      <p>See <a href="Changing-Files.html#Changing-Files">Changing
+      Files</a>, for the <code>set-file-modes</code> function,
+      which can be used to set these permissions.</p>
+
+      <div class="example">
+        <pre class="example">
+(file-modes "~/junk/diffs")
+     &rArr; 492               ; <span class=
+"roman">Decimal integer.</span>
+</pre>
+        <pre class="example">
+(format "%o" 492)
+     &rArr; "754"             ; <span class=
+"roman">Convert to octal.</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(set-file-modes "~/junk/diffs" #o666)
      &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">$ ls -l diffs
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+$ ls -l diffs
 -rw-rw-rw- 1 lewis lewis 3063 Oct 30 16:00 diffs
-</pre></div>
+</pre>
+      </div><a name="index-MS_002dDOS-and-file-modes" id=
+      "index-MS_002dDOS-and-file-modes"></a> <a name=
+      "index-file-modes-and-MS_002dDOS" id=
+      "index-file-modes-and-MS_002dDOS"></a>
 
-<a name="index-MS_002dDOS-and-file-modes"></a>
-<a name="index-file-modes-and-MS_002dDOS"></a>
-<p><strong>MS-DOS note:</strong> On MS-DOS, there is no such thing as an
-executable file mode bit.  So <code>file-modes</code> considers a file
-executable if its name ends in one of the standard executable
-extensions, such as <samp>.com</samp>, <samp>.bat</samp>, <samp>.exe</samp>, and some
-others.  Files that begin with the Unix-standard &lsquo;<samp>#!</samp>&rsquo; signature,
-such as shell and Perl scripts, are also considered executable.
-Directories are also reported as executable, for compatibility with
-Unix.  These conventions are also followed by <code>file-attributes</code>
-(see <a href="File-Attributes.html#File-Attributes">File Attributes</a>).
-</p></dd></dl>
+      <p><strong>MS-DOS note:</strong> On MS-DOS, there is no such
+      thing as an executable file mode bit. So
+      <code>file-modes</code> considers a file executable if its
+      name ends in one of the standard executable extensions, such
+      as <samp>.com</samp>, <samp>.bat</samp>, <samp>.exe</samp>,
+      and some others. Files that begin with the Unix-standard
+      &lsquo;<samp>#!</samp>&rsquo; signature, such as shell and
+      Perl scripts, are also considered executable. Directories are
+      also reported as executable, for compatibility with Unix.
+      These conventions are also followed by
+      <code>file-attributes</code> (see <a href=
+      "File-Attributes.html#File-Attributes">File
+      Attributes</a>).</p>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Kinds-of-Files.html#Kinds-of-Files" accesskey="n" rel="next">Kinds of Files</a>, Up: <a href="Information-about-Files.html#Information-about-Files" accesskey="u" rel="up">Information about Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Kinds-of-Files.html#Kinds-of-Files"
+    accesskey="n" rel="next">Kinds of Files</a>, Up: <a href=
+    "Information-about-Files.html#Information-about-Files"
+    accesskey="u" rel="up">Information about Files</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

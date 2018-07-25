@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,102 +20,195 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Incremental Search</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Incremental Search">
-<meta name="keywords" content="GNU Emacs Manual: Incremental Search">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Search.html#Search" rel="up" title="Search">
-<link href="Basic-Isearch.html#Basic-Isearch" rel="next" title="Basic Isearch">
-<link href="Search.html#Search" rel="prev" title="Search">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Incremental Search</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Incremental Search" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Incremental Search" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Search.html#Search" rel="up" title="Search" />
+  <link href="Basic-Isearch.html#Basic-Isearch" rel="next" title=
+  "Basic Isearch" />
+  <link href="Search.html#Search" rel="prev" title="Search" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Incremental-Search" id="Incremental-Search"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Nonincremental-Search.html#Nonincremental-Search" accesskey=
+    "n" rel="next">Nonincremental Search</a>, Up: <a href=
+    "Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Incremental-Search-1" id="Incremental-Search-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Incremental-Search"></a>
-<div class="header">
-<p>
-Next: <a href="Nonincremental-Search.html#Nonincremental-Search" accesskey="n" rel="next">Nonincremental Search</a>, Up: <a href="Search.html#Search" accesskey="u" rel="up">Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Incremental-Search-1"></a>
-<h3 class="section">15.1 Incremental Search</h3>
-<a name="index-incremental-search"></a>
-<a name="index-isearch"></a>
+  <h3 class="section">15.1 Incremental Search</h3><a name=
+  "index-incremental-search" id="index-incremental-search"></a>
+  <a name="index-isearch" id="index-isearch"></a>
 
-<p>The principal search command in Emacs is <em>incremental</em>: it
-begins searching as soon as you type the first character of the search
-string.  As you type in the search string, Emacs shows you where the
-string (as you have typed it so far) would be found.  When you have
-typed enough characters to identify the place you want, you can stop.
-Depending on what you plan to do next, you may or may not need to
-terminate the search explicitly with <tt class="key">RET</tt>.
-</p>
-<dl compact="compact">
-<dt><kbd>C-s</kbd></dt>
-<dd><p>Incremental search forward (<code>isearch-forward</code>).
-</p></dd>
-<dt><kbd>C-r</kbd></dt>
-<dd><p>Incremental search backward (<code>isearch-backward</code>).
-</p></dd>
-</dl>
+  <p>The principal search command in Emacs is <em>incremental</em>:
+  it begins searching as soon as you type the first character of
+  the search string. As you type in the search string, Emacs shows
+  you where the string (as you have typed it so far) would be
+  found. When you have typed enough characters to identify the
+  place you want, you can stop. Depending on what you plan to do
+  next, you may or may not need to terminate the search explicitly
+  with <tt class="key">RET</tt>.</p>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Basic-Isearch.html#Basic-Isearch" accesskey="1">Basic Isearch</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic incremental search commands.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Repeat-Isearch.html#Repeat-Isearch" accesskey="2">Repeat Isearch</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Searching for the same string again.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Isearch-Yank.html#Isearch-Yank" accesskey="3">Isearch Yank</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Commands that grab text into the search string
-                           or else edit the search string.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Error-in-Isearch.html#Error-in-Isearch" accesskey="4">Error in Isearch</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">When your string is not found.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Special-Isearch.html#Special-Isearch" accesskey="5">Special Isearch</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special input in incremental search.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Not-Exiting-Isearch.html#Not-Exiting-Isearch" accesskey="6">Not Exiting Isearch</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Prefix argument and scrolling commands.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Isearch-Minibuffer.html#Isearch-Minibuffer" accesskey="7">Isearch Minibuffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Incremental search of the minibuffer history.
-</td></tr>
-</table>
+  <dl compact="compact">
+    <dt><kbd>C-s</kbd></dt>
 
+    <dd>
+      <p>Incremental search forward
+      (<code>isearch-forward</code>).</p>
+    </dd>
 
+    <dt><kbd>C-r</kbd></dt>
 
+    <dd>
+      <p>Incremental search backward
+      (<code>isearch-backward</code>).</p>
+    </dd>
+  </dl>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Basic-Isearch.html#Basic-Isearch" accesskey="1">Basic
+      Isearch</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Basic incremental search
+      commands.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Repeat-Isearch.html#Repeat-Isearch" accesskey="2">Repeat
+      Isearch</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Searching for the same string
+      again.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Isearch-Yank.html#Isearch-Yank" accesskey="3">Isearch
+      Yank</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Commands that grab text into
+      the search string or else edit the search string.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Error-in-Isearch.html#Error-in-Isearch" accesskey="4">Error
+      in Isearch</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">When your string is not
+      found.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Special-Isearch.html#Special-Isearch" accesskey="5">Special
+      Isearch</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Special input in incremental
+      search.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Not-Exiting-Isearch.html#Not-Exiting-Isearch" accesskey=
+      "6">Not Exiting Isearch</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Prefix argument and scrolling
+      commands.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Isearch-Minibuffer.html#Isearch-Minibuffer" accesskey=
+      "7">Isearch Minibuffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Incremental search of the
+      minibuffer history.</td>
+    </tr>
+  </table>
 </body>
 </html>

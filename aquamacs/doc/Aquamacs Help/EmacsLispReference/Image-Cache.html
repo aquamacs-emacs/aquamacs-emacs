@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,134 +19,191 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Image Cache</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Image Cache">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Image Cache">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Images.html#Images" rel="up" title="Images">
-<link href="Xwidgets.html#Xwidgets" rel="next" title="Xwidgets">
-<link href="Multi_002dFrame-Images.html#Multi_002dFrame-Images" rel="prev" title="Multi-Frame Images">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Image Cache</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Image Cache" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Image Cache" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Images.html#Images" rel="up" title="Images" />
+  <link href="Xwidgets.html#Xwidgets" rel="next" title=
+  "Xwidgets" />
+  <link href="Multi_002dFrame-Images.html#Multi_002dFrame-Images"
+  rel="prev" title="Multi-Frame Images" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Image-Cache" id="Image-Cache"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Multi_002dFrame-Images.html#Multi_002dFrame-Images" accesskey=
+    "p" rel="prev">Multi-Frame Images</a>, Up: <a href=
+    "Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Image-Cache-1" id="Image-Cache-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Image-Cache"></a>
-<div class="header">
-<p>
-Previous: <a href="Multi_002dFrame-Images.html#Multi_002dFrame-Images" accesskey="p" rel="prev">Multi-Frame Images</a>, Up: <a href="Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Image-Cache-1"></a>
-<h4 class="subsection">37.17.11 Image Cache</h4>
-<a name="index-image-cache"></a>
+  <h4 class="subsection">37.17.11 Image Cache</h4><a name=
+  "index-image-cache" id="index-image-cache"></a>
 
-<p>Emacs caches images so that it can display them again more
-efficiently.  When Emacs displays an image, it searches the image
-cache for an existing image specification <code>equal</code> to the desired
-specification.  If a match is found, the image is displayed from the
-cache.  Otherwise, Emacs loads the image normally.
-</p>
-<dl>
-<dt><a name="index-image_002dflush"></a>Function: <strong>image-flush</strong> <em>spec &amp;optional frame</em></dt>
-<dd><p>This function removes the image with specification <var>spec</var> from the
-image cache of frame <var>frame</var>.  Image specifications are compared
-using <code>equal</code>.  If <var>frame</var> is <code>nil</code>, it defaults to the
-selected frame.  If <var>frame</var> is <code>t</code>, the image is flushed on
-all existing frames.
-</p>
-<p>In Emacs&rsquo;s current implementation, each graphical terminal possesses an
-image cache, which is shared by all the frames on that terminal
-(see <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>).  Thus, refreshing an image in one frame
-also refreshes it in all other frames on the same terminal.
-</p></dd></dl>
+  <p>Emacs caches images so that it can display them again more
+  efficiently. When Emacs displays an image, it searches the image
+  cache for an existing image specification <code>equal</code> to
+  the desired specification. If a match is found, the image is
+  displayed from the cache. Otherwise, Emacs loads the image
+  normally.</p>
 
-<p>One use for <code>image-flush</code> is to tell Emacs about a change in an
-image file.  If an image specification contains a <code>:file</code>
-property, the image is cached based on the file&rsquo;s contents when the
-image is first displayed.  Even if the file subsequently changes,
-Emacs continues displaying the old version of the image.  Calling
-<code>image-flush</code> flushes the image from the cache, forcing Emacs to
-re-read the file the next time it needs to display that image.
-</p>
-<p>Another use for <code>image-flush</code> is for memory conservation.  If
-your Lisp program creates a large number of temporary images over a
-period much shorter than <code>image-cache-eviction-delay</code> (see
-below), you can opt to flush unused images yourself, instead of
-waiting for Emacs to do it automatically.
-</p>
-<dl>
-<dt><a name="index-clear_002dimage_002dcache"></a>Function: <strong>clear-image-cache</strong> <em>&amp;optional filter</em></dt>
-<dd><p>This function clears an image cache, removing all the images stored in
-it.  If <var>filter</var> is omitted or <code>nil</code>, it clears the cache for
-the selected frame.  If <var>filter</var> is a frame, it clears the cache
-for that frame.  If <var>filter</var> is <code>t</code>, all image caches are
-cleared.  Otherwise, <var>filter</var> is taken to be a file name, and all
-images associated with that file name are removed from all image
-caches.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-image_002dflush" id=
+    "index-image_002dflush"></a>Function:
+    <strong>image-flush</strong> <em>spec &amp;optional
+    frame</em></dt>
 
-<p>If an image in the image cache has not been displayed for a specified
-period of time, Emacs removes it from the cache and frees the
-associated memory.
-</p>
-<dl>
-<dt><a name="index-image_002dcache_002deviction_002ddelay"></a>Variable: <strong>image-cache-eviction-delay</strong></dt>
-<dd><p>This variable specifies the number of seconds an image can remain in
-the cache without being displayed.  When an image is not displayed for
-this length of time, Emacs removes it from the image cache.
-</p>
-<p>Under some circumstances, if the number of images in the cache grows
-too large, the actual eviction delay may be shorter than this.
-</p>
-<p>If the value is <code>nil</code>, Emacs does not remove images from the cache
-except when you explicitly clear it.  This mode can be useful for
-debugging.
-</p></dd></dl>
+    <dd>
+      <p>This function removes the image with specification
+      <var>spec</var> from the image cache of frame
+      <var>frame</var>. Image specifications are compared using
+      <code>equal</code>. If <var>frame</var> is <code>nil</code>,
+      it defaults to the selected frame. If <var>frame</var> is
+      <code>t</code>, the image is flushed on all existing
+      frames.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Multi_002dFrame-Images.html#Multi_002dFrame-Images" accesskey="p" rel="prev">Multi-Frame Images</a>, Up: <a href="Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>In Emacs&rsquo;s current implementation, each graphical
+      terminal possesses an image cache, which is shared by all the
+      frames on that terminal (see <a href=
+      "Multiple-Terminals.html#Multiple-Terminals">Multiple
+      Terminals</a>). Thus, refreshing an image in one frame also
+      refreshes it in all other frames on the same terminal.</p>
+    </dd>
+  </dl>
 
+  <p>One use for <code>image-flush</code> is to tell Emacs about a
+  change in an image file. If an image specification contains a
+  <code>:file</code> property, the image is cached based on the
+  file&rsquo;s contents when the image is first displayed. Even if
+  the file subsequently changes, Emacs continues displaying the old
+  version of the image. Calling <code>image-flush</code> flushes
+  the image from the cache, forcing Emacs to re-read the file the
+  next time it needs to display that image.</p>
 
+  <p>Another use for <code>image-flush</code> is for memory
+  conservation. If your Lisp program creates a large number of
+  temporary images over a period much shorter than
+  <code>image-cache-eviction-delay</code> (see below), you can opt
+  to flush unused images yourself, instead of waiting for Emacs to
+  do it automatically.</p>
 
+  <dl>
+    <dt><a name="index-clear_002dimage_002dcache" id=
+    "index-clear_002dimage_002dcache"></a>Function:
+    <strong>clear-image-cache</strong> <em>&amp;optional
+    filter</em></dt>
+
+    <dd>
+      <p>This function clears an image cache, removing all the
+      images stored in it. If <var>filter</var> is omitted or
+      <code>nil</code>, it clears the cache for the selected frame.
+      If <var>filter</var> is a frame, it clears the cache for that
+      frame. If <var>filter</var> is <code>t</code>, all image
+      caches are cleared. Otherwise, <var>filter</var> is taken to
+      be a file name, and all images associated with that file name
+      are removed from all image caches.</p>
+    </dd>
+  </dl>
+
+  <p>If an image in the image cache has not been displayed for a
+  specified period of time, Emacs removes it from the cache and
+  frees the associated memory.</p>
+
+  <dl>
+    <dt><a name="index-image_002dcache_002deviction_002ddelay" id=
+    "index-image_002dcache_002deviction_002ddelay"></a>Variable:
+    <strong>image-cache-eviction-delay</strong></dt>
+
+    <dd>
+      <p>This variable specifies the number of seconds an image can
+      remain in the cache without being displayed. When an image is
+      not displayed for this length of time, Emacs removes it from
+      the image cache.</p>
+
+      <p>Under some circumstances, if the number of images in the
+      cache grows too large, the actual eviction delay may be
+      shorter than this.</p>
+
+      <p>If the value is <code>nil</code>, Emacs does not remove
+      images from the cache except when you explicitly clear it.
+      This mode can be useful for debugging.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Multi_002dFrame-Images.html#Multi_002dFrame-Images" accesskey=
+    "p" rel="prev">Multi-Frame Images</a>, Up: <a href=
+    "Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

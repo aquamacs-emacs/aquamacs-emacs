@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,182 +19,267 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Derived Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Derived Modes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Derived Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Major-Modes.html#Major-Modes" rel="up" title="Major Modes">
-<link href="Basic-Major-Modes.html#Basic-Major-Modes" rel="next" title="Basic Major Modes">
-<link href="Mode-Help.html#Mode-Help" rel="prev" title="Mode Help">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Derived Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Derived Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Derived Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Major-Modes.html#Major-Modes" rel="up" title=
+  "Major Modes" />
+  <link href="Basic-Major-Modes.html#Basic-Major-Modes" rel="next"
+  title="Basic Major Modes" />
+  <link href="Mode-Help.html#Mode-Help" rel="prev" title=
+  "Mode Help" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Derived-Modes" id="Derived-Modes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Basic-Major-Modes.html#Basic-Major-Modes"
+    accesskey="n" rel="next">Basic Major Modes</a>, Previous:
+    <a href="Mode-Help.html#Mode-Help" accesskey="p" rel=
+    "prev">Mode Help</a>, Up: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major
+    Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Derived-Modes" id="Defining-Derived-Modes"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Derived-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Basic-Major-Modes.html#Basic-Major-Modes" accesskey="n" rel="next">Basic Major Modes</a>, Previous: <a href="Mode-Help.html#Mode-Help" accesskey="p" rel="prev">Mode Help</a>, Up: <a href="Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Derived-Modes"></a>
-<h4 class="subsection">22.2.4 Defining Derived Modes</h4>
-<a name="index-derived-mode"></a>
+  <h4 class="subsection">22.2.4 Defining Derived Modes</h4><a name=
+  "index-derived-mode" id="index-derived-mode"></a>
 
-<p>The recommended way to define a new major mode is to derive it from an
-existing one using <code>define-derived-mode</code>.  If there is no closely
-related mode, you should inherit from either <code>text-mode</code>,
-<code>special-mode</code>, or <code>prog-mode</code>.  See <a href="Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>.  If
-none of these are suitable, you can inherit from <code>fundamental-mode</code>
-(see <a href="Major-Modes.html#Major-Modes">Major Modes</a>).
-</p>
-<dl>
-<dt><a name="index-define_002dderived_002dmode"></a>Macro: <strong>define-derived-mode</strong> <em>variant parent name docstring keyword-args&hellip; body&hellip;</em></dt>
-<dd><p>This macro defines <var>variant</var> as a major mode command, using
-<var>name</var> as the string form of the mode name.  <var>variant</var> and
-<var>parent</var> should be unquoted symbols.
-</p>
-<p>The new command <var>variant</var> is defined to call the function
-<var>parent</var>, then override certain aspects of that parent mode:
-</p>
-<ul>
-<li> The new mode has its own sparse keymap, named
-<code><var>variant</var>-map</code>.  <code>define-derived-mode</code>
-makes the parent mode&rsquo;s keymap the parent of the new map, unless
-<code><var>variant</var>-map</code> is already set and already has a parent.
+  <p>The recommended way to define a new major mode is to derive it
+  from an existing one using <code>define-derived-mode</code>. If
+  there is no closely related mode, you should inherit from either
+  <code>text-mode</code>, <code>special-mode</code>, or
+  <code>prog-mode</code>. See <a href=
+  "Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>.
+  If none of these are suitable, you can inherit from
+  <code>fundamental-mode</code> (see <a href=
+  "Major-Modes.html#Major-Modes">Major Modes</a>).</p>
 
-</li><li> The new mode has its own syntax table, kept in the variable
-<code><var>variant</var>-syntax-table</code>, unless you override this using the
-<code>:syntax-table</code> keyword (see below).  <code>define-derived-mode</code>
-makes the parent mode&rsquo;s syntax-table the parent of
-<code><var>variant</var>-syntax-table</code>, unless the latter is already set
-and already has a parent different from the standard syntax table.
+  <dl>
+    <dt><a name="index-define_002dderived_002dmode" id=
+    "index-define_002dderived_002dmode"></a>Macro:
+    <strong>define-derived-mode</strong> <em>variant parent name
+    docstring keyword-args&hellip; body&hellip;</em></dt>
 
-</li><li> The new mode has its own abbrev table, kept in the variable
-<code><var>variant</var>-abbrev-table</code>, unless you override this using the
-<code>:abbrev-table</code> keyword (see below).
+    <dd>
+      <p>This macro defines <var>variant</var> as a major mode
+      command, using <var>name</var> as the string form of the mode
+      name. <var>variant</var> and <var>parent</var> should be
+      unquoted symbols.</p>
 
-</li><li> The new mode has its own mode hook, <code><var>variant</var>-hook</code>.  It
-runs this hook, after running the hooks of its ancestor modes, with
-<code>run-mode-hooks</code>, as the last thing it does.  See <a href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>.
-</li></ul>
+      <p>The new command <var>variant</var> is defined to call the
+      function <var>parent</var>, then override certain aspects of
+      that parent mode:</p>
 
-<p>In addition, you can specify how to override other aspects of
-<var>parent</var> with <var>body</var>.  The command <var>variant</var>
-evaluates the forms in <var>body</var> after setting up all its usual
-overrides, just before running the mode hooks.
-</p>
-<p>If <var>parent</var> has a non-<code>nil</code> <code>mode-class</code> symbol
-property, then <code>define-derived-mode</code> sets the <code>mode-class</code>
-property of <var>variant</var> to the same value.  This ensures, for
-example, that if <var>parent</var> is a special mode, then <var>variant</var> is
-also a special mode (see <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>).
-</p>
-<p>You can also specify <code>nil</code> for <var>parent</var>.  This gives the new
-mode no parent.  Then <code>define-derived-mode</code> behaves as described
-above, but, of course, omits all actions connected with <var>parent</var>.
-</p>
-<p>The argument <var>docstring</var> specifies the documentation string for the
-new mode.  <code>define-derived-mode</code> adds some general information
-about the mode&rsquo;s hook, followed by the mode&rsquo;s keymap, at the end of this
-documentation string.  If you omit <var>docstring</var>,
-<code>define-derived-mode</code> generates a documentation string.
-</p>
-<p>The <var>keyword-args</var> are pairs of keywords and values.  The values
-are evaluated.  The following keywords are currently supported:
-</p>
-<dl compact="compact">
-<dt><code>:syntax-table</code></dt>
-<dd><p>You can use this to explicitly specify a syntax table for the new
-mode.  If you specify a <code>nil</code> value, the new mode uses the same
-syntax table as <var>parent</var>, or the standard syntax table if
-<var>parent</var> is <code>nil</code>.  (Note that this does <em>not</em> follow
-the convention used for non-keyword arguments that a <code>nil</code> value
-is equivalent with not specifying the argument.)
-</p>
-</dd>
-<dt><code>:abbrev-table</code></dt>
-<dd><p>You can use this to explicitly specify an abbrev table for the new
-mode.  If you specify a <code>nil</code> value, the new mode uses the same
-abbrev table as <var>parent</var>, or <code>fundamental-mode-abbrev-table</code>
-if <var>parent</var> is <code>nil</code>.  (Again, a <code>nil</code> value is
-<em>not</em> equivalent to not specifying this keyword.)
-</p>
-</dd>
-<dt><code>:group</code></dt>
-<dd><p>If this is specified, the value should be the customization group for
-this mode.  (Not all major modes have one.)  The command
-<code>customize-mode</code> uses this.  <code>define-derived-mode</code> does
-<em>not</em> automatically define the specified customization group.
-</p></dd>
-</dl>
+      <ul>
+        <li>The new mode has its own sparse keymap, named
+        <code><var>variant</var>-map</code>.
+        <code>define-derived-mode</code> makes the parent
+        mode&rsquo;s keymap the parent of the new map, unless
+        <code><var>variant</var>-map</code> is already set and
+        already has a parent.</li>
 
-<p>Here is a hypothetical example:
-</p>
-<div class="example">
-<pre class="example">(define-derived-mode hypertext-mode
-  text-mode &quot;Hypertext&quot;
-  &quot;Major mode for hypertext.
-\\{hypertext-mode-map}&quot;
+        <li>The new mode has its own syntax table, kept in the
+        variable <code><var>variant</var>-syntax-table</code>,
+        unless you override this using the
+        <code>:syntax-table</code> keyword (see below).
+        <code>define-derived-mode</code> makes the parent
+        mode&rsquo;s syntax-table the parent of
+        <code><var>variant</var>-syntax-table</code>, unless the
+        latter is already set and already has a parent different
+        from the standard syntax table.</li>
+
+        <li>The new mode has its own abbrev table, kept in the
+        variable <code><var>variant</var>-abbrev-table</code>,
+        unless you override this using the
+        <code>:abbrev-table</code> keyword (see below).</li>
+
+        <li>The new mode has its own mode hook,
+        <code><var>variant</var>-hook</code>. It runs this hook,
+        after running the hooks of its ancestor modes, with
+        <code>run-mode-hooks</code>, as the last thing it does. See
+        <a href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>.</li>
+      </ul>
+
+      <p>In addition, you can specify how to override other aspects
+      of <var>parent</var> with <var>body</var>. The command
+      <var>variant</var> evaluates the forms in <var>body</var>
+      after setting up all its usual overrides, just before running
+      the mode hooks.</p>
+
+      <p>If <var>parent</var> has a non-<code>nil</code>
+      <code>mode-class</code> symbol property, then
+      <code>define-derived-mode</code> sets the
+      <code>mode-class</code> property of <var>variant</var> to the
+      same value. This ensures, for example, that if
+      <var>parent</var> is a special mode, then <var>variant</var>
+      is also a special mode (see <a href=
+      "Major-Mode-Conventions.html#Major-Mode-Conventions">Major
+      Mode Conventions</a>).</p>
+
+      <p>You can also specify <code>nil</code> for
+      <var>parent</var>. This gives the new mode no parent. Then
+      <code>define-derived-mode</code> behaves as described above,
+      but, of course, omits all actions connected with
+      <var>parent</var>.</p>
+
+      <p>The argument <var>docstring</var> specifies the
+      documentation string for the new mode.
+      <code>define-derived-mode</code> adds some general
+      information about the mode&rsquo;s hook, followed by the
+      mode&rsquo;s keymap, at the end of this documentation string.
+      If you omit <var>docstring</var>,
+      <code>define-derived-mode</code> generates a documentation
+      string.</p>
+
+      <p>The <var>keyword-args</var> are pairs of keywords and
+      values. The values are evaluated. The following keywords are
+      currently supported:</p>
+
+      <dl compact="compact">
+        <dt><code>:syntax-table</code></dt>
+
+        <dd>
+          <p>You can use this to explicitly specify a syntax table
+          for the new mode. If you specify a <code>nil</code>
+          value, the new mode uses the same syntax table as
+          <var>parent</var>, or the standard syntax table if
+          <var>parent</var> is <code>nil</code>. (Note that this
+          does <em>not</em> follow the convention used for
+          non-keyword arguments that a <code>nil</code> value is
+          equivalent with not specifying the argument.)</p>
+        </dd>
+
+        <dt><code>:abbrev-table</code></dt>
+
+        <dd>
+          <p>You can use this to explicitly specify an abbrev table
+          for the new mode. If you specify a <code>nil</code>
+          value, the new mode uses the same abbrev table as
+          <var>parent</var>, or
+          <code>fundamental-mode-abbrev-table</code> if
+          <var>parent</var> is <code>nil</code>. (Again, a
+          <code>nil</code> value is <em>not</em> equivalent to not
+          specifying this keyword.)</p>
+        </dd>
+
+        <dt><code>:group</code></dt>
+
+        <dd>
+          <p>If this is specified, the value should be the
+          customization group for this mode. (Not all major modes
+          have one.) The command <code>customize-mode</code> uses
+          this. <code>define-derived-mode</code> does <em>not</em>
+          automatically define the specified customization
+          group.</p>
+        </dd>
+      </dl>
+
+      <p>Here is a hypothetical example:</p>
+
+      <div class="example">
+        <pre class="example">
+(define-derived-mode hypertext-mode
+  text-mode "Hypertext"
+  "Major mode for hypertext.
+\\{hypertext-mode-map}"
   (setq case-fold-search nil))
 
 (define-key hypertext-mode-map
   [down-mouse-3] 'do-hyper-link)
-</pre></div>
+</pre>
+      </div>
 
-<p>Do not write an <code>interactive</code> spec in the definition;
-<code>define-derived-mode</code> does that automatically.
-</p></dd></dl>
+      <p>Do not write an <code>interactive</code> spec in the
+      definition; <code>define-derived-mode</code> does that
+      automatically.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-derived_002dmode_002dp"></a>Function: <strong>derived-mode-p</strong> <em>&amp;rest modes</em></dt>
-<dd><p>This function returns non-<code>nil</code> if the current major mode is
-derived from any of the major modes given by the symbols <var>modes</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-derived_002dmode_002dp" id=
+    "index-derived_002dmode_002dp"></a>Function:
+    <strong>derived-mode-p</strong> <em>&amp;rest modes</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Basic-Major-Modes.html#Basic-Major-Modes" accesskey="n" rel="next">Basic Major Modes</a>, Previous: <a href="Mode-Help.html#Mode-Help" accesskey="p" rel="prev">Mode Help</a>, Up: <a href="Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns non-<code>nil</code> if the current
+      major mode is derived from any of the major modes given by
+      the symbols <var>modes</var>.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Basic-Major-Modes.html#Basic-Major-Modes"
+    accesskey="n" rel="next">Basic Major Modes</a>, Previous:
+    <a href="Mode-Help.html#Mode-Help" accesskey="p" rel=
+    "prev">Mode Help</a>, Up: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major
+    Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

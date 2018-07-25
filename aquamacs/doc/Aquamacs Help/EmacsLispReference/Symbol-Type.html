@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,138 +19,205 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Symbol Type</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Symbol Type">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Symbol Type">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Programming-Types.html#Programming-Types" rel="up" title="Programming Types">
-<link href="Sequence-Type.html#Sequence-Type" rel="next" title="Sequence Type">
-<link href="Other-Char-Bits.html#Other-Char-Bits" rel="prev" title="Other Char Bits">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Symbol Type</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Symbol Type" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Symbol Type" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Programming-Types.html#Programming-Types" rel="up"
+  title="Programming Types" />
+  <link href="Sequence-Type.html#Sequence-Type" rel="next" title=
+  "Sequence Type" />
+  <link href="Other-Char-Bits.html#Other-Char-Bits" rel="prev"
+  title="Other Char Bits" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Symbol-Type" id="Symbol-Type"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Sequence-Type.html#Sequence-Type" accesskey=
+    "n" rel="next">Sequence Type</a>, Previous: <a href=
+    "Character-Type.html#Character-Type" accesskey="p" rel=
+    "prev">Character Type</a>, Up: <a href=
+    "Programming-Types.html#Programming-Types" accesskey="u" rel=
+    "up">Programming Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Symbol-Type-1" id="Symbol-Type-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Symbol-Type"></a>
-<div class="header">
-<p>
-Next: <a href="Sequence-Type.html#Sequence-Type" accesskey="n" rel="next">Sequence Type</a>, Previous: <a href="Character-Type.html#Character-Type" accesskey="p" rel="prev">Character Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Symbol-Type-1"></a>
-<h4 class="subsection">2.3.4 Symbol Type</h4>
+  <h4 class="subsection">2.3.4 Symbol Type</h4>
 
-<p>A <em>symbol</em> in GNU Emacs Lisp is an object with a name.  The
-symbol name serves as the printed representation of the symbol.  In
-ordinary Lisp use, with one single obarray (see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>),
-a symbol&rsquo;s name is unique&mdash;no two symbols have the same name.
-</p>
-<p>A symbol can serve as a variable, as a function name, or to hold a
-property list.  Or it may serve only to be distinct from all other Lisp
-objects, so that its presence in a data structure may be recognized
-reliably.  In a given context, usually only one of these uses is
-intended.  But you can use one symbol in all of these ways,
-independently.
-</p>
-<p>A symbol whose name starts with a colon (&lsquo;<samp>:</samp>&rsquo;) is called a
-<em>keyword symbol</em>.  These symbols automatically act as constants,
-and are normally used only by comparing an unknown symbol with a few
-specific alternatives.  See <a href="Constant-Variables.html#Constant-Variables">Constant Variables</a>.
-</p>
-<a name="index-_005c-in-symbols"></a>
-<a name="index-backslash-in-symbols"></a>
-<p>A symbol name can contain any characters whatever.  Most symbol names
-are written with letters, digits, and the punctuation characters
-&lsquo;<samp>-+=*/</samp>&rsquo;.  Such names require no special punctuation; the characters
-of the name suffice as long as the name does not look like a number.
-(If it does, write a &lsquo;<samp>\</samp>&rsquo; at the beginning of the name to force
-interpretation as a symbol.)  The characters &lsquo;<samp>_~!@$%^&amp;:&lt;&gt;{}?</samp>&rsquo; are
-less often used but also require no special punctuation.  Any other
-characters may be included in a symbol&rsquo;s name by escaping them with a
-backslash.  In contrast to its use in strings, however, a backslash in
-the name of a symbol simply quotes the single character that follows the
-backslash.  For example, in a string, &lsquo;<samp>\t</samp>&rsquo; represents a tab
-character; in the name of a symbol, however, &lsquo;<samp>\t</samp>&rsquo; merely quotes the
-letter &lsquo;<samp>t</samp>&rsquo;.  To have a symbol with a tab character in its name, you
-must actually use a tab (preceded with a backslash).  But it&rsquo;s rare to
-do such a thing.
-</p>
-<a name="index-CL-note_002d_002d_002dcase-of-letters"></a>
-<blockquote>
-<p><b>Common Lisp note:</b> In Common Lisp, lower case letters are always
-folded to upper case, unless they are explicitly escaped.  In Emacs
-Lisp, upper case and lower case letters are distinct.
-</p></blockquote>
+  <p>A <em>symbol</em> in GNU Emacs Lisp is an object with a name.
+  The symbol name serves as the printed representation of the
+  symbol. In ordinary Lisp use, with one single obarray (see
+  <a href="Creating-Symbols.html#Creating-Symbols">Creating
+  Symbols</a>), a symbol&rsquo;s name is unique&mdash;no two
+  symbols have the same name.</p>
 
-<p>Here are several examples of symbol names.  Note that the &lsquo;<samp>+</samp>&rsquo; in
-the fourth example is escaped to prevent it from being read as a number.
-This is not necessary in the sixth example because the rest of the name
-makes it invalid as a number.
-</p>
-<div class="example">
-<pre class="example">foo                 ; <span class="roman">A symbol named &lsquo;<samp>foo</samp>&rsquo;.</span>
-FOO                 ; <span class="roman">A symbol named &lsquo;<samp>FOO</samp>&rsquo;, different from &lsquo;<samp>foo</samp>&rsquo;.</span>
-</pre><pre class="example">1+                  ; <span class="roman">A symbol named &lsquo;<samp>1+</samp>&rsquo;</span>
-                    ;   <span class="roman">(not &lsquo;<samp>+1</samp>&rsquo;, which is an integer).</span>
-</pre><pre class="example">\+1                 ; <span class="roman">A symbol named &lsquo;<samp>+1</samp>&rsquo;</span>
-                    ;   <span class="roman">(not a very readable name).</span>
-</pre><pre class="example">\(*\ 1\ 2\)         ; <span class="roman">A symbol named &lsquo;<samp>(* 1 2)</samp>&rsquo; (a worse name).</span>
-+-*/_~!@$%^&amp;=:&lt;&gt;{}  ; <span class="roman">A symbol named &lsquo;<samp>+-*/_~!@$%^&amp;=:&lt;&gt;{}</samp>&rsquo;.</span>
-                    ;   <span class="roman">These characters need not be escaped.</span>
-</pre></div>
+  <p>A symbol can serve as a variable, as a function name, or to
+  hold a property list. Or it may serve only to be distinct from
+  all other Lisp objects, so that its presence in a data structure
+  may be recognized reliably. In a given context, usually only one
+  of these uses is intended. But you can use one symbol in all of
+  these ways, independently.</p>
 
-<a name="index-_0023_0023-read-syntax"></a>
-<a name="index-_0023_003a-read-syntax"></a>
-<p>As an exception to the rule that a symbol&rsquo;s name serves as its
-printed representation, &lsquo;<samp>##</samp>&rsquo; is the printed representation for an
-interned symbol whose name is an empty string.  Furthermore,
-&lsquo;<samp>#:<var>foo</var></samp>&rsquo; is the printed representation for an uninterned
-symbol whose name is <var>foo</var>.  (Normally, the Lisp reader interns
-all symbols; see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>.)
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Sequence-Type.html#Sequence-Type" accesskey="n" rel="next">Sequence Type</a>, Previous: <a href="Character-Type.html#Character-Type" accesskey="p" rel="prev">Character Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A symbol whose name starts with a colon
+  (&lsquo;<samp>:</samp>&rsquo;) is called a <em>keyword
+  symbol</em>. These symbols automatically act as constants, and
+  are normally used only by comparing an unknown symbol with a few
+  specific alternatives. See <a href=
+  "Constant-Variables.html#Constant-Variables">Constant
+  Variables</a>.</p><a name="index-_005c-in-symbols" id=
+  "index-_005c-in-symbols"></a> <a name=
+  "index-backslash-in-symbols" id="index-backslash-in-symbols"></a>
 
+  <p>A symbol name can contain any characters whatever. Most symbol
+  names are written with letters, digits, and the punctuation
+  characters &lsquo;<samp>-+=*/</samp>&rsquo;. Such names require
+  no special punctuation; the characters of the name suffice as
+  long as the name does not look like a number. (If it does, write
+  a &lsquo;<samp>\</samp>&rsquo; at the beginning of the name to
+  force interpretation as a symbol.) The characters
+  &lsquo;<samp>_~!@$%^&amp;:&lt;&gt;{}?</samp>&rsquo; are less
+  often used but also require no special punctuation. Any other
+  characters may be included in a symbol&rsquo;s name by escaping
+  them with a backslash. In contrast to its use in strings,
+  however, a backslash in the name of a symbol simply quotes the
+  single character that follows the backslash. For example, in a
+  string, &lsquo;<samp>\t</samp>&rsquo; represents a tab character;
+  in the name of a symbol, however, &lsquo;<samp>\t</samp>&rsquo;
+  merely quotes the letter &lsquo;<samp>t</samp>&rsquo;. To have a
+  symbol with a tab character in its name, you must actually use a
+  tab (preceded with a backslash). But it&rsquo;s rare to do such a
+  thing.</p><a name="index-CL-note_002d_002d_002dcase-of-letters"
+  id="index-CL-note_002d_002d_002dcase-of-letters"></a>
 
+  <blockquote>
+    <p><b>Common Lisp note:</b> In Common Lisp, lower case letters
+    are always folded to upper case, unless they are explicitly
+    escaped. In Emacs Lisp, upper case and lower case letters are
+    distinct.</p>
+  </blockquote>
 
+  <p>Here are several examples of symbol names. Note that the
+  &lsquo;<samp>+</samp>&rsquo; in the fourth example is escaped to
+  prevent it from being read as a number. This is not necessary in
+  the sixth example because the rest of the name makes it invalid
+  as a number.</p>
+
+  <div class="example">
+    <pre class="example">
+foo                 ; <span class=
+"roman">A symbol named &lsquo;<samp>foo</samp>&rsquo;.</span>
+FOO                 ; <span class=
+"roman">A symbol named &lsquo;<samp>FOO</samp>&rsquo;, different from &lsquo;<samp>foo</samp>&rsquo;.</span>
+</pre>
+    <pre class="example">
+1+                  ; <span class=
+"roman">A symbol named &lsquo;<samp>1+</samp>&rsquo;</span>
+                    ;   <span class=
+"roman">(not &lsquo;<samp>+1</samp>&rsquo;, which is an integer).</span>
+</pre>
+    <pre class="example">
+\+1                 ; <span class=
+"roman">A symbol named &lsquo;<samp>+1</samp>&rsquo;</span>
+                    ;   <span class=
+"roman">(not a very readable name).</span>
+</pre>
+    <pre class="example">
+\(*\ 1\ 2\)         ; <span class=
+"roman">A symbol named &lsquo;<samp>(* 1 2)</samp>&rsquo; (a worse name).</span>
++-*/_~!@$%^&amp;=:&lt;&gt;{}  ; <span class=
+"roman">A symbol named &lsquo;<samp>+-*/_~!@$%^&amp;=:&lt;&gt;{}</samp>&rsquo;.</span>
+                    ;   <span class=
+"roman">These characters need not be escaped.</span>
+</pre>
+  </div><a name="index-_0023_0023-read-syntax" id=
+  "index-_0023_0023-read-syntax"></a> <a name=
+  "index-_0023_003a-read-syntax" id=
+  "index-_0023_003a-read-syntax"></a>
+
+  <p>As an exception to the rule that a symbol&rsquo;s name serves
+  as its printed representation, &lsquo;<samp>##</samp>&rsquo; is
+  the printed representation for an interned symbol whose name is
+  an empty string. Furthermore,
+  &lsquo;<samp>#:<var>foo</var></samp>&rsquo; is the printed
+  representation for an uninterned symbol whose name is
+  <var>foo</var>. (Normally, the Lisp reader interns all symbols;
+  see <a href="Creating-Symbols.html#Creating-Symbols">Creating
+  Symbols</a>.)</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Sequence-Type.html#Sequence-Type" accesskey=
+    "n" rel="next">Sequence Type</a>, Previous: <a href=
+    "Character-Type.html#Character-Type" accesskey="p" rel=
+    "prev">Character Type</a>, Up: <a href=
+    "Programming-Types.html#Programming-Types" accesskey="u" rel=
+    "up">Programming Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,273 +19,407 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Asynchronous Processes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Asynchronous Processes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Asynchronous Processes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Processes.html#Processes" rel="up" title="Processes">
-<link href="Deleting-Processes.html#Deleting-Processes" rel="next" title="Deleting Processes">
-<link href="Synchronous-Processes.html#Synchronous-Processes" rel="prev" title="Synchronous Processes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Asynchronous
+  Processes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Asynchronous Processes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Asynchronous Processes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Processes.html#Processes" rel="up" title=
+  "Processes" />
+  <link href="Deleting-Processes.html#Deleting-Processes" rel=
+  "next" title="Deleting Processes" />
+  <link href="Synchronous-Processes.html#Synchronous-Processes"
+  rel="prev" title="Synchronous Processes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Asynchronous-Processes" id="Asynchronous-Processes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Deleting-Processes.html#Deleting-Processes"
+    accesskey="n" rel="next">Deleting Processes</a>, Previous:
+    <a href="Synchronous-Processes.html#Synchronous-Processes"
+    accesskey="p" rel="prev">Synchronous Processes</a>, Up:
+    <a href="Processes.html#Processes" accesskey="u" rel=
+    "up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-an-Asynchronous-Process" id=
+  "Creating-an-Asynchronous-Process"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Asynchronous-Processes"></a>
-<div class="header">
-<p>
-Next: <a href="Deleting-Processes.html#Deleting-Processes" accesskey="n" rel="next">Deleting Processes</a>, Previous: <a href="Synchronous-Processes.html#Synchronous-Processes" accesskey="p" rel="prev">Synchronous Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-an-Asynchronous-Process"></a>
-<h3 class="section">36.4 Creating an Asynchronous Process</h3>
-<a name="index-asynchronous-subprocess"></a>
+  <h3 class="section">36.4 Creating an Asynchronous
+  Process</h3><a name="index-asynchronous-subprocess" id=
+  "index-asynchronous-subprocess"></a>
 
-<p>In this section, we describe how to create an <em>asynchronous
-process</em>.  After an asynchronous process is created, it runs in
-parallel with Emacs, and Emacs can communicate with it using the
-functions described in the following sections (see <a href="Input-to-Processes.html#Input-to-Processes">Input to Processes</a>, and see <a href="Output-from-Processes.html#Output-from-Processes">Output from Processes</a>).  Note that process
-communication is only partially asynchronous: Emacs sends data to the
-process only when certain functions are called, and Emacs accepts data
-from the process only while waiting for input or for a time delay.
-</p>
-<a name="index-pty"></a>
-<a name="index-pipe"></a>
-<p>An asynchronous process is controlled either via a <em>pty</em>
-(pseudo-terminal) or a <em>pipe</em>.  The choice of pty or pipe is made
-when creating the process, by default based on the value of the
-variable <code>process-connection-type</code> (see below).  If available,
-ptys are usually preferable for processes visible to the user, as in
-Shell mode, because they allow for job control (<kbd>C-c</kbd>, <kbd>C-z</kbd>,
-etc.) between the process and its children, and because interactive
-programs treat ptys as terminal devices, whereas pipes don&rsquo;t support
-these features.  However, for subprocesses used by Lisp programs for
-internal purposes, it is often better to use a pipe, because pipes are
-more efficient, and because they are immune to stray character
-injections that ptys introduce for large (around 500 byte) messages.
-Also, the total number of ptys is limited on many systems and it is
-good not to waste them.
-</p>
-<dl>
-<dt><a name="index-make_002dprocess"></a>Function: <strong>make-process</strong> <em>&amp;rest args</em></dt>
-<dd><p>This function is the basic low-level primitive for starting
-asynchronous subprocesses.  It returns a process object representing
-the subprocess.  Compared to the more high-level <code>start-process</code>,
-described below, it takes keyword arguments, is more flexible, and
-allows to specify process filters and sentinels in a single call.
-</p>
-<p>The arguments <var>args</var> are a list of keyword/argument pairs.
-Omitting a keyword is always equivalent to specifying it with value
-<code>nil</code>.  Here are the meaningful keywords:
-</p>
-<dl compact="compact">
-<dt>:name <var>name</var></dt>
-<dd><p>Use the string <var>name</var> as the process name; if a process with this
-name already exists, then <var>name</var> is modified (by appending
-&lsquo;<samp>&lt;1&gt;</samp>&rsquo;, etc.) to be unique.
-</p>
-</dd>
-<dt>:buffer <var>buffer</var></dt>
-<dd><p>Use <var>buffer</var> as the process buffer.  If the value is <code>nil</code>,
-the subprocess is not associated with any buffer.
-</p>
-</dd>
-<dt>:command <var>command</var></dt>
-<dd><p>Use <var>command</var> as the command line of the process.  The value
-should be a list starting with the program&rsquo;s executable file name,
-followed by strings to give to the program as its arguments.  If
-the first element of the list is <code>nil</code>, Emacs opens a new
-pseudoterminal (pty) and associates its input and output with
-<var>buffer</var>, without actually running any program; the rest of the
-list elements are ignored in that case.
-</p>
-</dd>
-<dt>:coding <var>coding</var></dt>
-<dd><p>If <var>coding</var> is a symbol, it specifies the coding system to be
-used for both reading and writing of data from and to the
-connection.  If <var>coding</var> is a cons cell
-<code>(<var>decoding</var>&nbsp;.&nbsp;<var>encoding</var>)</code><!-- /@w -->, then <var>decoding</var>
-will be used for reading and <var>encoding</var> for writing.  The coding
-system used for encoding the data written to the program is also used
-for encoding the command-line arguments (but not the program itself,
-whose file name is encoded as any other file name; see <a href="Encoding-and-I_002fO.html#Encoding-and-I_002fO">file-name-coding-system</a>).
-</p>
-<p>If <var>coding</var> is <code>nil</code>, the default rules for finding the
-coding system will apply.  See <a href="Default-Coding-Systems.html#Default-Coding-Systems">Default Coding Systems</a>.
-</p>
-</dd>
-<dt>:connection-type <var>TYPE</var></dt>
-<dd><p>Initialize the type of device used to communicate with the subprocess.
-Possible values are <code>pty</code> to use a pty, <code>pipe</code> to use a
-pipe, or <code>nil</code> to use the default derived from the value of the
-<code>process-connection-type</code> variable.  This parameter and the value
-of <code>process-connection-type</code> are ignored if a non-<code>nil</code>
-value is specified for the <code>:stderr</code> parameter; in that case, the
-type will always be <code>pipe</code>.
-</p>
-</dd>
-<dt>:noquery <var>query-flag</var></dt>
-<dd><p>Initialize the process query flag to <var>query-flag</var>.
-See <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>.
-</p>
-</dd>
-<dt>:stop <var>stopped</var></dt>
-<dd><p>If <var>stopped</var> is non-<code>nil</code>, start the process in the
-stopped state.
-</p>
-</dd>
-<dt>:filter <var>filter</var></dt>
-<dd><p>Initialize the process filter to <var>filter</var>.  If not specified, a
-default filter will be provided, which can be overridden later.
-See <a href="Filter-Functions.html#Filter-Functions">Filter Functions</a>.
-</p>
-</dd>
-<dt>:sentinel <var>sentinel</var></dt>
-<dd><p>Initialize the process sentinel to <var>sentinel</var>.  If not specified,
-a default sentinel will be used, which can be overridden later.
-See <a href="Sentinels.html#Sentinels">Sentinels</a>.
-</p>
-</dd>
-<dt>:stderr <var>stderr</var></dt>
-<dd><p>Associate <var>stderr</var> with the standard error of the process.  A
-non-<code>nil</code> value should be either a buffer or a pipe process
-created with <code>make-pipe-process</code>, described below.
-</p></dd>
-</dl>
+  <p>In this section, we describe how to create an <em>asynchronous
+  process</em>. After an asynchronous process is created, it runs
+  in parallel with Emacs, and Emacs can communicate with it using
+  the functions described in the following sections (see <a href=
+  "Input-to-Processes.html#Input-to-Processes">Input to
+  Processes</a>, and see <a href=
+  "Output-from-Processes.html#Output-from-Processes">Output from
+  Processes</a>). Note that process communication is only partially
+  asynchronous: Emacs sends data to the process only when certain
+  functions are called, and Emacs accepts data from the process
+  only while waiting for input or for a time delay.</p><a name=
+  "index-pty" id="index-pty"></a> <a name="index-pipe" id=
+  "index-pipe"></a>
 
-<p>The original argument list, modified with the actual connection
-information, is available via the <code>process-contact</code> function.
-</p></dd></dl>
+  <p>An asynchronous process is controlled either via a
+  <em>pty</em> (pseudo-terminal) or a <em>pipe</em>. The choice of
+  pty or pipe is made when creating the process, by default based
+  on the value of the variable <code>process-connection-type</code>
+  (see below). If available, ptys are usually preferable for
+  processes visible to the user, as in Shell mode, because they
+  allow for job control (<kbd>C-c</kbd>, <kbd>C-z</kbd>, etc.)
+  between the process and its children, and because interactive
+  programs treat ptys as terminal devices, whereas pipes
+  don&rsquo;t support these features. However, for subprocesses
+  used by Lisp programs for internal purposes, it is often better
+  to use a pipe, because pipes are more efficient, and because they
+  are immune to stray character injections that ptys introduce for
+  large (around 500 byte) messages. Also, the total number of ptys
+  is limited on many systems and it is good not to waste them.</p>
 
-<dl>
-<dt><a name="index-make_002dpipe_002dprocess"></a>Function: <strong>make-pipe-process</strong> <em>&amp;rest args</em></dt>
-<dd><p>This function creates a bidirectional pipe which can be attached to a
-child process.  This is useful with the <code>:stderr</code> keyword of
-<code>make-process</code>.  The function returns a process object.
-</p>
-<p>The arguments <var>args</var> are a list of keyword/argument pairs.
-Omitting a keyword is always equivalent to specifying it with value
-<code>nil</code>.
-</p>
-<p>Here are the meaningful keywords:
-</p>
-<dl compact="compact">
-<dt>:name <var>name</var></dt>
-<dd><p>Use the string <var>name</var> as the process name.  As with
-<code>make-process</code>, it is modified if necessary to make it unique.
-</p>
-</dd>
-<dt>:buffer <var>buffer</var></dt>
-<dd><p>Use <var>buffer</var> as the process buffer.
-</p>
-</dd>
-<dt>:coding <var>coding</var></dt>
-<dd><p>If <var>coding</var> is a symbol, it specifies the coding system to be
-used for both reading and writing of data from and to the
-connection.  If <var>coding</var> is a cons cell
-<code>(<var>decoding</var>&nbsp;.&nbsp;<var>encoding</var>)</code><!-- /@w -->, then <var>decoding</var>
-will be used for reading and <var>encoding</var> for writing.
-</p>
-<p>If <var>coding</var> is <code>nil</code>, the default rules for finding the
-coding system will apply.  See <a href="Default-Coding-Systems.html#Default-Coding-Systems">Default Coding Systems</a>.
-</p>
-</dd>
-<dt>:noquery <var>query-flag</var></dt>
-<dd><p>Initialize the process query flag to <var>query-flag</var>.
-See <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>.
-</p>
-</dd>
-<dt>:stop <var>stopped</var></dt>
-<dd><p>If <var>stopped</var> is non-<code>nil</code>, start the process in the
-stopped state.
-</p>
-</dd>
-<dt>:filter <var>filter</var></dt>
-<dd><p>Initialize the process filter to <var>filter</var>.  If not specified, a
-default filter will be provided, which can be changed later.
-See <a href="Filter-Functions.html#Filter-Functions">Filter Functions</a>.
-</p>
-</dd>
-<dt>:sentinel <var>sentinel</var></dt>
-<dd><p>Initialize the process sentinel to <var>sentinel</var>.  If not specified,
-a default sentinel will be used, which can be changed later.
-See <a href="Sentinels.html#Sentinels">Sentinels</a>.
-</p></dd>
-</dl>
+  <dl>
+    <dt><a name="index-make_002dprocess" id=
+    "index-make_002dprocess"></a>Function:
+    <strong>make-process</strong> <em>&amp;rest args</em></dt>
 
-<p>The original argument list, modified with the actual connection
-information, is available via the <code>process-contact</code> function.
-</p></dd></dl>
+    <dd>
+      <p>This function is the basic low-level primitive for
+      starting asynchronous subprocesses. It returns a process
+      object representing the subprocess. Compared to the more
+      high-level <code>start-process</code>, described below, it
+      takes keyword arguments, is more flexible, and allows to
+      specify process filters and sentinels in a single call.</p>
 
-<dl>
-<dt><a name="index-start_002dprocess"></a>Function: <strong>start-process</strong> <em>name buffer-or-name program &amp;rest args</em></dt>
-<dd><p>This function is a higher-level wrapper around <code>make-process</code>,
-exposing an interface that is similar to <code>call-process</code>.  It
-creates a new asynchronous subprocess and starts the specified
-<var>program</var> running in it.  It returns a process object that stands
-for the new subprocess in Lisp.  The argument <var>name</var> specifies the
-name for the process object; as with <code>make-process</code>, it is
-modified if necessary to make it unique.  The buffer
-<var>buffer-or-name</var> is the buffer to associate with the process.
-</p>
-<p>If <var>program</var> is <code>nil</code>, Emacs opens a new pseudoterminal (pty)
-and associates its input and output with <var>buffer-or-name</var>, without
-creating a subprocess.  In that case, the remaining arguments
-<var>args</var> are ignored.
-</p>
-<p>The rest of <var>args</var> are strings that specify command line arguments
-for the subprocess.
-</p>
-<p>In the example below, the first process is started and runs (rather,
-sleeps) for 100 seconds (the output buffer &lsquo;<samp>foo</samp>&rsquo; is created
-immediately).  Meanwhile, the second process is started, and
-given the name &lsquo;<samp>my-process&lt;1&gt;</samp>&rsquo; for the sake of uniqueness.  It
-inserts the directory listing at the end of the buffer &lsquo;<samp>foo</samp>&rsquo;,
-before the first process finishes.  Then it finishes, and a message to
-that effect is inserted in the buffer.  Much later, the first process
-finishes, and another message is inserted in the buffer for it.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(start-process &quot;my-process&quot; &quot;foo&quot; &quot;sleep&quot; &quot;100&quot;)
+      <p>The arguments <var>args</var> are a list of
+      keyword/argument pairs. Omitting a keyword is always
+      equivalent to specifying it with value <code>nil</code>. Here
+      are the meaningful keywords:</p>
+
+      <dl compact="compact">
+        <dt>:name <var>name</var></dt>
+
+        <dd>
+          <p>Use the string <var>name</var> as the process name; if
+          a process with this name already exists, then
+          <var>name</var> is modified (by appending
+          &lsquo;<samp>&lt;1&gt;</samp>&rsquo;, etc.) to be
+          unique.</p>
+        </dd>
+
+        <dt>:buffer <var>buffer</var></dt>
+
+        <dd>
+          <p>Use <var>buffer</var> as the process buffer. If the
+          value is <code>nil</code>, the subprocess is not
+          associated with any buffer.</p>
+        </dd>
+
+        <dt>:command <var>command</var></dt>
+
+        <dd>
+          <p>Use <var>command</var> as the command line of the
+          process. The value should be a list starting with the
+          program&rsquo;s executable file name, followed by strings
+          to give to the program as its arguments. If the first
+          element of the list is <code>nil</code>, Emacs opens a
+          new pseudoterminal (pty) and associates its input and
+          output with <var>buffer</var>, without actually running
+          any program; the rest of the list elements are ignored in
+          that case.</p>
+        </dd>
+
+        <dt>:coding <var>coding</var></dt>
+
+        <dd>
+          <p>If <var>coding</var> is a symbol, it specifies the
+          coding system to be used for both reading and writing of
+          data from and to the connection. If <var>coding</var> is
+          a cons cell
+          <code>(<var>decoding</var>&nbsp;.&nbsp;<var>encoding</var>)</code><!-- /@w -->,
+          then <var>decoding</var> will be used for reading and
+          <var>encoding</var> for writing. The coding system used
+          for encoding the data written to the program is also used
+          for encoding the command-line arguments (but not the
+          program itself, whose file name is encoded as any other
+          file name; see <a href=
+          "Encoding-and-I_002fO.html#Encoding-and-I_002fO">file-name-coding-system</a>).</p>
+
+          <p>If <var>coding</var> is <code>nil</code>, the default
+          rules for finding the coding system will apply. See
+          <a href=
+          "Default-Coding-Systems.html#Default-Coding-Systems">Default
+          Coding Systems</a>.</p>
+        </dd>
+
+        <dt>:connection-type <var>TYPE</var></dt>
+
+        <dd>
+          <p>Initialize the type of device used to communicate with
+          the subprocess. Possible values are <code>pty</code> to
+          use a pty, <code>pipe</code> to use a pipe, or
+          <code>nil</code> to use the default derived from the
+          value of the <code>process-connection-type</code>
+          variable. This parameter and the value of
+          <code>process-connection-type</code> are ignored if a
+          non-<code>nil</code> value is specified for the
+          <code>:stderr</code> parameter; in that case, the type
+          will always be <code>pipe</code>.</p>
+        </dd>
+
+        <dt>:noquery <var>query-flag</var></dt>
+
+        <dd>
+          <p>Initialize the process query flag to
+          <var>query-flag</var>. See <a href=
+          "Query-Before-Exit.html#Query-Before-Exit">Query Before
+          Exit</a>.</p>
+        </dd>
+
+        <dt>:stop <var>stopped</var></dt>
+
+        <dd>
+          <p>If <var>stopped</var> is non-<code>nil</code>, start
+          the process in the stopped state.</p>
+        </dd>
+
+        <dt>:filter <var>filter</var></dt>
+
+        <dd>
+          <p>Initialize the process filter to <var>filter</var>. If
+          not specified, a default filter will be provided, which
+          can be overridden later. See <a href=
+          "Filter-Functions.html#Filter-Functions">Filter
+          Functions</a>.</p>
+        </dd>
+
+        <dt>:sentinel <var>sentinel</var></dt>
+
+        <dd>
+          <p>Initialize the process sentinel to
+          <var>sentinel</var>. If not specified, a default sentinel
+          will be used, which can be overridden later. See <a href=
+          "Sentinels.html#Sentinels">Sentinels</a>.</p>
+        </dd>
+
+        <dt>:stderr <var>stderr</var></dt>
+
+        <dd>
+          <p>Associate <var>stderr</var> with the standard error of
+          the process. A non-<code>nil</code> value should be
+          either a buffer or a pipe process created with
+          <code>make-pipe-process</code>, described below.</p>
+        </dd>
+      </dl>
+
+      <p>The original argument list, modified with the actual
+      connection information, is available via the
+      <code>process-contact</code> function.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-make_002dpipe_002dprocess" id=
+    "index-make_002dpipe_002dprocess"></a>Function:
+    <strong>make-pipe-process</strong> <em>&amp;rest args</em></dt>
+
+    <dd>
+      <p>This function creates a bidirectional pipe which can be
+      attached to a child process. This is useful with the
+      <code>:stderr</code> keyword of <code>make-process</code>.
+      The function returns a process object.</p>
+
+      <p>The arguments <var>args</var> are a list of
+      keyword/argument pairs. Omitting a keyword is always
+      equivalent to specifying it with value <code>nil</code>.</p>
+
+      <p>Here are the meaningful keywords:</p>
+
+      <dl compact="compact">
+        <dt>:name <var>name</var></dt>
+
+        <dd>
+          <p>Use the string <var>name</var> as the process name. As
+          with <code>make-process</code>, it is modified if
+          necessary to make it unique.</p>
+        </dd>
+
+        <dt>:buffer <var>buffer</var></dt>
+
+        <dd>
+          <p>Use <var>buffer</var> as the process buffer.</p>
+        </dd>
+
+        <dt>:coding <var>coding</var></dt>
+
+        <dd>
+          <p>If <var>coding</var> is a symbol, it specifies the
+          coding system to be used for both reading and writing of
+          data from and to the connection. If <var>coding</var> is
+          a cons cell
+          <code>(<var>decoding</var>&nbsp;.&nbsp;<var>encoding</var>)</code><!-- /@w -->,
+          then <var>decoding</var> will be used for reading and
+          <var>encoding</var> for writing.</p>
+
+          <p>If <var>coding</var> is <code>nil</code>, the default
+          rules for finding the coding system will apply. See
+          <a href=
+          "Default-Coding-Systems.html#Default-Coding-Systems">Default
+          Coding Systems</a>.</p>
+        </dd>
+
+        <dt>:noquery <var>query-flag</var></dt>
+
+        <dd>
+          <p>Initialize the process query flag to
+          <var>query-flag</var>. See <a href=
+          "Query-Before-Exit.html#Query-Before-Exit">Query Before
+          Exit</a>.</p>
+        </dd>
+
+        <dt>:stop <var>stopped</var></dt>
+
+        <dd>
+          <p>If <var>stopped</var> is non-<code>nil</code>, start
+          the process in the stopped state.</p>
+        </dd>
+
+        <dt>:filter <var>filter</var></dt>
+
+        <dd>
+          <p>Initialize the process filter to <var>filter</var>. If
+          not specified, a default filter will be provided, which
+          can be changed later. See <a href=
+          "Filter-Functions.html#Filter-Functions">Filter
+          Functions</a>.</p>
+        </dd>
+
+        <dt>:sentinel <var>sentinel</var></dt>
+
+        <dd>
+          <p>Initialize the process sentinel to
+          <var>sentinel</var>. If not specified, a default sentinel
+          will be used, which can be changed later. See <a href=
+          "Sentinels.html#Sentinels">Sentinels</a>.</p>
+        </dd>
+      </dl>
+
+      <p>The original argument list, modified with the actual
+      connection information, is available via the
+      <code>process-contact</code> function.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-start_002dprocess" id=
+    "index-start_002dprocess"></a>Function:
+    <strong>start-process</strong> <em>name buffer-or-name program
+    &amp;rest args</em></dt>
+
+    <dd>
+      <p>This function is a higher-level wrapper around
+      <code>make-process</code>, exposing an interface that is
+      similar to <code>call-process</code>. It creates a new
+      asynchronous subprocess and starts the specified
+      <var>program</var> running in it. It returns a process object
+      that stands for the new subprocess in Lisp. The argument
+      <var>name</var> specifies the name for the process object; as
+      with <code>make-process</code>, it is modified if necessary
+      to make it unique. The buffer <var>buffer-or-name</var> is
+      the buffer to associate with the process.</p>
+
+      <p>If <var>program</var> is <code>nil</code>, Emacs opens a
+      new pseudoterminal (pty) and associates its input and output
+      with <var>buffer-or-name</var>, without creating a
+      subprocess. In that case, the remaining arguments
+      <var>args</var> are ignored.</p>
+
+      <p>The rest of <var>args</var> are strings that specify
+      command line arguments for the subprocess.</p>
+
+      <p>In the example below, the first process is started and
+      runs (rather, sleeps) for 100 seconds (the output buffer
+      &lsquo;<samp>foo</samp>&rsquo; is created immediately).
+      Meanwhile, the second process is started, and given the name
+      &lsquo;<samp>my-process&lt;1&gt;</samp>&rsquo; for the sake
+      of uniqueness. It inserts the directory listing at the end of
+      the buffer &lsquo;<samp>foo</samp>&rsquo;, before the first
+      process finishes. Then it finishes, and a message to that
+      effect is inserted in the buffer. Much later, the first
+      process finishes, and another message is inserted in the
+      buffer for it.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(start-process "my-process" "foo" "sleep" "100")
      &rArr; #&lt;process my-process&gt;
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">(start-process &quot;my-process&quot; &quot;foo&quot; &quot;ls&quot; &quot;-l&quot; &quot;/bin&quot;)
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+(start-process "my-process" "foo" "ls" "-l" "/bin")
      &rArr; #&lt;process my-process&lt;1&gt;&gt;
 
 ---------- Buffer: foo ----------
@@ -297,91 +433,144 @@ Process my-process&lt;1&gt; finished
 
 Process my-process finished
 ---------- Buffer: foo ----------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-start_002dfile_002dprocess"></a>Function: <strong>start-file-process</strong> <em>name buffer-or-name program &amp;rest args</em></dt>
-<dd><p>Like <code>start-process</code>, this function starts a new asynchronous
-subprocess running <var>program</var> in it, and returns its process
-object.
-</p>
-<p>The difference from <code>start-process</code> is that this function may
-invoke a file handler based on the value of <code>default-directory</code>.
-This handler ought to run <var>program</var>, perhaps on the local host,
-perhaps on a remote host that corresponds to <code>default-directory</code>.
-In the latter case, the local part of <code>default-directory</code> becomes
-the working directory of the process.
-</p>
-<p>This function does not try to invoke file name handlers for
-<var>program</var> or for the rest of <var>args</var>.
-</p>
-<p>Depending on the implementation of the file handler, it might not be
-possible to apply <code>process-filter</code> or <code>process-sentinel</code> to
-the resulting process object.  See <a href="Filter-Functions.html#Filter-Functions">Filter Functions</a>, and <a href="Sentinels.html#Sentinels">Sentinels</a>.
-</p>
-<p>Some file handlers may not support <code>start-file-process</code> (for
-example the function <code>ange-ftp-hook-function</code>).  In such cases,
-this function does nothing and returns <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-start_002dfile_002dprocess" id=
+    "index-start_002dfile_002dprocess"></a>Function:
+    <strong>start-file-process</strong> <em>name buffer-or-name
+    program &amp;rest args</em></dt>
 
-<dl>
-<dt><a name="index-start_002dprocess_002dshell_002dcommand"></a>Function: <strong>start-process-shell-command</strong> <em>name buffer-or-name command</em></dt>
-<dd><p>This function is like <code>start-process</code>, except that it uses a
-shell to execute the specified <var>command</var>.  The argument
-<var>command</var> is a shell command string.  The variable
-<code>shell-file-name</code> specifies which shell to use.
-</p>
-<p>The point of running a program through the shell, rather than directly
-with <code>make-process</code> or <code>start-process</code>, is so that you can
-employ shell features such as wildcards in the arguments.  It follows
-that if you include any arbitrary user-specified arguments in the
-command, you should quote them with <code>shell-quote-argument</code> first,
-so that any special shell characters do <em>not</em> have their special
-shell meanings.  See <a href="Shell-Arguments.html#Shell-Arguments">Shell Arguments</a>.  Of course, when executing
-commands based on user input you should also consider the security
-implications.
-</p></dd></dl>
+    <dd>
+      <p>Like <code>start-process</code>, this function starts a
+      new asynchronous subprocess running <var>program</var> in it,
+      and returns its process object.</p>
 
-<dl>
-<dt><a name="index-start_002dfile_002dprocess_002dshell_002dcommand"></a>Function: <strong>start-file-process-shell-command</strong> <em>name buffer-or-name command</em></dt>
-<dd><p>This function is like <code>start-process-shell-command</code>, but uses
-<code>start-file-process</code> internally.  Because of this, <var>command</var>
-can also be executed on remote hosts, depending on <code>default-directory</code>.
-</p></dd></dl>
+      <p>The difference from <code>start-process</code> is that
+      this function may invoke a file handler based on the value of
+      <code>default-directory</code>. This handler ought to run
+      <var>program</var>, perhaps on the local host, perhaps on a
+      remote host that corresponds to
+      <code>default-directory</code>. In the latter case, the local
+      part of <code>default-directory</code> becomes the working
+      directory of the process.</p>
 
-<dl>
-<dt><a name="index-process_002dconnection_002dtype"></a>Variable: <strong>process-connection-type</strong></dt>
-<dd><p>This variable controls the type of device used to communicate with
-asynchronous subprocesses.  If it is non-<code>nil</code>, then ptys are
-used, when available.  Otherwise, pipes are used.
-</p>
-<p>The value of <code>process-connection-type</code> takes effect when
-<code>make-process</code> or <code>start-process</code> is called.  So you can
-specify how to communicate with one subprocess by binding the variable
-around the call to these functions.
-</p>
-<p>Note that the value of this variable is ignored when
-<code>make-process</code> is called with a non-<code>nil</code> value of the
-<code>:stderr</code> parameter; in that case, Emacs will communicate with
-the process using pipes.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(let ((process-connection-type nil))  ; <span class="roman">use a pipe</span>
+      <p>This function does not try to invoke file name handlers
+      for <var>program</var> or for the rest of
+      <var>args</var>.</p>
+
+      <p>Depending on the implementation of the file handler, it
+      might not be possible to apply <code>process-filter</code> or
+      <code>process-sentinel</code> to the resulting process
+      object. See <a href=
+      "Filter-Functions.html#Filter-Functions">Filter
+      Functions</a>, and <a href=
+      "Sentinels.html#Sentinels">Sentinels</a>.</p>
+
+      <p>Some file handlers may not support
+      <code>start-file-process</code> (for example the function
+      <code>ange-ftp-hook-function</code>). In such cases, this
+      function does nothing and returns <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-start_002dprocess_002dshell_002dcommand" id=
+    "index-start_002dprocess_002dshell_002dcommand"></a>Function:
+    <strong>start-process-shell-command</strong> <em>name
+    buffer-or-name command</em></dt>
+
+    <dd>
+      <p>This function is like <code>start-process</code>, except
+      that it uses a shell to execute the specified
+      <var>command</var>. The argument <var>command</var> is a
+      shell command string. The variable
+      <code>shell-file-name</code> specifies which shell to
+      use.</p>
+
+      <p>The point of running a program through the shell, rather
+      than directly with <code>make-process</code> or
+      <code>start-process</code>, is so that you can employ shell
+      features such as wildcards in the arguments. It follows that
+      if you include any arbitrary user-specified arguments in the
+      command, you should quote them with
+      <code>shell-quote-argument</code> first, so that any special
+      shell characters do <em>not</em> have their special shell
+      meanings. See <a href=
+      "Shell-Arguments.html#Shell-Arguments">Shell Arguments</a>.
+      Of course, when executing commands based on user input you
+      should also consider the security implications.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-start_002dfile_002dprocess_002dshell_002dcommand" id=
+    "index-start_002dfile_002dprocess_002dshell_002dcommand"></a>Function:
+    <strong>start-file-process-shell-command</strong> <em>name
+    buffer-or-name command</em></dt>
+
+    <dd>
+      <p>This function is like
+      <code>start-process-shell-command</code>, but uses
+      <code>start-file-process</code> internally. Because of this,
+      <var>command</var> can also be executed on remote hosts,
+      depending on <code>default-directory</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-process_002dconnection_002dtype" id=
+    "index-process_002dconnection_002dtype"></a>Variable:
+    <strong>process-connection-type</strong></dt>
+
+    <dd>
+      <p>This variable controls the type of device used to
+      communicate with asynchronous subprocesses. If it is
+      non-<code>nil</code>, then ptys are used, when available.
+      Otherwise, pipes are used.</p>
+
+      <p>The value of <code>process-connection-type</code> takes
+      effect when <code>make-process</code> or
+      <code>start-process</code> is called. So you can specify how
+      to communicate with one subprocess by binding the variable
+      around the call to these functions.</p>
+
+      <p>Note that the value of this variable is ignored when
+      <code>make-process</code> is called with a
+      non-<code>nil</code> value of the <code>:stderr</code>
+      parameter; in that case, Emacs will communicate with the
+      process using pipes.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(let ((process-connection-type nil))  ; <span class=
+"roman">use a pipe</span>
   (start-process &hellip;))
-</pre></div>
+</pre>
+      </div>
 
-<p>To determine whether a given subprocess actually got a pipe or a pty,
-use the function <code>process-tty-name</code> (see <a href="Process-Information.html#Process-Information">Process Information</a>).
-</p></dd></dl>
+      <p>To determine whether a given subprocess actually got a
+      pipe or a pty, use the function <code>process-tty-name</code>
+      (see <a href=
+      "Process-Information.html#Process-Information">Process
+      Information</a>).</p>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Deleting-Processes.html#Deleting-Processes" accesskey="n" rel="next">Deleting Processes</a>, Previous: <a href="Synchronous-Processes.html#Synchronous-Processes" accesskey="p" rel="prev">Synchronous Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Deleting-Processes.html#Deleting-Processes"
+    accesskey="n" rel="next">Deleting Processes</a>, Previous:
+    <a href="Synchronous-Processes.html#Synchronous-Processes"
+    accesskey="p" rel="prev">Synchronous Processes</a>, Up:
+    <a href="Processes.html#Processes" accesskey="u" rel=
+    "up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

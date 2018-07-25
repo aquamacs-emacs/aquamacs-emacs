@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes EDE, the Emacs Development Environment.
 
 Copyright (C) 1998-2001, 2004-2005, 2008-2016
@@ -15,128 +17,177 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Development Environment: Development Overview</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Development Environment: Development Overview">
-<meta name="keywords" content="Emacs Development Environment: Development Overview">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Extending-EDE.html#Extending-EDE" rel="up" title="Extending EDE">
-<link href="Detecting-a-Project.html#Detecting-a-Project" rel="next" title="Detecting a Project">
-<link href="Extending-EDE.html#Extending-EDE" rel="prev" title="Extending EDE">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Development Environment: Development
+  Overview</title>
+  <meta name="description" content=
+  "Emacs Development Environment: Development Overview" />
+  <meta name="keywords" content=
+  "Emacs Development Environment: Development Overview" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Extending-EDE.html#Extending-EDE" rel="up" title=
+  "Extending EDE" />
+  <link href="Detecting-a-Project.html#Detecting-a-Project" rel=
+  "next" title="Detecting a Project" />
+  <link href="Extending-EDE.html#Extending-EDE" rel="prev" title=
+  "Extending EDE" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Development-Overview"></a>
-<div class="header">
-<p>
-Next: <a href="Detecting-a-Project.html#Detecting-a-Project" accesskey="n" rel="next">Detecting a Project</a>, Previous: <a href="Extending-EDE.html#Extending-EDE" accesskey="p" rel="prev">Extending EDE</a>, Up: <a href="Extending-EDE.html#Extending-EDE" accesskey="u" rel="up">Extending EDE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Development-Overview-1"></a>
-<h3 class="section">8.1 Development Overview</h3>
+<body lang="en" xml:lang="en">
+  <a name="Development-Overview" id="Development-Overview"></a>
 
-<p><i>EDE</i> is made up of a series of classes implemented with <i>EIEIO</i>.
-These classes define an interface that can be used to create different
-types of projects.
-</p>
-<p><i>EDE</i> defines two superclasses which are <code>ede-project</code> and
-<code>ede-target</code>.  All commands in <i>EDE</i> are usually meant to
-address the current project, or current target.
-</p>
-<p>All specific projects in <i>EDE</i> derive subclasses of the <i>EDE</i> superclasses.
-In this way, specific behaviors such as how a project is saved, or how a
-target is compiled can be customized by a project author in detail.  <i>EDE</i>
-communicates to these project objects via an API using methods.  The
-commands you use in <i>EDE</i> mode are high-level functional wrappers over
-these methods.
-</p>
-<p>Some example project types are:
-</p>
-<dl compact="compact">
-<dt><code>project-am</code></dt>
-<dd><p>Automake project which reads existing Automake files.
-</p></dd>
-<dt><code>ede-proj-project</code></dt>
-<dd><p>This project type will create <samp>Makefiles</samp>,
-or <samp>Makefile.am</samp> files to compile your project.
-</p></dd>
-<dt><code>ede-linux</code></dt>
-<dd><p>This project type will detect linux source trees.
-</p></dd>
-<dt><code>ede-emacs</code></dt>
-<dd><p>This project will detect an Emacs source tree.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Detecting-a-Project.html#Detecting-a-Project"
+    accesskey="n" rel="next">Detecting a Project</a>, Previous:
+    <a href="Extending-EDE.html#Extending-EDE" accesskey="p" rel=
+    "prev">Extending EDE</a>, Up: <a href=
+    "Extending-EDE.html#Extending-EDE" accesskey="u" rel=
+    "up">Extending EDE</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Development-Overview-1" id="Development-Overview-1"></a>
 
-<p>There are several other project types as well.
-</p>
-<p>The first class you need to know to create a new project type is
-<code>ede-project-autoload</code>.  New instances of this class are needed
-to define how Emacs associates different files/buffers with different
-project types.  All the autoloads are kept in the variable
-<code>ede-project-class-files</code>.
-</p>
-<p>The next most important class to know is <code>ede-project</code>.  This is
-the baseclass defines how all projects behave.  The basic pattern for
-a project is that there is one project per directory, and the topmost
-project or directory defines the project as a whole.
-</p>
-<p>Key features of <code>ede-project</code> are things like name and version
-number.  It also holds a list of <code>ede-target</code> objects and a list
-of sub projects, or more <code>ede-project</code> objects.
-</p>
-<p>New project types must subclass <code>ede-project</code> to add special
-behavior. New project types also need to subclass <code>ede-target</code> to
-add specialty behavior.
-</p>
-<p>In this way, the common <i>EDE</i> interface is designed to work against
-<code>ede-project</code>, and thus all subclasses.
-</p>
-<p><code>ede-project</code> subclasses <code>ede-project-placeholder</code>.  This is
-the minimum necessary project needed to be cached between runs of
-Emacs.  This way, Emacs can track all projects ever seen, without
-loading those projects into memory.
-</p>
-<p>Here is a high-level UML diagram for the <i>EDE</i> system created with <i>COGRE</i>..
-</p>
-<div class="example">
-<pre class="example">+-----------------------+        +-----------------------+
+  <h3 class="section">8.1 Development Overview</h3>
+
+  <p><i>EDE</i> is made up of a series of classes implemented with
+  <i>EIEIO</i>. These classes define an interface that can be used
+  to create different types of projects.</p>
+
+  <p><i>EDE</i> defines two superclasses which are
+  <code>ede-project</code> and <code>ede-target</code>. All
+  commands in <i>EDE</i> are usually meant to address the current
+  project, or current target.</p>
+
+  <p>All specific projects in <i>EDE</i> derive subclasses of the
+  <i>EDE</i> superclasses. In this way, specific behaviors such as
+  how a project is saved, or how a target is compiled can be
+  customized by a project author in detail. <i>EDE</i> communicates
+  to these project objects via an API using methods. The commands
+  you use in <i>EDE</i> mode are high-level functional wrappers
+  over these methods.</p>
+
+  <p>Some example project types are:</p>
+
+  <dl compact="compact">
+    <dt><code>project-am</code></dt>
+
+    <dd>
+      <p>Automake project which reads existing Automake files.</p>
+    </dd>
+
+    <dt><code>ede-proj-project</code></dt>
+
+    <dd>
+      <p>This project type will create <samp>Makefiles</samp>, or
+      <samp>Makefile.am</samp> files to compile your project.</p>
+    </dd>
+
+    <dt><code>ede-linux</code></dt>
+
+    <dd>
+      <p>This project type will detect linux source trees.</p>
+    </dd>
+
+    <dt><code>ede-emacs</code></dt>
+
+    <dd>
+      <p>This project will detect an Emacs source tree.</p>
+    </dd>
+  </dl>
+
+  <p>There are several other project types as well.</p>
+
+  <p>The first class you need to know to create a new project type
+  is <code>ede-project-autoload</code>. New instances of this class
+  are needed to define how Emacs associates different files/buffers
+  with different project types. All the autoloads are kept in the
+  variable <code>ede-project-class-files</code>.</p>
+
+  <p>The next most important class to know is
+  <code>ede-project</code>. This is the baseclass defines how all
+  projects behave. The basic pattern for a project is that there is
+  one project per directory, and the topmost project or directory
+  defines the project as a whole.</p>
+
+  <p>Key features of <code>ede-project</code> are things like name
+  and version number. It also holds a list of
+  <code>ede-target</code> objects and a list of sub projects, or
+  more <code>ede-project</code> objects.</p>
+
+  <p>New project types must subclass <code>ede-project</code> to
+  add special behavior. New project types also need to subclass
+  <code>ede-target</code> to add specialty behavior.</p>
+
+  <p>In this way, the common <i>EDE</i> interface is designed to
+  work against <code>ede-project</code>, and thus all
+  subclasses.</p>
+
+  <p><code>ede-project</code> subclasses
+  <code>ede-project-placeholder</code>. This is the minimum
+  necessary project needed to be cached between runs of Emacs. This
+  way, Emacs can track all projects ever seen, without loading
+  those projects into memory.</p>
+
+  <p>Here is a high-level UML diagram for the <i>EDE</i> system
+  created with <i>COGRE</i>..</p>
+
+  <div class="example">
+    <pre class="example">
++-----------------------+        +-----------------------+
 |                       |        |ede-project-placeholder|
 |ede-project-class-files|        +-----------------------+
 |                       |        +-----------------------+
@@ -161,16 +212,19 @@ loading those projects into memory.
               +----------------+   +-------------------+  +---------+
               +----------------+   +-------------------+  +---------+
               +----------------+   +-------------------+  +---------+
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Detecting-a-Project.html#Detecting-a-Project" accesskey="n" rel="next">Detecting a Project</a>, Previous: <a href="Extending-EDE.html#Extending-EDE" accesskey="p" rel="prev">Extending EDE</a>, Up: <a href="Extending-EDE.html#Extending-EDE" accesskey="u" rel="up">Extending EDE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Detecting-a-Project.html#Detecting-a-Project"
+    accesskey="n" rel="next">Detecting a Project</a>, Previous:
+    <a href="Extending-EDE.html#Extending-EDE" accesskey="p" rel=
+    "prev">Extending EDE</a>, Up: <a href=
+    "Extending-EDE.html#Extending-EDE" accesskey="u" rel=
+    "up">Extending EDE</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

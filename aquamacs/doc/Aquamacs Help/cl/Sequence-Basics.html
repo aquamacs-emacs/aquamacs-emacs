@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Sequence Basics - Common Lisp Extensions</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Common Lisp Extensions">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Sequences.html#Sequences" title="Sequences">
-<link rel="prev" href="Sequences.html#Sequences" title="Sequences">
-<link rel="next" href="Mapping-over-Sequences.html#Mapping-over-Sequences" title="Mapping over Sequences">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Sequence Basics - Common Lisp Extensions</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Common Lisp Extensions" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Sequences.html#Sequences" title=
+  "Sequences" />
+  <link rel="prev" href="Sequences.html#Sequences" title=
+  "Sequences" />
+  <link rel="next" href=
+  "Mapping-over-Sequences.html#Mapping-over-Sequences" title=
+  "Mapping over Sequences" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -27,8 +37,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,88 +50,109 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Sequence-Basics"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Mapping-over-Sequences.html#Mapping-over-Sequences">Mapping over Sequences</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Sequences.html#Sequences">Sequences</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Sequences.html#Sequences">Sequences</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Sequence-Basics" id="Sequence-Basics"></a>
 
-<h3 class="section">10.1 Sequence Basics</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Mapping-over-Sequences.html#Mapping-over-Sequences">Mapping
+    over Sequences</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href="Sequences.html#Sequences">Sequences</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Sequences.html#Sequences">Sequences</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">Many of the sequence functions take keyword arguments; see <a href="Argument-Lists.html#Argument-Lists">Argument Lists</a>.  All keyword arguments are optional and, if specified,
-may appear in any order.
+  <h3 class="section">10.1 Sequence Basics</h3>
 
-   <p>The <code>:key</code> argument should be passed either <code>nil</code>, or a
-function of one argument.  This key function is used as a filter
-through which the elements of the sequence are seen; for example,
-<code>(find x y :key 'car)</code> is similar to <code>(assoc* x y)</code>:
-It searches for an element of the list whose <code>car</code> equals
-<code>x</code>, rather than for an element which equals <code>x</code> itself. 
-If <code>:key</code> is omitted or <code>nil</code>, the filter is effectively
-the identity function.
+  <p class="noindent">Many of the sequence functions take keyword
+  arguments; see <a href=
+  "Argument-Lists.html#Argument-Lists">Argument Lists</a>. All
+  keyword arguments are optional and, if specified, may appear in
+  any order.</p>
 
-   <p>The <code>:test</code> and <code>:test-not</code> arguments should be either
-<code>nil</code>, or functions of two arguments.  The test function is
-used to compare two sequence elements, or to compare a search value
-with sequence elements.  (The two values are passed to the test
-function in the same order as the original sequence function
-arguments from which they are derived, or, if they both come from
-the same sequence, in the same order as they appear in that sequence.) 
-The <code>:test</code> argument specifies a function which must return
-true (non-<code>nil</code>) to indicate a match; instead, you may use
-<code>:test-not</code> to give a function which returns <em>false</em> to
-indicate a match.  The default test function is <code>eql</code>.
+  <p>The <code>:key</code> argument should be passed either
+  <code>nil</code>, or a function of one argument. This key
+  function is used as a filter through which the elements of the
+  sequence are seen; for example, <code>(find x y :key 'car)</code>
+  is similar to <code>(assoc* x y)</code>: It searches for an
+  element of the list whose <code>car</code> equals <code>x</code>,
+  rather than for an element which equals <code>x</code> itself. If
+  <code>:key</code> is omitted or <code>nil</code>, the filter is
+  effectively the identity function.</p>
 
-   <p>Many functions which take <var>item</var> and <code>:test</code> or <code>:test-not</code>
-arguments also come in <code>-if</code> and <code>-if-not</code> varieties,
-where a <var>predicate</var> function is passed instead of <var>item</var>,
-and sequence elements match if the predicate returns true on them
-(or false in the case of <code>-if-not</code>).  For example:
+  <p>The <code>:test</code> and <code>:test-not</code> arguments
+  should be either <code>nil</code>, or functions of two arguments.
+  The test function is used to compare two sequence elements, or to
+  compare a search value with sequence elements. (The two values
+  are passed to the test function in the same order as the original
+  sequence function arguments from which they are derived, or, if
+  they both come from the same sequence, in the same order as they
+  appear in that sequence.) The <code>:test</code> argument
+  specifies a function which must return true
+  (non-<code>nil</code>) to indicate a match; instead, you may use
+  <code>:test-not</code> to give a function which returns
+  <em>false</em> to indicate a match. The default test function is
+  <code>eql</code>.</p>
 
-<pre class="example">     (remove* 0 seq :test '=)  ==  (remove-if 'zerop seq)
+  <p>Many functions which take <var>item</var> and
+  <code>:test</code> or <code>:test-not</code> arguments also come
+  in <code>-if</code> and <code>-if-not</code> varieties, where a
+  <var>predicate</var> function is passed instead of
+  <var>item</var>, and sequence elements match if the predicate
+  returns true on them (or false in the case of
+  <code>-if-not</code>). For example:</p>
+  <pre class="example">
+     (remove* 0 seq :test '=)  ==  (remove-if 'zerop seq)
 </pre>
-   <p class="noindent">to remove all zeros from sequence <code>seq</code>.
 
-   <p>Some operations can work on a subsequence of the argument sequence;
-these function take <code>:start</code> and <code>:end</code> arguments which
-default to zero and the length of the sequence, respectively. 
-Only elements between <var>start</var> (inclusive) and <var>end</var>
-(exclusive) are affected by the operation.  The <var>end</var> argument
-may be passed <code>nil</code> to signify the length of the sequence;
-otherwise, both <var>start</var> and <var>end</var> must be integers, with
-<code>0 &lt;= </code><var>start</var><code> &lt;= </code><var>end</var><code> &lt;= (length </code><var>seq</var><code>)</code>. 
-If the function takes two sequence arguments, the limits are
-defined by keywords <code>:start1</code> and <code>:end1</code> for the first,
-and <code>:start2</code> and <code>:end2</code> for the second.
+  <p class="noindent">to remove all zeros from sequence
+  <code>seq</code>.</p>
 
-   <p>A few functions accept a <code>:from-end</code> argument, which, if
-non-<code>nil</code>, causes the operation to go from right-to-left
-through the sequence instead of left-to-right, and a <code>:count</code>
-argument, which specifies an integer maximum number of elements
-to be removed or otherwise processed.
+  <p>Some operations can work on a subsequence of the argument
+  sequence; these function take <code>:start</code> and
+  <code>:end</code> arguments which default to zero and the length
+  of the sequence, respectively. Only elements between
+  <var>start</var> (inclusive) and <var>end</var> (exclusive) are
+  affected by the operation. The <var>end</var> argument may be
+  passed <code>nil</code> to signify the length of the sequence;
+  otherwise, both <var>start</var> and <var>end</var> must be
+  integers, with <code>0 &lt;=</code> <var>start</var>
+  <code>&lt;=</code> <var>end</var> <code>&lt;= (length</code>
+  <var>seq</var><code>)</code>. If the function takes two sequence
+  arguments, the limits are defined by keywords
+  <code>:start1</code> and <code>:end1</code> for the first, and
+  <code>:start2</code> and <code>:end2</code> for the second.</p>
 
-   <p>The sequence functions make no guarantees about the order in
-which the <code>:test</code>, <code>:test-not</code>, and <code>:key</code> functions
-are called on various elements.  Therefore, it is a bad idea to depend
-on side effects of these functions.  For example, <code>:from-end</code>
-may cause the sequence to be scanned actually in reverse, or it may
-be scanned forwards but computing a result &ldquo;as if&rdquo; it were scanned
-backwards.  (Some functions, like <code>mapcar*</code> and <code>every</code>,
-<em>do</em> specify exactly the order in which the function is called
-so side effects are perfectly acceptable in those cases.)
+  <p>A few functions accept a <code>:from-end</code> argument,
+  which, if non-<code>nil</code>, causes the operation to go from
+  right-to-left through the sequence instead of left-to-right, and
+  a <code>:count</code> argument, which specifies an integer
+  maximum number of elements to be removed or otherwise
+  processed.</p>
 
-   <p>Strings may contain &ldquo;text properties&rdquo; as well
-as character data.  Except as noted, it is undefined whether or
-not text properties are preserved by sequence functions.  For
-example, <code>(remove* ?A </code><var>str</var><code>)</code> may or may not preserve
-the properties of the characters copied from <var>str</var> into the
-result.
+  <p>The sequence functions make no guarantees about the order in
+  which the <code>:test</code>, <code>:test-not</code>, and
+  <code>:key</code> functions are called on various elements.
+  Therefore, it is a bad idea to depend on side effects of these
+  functions. For example, <code>:from-end</code> may cause the
+  sequence to be scanned actually in reverse, or it may be scanned
+  forwards but computing a result &ldquo;as if&rdquo; it were
+  scanned backwards. (Some functions, like <code>mapcar*</code> and
+  <code>every</code>, <em>do</em> specify exactly the order in
+  which the function is called so side effects are perfectly
+  acceptable in those cases.)</p>
 
-   </body></html>
-
+  <p>Strings may contain &ldquo;text properties&rdquo; as well as
+  character data. Except as noted, it is undefined whether or not
+  text properties are preserved by sequence functions. For example,
+  <code>(remove* ?A</code> <var>str</var><code>)</code> may or may
+  not preserve the properties of the characters copied from
+  <var>str</var> into the result.</p>
+</body>
+</html>

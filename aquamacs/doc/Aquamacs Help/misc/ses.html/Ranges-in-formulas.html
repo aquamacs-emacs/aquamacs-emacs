@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents SES: the Simple Emacs Spreadsheet.
 
 Copyright (C) 2002-2016 Free Software Foundation, Inc.
@@ -14,190 +16,304 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>SES: Simple Emacs Spreadsheet: Ranges in formulas</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="SES: Simple Emacs Spreadsheet: Ranges in formulas">
-<meta name="keywords" content="SES: Simple Emacs Spreadsheet: Ranges in formulas">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Advanced-Features.html#Advanced-Features" rel="up" title="Advanced Features">
-<link href="Sorting-by-column.html#Sorting-by-column" rel="next" title="Sorting by column">
-<link href="The-print-area.html#The-print-area" rel="prev" title="The print area">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>SES: Simple Emacs Spreadsheet: Ranges in formulas</title>
+  <meta name="description" content=
+  "SES: Simple Emacs Spreadsheet: Ranges in formulas" />
+  <meta name="keywords" content=
+  "SES: Simple Emacs Spreadsheet: Ranges in formulas" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Advanced-Features.html#Advanced-Features" rel="up"
+  title="Advanced Features" />
+  <link href="Sorting-by-column.html#Sorting-by-column" rel="next"
+  title="Sorting by column" />
+  <link href="The-print-area.html#The-print-area" rel="prev" title=
+  "The print area" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Ranges-in-formulas"></a>
-<div class="header">
-<p>
-Next: <a href="Sorting-by-column.html#Sorting-by-column" accesskey="n" rel="next">Sorting by column</a>, Previous: <a href="The-print-area.html#The-print-area" accesskey="p" rel="prev">The print area</a>, Up: <a href="Advanced-Features.html#Advanced-Features" accesskey="u" rel="up">Advanced Features</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Ranges-in-formulas-1"></a>
-<h3 class="section">4.2 Ranges in formulas</h3>
-<a name="index-ranges"></a>
-<a name="index-ses_002dinsert_002drange_002dclick"></a>
-<a name="index-ses_002dinsert_002drange"></a>
-<a name="index-ses_002dinsert_002dses_002drange_002dclick"></a>
-<a name="index-ses_002dinsert_002dses_002drange"></a>
-<a name="index-from"></a>
-<a name="index-to"></a>
+<body lang="en" xml:lang="en">
+  <a name="Ranges-in-formulas" id="Ranges-in-formulas"></a>
 
-<p>A formula like
-</p><div class="lisp">
-<pre class="lisp">(+ A1 A2 A3)
-</pre></div>
-<p>is the sum of three specific cells.  If you insert a new second row,
-the formula becomes
-</p><div class="lisp">
-<pre class="lisp">(+ A1 A3 A4)
-</pre></div>
-<p>and the new row is not included in the sum.
-</p>
-<p>The macro <code>(ses-range <var>from</var> <var>to</var>)</code> evaluates to a list of
-the values in a rectangle of cells.  If your formula is
-</p><div class="lisp">
-<pre class="lisp">(apply '+ (ses-range A1 A3))
-</pre></div>
-<p>and you insert a new second row, it becomes
-</p><div class="lisp">
-<pre class="lisp">(apply '+ (ses-range A1 A4))
-</pre></div>
-<p>and the new row is included in the sum.
-</p>
-<p>While entering or editing a formula in the minibuffer, you can select
-a range in the spreadsheet (using mouse or keyboard), then paste a
-representation of that range into your formula.  Suppose you select
-A1-C1:
-</p>
-<dl compact="compact">
-<dt><kbd>[S-mouse-3]</kbd></dt>
-<dd><p>Inserts &quot;A1 B1 C1&quot; <code>(ses-insert-range-click</code>)
-</p>
-</dd>
-<dt><kbd>C-c C-r</kbd></dt>
-<dd><p>Keyboard version (<code>ses-insert-range</code>).
-</p>
-</dd>
-<dt><kbd>[C-S-mouse-3]</kbd></dt>
-<dd><p>Inserts &quot;(ses-range A1 C1)&quot; (<code>ses-insert-ses-range-click</code>).
-</p>
-</dd>
-<dt><kbd>C-c C-s</kbd></dt>
-<dd><p>Keyboard version (<code>ses-insert-ses-range</code>).
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Sorting-by-column.html#Sorting-by-column"
+    accesskey="n" rel="next">Sorting by column</a>, Previous:
+    <a href="The-print-area.html#The-print-area" accesskey="p" rel=
+    "prev">The print area</a>, Up: <a href=
+    "Advanced-Features.html#Advanced-Features" accesskey="u" rel=
+    "up">Advanced Features</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Ranges-in-formulas-1" id="Ranges-in-formulas-1"></a>
 
-<p>If you delete the <var>from</var> or <var>to</var> cell for a range, the nearest
-still-existing cell is used instead.  If you delete the entire range,
-the formula relocator will delete the ses-range from the formula.
-</p>
-<p>If you insert a new row just beyond the end of a one-column range, or
-a new column just beyond a one-row range, the new cell is included in
-the range.  New cells inserted just before a range are not included.
-</p>
-<p>Flags can be added to <code>ses-range</code> immediately after the <var>to</var>
-cell.
-</p><dl compact="compact">
-<dt><code>!</code></dt>
-<dd><p>Empty cells in range can be removed by adding the <code>!</code> flag. An
-empty cell is a cell the value of which is one of symbols <code>nil</code>
-or <code>*skip*</code>. For instance <code>(ses-range A1 A4 !)</code> will do the
-same as <code>(list A1 A3)</code> when cells <code>A2</code> and <code>A4</code> are
-empty.
-</p></dd>
-<dt><code>_</code></dt>
-<dd><p>Empty cell values are replaced by the argument following flag
-<code>_</code>, or <code>0</code> when flag <code>_</code> is last in argument list. For
-instance <code>(ses-range A1 A4 _ &quot;empty&quot;)</code> will do the same as
-<code>(list A1 &quot;empty&quot; A3 &quot;empty&quot;)</code> when cells <code>A2</code> and <code>A4</code>
-are empty. Similarly, <code>(ses-range A1 A4 _ )</code> will do the same as
-<code>(list A1 0 A3 0)</code>.
-</p></dd>
-<dt><code>&gt;v</code></dt>
-<dd><p>When order matters, list cells by reading cells row-wise from top left
-to bottom right. This flag is provided for completeness only as it is
-the default reading order.
-</p></dd>
-<dt><code>&lt;v</code></dt>
-<dd><p>List cells by reading cells row-wise from top right to bottom left.
-</p></dd>
-<dt><code>v&gt;</code></dt>
-<dd><p>List cells by reading cells column-wise from top left to bottom right.
-</p></dd>
-<dt><code>v&lt;</code></dt>
-<dd><p>List cells by reading cells column-wise from top right to bottom left.
-</p></dd>
-<dt><code>v</code></dt>
-<dd><p>A short hand for <code>v&gt;</code>.
-</p></dd>
-<dt><code>^</code></dt>
-<dd><p>A short hand for <code>^&gt;</code>.
-</p></dd>
-<dt><code>&gt;</code></dt>
-<dd><p>A short hand for <code>&gt;v</code>.
-</p></dd>
-<dt><code>&lt;</code></dt>
-<dd><p>A short hand for <code>&gt;^</code>.
-</p></dd>
-<dt><code>*</code></dt>
-<dd><p>Instead of listing cells, it makes a Calc vector or matrix of it
-(see <cite><a href="../calc/index.html#Top">GNU Emacs Calc Manual</a></cite>). If the range contains only
-one row or one column a vector is made, otherwise a matrix is made.
-</p></dd>
-<dt><code>*2</code></dt>
-<dd><p>Same as <code>*</code> except that a matrix is always made even when there
-is only one row or column in the range.
-</p></dd>
-<dt><code>*1</code></dt>
-<dd><p>Same as <code>*</code> except that a vector is always made even when there
-is only one row or column in the range, that is to say the
-corresponding matrix is flattened.
-</p></dd>
-</dl>
+  <h3 class="section">4.2 Ranges in formulas</h3><a name=
+  "index-ranges" id="index-ranges"></a> <a name=
+  "index-ses_002dinsert_002drange_002dclick" id=
+  "index-ses_002dinsert_002drange_002dclick"></a> <a name=
+  "index-ses_002dinsert_002drange" id=
+  "index-ses_002dinsert_002drange"></a> <a name=
+  "index-ses_002dinsert_002dses_002drange_002dclick" id=
+  "index-ses_002dinsert_002dses_002drange_002dclick"></a> <a name=
+  "index-ses_002dinsert_002dses_002drange" id=
+  "index-ses_002dinsert_002dses_002drange"></a> <a name=
+  "index-from" id="index-from"></a> <a name="index-to" id=
+  "index-to"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Sorting-by-column.html#Sorting-by-column" accesskey="n" rel="next">Sorting by column</a>, Previous: <a href="The-print-area.html#The-print-area" accesskey="p" rel="prev">The print area</a>, Up: <a href="Advanced-Features.html#Advanced-Features" accesskey="u" rel="up">Advanced Features</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A formula like</p>
 
+  <div class="lisp">
+    <pre class="lisp">
+(+ A1 A2 A3)
+</pre>
+  </div>
 
+  <p>is the sum of three specific cells. If you insert a new second
+  row, the formula becomes</p>
 
+  <div class="lisp">
+    <pre class="lisp">
+(+ A1 A3 A4)
+</pre>
+  </div>
+
+  <p>and the new row is not included in the sum.</p>
+
+  <p>The macro <code>(ses-range <var>from</var>
+  <var>to</var>)</code> evaluates to a list of the values in a
+  rectangle of cells. If your formula is</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(apply '+ (ses-range A1 A3))
+</pre>
+  </div>
+
+  <p>and you insert a new second row, it becomes</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(apply '+ (ses-range A1 A4))
+</pre>
+  </div>
+
+  <p>and the new row is included in the sum.</p>
+
+  <p>While entering or editing a formula in the minibuffer, you can
+  select a range in the spreadsheet (using mouse or keyboard), then
+  paste a representation of that range into your formula. Suppose
+  you select A1-C1:</p>
+
+  <dl compact="compact">
+    <dt><kbd>[S-mouse-3]</kbd></dt>
+
+    <dd>
+      <p>Inserts "A1 B1 C1"
+      <code>(ses-insert-range-click</code>)</p>
+    </dd>
+
+    <dt><kbd>C-c C-r</kbd></dt>
+
+    <dd>
+      <p>Keyboard version (<code>ses-insert-range</code>).</p>
+    </dd>
+
+    <dt><kbd>[C-S-mouse-3]</kbd></dt>
+
+    <dd>
+      <p>Inserts "(ses-range A1 C1)"
+      (<code>ses-insert-ses-range-click</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-s</kbd></dt>
+
+    <dd>
+      <p>Keyboard version (<code>ses-insert-ses-range</code>).</p>
+    </dd>
+  </dl>
+
+  <p>If you delete the <var>from</var> or <var>to</var> cell for a
+  range, the nearest still-existing cell is used instead. If you
+  delete the entire range, the formula relocator will delete the
+  ses-range from the formula.</p>
+
+  <p>If you insert a new row just beyond the end of a one-column
+  range, or a new column just beyond a one-row range, the new cell
+  is included in the range. New cells inserted just before a range
+  are not included.</p>
+
+  <p>Flags can be added to <code>ses-range</code> immediately after
+  the <var>to</var> cell.</p>
+
+  <dl compact="compact">
+    <dt><code>!</code></dt>
+
+    <dd>
+      <p>Empty cells in range can be removed by adding the
+      <code>!</code> flag. An empty cell is a cell the value of
+      which is one of symbols <code>nil</code> or
+      <code>*skip*</code>. For instance <code>(ses-range A1 A4
+      !)</code> will do the same as <code>(list A1 A3)</code> when
+      cells <code>A2</code> and <code>A4</code> are empty.</p>
+    </dd>
+
+    <dt><code>_</code></dt>
+
+    <dd>
+      <p>Empty cell values are replaced by the argument following
+      flag <code>_</code>, or <code>0</code> when flag
+      <code>_</code> is last in argument list. For instance
+      <code>(ses-range A1 A4 _ "empty")</code> will do the same as
+      <code>(list A1 "empty" A3 "empty")</code> when cells
+      <code>A2</code> and <code>A4</code> are empty. Similarly,
+      <code>(ses-range A1 A4 _ )</code> will do the same as
+      <code>(list A1 0 A3 0)</code>.</p>
+    </dd>
+
+    <dt><code>&gt;v</code></dt>
+
+    <dd>
+      <p>When order matters, list cells by reading cells row-wise
+      from top left to bottom right. This flag is provided for
+      completeness only as it is the default reading order.</p>
+    </dd>
+
+    <dt><code>&lt;v</code></dt>
+
+    <dd>
+      <p>List cells by reading cells row-wise from top right to
+      bottom left.</p>
+    </dd>
+
+    <dt><code>v&gt;</code></dt>
+
+    <dd>
+      <p>List cells by reading cells column-wise from top left to
+      bottom right.</p>
+    </dd>
+
+    <dt><code>v&lt;</code></dt>
+
+    <dd>
+      <p>List cells by reading cells column-wise from top right to
+      bottom left.</p>
+    </dd>
+
+    <dt><code>v</code></dt>
+
+    <dd>
+      <p>A short hand for <code>v&gt;</code>.</p>
+    </dd>
+
+    <dt><code>^</code></dt>
+
+    <dd>
+      <p>A short hand for <code>^&gt;</code>.</p>
+    </dd>
+
+    <dt><code>&gt;</code></dt>
+
+    <dd>
+      <p>A short hand for <code>&gt;v</code>.</p>
+    </dd>
+
+    <dt><code>&lt;</code></dt>
+
+    <dd>
+      <p>A short hand for <code>&gt;^</code>.</p>
+    </dd>
+
+    <dt><code>*</code></dt>
+
+    <dd>
+      <p>Instead of listing cells, it makes a Calc vector or matrix
+      of it (see <cite><a href="../calc/index.html#Top">GNU Emacs
+      Calc Manual</a></cite>). If the range contains only one row
+      or one column a vector is made, otherwise a matrix is
+      made.</p>
+    </dd>
+
+    <dt><code>*2</code></dt>
+
+    <dd>
+      <p>Same as <code>*</code> except that a matrix is always made
+      even when there is only one row or column in the range.</p>
+    </dd>
+
+    <dt><code>*1</code></dt>
+
+    <dd>
+      <p>Same as <code>*</code> except that a vector is always made
+      even when there is only one row or column in the range, that
+      is to say the corresponding matrix is flattened.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Sorting-by-column.html#Sorting-by-column"
+    accesskey="n" rel="next">Sorting by column</a>, Previous:
+    <a href="The-print-area.html#The-print-area" accesskey="p" rel=
+    "prev">The print area</a>, Up: <a href=
+    "Advanced-Features.html#Advanced-Features" accesskey="u" rel=
+    "up">Advanced Features</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

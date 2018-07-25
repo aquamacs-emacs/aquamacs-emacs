@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This document describes Supercite, an Emacs package for citing and
 attributing replies to mail and news messages.
 
@@ -15,155 +17,263 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Supercite User&rsquo;s Manual: The Built-in Header Rewrite Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Supercite User&rsquo;s Manual: The Built-in Header Rewrite Functions">
-<meta name="keywords" content="Supercite User&rsquo;s Manual: The Built-in Header Rewrite Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Reference-Headers.html#Reference-Headers" rel="up" title="Reference Headers">
-<link href="Electric-References.html#Electric-References" rel="next" title="Electric References">
-<link href="Reference-Headers.html#Reference-Headers" rel="prev" title="Reference Headers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Supercite User&rsquo;s Manual: The Built-in Header Rewrite
+  Functions</title>
+  <meta name="description" content=
+  "Supercite User&rsquo;s Manual: The Built-in Header Rewrite Functions" />
+  <meta name="keywords" content=
+  "Supercite User&rsquo;s Manual: The Built-in Header Rewrite Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Reference-Headers.html#Reference-Headers" rel="up"
+  title="Reference Headers" />
+  <link href="Electric-References.html#Electric-References" rel=
+  "next" title="Electric References" />
+  <link href="Reference-Headers.html#Reference-Headers" rel="prev"
+  title="Reference Headers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-Built_002din-Header-Rewrite-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Electric-References.html#Electric-References" accesskey="n" rel="next">Electric References</a>, Up: <a href="Reference-Headers.html#Reference-Headers" accesskey="u" rel="up">Reference Headers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Built_002din-Header-Rewrite-Functions-1"></a>
-<h3 class="section">4.1 The Built-in Header Rewrite Functions</h3>
-<a name="index-header-rewrite-functions_002c-built_002din"></a>
+<body lang="en" xml:lang="en">
+  <a name="The-Built_002din-Header-Rewrite-Functions" id=
+  "The-Built_002din-Header-Rewrite-Functions"></a>
 
-<p>Below are examples of the various built-in header rewrite functions.
-Please note the following: first, the text which appears in the
-examples below as <var>infokey</var> indicates that the corresponding value
-of the info key from the info alist will be inserted there.
-(see <a href="Information-Keys-and-the-Info-Alist.html#Information-Keys-and-the-Info-Alist">Information Keys and the Info Alist</a>).  For example, in <code>sc-header-on-said</code>
-below, <var>date</var> and <var>from</var> correspond to the values of the
-&lsquo;<samp>Date:</samp>&rsquo; and &lsquo;<samp>From:</samp>&rsquo; mail headers respectively.
-</p>
-<a name="index-sc_002dreference_002dtag_002dstring"></a>
-<a name="index-reference_002dtag_002dstring-_0028sc_002d_0029"></a>
-<p>Also, the string <code>&quot;&gt;&gt;&gt;&gt;&gt;&quot;</code> below is really the value of the
-variable <code>sc-reference-tag-string</code>.  This variable is used in all
-built-in header rewrite functions, and you can customize its value to
-change the tag string globally.
-</p>
-<p>Finally, the references headers actually written may omit certain parts
-of the header if the info key associated with <var>infokey</var> is not
-present in the info alist.  In fact, for all built-in headers, if the
-&lsquo;<samp>From:</samp>&rsquo; field is not present in the mail headers, the entire
-reference header will be omitted (but this usually signals a serious
-problem either in your MUA or in Supercite&rsquo;s installation).
-</p>
-<dl compact="compact">
-<dd><a name="index-sc_002dno_002dheader"></a>
-<a name="index-no_002dheader-_0028sc_002d_0029"></a>
-</dd>
-<dt><code>sc-no-header</code></dt>
-<dd><p>This function produces no header.  It should be used instead of
-<code>nil</code> to produce a blank header.  This header can possibly
-contain a blank line after the <code>mail-header-separator</code> line.
-</p>
-</dd>
-<dt><code>sc-no-blank-line-or-header</code></dt>
-<dd><a name="index-sc_002dno_002dblank_002dline_002dor_002dheader"></a>
-<a name="index-no_002dblank_002dline_002dor_002dheader-_0028sc_002d_0029"></a>
-<p>This function is similar to <code>sc-no-header</code> except that any blank
-line after the <code>mail-header-separator</code> line will be removed.
-</p>
-</dd>
-<dt><code>sc-header-on-said</code></dt>
-<dd><a name="index-sc_002dheader_002don_002dsaid"></a>
-<a name="index-header_002don_002dsaid-_0028sc_002d_0029"></a>
-<p><code>&gt;&gt;&gt;&gt;&gt; On <var>date</var>, <var>from</var> said:</code>
-</p>
-</dd>
-<dt><code>sc-header-inarticle-writes</code></dt>
-<dd><a name="index-sc_002dheader_002dinarticle_002dwrites"></a>
-<a name="index-header_002dinarticle_002dwrites-_0028sc_002d_0029"></a>
-<p><code>&gt;&gt;&gt;&gt;&gt; In article <var>message-id</var>, <var>from</var> writes:</code>
-</p>
-</dd>
-<dt><code>sc-header-regarding-adds</code></dt>
-<dd><a name="index-sc_002dheader_002dregarding_002dadds"></a>
-<a name="index-header_002dregarding_002dadds-_0028sc_002d_0029"></a>
-<p><code>&gt;&gt;&gt;&gt;&gt; Regarding <var>subject</var>; <var>from</var> adds:</code>
-</p>
-</dd>
-<dt><code>sc-header-attributed-writes</code></dt>
-<dd><a name="index-sc_002dheader_002dattributed_002dwrites"></a>
-<a name="index-header_002dattributed_002dwrites-_0028sc_002d_0029"></a>
-<p><code>&gt;&gt;&gt;&gt;&gt; &quot;<var>sc-attribution</var>&quot; == <var>sc-author</var> &lt;<var>sc-reply-address</var>&gt; writes:</code>
-</p>
-</dd>
-<dt><code>sc-header-author-writes</code></dt>
-<dd><a name="index-sc_002dheader_002dauthor_002dwrites"></a>
-<a name="index-header_002dauthor_002dwrites-_0028sc_002d_0029"></a>
-<p><code>&gt;&gt;&gt;&gt;&gt; <var>sc-author</var> writes:</code>
-</p>
-</dd>
-<dt><code>sc-header-verbose</code></dt>
-<dd><a name="index-sc_002dheader_002dverbose"></a>
-<a name="index-header_002dverbose-_0028sc_002d_0029"></a>
-<p><code>&gt;&gt;&gt;&gt;&gt; On <var>date</var>,</code><br>
-<code>&gt;&gt;&gt;&gt;&gt; <var>sc-author</var></code><br>
-<code>&gt;&gt;&gt;&gt;&gt; from the organization of <var>organization</var></code><br>
-<code>&gt;&gt;&gt;&gt;&gt; who can be reached at: <var>sc-reply-address</var></code><br>
-<code>&gt;&gt;&gt;&gt;&gt; (whose comments are cited below with: &quot;<var>sc-cite</var>&quot;)</code><br>
-<code>&gt;&gt;&gt;&gt;&gt; had this to say in article <var>message-id</var></code><br>
-<code>&gt;&gt;&gt;&gt;&gt; in newsgroups <var>newsgroups</var></code><br>
-<code>&gt;&gt;&gt;&gt;&gt; concerning the subject of <var>subject</var></code><br>
-<code>&gt;&gt;&gt;&gt;&gt; see <var>references</var> for more details</code>
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Electric-References.html#Electric-References"
+    accesskey="n" rel="next">Electric References</a>, Up: <a href=
+    "Reference-Headers.html#Reference-Headers" accesskey="u" rel=
+    "up">Reference Headers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Built_002din-Header-Rewrite-Functions-1" id=
+  "The-Built_002din-Header-Rewrite-Functions-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Electric-References.html#Electric-References" accesskey="n" rel="next">Electric References</a>, Up: <a href="Reference-Headers.html#Reference-Headers" accesskey="u" rel="up">Reference Headers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">4.1 The Built-in Header Rewrite
+  Functions</h3><a name=
+  "index-header-rewrite-functions_002c-built_002din" id=
+  "index-header-rewrite-functions_002c-built_002din"></a>
 
+  <p>Below are examples of the various built-in header rewrite
+  functions. Please note the following: first, the text which
+  appears in the examples below as <var>infokey</var> indicates
+  that the corresponding value of the info key from the info alist
+  will be inserted there. (see <a href=
+  "Information-Keys-and-the-Info-Alist.html#Information-Keys-and-the-Info-Alist">
+  Information Keys and the Info Alist</a>). For example, in
+  <code>sc-header-on-said</code> below, <var>date</var> and
+  <var>from</var> correspond to the values of the
+  &lsquo;<samp>Date:</samp>&rsquo; and
+  &lsquo;<samp>From:</samp>&rsquo; mail headers
+  respectively.</p><a name=
+  "index-sc_002dreference_002dtag_002dstring" id=
+  "index-sc_002dreference_002dtag_002dstring"></a> <a name=
+  "index-reference_002dtag_002dstring-_0028sc_002d_0029" id=
+  "index-reference_002dtag_002dstring-_0028sc_002d_0029"></a>
 
+  <p>Also, the string <code>"&gt;&gt;&gt;&gt;&gt;"</code> below is
+  really the value of the variable
+  <code>sc-reference-tag-string</code>. This variable is used in
+  all built-in header rewrite functions, and you can customize its
+  value to change the tag string globally.</p>
 
+  <p>Finally, the references headers actually written may omit
+  certain parts of the header if the info key associated with
+  <var>infokey</var> is not present in the info alist. In fact, for
+  all built-in headers, if the &lsquo;<samp>From:</samp>&rsquo;
+  field is not present in the mail headers, the entire reference
+  header will be omitted (but this usually signals a serious
+  problem either in your MUA or in Supercite&rsquo;s
+  installation).</p>
+
+  <dl compact="compact">
+    <dd><a name="index-sc_002dno_002dheader" id=
+    "index-sc_002dno_002dheader"></a> <a name=
+    "index-no_002dheader-_0028sc_002d_0029" id=
+    "index-no_002dheader-_0028sc_002d_0029"></a></dd>
+
+    <dt><code>sc-no-header</code></dt>
+
+    <dd>
+      <p>This function produces no header. It should be used
+      instead of <code>nil</code> to produce a blank header. This
+      header can possibly contain a blank line after the
+      <code>mail-header-separator</code> line.</p>
+    </dd>
+
+    <dt><code>sc-no-blank-line-or-header</code></dt>
+
+    <dd>
+      <a name=
+      "index-sc_002dno_002dblank_002dline_002dor_002dheader" id=
+      "index-sc_002dno_002dblank_002dline_002dor_002dheader"></a>
+      <a name=
+      "index-no_002dblank_002dline_002dor_002dheader-_0028sc_002d_0029"
+      id=
+      "index-no_002dblank_002dline_002dor_002dheader-_0028sc_002d_0029">
+      </a>
+
+      <p>This function is similar to <code>sc-no-header</code>
+      except that any blank line after the
+      <code>mail-header-separator</code> line will be removed.</p>
+    </dd>
+
+    <dt><code>sc-header-on-said</code></dt>
+
+    <dd>
+      <a name="index-sc_002dheader_002don_002dsaid" id=
+      "index-sc_002dheader_002don_002dsaid"></a> <a name=
+      "index-header_002don_002dsaid-_0028sc_002d_0029" id=
+      "index-header_002don_002dsaid-_0028sc_002d_0029"></a>
+
+      <p><code>&gt;&gt;&gt;&gt;&gt; On <var>date</var>,
+      <var>from</var> said:</code></p>
+    </dd>
+
+    <dt><code>sc-header-inarticle-writes</code></dt>
+
+    <dd>
+      <a name="index-sc_002dheader_002dinarticle_002dwrites" id=
+      "index-sc_002dheader_002dinarticle_002dwrites"></a> <a name=
+      "index-header_002dinarticle_002dwrites-_0028sc_002d_0029" id=
+      "index-header_002dinarticle_002dwrites-_0028sc_002d_0029"></a>
+
+      <p><code>&gt;&gt;&gt;&gt;&gt; In article
+      <var>message-id</var>, <var>from</var> writes:</code></p>
+    </dd>
+
+    <dt><code>sc-header-regarding-adds</code></dt>
+
+    <dd>
+      <a name="index-sc_002dheader_002dregarding_002dadds" id=
+      "index-sc_002dheader_002dregarding_002dadds"></a> <a name=
+      "index-header_002dregarding_002dadds-_0028sc_002d_0029" id=
+      "index-header_002dregarding_002dadds-_0028sc_002d_0029"></a>
+
+      <p><code>&gt;&gt;&gt;&gt;&gt; Regarding <var>subject</var>;
+      <var>from</var> adds:</code></p>
+    </dd>
+
+    <dt><code>sc-header-attributed-writes</code></dt>
+
+    <dd>
+      <a name="index-sc_002dheader_002dattributed_002dwrites" id=
+      "index-sc_002dheader_002dattributed_002dwrites"></a> <a name=
+      "index-header_002dattributed_002dwrites-_0028sc_002d_0029"
+      id="index-header_002dattributed_002dwrites-_0028sc_002d_0029">
+      </a>
+
+      <p><code>&gt;&gt;&gt;&gt;&gt; "<var>sc-attribution</var>" ==
+      <var>sc-author</var> &lt;<var>sc-reply-address</var>&gt;
+      writes:</code></p>
+    </dd>
+
+    <dt><code>sc-header-author-writes</code></dt>
+
+    <dd>
+      <a name="index-sc_002dheader_002dauthor_002dwrites" id=
+      "index-sc_002dheader_002dauthor_002dwrites"></a> <a name=
+      "index-header_002dauthor_002dwrites-_0028sc_002d_0029" id=
+      "index-header_002dauthor_002dwrites-_0028sc_002d_0029"></a>
+
+      <p><code>&gt;&gt;&gt;&gt;&gt; <var>sc-author</var>
+      writes:</code></p>
+    </dd>
+
+    <dt><code>sc-header-verbose</code></dt>
+
+    <dd>
+      <a name="index-sc_002dheader_002dverbose" id=
+      "index-sc_002dheader_002dverbose"></a> <a name=
+      "index-header_002dverbose-_0028sc_002d_0029" id=
+      "index-header_002dverbose-_0028sc_002d_0029"></a>
+
+      <p><code>&gt;&gt;&gt;&gt;&gt; On
+      <var>date</var>,</code><br />
+      <code>&gt;&gt;&gt;&gt;&gt; <var>sc-author</var></code><br />
+      <code>&gt;&gt;&gt;&gt;&gt; from the organization of
+      <var>organization</var></code><br />
+      <code>&gt;&gt;&gt;&gt;&gt; who can be reached at:
+      <var>sc-reply-address</var></code><br />
+      <code>&gt;&gt;&gt;&gt;&gt; (whose comments are cited below
+      with: "<var>sc-cite</var>")</code><br />
+      <code>&gt;&gt;&gt;&gt;&gt; had this to say in article
+      <var>message-id</var></code><br />
+      <code>&gt;&gt;&gt;&gt;&gt; in newsgroups
+      <var>newsgroups</var></code><br />
+      <code>&gt;&gt;&gt;&gt;&gt; concerning the subject of
+      <var>subject</var></code><br />
+      <code>&gt;&gt;&gt;&gt;&gt; see <var>references</var> for more
+      details</code></p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Electric-References.html#Electric-References"
+    accesskey="n" rel="next">Electric References</a>, Up: <a href=
+    "Reference-Headers.html#Reference-Headers" accesskey="u" rel=
+    "up">Reference Headers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

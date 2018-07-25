@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,113 +16,177 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Extending ODT export</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Extending ODT export">
-<meta name="keywords" content="The Org Manual: Extending ODT export">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="OpenDocument-Text-export.html#OpenDocument-Text-export" rel="up" title="OpenDocument Text export">
-<link href="Applying-custom-styles.html#Applying-custom-styles" rel="next" title="Applying custom styles">
-<link href="ODT-export-commands.html#ODT-export-commands" rel="prev" title="ODT export commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Extending ODT export</title>
+  <meta name="description" content=
+  "The Org Manual: Extending ODT export" />
+  <meta name="keywords" content=
+  "The Org Manual: Extending ODT export" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "OpenDocument-Text-export.html#OpenDocument-Text-export" rel="up"
+  title="OpenDocument Text export" />
+  <link href="Applying-custom-styles.html#Applying-custom-styles"
+  rel="next" title="Applying custom styles" />
+  <link href="ODT-export-commands.html#ODT-export-commands" rel=
+  "prev" title="ODT export commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Extending-ODT-export"></a>
-<div class="header">
-<p>
-Next: <a href="Applying-custom-styles.html#Applying-custom-styles" accesskey="n" rel="next">Applying custom styles</a>, Previous: <a href="ODT-export-commands.html#ODT-export-commands" accesskey="p" rel="prev">ODT export commands</a>, Up: <a href="OpenDocument-Text-export.html#OpenDocument-Text-export" accesskey="u" rel="up">OpenDocument Text export</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Extending-ODT-export-1"></a>
-<h4 class="subsection">12.9.3 Extending ODT export</h4>
+<body lang="en" xml:lang="en">
+  <a name="Extending-ODT-export" id="Extending-ODT-export"></a>
 
-<p>The ODT exporter can interface with a variety of document
-converters and supports popular converters out of the box.  As a result, you
-can use it to export to formats like &lsquo;<samp>doc</samp>&rsquo; or convert a document from
-one format (say &lsquo;<samp>csv</samp>&rsquo;) to another format (say &lsquo;<samp>ods</samp>&rsquo; or &lsquo;<samp>xls</samp>&rsquo;).
-</p>
-<a name="index-unoconv"></a>
-<a name="index-LibreOffice-1"></a>
-<p>If you have a working installation of LibreOffice, a document converter is
-pre-configured for you and you can use it right away.  If you would like to
-use <samp>unoconv</samp> as your preferred converter, customize the variable
-<code>org-odt-convert-process</code> to point to <code>unoconv</code>.  You can
-also use your own favorite converter or tweak the default settings of the
-<samp>LibreOffice</samp> and &lsquo;<samp>unoconv</samp>&rsquo; converters.  See <a href="Configuring-a-document-converter.html#Configuring-a-document-converter">Configuring a document converter</a>.
-</p>
-<a name="Automatically-exporting-to-other-formats"></a>
-<h4 class="subsubsection">12.9.3.1 Automatically exporting to other formats</h4>
-<a name="x_002dexport_002dto_002dother_002dformats"></a>
-<a name="index-org_002dodt_002dpreferred_002doutput_002dformat-2"></a>
-<p>Very often, you will find yourself exporting to ODT format, only to
-immediately save the exported document to other formats like &lsquo;<samp>doc</samp>&rsquo;,
-&lsquo;<samp>docx</samp>&rsquo;, &lsquo;<samp>rtf</samp>&rsquo;, &lsquo;<samp>pdf</samp>&rsquo; etc.  In such cases, you can specify your
-preferred output format by customizing the variable
-<code>org-odt-preferred-output-format</code>.  This way, the export commands
-(see <a href="ODT-export-commands.html#x_002dexport_002dto_002dodt">Exporting to ODT</a>) can be extended to export to a
-format that is of immediate interest to you.
-</p>
-<a name="Converting-between-document-formats"></a>
-<h4 class="subsubsection">12.9.3.2 Converting between document formats</h4>
-<a name="x_002dconvert_002dto_002dother_002dformats"></a>
-<p>There are many document converters in the wild which support conversion to
-and from various file formats, including, but not limited to the
-ODT format.  LibreOffice converter, mentioned above, is one such
-converter.  Once a converter is configured, you can interact with it using
-the following command.
-</p>
-<a name="index-org_002dodt_002dconvert"></a>
-<dl compact="compact">
-<dt><kbd>M-x org-odt-convert RET</kbd></dt>
-<dd><p>Convert an existing document from one format to another.  With a prefix
-argument, also open the newly produced file.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Applying-custom-styles.html#Applying-custom-styles" accesskey=
+    "n" rel="next">Applying custom styles</a>, Previous: <a href=
+    "ODT-export-commands.html#ODT-export-commands" accesskey="p"
+    rel="prev">ODT export commands</a>, Up: <a href=
+    "OpenDocument-Text-export.html#OpenDocument-Text-export"
+    accesskey="u" rel="up">OpenDocument Text export</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Extending-ODT-export-1" id="Extending-ODT-export-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Applying-custom-styles.html#Applying-custom-styles" accesskey="n" rel="next">Applying custom styles</a>, Previous: <a href="ODT-export-commands.html#ODT-export-commands" accesskey="p" rel="prev">ODT export commands</a>, Up: <a href="OpenDocument-Text-export.html#OpenDocument-Text-export" accesskey="u" rel="up">OpenDocument Text export</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h4 class="subsection">12.9.3 Extending ODT export</h4>
 
+  <p>The ODT exporter can interface with a variety of document
+  converters and supports popular converters out of the box. As a
+  result, you can use it to export to formats like
+  &lsquo;<samp>doc</samp>&rsquo; or convert a document from one
+  format (say &lsquo;<samp>csv</samp>&rsquo;) to another format
+  (say &lsquo;<samp>ods</samp>&rsquo; or
+  &lsquo;<samp>xls</samp>&rsquo;).</p><a name="index-unoconv" id=
+  "index-unoconv"></a> <a name="index-LibreOffice-1" id=
+  "index-LibreOffice-1"></a>
 
+  <p>If you have a working installation of LibreOffice, a document
+  converter is pre-configured for you and you can use it right
+  away. If you would like to use <samp>unoconv</samp> as your
+  preferred converter, customize the variable
+  <code>org-odt-convert-process</code> to point to
+  <code>unoconv</code>. You can also use your own favorite
+  converter or tweak the default settings of the
+  <samp>LibreOffice</samp> and &lsquo;<samp>unoconv</samp>&rsquo;
+  converters. See <a href=
+  "Configuring-a-document-converter.html#Configuring-a-document-converter">
+  Configuring a document converter</a>.</p><a name=
+  "Automatically-exporting-to-other-formats" id=
+  "Automatically-exporting-to-other-formats"></a>
 
+  <h4 class="subsubsection">12.9.3.1 Automatically exporting to
+  other formats</h4><a name=
+  "x_002dexport_002dto_002dother_002dformats" id=
+  "x_002dexport_002dto_002dother_002dformats"></a> <a name=
+  "index-org_002dodt_002dpreferred_002doutput_002dformat-2" id=
+  "index-org_002dodt_002dpreferred_002doutput_002dformat-2"></a>
+
+  <p>Very often, you will find yourself exporting to ODT format,
+  only to immediately save the exported document to other formats
+  like &lsquo;<samp>doc</samp>&rsquo;,
+  &lsquo;<samp>docx</samp>&rsquo;, &lsquo;<samp>rtf</samp>&rsquo;,
+  &lsquo;<samp>pdf</samp>&rsquo; etc. In such cases, you can
+  specify your preferred output format by customizing the variable
+  <code>org-odt-preferred-output-format</code>. This way, the
+  export commands (see <a href=
+  "ODT-export-commands.html#x_002dexport_002dto_002dodt">Exporting
+  to ODT</a>) can be extended to export to a format that is of
+  immediate interest to you.</p><a name=
+  "Converting-between-document-formats" id=
+  "Converting-between-document-formats"></a>
+
+  <h4 class="subsubsection">12.9.3.2 Converting between document
+  formats</h4><a name="x_002dconvert_002dto_002dother_002dformats"
+  id="x_002dconvert_002dto_002dother_002dformats"></a>
+
+  <p>There are many document converters in the wild which support
+  conversion to and from various file formats, including, but not
+  limited to the ODT format. LibreOffice converter, mentioned
+  above, is one such converter. Once a converter is configured, you
+  can interact with it using the following command.</p><a name=
+  "index-org_002dodt_002dconvert" id=
+  "index-org_002dodt_002dconvert"></a>
+
+  <dl compact="compact">
+    <dt><kbd>M-x org-odt-convert RET</kbd></dt>
+
+    <dd>
+      <p>Convert an existing document from one format to another.
+      With a prefix argument, also open the newly produced
+      file.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Applying-custom-styles.html#Applying-custom-styles" accesskey=
+    "n" rel="next">Applying custom styles</a>, Previous: <a href=
+    "ODT-export-commands.html#ODT-export-commands" accesskey="p"
+    rel="prev">ODT export commands</a>, Up: <a href=
+    "OpenDocument-Text-export.html#OpenDocument-Text-export"
+    accesskey="u" rel="up">OpenDocument Text export</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Mail Source Customization - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Mail-Sources.html#Mail-Sources" title="Mail Sources">
-<link rel="prev" href="Mail-Source-Specifiers.html#Mail-Source-Specifiers" title="Mail Source Specifiers">
-<link rel="next" href="Fetching-Mail.html#Fetching-Mail" title="Fetching Mail">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Mail Source Customization - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Mail-Sources.html#Mail-Sources" title=
+  "Mail Sources" />
+  <link rel="prev" href=
+  "Mail-Source-Specifiers.html#Mail-Source-Specifiers" title=
+  "Mail Source Specifiers" />
+  <link rel="next" href="Fetching-Mail.html#Fetching-Mail" title=
+  "Fetching Mail" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +36,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,60 +49,122 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Mail-Source-Customization"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Fetching-Mail.html#Fetching-Mail">Fetching Mail</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail Source Specifiers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Mail-Sources.html#Mail-Sources">Mail Sources</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Mail-Source-Customization" id=
+    "Mail-Source-Customization"></a>
 
-<h5 class="subsubsection">6.4.4.3 Mail Source Customization</h5>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Fetching-Mail.html#Fetching-Mail">Fetching Mail</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail
+    Source Specifiers</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Mail-Sources.html#Mail-Sources">Mail Sources</a></p>
+    <hr />
+  </div>
 
-<p>The following is a list of variables that influence how the mail is
-fetched.  You would normally not need to set or change any of these
-variables.
+  <h5 class="subsubsection">6.4.4.3 Mail Source Customization</h5>
 
-     <dl>
-<dt><code>mail-source-crash-box</code><dd><a name="index-mail_002dsource_002dcrash_002dbox-2088"></a>File where mail will be stored while processing it.  The default is<br>
-<samp><span class="file">~/.emacs-mail-crash-box</span></samp>.
+  <p>The following is a list of variables that influence how the
+  mail is fetched. You would normally not need to set or change any
+  of these variables.</p>
 
-     <p><a name="index-Incoming_002a-2089"></a><br><dt><code>mail-source-delete-incoming</code><dd><a name="index-mail_002dsource_002ddelete_002dincoming-2090"></a>If non-<code>nil</code>, delete incoming files after handling them.  If
-<code>t</code>, delete the files immediately, if <code>nil</code>, never delete any
-files.  If a positive number, delete files older than number of days
-(the deletion will only happen when receiving new mail).  You may also
-set <code>mail-source-delete-incoming</code> to <code>nil</code> and call
-<code>mail-source-delete-old-incoming</code> from a hook or interactively. 
-<code>mail-source-delete-incoming</code> defaults to <code>10</code> in alpha Gnusae
-and <code>2</code> in released Gnusae.  See <a href="Gnus-Development.html#Gnus-Development">Gnus Development</a>.
+  <dl>
+    <dt><code>mail-source-crash-box</code></dt>
 
-     <br><dt><code>mail-source-delete-old-incoming-confirm</code><dd><a name="index-mail_002dsource_002ddelete_002dold_002dincoming_002dconfirm-2091"></a>If non-<code>nil</code>, ask for confirmation before deleting old incoming
-files.  This variable only applies when
-<code>mail-source-delete-incoming</code> is a positive number.
+    <dd>
+      <a name="index-mail_002dsource_002dcrash_002dbox-2088" id=
+      "index-mail_002dsource_002dcrash_002dbox-2088"></a>File where
+      mail will be stored while processing it. The default is<br />
+      <samp><span class=
+      "file">~/.emacs-mail-crash-box</span></samp>.
 
-     <br><dt><code>mail-source-ignore-errors</code><dd><a name="index-mail_002dsource_002dignore_002derrors-2092"></a>If non-<code>nil</code>, ignore errors when reading mail from a mail source.
+      <p><a name="index-Incoming_002a-2089" id=
+      "index-Incoming_002a-2089"></a><br /></p>
+    </dd>
 
-     <br><dt><code>mail-source-directory</code><dd><a name="index-mail_002dsource_002ddirectory-2093"></a>Directory where incoming mail source files (if any) will be stored.  The
-default is <samp><span class="file">~/Mail/</span></samp>.  At present, the only thing this is used for
-is to say where the incoming files will be stored if the variable
-<code>mail-source-delete-incoming</code> is <code>nil</code> or a number.
+    <dt><code>mail-source-delete-incoming</code></dt>
 
-     <br><dt><code>mail-source-incoming-file-prefix</code><dd><a name="index-mail_002dsource_002dincoming_002dfile_002dprefix-2094"></a>Prefix for file name for storing incoming mail.  The default is
-<samp><span class="file">Incoming</span></samp>, in which case files will end up with names like
-<samp><span class="file">Incoming30630D_</span></samp> or <samp><span class="file">Incoming298602ZD</span></samp>.  This is really only
-relevant if <code>mail-source-delete-incoming</code> is <code>nil</code> or a
-number.
+    <dd><a name=
+    "index-mail_002dsource_002ddelete_002dincoming-2090" id=
+    "index-mail_002dsource_002ddelete_002dincoming-2090"></a>If
+    non-<code>nil</code>, delete incoming files after handling
+    them. If <code>t</code>, delete the files immediately, if
+    <code>nil</code>, never delete any files. If a positive number,
+    delete files older than number of days (the deletion will only
+    happen when receiving new mail). You may also set
+    <code>mail-source-delete-incoming</code> to <code>nil</code>
+    and call <code>mail-source-delete-old-incoming</code> from a
+    hook or interactively. <code>mail-source-delete-incoming</code>
+    defaults to <code>10</code> in alpha Gnusae and <code>2</code>
+    in released Gnusae. See <a href=
+    "Gnus-Development.html#Gnus-Development">Gnus
+    Development</a>.<br /></dd>
 
-     <br><dt><code>mail-source-default-file-modes</code><dd><a name="index-mail_002dsource_002ddefault_002dfile_002dmodes-2095"></a>All new mail files will get this file mode.  The default is 384.
+    <dt><code>mail-source-delete-old-incoming-confirm</code></dt>
 
-     <br><dt><code>mail-source-movemail-program</code><dd><a name="index-mail_002dsource_002dmovemail_002dprogram-2096"></a>If non-<code>nil</code>, name of program for fetching new mail.  If
-<code>nil</code>, <code>movemail</code> in <var>exec-directory</var>.
+    <dd><a name=
+    "index-mail_002dsource_002ddelete_002dold_002dincoming_002dconfirm-2091"
+    id=
+    "index-mail_002dsource_002ddelete_002dold_002dincoming_002dconfirm-2091">
+    </a>If non-<code>nil</code>, ask for confirmation before
+    deleting old incoming files. This variable only applies when
+    <code>mail-source-delete-incoming</code> is a positive
+    number.<br /></dd>
 
-   </dl>
+    <dt><code>mail-source-ignore-errors</code></dt>
 
-   </body></html>
+    <dd><a name="index-mail_002dsource_002dignore_002derrors-2092"
+    id="index-mail_002dsource_002dignore_002derrors-2092"></a>If
+    non-<code>nil</code>, ignore errors when reading mail from a
+    mail source.<br /></dd>
 
+    <dt><code>mail-source-directory</code></dt>
+
+    <dd><a name="index-mail_002dsource_002ddirectory-2093" id=
+    "index-mail_002dsource_002ddirectory-2093"></a>Directory where
+    incoming mail source files (if any) will be stored. The default
+    is <samp><span class="file">~/Mail/</span></samp>. At present,
+    the only thing this is used for is to say where the incoming
+    files will be stored if the variable
+    <code>mail-source-delete-incoming</code> is <code>nil</code> or
+    a number.<br /></dd>
+
+    <dt><code>mail-source-incoming-file-prefix</code></dt>
+
+    <dd><a name=
+    "index-mail_002dsource_002dincoming_002dfile_002dprefix-2094"
+    id=
+    "index-mail_002dsource_002dincoming_002dfile_002dprefix-2094"></a>Prefix
+    for file name for storing incoming mail. The default is
+    <samp><span class="file">Incoming</span></samp>, in which case
+    files will end up with names like <samp><span class=
+    "file">Incoming30630D_</span></samp> or <samp><span class=
+    "file">Incoming298602ZD</span></samp>. This is really only
+    relevant if <code>mail-source-delete-incoming</code> is
+    <code>nil</code> or a number.<br /></dd>
+
+    <dt><code>mail-source-default-file-modes</code></dt>
+
+    <dd><a name=
+    "index-mail_002dsource_002ddefault_002dfile_002dmodes-2095" id=
+    "index-mail_002dsource_002ddefault_002dfile_002dmodes-2095"></a>All
+    new mail files will get this file mode. The default is
+    384.<br /></dd>
+
+    <dt><code>mail-source-movemail-program</code></dt>
+
+    <dd><a name=
+    "index-mail_002dsource_002dmovemail_002dprogram-2096" id=
+    "index-mail_002dsource_002dmovemail_002dprogram-2096"></a>If
+    non-<code>nil</code>, name of program for fetching new mail. If
+    <code>nil</code>, <code>movemail</code> in
+    <var>exec-directory</var>.</dd>
+  </dl>
+</body>
+</html>

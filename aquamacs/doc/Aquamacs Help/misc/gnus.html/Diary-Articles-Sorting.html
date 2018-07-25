@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,80 +14,124 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Diary Articles Sorting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Diary Articles Sorting">
-<meta name="keywords" content="Gnus Manual: Diary Articles Sorting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-Gnus-Diary-Library.html#The-Gnus-Diary-Library" rel="up" title="The Gnus Diary Library">
-<link href="Diary-Headers-Generation.html#Diary-Headers-Generation" rel="next" title="Diary Headers Generation">
-<link href="Diary-Summary-Line-Format.html#Diary-Summary-Line-Format" rel="prev" title="Diary Summary Line Format">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Diary Articles Sorting</title>
+  <meta name="description" content=
+  "Gnus Manual: Diary Articles Sorting" />
+  <meta name="keywords" content=
+  "Gnus Manual: Diary Articles Sorting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-Gnus-Diary-Library.html#The-Gnus-Diary-Library"
+  rel="up" title="The Gnus Diary Library" />
+  <link href=
+  "Diary-Headers-Generation.html#Diary-Headers-Generation" rel=
+  "next" title="Diary Headers Generation" />
+  <link href=
+  "Diary-Summary-Line-Format.html#Diary-Summary-Line-Format" rel=
+  "prev" title="Diary Summary Line Format" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Diary-Articles-Sorting"></a>
-<div class="header">
-<p>
-Next: <a href="Diary-Headers-Generation.html#Diary-Headers-Generation" accesskey="n" rel="next">Diary Headers Generation</a>, Previous: <a href="Diary-Summary-Line-Format.html#Diary-Summary-Line-Format" accesskey="p" rel="prev">Diary Summary Line Format</a>, Up: <a href="The-Gnus-Diary-Library.html#The-Gnus-Diary-Library" accesskey="u" rel="up">The Gnus Diary Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Diary-Articles-Sorting-1"></a>
-<h4 class="subsubsection">6.8.2.2 Diary Articles Sorting</h4>
-<a name="index-diary-articles-sorting"></a>
-<a name="index-diary-summary-lines-sorting"></a>
-<a name="index-gnus_002dsummary_002dsort_002dby_002dschedule"></a>
-<a name="index-gnus_002dthread_002dsort_002dby_002dschedule"></a>
-<a name="index-gnus_002darticle_002dsort_002dby_002dschedule"></a>
+<body lang="en" xml:lang="en">
+  <a name="Diary-Articles-Sorting" id="Diary-Articles-Sorting"></a>
 
-<p><code>gnus-diary</code> provides new sorting functions (see <a href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer">Sorting the Summary Buffer</a> ) called <code>gnus-summary-sort-by-schedule</code>,
-<code>gnus-thread-sort-by-schedule</code> and
-<code>gnus-article-sort-by-schedule</code>.  These functions let you organize
-your diary summary buffers from the closest event to the farthest one.
-</p>
-<p><code>gnus-diary</code> automatically installs
-<code>gnus-summary-sort-by-schedule</code> as a menu item in the summary
-buffer&rsquo;s &ldquo;sort&rdquo; menu, and the two others as the primary (hence
-default) sorting functions in the group parameters (see <a href="Diary-Group-Parameters.html#Diary-Group-Parameters">Diary Group Parameters</a>).
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Diary-Headers-Generation.html#Diary-Headers-Generation"
+    accesskey="n" rel="next">Diary Headers Generation</a>,
+    Previous: <a href=
+    "Diary-Summary-Line-Format.html#Diary-Summary-Line-Format"
+    accesskey="p" rel="prev">Diary Summary Line Format</a>, Up:
+    <a href="The-Gnus-Diary-Library.html#The-Gnus-Diary-Library"
+    accesskey="u" rel="up">The Gnus Diary Library</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Diary-Articles-Sorting-1" id=
+  "Diary-Articles-Sorting-1"></a>
 
+  <h4 class="subsubsection">6.8.2.2 Diary Articles
+  Sorting</h4><a name="index-diary-articles-sorting" id=
+  "index-diary-articles-sorting"></a> <a name=
+  "index-diary-summary-lines-sorting" id=
+  "index-diary-summary-lines-sorting"></a> <a name=
+  "index-gnus_002dsummary_002dsort_002dby_002dschedule" id=
+  "index-gnus_002dsummary_002dsort_002dby_002dschedule"></a>
+  <a name="index-gnus_002dthread_002dsort_002dby_002dschedule" id=
+  "index-gnus_002dthread_002dsort_002dby_002dschedule"></a>
+  <a name="index-gnus_002darticle_002dsort_002dby_002dschedule" id=
+  "index-gnus_002darticle_002dsort_002dby_002dschedule"></a>
 
+  <p><code>gnus-diary</code> provides new sorting functions (see
+  <a href=
+  "Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer">Sorting
+  the Summary Buffer</a> ) called
+  <code>gnus-summary-sort-by-schedule</code>,
+  <code>gnus-thread-sort-by-schedule</code> and
+  <code>gnus-article-sort-by-schedule</code>. These functions let
+  you organize your diary summary buffers from the closest event to
+  the farthest one.</p>
 
+  <p><code>gnus-diary</code> automatically installs
+  <code>gnus-summary-sort-by-schedule</code> as a menu item in the
+  summary buffer&rsquo;s &ldquo;sort&rdquo; menu, and the two
+  others as the primary (hence default) sorting functions in the
+  group parameters (see <a href=
+  "Diary-Group-Parameters.html#Diary-Group-Parameters">Diary Group
+  Parameters</a>).</p>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,161 +14,208 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Agent Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Agent Basics">
-<meta name="keywords" content="Gnus Manual: Agent Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Gnus-Unplugged.html#Gnus-Unplugged" rel="up" title="Gnus Unplugged">
-<link href="Agent-Categories.html#Agent-Categories" rel="next" title="Agent Categories">
-<link href="Gnus-Unplugged.html#Gnus-Unplugged" rel="prev" title="Gnus Unplugged">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Agent Basics</title>
+  <meta name="description" content="Gnus Manual: Agent Basics" />
+  <meta name="keywords" content="Gnus Manual: Agent Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Gnus-Unplugged.html#Gnus-Unplugged" rel="up" title=
+  "Gnus Unplugged" />
+  <link href="Agent-Categories.html#Agent-Categories" rel="next"
+  title="Agent Categories" />
+  <link href="Gnus-Unplugged.html#Gnus-Unplugged" rel="prev" title=
+  "Gnus Unplugged" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Agent-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Agent-Categories.html#Agent-Categories" accesskey="n" rel="next">Agent Categories</a>, Up: <a href="Gnus-Unplugged.html#Gnus-Unplugged" accesskey="u" rel="up">Gnus Unplugged</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Agent-Basics-1"></a>
-<h4 class="subsection">6.9.1 Agent Basics</h4>
+<body lang="en" xml:lang="en">
+  <a name="Agent-Basics" id="Agent-Basics"></a>
 
-<p>First, let&rsquo;s get some terminology out of the way.
-</p>
-<p>The Gnus Agent is said to be <em>unplugged</em> when you have severed the
-connection to the net (and notified the Agent that this is the case).
-When the connection to the net is up again (and Gnus knows this), the
-Agent is <em>plugged</em>.
-</p>
-<p>The <em>local</em> machine is the one you&rsquo;re running on, and which isn&rsquo;t
-connected to the net continuously.
-</p>
-<p><em>Downloading</em> means fetching things from the net to your local
-machine.  <em>Uploading</em> is doing the opposite.
-</p>
-<p>You know that Gnus gives you all the opportunity you&rsquo;d ever want for
-shooting yourself in the foot.  Some people call it flexibility.  Gnus
-is also customizable to a great extent, which means that the user has a
-say on how Gnus behaves.  Other newsreaders might unconditionally shoot
-you in your foot, but with Gnus, you have a choice!
-</p>
-<p>Gnus is never really in plugged or unplugged state.  Rather, it applies
-that state to each server individually.  This means that some servers
-can be plugged while others can be unplugged.  Additionally, some
-servers can be ignored by the Agent altogether (which means that
-they&rsquo;re kinda like plugged always).
-</p>
-<p>So when you unplug the Agent and then wonder why is Gnus opening a
-connection to the Net, the next step to do is to look whether all
-servers are agentized.  If there is an unagentized server, you found
-the culprit.
-</p>
-<p>Another thing is the <em>offline</em> state.  Sometimes, servers aren&rsquo;t
-reachable.  When Gnus notices this, it asks you whether you want the
-server to be switched to offline state.  If you say yes, then the
-server will behave somewhat as if it was unplugged, except that Gnus
-will ask you whether you want to switch it back online again.
-</p>
-<p>Let&rsquo;s take a typical Gnus session using the Agent.
-</p>
-<ul>
-<li> <a name="index-gnus_002dunplugged"></a>
-You start Gnus with <code>gnus-unplugged</code>.  This brings up the Gnus
-Agent in a disconnected state.  You can read all the news that you have
-already fetched while in this mode.
+  <div class="header">
+    <p>Next: <a href="Agent-Categories.html#Agent-Categories"
+    accesskey="n" rel="next">Agent Categories</a>, Up: <a href=
+    "Gnus-Unplugged.html#Gnus-Unplugged" accesskey="u" rel=
+    "up">Gnus Unplugged</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Agent-Basics-1" id="Agent-Basics-1"></a>
 
-</li><li> You then decide to see whether any new news has arrived.  You connect
-your machine to the net (using PPP or whatever), and then hit <kbd>J j</kbd>
-to make Gnus become <em>plugged</em> and use <kbd>g</kbd> to check for new mail
-as usual.  To check for new mail in unplugged mode (see <a href="Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail Source Specifiers</a>).
+  <h4 class="subsection">6.9.1 Agent Basics</h4>
 
-</li><li> You can then read the new news immediately, or you can download the
-news onto your local machine.  If you want to do the latter, you press
-<kbd>g</kbd> to check if there are any new news and then <kbd>J s</kbd> to fetch
-all the eligible articles in all the groups.  (To let Gnus know which
-articles you want to download, see <a href="Agent-Categories.html#Agent-Categories">Agent Categories</a>).
+  <p>First, let&rsquo;s get some terminology out of the way.</p>
 
-</li><li> After fetching the articles, you press <kbd>J j</kbd> to make Gnus become
-unplugged again, and you shut down the PPP thing (or whatever).  And
-then you read the news offline.
+  <p>The Gnus Agent is said to be <em>unplugged</em> when you have
+  severed the connection to the net (and notified the Agent that
+  this is the case). When the connection to the net is up again
+  (and Gnus knows this), the Agent is <em>plugged</em>.</p>
 
-</li><li> And then you go to step 2.
-</li></ul>
+  <p>The <em>local</em> machine is the one you&rsquo;re running on,
+  and which isn&rsquo;t connected to the net continuously.</p>
 
-<p>Here are some things you should do the first time (or so) that you use
-the Agent.
-</p>
-<ul>
-<li> Decide which servers should be covered by the Agent.  If you have a mail
-back end, it would probably be nonsensical to have it covered by the
-Agent.  Go to the server buffer (<kbd>^</kbd> in the group buffer) and press
-<kbd>J a</kbd> on the server (or servers) that you wish to have covered by the
-Agent (see <a href="Server-Agent-Commands.html#Server-Agent-Commands">Server Agent Commands</a>), or <kbd>J r</kbd> on automatically
-added servers you do not wish to have covered by the Agent.  By default,
-no servers are agentized.
+  <p><em>Downloading</em> means fetching things from the net to
+  your local machine. <em>Uploading</em> is doing the opposite.</p>
 
-</li><li> Decide on download policy.  It&rsquo;s fairly simple once you decide whether
-you are going to use agent categories, topic parameters, and/or group
-parameters to implement your policy.  If you&rsquo;re new to gnus, it
-is probably best to start with a category, See <a href="Agent-Categories.html#Agent-Categories">Agent Categories</a>.
+  <p>You know that Gnus gives you all the opportunity you&rsquo;d
+  ever want for shooting yourself in the foot. Some people call it
+  flexibility. Gnus is also customizable to a great extent, which
+  means that the user has a say on how Gnus behaves. Other
+  newsreaders might unconditionally shoot you in your foot, but
+  with Gnus, you have a choice!</p>
 
-<p>Both topic parameters (see <a href="Topic-Parameters.html#Topic-Parameters">Topic Parameters</a>) and agent categories
-(see <a href="Agent-Categories.html#Agent-Categories">Agent Categories</a>) provide for setting a policy that applies
-to multiple groups.  Which you use is entirely up to you.  Topic
-parameters do override categories so, if you mix the two, you&rsquo;ll have
-to take that into account.  If you have a few groups that deviate from
-your policy, you can use group parameters (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) to
-configure them.
-</p>
-</li><li> Uhm&hellip; that&rsquo;s it.
-</li></ul>
+  <p>Gnus is never really in plugged or unplugged state. Rather, it
+  applies that state to each server individually. This means that
+  some servers can be plugged while others can be unplugged.
+  Additionally, some servers can be ignored by the Agent altogether
+  (which means that they&rsquo;re kinda like plugged always).</p>
 
+  <p>So when you unplug the Agent and then wonder why is Gnus
+  opening a connection to the Net, the next step to do is to look
+  whether all servers are agentized. If there is an unagentized
+  server, you found the culprit.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Agent-Categories.html#Agent-Categories" accesskey="n" rel="next">Agent Categories</a>, Up: <a href="Gnus-Unplugged.html#Gnus-Unplugged" accesskey="u" rel="up">Gnus Unplugged</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Another thing is the <em>offline</em> state. Sometimes,
+  servers aren&rsquo;t reachable. When Gnus notices this, it asks
+  you whether you want the server to be switched to offline state.
+  If you say yes, then the server will behave somewhat as if it was
+  unplugged, except that Gnus will ask you whether you want to
+  switch it back online again.</p>
 
+  <p>Let&rsquo;s take a typical Gnus session using the Agent.</p>
 
+  <ul>
+    <li><a name="index-gnus_002dunplugged" id=
+    "index-gnus_002dunplugged"></a> You start Gnus with
+    <code>gnus-unplugged</code>. This brings up the Gnus Agent in a
+    disconnected state. You can read all the news that you have
+    already fetched while in this mode.</li>
 
+    <li>You then decide to see whether any new news has arrived.
+    You connect your machine to the net (using PPP or whatever),
+    and then hit <kbd>J j</kbd> to make Gnus become
+    <em>plugged</em> and use <kbd>g</kbd> to check for new mail as
+    usual. To check for new mail in unplugged mode (see <a href=
+    "Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail
+    Source Specifiers</a>).</li>
+
+    <li>You can then read the new news immediately, or you can
+    download the news onto your local machine. If you want to do
+    the latter, you press <kbd>g</kbd> to check if there are any
+    new news and then <kbd>J s</kbd> to fetch all the eligible
+    articles in all the groups. (To let Gnus know which articles
+    you want to download, see <a href=
+    "Agent-Categories.html#Agent-Categories">Agent
+    Categories</a>).</li>
+
+    <li>After fetching the articles, you press <kbd>J j</kbd> to
+    make Gnus become unplugged again, and you shut down the PPP
+    thing (or whatever). And then you read the news offline.</li>
+
+    <li>And then you go to step 2.</li>
+  </ul>
+
+  <p>Here are some things you should do the first time (or so) that
+  you use the Agent.</p>
+
+  <ul>
+    <li>Decide which servers should be covered by the Agent. If you
+    have a mail back end, it would probably be nonsensical to have
+    it covered by the Agent. Go to the server buffer (<kbd>^</kbd>
+    in the group buffer) and press <kbd>J a</kbd> on the server (or
+    servers) that you wish to have covered by the Agent (see
+    <a href=
+    "Server-Agent-Commands.html#Server-Agent-Commands">Server Agent
+    Commands</a>), or <kbd>J r</kbd> on automatically added servers
+    you do not wish to have covered by the Agent. By default, no
+    servers are agentized.</li>
+
+    <li>Decide on download policy. It&rsquo;s fairly simple once
+    you decide whether you are going to use agent categories, topic
+    parameters, and/or group parameters to implement your policy.
+    If you&rsquo;re new to gnus, it is probably best to start with
+    a category, See <a href=
+    "Agent-Categories.html#Agent-Categories">Agent Categories</a>.
+
+      <p>Both topic parameters (see <a href=
+      "Topic-Parameters.html#Topic-Parameters">Topic
+      Parameters</a>) and agent categories (see <a href=
+      "Agent-Categories.html#Agent-Categories">Agent
+      Categories</a>) provide for setting a policy that applies to
+      multiple groups. Which you use is entirely up to you. Topic
+      parameters do override categories so, if you mix the two,
+      you&rsquo;ll have to take that into account. If you have a
+      few groups that deviate from your policy, you can use group
+      parameters (see <a href=
+      "Group-Parameters.html#Group-Parameters">Group
+      Parameters</a>) to configure them.</p>
+    </li>
+
+    <li>Uhm&hellip; that&rsquo;s it.</li>
+  </ul>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Agent-Categories.html#Agent-Categories"
+    accesskey="n" rel="next">Agent Categories</a>, Up: <a href=
+    "Gnus-Unplugged.html#Gnus-Unplugged" accesskey="u" rel=
+    "up">Gnus Unplugged</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

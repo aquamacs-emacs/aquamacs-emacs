@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,182 +19,277 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Making Backups</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Making Backups">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Making Backups">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Backup-Files.html#Backup-Files" rel="up" title="Backup Files">
-<link href="Rename-or-Copy.html#Rename-or-Copy" rel="next" title="Rename or Copy">
-<link href="Backup-Files.html#Backup-Files" rel="prev" title="Backup Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Making Backups</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Making Backups" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Making Backups" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Backup-Files.html#Backup-Files" rel="up" title=
+  "Backup Files" />
+  <link href="Rename-or-Copy.html#Rename-or-Copy" rel="next" title=
+  "Rename or Copy" />
+  <link href="Backup-Files.html#Backup-Files" rel="prev" title=
+  "Backup Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Making-Backups" id="Making-Backups"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Rename-or-Copy.html#Rename-or-Copy"
+    accesskey="n" rel="next">Rename or Copy</a>, Up: <a href=
+    "Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup
+    Files</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Making-Backup-Files" id="Making-Backup-Files"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Making-Backups"></a>
-<div class="header">
-<p>
-Next: <a href="Rename-or-Copy.html#Rename-or-Copy" accesskey="n" rel="next">Rename or Copy</a>, Up: <a href="Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Making-Backup-Files"></a>
-<h4 class="subsection">25.1.1 Making Backup Files</h4>
-<a name="index-making-backup-files"></a>
+  <h4 class="subsection">25.1.1 Making Backup Files</h4><a name=
+  "index-making-backup-files" id="index-making-backup-files"></a>
 
-<dl>
-<dt><a name="index-backup_002dbuffer"></a>Function: <strong>backup-buffer</strong></dt>
-<dd><p>This function makes a backup of the file visited by the current
-buffer, if appropriate.  It is called by <code>save-buffer</code> before
-saving the buffer the first time.
-</p>
-<p>If a backup was made by renaming, the return value is a cons cell of
-the form (<var>modes</var> <var>extra-alist</var> <var>backupname</var>), where
-<var>modes</var> are the mode bits of the original file, as returned by
-<code>file-modes</code> (see <a href="Testing-Accessibility.html#Testing-Accessibility">Testing Accessibility</a>), <var>extra-alist</var>
-is an alist describing the original file&rsquo;s extended attributes, as
-returned by <code>file-extended-attributes</code> (see <a href="Extended-Attributes.html#Extended-Attributes">Extended Attributes</a>), and <var>backupname</var> is the name of the backup.
-</p>
-<p>In all other cases (i.e., if a backup was made by copying or if no
-backup was made), this function returns <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-backup_002dbuffer" id=
+    "index-backup_002dbuffer"></a>Function:
+    <strong>backup-buffer</strong></dt>
 
-<dl>
-<dt><a name="index-buffer_002dbacked_002dup"></a>Variable: <strong>buffer-backed-up</strong></dt>
-<dd><p>This buffer-local variable says whether this buffer&rsquo;s file has
-been backed up on account of this buffer.  If it is non-<code>nil</code>,
-the backup file has been written.  Otherwise, the file should be backed
-up when it is next saved (if backups are enabled).  This is a
-permanent local; <code>kill-all-local-variables</code> does not alter&nbsp;it.
-</p></dd></dl>
+    <dd>
+      <p>This function makes a backup of the file visited by the
+      current buffer, if appropriate. It is called by
+      <code>save-buffer</code> before saving the buffer the first
+      time.</p>
 
-<dl>
-<dt><a name="index-make_002dbackup_002dfiles"></a>User Option: <strong>make-backup-files</strong></dt>
-<dd><p>This variable determines whether or not to make backup files.  If it
-is non-<code>nil</code>, then Emacs creates a backup of each file when it is
-saved for the first time&mdash;provided that <code>backup-inhibited</code>
-is <code>nil</code> (see below).
-</p>
-<p>The following example shows how to change the <code>make-backup-files</code>
-variable only in the Rmail buffers and not elsewhere.  Setting it
-<code>nil</code> stops Emacs from making backups of these files, which may
-save disk space.  (You would put this code in your init file.)
-</p>
-<div class="smallexample">
-<pre class="smallexample">(add-hook 'rmail-mode-hook
+      <p>If a backup was made by renaming, the return value is a
+      cons cell of the form (<var>modes</var>
+      <var>extra-alist</var> <var>backupname</var>), where
+      <var>modes</var> are the mode bits of the original file, as
+      returned by <code>file-modes</code> (see <a href=
+      "Testing-Accessibility.html#Testing-Accessibility">Testing
+      Accessibility</a>), <var>extra-alist</var> is an alist
+      describing the original file&rsquo;s extended attributes, as
+      returned by <code>file-extended-attributes</code> (see
+      <a href=
+      "Extended-Attributes.html#Extended-Attributes">Extended
+      Attributes</a>), and <var>backupname</var> is the name of the
+      backup.</p>
+
+      <p>In all other cases (i.e., if a backup was made by copying
+      or if no backup was made), this function returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-buffer_002dbacked_002dup" id=
+    "index-buffer_002dbacked_002dup"></a>Variable:
+    <strong>buffer-backed-up</strong></dt>
+
+    <dd>
+      <p>This buffer-local variable says whether this
+      buffer&rsquo;s file has been backed up on account of this
+      buffer. If it is non-<code>nil</code>, the backup file has
+      been written. Otherwise, the file should be backed up when it
+      is next saved (if backups are enabled). This is a permanent
+      local; <code>kill-all-local-variables</code> does not
+      alter&nbsp;it.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-make_002dbackup_002dfiles" id=
+    "index-make_002dbackup_002dfiles"></a>User Option:
+    <strong>make-backup-files</strong></dt>
+
+    <dd>
+      <p>This variable determines whether or not to make backup
+      files. If it is non-<code>nil</code>, then Emacs creates a
+      backup of each file when it is saved for the first
+      time&mdash;provided that <code>backup-inhibited</code> is
+      <code>nil</code> (see below).</p>
+
+      <p>The following example shows how to change the
+      <code>make-backup-files</code> variable only in the Rmail
+      buffers and not elsewhere. Setting it <code>nil</code> stops
+      Emacs from making backups of these files, which may save disk
+      space. (You would put this code in your init file.)</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(add-hook 'rmail-mode-hook
           (lambda () (setq-local make-backup-files nil)))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-backup_002denable_002dpredicate"></a>Variable: <strong>backup-enable-predicate</strong></dt>
-<dd><p>This variable&rsquo;s value is a function to be called on certain occasions to
-decide whether a file should have backup files.  The function receives
-one argument, an absolute file name to consider.  If the function returns
-<code>nil</code>, backups are disabled for that file.  Otherwise, the other
-variables in this section say whether and how to make backups.
-</p>
-<a name="index-normal_002dbackup_002denable_002dpredicate"></a>
-<p>The default value is <code>normal-backup-enable-predicate</code>, which checks
-for files in <code>temporary-file-directory</code> and
-<code>small-temporary-file-directory</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-backup_002denable_002dpredicate" id=
+    "index-backup_002denable_002dpredicate"></a>Variable:
+    <strong>backup-enable-predicate</strong></dt>
 
-<dl>
-<dt><a name="index-backup_002dinhibited"></a>Variable: <strong>backup-inhibited</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, backups are inhibited.  It records
-the result of testing <code>backup-enable-predicate</code> on the visited file
-name.  It can also coherently be used by other mechanisms that inhibit
-backups based on which file is visited.  For example, VC sets this
-variable non-<code>nil</code> to prevent making backups for files managed
-with a version control system.
-</p>
-<p>This is a permanent local, so that changing the major mode does not lose
-its value.  Major modes should not set this variable&mdash;they should set
-<code>make-backup-files</code> instead.
-</p></dd></dl>
+    <dd>
+      <p>This variable&rsquo;s value is a function to be called on
+      certain occasions to decide whether a file should have backup
+      files. The function receives one argument, an absolute file
+      name to consider. If the function returns <code>nil</code>,
+      backups are disabled for that file. Otherwise, the other
+      variables in this section say whether and how to make
+      backups.</p><a name=
+      "index-normal_002dbackup_002denable_002dpredicate" id=
+      "index-normal_002dbackup_002denable_002dpredicate"></a>
 
-<dl>
-<dt><a name="index-backup_002ddirectory_002dalist"></a>User Option: <strong>backup-directory-alist</strong></dt>
-<dd><p>This variable&rsquo;s value is an alist of filename patterns and backup
-directory names.  Each element looks like
-</p><div class="smallexample">
-<pre class="smallexample">(<var>regexp</var> . <var>directory</var>)
-</pre></div>
+      <p>The default value is
+      <code>normal-backup-enable-predicate</code>, which checks for
+      files in <code>temporary-file-directory</code> and
+      <code>small-temporary-file-directory</code>.</p>
+    </dd>
+  </dl>
 
-<p>Backups of files with names matching <var>regexp</var> will be made in
-<var>directory</var>.  <var>directory</var> may be relative or absolute.  If it is
-absolute, so that all matching files are backed up into the same
-directory, the file names in this directory will be the full name of the
-file backed up with all directory separators changed to &lsquo;<samp>!</samp>&rsquo; to
-prevent clashes.  This will not work correctly if your filesystem
-truncates the resulting name.
-</p>
-<p>For the common case of all backups going into one directory, the alist
-should contain a single element pairing &lsquo;<samp>&quot;.&quot;</samp>&rsquo; with the appropriate
-directory name.
-</p>
-<p>If this variable is <code>nil</code> (the default), or it fails to match a
-filename, the backup is made in the original file&rsquo;s directory.
-</p>
-<p>On MS-DOS filesystems without long names this variable is always
-ignored.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-backup_002dinhibited" id=
+    "index-backup_002dinhibited"></a>Variable:
+    <strong>backup-inhibited</strong></dt>
 
-<dl>
-<dt><a name="index-make_002dbackup_002dfile_002dname_002dfunction"></a>User Option: <strong>make-backup-file-name-function</strong></dt>
-<dd><p>This variable&rsquo;s value is a function to use for making backup file names.
-The function <code>make-backup-file-name</code> calls it.
-See <a href="Backup-Names.html#Backup-Names">Naming Backup Files</a>.
-</p>
-<p>This could be buffer-local to do something special for specific
-files.  If you change it, you may need to change
-<code>backup-file-name-p</code> and <code>file-name-sans-versions</code> too.
-</p></dd></dl>
+    <dd>
+      <p>If this variable is non-<code>nil</code>, backups are
+      inhibited. It records the result of testing
+      <code>backup-enable-predicate</code> on the visited file
+      name. It can also coherently be used by other mechanisms that
+      inhibit backups based on which file is visited. For example,
+      VC sets this variable non-<code>nil</code> to prevent making
+      backups for files managed with a version control system.</p>
 
+      <p>This is a permanent local, so that changing the major mode
+      does not lose its value. Major modes should not set this
+      variable&mdash;they should set <code>make-backup-files</code>
+      instead.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Rename-or-Copy.html#Rename-or-Copy" accesskey="n" rel="next">Rename or Copy</a>, Up: <a href="Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-backup_002ddirectory_002dalist" id=
+    "index-backup_002ddirectory_002dalist"></a>User Option:
+    <strong>backup-directory-alist</strong></dt>
 
+    <dd>
+      <p>This variable&rsquo;s value is an alist of filename
+      patterns and backup directory names. Each element looks
+      like</p>
 
+      <div class="smallexample">
+        <pre class="smallexample">
+(<var>regexp</var> . <var>directory</var>)
+</pre>
+      </div>
 
+      <p>Backups of files with names matching <var>regexp</var>
+      will be made in <var>directory</var>. <var>directory</var>
+      may be relative or absolute. If it is absolute, so that all
+      matching files are backed up into the same directory, the
+      file names in this directory will be the full name of the
+      file backed up with all directory separators changed to
+      &lsquo;<samp>!</samp>&rsquo; to prevent clashes. This will
+      not work correctly if your filesystem truncates the resulting
+      name.</p>
+
+      <p>For the common case of all backups going into one
+      directory, the alist should contain a single element pairing
+      &lsquo;<samp>"."</samp>&rsquo; with the appropriate directory
+      name.</p>
+
+      <p>If this variable is <code>nil</code> (the default), or it
+      fails to match a filename, the backup is made in the original
+      file&rsquo;s directory.</p>
+
+      <p>On MS-DOS filesystems without long names this variable is
+      always ignored.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-make_002dbackup_002dfile_002dname_002dfunction" id=
+    "index-make_002dbackup_002dfile_002dname_002dfunction"></a>User
+    Option: <strong>make-backup-file-name-function</strong></dt>
+
+    <dd>
+      <p>This variable&rsquo;s value is a function to use for
+      making backup file names. The function
+      <code>make-backup-file-name</code> calls it. See <a href=
+      "Backup-Names.html#Backup-Names">Naming Backup Files</a>.</p>
+
+      <p>This could be buffer-local to do something special for
+      specific files. If you change it, you may need to change
+      <code>backup-file-name-p</code> and
+      <code>file-name-sans-versions</code> too.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Rename-or-Copy.html#Rename-or-Copy"
+    accesskey="n" rel="next">Rename or Copy</a>, Up: <a href=
+    "Backup-Files.html#Backup-Files" accesskey="u" rel="up">Backup
+    Files</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

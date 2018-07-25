@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,110 +20,157 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: RCS and SCCS</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: RCS and SCCS">
-<meta name="keywords" content="GNU Emacs Manual: RCS and SCCS">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customizing-VC.html#Customizing-VC" rel="up" title="Customizing VC">
-<link href="CVS-Options.html#CVS-Options" rel="next" title="CVS Options">
-<link href="General-VC-Options.html#General-VC-Options" rel="prev" title="General VC Options">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: RCS and SCCS</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: RCS and SCCS" />
+  <meta name="keywords" content="GNU Emacs Manual: RCS and SCCS" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customizing-VC.html#Customizing-VC" rel="up" title=
+  "Customizing VC" />
+  <link href="CVS-Options.html#CVS-Options" rel="next" title=
+  "CVS Options" />
+  <link href="General-VC-Options.html#General-VC-Options" rel=
+  "prev" title="General VC Options" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="RCS-and-SCCS" id="RCS-and-SCCS"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="CVS-Options.html#CVS-Options" accesskey="n"
+    rel="next">CVS Options</a>, Previous: <a href=
+    "General-VC-Options.html#General-VC-Options" accesskey="p" rel=
+    "prev">General VC Options</a>, Up: <a href=
+    "Customizing-VC.html#Customizing-VC" accesskey="u" rel=
+    "up">Customizing VC</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Options-for-RCS-and-SCCS" id=
+  "Options-for-RCS-and-SCCS"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="RCS-and-SCCS"></a>
-<div class="header">
-<p>
-Next: <a href="CVS-Options.html#CVS-Options" accesskey="n" rel="next">CVS Options</a>, Previous: <a href="General-VC-Options.html#General-VC-Options" accesskey="p" rel="prev">General VC Options</a>, Up: <a href="Customizing-VC.html#Customizing-VC" accesskey="u" rel="up">Customizing VC</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Options-for-RCS-and-SCCS"></a>
-<h4 class="subsubsection">28.1.13.2 Options for RCS and SCCS</h4>
+  <h4 class="subsubsection">28.1.13.2 Options for RCS and
+  SCCS</h4><a name="index-non_002dstrict-locking-_0028RCS_0029" id=
+  "index-non_002dstrict-locking-_0028RCS_0029"></a> <a name=
+  "index-locking_002c-non_002dstrict-_0028RCS_0029" id=
+  "index-locking_002c-non_002dstrict-_0028RCS_0029"></a>
 
-<a name="index-non_002dstrict-locking-_0028RCS_0029"></a>
-<a name="index-locking_002c-non_002dstrict-_0028RCS_0029"></a>
-<p>By default, RCS uses locking to coordinate the activities of several
-users, but there is a mode called <em>non-strict locking</em> in which
-you can check-in changes without locking the file first.  Use
-&lsquo;<samp>rcs -U</samp>&rsquo; to switch to non-strict locking for a particular file,
-see the <code>rcs</code> manual page for details.
-</p>
-<p>When deducing the version control state of an RCS file, VC first
-looks for an RCS version header string in the file (see <a href="Version-Headers.html#Version-Headers">Version Headers</a>).  If there is no header string, VC normally looks at the
-file permissions of the work file; this is fast.  But there might be
-situations when the file permissions cannot be trusted.  In this case
-the master file has to be consulted, which is rather expensive.  Also
-the master file can only tell you <em>if</em> there&rsquo;s any lock on the
-file, but not whether your work file really contains that locked
-version.
-</p>
-<a name="index-vc_002dconsult_002dheaders-1"></a>
-<p>You can tell VC not to use version headers to determine the file
-status by setting <code>vc-consult-headers</code> to <code>nil</code>.  VC then
-always uses the file permissions (if it is supposed to trust them), or
-else checks the master file.
-</p>
-<a name="index-vc_002dmistrust_002dpermissions"></a>
-<p>You can specify the criterion for whether to trust the file
-permissions by setting the variable <code>vc-mistrust-permissions</code>.
-Its value can be <code>t</code> (always mistrust the file permissions and
-check the master file), <code>nil</code> (always trust the file
-permissions), or a function of one argument which makes the decision.
-The argument is the directory name of the <samp>RCS</samp> subdirectory.  A
-non-<code>nil</code> value from the function says to mistrust the file
-permissions.  If you find that the file permissions of work files are
-changed erroneously, set <code>vc-mistrust-permissions</code> to <code>t</code>.
-Then VC always checks the master file to determine the file&rsquo;s status.
-</p>
-<p>VC determines the version control state of files under SCCS much as
-with RCS.  It does not consider SCCS version headers, though.  Thus,
-the variable <code>vc-mistrust-permissions</code> affects SCCS use, but
-<code>vc-consult-headers</code> does not.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="CVS-Options.html#CVS-Options" accesskey="n" rel="next">CVS Options</a>, Previous: <a href="General-VC-Options.html#General-VC-Options" accesskey="p" rel="prev">General VC Options</a>, Up: <a href="Customizing-VC.html#Customizing-VC" accesskey="u" rel="up">Customizing VC</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>By default, RCS uses locking to coordinate the activities of
+  several users, but there is a mode called <em>non-strict
+  locking</em> in which you can check-in changes without locking
+  the file first. Use &lsquo;<samp>rcs -U</samp>&rsquo; to switch
+  to non-strict locking for a particular file, see the
+  <code>rcs</code> manual page for details.</p>
 
+  <p>When deducing the version control state of an RCS file, VC
+  first looks for an RCS version header string in the file (see
+  <a href="Version-Headers.html#Version-Headers">Version
+  Headers</a>). If there is no header string, VC normally looks at
+  the file permissions of the work file; this is fast. But there
+  might be situations when the file permissions cannot be trusted.
+  In this case the master file has to be consulted, which is rather
+  expensive. Also the master file can only tell you <em>if</em>
+  there&rsquo;s any lock on the file, but not whether your work
+  file really contains that locked version.</p><a name=
+  "index-vc_002dconsult_002dheaders-1" id=
+  "index-vc_002dconsult_002dheaders-1"></a>
 
+  <p>You can tell VC not to use version headers to determine the
+  file status by setting <code>vc-consult-headers</code> to
+  <code>nil</code>. VC then always uses the file permissions (if it
+  is supposed to trust them), or else checks the master
+  file.</p><a name="index-vc_002dmistrust_002dpermissions" id=
+  "index-vc_002dmistrust_002dpermissions"></a>
 
+  <p>You can specify the criterion for whether to trust the file
+  permissions by setting the variable
+  <code>vc-mistrust-permissions</code>. Its value can be
+  <code>t</code> (always mistrust the file permissions and check
+  the master file), <code>nil</code> (always trust the file
+  permissions), or a function of one argument which makes the
+  decision. The argument is the directory name of the
+  <samp>RCS</samp> subdirectory. A non-<code>nil</code> value from
+  the function says to mistrust the file permissions. If you find
+  that the file permissions of work files are changed erroneously,
+  set <code>vc-mistrust-permissions</code> to <code>t</code>. Then
+  VC always checks the master file to determine the file&rsquo;s
+  status.</p>
+
+  <p>VC determines the version control state of files under SCCS
+  much as with RCS. It does not consider SCCS version headers,
+  though. Thus, the variable <code>vc-mistrust-permissions</code>
+  affects SCCS use, but <code>vc-consult-headers</code> does
+  not.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="CVS-Options.html#CVS-Options" accesskey="n"
+    rel="next">CVS Options</a>, Previous: <a href=
+    "General-VC-Options.html#General-VC-Options" accesskey="p" rel=
+    "prev">General VC Options</a>, Up: <a href=
+    "Customizing-VC.html#Customizing-VC" accesskey="u" rel=
+    "up">Customizing VC</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

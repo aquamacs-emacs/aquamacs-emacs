@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,159 +16,297 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Using the property API</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Using the property API">
-<meta name="keywords" content="The Org Manual: Using the property API">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Hacking.html#Hacking" rel="up" title="Hacking">
-<link href="Using-the-mapping-API.html#Using-the-mapping-API" rel="next" title="Using the mapping API">
-<link href="Extracting-agenda-information.html#Extracting-agenda-information" rel="prev" title="Extracting agenda information">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Using the property API</title>
+  <meta name="description" content=
+  "The Org Manual: Using the property API" />
+  <meta name="keywords" content=
+  "The Org Manual: Using the property API" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Hacking.html#Hacking" rel="up" title="Hacking" />
+  <link href="Using-the-mapping-API.html#Using-the-mapping-API"
+  rel="next" title="Using the mapping API" />
+  <link href=
+  "Extracting-agenda-information.html#Extracting-agenda-information"
+  rel="prev" title="Extracting agenda information" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Using-the-property-API"></a>
-<div class="header">
-<p>
-Next: <a href="Using-the-mapping-API.html#Using-the-mapping-API" accesskey="n" rel="next">Using the mapping API</a>, Previous: <a href="Extracting-agenda-information.html#Extracting-agenda-information" accesskey="p" rel="prev">Extracting agenda information</a>, Up: <a href="Hacking.html#Hacking" accesskey="u" rel="up">Hacking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Using-the-property-API-1"></a>
-<h3 class="section">A.11 Using the property API</h3>
-<a name="index-API_002c-for-properties-1"></a>
-<a name="index-properties_002c-API-1"></a>
+<body lang="en" xml:lang="en">
+  <a name="Using-the-property-API" id="Using-the-property-API"></a>
 
-<p>Here is a description of the functions that can be used to work with
-properties.
-</p>
-<dl>
-<dt><a name="index-org_002dentry_002dproperties"></a>Function: <strong>org-entry-properties</strong> <em>&amp;optional pom which</em></dt>
-<dd><p>Get all properties of the entry at point-or-marker POM.<br>
-This includes the TODO keyword, the tags, time strings for deadline,
-scheduled, and clocking, and any additional properties defined in the
-entry.  The return value is an alist.  Keys may occur multiple times
-if the property key was used several times.<br>
-POM may also be <code>nil</code>, in which case the current entry is used.
-If WHICH is <code>nil</code> or <code>all</code>, get all properties.  If WHICH is
-<code>special</code> or <code>standard</code>, only get that subclass.
-</p></dd></dl>
-<a name="index-org_002duse_002dproperty_002dinheritance-3"></a>
-<a name="index-org_002dinsert_002dproperty_002ddrawer"></a>
-<dl>
-<dt><a name="index-org_002dentry_002dget"></a>Function: <strong>org-entry-get</strong> <em>pom property &amp;optional inherit</em></dt>
-<dd><p>Get value of <code>PROPERTY</code> for entry at point-or-marker <code>POM</code>.  By default,
-this only looks at properties defined locally in the entry.  If <code>INHERIT</code>
-is non-<code>nil</code> and the entry does not have the property, then also check
-higher levels of the hierarchy.  If <code>INHERIT</code> is the symbol
-<code>selective</code>, use inheritance if and only if the setting of
-<code>org-use-property-inheritance</code> selects <code>PROPERTY</code> for inheritance.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Using-the-mapping-API.html#Using-the-mapping-API" accesskey=
+    "n" rel="next">Using the mapping API</a>, Previous: <a href=
+    "Extracting-agenda-information.html#Extracting-agenda-information"
+    accesskey="p" rel="prev">Extracting agenda information</a>, Up:
+    <a href="Hacking.html#Hacking" accesskey="u" rel=
+    "up">Hacking</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Using-the-property-API-1" id=
+  "Using-the-property-API-1"></a>
 
-<dl>
-<dt><a name="index-org_002dentry_002ddelete"></a>Function: <strong>org-entry-delete</strong> <em>pom property</em></dt>
-<dd><p>Delete the property <code>PROPERTY</code> from entry at point-or-marker POM.
-</p></dd></dl>
+  <h3 class="section">A.11 Using the property API</h3><a name=
+  "index-API_002c-for-properties-1" id=
+  "index-API_002c-for-properties-1"></a> <a name=
+  "index-properties_002c-API-1" id=
+  "index-properties_002c-API-1"></a>
 
-<dl>
-<dt><a name="index-org_002dentry_002dput"></a>Function: <strong>org-entry-put</strong> <em>pom property value</em></dt>
-<dd><p>Set <code>PROPERTY</code> to <code>VALUE</code> for entry at point-or-marker POM.
-</p></dd></dl>
+  <p>Here is a description of the functions that can be used to
+  work with properties.</p>
 
-<dl>
-<dt><a name="index-org_002dbuffer_002dproperty_002dkeys"></a>Function: <strong>org-buffer-property-keys</strong> <em>&amp;optional include-specials</em></dt>
-<dd><p>Get all property keys in the current buffer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-org_002dentry_002dproperties" id=
+    "index-org_002dentry_002dproperties"></a>Function:
+    <strong>org-entry-properties</strong> <em>&amp;optional pom
+    which</em></dt>
 
-<dl>
-<dt><a name="index-org_002dinsert_002dproperty_002ddrawer-1"></a>Function: <strong>org-insert-property-drawer</strong></dt>
-<dd><p>Insert a property drawer for the current entry.  Also
-</p></dd></dl>
+    <dd>
+      <p>Get all properties of the entry at point-or-marker
+      POM.<br />
+      This includes the TODO keyword, the tags, time strings for
+      deadline, scheduled, and clocking, and any additional
+      properties defined in the entry. The return value is an
+      alist. Keys may occur multiple times if the property key was
+      used several times.<br />
+      POM may also be <code>nil</code>, in which case the current
+      entry is used. If WHICH is <code>nil</code> or
+      <code>all</code>, get all properties. If WHICH is
+      <code>special</code> or <code>standard</code>, only get that
+      subclass.</p>
+    </dd>
+  </dl><a name="index-org_002duse_002dproperty_002dinheritance-3"
+  id="index-org_002duse_002dproperty_002dinheritance-3"></a>
+  <a name="index-org_002dinsert_002dproperty_002ddrawer" id=
+  "index-org_002dinsert_002dproperty_002ddrawer"></a>
 
-<dl>
-<dt><a name="index-org_002dentry_002dput_002dmultivalued_002dproperty"></a>Function: <strong>org-entry-put-multivalued-property</strong> <em>pom property &amp;rest values</em></dt>
-<dd><p>Set <code>PROPERTY</code> at point-or-marker <code>POM</code> to <code>VALUES</code>.
-<code>VALUES</code> should be a list of strings.  They will be concatenated, with
-spaces as separators.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-org_002dentry_002dget" id=
+    "index-org_002dentry_002dget"></a>Function:
+    <strong>org-entry-get</strong> <em>pom property &amp;optional
+    inherit</em></dt>
 
-<dl>
-<dt><a name="index-org_002dentry_002dget_002dmultivalued_002dproperty"></a>Function: <strong>org-entry-get-multivalued-property</strong> <em>pom property</em></dt>
-<dd><p>Treat the value of the property <code>PROPERTY</code> as a whitespace-separated
-list of values and return the values as a list of strings.
-</p></dd></dl>
+    <dd>
+      <p>Get value of <code>PROPERTY</code> for entry at
+      point-or-marker <code>POM</code>. By default, this only looks
+      at properties defined locally in the entry. If
+      <code>INHERIT</code> is non-<code>nil</code> and the entry
+      does not have the property, then also check higher levels of
+      the hierarchy. If <code>INHERIT</code> is the symbol
+      <code>selective</code>, use inheritance if and only if the
+      setting of <code>org-use-property-inheritance</code> selects
+      <code>PROPERTY</code> for inheritance.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-org_002dentry_002dadd_002dto_002dmultivalued_002dproperty"></a>Function: <strong>org-entry-add-to-multivalued-property</strong> <em>pom property value</em></dt>
-<dd><p>Treat the value of the property <code>PROPERTY</code> as a whitespace-separated
-list of values and make sure that <code>VALUE</code> is in this list.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-org_002dentry_002ddelete" id=
+    "index-org_002dentry_002ddelete"></a>Function:
+    <strong>org-entry-delete</strong> <em>pom property</em></dt>
 
-<dl>
-<dt><a name="index-org_002dentry_002dremove_002dfrom_002dmultivalued_002dproperty"></a>Function: <strong>org-entry-remove-from-multivalued-property</strong> <em>pom property value</em></dt>
-<dd><p>Treat the value of the property <code>PROPERTY</code> as a whitespace-separated
-list of values and make sure that <code>VALUE</code> is <em>not</em> in this list.
-</p></dd></dl>
+    <dd>
+      <p>Delete the property <code>PROPERTY</code> from entry at
+      point-or-marker POM.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-org_002dentry_002dmember_002din_002dmultivalued_002dproperty"></a>Function: <strong>org-entry-member-in-multivalued-property</strong> <em>pom property value</em></dt>
-<dd><p>Treat the value of the property <code>PROPERTY</code> as a whitespace-separated
-list of values and check if <code>VALUE</code> is in this list.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-org_002dentry_002dput" id=
+    "index-org_002dentry_002dput"></a>Function:
+    <strong>org-entry-put</strong> <em>pom property value</em></dt>
 
-<dl>
-<dt><a name="index-org_002dproperty_002dallowed_002dvalue_002dfunctions"></a>User Option: <strong>org-property-allowed-value-functions</strong></dt>
-<dd><p>Hook for functions supplying allowed values for a specific property.
-The functions must take a single argument, the name of the property, and
-return a flat list of allowed values.  If &lsquo;<samp>:ETC</samp>&rsquo; is one of
-the values, use the values as completion help, but allow also other values
-to be entered.  The functions must return <code>nil</code> if they are not
-responsible for this property.
-</p></dd></dl>
+    <dd>
+      <p>Set <code>PROPERTY</code> to <code>VALUE</code> for entry
+      at point-or-marker POM.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Using-the-mapping-API.html#Using-the-mapping-API" accesskey="n" rel="next">Using the mapping API</a>, Previous: <a href="Extracting-agenda-information.html#Extracting-agenda-information" accesskey="p" rel="prev">Extracting agenda information</a>, Up: <a href="Hacking.html#Hacking" accesskey="u" rel="up">Hacking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-org_002dbuffer_002dproperty_002dkeys" id=
+    "index-org_002dbuffer_002dproperty_002dkeys"></a>Function:
+    <strong>org-buffer-property-keys</strong> <em>&amp;optional
+    include-specials</em></dt>
 
+    <dd>
+      <p>Get all property keys in the current buffer.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-org_002dinsert_002dproperty_002ddrawer-1"
+    id="index-org_002dinsert_002dproperty_002ddrawer-1"></a>Function:
+    <strong>org-insert-property-drawer</strong></dt>
 
+    <dd>
+      <p>Insert a property drawer for the current entry. Also</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-org_002dentry_002dput_002dmultivalued_002dproperty" id=
+    "index-org_002dentry_002dput_002dmultivalued_002dproperty"></a>Function:
+    <strong>org-entry-put-multivalued-property</strong> <em>pom
+    property &amp;rest values</em></dt>
+
+    <dd>
+      <p>Set <code>PROPERTY</code> at point-or-marker
+      <code>POM</code> to <code>VALUES</code>. <code>VALUES</code>
+      should be a list of strings. They will be concatenated, with
+      spaces as separators.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-org_002dentry_002dget_002dmultivalued_002dproperty" id=
+    "index-org_002dentry_002dget_002dmultivalued_002dproperty"></a>Function:
+    <strong>org-entry-get-multivalued-property</strong> <em>pom
+    property</em></dt>
+
+    <dd>
+      <p>Treat the value of the property <code>PROPERTY</code> as a
+      whitespace-separated list of values and return the values as
+      a list of strings.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-org_002dentry_002dadd_002dto_002dmultivalued_002dproperty"
+    id=
+    "index-org_002dentry_002dadd_002dto_002dmultivalued_002dproperty">
+    </a>Function:
+    <strong>org-entry-add-to-multivalued-property</strong> <em>pom
+    property value</em></dt>
+
+    <dd>
+      <p>Treat the value of the property <code>PROPERTY</code> as a
+      whitespace-separated list of values and make sure that
+      <code>VALUE</code> is in this list.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-org_002dentry_002dremove_002dfrom_002dmultivalued_002dproperty"
+    id=
+    "index-org_002dentry_002dremove_002dfrom_002dmultivalued_002dproperty">
+    </a>Function:
+    <strong>org-entry-remove-from-multivalued-property</strong>
+    <em>pom property value</em></dt>
+
+    <dd>
+      <p>Treat the value of the property <code>PROPERTY</code> as a
+      whitespace-separated list of values and make sure that
+      <code>VALUE</code> is <em>not</em> in this list.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-org_002dentry_002dmember_002din_002dmultivalued_002dproperty"
+    id=
+    "index-org_002dentry_002dmember_002din_002dmultivalued_002dproperty">
+    </a>Function:
+    <strong>org-entry-member-in-multivalued-property</strong>
+    <em>pom property value</em></dt>
+
+    <dd>
+      <p>Treat the value of the property <code>PROPERTY</code> as a
+      whitespace-separated list of values and check if
+      <code>VALUE</code> is in this list.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-org_002dproperty_002dallowed_002dvalue_002dfunctions"
+    id="index-org_002dproperty_002dallowed_002dvalue_002dfunctions">
+    </a>User Option:
+    <strong>org-property-allowed-value-functions</strong></dt>
+
+    <dd>
+      <p>Hook for functions supplying allowed values for a specific
+      property. The functions must take a single argument, the name
+      of the property, and return a flat list of allowed values. If
+      &lsquo;<samp>:ETC</samp>&rsquo; is one of the values, use the
+      values as completion help, but allow also other values to be
+      entered. The functions must return <code>nil</code> if they
+      are not responsible for this property.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Using-the-mapping-API.html#Using-the-mapping-API" accesskey=
+    "n" rel="next">Using the mapping API</a>, Previous: <a href=
+    "Extracting-agenda-information.html#Extracting-agenda-information"
+    accesskey="p" rel="prev">Extracting agenda information</a>, Up:
+    <a href="Hacking.html#Hacking" accesskey="u" rel=
+    "up">Hacking</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

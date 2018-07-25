@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,121 +19,174 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Time Zone Rules</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Time Zone Rules">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Time Zone Rules">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="System-Interface.html#System-Interface" rel="up" title="System Interface">
-<link href="Time-Conversion.html#Time-Conversion" rel="next" title="Time Conversion">
-<link href="Time-of-Day.html#Time-of-Day" rel="prev" title="Time of Day">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Time Zone Rules</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Time Zone Rules" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Time Zone Rules" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="System-Interface.html#System-Interface" rel="up"
+  title="System Interface" />
+  <link href="Time-Conversion.html#Time-Conversion" rel="next"
+  title="Time Conversion" />
+  <link href="Time-of-Day.html#Time-of-Day" rel="prev" title=
+  "Time of Day" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Time-Zone-Rules" id="Time-Zone-Rules"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Time-Conversion.html#Time-Conversion"
+    accesskey="n" rel="next">Time Conversion</a>, Previous:
+    <a href="Time-of-Day.html#Time-of-Day" accesskey="p" rel=
+    "prev">Time of Day</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Time-Zone-Rules-1" id="Time-Zone-Rules-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Time-Zone-Rules"></a>
-<div class="header">
-<p>
-Next: <a href="Time-Conversion.html#Time-Conversion" accesskey="n" rel="next">Time Conversion</a>, Previous: <a href="Time-of-Day.html#Time-of-Day" accesskey="p" rel="prev">Time of Day</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Time-Zone-Rules-1"></a>
-<h3 class="section">38.6 Time Zone Rules</h3>
-<a name="index-time-zone-rules"></a>
+  <h3 class="section">38.6 Time Zone Rules</h3><a name=
+  "index-time-zone-rules" id="index-time-zone-rules"></a> <a name=
+  "index-TZ_002c-environment-variable" id=
+  "index-TZ_002c-environment-variable"></a>
 
-<a name="index-TZ_002c-environment-variable"></a>
-<p>The default time zone is determined by the <code>TZ</code> environment
-variable.  See <a href="System-Environment.html#System-Environment">System Environment</a>.  For example, you can tell Emacs
-to default to Universal Time with <code>(setenv &quot;TZ&quot; &quot;UTC0&quot;)</code>.  If
-<code>TZ</code> is not in the environment, Emacs uses system wall clock time,
-which is a platform-dependent default time zone.
-</p>
-<p>The set of supported <code>TZ</code> strings is system-dependent.  GNU and
-many other systems support the tzdata database, e.g.,
-&lsquo;<samp>&quot;America/New_York&quot;</samp>&rsquo; specifies the time zone and daylight saving
-time history for locations near New York City.  GNU and most other
-systems support POSIX-style <code>TZ</code> strings, e.g.,
-&lsquo;<samp>&quot;EST+5EDT,M4.1.0/2,M10.5.0/2&quot;</samp>&rsquo; specifies the rules used in New
-York from 1987 through 2006.  All systems support the string
-&lsquo;<samp>&quot;UTC0&quot;</samp>&rsquo; meaning Universal Time.
-</p>
-<a name="index-time-zone-rule"></a>
-<p>Functions that convert to and from local time accept an optional
-<em>time zone rule</em> argument, which specifies the conversion&rsquo;s time
-zone and daylight saving time history.  If the time zone rule is
-omitted or <code>nil</code>, the conversion uses Emacs&rsquo;s default time zone.
-If it is <code>t</code>, the conversion uses Universal Time.  If it is
-<code>wall</code>, the conversion uses the system wall clock time.  If it is
-a string, the conversion uses the time zone rule equivalent to setting
-<code>TZ</code> to that string.
-</p>
-<dl>
-<dt><a name="index-current_002dtime_002dzone"></a>Function: <strong>current-time-zone</strong> <em>&amp;optional time zone</em></dt>
-<dd><a name="index-time-zone_002c-current"></a>
-<p>This function returns a list describing the time zone that the user is
-in.
-</p>
-<p>The value has the form <code>(<var>offset</var> <var>abbr</var>)</code>.  Here
-<var>offset</var> is an integer giving the number of seconds ahead of Universal Time
-(east of Greenwich).  A negative value means west of Greenwich.  The
-second element, <var>abbr</var>, is a string giving an abbreviation for the
-time zone, e.g., &lsquo;<samp>&quot;CST&quot;</samp>&rsquo; for China Standard Time or for
-U.S. Central Standard Time.  Both elements can change when daylight
-saving time begins or ends; if the user has specified a time zone that
-does not use a seasonal time adjustment, then the value is constant
-through time.
-</p>
-<p>If the operating system doesn&rsquo;t supply all the information necessary to
-compute the value, the unknown elements of the list are <code>nil</code>.
-</p>
-<p>The argument <var>time</var>, if given, specifies a time value to
-analyze instead of the current time.  The optional argument <var>zone</var>
-defaults to the current time zone rule.
-</p></dd></dl>
+  <p>The default time zone is determined by the <code>TZ</code>
+  environment variable. See <a href=
+  "System-Environment.html#System-Environment">System
+  Environment</a>. For example, you can tell Emacs to default to
+  Universal Time with <code>(setenv "TZ" "UTC0")</code>. If
+  <code>TZ</code> is not in the environment, Emacs uses system wall
+  clock time, which is a platform-dependent default time zone.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Time-Conversion.html#Time-Conversion" accesskey="n" rel="next">Time Conversion</a>, Previous: <a href="Time-of-Day.html#Time-of-Day" accesskey="p" rel="prev">Time of Day</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The set of supported <code>TZ</code> strings is
+  system-dependent. GNU and many other systems support the tzdata
+  database, e.g., &lsquo;<samp>"America/New_York"</samp>&rsquo;
+  specifies the time zone and daylight saving time history for
+  locations near New York City. GNU and most other systems support
+  POSIX-style <code>TZ</code> strings, e.g.,
+  &lsquo;<samp>"EST+5EDT,M4.1.0/2,M10.5.0/2"</samp>&rsquo;
+  specifies the rules used in New York from 1987 through 2006. All
+  systems support the string &lsquo;<samp>"UTC0"</samp>&rsquo;
+  meaning Universal Time.</p><a name="index-time-zone-rule" id=
+  "index-time-zone-rule"></a>
 
+  <p>Functions that convert to and from local time accept an
+  optional <em>time zone rule</em> argument, which specifies the
+  conversion&rsquo;s time zone and daylight saving time history. If
+  the time zone rule is omitted or <code>nil</code>, the conversion
+  uses Emacs&rsquo;s default time zone. If it is <code>t</code>,
+  the conversion uses Universal Time. If it is <code>wall</code>,
+  the conversion uses the system wall clock time. If it is a
+  string, the conversion uses the time zone rule equivalent to
+  setting <code>TZ</code> to that string.</p>
 
+  <dl>
+    <dt><a name="index-current_002dtime_002dzone" id=
+    "index-current_002dtime_002dzone"></a>Function:
+    <strong>current-time-zone</strong> <em>&amp;optional time
+    zone</em></dt>
 
+    <dd>
+      <a name="index-time-zone_002c-current" id=
+      "index-time-zone_002c-current"></a>
+
+      <p>This function returns a list describing the time zone that
+      the user is in.</p>
+
+      <p>The value has the form <code>(<var>offset</var>
+      <var>abbr</var>)</code>. Here <var>offset</var> is an integer
+      giving the number of seconds ahead of Universal Time (east of
+      Greenwich). A negative value means west of Greenwich. The
+      second element, <var>abbr</var>, is a string giving an
+      abbreviation for the time zone, e.g.,
+      &lsquo;<samp>"CST"</samp>&rsquo; for China Standard Time or
+      for U.S. Central Standard Time. Both elements can change when
+      daylight saving time begins or ends; if the user has
+      specified a time zone that does not use a seasonal time
+      adjustment, then the value is constant through time.</p>
+
+      <p>If the operating system doesn&rsquo;t supply all the
+      information necessary to compute the value, the unknown
+      elements of the list are <code>nil</code>.</p>
+
+      <p>The argument <var>time</var>, if given, specifies a time
+      value to analyze instead of the current time. The optional
+      argument <var>zone</var> defaults to the current time zone
+      rule.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Time-Conversion.html#Time-Conversion"
+    accesskey="n" rel="next">Time Conversion</a>, Previous:
+    <a href="Time-of-Day.html#Time-of-Day" accesskey="p" rel=
+    "prev">Time of Day</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,137 +20,182 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Comparing Files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Comparing Files">
-<meta name="keywords" content="GNU Emacs Manual: Comparing Files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="Diff-Mode.html#Diff-Mode" rel="next" title="Diff Mode">
-<link href="Directories.html#Directories" rel="prev" title="Directories">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Comparing Files</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Comparing Files" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Comparing Files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href="Diff-Mode.html#Diff-Mode" rel="next" title=
+  "Diff Mode" />
+  <link href="Directories.html#Directories" rel="prev" title=
+  "Directories" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Comparing-Files" id="Comparing-Files"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Diff-Mode.html#Diff-Mode" accesskey="n" rel=
+    "next">Diff Mode</a>, Previous: <a href=
+    "Directories.html#Directories" accesskey="p" rel=
+    "prev">Directories</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Comparing-Files-1" id="Comparing-Files-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Comparing-Files"></a>
-<div class="header">
-<p>
-Next: <a href="Diff-Mode.html#Diff-Mode" accesskey="n" rel="next">Diff Mode</a>, Previous: <a href="Directories.html#Directories" accesskey="p" rel="prev">Directories</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Comparing-Files-1"></a>
-<h3 class="section">18.9 Comparing Files</h3>
-<a name="index-comparing-files"></a>
+  <h3 class="section">18.9 Comparing Files</h3><a name=
+  "index-comparing-files" id="index-comparing-files"></a> <a name=
+  "index-diff" id="index-diff"></a> <a name=
+  "index-diff_002dswitches" id="index-diff_002dswitches"></a>
 
-<a name="index-diff"></a>
-<a name="index-diff_002dswitches"></a>
-<p>The command <kbd>M-x diff</kbd> prompts for two file names, using the
-minibuffer, and displays the differences between the two files in a
-buffer named <samp>*diff*</samp>.  This works by running the <code>diff</code>
-program, using options taken from the variable <code>diff-switches</code>.
-The value of <code>diff-switches</code> should be a string; the default is
-<code>&quot;-u&quot;</code> to specify a unified context diff.
-See <a href="http://www.gnu.org/software/diffutils/manual/html_node/index.html#Top">Diff</a> in <cite>Comparing and Merging Files</cite>, for more
-information about the <code>diff</code> program.
-</p>
-<p>The output of the <code>diff</code> command is shown using a major mode
-called Diff mode.  See <a href="Diff-Mode.html#Diff-Mode">Diff Mode</a>.
-</p>
-<a name="index-diff_002dbackup"></a>
-<p>The command <kbd>M-x diff-backup</kbd> compares a specified file with its
-most recent backup.  If you specify the name of a backup file,
-<code>diff-backup</code> compares it with the source file that it is a
-backup of.  In all other respects, this behaves like <kbd>M-x diff</kbd>.
-</p>
-<a name="index-diff_002dbuffer_002dwith_002dfile"></a>
-<p>The command <kbd>M-x diff-buffer-with-file</kbd> compares a specified
-buffer with its corresponding file.  This shows you what changes you
-would make to the file if you save the buffer.
-</p>
-<a name="index-compare_002dwindows"></a>
-<p>The command <kbd>M-x compare-windows</kbd> compares the text in the
-current window with that in the window that was the selected window
-before you selected the current one.  (For more information about
-windows in Emacs, <a href="Windows.html#Windows">Windows</a>.)  Comparison starts at point in each
-window, after pushing each initial point value on the mark ring in its
-respective buffer.  Then it moves point forward in each window, one
-character at a time, until it reaches characters that don&rsquo;t match.
-Then the command exits.
-</p>
-<p>If point in the two windows is followed by non-matching text when
-the command starts, <kbd>M-x compare-windows</kbd> tries heuristically to
-advance up to matching text in the two windows, and then exits.  So if
-you use <kbd>M-x compare-windows</kbd> repeatedly, each time it either
-skips one matching range or finds the start of another.
-</p>
-<a name="index-compare_002dignore_002dcase"></a>
-<a name="index-compare_002dignore_002dwhitespace"></a>
-<p>With a numeric argument, <code>compare-windows</code> ignores changes in
-whitespace.  If the variable <code>compare-ignore-case</code> is
-non-<code>nil</code>, the comparison ignores differences in case as well.
-If the variable <code>compare-ignore-whitespace</code> is non-<code>nil</code>,
-<code>compare-windows</code> normally ignores changes in whitespace, and a
-prefix argument turns that off.
-</p>
-<a name="index-Smerge-mode"></a>
-<a name="index-smerge_002dmode"></a>
-<a name="index-failed-merges"></a>
-<a name="index-merges_002c-failed"></a>
-<a name="index-comparing-3-files-_0028diff3_0029"></a>
-<p>You can use <kbd>M-x smerge-mode</kbd> to turn on Smerge mode, a minor
-mode for editing output from the <code>diff3</code> program.  This is
-typically the result of a failed merge from a version control system
-update outside VC, due to conflicting changes to a file.  Smerge
-mode provides commands to resolve conflicts by selecting specific
-changes.
-</p>
-<p>See <a href="Emerge.html#Emerge">Emerge</a>,
-for the Emerge facility, which provides a powerful interface for
-merging files.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Diff-Mode.html#Diff-Mode" accesskey="n" rel="next">Diff Mode</a>, Previous: <a href="Directories.html#Directories" accesskey="p" rel="prev">Directories</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The command <kbd>M-x diff</kbd> prompts for two file names,
+  using the minibuffer, and displays the differences between the
+  two files in a buffer named <samp>*diff*</samp>. This works by
+  running the <code>diff</code> program, using options taken from
+  the variable <code>diff-switches</code>. The value of
+  <code>diff-switches</code> should be a string; the default is
+  <code>"-u"</code> to specify a unified context diff. See <a href=
+  "http://www.gnu.org/software/diffutils/manual/html_node/index.html#Top">
+  Diff</a> in <cite>Comparing and Merging Files</cite>, for more
+  information about the <code>diff</code> program.</p>
 
+  <p>The output of the <code>diff</code> command is shown using a
+  major mode called Diff mode. See <a href=
+  "Diff-Mode.html#Diff-Mode">Diff Mode</a>.</p><a name=
+  "index-diff_002dbackup" id="index-diff_002dbackup"></a>
 
+  <p>The command <kbd>M-x diff-backup</kbd> compares a specified
+  file with its most recent backup. If you specify the name of a
+  backup file, <code>diff-backup</code> compares it with the source
+  file that it is a backup of. In all other respects, this behaves
+  like <kbd>M-x diff</kbd>.</p><a name=
+  "index-diff_002dbuffer_002dwith_002dfile" id=
+  "index-diff_002dbuffer_002dwith_002dfile"></a>
 
+  <p>The command <kbd>M-x diff-buffer-with-file</kbd> compares a
+  specified buffer with its corresponding file. This shows you what
+  changes you would make to the file if you save the
+  buffer.</p><a name="index-compare_002dwindows" id=
+  "index-compare_002dwindows"></a>
+
+  <p>The command <kbd>M-x compare-windows</kbd> compares the text
+  in the current window with that in the window that was the
+  selected window before you selected the current one. (For more
+  information about windows in Emacs, <a href=
+  "Windows.html#Windows">Windows</a>.) Comparison starts at point
+  in each window, after pushing each initial point value on the
+  mark ring in its respective buffer. Then it moves point forward
+  in each window, one character at a time, until it reaches
+  characters that don&rsquo;t match. Then the command exits.</p>
+
+  <p>If point in the two windows is followed by non-matching text
+  when the command starts, <kbd>M-x compare-windows</kbd> tries
+  heuristically to advance up to matching text in the two windows,
+  and then exits. So if you use <kbd>M-x compare-windows</kbd>
+  repeatedly, each time it either skips one matching range or finds
+  the start of another.</p><a name=
+  "index-compare_002dignore_002dcase" id=
+  "index-compare_002dignore_002dcase"></a> <a name=
+  "index-compare_002dignore_002dwhitespace" id=
+  "index-compare_002dignore_002dwhitespace"></a>
+
+  <p>With a numeric argument, <code>compare-windows</code> ignores
+  changes in whitespace. If the variable
+  <code>compare-ignore-case</code> is non-<code>nil</code>, the
+  comparison ignores differences in case as well. If the variable
+  <code>compare-ignore-whitespace</code> is non-<code>nil</code>,
+  <code>compare-windows</code> normally ignores changes in
+  whitespace, and a prefix argument turns that off.</p><a name=
+  "index-Smerge-mode" id="index-Smerge-mode"></a> <a name=
+  "index-smerge_002dmode" id="index-smerge_002dmode"></a> <a name=
+  "index-failed-merges" id="index-failed-merges"></a> <a name=
+  "index-merges_002c-failed" id="index-merges_002c-failed"></a>
+  <a name="index-comparing-3-files-_0028diff3_0029" id=
+  "index-comparing-3-files-_0028diff3_0029"></a>
+
+  <p>You can use <kbd>M-x smerge-mode</kbd> to turn on Smerge mode,
+  a minor mode for editing output from the <code>diff3</code>
+  program. This is typically the result of a failed merge from a
+  version control system update outside VC, due to conflicting
+  changes to a file. Smerge mode provides commands to resolve
+  conflicts by selecting specific changes.</p>
+
+  <p>See <a href="Emerge.html#Emerge">Emerge</a>, for the Emerge
+  facility, which provides a powerful interface for merging
+  files.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Diff-Mode.html#Diff-Mode" accesskey="n" rel=
+    "next">Diff Mode</a>, Previous: <a href=
+    "Directories.html#Directories" accesskey="p" rel=
+    "prev">Directories</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

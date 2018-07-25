@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,329 +19,518 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Interactive Codes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Interactive Codes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Interactive Codes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Defining-Commands.html#Defining-Commands" rel="up" title="Defining Commands">
-<link href="Interactive-Examples.html#Interactive-Examples" rel="next" title="Interactive Examples">
-<link href="Using-Interactive.html#Using-Interactive" rel="prev" title="Using Interactive">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Interactive Codes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Interactive Codes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Interactive Codes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Defining-Commands.html#Defining-Commands" rel="up"
+  title="Defining Commands" />
+  <link href="Interactive-Examples.html#Interactive-Examples" rel=
+  "next" title="Interactive Examples" />
+  <link href="Using-Interactive.html#Using-Interactive" rel="prev"
+  title="Using Interactive" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  dt.c1 {font-weight: bold}
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Interactive-Codes" id="Interactive-Codes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Interactive-Examples.html#Interactive-Examples" accesskey="n"
+    rel="next">Interactive Examples</a>, Previous: <a href=
+    "Using-Interactive.html#Using-Interactive" accesskey="p" rel=
+    "prev">Using Interactive</a>, Up: <a href=
+    "Defining-Commands.html#Defining-Commands" accesskey="u" rel=
+    "up">Defining Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Code-Characters-for-interactive" id=
+  "Code-Characters-for-interactive"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Interactive-Codes"></a>
-<div class="header">
-<p>
-Next: <a href="Interactive-Examples.html#Interactive-Examples" accesskey="n" rel="next">Interactive Examples</a>, Previous: <a href="Using-Interactive.html#Using-Interactive" accesskey="p" rel="prev">Using Interactive</a>, Up: <a href="Defining-Commands.html#Defining-Commands" accesskey="u" rel="up">Defining Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Code-Characters-for-interactive"></a>
-<h4 class="subsection">20.2.2 Code Characters for <code>interactive</code></h4>
-<a name="index-interactive-code-description"></a>
-<a name="index-description-for-interactive-codes"></a>
-<a name="index-codes_002c-interactive_002c-description-of"></a>
-<a name="index-characters-for-interactive-codes"></a>
+  <h4 class="subsection">20.2.2 Code Characters for
+  <code>interactive</code></h4><a name=
+  "index-interactive-code-description" id=
+  "index-interactive-code-description"></a> <a name=
+  "index-description-for-interactive-codes" id=
+  "index-description-for-interactive-codes"></a> <a name=
+  "index-codes_002c-interactive_002c-description-of" id=
+  "index-codes_002c-interactive_002c-description-of"></a> <a name=
+  "index-characters-for-interactive-codes" id=
+  "index-characters-for-interactive-codes"></a>
 
-<p>The code character descriptions below contain a number of key words,
-defined here as follows:
-</p>
-<dl compact="compact">
-<dt><b>Completion</b></dt>
-<dd><a name="index-interactive-completion"></a>
-<p>Provide completion.  <tt class="key">TAB</tt>, <tt class="key">SPC</tt>, and <tt class="key">RET</tt> perform name
-completion because the argument is read using <code>completing-read</code>
-(see <a href="Completion.html#Completion">Completion</a>).  <kbd>?</kbd> displays a list of possible completions.
-</p>
-</dd>
-<dt><b>Existing</b></dt>
-<dd><p>Require the name of an existing object.  An invalid name is not
-accepted; the commands to exit the minibuffer do not exit if the current
-input is not valid.
-</p>
-</dd>
-<dt><b>Default</b></dt>
-<dd><a name="index-default-argument-string"></a>
-<p>A default value of some sort is used if the user enters no text in the
-minibuffer.  The default depends on the code character.
-</p>
-</dd>
-<dt><b>No I/O</b></dt>
-<dd><p>This code letter computes an argument without reading any input.
-Therefore, it does not use a prompt string, and any prompt string you
-supply is ignored.
-</p>
-<p>Even though the code letter doesn&rsquo;t use a prompt string, you must follow
-it with a newline if it is not the last code character in the string.
-</p>
-</dd>
-<dt><b>Prompt</b></dt>
-<dd><p>A prompt immediately follows the code character.  The prompt ends either
-with the end of the string or with a newline.
-</p>
-</dd>
-<dt><b>Special</b></dt>
-<dd><p>This code character is meaningful only at the beginning of the
-interactive string, and it does not look for a prompt or a newline.
-It is a single, isolated character.
-</p></dd>
-</dl>
+  <p>The code character descriptions below contain a number of key
+  words, defined here as follows:</p>
 
-<a name="index-reading-interactive-arguments"></a>
-<p>Here are the code character descriptions for use with <code>interactive</code>:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>*</samp>&rsquo;</dt>
-<dd><p>Signal an error if the current buffer is read-only.  Special.
-</p>
-</dd>
-<dt>&lsquo;<samp>@</samp>&rsquo;</dt>
-<dd><p>Select the window mentioned in the first mouse event in the key
-sequence that invoked this command.  Special.
-</p>
-</dd>
-<dt>&lsquo;<samp>^</samp>&rsquo;</dt>
-<dd><p>If the command was invoked through shift-translation, set the mark and
-activate the region temporarily, or extend an already active region,
-before the command is run.  If the command was invoked without
-shift-translation, and the region is temporarily active, deactivate
-the region before the command is run.  Special.
-</p>
-</dd>
-<dt>&lsquo;<samp>a</samp>&rsquo;</dt>
-<dd><p>A function name (i.e., a symbol satisfying <code>fboundp</code>).  Existing,
-Completion, Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>b</samp>&rsquo;</dt>
-<dd><p>The name of an existing buffer.  By default, uses the name of the
-current buffer (see <a href="Buffers.html#Buffers">Buffers</a>).  Existing, Completion, Default,
-Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>B</samp>&rsquo;</dt>
-<dd><p>A buffer name.  The buffer need not exist.  By default, uses the name of
-a recently used buffer other than the current buffer.  Completion,
-Default, Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>c</samp>&rsquo;</dt>
-<dd><p>A character.  The cursor does not move into the echo area.  Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>C</samp>&rsquo;</dt>
-<dd><p>A command name (i.e., a symbol satisfying <code>commandp</code>).  Existing,
-Completion, Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>d</samp>&rsquo;</dt>
-<dd><a name="index-position-argument"></a>
-<p>The position of point, as an integer (see <a href="Point.html#Point">Point</a>).  No I/O.
-</p>
-</dd>
-<dt>&lsquo;<samp>D</samp>&rsquo;</dt>
-<dd><p>A directory name.  The default is the current default directory of the
-current buffer, <code>default-directory</code> (see <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>).
-Existing, Completion, Default, Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>e</samp>&rsquo;</dt>
-<dd><p>The first or next non-keyboard event in the key sequence that invoked
-the command.  More precisely, &lsquo;<samp>e</samp>&rsquo; gets events that are lists, so
-you can look at the data in the lists.  See <a href="Input-Events.html#Input-Events">Input Events</a>.  No I/O.
-</p>
-<p>You use &lsquo;<samp>e</samp>&rsquo; for mouse events and for special system events
-(see <a href="Misc-Events.html#Misc-Events">Misc Events</a>).  The event list that the command receives
-depends on the event.  See <a href="Input-Events.html#Input-Events">Input Events</a>, which describes the forms
-of the list for each event in the corresponding subsections.
-</p>
-<p>You can use &lsquo;<samp>e</samp>&rsquo; more than once in a single command&rsquo;s interactive
-specification.  If the key sequence that invoked the command has
-<var>n</var> events that are lists, the <var>n</var>th &lsquo;<samp>e</samp>&rsquo; provides the
-<var>n</var>th such event.  Events that are not lists, such as function keys
-and <acronym>ASCII</acronym> characters, do not count where &lsquo;<samp>e</samp>&rsquo; is concerned.
-</p>
-</dd>
-<dt>&lsquo;<samp>f</samp>&rsquo;</dt>
-<dd><p>A file name of an existing file (see <a href="File-Names.html#File-Names">File Names</a>).  The default
-directory is <code>default-directory</code>.  Existing, Completion, Default,
-Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>F</samp>&rsquo;</dt>
-<dd><p>A file name.  The file need not exist.  Completion, Default, Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>G</samp>&rsquo;</dt>
-<dd><p>A file name.  The file need not exist.  If the user enters just a
-directory name, then the value is just that directory name, with no
-file name within the directory added.  Completion, Default, Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>i</samp>&rsquo;</dt>
-<dd><p>An irrelevant argument.  This code always supplies <code>nil</code> as
-the argument&rsquo;s value.  No I/O.
-</p>
-</dd>
-<dt>&lsquo;<samp>k</samp>&rsquo;</dt>
-<dd><p>A key sequence (see <a href="Key-Sequences.html#Key-Sequences">Key Sequences</a>).  This keeps reading events
-until a command (or undefined command) is found in the current key
-maps.  The key sequence argument is represented as a string or vector.
-The cursor does not move into the echo area.  Prompt.
-</p>
-<p>If &lsquo;<samp>k</samp>&rsquo; reads a key sequence that ends with a down-event, it also
-reads and discards the following up-event.  You can get access to that
-up-event with the &lsquo;<samp>U</samp>&rsquo; code character.
-</p>
-<p>This kind of input is used by commands such as <code>describe-key</code> and
-<code>global-set-key</code>.
-</p>
-</dd>
-<dt>&lsquo;<samp>K</samp>&rsquo;</dt>
-<dd><p>A key sequence, whose definition you intend to change.  This works like
-&lsquo;<samp>k</samp>&rsquo;, except that it suppresses, for the last input event in the key
-sequence, the conversions that are normally used (when necessary) to
-convert an undefined key into a defined one.
-</p>
-</dd>
-<dt>&lsquo;<samp>m</samp>&rsquo;</dt>
-<dd><a name="index-marker-argument"></a>
-<p>The position of the mark, as an integer.  No I/O.
-</p>
-</dd>
-<dt>&lsquo;<samp>M</samp>&rsquo;</dt>
-<dd><p>Arbitrary text, read in the minibuffer using the current buffer&rsquo;s input
-method, and returned as a string (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Input-Methods.html#Input-Methods">Input Methods</a> in <cite>The GNU
-Emacs Manual</cite>).  Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>n</samp>&rsquo;</dt>
-<dd><p>A number, read with the minibuffer.  If the input is not a number, the
-user has to try again.  &lsquo;<samp>n</samp>&rsquo; never uses the prefix argument.
-Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>N</samp>&rsquo;</dt>
-<dd><p>The numeric prefix argument; but if there is no prefix argument, read
-a number as with <kbd>n</kbd>.  The value is always a number.  See <a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>.  Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>p</samp>&rsquo;</dt>
-<dd><a name="index-numeric-prefix-argument-usage"></a>
-<p>The numeric prefix argument.  (Note that this &lsquo;<samp>p</samp>&rsquo; is lower case.)
-No I/O.
-</p>
-</dd>
-<dt>&lsquo;<samp>P</samp>&rsquo;</dt>
-<dd><a name="index-raw-prefix-argument-usage"></a>
-<p>The raw prefix argument.  (Note that this &lsquo;<samp>P</samp>&rsquo; is upper case.)  No
-I/O.
-</p>
-</dd>
-<dt>&lsquo;<samp>r</samp>&rsquo;</dt>
-<dd><a name="index-region-argument"></a>
-<p>Point and the mark, as two numeric arguments, smallest first.  This is
-the only code letter that specifies two successive arguments rather than
-one.  No I/O.
-</p>
-</dd>
-<dt>&lsquo;<samp>s</samp>&rsquo;</dt>
-<dd><p>Arbitrary text, read in the minibuffer and returned as a string
-(see <a href="Text-from-Minibuffer.html#Text-from-Minibuffer">Text from Minibuffer</a>).  Terminate the input with either
-<kbd>C-j</kbd> or <tt class="key">RET</tt>.  (<kbd>C-q</kbd> may be used to include either of
-these characters in the input.)  Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>S</samp>&rsquo;</dt>
-<dd><p>An interned symbol whose name is read in the minibuffer.  Terminate
-the input with either <kbd>C-j</kbd> or <tt class="key">RET</tt>.  Other characters that
-normally terminate a symbol (e.g., whitespace, parentheses and
-brackets) do not do so here.  Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>U</samp>&rsquo;</dt>
-<dd><p>A key sequence or <code>nil</code>.  Can be used after a &lsquo;<samp>k</samp>&rsquo; or
-&lsquo;<samp>K</samp>&rsquo; argument to get the up-event that was discarded (if any)
-after &lsquo;<samp>k</samp>&rsquo; or &lsquo;<samp>K</samp>&rsquo; read a down-event.  If no up-event has been
-discarded, &lsquo;<samp>U</samp>&rsquo; provides <code>nil</code> as the argument.  No I/O.
-</p>
-</dd>
-<dt>&lsquo;<samp>v</samp>&rsquo;</dt>
-<dd><p>A variable declared to be a user option (i.e., satisfying the
-predicate <code>custom-variable-p</code>).  This reads the variable using
-<code>read-variable</code>.  See <a href="High_002dLevel-Completion.html#Definition-of-read_002dvariable">Definition of read-variable</a>.  Existing,
-Completion, Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>x</samp>&rsquo;</dt>
-<dd><p>A Lisp object, specified with its read syntax, terminated with a
-<kbd>C-j</kbd> or <tt class="key">RET</tt>.  The object is not evaluated.  See <a href="Object-from-Minibuffer.html#Object-from-Minibuffer">Object from Minibuffer</a>.  Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>X</samp>&rsquo;</dt>
-<dd><a name="index-evaluated-expression-argument"></a>
-<p>A Lisp form&rsquo;s value.  &lsquo;<samp>X</samp>&rsquo; reads as &lsquo;<samp>x</samp>&rsquo; does, then evaluates
-the form so that its value becomes the argument for the command.
-Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>z</samp>&rsquo;</dt>
-<dd><p>A coding system name (a symbol).  If the user enters null input, the
-argument value is <code>nil</code>.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.  Completion,
-Existing, Prompt.
-</p>
-</dd>
-<dt>&lsquo;<samp>Z</samp>&rsquo;</dt>
-<dd><p>A coding system name (a symbol)&mdash;but only if this command has a prefix
-argument.  With no prefix argument, &lsquo;<samp>Z</samp>&rsquo; provides <code>nil</code> as the
-argument value.  Completion, Existing, Prompt.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt class="c1">Completion</dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Interactive-Examples.html#Interactive-Examples" accesskey="n" rel="next">Interactive Examples</a>, Previous: <a href="Using-Interactive.html#Using-Interactive" accesskey="p" rel="prev">Using Interactive</a>, Up: <a href="Defining-Commands.html#Defining-Commands" accesskey="u" rel="up">Defining Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name="index-interactive-completion" id=
+      "index-interactive-completion"></a>
 
+      <p>Provide completion. <tt class="key">TAB</tt>, <tt class=
+      "key">SPC</tt>, and <tt class="key">RET</tt> perform name
+      completion because the argument is read using
+      <code>completing-read</code> (see <a href=
+      "Completion.html#Completion">Completion</a>). <kbd>?</kbd>
+      displays a list of possible completions.</p>
+    </dd>
 
+    <dt class="c1">Existing</dt>
 
+    <dd>
+      <p>Require the name of an existing object. An invalid name is
+      not accepted; the commands to exit the minibuffer do not exit
+      if the current input is not valid.</p>
+    </dd>
+
+    <dt class="c1">Default</dt>
+
+    <dd>
+      <a name="index-default-argument-string" id=
+      "index-default-argument-string"></a>
+
+      <p>A default value of some sort is used if the user enters no
+      text in the minibuffer. The default depends on the code
+      character.</p>
+    </dd>
+
+    <dt class="c1">No I/O</dt>
+
+    <dd>
+      <p>This code letter computes an argument without reading any
+      input. Therefore, it does not use a prompt string, and any
+      prompt string you supply is ignored.</p>
+
+      <p>Even though the code letter doesn&rsquo;t use a prompt
+      string, you must follow it with a newline if it is not the
+      last code character in the string.</p>
+    </dd>
+
+    <dt class="c1">Prompt</dt>
+
+    <dd>
+      <p>A prompt immediately follows the code character. The
+      prompt ends either with the end of the string or with a
+      newline.</p>
+    </dd>
+
+    <dt class="c1">Special</dt>
+
+    <dd>
+      <p>This code character is meaningful only at the beginning of
+      the interactive string, and it does not look for a prompt or
+      a newline. It is a single, isolated character.</p>
+    </dd>
+  </dl><a name="index-reading-interactive-arguments" id=
+  "index-reading-interactive-arguments"></a>
+
+  <p>Here are the code character descriptions for use with
+  <code>interactive</code>:</p>
+
+  <dl compact="compact">
+    <dt>&lsquo;<samp>*</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Signal an error if the current buffer is read-only.
+      Special.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>@</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Select the window mentioned in the first mouse event in
+      the key sequence that invoked this command. Special.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>^</samp>&rsquo;</dt>
+
+    <dd>
+      <p>If the command was invoked through shift-translation, set
+      the mark and activate the region temporarily, or extend an
+      already active region, before the command is run. If the
+      command was invoked without shift-translation, and the region
+      is temporarily active, deactivate the region before the
+      command is run. Special.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>a</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A function name (i.e., a symbol satisfying
+      <code>fboundp</code>). Existing, Completion, Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>b</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The name of an existing buffer. By default, uses the name
+      of the current buffer (see <a href=
+      "Buffers.html#Buffers">Buffers</a>). Existing, Completion,
+      Default, Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>B</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A buffer name. The buffer need not exist. By default, uses
+      the name of a recently used buffer other than the current
+      buffer. Completion, Default, Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>c</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A character. The cursor does not move into the echo area.
+      Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>C</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A command name (i.e., a symbol satisfying
+      <code>commandp</code>). Existing, Completion, Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>d</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-position-argument" id=
+      "index-position-argument"></a>
+
+      <p>The position of point, as an integer (see <a href=
+      "Point.html#Point">Point</a>). No I/O.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>D</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A directory name. The default is the current default
+      directory of the current buffer,
+      <code>default-directory</code> (see <a href=
+      "File-Name-Expansion.html#File-Name-Expansion">File Name
+      Expansion</a>). Existing, Completion, Default, Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>e</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The first or next non-keyboard event in the key sequence
+      that invoked the command. More precisely,
+      &lsquo;<samp>e</samp>&rsquo; gets events that are lists, so
+      you can look at the data in the lists. See <a href=
+      "Input-Events.html#Input-Events">Input Events</a>. No
+      I/O.</p>
+
+      <p>You use &lsquo;<samp>e</samp>&rsquo; for mouse events and
+      for special system events (see <a href=
+      "Misc-Events.html#Misc-Events">Misc Events</a>). The event
+      list that the command receives depends on the event. See
+      <a href="Input-Events.html#Input-Events">Input Events</a>,
+      which describes the forms of the list for each event in the
+      corresponding subsections.</p>
+
+      <p>You can use &lsquo;<samp>e</samp>&rsquo; more than once in
+      a single command&rsquo;s interactive specification. If the
+      key sequence that invoked the command has <var>n</var> events
+      that are lists, the <var>n</var>th
+      &lsquo;<samp>e</samp>&rsquo; provides the <var>n</var>th such
+      event. Events that are not lists, such as function keys and
+      <acronym>ASCII</acronym> characters, do not count where
+      &lsquo;<samp>e</samp>&rsquo; is concerned.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>f</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A file name of an existing file (see <a href=
+      "File-Names.html#File-Names">File Names</a>). The default
+      directory is <code>default-directory</code>. Existing,
+      Completion, Default, Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>F</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A file name. The file need not exist. Completion, Default,
+      Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>G</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A file name. The file need not exist. If the user enters
+      just a directory name, then the value is just that directory
+      name, with no file name within the directory added.
+      Completion, Default, Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>i</samp>&rsquo;</dt>
+
+    <dd>
+      <p>An irrelevant argument. This code always supplies
+      <code>nil</code> as the argument&rsquo;s value. No I/O.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>k</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A key sequence (see <a href=
+      "Key-Sequences.html#Key-Sequences">Key Sequences</a>). This
+      keeps reading events until a command (or undefined command)
+      is found in the current key maps. The key sequence argument
+      is represented as a string or vector. The cursor does not
+      move into the echo area. Prompt.</p>
+
+      <p>If &lsquo;<samp>k</samp>&rsquo; reads a key sequence that
+      ends with a down-event, it also reads and discards the
+      following up-event. You can get access to that up-event with
+      the &lsquo;<samp>U</samp>&rsquo; code character.</p>
+
+      <p>This kind of input is used by commands such as
+      <code>describe-key</code> and
+      <code>global-set-key</code>.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>K</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A key sequence, whose definition you intend to change.
+      This works like &lsquo;<samp>k</samp>&rsquo;, except that it
+      suppresses, for the last input event in the key sequence, the
+      conversions that are normally used (when necessary) to
+      convert an undefined key into a defined one.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>m</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-marker-argument" id=
+      "index-marker-argument"></a>
+
+      <p>The position of the mark, as an integer. No I/O.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>M</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Arbitrary text, read in the minibuffer using the current
+      buffer&rsquo;s input method, and returned as a string (see
+      <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Input-Methods.html#Input-Methods">
+      Input Methods</a> in <cite>The GNU Emacs Manual</cite>).
+      Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>n</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A number, read with the minibuffer. If the input is not a
+      number, the user has to try again.
+      &lsquo;<samp>n</samp>&rsquo; never uses the prefix argument.
+      Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>N</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The numeric prefix argument; but if there is no prefix
+      argument, read a number as with <kbd>n</kbd>. The value is
+      always a number. See <a href=
+      "Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix
+      Command Arguments</a>. Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>p</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-numeric-prefix-argument-usage" id=
+      "index-numeric-prefix-argument-usage"></a>
+
+      <p>The numeric prefix argument. (Note that this
+      &lsquo;<samp>p</samp>&rsquo; is lower case.) No I/O.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>P</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-raw-prefix-argument-usage" id=
+      "index-raw-prefix-argument-usage"></a>
+
+      <p>The raw prefix argument. (Note that this
+      &lsquo;<samp>P</samp>&rsquo; is upper case.) No I/O.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>r</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-region-argument" id=
+      "index-region-argument"></a>
+
+      <p>Point and the mark, as two numeric arguments, smallest
+      first. This is the only code letter that specifies two
+      successive arguments rather than one. No I/O.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>s</samp>&rsquo;</dt>
+
+    <dd>
+      <p>Arbitrary text, read in the minibuffer and returned as a
+      string (see <a href=
+      "Text-from-Minibuffer.html#Text-from-Minibuffer">Text from
+      Minibuffer</a>). Terminate the input with either
+      <kbd>C-j</kbd> or <tt class="key">RET</tt>. (<kbd>C-q</kbd>
+      may be used to include either of these characters in the
+      input.) Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>S</samp>&rsquo;</dt>
+
+    <dd>
+      <p>An interned symbol whose name is read in the minibuffer.
+      Terminate the input with either <kbd>C-j</kbd> or <tt class=
+      "key">RET</tt>. Other characters that normally terminate a
+      symbol (e.g., whitespace, parentheses and brackets) do not do
+      so here. Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>U</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A key sequence or <code>nil</code>. Can be used after a
+      &lsquo;<samp>k</samp>&rsquo; or &lsquo;<samp>K</samp>&rsquo;
+      argument to get the up-event that was discarded (if any)
+      after &lsquo;<samp>k</samp>&rsquo; or
+      &lsquo;<samp>K</samp>&rsquo; read a down-event. If no
+      up-event has been discarded, &lsquo;<samp>U</samp>&rsquo;
+      provides <code>nil</code> as the argument. No I/O.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>v</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A variable declared to be a user option (i.e., satisfying
+      the predicate <code>custom-variable-p</code>). This reads the
+      variable using <code>read-variable</code>. See <a href=
+      "High_002dLevel-Completion.html#Definition-of-read_002dvariable">
+      Definition of read-variable</a>. Existing, Completion,
+      Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>x</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A Lisp object, specified with its read syntax, terminated
+      with a <kbd>C-j</kbd> or <tt class="key">RET</tt>. The object
+      is not evaluated. See <a href=
+      "Object-from-Minibuffer.html#Object-from-Minibuffer">Object
+      from Minibuffer</a>. Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>X</samp>&rsquo;</dt>
+
+    <dd>
+      <a name="index-evaluated-expression-argument" id=
+      "index-evaluated-expression-argument"></a>
+
+      <p>A Lisp form&rsquo;s value. &lsquo;<samp>X</samp>&rsquo;
+      reads as &lsquo;<samp>x</samp>&rsquo; does, then evaluates
+      the form so that its value becomes the argument for the
+      command. Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>z</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A coding system name (a symbol). If the user enters null
+      input, the argument value is <code>nil</code>. See <a href=
+      "Coding-Systems.html#Coding-Systems">Coding Systems</a>.
+      Completion, Existing, Prompt.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>Z</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A coding system name (a symbol)&mdash;but only if this
+      command has a prefix argument. With no prefix argument,
+      &lsquo;<samp>Z</samp>&rsquo; provides <code>nil</code> as the
+      argument value. Completion, Existing, Prompt.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Interactive-Examples.html#Interactive-Examples" accesskey="n"
+    rel="next">Interactive Examples</a>, Previous: <a href=
+    "Using-Interactive.html#Using-Interactive" accesskey="p" rel=
+    "prev">Using Interactive</a>, Up: <a href=
+    "Defining-Commands.html#Defining-Commands" accesskey="u" rel=
+    "up">Defining Commands</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

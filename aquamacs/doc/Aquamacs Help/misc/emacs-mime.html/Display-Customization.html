@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the Emacs MIME interface functionality.
 
 Copyright © 1998-2016 Free Software Foundation, Inc.
@@ -14,276 +16,443 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs MIME Manual: Display Customization</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs MIME Manual: Display Customization">
-<meta name="keywords" content="Emacs MIME Manual: Display Customization">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Decoding-and-Viewing.html#Decoding-and-Viewing" rel="up" title="Decoding and Viewing">
-<link href="Files-and-Directories.html#Files-and-Directories" rel="next" title="Files and Directories">
-<link href="Display.html#Display" rel="prev" title="Display">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs MIME Manual: Display Customization</title>
+  <meta name="description" content=
+  "Emacs MIME Manual: Display Customization" />
+  <meta name="keywords" content=
+  "Emacs MIME Manual: Display Customization" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Decoding-and-Viewing.html#Decoding-and-Viewing" rel=
+  "up" title="Decoding and Viewing" />
+  <link href="Files-and-Directories.html#Files-and-Directories"
+  rel="next" title="Files and Directories" />
+  <link href="Display.html#Display" rel="prev" title="Display" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Display-Customization"></a>
-<div class="header">
-<p>
-Next: <a href="Files-and-Directories.html#Files-and-Directories" accesskey="n" rel="next">Files and Directories</a>, Previous: <a href="Display.html#Display" accesskey="p" rel="prev">Display</a>, Up: <a href="Decoding-and-Viewing.html#Decoding-and-Viewing" accesskey="u" rel="up">Decoding and Viewing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Display-Customization-1"></a>
-<h3 class="section">1.5 Display Customization</h3>
+<body lang="en" xml:lang="en">
+  <a name="Display-Customization" id="Display-Customization"></a>
 
-<dl compact="compact">
-<dt><code>mm-inline-media-tests</code></dt>
-<dd><a name="index-mm_002dinline_002dmedia_002dtests"></a>
-<p>This is an alist where the key is a <acronym>MIME</acronym> type, the second element
-is a function to display the part <em>inline</em> (i.e., inside Emacs), and
-the third element is a form to be <code>eval</code>ed to say whether the part
-can be displayed inline.
-</p>
-<p>This variable specifies whether a part <em>can</em> be displayed inline,
-and, if so, how to do it.  It does not say whether parts are
-<em>actually</em> displayed inline.
-</p>
-</dd>
-<dt><code>mm-inlined-types</code></dt>
-<dd><a name="index-mm_002dinlined_002dtypes"></a>
-<p>This, on the other hand, says what types are to be displayed inline, if
-they satisfy the conditions set by the variable above.  It&rsquo;s a list of
-<acronym>MIME</acronym> media types.
-</p>
-</dd>
-<dt><code>mm-automatic-display</code></dt>
-<dd><a name="index-mm_002dautomatic_002ddisplay"></a>
-<p>This is a list of types that are to be displayed &ldquo;automatically&rdquo;, but
-only if the above variable allows it.  That is, only inlinable parts can
-be displayed automatically.
-</p>
-</dd>
-<dt><code>mm-automatic-external-display</code></dt>
-<dd><a name="index-mm_002dautomatic_002dexternal_002ddisplay"></a>
-<p>This is a list of types that will be displayed automatically in an
-external viewer.
-</p>
-</dd>
-<dt><code>mm-keep-viewer-alive-types</code></dt>
-<dd><a name="index-mm_002dkeep_002dviewer_002dalive_002dtypes"></a>
-<p>This is a list of media types for which the external viewer will not
-be killed when selecting a different article.
-</p>
-</dd>
-<dt><code>mm-attachment-override-types</code></dt>
-<dd><a name="index-mm_002dattachment_002doverride_002dtypes"></a>
-<p>Some <acronym>MIME</acronym> agents create parts that have a content-disposition of
-&lsquo;<samp>attachment</samp>&rsquo;.  This variable allows overriding that disposition and
-displaying the part inline.  (Note that the disposition is only
-overridden if we are able to, and want to, display the part inline.)
-</p>
-</dd>
-<dt><code>mm-discouraged-alternatives</code></dt>
-<dd><a name="index-mm_002ddiscouraged_002dalternatives"></a>
-<p>List of <acronym>MIME</acronym> types that are discouraged when viewing
-&lsquo;<samp>multipart/alternative</samp>&rsquo;.  Viewing agents are supposed to view the
-last possible part of a message, as that is supposed to be the richest.
-However, users may prefer other types instead, and this list says what
-types are most unwanted.  If, for instance, &lsquo;<samp>text/html</samp>&rsquo; parts are
-very unwanted, and &lsquo;<samp>text/richtext</samp>&rsquo; parts are somewhat unwanted,
-you could say something like:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq mm-discouraged-alternatives
-      '(&quot;text/html&quot; &quot;text/richtext&quot;)
+  <div class="header">
+    <p>Next: <a href=
+    "Files-and-Directories.html#Files-and-Directories" accesskey=
+    "n" rel="next">Files and Directories</a>, Previous: <a href=
+    "Display.html#Display" accesskey="p" rel="prev">Display</a>,
+    Up: <a href="Decoding-and-Viewing.html#Decoding-and-Viewing"
+    accesskey="u" rel="up">Decoding and Viewing</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Display-Customization-1" id=
+  "Display-Customization-1"></a>
+
+  <h3 class="section">1.5 Display Customization</h3>
+
+  <dl compact="compact">
+    <dt><code>mm-inline-media-tests</code></dt>
+
+    <dd>
+      <a name="index-mm_002dinline_002dmedia_002dtests" id=
+      "index-mm_002dinline_002dmedia_002dtests"></a>
+
+      <p>This is an alist where the key is a
+      <acronym>MIME</acronym> type, the second element is a
+      function to display the part <em>inline</em> (i.e., inside
+      Emacs), and the third element is a form to be
+      <code>eval</code>ed to say whether the part can be displayed
+      inline.</p>
+
+      <p>This variable specifies whether a part <em>can</em> be
+      displayed inline, and, if so, how to do it. It does not say
+      whether parts are <em>actually</em> displayed inline.</p>
+    </dd>
+
+    <dt><code>mm-inlined-types</code></dt>
+
+    <dd>
+      <a name="index-mm_002dinlined_002dtypes" id=
+      "index-mm_002dinlined_002dtypes"></a>
+
+      <p>This, on the other hand, says what types are to be
+      displayed inline, if they satisfy the conditions set by the
+      variable above. It&rsquo;s a list of <acronym>MIME</acronym>
+      media types.</p>
+    </dd>
+
+    <dt><code>mm-automatic-display</code></dt>
+
+    <dd>
+      <a name="index-mm_002dautomatic_002ddisplay" id=
+      "index-mm_002dautomatic_002ddisplay"></a>
+
+      <p>This is a list of types that are to be displayed
+      &ldquo;automatically&rdquo;, but only if the above variable
+      allows it. That is, only inlinable parts can be displayed
+      automatically.</p>
+    </dd>
+
+    <dt><code>mm-automatic-external-display</code></dt>
+
+    <dd>
+      <a name="index-mm_002dautomatic_002dexternal_002ddisplay" id=
+      "index-mm_002dautomatic_002dexternal_002ddisplay"></a>
+
+      <p>This is a list of types that will be displayed
+      automatically in an external viewer.</p>
+    </dd>
+
+    <dt><code>mm-keep-viewer-alive-types</code></dt>
+
+    <dd>
+      <a name="index-mm_002dkeep_002dviewer_002dalive_002dtypes"
+      id="index-mm_002dkeep_002dviewer_002dalive_002dtypes"></a>
+
+      <p>This is a list of media types for which the external
+      viewer will not be killed when selecting a different
+      article.</p>
+    </dd>
+
+    <dt><code>mm-attachment-override-types</code></dt>
+
+    <dd>
+      <a name="index-mm_002dattachment_002doverride_002dtypes" id=
+      "index-mm_002dattachment_002doverride_002dtypes"></a>
+
+      <p>Some <acronym>MIME</acronym> agents create parts that have
+      a content-disposition of
+      &lsquo;<samp>attachment</samp>&rsquo;. This variable allows
+      overriding that disposition and displaying the part inline.
+      (Note that the disposition is only overridden if we are able
+      to, and want to, display the part inline.)</p>
+    </dd>
+
+    <dt><code>mm-discouraged-alternatives</code></dt>
+
+    <dd>
+      <a name="index-mm_002ddiscouraged_002dalternatives" id=
+      "index-mm_002ddiscouraged_002dalternatives"></a>
+
+      <p>List of <acronym>MIME</acronym> types that are discouraged
+      when viewing
+      &lsquo;<samp>multipart/alternative</samp>&rsquo;. Viewing
+      agents are supposed to view the last possible part of a
+      message, as that is supposed to be the richest. However,
+      users may prefer other types instead, and this list says what
+      types are most unwanted. If, for instance,
+      &lsquo;<samp>text/html</samp>&rsquo; parts are very unwanted,
+      and &lsquo;<samp>text/richtext</samp>&rsquo; parts are
+      somewhat unwanted, you could say something like:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq mm-discouraged-alternatives
+      '("text/html" "text/richtext")
       mm-automatic-display
-      (remove &quot;text/html&quot; mm-automatic-display))
-</pre></div>
+      (remove "text/html" mm-automatic-display))
+</pre>
+      </div>
 
-<p>Adding <code>&quot;image/.*&quot;</code> might also be useful.  Spammers use images as
-the preferred part of &lsquo;<samp>multipart/alternative</samp>&rsquo; messages, so you might
-not notice there are other parts.  See also
-<code>gnus-buttonized-mime-types</code>, <a href="http://www.gnu.org/software/emacs/manual/html_node/gnus/MIME-Commands.html#MIME-Commands">MIME Commands</a> in <cite>Gnus Manual</cite>.  After adding <code>&quot;multipart/alternative&quot;</code> to
-<code>gnus-buttonized-mime-types</code> you can choose manually which
-alternative you&rsquo;d like to view.  For example, you can set those
-variables like:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-buttonized-mime-types
-      '(&quot;multipart/alternative&quot; &quot;multipart/signed&quot;)
+      <p>Adding <code>"image/.*"</code> might also be useful.
+      Spammers use images as the preferred part of
+      &lsquo;<samp>multipart/alternative</samp>&rsquo; messages, so
+      you might not notice there are other parts. See also
+      <code>gnus-buttonized-mime-types</code>, <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/gnus/MIME-Commands.html#MIME-Commands">
+      MIME Commands</a> in <cite>Gnus Manual</cite>. After adding
+      <code>"multipart/alternative"</code> to
+      <code>gnus-buttonized-mime-types</code> you can choose
+      manually which alternative you&rsquo;d like to view. For
+      example, you can set those variables like:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq gnus-buttonized-mime-types
+      '("multipart/alternative" "multipart/signed")
       mm-discouraged-alternatives
-      '(&quot;text/html&quot; &quot;image/.*&quot;))
-</pre></div>
+      '("text/html" "image/.*"))
+</pre>
+      </div>
 
-<p>In this case, Gnus will display radio buttons for such a kind of spam
-message as follows:
-</p>
-<div class="example">
-<pre class="example">1.  (*) multipart/alternative  ( ) image/gif
+      <p>In this case, Gnus will display radio buttons for such a
+      kind of spam message as follows:</p>
+
+      <div class="example">
+        <pre class="example">
+1.  (*) multipart/alternative  ( ) image/gif
 
 2.  (*) text/plain          ( ) text/html
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>mm-inline-large-images</code></dt>
-<dd><a name="index-mm_002dinline_002dlarge_002dimages"></a>
-<p>When displaying inline images that are larger than the window, Emacs
-does not enable scrolling, which means that you cannot see the whole
-image. To prevent this, the library tries to determine the image size
-before displaying it inline, and if it doesn&rsquo;t fit the window, the
-library will display it externally (e.g., with &lsquo;<samp>ImageMagick</samp>&rsquo; or
-&lsquo;<samp>xv</samp>&rsquo;). Setting this variable to <code>t</code> disables this check and
-makes the library display all inline images as inline, regardless of
-their size. If you set this variable to <code>resize</code>, the image will
-be displayed resized to fit in the window, if Emacs has the ability to
-resize images.
-</p>
-</dd>
-<dt><code>mm-inline-large-images-proportion</code></dt>
-<dd><a name="index-mm_002dinline_002dimages_002dmax_002dproportion"></a>
-<p>The proportion used when resizing large images.
-</p>
-</dd>
-<dt><code>mm-inline-override-types</code></dt>
-<dd><a name="index-mm_002dinline_002doverride_002dtypes"></a>
-<p><code>mm-inlined-types</code> may include regular expressions, for example to
-specify that all &lsquo;<samp>text/.*</samp>&rsquo; parts be displayed inline.  If a user
-prefers to have a type that matches such a regular expression be treated
-as an attachment, that can be accomplished by setting this variable to a
-list containing that type.  For example assuming <code>mm-inlined-types</code>
-includes &lsquo;<samp>text/.*</samp>&rsquo;, then including &lsquo;<samp>text/html</samp>&rsquo; in this
-variable will cause &lsquo;<samp>text/html</samp>&rsquo; parts to be treated as attachments.
-</p>
-</dd>
-<dt><code>mm-text-html-renderer</code></dt>
-<dd><a name="index-mm_002dtext_002dhtml_002drenderer"></a>
-<p>This selects the function used to render <acronym>HTML</acronym>.  The predefined
-renderers are selected by the symbols <code>gnus-article-html</code>,
-<code>w3m</code><a name="DOCF1" href="#FOOT1"><sup>1</sup></a>, <code>links</code>, <code>lynx</code>,
-<code>w3m-standalone</code> or <code>html2text</code>.  If <code>nil</code> use an
-external viewer.  You can also specify a function, which will be
-called with a <acronym>MIME</acronym> handle as the argument.
-</p>
-</dd>
-<dt><code>mm-html-inhibit-images</code></dt>
-<dd><a name="index-mm_002dhtml_002dinhibit_002dimages"></a>
-<a name="index-mm_002dinline_002dtext_002dhtml_002dwith_002dimages"></a>
-<p>If this is non-<code>nil</code>, inhibit displaying of images inline in the
-article body.  It is effective to images in <acronym>HTML</acronym> articles
-rendered when <code>mm-text-html-renderer</code> (see <a href="#Display-Customization">Display Customization</a>) is <code>shr</code> or <code>w3m</code>.  In Gnus, this is
-overridden by the value of <code>gnus-inhibit-images</code> (see <a href="http://www.gnu.org/software/emacs/manual/html_node/gnus/Misc-Article.html#Misc-Article">Misc Article</a> in <cite>Gnus manual</cite>).  The default is <code>nil</code>.
-</p>
-</dd>
-<dt><code>mm-html-blocked-images</code></dt>
-<dd><a name="index-mm_002dhtml_002dblocked_002dimages"></a>
-<p>External images that have <acronym>URL</acronym>s that match this regexp won&rsquo;t
-be fetched and displayed.  For instance, to block all <acronym>URL</acronym>s
-that have the string &ldquo;ads&rdquo; in them, do the following:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq mm-html-blocked-images &quot;ads&quot;)
-</pre></div>
+    <dt><code>mm-inline-large-images</code></dt>
 
-<p>It is effective when <code>mm-text-html-renderer</code> (see <a href="#Display-Customization">Display Customization</a>) is <code>shr</code>.  In Gnus, this is overridden by the value
-of <code>gnus-blocked-images</code> or the return value of the function that
-<code>gnus-blocked-images</code> is set to (see <a href="http://www.gnu.org/software/emacs/manual/html_node/gnus/HTML.html#HTML">HTML</a> in <cite>Gnus
-manual</cite>).
-</p>
-<p>Some <acronym>HTML</acronym> mails might have the trick of spammers using
-&lsquo;<samp>&lt;img&gt;</samp>&rsquo; tags.  It is likely to be intended to verify whether you
-have read the mail.  You can prevent your personal information from
-leaking by setting this option to <code>&quot;&quot;</code> (which is the default).
-</p>
-</dd>
-<dt><code>mm-w3m-safe-url-regexp</code></dt>
-<dd><a name="index-mm_002dw3m_002dsafe_002durl_002dregexp"></a>
-<p>A regular expression that matches safe URL names, i.e., URLs that are
-unlikely to leak personal information when rendering <acronym>HTML</acronym>
-email (the default value is &lsquo;<samp>\\`cid:</samp>&rsquo;).  If <code>nil</code> consider
-all URLs safe.  In Gnus, this will be overridden according to the value
-of the variable <code>gnus-safe-html-newsgroups</code>, See <a href="http://www.gnu.org/software/emacs/manual/html_node/gnus/Various-Various.html#Various-Various">Various Various</a> in <cite>Gnus Manual</cite>.
-</p>
-</dd>
-<dt><code>mm-inline-text-html-with-w3m-keymap</code></dt>
-<dd><a name="index-mm_002dinline_002dtext_002dhtml_002dwith_002dw3m_002dkeymap"></a>
-<p>You can use emacs-w3m command keys in the inlined text/html part by
-setting this option to non-<code>nil</code>.  The default value is <code>t</code>.
-</p>
-</dd>
-<dt><code>mm-external-terminal-program</code></dt>
-<dd><a name="index-mm_002dexternal_002dterminal_002dprogram"></a>
-<p>The program used to start an external terminal.
-</p>
-</dd>
-<dt><code>mm-enable-external</code></dt>
-<dd><a name="index-mm_002denable_002dexternal"></a>
-<p>Indicate whether external <acronym>MIME</acronym> handlers should be used.
-</p>
-<p>If <code>t</code>, all defined external <acronym>MIME</acronym> handlers are used.  If
-<code>nil</code>, files are saved to disk (<code>mailcap-save-binary-file</code>).
-If it is the symbol <code>ask</code>, you are prompted before the external
-<acronym>MIME</acronym> handler is invoked.
-</p>
-<p>When you launch an attachment through mailcap (see <a href="mailcap.html#mailcap">mailcap</a>) an
-attempt is made to use a safe viewer with the safest options&mdash;this isn&rsquo;t
-the case if you save it to disk and launch it in a different way
-(command line or double-clicking).  Anyhow, if you want to be sure not
-to launch any external programs, set this variable to <code>nil</code> or
-<code>ask</code>.
-</p>
-</dd>
-</dl>
+    <dd>
+      <a name="index-mm_002dinline_002dlarge_002dimages" id=
+      "index-mm_002dinline_002dlarge_002dimages"></a>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+      <p>When displaying inline images that are larger than the
+      window, Emacs does not enable scrolling, which means that you
+      cannot see the whole image. To prevent this, the library
+      tries to determine the image size before displaying it
+      inline, and if it doesn&rsquo;t fit the window, the library
+      will display it externally (e.g., with
+      &lsquo;<samp>ImageMagick</samp>&rsquo; or
+      &lsquo;<samp>xv</samp>&rsquo;). Setting this variable to
+      <code>t</code> disables this check and makes the library
+      display all inline images as inline, regardless of their
+      size. If you set this variable to <code>resize</code>, the
+      image will be displayed resized to fit in the window, if
+      Emacs has the ability to resize images.</p>
+    </dd>
 
-<h3><a name="FOOT1" href="#DOCF1">(1)</a></h3>
-<p>See <a href="http://emacs-w3m.namazu.org/">http://emacs-w3m.namazu.org/</a> for more
-information about emacs-w3m</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Files-and-Directories.html#Files-and-Directories" accesskey="n" rel="next">Files and Directories</a>, Previous: <a href="Display.html#Display" accesskey="p" rel="prev">Display</a>, Up: <a href="Decoding-and-Viewing.html#Decoding-and-Viewing" accesskey="u" rel="up">Decoding and Viewing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><code>mm-inline-large-images-proportion</code></dt>
 
+    <dd>
+      <a name=
+      "index-mm_002dinline_002dimages_002dmax_002dproportion" id=
+      "index-mm_002dinline_002dimages_002dmax_002dproportion"></a>
 
+      <p>The proportion used when resizing large images.</p>
+    </dd>
 
+    <dt><code>mm-inline-override-types</code></dt>
+
+    <dd>
+      <a name="index-mm_002dinline_002doverride_002dtypes" id=
+      "index-mm_002dinline_002doverride_002dtypes"></a>
+
+      <p><code>mm-inlined-types</code> may include regular
+      expressions, for example to specify that all
+      &lsquo;<samp>text/.*</samp>&rsquo; parts be displayed inline.
+      If a user prefers to have a type that matches such a regular
+      expression be treated as an attachment, that can be
+      accomplished by setting this variable to a list containing
+      that type. For example assuming <code>mm-inlined-types</code>
+      includes &lsquo;<samp>text/.*</samp>&rsquo;, then including
+      &lsquo;<samp>text/html</samp>&rsquo; in this variable will
+      cause &lsquo;<samp>text/html</samp>&rsquo; parts to be
+      treated as attachments.</p>
+    </dd>
+
+    <dt><code>mm-text-html-renderer</code></dt>
+
+    <dd>
+      <a name="index-mm_002dtext_002dhtml_002drenderer" id=
+      "index-mm_002dtext_002dhtml_002drenderer"></a>
+
+      <p>This selects the function used to render
+      <acronym>HTML</acronym>. The predefined renderers are
+      selected by the symbols <code>gnus-article-html</code>,
+      <code>w3m</code><a name="DOCF1" href="#FOOT1" id=
+      "DOCF1"><sup>1</sup></a>, <code>links</code>,
+      <code>lynx</code>, <code>w3m-standalone</code> or
+      <code>html2text</code>. If <code>nil</code> use an external
+      viewer. You can also specify a function, which will be called
+      with a <acronym>MIME</acronym> handle as the argument.</p>
+    </dd>
+
+    <dt><code>mm-html-inhibit-images</code></dt>
+
+    <dd>
+      <a name="index-mm_002dhtml_002dinhibit_002dimages" id=
+      "index-mm_002dhtml_002dinhibit_002dimages"></a> <a name=
+      "index-mm_002dinline_002dtext_002dhtml_002dwith_002dimages"
+      id=
+      "index-mm_002dinline_002dtext_002dhtml_002dwith_002dimages"></a>
+
+      <p>If this is non-<code>nil</code>, inhibit displaying of
+      images inline in the article body. It is effective to images
+      in <acronym>HTML</acronym> articles rendered when
+      <code>mm-text-html-renderer</code> (see <a href=
+      "#Display-Customization">Display Customization</a>) is
+      <code>shr</code> or <code>w3m</code>. In Gnus, this is
+      overridden by the value of <code>gnus-inhibit-images</code>
+      (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/gnus/Misc-Article.html#Misc-Article">
+      Misc Article</a> in <cite>Gnus manual</cite>). The default is
+      <code>nil</code>.</p>
+    </dd>
+
+    <dt><code>mm-html-blocked-images</code></dt>
+
+    <dd>
+      <a name="index-mm_002dhtml_002dblocked_002dimages" id=
+      "index-mm_002dhtml_002dblocked_002dimages"></a>
+
+      <p>External images that have <acronym>URL</acronym>s that
+      match this regexp won&rsquo;t be fetched and displayed. For
+      instance, to block all <acronym>URL</acronym>s that have the
+      string &ldquo;ads&rdquo; in them, do the following:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq mm-html-blocked-images "ads")
+</pre>
+      </div>
+
+      <p>It is effective when <code>mm-text-html-renderer</code>
+      (see <a href="#Display-Customization">Display
+      Customization</a>) is <code>shr</code>. In Gnus, this is
+      overridden by the value of <code>gnus-blocked-images</code>
+      or the return value of the function that
+      <code>gnus-blocked-images</code> is set to (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/gnus/HTML.html#HTML">
+      HTML</a> in <cite>Gnus manual</cite>).</p>
+
+      <p>Some <acronym>HTML</acronym> mails might have the trick of
+      spammers using &lsquo;<samp>&lt;img&gt;</samp>&rsquo; tags.
+      It is likely to be intended to verify whether you have read
+      the mail. You can prevent your personal information from
+      leaking by setting this option to <code>""</code> (which is
+      the default).</p>
+    </dd>
+
+    <dt><code>mm-w3m-safe-url-regexp</code></dt>
+
+    <dd>
+      <a name="index-mm_002dw3m_002dsafe_002durl_002dregexp" id=
+      "index-mm_002dw3m_002dsafe_002durl_002dregexp"></a>
+
+      <p>A regular expression that matches safe URL names, i.e.,
+      URLs that are unlikely to leak personal information when
+      rendering <acronym>HTML</acronym> email (the default value is
+      &lsquo;<samp>\\`cid:</samp>&rsquo;). If <code>nil</code>
+      consider all URLs safe. In Gnus, this will be overridden
+      according to the value of the variable
+      <code>gnus-safe-html-newsgroups</code>, See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/gnus/Various-Various.html#Various-Various">
+      Various Various</a> in <cite>Gnus Manual</cite>.</p>
+    </dd>
+
+    <dt><code>mm-inline-text-html-with-w3m-keymap</code></dt>
+
+    <dd>
+      <a name=
+      "index-mm_002dinline_002dtext_002dhtml_002dwith_002dw3m_002dkeymap"
+      id=
+      "index-mm_002dinline_002dtext_002dhtml_002dwith_002dw3m_002dkeymap">
+      </a>
+
+      <p>You can use emacs-w3m command keys in the inlined
+      text/html part by setting this option to
+      non-<code>nil</code>. The default value is
+      <code>t</code>.</p>
+    </dd>
+
+    <dt><code>mm-external-terminal-program</code></dt>
+
+    <dd>
+      <a name="index-mm_002dexternal_002dterminal_002dprogram" id=
+      "index-mm_002dexternal_002dterminal_002dprogram"></a>
+
+      <p>The program used to start an external terminal.</p>
+    </dd>
+
+    <dt><code>mm-enable-external</code></dt>
+
+    <dd>
+      <a name="index-mm_002denable_002dexternal" id=
+      "index-mm_002denable_002dexternal"></a>
+
+      <p>Indicate whether external <acronym>MIME</acronym> handlers
+      should be used.</p>
+
+      <p>If <code>t</code>, all defined external
+      <acronym>MIME</acronym> handlers are used. If
+      <code>nil</code>, files are saved to disk
+      (<code>mailcap-save-binary-file</code>). If it is the symbol
+      <code>ask</code>, you are prompted before the external
+      <acronym>MIME</acronym> handler is invoked.</p>
+
+      <p>When you launch an attachment through mailcap (see
+      <a href="mailcap.html#mailcap">mailcap</a>) an attempt is
+      made to use a safe viewer with the safest options&mdash;this
+      isn&rsquo;t the case if you save it to disk and launch it in
+      a different way (command line or double-clicking). Anyhow, if
+      you want to be sure not to launch any external programs, set
+      this variable to <code>nil</code> or <code>ask</code>.</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT1" href="#DOCF1" id="FOOT1">(1)</a></h3>
+
+    <p>See <a href=
+    "http://emacs-w3m.namazu.org/">http://emacs-w3m.namazu.org/</a>
+    for more information about emacs-w3m</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Files-and-Directories.html#Files-and-Directories" accesskey=
+    "n" rel="next">Files and Directories</a>, Previous: <a href=
+    "Display.html#Display" accesskey="p" rel="prev">Display</a>,
+    Up: <a href="Decoding-and-Viewing.html#Decoding-and-Viewing"
+    accesskey="u" rel="up">Decoding and Viewing</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

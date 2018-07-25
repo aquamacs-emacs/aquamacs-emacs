@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,114 +14,164 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Sticky Articles</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Sticky Articles">
-<meta name="keywords" content="Gnus Manual: Sticky Articles">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Article-Backlog.html#Article-Backlog" rel="next" title="Article Backlog">
-<link href="Persistent-Articles.html#Persistent-Articles" rel="prev" title="Persistent Articles">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Sticky Articles</title>
+  <meta name="description" content=
+  "Gnus Manual: Sticky Articles" />
+  <meta name="keywords" content="Gnus Manual: Sticky Articles" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Article-Backlog.html#Article-Backlog" rel="next"
+  title="Article Backlog" />
+  <link href="Persistent-Articles.html#Persistent-Articles" rel=
+  "prev" title="Persistent Articles" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sticky-Articles"></a>
-<div class="header">
-<p>
-Next: <a href="Article-Backlog.html#Article-Backlog" accesskey="n" rel="next">Article Backlog</a>, Previous: <a href="Persistent-Articles.html#Persistent-Articles" accesskey="p" rel="prev">Persistent Articles</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sticky-Articles-1"></a>
-<h3 class="section">3.14 Sticky Articles</h3>
-<a name="index-sticky-articles"></a>
+<body lang="en" xml:lang="en">
+  <a name="Sticky-Articles" id="Sticky-Articles"></a>
 
-<p>When you select an article the current article buffer will be reused
-according to the value of the variable
-<code>gnus-single-article-buffer</code>.  If its value is non-<code>nil</code> (the
-default) all articles reuse the same article buffer.  Else each group
-has its own article buffer.
-</p>
-<p>This implies that it&rsquo;s not possible to have more than one article buffer
-in a group at a time.  But sometimes you might want to display all the
-latest emails from your mother, your father, your aunt, your uncle and
-your 17 cousins to coordinate the next Christmas party.
-</p>
-<p>That&rsquo;s where sticky articles come in handy.  A sticky article buffer
-basically is a normal article buffer, but it won&rsquo;t be reused when you
-select another article.  You can make an article sticky with:
-</p>
-<dl compact="compact">
-<dt><kbd>A S</kbd></dt>
-<dd><a name="index-A-S-_0028Summary_0029"></a>
-<a name="index-gnus_002dsticky_002darticle"></a>
-<p>Make the current article sticky.  If a prefix arg is given, ask for a
-name for this sticky article buffer.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Article-Backlog.html#Article-Backlog"
+    accesskey="n" rel="next">Article Backlog</a>, Previous:
+    <a href="Persistent-Articles.html#Persistent-Articles"
+    accesskey="p" rel="prev">Persistent Articles</a>, Up: <a href=
+    "Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sticky-Articles-1" id="Sticky-Articles-1"></a>
 
-<p>To close a sticky article buffer you can use these commands:
-</p>
-<dl compact="compact">
-<dt><kbd>q</kbd></dt>
-<dd><a name="index-q-_0028Article_0029"></a>
-<a name="index-bury_002dbuffer"></a>
-<p>Puts this sticky article buffer at the end of the list of all buffers.
-</p>
-</dd>
-<dt><kbd>k</kbd></dt>
-<dd><a name="index-k-_0028Article_0029"></a>
-<a name="index-gnus_002dkill_002dsticky_002darticle_002dbuffer"></a>
-<p>Kills this sticky article buffer.
-</p></dd>
-</dl>
+  <h3 class="section">3.14 Sticky Articles</h3><a name=
+  "index-sticky-articles" id="index-sticky-articles"></a>
 
-<p>To kill all sticky article buffers you can use:
-</p>
-<dl>
-<dt><a name="index-gnus_002dkill_002dsticky_002darticle_002dbuffers"></a>Function: <strong>gnus-kill-sticky-article-buffers</strong> <em>ARG</em></dt>
-<dd><p>Kill all sticky article buffers.
-If a prefix ARG is given, ask for confirmation.
-</p></dd></dl>
+  <p>When you select an article the current article buffer will be
+  reused according to the value of the variable
+  <code>gnus-single-article-buffer</code>. If its value is
+  non-<code>nil</code> (the default) all articles reuse the same
+  article buffer. Else each group has its own article buffer.</p>
 
+  <p>This implies that it&rsquo;s not possible to have more than
+  one article buffer in a group at a time. But sometimes you might
+  want to display all the latest emails from your mother, your
+  father, your aunt, your uncle and your 17 cousins to coordinate
+  the next Christmas party.</p>
 
+  <p>That&rsquo;s where sticky articles come in handy. A sticky
+  article buffer basically is a normal article buffer, but it
+  won&rsquo;t be reused when you select another article. You can
+  make an article sticky with:</p>
 
+  <dl compact="compact">
+    <dt><kbd>A S</kbd></dt>
 
+    <dd>
+      <a name="index-A-S-_0028Summary_0029" id=
+      "index-A-S-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsticky_002darticle" id=
+      "index-gnus_002dsticky_002darticle"></a>
+
+      <p>Make the current article sticky. If a prefix arg is given,
+      ask for a name for this sticky article buffer.</p>
+    </dd>
+  </dl>
+
+  <p>To close a sticky article buffer you can use these
+  commands:</p>
+
+  <dl compact="compact">
+    <dt><kbd>q</kbd></dt>
+
+    <dd>
+      <a name="index-q-_0028Article_0029" id=
+      "index-q-_0028Article_0029"></a> <a name=
+      "index-bury_002dbuffer" id="index-bury_002dbuffer"></a>
+
+      <p>Puts this sticky article buffer at the end of the list of
+      all buffers.</p>
+    </dd>
+
+    <dt><kbd>k</kbd></dt>
+
+    <dd>
+      <a name="index-k-_0028Article_0029" id=
+      "index-k-_0028Article_0029"></a> <a name=
+      "index-gnus_002dkill_002dsticky_002darticle_002dbuffer" id=
+      "index-gnus_002dkill_002dsticky_002darticle_002dbuffer"></a>
+
+      <p>Kills this sticky article buffer.</p>
+    </dd>
+  </dl>
+
+  <p>To kill all sticky article buffers you can use:</p>
+
+  <dl>
+    <dt><a name=
+    "index-gnus_002dkill_002dsticky_002darticle_002dbuffers" id=
+    "index-gnus_002dkill_002dsticky_002darticle_002dbuffers"></a>Function:
+    <strong>gnus-kill-sticky-article-buffers</strong>
+    <em>ARG</em></dt>
+
+    <dd>
+      <p>Kill all sticky article buffers. If a prefix ARG is given,
+      ask for confirmation.</p>
+    </dd>
+  </dl>
 </body>
 </html>

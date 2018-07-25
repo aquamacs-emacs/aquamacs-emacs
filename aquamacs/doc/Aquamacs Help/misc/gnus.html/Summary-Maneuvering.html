@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,170 +14,255 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Summary Maneuvering</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Summary Maneuvering">
-<meta name="keywords" content="Gnus Manual: Summary Maneuvering">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Choosing-Articles.html#Choosing-Articles" rel="next" title="Choosing Articles">
-<link href="Summary-Highlighting.html#Summary-Highlighting" rel="prev" title="Summary Highlighting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Summary Maneuvering</title>
+  <meta name="description" content=
+  "Gnus Manual: Summary Maneuvering" />
+  <meta name="keywords" content=
+  "Gnus Manual: Summary Maneuvering" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Choosing-Articles.html#Choosing-Articles" rel="next"
+  title="Choosing Articles" />
+  <link href="Summary-Highlighting.html#Summary-Highlighting" rel=
+  "prev" title="Summary Highlighting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Summary-Maneuvering"></a>
-<div class="header">
-<p>
-Next: <a href="Choosing-Articles.html#Choosing-Articles" accesskey="n" rel="next">Choosing Articles</a>, Previous: <a href="Summary-Buffer-Format.html#Summary-Buffer-Format" accesskey="p" rel="prev">Summary Buffer Format</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Summary-Maneuvering-1"></a>
-<h3 class="section">3.2 Summary Maneuvering</h3>
-<a name="index-summary-movement"></a>
+<body lang="en" xml:lang="en">
+  <a name="Summary-Maneuvering" id="Summary-Maneuvering"></a>
 
-<p>All the straight movement commands understand the numeric prefix and
-behave pretty much as you&rsquo;d expect.
-</p>
-<p>None of these commands select articles.
-</p>
-<dl compact="compact">
-<dt><kbd>G M-n</kbd></dt>
-<dt><kbd>M-n</kbd></dt>
-<dd><a name="index-M_002dn-_0028Summary_0029"></a>
-<a name="index-G-M_002dn-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dnext_002dunread_002dsubject"></a>
-<p>Go to the next summary line of an unread article
-(<code>gnus-summary-next-unread-subject</code>).
-</p>
-</dd>
-<dt><kbd>G M-p</kbd></dt>
-<dt><kbd>M-p</kbd></dt>
-<dd><a name="index-M_002dp-_0028Summary_0029"></a>
-<a name="index-G-M_002dp-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dprev_002dunread_002dsubject"></a>
-<p>Go to the previous summary line of an unread article
-(<code>gnus-summary-prev-unread-subject</code>).
-</p>
-</dd>
-<dt><kbd>G g</kbd></dt>
-<dd><a name="index-G-g-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dgoto_002dsubject"></a>
-<p>Ask for an article number and then go to the summary line of that article
-without displaying the article (<code>gnus-summary-goto-subject</code>).
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Choosing-Articles.html#Choosing-Articles"
+    accesskey="n" rel="next">Choosing Articles</a>, Previous:
+    <a href="Summary-Buffer-Format.html#Summary-Buffer-Format"
+    accesskey="p" rel="prev">Summary Buffer Format</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Summary-Maneuvering-1" id="Summary-Maneuvering-1"></a>
 
-<p>If Gnus asks you to press a key to confirm going to the next group, you
-can use the <kbd>C-n</kbd> and <kbd>C-p</kbd> keys to move around the group
-buffer, searching for the next group to read without actually returning
-to the group buffer.
-</p>
-<p>Variables related to summary movement:
-</p>
-<dl compact="compact">
-<dd>
-<a name="index-gnus_002dauto_002dselect_002dnext"></a>
-</dd>
-<dt><code>gnus-auto-select-next</code></dt>
-<dd><p>If you issue one of the movement commands (like <kbd>n</kbd>) and there are
-no more unread articles after the current one, Gnus will offer to go to
-the next group.  If this variable is <code>t</code> and the next group is
-empty, Gnus will exit summary mode and return to the group buffer.  If
-this variable is neither <code>t</code> nor <code>nil</code>, Gnus will select the
-next group with unread articles.  As a special case, if this variable
-is <code>quietly</code>, Gnus will select the next group without asking for
-confirmation.  If this variable is <code>almost-quietly</code>, the same
-will happen only if you are located on the last article in the group.
-Finally, if this variable is <code>slightly-quietly</code>, the <kbd>Z n</kbd>
-command will go to the next group without confirmation.  Also
-see <a href="Group-Levels.html#Group-Levels">Group Levels</a>.
-</p>
-</dd>
-<dt><code>gnus-auto-select-same</code></dt>
-<dd><a name="index-gnus_002dauto_002dselect_002dsame"></a>
-<p>If non-<code>nil</code>, all the movement commands will try to go to the next
-article with the same subject as the current.  (<em>Same</em> here might
-mean <em>roughly equal</em>.  See <code>gnus-summary-gather-subject-limit</code>
-for details (see <a href="Customizing-Threading.html#Customizing-Threading">Customizing Threading</a>).)  If there are no more
-articles with the same subject, go to the first unread article.
-</p>
-<p>This variable is not particularly useful if you use a threaded display.
-</p>
-</dd>
-<dt><code>gnus-summary-check-current</code></dt>
-<dd><a name="index-gnus_002dsummary_002dcheck_002dcurrent"></a>
-<p>If non-<code>nil</code>, all the &ldquo;unread&rdquo; movement commands will not proceed
-to the next (or previous) article if the current article is unread.
-Instead, they will choose the current article.
-</p>
-</dd>
-<dt><code>gnus-auto-center-summary</code></dt>
-<dd><a name="index-gnus_002dauto_002dcenter_002dsummary"></a>
-<p>If non-<code>nil</code>, Gnus will keep the point in the summary buffer
-centered at all times.  This makes things quite tidy, but if you have a
-slow network connection, or simply do not like this un-Emacsism, you can
-set this variable to <code>nil</code> to get the normal Emacs scrolling
-action.  This will also inhibit horizontal re-centering of the summary
-buffer, which might make it more inconvenient to read extremely long
-threads.
-</p>
-<p>This variable can also be a number.  In that case, center the window at
-the given number of lines from the top.
-</p>
-</dd>
-<dt><code>gnus-summary-stop-at-end-of-message</code></dt>
-<dd><a name="index-gnus_002dsummary_002dstop_002dat_002dend_002dof_002dmessage"></a>
-<p>If non-<code>nil</code>, don&rsquo;t go to the next article when hitting
-<kbd>SPC</kbd>, and you&rsquo;re at the end of the article.
-</p>
-</dd>
-</dl>
+  <h3 class="section">3.2 Summary Maneuvering</h3><a name=
+  "index-summary-movement" id="index-summary-movement"></a>
 
+  <p>All the straight movement commands understand the numeric
+  prefix and behave pretty much as you&rsquo;d expect.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Choosing-Articles.html#Choosing-Articles" accesskey="n" rel="next">Choosing Articles</a>, Previous: <a href="Summary-Buffer-Format.html#Summary-Buffer-Format" accesskey="p" rel="prev">Summary Buffer Format</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>None of these commands select articles.</p>
 
+  <dl compact="compact">
+    <dt><kbd>G M-n</kbd></dt>
 
+    <dt><kbd>M-n</kbd></dt>
 
+    <dd>
+      <a name="index-M_002dn-_0028Summary_0029" id=
+      "index-M_002dn-_0028Summary_0029"></a> <a name=
+      "index-G-M_002dn-_0028Summary_0029" id=
+      "index-G-M_002dn-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dnext_002dunread_002dsubject" id=
+      "index-gnus_002dsummary_002dnext_002dunread_002dsubject"></a>
+
+      <p>Go to the next summary line of an unread article
+      (<code>gnus-summary-next-unread-subject</code>).</p>
+    </dd>
+
+    <dt><kbd>G M-p</kbd></dt>
+
+    <dt><kbd>M-p</kbd></dt>
+
+    <dd>
+      <a name="index-M_002dp-_0028Summary_0029" id=
+      "index-M_002dp-_0028Summary_0029"></a> <a name=
+      "index-G-M_002dp-_0028Summary_0029" id=
+      "index-G-M_002dp-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dprev_002dunread_002dsubject" id=
+      "index-gnus_002dsummary_002dprev_002dunread_002dsubject"></a>
+
+      <p>Go to the previous summary line of an unread article
+      (<code>gnus-summary-prev-unread-subject</code>).</p>
+    </dd>
+
+    <dt><kbd>G g</kbd></dt>
+
+    <dd>
+      <a name="index-G-g-_0028Summary_0029" id=
+      "index-G-g-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dgoto_002dsubject" id=
+      "index-gnus_002dsummary_002dgoto_002dsubject"></a>
+
+      <p>Ask for an article number and then go to the summary line
+      of that article without displaying the article
+      (<code>gnus-summary-goto-subject</code>).</p>
+    </dd>
+  </dl>
+
+  <p>If Gnus asks you to press a key to confirm going to the next
+  group, you can use the <kbd>C-n</kbd> and <kbd>C-p</kbd> keys to
+  move around the group buffer, searching for the next group to
+  read without actually returning to the group buffer.</p>
+
+  <p>Variables related to summary movement:</p>
+
+  <dl compact="compact">
+    <dd><a name="index-gnus_002dauto_002dselect_002dnext" id=
+    "index-gnus_002dauto_002dselect_002dnext"></a></dd>
+
+    <dt><code>gnus-auto-select-next</code></dt>
+
+    <dd>
+      <p>If you issue one of the movement commands (like
+      <kbd>n</kbd>) and there are no more unread articles after the
+      current one, Gnus will offer to go to the next group. If this
+      variable is <code>t</code> and the next group is empty, Gnus
+      will exit summary mode and return to the group buffer. If
+      this variable is neither <code>t</code> nor <code>nil</code>,
+      Gnus will select the next group with unread articles. As a
+      special case, if this variable is <code>quietly</code>, Gnus
+      will select the next group without asking for confirmation.
+      If this variable is <code>almost-quietly</code>, the same
+      will happen only if you are located on the last article in
+      the group. Finally, if this variable is
+      <code>slightly-quietly</code>, the <kbd>Z n</kbd> command
+      will go to the next group without confirmation. Also see
+      <a href="Group-Levels.html#Group-Levels">Group
+      Levels</a>.</p>
+    </dd>
+
+    <dt><code>gnus-auto-select-same</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dauto_002dselect_002dsame" id=
+      "index-gnus_002dauto_002dselect_002dsame"></a>
+
+      <p>If non-<code>nil</code>, all the movement commands will
+      try to go to the next article with the same subject as the
+      current. (<em>Same</em> here might mean <em>roughly
+      equal</em>. See
+      <code>gnus-summary-gather-subject-limit</code> for details
+      (see <a href=
+      "Customizing-Threading.html#Customizing-Threading">Customizing
+      Threading</a>).) If there are no more articles with the same
+      subject, go to the first unread article.</p>
+
+      <p>This variable is not particularly useful if you use a
+      threaded display.</p>
+    </dd>
+
+    <dt><code>gnus-summary-check-current</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dsummary_002dcheck_002dcurrent" id=
+      "index-gnus_002dsummary_002dcheck_002dcurrent"></a>
+
+      <p>If non-<code>nil</code>, all the &ldquo;unread&rdquo;
+      movement commands will not proceed to the next (or previous)
+      article if the current article is unread. Instead, they will
+      choose the current article.</p>
+    </dd>
+
+    <dt><code>gnus-auto-center-summary</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dauto_002dcenter_002dsummary" id=
+      "index-gnus_002dauto_002dcenter_002dsummary"></a>
+
+      <p>If non-<code>nil</code>, Gnus will keep the point in the
+      summary buffer centered at all times. This makes things quite
+      tidy, but if you have a slow network connection, or simply do
+      not like this un-Emacsism, you can set this variable to
+      <code>nil</code> to get the normal Emacs scrolling action.
+      This will also inhibit horizontal re-centering of the summary
+      buffer, which might make it more inconvenient to read
+      extremely long threads.</p>
+
+      <p>This variable can also be a number. In that case, center
+      the window at the given number of lines from the top.</p>
+    </dd>
+
+    <dt><code>gnus-summary-stop-at-end-of-message</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dsummary_002dstop_002dat_002dend_002dof_002dmessage"
+      id=
+      "index-gnus_002dsummary_002dstop_002dat_002dend_002dof_002dmessage">
+      </a>
+
+      <p>If non-<code>nil</code>, don&rsquo;t go to the next
+      article when hitting <kbd>SPC</kbd>, and you&rsquo;re at the
+      end of the article.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Choosing-Articles.html#Choosing-Articles"
+    accesskey="n" rel="next">Choosing Articles</a>, Previous:
+    <a href="Summary-Buffer-Format.html#Summary-Buffer-Format"
+    accesskey="p" rel="prev">Summary Buffer Format</a>, Up:
+    <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel=
+    "up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

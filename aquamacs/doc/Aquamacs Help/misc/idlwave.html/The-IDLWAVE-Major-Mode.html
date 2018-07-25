@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,98 +20,227 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: The IDLWAVE Major Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: The IDLWAVE Major Mode">
-<meta name="keywords" content="IDLWAVE User Manual: The IDLWAVE Major Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Code-Formatting.html#Code-Formatting" rel="next" title="Code Formatting">
-<link href="Lesson-III_002d_002d_002dUser-Catalog.html#Lesson-III_002d_002d_002dUser-Catalog" rel="prev" title="Lesson III---User Catalog">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: The IDLWAVE Major Mode</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: The IDLWAVE Major Mode" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: The IDLWAVE Major Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Code-Formatting.html#Code-Formatting" rel="next"
+  title="Code Formatting" />
+  <link href=
+  "Lesson-III_002d_002d_002dUser-Catalog.html#Lesson-III_002d_002d_002dUser-Catalog"
+  rel="prev" title="Lesson III---User Catalog" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-IDLWAVE-Major-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell" accesskey="n" rel="next">The IDLWAVE Shell</a>, Previous: <a href="Getting-Started.html#Getting-Started" accesskey="p" rel="prev">Getting Started</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-IDLWAVE-Major-Mode-1"></a>
-<h2 class="chapter">4 The IDLWAVE Major Mode</h2>
-<a name="index-IDLWAVE-major-mode"></a>
-<a name="index-Major-mode_002c-idlwave_002dmode"></a>
+<body lang="en" xml:lang="en">
+  <a name="The-IDLWAVE-Major-Mode" id="The-IDLWAVE-Major-Mode"></a>
 
-<p>The IDLWAVE major mode supports editing IDL source files.  In this
-chapter we describe the main features of the mode and how to customize
-them.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Code-Formatting.html#Code-Formatting" accesskey="1">Code Formatting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Making code look nice
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Routine-Info.html#Routine-Info" accesskey="2">Routine Info</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Calling Sequence and Keyword List
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Online-Help.html#Online-Help" accesskey="3">Online Help</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">One key press from source to help
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Completion.html#Completion" accesskey="4">Completion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Completing routine names and Keywords
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Routine-Source.html#Routine-Source" accesskey="5">Routine Source</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Finding routines, the easy way
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Resolving-Routines.html#Resolving-Routines" accesskey="6">Resolving Routines</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Force the Shell to compile a routine
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Code-Templates.html#Code-Templates" accesskey="7">Code Templates</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Frequent code constructs
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Abbreviations.html#Abbreviations" accesskey="8">Abbreviations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Abbreviations for common commands
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Actions.html#Actions" accesskey="9">Actions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Changing case, Padding, End checking
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Doc-Header.html#Doc-Header">Doc Header</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Inserting a standard header
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Motion-Commands.html#Motion-Commands">Motion Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving through the structure of a program
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Misc-Options.html#Misc-Options">Misc Options</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Things that fit nowhere else
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="The-IDLWAVE-Shell.html#The-IDLWAVE-Shell"
+    accesskey="n" rel="next">The IDLWAVE Shell</a>, Previous:
+    <a href="Getting-Started.html#Getting-Started" accesskey="p"
+    rel="prev">Getting Started</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-IDLWAVE-Major-Mode-1" id=
+  "The-IDLWAVE-Major-Mode-1"></a>
 
+  <h2 class="chapter">4 The IDLWAVE Major Mode</h2><a name=
+  "index-IDLWAVE-major-mode" id="index-IDLWAVE-major-mode"></a>
+  <a name="index-Major-mode_002c-idlwave_002dmode" id=
+  "index-Major-mode_002c-idlwave_002dmode"></a>
 
+  <p>The IDLWAVE major mode supports editing IDL source files. In
+  this chapter we describe the main features of the mode and how to
+  customize them.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Code-Formatting.html#Code-Formatting" accesskey="1">Code
+      Formatting</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Making code look nice</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Routine-Info.html#Routine-Info" accesskey="2">Routine
+      Info</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Calling Sequence and Keyword
+      List</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Online-Help.html#Online-Help" accesskey="3">Online
+      Help</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">One key press from source to
+      help</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Completion.html#Completion" accesskey=
+      "4">Completion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Completing routine names and
+      Keywords</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Routine-Source.html#Routine-Source" accesskey="5">Routine
+      Source</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Finding routines, the easy
+      way</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Resolving-Routines.html#Resolving-Routines" accesskey=
+      "6">Resolving Routines</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Force the Shell to compile a
+      routine</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Code-Templates.html#Code-Templates" accesskey="7">Code
+      Templates</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Frequent code constructs</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Abbreviations.html#Abbreviations" accesskey=
+      "8">Abbreviations</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Abbreviations for common
+      commands</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Actions.html#Actions" accesskey="9">Actions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Changing case, Padding, End
+      checking</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Doc-Header.html#Doc-Header">Doc Header</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Inserting a standard
+      header</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Motion-Commands.html#Motion-Commands">Motion
+      Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Moving through the structure of
+      a program</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Misc-Options.html#Misc-Options">Misc Options</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Things that fit nowhere
+      else</td>
+    </tr>
+  </table>
 </body>
 </html>

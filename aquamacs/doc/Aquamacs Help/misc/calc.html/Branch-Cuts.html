@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,150 +18,209 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Branch Cuts</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Branch Cuts">
-<meta name="keywords" content="GNU Emacs Calc Manual: Branch Cuts">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Scientific-Functions.html#Scientific-Functions" rel="up" title="Scientific Functions">
-<link href="Random-Numbers.html#Random-Numbers" rel="next" title="Random Numbers">
-<link href="Advanced-Math-Functions.html#Advanced-Math-Functions" rel="prev" title="Advanced Math Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Branch Cuts</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Branch Cuts" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Branch Cuts" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Scientific-Functions.html#Scientific-Functions" rel=
+  "up" title="Scientific Functions" />
+  <link href="Random-Numbers.html#Random-Numbers" rel="next" title=
+  "Random Numbers" />
+  <link href="Advanced-Math-Functions.html#Advanced-Math-Functions"
+  rel="prev" title="Advanced Math Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Branch-Cuts"></a>
-<div class="header">
-<p>
-Next: <a href="Random-Numbers.html#Random-Numbers" accesskey="n" rel="next">Random Numbers</a>, Previous: <a href="Advanced-Math-Functions.html#Advanced-Math-Functions" accesskey="p" rel="prev">Advanced Math Functions</a>, Up: <a href="Scientific-Functions.html#Scientific-Functions" accesskey="u" rel="up">Scientific Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Branch-Cuts-and-Principal-Values"></a>
-<h3 class="section">8.4 Branch Cuts and Principal Values</h3>
+<body lang="en" xml:lang="en">
+  <a name="Branch-Cuts" id="Branch-Cuts"></a>
 
-<a name="index-Branch-cuts"></a>
-<a name="index-Principal-values"></a>
-<p>All of the logarithmic, trigonometric, and other scientific functions are
-defined for complex numbers as well as for reals.
-This section describes the values
-returned in cases where the general result is a family of possible values.
-Calc follows section 12.5.3 of Steele&rsquo;s <em>Common Lisp, the Language</em>,
-second edition, in these matters.  This section will describe each
-function briefly; for a more detailed discussion (including some nifty
-diagrams), consult Steele&rsquo;s book.
-</p>
-<p>Note that the branch cuts for <code>arctan</code> and <code>arctanh</code> were
-changed between the first and second editions of Steele.  Recent
-versions of Calc follow the second edition.
-</p>
-<p>The new branch cuts exactly match those of the HP-28/48 calculators.
-They also match those of Mathematica 1.2, except that Mathematica&rsquo;s
-<code>arctan</code> cut is always in the right half of the complex plane,
-and its <code>arctanh</code> cut is always in the top half of the plane.
-Calc&rsquo;s cuts are continuous with quadrants I and III for <code>arctan</code>,
-or II and IV for <code>arctanh</code>.
-</p>
-<p>Note:  The current implementations of these functions with complex arguments
-are designed with proper behavior around the branch cuts in mind, <em>not</em>
-efficiency or accuracy.  You may need to increase the floating precision
-and wait a while to get suitable answers from them.
-</p>
-<p>For &lsquo;<samp>sqrt(a+bi)</samp>&rsquo;:  When &lsquo;<samp>a&lt;0</samp>&rsquo; and &lsquo;<samp>b</samp>&rsquo; is small but positive
-or zero, the result is close to the &lsquo;<samp>+i</samp>&rsquo; axis.  For &lsquo;<samp>b</samp>&rsquo; small and
-negative, the result is close to the &lsquo;<samp>-i</samp>&rsquo; axis.  The result always lies
-in the right half of the complex plane.
-</p>
-<p>For &lsquo;<samp>ln(a+bi)</samp>&rsquo;:  The real part is defined as &lsquo;<samp>ln(abs(a+bi))</samp>&rsquo;.
-The imaginary part is defined as &lsquo;<samp>arg(a+bi) = arctan2(b,a)</samp>&rsquo;.
-Thus the branch cuts for <code>sqrt</code> and <code>ln</code> both lie on the
-negative real axis.
-</p>
-<p>The following table describes these branch cuts in another way.
-If the real and imaginary parts of &lsquo;<samp>z</samp>&rsquo; are as shown, then
-the real and imaginary parts of &lsquo;<samp>f(z)</samp>&rsquo; will be as shown.
-Here <code>eps</code> stands for a small positive value; each
-occurrence of <code>eps</code> may stand for a different small value.
-</p>
-<div class="smallexample">
-<pre class="smallexample">     z           sqrt(z)       ln(z)
+  <div class="header">
+    <p>Next: <a href="Random-Numbers.html#Random-Numbers"
+    accesskey="n" rel="next">Random Numbers</a>, Previous: <a href=
+    "Advanced-Math-Functions.html#Advanced-Math-Functions"
+    accesskey="p" rel="prev">Advanced Math Functions</a>, Up:
+    <a href="Scientific-Functions.html#Scientific-Functions"
+    accesskey="u" rel="up">Scientific Functions</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Branch-Cuts-and-Principal-Values" id=
+  "Branch-Cuts-and-Principal-Values"></a>
+
+  <h3 class="section">8.4 Branch Cuts and Principal
+  Values</h3><a name="index-Branch-cuts" id=
+  "index-Branch-cuts"></a> <a name="index-Principal-values" id=
+  "index-Principal-values"></a>
+
+  <p>All of the logarithmic, trigonometric, and other scientific
+  functions are defined for complex numbers as well as for reals.
+  This section describes the values returned in cases where the
+  general result is a family of possible values. Calc follows
+  section 12.5.3 of Steele&rsquo;s <em>Common Lisp, the
+  Language</em>, second edition, in these matters. This section
+  will describe each function briefly; for a more detailed
+  discussion (including some nifty diagrams), consult
+  Steele&rsquo;s book.</p>
+
+  <p>Note that the branch cuts for <code>arctan</code> and
+  <code>arctanh</code> were changed between the first and second
+  editions of Steele. Recent versions of Calc follow the second
+  edition.</p>
+
+  <p>The new branch cuts exactly match those of the HP-28/48
+  calculators. They also match those of Mathematica 1.2, except
+  that Mathematica&rsquo;s <code>arctan</code> cut is always in the
+  right half of the complex plane, and its <code>arctanh</code> cut
+  is always in the top half of the plane. Calc&rsquo;s cuts are
+  continuous with quadrants I and III for <code>arctan</code>, or
+  II and IV for <code>arctanh</code>.</p>
+
+  <p>Note: The current implementations of these functions with
+  complex arguments are designed with proper behavior around the
+  branch cuts in mind, <em>not</em> efficiency or accuracy. You may
+  need to increase the floating precision and wait a while to get
+  suitable answers from them.</p>
+
+  <p>For &lsquo;<samp>sqrt(a+bi)</samp>&rsquo;: When
+  &lsquo;<samp>a&lt;0</samp>&rsquo; and
+  &lsquo;<samp>b</samp>&rsquo; is small but positive or zero, the
+  result is close to the &lsquo;<samp>+i</samp>&rsquo; axis. For
+  &lsquo;<samp>b</samp>&rsquo; small and negative, the result is
+  close to the &lsquo;<samp>-i</samp>&rsquo; axis. The result
+  always lies in the right half of the complex plane.</p>
+
+  <p>For &lsquo;<samp>ln(a+bi)</samp>&rsquo;: The real part is
+  defined as &lsquo;<samp>ln(abs(a+bi))</samp>&rsquo;. The
+  imaginary part is defined as &lsquo;<samp>arg(a+bi) =
+  arctan2(b,a)</samp>&rsquo;. Thus the branch cuts for
+  <code>sqrt</code> and <code>ln</code> both lie on the negative
+  real axis.</p>
+
+  <p>The following table describes these branch cuts in another
+  way. If the real and imaginary parts of
+  &lsquo;<samp>z</samp>&rsquo; are as shown, then the real and
+  imaginary parts of &lsquo;<samp>f(z)</samp>&rsquo; will be as
+  shown. Here <code>eps</code> stands for a small positive value;
+  each occurrence of <code>eps</code> may stand for a different
+  small value.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+     z           sqrt(z)       ln(z)
 ----------------------------------------
    +,   0         +,  0       any, 0
    -,   0         0,  +       any, pi
    -, +eps      +eps, +      +eps, +
    -, -eps      +eps, -      +eps, -
-</pre></div>
+</pre>
+  </div>
 
-<p>For &lsquo;<samp>z1^z2</samp>&rsquo;:  This is defined by &lsquo;<samp>exp(ln(z1)*z2)</samp>&rsquo;.
-One interesting consequence of this is that &lsquo;<samp>(-8)^1:3</samp>&rsquo; does
-not evaluate to <i>-2</i> as you might expect, but to the complex
-number &lsquo;<samp>(1., 1.732)</samp>&rsquo;.  Both of these are valid cube roots
-of <i>-8</i> (as is &lsquo;<samp>(1., -1.732)</samp>&rsquo;); Calc chooses a perhaps
-less-obvious root for the sake of mathematical consistency.
-</p>
-<p>For &lsquo;<samp>arcsin(z)</samp>&rsquo;:  This is defined by &lsquo;<samp>-i*ln(i*z + sqrt(1-z^2))</samp>&rsquo;.
-The branch cuts are on the real axis, less than <i>-1</i> and greater than 1.
-</p>
-<p>For &lsquo;<samp>arccos(z)</samp>&rsquo;:  This is defined by &lsquo;<samp>-i*ln(z + i*sqrt(1-z^2))</samp>&rsquo;,
-or equivalently by &lsquo;<samp>pi/2 - arcsin(z)</samp>&rsquo;.  The branch cuts are on
-the real axis, less than <i>-1</i> and greater than 1.
-</p>
-<p>For &lsquo;<samp>arctan(z)</samp>&rsquo;:  This is defined by
-&lsquo;<samp>(ln(1+i*z) - ln(1-i*z)) / (2*i)</samp>&rsquo;.  The branch cuts are on the
-imaginary axis, below &lsquo;<samp>-i</samp>&rsquo; and above &lsquo;<samp>i</samp>&rsquo;.
-</p>
-<p>For &lsquo;<samp>arcsinh(z)</samp>&rsquo;:  This is defined by &lsquo;<samp>ln(z + sqrt(1+z^2))</samp>&rsquo;.
-The branch cuts are on the imaginary axis, below &lsquo;<samp>-i</samp>&rsquo; and
-above &lsquo;<samp>i</samp>&rsquo;.
-</p>
-<p>For &lsquo;<samp>arccosh(z)</samp>&rsquo;:  This is defined by
-&lsquo;<samp>ln(z + (z+1)*sqrt((z-1)/(z+1)))</samp>&rsquo;.  The branch cut is on the
-real axis less than 1.
-</p>
-<p>For &lsquo;<samp>arctanh(z)</samp>&rsquo;:  This is defined by &lsquo;<samp>(ln(1+z) - ln(1-z)) / 2</samp>&rsquo;.
-The branch cuts are on the real axis, less than <i>-1</i> and greater than 1.
-</p>
-<p>The following tables for <code>arcsin</code>, <code>arccos</code>, and
-<code>arctan</code> assume the current angular mode is Radians.  The
-hyperbolic functions operate independently of the angular mode.
-</p>
-<div class="smallexample">
-<pre class="smallexample">       z             arcsin(z)            arccos(z)
+  <p>For &lsquo;<samp>z1^z2</samp>&rsquo;: This is defined by
+  &lsquo;<samp>exp(ln(z1)*z2)</samp>&rsquo;. One interesting
+  consequence of this is that &lsquo;<samp>(-8)^1:3</samp>&rsquo;
+  does not evaluate to <i>-2</i> as you might expect, but to the
+  complex number &lsquo;<samp>(1., 1.732)</samp>&rsquo;. Both of
+  these are valid cube roots of <i>-8</i> (as is &lsquo;<samp>(1.,
+  -1.732)</samp>&rsquo;); Calc chooses a perhaps less-obvious root
+  for the sake of mathematical consistency.</p>
+
+  <p>For &lsquo;<samp>arcsin(z)</samp>&rsquo;: This is defined by
+  &lsquo;<samp>-i*ln(i*z + sqrt(1-z^2))</samp>&rsquo;. The branch
+  cuts are on the real axis, less than <i>-1</i> and greater than
+  1.</p>
+
+  <p>For &lsquo;<samp>arccos(z)</samp>&rsquo;: This is defined by
+  &lsquo;<samp>-i*ln(z + i*sqrt(1-z^2))</samp>&rsquo;, or
+  equivalently by &lsquo;<samp>pi/2 - arcsin(z)</samp>&rsquo;. The
+  branch cuts are on the real axis, less than <i>-1</i> and greater
+  than 1.</p>
+
+  <p>For &lsquo;<samp>arctan(z)</samp>&rsquo;: This is defined by
+  &lsquo;<samp>(ln(1+i*z) - ln(1-i*z)) / (2*i)</samp>&rsquo;. The
+  branch cuts are on the imaginary axis, below
+  &lsquo;<samp>-i</samp>&rsquo; and above
+  &lsquo;<samp>i</samp>&rsquo;.</p>
+
+  <p>For &lsquo;<samp>arcsinh(z)</samp>&rsquo;: This is defined by
+  &lsquo;<samp>ln(z + sqrt(1+z^2))</samp>&rsquo;. The branch cuts
+  are on the imaginary axis, below &lsquo;<samp>-i</samp>&rsquo;
+  and above &lsquo;<samp>i</samp>&rsquo;.</p>
+
+  <p>For &lsquo;<samp>arccosh(z)</samp>&rsquo;: This is defined by
+  &lsquo;<samp>ln(z + (z+1)*sqrt((z-1)/(z+1)))</samp>&rsquo;. The
+  branch cut is on the real axis less than 1.</p>
+
+  <p>For &lsquo;<samp>arctanh(z)</samp>&rsquo;: This is defined by
+  &lsquo;<samp>(ln(1+z) - ln(1-z)) / 2</samp>&rsquo;. The branch
+  cuts are on the real axis, less than <i>-1</i> and greater than
+  1.</p>
+
+  <p>The following tables for <code>arcsin</code>,
+  <code>arccos</code>, and <code>arctan</code> assume the current
+  angular mode is Radians. The hyperbolic functions operate
+  independently of the angular mode.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+       z             arcsin(z)            arccos(z)
 -------------------------------------------------------
  (-1..1),  0      (-pi/2..pi/2), 0       (0..pi), 0
  (-1..1), +eps    (-pi/2..pi/2), +eps    (0..pi), -eps
@@ -170,10 +231,12 @@ hyperbolic functions operate independently of the angular mode.
     &gt;1,    0           pi/2,     -          0,    +
     &gt;1,  +eps       pi/2 - eps,  +        +eps,   -
     &gt;1,  -eps       pi/2 - eps,  -        +eps,   +
-</pre></div>
+</pre>
+  </div>
 
-<div class="smallexample">
-<pre class="smallexample">       z            arccosh(z)         arctanh(z)
+  <div class="smallexample">
+    <pre class="smallexample">
+       z            arccosh(z)         arctanh(z)
 -----------------------------------------------------
  (-1..1),  0        0,  (0..pi)       any,     0
  (-1..1), +eps    +eps, (0..pi)       any,    +eps
@@ -184,10 +247,12 @@ hyperbolic functions operate independently of the angular mode.
     &gt;1,    0        +,     0           +,    -pi/2
     &gt;1,  +eps       +,   +eps          +,  pi/2 - eps
     &gt;1,  -eps       +,   -eps          +, -pi/2 + eps
-</pre></div>
+</pre>
+  </div>
 
-<div class="smallexample">
-<pre class="smallexample">       z           arcsinh(z)           arctan(z)
+  <div class="smallexample">
+    <pre class="smallexample">
+       z           arcsinh(z)           arctan(z)
 -----------------------------------------------------
    0, (-1..1)    0, (-pi/2..pi/2)         0,     any
    0,   &lt;-1      -,    -pi/2            -pi/2,    -
@@ -196,30 +261,39 @@ hyperbolic functions operate independently of the angular mode.
    0,    &gt;1      +,     pi/2             pi/2,    +
  +eps,   &gt;1      +,  pi/2 - eps       pi/2 - eps, +
  -eps,   &gt;1      -,  pi/2 - eps      -pi/2 + eps, +
-</pre></div>
+</pre>
+  </div>
 
-<p>Finally, the following identities help to illustrate the relationship
-between the complex trigonometric and hyperbolic functions.  They
-are valid everywhere, including on the branch cuts.
-</p>
-<div class="smallexample">
-<pre class="smallexample">sin(i*z)  = i*sinh(z)       arcsin(i*z)  = i*arcsinh(z)
+  <p>Finally, the following identities help to illustrate the
+  relationship between the complex trigonometric and hyperbolic
+  functions. They are valid everywhere, including on the branch
+  cuts.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+sin(i*z)  = i*sinh(z)       arcsin(i*z)  = i*arcsinh(z)
 cos(i*z)  =   cosh(z)       arcsinh(i*z) = i*arcsin(z)
 tan(i*z)  = i*tanh(z)       arctan(i*z)  = i*arctanh(z)
 sinh(i*z) = i*sin(z)        cosh(i*z)    =   cos(z)
-</pre></div>
+</pre>
+  </div>
 
-<p>The &ldquo;advanced math&rdquo; functions (gamma, Bessel, etc.) are also defined
-for general complex arguments, but their branch cuts and principal values
-are not rigorously specified at present.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Random-Numbers.html#Random-Numbers" accesskey="n" rel="next">Random Numbers</a>, Previous: <a href="Advanced-Math-Functions.html#Advanced-Math-Functions" accesskey="p" rel="prev">Advanced Math Functions</a>, Up: <a href="Scientific-Functions.html#Scientific-Functions" accesskey="u" rel="up">Scientific Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The &ldquo;advanced math&rdquo; functions (gamma, Bessel,
+  etc.) are also defined for general complex arguments, but their
+  branch cuts and principal values are not rigorously specified at
+  present.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Random-Numbers.html#Random-Numbers"
+    accesskey="n" rel="next">Random Numbers</a>, Previous: <a href=
+    "Advanced-Math-Functions.html#Advanced-Math-Functions"
+    accesskey="p" rel="prev">Advanced Math Functions</a>, Up:
+    <a href="Scientific-Functions.html#Scientific-Functions"
+    accesskey="u" rel="up">Scientific Functions</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

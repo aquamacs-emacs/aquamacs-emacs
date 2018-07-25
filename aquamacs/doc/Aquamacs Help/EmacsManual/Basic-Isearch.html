@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,143 +20,208 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Basic Isearch</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Basic Isearch">
-<meta name="keywords" content="GNU Emacs Manual: Basic Isearch">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Incremental-Search.html#Incremental-Search" rel="up" title="Incremental Search">
-<link href="Repeat-Isearch.html#Repeat-Isearch" rel="next" title="Repeat Isearch">
-<link href="Incremental-Search.html#Incremental-Search" rel="prev" title="Incremental Search">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Basic Isearch</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Basic Isearch" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Basic Isearch" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Incremental-Search.html#Incremental-Search" rel="up"
+  title="Incremental Search" />
+  <link href="Repeat-Isearch.html#Repeat-Isearch" rel="next" title=
+  "Repeat Isearch" />
+  <link href="Incremental-Search.html#Incremental-Search" rel=
+  "prev" title="Incremental Search" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Basic-Isearch" id="Basic-Isearch"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Repeat-Isearch.html#Repeat-Isearch"
+    accesskey="n" rel="next">Repeat Isearch</a>, Up: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="u" rel=
+    "up">Incremental Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basics-of-Incremental-Search" id=
+  "Basics-of-Incremental-Search"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Isearch"></a>
-<div class="header">
-<p>
-Next: <a href="Repeat-Isearch.html#Repeat-Isearch" accesskey="n" rel="next">Repeat Isearch</a>, Up: <a href="Incremental-Search.html#Incremental-Search" accesskey="u" rel="up">Incremental Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basics-of-Incremental-Search"></a>
-<h4 class="subsection">15.1.1 Basics of Incremental Search</h4>
+  <h4 class="subsection">15.1.1 Basics of Incremental Search</h4>
 
-<dl compact="compact">
-<dt><kbd>C-s</kbd></dt>
-<dd><p>Begin incremental search (<code>isearch-forward</code>).
-</p></dd>
-<dt><kbd>C-r</kbd></dt>
-<dd><p>Begin reverse incremental search (<code>isearch-backward</code>).
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>C-s</kbd></dt>
 
-<a name="index-C_002ds"></a>
-<a name="index-isearch_002dforward"></a>
-<p><kbd>C-s</kbd> (<code>isearch-forward</code>) starts a forward incremental
-search.  It reads characters from the keyboard, and moves point just
-past the end of the next occurrence of those characters in the buffer.
-</p>
-<p>For instance, if you type <kbd>C-s</kbd> and then <kbd>F</kbd>, that puts the
-cursor after the first &lsquo;<samp>F</samp>&rsquo; that occurs in the buffer after the
-starting point.  If you then type <kbd>O</kbd>, the cursor moves to just
-after the first &lsquo;<samp>FO</samp>&rsquo;; the &lsquo;<samp>F</samp>&rsquo; in that &lsquo;<samp>FO</samp>&rsquo; might not be
-the first &lsquo;<samp>F</samp>&rsquo; previously found.  After another <kbd>O</kbd>, the
-cursor moves to just after the first &lsquo;<samp>FOO</samp>&rsquo;.
-</p>
-<a name="index-faces-for-highlighting-search-matches"></a>
-<a name="index-isearch-face"></a>
-<p>At each step, Emacs highlights the <em>current match</em>&mdash;the buffer
-text that matches the search string&mdash;using the <code>isearch</code> face
-(see <a href="Faces.html#Faces">Faces</a>).  See <a href="Search-Customizations.html#Search-Customizations">Search Customizations</a>, for various options
-that customize this highlighting.  The current search string is also
-displayed in the echo area.
-</p>
-<p>If you make a mistake typing the search string, type <tt class="key">DEL</tt>.
-Each <tt class="key">DEL</tt> cancels the last character of the search string.
-See <a href="Error-in-Isearch.html#Error-in-Isearch">Error in Isearch</a>, for more about dealing with unsuccessful
-search.
-</p>
-<a name="index-exit-incremental-search"></a>
-<a name="index-incremental-search_002c-exiting"></a>
-<p>When you are satisfied with the place you have reached, type
-<tt class="key">RET</tt>.  This stops searching, leaving the cursor where the search
-brought it.  Also, any command not specially meaningful in searches
-stops the searching and is then executed.  Thus, typing <kbd>C-a</kbd>
-exits the search and then moves to the beginning of the line; typing
-one of the arrow keys exits the search and performs the respective
-movement command; etc.  <tt class="key">RET</tt> is necessary only if the next
-command you want to type is a printing character, <tt class="key">DEL</tt>,
-<tt class="key">RET</tt>, or another character that is special within searches
-(<kbd>C-q</kbd>, <kbd>C-w</kbd>, <kbd>C-r</kbd>, <kbd>C-s</kbd>, <kbd>C-y</kbd>, <kbd>M-y</kbd>,
-<kbd>M-r</kbd>, <kbd>M-c</kbd>, <kbd>M-e</kbd>, and some others described below).
-You can fine-tune the commands that exit the search; see <a href="Not-Exiting-Isearch.html#Not-Exiting-Isearch">Not Exiting Isearch</a>.
-</p>
-<p>As a special exception, entering <tt class="key">RET</tt> when the search string is
-empty launches nonincremental search (see <a href="Nonincremental-Search.html#Nonincremental-Search">Nonincremental Search</a>).
-(This can be customized; see <a href="Search-Customizations.html#Search-Customizations">Search Customizations</a>.)
-</p>
-<p>To abandon the search and return to the place where you started,
-type <kbd><span class="key">ESC</span> <span class="key">ESC</span> <span class="key">ESC</span></kbd> (<code>isearch-cancel</code>) or
-<kbd>C-g C-g</kbd> (<code>isearch-abort</code>).
-</p>
-<p>When you exit the incremental search, it adds the original value of
-point to the mark ring, without activating the mark; you can thus use
-<kbd>C-u C-<span class="key">SPC</span></kbd> or <kbd>C-x C-x</kbd> to return to where you were
-before beginning the search.  See <a href="Mark-Ring.html#Mark-Ring">Mark Ring</a>.  (Emacs only does this
-if the mark was not already active; if the mark was active when you
-started the search, both <kbd>C-u C-<span class="key">SPC</span></kbd> and <kbd>C-x C-x</kbd> will
-go to the mark.)
-</p>
-<a name="index-C_002dr"></a>
-<a name="index-isearch_002dbackward"></a>
-<p>To search backwards, use <kbd>C-r</kbd> (<code>isearch-backward</code>) instead
-of <kbd>C-s</kbd> to start the search.  A backward search finds matches
-that end before the starting point, just as a forward search finds
-matches that begin after it.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Repeat-Isearch.html#Repeat-Isearch" accesskey="n" rel="next">Repeat Isearch</a>, Up: <a href="Incremental-Search.html#Incremental-Search" accesskey="u" rel="up">Incremental Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Begin incremental search
+      (<code>isearch-forward</code>).</p>
+    </dd>
 
+    <dt><kbd>C-r</kbd></dt>
 
+    <dd>
+      <p>Begin reverse incremental search
+      (<code>isearch-backward</code>).</p>
+    </dd>
+  </dl><a name="index-C_002ds" id="index-C_002ds"></a> <a name=
+  "index-isearch_002dforward" id="index-isearch_002dforward"></a>
 
+  <p><kbd>C-s</kbd> (<code>isearch-forward</code>) starts a forward
+  incremental search. It reads characters from the keyboard, and
+  moves point just past the end of the next occurrence of those
+  characters in the buffer.</p>
+
+  <p>For instance, if you type <kbd>C-s</kbd> and then
+  <kbd>F</kbd>, that puts the cursor after the first
+  &lsquo;<samp>F</samp>&rsquo; that occurs in the buffer after the
+  starting point. If you then type <kbd>O</kbd>, the cursor moves
+  to just after the first &lsquo;<samp>FO</samp>&rsquo;; the
+  &lsquo;<samp>F</samp>&rsquo; in that
+  &lsquo;<samp>FO</samp>&rsquo; might not be the first
+  &lsquo;<samp>F</samp>&rsquo; previously found. After another
+  <kbd>O</kbd>, the cursor moves to just after the first
+  &lsquo;<samp>FOO</samp>&rsquo;.</p><a name=
+  "index-faces-for-highlighting-search-matches" id=
+  "index-faces-for-highlighting-search-matches"></a> <a name=
+  "index-isearch-face" id="index-isearch-face"></a>
+
+  <p>At each step, Emacs highlights the <em>current
+  match</em>&mdash;the buffer text that matches the search
+  string&mdash;using the <code>isearch</code> face (see <a href=
+  "Faces.html#Faces">Faces</a>). See <a href=
+  "Search-Customizations.html#Search-Customizations">Search
+  Customizations</a>, for various options that customize this
+  highlighting. The current search string is also displayed in the
+  echo area.</p>
+
+  <p>If you make a mistake typing the search string, type
+  <tt class="key">DEL</tt>. Each <tt class="key">DEL</tt> cancels
+  the last character of the search string. See <a href=
+  "Error-in-Isearch.html#Error-in-Isearch">Error in Isearch</a>,
+  for more about dealing with unsuccessful search.</p><a name=
+  "index-exit-incremental-search" id=
+  "index-exit-incremental-search"></a> <a name=
+  "index-incremental-search_002c-exiting" id=
+  "index-incremental-search_002c-exiting"></a>
+
+  <p>When you are satisfied with the place you have reached, type
+  <tt class="key">RET</tt>. This stops searching, leaving the
+  cursor where the search brought it. Also, any command not
+  specially meaningful in searches stops the searching and is then
+  executed. Thus, typing <kbd>C-a</kbd> exits the search and then
+  moves to the beginning of the line; typing one of the arrow keys
+  exits the search and performs the respective movement command;
+  etc. <tt class="key">RET</tt> is necessary only if the next
+  command you want to type is a printing character, <tt class=
+  "key">DEL</tt>, <tt class="key">RET</tt>, or another character
+  that is special within searches (<kbd>C-q</kbd>, <kbd>C-w</kbd>,
+  <kbd>C-r</kbd>, <kbd>C-s</kbd>, <kbd>C-y</kbd>, <kbd>M-y</kbd>,
+  <kbd>M-r</kbd>, <kbd>M-c</kbd>, <kbd>M-e</kbd>, and some others
+  described below). You can fine-tune the commands that exit the
+  search; see <a href=
+  "Not-Exiting-Isearch.html#Not-Exiting-Isearch">Not Exiting
+  Isearch</a>.</p>
+
+  <p>As a special exception, entering <tt class="key">RET</tt> when
+  the search string is empty launches nonincremental search (see
+  <a href=
+  "Nonincremental-Search.html#Nonincremental-Search">Nonincremental
+  Search</a>). (This can be customized; see <a href=
+  "Search-Customizations.html#Search-Customizations">Search
+  Customizations</a>.)</p>
+
+  <p>To abandon the search and return to the place where you
+  started, type <kbd><span class="key">ESC</span> <span class=
+  "key">ESC</span> <span class="key">ESC</span></kbd>
+  (<code>isearch-cancel</code>) or <kbd>C-g C-g</kbd>
+  (<code>isearch-abort</code>).</p>
+
+  <p>When you exit the incremental search, it adds the original
+  value of point to the mark ring, without activating the mark; you
+  can thus use <kbd>C-u C-<span class="key">SPC</span></kbd> or
+  <kbd>C-x C-x</kbd> to return to where you were before beginning
+  the search. See <a href="Mark-Ring.html#Mark-Ring">Mark Ring</a>.
+  (Emacs only does this if the mark was not already active; if the
+  mark was active when you started the search, both <kbd>C-u
+  C-<span class="key">SPC</span></kbd> and <kbd>C-x C-x</kbd> will
+  go to the mark.)</p><a name="index-C_002dr" id=
+  "index-C_002dr"></a> <a name="index-isearch_002dbackward" id=
+  "index-isearch_002dbackward"></a>
+
+  <p>To search backwards, use <kbd>C-r</kbd>
+  (<code>isearch-backward</code>) instead of <kbd>C-s</kbd> to
+  start the search. A backward search finds matches that end before
+  the starting point, just as a forward search finds matches that
+  begin after it.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Repeat-Isearch.html#Repeat-Isearch"
+    accesskey="n" rel="next">Repeat Isearch</a>, Up: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="u" rel=
+    "up">Incremental Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

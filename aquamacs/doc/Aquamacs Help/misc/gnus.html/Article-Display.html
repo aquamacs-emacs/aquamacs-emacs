@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,169 +14,256 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Article Display</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Article Display">
-<meta name="keywords" content="Gnus Manual: Article Display">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Article-Treatment.html#Article-Treatment" rel="up" title="Article Treatment">
-<link href="Article-Signature.html#Article-Signature" rel="next" title="Article Signature">
-<link href="Article-Date.html#Article-Date" rel="prev" title="Article Date">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Article Display</title>
+  <meta name="description" content=
+  "Gnus Manual: Article Display" />
+  <meta name="keywords" content="Gnus Manual: Article Display" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Article-Treatment.html#Article-Treatment" rel="up"
+  title="Article Treatment" />
+  <link href="Article-Signature.html#Article-Signature" rel="next"
+  title="Article Signature" />
+  <link href="Article-Date.html#Article-Date" rel="prev" title=
+  "Article Date" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Article-Display"></a>
-<div class="header">
-<p>
-Next: <a href="Article-Signature.html#Article-Signature" accesskey="n" rel="next">Article Signature</a>, Previous: <a href="Article-Date.html#Article-Date" accesskey="p" rel="prev">Article Date</a>, Up: <a href="Article-Treatment.html#Article-Treatment" accesskey="u" rel="up">Article Treatment</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Article-Display-1"></a>
-<h4 class="subsection">3.18.9 Article Display</h4>
-<a name="index-picons"></a>
-<a name="index-x_002dface"></a>
-<a name="index-smileys"></a>
-<a name="index-gravatars"></a>
+<body lang="en" xml:lang="en">
+  <a name="Article-Display" id="Article-Display"></a>
 
-<p>These commands add various frivolous display gimmicks to the article
-buffer in Emacs versions that support them.
-</p>
-<p><code>X-Face</code> headers are small black-and-white images supplied by the
-message headers (see <a href="X_002dFace.html#X_002dFace">X-Face</a>).
-</p>
-<p><code>Face</code> headers are small colored images supplied by the message
-headers (see <a href="Face.html#Face">Face</a>).
-</p>
-<p>Smileys are those little &lsquo;<samp>:-)</samp>&rsquo; symbols that people like to litter
-their messages with (see <a href="Smileys.html#Smileys">Smileys</a>).
-</p>
-<p>Picons, on the other hand, reside on your own system, and Gnus will
-try to match the headers to what you have (see <a href="Picons.html#Picons">Picons</a>).
-</p>
-<p>Gravatars reside on-line and are fetched from
-<a href="http://www.gravatar.com/">http://www.gravatar.com/</a> (see <a href="Gravatars.html#Gravatars">Gravatars</a>).
-</p>
-<p>All these functions are toggles&mdash;if the elements already exist,
-they&rsquo;ll be removed.
-</p>
-<dl compact="compact">
-<dt><kbd>W D x</kbd></dt>
-<dd><a name="index-W-D-x-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002ddisplay_002dx_002dface"></a>
-<p>Display an <code>X-Face</code> in the <code>From</code> header.
-(<code>gnus-article-display-x-face</code>).
-</p>
-</dd>
-<dt><kbd>W D d</kbd></dt>
-<dd><a name="index-W-D-d-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002ddisplay_002dface"></a>
-<p>Display a <code>Face</code> in the <code>From</code> header.
-(<code>gnus-article-display-face</code>).
-</p>
-</dd>
-<dt><kbd>W D s</kbd></dt>
-<dd><a name="index-W-D-s-_0028Summary_0029"></a>
-<a name="index-gnus_002dtreat_002dsmiley"></a>
-<p>Display smileys (<code>gnus-treat-smiley</code>).
-</p>
-</dd>
-<dt><kbd>W D f</kbd></dt>
-<dd><a name="index-W-D-f-_0028Summary_0029"></a>
-<a name="index-gnus_002dtreat_002dfrom_002dpicon"></a>
-<p>Piconify the <code>From</code> header (<code>gnus-treat-from-picon</code>).
-</p>
-</dd>
-<dt><kbd>W D m</kbd></dt>
-<dd><a name="index-W-D-m-_0028Summary_0029"></a>
-<a name="index-gnus_002dtreat_002dmail_002dpicon"></a>
-<p>Piconify all mail headers (i.e., <code>Cc</code>, <code>To</code>)
-(<code>gnus-treat-mail-picon</code>).
-</p>
-</dd>
-<dt><kbd>W D n</kbd></dt>
-<dd><a name="index-W-D-n-_0028Summary_0029"></a>
-<a name="index-gnus_002dtreat_002dnewsgroups_002dpicon"></a>
-<p>Piconify all news headers (i.e., <code>Newsgroups</code> and
-<code>Followup-To</code>) (<code>gnus-treat-newsgroups-picon</code>).
-</p>
-</dd>
-<dt><kbd>W D g</kbd></dt>
-<dd><a name="index-W-D-g-_0028Summary_0029"></a>
-<a name="index-gnus_002dtreat_002dfrom_002dgravatar"></a>
-<p>Gravatarify the <code>From</code> header (<code>gnus-treat-from-gravatar</code>).
-</p>
-</dd>
-<dt><kbd>W D h</kbd></dt>
-<dd><a name="index-W-D-h-_0028Summary_0029"></a>
-<a name="index-gnus_002dtreat_002dmail_002dgravatar"></a>
-<p>Gravatarify all mail headers (i.e., <code>Cc</code>, <code>To</code>)
-(<code>gnus-treat-from-gravatar</code>).
-</p>
-</dd>
-<dt><kbd>W D D</kbd></dt>
-<dd><a name="index-W-D-D-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dremove_002dimages"></a>
-<p>Remove all images from the article buffer
-(<code>gnus-article-remove-images</code>).
-</p>
-</dd>
-<dt><kbd>W D W</kbd></dt>
-<dd><a name="index-W-D-W-_0028Summary_0029"></a>
-<a name="index-gnus_002dhtml_002dshow_002dimages"></a>
-<p>If you&rsquo;re reading an <acronym>HTML</acronym> article rendered with
-<code>gnus-article-html</code>, then you can insert any blocked images in
-the buffer with this command.
-(<code>gnus-html-show-images</code>).
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Article-Signature.html#Article-Signature"
+    accesskey="n" rel="next">Article Signature</a>, Previous:
+    <a href="Article-Date.html#Article-Date" accesskey="p" rel=
+    "prev">Article Date</a>, Up: <a href=
+    "Article-Treatment.html#Article-Treatment" accesskey="u" rel=
+    "up">Article Treatment</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Article-Display-1" id="Article-Display-1"></a>
 
+  <h4 class="subsection">3.18.9 Article Display</h4><a name=
+  "index-picons" id="index-picons"></a> <a name="index-x_002dface"
+  id="index-x_002dface"></a> <a name="index-smileys" id=
+  "index-smileys"></a> <a name="index-gravatars" id=
+  "index-gravatars"></a>
 
+  <p>These commands add various frivolous display gimmicks to the
+  article buffer in Emacs versions that support them.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Article-Signature.html#Article-Signature" accesskey="n" rel="next">Article Signature</a>, Previous: <a href="Article-Date.html#Article-Date" accesskey="p" rel="prev">Article Date</a>, Up: <a href="Article-Treatment.html#Article-Treatment" accesskey="u" rel="up">Article Treatment</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p><code>X-Face</code> headers are small black-and-white images
+  supplied by the message headers (see <a href=
+  "X_002dFace.html#X_002dFace">X-Face</a>).</p>
 
+  <p><code>Face</code> headers are small colored images supplied by
+  the message headers (see <a href="Face.html#Face">Face</a>).</p>
 
+  <p>Smileys are those little &lsquo;<samp>:-)</samp>&rsquo;
+  symbols that people like to litter their messages with (see
+  <a href="Smileys.html#Smileys">Smileys</a>).</p>
 
+  <p>Picons, on the other hand, reside on your own system, and Gnus
+  will try to match the headers to what you have (see <a href=
+  "Picons.html#Picons">Picons</a>).</p>
+
+  <p>Gravatars reside on-line and are fetched from <a href=
+  "http://www.gravatar.com/">http://www.gravatar.com/</a> (see
+  <a href="Gravatars.html#Gravatars">Gravatars</a>).</p>
+
+  <p>All these functions are toggles&mdash;if the elements already
+  exist, they&rsquo;ll be removed.</p>
+
+  <dl compact="compact">
+    <dt><kbd>W D x</kbd></dt>
+
+    <dd>
+      <a name="index-W-D-x-_0028Summary_0029" id=
+      "index-W-D-x-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002ddisplay_002dx_002dface" id=
+      "index-gnus_002darticle_002ddisplay_002dx_002dface"></a>
+
+      <p>Display an <code>X-Face</code> in the <code>From</code>
+      header. (<code>gnus-article-display-x-face</code>).</p>
+    </dd>
+
+    <dt><kbd>W D d</kbd></dt>
+
+    <dd>
+      <a name="index-W-D-d-_0028Summary_0029" id=
+      "index-W-D-d-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002ddisplay_002dface" id=
+      "index-gnus_002darticle_002ddisplay_002dface"></a>
+
+      <p>Display a <code>Face</code> in the <code>From</code>
+      header. (<code>gnus-article-display-face</code>).</p>
+    </dd>
+
+    <dt><kbd>W D s</kbd></dt>
+
+    <dd>
+      <a name="index-W-D-s-_0028Summary_0029" id=
+      "index-W-D-s-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dtreat_002dsmiley" id=
+      "index-gnus_002dtreat_002dsmiley"></a>
+
+      <p>Display smileys (<code>gnus-treat-smiley</code>).</p>
+    </dd>
+
+    <dt><kbd>W D f</kbd></dt>
+
+    <dd>
+      <a name="index-W-D-f-_0028Summary_0029" id=
+      "index-W-D-f-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dtreat_002dfrom_002dpicon" id=
+      "index-gnus_002dtreat_002dfrom_002dpicon"></a>
+
+      <p>Piconify the <code>From</code> header
+      (<code>gnus-treat-from-picon</code>).</p>
+    </dd>
+
+    <dt><kbd>W D m</kbd></dt>
+
+    <dd>
+      <a name="index-W-D-m-_0028Summary_0029" id=
+      "index-W-D-m-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dtreat_002dmail_002dpicon" id=
+      "index-gnus_002dtreat_002dmail_002dpicon"></a>
+
+      <p>Piconify all mail headers (i.e., <code>Cc</code>,
+      <code>To</code>) (<code>gnus-treat-mail-picon</code>).</p>
+    </dd>
+
+    <dt><kbd>W D n</kbd></dt>
+
+    <dd>
+      <a name="index-W-D-n-_0028Summary_0029" id=
+      "index-W-D-n-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dtreat_002dnewsgroups_002dpicon" id=
+      "index-gnus_002dtreat_002dnewsgroups_002dpicon"></a>
+
+      <p>Piconify all news headers (i.e., <code>Newsgroups</code>
+      and <code>Followup-To</code>)
+      (<code>gnus-treat-newsgroups-picon</code>).</p>
+    </dd>
+
+    <dt><kbd>W D g</kbd></dt>
+
+    <dd>
+      <a name="index-W-D-g-_0028Summary_0029" id=
+      "index-W-D-g-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dtreat_002dfrom_002dgravatar" id=
+      "index-gnus_002dtreat_002dfrom_002dgravatar"></a>
+
+      <p>Gravatarify the <code>From</code> header
+      (<code>gnus-treat-from-gravatar</code>).</p>
+    </dd>
+
+    <dt><kbd>W D h</kbd></dt>
+
+    <dd>
+      <a name="index-W-D-h-_0028Summary_0029" id=
+      "index-W-D-h-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dtreat_002dmail_002dgravatar" id=
+      "index-gnus_002dtreat_002dmail_002dgravatar"></a>
+
+      <p>Gravatarify all mail headers (i.e., <code>Cc</code>,
+      <code>To</code>) (<code>gnus-treat-from-gravatar</code>).</p>
+    </dd>
+
+    <dt><kbd>W D D</kbd></dt>
+
+    <dd>
+      <a name="index-W-D-D-_0028Summary_0029" id=
+      "index-W-D-D-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dremove_002dimages" id=
+      "index-gnus_002darticle_002dremove_002dimages"></a>
+
+      <p>Remove all images from the article buffer
+      (<code>gnus-article-remove-images</code>).</p>
+    </dd>
+
+    <dt><kbd>W D W</kbd></dt>
+
+    <dd>
+      <a name="index-W-D-W-_0028Summary_0029" id=
+      "index-W-D-W-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dhtml_002dshow_002dimages" id=
+      "index-gnus_002dhtml_002dshow_002dimages"></a>
+
+      <p>If you&rsquo;re reading an <acronym>HTML</acronym> article
+      rendered with <code>gnus-article-html</code>, then you can
+      insert any blocked images in the buffer with this command.
+      (<code>gnus-html-show-images</code>).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Article-Signature.html#Article-Signature"
+    accesskey="n" rel="next">Article Signature</a>, Previous:
+    <a href="Article-Date.html#Article-Date" accesskey="p" rel=
+    "prev">Article Date</a>, Up: <a href=
+    "Article-Treatment.html#Article-Treatment" accesskey="u" rel=
+    "up">Article Treatment</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

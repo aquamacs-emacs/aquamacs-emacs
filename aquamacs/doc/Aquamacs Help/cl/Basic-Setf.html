@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Basic Setf - Common Lisp Extensions</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Common Lisp Extensions">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Generalized-Variables.html#Generalized-Variables" title="Generalized Variables">
-<link rel="prev" href="Generalized-Variables.html#Generalized-Variables" title="Generalized Variables">
-<link rel="next" href="Modify-Macros.html#Modify-Macros" title="Modify Macros">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Basic Setf - Common Lisp Extensions</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Common Lisp Extensions" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Generalized-Variables.html#Generalized-Variables" title=
+  "Generalized Variables" />
+  <link rel="prev" href=
+  "Generalized-Variables.html#Generalized-Variables" title=
+  "Generalized Variables" />
+  <link rel="next" href="Modify-Macros.html#Modify-Macros" title=
+  "Modify Macros" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -27,8 +38,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,63 +51,83 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Basic-Setf"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Modify-Macros.html#Modify-Macros">Modify Macros</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Generalized-Variables.html#Generalized-Variables">Generalized Variables</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Generalized-Variables.html#Generalized-Variables">Generalized Variables</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Basic-Setf" id="Basic-Setf"></a>
 
-<h4 class="subsection">5.2.1 Basic Setf</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Modify-Macros.html#Modify-Macros">Modify Macros</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Generalized-Variables.html#Generalized-Variables">Generalized
+    Variables</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Generalized-Variables.html#Generalized-Variables">Generalized
+    Variables</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">The <code>setf</code> macro is the most basic way to operate on generalized
-variables.
+  <h4 class="subsection">5.2.1 Basic Setf</h4>
 
-<div class="defun">
-&mdash; Special Form: <b>setf</b> [<var>place form</var>]<var><small class="dots">...</small><a name="index-setf-13"></a></var><br>
-<blockquote><p>This macro evaluates <var>form</var> and stores it in <var>place</var>, which
-must be a valid generalized variable form.  If there are several
-<var>place</var> and <var>form</var> pairs, the assignments are done sequentially
-just as with <code>setq</code>.  <code>setf</code> returns the value of the last
-<var>form</var>.
+  <p class="noindent">The <code>setf</code> macro is the most basic
+  way to operate on generalized variables.</p>
 
-        <p>The following Lisp forms will work as generalized variables, and
-so may appear in the <var>place</var> argument of <code>setf</code>:
+  <div class="defun">
+    &mdash; Special Form: <b>setf</b> [<var>place
+    form</var>]<var><small class="dots">...</small><a name=
+    "index-setf-13" id="index-setf-13"></a></var><br />
 
-          <ul>
-<li>A symbol naming a variable.  In other words, <code>(setf x y)</code> is
-exactly equivalent to <code>(setq x y)</code>, and <code>setq</code> itself is
-strictly speaking redundant now that <code>setf</code> exists.  Many
-programmers continue to prefer <code>setq</code> for setting simple
-variables, though, purely for stylistic or historical reasons. 
-The macro <code>(setf x y)</code> actually expands to <code>(setq x y)</code>,
-so there is no performance penalty for using it in compiled code.
+    <blockquote>
+      <p>This macro evaluates <var>form</var> and stores it in
+      <var>place</var>, which must be a valid generalized variable
+      form. If there are several <var>place</var> and
+      <var>form</var> pairs, the assignments are done sequentially
+      just as with <code>setq</code>. <code>setf</code> returns the
+      value of the last <var>form</var>.</p>
 
-          <li>A call to any of the following Lisp functions:
+      <p>The following Lisp forms will work as generalized
+      variables, and so may appear in the <var>place</var> argument
+      of <code>setf</code>:</p>
 
-          <pre class="smallexample">               car                 cdr                 caar .. cddddr
+      <ul>
+        <li>A symbol naming a variable. In other words, <code>(setf
+        x y)</code> is exactly equivalent to <code>(setq x
+        y)</code>, and <code>setq</code> itself is strictly
+        speaking redundant now that <code>setf</code> exists. Many
+        programmers continue to prefer <code>setq</code> for
+        setting simple variables, though, purely for stylistic or
+        historical reasons. The macro <code>(setf x y)</code>
+        actually expands to <code>(setq x y)</code>, so there is no
+        performance penalty for using it in compiled code.</li>
+
+        <li>A call to any of the following Lisp functions:
+          <pre class="smallexample">
+               car                 cdr                 caar .. cddddr
                nth                 rest                first .. tenth
                aref                elt                 nthcdr
                symbol-function     symbol-value        symbol-plist
                get                 get*                getf
                gethash             subseq
 </pre>
-          <p class="noindent">Note that for <code>nthcdr</code> and <code>getf</code>, the list argument
-of the function must itself be a valid <var>place</var> form.  For
-example, <code>(setf (nthcdr 0 foo) 7)</code> will set <code>foo</code> itself
-to 7.  Note that <code>push</code> and <code>pop</code> on an <code>nthcdr</code>
-place can be used to insert or delete at any position in a list. 
-The use of <code>nthcdr</code> as a <var>place</var> form is an extension
-to standard Common Lisp.
 
-          <li>The following Emacs-specific functions are also <code>setf</code>-able.
+          <p class="noindent">Note that for <code>nthcdr</code> and
+          <code>getf</code>, the list argument of the function must
+          itself be a valid <var>place</var> form. For example,
+          <code>(setf (nthcdr 0 foo) 7)</code> will set
+          <code>foo</code> itself to 7. Note that <code>push</code>
+          and <code>pop</code> on an <code>nthcdr</code> place can
+          be used to insert or delete at any position in a list.
+          The use of <code>nthcdr</code> as a <var>place</var> form
+          is an extension to standard Common Lisp.</p>
+        </li>
 
-          <pre class="smallexample">               buffer-file-name                  marker-position
+        <li>The following Emacs-specific functions are also <code>
+          setf</code>-able.
+          <pre class="smallexample">
+               buffer-file-name                  marker-position
                buffer-modified-p                 match-data
                buffer-name                       mouse-position
                buffer-string                     overlay-end
@@ -130,19 +163,27 @@ to standard Common Lisp.
                mark
                mark-marker
 </pre>
-          <p>Most of these have directly corresponding &ldquo;set&rdquo; functions, like
-<code>use-local-map</code> for <code>current-local-map</code>, or <code>goto-char</code>
-for <code>point</code>.  A few, like <code>point-min</code>, expand to longer
-sequences of code when they are <code>setf</code>'d (<code>(narrow-to-region
-x (point-max))</code> in this case).
 
-          <li>A call of the form <code>(substring </code><var>subplace</var> <var>n</var><code> [</code><var>m</var><code>])</code>,
-where <var>subplace</var> is itself a valid generalized variable whose
-current value is a string, and where the value stored is also a
-string.  The new string is spliced into the specified part of the
-destination string.  For example:
+          <p>Most of these have directly corresponding
+          &ldquo;set&rdquo; functions, like
+          <code>use-local-map</code> for
+          <code>current-local-map</code>, or <code>goto-char</code>
+          for <code>point</code>. A few, like
+          <code>point-min</code>, expand to longer sequences of
+          code when they are <code>setf</code>'d
+          (<code>(narrow-to-region x (point-max))</code> in this
+          case).</p>
+        </li>
 
-          <pre class="example">               (setq a (list "hello" "world"))
+        <li>A call of the form <code>(substring</code>
+        <var>subplace</var> <var>n</var>
+        <code>[</code><var>m</var><code>])</code>, where
+        <var>subplace</var> is itself a valid generalized variable
+        whose current value is a string, and where the value stored
+        is also a string. The new string is spliced into the
+        specified part of the destination string. For example:
+          <pre class="example">
+               (setq a (list "hello" "world"))
                     &rArr; ("hello" "world")
                (cadr a)
                     &rArr; "world"
@@ -155,50 +196,63 @@ destination string.  For example:
                a
                     &rArr; ("hello" "wood")
 </pre>
-          <p>The generalized variable <code>buffer-substring</code>, listed above,
-also works in this way by replacing a portion of the current buffer.
 
-          <li>A call of the form <code>(apply '</code><var>func</var><code> ...)</code> or
-<code>(apply (function </code><var>func</var><code>) ...)</code>, where <var>func</var>
-is a <code>setf</code>-able function whose store function is &ldquo;suitable&rdquo;
-in the sense described in Steele's book; since none of the standard
-Emacs place functions are suitable in this sense, this feature is
-only interesting when used with places you define yourself with
-<code>define-setf-method</code> or the long form of <code>defsetf</code>.
+          <p>The generalized variable
+          <code>buffer-substring</code>, listed above, also works
+          in this way by replacing a portion of the current
+          buffer.</p>
+        </li>
 
-          <li>A macro call, in which case the macro is expanded and <code>setf</code>
-is applied to the resulting form.
+        <li>A call of the form <code>(apply '</code><var>func</var>
+        <code>...)</code> or <code>(apply (function</code>
+        <var>func</var><code>) ...)</code>, where <var>func</var>
+        is a <code>setf</code>-able function whose store function
+        is &ldquo;suitable&rdquo; in the sense described in
+        Steele's book; since none of the standard Emacs place
+        functions are suitable in this sense, this feature is only
+        interesting when used with places you define yourself with
+        <code>define-setf-method</code> or the long form of
+        <code>defsetf</code>.</li>
 
-          <li>Any form for which a <code>defsetf</code> or <code>define-setf-method</code>
-has been made. 
-</ul>
+        <li>A macro call, in which case the macro is expanded and
+        <code>setf</code> is applied to the resulting form.</li>
 
-        <p>Using any forms other than these in the <var>place</var> argument to
-<code>setf</code> will signal an error.
+        <li>Any form for which a <code>defsetf</code> or
+        <code>define-setf-method</code> has been made.</li>
+      </ul>
 
-        <p>The <code>setf</code> macro takes care to evaluate all subforms in
-the proper left-to-right order; for example,
+      <p>Using any forms other than these in the <var>place</var>
+      argument to <code>setf</code> will signal an error.</p>
 
-     <pre class="example">          (setf (aref vec (incf i)) i)
+      <p>The <code>setf</code> macro takes care to evaluate all
+      subforms in the proper left-to-right order; for example,</p>
+      <pre class="example">
+          (setf (aref vec (incf i)) i)
 </pre>
-        <p class="noindent">looks like it will evaluate <code>(incf i)</code> exactly once, before the
-following access to <code>i</code>; the <code>setf</code> expander will insert
-temporary variables as necessary to ensure that it does in fact work
-this way no matter what setf-method is defined for <code>aref</code>. 
-(In this case, <code>aset</code> would be used and no such steps would
-be necessary since <code>aset</code> takes its arguments in a convenient
-order.)
 
-        <p>However, if the <var>place</var> form is a macro which explicitly
-evaluates its arguments in an unusual order, this unusual order
-will be preserved.  Adapting an example from Steele, given
+      <p class="noindent">looks like it will evaluate <code>(incf
+      i)</code> exactly once, before the following access to
+      <code>i</code>; the <code>setf</code> expander will insert
+      temporary variables as necessary to ensure that it does in
+      fact work this way no matter what setf-method is defined for
+      <code>aref</code>. (In this case, <code>aset</code> would be
+      used and no such steps would be necessary since
+      <code>aset</code> takes its arguments in a convenient
+      order.)</p>
 
-     <pre class="example">          (defmacro wrong-order (x y) (list 'aref y x))
+      <p>However, if the <var>place</var> form is a macro which
+      explicitly evaluates its arguments in an unusual order, this
+      unusual order will be preserved. Adapting an example from
+      Steele, given</p>
+      <pre class="example">
+          (defmacro wrong-order (x y) (list 'aref y x))
 </pre>
-        <p class="noindent">the form <code>(setf (wrong-order </code><var>a</var> <var>b</var><code>) 17)</code> will
-evaluate <var>b</var> first, then <var>a</var>, just as in an actual call
-to <code>wrong-order</code>. 
-</p></blockquote></div>
 
-   </body></html>
-
+      <p class="noindent">the form <code>(setf (wrong-order</code>
+      <var>a</var> <var>b</var><code>) 17)</code> will evaluate
+      <var>b</var> first, then <var>a</var>, just as in an actual
+      call to <code>wrong-order</code>.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

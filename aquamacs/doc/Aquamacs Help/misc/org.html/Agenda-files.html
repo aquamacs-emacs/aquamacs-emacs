@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,176 +16,270 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Agenda files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Agenda files">
-<meta name="keywords" content="The Org Manual: Agenda files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Agenda-Views.html#Agenda-Views" rel="up" title="Agenda Views">
-<link href="Agenda-dispatcher.html#Agenda-dispatcher" rel="next" title="Agenda dispatcher">
-<link href="Agenda-Views.html#Agenda-Views" rel="prev" title="Agenda Views">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Agenda files</title>
+  <meta name="description" content=
+  "The Org Manual: Agenda files" />
+  <meta name="keywords" content="The Org Manual: Agenda files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Agenda-Views.html#Agenda-Views" rel="up" title=
+  "Agenda Views" />
+  <link href="Agenda-dispatcher.html#Agenda-dispatcher" rel="next"
+  title="Agenda dispatcher" />
+  <link href="Agenda-Views.html#Agenda-Views" rel="prev" title=
+  "Agenda Views" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Agenda-files"></a>
-<div class="header">
-<p>
-Next: <a href="Agenda-dispatcher.html#Agenda-dispatcher" accesskey="n" rel="next">Agenda dispatcher</a>, Previous: <a href="Agenda-Views.html#Agenda-Views" accesskey="p" rel="prev">Agenda Views</a>, Up: <a href="Agenda-Views.html#Agenda-Views" accesskey="u" rel="up">Agenda Views</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Agenda-files-1"></a>
-<h3 class="section">10.1 Agenda files</h3>
-<a name="index-agenda-files"></a>
-<a name="index-files-for-agenda"></a>
+<body lang="en" xml:lang="en">
+  <a name="Agenda-files" id="Agenda-files"></a>
 
-<a name="index-org_002dagenda_002dfiles"></a>
-<p>The information to be shown is normally collected from all <em>agenda
-files</em>, the files listed in the variable
-<code>org-agenda-files</code><a name="DOCF98" href="#FOOT98"><sup>98</sup></a>.  If a directory is part of this list,
-all files with the extension <samp>.org</samp> in this directory will be part
-of the list.
-</p>
-<p>Thus, even if you only work with a single Org file, that file should
-be put into the list<a name="DOCF99" href="#FOOT99"><sup>99</sup></a>.  You can customize <code>org-agenda-files</code>, but
-the easiest way to maintain it is through the following commands
-</p>
-<a name="index-files_002c-adding-to-agenda-list"></a>
-<dl compact="compact">
-<dd><a name="index-C_002dc-_005b"></a>
-<a name="index-org_002dagenda_002dfile_002dto_002dfront"></a>
-</dd>
-<dt><kbd><kbd>C-c [</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-file-to-front</code>)</kbd></dt>
-<dd><p>Add current file to the list of agenda files.  The file is added to
-the front of the list.  If it was already in the list, it is moved to
-the front.  With a prefix argument, file is added/moved to the end.
-<a name="index-C_002dc-_005d"></a>
-<a name="index-org_002dremove_002dfile"></a>
-</p></dd>
-<dt><kbd><kbd>C-c ]</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-remove-file</code>)</kbd></dt>
-<dd><p>Remove current file from the list of agenda files.
-<a name="index-C_002d_002c"></a>
-<a name="index-cycling_002c-of-agenda-files"></a>
-<a name="index-C_002d_0027"></a>
-<a name="index-org_002dcycle_002dagenda_002dfiles"></a>
-</p></dd>
-<dt><kbd><kbd>C-'</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-cycle-agenda-files</code>)</kbd></dt>
-<dt><kbd>C-,</kbd></dt>
-<dd><p>Cycle through agenda file list, visiting one file after the other.
-<a name="index-M_002dx-org_002diswitchb"></a>
-</p></dd>
-<dt><kbd>M-x org-iswitchb RET</kbd></dt>
-<dd><p>Command to use an <code>iswitchb</code>-like interface to switch to and between Org
-buffers.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Agenda-dispatcher.html#Agenda-dispatcher"
+    accesskey="n" rel="next">Agenda dispatcher</a>, Previous:
+    <a href="Agenda-Views.html#Agenda-Views" accesskey="p" rel=
+    "prev">Agenda Views</a>, Up: <a href=
+    "Agenda-Views.html#Agenda-Views" accesskey="u" rel="up">Agenda
+    Views</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Agenda-files-1" id="Agenda-files-1"></a>
 
-<p>The Org menu contains the current list of files and can be used
-to visit any of them.
-</p>
-<p>If you would like to focus the agenda temporarily on a file not in
-this list, or on just one file in the list, or even on only a subtree in a
-file, then this can be done in different ways.  For a single agenda command,
-you may press <kbd>&lt;</kbd> once or several times in the dispatcher
-(see <a href="Agenda-dispatcher.html#Agenda-dispatcher">Agenda dispatcher</a>).  To restrict the agenda scope for an
-extended period, use the following commands:
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002dc-C_002dx-_003c"></a>
-<a name="index-org_002dagenda_002dset_002drestriction_002dlock"></a>
-</dd>
-<dt><kbd><kbd>C-c C-x &lt;</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-set-restriction-lock</code>)</kbd></dt>
-<dd><p>Permanently restrict the agenda to the current subtree.  When with a
-prefix argument, or with the cursor before the first headline in a file,
-the agenda scope is set to the entire file.  This restriction remains in
-effect until removed with <kbd>C-c C-x &gt;</kbd>, or by typing either <kbd>&lt;</kbd>
-or <kbd>&gt;</kbd> in the agenda dispatcher.  If there is a window displaying an
-agenda view, the new restriction takes effect immediately.
-<a name="index-C_002dc-C_002dx-_003e"></a>
-<a name="index-org_002dagenda_002dremove_002drestriction_002dlock"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-x &gt;</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-remove-restriction-lock</code>)</kbd></dt>
-<dd><p>Remove the permanent restriction created by <kbd>C-c C-x &lt;</kbd>.
-</p></dd>
-</dl>
+  <h3 class="section">10.1 Agenda files</h3><a name=
+  "index-agenda-files" id="index-agenda-files"></a> <a name=
+  "index-files-for-agenda" id="index-files-for-agenda"></a>
+  <a name="index-org_002dagenda_002dfiles" id=
+  "index-org_002dagenda_002dfiles"></a>
 
-<p>When working with <samp>speedbar.el</samp>, you can use the following commands in
-the Speedbar frame:
-</p>
-<dl compact="compact">
-<dd><a name="index-_003c-2"></a>
-<a name="index-org_002dspeedbar_002dset_002dagenda_002drestriction"></a>
-</dd>
-<dt><kbd><kbd>&lt; <span class="roman">in the speedbar frame</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-speedbar-set-agenda-restriction</code>)</kbd></dt>
-<dd><p>Permanently restrict the agenda to the item&mdash;either an Org file or a subtree
-in such a file&mdash;at the cursor in the Speedbar frame.
-If there is a window displaying an agenda view, the new restriction takes
-effect immediately.
-<a name="index-_003e-2"></a>
-<a name="index-org_002dagenda_002dremove_002drestriction_002dlock-1"></a>
-</p></dd>
-<dt><kbd><kbd>&gt; <span class="roman">in the speedbar frame</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-remove-restriction-lock</code>)</kbd></dt>
-<dd><p>Lift the restriction.
-</p></dd>
-</dl>
+  <p>The information to be shown is normally collected from all
+  <em>agenda files</em>, the files listed in the variable
+  <code>org-agenda-files</code><a name="DOCF98" href="#FOOT98" id=
+  "DOCF98"><sup>98</sup></a>. If a directory is part of this list,
+  all files with the extension <samp>.org</samp> in this directory
+  will be part of the list.</p>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>Thus, even if you only work with a single Org file, that file
+  should be put into the list<a name="DOCF99" href="#FOOT99" id=
+  "DOCF99"><sup>99</sup></a>. You can customize
+  <code>org-agenda-files</code>, but the easiest way to maintain it
+  is through the following commands</p><a name=
+  "index-files_002c-adding-to-agenda-list" id=
+  "index-files_002c-adding-to-agenda-list"></a>
 
-<h3><a name="FOOT98" href="#DOCF98">(98)</a></h3>
-<p>If the value of that variable is not a
-list, but a single file name, then the list of agenda files will be
-maintained in that external file.</p>
-<h3><a name="FOOT99" href="#DOCF99">(99)</a></h3>
-<p>When using the dispatcher, pressing
-<kbd>&lt;</kbd> before selecting a command will actually limit the command to
-the current file, and ignore <code>org-agenda-files</code> until the next
-dispatcher command.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Agenda-dispatcher.html#Agenda-dispatcher" accesskey="n" rel="next">Agenda dispatcher</a>, Previous: <a href="Agenda-Views.html#Agenda-Views" accesskey="p" rel="prev">Agenda Views</a>, Up: <a href="Agenda-Views.html#Agenda-Views" accesskey="u" rel="up">Agenda Views</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-_005b" id="index-C_002dc-_005b"></a>
+    <a name="index-org_002dagenda_002dfile_002dto_002dfront" id=
+    "index-org_002dagenda_002dfile_002dto_002dfront"></a></dd>
 
+    <dt><kbd><kbd>C-c [</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-file-to-front</code>)</kbd></dt>
 
+    <dd>
+      <p>Add current file to the list of agenda files. The file is
+      added to the front of the list. If it was already in the
+      list, it is moved to the front. With a prefix argument, file
+      is added/moved to the end. <a name="index-C_002dc-_005d" id=
+      "index-C_002dc-_005d"></a> <a name=
+      "index-org_002dremove_002dfile" id=
+      "index-org_002dremove_002dfile"></a></p>
+    </dd>
 
+    <dt><kbd><kbd>C-c ]</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-remove-file</code>)</kbd></dt>
+
+    <dd>
+      <p>Remove current file from the list of agenda files.
+      <a name="index-C_002d_002c" id="index-C_002d_002c"></a>
+      <a name="index-cycling_002c-of-agenda-files" id=
+      "index-cycling_002c-of-agenda-files"></a> <a name=
+      "index-C_002d_0027" id="index-C_002d_0027"></a> <a name=
+      "index-org_002dcycle_002dagenda_002dfiles" id=
+      "index-org_002dcycle_002dagenda_002dfiles"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-'</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-cycle-agenda-files</code>)</kbd></dt>
+
+    <dt><kbd>C-,</kbd></dt>
+
+    <dd>
+      <p>Cycle through agenda file list, visiting one file after
+      the other. <a name="index-M_002dx-org_002diswitchb" id=
+      "index-M_002dx-org_002diswitchb"></a></p>
+    </dd>
+
+    <dt><kbd>M-x org-iswitchb RET</kbd></dt>
+
+    <dd>
+      <p>Command to use an <code>iswitchb</code>-like interface to
+      switch to and between Org buffers.</p>
+    </dd>
+  </dl>
+
+  <p>The Org menu contains the current list of files and can be
+  used to visit any of them.</p>
+
+  <p>If you would like to focus the agenda temporarily on a file
+  not in this list, or on just one file in the list, or even on
+  only a subtree in a file, then this can be done in different
+  ways. For a single agenda command, you may press <kbd>&lt;</kbd>
+  once or several times in the dispatcher (see <a href=
+  "Agenda-dispatcher.html#Agenda-dispatcher">Agenda
+  dispatcher</a>). To restrict the agenda scope for an extended
+  period, use the following commands:</p>
+
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-C_002dx-_003c" id=
+    "index-C_002dc-C_002dx-_003c"></a> <a name=
+    "index-org_002dagenda_002dset_002drestriction_002dlock" id=
+    "index-org_002dagenda_002dset_002drestriction_002dlock"></a></dd>
+
+    <dt><kbd><kbd>C-c C-x &lt;</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-set-restriction-lock</code>)</kbd></dt>
+
+    <dd>
+      <p>Permanently restrict the agenda to the current subtree.
+      When with a prefix argument, or with the cursor before the
+      first headline in a file, the agenda scope is set to the
+      entire file. This restriction remains in effect until removed
+      with <kbd>C-c C-x &gt;</kbd>, or by typing either
+      <kbd>&lt;</kbd> or <kbd>&gt;</kbd> in the agenda dispatcher.
+      If there is a window displaying an agenda view, the new
+      restriction takes effect immediately. <a name=
+      "index-C_002dc-C_002dx-_003e" id=
+      "index-C_002dc-C_002dx-_003e"></a> <a name=
+      "index-org_002dagenda_002dremove_002drestriction_002dlock"
+      id="index-org_002dagenda_002dremove_002drestriction_002dlock">
+      </a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-x &gt;</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-remove-restriction-lock</code>)</kbd></dt>
+
+    <dd>
+      <p>Remove the permanent restriction created by <kbd>C-c C-x
+      &lt;</kbd>.</p>
+    </dd>
+  </dl>
+
+  <p>When working with <samp>speedbar.el</samp>, you can use the
+  following commands in the Speedbar frame:</p>
+
+  <dl compact="compact">
+    <dd><a name="index-_003c-2" id="index-_003c-2"></a> <a name=
+    "index-org_002dspeedbar_002dset_002dagenda_002drestriction" id=
+    "index-org_002dspeedbar_002dset_002dagenda_002drestriction"></a></dd>
+
+    <dt><kbd><kbd>&lt; <span class="roman">in the speedbar
+    frame</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-speedbar-set-agenda-restriction</code>)</kbd></dt>
+
+    <dd>
+      <p>Permanently restrict the agenda to the item&mdash;either
+      an Org file or a subtree in such a file&mdash;at the cursor
+      in the Speedbar frame. If there is a window displaying an
+      agenda view, the new restriction takes effect immediately.
+      <a name="index-_003e-2" id="index-_003e-2"></a> <a name=
+      "index-org_002dagenda_002dremove_002drestriction_002dlock-1"
+      id=
+      "index-org_002dagenda_002dremove_002drestriction_002dlock-1"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>&gt; <span class="roman">in the speedbar
+    frame</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-remove-restriction-lock</code>)</kbd></dt>
+
+    <dd>
+      <p>Lift the restriction.</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT98" href="#DOCF98" id="FOOT98">(98)</a></h3>
+
+    <p>If the value of that variable is not a list, but a single
+    file name, then the list of agenda files will be maintained in
+    that external file.</p>
+
+    <h3><a name="FOOT99" href="#DOCF99" id="FOOT99">(99)</a></h3>
+
+    <p>When using the dispatcher, pressing <kbd>&lt;</kbd> before
+    selecting a command will actually limit the command to the
+    current file, and ignore <code>org-agenda-files</code> until
+    the next dispatcher command.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Agenda-dispatcher.html#Agenda-dispatcher"
+    accesskey="n" rel="next">Agenda dispatcher</a>, Previous:
+    <a href="Agenda-Views.html#Agenda-Views" accesskey="p" rel=
+    "prev">Agenda Views</a>, Up: <a href=
+    "Agenda-Views.html#Agenda-Views" accesskey="u" rel="up">Agenda
+    Views</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

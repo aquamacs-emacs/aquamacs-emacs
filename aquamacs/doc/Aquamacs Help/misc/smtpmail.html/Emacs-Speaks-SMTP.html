@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2003-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,161 +14,225 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs SMTP Library: Emacs Speaks SMTP</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs SMTP Library: Emacs Speaks SMTP">
-<meta name="keywords" content="Emacs SMTP Library: Emacs Speaks SMTP">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Authentication.html#Authentication" rel="next" title="Authentication">
-<link href="How-Mail-Works.html#How-Mail-Works" rel="prev" title="How Mail Works">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs SMTP Library: Emacs Speaks SMTP</title>
+  <meta name="description" content=
+  "Emacs SMTP Library: Emacs Speaks SMTP" />
+  <meta name="keywords" content=
+  "Emacs SMTP Library: Emacs Speaks SMTP" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Authentication.html#Authentication" rel="next" title=
+  "Authentication" />
+  <link href="How-Mail-Works.html#How-Mail-Works" rel="prev" title=
+  "How Mail Works" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Emacs-Speaks-SMTP"></a>
-<div class="header">
-<p>
-Next: <a href="Authentication.html#Authentication" accesskey="n" rel="next">Authentication</a>, Previous: <a href="How-Mail-Works.html#How-Mail-Works" accesskey="p" rel="prev">How Mail Works</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Emacs-Speaks-SMTP-1"></a>
-<h2 class="chapter">2 Emacs Speaks SMTP</h2>
+<body lang="en" xml:lang="en">
+  <a name="Emacs-Speaks-SMTP" id="Emacs-Speaks-SMTP"></a>
 
-<p>Emacs includes a package for sending your mail to a SMTP server and
-have it take care of delivering it to the final destination, rather
-than letting the MTA on your local system take care of it.  This can
-be useful if you don&rsquo;t have a MTA set up on your host, or if your
-machine is often disconnected from the internet.
-</p>
-<p>Sending mail via SMTP requires configuring your mail user agent
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Mail-Methods.html#Mail-Methods">(emacs)Mail Methods</a>) to use the SMTP library.  If you
-have not configured anything, then in Emacs 24.1 and later the first
-time you try to send a mail Emacs will ask how you want to send
-mail.  To use this library, answer &lsquo;<samp>smtp</samp>&rsquo; when prompted.  Emacs
-then asks for the name of the SMTP server.
-</p>
-<p>If you prefer, or if you are using a non-standard mail user agent,
-you can configure this yourself.  The normal way to do this is to set
-the variable <code>send-mail-function</code> (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Mail-Sending.html#Mail-Sending">(emacs)Mail
-Sending</a>) to the value you want to use.  To use this library:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(setq send-mail-function 'smtpmail-send-it)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Authentication.html#Authentication"
+    accesskey="n" rel="next">Authentication</a>, Previous: <a href=
+    "How-Mail-Works.html#How-Mail-Works" accesskey="p" rel=
+    "prev">How Mail Works</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Emacs-Speaks-SMTP-1" id="Emacs-Speaks-SMTP-1"></a>
 
-<p>The default value for this variable is <code>sendmail-query-once</code>,
-which interactively asks how you want to send mail.
-</p>
-<p>Your mail user agent might use a different variable for this purpose.
-It should inherit from <code>send-mail-function</code>, but if it does not,
-or if you prefer, you can set that variable directly.  Consult your
-mail user agent&rsquo;s documentation for more details.  For example,
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/message/Mail-Variables.html#Mail-Variables">(message)Mail Variables</a>).
-</p>
-<p>Before using SMTP you must find out the hostname of the SMTP server
-to use.  Your system administrator or mail service provider should
-supply this information.  Often it is some variant of the server you
-receive mail from.  If your email address is
-&lsquo;<samp>yourname@example.com</samp>&rsquo;, then the name of the SMTP server is
-may be something like &lsquo;<samp>smtp.example.com</samp>&rsquo;.
-</p>
-<dl compact="compact">
-<dt><code>smtpmail-smtp-server</code></dt>
-<dd><a name="index-smtpmail_002dsmtp_002dserver"></a>
-<a name="index-SMTPSERVER"></a>
-<p>The variable <code>smtpmail-smtp-server</code> controls the hostname of
-the server to use.  It is a string with an IP address or hostname.  It
-defaults to the contents of the <code>SMTPSERVER</code> environment
-variable, or, if empty, the contents of
-<code>smtpmail-default-smtp-server</code>.
-</p>
-</dd>
-<dt><code>smtpmail-default-smtp-server</code></dt>
-<dd><a name="index-smtpmail_002ddefault_002dsmtp_002dserver"></a>
-<p>The variable <code>smtpmail-default-smtp-server</code> controls the
-default hostname of the server to use.  It is a string with an IP
-address or hostname.  It must be set before the SMTP library is
-loaded.  It has no effect if set after the SMTP library has been
-loaded, or if <code>smtpmail-smtp-server</code> is defined.  It is usually
-set by system administrators in a site wide initialization file.
-</p></dd>
-</dl>
+  <h2 class="chapter">2 Emacs Speaks SMTP</h2>
 
-<p>The following example illustrates what you could put in
-<samp>~/.emacs</samp> to set the SMTP server name.
-</p>
-<div class="example">
-<pre class="example">;; Send mail using SMTP via mail.example.org.
-(setq smtpmail-smtp-server &quot;mail.example.org&quot;)
-</pre></div>
+  <p>Emacs includes a package for sending your mail to a SMTP
+  server and have it take care of delivering it to the final
+  destination, rather than letting the MTA on your local system
+  take care of it. This can be useful if you don&rsquo;t have a MTA
+  set up on your host, or if your machine is often disconnected
+  from the internet.</p>
 
-<a name="index-Mail-Submission"></a>
-<p>SMTP is normally used on the registered &ldquo;smtp&rdquo; TCP service port 25.
-Some environments use SMTP in &ldquo;Mail Submission&rdquo; mode, which uses
-port 587.  Using other ports is not uncommon, either for security by
-obscurity purposes, port forwarding, or otherwise.
-</p>
-<dl compact="compact">
-<dt><code>smtpmail-smtp-service</code></dt>
-<dd><a name="index-smtpmail_002dsmtp_002dservice"></a>
-<p>The variable <code>smtpmail-smtp-service</code> controls the port on the
-server to contact.  It is either a string, in which case it will be
-translated into an integer using system calls, or an integer.
-</p></dd>
-</dl>
+  <p>Sending mail via SMTP requires configuring your mail user
+  agent (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Mail-Methods.html#Mail-Methods">
+  (emacs)Mail Methods</a>) to use the SMTP library. If you have not
+  configured anything, then in Emacs 24.1 and later the first time
+  you try to send a mail Emacs will ask how you want to send mail.
+  To use this library, answer &lsquo;<samp>smtp</samp>&rsquo; when
+  prompted. Emacs then asks for the name of the SMTP server.</p>
 
-<p>The following example illustrates what you could put in
-<samp>~/.emacs</samp> to set the SMTP service port.
-</p>
-<div class="example">
-<pre class="example">;; Send mail using SMTP on the mail submission port 587.
+  <p>If you prefer, or if you are using a non-standard mail user
+  agent, you can configure this yourself. The normal way to do this
+  is to set the variable <code>send-mail-function</code> (see
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Mail-Sending.html#Mail-Sending">
+  (emacs)Mail Sending</a>) to the value you want to use. To use
+  this library:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(setq send-mail-function 'smtpmail-send-it)
+</pre>
+  </div>
+
+  <p>The default value for this variable is
+  <code>sendmail-query-once</code>, which interactively asks how
+  you want to send mail.</p>
+
+  <p>Your mail user agent might use a different variable for this
+  purpose. It should inherit from <code>send-mail-function</code>,
+  but if it does not, or if you prefer, you can set that variable
+  directly. Consult your mail user agent&rsquo;s documentation for
+  more details. For example, (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/message/Mail-Variables.html#Mail-Variables">
+  (message)Mail Variables</a>).</p>
+
+  <p>Before using SMTP you must find out the hostname of the SMTP
+  server to use. Your system administrator or mail service provider
+  should supply this information. Often it is some variant of the
+  server you receive mail from. If your email address is
+  &lsquo;<samp>yourname@example.com</samp>&rsquo;, then the name of
+  the SMTP server is may be something like
+  &lsquo;<samp>smtp.example.com</samp>&rsquo;.</p>
+
+  <dl compact="compact">
+    <dt><code>smtpmail-smtp-server</code></dt>
+
+    <dd>
+      <a name="index-smtpmail_002dsmtp_002dserver" id=
+      "index-smtpmail_002dsmtp_002dserver"></a> <a name=
+      "index-SMTPSERVER" id="index-SMTPSERVER"></a>
+
+      <p>The variable <code>smtpmail-smtp-server</code> controls
+      the hostname of the server to use. It is a string with an IP
+      address or hostname. It defaults to the contents of the
+      <code>SMTPSERVER</code> environment variable, or, if empty,
+      the contents of
+      <code>smtpmail-default-smtp-server</code>.</p>
+    </dd>
+
+    <dt><code>smtpmail-default-smtp-server</code></dt>
+
+    <dd>
+      <a name="index-smtpmail_002ddefault_002dsmtp_002dserver" id=
+      "index-smtpmail_002ddefault_002dsmtp_002dserver"></a>
+
+      <p>The variable <code>smtpmail-default-smtp-server</code>
+      controls the default hostname of the server to use. It is a
+      string with an IP address or hostname. It must be set before
+      the SMTP library is loaded. It has no effect if set after the
+      SMTP library has been loaded, or if
+      <code>smtpmail-smtp-server</code> is defined. It is usually
+      set by system administrators in a site wide initialization
+      file.</p>
+    </dd>
+  </dl>
+
+  <p>The following example illustrates what you could put in
+  <samp>~/.emacs</samp> to set the SMTP server name.</p>
+
+  <div class="example">
+    <pre class="example">
+;; Send mail using SMTP via mail.example.org.
+(setq smtpmail-smtp-server "mail.example.org")
+</pre>
+  </div><a name="index-Mail-Submission" id=
+  "index-Mail-Submission"></a>
+
+  <p>SMTP is normally used on the registered &ldquo;smtp&rdquo; TCP
+  service port 25. Some environments use SMTP in &ldquo;Mail
+  Submission&rdquo; mode, which uses port 587. Using other ports is
+  not uncommon, either for security by obscurity purposes, port
+  forwarding, or otherwise.</p>
+
+  <dl compact="compact">
+    <dt><code>smtpmail-smtp-service</code></dt>
+
+    <dd>
+      <a name="index-smtpmail_002dsmtp_002dservice" id=
+      "index-smtpmail_002dsmtp_002dservice"></a>
+
+      <p>The variable <code>smtpmail-smtp-service</code> controls
+      the port on the server to contact. It is either a string, in
+      which case it will be translated into an integer using system
+      calls, or an integer.</p>
+    </dd>
+  </dl>
+
+  <p>The following example illustrates what you could put in
+  <samp>~/.emacs</samp> to set the SMTP service port.</p>
+
+  <div class="example">
+    <pre class="example">
+;; Send mail using SMTP on the mail submission port 587.
 (setq smtpmail-smtp-service 587)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Authentication.html#Authentication" accesskey="n" rel="next">Authentication</a>, Previous: <a href="How-Mail-Works.html#How-Mail-Works" accesskey="p" rel="prev">How Mail Works</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Authentication.html#Authentication"
+    accesskey="n" rel="next">Authentication</a>, Previous: <a href=
+    "How-Mail-Works.html#How-Mail-Works" accesskey="p" rel=
+    "prev">How Mail Works</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

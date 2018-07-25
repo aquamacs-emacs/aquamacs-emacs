@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,195 +14,277 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Extending the Spam package</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Extending the Spam package">
-<meta name="keywords" content="Gnus Manual: Extending the Spam package">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Package.html#Spam-Package" rel="up" title="Spam Package">
-<link href="Spam-Statistics-Package.html#Spam-Statistics-Package" rel="next" title="Spam Statistics Package">
-<link href="SpamOracle.html#SpamOracle" rel="prev" title="SpamOracle">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Extending the Spam package</title>
+  <meta name="description" content=
+  "Gnus Manual: Extending the Spam package" />
+  <meta name="keywords" content=
+  "Gnus Manual: Extending the Spam package" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Package.html#Spam-Package" rel="up" title=
+  "Spam Package" />
+  <link href="Spam-Statistics-Package.html#Spam-Statistics-Package"
+  rel="next" title="Spam Statistics Package" />
+  <link href="SpamOracle.html#SpamOracle" rel="prev" title=
+  "SpamOracle" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Extending-the-Spam-package"></a>
-<div class="header">
-<p>
-Next: <a href="Spam-Statistics-Package.html#Spam-Statistics-Package" accesskey="n" rel="next">Spam Statistics Package</a>, Previous: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="p" rel="prev">Spam Back Ends</a>, Up: <a href="Spam-Package.html#Spam-Package" accesskey="u" rel="up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Extending-the-Spam-package-1"></a>
-<h4 class="subsection">9.17.7 Extending the Spam package</h4>
-<a name="index-spam-filtering-15"></a>
-<a name="index-spam-elisp-package_002c-extending"></a>
-<a name="index-extending-the-spam-elisp-package"></a>
+<body lang="en" xml:lang="en">
+  <a name="Extending-the-Spam-package" id=
+  "Extending-the-Spam-package"></a>
 
-<p>Say you want to add a new back end called blackbox.  For filtering
-incoming mail, provide the following:
-</p>
-<ol>
-<li> Code
+  <div class="header">
+    <p>Next: <a href=
+    "Spam-Statistics-Package.html#Spam-Statistics-Package"
+    accesskey="n" rel="next">Spam Statistics Package</a>, Previous:
+    <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="p" rel=
+    "prev">Spam Back Ends</a>, Up: <a href=
+    "Spam-Package.html#Spam-Package" accesskey="u" rel="up">Spam
+    Package</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Extending-the-Spam-package-1" id=
+  "Extending-the-Spam-package-1"></a>
 
-<div class="lisp">
-<pre class="lisp">(defvar spam-use-blackbox nil
-  &quot;True if blackbox should be used.&quot;)
-</pre></div>
+  <h4 class="subsection">9.17.7 Extending the Spam
+  package</h4><a name="index-spam-filtering-15" id=
+  "index-spam-filtering-15"></a> <a name=
+  "index-spam-elisp-package_002c-extending" id=
+  "index-spam-elisp-package_002c-extending"></a> <a name=
+  "index-extending-the-spam-elisp-package" id=
+  "index-extending-the-spam-elisp-package"></a>
 
-<p>Write <code>spam-check-blackbox</code> if Blackbox can check incoming mail.
-</p>
-<p>Write <code>spam-blackbox-register-routine</code> and
-<code>spam-blackbox-unregister-routine</code> using the bogofilter
-register/unregister routines as a start, or other register/unregister
-routines more appropriate to Blackbox, if Blackbox can
-register/unregister spam and ham.
-</p>
-</li><li> Functionality
+  <p>Say you want to add a new back end called blackbox. For
+  filtering incoming mail, provide the following:</p>
 
-<p>The <code>spam-check-blackbox</code> function should return &lsquo;<samp>nil</samp>&rsquo; or
-<code>spam-split-group</code>, observing the other conventions.  See the
-existing <code>spam-check-*</code> functions for examples of what you can
-do, and stick to the template unless you fully understand the reasons
-why you aren&rsquo;t.
-</p>
-</li></ol>
+  <ol>
+    <li>Code
 
-<p>For processing spam and ham messages, provide the following:
-</p>
-<ol>
-<li> Code
+      <div class="lisp">
+        <pre class="lisp">
+(defvar spam-use-blackbox nil
+  "True if blackbox should be used.")
+</pre>
+      </div>
 
-<p>Note you don&rsquo;t have to provide a spam or a ham processor.  Only
-provide them if Blackbox supports spam or ham processing.
-</p>
-<p>Also, ham and spam processors are being phased out as single
-variables.  Instead the form <code>(spam spam-use-blackbox)</code> or
-<code>(ham spam-use-blackbox)</code> is favored.  For now, spam/ham
-processor variables are still around but they won&rsquo;t be for long.
-</p>
-<div class="lisp">
-<pre class="lisp">(defvar gnus-group-spam-exit-processor-blackbox &quot;blackbox-spam&quot;
-  &quot;The Blackbox summary exit spam processor.
-Only applicable to spam groups.&quot;)
+      <p>Write <code>spam-check-blackbox</code> if Blackbox can
+      check incoming mail.</p>
 
-(defvar gnus-group-ham-exit-processor-blackbox &quot;blackbox-ham&quot;
-  &quot;The whitelist summary exit ham processor.
-Only applicable to non-spam (unclassified and ham) groups.&quot;)
+      <p>Write <code>spam-blackbox-register-routine</code> and
+      <code>spam-blackbox-unregister-routine</code> using the
+      bogofilter register/unregister routines as a start, or other
+      register/unregister routines more appropriate to Blackbox, if
+      Blackbox can register/unregister spam and ham.</p>
+    </li>
 
-</pre></div>
+    <li>Functionality
 
-</li><li> Gnus parameters
+      <p>The <code>spam-check-blackbox</code> function should
+      return &lsquo;<samp>nil</samp>&rsquo; or
+      <code>spam-split-group</code>, observing the other
+      conventions. See the existing <code>spam-check-*</code>
+      functions for examples of what you can do, and stick to the
+      template unless you fully understand the reasons why you
+      aren&rsquo;t.</p>
+    </li>
+  </ol>
 
-<p>Add
-</p><div class="lisp">
-<pre class="lisp">(const :tag &quot;Spam: Blackbox&quot; (spam spam-use-blackbox))
-(const :tag &quot;Ham: Blackbox&quot;  (ham spam-use-blackbox))
-</pre></div>
-<p>to the <code>spam-process</code> group parameter in <code>gnus.el</code>.  Make
-sure you do it twice, once for the parameter and once for the
-variable customization.
-</p>
-<p>Add
-</p><div class="lisp">
-<pre class="lisp">(variable-item spam-use-blackbox)
-</pre></div>
-<p>to the <code>spam-autodetect-methods</code> group parameter in
-<code>gnus.el</code> if Blackbox can check incoming mail for spam contents.
-</p>
-<p>Finally, use the appropriate <code>spam-install-*-backend</code> function in
-<code>spam.el</code>.  Here are the available functions.
-</p>
+  <p>For processing spam and ham messages, provide the
+  following:</p>
 
-<ol>
-<li> <code>spam-install-backend-alias</code>
+  <ol>
+    <li>Code
 
-<p>This function will simply install an alias for a back end that does
-everything like the original back end.  It is currently only used to
-make <code>spam-use-BBDB-exclusive</code> act like <code>spam-use-BBDB</code>.
-</p>
-</li><li> <code>spam-install-nocheck-backend</code>
+      <p>Note you don&rsquo;t have to provide a spam or a ham
+      processor. Only provide them if Blackbox supports spam or ham
+      processing.</p>
 
-<p>This function installs a back end that has no check function, but can
-register/unregister ham or spam.  The <code>spam-use-gmane</code> back end is
-such a back end.
-</p>
-</li><li> <code>spam-install-checkonly-backend</code>
+      <p>Also, ham and spam processors are being phased out as
+      single variables. Instead the form <code>(spam
+      spam-use-blackbox)</code> or <code>(ham
+      spam-use-blackbox)</code> is favored. For now, spam/ham
+      processor variables are still around but they won&rsquo;t be
+      for long.</p>
 
-<p>This function will install a back end that can only check incoming mail
-for spam contents.  It can&rsquo;t register or unregister messages.
-<code>spam-use-blackholes</code> and <code>spam-use-hashcash</code> are such
-back ends.
-</p>
-</li><li> <code>spam-install-statistical-checkonly-backend</code>
+      <div class="lisp">
+        <pre class="lisp">
+(defvar gnus-group-spam-exit-processor-blackbox "blackbox-spam"
+  "The Blackbox summary exit spam processor.
+Only applicable to spam groups.")
 
-<p>This function installs a statistical back end (one which requires the
-full body of a message to check it) that can only check incoming mail
-for contents.  <code>spam-use-regex-body</code> is such a filter.
-</p>
-</li><li> <code>spam-install-statistical-backend</code>
+(defvar gnus-group-ham-exit-processor-blackbox "blackbox-ham"
+  "The whitelist summary exit ham processor.
+Only applicable to non-spam (unclassified and ham) groups.")
 
-<p>This function install a statistical back end with incoming checks and
-registration/unregistration routines.  <code>spam-use-bogofilter</code> is
-set up this way.
-</p>
-</li><li> <code>spam-install-backend</code>
+</pre>
+      </div>
+    </li>
 
-<p>This is the most normal back end installation, where a back end that can
-check and register/unregister messages is set up without statistical
-abilities.  The <code>spam-use-BBDB</code> is such a back end.
-</p>
-</li><li> <code>spam-install-mover-backend</code>
+    <li>Gnus parameters
 
-<p>Mover back ends are internal to <code>spam.el</code> and specifically move
-articles around when the summary is exited.  You will very probably
-never install such a back end.
-</p></li></ol>
+      <p>Add</p>
 
-</li></ol>
+      <div class="lisp">
+        <pre class="lisp">
+(const :tag "Spam: Blackbox" (spam spam-use-blackbox))
+(const :tag "Ham: Blackbox"  (ham spam-use-blackbox))
+</pre>
+      </div>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Spam-Statistics-Package.html#Spam-Statistics-Package" accesskey="n" rel="next">Spam Statistics Package</a>, Previous: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="p" rel="prev">Spam Back Ends</a>, Up: <a href="Spam-Package.html#Spam-Package" accesskey="u" rel="up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>to the <code>spam-process</code> group parameter in
+      <code>gnus.el</code>. Make sure you do it twice, once for the
+      parameter and once for the variable customization.</p>
 
+      <p>Add</p>
 
+      <div class="lisp">
+        <pre class="lisp">
+(variable-item spam-use-blackbox)
+</pre>
+      </div>
 
+      <p>to the <code>spam-autodetect-methods</code> group
+      parameter in <code>gnus.el</code> if Blackbox can check
+      incoming mail for spam contents.</p>
+
+      <p>Finally, use the appropriate
+      <code>spam-install-*-backend</code> function in
+      <code>spam.el</code>. Here are the available functions.</p>
+
+      <ol>
+        <li>
+          <code>spam-install-backend-alias</code>
+
+          <p>This function will simply install an alias for a back
+          end that does everything like the original back end. It
+          is currently only used to make
+          <code>spam-use-BBDB-exclusive</code> act like
+          <code>spam-use-BBDB</code>.</p>
+        </li>
+
+        <li>
+          <code>spam-install-nocheck-backend</code>
+
+          <p>This function installs a back end that has no check
+          function, but can register/unregister ham or spam. The
+          <code>spam-use-gmane</code> back end is such a back
+          end.</p>
+        </li>
+
+        <li>
+          <code>spam-install-checkonly-backend</code>
+
+          <p>This function will install a back end that can only
+          check incoming mail for spam contents. It can&rsquo;t
+          register or unregister messages.
+          <code>spam-use-blackholes</code> and
+          <code>spam-use-hashcash</code> are such back ends.</p>
+        </li>
+
+        <li>
+          <code>spam-install-statistical-checkonly-backend</code>
+
+          <p>This function installs a statistical back end (one
+          which requires the full body of a message to check it)
+          that can only check incoming mail for contents.
+          <code>spam-use-regex-body</code> is such a filter.</p>
+        </li>
+
+        <li>
+          <code>spam-install-statistical-backend</code>
+
+          <p>This function install a statistical back end with
+          incoming checks and registration/unregistration routines.
+          <code>spam-use-bogofilter</code> is set up this way.</p>
+        </li>
+
+        <li>
+          <code>spam-install-backend</code>
+
+          <p>This is the most normal back end installation, where a
+          back end that can check and register/unregister messages
+          is set up without statistical abilities. The
+          <code>spam-use-BBDB</code> is such a back end.</p>
+        </li>
+
+        <li>
+          <code>spam-install-mover-backend</code>
+
+          <p>Mover back ends are internal to <code>spam.el</code>
+          and specifically move articles around when the summary is
+          exited. You will very probably never install such a back
+          end.</p>
+        </li>
+      </ol>
+    </li>
+  </ol>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Spam-Statistics-Package.html#Spam-Statistics-Package"
+    accesskey="n" rel="next">Spam Statistics Package</a>, Previous:
+    <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="p" rel=
+    "prev">Spam Back Ends</a>, Up: <a href=
+    "Spam-Package.html#Spam-Package" accesskey="u" rel="up">Spam
+    Package</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

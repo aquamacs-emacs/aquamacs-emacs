@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,118 +19,167 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Inline Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Inline Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Inline Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Declare-Form.html#Declare-Form" rel="next" title="Declare Form">
-<link href="Obsolete-Functions.html#Obsolete-Functions" rel="prev" title="Obsolete Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Inline Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Inline Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Inline Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href="Declare-Form.html#Declare-Form" rel="next" title=
+  "Declare Form" />
+  <link href="Obsolete-Functions.html#Obsolete-Functions" rel=
+  "prev" title="Obsolete Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Inline-Functions" id="Inline-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Declare-Form.html#Declare-Form" accesskey="n"
+    rel="next">Declare Form</a>, Previous: <a href=
+    "Obsolete-Functions.html#Obsolete-Functions" accesskey="p" rel=
+    "prev">Obsolete Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Inline-Functions-1" id="Inline-Functions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Inline-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Declare-Form.html#Declare-Form" accesskey="n" rel="next">Declare Form</a>, Previous: <a href="Obsolete-Functions.html#Obsolete-Functions" accesskey="p" rel="prev">Obsolete Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Inline-Functions-1"></a>
-<h3 class="section">12.13 Inline Functions</h3>
-<a name="index-inline-functions"></a>
+  <h3 class="section">12.13 Inline Functions</h3><a name=
+  "index-inline-functions" id="index-inline-functions"></a>
 
-<p>An <em>inline function</em> is a function that works just like an
-ordinary function, except for one thing: when you byte-compile a call
-to the function (see <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>), the function&rsquo;s definition
-is expanded into the caller.  To define an inline function, use
-<code>defsubst</code> instead of <code>defun</code>.
-</p>
-<dl>
-<dt><a name="index-defsubst"></a>Macro: <strong>defsubst</strong> <em>name args [doc] [declare] [interactive] body&hellip;</em></dt>
-<dd><p>This macro defines an inline function.  Its syntax is exactly the same
-as <code>defun</code> (see <a href="Defining-Functions.html#Defining-Functions">Defining Functions</a>).
-</p></dd></dl>
+  <p>An <em>inline function</em> is a function that works just like
+  an ordinary function, except for one thing: when you byte-compile
+  a call to the function (see <a href=
+  "Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>),
+  the function&rsquo;s definition is expanded into the caller. To
+  define an inline function, use <code>defsubst</code> instead of
+  <code>defun</code>.</p>
 
-<p>Making a function inline often makes its function calls run faster.
-But it also has disadvantages.  For one thing, it reduces flexibility;
-if you change the definition of the function, calls already inlined
-still use the old definition until you recompile them.
-</p>
-<p>Another disadvantage is that making a large function inline can
-increase the size of compiled code both in files and in memory.  Since
-the speed advantage of inline functions is greatest for small
-functions, you generally should not make large functions inline.
-</p>
-<p>Also, inline functions do not behave well with respect to debugging,
-tracing, and advising (see <a href="Advising-Functions.html#Advising-Functions">Advising Functions</a>).  Since ease of
-debugging and the flexibility of redefining functions are important
-features of Emacs, you should not make a function inline, even if it&rsquo;s
-small, unless its speed is really crucial, and you&rsquo;ve timed the code
-to verify that using <code>defun</code> actually has performance problems.
-</p>
-<p>After an inline function is defined, its inline expansion can be
-performed later on in the same file, just like macros.
-</p>
-<p>It&rsquo;s possible to use <code>defsubst</code> to define a macro to expand
-into the same code that an inline function would execute
-(see <a href="Macros.html#Macros">Macros</a>).  But the macro would be limited to direct use in
-expressions&mdash;a macro cannot be called with <code>apply</code>,
-<code>mapcar</code> and so on.  Also, it takes some work to convert an
-ordinary function into a macro.  To convert it into an inline function
-is easy; just replace <code>defun</code> with <code>defsubst</code>.  Since each
-argument of an inline function is evaluated exactly once, you needn&rsquo;t
-worry about how many times the body uses the arguments, as you do for
-macros.
-</p>
-<p>As an alternative to <code>defsubst</code>, you can use
-<code>define-inline</code> to define functions via their exhaustive compiler
-macro.  See <a href="Defining-Functions.html#Defining-Functions">define-inline</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Declare-Form.html#Declare-Form" accesskey="n" rel="next">Declare Form</a>, Previous: <a href="Obsolete-Functions.html#Obsolete-Functions" accesskey="p" rel="prev">Obsolete Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-defsubst" id="index-defsubst"></a>Macro:
+    <strong>defsubst</strong> <em>name args [doc] [declare]
+    [interactive] body&hellip;</em></dt>
 
+    <dd>
+      <p>This macro defines an inline function. Its syntax is
+      exactly the same as <code>defun</code> (see <a href=
+      "Defining-Functions.html#Defining-Functions">Defining
+      Functions</a>).</p>
+    </dd>
+  </dl>
 
+  <p>Making a function inline often makes its function calls run
+  faster. But it also has disadvantages. For one thing, it reduces
+  flexibility; if you change the definition of the function, calls
+  already inlined still use the old definition until you recompile
+  them.</p>
 
+  <p>Another disadvantage is that making a large function inline
+  can increase the size of compiled code both in files and in
+  memory. Since the speed advantage of inline functions is greatest
+  for small functions, you generally should not make large
+  functions inline.</p>
+
+  <p>Also, inline functions do not behave well with respect to
+  debugging, tracing, and advising (see <a href=
+  "Advising-Functions.html#Advising-Functions">Advising
+  Functions</a>). Since ease of debugging and the flexibility of
+  redefining functions are important features of Emacs, you should
+  not make a function inline, even if it&rsquo;s small, unless its
+  speed is really crucial, and you&rsquo;ve timed the code to
+  verify that using <code>defun</code> actually has performance
+  problems.</p>
+
+  <p>After an inline function is defined, its inline expansion can
+  be performed later on in the same file, just like macros.</p>
+
+  <p>It&rsquo;s possible to use <code>defsubst</code> to define a
+  macro to expand into the same code that an inline function would
+  execute (see <a href="Macros.html#Macros">Macros</a>). But the
+  macro would be limited to direct use in expressions&mdash;a macro
+  cannot be called with <code>apply</code>, <code>mapcar</code> and
+  so on. Also, it takes some work to convert an ordinary function
+  into a macro. To convert it into an inline function is easy; just
+  replace <code>defun</code> with <code>defsubst</code>. Since each
+  argument of an inline function is evaluated exactly once, you
+  needn&rsquo;t worry about how many times the body uses the
+  arguments, as you do for macros.</p>
+
+  <p>As an alternative to <code>defsubst</code>, you can use
+  <code>define-inline</code> to define functions via their
+  exhaustive compiler macro. See <a href=
+  "Defining-Functions.html#Defining-Functions">define-inline</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Declare-Form.html#Declare-Form" accesskey="n"
+    rel="next">Declare Form</a>, Previous: <a href=
+    "Obsolete-Functions.html#Obsolete-Functions" accesskey="p" rel=
+    "prev">Obsolete Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

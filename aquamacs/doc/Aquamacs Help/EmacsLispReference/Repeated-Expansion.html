@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,120 +19,167 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Repeated Expansion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Repeated Expansion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Repeated Expansion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Problems-with-Macros.html#Problems-with-Macros" rel="up" title="Problems with Macros">
-<link href="Indenting-Macros.html#Indenting-Macros" rel="next" title="Indenting Macros">
-<link href="Eval-During-Expansion.html#Eval-During-Expansion" rel="prev" title="Eval During Expansion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Repeated
+  Expansion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Repeated Expansion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Repeated Expansion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Problems-with-Macros.html#Problems-with-Macros" rel=
+  "up" title="Problems with Macros" />
+  <link href="Indenting-Macros.html#Indenting-Macros" rel="next"
+  title="Indenting Macros" />
+  <link href="Eval-During-Expansion.html#Eval-During-Expansion"
+  rel="prev" title="Eval During Expansion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Repeated-Expansion" id="Repeated-Expansion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Eval-During-Expansion.html#Eval-During-Expansion" accesskey=
+    "p" rel="prev">Eval During Expansion</a>, Up: <a href=
+    "Problems-with-Macros.html#Problems-with-Macros" accesskey="u"
+    rel="up">Problems with Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="How-Many-Times-is-the-Macro-Expanded_003f" id=
+  "How-Many-Times-is-the-Macro-Expanded_003f"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Repeated-Expansion"></a>
-<div class="header">
-<p>
-Previous: <a href="Eval-During-Expansion.html#Eval-During-Expansion" accesskey="p" rel="prev">Eval During Expansion</a>, Up: <a href="Problems-with-Macros.html#Problems-with-Macros" accesskey="u" rel="up">Problems with Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-Many-Times-is-the-Macro-Expanded_003f"></a>
-<h4 class="subsection">13.5.5 How Many Times is the Macro Expanded?</h4>
+  <h4 class="subsection">13.5.5 How Many Times is the Macro
+  Expanded?</h4>
 
-<p>Occasionally problems result from the fact that a macro call is
-expanded each time it is evaluated in an interpreted function, but is
-expanded only once (during compilation) for a compiled function.  If the
-macro definition has side effects, they will work differently depending
-on how many times the macro is expanded.
-</p>
-<p>Therefore, you should avoid side effects in computation of the
-macro expansion, unless you really know what you are doing.
-</p>
-<p>One special kind of side effect can&rsquo;t be avoided: constructing Lisp
-objects.  Almost all macro expansions include constructed lists; that is
-the whole point of most macros.  This is usually safe; there is just one
-case where you must be careful: when the object you construct is part of a
-quoted constant in the macro expansion.
-</p>
-<p>If the macro is expanded just once, in compilation, then the object is
-constructed just once, during compilation.  But in interpreted
-execution, the macro is expanded each time the macro call runs, and this
-means a new object is constructed each time.
-</p>
-<p>In most clean Lisp code, this difference won&rsquo;t matter.  It can matter
-only if you perform side-effects on the objects constructed by the macro
-definition.  Thus, to avoid trouble, <strong>avoid side effects on
-objects constructed by macro definitions</strong>.  Here is an example of how
-such side effects can get you into trouble:
-</p>
-<div class="lisp">
-<pre class="lisp">(defmacro empty-object ()
+  <p>Occasionally problems result from the fact that a macro call
+  is expanded each time it is evaluated in an interpreted function,
+  but is expanded only once (during compilation) for a compiled
+  function. If the macro definition has side effects, they will
+  work differently depending on how many times the macro is
+  expanded.</p>
+
+  <p>Therefore, you should avoid side effects in computation of the
+  macro expansion, unless you really know what you are doing.</p>
+
+  <p>One special kind of side effect can&rsquo;t be avoided:
+  constructing Lisp objects. Almost all macro expansions include
+  constructed lists; that is the whole point of most macros. This
+  is usually safe; there is just one case where you must be
+  careful: when the object you construct is part of a quoted
+  constant in the macro expansion.</p>
+
+  <p>If the macro is expanded just once, in compilation, then the
+  object is constructed just once, during compilation. But in
+  interpreted execution, the macro is expanded each time the macro
+  call runs, and this means a new object is constructed each
+  time.</p>
+
+  <p>In most clean Lisp code, this difference won&rsquo;t matter.
+  It can matter only if you perform side-effects on the objects
+  constructed by the macro definition. Thus, to avoid trouble,
+  <strong>avoid side effects on objects constructed by macro
+  definitions</strong>. Here is an example of how such side effects
+  can get you into trouble:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(defmacro empty-object ()
   (list 'quote (cons nil nil)))
-</pre><pre class="lisp">
-</pre><pre class="lisp">(defun initialize (condition)
+</pre>
+    <pre class="lisp">
+</pre>
+    <pre class="lisp">
+(defun initialize (condition)
   (let ((object (empty-object)))
     (if condition
         (setcar object condition))
     object))
-</pre></div>
+</pre>
+  </div>
 
-<p>If <code>initialize</code> is interpreted, a new list <code>(nil)</code> is
-constructed each time <code>initialize</code> is called.  Thus, no side effect
-survives between calls.  If <code>initialize</code> is compiled, then the
-macro <code>empty-object</code> is expanded during compilation, producing a
-single constant <code>(nil)</code> that is reused and altered each time
-<code>initialize</code> is called.
-</p>
-<p>One way to avoid pathological cases like this is to think of
-<code>empty-object</code> as a funny kind of constant, not as a memory
-allocation construct.  You wouldn&rsquo;t use <code>setcar</code> on a constant such
-as <code>'(nil)</code>, so naturally you won&rsquo;t use it on <code>(empty-object)</code>
-either.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Eval-During-Expansion.html#Eval-During-Expansion" accesskey="p" rel="prev">Eval During Expansion</a>, Up: <a href="Problems-with-Macros.html#Problems-with-Macros" accesskey="u" rel="up">Problems with Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If <code>initialize</code> is interpreted, a new list
+  <code>(nil)</code> is constructed each time
+  <code>initialize</code> is called. Thus, no side effect survives
+  between calls. If <code>initialize</code> is compiled, then the
+  macro <code>empty-object</code> is expanded during compilation,
+  producing a single constant <code>(nil)</code> that is reused and
+  altered each time <code>initialize</code> is called.</p>
 
+  <p>One way to avoid pathological cases like this is to think of
+  <code>empty-object</code> as a funny kind of constant, not as a
+  memory allocation construct. You wouldn&rsquo;t use
+  <code>setcar</code> on a constant such as <code>'(nil)</code>, so
+  naturally you won&rsquo;t use it on <code>(empty-object)</code>
+  either.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Previous: <a href=
+    "Eval-During-Expansion.html#Eval-During-Expansion" accesskey=
+    "p" rel="prev">Eval During Expansion</a>, Up: <a href=
+    "Problems-with-Macros.html#Problems-with-Macros" accesskey="u"
+    rel="up">Problems with Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

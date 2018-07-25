@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Quick Help Customization - Ediff User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Ediff User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Customization.html#Customization" title="Customization">
-<link rel="prev" href="Hooks.html#Hooks" title="Hooks">
-<link rel="next" href="Window-and-Frame-Configuration.html#Window-and-Frame-Configuration" title="Window and Frame Configuration">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Quick Help Customization - Ediff User's Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Ediff User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Customization.html#Customization" title=
+  "Customization" />
+  <link rel="prev" href="Hooks.html#Hooks" title="Hooks" />
+  <link rel="next" href=
+  "Window-and-Frame-Configuration.html#Window-and-Frame-Configuration"
+  title="Window and Frame Configuration" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Ediff, a comprehensive visual interface to Unix diff
 and patch utilities.
 
@@ -28,8 +37,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -39,37 +50,51 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Quick-Help-Customization"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Window-and-Frame-Configuration.html#Window-and-Frame-Configuration">Window and Frame Configuration</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Hooks.html#Hooks">Hooks</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Quick-Help-Customization" id=
+    "Quick-Help-Customization"></a>
 
-<h3 class="section">7.2 Quick Help Customization</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Window-and-Frame-Configuration.html#Window-and-Frame-Configuration">Window
+    and Frame Configuration</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href="Hooks.html#Hooks">Hooks</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Customization.html#Customization">Customization</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-ediff_002duse_002dlong_002dhelp_002dmessage-146"></a><a name="index-ediff_002dcontrol_002dbuffer-147"></a><a name="index-ediff_002dstartup_002dhook-148"></a><a name="index-ediff_002dhelp_002dmessage-149"></a>
-Ediff provides quick help using its control panel window.  Since this window
-takes a fair share of the screen real estate, you can toggle it off by
-typing <kbd>?</kbd>.  The control window will then shrink to just one line and a
-mode line, displaying a short help message.
+  <h3 class="section">7.2 Quick Help Customization</h3>
 
-   <p>The variable <code>ediff-use-long-help-message</code> tells Ediff whether
-you use the short message or the long one.  By default, it
-is set to <code>nil</code>, meaning that the short message is used. 
-Set this to <code>t</code>, if you want Ediff to use the long
-message by default.  This property can always be changed interactively, by
-typing <kbd>?</kbd> into Ediff Control Buffer.
+  <p><a name=
+  "index-ediff_002duse_002dlong_002dhelp_002dmessage-146" id=
+  "index-ediff_002duse_002dlong_002dhelp_002dmessage-146"></a><a name="index-ediff_002dcontrol_002dbuffer-147"
+  id="index-ediff_002dcontrol_002dbuffer-147"></a><a name=
+  "index-ediff_002dstartup_002dhook-148" id=
+  "index-ediff_002dstartup_002dhook-148"></a><a name=
+  "index-ediff_002dhelp_002dmessage-149" id=
+  "index-ediff_002dhelp_002dmessage-149"></a> Ediff provides quick
+  help using its control panel window. Since this window takes a
+  fair share of the screen real estate, you can toggle it off by
+  typing <kbd>?</kbd>. The control window will then shrink to just
+  one line and a mode line, displaying a short help message.</p>
 
-   <p>If you want to change the appearance of the help message on a per-buffer
-basis, you must use <code>ediff-startup-hook</code> to change the value of
-the variable <code>ediff-help-message</code>, which is local to
-<code>ediff-control-buffer</code>.
+  <p>The variable <code>ediff-use-long-help-message</code> tells
+  Ediff whether you use the short message or the long one. By
+  default, it is set to <code>nil</code>, meaning that the short
+  message is used. Set this to <code>t</code>, if you want Ediff to
+  use the long message by default. This property can always be
+  changed interactively, by typing <kbd>?</kbd> into Ediff Control
+  Buffer.</p>
 
-   </body></html>
-
+  <p>If you want to change the appearance of the help message on a
+  per-buffer basis, you must use <code>ediff-startup-hook</code> to
+  change the value of the variable <code>ediff-help-message</code>,
+  which is local to <code>ediff-control-buffer</code>.</p>
+</body>
+</html>

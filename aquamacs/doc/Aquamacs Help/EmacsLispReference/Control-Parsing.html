@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,98 +19,151 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Control Parsing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Control Parsing">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Control Parsing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Parsing-Expressions.html#Parsing-Expressions" rel="up" title="Parsing Expressions">
-<link href="Syntax-Table-Internals.html#Syntax-Table-Internals" rel="next" title="Syntax Table Internals">
-<link href="Low_002dLevel-Parsing.html#Low_002dLevel-Parsing" rel="prev" title="Low-Level Parsing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Control Parsing</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Control Parsing" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Control Parsing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Parsing-Expressions.html#Parsing-Expressions" rel=
+  "up" title="Parsing Expressions" />
+  <link href="Syntax-Table-Internals.html#Syntax-Table-Internals"
+  rel="next" title="Syntax Table Internals" />
+  <link href="Low_002dLevel-Parsing.html#Low_002dLevel-Parsing"
+  rel="prev" title="Low-Level Parsing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Control-Parsing" id="Control-Parsing"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Low_002dLevel-Parsing.html#Low_002dLevel-Parsing" accesskey=
+    "p" rel="prev">Low-Level Parsing</a>, Up: <a href=
+    "Parsing-Expressions.html#Parsing-Expressions" accesskey="u"
+    rel="up">Parsing Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Parameters-to-Control-Parsing" id=
+  "Parameters-to-Control-Parsing"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Control-Parsing"></a>
-<div class="header">
-<p>
-Previous: <a href="Low_002dLevel-Parsing.html#Low_002dLevel-Parsing" accesskey="p" rel="prev">Low-Level Parsing</a>, Up: <a href="Parsing-Expressions.html#Parsing-Expressions" accesskey="u" rel="up">Parsing Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Parameters-to-Control-Parsing"></a>
-<h4 class="subsection">34.6.5 Parameters to Control Parsing</h4>
-<a name="index-parsing_002c-control-parameters"></a>
+  <h4 class="subsection">34.6.5 Parameters to Control
+  Parsing</h4><a name="index-parsing_002c-control-parameters" id=
+  "index-parsing_002c-control-parameters"></a>
 
-<dl>
-<dt><a name="index-multibyte_002dsyntax_002das_002dsymbol"></a>Variable: <strong>multibyte-syntax-as-symbol</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, <code>scan-sexps</code> treats all
-non-<acronym>ASCII</acronym> characters as symbol constituents regardless
-of what the syntax table says about them.  (However, text properties
-can still override the syntax.)
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-multibyte_002dsyntax_002das_002dsymbol" id=
+    "index-multibyte_002dsyntax_002das_002dsymbol"></a>Variable:
+    <strong>multibyte-syntax-as-symbol</strong></dt>
 
-<dl>
-<dt><a name="index-parse_002dsexp_002dignore_002dcomments"></a>User Option: <strong>parse-sexp-ignore-comments</strong></dt>
-<dd><a name="index-skipping-comments"></a>
-<p>If the value is non-<code>nil</code>, then comments are treated as
-whitespace by the functions in this section and by <code>forward-sexp</code>,
-<code>scan-lists</code> and <code>scan-sexps</code>.
-</p></dd></dl>
+    <dd>
+      <p>If this variable is non-<code>nil</code>,
+      <code>scan-sexps</code> treats all
+      non-<acronym>ASCII</acronym> characters as symbol
+      constituents regardless of what the syntax table says about
+      them. (However, text properties can still override the
+      syntax.)</p>
+    </dd>
+  </dl>
 
-<a name="index-parse_002dsexp_002dlookup_002dproperties-1"></a>
-<p>The behavior of <code>parse-partial-sexp</code> is also affected by
-<code>parse-sexp-lookup-properties</code> (see <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>).
-</p>
-<dl>
-<dt><a name="index-comment_002dend_002dcan_002dbe_002descaped"></a>Variable: <strong>comment-end-can-be-escaped</strong></dt>
-<dd><p>If this buffer local variable is non-<code>nil</code>, a single character
-which usually terminates a comment doesn&rsquo;t do so when that character
-is escaped.  This is used in C and C++ Modes, where line comments
-starting with &lsquo;<samp>//</samp>&rsquo; can be continued onto the next line by
-escaping the newline with &lsquo;<samp>\</samp>&rsquo;.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-parse_002dsexp_002dignore_002dcomments" id=
+    "index-parse_002dsexp_002dignore_002dcomments"></a>User Option:
+    <strong>parse-sexp-ignore-comments</strong></dt>
 
-<p>You can use <code>forward-comment</code> to move forward or backward over
-one comment or several comments.
-</p>
+    <dd>
+      <a name="index-skipping-comments" id=
+      "index-skipping-comments"></a>
 
+      <p>If the value is non-<code>nil</code>, then comments are
+      treated as whitespace by the functions in this section and by
+      <code>forward-sexp</code>, <code>scan-lists</code> and
+      <code>scan-sexps</code>.</p>
+    </dd>
+  </dl><a name="index-parse_002dsexp_002dlookup_002dproperties-1"
+  id="index-parse_002dsexp_002dlookup_002dproperties-1"></a>
 
+  <p>The behavior of <code>parse-partial-sexp</code> is also
+  affected by <code>parse-sexp-lookup-properties</code> (see
+  <a href="Syntax-Properties.html#Syntax-Properties">Syntax
+  Properties</a>).</p>
 
+  <dl>
+    <dt><a name="index-comment_002dend_002dcan_002dbe_002descaped"
+    id=
+    "index-comment_002dend_002dcan_002dbe_002descaped"></a>Variable:
+    <strong>comment-end-can-be-escaped</strong></dt>
+
+    <dd>
+      <p>If this buffer local variable is non-<code>nil</code>, a
+      single character which usually terminates a comment
+      doesn&rsquo;t do so when that character is escaped. This is
+      used in C and C++ Modes, where line comments starting with
+      &lsquo;<samp>//</samp>&rsquo; can be continued onto the next
+      line by escaping the newline with
+      &lsquo;<samp>\</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <p>You can use <code>forward-comment</code> to move forward or
+  backward over one comment or several comments.</p>
 </body>
 </html>

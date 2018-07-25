@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,204 +16,322 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Sequence Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Sequence Functions">
-<meta name="keywords" content="Common Lisp Extensions: Sequence Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sequences.html#Sequences" rel="up" title="Sequences">
-<link href="Searching-Sequences.html#Searching-Sequences" rel="next" title="Searching Sequences">
-<link href="Mapping-over-Sequences.html#Mapping-over-Sequences" rel="prev" title="Mapping over Sequences">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Sequence Functions</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Sequence Functions" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Sequence Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Sequences.html#Sequences" rel="up" title=
+  "Sequences" />
+  <link href="Searching-Sequences.html#Searching-Sequences" rel=
+  "next" title="Searching Sequences" />
+  <link href="Mapping-over-Sequences.html#Mapping-over-Sequences"
+  rel="prev" title="Mapping over Sequences" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sequence-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Searching-Sequences.html#Searching-Sequences" accesskey="n" rel="next">Searching Sequences</a>, Previous: <a href="Mapping-over-Sequences.html#Mapping-over-Sequences" accesskey="p" rel="prev">Mapping over Sequences</a>, Up: <a href="Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sequence-Functions-1"></a>
-<h3 class="section">9.3 Sequence Functions</h3>
+<body lang="en" xml:lang="en">
+  <a name="Sequence-Functions" id="Sequence-Functions"></a>
 
-<p>This section describes a number of Common Lisp functions for
-operating on sequences.
-</p>
-<dl>
-<dt><a name="index-cl_002dsubseq"></a>Function: <strong>cl-subseq</strong> <em>sequence start &amp;optional end</em></dt>
-<dd><p>This function returns a given subsequence of the argument
-<var>sequence</var>, which may be a list, string, or vector.
-The indices <var>start</var> and <var>end</var> must be in range, and
-<var>start</var> must be no greater than <var>end</var>.  If <var>end</var>
-is omitted, it defaults to the length of the sequence.  The
-return value is always a copy; it does not share structure
-with <var>sequence</var>.
-</p>
-<p>As an extension to Common Lisp, <var>start</var> and/or <var>end</var>
-may be negative, in which case they represent a distance back
-from the end of the sequence.  This is for compatibility with
-Emacs&rsquo;s <code>substring</code> function.  Note that <code>cl-subseq</code> is
-the <em>only</em> sequence function that allows negative
-<var>start</var> and <var>end</var>.
-</p>
-<p>You can use <code>setf</code> on a <code>cl-subseq</code> form to replace a
-specified range of elements with elements from another sequence.
-The replacement is done as if by <code>cl-replace</code>, described below.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Searching-Sequences.html#Searching-Sequences"
+    accesskey="n" rel="next">Searching Sequences</a>, Previous:
+    <a href="Mapping-over-Sequences.html#Mapping-over-Sequences"
+    accesskey="p" rel="prev">Mapping over Sequences</a>, Up:
+    <a href="Sequences.html#Sequences" accesskey="u" rel=
+    "up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sequence-Functions-1" id="Sequence-Functions-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dconcatenate"></a>Function: <strong>cl-concatenate</strong> <em>result-type &amp;rest seqs</em></dt>
-<dd><p>This function concatenates the argument sequences together to
-form a result sequence of type <var>result-type</var>, one of the
-symbols <code>vector</code>, <code>string</code>, or <code>list</code>.  The
-arguments are always copied, even in cases such as
-<code>(cl-concatenate 'list '(1 2 3))</code> where the result is
-identical to an argument.
-</p></dd></dl>
+  <h3 class="section">9.3 Sequence Functions</h3>
 
-<dl>
-<dt><a name="index-cl_002dfill"></a>Function: <strong>cl-fill</strong> <em>seq item <tt>&amp;key :start :end</tt></em></dt>
-<dd><p>This function fills the elements of the sequence (or the specified
-part of the sequence) with the value <var>item</var>.
-</p></dd></dl>
+  <p>This section describes a number of Common Lisp functions for
+  operating on sequences.</p>
 
-<dl>
-<dt><a name="index-cl_002dreplace"></a>Function: <strong>cl-replace</strong> <em>seq1 seq2 <tt>&amp;key :start1 :end1 :start2 :end2</tt></em></dt>
-<dd><p>This function copies part of <var>seq2</var> into part of <var>seq1</var>.
-The sequence <var>seq1</var> is not stretched or resized; the amount
-of data copied is simply the shorter of the source and destination
-(sub)sequences.  The function returns <var>seq1</var>.
-</p>
-<p>If <var>seq1</var> and <var>seq2</var> are <code>eq</code>, then the replacement
-will work correctly even if the regions indicated by the start
-and end arguments overlap.  However, if <var>seq1</var> and <var>seq2</var>
-are lists that share storage but are not <code>eq</code>, and the
-start and end arguments specify overlapping regions, the effect
-is undefined.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dsubseq" id=
+    "index-cl_002dsubseq"></a>Function: <strong>cl-subseq</strong>
+    <em>sequence start &amp;optional end</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dremove"></a>Function: <strong>cl-remove</strong> <em>item seq <tt>&amp;key :test :test-not :key :count :start :end :from-end</tt></em></dt>
-<dd><p>This returns a copy of <var>seq</var> with all elements matching
-<var>item</var> removed.  The result may share storage with or be
-<code>eq</code> to <var>seq</var> in some circumstances, but the original
-<var>seq</var> will not be modified.  The <code>:test</code>, <code>:test-not</code>,
-and <code>:key</code> arguments define the matching test that is used;
-by default, elements <code>eql</code> to <var>item</var> are removed.  The
-<code>:count</code> argument specifies the maximum number of matching
-elements that can be removed (only the leftmost <var>count</var> matches
-are removed).  The <code>:start</code> and <code>:end</code> arguments specify
-a region in <var>seq</var> in which elements will be removed; elements
-outside that region are not matched or removed.  The <code>:from-end</code>
-argument, if true, says that elements should be deleted from the
-end of the sequence rather than the beginning (this matters only
-if <var>count</var> was also specified).
-</p></dd></dl>
+    <dd>
+      <p>This function returns a given subsequence of the argument
+      <var>sequence</var>, which may be a list, string, or vector.
+      The indices <var>start</var> and <var>end</var> must be in
+      range, and <var>start</var> must be no greater than
+      <var>end</var>. If <var>end</var> is omitted, it defaults to
+      the length of the sequence. The return value is always a
+      copy; it does not share structure with
+      <var>sequence</var>.</p>
 
-<dl>
-<dt><a name="index-cl_002ddelete"></a>Function: <strong>cl-delete</strong> <em>item seq <tt>&amp;key :test :test-not :key :count :start :end :from-end</tt></em></dt>
-<dd><p>This deletes all elements of <var>seq</var> that match <var>item</var>.
-It is a destructive operation.  Since Emacs Lisp does not support
-stretchable strings or vectors, this is the same as <code>cl-remove</code>
-for those sequence types.  On lists, <code>cl-remove</code> will copy the
-list if necessary to preserve the original list, whereas
-<code>cl-delete</code> will splice out parts of the argument list.
-Compare <code>append</code> and <code>nconc</code>, which are analogous
-non-destructive and destructive list operations in Emacs Lisp.
-</p></dd></dl>
+      <p>As an extension to Common Lisp, <var>start</var> and/or
+      <var>end</var> may be negative, in which case they represent
+      a distance back from the end of the sequence. This is for
+      compatibility with Emacs&rsquo;s <code>substring</code>
+      function. Note that <code>cl-subseq</code> is the
+      <em>only</em> sequence function that allows negative
+      <var>start</var> and <var>end</var>.</p>
 
-<a name="index-cl_002dremove_002dif"></a>
-<a name="index-cl_002dremove_002dif_002dnot"></a>
-<a name="index-cl_002ddelete_002dif"></a>
-<a name="index-cl_002ddelete_002dif_002dnot"></a>
-<p>The predicate-oriented functions <code>cl-remove-if</code>, <code>cl-remove-if-not</code>,
-<code>cl-delete-if</code>, and <code>cl-delete-if-not</code> are defined similarly.
-</p>
-<dl>
-<dt><a name="index-cl_002dremove_002dduplicates"></a>Function: <strong>cl-remove-duplicates</strong> <em>seq <tt>&amp;key :test :test-not :key :start :end :from-end</tt></em></dt>
-<dd><p>This function returns a copy of <var>seq</var> with duplicate elements
-removed.  Specifically, if two elements from the sequence match
-according to the <code>:test</code>, <code>:test-not</code>, and <code>:key</code>
-arguments, only the rightmost one is retained.  If <code>:from-end</code>
-is true, the leftmost one is retained instead.  If <code>:start</code> or
-<code>:end</code> is specified, only elements within that subsequence are
-examined or removed.
-</p></dd></dl>
+      <p>You can use <code>setf</code> on a <code>cl-subseq</code>
+      form to replace a specified range of elements with elements
+      from another sequence. The replacement is done as if by
+      <code>cl-replace</code>, described below.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002ddelete_002dduplicates"></a>Function: <strong>cl-delete-duplicates</strong> <em>seq <tt>&amp;key :test :test-not :key :start :end :from-end</tt></em></dt>
-<dd><p>This function deletes duplicate elements from <var>seq</var>.  It is
-a destructive version of <code>cl-remove-duplicates</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dconcatenate" id=
+    "index-cl_002dconcatenate"></a>Function:
+    <strong>cl-concatenate</strong> <em>result-type &amp;rest
+    seqs</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dsubstitute"></a>Function: <strong>cl-substitute</strong> <em>new old seq <tt>&amp;key :test :test-not :key :count :start :end :from-end</tt></em></dt>
-<dd><p>This function returns a copy of <var>seq</var>, with all elements
-matching <var>old</var> replaced with <var>new</var>.  The <code>:count</code>,
-<code>:start</code>, <code>:end</code>, and <code>:from-end</code> arguments may be
-used to limit the number of substitutions made.
-</p></dd></dl>
+    <dd>
+      <p>This function concatenates the argument sequences together
+      to form a result sequence of type <var>result-type</var>, one
+      of the symbols <code>vector</code>, <code>string</code>, or
+      <code>list</code>. The arguments are always copied, even in
+      cases such as <code>(cl-concatenate 'list '(1 2 3))</code>
+      where the result is identical to an argument.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dnsubstitute"></a>Function: <strong>cl-nsubstitute</strong> <em>new old seq <tt>&amp;key :test :test-not :key :count :start :end :from-end</tt></em></dt>
-<dd><p>This is a destructive version of <code>cl-substitute</code>; it performs
-the substitution using <code>setcar</code> or <code>aset</code> rather than
-by returning a changed copy of the sequence.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dfill" id=
+    "index-cl_002dfill"></a>Function: <strong>cl-fill</strong>
+    <em>seq item <tt>&amp;key :start :end</tt></em></dt>
 
-<a name="index-cl_002dsubstitute_002dif"></a>
-<a name="index-cl_002dsubstitute_002dif_002dnot"></a>
-<a name="index-cl_002dnsubstitute_002dif"></a>
-<a name="index-cl_002dnsubstitute_002dif_002dnot"></a>
-<p>The functions <code>cl-substitute-if</code>, <code>cl-substitute-if-not</code>,
-<code>cl-nsubstitute-if</code>, and <code>cl-nsubstitute-if-not</code> are defined
-similarly.  For these, a <var>predicate</var> is given in place of the
-<var>old</var> argument.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Searching-Sequences.html#Searching-Sequences" accesskey="n" rel="next">Searching Sequences</a>, Previous: <a href="Mapping-over-Sequences.html#Mapping-over-Sequences" accesskey="p" rel="prev">Mapping over Sequences</a>, Up: <a href="Sequences.html#Sequences" accesskey="u" rel="up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function fills the elements of the sequence (or the
+      specified part of the sequence) with the value
+      <var>item</var>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dreplace" id=
+    "index-cl_002dreplace"></a>Function:
+    <strong>cl-replace</strong> <em>seq1 seq2 <tt>&amp;key :start1
+    :end1 :start2 :end2</tt></em></dt>
 
+    <dd>
+      <p>This function copies part of <var>seq2</var> into part of
+      <var>seq1</var>. The sequence <var>seq1</var> is not
+      stretched or resized; the amount of data copied is simply the
+      shorter of the source and destination (sub)sequences. The
+      function returns <var>seq1</var>.</p>
 
+      <p>If <var>seq1</var> and <var>seq2</var> are
+      <code>eq</code>, then the replacement will work correctly
+      even if the regions indicated by the start and end arguments
+      overlap. However, if <var>seq1</var> and <var>seq2</var> are
+      lists that share storage but are not <code>eq</code>, and the
+      start and end arguments specify overlapping regions, the
+      effect is undefined.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dremove" id=
+    "index-cl_002dremove"></a>Function: <strong>cl-remove</strong>
+    <em>item seq <tt>&amp;key :test :test-not :key :count :start
+    :end :from-end</tt></em></dt>
+
+    <dd>
+      <p>This returns a copy of <var>seq</var> with all elements
+      matching <var>item</var> removed. The result may share
+      storage with or be <code>eq</code> to <var>seq</var> in some
+      circumstances, but the original <var>seq</var> will not be
+      modified. The <code>:test</code>, <code>:test-not</code>, and
+      <code>:key</code> arguments define the matching test that is
+      used; by default, elements <code>eql</code> to
+      <var>item</var> are removed. The <code>:count</code> argument
+      specifies the maximum number of matching elements that can be
+      removed (only the leftmost <var>count</var> matches are
+      removed). The <code>:start</code> and <code>:end</code>
+      arguments specify a region in <var>seq</var> in which
+      elements will be removed; elements outside that region are
+      not matched or removed. The <code>:from-end</code> argument,
+      if true, says that elements should be deleted from the end of
+      the sequence rather than the beginning (this matters only if
+      <var>count</var> was also specified).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002ddelete" id=
+    "index-cl_002ddelete"></a>Function: <strong>cl-delete</strong>
+    <em>item seq <tt>&amp;key :test :test-not :key :count :start
+    :end :from-end</tt></em></dt>
+
+    <dd>
+      <p>This deletes all elements of <var>seq</var> that match
+      <var>item</var>. It is a destructive operation. Since Emacs
+      Lisp does not support stretchable strings or vectors, this is
+      the same as <code>cl-remove</code> for those sequence types.
+      On lists, <code>cl-remove</code> will copy the list if
+      necessary to preserve the original list, whereas
+      <code>cl-delete</code> will splice out parts of the argument
+      list. Compare <code>append</code> and <code>nconc</code>,
+      which are analogous non-destructive and destructive list
+      operations in Emacs Lisp.</p>
+    </dd>
+  </dl><a name="index-cl_002dremove_002dif" id=
+  "index-cl_002dremove_002dif"></a> <a name=
+  "index-cl_002dremove_002dif_002dnot" id=
+  "index-cl_002dremove_002dif_002dnot"></a> <a name=
+  "index-cl_002ddelete_002dif" id="index-cl_002ddelete_002dif"></a>
+  <a name="index-cl_002ddelete_002dif_002dnot" id=
+  "index-cl_002ddelete_002dif_002dnot"></a>
+
+  <p>The predicate-oriented functions <code>cl-remove-if</code>,
+  <code>cl-remove-if-not</code>, <code>cl-delete-if</code>, and
+  <code>cl-delete-if-not</code> are defined similarly.</p>
+
+  <dl>
+    <dt><a name="index-cl_002dremove_002dduplicates" id=
+    "index-cl_002dremove_002dduplicates"></a>Function:
+    <strong>cl-remove-duplicates</strong> <em>seq <tt>&amp;key
+    :test :test-not :key :start :end :from-end</tt></em></dt>
+
+    <dd>
+      <p>This function returns a copy of <var>seq</var> with
+      duplicate elements removed. Specifically, if two elements
+      from the sequence match according to the <code>:test</code>,
+      <code>:test-not</code>, and <code>:key</code> arguments, only
+      the rightmost one is retained. If <code>:from-end</code> is
+      true, the leftmost one is retained instead. If
+      <code>:start</code> or <code>:end</code> is specified, only
+      elements within that subsequence are examined or removed.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002ddelete_002dduplicates" id=
+    "index-cl_002ddelete_002dduplicates"></a>Function:
+    <strong>cl-delete-duplicates</strong> <em>seq <tt>&amp;key
+    :test :test-not :key :start :end :from-end</tt></em></dt>
+
+    <dd>
+      <p>This function deletes duplicate elements from
+      <var>seq</var>. It is a destructive version of
+      <code>cl-remove-duplicates</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dsubstitute" id=
+    "index-cl_002dsubstitute"></a>Function:
+    <strong>cl-substitute</strong> <em>new old seq <tt>&amp;key
+    :test :test-not :key :count :start :end
+    :from-end</tt></em></dt>
+
+    <dd>
+      <p>This function returns a copy of <var>seq</var>, with all
+      elements matching <var>old</var> replaced with
+      <var>new</var>. The <code>:count</code>, <code>:start</code>,
+      <code>:end</code>, and <code>:from-end</code> arguments may
+      be used to limit the number of substitutions made.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dnsubstitute" id=
+    "index-cl_002dnsubstitute"></a>Function:
+    <strong>cl-nsubstitute</strong> <em>new old seq <tt>&amp;key
+    :test :test-not :key :count :start :end
+    :from-end</tt></em></dt>
+
+    <dd>
+      <p>This is a destructive version of
+      <code>cl-substitute</code>; it performs the substitution
+      using <code>setcar</code> or <code>aset</code> rather than by
+      returning a changed copy of the sequence.</p>
+    </dd>
+  </dl><a name="index-cl_002dsubstitute_002dif" id=
+  "index-cl_002dsubstitute_002dif"></a> <a name=
+  "index-cl_002dsubstitute_002dif_002dnot" id=
+  "index-cl_002dsubstitute_002dif_002dnot"></a> <a name=
+  "index-cl_002dnsubstitute_002dif" id=
+  "index-cl_002dnsubstitute_002dif"></a> <a name=
+  "index-cl_002dnsubstitute_002dif_002dnot" id=
+  "index-cl_002dnsubstitute_002dif_002dnot"></a>
+
+  <p>The functions <code>cl-substitute-if</code>,
+  <code>cl-substitute-if-not</code>,
+  <code>cl-nsubstitute-if</code>, and
+  <code>cl-nsubstitute-if-not</code> are defined similarly. For
+  these, a <var>predicate</var> is given in place of the
+  <var>old</var> argument.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Searching-Sequences.html#Searching-Sequences"
+    accesskey="n" rel="next">Searching Sequences</a>, Previous:
+    <a href="Mapping-over-Sequences.html#Mapping-over-Sequences"
+    accesskey="p" rel="prev">Mapping over Sequences</a>, Up:
+    <a href="Sequences.html#Sequences" accesskey="u" rel=
+    "up">Sequences</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

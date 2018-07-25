@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,114 +14,180 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Spam Statistics Package</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Spam Statistics Package">
-<meta name="keywords" content="Gnus Manual: Spam Statistics Package">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Package.html#Spam-Package" rel="up" title="Spam Package">
-<link href="Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary" rel="next" title="Creating a spam-stat dictionary">
-<link href="Extending-the-Spam-package.html#Extending-the-Spam-package" rel="prev" title="Extending the Spam package">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Spam Statistics Package</title>
+  <meta name="description" content=
+  "Gnus Manual: Spam Statistics Package" />
+  <meta name="keywords" content=
+  "Gnus Manual: Spam Statistics Package" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Package.html#Spam-Package" rel="up" title=
+  "Spam Package" />
+  <link href=
+  "Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary"
+  rel="next" title="Creating a spam-stat dictionary" />
+  <link href=
+  "Extending-the-Spam-package.html#Extending-the-Spam-package" rel=
+  "prev" title="Extending the Spam package" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Spam-Statistics-Package"></a>
-<div class="header">
-<p>
-Previous: <a href="Extending-the-Spam-package.html#Extending-the-Spam-package" accesskey="p" rel="prev">Extending the Spam package</a>, Up: <a href="Spam-Package.html#Spam-Package" accesskey="u" rel="up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Spam-Statistics-Package-1"></a>
-<h4 class="subsection">9.17.8 Spam Statistics Package</h4>
-<a name="index-Paul-Graham"></a>
-<a name="index-Graham_002c-Paul"></a>
-<a name="index-naive-Bayesian-spam-filtering"></a>
-<a name="index-Bayesian-spam-filtering_002c-naive"></a>
-<a name="index-spam-filtering_002c-naive-Bayesian"></a>
+<body lang="en" xml:lang="en">
+  <a name="Spam-Statistics-Package" id=
+  "Spam-Statistics-Package"></a>
 
-<p>Paul Graham has written an excellent essay about spam filtering using
-statistics: <a href="http://www.paulgraham.com/spam.html">A Plan for
-Spam</a>.  In it he describes the inherent deficiency of rule-based
-filtering as used by SpamAssassin, for example: Somebody has to write
-the rules, and everybody else has to install these rules.  You are
-always late.  It would be much better, he argues, to filter mail based
-on whether it somehow resembles spam or non-spam.  One way to measure
-this is word distribution.  He then goes on to describe a solution
-that checks whether a new mail resembles any of your other spam mails
-or not.
-</p>
-<p>The basic idea is this:  Create a two collections of your mail, one
-with spam, one with non-spam.  Count how often each word appears in
-either collection, weight this by the total number of mails in the
-collections, and store this information in a dictionary.  For every
-word in a new mail, determine its probability to belong to a spam or a
-non-spam mail.  Use the 15 most conspicuous words, compute the total
-probability of the mail being spam.  If this probability is higher
-than a certain threshold, the mail is considered to be spam.
-</p>
-<p>The Spam Statistics package adds support to Gnus for this kind of
-filtering.  It can be used as one of the back ends of the Spam package
-(see <a href="Spam-Package.html#Spam-Package">Spam Package</a>), or by itself.
-</p>
-<p>Before using the Spam Statistics package, you need to set it up.
-First, you need two collections of your mail, one with spam, one with
-non-spam.  Then you need to create a dictionary using these two
-collections, and save it.  And last but not least, you need to use
-this dictionary in your fancy mail splitting rules.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary" accesskey="1">Creating a spam-stat dictionary</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat" accesskey="2">Splitting mail using spam-stat</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary" accesskey="3">Low-level interface to the spam-stat dictionary</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Previous: <a href=
+    "Extending-the-Spam-package.html#Extending-the-Spam-package"
+    accesskey="p" rel="prev">Extending the Spam package</a>, Up:
+    <a href="Spam-Package.html#Spam-Package" accesskey="u" rel=
+    "up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Spam-Statistics-Package-1" id=
+  "Spam-Statistics-Package-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Extending-the-Spam-package.html#Extending-the-Spam-package" accesskey="p" rel="prev">Extending the Spam package</a>, Up: <a href="Spam-Package.html#Spam-Package" accesskey="u" rel="up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h4 class="subsection">9.17.8 Spam Statistics
+  Package</h4><a name="index-Paul-Graham" id=
+  "index-Paul-Graham"></a> <a name="index-Graham_002c-Paul" id=
+  "index-Graham_002c-Paul"></a> <a name=
+  "index-naive-Bayesian-spam-filtering" id=
+  "index-naive-Bayesian-spam-filtering"></a> <a name=
+  "index-Bayesian-spam-filtering_002c-naive" id=
+  "index-Bayesian-spam-filtering_002c-naive"></a> <a name=
+  "index-spam-filtering_002c-naive-Bayesian" id=
+  "index-spam-filtering_002c-naive-Bayesian"></a>
 
+  <p>Paul Graham has written an excellent essay about spam
+  filtering using statistics: <a href=
+  "http://www.paulgraham.com/spam.html">A Plan for Spam</a>. In it
+  he describes the inherent deficiency of rule-based filtering as
+  used by SpamAssassin, for example: Somebody has to write the
+  rules, and everybody else has to install these rules. You are
+  always late. It would be much better, he argues, to filter mail
+  based on whether it somehow resembles spam or non-spam. One way
+  to measure this is word distribution. He then goes on to describe
+  a solution that checks whether a new mail resembles any of your
+  other spam mails or not.</p>
 
+  <p>The basic idea is this: Create a two collections of your mail,
+  one with spam, one with non-spam. Count how often each word
+  appears in either collection, weight this by the total number of
+  mails in the collections, and store this information in a
+  dictionary. For every word in a new mail, determine its
+  probability to belong to a spam or a non-spam mail. Use the 15
+  most conspicuous words, compute the total probability of the mail
+  being spam. If this probability is higher than a certain
+  threshold, the mail is considered to be spam.</p>
 
+  <p>The Spam Statistics package adds support to Gnus for this kind
+  of filtering. It can be used as one of the back ends of the Spam
+  package (see <a href="Spam-Package.html#Spam-Package">Spam
+  Package</a>), or by itself.</p>
+
+  <p>Before using the Spam Statistics package, you need to set it
+  up. First, you need two collections of your mail, one with spam,
+  one with non-spam. Then you need to create a dictionary using
+  these two collections, and save it. And last but not least, you
+  need to use this dictionary in your fancy mail splitting
+  rules.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary"
+      accesskey="1">Creating a spam-stat dictionary</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat"
+      accesskey="2">Splitting mail using spam-stat</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary"
+      accesskey="3">Low-level interface to the spam-stat
+      dictionary</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Extending-the-Spam-package.html#Extending-the-Spam-package"
+    accesskey="p" rel="prev">Extending the Spam package</a>, Up:
+    <a href="Spam-Package.html#Spam-Package" accesskey="u" rel=
+    "up">Spam Package</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

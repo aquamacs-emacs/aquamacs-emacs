@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,196 +16,312 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Guessing the Style</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Guessing the Style">
-<meta name="keywords" content="CC Mode Manual: Guessing the Style">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Styles.html#Styles" rel="up" title="Styles">
-<link href="File-Styles.html#File-Styles" rel="next" title="File Styles">
-<link href="Adding-Styles.html#Adding-Styles" rel="prev" title="Adding Styles">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Guessing the Style</title>
+  <meta name="description" content=
+  "CC Mode Manual: Guessing the Style" />
+  <meta name="keywords" content=
+  "CC Mode Manual: Guessing the Style" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Styles.html#Styles" rel="up" title="Styles" />
+  <link href="File-Styles.html#File-Styles" rel="next" title=
+  "File Styles" />
+  <link href="Adding-Styles.html#Adding-Styles" rel="prev" title=
+  "Adding Styles" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Guessing-the-Style"></a>
-<div class="header">
-<p>
-Next: <a href="File-Styles.html#File-Styles" accesskey="n" rel="next">File Styles</a>, Previous: <a href="Adding-Styles.html#Adding-Styles" accesskey="p" rel="prev">Adding Styles</a>, Up: <a href="Styles.html#Styles" accesskey="u" rel="up">Styles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Guessing-the-Style-1"></a>
-<h4 class="subsection">6.3.4 Guessing the Style</h4>
+<body lang="en" xml:lang="en">
+  <a name="Guessing-the-Style" id="Guessing-the-Style"></a>
 
-<p>Instead of specifying a style, you can get CC Mode to <em>guess</em>
-your style by examining an already formatted code buffer.  CC Mode
-then determines the &rdquo;most frequent&rdquo; offset (see <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>)
-for each of the syntactic symbols (see <a href="Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation Engine Basics</a>)
-encountered in the buffer, and the &rdquo;most frequent&rdquo; value of
-c-basic-offset (see <a href="Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a>), then merges the
-current style with these &rdquo;guesses&rdquo; to form a new style.  This
-combined style is known as the <em>guessed style</em>.
-</p>
-<p>To do this, call <code>c-guess</code> (or one of the other 5 guessing
-commands) on your sample buffer.  The analysis of your code may take
-some time.
-</p>
-<p>You can then set the guessed style in any CC Mode buffer with
-<code>c-guess-install</code>.  You can display the style with
-<code>c-guess-view</code>, and preserve it by copying it into your
-<samp>.emacs</samp> for future use, preferably after editing it.
-</p>
-<dl compact="compact">
-<dt><kbd>M-x c-guess-no-install</kbd></dt>
-<dt><kbd>M-x c-guess-buffer-no-install</kbd></dt>
-<dt><kbd>M-x c-guess-region-no-install</kbd></dt>
-<dd><a name="index-c_002dguess_002dno_002dinstall"></a>
-<a name="index-c_002dguess_002dbuffer_002dno_002dinstall"></a>
-<a name="index-c_002dguess_002dregion_002dno_002dinstall"></a>
-<a name="index-guess_002dno_002dinstall-_0028c_002d_0029"></a>
-<a name="index-guess_002dbuffer_002dno_002dinstall-_0028c_002d_0029"></a>
-<a name="index-guess_002dregion_002dno_002dinstall-_0028c_002d_0029"></a>
-<p>These commands analyze a part of the current buffer and guess the
-style from it.
-</p>
-<p>The part of the buffer examined is either the region
-(<code>c-guess-region-no-install</code>), the entire buffer
-(<code>c-guess-buffer-no-install</code>), or the first
-<code>c-guess-region-max</code> bytes (<code>c-guess-no-install</code>).
-</p>
-<p>Each of these commands can be given an optional prefix argument.  This
-instructs CC Mode to combine the new guesses with the current
-guesses before forming the guessed style.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="File-Styles.html#File-Styles" accesskey="n"
+    rel="next">File Styles</a>, Previous: <a href=
+    "Adding-Styles.html#Adding-Styles" accesskey="p" rel=
+    "prev">Adding Styles</a>, Up: <a href="Styles.html#Styles"
+    accesskey="u" rel="up">Styles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Guessing-the-Style-1" id="Guessing-the-Style-1"></a>
 
-<dl compact="compact">
-<dt><kbd>M-x c-guess</kbd></dt>
-<dt><kbd>M-x c-guess-buffer</kbd></dt>
-<dt><kbd>M-x c-guess-region</kbd></dt>
-<dd><a name="index-c_002dguess"></a>
-<a name="index-c_002dguess_002dbuffer"></a>
-<a name="index-c_002dguess_002dregion"></a>
-<a name="index-guess-_0028c_002d_0029"></a>
-<a name="index-guess_002dbuffer-_0028c_002d_0029"></a>
-<a name="index-guess_002dregion-_0028c_002d_0029"></a>
-<p>These commands analyze a part of the current buffer, guess the style
-from it, then install the guessed style on the buffer.  The guessed
-style is given a name based on the buffer&rsquo;s absolute file name, and
-you can then set this style on any CC Mode buffer with <kbd>C-c .</kbd>.
-</p>
-<p>The part of the buffer examined is either the region
-(<code>c-guess-region</code>), the entire buffer (<code>c-guess-buffer</code>), or
-the first <code>c-guess-region-max</code> bytes (<code>c-guess</code>).
-</p>
-<p>Each of these commands can be given an optional prefix argument.  This
-instructs CC Mode to combine the new guesses with the current
-guesses before forming the guessed style.
-</p></dd>
-</dl>
+  <h4 class="subsection">6.3.4 Guessing the Style</h4>
 
-<dl>
-<dt><a name="index-c_002dguess_002dregion_002dmax"></a>User Option: <strong>c-guess-region-max</strong></dt>
-<dd><a name="index-guess_002dregion_002dmax-_0028c_002d_0029"></a>
-<p>This variable, default 50000, is the size in bytes of the buffer
-portion examined by c-guess and c-guess-no-install.  If set to
-<code>nil</code>, the entire buffer is examined.
-</p></dd></dl>
+  <p>Instead of specifying a style, you can get CC Mode to
+  <em>guess</em> your style by examining an already formatted code
+  buffer. CC Mode then determines the &rdquo;most frequent&rdquo;
+  offset (see <a href=
+  "c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>)
+  for each of the syntactic symbols (see <a href=
+  "Indentation-Engine-Basics.html#Indentation-Engine-Basics">Indentation
+  Engine Basics</a>) encountered in the buffer, and the &rdquo;most
+  frequent&rdquo; value of c-basic-offset (see <a href=
+  "Customizing-Indentation.html#Customizing-Indentation">Customizing
+  Indentation</a>), then merges the current style with these
+  &rdquo;guesses&rdquo; to form a new style. This combined style is
+  known as the <em>guessed style</em>.</p>
 
-<dl>
-<dt><a name="index-c_002dguess_002doffset_002dthreshold"></a>User Option: <strong>c-guess-offset-threshold</strong></dt>
-<dd><a name="index-guess_002doffset_002dthreshold-_0028c_002d_0029"></a>
-<p>This variable, default 10, is the maximum offset, either outwards or
-inwards, which will be taken into account by the analysis process.
-Any offset bigger than this will be ignored.  For no limit, set this
-variable to a large number.
-</p></dd></dl>
+  <p>To do this, call <code>c-guess</code> (or one of the other 5
+  guessing commands) on your sample buffer. The analysis of your
+  code may take some time.</p>
 
-<dl compact="compact">
-<dt><kbd>M-x c-guess-install</kbd></dt>
-<dd><a name="index-c_002dguess_002dinstall"></a>
-<a name="index-guess_002dinstall-_0028c_002d_0029"></a>
+  <p>You can then set the guessed style in any CC Mode buffer with
+  <code>c-guess-install</code>. You can display the style with
+  <code>c-guess-view</code>, and preserve it by copying it into
+  your <samp>.emacs</samp> for future use, preferably after editing
+  it.</p>
 
-<p>Set the current buffer&rsquo;s style to the guessed style.  This prompts you
-to enter an optional new style name to give to the guessed style.  By
-default, this name is based on the buffer&rsquo;s absolute file name.  You
-can then use this style like any other.
-</p>
-</dd>
-<dt><kbd>M-x c-guess-view</kbd></dt>
-<dd><a name="index-c_002dguess_002dview"></a>
-<a name="index-guess_002dview-_0028c_002d_0029"></a>
-<p>Display the most recently guessed style in a temporary buffer.  This
-display is in the form of a <code>c-add-style</code> form (see <a href="Adding-Styles.html#Adding-Styles">Adding Styles</a>) which can be easily copied to your <samp>.emacs</samp>.  You will
-probably want to edit it first.
-</p>
-<p>The display of the guessed style contains these elements:
-</p>
-<dl compact="compact">
-<dt>Placeholder Name</dt>
-<dd><p>You should replace this with a style name of your own.
-</p></dd>
-<dt>Parent Style</dt>
-<dd><p>The style current when the guessing began, from which the guessed
-style inherits (see <a href="Config-Basics.html#Config-Basics">Config Basics</a>) the settings which weren&rsquo;t
-guessed.
-</p></dd>
-<dt>Guessed Offsets</dt>
-<dd><p>These are the core result of the guessing process.  Each of them is
-marked by a comment.
-</p></dd>
-<dt>Inherited Offsets</dt>
-<dd><p>These are syntactic offsets which have been taken over from the parent
-style.  To avoid possible future conflicts, you should remove either
-these offsets or the parent style name.
-</p></dd>
-</dl>
-</dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>M-x c-guess-no-install</kbd></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="File-Styles.html#File-Styles" accesskey="n" rel="next">File Styles</a>, Previous: <a href="Adding-Styles.html#Adding-Styles" accesskey="p" rel="prev">Adding Styles</a>, Up: <a href="Styles.html#Styles" accesskey="u" rel="up">Styles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><kbd>M-x c-guess-buffer-no-install</kbd></dt>
 
+    <dt><kbd>M-x c-guess-region-no-install</kbd></dt>
 
+    <dd>
+      <a name="index-c_002dguess_002dno_002dinstall" id=
+      "index-c_002dguess_002dno_002dinstall"></a> <a name=
+      "index-c_002dguess_002dbuffer_002dno_002dinstall" id=
+      "index-c_002dguess_002dbuffer_002dno_002dinstall"></a>
+      <a name="index-c_002dguess_002dregion_002dno_002dinstall" id=
+      "index-c_002dguess_002dregion_002dno_002dinstall"></a>
+      <a name="index-guess_002dno_002dinstall-_0028c_002d_0029" id=
+      "index-guess_002dno_002dinstall-_0028c_002d_0029"></a>
+      <a name=
+      "index-guess_002dbuffer_002dno_002dinstall-_0028c_002d_0029"
+      id=
+      "index-guess_002dbuffer_002dno_002dinstall-_0028c_002d_0029"></a>
+      <a name=
+      "index-guess_002dregion_002dno_002dinstall-_0028c_002d_0029"
+      id=
+      "index-guess_002dregion_002dno_002dinstall-_0028c_002d_0029"></a>
 
+      <p>These commands analyze a part of the current buffer and
+      guess the style from it.</p>
+
+      <p>The part of the buffer examined is either the region
+      (<code>c-guess-region-no-install</code>), the entire buffer
+      (<code>c-guess-buffer-no-install</code>), or the first
+      <code>c-guess-region-max</code> bytes
+      (<code>c-guess-no-install</code>).</p>
+
+      <p>Each of these commands can be given an optional prefix
+      argument. This instructs CC Mode to combine the new guesses
+      with the current guesses before forming the guessed
+      style.</p>
+    </dd>
+  </dl>
+
+  <dl compact="compact">
+    <dt><kbd>M-x c-guess</kbd></dt>
+
+    <dt><kbd>M-x c-guess-buffer</kbd></dt>
+
+    <dt><kbd>M-x c-guess-region</kbd></dt>
+
+    <dd>
+      <a name="index-c_002dguess" id="index-c_002dguess"></a>
+      <a name="index-c_002dguess_002dbuffer" id=
+      "index-c_002dguess_002dbuffer"></a> <a name=
+      "index-c_002dguess_002dregion" id=
+      "index-c_002dguess_002dregion"></a> <a name=
+      "index-guess-_0028c_002d_0029" id=
+      "index-guess-_0028c_002d_0029"></a> <a name=
+      "index-guess_002dbuffer-_0028c_002d_0029" id=
+      "index-guess_002dbuffer-_0028c_002d_0029"></a> <a name=
+      "index-guess_002dregion-_0028c_002d_0029" id=
+      "index-guess_002dregion-_0028c_002d_0029"></a>
+
+      <p>These commands analyze a part of the current buffer, guess
+      the style from it, then install the guessed style on the
+      buffer. The guessed style is given a name based on the
+      buffer&rsquo;s absolute file name, and you can then set this
+      style on any CC Mode buffer with <kbd>C-c .</kbd>.</p>
+
+      <p>The part of the buffer examined is either the region
+      (<code>c-guess-region</code>), the entire buffer
+      (<code>c-guess-buffer</code>), or the first
+      <code>c-guess-region-max</code> bytes
+      (<code>c-guess</code>).</p>
+
+      <p>Each of these commands can be given an optional prefix
+      argument. This instructs CC Mode to combine the new guesses
+      with the current guesses before forming the guessed
+      style.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-c_002dguess_002dregion_002dmax" id=
+    "index-c_002dguess_002dregion_002dmax"></a>User Option:
+    <strong>c-guess-region-max</strong></dt>
+
+    <dd>
+      <a name="index-guess_002dregion_002dmax-_0028c_002d_0029" id=
+      "index-guess_002dregion_002dmax-_0028c_002d_0029"></a>
+
+      <p>This variable, default 50000, is the size in bytes of the
+      buffer portion examined by c-guess and c-guess-no-install. If
+      set to <code>nil</code>, the entire buffer is examined.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-c_002dguess_002doffset_002dthreshold" id=
+    "index-c_002dguess_002doffset_002dthreshold"></a>User Option:
+    <strong>c-guess-offset-threshold</strong></dt>
+
+    <dd>
+      <a name=
+      "index-guess_002doffset_002dthreshold-_0028c_002d_0029" id=
+      "index-guess_002doffset_002dthreshold-_0028c_002d_0029"></a>
+
+      <p>This variable, default 10, is the maximum offset, either
+      outwards or inwards, which will be taken into account by the
+      analysis process. Any offset bigger than this will be
+      ignored. For no limit, set this variable to a large
+      number.</p>
+    </dd>
+  </dl>
+
+  <dl compact="compact">
+    <dt><kbd>M-x c-guess-install</kbd></dt>
+
+    <dd>
+      <a name="index-c_002dguess_002dinstall" id=
+      "index-c_002dguess_002dinstall"></a> <a name=
+      "index-guess_002dinstall-_0028c_002d_0029" id=
+      "index-guess_002dinstall-_0028c_002d_0029"></a>
+
+      <p>Set the current buffer&rsquo;s style to the guessed style.
+      This prompts you to enter an optional new style name to give
+      to the guessed style. By default, this name is based on the
+      buffer&rsquo;s absolute file name. You can then use this
+      style like any other.</p>
+    </dd>
+
+    <dt><kbd>M-x c-guess-view</kbd></dt>
+
+    <dd>
+      <a name="index-c_002dguess_002dview" id=
+      "index-c_002dguess_002dview"></a> <a name=
+      "index-guess_002dview-_0028c_002d_0029" id=
+      "index-guess_002dview-_0028c_002d_0029"></a>
+
+      <p>Display the most recently guessed style in a temporary
+      buffer. This display is in the form of a
+      <code>c-add-style</code> form (see <a href=
+      "Adding-Styles.html#Adding-Styles">Adding Styles</a>) which
+      can be easily copied to your <samp>.emacs</samp>. You will
+      probably want to edit it first.</p>
+
+      <p>The display of the guessed style contains these
+      elements:</p>
+
+      <dl compact="compact">
+        <dt>Placeholder Name</dt>
+
+        <dd>
+          <p>You should replace this with a style name of your
+          own.</p>
+        </dd>
+
+        <dt>Parent Style</dt>
+
+        <dd>
+          <p>The style current when the guessing began, from which
+          the guessed style inherits (see <a href=
+          "Config-Basics.html#Config-Basics">Config Basics</a>) the
+          settings which weren&rsquo;t guessed.</p>
+        </dd>
+
+        <dt>Guessed Offsets</dt>
+
+        <dd>
+          <p>These are the core result of the guessing process.
+          Each of them is marked by a comment.</p>
+        </dd>
+
+        <dt>Inherited Offsets</dt>
+
+        <dd>
+          <p>These are syntactic offsets which have been taken over
+          from the parent style. To avoid possible future
+          conflicts, you should remove either these offsets or the
+          parent style name.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="File-Styles.html#File-Styles" accesskey="n"
+    rel="next">File Styles</a>, Previous: <a href=
+    "Adding-Styles.html#Adding-Styles" accesskey="p" rel=
+    "prev">Adding Styles</a>, Up: <a href="Styles.html#Styles"
+    accesskey="u" rel="up">Styles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,160 +14,260 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Server Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Server Commands">
-<meta name="keywords" content="Gnus Manual: Server Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Server-Buffer.html#Server-Buffer" rel="up" title="Server Buffer">
-<link href="Example-Methods.html#Example-Methods" rel="next" title="Example Methods">
-<link href="Server-Buffer-Format.html#Server-Buffer-Format" rel="prev" title="Server Buffer Format">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Server Commands</title>
+  <meta name="description" content=
+  "Gnus Manual: Server Commands" />
+  <meta name="keywords" content="Gnus Manual: Server Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Server-Buffer.html#Server-Buffer" rel="up" title=
+  "Server Buffer" />
+  <link href="Example-Methods.html#Example-Methods" rel="next"
+  title="Example Methods" />
+  <link href="Server-Buffer-Format.html#Server-Buffer-Format" rel=
+  "prev" title="Server Buffer Format" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Server-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Example-Methods.html#Example-Methods" accesskey="n" rel="next">Example Methods</a>, Previous: <a href="Server-Buffer-Format.html#Server-Buffer-Format" accesskey="p" rel="prev">Server Buffer Format</a>, Up: <a href="Server-Buffer.html#Server-Buffer" accesskey="u" rel="up">Server Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Server-Commands-1"></a>
-<h4 class="subsection">6.1.2 Server Commands</h4>
-<a name="index-server-commands"></a>
+<body lang="en" xml:lang="en">
+  <a name="Server-Commands" id="Server-Commands"></a>
 
-<dl compact="compact">
-<dt><kbd>v</kbd></dt>
-<dd><a name="index-v-_0028Server_0029"></a>
-<a name="index-keys_002c-reserved-for-users-_0028Server_0029"></a>
-<p>The key <kbd>v</kbd> is reserved for users.  You can bind it to some
-command or better use it as a prefix key.
-</p>
-</dd>
-<dt><kbd>a</kbd></dt>
-<dd><a name="index-a-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dadd_002dserver"></a>
-<p>Add a new server (<code>gnus-server-add-server</code>).
-</p>
-</dd>
-<dt><kbd>e</kbd></dt>
-<dd><a name="index-e-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dedit_002dserver"></a>
-<p>Edit a server (<code>gnus-server-edit-server</code>).
-</p>
-</dd>
-<dt><kbd>S</kbd></dt>
-<dd><a name="index-S-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dshow_002dserver"></a>
-<p>Show the definition of a server (<code>gnus-server-show-server</code>).
-</p>
-</dd>
-<dt><kbd>SPACE</kbd></dt>
-<dd><a name="index-SPACE-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dread_002dserver"></a>
-<p>Browse the current server (<code>gnus-server-read-server</code>).
-</p>
-</dd>
-<dt><kbd>q</kbd></dt>
-<dd><a name="index-q-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dexit"></a>
-<p>Return to the group buffer (<code>gnus-server-exit</code>).
-</p>
-</dd>
-<dt><kbd>k</kbd></dt>
-<dd><a name="index-k-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dkill_002dserver"></a>
-<p>Kill the current server (<code>gnus-server-kill-server</code>).
-</p>
-</dd>
-<dt><kbd>y</kbd></dt>
-<dd><a name="index-y-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dyank_002dserver"></a>
-<p>Yank the previously killed server (<code>gnus-server-yank-server</code>).
-</p>
-</dd>
-<dt><kbd>c</kbd></dt>
-<dd><a name="index-c-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dcopy_002dserver"></a>
-<p>Copy the current server (<code>gnus-server-copy-server</code>).
-</p>
-</dd>
-<dt><kbd>l</kbd></dt>
-<dd><a name="index-l-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dlist_002dservers"></a>
-<p>List all servers (<code>gnus-server-list-servers</code>).
-</p>
-</dd>
-<dt><kbd>s</kbd></dt>
-<dd><a name="index-s-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dscan_002dserver"></a>
-<p>Request that the server scan its sources for new articles
-(<code>gnus-server-scan-server</code>).  This is mainly sensible with mail
-servers.
-</p>
-</dd>
-<dt><kbd>g</kbd></dt>
-<dd><a name="index-g-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dregenerate_002dserver"></a>
-<p>Request that the server regenerate all its data structures
-(<code>gnus-server-regenerate-server</code>).  This can be useful if you have
-a mail back end that has gotten out of sync.
-</p>
-</dd>
-<dt><kbd>z</kbd></dt>
-<dd><a name="index-z-_0028Server_0029"></a>
-<a name="index-gnus_002dserver_002dcompact_002dserver"></a>
+  <div class="header">
+    <p>Next: <a href="Example-Methods.html#Example-Methods"
+    accesskey="n" rel="next">Example Methods</a>, Previous:
+    <a href="Server-Buffer-Format.html#Server-Buffer-Format"
+    accesskey="p" rel="prev">Server Buffer Format</a>, Up: <a href=
+    "Server-Buffer.html#Server-Buffer" accesskey="u" rel=
+    "up">Server Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Server-Commands-1" id="Server-Commands-1"></a>
 
-<p>Compact all groups in the server under point
-(<code>gnus-server-compact-server</code>).  Currently implemented only in
-nnml (see <a href="Mail-Spool.html#Mail-Spool">Mail Spool</a>).  This removes gaps between article numbers,
-hence getting a correct total article count.
-</p>
-</dd>
-</dl>
+  <h4 class="subsection">6.1.2 Server Commands</h4><a name=
+  "index-server-commands" id="index-server-commands"></a>
 
-<p>Some more commands for closing, disabling, and re-opening servers are
-listed in <a href="Unavailable-Servers.html#Unavailable-Servers">Unavailable Servers</a>.
-</p>
+  <dl compact="compact">
+    <dt><kbd>v</kbd></dt>
 
+    <dd>
+      <a name="index-v-_0028Server_0029" id=
+      "index-v-_0028Server_0029"></a> <a name=
+      "index-keys_002c-reserved-for-users-_0028Server_0029" id=
+      "index-keys_002c-reserved-for-users-_0028Server_0029"></a>
 
+      <p>The key <kbd>v</kbd> is reserved for users. You can bind
+      it to some command or better use it as a prefix key.</p>
+    </dd>
 
+    <dt><kbd>a</kbd></dt>
 
+    <dd>
+      <a name="index-a-_0028Server_0029" id=
+      "index-a-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dadd_002dserver" id=
+      "index-gnus_002dserver_002dadd_002dserver"></a>
+
+      <p>Add a new server
+      (<code>gnus-server-add-server</code>).</p>
+    </dd>
+
+    <dt><kbd>e</kbd></dt>
+
+    <dd>
+      <a name="index-e-_0028Server_0029" id=
+      "index-e-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dedit_002dserver" id=
+      "index-gnus_002dserver_002dedit_002dserver"></a>
+
+      <p>Edit a server (<code>gnus-server-edit-server</code>).</p>
+    </dd>
+
+    <dt><kbd>S</kbd></dt>
+
+    <dd>
+      <a name="index-S-_0028Server_0029" id=
+      "index-S-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dshow_002dserver" id=
+      "index-gnus_002dserver_002dshow_002dserver"></a>
+
+      <p>Show the definition of a server
+      (<code>gnus-server-show-server</code>).</p>
+    </dd>
+
+    <dt><kbd>SPACE</kbd></dt>
+
+    <dd>
+      <a name="index-SPACE-_0028Server_0029" id=
+      "index-SPACE-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dread_002dserver" id=
+      "index-gnus_002dserver_002dread_002dserver"></a>
+
+      <p>Browse the current server
+      (<code>gnus-server-read-server</code>).</p>
+    </dd>
+
+    <dt><kbd>q</kbd></dt>
+
+    <dd>
+      <a name="index-q-_0028Server_0029" id=
+      "index-q-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dexit" id=
+      "index-gnus_002dserver_002dexit"></a>
+
+      <p>Return to the group buffer
+      (<code>gnus-server-exit</code>).</p>
+    </dd>
+
+    <dt><kbd>k</kbd></dt>
+
+    <dd>
+      <a name="index-k-_0028Server_0029" id=
+      "index-k-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dkill_002dserver" id=
+      "index-gnus_002dserver_002dkill_002dserver"></a>
+
+      <p>Kill the current server
+      (<code>gnus-server-kill-server</code>).</p>
+    </dd>
+
+    <dt><kbd>y</kbd></dt>
+
+    <dd>
+      <a name="index-y-_0028Server_0029" id=
+      "index-y-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dyank_002dserver" id=
+      "index-gnus_002dserver_002dyank_002dserver"></a>
+
+      <p>Yank the previously killed server
+      (<code>gnus-server-yank-server</code>).</p>
+    </dd>
+
+    <dt><kbd>c</kbd></dt>
+
+    <dd>
+      <a name="index-c-_0028Server_0029" id=
+      "index-c-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dcopy_002dserver" id=
+      "index-gnus_002dserver_002dcopy_002dserver"></a>
+
+      <p>Copy the current server
+      (<code>gnus-server-copy-server</code>).</p>
+    </dd>
+
+    <dt><kbd>l</kbd></dt>
+
+    <dd>
+      <a name="index-l-_0028Server_0029" id=
+      "index-l-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dlist_002dservers" id=
+      "index-gnus_002dserver_002dlist_002dservers"></a>
+
+      <p>List all servers
+      (<code>gnus-server-list-servers</code>).</p>
+    </dd>
+
+    <dt><kbd>s</kbd></dt>
+
+    <dd>
+      <a name="index-s-_0028Server_0029" id=
+      "index-s-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dscan_002dserver" id=
+      "index-gnus_002dserver_002dscan_002dserver"></a>
+
+      <p>Request that the server scan its sources for new articles
+      (<code>gnus-server-scan-server</code>). This is mainly
+      sensible with mail servers.</p>
+    </dd>
+
+    <dt><kbd>g</kbd></dt>
+
+    <dd>
+      <a name="index-g-_0028Server_0029" id=
+      "index-g-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dregenerate_002dserver" id=
+      "index-gnus_002dserver_002dregenerate_002dserver"></a>
+
+      <p>Request that the server regenerate all its data structures
+      (<code>gnus-server-regenerate-server</code>). This can be
+      useful if you have a mail back end that has gotten out of
+      sync.</p>
+    </dd>
+
+    <dt><kbd>z</kbd></dt>
+
+    <dd>
+      <a name="index-z-_0028Server_0029" id=
+      "index-z-_0028Server_0029"></a> <a name=
+      "index-gnus_002dserver_002dcompact_002dserver" id=
+      "index-gnus_002dserver_002dcompact_002dserver"></a>
+
+      <p>Compact all groups in the server under point
+      (<code>gnus-server-compact-server</code>). Currently
+      implemented only in nnml (see <a href=
+      "Mail-Spool.html#Mail-Spool">Mail Spool</a>). This removes
+      gaps between article numbers, hence getting a correct total
+      article count.</p>
+    </dd>
+  </dl>
+
+  <p>Some more commands for closing, disabling, and re-opening
+  servers are listed in <a href=
+  "Unavailable-Servers.html#Unavailable-Servers">Unavailable
+  Servers</a>.</p>
 </body>
 </html>

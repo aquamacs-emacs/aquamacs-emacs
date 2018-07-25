@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,175 +16,298 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Wisent Parsing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Wisent Parsing">
-<meta name="keywords" content="Wisent Parser Development: Wisent Parsing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="top">
-<link href="Writing-a-lexer.html#Writing-a-lexer" rel="next" title="Writing a lexer">
-<link href="Understanding-the-automaton.html#Understanding-the-automaton" rel="prev" title="Understanding the automaton">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Wisent Parsing</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Wisent Parsing" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Wisent Parsing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="top" />
+  <link href="Writing-a-lexer.html#Writing-a-lexer" rel="next"
+  title="Writing a lexer" />
+  <link href=
+  "Understanding-the-automaton.html#Understanding-the-automaton"
+  rel="prev" title="Understanding the automaton" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Wisent-Parsing"></a>
-<div class="header">
-<p>
-Next: <a href="Wisent-Semantic.html#Wisent-Semantic" accesskey="n" rel="next">Wisent Semantic</a>, Previous: <a href="Wisent-Grammar.html#Wisent-Grammar" accesskey="p" rel="prev">Wisent Grammar</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Wisent-Parsing-1"></a>
-<h2 class="chapter">3 Wisent Parsing</h2>
+<body lang="en" xml:lang="en">
+  <a name="Wisent-Parsing" id="Wisent-Parsing"></a>
 
-<a name="index-bottom_002dup-parser"></a>
-<a name="index-shift_002dreduce-parser"></a>
-<p>The Wisent&rsquo;s parser is what is called a <em>bottom-up</em> or
-<em>shift-reduce</em> parser which repeatedly:
-</p>
-<dl compact="compact">
-<dd><a name="index-shift"></a>
-</dd>
-<dt><em>shift</em></dt>
-<dd><p>That is pushes the value of the last lexical token read (the
-look-ahead token) into a value stack, and reads a new one.
-</p>
-<a name="index-reduce"></a>
-</dd>
-<dt><em>reduce</em></dt>
-<dd><p>That is replaces a nonterminal by its semantic value.  The values of
-the components which form the right hand side of a rule are popped
-from the value stack and reduced by the semantic action of this rule.
-The result is pushed back on top of value stack.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Wisent-Semantic.html#Wisent-Semantic"
+    accesskey="n" rel="next">Wisent Semantic</a>, Previous:
+    <a href="Wisent-Grammar.html#Wisent-Grammar" accesskey="p" rel=
+    "prev">Wisent Grammar</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Wisent-Parsing-1" id="Wisent-Parsing-1"></a>
 
-<p>The parser will stop on:
-</p>
-<dl compact="compact">
-<dd><a name="index-accept"></a>
-</dd>
-<dt><em>accept</em></dt>
-<dd><p>When all input has been successfully parsed.  The semantic value of
-the start nonterminal is on top of the value stack.
-</p>
-<a name="index-syntax-error"></a>
-</dd>
-<dt><em>error</em></dt>
-<dd><p>When a syntax error (an unexpected token in input) has been detected.
-At this point the parser issues an error message and either stops or
-calls a recovery routine to try to resume parsing.
-</p></dd>
-</dl>
+  <h2 class="chapter">3 Wisent Parsing</h2><a name=
+  "index-bottom_002dup-parser" id="index-bottom_002dup-parser"></a>
+  <a name="index-shift_002dreduce-parser" id=
+  "index-shift_002dreduce-parser"></a>
 
-<a name="index-table_002ddriven-parser"></a>
-<p>The above elementary actions are driven by the <acronym>LALR(1)</acronym>
-automaton built by <code>wisent-compile-grammar</code> from a context-free
-grammar.
-</p>
-<p>The Wisent&rsquo;s parser is entered by calling the function:
-</p>
-<a name="index-wisent_002dparse"></a>
-<dl>
-<dt><a name="index-wisent_002dparse-1"></a>Function: <strong>wisent-parse</strong> <em>automaton lexer &amp;optional error start</em></dt>
-<dd><p>Parse input using the automaton specified in <var>automaton</var>.
-</p>
-<dl compact="compact">
-<dt><var>automaton</var></dt>
-<dd><p>Is an <acronym>LALR(1)</acronym> automaton generated by
-<code>wisent-compile-grammar</code> (see <a href="Wisent-Grammar.html#Wisent-Grammar">Wisent Grammar</a>).
-</p>
-</dd>
-<dt><var>lexer</var></dt>
-<dd><p>Is a function with no argument called by the parser to obtain the next
-terminal (token) in input (see <a href="Writing-a-lexer.html#Writing-a-lexer">Writing a lexer</a>).
-</p>
-</dd>
-<dt><var>error</var></dt>
-<dd><p>Is an optional reporting function called when a parse error occurs.
-It receives a message string to report.  It defaults to the function
-<code>wisent-message</code> (see <a href="Report-errors.html#Report-errors">Report errors</a>).
-</p>
-</dd>
-<dt><var>start</var></dt>
-<dd><p>Specify the start symbol (nonterminal) used by the parser as its goal.
-It defaults to the start symbol defined in the grammar
-(see <a href="Wisent-Grammar.html#Wisent-Grammar">Wisent Grammar</a>).
-</p></dd>
-</dl>
-</dd></dl>
+  <p>The Wisent&rsquo;s parser is what is called a
+  <em>bottom-up</em> or <em>shift-reduce</em> parser which
+  repeatedly:</p>
 
-<p>The following two normal hooks permit doing some useful processing
-respectively before starting parsing, and after the parser terminated.
-</p>
-<a name="index-wisent_002dpre_002dparse_002dhook"></a>
-<dl>
-<dt><a name="index-wisent_002dpre_002dparse_002dhook-1"></a>Variable: <strong>wisent-pre-parse-hook</strong></dt>
-<dd><p>Normal hook run just before entering the <var>LR</var> parser engine.
-</p></dd></dl>
+  <dl compact="compact">
+    <dd><a name="index-shift" id="index-shift"></a></dd>
 
-<a name="index-wisent_002dpost_002dparse_002dhook"></a>
-<dl>
-<dt><a name="index-wisent_002dpost_002dparse_002dhook-1"></a>Variable: <strong>wisent-post-parse-hook</strong></dt>
-<dd><p>Normal hook run just after the <var>LR</var> parser engine terminated.
-</p></dd></dl>
+    <dt><em>shift</em></dt>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Writing-a-lexer.html#Writing-a-lexer" accesskey="1">Writing a lexer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Actions-goodies.html#Actions-goodies" accesskey="2">Actions goodies</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Report-errors.html#Report-errors" accesskey="3">Report errors</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Error-recovery.html#Error-recovery" accesskey="4">Error recovery</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Debugging-actions.html#Debugging-actions" accesskey="5">Debugging actions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+    <dd>
+      <p>That is pushes the value of the last lexical token read
+      (the look-ahead token) into a value stack, and reads a new
+      one.</p><a name="index-reduce" id="index-reduce"></a>
+    </dd>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Wisent-Semantic.html#Wisent-Semantic" accesskey="n" rel="next">Wisent Semantic</a>, Previous: <a href="Wisent-Grammar.html#Wisent-Grammar" accesskey="p" rel="prev">Wisent Grammar</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><em>reduce</em></dt>
 
+    <dd>
+      <p>That is replaces a nonterminal by its semantic value. The
+      values of the components which form the right hand side of a
+      rule are popped from the value stack and reduced by the
+      semantic action of this rule. The result is pushed back on
+      top of value stack.</p>
+    </dd>
+  </dl>
 
+  <p>The parser will stop on:</p>
 
+  <dl compact="compact">
+    <dd><a name="index-accept" id="index-accept"></a></dd>
+
+    <dt><em>accept</em></dt>
+
+    <dd>
+      <p>When all input has been successfully parsed. The semantic
+      value of the start nonterminal is on top of the value
+      stack.</p><a name="index-syntax-error" id=
+      "index-syntax-error"></a>
+    </dd>
+
+    <dt><em>error</em></dt>
+
+    <dd>
+      <p>When a syntax error (an unexpected token in input) has
+      been detected. At this point the parser issues an error
+      message and either stops or calls a recovery routine to try
+      to resume parsing.</p>
+    </dd>
+  </dl><a name="index-table_002ddriven-parser" id=
+  "index-table_002ddriven-parser"></a>
+
+  <p>The above elementary actions are driven by the
+  <acronym>LALR(1)</acronym> automaton built by
+  <code>wisent-compile-grammar</code> from a context-free
+  grammar.</p>
+
+  <p>The Wisent&rsquo;s parser is entered by calling the
+  function:</p><a name="index-wisent_002dparse" id=
+  "index-wisent_002dparse"></a>
+
+  <dl>
+    <dt><a name="index-wisent_002dparse-1" id=
+    "index-wisent_002dparse-1"></a>Function:
+    <strong>wisent-parse</strong> <em>automaton lexer &amp;optional
+    error start</em></dt>
+
+    <dd>
+      <p>Parse input using the automaton specified in
+      <var>automaton</var>.</p>
+
+      <dl compact="compact">
+        <dt><var>automaton</var></dt>
+
+        <dd>
+          <p>Is an <acronym>LALR(1)</acronym> automaton generated
+          by <code>wisent-compile-grammar</code> (see <a href=
+          "Wisent-Grammar.html#Wisent-Grammar">Wisent
+          Grammar</a>).</p>
+        </dd>
+
+        <dt><var>lexer</var></dt>
+
+        <dd>
+          <p>Is a function with no argument called by the parser to
+          obtain the next terminal (token) in input (see <a href=
+          "Writing-a-lexer.html#Writing-a-lexer">Writing a
+          lexer</a>).</p>
+        </dd>
+
+        <dt><var>error</var></dt>
+
+        <dd>
+          <p>Is an optional reporting function called when a parse
+          error occurs. It receives a message string to report. It
+          defaults to the function <code>wisent-message</code> (see
+          <a href="Report-errors.html#Report-errors">Report
+          errors</a>).</p>
+        </dd>
+
+        <dt><var>start</var></dt>
+
+        <dd>
+          <p>Specify the start symbol (nonterminal) used by the
+          parser as its goal. It defaults to the start symbol
+          defined in the grammar (see <a href=
+          "Wisent-Grammar.html#Wisent-Grammar">Wisent
+          Grammar</a>).</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <p>The following two normal hooks permit doing some useful
+  processing respectively before starting parsing, and after the
+  parser terminated.</p><a name=
+  "index-wisent_002dpre_002dparse_002dhook" id=
+  "index-wisent_002dpre_002dparse_002dhook"></a>
+
+  <dl>
+    <dt><a name="index-wisent_002dpre_002dparse_002dhook-1" id=
+    "index-wisent_002dpre_002dparse_002dhook-1"></a>Variable:
+    <strong>wisent-pre-parse-hook</strong></dt>
+
+    <dd>
+      <p>Normal hook run just before entering the <var>LR</var>
+      parser engine.</p>
+    </dd>
+  </dl><a name="index-wisent_002dpost_002dparse_002dhook" id=
+  "index-wisent_002dpost_002dparse_002dhook"></a>
+
+  <dl>
+    <dt><a name="index-wisent_002dpost_002dparse_002dhook-1" id=
+    "index-wisent_002dpost_002dparse_002dhook-1"></a>Variable:
+    <strong>wisent-post-parse-hook</strong></dt>
+
+    <dd>
+      <p>Normal hook run just after the <var>LR</var> parser engine
+      terminated.</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Writing-a-lexer.html#Writing-a-lexer" accesskey="1">Writing
+      a lexer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Actions-goodies.html#Actions-goodies" accesskey="2">Actions
+      goodies</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Report-errors.html#Report-errors" accesskey="3">Report
+      errors</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Error-recovery.html#Error-recovery" accesskey="4">Error
+      recovery</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Debugging-actions.html#Debugging-actions" accesskey=
+      "5">Debugging actions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Wisent-Semantic.html#Wisent-Semantic"
+    accesskey="n" rel="next">Wisent Semantic</a>, Previous:
+    <a href="Wisent-Grammar.html#Wisent-Grammar" accesskey="p" rel=
+    "prev">Wisent Grammar</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

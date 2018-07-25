@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,95 +20,131 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Completion Example</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Completion Example">
-<meta name="keywords" content="GNU Emacs Manual: Completion Example">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Completion.html#Completion" rel="up" title="Completion">
-<link href="Completion-Commands.html#Completion-Commands" rel="next" title="Completion Commands">
-<link href="Completion.html#Completion" rel="prev" title="Completion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Completion Example</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Completion Example" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Completion Example" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Completion.html#Completion" rel="up" title=
+  "Completion" />
+  <link href="Completion-Commands.html#Completion-Commands" rel=
+  "next" title="Completion Commands" />
+  <link href="Completion.html#Completion" rel="prev" title=
+  "Completion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Completion-Example" id="Completion-Example"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Completion-Commands.html#Completion-Commands"
+    accesskey="n" rel="next">Completion Commands</a>, Up: <a href=
+    "Completion.html#Completion" accesskey="u" rel=
+    "up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Completion-Example-1" id="Completion-Example-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Completion-Example"></a>
-<div class="header">
-<p>
-Next: <a href="Completion-Commands.html#Completion-Commands" accesskey="n" rel="next">Completion Commands</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Completion-Example-1"></a>
-<h4 class="subsection">8.4.1 Completion Example</h4>
+  <h4 class="subsection">8.4.1 Completion Example</h4><a name=
+  "index-TAB-_0028completion_0029" id=
+  "index-TAB-_0028completion_0029"></a>
 
-<a name="index-TAB-_0028completion_0029"></a>
-<p>A simple example may help here.  <kbd>M-x</kbd> uses the minibuffer to
-read the name of a command, so completion works by matching the
-minibuffer text against the names of existing Emacs commands.  Suppose
-you wish to run the command <code>auto-fill-mode</code>.  You can do that by
-typing <kbd>M-x auto-fill-mode <span class="key">RET</span></kbd>, but it is easier to use
-completion.
-</p>
-<p>If you type <kbd>M-x a u <span class="key">TAB</span></kbd>, the <tt class="key">TAB</tt> looks for
-completion alternatives (in this case, command names) that start with
-&lsquo;<samp>au</samp>&rsquo;.  There are several, including <code>auto-fill-mode</code> and
-<code>autoconf-mode</code>, but they all begin with <code>auto</code>, so the
-&lsquo;<samp>au</samp>&rsquo; in the minibuffer completes to &lsquo;<samp>auto</samp>&rsquo;.  (More commands
-may be defined in your Emacs session.  For example, if a command
-called <code>authorize-me</code> was defined, Emacs could only complete
-as far as &lsquo;<samp>aut</samp>&rsquo;.)
-</p>
-<p>If you type <tt class="key">TAB</tt> again immediately, it cannot determine the
-next character; it could be &lsquo;<samp>-</samp>&rsquo;, &lsquo;<samp>a</samp>&rsquo;, or &lsquo;<samp>c</samp>&rsquo;.  So it
-does not add any characters; instead, <tt class="key">TAB</tt> displays a list of all
-possible completions in another window.
-</p>
-<p>Next, type <kbd>-f</kbd>.  The minibuffer now contains &lsquo;<samp>auto-f</samp>&rsquo;, and
-the only command name that starts with this is <code>auto-fill-mode</code>.
-If you now type <tt class="key">TAB</tt>, completion fills in the rest of the
-argument &lsquo;<samp>auto-fill-mode</samp>&rsquo; into the minibuffer.
-</p>
-<p>Hence, typing just <kbd>a u <span class="key">TAB</span> - f <span class="key">TAB</span></kbd> allows you to
-enter &lsquo;<samp>auto-fill-mode</samp>&rsquo;.
-</p>
+  <p>A simple example may help here. <kbd>M-x</kbd> uses the
+  minibuffer to read the name of a command, so completion works by
+  matching the minibuffer text against the names of existing Emacs
+  commands. Suppose you wish to run the command
+  <code>auto-fill-mode</code>. You can do that by typing <kbd>M-x
+  auto-fill-mode <span class="key">RET</span></kbd>, but it is
+  easier to use completion.</p>
 
+  <p>If you type <kbd>M-x a u <span class="key">TAB</span></kbd>,
+  the <tt class="key">TAB</tt> looks for completion alternatives
+  (in this case, command names) that start with
+  &lsquo;<samp>au</samp>&rsquo;. There are several, including
+  <code>auto-fill-mode</code> and <code>autoconf-mode</code>, but
+  they all begin with <code>auto</code>, so the
+  &lsquo;<samp>au</samp>&rsquo; in the minibuffer completes to
+  &lsquo;<samp>auto</samp>&rsquo;. (More commands may be defined in
+  your Emacs session. For example, if a command called
+  <code>authorize-me</code> was defined, Emacs could only complete
+  as far as &lsquo;<samp>aut</samp>&rsquo;.)</p>
 
+  <p>If you type <tt class="key">TAB</tt> again immediately, it
+  cannot determine the next character; it could be
+  &lsquo;<samp>-</samp>&rsquo;, &lsquo;<samp>a</samp>&rsquo;, or
+  &lsquo;<samp>c</samp>&rsquo;. So it does not add any characters;
+  instead, <tt class="key">TAB</tt> displays a list of all possible
+  completions in another window.</p>
 
+  <p>Next, type <kbd>-f</kbd>. The minibuffer now contains
+  &lsquo;<samp>auto-f</samp>&rsquo;, and the only command name that
+  starts with this is <code>auto-fill-mode</code>. If you now type
+  <tt class="key">TAB</tt>, completion fills in the rest of the
+  argument &lsquo;<samp>auto-fill-mode</samp>&rsquo; into the
+  minibuffer.</p>
+
+  <p>Hence, typing just <kbd>a u <span class="key">TAB</span> - f
+  <span class="key">TAB</span></kbd> allows you to enter
+  &lsquo;<samp>auto-fill-mode</samp>&rsquo;.</p>
 </body>
 </html>

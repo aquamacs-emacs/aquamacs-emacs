@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,129 +19,178 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Auto-Indentation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Auto-Indentation">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Auto-Indentation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Modes.html#Modes" rel="up" title="Modes">
-<link href="SMIE.html#SMIE" rel="next" title="SMIE">
-<link href="Region-to-Refontify.html#Region-to-Refontify" rel="prev" title="Region to Refontify">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Auto-Indentation</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Auto-Indentation" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Auto-Indentation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Modes.html#Modes" rel="up" title="Modes" />
+  <link href="SMIE.html#SMIE" rel="next" title="SMIE" />
+  <link href="Region-to-Refontify.html#Region-to-Refontify" rel=
+  "prev" title="Region to Refontify" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Auto_002dIndentation" id="Auto_002dIndentation"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Desktop-Save-Mode.html#Desktop-Save-Mode"
+    accesskey="n" rel="next">Desktop Save Mode</a>, Previous:
+    <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="p" rel=
+    "prev">Font Lock Mode</a>, Up: <a href="Modes.html#Modes"
+    accesskey="u" rel="up">Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Automatic-Indentation-of-code" id=
+  "Automatic-Indentation-of-code"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Auto_002dIndentation"></a>
-<div class="header">
-<p>
-Next: <a href="Desktop-Save-Mode.html#Desktop-Save-Mode" accesskey="n" rel="next">Desktop Save Mode</a>, Previous: <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="p" rel="prev">Font Lock Mode</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Automatic-Indentation-of-code"></a>
-<h3 class="section">22.7 Automatic Indentation of code</h3>
+  <h3 class="section">22.7 Automatic Indentation of code</h3>
 
-<p>For programming languages, an important feature of a major mode is to
-provide automatic indentation.  There are two parts: one is to decide what
-is the right indentation of a line, and the other is to decide when to
-reindent a line.  By default, Emacs reindents a line whenever you
-type a character in <code>electric-indent-chars</code>, which by default only
-includes Newline.  Major modes can add chars to <code>electric-indent-chars</code>
-according to the syntax of the language.
-</p>
-<p>Deciding what is the right indentation is controlled in Emacs by
-<code>indent-line-function</code> (see <a href="Mode_002dSpecific-Indent.html#Mode_002dSpecific-Indent">Mode-Specific Indent</a>).  For some modes,
-the <em>right</em> indentation cannot be known reliably, typically because
-indentation is significant so several indentations are valid but with different
-meanings.  In that case, the mode should set <code>electric-indent-inhibit</code> to
-make sure the line is not constantly re-indented against the user&rsquo;s wishes.
-</p>
-<p>Writing a good indentation function can be difficult and to a large extent it
-is still a black art.  Many major mode authors will start by writing a simple
-indentation function that works for simple cases, for example by comparing with
-the indentation of the previous text line.  For most programming languages that
-are not really line-based, this tends to scale very poorly: improving
-such a function to let it handle more diverse situations tends to become more
-and more difficult, resulting in the end with a large, complex, unmaintainable
-indentation function which nobody dares to touch.
-</p>
-<p>A good indentation function will usually need to actually parse the
-text, according to the syntax of the language.  Luckily, it is not
-necessary to parse the text in as much detail as would be needed
-for a compiler, but on the other hand, the parser embedded in the
-indentation code will want to be somewhat friendly to syntactically
-incorrect code.
-</p>
-<p>Good maintainable indentation functions usually fall into two categories:
-either parsing forward from some safe starting point until the
-position of interest, or parsing backward from the position of interest.
-Neither of the two is a clearly better choice than the other: parsing
-backward is often more difficult than parsing forward because
-programming languages are designed to be parsed forward, but for the
-purpose of indentation it has the advantage of not needing to
-guess a safe starting point, and it generally enjoys the property
-that only a minimum of text will be analyzed to decide the indentation
-of a line, so indentation will tend to be less affected by syntax errors in
-some earlier unrelated piece of code.  Parsing forward on the other hand
-is usually easier and has the advantage of making it possible to
-reindent efficiently a whole region at a time, with a single parse.
-</p>
-<p>Rather than write your own indentation function from scratch, it is
-often preferable to try and reuse some existing ones or to rely
-on a generic indentation engine.  There are sadly few such
-engines.  The CC-mode indentation code (used with C, C++, Java, Awk
-and a few other such modes) has been made more generic over the years,
-so if your language seems somewhat similar to one of those languages,
-you might try to use that engine.  Another one is SMIE which takes an approach in the spirit
-of Lisp sexps and adapts it to non-Lisp languages.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="SMIE.html#SMIE" accesskey="1">SMIE</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A simple minded indentation engine.
-</td></tr>
-</table>
+  <p>For programming languages, an important feature of a major
+  mode is to provide automatic indentation. There are two parts:
+  one is to decide what is the right indentation of a line, and the
+  other is to decide when to reindent a line. By default, Emacs
+  reindents a line whenever you type a character in
+  <code>electric-indent-chars</code>, which by default only
+  includes Newline. Major modes can add chars to
+  <code>electric-indent-chars</code> according to the syntax of the
+  language.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Desktop-Save-Mode.html#Desktop-Save-Mode" accesskey="n" rel="next">Desktop Save Mode</a>, Previous: <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="p" rel="prev">Font Lock Mode</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Deciding what is the right indentation is controlled in Emacs
+  by <code>indent-line-function</code> (see <a href=
+  "Mode_002dSpecific-Indent.html#Mode_002dSpecific-Indent">Mode-Specific
+  Indent</a>). For some modes, the <em>right</em> indentation
+  cannot be known reliably, typically because indentation is
+  significant so several indentations are valid but with different
+  meanings. In that case, the mode should set
+  <code>electric-indent-inhibit</code> to make sure the line is not
+  constantly re-indented against the user&rsquo;s wishes.</p>
 
+  <p>Writing a good indentation function can be difficult and to a
+  large extent it is still a black art. Many major mode authors
+  will start by writing a simple indentation function that works
+  for simple cases, for example by comparing with the indentation
+  of the previous text line. For most programming languages that
+  are not really line-based, this tends to scale very poorly:
+  improving such a function to let it handle more diverse
+  situations tends to become more and more difficult, resulting in
+  the end with a large, complex, unmaintainable indentation
+  function which nobody dares to touch.</p>
 
+  <p>A good indentation function will usually need to actually
+  parse the text, according to the syntax of the language. Luckily,
+  it is not necessary to parse the text in as much detail as would
+  be needed for a compiler, but on the other hand, the parser
+  embedded in the indentation code will want to be somewhat
+  friendly to syntactically incorrect code.</p>
 
+  <p>Good maintainable indentation functions usually fall into two
+  categories: either parsing forward from some safe starting point
+  until the position of interest, or parsing backward from the
+  position of interest. Neither of the two is a clearly better
+  choice than the other: parsing backward is often more difficult
+  than parsing forward because programming languages are designed
+  to be parsed forward, but for the purpose of indentation it has
+  the advantage of not needing to guess a safe starting point, and
+  it generally enjoys the property that only a minimum of text will
+  be analyzed to decide the indentation of a line, so indentation
+  will tend to be less affected by syntax errors in some earlier
+  unrelated piece of code. Parsing forward on the other hand is
+  usually easier and has the advantage of making it possible to
+  reindent efficiently a whole region at a time, with a single
+  parse.</p>
+
+  <p>Rather than write your own indentation function from scratch,
+  it is often preferable to try and reuse some existing ones or to
+  rely on a generic indentation engine. There are sadly few such
+  engines. The CC-mode indentation code (used with C, C++, Java,
+  Awk and a few other such modes) has been made more generic over
+  the years, so if your language seems somewhat similar to one of
+  those languages, you might try to use that engine. Another one is
+  SMIE which takes an approach in the spirit of Lisp sexps and
+  adapts it to non-Lisp languages.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href="SMIE.html#SMIE"
+      accesskey="1">SMIE</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A simple minded indentation
+      engine.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Desktop-Save-Mode.html#Desktop-Save-Mode"
+    accesskey="n" rel="next">Desktop Save Mode</a>, Previous:
+    <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="p" rel=
+    "prev">Font Lock Mode</a>, Up: <a href="Modes.html#Modes"
+    accesskey="u" rel="up">Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

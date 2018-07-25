@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,134 +19,210 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Parameter Access</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Parameter Access">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Parameter Access">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Frame-Parameters.html#Frame-Parameters" rel="up" title="Frame Parameters">
-<link href="Initial-Parameters.html#Initial-Parameters" rel="next" title="Initial Parameters">
-<link href="Frame-Parameters.html#Frame-Parameters" rel="prev" title="Frame Parameters">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Parameter Access</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Parameter Access" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Parameter Access" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Frame-Parameters.html#Frame-Parameters" rel="up"
+  title="Frame Parameters" />
+  <link href="Initial-Parameters.html#Initial-Parameters" rel=
+  "next" title="Initial Parameters" />
+  <link href="Frame-Parameters.html#Frame-Parameters" rel="prev"
+  title="Frame Parameters" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Parameter-Access" id="Parameter-Access"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Initial-Parameters.html#Initial-Parameters"
+    accesskey="n" rel="next">Initial Parameters</a>, Up: <a href=
+    "Frame-Parameters.html#Frame-Parameters" accesskey="u" rel=
+    "up">Frame Parameters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Access-to-Frame-Parameters" id=
+  "Access-to-Frame-Parameters"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Parameter-Access"></a>
-<div class="header">
-<p>
-Next: <a href="Initial-Parameters.html#Initial-Parameters" accesskey="n" rel="next">Initial Parameters</a>, Up: <a href="Frame-Parameters.html#Frame-Parameters" accesskey="u" rel="up">Frame Parameters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Access-to-Frame-Parameters"></a>
-<h4 class="subsection">28.4.1 Access to Frame Parameters</h4>
+  <h4 class="subsection">28.4.1 Access to Frame Parameters</h4>
 
-<p>These functions let you read and change the parameter values of a
-frame.
-</p>
-<dl>
-<dt><a name="index-frame_002dparameter"></a>Function: <strong>frame-parameter</strong> <em>frame parameter</em></dt>
-<dd><p>This function returns the value of the parameter <var>parameter</var> (a
-symbol) of <var>frame</var>.  If <var>frame</var> is <code>nil</code>, it returns the
-selected frame&rsquo;s parameter.  If <var>frame</var> has no setting for
-<var>parameter</var>, this function returns <code>nil</code>.
-</p></dd></dl>
+  <p>These functions let you read and change the parameter values
+  of a frame.</p>
 
-<dl>
-<dt><a name="index-frame_002dparameters"></a>Function: <strong>frame-parameters</strong> <em>&amp;optional frame</em></dt>
-<dd><p>The function <code>frame-parameters</code> returns an alist listing all the
-parameters of <var>frame</var> and their values.  If <var>frame</var> is
-<code>nil</code> or omitted, this returns the selected frame&rsquo;s parameters
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-frame_002dparameter" id=
+    "index-frame_002dparameter"></a>Function:
+    <strong>frame-parameter</strong> <em>frame parameter</em></dt>
 
-<dl>
-<dt><a name="index-modify_002dframe_002dparameters"></a>Function: <strong>modify-frame-parameters</strong> <em>frame alist</em></dt>
-<dd><p>This function alters the frame <var>frame</var> based on the elements of
-<var>alist</var>.  Each element of <var>alist</var> has the form
-<code>(<var>parm</var> . <var>value</var>)</code>, where <var>parm</var> is a symbol naming
-a parameter.  If you don&rsquo;t mention a parameter in <var>alist</var>, its
-value doesn&rsquo;t change.  If <var>frame</var> is <code>nil</code>, it defaults to
-the selected frame.
-</p>
-<p>Some parameters are only meaningful for frames on certain kinds of
-display (see <a href="Frames.html#Frames">Frames</a>).  If <var>alist</var> includes parameters that are
-not meaningful for the <var>frame</var>&rsquo;s display, this function will
-change its value in the frame&rsquo;s parameter list, but will otherwise
-ignore it.
-</p>
-<p>When <var>alist</var> specifies more than one parameter whose value can
-affect the new size of <var>frame</var>, the final size of the frame may
-differ according to the toolkit used.  For example, specifying that a
-frame should from now on have a menu and/or tool bar instead of none and
-simultaneously specifying the new height of the frame will inevitably
-lead to a recalculation of the frame&rsquo;s height.  Conceptually, in such
-case, this function will try to have the explicit height specification
-prevail.  It cannot be excluded, however, that the addition (or removal)
-of the menu or tool bar, when eventually performed by the toolkit, will
-defeat this intention.
-</p>
-<p>Sometimes, binding <code>frame-inhibit-implied-resize</code> (see <a href="Implied-Frame-Resizing.html#Implied-Frame-Resizing">Implied Frame Resizing</a>) to a non-<code>nil</code> value around calls to this function
-may fix the problem sketched here.  Sometimes, however, exactly such
-binding may be hit by the problem.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the value of the parameter
+      <var>parameter</var> (a symbol) of <var>frame</var>. If
+      <var>frame</var> is <code>nil</code>, it returns the selected
+      frame&rsquo;s parameter. If <var>frame</var> has no setting
+      for <var>parameter</var>, this function returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-set_002dframe_002dparameter"></a>Function: <strong>set-frame-parameter</strong> <em>frame parm value</em></dt>
-<dd><p>This function sets the frame parameter <var>parm</var> to the specified
-<var>value</var>.  If <var>frame</var> is <code>nil</code>, it defaults to the selected
-frame.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-frame_002dparameters" id=
+    "index-frame_002dparameters"></a>Function:
+    <strong>frame-parameters</strong> <em>&amp;optional
+    frame</em></dt>
 
-<dl>
-<dt><a name="index-modify_002dall_002dframes_002dparameters"></a>Function: <strong>modify-all-frames-parameters</strong> <em>alist</em></dt>
-<dd><p>This function alters the frame parameters of all existing frames
-according to <var>alist</var>, then modifies <code>default-frame-alist</code>
-(and, if necessary, <code>initial-frame-alist</code>) to apply the same
-parameter values to frames that will be created henceforth.
-</p></dd></dl>
+    <dd>
+      <p>The function <code>frame-parameters</code> returns an
+      alist listing all the parameters of <var>frame</var> and
+      their values. If <var>frame</var> is <code>nil</code> or
+      omitted, this returns the selected frame&rsquo;s
+      parameters</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Initial-Parameters.html#Initial-Parameters" accesskey="n" rel="next">Initial Parameters</a>, Up: <a href="Frame-Parameters.html#Frame-Parameters" accesskey="u" rel="up">Frame Parameters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-modify_002dframe_002dparameters" id=
+    "index-modify_002dframe_002dparameters"></a>Function:
+    <strong>modify-frame-parameters</strong> <em>frame
+    alist</em></dt>
 
+    <dd>
+      <p>This function alters the frame <var>frame</var> based on
+      the elements of <var>alist</var>. Each element of
+      <var>alist</var> has the form <code>(<var>parm</var> .
+      <var>value</var>)</code>, where <var>parm</var> is a symbol
+      naming a parameter. If you don&rsquo;t mention a parameter in
+      <var>alist</var>, its value doesn&rsquo;t change. If
+      <var>frame</var> is <code>nil</code>, it defaults to the
+      selected frame.</p>
 
+      <p>Some parameters are only meaningful for frames on certain
+      kinds of display (see <a href=
+      "Frames.html#Frames">Frames</a>). If <var>alist</var>
+      includes parameters that are not meaningful for the
+      <var>frame</var>&rsquo;s display, this function will change
+      its value in the frame&rsquo;s parameter list, but will
+      otherwise ignore it.</p>
 
+      <p>When <var>alist</var> specifies more than one parameter
+      whose value can affect the new size of <var>frame</var>, the
+      final size of the frame may differ according to the toolkit
+      used. For example, specifying that a frame should from now on
+      have a menu and/or tool bar instead of none and
+      simultaneously specifying the new height of the frame will
+      inevitably lead to a recalculation of the frame&rsquo;s
+      height. Conceptually, in such case, this function will try to
+      have the explicit height specification prevail. It cannot be
+      excluded, however, that the addition (or removal) of the menu
+      or tool bar, when eventually performed by the toolkit, will
+      defeat this intention.</p>
+
+      <p>Sometimes, binding
+      <code>frame-inhibit-implied-resize</code> (see <a href=
+      "Implied-Frame-Resizing.html#Implied-Frame-Resizing">Implied
+      Frame Resizing</a>) to a non-<code>nil</code> value around
+      calls to this function may fix the problem sketched here.
+      Sometimes, however, exactly such binding may be hit by the
+      problem.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dframe_002dparameter" id=
+    "index-set_002dframe_002dparameter"></a>Function:
+    <strong>set-frame-parameter</strong> <em>frame parm
+    value</em></dt>
+
+    <dd>
+      <p>This function sets the frame parameter <var>parm</var> to
+      the specified <var>value</var>. If <var>frame</var> is
+      <code>nil</code>, it defaults to the selected frame.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-modify_002dall_002dframes_002dparameters"
+    id="index-modify_002dall_002dframes_002dparameters"></a>Function:
+    <strong>modify-all-frames-parameters</strong>
+    <em>alist</em></dt>
+
+    <dd>
+      <p>This function alters the frame parameters of all existing
+      frames according to <var>alist</var>, then modifies
+      <code>default-frame-alist</code> (and, if necessary,
+      <code>initial-frame-alist</code>) to apply the same parameter
+      values to frames that will be created henceforth.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Initial-Parameters.html#Initial-Parameters"
+    accesskey="n" rel="next">Initial Parameters</a>, Up: <a href=
+    "Frame-Parameters.html#Frame-Parameters" accesskey="u" rel=
+    "up">Frame Parameters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

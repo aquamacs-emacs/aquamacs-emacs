@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,198 +19,276 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Sentinels</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Sentinels">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Sentinels">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Processes.html#Processes" rel="up" title="Processes">
-<link href="Query-Before-Exit.html#Query-Before-Exit" rel="next" title="Query Before Exit">
-<link href="Accepting-Output.html#Accepting-Output" rel="prev" title="Accepting Output">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Sentinels</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Sentinels" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Sentinels" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Processes.html#Processes" rel="up" title=
+  "Processes" />
+  <link href="Query-Before-Exit.html#Query-Before-Exit" rel="next"
+  title="Query Before Exit" />
+  <link href="Accepting-Output.html#Accepting-Output" rel="prev"
+  title="Accepting Output" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Sentinels" id="Sentinels"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Query-Before-Exit.html#Query-Before-Exit"
+    accesskey="n" rel="next">Query Before Exit</a>, Previous:
+    <a href="Output-from-Processes.html#Output-from-Processes"
+    accesskey="p" rel="prev">Output from Processes</a>, Up:
+    <a href="Processes.html#Processes" accesskey="u" rel=
+    "up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sentinels_003a-Detecting-Process-Status-Changes" id=
+  "Sentinels_003a-Detecting-Process-Status-Changes"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sentinels"></a>
-<div class="header">
-<p>
-Next: <a href="Query-Before-Exit.html#Query-Before-Exit" accesskey="n" rel="next">Query Before Exit</a>, Previous: <a href="Output-from-Processes.html#Output-from-Processes" accesskey="p" rel="prev">Output from Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sentinels_003a-Detecting-Process-Status-Changes"></a>
-<h3 class="section">36.10 Sentinels: Detecting Process Status Changes</h3>
-<a name="index-process-sentinel"></a>
-<a name="index-sentinel-_0028of-process_0029"></a>
+  <h3 class="section">36.10 Sentinels: Detecting Process Status
+  Changes</h3><a name="index-process-sentinel" id=
+  "index-process-sentinel"></a> <a name=
+  "index-sentinel-_0028of-process_0029" id=
+  "index-sentinel-_0028of-process_0029"></a>
 
-<p>A <em>process sentinel</em> is a function that is called whenever the
-associated process changes status for any reason, including signals
-(whether sent by Emacs or caused by the process&rsquo;s own actions) that
-terminate, stop, or continue the process.  The process sentinel is
-also called if the process exits.  The sentinel receives two
-arguments: the process for which the event occurred, and a string
-describing the type of event.
-</p>
-<a name="index-default-sentinel-function-of-a-process"></a>
-<p>If no sentinel function was specified for a process, it will use the
-default sentinel function, which inserts a message in the process&rsquo;s
-buffer with the process name and the string describing the event.
-</p>
-<p>The string describing the event looks like one of the following:
-</p>
-<ul>
-<li> <code>&quot;finished\n&quot;</code>.
+  <p>A <em>process sentinel</em> is a function that is called
+  whenever the associated process changes status for any reason,
+  including signals (whether sent by Emacs or caused by the
+  process&rsquo;s own actions) that terminate, stop, or continue
+  the process. The process sentinel is also called if the process
+  exits. The sentinel receives two arguments: the process for which
+  the event occurred, and a string describing the type of
+  event.</p><a name="index-default-sentinel-function-of-a-process"
+  id="index-default-sentinel-function-of-a-process"></a>
 
-</li><li> <code>&quot;deleted\n&quot;</code>.
+  <p>If no sentinel function was specified for a process, it will
+  use the default sentinel function, which inserts a message in the
+  process&rsquo;s buffer with the process name and the string
+  describing the event.</p>
 
-</li><li> <code>&quot;exited abnormally with code <var>exitcode</var> (core dumped)\n&quot;</code>.
-The &ldquo;core dumped&rdquo; part is optional, and only appears if the process
-dumped core.
+  <p>The string describing the event looks like one of the
+  following:</p>
 
-</li><li> <code>&quot;failed with code <var>fail-code</var>\n&quot;</code>.
+  <ul>
+    <li><code>"finished\n"</code>.</li>
 
-</li><li> <code>&quot;<var>signal-description</var> (core dumped)\n&quot;</code>.  The
-<var>signal-description</var> is a system-dependent textual description of
-a signal, e.g., <code>&quot;killed&quot;</code> for <code>SIGKILL</code>.  The &ldquo;core
-dumped&rdquo; part is optional, and only appears if the process dumped
-core.
+    <li><code>"deleted\n"</code>.</li>
 
-</li><li> <code>&quot;open from <var>host-name</var>\n&quot;</code>.
+    <li><code>"exited abnormally with code <var>exitcode</var>
+    (core dumped)\n"</code>. The &ldquo;core dumped&rdquo; part is
+    optional, and only appears if the process dumped core.</li>
 
-</li><li> <code>&quot;open\n&quot;</code>.
+    <li><code>"failed with code
+    <var>fail-code</var>\n"</code>.</li>
 
-</li><li> <code>&quot;connection broken by remote peer\n&quot;</code>.
-</li></ul>
+    <li><code>"<var>signal-description</var> (core
+    dumped)\n"</code>. The <var>signal-description</var> is a
+    system-dependent textual description of a signal, e.g.,
+    <code>"killed"</code> for <code>SIGKILL</code>. The &ldquo;core
+    dumped&rdquo; part is optional, and only appears if the process
+    dumped core.</li>
 
-<p>A sentinel runs only while Emacs is waiting (e.g., for terminal
-input, or for time to elapse, or for process output).  This avoids the
-timing errors that could result from running sentinels at random places in
-the middle of other Lisp programs.  A program can wait, so that
-sentinels will run, by calling <code>sit-for</code> or <code>sleep-for</code>
-(see <a href="Waiting.html#Waiting">Waiting</a>), or <code>accept-process-output</code> (see <a href="Accepting-Output.html#Accepting-Output">Accepting Output</a>).  Emacs also allows sentinels to run when the command loop is
-reading input.  <code>delete-process</code> calls the sentinel when it
-terminates a running process.
-</p>
-<p>Emacs does not keep a queue of multiple reasons to call the sentinel
-of one process; it records just the current status and the fact that
-there has been a change.  Therefore two changes in status, coming in
-quick succession, can call the sentinel just once.  However, process
-termination will always run the sentinel exactly once.  This is
-because the process status can&rsquo;t change again after termination.
-</p>
-<p>Emacs explicitly checks for output from the process before running
-the process sentinel.  Once the sentinel runs due to process
-termination, no further output can arrive from the process.
-</p>
-<p>A sentinel that writes the output into the buffer of the process
-should check whether the buffer is still alive.  If it tries to insert
-into a dead buffer, it will get an error.  If the buffer is dead,
-<code>(buffer-name (process-buffer <var>process</var>))</code> returns <code>nil</code>.
-</p>
-<p>Quitting is normally inhibited within a sentinel&mdash;otherwise, the
-effect of typing <kbd>C-g</kbd> at command level or to quit a user command
-would be unpredictable.  If you want to permit quitting inside a
-sentinel, bind <code>inhibit-quit</code> to <code>nil</code>.  In most cases, the
-right way to do this is with the macro <code>with-local-quit</code>.
-See <a href="Quitting.html#Quitting">Quitting</a>.
-</p>
-<p>If an error happens during execution of a sentinel, it is caught
-automatically, so that it doesn&rsquo;t stop the execution of whatever
-programs was running when the sentinel was started.  However, if
-<code>debug-on-error</code> is non-<code>nil</code>,  errors are not caught.
-This makes it possible to use the Lisp debugger to debug the
-sentinel.  See <a href="Debugger.html#Debugger">Debugger</a>.
-</p>
-<p>While a sentinel is running, the process sentinel is temporarily
-set to <code>nil</code> so that the sentinel won&rsquo;t run recursively.
-For this reason it is not possible for a sentinel to specify
-a new sentinel.
-</p>
-<p>Note that Emacs automatically saves and restores the match data
-while executing sentinels.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
-</p>
-<dl>
-<dt><a name="index-set_002dprocess_002dsentinel"></a>Function: <strong>set-process-sentinel</strong> <em>process sentinel</em></dt>
-<dd><p>This function associates <var>sentinel</var> with <var>process</var>.  If
-<var>sentinel</var> is <code>nil</code>, then the process will have the default
-sentinel, which inserts a message in the process&rsquo;s buffer when the
-process status changes.
-</p>
-<p>Changes in process sentinels take effect immediately&mdash;if the sentinel
-is slated to be run but has not been called yet, and you specify a new
-sentinel, the eventual call to the sentinel will use the new one.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun msg-me (process event)
+    <li><code>"open from <var>host-name</var>\n"</code>.</li>
+
+    <li><code>"open\n"</code>.</li>
+
+    <li><code>"connection broken by remote peer\n"</code>.</li>
+  </ul>
+
+  <p>A sentinel runs only while Emacs is waiting (e.g., for
+  terminal input, or for time to elapse, or for process output).
+  This avoids the timing errors that could result from running
+  sentinels at random places in the middle of other Lisp programs.
+  A program can wait, so that sentinels will run, by calling
+  <code>sit-for</code> or <code>sleep-for</code> (see <a href=
+  "Waiting.html#Waiting">Waiting</a>), or
+  <code>accept-process-output</code> (see <a href=
+  "Accepting-Output.html#Accepting-Output">Accepting Output</a>).
+  Emacs also allows sentinels to run when the command loop is
+  reading input. <code>delete-process</code> calls the sentinel
+  when it terminates a running process.</p>
+
+  <p>Emacs does not keep a queue of multiple reasons to call the
+  sentinel of one process; it records just the current status and
+  the fact that there has been a change. Therefore two changes in
+  status, coming in quick succession, can call the sentinel just
+  once. However, process termination will always run the sentinel
+  exactly once. This is because the process status can&rsquo;t
+  change again after termination.</p>
+
+  <p>Emacs explicitly checks for output from the process before
+  running the process sentinel. Once the sentinel runs due to
+  process termination, no further output can arrive from the
+  process.</p>
+
+  <p>A sentinel that writes the output into the buffer of the
+  process should check whether the buffer is still alive. If it
+  tries to insert into a dead buffer, it will get an error. If the
+  buffer is dead, <code>(buffer-name (process-buffer
+  <var>process</var>))</code> returns <code>nil</code>.</p>
+
+  <p>Quitting is normally inhibited within a
+  sentinel&mdash;otherwise, the effect of typing <kbd>C-g</kbd> at
+  command level or to quit a user command would be unpredictable.
+  If you want to permit quitting inside a sentinel, bind
+  <code>inhibit-quit</code> to <code>nil</code>. In most cases, the
+  right way to do this is with the macro
+  <code>with-local-quit</code>. See <a href=
+  "Quitting.html#Quitting">Quitting</a>.</p>
+
+  <p>If an error happens during execution of a sentinel, it is
+  caught automatically, so that it doesn&rsquo;t stop the execution
+  of whatever programs was running when the sentinel was started.
+  However, if <code>debug-on-error</code> is non-<code>nil</code>,
+  errors are not caught. This makes it possible to use the Lisp
+  debugger to debug the sentinel. See <a href=
+  "Debugger.html#Debugger">Debugger</a>.</p>
+
+  <p>While a sentinel is running, the process sentinel is
+  temporarily set to <code>nil</code> so that the sentinel
+  won&rsquo;t run recursively. For this reason it is not possible
+  for a sentinel to specify a new sentinel.</p>
+
+  <p>Note that Emacs automatically saves and restores the match
+  data while executing sentinels. See <a href=
+  "Match-Data.html#Match-Data">Match Data</a>.</p>
+
+  <dl>
+    <dt><a name="index-set_002dprocess_002dsentinel" id=
+    "index-set_002dprocess_002dsentinel"></a>Function:
+    <strong>set-process-sentinel</strong> <em>process
+    sentinel</em></dt>
+
+    <dd>
+      <p>This function associates <var>sentinel</var> with
+      <var>process</var>. If <var>sentinel</var> is
+      <code>nil</code>, then the process will have the default
+      sentinel, which inserts a message in the process&rsquo;s
+      buffer when the process status changes.</p>
+
+      <p>Changes in process sentinels take effect
+      immediately&mdash;if the sentinel is slated to be run but has
+      not been called yet, and you specify a new sentinel, the
+      eventual call to the sentinel will use the new one.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(defun msg-me (process event)
    (princ
-     (format &quot;Process: %s had the event '%s'&quot; process event)))
-(set-process-sentinel (get-process &quot;shell&quot;) 'msg-me)
+     (format "Process: %s had the event '%s'" process event)))
+(set-process-sentinel (get-process "shell") 'msg-me)
      &rArr; msg-me
-</pre><pre class="smallexample">(kill-process (get-process &quot;shell&quot;))
-     ⊣ Process: #&lt;process shell&gt; had the event 'killed'
+</pre>
+        <pre class="smallexample">
+(kill-process (get-process "shell"))
+     &acirc;&Scaron;&pound; Process: #&lt;process shell&gt; had the event 'killed'
      &rArr; #&lt;process shell&gt;
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-process_002dsentinel"></a>Function: <strong>process-sentinel</strong> <em>process</em></dt>
-<dd><p>This function returns the sentinel of <var>process</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-process_002dsentinel" id=
+    "index-process_002dsentinel"></a>Function:
+    <strong>process-sentinel</strong> <em>process</em></dt>
 
-<p>In case a process status changes need to be passed to several sentinels, you
-can use <code>add-function</code> to combine an existing sentinel with a new one.
-See <a href="Advising-Functions.html#Advising-Functions">Advising Functions</a>.
-</p>
-<dl>
-<dt><a name="index-waiting_002dfor_002duser_002dinput_002dp"></a>Function: <strong>waiting-for-user-input-p</strong></dt>
-<dd><p>While a sentinel or filter function is running, this function returns
-non-<code>nil</code> if Emacs was waiting for keyboard input from the user at
-the time the sentinel or filter function was called, or <code>nil</code> if it
-was not.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the sentinel of
+      <var>process</var>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Query-Before-Exit.html#Query-Before-Exit" accesskey="n" rel="next">Query Before Exit</a>, Previous: <a href="Output-from-Processes.html#Output-from-Processes" accesskey="p" rel="prev">Output from Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In case a process status changes need to be passed to several
+  sentinels, you can use <code>add-function</code> to combine an
+  existing sentinel with a new one. See <a href=
+  "Advising-Functions.html#Advising-Functions">Advising
+  Functions</a>.</p>
 
+  <dl>
+    <dt><a name="index-waiting_002dfor_002duser_002dinput_002dp"
+    id="index-waiting_002dfor_002duser_002dinput_002dp"></a>Function:
+    <strong>waiting-for-user-input-p</strong></dt>
 
+    <dd>
+      <p>While a sentinel or filter function is running, this
+      function returns non-<code>nil</code> if Emacs was waiting
+      for keyboard input from the user at the time the sentinel or
+      filter function was called, or <code>nil</code> if it was
+      not.</p>
+    </dd>
+  </dl>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Query-Before-Exit.html#Query-Before-Exit"
+    accesskey="n" rel="next">Query Before Exit</a>, Previous:
+    <a href="Output-from-Processes.html#Output-from-Processes"
+    accesskey="p" rel="prev">Output from Processes</a>, Up:
+    <a href="Processes.html#Processes" accesskey="u" rel=
+    "up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

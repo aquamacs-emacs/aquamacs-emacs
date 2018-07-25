@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,92 +19,130 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Symbol Forms</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Symbol Forms">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Symbol Forms">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Forms.html#Forms" rel="up" title="Forms">
-<link href="Classifying-Lists.html#Classifying-Lists" rel="next" title="Classifying Lists">
-<link href="Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms" rel="prev" title="Self-Evaluating Forms">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Symbol Forms</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Symbol Forms" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Symbol Forms" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Forms.html#Forms" rel="up" title="Forms" />
+  <link href="Classifying-Lists.html#Classifying-Lists" rel="next"
+  title="Classifying Lists" />
+  <link href=
+  "Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms" rel=
+  "prev" title="Self-Evaluating Forms" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Symbol-Forms" id="Symbol-Forms"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Classifying-Lists.html#Classifying-Lists"
+    accesskey="n" rel="next">Classifying Lists</a>, Previous:
+    <a href=
+    "Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms"
+    accesskey="p" rel="prev">Self-Evaluating Forms</a>, Up:
+    <a href="Forms.html#Forms" accesskey="u" rel="up">Forms</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Symbol-Forms-1" id="Symbol-Forms-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Symbol-Forms"></a>
-<div class="header">
-<p>
-Next: <a href="Classifying-Lists.html#Classifying-Lists" accesskey="n" rel="next">Classifying Lists</a>, Previous: <a href="Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms" accesskey="p" rel="prev">Self-Evaluating Forms</a>, Up: <a href="Forms.html#Forms" accesskey="u" rel="up">Forms</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Symbol-Forms-1"></a>
-<h4 class="subsection">9.2.2 Symbol Forms</h4>
-<a name="index-symbol-evaluation"></a>
+  <h4 class="subsection">9.2.2 Symbol Forms</h4><a name=
+  "index-symbol-evaluation" id="index-symbol-evaluation"></a>
 
-<p>When a symbol is evaluated, it is treated as a variable.  The result
-is the variable&rsquo;s value, if it has one.  If the symbol has no value as
-a variable, the Lisp interpreter signals an error.  For more
-information on the use of variables, see <a href="Variables.html#Variables">Variables</a>.
-</p>
-<p>In the following example, we set the value of a symbol with
-<code>setq</code>.  Then we evaluate the symbol, and get back the value that
-<code>setq</code> stored.
-</p>
-<div class="example">
-<pre class="example">(setq a 123)
+  <p>When a symbol is evaluated, it is treated as a variable. The
+  result is the variable&rsquo;s value, if it has one. If the
+  symbol has no value as a variable, the Lisp interpreter signals
+  an error. For more information on the use of variables, see
+  <a href="Variables.html#Variables">Variables</a>.</p>
+
+  <p>In the following example, we set the value of a symbol with
+  <code>setq</code>. Then we evaluate the symbol, and get back the
+  value that <code>setq</code> stored.</p>
+
+  <div class="example">
+    <pre class="example">
+(setq a 123)
      &rArr; 123
-</pre><pre class="example">(eval 'a)
+</pre>
+    <pre class="example">
+(eval 'a)
      &rArr; 123
-</pre><pre class="example">a
+</pre>
+    <pre class="example">
+a
      &rArr; 123
-</pre></div>
+</pre>
+  </div>
 
-<p>The symbols <code>nil</code> and <code>t</code> are treated specially, so that the
-value of <code>nil</code> is always <code>nil</code>, and the value of <code>t</code> is
-always <code>t</code>; you cannot set or bind them to any other values.  Thus,
-these two symbols act like self-evaluating forms, even though
-<code>eval</code> treats them like any other symbol.  A symbol whose name
-starts with &lsquo;<samp>:</samp>&rsquo; also self-evaluates in the same way; likewise,
-its value ordinarily cannot be changed.  See <a href="Constant-Variables.html#Constant-Variables">Constant Variables</a>.
-</p>
-
-
-
+  <p>The symbols <code>nil</code> and <code>t</code> are treated
+  specially, so that the value of <code>nil</code> is always
+  <code>nil</code>, and the value of <code>t</code> is always
+  <code>t</code>; you cannot set or bind them to any other values.
+  Thus, these two symbols act like self-evaluating forms, even
+  though <code>eval</code> treats them like any other symbol. A
+  symbol whose name starts with &lsquo;<samp>:</samp>&rsquo; also
+  self-evaluates in the same way; likewise, its value ordinarily
+  cannot be changed. See <a href=
+  "Constant-Variables.html#Constant-Variables">Constant
+  Variables</a>.</p>
 </body>
 </html>

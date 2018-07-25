@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,98 +16,180 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Properties and Columns</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Properties and Columns">
-<meta name="keywords" content="The Org Manual: Properties and Columns">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Property-syntax.html#Property-syntax" rel="next" title="Property syntax">
-<link href="Tag-searches.html#Tag-searches" rel="prev" title="Tag searches">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Properties and Columns</title>
+  <meta name="description" content=
+  "The Org Manual: Properties and Columns" />
+  <meta name="keywords" content=
+  "The Org Manual: Properties and Columns" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Property-syntax.html#Property-syntax" rel="next"
+  title="Property syntax" />
+  <link href="Tag-searches.html#Tag-searches" rel="prev" title=
+  "Tag searches" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Properties-and-Columns"></a>
-<div class="header">
-<p>
-Next: <a href="Dates-and-Times.html#Dates-and-Times" accesskey="n" rel="next">Dates and Times</a>, Previous: <a href="Tags.html#Tags" accesskey="p" rel="prev">Tags</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Properties-and-columns"></a>
-<h2 class="chapter">7 Properties and columns</h2>
-<a name="index-properties"></a>
+<body lang="en" xml:lang="en">
+  <a name="Properties-and-Columns" id="Properties-and-Columns"></a>
 
-<p>A property is a key-value pair associated with an entry.  Properties can be
-set so they are associated with a single entry, with every entry in a tree,
-or with every entry in an Org mode file.
-</p>
-<p>There are two main applications for properties in Org mode.  First,
-properties are like tags, but with a value.  Imagine maintaining a file where
-you document bugs and plan releases for a piece of software.  Instead of
-using tags like <code>:release_1:</code>, <code>:release_2:</code>, you can use a
-property, say <code>:Release:</code>, that in different subtrees has different
-values, such as <code>1.0</code> or <code>2.0</code>.  Second, you can use properties to
-implement (very basic) database capabilities in an Org buffer.  Imagine
-keeping track of your music CDs, where properties could be things such as the
-album, artist, date of release, number of tracks, and so on.
-</p>
-<p>Properties can be conveniently edited and viewed in column view
-(see <a href="Column-view.html#Column-view">Column view</a>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Property-syntax.html#Property-syntax" accesskey="1">Property syntax</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How properties are spelled out
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Special-properties.html#Special-properties" accesskey="2">Special properties</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Access to other Org mode features
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Property-searches.html#Property-searches" accesskey="3">Property searches</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Matching property values
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Property-inheritance.html#Property-inheritance" accesskey="4">Property inheritance</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Passing values down the tree
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Column-view.html#Column-view" accesskey="5">Column view</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Tabular viewing and editing
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Property-API.html#Property-API" accesskey="6">Property API</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Properties for Lisp programmers
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Dates-and-Times.html#Dates-and-Times"
+    accesskey="n" rel="next">Dates and Times</a>, Previous:
+    <a href="Tags.html#Tags" accesskey="p" rel="prev">Tags</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Properties-and-columns" id="Properties-and-columns"></a>
 
+  <h2 class="chapter">7 Properties and columns</h2><a name=
+  "index-properties" id="index-properties"></a>
 
+  <p>A property is a key-value pair associated with an entry.
+  Properties can be set so they are associated with a single entry,
+  with every entry in a tree, or with every entry in an Org mode
+  file.</p>
 
+  <p>There are two main applications for properties in Org mode.
+  First, properties are like tags, but with a value. Imagine
+  maintaining a file where you document bugs and plan releases for
+  a piece of software. Instead of using tags like
+  <code>:release_1:</code>, <code>:release_2:</code>, you can use a
+  property, say <code>:Release:</code>, that in different subtrees
+  has different values, such as <code>1.0</code> or
+  <code>2.0</code>. Second, you can use properties to implement
+  (very basic) database capabilities in an Org buffer. Imagine
+  keeping track of your music CDs, where properties could be things
+  such as the album, artist, date of release, number of tracks, and
+  so on.</p>
 
+  <p>Properties can be conveniently edited and viewed in column
+  view (see <a href="Column-view.html#Column-view">Column
+  view</a>).</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Property-syntax.html#Property-syntax" accesskey="1">Property
+      syntax</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How properties are spelled
+      out</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Special-properties.html#Special-properties" accesskey=
+      "2">Special properties</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Access to other Org mode
+      features</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Property-searches.html#Property-searches" accesskey=
+      "3">Property searches</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Matching property values</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Property-inheritance.html#Property-inheritance" accesskey=
+      "4">Property inheritance</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Passing values down the
+      tree</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Column-view.html#Column-view" accesskey="5">Column
+      view</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Tabular viewing and
+      editing</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Property-API.html#Property-API" accesskey="6">Property
+      API</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Properties for Lisp
+      programmers</td>
+    </tr>
+  </table>
 </body>
 </html>

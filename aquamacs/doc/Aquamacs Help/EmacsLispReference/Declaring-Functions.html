@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,149 +19,210 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Declaring Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Declaring Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Declaring Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Function-Safety.html#Function-Safety" rel="next" title="Function Safety">
-<link href="Declare-Form.html#Declare-Form" rel="prev" title="Declare Form">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Declaring
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Declaring Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Declaring Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href="Function-Safety.html#Function-Safety" rel="next"
+  title="Function Safety" />
+  <link href="Declare-Form.html#Declare-Form" rel="prev" title=
+  "Declare Form" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Declaring-Functions" id="Declaring-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Function-Safety.html#Function-Safety"
+    accesskey="n" rel="next">Function Safety</a>, Previous:
+    <a href="Declare-Form.html#Declare-Form" accesskey="p" rel=
+    "prev">Declare Form</a>, Up: <a href="Functions.html#Functions"
+    accesskey="u" rel="up">Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Telling-the-Compiler-that-a-Function-is-Defined" id=
+  "Telling-the-Compiler-that-a-Function-is-Defined"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Declaring-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Function-Safety.html#Function-Safety" accesskey="n" rel="next">Function Safety</a>, Previous: <a href="Declare-Form.html#Declare-Form" accesskey="p" rel="prev">Declare Form</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Telling-the-Compiler-that-a-Function-is-Defined"></a>
-<h3 class="section">12.15 Telling the Compiler that a Function is Defined</h3>
-<a name="index-function-declaration"></a>
-<a name="index-declaring-functions"></a>
-<a name="index-declare_002dfunction"></a>
+  <h3 class="section">12.15 Telling the Compiler that a Function is
+  Defined</h3><a name="index-function-declaration" id=
+  "index-function-declaration"></a> <a name=
+  "index-declaring-functions" id="index-declaring-functions"></a>
+  <a name="index-declare_002dfunction" id=
+  "index-declare_002dfunction"></a>
 
-<p>Byte-compiling a file often produces warnings about functions that the
-compiler doesn&rsquo;t know about (see <a href="Compiler-Errors.html#Compiler-Errors">Compiler Errors</a>).  Sometimes this
-indicates a real problem, but usually the functions in question are
-defined in other files which would be loaded if that code is run.  For
-example, byte-compiling <samp>fortran.el</samp> used to warn:
-</p>
-<div class="example">
-<pre class="example">In end of data:
-fortran.el:2152:1:Warning: the function ‘gud-find-c-expr’ is not
+  <p>Byte-compiling a file often produces warnings about functions
+  that the compiler doesn&rsquo;t know about (see <a href=
+  "Compiler-Errors.html#Compiler-Errors">Compiler Errors</a>).
+  Sometimes this indicates a real problem, but usually the
+  functions in question are defined in other files which would be
+  loaded if that code is run. For example, byte-compiling
+  <samp>fortran.el</samp> used to warn:</p>
+
+  <div class="example">
+    <pre class="example">
+In end of data:
+fortran.el:2152:1:Warning: the function &acirc;&euro;&tilde;gud-find-c-expr&acirc;&euro;&trade; is not
     known to be defined.
-</pre></div>
+</pre>
+  </div>
 
-<p>In fact, <code>gud-find-c-expr</code> is only used in the function that
-Fortran mode uses for the local value of
-<code>gud-find-expr-function</code>, which is a callback from GUD; if it is
-called, the GUD functions will be loaded.  When you know that such a
-warning does not indicate a real problem, it is good to suppress the
-warning.  That makes new warnings which might mean real problems more
-visible.  You do that with <code>declare-function</code>.
-</p>
-<p>All you need to do is add a <code>declare-function</code> statement before the
-first use of the function in question:
-</p>
-<div class="example">
-<pre class="example">(declare-function gud-find-c-expr &quot;gud.el&quot; nil)
-</pre></div>
+  <p>In fact, <code>gud-find-c-expr</code> is only used in the
+  function that Fortran mode uses for the local value of
+  <code>gud-find-expr-function</code>, which is a callback from
+  GUD; if it is called, the GUD functions will be loaded. When you
+  know that such a warning does not indicate a real problem, it is
+  good to suppress the warning. That makes new warnings which might
+  mean real problems more visible. You do that with
+  <code>declare-function</code>.</p>
 
-<p>This says that <code>gud-find-c-expr</code> is defined in <samp>gud.el</samp> (the
-&lsquo;<samp>.el</samp>&rsquo; can be omitted).  The compiler takes for granted that that file
-really defines the function, and does not check.
-</p>
-<p>The optional third argument specifies the argument list of
-<code>gud-find-c-expr</code>.  In this case, it takes no arguments
-(<code>nil</code> is different from not specifying a value).  In other
-cases, this might be something like <code>(file &amp;optional overwrite)</code>.
-You don&rsquo;t have to specify the argument list, but if you do the
-byte compiler can check that the calls match the declaration.
-</p>
-<dl>
-<dt><a name="index-declare_002dfunction-1"></a>Macro: <strong>declare-function</strong> <em>function file &amp;optional arglist fileonly</em></dt>
-<dd><p>Tell the byte compiler to assume that <var>function</var> is defined, with
-arguments <var>arglist</var>, and that the definition should come from the
-file <var>file</var>.  <var>fileonly</var> non-<code>nil</code> means only check that
-<var>file</var> exists, not that it actually defines <var>function</var>.
-</p></dd></dl>
+  <p>All you need to do is add a <code>declare-function</code>
+  statement before the first use of the function in question:</p>
 
-<p>To verify that these functions really are declared where
-<code>declare-function</code> says they are, use <code>check-declare-file</code>
-to check all <code>declare-function</code> calls in one source file, or use
-<code>check-declare-directory</code> check all the files in and under a
-certain directory.
-</p>
-<p>These commands find the file that ought to contain a function&rsquo;s
-definition using <code>locate-library</code>; if that finds no file, they
-expand the definition file name relative to the directory of the file
-that contains the <code>declare-function</code> call.
-</p>
-<p>You can also say that a function is a primitive by specifying a file
-name ending in &lsquo;<samp>.c</samp>&rsquo; or &lsquo;<samp>.m</samp>&rsquo;.  This is useful only when you
-call a primitive that is defined only on certain systems.  Most
-primitives are always defined, so they will never give you a warning.
-</p>
-<p>Sometimes a file will optionally use functions from an external package.
-If you prefix the filename in the <code>declare-function</code> statement with
-&lsquo;<samp>ext:</samp>&rsquo;, then it will be checked if it is found, otherwise skipped
-without error.
-</p>
-<p>There are some function definitions that &lsquo;<samp>check-declare</samp>&rsquo; does not
-understand (e.g., <code>defstruct</code> and some other macros).  In such cases,
-you can pass a non-<code>nil</code> <var>fileonly</var> argument to
-<code>declare-function</code>, meaning to only check that the file exists, not
-that it actually defines the function.  Note that to do this without
-having to specify an argument list, you should set the <var>arglist</var>
-argument to <code>t</code> (because <code>nil</code> means an empty argument list, as
-opposed to an unspecified one).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Function-Safety.html#Function-Safety" accesskey="n" rel="next">Function Safety</a>, Previous: <a href="Declare-Form.html#Declare-Form" accesskey="p" rel="prev">Declare Form</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="example">
+    <pre class="example">
+(declare-function gud-find-c-expr "gud.el" nil)
+</pre>
+  </div>
 
+  <p>This says that <code>gud-find-c-expr</code> is defined in
+  <samp>gud.el</samp> (the &lsquo;<samp>.el</samp>&rsquo; can be
+  omitted). The compiler takes for granted that that file really
+  defines the function, and does not check.</p>
 
+  <p>The optional third argument specifies the argument list of
+  <code>gud-find-c-expr</code>. In this case, it takes no arguments
+  (<code>nil</code> is different from not specifying a value). In
+  other cases, this might be something like <code>(file
+  &amp;optional overwrite)</code>. You don&rsquo;t have to specify
+  the argument list, but if you do the byte compiler can check that
+  the calls match the declaration.</p>
 
+  <dl>
+    <dt><a name="index-declare_002dfunction-1" id=
+    "index-declare_002dfunction-1"></a>Macro:
+    <strong>declare-function</strong> <em>function file
+    &amp;optional arglist fileonly</em></dt>
+
+    <dd>
+      <p>Tell the byte compiler to assume that <var>function</var>
+      is defined, with arguments <var>arglist</var>, and that the
+      definition should come from the file <var>file</var>.
+      <var>fileonly</var> non-<code>nil</code> means only check
+      that <var>file</var> exists, not that it actually defines
+      <var>function</var>.</p>
+    </dd>
+  </dl>
+
+  <p>To verify that these functions really are declared where
+  <code>declare-function</code> says they are, use
+  <code>check-declare-file</code> to check all
+  <code>declare-function</code> calls in one source file, or use
+  <code>check-declare-directory</code> check all the files in and
+  under a certain directory.</p>
+
+  <p>These commands find the file that ought to contain a
+  function&rsquo;s definition using <code>locate-library</code>; if
+  that finds no file, they expand the definition file name relative
+  to the directory of the file that contains the
+  <code>declare-function</code> call.</p>
+
+  <p>You can also say that a function is a primitive by specifying
+  a file name ending in &lsquo;<samp>.c</samp>&rsquo; or
+  &lsquo;<samp>.m</samp>&rsquo;. This is useful only when you call
+  a primitive that is defined only on certain systems. Most
+  primitives are always defined, so they will never give you a
+  warning.</p>
+
+  <p>Sometimes a file will optionally use functions from an
+  external package. If you prefix the filename in the
+  <code>declare-function</code> statement with
+  &lsquo;<samp>ext:</samp>&rsquo;, then it will be checked if it is
+  found, otherwise skipped without error.</p>
+
+  <p>There are some function definitions that
+  &lsquo;<samp>check-declare</samp>&rsquo; does not understand
+  (e.g., <code>defstruct</code> and some other macros). In such
+  cases, you can pass a non-<code>nil</code> <var>fileonly</var>
+  argument to <code>declare-function</code>, meaning to only check
+  that the file exists, not that it actually defines the function.
+  Note that to do this without having to specify an argument list,
+  you should set the <var>arglist</var> argument to <code>t</code>
+  (because <code>nil</code> means an empty argument list, as
+  opposed to an unspecified one).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Function-Safety.html#Function-Safety"
+    accesskey="n" rel="next">Function Safety</a>, Previous:
+    <a href="Declare-Form.html#Declare-Form" accesskey="p" rel=
+    "prev">Declare Form</a>, Up: <a href="Functions.html#Functions"
+    accesskey="u" rel="up">Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents VHDL Mode, an Emacs mode for editing VHDL code.
 
 Copyright (C) 1995-2008, 2010, 2012, 2015-2016 Free Software
@@ -15,88 +17,139 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>VHDL Mode, an Emacs mode for editing VHDL code: Advanced Customizations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="VHDL Mode, an Emacs mode for editing VHDL code: Advanced Customizations">
-<meta name="keywords" content="VHDL Mode, an Emacs mode for editing VHDL code: Advanced Customizations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customizing-Indentation.html#Customizing-Indentation" rel="up" title="Customizing Indentation">
-<link href="Custom-Indentation-Functions.html#Custom-Indentation-Functions" rel="next" title="Custom Indentation Functions">
-<link href="File-Styles.html#File-Styles" rel="prev" title="File Styles">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>VHDL Mode, an Emacs mode for editing VHDL code: Advanced
+  Customizations</title>
+  <meta name="description" content=
+  "VHDL Mode, an Emacs mode for editing VHDL code: Advanced Customizations" />
+  <meta name="keywords" content=
+  "VHDL Mode, an Emacs mode for editing VHDL code: Advanced Customizations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customizing-Indentation.html#Customizing-Indentation"
+  rel="up" title="Customizing Indentation" />
+  <link href=
+  "Custom-Indentation-Functions.html#Custom-Indentation-Functions"
+  rel="next" title="Custom Indentation Functions" />
+  <link href="File-Styles.html#File-Styles" rel="prev" title=
+  "File Styles" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Advanced-Customizations"></a>
-<div class="header">
-<p>
-Previous: <a href="Styles.html#Styles" accesskey="p" rel="prev">Styles</a>, Up: <a href="Customizing-Indentation.html#Customizing-Indentation" accesskey="u" rel="up">Customizing Indentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Advanced-Customizations-1"></a>
-<h3 class="section">4.4 Advanced Customizations</h3>
-<a name="index-Advanced-Customizations"></a>
+<body lang="en" xml:lang="en">
+  <a name="Advanced-Customizations" id=
+  "Advanced-Customizations"></a>
 
-<a name="index-vhdl_002dstyle_002dalist-1"></a>
-<a name="index-style_002dalist-_0028vhdl_002d_0029-1"></a>
-<a name="index-vhdl_002dbasic_002doffset-1"></a>
-<a name="index-basic_002doffset-_0028vhdl_002d_0029-1"></a>
-<p>For most users, VHDL Mode will support their coding styles with
-very little need for customizations.  Usually, one of the standard
-styles defined in <code>vhdl-style-alist</code> will do the trick.  Sometimes,
-one of the syntactic symbol offsets will need to be tweaked slightly, or
-perhaps <code>vhdl-basic-offset</code> will need to be changed.  However, some
-styles require a more advanced ability for customization, and one of the
-real strengths of VHDL Mode is that the syntactic analysis model
-provides a very flexible framework for customizing indentation. This
-allows you to perform special indentation calculations for situations
-not handled by the mode directly.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Custom-Indentation-Functions.html#Custom-Indentation-Functions" accesskey="1">Custom Indentation Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Other-Special-Indentations.html#Other-Special-Indentations" accesskey="2">Other Special Indentations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Previous: <a href="Styles.html#Styles" accesskey="p" rel=
+    "prev">Styles</a>, Up: <a href=
+    "Customizing-Indentation.html#Customizing-Indentation"
+    accesskey="u" rel="up">Customizing Indentation</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Advanced-Customizations-1" id=
+  "Advanced-Customizations-1"></a>
 
+  <h3 class="section">4.4 Advanced Customizations</h3><a name=
+  "index-Advanced-Customizations" id=
+  "index-Advanced-Customizations"></a> <a name=
+  "index-vhdl_002dstyle_002dalist-1" id=
+  "index-vhdl_002dstyle_002dalist-1"></a> <a name=
+  "index-style_002dalist-_0028vhdl_002d_0029-1" id=
+  "index-style_002dalist-_0028vhdl_002d_0029-1"></a> <a name=
+  "index-vhdl_002dbasic_002doffset-1" id=
+  "index-vhdl_002dbasic_002doffset-1"></a> <a name=
+  "index-basic_002doffset-_0028vhdl_002d_0029-1" id=
+  "index-basic_002doffset-_0028vhdl_002d_0029-1"></a>
 
+  <p>For most users, VHDL Mode will support their coding styles
+  with very little need for customizations. Usually, one of the
+  standard styles defined in <code>vhdl-style-alist</code> will do
+  the trick. Sometimes, one of the syntactic symbol offsets will
+  need to be tweaked slightly, or perhaps
+  <code>vhdl-basic-offset</code> will need to be changed. However,
+  some styles require a more advanced ability for customization,
+  and one of the real strengths of VHDL Mode is that the syntactic
+  analysis model provides a very flexible framework for customizing
+  indentation. This allows you to perform special indentation
+  calculations for situations not handled by the mode directly.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Custom-Indentation-Functions.html#Custom-Indentation-Functions"
+      accesskey="1">Custom Indentation Functions</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Other-Special-Indentations.html#Other-Special-Indentations"
+      accesskey="2">Other Special Indentations</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

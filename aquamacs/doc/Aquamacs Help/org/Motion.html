@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Motion - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Document-Structure.html#Document-Structure" title="Document Structure">
-<link rel="prev" href="Visibility-cycling.html#Visibility-cycling" title="Visibility cycling">
-<link rel="next" href="Structure-editing.html#Structure-editing" title="Structure editing">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Motion - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Document-Structure.html#Document-Structure"
+  title="Document Structure" />
+  <link rel="prev" href=
+  "Visibility-cycling.html#Visibility-cycling" title=
+  "Visibility cycling" />
+  <link rel="next" href="Structure-editing.html#Structure-editing"
+  title="Structure editing" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +43,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,53 +56,115 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Motion"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Structure-editing.html#Structure-editing">Structure editing</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Visibility-cycling.html#Visibility-cycling">Visibility cycling</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Document-Structure.html#Document-Structure">Document Structure</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Motion" id="Motion"></a>
 
-<h3 class="section">2.4 Motion</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Structure-editing.html#Structure-editing">Structure
+    editing</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Visibility-cycling.html#Visibility-cycling">Visibility
+    cycling</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Document-Structure.html#Document-Structure">Document
+    Structure</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-motion_002c-between-headlines-66"></a><a name="index-jumping_002c-to-headlines-67"></a><a name="index-headline-navigation-68"></a>The following commands jump to other headlines in the buffer.
+  <h3 class="section">2.4 Motion</h3>
 
-     
-<a name="index-C_002dc-C_002dn-69"></a>
-<a name="index-outline_002dnext_002dvisible_002dheading-70"></a>
-<dl><dt><kbd>C-c C-n</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>outline-next-visible-heading</code>)<dd>
-Next heading. 
-<a name="index-C_002dc-C_002dp-71"></a><a name="index-outline_002dprevious_002dvisible_002dheading-72"></a><br><dt><kbd>C-c C-p</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>outline-previous-visible-heading</code>)<dd>
-Previous heading. 
-<a name="index-C_002dc-C_002df-73"></a><a name="index-org_002dforward_002dsame_002dlevel-74"></a><br><dt><kbd>C-c C-f</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-forward-same-level</code>)<dd>
-Next heading same level. 
-<a name="index-C_002dc-C_002db-75"></a><a name="index-org_002dbackward_002dsame_002dlevel-76"></a><br><dt><kbd>C-c C-b</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-backward-same-level</code>)<dd>
-Previous heading same level. 
-<a name="index-C_002dc-C_002du-77"></a><a name="index-outline_002dup_002dheading-78"></a><br><dt><kbd>C-c C-u</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>outline-up-heading</code>)<dd>
-Backward to higher level heading. 
-<a name="index-C_002dc-C_002dj-79"></a><a name="index-org_002dgoto-80"></a><br><dt><kbd>C-c C-j</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-goto</code>)<dd>
-Jump to a different place without changing the current outline
-visibility.  Shows the document structure in a temporary buffer, where
-you can use the following keys to find your destination:
-<a name="index-org_002dgoto_002dauto_002disearch-81"></a>
-     <pre class="example">          &lt;TAB&gt;         <span class="roman">Cycle visibility.</span>
-          &lt;down&gt; / &lt;up&gt;   <span class="roman">Next/previous visible headline.</span>
-          &lt;RET&gt;         <span class="roman">Select this location.</span>
-          <kbd>/</kbd>           <span class="roman">Do a Sparse-tree search</span>
-          <span class="roman">The following keys work if you turn off </span><code>org-goto-auto-isearch</code>
-          n / p        <span class="roman">Next/previous visible headline.</span>
-          f / b        <span class="roman">Next/previous headline same level.</span>
+  <p><a name="index-motion_002c-between-headlines-66" id=
+  "index-motion_002c-between-headlines-66"></a><a name=
+  "index-jumping_002c-to-headlines-67" id=
+  "index-jumping_002c-to-headlines-67"></a><a name=
+  "index-headline-navigation-68" id=
+  "index-headline-navigation-68"></a>The following commands jump to
+  other headlines in the buffer. <a name="index-C_002dc-C_002dn-69"
+  id="index-C_002dc-C_002dn-69"></a> <a name=
+  "index-outline_002dnext_002dvisible_002dheading-70" id=
+  "index-outline_002dnext_002dvisible_002dheading-70"></a></p>
+
+  <dl>
+    <dt><kbd>C-c C-n</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>outline-next-visible-heading</code>)</dt>
+
+    <dd>Next heading. <a name="index-C_002dc-C_002dp-71" id=
+    "index-C_002dc-C_002dp-71"></a><a name=
+    "index-outline_002dprevious_002dvisible_002dheading-72" id=
+    "index-outline_002dprevious_002dvisible_002dheading-72"></a><br />
+    </dd>
+
+    <dt><kbd>C-c C-p</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>outline-previous-visible-heading</code>)</dt>
+
+    <dd>Previous heading. <a name="index-C_002dc-C_002df-73" id=
+    "index-C_002dc-C_002df-73"></a><a name=
+    "index-org_002dforward_002dsame_002dlevel-74" id=
+    "index-org_002dforward_002dsame_002dlevel-74"></a><br /></dd>
+
+    <dt><kbd>C-c C-f</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-forward-same-level</code>)</dt>
+
+    <dd>Next heading same level. <a name="index-C_002dc-C_002db-75"
+    id="index-C_002dc-C_002db-75"></a><a name=
+    "index-org_002dbackward_002dsame_002dlevel-76" id=
+    "index-org_002dbackward_002dsame_002dlevel-76"></a><br /></dd>
+
+    <dt><kbd>C-c C-b</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-backward-same-level</code>)</dt>
+
+    <dd>Previous heading same level. <a name=
+    "index-C_002dc-C_002du-77" id=
+    "index-C_002dc-C_002du-77"></a><a name=
+    "index-outline_002dup_002dheading-78" id=
+    "index-outline_002dup_002dheading-78"></a><br /></dd>
+
+    <dt><kbd>C-c C-u</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>outline-up-heading</code>)</dt>
+
+    <dd>Backward to higher level heading. <a name=
+    "index-C_002dc-C_002dj-79" id=
+    "index-C_002dc-C_002dj-79"></a><a name="index-org_002dgoto-80"
+    id="index-org_002dgoto-80"></a><br /></dd>
+
+    <dt><kbd>C-c C-j</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-goto</code>)</dt>
+
+    <dd>
+      Jump to a different place without changing the current
+      outline visibility. Shows the document structure in a
+      temporary buffer, where you can use the following keys to
+      find your destination: <a name=
+      "index-org_002dgoto_002dauto_002disearch-81" id=
+      "index-org_002dgoto_002dauto_002disearch-81"></a>
+      <pre class="example">
+          &lt;TAB&gt;         <span class=
+"roman">Cycle visibility.</span>
+          &lt;down&gt; / &lt;up&gt;   <span class=
+"roman">Next/previous visible headline.</span>
+          &lt;RET&gt;         <span class=
+"roman">Select this location.</span>
+          <kbd>/</kbd>           <span class=
+"roman">Do a Sparse-tree search</span>
+          <span class=
+"roman">The following keys work if you turn off </span><code>org-goto-auto-isearch</code>
+          n / p        <span class=
+"roman">Next/previous visible headline.</span>
+          f / b        <span class=
+"roman">Next/previous headline same level.</span>
           u            <span class="roman">One level up.</span>
           0-9          <span class="roman">Digit argument.</span>
           q            <span class="roman">Quit</span>
 </pre>
-     <p><a name="index-org_002dgoto_002dinterface-82"></a>See also the variable <code>org-goto-interface</code>. 
-</dl>
 
-   </body></html>
-
+      <p><a name="index-org_002dgoto_002dinterface-82" id=
+      "index-org_002dgoto_002dinterface-82"></a>See also the
+      variable <code>org-goto-interface</code>.</p>
+    </dd>
+  </dl>
+</body>
+</html>

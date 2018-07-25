@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,155 +19,214 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Argument Evaluation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Argument Evaluation">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Argument Evaluation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Problems-with-Macros.html#Problems-with-Macros" rel="up" title="Problems with Macros">
-<link href="Surprising-Local-Vars.html#Surprising-Local-Vars" rel="next" title="Surprising Local Vars">
-<link href="Wrong-Time.html#Wrong-Time" rel="prev" title="Wrong Time">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Argument
+  Evaluation</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Argument Evaluation" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Argument Evaluation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Problems-with-Macros.html#Problems-with-Macros" rel=
+  "up" title="Problems with Macros" />
+  <link href="Surprising-Local-Vars.html#Surprising-Local-Vars"
+  rel="next" title="Surprising Local Vars" />
+  <link href="Wrong-Time.html#Wrong-Time" rel="prev" title=
+  "Wrong Time" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Argument-Evaluation" id="Argument-Evaluation"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Surprising-Local-Vars.html#Surprising-Local-Vars" accesskey=
+    "n" rel="next">Surprising Local Vars</a>, Previous: <a href=
+    "Wrong-Time.html#Wrong-Time" accesskey="p" rel="prev">Wrong
+    Time</a>, Up: <a href=
+    "Problems-with-Macros.html#Problems-with-Macros" accesskey="u"
+    rel="up">Problems with Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Evaluating-Macro-Arguments-Repeatedly" id=
+  "Evaluating-Macro-Arguments-Repeatedly"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Argument-Evaluation"></a>
-<div class="header">
-<p>
-Next: <a href="Surprising-Local-Vars.html#Surprising-Local-Vars" accesskey="n" rel="next">Surprising Local Vars</a>, Previous: <a href="Wrong-Time.html#Wrong-Time" accesskey="p" rel="prev">Wrong Time</a>, Up: <a href="Problems-with-Macros.html#Problems-with-Macros" accesskey="u" rel="up">Problems with Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Evaluating-Macro-Arguments-Repeatedly"></a>
-<h4 class="subsection">13.5.2 Evaluating Macro Arguments Repeatedly</h4>
+  <h4 class="subsection">13.5.2 Evaluating Macro Arguments
+  Repeatedly</h4>
 
-<p>When defining a macro you must pay attention to the number of times
-the arguments will be evaluated when the expansion is executed.  The
-following macro (used to facilitate iteration) illustrates the
-problem.  This macro allows us to write a for-loop construct.
-</p>
-<a name="index-for"></a>
-<div class="example">
-<pre class="example">(defmacro for (var from init to final do &amp;rest body)
-  &quot;Execute a simple \&quot;for\&quot; loop.
-For example, (for i from 1 to 10 do (print i)).&quot;
+  <p>When defining a macro you must pay attention to the number of
+  times the arguments will be evaluated when the expansion is
+  executed. The following macro (used to facilitate iteration)
+  illustrates the problem. This macro allows us to write a for-loop
+  construct.</p><a name="index-for" id="index-for"></a>
+
+  <div class="example">
+    <pre class="example">
+(defmacro for (var from init to final do &amp;rest body)
+  "Execute a simple \"for\" loop.
+For example, (for i from 1 to 10 do (print i))."
   (list 'let (list (list var init))
         (cons 'while
               (cons (list '&lt;= var final)
                     (append body (list (list 'inc var)))))))
-</pre><pre class="example">
-</pre><pre class="example">(for i from 1 to 3 do
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(for i from 1 to 3 do
    (setq square (* i i))
-   (princ (format &quot;\n%d %d&quot; i square)))
+   (princ (format "\n%d %d" i square)))
 &rarr;
-</pre><pre class="example">(let ((i 1))
+</pre>
+    <pre class="example">
+(let ((i 1))
   (while (&lt;= i 3)
     (setq square (* i i))
-    (princ (format &quot;\n%d %d&quot; i square))
+    (princ (format "\n%d %d" i square))
     (inc i)))
-</pre><pre class="example">
-     ⊣1       1
-     ⊣2       4
-     ⊣3       9
+</pre>
+    <pre class="example">
+     &acirc;&Scaron;&pound;1       1
+     &acirc;&Scaron;&pound;2       4
+     &acirc;&Scaron;&pound;3       9
 &rArr; nil
-</pre></div>
+</pre>
+  </div>
 
-<p>The arguments <code>from</code>, <code>to</code>, and <code>do</code> in this macro are
-syntactic sugar; they are entirely ignored.  The idea is that you
-will write noise words (such as <code>from</code>, <code>to</code>, and <code>do</code>)
-in those positions in the macro call.
-</p>
-<p>Here&rsquo;s an equivalent definition simplified through use of backquote:
-</p>
-<div class="example">
-<pre class="example">(defmacro for (var from init to final do &amp;rest body)
-  &quot;Execute a simple \&quot;for\&quot; loop.
-For example, (for i from 1 to 10 do (print i)).&quot;
+  <p>The arguments <code>from</code>, <code>to</code>, and
+  <code>do</code> in this macro are syntactic sugar; they are
+  entirely ignored. The idea is that you will write noise words
+  (such as <code>from</code>, <code>to</code>, and <code>do</code>)
+  in those positions in the macro call.</p>
+
+  <p>Here&rsquo;s an equivalent definition simplified through use
+  of backquote:</p>
+
+  <div class="example">
+    <pre class="example">
+(defmacro for (var from init to final do &amp;rest body)
+  "Execute a simple \"for\" loop.
+For example, (for i from 1 to 10 do (print i))."
   `(let ((,var ,init))
      (while (&lt;= ,var ,final)
        ,@body
        (inc ,var))))
-</pre></div>
+</pre>
+  </div>
 
-<p>Both forms of this definition (with backquote and without) suffer from
-the defect that <var>final</var> is evaluated on every iteration.  If
-<var>final</var> is a constant, this is not a problem.  If it is a more
-complex form, say <code>(long-complex-calculation x)</code>, this can slow
-down the execution significantly.  If <var>final</var> has side effects,
-executing it more than once is probably incorrect.
-</p>
-<a name="index-macro-argument-evaluation"></a>
-<p>A well-designed macro definition takes steps to avoid this problem by
-producing an expansion that evaluates the argument expressions exactly
-once unless repeated evaluation is part of the intended purpose of the
-macro.  Here is a correct expansion for the <code>for</code> macro:
-</p>
-<div class="example">
-<pre class="example">(let ((i 1)
+  <p>Both forms of this definition (with backquote and without)
+  suffer from the defect that <var>final</var> is evaluated on
+  every iteration. If <var>final</var> is a constant, this is not a
+  problem. If it is a more complex form, say
+  <code>(long-complex-calculation x)</code>, this can slow down the
+  execution significantly. If <var>final</var> has side effects,
+  executing it more than once is probably incorrect.</p><a name=
+  "index-macro-argument-evaluation" id=
+  "index-macro-argument-evaluation"></a>
+
+  <p>A well-designed macro definition takes steps to avoid this
+  problem by producing an expansion that evaluates the argument
+  expressions exactly once unless repeated evaluation is part of
+  the intended purpose of the macro. Here is a correct expansion
+  for the <code>for</code> macro:</p>
+
+  <div class="example">
+    <pre class="example">
+(let ((i 1)
       (max 3))
   (while (&lt;= i max)
     (setq square (* i i))
-    (princ (format &quot;%d      %d&quot; i square))
+    (princ (format "%d      %d" i square))
     (inc i)))
-</pre></div>
+</pre>
+  </div>
 
-<p>Here is a macro definition that creates this expansion:
-</p>
-<div class="example">
-<pre class="example">(defmacro for (var from init to final do &amp;rest body)
-  &quot;Execute a simple for loop: (for i from 1 to 10 do (print i)).&quot;
+  <p>Here is a macro definition that creates this expansion:</p>
+
+  <div class="example">
+    <pre class="example">
+(defmacro for (var from init to final do &amp;rest body)
+  "Execute a simple for loop: (for i from 1 to 10 do (print i))."
   `(let ((,var ,init)
          (max ,final))
      (while (&lt;= ,var max)
        ,@body
        (inc ,var))))
-</pre></div>
+</pre>
+  </div>
 
-<p>Unfortunately, this fix introduces another problem,
-described in the following section.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Surprising-Local-Vars.html#Surprising-Local-Vars" accesskey="n" rel="next">Surprising Local Vars</a>, Previous: <a href="Wrong-Time.html#Wrong-Time" accesskey="p" rel="prev">Wrong Time</a>, Up: <a href="Problems-with-Macros.html#Problems-with-Macros" accesskey="u" rel="up">Problems with Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Unfortunately, this fix introduces another problem, described
+  in the following section.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Surprising-Local-Vars.html#Surprising-Local-Vars" accesskey=
+    "n" rel="next">Surprising Local Vars</a>, Previous: <a href=
+    "Wrong-Time.html#Wrong-Time" accesskey="p" rel="prev">Wrong
+    Time</a>, Up: <a href=
+    "Problems-with-Macros.html#Problems-with-Macros" accesskey="u"
+    rel="up">Problems with Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

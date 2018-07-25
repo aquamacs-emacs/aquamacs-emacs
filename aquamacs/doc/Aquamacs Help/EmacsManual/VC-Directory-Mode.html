@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,100 +20,153 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: VC Directory Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: VC Directory Mode">
-<meta name="keywords" content="GNU Emacs Manual: VC Directory Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Version-Control.html#Version-Control" rel="up" title="Version Control">
-<link href="VC-Directory-Buffer.html#VC-Directory-Buffer" rel="next" title="VC Directory Buffer">
-<link href="VC-Ignore.html#VC-Ignore" rel="prev" title="VC Ignore">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: VC Directory Mode</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: VC Directory Mode" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: VC Directory Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Version-Control.html#Version-Control" rel="up" title=
+  "Version Control" />
+  <link href="VC-Directory-Buffer.html#VC-Directory-Buffer" rel=
+  "next" title="VC Directory Buffer" />
+  <link href="VC-Ignore.html#VC-Ignore" rel="prev" title=
+  "VC Ignore" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="VC-Directory-Mode" id="VC-Directory-Mode"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Branches.html#Branches" accesskey="n" rel=
+    "next">Branches</a>, Previous: <a href=
+    "VC-Ignore.html#VC-Ignore" accesskey="p" rel="prev">VC
+    Ignore</a>, Up: <a href="Version-Control.html#Version-Control"
+    accesskey="u" rel="up">Version Control</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="VC-Directory-Mode-1" id="VC-Directory-Mode-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="VC-Directory-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="Branches.html#Branches" accesskey="n" rel="next">Branches</a>, Previous: <a href="VC-Ignore.html#VC-Ignore" accesskey="p" rel="prev">VC Ignore</a>, Up: <a href="Version-Control.html#Version-Control" accesskey="u" rel="up">Version Control</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="VC-Directory-Mode-1"></a>
-<h4 class="subsection">28.1.10 VC Directory Mode</h4>
+  <h4 class="subsection">28.1.10 VC Directory Mode</h4><a name=
+  "index-VC-Directory-buffer" id="index-VC-Directory-buffer"></a>
 
-<a name="index-VC-Directory-buffer"></a>
-<p>The <em>VC Directory buffer</em> is a specialized buffer for viewing
-the version control statuses of the files in a directory tree, and
-performing version control operations on those files.  In particular,
-it is used to specify multi-file VC filesets for commands like
-<kbd><span class="nolinebreak">C-x</span>&nbsp;v&nbsp;v</kbd><!-- /@w --> to act on (see <a href="VC-Directory-Commands.html#VC-Directory-Commands">VC Directory Commands</a>).
-</p>
-<a name="index-C_002dx-v-d"></a>
-<a name="index-vc_002ddir"></a>
-<p>To use the VC Directory buffer, type <kbd>C-x v d</kbd> (<code>vc-dir</code>).
-This reads a directory name using the minibuffer, and switches to a VC
-Directory buffer for that directory.  By default, the buffer is named
-<samp>*vc-dir*</samp>.  Its contents are described
-in <a href="VC-Directory-Buffer.html#VC-Directory-Buffer">VC Directory Buffer</a>.
-</p>
-<p>The <code>vc-dir</code> command automatically detects the version control
-system to be used in the specified directory.  In the event that more
-than one system is being used in the directory, you should invoke the
-command with a prefix argument, <kbd>C-u C-x v d</kbd>; this prompts for
-the version control system which the VC Directory buffer should use.
-</p>
-<a name="index-PCL_002dCVS"></a>
-<a name="index-cvs"></a>
-<a name="index-CVS-directory-mode"></a>
-<p>In addition to the VC Directory buffer, Emacs has a similar facility
-called PCL-CVS which is specialized for CVS.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/pcl-cvs/index.html#Top">About
-PCL-CVS</a> in <cite>PCL-CVS&mdash;The Emacs Front-End to CVS</cite>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="VC-Directory-Buffer.html#VC-Directory-Buffer" accesskey="1">Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What the buffer looks like and means.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="VC-Directory-Commands.html#VC-Directory-Commands" accesskey="2">Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Commands to use in a VC directory buffer.
-</td></tr>
-</table>
+  <p>The <em>VC Directory buffer</em> is a specialized buffer for
+  viewing the version control statuses of the files in a directory
+  tree, and performing version control operations on those files.
+  In particular, it is used to specify multi-file VC filesets for
+  commands like <kbd><span class=
+  "nolinebreak">C-x</span>&nbsp;v&nbsp;v</kbd><!-- /@w --> to act
+  on (see <a href=
+  "VC-Directory-Commands.html#VC-Directory-Commands">VC Directory
+  Commands</a>).</p><a name="index-C_002dx-v-d" id=
+  "index-C_002dx-v-d"></a> <a name="index-vc_002ddir" id=
+  "index-vc_002ddir"></a>
 
+  <p>To use the VC Directory buffer, type <kbd>C-x v d</kbd>
+  (<code>vc-dir</code>). This reads a directory name using the
+  minibuffer, and switches to a VC Directory buffer for that
+  directory. By default, the buffer is named <samp>*vc-dir*</samp>.
+  Its contents are described in <a href=
+  "VC-Directory-Buffer.html#VC-Directory-Buffer">VC Directory
+  Buffer</a>.</p>
 
+  <p>The <code>vc-dir</code> command automatically detects the
+  version control system to be used in the specified directory. In
+  the event that more than one system is being used in the
+  directory, you should invoke the command with a prefix argument,
+  <kbd>C-u C-x v d</kbd>; this prompts for the version control
+  system which the VC Directory buffer should use.</p><a name=
+  "index-PCL_002dCVS" id="index-PCL_002dCVS"></a> <a name=
+  "index-cvs" id="index-cvs"></a> <a name=
+  "index-CVS-directory-mode" id="index-CVS-directory-mode"></a>
 
+  <p>In addition to the VC Directory buffer, Emacs has a similar
+  facility called PCL-CVS which is specialized for CVS. See
+  <a href="http://www.gnu.org/software/emacs/manual/html_node/pcl-cvs/index.html#Top">
+  About PCL-CVS</a> in <cite>PCL-CVS&mdash;The Emacs Front-End to
+  CVS</cite>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "VC-Directory-Buffer.html#VC-Directory-Buffer" accesskey=
+      "1">Buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What the buffer looks like and
+      means.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "VC-Directory-Commands.html#VC-Directory-Commands" accesskey=
+      "2">Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Commands to use in a VC
+      directory buffer.</td>
+    </tr>
+  </table>
 </body>
 </html>

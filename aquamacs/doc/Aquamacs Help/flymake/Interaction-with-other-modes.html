@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Interaction with other modes - GNU Flymake 0.3</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Flymake 0.3">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Flymake-Implementation.html#Flymake-Implementation" title="Flymake Implementation">
-<link rel="prev" href="Highlighting-erroneous-lines.html#Highlighting-erroneous-lines" title="Highlighting erroneous lines">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Interaction with other modes - GNU Flymake 0.3</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Flymake 0.3" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Flymake-Implementation.html#Flymake-Implementation" title=
+  "Flymake Implementation" />
+  <link rel="prev" href=
+  "Highlighting-erroneous-lines.html#Highlighting-erroneous-lines"
+  title="Highlighting erroneous lines" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -27,8 +37,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,41 +50,52 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Interaction-with-other-modes"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Highlighting-erroneous-lines.html#Highlighting-erroneous-lines">Highlighting erroneous lines</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Flymake-Implementation.html#Flymake-Implementation">Flymake Implementation</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Interaction-with-other-modes" id=
+    "Interaction-with-other-modes"></a>
 
-<h3 class="section">5.9 Interaction with other modes</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Highlighting-erroneous-lines.html#Highlighting-erroneous-lines">Highlighting
+    erroneous lines</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Flymake-Implementation.html#Flymake-Implementation">Flymake
+    Implementation</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Interaction-with-other-modes-29"></a><a name="index-Interaction-with-compile-mode-30"></a>
-The only mode flymake currently knows about is <code>compile</code>.
+  <h3 class="section">5.9 Interaction with other modes</h3>
 
-   <p>Flymake can be configured to not start syntax check if it thinks the
-compilation is in progress. The check is made by the
-<code>flymake-compilation-is-running</code>, which tests the
-<code>compilation-in-progress</code> variable. The reason why this might be
-useful is saving CPU time in case both syntax check and compilation
-are very CPU intensive. The original reason for adding this feature,
-though, was working around a locking problem with MS Visual C++ compiler.
+  <p><a name="index-Interaction-with-other-modes-29" id=
+  "index-Interaction-with-other-modes-29"></a><a name=
+  "index-Interaction-with-compile-mode-30" id=
+  "index-Interaction-with-compile-mode-30"></a> The only mode
+  flymake currently knows about is <code>compile</code>.</p>
 
-   <p>Flymake also provides an alternative command for starting compilation,
-<code>flymake-compile</code>:
+  <p>Flymake can be configured to not start syntax check if it
+  thinks the compilation is in progress. The check is made by the
+  <code>flymake-compilation-is-running</code>, which tests the
+  <code>compilation-in-progress</code> variable. The reason why
+  this might be useful is saving CPU time in case both syntax check
+  and compilation are very CPU intensive. The original reason for
+  adding this feature, though, was working around a locking problem
+  with MS Visual C++ compiler.</p>
 
-<pre class="lisp">     (defun flymake-compile ()
+  <p>Flymake also provides an alternative command for starting
+  compilation, <code>flymake-compile</code>:</p>
+  <pre class="lisp">
+     (defun flymake-compile ()
        "Kill all flymake syntax checks then start compilation."
        (interactive)
        (flymake-stop-all-syntax-checks)
        (call-interactively 'compile))
 </pre>
-   <p>It just kills all the active syntax check processes before calling
-<code>compile</code>.
 
-   </body></html>
-
+  <p>It just kills all the active syntax check processes before
+  calling <code>compile</code>.</p>
+</body>
+</html>

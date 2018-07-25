@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents SES: the Simple Emacs Spreadsheet.
 
 Copyright (C) 2002-2016 Free Software Foundation, Inc.
@@ -14,96 +16,136 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>SES: Simple Emacs Spreadsheet: Buffer-local variables in spreadsheets</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="SES: Simple Emacs Spreadsheet: Buffer-local variables in spreadsheets">
-<meta name="keywords" content="SES: Simple Emacs Spreadsheet: Buffer-local variables in spreadsheets">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="For-Gurus.html#For-Gurus" rel="up" title="For Gurus">
-<link href="Uses-of-defadvice-in-SES.html#Uses-of-defadvice-in-SES" rel="next" title="Uses of defadvice in SES">
-<link href="The-data-area.html#The-data-area" rel="prev" title="The data area">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>SES: Simple Emacs Spreadsheet: Buffer-local variables in
+  spreadsheets</title>
+  <meta name="description" content=
+  "SES: Simple Emacs Spreadsheet: Buffer-local variables in spreadsheets" />
+  <meta name="keywords" content=
+  "SES: Simple Emacs Spreadsheet: Buffer-local variables in spreadsheets" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="For-Gurus.html#For-Gurus" rel="up" title=
+  "For Gurus" />
+  <link href=
+  "Uses-of-defadvice-in-SES.html#Uses-of-defadvice-in-SES" rel=
+  "next" title="Uses of defadvice in SES" />
+  <link href="The-data-area.html#The-data-area" rel="prev" title=
+  "The data area" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Buffer_002dlocal-variables-in-spreadsheets"></a>
-<div class="header">
-<p>
-Next: <a href="Uses-of-defadvice-in-SES.html#Uses-of-defadvice-in-SES" accesskey="n" rel="next">Uses of defadvice in <acronym>SES</acronym></a>, Previous: <a href="The-data-area.html#The-data-area" accesskey="p" rel="prev">The data area</a>, Up: <a href="For-Gurus.html#For-Gurus" accesskey="u" rel="up">For Gurus</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Buffer_002dlocal-variables-in-spreadsheets-1"></a>
-<h3 class="section">5.4 Buffer-local variables in spreadsheets</h3>
-<a name="index-buffer_002dlocal-variables"></a>
-<a name="index-variables_002c-buffer_002dlocal"></a>
+<body lang="en" xml:lang="en">
+  <a name="Buffer_002dlocal-variables-in-spreadsheets" id=
+  "Buffer_002dlocal-variables-in-spreadsheets"></a>
 
-<p>You can add additional local variables to the list at the bottom of
-the data area, such as hidden constants you want to refer to in your
-formulas.
-</p>
-<p>You can override the variable <code>ses--symbolic-formulas</code> to be a list of
-symbols (as parenthesized strings) to show as completions for the <kbd>'</kbd>
-command.  This initial completions list is used instead of the actual
-set of symbols-as-formulas in the spreadsheet.
-</p>
-<p>For an example of this, see file <samp>etc/ses-example.ses</samp>.
-</p>
-<p>If (for some reason) you want your formulas or printers to save data
-into variables, you must declare these variables as buffer-locals in
-order to avoid a virus warning.
-</p>
-<p>You can define functions by making them values for the fake local
-variable <code>eval</code>.  Such functions can then be used in your
-formulas and printers, but usually each <code>eval</code> is presented to
-the user during file loading as a potential virus.  This can get
-annoying.
-</p>
-<p>You can define functions in your <samp>.emacs</samp> file.  Other people can
-still read the print area of your spreadsheet, but they won&rsquo;t be able
-to recalculate or reprint anything that depends on your functions.  To
-avoid virus warnings, each function used in a formula needs
-</p><div class="lisp">
-<pre class="lisp">(put 'your-function-name 'safe-function t)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Uses-of-defadvice-in-SES.html#Uses-of-defadvice-in-SES"
+    accesskey="n" rel="next">Uses of defadvice in
+    <acronym>SES</acronym></a>, Previous: <a href=
+    "The-data-area.html#The-data-area" accesskey="p" rel="prev">The
+    data area</a>, Up: <a href="For-Gurus.html#For-Gurus"
+    accesskey="u" rel="up">For Gurus</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Buffer_002dlocal-variables-in-spreadsheets-1" id=
+  "Buffer_002dlocal-variables-in-spreadsheets-1"></a>
 
+  <h3 class="section">5.4 Buffer-local variables in
+  spreadsheets</h3><a name="index-buffer_002dlocal-variables" id=
+  "index-buffer_002dlocal-variables"></a> <a name=
+  "index-variables_002c-buffer_002dlocal" id=
+  "index-variables_002c-buffer_002dlocal"></a>
 
+  <p>You can add additional local variables to the list at the
+  bottom of the data area, such as hidden constants you want to
+  refer to in your formulas.</p>
 
+  <p>You can override the variable
+  <code>ses--symbolic-formulas</code> to be a list of symbols (as
+  parenthesized strings) to show as completions for the
+  <kbd>'</kbd> command. This initial completions list is used
+  instead of the actual set of symbols-as-formulas in the
+  spreadsheet.</p>
 
+  <p>For an example of this, see file
+  <samp>etc/ses-example.ses</samp>.</p>
+
+  <p>If (for some reason) you want your formulas or printers to
+  save data into variables, you must declare these variables as
+  buffer-locals in order to avoid a virus warning.</p>
+
+  <p>You can define functions by making them values for the fake
+  local variable <code>eval</code>. Such functions can then be used
+  in your formulas and printers, but usually each <code>eval</code>
+  is presented to the user during file loading as a potential
+  virus. This can get annoying.</p>
+
+  <p>You can define functions in your <samp>.emacs</samp> file.
+  Other people can still read the print area of your spreadsheet,
+  but they won&rsquo;t be able to recalculate or reprint anything
+  that depends on your functions. To avoid virus warnings, each
+  function used in a formula needs</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(put 'your-function-name 'safe-function t)
+</pre>
+  </div>
 </body>
 </html>

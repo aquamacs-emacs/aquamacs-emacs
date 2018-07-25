@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,88 +19,137 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Predicates for Strings</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Predicates for Strings">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Predicates for Strings">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Strings-and-Characters.html#Strings-and-Characters" rel="up" title="Strings and Characters">
-<link href="Creating-Strings.html#Creating-Strings" rel="next" title="Creating Strings">
-<link href="String-Basics.html#String-Basics" rel="prev" title="String Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Predicates for
+  Strings</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Predicates for Strings" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Predicates for Strings" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Strings-and-Characters.html#Strings-and-Characters"
+  rel="up" title="Strings and Characters" />
+  <link href="Creating-Strings.html#Creating-Strings" rel="next"
+  title="Creating Strings" />
+  <link href="String-Basics.html#String-Basics" rel="prev" title=
+  "String Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Predicates-for-Strings" id="Predicates-for-Strings"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Creating-Strings.html#Creating-Strings"
+    accesskey="n" rel="next">Creating Strings</a>, Previous:
+    <a href="String-Basics.html#String-Basics" accesskey="p" rel=
+    "prev">String Basics</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Predicates-for-Strings-1" id=
+  "Predicates-for-Strings-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Predicates-for-Strings"></a>
-<div class="header">
-<p>
-Next: <a href="Creating-Strings.html#Creating-Strings" accesskey="n" rel="next">Creating Strings</a>, Previous: <a href="String-Basics.html#String-Basics" accesskey="p" rel="prev">String Basics</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Predicates-for-Strings-1"></a>
-<h3 class="section">4.2 Predicates for Strings</h3>
-<a name="index-predicates-for-strings"></a>
-<a name="index-string-predicates"></a>
+  <h3 class="section">4.2 Predicates for Strings</h3><a name=
+  "index-predicates-for-strings" id=
+  "index-predicates-for-strings"></a> <a name=
+  "index-string-predicates" id="index-string-predicates"></a>
 
-<p>For more information about general sequence and array predicates,
-see <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>, and <a href="Arrays.html#Arrays">Arrays</a>.
-</p>
-<dl>
-<dt><a name="index-stringp"></a>Function: <strong>stringp</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a string, <code>nil</code>
-otherwise.
-</p></dd></dl>
+  <p>For more information about general sequence and array
+  predicates, see <a href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences
+  Arrays Vectors</a>, and <a href=
+  "Arrays.html#Arrays">Arrays</a>.</p>
 
-<dl>
-<dt><a name="index-string_002dor_002dnull_002dp"></a>Function: <strong>string-or-null-p</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a string or
-<code>nil</code>.  It returns <code>nil</code> otherwise.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-stringp" id="index-stringp"></a>Function:
+    <strong>stringp</strong> <em>object</em></dt>
 
-<dl>
-<dt><a name="index-char_002dor_002dstring_002dp"></a>Function: <strong>char-or-string-p</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a string or a
-character (i.e., an integer), <code>nil</code> otherwise.
-</p></dd></dl>
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a string, <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-string_002dor_002dnull_002dp" id=
+    "index-string_002dor_002dnull_002dp"></a>Function:
+    <strong>string-or-null-p</strong> <em>object</em></dt>
 
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a string or <code>nil</code>. It returns <code>nil</code>
+      otherwise.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-char_002dor_002dstring_002dp" id=
+    "index-char_002dor_002dstring_002dp"></a>Function:
+    <strong>char-or-string-p</strong> <em>object</em></dt>
 
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a string or a character (i.e., an integer),
+      <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
 </body>
 </html>

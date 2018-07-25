@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Flowed text - Emacs MIME Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Emacs MIME Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Composing.html#Composing" title="Composing">
-<link rel="prev" href="Conversion.html#Conversion" title="Conversion">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Flowed text - Emacs MIME Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Emacs MIME Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Composing.html#Composing" title=
+  "Composing" />
+  <link rel="prev" href="Conversion.html#Conversion" title=
+  "Conversion" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the Emacs MIME interface functionality.
 
 Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
@@ -26,8 +35,10 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,45 +48,60 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Flowed-text"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Conversion.html#Conversion">Conversion</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Composing.html#Composing">Composing</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Flowed-text" id="Flowed-text"></a>
 
-<h3 class="section">2.7 Flowed text</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Conversion.html#Conversion">Conversion</a>, Up:&nbsp;<a rel=
+    "up" accesskey="u" href=
+    "Composing.html#Composing">Composing</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-format_003dflowed-78"></a>
-The Emacs <acronym>MIME</acronym> library will respect the <code>use-hard-newlines</code>
-variable (see <a href="../emacs/Hard-and-Soft-Newlines.html#Hard-and-Soft-Newlines">Hard and Soft Newlines</a>) when encoding a message, and the
-&ldquo;format=flowed&rdquo; Content-Type parameter when decoding a message.
+  <h3 class="section">2.7 Flowed text</h3>
 
-   <p>On encoding text, regardless of <code>use-hard-newlines</code>, lines
-terminated by soft newline characters are filled together and wrapped
-after the column decided by <code>fill-flowed-encode-column</code>. 
-Quotation marks (matching &lsquo;<samp><span class="samp">^&gt;* ?</span></samp>&rsquo;) are respected.  The variable
-controls how the text will look in a client that does not support
-flowed text, the default is to wrap after 66 characters.  If hard
-newline characters are not present in the buffer, no flow encoding
-occurs.
+  <p><a name="index-format_003dflowed-78" id=
+  "index-format_003dflowed-78"></a> The Emacs
+  <acronym>MIME</acronym> library will respect the
+  <code>use-hard-newlines</code> variable (see <a href=
+  "../emacs/Hard-and-Soft-Newlines.html#Hard-and-Soft-Newlines">Hard
+  and Soft Newlines</a>) when encoding a message, and the
+  &ldquo;format=flowed&rdquo; Content-Type parameter when decoding
+  a message.</p>
 
-   <p>You can customize the value of the <code>mml-enable-flowed</code> variable
-to enable or disable the flowed encoding usage when newline
-characteres are present in the buffer.
+  <p>On encoding text, regardless of
+  <code>use-hard-newlines</code>, lines terminated by soft newline
+  characters are filled together and wrapped after the column
+  decided by <code>fill-flowed-encode-column</code>. Quotation
+  marks (matching &lsquo;<samp><span class="samp">^&gt;*
+  ?</span></samp>&rsquo;) are respected. The variable controls how
+  the text will look in a client that does not support flowed text,
+  the default is to wrap after 66 characters. If hard newline
+  characters are not present in the buffer, no flow encoding
+  occurs.</p>
 
-   <p>On decoding flowed text, lines with soft newline characters are filled
-together and wrapped after the column decided by
-<code>fill-flowed-display-column</code>.  The default is to wrap after
-<code>fill-column</code>.
+  <p>You can customize the value of the
+  <code>mml-enable-flowed</code> variable to enable or disable the
+  flowed encoding usage when newline characteres are present in the
+  buffer.</p>
 
-     <dl>
-<dt><code>mm-fill-flowed</code><dd><a name="index-mm_002dfill_002dflowed-79"></a>If non-<code>nil</code> a format=flowed article will be displayed flowed. 
-</dl>
+  <p>On decoding flowed text, lines with soft newline characters
+  are filled together and wrapped after the column decided by
+  <code>fill-flowed-display-column</code>. The default is to wrap
+  after <code>fill-column</code>.</p>
 
-   </body></html>
+  <dl>
+    <dt><code>mm-fill-flowed</code></dt>
 
+    <dd><a name="index-mm_002dfill_002dflowed-79" id=
+    "index-mm_002dfill_002dflowed-79"></a>If non-<code>nil</code> a
+    format=flowed article will be displayed flowed.</dd>
+  </dl>
+</body>
+</html>

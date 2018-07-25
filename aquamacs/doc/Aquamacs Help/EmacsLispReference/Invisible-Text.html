@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,153 +19,224 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Invisible Text</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Invisible Text">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Invisible Text">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="Selective-Display.html#Selective-Display" rel="next" title="Selective Display">
-<link href="Delayed-Warnings.html#Delayed-Warnings" rel="prev" title="Delayed Warnings">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Invisible Text</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Invisible Text" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Invisible Text" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="Selective-Display.html#Selective-Display" rel="next"
+  title="Selective Display" />
+  <link href="Delayed-Warnings.html#Delayed-Warnings" rel="prev"
+  title="Delayed Warnings" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Invisible-Text" id="Invisible-Text"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Selective-Display.html#Selective-Display"
+    accesskey="n" rel="next">Selective Display</a>, Previous:
+    <a href="Warnings.html#Warnings" accesskey="p" rel=
+    "prev">Warnings</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Invisible-Text-1" id="Invisible-Text-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Invisible-Text"></a>
-<div class="header">
-<p>
-Next: <a href="Selective-Display.html#Selective-Display" accesskey="n" rel="next">Selective Display</a>, Previous: <a href="Warnings.html#Warnings" accesskey="p" rel="prev">Warnings</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Invisible-Text-1"></a>
-<h3 class="section">37.6 Invisible Text</h3>
+  <h3 class="section">37.6 Invisible Text</h3><a name=
+  "index-invisible-text" id="index-invisible-text"></a>
 
-<a name="index-invisible-text"></a>
-<p>You can make characters <em>invisible</em>, so that they do not appear on
-the screen, with the <code>invisible</code> property.  This can be either a
-text property (see <a href="Text-Properties.html#Text-Properties">Text Properties</a>) or an overlay property
-(see <a href="Overlays.html#Overlays">Overlays</a>).  Cursor motion also partly ignores these
-characters; if the command loop finds that point is inside a range of
-invisible text after a command, it relocates point to the other side
-of the text.
-</p>
-<p>In the simplest case, any non-<code>nil</code> <code>invisible</code> property makes
-a character invisible.  This is the default case&mdash;if you don&rsquo;t alter
-the default value of <code>buffer-invisibility-spec</code>, this is how the
-<code>invisible</code> property works.  You should normally use <code>t</code>
-as the value of the <code>invisible</code> property if you don&rsquo;t plan
-to set <code>buffer-invisibility-spec</code> yourself.
-</p>
-<p>More generally, you can use the variable <code>buffer-invisibility-spec</code>
-to control which values of the <code>invisible</code> property make text
-invisible.  This permits you to classify the text into different subsets
-in advance, by giving them different <code>invisible</code> values, and
-subsequently make various subsets visible or invisible by changing the
-value of <code>buffer-invisibility-spec</code>.
-</p>
-<p>Controlling visibility with <code>buffer-invisibility-spec</code> is
-especially useful in a program to display the list of entries in a
-database.  It permits the implementation of convenient filtering
-commands to view just a part of the entries in the database.  Setting
-this variable is very fast, much faster than scanning all the text in
-the buffer looking for properties to change.
-</p>
-<dl>
-<dt><a name="index-buffer_002dinvisibility_002dspec"></a>Variable: <strong>buffer-invisibility-spec</strong></dt>
-<dd><p>This variable specifies which kinds of <code>invisible</code> properties
-actually make a character invisible.  Setting this variable makes it
-buffer-local.
-</p>
-<dl compact="compact">
-<dt><code>t</code></dt>
-<dd><p>A character is invisible if its <code>invisible</code> property is
-non-<code>nil</code>.  This is the default.
-</p>
-</dd>
-<dt>a list</dt>
-<dd><p>Each element of the list specifies a criterion for invisibility; if a
-character&rsquo;s <code>invisible</code> property fits any one of these criteria,
-the character is invisible.  The list can have two kinds of elements:
-</p>
-<dl compact="compact">
-<dt><code><var>atom</var></code></dt>
-<dd><p>A character is invisible if its <code>invisible</code> property value is
-<var>atom</var> or if it is a list with <var>atom</var> as a member; comparison
-is done with <code>eq</code>.
-</p>
-</dd>
-<dt><code>(<var>atom</var> . t)</code></dt>
-<dd><p>A character is invisible if its <code>invisible</code> property value is
-<var>atom</var> or if it is a list with <var>atom</var> as a member; comparison
-is done with <code>eq</code>.  Moreover, a sequence of such characters
-displays as an ellipsis.
-</p></dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
+  <p>You can make characters <em>invisible</em>, so that they do
+  not appear on the screen, with the <code>invisible</code>
+  property. This can be either a text property (see <a href=
+  "Text-Properties.html#Text-Properties">Text Properties</a>) or an
+  overlay property (see <a href=
+  "Overlays.html#Overlays">Overlays</a>). Cursor motion also partly
+  ignores these characters; if the command loop finds that point is
+  inside a range of invisible text after a command, it relocates
+  point to the other side of the text.</p>
 
-<p>Two functions are specifically provided for adding elements to
-<code>buffer-invisibility-spec</code> and removing elements from it.
-</p>
-<dl>
-<dt><a name="index-add_002dto_002dinvisibility_002dspec"></a>Function: <strong>add-to-invisibility-spec</strong> <em>element</em></dt>
-<dd><p>This function adds the element <var>element</var> to
-<code>buffer-invisibility-spec</code>.  If <code>buffer-invisibility-spec</code>
-was <code>t</code>, it changes to a list, <code>(t)</code>, so that text whose
-<code>invisible</code> property is <code>t</code> remains invisible.
-</p></dd></dl>
+  <p>In the simplest case, any non-<code>nil</code>
+  <code>invisible</code> property makes a character invisible. This
+  is the default case&mdash;if you don&rsquo;t alter the default
+  value of <code>buffer-invisibility-spec</code>, this is how the
+  <code>invisible</code> property works. You should normally use
+  <code>t</code> as the value of the <code>invisible</code>
+  property if you don&rsquo;t plan to set
+  <code>buffer-invisibility-spec</code> yourself.</p>
 
-<dl>
-<dt><a name="index-remove_002dfrom_002dinvisibility_002dspec"></a>Function: <strong>remove-from-invisibility-spec</strong> <em>element</em></dt>
-<dd><p>This removes the element <var>element</var> from
-<code>buffer-invisibility-spec</code>.  This does nothing if <var>element</var>
-is not in the list.
-</p></dd></dl>
+  <p>More generally, you can use the variable
+  <code>buffer-invisibility-spec</code> to control which values of
+  the <code>invisible</code> property make text invisible. This
+  permits you to classify the text into different subsets in
+  advance, by giving them different <code>invisible</code> values,
+  and subsequently make various subsets visible or invisible by
+  changing the value of <code>buffer-invisibility-spec</code>.</p>
 
-<p>A convention for use of <code>buffer-invisibility-spec</code> is that a
-major mode should use the mode&rsquo;s own name as an element of
-<code>buffer-invisibility-spec</code> and as the value of the
-<code>invisible</code> property:
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">If you want to display an ellipsis:</span>
+  <p>Controlling visibility with
+  <code>buffer-invisibility-spec</code> is especially useful in a
+  program to display the list of entries in a database. It permits
+  the implementation of convenient filtering commands to view just
+  a part of the entries in the database. Setting this variable is
+  very fast, much faster than scanning all the text in the buffer
+  looking for properties to change.</p>
+
+  <dl>
+    <dt><a name="index-buffer_002dinvisibility_002dspec" id=
+    "index-buffer_002dinvisibility_002dspec"></a>Variable:
+    <strong>buffer-invisibility-spec</strong></dt>
+
+    <dd>
+      <p>This variable specifies which kinds of
+      <code>invisible</code> properties actually make a character
+      invisible. Setting this variable makes it buffer-local.</p>
+
+      <dl compact="compact">
+        <dt><code>t</code></dt>
+
+        <dd>
+          <p>A character is invisible if its <code>invisible</code>
+          property is non-<code>nil</code>. This is the
+          default.</p>
+        </dd>
+
+        <dt>a list</dt>
+
+        <dd>
+          <p>Each element of the list specifies a criterion for
+          invisibility; if a character&rsquo;s
+          <code>invisible</code> property fits any one of these
+          criteria, the character is invisible. The list can have
+          two kinds of elements:</p>
+
+          <dl compact="compact">
+            <dt><code><var>atom</var></code></dt>
+
+            <dd>
+              <p>A character is invisible if its
+              <code>invisible</code> property value is
+              <var>atom</var> or if it is a list with
+              <var>atom</var> as a member; comparison is done with
+              <code>eq</code>.</p>
+            </dd>
+
+            <dt><code>(<var>atom</var> . t)</code></dt>
+
+            <dd>
+              <p>A character is invisible if its
+              <code>invisible</code> property value is
+              <var>atom</var> or if it is a list with
+              <var>atom</var> as a member; comparison is done with
+              <code>eq</code>. Moreover, a sequence of such
+              characters displays as an ellipsis.</p>
+            </dd>
+          </dl>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+
+  <p>Two functions are specifically provided for adding elements to
+  <code>buffer-invisibility-spec</code> and removing elements from
+  it.</p>
+
+  <dl>
+    <dt><a name="index-add_002dto_002dinvisibility_002dspec" id=
+    "index-add_002dto_002dinvisibility_002dspec"></a>Function:
+    <strong>add-to-invisibility-spec</strong> <em>element</em></dt>
+
+    <dd>
+      <p>This function adds the element <var>element</var> to
+      <code>buffer-invisibility-spec</code>. If
+      <code>buffer-invisibility-spec</code> was <code>t</code>, it
+      changes to a list, <code>(t)</code>, so that text whose
+      <code>invisible</code> property is <code>t</code> remains
+      invisible.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-remove_002dfrom_002dinvisibility_002dspec"
+    id=
+    "index-remove_002dfrom_002dinvisibility_002dspec"></a>Function:
+    <strong>remove-from-invisibility-spec</strong>
+    <em>element</em></dt>
+
+    <dd>
+      <p>This removes the element <var>element</var> from
+      <code>buffer-invisibility-spec</code>. This does nothing if
+      <var>element</var> is not in the list.</p>
+    </dd>
+  </dl>
+
+  <p>A convention for use of <code>buffer-invisibility-spec</code>
+  is that a major mode should use the mode&rsquo;s own name as an
+  element of <code>buffer-invisibility-spec</code> and as the value
+  of the <code>invisible</code> property:</p>
+
+  <div class="example">
+    <pre class="example">
+;; <span class="roman">If you want to display an ellipsis:</span>
 (add-to-invisibility-spec '(my-symbol . t))
 ;; <span class="roman">If you don&rsquo;t want ellipsis:</span>
 (add-to-invisibility-spec 'my-symbol)
@@ -175,75 +248,95 @@ major mode should use the mode&rsquo;s own name as an element of
 (remove-from-invisibility-spec '(my-symbol . t))
 ;; <span class="roman">Or respectively:</span>
 (remove-from-invisibility-spec 'my-symbol)
-</pre></div>
+</pre>
+  </div>
 
-<p>You can check for invisibility using the following function:
-</p>
-<dl>
-<dt><a name="index-invisible_002dp"></a>Function: <strong>invisible-p</strong> <em>pos-or-prop</em></dt>
-<dd><p>If <var>pos-or-prop</var> is a marker or number, this function returns a
-non-<code>nil</code> value if the text at that position is invisible.
-</p>
-<p>If <var>pos-or-prop</var> is any other kind of Lisp object, that is taken
-to mean a possible value of the <code>invisible</code> text or overlay
-property.  In that case, this function returns a non-<code>nil</code> value
-if that value would cause text to become invisible, based on the
-current value of <code>buffer-invisibility-spec</code>.
-</p></dd></dl>
+  <p>You can check for invisibility using the following
+  function:</p>
 
-<a name="index-line_002dmove_002dignore_002dinvisible"></a>
-<p>Ordinarily, functions that operate on text or move point do not care
-whether the text is invisible, they process invisible characters and
-visible characters alike.  The user-level line motion commands,
-such as <code>next-line</code>, <code>previous-line</code>, ignore invisible
-newlines if <code>line-move-ignore-invisible</code> is non-<code>nil</code> (the
-default), i.e., behave like these invisible newlines didn&rsquo;t exist in
-the buffer, but only because they are explicitly programmed to do so.
-</p>
-<p>If a command ends with point inside or at the boundary of
-invisible text, the main editing loop relocates point to one of the
-two ends of the invisible text.  Emacs chooses the direction of
-relocation so that it is the same as the overall movement direction of
-the command; if in doubt, it prefers a position where an inserted char
-would not inherit the <code>invisible</code> property.  Additionally, if the
-text is not replaced by an ellipsis and the command only moved within
-the invisible text, then point is moved one extra character so as to
-try and reflect the command&rsquo;s movement by a visible movement of the
-cursor.
-</p>
-<p>Thus, if the command moved point back to an invisible range (with the usual
-stickiness), Emacs moves point back to the beginning of that range.  If the
-command moved point forward into an invisible range, Emacs moves point forward
-to the first visible character that follows the invisible text and then forward
-one more character.
-</p>
-<p>These <em>adjustments</em> of point that ended up in the middle of
-invisible text can be disabled by setting <code>disable-point-adjustment</code>
-to a non-<code>nil</code> value.  See <a href="Adjusting-Point.html#Adjusting-Point">Adjusting Point</a>.
-</p>
-<p>Incremental search can make invisible overlays visible temporarily
-and/or permanently when a match includes invisible text.  To enable
-this, the overlay should have a non-<code>nil</code>
-<code>isearch-open-invisible</code> property.  The property value should be a
-function to be called with the overlay as an argument.  This function
-should make the overlay visible permanently; it is used when the match
-overlaps the overlay on exit from the search.
-</p>
-<p>During the search, such overlays are made temporarily visible by
-temporarily modifying their invisible and intangible properties.  If you
-want this to be done differently for a certain overlay, give it an
-<code>isearch-open-invisible-temporary</code> property which is a function.
-The function is called with two arguments: the first is the overlay, and
-the second is <code>nil</code> to make the overlay visible, or <code>t</code> to
-make it invisible again.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Selective-Display.html#Selective-Display" accesskey="n" rel="next">Selective Display</a>, Previous: <a href="Warnings.html#Warnings" accesskey="p" rel="prev">Warnings</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-invisible_002dp" id=
+    "index-invisible_002dp"></a>Function:
+    <strong>invisible-p</strong> <em>pos-or-prop</em></dt>
 
+    <dd>
+      <p>If <var>pos-or-prop</var> is a marker or number, this
+      function returns a non-<code>nil</code> value if the text at
+      that position is invisible.</p>
 
+      <p>If <var>pos-or-prop</var> is any other kind of Lisp
+      object, that is taken to mean a possible value of the
+      <code>invisible</code> text or overlay property. In that
+      case, this function returns a non-<code>nil</code> value if
+      that value would cause text to become invisible, based on the
+      current value of <code>buffer-invisibility-spec</code>.</p>
+    </dd>
+  </dl><a name="index-line_002dmove_002dignore_002dinvisible" id=
+  "index-line_002dmove_002dignore_002dinvisible"></a>
 
+  <p>Ordinarily, functions that operate on text or move point do
+  not care whether the text is invisible, they process invisible
+  characters and visible characters alike. The user-level line
+  motion commands, such as <code>next-line</code>,
+  <code>previous-line</code>, ignore invisible newlines if
+  <code>line-move-ignore-invisible</code> is non-<code>nil</code>
+  (the default), i.e., behave like these invisible newlines
+  didn&rsquo;t exist in the buffer, but only because they are
+  explicitly programmed to do so.</p>
+
+  <p>If a command ends with point inside or at the boundary of
+  invisible text, the main editing loop relocates point to one of
+  the two ends of the invisible text. Emacs chooses the direction
+  of relocation so that it is the same as the overall movement
+  direction of the command; if in doubt, it prefers a position
+  where an inserted char would not inherit the
+  <code>invisible</code> property. Additionally, if the text is not
+  replaced by an ellipsis and the command only moved within the
+  invisible text, then point is moved one extra character so as to
+  try and reflect the command&rsquo;s movement by a visible
+  movement of the cursor.</p>
+
+  <p>Thus, if the command moved point back to an invisible range
+  (with the usual stickiness), Emacs moves point back to the
+  beginning of that range. If the command moved point forward into
+  an invisible range, Emacs moves point forward to the first
+  visible character that follows the invisible text and then
+  forward one more character.</p>
+
+  <p>These <em>adjustments</em> of point that ended up in the
+  middle of invisible text can be disabled by setting
+  <code>disable-point-adjustment</code> to a non-<code>nil</code>
+  value. See <a href=
+  "Adjusting-Point.html#Adjusting-Point">Adjusting Point</a>.</p>
+
+  <p>Incremental search can make invisible overlays visible
+  temporarily and/or permanently when a match includes invisible
+  text. To enable this, the overlay should have a
+  non-<code>nil</code> <code>isearch-open-invisible</code>
+  property. The property value should be a function to be called
+  with the overlay as an argument. This function should make the
+  overlay visible permanently; it is used when the match overlaps
+  the overlay on exit from the search.</p>
+
+  <p>During the search, such overlays are made temporarily visible
+  by temporarily modifying their invisible and intangible
+  properties. If you want this to be done differently for a certain
+  overlay, give it an <code>isearch-open-invisible-temporary</code>
+  property which is a function. The function is called with two
+  arguments: the first is the overlay, and the second is
+  <code>nil</code> to make the overlay visible, or <code>t</code>
+  to make it invisible again.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Selective-Display.html#Selective-Display"
+    accesskey="n" rel="next">Selective Display</a>, Previous:
+    <a href="Warnings.html#Warnings" accesskey="p" rel=
+    "prev">Warnings</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

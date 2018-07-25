@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,104 +14,133 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Fetching Mail</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Fetching Mail">
-<meta name="keywords" content="Gnus Manual: Fetching Mail">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mail-Sources.html#Mail-Sources" rel="up" title="Mail Sources">
-<link href="Mail-Back-End-Variables.html#Mail-Back-End-Variables" rel="next" title="Mail Back End Variables">
-<link href="Mail-Source-Customization.html#Mail-Source-Customization" rel="prev" title="Mail Source Customization">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Fetching Mail</title>
+  <meta name="description" content="Gnus Manual: Fetching Mail" />
+  <meta name="keywords" content="Gnus Manual: Fetching Mail" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mail-Sources.html#Mail-Sources" rel="up" title=
+  "Mail Sources" />
+  <link href="Mail-Back-End-Variables.html#Mail-Back-End-Variables"
+  rel="next" title="Mail Back End Variables" />
+  <link href=
+  "Mail-Source-Customization.html#Mail-Source-Customization" rel=
+  "prev" title="Mail Source Customization" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Fetching-Mail"></a>
-<div class="header">
-<p>
-Previous: <a href="Mail-Source-Customization.html#Mail-Source-Customization" accesskey="p" rel="prev">Mail Source Customization</a>, Up: <a href="Mail-Sources.html#Mail-Sources" accesskey="u" rel="up">Mail Sources</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Fetching-Mail-1"></a>
-<h4 class="subsubsection">6.4.4.4 Fetching Mail</h4>
+<body lang="en" xml:lang="en">
+  <a name="Fetching-Mail" id="Fetching-Mail"></a>
 
-<a name="index-mail_002dsources"></a>
-<p>The way to actually tell Gnus where to get new mail from is to set
-<code>mail-sources</code> to a list of mail source specifiers
-(see <a href="Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail Source Specifiers</a>).
-</p>
-<p>If this variable is <code>nil</code>, the mail back ends will never attempt to
-fetch mail by themselves.
-</p>
-<p>If you want to fetch mail both from your local spool as well as a
-<acronym>POP</acronym> mail server, you&rsquo;d say something like:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq mail-sources
+  <div class="header">
+    <p>Previous: <a href=
+    "Mail-Source-Customization.html#Mail-Source-Customization"
+    accesskey="p" rel="prev">Mail Source Customization</a>, Up:
+    <a href="Mail-Sources.html#Mail-Sources" accesskey="u" rel=
+    "up">Mail Sources</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Fetching-Mail-1" id="Fetching-Mail-1"></a>
+
+  <h4 class="subsubsection">6.4.4.4 Fetching Mail</h4><a name=
+  "index-mail_002dsources" id="index-mail_002dsources"></a>
+
+  <p>The way to actually tell Gnus where to get new mail from is to
+  set <code>mail-sources</code> to a list of mail source specifiers
+  (see <a href=
+  "Mail-Source-Specifiers.html#Mail-Source-Specifiers">Mail Source
+  Specifiers</a>).</p>
+
+  <p>If this variable is <code>nil</code>, the mail back ends will
+  never attempt to fetch mail by themselves.</p>
+
+  <p>If you want to fetch mail both from your local spool as well
+  as a <acronym>POP</acronym> mail server, you&rsquo;d say
+  something like:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq mail-sources
       '((file)
-        (pop :server &quot;pop3.mail.server&quot;
-             :password &quot;secret&quot;)))
-</pre></div>
+        (pop :server "pop3.mail.server"
+             :password "secret")))
+</pre>
+  </div>
 
-<p>Or, if you don&rsquo;t want to use any of the keyword defaults:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq mail-sources
-      '((file :path &quot;/var/spool/mail/user-name&quot;)
-        (pop :server &quot;pop3.mail.server&quot;
-             :user &quot;user-name&quot;
-             :port &quot;pop3&quot;
-             :password &quot;secret&quot;)))
-</pre></div>
+  <p>Or, if you don&rsquo;t want to use any of the keyword
+  defaults:</p>
 
+  <div class="lisp">
+    <pre class="lisp">
+(setq mail-sources
+      '((file :path "/var/spool/mail/user-name")
+        (pop :server "pop3.mail.server"
+             :user "user-name"
+             :port "pop3"
+             :password "secret")))
+</pre>
+  </div>
 
-<p>When you use a mail back end, Gnus will slurp all your mail from your
-inbox and plonk it down in your home directory.  Gnus doesn&rsquo;t move any
-mail if you&rsquo;re not using a mail back end&mdash;you have to do a lot of magic
-invocations first.  At the time when you have finished drawing the
-pentagram, lightened the candles, and sacrificed the goat, you really
-shouldn&rsquo;t be too surprised when Gnus moves your mail.
-</p>
-
-
-
-
-
+  <p>When you use a mail back end, Gnus will slurp all your mail
+  from your inbox and plonk it down in your home directory. Gnus
+  doesn&rsquo;t move any mail if you&rsquo;re not using a mail back
+  end&mdash;you have to do a lot of magic invocations first. At the
+  time when you have finished drawing the pentagram, lightened the
+  candles, and sacrificed the goat, you really shouldn&rsquo;t be
+  too surprised when Gnus moves your mail.</p>
 </body>
 </html>

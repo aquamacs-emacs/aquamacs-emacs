@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,99 +19,145 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Property Lists</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Property Lists">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Property Lists">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lists.html#Lists" rel="up" title="Lists">
-<link href="Plists-and-Alists.html#Plists-and-Alists" rel="next" title="Plists and Alists">
-<link href="Association-Lists.html#Association-Lists" rel="prev" title="Association Lists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Property Lists</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Property Lists" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Property Lists" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lists.html#Lists" rel="up" title="Lists" />
+  <link href="Plists-and-Alists.html#Plists-and-Alists" rel="next"
+  title="Plists and Alists" />
+  <link href="Association-Lists.html#Association-Lists" rel="prev"
+  title="Association Lists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Property-Lists" id="Property-Lists"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Association-Lists.html#Association-Lists"
+    accesskey="p" rel="prev">Association Lists</a>, Up: <a href=
+    "Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Property-Lists-1" id="Property-Lists-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Property-Lists"></a>
-<div class="header">
-<p>
-Previous: <a href="Association-Lists.html#Association-Lists" accesskey="p" rel="prev">Association Lists</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Property-Lists-1"></a>
-<h3 class="section">5.9 Property Lists</h3>
-<a name="index-property-list"></a>
-<a name="index-plist"></a>
+  <h3 class="section">5.9 Property Lists</h3><a name=
+  "index-property-list" id="index-property-list"></a> <a name=
+  "index-plist" id="index-plist"></a>
 
-<p>A <em>property list</em> (<em>plist</em> for short) is a list of paired
-elements.  Each of the pairs associates a property name (usually a
-symbol) with a property or value.  Here is an example of a property
-list:
-</p>
-<div class="example">
-<pre class="example">(pine cones numbers (1 2 3) color &quot;blue&quot;)
-</pre></div>
+  <p>A <em>property list</em> (<em>plist</em> for short) is a list
+  of paired elements. Each of the pairs associates a property name
+  (usually a symbol) with a property or value. Here is an example
+  of a property list:</p>
 
-<p>This property list associates <code>pine</code> with <code>cones</code>,
-<code>numbers</code> with <code>(1 2 3)</code>, and <code>color</code> with
-<code>&quot;blue&quot;</code>.  The property names and values can be any Lisp objects,
-but the names are usually symbols (as they are in this example).
-</p>
-<p>Property lists are used in several contexts.  For instance, the
-function <code>put-text-property</code> takes an argument which is a
-property list, specifying text properties and associated values which
-are to be applied to text in a string or buffer.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.
-</p>
-<p>Another prominent use of property lists is for storing symbol
-properties.  Every symbol possesses a list of properties, used to
-record miscellaneous information about the symbol; these properties
-are stored in the form of a property list.  See <a href="Symbol-Properties.html#Symbol-Properties">Symbol Properties</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Plists-and-Alists.html#Plists-and-Alists" accesskey="1">Plists and Alists</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Comparison of the advantages of property
-                                  lists and association lists.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Plist-Access.html#Plist-Access" accesskey="2">Plist Access</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Accessing property lists stored elsewhere.
-</td></tr>
-</table>
+  <div class="example">
+    <pre class="example">
+(pine cones numbers (1 2 3) color "blue")
+</pre>
+  </div>
 
+  <p>This property list associates <code>pine</code> with
+  <code>cones</code>, <code>numbers</code> with <code>(1 2
+  3)</code>, and <code>color</code> with <code>"blue"</code>. The
+  property names and values can be any Lisp objects, but the names
+  are usually symbols (as they are in this example).</p>
 
+  <p>Property lists are used in several contexts. For instance, the
+  function <code>put-text-property</code> takes an argument which
+  is a property list, specifying text properties and associated
+  values which are to be applied to text in a string or buffer. See
+  <a href="Text-Properties.html#Text-Properties">Text
+  Properties</a>.</p>
 
+  <p>Another prominent use of property lists is for storing symbol
+  properties. Every symbol possesses a list of properties, used to
+  record miscellaneous information about the symbol; these
+  properties are stored in the form of a property list. See
+  <a href="Symbol-Properties.html#Symbol-Properties">Symbol
+  Properties</a>.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Plists-and-Alists.html#Plists-and-Alists" accesskey=
+      "1">Plists and Alists</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Comparison of the advantages of
+      property lists and association lists.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Plist-Access.html#Plist-Access" accesskey="2">Plist
+      Access</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Accessing property lists stored
+      elsewhere.</td>
+    </tr>
+  </table>
 </body>
 </html>

@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Identifier completion - Ada Mode</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Ada Mode">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Moving-Through-Ada-Code.html#Moving-Through-Ada-Code" title="Moving Through Ada Code">
-<link rel="next" href="Automatic-Smart-Indentation.html#Automatic-Smart-Indentation" title="Automatic Smart Indentation">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Identifier completion - Ada Mode</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Ada Mode" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Moving-Through-Ada-Code.html#Moving-Through-Ada-Code" title=
+  "Moving Through Ada Code" />
+  <link rel="next" href=
+  "Automatic-Smart-Indentation.html#Automatic-Smart-Indentation"
+  title="Automatic Smart Indentation" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -24,8 +34,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,56 +47,77 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Identifier-completion"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Automatic-Smart-Indentation.html#Automatic-Smart-Indentation">Automatic Smart Indentation</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Moving-Through-Ada-Code.html#Moving-Through-Ada-Code">Moving Through Ada Code</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Identifier-completion" id="Identifier-completion"></a>
 
-<h2 class="chapter">8 Identifier completion</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Automatic-Smart-Indentation.html#Automatic-Smart-Indentation">Automatic
+    Smart Indentation</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Moving-Through-Ada-Code.html#Moving-Through-Ada-Code">Moving
+    Through Ada Code</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>Emacs and Ada mode provide two general ways for the completion of
-identifiers. This is an easy way to type faster: you just have to type
-the first few letters of an identifiers, and then loop through all the
-possible completions.
+  <h2 class="chapter">8 Identifier completion</h2>
 
-   <p>The first method is general for Emacs. It works by parsing all open
-files for possible completions.
+  <p>Emacs and Ada mode provide two general ways for the completion
+  of identifiers. This is an easy way to type faster: you just have
+  to type the first few letters of an identifiers, and then loop
+  through all the possible completions.</p>
 
-   <p>For instance, if the words &lsquo;<samp><span class="samp">my_identifier</span></samp>&rsquo;, &lsquo;<samp><span class="samp">my_subprogram</span></samp>&rsquo;
-are the only words starting with &lsquo;<samp><span class="samp">my</span></samp>&rsquo; in any of the opened files,
-then you will have this scenario:
+  <p>The first method is general for Emacs. It works by parsing all
+  open files for possible completions.</p>
 
-<pre class="example">     You type:  my<kbd>M-/</kbd>
-     Emacs inserts:  &lsquo;<samp><span class="samp">my_identifier</span></samp>&rsquo;
+  <p>For instance, if the words &lsquo;<samp><span class=
+  "samp">my_identifier</span></samp>&rsquo;,
+  &lsquo;<samp><span class=
+  "samp">my_subprogram</span></samp>&rsquo; are the only words
+  starting with &lsquo;<samp><span class=
+  "samp">my</span></samp>&rsquo; in any of the opened files, then
+  you will have this scenario:</p>
+  <pre class="example">
+     You type:  my<kbd>M-/</kbd>
+     Emacs inserts:  &lsquo;<samp><span class=
+"samp">my_identifier</span></samp>&rsquo;
      If you press <kbd>M-/</kbd> once again, Emacs replaces &lsquo;<samp><span class="samp">my_identifier</span></samp>&rsquo; with
-     &lsquo;<samp><span class="samp">my_subprogram</span></samp>&rsquo;.
+     &lsquo;<samp><span class=
+"samp">my_subprogram</span></samp>&rsquo;.
      Pressing <kbd>M-/</kbd> once more will bring you back to &lsquo;<samp><span class="samp">my_identifier</span></samp>&rsquo;.
 </pre>
-   <p>This is a very fast way to do completion, and the casing of words will
-also be respected.
 
-   <p>The second method (<kbd>C-&lt;TAB&gt;</kbd>) is specific to Ada mode and the GNAT
-compiler. Emacs will search the cross-information for possible
-completions.
+  <p>This is a very fast way to do completion, and the casing of
+  words will also be respected.</p>
 
-   <p>The main advantage is that this completion is more accurate: only
-existing identifier will be suggested.
+  <p>The second method (<kbd>C-&lt;TAB&gt;</kbd>) is specific to
+  Ada mode and the GNAT compiler. Emacs will search the
+  cross-information for possible completions.</p>
 
-   <p>On the other hand, this completion is a little bit slower and requires
-that you have compiled your file at least once since you created that
-identifier.
+  <p>The main advantage is that this completion is more accurate:
+  only existing identifier will be suggested.</p>
 
-     <dl>
-<dt><kbd>C-&lt;TAB&gt;</kbd><dd><a name="index-ada_002dcomplete_002didentifier-9"></a>Complete current identifier using cross-reference information. 
-<br><dt><kbd>M-/</kbd><dd>Complete identifier using buffer information (not Ada-specific). 
-</dl>
+  <p>On the other hand, this completion is a little bit slower and
+  requires that you have compiled your file at least once since you
+  created that identifier.</p>
 
-   </body></html>
+  <dl>
+    <dt><kbd>C-&lt;TAB&gt;</kbd></dt>
 
+    <dd><a name="index-ada_002dcomplete_002didentifier-9" id=
+    "index-ada_002dcomplete_002didentifier-9"></a>Complete current
+    identifier using cross-reference information.<br /></dd>
+
+    <dt><kbd>M-/</kbd></dt>
+
+    <dd>Complete identifier using buffer information (not
+    Ada-specific).</dd>
+  </dl>
+</body>
+</html>

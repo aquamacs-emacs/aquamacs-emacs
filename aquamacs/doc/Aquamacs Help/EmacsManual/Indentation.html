@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,126 +20,204 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Indentation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Indentation">
-<meta name="keywords" content="GNU Emacs Manual: Indentation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Indentation-Commands.html#Indentation-Commands" rel="next" title="Indentation Commands">
-<link href="Choosing-Modes.html#Choosing-Modes" rel="prev" title="Choosing Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Indentation</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Indentation" />
+  <meta name="keywords" content="GNU Emacs Manual: Indentation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Indentation-Commands.html#Indentation-Commands" rel=
+  "next" title="Indentation Commands" />
+  <link href="Choosing-Modes.html#Choosing-Modes" rel="prev" title=
+  "Choosing Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Indentation" id="Indentation"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Text.html#Text" accesskey="n" rel=
+    "next">Text</a>, Previous: <a href="Modes.html#Modes"
+    accesskey="p" rel="prev">Modes</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Indentation-1" id="Indentation-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Indentation"></a>
-<div class="header">
-<p>
-Next: <a href="Text.html#Text" accesskey="n" rel="next">Text</a>, Previous: <a href="Modes.html#Modes" accesskey="p" rel="prev">Modes</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Indentation-1"></a>
-<h2 class="chapter">24 Indentation</h2>
-<a name="index-indentation"></a>
-<a name="index-tabs"></a>
-<a name="index-columns-_0028indentation_0029"></a>
+  <h2 class="chapter">24 Indentation</h2><a name=
+  "index-indentation" id="index-indentation"></a> <a name=
+  "index-tabs" id="index-tabs"></a> <a name=
+  "index-columns-_0028indentation_0029" id=
+  "index-columns-_0028indentation_0029"></a> <a name=
+  "index-whitespace-character" id="index-whitespace-character"></a>
 
-<a name="index-whitespace-character"></a>
-<p><em>Indentation</em> refers to inserting or adjusting <em>whitespace
-characters</em> (space and/or tab characters) at the beginning of a line
-of text.  This chapter documents indentation commands and options
-which are common to Text mode and related modes, as well as
-programming language modes.  See <a href="Program-Indent.html#Program-Indent">Program Indent</a>, for additional
-documentation about indenting in programming modes.
-</p>
-<a name="index-indent_002dfor_002dtab_002dcommand"></a>
-<a name="index-TAB-_0028indentation_0029"></a>
-<p>The simplest way to perform indentation is the <tt class="key">TAB</tt> key.  In
-most major modes, this runs the command <code>indent-for-tab-command</code>.
-(In C and related modes, <tt class="key">TAB</tt> runs the command
-<code>c-indent-line-or-region</code>, which behaves similarly).
-</p>
-<dl compact="compact">
-<dt><tt class="key">TAB</tt></dt>
-<dd><p>Insert whitespace, or indent the current line, in a mode-appropriate
-way (<code>indent-for-tab-command</code>).  If the region is active, indent
-all the lines within it.
-</p></dd>
-</dl>
+  <p><em>Indentation</em> refers to inserting or adjusting
+  <em>whitespace characters</em> (space and/or tab characters) at
+  the beginning of a line of text. This chapter documents
+  indentation commands and options which are common to Text mode
+  and related modes, as well as programming language modes. See
+  <a href="Program-Indent.html#Program-Indent">Program Indent</a>,
+  for additional documentation about indenting in programming
+  modes.</p><a name="index-indent_002dfor_002dtab_002dcommand" id=
+  "index-indent_002dfor_002dtab_002dcommand"></a> <a name=
+  "index-TAB-_0028indentation_0029" id=
+  "index-TAB-_0028indentation_0029"></a>
 
-<p>The exact behavior of <tt class="key">TAB</tt> depends on the major mode.  In Text
-mode and related major modes, <tt class="key">TAB</tt> normally inserts some
-combination of space and tab characters to advance point to the next
-tab stop (see <a href="Tab-Stops.html#Tab-Stops">Tab Stops</a>).  For this purpose, the position of the
-first non-whitespace character on the preceding line is treated as an
-additional tab stop, so you can use <tt class="key">TAB</tt> to align point with
-the preceding line.  If the region is active (see <a href="Using-Region.html#Using-Region">Using Region</a>),
-<tt class="key">TAB</tt> acts specially: it indents each line in the region so that
-its first non-whitespace character is aligned with the preceding line.
-</p>
-<p>In programming modes, <tt class="key">TAB</tt> indents the current line of code in
-a way that makes sense given the code in the preceding lines.  If the
-region is active, all the lines in the region are indented this way.
-If point was initially within the current line&rsquo;s indentation, it is
-repositioned to the first non-whitespace character on the line.
-</p>
-<p>If you just want to insert a tab character in the buffer, type
-<kbd>C-q <span class="key">TAB</span></kbd> (see <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Indentation-Commands.html#Indentation-Commands" accesskey="1">Indentation Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">More commands for performing indentation.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Tab-Stops.html#Tab-Stops" accesskey="2">Tab Stops</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Stop points for indentation in Text modes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Just-Spaces.html#Just-Spaces" accesskey="3">Just Spaces</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using only space characters for indentation.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Indent-Convenience.html#Indent-Convenience" accesskey="4">Indent Convenience</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Optional indentation features.
-</td></tr>
-</table>
+  <p>The simplest way to perform indentation is the <tt class=
+  "key">TAB</tt> key. In most major modes, this runs the command
+  <code>indent-for-tab-command</code>. (In C and related modes,
+  <tt class="key">TAB</tt> runs the command
+  <code>c-indent-line-or-region</code>, which behaves
+  similarly).</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Text.html#Text" accesskey="n" rel="next">Text</a>, Previous: <a href="Modes.html#Modes" accesskey="p" rel="prev">Modes</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><tt class="key">TAB</tt></dt>
 
+    <dd>
+      <p>Insert whitespace, or indent the current line, in a
+      mode-appropriate way (<code>indent-for-tab-command</code>).
+      If the region is active, indent all the lines within it.</p>
+    </dd>
+  </dl>
 
+  <p>The exact behavior of <tt class="key">TAB</tt> depends on the
+  major mode. In Text mode and related major modes, <tt class=
+  "key">TAB</tt> normally inserts some combination of space and tab
+  characters to advance point to the next tab stop (see <a href=
+  "Tab-Stops.html#Tab-Stops">Tab Stops</a>). For this purpose, the
+  position of the first non-whitespace character on the preceding
+  line is treated as an additional tab stop, so you can use
+  <tt class="key">TAB</tt> to align point with the preceding line.
+  If the region is active (see <a href=
+  "Using-Region.html#Using-Region">Using Region</a>), <tt class=
+  "key">TAB</tt> acts specially: it indents each line in the region
+  so that its first non-whitespace character is aligned with the
+  preceding line.</p>
 
+  <p>In programming modes, <tt class="key">TAB</tt> indents the
+  current line of code in a way that makes sense given the code in
+  the preceding lines. If the region is active, all the lines in
+  the region are indented this way. If point was initially within
+  the current line&rsquo;s indentation, it is repositioned to the
+  first non-whitespace character on the line.</p>
+
+  <p>If you just want to insert a tab character in the buffer, type
+  <kbd>C-q <span class="key">TAB</span></kbd> (see <a href=
+  "Inserting-Text.html#Inserting-Text">Inserting Text</a>).</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Indentation-Commands.html#Indentation-Commands" accesskey=
+      "1">Indentation Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">More commands for performing
+      indentation.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Tab-Stops.html#Tab-Stops" accesskey="2">Tab Stops</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Stop points for indentation in
+      Text modes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Just-Spaces.html#Just-Spaces" accesskey="3">Just
+      Spaces</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Using only space characters for
+      indentation.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Indent-Convenience.html#Indent-Convenience" accesskey=
+      "4">Indent Convenience</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Optional indentation
+      features.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Text.html#Text" accesskey="n" rel=
+    "next">Text</a>, Previous: <a href="Modes.html#Modes"
+    accesskey="p" rel="prev">Modes</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

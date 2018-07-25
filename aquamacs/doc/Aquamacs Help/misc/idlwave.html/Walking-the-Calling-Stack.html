@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,81 +20,116 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Walking the Calling Stack</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Walking the Calling Stack">
-<meta name="keywords" content="IDLWAVE User Manual: Walking the Calling Stack">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" rel="up" title="Debugging IDL Programs">
-<link href="Electric-Debug-Mode.html#Electric-Debug-Mode" rel="next" title="Electric Debug Mode">
-<link href="Compiling-Programs.html#Compiling-Programs" rel="prev" title="Compiling Programs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Walking the Calling Stack</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Walking the Calling Stack" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Walking the Calling Stack" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugging-IDL-Programs.html#Debugging-IDL-Programs"
+  rel="up" title="Debugging IDL Programs" />
+  <link href="Electric-Debug-Mode.html#Electric-Debug-Mode" rel=
+  "next" title="Electric Debug Mode" />
+  <link href="Compiling-Programs.html#Compiling-Programs" rel=
+  "prev" title="Compiling Programs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Walking-the-Calling-Stack"></a>
-<div class="header">
-<p>
-Next: <a href="Electric-Debug-Mode.html#Electric-Debug-Mode" accesskey="n" rel="next">Electric Debug Mode</a>, Previous: <a href="Compiling-Programs.html#Compiling-Programs" accesskey="p" rel="prev">Compiling Programs</a>, Up: <a href="Debugging-IDL-Programs.html#Debugging-IDL-Programs" accesskey="u" rel="up">Debugging IDL Programs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Walking-the-Calling-Stack-1"></a>
-<h4 class="subsection">5.4.5 Walking the Calling Stack</h4>
-<a name="index-Calling-stack_002c-walking"></a>
+<body lang="en" xml:lang="en">
+  <a name="Walking-the-Calling-Stack" id=
+  "Walking-the-Calling-Stack"></a>
 
-<p>While debugging a program, it can be very useful to check the context in
-which the current routine was called, for instance to help understand
-the value of the arguments passed.  To do so conveniently you need to
-examine the calling stack.  If execution is stopped somewhere deep in a
-program, you can use the commands <kbd>C-c C-d C-<span class="key">UP</span></kbd>
-(<code>idlwave-shell-stack-up</code>) and <kbd>C-c C-d C-<span class="key">DOWN</span></kbd>
-(<code>idlwave-shell-stack-down</code>), or the corresponding toolbar buttons,
-to move up or down through the calling stack.  The mode line of the
-shell window will indicate the position within the stack with a label
-like &lsquo;<samp>[-3:MYPRO]</samp>&rsquo;.  The line of IDL code at that stack position
-will be highlighted.  If you continue execution, IDLWAVE will
-automatically return to the current level. See <a href="Examining-Variables.html#Examining-Variables">Examining Variables</a>,
-for information how to examine the value of variables and expressions on
-higher calling stack levels.
-</p>
-<A NAME="EDEBUG"></A>
+  <div class="header">
+    <p>Next: <a href="Electric-Debug-Mode.html#Electric-Debug-Mode"
+    accesskey="n" rel="next">Electric Debug Mode</a>, Previous:
+    <a href="Compiling-Programs.html#Compiling-Programs" accesskey=
+    "p" rel="prev">Compiling Programs</a>, Up: <a href=
+    "Debugging-IDL-Programs.html#Debugging-IDL-Programs" accesskey=
+    "u" rel="up">Debugging IDL Programs</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Walking-the-Calling-Stack-1" id=
+  "Walking-the-Calling-Stack-1"></a>
 
+  <h4 class="subsection">5.4.5 Walking the Calling
+  Stack</h4><a name="index-Calling-stack_002c-walking" id=
+  "index-Calling-stack_002c-walking"></a>
 
+  <p>While debugging a program, it can be very useful to check the
+  context in which the current routine was called, for instance to
+  help understand the value of the arguments passed. To do so
+  conveniently you need to examine the calling stack. If execution
+  is stopped somewhere deep in a program, you can use the commands
+  <kbd>C-c C-d C-<span class="key">UP</span></kbd>
+  (<code>idlwave-shell-stack-up</code>) and <kbd>C-c C-d
+  C-<span class="key">DOWN</span></kbd>
+  (<code>idlwave-shell-stack-down</code>), or the corresponding
+  toolbar buttons, to move up or down through the calling stack.
+  The mode line of the shell window will indicate the position
+  within the stack with a label like
+  &lsquo;<samp>[-3:MYPRO]</samp>&rsquo;. The line of IDL code at
+  that stack position will be highlighted. If you continue
+  execution, IDLWAVE will automatically return to the current
+  level. See <a href=
+  "Examining-Variables.html#Examining-Variables">Examining
+  Variables</a>, for information how to examine the value of
+  variables and expressions on higher calling stack
+  levels.</p><a name="EDEBUG" id="EDEBUG"></a>
 </body>
 </html>

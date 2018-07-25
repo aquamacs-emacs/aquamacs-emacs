@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,86 +18,121 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Bit Counting Example</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Bit Counting Example">
-<meta name="keywords" content="GNU Emacs Calc Manual: Bit Counting Example">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Example-Definitions.html#Example-Definitions" rel="up" title="Example Definitions">
-<link href="Sine-Example.html#Sine-Example" rel="next" title="Sine Example">
-<link href="Example-Definitions.html#Example-Definitions" rel="prev" title="Example Definitions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Bit Counting Example</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Bit Counting Example" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Bit Counting Example" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Example-Definitions.html#Example-Definitions" rel=
+  "up" title="Example Definitions" />
+  <link href="Sine-Example.html#Sine-Example" rel="next" title=
+  "Sine Example" />
+  <link href="Example-Definitions.html#Example-Definitions" rel=
+  "prev" title="Example Definitions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Bit-Counting-Example"></a>
-<div class="header">
-<p>
-Next: <a href="Sine-Example.html#Sine-Example" accesskey="n" rel="next">Sine Example</a>, Previous: <a href="Example-Definitions.html#Example-Definitions" accesskey="p" rel="prev">Example Definitions</a>, Up: <a href="Example-Definitions.html#Example-Definitions" accesskey="u" rel="up">Example Definitions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Bit_002dCounting"></a>
-<h4 class="subsubsection">17.5.5.1 Bit-Counting</h4>
+<body lang="en" xml:lang="en">
+  <a name="Bit-Counting-Example" id="Bit-Counting-Example"></a>
 
-<a name="index-bcount"></a>
-<p>Calc does not include a built-in function for counting the number of
-&ldquo;one&rdquo; bits in a binary integer.  It&rsquo;s easy to invent one using <kbd>b u</kbd>
-to convert the integer to a set, and <kbd>V #</kbd> to count the elements of
-that set; let&rsquo;s write a function that counts the bits without having to
-create an intermediate set.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defmath bcount ((natnum n))
-  (interactive 1 &quot;bcnt&quot;)
+  <div class="header">
+    <p>Next: <a href="Sine-Example.html#Sine-Example" accesskey="n"
+    rel="next">Sine Example</a>, Previous: <a href=
+    "Example-Definitions.html#Example-Definitions" accesskey="p"
+    rel="prev">Example Definitions</a>, Up: <a href=
+    "Example-Definitions.html#Example-Definitions" accesskey="u"
+    rel="up">Example Definitions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Bit_002dCounting" id="Bit_002dCounting"></a>
+
+  <h4 class="subsubsection">17.5.5.1 Bit-Counting</h4><a name=
+  "index-bcount" id="index-bcount"></a>
+
+  <p>Calc does not include a built-in function for counting the
+  number of &ldquo;one&rdquo; bits in a binary integer. It&rsquo;s
+  easy to invent one using <kbd>b u</kbd> to convert the integer to
+  a set, and <kbd>V #</kbd> to count the elements of that set;
+  let&rsquo;s write a function that counts the bits without having
+  to create an intermediate set.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defmath bcount ((natnum n))
+  (interactive 1 "bcnt")
   (let ((count 0))
     (while (&gt; n 0)
       (if (oddp n)
           (setq count (1+ count)))
       (setq n (lsh n -1)))
     count))
-</pre></div>
+</pre>
+  </div>
 
-<p>When this is expanded by <code>defmath</code>, it will become the following
-Emacs Lisp function:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun calcFunc-bcount (n)
+  <p>When this is expanded by <code>defmath</code>, it will become
+  the following Emacs Lisp function:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defun calcFunc-bcount (n)
   (setq n (math-check-natnum n))
   (let ((count 0))
     (while (math-posp n)
@@ -103,22 +140,25 @@ Emacs Lisp function:
           (setq count (math-add count 1)))
       (setq n (calcFunc-lsh n -1)))
     count))
-</pre></div>
+</pre>
+  </div>
 
-<p>If the input numbers are large, this function involves a fair amount
-of arithmetic.  A binary right shift is essentially a division by two;
-recall that Calc stores integers in decimal form so bit shifts must
-involve actual division.
-</p>
-<p>To gain a bit more efficiency, we could divide the integer into
-<var>n</var>-bit chunks, each of which can be handled quickly because
-they fit into Lisp integers.  It turns out that Calc&rsquo;s arithmetic
-routines are especially fast when dividing by an integer less than
-1000, so we can set <var>n = 9</var> bits and use repeated division by 512:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defmath bcount ((natnum n))
-  (interactive 1 &quot;bcnt&quot;)
+  <p>If the input numbers are large, this function involves a fair
+  amount of arithmetic. A binary right shift is essentially a
+  division by two; recall that Calc stores integers in decimal form
+  so bit shifts must involve actual division.</p>
+
+  <p>To gain a bit more efficiency, we could divide the integer
+  into <var>n</var>-bit chunks, each of which can be handled
+  quickly because they fit into Lisp integers. It turns out that
+  Calc&rsquo;s arithmetic routines are especially fast when
+  dividing by an integer less than 1000, so we can set <var>n =
+  9</var> bits and use repeated division by 512:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defmath bcount ((natnum n))
+  (interactive 1 "bcnt")
   (let ((count 0))
     (while (not (fixnump n))
       (let ((qr (idivmod n 512)))
@@ -132,29 +172,37 @@ routines are especially fast when dividing by an integer less than
       (setq count (+ count (logand n 1))
             n (lsh n -1)))
     count))
-</pre></div>
+</pre>
+  </div>
 
-<p>Note that the second function uses <code>defun</code>, not <code>defmath</code>.
-Because this function deals only with native Lisp integers (&ldquo;fixnums&rdquo;),
-it can use the actual Emacs <code>+</code> and related functions rather
-than the slower but more general Calc equivalents which <code>defmath</code>
-uses.
-</p>
-<p>The <code>idivmod</code> function does an integer division, returning both
-the quotient and the remainder at once.  Again, note that while it
-might seem that &lsquo;<samp>(logand n 511)</samp>&rsquo; and &lsquo;<samp>(lsh n -9)</samp>&rsquo; are
-more efficient ways to split off the bottom nine bits of <code>n</code>,
-actually they are less efficient because each operation is really
-a division by 512 in disguise; <code>idivmod</code> allows us to do the
-same thing with a single division by 512.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Sine-Example.html#Sine-Example" accesskey="n" rel="next">Sine Example</a>, Previous: <a href="Example-Definitions.html#Example-Definitions" accesskey="p" rel="prev">Example Definitions</a>, Up: <a href="Example-Definitions.html#Example-Definitions" accesskey="u" rel="up">Example Definitions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Note that the second function uses <code>defun</code>, not
+  <code>defmath</code>. Because this function deals only with
+  native Lisp integers (&ldquo;fixnums&rdquo;), it can use the
+  actual Emacs <code>+</code> and related functions rather than the
+  slower but more general Calc equivalents which
+  <code>defmath</code> uses.</p>
 
+  <p>The <code>idivmod</code> function does an integer division,
+  returning both the quotient and the remainder at once. Again,
+  note that while it might seem that &lsquo;<samp>(logand n
+  511)</samp>&rsquo; and &lsquo;<samp>(lsh n -9)</samp>&rsquo; are
+  more efficient ways to split off the bottom nine bits of
+  <code>n</code>, actually they are less efficient because each
+  operation is really a division by 512 in disguise;
+  <code>idivmod</code> allows us to do the same thing with a single
+  division by 512.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Sine-Example.html#Sine-Example" accesskey="n"
+    rel="next">Sine Example</a>, Previous: <a href=
+    "Example-Definitions.html#Example-Definitions" accesskey="p"
+    rel="prev">Example Definitions</a>, Up: <a href=
+    "Example-Definitions.html#Example-Definitions" accesskey="u"
+    rel="up">Example Definitions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

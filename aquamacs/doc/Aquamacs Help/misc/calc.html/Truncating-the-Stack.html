@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,96 +18,131 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Truncating the Stack</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Truncating the Stack">
-<meta name="keywords" content="GNU Emacs Calc Manual: Truncating the Stack">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display-Modes.html#Display-Modes" rel="up" title="Display Modes">
-<link href="Justification.html#Justification" rel="next" title="Justification">
-<link href="Standard-Date-Formats.html#Standard-Date-Formats" rel="prev" title="Standard Date Formats">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Truncating the Stack</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Truncating the Stack" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Truncating the Stack" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display-Modes.html#Display-Modes" rel="up" title=
+  "Display Modes" />
+  <link href="Justification.html#Justification" rel="next" title=
+  "Justification" />
+  <link href="Standard-Date-Formats.html#Standard-Date-Formats"
+  rel="prev" title="Standard Date Formats" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Truncating-the-Stack"></a>
-<div class="header">
-<p>
-Next: <a href="Justification.html#Justification" accesskey="n" rel="next">Justification</a>, Previous: <a href="Date-Formats.html#Date-Formats" accesskey="p" rel="prev">Date Formats</a>, Up: <a href="Display-Modes.html#Display-Modes" accesskey="u" rel="up">Display Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Truncating-the-Stack-1"></a>
-<h4 class="subsection">6.7.8 Truncating the Stack</h4>
+<body lang="en" xml:lang="en">
+  <a name="Truncating-the-Stack" id="Truncating-the-Stack"></a>
 
-<a name="index-d-t"></a>
-<a name="index-calc_002dtruncate_002dstack"></a>
-<a name="index-Truncating-the-stack"></a>
-<a name="index-Narrowing-the-stack"></a>
-<p>The <kbd>d t</kbd> (<code>calc-truncate-stack</code>) command moves the &lsquo;<samp>.</samp>&rsquo;
-line that marks the top-of-stack up or down in the Calculator buffer.
-The number right above that line is considered to the be at the top of
-the stack.  Any numbers below that line are &ldquo;hidden&rdquo; from all stack
-operations (although still visible to the user).  This is similar to the
-Emacs &ldquo;narrowing&rdquo; feature, except that the values below the &lsquo;<samp>.</samp>&rsquo;
-are <em>visible</em>, just temporarily frozen.  This feature allows you to
-keep several independent calculations running at once in different parts
-of the stack, or to apply a certain command to an element buried deep in
-the stack.
-</p>
-<p>Pressing <kbd>d t</kbd> by itself moves the &lsquo;<samp>.</samp>&rsquo; to the line the cursor
-is on.  Thus, this line and all those below it become hidden.  To un-hide
-these lines, move down to the end of the buffer and press <kbd>d&nbsp;t</kbd><!-- /@w -->.
-With a positive numeric prefix argument &lsquo;<samp>n</samp>&rsquo;, <kbd>d t</kbd> hides the
-bottom &lsquo;<samp>n</samp>&rsquo; values in the buffer.  With a negative argument, it hides
-all but the top &lsquo;<samp>n</samp>&rsquo; values.  With an argument of zero, it hides zero
-values, i.e., moves the &lsquo;<samp>.</samp>&rsquo; all the way down to the bottom.
-</p>
-<a name="index-d-_005b"></a>
-<a name="index-calc_002dtruncate_002dup"></a>
-<a name="index-d-_005d"></a>
-<a name="index-calc_002dtruncate_002ddown"></a>
-<p>The <kbd>d [</kbd> (<code>calc-truncate-up</code>) and <kbd>d ]</kbd>
-(<code>calc-truncate-down</code>) commands move the &lsquo;<samp>.</samp>&rsquo; up or down one
-line at a time (or several lines with a prefix argument).
-</p>
+  <div class="header">
+    <p>Next: <a href="Justification.html#Justification" accesskey=
+    "n" rel="next">Justification</a>, Previous: <a href=
+    "Date-Formats.html#Date-Formats" accesskey="p" rel="prev">Date
+    Formats</a>, Up: <a href="Display-Modes.html#Display-Modes"
+    accesskey="u" rel="up">Display Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Truncating-the-Stack-1" id="Truncating-the-Stack-1"></a>
 
+  <h4 class="subsection">6.7.8 Truncating the Stack</h4><a name=
+  "index-d-t" id="index-d-t"></a> <a name=
+  "index-calc_002dtruncate_002dstack" id=
+  "index-calc_002dtruncate_002dstack"></a> <a name=
+  "index-Truncating-the-stack" id="index-Truncating-the-stack"></a>
+  <a name="index-Narrowing-the-stack" id=
+  "index-Narrowing-the-stack"></a>
 
+  <p>The <kbd>d t</kbd> (<code>calc-truncate-stack</code>) command
+  moves the &lsquo;<samp>.</samp>&rsquo; line that marks the
+  top-of-stack up or down in the Calculator buffer. The number
+  right above that line is considered to the be at the top of the
+  stack. Any numbers below that line are &ldquo;hidden&rdquo; from
+  all stack operations (although still visible to the user). This
+  is similar to the Emacs &ldquo;narrowing&rdquo; feature, except
+  that the values below the &lsquo;<samp>.</samp>&rsquo; are
+  <em>visible</em>, just temporarily frozen. This feature allows
+  you to keep several independent calculations running at once in
+  different parts of the stack, or to apply a certain command to an
+  element buried deep in the stack.</p>
 
+  <p>Pressing <kbd>d t</kbd> by itself moves the
+  &lsquo;<samp>.</samp>&rsquo; to the line the cursor is on. Thus,
+  this line and all those below it become hidden. To un-hide these
+  lines, move down to the end of the buffer and press
+  <kbd>d&nbsp;t</kbd><!-- /@w -->. With a positive numeric prefix
+  argument &lsquo;<samp>n</samp>&rsquo;, <kbd>d t</kbd> hides the
+  bottom &lsquo;<samp>n</samp>&rsquo; values in the buffer. With a
+  negative argument, it hides all but the top
+  &lsquo;<samp>n</samp>&rsquo; values. With an argument of zero, it
+  hides zero values, i.e., moves the &lsquo;<samp>.</samp>&rsquo;
+  all the way down to the bottom.</p><a name="index-d-_005b" id=
+  "index-d-_005b"></a> <a name="index-calc_002dtruncate_002dup" id=
+  "index-calc_002dtruncate_002dup"></a> <a name="index-d-_005d" id=
+  "index-d-_005d"></a> <a name="index-calc_002dtruncate_002ddown"
+  id="index-calc_002dtruncate_002ddown"></a>
+
+  <p>The <kbd>d [</kbd> (<code>calc-truncate-up</code>) and <kbd>d
+  ]</kbd> (<code>calc-truncate-down</code>) commands move the
+  &lsquo;<samp>.</samp>&rsquo; up or down one line at a time (or
+  several lines with a prefix argument).</p>
 </body>
 </html>

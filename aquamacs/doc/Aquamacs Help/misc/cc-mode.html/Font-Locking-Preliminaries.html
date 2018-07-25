@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,156 +16,229 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Font Locking Preliminaries</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Font Locking Preliminaries">
-<meta name="keywords" content="CC Mode Manual: Font Locking Preliminaries">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Font-Locking.html#Font-Locking" rel="up" title="Font Locking">
-<link href="Faces.html#Faces" rel="next" title="Faces">
-<link href="Font-Locking.html#Font-Locking" rel="prev" title="Font Locking">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Font Locking Preliminaries</title>
+  <meta name="description" content=
+  "CC Mode Manual: Font Locking Preliminaries" />
+  <meta name="keywords" content=
+  "CC Mode Manual: Font Locking Preliminaries" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Font-Locking.html#Font-Locking" rel="up" title=
+  "Font Locking" />
+  <link href="Faces.html#Faces" rel="next" title="Faces" />
+  <link href="Font-Locking.html#Font-Locking" rel="prev" title=
+  "Font Locking" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Font-Locking-Preliminaries"></a>
-<div class="header">
-<p>
-Next: <a href="Faces.html#Faces" accesskey="n" rel="next">Faces</a>, Previous: <a href="Font-Locking.html#Font-Locking" accesskey="p" rel="prev">Font Locking</a>, Up: <a href="Font-Locking.html#Font-Locking" accesskey="u" rel="up">Font Locking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Font-Locking-Preliminaries-1"></a>
-<h3 class="section">5.1 Font Locking Preliminaries</h3>
+<body lang="en" xml:lang="en">
+  <a name="Font-Locking-Preliminaries" id=
+  "Font-Locking-Preliminaries"></a>
 
-<p>The font locking for most of the CC Mode languages were provided
-directly by the Font Lock package prior to version 5.30 of CC Mode.
-In the transition to CC Mode the patterns have been reworked
-completely and are applied uniformly across all the languages except AWK
-mode, just like the indentation rules (although each language still has
-some peculiarities of its own, of course).  Since the languages
-previously had completely separate font locking patterns, this means
-that it&rsquo;s a bit different in most languages now.
-</p>
-<p>The main goal for the font locking in CC Mode is accuracy, to provide
-a dependable aid in recognizing the various constructs.  Some, like
-strings and comments, are easy to recognize while others, like
-declarations and types, can be very tricky.  CC Mode can go to great
-lengths to recognize declarations and casts correctly, especially when
-the types aren&rsquo;t recognized by standard patterns.  This is a fairly
-demanding analysis which can be slow on older hardware, and it can
-therefore be disabled by choosing a lower decoration level with the
-variable <code>font-lock-maximum-decoration</code> (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Font-Lock.html#Font-Lock">Font Lock</a> in <cite>GNU Emacs Manual</cite>).
-</p>
-<a name="index-font_002dlock_002dmaximum_002ddecoration"></a>
+  <div class="header">
+    <p>Next: <a href="Faces.html#Faces" accesskey="n" rel=
+    "next">Faces</a>, Previous: <a href=
+    "Font-Locking.html#Font-Locking" accesskey="p" rel="prev">Font
+    Locking</a>, Up: <a href="Font-Locking.html#Font-Locking"
+    accesskey="u" rel="up">Font Locking</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Font-Locking-Preliminaries-1" id=
+  "Font-Locking-Preliminaries-1"></a>
 
-<p>The decoration levels are used as follows:
-</p>
-<ol>
-<li> Minimal font locking: Fontify only comments, strings and preprocessor
-directives (in the languages that use cpp).
+  <h3 class="section">5.1 Font Locking Preliminaries</h3>
 
-</li><li> Fast font locking: In addition to level 1, fontify keywords, simple
-types and declarations that are easy to recognize.  The variables
-<code>*-font-lock-extra-types</code> (where &lsquo;<samp>*</samp>&rsquo; is the name of the
-language) are used to recognize types (see below).  Documentation
-comments like Javadoc are fontified according to
-<code>c-doc-comment-style</code> (see <a href="Doc-Comments.html#Doc-Comments">Doc Comments</a>).
+  <p>The font locking for most of the CC Mode languages were
+  provided directly by the Font Lock package prior to version 5.30
+  of CC Mode. In the transition to CC Mode the patterns have been
+  reworked completely and are applied uniformly across all the
+  languages except AWK mode, just like the indentation rules
+  (although each language still has some peculiarities of its own,
+  of course). Since the languages previously had completely
+  separate font locking patterns, this means that it&rsquo;s a bit
+  different in most languages now.</p>
 
-<p>Use this if you think the font locking is too slow.  It&rsquo;s the closest
-corresponding level to level 3 in the old font lock patterns.
-</p>
-</li><li> Accurate font locking: Like level 2 but uses a different approach that
-can recognize types and declarations much more accurately.  The
-<code>*-font-lock-extra-types</code> variables are still used, but user
-defined types are recognized correctly anyway in most cases.  Therefore
-those variables should be fairly restrictive and not contain patterns
-that are uncertain.
+  <p>The main goal for the font locking in CC Mode is accuracy, to
+  provide a dependable aid in recognizing the various constructs.
+  Some, like strings and comments, are easy to recognize while
+  others, like declarations and types, can be very tricky. CC Mode
+  can go to great lengths to recognize declarations and casts
+  correctly, especially when the types aren&rsquo;t recognized by
+  standard patterns. This is a fairly demanding analysis which can
+  be slow on older hardware, and it can therefore be disabled by
+  choosing a lower decoration level with the variable
+  <code>font-lock-maximum-decoration</code> (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Font-Lock.html#Font-Lock">
+  Font Lock</a> in <cite>GNU Emacs Manual</cite>).</p><a name=
+  "index-font_002dlock_002dmaximum_002ddecoration" id=
+  "index-font_002dlock_002dmaximum_002ddecoration"></a>
 
-<a name="index-Lazy-Lock-mode"></a>
-<a name="index-Just_002din_002dtime-Lock-mode"></a>
+  <p>The decoration levels are used as follows:</p>
 
-<p>This level is designed for fairly modern hardware and a font lock
-support mode like Lazy Lock or Just-in-time Lock mode that only
-fontifies the parts that are actually shown.  Fontifying the whole
-buffer at once can easily get bothersomely slow even on contemporary
-hardware. See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Font-Lock.html#Font-Lock">Font Lock</a> in <cite>GNU Emacs Manual</cite>.
-</p></li></ol>
+  <ol>
+    <li>Minimal font locking: Fontify only comments, strings and
+    preprocessor directives (in the languages that use cpp).</li>
 
-<a name="index-user-defined-types"></a>
-<a name="index-types_002c-user-defined"></a>
+    <li>Fast font locking: In addition to level 1, fontify
+    keywords, simple types and declarations that are easy to
+    recognize. The variables <code>*-font-lock-extra-types</code>
+    (where &lsquo;<samp>*</samp>&rsquo; is the name of the
+    language) are used to recognize types (see below).
+    Documentation comments like Javadoc are fontified according to
+    <code>c-doc-comment-style</code> (see <a href=
+    "Doc-Comments.html#Doc-Comments">Doc Comments</a>).
 
-<p>Since user defined types are hard to recognize you can provide
-additional regexps to match those you use:
-</p>
-<dl>
-<dt><a name="index-c_002dfont_002dlock_002dextra_002dtypes"></a>User Option: <strong>c-font-lock-extra-types</strong></dt>
-<dt><a name="index-c_002b_002b_002dfont_002dlock_002dextra_002dtypes"></a>User Option: <strong>c++-font-lock-extra-types</strong></dt>
-<dt><a name="index-objc_002dfont_002dlock_002dextra_002dtypes"></a>User Option: <strong>objc-font-lock-extra-types</strong></dt>
-<dt><a name="index-java_002dfont_002dlock_002dextra_002dtypes"></a>User Option: <strong>java-font-lock-extra-types</strong></dt>
-<dt><a name="index-idl_002dfont_002dlock_002dextra_002dtypes"></a>User Option: <strong>idl-font-lock-extra-types</strong></dt>
-<dt><a name="index-pike_002dfont_002dlock_002dextra_002dtypes"></a>User Option: <strong>pike-font-lock-extra-types</strong></dt>
-<dd><p>For each language there&rsquo;s a variable <code>*-font-lock-extra-types</code>,
-where &lsquo;<samp>*</samp>&rsquo; stands for the language in question.  It contains a list
-of regexps that matches identifiers that should be recognized as types,
-e.g., &lsquo;<samp>\\sw+_t</samp>&rsquo; to recognize all identifiers ending with &lsquo;<samp>_t</samp>&rsquo;
-as is customary in C code.  Each regexp should not match more than a
-single identifier.
-</p>
-<p>The default values contain regexps for many types in standard runtime
-libraries that are otherwise difficult to recognize, and patterns for
-standard type naming conventions like the &lsquo;<samp>_t</samp>&rsquo; suffix in C and C++.
-Java, Objective-C and Pike have as a convention to start class names
-with capitals, so there are patterns for that in those languages.
-</p>
-<p>Despite the names of these variables, they are not only used for
-fontification but in other places as well where CC Mode needs to
-recognize types.
-</p></dd></dl>
+      <p>Use this if you think the font locking is too slow.
+      It&rsquo;s the closest corresponding level to level 3 in the
+      old font lock patterns.</p>
+    </li>
 
+    <li>Accurate font locking: Like level 2 but uses a different
+    approach that can recognize types and declarations much more
+    accurately. The <code>*-font-lock-extra-types</code> variables
+    are still used, but user defined types are recognized correctly
+    anyway in most cases. Therefore those variables should be
+    fairly restrictive and not contain patterns that are uncertain.
+    <a name="index-Lazy-Lock-mode" id="index-Lazy-Lock-mode"></a>
+    <a name="index-Just_002din_002dtime-Lock-mode" id=
+    "index-Just_002din_002dtime-Lock-mode"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Faces.html#Faces" accesskey="n" rel="next">Faces</a>, Previous: <a href="Font-Locking.html#Font-Locking" accesskey="p" rel="prev">Font Locking</a>, Up: <a href="Font-Locking.html#Font-Locking" accesskey="u" rel="up">Font Locking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This level is designed for fairly modern hardware and a
+      font lock support mode like Lazy Lock or Just-in-time Lock
+      mode that only fontifies the parts that are actually shown.
+      Fontifying the whole buffer at once can easily get
+      bothersomely slow even on contemporary hardware. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Font-Lock.html#Font-Lock">
+      Font Lock</a> in <cite>GNU Emacs Manual</cite>.</p>
+    </li>
+  </ol><a name="index-user-defined-types" id=
+  "index-user-defined-types"></a> <a name=
+  "index-types_002c-user-defined" id=
+  "index-types_002c-user-defined"></a>
 
+  <p>Since user defined types are hard to recognize you can provide
+  additional regexps to match those you use:</p>
 
+  <dl>
+    <dt><a name="index-c_002dfont_002dlock_002dextra_002dtypes" id=
+    "index-c_002dfont_002dlock_002dextra_002dtypes"></a>User
+    Option: <strong>c-font-lock-extra-types</strong></dt>
 
+    <dt><a name=
+    "index-c_002b_002b_002dfont_002dlock_002dextra_002dtypes" id=
+    "index-c_002b_002b_002dfont_002dlock_002dextra_002dtypes"></a>User
+    Option: <strong>c++-font-lock-extra-types</strong></dt>
+
+    <dt><a name="index-objc_002dfont_002dlock_002dextra_002dtypes"
+    id="index-objc_002dfont_002dlock_002dextra_002dtypes"></a>User
+    Option: <strong>objc-font-lock-extra-types</strong></dt>
+
+    <dt><a name="index-java_002dfont_002dlock_002dextra_002dtypes"
+    id="index-java_002dfont_002dlock_002dextra_002dtypes"></a>User
+    Option: <strong>java-font-lock-extra-types</strong></dt>
+
+    <dt><a name="index-idl_002dfont_002dlock_002dextra_002dtypes"
+    id="index-idl_002dfont_002dlock_002dextra_002dtypes"></a>User
+    Option: <strong>idl-font-lock-extra-types</strong></dt>
+
+    <dt><a name="index-pike_002dfont_002dlock_002dextra_002dtypes"
+    id="index-pike_002dfont_002dlock_002dextra_002dtypes"></a>User
+    Option: <strong>pike-font-lock-extra-types</strong></dt>
+
+    <dd>
+      <p>For each language there&rsquo;s a variable
+      <code>*-font-lock-extra-types</code>, where
+      &lsquo;<samp>*</samp>&rsquo; stands for the language in
+      question. It contains a list of regexps that matches
+      identifiers that should be recognized as types, e.g.,
+      &lsquo;<samp>\\sw+_t</samp>&rsquo; to recognize all
+      identifiers ending with &lsquo;<samp>_t</samp>&rsquo; as is
+      customary in C code. Each regexp should not match more than a
+      single identifier.</p>
+
+      <p>The default values contain regexps for many types in
+      standard runtime libraries that are otherwise difficult to
+      recognize, and patterns for standard type naming conventions
+      like the &lsquo;<samp>_t</samp>&rsquo; suffix in C and C++.
+      Java, Objective-C and Pike have as a convention to start
+      class names with capitals, so there are patterns for that in
+      those languages.</p>
+
+      <p>Despite the names of these variables, they are not only
+      used for fontification but in other places as well where CC
+      Mode needs to recognize types.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Faces.html#Faces" accesskey="n" rel=
+    "next">Faces</a>, Previous: <a href=
+    "Font-Locking.html#Font-Locking" accesskey="p" rel="prev">Font
+    Locking</a>, Up: <a href="Font-Locking.html#Font-Locking"
+    accesskey="u" rel="up">Font Locking</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

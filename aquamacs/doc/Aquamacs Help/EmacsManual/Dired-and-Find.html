@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,121 +20,166 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Dired and Find</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Dired and Find">
-<meta name="keywords" content="GNU Emacs Manual: Dired and Find">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Dired.html#Dired" rel="up" title="Dired">
-<link href="Wdired.html#Wdired" rel="next" title="Wdired">
-<link href="Dired-Updating.html#Dired-Updating" rel="prev" title="Dired Updating">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Dired and Find</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Dired and Find" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Dired and Find" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Dired.html#Dired" rel="up" title="Dired" />
+  <link href="Wdired.html#Wdired" rel="next" title="Wdired" />
+  <link href="Dired-Updating.html#Dired-Updating" rel="prev" title=
+  "Dired Updating" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Dired-and-Find" id="Dired-and-Find"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Wdired.html#Wdired" accesskey="n" rel=
+    "next">Wdired</a>, Previous: <a href=
+    "Dired-Updating.html#Dired-Updating" accesskey="p" rel=
+    "prev">Dired Updating</a>, Up: <a href="Dired.html#Dired"
+    accesskey="u" rel="up">Dired</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Dired-and-find" id="Dired-and-find"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dired-and-Find"></a>
-<div class="header">
-<p>
-Next: <a href="Wdired.html#Wdired" accesskey="n" rel="next">Wdired</a>, Previous: <a href="Dired-Updating.html#Dired-Updating" accesskey="p" rel="prev">Dired Updating</a>, Up: <a href="Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Dired-and-find"></a>
-<h3 class="section">30.16 Dired and <code>find</code></h3>
-<a name="index-find-and-Dired"></a>
+  <h3 class="section">30.16 Dired and
+  <code>find</code></h3><a name="index-find-and-Dired" id=
+  "index-find-and-Dired"></a>
 
-<p>You can select a set of files for display in a Dired buffer more
-flexibly by using the <code>find</code> utility to choose the files.
-</p>
-<a name="index-find_002dname_002ddired"></a>
-<p>To search for files with names matching a wildcard pattern use
-<kbd>M-x find-name-dired</kbd>.  It reads arguments <var>directory</var> and
-<var>pattern</var>, and chooses all the files in <var>directory</var> or its
-subdirectories whose individual names match <var>pattern</var>.
-</p>
-<p>The files thus chosen are displayed in a Dired buffer, in which the
-ordinary Dired commands are available.
-</p>
-<a name="index-find_002dgrep_002ddired"></a>
-<p>If you want to test the contents of files, rather than their names,
-use <kbd>M-x find-grep-dired</kbd>.  This command reads two minibuffer
-arguments, <var>directory</var> and <var>regexp</var>; it chooses all the files
-in <var>directory</var> or its subdirectories that contain a match for
-<var>regexp</var>.  It works by running the programs <code>find</code> and
-<code>grep</code>.  See also <kbd>M-x grep-find</kbd>, in <a href="Grep-Searching.html#Grep-Searching">Grep Searching</a>.  Remember to write the regular expression for
-<code>grep</code>, not for Emacs.  (An alternative method of showing
-files whose contents match a given regexp is the <kbd>% g
-<var>regexp</var></kbd> command, see <a href="Marks-vs-Flags.html#Marks-vs-Flags">Marks vs Flags</a>.)
-</p>
-<a name="index-find_002ddired"></a>
-<p>The most general command in this series is <kbd>M-x find-dired</kbd>,
-which lets you specify any condition that <code>find</code> can test.  It
-takes two minibuffer arguments, <var>directory</var> and <var>find-args</var>;
-it runs <code>find</code> in <var>directory</var>, passing <var>find-args</var> to
-tell <code>find</code> what condition to test.  To use this command, you
-need to know how to use <code>find</code>.
-</p>
-<a name="index-find_002dls_002doption"></a>
-<p>The format of listing produced by these commands is controlled by
-the variable <code>find-ls-option</code>.  This is a pair of options; the
-first specifying how to call <code>find</code> to produce the file listing,
-and the second telling Dired to parse the output.
-</p>
-<a name="index-locate"></a>
-<a name="index-locate_002dwith_002dfilter"></a>
-<a name="index-file-database-_0028locate_0029"></a>
-<a name="index-locate_002dcommand"></a>
-<p>The command <kbd>M-x locate</kbd> provides a similar interface to the
-<code>locate</code> program.  <kbd>M-x locate-with-filter</kbd> is similar, but
-keeps only files whose names match a given regular expression.
-</p>
-<p>These buffers don&rsquo;t work entirely like ordinary Dired buffers: file
-operations work, but do not always automatically update the buffer.
-Reverting the buffer with <kbd>g</kbd> deletes all inserted subdirectories,
-and erases all flags and marks.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Wdired.html#Wdired" accesskey="n" rel="next">Wdired</a>, Previous: <a href="Dired-Updating.html#Dired-Updating" accesskey="p" rel="prev">Dired Updating</a>, Up: <a href="Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>You can select a set of files for display in a Dired buffer
+  more flexibly by using the <code>find</code> utility to choose
+  the files.</p><a name="index-find_002dname_002ddired" id=
+  "index-find_002dname_002ddired"></a>
 
+  <p>To search for files with names matching a wildcard pattern use
+  <kbd>M-x find-name-dired</kbd>. It reads arguments
+  <var>directory</var> and <var>pattern</var>, and chooses all the
+  files in <var>directory</var> or its subdirectories whose
+  individual names match <var>pattern</var>.</p>
 
+  <p>The files thus chosen are displayed in a Dired buffer, in
+  which the ordinary Dired commands are available.</p><a name=
+  "index-find_002dgrep_002ddired" id=
+  "index-find_002dgrep_002ddired"></a>
 
+  <p>If you want to test the contents of files, rather than their
+  names, use <kbd>M-x find-grep-dired</kbd>. This command reads two
+  minibuffer arguments, <var>directory</var> and <var>regexp</var>;
+  it chooses all the files in <var>directory</var> or its
+  subdirectories that contain a match for <var>regexp</var>. It
+  works by running the programs <code>find</code> and
+  <code>grep</code>. See also <kbd>M-x grep-find</kbd>, in <a href=
+  "Grep-Searching.html#Grep-Searching">Grep Searching</a>. Remember
+  to write the regular expression for <code>grep</code>, not for
+  Emacs. (An alternative method of showing files whose contents
+  match a given regexp is the <kbd>% g <var>regexp</var></kbd>
+  command, see <a href="Marks-vs-Flags.html#Marks-vs-Flags">Marks
+  vs Flags</a>.)</p><a name="index-find_002ddired" id=
+  "index-find_002ddired"></a>
+
+  <p>The most general command in this series is <kbd>M-x
+  find-dired</kbd>, which lets you specify any condition that
+  <code>find</code> can test. It takes two minibuffer arguments,
+  <var>directory</var> and <var>find-args</var>; it runs
+  <code>find</code> in <var>directory</var>, passing
+  <var>find-args</var> to tell <code>find</code> what condition to
+  test. To use this command, you need to know how to use
+  <code>find</code>.</p><a name="index-find_002dls_002doption" id=
+  "index-find_002dls_002doption"></a>
+
+  <p>The format of listing produced by these commands is controlled
+  by the variable <code>find-ls-option</code>. This is a pair of
+  options; the first specifying how to call <code>find</code> to
+  produce the file listing, and the second telling Dired to parse
+  the output.</p><a name="index-locate" id="index-locate"></a>
+  <a name="index-locate_002dwith_002dfilter" id=
+  "index-locate_002dwith_002dfilter"></a> <a name=
+  "index-file-database-_0028locate_0029" id=
+  "index-file-database-_0028locate_0029"></a> <a name=
+  "index-locate_002dcommand" id="index-locate_002dcommand"></a>
+
+  <p>The command <kbd>M-x locate</kbd> provides a similar interface
+  to the <code>locate</code> program. <kbd>M-x
+  locate-with-filter</kbd> is similar, but keeps only files whose
+  names match a given regular expression.</p>
+
+  <p>These buffers don&rsquo;t work entirely like ordinary Dired
+  buffers: file operations work, but do not always automatically
+  update the buffer. Reverting the buffer with <kbd>g</kbd> deletes
+  all inserted subdirectories, and erases all flags and marks.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Wdired.html#Wdired" accesskey="n" rel=
+    "next">Wdired</a>, Previous: <a href=
+    "Dired-Updating.html#Dired-Updating" accesskey="p" rel=
+    "prev">Dired Updating</a>, Up: <a href="Dired.html#Dired"
+    accesskey="u" rel="up">Dired</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

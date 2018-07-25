@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,116 +16,170 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Conflicts</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Conflicts">
-<meta name="keywords" content="Wisent Parser Development: Conflicts">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Wisent-Grammar.html#Wisent-Grammar" rel="up" title="Wisent Grammar">
-<link href="Grammar-Debugging.html#Grammar-Debugging" rel="next" title="Grammar Debugging">
-<link href="Compiling-a-grammar.html#Compiling-a-grammar" rel="prev" title="Compiling a grammar">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Conflicts</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Conflicts" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Conflicts" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Wisent-Grammar.html#Wisent-Grammar" rel="up" title=
+  "Wisent Grammar" />
+  <link href="Grammar-Debugging.html#Grammar-Debugging" rel="next"
+  title="Grammar Debugging" />
+  <link href="Compiling-a-grammar.html#Compiling-a-grammar" rel=
+  "prev" title="Compiling a grammar" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Conflicts"></a>
-<div class="header">
-<p>
-Previous: <a href="Compiling-a-grammar.html#Compiling-a-grammar" accesskey="p" rel="prev">Compiling a grammar</a>, Up: <a href="Wisent-Grammar.html#Wisent-Grammar" accesskey="u" rel="up">Wisent Grammar</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Conflicts-1"></a>
-<h3 class="section">2.4 Conflicts</h3>
+<body lang="en" xml:lang="en">
+  <a name="Conflicts" id="Conflicts"></a>
 
-<p>Normally, a grammar should produce an automaton where at each state
-the parser has only one action to do (see <a href="Wisent-Parsing.html#Wisent-Parsing">Wisent Parsing</a>).
-</p>
-<a name="index-ambiguous-grammar"></a>
-<p>In certain cases, a grammar can produce an automaton where, at some
-states, there are more than one action possible.  Such a grammar is
-<em>ambiguous</em>, and generates <em>conflicts</em>.
-</p>
-<a name="index-deterministic-automaton"></a>
-<p>The parser can&rsquo;t be driven by an automaton which isn&rsquo;t completely
-<em>deterministic</em>, that is which contains conflicts.  It is
-necessary to resolve the conflicts to eliminate them.  Wisent resolves
-conflicts like Bison does.
-</p>
-<a name="index-grammar-conflicts"></a>
-<a name="index-conflicts-resolution"></a>
-<p>There are two sorts of conflicts:
-</p>
-<dl compact="compact">
-<dd><a name="index-shift_002freduce-conflicts"></a>
-</dd>
-<dt><em>shift/reduce conflicts</em></dt>
-<dd><p>When either a shift or a reduction would be valid at the same state.
-</p>
-<p>Such conflicts are resolved by choosing to shift, unless otherwise
-directed by operator precedence declarations.
-See <a href="http://www.gnu.org/software/bison/manual/html_node/Shift_002fReduce.html#Shift_002fReduce">(bison)Shift/Reduce</a>, in the Bison manual for more
-information.
-</p>
-<a name="index-reduce_002freduce-conflicts"></a>
-</dd>
-<dt><em>reduce/reduce conflicts</em></dt>
-<dd><p>That occurs if there are two or more rules that apply to the same
-sequence of input.  This usually indicates a serious error in the
-grammar.
-</p>
-<p>Such conflicts are resolved by choosing to use the rule that appears
-first in the grammar, but it is very risky to rely on this.  Every
-reduce/reduce conflict must be studied and usually eliminated.  See
-<a href="http://www.gnu.org/software/bison/manual/html_node/Reduce_002fReduce.html#Reduce_002fReduce">(bison)Reduce/Reduce</a>, in the Bison manual for more
-information.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Previous: <a href=
+    "Compiling-a-grammar.html#Compiling-a-grammar" accesskey="p"
+    rel="prev">Compiling a grammar</a>, Up: <a href=
+    "Wisent-Grammar.html#Wisent-Grammar" accesskey="u" rel=
+    "up">Wisent Grammar</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Conflicts-1" id="Conflicts-1"></a>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Grammar-Debugging.html#Grammar-Debugging" accesskey="1">Grammar Debugging</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Understanding-the-automaton.html#Understanding-the-automaton" accesskey="2">Understanding the automaton</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <h3 class="section">2.4 Conflicts</h3>
 
+  <p>Normally, a grammar should produce an automaton where at each
+  state the parser has only one action to do (see <a href=
+  "Wisent-Parsing.html#Wisent-Parsing">Wisent
+  Parsing</a>).</p><a name="index-ambiguous-grammar" id=
+  "index-ambiguous-grammar"></a>
 
+  <p>In certain cases, a grammar can produce an automaton where, at
+  some states, there are more than one action possible. Such a
+  grammar is <em>ambiguous</em>, and generates
+  <em>conflicts</em>.</p><a name="index-deterministic-automaton"
+  id="index-deterministic-automaton"></a>
 
+  <p>The parser can&rsquo;t be driven by an automaton which
+  isn&rsquo;t completely <em>deterministic</em>, that is which
+  contains conflicts. It is necessary to resolve the conflicts to
+  eliminate them. Wisent resolves conflicts like Bison
+  does.</p><a name="index-grammar-conflicts" id=
+  "index-grammar-conflicts"></a> <a name=
+  "index-conflicts-resolution" id="index-conflicts-resolution"></a>
 
+  <p>There are two sorts of conflicts:</p>
+
+  <dl compact="compact">
+    <dd><a name="index-shift_002freduce-conflicts" id=
+    "index-shift_002freduce-conflicts"></a></dd>
+
+    <dt><em>shift/reduce conflicts</em></dt>
+
+    <dd>
+      <p>When either a shift or a reduction would be valid at the
+      same state.</p>
+
+      <p>Such conflicts are resolved by choosing to shift, unless
+      otherwise directed by operator precedence declarations. See
+      <a href=
+      "http://www.gnu.org/software/bison/manual/html_node/Shift_002fReduce.html#Shift_002fReduce">
+      (bison)Shift/Reduce</a>, in the Bison manual for more
+      information.</p><a name="index-reduce_002freduce-conflicts"
+      id="index-reduce_002freduce-conflicts"></a>
+    </dd>
+
+    <dt><em>reduce/reduce conflicts</em></dt>
+
+    <dd>
+      <p>That occurs if there are two or more rules that apply to
+      the same sequence of input. This usually indicates a serious
+      error in the grammar.</p>
+
+      <p>Such conflicts are resolved by choosing to use the rule
+      that appears first in the grammar, but it is very risky to
+      rely on this. Every reduce/reduce conflict must be studied
+      and usually eliminated. See <a href=
+      "http://www.gnu.org/software/bison/manual/html_node/Reduce_002fReduce.html#Reduce_002fReduce">
+      (bison)Reduce/Reduce</a>, in the Bison manual for more
+      information.</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Grammar-Debugging.html#Grammar-Debugging" accesskey=
+      "1">Grammar Debugging</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Understanding-the-automaton.html#Understanding-the-automaton"
+      accesskey="2">Understanding the automaton</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

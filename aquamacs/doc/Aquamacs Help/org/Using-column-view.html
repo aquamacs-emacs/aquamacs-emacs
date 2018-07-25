@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Using column view - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Column-view.html#Column-view" title="Column view">
-<link rel="prev" href="Defining-columns.html#Defining-columns" title="Defining columns">
-<link rel="next" href="Capturing-column-view.html#Capturing-column-view" title="Capturing column view">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Using column view - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Column-view.html#Column-view" title=
+  "Column view" />
+  <link rel="prev" href="Defining-columns.html#Defining-columns"
+  title="Defining columns" />
+  <link rel="next" href=
+  "Capturing-column-view.html#Capturing-column-view" title=
+  "Capturing column view" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +43,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,68 +56,193 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  dt.c1 {font-weight: bold}
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Using-column-view"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Capturing-column-view.html#Capturing-column-view">Capturing column view</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-columns.html#Defining-columns">Defining columns</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Column-view.html#Column-view">Column view</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Using-column-view" id="Using-column-view"></a>
 
-<h4 class="subsection">7.5.2 Using column view</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Capturing-column-view.html#Capturing-column-view">Capturing
+    column view</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Defining-columns.html#Defining-columns">Defining
+    columns</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Column-view.html#Column-view">Column view</a></p>
+    <hr />
+  </div>
 
-     <dl>
-<dt><b>Turning column view on and off</b><dd>
-<a name="index-C_002dc-C_002dx-C_002dc-681"></a><a name="index-org_002dcolumns-682"></a><br><dt><kbd>C-c C-x C-c &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns</code><kbd>)</kbd><dd>
-<a name="index-org_002dcolumns_002ddefault_002dformat-683"></a>Turn on column view.  If the cursor is before the first headline in the file,
-column view is turned on for the entire file, using the <code>#+COLUMNS</code>
-definition.  If the cursor is somewhere inside the outline, this command
-searches the hierarchy, up from point, for a <code>:COLUMNS:</code> property that
-defines a format.  When one is found, the column view table is established
-for the tree starting at the entry that contains the <code>:COLUMNS:</code>
-property.  If no such property is found, the format is taken from the
-<code>#+COLUMNS</code> line or from the variable <code>org-columns-default-format</code>,
-and column view is established for the current entry and its subtree. 
-<a name="index-r-684"></a><a name="index-org_002dcolumns_002dredo-685"></a><br><dt><kbd>r &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-redo</code><kbd>)</kbd><dd>
-Recreate the column view, to include recent changes made in the buffer. 
-<a name="index-g-686"></a><a name="index-org_002dcolumns_002dredo-687"></a><br><dt><kbd>g &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-redo</code><kbd>)</kbd><dd>
-Same as <kbd>r</kbd>. 
-<a name="index-q-688"></a><a name="index-org_002dcolumns_002dquit-689"></a><br><dt><kbd>q &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-quit</code><kbd>)</kbd><dd>
-Exit column view. 
-<br><dt><b>Editing values</b>
-<br><dt><kbd>&lt;left&gt; &lt;right&gt; &lt;up&gt; &lt;down&gt;</kbd><dd>Move through the column view from field to field. 
-<a name="index-S_002d_0040key_007bleft_007d-690"></a><a name="index-S_002d_0040key_007bright_007d-691"></a><br><dt><kbd>S-&lt;left&gt;/&lt;right&gt;</kbd><dd>Switch to the next/previous allowed value of the field.  For this, you
-have to have specified allowed values for a property. 
-<br><dt><kbd>1..9,0</kbd><dd>Directly select the Nth allowed value, <kbd>0</kbd> selects the 10th value. 
-<a name="index-n-692"></a><a name="index-p-693"></a><a name="index-org_002dcolumns_002dnext_002dallowed_002dvalue-694"></a><a name="index-org_002dcolumns_002dprevious_002dallowed_002dvalue-695"></a><br><dt><kbd>n &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-next-allowed-value</code><kbd>)</kbd><dt><kbd>p &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-previous-allowed-value</code><kbd>)</kbd><dd>
-Same as <kbd>S-&lt;left&gt;/&lt;right&gt;</kbd>
-<a name="index-e-696"></a><a name="index-org_002dcolumns_002dedit_002dvalue-697"></a><br><dt><kbd>e &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-edit-value</code><kbd>)</kbd><dd>
-Edit the property at point.  For the special properties, this will
-invoke the same interface that you normally use to change that
-property.  For example, when editing a TAGS property, the tag completion
-or fast selection interface will pop up. 
-<a name="index-C_002dc-C_002dc-698"></a><a name="index-org_002dcolumns_002dset_002dtags_002dor_002dtoggle-699"></a><br><dt><kbd>C-c C-c &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-set-tags-or-toggle</code><kbd>)</kbd><dd>
-When there is a checkbox at point, toggle it. 
-<a name="index-v-700"></a><a name="index-org_002dcolumns_002dshow_002dvalue-701"></a><br><dt><kbd>v &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-show-value</code><kbd>)</kbd><dd>
-View the full value of this property.  This is useful if the width of
-the column is smaller than that of the value. 
-<a name="index-a-702"></a><a name="index-org_002dcolumns_002dedit_002dallowed-703"></a><br><dt><kbd>a &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-edit-allowed</code><kbd>)</kbd><dd>
-Edit the list of allowed values for this property.  If the list is found
-in the hierarchy, the modified values is stored there.  If no list is
-found, the new value is stored in the first entry that is part of the
-current column view. 
-<br><dt><b>Modifying the table structure</b><dd>
-<a name="index-g_t_003c-704"></a><a name="index-g_t_003e-705"></a><a name="index-org_002dcolumns_002dnarrow-706"></a><a name="index-org_002dcolumns_002dwiden-707"></a><br><dt><kbd>&lt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-narrow</code><kbd>)</kbd><dt><kbd>&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-widen</code><kbd>)</kbd><dd>
-Make the column narrower/wider by one character. 
-<a name="index-S_002dM_002d_0040key_007bright_007d-708"></a><a name="index-org_002dcolumns_002dnew-709"></a><br><dt><kbd>S-M-&lt;right&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-new</code><kbd>)</kbd><dd>
-Insert a new column, to the left of the current column. 
-<a name="index-S_002dM_002d_0040key_007bleft_007d-710"></a><a name="index-org_002dcolumns_002ddelete-711"></a><br><dt><kbd>S-M-&lt;left&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-delete</code><kbd>)</kbd><dd>
-Delete the current column. 
-</dl>
+  <h4 class="subsection">7.5.2 Using column view</h4>
 
-   </body></html>
+  <dl>
+    <dt class="c1">Turning column view on and off</dt>
 
+    <dd><a name="index-C_002dc-C_002dx-C_002dc-681" id=
+    "index-C_002dc-C_002dx-C_002dc-681"></a><a name=
+    "index-org_002dcolumns-682" id=
+    "index-org_002dcolumns-682"></a><br /></dd>
+
+    <dt><kbd>C-c C-x C-c
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns</code><kbd>)</kbd></dt>
+
+    <dd><a name="index-org_002dcolumns_002ddefault_002dformat-683"
+    id="index-org_002dcolumns_002ddefault_002dformat-683"></a>Turn
+    on column view. If the cursor is before the first headline in
+    the file, column view is turned on for the entire file, using
+    the <code>#+COLUMNS</code> definition. If the cursor is
+    somewhere inside the outline, this command searches the
+    hierarchy, up from point, for a <code>:COLUMNS:</code> property
+    that defines a format. When one is found, the column view table
+    is established for the tree starting at the entry that contains
+    the <code>:COLUMNS:</code> property. If no such property is
+    found, the format is taken from the <code>#+COLUMNS</code> line
+    or from the variable <code>org-columns-default-format</code>,
+    and column view is established for the current entry and its
+    subtree. <a name="index-r-684" id="index-r-684"></a><a name=
+    "index-org_002dcolumns_002dredo-685" id=
+    "index-org_002dcolumns_002dredo-685"></a><br /></dd>
+
+    <dt><kbd>r
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-redo</code><kbd>)</kbd></dt>
+
+    <dd>Recreate the column view, to include recent changes made in
+    the buffer. <a name="index-g-686" id="index-g-686"></a><a name=
+    "index-org_002dcolumns_002dredo-687" id=
+    "index-org_002dcolumns_002dredo-687"></a><br /></dd>
+
+    <dt><kbd>g
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-redo</code><kbd>)</kbd></dt>
+
+    <dd>Same as <kbd>r</kbd>. <a name="index-q-688" id=
+    "index-q-688"></a><a name="index-org_002dcolumns_002dquit-689"
+    id="index-org_002dcolumns_002dquit-689"></a><br /></dd>
+
+    <dt><kbd>q
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-quit</code><kbd>)</kbd></dt>
+
+    <dd>Exit column view.<br /></dd>
+
+    <dt><b>Editing values</b><br /></dt>
+
+    <dt><kbd>&lt;left&gt; &lt;right&gt; &lt;up&gt;
+    &lt;down&gt;</kbd></dt>
+
+    <dd>Move through the column view from field to field. <a name=
+    "index-S_002d_0040key_007bleft_007d-690" id=
+    "index-S_002d_0040key_007bleft_007d-690"></a><a name=
+    "index-S_002d_0040key_007bright_007d-691" id=
+    "index-S_002d_0040key_007bright_007d-691"></a><br /></dd>
+
+    <dt><kbd>S-&lt;left&gt;/&lt;right&gt;</kbd></dt>
+
+    <dd>Switch to the next/previous allowed value of the field. For
+    this, you have to have specified allowed values for a
+    property.<br /></dd>
+
+    <dt><kbd>1..9,0</kbd></dt>
+
+    <dd>Directly select the Nth allowed value, <kbd>0</kbd> selects
+    the 10th value. <a name="index-n-692" id=
+    "index-n-692"></a><a name="index-p-693" id=
+    "index-p-693"></a><a name=
+    "index-org_002dcolumns_002dnext_002dallowed_002dvalue-694" id=
+    "index-org_002dcolumns_002dnext_002dallowed_002dvalue-694"></a><a name="index-org_002dcolumns_002dprevious_002dallowed_002dvalue-695"
+    id=
+    "index-org_002dcolumns_002dprevious_002dallowed_002dvalue-695"></a><br />
+    </dd>
+
+    <dt><kbd>n
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-next-allowed-value</code><kbd>)</kbd></dt>
+
+    <dt><kbd>p
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-previous-allowed-value</code><kbd>)</kbd></dt>
+
+    <dd>Same as <kbd>S-&lt;left&gt;/&lt;right&gt;</kbd> <a name=
+    "index-e-696" id="index-e-696"></a><a name=
+    "index-org_002dcolumns_002dedit_002dvalue-697" id=
+    "index-org_002dcolumns_002dedit_002dvalue-697"></a><br /></dd>
+
+    <dt><kbd>e
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-edit-value</code><kbd>)</kbd></dt>
+
+    <dd>Edit the property at point. For the special properties,
+    this will invoke the same interface that you normally use to
+    change that property. For example, when editing a TAGS
+    property, the tag completion or fast selection interface will
+    pop up. <a name="index-C_002dc-C_002dc-698" id=
+    "index-C_002dc-C_002dc-698"></a><a name=
+    "index-org_002dcolumns_002dset_002dtags_002dor_002dtoggle-699"
+    id=
+    "index-org_002dcolumns_002dset_002dtags_002dor_002dtoggle-699"></a><br />
+    </dd>
+
+    <dt><kbd>C-c C-c
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-set-tags-or-toggle</code><kbd>)</kbd></dt>
+
+    <dd>When there is a checkbox at point, toggle it. <a name=
+    "index-v-700" id="index-v-700"></a><a name=
+    "index-org_002dcolumns_002dshow_002dvalue-701" id=
+    "index-org_002dcolumns_002dshow_002dvalue-701"></a><br /></dd>
+
+    <dt><kbd>v
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-show-value</code><kbd>)</kbd></dt>
+
+    <dd>View the full value of this property. This is useful if the
+    width of the column is smaller than that of the value. <a name=
+    "index-a-702" id="index-a-702"></a><a name=
+    "index-org_002dcolumns_002dedit_002dallowed-703" id=
+    "index-org_002dcolumns_002dedit_002dallowed-703"></a><br /></dd>
+
+    <dt><kbd>a
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-edit-allowed</code><kbd>)</kbd></dt>
+
+    <dd>Edit the list of allowed values for this property. If the
+    list is found in the hierarchy, the modified values is stored
+    there. If no list is found, the new value is stored in the
+    first entry that is part of the current column view.<br /></dd>
+
+    <dt class="c1">Modifying the table structure</dt>
+
+    <dd><a name="index-g_t_003c-704" id=
+    "index-g_t_003c-704"></a><a name="index-g_t_003e-705" id=
+    "index-g_t_003e-705"></a><a name=
+    "index-org_002dcolumns_002dnarrow-706" id=
+    "index-org_002dcolumns_002dnarrow-706"></a><a name=
+    "index-org_002dcolumns_002dwiden-707" id=
+    "index-org_002dcolumns_002dwiden-707"></a><br /></dd>
+
+    <dt><kbd>&lt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-narrow</code><kbd>)</kbd></dt>
+
+    <dt><kbd>&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-widen</code><kbd>)</kbd></dt>
+
+    <dd>Make the column narrower/wider by one character. <a name=
+    "index-S_002dM_002d_0040key_007bright_007d-708" id=
+    "index-S_002dM_002d_0040key_007bright_007d-708"></a><a name=
+    "index-org_002dcolumns_002dnew-709" id=
+    "index-org_002dcolumns_002dnew-709"></a><br /></dd>
+
+    <dt><kbd>S-M-&lt;right&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-new</code><kbd>)</kbd></dt>
+
+    <dd>Insert a new column, to the left of the current column.
+    <a name="index-S_002dM_002d_0040key_007bleft_007d-710" id=
+    "index-S_002dM_002d_0040key_007bleft_007d-710"></a><a name=
+    "index-org_002dcolumns_002ddelete-711" id=
+    "index-org_002dcolumns_002ddelete-711"></a><br /></dd>
+
+    <dt><kbd>S-M-&lt;left&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-columns-delete</code><kbd>)</kbd></dt>
+
+    <dd>Delete the current column.</dd>
+  </dl>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,261 +19,371 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Image Descriptors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Image Descriptors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Image Descriptors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Images.html#Images" rel="up" title="Images">
-<link href="XBM-Images.html#XBM-Images" rel="next" title="XBM Images">
-<link href="Image-Formats.html#Image-Formats" rel="prev" title="Image Formats">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Image Descriptors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Image Descriptors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Image Descriptors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Images.html#Images" rel="up" title="Images" />
+  <link href="XBM-Images.html#XBM-Images" rel="next" title=
+  "XBM Images" />
+  <link href="Image-Formats.html#Image-Formats" rel="prev" title=
+  "Image Formats" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Image-Descriptors" id="Image-Descriptors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="XBM-Images.html#XBM-Images" accesskey="n"
+    rel="next">XBM Images</a>, Previous: <a href=
+    "Image-Formats.html#Image-Formats" accesskey="p" rel=
+    "prev">Image Formats</a>, Up: <a href="Images.html#Images"
+    accesskey="u" rel="up">Images</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Image-Descriptors-1" id="Image-Descriptors-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Image-Descriptors"></a>
-<div class="header">
-<p>
-Next: <a href="XBM-Images.html#XBM-Images" accesskey="n" rel="next">XBM Images</a>, Previous: <a href="Image-Formats.html#Image-Formats" accesskey="p" rel="prev">Image Formats</a>, Up: <a href="Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Image-Descriptors-1"></a>
-<h4 class="subsection">37.17.2 Image Descriptors</h4>
-<a name="index-image-descriptor"></a>
+  <h4 class="subsection">37.17.2 Image Descriptors</h4><a name=
+  "index-image-descriptor" id="index-image-descriptor"></a>
 
-<p>An <em>image descriptor</em> is a list which specifies the underlying
-data for an image, and how to display it.  It is typically used as the
-value of a <code>display</code> overlay or text property (see <a href="Other-Display-Specs.html#Other-Display-Specs">Other Display Specs</a>); but See <a href="Showing-Images.html#Showing-Images">Showing Images</a>, for convenient helper
-functions to insert images into buffers.
-</p>
-<p>Each image descriptor has the form <code>(image . <var>props</var>)</code>,
-where <var>props</var> is a property list of alternating keyword symbols
-and values, including at least the pair <code>:type <var>type</var></code> that
-specifies the image type.
-</p>
-<p>The following is a list of properties that are meaningful for all
-image types (there are also properties which are meaningful only for
-certain image types, as documented in the following subsections):
-</p>
-<dl compact="compact">
-<dt><code>:type <var>type</var></code></dt>
-<dd><p>The image type.
-See <a href="Image-Formats.html#Image-Formats">Image Formats</a>.
-Every image descriptor must include this property.
-</p>
-</dd>
-<dt><code>:file <var>file</var></code></dt>
-<dd><p>This says to load the image from file <var>file</var>.  If <var>file</var> is
-not an absolute file name, it is expanded in <code>data-directory</code>.
-</p>
-</dd>
-<dt><code>:data <var>data</var></code></dt>
-<dd><p>This specifies the raw image data.  Each image descriptor must have
-either <code>:data</code> or <code>:file</code>, but not both.
-</p>
-<p>For most image types, the value of a <code>:data</code> property should be a
-string containing the image data.  Some image types do not support
-<code>:data</code>; for some others, <code>:data</code> alone is not enough, so
-you need to use other image properties along with <code>:data</code>.  See
-the following subsections for details.
-</p>
-</dd>
-<dt><code>:margin <var>margin</var></code></dt>
-<dd><p>This specifies how many pixels to add as an extra margin around the
-image.  The value, <var>margin</var>, must be a non-negative number, or a
-pair <code>(<var>x</var> . <var>y</var>)</code> of such numbers.  If it is a pair,
-<var>x</var> specifies how many pixels to add horizontally, and <var>y</var>
-specifies how many pixels to add vertically.  If <code>:margin</code> is not
-specified, the default is zero.
-</p>
-</dd>
-<dt><code>:ascent <var>ascent</var></code></dt>
-<dd><p>This specifies the amount of the image&rsquo;s height to use for its
-ascent&mdash;that is, the part above the baseline.  The value,
-<var>ascent</var>, must be a number in the range 0 to 100, or the symbol
-<code>center</code>.
-</p>
-<p>If <var>ascent</var> is a number, that percentage of the image&rsquo;s height is
-used for its ascent.
-</p>
-<p>If <var>ascent</var> is <code>center</code>, the image is vertically centered
-around a centerline which would be the vertical centerline of text drawn
-at the position of the image, in the manner specified by the text
-properties and overlays that apply to the image.
-</p>
-<p>If this property is omitted, it defaults to 50.
-</p>
-</dd>
-<dt><code>:relief <var>relief</var></code></dt>
-<dd><p>This adds a shadow rectangle around the image.  The value,
-<var>relief</var>, specifies the width of the shadow lines, in pixels.  If
-<var>relief</var> is negative, shadows are drawn so that the image appears
-as a pressed button; otherwise, it appears as an unpressed button.
-</p>
-</dd>
-<dt><code>:conversion <var>algorithm</var></code></dt>
-<dd><p>This specifies a conversion algorithm that should be applied to the
-image before it is displayed; the value, <var>algorithm</var>, specifies
-which algorithm.
-</p>
-<dl compact="compact">
-<dt><code>laplace</code></dt>
-<dt><code>emboss</code></dt>
-<dd><p>Specifies the Laplace edge detection algorithm, which blurs out small
-differences in color while highlighting larger differences.  People
-sometimes consider this useful for displaying the image for a
-disabled button.
-</p>
-</dd>
-<dt><code>(edge-detection :matrix <var>matrix</var> :color-adjust <var>adjust</var>)</code></dt>
-<dd><a name="index-edge-detection_002c-images"></a>
-<p>Specifies a general edge-detection algorithm.  <var>matrix</var> must be
-either a nine-element list or a nine-element vector of numbers.  A pixel
-at position <em>x/y</em> in the transformed image is computed from
-original pixels around that position.  <var>matrix</var> specifies, for each
-pixel in the neighborhood of <em>x/y</em>, a factor with which that pixel
-will influence the transformed pixel; element <em>0</em> specifies the
-factor for the pixel at <em>x-1/y-1</em>, element <em>1</em> the factor for
-the pixel at <em>x/y-1</em> etc., as shown below:
-</p><div class="display">
-<pre class="display">  (x-1/y-1  x/y-1  x+1/y-1
+  <p>An <em>image descriptor</em> is a list which specifies the
+  underlying data for an image, and how to display it. It is
+  typically used as the value of a <code>display</code> overlay or
+  text property (see <a href=
+  "Other-Display-Specs.html#Other-Display-Specs">Other Display
+  Specs</a>); but See <a href=
+  "Showing-Images.html#Showing-Images">Showing Images</a>, for
+  convenient helper functions to insert images into buffers.</p>
+
+  <p>Each image descriptor has the form <code>(image .
+  <var>props</var>)</code>, where <var>props</var> is a property
+  list of alternating keyword symbols and values, including at
+  least the pair <code>:type <var>type</var></code> that specifies
+  the image type.</p>
+
+  <p>The following is a list of properties that are meaningful for
+  all image types (there are also properties which are meaningful
+  only for certain image types, as documented in the following
+  subsections):</p>
+
+  <dl compact="compact">
+    <dt><code>:type <var>type</var></code></dt>
+
+    <dd>
+      <p>The image type. See <a href=
+      "Image-Formats.html#Image-Formats">Image Formats</a>. Every
+      image descriptor must include this property.</p>
+    </dd>
+
+    <dt><code>:file <var>file</var></code></dt>
+
+    <dd>
+      <p>This says to load the image from file <var>file</var>. If
+      <var>file</var> is not an absolute file name, it is expanded
+      in <code>data-directory</code>.</p>
+    </dd>
+
+    <dt><code>:data <var>data</var></code></dt>
+
+    <dd>
+      <p>This specifies the raw image data. Each image descriptor
+      must have either <code>:data</code> or <code>:file</code>,
+      but not both.</p>
+
+      <p>For most image types, the value of a <code>:data</code>
+      property should be a string containing the image data. Some
+      image types do not support <code>:data</code>; for some
+      others, <code>:data</code> alone is not enough, so you need
+      to use other image properties along with <code>:data</code>.
+      See the following subsections for details.</p>
+    </dd>
+
+    <dt><code>:margin <var>margin</var></code></dt>
+
+    <dd>
+      <p>This specifies how many pixels to add as an extra margin
+      around the image. The value, <var>margin</var>, must be a
+      non-negative number, or a pair <code>(<var>x</var> .
+      <var>y</var>)</code> of such numbers. If it is a pair,
+      <var>x</var> specifies how many pixels to add horizontally,
+      and <var>y</var> specifies how many pixels to add vertically.
+      If <code>:margin</code> is not specified, the default is
+      zero.</p>
+    </dd>
+
+    <dt><code>:ascent <var>ascent</var></code></dt>
+
+    <dd>
+      <p>This specifies the amount of the image&rsquo;s height to
+      use for its ascent&mdash;that is, the part above the
+      baseline. The value, <var>ascent</var>, must be a number in
+      the range 0 to 100, or the symbol <code>center</code>.</p>
+
+      <p>If <var>ascent</var> is a number, that percentage of the
+      image&rsquo;s height is used for its ascent.</p>
+
+      <p>If <var>ascent</var> is <code>center</code>, the image is
+      vertically centered around a centerline which would be the
+      vertical centerline of text drawn at the position of the
+      image, in the manner specified by the text properties and
+      overlays that apply to the image.</p>
+
+      <p>If this property is omitted, it defaults to 50.</p>
+    </dd>
+
+    <dt><code>:relief <var>relief</var></code></dt>
+
+    <dd>
+      <p>This adds a shadow rectangle around the image. The value,
+      <var>relief</var>, specifies the width of the shadow lines,
+      in pixels. If <var>relief</var> is negative, shadows are
+      drawn so that the image appears as a pressed button;
+      otherwise, it appears as an unpressed button.</p>
+    </dd>
+
+    <dt><code>:conversion <var>algorithm</var></code></dt>
+
+    <dd>
+      <p>This specifies a conversion algorithm that should be
+      applied to the image before it is displayed; the value,
+      <var>algorithm</var>, specifies which algorithm.</p>
+
+      <dl compact="compact">
+        <dt><code>laplace</code></dt>
+
+        <dt><code>emboss</code></dt>
+
+        <dd>
+          <p>Specifies the Laplace edge detection algorithm, which
+          blurs out small differences in color while highlighting
+          larger differences. People sometimes consider this useful
+          for displaying the image for a disabled button.</p>
+        </dd>
+
+        <dt><code>(edge-detection :matrix <var>matrix</var>
+        :color-adjust <var>adjust</var>)</code></dt>
+
+        <dd>
+          <a name="index-edge-detection_002c-images" id=
+          "index-edge-detection_002c-images"></a>
+
+          <p>Specifies a general edge-detection algorithm.
+          <var>matrix</var> must be either a nine-element list or a
+          nine-element vector of numbers. A pixel at position
+          <em>x/y</em> in the transformed image is computed from
+          original pixels around that position. <var>matrix</var>
+          specifies, for each pixel in the neighborhood of
+          <em>x/y</em>, a factor with which that pixel will
+          influence the transformed pixel; element <em>0</em>
+          specifies the factor for the pixel at <em>x-1/y-1</em>,
+          element <em>1</em> the factor for the pixel at
+          <em>x/y-1</em> etc., as shown below:</p>
+
+          <div class="display">
+            <pre class="display">
+  (x-1/y-1  x/y-1  x+1/y-1
    x-1/y    x/y    x+1/y
    x-1/y+1  x/y+1  x+1/y+1)
-</pre></div>
+</pre>
+          </div>
 
-<p>The resulting pixel is computed from the color intensity of the color
-resulting from summing up the RGB values of surrounding pixels,
-multiplied by the specified factors, and dividing that sum by the sum
-of the factors&rsquo; absolute values.
-</p>
-<p>Laplace edge-detection currently uses a matrix of
-</p><div class="display">
-<pre class="display">  (1  0  0
+          <p>The resulting pixel is computed from the color
+          intensity of the color resulting from summing up the RGB
+          values of surrounding pixels, multiplied by the specified
+          factors, and dividing that sum by the sum of the
+          factors&rsquo; absolute values.</p>
+
+          <p>Laplace edge-detection currently uses a matrix of</p>
+
+          <div class="display">
+            <pre class="display">
+  (1  0  0
    0  0  0
    0  0 -1)
-</pre></div>
+</pre>
+          </div>
 
-<p>Emboss edge-detection uses a matrix of
-</p><div class="display">
-<pre class="display">  ( 2 -1  0
+          <p>Emboss edge-detection uses a matrix of</p>
+
+          <div class="display">
+            <pre class="display">
+  ( 2 -1  0
    -1  0  1
     0  1 -2)
-</pre></div>
+</pre>
+          </div>
+        </dd>
 
-</dd>
-<dt><code>disabled</code></dt>
-<dd><p>Specifies transforming the image so that it looks disabled.
-</p></dd>
-</dl>
+        <dt><code>disabled</code></dt>
 
-</dd>
-<dt><code>:mask <var>mask</var></code></dt>
-<dd><p>If <var>mask</var> is <code>heuristic</code> or <code>(heuristic <var>bg</var>)</code>, build
-a clipping mask for the image, so that the background of a frame is
-visible behind the image.  If <var>bg</var> is not specified, or if <var>bg</var>
-is <code>t</code>, determine the background color of the image by looking at
-the four corners of the image, assuming the most frequently occurring
-color from the corners is the background color of the image.  Otherwise,
-<var>bg</var> must be a list <code>(<var>red</var> <var>green</var> <var>blue</var>)</code>
-specifying the color to assume for the background of the image.
-</p>
-<p>If <var>mask</var> is <code>nil</code>, remove a mask from the image, if it has
-one.  Images in some formats include a mask which can be removed by
-specifying <code>:mask nil</code>.
-</p>
-</dd>
-<dt><code>:pointer <var>shape</var></code></dt>
-<dd><p>This specifies the pointer shape when the mouse pointer is over this
-image.  See <a href="Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>, for available pointer shapes.
-</p>
-</dd>
-<dt><code>:map <var>map</var></code></dt>
-<dd><a name="index-image-maps"></a>
-<p>This associates an image map of <em>hot spots</em> with this image.
-</p>
-<p>An image map is an alist where each element has the format
-<code>(<var>area</var> <var>id</var> <var>plist</var>)</code>.  An <var>area</var> is specified
-as either a rectangle, a circle, or a polygon.
-</p>
-<p>A rectangle is a cons
-<code>(rect . ((<var>x0</var> . <var>y0</var>) . (<var>x1</var> . <var>y1</var>)))</code>
-which specifies the pixel coordinates of the upper left and bottom right
-corners of the rectangle area.
-</p>
-<p>A circle is a cons
-<code>(circle . ((<var>x0</var> . <var>y0</var>) . <var>r</var>))</code>
-which specifies the center and the radius of the circle; <var>r</var> may
-be a float or integer.
-</p>
-<p>A polygon is a cons
-<code>(poly . [<var>x0</var> <var>y0</var> <var>x1</var> <var>y1</var> ...])</code>
-where each pair in the vector describes one corner in the polygon.
-</p>
-<p>When the mouse pointer lies on a hot-spot area of an image, the
-<var>plist</var> of that hot-spot is consulted; if it contains a <code>help-echo</code>
-property, that defines a tool-tip for the hot-spot, and if it contains
-a <code>pointer</code> property, that defines the shape of the mouse cursor when
-it is on the hot-spot.
-See <a href="Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>, for available pointer shapes.
-</p>
-<p>When you click the mouse when the mouse pointer is over a hot-spot, an
-event is composed by combining the <var>id</var> of the hot-spot with the
-mouse event; for instance, <code>[area4 mouse-1]</code> if the hot-spot&rsquo;s
-<var>id</var> is <code>area4</code>.
-</p></dd>
-</dl>
+        <dd>
+          <p>Specifies transforming the image so that it looks
+          disabled.</p>
+        </dd>
+      </dl>
+    </dd>
 
-<dl>
-<dt><a name="index-image_002dmask_002dp"></a>Function: <strong>image-mask-p</strong> <em>spec &amp;optional frame</em></dt>
-<dd><p>This function returns <code>t</code> if image <var>spec</var> has a mask bitmap.
-<var>frame</var> is the frame on which the image will be displayed.
-<var>frame</var> <code>nil</code> or omitted means to use the selected frame
-(see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).
-</p></dd></dl>
+    <dt><code>:mask <var>mask</var></code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="XBM-Images.html#XBM-Images" accesskey="n" rel="next">XBM Images</a>, Previous: <a href="Image-Formats.html#Image-Formats" accesskey="p" rel="prev">Image Formats</a>, Up: <a href="Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>If <var>mask</var> is <code>heuristic</code> or
+      <code>(heuristic <var>bg</var>)</code>, build a clipping mask
+      for the image, so that the background of a frame is visible
+      behind the image. If <var>bg</var> is not specified, or if
+      <var>bg</var> is <code>t</code>, determine the background
+      color of the image by looking at the four corners of the
+      image, assuming the most frequently occurring color from the
+      corners is the background color of the image. Otherwise,
+      <var>bg</var> must be a list <code>(<var>red</var>
+      <var>green</var> <var>blue</var>)</code> specifying the color
+      to assume for the background of the image.</p>
 
+      <p>If <var>mask</var> is <code>nil</code>, remove a mask from
+      the image, if it has one. Images in some formats include a
+      mask which can be removed by specifying <code>:mask
+      nil</code>.</p>
+    </dd>
 
+    <dt><code>:pointer <var>shape</var></code></dt>
 
+    <dd>
+      <p>This specifies the pointer shape when the mouse pointer is
+      over this image. See <a href=
+      "Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>, for
+      available pointer shapes.</p>
+    </dd>
+
+    <dt><code>:map <var>map</var></code></dt>
+
+    <dd>
+      <a name="index-image-maps" id="index-image-maps"></a>
+
+      <p>This associates an image map of <em>hot spots</em> with
+      this image.</p>
+
+      <p>An image map is an alist where each element has the format
+      <code>(<var>area</var> <var>id</var>
+      <var>plist</var>)</code>. An <var>area</var> is specified as
+      either a rectangle, a circle, or a polygon.</p>
+
+      <p>A rectangle is a cons <code>(rect . ((<var>x0</var> .
+      <var>y0</var>) . (<var>x1</var> . <var>y1</var>)))</code>
+      which specifies the pixel coordinates of the upper left and
+      bottom right corners of the rectangle area.</p>
+
+      <p>A circle is a cons <code>(circle . ((<var>x0</var> .
+      <var>y0</var>) . <var>r</var>))</code> which specifies the
+      center and the radius of the circle; <var>r</var> may be a
+      float or integer.</p>
+
+      <p>A polygon is a cons <code>(poly . [<var>x0</var>
+      <var>y0</var> <var>x1</var> <var>y1</var> ...])</code> where
+      each pair in the vector describes one corner in the
+      polygon.</p>
+
+      <p>When the mouse pointer lies on a hot-spot area of an
+      image, the <var>plist</var> of that hot-spot is consulted; if
+      it contains a <code>help-echo</code> property, that defines a
+      tool-tip for the hot-spot, and if it contains a
+      <code>pointer</code> property, that defines the shape of the
+      mouse cursor when it is on the hot-spot. See <a href=
+      "Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>, for
+      available pointer shapes.</p>
+
+      <p>When you click the mouse when the mouse pointer is over a
+      hot-spot, an event is composed by combining the <var>id</var>
+      of the hot-spot with the mouse event; for instance,
+      <code>[area4 mouse-1]</code> if the hot-spot&rsquo;s
+      <var>id</var> is <code>area4</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-image_002dmask_002dp" id=
+    "index-image_002dmask_002dp"></a>Function:
+    <strong>image-mask-p</strong> <em>spec &amp;optional
+    frame</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if image
+      <var>spec</var> has a mask bitmap. <var>frame</var> is the
+      frame on which the image will be displayed. <var>frame</var>
+      <code>nil</code> or omitted means to use the selected frame
+      (see <a href="Input-Focus.html#Input-Focus">Input
+      Focus</a>).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="XBM-Images.html#XBM-Images" accesskey="n"
+    rel="next">XBM Images</a>, Previous: <a href=
+    "Image-Formats.html#Image-Formats" accesskey="p" rel=
+    "prev">Image Formats</a>, Up: <a href="Images.html#Images"
+    accesskey="u" rel="up">Images</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

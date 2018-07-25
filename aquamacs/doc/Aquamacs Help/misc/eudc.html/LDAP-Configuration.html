@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents EUDC version 1.40.0.
 
 EUDC is the Emacs Unified Directory Client, a common interface to
@@ -17,126 +19,192 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Unified Directory Client (EUDC) Manual: LDAP Configuration</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Unified Directory Client (EUDC) Manual: LDAP Configuration">
-<meta name="keywords" content="Emacs Unified Directory Client (EUDC) Manual: LDAP Configuration">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Installation.html#Installation" rel="up" title="Installation">
-<link href="Emacs_002donly-Configuration.html#Emacs_002donly-Configuration" rel="next" title="Emacs-only Configuration">
-<link href="Installation.html#Installation" rel="prev" title="Installation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Unified Directory Client (EUDC) Manual: LDAP
+  Configuration</title>
+  <meta name="description" content=
+  "Emacs Unified Directory Client (EUDC) Manual: LDAP Configuration" />
+  <meta name="keywords" content=
+  "Emacs Unified Directory Client (EUDC) Manual: LDAP Configuration" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Installation.html#Installation" rel="up" title=
+  "Installation" />
+  <link href=
+  "Emacs_002donly-Configuration.html#Emacs_002donly-Configuration"
+  rel="next" title="Emacs-only Configuration" />
+  <link href="Installation.html#Installation" rel="prev" title=
+  "Installation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="LDAP-Configuration"></a>
-<div class="header">
-<p>
-Up: <a href="Installation.html#Installation" accesskey="u" rel="up">Installation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="LDAP-Configuration-1"></a>
-<h3 class="section">2.1 LDAP Configuration</h3>
+<body lang="en" xml:lang="en">
+  <a name="LDAP-Configuration" id="LDAP-Configuration"></a>
 
-<p>LDAP support is added by means of <samp>ldap.el</samp>, which is part of
-Emacs.  <samp>ldap.el</samp> needs an external program called
-<code>ldapsearch</code>, available as part of OpenLDAP
-(<a href="http://www.openldap.org/">http://www.openldap.org/</a>).  The configurations in this section
-were tested with OpenLDAP 2.4.23.
-</p>
-<p>Most servers use LDAP-over-SSL these days; the examples here reflect
-that.  The other possibilities are:
-</p>
-<a name="index-ldap_002dhost_002dparameters_002dalist"></a>
-<a name="index-ldap_002dldapsearch_002dargs"></a>
-<ul>
-<li> Servers that do not require authentication or that do not encrypt
-authentication traffic.
+  <div class="header">
+    <p>Up: <a href="Installation.html#Installation" accesskey="u"
+    rel="up">Installation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="LDAP-Configuration-1" id="LDAP-Configuration-1"></a>
 
-<p>Include <code>auth simple</code> in <code>ldap-host-parameters-alist</code>, which
-causes the <code>-x</code> option to be passed to <code>ldapsearch</code>.
-</p>
-</li><li> Servers that require SASL authentication.
+  <h3 class="section">2.1 LDAP Configuration</h3>
 
-<p>Pass any required extra options to <code>ldapsearch</code> using
-<code>ldap-ldapsearch-args</code>.
-</p></li></ul>
+  <p>LDAP support is added by means of <samp>ldap.el</samp>, which
+  is part of Emacs. <samp>ldap.el</samp> needs an external program
+  called <code>ldapsearch</code>, available as part of OpenLDAP
+  (<a href=
+  "http://www.openldap.org/">http://www.openldap.org/</a>). The
+  configurations in this section were tested with OpenLDAP
+  2.4.23.</p>
 
-<p>The following examples use a base of
-<code>ou=people,dc=gnu,dc=org</code> and the host name
-<code>ldap.gnu.org</code>, a server that supports LDAP-over-SSL (the
-<code>ldaps</code> protocol, with default port <code>636</code>) and which
-requires authentication by the user <code>emacsuser</code> with password
-<code>s3cr3t</code>.
-</p>
-<p>These configurations are meant to be self-contained; that is, each
-provides everything required for sensible TAB-completion of email
-fields.  BBDB lookups are attempted first; if a matching BBDB entry is
-found then EUDC will not attempt any LDAP lookups.
-</p>
-<p>Wildcard LDAP lookups are supported using the <code>*</code> character.  For
-example, attempting to TAB-complete the following:
-</p>
-<div class="example">
-<pre class="example">To: * Smith
-</pre></div>
+  <p>Most servers use LDAP-over-SSL these days; the examples here
+  reflect that. The other possibilities are:</p><a name=
+  "index-ldap_002dhost_002dparameters_002dalist" id=
+  "index-ldap_002dhost_002dparameters_002dalist"></a> <a name=
+  "index-ldap_002dldapsearch_002dargs" id=
+  "index-ldap_002dldapsearch_002dargs"></a>
 
-<p>will return all LDAP entries with surnames that begin with
-<code>Smith</code>.  In every LDAP query it makes, EUDC implicitly appends
-the wildcard character to the end of the last word.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Emacs_002donly-Configuration.html#Emacs_002donly-Configuration" accesskey="1">Emacs-only Configuration</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Configure with <samp>.emacs</samp>
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="External-Configuration.html#External-Configuration" accesskey="2">External Configuration</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Configure with <samp>/etc/openldap/ldap.conf</samp>
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Troubleshooting.html#Troubleshooting" accesskey="3">Troubleshooting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Debug <code>ldapsearch</code> failures
-</td></tr>
-</table>
+  <ul>
+    <li>Servers that do not require authentication or that do not
+    encrypt authentication traffic.
 
-<hr>
-<div class="header">
-<p>
-Up: <a href="Installation.html#Installation" accesskey="u" rel="up">Installation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Include <code>auth simple</code> in
+      <code>ldap-host-parameters-alist</code>, which causes the
+      <code>-x</code> option to be passed to
+      <code>ldapsearch</code>.</p>
+    </li>
 
+    <li>Servers that require SASL authentication.
 
+      <p>Pass any required extra options to <code>ldapsearch</code>
+      using <code>ldap-ldapsearch-args</code>.</p>
+    </li>
+  </ul>
 
+  <p>The following examples use a base of
+  <code>ou=people,dc=gnu,dc=org</code> and the host name
+  <code>ldap.gnu.org</code>, a server that supports LDAP-over-SSL
+  (the <code>ldaps</code> protocol, with default port
+  <code>636</code>) and which requires authentication by the user
+  <code>emacsuser</code> with password <code>s3cr3t</code>.</p>
+
+  <p>These configurations are meant to be self-contained; that is,
+  each provides everything required for sensible TAB-completion of
+  email fields. BBDB lookups are attempted first; if a matching
+  BBDB entry is found then EUDC will not attempt any LDAP
+  lookups.</p>
+
+  <p>Wildcard LDAP lookups are supported using the <code>*</code>
+  character. For example, attempting to TAB-complete the
+  following:</p>
+
+  <div class="example">
+    <pre class="example">
+To: * Smith
+</pre>
+  </div>
+
+  <p>will return all LDAP entries with surnames that begin with
+  <code>Smith</code>. In every LDAP query it makes, EUDC implicitly
+  appends the wildcard character to the end of the last word.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Emacs_002donly-Configuration.html#Emacs_002donly-Configuration"
+      accesskey="1">Emacs-only Configuration</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Configure with
+      <samp>.emacs</samp></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "External-Configuration.html#External-Configuration"
+      accesskey="2">External Configuration</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Configure with
+      <samp>/etc/openldap/ldap.conf</samp></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Troubleshooting.html#Troubleshooting" accesskey=
+      "3">Troubleshooting</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Debug <code>ldapsearch</code>
+      failures</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Up: <a href="Installation.html#Installation" accesskey="u"
+    rel="up">Installation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

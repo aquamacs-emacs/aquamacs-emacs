@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,90 +19,194 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: GNU Emacs Internals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: GNU Emacs Internals">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: GNU Emacs Internals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Building-Emacs.html#Building-Emacs" rel="next" title="Building Emacs">
-<link href="Library-Headers.html#Library-Headers" rel="prev" title="Library Headers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: GNU Emacs
+  Internals</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: GNU Emacs Internals" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: GNU Emacs Internals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Building-Emacs.html#Building-Emacs" rel="next" title=
+  "Building Emacs" />
+  <link href="Library-Headers.html#Library-Headers" rel="prev"
+  title="Library Headers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="GNU-Emacs-Internals" id="GNU-Emacs-Internals"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Standard-Errors.html#Standard-Errors"
+    accesskey="n" rel="next">Standard Errors</a>, Previous:
+    <a href="Tips.html#Tips" accesskey="p" rel="prev">Tips</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="GNU-Emacs-Internals-1" id="GNU-Emacs-Internals-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="GNU-Emacs-Internals"></a>
-<div class="header">
-<p>
-Next: <a href="Standard-Errors.html#Standard-Errors" accesskey="n" rel="next">Standard Errors</a>, Previous: <a href="Tips.html#Tips" accesskey="p" rel="prev">Tips</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="GNU-Emacs-Internals-1"></a>
-<h2 class="appendix">Appendix E GNU Emacs Internals</h2>
+  <h2 class="appendix">Appendix E GNU Emacs Internals</h2>
 
-<p>This chapter describes how the runnable Emacs executable is dumped with
-the preloaded Lisp libraries in it, how storage is allocated, and some
-internal aspects of GNU Emacs that may be of interest to C programmers.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Building-Emacs.html#Building-Emacs" accesskey="1">Building Emacs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How the dumped Emacs is made.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Pure-Storage.html#Pure-Storage" accesskey="2">Pure Storage</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Kludge to make preloaded Lisp functions shareable.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Garbage-Collection.html#Garbage-Collection" accesskey="3">Garbage Collection</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reclaiming space for Lisp objects no longer used.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Stack_002dallocated-Objects.html#Stack_002dallocated-Objects" accesskey="4">Stack-allocated Objects</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Temporary conses and strings on C stack.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Memory-Usage.html#Memory-Usage" accesskey="5">Memory Usage</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Info about total size of Lisp objects made so far.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="C-Dialect.html#C-Dialect" accesskey="6">C Dialect</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What C variant Emacs is written in.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Writing-Emacs-Primitives.html#Writing-Emacs-Primitives" accesskey="7">Writing Emacs Primitives</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Writing C code for Emacs.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Object-Internals.html#Object-Internals" accesskey="8">Object Internals</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Data formats of buffers, windows, processes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="C-Integer-Types.html#C-Integer-Types" accesskey="9">C Integer Types</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How C integer types are used inside Emacs.
-</td></tr>
-</table>
+  <p>This chapter describes how the runnable Emacs executable is
+  dumped with the preloaded Lisp libraries in it, how storage is
+  allocated, and some internal aspects of GNU Emacs that may be of
+  interest to C programmers.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Building-Emacs.html#Building-Emacs" accesskey="1">Building
+      Emacs</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">How the dumped Emacs is
+      made.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Pure-Storage.html#Pure-Storage" accesskey="2">Pure
+      Storage</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Kludge to make preloaded Lisp
+      functions shareable.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Garbage-Collection.html#Garbage-Collection" accesskey=
+      "3">Garbage Collection</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reclaiming space for Lisp
+      objects no longer used.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Stack_002dallocated-Objects.html#Stack_002dallocated-Objects"
+      accesskey="4">Stack-allocated Objects</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Temporary conses and strings on
+      C stack.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Memory-Usage.html#Memory-Usage" accesskey="5">Memory
+      Usage</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Info about total size of Lisp
+      objects made so far.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "C-Dialect.html#C-Dialect" accesskey="6">C Dialect</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What C variant Emacs is written
+      in.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Writing-Emacs-Primitives.html#Writing-Emacs-Primitives"
+      accesskey="7">Writing Emacs Primitives</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Writing C code for Emacs.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Object-Internals.html#Object-Internals" accesskey="8">Object
+      Internals</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Data formats of buffers,
+      windows, processes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "C-Integer-Types.html#C-Integer-Types" accesskey="9">C
+      Integer Types</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How C integer types are used
+      inside Emacs.</td>
+    </tr>
+  </table>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,120 +14,168 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Advanced Scoring Syntax</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Advanced Scoring Syntax">
-<meta name="keywords" content="Gnus Manual: Advanced Scoring Syntax">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Advanced-Scoring.html#Advanced-Scoring" rel="up" title="Advanced Scoring">
-<link href="Advanced-Scoring-Examples.html#Advanced-Scoring-Examples" rel="next" title="Advanced Scoring Examples">
-<link href="Advanced-Scoring.html#Advanced-Scoring" rel="prev" title="Advanced Scoring">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Advanced Scoring Syntax</title>
+  <meta name="description" content=
+  "Gnus Manual: Advanced Scoring Syntax" />
+  <meta name="keywords" content=
+  "Gnus Manual: Advanced Scoring Syntax" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Advanced-Scoring.html#Advanced-Scoring" rel="up"
+  title="Advanced Scoring" />
+  <link href=
+  "Advanced-Scoring-Examples.html#Advanced-Scoring-Examples" rel=
+  "next" title="Advanced Scoring Examples" />
+  <link href="Advanced-Scoring.html#Advanced-Scoring" rel="prev"
+  title="Advanced Scoring" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Advanced-Scoring-Syntax"></a>
-<div class="header">
-<p>
-Next: <a href="Advanced-Scoring-Examples.html#Advanced-Scoring-Examples" accesskey="n" rel="next">Advanced Scoring Examples</a>, Up: <a href="Advanced-Scoring.html#Advanced-Scoring" accesskey="u" rel="up">Advanced Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Advanced-Scoring-Syntax-1"></a>
-<h4 class="subsection">7.15.1 Advanced Scoring Syntax</h4>
+<body lang="en" xml:lang="en">
+  <a name="Advanced-Scoring-Syntax" id=
+  "Advanced-Scoring-Syntax"></a>
 
-<p>Ordinary scoring rules have a string as the first element in the rule.
-Advanced scoring rules have a list as the first element.  The second
-element is the score to be applied if the first element evaluated to a
-non-<code>nil</code> value.
-</p>
-<p>These lists may consist of three logical operators, one redirection
-operator, and various match operators.
-</p>
-<p>Logical operators:
-</p>
-<dl compact="compact">
-<dt><code>&amp;</code></dt>
-<dt><code>and</code></dt>
-<dd><p>This logical operator will evaluate each of its arguments until it finds
-one that evaluates to <code>false</code>, and then it&rsquo;ll stop.  If all arguments
-evaluate to <code>true</code> values, then this operator will return
-<code>true</code>.
-</p>
-</dd>
-<dt><code>|</code></dt>
-<dt><code>or</code></dt>
-<dd><p>This logical operator will evaluate each of its arguments until it finds
-one that evaluates to <code>true</code>.  If no arguments are <code>true</code>,
-then this operator will return <code>false</code>.
-</p>
-</dd>
-<dt><code>!</code></dt>
-<dt><code>not</code></dt>
-<dt><code>¬</code></dt>
-<dd><p>This logical operator only takes a single argument.  It returns the
-logical negation of the value of its argument.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Advanced-Scoring-Examples.html#Advanced-Scoring-Examples"
+    accesskey="n" rel="next">Advanced Scoring Examples</a>, Up:
+    <a href="Advanced-Scoring.html#Advanced-Scoring" accesskey="u"
+    rel="up">Advanced Scoring</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Advanced-Scoring-Syntax-1" id=
+  "Advanced-Scoring-Syntax-1"></a>
 
-<p>There is an <em>indirection operator</em> that will make its arguments
-apply to the ancestors of the current article being scored.  For
-instance, <code>1-</code> will make score rules apply to the parent of the
-current article.  <code>2-</code> will make score rules apply to the
-grandparent of the current article.  Alternatively, you can write
-<code>^^</code>, where the number of <code>^</code>s (carets) says how far back into
-the ancestry you want to go.
-</p>
-<p>Finally, we have the match operators.  These are the ones that do the
-real work.  Match operators are header name strings followed by a match
-and a match type.  A typical match operator looks like &lsquo;<samp>(&quot;from&quot;
-&quot;Lars Ingebrigtsen&quot; s)</samp>&rsquo;.  The header names are the same as when using
-simple scoring, and the match types are also the same.
-</p>
+  <h4 class="subsection">7.15.1 Advanced Scoring Syntax</h4>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Advanced-Scoring-Examples.html#Advanced-Scoring-Examples" accesskey="n" rel="next">Advanced Scoring Examples</a>, Up: <a href="Advanced-Scoring.html#Advanced-Scoring" accesskey="u" rel="up">Advanced Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Ordinary scoring rules have a string as the first element in
+  the rule. Advanced scoring rules have a list as the first
+  element. The second element is the score to be applied if the
+  first element evaluated to a non-<code>nil</code> value.</p>
 
+  <p>These lists may consist of three logical operators, one
+  redirection operator, and various match operators.</p>
 
+  <p>Logical operators:</p>
 
+  <dl compact="compact">
+    <dt><code>&amp;</code></dt>
+
+    <dt><code>and</code></dt>
+
+    <dd>
+      <p>This logical operator will evaluate each of its arguments
+      until it finds one that evaluates to <code>false</code>, and
+      then it&rsquo;ll stop. If all arguments evaluate to
+      <code>true</code> values, then this operator will return
+      <code>true</code>.</p>
+    </dd>
+
+    <dt><code>|</code></dt>
+
+    <dt><code>or</code></dt>
+
+    <dd>
+      <p>This logical operator will evaluate each of its arguments
+      until it finds one that evaluates to <code>true</code>. If no
+      arguments are <code>true</code>, then this operator will
+      return <code>false</code>.</p>
+    </dd>
+
+    <dt><code>!</code></dt>
+
+    <dt><code>not</code></dt>
+
+    <dt><code>&Acirc;&not;</code></dt>
+
+    <dd>
+      <p>This logical operator only takes a single argument. It
+      returns the logical negation of the value of its
+      argument.</p>
+    </dd>
+  </dl>
+
+  <p>There is an <em>indirection operator</em> that will make its
+  arguments apply to the ancestors of the current article being
+  scored. For instance, <code>1-</code> will make score rules apply
+  to the parent of the current article. <code>2-</code> will make
+  score rules apply to the grandparent of the current article.
+  Alternatively, you can write <code>^^</code>, where the number of
+  <code>^</code>s (carets) says how far back into the ancestry you
+  want to go.</p>
+
+  <p>Finally, we have the match operators. These are the ones that
+  do the real work. Match operators are header name strings
+  followed by a match and a match type. A typical match operator
+  looks like &lsquo;<samp>("from" "Lars Ingebrigtsen"
+  s)</samp>&rsquo;. The header names are the same as when using
+  simple scoring, and the match types are also the same.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Advanced-Scoring-Examples.html#Advanced-Scoring-Examples"
+    accesskey="n" rel="next">Advanced Scoring Examples</a>, Up:
+    <a href="Advanced-Scoring.html#Advanced-Scoring" accesskey="u"
+    rel="up">Advanced Scoring</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

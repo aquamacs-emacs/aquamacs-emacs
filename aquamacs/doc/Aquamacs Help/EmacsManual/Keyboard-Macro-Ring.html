@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,134 +20,200 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Keyboard Macro Ring</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Keyboard Macro Ring">
-<meta name="keywords" content="GNU Emacs Manual: Keyboard Macro Ring">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title="Keyboard Macros">
-<link href="Keyboard-Macro-Counter.html#Keyboard-Macro-Counter" rel="next" title="Keyboard Macro Counter">
-<link href="Basic-Keyboard-Macro.html#Basic-Keyboard-Macro" rel="prev" title="Basic Keyboard Macro">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Keyboard Macro Ring</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Keyboard Macro Ring" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Keyboard Macro Ring" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title=
+  "Keyboard Macros" />
+  <link href="Keyboard-Macro-Counter.html#Keyboard-Macro-Counter"
+  rel="next" title="Keyboard Macro Counter" />
+  <link href="Basic-Keyboard-Macro.html#Basic-Keyboard-Macro" rel=
+  "prev" title="Basic Keyboard Macro" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Keyboard-Macro-Ring" id="Keyboard-Macro-Ring"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Keyboard-Macro-Counter.html#Keyboard-Macro-Counter" accesskey=
+    "n" rel="next">Keyboard Macro Counter</a>, Previous: <a href=
+    "Basic-Keyboard-Macro.html#Basic-Keyboard-Macro" accesskey="p"
+    rel="prev">Basic Keyboard Macro</a>, Up: <a href=
+    "Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel=
+    "up">Keyboard Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Keyboard-Macro-Ring" id=
+  "The-Keyboard-Macro-Ring"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Keyboard-Macro-Ring"></a>
-<div class="header">
-<p>
-Next: <a href="Keyboard-Macro-Counter.html#Keyboard-Macro-Counter" accesskey="n" rel="next">Keyboard Macro Counter</a>, Previous: <a href="Basic-Keyboard-Macro.html#Basic-Keyboard-Macro" accesskey="p" rel="prev">Basic Keyboard Macro</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Keyboard-Macro-Ring"></a>
-<h3 class="section">17.2 The Keyboard Macro Ring</h3>
+  <h3 class="section">17.2 The Keyboard Macro Ring</h3>
 
-<p>All defined keyboard macros are recorded in the <em>keyboard macro
-ring</em>.  There is only one keyboard macro ring, shared by all buffers.
-</p>
-<dl compact="compact">
-<dt><kbd>C-x C-k C-k</kbd></dt>
-<dd><p>Execute the keyboard macro at the head of the ring (<code>kmacro-end-or-call-macro-repeat</code>).
-</p></dd>
-<dt><kbd>C-x C-k C-n</kbd></dt>
-<dd><p>Rotate the keyboard macro ring to the next macro (defined earlier)
-(<code>kmacro-cycle-ring-next</code>).
-</p></dd>
-<dt><kbd>C-x C-k C-p</kbd></dt>
-<dd><p>Rotate the keyboard macro ring to the previous macro (defined later)
-(<code>kmacro-cycle-ring-previous</code>).
-</p></dd>
-</dl>
+  <p>All defined keyboard macros are recorded in the <em>keyboard
+  macro ring</em>. There is only one keyboard macro ring, shared by
+  all buffers.</p>
 
-<p>All commands which operate on the keyboard macro ring use the
-same <kbd>C-x C-k</kbd> prefix.  Most of these commands can be executed and
-repeated immediately after each other without repeating the <kbd>C-x
-C-k</kbd> prefix.  For example,
-</p>
-<div class="example">
-<pre class="example">C-x C-k C-p C-p C-k C-k C-k C-n C-n C-k C-p C-k C-d
-</pre></div>
+  <dl compact="compact">
+    <dt><kbd>C-x C-k C-k</kbd></dt>
 
-<p>will rotate the keyboard macro ring to the second-previous macro,
-execute the resulting head macro three times, rotate back to the
-original head macro, execute that once, rotate to the previous
-macro, execute that, and finally delete it from the macro ring.
-</p>
-<a name="index-kmacro_002dend_002dor_002dcall_002dmacro_002drepeat"></a>
-<a name="index-C_002dx-C_002dk-C_002dk"></a>
-<p>The command <kbd>C-x C-k C-k</kbd> (<code>kmacro-end-or-call-macro-repeat</code>)
-executes the keyboard macro at the head of the macro ring.  You can
-repeat the macro immediately by typing another <kbd>C-k</kbd>, or you can
-rotate the macro ring immediately by typing <kbd>C-n</kbd> or <kbd>C-p</kbd>.
-</p>
-<p>When a keyboard macro is being defined, <kbd>C-x C-k C-k</kbd> behaves
-like <tt class="key">F4</tt> except that, immediately afterward, you can use most key
-bindings of this section without the <kbd>C-x C-k</kbd> prefix.  For
-instance, another <kbd>C-k</kbd> will re-execute the macro.
-</p>
-<a name="index-kmacro_002dcycle_002dring_002dnext"></a>
-<a name="index-C_002dx-C_002dk-C_002dn"></a>
-<a name="index-kmacro_002dcycle_002dring_002dprevious"></a>
-<a name="index-C_002dx-C_002dk-C_002dp"></a>
-<p>The commands <kbd>C-x C-k C-n</kbd> (<code>kmacro-cycle-ring-next</code>) and
-<kbd>C-x C-k C-p</kbd> (<code>kmacro-cycle-ring-previous</code>) rotate the
-macro ring, bringing the next or previous keyboard macro to the head
-of the macro ring.  The definition of the new head macro is displayed
-in the echo area.  You can continue to rotate the macro ring
-immediately by repeating just <kbd>C-n</kbd> and <kbd>C-p</kbd> until the
-desired macro is at the head of the ring.  To execute the new macro
-ring head immediately, just type <kbd>C-k</kbd>.
-</p>
-<p>Note that Emacs treats the head of the macro ring as the last
-defined keyboard macro.  For instance, <tt class="key">F4</tt> will execute that
-macro, and <kbd>C-x C-k n</kbd> will give it a name.
-</p>
-<a name="index-kmacro_002dring_002dmax"></a>
-<p>The maximum number of macros stored in the keyboard macro ring is
-determined by the customizable variable <code>kmacro-ring-max</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Keyboard-Macro-Counter.html#Keyboard-Macro-Counter" accesskey="n" rel="next">Keyboard Macro Counter</a>, Previous: <a href="Basic-Keyboard-Macro.html#Basic-Keyboard-Macro" accesskey="p" rel="prev">Basic Keyboard Macro</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Execute the keyboard macro at the head of the ring
+      (<code>kmacro-end-or-call-macro-repeat</code>).</p>
+    </dd>
 
+    <dt><kbd>C-x C-k C-n</kbd></dt>
 
+    <dd>
+      <p>Rotate the keyboard macro ring to the next macro (defined
+      earlier) (<code>kmacro-cycle-ring-next</code>).</p>
+    </dd>
 
+    <dt><kbd>C-x C-k C-p</kbd></dt>
+
+    <dd>
+      <p>Rotate the keyboard macro ring to the previous macro
+      (defined later)
+      (<code>kmacro-cycle-ring-previous</code>).</p>
+    </dd>
+  </dl>
+
+  <p>All commands which operate on the keyboard macro ring use the
+  same <kbd>C-x C-k</kbd> prefix. Most of these commands can be
+  executed and repeated immediately after each other without
+  repeating the <kbd>C-x C-k</kbd> prefix. For example,</p>
+
+  <div class="example">
+    <pre class="example">
+C-x C-k C-p C-p C-k C-k C-k C-n C-n C-k C-p C-k C-d
+</pre>
+  </div>
+
+  <p>will rotate the keyboard macro ring to the second-previous
+  macro, execute the resulting head macro three times, rotate back
+  to the original head macro, execute that once, rotate to the
+  previous macro, execute that, and finally delete it from the
+  macro ring.</p><a name=
+  "index-kmacro_002dend_002dor_002dcall_002dmacro_002drepeat" id=
+  "index-kmacro_002dend_002dor_002dcall_002dmacro_002drepeat"></a>
+  <a name="index-C_002dx-C_002dk-C_002dk" id=
+  "index-C_002dx-C_002dk-C_002dk"></a>
+
+  <p>The command <kbd>C-x C-k C-k</kbd>
+  (<code>kmacro-end-or-call-macro-repeat</code>) executes the
+  keyboard macro at the head of the macro ring. You can repeat the
+  macro immediately by typing another <kbd>C-k</kbd>, or you can
+  rotate the macro ring immediately by typing <kbd>C-n</kbd> or
+  <kbd>C-p</kbd>.</p>
+
+  <p>When a keyboard macro is being defined, <kbd>C-x C-k C-k</kbd>
+  behaves like <tt class="key">F4</tt> except that, immediately
+  afterward, you can use most key bindings of this section without
+  the <kbd>C-x C-k</kbd> prefix. For instance, another
+  <kbd>C-k</kbd> will re-execute the macro.</p><a name=
+  "index-kmacro_002dcycle_002dring_002dnext" id=
+  "index-kmacro_002dcycle_002dring_002dnext"></a> <a name=
+  "index-C_002dx-C_002dk-C_002dn" id=
+  "index-C_002dx-C_002dk-C_002dn"></a> <a name=
+  "index-kmacro_002dcycle_002dring_002dprevious" id=
+  "index-kmacro_002dcycle_002dring_002dprevious"></a> <a name=
+  "index-C_002dx-C_002dk-C_002dp" id=
+  "index-C_002dx-C_002dk-C_002dp"></a>
+
+  <p>The commands <kbd>C-x C-k C-n</kbd>
+  (<code>kmacro-cycle-ring-next</code>) and <kbd>C-x C-k C-p</kbd>
+  (<code>kmacro-cycle-ring-previous</code>) rotate the macro ring,
+  bringing the next or previous keyboard macro to the head of the
+  macro ring. The definition of the new head macro is displayed in
+  the echo area. You can continue to rotate the macro ring
+  immediately by repeating just <kbd>C-n</kbd> and <kbd>C-p</kbd>
+  until the desired macro is at the head of the ring. To execute
+  the new macro ring head immediately, just type
+  <kbd>C-k</kbd>.</p>
+
+  <p>Note that Emacs treats the head of the macro ring as the last
+  defined keyboard macro. For instance, <tt class="key">F4</tt>
+  will execute that macro, and <kbd>C-x C-k n</kbd> will give it a
+  name.</p><a name="index-kmacro_002dring_002dmax" id=
+  "index-kmacro_002dring_002dmax"></a>
+
+  <p>The maximum number of macros stored in the keyboard macro ring
+  is determined by the customizable variable
+  <code>kmacro-ring-max</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Keyboard-Macro-Counter.html#Keyboard-Macro-Counter" accesskey=
+    "n" rel="next">Keyboard Macro Counter</a>, Previous: <a href=
+    "Basic-Keyboard-Macro.html#Basic-Keyboard-Macro" accesskey="p"
+    rel="prev">Basic Keyboard Macro</a>, Up: <a href=
+    "Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel=
+    "up">Keyboard Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

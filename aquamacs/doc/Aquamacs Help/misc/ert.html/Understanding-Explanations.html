@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2008, 2010-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,66 +14,98 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Lisp Regression Testing: Understanding Explanations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Lisp Regression Testing: Understanding Explanations">
-<meta name="keywords" content="Emacs Lisp Regression Testing: Understanding Explanations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="How-to-Debug-Tests.html#How-to-Debug-Tests" rel="up" title="How to Debug Tests">
-<link href="Interactive-Debugging.html#Interactive-Debugging" rel="next" title="Interactive Debugging">
-<link href="How-to-Debug-Tests.html#How-to-Debug-Tests" rel="prev" title="How to Debug Tests">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Lisp Regression Testing: Understanding
+  Explanations</title>
+  <meta name="description" content=
+  "Emacs Lisp Regression Testing: Understanding Explanations" />
+  <meta name="keywords" content=
+  "Emacs Lisp Regression Testing: Understanding Explanations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="How-to-Debug-Tests.html#How-to-Debug-Tests" rel="up"
+  title="How to Debug Tests" />
+  <link href="Interactive-Debugging.html#Interactive-Debugging"
+  rel="next" title="Interactive Debugging" />
+  <link href="How-to-Debug-Tests.html#How-to-Debug-Tests" rel=
+  "prev" title="How to Debug Tests" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Understanding-Explanations"></a>
-<div class="header">
-<p>
-Next: <a href="Interactive-Debugging.html#Interactive-Debugging" accesskey="n" rel="next">Interactive Debugging</a>, Up: <a href="How-to-Debug-Tests.html#How-to-Debug-Tests" accesskey="u" rel="up">How to Debug Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Understanding-Explanations-1"></a>
-<h3 class="section">4.1 Understanding Explanations</h3>
+<body lang="en" xml:lang="en">
+  <a name="Understanding-Explanations" id=
+  "Understanding-Explanations"></a>
 
-<p>Failed <code>should</code> forms are reported like this:
-</p>
-<div class="example">
-<pre class="example">F addition-test
+  <div class="header">
+    <p>Next: <a href=
+    "Interactive-Debugging.html#Interactive-Debugging" accesskey=
+    "n" rel="next">Interactive Debugging</a>, Up: <a href=
+    "How-to-Debug-Tests.html#How-to-Debug-Tests" accesskey="u" rel=
+    "up">How to Debug Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Understanding-Explanations-1" id=
+  "Understanding-Explanations-1"></a>
+
+  <h3 class="section">4.1 Understanding Explanations</h3>
+
+  <p>Failed <code>should</code> forms are reported like this:</p>
+
+  <div class="example">
+    <pre class="example">
+F addition-test
     (ert-test-failed
      ((should
        (=
@@ -80,20 +114,23 @@ Next: <a href="Interactive-Debugging.html#Interactive-Debugging" accesskey="n" r
       :form
       (= 3 4)
       :value nil))
-</pre></div>
+</pre>
+  </div>
 
-<p>ERT shows what the <code>should</code> expression looked like and what
-values its subexpressions had: The source code of the assertion was
-<code>(should (= (+ 1 2) 4))</code>, which applied the function <code>=</code> to
-the arguments <code>3</code> and <code>4</code>, resulting in the value
-<code>nil</code>.  In this case, the test is wrong; it should expect 3
-rather than 4.
-</p>
-<p>If a predicate like <code>equal</code> is used with <code>should</code>, ERT
-provides a so-called <em>explanation</em>:
-</p>
-<div class="example">
-<pre class="example">F list-test
+  <p>ERT shows what the <code>should</code> expression looked like
+  and what values its subexpressions had: The source code of the
+  assertion was <code>(should (= (+ 1 2) 4))</code>, which applied
+  the function <code>=</code> to the arguments <code>3</code> and
+  <code>4</code>, resulting in the value <code>nil</code>. In this
+  case, the test is wrong; it should expect 3 rather than 4.</p>
+
+  <p>If a predicate like <code>equal</code> is used with
+  <code>should</code>, ERT provides a so-called
+  <em>explanation</em>:</p>
+
+  <div class="example">
+    <pre class="example">
+F list-test
     (ert-test-failed
      ((should
        (equal
@@ -106,19 +143,22 @@ provides a so-called <em>explanation</em>:
       :value nil :explanation
       (list-elt 2
                 (different-atoms c d))))
-</pre></div>
+</pre>
+  </div>
 
-<p>In this case, the function <code>equal</code> was applied to the arguments
-<code>(a b c)</code> and <code>(a b d)</code>.  ERT&rsquo;s explanation shows that
-the item at index 2 differs between the two lists; in one list, it is
-the atom c, in the other, it is the atom d.
-</p>
-<p>In simple examples like the above, the explanation is unnecessary.
-But in cases where the difference is not immediately apparent, it can
-save time:
-</p>
-<div class="example">
-<pre class="example">F test1
+  <p>In this case, the function <code>equal</code> was applied to
+  the arguments <code>(a b c)</code> and <code>(a b d)</code>.
+  ERT&rsquo;s explanation shows that the item at index 2 differs
+  between the two lists; in one list, it is the atom c, in the
+  other, it is the atom d.</p>
+
+  <p>In simple examples like the above, the explanation is
+  unnecessary. But in cases where the difference is not immediately
+  apparent, it can save time:</p>
+
+  <div class="example">
+    <pre class="example">
+F test1
     (ert-test-failed
      ((should
        (equal x y))
@@ -126,14 +166,12 @@ save time:
       (equal a a)
       :value nil :explanation
       (different-symbols-with-the-same-name a a)))
-</pre></div>
+</pre>
+  </div>
 
-<p>ERT only provides explanations for predicates that have an explanation
-function registered.  See <a href="Defining-Explanation-Functions.html#Defining-Explanation-Functions">Defining Explanation Functions</a>.
-</p>
-
-
-
-
+  <p>ERT only provides explanations for predicates that have an
+  explanation function registered. See <a href=
+  "Defining-Explanation-Functions.html#Defining-Explanation-Functions">
+  Defining Explanation Functions</a>.</p>
 </body>
 </html>

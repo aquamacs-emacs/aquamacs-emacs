@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,151 +19,239 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Object Internals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Object Internals">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Object Internals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" rel="up" title="GNU Emacs Internals">
-<link href="Buffer-Internals.html#Buffer-Internals" rel="next" title="Buffer Internals">
-<link href="Writing-Emacs-Primitives.html#Writing-Emacs-Primitives" rel="prev" title="Writing Emacs Primitives">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Object Internals</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Object Internals" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Object Internals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" rel=
+  "up" title="GNU Emacs Internals" />
+  <link href="Buffer-Internals.html#Buffer-Internals" rel="next"
+  title="Buffer Internals" />
+  <link href=
+  "Writing-Emacs-Primitives.html#Writing-Emacs-Primitives" rel=
+  "prev" title="Writing Emacs Primitives" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Object-Internals" id="Object-Internals"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="C-Integer-Types.html#C-Integer-Types"
+    accesskey="n" rel="next">C Integer Types</a>, Previous:
+    <a href="Writing-Emacs-Primitives.html#Writing-Emacs-Primitives"
+    accesskey="p" rel="prev">Writing Emacs Primitives</a>, Up:
+    <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals"
+    accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Object-Internals-1" id="Object-Internals-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Object-Internals"></a>
-<div class="header">
-<p>
-Next: <a href="C-Integer-Types.html#C-Integer-Types" accesskey="n" rel="next">C Integer Types</a>, Previous: <a href="Writing-Emacs-Primitives.html#Writing-Emacs-Primitives" accesskey="p" rel="prev">Writing Emacs Primitives</a>, Up: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Object-Internals-1"></a>
-<h3 class="section">E.8 Object Internals</h3>
-<a name="index-object-internals"></a>
+  <h3 class="section">E.8 Object Internals</h3><a name=
+  "index-object-internals" id="index-object-internals"></a>
 
-<p>Emacs Lisp provides a rich set of the data types.  Some of them, like cons
-cells, integers and strings, are common to nearly all Lisp dialects.  Some
-others, like markers and buffers, are quite special and needed to provide
-the basic support to write editor commands in Lisp.  To implement such
-a variety of object types and provide an efficient way to pass objects between
-the subsystems of an interpreter, there is a set of C data structures and
-a special type to represent the pointers to all of them, which is known as
-<em>tagged pointer</em>.
-</p>
-<p>In C, the tagged pointer is an object of type <code>Lisp_Object</code>.  Any
-initialized variable of such a type always holds the value of one of the
-following basic data types: integer, symbol, string, cons cell, float,
-vectorlike or miscellaneous object.  Each of these data types has the
-corresponding tag value.  All tags are enumerated by <code>enum Lisp_Type</code>
-and placed into a 3-bit bitfield of the <code>Lisp_Object</code>.  The rest of the
-bits is the value itself.  Integers are immediate, i.e., directly
-represented by those <em>value bits</em>, and all other objects are represented
-by the C pointers to a corresponding object allocated from the heap.  Width
-of the <code>Lisp_Object</code> is platform- and configuration-dependent: usually
-it&rsquo;s equal to the width of an underlying platform pointer (i.e., 32-bit on
-a 32-bit machine and 64-bit on a 64-bit one), but also there is a special
-configuration where <code>Lisp_Object</code> is 64-bit but all pointers are 32-bit.
-The latter trick was designed to overcome the limited range of values for
-Lisp integers on a 32-bit system by using 64-bit <code>long long</code> type for
-<code>Lisp_Object</code>.
-</p>
-<p>The following C data structures are defined in <samp>lisp.h</samp> to represent
-the basic data types beyond integers:
-</p>
-<dl compact="compact">
-<dt><code>struct Lisp_Cons</code></dt>
-<dd><p>Cons cell, an object used to construct lists.
-</p>
-</dd>
-<dt><code>struct Lisp_String</code></dt>
-<dd><p>String, the basic object to represent a sequence of characters.
-</p>
-</dd>
-<dt><code>struct Lisp_Vector</code></dt>
-<dd><p>Array, a fixed-size set of Lisp objects which may be accessed by an index.
-</p>
-</dd>
-<dt><code>struct Lisp_Symbol</code></dt>
-<dd><p>Symbol, the unique-named entity commonly used as an identifier.
-</p>
-</dd>
-<dt><code>struct Lisp_Float</code></dt>
-<dd><p>Floating-point value.
-</p>
-</dd>
-<dt><code>union Lisp_Misc</code></dt>
-<dd><p>Miscellaneous kinds of objects which don&rsquo;t fit into any of the above.
-</p></dd>
-</dl>
+  <p>Emacs Lisp provides a rich set of the data types. Some of
+  them, like cons cells, integers and strings, are common to nearly
+  all Lisp dialects. Some others, like markers and buffers, are
+  quite special and needed to provide the basic support to write
+  editor commands in Lisp. To implement such a variety of object
+  types and provide an efficient way to pass objects between the
+  subsystems of an interpreter, there is a set of C data structures
+  and a special type to represent the pointers to all of them,
+  which is known as <em>tagged pointer</em>.</p>
 
-<p>These types are the first-class citizens of an internal type system.
-Since the tag space is limited, all other types are the subtypes of either
-<code>Lisp_Vectorlike</code> or <code>Lisp_Misc</code>.  Vector subtypes are enumerated
-by <code>enum pvec_type</code>, and nearly all complex objects like windows, buffers,
-frames, and processes fall into this category.  The rest of special types,
-including markers and overlays, are enumerated by <code>enum Lisp_Misc_Type</code>
-and form the set of subtypes of <code>Lisp_Misc</code>.
-</p>
-<p>Below there is a description of a few subtypes of <code>Lisp_Vectorlike</code>.
-Buffer object represents the text to display and edit.  Window is the part
-of display structure which shows the buffer or used as a container to
-recursively place other windows on the same frame.  (Do not confuse Emacs Lisp
-window object with the window as an entity managed by the user interface
-system like X; in Emacs terminology, the latter is called frame.)  Finally,
-process object is used to manage the subprocesses.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Buffer-Internals.html#Buffer-Internals" accesskey="1">Buffer Internals</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Components of a buffer structure.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Window-Internals.html#Window-Internals" accesskey="2">Window Internals</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Components of a window structure.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Process-Internals.html#Process-Internals" accesskey="3">Process Internals</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Components of a process structure.
-</td></tr>
-</table>
+  <p>In C, the tagged pointer is an object of type
+  <code>Lisp_Object</code>. Any initialized variable of such a type
+  always holds the value of one of the following basic data types:
+  integer, symbol, string, cons cell, float, vectorlike or
+  miscellaneous object. Each of these data types has the
+  corresponding tag value. All tags are enumerated by <code>enum
+  Lisp_Type</code> and placed into a 3-bit bitfield of the
+  <code>Lisp_Object</code>. The rest of the bits is the value
+  itself. Integers are immediate, i.e., directly represented by
+  those <em>value bits</em>, and all other objects are represented
+  by the C pointers to a corresponding object allocated from the
+  heap. Width of the <code>Lisp_Object</code> is platform- and
+  configuration-dependent: usually it&rsquo;s equal to the width of
+  an underlying platform pointer (i.e., 32-bit on a 32-bit machine
+  and 64-bit on a 64-bit one), but also there is a special
+  configuration where <code>Lisp_Object</code> is 64-bit but all
+  pointers are 32-bit. The latter trick was designed to overcome
+  the limited range of values for Lisp integers on a 32-bit system
+  by using 64-bit <code>long long</code> type for
+  <code>Lisp_Object</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="C-Integer-Types.html#C-Integer-Types" accesskey="n" rel="next">C Integer Types</a>, Previous: <a href="Writing-Emacs-Primitives.html#Writing-Emacs-Primitives" accesskey="p" rel="prev">Writing Emacs Primitives</a>, Up: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The following C data structures are defined in
+  <samp>lisp.h</samp> to represent the basic data types beyond
+  integers:</p>
 
+  <dl compact="compact">
+    <dt><code>struct Lisp_Cons</code></dt>
 
+    <dd>
+      <p>Cons cell, an object used to construct lists.</p>
+    </dd>
 
+    <dt><code>struct Lisp_String</code></dt>
+
+    <dd>
+      <p>String, the basic object to represent a sequence of
+      characters.</p>
+    </dd>
+
+    <dt><code>struct Lisp_Vector</code></dt>
+
+    <dd>
+      <p>Array, a fixed-size set of Lisp objects which may be
+      accessed by an index.</p>
+    </dd>
+
+    <dt><code>struct Lisp_Symbol</code></dt>
+
+    <dd>
+      <p>Symbol, the unique-named entity commonly used as an
+      identifier.</p>
+    </dd>
+
+    <dt><code>struct Lisp_Float</code></dt>
+
+    <dd>
+      <p>Floating-point value.</p>
+    </dd>
+
+    <dt><code>union Lisp_Misc</code></dt>
+
+    <dd>
+      <p>Miscellaneous kinds of objects which don&rsquo;t fit into
+      any of the above.</p>
+    </dd>
+  </dl>
+
+  <p>These types are the first-class citizens of an internal type
+  system. Since the tag space is limited, all other types are the
+  subtypes of either <code>Lisp_Vectorlike</code> or
+  <code>Lisp_Misc</code>. Vector subtypes are enumerated by
+  <code>enum pvec_type</code>, and nearly all complex objects like
+  windows, buffers, frames, and processes fall into this category.
+  The rest of special types, including markers and overlays, are
+  enumerated by <code>enum Lisp_Misc_Type</code> and form the set
+  of subtypes of <code>Lisp_Misc</code>.</p>
+
+  <p>Below there is a description of a few subtypes of
+  <code>Lisp_Vectorlike</code>. Buffer object represents the text
+  to display and edit. Window is the part of display structure
+  which shows the buffer or used as a container to recursively
+  place other windows on the same frame. (Do not confuse Emacs Lisp
+  window object with the window as an entity managed by the user
+  interface system like X; in Emacs terminology, the latter is
+  called frame.) Finally, process object is used to manage the
+  subprocesses.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Buffer-Internals.html#Buffer-Internals" accesskey="1">Buffer
+      Internals</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Components of a buffer
+      structure.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Window-Internals.html#Window-Internals" accesskey="2">Window
+      Internals</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Components of a window
+      structure.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Process-Internals.html#Process-Internals" accesskey=
+      "3">Process Internals</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Components of a process
+      structure.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="C-Integer-Types.html#C-Integer-Types"
+    accesskey="n" rel="next">C Integer Types</a>, Previous:
+    <a href="Writing-Emacs-Primitives.html#Writing-Emacs-Primitives"
+    accesskey="p" rel="prev">Writing Emacs Primitives</a>, Up:
+    <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals"
+    accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

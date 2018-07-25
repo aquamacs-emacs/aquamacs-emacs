@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,78 +18,111 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Autoloading Problems</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Autoloading Problems">
-<meta name="keywords" content="GNU Emacs Calc Manual: Autoloading Problems">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Troubleshooting-Commands.html#Troubleshooting-Commands" rel="up" title="Troubleshooting Commands">
-<link href="Recursion-Depth.html#Recursion-Depth" rel="next" title="Recursion Depth">
-<link href="Troubleshooting-Commands.html#Troubleshooting-Commands" rel="prev" title="Troubleshooting Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Autoloading Problems</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Autoloading Problems" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Autoloading Problems" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Troubleshooting-Commands.html#Troubleshooting-Commands" rel="up"
+  title="Troubleshooting Commands" />
+  <link href="Recursion-Depth.html#Recursion-Depth" rel="next"
+  title="Recursion Depth" />
+  <link href=
+  "Troubleshooting-Commands.html#Troubleshooting-Commands" rel=
+  "prev" title="Troubleshooting Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Autoloading-Problems"></a>
-<div class="header">
-<p>
-Next: <a href="Recursion-Depth.html#Recursion-Depth" accesskey="n" rel="next">Recursion Depth</a>, Previous: <a href="Troubleshooting-Commands.html#Troubleshooting-Commands" accesskey="p" rel="prev">Troubleshooting Commands</a>, Up: <a href="Troubleshooting-Commands.html#Troubleshooting-Commands" accesskey="u" rel="up">Troubleshooting Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Autoloading-Problems-1"></a>
-<h4 class="subsection">3.11.1 Autoloading Problems</h4>
+<body lang="en" xml:lang="en">
+  <a name="Autoloading-Problems" id="Autoloading-Problems"></a>
 
-<p>The Calc program is split into many component files; components are
-loaded automatically as you use various commands that require them.
-Occasionally Calc may lose track of when a certain component is
-necessary; typically this means you will type a command and it won&rsquo;t
-work because some function you&rsquo;ve never heard of was undefined.
-</p>
-<a name="index-C_002dx-_002a-L"></a>
-<a name="index-calc_002dload_002deverything"></a>
-<p>If this happens, the easiest workaround is to type <kbd>C-x * L</kbd>
-(<code>calc-load-everything</code>) to force all the parts of Calc to be
-loaded right away.  This will cause Emacs to take up a lot more
-memory than it would otherwise, but it&rsquo;s guaranteed to fix the problem.
-</p>
+  <div class="header">
+    <p>Next: <a href="Recursion-Depth.html#Recursion-Depth"
+    accesskey="n" rel="next">Recursion Depth</a>, Previous:
+    <a href="Troubleshooting-Commands.html#Troubleshooting-Commands"
+    accesskey="p" rel="prev">Troubleshooting Commands</a>, Up:
+    <a href=
+    "Troubleshooting-Commands.html#Troubleshooting-Commands"
+    accesskey="u" rel="up">Troubleshooting Commands</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Autoloading-Problems-1" id="Autoloading-Problems-1"></a>
 
+  <h4 class="subsection">3.11.1 Autoloading Problems</h4>
 
+  <p>The Calc program is split into many component files;
+  components are loaded automatically as you use various commands
+  that require them. Occasionally Calc may lose track of when a
+  certain component is necessary; typically this means you will
+  type a command and it won&rsquo;t work because some function
+  you&rsquo;ve never heard of was undefined.</p><a name=
+  "index-C_002dx-_002a-L" id="index-C_002dx-_002a-L"></a> <a name=
+  "index-calc_002dload_002deverything" id=
+  "index-calc_002dload_002deverything"></a>
 
+  <p>If this happens, the easiest workaround is to type <kbd>C-x *
+  L</kbd> (<code>calc-load-everything</code>) to force all the
+  parts of Calc to be loaded right away. This will cause Emacs to
+  take up a lot more memory than it would otherwise, but it&rsquo;s
+  guaranteed to fix the problem.</p>
 </body>
 </html>

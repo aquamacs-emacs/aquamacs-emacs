@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>External packages - TRAMP User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="TRAMP User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Files-directories-and-localnames.html#Files-directories-and-localnames" title="Files directories and localnames">
-<link rel="prev" href="Localname-deconstruction.html#Localname-deconstruction" title="Localname deconstruction">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>External packages - TRAMP User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="TRAMP User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Files-directories-and-localnames.html#Files-directories-and-localnames"
+  title="Files directories and localnames" />
+  <link rel="prev" href=
+  "Localname-deconstruction.html#Localname-deconstruction" title=
+  "Localname deconstruction" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +34,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,71 +47,89 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="External-packages"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Localname-deconstruction.html#Localname-deconstruction">Localname deconstruction</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Files-directories-and-localnames.html#Files-directories-and-localnames">Files directories and localnames</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="External-packages" id="External-packages"></a>
 
-<h3 class="section">8.2 Integration with external Lisp packages.</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Localname-deconstruction.html#Localname-deconstruction">Localname
+    deconstruction</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Files-directories-and-localnames.html#Files-directories-and-localnames">Files
+    directories and localnames</a></p>
+    <hr />
+  </div>
 
-<h4 class="subsection">8.2.1 Filename completion.</h4>
+  <h3 class="section">8.2 Integration with external Lisp
+  packages.</h3>
 
-<p>While reading filenames in the minibuffer, <span class="sc">tramp</span> must decide
-whether it completes possible incomplete filenames, or not.  Imagine
-there is the following situation: You have typed <kbd>C-x C-f
-/ssh: &lt;TAB&gt;</kbd>.  <span class="sc">tramp</span> cannot
-know, whether <samp><span class="option">ssh</span></samp> is a method or a host name.  It checks
-therefore the last input character you have typed.  If this is
-&lt;TAB&gt;, &lt;SPACE&gt; or <kbd>?</kbd>, <span class="sc">tramp</span> assumes that you are
-still in filename completion, and it does not connect to the possible
-remote host <samp><span class="option">ssh</span></samp>.
+  <h4 class="subsection">8.2.1 Filename completion.</h4>
 
-   <p><a name="index-tramp_002dcompletion_002dmode-197"></a>External packages, which use other characters for completing filenames
-in the minibuffer, must signal this to <span class="sc">tramp</span>.  For this case,
-the variable <code>tramp-completion-mode</code> can be bound temporarily to
-a non-<code>nil</code> value.
+  <p>While reading filenames in the minibuffer, <span class=
+  "sc">tramp</span> must decide whether it completes possible
+  incomplete filenames, or not. Imagine there is the following
+  situation: You have typed <kbd>C-x C-f /ssh: &lt;TAB&gt;</kbd>.
+  <span class="sc">tramp</span> cannot know, whether
+  <samp><span class="option">ssh</span></samp> is a method or a
+  host name. It checks therefore the last input character you have
+  typed. If this is &lt;TAB&gt;, &lt;SPACE&gt; or <kbd>?</kbd>,
+  <span class="sc">tramp</span> assumes that you are still in
+  filename completion, and it does not connect to the possible
+  remote host <samp><span class="option">ssh</span></samp>.</p>
 
-<pre class="lisp">     (let ((tramp-completion-mode t))
+  <p><a name="index-tramp_002dcompletion_002dmode-197" id=
+  "index-tramp_002dcompletion_002dmode-197"></a>External packages,
+  which use other characters for completing filenames in the
+  minibuffer, must signal this to <span class="sc">tramp</span>.
+  For this case, the variable <code>tramp-completion-mode</code>
+  can be bound temporarily to a non-<code>nil</code> value.</p>
+  <pre class="lisp">
+     (let ((tramp-completion-mode t))
        ...)
 </pre>
-   <h4 class="subsection">8.2.2 File attributes cache.</h4>
 
-<p>When <span class="sc">tramp</span> runs remote processes, files on the remote host
-could change their attributes.  Consequently, <span class="sc">tramp</span> must flush
-its complete cache keeping attributes for all files of the remote host
-it has seen so far.
+  <h4 class="subsection">8.2.2 File attributes cache.</h4>
 
-   <p>This is a performance degradation, because the lost file attributes
-must be recomputed, when needed again.  In cases the caller of
-<code>process-file</code> knows that there are no file attribute changes, it
-shall let-bind the variable <code>process-file-side-effects</code> to
-<code>nil</code>.  <span class="sc">tramp</span> wouldn't flush the file attributes cache then.
+  <p>When <span class="sc">tramp</span> runs remote processes,
+  files on the remote host could change their attributes.
+  Consequently, <span class="sc">tramp</span> must flush its
+  complete cache keeping attributes for all files of the remote
+  host it has seen so far.</p>
 
-<pre class="lisp">     (let (process-file-side-effects)
+  <p>This is a performance degradation, because the lost file
+  attributes must be recomputed, when needed again. In cases the
+  caller of <code>process-file</code> knows that there are no file
+  attribute changes, it shall let-bind the variable
+  <code>process-file-side-effects</code> to <code>nil</code>.
+  <span class="sc">tramp</span> wouldn't flush the file attributes
+  cache then.</p>
+  <pre class="lisp">
+     (let (process-file-side-effects)
        ...)
 </pre>
-   <p>For asynchronous processes, <span class="sc">tramp</span> flushes the file attributes
-cache via a process sentinel.  If the caller of
-<code>start-file-process</code> knows that there are no file attribute
-changes, it shall set the process sentinel to <code>nil</code>.  In case the
-caller defines an own process sentinel, <span class="sc">tramp</span>'s process
-sentinel is overwritten.  The caller can still flush the file
-attributes cache in its process sentinel with this code:
 
-<pre class="lisp">     (unless (memq (process-status proc) '(run open))
+  <p>For asynchronous processes, <span class="sc">tramp</span>
+  flushes the file attributes cache via a process sentinel. If the
+  caller of <code>start-file-process</code> knows that there are no
+  file attribute changes, it shall set the process sentinel to
+  <code>nil</code>. In case the caller defines an own process
+  sentinel, <span class="sc">tramp</span>'s process sentinel is
+  overwritten. The caller can still flush the file attributes cache
+  in its process sentinel with this code:</p>
+  <pre class="lisp">
+     (unless (memq (process-status proc) '(run open))
        (dired-uncache remote-directory))
 </pre>
-   <p><code>remote-directory</code> shall be the root directory, where file
-attribute changes can happen during the process lifetime. 
-<span class="sc">tramp</span> traverses all subdirectories, starting at this
-directory.  Often, it is sufficient to use <code>default-directory</code> of
-the process buffer as root directory.
 
-   </body></html>
-
+  <p><code>remote-directory</code> shall be the root directory,
+  where file attribute changes can happen during the process
+  lifetime. <span class="sc">tramp</span> traverses all
+  subdirectories, starting at this directory. Often, it is
+  sufficient to use <code>default-directory</code> of the process
+  buffer as root directory.</p>
+</body>
+</html>

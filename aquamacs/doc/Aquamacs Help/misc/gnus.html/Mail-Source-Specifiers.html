@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,565 +14,794 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Mail Source Specifiers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Mail Source Specifiers">
-<meta name="keywords" content="Gnus Manual: Mail Source Specifiers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mail-Sources.html#Mail-Sources" rel="up" title="Mail Sources">
-<link href="Mail-Source-Functions.html#Mail-Source-Functions" rel="next" title="Mail Source Functions">
-<link href="Mail-Sources.html#Mail-Sources" rel="prev" title="Mail Sources">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Mail Source Specifiers</title>
+  <meta name="description" content=
+  "Gnus Manual: Mail Source Specifiers" />
+  <meta name="keywords" content=
+  "Gnus Manual: Mail Source Specifiers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mail-Sources.html#Mail-Sources" rel="up" title=
+  "Mail Sources" />
+  <link href="Mail-Source-Functions.html#Mail-Source-Functions"
+  rel="next" title="Mail Source Functions" />
+  <link href="Mail-Sources.html#Mail-Sources" rel="prev" title=
+  "Mail Sources" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Mail-Source-Specifiers"></a>
-<div class="header">
-<p>
-Next: <a href="Mail-Source-Functions.html#Mail-Source-Functions" accesskey="n" rel="next">Mail Source Functions</a>, Up: <a href="Mail-Sources.html#Mail-Sources" accesskey="u" rel="up">Mail Sources</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Mail-Source-Specifiers-1"></a>
-<h4 class="subsubsection">6.4.4.1 Mail Source Specifiers</h4>
-<a name="index-POP"></a>
-<a name="index-mail-server"></a>
-<a name="index-procmail"></a>
-<a name="index-mail-spool"></a>
-<a name="index-mail-source"></a>
+<body lang="en" xml:lang="en">
+  <a name="Mail-Source-Specifiers" id="Mail-Source-Specifiers"></a>
 
-<p>You tell Gnus how to fetch mail by setting <code>mail-sources</code>
-(see <a href="Fetching-Mail.html#Fetching-Mail">Fetching Mail</a>) to a <em>mail source specifier</em>.
-</p>
-<p>Here&rsquo;s an example:
-</p>
-<div class="lisp">
-<pre class="lisp">(pop :server &quot;pop3.mailserver.com&quot; :user &quot;myname&quot;)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Mail-Source-Functions.html#Mail-Source-Functions" accesskey=
+    "n" rel="next">Mail Source Functions</a>, Up: <a href=
+    "Mail-Sources.html#Mail-Sources" accesskey="u" rel="up">Mail
+    Sources</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Mail-Source-Specifiers-1" id=
+  "Mail-Source-Specifiers-1"></a>
 
-<p>As can be observed, a mail source specifier is a list where the first
-element is a <em>mail source type</em>, followed by an arbitrary number of
-<em>keywords</em>.  Keywords that are not explicitly specified are given
-default values.
-</p>
-<p>The <code>mail-sources</code> is global for all mail groups.  You can specify
-an additional mail source for a particular group by including the
-<code>group</code> mail specifier in <code>mail-sources</code>, and setting a
-<code>mail-source</code> group parameter (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>) specifying
-a single mail source.  When this is used, <code>mail-sources</code> is
-typically just <code>(group)</code>; the <code>mail-source</code> parameter for a
-group might look like this:
-</p>
-<div class="lisp">
-<pre class="lisp">(mail-source . (file :path &quot;home/user/spools/foo.spool&quot;))
-</pre></div>
+  <h4 class="subsubsection">6.4.4.1 Mail Source
+  Specifiers</h4><a name="index-POP" id="index-POP"></a> <a name=
+  "index-mail-server" id="index-mail-server"></a> <a name=
+  "index-procmail" id="index-procmail"></a> <a name=
+  "index-mail-spool" id="index-mail-spool"></a> <a name=
+  "index-mail-source" id="index-mail-source"></a>
 
-<p>This means that the group&rsquo;s (and only this group&rsquo;s) messages will be
-fetched from the spool file &lsquo;<samp>/user/spools/foo.spool</samp>&rsquo;.
-</p>
-<p>The following mail source types are available:
-</p>
-<dl compact="compact">
-<dt><code>file</code></dt>
-<dd><p>Get mail from a single file; typically from the mail spool.
-</p>
-<p>Keywords:
-</p>
-<dl compact="compact">
-<dt><code>:path</code></dt>
-<dd><p>The file name.  Defaults to the value of the <code>MAIL</code>
-environment variable or the value of <code>rmail-spool-directory</code>
-(usually something like <samp>/usr/mail/spool/user-name</samp>).
-</p>
-</dd>
-<dt><code>:prescript</code></dt>
-<dt><code>:postscript</code></dt>
-<dd><p>Script run before/after fetching mail.
-</p></dd>
-</dl>
+  <p>You tell Gnus how to fetch mail by setting
+  <code>mail-sources</code> (see <a href=
+  "Fetching-Mail.html#Fetching-Mail">Fetching Mail</a>) to a
+  <em>mail source specifier</em>.</p>
 
-<p>An example file mail source:
-</p>
-<div class="lisp">
-<pre class="lisp">(file :path &quot;/usr/spool/mail/user-name&quot;)
-</pre></div>
+  <p>Here&rsquo;s an example:</p>
 
-<p>Or using the default file name:
-</p>
-<div class="lisp">
-<pre class="lisp">(file)
-</pre></div>
+  <div class="lisp">
+    <pre class="lisp">
+(pop :server "pop3.mailserver.com" :user "myname")
+</pre>
+  </div>
 
-<p>If the mail spool file is not located on the local machine, it&rsquo;s best
-to use <acronym>POP</acronym> or <acronym>IMAP</acronym> or the like to fetch the mail.
-You can not use ange-ftp file names here&mdash;it has no way to lock the
-mail spool while moving the mail.
-</p>
-<p>If it&rsquo;s impossible to set up a proper server, you can use ssh instead.
-</p>
-<div class="lisp">
-<pre class="lisp">(setq mail-sources
-      '((file :prescript &quot;ssh host bin/getmail &gt;%t&quot;)))
-</pre></div>
+  <p>As can be observed, a mail source specifier is a list where
+  the first element is a <em>mail source type</em>, followed by an
+  arbitrary number of <em>keywords</em>. Keywords that are not
+  explicitly specified are given default values.</p>
 
-<p>The &lsquo;<samp>getmail</samp>&rsquo; script would look something like the following:
-</p>
-<div class="example">
-<pre class="example">#!/bin/sh
+  <p>The <code>mail-sources</code> is global for all mail groups.
+  You can specify an additional mail source for a particular group
+  by including the <code>group</code> mail specifier in
+  <code>mail-sources</code>, and setting a <code>mail-source</code>
+  group parameter (see <a href=
+  "Group-Parameters.html#Group-Parameters">Group Parameters</a>)
+  specifying a single mail source. When this is used,
+  <code>mail-sources</code> is typically just <code>(group)</code>;
+  the <code>mail-source</code> parameter for a group might look
+  like this:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(mail-source . (file :path "home/user/spools/foo.spool"))
+</pre>
+  </div>
+
+  <p>This means that the group&rsquo;s (and only this
+  group&rsquo;s) messages will be fetched from the spool file
+  &lsquo;<samp>/user/spools/foo.spool</samp>&rsquo;.</p>
+
+  <p>The following mail source types are available:</p>
+
+  <dl compact="compact">
+    <dt><code>file</code></dt>
+
+    <dd>
+      <p>Get mail from a single file; typically from the mail
+      spool.</p>
+
+      <p>Keywords:</p>
+
+      <dl compact="compact">
+        <dt><code>:path</code></dt>
+
+        <dd>
+          <p>The file name. Defaults to the value of the
+          <code>MAIL</code> environment variable or the value of
+          <code>rmail-spool-directory</code> (usually something
+          like <samp>/usr/mail/spool/user-name</samp>).</p>
+        </dd>
+
+        <dt><code>:prescript</code></dt>
+
+        <dt><code>:postscript</code></dt>
+
+        <dd>
+          <p>Script run before/after fetching mail.</p>
+        </dd>
+      </dl>
+
+      <p>An example file mail source:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(file :path "/usr/spool/mail/user-name")
+</pre>
+      </div>
+
+      <p>Or using the default file name:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(file)
+</pre>
+      </div>
+
+      <p>If the mail spool file is not located on the local
+      machine, it&rsquo;s best to use <acronym>POP</acronym> or
+      <acronym>IMAP</acronym> or the like to fetch the mail. You
+      can not use ange-ftp file names here&mdash;it has no way to
+      lock the mail spool while moving the mail.</p>
+
+      <p>If it&rsquo;s impossible to set up a proper server, you
+      can use ssh instead.</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq mail-sources
+      '((file :prescript "ssh host bin/getmail &gt;%t")))
+</pre>
+      </div>
+
+      <p>The &lsquo;<samp>getmail</samp>&rsquo; script would look
+      something like the following:</p>
+
+      <div class="example">
+        <pre class="example">
+#!/bin/sh
 #  getmail - move mail from spool to stdout
 #  flu@iki.fi
 
 MOVEMAIL=/usr/lib/emacs/20.3/i386-redhat-linux/movemail
 TMP=$HOME/Mail/tmp
 rm -f $TMP; $MOVEMAIL $MAIL $TMP &gt;/dev/null &amp;&amp; cat $TMP
-</pre></div>
+</pre>
+      </div>
 
-<p>Alter this script to fit the &lsquo;<samp>movemail</samp>&rsquo; and temporary
-file you want to use.
-</p>
+      <p>Alter this script to fit the
+      &lsquo;<samp>movemail</samp>&rsquo; and temporary file you
+      want to use.</p>
+    </dd>
 
-</dd>
-<dt><code>directory</code></dt>
-<dd><a name="index-nnmail_002dscan_002ddirectory_002dmail_002dsource_002donce"></a>
-<p>Get mail from several files in a directory.  This is typically used
-when you have procmail split the incoming mail into several files.
-That is, there is a one-to-one correspondence between files in that
-directory and groups, so that mail from the file <samp>foo.bar.spool</samp>
-will be put in the group <code>foo.bar</code>.  (You can change the suffix
-to be used instead of <code>.spool</code>.)  Setting
-<code>nnmail-scan-directory-mail-source-once</code> to non-<code>nil</code> forces
-Gnus to scan the mail source only once.  This is particularly useful
-if you want to scan mail groups at a specified level.
-</p>
-<a name="index-nnmail_002dresplit_002dincoming-1"></a>
-<p>There is also the variable <code>nnmail-resplit-incoming</code>, if you set
-that to a non-<code>nil</code> value, then the normal splitting process is
-applied to all the files from the directory, <a href="Splitting-Mail.html#Splitting-Mail">Splitting Mail</a>.
-</p>
-<p>Keywords:
-</p>
-<dl compact="compact">
-<dt><code>:path</code></dt>
-<dd><p>The name of the directory where the files are.  There is no default
-value.
-</p>
-</dd>
-<dt><code>:suffix</code></dt>
-<dd><p>Only files ending with this suffix are used.  The default is
-&lsquo;<samp>.spool</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>:predicate</code></dt>
-<dd><p>Only files that have this predicate return non-<code>nil</code> are returned.
-The default is <code>identity</code>.  This is used as an additional
-filter&mdash;only files that have the right suffix <em>and</em> satisfy this
-predicate are considered.
-</p>
-</dd>
-<dt><code>:prescript</code></dt>
-<dt><code>:postscript</code></dt>
-<dd><p>Script run before/after fetching mail.
-</p>
-</dd>
-</dl>
+    <dt><code>directory</code></dt>
 
-<p>An example directory mail source:
-</p>
-<div class="lisp">
-<pre class="lisp">(directory :path &quot;/home/user-name/procmail-dir/&quot;
-           :suffix &quot;.prcml&quot;)
-</pre></div>
+    <dd>
+      <a name=
+      "index-nnmail_002dscan_002ddirectory_002dmail_002dsource_002donce"
+      id=
+      "index-nnmail_002dscan_002ddirectory_002dmail_002dsource_002donce">
+      </a>
 
-</dd>
-<dt><code>pop</code></dt>
-<dd><p>Get mail from a <acronym>POP</acronym> server.
-</p>
-<p>Keywords:
-</p>
-<dl compact="compact">
-<dt><code>:server</code></dt>
-<dd><p>The name of the <acronym>POP</acronym> server.  The default is taken from the
-<code>MAILHOST</code> environment variable.
-</p>
-</dd>
-<dt><code>:port</code></dt>
-<dd><p>The port number of the <acronym>POP</acronym> server.  This can be a number (e.g.,
-&lsquo;<samp>:port 1234</samp>&rsquo;) or a string (e.g., &lsquo;<samp>:port &quot;pop3&quot;</samp>&rsquo;).  If it is a
-string, it should be a service name as listed in <samp>/etc/services</samp> on
-Unix systems.  The default is &lsquo;<samp>&quot;pop3&quot;</samp>&rsquo;.  On some systems you might
-need to specify it as &lsquo;<samp>&quot;pop-3&quot;</samp>&rsquo; instead.
-</p>
-</dd>
-<dt><code>:user</code></dt>
-<dd><p>The user name to give to the <acronym>POP</acronym> server.  The default is the login
-name.
-</p>
-</dd>
-<dt><code>:password</code></dt>
-<dd><p>The password to give to the <acronym>POP</acronym> server.  If not specified,
-the user is prompted.
-</p>
-</dd>
-<dt><code>:program</code></dt>
-<dd><p>The program to use to fetch mail from the <acronym>POP</acronym> server.  This
-should be a <code>format</code>-like string.  Here&rsquo;s an example:
-</p>
-<div class="example">
-<pre class="example">fetchmail %u@%s -P %p %t
-</pre></div>
+      <p>Get mail from several files in a directory. This is
+      typically used when you have procmail split the incoming mail
+      into several files. That is, there is a one-to-one
+      correspondence between files in that directory and groups, so
+      that mail from the file <samp>foo.bar.spool</samp> will be
+      put in the group <code>foo.bar</code>. (You can change the
+      suffix to be used instead of <code>.spool</code>.) Setting
+      <code>nnmail-scan-directory-mail-source-once</code> to
+      non-<code>nil</code> forces Gnus to scan the mail source only
+      once. This is particularly useful if you want to scan mail
+      groups at a specified level.</p><a name=
+      "index-nnmail_002dresplit_002dincoming-1" id=
+      "index-nnmail_002dresplit_002dincoming-1"></a>
 
-<p>The valid format specifier characters are:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>t</samp>&rsquo;</dt>
-<dd><p>The name of the file the mail is to be moved to.  This must always be
-included in this string.
-</p>
-</dd>
-<dt>&lsquo;<samp>s</samp>&rsquo;</dt>
-<dd><p>The name of the server.
-</p>
-</dd>
-<dt>&lsquo;<samp>P</samp>&rsquo;</dt>
-<dd><p>The port number of the server.
-</p>
-</dd>
-<dt>&lsquo;<samp>u</samp>&rsquo;</dt>
-<dd><p>The user name to use.
-</p>
-</dd>
-<dt>&lsquo;<samp>p</samp>&rsquo;</dt>
-<dd><p>The password to use.
-</p></dd>
-</dl>
+      <p>There is also the variable
+      <code>nnmail-resplit-incoming</code>, if you set that to a
+      non-<code>nil</code> value, then the normal splitting process
+      is applied to all the files from the directory, <a href=
+      "Splitting-Mail.html#Splitting-Mail">Splitting Mail</a>.</p>
 
-<p>The values used for these specs are taken from the values you give the
-corresponding keywords.
-</p>
-</dd>
-<dt><code>:prescript</code></dt>
-<dd><p>A script to be run before fetching the mail.  The syntax is the same as
-the <code>:program</code> keyword.  This can also be a function to be run.
-</p>
-<p>One popular way to use this is to set up an SSH tunnel to access the
-<acronym>POP</acronym> server.  Here&rsquo;s an example:
-</p>
-<div class="lisp">
-<pre class="lisp">(pop :server &quot;127.0.0.1&quot;
+      <p>Keywords:</p>
+
+      <dl compact="compact">
+        <dt><code>:path</code></dt>
+
+        <dd>
+          <p>The name of the directory where the files are. There
+          is no default value.</p>
+        </dd>
+
+        <dt><code>:suffix</code></dt>
+
+        <dd>
+          <p>Only files ending with this suffix are used. The
+          default is &lsquo;<samp>.spool</samp>&rsquo;.</p>
+        </dd>
+
+        <dt><code>:predicate</code></dt>
+
+        <dd>
+          <p>Only files that have this predicate return
+          non-<code>nil</code> are returned. The default is
+          <code>identity</code>. This is used as an additional
+          filter&mdash;only files that have the right suffix
+          <em>and</em> satisfy this predicate are considered.</p>
+        </dd>
+
+        <dt><code>:prescript</code></dt>
+
+        <dt><code>:postscript</code></dt>
+
+        <dd>
+          <p>Script run before/after fetching mail.</p>
+        </dd>
+      </dl>
+
+      <p>An example directory mail source:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(directory :path "/home/user-name/procmail-dir/"
+           :suffix ".prcml")
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>pop</code></dt>
+
+    <dd>
+      <p>Get mail from a <acronym>POP</acronym> server.</p>
+
+      <p>Keywords:</p>
+
+      <dl compact="compact">
+        <dt><code>:server</code></dt>
+
+        <dd>
+          <p>The name of the <acronym>POP</acronym> server. The
+          default is taken from the <code>MAILHOST</code>
+          environment variable.</p>
+        </dd>
+
+        <dt><code>:port</code></dt>
+
+        <dd>
+          <p>The port number of the <acronym>POP</acronym> server.
+          This can be a number (e.g., &lsquo;<samp>:port
+          1234</samp>&rsquo;) or a string (e.g., &lsquo;<samp>:port
+          "pop3"</samp>&rsquo;). If it is a string, it should be a
+          service name as listed in <samp>/etc/services</samp> on
+          Unix systems. The default is
+          &lsquo;<samp>"pop3"</samp>&rsquo;. On some systems you
+          might need to specify it as
+          &lsquo;<samp>"pop-3"</samp>&rsquo; instead.</p>
+        </dd>
+
+        <dt><code>:user</code></dt>
+
+        <dd>
+          <p>The user name to give to the <acronym>POP</acronym>
+          server. The default is the login name.</p>
+        </dd>
+
+        <dt><code>:password</code></dt>
+
+        <dd>
+          <p>The password to give to the <acronym>POP</acronym>
+          server. If not specified, the user is prompted.</p>
+        </dd>
+
+        <dt><code>:program</code></dt>
+
+        <dd>
+          <p>The program to use to fetch mail from the
+          <acronym>POP</acronym> server. This should be a
+          <code>format</code>-like string. Here&rsquo;s an
+          example:</p>
+
+          <div class="example">
+            <pre class="example">
+fetchmail %u@%s -P %p %t
+</pre>
+          </div>
+
+          <p>The valid format specifier characters are:</p>
+
+          <dl compact="compact">
+            <dt>&lsquo;<samp>t</samp>&rsquo;</dt>
+
+            <dd>
+              <p>The name of the file the mail is to be moved to.
+              This must always be included in this string.</p>
+            </dd>
+
+            <dt>&lsquo;<samp>s</samp>&rsquo;</dt>
+
+            <dd>
+              <p>The name of the server.</p>
+            </dd>
+
+            <dt>&lsquo;<samp>P</samp>&rsquo;</dt>
+
+            <dd>
+              <p>The port number of the server.</p>
+            </dd>
+
+            <dt>&lsquo;<samp>u</samp>&rsquo;</dt>
+
+            <dd>
+              <p>The user name to use.</p>
+            </dd>
+
+            <dt>&lsquo;<samp>p</samp>&rsquo;</dt>
+
+            <dd>
+              <p>The password to use.</p>
+            </dd>
+          </dl>
+
+          <p>The values used for these specs are taken from the
+          values you give the corresponding keywords.</p>
+        </dd>
+
+        <dt><code>:prescript</code></dt>
+
+        <dd>
+          <p>A script to be run before fetching the mail. The
+          syntax is the same as the <code>:program</code> keyword.
+          This can also be a function to be run.</p>
+
+          <p>One popular way to use this is to set up an SSH tunnel
+          to access the <acronym>POP</acronym> server. Here&rsquo;s
+          an example:</p>
+
+          <div class="lisp">
+            <pre class="lisp">
+(pop :server "127.0.0.1"
      :port 1234
-     :user &quot;foo&quot;
-     :password &quot;secret&quot;
+     :user "foo"
+     :password "secret"
      :prescript
-     &quot;nohup ssh -f -L 1234:pop.server:110 remote.host sleep 3600 &amp;&quot;)
-</pre></div>
+     "nohup ssh -f -L 1234:pop.server:110 remote.host sleep 3600 &amp;")
+</pre>
+          </div>
+        </dd>
 
-</dd>
-<dt><code>:postscript</code></dt>
-<dd><p>A script to be run after fetching the mail.  The syntax is the same as
-the <code>:program</code> keyword.  This can also be a function to be run.
-</p>
-</dd>
-<dt><code>:function</code></dt>
-<dd><p>The function to use to fetch mail from the <acronym>POP</acronym> server.  The
-function is called with one parameter&mdash;the name of the file where the
-mail should be moved to.
-</p>
-</dd>
-<dt><code>:authentication</code></dt>
-<dd><p>This can be either the symbol <code>password</code> or the symbol <code>apop</code>
-and says what authentication scheme to use.  The default is
-<code>password</code>.
-</p>
-</dd>
-<dt><code>:leave</code></dt>
-<dd><p>Non-<code>nil</code> if the mail is to be left on the <acronym>POP</acronym> server
-after fetching.  Only the built-in <code>pop3-movemail</code> program (the
-default) supports this keyword.
-</p>
-<p>If this is a number, leave mails on the server for this many days since
-you first checked new mails.  In that case, mails once fetched will
-never be fetched again by the <acronym>UIDL</acronym> control.  If this is
-<code>nil</code> (the default), mails will be deleted on the server right
-after fetching.  If this is neither <code>nil</code> nor a number, all mails
-will be left on the server, and you will end up getting the same mails
-again and again.
-</p>
-<a name="index-pop3_002duidl_002dfile"></a>
-<p>The <code>pop3-uidl-file</code> variable specifies the file to which the
-<acronym>UIDL</acronym> data are locally stored.  The default value is
-<samp>~/.pop3-uidl</samp>.
-</p>
-<p>Note that <acronym>POP</acronym> servers maintain no state information between
-sessions, so what the client believes is there and what is actually
-there may not match up.  If they do not, then you may get duplicate
-mails or the whole thing can fall apart and leave you with a corrupt
-mailbox.
-</p>
-</dd>
-</dl>
+        <dt><code>:postscript</code></dt>
 
-<a name="index-pop3_002dmovemail"></a>
-<a name="index-pop3_002dleave_002dmail_002don_002dserver"></a>
-<p>If the <code>:program</code> and <code>:function</code> keywords aren&rsquo;t specified,
-<code>pop3-movemail</code> will be used.
-</p>
-<p>Here are some examples for getting mail from a <acronym>POP</acronym> server.
-</p>
-<p>Fetch from the default <acronym>POP</acronym> server, using the default user
-name, and default fetcher:
-</p>
-<div class="lisp">
-<pre class="lisp">(pop)
-</pre></div>
+        <dd>
+          <p>A script to be run after fetching the mail. The syntax
+          is the same as the <code>:program</code> keyword. This
+          can also be a function to be run.</p>
+        </dd>
 
-<p>Fetch from a named server with a named user and password:
-</p>
-<div class="lisp">
-<pre class="lisp">(pop :server &quot;my.pop.server&quot;
-     :user &quot;user-name&quot; :password &quot;secret&quot;)
-</pre></div>
+        <dt><code>:function</code></dt>
 
-<p>Leave mails on the server for 14 days:
-</p>
-<div class="lisp">
-<pre class="lisp">(pop :server &quot;my.pop.server&quot;
-     :user &quot;user-name&quot; :password &quot;secret&quot;
+        <dd>
+          <p>The function to use to fetch mail from the
+          <acronym>POP</acronym> server. The function is called
+          with one parameter&mdash;the name of the file where the
+          mail should be moved to.</p>
+        </dd>
+
+        <dt><code>:authentication</code></dt>
+
+        <dd>
+          <p>This can be either the symbol <code>password</code> or
+          the symbol <code>apop</code> and says what authentication
+          scheme to use. The default is <code>password</code>.</p>
+        </dd>
+
+        <dt><code>:leave</code></dt>
+
+        <dd>
+          <p>Non-<code>nil</code> if the mail is to be left on the
+          <acronym>POP</acronym> server after fetching. Only the
+          built-in <code>pop3-movemail</code> program (the default)
+          supports this keyword.</p>
+
+          <p>If this is a number, leave mails on the server for
+          this many days since you first checked new mails. In that
+          case, mails once fetched will never be fetched again by
+          the <acronym>UIDL</acronym> control. If this is
+          <code>nil</code> (the default), mails will be deleted on
+          the server right after fetching. If this is neither
+          <code>nil</code> nor a number, all mails will be left on
+          the server, and you will end up getting the same mails
+          again and again.</p><a name=
+          "index-pop3_002duidl_002dfile" id=
+          "index-pop3_002duidl_002dfile"></a>
+
+          <p>The <code>pop3-uidl-file</code> variable specifies the
+          file to which the <acronym>UIDL</acronym> data are
+          locally stored. The default value is
+          <samp>~/.pop3-uidl</samp>.</p>
+
+          <p>Note that <acronym>POP</acronym> servers maintain no
+          state information between sessions, so what the client
+          believes is there and what is actually there may not
+          match up. If they do not, then you may get duplicate
+          mails or the whole thing can fall apart and leave you
+          with a corrupt mailbox.</p>
+        </dd>
+      </dl><a name="index-pop3_002dmovemail" id=
+      "index-pop3_002dmovemail"></a> <a name=
+      "index-pop3_002dleave_002dmail_002don_002dserver" id=
+      "index-pop3_002dleave_002dmail_002don_002dserver"></a>
+
+      <p>If the <code>:program</code> and <code>:function</code>
+      keywords aren&rsquo;t specified, <code>pop3-movemail</code>
+      will be used.</p>
+
+      <p>Here are some examples for getting mail from a
+      <acronym>POP</acronym> server.</p>
+
+      <p>Fetch from the default <acronym>POP</acronym> server,
+      using the default user name, and default fetcher:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(pop)
+</pre>
+      </div>
+
+      <p>Fetch from a named server with a named user and
+      password:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(pop :server "my.pop.server"
+     :user "user-name" :password "secret")
+</pre>
+      </div>
+
+      <p>Leave mails on the server for 14 days:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(pop :server "my.pop.server"
+     :user "user-name" :password "secret"
      :leave 14)
-</pre></div>
+</pre>
+      </div>
 
-<p>Use &lsquo;<samp>movemail</samp>&rsquo; to move the mail:
-</p>
-<div class="lisp">
-<pre class="lisp">(pop :program &quot;movemail po:%u %t %p&quot;)
-</pre></div>
+      <p>Use &lsquo;<samp>movemail</samp>&rsquo; to move the
+      mail:</p>
 
-</dd>
-<dt><code>maildir</code></dt>
-<dd><p>Get mail from a maildir.  This is a type of mailbox that is supported by
-at least qmail and postfix, where each file in a special directory
-contains exactly one mail.
-</p>
-<p>Keywords:
-</p>
-<dl compact="compact">
-<dt><code>:path</code></dt>
-<dd><p>The name of the directory where the mails are stored.  The default is
-taken from the <code>MAILDIR</code> environment variable or
-<samp>~/Maildir/</samp>.
-</p></dd>
-<dt><code>:subdirs</code></dt>
-<dd><p>The subdirectories of the Maildir.  The default is
-&lsquo;<samp>(&quot;new&quot; &quot;cur&quot;)</samp>&rsquo;.
-</p>
+      <div class="lisp">
+        <pre class="lisp">
+(pop :program "movemail po:%u %t %p")
+</pre>
+      </div>
+    </dd>
 
-<p>You can also get mails from remote hosts (because maildirs don&rsquo;t suffer
-from locking problems).
-</p>
-</dd>
-</dl>
+    <dt><code>maildir</code></dt>
 
-<p>Two example maildir mail sources:
-</p>
-<div class="lisp">
-<pre class="lisp">(maildir :path &quot;/home/user-name/Maildir/&quot;
-         :subdirs (&quot;cur&quot; &quot;new&quot;))
-</pre></div>
+    <dd>
+      <p>Get mail from a maildir. This is a type of mailbox that is
+      supported by at least qmail and postfix, where each file in a
+      special directory contains exactly one mail.</p>
 
-<div class="lisp">
-<pre class="lisp">(maildir :path &quot;/user@remotehost.org:~/Maildir/&quot;
-         :subdirs (&quot;new&quot;))
-</pre></div>
+      <p>Keywords:</p>
 
-</dd>
-<dt><code>imap</code></dt>
-<dd><p>Get mail from a <acronym>IMAP</acronym> server.  If you don&rsquo;t want to use
-<acronym>IMAP</acronym> as intended, as a network mail reading protocol (i.e.,
-with nnimap), for some reason or other, Gnus let you treat it similar
-to a <acronym>POP</acronym> server and fetches articles from a given
-<acronym>IMAP</acronym> mailbox.  See <a href="Using-IMAP.html#Using-IMAP">Using IMAP</a>, for more information.
-</p>
-<p>Keywords:
-</p>
-<dl compact="compact">
-<dt><code>:server</code></dt>
-<dd><p>The name of the <acronym>IMAP</acronym> server.  The default is taken from the
-<code>MAILHOST</code> environment variable.
-</p>
-</dd>
-<dt><code>:port</code></dt>
-<dd><p>The port number of the <acronym>IMAP</acronym> server.  The default is &lsquo;<samp>143</samp>&rsquo;, or
-&lsquo;<samp>993</samp>&rsquo; for <acronym>TLS</acronym>/<acronym>SSL</acronym> connections.
-</p>
-</dd>
-<dt><code>:user</code></dt>
-<dd><p>The user name to give to the <acronym>IMAP</acronym> server.  The default is the login
-name.
-</p>
-</dd>
-<dt><code>:password</code></dt>
-<dd><p>The password to give to the <acronym>IMAP</acronym> server.  If not specified, the user is
-prompted.
-</p>
-</dd>
-<dt><code>:stream</code></dt>
-<dd><p>What stream to use for connecting to the server, this is one of the
-symbols in <code>imap-stream-alist</code>.  Right now, this means
-&lsquo;<samp>gssapi</samp>&rsquo;, &lsquo;<samp>kerberos4</samp>&rsquo;, &lsquo;<samp>starttls</samp>&rsquo;, &lsquo;<samp>tls</samp>&rsquo;,
-&lsquo;<samp>ssl</samp>&rsquo;, &lsquo;<samp>shell</samp>&rsquo; or the default &lsquo;<samp>network</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>:authentication</code></dt>
-<dd><p>Which authenticator to use for authenticating to the server, this is
-one of the symbols in <code>imap-authenticator-alist</code>.  Right now,
-this means &lsquo;<samp>gssapi</samp>&rsquo;, &lsquo;<samp>kerberos4</samp>&rsquo;, &lsquo;<samp>digest-md5</samp>&rsquo;,
-&lsquo;<samp>cram-md5</samp>&rsquo;, &lsquo;<samp>anonymous</samp>&rsquo; or the default &lsquo;<samp>login</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>:program</code></dt>
-<dd><p>When using the &lsquo;<samp>shell</samp>&rsquo; :stream, the contents of this variable is
-mapped into the <code>imap-shell-program</code> variable.  This should be a
-<code>format</code>-like string (or list of strings).  Here&rsquo;s an example:
-</p>
-<div class="example">
-<pre class="example">ssh %s imapd
-</pre></div>
+      <dl compact="compact">
+        <dt><code>:path</code></dt>
 
-<p>Make sure nothing is interfering with the output of the program, e.g.,
-don&rsquo;t forget to redirect the error output to the void.  The valid format
-specifier characters are:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>s</samp>&rsquo;</dt>
-<dd><p>The name of the server.
-</p>
-</dd>
-<dt>&lsquo;<samp>l</samp>&rsquo;</dt>
-<dd><p>User name from <code>imap-default-user</code>.
-</p>
-</dd>
-<dt>&lsquo;<samp>p</samp>&rsquo;</dt>
-<dd><p>The port number of the server.
-</p></dd>
-</dl>
+        <dd>
+          <p>The name of the directory where the mails are stored.
+          The default is taken from the <code>MAILDIR</code>
+          environment variable or <samp>~/Maildir/</samp>.</p>
+        </dd>
 
-<p>The values used for these specs are taken from the values you give the
-corresponding keywords.
-</p>
-</dd>
-<dt><code>:mailbox</code></dt>
-<dd><p>The name of the mailbox to get mail from.  The default is &lsquo;<samp>INBOX</samp>&rsquo;
-which normally is the mailbox which receives incoming mail. Instead of
-a single mailbox, this can be a list of mailboxes to fetch mail from.
-</p>
-</dd>
-<dt><code>:predicate</code></dt>
-<dd><p>The predicate used to find articles to fetch.  The default, &lsquo;<samp>UNSEEN
-UNDELETED</samp>&rsquo;, is probably the best choice for most people, but if you
-sometimes peek in your mailbox with a <acronym>IMAP</acronym> client and mark some
-articles as read (or; SEEN) you might want to set this to &lsquo;<samp>1:*</samp>&rsquo;.
-Then all articles in the mailbox is fetched, no matter what.  For a
-complete list of predicates, see RFC 2060 section 6.4.4.
-</p>
-</dd>
-<dt><code>:fetchflag</code></dt>
-<dd><p>How to flag fetched articles on the server, the default &lsquo;<samp>\Deleted</samp>&rsquo;
-will mark them as deleted, an alternative would be &lsquo;<samp>\Seen</samp>&rsquo; which
-would simply mark them as read.  These are the two most likely choices,
-but more flags are defined in RFC 2060 section 2.3.2.
-</p>
-</dd>
-<dt><code>:dontexpunge</code></dt>
-<dd><p>If non-<code>nil</code>, don&rsquo;t remove all articles marked as deleted in the
-mailbox after finishing the fetch.
-</p>
-</dd>
-</dl>
+        <dt><code>:subdirs</code></dt>
 
-<p>An example <acronym>IMAP</acronym> mail source:
-</p>
-<div class="lisp">
-<pre class="lisp">(imap :server &quot;mail.mycorp.com&quot;
+        <dd>
+          <p>The subdirectories of the Maildir. The default is
+          &lsquo;<samp>("new" "cur")</samp>&rsquo;.</p>
+
+          <p>You can also get mails from remote hosts (because
+          maildirs don&rsquo;t suffer from locking problems).</p>
+        </dd>
+      </dl>
+
+      <p>Two example maildir mail sources:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(maildir :path "/home/user-name/Maildir/"
+         :subdirs ("cur" "new"))
+</pre>
+      </div>
+
+      <div class="lisp">
+        <pre class="lisp">
+(maildir :path "/user@remotehost.org:~/Maildir/"
+         :subdirs ("new"))
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>imap</code></dt>
+
+    <dd>
+      <p>Get mail from a <acronym>IMAP</acronym> server. If you
+      don&rsquo;t want to use <acronym>IMAP</acronym> as intended,
+      as a network mail reading protocol (i.e., with nnimap), for
+      some reason or other, Gnus let you treat it similar to a
+      <acronym>POP</acronym> server and fetches articles from a
+      given <acronym>IMAP</acronym> mailbox. See <a href=
+      "Using-IMAP.html#Using-IMAP">Using IMAP</a>, for more
+      information.</p>
+
+      <p>Keywords:</p>
+
+      <dl compact="compact">
+        <dt><code>:server</code></dt>
+
+        <dd>
+          <p>The name of the <acronym>IMAP</acronym> server. The
+          default is taken from the <code>MAILHOST</code>
+          environment variable.</p>
+        </dd>
+
+        <dt><code>:port</code></dt>
+
+        <dd>
+          <p>The port number of the <acronym>IMAP</acronym> server.
+          The default is &lsquo;<samp>143</samp>&rsquo;, or
+          &lsquo;<samp>993</samp>&rsquo; for
+          <acronym>TLS</acronym>/<acronym>SSL</acronym>
+          connections.</p>
+        </dd>
+
+        <dt><code>:user</code></dt>
+
+        <dd>
+          <p>The user name to give to the <acronym>IMAP</acronym>
+          server. The default is the login name.</p>
+        </dd>
+
+        <dt><code>:password</code></dt>
+
+        <dd>
+          <p>The password to give to the <acronym>IMAP</acronym>
+          server. If not specified, the user is prompted.</p>
+        </dd>
+
+        <dt><code>:stream</code></dt>
+
+        <dd>
+          <p>What stream to use for connecting to the server, this
+          is one of the symbols in <code>imap-stream-alist</code>.
+          Right now, this means &lsquo;<samp>gssapi</samp>&rsquo;,
+          &lsquo;<samp>kerberos4</samp>&rsquo;,
+          &lsquo;<samp>starttls</samp>&rsquo;,
+          &lsquo;<samp>tls</samp>&rsquo;,
+          &lsquo;<samp>ssl</samp>&rsquo;,
+          &lsquo;<samp>shell</samp>&rsquo; or the default
+          &lsquo;<samp>network</samp>&rsquo;.</p>
+        </dd>
+
+        <dt><code>:authentication</code></dt>
+
+        <dd>
+          <p>Which authenticator to use for authenticating to the
+          server, this is one of the symbols in
+          <code>imap-authenticator-alist</code>. Right now, this
+          means &lsquo;<samp>gssapi</samp>&rsquo;,
+          &lsquo;<samp>kerberos4</samp>&rsquo;,
+          &lsquo;<samp>digest-md5</samp>&rsquo;,
+          &lsquo;<samp>cram-md5</samp>&rsquo;,
+          &lsquo;<samp>anonymous</samp>&rsquo; or the default
+          &lsquo;<samp>login</samp>&rsquo;.</p>
+        </dd>
+
+        <dt><code>:program</code></dt>
+
+        <dd>
+          <p>When using the &lsquo;<samp>shell</samp>&rsquo;
+          :stream, the contents of this variable is mapped into the
+          <code>imap-shell-program</code> variable. This should be
+          a <code>format</code>-like string (or list of strings).
+          Here&rsquo;s an example:</p>
+
+          <div class="example">
+            <pre class="example">
+ssh %s imapd
+</pre>
+          </div>
+
+          <p>Make sure nothing is interfering with the output of
+          the program, e.g., don&rsquo;t forget to redirect the
+          error output to the void. The valid format specifier
+          characters are:</p>
+
+          <dl compact="compact">
+            <dt>&lsquo;<samp>s</samp>&rsquo;</dt>
+
+            <dd>
+              <p>The name of the server.</p>
+            </dd>
+
+            <dt>&lsquo;<samp>l</samp>&rsquo;</dt>
+
+            <dd>
+              <p>User name from <code>imap-default-user</code>.</p>
+            </dd>
+
+            <dt>&lsquo;<samp>p</samp>&rsquo;</dt>
+
+            <dd>
+              <p>The port number of the server.</p>
+            </dd>
+          </dl>
+
+          <p>The values used for these specs are taken from the
+          values you give the corresponding keywords.</p>
+        </dd>
+
+        <dt><code>:mailbox</code></dt>
+
+        <dd>
+          <p>The name of the mailbox to get mail from. The default
+          is &lsquo;<samp>INBOX</samp>&rsquo; which normally is the
+          mailbox which receives incoming mail. Instead of a single
+          mailbox, this can be a list of mailboxes to fetch mail
+          from.</p>
+        </dd>
+
+        <dt><code>:predicate</code></dt>
+
+        <dd>
+          <p>The predicate used to find articles to fetch. The
+          default, &lsquo;<samp>UNSEEN UNDELETED</samp>&rsquo;, is
+          probably the best choice for most people, but if you
+          sometimes peek in your mailbox with a
+          <acronym>IMAP</acronym> client and mark some articles as
+          read (or; SEEN) you might want to set this to
+          &lsquo;<samp>1:*</samp>&rsquo;. Then all articles in the
+          mailbox is fetched, no matter what. For a complete list
+          of predicates, see RFC 2060 section 6.4.4.</p>
+        </dd>
+
+        <dt><code>:fetchflag</code></dt>
+
+        <dd>
+          <p>How to flag fetched articles on the server, the
+          default &lsquo;<samp>\Deleted</samp>&rsquo; will mark
+          them as deleted, an alternative would be
+          &lsquo;<samp>\Seen</samp>&rsquo; which would simply mark
+          them as read. These are the two most likely choices, but
+          more flags are defined in RFC 2060 section 2.3.2.</p>
+        </dd>
+
+        <dt><code>:dontexpunge</code></dt>
+
+        <dd>
+          <p>If non-<code>nil</code>, don&rsquo;t remove all
+          articles marked as deleted in the mailbox after finishing
+          the fetch.</p>
+        </dd>
+      </dl>
+
+      <p>An example <acronym>IMAP</acronym> mail source:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(imap :server "mail.mycorp.com"
       :stream kerberos4
-      :fetchflag &quot;\\Seen&quot;)
-</pre></div>
+      :fetchflag "\\Seen")
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>group</code></dt>
-<dd><p>Get the actual mail source from the <code>mail-source</code> group parameter,
-See <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>.
-</p>
-</dd>
-</dl>
+    <dt><code>group</code></dt>
 
-<dl compact="compact">
-<dt><em>Common Keywords</em></dt>
-<dd><p>Common keywords can be used in any type of mail source.
-</p>
-<p>Keywords:
-</p>
-<dl compact="compact">
-<dt><code>:plugged</code></dt>
-<dd><p>If non-<code>nil</code>, fetch the mail even when Gnus is unplugged.  If you
-use directory source to get mail, you can specify it as in this
-example:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq mail-sources
-      '((directory :path &quot;/home/pavel/.Spool/&quot;
-                   :suffix &quot;&quot;
+    <dd>
+      <p>Get the actual mail source from the
+      <code>mail-source</code> group parameter, See <a href=
+      "Group-Parameters.html#Group-Parameters">Group
+      Parameters</a>.</p>
+    </dd>
+  </dl>
+
+  <dl compact="compact">
+    <dt><em>Common Keywords</em></dt>
+
+    <dd>
+      <p>Common keywords can be used in any type of mail
+      source.</p>
+
+      <p>Keywords:</p>
+
+      <dl compact="compact">
+        <dt><code>:plugged</code></dt>
+
+        <dd>
+          <p>If non-<code>nil</code>, fetch the mail even when Gnus
+          is unplugged. If you use directory source to get mail,
+          you can specify it as in this example:</p>
+
+          <div class="lisp">
+            <pre class="lisp">
+(setq mail-sources
+      '((directory :path "/home/pavel/.Spool/"
+                   :suffix ""
                    :plugged t)))
-</pre></div>
+</pre>
+          </div>
 
-<p>Gnus will then fetch your mail even when you are unplugged.  This is
-useful when you use local mail and news.
-</p>
-</dd>
-</dl>
-</dd>
-</dl>
+          <p>Gnus will then fetch your mail even when you are
+          unplugged. This is useful when you use local mail and
+          news.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Mail-Source-Functions.html#Mail-Source-Functions" accesskey="n" rel="next">Mail Source Functions</a>, Up: <a href="Mail-Sources.html#Mail-Sources" accesskey="u" rel="up">Mail Sources</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Mail-Source-Functions.html#Mail-Source-Functions" accesskey=
+    "n" rel="next">Mail Source Functions</a>, Up: <a href=
+    "Mail-Sources.html#Mail-Sources" accesskey="u" rel="up">Mail
+    Sources</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

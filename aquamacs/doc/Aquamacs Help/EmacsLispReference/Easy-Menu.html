@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,199 +19,289 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Easy Menu</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Easy Menu">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Easy Menu">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Menu-Keymaps.html#Menu-Keymaps" rel="up" title="Menu Keymaps">
-<link href="Modes.html#Modes" rel="next" title="Modes">
-<link href="Modifying-Menus.html#Modifying-Menus" rel="prev" title="Modifying Menus">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Easy Menu</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Easy Menu" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Easy Menu" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Menu-Keymaps.html#Menu-Keymaps" rel="up" title=
+  "Menu Keymaps" />
+  <link href="Modes.html#Modes" rel="next" title="Modes" />
+  <link href="Modifying-Menus.html#Modifying-Menus" rel="prev"
+  title="Modifying Menus" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Easy-Menu" id="Easy-Menu"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Modifying-Menus.html#Modifying-Menus"
+    accesskey="p" rel="prev">Modifying Menus</a>, Up: <a href=
+    "Menu-Keymaps.html#Menu-Keymaps" accesskey="u" rel="up">Menu
+    Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Easy-Menu-1" id="Easy-Menu-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Easy-Menu"></a>
-<div class="header">
-<p>
-Previous: <a href="Modifying-Menus.html#Modifying-Menus" accesskey="p" rel="prev">Modifying Menus</a>, Up: <a href="Menu-Keymaps.html#Menu-Keymaps" accesskey="u" rel="up">Menu Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Easy-Menu-1"></a>
-<h4 class="subsection">21.17.8 Easy Menu</h4>
+  <h4 class="subsection">21.17.8 Easy Menu</h4>
 
-<p>The following macro provides a convenient way to define pop-up menus
-and/or menu bar menus.
-</p>
-<dl>
-<dt><a name="index-easy_002dmenu_002ddefine"></a>Macro: <strong>easy-menu-define</strong> <em>symbol maps doc menu</em></dt>
-<dd><p>This macro defines a pop-up menu and/or menu bar submenu, whose
-contents are given by <var>menu</var>.
-</p>
-<p>If <var>symbol</var> is non-<code>nil</code>, it should be a symbol; then this
-macro defines <var>symbol</var> as a function for popping up the menu
-(see <a href="Pop_002dUp-Menus.html#Pop_002dUp-Menus">Pop-Up Menus</a>), with <var>doc</var> as its documentation string.
-<var>symbol</var> should not be quoted.
-</p>
-<p>Regardless of the value of <var>symbol</var>, if <var>maps</var> is a keymap,
-the menu is added to that keymap, as a top-level menu for the menu bar
-(see <a href="Menu-Bar.html#Menu-Bar">Menu Bar</a>).  It can also be a list of keymaps, in which case
-the menu is added separately to each of those keymaps.
-</p>
-<p>The first element of <var>menu</var> must be a string, which serves as the
-menu label.  It may be followed by any number of the following
-keyword-argument pairs:
-</p>
-<dl compact="compact">
-<dt><code>:filter <var>function</var></code></dt>
-<dd><p><var>function</var> must be a function which, if called with one
-argument&mdash;the list of the other menu items&mdash;returns the actual items
-to be displayed in the menu.
-</p>
-</dd>
-<dt><code>:visible <var>include</var></code></dt>
-<dd><p><var>include</var> is an expression; if it evaluates to <code>nil</code>, the
-menu is made invisible.  <code>:included</code> is an alias for
-<code>:visible</code>.
-</p>
-</dd>
-<dt><code>:active <var>enable</var></code></dt>
-<dd><p><var>enable</var> is an expression; if it evaluates to <code>nil</code>, the menu
-is not selectable.  <code>:enable</code> is an alias for <code>:active</code>.
-</p></dd>
-</dl>
+  <p>The following macro provides a convenient way to define pop-up
+  menus and/or menu bar menus.</p>
 
-<p>The remaining elements in <var>menu</var> are menu items.
-</p>
-<p>A menu item can be a vector of three elements, <code>[<var>name</var>
-<var>callback</var> <var>enable</var>]</code>.  <var>name</var> is the menu item name (a
-string).  <var>callback</var> is a command to run, or an expression to
-evaluate, when the item is chosen.  <var>enable</var> is an expression; if
-it evaluates to <code>nil</code>, the item is disabled for selection.
-</p>
-<p>Alternatively, a menu item may have the form:
-</p>
-<div class="smallexample">
-<pre class="smallexample">   [ <var>name</var> <var>callback</var> [ <var>keyword</var> <var>arg</var> ]... ]
-</pre></div>
+  <dl>
+    <dt><a name="index-easy_002dmenu_002ddefine" id=
+    "index-easy_002dmenu_002ddefine"></a>Macro:
+    <strong>easy-menu-define</strong> <em>symbol maps doc
+    menu</em></dt>
 
-<p>where <var>name</var> and <var>callback</var> have the same meanings as above,
-and each optional <var>keyword</var> and <var>arg</var> pair should be one of
-the following:
-</p>
-<dl compact="compact">
-<dt><code>:keys <var>keys</var></code></dt>
-<dd><p><var>keys</var> is a keyboard equivalent to the menu item (a string).  This
-is normally not needed, as keyboard equivalents are computed
-automatically.  <var>keys</var> is expanded with
-<code>substitute-command-keys</code> before it is displayed (see <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>).
-</p>
-</dd>
-<dt><code>:key-sequence <var>keys</var></code></dt>
-<dd><p><var>keys</var> is a hint for speeding up Emacs&rsquo;s first display of the
-menu.  It should be <code>nil</code> if you know that the menu item has no keyboard
-equivalent; otherwise it should be a string or vector specifying a
-keyboard equivalent for the menu item.
-</p>
-</dd>
-<dt><code>:active <var>enable</var></code></dt>
-<dd><p><var>enable</var> is an expression; if it evaluates to <code>nil</code>, the item
-is make unselectable..  <code>:enable</code> is an alias for <code>:active</code>.
-</p>
-</dd>
-<dt><code>:visible <var>include</var></code></dt>
-<dd><p><var>include</var> is an expression; if it evaluates to <code>nil</code>, the
-item is made invisible.  <code>:included</code> is an alias for
-<code>:visible</code>.
-</p>
-</dd>
-<dt><code>:label <var>form</var></code></dt>
-<dd><p><var>form</var> is an expression that is evaluated to obtain a value which
-serves as the menu item&rsquo;s label (the default is <var>name</var>).
-</p>
-</dd>
-<dt><code>:suffix <var>form</var></code></dt>
-<dd><p><var>form</var> is an expression that is dynamically evaluated and whose
-value is concatenated with the menu entry&rsquo;s label.
-</p>
-</dd>
-<dt><code>:style <var>style</var></code></dt>
-<dd><p><var>style</var> is a symbol describing the type of menu item; it should be
-<code>toggle</code> (a checkbox), or <code>radio</code> (a radio button), or
-anything else (meaning an ordinary menu item).
-</p>
-</dd>
-<dt><code>:selected <var>selected</var></code></dt>
-<dd><p><var>selected</var> is an expression; the checkbox or radio button is
-selected whenever the expression&rsquo;s value is non-<code>nil</code>.
-</p>
-</dd>
-<dt><code>:help <var>help</var></code></dt>
-<dd><p><var>help</var> is a string describing the menu item.
-</p></dd>
-</dl>
+    <dd>
+      <p>This macro defines a pop-up menu and/or menu bar submenu,
+      whose contents are given by <var>menu</var>.</p>
 
-<p>Alternatively, a menu item can be a string.  Then that string appears
-in the menu as unselectable text.  A string consisting of dashes is
-displayed as a separator (see <a href="Menu-Separators.html#Menu-Separators">Menu Separators</a>).
-</p>
-<p>Alternatively, a menu item can be a list with the same format as
-<var>menu</var>.  This is a submenu.
-</p></dd></dl>
+      <p>If <var>symbol</var> is non-<code>nil</code>, it should be
+      a symbol; then this macro defines <var>symbol</var> as a
+      function for popping up the menu (see <a href=
+      "Pop_002dUp-Menus.html#Pop_002dUp-Menus">Pop-Up Menus</a>),
+      with <var>doc</var> as its documentation string.
+      <var>symbol</var> should not be quoted.</p>
 
-<p>Here is an example of using <code>easy-menu-define</code> to define a menu
-similar to the one defined in the example in <a href="Menu-Bar.html#Menu-Bar">Menu Bar</a>:
-</p>
-<div class="example">
-<pre class="example">(easy-menu-define words-menu global-map
-  &quot;Menu for word navigation commands.&quot;
-  '(&quot;Words&quot;
-     [&quot;Forward word&quot; forward-word]
-     [&quot;Backward word&quot; backward-word]))
-</pre></div>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Modifying-Menus.html#Modifying-Menus" accesskey="p" rel="prev">Modifying Menus</a>, Up: <a href="Menu-Keymaps.html#Menu-Keymaps" accesskey="u" rel="up">Menu Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Regardless of the value of <var>symbol</var>, if
+      <var>maps</var> is a keymap, the menu is added to that
+      keymap, as a top-level menu for the menu bar (see <a href=
+      "Menu-Bar.html#Menu-Bar">Menu Bar</a>). It can also be a list
+      of keymaps, in which case the menu is added separately to
+      each of those keymaps.</p>
 
+      <p>The first element of <var>menu</var> must be a string,
+      which serves as the menu label. It may be followed by any
+      number of the following keyword-argument pairs:</p>
 
+      <dl compact="compact">
+        <dt><code>:filter <var>function</var></code></dt>
 
+        <dd>
+          <p><var>function</var> must be a function which, if
+          called with one argument&mdash;the list of the other menu
+          items&mdash;returns the actual items to be displayed in
+          the menu.</p>
+        </dd>
+
+        <dt><code>:visible <var>include</var></code></dt>
+
+        <dd>
+          <p><var>include</var> is an expression; if it evaluates
+          to <code>nil</code>, the menu is made invisible.
+          <code>:included</code> is an alias for
+          <code>:visible</code>.</p>
+        </dd>
+
+        <dt><code>:active <var>enable</var></code></dt>
+
+        <dd>
+          <p><var>enable</var> is an expression; if it evaluates to
+          <code>nil</code>, the menu is not selectable.
+          <code>:enable</code> is an alias for
+          <code>:active</code>.</p>
+        </dd>
+      </dl>
+
+      <p>The remaining elements in <var>menu</var> are menu
+      items.</p>
+
+      <p>A menu item can be a vector of three elements,
+      <code>[<var>name</var> <var>callback</var>
+      <var>enable</var>]</code>. <var>name</var> is the menu item
+      name (a string). <var>callback</var> is a command to run, or
+      an expression to evaluate, when the item is chosen.
+      <var>enable</var> is an expression; if it evaluates to
+      <code>nil</code>, the item is disabled for selection.</p>
+
+      <p>Alternatively, a menu item may have the form:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+   [ <var>name</var> <var>callback</var> [ <var>keyword</var> <var>arg</var> ]... ]
+</pre>
+      </div>
+
+      <p>where <var>name</var> and <var>callback</var> have the
+      same meanings as above, and each optional <var>keyword</var>
+      and <var>arg</var> pair should be one of the following:</p>
+
+      <dl compact="compact">
+        <dt><code>:keys <var>keys</var></code></dt>
+
+        <dd>
+          <p><var>keys</var> is a keyboard equivalent to the menu
+          item (a string). This is normally not needed, as keyboard
+          equivalents are computed automatically. <var>keys</var>
+          is expanded with <code>substitute-command-keys</code>
+          before it is displayed (see <a href=
+          "Keys-in-Documentation.html#Keys-in-Documentation">Keys
+          in Documentation</a>).</p>
+        </dd>
+
+        <dt><code>:key-sequence <var>keys</var></code></dt>
+
+        <dd>
+          <p><var>keys</var> is a hint for speeding up
+          Emacs&rsquo;s first display of the menu. It should be
+          <code>nil</code> if you know that the menu item has no
+          keyboard equivalent; otherwise it should be a string or
+          vector specifying a keyboard equivalent for the menu
+          item.</p>
+        </dd>
+
+        <dt><code>:active <var>enable</var></code></dt>
+
+        <dd>
+          <p><var>enable</var> is an expression; if it evaluates to
+          <code>nil</code>, the item is make unselectable..
+          <code>:enable</code> is an alias for
+          <code>:active</code>.</p>
+        </dd>
+
+        <dt><code>:visible <var>include</var></code></dt>
+
+        <dd>
+          <p><var>include</var> is an expression; if it evaluates
+          to <code>nil</code>, the item is made invisible.
+          <code>:included</code> is an alias for
+          <code>:visible</code>.</p>
+        </dd>
+
+        <dt><code>:label <var>form</var></code></dt>
+
+        <dd>
+          <p><var>form</var> is an expression that is evaluated to
+          obtain a value which serves as the menu item&rsquo;s
+          label (the default is <var>name</var>).</p>
+        </dd>
+
+        <dt><code>:suffix <var>form</var></code></dt>
+
+        <dd>
+          <p><var>form</var> is an expression that is dynamically
+          evaluated and whose value is concatenated with the menu
+          entry&rsquo;s label.</p>
+        </dd>
+
+        <dt><code>:style <var>style</var></code></dt>
+
+        <dd>
+          <p><var>style</var> is a symbol describing the type of
+          menu item; it should be <code>toggle</code> (a checkbox),
+          or <code>radio</code> (a radio button), or anything else
+          (meaning an ordinary menu item).</p>
+        </dd>
+
+        <dt><code>:selected <var>selected</var></code></dt>
+
+        <dd>
+          <p><var>selected</var> is an expression; the checkbox or
+          radio button is selected whenever the expression&rsquo;s
+          value is non-<code>nil</code>.</p>
+        </dd>
+
+        <dt><code>:help <var>help</var></code></dt>
+
+        <dd>
+          <p><var>help</var> is a string describing the menu
+          item.</p>
+        </dd>
+      </dl>
+
+      <p>Alternatively, a menu item can be a string. Then that
+      string appears in the menu as unselectable text. A string
+      consisting of dashes is displayed as a separator (see
+      <a href="Menu-Separators.html#Menu-Separators">Menu
+      Separators</a>).</p>
+
+      <p>Alternatively, a menu item can be a list with the same
+      format as <var>menu</var>. This is a submenu.</p>
+    </dd>
+  </dl>
+
+  <p>Here is an example of using <code>easy-menu-define</code> to
+  define a menu similar to the one defined in the example in
+  <a href="Menu-Bar.html#Menu-Bar">Menu Bar</a>:</p>
+
+  <div class="example">
+    <pre class="example">
+(easy-menu-define words-menu global-map
+  "Menu for word navigation commands."
+  '("Words"
+     ["Forward word" forward-word]
+     ["Backward word" backward-word]))
+</pre>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Modifying-Menus.html#Modifying-Menus"
+    accesskey="p" rel="prev">Modifying Menus</a>, Up: <a href=
+    "Menu-Keymaps.html#Menu-Keymaps" accesskey="u" rel="up">Menu
+    Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

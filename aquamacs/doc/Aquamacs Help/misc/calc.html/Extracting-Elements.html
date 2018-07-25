@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,172 +18,231 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Extracting Elements</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Extracting Elements">
-<meta name="keywords" content="GNU Emacs Calc Manual: Extracting Elements">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Matrix-Functions.html#Matrix-Functions" rel="up" title="Matrix Functions">
-<link href="Manipulating-Vectors.html#Manipulating-Vectors" rel="next" title="Manipulating Vectors">
-<link href="Building-Vectors.html#Building-Vectors" rel="prev" title="Building Vectors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Extracting Elements</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Extracting Elements" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Extracting Elements" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Matrix-Functions.html#Matrix-Functions" rel="up"
+  title="Matrix Functions" />
+  <link href="Manipulating-Vectors.html#Manipulating-Vectors" rel=
+  "next" title="Manipulating Vectors" />
+  <link href="Building-Vectors.html#Building-Vectors" rel="prev"
+  title="Building Vectors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Extracting-Elements"></a>
-<div class="header">
-<p>
-Next: <a href="Manipulating-Vectors.html#Manipulating-Vectors" accesskey="n" rel="next">Manipulating Vectors</a>, Previous: <a href="Building-Vectors.html#Building-Vectors" accesskey="p" rel="prev">Building Vectors</a>, Up: <a href="Matrix-Functions.html#Matrix-Functions" accesskey="u" rel="up">Matrix Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Extracting-Vector-Elements"></a>
-<h3 class="section">9.3 Extracting Vector Elements</h3>
+<body lang="en" xml:lang="en">
+  <a name="Extracting-Elements" id="Extracting-Elements"></a>
 
-<a name="index-v-r"></a>
-<a name="index-V-r"></a>
-<a name="index-calc_002dmrow"></a>
-<a name="index-mrow"></a>
-<p>The <kbd>v r</kbd> (<code>calc-mrow</code>) [<code>mrow</code>] command extracts one row of
-the matrix on the top of the stack, or one element of the plain vector on
-the top of the stack.  The row or element is specified by the numeric
-prefix argument; the default is to prompt for the row or element number.
-The matrix or vector is replaced by the specified row or element in the
-form of a vector or scalar, respectively.
-</p>
-<a name="index-Permutations_002c-applying"></a>
-<p>With a prefix argument of <kbd>C-u</kbd> only, <kbd>v r</kbd> takes the index of
-the element or row from the top of the stack, and the vector or matrix
-from the second-to-top position.  If the index is itself a vector of
-integers, the result is a vector of the corresponding elements of the
-input vector, or a matrix of the corresponding rows of the input matrix.
-This command can be used to obtain any permutation of a vector.
-</p>
-<p>With <kbd>C-u</kbd>, if the index is an interval form with integer components,
-it is interpreted as a range of indices and the corresponding subvector or
-submatrix is returned.
-</p>
-<a name="index-Subscript-notation"></a>
-<a name="index-a-_005f"></a>
-<a name="index-calc_002dsubscript"></a>
-<a name="index-subscr"></a>
-<a name="index-_005f-1"></a>
-<p>Subscript notation in algebraic formulas (&lsquo;<samp>a_b</samp>&rsquo;) stands for the
-Calc function <code>subscr</code>, which is synonymous with <code>mrow</code>.
-Thus, &lsquo;<samp>[x, y, z]_k</samp>&rsquo; produces &lsquo;<samp>x</samp>&rsquo;, &lsquo;<samp>y</samp>&rsquo;, or &lsquo;<samp>z</samp>&rsquo; if
-&lsquo;<samp>k</samp>&rsquo; is one, two, or three, respectively.  A double subscript
-(&lsquo;<samp>M_i_j</samp>&rsquo;, equivalent to &lsquo;<samp>subscr(subscr(M, i), j)</samp>&rsquo;) will
-access the element at row &lsquo;<samp>i</samp>&rsquo;, column &lsquo;<samp>j</samp>&rsquo; of a matrix.
-The <kbd>a _</kbd> (<code>calc-subscript</code>) command creates a subscript
-formula &lsquo;<samp>a_b</samp>&rsquo; out of two stack entries.  (It is on the <kbd>a</kbd>
-&ldquo;algebra&rdquo; prefix because subscripted variables are often used
-purely as an algebraic notation.)
-</p>
-<a name="index-mrrow"></a>
-<p>Given a negative prefix argument, <kbd>v r</kbd> instead deletes one row or
-element from the matrix or vector on the top of the stack.  Thus
-<kbd>C-u 2 v r</kbd> replaces a matrix with its second row, but <kbd>C-u -2 v r</kbd>
-replaces the matrix with the same matrix with its second row removed.
-In algebraic form this function is called <code>mrrow</code>.
-</p>
-<a name="index-getdiag"></a>
-<p>Given a prefix argument of zero, <kbd>v r</kbd> extracts the diagonal elements
-of a square matrix in the form of a vector.  In algebraic form this
-function is called <code>getdiag</code>.
-</p>
-<a name="index-v-c"></a>
-<a name="index-V-c"></a>
-<a name="index-calc_002dmcol"></a>
-<a name="index-mcol"></a>
-<a name="index-mrcol"></a>
-<p>The <kbd>v c</kbd> (<code>calc-mcol</code>) [<code>mcol</code> or <code>mrcol</code>] command is
-the analogous operation on columns of a matrix.  Given a plain vector
-it extracts (or removes) one element, just like <kbd>v r</kbd>.  If the
-index in <kbd>C-u v c</kbd> is an interval or vector and the argument is a
-matrix, the result is a submatrix with only the specified columns
-retained (and possibly permuted in the case of a vector index).
-</p>
-<p>To extract a matrix element at a given row and column, use <kbd>v r</kbd> to
-extract the row as a vector, then <kbd>v c</kbd> to extract the column element
-from that vector.  In algebraic formulas, it is often more convenient to
-use subscript notation:  &lsquo;<samp>m_i_j</samp>&rsquo; gives row &lsquo;<samp>i</samp>&rsquo;, column &lsquo;<samp>j</samp>&rsquo;
-of matrix &lsquo;<samp>m</samp>&rsquo;.
-</p>
-<a name="index-v-s"></a>
-<a name="index-V-s"></a>
-<a name="index-calc_002dsubvector"></a>
-<a name="index-subvec"></a>
-<p>The <kbd>v s</kbd> (<code>calc-subvector</code>) [<code>subvec</code>] command extracts
-a subvector of a vector.  The arguments are the vector, the starting
-index, and the ending index, with the ending index in the top-of-stack
-position.  The starting index indicates the first element of the vector
-to take.  The ending index indicates the first element <em>past</em> the
-range to be taken.  Thus, &lsquo;<samp>subvec([a, b, c, d, e], 2, 4)</samp>&rsquo; produces
-the subvector &lsquo;<samp>[b, c]</samp>&rsquo;.  You could get the same result using
-&lsquo;<samp>mrow([a, b, c, d, e], [2&nbsp;..&nbsp;4)<!-- /@w -->)</samp>&rsquo;.
-</p>
-<p>If either the start or the end index is zero or negative, it is
-interpreted as relative to the end of the vector.  Thus
-&lsquo;<samp>subvec([a, b, c, d, e], 2, -2)</samp>&rsquo; also produces &lsquo;<samp>[b, c]</samp>&rsquo;.  In
-the algebraic form, the end index can be omitted in which case it
-is taken as zero, i.e., elements from the starting element to the
-end of the vector are used.  The infinity symbol, <code>inf</code>, also
-has this effect when used as the ending index.
-</p>
-<a name="index-I-v-s"></a>
-<a name="index-I-V-s"></a>
-<a name="index-rsubvec"></a>
-<p>With the Inverse flag, <kbd>I v s</kbd> [<code>rsubvec</code>] removes a subvector
-from a vector.  The arguments are interpreted the same as for the
-normal <kbd>v s</kbd> command.  Thus, &lsquo;<samp>rsubvec([a, b, c, d, e], 2, 4)</samp>&rsquo;
-produces &lsquo;<samp>[a, d, e]</samp>&rsquo;.  It is always true that <code>subvec</code> and
-<code>rsubvec</code> return complementary parts of the input vector.
-</p>
-<p>See <a href="Selecting-Subformulas.html#Selecting-Subformulas">Selecting Subformulas</a>, for an alternative way to operate on
-vectors one element at a time.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Manipulating-Vectors.html#Manipulating-Vectors" accesskey="n" rel="next">Manipulating Vectors</a>, Previous: <a href="Building-Vectors.html#Building-Vectors" accesskey="p" rel="prev">Building Vectors</a>, Up: <a href="Matrix-Functions.html#Matrix-Functions" accesskey="u" rel="up">Matrix Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Manipulating-Vectors.html#Manipulating-Vectors" accesskey="n"
+    rel="next">Manipulating Vectors</a>, Previous: <a href=
+    "Building-Vectors.html#Building-Vectors" accesskey="p" rel=
+    "prev">Building Vectors</a>, Up: <a href=
+    "Matrix-Functions.html#Matrix-Functions" accesskey="u" rel=
+    "up">Matrix Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Extracting-Vector-Elements" id=
+  "Extracting-Vector-Elements"></a>
 
+  <h3 class="section">9.3 Extracting Vector Elements</h3><a name=
+  "index-v-r" id="index-v-r"></a> <a name="index-V-r" id=
+  "index-V-r"></a> <a name="index-calc_002dmrow" id=
+  "index-calc_002dmrow"></a> <a name="index-mrow" id=
+  "index-mrow"></a>
 
+  <p>The <kbd>v r</kbd> (<code>calc-mrow</code>)
+  [<code>mrow</code>] command extracts one row of the matrix on the
+  top of the stack, or one element of the plain vector on the top
+  of the stack. The row or element is specified by the numeric
+  prefix argument; the default is to prompt for the row or element
+  number. The matrix or vector is replaced by the specified row or
+  element in the form of a vector or scalar,
+  respectively.</p><a name="index-Permutations_002c-applying" id=
+  "index-Permutations_002c-applying"></a>
 
+  <p>With a prefix argument of <kbd>C-u</kbd> only, <kbd>v r</kbd>
+  takes the index of the element or row from the top of the stack,
+  and the vector or matrix from the second-to-top position. If the
+  index is itself a vector of integers, the result is a vector of
+  the corresponding elements of the input vector, or a matrix of
+  the corresponding rows of the input matrix. This command can be
+  used to obtain any permutation of a vector.</p>
+
+  <p>With <kbd>C-u</kbd>, if the index is an interval form with
+  integer components, it is interpreted as a range of indices and
+  the corresponding subvector or submatrix is returned.</p><a name=
+  "index-Subscript-notation" id="index-Subscript-notation"></a>
+  <a name="index-a-_005f" id="index-a-_005f"></a> <a name=
+  "index-calc_002dsubscript" id="index-calc_002dsubscript"></a>
+  <a name="index-subscr" id="index-subscr"></a> <a name=
+  "index-_005f-1" id="index-_005f-1"></a>
+
+  <p>Subscript notation in algebraic formulas
+  (&lsquo;<samp>a_b</samp>&rsquo;) stands for the Calc function
+  <code>subscr</code>, which is synonymous with <code>mrow</code>.
+  Thus, &lsquo;<samp>[x, y, z]_k</samp>&rsquo; produces
+  &lsquo;<samp>x</samp>&rsquo;, &lsquo;<samp>y</samp>&rsquo;, or
+  &lsquo;<samp>z</samp>&rsquo; if &lsquo;<samp>k</samp>&rsquo; is
+  one, two, or three, respectively. A double subscript
+  (&lsquo;<samp>M_i_j</samp>&rsquo;, equivalent to
+  &lsquo;<samp>subscr(subscr(M, i), j)</samp>&rsquo;) will access
+  the element at row &lsquo;<samp>i</samp>&rsquo;, column
+  &lsquo;<samp>j</samp>&rsquo; of a matrix. The <kbd>a _</kbd>
+  (<code>calc-subscript</code>) command creates a subscript formula
+  &lsquo;<samp>a_b</samp>&rsquo; out of two stack entries. (It is
+  on the <kbd>a</kbd> &ldquo;algebra&rdquo; prefix because
+  subscripted variables are often used purely as an algebraic
+  notation.)</p><a name="index-mrrow" id="index-mrrow"></a>
+
+  <p>Given a negative prefix argument, <kbd>v r</kbd> instead
+  deletes one row or element from the matrix or vector on the top
+  of the stack. Thus <kbd>C-u 2 v r</kbd> replaces a matrix with
+  its second row, but <kbd>C-u -2 v r</kbd> replaces the matrix
+  with the same matrix with its second row removed. In algebraic
+  form this function is called <code>mrrow</code>.</p><a name=
+  "index-getdiag" id="index-getdiag"></a>
+
+  <p>Given a prefix argument of zero, <kbd>v r</kbd> extracts the
+  diagonal elements of a square matrix in the form of a vector. In
+  algebraic form this function is called
+  <code>getdiag</code>.</p><a name="index-v-c" id="index-v-c"></a>
+  <a name="index-V-c" id="index-V-c"></a> <a name=
+  "index-calc_002dmcol" id="index-calc_002dmcol"></a> <a name=
+  "index-mcol" id="index-mcol"></a> <a name="index-mrcol" id=
+  "index-mrcol"></a>
+
+  <p>The <kbd>v c</kbd> (<code>calc-mcol</code>) [<code>mcol</code>
+  or <code>mrcol</code>] command is the analogous operation on
+  columns of a matrix. Given a plain vector it extracts (or
+  removes) one element, just like <kbd>v r</kbd>. If the index in
+  <kbd>C-u v c</kbd> is an interval or vector and the argument is a
+  matrix, the result is a submatrix with only the specified columns
+  retained (and possibly permuted in the case of a vector
+  index).</p>
+
+  <p>To extract a matrix element at a given row and column, use
+  <kbd>v r</kbd> to extract the row as a vector, then <kbd>v
+  c</kbd> to extract the column element from that vector. In
+  algebraic formulas, it is often more convenient to use subscript
+  notation: &lsquo;<samp>m_i_j</samp>&rsquo; gives row
+  &lsquo;<samp>i</samp>&rsquo;, column &lsquo;<samp>j</samp>&rsquo;
+  of matrix &lsquo;<samp>m</samp>&rsquo;.</p><a name="index-v-s"
+  id="index-v-s"></a> <a name="index-V-s" id="index-V-s"></a>
+  <a name="index-calc_002dsubvector" id=
+  "index-calc_002dsubvector"></a> <a name="index-subvec" id=
+  "index-subvec"></a>
+
+  <p>The <kbd>v s</kbd> (<code>calc-subvector</code>)
+  [<code>subvec</code>] command extracts a subvector of a vector.
+  The arguments are the vector, the starting index, and the ending
+  index, with the ending index in the top-of-stack position. The
+  starting index indicates the first element of the vector to take.
+  The ending index indicates the first element <em>past</em> the
+  range to be taken. Thus, &lsquo;<samp>subvec([a, b, c, d, e], 2,
+  4)</samp>&rsquo; produces the subvector &lsquo;<samp>[b,
+  c]</samp>&rsquo;. You could get the same result using
+  &lsquo;<samp>mrow([a, b, c, d, e], [2&nbsp;..&nbsp;4)
+  <!-- /@w -->)</samp>&rsquo;.</p>
+
+  <p>If either the start or the end index is zero or negative, it
+  is interpreted as relative to the end of the vector. Thus
+  &lsquo;<samp>subvec([a, b, c, d, e], 2, -2)</samp>&rsquo; also
+  produces &lsquo;<samp>[b, c]</samp>&rsquo;. In the algebraic
+  form, the end index can be omitted in which case it is taken as
+  zero, i.e., elements from the starting element to the end of the
+  vector are used. The infinity symbol, <code>inf</code>, also has
+  this effect when used as the ending index.</p><a name=
+  "index-I-v-s" id="index-I-v-s"></a> <a name="index-I-V-s" id=
+  "index-I-V-s"></a> <a name="index-rsubvec" id=
+  "index-rsubvec"></a>
+
+  <p>With the Inverse flag, <kbd>I v s</kbd> [<code>rsubvec</code>]
+  removes a subvector from a vector. The arguments are interpreted
+  the same as for the normal <kbd>v s</kbd> command. Thus,
+  &lsquo;<samp>rsubvec([a, b, c, d, e], 2, 4)</samp>&rsquo;
+  produces &lsquo;<samp>[a, d, e]</samp>&rsquo;. It is always true
+  that <code>subvec</code> and <code>rsubvec</code> return
+  complementary parts of the input vector.</p>
+
+  <p>See <a href=
+  "Selecting-Subformulas.html#Selecting-Subformulas">Selecting
+  Subformulas</a>, for an alternative way to operate on vectors one
+  element at a time.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Manipulating-Vectors.html#Manipulating-Vectors" accesskey="n"
+    rel="next">Manipulating Vectors</a>, Previous: <a href=
+    "Building-Vectors.html#Building-Vectors" accesskey="p" rel=
+    "prev">Building Vectors</a>, Up: <a href=
+    "Matrix-Functions.html#Matrix-Functions" accesskey="u" rel=
+    "up">Matrix Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

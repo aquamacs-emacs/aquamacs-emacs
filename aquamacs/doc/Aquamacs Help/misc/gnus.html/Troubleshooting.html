@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,179 +14,225 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Troubleshooting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Troubleshooting">
-<meta name="keywords" content="Gnus Manual: Troubleshooting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Appendices.html#Appendices" rel="up" title="Appendices">
-<link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel="next" title="Gnus Reference Guide">
-<link href="Slow-Machine.html#Slow-Machine" rel="prev" title="Slow Machine">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Troubleshooting</title>
+  <meta name="description" content=
+  "Gnus Manual: Troubleshooting" />
+  <meta name="keywords" content="Gnus Manual: Troubleshooting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Appendices.html#Appendices" rel="up" title=
+  "Appendices" />
+  <link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel=
+  "next" title="Gnus Reference Guide" />
+  <link href="Slow-Machine.html#Slow-Machine" rel="prev" title=
+  "Slow Machine" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Troubleshooting"></a>
-<div class="header">
-<p>
-Next: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="n" rel="next">Gnus Reference Guide</a>, Previous: <a href="Customization.html#Customization" accesskey="p" rel="prev">Customization</a>, Up: <a href="Appendices.html#Appendices" accesskey="u" rel="up">Appendices</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Troubleshooting-1"></a>
-<h3 class="section">11.6 Troubleshooting</h3>
-<a name="index-troubleshooting"></a>
+<body lang="en" xml:lang="en">
+  <a name="Troubleshooting" id="Troubleshooting"></a>
 
-<p>Gnus works <em>so</em> well straight out of the box&mdash;I can&rsquo;t imagine any
-problems, really.
-</p>
-<p>Ahem.
-</p>
-<ol>
-<li> Make sure your computer is switched on.
+  <div class="header">
+    <p>Next: <a href=
+    "Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="n"
+    rel="next">Gnus Reference Guide</a>, Previous: <a href=
+    "Customization.html#Customization" accesskey="p" rel=
+    "prev">Customization</a>, Up: <a href=
+    "Appendices.html#Appendices" accesskey="u" rel=
+    "up">Appendices</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Troubleshooting-1" id="Troubleshooting-1"></a>
 
-</li><li> Make sure that you really load the current Gnus version.  If you have
-been running <small>GNUS</small>, you need to exit Emacs and start it up again before
-Gnus will work.
+  <h3 class="section">11.6 Troubleshooting</h3><a name=
+  "index-troubleshooting" id="index-troubleshooting"></a>
 
-</li><li> Try doing an <kbd>M-x gnus-version</kbd>.  If you get something that looks
-like &lsquo;<samp>Gnus v5.13</samp>&rsquo; you have the right files loaded.  Otherwise you have some old <samp>.el</samp>
-files lying around.  Delete these.
+  <p>Gnus works <em>so</em> well straight out of the box&mdash;I
+  can&rsquo;t imagine any problems, really.</p>
 
-</li><li> Read the help group (<kbd>G h</kbd> in the group buffer) for a
-<acronym>FAQ</acronym> and a how-to.
+  <p>Ahem.</p>
 
-</li><li> <a name="index-max_002dlisp_002deval_002ddepth"></a>
-Gnus works on many recursive structures, and in some extreme (and very
-rare) cases Gnus may recurse down &ldquo;too deeply&rdquo; and Emacs will beep at
-you.  If this happens to you, set <code>max-lisp-eval-depth</code> to 500 or
-something like that.
-</li></ol>
+  <ol>
+    <li>Make sure your computer is switched on.</li>
 
-<p>If all else fails, report the problem as a bug.
-</p>
-<a name="index-bugs-1"></a>
-<a name="index-reporting-bugs-1"></a>
+    <li>Make sure that you really load the current Gnus version. If
+    you have been running <small>GNUS</small>, you need to exit
+    Emacs and start it up again before Gnus will work.</li>
 
-<a name="index-M_002dx-gnus_002dbug-1"></a>
-<a name="index-gnus_002dbug-1"></a>
-<p>If you find a bug in Gnus, you can report it with the <kbd>M-x gnus-bug</kbd>
-command.  <kbd>M-x set-variable RET debug-on-error RET t RET</kbd>, and send
-me the backtrace.  I will fix bugs, but I can only fix them if you send
-me a precise description as to how to reproduce the bug.
-</p>
-<p>You really can never be too detailed in a bug report.  Always use the
-<kbd>M-x gnus-bug</kbd> command when you make bug reports, even if it creates
-a 10Kb mail each time you use it, and even if you have sent me your
-environment 500 times before.  I don&rsquo;t care.  I want the full info each
-time.
-</p>
-<p>It is also important to remember that I have no memory whatsoever.  If
-you send a bug report, and I send you a reply, and then you just send
-back &ldquo;No, it&rsquo;s not! Moron!&rdquo;, I will have no idea what you are
-insulting me about.  Always over-explain everything.  It&rsquo;s much easier
-for all of us&mdash;if I don&rsquo;t have all the information I need, I will just
-mail you and ask for more info, and everything takes more time.
-</p>
-<p>If the problem you&rsquo;re seeing is very visual, and you can&rsquo;t quite explain
-it, copy the Emacs window to a file (with <code>xwd</code>, for instance), put
-it somewhere it can be reached, and include the URL of the picture in
-the bug report.
-</p>
-<a name="index-patches"></a>
-<p>If you would like to contribute a patch to fix bugs or make
-improvements, please produce the patch using &lsquo;<samp>diff -u</samp>&rsquo;.
-</p>
-<a name="index-edebug"></a>
-<p>If you want to debug your problem further before reporting, possibly
-in order to solve the problem yourself and send a patch, you can use
-edebug.  Debugging Lisp code is documented in the Elisp manual
-(see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Debugging.html#Debugging">Debugging Lisp Programs</a> in <cite>The GNU Emacs
-Lisp Reference Manual</cite>).  To get you started with edebug, consider if
-you discover some weird behavior when pressing <kbd>c</kbd>, the first
-step is to do <kbd>C-h k c</kbd> and click on the hyperlink (Emacs only) in
-the documentation buffer that leads you to the function definition,
-then press <kbd>M-x edebug-defun RET</kbd> with point inside that function,
-return to Gnus and press <kbd>c</kbd> to invoke the code.  You will be
-placed in the lisp buffer and can single step using <kbd>SPC</kbd> and
-evaluate expressions using <kbd>M-:</kbd> or inspect variables using
-<kbd>C-h v</kbd>, abort execution with <kbd>q</kbd>, and resume execution with
-<kbd>c</kbd> or <kbd>g</kbd>.
-</p>
-<a name="index-elp"></a>
-<a name="index-profile"></a>
-<a name="index-slow"></a>
-<p>Sometimes, a problem do not directly generate an elisp error but
-manifests itself by causing Gnus to be very slow.  In these cases, you
-can use <kbd>M-x toggle-debug-on-quit</kbd> and press <kbd>C-g</kbd> when things are
-slow, and then try to analyze the backtrace (repeating the procedure
-helps isolating the real problem areas).
-</p>
-<p>A fancier approach is to use the elisp profiler, ELP.  The profiler is
-(or should be) fully documented elsewhere, but to get you started
-there are a few steps that need to be followed.  First, instrument the
-part of Gnus you are interested in for profiling, e.g., <kbd>M-x
-elp-instrument-package RET gnus</kbd> or <kbd>M-x elp-instrument-package
-RET message</kbd>.  Then perform the operation that is slow and press
-<kbd>M-x elp-results</kbd>.  You will then see which operations that takes
-time, and can debug them further.  If the entire operation takes much
-longer than the time spent in the slowest function in the profiler
-output, you probably profiled the wrong part of Gnus.  To reset
-profiling statistics, use <kbd>M-x elp-reset-all</kbd>.  <kbd>M-x
-elp-restore-all</kbd> is supposed to remove profiling, but given the
-complexities and dynamic code generation in Gnus, it might not always
-work perfectly.
-</p>
-<a name="index-gnu_002eemacs_002egnus"></a>
-<a name="index-ding-mailing-list"></a>
-<p>If you just need help, you are better off asking on
-&lsquo;<samp>gnu.emacs.gnus</samp>&rsquo;.  I&rsquo;m not very helpful.  You can also ask on
-<a href="mailto:ding@gnus.org">the ding mailing list</a>.  Write to
-<a href="mailto:ding-request@gnus.org">ding-request@gnus.org</a> to subscribe.
-</p>
+    <li>Try doing an <kbd>M-x gnus-version</kbd>. If you get
+    something that looks like &lsquo;<samp>Gnus v5.13</samp>&rsquo;
+    you have the right files loaded. Otherwise you have some old
+    <samp>.el</samp> files lying around. Delete these.</li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="n" rel="next">Gnus Reference Guide</a>, Previous: <a href="Customization.html#Customization" accesskey="p" rel="prev">Customization</a>, Up: <a href="Appendices.html#Appendices" accesskey="u" rel="up">Appendices</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>Read the help group (<kbd>G h</kbd> in the group buffer)
+    for a <acronym>FAQ</acronym> and a how-to.</li>
 
+    <li><a name="index-max_002dlisp_002deval_002ddepth" id=
+    "index-max_002dlisp_002deval_002ddepth"></a> Gnus works on many
+    recursive structures, and in some extreme (and very rare) cases
+    Gnus may recurse down &ldquo;too deeply&rdquo; and Emacs will
+    beep at you. If this happens to you, set
+    <code>max-lisp-eval-depth</code> to 500 or something like
+    that.</li>
+  </ol>
 
+  <p>If all else fails, report the problem as a bug.</p><a name=
+  "index-bugs-1" id="index-bugs-1"></a> <a name=
+  "index-reporting-bugs-1" id="index-reporting-bugs-1"></a>
+  <a name="index-M_002dx-gnus_002dbug-1" id=
+  "index-M_002dx-gnus_002dbug-1"></a> <a name=
+  "index-gnus_002dbug-1" id="index-gnus_002dbug-1"></a>
 
+  <p>If you find a bug in Gnus, you can report it with the <kbd>M-x
+  gnus-bug</kbd> command. <kbd>M-x set-variable RET debug-on-error
+  RET t RET</kbd>, and send me the backtrace. I will fix bugs, but
+  I can only fix them if you send me a precise description as to
+  how to reproduce the bug.</p>
+
+  <p>You really can never be too detailed in a bug report. Always
+  use the <kbd>M-x gnus-bug</kbd> command when you make bug
+  reports, even if it creates a 10Kb mail each time you use it, and
+  even if you have sent me your environment 500 times before. I
+  don&rsquo;t care. I want the full info each time.</p>
+
+  <p>It is also important to remember that I have no memory
+  whatsoever. If you send a bug report, and I send you a reply, and
+  then you just send back &ldquo;No, it&rsquo;s not! Moron!&rdquo;,
+  I will have no idea what you are insulting me about. Always
+  over-explain everything. It&rsquo;s much easier for all of
+  us&mdash;if I don&rsquo;t have all the information I need, I will
+  just mail you and ask for more info, and everything takes more
+  time.</p>
+
+  <p>If the problem you&rsquo;re seeing is very visual, and you
+  can&rsquo;t quite explain it, copy the Emacs window to a file
+  (with <code>xwd</code>, for instance), put it somewhere it can be
+  reached, and include the URL of the picture in the bug
+  report.</p><a name="index-patches" id="index-patches"></a>
+
+  <p>If you would like to contribute a patch to fix bugs or make
+  improvements, please produce the patch using &lsquo;<samp>diff
+  -u</samp>&rsquo;.</p><a name="index-edebug" id=
+  "index-edebug"></a>
+
+  <p>If you want to debug your problem further before reporting,
+  possibly in order to solve the problem yourself and send a patch,
+  you can use edebug. Debugging Lisp code is documented in the
+  Elisp manual (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Debugging.html#Debugging">
+  Debugging Lisp Programs</a> in <cite>The GNU Emacs Lisp Reference
+  Manual</cite>). To get you started with edebug, consider if you
+  discover some weird behavior when pressing <kbd>c</kbd>, the
+  first step is to do <kbd>C-h k c</kbd> and click on the hyperlink
+  (Emacs only) in the documentation buffer that leads you to the
+  function definition, then press <kbd>M-x edebug-defun RET</kbd>
+  with point inside that function, return to Gnus and press
+  <kbd>c</kbd> to invoke the code. You will be placed in the lisp
+  buffer and can single step using <kbd>SPC</kbd> and evaluate
+  expressions using <kbd>M-:</kbd> or inspect variables using
+  <kbd>C-h v</kbd>, abort execution with <kbd>q</kbd>, and resume
+  execution with <kbd>c</kbd> or <kbd>g</kbd>.</p><a name=
+  "index-elp" id="index-elp"></a> <a name="index-profile" id=
+  "index-profile"></a> <a name="index-slow" id="index-slow"></a>
+
+  <p>Sometimes, a problem do not directly generate an elisp error
+  but manifests itself by causing Gnus to be very slow. In these
+  cases, you can use <kbd>M-x toggle-debug-on-quit</kbd> and press
+  <kbd>C-g</kbd> when things are slow, and then try to analyze the
+  backtrace (repeating the procedure helps isolating the real
+  problem areas).</p>
+
+  <p>A fancier approach is to use the elisp profiler, ELP. The
+  profiler is (or should be) fully documented elsewhere, but to get
+  you started there are a few steps that need to be followed.
+  First, instrument the part of Gnus you are interested in for
+  profiling, e.g., <kbd>M-x elp-instrument-package RET gnus</kbd>
+  or <kbd>M-x elp-instrument-package RET message</kbd>. Then
+  perform the operation that is slow and press <kbd>M-x
+  elp-results</kbd>. You will then see which operations that takes
+  time, and can debug them further. If the entire operation takes
+  much longer than the time spent in the slowest function in the
+  profiler output, you probably profiled the wrong part of Gnus. To
+  reset profiling statistics, use <kbd>M-x elp-reset-all</kbd>.
+  <kbd>M-x elp-restore-all</kbd> is supposed to remove profiling,
+  but given the complexities and dynamic code generation in Gnus,
+  it might not always work perfectly.</p><a name=
+  "index-gnu_002eemacs_002egnus" id=
+  "index-gnu_002eemacs_002egnus"></a> <a name=
+  "index-ding-mailing-list" id="index-ding-mailing-list"></a>
+
+  <p>If you just need help, you are better off asking on
+  &lsquo;<samp>gnu.emacs.gnus</samp>&rsquo;. I&rsquo;m not very
+  helpful. You can also ask on <a href="mailto:ding@gnus.org">the
+  ding mailing list</a>. Write to <a href=
+  "mailto:ding-request@gnus.org">ding-request@gnus.org</a> to
+  subscribe.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="n"
+    rel="next">Gnus Reference Guide</a>, Previous: <a href=
+    "Customization.html#Customization" accesskey="p" rel=
+    "prev">Customization</a>, Up: <a href=
+    "Appendices.html#Appendices" accesskey="u" rel=
+    "up">Appendices</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

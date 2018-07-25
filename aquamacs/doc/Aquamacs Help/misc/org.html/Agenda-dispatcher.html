@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,148 +16,251 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Agenda dispatcher</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Agenda dispatcher">
-<meta name="keywords" content="The Org Manual: Agenda dispatcher">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Agenda-Views.html#Agenda-Views" rel="up" title="Agenda Views">
-<link href="Built_002din-agenda-views.html#Built_002din-agenda-views" rel="next" title="Built-in agenda views">
-<link href="Agenda-files.html#Agenda-files" rel="prev" title="Agenda files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Agenda dispatcher</title>
+  <meta name="description" content=
+  "The Org Manual: Agenda dispatcher" />
+  <meta name="keywords" content=
+  "The Org Manual: Agenda dispatcher" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Agenda-Views.html#Agenda-Views" rel="up" title=
+  "Agenda Views" />
+  <link href=
+  "Built_002din-agenda-views.html#Built_002din-agenda-views" rel=
+  "next" title="Built-in agenda views" />
+  <link href="Agenda-files.html#Agenda-files" rel="prev" title=
+  "Agenda files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Agenda-dispatcher"></a>
-<div class="header">
-<p>
-Next: <a href="Built_002din-agenda-views.html#Built_002din-agenda-views" accesskey="n" rel="next">Built-in agenda views</a>, Previous: <a href="Agenda-files.html#Agenda-files" accesskey="p" rel="prev">Agenda files</a>, Up: <a href="Agenda-Views.html#Agenda-Views" accesskey="u" rel="up">Agenda Views</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-agenda-dispatcher"></a>
-<h3 class="section">10.2 The agenda dispatcher</h3>
-<a name="index-agenda-dispatcher"></a>
-<a name="index-dispatching-agenda-commands"></a>
-<p>The views are created through a dispatcher, which should be bound to a
-global key&mdash;for example <kbd>C-c a</kbd> (see <a href="Activation.html#Activation">Activation</a>).  In the
-following we will assume that <kbd>C-c a</kbd> is indeed how the dispatcher
-is accessed and list keyboard access to commands accordingly.  After
-pressing <kbd>C-c a</kbd>, an additional letter is required to execute a
-command.  The dispatcher offers the following default commands:
-</p>
-<dl compact="compact">
-<dt><kbd>a</kbd></dt>
-<dd><p>Create the calendar-like agenda (see <a href="Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily agenda</a>).
-</p></dd>
-<dt><kbd>t <span class="roman">/</span> T</kbd></dt>
-<dd><p>Create a list of all TODO items (see <a href="Global-TODO-list.html#Global-TODO-list">Global TODO list</a>).
-</p></dd>
-<dt><kbd>m <span class="roman">/</span> M</kbd></dt>
-<dd><p>Create a list of headlines matching a TAGS expression (see <a href="Matching-tags-and-properties.html#Matching-tags-and-properties">Matching tags and properties</a>).
-</p></dd>
-<dt><kbd>L</kbd></dt>
-<dd><p>Create the timeline view for the current buffer (see <a href="Timeline.html#Timeline">Timeline</a>).
-</p></dd>
-<dt><kbd>s</kbd></dt>
-<dd><p>Create a list of entries selected by a boolean expression of keywords
-and/or regular expressions that must or must not occur in the entry.
-</p></dd>
-<dt><kbd>/</kbd></dt>
-<dd><a name="index-org_002dagenda_002dtext_002dsearch_002dextra_002dfiles"></a>
-<p>Search for a regular expression in all agenda files and additionally in
-the files listed in <code>org-agenda-text-search-extra-files</code>.  This
-uses the Emacs command <code>multi-occur</code>.  A prefix argument can be
-used to specify the number of context lines for each match, default is
-1.
-</p></dd>
-<dt><kbd># <span class="roman">/</span> !</kbd></dt>
-<dd><p>Create a list of stuck projects (see <a href="Stuck-projects.html#Stuck-projects">Stuck projects</a>).
-</p></dd>
-<dt><kbd>&lt;</kbd></dt>
-<dd><p>Restrict an agenda command to the current buffer<a name="DOCF100" href="#FOOT100"><sup>100</sup></a>.  After pressing <kbd>&lt;</kbd>, you still need to press the character
-selecting the command.
-</p></dd>
-<dt><kbd>&lt; &lt;</kbd></dt>
-<dd><p>If there is an active region, restrict the following agenda command to
-the region.  Otherwise, restrict it to the current subtree<a name="DOCF101" href="#FOOT101"><sup>101</sup></a>.  After pressing <kbd>&lt; &lt;</kbd>, you still need to press the
-character selecting the command.
-</p>
-</dd>
-<dt><kbd>*</kbd></dt>
-<dd><a name="index-org_002dagenda_002dsticky"></a>
-<p>Toggle sticky agenda views.  By default, Org maintains only a single agenda
-buffer and rebuilds it each time you change the view, to make sure everything
-is always up to date.  If you switch between views often and the build time
-bothers you, you can turn on sticky agenda buffers (make this the default by
-customizing the variable <code>org-agenda-sticky</code>).  With sticky agendas, the
-dispatcher only switches to the selected view, you need to update it by hand
-with <kbd>r</kbd> or <kbd>g</kbd>.  You can toggle sticky agenda view any time with
-<code>org-toggle-sticky-agenda</code>.
-</p></dd>
-</dl>
+<body lang="en" xml:lang="en">
+  <a name="Agenda-dispatcher" id="Agenda-dispatcher"></a>
 
-<p>You can also define custom commands that will be accessible through the
-dispatcher, just like the default commands.  This includes the
-possibility to create extended agenda buffers that contain several
-blocks together, for example the weekly agenda, the global TODO list and
-a number of special tags matches.  See <a href="Custom-agenda-views.html#Custom-agenda-views">Custom agenda views</a>.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <div class="header">
+    <p>Next: <a href=
+    "Built_002din-agenda-views.html#Built_002din-agenda-views"
+    accesskey="n" rel="next">Built-in agenda views</a>, Previous:
+    <a href="Agenda-files.html#Agenda-files" accesskey="p" rel=
+    "prev">Agenda files</a>, Up: <a href=
+    "Agenda-Views.html#Agenda-Views" accesskey="u" rel="up">Agenda
+    Views</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-agenda-dispatcher" id="The-agenda-dispatcher"></a>
 
-<h3><a name="FOOT100" href="#DOCF100">(100)</a></h3>
-<p>For backward
-compatibility, you can also press <kbd>1</kbd> to restrict to the current
-buffer.</p>
-<h3><a name="FOOT101" href="#DOCF101">(101)</a></h3>
-<p>For
-backward compatibility, you can also press <kbd>0</kbd> to restrict to the
-current region/subtree.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Built_002din-agenda-views.html#Built_002din-agenda-views" accesskey="n" rel="next">Built-in agenda views</a>, Previous: <a href="Agenda-files.html#Agenda-files" accesskey="p" rel="prev">Agenda files</a>, Up: <a href="Agenda-Views.html#Agenda-Views" accesskey="u" rel="up">Agenda Views</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">10.2 The agenda dispatcher</h3><a name=
+  "index-agenda-dispatcher" id="index-agenda-dispatcher"></a>
+  <a name="index-dispatching-agenda-commands" id=
+  "index-dispatching-agenda-commands"></a>
 
+  <p>The views are created through a dispatcher, which should be
+  bound to a global key&mdash;for example <kbd>C-c a</kbd> (see
+  <a href="Activation.html#Activation">Activation</a>). In the
+  following we will assume that <kbd>C-c a</kbd> is indeed how the
+  dispatcher is accessed and list keyboard access to commands
+  accordingly. After pressing <kbd>C-c a</kbd>, an additional
+  letter is required to execute a command. The dispatcher offers
+  the following default commands:</p>
 
+  <dl compact="compact">
+    <dt><kbd>a</kbd></dt>
 
+    <dd>
+      <p>Create the calendar-like agenda (see <a href=
+      "Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily
+      agenda</a>).</p>
+    </dd>
+
+    <dt><kbd>t <span class="roman">/</span> T</kbd></dt>
+
+    <dd>
+      <p>Create a list of all TODO items (see <a href=
+      "Global-TODO-list.html#Global-TODO-list">Global TODO
+      list</a>).</p>
+    </dd>
+
+    <dt><kbd>m <span class="roman">/</span> M</kbd></dt>
+
+    <dd>
+      <p>Create a list of headlines matching a TAGS expression (see
+      <a href=
+      "Matching-tags-and-properties.html#Matching-tags-and-properties">
+      Matching tags and properties</a>).</p>
+    </dd>
+
+    <dt><kbd>L</kbd></dt>
+
+    <dd>
+      <p>Create the timeline view for the current buffer (see
+      <a href="Timeline.html#Timeline">Timeline</a>).</p>
+    </dd>
+
+    <dt><kbd>s</kbd></dt>
+
+    <dd>
+      <p>Create a list of entries selected by a boolean expression
+      of keywords and/or regular expressions that must or must not
+      occur in the entry.</p>
+    </dd>
+
+    <dt><kbd>/</kbd></dt>
+
+    <dd>
+      <a name=
+      "index-org_002dagenda_002dtext_002dsearch_002dextra_002dfiles"
+      id=
+      "index-org_002dagenda_002dtext_002dsearch_002dextra_002dfiles">
+      </a>
+
+      <p>Search for a regular expression in all agenda files and
+      additionally in the files listed in
+      <code>org-agenda-text-search-extra-files</code>. This uses
+      the Emacs command <code>multi-occur</code>. A prefix argument
+      can be used to specify the number of context lines for each
+      match, default is 1.</p>
+    </dd>
+
+    <dt><kbd># <span class="roman">/</span> !</kbd></dt>
+
+    <dd>
+      <p>Create a list of stuck projects (see <a href=
+      "Stuck-projects.html#Stuck-projects">Stuck projects</a>).</p>
+    </dd>
+
+    <dt><kbd>&lt;</kbd></dt>
+
+    <dd>
+      <p>Restrict an agenda command to the current buffer<a name=
+      "DOCF100" href="#FOOT100" id="DOCF100"><sup>100</sup></a>.
+      After pressing <kbd>&lt;</kbd>, you still need to press the
+      character selecting the command.</p>
+    </dd>
+
+    <dt><kbd>&lt; &lt;</kbd></dt>
+
+    <dd>
+      <p>If there is an active region, restrict the following
+      agenda command to the region. Otherwise, restrict it to the
+      current subtree<a name="DOCF101" href="#FOOT101" id=
+      "DOCF101"><sup>101</sup></a>. After pressing <kbd>&lt;
+      &lt;</kbd>, you still need to press the character selecting
+      the command.</p>
+    </dd>
+
+    <dt><kbd>*</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dagenda_002dsticky" id=
+      "index-org_002dagenda_002dsticky"></a>
+
+      <p>Toggle sticky agenda views. By default, Org maintains only
+      a single agenda buffer and rebuilds it each time you change
+      the view, to make sure everything is always up to date. If
+      you switch between views often and the build time bothers
+      you, you can turn on sticky agenda buffers (make this the
+      default by customizing the variable
+      <code>org-agenda-sticky</code>). With sticky agendas, the
+      dispatcher only switches to the selected view, you need to
+      update it by hand with <kbd>r</kbd> or <kbd>g</kbd>. You can
+      toggle sticky agenda view any time with
+      <code>org-toggle-sticky-agenda</code>.</p>
+    </dd>
+  </dl>
+
+  <p>You can also define custom commands that will be accessible
+  through the dispatcher, just like the default commands. This
+  includes the possibility to create extended agenda buffers that
+  contain several blocks together, for example the weekly agenda,
+  the global TODO list and a number of special tags matches. See
+  <a href="Custom-agenda-views.html#Custom-agenda-views">Custom
+  agenda views</a>.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT100" href="#DOCF100" id=
+    "FOOT100">(100)</a></h3>
+
+    <p>For backward compatibility, you can also press <kbd>1</kbd>
+    to restrict to the current buffer.</p>
+
+    <h3><a name="FOOT101" href="#DOCF101" id=
+    "FOOT101">(101)</a></h3>
+
+    <p>For backward compatibility, you can also press <kbd>0</kbd>
+    to restrict to the current region/subtree.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Built_002din-agenda-views.html#Built_002din-agenda-views"
+    accesskey="n" rel="next">Built-in agenda views</a>, Previous:
+    <a href="Agenda-files.html#Agenda-files" accesskey="p" rel=
+    "prev">Agenda files</a>, Up: <a href=
+    "Agenda-Views.html#Agenda-Views" accesskey="u" rel="up">Agenda
+    Views</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,291 +16,405 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Grammar format</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Grammar format">
-<meta name="keywords" content="Wisent Parser Development: Grammar format">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Wisent-Grammar.html#Wisent-Grammar" rel="up" title="Wisent Grammar">
-<link href="Example.html#Example" rel="next" title="Example">
-<link href="Wisent-Grammar.html#Wisent-Grammar" rel="prev" title="Wisent Grammar">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Grammar format</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Grammar format" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Grammar format" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Wisent-Grammar.html#Wisent-Grammar" rel="up" title=
+  "Wisent Grammar" />
+  <link href="Example.html#Example" rel="next" title="Example" />
+  <link href="Wisent-Grammar.html#Wisent-Grammar" rel="prev" title=
+  "Wisent Grammar" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Grammar-format"></a>
-<div class="header">
-<p>
-Next: <a href="Example.html#Example" accesskey="n" rel="next">Example</a>, Up: <a href="Wisent-Grammar.html#Wisent-Grammar" accesskey="u" rel="up">Wisent Grammar</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Grammar-format-1"></a>
-<h3 class="section">2.1 Grammar format</h3>
+<body lang="en" xml:lang="en">
+  <a name="Grammar-format" id="Grammar-format"></a>
 
-<a name="index-grammar-format"></a>
-<p>To be acceptable by Wisent a context-free grammar must respect a
-particular format.  That is, must be represented as an Emacs Lisp list
-of the form:
-</p>
-<p><code>(<var>terminals</var> <var>assocs</var> . <var>non-terminals</var>)</code>
-</p>
-<dl compact="compact">
-<dt><var>terminals</var></dt>
-<dd><p>Is the list of terminal symbols used in the grammar.
-</p>
-<a name="index-associativity"></a>
-</dd>
-<dt><var>assocs</var></dt>
-<dd><p>Specify the associativity of <var>terminals</var>.  It is <code>nil</code> when
-there is no associativity defined, or an alist of
-<code>(<var><span class="nolinebreak">assoc-type</span></var>&nbsp;.&nbsp;<var><span class="nolinebreak">assoc-value</span></var>)</code><!-- /@w --> elements.
-</p>
-<p><var>assoc-type</var> must be one of the <code>default-prec</code>,
-<code>nonassoc</code>, <code>left</code> or <code>right</code> symbols.  When
-<var>assoc-type</var> is <code>default-prec</code>, <var>assoc-value</var> must be
-<code>nil</code> or <code>t</code> (the default).  Otherwise it is a list of
-tokens which must have been previously declared in <var>terminals</var>.
-</p>
-<p>For details, see <a href="http://www.gnu.org/software/bison/manual/html_node/Contextual-Precedence.html#Contextual-Precedence">(bison)Contextual Precedence</a>, in the
-Bison manual.
-</p>
-</dd>
-<dt><var>non-terminals</var></dt>
-<dd><p>Is the list of nonterminal definitions.  Each definition has the form:
-</p>
-<p><code>(<var>nonterm</var> . <var>rules</var>)</code>
-</p>
-<p>Where <var>nonterm</var> is the nonterminal symbol defined and
-<var>rules</var> the list of rules that describe this nonterminal.  Each
-rule is a list:
-</p>
-<p><code>(<var>components</var> [<var>precedence</var>] [<var>action</var>])</code>
-</p>
-<p>Where:
-</p>
-<dl compact="compact">
-<dt><var>components</var></dt>
-<dd><p>Is a list of various terminals and nonterminals that are put together
-by this rule.
-</p>
-<p>For example,
-</p>
-<div class="example">
-<pre class="example">(exp ((exp ?+ exp))          ;; exp: exp '+' exp
+  <div class="header">
+    <p>Next: <a href="Example.html#Example" accesskey="n" rel=
+    "next">Example</a>, Up: <a href=
+    "Wisent-Grammar.html#Wisent-Grammar" accesskey="u" rel=
+    "up">Wisent Grammar</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Grammar-format-1" id="Grammar-format-1"></a>
+
+  <h3 class="section">2.1 Grammar format</h3><a name=
+  "index-grammar-format" id="index-grammar-format"></a>
+
+  <p>To be acceptable by Wisent a context-free grammar must respect
+  a particular format. That is, must be represented as an Emacs
+  Lisp list of the form:</p>
+
+  <p><code>(<var>terminals</var> <var>assocs</var> .
+  <var>non-terminals</var>)</code></p>
+
+  <dl compact="compact">
+    <dt><var>terminals</var></dt>
+
+    <dd>
+      <p>Is the list of terminal symbols used in the
+      grammar.</p><a name="index-associativity" id=
+      "index-associativity"></a>
+    </dd>
+
+    <dt><var>assocs</var></dt>
+
+    <dd>
+      <p>Specify the associativity of <var>terminals</var>. It is
+      <code>nil</code> when there is no associativity defined, or
+      an alist of <code>(<var><span class=
+      "nolinebreak">assoc-type</span></var>&nbsp;.&nbsp;<var><span class="nolinebreak">assoc-value</span></var>)</code><!-- /@w -->
+      elements.</p>
+
+      <p><var>assoc-type</var> must be one of the
+      <code>default-prec</code>, <code>nonassoc</code>,
+      <code>left</code> or <code>right</code> symbols. When
+      <var>assoc-type</var> is <code>default-prec</code>,
+      <var>assoc-value</var> must be <code>nil</code> or
+      <code>t</code> (the default). Otherwise it is a list of
+      tokens which must have been previously declared in
+      <var>terminals</var>.</p>
+
+      <p>For details, see <a href=
+      "http://www.gnu.org/software/bison/manual/html_node/Contextual-Precedence.html#Contextual-Precedence">
+      (bison)Contextual Precedence</a>, in the Bison manual.</p>
+    </dd>
+
+    <dt><var>non-terminals</var></dt>
+
+    <dd>
+      <p>Is the list of nonterminal definitions. Each definition
+      has the form:</p>
+
+      <p><code>(<var>nonterm</var> . <var>rules</var>)</code></p>
+
+      <p>Where <var>nonterm</var> is the nonterminal symbol defined
+      and <var>rules</var> the list of rules that describe this
+      nonterminal. Each rule is a list:</p>
+
+      <p><code>(<var>components</var> [<var>precedence</var>]
+      [<var>action</var>])</code></p>
+
+      <p>Where:</p>
+
+      <dl compact="compact">
+        <dt><var>components</var></dt>
+
+        <dd>
+          <p>Is a list of various terminals and nonterminals that
+          are put together by this rule.</p>
+
+          <p>For example,</p>
+
+          <div class="example">
+            <pre class="example">
+(exp ((exp ?+ exp))          ;; exp: exp '+' exp
      )                       ;;    ;
-</pre></div>
+</pre>
+          </div>
 
-<p>Says that two groupings of type &lsquo;<samp>exp</samp>&rsquo;, with a &lsquo;<samp>+</samp>&rsquo; token in
-between, can be combined into a larger grouping of type &lsquo;<samp>exp</samp>&rsquo;.
-</p>
-<a name="index-grammar-coding-conventions"></a>
-<p>By convention, a nonterminal symbol should be in lower case, such as
-&lsquo;<samp>exp</samp>&rsquo;, &lsquo;<samp>stmt</samp>&rsquo; or &lsquo;<samp>declaration</samp>&rsquo;.  Terminal symbols
-should be upper case to distinguish them from nonterminals: for
-example, &lsquo;<samp>INTEGER</samp>&rsquo;, &lsquo;<samp>IDENTIFIER</samp>&rsquo;, &lsquo;<samp>IF</samp>&rsquo; or
-&lsquo;<samp>RETURN</samp>&rsquo;.  A terminal symbol that represents a particular keyword
-in the language is conventionally the same as that keyword converted
-to upper case.  The terminal symbol <code>error</code> is reserved for error
-recovery.
-</p>
-<a name="index-middle_002drule-actions"></a>
-<p>Scattered among the components can be <em>middle-rule</em> actions.
-Usually only <var>action</var> is provided (see <a href="#action">action</a>).
-</p>
-<p>If <var>components</var> in a rule is <code>nil</code>, it means that the rule
-can match the empty string.  For example, here is how to define a
-comma-separated sequence of zero or more &lsquo;<samp>exp</samp>&rsquo; groupings:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(expseq  (nil)               ;; expseq: ;; empty
+          <p>Says that two groupings of type
+          &lsquo;<samp>exp</samp>&rsquo;, with a
+          &lsquo;<samp>+</samp>&rsquo; token in between, can be
+          combined into a larger grouping of type
+          &lsquo;<samp>exp</samp>&rsquo;.</p><a name=
+          "index-grammar-coding-conventions" id=
+          "index-grammar-coding-conventions"></a>
+
+          <p>By convention, a nonterminal symbol should be in lower
+          case, such as &lsquo;<samp>exp</samp>&rsquo;,
+          &lsquo;<samp>stmt</samp>&rsquo; or
+          &lsquo;<samp>declaration</samp>&rsquo;. Terminal symbols
+          should be upper case to distinguish them from
+          nonterminals: for example,
+          &lsquo;<samp>INTEGER</samp>&rsquo;,
+          &lsquo;<samp>IDENTIFIER</samp>&rsquo;,
+          &lsquo;<samp>IF</samp>&rsquo; or
+          &lsquo;<samp>RETURN</samp>&rsquo;. A terminal symbol that
+          represents a particular keyword in the language is
+          conventionally the same as that keyword converted to
+          upper case. The terminal symbol <code>error</code> is
+          reserved for error recovery.</p><a name=
+          "index-middle_002drule-actions" id=
+          "index-middle_002drule-actions"></a>
+
+          <p>Scattered among the components can be
+          <em>middle-rule</em> actions. Usually only
+          <var>action</var> is provided (see <a href=
+          "#action">action</a>).</p>
+
+          <p>If <var>components</var> in a rule is
+          <code>nil</code>, it means that the rule can match the
+          empty string. For example, here is how to define a
+          comma-separated sequence of zero or more
+          &lsquo;<samp>exp</samp>&rsquo; groupings:</p>
+
+          <div class="smallexample">
+            <pre class="smallexample">
+(expseq  (nil)               ;; expseq: ;; empty
          ((expseq1))         ;;       | expseq1
          )                   ;;       ;
 
 (expseq1 ((exp))             ;; expseq1: exp
          ((expseq1 ?, exp))  ;;        | expseq1 ',' exp
          )                   ;;        ;
-</pre></div>
+</pre>
+          </div><a name="index-precedence-level" id=
+          "index-precedence-level"></a>
+        </dd>
 
-<a name="index-precedence-level"></a>
-</dd>
-<dt><var>precedence</var></dt>
-<dd><p>Assign the rule the precedence of the given terminal item, overriding
-the precedence that would be deduced for it, that is the one of the
-last terminal in it.  Notice that only terminals declared in
-<var>assocs</var> have a precedence level.  The altered rule precedence
-then affects how conflicts involving that rule are resolved.
-</p>
-<p><var>precedence</var> is an optional vector of one terminal item.
-</p>
-<p>Here is how <var>precedence</var> solves the problem of unary minus.
-First, declare a precedence for a fictitious terminal symbol named
-<code>UMINUS</code>.  There are no tokens of this type, but the symbol
-serves to stand for its precedence:
-</p>
-<div class="example">
-<pre class="example">&hellip;
+        <dt><var>precedence</var></dt>
+
+        <dd>
+          <p>Assign the rule the precedence of the given terminal
+          item, overriding the precedence that would be deduced for
+          it, that is the one of the last terminal in it. Notice
+          that only terminals declared in <var>assocs</var> have a
+          precedence level. The altered rule precedence then
+          affects how conflicts involving that rule are
+          resolved.</p>
+
+          <p><var>precedence</var> is an optional vector of one
+          terminal item.</p>
+
+          <p>Here is how <var>precedence</var> solves the problem
+          of unary minus. First, declare a precedence for a
+          fictitious terminal symbol named <code>UMINUS</code>.
+          There are no tokens of this type, but the symbol serves
+          to stand for its precedence:</p>
+
+          <div class="example">
+            <pre class="example">
+&hellip;
 ((default-prec t) ;; This is the default
  (left '+' '-')
  (left '*')
  (left UMINUS))
-</pre></div>
+</pre>
+          </div>
 
-<p>Now the precedence of <code>UMINUS</code> can be used in specific rules:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(exp    &hellip;                  ;; exp:    &hellip;
+          <p>Now the precedence of <code>UMINUS</code> can be used
+          in specific rules:</p>
+
+          <div class="smallexample">
+            <pre class="smallexample">
+(exp    &hellip;                  ;; exp:    &hellip;
          ((exp ?- exp))      ;;         | exp '-' exp
         &hellip;                  ;;         &hellip;
          ((?- exp) [UMINUS]) ;;         | '-' exp %prec UMINUS
         &hellip;                  ;;         &hellip;
         )                    ;;         ;
-</pre></div>
+</pre>
+          </div>
 
-<p>If you forget to append <code>[UMINUS]</code> to the rule for unary minus,
-Wisent silently assumes that minus has its usual precedence.  This
-kind of problem can be tricky to debug, since one typically discovers
-the mistake only by testing the code.
-</p>
-<p>Using <code>(default-prec nil)</code> declaration makes it easier to
-discover this kind of problem systematically.  It causes rules that
-lack a <var>precedence</var> modifier to have no precedence, even if the
-last terminal symbol mentioned in their components has a declared
-precedence.
-</p>
-<p>If <code>(default-prec nil)</code> is in effect, you must specify
-<var>precedence</var> for all rules that participate in precedence conflict
-resolution.  Then you will see any shift/reduce conflict until you
-tell Wisent how to resolve it, either by changing your grammar or by
-adding an explicit precedence.  This will probably add declarations to
-the grammar, but it helps to protect against incorrect rule
-precedences.
-</p>
-<p>The effect of <code>(default-prec nil)</code> can be reversed by giving
-<code>(default-prec t)</code>, which is the default.
-</p>
-<p>For more details, see <a href="http://www.gnu.org/software/bison/manual/html_node/Contextual-Precedence.html#Contextual-Precedence">(bison)Contextual Precedence</a>, in the
-Bison manual.
-</p>
-<p>It is important to understand that <var>assocs</var> declarations defines
-associativity but also assign a precedence level to terminals.  All
-terminals declared in the same <code>left</code>, <code>right</code> or
-<code>nonassoc</code> association get the same precedence level.  The
-precedence level is increased at each new association.
-</p>
-<p>On the other hand, <var>precedence</var> explicitly assign the precedence
-level of the given terminal to a rule.
-</p>
-<a name="index-semantic-actions"></a>
-</dd>
-<dt><var><a name="action"></a>action</var></dt>
-<dd><p>An action is an optional Emacs Lisp function call, like this:
-</p>
-<p><code>(identity $1)</code>
-</p>
-<p>The result of an action determines the semantic value of a rule.
-</p>
-<p>From an implementation standpoint, the function call will be embedded
-in a lambda expression, and several useful local variables will be
-defined:
-</p>
-<dl compact="compact">
-<dd><a name="index-_0024N"></a>
-</dd>
-<dt><code>$<var>n</var></code></dt>
-<dd><p>Where <var>n</var> is a positive integer.  Like in Bison, the value of
-<code>$<var>n</var></code> is the semantic value of the <var>n</var>th element of
-<var>components</var>, starting from 1.  It can be of any Lisp data
-type.
-</p>
-<a name="index-_0024regionn"></a>
-</dd>
-<dt><code>$regionN</code></dt>
-<dd><p>Where <var>n</var> is a positive integer.  For each <code>$<var>n</var></code>
-variable defined there is a corresponding <code>$region<var>n</var></code>
-variable.  Its value is a pair <code>(<var>start-pos</var> .
-<var>end-pos</var>)</code> that represent the start and end positions (in the
-lexical input stream) of the <code>$<var>n</var></code> value.  It can be
-<code>nil</code> when the component positions are not available, like for an
-empty string component for example.
-</p>
-<a name="index-_0024region"></a>
-</dd>
-<dt><code>$region</code></dt>
-<dd><p>Its value is the leftmost and rightmost positions of input data
-matched by all <var>components</var> in the rule.  This is a pair
-<code>(<var>leftmost-pos</var> .  <var>rightmost-pos</var>)</code>.  It can be
-<code>nil</code> when components positions are not available.
-</p>
-<a name="index-_0024nterm"></a>
-</dd>
-<dt><code>$nterm</code></dt>
-<dd><p>This variable is initialized with the nonterminal symbol
-(<var>nonterm</var>) the rule belongs to.  It could be useful to improve
-error reporting or debugging.  It is also used to automatically
-provide incremental re-parse entry points for <i>Semantic</i> tags
-(see <a href="Wisent-Semantic.html#Wisent-Semantic">Wisent Semantic</a>).
-</p>
-<a name="index-_0024action"></a>
-</dd>
-<dt><code>$action</code></dt>
-<dd><p>The value of <code>$action</code> is the symbolic name of the current
-semantic action (see <a href="Debugging-actions.html#Debugging-actions">Debugging actions</a>).
-</p></dd>
-</dl>
+          <p>If you forget to append <code>[UMINUS]</code> to the
+          rule for unary minus, Wisent silently assumes that minus
+          has its usual precedence. This kind of problem can be
+          tricky to debug, since one typically discovers the
+          mistake only by testing the code.</p>
 
-<p>When an action is not specified a default value is supplied, it is
-<code>(identity $1)</code>.  This means that the default semantic value of a
-rule is the value of its first component.  Excepted for a rule
-matching the empty string, for which the default action is to return
-<code>nil</code>.
-</p></dd>
-</dl>
-</dd>
-</dl>
+          <p>Using <code>(default-prec nil)</code> declaration
+          makes it easier to discover this kind of problem
+          systematically. It causes rules that lack a
+          <var>precedence</var> modifier to have no precedence,
+          even if the last terminal symbol mentioned in their
+          components has a declared precedence.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Example.html#Example" accesskey="n" rel="next">Example</a>, Up: <a href="Wisent-Grammar.html#Wisent-Grammar" accesskey="u" rel="up">Wisent Grammar</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+          <p>If <code>(default-prec nil)</code> is in effect, you
+          must specify <var>precedence</var> for all rules that
+          participate in precedence conflict resolution. Then you
+          will see any shift/reduce conflict until you tell Wisent
+          how to resolve it, either by changing your grammar or by
+          adding an explicit precedence. This will probably add
+          declarations to the grammar, but it helps to protect
+          against incorrect rule precedences.</p>
 
+          <p>The effect of <code>(default-prec nil)</code> can be
+          reversed by giving <code>(default-prec t)</code>, which
+          is the default.</p>
 
+          <p>For more details, see <a href=
+          "http://www.gnu.org/software/bison/manual/html_node/Contextual-Precedence.html#Contextual-Precedence">
+          (bison)Contextual Precedence</a>, in the Bison
+          manual.</p>
 
+          <p>It is important to understand that <var>assocs</var>
+          declarations defines associativity but also assign a
+          precedence level to terminals. All terminals declared in
+          the same <code>left</code>, <code>right</code> or
+          <code>nonassoc</code> association get the same precedence
+          level. The precedence level is increased at each new
+          association.</p>
+
+          <p>On the other hand, <var>precedence</var> explicitly
+          assign the precedence level of the given terminal to a
+          rule.</p><a name="index-semantic-actions" id=
+          "index-semantic-actions"></a>
+        </dd>
+
+        <dt><var><a name="action" id="action"></a>action</var></dt>
+
+        <dd>
+          <p>An action is an optional Emacs Lisp function call,
+          like this:</p>
+
+          <p><code>(identity $1)</code></p>
+
+          <p>The result of an action determines the semantic value
+          of a rule.</p>
+
+          <p>From an implementation standpoint, the function call
+          will be embedded in a lambda expression, and several
+          useful local variables will be defined:</p>
+
+          <dl compact="compact">
+            <dd><a name="index-_0024N" id="index-_0024N"></a></dd>
+
+            <dt><code>$<var>n</var></code></dt>
+
+            <dd>
+              <p>Where <var>n</var> is a positive integer. Like in
+              Bison, the value of <code>$<var>n</var></code> is the
+              semantic value of the <var>n</var>th element of
+              <var>components</var>, starting from 1. It can be of
+              any Lisp data type.</p><a name="index-_0024regionn"
+              id="index-_0024regionn"></a>
+            </dd>
+
+            <dt><code>$regionN</code></dt>
+
+            <dd>
+              <p>Where <var>n</var> is a positive integer. For each
+              <code>$<var>n</var></code> variable defined there is
+              a corresponding <code>$region<var>n</var></code>
+              variable. Its value is a pair
+              <code>(<var>start-pos</var> .
+              <var>end-pos</var>)</code> that represent the start
+              and end positions (in the lexical input stream) of
+              the <code>$<var>n</var></code> value. It can be
+              <code>nil</code> when the component positions are not
+              available, like for an empty string component for
+              example.</p><a name="index-_0024region" id=
+              "index-_0024region"></a>
+            </dd>
+
+            <dt><code>$region</code></dt>
+
+            <dd>
+              <p>Its value is the leftmost and rightmost positions
+              of input data matched by all <var>components</var> in
+              the rule. This is a pair
+              <code>(<var>leftmost-pos</var> .
+              <var>rightmost-pos</var>)</code>. It can be
+              <code>nil</code> when components positions are not
+              available.</p><a name="index-_0024nterm" id=
+              "index-_0024nterm"></a>
+            </dd>
+
+            <dt><code>$nterm</code></dt>
+
+            <dd>
+              <p>This variable is initialized with the nonterminal
+              symbol (<var>nonterm</var>) the rule belongs to. It
+              could be useful to improve error reporting or
+              debugging. It is also used to automatically provide
+              incremental re-parse entry points for <i>Semantic</i>
+              tags (see <a href=
+              "Wisent-Semantic.html#Wisent-Semantic">Wisent
+              Semantic</a>).</p><a name="index-_0024action" id=
+              "index-_0024action"></a>
+            </dd>
+
+            <dt><code>$action</code></dt>
+
+            <dd>
+              <p>The value of <code>$action</code> is the symbolic
+              name of the current semantic action (see <a href=
+              "Debugging-actions.html#Debugging-actions">Debugging
+              actions</a>).</p>
+            </dd>
+          </dl>
+
+          <p>When an action is not specified a default value is
+          supplied, it is <code>(identity $1)</code>. This means
+          that the default semantic value of a rule is the value of
+          its first component. Excepted for a rule matching the
+          empty string, for which the default action is to return
+          <code>nil</code>.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Example.html#Example" accesskey="n" rel=
+    "next">Example</a>, Up: <a href=
+    "Wisent-Grammar.html#Wisent-Grammar" accesskey="u" rel=
+    "up">Wisent Grammar</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

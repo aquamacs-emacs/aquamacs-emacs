@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents IDLWAVE, a major mode for editing IDL files with
 Emacs, and interacting with an IDL shell run as a subprocess.
 
@@ -18,91 +20,129 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>IDLWAVE User Manual: Syntax Highlighting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="IDLWAVE User Manual: Syntax Highlighting">
-<meta name="keywords" content="IDLWAVE User Manual: Syntax Highlighting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Code-Formatting.html#Code-Formatting" rel="up" title="Code Formatting">
-<link href="Octals-and-Highlighting.html#Octals-and-Highlighting" rel="next" title="Octals and Highlighting">
-<link href="Continuation-Lines.html#Continuation-Lines" rel="prev" title="Continuation Lines">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>IDLWAVE User Manual: Syntax Highlighting</title>
+  <meta name="description" content=
+  "IDLWAVE User Manual: Syntax Highlighting" />
+  <meta name="keywords" content=
+  "IDLWAVE User Manual: Syntax Highlighting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Code-Formatting.html#Code-Formatting" rel="up" title=
+  "Code Formatting" />
+  <link href="Octals-and-Highlighting.html#Octals-and-Highlighting"
+  rel="next" title="Octals and Highlighting" />
+  <link href="Continuation-Lines.html#Continuation-Lines" rel=
+  "prev" title="Continuation Lines" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Syntax-Highlighting"></a>
-<div class="header">
-<p>
-Next: <a href="Octals-and-Highlighting.html#Octals-and-Highlighting" accesskey="n" rel="next">Octals and Highlighting</a>, Previous: <a href="Continuation-Lines.html#Continuation-Lines" accesskey="p" rel="prev">Continuation Lines</a>, Up: <a href="Code-Formatting.html#Code-Formatting" accesskey="u" rel="up">Code Formatting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Syntax-Highlighting-1"></a>
-<h4 class="subsection">4.1.5 Syntax Highlighting</h4>
-<a name="index-Syntax-highlighting"></a>
-<a name="index-Highlighting-of-syntax"></a>
-<a name="index-Font-lock"></a>
+<body lang="en" xml:lang="en">
+  <a name="Syntax-Highlighting" id="Syntax-Highlighting"></a>
 
-<p>Highlighting of keywords, comments, strings etc. can be accomplished
-with <code>font-lock</code>.  If you are using <code>global-font-lock-mode</code>
-(in Emacs), or have <code>font-lock</code> turned on in any other buffer in
-XEmacs, it should also automatically work in IDLWAVE buffers.  If you&rsquo;d
-prefer invoking font-lock individually by mode, you can enforce it in
-<code>idlwave-mode</code> with the following line in your <samp>.emacs</samp>:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-hook 'idlwave-mode-hook 'turn-on-font-lock)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Octals-and-Highlighting.html#Octals-and-Highlighting"
+    accesskey="n" rel="next">Octals and Highlighting</a>, Previous:
+    <a href="Continuation-Lines.html#Continuation-Lines" accesskey=
+    "p" rel="prev">Continuation Lines</a>, Up: <a href=
+    "Code-Formatting.html#Code-Formatting" accesskey="u" rel=
+    "up">Code Formatting</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Syntax-Highlighting-1" id="Syntax-Highlighting-1"></a>
 
-<p>IDLWAVE supports 3 increasing levels of syntax highlighting.
-The variable <code>font-lock-maximum-decoration</code> determines which level
-is selected.  Individual categories of special tokens can be selected
-for highlighting using the variable
-<code>idlwave-default-font-lock-items</code>.
-</p>
-<dl>
-<dt><a name="index-idlwave_002ddefault_002dfont_002dlock_002ditems"></a>User Option: <strong>idlwave-default-font-lock-items</strong></dt>
-<dd><p>Items which should be fontified on the default fontification level
-2.
-</p></dd></dl>
+  <h4 class="subsection">4.1.5 Syntax Highlighting</h4><a name=
+  "index-Syntax-highlighting" id="index-Syntax-highlighting"></a>
+  <a name="index-Highlighting-of-syntax" id=
+  "index-Highlighting-of-syntax"></a> <a name="index-Font-lock" id=
+  "index-Font-lock"></a>
 
+  <p>Highlighting of keywords, comments, strings etc. can be
+  accomplished with <code>font-lock</code>. If you are using
+  <code>global-font-lock-mode</code> (in Emacs), or have
+  <code>font-lock</code> turned on in any other buffer in XEmacs,
+  it should also automatically work in IDLWAVE buffers. If
+  you&rsquo;d prefer invoking font-lock individually by mode, you
+  can enforce it in <code>idlwave-mode</code> with the following
+  line in your <samp>.emacs</samp>:</p>
 
+  <div class="lisp">
+    <pre class="lisp">
+(add-hook 'idlwave-mode-hook 'turn-on-font-lock)
+</pre>
+  </div>
 
+  <p>IDLWAVE supports 3 increasing levels of syntax highlighting.
+  The variable <code>font-lock-maximum-decoration</code> determines
+  which level is selected. Individual categories of special tokens
+  can be selected for highlighting using the variable
+  <code>idlwave-default-font-lock-items</code>.</p>
 
+  <dl>
+    <dt><a name=
+    "index-idlwave_002ddefault_002dfont_002dlock_002ditems" id=
+    "index-idlwave_002ddefault_002dfont_002dlock_002ditems"></a>User
+    Option: <strong>idlwave-default-font-lock-items</strong></dt>
+
+    <dd>
+      <p>Items which should be fontified on the default
+      fontification level 2.</p>
+    </dd>
+  </dl>
 </body>
 </html>

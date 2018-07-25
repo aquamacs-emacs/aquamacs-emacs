@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,134 +19,208 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Subroutines of Visiting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Subroutines of Visiting">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Subroutines of Visiting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Visiting-Files.html#Visiting-Files" rel="up" title="Visiting Files">
-<link href="Saving-Buffers.html#Saving-Buffers" rel="next" title="Saving Buffers">
-<link href="Visiting-Functions.html#Visiting-Functions" rel="prev" title="Visiting Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Subroutines of
+  Visiting</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Subroutines of Visiting" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Subroutines of Visiting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Visiting-Files.html#Visiting-Files" rel="up" title=
+  "Visiting Files" />
+  <link href="Saving-Buffers.html#Saving-Buffers" rel="next" title=
+  "Saving Buffers" />
+  <link href="Visiting-Functions.html#Visiting-Functions" rel=
+  "prev" title="Visiting Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Subroutines-of-Visiting" id=
+  "Subroutines-of-Visiting"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Visiting-Functions.html#Visiting-Functions" accesskey="p" rel=
+    "prev">Visiting Functions</a>, Up: <a href=
+    "Visiting-Files.html#Visiting-Files" accesskey="u" rel=
+    "up">Visiting Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Subroutines-of-Visiting-1" id=
+  "Subroutines-of-Visiting-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Subroutines-of-Visiting"></a>
-<div class="header">
-<p>
-Previous: <a href="Visiting-Functions.html#Visiting-Functions" accesskey="p" rel="prev">Visiting Functions</a>, Up: <a href="Visiting-Files.html#Visiting-Files" accesskey="u" rel="up">Visiting Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Subroutines-of-Visiting-1"></a>
-<h4 class="subsection">24.1.2 Subroutines of Visiting</h4>
+  <h4 class="subsection">24.1.2 Subroutines of Visiting</h4>
 
-<p>The <code>find-file-noselect</code> function uses two important subroutines
-which are sometimes useful in user Lisp code: <code>create-file-buffer</code>
-and <code>after-find-file</code>.  This section explains how to use them.
-</p>
-<dl>
-<dt><a name="index-create_002dfile_002dbuffer"></a>Function: <strong>create-file-buffer</strong> <em>filename</em></dt>
-<dd><p>This function creates a suitably named buffer for visiting
-<var>filename</var>, and returns it.  It uses <var>filename</var> (sans directory)
-as the name if that name is free; otherwise, it appends a string such as
-&lsquo;<samp>&lt;2&gt;</samp>&rsquo; to get an unused name.  See also <a href="Creating-Buffers.html#Creating-Buffers">Creating Buffers</a>.
-Note that the <samp>uniquify</samp> library affects the result of this
-function.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.html#Uniquify">Uniquify</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-<p><strong>Please note:</strong> <code>create-file-buffer</code> does <em>not</em>
-associate the new buffer with a file and does not select the buffer.
-It also does not use the default major mode.
-</p>
-<div class="example">
-<pre class="example">(create-file-buffer &quot;foo&quot;)
+  <p>The <code>find-file-noselect</code> function uses two
+  important subroutines which are sometimes useful in user Lisp
+  code: <code>create-file-buffer</code> and
+  <code>after-find-file</code>. This section explains how to use
+  them.</p>
+
+  <dl>
+    <dt><a name="index-create_002dfile_002dbuffer" id=
+    "index-create_002dfile_002dbuffer"></a>Function:
+    <strong>create-file-buffer</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This function creates a suitably named buffer for visiting
+      <var>filename</var>, and returns it. It uses
+      <var>filename</var> (sans directory) as the name if that name
+      is free; otherwise, it appends a string such as
+      &lsquo;<samp>&lt;2&gt;</samp>&rsquo; to get an unused name.
+      See also <a href=
+      "Creating-Buffers.html#Creating-Buffers">Creating
+      Buffers</a>. Note that the <samp>uniquify</samp> library
+      affects the result of this function. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.html#Uniquify">
+      Uniquify</a> in <cite>The GNU Emacs Manual</cite>.</p>
+
+      <p><strong>Please note:</strong>
+      <code>create-file-buffer</code> does <em>not</em> associate
+      the new buffer with a file and does not select the buffer. It
+      also does not use the default major mode.</p>
+
+      <div class="example">
+        <pre class="example">
+(create-file-buffer "foo")
      &rArr; #&lt;buffer foo&gt;
-</pre><pre class="example">(create-file-buffer &quot;foo&quot;)
+</pre>
+        <pre class="example">
+(create-file-buffer "foo")
      &rArr; #&lt;buffer foo&lt;2&gt;&gt;
-</pre><pre class="example">(create-file-buffer &quot;foo&quot;)
+</pre>
+        <pre class="example">
+(create-file-buffer "foo")
      &rArr; #&lt;buffer foo&lt;3&gt;&gt;
-</pre></div>
+</pre>
+      </div>
 
-<p>This function is used by <code>find-file-noselect</code>.
-It uses <code>generate-new-buffer</code> (see <a href="Creating-Buffers.html#Creating-Buffers">Creating Buffers</a>).
-</p></dd></dl>
+      <p>This function is used by <code>find-file-noselect</code>.
+      It uses <code>generate-new-buffer</code> (see <a href=
+      "Creating-Buffers.html#Creating-Buffers">Creating
+      Buffers</a>).</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-after_002dfind_002dfile"></a>Function: <strong>after-find-file</strong> <em>&amp;optional error warn noauto after-find-file-from-revert-buffer nomodes</em></dt>
-<dd><p>This function sets the buffer major mode, and parses local variables
-(see <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>).  It is called by <code>find-file-noselect</code>
-and by the default revert function (see <a href="Reverting.html#Reverting">Reverting</a>).
-</p>
-<a name="index-new-file-message"></a>
-<a name="index-file-open-error"></a>
-<p>If reading the file got an error because the file does not exist, but
-its directory does exist, the caller should pass a non-<code>nil</code> value
-for <var>error</var>.  In that case, <code>after-find-file</code> issues a warning:
-&lsquo;<samp>(New file)</samp>&rsquo;.  For more serious errors, the caller should usually not
-call <code>after-find-file</code>.
-</p>
-<p>If <var>warn</var> is non-<code>nil</code>, then this function issues a warning
-if an auto-save file exists and is more recent than the visited file.
-</p>
-<p>If <var>noauto</var> is non-<code>nil</code>, that says not to enable or disable
-Auto-Save mode.  The mode remains enabled if it was enabled before.
-</p>
-<p>If <var>after-find-file-from-revert-buffer</var> is non-<code>nil</code>, that
-means this call was from <code>revert-buffer</code>.  This has no direct
-effect, but some mode functions and hook functions check the value
-of this variable.
-</p>
-<p>If <var>nomodes</var> is non-<code>nil</code>, that means don&rsquo;t alter the buffer&rsquo;s
-major mode, don&rsquo;t process local variables specifications in the file,
-and don&rsquo;t run <code>find-file-hook</code>.  This feature is used by
-<code>revert-buffer</code> in some cases.
-</p>
-<p>The last thing <code>after-find-file</code> does is call all the functions
-in the list <code>find-file-hook</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-after_002dfind_002dfile" id=
+    "index-after_002dfind_002dfile"></a>Function:
+    <strong>after-find-file</strong> <em>&amp;optional error warn
+    noauto after-find-file-from-revert-buffer nomodes</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Visiting-Functions.html#Visiting-Functions" accesskey="p" rel="prev">Visiting Functions</a>, Up: <a href="Visiting-Files.html#Visiting-Files" accesskey="u" rel="up">Visiting Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function sets the buffer major mode, and parses local
+      variables (see <a href=
+      "Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>).
+      It is called by <code>find-file-noselect</code> and by the
+      default revert function (see <a href=
+      "Reverting.html#Reverting">Reverting</a>).</p><a name=
+      "index-new-file-message" id="index-new-file-message"></a>
+      <a name="index-file-open-error" id=
+      "index-file-open-error"></a>
 
+      <p>If reading the file got an error because the file does not
+      exist, but its directory does exist, the caller should pass a
+      non-<code>nil</code> value for <var>error</var>. In that
+      case, <code>after-find-file</code> issues a warning:
+      &lsquo;<samp>(New file)</samp>&rsquo;. For more serious
+      errors, the caller should usually not call
+      <code>after-find-file</code>.</p>
 
+      <p>If <var>warn</var> is non-<code>nil</code>, then this
+      function issues a warning if an auto-save file exists and is
+      more recent than the visited file.</p>
 
+      <p>If <var>noauto</var> is non-<code>nil</code>, that says
+      not to enable or disable Auto-Save mode. The mode remains
+      enabled if it was enabled before.</p>
+
+      <p>If <var>after-find-file-from-revert-buffer</var> is
+      non-<code>nil</code>, that means this call was from
+      <code>revert-buffer</code>. This has no direct effect, but
+      some mode functions and hook functions check the value of
+      this variable.</p>
+
+      <p>If <var>nomodes</var> is non-<code>nil</code>, that means
+      don&rsquo;t alter the buffer&rsquo;s major mode, don&rsquo;t
+      process local variables specifications in the file, and
+      don&rsquo;t run <code>find-file-hook</code>. This feature is
+      used by <code>revert-buffer</code> in some cases.</p>
+
+      <p>The last thing <code>after-find-file</code> does is call
+      all the functions in the list
+      <code>find-file-hook</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Visiting-Functions.html#Visiting-Functions" accesskey="p" rel=
+    "prev">Visiting Functions</a>, Up: <a href=
+    "Visiting-Files.html#Visiting-Files" accesskey="u" rel=
+    "up">Visiting Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

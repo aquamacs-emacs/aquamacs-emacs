@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,158 +19,193 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Strings of Events</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Strings of Events">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Strings of Events">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Input-Events.html#Input-Events" rel="up" title="Input Events">
-<link href="Reading-Input.html#Reading-Input" rel="next" title="Reading Input">
-<link href="Accessing-Scroll.html#Accessing-Scroll" rel="prev" title="Accessing Scroll">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Strings of Events</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Strings of Events" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Strings of Events" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Input-Events.html#Input-Events" rel="up" title=
+  "Input Events" />
+  <link href="Reading-Input.html#Reading-Input" rel="next" title=
+  "Reading Input" />
+  <link href="Accessing-Scroll.html#Accessing-Scroll" rel="prev"
+  title="Accessing Scroll" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Strings-of-Events" id="Strings-of-Events"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Accessing-Scroll.html#Accessing-Scroll"
+    accesskey="p" rel="prev">Accessing Scroll</a>, Up: <a href=
+    "Input-Events.html#Input-Events" accesskey="u" rel="up">Input
+    Events</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Putting-Keyboard-Events-in-Strings" id=
+  "Putting-Keyboard-Events-in-Strings"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Strings-of-Events"></a>
-<div class="header">
-<p>
-Previous: <a href="Accessing-Scroll.html#Accessing-Scroll" accesskey="p" rel="prev">Accessing Scroll</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Putting-Keyboard-Events-in-Strings"></a>
-<h4 class="subsection">20.7.15 Putting Keyboard Events in Strings</h4>
-<a name="index-keyboard-events-in-strings"></a>
-<a name="index-strings-with-keyboard-events"></a>
+  <h4 class="subsection">20.7.15 Putting Keyboard Events in
+  Strings</h4><a name="index-keyboard-events-in-strings" id=
+  "index-keyboard-events-in-strings"></a> <a name=
+  "index-strings-with-keyboard-events" id=
+  "index-strings-with-keyboard-events"></a>
 
-<p>In most of the places where strings are used, we conceptualize the
-string as containing text characters&mdash;the same kind of characters found
-in buffers or files.  Occasionally Lisp programs use strings that
-conceptually contain keyboard characters; for example, they may be key
-sequences or keyboard macro definitions.  However, storing keyboard
-characters in a string is a complex matter, for reasons of historical
-compatibility, and it is not always possible.
-</p>
-<p>We recommend that new programs avoid dealing with these complexities
-by not storing keyboard events in strings.  Here is how to do that:
-</p>
-<ul>
-<li> Use vectors instead of strings for key sequences, when you plan to use
-them for anything other than as arguments to <code>lookup-key</code> and
-<code>define-key</code>.  For example, you can use
-<code>read-key-sequence-vector</code> instead of <code>read-key-sequence</code>, and
-<code>this-command-keys-vector</code> instead of <code>this-command-keys</code>.
+  <p>In most of the places where strings are used, we conceptualize
+  the string as containing text characters&mdash;the same kind of
+  characters found in buffers or files. Occasionally Lisp programs
+  use strings that conceptually contain keyboard characters; for
+  example, they may be key sequences or keyboard macro definitions.
+  However, storing keyboard characters in a string is a complex
+  matter, for reasons of historical compatibility, and it is not
+  always possible.</p>
 
-</li><li> Use vectors to write key sequence constants containing meta characters,
-even when passing them directly to <code>define-key</code>.
+  <p>We recommend that new programs avoid dealing with these
+  complexities by not storing keyboard events in strings. Here is
+  how to do that:</p>
 
-</li><li> When you have to look at the contents of a key sequence that might be a
-string, use <code>listify-key-sequence</code> (see <a href="Event-Input-Misc.html#Event-Input-Misc">Event Input Misc</a>)
-first, to convert it to a list.
-</li></ul>
+  <ul>
+    <li>Use vectors instead of strings for key sequences, when you
+    plan to use them for anything other than as arguments to
+    <code>lookup-key</code> and <code>define-key</code>. For
+    example, you can use <code>read-key-sequence-vector</code>
+    instead of <code>read-key-sequence</code>, and
+    <code>this-command-keys-vector</code> instead of
+    <code>this-command-keys</code>.</li>
 
-<p>The complexities stem from the modifier bits that keyboard input
-characters can include.  Aside from the Meta modifier, none of these
-modifier bits can be included in a string, and the Meta modifier is
-allowed only in special cases.
-</p>
-<p>The earliest GNU Emacs versions represented meta characters as codes
-in the range of 128 to 255.  At that time, the basic character codes
-ranged from 0 to 127, so all keyboard character codes did fit in a
-string.  Many Lisp programs used &lsquo;<samp>\M-</samp>&rsquo; in string constants to stand
-for meta characters, especially in arguments to <code>define-key</code> and
-similar functions, and key sequences and sequences of events were always
-represented as strings.
-</p>
-<p>When we added support for larger basic character codes beyond 127, and
-additional modifier bits, we had to change the representation of meta
-characters.  Now the flag that represents the Meta modifier in a
-character is
-2**27
-and such numbers cannot be included in a string.
-</p>
-<p>To support programs with &lsquo;<samp>\M-</samp>&rsquo; in string constants, there are
-special rules for including certain meta characters in a string.
-Here are the rules for interpreting a string as a sequence of input
-characters:
-</p>
-<ul>
-<li> If the keyboard character value is in the range of 0 to 127, it can go
-in the string unchanged.
+    <li>Use vectors to write key sequence constants containing meta
+    characters, even when passing them directly to
+    <code>define-key</code>.</li>
 
-</li><li> The meta variants of those characters, with codes in the range of
-2**27
-to
-2**27+127,
-can also go in the string, but you must change their
-numeric values.  You must set the
-2**7
-bit instead of the
-2**27
-bit, resulting in a value between 128 and 255.  Only a unibyte string
-can include these codes.
+    <li>When you have to look at the contents of a key sequence
+    that might be a string, use <code>listify-key-sequence</code>
+    (see <a href="Event-Input-Misc.html#Event-Input-Misc">Event
+    Input Misc</a>) first, to convert it to a list.</li>
+  </ul>
 
-</li><li> Non-<acronym>ASCII</acronym> characters above 256 can be included in a multibyte string.
+  <p>The complexities stem from the modifier bits that keyboard
+  input characters can include. Aside from the Meta modifier, none
+  of these modifier bits can be included in a string, and the Meta
+  modifier is allowed only in special cases.</p>
 
-</li><li> Other keyboard character events cannot fit in a string.  This includes
-keyboard events in the range of 128 to 255.
-</li></ul>
+  <p>The earliest GNU Emacs versions represented meta characters as
+  codes in the range of 128 to 255. At that time, the basic
+  character codes ranged from 0 to 127, so all keyboard character
+  codes did fit in a string. Many Lisp programs used
+  &lsquo;<samp>\M-</samp>&rsquo; in string constants to stand for
+  meta characters, especially in arguments to
+  <code>define-key</code> and similar functions, and key sequences
+  and sequences of events were always represented as strings.</p>
 
-<p>Functions such as <code>read-key-sequence</code> that construct strings of
-keyboard input characters follow these rules: they construct vectors
-instead of strings, when the events won&rsquo;t fit in a string.
-</p>
-<p>When you use the read syntax &lsquo;<samp>\M-</samp>&rsquo; in a string, it produces a
-code in the range of 128 to 255&mdash;the same code that you get if you
-modify the corresponding keyboard event to put it in the string.  Thus,
-meta events in strings work consistently regardless of how they get into
-the strings.
-</p>
-<p>However, most programs would do well to avoid these issues by
-following the recommendations at the beginning of this section.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Accessing-Scroll.html#Accessing-Scroll" accesskey="p" rel="prev">Accessing Scroll</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When we added support for larger basic character codes beyond
+  127, and additional modifier bits, we had to change the
+  representation of meta characters. Now the flag that represents
+  the Meta modifier in a character is 2**27 and such numbers cannot
+  be included in a string.</p>
 
+  <p>To support programs with &lsquo;<samp>\M-</samp>&rsquo; in
+  string constants, there are special rules for including certain
+  meta characters in a string. Here are the rules for interpreting
+  a string as a sequence of input characters:</p>
 
+  <ul>
+    <li>If the keyboard character value is in the range of 0 to
+    127, it can go in the string unchanged.</li>
 
+    <li>The meta variants of those characters, with codes in the
+    range of 2**27 to 2**27+127, can also go in the string, but you
+    must change their numeric values. You must set the 2**7 bit
+    instead of the 2**27 bit, resulting in a value between 128 and
+    255. Only a unibyte string can include these codes.</li>
+
+    <li>Non-<acronym>ASCII</acronym> characters above 256 can be
+    included in a multibyte string.</li>
+
+    <li>Other keyboard character events cannot fit in a string.
+    This includes keyboard events in the range of 128 to 255.</li>
+  </ul>
+
+  <p>Functions such as <code>read-key-sequence</code> that
+  construct strings of keyboard input characters follow these
+  rules: they construct vectors instead of strings, when the events
+  won&rsquo;t fit in a string.</p>
+
+  <p>When you use the read syntax &lsquo;<samp>\M-</samp>&rsquo; in
+  a string, it produces a code in the range of 128 to 255&mdash;the
+  same code that you get if you modify the corresponding keyboard
+  event to put it in the string. Thus, meta events in strings work
+  consistently regardless of how they get into the strings.</p>
+
+  <p>However, most programs would do well to avoid these issues by
+  following the recommendations at the beginning of this
+  section.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Accessing-Scroll.html#Accessing-Scroll"
+    accesskey="p" rel="prev">Accessing Scroll</a>, Up: <a href=
+    "Input-Events.html#Input-Events" accesskey="u" rel="up">Input
+    Events</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

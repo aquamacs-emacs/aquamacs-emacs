@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,121 +19,186 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Syntax Descriptors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Syntax Descriptors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Syntax Descriptors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Syntax-Tables.html#Syntax-Tables" rel="up" title="Syntax Tables">
-<link href="Syntax-Class-Table.html#Syntax-Class-Table" rel="next" title="Syntax Class Table">
-<link href="Syntax-Basics.html#Syntax-Basics" rel="prev" title="Syntax Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Syntax
+  Descriptors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Syntax Descriptors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Syntax Descriptors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Syntax-Tables.html#Syntax-Tables" rel="up" title=
+  "Syntax Tables" />
+  <link href="Syntax-Class-Table.html#Syntax-Class-Table" rel=
+  "next" title="Syntax Class Table" />
+  <link href="Syntax-Basics.html#Syntax-Basics" rel="prev" title=
+  "Syntax Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Syntax-Descriptors" id="Syntax-Descriptors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Syntax-Table-Functions.html#Syntax-Table-Functions" accesskey=
+    "n" rel="next">Syntax Table Functions</a>, Previous: <a href=
+    "Syntax-Basics.html#Syntax-Basics" accesskey="p" rel=
+    "prev">Syntax Basics</a>, Up: <a href=
+    "Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Syntax-Descriptors-1" id="Syntax-Descriptors-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Syntax-Descriptors"></a>
-<div class="header">
-<p>
-Next: <a href="Syntax-Table-Functions.html#Syntax-Table-Functions" accesskey="n" rel="next">Syntax Table Functions</a>, Previous: <a href="Syntax-Basics.html#Syntax-Basics" accesskey="p" rel="prev">Syntax Basics</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Syntax-Descriptors-1"></a>
-<h3 class="section">34.2 Syntax Descriptors</h3>
-<a name="index-syntax-class"></a>
+  <h3 class="section">34.2 Syntax Descriptors</h3><a name=
+  "index-syntax-class" id="index-syntax-class"></a>
 
-<p>The <em>syntax class</em> of a character describes its syntactic role.
-Each syntax table specifies the syntax class of each character.  There
-is no necessary relationship between the class of a character in one
-syntax table and its class in any other table.
-</p>
-<p>Each syntax class is designated by a mnemonic character, which
-serves as the name of the class when you need to specify a class.
-Usually, this designator character is one that is often assigned that
-class; however, its meaning as a designator is unvarying and
-independent of what syntax that character currently has.  Thus,
-&lsquo;<samp>\</samp>&rsquo; as a designator character always stands for escape character
-syntax, regardless of whether the &lsquo;<samp>\</samp>&rsquo; character actually has that
-syntax in the current syntax table.
-See <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>, for a list of syntax classes and their
-designator characters.
-</p>
-<a name="index-syntax-descriptor"></a>
-<p>A <em>syntax descriptor</em> is a Lisp string that describes the syntax
-class and other syntactic properties of a character.  When you want to
-modify the syntax of a character, that is done by calling the function
-<code>modify-syntax-entry</code> and passing a syntax descriptor as one of
-its arguments (see <a href="Syntax-Table-Functions.html#Syntax-Table-Functions">Syntax Table Functions</a>).
-</p>
-<p>The first character in a syntax descriptor must be a syntax class
-designator character.  The second character, if present, specifies a
-matching character (e.g., in Lisp, the matching character for
-&lsquo;<samp>(</samp>&rsquo; is &lsquo;<samp>)</samp>&rsquo;); a space specifies that there is no matching
-character.  Then come characters specifying additional syntax
-properties (see <a href="Syntax-Flags.html#Syntax-Flags">Syntax Flags</a>).
-</p>
-<p>If no matching character or flags are needed, only one character
-(specifying the syntax class) is sufficient.
-</p>
-<p>For example, the syntax descriptor for the character &lsquo;<samp>*</samp>&rsquo; in C
-mode is <code>&quot;. 23&quot;</code> (i.e., punctuation, matching character slot
-unused, second character of a comment-starter, first character of a
-comment-ender), and the entry for &lsquo;<samp>/</samp>&rsquo; is &lsquo;<samp>.&nbsp;14<!-- /@w --></samp>&rsquo; (i.e.,
-punctuation, matching character slot unused, first character of a
-comment-starter, second character of a comment-ender).
-</p>
-<p>Emacs also defines <em>raw syntax descriptors</em>, which are used to
-describe syntax classes at a lower level.  See <a href="Syntax-Table-Internals.html#Syntax-Table-Internals">Syntax Table Internals</a>.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Syntax-Class-Table.html#Syntax-Class-Table" accesskey="1">Syntax Class Table</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Table of syntax classes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Syntax-Flags.html#Syntax-Flags" accesskey="2">Syntax Flags</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Additional flags each character can have.
-</td></tr>
-</table>
+  <p>The <em>syntax class</em> of a character describes its
+  syntactic role. Each syntax table specifies the syntax class of
+  each character. There is no necessary relationship between the
+  class of a character in one syntax table and its class in any
+  other table.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Syntax-Table-Functions.html#Syntax-Table-Functions" accesskey="n" rel="next">Syntax Table Functions</a>, Previous: <a href="Syntax-Basics.html#Syntax-Basics" accesskey="p" rel="prev">Syntax Basics</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Each syntax class is designated by a mnemonic character, which
+  serves as the name of the class when you need to specify a class.
+  Usually, this designator character is one that is often assigned
+  that class; however, its meaning as a designator is unvarying and
+  independent of what syntax that character currently has. Thus,
+  &lsquo;<samp>\</samp>&rsquo; as a designator character always
+  stands for escape character syntax, regardless of whether the
+  &lsquo;<samp>\</samp>&rsquo; character actually has that syntax
+  in the current syntax table. See <a href=
+  "Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class
+  Table</a>, for a list of syntax classes and their designator
+  characters.</p><a name="index-syntax-descriptor" id=
+  "index-syntax-descriptor"></a>
 
+  <p>A <em>syntax descriptor</em> is a Lisp string that describes
+  the syntax class and other syntactic properties of a character.
+  When you want to modify the syntax of a character, that is done
+  by calling the function <code>modify-syntax-entry</code> and
+  passing a syntax descriptor as one of its arguments (see <a href=
+  "Syntax-Table-Functions.html#Syntax-Table-Functions">Syntax Table
+  Functions</a>).</p>
 
+  <p>The first character in a syntax descriptor must be a syntax
+  class designator character. The second character, if present,
+  specifies a matching character (e.g., in Lisp, the matching
+  character for &lsquo;<samp>(</samp>&rsquo; is
+  &lsquo;<samp>)</samp>&rsquo;); a space specifies that there is no
+  matching character. Then come characters specifying additional
+  syntax properties (see <a href=
+  "Syntax-Flags.html#Syntax-Flags">Syntax Flags</a>).</p>
 
+  <p>If no matching character or flags are needed, only one
+  character (specifying the syntax class) is sufficient.</p>
+
+  <p>For example, the syntax descriptor for the character
+  &lsquo;<samp>*</samp>&rsquo; in C mode is <code>". 23"</code>
+  (i.e., punctuation, matching character slot unused, second
+  character of a comment-starter, first character of a
+  comment-ender), and the entry for &lsquo;<samp>/</samp>&rsquo; is
+  &lsquo;<samp>.&nbsp;14<!-- /@w --></samp>&rsquo; (i.e.,
+  punctuation, matching character slot unused, first character of a
+  comment-starter, second character of a comment-ender).</p>
+
+  <p>Emacs also defines <em>raw syntax descriptors</em>, which are
+  used to describe syntax classes at a lower level. See <a href=
+  "Syntax-Table-Internals.html#Syntax-Table-Internals">Syntax Table
+  Internals</a>.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Syntax-Class-Table.html#Syntax-Class-Table" accesskey=
+      "1">Syntax Class Table</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Table of syntax classes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Syntax-Flags.html#Syntax-Flags" accesskey="2">Syntax
+      Flags</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Additional flags each character
+      can have.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Syntax-Table-Functions.html#Syntax-Table-Functions" accesskey=
+    "n" rel="next">Syntax Table Functions</a>, Previous: <a href=
+    "Syntax-Basics.html#Syntax-Basics" accesskey="p" rel=
+    "prev">Syntax Basics</a>, Up: <a href=
+    "Syntax-Tables.html#Syntax-Tables" accesskey="u" rel=
+    "up">Syntax Tables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

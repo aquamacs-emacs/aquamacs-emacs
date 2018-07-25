@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Agenda dispatcher - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Agenda-Views.html#Agenda-Views" title="Agenda Views">
-<link rel="prev" href="Agenda-files.html#Agenda-files" title="Agenda files">
-<link rel="next" href="Built_002din-agenda-views.html#Built_002din-agenda-views" title="Built-in agenda views">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Agenda dispatcher - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Agenda-Views.html#Agenda-Views" title=
+  "Agenda Views" />
+  <link rel="prev" href="Agenda-files.html#Agenda-files" title=
+  "Agenda files" />
+  <link rel="next" href=
+  "Built_002din-agenda-views.html#Built_002din-agenda-views" title=
+  "Built-in agenda views" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +43,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,63 +56,129 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Agenda-dispatcher"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Built_002din-agenda-views.html#Built_002din-agenda-views">Built-in agenda views</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Agenda-files.html#Agenda-files">Agenda files</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Agenda-Views.html#Agenda-Views">Agenda Views</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Agenda-dispatcher" id="Agenda-dispatcher"></a>
 
-<h3 class="section">10.2 The agenda dispatcher</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Built_002din-agenda-views.html#Built_002din-agenda-views">Built-in
+    agenda views</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href="Agenda-files.html#Agenda-files">Agenda files</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Agenda-Views.html#Agenda-Views">Agenda Views</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-agenda-dispatcher-1004"></a><a name="index-dispatching-agenda-commands-1005"></a>The views are created through a dispatcher, which should be bound to a
-global key&mdash;for example <kbd>C-c a</kbd> (see <a href="Installation.html#Installation">Installation</a>).  In the
-following we will assume that <kbd>C-c a</kbd> is indeed how the dispatcher
-is accessed and list keyboard access to commands accordingly.  After
-pressing <kbd>C-c a</kbd>, an additional letter is required to execute a
-command.  The dispatcher offers the following default commands:
-     <dl>
-<dt><kbd>a</kbd><dd>Create the calendar-like agenda (see <a href="Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily agenda</a>). 
-<br><dt><kbd>t </kbd><span class="roman">/</span><kbd> T</kbd><dd>Create a list of all TODO items (see <a href="Global-TODO-list.html#Global-TODO-list">Global TODO list</a>). 
-<br><dt><kbd>m </kbd><span class="roman">/</span><kbd> M</kbd><dd>Create a list of headlines matching a TAGS expression (see <a href="Matching-tags-and-properties.html#Matching-tags-and-properties">Matching tags and properties</a>). 
-<br><dt><kbd>L</kbd><dd>Create the timeline view for the current buffer (see <a href="Timeline.html#Timeline">Timeline</a>). 
-<br><dt><kbd>s</kbd><dd>Create a list of entries selected by a boolean expression of keywords
-and/or regular expressions that must or must not occur in the entry. 
-<br><dt><kbd>/</kbd><dd><a name="index-org_002dagenda_002dtext_002dsearch_002dextra_002dfiles-1006"></a>Search for a regular expression in all agenda files and additionally in
-the files listed in <code>org-agenda-text-search-extra-files</code>.  This
-uses the Emacs command <code>multi-occur</code>.  A prefix argument can be
-used to specify the number of context lines for each match, default is
-1. 
-<br><dt><kbd># </kbd><span class="roman">/</span><kbd> !</kbd><dd>Create a list of stuck projects (see <a href="Stuck-projects.html#Stuck-projects">Stuck projects</a>). 
-<br><dt><kbd>&lt;</kbd><dd>Restrict an agenda command to the current buffer<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  After pressing <kbd>&lt;</kbd>, you still need to press the character
-selecting the command. 
-<br><dt><kbd>&lt; &lt;</kbd><dd>If there is an active region, restrict the following agenda command to
-the region.  Otherwise, restrict it to the current subtree<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  After pressing <kbd>&lt; &lt;</kbd>, you still need to press the
-character selecting the command. 
-</dl>
+  <h3 class="section">10.2 The agenda dispatcher</h3>
 
-   <p>You can also define custom commands that will be accessible through the
-dispatcher, just like the default commands.  This includes the
-possibility to create extended agenda buffers that contain several
-blocks together, for example the weekly agenda, the global TODO list and
-a number of special tags matches.  See <a href="Custom-agenda-views.html#Custom-agenda-views">Custom agenda views</a>.
+  <p><a name="index-agenda-dispatcher-1004" id=
+  "index-agenda-dispatcher-1004"></a><a name=
+  "index-dispatching-agenda-commands-1005" id=
+  "index-dispatching-agenda-commands-1005"></a>The views are
+  created through a dispatcher, which should be bound to a global
+  key&mdash;for example <kbd>C-c a</kbd> (see <a href=
+  "Installation.html#Installation">Installation</a>). In the
+  following we will assume that <kbd>C-c a</kbd> is indeed how the
+  dispatcher is accessed and list keyboard access to commands
+  accordingly. After pressing <kbd>C-c a</kbd>, an additional
+  letter is required to execute a command. The dispatcher offers
+  the following default commands:</p>
 
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> For backward
-compatibility, you can also press <kbd>1</kbd> to restrict to the current
-buffer.</p>
+  <dl>
+    <dt><kbd>a</kbd></dt>
 
-   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> For
-backward compatibility, you can also press <kbd>0</kbd> to restrict to the
-current region/subtree.</p>
+    <dd>Create the calendar-like agenda (see <a href=
+    "Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily
+    agenda</a>).<br /></dd>
 
-   <hr></div>
+    <dt><kbd>t</kbd> <span class="roman">/</span> <kbd>T</kbd></dt>
 
-   </body></html>
+    <dd>Create a list of all TODO items (see <a href=
+    "Global-TODO-list.html#Global-TODO-list">Global TODO
+    list</a>).<br /></dd>
 
+    <dt><kbd>m</kbd> <span class="roman">/</span> <kbd>M</kbd></dt>
+
+    <dd>Create a list of headlines matching a TAGS expression (see
+    <a href=
+    "Matching-tags-and-properties.html#Matching-tags-and-properties">
+    Matching tags and properties</a>).<br /></dd>
+
+    <dt><kbd>L</kbd></dt>
+
+    <dd>Create the timeline view for the current buffer (see
+    <a href="Timeline.html#Timeline">Timeline</a>).<br /></dd>
+
+    <dt><kbd>s</kbd></dt>
+
+    <dd>Create a list of entries selected by a boolean expression
+    of keywords and/or regular expressions that must or must not
+    occur in the entry.<br /></dd>
+
+    <dt><kbd>/</kbd></dt>
+
+    <dd><a name=
+    "index-org_002dagenda_002dtext_002dsearch_002dextra_002dfiles-1006"
+    id=
+    "index-org_002dagenda_002dtext_002dsearch_002dextra_002dfiles-1006">
+    </a>Search for a regular expression in all agenda files and
+    additionally in the files listed in
+    <code>org-agenda-text-search-extra-files</code>. This uses the
+    Emacs command <code>multi-occur</code>. A prefix argument can
+    be used to specify the number of context lines for each match,
+    default is 1.<br /></dd>
+
+    <dt><kbd>#</kbd> <span class="roman">/</span> <kbd>!</kbd></dt>
+
+    <dd>Create a list of stuck projects (see <a href=
+    "Stuck-projects.html#Stuck-projects">Stuck
+    projects</a>).<br /></dd>
+
+    <dt><kbd>&lt;</kbd></dt>
+
+    <dd>Restrict an agenda command to the current buffer<a rel=
+    "footnote" href="#fn-1" name="fnd-1" id=
+    "fnd-1"><sup>1</sup></a>. After pressing <kbd>&lt;</kbd>, you
+    still need to press the character selecting the
+    command.<br /></dd>
+
+    <dt><kbd>&lt; &lt;</kbd></dt>
+
+    <dd>If there is an active region, restrict the following agenda
+    command to the region. Otherwise, restrict it to the current
+    subtree<a rel="footnote" href="#fn-2" name="fnd-2" id=
+    "fnd-2"><sup>2</sup></a>. After pressing <kbd>&lt; &lt;</kbd>,
+    you still need to press the character selecting the
+    command.</dd>
+  </dl>
+
+  <p>You can also define custom commands that will be accessible
+  through the dispatcher, just like the default commands. This
+  includes the possibility to create extended agenda buffers that
+  contain several blocks together, for example the weekly agenda,
+  the global TODO list and a number of special tags matches. See
+  <a href="Custom-agenda-views.html#Custom-agenda-views">Custom
+  agenda views</a>.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4>Footnotes</h4>
+
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> For backward compatibility, you can also
+    press <kbd>1</kbd> to restrict to the current buffer.</p>
+
+    <p class="footnote"><small>[<a name="fn-2" href="#fnd-2" id=
+    "fn-2">2</a>]</small> For backward compatibility, you can also
+    press <kbd>0</kbd> to restrict to the current
+    region/subtree.</p>
+    <hr />
+  </div>
+</body>
+</html>

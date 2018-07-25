@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,396 +16,554 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: For Clauses</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: For Clauses">
-<meta name="keywords" content="Common Lisp Extensions: For Clauses">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Loop-Facility.html#Loop-Facility" rel="up" title="Loop Facility">
-<link href="Iteration-Clauses.html#Iteration-Clauses" rel="next" title="Iteration Clauses">
-<link href="Loop-Examples.html#Loop-Examples" rel="prev" title="Loop Examples">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: For Clauses</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: For Clauses" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: For Clauses" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Loop-Facility.html#Loop-Facility" rel="up" title=
+  "Loop Facility" />
+  <link href="Iteration-Clauses.html#Iteration-Clauses" rel="next"
+  title="Iteration Clauses" />
+  <link href="Loop-Examples.html#Loop-Examples" rel="prev" title=
+  "Loop Examples" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="For-Clauses"></a>
-<div class="header">
-<p>
-Next: <a href="Iteration-Clauses.html#Iteration-Clauses" accesskey="n" rel="next">Iteration Clauses</a>, Previous: <a href="Loop-Examples.html#Loop-Examples" accesskey="p" rel="prev">Loop Examples</a>, Up: <a href="Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="For-Clauses-1"></a>
-<h4 class="subsection">4.7.3 For Clauses</h4>
+<body lang="en" xml:lang="en">
+  <a name="For-Clauses" id="For-Clauses"></a>
 
-<p>Most loops are governed by one or more <code>for</code> clauses.
-A <code>for</code> clause simultaneously describes variables to be
-bound, how those variables are to be stepped during the loop,
-and usually an end condition based on those variables.
-</p>
-<p>The word <code>as</code> is a synonym for the word <code>for</code>.  This
-word is followed by a variable name, then a word like <code>from</code>
-or <code>across</code> that describes the kind of iteration desired.
-In Common Lisp, the phrase <code>being the</code> sometimes precedes
-the type of iteration; in this package both <code>being</code> and
-<code>the</code> are optional.  The word <code>each</code> is a synonym
-for <code>the</code>, and the word that follows it may be singular
-or plural:  &lsquo;<samp>for x being the elements of y</samp>&rsquo; or
-&lsquo;<samp>for x being each element of y</samp>&rsquo;.  Which form you use
-is purely a matter of style.
-</p>
-<p>The variable is bound around the loop as if by <code>let</code>:
-</p>
-<div class="example">
-<pre class="example">(setq i 'happy)
+  <div class="header">
+    <p>Next: <a href="Iteration-Clauses.html#Iteration-Clauses"
+    accesskey="n" rel="next">Iteration Clauses</a>, Previous:
+    <a href="Loop-Examples.html#Loop-Examples" accesskey="p" rel=
+    "prev">Loop Examples</a>, Up: <a href=
+    "Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop
+    Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="For-Clauses-1" id="For-Clauses-1"></a>
+
+  <h4 class="subsection">4.7.3 For Clauses</h4>
+
+  <p>Most loops are governed by one or more <code>for</code>
+  clauses. A <code>for</code> clause simultaneously describes
+  variables to be bound, how those variables are to be stepped
+  during the loop, and usually an end condition based on those
+  variables.</p>
+
+  <p>The word <code>as</code> is a synonym for the word
+  <code>for</code>. This word is followed by a variable name, then
+  a word like <code>from</code> or <code>across</code> that
+  describes the kind of iteration desired. In Common Lisp, the
+  phrase <code>being the</code> sometimes precedes the type of
+  iteration; in this package both <code>being</code> and
+  <code>the</code> are optional. The word <code>each</code> is a
+  synonym for <code>the</code>, and the word that follows it may be
+  singular or plural: &lsquo;<samp>for x being the elements of
+  y</samp>&rsquo; or &lsquo;<samp>for x being each element of
+  y</samp>&rsquo;. Which form you use is purely a matter of
+  style.</p>
+
+  <p>The variable is bound around the loop as if by
+  <code>let</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(setq i 'happy)
 (cl-loop for i from 1 to 10 do (do-something-with i))
 i
      &rArr; happy
-</pre></div>
+</pre>
+  </div>
 
-<dl compact="compact">
-<dt><code>for <var>var</var> from <var>expr1</var> to <var>expr2</var> by <var>expr3</var></code></dt>
-<dd><p>This type of <code>for</code> clause creates a counting loop.  Each of
-the three sub-terms is optional, though there must be at least one
-term so that the clause is marked as a counting clause.
-</p>
-<p>The three expressions are the starting value, the ending value, and
-the step value, respectively, of the variable.  The loop counts
-upwards by default (<var>expr3</var> must be positive), from <var>expr1</var>
-to <var>expr2</var> inclusively.  If you omit the <code>from</code> term, the
-loop counts from zero; if you omit the <code>to</code> term, the loop
-counts forever without stopping (unless stopped by some other
-loop clause, of course); if you omit the <code>by</code> term, the loop
-counts in steps of one.
-</p>
-<p>You can replace the word <code>from</code> with <code>upfrom</code> or
-<code>downfrom</code> to indicate the direction of the loop.  Likewise,
-you can replace <code>to</code> with <code>upto</code> or <code>downto</code>.
-For example, &lsquo;<samp>for x from 5 downto 1</samp>&rsquo; executes five times
-with <code>x</code> taking on the integers from 5 down to 1 in turn.
-Also, you can replace <code>to</code> with <code>below</code> or <code>above</code>,
-which are like <code>upto</code> and <code>downto</code> respectively except
-that they are exclusive rather than inclusive limits:
-</p>
-<div class="example">
-<pre class="example">(cl-loop for x to 10 collect x)
+  <dl compact="compact">
+    <dt><code>for <var>var</var> from <var>expr1</var> to
+    <var>expr2</var> by <var>expr3</var></code></dt>
+
+    <dd>
+      <p>This type of <code>for</code> clause creates a counting
+      loop. Each of the three sub-terms is optional, though there
+      must be at least one term so that the clause is marked as a
+      counting clause.</p>
+
+      <p>The three expressions are the starting value, the ending
+      value, and the step value, respectively, of the variable. The
+      loop counts upwards by default (<var>expr3</var> must be
+      positive), from <var>expr1</var> to <var>expr2</var>
+      inclusively. If you omit the <code>from</code> term, the loop
+      counts from zero; if you omit the <code>to</code> term, the
+      loop counts forever without stopping (unless stopped by some
+      other loop clause, of course); if you omit the
+      <code>by</code> term, the loop counts in steps of one.</p>
+
+      <p>You can replace the word <code>from</code> with
+      <code>upfrom</code> or <code>downfrom</code> to indicate the
+      direction of the loop. Likewise, you can replace
+      <code>to</code> with <code>upto</code> or
+      <code>downto</code>. For example, &lsquo;<samp>for x from 5
+      downto 1</samp>&rsquo; executes five times with
+      <code>x</code> taking on the integers from 5 down to 1 in
+      turn. Also, you can replace <code>to</code> with
+      <code>below</code> or <code>above</code>, which are like
+      <code>upto</code> and <code>downto</code> respectively except
+      that they are exclusive rather than inclusive limits:</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop for x to 10 collect x)
         &rArr; (0 1 2 3 4 5 6 7 8 9 10)
 (cl-loop for x below 10 collect x)
         &rArr; (0 1 2 3 4 5 6 7 8 9)
-</pre></div>
+</pre>
+      </div>
 
-<p>The <code>by</code> value is always positive, even for downward-counting
-loops.  Some sort of <code>from</code> value is required for downward
-loops; &lsquo;<samp>for x downto 5</samp>&rsquo; is not a valid loop clause all by
-itself.
-</p>
-</dd>
-<dt><code>for <var>var</var> in <var>list</var> by <var>function</var></code></dt>
-<dd><p>This clause iterates <var>var</var> over all the elements of <var>list</var>,
-in turn.  If you specify the <code>by</code> term, then <var>function</var>
-is used to traverse the list instead of <code>cdr</code>; it must be a
-function taking one argument.  For example:
-</p>
-<div class="example">
-<pre class="example">(cl-loop for x in '(1 2 3 4 5 6) collect (* x x))
+      <p>The <code>by</code> value is always positive, even for
+      downward-counting loops. Some sort of <code>from</code> value
+      is required for downward loops; &lsquo;<samp>for x downto
+      5</samp>&rsquo; is not a valid loop clause all by itself.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> in <var>list</var> by
+    <var>function</var></code></dt>
+
+    <dd>
+      <p>This clause iterates <var>var</var> over all the elements
+      of <var>list</var>, in turn. If you specify the
+      <code>by</code> term, then <var>function</var> is used to
+      traverse the list instead of <code>cdr</code>; it must be a
+      function taking one argument. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop for x in '(1 2 3 4 5 6) collect (* x x))
         &rArr; (1 4 9 16 25 36)
 (cl-loop for x in '(1 2 3 4 5 6) by 'cddr collect (* x x))
         &rArr; (1 9 25)
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>for <var>var</var> on <var>list</var> by <var>function</var></code></dt>
-<dd><p>This clause iterates <var>var</var> over all the cons cells of <var>list</var>.
-</p>
-<div class="example">
-<pre class="example">(cl-loop for x on '(1 2 3 4) collect x)
+    <dt><code>for <var>var</var> on <var>list</var> by
+    <var>function</var></code></dt>
+
+    <dd>
+      <p>This clause iterates <var>var</var> over all the cons
+      cells of <var>list</var>.</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop for x on '(1 2 3 4) collect x)
         &rArr; ((1 2 3 4) (2 3 4) (3 4) (4))
-</pre></div>
+</pre>
+      </div>
 
-<p>With <code>by</code>, there is no real reason that the <code>on</code> expression
-must be a list.  For example:
-</p>
-<div class="example">
-<pre class="example">(cl-loop for x on first-animal by 'next-animal collect x)
-</pre></div>
+      <p>With <code>by</code>, there is no real reason that the
+      <code>on</code> expression must be a list. For example:</p>
 
-<p>where <code>(next-animal x)</code> takes an &ldquo;animal&rdquo; <var>x</var> and returns
-the next in the (assumed) sequence of animals, or <code>nil</code> if
-<var>x</var> was the last animal in the sequence.
-</p>
-</dd>
-<dt><code>for <var>var</var> in-ref <var>list</var> by <var>function</var></code></dt>
-<dd><p>This is like a regular <code>in</code> clause, but <var>var</var> becomes
-a <code>setf</code>-able &ldquo;reference&rdquo; onto the elements of the list
-rather than just a temporary variable.  For example,
-</p>
-<div class="example">
-<pre class="example">(cl-loop for x in-ref my-list do (cl-incf x))
-</pre></div>
+      <div class="example">
+        <pre class="example">
+(cl-loop for x on first-animal by 'next-animal collect x)
+</pre>
+      </div>
 
-<p>increments every element of <code>my-list</code> in place.  This clause
-is an extension to standard Common Lisp.
-</p>
-</dd>
-<dt><code>for <var>var</var> across <var>array</var></code></dt>
-<dd><p>This clause iterates <var>var</var> over all the elements of <var>array</var>,
-which may be a vector or a string.
-</p>
-<div class="example">
-<pre class="example">(cl-loop for x across &quot;aeiou&quot;
+      <p>where <code>(next-animal x)</code> takes an
+      &ldquo;animal&rdquo; <var>x</var> and returns the next in the
+      (assumed) sequence of animals, or <code>nil</code> if
+      <var>x</var> was the last animal in the sequence.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> in-ref <var>list</var> by
+    <var>function</var></code></dt>
+
+    <dd>
+      <p>This is like a regular <code>in</code> clause, but
+      <var>var</var> becomes a <code>setf</code>-able
+      &ldquo;reference&rdquo; onto the elements of the list rather
+      than just a temporary variable. For example,</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop for x in-ref my-list do (cl-incf x))
+</pre>
+      </div>
+
+      <p>increments every element of <code>my-list</code> in place.
+      This clause is an extension to standard Common Lisp.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> across
+    <var>array</var></code></dt>
+
+    <dd>
+      <p>This clause iterates <var>var</var> over all the elements
+      of <var>array</var>, which may be a vector or a string.</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop for x across "aeiou"
          do (use-vowel (char-to-string x)))
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>for <var>var</var> across-ref <var>array</var></code></dt>
-<dd><p>This clause iterates over an array, with <var>var</var> a <code>setf</code>-able
-reference onto the elements; see <code>in-ref</code> above.
-</p>
-</dd>
-<dt><code>for <var>var</var> being the elements of <var>sequence</var></code></dt>
-<dd><p>This clause iterates over the elements of <var>sequence</var>, which may
-be a list, vector, or string.  Since the type must be determined
-at run-time, this is somewhat less efficient than <code>in</code> or
-<code>across</code>.  The clause may be followed by the additional term
-&lsquo;<samp>using (index <var>var2</var>)</samp>&rsquo; to cause <var>var2</var> to be bound to
-the successive indices (starting at 0) of the elements.
-</p>
-<p>This clause type is taken from older versions of the <code>loop</code> macro,
-and is not present in modern Common Lisp.  The &lsquo;<samp>using (sequence &hellip;)</samp>&rsquo;
-term of the older macros is not supported.
-</p>
-</dd>
-<dt><code>for <var>var</var> being the elements of-ref <var>sequence</var></code></dt>
-<dd><p>This clause iterates over a sequence, with <var>var</var> a <code>setf</code>-able
-reference onto the elements; see <code>in-ref</code> above.
-</p>
-</dd>
-<dt><code>for <var>var</var> being the symbols [of <var>obarray</var>]</code></dt>
-<dd><p>This clause iterates over symbols, either over all interned symbols
-or over all symbols in <var>obarray</var>.  The loop is executed with
-<var>var</var> bound to each symbol in turn.  The symbols are visited in
-an unspecified order.
-</p>
-<p>As an example,
-</p>
-<div class="example">
-<pre class="example">(cl-loop for sym being the symbols
+    <dt><code>for <var>var</var> across-ref
+    <var>array</var></code></dt>
+
+    <dd>
+      <p>This clause iterates over an array, with <var>var</var> a
+      <code>setf</code>-able reference onto the elements; see
+      <code>in-ref</code> above.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> being the elements of
+    <var>sequence</var></code></dt>
+
+    <dd>
+      <p>This clause iterates over the elements of
+      <var>sequence</var>, which may be a list, vector, or string.
+      Since the type must be determined at run-time, this is
+      somewhat less efficient than <code>in</code> or
+      <code>across</code>. The clause may be followed by the
+      additional term &lsquo;<samp>using (index
+      <var>var2</var>)</samp>&rsquo; to cause <var>var2</var> to be
+      bound to the successive indices (starting at 0) of the
+      elements.</p>
+
+      <p>This clause type is taken from older versions of the
+      <code>loop</code> macro, and is not present in modern Common
+      Lisp. The &lsquo;<samp>using (sequence
+      &hellip;)</samp>&rsquo; term of the older macros is not
+      supported.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> being the elements of-ref
+    <var>sequence</var></code></dt>
+
+    <dd>
+      <p>This clause iterates over a sequence, with <var>var</var>
+      a <code>setf</code>-able reference onto the elements; see
+      <code>in-ref</code> above.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> being the symbols [of
+    <var>obarray</var>]</code></dt>
+
+    <dd>
+      <p>This clause iterates over symbols, either over all
+      interned symbols or over all symbols in <var>obarray</var>.
+      The loop is executed with <var>var</var> bound to each symbol
+      in turn. The symbols are visited in an unspecified order.</p>
+
+      <p>As an example,</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop for sym being the symbols
          when (fboundp sym)
-         when (string-match &quot;^map&quot; (symbol-name sym))
+         when (string-match "^map" (symbol-name sym))
          collect sym)
-</pre></div>
+</pre>
+      </div>
 
-<p>returns a list of all the functions whose names begin with &lsquo;<samp>map</samp>&rsquo;.
-</p>
-<p>The Common Lisp words <code>external-symbols</code> and <code>present-symbols</code>
-are also recognized but are equivalent to <code>symbols</code> in Emacs Lisp.
-</p>
-<p>Due to a minor implementation restriction, it will not work to have
-more than one <code>for</code> clause iterating over symbols, hash tables,
-keymaps, overlays, or intervals in a given <code>cl-loop</code>.  Fortunately,
-it would rarely if ever be useful to do so.  It <em>is</em> valid to mix
-one of these types of clauses with other clauses like <code>for &hellip; to</code>
-or <code>while</code>.
-</p>
-</dd>
-<dt><code>for <var>var</var> being the hash-keys of <var>hash-table</var></code></dt>
-<dt><code>for <var>var</var> being the hash-values of <var>hash-table</var></code></dt>
-<dd><p>This clause iterates over the entries in <var>hash-table</var> with
-<var>var</var> bound to each key, or value.  A &lsquo;<samp>using</samp>&rsquo; clause can bind
-a second variable to the opposite part.
-</p>
-<div class="example">
-<pre class="example">(cl-loop for k being the hash-keys of h
+      <p>returns a list of all the functions whose names begin with
+      &lsquo;<samp>map</samp>&rsquo;.</p>
+
+      <p>The Common Lisp words <code>external-symbols</code> and
+      <code>present-symbols</code> are also recognized but are
+      equivalent to <code>symbols</code> in Emacs Lisp.</p>
+
+      <p>Due to a minor implementation restriction, it will not
+      work to have more than one <code>for</code> clause iterating
+      over symbols, hash tables, keymaps, overlays, or intervals in
+      a given <code>cl-loop</code>. Fortunately, it would rarely if
+      ever be useful to do so. It <em>is</em> valid to mix one of
+      these types of clauses with other clauses like <code>for
+      &hellip; to</code> or <code>while</code>.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> being the hash-keys of
+    <var>hash-table</var></code></dt>
+
+    <dt><code>for <var>var</var> being the hash-values of
+    <var>hash-table</var></code></dt>
+
+    <dd>
+      <p>This clause iterates over the entries in
+      <var>hash-table</var> with <var>var</var> bound to each key,
+      or value. A &lsquo;<samp>using</samp>&rsquo; clause can bind
+      a second variable to the opposite part.</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop for k being the hash-keys of h
                using (hash-values v)
          do
-         (message &quot;key %S -&gt; value %S&quot; k v))
-</pre></div>
+         (message "key %S -&gt; value %S" k v))
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>for <var>var</var> being the key-codes of <var>keymap</var></code></dt>
-<dt><code>for <var>var</var> being the key-bindings of <var>keymap</var></code></dt>
-<dd><p>This clause iterates over the entries in <var>keymap</var>.
-The iteration does not enter nested keymaps but does enter inherited
-(parent) keymaps.
-A <code>using</code> clause can access both the codes and the bindings
-together.
-</p>
-<div class="example">
-<pre class="example">(cl-loop for c being the key-codes of (current-local-map)
+    <dt><code>for <var>var</var> being the key-codes of
+    <var>keymap</var></code></dt>
+
+    <dt><code>for <var>var</var> being the key-bindings of
+    <var>keymap</var></code></dt>
+
+    <dd>
+      <p>This clause iterates over the entries in
+      <var>keymap</var>. The iteration does not enter nested
+      keymaps but does enter inherited (parent) keymaps. A
+      <code>using</code> clause can access both the codes and the
+      bindings together.</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop for c being the key-codes of (current-local-map)
                using (key-bindings b)
          do
-         (message &quot;key %S -&gt; binding %S&quot; c b))
-</pre></div>
+         (message "key %S -&gt; binding %S" c b))
+</pre>
+      </div>
+    </dd>
 
+    <dt><code>for <var>var</var> being the key-seqs of
+    <var>keymap</var></code></dt>
 
-</dd>
-<dt><code>for <var>var</var> being the key-seqs of <var>keymap</var></code></dt>
-<dd><p>This clause iterates over all key sequences defined by <var>keymap</var>
-and its nested keymaps, where <var>var</var> takes on values which are
-vectors.  The strings or vectors
-are reused for each iteration, so you must copy them if you wish to keep
-them permanently.  You can add a &lsquo;<samp>using (key-bindings &hellip;)</samp>&rsquo;
-clause to get the command bindings as well.
-</p>
-</dd>
-<dt><code>for <var>var</var> being the overlays [of <var>buffer</var>] &hellip;</code></dt>
-<dd><p>This clause iterates over the &ldquo;overlays&rdquo; of a buffer
-(the clause <code>extents</code> is synonymous
-with <code>overlays</code>).  If the <code>of</code> term is omitted, the current
-buffer is used.
-This clause also accepts optional &lsquo;<samp>from <var>pos</var></samp>&rsquo; and
-&lsquo;<samp>to <var>pos</var></samp>&rsquo; terms, limiting the clause to overlays which
-overlap the specified region.
-</p>
-</dd>
-<dt><code>for <var>var</var> being the intervals [of <var>buffer</var>] &hellip;</code></dt>
-<dd><p>This clause iterates over all intervals of a buffer with constant
-text properties.  The variable <var>var</var> will be bound to conses
-of start and end positions, where one start position is always equal
-to the previous end position.  The clause allows <code>of</code>,
-<code>from</code>, <code>to</code>, and <code>property</code> terms, where the latter
-term restricts the search to just the specified property.  The
-<code>of</code> term may specify either a buffer or a string.
-</p>
-</dd>
-<dt><code>for <var>var</var> being the frames</code></dt>
-<dd><p>This clause iterates over all Emacs frames. The clause <code>screens</code> is
-a synonym for <code>frames</code>.  The frames are visited in
-<code>next-frame</code> order starting from <code>selected-frame</code>.
-</p>
-</dd>
-<dt><code>for <var>var</var> being the windows [of <var>frame</var>]</code></dt>
-<dd><p>This clause iterates over the windows (in the Emacs sense) of
-the current frame, or of the specified <var>frame</var>.  It visits windows
-in <code>next-window</code> order starting from <code>selected-window</code>
-(or <code>frame-selected-window</code> if you specify <var>frame</var>).
-This clause treats the minibuffer window in the same way as
-<code>next-window</code> does.  For greater flexibility, consider using
-<code>walk-windows</code> instead.
-</p>
-</dd>
-<dt><code>for <var>var</var> being the buffers</code></dt>
-<dd><p>This clause iterates over all buffers in Emacs.  It is equivalent
-to &lsquo;<samp>for <var>var</var> in (buffer-list)</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>for <var>var</var> = <var>expr1</var> then <var>expr2</var></code></dt>
-<dd><p>This clause does a general iteration.  The first time through
-the loop, <var>var</var> will be bound to <var>expr1</var>.  On the second
-and successive iterations it will be set by evaluating <var>expr2</var>
-(which may refer to the old value of <var>var</var>).  For example,
-these two loops are effectively the same:
-</p>
-<div class="example">
-<pre class="example">(cl-loop for x on my-list by 'cddr do &hellip;)
+    <dd>
+      <p>This clause iterates over all key sequences defined by
+      <var>keymap</var> and its nested keymaps, where
+      <var>var</var> takes on values which are vectors. The strings
+      or vectors are reused for each iteration, so you must copy
+      them if you wish to keep them permanently. You can add a
+      &lsquo;<samp>using (key-bindings &hellip;)</samp>&rsquo;
+      clause to get the command bindings as well.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> being the overlays [of
+    <var>buffer</var>] &hellip;</code></dt>
+
+    <dd>
+      <p>This clause iterates over the &ldquo;overlays&rdquo; of a
+      buffer (the clause <code>extents</code> is synonymous with
+      <code>overlays</code>). If the <code>of</code> term is
+      omitted, the current buffer is used. This clause also accepts
+      optional &lsquo;<samp>from <var>pos</var></samp>&rsquo; and
+      &lsquo;<samp>to <var>pos</var></samp>&rsquo; terms, limiting
+      the clause to overlays which overlap the specified
+      region.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> being the intervals [of
+    <var>buffer</var>] &hellip;</code></dt>
+
+    <dd>
+      <p>This clause iterates over all intervals of a buffer with
+      constant text properties. The variable <var>var</var> will be
+      bound to conses of start and end positions, where one start
+      position is always equal to the previous end position. The
+      clause allows <code>of</code>, <code>from</code>,
+      <code>to</code>, and <code>property</code> terms, where the
+      latter term restricts the search to just the specified
+      property. The <code>of</code> term may specify either a
+      buffer or a string.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> being the frames</code></dt>
+
+    <dd>
+      <p>This clause iterates over all Emacs frames. The clause
+      <code>screens</code> is a synonym for <code>frames</code>.
+      The frames are visited in <code>next-frame</code> order
+      starting from <code>selected-frame</code>.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> being the windows [of
+    <var>frame</var>]</code></dt>
+
+    <dd>
+      <p>This clause iterates over the windows (in the Emacs sense)
+      of the current frame, or of the specified <var>frame</var>.
+      It visits windows in <code>next-window</code> order starting
+      from <code>selected-window</code> (or
+      <code>frame-selected-window</code> if you specify
+      <var>frame</var>). This clause treats the minibuffer window
+      in the same way as <code>next-window</code> does. For greater
+      flexibility, consider using <code>walk-windows</code>
+      instead.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> being the buffers</code></dt>
+
+    <dd>
+      <p>This clause iterates over all buffers in Emacs. It is
+      equivalent to &lsquo;<samp>for <var>var</var> in
+      (buffer-list)</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><code>for <var>var</var> = <var>expr1</var> then
+    <var>expr2</var></code></dt>
+
+    <dd>
+      <p>This clause does a general iteration. The first time
+      through the loop, <var>var</var> will be bound to
+      <var>expr1</var>. On the second and successive iterations it
+      will be set by evaluating <var>expr2</var> (which may refer
+      to the old value of <var>var</var>). For example, these two
+      loops are effectively the same:</p>
+
+      <div class="example">
+        <pre class="example">
+(cl-loop for x on my-list by 'cddr do &hellip;)
 (cl-loop for x = my-list then (cddr x) while x do &hellip;)
-</pre></div>
+</pre>
+      </div>
 
-<p>Note that this type of <code>for</code> clause does not imply any sort
-of terminating condition; the above example combines it with a
-<code>while</code> clause to tell when to end the loop.
-</p>
-<p>If you omit the <code>then</code> term, <var>expr1</var> is used both for
-the initial setting and for successive settings:
-</p>
-<div class="example">
-<pre class="example">(cl-loop for x = (random) when (&gt; x 0) return x)
-</pre></div>
+      <p>Note that this type of <code>for</code> clause does not
+      imply any sort of terminating condition; the above example
+      combines it with a <code>while</code> clause to tell when to
+      end the loop.</p>
 
-<p>This loop keeps taking random numbers from the <code>(random)</code>
-function until it gets a positive one, which it then returns.
-</p></dd>
-</dl>
+      <p>If you omit the <code>then</code> term, <var>expr1</var>
+      is used both for the initial setting and for successive
+      settings:</p>
 
-<p>If you include several <code>for</code> clauses in a row, they are
-treated sequentially (as if by <code>let*</code> and <code>setq</code>).
-You can instead use the word <code>and</code> to link the clauses,
-in which case they are processed in parallel (as if by <code>let</code>
-and <code>cl-psetq</code>).
-</p>
-<div class="example">
-<pre class="example">(cl-loop for x below 5 for y = nil then x collect (list x y))
+      <div class="example">
+        <pre class="example">
+(cl-loop for x = (random) when (&gt; x 0) return x)
+</pre>
+      </div>
+
+      <p>This loop keeps taking random numbers from the
+      <code>(random)</code> function until it gets a positive one,
+      which it then returns.</p>
+    </dd>
+  </dl>
+
+  <p>If you include several <code>for</code> clauses in a row, they
+  are treated sequentially (as if by <code>let*</code> and
+  <code>setq</code>). You can instead use the word <code>and</code>
+  to link the clauses, in which case they are processed in parallel
+  (as if by <code>let</code> and <code>cl-psetq</code>).</p>
+
+  <div class="example">
+    <pre class="example">
+(cl-loop for x below 5 for y = nil then x collect (list x y))
         &rArr; ((0 nil) (1 1) (2 2) (3 3) (4 4))
 (cl-loop for x below 5 and y = nil then x collect (list x y))
         &rArr; ((0 nil) (1 0) (2 1) (3 2) (4 3))
-</pre></div>
+</pre>
+  </div>
 
-<p>In the first loop, <code>y</code> is set based on the value of <code>x</code>
-that was just set by the previous clause; in the second loop,
-<code>x</code> and <code>y</code> are set simultaneously so <code>y</code> is set
-based on the value of <code>x</code> left over from the previous time
-through the loop.
-</p>
-<a name="index-destructuring_002c-in-cl_002dloop"></a>
-<p>Another feature of the <code>cl-loop</code> macro is <em>destructuring</em>,
-similar in concept to the destructuring provided by <code>defmacro</code>
-(see <a href="Argument-Lists.html#Argument-Lists">Argument Lists</a>).
-The <var>var</var> part of any <code>for</code> clause can be given as a list
-of variables instead of a single variable.  The values produced
-during loop execution must be lists; the values in the lists are
-stored in the corresponding variables.
-</p>
-<div class="example">
-<pre class="example">(cl-loop for (x y) in '((2 3) (4 5) (6 7)) collect (+ x y))
+  <p>In the first loop, <code>y</code> is set based on the value of
+  <code>x</code> that was just set by the previous clause; in the
+  second loop, <code>x</code> and <code>y</code> are set
+  simultaneously so <code>y</code> is set based on the value of
+  <code>x</code> left over from the previous time through the
+  loop.</p><a name="index-destructuring_002c-in-cl_002dloop" id=
+  "index-destructuring_002c-in-cl_002dloop"></a>
+
+  <p>Another feature of the <code>cl-loop</code> macro is
+  <em>destructuring</em>, similar in concept to the destructuring
+  provided by <code>defmacro</code> (see <a href=
+  "Argument-Lists.html#Argument-Lists">Argument Lists</a>). The
+  <var>var</var> part of any <code>for</code> clause can be given
+  as a list of variables instead of a single variable. The values
+  produced during loop execution must be lists; the values in the
+  lists are stored in the corresponding variables.</p>
+
+  <div class="example">
+    <pre class="example">
+(cl-loop for (x y) in '((2 3) (4 5) (6 7)) collect (+ x y))
         &rArr; (5 9 13)
-</pre></div>
+</pre>
+  </div>
 
-<p>In loop destructuring, if there are more values than variables
-the trailing values are ignored, and if there are more variables
-than values the trailing variables get the value <code>nil</code>.
-If <code>nil</code> is used as a variable name, the corresponding
-values are ignored.  Destructuring may be nested, and dotted
-lists of variables like <code>(x . y)</code> are allowed, so for example
-to process an alist
-</p>
-<div class="example">
-<pre class="example">(cl-loop for (key . value) in '((a . 1) (b . 2))
+  <p>In loop destructuring, if there are more values than variables
+  the trailing values are ignored, and if there are more variables
+  than values the trailing variables get the value
+  <code>nil</code>. If <code>nil</code> is used as a variable name,
+  the corresponding values are ignored. Destructuring may be
+  nested, and dotted lists of variables like <code>(x . y)</code>
+  are allowed, so for example to process an alist</p>
+
+  <div class="example">
+    <pre class="example">
+(cl-loop for (key . value) in '((a . 1) (b . 2))
          collect value)
         &rArr; (1 2)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Iteration-Clauses.html#Iteration-Clauses" accesskey="n" rel="next">Iteration Clauses</a>, Previous: <a href="Loop-Examples.html#Loop-Examples" accesskey="p" rel="prev">Loop Examples</a>, Up: <a href="Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Iteration-Clauses.html#Iteration-Clauses"
+    accesskey="n" rel="next">Iteration Clauses</a>, Previous:
+    <a href="Loop-Examples.html#Loop-Examples" accesskey="p" rel=
+    "prev">Loop Examples</a>, Up: <a href=
+    "Loop-Facility.html#Loop-Facility" accesskey="u" rel="up">Loop
+    Facility</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

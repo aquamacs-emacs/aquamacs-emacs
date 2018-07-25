@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,236 +14,372 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Mail Group Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Mail Group Commands">
-<meta name="keywords" content="Gnus Manual: Mail Group Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Summary-Buffer.html#Summary-Buffer" rel="up" title="Summary Buffer">
-<link href="Various-Summary-Stuff.html#Various-Summary-Stuff" rel="next" title="Various Summary Stuff">
-<link href="Tree-Display.html#Tree-Display" rel="prev" title="Tree Display">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Mail Group Commands</title>
+  <meta name="description" content=
+  "Gnus Manual: Mail Group Commands" />
+  <meta name="keywords" content=
+  "Gnus Manual: Mail Group Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Summary-Buffer.html#Summary-Buffer" rel="up" title=
+  "Summary Buffer" />
+  <link href="Various-Summary-Stuff.html#Various-Summary-Stuff"
+  rel="next" title="Various Summary Stuff" />
+  <link href="Tree-Display.html#Tree-Display" rel="prev" title=
+  "Tree Display" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Mail-Group-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Various-Summary-Stuff.html#Various-Summary-Stuff" accesskey="n" rel="next">Various Summary Stuff</a>, Previous: <a href="Tree-Display.html#Tree-Display" accesskey="p" rel="prev">Tree Display</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Mail-Group-Commands-1"></a>
-<h3 class="section">3.26 Mail Group Commands</h3>
-<a name="index-mail-group-commands"></a>
+<body lang="en" xml:lang="en">
+  <a name="Mail-Group-Commands" id="Mail-Group-Commands"></a>
 
-<p>Some commands only make sense in mail groups.  If these commands are
-invalid in the current group, they will raise a hell and let you know.
-</p>
-<p>All these commands (except the expiry and edit commands) use the
-process/prefix convention (see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).
-</p>
-<dl compact="compact">
-<dt><kbd>B e</kbd></dt>
-<dd><a name="index-B-e-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dexpire_002darticles"></a>
-<a name="index-expiring-mail-5"></a>
-<p>Run all expirable articles in the current group through the expiry
-process (<code>gnus-summary-expire-articles</code>).  That is, delete all
-expirable articles in the group that have been around for a while.
-(see <a href="Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>).
-</p>
-</dd>
-<dt><kbd>B C-M-e</kbd></dt>
-<dd><a name="index-B-C_002dM_002de-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dexpire_002darticles_002dnow"></a>
-<a name="index-expiring-mail-6"></a>
-<p>Delete all the expirable articles in the group
-(<code>gnus-summary-expire-articles-now</code>).  This means that <strong>all</strong>
-articles eligible for expiry in the current group will
-disappear forever into that big <samp>/dev/null</samp> in the sky.
-</p>
-</dd>
-<dt><kbd>B DEL</kbd></dt>
-<dd><a name="index-B-DEL-_0028Summary_0029"></a>
-<a name="index-deleting-mail"></a>
-<a name="index-gnus_002dsummary_002ddelete_002darticle"></a>
-<p>Delete the mail article.  This is &ldquo;delete&rdquo; as in &ldquo;delete it from your
-disk forever and ever, never to return again.&rdquo; Use with caution.
-(<code>gnus-summary-delete-article</code>).
-</p>
-</dd>
-<dt><kbd>B m</kbd></dt>
-<dd><a name="index-B-m-_0028Summary_0029"></a>
-<a name="index-move-mail"></a>
-<a name="index-gnus_002dsummary_002dmove_002darticle"></a>
-<a name="index-gnus_002dpreserve_002dmarks"></a>
-<p>Move the article from one mail group to another
-(<code>gnus-summary-move-article</code>).  Marks will be preserved if
-<code>gnus-preserve-marks</code> is non-<code>nil</code> (which is the default).
-</p>
-</dd>
-<dt><kbd>B c</kbd></dt>
-<dd><a name="index-B-c-_0028Summary_0029"></a>
-<a name="index-copy-mail"></a>
-<a name="index-gnus_002dsummary_002dcopy_002darticle"></a>
-<p>Copy the article from one group (mail group or not) to a mail group
-(<code>gnus-summary-copy-article</code>).  Marks will be preserved if
-<code>gnus-preserve-marks</code> is non-<code>nil</code> (which is the default).
-</p>
-</dd>
-<dt><kbd>B B</kbd></dt>
-<dd><a name="index-B-B-_0028Summary_0029"></a>
-<a name="index-crosspost-mail"></a>
-<a name="index-gnus_002dsummary_002dcrosspost_002darticle"></a>
-<p>Crosspost the current article to some other group
-(<code>gnus-summary-crosspost-article</code>).  This will create a new copy of
-the article in the other group, and the Xref headers of the article will
-be properly updated.
-</p>
-</dd>
-<dt><kbd>B i</kbd></dt>
-<dd><a name="index-B-i-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dimport_002darticle"></a>
-<p>Import an arbitrary file into the current mail newsgroup
-(<code>gnus-summary-import-article</code>).  You will be prompted for a file
-name, a <code>From</code> header and a <code>Subject</code> header.
-</p>
-</dd>
-<dt><kbd>B I</kbd></dt>
-<dd><a name="index-B-I-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dcreate_002darticle"></a>
-<p>Create an empty article in the current mail newsgroups
-(<code>gnus-summary-create-article</code>).  You will be prompted for a
-<code>From</code> header and a <code>Subject</code> header.
-</p>
-</dd>
-<dt><kbd>B r</kbd></dt>
-<dd><a name="index-B-r-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002drespool_002darticle"></a>
-<a name="index-gnus_002dsummary_002drespool_002ddefault_002dmethod"></a>
-<p>Respool the mail article (<code>gnus-summary-respool-article</code>).
-<code>gnus-summary-respool-default-method</code> will be used as the default
-select method when respooling.  This variable is <code>nil</code> by default,
-which means that the current group select method will be used instead.
-Marks will be preserved if <code>gnus-preserve-marks</code> is non-<code>nil</code>
-(which is the default).
-</p>
-</dd>
-<dt><kbd>B w</kbd></dt>
-<dt><kbd>e</kbd></dt>
-<dd><a name="index-B-w-_0028Summary_0029"></a>
-<a name="index-e-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002dedit_002darticle"></a>
-<a name="index-C_002dc-C_002dc-_0028Article_0029"></a>
-<a name="index-gnus_002dsummary_002dedit_002darticle_002ddone"></a>
-<p>Edit the current article (<code>gnus-summary-edit-article</code>).  To finish
-editing and make the changes permanent, type <kbd>C-c C-c</kbd>
-(<code>gnus-summary-edit-article-done</code>).  If you give a prefix to the
-<kbd>C-c C-c</kbd> command, Gnus won&rsquo;t re-highlight the article.
-</p>
-</dd>
-<dt><kbd>B q</kbd></dt>
-<dd><a name="index-B-q-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002drespool_002dquery"></a>
-<p>If you want to re-spool an article, you might be curious as to what group
-the article will end up in before you do the re-spooling.  This command
-will tell you (<code>gnus-summary-respool-query</code>).
-</p>
-</dd>
-<dt><kbd>B t</kbd></dt>
-<dd><a name="index-B-t-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002drespool_002dtrace"></a>
-<p>Similarly, this command will display all fancy splitting patterns used
-when respooling, if any (<code>gnus-summary-respool-trace</code>).
-</p>
-</dd>
-<dt><kbd>B p</kbd></dt>
-<dd><a name="index-B-p-_0028Summary_0029"></a>
-<a name="index-gnus_002dsummary_002darticle_002dposted_002dp"></a>
-<p>Some people have a tendency to send you &ldquo;courtesy&rdquo; copies when they
-follow up to articles you have posted.  These usually have a
-<code>Newsgroups</code> header in them, but not always.  This command
-(<code>gnus-summary-article-posted-p</code>) will try to fetch the current
-article from your news server (or rather, from
-<code>gnus-refer-article-method</code> or <code>gnus-select-method</code>) and will
-report back whether it found the article or not.  Even if it says that
-it didn&rsquo;t find the article, it may have been posted anyway&mdash;mail
-propagation is much faster than news propagation, and the news copy may
-just not have arrived yet.
-</p>
-</dd>
-<dt><kbd>K E</kbd></dt>
-<dd><a name="index-K-E-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dencrypt_002dbody"></a>
-<a name="index-gnus_002darticle_002dencrypt_002dprotocol"></a>
-<p>Encrypt the body of an article (<code>gnus-article-encrypt-body</code>).
-The body is encrypted with the encryption protocol specified by the
-variable <code>gnus-article-encrypt-protocol</code>.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Various-Summary-Stuff.html#Various-Summary-Stuff" accesskey=
+    "n" rel="next">Various Summary Stuff</a>, Previous: <a href=
+    "Tree-Display.html#Tree-Display" accesskey="p" rel="prev">Tree
+    Display</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer"
+    accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Mail-Group-Commands-1" id="Mail-Group-Commands-1"></a>
 
-<a name="index-gnus_002dmove_002dsplit_002dmethods"></a>
-<a name="index-moving-articles"></a>
-<p>If you move (or copy) articles regularly, you might wish to have Gnus
-suggest where to put the articles.  <code>gnus-move-split-methods</code> is a
-variable that uses the same syntax as <code>gnus-split-methods</code>
-(see <a href="Saving-Articles.html#Saving-Articles">Saving Articles</a>).  You may customize that variable to create
-suggestions you find reasonable.  (Note that
-<code>gnus-move-split-methods</code> uses group names where
-<code>gnus-split-methods</code> uses file names.)
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-move-split-methods
-      '((&quot;^From:.*Lars Magne&quot; &quot;nnml:junk&quot;)
-        (&quot;^Subject:.*gnus&quot; &quot;nnfolder:important&quot;)
-        (&quot;.*&quot; &quot;nnml:misc&quot;)))
-</pre></div>
+  <h3 class="section">3.26 Mail Group Commands</h3><a name=
+  "index-mail-group-commands" id="index-mail-group-commands"></a>
 
+  <p>Some commands only make sense in mail groups. If these
+  commands are invalid in the current group, they will raise a hell
+  and let you know.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Various-Summary-Stuff.html#Various-Summary-Stuff" accesskey="n" rel="next">Various Summary Stuff</a>, Previous: <a href="Tree-Display.html#Tree-Display" accesskey="p" rel="prev">Tree Display</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer" accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>All these commands (except the expiry and edit commands) use
+  the process/prefix convention (see <a href=
+  "Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).</p>
 
+  <dl compact="compact">
+    <dt><kbd>B e</kbd></dt>
 
+    <dd>
+      <a name="index-B-e-_0028Summary_0029" id=
+      "index-B-e-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dexpire_002darticles" id=
+      "index-gnus_002dsummary_002dexpire_002darticles"></a>
+      <a name="index-expiring-mail-5" id=
+      "index-expiring-mail-5"></a>
 
+      <p>Run all expirable articles in the current group through
+      the expiry process
+      (<code>gnus-summary-expire-articles</code>). That is, delete
+      all expirable articles in the group that have been around for
+      a while. (see <a href=
+      "Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>).</p>
+    </dd>
+
+    <dt><kbd>B C-M-e</kbd></dt>
+
+    <dd>
+      <a name="index-B-C_002dM_002de-_0028Summary_0029" id=
+      "index-B-C_002dM_002de-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dexpire_002darticles_002dnow" id=
+      "index-gnus_002dsummary_002dexpire_002darticles_002dnow"></a>
+      <a name="index-expiring-mail-6" id=
+      "index-expiring-mail-6"></a>
+
+      <p>Delete all the expirable articles in the group
+      (<code>gnus-summary-expire-articles-now</code>). This means
+      that <strong>all</strong> articles eligible for expiry in the
+      current group will disappear forever into that big
+      <samp>/dev/null</samp> in the sky.</p>
+    </dd>
+
+    <dt><kbd>B DEL</kbd></dt>
+
+    <dd>
+      <a name="index-B-DEL-_0028Summary_0029" id=
+      "index-B-DEL-_0028Summary_0029"></a> <a name=
+      "index-deleting-mail" id="index-deleting-mail"></a> <a name=
+      "index-gnus_002dsummary_002ddelete_002darticle" id=
+      "index-gnus_002dsummary_002ddelete_002darticle"></a>
+
+      <p>Delete the mail article. This is &ldquo;delete&rdquo; as
+      in &ldquo;delete it from your disk forever and ever, never to
+      return again.&rdquo; Use with caution.
+      (<code>gnus-summary-delete-article</code>).</p>
+    </dd>
+
+    <dt><kbd>B m</kbd></dt>
+
+    <dd>
+      <a name="index-B-m-_0028Summary_0029" id=
+      "index-B-m-_0028Summary_0029"></a> <a name="index-move-mail"
+      id="index-move-mail"></a> <a name=
+      "index-gnus_002dsummary_002dmove_002darticle" id=
+      "index-gnus_002dsummary_002dmove_002darticle"></a> <a name=
+      "index-gnus_002dpreserve_002dmarks" id=
+      "index-gnus_002dpreserve_002dmarks"></a>
+
+      <p>Move the article from one mail group to another
+      (<code>gnus-summary-move-article</code>). Marks will be
+      preserved if <code>gnus-preserve-marks</code> is
+      non-<code>nil</code> (which is the default).</p>
+    </dd>
+
+    <dt><kbd>B c</kbd></dt>
+
+    <dd>
+      <a name="index-B-c-_0028Summary_0029" id=
+      "index-B-c-_0028Summary_0029"></a> <a name="index-copy-mail"
+      id="index-copy-mail"></a> <a name=
+      "index-gnus_002dsummary_002dcopy_002darticle" id=
+      "index-gnus_002dsummary_002dcopy_002darticle"></a>
+
+      <p>Copy the article from one group (mail group or not) to a
+      mail group (<code>gnus-summary-copy-article</code>). Marks
+      will be preserved if <code>gnus-preserve-marks</code> is
+      non-<code>nil</code> (which is the default).</p>
+    </dd>
+
+    <dt><kbd>B B</kbd></dt>
+
+    <dd>
+      <a name="index-B-B-_0028Summary_0029" id=
+      "index-B-B-_0028Summary_0029"></a> <a name=
+      "index-crosspost-mail" id="index-crosspost-mail"></a>
+      <a name="index-gnus_002dsummary_002dcrosspost_002darticle"
+      id="index-gnus_002dsummary_002dcrosspost_002darticle"></a>
+
+      <p>Crosspost the current article to some other group
+      (<code>gnus-summary-crosspost-article</code>). This will
+      create a new copy of the article in the other group, and the
+      Xref headers of the article will be properly updated.</p>
+    </dd>
+
+    <dt><kbd>B i</kbd></dt>
+
+    <dd>
+      <a name="index-B-i-_0028Summary_0029" id=
+      "index-B-i-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dimport_002darticle" id=
+      "index-gnus_002dsummary_002dimport_002darticle"></a>
+
+      <p>Import an arbitrary file into the current mail newsgroup
+      (<code>gnus-summary-import-article</code>). You will be
+      prompted for a file name, a <code>From</code> header and a
+      <code>Subject</code> header.</p>
+    </dd>
+
+    <dt><kbd>B I</kbd></dt>
+
+    <dd>
+      <a name="index-B-I-_0028Summary_0029" id=
+      "index-B-I-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dcreate_002darticle" id=
+      "index-gnus_002dsummary_002dcreate_002darticle"></a>
+
+      <p>Create an empty article in the current mail newsgroups
+      (<code>gnus-summary-create-article</code>). You will be
+      prompted for a <code>From</code> header and a
+      <code>Subject</code> header.</p>
+    </dd>
+
+    <dt><kbd>B r</kbd></dt>
+
+    <dd>
+      <a name="index-B-r-_0028Summary_0029" id=
+      "index-B-r-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002drespool_002darticle" id=
+      "index-gnus_002dsummary_002drespool_002darticle"></a>
+      <a name="index-gnus_002dsummary_002drespool_002ddefault_002dmethod"
+      id=
+      "index-gnus_002dsummary_002drespool_002ddefault_002dmethod"></a>
+
+      <p>Respool the mail article
+      (<code>gnus-summary-respool-article</code>).
+      <code>gnus-summary-respool-default-method</code> will be used
+      as the default select method when respooling. This variable
+      is <code>nil</code> by default, which means that the current
+      group select method will be used instead. Marks will be
+      preserved if <code>gnus-preserve-marks</code> is
+      non-<code>nil</code> (which is the default).</p>
+    </dd>
+
+    <dt><kbd>B w</kbd></dt>
+
+    <dt><kbd>e</kbd></dt>
+
+    <dd>
+      <a name="index-B-w-_0028Summary_0029" id=
+      "index-B-w-_0028Summary_0029"></a> <a name=
+      "index-e-_0028Summary_0029" id=
+      "index-e-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002dedit_002darticle" id=
+      "index-gnus_002dsummary_002dedit_002darticle"></a> <a name=
+      "index-C_002dc-C_002dc-_0028Article_0029" id=
+      "index-C_002dc-C_002dc-_0028Article_0029"></a> <a name=
+      "index-gnus_002dsummary_002dedit_002darticle_002ddone" id=
+      "index-gnus_002dsummary_002dedit_002darticle_002ddone"></a>
+
+      <p>Edit the current article
+      (<code>gnus-summary-edit-article</code>). To finish editing
+      and make the changes permanent, type <kbd>C-c C-c</kbd>
+      (<code>gnus-summary-edit-article-done</code>). If you give a
+      prefix to the <kbd>C-c C-c</kbd> command, Gnus won&rsquo;t
+      re-highlight the article.</p>
+    </dd>
+
+    <dt><kbd>B q</kbd></dt>
+
+    <dd>
+      <a name="index-B-q-_0028Summary_0029" id=
+      "index-B-q-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002drespool_002dquery" id=
+      "index-gnus_002dsummary_002drespool_002dquery"></a>
+
+      <p>If you want to re-spool an article, you might be curious
+      as to what group the article will end up in before you do the
+      re-spooling. This command will tell you
+      (<code>gnus-summary-respool-query</code>).</p>
+    </dd>
+
+    <dt><kbd>B t</kbd></dt>
+
+    <dd>
+      <a name="index-B-t-_0028Summary_0029" id=
+      "index-B-t-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002drespool_002dtrace" id=
+      "index-gnus_002dsummary_002drespool_002dtrace"></a>
+
+      <p>Similarly, this command will display all fancy splitting
+      patterns used when respooling, if any
+      (<code>gnus-summary-respool-trace</code>).</p>
+    </dd>
+
+    <dt><kbd>B p</kbd></dt>
+
+    <dd>
+      <a name="index-B-p-_0028Summary_0029" id=
+      "index-B-p-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsummary_002darticle_002dposted_002dp" id=
+      "index-gnus_002dsummary_002darticle_002dposted_002dp"></a>
+
+      <p>Some people have a tendency to send you
+      &ldquo;courtesy&rdquo; copies when they follow up to articles
+      you have posted. These usually have a <code>Newsgroups</code>
+      header in them, but not always. This command
+      (<code>gnus-summary-article-posted-p</code>) will try to
+      fetch the current article from your news server (or rather,
+      from <code>gnus-refer-article-method</code> or
+      <code>gnus-select-method</code>) and will report back whether
+      it found the article or not. Even if it says that it
+      didn&rsquo;t find the article, it may have been posted
+      anyway&mdash;mail propagation is much faster than news
+      propagation, and the news copy may just not have arrived
+      yet.</p>
+    </dd>
+
+    <dt><kbd>K E</kbd></dt>
+
+    <dd>
+      <a name="index-K-E-_0028Summary_0029" id=
+      "index-K-E-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dencrypt_002dbody" id=
+      "index-gnus_002darticle_002dencrypt_002dbody"></a> <a name=
+      "index-gnus_002darticle_002dencrypt_002dprotocol" id=
+      "index-gnus_002darticle_002dencrypt_002dprotocol"></a>
+
+      <p>Encrypt the body of an article
+      (<code>gnus-article-encrypt-body</code>). The body is
+      encrypted with the encryption protocol specified by the
+      variable <code>gnus-article-encrypt-protocol</code>.</p>
+    </dd>
+  </dl><a name="index-gnus_002dmove_002dsplit_002dmethods" id=
+  "index-gnus_002dmove_002dsplit_002dmethods"></a> <a name=
+  "index-moving-articles" id="index-moving-articles"></a>
+
+  <p>If you move (or copy) articles regularly, you might wish to
+  have Gnus suggest where to put the articles.
+  <code>gnus-move-split-methods</code> is a variable that uses the
+  same syntax as <code>gnus-split-methods</code> (see <a href=
+  "Saving-Articles.html#Saving-Articles">Saving Articles</a>). You
+  may customize that variable to create suggestions you find
+  reasonable. (Note that <code>gnus-move-split-methods</code> uses
+  group names where <code>gnus-split-methods</code> uses file
+  names.)</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq gnus-move-split-methods
+      '(("^From:.*Lars Magne" "nnml:junk")
+        ("^Subject:.*gnus" "nnfolder:important")
+        (".*" "nnml:misc")))
+</pre>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Various-Summary-Stuff.html#Various-Summary-Stuff" accesskey=
+    "n" rel="next">Various Summary Stuff</a>, Previous: <a href=
+    "Tree-Display.html#Tree-Display" accesskey="p" rel="prev">Tree
+    Display</a>, Up: <a href="Summary-Buffer.html#Summary-Buffer"
+    accesskey="u" rel="up">Summary Buffer</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,107 +20,157 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Shell History Copying</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Shell History Copying">
-<meta name="keywords" content="GNU Emacs Manual: Shell History Copying">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Shell-History.html#Shell-History" rel="up" title="Shell History">
-<link href="History-References.html#History-References" rel="next" title="History References">
-<link href="Shell-Ring.html#Shell-Ring" rel="prev" title="Shell Ring">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Shell History Copying</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Shell History Copying" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Shell History Copying" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Shell-History.html#Shell-History" rel="up" title=
+  "Shell History" />
+  <link href="History-References.html#History-References" rel=
+  "next" title="History References" />
+  <link href="Shell-Ring.html#Shell-Ring" rel="prev" title=
+  "Shell Ring" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Shell-History-Copying" id="Shell-History-Copying"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="History-References.html#History-References"
+    accesskey="n" rel="next">History References</a>, Previous:
+    <a href="Shell-Ring.html#Shell-Ring" accesskey="p" rel=
+    "prev">Shell Ring</a>, Up: <a href=
+    "Shell-History.html#Shell-History" accesskey="u" rel="up">Shell
+    History</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Shell-History-Copying-1" id=
+  "Shell-History-Copying-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Shell-History-Copying"></a>
-<div class="header">
-<p>
-Next: <a href="History-References.html#History-References" accesskey="n" rel="next">History References</a>, Previous: <a href="Shell-Ring.html#Shell-Ring" accesskey="p" rel="prev">Shell Ring</a>, Up: <a href="Shell-History.html#Shell-History" accesskey="u" rel="up">Shell History</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Shell-History-Copying-1"></a>
-<h4 class="subsection">40.5.2 Shell History Copying</h4>
+  <h4 class="subsection">40.5.2 Shell History Copying</h4>
 
-<dl compact="compact">
-<dd><a name="index-C_002dc-C_002dp-_0028Shell-mode_0029"></a>
-<a name="index-comint_002dprevious_002dprompt"></a>
-</dd>
-<dt><kbd>C-c C-p</kbd></dt>
-<dd><p>Move point to the previous prompt (<code>comint-previous-prompt</code>).
-</p>
-<a name="index-C_002dc-C_002dn-_0028Shell-mode_0029"></a>
-<a name="index-comint_002dnext_002dprompt"></a>
-</dd>
-<dt><kbd>C-c C-n</kbd></dt>
-<dd><p>Move point to the following prompt (<code>comint-next-prompt</code>).
-</p>
-<a name="index-C_002dc-RET-_0028Shell-mode_0029"></a>
-<a name="index-comint_002dcopy_002dold_002dinput"></a>
-</dd>
-<dt><kbd>C-c <span class="key">RET</span></kbd></dt>
-<dd><p>Copy the input command at point, inserting the copy at the end of the
-buffer (<code>comint-copy-old-input</code>).  This is useful if you move
-point back to a previous command.  After you copy the command, you can
-submit the copy as input with <tt class="key">RET</tt>.  If you wish, you can edit
-the copy before resubmitting it.  If you use this command on an output
-line, it copies that line to the end of the buffer.
-</p>
-</dd>
-<dt><kbd>mouse-2</kbd></dt>
-<dd><p>If <code>comint-use-prompt-regexp</code> is <code>nil</code> (the default), copy
-the old input command that you click on, inserting the copy at the end
-of the buffer (<code>comint-insert-input</code>).  If
-<code>comint-use-prompt-regexp</code> is non-<code>nil</code>, or if the click is
-not over old input, just yank as usual.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-C_002dp-_0028Shell-mode_0029" id=
+    "index-C_002dc-C_002dp-_0028Shell-mode_0029"></a> <a name=
+    "index-comint_002dprevious_002dprompt" id=
+    "index-comint_002dprevious_002dprompt"></a></dd>
 
-<p>Moving to a previous input and then copying it with <kbd>C-c
-<span class="key">RET</span></kbd> or <kbd>mouse-2</kbd> produces the same results&mdash;the same
-buffer contents&mdash;that you would get by using <kbd>M-p</kbd> enough times
-to fetch that previous input from the history list.  However, <kbd>C-c
-<span class="key">RET</span></kbd> copies the text from the buffer, which can be different
-from what is in the history list if you edit the input text in the
-buffer after it has been sent.
-</p>
+    <dt><kbd>C-c C-p</kbd></dt>
 
+    <dd>
+      <p>Move point to the previous prompt
+      (<code>comint-previous-prompt</code>).</p><a name=
+      "index-C_002dc-C_002dn-_0028Shell-mode_0029" id=
+      "index-C_002dc-C_002dn-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002dnext_002dprompt" id=
+      "index-comint_002dnext_002dprompt"></a>
+    </dd>
 
+    <dt><kbd>C-c C-n</kbd></dt>
 
+    <dd>
+      <p>Move point to the following prompt
+      (<code>comint-next-prompt</code>).</p><a name=
+      "index-C_002dc-RET-_0028Shell-mode_0029" id=
+      "index-C_002dc-RET-_0028Shell-mode_0029"></a> <a name=
+      "index-comint_002dcopy_002dold_002dinput" id=
+      "index-comint_002dcopy_002dold_002dinput"></a>
+    </dd>
+
+    <dt><kbd>C-c <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Copy the input command at point, inserting the copy at the
+      end of the buffer (<code>comint-copy-old-input</code>). This
+      is useful if you move point back to a previous command. After
+      you copy the command, you can submit the copy as input with
+      <tt class="key">RET</tt>. If you wish, you can edit the copy
+      before resubmitting it. If you use this command on an output
+      line, it copies that line to the end of the buffer.</p>
+    </dd>
+
+    <dt><kbd>mouse-2</kbd></dt>
+
+    <dd>
+      <p>If <code>comint-use-prompt-regexp</code> is
+      <code>nil</code> (the default), copy the old input command
+      that you click on, inserting the copy at the end of the
+      buffer (<code>comint-insert-input</code>). If
+      <code>comint-use-prompt-regexp</code> is
+      non-<code>nil</code>, or if the click is not over old input,
+      just yank as usual.</p>
+    </dd>
+  </dl>
+
+  <p>Moving to a previous input and then copying it with <kbd>C-c
+  <span class="key">RET</span></kbd> or <kbd>mouse-2</kbd> produces
+  the same results&mdash;the same buffer contents&mdash;that you
+  would get by using <kbd>M-p</kbd> enough times to fetch that
+  previous input from the history list. However, <kbd>C-c
+  <span class="key">RET</span></kbd> copies the text from the
+  buffer, which can be different from what is in the history list
+  if you edit the input text in the buffer after it has been
+  sent.</p>
 </body>
 </html>

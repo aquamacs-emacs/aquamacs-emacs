@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,152 +18,210 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Infinities</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Infinities">
-<meta name="keywords" content="GNU Emacs Calc Manual: Infinities">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Data-Types.html#Data-Types" rel="up" title="Data Types">
-<link href="Vectors-and-Matrices.html#Vectors-and-Matrices" rel="next" title="Vectors and Matrices">
-<link href="Complex-Numbers.html#Complex-Numbers" rel="prev" title="Complex Numbers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Infinities</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Infinities" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Infinities" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Data-Types.html#Data-Types" rel="up" title=
+  "Data Types" />
+  <link href="Vectors-and-Matrices.html#Vectors-and-Matrices" rel=
+  "next" title="Vectors and Matrices" />
+  <link href="Complex-Numbers.html#Complex-Numbers" rel="prev"
+  title="Complex Numbers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Infinities"></a>
-<div class="header">
-<p>
-Next: <a href="Vectors-and-Matrices.html#Vectors-and-Matrices" accesskey="n" rel="next">Vectors and Matrices</a>, Previous: <a href="Complex-Numbers.html#Complex-Numbers" accesskey="p" rel="prev">Complex Numbers</a>, Up: <a href="Data-Types.html#Data-Types" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Infinities-1"></a>
-<h3 class="section">4.5 Infinities</h3>
+<body lang="en" xml:lang="en">
+  <a name="Infinities" id="Infinities"></a>
 
-<a name="index-Infinity"></a>
-<a name="index-inf-variable"></a>
-<a name="index-uinf-variable"></a>
-<a name="index-nan-variable"></a>
-<a name="index-inf"></a>
-<a name="index-uinf"></a>
-<a name="index-nan"></a>
-<p>The word <code>inf</code> represents the mathematical concept of <em>infinity</em>.
-Calc actually has three slightly different infinity-like values:
-<code>inf</code>, <code>uinf</code>, and <code>nan</code>.  These are just regular
-variable names (see <a href="Variables.html#Variables">Variables</a>); you should avoid using these
-names for your own variables because Calc gives them special
-treatment.  Infinities, like all variable names, are normally
-entered using algebraic entry.
-</p>
-<p>Mathematically speaking, it is not rigorously correct to treat
-&ldquo;infinity&rdquo; as if it were a number, but mathematicians often do
-so informally.  When they say that &lsquo;<samp>1 / inf = 0</samp>&rsquo;, what they
-really mean is that &lsquo;<samp>1 / x</samp>&rsquo;, as &lsquo;<samp>x</samp>&rsquo; becomes larger and
-larger, becomes arbitrarily close to zero.  So you can imagine
-that if &lsquo;<samp>x</samp>&rsquo; got &ldquo;all the way to infinity,&rdquo; then &lsquo;<samp>1 / x</samp>&rsquo;
-would go all the way to zero.  Similarly, when they say that
-&lsquo;<samp>exp(inf) = inf</samp>&rsquo;, they mean that
-&lsquo;<samp>exp(x)</samp>&rsquo;
-grows without bound as &lsquo;<samp>x</samp>&rsquo; grows.  The symbol &lsquo;<samp>-inf</samp>&rsquo; likewise
-stands for an infinitely negative real value; for example, we say that
-&lsquo;<samp>exp(-inf) = 0</samp>&rsquo;.  You can have an infinity pointing in any
-direction on the complex plane:  &lsquo;<samp>sqrt(-inf) = i inf</samp>&rsquo;.
-</p>
-<p>The same concept of limits can be used to define &lsquo;<samp>1 / 0</samp>&rsquo;.  We
-really want the value that &lsquo;<samp>1 / x</samp>&rsquo; approaches as &lsquo;<samp>x</samp>&rsquo;
-approaches zero.  But if all we have is &lsquo;<samp>1 / 0</samp>&rsquo;, we can&rsquo;t
-tell which direction &lsquo;<samp>x</samp>&rsquo; was coming from.  If &lsquo;<samp>x</samp>&rsquo; was
-positive and decreasing toward zero, then we should say that
-&lsquo;<samp>1 / 0 = inf</samp>&rsquo;.  But if &lsquo;<samp>x</samp>&rsquo; was negative and increasing
-toward zero, the answer is &lsquo;<samp>1 / 0 = -inf</samp>&rsquo;.  In fact, &lsquo;<samp>x</samp>&rsquo;
-could be an imaginary number, giving the answer &lsquo;<samp>i inf</samp>&rsquo; or
-&lsquo;<samp>-i inf</samp>&rsquo;.  Calc uses the special symbol &lsquo;<samp>uinf</samp>&rsquo; to mean
-<em>undirected infinity</em>, i.e., a value which is infinitely
-large but with an unknown sign (or direction on the complex plane).
-</p>
-<p>Calc actually has three modes that say how infinities are handled.
-Normally, infinities never arise from calculations that didn&rsquo;t
-already have them.  Thus, &lsquo;<samp>1 / 0</samp>&rsquo; is treated simply as an
-error and left unevaluated.  The <kbd>m i</kbd> (<code>calc-infinite-mode</code>)
-command (see <a href="Infinite-Mode.html#Infinite-Mode">Infinite Mode</a>) enables a mode in which
-&lsquo;<samp>1 / 0</samp>&rsquo; evaluates to <code>uinf</code> instead.  There is also
-an alternative type of infinite mode which says to treat zeros
-as if they were positive, so that &lsquo;<samp>1 / 0 = inf</samp>&rsquo;.  While this
-is less mathematically correct, it may be the answer you want in
-some cases.
-</p>
-<p>Since all infinities are &ldquo;as large&rdquo; as all others, Calc simplifies,
-e.g., &lsquo;<samp>5 inf</samp>&rsquo; to &lsquo;<samp>inf</samp>&rsquo;.  Another example is
-&lsquo;<samp>5 - inf = -inf</samp>&rsquo;, where the &lsquo;<samp>-inf</samp>&rsquo; is so large that
-adding a finite number like five to it does not affect it.
-Note that &lsquo;<samp>a - inf</samp>&rsquo; also results in &lsquo;<samp>-inf</samp>&rsquo;; Calc assumes
-that variables like <code>a</code> always stand for finite quantities.
-Just to show that infinities really are all the same size,
-note that &lsquo;<samp>sqrt(inf) = inf^2 = exp(inf) = inf</samp>&rsquo; in Calc&rsquo;s
-notation.
-</p>
-<p>It&rsquo;s not so easy to define certain formulas like &lsquo;<samp>0 * inf</samp>&rsquo; and
-&lsquo;<samp>inf / inf</samp>&rsquo;.  Depending on where these zeros and infinities
-came from, the answer could be literally anything.  The latter
-formula could be the limit of &lsquo;<samp>x / x</samp>&rsquo; (giving a result of one),
-or &lsquo;<samp>2 x / x</samp>&rsquo; (giving two), or &lsquo;<samp>x^2 / x</samp>&rsquo; (giving <code>inf</code>),
-or &lsquo;<samp>x / x^2</samp>&rsquo; (giving zero).  Calc uses the symbol <code>nan</code>
-to represent such an <em>indeterminate</em> value.  (The name &ldquo;nan&rdquo;
-comes from analogy with the &ldquo;NAN&rdquo; concept of IEEE standard
-arithmetic; it stands for &ldquo;Not A Number.&rdquo;  This is somewhat of a
-misnomer, since <code>nan</code> <em>does</em> stand for some number or
-infinity, it&rsquo;s just that <em>which</em> number it stands for
-cannot be determined.)  In Calc&rsquo;s notation, &lsquo;<samp>0 * inf = nan</samp>&rsquo;
-and &lsquo;<samp>inf / inf = nan</samp>&rsquo;.  A few other common indeterminate
-expressions are &lsquo;<samp>inf - inf</samp>&rsquo; and &lsquo;<samp>inf ^ 0</samp>&rsquo;.  Also,
-&lsquo;<samp>0 / 0 = nan</samp>&rsquo; if you have turned on Infinite mode
-(as described above).
-</p>
-<p>Infinities are especially useful as parts of <em>intervals</em>.
-See <a href="Interval-Forms.html#Interval-Forms">Interval Forms</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Vectors-and-Matrices.html#Vectors-and-Matrices" accesskey="n" rel="next">Vectors and Matrices</a>, Previous: <a href="Complex-Numbers.html#Complex-Numbers" accesskey="p" rel="prev">Complex Numbers</a>, Up: <a href="Data-Types.html#Data-Types" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Vectors-and-Matrices.html#Vectors-and-Matrices" accesskey="n"
+    rel="next">Vectors and Matrices</a>, Previous: <a href=
+    "Complex-Numbers.html#Complex-Numbers" accesskey="p" rel=
+    "prev">Complex Numbers</a>, Up: <a href=
+    "Data-Types.html#Data-Types" accesskey="u" rel="up">Data
+    Types</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Infinities-1" id="Infinities-1"></a>
 
+  <h3 class="section">4.5 Infinities</h3><a name="index-Infinity"
+  id="index-Infinity"></a> <a name="index-inf-variable" id=
+  "index-inf-variable"></a> <a name="index-uinf-variable" id=
+  "index-uinf-variable"></a> <a name="index-nan-variable" id=
+  "index-nan-variable"></a> <a name="index-inf" id="index-inf"></a>
+  <a name="index-uinf" id="index-uinf"></a> <a name="index-nan" id=
+  "index-nan"></a>
 
+  <p>The word <code>inf</code> represents the mathematical concept
+  of <em>infinity</em>. Calc actually has three slightly different
+  infinity-like values: <code>inf</code>, <code>uinf</code>, and
+  <code>nan</code>. These are just regular variable names (see
+  <a href="Variables.html#Variables">Variables</a>); you should
+  avoid using these names for your own variables because Calc gives
+  them special treatment. Infinities, like all variable names, are
+  normally entered using algebraic entry.</p>
 
+  <p>Mathematically speaking, it is not rigorously correct to treat
+  &ldquo;infinity&rdquo; as if it were a number, but mathematicians
+  often do so informally. When they say that &lsquo;<samp>1 / inf =
+  0</samp>&rsquo;, what they really mean is that &lsquo;<samp>1 /
+  x</samp>&rsquo;, as &lsquo;<samp>x</samp>&rsquo; becomes larger
+  and larger, becomes arbitrarily close to zero. So you can imagine
+  that if &lsquo;<samp>x</samp>&rsquo; got &ldquo;all the way to
+  infinity,&rdquo; then &lsquo;<samp>1 / x</samp>&rsquo; would go
+  all the way to zero. Similarly, when they say that
+  &lsquo;<samp>exp(inf) = inf</samp>&rsquo;, they mean that
+  &lsquo;<samp>exp(x)</samp>&rsquo; grows without bound as
+  &lsquo;<samp>x</samp>&rsquo; grows. The symbol
+  &lsquo;<samp>-inf</samp>&rsquo; likewise stands for an infinitely
+  negative real value; for example, we say that
+  &lsquo;<samp>exp(-inf) = 0</samp>&rsquo;. You can have an
+  infinity pointing in any direction on the complex plane:
+  &lsquo;<samp>sqrt(-inf) = i inf</samp>&rsquo;.</p>
+
+  <p>The same concept of limits can be used to define
+  &lsquo;<samp>1 / 0</samp>&rsquo;. We really want the value that
+  &lsquo;<samp>1 / x</samp>&rsquo; approaches as
+  &lsquo;<samp>x</samp>&rsquo; approaches zero. But if all we have
+  is &lsquo;<samp>1 / 0</samp>&rsquo;, we can&rsquo;t tell which
+  direction &lsquo;<samp>x</samp>&rsquo; was coming from. If
+  &lsquo;<samp>x</samp>&rsquo; was positive and decreasing toward
+  zero, then we should say that &lsquo;<samp>1 / 0 =
+  inf</samp>&rsquo;. But if &lsquo;<samp>x</samp>&rsquo; was
+  negative and increasing toward zero, the answer is &lsquo;<samp>1
+  / 0 = -inf</samp>&rsquo;. In fact, &lsquo;<samp>x</samp>&rsquo;
+  could be an imaginary number, giving the answer &lsquo;<samp>i
+  inf</samp>&rsquo; or &lsquo;<samp>-i inf</samp>&rsquo;. Calc uses
+  the special symbol &lsquo;<samp>uinf</samp>&rsquo; to mean
+  <em>undirected infinity</em>, i.e., a value which is infinitely
+  large but with an unknown sign (or direction on the complex
+  plane).</p>
+
+  <p>Calc actually has three modes that say how infinities are
+  handled. Normally, infinities never arise from calculations that
+  didn&rsquo;t already have them. Thus, &lsquo;<samp>1 /
+  0</samp>&rsquo; is treated simply as an error and left
+  unevaluated. The <kbd>m i</kbd> (<code>calc-infinite-mode</code>)
+  command (see <a href="Infinite-Mode.html#Infinite-Mode">Infinite
+  Mode</a>) enables a mode in which &lsquo;<samp>1 /
+  0</samp>&rsquo; evaluates to <code>uinf</code> instead. There is
+  also an alternative type of infinite mode which says to treat
+  zeros as if they were positive, so that &lsquo;<samp>1 / 0 =
+  inf</samp>&rsquo;. While this is less mathematically correct, it
+  may be the answer you want in some cases.</p>
+
+  <p>Since all infinities are &ldquo;as large&rdquo; as all others,
+  Calc simplifies, e.g., &lsquo;<samp>5 inf</samp>&rsquo; to
+  &lsquo;<samp>inf</samp>&rsquo;. Another example is &lsquo;<samp>5
+  - inf = -inf</samp>&rsquo;, where the
+  &lsquo;<samp>-inf</samp>&rsquo; is so large that adding a finite
+  number like five to it does not affect it. Note that
+  &lsquo;<samp>a - inf</samp>&rsquo; also results in
+  &lsquo;<samp>-inf</samp>&rsquo;; Calc assumes that variables like
+  <code>a</code> always stand for finite quantities. Just to show
+  that infinities really are all the same size, note that
+  &lsquo;<samp>sqrt(inf) = inf^2 = exp(inf) = inf</samp>&rsquo; in
+  Calc&rsquo;s notation.</p>
+
+  <p>It&rsquo;s not so easy to define certain formulas like
+  &lsquo;<samp>0 * inf</samp>&rsquo; and &lsquo;<samp>inf /
+  inf</samp>&rsquo;. Depending on where these zeros and infinities
+  came from, the answer could be literally anything. The latter
+  formula could be the limit of &lsquo;<samp>x / x</samp>&rsquo;
+  (giving a result of one), or &lsquo;<samp>2 x / x</samp>&rsquo;
+  (giving two), or &lsquo;<samp>x^2 / x</samp>&rsquo; (giving
+  <code>inf</code>), or &lsquo;<samp>x / x^2</samp>&rsquo; (giving
+  zero). Calc uses the symbol <code>nan</code> to represent such an
+  <em>indeterminate</em> value. (The name &ldquo;nan&rdquo; comes
+  from analogy with the &ldquo;NAN&rdquo; concept of IEEE standard
+  arithmetic; it stands for &ldquo;Not A Number.&rdquo; This is
+  somewhat of a misnomer, since <code>nan</code> <em>does</em>
+  stand for some number or infinity, it&rsquo;s just that
+  <em>which</em> number it stands for cannot be determined.) In
+  Calc&rsquo;s notation, &lsquo;<samp>0 * inf = nan</samp>&rsquo;
+  and &lsquo;<samp>inf / inf = nan</samp>&rsquo;. A few other
+  common indeterminate expressions are &lsquo;<samp>inf -
+  inf</samp>&rsquo; and &lsquo;<samp>inf ^ 0</samp>&rsquo;. Also,
+  &lsquo;<samp>0 / 0 = nan</samp>&rsquo; if you have turned on
+  Infinite mode (as described above).</p>
+
+  <p>Infinities are especially useful as parts of
+  <em>intervals</em>. See <a href=
+  "Interval-Forms.html#Interval-Forms">Interval Forms</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Vectors-and-Matrices.html#Vectors-and-Matrices" accesskey="n"
+    rel="next">Vectors and Matrices</a>, Previous: <a href=
+    "Complex-Numbers.html#Complex-Numbers" accesskey="p" rel=
+    "prev">Complex Numbers</a>, Up: <a href=
+    "Data-Types.html#Data-Types" accesskey="u" rel="up">Data
+    Types</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

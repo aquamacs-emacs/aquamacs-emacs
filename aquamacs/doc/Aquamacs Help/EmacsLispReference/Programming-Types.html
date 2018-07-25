@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,120 +19,312 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Programming Types</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Programming Types">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Programming Types">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lisp-Data-Types.html#Lisp-Data-Types" rel="up" title="Lisp Data Types">
-<link href="Integer-Type.html#Integer-Type" rel="next" title="Integer Type">
-<link href="Comments.html#Comments" rel="prev" title="Comments">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Programming Types</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Programming Types" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Programming Types" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lisp-Data-Types.html#Lisp-Data-Types" rel="up" title=
+  "Lisp Data Types" />
+  <link href="Integer-Type.html#Integer-Type" rel="next" title=
+  "Integer Type" />
+  <link href="Comments.html#Comments" rel="prev" title=
+  "Comments" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Programming-Types" id="Programming-Types"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Editing-Types.html#Editing-Types" accesskey=
+    "n" rel="next">Editing Types</a>, Previous: <a href=
+    "Comments.html#Comments" accesskey="p" rel="prev">Comments</a>,
+    Up: <a href="Lisp-Data-Types.html#Lisp-Data-Types" accesskey=
+    "u" rel="up">Lisp Data Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Programming-Types-1" id="Programming-Types-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Programming-Types"></a>
-<div class="header">
-<p>
-Next: <a href="Editing-Types.html#Editing-Types" accesskey="n" rel="next">Editing Types</a>, Previous: <a href="Comments.html#Comments" accesskey="p" rel="prev">Comments</a>, Up: <a href="Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel="up">Lisp Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Programming-Types-1"></a>
-<h3 class="section">2.3 Programming Types</h3>
-<a name="index-programming-types"></a>
+  <h3 class="section">2.3 Programming Types</h3><a name=
+  "index-programming-types" id="index-programming-types"></a>
 
-<p>There are two general categories of types in Emacs Lisp: those having
-to do with Lisp programming, and those having to do with editing.  The
-former exist in many Lisp implementations, in one form or another.  The
-latter are unique to Emacs Lisp.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Integer-Type.html#Integer-Type" accesskey="1">Integer Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Numbers without fractional parts.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Floating_002dPoint-Type.html#Floating_002dPoint-Type" accesskey="2">Floating-Point Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Numbers with fractional parts and with a large range.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Character-Type.html#Character-Type" accesskey="3">Character Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The representation of letters, numbers and
-                        control characters.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Symbol-Type.html#Symbol-Type" accesskey="4">Symbol Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A multi-use object that refers to a function,
-                        variable, or property list, and has a unique identity.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Sequence-Type.html#Sequence-Type" accesskey="5">Sequence Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Both lists and arrays are classified as sequences.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Cons-Cell-Type.html#Cons-Cell-Type" accesskey="6">Cons Cell Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Cons cells, and lists (which are made from cons cells).
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Array-Type.html#Array-Type" accesskey="7">Array Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Arrays include strings and vectors.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="String-Type.html#String-Type" accesskey="8">String Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An (efficient) array of characters.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Vector-Type.html#Vector-Type" accesskey="9">Vector Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">One-dimensional arrays.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Char_002dTable-Type.html#Char_002dTable-Type">Char-Table Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">One-dimensional sparse arrays indexed by characters.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Bool_002dVector-Type.html#Bool_002dVector-Type">Bool-Vector Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">One-dimensional arrays of <code>t</code> or <code>nil</code>.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Hash-Table-Type.html#Hash-Table-Type">Hash Table Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Super-fast lookup tables.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Function-Type.html#Function-Type">Function Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A piece of executable code you can call from elsewhere.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Macro-Type.html#Macro-Type">Macro Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A method of expanding an expression into another
-                          expression, more fundamental but less pretty.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Primitive-Function-Type.html#Primitive-Function-Type">Primitive Function Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A function written in C, callable from Lisp.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Byte_002dCode-Type.html#Byte_002dCode-Type">Byte-Code Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A function written in Lisp, then compiled.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Autoload-Type.html#Autoload-Type">Autoload Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A type used for automatically loading seldom-used
-                        functions.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Finalizer-Type.html#Finalizer-Type">Finalizer Type</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Runs code when no longer reachable.
-</td></tr>
-<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
-</pre></th></tr></table>
+  <p>There are two general categories of types in Emacs Lisp: those
+  having to do with Lisp programming, and those having to do with
+  editing. The former exist in many Lisp implementations, in one
+  form or another. The latter are unique to Emacs Lisp.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Editing-Types.html#Editing-Types" accesskey="n" rel="next">Editing Types</a>, Previous: <a href="Comments.html#Comments" accesskey="p" rel="prev">Comments</a>, Up: <a href="Lisp-Data-Types.html#Lisp-Data-Types" accesskey="u" rel="up">Lisp Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Integer-Type.html#Integer-Type" accesskey="1">Integer
+      Type</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Numbers without fractional
+      parts.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Floating_002dPoint-Type.html#Floating_002dPoint-Type"
+      accesskey="2">Floating-Point Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Numbers with fractional parts
+      and with a large range.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Character-Type.html#Character-Type" accesskey="3">Character
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">The representation of letters,
+      numbers and control characters.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Symbol-Type.html#Symbol-Type" accesskey="4">Symbol
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A multi-use object that refers
+      to a function, variable, or property list, and has a unique
+      identity.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Sequence-Type.html#Sequence-Type" accesskey="5">Sequence
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Both lists and arrays are
+      classified as sequences.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Cons-Cell-Type.html#Cons-Cell-Type" accesskey="6">Cons Cell
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Cons cells, and lists (which
+      are made from cons cells).</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Array-Type.html#Array-Type" accesskey="7">Array
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Arrays include strings and
+      vectors.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "String-Type.html#String-Type" accesskey="8">String
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">An (efficient) array of
+      characters.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Vector-Type.html#Vector-Type" accesskey="9">Vector
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">One-dimensional arrays.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Char_002dTable-Type.html#Char_002dTable-Type">Char-Table
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">One-dimensional sparse arrays
+      indexed by characters.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Bool_002dVector-Type.html#Bool_002dVector-Type">Bool-Vector
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">One-dimensional arrays of
+      <code>t</code> or <code>nil</code>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Hash-Table-Type.html#Hash-Table-Type">Hash Table
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Super-fast lookup tables.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Function-Type.html#Function-Type">Function Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A piece of executable code you
+      can call from elsewhere.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Macro-Type.html#Macro-Type">Macro Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A method of expanding an
+      expression into another expression, more fundamental but less
+      pretty.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Primitive-Function-Type.html#Primitive-Function-Type">Primitive
+      Function Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A function written in C,
+      callable from Lisp.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Byte_002dCode-Type.html#Byte_002dCode-Type">Byte-Code
+      Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A function written in Lisp,
+      then compiled.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Autoload-Type.html#Autoload-Type">Autoload Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A type used for automatically
+      loading seldom-used functions.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Finalizer-Type.html#Finalizer-Type">Finalizer Type</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Runs code when no longer
+      reachable.</td>
+    </tr>
+
+    <tr>
+      <th colspan="3" align="left" valign="top">
+        <pre class="menu-comment">
+</pre>
+      </th>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Editing-Types.html#Editing-Types" accesskey=
+    "n" rel="next">Editing Types</a>, Previous: <a href=
+    "Comments.html#Comments" accesskey="p" rel="prev">Comments</a>,
+    Up: <a href="Lisp-Data-Types.html#Lisp-Data-Types" accesskey=
+    "u" rel="up">Lisp Data Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

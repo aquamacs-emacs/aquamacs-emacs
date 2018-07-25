@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2008, 2010-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,77 +14,110 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Lisp Regression Testing: Fixtures and Test Suites</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Lisp Regression Testing: Fixtures and Test Suites">
-<meta name="keywords" content="Emacs Lisp Regression Testing: Fixtures and Test Suites">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Other-Testing-Concepts.html#Other-Testing-Concepts" rel="up" title="Other Testing Concepts">
-<link href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" rel="next" title="GNU Free Documentation License">
-<link href="Mocks-and-Stubs.html#Mocks-and-Stubs" rel="prev" title="Mocks and Stubs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Lisp Regression Testing: Fixtures and Test
+  Suites</title>
+  <meta name="description" content=
+  "Emacs Lisp Regression Testing: Fixtures and Test Suites" />
+  <meta name="keywords" content=
+  "Emacs Lisp Regression Testing: Fixtures and Test Suites" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Other-Testing-Concepts.html#Other-Testing-Concepts"
+  rel="up" title="Other Testing Concepts" />
+  <link href=
+  "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+  rel="next" title="GNU Free Documentation License" />
+  <link href="Mocks-and-Stubs.html#Mocks-and-Stubs" rel="prev"
+  title="Mocks and Stubs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Fixtures-and-Test-Suites"></a>
-<div class="header">
-<p>
-Previous: <a href="Mocks-and-Stubs.html#Mocks-and-Stubs" accesskey="p" rel="prev">Mocks and Stubs</a>, Up: <a href="Other-Testing-Concepts.html#Other-Testing-Concepts" accesskey="u" rel="up">Other Testing Concepts</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Fixtures-and-Test-Suites-1"></a>
-<h3 class="section">6.2 Fixtures and Test Suites</h3>
+<body lang="en" xml:lang="en">
+  <a name="Fixtures-and-Test-Suites" id=
+  "Fixtures-and-Test-Suites"></a>
 
-<p>In many ways, ERT is similar to frameworks for other languages like
-SUnit or JUnit.  However, two features commonly found in such
-frameworks are notably absent from ERT: fixtures and test suites.
-</p>
-<p>Fixtures are mainly used (e.g., in SUnit or JUnit) to provide an
-environment for a set of tests, and consist of set-up and tear-down
-functions.
-</p>
-<p>While fixtures are a useful syntactic simplification in other
-languages, this does not apply to Lisp, where higher-order functions
-and <code>unwind-protect</code> are available.  One way to implement and use a
-fixture in ERT is
-</p>
-<div class="lisp">
-<pre class="lisp">(defun my-fixture (body)
+  <div class="header">
+    <p>Previous: <a href="Mocks-and-Stubs.html#Mocks-and-Stubs"
+    accesskey="p" rel="prev">Mocks and Stubs</a>, Up: <a href=
+    "Other-Testing-Concepts.html#Other-Testing-Concepts" accesskey=
+    "u" rel="up">Other Testing Concepts</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Fixtures-and-Test-Suites-1" id=
+  "Fixtures-and-Test-Suites-1"></a>
+
+  <h3 class="section">6.2 Fixtures and Test Suites</h3>
+
+  <p>In many ways, ERT is similar to frameworks for other languages
+  like SUnit or JUnit. However, two features commonly found in such
+  frameworks are notably absent from ERT: fixtures and test
+  suites.</p>
+
+  <p>Fixtures are mainly used (e.g., in SUnit or JUnit) to provide
+  an environment for a set of tests, and consist of set-up and
+  tear-down functions.</p>
+
+  <p>While fixtures are a useful syntactic simplification in other
+  languages, this does not apply to Lisp, where higher-order
+  functions and <code>unwind-protect</code> are available. One way
+  to implement and use a fixture in ERT is</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(defun my-fixture (body)
   (unwind-protect
       (progn [set up]
              (funcall body))
@@ -92,45 +127,52 @@ fixture in ERT is
   (my-fixture
    (lambda ()
      [test code])))
-</pre></div>
+</pre>
+  </div>
 
-<p>(Another way would be a <code>with-my-fixture</code> macro.)  This solves
-the set-up and tear-down part, and additionally allows any test
-to use any combination of fixtures, so it is more flexible than what
-other tools typically allow.
-</p>
-<p>If the test needs access to the environment the fixture sets up, the
-fixture can be modified to pass arguments to the body.
-</p>
-<p>These are well-known Lisp techniques.  Special syntax for them could
-be added but would provide only a minor simplification.
-</p>
-<p>(If you are interested in such syntax, note that splitting set-up and
-tear-down into separate functions, like *Unit tools usually do, makes
-it impossible to establish dynamic <code>let</code> bindings as part of the
-fixture.  So, blindly imitating the way fixtures are implemented in
-other languages would be counter-productive in Lisp.)
-</p>
-<p>The purpose of test suites is to group related tests together.
-</p>
-<p>The most common use of this is to run just the tests for one
-particular module.  Since symbol prefixes are the usual way of
-separating module namespaces in Emacs Lisp, test selectors already
-solve this by allowing regexp matching on test names; e.g., the
-selector <code>&quot;^ert-&quot;</code> selects ERT&rsquo;s self-tests.
-</p>
-<p>Other uses include grouping tests by their expected execution time,
-e.g., to run quick tests during interactive development and slow tests less
-often.  This can be achieved with the <code>:tag</code> argument to
-<code>ert-deftest</code> and <code>tag</code> test selectors.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Mocks-and-Stubs.html#Mocks-and-Stubs" accesskey="p" rel="prev">Mocks and Stubs</a>, Up: <a href="Other-Testing-Concepts.html#Other-Testing-Concepts" accesskey="u" rel="up">Other Testing Concepts</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+  <p>(Another way would be a <code>with-my-fixture</code> macro.)
+  This solves the set-up and tear-down part, and additionally
+  allows any test to use any combination of fixtures, so it is more
+  flexible than what other tools typically allow.</p>
 
+  <p>If the test needs access to the environment the fixture sets
+  up, the fixture can be modified to pass arguments to the
+  body.</p>
 
+  <p>These are well-known Lisp techniques. Special syntax for them
+  could be added but would provide only a minor simplification.</p>
 
+  <p>(If you are interested in such syntax, note that splitting
+  set-up and tear-down into separate functions, like *Unit tools
+  usually do, makes it impossible to establish dynamic
+  <code>let</code> bindings as part of the fixture. So, blindly
+  imitating the way fixtures are implemented in other languages
+  would be counter-productive in Lisp.)</p>
+
+  <p>The purpose of test suites is to group related tests
+  together.</p>
+
+  <p>The most common use of this is to run just the tests for one
+  particular module. Since symbol prefixes are the usual way of
+  separating module namespaces in Emacs Lisp, test selectors
+  already solve this by allowing regexp matching on test names;
+  e.g., the selector <code>"^ert-"</code> selects ERT&rsquo;s
+  self-tests.</p>
+
+  <p>Other uses include grouping tests by their expected execution
+  time, e.g., to run quick tests during interactive development and
+  slow tests less often. This can be achieved with the
+  <code>:tag</code> argument to <code>ert-deftest</code> and
+  <code>tag</code> test selectors.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Mocks-and-Stubs.html#Mocks-and-Stubs"
+    accesskey="p" rel="prev">Mocks and Stubs</a>, Up: <a href=
+    "Other-Testing-Concepts.html#Other-Testing-Concepts" accesskey=
+    "u" rel="up">Other Testing Concepts</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

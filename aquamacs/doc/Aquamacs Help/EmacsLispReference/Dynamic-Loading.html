@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,128 +19,185 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Dynamic Loading</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Dynamic Loading">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Dynamic Loading">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Byte-Compilation.html#Byte-Compilation" rel="up" title="Byte Compilation">
-<link href="Eval-During-Compile.html#Eval-During-Compile" rel="next" title="Eval During Compile">
-<link href="Docs-and-Compilation.html#Docs-and-Compilation" rel="prev" title="Docs and Compilation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Dynamic Loading</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Dynamic Loading" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Dynamic Loading" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Byte-Compilation.html#Byte-Compilation" rel="up"
+  title="Byte Compilation" />
+  <link href="Eval-During-Compile.html#Eval-During-Compile" rel=
+  "next" title="Eval During Compile" />
+  <link href="Docs-and-Compilation.html#Docs-and-Compilation" rel=
+  "prev" title="Docs and Compilation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Dynamic-Loading" id="Dynamic-Loading"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Eval-During-Compile.html#Eval-During-Compile"
+    accesskey="n" rel="next">Eval During Compile</a>, Previous:
+    <a href="Docs-and-Compilation.html#Docs-and-Compilation"
+    accesskey="p" rel="prev">Docs and Compilation</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Dynamic-Loading-of-Individual-Functions" id=
+  "Dynamic-Loading-of-Individual-Functions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dynamic-Loading"></a>
-<div class="header">
-<p>
-Next: <a href="Eval-During-Compile.html#Eval-During-Compile" accesskey="n" rel="next">Eval During Compile</a>, Previous: <a href="Docs-and-Compilation.html#Docs-and-Compilation" accesskey="p" rel="prev">Docs and Compilation</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Dynamic-Loading-of-Individual-Functions"></a>
-<h3 class="section">16.4 Dynamic Loading of Individual Functions</h3>
+  <h3 class="section">16.4 Dynamic Loading of Individual
+  Functions</h3><a name="index-dynamic-loading-of-functions" id=
+  "index-dynamic-loading-of-functions"></a> <a name=
+  "index-lazy-loading" id="index-lazy-loading"></a>
 
-<a name="index-dynamic-loading-of-functions"></a>
-<a name="index-lazy-loading"></a>
-<p>When you compile a file, you can optionally enable the <em>dynamic
-function loading</em> feature (also known as <em>lazy loading</em>).  With
-dynamic function loading, loading the file doesn&rsquo;t fully read the
-function definitions in the file.  Instead, each function definition
-contains a place-holder which refers to the file.  The first time each
-function is called, it reads the full definition from the file, to
-replace the place-holder.
-</p>
-<p>The advantage of dynamic function loading is that loading the file
-becomes much faster.  This is a good thing for a file which contains
-many separate user-callable functions, if using one of them does not
-imply you will probably also use the rest.  A specialized mode which
-provides many keyboard commands often has that usage pattern: a user may
-invoke the mode, but use only a few of the commands it provides.
-</p>
-<p>The dynamic loading feature has certain disadvantages:
-</p>
-<ul>
-<li> If you delete or move the compiled file after loading it, Emacs can no
-longer load the remaining function definitions not already loaded.
+  <p>When you compile a file, you can optionally enable the
+  <em>dynamic function loading</em> feature (also known as <em>lazy
+  loading</em>). With dynamic function loading, loading the file
+  doesn&rsquo;t fully read the function definitions in the file.
+  Instead, each function definition contains a place-holder which
+  refers to the file. The first time each function is called, it
+  reads the full definition from the file, to replace the
+  place-holder.</p>
 
-</li><li> If you alter the compiled file (such as by compiling a new version),
-then trying to load any function not already loaded will usually yield
-nonsense results.
-</li></ul>
+  <p>The advantage of dynamic function loading is that loading the
+  file becomes much faster. This is a good thing for a file which
+  contains many separate user-callable functions, if using one of
+  them does not imply you will probably also use the rest. A
+  specialized mode which provides many keyboard commands often has
+  that usage pattern: a user may invoke the mode, but use only a
+  few of the commands it provides.</p>
 
-<p>These problems will never happen in normal circumstances with
-installed Emacs files.  But they are quite likely to happen with Lisp
-files that you are changing.  The easiest way to prevent these problems
-is to reload the new compiled file immediately after each recompilation.
-</p>
-<p>The byte compiler uses the dynamic function loading feature if the
-variable <code>byte-compile-dynamic</code> is non-<code>nil</code> at compilation
-time.  Do not set this variable globally, since dynamic loading is
-desirable only for certain files.  Instead, enable the feature for
-specific source files with file-local variable bindings.  For example,
-you could do it by writing this text in the source file&rsquo;s first line:
-</p>
-<div class="example">
-<pre class="example">-*-byte-compile-dynamic: t;-*-
-</pre></div>
+  <p>The dynamic loading feature has certain disadvantages:</p>
 
-<dl>
-<dt><a name="index-byte_002dcompile_002ddynamic"></a>Variable: <strong>byte-compile-dynamic</strong></dt>
-<dd><p>If this is non-<code>nil</code>, the byte compiler generates compiled files
-that are set up for dynamic function loading.
-</p></dd></dl>
+  <ul>
+    <li>If you delete or move the compiled file after loading it,
+    Emacs can no longer load the remaining function definitions not
+    already loaded.</li>
 
-<dl>
-<dt><a name="index-fetch_002dbytecode"></a>Function: <strong>fetch-bytecode</strong> <em>function</em></dt>
-<dd><p>If <var>function</var> is a byte-code function object, this immediately
-finishes loading the byte code of <var>function</var> from its
-byte-compiled file, if it is not fully loaded already.  Otherwise,
-it does nothing.  It always returns <var>function</var>.
-</p></dd></dl>
+    <li>If you alter the compiled file (such as by compiling a new
+    version), then trying to load any function not already loaded
+    will usually yield nonsense results.</li>
+  </ul>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Eval-During-Compile.html#Eval-During-Compile" accesskey="n" rel="next">Eval During Compile</a>, Previous: <a href="Docs-and-Compilation.html#Docs-and-Compilation" accesskey="p" rel="prev">Docs and Compilation</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>These problems will never happen in normal circumstances with
+  installed Emacs files. But they are quite likely to happen with
+  Lisp files that you are changing. The easiest way to prevent
+  these problems is to reload the new compiled file immediately
+  after each recompilation.</p>
 
+  <p>The byte compiler uses the dynamic function loading feature if
+  the variable <code>byte-compile-dynamic</code> is
+  non-<code>nil</code> at compilation time. Do not set this
+  variable globally, since dynamic loading is desirable only for
+  certain files. Instead, enable the feature for specific source
+  files with file-local variable bindings. For example, you could
+  do it by writing this text in the source file&rsquo;s first
+  line:</p>
 
+  <div class="example">
+    <pre class="example">
+-*-byte-compile-dynamic: t;-*-
+</pre>
+  </div>
 
+  <dl>
+    <dt><a name="index-byte_002dcompile_002ddynamic" id=
+    "index-byte_002dcompile_002ddynamic"></a>Variable:
+    <strong>byte-compile-dynamic</strong></dt>
+
+    <dd>
+      <p>If this is non-<code>nil</code>, the byte compiler
+      generates compiled files that are set up for dynamic function
+      loading.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-fetch_002dbytecode" id=
+    "index-fetch_002dbytecode"></a>Function:
+    <strong>fetch-bytecode</strong> <em>function</em></dt>
+
+    <dd>
+      <p>If <var>function</var> is a byte-code function object,
+      this immediately finishes loading the byte code of
+      <var>function</var> from its byte-compiled file, if it is not
+      fully loaded already. Otherwise, it does nothing. It always
+      returns <var>function</var>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Eval-During-Compile.html#Eval-During-Compile"
+    accesskey="n" rel="next">Eval During Compile</a>, Previous:
+    <a href="Docs-and-Compilation.html#Docs-and-Compilation"
+    accesskey="p" rel="prev">Docs and Compilation</a>, Up: <a href=
+    "Byte-Compilation.html#Byte-Compilation" accesskey="u" rel=
+    "up">Byte Compilation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

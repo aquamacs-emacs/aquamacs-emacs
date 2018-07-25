@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,213 +19,307 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Misc Events</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Misc Events">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Misc Events">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Input-Events.html#Input-Events" rel="up" title="Input Events">
-<link href="Event-Examples.html#Event-Examples" rel="next" title="Event Examples">
-<link href="Focus-Events.html#Focus-Events" rel="prev" title="Focus Events">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Misc Events</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Misc Events" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Misc Events" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Input-Events.html#Input-Events" rel="up" title=
+  "Input Events" />
+  <link href="Event-Examples.html#Event-Examples" rel="next" title=
+  "Event Examples" />
+  <link href="Focus-Events.html#Focus-Events" rel="prev" title=
+  "Focus Events" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Misc-Events" id="Misc-Events"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Event-Examples.html#Event-Examples"
+    accesskey="n" rel="next">Event Examples</a>, Previous: <a href=
+    "Focus-Events.html#Focus-Events" accesskey="p" rel="prev">Focus
+    Events</a>, Up: <a href="Input-Events.html#Input-Events"
+    accesskey="u" rel="up">Input Events</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Miscellaneous-System-Events" id=
+  "Miscellaneous-System-Events"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Misc-Events"></a>
-<div class="header">
-<p>
-Next: <a href="Event-Examples.html#Event-Examples" accesskey="n" rel="next">Event Examples</a>, Previous: <a href="Focus-Events.html#Focus-Events" accesskey="p" rel="prev">Focus Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Miscellaneous-System-Events"></a>
-<h4 class="subsection">20.7.10 Miscellaneous System Events</h4>
+  <h4 class="subsection">20.7.10 Miscellaneous System Events</h4>
 
-<p>A few other event types represent occurrences within the system.
-</p>
-<dl compact="compact">
-<dd><a name="index-delete_002dframe-event"></a>
-</dd>
-<dt><code>(delete-frame (<var>frame</var>))</code></dt>
-<dd><p>This kind of event indicates that the user gave the window manager
-a command to delete a particular window, which happens to be an Emacs frame.
-</p>
-<p>The standard definition of the <code>delete-frame</code> event is to delete <var>frame</var>.
-</p>
-<a name="index-iconify_002dframe-event"></a>
-</dd>
-<dt><code>(iconify-frame (<var>frame</var>))</code></dt>
-<dd><p>This kind of event indicates that the user iconified <var>frame</var> using
-the window manager.  Its standard definition is <code>ignore</code>; since the
-frame has already been iconified, Emacs has no work to do.  The purpose
-of this event type is so that you can keep track of such events if you
-want to.
-</p>
-<a name="index-make_002dframe_002dvisible-event"></a>
-</dd>
-<dt><code>(make-frame-visible (<var>frame</var>))</code></dt>
-<dd><p>This kind of event indicates that the user deiconified <var>frame</var> using
-the window manager.  Its standard definition is <code>ignore</code>; since the
-frame has already been made visible, Emacs has no work to do.
-</p>
-<a name="index-wheel_002dup-event"></a>
-<a name="index-wheel_002ddown-event"></a>
-</dd>
-<dt><code>(wheel-up <var>position</var>)</code></dt>
-<dt><code>(wheel-down <var>position</var>)</code></dt>
-<dd><p>These kinds of event are generated by moving a mouse wheel.  The
-<var>position</var> element is a mouse position list (see <a href="Click-Events.html#Click-Events">Click Events</a>), specifying the position of the mouse cursor when the event
-occurred.
-</p>
-<a name="index-mouse_002dwheel_002dup_002devent"></a>
-<a name="index-mouse_002dwheel_002ddown_002devent"></a>
-<p>This kind of event is generated only on some kinds of systems.  On some
-systems, <code>mouse-4</code> and <code>mouse-5</code> are used instead.  For
-portable code, use the variables <code>mouse-wheel-up-event</code> and
-<code>mouse-wheel-down-event</code> defined in <samp>mwheel.el</samp> to determine
-what event types to expect for the mouse wheel.
-</p>
-<a name="index-drag_002dn_002ddrop-event"></a>
-</dd>
-<dt><code>(drag-n-drop <var>position</var> <var>files</var>)</code></dt>
-<dd><p>This kind of event is generated when a group of files is
-selected in an application outside of Emacs, and then dragged and
-dropped onto an Emacs frame.
-</p>
-<p>The element <var>position</var> is a list describing the position of the
-event, in the same format as used in a mouse-click event (see <a href="Click-Events.html#Click-Events">Click Events</a>), and <var>files</var> is the list of file names that were dragged
-and dropped.  The usual way to handle this event is by visiting these
-files.
-</p>
-<p>This kind of event is generated, at present, only on some kinds of
-systems.
-</p>
-<a name="index-help_002decho-event"></a>
-</dd>
-<dt><code>help-echo</code></dt>
-<dd><p>This kind of event is generated when a mouse pointer moves onto a
-portion of buffer text which has a <code>help-echo</code> text property.
-The generated event has this form:
-</p>
-<div class="example">
-<pre class="example">(help-echo <var>frame</var> <var>help</var> <var>window</var> <var>object</var> <var>pos</var>)
-</pre></div>
+  <p>A few other event types represent occurrences within the
+  system.</p>
 
-<p>The precise meaning of the event parameters and the way these
-parameters are used to display the help-echo text are described in
-<a href="Special-Properties.html#Text-help_002decho">Text help-echo</a>.
-</p>
-<a name="index-sigusr1-event"></a>
-<a name="index-sigusr2-event"></a>
-<a name="index-user-signals"></a>
-</dd>
-<dt><code>sigusr1</code></dt>
-<dt><code>sigusr2</code></dt>
-<dd><p>These events are generated when the Emacs process receives
-the signals <code>SIGUSR1</code> and <code>SIGUSR2</code>.  They contain no
-additional data because signals do not carry additional information.
-They can be useful for debugging (see <a href="Error-Debugging.html#Error-Debugging">Error Debugging</a>).
-</p>
-<p>To catch a user signal, bind the corresponding event to an interactive
-command in the <code>special-event-map</code> (see <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>).
-The command is called with no arguments, and the specific signal event is
-available in <code>last-input-event</code>.  For example:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun sigusr-handler ()
+  <dl compact="compact">
+    <dd><a name="index-delete_002dframe-event" id=
+    "index-delete_002dframe-event"></a></dd>
+
+    <dt><code>(delete-frame (<var>frame</var>))</code></dt>
+
+    <dd>
+      <p>This kind of event indicates that the user gave the window
+      manager a command to delete a particular window, which
+      happens to be an Emacs frame.</p>
+
+      <p>The standard definition of the <code>delete-frame</code>
+      event is to delete <var>frame</var>.</p><a name=
+      "index-iconify_002dframe-event" id=
+      "index-iconify_002dframe-event"></a>
+    </dd>
+
+    <dt><code>(iconify-frame (<var>frame</var>))</code></dt>
+
+    <dd>
+      <p>This kind of event indicates that the user iconified
+      <var>frame</var> using the window manager. Its standard
+      definition is <code>ignore</code>; since the frame has
+      already been iconified, Emacs has no work to do. The purpose
+      of this event type is so that you can keep track of such
+      events if you want to.</p><a name=
+      "index-make_002dframe_002dvisible-event" id=
+      "index-make_002dframe_002dvisible-event"></a>
+    </dd>
+
+    <dt><code>(make-frame-visible (<var>frame</var>))</code></dt>
+
+    <dd>
+      <p>This kind of event indicates that the user deiconified
+      <var>frame</var> using the window manager. Its standard
+      definition is <code>ignore</code>; since the frame has
+      already been made visible, Emacs has no work to
+      do.</p><a name="index-wheel_002dup-event" id=
+      "index-wheel_002dup-event"></a> <a name=
+      "index-wheel_002ddown-event" id=
+      "index-wheel_002ddown-event"></a>
+    </dd>
+
+    <dt><code>(wheel-up <var>position</var>)</code></dt>
+
+    <dt><code>(wheel-down <var>position</var>)</code></dt>
+
+    <dd>
+      <p>These kinds of event are generated by moving a mouse
+      wheel. The <var>position</var> element is a mouse position
+      list (see <a href="Click-Events.html#Click-Events">Click
+      Events</a>), specifying the position of the mouse cursor when
+      the event occurred.</p><a name=
+      "index-mouse_002dwheel_002dup_002devent" id=
+      "index-mouse_002dwheel_002dup_002devent"></a> <a name=
+      "index-mouse_002dwheel_002ddown_002devent" id=
+      "index-mouse_002dwheel_002ddown_002devent"></a>
+
+      <p>This kind of event is generated only on some kinds of
+      systems. On some systems, <code>mouse-4</code> and
+      <code>mouse-5</code> are used instead. For portable code, use
+      the variables <code>mouse-wheel-up-event</code> and
+      <code>mouse-wheel-down-event</code> defined in
+      <samp>mwheel.el</samp> to determine what event types to
+      expect for the mouse wheel.</p><a name=
+      "index-drag_002dn_002ddrop-event" id=
+      "index-drag_002dn_002ddrop-event"></a>
+    </dd>
+
+    <dt><code>(drag-n-drop <var>position</var>
+    <var>files</var>)</code></dt>
+
+    <dd>
+      <p>This kind of event is generated when a group of files is
+      selected in an application outside of Emacs, and then dragged
+      and dropped onto an Emacs frame.</p>
+
+      <p>The element <var>position</var> is a list describing the
+      position of the event, in the same format as used in a
+      mouse-click event (see <a href=
+      "Click-Events.html#Click-Events">Click Events</a>), and
+      <var>files</var> is the list of file names that were dragged
+      and dropped. The usual way to handle this event is by
+      visiting these files.</p>
+
+      <p>This kind of event is generated, at present, only on some
+      kinds of systems.</p><a name="index-help_002decho-event" id=
+      "index-help_002decho-event"></a>
+    </dd>
+
+    <dt><code>help-echo</code></dt>
+
+    <dd>
+      <p>This kind of event is generated when a mouse pointer moves
+      onto a portion of buffer text which has a
+      <code>help-echo</code> text property. The generated event has
+      this form:</p>
+
+      <div class="example">
+        <pre class="example">
+(help-echo <var>frame</var> <var>help</var> <var>window</var> <var>object</var> <var>pos</var>)
+</pre>
+      </div>
+
+      <p>The precise meaning of the event parameters and the way
+      these parameters are used to display the help-echo text are
+      described in <a href=
+      "Special-Properties.html#Text-help_002decho">Text
+      help-echo</a>.</p><a name="index-sigusr1-event" id=
+      "index-sigusr1-event"></a> <a name="index-sigusr2-event" id=
+      "index-sigusr2-event"></a> <a name="index-user-signals" id=
+      "index-user-signals"></a>
+    </dd>
+
+    <dt><code>sigusr1</code></dt>
+
+    <dt><code>sigusr2</code></dt>
+
+    <dd>
+      <p>These events are generated when the Emacs process receives
+      the signals <code>SIGUSR1</code> and <code>SIGUSR2</code>.
+      They contain no additional data because signals do not carry
+      additional information. They can be useful for debugging (see
+      <a href="Error-Debugging.html#Error-Debugging">Error
+      Debugging</a>).</p>
+
+      <p>To catch a user signal, bind the corresponding event to an
+      interactive command in the <code>special-event-map</code>
+      (see <a href="Active-Keymaps.html#Active-Keymaps">Active
+      Keymaps</a>). The command is called with no arguments, and
+      the specific signal event is available in
+      <code>last-input-event</code>. For example:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(defun sigusr-handler ()
   (interactive)
-  (message &quot;Caught signal %S&quot; last-input-event))
+  (message "Caught signal %S" last-input-event))
 
 (define-key special-event-map [sigusr1] 'sigusr-handler)
-</pre></div>
+</pre>
+      </div>
 
-<p>To test the signal handler, you can make Emacs send a signal to itself:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(signal-process (emacs-pid) 'sigusr1)
-</pre></div>
+      <p>To test the signal handler, you can make Emacs send a
+      signal to itself:</p>
 
-<a name="index-language_002dchange-event"></a>
-</dd>
-<dt><code>language-change</code></dt>
-<dd><p>This kind of event is generated on MS-Windows when the input language
-has changed.  This typically means that the keyboard keys will send to
-Emacs characters from a different language.  The generated event has
-this form:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(language-change <var>frame</var> <var>codepage</var> <var>language-id</var>)
-</pre></div>
+      <div class="smallexample">
+        <pre class="smallexample">
+(signal-process (emacs-pid) 'sigusr1)
+</pre>
+      </div><a name="index-language_002dchange-event" id=
+      "index-language_002dchange-event"></a>
+    </dd>
 
-<p>Here <var>frame</var> is the frame which was current when the input
-language changed; <var>codepage</var> is the new codepage number; and
-<var>language-id</var> is the numerical ID of the new input language.  The
-coding-system (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>) that corresponds to
-<var>codepage</var> is <code>cp<var>codepage</var></code> or
-<code>windows-<var>codepage</var></code>.  To convert <var>language-id</var> to a
-string (e.g., to use it for various language-dependent features, such
-as <code>set-language-environment</code>), use the
-<code>w32-get-locale-info</code> function, like this:
-</p>
-<div class="smallexample">
-<pre class="smallexample">;; Get the abbreviated language name, such as &quot;ENU&quot; for English
+    <dt><code>language-change</code></dt>
+
+    <dd>
+      <p>This kind of event is generated on MS-Windows when the
+      input language has changed. This typically means that the
+      keyboard keys will send to Emacs characters from a different
+      language. The generated event has this form:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(language-change <var>frame</var> <var>codepage</var> <var>language-id</var>)
+</pre>
+      </div>
+
+      <p>Here <var>frame</var> is the frame which was current when
+      the input language changed; <var>codepage</var> is the new
+      codepage number; and <var>language-id</var> is the numerical
+      ID of the new input language. The coding-system (see <a href=
+      "Coding-Systems.html#Coding-Systems">Coding Systems</a>) that
+      corresponds to <var>codepage</var> is
+      <code>cp<var>codepage</var></code> or
+      <code>windows-<var>codepage</var></code>. To convert
+      <var>language-id</var> to a string (e.g., to use it for
+      various language-dependent features, such as
+      <code>set-language-environment</code>), use the
+      <code>w32-get-locale-info</code> function, like this:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+;; Get the abbreviated language name, such as "ENU" for English
 (w32-get-locale-info language-id)
 ;; Get the full English name of the language,
-;; such as &quot;English (United States)&quot;
+;; such as "English (United States)"
 (w32-get-locale-info language-id 4097)
 ;; Get the full localized name of the language
 (w32-get-locale-info language-id t)
-</pre></div>
-</dd>
-</dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>If one of these events arrives in the middle of a key sequence&mdash;that
-is, after a prefix key&mdash;then Emacs reorders the events so that this
-event comes either before or after the multi-event key sequence, not
-within it.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Event-Examples.html#Event-Examples" accesskey="n" rel="next">Event Examples</a>, Previous: <a href="Focus-Events.html#Focus-Events" accesskey="p" rel="prev">Focus Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>If one of these events arrives in the middle of a key
+  sequence&mdash;that is, after a prefix key&mdash;then Emacs
+  reorders the events so that this event comes either before or
+  after the multi-event key sequence, not within it.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Event-Examples.html#Event-Examples"
+    accesskey="n" rel="next">Event Examples</a>, Previous: <a href=
+    "Focus-Events.html#Focus-Events" accesskey="p" rel="prev">Focus
+    Events</a>, Up: <a href="Input-Events.html#Input-Events"
+    accesskey="u" rel="up">Input Events</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

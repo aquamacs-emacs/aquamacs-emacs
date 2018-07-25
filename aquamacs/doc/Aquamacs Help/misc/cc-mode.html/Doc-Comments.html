@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,145 +16,213 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Doc Comments</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Doc Comments">
-<meta name="keywords" content="CC Mode Manual: Doc Comments">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Font-Locking.html#Font-Locking" rel="up" title="Font Locking">
-<link href="AWK-Mode-Font-Locking.html#AWK-Mode-Font-Locking" rel="next" title="AWK Mode Font Locking">
-<link href="Faces.html#Faces" rel="prev" title="Faces">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Doc Comments</title>
+  <meta name="description" content=
+  "CC Mode Manual: Doc Comments" />
+  <meta name="keywords" content="CC Mode Manual: Doc Comments" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Font-Locking.html#Font-Locking" rel="up" title=
+  "Font Locking" />
+  <link href="AWK-Mode-Font-Locking.html#AWK-Mode-Font-Locking"
+  rel="next" title="AWK Mode Font Locking" />
+  <link href="Faces.html#Faces" rel="prev" title="Faces" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Doc-Comments"></a>
-<div class="header">
-<p>
-Next: <a href="AWK-Mode-Font-Locking.html#AWK-Mode-Font-Locking" accesskey="n" rel="next">AWK Mode Font Locking</a>, Previous: <a href="Faces.html#Faces" accesskey="p" rel="prev">Faces</a>, Up: <a href="Font-Locking.html#Font-Locking" accesskey="u" rel="up">Font Locking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Documentation-Comments"></a>
-<h3 class="section">5.3 Documentation Comments</h3>
-<a name="index-documentation-comments"></a>
+<body lang="en" xml:lang="en">
+  <a name="Doc-Comments" id="Doc-Comments"></a>
 
-<p>There are various tools to supply documentation in the source as
-specially structured comments, e.g., the standard Javadoc tool in Java.
-CC Mode provides an extensible mechanism to fontify such comments and
-the special markup inside them.
-</p>
-<dl>
-<dt><a name="index-c_002ddoc_002dcomment_002dstyle"></a>User Option: <strong>c-doc-comment-style</strong></dt>
-<dd><a name="index-doc_002dcomment_002dstyle-_0028c_002d_0029"></a>
-<p>This is a style variable that specifies which documentation comment
-style to recognize, e.g., <code>javadoc</code> for Javadoc comments.
-</p>
-<p>The value may also be a list of styles, in which case all of them are
-recognized simultaneously (presumably with markup cues that don&rsquo;t
-conflict).
-</p>
-<p>The value may also be an association list to specify different comment
-styles for different languages.  The symbol for the major mode is then
-looked up in the alist, and the value of that element is interpreted as
-above if found.  If it isn&rsquo;t found then the symbol <code>other</code> is looked up
-and its value is used instead.
-</p>
-<p>The default value for <code>c-doc-comment-style</code> is
-<code><span class="nolinebreak">((java-mode</span>&nbsp;.&nbsp;javadoc)&nbsp;<span class="nolinebreak">(pike-mode</span>&nbsp;.&nbsp;autodoc)&nbsp;<span class="nolinebreak">(c-mode</span>&nbsp;.&nbsp;gtkdoc))</code><!-- /@w -->.
-</p>
-<p>Note that CC Mode uses this variable to set other variables that
-handle fontification etc.  That&rsquo;s done at mode initialization or when
-you switch to a style which sets this variable.  Thus, if you change it
-in some other way, e.g., interactively in a CC Mode buffer, you will need
-to do <kbd>M-x java-mode</kbd> (or whatever mode you&rsquo;re currently using) to
-reinitialize.
-</p>
-<a name="index-c_002dsetup_002ddoc_002dcomment_002dstyle"></a>
-<a name="index-setup_002ddoc_002dcomment_002dstyle-_0028c_002d_0029"></a>
-<p>Note also that when CC Mode starts up, the other variables are
-modified before the mode hooks are run.  If you change this variable in
-a mode hook, you&rsquo;ll have to call <code>c-setup-doc-comment-style</code>
-afterwards to redo that work.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "AWK-Mode-Font-Locking.html#AWK-Mode-Font-Locking" accesskey=
+    "n" rel="next">AWK Mode Font Locking</a>, Previous: <a href=
+    "Faces.html#Faces" accesskey="p" rel="prev">Faces</a>, Up:
+    <a href="Font-Locking.html#Font-Locking" accesskey="u" rel=
+    "up">Font Locking</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Documentation-Comments" id="Documentation-Comments"></a>
 
-<p>CC Mode currently provides handing of the following doc comment
-styles:
-</p>
-<dl compact="compact">
-<dt><code>javadoc</code></dt>
-<dd><a name="index-Javadoc-markup-1"></a>
-<p>Javadoc comments, the standard tool in Java.
-</p>
-</dd>
-<dt><code>autodoc</code></dt>
-<dd><a name="index-Pike-autodoc-markup-1"></a>
-<p>For Pike autodoc markup, the standard in Pike.
-</p>
-</dd>
-<dt><code>gtkdoc</code></dt>
-<dd><a name="index-GtkDoc-markup"></a>
-<p>For GtkDoc markup, widely used in the Gnome community.
-</p></dd>
-</dl>
+  <h3 class="section">5.3 Documentation Comments</h3><a name=
+  "index-documentation-comments" id=
+  "index-documentation-comments"></a>
 
-<p>The above is by no means complete.  If you&rsquo;d like to see support for
-other doc comment styles, please let us know (see <a href="Mailing-Lists-and-Bug-Reports.html#Mailing-Lists-and-Bug-Reports">Mailing Lists and Bug Reports</a>).
-</p>
-<p>You can also write your own doc comment fontification support to use
-with <code>c-doc-comment-style</code>: Supply a variable or function
-<code>*-font-lock-keywords</code> where &lsquo;<samp>*</samp>&rsquo; is the name you want to use
-in <code>c-doc-comment-style</code>.  If it&rsquo;s a variable, it&rsquo;s prepended to
-<code>font-lock-keywords</code>.  If it&rsquo;s a function, it&rsquo;s called at mode
-initialization and the result is prepended.  For an example, see
-<code>javadoc-font-lock-keywords</code> in <samp>cc-fonts.el</samp>.
-</p>
-<p>If you add support for another doc comment style, please consider
-contributing it: send a note to <a href="mailto:bug-cc-mode@gnu.org">bug-cc-mode@gnu.org</a>.
-</p>
+  <p>There are various tools to supply documentation in the source
+  as specially structured comments, e.g., the standard Javadoc tool
+  in Java. CC Mode provides an extensible mechanism to fontify such
+  comments and the special markup inside them.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="AWK-Mode-Font-Locking.html#AWK-Mode-Font-Locking" accesskey="n" rel="next">AWK Mode Font Locking</a>, Previous: <a href="Faces.html#Faces" accesskey="p" rel="prev">Faces</a>, Up: <a href="Font-Locking.html#Font-Locking" accesskey="u" rel="up">Font Locking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-c_002ddoc_002dcomment_002dstyle" id=
+    "index-c_002ddoc_002dcomment_002dstyle"></a>User Option:
+    <strong>c-doc-comment-style</strong></dt>
 
+    <dd>
+      <a name="index-doc_002dcomment_002dstyle-_0028c_002d_0029"
+      id="index-doc_002dcomment_002dstyle-_0028c_002d_0029"></a>
 
+      <p>This is a style variable that specifies which
+      documentation comment style to recognize, e.g.,
+      <code>javadoc</code> for Javadoc comments.</p>
 
+      <p>The value may also be a list of styles, in which case all
+      of them are recognized simultaneously (presumably with markup
+      cues that don&rsquo;t conflict).</p>
+
+      <p>The value may also be an association list to specify
+      different comment styles for different languages. The symbol
+      for the major mode is then looked up in the alist, and the
+      value of that element is interpreted as above if found. If it
+      isn&rsquo;t found then the symbol <code>other</code> is
+      looked up and its value is used instead.</p>
+
+      <p>The default value for <code>c-doc-comment-style</code> is
+      <code><span class=
+      "nolinebreak">((java-mode</span>&nbsp;.&nbsp;javadoc)&nbsp;<span class="nolinebreak">(pike-mode</span>&nbsp;.&nbsp;autodoc)&nbsp;<span class="nolinebreak">(c-mode</span>&nbsp;.&nbsp;gtkdoc))</code><!-- /@w -->.</p>
+
+      <p>Note that CC Mode uses this variable to set other
+      variables that handle fontification etc. That&rsquo;s done at
+      mode initialization or when you switch to a style which sets
+      this variable. Thus, if you change it in some other way,
+      e.g., interactively in a CC Mode buffer, you will need to do
+      <kbd>M-x java-mode</kbd> (or whatever mode you&rsquo;re
+      currently using) to reinitialize.</p><a name=
+      "index-c_002dsetup_002ddoc_002dcomment_002dstyle" id=
+      "index-c_002dsetup_002ddoc_002dcomment_002dstyle"></a>
+      <a name=
+      "index-setup_002ddoc_002dcomment_002dstyle-_0028c_002d_0029"
+      id=
+      "index-setup_002ddoc_002dcomment_002dstyle-_0028c_002d_0029"></a>
+
+      <p>Note also that when CC Mode starts up, the other variables
+      are modified before the mode hooks are run. If you change
+      this variable in a mode hook, you&rsquo;ll have to call
+      <code>c-setup-doc-comment-style</code> afterwards to redo
+      that work.</p>
+    </dd>
+  </dl>
+
+  <p>CC Mode currently provides handing of the following doc
+  comment styles:</p>
+
+  <dl compact="compact">
+    <dt><code>javadoc</code></dt>
+
+    <dd>
+      <a name="index-Javadoc-markup-1" id=
+      "index-Javadoc-markup-1"></a>
+
+      <p>Javadoc comments, the standard tool in Java.</p>
+    </dd>
+
+    <dt><code>autodoc</code></dt>
+
+    <dd>
+      <a name="index-Pike-autodoc-markup-1" id=
+      "index-Pike-autodoc-markup-1"></a>
+
+      <p>For Pike autodoc markup, the standard in Pike.</p>
+    </dd>
+
+    <dt><code>gtkdoc</code></dt>
+
+    <dd>
+      <a name="index-GtkDoc-markup" id="index-GtkDoc-markup"></a>
+
+      <p>For GtkDoc markup, widely used in the Gnome community.</p>
+    </dd>
+  </dl>
+
+  <p>The above is by no means complete. If you&rsquo;d like to see
+  support for other doc comment styles, please let us know (see
+  <a href=
+  "Mailing-Lists-and-Bug-Reports.html#Mailing-Lists-and-Bug-Reports">
+  Mailing Lists and Bug Reports</a>).</p>
+
+  <p>You can also write your own doc comment fontification support
+  to use with <code>c-doc-comment-style</code>: Supply a variable
+  or function <code>*-font-lock-keywords</code> where
+  &lsquo;<samp>*</samp>&rsquo; is the name you want to use in
+  <code>c-doc-comment-style</code>. If it&rsquo;s a variable,
+  it&rsquo;s prepended to <code>font-lock-keywords</code>. If
+  it&rsquo;s a function, it&rsquo;s called at mode initialization
+  and the result is prepended. For an example, see
+  <code>javadoc-font-lock-keywords</code> in
+  <samp>cc-fonts.el</samp>.</p>
+
+  <p>If you add support for another doc comment style, please
+  consider contributing it: send a note to <a href=
+  "mailto:bug-cc-mode@gnu.org">bug-cc-mode@gnu.org</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "AWK-Mode-Font-Locking.html#AWK-Mode-Font-Locking" accesskey=
+    "n" rel="next">AWK Mode Font Locking</a>, Previous: <a href=
+    "Faces.html#Faces" accesskey="p" rel="prev">Faces</a>, Up:
+    <a href="Font-Locking.html#Font-Locking" accesskey="u" rel=
+    "up">Font Locking</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

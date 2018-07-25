@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,196 +14,303 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to
 copy and modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>TRAMP User Manual: Customizing Completion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="TRAMP User Manual: Customizing Completion">
-<meta name="keywords" content="TRAMP User Manual: Customizing Completion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Configuration.html#Configuration" rel="up" title="Configuration">
-<link href="Password-handling.html#Password-handling" rel="next" title="Password handling">
-<link href="Customizing-Methods.html#Customizing-Methods" rel="prev" title="Customizing Methods">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>TRAMP User Manual: Customizing Completion</title>
+  <meta name="description" content=
+  "TRAMP User Manual: Customizing Completion" />
+  <meta name="keywords" content=
+  "TRAMP User Manual: Customizing Completion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Configuration.html#Configuration" rel="up" title=
+  "Configuration" />
+  <link href="Password-handling.html#Password-handling" rel="next"
+  title="Password handling" />
+  <link href="Customizing-Methods.html#Customizing-Methods" rel=
+  "prev" title="Customizing Methods" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Customizing-Completion"></a>
-<div class="header">
-<p>
-Next: <a href="Password-handling.html#Password-handling" accesskey="n" rel="next">Password handling</a>, Previous: <a href="Customizing-Methods.html#Customizing-Methods" accesskey="p" rel="prev">Customizing Methods</a>, Up: <a href="Configuration.html#Configuration" accesskey="u" rel="up">Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Selecting-config-files-for-user_002fhost-name-completion"></a>
-<h3 class="section">4.11 Selecting config files for user/host name completion</h3>
-<a name="index-customizing-completion"></a>
-<a name="index-selecting-config-files"></a>
-<a name="index-tramp_002dcompletion_002dfunction_002dalist"></a>
+<body lang="en" xml:lang="en">
+  <a name="Customizing-Completion" id="Customizing-Completion"></a>
 
-<p><code>tramp-completion-function-alist</code> uses predefined files for user
-and host name completion (see <a href="File-name-completion.html#File-name-completion">File name completion</a>).  For each
-method, it keeps a set of configuration files and a function that can
-parse that file.  Each entry in <code>tramp-completion-function-alist</code>
-is of the form (<var>method</var> <var>pair1</var> <var>pair2</var> &hellip;).
-</p>
-<p>Each <var>pair</var> is composed of (<var>function</var> <var>file</var>).
-<var>function</var> is responsible for extracting user names and host names
-from <var>file</var> for completion.  There are two functions which access
-this variable:
-</p>
-<dl>
-<dt><a name="index-tramp_002dget_002dcompletion_002dfunction"></a>Function: <strong>tramp-get-completion-function</strong> <em>method</em></dt>
-<dd><p>This function returns the list of completion functions for <var>method</var>.
-</p>
-<p>Example:
-</p><div class="example">
-<pre class="example">(tramp-get-completion-function &quot;rsh&quot;)
+  <div class="header">
+    <p>Next: <a href="Password-handling.html#Password-handling"
+    accesskey="n" rel="next">Password handling</a>, Previous:
+    <a href="Customizing-Methods.html#Customizing-Methods"
+    accesskey="p" rel="prev">Customizing Methods</a>, Up: <a href=
+    "Configuration.html#Configuration" accesskey="u" rel=
+    "up">Configuration</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name=
+  "Selecting-config-files-for-user_002fhost-name-completion" id=
+  "Selecting-config-files-for-user_002fhost-name-completion"></a>
 
-     &rArr; ((tramp-parse-rhosts &quot;/etc/hosts.equiv&quot;)
-         (tramp-parse-rhosts &quot;~/.rhosts&quot;))
-</pre></div>
-</dd></dl>
+  <h3 class="section">4.11 Selecting config files for user/host
+  name completion</h3><a name="index-customizing-completion" id=
+  "index-customizing-completion"></a> <a name=
+  "index-selecting-config-files" id=
+  "index-selecting-config-files"></a> <a name=
+  "index-tramp_002dcompletion_002dfunction_002dalist" id=
+  "index-tramp_002dcompletion_002dfunction_002dalist"></a>
 
-<dl>
-<dt><a name="index-tramp_002dset_002dcompletion_002dfunction"></a>Function: <strong>tramp-set-completion-function</strong> <em>method function-list</em></dt>
-<dd><p>This function sets <var>function-list</var> as list of completion functions
-for <var>method</var>.
-</p>
-<p>Example:
-</p><div class="example">
-<pre class="example">(tramp-set-completion-function &quot;ssh&quot;
- '((tramp-parse-sconfig &quot;/etc/ssh_config&quot;)
-   (tramp-parse-sconfig &quot;~/.ssh/config&quot;)))
+  <p><code>tramp-completion-function-alist</code> uses predefined
+  files for user and host name completion (see <a href=
+  "File-name-completion.html#File-name-completion">File name
+  completion</a>). For each method, it keeps a set of configuration
+  files and a function that can parse that file. Each entry in
+  <code>tramp-completion-function-alist</code> is of the form
+  (<var>method</var> <var>pair1</var> <var>pair2</var>
+  &hellip;).</p>
 
-     &rArr; ((tramp-parse-sconfig &quot;/etc/ssh_config&quot;)
-         (tramp-parse-sconfig &quot;~/.ssh/config&quot;))
-</pre></div>
-</dd></dl>
+  <p>Each <var>pair</var> is composed of (<var>function</var>
+  <var>file</var>). <var>function</var> is responsible for
+  extracting user names and host names from <var>file</var> for
+  completion. There are two functions which access this
+  variable:</p>
 
-<p>The following predefined functions parsing configuration files exist:
-</p>
-<dl compact="compact">
-<dt><code>tramp-parse-rhosts</code></dt>
-<dd><a name="index-tramp_002dparse_002drhosts"></a>
+  <dl>
+    <dt><a name="index-tramp_002dget_002dcompletion_002dfunction"
+    id=
+    "index-tramp_002dget_002dcompletion_002dfunction"></a>Function:
+    <strong>tramp-get-completion-function</strong>
+    <em>method</em></dt>
 
-<p>This function parses files which are syntactical equivalent to
-<samp>~/.rhosts</samp>.  It returns both host names and user names, if
-specified.
-</p>
-</dd>
-<dt><code>tramp-parse-shosts</code></dt>
-<dd><a name="index-tramp_002dparse_002dshosts"></a>
+    <dd>
+      <p>This function returns the list of completion functions for
+      <var>method</var>.</p>
 
-<p>This function parses files which are syntactical equivalent to
-<samp>~/.ssh/known_hosts</samp>.  Since there are no user names specified
-in such files, it can return host names only.
-</p>
-</dd>
-<dt><code>tramp-parse-sconfig</code></dt>
-<dd><a name="index-tramp_002dparse_002dshosts-1"></a>
+      <p>Example:</p>
 
-<p>This function returns the host nicknames defined by <code>Host</code> entries
-in <samp>~/.ssh/config</samp> style files.
-</p>
-</dd>
-<dt><code>tramp-parse-shostkeys</code></dt>
-<dd><a name="index-tramp_002dparse_002dshostkeys"></a>
+      <div class="example">
+        <pre class="example">
+(tramp-get-completion-function "rsh")
 
-<p>SSH2 parsing of directories <samp>/etc/ssh2/hostkeys/*</samp> and
-<samp>~/ssh2/hostkeys/*</samp>.  Hosts are coded in file names
-<samp>hostkey_<var>portnumber</var>_<var>host-name</var>.pub</samp>.  User names
-are always <code>nil</code>.
-</p>
-</dd>
-<dt><code>tramp-parse-sknownhosts</code></dt>
-<dd><a name="index-tramp_002dparse_002dshostkeys-1"></a>
+     &rArr; ((tramp-parse-rhosts "/etc/hosts.equiv")
+         (tramp-parse-rhosts "~/.rhosts"))
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p>Another SSH2 style parsing of directories like
-<samp>/etc/ssh2/knownhosts/*</samp> and <samp>~/ssh2/knownhosts/*</samp>.  This
-case, hosts names are coded in file names
-<samp><var>host-name</var>.<var>algorithm</var>.pub</samp>.  User names are always <code>nil</code>.
-</p>
-</dd>
-<dt><code>tramp-parse-hosts</code></dt>
-<dd><a name="index-tramp_002dparse_002dhosts"></a>
+  <dl>
+    <dt><a name="index-tramp_002dset_002dcompletion_002dfunction"
+    id=
+    "index-tramp_002dset_002dcompletion_002dfunction"></a>Function:
+    <strong>tramp-set-completion-function</strong> <em>method
+    function-list</em></dt>
 
-<p>A function dedicated to <samp>/etc/hosts</samp> for host names.
-</p>
-</dd>
-<dt><code>tramp-parse-passwd</code></dt>
-<dd><a name="index-tramp_002dparse_002dpasswd"></a>
+    <dd>
+      <p>This function sets <var>function-list</var> as list of
+      completion functions for <var>method</var>.</p>
 
-<p>A function which parses <samp>/etc/passwd</samp> files for user names.
-</p>
-</dd>
-<dt><code>tramp-parse-netrc</code></dt>
-<dd><a name="index-tramp_002dparse_002dnetrc"></a>
+      <p>Example:</p>
 
-<p>A function which parses <samp>~/.netrc</samp> and <samp>~/.authinfo</samp>-style files.
-</p>
-</dd>
-</dl>
+      <div class="example">
+        <pre class="example">
+(tramp-set-completion-function "ssh"
+ '((tramp-parse-sconfig "/etc/ssh_config")
+   (tramp-parse-sconfig "~/.ssh/config")))
 
-<p>To keep a custom file with custom data in a custom structure, a custom
-function has to be provided.  This function must meet the following
-conventions:
-</p>
-<dl>
-<dt><a name="index-my_002dtramp_002dparse"></a>Function: <strong>my-tramp-parse</strong> <em>file</em></dt>
-<dd><p><var>file</var> must be either a file on the host, or <code>nil</code>.  The
-function must return a list of (<var>user</var> <var>host</var>), which are
-taken as candidates for completion for user and host names.
-</p>
-<p>Example:
-</p><div class="example">
-<pre class="example">(my-tramp-parse &quot;~/.my-tramp-hosts&quot;)
+     &rArr; ((tramp-parse-sconfig "/etc/ssh_config")
+         (tramp-parse-sconfig "~/.ssh/config"))
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-     &rArr; ((nil &quot;toto&quot;) (&quot;daniel&quot; &quot;melancholia&quot;))
-</pre></div>
-</dd></dl>
+  <p>The following predefined functions parsing configuration files
+  exist:</p>
 
+  <dl compact="compact">
+    <dt><code>tramp-parse-rhosts</code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Password-handling.html#Password-handling" accesskey="n" rel="next">Password handling</a>, Previous: <a href="Customizing-Methods.html#Customizing-Methods" accesskey="p" rel="prev">Customizing Methods</a>, Up: <a href="Configuration.html#Configuration" accesskey="u" rel="up">Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name="index-tramp_002dparse_002drhosts" id=
+      "index-tramp_002dparse_002drhosts"></a>
 
+      <p>This function parses files which are syntactical
+      equivalent to <samp>~/.rhosts</samp>. It returns both host
+      names and user names, if specified.</p>
+    </dd>
 
+    <dt><code>tramp-parse-shosts</code></dt>
 
+    <dd>
+      <a name="index-tramp_002dparse_002dshosts" id=
+      "index-tramp_002dparse_002dshosts"></a>
+
+      <p>This function parses files which are syntactical
+      equivalent to <samp>~/.ssh/known_hosts</samp>. Since there
+      are no user names specified in such files, it can return host
+      names only.</p>
+    </dd>
+
+    <dt><code>tramp-parse-sconfig</code></dt>
+
+    <dd>
+      <a name="index-tramp_002dparse_002dshosts-1" id=
+      "index-tramp_002dparse_002dshosts-1"></a>
+
+      <p>This function returns the host nicknames defined by
+      <code>Host</code> entries in <samp>~/.ssh/config</samp> style
+      files.</p>
+    </dd>
+
+    <dt><code>tramp-parse-shostkeys</code></dt>
+
+    <dd>
+      <a name="index-tramp_002dparse_002dshostkeys" id=
+      "index-tramp_002dparse_002dshostkeys"></a>
+
+      <p>SSH2 parsing of directories
+      <samp>/etc/ssh2/hostkeys/*</samp> and
+      <samp>~/ssh2/hostkeys/*</samp>. Hosts are coded in file names
+      <samp>hostkey_<var>portnumber</var>_<var>host-name</var>.pub</samp>.
+      User names are always <code>nil</code>.</p>
+    </dd>
+
+    <dt><code>tramp-parse-sknownhosts</code></dt>
+
+    <dd>
+      <a name="index-tramp_002dparse_002dshostkeys-1" id=
+      "index-tramp_002dparse_002dshostkeys-1"></a>
+
+      <p>Another SSH2 style parsing of directories like
+      <samp>/etc/ssh2/knownhosts/*</samp> and
+      <samp>~/ssh2/knownhosts/*</samp>. This case, hosts names are
+      coded in file names
+      <samp><var>host-name</var>.<var>algorithm</var>.pub</samp>.
+      User names are always <code>nil</code>.</p>
+    </dd>
+
+    <dt><code>tramp-parse-hosts</code></dt>
+
+    <dd>
+      <a name="index-tramp_002dparse_002dhosts" id=
+      "index-tramp_002dparse_002dhosts"></a>
+
+      <p>A function dedicated to <samp>/etc/hosts</samp> for host
+      names.</p>
+    </dd>
+
+    <dt><code>tramp-parse-passwd</code></dt>
+
+    <dd>
+      <a name="index-tramp_002dparse_002dpasswd" id=
+      "index-tramp_002dparse_002dpasswd"></a>
+
+      <p>A function which parses <samp>/etc/passwd</samp> files for
+      user names.</p>
+    </dd>
+
+    <dt><code>tramp-parse-netrc</code></dt>
+
+    <dd>
+      <a name="index-tramp_002dparse_002dnetrc" id=
+      "index-tramp_002dparse_002dnetrc"></a>
+
+      <p>A function which parses <samp>~/.netrc</samp> and
+      <samp>~/.authinfo</samp>-style files.</p>
+    </dd>
+  </dl>
+
+  <p>To keep a custom file with custom data in a custom structure,
+  a custom function has to be provided. This function must meet the
+  following conventions:</p>
+
+  <dl>
+    <dt><a name="index-my_002dtramp_002dparse" id=
+    "index-my_002dtramp_002dparse"></a>Function:
+    <strong>my-tramp-parse</strong> <em>file</em></dt>
+
+    <dd>
+      <p><var>file</var> must be either a file on the host, or
+      <code>nil</code>. The function must return a list of
+      (<var>user</var> <var>host</var>), which are taken as
+      candidates for completion for user and host names.</p>
+
+      <p>Example:</p>
+
+      <div class="example">
+        <pre class="example">
+(my-tramp-parse "~/.my-tramp-hosts")
+
+     &rArr; ((nil "toto") ("daniel" "melancholia"))
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Password-handling.html#Password-handling"
+    accesskey="n" rel="next">Password handling</a>, Previous:
+    <a href="Customizing-Methods.html#Customizing-Methods"
+    accesskey="p" rel="prev">Customizing Methods</a>, Up: <a href=
+    "Configuration.html#Configuration" accesskey="u" rel=
+    "up">Configuration</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This document describes Supercite, an Emacs package for citing and
 attributing replies to mail and news messages.
 
@@ -15,106 +17,151 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Supercite User&rsquo;s Manual: Recognizing Citations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Supercite User&rsquo;s Manual: Recognizing Citations">
-<meta name="keywords" content="Supercite User&rsquo;s Manual: Recognizing Citations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Citations.html#Citations" rel="up" title="Citations">
-<link href="Information-Keys-and-the-Info-Alist.html#Information-Keys-and-the-Info-Alist" rel="next" title="Information Keys and the Info Alist">
-<link href="Citation-Elements.html#Citation-Elements" rel="prev" title="Citation Elements">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Supercite User&rsquo;s Manual: Recognizing
+  Citations</title>
+  <meta name="description" content=
+  "Supercite User&rsquo;s Manual: Recognizing Citations" />
+  <meta name="keywords" content=
+  "Supercite User&rsquo;s Manual: Recognizing Citations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Citations.html#Citations" rel="up" title=
+  "Citations" />
+  <link href=
+  "Information-Keys-and-the-Info-Alist.html#Information-Keys-and-the-Info-Alist"
+  rel="next" title="Information Keys and the Info Alist" />
+  <link href="Citation-Elements.html#Citation-Elements" rel="prev"
+  title="Citation Elements" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Recognizing-Citations"></a>
-<div class="header">
-<p>
-Previous: <a href="Citation-Elements.html#Citation-Elements" accesskey="p" rel="prev">Citation Elements</a>, Up: <a href="Citations.html#Citations" accesskey="u" rel="up">Citations</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Recognizing-Citations-1"></a>
-<h3 class="section">2.2 Recognizing Citations</h3>
+<body lang="en" xml:lang="en">
+  <a name="Recognizing-Citations" id="Recognizing-Citations"></a>
 
-<p>Supercite also recognizes citations in the original article, and can
-transform these already cited lines in a number of ways.  This is how
-Supercite suppresses the multiple citing of non-nested citations.
-Recognition of cited lines is controlled by variables analogous to
-those that make up the citation string as mentioned previously.
-</p>
-<a name="index-sc_002dcitation_002dleader_002dregexp"></a>
-<a name="index-citation_002dleader_002dregexp-_0028sc_002d_0029"></a>
-<a name="index-sc_002dcitation_002ddelimiter_002dregexp"></a>
-<a name="index-citation_002ddelimiter_002dregexp-_0028sc_002d_0029"></a>
-<a name="index-sc_002dcitation_002dseparator_002dregexp"></a>
-<a name="index-citation_002dseparator_002dregexp-_0028sc_002d_0029"></a>
-<a name="index-sc_002dcitation_002droot_002dregexp"></a>
-<a name="index-citation_002droot_002dregexp-_0028sc_002d_0029"></a>
-<a name="index-sc_002dcitation_002dnonnested_002droot_002dregexp"></a>
-<a name="index-citation_002dnonnested_002droot_002dregexp-_0028sc_002d_0029"></a>
+  <div class="header">
+    <p>Previous: <a href="Citation-Elements.html#Citation-Elements"
+    accesskey="p" rel="prev">Citation Elements</a>, Up: <a href=
+    "Citations.html#Citations" accesskey="u" rel="up">Citations</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Recognizing-Citations-1" id=
+  "Recognizing-Citations-1"></a>
 
-<p>The variable <code>sc-citation-leader-regexp</code> describes how citation
-leaders can look, by default it matches any number of spaces or tabs.
-Note that since the lisp function <code>looking-at</code> is used to do the
-matching, if you change this variable it need not start with a leading
-<code>&quot;^&quot;</code>.
-</p>
-<p>Similarly, the variables <code>sc-citation-delimiter-regexp</code> and
-<code>sc-citation-separator-regexp</code> respectively describe how citation
-delimiters and separators can look.  They follow the same rule as
-<code>sc-citation-leader-regexp</code> above.
-</p>
-<p>When Supercite composes a citation string, it provides the attribution
-automatically.  The analogous variable which handles recognition of the
-attribution part of citation strings is <code>sc-citation-root-regexp</code>.
-This variable describes the attribution root for both nested and
-non-nested citations.  By default it can match zero-to-many alphanumeric
-characters (also &ldquo;.&rdquo;, &ldquo;-&rdquo;, and &ldquo;_&rdquo;).  But in some situations,
-Supercite has to determine whether it is looking at a nested or
-non-nested citation.  Thus the variable
-<code>sc-citation-nonnested-root-regexp</code> is used to describe only
-non-nested citation roots.  It is important to remember that if you
-change <code>sc-citation-root-regexp</code> you should always also change
-<code>sc-citation-nonnested-root-regexp</code>.
-</p>
+  <h3 class="section">2.2 Recognizing Citations</h3>
 
+  <p>Supercite also recognizes citations in the original article,
+  and can transform these already cited lines in a number of ways.
+  This is how Supercite suppresses the multiple citing of
+  non-nested citations. Recognition of cited lines is controlled by
+  variables analogous to those that make up the citation string as
+  mentioned previously.</p><a name=
+  "index-sc_002dcitation_002dleader_002dregexp" id=
+  "index-sc_002dcitation_002dleader_002dregexp"></a> <a name=
+  "index-citation_002dleader_002dregexp-_0028sc_002d_0029" id=
+  "index-citation_002dleader_002dregexp-_0028sc_002d_0029"></a>
+  <a name="index-sc_002dcitation_002ddelimiter_002dregexp" id=
+  "index-sc_002dcitation_002ddelimiter_002dregexp"></a> <a name=
+  "index-citation_002ddelimiter_002dregexp-_0028sc_002d_0029" id=
+  "index-citation_002ddelimiter_002dregexp-_0028sc_002d_0029"></a>
+  <a name="index-sc_002dcitation_002dseparator_002dregexp" id=
+  "index-sc_002dcitation_002dseparator_002dregexp"></a> <a name=
+  "index-citation_002dseparator_002dregexp-_0028sc_002d_0029" id=
+  "index-citation_002dseparator_002dregexp-_0028sc_002d_0029"></a>
+  <a name="index-sc_002dcitation_002droot_002dregexp" id=
+  "index-sc_002dcitation_002droot_002dregexp"></a> <a name=
+  "index-citation_002droot_002dregexp-_0028sc_002d_0029" id=
+  "index-citation_002droot_002dregexp-_0028sc_002d_0029"></a>
+  <a name="index-sc_002dcitation_002dnonnested_002droot_002dregexp"
+  id="index-sc_002dcitation_002dnonnested_002droot_002dregexp"></a>
+  <a name=
+  "index-citation_002dnonnested_002droot_002dregexp-_0028sc_002d_0029"
+  id=
+  "index-citation_002dnonnested_002droot_002dregexp-_0028sc_002d_0029">
+  </a>
 
+  <p>The variable <code>sc-citation-leader-regexp</code> describes
+  how citation leaders can look, by default it matches any number
+  of spaces or tabs. Note that since the lisp function
+  <code>looking-at</code> is used to do the matching, if you change
+  this variable it need not start with a leading
+  <code>"^"</code>.</p>
 
+  <p>Similarly, the variables
+  <code>sc-citation-delimiter-regexp</code> and
+  <code>sc-citation-separator-regexp</code> respectively describe
+  how citation delimiters and separators can look. They follow the
+  same rule as <code>sc-citation-leader-regexp</code> above.</p>
+
+  <p>When Supercite composes a citation string, it provides the
+  attribution automatically. The analogous variable which handles
+  recognition of the attribution part of citation strings is
+  <code>sc-citation-root-regexp</code>. This variable describes the
+  attribution root for both nested and non-nested citations. By
+  default it can match zero-to-many alphanumeric characters (also
+  &ldquo;.&rdquo;, &ldquo;-&rdquo;, and &ldquo;_&rdquo;). But in
+  some situations, Supercite has to determine whether it is looking
+  at a nested or non-nested citation. Thus the variable
+  <code>sc-citation-nonnested-root-regexp</code> is used to
+  describe only non-nested citation roots. It is important to
+  remember that if you change <code>sc-citation-root-regexp</code>
+  you should always also change
+  <code>sc-citation-nonnested-root-regexp</code>.</p>
 </body>
 </html>

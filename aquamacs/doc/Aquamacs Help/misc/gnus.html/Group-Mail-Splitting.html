@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,196 +14,267 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Group Mail Splitting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Group Mail Splitting">
-<meta name="keywords" content="Gnus Manual: Group Mail Splitting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Getting-Mail.html#Getting-Mail" rel="up" title="Getting Mail">
-<link href="Incorporating-Old-Mail.html#Incorporating-Old-Mail" rel="next" title="Incorporating Old Mail">
-<link href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting" rel="prev" title="Fancy Mail Splitting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Group Mail Splitting</title>
+  <meta name="description" content=
+  "Gnus Manual: Group Mail Splitting" />
+  <meta name="keywords" content=
+  "Gnus Manual: Group Mail Splitting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Getting-Mail.html#Getting-Mail" rel="up" title=
+  "Getting Mail" />
+  <link href="Incorporating-Old-Mail.html#Incorporating-Old-Mail"
+  rel="next" title="Incorporating Old Mail" />
+  <link href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting" rel=
+  "prev" title="Fancy Mail Splitting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Group-Mail-Splitting"></a>
-<div class="header">
-<p>
-Next: <a href="Incorporating-Old-Mail.html#Incorporating-Old-Mail" accesskey="n" rel="next">Incorporating Old Mail</a>, Previous: <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting" accesskey="p" rel="prev">Fancy Mail Splitting</a>, Up: <a href="Getting-Mail.html#Getting-Mail" accesskey="u" rel="up">Getting Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Group-Mail-Splitting-1"></a>
-<h4 class="subsection">6.4.7 Group Mail Splitting</h4>
-<a name="index-mail-splitting-2"></a>
-<a name="index-group-mail-splitting"></a>
+<body lang="en" xml:lang="en">
+  <a name="Group-Mail-Splitting" id="Group-Mail-Splitting"></a>
 
-<a name="index-gnus_002dgroup_002dsplit"></a>
-<p>If you subscribe to dozens of mailing lists but you don&rsquo;t want to
-maintain mail splitting rules manually, group mail splitting is for you.
-You just have to set <code>to-list</code> and/or <code>to-address</code> in group
-parameters or group customization and set <code>nnmail-split-methods</code> to
-<code>gnus-group-split</code>.  This splitting function will scan all groups
-for those parameters and split mail accordingly, i.e., messages posted
-from or to the addresses specified in the parameters <code>to-list</code> or
-<code>to-address</code> of a mail group will be stored in that group.
-</p>
-<p>Sometimes, mailing lists have multiple addresses, and you may want mail
-splitting to recognize them all: just set the <code>extra-aliases</code> group
-parameter to the list of additional addresses and it&rsquo;s done.  If you&rsquo;d
-rather use a regular expression, set <code>split-regexp</code>.
-</p>
-<p>All these parameters in a group will be used to create an
-<code>nnmail-split-fancy</code> split, in which the <var>field</var> is &lsquo;<samp>any</samp>&rsquo;,
-the <var>value</var> is a single regular expression that matches
-<code>to-list</code>, <code>to-address</code>, all of <code>extra-aliases</code> and all
-matches of <code>split-regexp</code>, and the <var>split</var> is the name of the
-group.  <var>restrict</var>s are also supported: just set the
-<code>split-exclude</code> parameter to a list of regular expressions.
-</p>
-<p>If you can&rsquo;t get the right split to be generated using all these
-parameters, or you just need something fancier, you can set the
-parameter <code>split-spec</code> to an <code>nnmail-split-fancy</code> split.  In
-this case, all other aforementioned parameters will be ignored by
-<code>gnus-group-split</code>.  In particular, <code>split-spec</code> may be set to
-<code>nil</code>, in which case the group will be ignored by
-<code>gnus-group-split</code>.
-</p>
-<a name="index-gnus_002dgroup_002dsplit_002ddefault_002dcatch_002dall_002dgroup"></a>
-<p><code>gnus-group-split</code> will do cross-posting on all groups that match,
-by defining a single <code>&amp;</code> fancy split containing one split for each
-group.  If a message doesn&rsquo;t match any split, it will be stored in the
-group named in <code>gnus-group-split-default-catch-all-group</code>, unless
-some group has <code>split-spec</code> set to <code>catch-all</code>, in which case
-that group is used as the catch-all group.  Even though this variable is
-often used just to name a group, it may also be set to an arbitrarily
-complex fancy split (after all, a group name is a fancy split), and this
-may be useful to split mail that doesn&rsquo;t go to any mailing list to
-personal mail folders.  Note that this fancy split is added as the last
-element of a <code>|</code> split list that also contains a <code>&amp;</code> split
-with the rules extracted from group parameters.
-</p>
-<p>It&rsquo;s time for an example.  Assume the following group parameters have
-been defined:
-</p>
-<div class="example">
-<pre class="example">nnml:mail.bar:
-((to-address . &quot;bar@femail.com&quot;)
- (split-regexp . &quot;.*@femail\\.com&quot;))
+  <div class="header">
+    <p>Next: <a href=
+    "Incorporating-Old-Mail.html#Incorporating-Old-Mail" accesskey=
+    "n" rel="next">Incorporating Old Mail</a>, Previous: <a href=
+    "Fancy-Mail-Splitting.html#Fancy-Mail-Splitting" accesskey="p"
+    rel="prev">Fancy Mail Splitting</a>, Up: <a href=
+    "Getting-Mail.html#Getting-Mail" accesskey="u" rel="up">Getting
+    Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Group-Mail-Splitting-1" id="Group-Mail-Splitting-1"></a>
+
+  <h4 class="subsection">6.4.7 Group Mail Splitting</h4><a name=
+  "index-mail-splitting-2" id="index-mail-splitting-2"></a>
+  <a name="index-group-mail-splitting" id=
+  "index-group-mail-splitting"></a> <a name=
+  "index-gnus_002dgroup_002dsplit" id=
+  "index-gnus_002dgroup_002dsplit"></a>
+
+  <p>If you subscribe to dozens of mailing lists but you
+  don&rsquo;t want to maintain mail splitting rules manually, group
+  mail splitting is for you. You just have to set
+  <code>to-list</code> and/or <code>to-address</code> in group
+  parameters or group customization and set
+  <code>nnmail-split-methods</code> to
+  <code>gnus-group-split</code>. This splitting function will scan
+  all groups for those parameters and split mail accordingly, i.e.,
+  messages posted from or to the addresses specified in the
+  parameters <code>to-list</code> or <code>to-address</code> of a
+  mail group will be stored in that group.</p>
+
+  <p>Sometimes, mailing lists have multiple addresses, and you may
+  want mail splitting to recognize them all: just set the
+  <code>extra-aliases</code> group parameter to the list of
+  additional addresses and it&rsquo;s done. If you&rsquo;d rather
+  use a regular expression, set <code>split-regexp</code>.</p>
+
+  <p>All these parameters in a group will be used to create an
+  <code>nnmail-split-fancy</code> split, in which the
+  <var>field</var> is &lsquo;<samp>any</samp>&rsquo;, the
+  <var>value</var> is a single regular expression that matches
+  <code>to-list</code>, <code>to-address</code>, all of
+  <code>extra-aliases</code> and all matches of
+  <code>split-regexp</code>, and the <var>split</var> is the name
+  of the group. <var>restrict</var>s are also supported: just set
+  the <code>split-exclude</code> parameter to a list of regular
+  expressions.</p>
+
+  <p>If you can&rsquo;t get the right split to be generated using
+  all these parameters, or you just need something fancier, you can
+  set the parameter <code>split-spec</code> to an
+  <code>nnmail-split-fancy</code> split. In this case, all other
+  aforementioned parameters will be ignored by
+  <code>gnus-group-split</code>. In particular,
+  <code>split-spec</code> may be set to <code>nil</code>, in which
+  case the group will be ignored by
+  <code>gnus-group-split</code>.</p><a name=
+  "index-gnus_002dgroup_002dsplit_002ddefault_002dcatch_002dall_002dgroup"
+  id=
+  "index-gnus_002dgroup_002dsplit_002ddefault_002dcatch_002dall_002dgroup"></a>
+
+  <p><code>gnus-group-split</code> will do cross-posting on all
+  groups that match, by defining a single <code>&amp;</code> fancy
+  split containing one split for each group. If a message
+  doesn&rsquo;t match any split, it will be stored in the group
+  named in <code>gnus-group-split-default-catch-all-group</code>,
+  unless some group has <code>split-spec</code> set to
+  <code>catch-all</code>, in which case that group is used as the
+  catch-all group. Even though this variable is often used just to
+  name a group, it may also be set to an arbitrarily complex fancy
+  split (after all, a group name is a fancy split), and this may be
+  useful to split mail that doesn&rsquo;t go to any mailing list to
+  personal mail folders. Note that this fancy split is added as the
+  last element of a <code>|</code> split list that also contains a
+  <code>&amp;</code> split with the rules extracted from group
+  parameters.</p>
+
+  <p>It&rsquo;s time for an example. Assume the following group
+  parameters have been defined:</p>
+
+  <div class="example">
+    <pre class="example">
+nnml:mail.bar:
+((to-address . "bar@femail.com")
+ (split-regexp . ".*@femail\\.com"))
 nnml:mail.foo:
-((to-list . &quot;foo@nowhere.gov&quot;)
- (extra-aliases &quot;foo@localhost&quot; &quot;foo-redist@home&quot;)
- (split-exclude &quot;bugs-foo&quot; &quot;rambling-foo&quot;)
- (admin-address . &quot;foo-request@nowhere.gov&quot;))
+((to-list . "foo@nowhere.gov")
+ (extra-aliases "foo@localhost" "foo-redist@home")
+ (split-exclude "bugs-foo" "rambling-foo")
+ (admin-address . "foo-request@nowhere.gov"))
 nnml:mail.others:
 ((split-spec . catch-all))
-</pre></div>
+</pre>
+  </div>
 
-<p>Setting <code>nnmail-split-methods</code> to <code>gnus-group-split</code> will
-behave as if <code>nnmail-split-fancy</code> had been selected and variable
-<code>nnmail-split-fancy</code> had been set as follows:
-</p>
-<div class="lisp">
-<pre class="lisp">(| (&amp; (any &quot;\\(bar@femail\\.com\\|.*@femail\\.com\\)&quot; &quot;mail.bar&quot;)
-      (any &quot;\\(foo@nowhere\\.gov\\|foo@localhost\\|foo-redist@home\\)&quot;
-           - &quot;bugs-foo&quot; - &quot;rambling-foo&quot; &quot;mail.foo&quot;))
-   &quot;mail.others&quot;)
-</pre></div>
+  <p>Setting <code>nnmail-split-methods</code> to
+  <code>gnus-group-split</code> will behave as if
+  <code>nnmail-split-fancy</code> had been selected and variable
+  <code>nnmail-split-fancy</code> had been set as follows:</p>
 
-<a name="index-gnus_002dgroup_002dsplit_002dfancy"></a>
-<p>If you&rsquo;d rather not use group splitting for all your mail groups, you
-may use it for only some of them, by using <code>nnmail-split-fancy</code>
-splits like this:
-</p>
-<div class="lisp">
-<pre class="lisp">(: gnus-group-split-fancy <var>groups</var> <var>no-crosspost</var> <var>catch-all</var>)
-</pre></div>
+  <div class="lisp">
+    <pre class="lisp">
+(| (&amp; (any "\\(bar@femail\\.com\\|.*@femail\\.com\\)" "mail.bar")
+      (any "\\(foo@nowhere\\.gov\\|foo@localhost\\|foo-redist@home\\)"
+           - "bugs-foo" - "rambling-foo" "mail.foo"))
+   "mail.others")
+</pre>
+  </div><a name="index-gnus_002dgroup_002dsplit_002dfancy" id=
+  "index-gnus_002dgroup_002dsplit_002dfancy"></a>
 
-<p><var>groups</var> may be a regular expression or a list of group names whose
-parameters will be scanned to generate the output split.
-<var>no-crosspost</var> can be used to disable cross-posting; in this case, a
-single <code>|</code> split will be output.  <var>catch-all</var> is the fall back
-fancy split, used like <code>gnus-group-split-default-catch-all-group</code>.
-If <var>catch-all</var> is <code>nil</code>, or if <code>split-regexp</code> matches the
-empty string in any selected group, no catch-all split will be issued.
-Otherwise, if some group has <code>split-spec</code> set to <code>catch-all</code>,
-this group will override the value of the <var>catch-all</var> argument.
-</p>
-<a name="index-gnus_002dgroup_002dsplit_002dsetup"></a>
-<p>Unfortunately, scanning all groups and their parameters can be quite
-slow, especially considering that it has to be done for every message.
-But don&rsquo;t despair!  The function <code>gnus-group-split-setup</code> can be
-used to enable <code>gnus-group-split</code> in a much more efficient way.  It
-sets <code>nnmail-split-methods</code> to <code>nnmail-split-fancy</code> and sets
-<code>nnmail-split-fancy</code> to the split produced by
-<code>gnus-group-split-fancy</code>.  Thus, the group parameters are only
-scanned once, no matter how many messages are split.
-</p>
-<a name="index-gnus_002dgroup_002dsplit_002dupdate"></a>
-<p>However, if you change group parameters, you&rsquo;d have to update
-<code>nnmail-split-fancy</code> manually.  You can do it by running
-<code>gnus-group-split-update</code>.  If you&rsquo;d rather have it updated
-automatically, just tell <code>gnus-group-split-setup</code> to do it for
-you.  For example, add to your <samp>~/.gnus.el</samp>:
-</p>
-<div class="lisp">
-<pre class="lisp">(gnus-group-split-setup <var>auto-update</var> <var>catch-all</var>)
-</pre></div>
+  <p>If you&rsquo;d rather not use group splitting for all your
+  mail groups, you may use it for only some of them, by using
+  <code>nnmail-split-fancy</code> splits like this:</p>
 
-<p>If <var>auto-update</var> is non-<code>nil</code>, <code>gnus-group-split-update</code>
-will be added to <code>nnmail-pre-get-new-mail-hook</code>, so you won&rsquo;t ever
-have to worry about updating <code>nnmail-split-fancy</code> again.  If you
-don&rsquo;t omit <var>catch-all</var> (it&rsquo;s optional, equivalent to <code>nil</code>),
-<code>gnus-group-split-default-catch-all-group</code> will be set to its
-value.
-</p>
-<a name="index-gnus_002dgroup_002dsplit_002dupdated_002dhook"></a>
-<p>Because you may want to change <code>nnmail-split-fancy</code> after it is set
-by <code>gnus-group-split-update</code>, this function will run
-<code>gnus-group-split-updated-hook</code> just before finishing.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Incorporating-Old-Mail.html#Incorporating-Old-Mail" accesskey="n" rel="next">Incorporating Old Mail</a>, Previous: <a href="Fancy-Mail-Splitting.html#Fancy-Mail-Splitting" accesskey="p" rel="prev">Fancy Mail Splitting</a>, Up: <a href="Getting-Mail.html#Getting-Mail" accesskey="u" rel="up">Getting Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="lisp">
+    <pre class="lisp">
+(: gnus-group-split-fancy <var>groups</var> <var>no-crosspost</var> <var>catch-all</var>)
+</pre>
+  </div>
 
+  <p><var>groups</var> may be a regular expression or a list of
+  group names whose parameters will be scanned to generate the
+  output split. <var>no-crosspost</var> can be used to disable
+  cross-posting; in this case, a single <code>|</code> split will
+  be output. <var>catch-all</var> is the fall back fancy split,
+  used like <code>gnus-group-split-default-catch-all-group</code>.
+  If <var>catch-all</var> is <code>nil</code>, or if
+  <code>split-regexp</code> matches the empty string in any
+  selected group, no catch-all split will be issued. Otherwise, if
+  some group has <code>split-spec</code> set to
+  <code>catch-all</code>, this group will override the value of the
+  <var>catch-all</var> argument.</p><a name=
+  "index-gnus_002dgroup_002dsplit_002dsetup" id=
+  "index-gnus_002dgroup_002dsplit_002dsetup"></a>
 
+  <p>Unfortunately, scanning all groups and their parameters can be
+  quite slow, especially considering that it has to be done for
+  every message. But don&rsquo;t despair! The function
+  <code>gnus-group-split-setup</code> can be used to enable
+  <code>gnus-group-split</code> in a much more efficient way. It
+  sets <code>nnmail-split-methods</code> to
+  <code>nnmail-split-fancy</code> and sets
+  <code>nnmail-split-fancy</code> to the split produced by
+  <code>gnus-group-split-fancy</code>. Thus, the group parameters
+  are only scanned once, no matter how many messages are
+  split.</p><a name="index-gnus_002dgroup_002dsplit_002dupdate" id=
+  "index-gnus_002dgroup_002dsplit_002dupdate"></a>
 
+  <p>However, if you change group parameters, you&rsquo;d have to
+  update <code>nnmail-split-fancy</code> manually. You can do it by
+  running <code>gnus-group-split-update</code>. If you&rsquo;d
+  rather have it updated automatically, just tell
+  <code>gnus-group-split-setup</code> to do it for you. For
+  example, add to your <samp>~/.gnus.el</samp>:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(gnus-group-split-setup <var>auto-update</var> <var>catch-all</var>)
+</pre>
+  </div>
+
+  <p>If <var>auto-update</var> is non-<code>nil</code>,
+  <code>gnus-group-split-update</code> will be added to
+  <code>nnmail-pre-get-new-mail-hook</code>, so you won&rsquo;t
+  ever have to worry about updating <code>nnmail-split-fancy</code>
+  again. If you don&rsquo;t omit <var>catch-all</var> (it&rsquo;s
+  optional, equivalent to <code>nil</code>),
+  <code>gnus-group-split-default-catch-all-group</code> will be set
+  to its value.</p><a name=
+  "index-gnus_002dgroup_002dsplit_002dupdated_002dhook" id=
+  "index-gnus_002dgroup_002dsplit_002dupdated_002dhook"></a>
+
+  <p>Because you may want to change <code>nnmail-split-fancy</code>
+  after it is set by <code>gnus-group-split-update</code>, this
+  function will run <code>gnus-group-split-updated-hook</code> just
+  before finishing.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Incorporating-Old-Mail.html#Incorporating-Old-Mail" accesskey=
+    "n" rel="next">Incorporating Old Mail</a>, Previous: <a href=
+    "Fancy-Mail-Splitting.html#Fancy-Mail-Splitting" accesskey="p"
+    rel="prev">Fancy Mail Splitting</a>, Up: <a href=
+    "Getting-Mail.html#Getting-Mail" accesskey="u" rel="up">Getting
+    Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

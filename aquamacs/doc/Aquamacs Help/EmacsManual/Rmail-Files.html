@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,144 +20,199 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Rmail Files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Rmail Files">
-<meta name="keywords" content="GNU Emacs Manual: Rmail Files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Rmail.html#Rmail" rel="up" title="Rmail">
-<link href="Rmail-Output.html#Rmail-Output" rel="next" title="Rmail Output">
-<link href="Rmail-Inbox.html#Rmail-Inbox" rel="prev" title="Rmail Inbox">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Rmail Files</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Rmail Files" />
+  <meta name="keywords" content="GNU Emacs Manual: Rmail Files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Rmail.html#Rmail" rel="up" title="Rmail" />
+  <link href="Rmail-Output.html#Rmail-Output" rel="next" title=
+  "Rmail Output" />
+  <link href="Rmail-Inbox.html#Rmail-Inbox" rel="prev" title=
+  "Rmail Inbox" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Rmail-Files" id="Rmail-Files"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Rmail-Output.html#Rmail-Output" accesskey="n"
+    rel="next">Rmail Output</a>, Previous: <a href=
+    "Rmail-Inbox.html#Rmail-Inbox" accesskey="p" rel="prev">Rmail
+    Inbox</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel=
+    "up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Multiple-Rmail-Files" id="Multiple-Rmail-Files"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Rmail-Files"></a>
-<div class="header">
-<p>
-Next: <a href="Rmail-Output.html#Rmail-Output" accesskey="n" rel="next">Rmail Output</a>, Previous: <a href="Rmail-Inbox.html#Rmail-Inbox" accesskey="p" rel="prev">Rmail Inbox</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Multiple-Rmail-Files"></a>
-<h3 class="section">33.6 Multiple Rmail Files</h3>
+  <h3 class="section">33.6 Multiple Rmail Files</h3>
 
-<p>Rmail operates by default on your <em>primary Rmail file</em>, which is named
-<samp>~/RMAIL</samp> and receives your incoming mail from your system inbox file.
-But you can also have other Rmail files and edit them with Rmail.  These
-files can receive mail through their own inboxes, or you can move messages
-into them with explicit Rmail commands (see <a href="Rmail-Output.html#Rmail-Output">Rmail Output</a>).
-</p>
-<dl compact="compact">
-<dt><kbd>i <var>file</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Read <var>file</var> into Emacs and run Rmail on it (<code>rmail-input</code>).
-</p>
-</dd>
-<dt><kbd>M-x set-rmail-inbox-list <span class="key">RET</span> <var>files</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Specify inbox file names for current Rmail file to get mail from.
-</p>
-</dd>
-<dt><kbd>g</kbd></dt>
-<dd><p>Merge new mail from current Rmail file&rsquo;s inboxes
-(<code>rmail-get-new-mail</code>).
-</p>
-</dd>
-<dt><kbd>C-u g <var>file</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Merge new mail from inbox file <var>file</var>.
-</p></dd>
-</dl>
+  <p>Rmail operates by default on your <em>primary Rmail file</em>,
+  which is named <samp>~/RMAIL</samp> and receives your incoming
+  mail from your system inbox file. But you can also have other
+  Rmail files and edit them with Rmail. These files can receive
+  mail through their own inboxes, or you can move messages into
+  them with explicit Rmail commands (see <a href=
+  "Rmail-Output.html#Rmail-Output">Rmail Output</a>).</p>
 
-<a name="index-i-_0028Rmail_0029"></a>
-<a name="index-rmail_002dinput"></a>
-<p>To run Rmail on a file other than your primary Rmail file, you can use
-the <kbd>i</kbd> (<code>rmail-input</code>) command in Rmail.  This visits the file
-in Rmail mode.  You can use <kbd>M-x rmail-input</kbd> even when not in
-Rmail, but it is easier to type <kbd>C-u M-x rmail</kbd>, which does the
-same thing.
-</p>
-<p>The file you read with <kbd>i</kbd> should normally be a valid mbox file.
-If it is not, Rmail tries to convert its text to mbox format, and
-visits the converted text in the buffer.  If you save the buffer, that
-converts the file.
-</p>
-<p>If you specify a file name that doesn&rsquo;t exist, <kbd>i</kbd> initializes a
-new buffer for creating a new Rmail file.
-</p>
-<a name="index-rmail_002dsecondary_002dfile_002ddirectory"></a>
-<a name="index-rmail_002dsecondary_002dfile_002dregexp"></a>
-<p>You can also select an Rmail file from a menu.  In the Classify menu,
-choose the Input Rmail File item; then choose the Rmail file you want.
-The variables <code>rmail-secondary-file-directory</code> and
-<code>rmail-secondary-file-regexp</code> specify which files to offer in the
-menu: the first variable says which directory to find them in; the
-second says which files in that directory to offer (all those that match
-the regular expression).  If no files match, you cannot select this menu
-item.  These variables also apply to choosing a file for output
-(see <a href="Rmail-Output.html#Rmail-Output">Rmail Output</a>).
-</p>
+  <dl compact="compact">
+    <dt><kbd>i <var>file</var> <span class=
+    "key">RET</span></kbd></dt>
 
-<a name="index-rmail_002dinbox_002dlist"></a>
-<p>The inbox files to use are specified by the variable
-<code>rmail-inbox-list</code>, which is buffer-local in Rmail mode.  As a
-special exception, if you have specified no inbox files for your primary
-Rmail file, it uses the <code>MAIL</code> environment variable, or your
-standard system inbox.
-</p>
-<a name="index-g-_0028Rmail_0029"></a>
-<a name="index-rmail_002dget_002dnew_002dmail"></a>
-<p>The <kbd>g</kbd> command (<code>rmail-get-new-mail</code>) merges mail into the
-current Rmail file from its inboxes.  If the Rmail file has no
-inboxes, <kbd>g</kbd> does nothing.  The command <kbd>M-x rmail</kbd> also
-merges new mail into your primary Rmail file.
-</p>
-<p>To merge mail from a file that is not the usual inbox, give the
-<kbd>g</kbd> key a numeric argument, as in <kbd>C-u g</kbd>.  Then it reads a file
-name and merges mail from that file.  The inbox file is not deleted or
-changed in any way when <kbd>g</kbd> with an argument is used.  This is,
-therefore, a general way of merging one file of messages into another.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Rmail-Output.html#Rmail-Output" accesskey="n" rel="next">Rmail Output</a>, Previous: <a href="Rmail-Inbox.html#Rmail-Inbox" accesskey="p" rel="prev">Rmail Inbox</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Read <var>file</var> into Emacs and run Rmail on it
+      (<code>rmail-input</code>).</p>
+    </dd>
 
+    <dt><kbd>M-x set-rmail-inbox-list <span class="key">RET</span>
+    <var>files</var> <span class="key">RET</span></kbd></dt>
 
+    <dd>
+      <p>Specify inbox file names for current Rmail file to get
+      mail from.</p>
+    </dd>
 
+    <dt><kbd>g</kbd></dt>
+
+    <dd>
+      <p>Merge new mail from current Rmail file&rsquo;s inboxes
+      (<code>rmail-get-new-mail</code>).</p>
+    </dd>
+
+    <dt><kbd>C-u g <var>file</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Merge new mail from inbox file <var>file</var>.</p>
+    </dd>
+  </dl><a name="index-i-_0028Rmail_0029" id=
+  "index-i-_0028Rmail_0029"></a> <a name="index-rmail_002dinput"
+  id="index-rmail_002dinput"></a>
+
+  <p>To run Rmail on a file other than your primary Rmail file, you
+  can use the <kbd>i</kbd> (<code>rmail-input</code>) command in
+  Rmail. This visits the file in Rmail mode. You can use <kbd>M-x
+  rmail-input</kbd> even when not in Rmail, but it is easier to
+  type <kbd>C-u M-x rmail</kbd>, which does the same thing.</p>
+
+  <p>The file you read with <kbd>i</kbd> should normally be a valid
+  mbox file. If it is not, Rmail tries to convert its text to mbox
+  format, and visits the converted text in the buffer. If you save
+  the buffer, that converts the file.</p>
+
+  <p>If you specify a file name that doesn&rsquo;t exist,
+  <kbd>i</kbd> initializes a new buffer for creating a new Rmail
+  file.</p><a name=
+  "index-rmail_002dsecondary_002dfile_002ddirectory" id=
+  "index-rmail_002dsecondary_002dfile_002ddirectory"></a> <a name=
+  "index-rmail_002dsecondary_002dfile_002dregexp" id=
+  "index-rmail_002dsecondary_002dfile_002dregexp"></a>
+
+  <p>You can also select an Rmail file from a menu. In the Classify
+  menu, choose the Input Rmail File item; then choose the Rmail
+  file you want. The variables
+  <code>rmail-secondary-file-directory</code> and
+  <code>rmail-secondary-file-regexp</code> specify which files to
+  offer in the menu: the first variable says which directory to
+  find them in; the second says which files in that directory to
+  offer (all those that match the regular expression). If no files
+  match, you cannot select this menu item. These variables also
+  apply to choosing a file for output (see <a href=
+  "Rmail-Output.html#Rmail-Output">Rmail Output</a>).</p><a name=
+  "index-rmail_002dinbox_002dlist" id=
+  "index-rmail_002dinbox_002dlist"></a>
+
+  <p>The inbox files to use are specified by the variable
+  <code>rmail-inbox-list</code>, which is buffer-local in Rmail
+  mode. As a special exception, if you have specified no inbox
+  files for your primary Rmail file, it uses the <code>MAIL</code>
+  environment variable, or your standard system inbox.</p><a name=
+  "index-g-_0028Rmail_0029" id="index-g-_0028Rmail_0029"></a>
+  <a name="index-rmail_002dget_002dnew_002dmail" id=
+  "index-rmail_002dget_002dnew_002dmail"></a>
+
+  <p>The <kbd>g</kbd> command (<code>rmail-get-new-mail</code>)
+  merges mail into the current Rmail file from its inboxes. If the
+  Rmail file has no inboxes, <kbd>g</kbd> does nothing. The command
+  <kbd>M-x rmail</kbd> also merges new mail into your primary Rmail
+  file.</p>
+
+  <p>To merge mail from a file that is not the usual inbox, give
+  the <kbd>g</kbd> key a numeric argument, as in <kbd>C-u g</kbd>.
+  Then it reads a file name and merges mail from that file. The
+  inbox file is not deleted or changed in any way when <kbd>g</kbd>
+  with an argument is used. This is, therefore, a general way of
+  merging one file of messages into another.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Rmail-Output.html#Rmail-Output" accesskey="n"
+    rel="next">Rmail Output</a>, Previous: <a href=
+    "Rmail-Inbox.html#Rmail-Inbox" accesskey="p" rel="prev">Rmail
+    Inbox</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel=
+    "up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

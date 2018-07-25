@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,108 +14,154 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Client-Side IMAP Splitting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Client-Side IMAP Splitting">
-<meta name="keywords" content="Gnus Manual: Client-Side IMAP Splitting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Using-IMAP.html#Using-IMAP" rel="up" title="Using IMAP">
-<link href="Support-for-IMAP-Extensions.html#Support-for-IMAP-Extensions" rel="next" title="Support for IMAP Extensions">
-<link href="Customizing-the-IMAP-Connection.html#Customizing-the-IMAP-Connection" rel="prev" title="Customizing the IMAP Connection">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Client-Side IMAP Splitting</title>
+  <meta name="description" content=
+  "Gnus Manual: Client-Side IMAP Splitting" />
+  <meta name="keywords" content=
+  "Gnus Manual: Client-Side IMAP Splitting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Using-IMAP.html#Using-IMAP" rel="up" title=
+  "Using IMAP" />
+  <link href=
+  "Support-for-IMAP-Extensions.html#Support-for-IMAP-Extensions"
+  rel="next" title="Support for IMAP Extensions" />
+  <link href=
+  "Customizing-the-IMAP-Connection.html#Customizing-the-IMAP-Connection"
+  rel="prev" title="Customizing the IMAP Connection" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Client_002dSide-IMAP-Splitting"></a>
-<div class="header">
-<p>
-Next: <a href="Support-for-IMAP-Extensions.html#Support-for-IMAP-Extensions" accesskey="n" rel="next">Support for IMAP Extensions</a>, Previous: <a href="Customizing-the-IMAP-Connection.html#Customizing-the-IMAP-Connection" accesskey="p" rel="prev">Customizing the IMAP Connection</a>, Up: <a href="Using-IMAP.html#Using-IMAP" accesskey="u" rel="up">Using IMAP</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Client_002dSide-IMAP-Splitting-1"></a>
-<h4 class="subsection">6.3.3 Client-Side IMAP Splitting</h4>
+<body lang="en" xml:lang="en">
+  <a name="Client_002dSide-IMAP-Splitting" id=
+  "Client_002dSide-IMAP-Splitting"></a>
 
-<p>Many people prefer to do the sorting/splitting of mail into their mail
-boxes on the <acronym>IMAP</acronym> server.  That way they don&rsquo;t have to
-download the mail they&rsquo;re not all that interested in.
-</p>
-<p>If you do want to do client-side mail splitting, then the following
-variables are relevant:
-</p>
-<dl compact="compact">
-<dt><code>nnimap-inbox</code></dt>
-<dd><p>This is the <acronym>IMAP</acronym> mail box that will be scanned for new
-mail.  This can also be a list of mail box names.
-</p>
-</dd>
-<dt><code>nnimap-split-methods</code></dt>
-<dd><p>Uses the same syntax as <code>nnmail-split-methods</code> (see <a href="Splitting-Mail.html#Splitting-Mail">Splitting Mail</a>), except the symbol <code>default</code>, which means that it should
-use the value of the <code>nnmail-split-methods</code> variable.
-</p>
-</dd>
-<dt><code>nnimap-split-fancy</code></dt>
-<dd><p>Uses the same syntax as <code>nnmail-split-fancy</code>.
-</p>
-</dd>
-<dt><code>nnimap-unsplittable-articles</code></dt>
-<dd><p>List of flag symbols to ignore when doing splitting.  That is,
-articles that have these flags won&rsquo;t be considered when splitting.
-The default is &lsquo;<samp>(%Deleted %Seen)</samp>&rsquo;.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Support-for-IMAP-Extensions.html#Support-for-IMAP-Extensions"
+    accesskey="n" rel="next">Support for IMAP Extensions</a>,
+    Previous: <a href=
+    "Customizing-the-IMAP-Connection.html#Customizing-the-IMAP-Connection"
+    accesskey="p" rel="prev">Customizing the IMAP Connection</a>,
+    Up: <a href="Using-IMAP.html#Using-IMAP" accesskey="u" rel=
+    "up">Using IMAP</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Client_002dSide-IMAP-Splitting-1" id=
+  "Client_002dSide-IMAP-Splitting-1"></a>
 
-<p>Here&rsquo;s a complete example <code>nnimap</code> backend with a client-side
-&ldquo;fancy&rdquo; splitting method:
-</p>
-<div class="example">
-<pre class="example">(nnimap &quot;imap.example.com&quot;
-        (nnimap-inbox &quot;INBOX&quot;)
+  <h4 class="subsection">6.3.3 Client-Side IMAP Splitting</h4>
+
+  <p>Many people prefer to do the sorting/splitting of mail into
+  their mail boxes on the <acronym>IMAP</acronym> server. That way
+  they don&rsquo;t have to download the mail they&rsquo;re not all
+  that interested in.</p>
+
+  <p>If you do want to do client-side mail splitting, then the
+  following variables are relevant:</p>
+
+  <dl compact="compact">
+    <dt><code>nnimap-inbox</code></dt>
+
+    <dd>
+      <p>This is the <acronym>IMAP</acronym> mail box that will be
+      scanned for new mail. This can also be a list of mail box
+      names.</p>
+    </dd>
+
+    <dt><code>nnimap-split-methods</code></dt>
+
+    <dd>
+      <p>Uses the same syntax as <code>nnmail-split-methods</code>
+      (see <a href="Splitting-Mail.html#Splitting-Mail">Splitting
+      Mail</a>), except the symbol <code>default</code>, which
+      means that it should use the value of the
+      <code>nnmail-split-methods</code> variable.</p>
+    </dd>
+
+    <dt><code>nnimap-split-fancy</code></dt>
+
+    <dd>
+      <p>Uses the same syntax as
+      <code>nnmail-split-fancy</code>.</p>
+    </dd>
+
+    <dt><code>nnimap-unsplittable-articles</code></dt>
+
+    <dd>
+      <p>List of flag symbols to ignore when doing splitting. That
+      is, articles that have these flags won&rsquo;t be considered
+      when splitting. The default is &lsquo;<samp>(%Deleted
+      %Seen)</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <p>Here&rsquo;s a complete example <code>nnimap</code> backend
+  with a client-side &ldquo;fancy&rdquo; splitting method:</p>
+
+  <div class="example">
+    <pre class="example">
+(nnimap "imap.example.com"
+        (nnimap-inbox "INBOX")
         (nnimap-split-fancy
-         (| (&quot;MailScanner-SpamCheck&quot; &quot;spam&quot; &quot;spam.detected&quot;)
-            (to &quot;foo@bar.com&quot; &quot;foo&quot;)
-            &quot;undecided&quot;)))
-</pre></div>
-
-
-
-
-
+         (| ("MailScanner-SpamCheck" "spam" "spam.detected")
+            (to "foo@bar.com" "foo")
+            "undecided")))
+</pre>
+  </div>
 </body>
 </html>

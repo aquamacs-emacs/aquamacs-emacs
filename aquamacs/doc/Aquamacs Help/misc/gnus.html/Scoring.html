@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,130 +14,300 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Scoring</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Scoring">
-<meta name="keywords" content="Gnus Manual: Scoring">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Summary-Score-Commands.html#Summary-Score-Commands" rel="next" title="Summary Score Commands">
-<link href="Agent-Caveats.html#Agent-Caveats" rel="prev" title="Agent Caveats">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Scoring</title>
+  <meta name="description" content="Gnus Manual: Scoring" />
+  <meta name="keywords" content="Gnus Manual: Scoring" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Summary-Score-Commands.html#Summary-Score-Commands"
+  rel="next" title="Summary Score Commands" />
+  <link href="Agent-Caveats.html#Agent-Caveats" rel="prev" title=
+  "Agent Caveats" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Scoring"></a>
-<div class="header">
-<p>
-Next: <a href="Searching.html#Searching" accesskey="n" rel="next">Searching</a>, Previous: <a href="Select-Methods.html#Select-Methods" accesskey="p" rel="prev">Select Methods</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Scoring-1"></a>
-<h2 class="chapter">7 Scoring</h2>
-<a name="index-scoring"></a>
+<body lang="en" xml:lang="en">
+  <a name="Scoring" id="Scoring"></a>
 
-<p>Other people use <em>kill files</em>, but we here at Gnus Towers like
-scoring better than killing, so we&rsquo;d rather switch than fight.  They do
-something completely different as well, so sit up straight and pay
-attention!
-</p>
-<a name="index-gnus_002dsummary_002dmark_002dbelow"></a>
-<p>All articles have a default score (<code>gnus-summary-default-score</code>),
-which is 0 by default.  This score may be raised or lowered either
-interactively or by score files.  Articles that have a score lower than
-<code>gnus-summary-mark-below</code> are marked as read.
-</p>
-<p>Gnus will read any <em>score files</em> that apply to the current group
-before generating the summary buffer.
-</p>
-<p>There are several commands in the summary buffer that insert score
-entries based on the current article.  You can, for instance, ask Gnus to
-lower or increase the score of all articles with a certain subject.
-</p>
-<p>There are two sorts of scoring entries: Permanent and temporary.
-Temporary score entries are self-expiring entries.  Any entries that are
-temporary and have not been used for, say, a week, will be removed
-silently to help keep the sizes of the score files down.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Summary-Score-Commands.html#Summary-Score-Commands" accesskey="1">Summary Score Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Adding score entries for the current group.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Group-Score-Commands.html#Group-Score-Commands" accesskey="2">Group Score Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">General score commands.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Score-Variables.html#Score-Variables" accesskey="3">Score Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Customize your scoring.  (My, what terminology).
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Score-File-Format.html#Score-File-Format" accesskey="4">Score File Format</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What a score file may contain.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Score-File-Editing.html#Score-File-Editing" accesskey="5">Score File Editing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">You can edit score files by hand as well.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Adaptive-Scoring.html#Adaptive-Scoring" accesskey="6">Adaptive Scoring</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Big Sister Gnus knows what you read.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Home-Score-File.html#Home-Score-File" accesskey="7">Home Score File</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to say where new score entries are to go.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Followups-To-Yourself.html#Followups-To-Yourself" accesskey="8">Followups To Yourself</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Having Gnus notice when people answer you.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Scoring-On-Other-Headers.html#Scoring-On-Other-Headers" accesskey="9">Scoring On Other Headers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Scoring on non-standard headers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Scoring-Tips.html#Scoring-Tips">Scoring Tips</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to score effectively.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Reverse-Scoring.html#Reverse-Scoring">Reverse Scoring</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">That problem child of old is not problem.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Global-Score-Files.html#Global-Score-Files">Global Score Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Earth-spanning, ear-splitting score files.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Kill-Files.html#Kill-Files">Kill Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">They are still here, but they can be ignored.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Converting-Kill-Files.html#Converting-Kill-Files">Converting Kill Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Translating kill files to score files.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Advanced-Scoring.html#Advanced-Scoring">Advanced Scoring</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using logical expressions to build score rules.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Score-Decays.html#Score-Decays">Score Decays</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">It can be useful to let scores wither away.
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Searching.html#Searching" accesskey="n" rel=
+    "next">Searching</a>, Previous: <a href=
+    "Select-Methods.html#Select-Methods" accesskey="p" rel=
+    "prev">Select Methods</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Scoring-1" id="Scoring-1"></a>
 
+  <h2 class="chapter">7 Scoring</h2><a name="index-scoring" id=
+  "index-scoring"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Searching.html#Searching" accesskey="n" rel="next">Searching</a>, Previous: <a href="Select-Methods.html#Select-Methods" accesskey="p" rel="prev">Select Methods</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Other people use <em>kill files</em>, but we here at Gnus
+  Towers like scoring better than killing, so we&rsquo;d rather
+  switch than fight. They do something completely different as
+  well, so sit up straight and pay attention!</p><a name=
+  "index-gnus_002dsummary_002dmark_002dbelow" id=
+  "index-gnus_002dsummary_002dmark_002dbelow"></a>
 
+  <p>All articles have a default score
+  (<code>gnus-summary-default-score</code>), which is 0 by default.
+  This score may be raised or lowered either interactively or by
+  score files. Articles that have a score lower than
+  <code>gnus-summary-mark-below</code> are marked as read.</p>
 
+  <p>Gnus will read any <em>score files</em> that apply to the
+  current group before generating the summary buffer.</p>
 
+  <p>There are several commands in the summary buffer that insert
+  score entries based on the current article. You can, for
+  instance, ask Gnus to lower or increase the score of all articles
+  with a certain subject.</p>
+
+  <p>There are two sorts of scoring entries: Permanent and
+  temporary. Temporary score entries are self-expiring entries. Any
+  entries that are temporary and have not been used for, say, a
+  week, will be removed silently to help keep the sizes of the
+  score files down.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Summary-Score-Commands.html#Summary-Score-Commands"
+      accesskey="1">Summary Score Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Adding score entries for the
+      current group.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Group-Score-Commands.html#Group-Score-Commands" accesskey=
+      "2">Group Score Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">General score commands.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Score-Variables.html#Score-Variables" accesskey="3">Score
+      Variables</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Customize your scoring. (My,
+      what terminology).</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Score-File-Format.html#Score-File-Format" accesskey=
+      "4">Score File Format</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">What a score file may
+      contain.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Score-File-Editing.html#Score-File-Editing" accesskey=
+      "5">Score File Editing</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">You can edit score files by
+      hand as well.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Adaptive-Scoring.html#Adaptive-Scoring" accesskey=
+      "6">Adaptive Scoring</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Big Sister Gnus knows what you
+      read.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Home-Score-File.html#Home-Score-File" accesskey="7">Home
+      Score File</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to say where new score
+      entries are to go.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Followups-To-Yourself.html#Followups-To-Yourself" accesskey=
+      "8">Followups To Yourself</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Having Gnus notice when people
+      answer you.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Scoring-On-Other-Headers.html#Scoring-On-Other-Headers"
+      accesskey="9">Scoring On Other Headers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Scoring on non-standard
+      headers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Scoring-Tips.html#Scoring-Tips">Scoring Tips</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to score effectively.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Reverse-Scoring.html#Reverse-Scoring">Reverse
+      Scoring</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">That problem child of old is
+      not problem.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Global-Score-Files.html#Global-Score-Files">Global Score
+      Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Earth-spanning, ear-splitting
+      score files.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Kill-Files.html#Kill-Files">Kill Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">They are still here, but they
+      can be ignored.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Converting-Kill-Files.html#Converting-Kill-Files">Converting
+      Kill Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Translating kill files to score
+      files.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Advanced-Scoring.html#Advanced-Scoring">Advanced
+      Scoring</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Using logical expressions to
+      build score rules.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Score-Decays.html#Score-Decays">Score Decays</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">It can be useful to let scores
+      wither away.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Searching.html#Searching" accesskey="n" rel=
+    "next">Searching</a>, Previous: <a href=
+    "Select-Methods.html#Select-Methods" accesskey="p" rel=
+    "prev">Select Methods</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

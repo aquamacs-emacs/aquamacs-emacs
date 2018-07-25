@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,200 +19,295 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Simple Match Data</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Simple Match Data">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Simple Match Data">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Match-Data.html#Match-Data" rel="up" title="Match Data">
-<link href="Entire-Match-Data.html#Entire-Match-Data" rel="next" title="Entire Match Data">
-<link href="Replacing-Match.html#Replacing-Match" rel="prev" title="Replacing Match">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Simple Match Data</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Simple Match Data" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Simple Match Data" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Match-Data.html#Match-Data" rel="up" title=
+  "Match Data" />
+  <link href="Entire-Match-Data.html#Entire-Match-Data" rel="next"
+  title="Entire Match Data" />
+  <link href="Replacing-Match.html#Replacing-Match" rel="prev"
+  title="Replacing Match" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Simple-Match-Data" id="Simple-Match-Data"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Entire-Match-Data.html#Entire-Match-Data"
+    accesskey="n" rel="next">Entire Match Data</a>, Previous:
+    <a href="Replacing-Match.html#Replacing-Match" accesskey="p"
+    rel="prev">Replacing Match</a>, Up: <a href=
+    "Match-Data.html#Match-Data" accesskey="u" rel="up">Match
+    Data</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Simple-Match-Data-Access" id=
+  "Simple-Match-Data-Access"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Simple-Match-Data"></a>
-<div class="header">
-<p>
-Next: <a href="Entire-Match-Data.html#Entire-Match-Data" accesskey="n" rel="next">Entire Match Data</a>, Previous: <a href="Replacing-Match.html#Replacing-Match" accesskey="p" rel="prev">Replacing Match</a>, Up: <a href="Match-Data.html#Match-Data" accesskey="u" rel="up">Match Data</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Simple-Match-Data-Access"></a>
-<h4 class="subsection">33.6.2 Simple Match Data Access</h4>
+  <h4 class="subsection">33.6.2 Simple Match Data Access</h4>
 
-<p>This section explains how to use the match data to find out what was
-matched by the last search or match operation, if it succeeded.
-</p>
-<p>You can ask about the entire matching text, or about a particular
-parenthetical subexpression of a regular expression.  The <var>count</var>
-argument in the functions below specifies which.  If <var>count</var> is
-zero, you are asking about the entire match.  If <var>count</var> is
-positive, it specifies which subexpression you want.
-</p>
-<p>Recall that the subexpressions of a regular expression are those
-expressions grouped with escaped parentheses, &lsquo;<samp>\(&hellip;\)</samp>&rsquo;.  The
-<var>count</var>th subexpression is found by counting occurrences of
-&lsquo;<samp>\(</samp>&rsquo; from the beginning of the whole regular expression.  The first
-subexpression is numbered 1, the second 2, and so on.  Only regular
-expressions can have subexpressions&mdash;after a simple string search, the
-only information available is about the entire match.
-</p>
-<p>Every successful search sets the match data.  Therefore, you should
-query the match data immediately after searching, before calling any
-other function that might perform another search.  Alternatively, you
-may save and restore the match data (see <a href="Saving-Match-Data.html#Saving-Match-Data">Saving Match Data</a>) around
-the call to functions that could perform another search.  Or use the
-functions that explicitly do not modify the match data;
-e.g., <code>string-match-p</code>.
-</p>
-<p>A search which fails may or may not alter the match data.  In the
-current implementation, it does not, but we may change it in the
-future.  Don&rsquo;t try to rely on the value of the match data after a
-failing search.
-</p>
-<dl>
-<dt><a name="index-match_002dstring"></a>Function: <strong>match-string</strong> <em>count &amp;optional in-string</em></dt>
-<dd><p>This function returns, as a string, the text matched in the last search
-or match operation.  It returns the entire text if <var>count</var> is zero,
-or just the portion corresponding to the <var>count</var>th parenthetical
-subexpression, if <var>count</var> is positive.
-</p>
-<p>If the last such operation was done against a string with
-<code>string-match</code>, then you should pass the same string as the
-argument <var>in-string</var>.  After a buffer search or match,
-you should omit <var>in-string</var> or pass <code>nil</code> for it; but you
-should make sure that the current buffer when you call
-<code>match-string</code> is the one in which you did the searching or
-matching.  Failure to follow this advice will lead to incorrect results.
-</p>
-<p>The value is <code>nil</code> if <var>count</var> is out of range, or for a
-subexpression inside a &lsquo;<samp>\|</samp>&rsquo; alternative that wasn&rsquo;t used or a
-repetition that repeated zero times.
-</p></dd></dl>
+  <p>This section explains how to use the match data to find out
+  what was matched by the last search or match operation, if it
+  succeeded.</p>
 
-<dl>
-<dt><a name="index-match_002dstring_002dno_002dproperties"></a>Function: <strong>match-string-no-properties</strong> <em>count &amp;optional in-string</em></dt>
-<dd><p>This function is like <code>match-string</code> except that the result
-has no text properties.
-</p></dd></dl>
+  <p>You can ask about the entire matching text, or about a
+  particular parenthetical subexpression of a regular expression.
+  The <var>count</var> argument in the functions below specifies
+  which. If <var>count</var> is zero, you are asking about the
+  entire match. If <var>count</var> is positive, it specifies which
+  subexpression you want.</p>
 
-<dl>
-<dt><a name="index-match_002dbeginning"></a>Function: <strong>match-beginning</strong> <em>count</em></dt>
-<dd><p>If the last regular expression search found a match, this function
-returns the position of the start of the matching text or of a
-subexpression of it.
-</p>
-<p>If <var>count</var> is zero, then the value is the position of the start of
-the entire match.  Otherwise, <var>count</var> specifies a subexpression in
-the regular expression, and the value of the function is the starting
-position of the match for that subexpression.
-</p>
-<p>The value is <code>nil</code> for a subexpression inside a &lsquo;<samp>\|</samp>&rsquo;
-alternative that wasn&rsquo;t used or a repetition that repeated zero times.
-</p></dd></dl>
+  <p>Recall that the subexpressions of a regular expression are
+  those expressions grouped with escaped parentheses,
+  &lsquo;<samp>\(&hellip;\)</samp>&rsquo;. The <var>count</var>th
+  subexpression is found by counting occurrences of
+  &lsquo;<samp>\(</samp>&rsquo; from the beginning of the whole
+  regular expression. The first subexpression is numbered 1, the
+  second 2, and so on. Only regular expressions can have
+  subexpressions&mdash;after a simple string search, the only
+  information available is about the entire match.</p>
 
-<dl>
-<dt><a name="index-match_002dend"></a>Function: <strong>match-end</strong> <em>count</em></dt>
-<dd><p>This function is like <code>match-beginning</code> except that it returns the
-position of the end of the match, rather than the position of the
-beginning.
-</p></dd></dl>
+  <p>Every successful search sets the match data. Therefore, you
+  should query the match data immediately after searching, before
+  calling any other function that might perform another search.
+  Alternatively, you may save and restore the match data (see
+  <a href="Saving-Match-Data.html#Saving-Match-Data">Saving Match
+  Data</a>) around the call to functions that could perform another
+  search. Or use the functions that explicitly do not modify the
+  match data; e.g., <code>string-match-p</code>.</p>
 
-<p>Here is an example of using the match data, with a comment showing the
-positions within the text:
-</p>
-<div class="example">
-<pre class="example">(string-match &quot;\\(qu\\)\\(ick\\)&quot;
-              &quot;The quick fox jumped quickly.&quot;)
+  <p>A search which fails may or may not alter the match data. In
+  the current implementation, it does not, but we may change it in
+  the future. Don&rsquo;t try to rely on the value of the match
+  data after a failing search.</p>
+
+  <dl>
+    <dt><a name="index-match_002dstring" id=
+    "index-match_002dstring"></a>Function:
+    <strong>match-string</strong> <em>count &amp;optional
+    in-string</em></dt>
+
+    <dd>
+      <p>This function returns, as a string, the text matched in
+      the last search or match operation. It returns the entire
+      text if <var>count</var> is zero, or just the portion
+      corresponding to the <var>count</var>th parenthetical
+      subexpression, if <var>count</var> is positive.</p>
+
+      <p>If the last such operation was done against a string with
+      <code>string-match</code>, then you should pass the same
+      string as the argument <var>in-string</var>. After a buffer
+      search or match, you should omit <var>in-string</var> or pass
+      <code>nil</code> for it; but you should make sure that the
+      current buffer when you call <code>match-string</code> is the
+      one in which you did the searching or matching. Failure to
+      follow this advice will lead to incorrect results.</p>
+
+      <p>The value is <code>nil</code> if <var>count</var> is out
+      of range, or for a subexpression inside a
+      &lsquo;<samp>\|</samp>&rsquo; alternative that wasn&rsquo;t
+      used or a repetition that repeated zero times.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-match_002dstring_002dno_002dproperties" id=
+    "index-match_002dstring_002dno_002dproperties"></a>Function:
+    <strong>match-string-no-properties</strong> <em>count
+    &amp;optional in-string</em></dt>
+
+    <dd>
+      <p>This function is like <code>match-string</code> except
+      that the result has no text properties.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-match_002dbeginning" id=
+    "index-match_002dbeginning"></a>Function:
+    <strong>match-beginning</strong> <em>count</em></dt>
+
+    <dd>
+      <p>If the last regular expression search found a match, this
+      function returns the position of the start of the matching
+      text or of a subexpression of it.</p>
+
+      <p>If <var>count</var> is zero, then the value is the
+      position of the start of the entire match. Otherwise,
+      <var>count</var> specifies a subexpression in the regular
+      expression, and the value of the function is the starting
+      position of the match for that subexpression.</p>
+
+      <p>The value is <code>nil</code> for a subexpression inside a
+      &lsquo;<samp>\|</samp>&rsquo; alternative that wasn&rsquo;t
+      used or a repetition that repeated zero times.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-match_002dend" id=
+    "index-match_002dend"></a>Function: <strong>match-end</strong>
+    <em>count</em></dt>
+
+    <dd>
+      <p>This function is like <code>match-beginning</code> except
+      that it returns the position of the end of the match, rather
+      than the position of the beginning.</p>
+    </dd>
+  </dl>
+
+  <p>Here is an example of using the match data, with a comment
+  showing the positions within the text:</p>
+
+  <div class="example">
+    <pre class="example">
+(string-match "\\(qu\\)\\(ick\\)"
+              "The quick fox jumped quickly.")
               ;0123456789
      &rArr; 4
-</pre><pre class="example">
-</pre><pre class="example">(match-string 0 &quot;The quick fox jumped quickly.&quot;)
-     &rArr; &quot;quick&quot;
-(match-string 1 &quot;The quick fox jumped quickly.&quot;)
-     &rArr; &quot;qu&quot;
-(match-string 2 &quot;The quick fox jumped quickly.&quot;)
-     &rArr; &quot;ick&quot;
-</pre><pre class="example">
-</pre><pre class="example">(match-beginning 1)       ; <span class="roman">The beginning of the match</span>
-     &rArr; 4                 ;   <span class="roman">with &lsquo;<samp>qu</samp>&rsquo; is at index 4.</span>
-</pre><pre class="example">
-</pre><pre class="example">(match-beginning 2)       ; <span class="roman">The beginning of the match</span>
-     &rArr; 6                 ;   <span class="roman">with &lsquo;<samp>ick</samp>&rsquo; is at index 6.</span>
-</pre><pre class="example">
-</pre><pre class="example">(match-end 1)             ; <span class="roman">The end of the match</span>
-     &rArr; 6                 ;   <span class="roman">with &lsquo;<samp>qu</samp>&rsquo; is at index 6.</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(match-string 0 "The quick fox jumped quickly.")
+     &rArr; "quick"
+(match-string 1 "The quick fox jumped quickly.")
+     &rArr; "qu"
+(match-string 2 "The quick fox jumped quickly.")
+     &rArr; "ick"
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(match-beginning 1)       ; <span class=
+"roman">The beginning of the match</span>
+     &rArr; 4                 ;   <span class=
+"roman">with &lsquo;<samp>qu</samp>&rsquo; is at index 4.</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(match-beginning 2)       ; <span class=
+"roman">The beginning of the match</span>
+     &rArr; 6                 ;   <span class=
+"roman">with &lsquo;<samp>ick</samp>&rsquo; is at index 6.</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(match-end 1)             ; <span class=
+"roman">The end of the match</span>
+     &rArr; 6                 ;   <span class=
+"roman">with &lsquo;<samp>qu</samp>&rsquo; is at index 6.</span>
 
-(match-end 2)             ; <span class="roman">The end of the match</span>
-     &rArr; 9                 ;   <span class="roman">with &lsquo;<samp>ick</samp>&rsquo; is at index 9.</span>
-</pre></div>
+(match-end 2)             ; <span class=
+"roman">The end of the match</span>
+     &rArr; 9                 ;   <span class=
+"roman">with &lsquo;<samp>ick</samp>&rsquo; is at index 9.</span>
+</pre>
+  </div>
 
-<p>Here is another example.  Point is initially located at the beginning
-of the line.  Searching moves point to between the space and the word
-&lsquo;<samp>in</samp>&rsquo;.  The beginning of the entire match is at the 9th character of
-the buffer (&lsquo;<samp>T</samp>&rsquo;), and the beginning of the match for the first
-subexpression is at the 13th character (&lsquo;<samp>c</samp>&rsquo;).
-</p>
-<div class="example">
-<pre class="example">(list
-  (re-search-forward &quot;The \\(cat \\)&quot;)
+  <p>Here is another example. Point is initially located at the
+  beginning of the line. Searching moves point to between the space
+  and the word &lsquo;<samp>in</samp>&rsquo;. The beginning of the
+  entire match is at the 9th character of the buffer
+  (&lsquo;<samp>T</samp>&rsquo;), and the beginning of the match
+  for the first subexpression is at the 13th character
+  (&lsquo;<samp>c</samp>&rsquo;).</p>
+
+  <div class="example">
+    <pre class="example">
+(list
+  (re-search-forward "The \\(cat \\)")
   (match-beginning 0)
   (match-beginning 1))
     &rArr; (17 9 13)
-</pre><pre class="example">
-</pre><pre class="example">---------- Buffer: foo ----------
-I read &quot;The cat &lowast;in the hat comes back&quot; twice.
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+---------- Buffer: foo ----------
+I read "The cat &lowast;in the hat comes back" twice.
         ^   ^
         9  13
 ---------- Buffer: foo ----------
-</pre></div>
+</pre>
+  </div>
 
-<p>(In this case, the index returned is a buffer position; the first
-character of the buffer counts as 1.)
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Entire-Match-Data.html#Entire-Match-Data" accesskey="n" rel="next">Entire Match Data</a>, Previous: <a href="Replacing-Match.html#Replacing-Match" accesskey="p" rel="prev">Replacing Match</a>, Up: <a href="Match-Data.html#Match-Data" accesskey="u" rel="up">Match Data</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>(In this case, the index returned is a buffer position; the
+  first character of the buffer counts as 1.)</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Entire-Match-Data.html#Entire-Match-Data"
+    accesskey="n" rel="next">Entire Match Data</a>, Previous:
+    <a href="Replacing-Match.html#Replacing-Match" accesskey="p"
+    rel="prev">Replacing Match</a>, Up: <a href=
+    "Match-Data.html#Match-Data" accesskey="u" rel="up">Match
+    Data</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,118 +20,161 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Auto Fill</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Auto Fill">
-<meta name="keywords" content="GNU Emacs Manual: Auto Fill">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Filling.html#Filling" rel="up" title="Filling">
-<link href="Fill-Commands.html#Fill-Commands" rel="next" title="Fill Commands">
-<link href="Filling.html#Filling" rel="prev" title="Filling">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Auto Fill</title>
+  <meta name="description" content="GNU Emacs Manual: Auto Fill" />
+  <meta name="keywords" content="GNU Emacs Manual: Auto Fill" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Filling.html#Filling" rel="up" title="Filling" />
+  <link href="Fill-Commands.html#Fill-Commands" rel="next" title=
+  "Fill Commands" />
+  <link href="Filling.html#Filling" rel="prev" title="Filling" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Auto-Fill" id="Auto-Fill"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Fill-Commands.html#Fill-Commands" accesskey=
+    "n" rel="next">Fill Commands</a>, Up: <a href=
+    "Filling.html#Filling" accesskey="u" rel="up">Filling</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Auto-Fill-Mode" id="Auto-Fill-Mode"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Auto-Fill"></a>
-<div class="header">
-<p>
-Next: <a href="Fill-Commands.html#Fill-Commands" accesskey="n" rel="next">Fill Commands</a>, Up: <a href="Filling.html#Filling" accesskey="u" rel="up">Filling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Auto-Fill-Mode"></a>
-<h4 class="subsection">25.6.1 Auto Fill Mode</h4>
-<a name="index-Auto-Fill-mode"></a>
-<a name="index-mode_002c-Auto-Fill"></a>
+  <h4 class="subsection">25.6.1 Auto Fill Mode</h4><a name=
+  "index-Auto-Fill-mode" id="index-Auto-Fill-mode"></a> <a name=
+  "index-mode_002c-Auto-Fill" id="index-mode_002c-Auto-Fill"></a>
 
-<p><em>Auto Fill</em> mode is a buffer-local minor mode (see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>) in which lines are broken automatically when they become too
-wide.  Breaking happens only when you type a <tt class="key">SPC</tt> or <tt class="key">RET</tt>.
-</p>
-<dl compact="compact">
-<dt><kbd>M-x auto-fill-mode</kbd></dt>
-<dd><p>Enable or disable Auto Fill mode.
-</p></dd>
-<dt><kbd><span class="key">SPC</span></kbd></dt>
-<dt><kbd><span class="key">RET</span></kbd></dt>
-<dd><p>In Auto Fill mode, break lines when appropriate.
-</p></dd>
-</dl>
+  <p><em>Auto Fill</em> mode is a buffer-local minor mode (see
+  <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>) in which
+  lines are broken automatically when they become too wide.
+  Breaking happens only when you type a <tt class="key">SPC</tt> or
+  <tt class="key">RET</tt>.</p>
 
-<a name="index-auto_002dfill_002dmode"></a>
-<p>The mode command <kbd>M-x auto-fill-mode</kbd> toggles Auto Fill mode in
-the current buffer.  With a positive numeric argument, it enables Auto
-Fill mode, and with a negative argument it disables it.  If
-<code>auto-fill-mode</code> is called from Lisp with an omitted or
-<code>nil</code> argument, it enables Auto Fill mode.  To enable Auto Fill
-mode automatically in certain major modes, add <code>auto-fill-mode</code>
-to the mode hooks (see <a href="Major-Modes.html#Major-Modes">Major Modes</a>).  When Auto Fill mode is
-enabled, the mode indicator &lsquo;<samp>Fill</samp>&rsquo; appears in the mode line
-(see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).
-</p>
-<p>Auto Fill mode breaks lines automatically at spaces whenever they
-get longer than the desired width.  This line breaking occurs only
-when you type <tt class="key">SPC</tt> or <tt class="key">RET</tt>.  If you wish to insert a space
-or newline without permitting line-breaking, type <kbd>C-q <span class="key">SPC</span></kbd>
-or <kbd>C-q C-j</kbd> respectively.  Also, <kbd>C-o</kbd> inserts a newline
-without line breaking.
-</p>
-<p>When Auto Fill mode breaks a line, it tries to obey the
-<em>adaptive fill prefix</em>: if a fill prefix can be deduced from the
-first and/or second line of the current paragraph, it is inserted into
-the new line (see <a href="Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>).  Otherwise the new line is
-indented, as though you had typed <tt class="key">TAB</tt> on it
-(see <a href="Indentation.html#Indentation">Indentation</a>).  In a programming language mode, if a line is
-broken in the middle of a comment, the comment is split by inserting
-new comment delimiters as appropriate.
-</p>
-<p>Auto Fill mode does not refill entire paragraphs; it breaks lines
-but does not merge lines.  Therefore, editing in the middle of a
-paragraph can result in a paragraph that is not correctly filled.  To
-fill it, call the explicit fill commands
-(see <a href="Fill-Commands.html#Fill-Commands">Fill Commands</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Fill-Commands.html#Fill-Commands" accesskey="n" rel="next">Fill Commands</a>, Up: <a href="Filling.html#Filling" accesskey="u" rel="up">Filling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>M-x auto-fill-mode</kbd></dt>
 
+    <dd>
+      <p>Enable or disable Auto Fill mode.</p>
+    </dd>
 
+    <dt><kbd><span class="key">SPC</span></kbd></dt>
 
+    <dt><kbd><span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>In Auto Fill mode, break lines when appropriate.</p>
+    </dd>
+  </dl><a name="index-auto_002dfill_002dmode" id=
+  "index-auto_002dfill_002dmode"></a>
+
+  <p>The mode command <kbd>M-x auto-fill-mode</kbd> toggles Auto
+  Fill mode in the current buffer. With a positive numeric
+  argument, it enables Auto Fill mode, and with a negative argument
+  it disables it. If <code>auto-fill-mode</code> is called from
+  Lisp with an omitted or <code>nil</code> argument, it enables
+  Auto Fill mode. To enable Auto Fill mode automatically in certain
+  major modes, add <code>auto-fill-mode</code> to the mode hooks
+  (see <a href="Major-Modes.html#Major-Modes">Major Modes</a>).
+  When Auto Fill mode is enabled, the mode indicator
+  &lsquo;<samp>Fill</samp>&rsquo; appears in the mode line (see
+  <a href="Mode-Line.html#Mode-Line">Mode Line</a>).</p>
+
+  <p>Auto Fill mode breaks lines automatically at spaces whenever
+  they get longer than the desired width. This line breaking occurs
+  only when you type <tt class="key">SPC</tt> or <tt class=
+  "key">RET</tt>. If you wish to insert a space or newline without
+  permitting line-breaking, type <kbd>C-q <span class=
+  "key">SPC</span></kbd> or <kbd>C-q C-j</kbd> respectively. Also,
+  <kbd>C-o</kbd> inserts a newline without line breaking.</p>
+
+  <p>When Auto Fill mode breaks a line, it tries to obey the
+  <em>adaptive fill prefix</em>: if a fill prefix can be deduced
+  from the first and/or second line of the current paragraph, it is
+  inserted into the new line (see <a href=
+  "Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>). Otherwise
+  the new line is indented, as though you had typed <tt class=
+  "key">TAB</tt> on it (see <a href=
+  "Indentation.html#Indentation">Indentation</a>). In a programming
+  language mode, if a line is broken in the middle of a comment,
+  the comment is split by inserting new comment delimiters as
+  appropriate.</p>
+
+  <p>Auto Fill mode does not refill entire paragraphs; it breaks
+  lines but does not merge lines. Therefore, editing in the middle
+  of a paragraph can result in a paragraph that is not correctly
+  filled. To fill it, call the explicit fill commands (see <a href=
+  "Fill-Commands.html#Fill-Commands">Fill Commands</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Fill-Commands.html#Fill-Commands" accesskey=
+    "n" rel="next">Fill Commands</a>, Up: <a href=
+    "Filling.html#Filling" accesskey="u" rel="up">Filling</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

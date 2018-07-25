@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,135 +14,206 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Topic Sorting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Topic Sorting">
-<meta name="keywords" content="Gnus Manual: Topic Sorting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Group-Topics.html#Group-Topics" rel="up" title="Group Topics">
-<link href="Topic-Topology.html#Topic-Topology" rel="next" title="Topic Topology">
-<link href="Topic-Variables.html#Topic-Variables" rel="prev" title="Topic Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Topic Sorting</title>
+  <meta name="description" content="Gnus Manual: Topic Sorting" />
+  <meta name="keywords" content="Gnus Manual: Topic Sorting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Group-Topics.html#Group-Topics" rel="up" title=
+  "Group Topics" />
+  <link href="Topic-Topology.html#Topic-Topology" rel="next" title=
+  "Topic Topology" />
+  <link href="Topic-Variables.html#Topic-Variables" rel="prev"
+  title="Topic Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Topic-Sorting"></a>
-<div class="header">
-<p>
-Next: <a href="Topic-Topology.html#Topic-Topology" accesskey="n" rel="next">Topic Topology</a>, Previous: <a href="Topic-Variables.html#Topic-Variables" accesskey="p" rel="prev">Topic Variables</a>, Up: <a href="Group-Topics.html#Group-Topics" accesskey="u" rel="up">Group Topics</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Topic-Sorting-1"></a>
-<h4 class="subsection">2.16.3 Topic Sorting</h4>
-<a name="index-topic-sorting"></a>
+<body lang="en" xml:lang="en">
+  <a name="Topic-Sorting" id="Topic-Sorting"></a>
 
-<p>You can sort the groups in each topic individually with the following
-commands:
-</p>
+  <div class="header">
+    <p>Next: <a href="Topic-Topology.html#Topic-Topology"
+    accesskey="n" rel="next">Topic Topology</a>, Previous: <a href=
+    "Topic-Variables.html#Topic-Variables" accesskey="p" rel=
+    "prev">Topic Variables</a>, Up: <a href=
+    "Group-Topics.html#Group-Topics" accesskey="u" rel="up">Group
+    Topics</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Topic-Sorting-1" id="Topic-Sorting-1"></a>
 
-<dl compact="compact">
-<dt><kbd>T S a</kbd></dt>
-<dd><a name="index-T-S-a-_0028Topic_0029"></a>
-<a name="index-gnus_002dtopic_002dsort_002dgroups_002dby_002dalphabet"></a>
-<p>Sort the current topic alphabetically by group name
-(<code>gnus-topic-sort-groups-by-alphabet</code>).
-</p>
-</dd>
-<dt><kbd>T S u</kbd></dt>
-<dd><a name="index-T-S-u-_0028Topic_0029"></a>
-<a name="index-gnus_002dtopic_002dsort_002dgroups_002dby_002dunread"></a>
-<p>Sort the current topic by the number of unread articles
-(<code>gnus-topic-sort-groups-by-unread</code>).
-</p>
-</dd>
-<dt><kbd>T S l</kbd></dt>
-<dd><a name="index-T-S-l-_0028Topic_0029"></a>
-<a name="index-gnus_002dtopic_002dsort_002dgroups_002dby_002dlevel"></a>
-<p>Sort the current topic by group level
-(<code>gnus-topic-sort-groups-by-level</code>).
-</p>
-</dd>
-<dt><kbd>T S v</kbd></dt>
-<dd><a name="index-T-S-v-_0028Topic_0029"></a>
-<a name="index-gnus_002dtopic_002dsort_002dgroups_002dby_002dscore"></a>
-<p>Sort the current topic by group score
-(<code>gnus-topic-sort-groups-by-score</code>).  See <a href="Group-Score.html#Group-Score">Group Score</a>.
-</p>
-</dd>
-<dt><kbd>T S r</kbd></dt>
-<dd><a name="index-T-S-r-_0028Topic_0029"></a>
-<a name="index-gnus_002dtopic_002dsort_002dgroups_002dby_002drank"></a>
-<p>Sort the current topic by group rank
-(<code>gnus-topic-sort-groups-by-rank</code>).  See <a href="Group-Score.html#Group-Score">Group Score</a>.
-</p>
-</dd>
-<dt><kbd>T S m</kbd></dt>
-<dd><a name="index-T-S-m-_0028Topic_0029"></a>
-<a name="index-gnus_002dtopic_002dsort_002dgroups_002dby_002dmethod"></a>
-<p>Sort the current topic alphabetically by back end name
-(<code>gnus-topic-sort-groups-by-method</code>).
-</p>
-</dd>
-<dt><kbd>T S e</kbd></dt>
-<dd><a name="index-T-S-e-_0028Topic_0029"></a>
-<a name="index-gnus_002dtopic_002dsort_002dgroups_002dby_002dserver"></a>
-<p>Sort the current topic alphabetically by server name
-(<code>gnus-topic-sort-groups-by-server</code>).
-</p>
-</dd>
-<dt><kbd>T S s</kbd></dt>
-<dd><a name="index-T-S-s-_0028Topic_0029"></a>
-<a name="index-gnus_002dtopic_002dsort_002dgroups"></a>
-<p>Sort the current topic according to the function(s) given by the
-<code>gnus-group-sort-function</code> variable
-(<code>gnus-topic-sort-groups</code>).
-</p>
-</dd>
-</dl>
+  <h4 class="subsection">2.16.3 Topic Sorting</h4><a name=
+  "index-topic-sorting" id="index-topic-sorting"></a>
 
-<p>When given a prefix argument, all these commands will sort in reverse
-order.  See <a href="Sorting-Groups.html#Sorting-Groups">Sorting Groups</a>, for more information about group
-sorting.
-</p>
+  <p>You can sort the groups in each topic individually with the
+  following commands:</p>
 
+  <dl compact="compact">
+    <dt><kbd>T S a</kbd></dt>
 
+    <dd>
+      <a name="index-T-S-a-_0028Topic_0029" id=
+      "index-T-S-a-_0028Topic_0029"></a> <a name=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dalphabet"
+      id=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dalphabet">
+      </a>
 
+      <p>Sort the current topic alphabetically by group name
+      (<code>gnus-topic-sort-groups-by-alphabet</code>).</p>
+    </dd>
 
+    <dt><kbd>T S u</kbd></dt>
+
+    <dd>
+      <a name="index-T-S-u-_0028Topic_0029" id=
+      "index-T-S-u-_0028Topic_0029"></a> <a name=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dunread"
+      id=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dunread"></a>
+
+      <p>Sort the current topic by the number of unread articles
+      (<code>gnus-topic-sort-groups-by-unread</code>).</p>
+    </dd>
+
+    <dt><kbd>T S l</kbd></dt>
+
+    <dd>
+      <a name="index-T-S-l-_0028Topic_0029" id=
+      "index-T-S-l-_0028Topic_0029"></a> <a name=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dlevel"
+      id=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dlevel"></a>
+
+      <p>Sort the current topic by group level
+      (<code>gnus-topic-sort-groups-by-level</code>).</p>
+    </dd>
+
+    <dt><kbd>T S v</kbd></dt>
+
+    <dd>
+      <a name="index-T-S-v-_0028Topic_0029" id=
+      "index-T-S-v-_0028Topic_0029"></a> <a name=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dscore"
+      id=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dscore"></a>
+
+      <p>Sort the current topic by group score
+      (<code>gnus-topic-sort-groups-by-score</code>). See <a href=
+      "Group-Score.html#Group-Score">Group Score</a>.</p>
+    </dd>
+
+    <dt><kbd>T S r</kbd></dt>
+
+    <dd>
+      <a name="index-T-S-r-_0028Topic_0029" id=
+      "index-T-S-r-_0028Topic_0029"></a> <a name=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002drank"
+      id="index-gnus_002dtopic_002dsort_002dgroups_002dby_002drank">
+      </a>
+
+      <p>Sort the current topic by group rank
+      (<code>gnus-topic-sort-groups-by-rank</code>). See <a href=
+      "Group-Score.html#Group-Score">Group Score</a>.</p>
+    </dd>
+
+    <dt><kbd>T S m</kbd></dt>
+
+    <dd>
+      <a name="index-T-S-m-_0028Topic_0029" id=
+      "index-T-S-m-_0028Topic_0029"></a> <a name=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dmethod"
+      id=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dmethod"></a>
+
+      <p>Sort the current topic alphabetically by back end name
+      (<code>gnus-topic-sort-groups-by-method</code>).</p>
+    </dd>
+
+    <dt><kbd>T S e</kbd></dt>
+
+    <dd>
+      <a name="index-T-S-e-_0028Topic_0029" id=
+      "index-T-S-e-_0028Topic_0029"></a> <a name=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dserver"
+      id=
+      "index-gnus_002dtopic_002dsort_002dgroups_002dby_002dserver"></a>
+
+      <p>Sort the current topic alphabetically by server name
+      (<code>gnus-topic-sort-groups-by-server</code>).</p>
+    </dd>
+
+    <dt><kbd>T S s</kbd></dt>
+
+    <dd>
+      <a name="index-T-S-s-_0028Topic_0029" id=
+      "index-T-S-s-_0028Topic_0029"></a> <a name=
+      "index-gnus_002dtopic_002dsort_002dgroups" id=
+      "index-gnus_002dtopic_002dsort_002dgroups"></a>
+
+      <p>Sort the current topic according to the function(s) given
+      by the <code>gnus-group-sort-function</code> variable
+      (<code>gnus-topic-sort-groups</code>).</p>
+    </dd>
+  </dl>
+
+  <p>When given a prefix argument, all these commands will sort in
+  reverse order. See <a href=
+  "Sorting-Groups.html#Sorting-Groups">Sorting Groups</a>, for more
+  information about group sorting.</p>
 </body>
 </html>

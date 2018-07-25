@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,150 +19,220 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Time of Day</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Time of Day">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Time of Day">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="System-Interface.html#System-Interface" rel="up" title="System Interface">
-<link href="Time-Zone-Rules.html#Time-Zone-Rules" rel="next" title="Time Zone Rules">
-<link href="User-Identification.html#User-Identification" rel="prev" title="User Identification">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Time of Day</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Time of Day" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Time of Day" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="System-Interface.html#System-Interface" rel="up"
+  title="System Interface" />
+  <link href="Time-Zone-Rules.html#Time-Zone-Rules" rel="next"
+  title="Time Zone Rules" />
+  <link href="User-Identification.html#User-Identification" rel=
+  "prev" title="User Identification" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Time-of-Day" id="Time-of-Day"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Time-Zone-Rules.html#Time-Zone-Rules"
+    accesskey="n" rel="next">Time Zone Rules</a>, Previous:
+    <a href="User-Identification.html#User-Identification"
+    accesskey="p" rel="prev">User Identification</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Time-of-Day-1" id="Time-of-Day-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Time-of-Day"></a>
-<div class="header">
-<p>
-Next: <a href="Time-Zone-Rules.html#Time-Zone-Rules" accesskey="n" rel="next">Time Zone Rules</a>, Previous: <a href="User-Identification.html#User-Identification" accesskey="p" rel="prev">User Identification</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Time-of-Day-1"></a>
-<h3 class="section">38.5 Time of Day</h3>
-<a name="index-time-of-day"></a>
+  <h3 class="section">38.5 Time of Day</h3><a name=
+  "index-time-of-day" id="index-time-of-day"></a>
 
-<p>This section explains how to determine the current time and time
-zone.
-</p>
-<a name="index-epoch"></a>
-<p>Most of these functions represent time as a list of four integers
-<code>(<var>sec-high</var> <var>sec-low</var> <var>microsec</var> <var>picosec</var>)</code>.
-This represents the number of seconds from the <em>epoch</em> (January
-1, 1970 at 00:00 UTC), using the formula:
-<var>high</var> * 2**16 + <var>low</var> + <var>micro</var> * 10**−6 +
-<var>pico</var> * 10**−12.
-The return value of <code>current-time</code> represents time using this
-form, as do the timestamps in the return values of other functions
-such as <code>file-attributes</code> (see <a href="File-Attributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>).  In some cases, functions may return two- or
-three-element lists, with omitted <var>microsec</var> and <var>picosec</var>
-components defaulting to zero.
-</p>
-<a name="index-time-value"></a>
-<p>Function arguments, e.g., the <var>time</var> argument to
-<code>current-time-string</code>, accept a more-general <em>time value</em>
-format, which can be a list of integers as above, or a single number
-for seconds since the epoch, or <code>nil</code> for the current time.  You
-can convert a time value into a human-readable string using
-<code>current-time-string</code> and <code>format-time-string</code>, into a list
-of integers using <code>seconds-to-time</code>, and into other forms using
-<code>decode-time</code> and <code>float-time</code>.  These functions are
-described in the following sections.
-</p>
-<dl>
-<dt><a name="index-current_002dtime_002dstring"></a>Function: <strong>current-time-string</strong> <em>&amp;optional time zone</em></dt>
-<dd><p>This function returns the current time and date as a human-readable
-string.  The format does not vary for the initial part of the string,
-which contains the day of week, month, day of month, and time of day
-in that order: the number of characters used for these fields is
-always the same, so you can reliably
-use <code>substring</code> to extract them.  You should count
-characters from the beginning of the string rather than from the end,
-as the year might not have exactly four digits, and additional
-information may some day be added at the end.
-</p>
-<p>The argument <var>time</var>, if given, specifies a time to format,
-instead of the current time.  The optional argument <var>zone</var>
-defaults to the current time zone rule.  See <a href="Time-Zone-Rules.html#Time-Zone-Rules">Time Zone Rules</a>.
-</p>
-<div class="example">
-<pre class="example">(current-time-string)
-     &rArr; &quot;Wed Oct 14 22:21:05 1987&quot;
-</pre></div>
-</dd></dl>
+  <p>This section explains how to determine the current time and
+  time zone.</p><a name="index-epoch" id="index-epoch"></a>
 
-<dl>
-<dt><a name="index-current_002dtime"></a>Function: <strong>current-time</strong></dt>
-<dd><p>This function returns the current time, represented as a list of four
-integers <code>(<var>sec-high</var> <var>sec-low</var> <var>microsec</var> <var>picosec</var>)</code>.
-These integers have trailing zeros on systems that return time with
-lower resolutions.  On all current machines <var>picosec</var> is a
-multiple of 1000, but this may change as higher-resolution clocks
-become available.
-</p></dd></dl>
+  <p>Most of these functions represent time as a list of four
+  integers <code>(<var>sec-high</var> <var>sec-low</var>
+  <var>microsec</var> <var>picosec</var>)</code>. This represents
+  the number of seconds from the <em>epoch</em> (January 1, 1970 at
+  00:00 UTC), using the formula: <var>high</var> * 2**16 +
+  <var>low</var> + <var>micro</var> * 10**&acirc;&circ;&rsquo;6 +
+  <var>pico</var> * 10**&acirc;&circ;&rsquo;12. The return value of
+  <code>current-time</code> represents time using this form, as do
+  the timestamps in the return values of other functions such as
+  <code>file-attributes</code> (see <a href=
+  "File-Attributes.html#Definition-of-file_002dattributes">Definition
+  of file-attributes</a>). In some cases, functions may return two-
+  or three-element lists, with omitted <var>microsec</var> and
+  <var>picosec</var> components defaulting to zero.</p><a name=
+  "index-time-value" id="index-time-value"></a>
 
-<dl>
-<dt><a name="index-float_002dtime"></a>Function: <strong>float-time</strong> <em>&amp;optional time</em></dt>
-<dd><p>This function returns the current time as a floating-point number of
-seconds since the epoch.  The optional argument <var>time</var>, if
-given, specifies a time to convert instead of the current time.
-</p>
-<p><em>Warning</em>: Since the result is floating point, it may not be
-exact.  Do not use this function if precise time stamps are required.
-</p>
-<p><code>time-to-seconds</code> is an alias for this function.
-</p></dd></dl>
+  <p>Function arguments, e.g., the <var>time</var> argument to
+  <code>current-time-string</code>, accept a more-general <em>time
+  value</em> format, which can be a list of integers as above, or a
+  single number for seconds since the epoch, or <code>nil</code>
+  for the current time. You can convert a time value into a
+  human-readable string using <code>current-time-string</code> and
+  <code>format-time-string</code>, into a list of integers using
+  <code>seconds-to-time</code>, and into other forms using
+  <code>decode-time</code> and <code>float-time</code>. These
+  functions are described in the following sections.</p>
 
-<dl>
-<dt><a name="index-seconds_002dto_002dtime"></a>Function: <strong>seconds-to-time</strong> <em>time</em></dt>
-<dd><p>This function converts a time value to list-of-integer form.
-For example, if <var>time</var> is a number, <code>(time-to-seconds
-(seconds-to-time <var>time</var>))</code> equals the number unless overflow
-or rounding errors occur.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-current_002dtime_002dstring" id=
+    "index-current_002dtime_002dstring"></a>Function:
+    <strong>current-time-string</strong> <em>&amp;optional time
+    zone</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Time-Zone-Rules.html#Time-Zone-Rules" accesskey="n" rel="next">Time Zone Rules</a>, Previous: <a href="User-Identification.html#User-Identification" accesskey="p" rel="prev">User Identification</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns the current time and date as a
+      human-readable string. The format does not vary for the
+      initial part of the string, which contains the day of week,
+      month, day of month, and time of day in that order: the
+      number of characters used for these fields is always the
+      same, so you can reliably use <code>substring</code> to
+      extract them. You should count characters from the beginning
+      of the string rather than from the end, as the year might not
+      have exactly four digits, and additional information may some
+      day be added at the end.</p>
 
+      <p>The argument <var>time</var>, if given, specifies a time
+      to format, instead of the current time. The optional argument
+      <var>zone</var> defaults to the current time zone rule. See
+      <a href="Time-Zone-Rules.html#Time-Zone-Rules">Time Zone
+      Rules</a>.</p>
 
+      <div class="example">
+        <pre class="example">
+(current-time-string)
+     &rArr; "Wed Oct 14 22:21:05 1987"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-current_002dtime" id=
+    "index-current_002dtime"></a>Function:
+    <strong>current-time</strong></dt>
+
+    <dd>
+      <p>This function returns the current time, represented as a
+      list of four integers <code>(<var>sec-high</var>
+      <var>sec-low</var> <var>microsec</var>
+      <var>picosec</var>)</code>. These integers have trailing
+      zeros on systems that return time with lower resolutions. On
+      all current machines <var>picosec</var> is a multiple of
+      1000, but this may change as higher-resolution clocks become
+      available.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-float_002dtime" id=
+    "index-float_002dtime"></a>Function:
+    <strong>float-time</strong> <em>&amp;optional time</em></dt>
+
+    <dd>
+      <p>This function returns the current time as a floating-point
+      number of seconds since the epoch. The optional argument
+      <var>time</var>, if given, specifies a time to convert
+      instead of the current time.</p>
+
+      <p><em>Warning</em>: Since the result is floating point, it
+      may not be exact. Do not use this function if precise time
+      stamps are required.</p>
+
+      <p><code>time-to-seconds</code> is an alias for this
+      function.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-seconds_002dto_002dtime" id=
+    "index-seconds_002dto_002dtime"></a>Function:
+    <strong>seconds-to-time</strong> <em>time</em></dt>
+
+    <dd>
+      <p>This function converts a time value to list-of-integer
+      form. For example, if <var>time</var> is a number,
+      <code>(time-to-seconds (seconds-to-time
+      <var>time</var>))</code> equals the number unless overflow or
+      rounding errors occur.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Time-Zone-Rules.html#Time-Zone-Rules"
+    accesskey="n" rel="next">Time Zone Rules</a>, Previous:
+    <a href="User-Identification.html#User-Identification"
+    accesskey="p" rel="prev">User Identification</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

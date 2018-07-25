@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,165 +29,240 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: Security risks with Emacs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: Security risks with Emacs">
-<meta name="keywords" content="GNU Emacs FAQ: Security risks with Emacs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Bugs-and-problems.html#Bugs-and-problems" rel="up" title="Bugs and problems">
-<link href="Dired-claims-that-no-file-is-on-this-line.html#Dired-claims-that-no-file-is-on-this-line" rel="next" title="Dired claims that no file is on this line">
-<link href="Shell-mode-loses-the-current-directory.html#Shell-mode-loses-the-current-directory" rel="prev" title="Shell mode loses the current directory">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: Security risks with Emacs</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: Security risks with Emacs" />
+  <meta name="keywords" content=
+  "GNU Emacs FAQ: Security risks with Emacs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Bugs-and-problems.html#Bugs-and-problems" rel="up"
+  title="Bugs and problems" />
+  <link href=
+  "Dired-claims-that-no-file-is-on-this-line.html#Dired-claims-that-no-file-is-on-this-line"
+  rel="next" title="Dired claims that no file is on this line" />
+  <link href=
+  "Shell-mode-loses-the-current-directory.html#Shell-mode-loses-the-current-directory"
+  rel="prev" title="Shell mode loses the current directory" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Security-risks-with-Emacs"></a>
-<div class="header">
-<p>
-Next: <a href="Dired-claims-that-no-file-is-on-this-line.html#Dired-claims-that-no-file-is-on-this-line" accesskey="n" rel="next">Dired claims that no file is on this line</a>, Previous: <a href="Shell-mode-loses-the-current-directory.html#Shell-mode-loses-the-current-directory" accesskey="p" rel="prev">Shell mode loses the current directory</a>, Up: <a href="Bugs-and-problems.html#Bugs-and-problems" accesskey="u" rel="up">Bugs and problems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Are-there-any-security-risks-in-Emacs_003f"></a>
-<h3 class="section">6.10 Are there any security risks in Emacs?</h3>
-<a name="index-Security-with-Emacs"></a>
-<a name="index-movemail-and-security"></a>
-<a name="index-file_002dlocal_002dvariable-and-security"></a>
-<a name="index-Synthetic-X-events-and-security"></a>
-<a name="index-X-events-and-security"></a>
+<body lang="en" xml:lang="en">
+  <a name="Security-risks-with-Emacs" id=
+  "Security-risks-with-Emacs"></a>
 
-<ul>
-<li> The <samp>movemail</samp> incident.  (No, this is not a risk.)
+  <div class="header">
+    <p>Next: <a href=
+    "Dired-claims-that-no-file-is-on-this-line.html#Dired-claims-that-no-file-is-on-this-line"
+    accesskey="n" rel="next">Dired claims that no file is on this
+    line</a>, Previous: <a href=
+    "Shell-mode-loses-the-current-directory.html#Shell-mode-loses-the-current-directory"
+    accesskey="p" rel="prev">Shell mode loses the current
+    directory</a>, Up: <a href=
+    "Bugs-and-problems.html#Bugs-and-problems" accesskey="u" rel=
+    "up">Bugs and problems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Are-there-any-security-risks-in-Emacs_003f" id=
+  "Are-there-any-security-risks-in-Emacs_003f"></a>
 
-<p>In his book <cite>The Cuckoo&rsquo;s Egg</cite>, Cliff Stoll describes this in
-chapter 4.  The site at LBL had installed the <samp>/etc/movemail</samp>
-program setuid root.  (As of version 19, <samp>movemail</samp> is in your
-architecture-specific directory; type <kbd>C-h v exec-directory
-<span class="key">RET</span></kbd> to see what it is.)  Since <code>movemail</code> had not been
-designed for this situation, a security hole was created and users could
-get root privileges.
-</p>
-<p><code>movemail</code> has since been changed so that this security hole will
-not exist, even if it is installed setuid root.  However,
-<code>movemail</code> no longer needs to be installed setuid root, which
-should eliminate this particular risk.
-</p>
-<p>We have heard unverified reports that the 1988 Internet worm took
-advantage of this configuration problem.
-</p>
-</li><li> The <code>file-local-variable</code> feature.  (Yes, a risk, but easy to
-change.)
+  <h3 class="section">6.10 Are there any security risks in
+  Emacs?</h3><a name="index-Security-with-Emacs" id=
+  "index-Security-with-Emacs"></a> <a name=
+  "index-movemail-and-security" id=
+  "index-movemail-and-security"></a> <a name=
+  "index-file_002dlocal_002dvariable-and-security" id=
+  "index-file_002dlocal_002dvariable-and-security"></a> <a name=
+  "index-Synthetic-X-events-and-security" id=
+  "index-Synthetic-X-events-and-security"></a> <a name=
+  "index-X-events-and-security" id=
+  "index-X-events-and-security"></a>
 
-<p>There is an Emacs feature that allows the setting of local values for
-variables when editing a file by including specially formatted text near
-the end of the file.  This feature also includes the ability to have
-arbitrary Emacs Lisp code evaluated when the file is visited.
-Obviously, there is a potential for Trojan horses to exploit this
-feature.
-</p>
-<p>As of Emacs 22, Emacs has a list of local variables that are known to
-be safe to set.  If a file tries to set any variable outside this
-list, it asks the user to confirm whether the variables should be set.
-You can also tell Emacs whether to allow the evaluation of Emacs Lisp
-code found at the bottom of files by setting the variable
-<code>enable-local-eval</code>.
-</p>
-<p>See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Variables.html#File-Variables">File Variables</a> in <cite>The GNU Emacs Manual</cite>.
-</p>
-</li><li> Synthetic X events.  (Yes, a risk; use &lsquo;<samp>MIT-MAGIC-COOKIE-1</samp>&rsquo; or
-better.)
+  <ul>
+    <li>The <samp>movemail</samp> incident. (No, this is not a
+    risk.)
 
-<p>Emacs accepts synthetic X events generated by the <code>SendEvent</code>
-request as though they were regular events.  As a result, if you are
-using the trivial host-based authentication, other users who can open X
-connections to your X workstation can make your Emacs process do
-anything, including run other processes with your privileges.
-</p>
-<p>The only fix for this is to prevent other users from being able to open
-X connections.  The standard way to prevent this is to use a real
-authentication mechanism, such as &lsquo;<samp>MIT-MAGIC-COOKIE-1</samp>&rsquo;.  If using
-the <code>xauth</code> program has any effect, then you are probably using
-&lsquo;<samp>MIT-MAGIC-COOKIE-1</samp>&rsquo;.  Your site may be using a superior
-authentication method; ask your system administrator.
-</p>
-<p>If real authentication is not a possibility, you may be satisfied by
-just allowing hosts access for brief intervals while you start your X
-programs, then removing the access.  This reduces the risk somewhat by
-narrowing the time window when hostile users would have access, but
-<em>does not eliminate the risk</em>.
-</p>
-<p>On most computers running Unix and X, you enable and disable
-access using the <code>xhost</code> command.  To allow all hosts access to
-your X server, use
-</p>
-<div class="example">
-<pre class="example">xhost +
-</pre></div>
+      <p>In his book <cite>The Cuckoo&rsquo;s Egg</cite>, Cliff
+      Stoll describes this in chapter 4. The site at LBL had
+      installed the <samp>/etc/movemail</samp> program setuid root.
+      (As of version 19, <samp>movemail</samp> is in your
+      architecture-specific directory; type <kbd>C-h v
+      exec-directory <span class="key">RET</span></kbd> to see what
+      it is.) Since <code>movemail</code> had not been designed for
+      this situation, a security hole was created and users could
+      get root privileges.</p>
 
-<p>at the shell prompt, which (on an HP machine, at least) produces the
-following message:
-</p>
-<div class="example">
-<pre class="example">access control disabled, clients can connect from any host
-</pre></div>
+      <p><code>movemail</code> has since been changed so that this
+      security hole will not exist, even if it is installed setuid
+      root. However, <code>movemail</code> no longer needs to be
+      installed setuid root, which should eliminate this particular
+      risk.</p>
 
-<p>To deny all hosts access to your X server (except those explicitly
-allowed by name), use
-</p>
-<div class="example">
-<pre class="example">xhost -
-</pre></div>
+      <p>We have heard unverified reports that the 1988 Internet
+      worm took advantage of this configuration problem.</p>
+    </li>
 
-<p>On the test HP computer, this command generated the following message:
-</p>
-<div class="example">
-<pre class="example">access control enabled, only authorized clients can connect
-</pre></div>
+    <li>The <code>file-local-variable</code> feature. (Yes, a risk,
+    but easy to change.)
 
-</li></ul>
+      <p>There is an Emacs feature that allows the setting of local
+      values for variables when editing a file by including
+      specially formatted text near the end of the file. This
+      feature also includes the ability to have arbitrary Emacs
+      Lisp code evaluated when the file is visited. Obviously,
+      there is a potential for Trojan horses to exploit this
+      feature.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Dired-claims-that-no-file-is-on-this-line.html#Dired-claims-that-no-file-is-on-this-line" accesskey="n" rel="next">Dired claims that no file is on this line</a>, Previous: <a href="Shell-mode-loses-the-current-directory.html#Shell-mode-loses-the-current-directory" accesskey="p" rel="prev">Shell mode loses the current directory</a>, Up: <a href="Bugs-and-problems.html#Bugs-and-problems" accesskey="u" rel="up">Bugs and problems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>As of Emacs 22, Emacs has a list of local variables that
+      are known to be safe to set. If a file tries to set any
+      variable outside this list, it asks the user to confirm
+      whether the variables should be set. You can also tell Emacs
+      whether to allow the evaluation of Emacs Lisp code found at
+      the bottom of files by setting the variable
+      <code>enable-local-eval</code>.</p>
 
+      <p>See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/File-Variables.html#File-Variables">
+      File Variables</a> in <cite>The GNU Emacs Manual</cite>.</p>
+    </li>
 
+    <li>Synthetic X events. (Yes, a risk; use
+    &lsquo;<samp>MIT-MAGIC-COOKIE-1</samp>&rsquo; or better.)
 
+      <p>Emacs accepts synthetic X events generated by the
+      <code>SendEvent</code> request as though they were regular
+      events. As a result, if you are using the trivial host-based
+      authentication, other users who can open X connections to
+      your X workstation can make your Emacs process do anything,
+      including run other processes with your privileges.</p>
+
+      <p>The only fix for this is to prevent other users from being
+      able to open X connections. The standard way to prevent this
+      is to use a real authentication mechanism, such as
+      &lsquo;<samp>MIT-MAGIC-COOKIE-1</samp>&rsquo;. If using the
+      <code>xauth</code> program has any effect, then you are
+      probably using &lsquo;<samp>MIT-MAGIC-COOKIE-1</samp>&rsquo;.
+      Your site may be using a superior authentication method; ask
+      your system administrator.</p>
+
+      <p>If real authentication is not a possibility, you may be
+      satisfied by just allowing hosts access for brief intervals
+      while you start your X programs, then removing the access.
+      This reduces the risk somewhat by narrowing the time window
+      when hostile users would have access, but <em>does not
+      eliminate the risk</em>.</p>
+
+      <p>On most computers running Unix and X, you enable and
+      disable access using the <code>xhost</code> command. To allow
+      all hosts access to your X server, use</p>
+
+      <div class="example">
+        <pre class="example">
+xhost +
+</pre>
+      </div>
+
+      <p>at the shell prompt, which (on an HP machine, at least)
+      produces the following message:</p>
+
+      <div class="example">
+        <pre class="example">
+access control disabled, clients can connect from any host
+</pre>
+      </div>
+
+      <p>To deny all hosts access to your X server (except those
+      explicitly allowed by name), use</p>
+
+      <div class="example">
+        <pre class="example">
+xhost -
+</pre>
+      </div>
+
+      <p>On the test HP computer, this command generated the
+      following message:</p>
+
+      <div class="example">
+        <pre class="example">
+access control enabled, only authorized clients can connect
+</pre>
+      </div>
+    </li>
+  </ul>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Dired-claims-that-no-file-is-on-this-line.html#Dired-claims-that-no-file-is-on-this-line"
+    accesskey="n" rel="next">Dired claims that no file is on this
+    line</a>, Previous: <a href=
+    "Shell-mode-loses-the-current-directory.html#Shell-mode-loses-the-current-directory"
+    accesskey="p" rel="prev">Shell mode loses the current
+    directory</a>, Up: <a href=
+    "Bugs-and-problems.html#Bugs-and-problems" accesskey="u" rel=
+    "up">Bugs and problems</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

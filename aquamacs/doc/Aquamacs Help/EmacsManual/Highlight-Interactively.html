@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,219 +20,333 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Highlight Interactively</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Highlight Interactively">
-<meta name="keywords" content="GNU Emacs Manual: Highlight Interactively">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="Fringes.html#Fringes" rel="next" title="Fringes">
-<link href="Font-Lock.html#Font-Lock" rel="prev" title="Font Lock">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Highlight Interactively</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Highlight Interactively" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Highlight Interactively" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="Fringes.html#Fringes" rel="next" title="Fringes" />
+  <link href="Font-Lock.html#Font-Lock" rel="prev" title=
+  "Font Lock" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Highlight-Interactively" id=
+  "Highlight-Interactively"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Fringes.html#Fringes" accesskey="n" rel=
+    "next">Fringes</a>, Previous: <a href=
+    "Font-Lock.html#Font-Lock" accesskey="p" rel="prev">Font
+    Lock</a>, Up: <a href="Display.html#Display" accesskey="u" rel=
+    "up">Display</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Interactive-Highlighting" id=
+  "Interactive-Highlighting"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Highlight-Interactively"></a>
-<div class="header">
-<p>
-Next: <a href="Fringes.html#Fringes" accesskey="n" rel="next">Fringes</a>, Previous: <a href="Font-Lock.html#Font-Lock" accesskey="p" rel="prev">Font Lock</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Interactive-Highlighting"></a>
-<h3 class="section">14.13 Interactive Highlighting</h3>
-<a name="index-highlighting-by-matching"></a>
-<a name="index-interactive-highlighting"></a>
-<a name="index-Highlight-Changes-mode"></a>
+  <h3 class="section">14.13 Interactive Highlighting</h3><a name=
+  "index-highlighting-by-matching" id=
+  "index-highlighting-by-matching"></a> <a name=
+  "index-interactive-highlighting" id=
+  "index-interactive-highlighting"></a> <a name=
+  "index-Highlight-Changes-mode" id=
+  "index-Highlight-Changes-mode"></a> <a name=
+  "index-highlight_002dchanges_002dmode" id=
+  "index-highlight_002dchanges_002dmode"></a>
 
-<a name="index-highlight_002dchanges_002dmode"></a>
-<p>Highlight Changes mode is a minor mode that <em>highlights</em> the parts
-of the buffer that were changed most recently, by giving that text a
-different face.  To enable or disable Highlight Changes mode, use
-<kbd>M-x highlight-changes-mode</kbd>.
-</p>
-<a name="index-Hi-Lock-mode"></a>
-<a name="index-hi_002dlock_002dmode"></a>
-<p>Hi Lock mode is a minor mode that highlights text that matches
-regular expressions you specify.  For example, you can use it to
-highlight all the references to a certain variable in a program source
-file, highlight certain parts in a voluminous output of some program,
-or highlight certain names in an article.  To enable or disable Hi
-Lock mode, use the command <kbd>M-x hi-lock-mode</kbd>.  To enable Hi Lock
-mode for all buffers, use <kbd>M-x global-hi-lock-mode</kbd> or place
-<code>(global-hi-lock-mode 1)</code> in your <samp>.emacs</samp> file.
-</p>
-<p>Hi Lock mode works like Font Lock mode (see <a href="Font-Lock.html#Font-Lock">Font Lock</a>), except
-that you specify explicitly the regular expressions to highlight.  You
-control them with the commands described below.  (The key bindings
-below that begin with <kbd>C-x w</kbd> are deprecated in favor of the
-global <kbd>M-s h</kbd> bindings, and will be removed in some future Emacs
-version.)
-</p>
-<dl compact="compact">
-<dt><kbd>M-s h r <var>regexp</var> <span class="key">RET</span> <var>face</var> <span class="key">RET</span></kbd></dt>
-<dt><kbd>C-x w h <var>regexp</var> <span class="key">RET</span> <var>face</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-M_002ds-h-r"></a>
-<a name="index-C_002dx-w-h"></a>
-<a name="index-highlight_002dregexp"></a>
-<p>Highlight text that matches <var>regexp</var> using face <var>face</var>
-(<code>highlight-regexp</code>).  The highlighting will remain as long as
-the buffer is loaded.  For example, to highlight all occurrences of
-the word &ldquo;whim&rdquo; using the default face (a yellow background)
-<kbd>M-s h r whim <span class="key">RET</span> <span class="key">RET</span></kbd>.  Any face can be used for
-highlighting, Hi Lock provides several of its own and these are
-pre-loaded into a list of default values.  While being prompted
-for a face use <kbd>M-n</kbd> and <kbd>M-p</kbd> to cycle through them.
-</p>
-<a name="index-hi_002dlock_002dauto_002dselect_002dface"></a>
-<p>Setting the option <code>hi-lock-auto-select-face</code> to a non-<code>nil</code>
-value causes this command (and other Hi Lock commands that read faces)
-to automatically choose the next face from the default list without
-prompting.
-</p>
-<p>You can use this command multiple times, specifying various regular
-expressions to highlight in different ways.
-</p>
-</dd>
-<dt><kbd>M-s h u <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dt><kbd>C-x w r <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-M_002ds-h-u"></a>
-<a name="index-C_002dx-w-r"></a>
-<a name="index-unhighlight_002dregexp"></a>
-<p>Unhighlight <var>regexp</var> (<code>unhighlight-regexp</code>).
-</p>
-<p>If you invoke this from the menu, you select the expression to
-unhighlight from a list.  If you invoke this from the keyboard, you
-use the minibuffer.  It will show the most recently added regular
-expression; use <kbd>M-n</kbd> to show the next older expression and
-<kbd>M-p</kbd> to select the next newer expression.  (You can also type the
-expression by hand, with completion.)  When the expression you want to
-unhighlight appears in the minibuffer, press <kbd><span class="key">RET</span></kbd> to exit
-the minibuffer and unhighlight it.
-</p>
-</dd>
-<dt><kbd>M-s h l <var>regexp</var> <span class="key">RET</span> <var>face</var> <span class="key">RET</span></kbd></dt>
-<dt><kbd>C-x w l <var>regexp</var> <span class="key">RET</span> <var>face</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-M_002ds-h-l"></a>
-<a name="index-C_002dx-w-l"></a>
-<a name="index-highlight_002dlines_002dmatching_002dregexp"></a>
-<a name="index-lines_002c-highlighting"></a>
-<a name="index-highlighting-lines-of-text"></a>
-<p>Highlight entire lines containing a match for <var>regexp</var>, using face
-<var>face</var> (<code>highlight-lines-matching-regexp</code>).
-</p>
-</dd>
-<dt><kbd>M-s h p <var>phrase</var> <span class="key">RET</span> <var>face</var> <span class="key">RET</span></kbd></dt>
-<dt><kbd>C-x w p <var>phrase</var> <span class="key">RET</span> <var>face</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-M_002ds-h-p"></a>
-<a name="index-C_002dx-w-p"></a>
-<a name="index-highlight_002dphrase"></a>
-<a name="index-phrase_002c-highlighting"></a>
-<a name="index-highlighting-phrase"></a>
-<p>Highlight matches of <var>phrase</var>, using face <var>face</var>
-(<code>highlight-phrase</code>).  <var>phrase</var> can be any regexp,
-but spaces will be replaced by matches to whitespace and
-initial lower-case letters will become case insensitive.
-</p>
-</dd>
-<dt><kbd>M-s h .</kbd></dt>
-<dt><kbd>C-x w .</kbd></dt>
-<dd><a name="index-M_002ds-h-_002e"></a>
-<a name="index-C_002dx-w-_002e"></a>
-<a name="index-highlight_002dsymbol_002dat_002dpoint"></a>
-<a name="index-symbol_002c-highlighting"></a>
-<a name="index-highlighting-symbol-at-point"></a>
-<p>Highlight the symbol found near point, using the next available face
-(<code>highlight-symbol-at-point</code>).
-</p>
-</dd>
-<dt><kbd>M-s h w</kbd></dt>
-<dt><kbd>C-x w b</kbd></dt>
-<dd><a name="index-M_002ds-h-w"></a>
-<a name="index-C_002dx-w-b"></a>
-<a name="index-hi_002dlock_002dwrite_002dinteractive_002dpatterns"></a>
-<p>Insert all the current highlighting regexp/face pairs into the buffer
-at point, with comment delimiters to prevent them from changing your
-program.  (This key binding runs the
-<code>hi-lock-write-interactive-patterns</code> command.)
-</p>
-<p>These patterns are extracted from the comments, if appropriate, if you
-invoke <kbd>M-x hi-lock-find-patterns</kbd>, or if you visit the file while
-Hi Lock mode is enabled (since that runs <code>hi-lock-find-patterns</code>).
-</p>
-</dd>
-<dt><kbd>M-s h f</kbd></dt>
-<dt><kbd>C-x w i</kbd></dt>
-<dd><a name="index-M_002ds-h-f"></a>
-<a name="index-C_002dx-w-i"></a>
-<a name="index-hi_002dlock_002dfind_002dpatterns"></a>
-<p>Extract regexp/face pairs from comments in the current buffer
-(<code>hi-lock-find-patterns</code>).  Thus, you can enter patterns
-interactively with <code>highlight-regexp</code>, store them into the file
-with <code>hi-lock-write-interactive-patterns</code>, edit them (perhaps
-including different faces for different parenthesized parts of the
-match), and finally use this command (<code>hi-lock-find-patterns</code>) to
-have Hi Lock highlight the edited patterns.
-</p>
-<a name="index-hi_002dlock_002dfile_002dpatterns_002dpolicy"></a>
-<p>The variable <code>hi-lock-file-patterns-policy</code> controls whether Hi
-Lock mode should automatically extract and highlight patterns found in a
-file when it is visited.  Its value can be <code>nil</code> (never highlight),
-<code>ask</code> (query the user), or a function.  If it is a function,
-<code>hi-lock-find-patterns</code> calls it with the patterns as argument; if
-the function returns non-<code>nil</code>, the patterns are used.  The default
-is <code>ask</code>.  Note that patterns are always highlighted if you call
-<code>hi-lock-find-patterns</code> directly, regardless of the value of this
-variable.
-</p>
-<a name="index-hi_002dlock_002dexclude_002dmodes"></a>
-<p>Also, <code>hi-lock-find-patterns</code> does nothing if the current major
-mode&rsquo;s symbol is a member of the list <code>hi-lock-exclude-modes</code>.
-</p></dd>
-</dl>
+  <p>Highlight Changes mode is a minor mode that
+  <em>highlights</em> the parts of the buffer that were changed
+  most recently, by giving that text a different face. To enable or
+  disable Highlight Changes mode, use <kbd>M-x
+  highlight-changes-mode</kbd>.</p><a name="index-Hi-Lock-mode" id=
+  "index-Hi-Lock-mode"></a> <a name="index-hi_002dlock_002dmode"
+  id="index-hi_002dlock_002dmode"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Fringes.html#Fringes" accesskey="n" rel="next">Fringes</a>, Previous: <a href="Font-Lock.html#Font-Lock" accesskey="p" rel="prev">Font Lock</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Hi Lock mode is a minor mode that highlights text that matches
+  regular expressions you specify. For example, you can use it to
+  highlight all the references to a certain variable in a program
+  source file, highlight certain parts in a voluminous output of
+  some program, or highlight certain names in an article. To enable
+  or disable Hi Lock mode, use the command <kbd>M-x
+  hi-lock-mode</kbd>. To enable Hi Lock mode for all buffers, use
+  <kbd>M-x global-hi-lock-mode</kbd> or place
+  <code>(global-hi-lock-mode 1)</code> in your <samp>.emacs</samp>
+  file.</p>
 
+  <p>Hi Lock mode works like Font Lock mode (see <a href=
+  "Font-Lock.html#Font-Lock">Font Lock</a>), except that you
+  specify explicitly the regular expressions to highlight. You
+  control them with the commands described below. (The key bindings
+  below that begin with <kbd>C-x w</kbd> are deprecated in favor of
+  the global <kbd>M-s h</kbd> bindings, and will be removed in some
+  future Emacs version.)</p>
 
+  <dl compact="compact">
+    <dt><kbd>M-s h r <var>regexp</var> <span class="key">RET</span>
+    <var>face</var> <span class="key">RET</span></kbd></dt>
 
+    <dt><kbd>C-x w h <var>regexp</var> <span class="key">RET</span>
+    <var>face</var> <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <a name="index-M_002ds-h-r" id="index-M_002ds-h-r"></a>
+      <a name="index-C_002dx-w-h" id="index-C_002dx-w-h"></a>
+      <a name="index-highlight_002dregexp" id=
+      "index-highlight_002dregexp"></a>
+
+      <p>Highlight text that matches <var>regexp</var> using face
+      <var>face</var> (<code>highlight-regexp</code>). The
+      highlighting will remain as long as the buffer is loaded. For
+      example, to highlight all occurrences of the word
+      &ldquo;whim&rdquo; using the default face (a yellow
+      background) <kbd>M-s h r whim <span class="key">RET</span>
+      <span class="key">RET</span></kbd>. Any face can be used for
+      highlighting, Hi Lock provides several of its own and these
+      are pre-loaded into a list of default values. While being
+      prompted for a face use <kbd>M-n</kbd> and <kbd>M-p</kbd> to
+      cycle through them.</p><a name=
+      "index-hi_002dlock_002dauto_002dselect_002dface" id=
+      "index-hi_002dlock_002dauto_002dselect_002dface"></a>
+
+      <p>Setting the option <code>hi-lock-auto-select-face</code>
+      to a non-<code>nil</code> value causes this command (and
+      other Hi Lock commands that read faces) to automatically
+      choose the next face from the default list without
+      prompting.</p>
+
+      <p>You can use this command multiple times, specifying
+      various regular expressions to highlight in different
+      ways.</p>
+    </dd>
+
+    <dt><kbd>M-s h u <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dt><kbd>C-x w r <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <a name="index-M_002ds-h-u" id="index-M_002ds-h-u"></a>
+      <a name="index-C_002dx-w-r" id="index-C_002dx-w-r"></a>
+      <a name="index-unhighlight_002dregexp" id=
+      "index-unhighlight_002dregexp"></a>
+
+      <p>Unhighlight <var>regexp</var>
+      (<code>unhighlight-regexp</code>).</p>
+
+      <p>If you invoke this from the menu, you select the
+      expression to unhighlight from a list. If you invoke this
+      from the keyboard, you use the minibuffer. It will show the
+      most recently added regular expression; use <kbd>M-n</kbd> to
+      show the next older expression and <kbd>M-p</kbd> to select
+      the next newer expression. (You can also type the expression
+      by hand, with completion.) When the expression you want to
+      unhighlight appears in the minibuffer, press
+      <kbd><span class="key">RET</span></kbd> to exit the
+      minibuffer and unhighlight it.</p>
+    </dd>
+
+    <dt><kbd>M-s h l <var>regexp</var> <span class="key">RET</span>
+    <var>face</var> <span class="key">RET</span></kbd></dt>
+
+    <dt><kbd>C-x w l <var>regexp</var> <span class="key">RET</span>
+    <var>face</var> <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <a name="index-M_002ds-h-l" id="index-M_002ds-h-l"></a>
+      <a name="index-C_002dx-w-l" id="index-C_002dx-w-l"></a>
+      <a name="index-highlight_002dlines_002dmatching_002dregexp"
+      id="index-highlight_002dlines_002dmatching_002dregexp"></a>
+      <a name="index-lines_002c-highlighting" id=
+      "index-lines_002c-highlighting"></a> <a name=
+      "index-highlighting-lines-of-text" id=
+      "index-highlighting-lines-of-text"></a>
+
+      <p>Highlight entire lines containing a match for
+      <var>regexp</var>, using face <var>face</var>
+      (<code>highlight-lines-matching-regexp</code>).</p>
+    </dd>
+
+    <dt><kbd>M-s h p <var>phrase</var> <span class="key">RET</span>
+    <var>face</var> <span class="key">RET</span></kbd></dt>
+
+    <dt><kbd>C-x w p <var>phrase</var> <span class="key">RET</span>
+    <var>face</var> <span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <a name="index-M_002ds-h-p" id="index-M_002ds-h-p"></a>
+      <a name="index-C_002dx-w-p" id="index-C_002dx-w-p"></a>
+      <a name="index-highlight_002dphrase" id=
+      "index-highlight_002dphrase"></a> <a name=
+      "index-phrase_002c-highlighting" id=
+      "index-phrase_002c-highlighting"></a> <a name=
+      "index-highlighting-phrase" id=
+      "index-highlighting-phrase"></a>
+
+      <p>Highlight matches of <var>phrase</var>, using face
+      <var>face</var> (<code>highlight-phrase</code>).
+      <var>phrase</var> can be any regexp, but spaces will be
+      replaced by matches to whitespace and initial lower-case
+      letters will become case insensitive.</p>
+    </dd>
+
+    <dt><kbd>M-s h .</kbd></dt>
+
+    <dt><kbd>C-x w .</kbd></dt>
+
+    <dd>
+      <a name="index-M_002ds-h-_002e" id=
+      "index-M_002ds-h-_002e"></a> <a name="index-C_002dx-w-_002e"
+      id="index-C_002dx-w-_002e"></a> <a name=
+      "index-highlight_002dsymbol_002dat_002dpoint" id=
+      "index-highlight_002dsymbol_002dat_002dpoint"></a> <a name=
+      "index-symbol_002c-highlighting" id=
+      "index-symbol_002c-highlighting"></a> <a name=
+      "index-highlighting-symbol-at-point" id=
+      "index-highlighting-symbol-at-point"></a>
+
+      <p>Highlight the symbol found near point, using the next
+      available face (<code>highlight-symbol-at-point</code>).</p>
+    </dd>
+
+    <dt><kbd>M-s h w</kbd></dt>
+
+    <dt><kbd>C-x w b</kbd></dt>
+
+    <dd>
+      <a name="index-M_002ds-h-w" id="index-M_002ds-h-w"></a>
+      <a name="index-C_002dx-w-b" id="index-C_002dx-w-b"></a>
+      <a name=
+      "index-hi_002dlock_002dwrite_002dinteractive_002dpatterns"
+      id="index-hi_002dlock_002dwrite_002dinteractive_002dpatterns">
+      </a>
+
+      <p>Insert all the current highlighting regexp/face pairs into
+      the buffer at point, with comment delimiters to prevent them
+      from changing your program. (This key binding runs the
+      <code>hi-lock-write-interactive-patterns</code> command.)</p>
+
+      <p>These patterns are extracted from the comments, if
+      appropriate, if you invoke <kbd>M-x
+      hi-lock-find-patterns</kbd>, or if you visit the file while
+      Hi Lock mode is enabled (since that runs
+      <code>hi-lock-find-patterns</code>).</p>
+    </dd>
+
+    <dt><kbd>M-s h f</kbd></dt>
+
+    <dt><kbd>C-x w i</kbd></dt>
+
+    <dd>
+      <a name="index-M_002ds-h-f" id="index-M_002ds-h-f"></a>
+      <a name="index-C_002dx-w-i" id="index-C_002dx-w-i"></a>
+      <a name="index-hi_002dlock_002dfind_002dpatterns" id=
+      "index-hi_002dlock_002dfind_002dpatterns"></a>
+
+      <p>Extract regexp/face pairs from comments in the current
+      buffer (<code>hi-lock-find-patterns</code>). Thus, you can
+      enter patterns interactively with
+      <code>highlight-regexp</code>, store them into the file with
+      <code>hi-lock-write-interactive-patterns</code>, edit them
+      (perhaps including different faces for different
+      parenthesized parts of the match), and finally use this
+      command (<code>hi-lock-find-patterns</code>) to have Hi Lock
+      highlight the edited patterns.</p><a name=
+      "index-hi_002dlock_002dfile_002dpatterns_002dpolicy" id=
+      "index-hi_002dlock_002dfile_002dpatterns_002dpolicy"></a>
+
+      <p>The variable <code>hi-lock-file-patterns-policy</code>
+      controls whether Hi Lock mode should automatically extract
+      and highlight patterns found in a file when it is visited.
+      Its value can be <code>nil</code> (never highlight),
+      <code>ask</code> (query the user), or a function. If it is a
+      function, <code>hi-lock-find-patterns</code> calls it with
+      the patterns as argument; if the function returns
+      non-<code>nil</code>, the patterns are used. The default is
+      <code>ask</code>. Note that patterns are always highlighted
+      if you call <code>hi-lock-find-patterns</code> directly,
+      regardless of the value of this variable.</p><a name=
+      "index-hi_002dlock_002dexclude_002dmodes" id=
+      "index-hi_002dlock_002dexclude_002dmodes"></a>
+
+      <p>Also, <code>hi-lock-find-patterns</code> does nothing if
+      the current major mode&rsquo;s symbol is a member of the list
+      <code>hi-lock-exclude-modes</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Fringes.html#Fringes" accesskey="n" rel=
+    "next">Fringes</a>, Previous: <a href=
+    "Font-Lock.html#Font-Lock" accesskey="p" rel="prev">Font
+    Lock</a>, Up: <a href="Display.html#Display" accesskey="u" rel=
+    "up">Display</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

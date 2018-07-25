@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,190 +19,303 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Advice combinators</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Advice combinators">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Advice combinators">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Advising-Functions.html#Advising-Functions" rel="up" title="Advising Functions">
-<link href="Porting-old-advice.html#Porting-old-advice" rel="next" title="Porting old advice">
-<link href="Advising-Named-Functions.html#Advising-Named-Functions" rel="prev" title="Advising Named Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Advice
+  combinators</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Advice combinators" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Advice combinators" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Advising-Functions.html#Advising-Functions" rel="up"
+  title="Advising Functions" />
+  <link href="Porting-old-advice.html#Porting-old-advice" rel=
+  "next" title="Porting old advice" />
+  <link href=
+  "Advising-Named-Functions.html#Advising-Named-Functions" rel=
+  "prev" title="Advising Named Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Advice-combinators" id="Advice-combinators"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Porting-old-advice.html#Porting-old-advice"
+    accesskey="n" rel="next">Porting old advice</a>, Previous:
+    <a href=
+    "Advising-Named-Functions.html#Advising-Named-Functions"
+    accesskey="p" rel="prev">Advising Named Functions</a>, Up:
+    <a href="Advising-Functions.html#Advising-Functions" accesskey=
+    "u" rel="up">Advising Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Ways-to-compose-advice" id="Ways-to-compose-advice"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Advice-combinators"></a>
-<div class="header">
-<p>
-Next: <a href="Porting-old-advice.html#Porting-old-advice" accesskey="n" rel="next">Porting old advice</a>, Previous: <a href="Advising-Named-Functions.html#Advising-Named-Functions" accesskey="p" rel="prev">Advising Named Functions</a>, Up: <a href="Advising-Functions.html#Advising-Functions" accesskey="u" rel="up">Advising Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Ways-to-compose-advice"></a>
-<h4 class="subsection">12.11.3 Ways to compose advice</h4>
+  <h4 class="subsection">12.11.3 Ways to compose advice</h4>
 
-<p>Here are the different possible values for the <var>where</var> argument of
-<code>add-function</code> and <code>advice-add</code>, specifying how the advice
-<var>function</var> and the original function should be composed.
-</p>
-<dl compact="compact">
-<dt><code>:before</code></dt>
-<dd><p>Call <var>function</var> before the old function.  Both functions receive the
-same arguments, and the return value of the composition is the return value of
-the old function.  More specifically, the composition of the two functions
-behaves like:
-</p><div class="example">
-<pre class="example">(lambda (&amp;rest r) (apply <var>function</var> r) (apply <var>oldfun</var> r))
-</pre></div>
-<p><code>(add-function :before <var>funvar</var> <var>function</var>)</code> is comparable for
-single-function hooks to <code>(add-hook '<var>hookvar</var> <var>function</var>)</code> for
-normal hooks.
-</p>
-</dd>
-<dt><code>:after</code></dt>
-<dd><p>Call <var>function</var> after the old function.  Both functions receive the
-same arguments, and the return value of the composition is the return value of
-the old function.  More specifically, the composition of the two functions
-behaves like:
-</p><div class="example">
-<pre class="example">(lambda (&amp;rest r) (prog1 (apply <var>oldfun</var> r) (apply <var>function</var> r)))
-</pre></div>
-<p><code>(add-function :after <var>funvar</var> <var>function</var>)</code> is comparable for
-single-function hooks to <code>(add-hook '<var>hookvar</var> <var>function</var>
-'append)</code> for normal hooks.
-</p>
-</dd>
-<dt><code>:override</code></dt>
-<dd><p>This completely replaces the old function with the new one.  The old function
-can of course be recovered if you later call <code>remove-function</code>.
-</p>
-</dd>
-<dt><code>:around</code></dt>
-<dd><p>Call <var>function</var> instead of the old function, but provide the old function
-as an extra argument to <var>function</var>.  This is the most flexible composition.
-For example, it lets you call the old function with different arguments, or
-many times, or within a let-binding, or you can sometimes delegate the work to
-the old function and sometimes override it completely.  More specifically, the
-composition of the two functions behaves like:
-</p><div class="example">
-<pre class="example">(lambda (&amp;rest r) (apply <var>function</var> <var>oldfun</var> r))
-</pre></div>
+  <p>Here are the different possible values for the
+  <var>where</var> argument of <code>add-function</code> and
+  <code>advice-add</code>, specifying how the advice
+  <var>function</var> and the original function should be
+  composed.</p>
 
-</dd>
-<dt><code>:before-while</code></dt>
-<dd><p>Call <var>function</var> before the old function and don&rsquo;t call the old
-function if <var>function</var> returns <code>nil</code>.  Both functions receive the
-same arguments, and the return value of the composition is the return value of
-the old function.  More specifically, the composition of the two functions
-behaves like:
-</p><div class="example">
-<pre class="example">(lambda (&amp;rest r) (and (apply <var>function</var> r) (apply <var>oldfun</var> r)))
-</pre></div>
-<p><code>(add-function :before-while <var>funvar</var> <var>function</var>)</code> is comparable
-for single-function hooks to <code>(add-hook '<var>hookvar</var> <var>function</var>)</code>
-when <var>hookvar</var> is run via <code>run-hook-with-args-until-failure</code>.
-</p>
-</dd>
-<dt><code>:before-until</code></dt>
-<dd><p>Call <var>function</var> before the old function and only call the old function if
-<var>function</var> returns <code>nil</code>.  More specifically, the composition of the
-two functions behaves like:
-</p><div class="example">
-<pre class="example">(lambda (&amp;rest r) (or (apply <var>function</var> r) (apply <var>oldfun</var> r)))
-</pre></div>
-<p><code>(add-function :before-until <var>funvar</var> <var>function</var>)</code> is comparable
-for single-function hooks to <code>(add-hook '<var>hookvar</var> <var>function</var>)</code>
-when <var>hookvar</var> is run via <code>run-hook-with-args-until-success</code>.
-</p>
-</dd>
-<dt><code>:after-while</code></dt>
-<dd><p>Call <var>function</var> after the old function and only if the old function
-returned non-<code>nil</code>.  Both functions receive the same arguments, and the
-return value of the composition is the return value of <var>function</var>.
-More specifically, the composition of the two functions behaves like:
-</p><div class="example">
-<pre class="example">(lambda (&amp;rest r) (and (apply <var>oldfun</var> r) (apply <var>function</var> r)))
-</pre></div>
-<p><code>(add-function :after-while <var>funvar</var> <var>function</var>)</code> is comparable
-for single-function hooks to <code>(add-hook '<var>hookvar</var> <var>function</var>
-'append)</code> when <var>hookvar</var> is run via
-<code>run-hook-with-args-until-failure</code>.
-</p>
-</dd>
-<dt><code>:after-until</code></dt>
-<dd><p>Call <var>function</var> after the old function and only if the old function
-returned <code>nil</code>.  More specifically, the composition of the two functions
-behaves like:
-</p><div class="example">
-<pre class="example">(lambda (&amp;rest r) (or  (apply <var>oldfun</var> r) (apply <var>function</var> r)))
-</pre></div>
-<p><code>(add-function :after-until <var>funvar</var> <var>function</var>)</code> is comparable
-for single-function hooks to <code>(add-hook '<var>hookvar</var> <var>function</var>
-'append)</code> when <var>hookvar</var> is run via
-<code>run-hook-with-args-until-success</code>.
-</p>
-</dd>
-<dt><code>:filter-args</code></dt>
-<dd><p>Call <var>function</var> first and use the result (which should be a list) as the
-new arguments to pass to the old function.  More specifically, the composition
-of the two functions behaves like:
-</p><div class="example">
-<pre class="example">(lambda (&amp;rest r) (apply <var>oldfun</var> (funcall <var>function</var> r)))
-</pre></div>
+  <dl compact="compact">
+    <dt><code>:before</code></dt>
 
-</dd>
-<dt><code>:filter-return</code></dt>
-<dd><p>Call the old function first and pass the result to <var>function</var>.
-More specifically, the composition of the two functions behaves like:
-</p><div class="example">
-<pre class="example">(lambda (&amp;rest r) (funcall <var>function</var> (apply <var>oldfun</var> r)))
-</pre></div>
-</dd>
-</dl>
+    <dd>
+      <p>Call <var>function</var> before the old function. Both
+      functions receive the same arguments, and the return value of
+      the composition is the return value of the old function. More
+      specifically, the composition of the two functions behaves
+      like:</p>
 
+      <div class="example">
+        <pre class="example">
+(lambda (&amp;rest r) (apply <var>function</var> r) (apply <var>oldfun</var> r))
+</pre>
+      </div>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Porting-old-advice.html#Porting-old-advice" accesskey="n" rel="next">Porting old advice</a>, Previous: <a href="Advising-Named-Functions.html#Advising-Named-Functions" accesskey="p" rel="prev">Advising Named Functions</a>, Up: <a href="Advising-Functions.html#Advising-Functions" accesskey="u" rel="up">Advising Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p><code>(add-function :before <var>funvar</var>
+      <var>function</var>)</code> is comparable for single-function
+      hooks to <code>(add-hook '<var>hookvar</var>
+      <var>function</var>)</code> for normal hooks.</p>
+    </dd>
 
+    <dt><code>:after</code></dt>
 
+    <dd>
+      <p>Call <var>function</var> after the old function. Both
+      functions receive the same arguments, and the return value of
+      the composition is the return value of the old function. More
+      specifically, the composition of the two functions behaves
+      like:</p>
 
+      <div class="example">
+        <pre class="example">
+(lambda (&amp;rest r) (prog1 (apply <var>oldfun</var> r) (apply <var>function</var> r)))
+</pre>
+      </div>
+
+      <p><code>(add-function :after <var>funvar</var>
+      <var>function</var>)</code> is comparable for single-function
+      hooks to <code>(add-hook '<var>hookvar</var>
+      <var>function</var> 'append)</code> for normal hooks.</p>
+    </dd>
+
+    <dt><code>:override</code></dt>
+
+    <dd>
+      <p>This completely replaces the old function with the new
+      one. The old function can of course be recovered if you later
+      call <code>remove-function</code>.</p>
+    </dd>
+
+    <dt><code>:around</code></dt>
+
+    <dd>
+      <p>Call <var>function</var> instead of the old function, but
+      provide the old function as an extra argument to
+      <var>function</var>. This is the most flexible composition.
+      For example, it lets you call the old function with different
+      arguments, or many times, or within a let-binding, or you can
+      sometimes delegate the work to the old function and sometimes
+      override it completely. More specifically, the composition of
+      the two functions behaves like:</p>
+
+      <div class="example">
+        <pre class="example">
+(lambda (&amp;rest r) (apply <var>function</var> <var>oldfun</var> r))
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>:before-while</code></dt>
+
+    <dd>
+      <p>Call <var>function</var> before the old function and
+      don&rsquo;t call the old function if <var>function</var>
+      returns <code>nil</code>. Both functions receive the same
+      arguments, and the return value of the composition is the
+      return value of the old function. More specifically, the
+      composition of the two functions behaves like:</p>
+
+      <div class="example">
+        <pre class="example">
+(lambda (&amp;rest r) (and (apply <var>function</var> r) (apply <var>oldfun</var> r)))
+</pre>
+      </div>
+
+      <p><code>(add-function :before-while <var>funvar</var>
+      <var>function</var>)</code> is comparable for single-function
+      hooks to <code>(add-hook '<var>hookvar</var>
+      <var>function</var>)</code> when <var>hookvar</var> is run
+      via <code>run-hook-with-args-until-failure</code>.</p>
+    </dd>
+
+    <dt><code>:before-until</code></dt>
+
+    <dd>
+      <p>Call <var>function</var> before the old function and only
+      call the old function if <var>function</var> returns
+      <code>nil</code>. More specifically, the composition of the
+      two functions behaves like:</p>
+
+      <div class="example">
+        <pre class="example">
+(lambda (&amp;rest r) (or (apply <var>function</var> r) (apply <var>oldfun</var> r)))
+</pre>
+      </div>
+
+      <p><code>(add-function :before-until <var>funvar</var>
+      <var>function</var>)</code> is comparable for single-function
+      hooks to <code>(add-hook '<var>hookvar</var>
+      <var>function</var>)</code> when <var>hookvar</var> is run
+      via <code>run-hook-with-args-until-success</code>.</p>
+    </dd>
+
+    <dt><code>:after-while</code></dt>
+
+    <dd>
+      <p>Call <var>function</var> after the old function and only
+      if the old function returned non-<code>nil</code>. Both
+      functions receive the same arguments, and the return value of
+      the composition is the return value of <var>function</var>.
+      More specifically, the composition of the two functions
+      behaves like:</p>
+
+      <div class="example">
+        <pre class="example">
+(lambda (&amp;rest r) (and (apply <var>oldfun</var> r) (apply <var>function</var> r)))
+</pre>
+      </div>
+
+      <p><code>(add-function :after-while <var>funvar</var>
+      <var>function</var>)</code> is comparable for single-function
+      hooks to <code>(add-hook '<var>hookvar</var>
+      <var>function</var> 'append)</code> when <var>hookvar</var>
+      is run via <code>run-hook-with-args-until-failure</code>.</p>
+    </dd>
+
+    <dt><code>:after-until</code></dt>
+
+    <dd>
+      <p>Call <var>function</var> after the old function and only
+      if the old function returned <code>nil</code>. More
+      specifically, the composition of the two functions behaves
+      like:</p>
+
+      <div class="example">
+        <pre class="example">
+(lambda (&amp;rest r) (or  (apply <var>oldfun</var> r) (apply <var>function</var> r)))
+</pre>
+      </div>
+
+      <p><code>(add-function :after-until <var>funvar</var>
+      <var>function</var>)</code> is comparable for single-function
+      hooks to <code>(add-hook '<var>hookvar</var>
+      <var>function</var> 'append)</code> when <var>hookvar</var>
+      is run via <code>run-hook-with-args-until-success</code>.</p>
+    </dd>
+
+    <dt><code>:filter-args</code></dt>
+
+    <dd>
+      <p>Call <var>function</var> first and use the result (which
+      should be a list) as the new arguments to pass to the old
+      function. More specifically, the composition of the two
+      functions behaves like:</p>
+
+      <div class="example">
+        <pre class="example">
+(lambda (&amp;rest r) (apply <var>oldfun</var> (funcall <var>function</var> r)))
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>:filter-return</code></dt>
+
+    <dd>
+      <p>Call the old function first and pass the result to
+      <var>function</var>. More specifically, the composition of
+      the two functions behaves like:</p>
+
+      <div class="example">
+        <pre class="example">
+(lambda (&amp;rest r) (funcall <var>function</var> (apply <var>oldfun</var> r)))
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Porting-old-advice.html#Porting-old-advice"
+    accesskey="n" rel="next">Porting old advice</a>, Previous:
+    <a href=
+    "Advising-Named-Functions.html#Advising-Named-Functions"
+    accesskey="p" rel="prev">Advising Named Functions</a>, Up:
+    <a href="Advising-Functions.html#Advising-Functions" accesskey=
+    "u" rel="up">Advising Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

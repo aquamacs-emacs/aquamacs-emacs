@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,203 +19,320 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Special Forms</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Special Forms">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Special Forms">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Forms.html#Forms" rel="up" title="Forms">
-<link href="Autoloading.html#Autoloading" rel="next" title="Autoloading">
-<link href="Macro-Forms.html#Macro-Forms" rel="prev" title="Macro Forms">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Special Forms</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Special Forms" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Special Forms" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Forms.html#Forms" rel="up" title="Forms" />
+  <link href="Autoloading.html#Autoloading" rel="next" title=
+  "Autoloading" />
+  <link href="Macro-Forms.html#Macro-Forms" rel="prev" title=
+  "Macro Forms" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Special-Forms" id="Special-Forms"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Autoloading.html#Autoloading" accesskey="n"
+    rel="next">Autoloading</a>, Previous: <a href=
+    "Macro-Forms.html#Macro-Forms" accesskey="p" rel="prev">Macro
+    Forms</a>, Up: <a href="Forms.html#Forms" accesskey="u" rel=
+    "up">Forms</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Special-Forms-1" id="Special-Forms-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Special-Forms"></a>
-<div class="header">
-<p>
-Next: <a href="Autoloading.html#Autoloading" accesskey="n" rel="next">Autoloading</a>, Previous: <a href="Macro-Forms.html#Macro-Forms" accesskey="p" rel="prev">Macro Forms</a>, Up: <a href="Forms.html#Forms" accesskey="u" rel="up">Forms</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Special-Forms-1"></a>
-<h4 class="subsection">9.2.7 Special Forms</h4>
-<a name="index-special-forms"></a>
-<a name="index-evaluation-of-special-forms"></a>
+  <h4 class="subsection">9.2.7 Special Forms</h4><a name=
+  "index-special-forms" id="index-special-forms"></a> <a name=
+  "index-evaluation-of-special-forms" id=
+  "index-evaluation-of-special-forms"></a>
 
-<p>A <em>special form</em> is a primitive function specially marked so that
-its arguments are not all evaluated.  Most special forms define control
-structures or perform variable bindings&mdash;things which functions cannot
-do.
-</p>
-<p>Each special form has its own rules for which arguments are evaluated
-and which are used without evaluation.  Whether a particular argument is
-evaluated may depend on the results of evaluating other arguments.
-</p>
-<p>If an expression&rsquo;s first symbol is that of a special form, the
-expression should follow the rules of that special form; otherwise,
-Emacs&rsquo;s behavior is not well-defined (though it will not crash).  For
-example, <code>((lambda (x) x . 3) 4)</code> contains a subexpression that
-begins with <code>lambda</code> but is not a well-formed <code>lambda</code>
-expression, so Emacs may signal an error, or may return 3 or 4 or
-<code>nil</code>, or may behave in other ways.
-</p>
-<dl>
-<dt><a name="index-special_002dform_002dp"></a>Function: <strong>special-form-p</strong> <em>object</em></dt>
-<dd><p>This predicate tests whether its argument is a special form, and
-returns <code>t</code> if so, <code>nil</code> otherwise.
-</p></dd></dl>
+  <p>A <em>special form</em> is a primitive function specially
+  marked so that its arguments are not all evaluated. Most special
+  forms define control structures or perform variable
+  bindings&mdash;things which functions cannot do.</p>
 
-<p>Here is a list, in alphabetical order, of all of the special forms in
-Emacs Lisp with a reference to where each is described.
-</p>
-<dl compact="compact">
-<dt><code>and</code></dt>
-<dd><p>see <a href="Combining-Conditions.html#Combining-Conditions">Combining Conditions</a>
-</p>
-</dd>
-<dt><code>catch</code></dt>
-<dd><p>see <a href="Catch-and-Throw.html#Catch-and-Throw">Catch and Throw</a>
-</p>
-</dd>
-<dt><code>cond</code></dt>
-<dd><p>see <a href="Conditionals.html#Conditionals">Conditionals</a>
-</p>
-</dd>
-<dt><code>condition-case</code></dt>
-<dd><p>see <a href="Handling-Errors.html#Handling-Errors">Handling Errors</a>
-</p>
-</dd>
-<dt><code>defconst</code></dt>
-<dd><p>see <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>
-</p>
-</dd>
-<dt><code>defvar</code></dt>
-<dd><p>see <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>
-</p>
-</dd>
-<dt><code>function</code></dt>
-<dd><p>see <a href="Anonymous-Functions.html#Anonymous-Functions">Anonymous Functions</a>
-</p>
-</dd>
-<dt><code>if</code></dt>
-<dd><p>see <a href="Conditionals.html#Conditionals">Conditionals</a>
-</p>
-</dd>
-<dt><code>interactive</code></dt>
-<dd><p>see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>
-</p>
-</dd>
-<dt><code>lambda</code></dt>
-<dd><p>see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>
-</p>
-</dd>
-<dt><code>let</code></dt>
-<dt><code>let*</code></dt>
-<dd><p>see <a href="Local-Variables.html#Local-Variables">Local Variables</a>
-</p>
-</dd>
-<dt><code>or</code></dt>
-<dd><p>see <a href="Combining-Conditions.html#Combining-Conditions">Combining Conditions</a>
-</p>
-</dd>
-<dt><code>prog1</code></dt>
-<dt><code>prog2</code></dt>
-<dt><code>progn</code></dt>
-<dd><p>see <a href="Sequencing.html#Sequencing">Sequencing</a>
-</p>
-</dd>
-<dt><code>quote</code></dt>
-<dd><p>see <a href="Quoting.html#Quoting">Quoting</a>
-</p>
-</dd>
-<dt><code>save-current-buffer</code></dt>
-<dd><p>see <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>
-</p>
-</dd>
-<dt><code>save-excursion</code></dt>
-<dd><p>see <a href="Excursions.html#Excursions">Excursions</a>
-</p>
-</dd>
-<dt><code>save-restriction</code></dt>
-<dd><p>see <a href="Narrowing.html#Narrowing">Narrowing</a>
-</p>
-</dd>
-<dt><code>setq</code></dt>
-<dd><p>see <a href="Setting-Variables.html#Setting-Variables">Setting Variables</a>
-</p>
-</dd>
-<dt><code>setq-default</code></dt>
-<dd><p>see <a href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal">Creating Buffer-Local</a>
-</p>
-</dd>
-<dt><code>track-mouse</code></dt>
-<dd><p>see <a href="Mouse-Tracking.html#Mouse-Tracking">Mouse Tracking</a>
-</p>
-</dd>
-<dt><code>unwind-protect</code></dt>
-<dd><p>see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>
-</p>
-</dd>
-<dt><code>while</code></dt>
-<dd><p>see <a href="Iteration.html#Iteration">Iteration</a>
-</p></dd>
-</dl>
+  <p>Each special form has its own rules for which arguments are
+  evaluated and which are used without evaluation. Whether a
+  particular argument is evaluated may depend on the results of
+  evaluating other arguments.</p>
 
-<a name="index-CL-note_002d_002d_002dspecial-forms-compared"></a>
-<blockquote>
-<p><b>Common Lisp note:</b> Here are some comparisons of special forms in
-GNU Emacs Lisp and Common Lisp.  <code>setq</code>, <code>if</code>, and
-<code>catch</code> are special forms in both Emacs Lisp and Common Lisp.
-<code>save-excursion</code> is a special form in Emacs Lisp, but
-doesn&rsquo;t exist in Common Lisp.  <code>throw</code> is a special form in
-Common Lisp (because it must be able to throw multiple values), but it
-is a function in Emacs Lisp (which doesn&rsquo;t have multiple
-values).
-</p></blockquote>
+  <p>If an expression&rsquo;s first symbol is that of a special
+  form, the expression should follow the rules of that special
+  form; otherwise, Emacs&rsquo;s behavior is not well-defined
+  (though it will not crash). For example, <code>((lambda (x) x .
+  3) 4)</code> contains a subexpression that begins with
+  <code>lambda</code> but is not a well-formed <code>lambda</code>
+  expression, so Emacs may signal an error, or may return 3 or 4 or
+  <code>nil</code>, or may behave in other ways.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Autoloading.html#Autoloading" accesskey="n" rel="next">Autoloading</a>, Previous: <a href="Macro-Forms.html#Macro-Forms" accesskey="p" rel="prev">Macro Forms</a>, Up: <a href="Forms.html#Forms" accesskey="u" rel="up">Forms</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-special_002dform_002dp" id=
+    "index-special_002dform_002dp"></a>Function:
+    <strong>special-form-p</strong> <em>object</em></dt>
 
+    <dd>
+      <p>This predicate tests whether its argument is a special
+      form, and returns <code>t</code> if so, <code>nil</code>
+      otherwise.</p>
+    </dd>
+  </dl>
 
+  <p>Here is a list, in alphabetical order, of all of the special
+  forms in Emacs Lisp with a reference to where each is
+  described.</p>
 
+  <dl compact="compact">
+    <dt><code>and</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Combining-Conditions.html#Combining-Conditions">Combining
+      Conditions</a></p>
+    </dd>
+
+    <dt><code>catch</code></dt>
+
+    <dd>
+      <p>see <a href="Catch-and-Throw.html#Catch-and-Throw">Catch
+      and Throw</a></p>
+    </dd>
+
+    <dt><code>cond</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Conditionals.html#Conditionals">Conditionals</a></p>
+    </dd>
+
+    <dt><code>condition-case</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Handling-Errors.html#Handling-Errors">Handling
+      Errors</a></p>
+    </dd>
+
+    <dt><code>defconst</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Defining-Variables.html#Defining-Variables">Defining
+      Variables</a></p>
+    </dd>
+
+    <dt><code>defvar</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Defining-Variables.html#Defining-Variables">Defining
+      Variables</a></p>
+    </dd>
+
+    <dt><code>function</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Anonymous-Functions.html#Anonymous-Functions">Anonymous
+      Functions</a></p>
+    </dd>
+
+    <dt><code>if</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Conditionals.html#Conditionals">Conditionals</a></p>
+    </dd>
+
+    <dt><code>interactive</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Interactive-Call.html#Interactive-Call">Interactive
+      Call</a></p>
+    </dd>
+
+    <dt><code>lambda</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Lambda-Expressions.html#Lambda-Expressions">Lambda
+      Expressions</a></p>
+    </dd>
+
+    <dt><code>let</code></dt>
+
+    <dt><code>let*</code></dt>
+
+    <dd>
+      <p>see <a href="Local-Variables.html#Local-Variables">Local
+      Variables</a></p>
+    </dd>
+
+    <dt><code>or</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Combining-Conditions.html#Combining-Conditions">Combining
+      Conditions</a></p>
+    </dd>
+
+    <dt><code>prog1</code></dt>
+
+    <dt><code>prog2</code></dt>
+
+    <dt><code>progn</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Sequencing.html#Sequencing">Sequencing</a></p>
+    </dd>
+
+    <dt><code>quote</code></dt>
+
+    <dd>
+      <p>see <a href="Quoting.html#Quoting">Quoting</a></p>
+    </dd>
+
+    <dt><code>save-current-buffer</code></dt>
+
+    <dd>
+      <p>see <a href="Current-Buffer.html#Current-Buffer">Current
+      Buffer</a></p>
+    </dd>
+
+    <dt><code>save-excursion</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Excursions.html#Excursions">Excursions</a></p>
+    </dd>
+
+    <dt><code>save-restriction</code></dt>
+
+    <dd>
+      <p>see <a href="Narrowing.html#Narrowing">Narrowing</a></p>
+    </dd>
+
+    <dt><code>setq</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Setting-Variables.html#Setting-Variables">Setting
+      Variables</a></p>
+    </dd>
+
+    <dt><code>setq-default</code></dt>
+
+    <dd>
+      <p>see <a href=
+      "Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal">Creating
+      Buffer-Local</a></p>
+    </dd>
+
+    <dt><code>track-mouse</code></dt>
+
+    <dd>
+      <p>see <a href="Mouse-Tracking.html#Mouse-Tracking">Mouse
+      Tracking</a></p>
+    </dd>
+
+    <dt><code>unwind-protect</code></dt>
+
+    <dd>
+      <p>see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal
+      Exits</a></p>
+    </dd>
+
+    <dt><code>while</code></dt>
+
+    <dd>
+      <p>see <a href="Iteration.html#Iteration">Iteration</a></p>
+    </dd>
+  </dl><a name="index-CL-note_002d_002d_002dspecial-forms-compared"
+  id="index-CL-note_002d_002d_002dspecial-forms-compared"></a>
+
+  <blockquote>
+    <p><b>Common Lisp note:</b> Here are some comparisons of
+    special forms in GNU Emacs Lisp and Common Lisp.
+    <code>setq</code>, <code>if</code>, and <code>catch</code> are
+    special forms in both Emacs Lisp and Common Lisp.
+    <code>save-excursion</code> is a special form in Emacs Lisp,
+    but doesn&rsquo;t exist in Common Lisp. <code>throw</code> is a
+    special form in Common Lisp (because it must be able to throw
+    multiple values), but it is a function in Emacs Lisp (which
+    doesn&rsquo;t have multiple values).</p>
+  </blockquote>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Autoloading.html#Autoloading" accesskey="n"
+    rel="next">Autoloading</a>, Previous: <a href=
+    "Macro-Forms.html#Macro-Forms" accesskey="p" rel="prev">Macro
+    Forms</a>, Up: <a href="Forms.html#Forms" accesskey="u" rel=
+    "up">Forms</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

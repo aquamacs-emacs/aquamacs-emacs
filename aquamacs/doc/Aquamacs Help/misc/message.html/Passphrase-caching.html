@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Message, the Emacs message composition mode.
 
 Copyright (C) 1996-2016 Free Software Foundation, Inc.
@@ -14,105 +16,140 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Message Manual: Passphrase caching</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Message Manual: Passphrase caching">
-<meta name="keywords" content="Message Manual: Passphrase caching">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Security.html#Security" rel="up" title="Security">
-<link href="PGP-Compatibility.html#PGP-Compatibility" rel="next" title="PGP Compatibility">
-<link href="Using-OpenPGP.html#Using-OpenPGP" rel="prev" title="Using OpenPGP">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Message Manual: Passphrase caching</title>
+  <meta name="description" content=
+  "Message Manual: Passphrase caching" />
+  <meta name="keywords" content=
+  "Message Manual: Passphrase caching" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Security.html#Security" rel="up" title="Security" />
+  <link href="PGP-Compatibility.html#PGP-Compatibility" rel="next"
+  title="PGP Compatibility" />
+  <link href="Using-OpenPGP.html#Using-OpenPGP" rel="prev" title=
+  "Using OpenPGP" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Passphrase-caching"></a>
-<div class="header">
-<p>
-Next: <a href="PGP-Compatibility.html#PGP-Compatibility" accesskey="n" rel="next">PGP Compatibility</a>, Previous: <a href="Using-OpenPGP.html#Using-OpenPGP" accesskey="p" rel="prev">Using OpenPGP</a>, Up: <a href="Security.html#Security" accesskey="u" rel="up">Security</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Passphrase-caching-1"></a>
-<h4 class="subsection">2.7.4 Passphrase caching</h4>
+<body lang="en" xml:lang="en">
+  <a name="Passphrase-caching" id="Passphrase-caching"></a>
 
-<a name="index-gpg_002dagent"></a>
-<p>Message with EasyPG internally calls GnuPG (the <code>gpg</code> or
-<code>gpgsm</code> command) to perform
-data encryption, and in certain cases (decrypting or signing for
-example), <code>gpg</code>/<code>gpgsm</code> requires user&rsquo;s passphrase.
-Currently the recommended way to supply your passphrase is to use the
-<code>gpg-agent</code> program.
-</p>
-<p>In particular, the <code>gpg-agent</code> program supports passphrase
-caching so that you do not need to enter your passphrase for every
-decryption/sign operation.  See <a href="http://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html#Agent-Options">Agent Options</a> in <cite>Using the
-GNU Privacy Guard</cite>.
-</p>
-<p>How to use <code>gpg-agent</code> in Emacs depends on your version of
-GnuPG.  With GnuPG version 2.1, <code>gpg-agent</code> is started
-automatically if necessary.  With older versions you may need to run
-the following command from the shell before starting Emacs.
-</p>
-<div class="example">
-<pre class="example">eval `gpg-agent --daemon`
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="PGP-Compatibility.html#PGP-Compatibility"
+    accesskey="n" rel="next">PGP Compatibility</a>, Previous:
+    <a href="Using-OpenPGP.html#Using-OpenPGP" accesskey="p" rel=
+    "prev">Using OpenPGP</a>, Up: <a href="Security.html#Security"
+    accesskey="u" rel="up">Security</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Passphrase-caching-1" id="Passphrase-caching-1"></a>
 
-<p>This will invoke <code>gpg-agent</code> and set the environment variable
-<code>GPG_AGENT_INFO</code> to allow <code>gpg</code> to communicate with it.
-It might be good idea to put this command in your <samp>.xsession</samp> or
-<samp>.bash_profile</samp>.  See <a href="http://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html#Invoking-GPG_002dAGENT">Invoking GPG-AGENT</a> in <cite>Using the
-GNU Privacy Guard</cite>.
-</p>
-<p>Once your <code>gpg-agent</code> is set up, it will ask you for a
-passphrase as needed for <code>gpg</code>.  Under the X Window System,
-you will see a new passphrase input dialog appear.  The dialog is
-provided by PIN Entry (the <code>pinentry</code> command), reasonably
-recent versions of which can also cooperate with Emacs on a text
-console.  If that does not work, you may need to put a passphrase into
-gpg-agent&rsquo;s cache beforehand.  The following command does the trick.
-</p>
-<div class="example">
-<pre class="example">gpg --use-agent --sign &lt; /dev/null &gt; /dev/null
-</pre></div>
+  <h4 class="subsection">2.7.4 Passphrase caching</h4><a name=
+  "index-gpg_002dagent" id="index-gpg_002dagent"></a>
 
+  <p>Message with EasyPG internally calls GnuPG (the
+  <code>gpg</code> or <code>gpgsm</code> command) to perform data
+  encryption, and in certain cases (decrypting or signing for
+  example), <code>gpg</code>/<code>gpgsm</code> requires
+  user&rsquo;s passphrase. Currently the recommended way to supply
+  your passphrase is to use the <code>gpg-agent</code> program.</p>
 
+  <p>In particular, the <code>gpg-agent</code> program supports
+  passphrase caching so that you do not need to enter your
+  passphrase for every decryption/sign operation. See <a href=
+  "http://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html#Agent-Options">
+  Agent Options</a> in <cite>Using the GNU Privacy
+  Guard</cite>.</p>
 
+  <p>How to use <code>gpg-agent</code> in Emacs depends on your
+  version of GnuPG. With GnuPG version 2.1, <code>gpg-agent</code>
+  is started automatically if necessary. With older versions you
+  may need to run the following command from the shell before
+  starting Emacs.</p>
 
+  <div class="example">
+    <pre class="example">
+eval `gpg-agent --daemon`
+</pre>
+  </div>
+
+  <p>This will invoke <code>gpg-agent</code> and set the
+  environment variable <code>GPG_AGENT_INFO</code> to allow
+  <code>gpg</code> to communicate with it. It might be good idea to
+  put this command in your <samp>.xsession</samp> or
+  <samp>.bash_profile</samp>. See <a href=
+  "http://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html#Invoking-GPG_002dAGENT">
+  Invoking GPG-AGENT</a> in <cite>Using the GNU Privacy
+  Guard</cite>.</p>
+
+  <p>Once your <code>gpg-agent</code> is set up, it will ask you
+  for a passphrase as needed for <code>gpg</code>. Under the X
+  Window System, you will see a new passphrase input dialog appear.
+  The dialog is provided by PIN Entry (the <code>pinentry</code>
+  command), reasonably recent versions of which can also cooperate
+  with Emacs on a text console. If that does not work, you may need
+  to put a passphrase into gpg-agent&rsquo;s cache beforehand. The
+  following command does the trick.</p>
+
+  <div class="example">
+    <pre class="example">
+gpg --use-agent --sign &lt; /dev/null &gt; /dev/null
+</pre>
+  </div>
 </body>
 </html>

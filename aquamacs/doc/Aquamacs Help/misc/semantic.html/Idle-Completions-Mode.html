@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents the Semantic library and utilities.
 
 Copyright (C) 1999-2005, 2007, 2009-2016 Free Software
@@ -15,161 +17,244 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Semantic Manual: Idle Completions Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Semantic Manual: Idle Completions Mode">
-<meta name="keywords" content="Semantic Manual: Idle Completions Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Idle-Scheduler.html#Idle-Scheduler" rel="up" title="Idle Scheduler">
-<link href="Analyzer.html#Analyzer" rel="next" title="Analyzer">
-<link href="Idle-Summary-Mode.html#Idle-Summary-Mode" rel="prev" title="Idle Summary Mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Semantic Manual: Idle Completions Mode</title>
+  <meta name="description" content=
+  "Semantic Manual: Idle Completions Mode" />
+  <meta name="keywords" content=
+  "Semantic Manual: Idle Completions Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Idle-Scheduler.html#Idle-Scheduler" rel="up" title=
+  "Idle Scheduler" />
+  <link href="Analyzer.html#Analyzer" rel="next" title=
+  "Analyzer" />
+  <link href="Idle-Summary-Mode.html#Idle-Summary-Mode" rel="prev"
+  title="Idle Summary Mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Idle-Completions-Mode"></a>
-<div class="header">
-<p>
-Previous: <a href="Idle-Summary-Mode.html#Idle-Summary-Mode" accesskey="p" rel="prev">Idle Summary Mode</a>, Up: <a href="Idle-Scheduler.html#Idle-Scheduler" accesskey="u" rel="up">Idle Scheduler</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Idle-Completions-Mode-1"></a>
-<h4 class="subsection">2.3.5 Idle Completions Mode</h4>
+<body lang="en" xml:lang="en">
+  <a name="Idle-Completions-Mode" id="Idle-Completions-Mode"></a>
 
-<p>Semantic Idle Completions mode is a minor mode for performing
-<em>code completions</em> during idle time.  The completions are
-displayed inline, with keybindings that allow you to cycle through
-different alternatives.
-</p>
-<p>Semantic Idle Completions mode performs completion based on the
-Semantic Analyzer (see <a href="Analyzer.html#Analyzer">Analyzer</a>).
-</p>
-<dl>
-<dt><a name="index-_0026optional-1"></a>global-semantic-idle-completions-mode: <strong>&amp;optional</strong> <em>arg</em></dt>
-<dd><p>This command toggles Semantic Idle Completions mode in every
-<i>Semantic</i>-enabled buffer.  You can also toggle it via the &lsquo;<samp>Show
-Tag Completions</samp>&rsquo; menu item in the &lsquo;<samp>Development</samp>&rsquo; menu.
-</p></dd></dl>
+  <div class="header">
+    <p>Previous: <a href="Idle-Summary-Mode.html#Idle-Summary-Mode"
+    accesskey="p" rel="prev">Idle Summary Mode</a>, Up: <a href=
+    "Idle-Scheduler.html#Idle-Scheduler" accesskey="u" rel=
+    "up">Idle Scheduler</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Idle-Completions-Mode-1" id=
+  "Idle-Completions-Mode-1"></a>
 
-<p>If the tag at point has at least one completion, Semantic Idle
-Completions mode displays that completion inline&mdash;i.e., as part of
-the buffer text (you can change the display method by customizing
-<code>semantic-complete-inline-analyzer-idle-displayor-class</code>, as
-described below).  The completed part is highlighted, to indicate that
-it is not yet properly inserted into the buffer.  The echo area shows
-the completion, and whether there are other possible completions, like
-this:
-</p>
-<div class="example">
-<pre class="example">besselj [1 of 6 matches]
-</pre></div>
+  <h4 class="subsection">2.3.5 Idle Completions Mode</h4>
 
-<p>While the completion is being displayed, the following keybindings
-take effect:
-</p>
-<dl compact="compact">
-<dt><kbd><span class="key">RET</span></kbd></dt>
-<dt><kbd>C-m</kbd></dt>
-<dd><p>Accept the current completion (<code>semantic-complete-inline-done</code>),
-placing it in the buffer and moving point to the end of the completed
-tag.
-</p></dd>
-<dt><kbd>M-n</kbd></dt>
-<dd><p>Select the next possible completion
-(<code>semantic-complete-inline-down</code>).  The new completion is shown
-inline, replacing the old completion.
-</p></dd>
-<dt><kbd>M-p</kbd></dt>
-<dd><p>Select the previous possible completion
-(<code>semantic-complete-inline-up</code>).
-</p></dd>
-<dt><kbd><span class="key">TAB</span></kbd></dt>
-<dt><kbd>C-i</kbd></dt>
-<dd><p>Accept as much of the completion as possible.  If no additional
-completion can be accepted without ambiguity, select the next possible
-completion (<code>semantic-complete-inline-TAB</code>).
-</p></dd>
-<dt><kbd>C-g</kbd></dt>
-<dd><p>Quit without completing (<code>semantic-complete-inline-quit</code>).
-</p></dd>
-</dl>
+  <p>Semantic Idle Completions mode is a minor mode for performing
+  <em>code completions</em> during idle time. The completions are
+  displayed inline, with keybindings that allow you to cycle
+  through different alternatives.</p>
 
-<p>You can also exit inline completion by issuing any other Emacs
-command.  The completion text then disappears from the buffer.
-</p>
-<dl>
-<dt><a name="index-semantic_002dcomplete_002danalyze_002dinline_002didle"></a>Command: <strong>semantic-complete-analyze-inline-idle</strong></dt>
-<dd><p>This is the command for performing inline code completion.  It is
-called by Semantic Idle Completions mode during idle time, but you can
-also call it yourself.  It returns immediately, leaving the buffer in
-a state for inline completion.
-</p></dd></dl>
+  <p>Semantic Idle Completions mode performs completion based on
+  the Semantic Analyzer (see <a href=
+  "Analyzer.html#Analyzer">Analyzer</a>).</p>
 
-<dl>
-<dt><a name="index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass"></a>Option: <strong>semantic-complete-inline-analyzer-idle-displayor-class</strong></dt>
-<dd><p>The value of this variable determines how
-<code>semantic-complete-analyze-inline-idle</code> shows its completions.
-Possible values include:
-</p>
-<dl compact="compact">
-<dt><code>semantic-displayor-ghost</code></dt>
-<dd><p>Display completions &ldquo;inline&rdquo; with the buffer text, as described
-above.  This is the default value.
-</p>
-</dd>
-<dt><code>semantic-displayor-tooltip</code></dt>
-<dd><p>Display completions in a tooltip.
-</p>
-</dd>
-<dt><code>semantic-displayor-traditional</code></dt>
-<dd><p>Display completions in a separate window.
-</p></dd>
-</dl>
-</dd></dl>
+  <dl>
+    <dt><a name="index-_0026optional-1" id=
+    "index-_0026optional-1"></a>global-semantic-idle-completions-mode:
+    <strong>&amp;optional</strong> <em>arg</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Idle-Summary-Mode.html#Idle-Summary-Mode" accesskey="p" rel="prev">Idle Summary Mode</a>, Up: <a href="Idle-Scheduler.html#Idle-Scheduler" accesskey="u" rel="up">Idle Scheduler</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This command toggles Semantic Idle Completions mode in
+      every <i>Semantic</i>-enabled buffer. You can also toggle it
+      via the &lsquo;<samp>Show Tag Completions</samp>&rsquo; menu
+      item in the &lsquo;<samp>Development</samp>&rsquo; menu.</p>
+    </dd>
+  </dl>
 
+  <p>If the tag at point has at least one completion, Semantic Idle
+  Completions mode displays that completion inline&mdash;i.e., as
+  part of the buffer text (you can change the display method by
+  customizing
+  <code>semantic-complete-inline-analyzer-idle-displayor-class</code>,
+  as described below). The completed part is highlighted, to
+  indicate that it is not yet properly inserted into the buffer.
+  The echo area shows the completion, and whether there are other
+  possible completions, like this:</p>
 
+  <div class="example">
+    <pre class="example">
+besselj [1 of 6 matches]
+</pre>
+  </div>
 
+  <p>While the completion is being displayed, the following
+  keybindings take effect:</p>
+
+  <dl compact="compact">
+    <dt><kbd><span class="key">RET</span></kbd></dt>
+
+    <dt><kbd>C-m</kbd></dt>
+
+    <dd>
+      <p>Accept the current completion
+      (<code>semantic-complete-inline-done</code>), placing it in
+      the buffer and moving point to the end of the completed
+      tag.</p>
+    </dd>
+
+    <dt><kbd>M-n</kbd></dt>
+
+    <dd>
+      <p>Select the next possible completion
+      (<code>semantic-complete-inline-down</code>). The new
+      completion is shown inline, replacing the old completion.</p>
+    </dd>
+
+    <dt><kbd>M-p</kbd></dt>
+
+    <dd>
+      <p>Select the previous possible completion
+      (<code>semantic-complete-inline-up</code>).</p>
+    </dd>
+
+    <dt><kbd><span class="key">TAB</span></kbd></dt>
+
+    <dt><kbd>C-i</kbd></dt>
+
+    <dd>
+      <p>Accept as much of the completion as possible. If no
+      additional completion can be accepted without ambiguity,
+      select the next possible completion
+      (<code>semantic-complete-inline-TAB</code>).</p>
+    </dd>
+
+    <dt><kbd>C-g</kbd></dt>
+
+    <dd>
+      <p>Quit without completing
+      (<code>semantic-complete-inline-quit</code>).</p>
+    </dd>
+  </dl>
+
+  <p>You can also exit inline completion by issuing any other Emacs
+  command. The completion text then disappears from the buffer.</p>
+
+  <dl>
+    <dt><a name=
+    "index-semantic_002dcomplete_002danalyze_002dinline_002didle"
+    id=
+    "index-semantic_002dcomplete_002danalyze_002dinline_002didle"></a>Command:
+    <strong>semantic-complete-analyze-inline-idle</strong></dt>
+
+    <dd>
+      <p>This is the command for performing inline code completion.
+      It is called by Semantic Idle Completions mode during idle
+      time, but you can also call it yourself. It returns
+      immediately, leaving the buffer in a state for inline
+      completion.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass"
+    id=
+    "index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass">
+    </a>Option:
+    <strong>semantic-complete-inline-analyzer-idle-displayor-class</strong></dt>
+
+    <dd>
+      <p>The value of this variable determines how
+      <code>semantic-complete-analyze-inline-idle</code> shows its
+      completions. Possible values include:</p>
+
+      <dl compact="compact">
+        <dt><code>semantic-displayor-ghost</code></dt>
+
+        <dd>
+          <p>Display completions &ldquo;inline&rdquo; with the
+          buffer text, as described above. This is the default
+          value.</p>
+        </dd>
+
+        <dt><code>semantic-displayor-tooltip</code></dt>
+
+        <dd>
+          <p>Display completions in a tooltip.</p>
+        </dd>
+
+        <dt><code>semantic-displayor-traditional</code></dt>
+
+        <dd>
+          <p>Display completions in a separate window.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Idle-Summary-Mode.html#Idle-Summary-Mode"
+    accesskey="p" rel="prev">Idle Summary Mode</a>, Up: <a href=
+    "Idle-Scheduler.html#Idle-Scheduler" accesskey="u" rel=
+    "up">Idle Scheduler</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

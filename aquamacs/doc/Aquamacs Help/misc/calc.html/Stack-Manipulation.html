@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,195 +18,271 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Stack Manipulation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Stack Manipulation">
-<meta name="keywords" content="GNU Emacs Calc Manual: Stack Manipulation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Stack-and-Trail.html#Stack-and-Trail" rel="up" title="Stack and Trail">
-<link href="Editing-Stack-Entries.html#Editing-Stack-Entries" rel="next" title="Editing Stack Entries">
-<link href="Stack-and-Trail.html#Stack-and-Trail" rel="prev" title="Stack and Trail">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Stack Manipulation</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Stack Manipulation" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Stack Manipulation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Stack-and-Trail.html#Stack-and-Trail" rel="up" title=
+  "Stack and Trail" />
+  <link href="Editing-Stack-Entries.html#Editing-Stack-Entries"
+  rel="next" title="Editing Stack Entries" />
+  <link href="Stack-and-Trail.html#Stack-and-Trail" rel="prev"
+  title="Stack and Trail" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Stack-Manipulation"></a>
-<div class="header">
-<p>
-Next: <a href="Editing-Stack-Entries.html#Editing-Stack-Entries" accesskey="n" rel="next">Editing Stack Entries</a>, Previous: <a href="Stack-and-Trail.html#Stack-and-Trail" accesskey="p" rel="prev">Stack and Trail</a>, Up: <a href="Stack-and-Trail.html#Stack-and-Trail" accesskey="u" rel="up">Stack and Trail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Stack-Manipulation-Commands"></a>
-<h3 class="section">5.1 Stack Manipulation Commands</h3>
+<body lang="en" xml:lang="en">
+  <a name="Stack-Manipulation" id="Stack-Manipulation"></a>
 
-<a name="index-RET"></a>
-<a name="index-SPC"></a>
-<a name="index-calc_002denter"></a>
-<a name="index-Duplicating-stack-entries"></a>
-<p>To duplicate the top object on the stack, press <tt class="key">RET</tt> or <tt class="key">SPC</tt>
-(two equivalent keys for the <code>calc-enter</code> command).
-Given a positive numeric prefix argument, these commands duplicate
-several elements at the top of the stack.
-Given a negative argument,
-these commands duplicate the specified element of the stack.
-Given an argument of zero, they duplicate the entire stack.
-For example, with &lsquo;<samp>10 20 30</samp>&rsquo; on the stack,
-<tt class="key">RET</tt> creates &lsquo;<samp>10 20 30 30</samp>&rsquo;,
-<kbd>C-u 2 <span class="key">RET</span></kbd> creates &lsquo;<samp>10 20 30 20 30</samp>&rsquo;,
-<kbd>C-u - 2 <span class="key">RET</span></kbd> creates &lsquo;<samp>10 20 30 20</samp>&rsquo;, and
-<kbd>C-u 0 <span class="key">RET</span></kbd> creates &lsquo;<samp>10 20 30 10 20 30</samp>&rsquo;.
-</p>
-<a name="index-LFD"></a>
-<a name="index-calc_002dover"></a>
-<p>The <tt class="key">LFD</tt> (<code>calc-over</code>) command (on a key marked Line-Feed if you
-have it, else on <kbd>C-j</kbd>) is like <code>calc-enter</code>
-except that the sign of the numeric prefix argument is interpreted
-oppositely.  Also, with no prefix argument the default argument is 2.
-Thus with &lsquo;<samp>10 20 30</samp>&rsquo; on the stack, <tt class="key">LFD</tt> and <kbd>C-u 2 <span class="key">LFD</span></kbd>
-are both equivalent to <kbd>C-u - 2 <span class="key">RET</span></kbd>, producing
-&lsquo;<samp>10 20 30 20</samp>&rsquo;.
-</p>
-<a name="index-DEL"></a>
-<a name="index-C_002dd"></a>
-<a name="index-calc_002dpop"></a>
-<a name="index-Removing-stack-entries"></a>
-<a name="index-Deleting-stack-entries"></a>
-<p>To remove the top element from the stack, press <tt class="key">DEL</tt> (<code>calc-pop</code>).
-The <kbd>C-d</kbd> key is a synonym for <tt class="key">DEL</tt>.
-(If the top element is an incomplete object with at least one element, the
-last element is removed from it.)  Given a positive numeric prefix argument,
-several elements are removed.  Given a negative argument, the specified
-element of the stack is deleted.  Given an argument of zero, the entire
-stack is emptied.
-For example, with &lsquo;<samp>10 20 30</samp>&rsquo; on the stack,
-<tt class="key">DEL</tt> leaves &lsquo;<samp>10 20</samp>&rsquo;,
-<kbd>C-u 2 <span class="key">DEL</span></kbd> leaves &lsquo;<samp>10</samp>&rsquo;,
-<kbd>C-u - 2 <span class="key">DEL</span></kbd> leaves &lsquo;<samp>10 30</samp>&rsquo;, and
-<kbd>C-u 0 <span class="key">DEL</span></kbd> leaves an empty stack.
-</p>
-<a name="index-M_002dDEL"></a>
-<a name="index-calc_002dpop_002dabove"></a>
-<p>The <kbd>M-<span class="key">DEL</span></kbd> (<code>calc-pop-above</code>) command is to <tt class="key">DEL</tt> what
-<tt class="key">LFD</tt> is to <tt class="key">RET</tt>:  It interprets the sign of the numeric
-prefix argument in the opposite way, and the default argument is 2.
-Thus <kbd>M-<span class="key">DEL</span></kbd> by itself removes the second-from-top stack element,
-leaving the first, third, fourth, and so on; <kbd>M-3 M-<span class="key">DEL</span></kbd> deletes
-the third stack element.
-</p>
-<p>The above commands do not depend on the location of the cursor.
-If the customizable variable <code>calc-context-sensitive-enter</code> is
-non-<code>nil</code> (see <a href="Customizing-Calc.html#Customizing-Calc">Customizing Calc</a>), these commands will become
-context sensitive.  For example, instead of duplicating the top of the stack,
-<tt class="key">RET</tt> will copy the element at the cursor to the top of the
-stack.  With a positive numeric prefix, a copy of the element at the
-cursor and the appropriate number of preceding elements will be placed
-at the top of the stack.  A negative prefix will still duplicate the
-specified element of the stack regardless of the cursor  position.
-Similarly, <tt class="key">DEL</tt> will remove the corresponding elements from the
-stack.
-</p>
-<a name="index-TAB"></a>
-<a name="index-calc_002droll_002ddown"></a>
-<p>To exchange the top two elements of the stack, press <tt class="key">TAB</tt>
-(<code>calc-roll-down</code>).  Given a positive numeric prefix argument, the
-specified number of elements at the top of the stack are rotated downward.
-Given a negative argument, the entire stack is rotated downward the specified
-number of times.  Given an argument of zero, the entire stack is reversed
-top-for-bottom.
-For example, with &lsquo;<samp>10 20 30 40 50</samp>&rsquo; on the stack,
-<tt class="key">TAB</tt> creates &lsquo;<samp>10 20 30 50 40</samp>&rsquo;,
-<kbd>C-u 3 <span class="key">TAB</span></kbd> creates &lsquo;<samp>10 20 50 30 40</samp>&rsquo;,
-<kbd>C-u - 2 <span class="key">TAB</span></kbd> creates &lsquo;<samp>40 50 10 20 30</samp>&rsquo;, and
-<kbd>C-u 0 <span class="key">TAB</span></kbd> creates &lsquo;<samp>50 40 30 20 10</samp>&rsquo;.
-</p>
-<a name="index-M_002dTAB"></a>
-<a name="index-calc_002droll_002dup"></a>
-<p>The command <kbd>M-<span class="key">TAB</span></kbd> (<code>calc-roll-up</code>) is analogous to <tt class="key">TAB</tt>
-except that it rotates upward instead of downward.  Also, the default
-with no prefix argument is to rotate the top 3 elements.
-For example, with &lsquo;<samp>10 20 30 40 50</samp>&rsquo; on the stack,
-<kbd>M-<span class="key">TAB</span></kbd> creates &lsquo;<samp>10 20 40 50 30</samp>&rsquo;,
-<kbd>C-u 4 M-<span class="key">TAB</span></kbd> creates &lsquo;<samp>10 30 40 50 20</samp>&rsquo;,
-<kbd>C-u - 2 M-<span class="key">TAB</span></kbd> creates &lsquo;<samp>30 40 50 10 20</samp>&rsquo;, and
-<kbd>C-u 0 M-<span class="key">TAB</span></kbd> creates &lsquo;<samp>50 40 30 20 10</samp>&rsquo;.
-</p>
-<p>A good way to view the operation of <tt class="key">TAB</tt> and <kbd>M-<span class="key">TAB</span></kbd> is in
-terms of moving a particular element to a new position in the stack.
-With a positive argument <var>n</var>, <tt class="key">TAB</tt> moves the top stack
-element down to level <var>n</var>, making room for it by pulling all the
-intervening stack elements toward the top.  <kbd>M-<span class="key">TAB</span></kbd> moves the
-element at level <var>n</var> up to the top.  (Compare with <tt class="key">LFD</tt>,
-which copies instead of moving the element in level <var>n</var>.)
-</p>
-<p>With a negative argument <i>-<var>n</var></i>, <tt class="key">TAB</tt> rotates the stack
-to move the object in level <var>n</var> to the deepest place in the
-stack, and the object in level <i><var>n</var>+1</i> to the top.  <kbd>M-<span class="key">TAB</span></kbd>
-rotates the deepest stack element to be in level <var>n</var>, also
-putting the top stack element in level <i><var>n</var>+1</i>.
-</p>
-<p>See <a href="Selecting-Subformulas.html#Selecting-Subformulas">Selecting Subformulas</a>, for a way to apply these commands to
-any portion of a vector or formula on the stack.
-</p>
-<a name="index-C_002dxC_002dt"></a>
-<a name="index-calc_002dtranspose_002dlines"></a>
-<a name="index-Moving-stack-entries"></a>
-<p>The command <kbd>C-x C-t</kbd> (<code>calc-transpose-lines</code>) will transpose
-the stack object determined by the point with the stack object at the
-next higher level. For example, with &lsquo;<samp>10 20 30 40 50</samp>&rsquo; on the
-stack and the point on the line containing &lsquo;<samp>30</samp>&rsquo;, <kbd>C-x C-t</kbd>
-creates &lsquo;<samp>10 20 40 30 50</samp>&rsquo;.  More generally, <kbd>C-x C-t</kbd> acts on
-the stack objects determined by the current point (and mark) similar
-to how the text-mode command <code>transpose-lines</code> acts on
-lines.  With argument <var>n</var>, <kbd>C-x C-t</kbd> will move the stack object
-at the level above the current point and move it past N other objects;
-for example, with &lsquo;<samp>10 20 30 40 50</samp>&rsquo; on the stack and the point on
-the line containing &lsquo;<samp>30</samp>&rsquo;, <kbd>C-u 2 C-x C-t</kbd> creates
-&lsquo;<samp>10 40 20 30 50</samp>&rsquo;. With an argument of 0, <kbd>C-x C-t</kbd> will switch
-the stack objects at the levels determined by the point and the mark.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Editing-Stack-Entries.html#Editing-Stack-Entries" accesskey="n" rel="next">Editing Stack Entries</a>, Previous: <a href="Stack-and-Trail.html#Stack-and-Trail" accesskey="p" rel="prev">Stack and Trail</a>, Up: <a href="Stack-and-Trail.html#Stack-and-Trail" accesskey="u" rel="up">Stack and Trail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Editing-Stack-Entries.html#Editing-Stack-Entries" accesskey=
+    "n" rel="next">Editing Stack Entries</a>, Previous: <a href=
+    "Stack-and-Trail.html#Stack-and-Trail" accesskey="p" rel=
+    "prev">Stack and Trail</a>, Up: <a href=
+    "Stack-and-Trail.html#Stack-and-Trail" accesskey="u" rel=
+    "up">Stack and Trail</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Stack-Manipulation-Commands" id=
+  "Stack-Manipulation-Commands"></a>
 
+  <h3 class="section">5.1 Stack Manipulation Commands</h3><a name=
+  "index-RET" id="index-RET"></a> <a name="index-SPC" id=
+  "index-SPC"></a> <a name="index-calc_002denter" id=
+  "index-calc_002denter"></a> <a name=
+  "index-Duplicating-stack-entries" id=
+  "index-Duplicating-stack-entries"></a>
 
+  <p>To duplicate the top object on the stack, press <tt class=
+  "key">RET</tt> or <tt class="key">SPC</tt> (two equivalent keys
+  for the <code>calc-enter</code> command). Given a positive
+  numeric prefix argument, these commands duplicate several
+  elements at the top of the stack. Given a negative argument,
+  these commands duplicate the specified element of the stack.
+  Given an argument of zero, they duplicate the entire stack. For
+  example, with &lsquo;<samp>10 20 30</samp>&rsquo; on the stack,
+  <tt class="key">RET</tt> creates &lsquo;<samp>10 20 30
+  30</samp>&rsquo;, <kbd>C-u 2 <span class="key">RET</span></kbd>
+  creates &lsquo;<samp>10 20 30 20 30</samp>&rsquo;, <kbd>C-u - 2
+  <span class="key">RET</span></kbd> creates &lsquo;<samp>10 20 30
+  20</samp>&rsquo;, and <kbd>C-u 0 <span class=
+  "key">RET</span></kbd> creates &lsquo;<samp>10 20 30 10 20
+  30</samp>&rsquo;.</p><a name="index-LFD" id="index-LFD"></a>
+  <a name="index-calc_002dover" id="index-calc_002dover"></a>
 
+  <p>The <tt class="key">LFD</tt> (<code>calc-over</code>) command
+  (on a key marked Line-Feed if you have it, else on
+  <kbd>C-j</kbd>) is like <code>calc-enter</code> except that the
+  sign of the numeric prefix argument is interpreted oppositely.
+  Also, with no prefix argument the default argument is 2. Thus
+  with &lsquo;<samp>10 20 30</samp>&rsquo; on the stack, <tt class=
+  "key">LFD</tt> and <kbd>C-u 2 <span class="key">LFD</span></kbd>
+  are both equivalent to <kbd>C-u - 2 <span class=
+  "key">RET</span></kbd>, producing &lsquo;<samp>10 20 30
+  20</samp>&rsquo;.</p><a name="index-DEL" id="index-DEL"></a>
+  <a name="index-C_002dd" id="index-C_002dd"></a> <a name=
+  "index-calc_002dpop" id="index-calc_002dpop"></a> <a name=
+  "index-Removing-stack-entries" id=
+  "index-Removing-stack-entries"></a> <a name=
+  "index-Deleting-stack-entries" id=
+  "index-Deleting-stack-entries"></a>
+
+  <p>To remove the top element from the stack, press <tt class=
+  "key">DEL</tt> (<code>calc-pop</code>). The <kbd>C-d</kbd> key is
+  a synonym for <tt class="key">DEL</tt>. (If the top element is an
+  incomplete object with at least one element, the last element is
+  removed from it.) Given a positive numeric prefix argument,
+  several elements are removed. Given a negative argument, the
+  specified element of the stack is deleted. Given an argument of
+  zero, the entire stack is emptied. For example, with
+  &lsquo;<samp>10 20 30</samp>&rsquo; on the stack, <tt class=
+  "key">DEL</tt> leaves &lsquo;<samp>10 20</samp>&rsquo;, <kbd>C-u
+  2 <span class="key">DEL</span></kbd> leaves
+  &lsquo;<samp>10</samp>&rsquo;, <kbd>C-u - 2 <span class=
+  "key">DEL</span></kbd> leaves &lsquo;<samp>10 30</samp>&rsquo;,
+  and <kbd>C-u 0 <span class="key">DEL</span></kbd> leaves an empty
+  stack.</p><a name="index-M_002dDEL" id="index-M_002dDEL"></a>
+  <a name="index-calc_002dpop_002dabove" id=
+  "index-calc_002dpop_002dabove"></a>
+
+  <p>The <kbd>M-<span class="key">DEL</span></kbd>
+  (<code>calc-pop-above</code>) command is to <tt class=
+  "key">DEL</tt> what <tt class="key">LFD</tt> is to <tt class=
+  "key">RET</tt>: It interprets the sign of the numeric prefix
+  argument in the opposite way, and the default argument is 2. Thus
+  <kbd>M-<span class="key">DEL</span></kbd> by itself removes the
+  second-from-top stack element, leaving the first, third, fourth,
+  and so on; <kbd>M-3 M-<span class="key">DEL</span></kbd> deletes
+  the third stack element.</p>
+
+  <p>The above commands do not depend on the location of the
+  cursor. If the customizable variable
+  <code>calc-context-sensitive-enter</code> is non-<code>nil</code>
+  (see <a href="Customizing-Calc.html#Customizing-Calc">Customizing
+  Calc</a>), these commands will become context sensitive. For
+  example, instead of duplicating the top of the stack, <tt class=
+  "key">RET</tt> will copy the element at the cursor to the top of
+  the stack. With a positive numeric prefix, a copy of the element
+  at the cursor and the appropriate number of preceding elements
+  will be placed at the top of the stack. A negative prefix will
+  still duplicate the specified element of the stack regardless of
+  the cursor position. Similarly, <tt class="key">DEL</tt> will
+  remove the corresponding elements from the stack.</p><a name=
+  "index-TAB" id="index-TAB"></a> <a name=
+  "index-calc_002droll_002ddown" id=
+  "index-calc_002droll_002ddown"></a>
+
+  <p>To exchange the top two elements of the stack, press
+  <tt class="key">TAB</tt> (<code>calc-roll-down</code>). Given a
+  positive numeric prefix argument, the specified number of
+  elements at the top of the stack are rotated downward. Given a
+  negative argument, the entire stack is rotated downward the
+  specified number of times. Given an argument of zero, the entire
+  stack is reversed top-for-bottom. For example, with
+  &lsquo;<samp>10 20 30 40 50</samp>&rsquo; on the stack,
+  <tt class="key">TAB</tt> creates &lsquo;<samp>10 20 30 50
+  40</samp>&rsquo;, <kbd>C-u 3 <span class="key">TAB</span></kbd>
+  creates &lsquo;<samp>10 20 50 30 40</samp>&rsquo;, <kbd>C-u - 2
+  <span class="key">TAB</span></kbd> creates &lsquo;<samp>40 50 10
+  20 30</samp>&rsquo;, and <kbd>C-u 0 <span class=
+  "key">TAB</span></kbd> creates &lsquo;<samp>50 40 30 20
+  10</samp>&rsquo;.</p><a name="index-M_002dTAB" id=
+  "index-M_002dTAB"></a> <a name="index-calc_002droll_002dup" id=
+  "index-calc_002droll_002dup"></a>
+
+  <p>The command <kbd>M-<span class="key">TAB</span></kbd>
+  (<code>calc-roll-up</code>) is analogous to <tt class=
+  "key">TAB</tt> except that it rotates upward instead of downward.
+  Also, the default with no prefix argument is to rotate the top 3
+  elements. For example, with &lsquo;<samp>10 20 30 40
+  50</samp>&rsquo; on the stack, <kbd>M-<span class=
+  "key">TAB</span></kbd> creates &lsquo;<samp>10 20 40 50
+  30</samp>&rsquo;, <kbd>C-u 4 M-<span class="key">TAB</span></kbd>
+  creates &lsquo;<samp>10 30 40 50 20</samp>&rsquo;, <kbd>C-u - 2
+  M-<span class="key">TAB</span></kbd> creates &lsquo;<samp>30 40
+  50 10 20</samp>&rsquo;, and <kbd>C-u 0 M-<span class=
+  "key">TAB</span></kbd> creates &lsquo;<samp>50 40 30 20
+  10</samp>&rsquo;.</p>
+
+  <p>A good way to view the operation of <tt class="key">TAB</tt>
+  and <kbd>M-<span class="key">TAB</span></kbd> is in terms of
+  moving a particular element to a new position in the stack. With
+  a positive argument <var>n</var>, <tt class="key">TAB</tt> moves
+  the top stack element down to level <var>n</var>, making room for
+  it by pulling all the intervening stack elements toward the top.
+  <kbd>M-<span class="key">TAB</span></kbd> moves the element at
+  level <var>n</var> up to the top. (Compare with <tt class=
+  "key">LFD</tt>, which copies instead of moving the element in
+  level <var>n</var>.)</p>
+
+  <p>With a negative argument <i>-<var>n</var></i>, <tt class=
+  "key">TAB</tt> rotates the stack to move the object in level
+  <var>n</var> to the deepest place in the stack, and the object in
+  level <i><var>n</var>+1</i> to the top. <kbd>M-<span class=
+  "key">TAB</span></kbd> rotates the deepest stack element to be in
+  level <var>n</var>, also putting the top stack element in level
+  <i><var>n</var>+1</i>.</p>
+
+  <p>See <a href=
+  "Selecting-Subformulas.html#Selecting-Subformulas">Selecting
+  Subformulas</a>, for a way to apply these commands to any portion
+  of a vector or formula on the stack.</p><a name=
+  "index-C_002dxC_002dt" id="index-C_002dxC_002dt"></a> <a name=
+  "index-calc_002dtranspose_002dlines" id=
+  "index-calc_002dtranspose_002dlines"></a> <a name=
+  "index-Moving-stack-entries" id="index-Moving-stack-entries"></a>
+
+  <p>The command <kbd>C-x C-t</kbd>
+  (<code>calc-transpose-lines</code>) will transpose the stack
+  object determined by the point with the stack object at the next
+  higher level. For example, with &lsquo;<samp>10 20 30 40
+  50</samp>&rsquo; on the stack and the point on the line
+  containing &lsquo;<samp>30</samp>&rsquo;, <kbd>C-x C-t</kbd>
+  creates &lsquo;<samp>10 20 40 30 50</samp>&rsquo;. More
+  generally, <kbd>C-x C-t</kbd> acts on the stack objects
+  determined by the current point (and mark) similar to how the
+  text-mode command <code>transpose-lines</code> acts on lines.
+  With argument <var>n</var>, <kbd>C-x C-t</kbd> will move the
+  stack object at the level above the current point and move it
+  past N other objects; for example, with &lsquo;<samp>10 20 30 40
+  50</samp>&rsquo; on the stack and the point on the line
+  containing &lsquo;<samp>30</samp>&rsquo;, <kbd>C-u 2 C-x
+  C-t</kbd> creates &lsquo;<samp>10 40 20 30 50</samp>&rsquo;. With
+  an argument of 0, <kbd>C-x C-t</kbd> will switch the stack
+  objects at the levels determined by the point and the mark.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Editing-Stack-Entries.html#Editing-Stack-Entries" accesskey=
+    "n" rel="next">Editing Stack Entries</a>, Previous: <a href=
+    "Stack-and-Trail.html#Stack-and-Trail" accesskey="p" rel=
+    "prev">Stack and Trail</a>, Up: <a href=
+    "Stack-and-Trail.html#Stack-and-Trail" accesskey="u" rel=
+    "up">Stack and Trail</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

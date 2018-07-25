@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,193 +19,281 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Defining Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Defining Variables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Defining Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variables.html#Variables" rel="up" title="Variables">
-<link href="Tips-for-Defining.html#Tips-for-Defining" rel="next" title="Tips for Defining">
-<link href="Void-Variables.html#Void-Variables" rel="prev" title="Void Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Defining
+  Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Defining Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Defining Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variables.html#Variables" rel="up" title=
+  "Variables" />
+  <link href="Tips-for-Defining.html#Tips-for-Defining" rel="next"
+  title="Tips for Defining" />
+  <link href="Void-Variables.html#Void-Variables" rel="prev" title=
+  "Void Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Defining-Variables" id="Defining-Variables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Tips-for-Defining.html#Tips-for-Defining"
+    accesskey="n" rel="next">Tips for Defining</a>, Previous:
+    <a href="Void-Variables.html#Void-Variables" accesskey="p" rel=
+    "prev">Void Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-Global-Variables" id=
+  "Defining-Global-Variables"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Variables"></a>
-<div class="header">
-<p>
-Next: <a href="Tips-for-Defining.html#Tips-for-Defining" accesskey="n" rel="next">Tips for Defining</a>, Previous: <a href="Void-Variables.html#Void-Variables" accesskey="p" rel="prev">Void Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-Global-Variables"></a>
-<h3 class="section">11.5 Defining Global Variables</h3>
-<a name="index-variable-definition"></a>
+  <h3 class="section">11.5 Defining Global Variables</h3><a name=
+  "index-variable-definition" id="index-variable-definition"></a>
 
-<p>A <em>variable definition</em> is a construct that announces your
-intention to use a symbol as a global variable.  It uses the special
-forms <code>defvar</code> or <code>defconst</code>, which are documented below.
-</p>
-<p>A variable definition serves three purposes.  First, it informs
-people who read the code that the symbol is <em>intended</em> to be used
-a certain way (as a variable).  Second, it informs the Lisp system of
-this, optionally supplying an initial value and a documentation
-string.  Third, it provides information to programming tools such as
-<code>etags</code>, allowing them to find where the variable was defined.
-</p>
-<p>The difference between <code>defconst</code> and <code>defvar</code> is mainly a
-matter of intent, serving to inform human readers of whether the value
-should ever change.  Emacs Lisp does not actually prevent you from
-changing the value of a variable defined with <code>defconst</code>.  One
-notable difference between the two forms is that <code>defconst</code>
-unconditionally initializes the variable, whereas <code>defvar</code>
-initializes it only if it is originally void.
-</p>
-<p>To define a customizable variable, you should use <code>defcustom</code>
-(which calls <code>defvar</code> as a subroutine).  See <a href="Variable-Definitions.html#Variable-Definitions">Variable Definitions</a>.
-</p>
-<dl>
-<dt><a name="index-defvar"></a>Special Form: <strong>defvar</strong> <em>symbol [value [doc-string]]</em></dt>
-<dd><p>This special form defines <var>symbol</var> as a variable.  Note that
-<var>symbol</var> is not evaluated; the symbol to be defined should appear
-explicitly in the <code>defvar</code> form.  The variable is marked as
-<em>special</em>, meaning that it should always be dynamically bound
-(see <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>).
-</p>
-<p>If <var>value</var> is specified, and <var>symbol</var> is void (i.e., it has no
-dynamically bound value; see <a href="Void-Variables.html#Void-Variables">Void Variables</a>), then <var>value</var> is
-evaluated and <var>symbol</var> is set to the result.  But if <var>symbol</var>
-is not void, <var>value</var> is not evaluated, and <var>symbol</var>&rsquo;s value is
-left unchanged.  If <var>value</var> is omitted, the value of <var>symbol</var>
-is not changed in any case.
-</p>
-<p>If <var>symbol</var> has a buffer-local binding in the current buffer,
-<code>defvar</code> acts on the default value, which is buffer-independent,
-rather than the buffer-local binding.  It sets the default value if
-the default value is void.  See <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>.
-</p>
-<p>If <var>symbol</var> is already lexically bound (e.g., if the <code>defvar</code>
-form occurs in a <code>let</code> form with lexical binding enabled), then
-<code>defvar</code> sets the dynamic value.  The lexical binding remains in
-effect until its binding construct exits.  See <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>.
-</p>
-<p>When you evaluate a top-level <code>defvar</code> form with <kbd>C-M-x</kbd> in
-Emacs Lisp mode (<code>eval-defun</code>), a special feature of
-<code>eval-defun</code> arranges to set the variable unconditionally, without
-testing whether its value is void.
-</p>
-<p>If the <var>doc-string</var> argument is supplied, it specifies the
-documentation string for the variable (stored in the symbol&rsquo;s
-<code>variable-documentation</code> property).  See <a href="Documentation.html#Documentation">Documentation</a>.
-</p>
-<p>Here are some examples.  This form defines <code>foo</code> but does not
-initialize it:
-</p>
-<div class="example">
-<pre class="example">(defvar foo)
+  <p>A <em>variable definition</em> is a construct that announces
+  your intention to use a symbol as a global variable. It uses the
+  special forms <code>defvar</code> or <code>defconst</code>, which
+  are documented below.</p>
+
+  <p>A variable definition serves three purposes. First, it informs
+  people who read the code that the symbol is <em>intended</em> to
+  be used a certain way (as a variable). Second, it informs the
+  Lisp system of this, optionally supplying an initial value and a
+  documentation string. Third, it provides information to
+  programming tools such as <code>etags</code>, allowing them to
+  find where the variable was defined.</p>
+
+  <p>The difference between <code>defconst</code> and
+  <code>defvar</code> is mainly a matter of intent, serving to
+  inform human readers of whether the value should ever change.
+  Emacs Lisp does not actually prevent you from changing the value
+  of a variable defined with <code>defconst</code>. One notable
+  difference between the two forms is that <code>defconst</code>
+  unconditionally initializes the variable, whereas
+  <code>defvar</code> initializes it only if it is originally
+  void.</p>
+
+  <p>To define a customizable variable, you should use
+  <code>defcustom</code> (which calls <code>defvar</code> as a
+  subroutine). See <a href=
+  "Variable-Definitions.html#Variable-Definitions">Variable
+  Definitions</a>.</p>
+
+  <dl>
+    <dt><a name="index-defvar" id="index-defvar"></a>Special Form:
+    <strong>defvar</strong> <em>symbol [value
+    [doc-string]]</em></dt>
+
+    <dd>
+      <p>This special form defines <var>symbol</var> as a variable.
+      Note that <var>symbol</var> is not evaluated; the symbol to
+      be defined should appear explicitly in the
+      <code>defvar</code> form. The variable is marked as
+      <em>special</em>, meaning that it should always be
+      dynamically bound (see <a href=
+      "Variable-Scoping.html#Variable-Scoping">Variable
+      Scoping</a>).</p>
+
+      <p>If <var>value</var> is specified, and <var>symbol</var> is
+      void (i.e., it has no dynamically bound value; see <a href=
+      "Void-Variables.html#Void-Variables">Void Variables</a>),
+      then <var>value</var> is evaluated and <var>symbol</var> is
+      set to the result. But if <var>symbol</var> is not void,
+      <var>value</var> is not evaluated, and
+      <var>symbol</var>&rsquo;s value is left unchanged. If
+      <var>value</var> is omitted, the value of <var>symbol</var>
+      is not changed in any case.</p>
+
+      <p>If <var>symbol</var> has a buffer-local binding in the
+      current buffer, <code>defvar</code> acts on the default
+      value, which is buffer-independent, rather than the
+      buffer-local binding. It sets the default value if the
+      default value is void. See <a href=
+      "Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local
+      Variables</a>.</p>
+
+      <p>If <var>symbol</var> is already lexically bound (e.g., if
+      the <code>defvar</code> form occurs in a <code>let</code>
+      form with lexical binding enabled), then <code>defvar</code>
+      sets the dynamic value. The lexical binding remains in effect
+      until its binding construct exits. See <a href=
+      "Variable-Scoping.html#Variable-Scoping">Variable
+      Scoping</a>.</p>
+
+      <p>When you evaluate a top-level <code>defvar</code> form
+      with <kbd>C-M-x</kbd> in Emacs Lisp mode
+      (<code>eval-defun</code>), a special feature of
+      <code>eval-defun</code> arranges to set the variable
+      unconditionally, without testing whether its value is
+      void.</p>
+
+      <p>If the <var>doc-string</var> argument is supplied, it
+      specifies the documentation string for the variable (stored
+      in the symbol&rsquo;s <code>variable-documentation</code>
+      property). See <a href=
+      "Documentation.html#Documentation">Documentation</a>.</p>
+
+      <p>Here are some examples. This form defines <code>foo</code>
+      but does not initialize it:</p>
+
+      <div class="example">
+        <pre class="example">
+(defvar foo)
      &rArr; foo
-</pre></div>
+</pre>
+      </div>
 
-<p>This example initializes the value of <code>bar</code> to <code>23</code>, and gives
-it a documentation string:
-</p>
-<div class="example">
-<pre class="example">(defvar bar 23
-  &quot;The normal weight of a bar.&quot;)
+      <p>This example initializes the value of <code>bar</code> to
+      <code>23</code>, and gives it a documentation string:</p>
+
+      <div class="example">
+        <pre class="example">
+(defvar bar 23
+  "The normal weight of a bar.")
      &rArr; bar
-</pre></div>
+</pre>
+      </div>
 
-<p>The <code>defvar</code> form returns <var>symbol</var>, but it is normally used
-at top level in a file where its value does not matter.
-</p></dd></dl>
+      <p>The <code>defvar</code> form returns <var>symbol</var>,
+      but it is normally used at top level in a file where its
+      value does not matter.</p>
+    </dd>
+  </dl><a name="index-constant-variables-1" id=
+  "index-constant-variables-1"></a>
 
-<a name="index-constant-variables-1"></a>
-<dl>
-<dt><a name="index-defconst"></a>Special Form: <strong>defconst</strong> <em>symbol value [doc-string]</em></dt>
-<dd><p>This special form defines <var>symbol</var> as a value and initializes it.
-It informs a person reading your code that <var>symbol</var> has a standard
-global value, established here, that should not be changed by the user
-or by other programs.  Note that <var>symbol</var> is not evaluated; the
-symbol to be defined must appear explicitly in the <code>defconst</code>.
-</p>
-<p>The <code>defconst</code> form, like <code>defvar</code>, marks the variable as
-<em>special</em>, meaning that it should always be dynamically bound
-(see <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>).  In addition, it marks the variable as
-risky (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>).
-</p>
-<p><code>defconst</code> always evaluates <var>value</var>, and sets the value of
-<var>symbol</var> to the result.  If <var>symbol</var> does have a buffer-local
-binding in the current buffer, <code>defconst</code> sets the default value,
-not the buffer-local value.  (But you should not be making
-buffer-local bindings for a symbol that is defined with
-<code>defconst</code>.)
-</p>
-<p>An example of the use of <code>defconst</code> is Emacs&rsquo;s definition of
-<code>float-pi</code>&mdash;the mathematical constant <em>pi</em>, which ought not
-to be changed by anyone (attempts by the Indiana State Legislature
-notwithstanding).  As the second form illustrates, however,
-<code>defconst</code> is only advisory.
-</p>
-<div class="example">
-<pre class="example">(defconst float-pi 3.141592653589793 &quot;The value of Pi.&quot;)
+  <dl>
+    <dt><a name="index-defconst" id="index-defconst"></a>Special
+    Form: <strong>defconst</strong> <em>symbol value
+    [doc-string]</em></dt>
+
+    <dd>
+      <p>This special form defines <var>symbol</var> as a value and
+      initializes it. It informs a person reading your code that
+      <var>symbol</var> has a standard global value, established
+      here, that should not be changed by the user or by other
+      programs. Note that <var>symbol</var> is not evaluated; the
+      symbol to be defined must appear explicitly in the
+      <code>defconst</code>.</p>
+
+      <p>The <code>defconst</code> form, like <code>defvar</code>,
+      marks the variable as <em>special</em>, meaning that it
+      should always be dynamically bound (see <a href=
+      "Variable-Scoping.html#Variable-Scoping">Variable
+      Scoping</a>). In addition, it marks the variable as risky
+      (see <a href=
+      "File-Local-Variables.html#File-Local-Variables">File Local
+      Variables</a>).</p>
+
+      <p><code>defconst</code> always evaluates <var>value</var>,
+      and sets the value of <var>symbol</var> to the result. If
+      <var>symbol</var> does have a buffer-local binding in the
+      current buffer, <code>defconst</code> sets the default value,
+      not the buffer-local value. (But you should not be making
+      buffer-local bindings for a symbol that is defined with
+      <code>defconst</code>.)</p>
+
+      <p>An example of the use of <code>defconst</code> is
+      Emacs&rsquo;s definition of <code>float-pi</code>&mdash;the
+      mathematical constant <em>pi</em>, which ought not to be
+      changed by anyone (attempts by the Indiana State Legislature
+      notwithstanding). As the second form illustrates, however,
+      <code>defconst</code> is only advisory.</p>
+
+      <div class="example">
+        <pre class="example">
+(defconst float-pi 3.141592653589793 "The value of Pi.")
      &rArr; float-pi
-</pre><pre class="example">(setq float-pi 3)
+</pre>
+        <pre class="example">
+(setq float-pi 3)
      &rArr; float-pi
-</pre><pre class="example">float-pi
+</pre>
+        <pre class="example">
+float-pi
      &rArr; 3
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<p><strong>Warning:</strong> If you use a <code>defconst</code> or <code>defvar</code>
-special form while the variable has a local binding (made with
-<code>let</code>, or a function argument), it sets the local binding rather
-than the global binding.  This is not what you usually want.  To
-prevent this, use these special forms at top level in a file, where
-normally no local binding is in effect, and make sure to load the file
-before making a local binding for the variable.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Tips-for-Defining.html#Tips-for-Defining" accesskey="n" rel="next">Tips for Defining</a>, Previous: <a href="Void-Variables.html#Void-Variables" accesskey="p" rel="prev">Void Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p><strong>Warning:</strong> If you use a <code>defconst</code>
+  or <code>defvar</code> special form while the variable has a
+  local binding (made with <code>let</code>, or a function
+  argument), it sets the local binding rather than the global
+  binding. This is not what you usually want. To prevent this, use
+  these special forms at top level in a file, where normally no
+  local binding is in effect, and make sure to load the file before
+  making a local binding for the variable.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Tips-for-Defining.html#Tips-for-Defining"
+    accesskey="n" rel="next">Tips for Defining</a>, Previous:
+    <a href="Void-Variables.html#Void-Variables" accesskey="p" rel=
+    "prev">Void Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

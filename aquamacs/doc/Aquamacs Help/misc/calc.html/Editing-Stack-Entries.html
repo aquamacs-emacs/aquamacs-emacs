@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,120 +18,169 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Editing Stack Entries</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Editing Stack Entries">
-<meta name="keywords" content="GNU Emacs Calc Manual: Editing Stack Entries">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Stack-and-Trail.html#Stack-and-Trail" rel="up" title="Stack and Trail">
-<link href="Trail-Commands.html#Trail-Commands" rel="next" title="Trail Commands">
-<link href="Stack-Manipulation.html#Stack-Manipulation" rel="prev" title="Stack Manipulation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Editing Stack Entries</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Editing Stack Entries" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Editing Stack Entries" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Stack-and-Trail.html#Stack-and-Trail" rel="up" title=
+  "Stack and Trail" />
+  <link href="Trail-Commands.html#Trail-Commands" rel="next" title=
+  "Trail Commands" />
+  <link href="Stack-Manipulation.html#Stack-Manipulation" rel=
+  "prev" title="Stack Manipulation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Editing-Stack-Entries"></a>
-<div class="header">
-<p>
-Next: <a href="Trail-Commands.html#Trail-Commands" accesskey="n" rel="next">Trail Commands</a>, Previous: <a href="Stack-Manipulation.html#Stack-Manipulation" accesskey="p" rel="prev">Stack Manipulation</a>, Up: <a href="Stack-and-Trail.html#Stack-and-Trail" accesskey="u" rel="up">Stack and Trail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Editing-Stack-Entries-1"></a>
-<h3 class="section">5.2 Editing Stack Entries</h3>
+<body lang="en" xml:lang="en">
+  <a name="Editing-Stack-Entries" id="Editing-Stack-Entries"></a>
 
-<a name="index-_0060"></a>
-<a name="index-calc_002dedit"></a>
-<a name="index-calc_002dedit_002dfinish"></a>
-<a name="index-Editing-the-stack-with-Emacs"></a>
-<p>The <kbd>`</kbd> (<code>calc-edit</code>) command creates a temporary buffer
-(<samp>*Calc Edit*</samp>) for editing the top-of-stack value using regular
-Emacs commands.  Note that <kbd>`</kbd> is a grave accent, not an apostrophe.
-With a numeric prefix argument, it edits the specified number of stack
-entries at once.  (An argument of zero edits the entire stack; a
-negative argument edits one specific stack entry.)
-</p>
-<p>When you are done editing, press <kbd>C-c C-c</kbd> to finish and return
-to Calc.  The <tt class="key">RET</tt> and <tt class="key">LFD</tt> keys also work to finish most
-sorts of editing, though in some cases Calc leaves <tt class="key">RET</tt> with its
-usual meaning (&ldquo;insert a newline&rdquo;) if it&rsquo;s a situation where you
-might want to insert new lines into the editing buffer.
-</p>
-<p>When you finish editing, the Calculator parses the lines of text in
-the <samp>*Calc Edit*</samp> buffer as numbers or formulas, replaces the
-original stack elements in the original buffer with these new values,
-then kills the <samp>*Calc Edit*</samp> buffer.  The original Calculator buffer
-continues to exist during editing, but for best results you should be
-careful not to change it until you have finished the edit.  You can
-also cancel the edit by killing the buffer with <kbd>C-x k</kbd>.
-</p>
-<p>The formula is normally reevaluated as it is put onto the stack.
-For example, editing &lsquo;<samp>a + 2</samp>&rsquo; to &lsquo;<samp>3 + 2</samp>&rsquo; and pressing
-<kbd>C-c C-c</kbd> will push 5 on the stack.  If you use <tt class="key">LFD</tt> to
-finish, Calc will put the result on the stack without evaluating it.
-</p>
-<p>If you give a prefix argument to <kbd>C-c C-c</kbd>,
-Calc will not kill the <samp>*Calc Edit*</samp> buffer.  You can switch
-back to that buffer and continue editing if you wish.  However, you
-should understand that if you initiated the edit with <kbd>`</kbd>, the
-<kbd>C-c C-c</kbd> operation will be programmed to replace the top of the
-stack with the new edited value, and it will do this even if you have
-rearranged the stack in the meanwhile.  This is not so much of a problem
-with other editing commands, though, such as <kbd>s e</kbd>
-(<code>calc-edit-variable</code>; see <a href="Operations-on-Variables.html#Operations-on-Variables">Operations on Variables</a>).
-</p>
-<p>If the <code>calc-edit</code> command involves more than one stack entry,
-each line of the <samp>*Calc Edit*</samp> buffer is interpreted as a
-separate formula.  Otherwise, the entire buffer is interpreted as
-one formula, with line breaks ignored.  (You can use <kbd>C-o</kbd> or
-<kbd>C-q C-j</kbd> to insert a newline in the buffer without pressing <tt class="key">RET</tt>.)
-</p>
-<p>The <kbd>`</kbd> key also works during numeric or algebraic entry.  The
-text entered so far is moved to the <samp>*Calc Edit*</samp> buffer for
-more extensive editing than is convenient in the minibuffer.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Trail-Commands.html#Trail-Commands" accesskey="n" rel="next">Trail Commands</a>, Previous: <a href="Stack-Manipulation.html#Stack-Manipulation" accesskey="p" rel="prev">Stack Manipulation</a>, Up: <a href="Stack-and-Trail.html#Stack-and-Trail" accesskey="u" rel="up">Stack and Trail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Trail-Commands.html#Trail-Commands"
+    accesskey="n" rel="next">Trail Commands</a>, Previous: <a href=
+    "Stack-Manipulation.html#Stack-Manipulation" accesskey="p" rel=
+    "prev">Stack Manipulation</a>, Up: <a href=
+    "Stack-and-Trail.html#Stack-and-Trail" accesskey="u" rel=
+    "up">Stack and Trail</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Editing-Stack-Entries-1" id=
+  "Editing-Stack-Entries-1"></a>
 
+  <h3 class="section">5.2 Editing Stack Entries</h3><a name=
+  "index-_0060" id="index-_0060"></a> <a name="index-calc_002dedit"
+  id="index-calc_002dedit"></a> <a name=
+  "index-calc_002dedit_002dfinish" id=
+  "index-calc_002dedit_002dfinish"></a> <a name=
+  "index-Editing-the-stack-with-Emacs" id=
+  "index-Editing-the-stack-with-Emacs"></a>
 
+  <p>The <kbd>`</kbd> (<code>calc-edit</code>) command creates a
+  temporary buffer (<samp>*Calc Edit*</samp>) for editing the
+  top-of-stack value using regular Emacs commands. Note that
+  <kbd>`</kbd> is a grave accent, not an apostrophe. With a numeric
+  prefix argument, it edits the specified number of stack entries
+  at once. (An argument of zero edits the entire stack; a negative
+  argument edits one specific stack entry.)</p>
 
+  <p>When you are done editing, press <kbd>C-c C-c</kbd> to finish
+  and return to Calc. The <tt class="key">RET</tt> and <tt class=
+  "key">LFD</tt> keys also work to finish most sorts of editing,
+  though in some cases Calc leaves <tt class="key">RET</tt> with
+  its usual meaning (&ldquo;insert a newline&rdquo;) if it&rsquo;s
+  a situation where you might want to insert new lines into the
+  editing buffer.</p>
+
+  <p>When you finish editing, the Calculator parses the lines of
+  text in the <samp>*Calc Edit*</samp> buffer as numbers or
+  formulas, replaces the original stack elements in the original
+  buffer with these new values, then kills the <samp>*Calc
+  Edit*</samp> buffer. The original Calculator buffer continues to
+  exist during editing, but for best results you should be careful
+  not to change it until you have finished the edit. You can also
+  cancel the edit by killing the buffer with <kbd>C-x k</kbd>.</p>
+
+  <p>The formula is normally reevaluated as it is put onto the
+  stack. For example, editing &lsquo;<samp>a + 2</samp>&rsquo; to
+  &lsquo;<samp>3 + 2</samp>&rsquo; and pressing <kbd>C-c C-c</kbd>
+  will push 5 on the stack. If you use <tt class="key">LFD</tt> to
+  finish, Calc will put the result on the stack without evaluating
+  it.</p>
+
+  <p>If you give a prefix argument to <kbd>C-c C-c</kbd>, Calc will
+  not kill the <samp>*Calc Edit*</samp> buffer. You can switch back
+  to that buffer and continue editing if you wish. However, you
+  should understand that if you initiated the edit with
+  <kbd>`</kbd>, the <kbd>C-c C-c</kbd> operation will be programmed
+  to replace the top of the stack with the new edited value, and it
+  will do this even if you have rearranged the stack in the
+  meanwhile. This is not so much of a problem with other editing
+  commands, though, such as <kbd>s e</kbd>
+  (<code>calc-edit-variable</code>; see <a href=
+  "Operations-on-Variables.html#Operations-on-Variables">Operations
+  on Variables</a>).</p>
+
+  <p>If the <code>calc-edit</code> command involves more than one
+  stack entry, each line of the <samp>*Calc Edit*</samp> buffer is
+  interpreted as a separate formula. Otherwise, the entire buffer
+  is interpreted as one formula, with line breaks ignored. (You can
+  use <kbd>C-o</kbd> or <kbd>C-q C-j</kbd> to insert a newline in
+  the buffer without pressing <tt class="key">RET</tt>.)</p>
+
+  <p>The <kbd>`</kbd> key also works during numeric or algebraic
+  entry. The text entered so far is moved to the <samp>*Calc
+  Edit*</samp> buffer for more extensive editing than is convenient
+  in the minibuffer.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Trail-Commands.html#Trail-Commands"
+    accesskey="n" rel="next">Trail Commands</a>, Previous: <a href=
+    "Stack-Manipulation.html#Stack-Manipulation" accesskey="p" rel=
+    "prev">Stack Manipulation</a>, Up: <a href=
+    "Stack-and-Trail.html#Stack-and-Trail" accesskey="u" rel=
+    "up">Stack and Trail</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

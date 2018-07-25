@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,226 +19,337 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Calling Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Calling Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Calling Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Functions.html#Functions" rel="up" title="Functions">
-<link href="Mapping-Functions.html#Mapping-Functions" rel="next" title="Mapping Functions">
-<link href="Defining-Functions.html#Defining-Functions" rel="prev" title="Defining Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Calling Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Calling Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Calling Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Functions.html#Functions" rel="up" title=
+  "Functions" />
+  <link href="Mapping-Functions.html#Mapping-Functions" rel="next"
+  title="Mapping Functions" />
+  <link href="Defining-Functions.html#Defining-Functions" rel=
+  "prev" title="Defining Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Calling-Functions" id="Calling-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Mapping-Functions.html#Mapping-Functions"
+    accesskey="n" rel="next">Mapping Functions</a>, Previous:
+    <a href="Defining-Functions.html#Defining-Functions" accesskey=
+    "p" rel="prev">Defining Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Calling-Functions-1" id="Calling-Functions-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Calling-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Mapping-Functions.html#Mapping-Functions" accesskey="n" rel="next">Mapping Functions</a>, Previous: <a href="Defining-Functions.html#Defining-Functions" accesskey="p" rel="prev">Defining Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Calling-Functions-1"></a>
-<h3 class="section">12.5 Calling Functions</h3>
-<a name="index-function-invocation"></a>
-<a name="index-calling-a-function"></a>
+  <h3 class="section">12.5 Calling Functions</h3><a name=
+  "index-function-invocation" id="index-function-invocation"></a>
+  <a name="index-calling-a-function" id=
+  "index-calling-a-function"></a>
 
-<p>Defining functions is only half the battle.  Functions don&rsquo;t do
-anything until you <em>call</em> them, i.e., tell them to run.  Calling a
-function is also known as <em>invocation</em>.
-</p>
-<p>The most common way of invoking a function is by evaluating a list.
-For example, evaluating the list <code>(concat &quot;a&quot; &quot;b&quot;)</code> calls the
-function <code>concat</code> with arguments <code>&quot;a&quot;</code> and <code>&quot;b&quot;</code>.
-See <a href="Evaluation.html#Evaluation">Evaluation</a>, for a description of evaluation.
-</p>
-<p>When you write a list as an expression in your program, you specify
-which function to call, and how many arguments to give it, in the text
-of the program.  Usually that&rsquo;s just what you want.  Occasionally you
-need to compute at run time which function to call.  To do that, use
-the function <code>funcall</code>.  When you also need to determine at run
-time how many arguments to pass, use <code>apply</code>.
-</p>
-<dl>
-<dt><a name="index-funcall"></a>Function: <strong>funcall</strong> <em>function &amp;rest arguments</em></dt>
-<dd><p><code>funcall</code> calls <var>function</var> with <var>arguments</var>, and returns
-whatever <var>function</var> returns.
-</p>
-<p>Since <code>funcall</code> is a function, all of its arguments, including
-<var>function</var>, are evaluated before <code>funcall</code> is called.  This
-means that you can use any expression to obtain the function to be
-called.  It also means that <code>funcall</code> does not see the
-expressions you write for the <var>arguments</var>, only their values.
-These values are <em>not</em> evaluated a second time in the act of
-calling <var>function</var>; the operation of <code>funcall</code> is like the
-normal procedure for calling a function, once its arguments have
-already been evaluated.
-</p>
-<p>The argument <var>function</var> must be either a Lisp function or a
-primitive function.  Special forms and macros are not allowed, because
-they make sense only when given the unevaluated argument
-expressions.  <code>funcall</code> cannot provide these because, as we saw
-above, it never knows them in the first place.
-</p>
-<p>If you need to use <code>funcall</code> to call a command and make it behave
-as if invoked interactively, use <code>funcall-interactively</code>
-(see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>).
-</p>
-<div class="example">
-<pre class="example">(setq f 'list)
+  <p>Defining functions is only half the battle. Functions
+  don&rsquo;t do anything until you <em>call</em> them, i.e., tell
+  them to run. Calling a function is also known as
+  <em>invocation</em>.</p>
+
+  <p>The most common way of invoking a function is by evaluating a
+  list. For example, evaluating the list <code>(concat "a"
+  "b")</code> calls the function <code>concat</code> with arguments
+  <code>"a"</code> and <code>"b"</code>. See <a href=
+  "Evaluation.html#Evaluation">Evaluation</a>, for a description of
+  evaluation.</p>
+
+  <p>When you write a list as an expression in your program, you
+  specify which function to call, and how many arguments to give
+  it, in the text of the program. Usually that&rsquo;s just what
+  you want. Occasionally you need to compute at run time which
+  function to call. To do that, use the function
+  <code>funcall</code>. When you also need to determine at run time
+  how many arguments to pass, use <code>apply</code>.</p>
+
+  <dl>
+    <dt><a name="index-funcall" id="index-funcall"></a>Function:
+    <strong>funcall</strong> <em>function &amp;rest
+    arguments</em></dt>
+
+    <dd>
+      <p><code>funcall</code> calls <var>function</var> with
+      <var>arguments</var>, and returns whatever
+      <var>function</var> returns.</p>
+
+      <p>Since <code>funcall</code> is a function, all of its
+      arguments, including <var>function</var>, are evaluated
+      before <code>funcall</code> is called. This means that you
+      can use any expression to obtain the function to be called.
+      It also means that <code>funcall</code> does not see the
+      expressions you write for the <var>arguments</var>, only
+      their values. These values are <em>not</em> evaluated a
+      second time in the act of calling <var>function</var>; the
+      operation of <code>funcall</code> is like the normal
+      procedure for calling a function, once its arguments have
+      already been evaluated.</p>
+
+      <p>The argument <var>function</var> must be either a Lisp
+      function or a primitive function. Special forms and macros
+      are not allowed, because they make sense only when given the
+      unevaluated argument expressions. <code>funcall</code> cannot
+      provide these because, as we saw above, it never knows them
+      in the first place.</p>
+
+      <p>If you need to use <code>funcall</code> to call a command
+      and make it behave as if invoked interactively, use
+      <code>funcall-interactively</code> (see <a href=
+      "Interactive-Call.html#Interactive-Call">Interactive
+      Call</a>).</p>
+
+      <div class="example">
+        <pre class="example">
+(setq f 'list)
      &rArr; list
-</pre><pre class="example">(funcall f 'x 'y 'z)
+</pre>
+        <pre class="example">
+(funcall f 'x 'y 'z)
      &rArr; (x y z)
-</pre><pre class="example">(funcall f 'x 'y '(z))
+</pre>
+        <pre class="example">
+(funcall f 'x 'y '(z))
      &rArr; (x y (z))
-</pre><pre class="example">(funcall 'and t nil)
+</pre>
+        <pre class="example">
+(funcall 'and t nil)
 error&rarr; Invalid function: #&lt;subr and&gt;
-</pre></div>
+</pre>
+      </div>
 
-<p>Compare these examples with the examples of <code>apply</code>.
-</p></dd></dl>
+      <p>Compare these examples with the examples of
+      <code>apply</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-apply"></a>Function: <strong>apply</strong> <em>function &amp;rest arguments</em></dt>
-<dd><p><code>apply</code> calls <var>function</var> with <var>arguments</var>, just like
-<code>funcall</code> but with one difference: the last of <var>arguments</var> is a
-list of objects, which are passed to <var>function</var> as separate
-arguments, rather than a single list.  We say that <code>apply</code>
-<em>spreads</em> this list so that each individual element becomes an
-argument.
-</p>
-<p><code>apply</code> returns the result of calling <var>function</var>.  As with
-<code>funcall</code>, <var>function</var> must either be a Lisp function or a
-primitive function; special forms and macros do not make sense in
-<code>apply</code>.
-</p>
-<div class="example">
-<pre class="example">(setq f 'list)
+  <dl>
+    <dt><a name="index-apply" id="index-apply"></a>Function:
+    <strong>apply</strong> <em>function &amp;rest
+    arguments</em></dt>
+
+    <dd>
+      <p><code>apply</code> calls <var>function</var> with
+      <var>arguments</var>, just like <code>funcall</code> but with
+      one difference: the last of <var>arguments</var> is a list of
+      objects, which are passed to <var>function</var> as separate
+      arguments, rather than a single list. We say that
+      <code>apply</code> <em>spreads</em> this list so that each
+      individual element becomes an argument.</p>
+
+      <p><code>apply</code> returns the result of calling
+      <var>function</var>. As with <code>funcall</code>,
+      <var>function</var> must either be a Lisp function or a
+      primitive function; special forms and macros do not make
+      sense in <code>apply</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(setq f 'list)
      &rArr; list
-</pre><pre class="example">(apply f 'x 'y 'z)
+</pre>
+        <pre class="example">
+(apply f 'x 'y 'z)
 error&rarr; Wrong type argument: listp, z
-</pre><pre class="example">(apply '+ 1 2 '(3 4))
+</pre>
+        <pre class="example">
+(apply '+ 1 2 '(3 4))
      &rArr; 10
-</pre><pre class="example">(apply '+ '(1 2 3 4))
+</pre>
+        <pre class="example">
+(apply '+ '(1 2 3 4))
      &rArr; 10
-</pre><pre class="example">
-</pre><pre class="example">(apply 'append '((a b c) nil (x y z) nil))
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(apply 'append '((a b c) nil (x y z) nil))
      &rArr; (a b c x y z)
-</pre></div>
+</pre>
+      </div>
 
-<p>For an interesting example of using <code>apply</code>, see <a href="Mapping-Functions.html#Definition-of-mapcar">Definition of mapcar</a>.
-</p></dd></dl>
+      <p>For an interesting example of using <code>apply</code>,
+      see <a href=
+      "Mapping-Functions.html#Definition-of-mapcar">Definition of
+      mapcar</a>.</p>
+    </dd>
+  </dl><a name="index-partial-application-of-functions" id=
+  "index-partial-application-of-functions"></a> <a name=
+  "index-currying" id="index-currying"></a>
 
-<a name="index-partial-application-of-functions"></a>
-<a name="index-currying"></a>
-<p>Sometimes it is useful to fix some of the function&rsquo;s arguments at
-certain values, and leave the rest of arguments for when the function
-is actually called.  The act of fixing some of the function&rsquo;s
-arguments is called <em>partial application</em> of the function<a name="DOCF9" href="#FOOT9"><sup>9</sup></a>.
-The result is a new function that accepts the rest of
-arguments and calls the original function with all the arguments
-combined.
-</p>
-<p>Here&rsquo;s how to do partial application in Emacs Lisp:
-</p>
-<dl>
-<dt><a name="index-apply_002dpartially"></a>Function: <strong>apply-partially</strong> <em>func &amp;rest args</em></dt>
-<dd><p>This function returns a new function which, when called, will call
-<var>func</var> with the list of arguments composed from <var>args</var> and
-additional arguments specified at the time of the call.  If <var>func</var>
-accepts <var>n</var> arguments, then a call to <code>apply-partially</code> with
-<code><var>m</var>&nbsp;&lt;&nbsp;<var>n</var></code><!-- /@w --> arguments will produce a new function of
-<code><var>n</var>&nbsp;<span class="nolinebreak">-</span>&nbsp;<var>m</var></code><!-- /@w --> arguments.
-</p>
-<p>Here&rsquo;s how we could define the built-in function <code>1+</code>, if it
-didn&rsquo;t exist, using <code>apply-partially</code> and <code>+</code>, another
-built-in function:
-</p>
-<div class="example">
-<pre class="example">(defalias '1+ (apply-partially '+ 1)
-  &quot;Increment argument by one.&quot;)
-</pre><pre class="example">(1+ 10)
+  <p>Sometimes it is useful to fix some of the function&rsquo;s
+  arguments at certain values, and leave the rest of arguments for
+  when the function is actually called. The act of fixing some of
+  the function&rsquo;s arguments is called <em>partial
+  application</em> of the function<a name="DOCF9" href="#FOOT9" id=
+  "DOCF9"><sup>9</sup></a>. The result is a new function that
+  accepts the rest of arguments and calls the original function
+  with all the arguments combined.</p>
+
+  <p>Here&rsquo;s how to do partial application in Emacs Lisp:</p>
+
+  <dl>
+    <dt><a name="index-apply_002dpartially" id=
+    "index-apply_002dpartially"></a>Function:
+    <strong>apply-partially</strong> <em>func &amp;rest
+    args</em></dt>
+
+    <dd>
+      <p>This function returns a new function which, when called,
+      will call <var>func</var> with the list of arguments composed
+      from <var>args</var> and additional arguments specified at
+      the time of the call. If <var>func</var> accepts <var>n</var>
+      arguments, then a call to <code>apply-partially</code> with
+      <code><var>m</var>&nbsp;&lt;&nbsp;<var>n</var></code>
+      <!-- /@w --> arguments will produce a new function of
+      <code><var>n</var>&nbsp;<span class=
+      "nolinebreak">-</span>&nbsp;<var>m</var></code><!-- /@w -->
+      arguments.</p>
+
+      <p>Here&rsquo;s how we could define the built-in function
+      <code>1+</code>, if it didn&rsquo;t exist, using
+      <code>apply-partially</code> and <code>+</code>, another
+      built-in function:</p>
+
+      <div class="example">
+        <pre class="example">
+(defalias '1+ (apply-partially '+ 1)
+  "Increment argument by one.")
+</pre>
+        <pre class="example">
+(1+ 10)
      &rArr; 11
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl><a name="index-functionals" id="index-functionals"></a>
 
-<a name="index-functionals"></a>
-<p>It is common for Lisp functions to accept functions as arguments or
-find them in data structures (especially in hook variables and property
-lists) and call them using <code>funcall</code> or <code>apply</code>.  Functions
-that accept function arguments are often called <em>functionals</em>.
-</p>
-<p>Sometimes, when you call a functional, it is useful to supply a no-op
-function as the argument.  Here are two different kinds of no-op
-function:
-</p>
-<dl>
-<dt><a name="index-identity"></a>Function: <strong>identity</strong> <em>arg</em></dt>
-<dd><p>This function returns <var>arg</var> and has no side effects.
-</p></dd></dl>
+  <p>It is common for Lisp functions to accept functions as
+  arguments or find them in data structures (especially in hook
+  variables and property lists) and call them using
+  <code>funcall</code> or <code>apply</code>. Functions that accept
+  function arguments are often called <em>functionals</em>.</p>
 
-<dl>
-<dt><a name="index-ignore"></a>Function: <strong>ignore</strong> <em>&amp;rest args</em></dt>
-<dd><p>This function ignores any arguments and returns <code>nil</code>.
-</p></dd></dl>
+  <p>Sometimes, when you call a functional, it is useful to supply
+  a no-op function as the argument. Here are two different kinds of
+  no-op function:</p>
 
-<p>Some functions are user-visible <em>commands</em>, which can be called
-interactively (usually by a key sequence).  It is possible to invoke
-such a command exactly as though it was called interactively, by using
-the <code>call-interactively</code> function.  See <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl>
+    <dt><a name="index-identity" id="index-identity"></a>Function:
+    <strong>identity</strong> <em>arg</em></dt>
 
-<h3><a name="FOOT9" href="#DOCF9">(9)</a></h3>
-<p>This is related to, but different from <em>currying</em>, which
-transforms a function that takes multiple arguments in such a way that
-it can be called as a chain of functions, each one with a single
-argument.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Mapping-Functions.html#Mapping-Functions" accesskey="n" rel="next">Mapping Functions</a>, Previous: <a href="Defining-Functions.html#Defining-Functions" accesskey="p" rel="prev">Defining Functions</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns <var>arg</var> and has no side
+      effects.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-ignore" id="index-ignore"></a>Function:
+    <strong>ignore</strong> <em>&amp;rest args</em></dt>
 
+    <dd>
+      <p>This function ignores any arguments and returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
 
+  <p>Some functions are user-visible <em>commands</em>, which can
+  be called interactively (usually by a key sequence). It is
+  possible to invoke such a command exactly as though it was called
+  interactively, by using the <code>call-interactively</code>
+  function. See <a href=
+  "Interactive-Call.html#Interactive-Call">Interactive
+  Call</a>.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT9" href="#DOCF9" id="FOOT9">(9)</a></h3>
+
+    <p>This is related to, but different from <em>currying</em>,
+    which transforms a function that takes multiple arguments in
+    such a way that it can be called as a chain of functions, each
+    one with a single argument.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Mapping-Functions.html#Mapping-Functions"
+    accesskey="n" rel="next">Mapping Functions</a>, Previous:
+    <a href="Defining-Functions.html#Defining-Functions" accesskey=
+    "p" rel="prev">Defining Functions</a>, Up: <a href=
+    "Functions.html#Functions" accesskey="u" rel="up">Functions</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

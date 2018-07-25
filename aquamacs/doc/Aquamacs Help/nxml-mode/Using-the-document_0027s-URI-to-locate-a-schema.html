@@ -1,15 +1,28 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Using the document's URI to locate a schema - nXML Mode</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="nXML Mode">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Schema-locating-files.html#Schema-locating-files" title="Schema locating files">
-<link rel="prev" href="Schema-locating-file-syntax-basics.html#Schema-locating-file-syntax-basics" title="Schema locating file syntax basics">
-<link rel="next" href="Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema" title="Using the document element to locate a schema">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Using the document's URI to locate a schema - nXML
+  Mode</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="nXML Mode" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Schema-locating-files.html#Schema-locating-files" title=
+  "Schema locating files" />
+  <link rel="prev" href=
+  "Schema-locating-file-syntax-basics.html#Schema-locating-file-syntax-basics"
+  title="Schema locating file syntax basics" />
+  <link rel="next" href=
+  "Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema"
+  title="Using the document element to locate a schema" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual documents nxml-mode, an Emacs major mode for editing
 XML with RELAX NG support.
 
@@ -34,8 +47,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -45,71 +60,111 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Using-the-document's-URI-to-locate-a-schema"></a>
-<a name="Using-the-document_0027s-URI-to-locate-a-schema"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema">Using the document element to locate a schema</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Schema-locating-file-syntax-basics.html#Schema-locating-file-syntax-basics">Schema locating file syntax basics</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Schema-locating-files.html#Schema-locating-files">Schema locating files</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Using-the-document's-URI-to-locate-a-schema"></a>
+    <a name="Using-the-document_0027s-URI-to-locate-a-schema" id=
+    "Using-the-document_0027s-URI-to-locate-a-schema"></a>
 
-<h4 class="subsection">6.2.2 Using the document's URI to locate a schema</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Using-the-document-element-to-locate-a-schema.html#Using-the-document-element-to-locate-a-schema">Using
+    the document element to locate a schema</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Schema-locating-file-syntax-basics.html#Schema-locating-file-syntax-basics">Schema
+    locating file syntax basics</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Schema-locating-files.html#Schema-locating-files">Schema
+    locating files</a></p>
+    <hr />
+  </div>
 
-<p>A &lsquo;<samp><span class="samp">uri</span></samp>&rsquo; rule locates a schema based on the URI of the
-document.  The &lsquo;<samp><span class="samp">uri</span></samp>&rsquo; attribute specifies the URI of the
-schema.  The &lsquo;<samp><span class="samp">resource</span></samp>&rsquo; attribute can be used to specify
-the schema for a particular document.  For example,
+  <h4 class="subsection">6.2.2 Using the document's URI to locate a
+  schema</h4>
 
-<pre class="example">     &lt;uri resource="spec.xml" uri="docbook.rnc"/&gt;
+  <p>A &lsquo;<samp><span class="samp">uri</span></samp>&rsquo;
+  rule locates a schema based on the URI of the document. The
+  &lsquo;<samp><span class="samp">uri</span></samp>&rsquo;
+  attribute specifies the URI of the schema. The
+  &lsquo;<samp><span class="samp">resource</span></samp>&rsquo;
+  attribute can be used to specify the schema for a particular
+  document. For example,</p>
+  <pre class="example">
+     &lt;uri resource="spec.xml" uri="docbook.rnc"/&gt;
 </pre>
-   <p class="noindent">specifies that the schema for &lsquo;<samp><span class="samp">spec.xml</span></samp>&rsquo; is
-&lsquo;<samp><span class="samp">docbook.rnc</span></samp>&rsquo;.
 
-   <p>The &lsquo;<samp><span class="samp">pattern</span></samp>&rsquo; attribute can be used instead of the
-&lsquo;<samp><span class="samp">resource</span></samp>&rsquo; attribute to specify the schema for any document
-whose URI matches a pattern.  The pattern has the same syntax as an
-absolute or relative URI except that the path component of the URI can
-use a &lsquo;<samp><span class="samp">*</span></samp>&rsquo; character to stand for zero or more characters
-within a path segment (i.e. any character other &lsquo;<samp><span class="samp">/</span></samp>&rsquo;). 
-Typically, the URI pattern looks like a relative URI, but, whereas a
-relative URI in the &lsquo;<samp><span class="samp">resource</span></samp>&rsquo; attribute is resolved into a
-particular absolute URI using the base URI of the schema locating
-file, a relative URI pattern matches if it matches some number of
-complete path segments of the document's URI ending with the last path
-segment of the document's URI. For example,
+  <p class="noindent">specifies that the schema for
+  &lsquo;<samp><span class="samp">spec.xml</span></samp>&rsquo; is
+  &lsquo;<samp><span class=
+  "samp">docbook.rnc</span></samp>&rsquo;.</p>
 
-<pre class="example">     &lt;uri pattern="*.xsl" uri="xslt.rnc"/&gt;
+  <p>The &lsquo;<samp><span class=
+  "samp">pattern</span></samp>&rsquo; attribute can be used instead
+  of the &lsquo;<samp><span class=
+  "samp">resource</span></samp>&rsquo; attribute to specify the
+  schema for any document whose URI matches a pattern. The pattern
+  has the same syntax as an absolute or relative URI except that
+  the path component of the URI can use a &lsquo;<samp><span class=
+  "samp">*</span></samp>&rsquo; character to stand for zero or more
+  characters within a path segment (i.e. any character other
+  &lsquo;<samp><span class="samp">/</span></samp>&rsquo;).
+  Typically, the URI pattern looks like a relative URI, but,
+  whereas a relative URI in the &lsquo;<samp><span class=
+  "samp">resource</span></samp>&rsquo; attribute is resolved into a
+  particular absolute URI using the base URI of the schema locating
+  file, a relative URI pattern matches if it matches some number of
+  complete path segments of the document's URI ending with the last
+  path segment of the document's URI. For example,</p>
+  <pre class="example">
+     &lt;uri pattern="*.xsl" uri="xslt.rnc"/&gt;
 </pre>
-   <p class="noindent">specifies that the schema for documents with a URI whose path ends
-with &lsquo;<samp><span class="samp">.xsl</span></samp>&rsquo; is &lsquo;<samp><span class="samp">xslt.rnc</span></samp>&rsquo;.
 
-   <p>A &lsquo;<samp><span class="samp">transformURI</span></samp>&rsquo; rule locates a schema by
-transforming the URI of the document. The &lsquo;<samp><span class="samp">fromPattern</span></samp>&rsquo;
-attribute specifies a URI pattern with the same meaning as the
-&lsquo;<samp><span class="samp">pattern</span></samp>&rsquo; attribute of the &lsquo;<samp><span class="samp">uri</span></samp>&rsquo; element.  The
-&lsquo;<samp><span class="samp">toPattern</span></samp>&rsquo; attribute is a URI pattern that is used to
-generate the URI of the schema.  Each &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in the
-&lsquo;<samp><span class="samp">toPattern</span></samp>&rsquo; is replaced by the string that matched the
-corresponding &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in the &lsquo;<samp><span class="samp">fromPattern</span></samp>&rsquo;.  The
-resulting string is appended to the initial part of the document's URI
-that was not explicitly matched by the &lsquo;<samp><span class="samp">fromPattern</span></samp>&rsquo;.  The
-rule matches only if the transformed URI identifies an existing
-resource.  For example, the rule
+  <p class="noindent">specifies that the schema for documents with
+  a URI whose path ends with &lsquo;<samp><span class=
+  "samp">.xsl</span></samp>&rsquo; is &lsquo;<samp><span class=
+  "samp">xslt.rnc</span></samp>&rsquo;.</p>
 
-<pre class="example">     &lt;transformURI fromPattern="*.xml" toPattern="*.rnc"/&gt;
+  <p>A &lsquo;<samp><span class=
+  "samp">transformURI</span></samp>&rsquo; rule locates a schema by
+  transforming the URI of the document. The
+  &lsquo;<samp><span class="samp">fromPattern</span></samp>&rsquo;
+  attribute specifies a URI pattern with the same meaning as the
+  &lsquo;<samp><span class="samp">pattern</span></samp>&rsquo;
+  attribute of the &lsquo;<samp><span class=
+  "samp">uri</span></samp>&rsquo; element. The
+  &lsquo;<samp><span class="samp">toPattern</span></samp>&rsquo;
+  attribute is a URI pattern that is used to generate the URI of
+  the schema. Each &lsquo;<samp><span class=
+  "samp">*</span></samp>&rsquo; in the &lsquo;<samp><span class=
+  "samp">toPattern</span></samp>&rsquo; is replaced by the string
+  that matched the corresponding &lsquo;<samp><span class=
+  "samp">*</span></samp>&rsquo; in the &lsquo;<samp><span class=
+  "samp">fromPattern</span></samp>&rsquo;. The resulting string is
+  appended to the initial part of the document's URI that was not
+  explicitly matched by the &lsquo;<samp><span class=
+  "samp">fromPattern</span></samp>&rsquo;. The rule matches only if
+  the transformed URI identifies an existing resource. For example,
+  the rule</p>
+  <pre class="example">
+     &lt;transformURI fromPattern="*.xml" toPattern="*.rnc"/&gt;
 </pre>
-   <p class="noindent">would transform the URI &lsquo;<samp><span class="samp">file:///home/jjc/docs/spec.xml</span></samp>&rsquo;
-into the URI &lsquo;<samp><span class="samp">file:///home/jjc/docs/spec.rnc</span></samp>&rsquo;.  Thus, this
-rule specifies that to locate a schema for a document
-&lsquo;<samp><var>foo</var><span class="samp">.xml</span></samp>&rsquo;, Emacs should test whether a file
-&lsquo;<samp><var>foo</var><span class="samp">.rnc</span></samp>&rsquo; exists in the same directory as
-&lsquo;<samp><var>foo</var><span class="samp">.xml</span></samp>&rsquo;, and, if so, should use it as the
-schema.
 
-   </body></html>
-
+  <p class="noindent">would transform the URI
+  &lsquo;<samp><span class=
+  "samp">file:///home/jjc/docs/spec.xml</span></samp>&rsquo; into
+  the URI &lsquo;<samp><span class=
+  "samp">file:///home/jjc/docs/spec.rnc</span></samp>&rsquo;. Thus,
+  this rule specifies that to locate a schema for a document
+  &lsquo;<samp><var>foo</var><span class=
+  "samp">.xml</span></samp>&rsquo;, Emacs should test whether a
+  file &lsquo;<samp><var>foo</var><span class=
+  "samp">.rnc</span></samp>&rsquo; exists in the same directory as
+  &lsquo;<samp><var>foo</var><span class=
+  "samp">.xml</span></samp>&rsquo;, and, if so, should use it as
+  the schema.</p>
+</body>
+</html>

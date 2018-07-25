@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,130 +18,176 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Solving Systems of Equations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Solving Systems of Equations">
-<meta name="keywords" content="GNU Emacs Calc Manual: Solving Systems of Equations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Solving-Equations.html#Solving-Equations" rel="up" title="Solving Equations">
-<link href="Decomposing-Polynomials.html#Decomposing-Polynomials" rel="next" title="Decomposing Polynomials">
-<link href="Multiple-Solutions.html#Multiple-Solutions" rel="prev" title="Multiple Solutions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Solving Systems of
+  Equations</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Solving Systems of Equations" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Solving Systems of Equations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Solving-Equations.html#Solving-Equations" rel="up"
+  title="Solving Equations" />
+  <link href="Decomposing-Polynomials.html#Decomposing-Polynomials"
+  rel="next" title="Decomposing Polynomials" />
+  <link href="Multiple-Solutions.html#Multiple-Solutions" rel=
+  "prev" title="Multiple Solutions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Solving-Systems-of-Equations"></a>
-<div class="header">
-<p>
-Next: <a href="Decomposing-Polynomials.html#Decomposing-Polynomials" accesskey="n" rel="next">Decomposing Polynomials</a>, Previous: <a href="Multiple-Solutions.html#Multiple-Solutions" accesskey="p" rel="prev">Multiple Solutions</a>, Up: <a href="Solving-Equations.html#Solving-Equations" accesskey="u" rel="up">Solving Equations</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Solving-Systems-of-Equations-1"></a>
-<h4 class="subsection">10.6.2 Solving Systems of Equations</h4>
+<body lang="en" xml:lang="en">
+  <a name="Solving-Systems-of-Equations" id=
+  "Solving-Systems-of-Equations"></a>
 
-<a name="index-Systems-of-equations_002c-symbolic"></a>
-<p>You can also use the commands described above to solve systems of
-simultaneous equations.  Just create a vector of equations, then
-specify a vector of variables for which to solve.  (You can omit
-the surrounding brackets when entering the vector of variables
-at the prompt.)
-</p>
-<p>For example, putting &lsquo;<samp>[x + y = a, x - y = b]</samp>&rsquo; on the stack
-and typing <kbd>a S x,y <span class="key">RET</span></kbd> produces the vector of solutions
-&lsquo;<samp>[x = a - (a-b)/2, y = (a-b)/2]</samp>&rsquo;.  The result vector will
-have the same length as the variables vector, and the variables
-will be listed in the same order there.  Note that the solutions
-are not always simplified as far as possible; the solution for
-&lsquo;<samp>x</samp>&rsquo; here could be improved by an application of the <kbd>a n</kbd>
-command.
-</p>
-<p>Calc&rsquo;s algorithm works by trying to eliminate one variable at a
-time by solving one of the equations for that variable and then
-substituting into the other equations.  Calc will try all the
-possibilities, but you can speed things up by noting that Calc
-first tries to eliminate the first variable with the first
-equation, then the second variable with the second equation,
-and so on.  It also helps to put the simpler (e.g., more linear)
-equations toward the front of the list.  Calc&rsquo;s algorithm will
-solve any system of linear equations, and also many kinds of
-nonlinear systems.
-</p>
-<a name="index-elim"></a>
-<p>Normally there will be as many variables as equations.  If you
-give fewer variables than equations (an &ldquo;over-determined&rdquo; system
-of equations), Calc will find a partial solution.  For example,
-typing <kbd>a S y <span class="key">RET</span></kbd> with the above system of equations
-would produce &lsquo;<samp>[y = a - x]</samp>&rsquo;.  There are now several ways to
-express this solution in terms of the original variables; Calc uses
-the first one that it finds.  You can control the choice by adding
-variable specifiers of the form &lsquo;<samp>elim(<var>v</var>)</samp>&rsquo; to the
-variables list.  This says that <var>v</var> should be eliminated from
-the equations; the variable will not appear at all in the solution.
-For example, typing <kbd>a S y,elim(x)</kbd> would yield
-&lsquo;<samp>[y = a - (b+a)/2]</samp>&rsquo;.
-</p>
-<p>If the variables list contains only <code>elim</code> specifiers,
-Calc simply eliminates those variables from the equations
-and then returns the resulting set of equations.  For example,
-<kbd>a S elim(x)</kbd> produces &lsquo;<samp>[a - 2 y = b]</samp>&rsquo;.  Every variable
-eliminated will reduce the number of equations in the system
-by one.
-</p>
-<p>Again, <kbd>a S</kbd> gives you one solution to the system of
-equations.  If there are several solutions, you can use <kbd>H a S</kbd>
-to get a general family of solutions, or, if there is a finite
-number of solutions, you can use <kbd>a P</kbd> to get a list.  (In
-the latter case, the result will take the form of a matrix where
-the rows are different solutions and the columns correspond to the
-variables you requested.)
-</p>
-<p>Another way to deal with certain kinds of overdetermined systems of
-equations is the <kbd>a F</kbd> command, which does least-squares fitting
-to satisfy the equations.  See <a href="Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Decomposing-Polynomials.html#Decomposing-Polynomials" accesskey="n" rel="next">Decomposing Polynomials</a>, Previous: <a href="Multiple-Solutions.html#Multiple-Solutions" accesskey="p" rel="prev">Multiple Solutions</a>, Up: <a href="Solving-Equations.html#Solving-Equations" accesskey="u" rel="up">Solving Equations</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Decomposing-Polynomials.html#Decomposing-Polynomials"
+    accesskey="n" rel="next">Decomposing Polynomials</a>, Previous:
+    <a href="Multiple-Solutions.html#Multiple-Solutions" accesskey=
+    "p" rel="prev">Multiple Solutions</a>, Up: <a href=
+    "Solving-Equations.html#Solving-Equations" accesskey="u" rel=
+    "up">Solving Equations</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Solving-Systems-of-Equations-1" id=
+  "Solving-Systems-of-Equations-1"></a>
 
+  <h4 class="subsection">10.6.2 Solving Systems of
+  Equations</h4><a name="index-Systems-of-equations_002c-symbolic"
+  id="index-Systems-of-equations_002c-symbolic"></a>
 
+  <p>You can also use the commands described above to solve systems
+  of simultaneous equations. Just create a vector of equations,
+  then specify a vector of variables for which to solve. (You can
+  omit the surrounding brackets when entering the vector of
+  variables at the prompt.)</p>
 
+  <p>For example, putting &lsquo;<samp>[x + y = a, x - y =
+  b]</samp>&rsquo; on the stack and typing <kbd>a S x,y
+  <span class="key">RET</span></kbd> produces the vector of
+  solutions &lsquo;<samp>[x = a - (a-b)/2, y =
+  (a-b)/2]</samp>&rsquo;. The result vector will have the same
+  length as the variables vector, and the variables will be listed
+  in the same order there. Note that the solutions are not always
+  simplified as far as possible; the solution for
+  &lsquo;<samp>x</samp>&rsquo; here could be improved by an
+  application of the <kbd>a n</kbd> command.</p>
+
+  <p>Calc&rsquo;s algorithm works by trying to eliminate one
+  variable at a time by solving one of the equations for that
+  variable and then substituting into the other equations. Calc
+  will try all the possibilities, but you can speed things up by
+  noting that Calc first tries to eliminate the first variable with
+  the first equation, then the second variable with the second
+  equation, and so on. It also helps to put the simpler (e.g., more
+  linear) equations toward the front of the list. Calc&rsquo;s
+  algorithm will solve any system of linear equations, and also
+  many kinds of nonlinear systems.</p><a name="index-elim" id=
+  "index-elim"></a>
+
+  <p>Normally there will be as many variables as equations. If you
+  give fewer variables than equations (an
+  &ldquo;over-determined&rdquo; system of equations), Calc will
+  find a partial solution. For example, typing <kbd>a S y
+  <span class="key">RET</span></kbd> with the above system of
+  equations would produce &lsquo;<samp>[y = a - x]</samp>&rsquo;.
+  There are now several ways to express this solution in terms of
+  the original variables; Calc uses the first one that it finds.
+  You can control the choice by adding variable specifiers of the
+  form &lsquo;<samp>elim(<var>v</var>)</samp>&rsquo; to the
+  variables list. This says that <var>v</var> should be eliminated
+  from the equations; the variable will not appear at all in the
+  solution. For example, typing <kbd>a S y,elim(x)</kbd> would
+  yield &lsquo;<samp>[y = a - (b+a)/2]</samp>&rsquo;.</p>
+
+  <p>If the variables list contains only <code>elim</code>
+  specifiers, Calc simply eliminates those variables from the
+  equations and then returns the resulting set of equations. For
+  example, <kbd>a S elim(x)</kbd> produces &lsquo;<samp>[a - 2 y =
+  b]</samp>&rsquo;. Every variable eliminated will reduce the
+  number of equations in the system by one.</p>
+
+  <p>Again, <kbd>a S</kbd> gives you one solution to the system of
+  equations. If there are several solutions, you can use <kbd>H a
+  S</kbd> to get a general family of solutions, or, if there is a
+  finite number of solutions, you can use <kbd>a P</kbd> to get a
+  list. (In the latter case, the result will take the form of a
+  matrix where the rows are different solutions and the columns
+  correspond to the variables you requested.)</p>
+
+  <p>Another way to deal with certain kinds of overdetermined
+  systems of equations is the <kbd>a F</kbd> command, which does
+  least-squares fitting to satisfy the equations. See <a href=
+  "Curve-Fitting.html#Curve-Fitting">Curve Fitting</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Decomposing-Polynomials.html#Decomposing-Polynomials"
+    accesskey="n" rel="next">Decomposing Polynomials</a>, Previous:
+    <a href="Multiple-Solutions.html#Multiple-Solutions" accesskey=
+    "p" rel="prev">Multiple Solutions</a>, Up: <a href=
+    "Solving-Equations.html#Solving-Equations" accesskey="u" rel=
+    "up">Solving Equations</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

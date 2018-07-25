@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,157 +19,229 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Sticky Properties</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Sticky Properties">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Sticky Properties">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text-Properties.html#Text-Properties" rel="up" title="Text Properties">
-<link href="Lazy-Properties.html#Lazy-Properties" rel="next" title="Lazy Properties">
-<link href="Format-Properties.html#Format-Properties" rel="prev" title="Format Properties">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Sticky Properties</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Sticky Properties" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Sticky Properties" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text-Properties.html#Text-Properties" rel="up" title=
+  "Text Properties" />
+  <link href="Lazy-Properties.html#Lazy-Properties" rel="next"
+  title="Lazy Properties" />
+  <link href="Format-Properties.html#Format-Properties" rel="prev"
+  title="Format Properties" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Sticky-Properties" id="Sticky-Properties"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Lazy-Properties.html#Lazy-Properties"
+    accesskey="n" rel="next">Lazy Properties</a>, Previous:
+    <a href="Format-Properties.html#Format-Properties" accesskey=
+    "p" rel="prev">Format Properties</a>, Up: <a href=
+    "Text-Properties.html#Text-Properties" accesskey="u" rel=
+    "up">Text Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Stickiness-of-Text-Properties" id=
+  "Stickiness-of-Text-Properties"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sticky-Properties"></a>
-<div class="header">
-<p>
-Next: <a href="Lazy-Properties.html#Lazy-Properties" accesskey="n" rel="next">Lazy Properties</a>, Previous: <a href="Format-Properties.html#Format-Properties" accesskey="p" rel="prev">Format Properties</a>, Up: <a href="Text-Properties.html#Text-Properties" accesskey="u" rel="up">Text Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Stickiness-of-Text-Properties"></a>
-<h4 class="subsection">31.19.6 Stickiness of Text Properties</h4>
-<a name="index-sticky-text-properties"></a>
-<a name="index-inheritance_002c-text-property"></a>
+  <h4 class="subsection">31.19.6 Stickiness of Text
+  Properties</h4><a name="index-sticky-text-properties" id=
+  "index-sticky-text-properties"></a> <a name=
+  "index-inheritance_002c-text-property" id=
+  "index-inheritance_002c-text-property"></a>
 
-<p>Self-inserting characters, the ones that get inserted into a buffer
-when the user types them (see <a href="Commands-for-Insertion.html#Commands-for-Insertion">Commands for Insertion</a>), normally
-take on the same properties as the preceding character.  This is
-called <em>inheritance</em> of properties.
-</p>
-<p>By contrast, a Lisp program can do insertion with inheritance or without,
-depending on the choice of insertion primitive.  The ordinary text
-insertion functions, such as <code>insert</code>, do not inherit any
-properties.  They insert text with precisely the properties of the
-string being inserted, and no others.  This is correct for programs
-that copy text from one context to another&mdash;for example, into or out
-of the kill ring.  To insert with inheritance, use the special
-primitives described in this section.  Self-inserting characters
-inherit properties because they work using these primitives.
-</p>
-<p>When you do insertion with inheritance, <em>which</em> properties are
-inherited, and from where, depends on which properties are <em>sticky</em>.
-Insertion after a character inherits those of its properties that are
-<em>rear-sticky</em>.  Insertion before a character inherits those of its
-properties that are <em>front-sticky</em>.  When both sides offer different
-sticky values for the same property, the previous character&rsquo;s value
-takes precedence.
-</p>
-<p>By default, a text property is rear-sticky but not front-sticky; thus,
-the default is to inherit all the properties of the preceding character,
-and nothing from the following character.
-</p>
-<p>You can control the stickiness of various text properties with two
-specific text properties, <code>front-sticky</code> and <code>rear-nonsticky</code>,
-and with the variable <code>text-property-default-nonsticky</code>.  You can
-use the variable to specify a different default for a given property.
-You can use those two text properties to make any specific properties
-sticky or nonsticky in any particular part of the text.
-</p>
-<p>If a character&rsquo;s <code>front-sticky</code> property is <code>t</code>, then all
-its properties are front-sticky.  If the <code>front-sticky</code> property is
-a list, then the sticky properties of the character are those whose
-names are in the list.  For example, if a character has a
-<code>front-sticky</code> property whose value is <code>(face read-only)</code>,
-then insertion before the character can inherit its <code>face</code> property
-and its <code>read-only</code> property, but no others.
-</p>
-<p>The <code>rear-nonsticky</code> property works the opposite way.  Most
-properties are rear-sticky by default, so the <code>rear-nonsticky</code>
-property says which properties are <em>not</em> rear-sticky.  If a
-character&rsquo;s <code>rear-nonsticky</code> property is <code>t</code>, then none of its
-properties are rear-sticky.  If the <code>rear-nonsticky</code> property is a
-list, properties are rear-sticky <em>unless</em> their names are in the
-list.
-</p>
-<dl>
-<dt><a name="index-text_002dproperty_002ddefault_002dnonsticky"></a>Variable: <strong>text-property-default-nonsticky</strong></dt>
-<dd><p>This variable holds an alist which defines the default rear-stickiness
-of various text properties.  Each element has the form
-<code>(<var>property</var> . <var>nonstickiness</var>)</code>, and it defines the
-stickiness of a particular text property, <var>property</var>.
-</p>
-<p>If <var>nonstickiness</var> is non-<code>nil</code>, this means that the property
-<var>property</var> is rear-nonsticky by default.  Since all properties are
-front-nonsticky by default, this makes <var>property</var> nonsticky in both
-directions by default.
-</p>
-<p>The text properties <code>front-sticky</code> and <code>rear-nonsticky</code>, when
-used, take precedence over the default <var>nonstickiness</var> specified in
-<code>text-property-default-nonsticky</code>.
-</p></dd></dl>
+  <p>Self-inserting characters, the ones that get inserted into a
+  buffer when the user types them (see <a href=
+  "Commands-for-Insertion.html#Commands-for-Insertion">Commands for
+  Insertion</a>), normally take on the same properties as the
+  preceding character. This is called <em>inheritance</em> of
+  properties.</p>
 
-<p>Here are the functions that insert text with inheritance of properties:
-</p>
-<dl>
-<dt><a name="index-insert_002dand_002dinherit"></a>Function: <strong>insert-and-inherit</strong> <em>&amp;rest strings</em></dt>
-<dd><p>Insert the strings <var>strings</var>, just like the function <code>insert</code>,
-but inherit any sticky properties from the adjoining text.
-</p></dd></dl>
+  <p>By contrast, a Lisp program can do insertion with inheritance
+  or without, depending on the choice of insertion primitive. The
+  ordinary text insertion functions, such as <code>insert</code>,
+  do not inherit any properties. They insert text with precisely
+  the properties of the string being inserted, and no others. This
+  is correct for programs that copy text from one context to
+  another&mdash;for example, into or out of the kill ring. To
+  insert with inheritance, use the special primitives described in
+  this section. Self-inserting characters inherit properties
+  because they work using these primitives.</p>
 
-<dl>
-<dt><a name="index-insert_002dbefore_002dmarkers_002dand_002dinherit"></a>Function: <strong>insert-before-markers-and-inherit</strong> <em>&amp;rest strings</em></dt>
-<dd><p>Insert the strings <var>strings</var>, just like the function
-<code>insert-before-markers</code>, but inherit any sticky properties from the
-adjoining text.
-</p></dd></dl>
+  <p>When you do insertion with inheritance, <em>which</em>
+  properties are inherited, and from where, depends on which
+  properties are <em>sticky</em>. Insertion after a character
+  inherits those of its properties that are <em>rear-sticky</em>.
+  Insertion before a character inherits those of its properties
+  that are <em>front-sticky</em>. When both sides offer different
+  sticky values for the same property, the previous
+  character&rsquo;s value takes precedence.</p>
 
-<p>See <a href="Insertion.html#Insertion">Insertion</a>, for the ordinary insertion functions which do not
-inherit.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Lazy-Properties.html#Lazy-Properties" accesskey="n" rel="next">Lazy Properties</a>, Previous: <a href="Format-Properties.html#Format-Properties" accesskey="p" rel="prev">Format Properties</a>, Up: <a href="Text-Properties.html#Text-Properties" accesskey="u" rel="up">Text Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>By default, a text property is rear-sticky but not
+  front-sticky; thus, the default is to inherit all the properties
+  of the preceding character, and nothing from the following
+  character.</p>
 
+  <p>You can control the stickiness of various text properties with
+  two specific text properties, <code>front-sticky</code> and
+  <code>rear-nonsticky</code>, and with the variable
+  <code>text-property-default-nonsticky</code>. You can use the
+  variable to specify a different default for a given property. You
+  can use those two text properties to make any specific properties
+  sticky or nonsticky in any particular part of the text.</p>
 
+  <p>If a character&rsquo;s <code>front-sticky</code> property is
+  <code>t</code>, then all its properties are front-sticky. If the
+  <code>front-sticky</code> property is a list, then the sticky
+  properties of the character are those whose names are in the
+  list. For example, if a character has a <code>front-sticky</code>
+  property whose value is <code>(face read-only)</code>, then
+  insertion before the character can inherit its <code>face</code>
+  property and its <code>read-only</code> property, but no
+  others.</p>
 
+  <p>The <code>rear-nonsticky</code> property works the opposite
+  way. Most properties are rear-sticky by default, so the
+  <code>rear-nonsticky</code> property says which properties are
+  <em>not</em> rear-sticky. If a character&rsquo;s
+  <code>rear-nonsticky</code> property is <code>t</code>, then none
+  of its properties are rear-sticky. If the
+  <code>rear-nonsticky</code> property is a list, properties are
+  rear-sticky <em>unless</em> their names are in the list.</p>
+
+  <dl>
+    <dt><a name="index-text_002dproperty_002ddefault_002dnonsticky"
+    id=
+    "index-text_002dproperty_002ddefault_002dnonsticky"></a>Variable:
+    <strong>text-property-default-nonsticky</strong></dt>
+
+    <dd>
+      <p>This variable holds an alist which defines the default
+      rear-stickiness of various text properties. Each element has
+      the form <code>(<var>property</var> .
+      <var>nonstickiness</var>)</code>, and it defines the
+      stickiness of a particular text property,
+      <var>property</var>.</p>
+
+      <p>If <var>nonstickiness</var> is non-<code>nil</code>, this
+      means that the property <var>property</var> is rear-nonsticky
+      by default. Since all properties are front-nonsticky by
+      default, this makes <var>property</var> nonsticky in both
+      directions by default.</p>
+
+      <p>The text properties <code>front-sticky</code> and
+      <code>rear-nonsticky</code>, when used, take precedence over
+      the default <var>nonstickiness</var> specified in
+      <code>text-property-default-nonsticky</code>.</p>
+    </dd>
+  </dl>
+
+  <p>Here are the functions that insert text with inheritance of
+  properties:</p>
+
+  <dl>
+    <dt><a name="index-insert_002dand_002dinherit" id=
+    "index-insert_002dand_002dinherit"></a>Function:
+    <strong>insert-and-inherit</strong> <em>&amp;rest
+    strings</em></dt>
+
+    <dd>
+      <p>Insert the strings <var>strings</var>, just like the
+      function <code>insert</code>, but inherit any sticky
+      properties from the adjoining text.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-insert_002dbefore_002dmarkers_002dand_002dinherit" id=
+    "index-insert_002dbefore_002dmarkers_002dand_002dinherit"></a>Function:
+    <strong>insert-before-markers-and-inherit</strong>
+    <em>&amp;rest strings</em></dt>
+
+    <dd>
+      <p>Insert the strings <var>strings</var>, just like the
+      function <code>insert-before-markers</code>, but inherit any
+      sticky properties from the adjoining text.</p>
+    </dd>
+  </dl>
+
+  <p>See <a href="Insertion.html#Insertion">Insertion</a>, for the
+  ordinary insertion functions which do not inherit.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Lazy-Properties.html#Lazy-Properties"
+    accesskey="n" rel="next">Lazy Properties</a>, Previous:
+    <a href="Format-Properties.html#Format-Properties" accesskey=
+    "p" rel="prev">Format Properties</a>, Up: <a href=
+    "Text-Properties.html#Text-Properties" accesskey="u" rel=
+    "up">Text Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

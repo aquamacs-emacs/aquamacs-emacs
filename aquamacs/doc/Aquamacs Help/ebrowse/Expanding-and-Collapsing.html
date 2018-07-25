@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Expanding and Collapsing - A Class Browser for C++</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="A Class Browser for C++">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Tree-Buffers.html#Tree-Buffers" title="Tree Buffers">
-<link rel="prev" href="File-Name-Display.html#File-Name-Display" title="File Name Display">
-<link rel="next" href="Tree-Indentation.html#Tree-Indentation" title="Tree Indentation">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Expanding and Collapsing - A Class Browser for C++</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="A Class Browser for C++" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Tree-Buffers.html#Tree-Buffers" title=
+  "Tree Buffers" />
+  <link rel="prev" href="File-Name-Display.html#File-Name-Display"
+  title="File Name Display" />
+  <link rel="next" href="Tree-Indentation.html#Tree-Indentation"
+  title="Tree Indentation" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Ebrowse, a C++ class browser for GNU Emacs.
 
 Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
@@ -27,8 +36,10 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,45 +49,67 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Expanding-and-Collapsing"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Tree-Indentation.html#Tree-Indentation">Tree Indentation</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Name-Display.html#File-Name-Display">File Name Display</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Tree-Buffers.html#Tree-Buffers">Tree Buffers</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Expanding-and-Collapsing" id=
+    "Expanding-and-Collapsing"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h3 class="section">4.6 Expanding and Collapsing a Tree</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Tree-Indentation.html#Tree-Indentation">Tree Indentation</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "File-Name-Display.html#File-Name-Display">File Name
+    Display</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Tree-Buffers.html#Tree-Buffers">Tree Buffers</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-<p><a name="index-expand-tree-branch-58"></a><a name="index-collapse-tree-branch-59"></a><a name="index-branches-of-class-tree-60"></a><a name="index-class-tree_002c-collapse-or-expand-61"></a>
-You can expand and collapse parts of a tree to reduce the complexity of
-large class hierarchies.  Expanding or collapsing branches of a tree has
-no impact on the functionality of other commands, like <kbd>/</kbd>.  (See
-also <a href="Go-to-Class.html#Go-to-Class">Go to Class</a>.)
+  <h3 class="section">4.6 Expanding and Collapsing a Tree</h3>
 
-   <p>Collapsed branches are indicated with an ellipsis following the class
-name like in the example below.
+  <p><a name="index-expand-tree-branch-58" id=
+  "index-expand-tree-branch-58"></a><a name=
+  "index-collapse-tree-branch-59" id=
+  "index-collapse-tree-branch-59"></a><a name=
+  "index-branches-of-class-tree-60" id=
+  "index-branches-of-class-tree-60"></a><a name=
+  "index-class-tree_002c-collapse-or-expand-61" id=
+  "index-class-tree_002c-collapse-or-expand-61"></a> You can expand
+  and collapse parts of a tree to reduce the complexity of large
+  class hierarchies. Expanding or collapsing branches of a tree has
+  no impact on the functionality of other commands, like
+  <kbd>/</kbd>. (See also <a href="Go-to-Class.html#Go-to-Class">Go
+  to Class</a>.)</p>
 
-<pre class="example">     |  Collection
+  <p>Collapsed branches are indicated with an ellipsis following
+  the class name like in the example below.</p>
+  <pre class="example">
+     |  Collection
      |    IndexedCollection...
      |    Set
      |    Dictionary
 </pre>
-     <dl>
-<dt><kbd>-</kbd><dd>This command collapses the branch of the tree starting at the class the
-cursor is on.
 
-     <br><dt><kbd>+</kbd><dd>This command expands the branch of the tree starting at the class the
-cursor is on.  Both commands for collapsing and expanding branches are
-also available from the class' object menu.
+  <dl>
+    <dt><kbd>-</kbd></dt>
 
-     <br><dt><kbd>*</kbd><dd>This command expands all collapsed branches in the tree. 
-</dl>
+    <dd>This command collapses the branch of the tree starting at
+    the class the cursor is on.<br /></dd>
 
-   </body></html>
+    <dt><kbd>+</kbd></dt>
 
+    <dd>This command expands the branch of the tree starting at the
+    class the cursor is on. Both commands for collapsing and
+    expanding branches are also available from the class' object
+    menu.<br /></dd>
+
+    <dt><kbd>*</kbd></dt>
+
+    <dd>This command expands all collapsed branches in the
+    tree.</dd>
+  </dl>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Message, the Emacs message composition mode.
 
 Copyright (C) 1996-2016 Free Software Foundation, Inc.
@@ -14,143 +16,209 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Message Manual: Message Buffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Message Manual: Message Buffers">
-<meta name="keywords" content="Message Manual: Message Buffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variables.html#Variables" rel="up" title="Variables">
-<link href="Message-Actions.html#Message-Actions" rel="next" title="Message Actions">
-<link href="Sending-Variables.html#Sending-Variables" rel="prev" title="Sending Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Message Manual: Message Buffers</title>
+  <meta name="description" content=
+  "Message Manual: Message Buffers" />
+  <meta name="keywords" content=
+  "Message Manual: Message Buffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variables.html#Variables" rel="up" title=
+  "Variables" />
+  <link href="Message-Actions.html#Message-Actions" rel="next"
+  title="Message Actions" />
+  <link href="Sending-Variables.html#Sending-Variables" rel="prev"
+  title="Sending Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Message-Buffers"></a>
-<div class="header">
-<p>
-Next: <a href="Message-Actions.html#Message-Actions" accesskey="n" rel="next">Message Actions</a>, Previous: <a href="Sending-Variables.html#Sending-Variables" accesskey="p" rel="prev">Sending Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Message-Buffers-1"></a>
-<h3 class="section">3.9 Message Buffers</h3>
+<body lang="en" xml:lang="en">
+  <a name="Message-Buffers" id="Message-Buffers"></a>
 
-<p>Message will generate new buffers with unique buffer names when you
-request a message buffer.  When you send the message, the buffer isn&rsquo;t
-normally killed off.  Its name is changed and a certain number of old
-message buffers are kept alive.
-</p>
-<dl compact="compact">
-<dt><code>message-generate-new-buffers</code></dt>
-<dd><a name="index-message_002dgenerate_002dnew_002dbuffers"></a>
-<p>Controls whether to create a new message buffer to compose a message.
-Valid values include:
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>Generate the buffer name in the Message way (e.g., *mail*, *news*, *mail
-to whom*, *news on group*, etc.) and continue editing in the existing
-buffer of that name.  If there is no such buffer, it will be newly
-created.
-</p>
-</dd>
-<dt><code>unique</code></dt>
-<dt><code>t</code></dt>
-<dd><p>Create the new buffer with the name generated in the Message way.
-</p>
-</dd>
-<dt><code>unsent</code></dt>
-<dd><p>Similar to <code>unique</code> but the buffer name begins with &quot;*unsent &quot;.
-</p>
-</dd>
-<dt><code>standard</code></dt>
-<dd><p>Similar to <code>nil</code> but the buffer name is simpler like *mail
-message*.
-</p></dd>
-</dl>
-<dl compact="compact">
-<dt><var>function</var></dt>
-<dd><p>If this is a function, call that function with three parameters: The
-type, the To address and the group name (any of these may be
-<code>nil</code>).  The function should return the new buffer name.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Message-Actions.html#Message-Actions"
+    accesskey="n" rel="next">Message Actions</a>, Previous:
+    <a href="Sending-Variables.html#Sending-Variables" accesskey=
+    "p" rel="prev">Sending Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Message-Buffers-1" id="Message-Buffers-1"></a>
 
-<p>The default value is <code>unsent</code>.
-</p>
-</dd>
-<dt><code>message-max-buffers</code></dt>
-<dd><a name="index-message_002dmax_002dbuffers"></a>
-<p>This variable says how many old message buffers to keep.  If there are
-more message buffers than this, the oldest buffer will be killed.  The
-default is 10.  If this variable is <code>nil</code>, no old message buffers
-will ever be killed.
-</p>
-</dd>
-<dt><code>message-send-rename-function</code></dt>
-<dd><a name="index-message_002dsend_002drename_002dfunction"></a>
-<p>After sending a message, the buffer is renamed from, for instance,
-&lsquo;<samp>*reply to Lars*</samp>&rsquo; to &lsquo;<samp>*sent reply to Lars*</samp>&rsquo;.  If you don&rsquo;t
-like this, set this variable to a function that renames the buffer in a
-manner you like.  If you don&rsquo;t want to rename the buffer at all, you can
-say:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq message-send-rename-function 'ignore)
-</pre></div>
+  <h3 class="section">3.9 Message Buffers</h3>
 
-</dd>
-<dt><code>message-kill-buffer-on-exit</code></dt>
-<dd><a name="index-message_002dkill_002dbuffer_002don_002dexit"></a>
-<p>If non-<code>nil</code>, kill the buffer immediately on exit.
-</p>
-</dd>
-</dl>
+  <p>Message will generate new buffers with unique buffer names
+  when you request a message buffer. When you send the message, the
+  buffer isn&rsquo;t normally killed off. Its name is changed and a
+  certain number of old message buffers are kept alive.</p>
 
+  <dl compact="compact">
+    <dt><code>message-generate-new-buffers</code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Message-Actions.html#Message-Actions" accesskey="n" rel="next">Message Actions</a>, Previous: <a href="Sending-Variables.html#Sending-Variables" accesskey="p" rel="prev">Sending Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name="index-message_002dgenerate_002dnew_002dbuffers" id=
+      "index-message_002dgenerate_002dnew_002dbuffers"></a>
 
+      <p>Controls whether to create a new message buffer to compose
+      a message. Valid values include:</p>
 
+      <dl compact="compact">
+        <dt><code>nil</code></dt>
 
+        <dd>
+          <p>Generate the buffer name in the Message way (e.g.,
+          *mail*, *news*, *mail to whom*, *news on group*, etc.)
+          and continue editing in the existing buffer of that name.
+          If there is no such buffer, it will be newly created.</p>
+        </dd>
+
+        <dt><code>unique</code></dt>
+
+        <dt><code>t</code></dt>
+
+        <dd>
+          <p>Create the new buffer with the name generated in the
+          Message way.</p>
+        </dd>
+
+        <dt><code>unsent</code></dt>
+
+        <dd>
+          <p>Similar to <code>unique</code> but the buffer name
+          begins with "*unsent ".</p>
+        </dd>
+
+        <dt><code>standard</code></dt>
+
+        <dd>
+          <p>Similar to <code>nil</code> but the buffer name is
+          simpler like *mail message*.</p>
+        </dd>
+      </dl>
+
+      <dl compact="compact">
+        <dt><var>function</var></dt>
+
+        <dd>
+          <p>If this is a function, call that function with three
+          parameters: The type, the To address and the group name
+          (any of these may be <code>nil</code>). The function
+          should return the new buffer name.</p>
+        </dd>
+      </dl>
+
+      <p>The default value is <code>unsent</code>.</p>
+    </dd>
+
+    <dt><code>message-max-buffers</code></dt>
+
+    <dd>
+      <a name="index-message_002dmax_002dbuffers" id=
+      "index-message_002dmax_002dbuffers"></a>
+
+      <p>This variable says how many old message buffers to keep.
+      If there are more message buffers than this, the oldest
+      buffer will be killed. The default is 10. If this variable is
+      <code>nil</code>, no old message buffers will ever be
+      killed.</p>
+    </dd>
+
+    <dt><code>message-send-rename-function</code></dt>
+
+    <dd>
+      <a name="index-message_002dsend_002drename_002dfunction" id=
+      "index-message_002dsend_002drename_002dfunction"></a>
+
+      <p>After sending a message, the buffer is renamed from, for
+      instance, &lsquo;<samp>*reply to Lars*</samp>&rsquo; to
+      &lsquo;<samp>*sent reply to Lars*</samp>&rsquo;. If you
+      don&rsquo;t like this, set this variable to a function that
+      renames the buffer in a manner you like. If you don&rsquo;t
+      want to rename the buffer at all, you can say:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq message-send-rename-function 'ignore)
+</pre>
+      </div>
+    </dd>
+
+    <dt><code>message-kill-buffer-on-exit</code></dt>
+
+    <dd>
+      <a name="index-message_002dkill_002dbuffer_002don_002dexit"
+      id="index-message_002dkill_002dbuffer_002don_002dexit"></a>
+
+      <p>If non-<code>nil</code>, kill the buffer immediately on
+      exit.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Message-Actions.html#Message-Actions"
+    accesskey="n" rel="next">Message Actions</a>, Previous:
+    <a href="Sending-Variables.html#Sending-Variables" accesskey=
+    "p" rel="prev">Sending Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

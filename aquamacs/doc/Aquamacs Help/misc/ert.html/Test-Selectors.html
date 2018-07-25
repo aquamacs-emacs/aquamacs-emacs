@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2008, 2010-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,106 +14,163 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Lisp Regression Testing: Test Selectors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Lisp Regression Testing: Test Selectors">
-<meta name="keywords" content="Emacs Lisp Regression Testing: Test Selectors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="How-to-Run-Tests.html#How-to-Run-Tests" rel="up" title="How to Run Tests">
-<link href="How-to-Write-Tests.html#How-to-Write-Tests" rel="next" title="How to Write Tests">
-<link href="Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode" rel="prev" title="Running Tests in Batch Mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Lisp Regression Testing: Test Selectors</title>
+  <meta name="description" content=
+  "Emacs Lisp Regression Testing: Test Selectors" />
+  <meta name="keywords" content=
+  "Emacs Lisp Regression Testing: Test Selectors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="How-to-Run-Tests.html#How-to-Run-Tests" rel="up"
+  title="How to Run Tests" />
+  <link href="How-to-Write-Tests.html#How-to-Write-Tests" rel=
+  "next" title="How to Write Tests" />
+  <link href=
+  "Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode"
+  rel="prev" title="Running Tests in Batch Mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Test-Selectors"></a>
-<div class="header">
-<p>
-Previous: <a href="Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode" accesskey="p" rel="prev">Running Tests in Batch Mode</a>, Up: <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="u" rel="up">How to Run Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Test-Selectors-1"></a>
-<h3 class="section">2.3 Test Selectors</h3>
+<body lang="en" xml:lang="en">
+  <a name="Test-Selectors" id="Test-Selectors"></a>
 
-<p>Functions like <code>ert</code> accept a <em>test selector</em>, a Lisp
-expression specifying a set of tests.  Test selector syntax is similar
-to Common Lisp&rsquo;s type specifier syntax:
-</p>
-<ul>
-<li> <code>nil</code> selects no tests.
-</li><li> <code>t</code> selects all tests.
-</li><li> <code>:new</code> selects all tests that have not been run yet.
-</li><li> <code>:failed</code> and <code>:passed</code> select tests according to their most recent result.
-</li><li> <code>:expected</code>, <code>:unexpected</code> select tests according to their most recent result.
-</li><li> A string is a regular expression that selects all tests with matching names.
-</li><li> A test (i.e., an object of <code>ert-test</code> data type) selects that test.
-</li><li> A symbol selects the test that the symbol names.
-</li><li> <code>(member TESTS...)</code> selects the elements of TESTS, a list of
-tests or symbols naming tests.
-</li><li> <code>(eql TEST)</code> selects TEST, a test or a symbol naming a test.
-</li><li> <code>(and SELECTORS...)</code> selects the tests that match all SELECTORS.
-</li><li> <code>(or SELECTORS...)</code> selects the tests that match any SELECTOR.
-</li><li> <code>(not SELECTOR)</code> selects all tests that do not match SELECTOR.
-</li><li> <code>(tag TAG)</code> selects all tests that have TAG on their tags list.
-(Tags are optional labels you can apply to tests when you define them.)
-</li><li> <code>(satisfies PREDICATE)</code> selects all tests that satisfy PREDICATE,
-a function that takes a test as argument and returns non-<code>nil</code> if
-it is selected.
-</li></ul>
+  <div class="header">
+    <p>Previous: <a href=
+    "Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode"
+    accesskey="p" rel="prev">Running Tests in Batch Mode</a>, Up:
+    <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="u"
+    rel="up">How to Run Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Test-Selectors-1" id="Test-Selectors-1"></a>
 
-<p>Selectors that are frequently useful when selecting tests to run
-include <code>t</code> to run all tests that are currently defined in Emacs,
-<code>&quot;^foo-&quot;</code> to run all tests in package <code>foo</code> (this assumes
-that package <code>foo</code> uses the prefix <code>foo-</code> for its test names),
-result-based selectors such as <code>(or :new :unexpected)</code> to
-run all tests that have either not run yet or that had an unexpected
-result in the last run, and tag-based selectors such as <code>(not
-(tag :causes-redisplay))</code> to run all tests that are not tagged
-<code>:causes-redisplay</code>.
-</p>
+  <h3 class="section">2.3 Test Selectors</h3>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode" accesskey="p" rel="prev">Running Tests in Batch Mode</a>, Up: <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="u" rel="up">How to Run Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+  <p>Functions like <code>ert</code> accept a <em>test
+  selector</em>, a Lisp expression specifying a set of tests. Test
+  selector syntax is similar to Common Lisp&rsquo;s type specifier
+  syntax:</p>
 
+  <ul>
+    <li><code>nil</code> selects no tests.</li>
 
+    <li><code>t</code> selects all tests.</li>
 
+    <li><code>:new</code> selects all tests that have not been run
+    yet.</li>
+
+    <li><code>:failed</code> and <code>:passed</code> select tests
+    according to their most recent result.</li>
+
+    <li><code>:expected</code>, <code>:unexpected</code> select
+    tests according to their most recent result.</li>
+
+    <li>A string is a regular expression that selects all tests
+    with matching names.</li>
+
+    <li>A test (i.e., an object of <code>ert-test</code> data type)
+    selects that test.</li>
+
+    <li>A symbol selects the test that the symbol names.</li>
+
+    <li><code>(member TESTS...)</code> selects the elements of
+    TESTS, a list of tests or symbols naming tests.</li>
+
+    <li><code>(eql TEST)</code> selects TEST, a test or a symbol
+    naming a test.</li>
+
+    <li><code>(and SELECTORS...)</code> selects the tests that
+    match all SELECTORS.</li>
+
+    <li><code>(or SELECTORS...)</code> selects the tests that match
+    any SELECTOR.</li>
+
+    <li><code>(not SELECTOR)</code> selects all tests that do not
+    match SELECTOR.</li>
+
+    <li><code>(tag TAG)</code> selects all tests that have TAG on
+    their tags list. (Tags are optional labels you can apply to
+    tests when you define them.)</li>
+
+    <li><code>(satisfies PREDICATE)</code> selects all tests that
+    satisfy PREDICATE, a function that takes a test as argument and
+    returns non-<code>nil</code> if it is selected.</li>
+  </ul>
+
+  <p>Selectors that are frequently useful when selecting tests to
+  run include <code>t</code> to run all tests that are currently
+  defined in Emacs, <code>"^foo-"</code> to run all tests in
+  package <code>foo</code> (this assumes that package
+  <code>foo</code> uses the prefix <code>foo-</code> for its test
+  names), result-based selectors such as <code>(or :new
+  :unexpected)</code> to run all tests that have either not run yet
+  or that had an unexpected result in the last run, and tag-based
+  selectors such as <code>(not (tag :causes-redisplay))</code> to
+  run all tests that are not tagged
+  <code>:causes-redisplay</code>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Running-Tests-in-Batch-Mode.html#Running-Tests-in-Batch-Mode"
+    accesskey="p" rel="prev">Running Tests in Batch Mode</a>, Up:
+    <a href="How-to-Run-Tests.html#How-to-Run-Tests" accesskey="u"
+    rel="up">How to Run Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

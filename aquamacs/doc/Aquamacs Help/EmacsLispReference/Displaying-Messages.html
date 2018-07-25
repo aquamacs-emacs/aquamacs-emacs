@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,190 +19,299 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Displaying Messages</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Displaying Messages">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Displaying Messages">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="The-Echo-Area.html#The-Echo-Area" rel="up" title="The Echo Area">
-<link href="Progress.html#Progress" rel="next" title="Progress">
-<link href="The-Echo-Area.html#The-Echo-Area" rel="prev" title="The Echo Area">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Displaying
+  Messages</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Displaying Messages" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Displaying Messages" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="The-Echo-Area.html#The-Echo-Area" rel="up" title=
+  "The Echo Area" />
+  <link href="Progress.html#Progress" rel="next" title=
+  "Progress" />
+  <link href="The-Echo-Area.html#The-Echo-Area" rel="prev" title=
+  "The Echo Area" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Displaying-Messages" id="Displaying-Messages"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Progress.html#Progress" accesskey="n" rel=
+    "next">Progress</a>, Up: <a href=
+    "The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The
+    Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Displaying-Messages-in-the-Echo-Area" id=
+  "Displaying-Messages-in-the-Echo-Area"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Displaying-Messages"></a>
-<div class="header">
-<p>
-Next: <a href="Progress.html#Progress" accesskey="n" rel="next">Progress</a>, Up: <a href="The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Displaying-Messages-in-the-Echo-Area"></a>
-<h4 class="subsection">37.4.1 Displaying Messages in the Echo Area</h4>
-<a name="index-display-message-in-echo-area"></a>
+  <h4 class="subsection">37.4.1 Displaying Messages in the Echo
+  Area</h4><a name="index-display-message-in-echo-area" id=
+  "index-display-message-in-echo-area"></a>
 
-<p>This section describes the standard functions for displaying
-messages in the echo area.
-</p>
-<dl>
-<dt><a name="index-message"></a>Function: <strong>message</strong> <em>format-string &amp;rest arguments</em></dt>
-<dd><p>This function displays a message in the echo area.
-<var>format-string</var> is a format string, and <var>arguments</var> are the
-objects for its format specifications, like in the <code>format-message</code>
-function (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>).  The resulting formatted string
-is displayed in the echo area; if it contains <code>face</code> text
-properties, it is displayed with the specified faces (see <a href="Faces.html#Faces">Faces</a>).
-The string is also added to the <samp>*Messages*</samp> buffer, but without
-text properties (see <a href="Logging-Messages.html#Logging-Messages">Logging Messages</a>).
-</p>
-<p>The <code>text-quoting-style</code> variable controls what quotes are
-generated; See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.  A call using a format like
-<tt>&quot;Missing `%s'&quot;</tt> with grave accents and apostrophes typically
-generates a message like <tt>&quot;Missing ‘foo’&quot;</tt> with matching curved
-quotes.  In contrast, a call using a format like <tt>&quot;Missing '%s'&quot;</tt>
-with only apostrophes typically generates a message like <tt>&quot;Missing
-’foo’&quot;</tt> with only closing curved quotes, an unusual style in English.
-</p>
-<p>In batch mode, the message is printed to the standard error stream,
-followed by a newline.
-</p>
-<p>When <code>inhibit-message</code> is non-<code>nil</code>, no message will be displayed
-in the echo area, it will only be logged to &lsquo;<samp>*Messages*</samp>&rsquo;.
-</p>
-<p>If <var>format-string</var> is <code>nil</code> or the empty string,
-<code>message</code> clears the echo area; if the echo area has been
-expanded automatically, this brings it back to its normal size.  If
-the minibuffer is active, this brings the minibuffer contents back
-onto the screen immediately.
-</p>
-<div class="example">
-<pre class="example">(message &quot;Reverting `%s'...&quot; (buffer-name))
- ⊣ Reverting ‘subr.el’...
-&rArr; &quot;Reverting ‘subr.el’...&quot;
-</pre><pre class="example">
-</pre><pre class="example">---------- Echo Area ----------
-Reverting ‘subr.el’...
+  <p>This section describes the standard functions for displaying
+  messages in the echo area.</p>
+
+  <dl>
+    <dt><a name="index-message" id="index-message"></a>Function:
+    <strong>message</strong> <em>format-string &amp;rest
+    arguments</em></dt>
+
+    <dd>
+      <p>This function displays a message in the echo area.
+      <var>format-string</var> is a format string, and
+      <var>arguments</var> are the objects for its format
+      specifications, like in the <code>format-message</code>
+      function (see <a href=
+      "Formatting-Strings.html#Formatting-Strings">Formatting
+      Strings</a>). The resulting formatted string is displayed in
+      the echo area; if it contains <code>face</code> text
+      properties, it is displayed with the specified faces (see
+      <a href="Faces.html#Faces">Faces</a>). The string is also
+      added to the <samp>*Messages*</samp> buffer, but without text
+      properties (see <a href=
+      "Logging-Messages.html#Logging-Messages">Logging
+      Messages</a>).</p>
+
+      <p>The <code>text-quoting-style</code> variable controls what
+      quotes are generated; See <a href=
+      "Keys-in-Documentation.html#Keys-in-Documentation">Keys in
+      Documentation</a>. A call using a format like <tt>"Missing
+      `%s'"</tt> with grave accents and apostrophes typically
+      generates a message like <tt>"Missing
+      &acirc;&euro;&tilde;foo&acirc;&euro;&trade;"</tt> with
+      matching curved quotes. In contrast, a call using a format
+      like <tt>"Missing '%s'"</tt> with only apostrophes typically
+      generates a message like <tt>"Missing
+      &acirc;&euro;&trade;foo&acirc;&euro;&trade;"</tt> with only
+      closing curved quotes, an unusual style in English.</p>
+
+      <p>In batch mode, the message is printed to the standard
+      error stream, followed by a newline.</p>
+
+      <p>When <code>inhibit-message</code> is non-<code>nil</code>,
+      no message will be displayed in the echo area, it will only
+      be logged to &lsquo;<samp>*Messages*</samp>&rsquo;.</p>
+
+      <p>If <var>format-string</var> is <code>nil</code> or the
+      empty string, <code>message</code> clears the echo area; if
+      the echo area has been expanded automatically, this brings it
+      back to its normal size. If the minibuffer is active, this
+      brings the minibuffer contents back onto the screen
+      immediately.</p>
+
+      <div class="example">
+        <pre class="example">
+(message "Reverting `%s'..." (buffer-name))
+ &acirc;&Scaron;&pound; Reverting &acirc;&euro;&tilde;subr.el&acirc;&euro;&trade;...
+&rArr; "Reverting &acirc;&euro;&tilde;subr.el&acirc;&euro;&trade;..."
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
 ---------- Echo Area ----------
-</pre></div>
+Reverting &acirc;&euro;&tilde;subr.el&acirc;&euro;&trade;...
+---------- Echo Area ----------
+</pre>
+      </div>
 
-<p>To automatically display a message in the echo area or in a pop-buffer,
-depending on its size, use <code>display-message-or-buffer</code> (see below).
-</p>
-<p><strong>Warning:</strong> If you want to use your own string as a message
-verbatim, don&rsquo;t just write <code>(message <var>string</var>)</code>.  If
-<var>string</var> contains &lsquo;<samp>%</samp>&rsquo;, &lsquo;<samp>`</samp>&rsquo;, or &lsquo;<samp>'</samp>&rsquo; it may be
-reformatted, with undesirable results.  Instead, use <code>(message
-&quot;%s&quot; <var>string</var>)</code>.
-</p></dd></dl>
+      <p>To automatically display a message in the echo area or in
+      a pop-buffer, depending on its size, use
+      <code>display-message-or-buffer</code> (see below).</p>
 
-<dl>
-<dt><a name="index-inhibit_002dmessage"></a>Variable: <strong>inhibit-message</strong></dt>
-<dd><p>When this variable is non-<code>nil</code>, <code>message</code> and related functions
-will not use the Echo Area to display messages.
-</p></dd></dl>
+      <p><strong>Warning:</strong> If you want to use your own
+      string as a message verbatim, don&rsquo;t just write
+      <code>(message <var>string</var>)</code>. If
+      <var>string</var> contains &lsquo;<samp>%</samp>&rsquo;,
+      &lsquo;<samp>`</samp>&rsquo;, or &lsquo;<samp>'</samp>&rsquo;
+      it may be reformatted, with undesirable results. Instead, use
+      <code>(message "%s" <var>string</var>)</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-with_002dtemp_002dmessage"></a>Macro: <strong>with-temp-message</strong> <em>message &amp;rest body</em></dt>
-<dd><p>This construct displays a message in the echo area temporarily, during
-the execution of <var>body</var>.  It displays <var>message</var>, executes
-<var>body</var>, then returns the value of the last body form while restoring
-the previous echo area contents.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-inhibit_002dmessage" id=
+    "index-inhibit_002dmessage"></a>Variable:
+    <strong>inhibit-message</strong></dt>
 
-<dl>
-<dt><a name="index-message_002dor_002dbox"></a>Function: <strong>message-or-box</strong> <em>format-string &amp;rest arguments</em></dt>
-<dd><p>This function displays a message like <code>message</code>, but may display it
-in a dialog box instead of the echo area.  If this function is called in
-a command that was invoked using the mouse&mdash;more precisely, if
-<code>last-nonmenu-event</code> (see <a href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>) is either
-<code>nil</code> or a list&mdash;then it uses a dialog box or pop-up menu to
-display the message.  Otherwise, it uses the echo area.  (This is the
-same criterion that <code>y-or-n-p</code> uses to make a similar decision; see
-<a href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries">Yes-or-No Queries</a>.)
-</p>
-<p>You can force use of the mouse or of the echo area by binding
-<code>last-nonmenu-event</code> to a suitable value around the call.
-</p></dd></dl>
+    <dd>
+      <p>When this variable is non-<code>nil</code>,
+      <code>message</code> and related functions will not use the
+      Echo Area to display messages.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-message_002dbox"></a>Function: <strong>message-box</strong> <em>format-string &amp;rest arguments</em></dt>
-<dd><a name="message_002dbox"></a><p>This function displays a message like <code>message</code>, but uses a dialog
-box (or a pop-up menu) whenever that is possible.  If it is impossible
-to use a dialog box or pop-up menu, because the terminal does not
-support them, then <code>message-box</code> uses the echo area, like
-<code>message</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-with_002dtemp_002dmessage" id=
+    "index-with_002dtemp_002dmessage"></a>Macro:
+    <strong>with-temp-message</strong> <em>message &amp;rest
+    body</em></dt>
 
-<dl>
-<dt><a name="index-display_002dmessage_002dor_002dbuffer"></a>Function: <strong>display-message-or-buffer</strong> <em>message &amp;optional buffer-name action frame</em></dt>
-<dd><p>This function displays the message <var>message</var>, which may be either a
-string or a buffer.  If it is shorter than the maximum height of the
-echo area, as defined by <code>max-mini-window-height</code>, it is displayed
-in the echo area, using <code>message</code>.  Otherwise,
-<code>display-buffer</code> is used to show it in a pop-up buffer.
-</p>
-<p>Returns either the string shown in the echo area, or when a pop-up
-buffer is used, the window used to display it.
-</p>
-<p>If <var>message</var> is a string, then the optional argument
-<var>buffer-name</var> is the name of the buffer used to display it when a
-pop-up buffer is used, defaulting to <samp>*Message*</samp>.  In the case
-where <var>message</var> is a string and displayed in the echo area, it is
-not specified whether the contents are inserted into the buffer anyway.
-</p>
-<p>The optional arguments <var>action</var> and <var>frame</var> are as for
-<code>display-buffer</code>, and only used if a buffer is displayed.
-</p></dd></dl>
+    <dd>
+      <p>This construct displays a message in the echo area
+      temporarily, during the execution of <var>body</var>. It
+      displays <var>message</var>, executes <var>body</var>, then
+      returns the value of the last body form while restoring the
+      previous echo area contents.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-current_002dmessage"></a>Function: <strong>current-message</strong></dt>
-<dd><p>This function returns the message currently being displayed in the
-echo area, or <code>nil</code> if there is none.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-message_002dor_002dbox" id=
+    "index-message_002dor_002dbox"></a>Function:
+    <strong>message-or-box</strong> <em>format-string &amp;rest
+    arguments</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Progress.html#Progress" accesskey="n" rel="next">Progress</a>, Up: <a href="The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function displays a message like
+      <code>message</code>, but may display it in a dialog box
+      instead of the echo area. If this function is called in a
+      command that was invoked using the mouse&mdash;more
+      precisely, if <code>last-nonmenu-event</code> (see <a href=
+      "Command-Loop-Info.html#Command-Loop-Info">Command Loop
+      Info</a>) is either <code>nil</code> or a list&mdash;then it
+      uses a dialog box or pop-up menu to display the message.
+      Otherwise, it uses the echo area. (This is the same criterion
+      that <code>y-or-n-p</code> uses to make a similar decision;
+      see <a href=
+      "Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries">Yes-or-No
+      Queries</a>.)</p>
 
+      <p>You can force use of the mouse or of the echo area by
+      binding <code>last-nonmenu-event</code> to a suitable value
+      around the call.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-message_002dbox" id=
+    "index-message_002dbox"></a>Function:
+    <strong>message-box</strong> <em>format-string &amp;rest
+    arguments</em></dt>
 
+    <dd>
+      <a name="message_002dbox" id="message_002dbox"></a>
+
+      <p>This function displays a message like
+      <code>message</code>, but uses a dialog box (or a pop-up
+      menu) whenever that is possible. If it is impossible to use a
+      dialog box or pop-up menu, because the terminal does not
+      support them, then <code>message-box</code> uses the echo
+      area, like <code>message</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-display_002dmessage_002dor_002dbuffer" id=
+    "index-display_002dmessage_002dor_002dbuffer"></a>Function:
+    <strong>display-message-or-buffer</strong> <em>message
+    &amp;optional buffer-name action frame</em></dt>
+
+    <dd>
+      <p>This function displays the message <var>message</var>,
+      which may be either a string or a buffer. If it is shorter
+      than the maximum height of the echo area, as defined by
+      <code>max-mini-window-height</code>, it is displayed in the
+      echo area, using <code>message</code>. Otherwise,
+      <code>display-buffer</code> is used to show it in a pop-up
+      buffer.</p>
+
+      <p>Returns either the string shown in the echo area, or when
+      a pop-up buffer is used, the window used to display it.</p>
+
+      <p>If <var>message</var> is a string, then the optional
+      argument <var>buffer-name</var> is the name of the buffer
+      used to display it when a pop-up buffer is used, defaulting
+      to <samp>*Message*</samp>. In the case where
+      <var>message</var> is a string and displayed in the echo
+      area, it is not specified whether the contents are inserted
+      into the buffer anyway.</p>
+
+      <p>The optional arguments <var>action</var> and
+      <var>frame</var> are as for <code>display-buffer</code>, and
+      only used if a buffer is displayed.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-current_002dmessage" id=
+    "index-current_002dmessage"></a>Function:
+    <strong>current-message</strong></dt>
+
+    <dd>
+      <p>This function returns the message currently being
+      displayed in the echo area, or <code>nil</code> if there is
+      none.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Progress.html#Progress" accesskey="n" rel=
+    "next">Progress</a>, Up: <a href=
+    "The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The
+    Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,237 +16,397 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: The clock table</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: The clock table">
-<meta name="keywords" content="The Org Manual: The clock table">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Clocking-work-time.html#Clocking-work-time" rel="up" title="Clocking work time">
-<link href="Resolving-idle-time.html#Resolving-idle-time" rel="next" title="Resolving idle time">
-<link href="Clocking-commands.html#Clocking-commands" rel="prev" title="Clocking commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: The clock table</title>
+  <meta name="description" content=
+  "The Org Manual: The clock table" />
+  <meta name="keywords" content=
+  "The Org Manual: The clock table" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Clocking-work-time.html#Clocking-work-time" rel="up"
+  title="Clocking work time" />
+  <link href="Resolving-idle-time.html#Resolving-idle-time" rel=
+  "next" title="Resolving idle time" />
+  <link href="Clocking-commands.html#Clocking-commands" rel="prev"
+  title="Clocking commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-clock-table"></a>
-<div class="header">
-<p>
-Next: <a href="Resolving-idle-time.html#Resolving-idle-time" accesskey="n" rel="next">Resolving idle time</a>, Previous: <a href="Clocking-commands.html#Clocking-commands" accesskey="p" rel="prev">Clocking commands</a>, Up: <a href="Clocking-work-time.html#Clocking-work-time" accesskey="u" rel="up">Clocking work time</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-clock-table-1"></a>
-<h4 class="subsection">8.4.2 The clock table</h4>
-<a name="index-clocktable_002c-dynamic-block"></a>
-<a name="index-report_002c-of-clocked-time"></a>
+<body lang="en" xml:lang="en">
+  <a name="The-clock-table" id="The-clock-table"></a>
 
-<p>Org mode can produce quite complex reports based on the time clocking
-information.  Such a report is called a <em>clock table</em>, because it is
-formatted as one or several Org tables.
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002dc-C_002dx-C_002dr"></a>
-<a name="index-org_002dclock_002dreport"></a>
-</dd>
-<dt><kbd><kbd>C-c C-x C-r</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-report</code>)</kbd></dt>
-<dd><p>Insert a dynamic block (see <a href="Dynamic-blocks.html#Dynamic-blocks">Dynamic blocks</a>) containing a clock
-report as an Org mode table into the current file.  When the cursor is
-at an existing clock table, just update it.  When called with a prefix
-argument, jump to the first clock report in the current document and
-update it.  The clock table always includes also trees with
-<code>:ARCHIVE:</code> tag.
-<a name="index-C_002dc-C_002dc-14"></a>
-<a name="index-C_002dc-C_002dx-C_002du-1"></a>
-<a name="index-org_002ddblock_002dupdate-1"></a>
-</p></dd>
-<dt><kbd><kbd>C-c C-c</kbd> &nbsp;<span class="roman">or</span> &nbsp;<kbd>C-c C-x C-u</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-dblock-update</code>)</kbd></dt>
-<dd><p>Update dynamic block at point.  The cursor needs to be in the
-<code>#+BEGIN</code> line of the dynamic block.
-<a name="index-C_002du-C_002dc-C_002dx-C_002du-1"></a>
-</p></dd>
-<dt><kbd><kbd>C-u C-c C-x C-u</kbd></kbd></dt>
-<dd><p>Update all dynamic blocks (see <a href="Dynamic-blocks.html#Dynamic-blocks">Dynamic blocks</a>).  This is useful if
-you have several clock table blocks in a buffer.
-<a name="index-S_002dleft-8"></a>
-<a name="index-S_002dright-8"></a>
-<a name="index-org_002dclocktable_002dtry_002dshift"></a>
-</p></dd>
-<dt><kbd><kbd>S-<span class="key">left</span></kbd></kbd></dt>
-<dt><kbd><kbd>S-<span class="key">right</span></kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clocktable-try-shift</code>)</kbd></dt>
-<dd><p>Shift the current <code>:block</code> interval and update the table.  The cursor
-needs to be in the <code>#+BEGIN: clocktable</code> line for this command.  If
-<code>:block</code> is <code>today</code>, it will be shifted to <code>today-1</code> etc.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Resolving-idle-time.html#Resolving-idle-time"
+    accesskey="n" rel="next">Resolving idle time</a>, Previous:
+    <a href="Clocking-commands.html#Clocking-commands" accesskey=
+    "p" rel="prev">Clocking commands</a>, Up: <a href=
+    "Clocking-work-time.html#Clocking-work-time" accesskey="u" rel=
+    "up">Clocking work time</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-clock-table-1" id="The-clock-table-1"></a>
 
+  <h4 class="subsection">8.4.2 The clock table</h4><a name=
+  "index-clocktable_002c-dynamic-block" id=
+  "index-clocktable_002c-dynamic-block"></a> <a name=
+  "index-report_002c-of-clocked-time" id=
+  "index-report_002c-of-clocked-time"></a>
 
-<p>Here is an example of the frame for a clock table as it is inserted into the
-buffer with the <kbd>C-c C-x C-r</kbd> command:
-</p>
-<a name="index-_0023_002bBEGIN_002c-clocktable"></a>
-<div class="example">
-<pre class="example">#+BEGIN: clocktable :maxlevel 2 :emphasize nil :scope file
+  <p>Org mode can produce quite complex reports based on the time
+  clocking information. Such a report is called a <em>clock
+  table</em>, because it is formatted as one or several Org
+  tables.</p>
+
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-C_002dx-C_002dr" id=
+    "index-C_002dc-C_002dx-C_002dr"></a> <a name=
+    "index-org_002dclock_002dreport" id=
+    "index-org_002dclock_002dreport"></a></dd>
+
+    <dt><kbd><kbd>C-c C-x C-r</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clock-report</code>)</kbd></dt>
+
+    <dd>
+      <p>Insert a dynamic block (see <a href=
+      "Dynamic-blocks.html#Dynamic-blocks">Dynamic blocks</a>)
+      containing a clock report as an Org mode table into the
+      current file. When the cursor is at an existing clock table,
+      just update it. When called with a prefix argument, jump to
+      the first clock report in the current document and update it.
+      The clock table always includes also trees with
+      <code>:ARCHIVE:</code> tag. <a name=
+      "index-C_002dc-C_002dc-14" id="index-C_002dc-C_002dc-14"></a>
+      <a name="index-C_002dc-C_002dx-C_002du-1" id=
+      "index-C_002dc-C_002dx-C_002du-1"></a> <a name=
+      "index-org_002ddblock_002dupdate-1" id=
+      "index-org_002ddblock_002dupdate-1"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-c C-c</kbd> &nbsp;<span class="roman">or</span>
+    &nbsp;<kbd>C-c C-x C-u</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-dblock-update</code>)</kbd></dt>
+
+    <dd>
+      <p>Update dynamic block at point. The cursor needs to be in
+      the <code>#+BEGIN</code> line of the dynamic block. <a name=
+      "index-C_002du-C_002dc-C_002dx-C_002du-1" id=
+      "index-C_002du-C_002dc-C_002dx-C_002du-1"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>C-u C-c C-x C-u</kbd></kbd></dt>
+
+    <dd>
+      <p>Update all dynamic blocks (see <a href=
+      "Dynamic-blocks.html#Dynamic-blocks">Dynamic blocks</a>).
+      This is useful if you have several clock table blocks in a
+      buffer. <a name="index-S_002dleft-8" id=
+      "index-S_002dleft-8"></a> <a name="index-S_002dright-8" id=
+      "index-S_002dright-8"></a> <a name=
+      "index-org_002dclocktable_002dtry_002dshift" id=
+      "index-org_002dclocktable_002dtry_002dshift"></a></p>
+    </dd>
+
+    <dt><kbd><kbd>S-<span class="key">left</span></kbd></kbd></dt>
+
+    <dt><kbd><kbd>S-<span class="key">right</span></kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-clocktable-try-shift</code>)</kbd></dt>
+
+    <dd>
+      <p>Shift the current <code>:block</code> interval and update
+      the table. The cursor needs to be in the <code>#+BEGIN:
+      clocktable</code> line for this command. If
+      <code>:block</code> is <code>today</code>, it will be shifted
+      to <code>today-1</code> etc.</p>
+    </dd>
+  </dl>
+
+  <p>Here is an example of the frame for a clock table as it is
+  inserted into the buffer with the <kbd>C-c C-x C-r</kbd>
+  command:</p><a name="index-_0023_002bBEGIN_002c-clocktable" id=
+  "index-_0023_002bBEGIN_002c-clocktable"></a>
+
+  <div class="example">
+    <pre class="example">
+#+BEGIN: clocktable :maxlevel 2 :emphasize nil :scope file
 #+END: clocktable
-</pre></div>
-<a name="index-org_002dclocktable_002ddefaults"></a>
-<p>The &lsquo;<samp>BEGIN</samp>&rsquo; line and specify a number of options to define the scope,
-structure, and formatting of the report.  Defaults for all these options can
-be configured in the variable <code>org-clocktable-defaults</code>.
-</p>
-<p>First there are options that determine which clock entries are to
-be selected:
-</p><div class="example">
-<pre class="example">:maxlevel    <span class="roman">Maximum level depth to which times are listed in the table.</span>
-             <span class="roman">Clocks at deeper levels will be summed into the upper level.</span>
-:scope       <span class="roman">The scope to consider.  This can be any of the following:</span>
-             nil        <span class="roman">the current buffer or narrowed region</span>
-             file       <span class="roman">the full current buffer</span>
-             subtree    <span class="roman">the subtree where the clocktable is located</span>
-             tree<var>N</var>      <span class="roman">the surrounding level <var>N</var> tree, for example <code>tree3</code></span>
-             tree       <span class="roman">the surrounding level 1 tree</span>
+</pre>
+  </div><a name="index-org_002dclocktable_002ddefaults" id=
+  "index-org_002dclocktable_002ddefaults"></a>
+
+  <p>The &lsquo;<samp>BEGIN</samp>&rsquo; line and specify a number
+  of options to define the scope, structure, and formatting of the
+  report. Defaults for all these options can be configured in the
+  variable <code>org-clocktable-defaults</code>.</p>
+
+  <p>First there are options that determine which clock entries are
+  to be selected:</p>
+
+  <div class="example">
+    <pre class="example">
+:maxlevel    <span class=
+"roman">Maximum level depth to which times are listed in the table.</span>
+             <span class=
+"roman">Clocks at deeper levels will be summed into the upper level.</span>
+:scope       <span class=
+"roman">The scope to consider.  This can be any of the following:</span>
+             nil        <span class=
+"roman">the current buffer or narrowed region</span>
+             file       <span class=
+"roman">the full current buffer</span>
+             subtree    <span class=
+"roman">the subtree where the clocktable is located</span>
+             tree<var>N</var>      <span class=
+"roman">the surrounding level <var>N</var> tree, for example <code>tree3</code></span>
+             tree       <span class=
+"roman">the surrounding level 1 tree</span>
              agenda     <span class="roman">all agenda files</span>
-             (&quot;file&quot;..) <span class="roman">scan these files</span>
-             file-with-archives    <span class="roman">current file and its archives</span>
-             agenda-with-archives  <span class="roman">all agenda files, including archives</span>
-:block       <span class="roman">The time block to consider.  This block is specified either</span>
-             <span class="roman">absolute, or relative to the current time and may be any of</span>
+             ("file"..) <span class="roman">scan these files</span>
+             file-with-archives    <span class=
+"roman">current file and its archives</span>
+             agenda-with-archives  <span class=
+"roman">all agenda files, including archives</span>
+:block       <span class=
+"roman">The time block to consider.  This block is specified either</span>
+             <span class=
+"roman">absolute, or relative to the current time and may be any of</span>
              <span class="roman">these formats:</span>
-             2007-12-31    <span class="roman">New year eve 2007</span>
+             2007-12-31    <span class=
+"roman">New year eve 2007</span>
              2007-12       <span class="roman">December 2007</span>
-             2007-W50      <span class="roman">ISO-week 50 in 2007</span>
-             2007-Q2       <span class="roman">2nd quarter in 2007</span>
+             2007-W50      <span class=
+"roman">ISO-week 50 in 2007</span>
+             2007-Q2       <span class=
+"roman">2nd quarter in 2007</span>
              2007          <span class="roman">the year 2007</span>
              today, yesterday, today-<var>N</var>          <span class="roman">a relative day</span>
              thisweek, lastweek, thisweek-<var>N</var>     <span class="roman">a relative week</span>
              thismonth, lastmonth, thismonth-<var>N</var>  <span class="roman">a relative month</span>
              thisyear, lastyear, thisyear-<var>N</var>     <span class="roman">a relative year</span>
-             <span class="roman">Use <kbd>S-<span class="key">left</span>/<span class="key">right</span></kbd> keys to shift the time interval.</span>
-:tstart      <span class="roman">A time string specifying when to start considering times.</span>
-             <span class="roman">Relative times like <code>&quot;&lt;-2w&gt;&quot;</code> can also be used.  See</span>
-             <span class="roman"><a href="Matching-tags-and-properties.html#Matching-tags-and-properties">Matching tags and properties</a> for relative time syntax.</span>
-:tend        <span class="roman">A time string specifying when to stop considering times.</span>
-             <span class="roman">Relative times like <code>&quot;&lt;now&gt;&quot;</code> can also be used.  See</span>
-             <span class="roman"><a href="Matching-tags-and-properties.html#Matching-tags-and-properties">Matching tags and properties</a> for relative time syntax.</span>
-:wstart      <span class="roman">The starting day of the week.  The default is 1 for monday.</span>
-:mstart      <span class="roman">The starting day of the month.  The default 1 is for the first</span>
+             <span class="roman">Use <kbd>S-<span class=
+"key">left</span>/<span class=
+"key">right</span></kbd> keys to shift the time interval.</span>
+:tstart      <span class=
+"roman">A time string specifying when to start considering times.</span>
+             <span class=
+"roman">Relative times like <code>"&lt;-2w&gt;"</code> can also be used.  See</span>
+             <span class="roman"><a href=
+"Matching-tags-and-properties.html#Matching-tags-and-properties">Matching tags and properties</a> for relative time syntax.</span>
+:tend        <span class=
+"roman">A time string specifying when to stop considering times.</span>
+             <span class=
+"roman">Relative times like <code>"&lt;now&gt;"</code> can also be used.  See</span>
+             <span class="roman"><a href=
+"Matching-tags-and-properties.html#Matching-tags-and-properties">Matching tags and properties</a> for relative time syntax.</span>
+:wstart      <span class=
+"roman">The starting day of the week.  The default is 1 for monday.</span>
+:mstart      <span class=
+"roman">The starting day of the month.  The default 1 is for the first</span>
              <span class="roman">day of the month.</span>
-:step        <span class="roman"><code>week</code> or <code>day</code>, to split the table into chunks.</span>
-             <span class="roman">To use this, <code>:block</code> or <code>:tstart</code>, <code>:tend</code> are needed.</span>
-:stepskip0   <span class="roman">Do not show steps that have zero time.</span>
-:fileskip0   <span class="roman">Do not show table sections from files which did not contribute.</span>
-:tags        <span class="roman">A tags match to select entries that should contribute.  See</span>
-             <span class="roman"><a href="Matching-tags-and-properties.html#Matching-tags-and-properties">Matching tags and properties</a> for the match syntax.</span>
-</pre></div>
+:step        <span class=
+"roman"><code>week</code> or <code>day</code>, to split the table into chunks.</span>
+             <span class=
+"roman">To use this, <code>:block</code> or <code>:tstart</code>, <code>:tend</code> are needed.</span>
+:stepskip0   <span class=
+"roman">Do not show steps that have zero time.</span>
+:fileskip0   <span class=
+"roman">Do not show table sections from files which did not contribute.</span>
+:tags        <span class=
+"roman">A tags match to select entries that should contribute.  See</span>
+             <span class="roman"><a href=
+"Matching-tags-and-properties.html#Matching-tags-and-properties">Matching tags and properties</a> for the match syntax.</span>
+</pre>
+  </div>
 
-<p>Then there are options which determine the formatting of the table.  There
-options are interpreted by the function <code>org-clocktable-write-default</code>,
-but you can specify your own function using the <code>:formatter</code> parameter.
-</p><div class="example">
-<pre class="example">:emphasize   <span class="roman">When <code>t</code>, emphasize level one and level two items.</span>
-:lang        <span class="roman">Language<a name="DOCF85" href="#FOOT85">(85)</a> to use for descriptive cells like &quot;Task&quot;.</span>
-:link        <span class="roman">Link the item headlines in the table to their origins.</span>
-:narrow      <span class="roman">An integer to limit the width of the headline column in</span>
-             <span class="roman">the org table.  If you write it like &lsquo;<samp>50!</samp>&rsquo;, then the</span>
-             <span class="roman">headline will also be shortened in export.</span>
-:indent      <span class="roman">Indent each headline field according to its level.</span>
-:tcolumns    <span class="roman">Number of columns to be used for times.  If this is smaller</span>
-             <span class="roman">than <code>:maxlevel</code>, lower levels will be lumped into one column.</span>
-:level       <span class="roman">Should a level number column be included?</span>
-:compact     <span class="roman">Abbreviation for <code>:level nil :indent t :narrow 40! :tcolumns 1</code></span>
-             <span class="roman">All are overwritten except if there is an explicit <code>:narrow</code></span>
-:timestamp   <span class="roman">A timestamp for the entry, when available.  Look for SCHEDULED,</span>
-             <span class="roman">DEADLINE, TIMESTAMP and TIMESTAMP_IA, in this order.</span>
-:properties  <span class="roman">List of properties that should be shown in the table.  Each</span>
-             <span class="roman">property will get its own column.</span>
-:inherit-props <span class="roman">When this flag is <code>t</code>, the values for <code>:properties</code> will be inherited.</span>
-:formula     <span class="roman">Content of a <code>#+TBLFM</code> line to be added and evaluated.</span>
-             <span class="roman">As a special case, &lsquo;<samp>:formula %</samp>&rsquo; adds a column with % time.</span>
-             <span class="roman">If you do not specify a formula here, any existing formula</span>
-             <span class="roman">below the clock table will survive updates and be evaluated.</span>
-:formatter   <span class="roman">A function to format clock data and insert it into the buffer.</span>
-</pre></div>
-<p>To get a clock summary of the current level 1 tree, for the current
-day, you could write
-</p><div class="example">
-<pre class="example">#+BEGIN: clocktable :maxlevel 2 :block today :scope tree1 :link t
+  <p>Then there are options which determine the formatting of the
+  table. There options are interpreted by the function
+  <code>org-clocktable-write-default</code>, but you can specify
+  your own function using the <code>:formatter</code>
+  parameter.</p>
+
+  <div class="example">
+    <pre class="example">
+:emphasize   <span class=
+"roman">When <code>t</code>, emphasize level one and level two items.</span>
+:lang        <span class="roman">Language<a name="DOCF85" href=
+"#FOOT85" id=
+"DOCF85">(85)</a> to use for descriptive cells like "Task".</span>
+:link        <span class=
+"roman">Link the item headlines in the table to their origins.</span>
+:narrow      <span class=
+"roman">An integer to limit the width of the headline column in</span>
+             <span class=
+"roman">the org table.  If you write it like &lsquo;<samp>50!</samp>&rsquo;, then the</span>
+             <span class=
+"roman">headline will also be shortened in export.</span>
+:indent      <span class=
+"roman">Indent each headline field according to its level.</span>
+:tcolumns    <span class=
+"roman">Number of columns to be used for times.  If this is smaller</span>
+             <span class=
+"roman">than <code>:maxlevel</code>, lower levels will be lumped into one column.</span>
+:level       <span class=
+"roman">Should a level number column be included?</span>
+:compact     <span class=
+"roman">Abbreviation for <code>:level nil :indent t :narrow 40! :tcolumns 1</code></span>
+             <span class=
+"roman">All are overwritten except if there is an explicit <code>:narrow</code></span>
+:timestamp   <span class=
+"roman">A timestamp for the entry, when available.  Look for SCHEDULED,</span>
+             <span class=
+"roman">DEADLINE, TIMESTAMP and TIMESTAMP_IA, in this order.</span>
+:properties  <span class=
+"roman">List of properties that should be shown in the table.  Each</span>
+             <span class=
+"roman">property will get its own column.</span>
+:inherit-props <span class=
+"roman">When this flag is <code>t</code>, the values for <code>:properties</code> will be inherited.</span>
+:formula     <span class=
+"roman">Content of a <code>#+TBLFM</code> line to be added and evaluated.</span>
+             <span class=
+"roman">As a special case, &lsquo;<samp>:formula %</samp>&rsquo; adds a column with % time.</span>
+             <span class=
+"roman">If you do not specify a formula here, any existing formula</span>
+             <span class=
+"roman">below the clock table will survive updates and be evaluated.</span>
+:formatter   <span class=
+"roman">A function to format clock data and insert it into the buffer.</span>
+</pre>
+  </div>
+
+  <p>To get a clock summary of the current level 1 tree, for the
+  current day, you could write</p>
+
+  <div class="example">
+    <pre class="example">
+#+BEGIN: clocktable :maxlevel 2 :block today :scope tree1 :link t
 #+END: clocktable
-</pre></div>
-<p>and to use a specific time range you could write<a name="DOCF86" href="#FOOT86"><sup>86</sup></a>
-</p><div class="example">
-<pre class="example">#+BEGIN: clocktable :tstart &quot;&lt;2006-08-10 Thu 10:00&gt;&quot;
-                    :tend &quot;&lt;2006-08-10 Thu 12:00&gt;&quot;
+</pre>
+  </div>
+
+  <p>and to use a specific time range you could write<a name=
+  "DOCF86" href="#FOOT86" id="DOCF86"><sup>86</sup></a></p>
+
+  <div class="example">
+    <pre class="example">
+#+BEGIN: clocktable :tstart "&lt;2006-08-10 Thu 10:00&gt;"
+                    :tend "&lt;2006-08-10 Thu 12:00&gt;"
 #+END: clocktable
-</pre></div>
-<p>A range starting a week ago and ending right now could be written as
-</p><div class="example">
-<pre class="example">#+BEGIN: clocktable :tstart &quot;&lt;-1w&gt;&quot; :tend &quot;&lt;now&gt;&quot;
+</pre>
+  </div>
+
+  <p>A range starting a week ago and ending right now could be
+  written as</p>
+
+  <div class="example">
+    <pre class="example">
+#+BEGIN: clocktable :tstart "&lt;-1w&gt;" :tend "&lt;now&gt;"
 #+END: clocktable
-</pre></div>
-<p>A summary of the current subtree with % times would be
-</p><div class="example">
-<pre class="example">#+BEGIN: clocktable :scope subtree :link t :formula %
+</pre>
+  </div>
+
+  <p>A summary of the current subtree with % times would be</p>
+
+  <div class="example">
+    <pre class="example">
+#+BEGIN: clocktable :scope subtree :link t :formula %
 #+END: clocktable
-</pre></div>
-<p>A horizontally compact representation of everything clocked during last week
-would be
-</p><div class="example">
-<pre class="example">#+BEGIN: clocktable :scope agenda :block lastweek :compact t
+</pre>
+  </div>
+
+  <p>A horizontally compact representation of everything clocked
+  during last week would be</p>
+
+  <div class="example">
+    <pre class="example">
+#+BEGIN: clocktable :scope agenda :block lastweek :compact t
 #+END: clocktable
-</pre></div>
+</pre>
+  </div>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <div class="footnote">
+    <hr />
 
-<h3><a name="FOOT85" href="#DOCF85">(85)</a></h3>
-<p>Language terms can be set through the variable <code>org-clock-clocktable-language-setup</code>.</p>
-<h3><a name="FOOT86" href="#DOCF86">(86)</a></h3>
-<p>Note that all
-parameters must be specified in a single line&mdash;the line is broken here
-only to fit it into the manual.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Resolving-idle-time.html#Resolving-idle-time" accesskey="n" rel="next">Resolving idle time</a>, Previous: <a href="Clocking-commands.html#Clocking-commands" accesskey="p" rel="prev">Clocking commands</a>, Up: <a href="Clocking-work-time.html#Clocking-work-time" accesskey="u" rel="up">Clocking work time</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT85" href="#DOCF85" id="FOOT85">(85)</a></h3>
 
+    <p>Language terms can be set through the variable
+    <code>org-clock-clocktable-language-setup</code>.</p>
 
+    <h3><a name="FOOT86" href="#DOCF86" id="FOOT86">(86)</a></h3>
+
+    <p>Note that all parameters must be specified in a single
+    line&mdash;the line is broken here only to fit it into the
+    manual.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Resolving-idle-time.html#Resolving-idle-time"
+    accesskey="n" rel="next">Resolving idle time</a>, Previous:
+    <a href="Clocking-commands.html#Clocking-commands" accesskey=
+    "p" rel="prev">Clocking commands</a>, Up: <a href=
+    "Clocking-work-time.html#Clocking-work-time" accesskey="u" rel=
+    "up">Clocking work time</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

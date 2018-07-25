@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,214 +14,302 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Selecting a Group</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Selecting a Group">
-<meta name="keywords" content="Gnus Manual: Selecting a Group">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Group-Buffer.html#Group-Buffer" rel="up" title="Group Buffer">
-<link href="Subscription-Commands.html#Subscription-Commands" rel="next" title="Subscription Commands">
-<link href="Group-Maneuvering.html#Group-Maneuvering" rel="prev" title="Group Maneuvering">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Selecting a Group</title>
+  <meta name="description" content=
+  "Gnus Manual: Selecting a Group" />
+  <meta name="keywords" content="Gnus Manual: Selecting a Group" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Group-Buffer.html#Group-Buffer" rel="up" title=
+  "Group Buffer" />
+  <link href="Subscription-Commands.html#Subscription-Commands"
+  rel="next" title="Subscription Commands" />
+  <link href="Group-Maneuvering.html#Group-Maneuvering" rel="prev"
+  title="Group Maneuvering" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Selecting-a-Group"></a>
-<div class="header">
-<p>
-Next: <a href="Subscription-Commands.html#Subscription-Commands" accesskey="n" rel="next">Subscription Commands</a>, Previous: <a href="Group-Maneuvering.html#Group-Maneuvering" accesskey="p" rel="prev">Group Maneuvering</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Selecting-a-Group-1"></a>
-<h3 class="section">2.3 Selecting a Group</h3>
-<a name="index-group-selection"></a>
+<body lang="en" xml:lang="en">
+  <a name="Selecting-a-Group" id="Selecting-a-Group"></a>
 
-<dl compact="compact">
-<dt><kbd>SPACE</kbd></dt>
-<dd><a name="index-SPACE-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dread_002dgroup"></a>
-<p>Select the current group, switch to the summary buffer and display the
-first unread article (<code>gnus-group-read-group</code>).  If there are no
-unread articles in the group, or if you give a non-numerical prefix to
-this command, Gnus will offer to fetch all the old articles in this
-group from the server.  If you give a numerical prefix <var>n</var>, <var>n</var>
-determines the number of articles Gnus will fetch.  If <var>n</var> is
-positive, Gnus fetches the <var>n</var> newest articles, if <var>n</var> is
-negative, Gnus fetches the <code>abs(<var>n</var>)</code> oldest articles.
-</p>
-<p>Thus, <kbd>SPC</kbd> enters the group normally, <kbd>C-u SPC</kbd> offers old
-articles, <kbd>C-u 4 2 SPC</kbd> fetches the 42 newest articles, and <kbd>C-u
-- 4 2 SPC</kbd> fetches the 42 oldest ones.
-</p>
-<p>When you are in the group (in the Summary buffer), you can type
-<kbd>M-g</kbd> to fetch new articles, or <kbd>C-u M-g</kbd> to also show the old
-ones.
-</p>
-</dd>
-<dt><kbd>RET</kbd></dt>
-<dd><a name="index-RET-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dselect_002dgroup"></a>
-<p>Select the current group and switch to the summary buffer
-(<code>gnus-group-select-group</code>).  Takes the same arguments as
-<code>gnus-group-read-group</code>&mdash;the only difference is that this command
-does not display the first unread article automatically upon group
-entry.
-</p>
-</dd>
-<dt><kbd>M-RET</kbd></dt>
-<dd><a name="index-M_002dRET-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dquick_002dselect_002dgroup"></a>
-<p>This does the same as the command above, but tries to do it with the
-minimum amount of fuzz (<code>gnus-group-quick-select-group</code>).  No
-scoring/killing will be performed, there will be no highlights and no
-expunging.  This might be useful if you&rsquo;re in a real hurry and have to
-enter some humongous group.  If you give a 0 prefix to this command
-(i.e., <kbd>0 M-RET</kbd>), Gnus won&rsquo;t even generate the summary buffer,
-which is useful if you want to toggle threading before generating the
-summary buffer (see <a href="Summary-Generation-Commands.html#Summary-Generation-Commands">Summary Generation Commands</a>).
-</p>
-</dd>
-<dt><kbd>M-SPACE</kbd></dt>
-<dd><a name="index-M_002dSPACE-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dvisible_002dselect_002dgroup"></a>
-<p>This is yet one more command that does the same as the <kbd>RET</kbd>
-command, but this one does it without expunging and hiding dormants
-(<code>gnus-group-visible-select-group</code>).
-</p>
-</dd>
-<dt><kbd>C-M-RET</kbd></dt>
-<dd><a name="index-C_002dM_002dRET-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dselect_002dgroup_002dephemerally"></a>
-<p>Finally, this command selects the current group ephemerally without
-doing any processing of its contents
-(<code>gnus-group-select-group-ephemerally</code>).  Even threading has been
-turned off.  Everything you do in the group after selecting it in this
-manner will have no permanent effects.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Subscription-Commands.html#Subscription-Commands" accesskey=
+    "n" rel="next">Subscription Commands</a>, Previous: <a href=
+    "Group-Maneuvering.html#Group-Maneuvering" accesskey="p" rel=
+    "prev">Group Maneuvering</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Selecting-a-Group-1" id="Selecting-a-Group-1"></a>
 
-<a name="index-gnus_002dlarge_002dnewsgroup"></a>
-<p>The <code>gnus-large-newsgroup</code> variable says what Gnus should
-consider to be a big group.  If it is <code>nil</code>, no groups are
-considered big.  The default value is 200.  If the group has more
-(unread and/or ticked) articles than this, Gnus will query the user
-before entering the group.  The user can then specify how many
-articles should be fetched from the server.  If the user specifies a
-negative number (<var>-n</var>), the <var>n</var> oldest articles will be
-fetched.  If it is positive, the <var>n</var> articles that have arrived
-most recently will be fetched.
-</p>
-<a name="index-gnus_002dlarge_002dephemeral_002dnewsgroup"></a>
-<p><code>gnus-large-ephemeral-newsgroup</code> is the same as
-<code>gnus-large-newsgroup</code>, but is only used for ephemeral
-newsgroups.
-</p>
-<a name="index-gnus_002dnewsgroup_002dmaximum_002darticles"></a>
-<p>In groups in some news servers, there might be a big gap between a few
-very old articles that will never be expired and the recent ones.  In
-such a case, the server will return the data like <code>(1 . 30000000)</code>
-for the <code>LIST ACTIVE group</code> command, for example.  Even if there
-are actually only the articles 1&ndash;10 and 29999900&ndash;30000000, Gnus doesn&rsquo;t
-know it at first and prepares for getting 30000000 articles.  However,
-it will consume hundreds megabytes of memories and might make Emacs get
-stuck as the case may be.  If you use such news servers, set the
-variable <code>gnus-newsgroup-maximum-articles</code> to a positive number.
-The value means that Gnus ignores articles other than this number of the
-latest ones in every group.  For instance, the value 10000 makes Gnus
-get only the articles 29990001&ndash;30000000 (if the latest article number is
-30000000 in a group).  Note that setting this variable to a number might
-prevent you from reading very old articles.  The default value of the
-variable <code>gnus-newsgroup-maximum-articles</code> is <code>nil</code>, which
-means Gnus never ignores old articles.
-</p>
-<a name="index-gnus_002dselect_002dgroup_002dhook"></a>
-<a name="index-gnus_002dauto_002dselect_002dfirst"></a>
-<a name="index-gnus_002dauto_002dselect_002dsubject"></a>
-<p>If <code>gnus-auto-select-first</code> is non-<code>nil</code>, select an article
-automatically when entering a group with the <kbd>SPACE</kbd> command.
-Which article this is controlled by the
-<code>gnus-auto-select-subject</code> variable.  Valid values for this
-variable are:
-</p>
-<dl compact="compact">
-<dt><code>unread</code></dt>
-<dd><p>Place point on the subject line of the first unread article.
-</p>
-</dd>
-<dt><code>first</code></dt>
-<dd><p>Place point on the subject line of the first article.
-</p>
-</dd>
-<dt><code>unseen</code></dt>
-<dd><p>Place point on the subject line of the first unseen article.
-</p>
-</dd>
-<dt><code>unseen-or-unread</code></dt>
-<dd><p>Place point on the subject line of the first unseen article, and if
-there is no such article, place point on the subject line of the first
-unread article.
-</p>
-</dd>
-<dt><code>best</code></dt>
-<dd><p>Place point on the subject line of the highest-scored unread article.
-</p>
-</dd>
-</dl>
+  <h3 class="section">2.3 Selecting a Group</h3><a name=
+  "index-group-selection" id="index-group-selection"></a>
 
-<p>This variable can also be a function.  In that case, that function
-will be called to place point on a subject line.
-</p>
-<p>If you want to prevent automatic selection in some group (say, in a
-binary group with Huge articles) you can set the
-<code>gnus-auto-select-first</code> variable to <code>nil</code> in
-<code>gnus-select-group-hook</code>, which is called when a group is
-selected.
-</p>
+  <dl compact="compact">
+    <dt><kbd>SPACE</kbd></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Subscription-Commands.html#Subscription-Commands" accesskey="n" rel="next">Subscription Commands</a>, Previous: <a href="Group-Maneuvering.html#Group-Maneuvering" accesskey="p" rel="prev">Group Maneuvering</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <a name="index-SPACE-_0028Group_0029" id=
+      "index-SPACE-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dread_002dgroup" id=
+      "index-gnus_002dgroup_002dread_002dgroup"></a>
 
+      <p>Select the current group, switch to the summary buffer and
+      display the first unread article
+      (<code>gnus-group-read-group</code>). If there are no unread
+      articles in the group, or if you give a non-numerical prefix
+      to this command, Gnus will offer to fetch all the old
+      articles in this group from the server. If you give a
+      numerical prefix <var>n</var>, <var>n</var> determines the
+      number of articles Gnus will fetch. If <var>n</var> is
+      positive, Gnus fetches the <var>n</var> newest articles, if
+      <var>n</var> is negative, Gnus fetches the
+      <code>abs(<var>n</var>)</code> oldest articles.</p>
 
+      <p>Thus, <kbd>SPC</kbd> enters the group normally, <kbd>C-u
+      SPC</kbd> offers old articles, <kbd>C-u 4 2 SPC</kbd> fetches
+      the 42 newest articles, and <kbd>C-u - 4 2 SPC</kbd> fetches
+      the 42 oldest ones.</p>
 
+      <p>When you are in the group (in the Summary buffer), you can
+      type <kbd>M-g</kbd> to fetch new articles, or <kbd>C-u
+      M-g</kbd> to also show the old ones.</p>
+    </dd>
+
+    <dt><kbd>RET</kbd></dt>
+
+    <dd>
+      <a name="index-RET-_0028Group_0029" id=
+      "index-RET-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dselect_002dgroup" id=
+      "index-gnus_002dgroup_002dselect_002dgroup"></a>
+
+      <p>Select the current group and switch to the summary buffer
+      (<code>gnus-group-select-group</code>). Takes the same
+      arguments as <code>gnus-group-read-group</code>&mdash;the
+      only difference is that this command does not display the
+      first unread article automatically upon group entry.</p>
+    </dd>
+
+    <dt><kbd>M-RET</kbd></dt>
+
+    <dd>
+      <a name="index-M_002dRET-_0028Group_0029" id=
+      "index-M_002dRET-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dquick_002dselect_002dgroup" id=
+      "index-gnus_002dgroup_002dquick_002dselect_002dgroup"></a>
+
+      <p>This does the same as the command above, but tries to do
+      it with the minimum amount of fuzz
+      (<code>gnus-group-quick-select-group</code>). No
+      scoring/killing will be performed, there will be no
+      highlights and no expunging. This might be useful if
+      you&rsquo;re in a real hurry and have to enter some humongous
+      group. If you give a 0 prefix to this command (i.e., <kbd>0
+      M-RET</kbd>), Gnus won&rsquo;t even generate the summary
+      buffer, which is useful if you want to toggle threading
+      before generating the summary buffer (see <a href=
+      "Summary-Generation-Commands.html#Summary-Generation-Commands">
+      Summary Generation Commands</a>).</p>
+    </dd>
+
+    <dt><kbd>M-SPACE</kbd></dt>
+
+    <dd>
+      <a name="index-M_002dSPACE-_0028Group_0029" id=
+      "index-M_002dSPACE-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dvisible_002dselect_002dgroup" id=
+      "index-gnus_002dgroup_002dvisible_002dselect_002dgroup"></a>
+
+      <p>This is yet one more command that does the same as the
+      <kbd>RET</kbd> command, but this one does it without
+      expunging and hiding dormants
+      (<code>gnus-group-visible-select-group</code>).</p>
+    </dd>
+
+    <dt><kbd>C-M-RET</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dM_002dRET-_0028Group_0029" id=
+      "index-C_002dM_002dRET-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dselect_002dgroup_002dephemerally"
+      id=
+      "index-gnus_002dgroup_002dselect_002dgroup_002dephemerally"></a>
+
+      <p>Finally, this command selects the current group
+      ephemerally without doing any processing of its contents
+      (<code>gnus-group-select-group-ephemerally</code>). Even
+      threading has been turned off. Everything you do in the group
+      after selecting it in this manner will have no permanent
+      effects.</p>
+    </dd>
+  </dl><a name="index-gnus_002dlarge_002dnewsgroup" id=
+  "index-gnus_002dlarge_002dnewsgroup"></a>
+
+  <p>The <code>gnus-large-newsgroup</code> variable says what Gnus
+  should consider to be a big group. If it is <code>nil</code>, no
+  groups are considered big. The default value is 200. If the group
+  has more (unread and/or ticked) articles than this, Gnus will
+  query the user before entering the group. The user can then
+  specify how many articles should be fetched from the server. If
+  the user specifies a negative number (<var>-n</var>), the
+  <var>n</var> oldest articles will be fetched. If it is positive,
+  the <var>n</var> articles that have arrived most recently will be
+  fetched.</p><a name=
+  "index-gnus_002dlarge_002dephemeral_002dnewsgroup" id=
+  "index-gnus_002dlarge_002dephemeral_002dnewsgroup"></a>
+
+  <p><code>gnus-large-ephemeral-newsgroup</code> is the same as
+  <code>gnus-large-newsgroup</code>, but is only used for ephemeral
+  newsgroups.</p><a name=
+  "index-gnus_002dnewsgroup_002dmaximum_002darticles" id=
+  "index-gnus_002dnewsgroup_002dmaximum_002darticles"></a>
+
+  <p>In groups in some news servers, there might be a big gap
+  between a few very old articles that will never be expired and
+  the recent ones. In such a case, the server will return the data
+  like <code>(1 . 30000000)</code> for the <code>LIST ACTIVE
+  group</code> command, for example. Even if there are actually
+  only the articles 1&ndash;10 and 29999900&ndash;30000000, Gnus
+  doesn&rsquo;t know it at first and prepares for getting 30000000
+  articles. However, it will consume hundreds megabytes of memories
+  and might make Emacs get stuck as the case may be. If you use
+  such news servers, set the variable
+  <code>gnus-newsgroup-maximum-articles</code> to a positive
+  number. The value means that Gnus ignores articles other than
+  this number of the latest ones in every group. For instance, the
+  value 10000 makes Gnus get only the articles
+  29990001&ndash;30000000 (if the latest article number is 30000000
+  in a group). Note that setting this variable to a number might
+  prevent you from reading very old articles. The default value of
+  the variable <code>gnus-newsgroup-maximum-articles</code> is
+  <code>nil</code>, which means Gnus never ignores old
+  articles.</p><a name="index-gnus_002dselect_002dgroup_002dhook"
+  id="index-gnus_002dselect_002dgroup_002dhook"></a> <a name=
+  "index-gnus_002dauto_002dselect_002dfirst" id=
+  "index-gnus_002dauto_002dselect_002dfirst"></a> <a name=
+  "index-gnus_002dauto_002dselect_002dsubject" id=
+  "index-gnus_002dauto_002dselect_002dsubject"></a>
+
+  <p>If <code>gnus-auto-select-first</code> is
+  non-<code>nil</code>, select an article automatically when
+  entering a group with the <kbd>SPACE</kbd> command. Which article
+  this is controlled by the <code>gnus-auto-select-subject</code>
+  variable. Valid values for this variable are:</p>
+
+  <dl compact="compact">
+    <dt><code>unread</code></dt>
+
+    <dd>
+      <p>Place point on the subject line of the first unread
+      article.</p>
+    </dd>
+
+    <dt><code>first</code></dt>
+
+    <dd>
+      <p>Place point on the subject line of the first article.</p>
+    </dd>
+
+    <dt><code>unseen</code></dt>
+
+    <dd>
+      <p>Place point on the subject line of the first unseen
+      article.</p>
+    </dd>
+
+    <dt><code>unseen-or-unread</code></dt>
+
+    <dd>
+      <p>Place point on the subject line of the first unseen
+      article, and if there is no such article, place point on the
+      subject line of the first unread article.</p>
+    </dd>
+
+    <dt><code>best</code></dt>
+
+    <dd>
+      <p>Place point on the subject line of the highest-scored
+      unread article.</p>
+    </dd>
+  </dl>
+
+  <p>This variable can also be a function. In that case, that
+  function will be called to place point on a subject line.</p>
+
+  <p>If you want to prevent automatic selection in some group (say,
+  in a binary group with Huge articles) you can set the
+  <code>gnus-auto-select-first</code> variable to <code>nil</code>
+  in <code>gnus-select-group-hook</code>, which is called when a
+  group is selected.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Subscription-Commands.html#Subscription-Commands" accesskey=
+    "n" rel="next">Subscription Commands</a>, Previous: <a href=
+    "Group-Maneuvering.html#Group-Maneuvering" accesskey="p" rel=
+    "prev">Group Maneuvering</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

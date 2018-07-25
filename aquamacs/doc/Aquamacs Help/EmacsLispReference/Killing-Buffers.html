@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,181 +19,271 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Killing Buffers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Killing Buffers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Killing Buffers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffers.html#Buffers" rel="up" title="Buffers">
-<link href="Indirect-Buffers.html#Indirect-Buffers" rel="next" title="Indirect Buffers">
-<link href="Creating-Buffers.html#Creating-Buffers" rel="prev" title="Creating Buffers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Killing Buffers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Killing Buffers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Killing Buffers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffers.html#Buffers" rel="up" title="Buffers" />
+  <link href="Indirect-Buffers.html#Indirect-Buffers" rel="next"
+  title="Indirect Buffers" />
+  <link href="Creating-Buffers.html#Creating-Buffers" rel="prev"
+  title="Creating Buffers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Killing-Buffers" id="Killing-Buffers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Indirect-Buffers.html#Indirect-Buffers"
+    accesskey="n" rel="next">Indirect Buffers</a>, Previous:
+    <a href="Creating-Buffers.html#Creating-Buffers" accesskey="p"
+    rel="prev">Creating Buffers</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Killing-Buffers-1" id="Killing-Buffers-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Killing-Buffers"></a>
-<div class="header">
-<p>
-Next: <a href="Indirect-Buffers.html#Indirect-Buffers" accesskey="n" rel="next">Indirect Buffers</a>, Previous: <a href="Creating-Buffers.html#Creating-Buffers" accesskey="p" rel="prev">Creating Buffers</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Killing-Buffers-1"></a>
-<h3 class="section">26.10 Killing Buffers</h3>
-<a name="index-killing-buffers"></a>
-<a name="index-buffers_002c-killing"></a>
+  <h3 class="section">26.10 Killing Buffers</h3><a name=
+  "index-killing-buffers" id="index-killing-buffers"></a> <a name=
+  "index-buffers_002c-killing" id="index-buffers_002c-killing"></a>
 
-<p><em>Killing a buffer</em> makes its name unknown to Emacs and makes the
-memory space it occupied available for other use.
-</p>
-<p>The buffer object for the buffer that has been killed remains in
-existence as long as anything refers to it, but it is specially marked
-so that you cannot make it current or display it.  Killed buffers retain
-their identity, however; if you kill two distinct buffers, they remain
-distinct according to <code>eq</code> although both are dead.
-</p>
-<p>If you kill a buffer that is current or displayed in a window, Emacs
-automatically selects or displays some other buffer instead.  This
-means that killing a buffer can change the current buffer.  Therefore,
-when you kill a buffer, you should also take the precautions
-associated with changing the current buffer (unless you happen to know
-that the buffer being killed isn&rsquo;t current).  See <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>.
-</p>
-<p>If you kill a buffer that is the base buffer of one or more indirect
-buffers (see <a href="Indirect-Buffers.html#Indirect-Buffers">Indirect Buffers</a>),
-the indirect buffers are automatically killed as well.
-</p>
-<a name="index-live-buffer"></a>
-<p>The <code>buffer-name</code> of a buffer is <code>nil</code> if, and only if,
-the buffer is killed.  A buffer that has not been killed is called a
-<em>live</em> buffer.  To test whether a buffer is live or killed, use
-the function <code>buffer-live-p</code> (see below).
-</p>
-<dl>
-<dt><a name="index-kill_002dbuffer"></a>Command: <strong>kill-buffer</strong> <em>&amp;optional buffer-or-name</em></dt>
-<dd><p>This function kills the buffer <var>buffer-or-name</var>, freeing all its
-memory for other uses or to be returned to the operating system.  If
-<var>buffer-or-name</var> is <code>nil</code> or omitted, it kills the current
-buffer.
-</p>
-<p>Any processes that have this buffer as the <code>process-buffer</code> are
-sent the <code>SIGHUP</code> (hangup) signal, which normally causes them
-to terminate.  See <a href="Signals-to-Processes.html#Signals-to-Processes">Signals to Processes</a>.
-</p>
-<p>If the buffer is visiting a file and contains unsaved changes,
-<code>kill-buffer</code> asks the user to confirm before the buffer is killed.
-It does this even if not called interactively.  To prevent the request
-for confirmation, clear the modified flag before calling
-<code>kill-buffer</code>.  See <a href="Buffer-Modification.html#Buffer-Modification">Buffer Modification</a>.
-</p>
-<p>This function calls <code>replace-buffer-in-windows</code> for cleaning up
-all windows currently displaying the buffer to be killed.
-</p>
-<p>Killing a buffer that is already dead has no effect.
-</p>
-<p>This function returns <code>t</code> if it actually killed the buffer.  It
-returns <code>nil</code> if the user refuses to confirm or if
-<var>buffer-or-name</var> was already dead.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(kill-buffer &quot;foo.unchanged&quot;)
+  <p><em>Killing a buffer</em> makes its name unknown to Emacs and
+  makes the memory space it occupied available for other use.</p>
+
+  <p>The buffer object for the buffer that has been killed remains
+  in existence as long as anything refers to it, but it is
+  specially marked so that you cannot make it current or display
+  it. Killed buffers retain their identity, however; if you kill
+  two distinct buffers, they remain distinct according to
+  <code>eq</code> although both are dead.</p>
+
+  <p>If you kill a buffer that is current or displayed in a window,
+  Emacs automatically selects or displays some other buffer
+  instead. This means that killing a buffer can change the current
+  buffer. Therefore, when you kill a buffer, you should also take
+  the precautions associated with changing the current buffer
+  (unless you happen to know that the buffer being killed
+  isn&rsquo;t current). See <a href=
+  "Current-Buffer.html#Current-Buffer">Current Buffer</a>.</p>
+
+  <p>If you kill a buffer that is the base buffer of one or more
+  indirect buffers (see <a href=
+  "Indirect-Buffers.html#Indirect-Buffers">Indirect Buffers</a>),
+  the indirect buffers are automatically killed as
+  well.</p><a name="index-live-buffer" id="index-live-buffer"></a>
+
+  <p>The <code>buffer-name</code> of a buffer is <code>nil</code>
+  if, and only if, the buffer is killed. A buffer that has not been
+  killed is called a <em>live</em> buffer. To test whether a buffer
+  is live or killed, use the function <code>buffer-live-p</code>
+  (see below).</p>
+
+  <dl>
+    <dt><a name="index-kill_002dbuffer" id=
+    "index-kill_002dbuffer"></a>Command:
+    <strong>kill-buffer</strong> <em>&amp;optional
+    buffer-or-name</em></dt>
+
+    <dd>
+      <p>This function kills the buffer <var>buffer-or-name</var>,
+      freeing all its memory for other uses or to be returned to
+      the operating system. If <var>buffer-or-name</var> is
+      <code>nil</code> or omitted, it kills the current buffer.</p>
+
+      <p>Any processes that have this buffer as the
+      <code>process-buffer</code> are sent the <code>SIGHUP</code>
+      (hangup) signal, which normally causes them to terminate. See
+      <a href=
+      "Signals-to-Processes.html#Signals-to-Processes">Signals to
+      Processes</a>.</p>
+
+      <p>If the buffer is visiting a file and contains unsaved
+      changes, <code>kill-buffer</code> asks the user to confirm
+      before the buffer is killed. It does this even if not called
+      interactively. To prevent the request for confirmation, clear
+      the modified flag before calling <code>kill-buffer</code>.
+      See <a href=
+      "Buffer-Modification.html#Buffer-Modification">Buffer
+      Modification</a>.</p>
+
+      <p>This function calls <code>replace-buffer-in-windows</code>
+      for cleaning up all windows currently displaying the buffer
+      to be killed.</p>
+
+      <p>Killing a buffer that is already dead has no effect.</p>
+
+      <p>This function returns <code>t</code> if it actually killed
+      the buffer. It returns <code>nil</code> if the user refuses
+      to confirm or if <var>buffer-or-name</var> was already
+      dead.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(kill-buffer "foo.unchanged")
      &rArr; t
-(kill-buffer &quot;foo.changed&quot;)
+(kill-buffer "foo.changed")
 
 ---------- Buffer: Minibuffer ----------
 Buffer foo.changed modified; kill anyway? (yes or no) <kbd>yes</kbd>
 ---------- Buffer: Minibuffer ----------
 
      &rArr; t
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-kill_002dbuffer_002dquery_002dfunctions"></a>Variable: <strong>kill-buffer-query-functions</strong></dt>
-<dd><p>Before confirming unsaved changes, <code>kill-buffer</code> calls the functions
-in the list <code>kill-buffer-query-functions</code>, in order of appearance,
-with no arguments.  The buffer being killed is the current buffer when
-they are called.  The idea of this feature is that these functions will
-ask for confirmation from the user.  If any of them returns <code>nil</code>,
-<code>kill-buffer</code> spares the buffer&rsquo;s life.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-kill_002dbuffer_002dquery_002dfunctions" id=
+    "index-kill_002dbuffer_002dquery_002dfunctions"></a>Variable:
+    <strong>kill-buffer-query-functions</strong></dt>
 
-<dl>
-<dt><a name="index-kill_002dbuffer_002dhook"></a>Variable: <strong>kill-buffer-hook</strong></dt>
-<dd><p>This is a normal hook run by <code>kill-buffer</code> after asking all the
-questions it is going to ask, just before actually killing the buffer.
-The buffer to be killed is current when the hook functions run.
-See <a href="Hooks.html#Hooks">Hooks</a>.  This variable is a permanent local, so its local binding
-is not cleared by changing major modes.
-</p></dd></dl>
+    <dd>
+      <p>Before confirming unsaved changes,
+      <code>kill-buffer</code> calls the functions in the list
+      <code>kill-buffer-query-functions</code>, in order of
+      appearance, with no arguments. The buffer being killed is the
+      current buffer when they are called. The idea of this feature
+      is that these functions will ask for confirmation from the
+      user. If any of them returns <code>nil</code>,
+      <code>kill-buffer</code> spares the buffer&rsquo;s life.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-buffer_002doffer_002dsave"></a>User Option: <strong>buffer-offer-save</strong></dt>
-<dd><p>This variable, if non-<code>nil</code> in a particular buffer, tells
-<code>save-buffers-kill-emacs</code> and <code>save-some-buffers</code> (if the
-second optional argument to that function is <code>t</code>) to offer to
-save that buffer, just as they offer to save file-visiting buffers.
-See <a href="Saving-Buffers.html#Definition-of-save_002dsome_002dbuffers">Definition of save-some-buffers</a>.  The variable
-<code>buffer-offer-save</code> automatically becomes buffer-local when set
-for any reason.  See <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-kill_002dbuffer_002dhook" id=
+    "index-kill_002dbuffer_002dhook"></a>Variable:
+    <strong>kill-buffer-hook</strong></dt>
 
-<dl>
-<dt><a name="index-buffer_002dsave_002dwithout_002dquery"></a>Variable: <strong>buffer-save-without-query</strong></dt>
-<dd><p>This variable, if non-<code>nil</code> in a particular buffer, tells
-<code>save-buffers-kill-emacs</code> and <code>save-some-buffers</code> to save
-this buffer (if it&rsquo;s modified) without asking the user.  The variable
-automatically becomes buffer-local when set for any reason.
-</p></dd></dl>
+    <dd>
+      <p>This is a normal hook run by <code>kill-buffer</code>
+      after asking all the questions it is going to ask, just
+      before actually killing the buffer. The buffer to be killed
+      is current when the hook functions run. See <a href=
+      "Hooks.html#Hooks">Hooks</a>. This variable is a permanent
+      local, so its local binding is not cleared by changing major
+      modes.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-buffer_002dlive_002dp"></a>Function: <strong>buffer-live-p</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a live buffer (a
-buffer which has not been killed), <code>nil</code> otherwise.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-buffer_002doffer_002dsave" id=
+    "index-buffer_002doffer_002dsave"></a>User Option:
+    <strong>buffer-offer-save</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Indirect-Buffers.html#Indirect-Buffers" accesskey="n" rel="next">Indirect Buffers</a>, Previous: <a href="Creating-Buffers.html#Creating-Buffers" accesskey="p" rel="prev">Creating Buffers</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This variable, if non-<code>nil</code> in a particular
+      buffer, tells <code>save-buffers-kill-emacs</code> and
+      <code>save-some-buffers</code> (if the second optional
+      argument to that function is <code>t</code>) to offer to save
+      that buffer, just as they offer to save file-visiting
+      buffers. See <a href=
+      "Saving-Buffers.html#Definition-of-save_002dsome_002dbuffers">
+      Definition of save-some-buffers</a>. The variable
+      <code>buffer-offer-save</code> automatically becomes
+      buffer-local when set for any reason. See <a href=
+      "Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local
+      Variables</a>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-buffer_002dsave_002dwithout_002dquery" id=
+    "index-buffer_002dsave_002dwithout_002dquery"></a>Variable:
+    <strong>buffer-save-without-query</strong></dt>
 
+    <dd>
+      <p>This variable, if non-<code>nil</code> in a particular
+      buffer, tells <code>save-buffers-kill-emacs</code> and
+      <code>save-some-buffers</code> to save this buffer (if
+      it&rsquo;s modified) without asking the user. The variable
+      automatically becomes buffer-local when set for any
+      reason.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-buffer_002dlive_002dp" id=
+    "index-buffer_002dlive_002dp"></a>Function:
+    <strong>buffer-live-p</strong> <em>object</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a live buffer (a buffer which has not been killed),
+      <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Indirect-Buffers.html#Indirect-Buffers"
+    accesskey="n" rel="next">Indirect Buffers</a>, Previous:
+    <a href="Creating-Buffers.html#Creating-Buffers" accesskey="p"
+    rel="prev">Creating Buffers</a>, Up: <a href=
+    "Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

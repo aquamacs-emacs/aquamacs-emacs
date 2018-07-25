@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,293 +19,498 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Attribute Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Attribute Functions">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Attribute Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Faces.html#Faces" rel="up" title="Faces">
-<link href="Displaying-Faces.html#Displaying-Faces" rel="next" title="Displaying Faces">
-<link href="Defining-Faces.html#Defining-Faces" rel="prev" title="Defining Faces">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Attribute
+  Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Attribute Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Attribute Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Faces.html#Faces" rel="up" title="Faces" />
+  <link href="Displaying-Faces.html#Displaying-Faces" rel="next"
+  title="Displaying Faces" />
+  <link href="Defining-Faces.html#Defining-Faces" rel="prev" title=
+  "Defining Faces" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Attribute-Functions" id="Attribute-Functions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Displaying-Faces.html#Displaying-Faces"
+    accesskey="n" rel="next">Displaying Faces</a>, Previous:
+    <a href="Defining-Faces.html#Defining-Faces" accesskey="p" rel=
+    "prev">Defining Faces</a>, Up: <a href="Faces.html#Faces"
+    accesskey="u" rel="up">Faces</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Face-Attribute-Functions" id=
+  "Face-Attribute-Functions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Attribute-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Displaying-Faces.html#Displaying-Faces" accesskey="n" rel="next">Displaying Faces</a>, Previous: <a href="Defining-Faces.html#Defining-Faces" accesskey="p" rel="prev">Defining Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Face-Attribute-Functions"></a>
-<h4 class="subsection">37.12.3 Face Attribute Functions</h4>
-<a name="index-face-attributes_002c-access-and-modification"></a>
+  <h4 class="subsection">37.12.3 Face Attribute
+  Functions</h4><a name=
+  "index-face-attributes_002c-access-and-modification" id=
+  "index-face-attributes_002c-access-and-modification"></a>
 
-<p>This section describes functions for directly accessing and
-modifying the attributes of a named face.
-</p>
-<dl>
-<dt><a name="index-face_002dattribute"></a>Function: <strong>face-attribute</strong> <em>face attribute &amp;optional frame inherit</em></dt>
-<dd><p>This function returns the value of the <var>attribute</var> attribute for
-<var>face</var> on <var>frame</var>.
-</p>
-<p>If <var>frame</var> is <code>nil</code>, that means the selected frame
-(see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).  If <var>frame</var> is <code>t</code>, this function
-returns the value of the specified attribute for newly-created frames
-(this is normally <code>unspecified</code>, unless you have specified some
-value using <code>set-face-attribute</code>; see below).
-</p>
-<p>If <var>inherit</var> is <code>nil</code>, only attributes directly defined by
-<var>face</var> are considered, so the return value may be
-<code>unspecified</code>, or a relative value.  If <var>inherit</var> is
-non-<code>nil</code>, <var>face</var>&rsquo;s definition of <var>attribute</var> is merged
-with the faces specified by its <code>:inherit</code> attribute; however the
-return value may still be <code>unspecified</code> or relative.  If
-<var>inherit</var> is a face or a list of faces, then the result is further
-merged with that face (or faces), until it becomes specified and
-absolute.
-</p>
-<p>To ensure that the return value is always specified and absolute, use
-a value of <code>default</code> for <var>inherit</var>; this will resolve any
-unspecified or relative values by merging with the <code>default</code> face
-(which is always completely specified).
-</p>
-<p>For example,
-</p>
-<div class="example">
-<pre class="example">(face-attribute 'bold :weight)
+  <p>This section describes functions for directly accessing and
+  modifying the attributes of a named face.</p>
+
+  <dl>
+    <dt><a name="index-face_002dattribute" id=
+    "index-face_002dattribute"></a>Function:
+    <strong>face-attribute</strong> <em>face attribute
+    &amp;optional frame inherit</em></dt>
+
+    <dd>
+      <p>This function returns the value of the
+      <var>attribute</var> attribute for <var>face</var> on
+      <var>frame</var>.</p>
+
+      <p>If <var>frame</var> is <code>nil</code>, that means the
+      selected frame (see <a href=
+      "Input-Focus.html#Input-Focus">Input Focus</a>). If
+      <var>frame</var> is <code>t</code>, this function returns the
+      value of the specified attribute for newly-created frames
+      (this is normally <code>unspecified</code>, unless you have
+      specified some value using <code>set-face-attribute</code>;
+      see below).</p>
+
+      <p>If <var>inherit</var> is <code>nil</code>, only attributes
+      directly defined by <var>face</var> are considered, so the
+      return value may be <code>unspecified</code>, or a relative
+      value. If <var>inherit</var> is non-<code>nil</code>,
+      <var>face</var>&rsquo;s definition of <var>attribute</var> is
+      merged with the faces specified by its <code>:inherit</code>
+      attribute; however the return value may still be
+      <code>unspecified</code> or relative. If <var>inherit</var>
+      is a face or a list of faces, then the result is further
+      merged with that face (or faces), until it becomes specified
+      and absolute.</p>
+
+      <p>To ensure that the return value is always specified and
+      absolute, use a value of <code>default</code> for
+      <var>inherit</var>; this will resolve any unspecified or
+      relative values by merging with the <code>default</code> face
+      (which is always completely specified).</p>
+
+      <p>For example,</p>
+
+      <div class="example">
+        <pre class="example">
+(face-attribute 'bold :weight)
      &rArr; bold
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-face_002dattribute_002drelative_002dp"></a>Function: <strong>face-attribute-relative-p</strong> <em>attribute value</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>value</var>, when used as the
-value of the face attribute <var>attribute</var>, is relative.  This means
-it would modify, rather than completely override, any value that comes
-from a subsequent face in the face list or that is inherited from
-another face.
-</p>
-<p><code>unspecified</code> is a relative value for all attributes.  For
-<code>:height</code>, floating point and function values are also relative.
-</p>
-<p>For example:
-</p>
-<div class="example">
-<pre class="example">(face-attribute-relative-p :height 2.0)
+  <dl>
+    <dt><a name="index-face_002dattribute_002drelative_002dp" id=
+    "index-face_002dattribute_002drelative_002dp"></a>Function:
+    <strong>face-attribute-relative-p</strong> <em>attribute
+    value</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>value</var>, when used as the value of the face
+      attribute <var>attribute</var>, is relative. This means it
+      would modify, rather than completely override, any value that
+      comes from a subsequent face in the face list or that is
+      inherited from another face.</p>
+
+      <p><code>unspecified</code> is a relative value for all
+      attributes. For <code>:height</code>, floating point and
+      function values are also relative.</p>
+
+      <p>For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(face-attribute-relative-p :height 2.0)
      &rArr; t
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-face_002dall_002dattributes"></a>Function: <strong>face-all-attributes</strong> <em>face &amp;optional frame</em></dt>
-<dd><p>This function returns an alist of attributes of <var>face</var>.  The
-elements of the result are name-value pairs of the form
-<code>(<var><span class="nolinebreak">attr-name</span></var>&nbsp;.&nbsp;<var><span class="nolinebreak">attr-value</span></var>)</code><!-- /@w -->.  Optional argument
-<var>frame</var> specifies the frame whose definition of <var>face</var> to
-return; if omitted or <code>nil</code>, the returned value describes the
-default attributes of <var>face</var> for newly created frames.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-face_002dall_002dattributes" id=
+    "index-face_002dall_002dattributes"></a>Function:
+    <strong>face-all-attributes</strong> <em>face &amp;optional
+    frame</em></dt>
 
-<dl>
-<dt><a name="index-merge_002dface_002dattribute"></a>Function: <strong>merge-face-attribute</strong> <em>attribute value1 value2</em></dt>
-<dd><p>If <var>value1</var> is a relative value for the face attribute
-<var>attribute</var>, returns it merged with the underlying value
-<var>value2</var>; otherwise, if <var>value1</var> is an absolute value for the
-face attribute <var>attribute</var>, returns <var>value1</var> unchanged.
-</p></dd></dl>
+    <dd>
+      <p>This function returns an alist of attributes of
+      <var>face</var>. The elements of the result are name-value
+      pairs of the form <code>(<var><span class=
+      "nolinebreak">attr-name</span></var>&nbsp;.&nbsp;<var><span class="nolinebreak">attr-value</span></var>)</code><!-- /@w -->.
+      Optional argument <var>frame</var> specifies the frame whose
+      definition of <var>face</var> to return; if omitted or
+      <code>nil</code>, the returned value describes the default
+      attributes of <var>face</var> for newly created frames.</p>
+    </dd>
+  </dl>
 
-<p>Normally, Emacs uses the face specs of each face to automatically
-calculate its attributes on each frame (see <a href="Defining-Faces.html#Defining-Faces">Defining Faces</a>).  The
-function <code>set-face-attribute</code> can override this calculation by
-directly assigning attributes to a face, either on a specific frame or
-for all frames.  This function is mostly intended for internal usage.
-</p>
-<dl>
-<dt><a name="index-set_002dface_002dattribute"></a>Function: <strong>set-face-attribute</strong> <em>face frame &amp;rest arguments</em></dt>
-<dd><p>This function sets one or more attributes of <var>face</var> for
-<var>frame</var>.  The attributes specifies in this way override the face
-spec(s) belonging to <var>face</var>.
-</p>
-<p>The extra arguments <var>arguments</var> specify the attributes to set, and
-the values for them.  They should consist of alternating attribute
-names (such as <code>:family</code> or <code>:underline</code>) and values.  Thus,
-</p>
-<div class="example">
-<pre class="example">(set-face-attribute 'foo nil :weight 'bold :slant 'italic)
-</pre></div>
+  <dl>
+    <dt><a name="index-merge_002dface_002dattribute" id=
+    "index-merge_002dface_002dattribute"></a>Function:
+    <strong>merge-face-attribute</strong> <em>attribute value1
+    value2</em></dt>
 
-<p>sets the attribute <code>:weight</code> to <code>bold</code> and the attribute
-<code>:slant</code> to <code>italic</code>.
-</p>
+    <dd>
+      <p>If <var>value1</var> is a relative value for the face
+      attribute <var>attribute</var>, returns it merged with the
+      underlying value <var>value2</var>; otherwise, if
+      <var>value1</var> is an absolute value for the face attribute
+      <var>attribute</var>, returns <var>value1</var>
+      unchanged.</p>
+    </dd>
+  </dl>
 
-<p>If <var>frame</var> is <code>t</code>, this function sets the default attributes
-for newly created frames.  If <var>frame</var> is <code>nil</code>, this function
-sets the attributes for all existing frames, as well as for newly
-created frames.
-</p></dd></dl>
+  <p>Normally, Emacs uses the face specs of each face to
+  automatically calculate its attributes on each frame (see
+  <a href="Defining-Faces.html#Defining-Faces">Defining Faces</a>).
+  The function <code>set-face-attribute</code> can override this
+  calculation by directly assigning attributes to a face, either on
+  a specific frame or for all frames. This function is mostly
+  intended for internal usage.</p>
 
-<p>The following commands and functions mostly provide compatibility
-with old versions of Emacs.  They work by calling
-<code>set-face-attribute</code>.  Values of <code>t</code> and <code>nil</code> for
-their <var>frame</var> argument are handled just like
-<code>set-face-attribute</code> and <code>face-attribute</code>.  The commands
-read their arguments using the minibuffer, if called interactively.
-</p>
-<dl>
-<dt><a name="index-set_002dface_002dforeground"></a>Command: <strong>set-face-foreground</strong> <em>face color &amp;optional frame</em></dt>
-<dt><a name="index-set_002dface_002dbackground"></a>Command: <strong>set-face-background</strong> <em>face color &amp;optional frame</em></dt>
-<dd><p>These set the <code>:foreground</code> attribute (or <code>:background</code>
-attribute, respectively) of <var>face</var> to <var>color</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dface_002dattribute" id=
+    "index-set_002dface_002dattribute"></a>Function:
+    <strong>set-face-attribute</strong> <em>face frame &amp;rest
+    arguments</em></dt>
 
-<dl>
-<dt><a name="index-set_002dface_002dstipple"></a>Command: <strong>set-face-stipple</strong> <em>face pattern &amp;optional frame</em></dt>
-<dd><p>This sets the <code>:stipple</code> attribute of <var>face</var> to
-<var>pattern</var>.
-</p></dd></dl>
+    <dd>
+      <p>This function sets one or more attributes of
+      <var>face</var> for <var>frame</var>. The attributes
+      specifies in this way override the face spec(s) belonging to
+      <var>face</var>.</p>
 
-<dl>
-<dt><a name="index-set_002dface_002dfont"></a>Command: <strong>set-face-font</strong> <em>face font &amp;optional frame</em></dt>
-<dd><p>This sets the <code>:font</code> attribute of <var>face</var> to <var>font</var>.
-</p></dd></dl>
+      <p>The extra arguments <var>arguments</var> specify the
+      attributes to set, and the values for them. They should
+      consist of alternating attribute names (such as
+      <code>:family</code> or <code>:underline</code>) and values.
+      Thus,</p>
 
-<dl>
-<dt><a name="index-set_002dface_002dbold"></a>Function: <strong>set-face-bold</strong> <em>face bold-p &amp;optional frame</em></dt>
-<dd><p>This sets the <code>:weight</code> attribute of <var>face</var> to <var>normal</var>
-if <var>bold-p</var> is <code>nil</code>, and to <var>bold</var> otherwise.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+(set-face-attribute 'foo nil :weight 'bold :slant 'italic)
+</pre>
+      </div>
 
-<dl>
-<dt><a name="index-set_002dface_002ditalic"></a>Function: <strong>set-face-italic</strong> <em>face italic-p &amp;optional frame</em></dt>
-<dd><p>This sets the <code>:slant</code> attribute of <var>face</var> to <var>normal</var> if
-<var>italic-p</var> is <code>nil</code>, and to <var>italic</var> otherwise.
-</p></dd></dl>
+      <p>sets the attribute <code>:weight</code> to
+      <code>bold</code> and the attribute <code>:slant</code> to
+      <code>italic</code>.</p>
 
-<dl>
-<dt><a name="index-set_002dface_002dunderline"></a>Function: <strong>set-face-underline</strong> <em>face underline &amp;optional frame</em></dt>
-<dd><p>This sets the <code>:underline</code> attribute of <var>face</var> to
-<var>underline</var>.
-</p></dd></dl>
+      <p>If <var>frame</var> is <code>t</code>, this function sets
+      the default attributes for newly created frames. If
+      <var>frame</var> is <code>nil</code>, this function sets the
+      attributes for all existing frames, as well as for newly
+      created frames.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-set_002dface_002dinverse_002dvideo"></a>Function: <strong>set-face-inverse-video</strong> <em>face inverse-video-p &amp;optional frame</em></dt>
-<dd><p>This sets the <code>:inverse-video</code> attribute of <var>face</var> to
-<var>inverse-video-p</var>.
-</p></dd></dl>
+  <p>The following commands and functions mostly provide
+  compatibility with old versions of Emacs. They work by calling
+  <code>set-face-attribute</code>. Values of <code>t</code> and
+  <code>nil</code> for their <var>frame</var> argument are handled
+  just like <code>set-face-attribute</code> and
+  <code>face-attribute</code>. The commands read their arguments
+  using the minibuffer, if called interactively.</p>
 
-<dl>
-<dt><a name="index-invert_002dface"></a>Command: <strong>invert-face</strong> <em>face &amp;optional frame</em></dt>
-<dd><p>This swaps the foreground and background colors of face <var>face</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dface_002dforeground" id=
+    "index-set_002dface_002dforeground"></a>Command:
+    <strong>set-face-foreground</strong> <em>face color
+    &amp;optional frame</em></dt>
 
-<p>The following functions examine the attributes of a face.  They
-mostly provide compatibility with old versions of Emacs.  If you don&rsquo;t
-specify <var>frame</var>, they refer to the selected frame; <code>t</code> refers
-to the default data for new frames.  They return <code>unspecified</code> if
-the face doesn&rsquo;t define any value for that attribute.  If
-<var>inherit</var> is <code>nil</code>, only an attribute directly defined by the
-face is returned.  If <var>inherit</var> is non-<code>nil</code>, any faces
-specified by its <code>:inherit</code> attribute are considered as well, and
-if <var>inherit</var> is a face or a list of faces, then they are also
-considered, until a specified attribute is found.  To ensure that the
-return value is always specified, use a value of <code>default</code> for
-<var>inherit</var>.
-</p>
-<dl>
-<dt><a name="index-face_002dfont"></a>Function: <strong>face-font</strong> <em>face &amp;optional frame character</em></dt>
-<dd><p>This function returns the name of the font of face <var>face</var>.
-</p>
-<p>If the optional argument <var>frame</var> is specified, it returns the name
-of the font of <var>face</var> for that frame.  If <var>frame</var> is omitted or
-<code>nil</code>, the selected frame is used.  And, in this case, if the
-optional third argument <var>character</var> is supplied, it returns the font
-name used for <var>character</var>.
-</p></dd></dl>
+    <dt><a name="index-set_002dface_002dbackground" id=
+    "index-set_002dface_002dbackground"></a>Command:
+    <strong>set-face-background</strong> <em>face color
+    &amp;optional frame</em></dt>
 
-<dl>
-<dt><a name="index-face_002dforeground"></a>Function: <strong>face-foreground</strong> <em>face &amp;optional frame inherit</em></dt>
-<dt><a name="index-face_002dbackground"></a>Function: <strong>face-background</strong> <em>face &amp;optional frame inherit</em></dt>
-<dd><p>These functions return the foreground color (or background color,
-respectively) of face <var>face</var>, as a string.
-</p></dd></dl>
+    <dd>
+      <p>These set the <code>:foreground</code> attribute (or
+      <code>:background</code> attribute, respectively) of
+      <var>face</var> to <var>color</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-face_002dstipple"></a>Function: <strong>face-stipple</strong> <em>face &amp;optional frame inherit</em></dt>
-<dd><p>This function returns the name of the background stipple pattern of face
-<var>face</var>, or <code>nil</code> if it doesn&rsquo;t have one.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dface_002dstipple" id=
+    "index-set_002dface_002dstipple"></a>Command:
+    <strong>set-face-stipple</strong> <em>face pattern
+    &amp;optional frame</em></dt>
 
-<dl>
-<dt><a name="index-face_002dbold_002dp"></a>Function: <strong>face-bold-p</strong> <em>face &amp;optional frame inherit</em></dt>
-<dd><p>This function returns a non-<code>nil</code> value if the <code>:weight</code>
-attribute of <var>face</var> is bolder than normal (i.e., one of
-<code>semi-bold</code>, <code>bold</code>, <code>extra-bold</code>, or
-<code>ultra-bold</code>).  Otherwise, it returns <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>This sets the <code>:stipple</code> attribute of
+      <var>face</var> to <var>pattern</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-face_002ditalic_002dp"></a>Function: <strong>face-italic-p</strong> <em>face &amp;optional frame inherit</em></dt>
-<dd><p>This function returns a non-<code>nil</code> value if the <code>:slant</code>
-attribute of <var>face</var> is <code>italic</code> or <code>oblique</code>, and
-<code>nil</code> otherwise.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dface_002dfont" id=
+    "index-set_002dface_002dfont"></a>Command:
+    <strong>set-face-font</strong> <em>face font &amp;optional
+    frame</em></dt>
 
-<dl>
-<dt><a name="index-face_002dunderline_002dp"></a>Function: <strong>face-underline-p</strong> <em>face &amp;optional frame inherit</em></dt>
-<dd><p>This function returns non-<code>nil</code> if face <var>face</var> specifies
-a non-<code>nil</code> <code>:underline</code> attribute.
-</p></dd></dl>
+    <dd>
+      <p>This sets the <code>:font</code> attribute of
+      <var>face</var> to <var>font</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-face_002dinverse_002dvideo_002dp"></a>Function: <strong>face-inverse-video-p</strong> <em>face &amp;optional frame inherit</em></dt>
-<dd><p>This function returns non-<code>nil</code> if face <var>face</var> specifies
-a non-<code>nil</code> <code>:inverse-video</code> attribute.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dface_002dbold" id=
+    "index-set_002dface_002dbold"></a>Function:
+    <strong>set-face-bold</strong> <em>face bold-p &amp;optional
+    frame</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Displaying-Faces.html#Displaying-Faces" accesskey="n" rel="next">Displaying Faces</a>, Previous: <a href="Defining-Faces.html#Defining-Faces" accesskey="p" rel="prev">Defining Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This sets the <code>:weight</code> attribute of
+      <var>face</var> to <var>normal</var> if <var>bold-p</var> is
+      <code>nil</code>, and to <var>bold</var> otherwise.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-set_002dface_002ditalic" id=
+    "index-set_002dface_002ditalic"></a>Function:
+    <strong>set-face-italic</strong> <em>face italic-p
+    &amp;optional frame</em></dt>
 
+    <dd>
+      <p>This sets the <code>:slant</code> attribute of
+      <var>face</var> to <var>normal</var> if <var>italic-p</var>
+      is <code>nil</code>, and to <var>italic</var> otherwise.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-set_002dface_002dunderline" id=
+    "index-set_002dface_002dunderline"></a>Function:
+    <strong>set-face-underline</strong> <em>face underline
+    &amp;optional frame</em></dt>
+
+    <dd>
+      <p>This sets the <code>:underline</code> attribute of
+      <var>face</var> to <var>underline</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dface_002dinverse_002dvideo" id=
+    "index-set_002dface_002dinverse_002dvideo"></a>Function:
+    <strong>set-face-inverse-video</strong> <em>face
+    inverse-video-p &amp;optional frame</em></dt>
+
+    <dd>
+      <p>This sets the <code>:inverse-video</code> attribute of
+      <var>face</var> to <var>inverse-video-p</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-invert_002dface" id=
+    "index-invert_002dface"></a>Command:
+    <strong>invert-face</strong> <em>face &amp;optional
+    frame</em></dt>
+
+    <dd>
+      <p>This swaps the foreground and background colors of face
+      <var>face</var>.</p>
+    </dd>
+  </dl>
+
+  <p>The following functions examine the attributes of a face. They
+  mostly provide compatibility with old versions of Emacs. If you
+  don&rsquo;t specify <var>frame</var>, they refer to the selected
+  frame; <code>t</code> refers to the default data for new frames.
+  They return <code>unspecified</code> if the face doesn&rsquo;t
+  define any value for that attribute. If <var>inherit</var> is
+  <code>nil</code>, only an attribute directly defined by the face
+  is returned. If <var>inherit</var> is non-<code>nil</code>, any
+  faces specified by its <code>:inherit</code> attribute are
+  considered as well, and if <var>inherit</var> is a face or a list
+  of faces, then they are also considered, until a specified
+  attribute is found. To ensure that the return value is always
+  specified, use a value of <code>default</code> for
+  <var>inherit</var>.</p>
+
+  <dl>
+    <dt><a name="index-face_002dfont" id=
+    "index-face_002dfont"></a>Function: <strong>face-font</strong>
+    <em>face &amp;optional frame character</em></dt>
+
+    <dd>
+      <p>This function returns the name of the font of face
+      <var>face</var>.</p>
+
+      <p>If the optional argument <var>frame</var> is specified, it
+      returns the name of the font of <var>face</var> for that
+      frame. If <var>frame</var> is omitted or <code>nil</code>,
+      the selected frame is used. And, in this case, if the
+      optional third argument <var>character</var> is supplied, it
+      returns the font name used for <var>character</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-face_002dforeground" id=
+    "index-face_002dforeground"></a>Function:
+    <strong>face-foreground</strong> <em>face &amp;optional frame
+    inherit</em></dt>
+
+    <dt><a name="index-face_002dbackground" id=
+    "index-face_002dbackground"></a>Function:
+    <strong>face-background</strong> <em>face &amp;optional frame
+    inherit</em></dt>
+
+    <dd>
+      <p>These functions return the foreground color (or background
+      color, respectively) of face <var>face</var>, as a
+      string.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-face_002dstipple" id=
+    "index-face_002dstipple"></a>Function:
+    <strong>face-stipple</strong> <em>face &amp;optional frame
+    inherit</em></dt>
+
+    <dd>
+      <p>This function returns the name of the background stipple
+      pattern of face <var>face</var>, or <code>nil</code> if it
+      doesn&rsquo;t have one.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-face_002dbold_002dp" id=
+    "index-face_002dbold_002dp"></a>Function:
+    <strong>face-bold-p</strong> <em>face &amp;optional frame
+    inherit</em></dt>
+
+    <dd>
+      <p>This function returns a non-<code>nil</code> value if the
+      <code>:weight</code> attribute of <var>face</var> is bolder
+      than normal (i.e., one of <code>semi-bold</code>,
+      <code>bold</code>, <code>extra-bold</code>, or
+      <code>ultra-bold</code>). Otherwise, it returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-face_002ditalic_002dp" id=
+    "index-face_002ditalic_002dp"></a>Function:
+    <strong>face-italic-p</strong> <em>face &amp;optional frame
+    inherit</em></dt>
+
+    <dd>
+      <p>This function returns a non-<code>nil</code> value if the
+      <code>:slant</code> attribute of <var>face</var> is
+      <code>italic</code> or <code>oblique</code>, and
+      <code>nil</code> otherwise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-face_002dunderline_002dp" id=
+    "index-face_002dunderline_002dp"></a>Function:
+    <strong>face-underline-p</strong> <em>face &amp;optional frame
+    inherit</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if face
+      <var>face</var> specifies a non-<code>nil</code>
+      <code>:underline</code> attribute.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-face_002dinverse_002dvideo_002dp" id=
+    "index-face_002dinverse_002dvideo_002dp"></a>Function:
+    <strong>face-inverse-video-p</strong> <em>face &amp;optional
+    frame inherit</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if face
+      <var>face</var> specifies a non-<code>nil</code>
+      <code>:inverse-video</code> attribute.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Displaying-Faces.html#Displaying-Faces"
+    accesskey="n" rel="next">Displaying Faces</a>, Previous:
+    <a href="Defining-Faces.html#Defining-Faces" accesskey="p" rel=
+    "prev">Defining Faces</a>, Up: <a href="Faces.html#Faces"
+    accesskey="u" rel="up">Faces</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

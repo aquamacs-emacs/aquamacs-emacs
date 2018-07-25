@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,117 +14,167 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Uuencoded Articles</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Uuencoded Articles">
-<meta name="keywords" content="Gnus Manual: Uuencoded Articles">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Decoding-Articles.html#Decoding-Articles" rel="up" title="Decoding Articles">
-<link href="Shell-Archives.html#Shell-Archives" rel="next" title="Shell Archives">
-<link href="Decoding-Articles.html#Decoding-Articles" rel="prev" title="Decoding Articles">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Uuencoded Articles</title>
+  <meta name="description" content=
+  "Gnus Manual: Uuencoded Articles" />
+  <meta name="keywords" content=
+  "Gnus Manual: Uuencoded Articles" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Decoding-Articles.html#Decoding-Articles" rel="up"
+  title="Decoding Articles" />
+  <link href="Shell-Archives.html#Shell-Archives" rel="next" title=
+  "Shell Archives" />
+  <link href="Decoding-Articles.html#Decoding-Articles" rel="prev"
+  title="Decoding Articles" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Uuencoded-Articles"></a>
-<div class="header">
-<p>
-Next: <a href="Shell-Archives.html#Shell-Archives" accesskey="n" rel="next">Shell Archives</a>, Up: <a href="Decoding-Articles.html#Decoding-Articles" accesskey="u" rel="up">Decoding Articles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Uuencoded-Articles-1"></a>
-<h4 class="subsection">3.17.1 Uuencoded Articles</h4>
-<a name="index-uudecode"></a>
-<a name="index-uuencoded-articles"></a>
+<body lang="en" xml:lang="en">
+  <a name="Uuencoded-Articles" id="Uuencoded-Articles"></a>
 
-<dl compact="compact">
-<dt><kbd>X u</kbd></dt>
-<dd><a name="index-X-u-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002ddecode_002duu"></a>
-<p>Uudecodes the current series (<code>gnus-uu-decode-uu</code>).
-</p>
-</dd>
-<dt><kbd>X U</kbd></dt>
-<dd><a name="index-X-U-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002ddecode_002duu_002dand_002dsave"></a>
-<p>Uudecodes and saves the current series
-(<code>gnus-uu-decode-uu-and-save</code>).
-</p>
-</dd>
-<dt><kbd>X v u</kbd></dt>
-<dd><a name="index-X-v-u-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002ddecode_002duu_002dview"></a>
-<p>Uudecodes and views the current series (<code>gnus-uu-decode-uu-view</code>).
-</p>
-</dd>
-<dt><kbd>X v U</kbd></dt>
-<dd><a name="index-X-v-U-_0028Summary_0029"></a>
-<a name="index-gnus_002duu_002ddecode_002duu_002dand_002dsave_002dview"></a>
-<p>Uudecodes, views and saves the current series
-(<code>gnus-uu-decode-uu-and-save-view</code>).
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Shell-Archives.html#Shell-Archives"
+    accesskey="n" rel="next">Shell Archives</a>, Up: <a href=
+    "Decoding-Articles.html#Decoding-Articles" accesskey="u" rel=
+    "up">Decoding Articles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Uuencoded-Articles-1" id="Uuencoded-Articles-1"></a>
 
-<p>Remember that these all react to the presence of articles marked with
-the process mark.  If, for instance, you&rsquo;d like to decode and save an
-entire newsgroup, you&rsquo;d typically do <kbd>M P a</kbd>
-(<code>gnus-uu-mark-all</code>) and then <kbd>X U</kbd>
-(<code>gnus-uu-decode-uu-and-save</code>).
-</p>
-<p>All this is very much different from how <code>gnus-uu</code> worked with
-<small>GNUS 4.1</small>, where you had explicit keystrokes for everything under
-the sun.  This version of <code>gnus-uu</code> generally assumes that you mark
-articles in some way (see <a href="Setting-Process-Marks.html#Setting-Process-Marks">Setting Process Marks</a>) and then press
-<kbd>X u</kbd>.
-</p>
-<a name="index-gnus_002duu_002dnotify_002dfiles"></a>
-<p>Note: When trying to decode articles that have names matching
-<code>gnus-uu-notify-files</code>, which is hard-coded to
-&lsquo;<samp>[Cc][Ii][Nn][Dd][Yy][0-9]+.\\(gif\\|jpg\\)</samp>&rsquo;, <code>gnus-uu</code> will
-automatically post an article on &lsquo;<samp>comp.unix.wizards</samp>&rsquo; saying that
-you have just viewed the file in question.  This feature can&rsquo;t be turned
-off.
-</p>
+  <h4 class="subsection">3.17.1 Uuencoded Articles</h4><a name=
+  "index-uudecode" id="index-uudecode"></a> <a name=
+  "index-uuencoded-articles" id="index-uuencoded-articles"></a>
 
+  <dl compact="compact">
+    <dt><kbd>X u</kbd></dt>
 
+    <dd>
+      <a name="index-X-u-_0028Summary_0029" id=
+      "index-X-u-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002ddecode_002duu" id=
+      "index-gnus_002duu_002ddecode_002duu"></a>
 
+      <p>Uudecodes the current series
+      (<code>gnus-uu-decode-uu</code>).</p>
+    </dd>
 
+    <dt><kbd>X U</kbd></dt>
+
+    <dd>
+      <a name="index-X-U-_0028Summary_0029" id=
+      "index-X-U-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002ddecode_002duu_002dand_002dsave" id=
+      "index-gnus_002duu_002ddecode_002duu_002dand_002dsave"></a>
+
+      <p>Uudecodes and saves the current series
+      (<code>gnus-uu-decode-uu-and-save</code>).</p>
+    </dd>
+
+    <dt><kbd>X v u</kbd></dt>
+
+    <dd>
+      <a name="index-X-v-u-_0028Summary_0029" id=
+      "index-X-v-u-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002ddecode_002duu_002dview" id=
+      "index-gnus_002duu_002ddecode_002duu_002dview"></a>
+
+      <p>Uudecodes and views the current series
+      (<code>gnus-uu-decode-uu-view</code>).</p>
+    </dd>
+
+    <dt><kbd>X v U</kbd></dt>
+
+    <dd>
+      <a name="index-X-v-U-_0028Summary_0029" id=
+      "index-X-v-U-_0028Summary_0029"></a> <a name=
+      "index-gnus_002duu_002ddecode_002duu_002dand_002dsave_002dview"
+      id=
+      "index-gnus_002duu_002ddecode_002duu_002dand_002dsave_002dview">
+      </a>
+
+      <p>Uudecodes, views and saves the current series
+      (<code>gnus-uu-decode-uu-and-save-view</code>).</p>
+    </dd>
+  </dl>
+
+  <p>Remember that these all react to the presence of articles
+  marked with the process mark. If, for instance, you&rsquo;d like
+  to decode and save an entire newsgroup, you&rsquo;d typically do
+  <kbd>M P a</kbd> (<code>gnus-uu-mark-all</code>) and then <kbd>X
+  U</kbd> (<code>gnus-uu-decode-uu-and-save</code>).</p>
+
+  <p>All this is very much different from how <code>gnus-uu</code>
+  worked with <small>GNUS 4.1</small>, where you had explicit
+  keystrokes for everything under the sun. This version of
+  <code>gnus-uu</code> generally assumes that you mark articles in
+  some way (see <a href=
+  "Setting-Process-Marks.html#Setting-Process-Marks">Setting
+  Process Marks</a>) and then press <kbd>X u</kbd>.</p><a name=
+  "index-gnus_002duu_002dnotify_002dfiles" id=
+  "index-gnus_002duu_002dnotify_002dfiles"></a>
+
+  <p>Note: When trying to decode articles that have names matching
+  <code>gnus-uu-notify-files</code>, which is hard-coded to
+  &lsquo;<samp>[Cc][Ii][Nn][Dd][Yy][0-9]+.\\(gif\\|jpg\\)</samp>&rsquo;,
+  <code>gnus-uu</code> will automatically post an article on
+  &lsquo;<samp>comp.unix.wizards</samp>&rsquo; saying that you have
+  just viewed the file in question. This feature can&rsquo;t be
+  turned off.</p>
 </body>
 </html>

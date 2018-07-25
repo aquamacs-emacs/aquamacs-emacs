@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,214 +14,349 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Gnus Utility Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Gnus Utility Functions">
-<meta name="keywords" content="Gnus Manual: Gnus Utility Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel="up" title="Gnus Reference Guide">
-<link href="Back-End-Interface.html#Back-End-Interface" rel="next" title="Back End Interface">
-<link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel="prev" title="Gnus Reference Guide">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Gnus Utility Functions</title>
+  <meta name="description" content=
+  "Gnus Manual: Gnus Utility Functions" />
+  <meta name="keywords" content=
+  "Gnus Manual: Gnus Utility Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel=
+  "up" title="Gnus Reference Guide" />
+  <link href="Back-End-Interface.html#Back-End-Interface" rel=
+  "next" title="Back End Interface" />
+  <link href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" rel=
+  "prev" title="Gnus Reference Guide" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Gnus-Utility-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Back-End-Interface.html#Back-End-Interface" accesskey="n" rel="next">Back End Interface</a>, Up: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Gnus-Utility-Functions-1"></a>
-<h4 class="subsection">11.7.1 Gnus Utility Functions</h4>
-<a name="index-Gnus-utility-functions"></a>
-<a name="index-utility-functions"></a>
-<a name="index-functions"></a>
-<a name="index-internal-variables"></a>
+<body lang="en" xml:lang="en">
+  <a name="Gnus-Utility-Functions" id="Gnus-Utility-Functions"></a>
 
-<p>When writing small functions to be run from hooks (and stuff), it&rsquo;s
-vital to have access to the Gnus internal functions and variables.
-Below is a list of the most common ones.
-</p>
-<dl compact="compact">
-<dt><code>gnus-newsgroup-name</code></dt>
-<dd><a name="index-gnus_002dnewsgroup_002dname"></a>
-<p>This variable holds the name of the current newsgroup.
-</p>
-</dd>
-<dt><code>gnus-find-method-for-group</code></dt>
-<dd><a name="index-gnus_002dfind_002dmethod_002dfor_002dgroup"></a>
-<p>A function that returns the select method for <var>group</var>.
-</p>
-</dd>
-<dt><code>gnus-group-real-name</code></dt>
-<dd><a name="index-gnus_002dgroup_002dreal_002dname"></a>
-<p>Takes a full (prefixed) Gnus group name, and returns the unprefixed
-name.
-</p>
-</dd>
-<dt><code>gnus-group-prefixed-name</code></dt>
-<dd><a name="index-gnus_002dgroup_002dprefixed_002dname"></a>
-<p>Takes an unprefixed group name and a select method, and returns the full
-(prefixed) Gnus group name.
-</p>
-</dd>
-<dt><code>gnus-get-info</code></dt>
-<dd><a name="index-gnus_002dget_002dinfo"></a>
-<p>Returns the group info list for <var>group</var> (see <a href="Group-Info.html#Group-Info">Group Info</a>).
-</p>
-</dd>
-<dt><code>gnus-group-unread</code></dt>
-<dd><a name="index-gnus_002dgroup_002dunread"></a>
-<p>The number of unread articles in <var>group</var>, or <code>t</code> if that is
-unknown.
-</p>
-</dd>
-<dt><code>gnus-active</code></dt>
-<dd><a name="index-gnus_002dactive"></a>
-<p>The active entry (i.e., a cons cell containing the lowest and highest
-article numbers) for <var>group</var>.
-</p>
-</dd>
-<dt><code>gnus-set-active</code></dt>
-<dd><a name="index-gnus_002dset_002dactive"></a>
-<p>Set the active entry for <var>group</var>.
-</p>
-</dd>
-<dt><code>gnus-add-current-to-buffer-list</code></dt>
-<dd><a name="index-gnus_002dadd_002dcurrent_002dto_002dbuffer_002dlist"></a>
-<p>Adds the current buffer to the list of buffers to be killed on Gnus
-exit.
-</p>
-</dd>
-<dt><code>gnus-continuum-version</code></dt>
-<dd><a name="index-gnus_002dcontinuum_002dversion"></a>
-<p>Takes a Gnus version string as a parameter and returns a floating point
-number.  Earlier versions will always get a lower number than later
-versions.
-</p>
-</dd>
-<dt><code>gnus-group-read-only-p</code></dt>
-<dd><a name="index-gnus_002dgroup_002dread_002donly_002dp"></a>
-<p>Says whether <var>group</var> is read-only or not.
-</p>
-</dd>
-<dt><code>gnus-news-group-p</code></dt>
-<dd><a name="index-gnus_002dnews_002dgroup_002dp"></a>
-<p>Says whether <var>group</var> came from a news back end.
-</p>
-</dd>
-<dt><code>gnus-ephemeral-group-p</code></dt>
-<dd><a name="index-gnus_002dephemeral_002dgroup_002dp"></a>
-<p>Says whether <var>group</var> is ephemeral or not.
-</p>
-</dd>
-<dt><code>gnus-server-to-method</code></dt>
-<dd><a name="index-gnus_002dserver_002dto_002dmethod"></a>
-<p>Returns the select method corresponding to <var>server</var>.
-</p>
-</dd>
-<dt><code>gnus-server-equal</code></dt>
-<dd><a name="index-gnus_002dserver_002dequal"></a>
-<p>Says whether two virtual servers are essentially equal.  For instance,
-two virtual servers may have server parameters in different order, but
-this function will consider them equal.
-</p>
-</dd>
-<dt><code>gnus-group-native-p</code></dt>
-<dd><a name="index-gnus_002dgroup_002dnative_002dp"></a>
-<p>Says whether <var>group</var> is native or not.
-</p>
-</dd>
-<dt><code>gnus-group-secondary-p</code></dt>
-<dd><a name="index-gnus_002dgroup_002dsecondary_002dp"></a>
-<p>Says whether <var>group</var> is secondary or not.
-</p>
-</dd>
-<dt><code>gnus-group-foreign-p</code></dt>
-<dd><a name="index-gnus_002dgroup_002dforeign_002dp"></a>
-<p>Says whether <var>group</var> is foreign or not.
-</p>
-</dd>
-<dt><code>gnus-group-find-parameter</code></dt>
-<dd><a name="index-gnus_002dgroup_002dfind_002dparameter"></a>
-<p>Returns the parameter list of <var>group</var> (see <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>).
-If given a second parameter, returns the value of that parameter for
-<var>group</var>.
-</p>
-</dd>
-<dt><code>gnus-group-set-parameter</code></dt>
-<dd><a name="index-gnus_002dgroup_002dset_002dparameter"></a>
-<p>Takes three parameters; <var>group</var>, <var>parameter</var> and <var>value</var>.
-</p>
-</dd>
-<dt><code>gnus-narrow-to-body</code></dt>
-<dd><a name="index-gnus_002dnarrow_002dto_002dbody"></a>
-<p>Narrows the current buffer to the body of the article.
-</p>
-</dd>
-<dt><code>gnus-check-backend-function</code></dt>
-<dd><a name="index-gnus_002dcheck_002dbackend_002dfunction"></a>
-<p>Takes two parameters, <var>function</var> and <var>group</var>.  If the back end
-<var>group</var> comes from supports <var>function</var>, return non-<code>nil</code>.
-</p>
-<div class="lisp">
-<pre class="lisp">(gnus-check-backend-function &quot;request-scan&quot; &quot;nnml:misc&quot;)
+  <div class="header">
+    <p>Next: <a href="Back-End-Interface.html#Back-End-Interface"
+    accesskey="n" rel="next">Back End Interface</a>, Up: <a href=
+    "Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u"
+    rel="up">Gnus Reference Guide</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Gnus-Utility-Functions-1" id=
+  "Gnus-Utility-Functions-1"></a>
+
+  <h4 class="subsection">11.7.1 Gnus Utility Functions</h4><a name=
+  "index-Gnus-utility-functions" id=
+  "index-Gnus-utility-functions"></a> <a name=
+  "index-utility-functions" id="index-utility-functions"></a>
+  <a name="index-functions" id="index-functions"></a> <a name=
+  "index-internal-variables" id="index-internal-variables"></a>
+
+  <p>When writing small functions to be run from hooks (and stuff),
+  it&rsquo;s vital to have access to the Gnus internal functions
+  and variables. Below is a list of the most common ones.</p>
+
+  <dl compact="compact">
+    <dt><code>gnus-newsgroup-name</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dnewsgroup_002dname" id=
+      "index-gnus_002dnewsgroup_002dname"></a>
+
+      <p>This variable holds the name of the current newsgroup.</p>
+    </dd>
+
+    <dt><code>gnus-find-method-for-group</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dfind_002dmethod_002dfor_002dgroup"
+      id="index-gnus_002dfind_002dmethod_002dfor_002dgroup"></a>
+
+      <p>A function that returns the select method for
+      <var>group</var>.</p>
+    </dd>
+
+    <dt><code>gnus-group-real-name</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dreal_002dname" id=
+      "index-gnus_002dgroup_002dreal_002dname"></a>
+
+      <p>Takes a full (prefixed) Gnus group name, and returns the
+      unprefixed name.</p>
+    </dd>
+
+    <dt><code>gnus-group-prefixed-name</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dprefixed_002dname" id=
+      "index-gnus_002dgroup_002dprefixed_002dname"></a>
+
+      <p>Takes an unprefixed group name and a select method, and
+      returns the full (prefixed) Gnus group name.</p>
+    </dd>
+
+    <dt><code>gnus-get-info</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dget_002dinfo" id=
+      "index-gnus_002dget_002dinfo"></a>
+
+      <p>Returns the group info list for <var>group</var> (see
+      <a href="Group-Info.html#Group-Info">Group Info</a>).</p>
+    </dd>
+
+    <dt><code>gnus-group-unread</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dunread" id=
+      "index-gnus_002dgroup_002dunread"></a>
+
+      <p>The number of unread articles in <var>group</var>, or
+      <code>t</code> if that is unknown.</p>
+    </dd>
+
+    <dt><code>gnus-active</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dactive" id=
+      "index-gnus_002dactive"></a>
+
+      <p>The active entry (i.e., a cons cell containing the lowest
+      and highest article numbers) for <var>group</var>.</p>
+    </dd>
+
+    <dt><code>gnus-set-active</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dset_002dactive" id=
+      "index-gnus_002dset_002dactive"></a>
+
+      <p>Set the active entry for <var>group</var>.</p>
+    </dd>
+
+    <dt><code>gnus-add-current-to-buffer-list</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dadd_002dcurrent_002dto_002dbuffer_002dlist"
+      id=
+      "index-gnus_002dadd_002dcurrent_002dto_002dbuffer_002dlist"></a>
+
+      <p>Adds the current buffer to the list of buffers to be
+      killed on Gnus exit.</p>
+    </dd>
+
+    <dt><code>gnus-continuum-version</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dcontinuum_002dversion" id=
+      "index-gnus_002dcontinuum_002dversion"></a>
+
+      <p>Takes a Gnus version string as a parameter and returns a
+      floating point number. Earlier versions will always get a
+      lower number than later versions.</p>
+    </dd>
+
+    <dt><code>gnus-group-read-only-p</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dread_002donly_002dp" id=
+      "index-gnus_002dgroup_002dread_002donly_002dp"></a>
+
+      <p>Says whether <var>group</var> is read-only or not.</p>
+    </dd>
+
+    <dt><code>gnus-news-group-p</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dnews_002dgroup_002dp" id=
+      "index-gnus_002dnews_002dgroup_002dp"></a>
+
+      <p>Says whether <var>group</var> came from a news back
+      end.</p>
+    </dd>
+
+    <dt><code>gnus-ephemeral-group-p</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dephemeral_002dgroup_002dp" id=
+      "index-gnus_002dephemeral_002dgroup_002dp"></a>
+
+      <p>Says whether <var>group</var> is ephemeral or not.</p>
+    </dd>
+
+    <dt><code>gnus-server-to-method</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dserver_002dto_002dmethod" id=
+      "index-gnus_002dserver_002dto_002dmethod"></a>
+
+      <p>Returns the select method corresponding to
+      <var>server</var>.</p>
+    </dd>
+
+    <dt><code>gnus-server-equal</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dserver_002dequal" id=
+      "index-gnus_002dserver_002dequal"></a>
+
+      <p>Says whether two virtual servers are essentially equal.
+      For instance, two virtual servers may have server parameters
+      in different order, but this function will consider them
+      equal.</p>
+    </dd>
+
+    <dt><code>gnus-group-native-p</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dnative_002dp" id=
+      "index-gnus_002dgroup_002dnative_002dp"></a>
+
+      <p>Says whether <var>group</var> is native or not.</p>
+    </dd>
+
+    <dt><code>gnus-group-secondary-p</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dsecondary_002dp" id=
+      "index-gnus_002dgroup_002dsecondary_002dp"></a>
+
+      <p>Says whether <var>group</var> is secondary or not.</p>
+    </dd>
+
+    <dt><code>gnus-group-foreign-p</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dforeign_002dp" id=
+      "index-gnus_002dgroup_002dforeign_002dp"></a>
+
+      <p>Says whether <var>group</var> is foreign or not.</p>
+    </dd>
+
+    <dt><code>gnus-group-find-parameter</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dfind_002dparameter" id=
+      "index-gnus_002dgroup_002dfind_002dparameter"></a>
+
+      <p>Returns the parameter list of <var>group</var> (see
+      <a href="Group-Parameters.html#Group-Parameters">Group
+      Parameters</a>). If given a second parameter, returns the
+      value of that parameter for <var>group</var>.</p>
+    </dd>
+
+    <dt><code>gnus-group-set-parameter</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dset_002dparameter" id=
+      "index-gnus_002dgroup_002dset_002dparameter"></a>
+
+      <p>Takes three parameters; <var>group</var>,
+      <var>parameter</var> and <var>value</var>.</p>
+    </dd>
+
+    <dt><code>gnus-narrow-to-body</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dnarrow_002dto_002dbody" id=
+      "index-gnus_002dnarrow_002dto_002dbody"></a>
+
+      <p>Narrows the current buffer to the body of the article.</p>
+    </dd>
+
+    <dt><code>gnus-check-backend-function</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dcheck_002dbackend_002dfunction" id=
+      "index-gnus_002dcheck_002dbackend_002dfunction"></a>
+
+      <p>Takes two parameters, <var>function</var> and
+      <var>group</var>. If the back end <var>group</var> comes from
+      supports <var>function</var>, return
+      non-<code>nil</code>.</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(gnus-check-backend-function "request-scan" "nnml:misc")
 &rArr; t
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><code>gnus-read-method</code></dt>
-<dd><a name="index-gnus_002dread_002dmethod"></a>
-<p>Prompts the user for a select method.
-</p>
-</dd>
-</dl>
+    <dt><code>gnus-read-method</code></dt>
 
+    <dd>
+      <a name="index-gnus_002dread_002dmethod" id=
+      "index-gnus_002dread_002dmethod"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Back-End-Interface.html#Back-End-Interface" accesskey="n" rel="next">Back End Interface</a>, Up: <a href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u" rel="up">Gnus Reference Guide</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Prompts the user for a select method.</p>
+    </dd>
+  </dl>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Back-End-Interface.html#Back-End-Interface"
+    accesskey="n" rel="next">Back End Interface</a>, Up: <a href=
+    "Gnus-Reference-Guide.html#Gnus-Reference-Guide" accesskey="u"
+    rel="up">Gnus Reference Guide</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

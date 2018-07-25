@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,253 +16,373 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Error recovery</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Error recovery">
-<meta name="keywords" content="Wisent Parser Development: Error recovery">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Wisent-Parsing.html#Wisent-Parsing" rel="up" title="Wisent Parsing">
-<link href="Debugging-actions.html#Debugging-actions" rel="next" title="Debugging actions">
-<link href="Report-errors.html#Report-errors" rel="prev" title="Report errors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Error recovery</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Error recovery" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Error recovery" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Wisent-Parsing.html#Wisent-Parsing" rel="up" title=
+  "Wisent Parsing" />
+  <link href="Debugging-actions.html#Debugging-actions" rel="next"
+  title="Debugging actions" />
+  <link href="Report-errors.html#Report-errors" rel="prev" title=
+  "Report errors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Error-recovery"></a>
-<div class="header">
-<p>
-Next: <a href="Debugging-actions.html#Debugging-actions" accesskey="n" rel="next">Debugging actions</a>, Previous: <a href="Report-errors.html#Report-errors" accesskey="p" rel="prev">Report errors</a>, Up: <a href="Wisent-Parsing.html#Wisent-Parsing" accesskey="u" rel="up">Wisent Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Error-recovery-1"></a>
-<h3 class="section">3.4 Error recovery</h3>
+<body lang="en" xml:lang="en">
+  <a name="Error-recovery" id="Error-recovery"></a>
 
-<a name="index-error-recovery"></a>
-<p>The error recovery mechanism of the Wisent&rsquo;s parser conforms to the
-one Bison uses.  See <a href="http://www.gnu.org/software/bison/manual/html_node/Error-Recovery.html#Error-Recovery">(bison)Error Recovery</a>, in the Bison
-manual for details.
-</p>
-<a name="index-error-token"></a>
-<p>To recover from a syntax error you must write rules to recognize the
-special token <code>error</code>.  This is a terminal symbol that is
-automatically defined and reserved for error handling.
-</p>
-<p>When the parser encounters a syntax error, it pops the state stack
-until it finds a state that allows shifting the <code>error</code> token.
-After it has been shifted, if the old look-ahead token is not
-acceptable to be shifted next, the parser reads tokens and discards
-them until it finds a token which is acceptable.
-</p>
-<a name="index-error-recovery-strategy"></a>
-<p>Strategies for error recovery depend on the choice of error rules in
-the grammar.  A simple and useful strategy is simply to skip the rest
-of the current statement if an error is detected:
-</p>
-<div class="example">
-<pre class="example">(statement (( error ?; )) ;; on error, skip until ';' is read
+  <div class="header">
+    <p>Next: <a href="Debugging-actions.html#Debugging-actions"
+    accesskey="n" rel="next">Debugging actions</a>, Previous:
+    <a href="Report-errors.html#Report-errors" accesskey="p" rel=
+    "prev">Report errors</a>, Up: <a href=
+    "Wisent-Parsing.html#Wisent-Parsing" accesskey="u" rel=
+    "up">Wisent Parsing</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Error-recovery-1" id="Error-recovery-1"></a>
+
+  <h3 class="section">3.4 Error recovery</h3><a name=
+  "index-error-recovery" id="index-error-recovery"></a>
+
+  <p>The error recovery mechanism of the Wisent&rsquo;s parser
+  conforms to the one Bison uses. See <a href=
+  "http://www.gnu.org/software/bison/manual/html_node/Error-Recovery.html#Error-Recovery">
+  (bison)Error Recovery</a>, in the Bison manual for
+  details.</p><a name="index-error-token" id=
+  "index-error-token"></a>
+
+  <p>To recover from a syntax error you must write rules to
+  recognize the special token <code>error</code>. This is a
+  terminal symbol that is automatically defined and reserved for
+  error handling.</p>
+
+  <p>When the parser encounters a syntax error, it pops the state
+  stack until it finds a state that allows shifting the
+  <code>error</code> token. After it has been shifted, if the old
+  look-ahead token is not acceptable to be shifted next, the parser
+  reads tokens and discards them until it finds a token which is
+  acceptable.</p><a name="index-error-recovery-strategy" id=
+  "index-error-recovery-strategy"></a>
+
+  <p>Strategies for error recovery depend on the choice of error
+  rules in the grammar. A simple and useful strategy is simply to
+  skip the rest of the current statement if an error is
+  detected:</p>
+
+  <div class="example">
+    <pre class="example">
+(statement (( error ?; )) ;; on error, skip until ';' is read
            )
-</pre></div>
+</pre>
+  </div>
 
-<p>It is also useful to recover to the matching close-delimiter of an
-opening-delimiter that has already been parsed:
-</p>
-<div class="example">
-<pre class="example">(primary (( ?{ expr  ?} ))
+  <p>It is also useful to recover to the matching close-delimiter
+  of an opening-delimiter that has already been parsed:</p>
+
+  <div class="example">
+    <pre class="example">
+(primary (( ?{ expr  ?} ))
          (( ?{ error ?} ))
          &hellip;
          )
-</pre></div>
+</pre>
+  </div><a name="index-error-recovery-actions" id=
+  "index-error-recovery-actions"></a>
 
-<a name="index-error-recovery-actions"></a>
-<p>Note that error recovery rules may have actions, just as any other
-rules can.  Here are some predefined hooks, variables, functions or
-macros, useful in such actions:
-</p>
-<a name="index-wisent_002dnerrs"></a>
-<dl>
-<dt><a name="index-wisent_002dnerrs-1"></a>Variable: <strong>wisent-nerrs</strong></dt>
-<dd><p>The number of parse errors encountered so far.
-</p></dd></dl>
+  <p>Note that error recovery rules may have actions, just as any
+  other rules can. Here are some predefined hooks, variables,
+  functions or macros, useful in such actions:</p><a name=
+  "index-wisent_002dnerrs" id="index-wisent_002dnerrs"></a>
 
-<a name="index-wisent_002drecovering"></a>
-<dl>
-<dt><a name="index-wisent_002drecovering-1"></a>Variable: <strong>wisent-recovering</strong></dt>
-<dd><p>non-<code>nil</code> means that the parser is recovering.
-This variable only has meaning in the scope of <code>wisent-parse</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-wisent_002dnerrs-1" id=
+    "index-wisent_002dnerrs-1"></a>Variable:
+    <strong>wisent-nerrs</strong></dt>
 
-<a name="index-wisent_002derror"></a>
-<dl>
-<dt><a name="index-wisent_002derror-1"></a>Function: <strong>wisent-error</strong> <em>msg</em></dt>
-<dd><p>Call the user supplied error reporting function with message
-<var>msg</var> (see <a href="Report-errors.html#Report-errors">Report errors</a>).
-</p>
-<p>For an example of use, See <a href="#wisent_002dskip_002dtoken">wisent-skip-token</a>.
-</p></dd></dl>
+    <dd>
+      <p>The number of parse errors encountered so far.</p>
+    </dd>
+  </dl><a name="index-wisent_002drecovering" id=
+  "index-wisent_002drecovering"></a>
 
-<a name="index-wisent_002derrok"></a>
-<dl>
-<dt><a name="index-wisent_002derrok-1"></a>Function: <strong>wisent-errok</strong></dt>
-<dd><p>Resume generating error messages immediately for subsequent syntax
-errors.
-</p>
-<p>The parser suppress error message for syntax errors that happens
-shortly after the first, until three consecutive input tokens have
-been successfully shifted.
-</p>
-<p>Calling <code>wisent-errok</code> in an action, make error messages resume
-immediately.  No error messages will be suppressed if you call it in
-an error rule&rsquo;s action.
-</p>
-<p>For an example of use, See <a href="#wisent_002dskip_002dtoken">wisent-skip-token</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-wisent_002drecovering-1" id=
+    "index-wisent_002drecovering-1"></a>Variable:
+    <strong>wisent-recovering</strong></dt>
 
-<a name="index-wisent_002dclearin"></a>
-<dl>
-<dt><a name="index-wisent_002dclearin-1"></a>Function: <strong>wisent-clearin</strong></dt>
-<dd><p>Discard the current lookahead token.
-This will cause a new lexical token to be read.
-</p>
-<p>In an error rule&rsquo;s action the previous lookahead token is reanalyzed
-immediately.  <code>wisent-clearin</code> may be called to clear this token.
-</p>
-<p>For example, suppose that on a parse error, an error handling routine
-is called that advances the input stream to some point where parsing
-should once again commence.  The next symbol returned by the lexical
-scanner is probably correct.  The previous lookahead token ought to
-be discarded with <code>wisent-clearin</code>.
-</p>
-<p>For an example of use, See <a href="#wisent_002dskip_002dtoken">wisent-skip-token</a>.
-</p></dd></dl>
+    <dd>
+      <p>non-<code>nil</code> means that the parser is recovering.
+      This variable only has meaning in the scope of
+      <code>wisent-parse</code>.</p>
+    </dd>
+  </dl><a name="index-wisent_002derror" id=
+  "index-wisent_002derror"></a>
 
-<a name="index-wisent_002dabort"></a>
-<dl>
-<dt><a name="index-wisent_002dabort-1"></a>Function: <strong>wisent-abort</strong></dt>
-<dd><p>Abort parsing and save the lookahead token.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-wisent_002derror-1" id=
+    "index-wisent_002derror-1"></a>Function:
+    <strong>wisent-error</strong> <em>msg</em></dt>
 
-<a name="index-wisent_002dset_002dregion"></a>
-<dl>
-<dt><a name="index-wisent_002dset_002dregion-1"></a>Function: <strong>wisent-set-region</strong> <em>start end</em></dt>
-<dd><p>Change the region of text matched by the current nonterminal.
-<var>start</var> and <var>end</var> are respectively the beginning and end
-positions of the region occupied by the group of components associated
-to this nonterminal.  If <var>start</var> or <var>end</var> values are not a
-valid positions the region is set to <code>nil</code>.
-</p>
-<p>For an example of use, See <a href="#wisent_002dskip_002dtoken">wisent-skip-token</a>.
-</p></dd></dl>
+    <dd>
+      <p>Call the user supplied error reporting function with
+      message <var>msg</var> (see <a href=
+      "Report-errors.html#Report-errors">Report errors</a>).</p>
 
-<a name="index-wisent_002ddiscarding_002dtoken_002dfunctions"></a>
-<dl>
-<dt><a name="index-wisent_002ddiscarding_002dtoken_002dfunctions-1"></a>Variable: <strong>wisent-discarding-token-functions</strong></dt>
-<dd><p>List of functions to be called when discarding a lexical token.
-These functions receive the lexical token discarded.
-When the parser encounters unexpected tokens, it can discards them,
-based on what directed by error recovery rules.  Either when the
-parser reads tokens until one is found that can be shifted, or when an
-semantic action calls the function <code>wisent-skip-token</code> or
-<code>wisent-skip-block</code>.
-For language specific hooks, make sure you define this as a local
-hook.
-</p>
-<p>For example, in <i>Semantic</i>, this hook is set to the function
-<code>wisent-collect-unmatched-syntax</code> to collect unmatched lexical
-tokens (see <a href="Useful-functions.html#Useful-functions">Useful functions</a>).
-</p></dd></dl>
+      <p>For an example of use, See <a href=
+      "#wisent_002dskip_002dtoken">wisent-skip-token</a>.</p>
+    </dd>
+  </dl><a name="index-wisent_002derrok" id=
+  "index-wisent_002derrok"></a>
 
-<a name="index-wisent_002dskip_002dtoken"></a>
-<dl>
-<dt><a name="index-wisent_002dskip_002dtoken-1"></a>Function: <strong>wisent-skip-token</strong></dt>
-<dd><a name="wisent_002dskip_002dtoken"></a><p>Skip the lookahead token in order to resume parsing.
-Return <code>nil</code>.
-Must be used in error recovery semantic actions.
-</p>
-<p>It typically looks like this:
-</p>
-<div class="lisp">
-<pre class="lisp">(wisent-message &quot;%s: skip %s&quot; $action
+  <dl>
+    <dt><a name="index-wisent_002derrok-1" id=
+    "index-wisent_002derrok-1"></a>Function:
+    <strong>wisent-errok</strong></dt>
+
+    <dd>
+      <p>Resume generating error messages immediately for
+      subsequent syntax errors.</p>
+
+      <p>The parser suppress error message for syntax errors that
+      happens shortly after the first, until three consecutive
+      input tokens have been successfully shifted.</p>
+
+      <p>Calling <code>wisent-errok</code> in an action, make error
+      messages resume immediately. No error messages will be
+      suppressed if you call it in an error rule&rsquo;s
+      action.</p>
+
+      <p>For an example of use, See <a href=
+      "#wisent_002dskip_002dtoken">wisent-skip-token</a>.</p>
+    </dd>
+  </dl><a name="index-wisent_002dclearin" id=
+  "index-wisent_002dclearin"></a>
+
+  <dl>
+    <dt><a name="index-wisent_002dclearin-1" id=
+    "index-wisent_002dclearin-1"></a>Function:
+    <strong>wisent-clearin</strong></dt>
+
+    <dd>
+      <p>Discard the current lookahead token. This will cause a new
+      lexical token to be read.</p>
+
+      <p>In an error rule&rsquo;s action the previous lookahead
+      token is reanalyzed immediately. <code>wisent-clearin</code>
+      may be called to clear this token.</p>
+
+      <p>For example, suppose that on a parse error, an error
+      handling routine is called that advances the input stream to
+      some point where parsing should once again commence. The next
+      symbol returned by the lexical scanner is probably correct.
+      The previous lookahead token ought to be discarded with
+      <code>wisent-clearin</code>.</p>
+
+      <p>For an example of use, See <a href=
+      "#wisent_002dskip_002dtoken">wisent-skip-token</a>.</p>
+    </dd>
+  </dl><a name="index-wisent_002dabort" id=
+  "index-wisent_002dabort"></a>
+
+  <dl>
+    <dt><a name="index-wisent_002dabort-1" id=
+    "index-wisent_002dabort-1"></a>Function:
+    <strong>wisent-abort</strong></dt>
+
+    <dd>
+      <p>Abort parsing and save the lookahead token.</p>
+    </dd>
+  </dl><a name="index-wisent_002dset_002dregion" id=
+  "index-wisent_002dset_002dregion"></a>
+
+  <dl>
+    <dt><a name="index-wisent_002dset_002dregion-1" id=
+    "index-wisent_002dset_002dregion-1"></a>Function:
+    <strong>wisent-set-region</strong> <em>start end</em></dt>
+
+    <dd>
+      <p>Change the region of text matched by the current
+      nonterminal. <var>start</var> and <var>end</var> are
+      respectively the beginning and end positions of the region
+      occupied by the group of components associated to this
+      nonterminal. If <var>start</var> or <var>end</var> values are
+      not a valid positions the region is set to
+      <code>nil</code>.</p>
+
+      <p>For an example of use, See <a href=
+      "#wisent_002dskip_002dtoken">wisent-skip-token</a>.</p>
+    </dd>
+  </dl><a name=
+  "index-wisent_002ddiscarding_002dtoken_002dfunctions" id=
+  "index-wisent_002ddiscarding_002dtoken_002dfunctions"></a>
+
+  <dl>
+    <dt><a name=
+    "index-wisent_002ddiscarding_002dtoken_002dfunctions-1" id=
+    "index-wisent_002ddiscarding_002dtoken_002dfunctions-1"></a>Variable:
+    <strong>wisent-discarding-token-functions</strong></dt>
+
+    <dd>
+      <p>List of functions to be called when discarding a lexical
+      token. These functions receive the lexical token discarded.
+      When the parser encounters unexpected tokens, it can discards
+      them, based on what directed by error recovery rules. Either
+      when the parser reads tokens until one is found that can be
+      shifted, or when an semantic action calls the function
+      <code>wisent-skip-token</code> or
+      <code>wisent-skip-block</code>. For language specific hooks,
+      make sure you define this as a local hook.</p>
+
+      <p>For example, in <i>Semantic</i>, this hook is set to the
+      function <code>wisent-collect-unmatched-syntax</code> to
+      collect unmatched lexical tokens (see <a href=
+      "Useful-functions.html#Useful-functions">Useful
+      functions</a>).</p>
+    </dd>
+  </dl><a name="index-wisent_002dskip_002dtoken" id=
+  "index-wisent_002dskip_002dtoken"></a>
+
+  <dl>
+    <dt><a name="index-wisent_002dskip_002dtoken-1" id=
+    "index-wisent_002dskip_002dtoken-1"></a>Function:
+    <strong>wisent-skip-token</strong></dt>
+
+    <dd>
+      <a name="wisent_002dskip_002dtoken" id=
+      "wisent_002dskip_002dtoken"></a>
+
+      <p>Skip the lookahead token in order to resume parsing.
+      Return <code>nil</code>. Must be used in error recovery
+      semantic actions.</p>
+
+      <p>It typically looks like this:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(wisent-message "%s: skip %s" $action
                 (wisent-token-to-string wisent-input))
 (run-hook-with-args
  'wisent-discarding-token-functions wisent-input)
 (wisent-clearin)
 (wisent-errok)))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl><a name="index-wisent_002dskip_002dblock" id=
+  "index-wisent_002dskip_002dblock"></a>
 
-<a name="index-wisent_002dskip_002dblock"></a>
-<dl>
-<dt><a name="index-wisent_002dskip_002dblock-1"></a>Function: <strong>wisent-skip-block</strong></dt>
-<dd><p>Safely skip a block in order to resume parsing.
-Return <code>nil</code>.
-Must be used in error recovery semantic actions.
-</p>
-<p>A block is data between an open-delimiter (syntax class <code>(</code>) and
-a matching close-delimiter (syntax class <code>)</code>):
-</p>
-<div class="example">
-<pre class="example">(a parenthesized block)
+  <dl>
+    <dt><a name="index-wisent_002dskip_002dblock-1" id=
+    "index-wisent_002dskip_002dblock-1"></a>Function:
+    <strong>wisent-skip-block</strong></dt>
+
+    <dd>
+      <p>Safely skip a block in order to resume parsing. Return
+      <code>nil</code>. Must be used in error recovery semantic
+      actions.</p>
+
+      <p>A block is data between an open-delimiter (syntax class
+      <code>(</code>) and a matching close-delimiter (syntax class
+      <code>)</code>):</p>
+
+      <div class="example">
+        <pre class="example">
+(a parenthesized block)
 [a block between brackets]
 {a block between braces}
-</pre></div>
+</pre>
+      </div>
 
-<p>The following example uses <code>wisent-skip-block</code> to safely skip a
-block delimited by &lsquo;<samp>LBRACE</samp>&rsquo; (<code>{</code>) and &lsquo;<samp>RBRACE</samp>&rsquo;
-(<code>}</code>) tokens, when a syntax error occurs in
-&lsquo;<samp>other-components</samp>&rsquo;:
-</p>
-<div class="example">
-<pre class="example">(block ((LBRACE other-components RBRACE))
+      <p>The following example uses <code>wisent-skip-block</code>
+      to safely skip a block delimited by
+      &lsquo;<samp>LBRACE</samp>&rsquo; (<code>{</code>) and
+      &lsquo;<samp>RBRACE</samp>&rsquo; (<code>}</code>) tokens,
+      when a syntax error occurs in
+      &lsquo;<samp>other-components</samp>&rsquo;:</p>
+
+      <div class="example">
+        <pre class="example">
+(block ((LBRACE other-components RBRACE))
        ((LBRACE RBRACE))
        ((LBRACE error)
         (wisent-skip-block))
        )
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Debugging-actions.html#Debugging-actions" accesskey="n" rel="next">Debugging actions</a>, Previous: <a href="Report-errors.html#Report-errors" accesskey="p" rel="prev">Report errors</a>, Up: <a href="Wisent-Parsing.html#Wisent-Parsing" accesskey="u" rel="up">Wisent Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Debugging-actions.html#Debugging-actions"
+    accesskey="n" rel="next">Debugging actions</a>, Previous:
+    <a href="Report-errors.html#Report-errors" accesskey="p" rel=
+    "prev">Report errors</a>, Up: <a href=
+    "Wisent-Parsing.html#Wisent-Parsing" accesskey="u" rel=
+    "up">Wisent Parsing</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

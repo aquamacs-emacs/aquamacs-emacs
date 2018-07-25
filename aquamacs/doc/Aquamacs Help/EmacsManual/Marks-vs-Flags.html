@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,282 +20,459 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Marks vs Flags</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Marks vs Flags">
-<meta name="keywords" content="GNU Emacs Manual: Marks vs Flags">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Dired.html#Dired" rel="up" title="Dired">
-<link href="Operating-on-Files.html#Operating-on-Files" rel="next" title="Operating on Files">
-<link href="Dired-Visiting.html#Dired-Visiting" rel="prev" title="Dired Visiting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Marks vs Flags</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Marks vs Flags" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Marks vs Flags" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Dired.html#Dired" rel="up" title="Dired" />
+  <link href="Operating-on-Files.html#Operating-on-Files" rel=
+  "next" title="Operating on Files" />
+  <link href="Dired-Visiting.html#Dired-Visiting" rel="prev" title=
+  "Dired Visiting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Marks-vs-Flags" id="Marks-vs-Flags"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Operating-on-Files.html#Operating-on-Files"
+    accesskey="n" rel="next">Operating on Files</a>, Previous:
+    <a href="Dired-Visiting.html#Dired-Visiting" accesskey="p" rel=
+    "prev">Dired Visiting</a>, Up: <a href="Dired.html#Dired"
+    accesskey="u" rel="up">Dired</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Dired-Marks-vs_002e-Flags" id=
+  "Dired-Marks-vs_002e-Flags"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Marks-vs-Flags"></a>
-<div class="header">
-<p>
-Next: <a href="Operating-on-Files.html#Operating-on-Files" accesskey="n" rel="next">Operating on Files</a>, Previous: <a href="Dired-Visiting.html#Dired-Visiting" accesskey="p" rel="prev">Dired Visiting</a>, Up: <a href="Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Dired-Marks-vs_002e-Flags"></a>
-<h3 class="section">30.6 Dired Marks vs. Flags</h3>
+  <h3 class="section">30.6 Dired Marks vs. Flags</h3><a name=
+  "index-marking-many-files-_0028in-Dired_0029" id=
+  "index-marking-many-files-_0028in-Dired_0029"></a>
 
-<a name="index-marking-many-files-_0028in-Dired_0029"></a>
-<p>Instead of flagging a file with &lsquo;<samp>D</samp>&rsquo;, you can <em>mark</em> the
-file with some other character (usually &lsquo;<samp>*</samp>&rsquo;).  Most Dired
-commands to operate on files use the files marked with &lsquo;<samp>*</samp>&rsquo;.  The
-only command that operates on flagged files is <kbd>x</kbd>, which deletes
-them.
-</p>
-<p>Here are some commands for marking with &lsquo;<samp>*</samp>&rsquo;, for unmarking, and
-for operating on marks.  (See <a href="Dired-Deletion.html#Dired-Deletion">Dired Deletion</a>, for commands to flag
-and unflag files.)
-</p>
-<dl compact="compact">
-<dt><kbd>m</kbd></dt>
-<dt><kbd>* m</kbd></dt>
-<dd><a name="index-m-_0028Dired_0029"></a>
-<a name="index-_002a-m-_0028Dired_0029"></a>
-<a name="index-dired_002dmark"></a>
-<p>Mark the current file with &lsquo;<samp>*</samp>&rsquo; (<code>dired-mark</code>).  If the
-region is active, mark all files in the region instead; otherwise, if
-a numeric argument <var>n</var> is supplied, mark the next <var>n</var> files
-instead, starting with the current file (if <var>n</var> is negative, mark
-the previous −<var>n</var> files).
-</p>
-</dd>
-<dt><kbd>* *</kbd></dt>
-<dd><a name="index-_002a-_002a-_0028Dired_0029"></a>
-<a name="index-dired_002dmark_002dexecutables"></a>
-<a name="index-marking-executable-files-_0028in-Dired_0029"></a>
-<p>Mark all executable files with &lsquo;<samp>*</samp>&rsquo;
-(<code>dired-mark-executables</code>).  With a numeric argument, unmark all
-those files.
-</p>
-</dd>
-<dt><kbd>* @</kbd></dt>
-<dd><a name="index-_002a-_0040-_0028Dired_0029"></a>
-<a name="index-dired_002dmark_002dsymlinks"></a>
-<a name="index-marking-symbolic-links-_0028in-Dired_0029"></a>
-<p>Mark all symbolic links with &lsquo;<samp>*</samp>&rsquo; (<code>dired-mark-symlinks</code>).
-With a numeric argument, unmark all those files.
-</p>
-</dd>
-<dt><kbd>* /</kbd></dt>
-<dd><a name="index-_002a-_002f-_0028Dired_0029"></a>
-<a name="index-dired_002dmark_002ddirectories"></a>
-<a name="index-marking-subdirectories-_0028in-Dired_0029"></a>
-<p>Mark with &lsquo;<samp>*</samp>&rsquo; all files which are directories, except for
-<samp>.</samp> and <samp>..</samp> (<code>dired-mark-directories</code>).  With a numeric
-argument, unmark all those files.
-</p>
-</dd>
-<dt><kbd>* s</kbd></dt>
-<dd><a name="index-_002a-s-_0028Dired_0029"></a>
-<a name="index-dired_002dmark_002dsubdir_002dfiles"></a>
-<p>Mark all the files in the current subdirectory, aside from <samp>.</samp>
-and <samp>..</samp> (<code>dired-mark-subdir-files</code>).
-</p>
-</dd>
-<dt><kbd>u</kbd></dt>
-<dt><kbd>* u</kbd></dt>
-<dd><a name="index-u-_0028Dired_0029"></a>
-<a name="index-_002a-u-_0028Dired_0029"></a>
-<a name="index-dired_002dunmark"></a>
-<p>Remove any mark on this line (<code>dired-unmark</code>).  If the region is
-active, unmark all files in the region instead; otherwise, if a
-numeric argument <var>n</var> is supplied, unmark the next <var>n</var> files
-instead, starting with the current file (if <var>n</var> is negative,
-unmark the previous −<var>n</var> files).
-</p>
-</dd>
-<dt><kbd><span class="key">DEL</span></kbd></dt>
-<dt><kbd>* <span class="key">DEL</span></kbd></dt>
-<dd><a name="index-_002a-DEL-_0028Dired_0029"></a>
-<a name="index-dired_002dunmark_002dbackward"></a>
-<a name="index-unmarking-files-_0028in-Dired_0029"></a>
-<p>Move point to previous line and remove any mark on that line
-(<code>dired-unmark-backward</code>).  If the region is active, unmark all
-files in the region instead; otherwise, if a numeric argument <var>n</var>
-is supplied, unmark the <var>n</var> preceding files instead, starting with
-the current file (if <var>n</var> is negative, unmark the next
-−<var>n</var> files).
-</p>
-</dd>
-<dt><kbd>* !</kbd></dt>
-<dt><kbd>U</kbd></dt>
-<dd><a name="index-_002a-_0021-_0028Dired_0029"></a>
-<a name="index-U-_0028Dired_0029"></a>
-<a name="index-dired_002dunmark_002dall_002dmarks"></a>
-<p>Remove all marks from all the files in this Dired buffer
-(<code>dired-unmark-all-marks</code>).
-</p>
-</dd>
-<dt><kbd>* ? <var>markchar</var></kbd></dt>
-<dt><kbd>M-<span class="key">DEL</span></kbd></dt>
-<dd><a name="index-_002a-_003f-_0028Dired_0029"></a>
-<a name="index-M_002dDEL-_0028Dired_0029"></a>
-<a name="index-dired_002dunmark_002dall_002dfiles"></a>
-<p>Remove all marks that use the character <var>markchar</var>
-(<code>dired-unmark-all-files</code>).  The argument is a single
-character&mdash;do not use <tt class="key">RET</tt> to terminate it.  See the description
-of the <kbd>* c</kbd> command below, which lets you replace one mark
-character with another.
-</p>
-<p>With a numeric argument, this command queries about each marked file,
-asking whether to remove its mark.  You can answer <kbd>y</kbd> meaning yes,
-<kbd>n</kbd> meaning no, or <kbd>!</kbd> to remove the marks from the remaining
-files without asking about them.
-</p>
-</dd>
-<dt><kbd>* C-n</kbd></dt>
-<dt><kbd>M-}</kbd></dt>
-<dd><a name="index-dired_002dnext_002dmarked_002dfile"></a>
-<a name="index-_002a-C_002dn-_0028Dired_0029"></a>
-<a name="index-M_002d_007d-_0028Dired_0029"></a>
-<p>Move down to the next marked file (<code>dired-next-marked-file</code>)
-A file is &ldquo;marked&rdquo; if it has any kind of mark.
-</p>
-</dd>
-<dt><kbd>* C-p</kbd></dt>
-<dt><kbd>M-{</kbd></dt>
-<dd><a name="index-dired_002dprev_002dmarked_002dfile"></a>
-<a name="index-_002a-C_002dp-_0028Dired_0029"></a>
-<a name="index-M_002d_007b-_0028Dired_0029"></a>
-<p>Move up to the previous marked file (<code>dired-prev-marked-file</code>)
-</p>
-</dd>
-<dt><kbd>t</kbd></dt>
-<dt><kbd>* t</kbd></dt>
-<dd><a name="index-t-_0028Dired_0029"></a>
-<a name="index-_002a-t-_0028Dired_0029"></a>
-<a name="index-dired_002dtoggle_002dmarks"></a>
-<a name="index-toggling-marks-_0028in-Dired_0029"></a>
-<p>Toggle all marks (<code>dired-toggle-marks</code>): files marked with &lsquo;<samp>*</samp>&rsquo;
-become unmarked, and unmarked files are marked with &lsquo;<samp>*</samp>&rsquo;.  Files
-marked in any other way are not affected.
-</p>
-</dd>
-<dt><kbd>* c <var>old-markchar</var> <var>new-markchar</var></kbd></dt>
-<dd><a name="index-_002a-c-_0028Dired_0029"></a>
-<a name="index-dired_002dchange_002dmarks"></a>
-<p>Replace all marks that use the character <var>old-markchar</var> with marks
-that use the character <var>new-markchar</var> (<code>dired-change-marks</code>).
-This command is the primary way to create or use marks other than
-&lsquo;<samp>*</samp>&rsquo; or &lsquo;<samp>D</samp>&rsquo;.  The arguments are single characters&mdash;do not use
-<tt class="key">RET</tt> to terminate them.
-</p>
-<p>You can use almost any character as a mark character by means of this
-command, to distinguish various classes of files.  If <var>old-markchar</var>
-is a space (&lsquo;<samp> </samp>&rsquo;), then the command operates on all unmarked files;
-if <var>new-markchar</var> is a space, then the command unmarks the files it
-acts on.
-</p>
-<p>To illustrate the power of this command, here is how to put &lsquo;<samp>D</samp>&rsquo;
-flags on all the files that have no marks, while unflagging all those
-that already have &lsquo;<samp>D</samp>&rsquo; flags:
-</p>
-<div class="example">
-<pre class="example">* c D t  * c <span class="key">SPC</span> D  * c t <span class="key">SPC</span>
-</pre></div>
+  <p>Instead of flagging a file with &lsquo;<samp>D</samp>&rsquo;,
+  you can <em>mark</em> the file with some other character (usually
+  &lsquo;<samp>*</samp>&rsquo;). Most Dired commands to operate on
+  files use the files marked with &lsquo;<samp>*</samp>&rsquo;. The
+  only command that operates on flagged files is <kbd>x</kbd>,
+  which deletes them.</p>
 
-<p>This assumes that no files were already marked with &lsquo;<samp>t</samp>&rsquo;.
-</p>
-</dd>
-<dt><kbd>% m <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dt><kbd>* % <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-dired_002dmark_002dfiles_002dregexp"></a>
-<a name="index-_0025-m-_0028Dired_0029"></a>
-<a name="index-_002a-_0025-_0028Dired_0029"></a>
-<p>Mark (with &lsquo;<samp>*</samp>&rsquo;) all files whose names match the regular expression
-<var>regexp</var> (<code>dired-mark-files-regexp</code>).  This command is like
-<kbd>% d</kbd>, except that it marks files with &lsquo;<samp>*</samp>&rsquo; instead of flagging
-with &lsquo;<samp>D</samp>&rsquo;.
-</p>
-<p>Only the non-directory part of the file name is used in matching.  Use
-&lsquo;<samp>^</samp>&rsquo; and &lsquo;<samp>$</samp>&rsquo; to anchor matches.  You can exclude
-subdirectories by temporarily hiding them (see <a href="Hiding-Subdirectories.html#Hiding-Subdirectories">Hiding Subdirectories</a>).
-</p>
-</dd>
-<dt><kbd>% g <var>regexp</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-dired_002dmark_002dfiles_002dcontaining_002dregexp"></a>
-<a name="index-_0025-g-_0028Dired_0029"></a>
-<a name="index-finding-files-containing-regexp-matches-_0028in-Dired_0029"></a>
-<p>Mark (with &lsquo;<samp>*</samp>&rsquo;) all files whose <em>contents</em> contain a match for
-the regular expression <var>regexp</var>
-(<code>dired-mark-files-containing-regexp</code>).  This command is like
-<kbd>% m</kbd>, except that it searches the file contents instead of the file
-name.  Note that if a file is visited in an Emacs buffer, this command
-will look in the buffer without revisiting the file, so the results
-might be inconsistent with the file on disk if its contents has changed
-since it was last visited.  If you don&rsquo;t want this, you may wish
-reverting the files you have visited in your buffers, or turning on
-the <code>auto-revert</code> mode in those buffers, before invoking this
-command.  See <a href="Reverting.html#Reverting">Reverting</a>.
-</p>
-</dd>
-<dt><kbd>C-/</kbd></dt>
-<dt><kbd>C-x u</kbd></dt>
-<dt><kbd>C-_</kbd></dt>
-<dd><a name="index-C_002d_005f-_0028Dired_0029"></a>
-<a name="index-dired_002dundo"></a>
-<p>Undo changes in the Dired buffer, such as adding or removing
-marks (<code>dired-undo</code>).  <em>This command does not revert the
-actual file operations, nor recover lost files!</em>  It just undoes
-changes in the buffer itself.
-</p>
-<p>In some cases, using this after commands that operate on files can
-cause trouble.  For example, after renaming one or more files,
-<code>dired-undo</code> restores the original names in the Dired buffer,
-which gets the Dired buffer out of sync with the actual contents of
-the directory.
-</p></dd>
-</dl>
+  <p>Here are some commands for marking with
+  &lsquo;<samp>*</samp>&rsquo;, for unmarking, and for operating on
+  marks. (See <a href="Dired-Deletion.html#Dired-Deletion">Dired
+  Deletion</a>, for commands to flag and unflag files.)</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Operating-on-Files.html#Operating-on-Files" accesskey="n" rel="next">Operating on Files</a>, Previous: <a href="Dired-Visiting.html#Dired-Visiting" accesskey="p" rel="prev">Dired Visiting</a>, Up: <a href="Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>m</kbd></dt>
 
+    <dt><kbd>* m</kbd></dt>
 
+    <dd>
+      <a name="index-m-_0028Dired_0029" id=
+      "index-m-_0028Dired_0029"></a> <a name=
+      "index-_002a-m-_0028Dired_0029" id=
+      "index-_002a-m-_0028Dired_0029"></a> <a name=
+      "index-dired_002dmark" id="index-dired_002dmark"></a>
 
+      <p>Mark the current file with &lsquo;<samp>*</samp>&rsquo;
+      (<code>dired-mark</code>). If the region is active, mark all
+      files in the region instead; otherwise, if a numeric argument
+      <var>n</var> is supplied, mark the next <var>n</var> files
+      instead, starting with the current file (if <var>n</var> is
+      negative, mark the previous &acirc;&circ;&rsquo;<var>n</var>
+      files).</p>
+    </dd>
+
+    <dt><kbd>* *</kbd></dt>
+
+    <dd>
+      <a name="index-_002a-_002a-_0028Dired_0029" id=
+      "index-_002a-_002a-_0028Dired_0029"></a> <a name=
+      "index-dired_002dmark_002dexecutables" id=
+      "index-dired_002dmark_002dexecutables"></a> <a name=
+      "index-marking-executable-files-_0028in-Dired_0029" id=
+      "index-marking-executable-files-_0028in-Dired_0029"></a>
+
+      <p>Mark all executable files with
+      &lsquo;<samp>*</samp>&rsquo;
+      (<code>dired-mark-executables</code>). With a numeric
+      argument, unmark all those files.</p>
+    </dd>
+
+    <dt><kbd>* @</kbd></dt>
+
+    <dd>
+      <a name="index-_002a-_0040-_0028Dired_0029" id=
+      "index-_002a-_0040-_0028Dired_0029"></a> <a name=
+      "index-dired_002dmark_002dsymlinks" id=
+      "index-dired_002dmark_002dsymlinks"></a> <a name=
+      "index-marking-symbolic-links-_0028in-Dired_0029" id=
+      "index-marking-symbolic-links-_0028in-Dired_0029"></a>
+
+      <p>Mark all symbolic links with &lsquo;<samp>*</samp>&rsquo;
+      (<code>dired-mark-symlinks</code>). With a numeric argument,
+      unmark all those files.</p>
+    </dd>
+
+    <dt><kbd>* /</kbd></dt>
+
+    <dd>
+      <a name="index-_002a-_002f-_0028Dired_0029" id=
+      "index-_002a-_002f-_0028Dired_0029"></a> <a name=
+      "index-dired_002dmark_002ddirectories" id=
+      "index-dired_002dmark_002ddirectories"></a> <a name=
+      "index-marking-subdirectories-_0028in-Dired_0029" id=
+      "index-marking-subdirectories-_0028in-Dired_0029"></a>
+
+      <p>Mark with &lsquo;<samp>*</samp>&rsquo; all files which are
+      directories, except for <samp>.</samp> and <samp>..</samp>
+      (<code>dired-mark-directories</code>). With a numeric
+      argument, unmark all those files.</p>
+    </dd>
+
+    <dt><kbd>* s</kbd></dt>
+
+    <dd>
+      <a name="index-_002a-s-_0028Dired_0029" id=
+      "index-_002a-s-_0028Dired_0029"></a> <a name=
+      "index-dired_002dmark_002dsubdir_002dfiles" id=
+      "index-dired_002dmark_002dsubdir_002dfiles"></a>
+
+      <p>Mark all the files in the current subdirectory, aside from
+      <samp>.</samp> and <samp>..</samp>
+      (<code>dired-mark-subdir-files</code>).</p>
+    </dd>
+
+    <dt><kbd>u</kbd></dt>
+
+    <dt><kbd>* u</kbd></dt>
+
+    <dd>
+      <a name="index-u-_0028Dired_0029" id=
+      "index-u-_0028Dired_0029"></a> <a name=
+      "index-_002a-u-_0028Dired_0029" id=
+      "index-_002a-u-_0028Dired_0029"></a> <a name=
+      "index-dired_002dunmark" id="index-dired_002dunmark"></a>
+
+      <p>Remove any mark on this line (<code>dired-unmark</code>).
+      If the region is active, unmark all files in the region
+      instead; otherwise, if a numeric argument <var>n</var> is
+      supplied, unmark the next <var>n</var> files instead,
+      starting with the current file (if <var>n</var> is negative,
+      unmark the previous &acirc;&circ;&rsquo;<var>n</var>
+      files).</p>
+    </dd>
+
+    <dt><kbd><span class="key">DEL</span></kbd></dt>
+
+    <dt><kbd>* <span class="key">DEL</span></kbd></dt>
+
+    <dd>
+      <a name="index-_002a-DEL-_0028Dired_0029" id=
+      "index-_002a-DEL-_0028Dired_0029"></a> <a name=
+      "index-dired_002dunmark_002dbackward" id=
+      "index-dired_002dunmark_002dbackward"></a> <a name=
+      "index-unmarking-files-_0028in-Dired_0029" id=
+      "index-unmarking-files-_0028in-Dired_0029"></a>
+
+      <p>Move point to previous line and remove any mark on that
+      line (<code>dired-unmark-backward</code>). If the region is
+      active, unmark all files in the region instead; otherwise, if
+      a numeric argument <var>n</var> is supplied, unmark the
+      <var>n</var> preceding files instead, starting with the
+      current file (if <var>n</var> is negative, unmark the next
+      &acirc;&circ;&rsquo;<var>n</var> files).</p>
+    </dd>
+
+    <dt><kbd>* !</kbd></dt>
+
+    <dt><kbd>U</kbd></dt>
+
+    <dd>
+      <a name="index-_002a-_0021-_0028Dired_0029" id=
+      "index-_002a-_0021-_0028Dired_0029"></a> <a name=
+      "index-U-_0028Dired_0029" id="index-U-_0028Dired_0029"></a>
+      <a name="index-dired_002dunmark_002dall_002dmarks" id=
+      "index-dired_002dunmark_002dall_002dmarks"></a>
+
+      <p>Remove all marks from all the files in this Dired buffer
+      (<code>dired-unmark-all-marks</code>).</p>
+    </dd>
+
+    <dt><kbd>* ? <var>markchar</var></kbd></dt>
+
+    <dt><kbd>M-<span class="key">DEL</span></kbd></dt>
+
+    <dd>
+      <a name="index-_002a-_003f-_0028Dired_0029" id=
+      "index-_002a-_003f-_0028Dired_0029"></a> <a name=
+      "index-M_002dDEL-_0028Dired_0029" id=
+      "index-M_002dDEL-_0028Dired_0029"></a> <a name=
+      "index-dired_002dunmark_002dall_002dfiles" id=
+      "index-dired_002dunmark_002dall_002dfiles"></a>
+
+      <p>Remove all marks that use the character
+      <var>markchar</var> (<code>dired-unmark-all-files</code>).
+      The argument is a single character&mdash;do not use
+      <tt class="key">RET</tt> to terminate it. See the description
+      of the <kbd>* c</kbd> command below, which lets you replace
+      one mark character with another.</p>
+
+      <p>With a numeric argument, this command queries about each
+      marked file, asking whether to remove its mark. You can
+      answer <kbd>y</kbd> meaning yes, <kbd>n</kbd> meaning no, or
+      <kbd>!</kbd> to remove the marks from the remaining files
+      without asking about them.</p>
+    </dd>
+
+    <dt><kbd>* C-n</kbd></dt>
+
+    <dt><kbd>M-}</kbd></dt>
+
+    <dd>
+      <a name="index-dired_002dnext_002dmarked_002dfile" id=
+      "index-dired_002dnext_002dmarked_002dfile"></a> <a name=
+      "index-_002a-C_002dn-_0028Dired_0029" id=
+      "index-_002a-C_002dn-_0028Dired_0029"></a> <a name=
+      "index-M_002d_007d-_0028Dired_0029" id=
+      "index-M_002d_007d-_0028Dired_0029"></a>
+
+      <p>Move down to the next marked file
+      (<code>dired-next-marked-file</code>) A file is
+      &ldquo;marked&rdquo; if it has any kind of mark.</p>
+    </dd>
+
+    <dt><kbd>* C-p</kbd></dt>
+
+    <dt><kbd>M-{</kbd></dt>
+
+    <dd>
+      <a name="index-dired_002dprev_002dmarked_002dfile" id=
+      "index-dired_002dprev_002dmarked_002dfile"></a> <a name=
+      "index-_002a-C_002dp-_0028Dired_0029" id=
+      "index-_002a-C_002dp-_0028Dired_0029"></a> <a name=
+      "index-M_002d_007b-_0028Dired_0029" id=
+      "index-M_002d_007b-_0028Dired_0029"></a>
+
+      <p>Move up to the previous marked file
+      (<code>dired-prev-marked-file</code>)</p>
+    </dd>
+
+    <dt><kbd>t</kbd></dt>
+
+    <dt><kbd>* t</kbd></dt>
+
+    <dd>
+      <a name="index-t-_0028Dired_0029" id=
+      "index-t-_0028Dired_0029"></a> <a name=
+      "index-_002a-t-_0028Dired_0029" id=
+      "index-_002a-t-_0028Dired_0029"></a> <a name=
+      "index-dired_002dtoggle_002dmarks" id=
+      "index-dired_002dtoggle_002dmarks"></a> <a name=
+      "index-toggling-marks-_0028in-Dired_0029" id=
+      "index-toggling-marks-_0028in-Dired_0029"></a>
+
+      <p>Toggle all marks (<code>dired-toggle-marks</code>): files
+      marked with &lsquo;<samp>*</samp>&rsquo; become unmarked, and
+      unmarked files are marked with &lsquo;<samp>*</samp>&rsquo;.
+      Files marked in any other way are not affected.</p>
+    </dd>
+
+    <dt><kbd>* c <var>old-markchar</var>
+    <var>new-markchar</var></kbd></dt>
+
+    <dd>
+      <a name="index-_002a-c-_0028Dired_0029" id=
+      "index-_002a-c-_0028Dired_0029"></a> <a name=
+      "index-dired_002dchange_002dmarks" id=
+      "index-dired_002dchange_002dmarks"></a>
+
+      <p>Replace all marks that use the character
+      <var>old-markchar</var> with marks that use the character
+      <var>new-markchar</var> (<code>dired-change-marks</code>).
+      This command is the primary way to create or use marks other
+      than &lsquo;<samp>*</samp>&rsquo; or
+      &lsquo;<samp>D</samp>&rsquo;. The arguments are single
+      characters&mdash;do not use <tt class="key">RET</tt> to
+      terminate them.</p>
+
+      <p>You can use almost any character as a mark character by
+      means of this command, to distinguish various classes of
+      files. If <var>old-markchar</var> is a space (&lsquo;
+      &rsquo;), then the command operates on all unmarked files; if
+      <var>new-markchar</var> is a space, then the command unmarks
+      the files it acts on.</p>
+
+      <p>To illustrate the power of this command, here is how to
+      put &lsquo;<samp>D</samp>&rsquo; flags on all the files that
+      have no marks, while unflagging all those that already have
+      &lsquo;<samp>D</samp>&rsquo; flags:</p>
+
+      <div class="example">
+        <pre class="example">
+* c D t  * c <span class="key">SPC</span> D  * c t <span class=
+"key">SPC</span>
+</pre>
+      </div>
+
+      <p>This assumes that no files were already marked with
+      &lsquo;<samp>t</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><kbd>% m <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dt><kbd>* % <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <a name="index-dired_002dmark_002dfiles_002dregexp" id=
+      "index-dired_002dmark_002dfiles_002dregexp"></a> <a name=
+      "index-_0025-m-_0028Dired_0029" id=
+      "index-_0025-m-_0028Dired_0029"></a> <a name=
+      "index-_002a-_0025-_0028Dired_0029" id=
+      "index-_002a-_0025-_0028Dired_0029"></a>
+
+      <p>Mark (with &lsquo;<samp>*</samp>&rsquo;) all files whose
+      names match the regular expression <var>regexp</var>
+      (<code>dired-mark-files-regexp</code>). This command is like
+      <kbd>% d</kbd>, except that it marks files with
+      &lsquo;<samp>*</samp>&rsquo; instead of flagging with
+      &lsquo;<samp>D</samp>&rsquo;.</p>
+
+      <p>Only the non-directory part of the file name is used in
+      matching. Use &lsquo;<samp>^</samp>&rsquo; and
+      &lsquo;<samp>$</samp>&rsquo; to anchor matches. You can
+      exclude subdirectories by temporarily hiding them (see
+      <a href=
+      "Hiding-Subdirectories.html#Hiding-Subdirectories">Hiding
+      Subdirectories</a>).</p>
+    </dd>
+
+    <dt><kbd>% g <var>regexp</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <a name=
+      "index-dired_002dmark_002dfiles_002dcontaining_002dregexp"
+      id="index-dired_002dmark_002dfiles_002dcontaining_002dregexp">
+      </a> <a name="index-_0025-g-_0028Dired_0029" id=
+      "index-_0025-g-_0028Dired_0029"></a> <a name=
+      "index-finding-files-containing-regexp-matches-_0028in-Dired_0029"
+      id=
+      "index-finding-files-containing-regexp-matches-_0028in-Dired_0029">
+      </a>
+
+      <p>Mark (with &lsquo;<samp>*</samp>&rsquo;) all files whose
+      <em>contents</em> contain a match for the regular expression
+      <var>regexp</var>
+      (<code>dired-mark-files-containing-regexp</code>). This
+      command is like <kbd>% m</kbd>, except that it searches the
+      file contents instead of the file name. Note that if a file
+      is visited in an Emacs buffer, this command will look in the
+      buffer without revisiting the file, so the results might be
+      inconsistent with the file on disk if its contents has
+      changed since it was last visited. If you don&rsquo;t want
+      this, you may wish reverting the files you have visited in
+      your buffers, or turning on the <code>auto-revert</code> mode
+      in those buffers, before invoking this command. See <a href=
+      "Reverting.html#Reverting">Reverting</a>.</p>
+    </dd>
+
+    <dt><kbd>C-/</kbd></dt>
+
+    <dt><kbd>C-x u</kbd></dt>
+
+    <dt><kbd>C-_</kbd></dt>
+
+    <dd>
+      <a name="index-C_002d_005f-_0028Dired_0029" id=
+      "index-C_002d_005f-_0028Dired_0029"></a> <a name=
+      "index-dired_002dundo" id="index-dired_002dundo"></a>
+
+      <p>Undo changes in the Dired buffer, such as adding or
+      removing marks (<code>dired-undo</code>). <em>This command
+      does not revert the actual file operations, nor recover lost
+      files!</em> It just undoes changes in the buffer itself.</p>
+
+      <p>In some cases, using this after commands that operate on
+      files can cause trouble. For example, after renaming one or
+      more files, <code>dired-undo</code> restores the original
+      names in the Dired buffer, which gets the Dired buffer out of
+      sync with the actual contents of the directory.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Operating-on-Files.html#Operating-on-Files"
+    accesskey="n" rel="next">Operating on Files</a>, Previous:
+    <a href="Dired-Visiting.html#Dired-Visiting" accesskey="p" rel=
+    "prev">Dired Visiting</a>, Up: <a href="Dired.html#Dired"
+    accesskey="u" rel="up">Dired</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

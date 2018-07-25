@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -15,129 +17,200 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Flymake 0.3: Adding support for a new syntax check tool</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Flymake 0.3: Adding support for a new syntax check tool">
-<meta name="keywords" content="GNU Flymake 0.3: Adding support for a new syntax check tool">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Configuring-Flymake.html#Configuring-Flymake" rel="up" title="Configuring Flymake">
-<link href="Example_002d_002d_002dConfiguring-a-tool-called-directly.html#Example_002d_002d_002dConfiguring-a-tool-called-directly" rel="next" title="Example---Configuring a tool called directly">
-<link href="Customizable-variables.html#Customizable-variables" rel="prev" title="Customizable variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Flymake 0.3: Adding support for a new syntax check
+  tool</title>
+  <meta name="description" content=
+  "GNU Flymake 0.3: Adding support for a new syntax check tool" />
+  <meta name="keywords" content=
+  "GNU Flymake 0.3: Adding support for a new syntax check tool" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Configuring-Flymake.html#Configuring-Flymake" rel=
+  "up" title="Configuring Flymake" />
+  <link href=
+  "Example_002d_002d_002dConfiguring-a-tool-called-directly.html#Example_002d_002d_002dConfiguring-a-tool-called-directly"
+  rel="next" title=
+  "Example---Configuring a tool called directly" />
+  <link href="Customizable-variables.html#Customizable-variables"
+  rel="prev" title="Customizable variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Adding-support-for-a-new-syntax-check-tool"></a>
-<div class="header">
-<p>
-Previous: <a href="Customizable-variables.html#Customizable-variables" accesskey="p" rel="prev">Customizable variables</a>, Up: <a href="Configuring-Flymake.html#Configuring-Flymake" accesskey="u" rel="up">Configuring Flymake</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Adding-support-for-a-new-syntax-check-tool-1"></a>
-<h3 class="section">4.2 Adding support for a new syntax check tool</h3>
-<a name="index-Adding-support-for-a-new-syntax-check-tool"></a>
+<body lang="en" xml:lang="en">
+  <a name="Adding-support-for-a-new-syntax-check-tool" id=
+  "Adding-support-for-a-new-syntax-check-tool"></a>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Example_002d_002d_002dConfiguring-a-tool-called-directly.html#Example_002d_002d_002dConfiguring-a-tool-called-directly" accesskey="1">Example---Configuring a tool called directly</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Example_002d_002d_002dConfiguring-a-tool-called-via-make.html#Example_002d_002d_002dConfiguring-a-tool-called-via-make" accesskey="2">Example---Configuring a tool called via make</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Previous: <a href=
+    "Customizable-variables.html#Customizable-variables" accesskey=
+    "p" rel="prev">Customizable variables</a>, Up: <a href=
+    "Configuring-Flymake.html#Configuring-Flymake" accesskey="u"
+    rel="up">Configuring Flymake</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Adding-support-for-a-new-syntax-check-tool-1" id=
+  "Adding-support-for-a-new-syntax-check-tool-1"></a>
 
-<p>Syntax check tools are configured using the
-<code>flymake-allowed-file-name-masks</code> list.  Each item of this list
-has the following format:
-</p>
-<div class="lisp">
-<pre class="lisp">(filename-regexp, init-function, cleanup-function, getfname-function)
-</pre></div>
+  <h3 class="section">4.2 Adding support for a new syntax check
+  tool</h3><a name=
+  "index-Adding-support-for-a-new-syntax-check-tool" id=
+  "index-Adding-support-for-a-new-syntax-check-tool"></a>
 
-<dl compact="compact">
-<dt><code>filename-regexp</code></dt>
-<dd><p>This field is used as a key for locating init/cleanup/getfname
-functions for the buffer.  Items in
-<code>flymake-allowed-file-name-masks</code> are searched sequentially.  The
-first item with <code>filename-regexp</code> matching buffer filename is
-selected.  If no match is found, <code>flymake-mode</code> is switched off.
-</p>
-</dd>
-<dt><code>init-function</code></dt>
-<dd><p><code>init-function</code> is required to initialize the syntax check,
-usually by creating a temporary copy of the buffer contents.  The
-function must return <code>(list cmd-name arg-list)</code>.  If
-<code>init-function</code> returns null, syntax check is aborted, by
-<code>flymake-mode</code> is not switched off.
-</p>
-</dd>
-<dt><code>cleanup-function</code></dt>
-<dd><p><code>cleanup-function</code> is called after the syntax check process is
-complete and should take care of proper deinitialization, which is
-usually deleting a temporary copy created by the <code>init-function</code>.
-</p>
-</dd>
-<dt><code>getfname-function</code></dt>
-<dd><p>This function is used for translating filenames reported by the syntax
-check tool into &ldquo;real&rdquo; filenames.  Filenames reported by the tool
-will be different from the real ones, as actually the tool works with
-the temporary copy.  In most cases, the default implementation
-provided by Flymake, <code>flymake-get-real-file-name</code>, can be used as
-<code>getfname-function</code>.
-</p>
-</dd>
-</dl>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Example_002d_002d_002dConfiguring-a-tool-called-directly.html#Example_002d_002d_002dConfiguring-a-tool-called-directly"
+      accesskey="1">Example---Configuring a tool called
+      directly</a>:</td>
 
-<p>To add support for a new syntax check tool, write corresponding
-<code>init-function</code>, and, optionally <code>cleanup-function</code> and
-<code>getfname-function</code>.  If the format of error messages reported by
-the new tool is not yet supported by Flymake, add a new entry to
-the <code>flymake-err-line-patterns</code> list.
-</p>
-<p>The following sections contain some examples of configuring Flymake
-support for various syntax check tools.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Customizable-variables.html#Customizable-variables" accesskey="p" rel="prev">Customizable variables</a>, Up: <a href="Configuring-Flymake.html#Configuring-Flymake" accesskey="u" rel="up">Configuring Flymake</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top"></td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Example_002d_002d_002dConfiguring-a-tool-called-via-make.html#Example_002d_002d_002dConfiguring-a-tool-called-via-make"
+      accesskey="2">Example---Configuring a tool called via
+      make</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+
+  <p>Syntax check tools are configured using the
+  <code>flymake-allowed-file-name-masks</code> list. Each item of
+  this list has the following format:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(filename-regexp, init-function, cleanup-function, getfname-function)
+</pre>
+  </div>
+
+  <dl compact="compact">
+    <dt><code>filename-regexp</code></dt>
+
+    <dd>
+      <p>This field is used as a key for locating
+      init/cleanup/getfname functions for the buffer. Items in
+      <code>flymake-allowed-file-name-masks</code> are searched
+      sequentially. The first item with
+      <code>filename-regexp</code> matching buffer filename is
+      selected. If no match is found, <code>flymake-mode</code> is
+      switched off.</p>
+    </dd>
+
+    <dt><code>init-function</code></dt>
+
+    <dd>
+      <p><code>init-function</code> is required to initialize the
+      syntax check, usually by creating a temporary copy of the
+      buffer contents. The function must return <code>(list
+      cmd-name arg-list)</code>. If <code>init-function</code>
+      returns null, syntax check is aborted, by
+      <code>flymake-mode</code> is not switched off.</p>
+    </dd>
+
+    <dt><code>cleanup-function</code></dt>
+
+    <dd>
+      <p><code>cleanup-function</code> is called after the syntax
+      check process is complete and should take care of proper
+      deinitialization, which is usually deleting a temporary copy
+      created by the <code>init-function</code>.</p>
+    </dd>
+
+    <dt><code>getfname-function</code></dt>
+
+    <dd>
+      <p>This function is used for translating filenames reported
+      by the syntax check tool into &ldquo;real&rdquo; filenames.
+      Filenames reported by the tool will be different from the
+      real ones, as actually the tool works with the temporary
+      copy. In most cases, the default implementation provided by
+      Flymake, <code>flymake-get-real-file-name</code>, can be used
+      as <code>getfname-function</code>.</p>
+    </dd>
+  </dl>
+
+  <p>To add support for a new syntax check tool, write
+  corresponding <code>init-function</code>, and, optionally
+  <code>cleanup-function</code> and <code>getfname-function</code>.
+  If the format of error messages reported by the new tool is not
+  yet supported by Flymake, add a new entry to the
+  <code>flymake-err-line-patterns</code> list.</p>
+
+  <p>The following sections contain some examples of configuring
+  Flymake support for various syntax check tools.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Customizable-variables.html#Customizable-variables" accesskey=
+    "p" rel="prev">Customizable variables</a>, Up: <a href=
+    "Configuring-Flymake.html#Configuring-Flymake" accesskey="u"
+    rel="up">Configuring Flymake</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

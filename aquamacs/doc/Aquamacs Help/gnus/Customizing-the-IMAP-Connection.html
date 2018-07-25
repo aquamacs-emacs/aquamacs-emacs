@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Customizing the IMAP Connection - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Using-IMAP.html#Using-IMAP" title="Using IMAP">
-<link rel="prev" href="Connecting-to-an-IMAP-Server.html#Connecting-to-an-IMAP-Server" title="Connecting to an IMAP Server">
-<link rel="next" href="Client_002dSide-IMAP-Splitting.html#Client_002dSide-IMAP-Splitting" title="Client-Side IMAP Splitting">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Customizing the IMAP Connection - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Using-IMAP.html#Using-IMAP" title=
+  "Using IMAP" />
+  <link rel="prev" href=
+  "Connecting-to-an-IMAP-Server.html#Connecting-to-an-IMAP-Server"
+  title="Connecting to an IMAP Server" />
+  <link rel="next" href=
+  "Client_002dSide-IMAP-Splitting.html#Client_002dSide-IMAP-Splitting"
+  title="Client-Side IMAP Splitting" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +37,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,70 +50,114 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Customizing-the-IMAP-Connection"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Client_002dSide-IMAP-Splitting.html#Client_002dSide-IMAP-Splitting">Client-Side IMAP Splitting</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Connecting-to-an-IMAP-Server.html#Connecting-to-an-IMAP-Server">Connecting to an IMAP Server</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Using-IMAP.html#Using-IMAP">Using IMAP</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Customizing-the-IMAP-Connection" id=
+    "Customizing-the-IMAP-Connection"></a>
 
-<h4 class="subsection">6.3.2 Customizing the IMAP Connection</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Client_002dSide-IMAP-Splitting.html#Client_002dSide-IMAP-Splitting">Client-Side
+    IMAP Splitting</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href=
+    "Connecting-to-an-IMAP-Server.html#Connecting-to-an-IMAP-Server">Connecting
+    to an IMAP Server</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Using-IMAP.html#Using-IMAP">Using IMAP</a></p>
+    <hr />
+  </div>
 
-<p>Here's an example method that's more complex:
+  <h4 class="subsection">6.3.2 Customizing the IMAP Connection</h4>
 
-<pre class="example">     (nnimap "imap.gmail.com"
+  <p>Here's an example method that's more complex:</p>
+  <pre class="example">
+     (nnimap "imap.gmail.com"
              (nnimap-inbox "INBOX")
              (nnimap-split-methods default)
              (nnimap-expunge t)
              (nnimap-stream ssl))
 </pre>
-     <dl>
-<dt><code>nnimap-address</code><dd>The address of the server, like &lsquo;<samp><span class="samp">imap.gmail.com</span></samp>&rsquo;.
 
-     <br><dt><code>nnimap-server-port</code><dd>If the server uses a non-standard port, that can be specified here.  A
-typical port would be <code>"imap"</code> or <code>"imaps"</code>.
+  <dl>
+    <dt><code>nnimap-address</code></dt>
 
-     <br><dt><code>nnimap-stream</code><dd>How <code>nnimap</code> should connect to the server.  Possible values are:
+    <dd>The address of the server, like &lsquo;<samp><span class=
+    "samp">imap.gmail.com</span></samp>&rsquo;.<br /></dd>
 
-          <dl>
-<dt><code>undecided</code><dd>This is the default, and this first tries the <code>ssl</code> setting, and
-then tries the <code>network</code> setting.
+    <dt><code>nnimap-server-port</code></dt>
 
-          <br><dt><code>ssl</code><dd>This uses standard <acronym>TLS</acronym>/<acronym>SSL</acronym> connections.
+    <dd>If the server uses a non-standard port, that can be
+    specified here. A typical port would be <code>"imap"</code> or
+    <code>"imaps"</code>.<br /></dd>
 
-          <br><dt><code>network</code><dd>Non-encrypted and unsafe straight socket connection, but will upgrade
-to encrypted <acronym>STARTTLS</acronym> if both Emacs and the server
-supports it.
+    <dt><code>nnimap-stream</code></dt>
 
-          <br><dt><code>starttls</code><dd>Encrypted <acronym>STARTTLS</acronym> over the normal <acronym>IMAP</acronym> port.
+    <dd>
+      How <code>nnimap</code> should connect to the server.
+      Possible values are:
 
-          <br><dt><code>shell</code><dd>If you need to tunnel via other systems to connect to the server, you
-can use this option, and customize <code>nnimap-shell-program</code> to be
-what you need.
+      <dl>
+        <dt><code>undecided</code></dt>
 
-     </dl>
+        <dd>This is the default, and this first tries the
+        <code>ssl</code> setting, and then tries the
+        <code>network</code> setting.<br /></dd>
 
-     <br><dt><code>nnimap-authenticator</code><dd>Some <acronym>IMAP</acronym> servers allow anonymous logins.  In that case,
-this should be set to <code>anonymous</code>.
+        <dt><code>ssl</code></dt>
 
-     <br><dt><code>nnimap-expunge</code><dd>If non-<code>nil</code>, expunge articles after deleting them.  This is always done
-if the server supports UID EXPUNGE, but it's not done by default on
-servers that doesn't support that command.
+        <dd>This uses standard
+        <acronym>TLS</acronym>/<acronym>SSL</acronym>
+        connections.<br /></dd>
 
-     <br><dt><code>nnimap-streaming</code><dd>Virtually all <code>IMAP</code> server support fast streaming of data.  If
-you have problems connecting to the server, try setting this to <code>nil</code>.
+        <dt><code>network</code></dt>
 
-     <br><dt><code>nnimap-fetch-partial-articles</code><dd>If non-<code>nil</code>, fetch partial articles from the server.  If set to
-a string, then it's interpreted as a regexp, and parts that have
-matching types will be fetched.  For instance, &lsquo;<samp><span class="samp">"text/"</span></samp>&rsquo; will
-fetch all textual parts, while leaving the rest on the server.
+        <dd>Non-encrypted and unsafe straight socket connection,
+        but will upgrade to encrypted <acronym>STARTTLS</acronym>
+        if both Emacs and the server supports it.<br /></dd>
 
-   </dl>
+        <dt><code>starttls</code></dt>
 
-   </body></html>
+        <dd>Encrypted <acronym>STARTTLS</acronym> over the normal
+        <acronym>IMAP</acronym> port.<br /></dd>
 
+        <dt><code>shell</code></dt>
+
+        <dd>If you need to tunnel via other systems to connect to
+        the server, you can use this option, and customize
+        <code>nnimap-shell-program</code> to be what you need.</dd>
+      </dl><br />
+    </dd>
+
+    <dt><code>nnimap-authenticator</code></dt>
+
+    <dd>Some <acronym>IMAP</acronym> servers allow anonymous
+    logins. In that case, this should be set to
+    <code>anonymous</code>.<br /></dd>
+
+    <dt><code>nnimap-expunge</code></dt>
+
+    <dd>If non-<code>nil</code>, expunge articles after deleting
+    them. This is always done if the server supports UID EXPUNGE,
+    but it's not done by default on servers that doesn't support
+    that command.<br /></dd>
+
+    <dt><code>nnimap-streaming</code></dt>
+
+    <dd>Virtually all <code>IMAP</code> server support fast
+    streaming of data. If you have problems connecting to the
+    server, try setting this to <code>nil</code>.<br /></dd>
+
+    <dt><code>nnimap-fetch-partial-articles</code></dt>
+
+    <dd>If non-<code>nil</code>, fetch partial articles from the
+    server. If set to a string, then it's interpreted as a regexp,
+    and parts that have matching types will be fetched. For
+    instance, &lsquo;<samp><span class=
+    "samp">"text/"</span></samp>&rsquo; will fetch all textual
+    parts, while leaving the rest on the server.</dd>
+  </dl>
+</body>
+</html>

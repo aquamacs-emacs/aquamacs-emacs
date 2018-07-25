@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,165 +19,234 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Tips for Defining</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Tips for Defining">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Tips for Defining">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variables.html#Variables" rel="up" title="Variables">
-<link href="Accessing-Variables.html#Accessing-Variables" rel="next" title="Accessing Variables">
-<link href="Defining-Variables.html#Defining-Variables" rel="prev" title="Defining Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Tips for Defining</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Tips for Defining" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Tips for Defining" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variables.html#Variables" rel="up" title=
+  "Variables" />
+  <link href="Accessing-Variables.html#Accessing-Variables" rel=
+  "next" title="Accessing Variables" />
+  <link href="Defining-Variables.html#Defining-Variables" rel=
+  "prev" title="Defining Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Tips-for-Defining" id="Tips-for-Defining"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Accessing-Variables.html#Accessing-Variables"
+    accesskey="n" rel="next">Accessing Variables</a>, Previous:
+    <a href="Defining-Variables.html#Defining-Variables" accesskey=
+    "p" rel="prev">Defining Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Tips-for-Defining-Variables-Robustly" id=
+  "Tips-for-Defining-Variables-Robustly"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Tips-for-Defining"></a>
-<div class="header">
-<p>
-Next: <a href="Accessing-Variables.html#Accessing-Variables" accesskey="n" rel="next">Accessing Variables</a>, Previous: <a href="Defining-Variables.html#Defining-Variables" accesskey="p" rel="prev">Defining Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Tips-for-Defining-Variables-Robustly"></a>
-<h3 class="section">11.6 Tips for Defining Variables Robustly</h3>
+  <h3 class="section">11.6 Tips for Defining Variables
+  Robustly</h3>
 
-<p>When you define a variable whose value is a function, or a list of
-functions, use a name that ends in &lsquo;<samp>-function</samp>&rsquo; or
-&lsquo;<samp>-functions</samp>&rsquo;, respectively.
-</p>
-<p>There are several other variable name conventions;
-here is a complete list:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>&hellip;-hook</samp>&rsquo;</dt>
-<dd><p>The variable is a normal hook (see <a href="Hooks.html#Hooks">Hooks</a>).
-</p>
-</dd>
-<dt>&lsquo;<samp>&hellip;-function</samp>&rsquo;</dt>
-<dd><p>The value is a function.
-</p>
-</dd>
-<dt>&lsquo;<samp>&hellip;-functions</samp>&rsquo;</dt>
-<dd><p>The value is a list of functions.
-</p>
-</dd>
-<dt>&lsquo;<samp>&hellip;-form</samp>&rsquo;</dt>
-<dd><p>The value is a form (an expression).
-</p>
-</dd>
-<dt>&lsquo;<samp>&hellip;-forms</samp>&rsquo;</dt>
-<dd><p>The value is a list of forms (expressions).
-</p>
-</dd>
-<dt>&lsquo;<samp>&hellip;-predicate</samp>&rsquo;</dt>
-<dd><p>The value is a predicate&mdash;a function of one argument that returns
-non-<code>nil</code> for success and <code>nil</code> for failure.
-</p>
-</dd>
-<dt>&lsquo;<samp>&hellip;-flag</samp>&rsquo;</dt>
-<dd><p>The value is significant only as to whether it is <code>nil</code> or not.
-Since such variables often end up acquiring more values over time,
-this convention is not strongly recommended.
-</p>
-</dd>
-<dt>&lsquo;<samp>&hellip;-program</samp>&rsquo;</dt>
-<dd><p>The value is a program name.
-</p>
-</dd>
-<dt>&lsquo;<samp>&hellip;-command</samp>&rsquo;</dt>
-<dd><p>The value is a whole shell command.
-</p>
-</dd>
-<dt>&lsquo;<samp>&hellip;-switches</samp>&rsquo;</dt>
-<dd><p>The value specifies options for a command.
-</p></dd>
-</dl>
+  <p>When you define a variable whose value is a function, or a
+  list of functions, use a name that ends in
+  &lsquo;<samp>-function</samp>&rsquo; or
+  &lsquo;<samp>-functions</samp>&rsquo;, respectively.</p>
 
-<p>When you define a variable, always consider whether you should mark
-it as safe or risky; see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>.
-</p>
-<p>When defining and initializing a variable that holds a complicated
-value (such as a keymap with bindings in it), it&rsquo;s best to put the
-entire computation of the value into the <code>defvar</code>, like this:
-</p>
-<div class="example">
-<pre class="example">(defvar my-mode-map
+  <p>There are several other variable name conventions; here is a
+  complete list:</p>
+
+  <dl compact="compact">
+    <dt>&lsquo;<samp>&hellip;-hook</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The variable is a normal hook (see <a href=
+      "Hooks.html#Hooks">Hooks</a>).</p>
+    </dd>
+
+    <dt>&lsquo;<samp>&hellip;-function</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The value is a function.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>&hellip;-functions</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The value is a list of functions.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>&hellip;-form</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The value is a form (an expression).</p>
+    </dd>
+
+    <dt>&lsquo;<samp>&hellip;-forms</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The value is a list of forms (expressions).</p>
+    </dd>
+
+    <dt>&lsquo;<samp>&hellip;-predicate</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The value is a predicate&mdash;a function of one argument
+      that returns non-<code>nil</code> for success and
+      <code>nil</code> for failure.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>&hellip;-flag</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The value is significant only as to whether it is
+      <code>nil</code> or not. Since such variables often end up
+      acquiring more values over time, this convention is not
+      strongly recommended.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>&hellip;-program</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The value is a program name.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>&hellip;-command</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The value is a whole shell command.</p>
+    </dd>
+
+    <dt>&lsquo;<samp>&hellip;-switches</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The value specifies options for a command.</p>
+    </dd>
+  </dl>
+
+  <p>When you define a variable, always consider whether you should
+  mark it as safe or risky; see <a href=
+  "File-Local-Variables.html#File-Local-Variables">File Local
+  Variables</a>.</p>
+
+  <p>When defining and initializing a variable that holds a
+  complicated value (such as a keymap with bindings in it),
+  it&rsquo;s best to put the entire computation of the value into
+  the <code>defvar</code>, like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(defvar my-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map &quot;\C-c\C-a&quot; 'my-command)
+    (define-key map "\C-c\C-a" 'my-command)
     &hellip;
     map)
   <var>docstring</var>)
-</pre></div>
+</pre>
+  </div>
 
-<p>This method has several benefits.  First, if the user quits while
-loading the file, the variable is either still uninitialized or
-initialized properly, never in-between.  If it is still uninitialized,
-reloading the file will initialize it properly.  Second, reloading the
-file once the variable is initialized will not alter it; that is
-important if the user has run hooks to alter part of the contents
-(such as, to rebind keys).  Third, evaluating the <code>defvar</code> form
-with <kbd>C-M-x</kbd> will reinitialize the map completely.
-</p>
-<p>Putting so much code in the <code>defvar</code> form has one disadvantage:
-it puts the documentation string far away from the line which names the
-variable.  Here&rsquo;s a safe way to avoid that:
-</p>
-<div class="example">
-<pre class="example">(defvar my-mode-map nil
+  <p>This method has several benefits. First, if the user quits
+  while loading the file, the variable is either still
+  uninitialized or initialized properly, never in-between. If it is
+  still uninitialized, reloading the file will initialize it
+  properly. Second, reloading the file once the variable is
+  initialized will not alter it; that is important if the user has
+  run hooks to alter part of the contents (such as, to rebind
+  keys). Third, evaluating the <code>defvar</code> form with
+  <kbd>C-M-x</kbd> will reinitialize the map completely.</p>
+
+  <p>Putting so much code in the <code>defvar</code> form has one
+  disadvantage: it puts the documentation string far away from the
+  line which names the variable. Here&rsquo;s a safe way to avoid
+  that:</p>
+
+  <div class="example">
+    <pre class="example">
+(defvar my-mode-map nil
   <var>docstring</var>)
 (unless my-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map &quot;\C-c\C-a&quot; 'my-command)
+    (define-key map "\C-c\C-a" 'my-command)
     &hellip;
     (setq my-mode-map map)))
-</pre></div>
+</pre>
+  </div>
 
-<p>This has all the same advantages as putting the initialization inside
-the <code>defvar</code>, except that you must type <kbd>C-M-x</kbd> twice, once on
-each form, if you do want to reinitialize the variable.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Accessing-Variables.html#Accessing-Variables" accesskey="n" rel="next">Accessing Variables</a>, Previous: <a href="Defining-Variables.html#Defining-Variables" accesskey="p" rel="prev">Defining Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>This has all the same advantages as putting the initialization
+  inside the <code>defvar</code>, except that you must type
+  <kbd>C-M-x</kbd> twice, once on each form, if you do want to
+  reinitialize the variable.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href="Accessing-Variables.html#Accessing-Variables"
+    accesskey="n" rel="next">Accessing Variables</a>, Previous:
+    <a href="Defining-Variables.html#Defining-Variables" accesskey=
+    "p" rel="prev">Defining Variables</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

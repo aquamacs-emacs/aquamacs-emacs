@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>mailcap - Emacs MIME Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Emacs MIME Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Basic-Functions.html#Basic-Functions" title="Basic Functions">
-<link rel="prev" href="rfc1843.html#rfc1843" title="rfc1843">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>mailcap - Emacs MIME Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Emacs MIME Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Basic-Functions.html#Basic-Functions" title=
+  "Basic Functions" />
+  <link rel="prev" href="rfc1843.html#rfc1843" title="rfc1843" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the Emacs MIME interface functionality.
 
 Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
@@ -26,8 +34,10 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,47 +47,64 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="mailcap"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="rfc1843.html#rfc1843">rfc1843</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Basic-Functions.html#Basic-Functions">Basic Functions</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="mailcap" id="mailcap"></a>
 
-<h3 class="section">4.12 mailcap</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "rfc1843.html#rfc1843">rfc1843</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="Basic-Functions.html#Basic-Functions">Basic
+    Functions</a></p>
+    <hr />
+  </div>
 
-<p>The <samp><span class="file">~/.mailcap</span></samp> file is parsed by most <acronym>MIME</acronym>-aware message
-handlers and describes how elements are supposed to be displayed. 
-Here's an example file:
+  <h3 class="section">4.12 mailcap</h3>
 
-<pre class="example">     image/*; gimp -8 %s
+  <p>The <samp><span class="file">~/.mailcap</span></samp> file is
+  parsed by most <acronym>MIME</acronym>-aware message handlers and
+  describes how elements are supposed to be displayed. Here's an
+  example file:</p>
+  <pre class="example">
+     image/*; gimp -8 %s
      audio/wav; wavplayer %s
      application/msword; catdoc %s ; copiousoutput ; nametemplate=%s.doc
 </pre>
-   <p>This says that all image files should be displayed with <code>gimp</code>,
-that WAVE audio files should be played by <code>wavplayer</code>, and that
-MS-WORD files should be inlined by <code>catdoc</code>.
 
-   <p>The <code>mailcap</code> library parses this file, and provides functions for
-matching types.
+  <p>This says that all image files should be displayed with
+  <code>gimp</code>, that WAVE audio files should be played by
+  <code>wavplayer</code>, and that MS-WORD files should be inlined
+  by <code>catdoc</code>.</p>
 
-     <dl>
-<dt><code>mailcap-mime-data</code><dd><a name="index-mailcap_002dmime_002ddata-148"></a>This variable is an alist of alists containing backup viewing rules.
+  <p>The <code>mailcap</code> library parses this file, and
+  provides functions for matching types.</p>
 
-   </dl>
+  <dl>
+    <dt><code>mailcap-mime-data</code></dt>
 
-   <p>Interface functions:
+    <dd><a name="index-mailcap_002dmime_002ddata-148" id=
+    "index-mailcap_002dmime_002ddata-148"></a>This variable is an
+    alist of alists containing backup viewing rules.</dd>
+  </dl>
 
-     <dl>
-<dt><code>mailcap-parse-mailcaps</code><dd><a name="index-mailcap_002dparse_002dmailcaps-149"></a>Parse the <samp><span class="file">~/.mailcap</span></samp> file.
+  <p>Interface functions:</p>
 
-     <br><dt><code>mailcap-mime-info</code><dd>Takes a <acronym>MIME</acronym> type as its argument and returns the matching viewer.
+  <dl>
+    <dt><code>mailcap-parse-mailcaps</code></dt>
 
-   </dl>
+    <dd><a name="index-mailcap_002dparse_002dmailcaps-149" id=
+    "index-mailcap_002dparse_002dmailcaps-149"></a>Parse the
+    <samp><span class="file">~/.mailcap</span></samp>
+    file.<br /></dd>
 
-   </body></html>
+    <dt><code>mailcap-mime-info</code></dt>
 
+    <dd>Takes a <acronym>MIME</acronym> type as its argument and
+    returns the matching viewer.</dd>
+  </dl>
+</body>
+</html>

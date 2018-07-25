@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This document describes Supercite, an Emacs package for citing and
 attributing replies to mail and news messages.
 
@@ -15,132 +17,195 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Supercite User&rsquo;s Manual: Citations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Supercite User&rsquo;s Manual: Citations">
-<meta name="keywords" content="Supercite User&rsquo;s Manual: Citations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Citation-Elements.html#Citation-Elements" rel="next" title="Citation Elements">
-<link href="What-Supercite-Does.html#What-Supercite-Does" rel="prev" title="What Supercite Does">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Supercite User&rsquo;s Manual: Citations</title>
+  <meta name="description" content=
+  "Supercite User&rsquo;s Manual: Citations" />
+  <meta name="keywords" content=
+  "Supercite User&rsquo;s Manual: Citations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Citation-Elements.html#Citation-Elements" rel="next"
+  title="Citation Elements" />
+  <link href="What-Supercite-Does.html#What-Supercite-Does" rel=
+  "prev" title="What Supercite Does" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Citations"></a>
-<div class="header">
-<p>
-Next: <a href="Information-Keys-and-the-Info-Alist.html#Information-Keys-and-the-Info-Alist" accesskey="n" rel="next">Information Keys and the Info Alist</a>, Previous: <a href="Introduction.html#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Citations-1"></a>
-<h2 class="chapter">2 Citations</h2>
-<a name="index-nested-citations"></a>
-<a name="index-citation"></a>
+<body lang="en" xml:lang="en">
+  <a name="Citations" id="Citations"></a>
 
-<p>A <em>citation</em> is the acknowledgment of the original author of a mail
-message in the body of the reply.  There are two basic citation styles
-which Supercite supports.  The first, called <em>nested citations</em> is
-an anonymous form of citation; in other words, an indication is made
-that the cited line was written by someone <em>other</em> that the current
-message author (i.e., other than you, the person composing the reply),
-but no reference is made as to the identity of the original author.
-This style should look familiar since its use on the net is widespread.
-Here&rsquo;s an example of what a message buffer would look like using nested
-citations after multiple replies:
-</p>
-<div class="example">
-<pre class="example">&gt;&gt; John originally wrote this
+  <div class="header">
+    <p>Next: <a href=
+    "Information-Keys-and-the-Info-Alist.html#Information-Keys-and-the-Info-Alist"
+    accesskey="n" rel="next">Information Keys and the Info
+    Alist</a>, Previous: <a href="Introduction.html#Introduction"
+    accesskey="p" rel="prev">Introduction</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Citations-1" id="Citations-1"></a>
+
+  <h2 class="chapter">2 Citations</h2><a name=
+  "index-nested-citations" id="index-nested-citations"></a>
+  <a name="index-citation" id="index-citation"></a>
+
+  <p>A <em>citation</em> is the acknowledgment of the original
+  author of a mail message in the body of the reply. There are two
+  basic citation styles which Supercite supports. The first, called
+  <em>nested citations</em> is an anonymous form of citation; in
+  other words, an indication is made that the cited line was
+  written by someone <em>other</em> that the current message author
+  (i.e., other than you, the person composing the reply), but no
+  reference is made as to the identity of the original author. This
+  style should look familiar since its use on the net is
+  widespread. Here&rsquo;s an example of what a message buffer
+  would look like using nested citations after multiple
+  replies:</p>
+
+  <div class="example">
+    <pre class="example">
+&gt;&gt; John originally wrote this
 &gt;&gt; and this as well
 &gt; Jane said that John didn't know
 &gt; what he was talking about
 And that's what I think too.
-</pre></div>
+</pre>
+  </div>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Citation-Elements.html#Citation-Elements" accesskey="1">Citation Elements</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Recognizing-Citations.html#Recognizing-Citations" accesskey="2">Recognizing Citations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Citation-Elements.html#Citation-Elements" accesskey=
+      "1">Citation Elements</a>:</td>
 
-<p>Note that multiple inclusions of the original messages result in a
-nesting of the &lsquo;<samp><code>&gt;</code></samp>&rsquo; characters.  This can sometimes be quite
-confusing when many levels of citations are included since it may be
-difficult or impossible to figure out who actually participated in the
-thread, and multiple nesting of &lsquo;<samp><code>&gt;</code></samp>&rsquo; characters can sometimes
-make the message very difficult for the eye to scan.
-</p>
-<a name="index-non_002dnested-citations"></a>
-<p>In <em>non-nested citations</em>, each cited line begins with an
-informative string attributing that line to the original author.  Only
-the first level of attribution will be shown; subsequent citations
-don&rsquo;t nest the citation strings.  The above dialog might look like
-this when non-nested citations are used:
-</p>
-<div class="example">
-<pre class="example">John&gt; John originally wrote this
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Recognizing-Citations.html#Recognizing-Citations" accesskey=
+      "2">Recognizing Citations</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+
+  <p>Note that multiple inclusions of the original messages result
+  in a nesting of the &lsquo;<samp><code>&gt;</code></samp>&rsquo;
+  characters. This can sometimes be quite confusing when many
+  levels of citations are included since it may be difficult or
+  impossible to figure out who actually participated in the thread,
+  and multiple nesting of
+  &lsquo;<samp><code>&gt;</code></samp>&rsquo; characters can
+  sometimes make the message very difficult for the eye to
+  scan.</p><a name="index-non_002dnested-citations" id=
+  "index-non_002dnested-citations"></a>
+
+  <p>In <em>non-nested citations</em>, each cited line begins with
+  an informative string attributing that line to the original
+  author. Only the first level of attribution will be shown;
+  subsequent citations don&rsquo;t nest the citation strings. The
+  above dialog might look like this when non-nested citations are
+  used:</p>
+
+  <div class="example">
+    <pre class="example">
+John&gt; John originally wrote this
 John&gt; and this as well
 Jane&gt; Jane said that John didn't know
 Jane&gt; what he was talking about
 And that's what I think too.
-</pre></div>
+</pre>
+  </div>
 
-<p>Notice here that my inclusion of Jane&rsquo;s inclusion of John&rsquo;s original
-message did not result in a line cited with &lsquo;<samp>Jane&gt;John&gt;</samp>&rsquo;.
-</p>
-<a name="index-sc_002dnested_002dcitation_002dp"></a>
-<a name="index-nested_002dcitation_002dp-_0028sc_002d_0029"></a>
-<p>Supercite supports both styles of citation, and the variable
-<code>sc-nested-citation-p</code> controls which style it will use when
-citing previously uncited text.  When this variable is <code>nil</code> (the
-default), non-nested citations are used.  When non-<code>nil</code>, nested
-citations are used.
-</p>
+  <p>Notice here that my inclusion of Jane&rsquo;s inclusion of
+  John&rsquo;s original message did not result in a line cited with
+  &lsquo;<samp>Jane&gt;John&gt;</samp>&rsquo;.</p><a name=
+  "index-sc_002dnested_002dcitation_002dp" id=
+  "index-sc_002dnested_002dcitation_002dp"></a> <a name=
+  "index-nested_002dcitation_002dp-_0028sc_002d_0029" id=
+  "index-nested_002dcitation_002dp-_0028sc_002d_0029"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Information-Keys-and-the-Info-Alist.html#Information-Keys-and-the-Info-Alist" accesskey="n" rel="next">Information Keys and the Info Alist</a>, Previous: <a href="Introduction.html#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Supercite supports both styles of citation, and the variable
+  <code>sc-nested-citation-p</code> controls which style it will
+  use when citing previously uncited text. When this variable is
+  <code>nil</code> (the default), non-nested citations are used.
+  When non-<code>nil</code>, nested citations are used.</p>
+  <hr />
 
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Information-Keys-and-the-Info-Alist.html#Information-Keys-and-the-Info-Alist"
+    accesskey="n" rel="next">Information Keys and the Info
+    Alist</a>, Previous: <a href="Introduction.html#Introduction"
+    accesskey="p" rel="prev">Introduction</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

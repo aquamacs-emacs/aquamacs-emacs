@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,142 +18,209 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Eqn Language Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Eqn Language Mode">
-<meta name="keywords" content="GNU Emacs Calc Manual: Eqn Language Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Language-Modes.html#Language-Modes" rel="up" title="Language Modes">
-<link href="Yacas-Language-Mode.html#Yacas-Language-Mode" rel="next" title="Yacas Language Mode">
-<link href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes" rel="prev" title="TeX and LaTeX Language Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Eqn Language Mode</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Eqn Language Mode" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Eqn Language Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Language-Modes.html#Language-Modes" rel="up" title=
+  "Language Modes" />
+  <link href="Yacas-Language-Mode.html#Yacas-Language-Mode" rel=
+  "next" title="Yacas Language Mode" />
+  <link href=
+  "TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes"
+  rel="prev" title="TeX and LaTeX Language Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Eqn-Language-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="Yacas-Language-Mode.html#Yacas-Language-Mode" accesskey="n" rel="next">Yacas Language Mode</a>, Previous: <a href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes" accesskey="p" rel="prev">TeX and LaTeX Language Modes</a>, Up: <a href="Language-Modes.html#Language-Modes" accesskey="u" rel="up">Language Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Eqn-Language-Mode-1"></a>
-<h4 class="subsection">6.8.4 Eqn Language Mode</h4>
+<body lang="en" xml:lang="en">
+  <a name="Eqn-Language-Mode" id="Eqn-Language-Mode"></a>
 
-<a name="index-d-E"></a>
-<a name="index-calc_002deqn_002dlanguage"></a>
-<p><em>Eqn</em> is another popular formatter for math formulas.  It is
-designed for use with the TROFF text formatter, and comes standard
-with many versions of Unix.  The <kbd>d E</kbd> (<code>calc-eqn-language</code>)
-command selects <em>eqn</em> notation.
-</p>
-<p>The <em>eqn</em> language&rsquo;s main idiosyncrasy is that whitespace plays
-a significant part in the parsing of the language.  For example,
-&lsquo;<samp>sqrt x+1 + y</samp>&rsquo; treats &lsquo;<samp>x+1</samp>&rsquo; as the argument of the
-<code>sqrt</code> operator.  <em>Eqn</em> also understands more conventional
-grouping using curly braces:  &lsquo;<samp>sqrt{x+1} + y</samp>&rsquo;.  Braces are
-required only when the argument contains spaces.
-</p>
-<p>In Calc&rsquo;s <em>eqn</em> mode, however, curly braces are required to
-delimit arguments of operators like <code>sqrt</code>.  The first of the
-above examples would treat only the &lsquo;<samp>x</samp>&rsquo; as the argument of
-<code>sqrt</code>, and in fact &lsquo;<samp>sin x+1</samp>&rsquo; would be interpreted as
-&lsquo;<samp>sin * x + 1</samp>&rsquo;, because <code>sin</code> is not a special operator
-in the <em>eqn</em> language.  If you always surround the argument
-with curly braces, Calc will never misunderstand.
-</p>
-<p>Calc also understands parentheses as grouping characters.  Another
-peculiarity of <em>eqn</em>&rsquo;s syntax makes it advisable to separate
-words with spaces from any surrounding characters that aren&rsquo;t curly
-braces, so Calc writes &lsquo;<samp>sin ( x + y )</samp>&rsquo; in <em>eqn</em> mode.
-(The spaces around <code>sin</code> are important to make <em>eqn</em>
-recognize that <code>sin</code> should be typeset in a roman font, and
-the spaces around <code>x</code> and <code>y</code> are a good idea just in
-case the <em>eqn</em> document has defined special meanings for these
-names, too.)
-</p>
-<p>Powers and subscripts are written with the <code>sub</code> and <code>sup</code>
-operators, respectively.  Note that the caret symbol &lsquo;<samp>^</samp>&rsquo; is
-treated the same as a space in <em>eqn</em> mode, as is the &lsquo;<samp>~</samp>&rsquo;
-symbol (these are used to introduce spaces of various widths into
-the typeset output of <em>eqn</em>).
-</p>
-<p>As in LaTeX mode, Calc&rsquo;s formatter omits parentheses around the
-arguments of functions like <code>ln</code> and <code>sin</code> if they are
-&ldquo;simple-looking&rdquo;; in this case Calc surrounds the argument with
-braces, separated by a &lsquo;<samp>~</samp>&rsquo; from the function name: &lsquo;<samp>sin~{x}</samp>&rsquo;.
-</p>
-<p>Font change codes (like &lsquo;<samp>roman <var>x</var></samp>&rsquo;) and positioning codes
-(like &lsquo;<samp>~</samp>&rsquo; and &lsquo;<samp>down <var>n</var> <var>x</var></samp>&rsquo;) are ignored by the
-<em>eqn</em> reader.  Also ignored are the words <code>left</code>, <code>right</code>,
-<code>mark</code>, and <code>lineup</code>.  Quotation marks in <em>eqn</em> mode input
-are treated the same as curly braces: &lsquo;<samp>sqrt &quot;1+x&quot;</samp>&rsquo; is equivalent to
-&lsquo;<samp>sqrt {1+x}</samp>&rsquo;; this is only an approximation to the true meaning
-of quotes in <em>eqn</em>, but it is good enough for most uses.
-</p>
-<p>Accent codes (&lsquo;<samp><var>x</var> dot</samp>&rsquo;) are handled by treating them as
-function calls (&lsquo;<samp>dot(<var>x</var>)</samp>&rsquo;) internally.
-See <a href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">TeX and LaTeX Language Modes</a>, for a table of these accent
-functions.  The <code>prime</code> accent is treated specially if it occurs on
-a variable or function name: &lsquo;<samp>f prime prime (&nbsp;x&nbsp;prime&nbsp;)<!-- /@w --></samp>&rsquo; is
-stored internally as &lsquo;<samp>f''<!-- /@w -->(x')</samp>&rsquo;.  For example, taking the
-derivative of &lsquo;<samp>f(2 x)</samp>&rsquo; with <kbd>a d x</kbd> will produce &lsquo;<samp>2 f'(2
-x)</samp>&rsquo;, which <em>eqn</em> mode will display as &lsquo;<samp>2 f prime ( 2 x )</samp>&rsquo;.
-</p>
-<p>Assignments are written with the &lsquo;<samp>&lt;-</samp>&rsquo; (left-arrow) symbol,
-and <code>evalto</code> operators are written with &lsquo;<samp>-&gt;</samp>&rsquo; or
-&lsquo;<samp>evalto ... -&gt;</samp>&rsquo; (see <a href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">TeX and LaTeX Language Modes</a>, for a discussion
-of this).  The regular Calc symbols &lsquo;<samp>:=</samp>&rsquo; and &lsquo;<samp>=&gt;</samp>&rsquo; are also
-recognized for these operators during reading.
-</p>
-<p>Vectors in <em>eqn</em> mode use regular Calc square brackets, but
-matrices are formatted as &lsquo;<samp>matrix { ccol { a above b } ... }</samp>&rsquo;.
-The words <code>lcol</code> and <code>rcol</code> are recognized as synonyms
-for <code>ccol</code> during input, and are generated instead of <code>ccol</code>
-if the matrix justification mode so specifies.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Yacas-Language-Mode.html#Yacas-Language-Mode" accesskey="n" rel="next">Yacas Language Mode</a>, Previous: <a href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes" accesskey="p" rel="prev">TeX and LaTeX Language Modes</a>, Up: <a href="Language-Modes.html#Language-Modes" accesskey="u" rel="up">Language Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Yacas-Language-Mode.html#Yacas-Language-Mode"
+    accesskey="n" rel="next">Yacas Language Mode</a>, Previous:
+    <a href=
+    "TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes"
+    accesskey="p" rel="prev">TeX and LaTeX Language Modes</a>, Up:
+    <a href="Language-Modes.html#Language-Modes" accesskey="u" rel=
+    "up">Language Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Eqn-Language-Mode-1" id="Eqn-Language-Mode-1"></a>
 
+  <h4 class="subsection">6.8.4 Eqn Language Mode</h4><a name=
+  "index-d-E" id="index-d-E"></a> <a name=
+  "index-calc_002deqn_002dlanguage" id=
+  "index-calc_002deqn_002dlanguage"></a>
 
+  <p><em>Eqn</em> is another popular formatter for math formulas.
+  It is designed for use with the TROFF text formatter, and comes
+  standard with many versions of Unix. The <kbd>d E</kbd>
+  (<code>calc-eqn-language</code>) command selects <em>eqn</em>
+  notation.</p>
 
+  <p>The <em>eqn</em> language&rsquo;s main idiosyncrasy is that
+  whitespace plays a significant part in the parsing of the
+  language. For example, &lsquo;<samp>sqrt x+1 + y</samp>&rsquo;
+  treats &lsquo;<samp>x+1</samp>&rsquo; as the argument of the
+  <code>sqrt</code> operator. <em>Eqn</em> also understands more
+  conventional grouping using curly braces: &lsquo;<samp>sqrt{x+1}
+  + y</samp>&rsquo;. Braces are required only when the argument
+  contains spaces.</p>
+
+  <p>In Calc&rsquo;s <em>eqn</em> mode, however, curly braces are
+  required to delimit arguments of operators like
+  <code>sqrt</code>. The first of the above examples would treat
+  only the &lsquo;<samp>x</samp>&rsquo; as the argument of
+  <code>sqrt</code>, and in fact &lsquo;<samp>sin x+1</samp>&rsquo;
+  would be interpreted as &lsquo;<samp>sin * x + 1</samp>&rsquo;,
+  because <code>sin</code> is not a special operator in the
+  <em>eqn</em> language. If you always surround the argument with
+  curly braces, Calc will never misunderstand.</p>
+
+  <p>Calc also understands parentheses as grouping characters.
+  Another peculiarity of <em>eqn</em>&rsquo;s syntax makes it
+  advisable to separate words with spaces from any surrounding
+  characters that aren&rsquo;t curly braces, so Calc writes
+  &lsquo;<samp>sin ( x + y )</samp>&rsquo; in <em>eqn</em> mode.
+  (The spaces around <code>sin</code> are important to make
+  <em>eqn</em> recognize that <code>sin</code> should be typeset in
+  a roman font, and the spaces around <code>x</code> and
+  <code>y</code> are a good idea just in case the <em>eqn</em>
+  document has defined special meanings for these names, too.)</p>
+
+  <p>Powers and subscripts are written with the <code>sub</code>
+  and <code>sup</code> operators, respectively. Note that the caret
+  symbol &lsquo;<samp>^</samp>&rsquo; is treated the same as a
+  space in <em>eqn</em> mode, as is the
+  &lsquo;<samp>~</samp>&rsquo; symbol (these are used to introduce
+  spaces of various widths into the typeset output of
+  <em>eqn</em>).</p>
+
+  <p>As in LaTeX mode, Calc&rsquo;s formatter omits parentheses
+  around the arguments of functions like <code>ln</code> and
+  <code>sin</code> if they are &ldquo;simple-looking&rdquo;; in
+  this case Calc surrounds the argument with braces, separated by a
+  &lsquo;<samp>~</samp>&rsquo; from the function name:
+  &lsquo;<samp>sin~{x}</samp>&rsquo;.</p>
+
+  <p>Font change codes (like &lsquo;<samp>roman
+  <var>x</var></samp>&rsquo;) and positioning codes (like
+  &lsquo;<samp>~</samp>&rsquo; and &lsquo;<samp>down <var>n</var>
+  <var>x</var></samp>&rsquo;) are ignored by the <em>eqn</em>
+  reader. Also ignored are the words <code>left</code>,
+  <code>right</code>, <code>mark</code>, and <code>lineup</code>.
+  Quotation marks in <em>eqn</em> mode input are treated the same
+  as curly braces: &lsquo;<samp>sqrt "1+x"</samp>&rsquo; is
+  equivalent to &lsquo;<samp>sqrt {1+x}</samp>&rsquo;; this is only
+  an approximation to the true meaning of quotes in <em>eqn</em>,
+  but it is good enough for most uses.</p>
+
+  <p>Accent codes (&lsquo;<samp><var>x</var> dot</samp>&rsquo;) are
+  handled by treating them as function calls
+  (&lsquo;<samp>dot(<var>x</var>)</samp>&rsquo;) internally. See
+  <a href=
+  "TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">TeX
+  and LaTeX Language Modes</a>, for a table of these accent
+  functions. The <code>prime</code> accent is treated specially if
+  it occurs on a variable or function name: &lsquo;<samp>f prime
+  prime (&nbsp;x&nbsp;prime&nbsp;)<!-- /@w --></samp>&rsquo; is
+  stored internally as &lsquo;<samp>f''
+  <!-- /@w -->(x')</samp>&rsquo;. For example, taking the
+  derivative of &lsquo;<samp>f(2 x)</samp>&rsquo; with <kbd>a d
+  x</kbd> will produce &lsquo;<samp>2 f'(2 x)</samp>&rsquo;, which
+  <em>eqn</em> mode will display as &lsquo;<samp>2 f prime ( 2 x
+  )</samp>&rsquo;.</p>
+
+  <p>Assignments are written with the
+  &lsquo;<samp>&lt;-</samp>&rsquo; (left-arrow) symbol, and
+  <code>evalto</code> operators are written with
+  &lsquo;<samp>-&gt;</samp>&rsquo; or &lsquo;<samp>evalto ...
+  -&gt;</samp>&rsquo; (see <a href=
+  "TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">TeX
+  and LaTeX Language Modes</a>, for a discussion of this). The
+  regular Calc symbols &lsquo;<samp>:=</samp>&rsquo; and
+  &lsquo;<samp>=&gt;</samp>&rsquo; are also recognized for these
+  operators during reading.</p>
+
+  <p>Vectors in <em>eqn</em> mode use regular Calc square brackets,
+  but matrices are formatted as &lsquo;<samp>matrix { ccol { a
+  above b } ... }</samp>&rsquo;. The words <code>lcol</code> and
+  <code>rcol</code> are recognized as synonyms for
+  <code>ccol</code> during input, and are generated instead of
+  <code>ccol</code> if the matrix justification mode so
+  specifies.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Yacas-Language-Mode.html#Yacas-Language-Mode"
+    accesskey="n" rel="next">Yacas Language Mode</a>, Previous:
+    <a href=
+    "TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes"
+    accesskey="p" rel="prev">TeX and LaTeX Language Modes</a>, Up:
+    <a href="Language-Modes.html#Language-Modes" accesskey="u" rel=
+    "up">Language Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

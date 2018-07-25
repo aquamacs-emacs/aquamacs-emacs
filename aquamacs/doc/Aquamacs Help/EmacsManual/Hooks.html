@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,177 +20,239 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Hooks</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Hooks">
-<meta name="keywords" content="GNU Emacs Manual: Hooks">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Variables.html#Variables" rel="up" title="Variables">
-<link href="Locals.html#Locals" rel="next" title="Locals">
-<link href="Examining.html#Examining" rel="prev" title="Examining">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Hooks</title>
+  <meta name="description" content="GNU Emacs Manual: Hooks" />
+  <meta name="keywords" content="GNU Emacs Manual: Hooks" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Variables.html#Variables" rel="up" title=
+  "Variables" />
+  <link href="Locals.html#Locals" rel="next" title="Locals" />
+  <link href="Examining.html#Examining" rel="prev" title=
+  "Examining" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Hooks" id="Hooks"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Locals.html#Locals" accesskey="n" rel=
+    "next">Locals</a>, Previous: <a href="Examining.html#Examining"
+    accesskey="p" rel="prev">Examining</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Hooks-1" id="Hooks-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Hooks"></a>
-<div class="header">
-<p>
-Next: <a href="Locals.html#Locals" accesskey="n" rel="next">Locals</a>, Previous: <a href="Examining.html#Examining" accesskey="p" rel="prev">Examining</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Hooks-1"></a>
-<h4 class="subsection">51.2.2 Hooks</h4>
-<a name="index-hook"></a>
-<a name="index-running-a-hook"></a>
+  <h4 class="subsection">51.2.2 Hooks</h4><a name="index-hook" id=
+  "index-hook"></a> <a name="index-running-a-hook" id=
+  "index-running-a-hook"></a>
 
-<p><em>Hooks</em> are an important mechanism for customizing Emacs.  A
-hook is a Lisp variable which holds a list of functions, to be called
-on some well-defined occasion.  (This is called <em>running the
-hook</em>.)  The individual functions in the list are called the <em>hook
-functions</em> of the hook.  For example, the hook <code>kill-emacs-hook</code>
-runs just before exiting Emacs (see <a href="Exiting.html#Exiting">Exiting</a>).
-</p>
-<a name="index-normal-hook"></a>
-<p>Most hooks are <em>normal hooks</em>.  This means that when Emacs runs
-the hook, it calls each hook function in turn, with no arguments.  We
-have made an effort to keep most hooks normal, so that you can use
-them in a uniform way.  Every variable whose name ends in &lsquo;<samp>-hook</samp>&rsquo;
-is a normal hook.
-</p>
-<a name="index-abnormal-hook"></a>
-<p>A few hooks are <em>abnormal hooks</em>.  Their names end in
-&lsquo;<samp>-functions</samp>&rsquo;, instead of &lsquo;<samp>-hook</samp>&rsquo; (some old code may also use
-the deprecated suffix &lsquo;<samp>-hooks</samp>&rsquo;).  What
-makes these hooks abnormal is the way its functions are
-called&mdash;perhaps they are given arguments, or perhaps the values they
-return are used in some way.  For example,
-<code>find-file-not-found-functions</code> is abnormal because as soon as
-one hook function returns a non-<code>nil</code> value, the rest are not
-called at all (see <a href="Visiting.html#Visiting">Visiting</a>).  The documentation of each abnormal
-hook variable explains how its functions are used.
-</p>
-<a name="index-add_002dhook"></a>
-<p>You can set a hook variable with <code>setq</code> like any other Lisp
-variable, but the recommended way to add a function to a hook (either
-normal or abnormal) is to use <code>add-hook</code>, as shown by the
-following examples.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Hooks.html#Hooks">Hooks</a> in <cite>The Emacs Lisp Reference
-Manual</cite>, for details.
-</p>
-<p>Most major modes run one or more <em>mode hooks</em> as the last step
-of initialization.  Mode hooks are a convenient way to customize the
-behavior of individual modes; they are always normal.  For example,
-here&rsquo;s how to set up a hook to turn on Auto Fill mode in Text mode and
-other modes based on Text mode:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'text-mode-hook 'auto-fill-mode)
-</pre></div>
+  <p><em>Hooks</em> are an important mechanism for customizing
+  Emacs. A hook is a Lisp variable which holds a list of functions,
+  to be called on some well-defined occasion. (This is called
+  <em>running the hook</em>.) The individual functions in the list
+  are called the <em>hook functions</em> of the hook. For example,
+  the hook <code>kill-emacs-hook</code> runs just before exiting
+  Emacs (see <a href=
+  "Exiting.html#Exiting">Exiting</a>).</p><a name=
+  "index-normal-hook" id="index-normal-hook"></a>
 
-<p>This works by calling <code>auto-fill-mode</code>, which enables the minor
-mode when no argument is supplied (see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>).  Next,
-suppose you don&rsquo;t want Auto Fill mode turned on in LaTeX mode,
-which is one of the modes based on Text mode.  You can do this with
-the following additional line:
-</p>
-<div class="example">
-<pre class="example">(add-hook 'latex-mode-hook (lambda () (auto-fill-mode -1)))
-</pre></div>
+  <p>Most hooks are <em>normal hooks</em>. This means that when
+  Emacs runs the hook, it calls each hook function in turn, with no
+  arguments. We have made an effort to keep most hooks normal, so
+  that you can use them in a uniform way. Every variable whose name
+  ends in &lsquo;<samp>-hook</samp>&rsquo; is a normal
+  hook.</p><a name="index-abnormal-hook" id=
+  "index-abnormal-hook"></a>
 
-<p>Here we have used the special macro <code>lambda</code> to construct an
-anonymous function (see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a> in <cite>The Emacs Lisp
-Reference Manual</cite>), which calls <code>auto-fill-mode</code> with an argument
-of <code>-1</code> to disable the minor mode.  Because LaTeX mode runs
-<code>latex-mode-hook</code> after running <code>text-mode-hook</code>, the result
-leaves Auto Fill mode disabled.
-</p>
-<p>Here is a more complex example, showing how to use a hook to
-customize the indentation of C code:
-</p>
-<div class="example">
-<pre class="example">(setq my-c-style
+  <p>A few hooks are <em>abnormal hooks</em>. Their names end in
+  &lsquo;<samp>-functions</samp>&rsquo;, instead of
+  &lsquo;<samp>-hook</samp>&rsquo; (some old code may also use the
+  deprecated suffix &lsquo;<samp>-hooks</samp>&rsquo;). What makes
+  these hooks abnormal is the way its functions are
+  called&mdash;perhaps they are given arguments, or perhaps the
+  values they return are used in some way. For example,
+  <code>find-file-not-found-functions</code> is abnormal because as
+  soon as one hook function returns a non-<code>nil</code> value,
+  the rest are not called at all (see <a href=
+  "Visiting.html#Visiting">Visiting</a>). The documentation of each
+  abnormal hook variable explains how its functions are
+  used.</p><a name="index-add_002dhook" id=
+  "index-add_002dhook"></a>
+
+  <p>You can set a hook variable with <code>setq</code> like any
+  other Lisp variable, but the recommended way to add a function to
+  a hook (either normal or abnormal) is to use
+  <code>add-hook</code>, as shown by the following examples. See
+  <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Hooks.html#Hooks">
+  Hooks</a> in <cite>The Emacs Lisp Reference Manual</cite>, for
+  details.</p>
+
+  <p>Most major modes run one or more <em>mode hooks</em> as the
+  last step of initialization. Mode hooks are a convenient way to
+  customize the behavior of individual modes; they are always
+  normal. For example, here&rsquo;s how to set up a hook to turn on
+  Auto Fill mode in Text mode and other modes based on Text
+  mode:</p>
+
+  <div class="example">
+    <pre class="example">
+(add-hook 'text-mode-hook 'auto-fill-mode)
+</pre>
+  </div>
+
+  <p>This works by calling <code>auto-fill-mode</code>, which
+  enables the minor mode when no argument is supplied (see <a href=
+  "Minor-Modes.html#Minor-Modes">Minor Modes</a>). Next, suppose
+  you don&rsquo;t want Auto Fill mode turned on in LaTeX mode,
+  which is one of the modes based on Text mode. You can do this
+  with the following additional line:</p>
+
+  <div class="example">
+    <pre class="example">
+(add-hook 'latex-mode-hook (lambda () (auto-fill-mode -1)))
+</pre>
+  </div>
+
+  <p>Here we have used the special macro <code>lambda</code> to
+  construct an anonymous function (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Lambda-Expressions.html#Lambda-Expressions">
+  Lambda Expressions</a> in <cite>The Emacs Lisp Reference
+  Manual</cite>), which calls <code>auto-fill-mode</code> with an
+  argument of <code>-1</code> to disable the minor mode. Because
+  LaTeX mode runs <code>latex-mode-hook</code> after running
+  <code>text-mode-hook</code>, the result leaves Auto Fill mode
+  disabled.</p>
+
+  <p>Here is a more complex example, showing how to use a hook to
+  customize the indentation of C code:</p>
+
+  <div class="example">
+    <pre class="example">
+(setq my-c-style
   '((c-comment-only-line-offset . 4)
-</pre><pre class="example">    (c-cleanup-list . (scope-operator
+</pre>
+    <pre class="example">
+    (c-cleanup-list . (scope-operator
                        empty-defun-braces
                        defun-close-semi))))
-</pre><pre class="example">
-</pre><pre class="example">(add-hook 'c-mode-common-hook
-  (lambda () (c-add-style &quot;my-style&quot; my-c-style t)))
-</pre></div>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+(add-hook 'c-mode-common-hook
+  (lambda () (c-add-style "my-style" my-c-style t)))
+</pre>
+  </div><a name="index-Prog-mode" id="index-Prog-mode"></a>
+  <a name="index-program-editing-1" id=
+  "index-program-editing-1"></a>
 
-<a name="index-Prog-mode"></a>
-<a name="index-program-editing-1"></a>
-<p>Major mode hooks also apply to other major modes <em>derived</em> from
-the original mode (see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Derived-Modes.html#Derived-Modes">Derived Modes</a> in <cite>The Emacs Lisp
-Reference Manual</cite>).  For instance, HTML mode is derived from Text mode
-(see <a href="HTML-Mode.html#HTML-Mode">HTML Mode</a>); when HTML mode is enabled, it runs
-<code>text-mode-hook</code> before running <code>html-mode-hook</code>.  This
-provides a convenient way to use a single hook to affect several
-related modes.  In particular, if you want to apply a hook function to
-any programming language mode, add it to <code>prog-mode-hook</code>; Prog
-mode is a major mode that does little else than to let other major
-modes inherit from it, exactly for this purpose.
-</p>
-<p>It is best to design your hook functions so that the order in which
-they are executed does not matter.  Any dependence on the order is
-asking for trouble.  However, the order is predictable: the hook
-functions are executed in the order they appear in the hook.
-</p>
-<a name="index-remove_002dhook"></a>
-<p>If you play with adding various different versions of a hook
-function by calling <code>add-hook</code> over and over, remember that all
-the versions you added will remain in the hook variable together.  You
-can clear out individual functions by calling <code>remove-hook</code>, or
-do <code>(setq <var>hook-variable</var> nil)</code> to remove everything.
-</p>
-<a name="index-buffer_002dlocal-hooks"></a>
-<p>If the hook variable is buffer-local, the buffer-local variable will
-be used instead of the global variable.  However, if the buffer-local
-variable contains the element <code>t</code>, the global hook variable will
-be run as well.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Locals.html#Locals" accesskey="n" rel="next">Locals</a>, Previous: <a href="Examining.html#Examining" accesskey="p" rel="prev">Examining</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Major mode hooks also apply to other major modes
+  <em>derived</em> from the original mode (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/elisp/Derived-Modes.html#Derived-Modes">
+  Derived Modes</a> in <cite>The Emacs Lisp Reference
+  Manual</cite>). For instance, HTML mode is derived from Text mode
+  (see <a href="HTML-Mode.html#HTML-Mode">HTML Mode</a>); when HTML
+  mode is enabled, it runs <code>text-mode-hook</code> before
+  running <code>html-mode-hook</code>. This provides a convenient
+  way to use a single hook to affect several related modes. In
+  particular, if you want to apply a hook function to any
+  programming language mode, add it to <code>prog-mode-hook</code>;
+  Prog mode is a major mode that does little else than to let other
+  major modes inherit from it, exactly for this purpose.</p>
 
+  <p>It is best to design your hook functions so that the order in
+  which they are executed does not matter. Any dependence on the
+  order is asking for trouble. However, the order is predictable:
+  the hook functions are executed in the order they appear in the
+  hook.</p><a name="index-remove_002dhook" id=
+  "index-remove_002dhook"></a>
 
+  <p>If you play with adding various different versions of a hook
+  function by calling <code>add-hook</code> over and over, remember
+  that all the versions you added will remain in the hook variable
+  together. You can clear out individual functions by calling
+  <code>remove-hook</code>, or do <code>(setq
+  <var>hook-variable</var> nil)</code> to remove
+  everything.</p><a name="index-buffer_002dlocal-hooks" id=
+  "index-buffer_002dlocal-hooks"></a>
 
+  <p>If the hook variable is buffer-local, the buffer-local
+  variable will be used instead of the global variable. However, if
+  the buffer-local variable contains the element <code>t</code>,
+  the global hook variable will be run as well.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Locals.html#Locals" accesskey="n" rel=
+    "next">Locals</a>, Previous: <a href="Examining.html#Examining"
+    accesskey="p" rel="prev">Examining</a>, Up: <a href=
+    "Variables.html#Variables" accesskey="u" rel="up">Variables</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

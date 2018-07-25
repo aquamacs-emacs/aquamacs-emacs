@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Modifying Commands - VIP</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="VIP">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Vi-Commands.html#Vi-Commands" title="Vi Commands">
-<link rel="prev" href="Searching-and-Replacing.html#Searching-and-Replacing" title="Searching and Replacing">
-<link rel="next" href="Delete-Commands.html#Delete-Commands" title="Delete Commands">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Modifying Commands - VIP</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="VIP" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Vi-Commands.html#Vi-Commands" title=
+  "Vi Commands" />
+  <link rel="prev" href=
+  "Searching-and-Replacing.html#Searching-and-Replacing" title=
+  "Searching and Replacing" />
+  <link rel="next" href="Delete-Commands.html#Delete-Commands"
+  title="Delete Commands" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +35,10 @@ Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,48 +48,79 @@ Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Modifying-Commands"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Delete-Commands.html#Delete-Commands">Delete Commands</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Searching-and-Replacing.html#Searching-and-Replacing">Searching and Replacing</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Vi-Commands.html#Vi-Commands">Vi Commands</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Modifying-Commands" id="Modifying-Commands"></a>
 
-<h3 class="section">2.9 Modifying Commands</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Delete-Commands.html#Delete-Commands">Delete Commands</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Searching-and-Replacing.html#Searching-and-Replacing">Searching
+    and Replacing</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Vi-Commands.html#Vi-Commands">Vi Commands</a></p>
+    <hr />
+  </div>
 
-<p>In this section, commands for modifying the content of a buffer are
-described.  These commands affect the region determined by a motion command
-which is given to the commands as their argument.
+  <h3 class="section">2.9 Modifying Commands</h3>
 
-   <p><a name="index-point-commands-194"></a><a name="index-line-commands-195"></a>
-We classify motion commands into <dfn>point commands</dfn> and
-<dfn>line commands</dfn>.  The point commands are as follows:
-<pre class="example">     <kbd>h</kbd>, <kbd>l</kbd>, <kbd>0</kbd>, <kbd>^</kbd>, <kbd>$</kbd>, <kbd>w</kbd>, <kbd>W</kbd>, <kbd>b</kbd>, <kbd>B</kbd>, <kbd>e</kbd>, <kbd>E</kbd>, <kbd>(</kbd>, <kbd>)</kbd>, <kbd>/</kbd>, <kbd>?</kbd>, <kbd>`</kbd>, <kbd>f</kbd>, <kbd>F</kbd>, <kbd>t</kbd>, <kbd>T</kbd>, <kbd>%</kbd>, <kbd>;</kbd>, <kbd>,</kbd>
+  <p>In this section, commands for modifying the content of a
+  buffer are described. These commands affect the region determined
+  by a motion command which is given to the commands as their
+  argument.</p>
+
+  <p><a name="index-point-commands-194" id=
+  "index-point-commands-194"></a><a name="index-line-commands-195"
+  id="index-line-commands-195"></a> We classify motion commands
+  into <dfn>point commands</dfn> and <dfn>line commands</dfn>. The
+  point commands are as follows:</p>
+  <pre class="example">
+     <kbd>h</kbd>, <kbd>l</kbd>, <kbd>0</kbd>, <kbd>^</kbd>, <kbd>$</kbd>, <kbd>w</kbd>, <kbd>W</kbd>, <kbd>b</kbd>, <kbd>B</kbd>, <kbd>e</kbd>, <kbd>E</kbd>, <kbd>(</kbd>, <kbd>)</kbd>, <kbd>/</kbd>, <kbd>?</kbd>, <kbd>`</kbd>, <kbd>f</kbd>, <kbd>F</kbd>, <kbd>t</kbd>, <kbd>T</kbd>, <kbd>%</kbd>, <kbd>;</kbd>, <kbd>,</kbd>
 </pre>
-   <p class="noindent">The line commands are as follows:
-<pre class="example">     <kbd>j</kbd>, <kbd>k</kbd>, <kbd>+</kbd>, <kbd>-</kbd>, <kbd>H</kbd>, <kbd>M</kbd>, <kbd>L</kbd>, <kbd>{</kbd>, <kbd>}</kbd>, <kbd>G</kbd>, <kbd>'</kbd>
+
+  <p class="noindent">The line commands are as follows:</p>
+  <pre class="example">
+     <kbd>j</kbd>, <kbd>k</kbd>, <kbd>+</kbd>, <kbd>-</kbd>, <kbd>H</kbd>, <kbd>M</kbd>, <kbd>L</kbd>, <kbd>{</kbd>, <kbd>}</kbd>, <kbd>G</kbd>, <kbd>'</kbd>
 </pre>
-   <p class="noindent"><a name="index-expanding-_0028region_0029-196"></a>If a point command is given as an argument to a modifying command, the
-region determined by the point command will be affected by the modifying
-command. On the other hand, if a line command is given as an argument to a
-modifying command, the region determined by the line command will be
-enlarged so that it will become the smallest region properly containing the
-region and consisting of whole lines (we call this process <dfn>expanding
-the region</dfn>), and then the enlarged region will be affected by the modifying
-command.
 
-<ul class="menu">
-<li><a accesskey="1" href="Delete-Commands.html#Delete-Commands">Delete Commands</a>:      Commands for deleting text. 
-<li><a accesskey="2" href="Yank-Commands.html#Yank-Commands">Yank Commands</a>:        Commands for yanking text in Vi's sense. 
-<li><a accesskey="3" href="Put-Back-Commands.html#Put-Back-Commands">Put Back Commands</a>:    Commands for putting back deleted/yanked text. 
-<li><a accesskey="4" href="Change-Commands.html#Change-Commands">Change Commands</a>:      Commands for changing text. 
-<li><a accesskey="5" href="Repeating-and-Undoing-Modifications.html#Repeating-and-Undoing-Modifications">Repeating and Undoing Modifications</a>
-</ul>
+  <p class="noindent"><a name=
+  "index-expanding-_0028region_0029-196" id=
+  "index-expanding-_0028region_0029-196"></a>If a point command is
+  given as an argument to a modifying command, the region
+  determined by the point command will be affected by the modifying
+  command. On the other hand, if a line command is given as an
+  argument to a modifying command, the region determined by the
+  line command will be enlarged so that it will become the smallest
+  region properly containing the region and consisting of whole
+  lines (we call this process <dfn>expanding the region</dfn>), and
+  then the enlarged region will be affected by the modifying
+  command.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Delete-Commands.html#Delete-Commands">Delete Commands</a>:
+    Commands for deleting text.</li>
 
+    <li><a accesskey="2" href=
+    "Yank-Commands.html#Yank-Commands">Yank Commands</a>: Commands
+    for yanking text in Vi's sense.</li>
+
+    <li><a accesskey="3" href=
+    "Put-Back-Commands.html#Put-Back-Commands">Put Back
+    Commands</a>: Commands for putting back deleted/yanked
+    text.</li>
+
+    <li><a accesskey="4" href=
+    "Change-Commands.html#Change-Commands">Change Commands</a>:
+    Commands for changing text.</li>
+
+    <li><a accesskey="5" href=
+    "Repeating-and-Undoing-Modifications.html#Repeating-and-Undoing-Modifications">
+    Repeating and Undoing Modifications</a></li>
+  </ul>
+</body>
+</html>

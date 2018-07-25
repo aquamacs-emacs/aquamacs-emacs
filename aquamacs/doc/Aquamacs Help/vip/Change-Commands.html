@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Change Commands - VIP</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="VIP">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Modifying-Commands.html#Modifying-Commands" title="Modifying Commands">
-<link rel="prev" href="Put-Back-Commands.html#Put-Back-Commands" title="Put Back Commands">
-<link rel="next" href="Repeating-and-Undoing-Modifications.html#Repeating-and-Undoing-Modifications" title="Repeating and Undoing Modifications">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Change Commands - VIP</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="VIP" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Modifying-Commands.html#Modifying-Commands"
+  title="Modifying Commands" />
+  <link rel="prev" href="Put-Back-Commands.html#Put-Back-Commands"
+  title="Put Back Commands" />
+  <link rel="next" href=
+  "Repeating-and-Undoing-Modifications.html#Repeating-and-Undoing-Modifications"
+  title="Repeating and Undoing Modifications" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +35,10 @@ Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,40 +48,71 @@ Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Change-Commands"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Repeating-and-Undoing-Modifications.html#Repeating-and-Undoing-Modifications">Repeating and Undoing Modifications</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Put-Back-Commands.html#Put-Back-Commands">Put Back Commands</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Modifying-Commands.html#Modifying-Commands">Modifying Commands</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Change-Commands" id="Change-Commands"></a>
 
-<h4 class="subsection">2.9.4 Change Commands</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Repeating-and-Undoing-Modifications.html#Repeating-and-Undoing-Modifications">Repeating
+    and Undoing Modifications</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Put-Back-Commands.html#Put-Back-Commands">Put Back
+    Commands</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Modifying-Commands.html#Modifying-Commands">Modifying
+    Commands</a></p>
+    <hr />
+  </div>
 
-<p>Most commonly used change command takes the following form.
+  <h4 class="subsection">2.9.4 Change Commands</h4>
 
-     <dl>
-<dt><kbd>c </kbd><var>motion-command</var><dd><a name="index-g_t1430-_0040kbd_007bc_007d-_0028_0040code_007bvip_002dcommand_002dargument_007d_0029-214"></a>Replace the content of the region determined by the motion command
-<var>motion-command</var> by the text you type.  If the motion command is a
-point command then you will type the text into minibuffer, and if the
-motion command is a line command then the region will be deleted first and
-you can insert the text in <var>insert mode</var>. 
-</dl>
-   For example, if point is at the beginning of a word &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; and you
-wish to change it to &lsquo;<samp><span class="samp">bar</span></samp>&rsquo;, you can type <kbd>c w</kbd>.  Then, as <kbd>w</kbd>
-is a point command, you will get the prompt &lsquo;<samp><span class="samp">foo =&gt;</span></samp>&rsquo; in the
-minibuffer, for which you can type <kbd>b a r &lt;RET&gt;</kbd> to complete the change
-command.
+  <p>Most commonly used change command takes the following
+  form.</p>
 
-     <dl>
-<dt><kbd>c c</kbd><dd><a name="index-g_t1432-_0040kbd_007bc-c_007d-215"></a>Change a line.  Given a count, that many lines are changed. 
-<br><dt><kbd>c r</kbd><dd><a name="index-g_t1432-_0040kbd_007bc-r_007d-216"></a>Change current region. 
-<br><dt><kbd>c R</kbd><dd><a name="index-g_t1431-_0040kbd_007bc-R_007d-217"></a>Expand current region and change it. 
-</dl>
+  <dl>
+    <dt><kbd>c</kbd> <var>motion-command</var></dt>
 
-   </body></html>
+    <dd><a name=
+    "index-g_t1430-_0040kbd_007bc_007d-_0028_0040code_007bvip_002dcommand_002dargument_007d_0029-214"
+    id=
+    "index-g_t1430-_0040kbd_007bc_007d-_0028_0040code_007bvip_002dcommand_002dargument_007d_0029-214">
+    </a>Replace the content of the region determined by the motion
+    command <var>motion-command</var> by the text you type. If the
+    motion command is a point command then you will type the text
+    into minibuffer, and if the motion command is a line command
+    then the region will be deleted first and you can insert the
+    text in <var>insert mode</var>.</dd>
+  </dl>For example, if point is at the beginning of a word
+  &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; and you
+  wish to change it to &lsquo;<samp><span class=
+  "samp">bar</span></samp>&rsquo;, you can type <kbd>c w</kbd>.
+  Then, as <kbd>w</kbd> is a point command, you will get the prompt
+  &lsquo;<samp><span class="samp">foo =&gt;</span></samp>&rsquo; in
+  the minibuffer, for which you can type <kbd>b a r
+  &lt;RET&gt;</kbd> to complete the change command.
 
+  <dl>
+    <dt><kbd>c c</kbd></dt>
+
+    <dd><a name="index-g_t1432-_0040kbd_007bc-c_007d-215" id=
+    "index-g_t1432-_0040kbd_007bc-c_007d-215"></a>Change a line.
+    Given a count, that many lines are changed.<br /></dd>
+
+    <dt><kbd>c r</kbd></dt>
+
+    <dd><a name="index-g_t1432-_0040kbd_007bc-r_007d-216" id=
+    "index-g_t1432-_0040kbd_007bc-r_007d-216"></a>Change current
+    region.<br /></dd>
+
+    <dt><kbd>c R</kbd></dt>
+
+    <dd><a name="index-g_t1431-_0040kbd_007bc-R_007d-217" id=
+    "index-g_t1431-_0040kbd_007bc-R_007d-217"></a>Expand current
+    region and change it.</dd>
+  </dl>
+</body>
+</html>

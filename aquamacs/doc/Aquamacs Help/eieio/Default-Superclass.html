@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Default Superclass - Enhanced Implementation of Emacs Interpreted Objects</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Class-Values.html#Class-Values" title="Class Values">
-<link rel="next" href="Signals.html#Signals" title="Signals">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Default Superclass - Enhanced Implementation of Emacs
+  Interpreted Objects</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href="Class-Values.html#Class-Values" title=
+  "Class Values" />
+  <link rel="next" href="Signals.html#Signals" title="Signals" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -25,8 +34,10 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,45 +47,59 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Default-Superclass"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Signals.html#Signals">Signals</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Class-Values.html#Class-Values">Class Values</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Default-Superclass" id="Default-Superclass"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h2 class="chapter">14 Default Superclass</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Signals.html#Signals">Signals</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Class-Values.html#Class-Values">Class Values</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-<p>All defined classes, if created with no specified parent class, will
-inherit from a special class stored in
-<code>eieio-default-superclass</code>.  This superclass is quite simple, but
-with it, certain default methods or attributes can be added to all
-objects.  In CLOS, this would be named <code>STANDARD-CLASS</code>, and that
-symbol is an alias to <code>eieio-default-superclass</code>.
+  <h2 class="chapter">14 Default Superclass</h2>
 
-   <p>Currently, the default superclass is defined as follows:
+  <p>All defined classes, if created with no specified parent
+  class, will inherit from a special class stored in
+  <code>eieio-default-superclass</code>. This superclass is quite
+  simple, but with it, certain default methods or attributes can be
+  added to all objects. In CLOS, this would be named
+  <code>STANDARD-CLASS</code>, and that symbol is an alias to
+  <code>eieio-default-superclass</code>.</p>
 
-<pre class="example">     (defclass eieio-default-superclass nil
+  <p>Currently, the default superclass is defined as follows:</p>
+  <pre class="example">
+     (defclass eieio-default-superclass nil
        nil
        "Default parent class for classes with no specified parent class.
      Its slots are automatically adopted by classes with no specified
      parents.  This class is not stored in the `parent' slot of a class vector."
        :abstract t)
 </pre>
-   <p>The default superclass implements several methods providing a default
-behavior for all objects created by <i>EIEIO</i>.
 
-<ul class="menu">
-<li><a accesskey="1" href="Initialization.html#Initialization">Initialization</a>:       How objects are initialized
-<li><a accesskey="2" href="Basic-Methods.html#Basic-Methods">Basic Methods</a>:        Clone, print, and write
-<li><a accesskey="3" href="Signal-Handling.html#Signal-Handling">Signal Handling</a>:      Methods for managing signals. 
-</ul>
+  <p>The default superclass implements several methods providing a
+  default behavior for all objects created by <i>EIEIO</i>.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Initialization.html#Initialization">Initialization</a>: How
+    objects are initialized</li>
 
+    <li><a accesskey="2" href=
+    "Basic-Methods.html#Basic-Methods">Basic Methods</a>: Clone,
+    print, and write</li>
+
+    <li><a accesskey="3" href=
+    "Signal-Handling.html#Signal-Handling">Signal Handling</a>:
+    Methods for managing signals.</li>
+  </ul>
+</body>
+</html>

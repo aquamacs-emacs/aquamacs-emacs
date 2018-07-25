@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,169 +18,222 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Advanced Math Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Advanced Math Functions">
-<meta name="keywords" content="GNU Emacs Calc Manual: Advanced Math Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Scientific-Functions.html#Scientific-Functions" rel="up" title="Scientific Functions">
-<link href="Branch-Cuts.html#Branch-Cuts" rel="next" title="Branch Cuts">
-<link href="Trigonometric-and-Hyperbolic-Functions.html#Trigonometric-and-Hyperbolic-Functions" rel="prev" title="Trigonometric and Hyperbolic Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Advanced Math Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Advanced Math Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Advanced Math Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Scientific-Functions.html#Scientific-Functions" rel=
+  "up" title="Scientific Functions" />
+  <link href="Branch-Cuts.html#Branch-Cuts" rel="next" title=
+  "Branch Cuts" />
+  <link href=
+  "Trigonometric-and-Hyperbolic-Functions.html#Trigonometric-and-Hyperbolic-Functions"
+  rel="prev" title="Trigonometric and Hyperbolic Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Advanced-Math-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Branch-Cuts.html#Branch-Cuts" accesskey="n" rel="next">Branch Cuts</a>, Previous: <a href="Trigonometric-and-Hyperbolic-Functions.html#Trigonometric-and-Hyperbolic-Functions" accesskey="p" rel="prev">Trigonometric and Hyperbolic Functions</a>, Up: <a href="Scientific-Functions.html#Scientific-Functions" accesskey="u" rel="up">Scientific Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Advanced-Mathematical-Functions"></a>
-<h3 class="section">8.3 Advanced Mathematical Functions</h3>
+<body lang="en" xml:lang="en">
+  <a name="Advanced-Math-Functions" id=
+  "Advanced-Math-Functions"></a>
 
-<p>Calc can compute a variety of less common functions that arise in
-various branches of mathematics.  All of the functions described in
-this section allow arbitrary complex arguments and, except as noted,
-will work to arbitrarily large precision.  They can not at present
-handle error forms or intervals as arguments.
-</p>
-<p>NOTE:  These functions are still experimental.  In particular, their
-accuracy is not guaranteed in all domains.  It is advisable to set the
-current precision comfortably higher than you actually need when
-using these functions.  Also, these functions may be impractically
-slow for some values of the arguments.
-</p>
-<a name="index-f-g"></a>
-<a name="index-calc_002dgamma"></a>
-<a name="index-gamma"></a>
-<p>The <kbd>f g</kbd> (<code>calc-gamma</code>) [<code>gamma</code>] command computes the Euler
-gamma function.  For positive integer arguments, this is related to the
-factorial function:  &lsquo;<samp>gamma(n+1) = fact(n)</samp>&rsquo;.  For general complex
-arguments the gamma function can be defined by the following definite
-integral:
-&lsquo;<samp>gamma(a) = integ(t^(a-1) exp(t), t, 0, inf)</samp>&rsquo;.
-(The actual implementation uses far more efficient computational methods.)
-</p>
-<a name="index-f-G"></a>
-<a name="index-gammaP"></a>
-<a name="index-I-f-G"></a>
-<a name="index-H-f-G"></a>
-<a name="index-H-I-f-G"></a>
-<a name="index-calc_002dinc_002dgamma"></a>
-<a name="index-gammaQ"></a>
-<a name="index-gammag"></a>
-<a name="index-gammaG"></a>
-<p>The <kbd>f G</kbd> (<code>calc-inc-gamma</code>) [<code>gammaP</code>] command computes
-the incomplete gamma function, denoted &lsquo;<samp>P(a,x)</samp>&rsquo;.  This is defined by
-the integral,
-&lsquo;<samp>gammaP(a,x) = integ(t^(a-1) exp(t), t, 0, x) / gamma(a)</samp>&rsquo;.
-This implies that &lsquo;<samp>gammaP(a,inf) = 1</samp>&rsquo; for any &lsquo;<samp>a</samp>&rsquo; (see the
-definition of the normal gamma function).
-</p>
-<p>Several other varieties of incomplete gamma function are defined.
-The complement of &lsquo;<samp>P(a,x)</samp>&rsquo;, called &lsquo;<samp>Q(a,x) = 1-P(a,x)</samp>&rsquo; by
-some authors, is computed by the <kbd>I f G</kbd> [<code>gammaQ</code>] command.
-You can think of this as taking the other half of the integral, from
-&lsquo;<samp>x</samp>&rsquo; to infinity.
-</p>
-<p>The functions corresponding to the integrals that define &lsquo;<samp>P(a,x)</samp>&rsquo;
-and &lsquo;<samp>Q(a,x)</samp>&rsquo; but without the normalizing &lsquo;<samp>1/gamma(a)</samp>&rsquo;
-factor are called &lsquo;<samp>g(a,x)</samp>&rsquo; and &lsquo;<samp>G(a,x)</samp>&rsquo;, respectively
-(where &lsquo;<samp>g</samp>&rsquo; and &lsquo;<samp>G</samp>&rsquo; represent the lower- and upper-case Greek
-letter gamma).  You can obtain these using the <kbd>H f G</kbd> [<code>gammag</code>]
-and <kbd>H I f G</kbd> [<code>gammaG</code>] commands.
-</p>
-<a name="index-f-b"></a>
-<a name="index-calc_002dbeta"></a>
-<a name="index-beta"></a>
-<p>The <kbd>f b</kbd> (<code>calc-beta</code>) [<code>beta</code>] command computes the
-Euler beta function, which is defined in terms of the gamma function as
-&lsquo;<samp>beta(a,b) = gamma(a) gamma(b) / gamma(a+b)</samp>&rsquo;,
-or by
-&lsquo;<samp>beta(a,b) = integ(t^(a-1) (1-t)^(b-1), t, 0, 1)</samp>&rsquo;.
-</p>
-<a name="index-f-B"></a>
-<a name="index-H-f-B"></a>
-<a name="index-calc_002dinc_002dbeta"></a>
-<a name="index-betaI"></a>
-<a name="index-betaB"></a>
-<p>The <kbd>f B</kbd> (<code>calc-inc-beta</code>) [<code>betaI</code>] command computes
-the incomplete beta function &lsquo;<samp>I(x,a,b)</samp>&rsquo;.  It is defined by
-&lsquo;<samp>betaI(x,a,b) = integ(t^(a-1) (1-t)^(b-1), t, 0, x) / beta(a,b)</samp>&rsquo;.
-Once again, the <kbd>H</kbd> (hyperbolic) prefix gives the corresponding
-un-normalized version [<code>betaB</code>].
-</p>
-<a name="index-f-e"></a>
-<a name="index-I-f-e"></a>
-<a name="index-calc_002derf"></a>
-<a name="index-erf"></a>
-<a name="index-erfc"></a>
-<p>The <kbd>f e</kbd> (<code>calc-erf</code>) [<code>erf</code>] command computes the
-error function
-&lsquo;<samp>erf(x) = 2 integ(exp(-(t^2)), t, 0, x) / sqrt(pi)</samp>&rsquo;.
-The complementary error function <kbd>I f e</kbd> (<code>calc-erfc</code>) [<code>erfc</code>]
-is the corresponding integral from &lsquo;<samp>x</samp>&rsquo; to infinity; the sum
-&lsquo;<samp>erf(x) + erfc(x) = 1</samp>&rsquo;.
-</p>
-<a name="index-f-j"></a>
-<a name="index-f-y"></a>
-<a name="index-calc_002dbessel_002dJ"></a>
-<a name="index-calc_002dbessel_002dY"></a>
-<a name="index-besJ"></a>
-<a name="index-besY"></a>
-<p>The <kbd>f j</kbd> (<code>calc-bessel-J</code>) [<code>besJ</code>] and <kbd>f y</kbd>
-(<code>calc-bessel-Y</code>) [<code>besY</code>] commands compute the Bessel
-functions of the first and second kinds, respectively.
-In &lsquo;<samp>besJ(n,x)</samp>&rsquo; and &lsquo;<samp>besY(n,x)</samp>&rsquo; the &ldquo;order&rdquo; parameter
-&lsquo;<samp>n</samp>&rsquo; is often an integer, but is not required to be one.
-Calc&rsquo;s implementation of the Bessel functions currently limits the
-precision to 8 digits, and may not be exact even to that precision.
-Use with care!
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Branch-Cuts.html#Branch-Cuts" accesskey="n" rel="next">Branch Cuts</a>, Previous: <a href="Trigonometric-and-Hyperbolic-Functions.html#Trigonometric-and-Hyperbolic-Functions" accesskey="p" rel="prev">Trigonometric and Hyperbolic Functions</a>, Up: <a href="Scientific-Functions.html#Scientific-Functions" accesskey="u" rel="up">Scientific Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Branch-Cuts.html#Branch-Cuts" accesskey="n"
+    rel="next">Branch Cuts</a>, Previous: <a href=
+    "Trigonometric-and-Hyperbolic-Functions.html#Trigonometric-and-Hyperbolic-Functions"
+    accesskey="p" rel="prev">Trigonometric and Hyperbolic
+    Functions</a>, Up: <a href=
+    "Scientific-Functions.html#Scientific-Functions" accesskey="u"
+    rel="up">Scientific Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Advanced-Mathematical-Functions" id=
+  "Advanced-Mathematical-Functions"></a>
 
+  <h3 class="section">8.3 Advanced Mathematical Functions</h3>
 
+  <p>Calc can compute a variety of less common functions that arise
+  in various branches of mathematics. All of the functions
+  described in this section allow arbitrary complex arguments and,
+  except as noted, will work to arbitrarily large precision. They
+  can not at present handle error forms or intervals as
+  arguments.</p>
 
+  <p>NOTE: These functions are still experimental. In particular,
+  their accuracy is not guaranteed in all domains. It is advisable
+  to set the current precision comfortably higher than you actually
+  need when using these functions. Also, these functions may be
+  impractically slow for some values of the arguments.</p><a name=
+  "index-f-g" id="index-f-g"></a> <a name="index-calc_002dgamma"
+  id="index-calc_002dgamma"></a> <a name="index-gamma" id=
+  "index-gamma"></a>
+
+  <p>The <kbd>f g</kbd> (<code>calc-gamma</code>)
+  [<code>gamma</code>] command computes the Euler gamma function.
+  For positive integer arguments, this is related to the factorial
+  function: &lsquo;<samp>gamma(n+1) = fact(n)</samp>&rsquo;. For
+  general complex arguments the gamma function can be defined by
+  the following definite integral: &lsquo;<samp>gamma(a) =
+  integ(t^(a-1) exp(t), t, 0, inf)</samp>&rsquo;. (The actual
+  implementation uses far more efficient computational
+  methods.)</p><a name="index-f-G" id="index-f-G"></a> <a name=
+  "index-gammaP" id="index-gammaP"></a> <a name="index-I-f-G" id=
+  "index-I-f-G"></a> <a name="index-H-f-G" id="index-H-f-G"></a>
+  <a name="index-H-I-f-G" id="index-H-I-f-G"></a> <a name=
+  "index-calc_002dinc_002dgamma" id=
+  "index-calc_002dinc_002dgamma"></a> <a name="index-gammaQ" id=
+  "index-gammaQ"></a> <a name="index-gammag" id="index-gammag"></a>
+  <a name="index-gammaG" id="index-gammaG"></a>
+
+  <p>The <kbd>f G</kbd> (<code>calc-inc-gamma</code>)
+  [<code>gammaP</code>] command computes the incomplete gamma
+  function, denoted &lsquo;<samp>P(a,x)</samp>&rsquo;. This is
+  defined by the integral, &lsquo;<samp>gammaP(a,x) = integ(t^(a-1)
+  exp(t), t, 0, x) / gamma(a)</samp>&rsquo;. This implies that
+  &lsquo;<samp>gammaP(a,inf) = 1</samp>&rsquo; for any
+  &lsquo;<samp>a</samp>&rsquo; (see the definition of the normal
+  gamma function).</p>
+
+  <p>Several other varieties of incomplete gamma function are
+  defined. The complement of &lsquo;<samp>P(a,x)</samp>&rsquo;,
+  called &lsquo;<samp>Q(a,x) = 1-P(a,x)</samp>&rsquo; by some
+  authors, is computed by the <kbd>I f G</kbd>
+  [<code>gammaQ</code>] command. You can think of this as taking
+  the other half of the integral, from &lsquo;<samp>x</samp>&rsquo;
+  to infinity.</p>
+
+  <p>The functions corresponding to the integrals that define
+  &lsquo;<samp>P(a,x)</samp>&rsquo; and
+  &lsquo;<samp>Q(a,x)</samp>&rsquo; but without the normalizing
+  &lsquo;<samp>1/gamma(a)</samp>&rsquo; factor are called
+  &lsquo;<samp>g(a,x)</samp>&rsquo; and
+  &lsquo;<samp>G(a,x)</samp>&rsquo;, respectively (where
+  &lsquo;<samp>g</samp>&rsquo; and &lsquo;<samp>G</samp>&rsquo;
+  represent the lower- and upper-case Greek letter gamma). You can
+  obtain these using the <kbd>H f G</kbd> [<code>gammag</code>] and
+  <kbd>H I f G</kbd> [<code>gammaG</code>] commands.</p><a name=
+  "index-f-b" id="index-f-b"></a> <a name="index-calc_002dbeta" id=
+  "index-calc_002dbeta"></a> <a name="index-beta" id=
+  "index-beta"></a>
+
+  <p>The <kbd>f b</kbd> (<code>calc-beta</code>)
+  [<code>beta</code>] command computes the Euler beta function,
+  which is defined in terms of the gamma function as
+  &lsquo;<samp>beta(a,b) = gamma(a) gamma(b) /
+  gamma(a+b)</samp>&rsquo;, or by &lsquo;<samp>beta(a,b) =
+  integ(t^(a-1) (1-t)^(b-1), t, 0, 1)</samp>&rsquo;.</p><a name=
+  "index-f-B" id="index-f-B"></a> <a name="index-H-f-B" id=
+  "index-H-f-B"></a> <a name="index-calc_002dinc_002dbeta" id=
+  "index-calc_002dinc_002dbeta"></a> <a name="index-betaI" id=
+  "index-betaI"></a> <a name="index-betaB" id="index-betaB"></a>
+
+  <p>The <kbd>f B</kbd> (<code>calc-inc-beta</code>)
+  [<code>betaI</code>] command computes the incomplete beta
+  function &lsquo;<samp>I(x,a,b)</samp>&rsquo;. It is defined by
+  &lsquo;<samp>betaI(x,a,b) = integ(t^(a-1) (1-t)^(b-1), t, 0, x) /
+  beta(a,b)</samp>&rsquo;. Once again, the <kbd>H</kbd>
+  (hyperbolic) prefix gives the corresponding un-normalized version
+  [<code>betaB</code>].</p><a name="index-f-e" id="index-f-e"></a>
+  <a name="index-I-f-e" id="index-I-f-e"></a> <a name=
+  "index-calc_002derf" id="index-calc_002derf"></a> <a name=
+  "index-erf" id="index-erf"></a> <a name="index-erfc" id=
+  "index-erfc"></a>
+
+  <p>The <kbd>f e</kbd> (<code>calc-erf</code>) [<code>erf</code>]
+  command computes the error function &lsquo;<samp>erf(x) = 2
+  integ(exp(-(t^2)), t, 0, x) / sqrt(pi)</samp>&rsquo;. The
+  complementary error function <kbd>I f e</kbd>
+  (<code>calc-erfc</code>) [<code>erfc</code>] is the corresponding
+  integral from &lsquo;<samp>x</samp>&rsquo; to infinity; the sum
+  &lsquo;<samp>erf(x) + erfc(x) = 1</samp>&rsquo;.</p><a name=
+  "index-f-j" id="index-f-j"></a> <a name="index-f-y" id=
+  "index-f-y"></a> <a name="index-calc_002dbessel_002dJ" id=
+  "index-calc_002dbessel_002dJ"></a> <a name=
+  "index-calc_002dbessel_002dY" id=
+  "index-calc_002dbessel_002dY"></a> <a name="index-besJ" id=
+  "index-besJ"></a> <a name="index-besY" id="index-besY"></a>
+
+  <p>The <kbd>f j</kbd> (<code>calc-bessel-J</code>)
+  [<code>besJ</code>] and <kbd>f y</kbd>
+  (<code>calc-bessel-Y</code>) [<code>besY</code>] commands compute
+  the Bessel functions of the first and second kinds, respectively.
+  In &lsquo;<samp>besJ(n,x)</samp>&rsquo; and
+  &lsquo;<samp>besY(n,x)</samp>&rsquo; the &ldquo;order&rdquo;
+  parameter &lsquo;<samp>n</samp>&rsquo; is often an integer, but
+  is not required to be one. Calc&rsquo;s implementation of the
+  Bessel functions currently limits the precision to 8 digits, and
+  may not be exact even to that precision. Use with care!</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Branch-Cuts.html#Branch-Cuts" accesskey="n"
+    rel="next">Branch Cuts</a>, Previous: <a href=
+    "Trigonometric-and-Hyperbolic-Functions.html#Trigonometric-and-Hyperbolic-Functions"
+    accesskey="p" rel="prev">Trigonometric and Hyperbolic
+    Functions</a>, Up: <a href=
+    "Scientific-Functions.html#Scientific-Functions" accesskey="u"
+    rel="up">Scientific Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

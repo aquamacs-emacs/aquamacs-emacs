@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,254 +14,427 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Sorting Groups</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Sorting Groups">
-<meta name="keywords" content="Gnus Manual: Sorting Groups">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Group-Buffer.html#Group-Buffer" rel="up" title="Group Buffer">
-<link href="Group-Maintenance.html#Group-Maintenance" rel="next" title="Group Maintenance">
-<link href="Listing-Groups.html#Listing-Groups" rel="prev" title="Listing Groups">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Sorting Groups</title>
+  <meta name="description" content="Gnus Manual: Sorting Groups" />
+  <meta name="keywords" content="Gnus Manual: Sorting Groups" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Group-Buffer.html#Group-Buffer" rel="up" title=
+  "Group Buffer" />
+  <link href="Group-Maintenance.html#Group-Maintenance" rel="next"
+  title="Group Maintenance" />
+  <link href="Listing-Groups.html#Listing-Groups" rel="prev" title=
+  "Listing Groups" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sorting-Groups"></a>
-<div class="header">
-<p>
-Next: <a href="Group-Maintenance.html#Group-Maintenance" accesskey="n" rel="next">Group Maintenance</a>, Previous: <a href="Listing-Groups.html#Listing-Groups" accesskey="p" rel="prev">Listing Groups</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sorting-Groups-1"></a>
-<h3 class="section">2.12 Sorting Groups</h3>
-<a name="index-sorting-groups"></a>
+<body lang="en" xml:lang="en">
+  <a name="Sorting-Groups" id="Sorting-Groups"></a>
 
-<a name="index-C_002dc-C_002ds-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dgroups"></a>
-<a name="index-gnus_002dgroup_002dsort_002dfunction"></a>
-<p>The <kbd>C-c C-s</kbd> (<code>gnus-group-sort-groups</code>) command sorts the
-group buffer according to the function(s) given by the
-<code>gnus-group-sort-function</code> variable.  Available sorting functions
-include:
-</p>
-<dl compact="compact">
-<dt><code>gnus-group-sort-by-alphabet</code></dt>
-<dd><a name="index-gnus_002dgroup_002dsort_002dby_002dalphabet"></a>
-<p>Sort the group names alphabetically.  This is the default.
-</p>
-</dd>
-<dt><code>gnus-group-sort-by-real-name</code></dt>
-<dd><a name="index-gnus_002dgroup_002dsort_002dby_002dreal_002dname"></a>
-<p>Sort the group alphabetically on the real (unprefixed) group names.
-</p>
-</dd>
-<dt><code>gnus-group-sort-by-level</code></dt>
-<dd><a name="index-gnus_002dgroup_002dsort_002dby_002dlevel"></a>
-<p>Sort by group level.
-</p>
-</dd>
-<dt><code>gnus-group-sort-by-score</code></dt>
-<dd><a name="index-gnus_002dgroup_002dsort_002dby_002dscore"></a>
-<p>Sort by group score.  See <a href="Group-Score.html#Group-Score">Group Score</a>.
-</p>
-</dd>
-<dt><code>gnus-group-sort-by-rank</code></dt>
-<dd><a name="index-gnus_002dgroup_002dsort_002dby_002drank"></a>
-<p>Sort by group score and then the group level.  The level and the score
-are, when taken together, the group&rsquo;s <em>rank</em>.  See <a href="Group-Score.html#Group-Score">Group Score</a>.
-</p>
-</dd>
-<dt><code>gnus-group-sort-by-unread</code></dt>
-<dd><a name="index-gnus_002dgroup_002dsort_002dby_002dunread"></a>
-<p>Sort by number of unread articles.
-</p>
-</dd>
-<dt><code>gnus-group-sort-by-method</code></dt>
-<dd><a name="index-gnus_002dgroup_002dsort_002dby_002dmethod"></a>
-<p>Sort alphabetically on the select method.
-</p>
-</dd>
-<dt><code>gnus-group-sort-by-server</code></dt>
-<dd><a name="index-gnus_002dgroup_002dsort_002dby_002dserver"></a>
-<p>Sort alphabetically on the Gnus server name.
-</p>
+  <div class="header">
+    <p>Next: <a href="Group-Maintenance.html#Group-Maintenance"
+    accesskey="n" rel="next">Group Maintenance</a>, Previous:
+    <a href="Listing-Groups.html#Listing-Groups" accesskey="p" rel=
+    "prev">Listing Groups</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sorting-Groups-1" id="Sorting-Groups-1"></a>
 
-</dd>
-</dl>
+  <h3 class="section">2.12 Sorting Groups</h3><a name=
+  "index-sorting-groups" id="index-sorting-groups"></a> <a name=
+  "index-C_002dc-C_002ds-_0028Group_0029" id=
+  "index-C_002dc-C_002ds-_0028Group_0029"></a> <a name=
+  "index-gnus_002dgroup_002dsort_002dgroups" id=
+  "index-gnus_002dgroup_002dsort_002dgroups"></a> <a name=
+  "index-gnus_002dgroup_002dsort_002dfunction" id=
+  "index-gnus_002dgroup_002dsort_002dfunction"></a>
 
-<p><code>gnus-group-sort-function</code> can also be a list of sorting
-functions.  In that case, the most significant sort key function must be
-the last one.
-</p>
+  <p>The <kbd>C-c C-s</kbd> (<code>gnus-group-sort-groups</code>)
+  command sorts the group buffer according to the function(s) given
+  by the <code>gnus-group-sort-function</code> variable. Available
+  sorting functions include:</p>
 
-<p>There are also a number of commands for sorting directly according to
-some sorting criteria:
-</p>
-<dl compact="compact">
-<dt><kbd>G S a</kbd></dt>
-<dd><a name="index-G-S-a-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dgroups_002dby_002dalphabet"></a>
-<p>Sort the group buffer alphabetically by group name
-(<code>gnus-group-sort-groups-by-alphabet</code>).
-</p>
-</dd>
-<dt><kbd>G S u</kbd></dt>
-<dd><a name="index-G-S-u-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dgroups_002dby_002dunread"></a>
-<p>Sort the group buffer by the number of unread articles
-(<code>gnus-group-sort-groups-by-unread</code>).
-</p>
-</dd>
-<dt><kbd>G S l</kbd></dt>
-<dd><a name="index-G-S-l-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dgroups_002dby_002dlevel"></a>
-<p>Sort the group buffer by group level
-(<code>gnus-group-sort-groups-by-level</code>).
-</p>
-</dd>
-<dt><kbd>G S v</kbd></dt>
-<dd><a name="index-G-S-v-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dgroups_002dby_002dscore"></a>
-<p>Sort the group buffer by group score
-(<code>gnus-group-sort-groups-by-score</code>).  See <a href="Group-Score.html#Group-Score">Group Score</a>.
-</p>
-</dd>
-<dt><kbd>G S r</kbd></dt>
-<dd><a name="index-G-S-r-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dgroups_002dby_002drank"></a>
-<p>Sort the group buffer by group rank
-(<code>gnus-group-sort-groups-by-rank</code>).  See <a href="Group-Score.html#Group-Score">Group Score</a>.
-</p>
-</dd>
-<dt><kbd>G S m</kbd></dt>
-<dd><a name="index-G-S-m-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dgroups_002dby_002dmethod"></a>
-<p>Sort the group buffer alphabetically by back end name<br>
-(<code>gnus-group-sort-groups-by-method</code>).
-</p>
-</dd>
-<dt><kbd>G S n</kbd></dt>
-<dd><a name="index-G-S-n-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dgroups_002dby_002dreal_002dname"></a>
-<p>Sort the group buffer alphabetically by real (unprefixed) group name
-(<code>gnus-group-sort-groups-by-real-name</code>).
-</p>
-</dd>
-</dl>
+  <dl compact="compact">
+    <dt><code>gnus-group-sort-by-alphabet</code></dt>
 
-<p>All the commands below obey the process/prefix convention
-(see <a href="Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).
-</p>
-<p>When given a symbolic prefix (see <a href="Symbolic-Prefixes.html#Symbolic-Prefixes">Symbolic Prefixes</a>), all these
-commands will sort in reverse order.
-</p>
-<p>You can also sort a subset of the groups:
-</p>
-<dl compact="compact">
-<dt><kbd>G P a</kbd></dt>
-<dd><a name="index-G-P-a-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dalphabet"></a>
-<p>Sort the groups alphabetically by group name
-(<code>gnus-group-sort-selected-groups-by-alphabet</code>).
-</p>
-</dd>
-<dt><kbd>G P u</kbd></dt>
-<dd><a name="index-G-P-u-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dunread"></a>
-<p>Sort the groups by the number of unread articles
-(<code>gnus-group-sort-selected-groups-by-unread</code>).
-</p>
-</dd>
-<dt><kbd>G P l</kbd></dt>
-<dd><a name="index-G-P-l-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dlevel"></a>
-<p>Sort the groups by group level
-(<code>gnus-group-sort-selected-groups-by-level</code>).
-</p>
-</dd>
-<dt><kbd>G P v</kbd></dt>
-<dd><a name="index-G-P-v-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dscore"></a>
-<p>Sort the groups by group score
-(<code>gnus-group-sort-selected-groups-by-score</code>).  See <a href="Group-Score.html#Group-Score">Group Score</a>.
-</p>
-</dd>
-<dt><kbd>G P r</kbd></dt>
-<dd><a name="index-G-P-r-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002drank"></a>
-<p>Sort the groups by group rank
-(<code>gnus-group-sort-selected-groups-by-rank</code>).  See <a href="Group-Score.html#Group-Score">Group Score</a>.
-</p>
-</dd>
-<dt><kbd>G P m</kbd></dt>
-<dd><a name="index-G-P-m-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dmethod"></a>
-<p>Sort the groups alphabetically by back end name<br>
-(<code>gnus-group-sort-selected-groups-by-method</code>).
-</p>
-</dd>
-<dt><kbd>G P n</kbd></dt>
-<dd><a name="index-G-P-n-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dreal_002dname"></a>
-<p>Sort the groups alphabetically by real (unprefixed) group name
-(<code>gnus-group-sort-selected-groups-by-real-name</code>).
-</p>
-</dd>
-<dt><kbd>G P s</kbd></dt>
-<dd><a name="index-G-P-s-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dsort_002dselected_002dgroups"></a>
-<p>Sort the groups according to <code>gnus-group-sort-function</code>.
-</p>
-</dd>
-</dl>
+    <dd>
+      <a name="index-gnus_002dgroup_002dsort_002dby_002dalphabet"
+      id="index-gnus_002dgroup_002dsort_002dby_002dalphabet"></a>
 
-<p>And finally, note that you can use <kbd>C-k</kbd> and <kbd>C-y</kbd> to manually
-move groups around.
-</p>
+      <p>Sort the group names alphabetically. This is the
+      default.</p>
+    </dd>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Group-Maintenance.html#Group-Maintenance" accesskey="n" rel="next">Group Maintenance</a>, Previous: <a href="Listing-Groups.html#Listing-Groups" accesskey="p" rel="prev">Listing Groups</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt><code>gnus-group-sort-by-real-name</code></dt>
 
+    <dd>
+      <a name=
+      "index-gnus_002dgroup_002dsort_002dby_002dreal_002dname" id=
+      "index-gnus_002dgroup_002dsort_002dby_002dreal_002dname"></a>
 
+      <p>Sort the group alphabetically on the real (unprefixed)
+      group names.</p>
+    </dd>
 
+    <dt><code>gnus-group-sort-by-level</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dsort_002dby_002dlevel" id=
+      "index-gnus_002dgroup_002dsort_002dby_002dlevel"></a>
+
+      <p>Sort by group level.</p>
+    </dd>
+
+    <dt><code>gnus-group-sort-by-score</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dsort_002dby_002dscore" id=
+      "index-gnus_002dgroup_002dsort_002dby_002dscore"></a>
+
+      <p>Sort by group score. See <a href=
+      "Group-Score.html#Group-Score">Group Score</a>.</p>
+    </dd>
+
+    <dt><code>gnus-group-sort-by-rank</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dsort_002dby_002drank" id=
+      "index-gnus_002dgroup_002dsort_002dby_002drank"></a>
+
+      <p>Sort by group score and then the group level. The level
+      and the score are, when taken together, the group&rsquo;s
+      <em>rank</em>. See <a href=
+      "Group-Score.html#Group-Score">Group Score</a>.</p>
+    </dd>
+
+    <dt><code>gnus-group-sort-by-unread</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dsort_002dby_002dunread" id=
+      "index-gnus_002dgroup_002dsort_002dby_002dunread"></a>
+
+      <p>Sort by number of unread articles.</p>
+    </dd>
+
+    <dt><code>gnus-group-sort-by-method</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dsort_002dby_002dmethod" id=
+      "index-gnus_002dgroup_002dsort_002dby_002dmethod"></a>
+
+      <p>Sort alphabetically on the select method.</p>
+    </dd>
+
+    <dt><code>gnus-group-sort-by-server</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dgroup_002dsort_002dby_002dserver" id=
+      "index-gnus_002dgroup_002dsort_002dby_002dserver"></a>
+
+      <p>Sort alphabetically on the Gnus server name.</p>
+    </dd>
+  </dl>
+
+  <p><code>gnus-group-sort-function</code> can also be a list of
+  sorting functions. In that case, the most significant sort key
+  function must be the last one.</p>
+
+  <p>There are also a number of commands for sorting directly
+  according to some sorting criteria:</p>
+
+  <dl compact="compact">
+    <dt><kbd>G S a</kbd></dt>
+
+    <dd>
+      <a name="index-G-S-a-_0028Group_0029" id=
+      "index-G-S-a-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dalphabet"
+      id=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dalphabet">
+      </a>
+
+      <p>Sort the group buffer alphabetically by group name
+      (<code>gnus-group-sort-groups-by-alphabet</code>).</p>
+    </dd>
+
+    <dt><kbd>G S u</kbd></dt>
+
+    <dd>
+      <a name="index-G-S-u-_0028Group_0029" id=
+      "index-G-S-u-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dunread"
+      id=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dunread"></a>
+
+      <p>Sort the group buffer by the number of unread articles
+      (<code>gnus-group-sort-groups-by-unread</code>).</p>
+    </dd>
+
+    <dt><kbd>G S l</kbd></dt>
+
+    <dd>
+      <a name="index-G-S-l-_0028Group_0029" id=
+      "index-G-S-l-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dlevel"
+      id=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dlevel"></a>
+
+      <p>Sort the group buffer by group level
+      (<code>gnus-group-sort-groups-by-level</code>).</p>
+    </dd>
+
+    <dt><kbd>G S v</kbd></dt>
+
+    <dd>
+      <a name="index-G-S-v-_0028Group_0029" id=
+      "index-G-S-v-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dscore"
+      id=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dscore"></a>
+
+      <p>Sort the group buffer by group score
+      (<code>gnus-group-sort-groups-by-score</code>). See <a href=
+      "Group-Score.html#Group-Score">Group Score</a>.</p>
+    </dd>
+
+    <dt><kbd>G S r</kbd></dt>
+
+    <dd>
+      <a name="index-G-S-r-_0028Group_0029" id=
+      "index-G-S-r-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002drank"
+      id="index-gnus_002dgroup_002dsort_002dgroups_002dby_002drank">
+      </a>
+
+      <p>Sort the group buffer by group rank
+      (<code>gnus-group-sort-groups-by-rank</code>). See <a href=
+      "Group-Score.html#Group-Score">Group Score</a>.</p>
+    </dd>
+
+    <dt><kbd>G S m</kbd></dt>
+
+    <dd>
+      <a name="index-G-S-m-_0028Group_0029" id=
+      "index-G-S-m-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dmethod"
+      id=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dmethod"></a>
+
+      <p>Sort the group buffer alphabetically by back end
+      name<br />
+      (<code>gnus-group-sort-groups-by-method</code>).</p>
+    </dd>
+
+    <dt><kbd>G S n</kbd></dt>
+
+    <dd>
+      <a name="index-G-S-n-_0028Group_0029" id=
+      "index-G-S-n-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dreal_002dname"
+      id=
+      "index-gnus_002dgroup_002dsort_002dgroups_002dby_002dreal_002dname">
+      </a>
+
+      <p>Sort the group buffer alphabetically by real (unprefixed)
+      group name
+      (<code>gnus-group-sort-groups-by-real-name</code>).</p>
+    </dd>
+  </dl>
+
+  <p>All the commands below obey the process/prefix convention (see
+  <a href=
+  "Process_002fPrefix.html#Process_002fPrefix">Process/Prefix</a>).</p>
+
+  <p>When given a symbolic prefix (see <a href=
+  "Symbolic-Prefixes.html#Symbolic-Prefixes">Symbolic
+  Prefixes</a>), all these commands will sort in reverse order.</p>
+
+  <p>You can also sort a subset of the groups:</p>
+
+  <dl compact="compact">
+    <dt><kbd>G P a</kbd></dt>
+
+    <dd>
+      <a name="index-G-P-a-_0028Group_0029" id=
+      "index-G-P-a-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dalphabet"
+      id=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dalphabet">
+      </a>
+
+      <p>Sort the groups alphabetically by group name
+      (<code>gnus-group-sort-selected-groups-by-alphabet</code>).</p>
+    </dd>
+
+    <dt><kbd>G P u</kbd></dt>
+
+    <dd>
+      <a name="index-G-P-u-_0028Group_0029" id=
+      "index-G-P-u-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dunread"
+      id=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dunread">
+      </a>
+
+      <p>Sort the groups by the number of unread articles
+      (<code>gnus-group-sort-selected-groups-by-unread</code>).</p>
+    </dd>
+
+    <dt><kbd>G P l</kbd></dt>
+
+    <dd>
+      <a name="index-G-P-l-_0028Group_0029" id=
+      "index-G-P-l-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dlevel"
+      id=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dlevel">
+      </a>
+
+      <p>Sort the groups by group level
+      (<code>gnus-group-sort-selected-groups-by-level</code>).</p>
+    </dd>
+
+    <dt><kbd>G P v</kbd></dt>
+
+    <dd>
+      <a name="index-G-P-v-_0028Group_0029" id=
+      "index-G-P-v-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dscore"
+      id=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dscore">
+      </a>
+
+      <p>Sort the groups by group score
+      (<code>gnus-group-sort-selected-groups-by-score</code>). See
+      <a href="Group-Score.html#Group-Score">Group Score</a>.</p>
+    </dd>
+
+    <dt><kbd>G P r</kbd></dt>
+
+    <dd>
+      <a name="index-G-P-r-_0028Group_0029" id=
+      "index-G-P-r-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002drank"
+      id=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002drank">
+      </a>
+
+      <p>Sort the groups by group rank
+      (<code>gnus-group-sort-selected-groups-by-rank</code>). See
+      <a href="Group-Score.html#Group-Score">Group Score</a>.</p>
+    </dd>
+
+    <dt><kbd>G P m</kbd></dt>
+
+    <dd>
+      <a name="index-G-P-m-_0028Group_0029" id=
+      "index-G-P-m-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dmethod"
+      id=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dmethod">
+      </a>
+
+      <p>Sort the groups alphabetically by back end name<br />
+      (<code>gnus-group-sort-selected-groups-by-method</code>).</p>
+    </dd>
+
+    <dt><kbd>G P n</kbd></dt>
+
+    <dd>
+      <a name="index-G-P-n-_0028Group_0029" id=
+      "index-G-P-n-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dreal_002dname"
+      id=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups_002dby_002dreal_002dname">
+      </a>
+
+      <p>Sort the groups alphabetically by real (unprefixed) group
+      name
+      (<code>gnus-group-sort-selected-groups-by-real-name</code>).</p>
+    </dd>
+
+    <dt><kbd>G P s</kbd></dt>
+
+    <dd>
+      <a name="index-G-P-s-_0028Group_0029" id=
+      "index-G-P-s-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups" id=
+      "index-gnus_002dgroup_002dsort_002dselected_002dgroups"></a>
+
+      <p>Sort the groups according to
+      <code>gnus-group-sort-function</code>.</p>
+    </dd>
+  </dl>
+
+  <p>And finally, note that you can use <kbd>C-k</kbd> and
+  <kbd>C-y</kbd> to manually move groups around.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Group-Maintenance.html#Group-Maintenance"
+    accesskey="n" rel="next">Group Maintenance</a>, Previous:
+    <a href="Listing-Groups.html#Listing-Groups" accesskey="p" rel=
+    "prev">Listing Groups</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

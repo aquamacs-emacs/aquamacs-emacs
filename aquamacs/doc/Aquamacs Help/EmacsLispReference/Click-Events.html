@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,258 +19,367 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Click Events</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Click Events">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Click Events">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Input-Events.html#Input-Events" rel="up" title="Input Events">
-<link href="Drag-Events.html#Drag-Events" rel="next" title="Drag Events">
-<link href="Mouse-Events.html#Mouse-Events" rel="prev" title="Mouse Events">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Click Events</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Click Events" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Click Events" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Input-Events.html#Input-Events" rel="up" title=
+  "Input Events" />
+  <link href="Drag-Events.html#Drag-Events" rel="next" title=
+  "Drag Events" />
+  <link href="Mouse-Events.html#Mouse-Events" rel="prev" title=
+  "Mouse Events" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Click-Events" id="Click-Events"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Drag-Events.html#Drag-Events" accesskey="n"
+    rel="next">Drag Events</a>, Previous: <a href=
+    "Mouse-Events.html#Mouse-Events" accesskey="p" rel="prev">Mouse
+    Events</a>, Up: <a href="Input-Events.html#Input-Events"
+    accesskey="u" rel="up">Input Events</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Click-Events-1" id="Click-Events-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Click-Events"></a>
-<div class="header">
-<p>
-Next: <a href="Drag-Events.html#Drag-Events" accesskey="n" rel="next">Drag Events</a>, Previous: <a href="Mouse-Events.html#Mouse-Events" accesskey="p" rel="prev">Mouse Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Click-Events-1"></a>
-<h4 class="subsection">20.7.4 Click Events</h4>
-<a name="index-click-event"></a>
-<a name="index-mouse-click-event"></a>
+  <h4 class="subsection">20.7.4 Click Events</h4><a name=
+  "index-click-event" id="index-click-event"></a> <a name=
+  "index-mouse-click-event" id="index-mouse-click-event"></a>
 
-<p>When the user presses a mouse button and releases it at the same
-location, that generates a <em>click</em> event.  All mouse click event
-share the same format:
-</p>
-<div class="example">
-<pre class="example">(<var>event-type</var> <var>position</var> <var>click-count</var>)
-</pre></div>
+  <p>When the user presses a mouse button and releases it at the
+  same location, that generates a <em>click</em> event. All mouse
+  click event share the same format:</p>
 
-<dl compact="compact">
-<dt><var>event-type</var></dt>
-<dd><p>This is a symbol that indicates which mouse button was used.  It is
-one of the symbols <code>mouse-1</code>, <code>mouse-2</code>, &hellip;, where the
-buttons are numbered left to right.
-</p>
-<p>You can also use prefixes &lsquo;<samp>A-</samp>&rsquo;, &lsquo;<samp>C-</samp>&rsquo;, &lsquo;<samp>H-</samp>&rsquo;, &lsquo;<samp>M-</samp>&rsquo;,
-&lsquo;<samp>S-</samp>&rsquo; and &lsquo;<samp>s-</samp>&rsquo; for modifiers alt, control, hyper, meta, shift
-and super, just as you would with function keys.
-</p>
-<p>This symbol also serves as the event type of the event.  Key bindings
-describe events by their types; thus, if there is a key binding for
-<code>mouse-1</code>, that binding would apply to all events whose
-<var>event-type</var> is <code>mouse-1</code>.
-</p>
-</dd>
-<dt><var>position</var></dt>
-<dd><a name="index-mouse-position-list"></a>
-<p>This is a <em>mouse position list</em> specifying where the mouse click
-occurred; see below for details.
-</p>
-</dd>
-<dt><var>click-count</var></dt>
-<dd><p>This is the number of rapid repeated presses so far of the same mouse
-button.  See <a href="Repeat-Events.html#Repeat-Events">Repeat Events</a>.
-</p></dd>
-</dl>
+  <div class="example">
+    <pre class="example">
+(<var>event-type</var> <var>position</var> <var>click-count</var>)
+</pre>
+  </div>
 
-<p>To access the contents of a mouse position list in the
-<var>position</var> slot of a click event, you should typically use the
-functions documented in <a href="Accessing-Mouse.html#Accessing-Mouse">Accessing Mouse</a>.  The explicit format of
-the list depends on where the click occurred.  For clicks in the text
-area, mode line, header line, or in the fringe or marginal areas, the
-mouse position list has the form
-</p>
-<div class="example">
-<pre class="example">(<var>window</var> <var>pos-or-area</var> (<var>x</var> . <var>y</var>) <var>timestamp</var>
+  <dl compact="compact">
+    <dt><var>event-type</var></dt>
+
+    <dd>
+      <p>This is a symbol that indicates which mouse button was
+      used. It is one of the symbols <code>mouse-1</code>,
+      <code>mouse-2</code>, &hellip;, where the buttons are
+      numbered left to right.</p>
+
+      <p>You can also use prefixes &lsquo;<samp>A-</samp>&rsquo;,
+      &lsquo;<samp>C-</samp>&rsquo;, &lsquo;<samp>H-</samp>&rsquo;,
+      &lsquo;<samp>M-</samp>&rsquo;, &lsquo;<samp>S-</samp>&rsquo;
+      and &lsquo;<samp>s-</samp>&rsquo; for modifiers alt, control,
+      hyper, meta, shift and super, just as you would with function
+      keys.</p>
+
+      <p>This symbol also serves as the event type of the event.
+      Key bindings describe events by their types; thus, if there
+      is a key binding for <code>mouse-1</code>, that binding would
+      apply to all events whose <var>event-type</var> is
+      <code>mouse-1</code>.</p>
+    </dd>
+
+    <dt><var>position</var></dt>
+
+    <dd>
+      <a name="index-mouse-position-list" id=
+      "index-mouse-position-list"></a>
+
+      <p>This is a <em>mouse position list</em> specifying where
+      the mouse click occurred; see below for details.</p>
+    </dd>
+
+    <dt><var>click-count</var></dt>
+
+    <dd>
+      <p>This is the number of rapid repeated presses so far of the
+      same mouse button. See <a href=
+      "Repeat-Events.html#Repeat-Events">Repeat Events</a>.</p>
+    </dd>
+  </dl>
+
+  <p>To access the contents of a mouse position list in the
+  <var>position</var> slot of a click event, you should typically
+  use the functions documented in <a href=
+  "Accessing-Mouse.html#Accessing-Mouse">Accessing Mouse</a>. The
+  explicit format of the list depends on where the click occurred.
+  For clicks in the text area, mode line, header line, or in the
+  fringe or marginal areas, the mouse position list has the
+  form</p>
+
+  <div class="example">
+    <pre class="example">
+(<var>window</var> <var>pos-or-area</var> (<var>x</var> . <var>y</var>) <var>timestamp</var>
  <var>object</var> <var>text-pos</var> (<var>col</var> . <var>row</var>)
  <var>image</var> (<var>dx</var> . <var>dy</var>) (<var>width</var> . <var>height</var>))
-</pre></div>
+</pre>
+  </div>
 
-<p>The meanings of these list elements are as follows:
-</p>
-<dl compact="compact">
-<dt><var>window</var></dt>
-<dd><p>The window in which the click occurred.
-</p>
-</dd>
-<dt><var>pos-or-area</var></dt>
-<dd><p>The buffer position of the character clicked on in the text area; or,
-if the click was outside the text area, the window area where it
-occurred.  It is one of the symbols <code>mode-line</code>,
-<code>header-line</code>, <code>vertical-line</code>, <code>left-margin</code>,
-<code>right-margin</code>, <code>left-fringe</code>, or <code>right-fringe</code>.
-</p>
-<p>In one special case, <var>pos-or-area</var> is a list containing a symbol
-(one of the symbols listed above) instead of just the symbol.  This
-happens after the imaginary prefix keys for the event are registered
-by Emacs.  See <a href="Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence Input</a>.
-</p>
-</dd>
-<dt><var>x</var>, <var>y</var></dt>
-<dd><p>The relative pixel coordinates of the click.  For clicks in the text
-area of a window, the coordinate origin <code>(0 . 0)</code> is taken to be
-the top left corner of the text area.  See <a href="Window-Sizes.html#Window-Sizes">Window Sizes</a>.  For
-clicks in a mode line or header line, the coordinate origin is the top
-left corner of the window itself.  For fringes, margins, and the
-vertical border, <var>x</var> does not have meaningful data.  For fringes
-and margins, <var>y</var> is relative to the bottom edge of the header
-line.  In all cases, the <var>x</var> and <var>y</var> coordinates increase
-rightward and downward respectively.
-</p>
-</dd>
-<dt><var>timestamp</var></dt>
-<dd><p>The time at which the event occurred, as an integer number of
-milliseconds since a system-dependent initial time.
-</p>
-</dd>
-<dt><var>object</var></dt>
-<dd><p>Either <code>nil</code> if there is no string-type text property at the
-click position, or a cons cell of the form (<var>string</var>
-. <var>string-pos</var>) if there is one:
-</p>
-<dl compact="compact">
-<dt><var>string</var></dt>
-<dd><p>The string which was clicked on, including any properties.
-</p>
-</dd>
-<dt><var>string-pos</var></dt>
-<dd><p>The position in the string where the click occurred.
-</p></dd>
-</dl>
+  <p>The meanings of these list elements are as follows:</p>
 
-</dd>
-<dt><var>text-pos</var></dt>
-<dd><p>For clicks on a marginal area or on a fringe, this is the buffer
-position of the first visible character in the corresponding line in
-the window.  For clicks on the mode line or the header line, this is
-<code>nil</code>.  For other events, it is the buffer position closest to
-the click.
-</p>
-</dd>
-<dt><var>col</var>, <var>row</var></dt>
-<dd><p>These are the actual column and row coordinate numbers of the glyph
-under the <var>x</var>, <var>y</var> position.  If <var>x</var> lies beyond the last
-column of actual text on its line, <var>col</var> is reported by adding
-fictional extra columns that have the default character width.  Row 0
-is taken to be the header line if the window has one, or the topmost
-row of the text area otherwise.  Column 0 is taken to be the leftmost
-column of the text area for clicks on a window text area, or the
-leftmost mode line or header line column for clicks there.  For clicks
-on fringes or vertical borders, these have no meaningful data.  For
-clicks on margins, <var>col</var> is measured from the left edge of the
-margin area and <var>row</var> is measured from the top of the margin area.
-</p>
-</dd>
-<dt><var>image</var></dt>
-<dd><p>This is the image object on which the click occurred.  It is either
-<code>nil</code> if there is no image at the position clicked on, or it is
-an image object as returned by <code>find-image</code> if click was in an image.
-</p>
-</dd>
-<dt><var>dx</var>, <var>dy</var></dt>
-<dd><p>These are the pixel coordinates of the click, relative to
-the top left corner of <var>object</var>, which is <code>(0 . 0)</code>.  If
-<var>object</var> is <code>nil</code>, the coordinates are relative to the top
-left corner of the character glyph clicked on.
-</p>
-</dd>
-<dt><var>width</var>, <var>height</var></dt>
-<dd><p>These are the pixel width and height of <var>object</var> or, if this is
-<code>nil</code>, those of the character glyph clicked on.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><var>window</var></dt>
 
-<p>For clicks on a scroll bar, <var>position</var> has this form:
-</p>
-<div class="example">
-<pre class="example">(<var>window</var> <var>area</var> (<var>portion</var> . <var>whole</var>) <var>timestamp</var> <var>part</var>)
-</pre></div>
+    <dd>
+      <p>The window in which the click occurred.</p>
+    </dd>
 
-<dl compact="compact">
-<dt><var>window</var></dt>
-<dd><p>The window whose scroll bar was clicked on.
-</p>
-</dd>
-<dt><var>area</var></dt>
-<dd><p>This is the symbol <code>vertical-scroll-bar</code>.
-</p>
-</dd>
-<dt><var>portion</var></dt>
-<dd><p>The number of pixels from the top of the scroll bar to the click
-position.  On some toolkits, including GTK+, Emacs cannot extract this
-data, so the value is always <code>0</code>.
-</p>
-</dd>
-<dt><var>whole</var></dt>
-<dd><p>The total length, in pixels, of the scroll bar.  On some toolkits,
-including GTK+, Emacs cannot extract this data, so the value is always
-<code>0</code>.
-</p>
-</dd>
-<dt><var>timestamp</var></dt>
-<dd><p>The time at which the event occurred, in milliseconds.  On some
-toolkits, including GTK+, Emacs cannot extract this data, so the value
-is always <code>0</code>.
-</p>
-</dd>
-<dt><var>part</var></dt>
-<dd><p>The part of the scroll bar on which the click occurred.  It is one of
-the symbols <code>handle</code> (the scroll bar handle), <code>above-handle</code>
-(the area above the handle), <code>below-handle</code> (the area below the
-handle), <code>up</code> (the up arrow at one end of the scroll bar), or
-<code>down</code> (the down arrow at one end of the scroll bar).
-</p></dd>
-</dl>
+    <dt><var>pos-or-area</var></dt>
 
+    <dd>
+      <p>The buffer position of the character clicked on in the
+      text area; or, if the click was outside the text area, the
+      window area where it occurred. It is one of the symbols
+      <code>mode-line</code>, <code>header-line</code>,
+      <code>vertical-line</code>, <code>left-margin</code>,
+      <code>right-margin</code>, <code>left-fringe</code>, or
+      <code>right-fringe</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Drag-Events.html#Drag-Events" accesskey="n" rel="next">Drag Events</a>, Previous: <a href="Mouse-Events.html#Mouse-Events" accesskey="p" rel="prev">Mouse Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>In one special case, <var>pos-or-area</var> is a list
+      containing a symbol (one of the symbols listed above) instead
+      of just the symbol. This happens after the imaginary prefix
+      keys for the event are registered by Emacs. See <a href=
+      "Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence
+      Input</a>.</p>
+    </dd>
 
+    <dt><var>x</var>, <var>y</var></dt>
 
+    <dd>
+      <p>The relative pixel coordinates of the click. For clicks in
+      the text area of a window, the coordinate origin <code>(0 .
+      0)</code> is taken to be the top left corner of the text
+      area. See <a href="Window-Sizes.html#Window-Sizes">Window
+      Sizes</a>. For clicks in a mode line or header line, the
+      coordinate origin is the top left corner of the window
+      itself. For fringes, margins, and the vertical border,
+      <var>x</var> does not have meaningful data. For fringes and
+      margins, <var>y</var> is relative to the bottom edge of the
+      header line. In all cases, the <var>x</var> and <var>y</var>
+      coordinates increase rightward and downward respectively.</p>
+    </dd>
 
+    <dt><var>timestamp</var></dt>
+
+    <dd>
+      <p>The time at which the event occurred, as an integer number
+      of milliseconds since a system-dependent initial time.</p>
+    </dd>
+
+    <dt><var>object</var></dt>
+
+    <dd>
+      <p>Either <code>nil</code> if there is no string-type text
+      property at the click position, or a cons cell of the form
+      (<var>string</var> . <var>string-pos</var>) if there is
+      one:</p>
+
+      <dl compact="compact">
+        <dt><var>string</var></dt>
+
+        <dd>
+          <p>The string which was clicked on, including any
+          properties.</p>
+        </dd>
+
+        <dt><var>string-pos</var></dt>
+
+        <dd>
+          <p>The position in the string where the click
+          occurred.</p>
+        </dd>
+      </dl>
+    </dd>
+
+    <dt><var>text-pos</var></dt>
+
+    <dd>
+      <p>For clicks on a marginal area or on a fringe, this is the
+      buffer position of the first visible character in the
+      corresponding line in the window. For clicks on the mode line
+      or the header line, this is <code>nil</code>. For other
+      events, it is the buffer position closest to the click.</p>
+    </dd>
+
+    <dt><var>col</var>, <var>row</var></dt>
+
+    <dd>
+      <p>These are the actual column and row coordinate numbers of
+      the glyph under the <var>x</var>, <var>y</var> position. If
+      <var>x</var> lies beyond the last column of actual text on
+      its line, <var>col</var> is reported by adding fictional
+      extra columns that have the default character width. Row 0 is
+      taken to be the header line if the window has one, or the
+      topmost row of the text area otherwise. Column 0 is taken to
+      be the leftmost column of the text area for clicks on a
+      window text area, or the leftmost mode line or header line
+      column for clicks there. For clicks on fringes or vertical
+      borders, these have no meaningful data. For clicks on
+      margins, <var>col</var> is measured from the left edge of the
+      margin area and <var>row</var> is measured from the top of
+      the margin area.</p>
+    </dd>
+
+    <dt><var>image</var></dt>
+
+    <dd>
+      <p>This is the image object on which the click occurred. It
+      is either <code>nil</code> if there is no image at the
+      position clicked on, or it is an image object as returned by
+      <code>find-image</code> if click was in an image.</p>
+    </dd>
+
+    <dt><var>dx</var>, <var>dy</var></dt>
+
+    <dd>
+      <p>These are the pixel coordinates of the click, relative to
+      the top left corner of <var>object</var>, which is <code>(0 .
+      0)</code>. If <var>object</var> is <code>nil</code>, the
+      coordinates are relative to the top left corner of the
+      character glyph clicked on.</p>
+    </dd>
+
+    <dt><var>width</var>, <var>height</var></dt>
+
+    <dd>
+      <p>These are the pixel width and height of <var>object</var>
+      or, if this is <code>nil</code>, those of the character glyph
+      clicked on.</p>
+    </dd>
+  </dl>
+
+  <p>For clicks on a scroll bar, <var>position</var> has this
+  form:</p>
+
+  <div class="example">
+    <pre class="example">
+(<var>window</var> <var>area</var> (<var>portion</var> . <var>whole</var>) <var>timestamp</var> <var>part</var>)
+</pre>
+  </div>
+
+  <dl compact="compact">
+    <dt><var>window</var></dt>
+
+    <dd>
+      <p>The window whose scroll bar was clicked on.</p>
+    </dd>
+
+    <dt><var>area</var></dt>
+
+    <dd>
+      <p>This is the symbol <code>vertical-scroll-bar</code>.</p>
+    </dd>
+
+    <dt><var>portion</var></dt>
+
+    <dd>
+      <p>The number of pixels from the top of the scroll bar to the
+      click position. On some toolkits, including GTK+, Emacs
+      cannot extract this data, so the value is always
+      <code>0</code>.</p>
+    </dd>
+
+    <dt><var>whole</var></dt>
+
+    <dd>
+      <p>The total length, in pixels, of the scroll bar. On some
+      toolkits, including GTK+, Emacs cannot extract this data, so
+      the value is always <code>0</code>.</p>
+    </dd>
+
+    <dt><var>timestamp</var></dt>
+
+    <dd>
+      <p>The time at which the event occurred, in milliseconds. On
+      some toolkits, including GTK+, Emacs cannot extract this
+      data, so the value is always <code>0</code>.</p>
+    </dd>
+
+    <dt><var>part</var></dt>
+
+    <dd>
+      <p>The part of the scroll bar on which the click occurred. It
+      is one of the symbols <code>handle</code> (the scroll bar
+      handle), <code>above-handle</code> (the area above the
+      handle), <code>below-handle</code> (the area below the
+      handle), <code>up</code> (the up arrow at one end of the
+      scroll bar), or <code>down</code> (the down arrow at one end
+      of the scroll bar).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Drag-Events.html#Drag-Events" accesskey="n"
+    rel="next">Drag Events</a>, Previous: <a href=
+    "Mouse-Events.html#Mouse-Events" accesskey="p" rel="prev">Mouse
+    Events</a>, Up: <a href="Input-Events.html#Input-Events"
+    accesskey="u" rel="up">Input Events</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

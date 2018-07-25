@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes PGG 0.1, an Emacs interface to various
 PGP implementations.
 
@@ -15,149 +17,239 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>PGG 0.1: User Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="PGG 0.1: User Commands">
-<meta name="keywords" content="PGG 0.1: User Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="How-to-use.html#How-to-use" rel="up" title="How to use">
-<link href="Selecting-an-implementation.html#Selecting-an-implementation" rel="next" title="Selecting an implementation">
-<link href="How-to-use.html#How-to-use" rel="prev" title="How to use">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>PGG 0.1: User Commands</title>
+  <meta name="description" content="PGG 0.1: User Commands" />
+  <meta name="keywords" content="PGG 0.1: User Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="How-to-use.html#How-to-use" rel="up" title=
+  "How to use" />
+  <link href=
+  "Selecting-an-implementation.html#Selecting-an-implementation"
+  rel="next" title="Selecting an implementation" />
+  <link href="How-to-use.html#How-to-use" rel="prev" title=
+  "How to use" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="User-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Selecting-an-implementation.html#Selecting-an-implementation" accesskey="n" rel="next">Selecting an implementation</a>, Up: <a href="How-to-use.html#How-to-use" accesskey="u" rel="up">How to use</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="User-Commands-1"></a>
-<h3 class="section">3.1 User Commands</h3>
+<body lang="en" xml:lang="en">
+  <a name="User-Commands" id="User-Commands"></a>
 
-<p>At this time you can use some cryptographic commands.  The behavior of
-these commands relies on a fashion of invocation because they are also
-intended to be used as library functions.  In case you don&rsquo;t have the
-signer&rsquo;s public key, for example, the function <code>pgg-verify-region</code>
-fails immediately, but if the function had been called interactively, it
-would ask you to retrieve the signer&rsquo;s public key from the server.
-</p>
-<dl>
-<dt><a name="index-pgg_002dencrypt_002dregion"></a>Command: <strong>pgg-encrypt-region</strong> <em>start end recipients &amp;optional sign passphrase</em></dt>
-<dd><p>Encrypt the current region between <var>start</var> and <var>end</var> for
-<var>recipients</var>.  When the function were called interactively, you
-would be asked about the recipients.
-</p>
-<p>If encryption is successful, it replaces the current region contents (in
-the accessible portion) with the resulting data.
-</p>
-<p>If optional argument <var>sign</var> is non-<code>nil</code>, the function is
-request to do a combined sign and encrypt.  This currently is
-confirmed to work with GnuPG, but might not work with PGP or PGP5.
-</p>
-<p>If optional <var>passphrase</var> is <code>nil</code>, the passphrase will be
-obtained from the passphrase cache or user.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Selecting-an-implementation.html#Selecting-an-implementation"
+    accesskey="n" rel="next">Selecting an implementation</a>, Up:
+    <a href="How-to-use.html#How-to-use" accesskey="u" rel="up">How
+    to use</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="User-Commands-1" id="User-Commands-1"></a>
 
-<dl>
-<dt><a name="index-pgg_002dencrypt_002dsymmetric_002dregion"></a>Command: <strong>pgg-encrypt-symmetric-region</strong> <em>&amp;optional start end passphrase</em></dt>
-<dd><p>Encrypt the current region between <var>start</var> and <var>end</var> using a
-symmetric cipher.  After invocation you are asked for a passphrase.
-</p>
-<p>If optional <var>passphrase</var> is <code>nil</code>, the passphrase will be
-obtained from the passphrase cache or user.
-</p>
-<p>symmetric-cipher encryption is currently only implemented for GnuPG.
-</p></dd></dl>
+  <h3 class="section">3.1 User Commands</h3>
 
-<dl>
-<dt><a name="index-pgg_002ddecrypt_002dregion"></a>Command: <strong>pgg-decrypt-region</strong> <em>start end &amp;optional passphrase</em></dt>
-<dd><p>Decrypt the current region between <var>start</var> and <var>end</var>.  If
-decryption is successful, it replaces the current region contents (in
-the accessible portion) with the resulting data.
-</p>
-<p>If optional <var>passphrase</var> is <code>nil</code>, the passphrase will be
-obtained from the passphrase cache or user.
-</p></dd></dl>
+  <p>At this time you can use some cryptographic commands. The
+  behavior of these commands relies on a fashion of invocation
+  because they are also intended to be used as library functions.
+  In case you don&rsquo;t have the signer&rsquo;s public key, for
+  example, the function <code>pgg-verify-region</code> fails
+  immediately, but if the function had been called interactively,
+  it would ask you to retrieve the signer&rsquo;s public key from
+  the server.</p>
 
-<dl>
-<dt><a name="index-pgg_002dsign_002dregion"></a>Command: <strong>pgg-sign-region</strong> <em>start end &amp;optional cleartext passphrase</em></dt>
-<dd><p>Make the signature from text between <var>start</var> and <var>end</var>.  If the
-optional third argument <var>cleartext</var> is non-<code>nil</code>, or the
-function is called interactively, it does not create a detached
-signature.  In such a case, it replaces the current region contents (in
-the accessible portion) with the resulting data.
-</p>
-<p>If optional <var>passphrase</var> is <code>nil</code>, the passphrase will be
-obtained from the passphrase cache or user.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-pgg_002dencrypt_002dregion" id=
+    "index-pgg_002dencrypt_002dregion"></a>Command:
+    <strong>pgg-encrypt-region</strong> <em>start end recipients
+    &amp;optional sign passphrase</em></dt>
 
-<dl>
-<dt><a name="index-pgg_002dverify_002dregion"></a>Command: <strong>pgg-verify-region</strong> <em>start end &amp;optional signature fetch</em></dt>
-<dd><p>Verify the current region between <var>start</var> and <var>end</var>.  If the
-optional third argument <var>signature</var> is non-<code>nil</code>, it is treated
-as the detached signature file of the current region.
-</p>
-<p>If the optional 4th argument <var>fetch</var> is non-<code>nil</code>, or the
-function is called interactively, we attempt to fetch the signer&rsquo;s
-public key from the key server.
-</p></dd></dl>
+    <dd>
+      <p>Encrypt the current region between <var>start</var> and
+      <var>end</var> for <var>recipients</var>. When the function
+      were called interactively, you would be asked about the
+      recipients.</p>
 
-<dl>
-<dt><a name="index-pgg_002dinsert_002dkey"></a>Command: <strong>pgg-insert-key</strong></dt>
-<dd><p>Retrieve the user&rsquo;s public key and insert it as ASCII-armored format.
-</p></dd></dl>
+      <p>If encryption is successful, it replaces the current
+      region contents (in the accessible portion) with the
+      resulting data.</p>
 
-<dl>
-<dt><a name="index-pgg_002dsnarf_002dkeys_002dregion"></a>Command: <strong>pgg-snarf-keys-region</strong> <em>start end</em></dt>
-<dd><p>Collect public keys in the current region between <var>start</var> and
-<var>end</var>, and add them into the user&rsquo;s keyring.
-</p></dd></dl>
+      <p>If optional argument <var>sign</var> is
+      non-<code>nil</code>, the function is request to do a
+      combined sign and encrypt. This currently is confirmed to
+      work with GnuPG, but might not work with PGP or PGP5.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Selecting-an-implementation.html#Selecting-an-implementation" accesskey="n" rel="next">Selecting an implementation</a>, Up: <a href="How-to-use.html#How-to-use" accesskey="u" rel="up">How to use</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If optional <var>passphrase</var> is <code>nil</code>, the
+      passphrase will be obtained from the passphrase cache or
+      user.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-pgg_002dencrypt_002dsymmetric_002dregion"
+    id="index-pgg_002dencrypt_002dsymmetric_002dregion"></a>Command:
+    <strong>pgg-encrypt-symmetric-region</strong> <em>&amp;optional
+    start end passphrase</em></dt>
 
+    <dd>
+      <p>Encrypt the current region between <var>start</var> and
+      <var>end</var> using a symmetric cipher. After invocation you
+      are asked for a passphrase.</p>
 
+      <p>If optional <var>passphrase</var> is <code>nil</code>, the
+      passphrase will be obtained from the passphrase cache or
+      user.</p>
+
+      <p>symmetric-cipher encryption is currently only implemented
+      for GnuPG.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pgg_002ddecrypt_002dregion" id=
+    "index-pgg_002ddecrypt_002dregion"></a>Command:
+    <strong>pgg-decrypt-region</strong> <em>start end &amp;optional
+    passphrase</em></dt>
+
+    <dd>
+      <p>Decrypt the current region between <var>start</var> and
+      <var>end</var>. If decryption is successful, it replaces the
+      current region contents (in the accessible portion) with the
+      resulting data.</p>
+
+      <p>If optional <var>passphrase</var> is <code>nil</code>, the
+      passphrase will be obtained from the passphrase cache or
+      user.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pgg_002dsign_002dregion" id=
+    "index-pgg_002dsign_002dregion"></a>Command:
+    <strong>pgg-sign-region</strong> <em>start end &amp;optional
+    cleartext passphrase</em></dt>
+
+    <dd>
+      <p>Make the signature from text between <var>start</var> and
+      <var>end</var>. If the optional third argument
+      <var>cleartext</var> is non-<code>nil</code>, or the function
+      is called interactively, it does not create a detached
+      signature. In such a case, it replaces the current region
+      contents (in the accessible portion) with the resulting
+      data.</p>
+
+      <p>If optional <var>passphrase</var> is <code>nil</code>, the
+      passphrase will be obtained from the passphrase cache or
+      user.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pgg_002dverify_002dregion" id=
+    "index-pgg_002dverify_002dregion"></a>Command:
+    <strong>pgg-verify-region</strong> <em>start end &amp;optional
+    signature fetch</em></dt>
+
+    <dd>
+      <p>Verify the current region between <var>start</var> and
+      <var>end</var>. If the optional third argument
+      <var>signature</var> is non-<code>nil</code>, it is treated
+      as the detached signature file of the current region.</p>
+
+      <p>If the optional 4th argument <var>fetch</var> is
+      non-<code>nil</code>, or the function is called
+      interactively, we attempt to fetch the signer&rsquo;s public
+      key from the key server.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pgg_002dinsert_002dkey" id=
+    "index-pgg_002dinsert_002dkey"></a>Command:
+    <strong>pgg-insert-key</strong></dt>
+
+    <dd>
+      <p>Retrieve the user&rsquo;s public key and insert it as
+      ASCII-armored format.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pgg_002dsnarf_002dkeys_002dregion" id=
+    "index-pgg_002dsnarf_002dkeys_002dregion"></a>Command:
+    <strong>pgg-snarf-keys-region</strong> <em>start end</em></dt>
+
+    <dd>
+      <p>Collect public keys in the current region between
+      <var>start</var> and <var>end</var>, and add them into the
+      user&rsquo;s keyring.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Selecting-an-implementation.html#Selecting-an-implementation"
+    accesskey="n" rel="next">Selecting an implementation</a>, Up:
+    <a href="How-to-use.html#How-to-use" accesskey="u" rel="up">How
+    to use</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

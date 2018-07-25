@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,116 +19,170 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Printing in Edebug</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Printing in Edebug">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Printing in Edebug">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="Trace-Buffer.html#Trace-Buffer" rel="next" title="Trace Buffer">
-<link href="Eval-List.html#Eval-List" rel="prev" title="Eval List">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Printing in
+  Edebug</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Printing in Edebug" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Printing in Edebug" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="Trace-Buffer.html#Trace-Buffer" rel="next" title=
+  "Trace Buffer" />
+  <link href="Eval-List.html#Eval-List" rel="prev" title=
+  "Eval List" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Printing-in-Edebug" id="Printing-in-Edebug"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Trace-Buffer.html#Trace-Buffer" accesskey="n"
+    rel="next">Trace Buffer</a>, Previous: <a href=
+    "Eval-List.html#Eval-List" accesskey="p" rel="prev">Eval
+    List</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel=
+    "up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Printing-in-Edebug-1" id="Printing-in-Edebug-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Printing-in-Edebug"></a>
-<div class="header">
-<p>
-Next: <a href="Trace-Buffer.html#Trace-Buffer" accesskey="n" rel="next">Trace Buffer</a>, Previous: <a href="Eval-List.html#Eval-List" accesskey="p" rel="prev">Eval List</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Printing-in-Edebug-1"></a>
-<h4 class="subsection">17.2.11 Printing in Edebug</h4>
+  <h4 class="subsection">17.2.11 Printing in Edebug</h4><a name=
+  "index-printing-_0028Edebug_0029" id=
+  "index-printing-_0028Edebug_0029"></a> <a name=
+  "index-printing-circular-structures" id=
+  "index-printing-circular-structures"></a> <a name=
+  "index-cust_002dprint" id="index-cust_002dprint"></a>
 
-<a name="index-printing-_0028Edebug_0029"></a>
-<a name="index-printing-circular-structures"></a>
-<a name="index-cust_002dprint"></a>
-<p>If an expression in your program produces a value containing circular
-list structure, you may get an error when Edebug attempts to print it.
-</p>
-<p>One way to cope with circular structure is to set <code>print-length</code>
-or <code>print-level</code> to truncate the printing.  Edebug does this for
-you; it binds <code>print-length</code> and <code>print-level</code> to the values
-of the variables <code>edebug-print-length</code> and
-<code>edebug-print-level</code> (so long as they have non-<code>nil</code>
-values).  See <a href="Output-Variables.html#Output-Variables">Output Variables</a>.
-</p>
-<dl>
-<dt><a name="index-edebug_002dprint_002dlength"></a>User Option: <strong>edebug-print-length</strong></dt>
-<dd><p>If non-<code>nil</code>, Edebug binds <code>print-length</code> to this value while
-printing results.  The default value is <code>50</code>.
-</p></dd></dl>
+  <p>If an expression in your program produces a value containing
+  circular list structure, you may get an error when Edebug
+  attempts to print it.</p>
 
-<dl>
-<dt><a name="index-edebug_002dprint_002dlevel"></a>User Option: <strong>edebug-print-level</strong></dt>
-<dd><p>If non-<code>nil</code>, Edebug binds <code>print-level</code> to this value while
-printing results.  The default value is <code>50</code>.
-</p></dd></dl>
+  <p>One way to cope with circular structure is to set
+  <code>print-length</code> or <code>print-level</code> to truncate
+  the printing. Edebug does this for you; it binds
+  <code>print-length</code> and <code>print-level</code> to the
+  values of the variables <code>edebug-print-length</code> and
+  <code>edebug-print-level</code> (so long as they have
+  non-<code>nil</code> values). See <a href=
+  "Output-Variables.html#Output-Variables">Output
+  Variables</a>.</p>
 
-<p>You can also print circular structures and structures that share
-elements more informatively by binding <code>print-circle</code>
-to a non-<code>nil</code> value.
-</p>
-<p>Here is an example of code that creates a circular structure:
-</p>
-<div class="example">
-<pre class="example">(setq a '(x y))
+  <dl>
+    <dt><a name="index-edebug_002dprint_002dlength" id=
+    "index-edebug_002dprint_002dlength"></a>User Option:
+    <strong>edebug-print-length</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, Edebug binds
+      <code>print-length</code> to this value while printing
+      results. The default value is <code>50</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-edebug_002dprint_002dlevel" id=
+    "index-edebug_002dprint_002dlevel"></a>User Option:
+    <strong>edebug-print-level</strong></dt>
+
+    <dd>
+      <p>If non-<code>nil</code>, Edebug binds
+      <code>print-level</code> to this value while printing
+      results. The default value is <code>50</code>.</p>
+    </dd>
+  </dl>
+
+  <p>You can also print circular structures and structures that
+  share elements more informatively by binding
+  <code>print-circle</code> to a non-<code>nil</code> value.</p>
+
+  <p>Here is an example of code that creates a circular
+  structure:</p>
+
+  <div class="example">
+    <pre class="example">
+(setq a '(x y))
 (setcar a a)
-</pre></div>
+</pre>
+  </div>
 
-<p>Custom printing prints this as &lsquo;<samp>Result: #1=(#1# y)</samp>&rsquo;.  The
-&lsquo;<samp>#1=</samp>&rsquo; notation labels the structure that follows it with the label
-&lsquo;<samp>1</samp>&rsquo;, and the &lsquo;<samp>#1#</samp>&rsquo; notation references the previously labeled
-structure.  This notation is used for any shared elements of lists or
-vectors.
-</p>
-<dl>
-<dt><a name="index-edebug_002dprint_002dcircle"></a>User Option: <strong>edebug-print-circle</strong></dt>
-<dd><p>If non-<code>nil</code>, Edebug binds <code>print-circle</code> to this value while
-printing results.  The default value is <code>t</code>.
-</p></dd></dl>
+  <p>Custom printing prints this as &lsquo;<samp>Result: #1=(#1#
+  y)</samp>&rsquo;. The &lsquo;<samp>#1=</samp>&rsquo; notation
+  labels the structure that follows it with the label
+  &lsquo;<samp>1</samp>&rsquo;, and the
+  &lsquo;<samp>#1#</samp>&rsquo; notation references the previously
+  labeled structure. This notation is used for any shared elements
+  of lists or vectors.</p>
 
-<p>Other programs can also use custom printing; see <samp>cust-print.el</samp>
-for details.
-</p>
+  <dl>
+    <dt><a name="index-edebug_002dprint_002dcircle" id=
+    "index-edebug_002dprint_002dcircle"></a>User Option:
+    <strong>edebug-print-circle</strong></dt>
 
+    <dd>
+      <p>If non-<code>nil</code>, Edebug binds
+      <code>print-circle</code> to this value while printing
+      results. The default value is <code>t</code>.</p>
+    </dd>
+  </dl>
 
-
+  <p>Other programs can also use custom printing; see
+  <samp>cust-print.el</samp> for details.</p>
 </body>
 </html>

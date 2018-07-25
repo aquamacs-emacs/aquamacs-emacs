@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,83 +19,112 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Trapping Errors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Trapping Errors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Trapping Errors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="Edebug-Views.html#Edebug-Views" rel="next" title="Edebug Views">
-<link href="Source-Breakpoints.html#Source-Breakpoints" rel="prev" title="Source Breakpoints">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Trapping Errors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Trapping Errors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Trapping Errors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="Edebug-Views.html#Edebug-Views" rel="next" title=
+  "Edebug Views" />
+  <link href="Source-Breakpoints.html#Source-Breakpoints" rel=
+  "prev" title="Source Breakpoints" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Trapping-Errors" id="Trapping-Errors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Edebug-Views.html#Edebug-Views" accesskey="n"
+    rel="next">Edebug Views</a>, Previous: <a href=
+    "Breaks.html#Breaks" accesskey="p" rel="prev">Breaks</a>, Up:
+    <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Trapping-Errors-1" id="Trapping-Errors-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Trapping-Errors"></a>
-<div class="header">
-<p>
-Next: <a href="Edebug-Views.html#Edebug-Views" accesskey="n" rel="next">Edebug Views</a>, Previous: <a href="Breaks.html#Breaks" accesskey="p" rel="prev">Breaks</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Trapping-Errors-1"></a>
-<h4 class="subsection">17.2.7 Trapping Errors</h4>
+  <h4 class="subsection">17.2.7 Trapping Errors</h4>
 
-<p>Emacs normally displays an error message when an error is signaled and
-not handled with <code>condition-case</code>.  While Edebug is active and
-executing instrumented code, it normally responds to all unhandled
-errors.  You can customize this with the options <code>edebug-on-error</code>
-and <code>edebug-on-quit</code>; see <a href="Edebug-Options.html#Edebug-Options">Edebug Options</a>.
-</p>
-<p>When Edebug responds to an error, it shows the last stop point
-encountered before the error.  This may be the location of a call to a
-function which was not instrumented, and within which the error actually
-occurred.  For an unbound variable error, the last known stop point
-might be quite distant from the offending variable reference.  In that
-case, you might want to display a full backtrace (see <a href="Edebug-Misc.html#Edebug-Misc">Edebug Misc</a>).
-</p>
-<p>If you change <code>debug-on-error</code> or <code>debug-on-quit</code> while
-Edebug is active, these changes will be forgotten when Edebug becomes
-inactive.  Furthermore, during Edebug&rsquo;s recursive edit, these variables
-are bound to the values they had outside of Edebug.
-</p>
+  <p>Emacs normally displays an error message when an error is
+  signaled and not handled with <code>condition-case</code>. While
+  Edebug is active and executing instrumented code, it normally
+  responds to all unhandled errors. You can customize this with the
+  options <code>edebug-on-error</code> and
+  <code>edebug-on-quit</code>; see <a href=
+  "Edebug-Options.html#Edebug-Options">Edebug Options</a>.</p>
 
+  <p>When Edebug responds to an error, it shows the last stop point
+  encountered before the error. This may be the location of a call
+  to a function which was not instrumented, and within which the
+  error actually occurred. For an unbound variable error, the last
+  known stop point might be quite distant from the offending
+  variable reference. In that case, you might want to display a
+  full backtrace (see <a href="Edebug-Misc.html#Edebug-Misc">Edebug
+  Misc</a>).</p>
 
-
+  <p>If you change <code>debug-on-error</code> or
+  <code>debug-on-quit</code> while Edebug is active, these changes
+  will be forgotten when Edebug becomes inactive. Furthermore,
+  during Edebug&rsquo;s recursive edit, these variables are bound
+  to the values they had outside of Edebug.</p>
 </body>
 </html>

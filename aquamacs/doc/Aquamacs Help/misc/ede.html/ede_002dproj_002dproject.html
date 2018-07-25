@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes EDE, the Emacs Development Environment.
 
 Copyright (C) 1998-2001, 2004-2005, 2008-2016
@@ -15,294 +17,544 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Development Environment: ede-proj-project</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Development Environment: ede-proj-project">
-<meta name="keywords" content="Emacs Development Environment: ede-proj-project">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Project.html#Project" rel="up" title="Project">
-<link href="project_002dam_002dmakefile.html#project_002dam_002dmakefile" rel="next" title="project-am-makefile">
-<link href="ede_002dsimple_002dbase_002dproject.html#ede_002dsimple_002dbase_002dproject" rel="prev" title="ede-simple-base-project">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Development Environment: ede-proj-project</title>
+  <meta name="description" content=
+  "Emacs Development Environment: ede-proj-project" />
+  <meta name="keywords" content=
+  "Emacs Development Environment: ede-proj-project" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Project.html#Project" rel="up" title="Project" />
+  <link href=
+  "project_002dam_002dmakefile.html#project_002dam_002dmakefile"
+  rel="next" title="project-am-makefile" />
+  <link href=
+  "ede_002dsimple_002dbase_002dproject.html#ede_002dsimple_002dbase_002dproject"
+  rel="prev" title="ede-simple-base-project" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="ede_002dproj_002dproject"></a>
-<div class="header">
-<p>
-Next: <a href="project_002dam_002dmakefile.html#project_002dam_002dmakefile" accesskey="n" rel="next">project-am-makefile</a>, Previous: <a href="ede_002dsimple_002dbase_002dproject.html#ede_002dsimple_002dbase_002dproject" accesskey="p" rel="prev">ede-simple-base-project</a>, Up: <a href="Project.html#Project" accesskey="u" rel="up">Project</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="ede_002dproj_002dproject-1"></a>
-<h4 class="subsection">8.7.6 ede-proj-project</h4>
-<a name="index-ede_002dproj_002dproject"></a>
+<body lang="en" xml:lang="en">
+  <a name="ede_002dproj_002dproject" id=
+  "ede_002dproj_002dproject"></a>
 
-<dl compact="compact">
-<dt>Inheritance Tree:</dt>
-<dd><dl compact="compact">
-<dt><code>eieio-speedbar</code></dt>
-<dd><dl compact="compact">
-<dt><code>eieio-speedbar-directory-button</code></dt>
-<dd><dl compact="compact">
-<dt><code>See&nbsp;<a href="ede_002dproject_002dplaceholder.html#ede_002dproject_002dplaceholder">ede-project-placeholder</a>.<!-- /@w --></code></dt>
-<dd><dl compact="compact">
-<dt><code>See&nbsp;<a href="ede_002dproject.html#ede_002dproject">ede-project</a>.<!-- /@w --></code></dt>
-<dd><dl compact="compact">
-<dt><code>ede-proj-project</code></dt>
-<dd><p>No children
-</p></dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "project_002dam_002dmakefile.html#project_002dam_002dmakefile"
+    accesskey="n" rel="next">project-am-makefile</a>, Previous:
+    <a href=
+    "ede_002dsimple_002dbase_002dproject.html#ede_002dsimple_002dbase_002dproject"
+    accesskey="p" rel="prev">ede-simple-base-project</a>, Up:
+    <a href="Project.html#Project" accesskey="u" rel=
+    "up">Project</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="ede_002dproj_002dproject-1" id=
+  "ede_002dproj_002dproject-1"></a>
 
-<dl compact="compact">
-<dt>Slots:</dt>
-<dd>
-<dl compact="compact">
-<dt><code>:makefile-type</code></dt>
-<dd><p>Type: <code>symbol</code> <br>
-Default Value: <code>Makefile</code>
-</p>
-<p>The type of Makefile to generate.
-Can be one of <code>'Makefile</code>, &rsquo;Makefile.in, or &rsquo;Makefile.am.
-If this value is NOT <code>'Makefile</code>, then that overrides the <code>:makefile</code> slot
-in targets.
-</p>
-</dd>
-<dt><code>:variables</code></dt>
-<dd><p>Type: <code>list</code> <br>
-Default Value: <code>nil</code>
-</p>
-<p>Variables to set in this Makefile.
-</p>
-</dd>
-<dt><code>:configuration-variables</code></dt>
-<dd><p>Type: <code>list</code> <br>
-Default Value: <code>(&quot;debug&quot; ((&quot;DEBUG&quot; . &quot;1&quot;)))</code>
-</p>
-<p>Makefile variables to use in different configurations.
-These variables are used in the makefile when a configuration becomes active.
-</p>
-</dd>
-<dt><code>:inference-rules <br></code></dt>
-<dd><p>Default Value: <code>nil</code>
-</p>
-<p>Inference rules to add to the makefile.
-</p>
-</dd>
-<dt><code>:include-file <br></code></dt>
-<dd><p>Default Value: <code>nil</code>
-</p>
-<p>Additional files to include.
-These files can contain additional rules, variables, and customizations.
-</p>
-</dd>
-<dt><code>:automatic-dependencies</code></dt>
-<dd><p>Type: <code>boolean</code> <br>
-Default Value: <code>t</code>
-</p>
-<p>Non-<code>nil</code> to do implement automatic dependencies in the Makefile.
-</p>
-</dd>
-<dt><code>:metasubproject</code></dt>
-<dd><p>Type: <code>boolean</code> <br>
-Default Value: <code>nil</code>
-</p>
-<p>Non-<code>nil</code> if this is a metasubproject.
-Usually, a subproject is determined by a parent project.  If multiple top level
-projects are grouped into a large project not maintained by EDE, then you need
-to set this to non-<code>nil</code>.  The only effect is that the <code>dist</code> rule will then avoid
-making a tar file.
-</p>
-</dd>
-</dl>
+  <h4 class="subsection">8.7.6 ede-proj-project</h4><a name=
+  "index-ede_002dproj_002dproject" id=
+  "index-ede_002dproj_002dproject"></a>
 
-</dd>
-</dl>
-<a name="Specialized-Methods-4"></a>
-<h4 class="subsubsection">8.7.6.1 Specialized Methods</h4>
+  <dl compact="compact">
+    <dt>Inheritance Tree:</dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dcreate"></a>Method: <strong>ede-proj-makefile-create</strong> <em>:AFTER this mfilename</em></dt>
-<dd><p>Create a Makefile for all Makefile targets in <var>THIS</var>.
-<var>MFILENAME</var> is the makefile to generate.
-</p></dd></dl>
+    <dd>
+      <dl compact="compact">
+        <dt><code>eieio-speedbar</code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dinsert_002drules"></a>Method: <strong>ede-proj-makefile-insert-rules</strong> <em>:AFTER this</em></dt>
-<dd><p>Insert rules needed by <var>THIS</var> target.
-</p></dd></dl>
+        <dd>
+          <dl compact="compact">
+            <dt><code>eieio-speedbar-directory-button</code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dtags"></a>Method: <strong>ede-proj-makefile-tags</strong> <em>:AFTER this targets</em></dt>
-<dd><p>Insert into the current location rules to make recursive TAGS files.
-Argument <var>THIS</var> is the project to create tags for.
-Argument <var>TARGETS</var> are the targets we should depend on for TAGS.
-</p></dd></dl>
+            <dd>
+              <dl compact="compact">
+                <dt><code>See&nbsp;<a href=
+                "ede_002dproject_002dplaceholder.html#ede_002dproject_002dplaceholder">ede-project-placeholder</a>.<!-- /@w --></code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dinsert_002dvariables"></a>Method: <strong>ede-proj-makefile-insert-variables</strong> <em>:AFTER this</em></dt>
-<dd><p>Insert variables needed by target <var>THIS</var>.
-</p></dd></dl>
+                <dd>
+                  <dl compact="compact">
+                    <dt><code>See&nbsp;<a href=
+                    "ede_002dproject.html#ede_002dproject">ede-project</a>.<!-- /@w --></code></dt>
 
-<dl>
-<dt><a name="index-project_002dmake_002ddist-1"></a>Method: <strong>project-make-dist</strong> <em>:AFTER this</em></dt>
-<dd><p>Build a distribution for the project based on <var>THIS</var> target.
-</p></dd></dl>
+                    <dd>
+                      <dl compact="compact">
+                        <dt><code>ede-proj-project</code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dinsert_002ddist_002drules"></a>Method: <strong>ede-proj-makefile-insert-dist-rules</strong> <em>:AFTER this</em></dt>
-<dd><p>Insert distribution rules for <var>THIS</var> in a Makefile, such as CLEAN and DIST.
-</p></dd></dl>
+                        <dd>
+                          <p>No children</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+                </dd>
+              </dl>
+            </dd>
+          </dl>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dinsert_002ddist_002ddependencies"></a>Method: <strong>ede-proj-makefile-insert-dist-dependencies</strong> <em>:AFTER this</em></dt>
-<dd><p>Insert any symbols that the DIST rule should depend on.
-Argument <var>THIS</var> is the project that should insert stuff.
-</p></dd></dl>
+  <dl compact="compact">
+    <dt>Slots:</dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dinsert_002dsubproj_002drules"></a>Method: <strong>ede-proj-makefile-insert-subproj-rules</strong> <em>:AFTER this</em></dt>
-<dd><p>Insert a rule for the project <var>THIS</var> which should be a subproject.
-</p></dd></dl>
+    <dd>
+      <dl compact="compact">
+        <dt><code>:makefile-type</code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dcreate_002dmaybe"></a>Method: <strong>ede-proj-makefile-create-maybe</strong> <em>:AFTER this mfilename</em></dt>
-<dd><p>Create a Makefile for all Makefile targets in <var>THIS</var> if needed.
-<var>MFILENAME</var> is the makefile to generate.
-</p></dd></dl>
+        <dd>
+          <p>Type: <code>symbol</code><br />
+          Default Value: <code>Makefile</code></p>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dconfigure_002dtest_002drequired_002dfile"></a>Method: <strong>ede-proj-configure-test-required-file</strong> <em>:AFTER this file</em></dt>
-<dd><p>For project <var>THIS</var>, test that the file <var>FILE</var> exists, or create it.
-</p></dd></dl>
+          <p>The type of Makefile to generate. Can be one of
+          <code>'Makefile</code>, &rsquo;Makefile.in, or
+          &rsquo;Makefile.am. If this value is NOT
+          <code>'Makefile</code>, then that overrides the
+          <code>:makefile</code> slot in targets.</p>
+        </dd>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dsetup_002dbuildenvironment"></a>Method: <strong>ede-proj-setup-buildenvironment</strong> <em>:AFTER this &amp;optional force</em></dt>
-<dd><p>Setup the build environment for project <var>THIS</var>.
-Handles the Makefile, or a Makefile.am configure.ac combination.
-Optional argument <var>FORCE</var> will force items to be regenerated.
-</p></dd></dl>
+        <dt><code>:variables</code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dgarbage_002dpatterns"></a>Method: <strong>ede-proj-makefile-garbage-patterns</strong> <em>:AFTER this</em></dt>
-<dd><p>Return a list of patterns that are considered garbage to <var>THIS</var>.
-These are removed with make clean.
-</p></dd></dl>
+        <dd>
+          <p>Type: <code>list</code><br />
+          Default Value: <code>nil</code></p>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dconfigure_002dsynchronize"></a>Method: <strong>ede-proj-configure-synchronize</strong> <em>:AFTER this</em></dt>
-<dd><p>Synchronize what we know about project <var>THIS</var> into configure.ac.
-</p></dd></dl>
+          <p>Variables to set in this Makefile.</p>
+        </dd>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dinsert_002dvariables_002dnew"></a>Method: <strong>ede-proj-makefile-insert-variables-new</strong> <em>:AFTER this</em></dt>
-<dd><p>Insert variables needed by target <var>THIS</var>.
-</p>
-<p>NOTE: Not yet in use!  This is part of an SRecode conversion of
-      EDE that is in progress.
-</p></dd></dl>
+        <dt><code>:configuration-variables</code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dconfiguration_002dvariables"></a>Method: <strong>ede-proj-makefile-configuration-variables</strong> <em>:AFTER this configuration</em></dt>
-<dd><p>Return a list of configuration variables from <var>THIS</var>.
-Use <var>CONFIGURATION</var> as the current configuration to query.
-</p></dd></dl>
+        <dd>
+          <p>Type: <code>list</code><br />
+          Default Value: <code>("debug" (("DEBUG" .
+          "1")))</code></p>
 
-<dl>
-<dt><a name="index-eieio_002ddone_002dcustomizing-1"></a>Method: <strong>eieio-done-customizing</strong> <em>:AFTER proj</em></dt>
-<dd><p>Call this when a user finishes customizing this object.
-Argument <var>PROJ</var> is the project to save.
-</p></dd></dl>
+          <p>Makefile variables to use in different configurations.
+          These variables are used in the makefile when a
+          configuration becomes active.</p>
+        </dd>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dconfigure_002drecreate"></a>Method: <strong>ede-proj-configure-recreate</strong> <em>:AFTER this</em></dt>
-<dd><p>Delete project <var>THIS</var>&rsquo;s configure script and start over.
-</p></dd></dl>
+        <dt><code>:inference-rules<br /></code></dt>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dmakefile_002dinsert_002duser_002drules"></a>Method: <strong>ede-proj-makefile-insert-user-rules</strong> <em>:AFTER this</em></dt>
-<dd><p>Insert user specified rules needed by <var>THIS</var> target.
-This is different from <em>ede-proj-makefile-insert-rules</em> in that this
-function won&rsquo;t create the building rules which are auto created with
-automake.
-</p></dd></dl>
+        <dd>
+          <p>Default Value: <code>nil</code></p>
 
-<dl>
-<dt><a name="index-ede_002dproj_002ddist_002dmakefile"></a>Method: <strong>ede-proj-dist-makefile</strong> <em>:AFTER this</em></dt>
-<dd><p>Return the name of the Makefile with the DIST target in it for <var>THIS</var>.
-</p></dd></dl>
+          <p>Inference rules to add to the makefile.</p>
+        </dd>
 
-<dl>
-<dt><a name="index-ede_002dproj_002dconfigure_002dfile"></a>Method: <strong>ede-proj-configure-file</strong> <em>:AFTER this</em></dt>
-<dd><p>The configure.ac script used by project <var>THIS</var>.
-</p></dd></dl>
+        <dt><code>:include-file<br /></code></dt>
 
-<dl>
-<dt><a name="index-ede_002dcommit_002dproject-2"></a>Method: <strong>ede-commit-project</strong> <em>:AFTER proj</em></dt>
-<dd><p>Commit any change to <var>PROJ</var> to its file.
-</p></dd></dl>
+        <dd>
+          <p>Default Value: <code>nil</code></p>
 
-<dl>
-<dt><a name="index-project_002ddist_002dfiles-1"></a>Method: <strong>project-dist-files</strong> <em>:AFTER this</em></dt>
-<dd><p>Return a list of files that constitutes a distribution of <var>THIS</var> project.
-</p></dd></dl>
+          <p>Additional files to include. These files can contain
+          additional rules, variables, and customizations.</p>
+        </dd>
 
-<dl>
-<dt><a name="index-ede_002dcommit_002dlocal_002dvariables-1"></a>Method: <strong>ede-commit-local-variables</strong> <em>:AFTER proj</em></dt>
-<dd><p>Commit change to local variables in <var>PROJ</var>.
-</p></dd></dl>
+        <dt><code>:automatic-dependencies</code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="project_002dam_002dmakefile.html#project_002dam_002dmakefile" accesskey="n" rel="next">project-am-makefile</a>, Previous: <a href="ede_002dsimple_002dbase_002dproject.html#ede_002dsimple_002dbase_002dproject" accesskey="p" rel="prev">ede-simple-base-project</a>, Up: <a href="Project.html#Project" accesskey="u" rel="up">Project</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+        <dd>
+          <p>Type: <code>boolean</code><br />
+          Default Value: <code>t</code></p>
 
+          <p>Non-<code>nil</code> to do implement automatic
+          dependencies in the Makefile.</p>
+        </dd>
 
+        <dt><code>:metasubproject</code></dt>
 
+        <dd>
+          <p>Type: <code>boolean</code><br />
+          Default Value: <code>nil</code></p>
+
+          <p>Non-<code>nil</code> if this is a metasubproject.
+          Usually, a subproject is determined by a parent project.
+          If multiple top level projects are grouped into a large
+          project not maintained by EDE, then you need to set this
+          to non-<code>nil</code>. The only effect is that the
+          <code>dist</code> rule will then avoid making a tar
+          file.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl><a name="Specialized-Methods-4" id=
+  "Specialized-Methods-4"></a>
+
+  <h4 class="subsubsection">8.7.6.1 Specialized Methods</h4>
+
+  <dl>
+    <dt><a name="index-ede_002dproj_002dmakefile_002dcreate" id=
+    "index-ede_002dproj_002dmakefile_002dcreate"></a>Method:
+    <strong>ede-proj-makefile-create</strong> <em>:AFTER this
+    mfilename</em></dt>
+
+    <dd>
+      <p>Create a Makefile for all Makefile targets in
+      <var>THIS</var>. <var>MFILENAME</var> is the makefile to
+      generate.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dinsert_002drules" id=
+    "index-ede_002dproj_002dmakefile_002dinsert_002drules"></a>Method:
+    <strong>ede-proj-makefile-insert-rules</strong> <em>:AFTER
+    this</em></dt>
+
+    <dd>
+      <p>Insert rules needed by <var>THIS</var> target.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ede_002dproj_002dmakefile_002dtags" id=
+    "index-ede_002dproj_002dmakefile_002dtags"></a>Method:
+    <strong>ede-proj-makefile-tags</strong> <em>:AFTER this
+    targets</em></dt>
+
+    <dd>
+      <p>Insert into the current location rules to make recursive
+      TAGS files. Argument <var>THIS</var> is the project to create
+      tags for. Argument <var>TARGETS</var> are the targets we
+      should depend on for TAGS.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dinsert_002dvariables" id=
+    "index-ede_002dproj_002dmakefile_002dinsert_002dvariables"></a>Method:
+    <strong>ede-proj-makefile-insert-variables</strong> <em>:AFTER
+    this</em></dt>
+
+    <dd>
+      <p>Insert variables needed by target <var>THIS</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-project_002dmake_002ddist-1" id=
+    "index-project_002dmake_002ddist-1"></a>Method:
+    <strong>project-make-dist</strong> <em>:AFTER this</em></dt>
+
+    <dd>
+      <p>Build a distribution for the project based on
+      <var>THIS</var> target.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dinsert_002ddist_002drules"
+    id=
+    "index-ede_002dproj_002dmakefile_002dinsert_002ddist_002drules">
+    </a>Method:
+    <strong>ede-proj-makefile-insert-dist-rules</strong> <em>:AFTER
+    this</em></dt>
+
+    <dd>
+      <p>Insert distribution rules for <var>THIS</var> in a
+      Makefile, such as CLEAN and DIST.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dinsert_002ddist_002ddependencies"
+    id=
+    "index-ede_002dproj_002dmakefile_002dinsert_002ddist_002ddependencies">
+    </a>Method:
+    <strong>ede-proj-makefile-insert-dist-dependencies</strong>
+    <em>:AFTER this</em></dt>
+
+    <dd>
+      <p>Insert any symbols that the DIST rule should depend on.
+      Argument <var>THIS</var> is the project that should insert
+      stuff.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dinsert_002dsubproj_002drules"
+    id=
+    "index-ede_002dproj_002dmakefile_002dinsert_002dsubproj_002drules">
+    </a>Method:
+    <strong>ede-proj-makefile-insert-subproj-rules</strong>
+    <em>:AFTER this</em></dt>
+
+    <dd>
+      <p>Insert a rule for the project <var>THIS</var> which should
+      be a subproject.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dcreate_002dmaybe" id=
+    "index-ede_002dproj_002dmakefile_002dcreate_002dmaybe"></a>Method:
+    <strong>ede-proj-makefile-create-maybe</strong> <em>:AFTER this
+    mfilename</em></dt>
+
+    <dd>
+      <p>Create a Makefile for all Makefile targets in
+      <var>THIS</var> if needed. <var>MFILENAME</var> is the
+      makefile to generate.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dconfigure_002dtest_002drequired_002dfile"
+    id=
+    "index-ede_002dproj_002dconfigure_002dtest_002drequired_002dfile">
+    </a>Method:
+    <strong>ede-proj-configure-test-required-file</strong>
+    <em>:AFTER this file</em></dt>
+
+    <dd>
+      <p>For project <var>THIS</var>, test that the file
+      <var>FILE</var> exists, or create it.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ede_002dproj_002dsetup_002dbuildenvironment"
+    id=
+    "index-ede_002dproj_002dsetup_002dbuildenvironment"></a>Method:
+    <strong>ede-proj-setup-buildenvironment</strong> <em>:AFTER
+    this &amp;optional force</em></dt>
+
+    <dd>
+      <p>Setup the build environment for project <var>THIS</var>.
+      Handles the Makefile, or a Makefile.am configure.ac
+      combination. Optional argument <var>FORCE</var> will force
+      items to be regenerated.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dgarbage_002dpatterns" id=
+    "index-ede_002dproj_002dmakefile_002dgarbage_002dpatterns"></a>Method:
+    <strong>ede-proj-makefile-garbage-patterns</strong> <em>:AFTER
+    this</em></dt>
+
+    <dd>
+      <p>Return a list of patterns that are considered garbage to
+      <var>THIS</var>. These are removed with make clean.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ede_002dproj_002dconfigure_002dsynchronize"
+    id=
+    "index-ede_002dproj_002dconfigure_002dsynchronize"></a>Method:
+    <strong>ede-proj-configure-synchronize</strong> <em>:AFTER
+    this</em></dt>
+
+    <dd>
+      <p>Synchronize what we know about project <var>THIS</var>
+      into configure.ac.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dinsert_002dvariables_002dnew"
+    id=
+    "index-ede_002dproj_002dmakefile_002dinsert_002dvariables_002dnew">
+    </a>Method:
+    <strong>ede-proj-makefile-insert-variables-new</strong>
+    <em>:AFTER this</em></dt>
+
+    <dd>
+      <p>Insert variables needed by target <var>THIS</var>.</p>
+
+      <p>NOTE: Not yet in use! This is part of an SRecode
+      conversion of EDE that is in progress.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dconfiguration_002dvariables"
+    id=
+    "index-ede_002dproj_002dmakefile_002dconfiguration_002dvariables">
+    </a>Method:
+    <strong>ede-proj-makefile-configuration-variables</strong>
+    <em>:AFTER this configuration</em></dt>
+
+    <dd>
+      <p>Return a list of configuration variables from
+      <var>THIS</var>. Use <var>CONFIGURATION</var> as the current
+      configuration to query.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-eieio_002ddone_002dcustomizing-1" id=
+    "index-eieio_002ddone_002dcustomizing-1"></a>Method:
+    <strong>eieio-done-customizing</strong> <em>:AFTER
+    proj</em></dt>
+
+    <dd>
+      <p>Call this when a user finishes customizing this object.
+      Argument <var>PROJ</var> is the project to save.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ede_002dproj_002dconfigure_002drecreate" id=
+    "index-ede_002dproj_002dconfigure_002drecreate"></a>Method:
+    <strong>ede-proj-configure-recreate</strong> <em>:AFTER
+    this</em></dt>
+
+    <dd>
+      <p>Delete project <var>THIS</var>&rsquo;s configure script
+      and start over.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-ede_002dproj_002dmakefile_002dinsert_002duser_002drules"
+    id=
+    "index-ede_002dproj_002dmakefile_002dinsert_002duser_002drules">
+    </a>Method:
+    <strong>ede-proj-makefile-insert-user-rules</strong> <em>:AFTER
+    this</em></dt>
+
+    <dd>
+      <p>Insert user specified rules needed by <var>THIS</var>
+      target. This is different from
+      <em>ede-proj-makefile-insert-rules</em> in that this function
+      won&rsquo;t create the building rules which are auto created
+      with automake.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ede_002dproj_002ddist_002dmakefile" id=
+    "index-ede_002dproj_002ddist_002dmakefile"></a>Method:
+    <strong>ede-proj-dist-makefile</strong> <em>:AFTER
+    this</em></dt>
+
+    <dd>
+      <p>Return the name of the Makefile with the DIST target in it
+      for <var>THIS</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ede_002dproj_002dconfigure_002dfile" id=
+    "index-ede_002dproj_002dconfigure_002dfile"></a>Method:
+    <strong>ede-proj-configure-file</strong> <em>:AFTER
+    this</em></dt>
+
+    <dd>
+      <p>The configure.ac script used by project
+      <var>THIS</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ede_002dcommit_002dproject-2" id=
+    "index-ede_002dcommit_002dproject-2"></a>Method:
+    <strong>ede-commit-project</strong> <em>:AFTER proj</em></dt>
+
+    <dd>
+      <p>Commit any change to <var>PROJ</var> to its file.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-project_002ddist_002dfiles-1" id=
+    "index-project_002ddist_002dfiles-1"></a>Method:
+    <strong>project-dist-files</strong> <em>:AFTER this</em></dt>
+
+    <dd>
+      <p>Return a list of files that constitutes a distribution of
+      <var>THIS</var> project.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-ede_002dcommit_002dlocal_002dvariables-1"
+    id="index-ede_002dcommit_002dlocal_002dvariables-1"></a>Method:
+    <strong>ede-commit-local-variables</strong> <em>:AFTER
+    proj</em></dt>
+
+    <dd>
+      <p>Commit change to local variables in <var>PROJ</var>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "project_002dam_002dmakefile.html#project_002dam_002dmakefile"
+    accesskey="n" rel="next">project-am-makefile</a>, Previous:
+    <a href=
+    "ede_002dsimple_002dbase_002dproject.html#ede_002dsimple_002dbase_002dproject"
+    accesskey="p" rel="prev">ede-simple-base-project</a>, Up:
+    <a href="Project.html#Project" accesskey="u" rel=
+    "up">Project</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

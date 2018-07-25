@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,363 +19,485 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Magic File Names</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Magic File Names">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Magic File Names">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="Format-Conversion.html#Format-Conversion" rel="next" title="Format Conversion">
-<link href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs" rel="prev" title="Create/Delete Dirs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Magic File Names</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Magic File Names" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Magic File Names" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href="Format-Conversion.html#Format-Conversion" rel="next"
+  title="Format Conversion" />
+  <link href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs"
+  rel="prev" title="Create/Delete Dirs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Magic-File-Names" id="Magic-File-Names"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Format-Conversion.html#Format-Conversion"
+    accesskey="n" rel="next">Format Conversion</a>, Previous:
+    <a href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs"
+    accesskey="p" rel="prev">Create/Delete Dirs</a>, Up: <a href=
+    "Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Making-Certain-File-Names-_0060_0060Magic_0027_0027" id=
+  "Making-Certain-File-Names-_0060_0060Magic_0027_0027"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Magic-File-Names"></a>
-<div class="header">
-<p>
-Next: <a href="Format-Conversion.html#Format-Conversion" accesskey="n" rel="next">Format Conversion</a>, Previous: <a href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs" accesskey="p" rel="prev">Create/Delete Dirs</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Making-Certain-File-Names-_0060_0060Magic_0027_0027"></a>
-<h3 class="section">24.11 Making Certain File Names &ldquo;Magic&rdquo;</h3>
-<a name="index-magic-file-names"></a>
+  <h3 class="section">24.11 Making Certain File Names
+  &ldquo;Magic&rdquo;</h3><a name="index-magic-file-names" id=
+  "index-magic-file-names"></a>
 
-<p>You can implement special handling for certain file names.  This is
-called making those names <em>magic</em>.  The principal use for this
-feature is in implementing access to remote files (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Remote-Files.html#Remote-Files">Remote Files</a> in <cite>The GNU Emacs Manual</cite>).
-</p>
-<p>To define a kind of magic file name, you must supply a regular
-expression to define the class of names (all those that match the
-regular expression), plus a handler that implements all the primitive
-Emacs file operations for file names that match.
-</p>
-<a name="index-file-handler"></a>
-<a name="index-file_002dname_002dhandler_002dalist"></a>
-<p>The variable <code>file-name-handler-alist</code> holds a list of handlers,
-together with regular expressions that determine when to apply each
-handler.  Each element has this form:
-</p>
-<div class="example">
-<pre class="example">(<var>regexp</var> . <var>handler</var>)
-</pre></div>
+  <p>You can implement special handling for certain file names.
+  This is called making those names <em>magic</em>. The principal
+  use for this feature is in implementing access to remote files
+  (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Remote-Files.html#Remote-Files">
+  Remote Files</a> in <cite>The GNU Emacs Manual</cite>).</p>
 
-<p>All the Emacs primitives for file access and file name transformation
-check the given file name against <code>file-name-handler-alist</code>.  If
-the file name matches <var>regexp</var>, the primitives handle that file by
-calling <var>handler</var>.
-</p>
-<p>The first argument given to <var>handler</var> is the name of the
-primitive, as a symbol; the remaining arguments are the arguments that
-were passed to that primitive.  (The first of these arguments is most
-often the file name itself.)  For example, if you do this:
-</p>
-<div class="example">
-<pre class="example">(file-exists-p <var>filename</var>)
-</pre></div>
+  <p>To define a kind of magic file name, you must supply a regular
+  expression to define the class of names (all those that match the
+  regular expression), plus a handler that implements all the
+  primitive Emacs file operations for file names that
+  match.</p><a name="index-file-handler" id=
+  "index-file-handler"></a> <a name=
+  "index-file_002dname_002dhandler_002dalist" id=
+  "index-file_002dname_002dhandler_002dalist"></a>
 
-<p>and <var>filename</var> has handler <var>handler</var>, then <var>handler</var> is
-called like this:
-</p>
-<div class="example">
-<pre class="example">(funcall <var>handler</var> 'file-exists-p <var>filename</var>)
-</pre></div>
+  <p>The variable <code>file-name-handler-alist</code> holds a list
+  of handlers, together with regular expressions that determine
+  when to apply each handler. Each element has this form:</p>
 
-<p>When a function takes two or more arguments that must be file names,
-it checks each of those names for a handler.  For example, if you do
-this:
-</p>
-<div class="example">
-<pre class="example">(expand-file-name <var>filename</var> <var>dirname</var>)
-</pre></div>
+  <div class="example">
+    <pre class="example">
+(<var>regexp</var> . <var>handler</var>)
+</pre>
+  </div>
 
-<p>then it checks for a handler for <var>filename</var> and then for a handler
-for <var>dirname</var>.  In either case, the <var>handler</var> is called like
-this:
-</p>
-<div class="example">
-<pre class="example">(funcall <var>handler</var> 'expand-file-name <var>filename</var> <var>dirname</var>)
-</pre></div>
+  <p>All the Emacs primitives for file access and file name
+  transformation check the given file name against
+  <code>file-name-handler-alist</code>. If the file name matches
+  <var>regexp</var>, the primitives handle that file by calling
+  <var>handler</var>.</p>
 
-<p>The <var>handler</var> then needs to figure out whether to handle
-<var>filename</var> or <var>dirname</var>.
-</p>
-<p>If the specified file name matches more than one handler, the one
-whose match starts last in the file name gets precedence.  This rule
-is chosen so that handlers for jobs such as uncompression are handled
-first, before handlers for jobs such as remote file access.
-</p>
-<p>Here are the operations that a magic file name handler gets to handle:
-</p>
-<p><code>access-file</code>, <code>add-name-to-file</code>,
-<code>byte-compiler-base-file-name</code>,<br>
-<code>copy-directory</code>, <code>copy-file</code>,
-<code>delete-directory</code>, <code>delete-file</code>,
-<code>diff-latest-backup-file</code>,
-<code>directory-file-name</code>,
-<code>directory-files</code>,
-<code>directory-files-and-attributes</code>,
-<code>dired-compress-file</code>, <code>dired-uncache</code>,<br>
-<code>expand-file-name</code>,
-<code>file-accessible-directory-p</code>,
-<code>file-acl</code>,
-<code>file-attributes</code>,
-<code>file-directory-p</code>,
-<code>file-equal-p</code>,
-<code>file-executable-p</code>, <code>file-exists-p</code>,
-<code>file-in-directory-p</code>,
-<code>file-local-copy</code>,
-<code>file-modes</code>, <code>file-name-all-completions</code>,
-<code>file-name-as-directory</code>,
-<code>file-name-completion</code>,
-<code>file-name-directory</code>,
-<code>file-name-nondirectory</code>,
-<code>file-name-sans-versions</code>, <code>file-newer-than-file-p</code>,
-<code>file-notify-add-watch</code>, <code>file-notify-rm-watch</code>,
-<code>file-notify-valid-p</code>,
-<code>file-ownership-preserved-p</code>,
-<code>file-readable-p</code>, <code>file-regular-p</code>,
-<code>file-remote-p</code>, <code>file-selinux-context</code>,
-<code>file-symlink-p</code>, <code>file-truename</code>, <code>file-writable-p</code>,
-<code>find-backup-file-name</code>,
-<code>get-file-buffer</code>,
-<code>insert-directory</code>,
-<code>insert-file-contents</code>,<br>
-<code>load</code>,
-<code>make-auto-save-file-name</code>,
-<code>make-directory</code>,
-<code>make-directory-internal</code>,
-<code>make-symbolic-link</code>,<br>
-<code>process-file</code>,
-<code>rename-file</code>, <code>set-file-acl</code>, <code>set-file-modes</code>,
-<code>set-file-selinux-context</code>, <code>set-file-times</code>,
-<code>set-visited-file-modtime</code>, <code>shell-command</code>,
-<code>start-file-process</code>,
-<code>substitute-in-file-name</code>,<br>
-<code>unhandled-file-name-directory</code>,
-<code>vc-registered</code>,
-<code>verify-visited-file-modtime</code>,<br>
-<code>write-region</code>.
-</p>
-<p>Handlers for <code>insert-file-contents</code> typically need to clear the
-buffer&rsquo;s modified flag, with <code>(set-buffer-modified-p nil)</code>, if the
-<var>visit</var> argument is non-<code>nil</code>.  This also has the effect of
-unlocking the buffer if it is locked.
-</p>
-<p>The handler function must handle all of the above operations, and
-possibly others to be added in the future.  It need not implement all
-these operations itself&mdash;when it has nothing special to do for a
-certain operation, it can reinvoke the primitive, to handle the
-operation in the usual way.  It should always reinvoke the primitive
-for an operation it does not recognize.  Here&rsquo;s one way to do this:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun my-file-handler (operation &amp;rest args)
-  ;; <span class="roman">First check for the specific operations</span>
+  <p>The first argument given to <var>handler</var> is the name of
+  the primitive, as a symbol; the remaining arguments are the
+  arguments that were passed to that primitive. (The first of these
+  arguments is most often the file name itself.) For example, if
+  you do this:</p>
+
+  <div class="example">
+    <pre class="example">
+(file-exists-p <var>filename</var>)
+</pre>
+  </div>
+
+  <p>and <var>filename</var> has handler <var>handler</var>, then
+  <var>handler</var> is called like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(funcall <var>handler</var> 'file-exists-p <var>filename</var>)
+</pre>
+  </div>
+
+  <p>When a function takes two or more arguments that must be file
+  names, it checks each of those names for a handler. For example,
+  if you do this:</p>
+
+  <div class="example">
+    <pre class="example">
+(expand-file-name <var>filename</var> <var>dirname</var>)
+</pre>
+  </div>
+
+  <p>then it checks for a handler for <var>filename</var> and then
+  for a handler for <var>dirname</var>. In either case, the
+  <var>handler</var> is called like this:</p>
+
+  <div class="example">
+    <pre class="example">
+(funcall <var>handler</var> 'expand-file-name <var>filename</var> <var>dirname</var>)
+</pre>
+  </div>
+
+  <p>The <var>handler</var> then needs to figure out whether to
+  handle <var>filename</var> or <var>dirname</var>.</p>
+
+  <p>If the specified file name matches more than one handler, the
+  one whose match starts last in the file name gets precedence.
+  This rule is chosen so that handlers for jobs such as
+  uncompression are handled first, before handlers for jobs such as
+  remote file access.</p>
+
+  <p>Here are the operations that a magic file name handler gets to
+  handle:</p>
+
+  <p><code>access-file</code>, <code>add-name-to-file</code>,
+  <code>byte-compiler-base-file-name</code>,<br />
+  <code>copy-directory</code>, <code>copy-file</code>,
+  <code>delete-directory</code>, <code>delete-file</code>,
+  <code>diff-latest-backup-file</code>,
+  <code>directory-file-name</code>, <code>directory-files</code>,
+  <code>directory-files-and-attributes</code>,
+  <code>dired-compress-file</code>,
+  <code>dired-uncache</code>,<br />
+  <code>expand-file-name</code>,
+  <code>file-accessible-directory-p</code>, <code>file-acl</code>,
+  <code>file-attributes</code>, <code>file-directory-p</code>,
+  <code>file-equal-p</code>, <code>file-executable-p</code>,
+  <code>file-exists-p</code>, <code>file-in-directory-p</code>,
+  <code>file-local-copy</code>, <code>file-modes</code>,
+  <code>file-name-all-completions</code>,
+  <code>file-name-as-directory</code>,
+  <code>file-name-completion</code>,
+  <code>file-name-directory</code>,
+  <code>file-name-nondirectory</code>,
+  <code>file-name-sans-versions</code>,
+  <code>file-newer-than-file-p</code>,
+  <code>file-notify-add-watch</code>,
+  <code>file-notify-rm-watch</code>,
+  <code>file-notify-valid-p</code>,
+  <code>file-ownership-preserved-p</code>,
+  <code>file-readable-p</code>, <code>file-regular-p</code>,
+  <code>file-remote-p</code>, <code>file-selinux-context</code>,
+  <code>file-symlink-p</code>, <code>file-truename</code>,
+  <code>file-writable-p</code>, <code>find-backup-file-name</code>,
+  <code>get-file-buffer</code>, <code>insert-directory</code>,
+  <code>insert-file-contents</code>,<br />
+  <code>load</code>, <code>make-auto-save-file-name</code>,
+  <code>make-directory</code>,
+  <code>make-directory-internal</code>,
+  <code>make-symbolic-link</code>,<br />
+  <code>process-file</code>, <code>rename-file</code>,
+  <code>set-file-acl</code>, <code>set-file-modes</code>,
+  <code>set-file-selinux-context</code>,
+  <code>set-file-times</code>,
+  <code>set-visited-file-modtime</code>,
+  <code>shell-command</code>, <code>start-file-process</code>,
+  <code>substitute-in-file-name</code>,<br />
+  <code>unhandled-file-name-directory</code>,
+  <code>vc-registered</code>,
+  <code>verify-visited-file-modtime</code>,<br />
+  <code>write-region</code>.</p>
+
+  <p>Handlers for <code>insert-file-contents</code> typically need
+  to clear the buffer&rsquo;s modified flag, with
+  <code>(set-buffer-modified-p nil)</code>, if the <var>visit</var>
+  argument is non-<code>nil</code>. This also has the effect of
+  unlocking the buffer if it is locked.</p>
+
+  <p>The handler function must handle all of the above operations,
+  and possibly others to be added in the future. It need not
+  implement all these operations itself&mdash;when it has nothing
+  special to do for a certain operation, it can reinvoke the
+  primitive, to handle the operation in the usual way. It should
+  always reinvoke the primitive for an operation it does not
+  recognize. Here&rsquo;s one way to do this:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defun my-file-handler (operation &amp;rest args)
+  ;; <span class=
+"roman">First check for the specific operations</span>
   ;; <span class="roman">that we have special handling for.</span>
   (cond ((eq operation 'insert-file-contents) &hellip;)
         ((eq operation 'write-region) &hellip;)
         &hellip;
-        ;; <span class="roman">Handle any operation we don&rsquo;t know about.</span>
+        ;; <span class=
+"roman">Handle any operation we don&rsquo;t know about.</span>
         (t (let ((inhibit-file-name-handlers
                   (cons 'my-file-handler
                         (and (eq inhibit-file-name-operation operation)
                              inhibit-file-name-handlers)))
                  (inhibit-file-name-operation operation))
              (apply operation args)))))
-</pre></div>
+</pre>
+  </div>
 
-<p>When a handler function decides to call the ordinary Emacs primitive for
-the operation at hand, it needs to prevent the primitive from calling
-the same handler once again, thus leading to an infinite recursion.  The
-example above shows how to do this, with the variables
-<code>inhibit-file-name-handlers</code> and
-<code>inhibit-file-name-operation</code>.  Be careful to use them exactly as
-shown above; the details are crucial for proper behavior in the case of
-multiple handlers, and for operations that have two file names that may
-each have handlers.
-</p>
-<a name="index-safe_002dmagic-_0028property_0029"></a>
-<p>Handlers that don&rsquo;t really do anything special for actual access to the
-file&mdash;such as the ones that implement completion of host names for
-remote file names&mdash;should have a non-<code>nil</code> <code>safe-magic</code>
-property.  For instance, Emacs normally protects directory names
-it finds in <code>PATH</code> from becoming magic, if they look like magic
-file names, by prefixing them with &lsquo;<samp>/:</samp>&rsquo;.  But if the handler that
-would be used for them has a non-<code>nil</code> <code>safe-magic</code>
-property, the &lsquo;<samp>/:</samp>&rsquo; is not added.
-</p>
-<a name="index-operations-_0028property_0029"></a>
-<p>A file name handler can have an <code>operations</code> property to
-declare which operations it handles in a nontrivial way.  If this
-property has a non-<code>nil</code> value, it should be a list of
-operations; then only those operations will call the handler.  This
-avoids inefficiency, but its main purpose is for autoloaded handler
-functions, so that they won&rsquo;t be loaded except when they have real
-work to do.
-</p>
-<p>Simply deferring all operations to the usual primitives does not
-work.  For instance, if the file name handler applies to
-<code>file-exists-p</code>, then it must handle <code>load</code> itself, because
-the usual <code>load</code> code won&rsquo;t work properly in that case.  However,
-if the handler uses the <code>operations</code> property to say it doesn&rsquo;t
-handle <code>file-exists-p</code>, then it need not handle <code>load</code>
-nontrivially.
-</p>
-<dl>
-<dt><a name="index-inhibit_002dfile_002dname_002dhandlers"></a>Variable: <strong>inhibit-file-name-handlers</strong></dt>
-<dd><p>This variable holds a list of handlers whose use is presently inhibited
-for a certain operation.
-</p></dd></dl>
+  <p>When a handler function decides to call the ordinary Emacs
+  primitive for the operation at hand, it needs to prevent the
+  primitive from calling the same handler once again, thus leading
+  to an infinite recursion. The example above shows how to do this,
+  with the variables <code>inhibit-file-name-handlers</code> and
+  <code>inhibit-file-name-operation</code>. Be careful to use them
+  exactly as shown above; the details are crucial for proper
+  behavior in the case of multiple handlers, and for operations
+  that have two file names that may each have handlers.</p><a name=
+  "index-safe_002dmagic-_0028property_0029" id=
+  "index-safe_002dmagic-_0028property_0029"></a>
 
-<dl>
-<dt><a name="index-inhibit_002dfile_002dname_002doperation"></a>Variable: <strong>inhibit-file-name-operation</strong></dt>
-<dd><p>The operation for which certain handlers are presently inhibited.
-</p></dd></dl>
+  <p>Handlers that don&rsquo;t really do anything special for
+  actual access to the file&mdash;such as the ones that implement
+  completion of host names for remote file names&mdash;should have
+  a non-<code>nil</code> <code>safe-magic</code> property. For
+  instance, Emacs normally protects directory names it finds in
+  <code>PATH</code> from becoming magic, if they look like magic
+  file names, by prefixing them with &lsquo;<samp>/:</samp>&rsquo;.
+  But if the handler that would be used for them has a
+  non-<code>nil</code> <code>safe-magic</code> property, the
+  &lsquo;<samp>/:</samp>&rsquo; is not added.</p><a name=
+  "index-operations-_0028property_0029" id=
+  "index-operations-_0028property_0029"></a>
 
-<dl>
-<dt><a name="index-find_002dfile_002dname_002dhandler"></a>Function: <strong>find-file-name-handler</strong> <em>file operation</em></dt>
-<dd><p>This function returns the handler function for file name <var>file</var>,
-or <code>nil</code> if there is none.  The argument <var>operation</var> should
-be the operation to be performed on the file&mdash;the value you will pass
-to the handler as its first argument when you call it.  If
-<var>operation</var> equals <code>inhibit-file-name-operation</code>, or if it is
-not found in the <code>operations</code> property of the handler, this
-function returns <code>nil</code>.
-</p></dd></dl>
+  <p>A file name handler can have an <code>operations</code>
+  property to declare which operations it handles in a nontrivial
+  way. If this property has a non-<code>nil</code> value, it should
+  be a list of operations; then only those operations will call the
+  handler. This avoids inefficiency, but its main purpose is for
+  autoloaded handler functions, so that they won&rsquo;t be loaded
+  except when they have real work to do.</p>
 
-<dl>
-<dt><a name="index-file_002dlocal_002dcopy"></a>Function: <strong>file-local-copy</strong> <em>filename</em></dt>
-<dd><p>This function copies file <var>filename</var> to an ordinary non-magic file
-on the local machine, if it isn&rsquo;t on the local machine already.  Magic
-file names should handle the <code>file-local-copy</code> operation if they
-refer to files on other machines.  A magic file name that is used for
-other purposes than remote file access should not handle
-<code>file-local-copy</code>; then this function will treat the file as
-local.
-</p>
-<p>If <var>filename</var> is local, whether magic or not, this function does
-nothing and returns <code>nil</code>.  Otherwise it returns the file name
-of the local copy file.
-</p></dd></dl>
+  <p>Simply deferring all operations to the usual primitives does
+  not work. For instance, if the file name handler applies to
+  <code>file-exists-p</code>, then it must handle <code>load</code>
+  itself, because the usual <code>load</code> code won&rsquo;t work
+  properly in that case. However, if the handler uses the
+  <code>operations</code> property to say it doesn&rsquo;t handle
+  <code>file-exists-p</code>, then it need not handle
+  <code>load</code> nontrivially.</p>
 
-<dl>
-<dt><a name="index-file_002dremote_002dp"></a>Function: <strong>file-remote-p</strong> <em>filename &amp;optional identification connected</em></dt>
-<dd><p>This function tests whether <var>filename</var> is a remote file.  If
-<var>filename</var> is local (not remote), the return value is <code>nil</code>.
-If <var>filename</var> is indeed remote, the return value is a string that
-identifies the remote system.
-</p>
-<p>This identifier string can include a host name and a user name, as
-well as characters designating the method used to access the remote
-system.  For example, the remote identifier string for the filename
-<code>/sudo::/some/file</code> is <code>/sudo:root@localhost:</code>.
-</p>
-<p>If <code>file-remote-p</code> returns the same identifier for two different
-filenames, that means they are stored on the same file system and can
-be accessed locally with respect to each other.  This means, for
-example, that it is possible to start a remote process accessing both
-files at the same time.  Implementers of file handlers need to ensure
-this principle is valid.
-</p>
-<p><var>identification</var> specifies which part of the identifier shall be
-returned as string.  <var>identification</var> can be the symbol
-<code>method</code>, <code>user</code> or <code>host</code>; any other value is handled
-like <code>nil</code> and means to return the complete identifier string.
-In the example above, the remote <code>user</code> identifier string would
-be <code>root</code>.
-</p>
-<p>If <var>connected</var> is non-<code>nil</code>, this function returns <code>nil</code>
-even if <var>filename</var> is remote, if Emacs has no network connection
-to its host.  This is useful when you want to avoid the delay of
-making connections when they don&rsquo;t exist.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-inhibit_002dfile_002dname_002dhandlers" id=
+    "index-inhibit_002dfile_002dname_002dhandlers"></a>Variable:
+    <strong>inhibit-file-name-handlers</strong></dt>
 
-<dl>
-<dt><a name="index-unhandled_002dfile_002dname_002ddirectory"></a>Function: <strong>unhandled-file-name-directory</strong> <em>filename</em></dt>
-<dd><p>This function returns the name of a directory that is not magic.  For
-a non-magic <var>filename</var> it returns the corresponding directory name
-(see <a href="Directory-Names.html#Directory-Names">Directory Names</a>).  For a magic <var>filename</var>, it invokes the
-file name handler, which therefore decides what value to return.  If
-<var>filename</var> is not accessible from a local process, then the file
-name handler should indicate that by returning <code>nil</code>.
-</p>
-<p>This is useful for running a subprocess; every subprocess must have a
-non-magic directory to serve as its current directory, and this function
-is a good way to come up with one.
-</p></dd></dl>
+    <dd>
+      <p>This variable holds a list of handlers whose use is
+      presently inhibited for a certain operation.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-remote_002dfile_002dname_002dinhibit_002dcache"></a>User Option: <strong>remote-file-name-inhibit-cache</strong></dt>
-<dd><p>The attributes of remote files can be cached for better performance.  If
-they are changed outside of Emacs&rsquo;s control, the cached values become
-invalid, and must be reread.
-</p>
-<p>When this variable is set to <code>nil</code>, cached values are never
-expired.  Use this setting with caution, only if you are sure nothing
-other than Emacs ever changes the remote files.  If it is set to
-<code>t</code>, cached values are never used.  This is the safest value, but
-could result in performance degradation.
-</p>
-<p>A compromise is to set it to a positive number.  This means that
-cached values are used for that amount of seconds since they were
-cached.  If a remote file is checked regularly, it might be a good
-idea to let-bind this variable to a value less than the time period
-between consecutive checks.  For example:
-</p>
-<div class="example">
-<pre class="example">(defun display-time-file-nonempty-p (file)
+  <dl>
+    <dt><a name="index-inhibit_002dfile_002dname_002doperation" id=
+    "index-inhibit_002dfile_002dname_002doperation"></a>Variable:
+    <strong>inhibit-file-name-operation</strong></dt>
+
+    <dd>
+      <p>The operation for which certain handlers are presently
+      inhibited.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-find_002dfile_002dname_002dhandler" id=
+    "index-find_002dfile_002dname_002dhandler"></a>Function:
+    <strong>find-file-name-handler</strong> <em>file
+    operation</em></dt>
+
+    <dd>
+      <p>This function returns the handler function for file name
+      <var>file</var>, or <code>nil</code> if there is none. The
+      argument <var>operation</var> should be the operation to be
+      performed on the file&mdash;the value you will pass to the
+      handler as its first argument when you call it. If
+      <var>operation</var> equals
+      <code>inhibit-file-name-operation</code>, or if it is not
+      found in the <code>operations</code> property of the handler,
+      this function returns <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-file_002dlocal_002dcopy" id=
+    "index-file_002dlocal_002dcopy"></a>Function:
+    <strong>file-local-copy</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This function copies file <var>filename</var> to an
+      ordinary non-magic file on the local machine, if it
+      isn&rsquo;t on the local machine already. Magic file names
+      should handle the <code>file-local-copy</code> operation if
+      they refer to files on other machines. A magic file name that
+      is used for other purposes than remote file access should not
+      handle <code>file-local-copy</code>; then this function will
+      treat the file as local.</p>
+
+      <p>If <var>filename</var> is local, whether magic or not,
+      this function does nothing and returns <code>nil</code>.
+      Otherwise it returns the file name of the local copy
+      file.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-file_002dremote_002dp" id=
+    "index-file_002dremote_002dp"></a>Function:
+    <strong>file-remote-p</strong> <em>filename &amp;optional
+    identification connected</em></dt>
+
+    <dd>
+      <p>This function tests whether <var>filename</var> is a
+      remote file. If <var>filename</var> is local (not remote),
+      the return value is <code>nil</code>. If <var>filename</var>
+      is indeed remote, the return value is a string that
+      identifies the remote system.</p>
+
+      <p>This identifier string can include a host name and a user
+      name, as well as characters designating the method used to
+      access the remote system. For example, the remote identifier
+      string for the filename <code>/sudo::/some/file</code> is
+      <code>/sudo:root@localhost:</code>.</p>
+
+      <p>If <code>file-remote-p</code> returns the same identifier
+      for two different filenames, that means they are stored on
+      the same file system and can be accessed locally with respect
+      to each other. This means, for example, that it is possible
+      to start a remote process accessing both files at the same
+      time. Implementers of file handlers need to ensure this
+      principle is valid.</p>
+
+      <p><var>identification</var> specifies which part of the
+      identifier shall be returned as string.
+      <var>identification</var> can be the symbol
+      <code>method</code>, <code>user</code> or <code>host</code>;
+      any other value is handled like <code>nil</code> and means to
+      return the complete identifier string. In the example above,
+      the remote <code>user</code> identifier string would be
+      <code>root</code>.</p>
+
+      <p>If <var>connected</var> is non-<code>nil</code>, this
+      function returns <code>nil</code> even if <var>filename</var>
+      is remote, if Emacs has no network connection to its host.
+      This is useful when you want to avoid the delay of making
+      connections when they don&rsquo;t exist.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-unhandled_002dfile_002dname_002ddirectory"
+    id=
+    "index-unhandled_002dfile_002dname_002ddirectory"></a>Function:
+    <strong>unhandled-file-name-directory</strong>
+    <em>filename</em></dt>
+
+    <dd>
+      <p>This function returns the name of a directory that is not
+      magic. For a non-magic <var>filename</var> it returns the
+      corresponding directory name (see <a href=
+      "Directory-Names.html#Directory-Names">Directory Names</a>).
+      For a magic <var>filename</var>, it invokes the file name
+      handler, which therefore decides what value to return. If
+      <var>filename</var> is not accessible from a local process,
+      then the file name handler should indicate that by returning
+      <code>nil</code>.</p>
+
+      <p>This is useful for running a subprocess; every subprocess
+      must have a non-magic directory to serve as its current
+      directory, and this function is a good way to come up with
+      one.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-remote_002dfile_002dname_002dinhibit_002dcache" id=
+    "index-remote_002dfile_002dname_002dinhibit_002dcache"></a>User
+    Option: <strong>remote-file-name-inhibit-cache</strong></dt>
+
+    <dd>
+      <p>The attributes of remote files can be cached for better
+      performance. If they are changed outside of Emacs&rsquo;s
+      control, the cached values become invalid, and must be
+      reread.</p>
+
+      <p>When this variable is set to <code>nil</code>, cached
+      values are never expired. Use this setting with caution, only
+      if you are sure nothing other than Emacs ever changes the
+      remote files. If it is set to <code>t</code>, cached values
+      are never used. This is the safest value, but could result in
+      performance degradation.</p>
+
+      <p>A compromise is to set it to a positive number. This means
+      that cached values are used for that amount of seconds since
+      they were cached. If a remote file is checked regularly, it
+      might be a good idea to let-bind this variable to a value
+      less than the time period between consecutive checks. For
+      example:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun display-time-file-nonempty-p (file)
   (let ((remote-file-name-inhibit-cache
          (- display-time-interval 5)))
     (and (file-exists-p file)
          (&lt; 0 (nth 7 (file-attributes
                        (file-chase-links file)))))))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Format-Conversion.html#Format-Conversion" accesskey="n" rel="next">Format Conversion</a>, Previous: <a href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs" accesskey="p" rel="prev">Create/Delete Dirs</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Format-Conversion.html#Format-Conversion"
+    accesskey="n" rel="next">Format Conversion</a>, Previous:
+    <a href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs"
+    accesskey="p" rel="prev">Create/Delete Dirs</a>, Up: <a href=
+    "Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

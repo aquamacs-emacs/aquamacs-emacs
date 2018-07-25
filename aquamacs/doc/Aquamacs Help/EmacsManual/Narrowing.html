@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,137 +20,198 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Narrowing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Narrowing">
-<meta name="keywords" content="GNU Emacs Manual: Narrowing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="View-Mode.html#View-Mode" rel="next" title="View Mode">
-<link href="Horizontal-Scrolling.html#Horizontal-Scrolling" rel="prev" title="Horizontal Scrolling">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Narrowing</title>
+  <meta name="description" content="GNU Emacs Manual: Narrowing" />
+  <meta name="keywords" content="GNU Emacs Manual: Narrowing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="View-Mode.html#View-Mode" rel="next" title=
+  "View Mode" />
+  <link href="Horizontal-Scrolling.html#Horizontal-Scrolling" rel=
+  "prev" title="Horizontal Scrolling" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Narrowing" id="Narrowing"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="View-Mode.html#View-Mode" accesskey="n" rel=
+    "next">View Mode</a>, Previous: <a href=
+    "Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="p"
+    rel="prev">Horizontal Scrolling</a>, Up: <a href=
+    "Display.html#Display" accesskey="u" rel="up">Display</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Narrowing-1" id="Narrowing-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Narrowing"></a>
-<div class="header">
-<p>
-Next: <a href="View-Mode.html#View-Mode" accesskey="n" rel="next">View Mode</a>, Previous: <a href="Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="p" rel="prev">Horizontal Scrolling</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Narrowing-1"></a>
-<h3 class="section">14.5 Narrowing</h3>
-<a name="index-widening"></a>
-<a name="index-restriction"></a>
-<a name="index-narrowing"></a>
-<a name="index-accessible-portion"></a>
+  <h3 class="section">14.5 Narrowing</h3><a name="index-widening"
+  id="index-widening"></a> <a name="index-restriction" id=
+  "index-restriction"></a> <a name="index-narrowing" id=
+  "index-narrowing"></a> <a name="index-accessible-portion" id=
+  "index-accessible-portion"></a>
 
-<p><em>Narrowing</em> means focusing in on some portion of the buffer,
-making the rest temporarily inaccessible.  The portion which you can
-still get to is called the <em>accessible portion</em>.  Canceling the
-narrowing, which makes the entire buffer once again accessible, is
-called <em>widening</em>.  The bounds of narrowing in effect in a buffer
-are called the buffer&rsquo;s <em>restriction</em>.
-</p>
-<p>Narrowing can make it easier to concentrate on a single subroutine or
-paragraph by eliminating clutter.  It can also be used to limit the
-range of operation of a replace command or repeating keyboard macro.
-</p>
-<dl compact="compact">
-<dt><kbd>C-x n n</kbd></dt>
-<dd><p>Narrow down to between point and mark (<code>narrow-to-region</code>).
-</p></dd>
-<dt><kbd>C-x n w</kbd></dt>
-<dd><p>Widen to make the entire buffer accessible again (<code>widen</code>).
-</p></dd>
-<dt><kbd>C-x n p</kbd></dt>
-<dd><p>Narrow down to the current page (<code>narrow-to-page</code>).
-</p></dd>
-<dt><kbd>C-x n d</kbd></dt>
-<dd><p>Narrow down to the current defun (<code>narrow-to-defun</code>).
-</p></dd>
-</dl>
+  <p><em>Narrowing</em> means focusing in on some portion of the
+  buffer, making the rest temporarily inaccessible. The portion
+  which you can still get to is called the <em>accessible
+  portion</em>. Canceling the narrowing, which makes the entire
+  buffer once again accessible, is called <em>widening</em>. The
+  bounds of narrowing in effect in a buffer are called the
+  buffer&rsquo;s <em>restriction</em>.</p>
 
-<p>When you have narrowed down to a part of the buffer, that part appears
-to be all there is.  You can&rsquo;t see the rest, you can&rsquo;t move into it
-(motion commands won&rsquo;t go outside the accessible part), you can&rsquo;t change
-it in any way.  However, it is not gone, and if you save the file all
-the inaccessible text will be saved.  The word &lsquo;<samp>Narrow</samp>&rsquo; appears in
-the mode line whenever narrowing is in effect.
-</p>
-<a name="index-C_002dx-n-n"></a>
-<a name="index-narrow_002dto_002dregion"></a>
-<p>The primary narrowing command is <kbd>C-x n n</kbd> (<code>narrow-to-region</code>).
-It sets the current buffer&rsquo;s restrictions so that the text in the current
-region remains accessible, but all text before the region or after the
-region is inaccessible.  Point and mark do not change.
-</p>
-<a name="index-C_002dx-n-p"></a>
-<a name="index-narrow_002dto_002dpage"></a>
-<a name="index-C_002dx-n-d"></a>
-<a name="index-narrow_002dto_002ddefun"></a>
-<p>Alternatively, use <kbd>C-x n p</kbd> (<code>narrow-to-page</code>) to narrow
-down to the current page.  See <a href="Pages.html#Pages">Pages</a>, for the definition of a page.
-<kbd>C-x n d</kbd> (<code>narrow-to-defun</code>) narrows down to the defun
-containing point (see <a href="Defuns.html#Defuns">Defuns</a>).
-</p>
-<a name="index-C_002dx-n-w"></a>
-<a name="index-widen"></a>
-<p>The way to cancel narrowing is to widen with <kbd>C-x n w</kbd>
-(<code>widen</code>).  This makes all text in the buffer accessible again.
-</p>
-<p>You can get information on what part of the buffer you are narrowed down
-to using the <kbd>C-x =</kbd> command.  See <a href="Position-Info.html#Position-Info">Position Info</a>.
-</p>
-<p>Because narrowing can easily confuse users who do not understand it,
-<code>narrow-to-region</code> is normally a disabled command.  Attempting to use
-this command asks for confirmation and gives you the option of enabling it;
-if you enable the command, confirmation will no longer be required for
-it.  See <a href="Disabling.html#Disabling">Disabling</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="View-Mode.html#View-Mode" accesskey="n" rel="next">View Mode</a>, Previous: <a href="Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="p" rel="prev">Horizontal Scrolling</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Narrowing can make it easier to concentrate on a single
+  subroutine or paragraph by eliminating clutter. It can also be
+  used to limit the range of operation of a replace command or
+  repeating keyboard macro.</p>
 
+  <dl compact="compact">
+    <dt><kbd>C-x n n</kbd></dt>
 
+    <dd>
+      <p>Narrow down to between point and mark
+      (<code>narrow-to-region</code>).</p>
+    </dd>
 
+    <dt><kbd>C-x n w</kbd></dt>
+
+    <dd>
+      <p>Widen to make the entire buffer accessible again
+      (<code>widen</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x n p</kbd></dt>
+
+    <dd>
+      <p>Narrow down to the current page
+      (<code>narrow-to-page</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x n d</kbd></dt>
+
+    <dd>
+      <p>Narrow down to the current defun
+      (<code>narrow-to-defun</code>).</p>
+    </dd>
+  </dl>
+
+  <p>When you have narrowed down to a part of the buffer, that part
+  appears to be all there is. You can&rsquo;t see the rest, you
+  can&rsquo;t move into it (motion commands won&rsquo;t go outside
+  the accessible part), you can&rsquo;t change it in any way.
+  However, it is not gone, and if you save the file all the
+  inaccessible text will be saved. The word
+  &lsquo;<samp>Narrow</samp>&rsquo; appears in the mode line
+  whenever narrowing is in effect.</p><a name="index-C_002dx-n-n"
+  id="index-C_002dx-n-n"></a> <a name=
+  "index-narrow_002dto_002dregion" id=
+  "index-narrow_002dto_002dregion"></a>
+
+  <p>The primary narrowing command is <kbd>C-x n n</kbd>
+  (<code>narrow-to-region</code>). It sets the current
+  buffer&rsquo;s restrictions so that the text in the current
+  region remains accessible, but all text before the region or
+  after the region is inaccessible. Point and mark do not
+  change.</p><a name="index-C_002dx-n-p" id=
+  "index-C_002dx-n-p"></a> <a name="index-narrow_002dto_002dpage"
+  id="index-narrow_002dto_002dpage"></a> <a name=
+  "index-C_002dx-n-d" id="index-C_002dx-n-d"></a> <a name=
+  "index-narrow_002dto_002ddefun" id=
+  "index-narrow_002dto_002ddefun"></a>
+
+  <p>Alternatively, use <kbd>C-x n p</kbd>
+  (<code>narrow-to-page</code>) to narrow down to the current page.
+  See <a href="Pages.html#Pages">Pages</a>, for the definition of a
+  page. <kbd>C-x n d</kbd> (<code>narrow-to-defun</code>) narrows
+  down to the defun containing point (see <a href=
+  "Defuns.html#Defuns">Defuns</a>).</p><a name="index-C_002dx-n-w"
+  id="index-C_002dx-n-w"></a> <a name="index-widen" id=
+  "index-widen"></a>
+
+  <p>The way to cancel narrowing is to widen with <kbd>C-x n
+  w</kbd> (<code>widen</code>). This makes all text in the buffer
+  accessible again.</p>
+
+  <p>You can get information on what part of the buffer you are
+  narrowed down to using the <kbd>C-x =</kbd> command. See <a href=
+  "Position-Info.html#Position-Info">Position Info</a>.</p>
+
+  <p>Because narrowing can easily confuse users who do not
+  understand it, <code>narrow-to-region</code> is normally a
+  disabled command. Attempting to use this command asks for
+  confirmation and gives you the option of enabling it; if you
+  enable the command, confirmation will no longer be required for
+  it. See <a href="Disabling.html#Disabling">Disabling</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="View-Mode.html#View-Mode" accesskey="n" rel=
+    "next">View Mode</a>, Previous: <a href=
+    "Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="p"
+    rel="prev">Horizontal Scrolling</a>, Up: <a href=
+    "Display.html#Display" accesskey="u" rel="up">Display</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

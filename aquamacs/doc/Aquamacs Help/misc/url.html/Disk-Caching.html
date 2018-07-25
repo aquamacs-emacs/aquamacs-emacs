@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the manual for the url Emacs Lisp library.
 
 Copyright (C) 1993-1999, 2002, 2004-2016 Free Software
@@ -15,149 +17,239 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>URL Programmer&rsquo;s Manual: Disk Caching</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="URL Programmer&rsquo;s Manual: Disk Caching">
-<meta name="keywords" content="URL Programmer&rsquo;s Manual: Disk Caching">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="General-Facilities.html#General-Facilities" rel="up" title="General Facilities">
-<link href="Proxies.html#Proxies" rel="next" title="Proxies">
-<link href="General-Facilities.html#General-Facilities" rel="prev" title="General Facilities">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>URL Programmer&rsquo;s Manual: Disk Caching</title>
+  <meta name="description" content=
+  "URL Programmer&rsquo;s Manual: Disk Caching" />
+  <meta name="keywords" content=
+  "URL Programmer&rsquo;s Manual: Disk Caching" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="General-Facilities.html#General-Facilities" rel="up"
+  title="General Facilities" />
+  <link href="Proxies.html#Proxies" rel="next" title="Proxies" />
+  <link href="General-Facilities.html#General-Facilities" rel=
+  "prev" title="General Facilities" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Disk-Caching"></a>
-<div class="header">
-<p>
-Next: <a href="Proxies.html#Proxies" accesskey="n" rel="next">Proxies</a>, Up: <a href="General-Facilities.html#General-Facilities" accesskey="u" rel="up">General Facilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Disk-Caching-1"></a>
-<h3 class="section">5.1 Disk Caching</h3>
-<a name="index-Caching"></a>
-<a name="index-Persistent-Cache"></a>
-<a name="index-Disk-Cache"></a>
+<body lang="en" xml:lang="en">
+  <a name="Disk-Caching" id="Disk-Caching"></a>
 
-<p>The disk cache stores retrieved documents locally, whence they can be
-retrieved more quickly.  When requesting a URL that is in the cache,
-the library checks to see if the page has changed since it was last
-retrieved from the remote machine.  If not, the local copy is used,
-saving the transmission over the network.
-<a name="index-Cleaning-the-cache"></a>
-<a name="index-Clearing-the-cache"></a>
-<a name="index-Cache-cleaning"></a>
-Currently the cache isn&rsquo;t cleared automatically.
-</p>
-<dl>
-<dt><a name="index-url_002dautomatic_002dcaching"></a>User Option: <strong>url-automatic-caching</strong></dt>
-<dd><p>Setting this variable non-<code>nil</code> causes documents to be cached
-automatically.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Proxies.html#Proxies" accesskey="n" rel=
+    "next">Proxies</a>, Up: <a href=
+    "General-Facilities.html#General-Facilities" accesskey="u" rel=
+    "up">General Facilities</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Disk-Caching-1" id="Disk-Caching-1"></a>
 
-<dl>
-<dt><a name="index-url_002dcache_002ddirectory"></a>User Option: <strong>url-cache-directory</strong></dt>
-<dd><p>This variable specifies the
-directory to store the cache files.  It defaults to sub-directory
-<samp>cache</samp> of <code>url-configuration-directory</code>.
-</p></dd></dl>
+  <h3 class="section">5.1 Disk Caching</h3><a name="index-Caching"
+  id="index-Caching"></a> <a name="index-Persistent-Cache" id=
+  "index-Persistent-Cache"></a> <a name="index-Disk-Cache" id=
+  "index-Disk-Cache"></a>
 
-<dl>
-<dt><a name="index-url_002dcache_002dcreation_002dfunction"></a>User Option: <strong>url-cache-creation-function</strong></dt>
-<dd><p>The cache relies on a scheme for mapping URLs to files in the cache.
-This variable names a function which sets the type of cache to use.
-It takes a URL as argument and returns the absolute file name of the
-corresponding cache file.  The two supplied possibilities are
-<code>url-cache-create-filename-using-md5</code> and
-<code>url-cache-create-filename-human-readable</code>.
-</p></dd></dl>
+  <p>The disk cache stores retrieved documents locally, whence they
+  can be retrieved more quickly. When requesting a URL that is in
+  the cache, the library checks to see if the page has changed
+  since it was last retrieved from the remote machine. If not, the
+  local copy is used, saving the transmission over the network.
+  <a name="index-Cleaning-the-cache" id=
+  "index-Cleaning-the-cache"></a> <a name=
+  "index-Clearing-the-cache" id="index-Clearing-the-cache"></a>
+  <a name="index-Cache-cleaning" id="index-Cache-cleaning"></a>
+  Currently the cache isn&rsquo;t cleared automatically.</p>
 
-<dl>
-<dt><a name="index-url_002dcache_002dcreate_002dfilename_002dusing_002dmd5"></a>Function: <strong>url-cache-create-filename-using-md5</strong> <em>url</em></dt>
-<dd><p>Creates a cache file name from <var>url</var> using MD5 hashing.
-This is creates entries with very few cache collisions and is fast.
-<a name="index-MD5"></a>
-</p><div class="smallexample">
-<pre class="smallexample">(url-cache-create-filename-using-md5 &quot;http://www.example.com/foo/bar&quot;)
-  &rArr; &quot;/home/fx/.url/cache/fx/http/com/example/www/b8a35774ad20db71c7c3409a5410e74f&quot;
-</pre></div>
-</dd></dl>
+  <dl>
+    <dt><a name="index-url_002dautomatic_002dcaching" id=
+    "index-url_002dautomatic_002dcaching"></a>User Option:
+    <strong>url-automatic-caching</strong></dt>
 
-<dl>
-<dt><a name="index-url_002dcache_002dcreate_002dfilename_002dhuman_002dreadable"></a>Function: <strong>url-cache-create-filename-human-readable</strong> <em>url</em></dt>
-<dd><p>Creates a cache file name from <var>url</var> more obviously connected to
-<var>url</var> than for <code>url-cache-create-filename-using-md5</code>, but
-more likely to conflict with other files.
-</p><div class="smallexample">
-<pre class="smallexample">(url-cache-create-filename-human-readable &quot;http://www.example.com/foo/bar&quot;)
-  &rArr; &quot;/home/fx/.url/cache/fx/http/com/example/www/foo/bar&quot;
-</pre></div>
-</dd></dl>
+    <dd>
+      <p>Setting this variable non-<code>nil</code> causes
+      documents to be cached automatically.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-url_002dcache_002dexpired"></a>Function: <strong>url-cache-expired</strong></dt>
-<dd><p>This function returns non-<code>nil</code> if a cache entry has expired (or is absent).
-The arguments are a URL and optional expiration delay in seconds
-(default <var>url-cache-expire-time</var>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-url_002dcache_002ddirectory" id=
+    "index-url_002dcache_002ddirectory"></a>User Option:
+    <strong>url-cache-directory</strong></dt>
 
-<dl>
-<dt><a name="index-url_002dcache_002dexpire_002dtime"></a>User Option: <strong>url-cache-expire-time</strong></dt>
-<dd><p>This variable is the default number of seconds to use for the
-expire-time argument of the function <code>url-cache-expired</code>.
-</p></dd></dl>
+    <dd>
+      <p>This variable specifies the directory to store the cache
+      files. It defaults to sub-directory <samp>cache</samp> of
+      <code>url-configuration-directory</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-url_002dfetch_002dfrom_002dcache"></a>Function: <strong>url-fetch-from-cache</strong></dt>
-<dd><p>This function takes a URL as its argument and returns a buffer
-containing the data cached for that URL.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-url_002dcache_002dcreation_002dfunction" id=
+    "index-url_002dcache_002dcreation_002dfunction"></a>User
+    Option: <strong>url-cache-creation-function</strong></dt>
 
+    <dd>
+      <p>The cache relies on a scheme for mapping URLs to files in
+      the cache. This variable names a function which sets the type
+      of cache to use. It takes a URL as argument and returns the
+      absolute file name of the corresponding cache file. The two
+      supplied possibilities are
+      <code>url-cache-create-filename-using-md5</code> and
+      <code>url-cache-create-filename-human-readable</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-url_002dcache_002dcreate_002dfilename_002dusing_002dmd5"
+    id=
+    "index-url_002dcache_002dcreate_002dfilename_002dusing_002dmd5">
+    </a>Function:
+    <strong>url-cache-create-filename-using-md5</strong>
+    <em>url</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Proxies.html#Proxies" accesskey="n" rel="next">Proxies</a>, Up: <a href="General-Facilities.html#General-Facilities" accesskey="u" rel="up">General Facilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Creates a cache file name from <var>url</var> using MD5
+      hashing. This is creates entries with very few cache
+      collisions and is fast. <a name="index-MD5" id=
+      "index-MD5"></a></p>
 
+      <div class="smallexample">
+        <pre class="smallexample">
+(url-cache-create-filename-using-md5 "http://www.example.com/foo/bar")
+  &rArr; "/home/fx/.url/cache/fx/http/com/example/www/b8a35774ad20db71c7c3409a5410e74f"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-url_002dcache_002dcreate_002dfilename_002dhuman_002dreadable"
+    id=
+    "index-url_002dcache_002dcreate_002dfilename_002dhuman_002dreadable">
+    </a>Function:
+    <strong>url-cache-create-filename-human-readable</strong>
+    <em>url</em></dt>
 
+    <dd>
+      <p>Creates a cache file name from <var>url</var> more
+      obviously connected to <var>url</var> than for
+      <code>url-cache-create-filename-using-md5</code>, but more
+      likely to conflict with other files.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(url-cache-create-filename-human-readable "http://www.example.com/foo/bar")
+  &rArr; "/home/fx/.url/cache/fx/http/com/example/www/foo/bar"
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-url_002dcache_002dexpired" id=
+    "index-url_002dcache_002dexpired"></a>Function:
+    <strong>url-cache-expired</strong></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if a cache
+      entry has expired (or is absent). The arguments are a URL and
+      optional expiration delay in seconds (default
+      <var>url-cache-expire-time</var>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-url_002dcache_002dexpire_002dtime" id=
+    "index-url_002dcache_002dexpire_002dtime"></a>User Option:
+    <strong>url-cache-expire-time</strong></dt>
+
+    <dd>
+      <p>This variable is the default number of seconds to use for
+      the expire-time argument of the function
+      <code>url-cache-expired</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-url_002dfetch_002dfrom_002dcache" id=
+    "index-url_002dfetch_002dfrom_002dcache"></a>Function:
+    <strong>url-fetch-from-cache</strong></dt>
+
+    <dd>
+      <p>This function takes a URL as its argument and returns a
+      buffer containing the data cached for that URL.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Proxies.html#Proxies" accesskey="n" rel=
+    "next">Proxies</a>, Up: <a href=
+    "General-Facilities.html#General-Facilities" accesskey="u" rel=
+    "up">General Facilities</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

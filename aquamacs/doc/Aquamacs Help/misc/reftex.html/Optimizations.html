@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,209 +18,301 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Optimizations</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Optimizations">
-<meta name="keywords" content="RefTeX User Manual: Optimizations">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="AUCTeX.html#AUCTeX" rel="next" title="AUCTeX">
-<link href="Finding-Files.html#Finding-Files" rel="prev" title="Finding Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Optimizations</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Optimizations" />
+  <meta name="keywords" content=
+  "RefTeX User Manual: Optimizations" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="AUCTeX.html#AUCTeX" rel="next" title="AUCTeX" />
+  <link href="Finding-Files.html#Finding-Files" rel="prev" title=
+  "Finding Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  p.c1 {font-weight: bold}
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Optimizations"></a>
-<div class="header">
-<p>
-Next: <a href="AUCTeX.html#AUCTeX" accesskey="n" rel="next">AUCTeX</a>, Previous: <a href="Finding-Files.html#Finding-Files" accesskey="p" rel="prev">Finding Files</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Optimizations-1"></a>
-<h2 class="chapter">13 Optimizations</h2>
-<a name="index-Optimizations"></a>
+<body lang="en" xml:lang="en">
+  <a name="Optimizations" id="Optimizations"></a>
 
-<p><b>Note added 2002.  Computers have gotten a lot faster, so most of the
-optimizations discussed below will not be necessary on new machines.  I
-am leaving this stuff in the manual for people who want to write thick
-books, where some of it still might be useful.</b>
-</p>
-<p>Implementing the principle of least surprises, the default settings of
-RefTeX ensure a safe ride for beginners and casual users.  However,
-when using RefTeX for a large project and/or on a small computer,
-there are ways to improve speed or memory usage.
-</p>
-<ul>
-<li> <b>Removing Lookup Buffers</b><br>
-<a name="index-Removing-lookup-buffers"></a>
-RefTeX will load other parts of a multifile document as well as BibTeX
-database files for lookup purposes.  These buffers are kept, so that
-subsequent use of the same files is fast.  If you can&rsquo;t afford keeping
-these buffers around, and if you can live with a speed penalty, try
+  <div class="header">
+    <p>Next: <a href="AUCTeX.html#AUCTeX" accesskey="n" rel=
+    "next">AUCTeX</a>, Previous: <a href=
+    "Finding-Files.html#Finding-Files" accesskey="p" rel=
+    "prev">Finding Files</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Optimizations-1" id="Optimizations-1"></a>
 
-<a name="index-reftex_002dkeep_002dtemporary_002dbuffers"></a>
-<div class="lisp">
-<pre class="lisp">(setq reftex-keep-temporary-buffers nil)
-</pre></div>
+  <h2 class="chapter">13 Optimizations</h2><a name=
+  "index-Optimizations" id="index-Optimizations"></a>
 
-</li><li> <b>Partial Document Scans</b><br>
-<a name="index-Partial-documents-scans"></a>
-<a name="index-Document-scanning_002c-partial"></a>
-A <kbd>C-u</kbd> prefix on the major RefTeX commands <code>reftex-label</code>
-(<kbd>C-u C-c (</kbd>), <code>reftex-reference</code> (<kbd>C-u C-c )</kbd>),
-<code>reftex-citation</code> (<kbd>C-u C-c [</kbd>), <code>reftex-toc</code> (<kbd>C-u C-c
-=</kbd>), and <code>reftex-view-crossref</code> (<kbd>C-u C-c &amp;</kbd>) initiates
-re-parsing of the entire document in order to update the parsing
-information.  For a large document this can be unnecessary, in
-particular if only one file has changed.  RefTeX can be configured
-to do partial scans instead of full ones.  <kbd>C-u</kbd> re-parsing then
-does apply only to the current buffer and files included from it.
-Likewise, the <kbd>r</kbd> key in both the label selection buffer and the
-table-of-contents buffer will only prompt scanning of the file in which
-the label or section macro near the cursor was defined.  Re-parsing of
-the entire document is still available by using <kbd>C-u C-u</kbd> as a
-prefix, or the capital <kbd>R</kbd> key in the menus.  To use this feature,
-try
+  <p class="c1">Note added 2002. Computers have gotten a lot
+  faster, so most of the optimizations discussed below will not be
+  necessary on new machines. I am leaving this stuff in the manual
+  for people who want to write thick books, where some of it still
+  might be useful.</p>
 
-<a name="index-reftex_002denable_002dpartial_002dscans-3"></a>
-<div class="lisp">
-<pre class="lisp">(setq reftex-enable-partial-scans t)
-</pre></div>
+  <p>Implementing the principle of least surprises, the default
+  settings of RefTeX ensure a safe ride for beginners and casual
+  users. However, when using RefTeX for a large project and/or on a
+  small computer, there are ways to improve speed or memory
+  usage.</p>
 
-</li><li> <b>Saving Parser Information</b><br>
-<a name="index-Saving-parser-information"></a>
-<a name="index-Parse-information_002c-saving-to-a-file"></a>
-<a name="index-reftex_002dparse_002dfile_002dextension"></a>
-Even with partial scans enabled, RefTeX still has to make one full
-scan, when you start working with a document.  To avoid this, parsing
-information can be stored in a file.  The file <samp>MASTER.rel</samp> is used
-for storing information about a document with master file
-<samp>MASTER.tex</samp>.  It is written automatically when you kill a buffer
-in <code>reftex-mode</code> or when you exit Emacs.  The information is
-restored when you begin working with a document in a new editing
-session.  To use this feature, put into <samp>.emacs</samp>:
+  <ul>
+    <li>
+      <b>Removing Lookup Buffers</b><br />
+      <a name="index-Removing-lookup-buffers" id=
+      "index-Removing-lookup-buffers"></a> RefTeX will load other
+      parts of a multifile document as well as BibTeX database
+      files for lookup purposes. These buffers are kept, so that
+      subsequent use of the same files is fast. If you can&rsquo;t
+      afford keeping these buffers around, and if you can live with
+      a speed penalty, try <a name=
+      "index-reftex_002dkeep_002dtemporary_002dbuffers" id=
+      "index-reftex_002dkeep_002dtemporary_002dbuffers"></a>
 
-<a name="index-reftex_002dsave_002dparse_002dinfo"></a>
-<div class="lisp">
-<pre class="lisp">(setq reftex-save-parse-info t)
-</pre></div>
+      <div class="lisp">
+        <pre class="lisp">
+(setq reftex-keep-temporary-buffers nil)
+</pre>
+      </div>
+    </li>
 
-</li><li> <b>Identifying label types by prefix</b><br>
-<a name="index-Parse-information_002c-saving-to-a-file-1"></a>
-<a name="index-reftex_002dtrust_002dlabel_002dprefix-1"></a>
-RefTeX normally parses around each label to check in which
-environment this label is located, in order to assign a label type to
-the label.  If your document contains thousands of labels, document
-parsing will take considerable time.  If you have been using label prefixes
-like tab: and fn: consistently, you can tell RefTeX to get the
-label type directly from the prefix, without additional parsing.  This
-will be faster and also allow labels to end up in the correct category
-if for some reason it is not possible to derive the correct type from
-context.  For example, to enable this feature for footnote and
-equation labels, use
+    <li>
+      <b>Partial Document Scans</b><br />
+      <a name="index-Partial-documents-scans" id=
+      "index-Partial-documents-scans"></a> <a name=
+      "index-Document-scanning_002c-partial" id=
+      "index-Document-scanning_002c-partial"></a> A <kbd>C-u</kbd>
+      prefix on the major RefTeX commands <code>reftex-label</code>
+      (<kbd>C-u C-c (</kbd>), <code>reftex-reference</code>
+      (<kbd>C-u C-c )</kbd>), <code>reftex-citation</code>
+      (<kbd>C-u C-c [</kbd>), <code>reftex-toc</code> (<kbd>C-u C-c
+      =</kbd>), and <code>reftex-view-crossref</code> (<kbd>C-u C-c
+      &amp;</kbd>) initiates re-parsing of the entire document in
+      order to update the parsing information. For a large document
+      this can be unnecessary, in particular if only one file has
+      changed. RefTeX can be configured to do partial scans instead
+      of full ones. <kbd>C-u</kbd> re-parsing then does apply only
+      to the current buffer and files included from it. Likewise,
+      the <kbd>r</kbd> key in both the label selection buffer and
+      the table-of-contents buffer will only prompt scanning of the
+      file in which the label or section macro near the cursor was
+      defined. Re-parsing of the entire document is still available
+      by using <kbd>C-u C-u</kbd> as a prefix, or the capital
+      <kbd>R</kbd> key in the menus. To use this feature, try
+      <a name="index-reftex_002denable_002dpartial_002dscans-3" id=
+      "index-reftex_002denable_002dpartial_002dscans-3"></a>
 
-<div class="lisp">
-<pre class="lisp">(setq reftex-trust-label-prefix '(&quot;fn:&quot; &quot;eq:&quot;))
-</pre></div>
+      <div class="lisp">
+        <pre class="lisp">
+(setq reftex-enable-partial-scans t)
+</pre>
+      </div>
+    </li>
 
-</li><li> <b>Automatic Document Scans</b><br>
-<a name="index-Automatic-document-scans"></a>
-<a name="index-Document-scanning_002c-automatic"></a>
-At rare occasions, RefTeX will automatically rescan a part of the
-document.  If this gets into your way, it can be turned off with
+    <li>
+      <b>Saving Parser Information</b><br />
+      <a name="index-Saving-parser-information" id=
+      "index-Saving-parser-information"></a> <a name=
+      "index-Parse-information_002c-saving-to-a-file" id=
+      "index-Parse-information_002c-saving-to-a-file"></a> <a name=
+      "index-reftex_002dparse_002dfile_002dextension" id=
+      "index-reftex_002dparse_002dfile_002dextension"></a> Even
+      with partial scans enabled, RefTeX still has to make one full
+      scan, when you start working with a document. To avoid this,
+      parsing information can be stored in a file. The file
+      <samp>MASTER.rel</samp> is used for storing information about
+      a document with master file <samp>MASTER.tex</samp>. It is
+      written automatically when you kill a buffer in
+      <code>reftex-mode</code> or when you exit Emacs. The
+      information is restored when you begin working with a
+      document in a new editing session. To use this feature, put
+      into <samp>.emacs</samp>: <a name=
+      "index-reftex_002dsave_002dparse_002dinfo" id=
+      "index-reftex_002dsave_002dparse_002dinfo"></a>
 
-<a name="index-reftex_002dallow_002dautomatic_002drescan"></a>
-<div class="lisp">
-<pre class="lisp">(setq reftex-allow-automatic-rescan nil)
-</pre></div>
+      <div class="lisp">
+        <pre class="lisp">
+(setq reftex-save-parse-info t)
+</pre>
+      </div>
+    </li>
 
-<p>RefTeX will then occasionally annotate new labels in the selection
-buffer, saying that their position in the label list in uncertain.  A
-manual document scan will fix this.
-</p>
-</li><li> <b>Multiple Selection Buffers</b><br>
-<a name="index-Multiple-selection-buffers"></a>
-<a name="index-Selection-buffers_002c-multiple"></a>
-Normally, the selection buffer <samp>*RefTeX Select*</samp> is re-created for
-every selection process.  In documents with very many labels this can
-take several seconds.  RefTeX provides an option to create a
-separate selection buffer for each label type and to keep this buffer
-from one selection to the next.  These buffers are updated automatically
-only when a new label has been added in the buffers category with
-<code>reftex-label</code>.  Updating the buffer takes as long as recreating it
-- so the time saving is limited to cases where no new labels of that
-category have been added.  To turn on this feature, use
+    <li>
+      <b>Identifying label types by prefix</b><br />
+      <a name="index-Parse-information_002c-saving-to-a-file-1" id=
+      "index-Parse-information_002c-saving-to-a-file-1"></a>
+      <a name="index-reftex_002dtrust_002dlabel_002dprefix-1" id=
+      "index-reftex_002dtrust_002dlabel_002dprefix-1"></a> RefTeX
+      normally parses around each label to check in which
+      environment this label is located, in order to assign a label
+      type to the label. If your document contains thousands of
+      labels, document parsing will take considerable time. If you
+      have been using label prefixes like tab: and fn:
+      consistently, you can tell RefTeX to get the label type
+      directly from the prefix, without additional parsing. This
+      will be faster and also allow labels to end up in the correct
+      category if for some reason it is not possible to derive the
+      correct type from context. For example, to enable this
+      feature for footnote and equation labels, use
 
-<a name="index-reftex_002duse_002dmultiple_002dselection_002dbuffers"></a>
-<div class="lisp">
-<pre class="lisp">(setq reftex-use-multiple-selection-buffers t)
-</pre></div>
+      <div class="lisp">
+        <pre class="lisp">
+(setq reftex-trust-label-prefix '("fn:" "eq:"))
+</pre>
+      </div>
+    </li>
 
-<a name="index-Selection-buffers_002c-updating"></a>
-<p>You can also inhibit the automatic updating entirely.  Then the
-selection buffer will always pop up very fast, but may not contain the
-most recently defined labels.  You can always update the buffer by hand,
-with the <kbd>g</kbd> key.  To get this behavior, use instead
-</p>
-<a name="index-reftex_002dauto_002dupdate_002dselection_002dbuffers"></a>
-<div class="lisp">
-<pre class="lisp">(setq reftex-use-multiple-selection-buffers t
+    <li>
+      <b>Automatic Document Scans</b><br />
+      <a name="index-Automatic-document-scans" id=
+      "index-Automatic-document-scans"></a> <a name=
+      "index-Document-scanning_002c-automatic" id=
+      "index-Document-scanning_002c-automatic"></a> At rare
+      occasions, RefTeX will automatically rescan a part of the
+      document. If this gets into your way, it can be turned off
+      with <a name=
+      "index-reftex_002dallow_002dautomatic_002drescan" id=
+      "index-reftex_002dallow_002dautomatic_002drescan"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq reftex-allow-automatic-rescan nil)
+</pre>
+      </div>
+
+      <p>RefTeX will then occasionally annotate new labels in the
+      selection buffer, saying that their position in the label
+      list in uncertain. A manual document scan will fix this.</p>
+    </li>
+
+    <li>
+      <b>Multiple Selection Buffers</b><br />
+      <a name="index-Multiple-selection-buffers" id=
+      "index-Multiple-selection-buffers"></a> <a name=
+      "index-Selection-buffers_002c-multiple" id=
+      "index-Selection-buffers_002c-multiple"></a> Normally, the
+      selection buffer <samp>*RefTeX Select*</samp> is re-created
+      for every selection process. In documents with very many
+      labels this can take several seconds. RefTeX provides an
+      option to create a separate selection buffer for each label
+      type and to keep this buffer from one selection to the next.
+      These buffers are updated automatically only when a new label
+      has been added in the buffers category with
+      <code>reftex-label</code>. Updating the buffer takes as long
+      as recreating it - so the time saving is limited to cases
+      where no new labels of that category have been added. To turn
+      on this feature, use <a name=
+      "index-reftex_002duse_002dmultiple_002dselection_002dbuffers"
+      id=
+      "index-reftex_002duse_002dmultiple_002dselection_002dbuffers">
+      </a>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq reftex-use-multiple-selection-buffers t)
+</pre>
+      </div><a name="index-Selection-buffers_002c-updating" id=
+      "index-Selection-buffers_002c-updating"></a>
+
+      <p>You can also inhibit the automatic updating entirely. Then
+      the selection buffer will always pop up very fast, but may
+      not contain the most recently defined labels. You can always
+      update the buffer by hand, with the <kbd>g</kbd> key. To get
+      this behavior, use instead</p><a name=
+      "index-reftex_002dauto_002dupdate_002dselection_002dbuffers"
+      id=
+      "index-reftex_002dauto_002dupdate_002dselection_002dbuffers"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq reftex-use-multiple-selection-buffers t
       reftex-auto-update-selection-buffers nil)
-</pre></div>
-</li></ul>
+</pre>
+      </div>
+    </li>
+  </ul>
 
-<p><b>As a summary</b>, here are the settings I recommend for heavy use of
-RefTeX with large documents:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq reftex-enable-partial-scans t
+  <p><b>As a summary</b>, here are the settings I recommend for
+  heavy use of RefTeX with large documents:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq reftex-enable-partial-scans t
       reftex-save-parse-info t
       reftex-use-multiple-selection-buffers t)
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="AUCTeX.html#AUCTeX" accesskey="n" rel="next">AUCTeX</a>, Previous: <a href="Finding-Files.html#Finding-Files" accesskey="p" rel="prev">Finding Files</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="AUCTeX.html#AUCTeX" accesskey="n" rel=
+    "next">AUCTeX</a>, Previous: <a href=
+    "Finding-Files.html#Finding-Files" accesskey="p" rel=
+    "prev">Finding Files</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

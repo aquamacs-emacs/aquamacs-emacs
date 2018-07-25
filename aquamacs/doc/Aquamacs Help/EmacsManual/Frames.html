@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,146 +20,365 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Frames</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Frames">
-<meta name="keywords" content="GNU Emacs Manual: Frames">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Mouse-Commands.html#Mouse-Commands" rel="next" title="Mouse Commands">
-<link href="Window-Convenience.html#Window-Convenience" rel="prev" title="Window Convenience">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Frames</title>
+  <meta name="description" content="GNU Emacs Manual: Frames" />
+  <meta name="keywords" content="GNU Emacs Manual: Frames" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Mouse-Commands.html#Mouse-Commands" rel="next" title=
+  "Mouse Commands" />
+  <link href="Window-Convenience.html#Window-Convenience" rel=
+  "prev" title="Window Convenience" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Frames" id="Frames"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="International.html#International" accesskey=
+    "n" rel="next">International</a>, Previous: <a href=
+    "Windows.html#Windows" accesskey="p" rel="prev">Windows</a>,
+    Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Frames-and-Graphical-Displays" id=
+  "Frames-and-Graphical-Displays"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Frames"></a>
-<div class="header">
-<p>
-Next: <a href="International.html#International" accesskey="n" rel="next">International</a>, Previous: <a href="Windows.html#Windows" accesskey="p" rel="prev">Windows</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Frames-and-Graphical-Displays"></a>
-<h2 class="chapter">21 Frames and Graphical Displays</h2>
-<a name="index-frames"></a>
+  <h2 class="chapter">21 Frames and Graphical Displays</h2><a name=
+  "index-frames" id="index-frames"></a>
 
-<p>When Emacs is started on a graphical display, e.g., on the X Window
-System, it occupies a graphical system-level display region.  In this
-manual, we call this a <em>frame</em>, reserving the word &ldquo;window&rdquo; for
-the part of the frame used for displaying a buffer.  A frame initially
-contains one window, but it can be subdivided into multiple windows
-(see <a href="Windows.html#Windows">Windows</a>).  A frame normally also contains a menu bar, tool
-bar, and echo area.
-</p>
-<p>You can also create additional frames (see <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>).
-All frames created in the same Emacs session have access to the same
-underlying buffers and other data.  For instance, if a buffer is being
-shown in more than one frame, any changes made to it in one frame show
-up immediately in the other frames too.
-</p>
-<p>Typing <kbd>C-x C-c</kbd> closes all the frames on the current display,
-and ends the Emacs session if it has no frames open on any other
-displays (see <a href="Exiting.html#Exiting">Exiting</a>).  To close just the selected frame, type
-<kbd>C-x 5 0</kbd> (that is zero, not <kbd>o</kbd>).
-</p>
-<p>This chapter describes Emacs features specific to graphical displays
-(particularly mouse commands), and features for managing multiple
-frames.  On text terminals, many of these features are unavailable.
-However, it is still possible to create multiple frames on text
-terminals; such frames are displayed one at a time, filling the entire
-terminal screen (see <a href="Non_002dWindow-Terminals.html#Non_002dWindow-Terminals">Non-Window Terminals</a>).  It is also possible
-to use the mouse on some text terminals (see <a href="Text_002dOnly-Mouse.html#Text_002dOnly-Mouse">Text-Only Mouse</a>, for
-doing so on GNU and Unix systems; and
-see <a href="MS_002dDOS-Mouse.html#MS_002dDOS-Mouse">MS-DOS Mouse</a>,
-for doing so on MS-DOS).  Menus are supported on all text terminals.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Mouse-Commands.html#Mouse-Commands" accesskey="1">Mouse Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving, cutting, and pasting, with the mouse.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Word-and-Line-Mouse.html#Word-and-Line-Mouse" accesskey="2">Word and Line Mouse</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Mouse commands for selecting whole words or lines.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mouse-References.html#Mouse-References" accesskey="3">Mouse References</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using the mouse to select an item from a list.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Menu-Mouse-Clicks.html#Menu-Mouse-Clicks" accesskey="4">Menu Mouse Clicks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Mouse clicks that bring up menus.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mode-Line-Mouse.html#Mode-Line-Mouse" accesskey="5">Mode Line Mouse</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Mouse clicks on the mode line.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Creating-Frames.html#Creating-Frames" accesskey="6">Creating Frames</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating additional Emacs frames with various contents.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Frame-Commands.html#Frame-Commands" accesskey="7">Frame Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Iconifying, deleting, and switching frames.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Fonts.html#Fonts" accesskey="8">Fonts</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Changing the frame font.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Speedbar.html#Speedbar" accesskey="9">Speedbar</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to make and use a speedbar frame.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Multiple-Displays.html#Multiple-Displays">Multiple Displays</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How one Emacs instance can talk to several displays.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Changing the colors and other modes of frames.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to enable and disable scroll bars; how to use them.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Window-Dividers.html#Window-Dividers">Window Dividers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Window separators that can be dragged with the mouse.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using drag and drop to open files and insert text.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Menu-Bars.html#Menu-Bars">Menu Bars</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Enabling and disabling the menu bar.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Tool-Bars.html#Tool-Bars">Tool Bars</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Enabling and disabling the tool bar.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Dialog-Boxes.html#Dialog-Boxes">Dialog Boxes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling use of dialog boxes.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Tooltips.html#Tooltips">Tooltips</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Displaying information at the current mouse position.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Mouse-Avoidance.html#Mouse-Avoidance">Mouse Avoidance</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Preventing the mouse pointer from obscuring text.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Non_002dWindow-Terminals.html#Non_002dWindow-Terminals">Non-Window Terminals</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Multiple frames on terminals that show only one.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Text_002dOnly-Mouse.html#Text_002dOnly-Mouse">Text-Only Mouse</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using the mouse in text terminals.
-</td></tr>
-</table>
+  <p>When Emacs is started on a graphical display, e.g., on the X
+  Window System, it occupies a graphical system-level display
+  region. In this manual, we call this a <em>frame</em>, reserving
+  the word &ldquo;window&rdquo; for the part of the frame used for
+  displaying a buffer. A frame initially contains one window, but
+  it can be subdivided into multiple windows (see <a href=
+  "Windows.html#Windows">Windows</a>). A frame normally also
+  contains a menu bar, tool bar, and echo area.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="International.html#International" accesskey="n" rel="next">International</a>, Previous: <a href="Windows.html#Windows" accesskey="p" rel="prev">Windows</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>You can also create additional frames (see <a href=
+  "Creating-Frames.html#Creating-Frames">Creating Frames</a>). All
+  frames created in the same Emacs session have access to the same
+  underlying buffers and other data. For instance, if a buffer is
+  being shown in more than one frame, any changes made to it in one
+  frame show up immediately in the other frames too.</p>
 
+  <p>Typing <kbd>C-x C-c</kbd> closes all the frames on the current
+  display, and ends the Emacs session if it has no frames open on
+  any other displays (see <a href=
+  "Exiting.html#Exiting">Exiting</a>). To close just the selected
+  frame, type <kbd>C-x 5 0</kbd> (that is zero, not
+  <kbd>o</kbd>).</p>
 
+  <p>This chapter describes Emacs features specific to graphical
+  displays (particularly mouse commands), and features for managing
+  multiple frames. On text terminals, many of these features are
+  unavailable. However, it is still possible to create multiple
+  frames on text terminals; such frames are displayed one at a
+  time, filling the entire terminal screen (see <a href=
+  "Non_002dWindow-Terminals.html#Non_002dWindow-Terminals">Non-Window
+  Terminals</a>). It is also possible to use the mouse on some text
+  terminals (see <a href=
+  "Text_002dOnly-Mouse.html#Text_002dOnly-Mouse">Text-Only
+  Mouse</a>, for doing so on GNU and Unix systems; and see <a href=
+  "MS_002dDOS-Mouse.html#MS_002dDOS-Mouse">MS-DOS Mouse</a>, for
+  doing so on MS-DOS). Menus are supported on all text
+  terminals.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mouse-Commands.html#Mouse-Commands" accesskey="1">Mouse
+      Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Moving, cutting, and pasting,
+      with the mouse.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Word-and-Line-Mouse.html#Word-and-Line-Mouse" accesskey=
+      "2">Word and Line Mouse</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Mouse commands for selecting
+      whole words or lines.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mouse-References.html#Mouse-References" accesskey="3">Mouse
+      References</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Using the mouse to select an
+      item from a list.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Menu-Mouse-Clicks.html#Menu-Mouse-Clicks" accesskey="4">Menu
+      Mouse Clicks</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Mouse clicks that bring up
+      menus.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mode-Line-Mouse.html#Mode-Line-Mouse" accesskey="5">Mode
+      Line Mouse</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Mouse clicks on the mode
+      line.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Creating-Frames.html#Creating-Frames" accesskey="6">Creating
+      Frames</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Creating additional Emacs
+      frames with various contents.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Frame-Commands.html#Frame-Commands" accesskey="7">Frame
+      Commands</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Iconifying, deleting, and
+      switching frames.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Fonts.html#Fonts" accesskey="8">Fonts</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Changing the frame font.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Speedbar.html#Speedbar" accesskey="9">Speedbar</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to make and use a speedbar
+      frame.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Multiple-Displays.html#Multiple-Displays">Multiple
+      Displays</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How one Emacs instance can talk
+      to several displays.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Frame-Parameters.html#Frame-Parameters">Frame
+      Parameters</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Changing the colors and other
+      modes of frames.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to enable and disable
+      scroll bars; how to use them.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Window-Dividers.html#Window-Dividers">Window
+      Dividers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Window separators that can be
+      dragged with the mouse.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Using drag and drop to open
+      files and insert text.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Menu-Bars.html#Menu-Bars">Menu Bars</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Enabling and disabling the menu
+      bar.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Tool-Bars.html#Tool-Bars">Tool Bars</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Enabling and disabling the tool
+      bar.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Dialog-Boxes.html#Dialog-Boxes">Dialog Boxes</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Controlling use of dialog
+      boxes.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Tooltips.html#Tooltips">Tooltips</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Displaying information at the
+      current mouse position.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Mouse-Avoidance.html#Mouse-Avoidance">Mouse
+      Avoidance</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Preventing the mouse pointer
+      from obscuring text.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Non_002dWindow-Terminals.html#Non_002dWindow-Terminals">Non-Window
+      Terminals</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Multiple frames on terminals
+      that show only one.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Text_002dOnly-Mouse.html#Text_002dOnly-Mouse">Text-Only
+      Mouse</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Using the mouse in text
+      terminals.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="International.html#International" accesskey=
+    "n" rel="next">International</a>, Previous: <a href=
+    "Windows.html#Windows" accesskey="p" rel="prev">Windows</a>,
+    Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

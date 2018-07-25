@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,120 +14,235 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Select Methods</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Select Methods">
-<meta name="keywords" content="Gnus Manual: Select Methods">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Server-Buffer.html#Server-Buffer" rel="next" title="Server Buffer">
-<link href="Signing-and-encrypting.html#Signing-and-encrypting" rel="prev" title="Signing and encrypting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Select Methods</title>
+  <meta name="description" content="Gnus Manual: Select Methods" />
+  <meta name="keywords" content="Gnus Manual: Select Methods" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Server-Buffer.html#Server-Buffer" rel="next" title=
+  "Server Buffer" />
+  <link href="Signing-and-encrypting.html#Signing-and-encrypting"
+  rel="prev" title="Signing and encrypting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Select-Methods"></a>
-<div class="header">
-<p>
-Next: <a href="Scoring.html#Scoring" accesskey="n" rel="next">Scoring</a>, Previous: <a href="Composing-Messages.html#Composing-Messages" accesskey="p" rel="prev">Composing Messages</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Select-Methods-1"></a>
-<h2 class="chapter">6 Select Methods</h2>
-<a name="index-foreign-groups-1"></a>
-<a name="index-select-methods"></a>
+<body lang="en" xml:lang="en">
+  <a name="Select-Methods" id="Select-Methods"></a>
 
-<p>A <em>foreign group</em> is a group not read by the usual (or
-default) means.  It could be, for instance, a group from a different
-<acronym>NNTP</acronym> server, it could be a virtual group, or it could be your own
-personal mail group.
-</p>
-<p>A foreign group (or any group, really) is specified by a <em>name</em> and
-a <em>select method</em>.  To take the latter first, a select method is a
-list where the first element says what back end to use (e.g., <code>nntp</code>,
-<code>nnspool</code>, <code>nnml</code>) and the second element is the <em>server
-name</em>.  There may be additional elements in the select method, where the
-value may have special meaning for the back end in question.
-</p>
-<p>One could say that a select method defines a <em>virtual server</em>&mdash;so
-we do just that (see <a href="Server-Buffer.html#Server-Buffer">Server Buffer</a>).
-</p>
-<p>The <em>name</em> of the group is the name the back end will recognize the
-group as.
-</p>
-<p>For instance, the group &lsquo;<samp>soc.motss</samp>&rsquo; on the <acronym>NNTP</acronym> server
-&lsquo;<samp>some.where.edu</samp>&rsquo; will have the name &lsquo;<samp>soc.motss</samp>&rsquo; and select
-method <code>(nntp &quot;some.where.edu&quot;)</code>.  Gnus will call this group
-&lsquo;<samp>nntp+some.where.edu:soc.motss</samp>&rsquo;, even though the <code>nntp</code>
-back end just knows this group as &lsquo;<samp>soc.motss</samp>&rsquo;.
-</p>
-<p>The different methods all have their peculiarities, of course.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Server-Buffer.html#Server-Buffer" accesskey="1">Server Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Making and editing virtual servers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Getting-News.html#Getting-News" accesskey="2">Getting News</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading USENET news with Gnus.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Using-IMAP.html#Using-IMAP" accesskey="3">Using IMAP</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading mail from <acronym>IMAP</acronym>.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Getting-Mail.html#Getting-Mail" accesskey="4">Getting Mail</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading your personal mail with Gnus.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Browsing-the-Web.html#Browsing-the-Web" accesskey="5">Browsing the Web</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting messages from a plethora of Web sources.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Other-Sources.html#Other-Sources" accesskey="6">Other Sources</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading directories, files.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Combined-Groups.html#Combined-Groups" accesskey="7">Combined Groups</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Combining groups into one group.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Email-Based-Diary.html#Email-Based-Diary" accesskey="8">Email Based Diary</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using mails to manage diary events in Gnus.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Gnus-Unplugged.html#Gnus-Unplugged" accesskey="9">Gnus Unplugged</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading news and mail offline.
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Scoring.html#Scoring" accesskey="n" rel=
+    "next">Scoring</a>, Previous: <a href=
+    "Composing-Messages.html#Composing-Messages" accesskey="p" rel=
+    "prev">Composing Messages</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Select-Methods-1" id="Select-Methods-1"></a>
 
+  <h2 class="chapter">6 Select Methods</h2><a name=
+  "index-foreign-groups-1" id="index-foreign-groups-1"></a>
+  <a name="index-select-methods" id="index-select-methods"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Scoring.html#Scoring" accesskey="n" rel="next">Scoring</a>, Previous: <a href="Composing-Messages.html#Composing-Messages" accesskey="p" rel="prev">Composing Messages</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>A <em>foreign group</em> is a group not read by the usual (or
+  default) means. It could be, for instance, a group from a
+  different <acronym>NNTP</acronym> server, it could be a virtual
+  group, or it could be your own personal mail group.</p>
 
+  <p>A foreign group (or any group, really) is specified by a
+  <em>name</em> and a <em>select method</em>. To take the latter
+  first, a select method is a list where the first element says
+  what back end to use (e.g., <code>nntp</code>,
+  <code>nnspool</code>, <code>nnml</code>) and the second element
+  is the <em>server name</em>. There may be additional elements in
+  the select method, where the value may have special meaning for
+  the back end in question.</p>
 
+  <p>One could say that a select method defines a <em>virtual
+  server</em>&mdash;so we do just that (see <a href=
+  "Server-Buffer.html#Server-Buffer">Server Buffer</a>).</p>
 
+  <p>The <em>name</em> of the group is the name the back end will
+  recognize the group as.</p>
+
+  <p>For instance, the group &lsquo;<samp>soc.motss</samp>&rsquo;
+  on the <acronym>NNTP</acronym> server
+  &lsquo;<samp>some.where.edu</samp>&rsquo; will have the name
+  &lsquo;<samp>soc.motss</samp>&rsquo; and select method
+  <code>(nntp "some.where.edu")</code>. Gnus will call this group
+  &lsquo;<samp>nntp+some.where.edu:soc.motss</samp>&rsquo;, even
+  though the <code>nntp</code> back end just knows this group as
+  &lsquo;<samp>soc.motss</samp>&rsquo;.</p>
+
+  <p>The different methods all have their peculiarities, of
+  course.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Server-Buffer.html#Server-Buffer" accesskey="1">Server
+      Buffer</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Making and editing virtual
+      servers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Getting-News.html#Getting-News" accesskey="2">Getting
+      News</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading USENET news with
+      Gnus.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Using-IMAP.html#Using-IMAP" accesskey="3">Using
+      IMAP</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading mail from
+      <acronym>IMAP</acronym>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Getting-Mail.html#Getting-Mail" accesskey="4">Getting
+      Mail</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading your personal mail with
+      Gnus.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Browsing-the-Web.html#Browsing-the-Web" accesskey=
+      "5">Browsing the Web</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Getting messages from a
+      plethora of Web sources.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Other-Sources.html#Other-Sources" accesskey="6">Other
+      Sources</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading directories,
+      files.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Combined-Groups.html#Combined-Groups" accesskey="7">Combined
+      Groups</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Combining groups into one
+      group.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Email-Based-Diary.html#Email-Based-Diary" accesskey=
+      "8">Email Based Diary</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Using mails to manage diary
+      events in Gnus.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Gnus-Unplugged.html#Gnus-Unplugged" accesskey="9">Gnus
+      Unplugged</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading news and mail
+      offline.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Scoring.html#Scoring" accesskey="n" rel=
+    "next">Scoring</a>, Previous: <a href=
+    "Composing-Messages.html#Composing-Messages" accesskey="p" rel=
+    "prev">Composing Messages</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

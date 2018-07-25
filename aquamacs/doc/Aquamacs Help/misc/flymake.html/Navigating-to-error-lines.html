@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -15,80 +17,122 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Flymake 0.3: Navigating to error lines</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Flymake 0.3: Navigating to error lines">
-<meta name="keywords" content="GNU Flymake 0.3: Navigating to error lines">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Using-Flymake.html#Using-Flymake" rel="up" title="Using Flymake">
-<link href="Viewing-error-messages.html#Viewing-error-messages" rel="next" title="Viewing error messages">
-<link href="Running-the-syntax-check.html#Running-the-syntax-check" rel="prev" title="Running the syntax check">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Flymake 0.3: Navigating to error lines</title>
+  <meta name="description" content=
+  "GNU Flymake 0.3: Navigating to error lines" />
+  <meta name="keywords" content=
+  "GNU Flymake 0.3: Navigating to error lines" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Using-Flymake.html#Using-Flymake" rel="up" title=
+  "Using Flymake" />
+  <link href="Viewing-error-messages.html#Viewing-error-messages"
+  rel="next" title="Viewing error messages" />
+  <link href=
+  "Running-the-syntax-check.html#Running-the-syntax-check" rel=
+  "prev" title="Running the syntax check" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Navigating-to-error-lines"></a>
-<div class="header">
-<p>
-Next: <a href="Viewing-error-messages.html#Viewing-error-messages" accesskey="n" rel="next">Viewing error messages</a>, Previous: <a href="Running-the-syntax-check.html#Running-the-syntax-check" accesskey="p" rel="prev">Running the syntax check</a>, Up: <a href="Using-Flymake.html#Using-Flymake" accesskey="u" rel="up">Using Flymake</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Navigating-to-error-lines-1"></a>
-<h3 class="section">3.3 Navigating to error lines</h3>
-<a name="index-Navigating-to-error-lines"></a>
+<body lang="en" xml:lang="en">
+  <a name="Navigating-to-error-lines" id=
+  "Navigating-to-error-lines"></a>
 
-<p>After syntax check is completed, lines for which at least one error or
-warning has been reported are highlighted, and total number of errors
-and warning is shown in the mode line.  Use the following functions to
-navigate the highlighted lines.
-</p>
-<table>
-<tr><td width="25%"><code>flymake-goto-next-error</code></td><td width="75%">Moves point to the next erroneous line, if any.</td></tr>
-<tr><td width="25%"><code>flymake-goto-prev-error</code></td><td width="75%">Moves point to the previous erroneous line.</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href=
+    "Viewing-error-messages.html#Viewing-error-messages" accesskey=
+    "n" rel="next">Viewing error messages</a>, Previous: <a href=
+    "Running-the-syntax-check.html#Running-the-syntax-check"
+    accesskey="p" rel="prev">Running the syntax check</a>, Up:
+    <a href="Using-Flymake.html#Using-Flymake" accesskey="u" rel=
+    "up">Using Flymake</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Navigating-to-error-lines-1" id=
+  "Navigating-to-error-lines-1"></a>
 
-<p>These functions treat erroneous lines as a linked list.  Therefore,
-<code>flymake-goto-next-error</code> will go to the first erroneous line
-when invoked in the end of the buffer.
-</p>
+  <h3 class="section">3.3 Navigating to error lines</h3><a name=
+  "index-Navigating-to-error-lines" id=
+  "index-Navigating-to-error-lines"></a>
 
+  <p>After syntax check is completed, lines for which at least one
+  error or warning has been reported are highlighted, and total
+  number of errors and warning is shown in the mode line. Use the
+  following functions to navigate the highlighted lines.</p>
 
+  <table>
+    <tr>
+      <td width="25%"><code>flymake-goto-next-error</code></td>
 
+      <td width="75%">Moves point to the next erroneous line, if
+      any.</td>
+    </tr>
+
+    <tr>
+      <td width="25%"><code>flymake-goto-prev-error</code></td>
+
+      <td width="75%">Moves point to the previous erroneous
+      line.</td>
+    </tr>
+  </table>
+
+  <p>These functions treat erroneous lines as a linked list.
+  Therefore, <code>flymake-goto-next-error</code> will go to the
+  first erroneous line when invoked in the end of the buffer.</p>
 </body>
 </html>

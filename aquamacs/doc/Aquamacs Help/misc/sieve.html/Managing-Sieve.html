@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the Emacs Sieve package, for server-side mail filtering.
 
 Copyright (C) 2001-2016 Free Software Foundation, Inc.
@@ -14,159 +16,232 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Sieve Manual: Managing Sieve</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Sieve Manual: Managing Sieve">
-<meta name="keywords" content="Emacs Sieve Manual: Managing Sieve">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Examples.html#Examples" rel="next" title="Examples">
-<link href="Sieve-Mode.html#Sieve-Mode" rel="prev" title="Sieve Mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Sieve Manual: Managing Sieve</title>
+  <meta name="description" content=
+  "Emacs Sieve Manual: Managing Sieve" />
+  <meta name="keywords" content=
+  "Emacs Sieve Manual: Managing Sieve" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Examples.html#Examples" rel="next" title=
+  "Examples" />
+  <link href="Sieve-Mode.html#Sieve-Mode" rel="prev" title=
+  "Sieve Mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Managing-Sieve"></a>
-<div class="header">
-<p>
-Next: <a href="Examples.html#Examples" accesskey="n" rel="next">Examples</a>, Previous: <a href="Sieve-Mode.html#Sieve-Mode" accesskey="p" rel="prev">Sieve Mode</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Managing-Sieve-1"></a>
-<h2 class="chapter">3 Managing Sieve</h2>
+<body lang="en" xml:lang="en">
+  <a name="Managing-Sieve" id="Managing-Sieve"></a>
 
-<p>Manage Sieve is a special mode used to display Sieve scripts available
-on a remote server.  It can be invoked with <kbd>M-x sieve-manage
-RET</kbd>, which queries the user for a server and if necessary, user
-credentials to use.
-</p>
-<p>When a server has been successfully contacted, the Manage Sieve buffer
-looks something like:
-</p>
-<div class="example">
-<pre class="example">Server  : mailserver:sieve
+  <div class="header">
+    <p>Next: <a href="Examples.html#Examples" accesskey="n" rel=
+    "next">Examples</a>, Previous: <a href=
+    "Sieve-Mode.html#Sieve-Mode" accesskey="p" rel="prev">Sieve
+    Mode</a>, Up: <a href="index.html#Top" accesskey="u" rel=
+    "up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Managing-Sieve-1" id="Managing-Sieve-1"></a>
+
+  <h2 class="chapter">3 Managing Sieve</h2>
+
+  <p>Manage Sieve is a special mode used to display Sieve scripts
+  available on a remote server. It can be invoked with <kbd>M-x
+  sieve-manage RET</kbd>, which queries the user for a server and
+  if necessary, user credentials to use.</p>
+
+  <p>When a server has been successfully contacted, the Manage
+  Sieve buffer looks something like:</p>
+
+  <div class="example">
+    <pre class="example">
+Server  : mailserver:sieve
 
 2 scripts on server, press RET on a script name edits it, or
 press RET on &lt;new script&gt; to create a new script.
         &lt;new script&gt;
  ACTIVE .sieve
         template.siv
-</pre></div>
+</pre>
+  </div>
 
-<p>One of the scripts are highlighted, and standard point navigation
-commands (<kbd>&lt;up&gt;</kbd>, <kbd>&lt;down&gt;</kbd> etc.) can be used to navigate the
-list.
-</p>
-<p>The following commands are available in the Manage Sieve buffer:
-</p>
-<dl compact="compact">
-<dt><kbd>m</kbd></dt>
-<dd><a name="index-m"></a>
-<a name="index-sieve_002dactivate"></a>
-<p>Activates the currently highlighted script.
-</p>
-</dd>
-<dt><kbd>u</kbd></dt>
-<dd><a name="index-u"></a>
-<a name="index-sieve_002ddeactivate"></a>
-<p>Deactivates the currently highlighted script.
-</p>
-</dd>
-<dt><kbd>C-M-?</kbd></dt>
-<dd><a name="index-C_002dM_002d_003f"></a>
-<a name="index-sieve_002ddeactivate_002dall"></a>
-<p>Deactivates all scripts.
-</p>
-</dd>
-<dt><kbd>r</kbd></dt>
-<dd><a name="index-r"></a>
-<a name="index-sieve_002dremove"></a>
-<p>Remove currently highlighted script.
-</p>
-</dd>
-<dt><kbd>RET</kbd></dt>
-<dt><kbd>mouse-2</kbd></dt>
-<dt><kbd>f</kbd></dt>
-<dd><a name="index-RET"></a>
-<a name="index-mouse_002d2"></a>
-<a name="index-f"></a>
-<a name="index-sieve_002dedit_002dscript"></a>
-<p>Bury the server buffer and download the currently highlighted script
-into a new buffer for editing in Sieve mode (see <a href="Sieve-Mode.html#Sieve-Mode">Sieve Mode</a>).
-</p>
-</dd>
-<dt><kbd>o</kbd></dt>
-<dd><a name="index-o"></a>
-<a name="index-sieve_002dedit_002dscript_002dother_002dwindow"></a>
-<p>Create a new buffer in another window containing the currently
-highlighted script for editing in Sieve mode (see <a href="Sieve-Mode.html#Sieve-Mode">Sieve Mode</a>).
-</p>
-</dd>
-<dt><kbd>q</kbd></dt>
-<dd><a name="index-q"></a>
-<a name="index-sieve_002dbury_002dbuffer"></a>
-<p>Bury the Manage Sieve buffer without closing the connection.
-</p>
-</dd>
-<dt><kbd>?</kbd></dt>
-<dt><kbd>h</kbd></dt>
-<dd><a name="index-_003f"></a>
-<a name="index-h"></a>
-<a name="index-sieve_002dhelp"></a>
-<p>Displays help in the minibuffer.
-</p>
-</dd>
-<dt><kbd>Q</kbd></dt>
-<dd><a name="index-Q"></a>
-<a name="index-sieve_002dmanage_002dquit"></a>
-<p>Quit Manage Sieve and close the connection.
-</p>
-</dd>
-</dl>
+  <p>One of the scripts are highlighted, and standard point
+  navigation commands (<kbd>&lt;up&gt;</kbd>,
+  <kbd>&lt;down&gt;</kbd> etc.) can be used to navigate the
+  list.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Examples.html#Examples" accesskey="n" rel="next">Examples</a>, Previous: <a href="Sieve-Mode.html#Sieve-Mode" accesskey="p" rel="prev">Sieve Mode</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The following commands are available in the Manage Sieve
+  buffer:</p>
 
+  <dl compact="compact">
+    <dt><kbd>m</kbd></dt>
 
+    <dd>
+      <a name="index-m" id="index-m"></a> <a name=
+      "index-sieve_002dactivate" id="index-sieve_002dactivate"></a>
 
+      <p>Activates the currently highlighted script.</p>
+    </dd>
+
+    <dt><kbd>u</kbd></dt>
+
+    <dd>
+      <a name="index-u" id="index-u"></a> <a name=
+      "index-sieve_002ddeactivate" id=
+      "index-sieve_002ddeactivate"></a>
+
+      <p>Deactivates the currently highlighted script.</p>
+    </dd>
+
+    <dt><kbd>C-M-?</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dM_002d_003f" id=
+      "index-C_002dM_002d_003f"></a> <a name=
+      "index-sieve_002ddeactivate_002dall" id=
+      "index-sieve_002ddeactivate_002dall"></a>
+
+      <p>Deactivates all scripts.</p>
+    </dd>
+
+    <dt><kbd>r</kbd></dt>
+
+    <dd>
+      <a name="index-r" id="index-r"></a> <a name=
+      "index-sieve_002dremove" id="index-sieve_002dremove"></a>
+
+      <p>Remove currently highlighted script.</p>
+    </dd>
+
+    <dt><kbd>RET</kbd></dt>
+
+    <dt><kbd>mouse-2</kbd></dt>
+
+    <dt><kbd>f</kbd></dt>
+
+    <dd>
+      <a name="index-RET" id="index-RET"></a> <a name=
+      "index-mouse_002d2" id="index-mouse_002d2"></a> <a name=
+      "index-f" id="index-f"></a> <a name=
+      "index-sieve_002dedit_002dscript" id=
+      "index-sieve_002dedit_002dscript"></a>
+
+      <p>Bury the server buffer and download the currently
+      highlighted script into a new buffer for editing in Sieve
+      mode (see <a href="Sieve-Mode.html#Sieve-Mode">Sieve
+      Mode</a>).</p>
+    </dd>
+
+    <dt><kbd>o</kbd></dt>
+
+    <dd>
+      <a name="index-o" id="index-o"></a> <a name=
+      "index-sieve_002dedit_002dscript_002dother_002dwindow" id=
+      "index-sieve_002dedit_002dscript_002dother_002dwindow"></a>
+
+      <p>Create a new buffer in another window containing the
+      currently highlighted script for editing in Sieve mode (see
+      <a href="Sieve-Mode.html#Sieve-Mode">Sieve Mode</a>).</p>
+    </dd>
+
+    <dt><kbd>q</kbd></dt>
+
+    <dd>
+      <a name="index-q" id="index-q"></a> <a name=
+      "index-sieve_002dbury_002dbuffer" id=
+      "index-sieve_002dbury_002dbuffer"></a>
+
+      <p>Bury the Manage Sieve buffer without closing the
+      connection.</p>
+    </dd>
+
+    <dt><kbd>?</kbd></dt>
+
+    <dt><kbd>h</kbd></dt>
+
+    <dd>
+      <a name="index-_003f" id="index-_003f"></a> <a name="index-h"
+      id="index-h"></a> <a name="index-sieve_002dhelp" id=
+      "index-sieve_002dhelp"></a>
+
+      <p>Displays help in the minibuffer.</p>
+    </dd>
+
+    <dt><kbd>Q</kbd></dt>
+
+    <dd>
+      <a name="index-Q" id="index-Q"></a> <a name=
+      "index-sieve_002dmanage_002dquit" id=
+      "index-sieve_002dmanage_002dquit"></a>
+
+      <p>Quit Manage Sieve and close the connection.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Examples.html#Examples" accesskey="n" rel=
+    "next">Examples</a>, Previous: <a href=
+    "Sieve-Mode.html#Sieve-Mode" accesskey="p" rel="prev">Sieve
+    Mode</a>, Up: <a href="index.html#Top" accesskey="u" rel=
+    "up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,250 +19,377 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Accessing Documentation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Accessing Documentation">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Accessing Documentation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Documentation.html#Documentation" rel="up" title="Documentation">
-<link href="Keys-in-Documentation.html#Keys-in-Documentation" rel="next" title="Keys in Documentation">
-<link href="Documentation-Basics.html#Documentation-Basics" rel="prev" title="Documentation Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Accessing
+  Documentation</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Accessing Documentation" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Accessing Documentation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Documentation.html#Documentation" rel="up" title=
+  "Documentation" />
+  <link href="Keys-in-Documentation.html#Keys-in-Documentation"
+  rel="next" title="Keys in Documentation" />
+  <link href="Documentation-Basics.html#Documentation-Basics" rel=
+  "prev" title="Documentation Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Accessing-Documentation" id=
+  "Accessing-Documentation"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Keys-in-Documentation.html#Keys-in-Documentation" accesskey=
+    "n" rel="next">Keys in Documentation</a>, Previous: <a href=
+    "Documentation-Basics.html#Documentation-Basics" accesskey="p"
+    rel="prev">Documentation Basics</a>, Up: <a href=
+    "Documentation.html#Documentation" accesskey="u" rel=
+    "up">Documentation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Access-to-Documentation-Strings" id=
+  "Access-to-Documentation-Strings"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Accessing-Documentation"></a>
-<div class="header">
-<p>
-Next: <a href="Keys-in-Documentation.html#Keys-in-Documentation" accesskey="n" rel="next">Keys in Documentation</a>, Previous: <a href="Documentation-Basics.html#Documentation-Basics" accesskey="p" rel="prev">Documentation Basics</a>, Up: <a href="Documentation.html#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Access-to-Documentation-Strings"></a>
-<h3 class="section">23.2 Access to Documentation Strings</h3>
-<a name="index-accessing-documentation-strings"></a>
+  <h3 class="section">23.2 Access to Documentation
+  Strings</h3><a name="index-accessing-documentation-strings" id=
+  "index-accessing-documentation-strings"></a>
 
-<dl>
-<dt><a name="index-documentation_002dproperty"></a>Function: <strong>documentation-property</strong> <em>symbol property &amp;optional verbatim</em></dt>
-<dd><p>This function returns the documentation string recorded in
-<var>symbol</var>&rsquo;s property list under property <var>property</var>.  It is
-most often used to look up the documentation strings of variables, for
-which <var>property</var> is <code>variable-documentation</code>.  However, it
-can also be used to look up other kinds of documentation, such as for
-customization groups (but for function documentation, use the
-<code>documentation</code> function, below).
-</p>
-<p>If the property value refers to a documentation string stored in the
-<samp>DOC</samp> file or a byte-compiled file, this function looks up that
-string and returns it.
-</p>
-<p>If the property value isn&rsquo;t <code>nil</code>, isn&rsquo;t a string, and doesn&rsquo;t
-refer to text in a file, then it is evaluated as a Lisp expression to
-obtain a string.
-</p>
-<p>Finally, this function passes the string through
-<code>substitute-command-keys</code> to substitute key bindings (see <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>).  It skips this step if <var>verbatim</var> is
-non-<code>nil</code>.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(documentation-property 'command-line-processed
+  <dl>
+    <dt><a name="index-documentation_002dproperty" id=
+    "index-documentation_002dproperty"></a>Function:
+    <strong>documentation-property</strong> <em>symbol property
+    &amp;optional verbatim</em></dt>
+
+    <dd>
+      <p>This function returns the documentation string recorded in
+      <var>symbol</var>&rsquo;s property list under property
+      <var>property</var>. It is most often used to look up the
+      documentation strings of variables, for which
+      <var>property</var> is <code>variable-documentation</code>.
+      However, it can also be used to look up other kinds of
+      documentation, such as for customization groups (but for
+      function documentation, use the <code>documentation</code>
+      function, below).</p>
+
+      <p>If the property value refers to a documentation string
+      stored in the <samp>DOC</samp> file or a byte-compiled file,
+      this function looks up that string and returns it.</p>
+
+      <p>If the property value isn&rsquo;t <code>nil</code>,
+      isn&rsquo;t a string, and doesn&rsquo;t refer to text in a
+      file, then it is evaluated as a Lisp expression to obtain a
+      string.</p>
+
+      <p>Finally, this function passes the string through
+      <code>substitute-command-keys</code> to substitute key
+      bindings (see <a href=
+      "Keys-in-Documentation.html#Keys-in-Documentation">Keys in
+      Documentation</a>). It skips this step if <var>verbatim</var>
+      is non-<code>nil</code>.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(documentation-property 'command-line-processed
    'variable-documentation)
-     &rArr; &quot;Non-nil once command line has been processed&quot;
-</pre><pre class="smallexample">(symbol-plist 'command-line-processed)
+     &rArr; "Non-nil once command line has been processed"
+</pre>
+        <pre class="smallexample">
+(symbol-plist 'command-line-processed)
      &rArr; (variable-documentation 188902)
-</pre><pre class="smallexample">(documentation-property 'emacs 'group-documentation)
-     &rArr; &quot;Customization of the One True Editor.&quot;
-</pre></div>
-</dd></dl>
+</pre>
+        <pre class="smallexample">
+(documentation-property 'emacs 'group-documentation)
+     &rArr; "Customization of the One True Editor."
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-documentation"></a>Function: <strong>documentation</strong> <em>function &amp;optional verbatim</em></dt>
-<dd><p>This function returns the documentation string of <var>function</var>.  It
-handles macros, named keyboard macros, and special forms, as well as
-ordinary functions.
-</p>
-<p>If <var>function</var> is a symbol, this function first looks for the
-<code>function-documentation</code> property of that symbol; if that has a
-non-<code>nil</code> value, the documentation comes from that value (if the
-value is not a string, it is evaluated).
-</p>
-<p>If <var>function</var> is not a symbol, or if it has no
-<code>function-documentation</code> property, then <code>documentation</code>
-extracts the documentation string from the actual function definition,
-reading it from a file if called for.
-</p>
-<p>Finally, unless <var>verbatim</var> is non-<code>nil</code>, this function calls
-<code>substitute-command-keys</code>.  The result is the documentation
-string to return.
-</p>
-<p>The <code>documentation</code> function signals a <code>void-function</code> error
-if <var>function</var> has no function definition.  However, it is OK if
-the function definition has no documentation string.  In that case,
-<code>documentation</code> returns <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-documentation" id=
+    "index-documentation"></a>Function:
+    <strong>documentation</strong> <em>function &amp;optional
+    verbatim</em></dt>
 
-<dl>
-<dt><a name="index-face_002ddocumentation"></a>Function: <strong>face-documentation</strong> <em>face</em></dt>
-<dd><p>This function returns the documentation string of <var>face</var> as a
-face.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the documentation string of
+      <var>function</var>. It handles macros, named keyboard
+      macros, and special forms, as well as ordinary functions.</p>
 
-<p>Here is an example of using the two functions, <code>documentation</code> and
-<code>documentation-property</code>, to display the documentation strings for
-several symbols in a <samp>*Help*</samp> buffer.
-</p>
-<a name="describe_002dsymbols-example"></a><div class="smallexample">
-<pre class="smallexample">(defun describe-symbols (pattern)
-  &quot;Describe the Emacs Lisp symbols matching PATTERN.
+      <p>If <var>function</var> is a symbol, this function first
+      looks for the <code>function-documentation</code> property of
+      that symbol; if that has a non-<code>nil</code> value, the
+      documentation comes from that value (if the value is not a
+      string, it is evaluated).</p>
+
+      <p>If <var>function</var> is not a symbol, or if it has no
+      <code>function-documentation</code> property, then
+      <code>documentation</code> extracts the documentation string
+      from the actual function definition, reading it from a file
+      if called for.</p>
+
+      <p>Finally, unless <var>verbatim</var> is
+      non-<code>nil</code>, this function calls
+      <code>substitute-command-keys</code>. The result is the
+      documentation string to return.</p>
+
+      <p>The <code>documentation</code> function signals a
+      <code>void-function</code> error if <var>function</var> has
+      no function definition. However, it is OK if the function
+      definition has no documentation string. In that case,
+      <code>documentation</code> returns <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-face_002ddocumentation" id=
+    "index-face_002ddocumentation"></a>Function:
+    <strong>face-documentation</strong> <em>face</em></dt>
+
+    <dd>
+      <p>This function returns the documentation string of
+      <var>face</var> as a face.</p>
+    </dd>
+  </dl>
+
+  <p>Here is an example of using the two functions,
+  <code>documentation</code> and
+  <code>documentation-property</code>, to display the documentation
+  strings for several symbols in a <samp>*Help*</samp>
+  buffer.</p><a name="describe_002dsymbols-example" id=
+  "describe_002dsymbols-example"></a>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defun describe-symbols (pattern)
+  "Describe the Emacs Lisp symbols matching PATTERN.
 All symbols that have PATTERN in their name are described
-in the *Help* buffer.&quot;
-  (interactive &quot;sDescribe symbols matching: &quot;)
+in the *Help* buffer."
+  (interactive "sDescribe symbols matching: ")
   (let ((describe-func
          (function
           (lambda (s)
-</pre><pre class="smallexample">            ;; <span class="roman">Print description of symbol.</span>
-            (if (fboundp s)             ; <span class="roman">It is a function.</span>
+</pre>
+    <pre class="smallexample">
+            ;; <span class=
+"roman">Print description of symbol.</span>
+            (if (fboundp s)             ; <span class=
+"roman">It is a function.</span>
                 (princ
-                 (format &quot;%s\t%s\n%s\n\n&quot; s
+                 (format "%s\t%s\n%s\n\n" s
                    (if (commandp s)
                        (let ((keys (where-is-internal s)))
                          (if keys
                              (concat
-                              &quot;Keys: &quot;
+                              "Keys: "
                               (mapconcat 'key-description
-                                         keys &quot; &quot;))
-                           &quot;Keys: none&quot;))
-                     &quot;Function&quot;)
-</pre><pre class="smallexample">                   (or (documentation s)
-                       &quot;not documented&quot;))))
+                                         keys " "))
+                           "Keys: none"))
+                     "Function")
+</pre>
+    <pre class="smallexample">
+                   (or (documentation s)
+                       "not documented"))))
 
-            (if (boundp s)              ; <span class="roman">It is a variable.</span>
-</pre><pre class="smallexample">                (princ
-                 (format &quot;%s\t%s\n%s\n\n&quot; s
+            (if (boundp s)              ; <span class=
+"roman">It is a variable.</span>
+</pre>
+    <pre class="smallexample">
+                (princ
+                 (format "%s\t%s\n%s\n\n" s
                    (if (custom-variable-p s)
-                       &quot;Option &quot; &quot;Variable&quot;)
-</pre><pre class="smallexample">                   (or (documentation-property
+                       "Option " "Variable")
+</pre>
+    <pre class="smallexample">
+                   (or (documentation-property
                          s 'variable-documentation)
-                       &quot;not documented&quot;)))))))
+                       "not documented")))))))
         sym-list)
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">    ;; <span class="roman">Build a list of symbols that match pattern.</span>
+</pre>
+    <pre class="smallexample">
+</pre>
+    <pre class="smallexample">
+    ;; <span class=
+"roman">Build a list of symbols that match pattern.</span>
     (mapatoms (function
                (lambda (sym)
                  (if (string-match pattern (symbol-name sym))
                      (setq sym-list (cons sym sym-list))))))
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">    ;; <span class="roman">Display the data.</span>
+</pre>
+    <pre class="smallexample">
+</pre>
+    <pre class="smallexample">
+    ;; <span class="roman">Display the data.</span>
     (help-setup-xref (list 'describe-symbols pattern) (interactive-p))
     (with-help-window (help-buffer)
       (mapcar describe-func (sort sym-list 'string&lt;)))))
-</pre></div>
+</pre>
+  </div>
 
-<p>The <code>describe-symbols</code> function works like <code>apropos</code>,
-but provides more information.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(describe-symbols &quot;goal&quot;)
+  <p>The <code>describe-symbols</code> function works like
+  <code>apropos</code>, but provides more information.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(describe-symbols "goal")
 
 ---------- Buffer: *Help* ----------
 goal-column     Option
 Semipermanent goal column for vertical motion, as set by &hellip;
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">minibuffer-temporary-goal-position      Variable
+</pre>
+    <pre class="smallexample">
+</pre>
+    <pre class="smallexample">
+minibuffer-temporary-goal-position      Variable
 not documented
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">set-goal-column Keys: C-x C-n
+</pre>
+    <pre class="smallexample">
+</pre>
+    <pre class="smallexample">
+set-goal-column Keys: C-x C-n
 Set the current horizontal position as a goal for C-n and C-p.
-</pre><pre class="smallexample">Those commands will move to this position in the line moved to
+</pre>
+    <pre class="smallexample">
+Those commands will move to this position in the line moved to
 rather than trying to keep the same horizontal position.
 With a non-nil argument ARG, clears out the goal column
 so that C-n and C-p resume vertical motion.
-The goal column is stored in the variable ‘goal-column’.
+The goal column is stored in the variable &acirc;&euro;&tilde;goal-column&acirc;&euro;&trade;.
 
 (fn ARG)
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">temporary-goal-column   Variable
+</pre>
+    <pre class="smallexample">
+</pre>
+    <pre class="smallexample">
+temporary-goal-column   Variable
 Current goal column for vertical motion.
 It is the column where point was at the start of the current run
 of vertical motion commands.
 
-When moving by visual lines via the function ‘line-move-visual’, it is a cons
+When moving by visual lines via the function &acirc;&euro;&tilde;line-move-visual&acirc;&euro;&trade;, it is a cons
 cell (COL . HSCROLL), where COL is the x-position, in pixels,
 divided by the default column width, and HSCROLL is the number of
 columns by which window is scrolled from left margin.
 
-When the ‘track-eol’ feature is doing its job, the value is
-‘most-positive-fixnum’.
+When the &acirc;&euro;&tilde;track-eol&acirc;&euro;&trade; feature is doing its job, the value is
+&acirc;&euro;&tilde;most-positive-fixnum&acirc;&euro;&trade;.
 ---------- Buffer: *Help* ----------
-</pre></div>
+</pre>
+  </div><a name="Definition-of-Snarf_002ddocumentation" id=
+  "Definition-of-Snarf_002ddocumentation"></a>
 
-<a name="Definition-of-Snarf_002ddocumentation"></a><dl>
-<dt><a name="index-Snarf_002ddocumentation"></a>Function: <strong>Snarf-documentation</strong> <em>filename</em></dt>
-<dd><p>This function is used when building Emacs, just before the runnable
-Emacs is dumped.  It finds the positions of the documentation strings
-stored in the file <var>filename</var>, and records those positions into
-memory in the function definitions and variable property lists.
-See <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>.
-</p>
-<p>Emacs reads the file <var>filename</var> from the <samp>emacs/etc</samp> directory.
-When the dumped Emacs is later executed, the same file will be looked
-for in the directory <code>doc-directory</code>.  Usually <var>filename</var> is
-<code>&quot;DOC&quot;</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-Snarf_002ddocumentation" id=
+    "index-Snarf_002ddocumentation"></a>Function:
+    <strong>Snarf-documentation</strong> <em>filename</em></dt>
 
-<dl>
-<dt><a name="index-doc_002ddirectory"></a>Variable: <strong>doc-directory</strong></dt>
-<dd><p>This variable holds the name of the directory which should contain the
-file <code>&quot;DOC&quot;</code> that contains documentation strings for
-built-in and preloaded functions and variables.
-</p>
-<p>In most cases, this is the same as <code>data-directory</code>.  They may be
-different when you run Emacs from the directory where you built it,
-without actually installing it.  See <a href="Help-Functions.html#Definition-of-data_002ddirectory">Definition of data-directory</a>.
-</p></dd></dl>
+    <dd>
+      <p>This function is used when building Emacs, just before the
+      runnable Emacs is dumped. It finds the positions of the
+      documentation strings stored in the file <var>filename</var>,
+      and records those positions into memory in the function
+      definitions and variable property lists. See <a href=
+      "Building-Emacs.html#Building-Emacs">Building Emacs</a>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Keys-in-Documentation.html#Keys-in-Documentation" accesskey="n" rel="next">Keys in Documentation</a>, Previous: <a href="Documentation-Basics.html#Documentation-Basics" accesskey="p" rel="prev">Documentation Basics</a>, Up: <a href="Documentation.html#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Emacs reads the file <var>filename</var> from the
+      <samp>emacs/etc</samp> directory. When the dumped Emacs is
+      later executed, the same file will be looked for in the
+      directory <code>doc-directory</code>. Usually
+      <var>filename</var> is <code>"DOC"</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-doc_002ddirectory" id=
+    "index-doc_002ddirectory"></a>Variable:
+    <strong>doc-directory</strong></dt>
 
+    <dd>
+      <p>This variable holds the name of the directory which should
+      contain the file <code>"DOC"</code> that contains
+      documentation strings for built-in and preloaded functions
+      and variables.</p>
 
+      <p>In most cases, this is the same as
+      <code>data-directory</code>. They may be different when you
+      run Emacs from the directory where you built it, without
+      actually installing it. See <a href=
+      "Help-Functions.html#Definition-of-data_002ddirectory">Definition
+      of data-directory</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Keys-in-Documentation.html#Keys-in-Documentation" accesskey=
+    "n" rel="next">Keys in Documentation</a>, Previous: <a href=
+    "Documentation-Basics.html#Documentation-Basics" accesskey="p"
+    rel="prev">Documentation Basics</a>, Up: <a href=
+    "Documentation.html#Documentation" accesskey="u" rel=
+    "up">Documentation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

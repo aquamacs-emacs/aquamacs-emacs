@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Traces and Profiles - TRAMP User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="TRAMP User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Files-directories-and-localnames.html#Files-directories-and-localnames" title="Files directories and localnames">
-<link rel="next" href="Issues.html#Issues" title="Issues">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Traces and Profiles - TRAMP User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="TRAMP User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Files-directories-and-localnames.html#Files-directories-and-localnames"
+  title="Files directories and localnames" />
+  <link rel="next" href="Issues.html#Issues" title="Issues" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +32,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,93 +45,87 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Traces-and-Profiles"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Issues.html#Issues">Issues</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Files-directories-and-localnames.html#Files-directories-and-localnames">Files directories and localnames</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Traces-and-Profiles" id="Traces-and-Profiles"></a>
 
-<h2 class="chapter">9 How to Customize Traces</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Issues.html#Issues">Issues</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Files-directories-and-localnames.html#Files-directories-and-localnames">Files
+    directories and localnames</a>, Up:&nbsp;<a rel="up" accesskey=
+    "u" href="index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>All <span class="sc">tramp</span> messages are raised with a verbosity level.  The
-verbosity level can be any number between 0 and 10.  Only messages with
-a verbosity level less than or equal to <code>tramp-verbose</code> are
-displayed.
+  <h2 class="chapter">9 How to Customize Traces</h2>
 
-   <p>The verbosity levels are
+  <p>All <span class="sc">tramp</span> messages are raised with a
+  verbosity level. The verbosity level can be any number between 0
+  and 10. Only messages with a verbosity level less than or equal
+  to <code>tramp-verbose</code> are displayed.</p>
 
-   <p>&nbsp;0<!-- /@w -->  silent (no <span class="sc">tramp</span> messages at all)
-<br>
+  <p>The verbosity levels are</p>
 
-   &nbsp;1<!-- /@w -->  errors
-<br>
+  <p>&nbsp;0<!-- /@w --> silent (no <span class="sc">tramp</span>
+  messages at all)<br />
+  &nbsp;1<!-- /@w --> errors<br />
+  &nbsp;2<!-- /@w --> warnings<br />
+  &nbsp;3<!-- /@w --> connection to remote hosts (default
+  verbosity)<br />
+  &nbsp;4<!-- /@w --> activities<br />
+  &nbsp;5<!-- /@w --> internal<br />
+  &nbsp;6<!-- /@w --> sent and received strings<br />
+  &nbsp;7<!-- /@w --> file caching<br />
+  &nbsp;8<!-- /@w --> connection properties<br />
+  &nbsp;9<!-- /@w --> test commands<br />
+  10<!-- /@w --> traces (huge)</p>
 
-   &nbsp;2<!-- /@w -->  warnings
-<br>
+  <p>When <code>tramp-verbose</code> is greater than or equal to 4,
+  the messages are also written into a <span class=
+  "sc">tramp</span> debug buffer. This debug buffer is useful for
+  analysing problems; sending a <span class="sc">tramp</span> bug
+  report should be done with <code>tramp-verbose</code> set to a
+  verbosity level of at least 6 (see <a href=
+  "Bug-Reports.html#Bug-Reports">Bug Reports</a>).</p>
 
-   &nbsp;3<!-- /@w -->  connection to remote hosts (default verbosity)
-<br>
+  <p>The debug buffer is in Outline Mode. That means, you can
+  change the level of messages to be viewed. If you want, for
+  example, see only messages up to verbosity level 5, you must
+  enter <kbd>C-u 6 C-c C-q</kbd>.</p>
 
-   &nbsp;4<!-- /@w -->  activities
-<br>
-
-   &nbsp;5<!-- /@w -->  internal
-<br>
-
-   &nbsp;6<!-- /@w -->  sent and received strings
-<br>
-
-   &nbsp;7<!-- /@w -->  file caching
-<br>
-
-   &nbsp;8<!-- /@w -->  connection properties
-<br>
-
-   &nbsp;9<!-- /@w -->  test commands
-<br>
-
-   10<!-- /@w -->  traces (huge)
-
-   <p>When <code>tramp-verbose</code> is greater than or equal to 4, the messages
-are also written into a <span class="sc">tramp</span> debug buffer.  This debug buffer
-is useful for analysing problems; sending a <span class="sc">tramp</span> bug report
-should be done with <code>tramp-verbose</code> set to a verbosity level of at
-least 6 (see <a href="Bug-Reports.html#Bug-Reports">Bug Reports</a>).
-
-   <p>The debug buffer is in
-Outline Mode. 
-That means, you can change the level of messages to be viewed.  If you
-want, for example, see only messages up to verbosity level 5, you must
-enter <kbd>C-u 6 C-c C-q</kbd>.
-
-   <p><span class="sc">tramp</span> errors are handled internally in order to raise the
-verbosity level 1 messages.  When you want to get a Lisp backtrace in
-case of an error, you need to set both
-
-<pre class="lisp">     (setq debug-on-error t
+  <p><span class="sc">tramp</span> errors are handled internally in
+  order to raise the verbosity level 1 messages. When you want to
+  get a Lisp backtrace in case of an error, you need to set
+  both</p>
+  <pre class="lisp">
+     (setq debug-on-error t
            debug-on-signal t)
 </pre>
-   <p>Sometimes, it might be even necessary to step through <span class="sc">tramp</span>
-function call traces.  Such traces are enabled by the following code:
 
-<pre class="lisp">     (require 'tramp)
+  <p>Sometimes, it might be even necessary to step through
+  <span class="sc">tramp</span> function call traces. Such traces
+  are enabled by the following code:</p>
+  <pre class="lisp">
+     (require 'tramp)
      (require 'trace)
      (dolist (elt (all-completions "tramp-" obarray 'functionp))
        (trace-function-background (intern elt)))
      (untrace-function 'tramp-read-passwd)
      (untrace-function 'tramp-gw-basic-authentication)
 </pre>
-   <p>The function call traces are inserted in the buffer
-<samp><span class="file">*trace-output*</span></samp>.  <code>tramp-read-passwd</code> and
-<code>tramp-gw-basic-authentication</code> shall be disabled when the
-function call traces are added to <span class="sc">tramp</span>, because both
-functions return password strings, which should not be distributed.
 
-   </body></html>
-
+  <p>The function call traces are inserted in the buffer
+  <samp><span class="file">*trace-output*</span></samp>.
+  <code>tramp-read-passwd</code> and
+  <code>tramp-gw-basic-authentication</code> shall be disabled when
+  the function call traces are added to <span class=
+  "sc">tramp</span>, because both functions return password
+  strings, which should not be distributed.</p>
+</body>
+</html>

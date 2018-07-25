@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,147 +18,202 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Reducing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Reducing">
-<meta name="keywords" content="GNU Emacs Calc Manual: Reducing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Reducing-and-Mapping.html#Reducing-and-Mapping" rel="up" title="Reducing and Mapping">
-<link href="Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points" rel="next" title="Nesting and Fixed Points">
-<link href="Mapping.html#Mapping" rel="prev" title="Mapping">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Reducing</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Reducing" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Reducing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Reducing-and-Mapping.html#Reducing-and-Mapping" rel=
+  "up" title="Reducing and Mapping" />
+  <link href=
+  "Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points" rel=
+  "next" title="Nesting and Fixed Points" />
+  <link href="Mapping.html#Mapping" rel="prev" title="Mapping" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Reducing"></a>
-<div class="header">
-<p>
-Next: <a href="Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points" accesskey="n" rel="next">Nesting and Fixed Points</a>, Previous: <a href="Mapping.html#Mapping" accesskey="p" rel="prev">Mapping</a>, Up: <a href="Reducing-and-Mapping.html#Reducing-and-Mapping" accesskey="u" rel="up">Reducing and Mapping</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Reducing-1"></a>
-<h4 class="subsection">9.8.3 Reducing</h4>
+<body lang="en" xml:lang="en">
+  <a name="Reducing" id="Reducing"></a>
 
-<a name="index-v-R"></a>
-<a name="index-V-R"></a>
-<a name="index-calc_002dreduce"></a>
-<a name="index-reduce"></a>
-<p>The <kbd>V R</kbd> (<code>calc-reduce</code>) [<code>reduce</code>] command applies a given
-binary operator across all the elements of a vector.  A binary operator is
-a function such as <code>+</code> or <code>max</code> which takes two arguments.  For
-example, reducing <code>+</code> over a vector computes the sum of the elements
-of the vector.  Reducing <code>-</code> computes the first element minus each of
-the remaining elements.  Reducing <code>max</code> computes the maximum element
-and so on.  In general, reducing <code>f</code> over the vector &lsquo;<samp>[a, b, c, d]</samp>&rsquo;
-produces &lsquo;<samp>f(f(f(a, b), c), d)</samp>&rsquo;.
-</p>
-<a name="index-I-v-R"></a>
-<a name="index-I-V-R"></a>
-<a name="index-rreduce"></a>
-<p>The <kbd>I V R</kbd> [<code>rreduce</code>] command is similar to <kbd>V R</kbd> except
-that works from right to left through the vector.  For example, plain
-<kbd>V R -</kbd> on the vector &lsquo;<samp>[a, b, c, d]</samp>&rsquo; produces &lsquo;<samp>a - b - c - d</samp>&rsquo;
-but <kbd>I V R -</kbd> on the same vector produces &lsquo;<samp>a - (b - (c - d))</samp>&rsquo;,
-or &lsquo;<samp>a - b + c - d</samp>&rsquo;.  This &ldquo;alternating sum&rdquo; occurs frequently
-in power series expansions.
-</p>
-<a name="index-v-U"></a>
-<a name="index-V-U"></a>
-<a name="index-accum"></a>
-<p>The <kbd>V U</kbd> (<code>calc-accumulate</code>) [<code>accum</code>] command does an
-accumulation operation.  Here Calc does the corresponding reduction
-operation, but instead of producing only the final result, it produces
-a vector of all the intermediate results.  Accumulating <code>+</code> over
-the vector &lsquo;<samp>[a, b, c, d]</samp>&rsquo; produces the vector
-&lsquo;<samp>[a, a + b, a + b + c, a + b + c + d]</samp>&rsquo;.
-</p>
-<a name="index-I-v-U"></a>
-<a name="index-I-V-U"></a>
-<a name="index-raccum"></a>
-<p>The <kbd>I V U</kbd> [<code>raccum</code>] command does a right-to-left accumulation.
-For example, <kbd>I V U -</kbd> on the vector &lsquo;<samp>[a, b, c, d]</samp>&rsquo; produces the
-vector &lsquo;<samp>[a - b + c - d, b - c + d, c - d, d]</samp>&rsquo;.
-</p>
-<a name="index-reducea"></a>
-<a name="index-rreducea"></a>
-<a name="index-reduced"></a>
-<a name="index-rreduced"></a>
-<p>As for <kbd>V M</kbd>, <kbd>V R</kbd> normally reduces a matrix elementwise.  For
-example, given the matrix &lsquo;<samp>[[a, b, c], [d, e, f]]</samp>&rsquo;, <kbd>V R +</kbd> will
-compute &lsquo;<samp>a + b + c + d + e + f</samp>&rsquo;.  You can type <kbd>V R _</kbd> or
-<kbd>V R :</kbd> to modify this behavior.  The <kbd>V R _</kbd> [<code>reducea</code>]
-command reduces &ldquo;across&rdquo; the matrix; it reduces each row of the matrix
-as a vector, then collects the results.  Thus <kbd>V R _ +</kbd> of this
-matrix would produce &lsquo;<samp>[a + b + c, d + e + f]</samp>&rsquo;.  Similarly, <kbd>V R :</kbd>
-[<code>reduced</code>] reduces down; <kbd>V R : +</kbd> would produce &lsquo;<samp>[a + d,
-b + e, c + f]</samp>&rsquo;.
-</p>
-<a name="index-reducer"></a>
-<a name="index-rreducer"></a>
-<p>There is a third &ldquo;by rows&rdquo; mode for reduction that is occasionally
-useful; <kbd>V R =</kbd> [<code>reducer</code>] simply reduces the operator over
-the rows of the matrix themselves.  Thus <kbd>V R = +</kbd> on the above
-matrix would get the same result as <kbd>V R : +</kbd>, since adding two
-row vectors is equivalent to adding their elements.  But <kbd>V R = *</kbd>
-would multiply the two rows (to get a single number, their dot product),
-while <kbd>V R : *</kbd> would produce a vector of the products of the columns.
-</p>
-<p>These three matrix reduction modes work with <kbd>V R</kbd> and <kbd>I V R</kbd>,
-but they are not currently supported with <kbd>V U</kbd> or <kbd>I V U</kbd>.
-</p>
-<a name="index-reducec"></a>
-<a name="index-rreducec"></a>
-<p>The obsolete reduce-by-columns function, <code>reducec</code>, is still
-supported but there is no way to get it through the <kbd>V R</kbd> command.
-</p>
-<p>The commands <kbd>C-x * :</kbd> and <kbd>C-x * _</kbd> are equivalent to typing
-<kbd>C-x * r</kbd> to grab a rectangle of data into Calc, and then typing
-<kbd>V R : +</kbd> or <kbd>V R _ +</kbd>, respectively, to sum the columns or
-rows of the matrix.  See <a href="Grabbing-From-Buffers.html#Grabbing-From-Buffers">Grabbing From Buffers</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points" accesskey="n" rel="next">Nesting and Fixed Points</a>, Previous: <a href="Mapping.html#Mapping" accesskey="p" rel="prev">Mapping</a>, Up: <a href="Reducing-and-Mapping.html#Reducing-and-Mapping" accesskey="u" rel="up">Reducing and Mapping</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href=
+    "Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points"
+    accesskey="n" rel="next">Nesting and Fixed Points</a>,
+    Previous: <a href="Mapping.html#Mapping" accesskey="p" rel=
+    "prev">Mapping</a>, Up: <a href=
+    "Reducing-and-Mapping.html#Reducing-and-Mapping" accesskey="u"
+    rel="up">Reducing and Mapping</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Reducing-1" id="Reducing-1"></a>
 
+  <h4 class="subsection">9.8.3 Reducing</h4><a name="index-v-R" id=
+  "index-v-R"></a> <a name="index-V-R" id="index-V-R"></a> <a name=
+  "index-calc_002dreduce" id="index-calc_002dreduce"></a> <a name=
+  "index-reduce" id="index-reduce"></a>
 
+  <p>The <kbd>V R</kbd> (<code>calc-reduce</code>)
+  [<code>reduce</code>] command applies a given binary operator
+  across all the elements of a vector. A binary operator is a
+  function such as <code>+</code> or <code>max</code> which takes
+  two arguments. For example, reducing <code>+</code> over a vector
+  computes the sum of the elements of the vector. Reducing
+  <code>-</code> computes the first element minus each of the
+  remaining elements. Reducing <code>max</code> computes the
+  maximum element and so on. In general, reducing <code>f</code>
+  over the vector &lsquo;<samp>[a, b, c, d]</samp>&rsquo; produces
+  &lsquo;<samp>f(f(f(a, b), c), d)</samp>&rsquo;.</p><a name=
+  "index-I-v-R" id="index-I-v-R"></a> <a name="index-I-V-R" id=
+  "index-I-V-R"></a> <a name="index-rreduce" id=
+  "index-rreduce"></a>
 
+  <p>The <kbd>I V R</kbd> [<code>rreduce</code>] command is similar
+  to <kbd>V R</kbd> except that works from right to left through
+  the vector. For example, plain <kbd>V R -</kbd> on the vector
+  &lsquo;<samp>[a, b, c, d]</samp>&rsquo; produces &lsquo;<samp>a -
+  b - c - d</samp>&rsquo; but <kbd>I V R -</kbd> on the same vector
+  produces &lsquo;<samp>a - (b - (c - d))</samp>&rsquo;, or
+  &lsquo;<samp>a - b + c - d</samp>&rsquo;. This &ldquo;alternating
+  sum&rdquo; occurs frequently in power series
+  expansions.</p><a name="index-v-U" id="index-v-U"></a> <a name=
+  "index-V-U" id="index-V-U"></a> <a name="index-accum" id=
+  "index-accum"></a>
+
+  <p>The <kbd>V U</kbd> (<code>calc-accumulate</code>)
+  [<code>accum</code>] command does an accumulation operation. Here
+  Calc does the corresponding reduction operation, but instead of
+  producing only the final result, it produces a vector of all the
+  intermediate results. Accumulating <code>+</code> over the vector
+  &lsquo;<samp>[a, b, c, d]</samp>&rsquo; produces the vector
+  &lsquo;<samp>[a, a + b, a + b + c, a + b + c +
+  d]</samp>&rsquo;.</p><a name="index-I-v-U" id="index-I-v-U"></a>
+  <a name="index-I-V-U" id="index-I-V-U"></a> <a name=
+  "index-raccum" id="index-raccum"></a>
+
+  <p>The <kbd>I V U</kbd> [<code>raccum</code>] command does a
+  right-to-left accumulation. For example, <kbd>I V U -</kbd> on
+  the vector &lsquo;<samp>[a, b, c, d]</samp>&rsquo; produces the
+  vector &lsquo;<samp>[a - b + c - d, b - c + d, c - d,
+  d]</samp>&rsquo;.</p><a name="index-reducea" id=
+  "index-reducea"></a> <a name="index-rreducea" id=
+  "index-rreducea"></a> <a name="index-reduced" id=
+  "index-reduced"></a> <a name="index-rreduced" id=
+  "index-rreduced"></a>
+
+  <p>As for <kbd>V M</kbd>, <kbd>V R</kbd> normally reduces a
+  matrix elementwise. For example, given the matrix
+  &lsquo;<samp>[[a, b, c], [d, e, f]]</samp>&rsquo;, <kbd>V R
+  +</kbd> will compute &lsquo;<samp>a + b + c + d + e +
+  f</samp>&rsquo;. You can type <kbd>V R _</kbd> or <kbd>V R
+  :</kbd> to modify this behavior. The <kbd>V R _</kbd>
+  [<code>reducea</code>] command reduces &ldquo;across&rdquo; the
+  matrix; it reduces each row of the matrix as a vector, then
+  collects the results. Thus <kbd>V R _ +</kbd> of this matrix
+  would produce &lsquo;<samp>[a + b + c, d + e + f]</samp>&rsquo;.
+  Similarly, <kbd>V R :</kbd> [<code>reduced</code>] reduces down;
+  <kbd>V R : +</kbd> would produce &lsquo;<samp>[a + d, b + e, c +
+  f]</samp>&rsquo;.</p><a name="index-reducer" id=
+  "index-reducer"></a> <a name="index-rreducer" id=
+  "index-rreducer"></a>
+
+  <p>There is a third &ldquo;by rows&rdquo; mode for reduction that
+  is occasionally useful; <kbd>V R =</kbd> [<code>reducer</code>]
+  simply reduces the operator over the rows of the matrix
+  themselves. Thus <kbd>V R = +</kbd> on the above matrix would get
+  the same result as <kbd>V R : +</kbd>, since adding two row
+  vectors is equivalent to adding their elements. But <kbd>V R =
+  *</kbd> would multiply the two rows (to get a single number,
+  their dot product), while <kbd>V R : *</kbd> would produce a
+  vector of the products of the columns.</p>
+
+  <p>These three matrix reduction modes work with <kbd>V R</kbd>
+  and <kbd>I V R</kbd>, but they are not currently supported with
+  <kbd>V U</kbd> or <kbd>I V U</kbd>.</p><a name="index-reducec"
+  id="index-reducec"></a> <a name="index-rreducec" id=
+  "index-rreducec"></a>
+
+  <p>The obsolete reduce-by-columns function, <code>reducec</code>,
+  is still supported but there is no way to get it through the
+  <kbd>V R</kbd> command.</p>
+
+  <p>The commands <kbd>C-x * :</kbd> and <kbd>C-x * _</kbd> are
+  equivalent to typing <kbd>C-x * r</kbd> to grab a rectangle of
+  data into Calc, and then typing <kbd>V R : +</kbd> or <kbd>V R _
+  +</kbd>, respectively, to sum the columns or rows of the matrix.
+  See <a href=
+  "Grabbing-From-Buffers.html#Grabbing-From-Buffers">Grabbing From
+  Buffers</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Nesting-and-Fixed-Points.html#Nesting-and-Fixed-Points"
+    accesskey="n" rel="next">Nesting and Fixed Points</a>,
+    Previous: <a href="Mapping.html#Mapping" accesskey="p" rel=
+    "prev">Mapping</a>, Up: <a href=
+    "Reducing-and-Mapping.html#Reducing-and-Mapping" accesskey="u"
+    rel="up">Reducing and Mapping</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

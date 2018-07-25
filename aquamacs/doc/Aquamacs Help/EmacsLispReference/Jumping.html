@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,141 +19,192 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Jumping</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Jumping">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Jumping">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="Edebug-Misc.html#Edebug-Misc" rel="next" title="Edebug Misc">
-<link href="Edebug-Execution-Modes.html#Edebug-Execution-Modes" rel="prev" title="Edebug Execution Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Jumping</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Jumping" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Jumping" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="Edebug-Misc.html#Edebug-Misc" rel="next" title=
+  "Edebug Misc" />
+  <link href="Edebug-Execution-Modes.html#Edebug-Execution-Modes"
+  rel="prev" title="Edebug Execution Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Jumping" id="Jumping"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Edebug-Misc.html#Edebug-Misc" accesskey="n"
+    rel="next">Edebug Misc</a>, Previous: <a href=
+    "Edebug-Execution-Modes.html#Edebug-Execution-Modes" accesskey=
+    "p" rel="prev">Edebug Execution Modes</a>, Up: <a href=
+    "Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Jumping-1" id="Jumping-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Jumping"></a>
-<div class="header">
-<p>
-Next: <a href="Edebug-Misc.html#Edebug-Misc" accesskey="n" rel="next">Edebug Misc</a>, Previous: <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes" accesskey="p" rel="prev">Edebug Execution Modes</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Jumping-1"></a>
-<h4 class="subsection">17.2.4 Jumping</h4>
+  <h4 class="subsection">17.2.4 Jumping</h4>
 
-<p>The commands described in this section execute until they reach a
-specified location.  All except <kbd>i</kbd> make a temporary breakpoint to
-establish the place to stop, then switch to go mode.  Any other
-breakpoint reached before the intended stop point will also stop
-execution.  See <a href="Breakpoints.html#Breakpoints">Breakpoints</a>, for the details on breakpoints.
-</p>
-<p>These commands may fail to work as expected in case of nonlocal exit,
-as that can bypass the temporary breakpoint where you expected the
-program to stop.
-</p>
-<dl compact="compact">
-<dt><kbd>h</kbd></dt>
-<dd><p>Proceed to the stop point near where point is (<code>edebug-goto-here</code>).
-</p>
-</dd>
-<dt><kbd>f</kbd></dt>
-<dd><p>Run the program for one expression
-(<code>edebug-forward-sexp</code>).
-</p>
-</dd>
-<dt><kbd>o</kbd></dt>
-<dd><p>Run the program until the end of the containing sexp (<code>edebug-step-out</code>).
-</p>
-</dd>
-<dt><kbd>i</kbd></dt>
-<dd><p>Step into the function or macro called by the form after point
-(<code>edebug-step-in</code>).
-</p></dd>
-</dl>
+  <p>The commands described in this section execute until they
+  reach a specified location. All except <kbd>i</kbd> make a
+  temporary breakpoint to establish the place to stop, then switch
+  to go mode. Any other breakpoint reached before the intended stop
+  point will also stop execution. See <a href=
+  "Breakpoints.html#Breakpoints">Breakpoints</a>, for the details
+  on breakpoints.</p>
 
-<p>The <kbd>h</kbd> command proceeds to the stop point at or after the current
-location of point, using a temporary breakpoint.
-</p>
-<p>The <kbd>f</kbd> command runs the program forward over one expression.  More
-precisely, it sets a temporary breakpoint at the position that
-<code>forward-sexp</code> would reach, then executes in go mode so that
-the program will stop at breakpoints.
-</p>
-<p>With a prefix argument <var>n</var>, the temporary breakpoint is placed
-<var>n</var> sexps beyond point.  If the containing list ends before <var>n</var>
-more elements, then the place to stop is after the containing
-expression.
-</p>
-<p>You must check that the position <code>forward-sexp</code> finds is a place
-that the program will really get to.  In <code>cond</code>, for example,
-this may not be true.
-</p>
-<p>For flexibility, the <kbd>f</kbd> command does <code>forward-sexp</code> starting
-at point, rather than at the stop point.  If you want to execute one
-expression <em>from the current stop point</em>, first type <kbd>w</kbd>
-(<code>edebug-where</code>) to move point there, and then type <kbd>f</kbd>.
-</p>
-<p>The <kbd>o</kbd> command continues out of an expression.  It places a
-temporary breakpoint at the end of the sexp containing point.  If the
-containing sexp is a function definition itself, <kbd>o</kbd> continues until
-just before the last sexp in the definition.  If that is where you are
-now, it returns from the function and then stops.  In other words, this
-command does not exit the currently executing function unless you are
-positioned after the last sexp.
-</p>
-<p>The <kbd>i</kbd> command steps into the function or macro called by the list
-form after point, and stops at its first stop point.  Note that the form
-need not be the one about to be evaluated.  But if the form is a
-function call about to be evaluated, remember to use this command before
-any of the arguments are evaluated, since otherwise it will be too late.
-</p>
-<p>The <kbd>i</kbd> command instruments the function or macro it&rsquo;s supposed to
-step into, if it isn&rsquo;t instrumented already.  This is convenient, but keep
-in mind that the function or macro remains instrumented unless you explicitly
-arrange to deinstrument it.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Edebug-Misc.html#Edebug-Misc" accesskey="n" rel="next">Edebug Misc</a>, Previous: <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes" accesskey="p" rel="prev">Edebug Execution Modes</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>These commands may fail to work as expected in case of
+  nonlocal exit, as that can bypass the temporary breakpoint where
+  you expected the program to stop.</p>
 
+  <dl compact="compact">
+    <dt><kbd>h</kbd></dt>
 
+    <dd>
+      <p>Proceed to the stop point near where point is
+      (<code>edebug-goto-here</code>).</p>
+    </dd>
 
+    <dt><kbd>f</kbd></dt>
+
+    <dd>
+      <p>Run the program for one expression
+      (<code>edebug-forward-sexp</code>).</p>
+    </dd>
+
+    <dt><kbd>o</kbd></dt>
+
+    <dd>
+      <p>Run the program until the end of the containing sexp
+      (<code>edebug-step-out</code>).</p>
+    </dd>
+
+    <dt><kbd>i</kbd></dt>
+
+    <dd>
+      <p>Step into the function or macro called by the form after
+      point (<code>edebug-step-in</code>).</p>
+    </dd>
+  </dl>
+
+  <p>The <kbd>h</kbd> command proceeds to the stop point at or
+  after the current location of point, using a temporary
+  breakpoint.</p>
+
+  <p>The <kbd>f</kbd> command runs the program forward over one
+  expression. More precisely, it sets a temporary breakpoint at the
+  position that <code>forward-sexp</code> would reach, then
+  executes in go mode so that the program will stop at
+  breakpoints.</p>
+
+  <p>With a prefix argument <var>n</var>, the temporary breakpoint
+  is placed <var>n</var> sexps beyond point. If the containing list
+  ends before <var>n</var> more elements, then the place to stop is
+  after the containing expression.</p>
+
+  <p>You must check that the position <code>forward-sexp</code>
+  finds is a place that the program will really get to. In
+  <code>cond</code>, for example, this may not be true.</p>
+
+  <p>For flexibility, the <kbd>f</kbd> command does
+  <code>forward-sexp</code> starting at point, rather than at the
+  stop point. If you want to execute one expression <em>from the
+  current stop point</em>, first type <kbd>w</kbd>
+  (<code>edebug-where</code>) to move point there, and then type
+  <kbd>f</kbd>.</p>
+
+  <p>The <kbd>o</kbd> command continues out of an expression. It
+  places a temporary breakpoint at the end of the sexp containing
+  point. If the containing sexp is a function definition itself,
+  <kbd>o</kbd> continues until just before the last sexp in the
+  definition. If that is where you are now, it returns from the
+  function and then stops. In other words, this command does not
+  exit the currently executing function unless you are positioned
+  after the last sexp.</p>
+
+  <p>The <kbd>i</kbd> command steps into the function or macro
+  called by the list form after point, and stops at its first stop
+  point. Note that the form need not be the one about to be
+  evaluated. But if the form is a function call about to be
+  evaluated, remember to use this command before any of the
+  arguments are evaluated, since otherwise it will be too late.</p>
+
+  <p>The <kbd>i</kbd> command instruments the function or macro
+  it&rsquo;s supposed to step into, if it isn&rsquo;t instrumented
+  already. This is convenient, but keep in mind that the function
+  or macro remains instrumented unless you explicitly arrange to
+  deinstrument it.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Edebug-Misc.html#Edebug-Misc" accesskey="n"
+    rel="next">Edebug Misc</a>, Previous: <a href=
+    "Edebug-Execution-Modes.html#Edebug-Execution-Modes" accesskey=
+    "p" rel="prev">Edebug Execution Modes</a>, Up: <a href=
+    "Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

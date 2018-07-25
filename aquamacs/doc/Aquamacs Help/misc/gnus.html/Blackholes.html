@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,113 +14,160 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Blackholes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Blackholes">
-<meta name="keywords" content="Gnus Manual: Blackholes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title="Spam Back Ends">
-<link href="Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching" rel="next" title="Regular Expressions Header Matching">
-<link href="Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments" rel="prev" title="Anti-spam Hashcash Payments">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Blackholes</title>
+  <meta name="description" content="Gnus Manual: Blackholes" />
+  <meta name="keywords" content="Gnus Manual: Blackholes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title=
+  "Spam Back Ends" />
+  <link href=
+  "Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching"
+  rel="next" title="Regular Expressions Header Matching" />
+  <link href=
+  "Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments"
+  rel="prev" title="Anti-spam Hashcash Payments" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Blackholes"></a>
-<div class="header">
-<p>
-Next: <a href="Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching" accesskey="n" rel="next">Regular Expressions Header Matching</a>, Previous: <a href="Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments" accesskey="p" rel="prev">Anti-spam Hashcash Payments</a>, Up: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel="up">Spam Back Ends</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Blackholes-1"></a>
-<h4 class="subsubsection">9.17.6.5 Blackholes</h4>
-<a name="index-spam-filtering-8"></a>
-<a name="index-blackholes_002c-spam-filtering"></a>
-<a name="index-spam-11"></a>
+<body lang="en" xml:lang="en">
+  <a name="Blackholes" id="Blackholes"></a>
 
-<dl>
-<dt><a name="index-spam_002duse_002dblackholes"></a>Variable: <strong>spam-use-blackholes</strong></dt>
-<dd>
-<p>This option is disabled by default.  You can let Gnus consult the
-blackhole-type distributed spam processing systems (DCC, for instance)
-when you set this option.  The variable <code>spam-blackhole-servers</code>
-holds the list of blackhole servers Gnus will consult.  The current
-list is fairly comprehensive, but make sure to let us know if it
-contains outdated servers.
-</p>
-<p>The blackhole check uses the <code>dig.el</code> package, but you can tell
-<code>spam.el</code> to use <code>dns.el</code> instead for better performance if
-you set <code>spam-use-dig</code> to <code>nil</code>.  It is not recommended at
-this time to set <code>spam-use-dig</code> to <code>nil</code> despite the
-possible performance improvements, because some users may be unable to
-use it, but you can try it and see if it works for you.
-</p>
-</dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching"
+    accesskey="n" rel="next">Regular Expressions Header
+    Matching</a>, Previous: <a href=
+    "Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments"
+    accesskey="p" rel="prev">Anti-spam Hashcash Payments</a>, Up:
+    <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel=
+    "up">Spam Back Ends</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Blackholes-1" id="Blackholes-1"></a>
 
-<dl>
-<dt><a name="index-spam_002dblackhole_002dservers"></a>Variable: <strong>spam-blackhole-servers</strong></dt>
-<dd>
-<p>The list of servers to consult for blackhole checks.
-</p>
-</dd></dl>
+  <h4 class="subsubsection">9.17.6.5 Blackholes</h4><a name=
+  "index-spam-filtering-8" id="index-spam-filtering-8"></a>
+  <a name="index-blackholes_002c-spam-filtering" id=
+  "index-blackholes_002c-spam-filtering"></a> <a name=
+  "index-spam-11" id="index-spam-11"></a>
 
-<dl>
-<dt><a name="index-spam_002dblackhole_002dgood_002dserver_002dregex"></a>Variable: <strong>spam-blackhole-good-server-regex</strong></dt>
-<dd>
-<p>A regular expression for IPs that should not be checked against the
-blackhole server list.  When set to <code>nil</code>, it has no effect.
-</p>
-</dd></dl>
+  <dl>
+    <dt><a name="index-spam_002duse_002dblackholes" id=
+    "index-spam_002duse_002dblackholes"></a>Variable:
+    <strong>spam-use-blackholes</strong></dt>
 
-<dl>
-<dt><a name="index-spam_002duse_002ddig"></a>Variable: <strong>spam-use-dig</strong></dt>
-<dd>
-<p>Use the <code>dig.el</code> package instead of the <code>dns.el</code> package.
-The default setting of <code>t</code> is recommended.
-</p>
-</dd></dl>
+    <dd>
+      <p>This option is disabled by default. You can let Gnus
+      consult the blackhole-type distributed spam processing
+      systems (DCC, for instance) when you set this option. The
+      variable <code>spam-blackhole-servers</code> holds the list
+      of blackhole servers Gnus will consult. The current list is
+      fairly comprehensive, but make sure to let us know if it
+      contains outdated servers.</p>
 
-<p>Blackhole checks are done only on incoming mail.  There is no spam or
-ham processor for blackholes.
-</p>
+      <p>The blackhole check uses the <code>dig.el</code> package,
+      but you can tell <code>spam.el</code> to use
+      <code>dns.el</code> instead for better performance if you set
+      <code>spam-use-dig</code> to <code>nil</code>. It is not
+      recommended at this time to set <code>spam-use-dig</code> to
+      <code>nil</code> despite the possible performance
+      improvements, because some users may be unable to use it, but
+      you can try it and see if it works for you.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-spam_002dblackhole_002dservers" id=
+    "index-spam_002dblackhole_002dservers"></a>Variable:
+    <strong>spam-blackhole-servers</strong></dt>
 
+    <dd>
+      <p>The list of servers to consult for blackhole checks.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-spam_002dblackhole_002dgood_002dserver_002dregex" id=
+    "index-spam_002dblackhole_002dgood_002dserver_002dregex"></a>Variable:
+    <strong>spam-blackhole-good-server-regex</strong></dt>
+
+    <dd>
+      <p>A regular expression for IPs that should not be checked
+      against the blackhole server list. When set to
+      <code>nil</code>, it has no effect.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-spam_002duse_002ddig" id=
+    "index-spam_002duse_002ddig"></a>Variable:
+    <strong>spam-use-dig</strong></dt>
+
+    <dd>
+      <p>Use the <code>dig.el</code> package instead of the
+      <code>dns.el</code> package. The default setting of
+      <code>t</code> is recommended.</p>
+    </dd>
+  </dl>
+
+  <p>Blackhole checks are done only on incoming mail. There is no
+  spam or ham processor for blackholes.</p>
 </body>
 </html>

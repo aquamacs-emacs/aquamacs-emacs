@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,166 +18,233 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Defining Stack Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Defining Stack Commands">
-<meta name="keywords" content="GNU Emacs Calc Manual: Defining Stack Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lisp-Definitions.html#Lisp-Definitions" rel="up" title="Lisp Definitions">
-<link href="Argument-Qualifiers.html#Argument-Qualifiers" rel="next" title="Argument Qualifiers">
-<link href="Defining-Simple-Commands.html#Defining-Simple-Commands" rel="prev" title="Defining Simple Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Defining Stack Commands</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Defining Stack Commands" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Defining Stack Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lisp-Definitions.html#Lisp-Definitions" rel="up"
+  title="Lisp Definitions" />
+  <link href="Argument-Qualifiers.html#Argument-Qualifiers" rel=
+  "next" title="Argument Qualifiers" />
+  <link href=
+  "Defining-Simple-Commands.html#Defining-Simple-Commands" rel=
+  "prev" title="Defining Simple Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-Stack-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Argument-Qualifiers.html#Argument-Qualifiers" accesskey="n" rel="next">Argument Qualifiers</a>, Previous: <a href="Defining-Simple-Commands.html#Defining-Simple-Commands" accesskey="p" rel="prev">Defining Simple Commands</a>, Up: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel="up">Lisp Definitions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-New-Stack_002dBased-Commands"></a>
-<h4 class="subsection">17.5.3 Defining New Stack-Based Commands</h4>
+<body lang="en" xml:lang="en">
+  <a name="Defining-Stack-Commands" id=
+  "Defining-Stack-Commands"></a>
 
-<p>To define a new computational command which takes and/or leaves arguments
-on the stack, a special form of <code>interactive</code> clause is used.
-</p>
-<div class="example">
-<pre class="example">(interactive <var>num</var> <var>tag</var>)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Argument-Qualifiers.html#Argument-Qualifiers"
+    accesskey="n" rel="next">Argument Qualifiers</a>, Previous:
+    <a href=
+    "Defining-Simple-Commands.html#Defining-Simple-Commands"
+    accesskey="p" rel="prev">Defining Simple Commands</a>, Up:
+    <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="u"
+    rel="up">Lisp Definitions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-New-Stack_002dBased-Commands" id=
+  "Defining-New-Stack_002dBased-Commands"></a>
 
-<p>where <var>num</var> is an integer, and <var>tag</var> is a string.  The effect is
-to pop <var>num</var> values off the stack, resimplify them by calling
-<code>calc-normalize</code>, and hand them to your function according to the
-function&rsquo;s argument list.  Your function may include <code>&amp;optional</code> and
-<code>&amp;rest</code> parameters, so long as calling the function with <var>num</var>
-parameters is valid.
-</p>
-<p>Your function must return either a number or a formula in a form
-acceptable to Calc, or a list of such numbers or formulas.  These value(s)
-are pushed onto the stack when the function completes.  They are also
-recorded in the Calc Trail buffer on a line beginning with <var>tag</var>,
-a string of (normally) four characters or less.  If you omit <var>tag</var>
-or use <code>nil</code> as a tag, the result is not recorded in the trail.
-</p>
-<p>As an example, the definition
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defmath myfact (n)
-  &quot;Compute the factorial of the integer at the top of the stack.&quot;
-  (interactive 1 &quot;fact&quot;)
+  <h4 class="subsection">17.5.3 Defining New Stack-Based
+  Commands</h4>
+
+  <p>To define a new computational command which takes and/or
+  leaves arguments on the stack, a special form of
+  <code>interactive</code> clause is used.</p>
+
+  <div class="example">
+    <pre class="example">
+(interactive <var>num</var> <var>tag</var>)
+</pre>
+  </div>
+
+  <p>where <var>num</var> is an integer, and <var>tag</var> is a
+  string. The effect is to pop <var>num</var> values off the stack,
+  resimplify them by calling <code>calc-normalize</code>, and hand
+  them to your function according to the function&rsquo;s argument
+  list. Your function may include <code>&amp;optional</code> and
+  <code>&amp;rest</code> parameters, so long as calling the
+  function with <var>num</var> parameters is valid.</p>
+
+  <p>Your function must return either a number or a formula in a
+  form acceptable to Calc, or a list of such numbers or formulas.
+  These value(s) are pushed onto the stack when the function
+  completes. They are also recorded in the Calc Trail buffer on a
+  line beginning with <var>tag</var>, a string of (normally) four
+  characters or less. If you omit <var>tag</var> or use
+  <code>nil</code> as a tag, the result is not recorded in the
+  trail.</p>
+
+  <p>As an example, the definition</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defmath myfact (n)
+  "Compute the factorial of the integer at the top of the stack."
+  (interactive 1 "fact")
   (if (&gt; n 0)
       (* n (myfact (1- n)))
     (and (= n 0) 1)))
-</pre></div>
+</pre>
+  </div>
 
-<p>is a version of the factorial function shown previously which can be used
-as a command as well as an algebraic function.  It expands to
-</p>
-<div class="smallexample">
-<pre class="smallexample">(defun calc-myfact ()
-  &quot;Compute the factorial of the integer at the top of the stack.&quot;
+  <p>is a version of the factorial function shown previously which
+  can be used as a command as well as an algebraic function. It
+  expands to</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(defun calc-myfact ()
+  "Compute the factorial of the integer at the top of the stack."
   (interactive)
   (calc-slow-wrapper
-   (calc-enter-result 1 &quot;fact&quot;
+   (calc-enter-result 1 "fact"
      (cons 'calcFunc-myfact (calc-top-list-n 1)))))
 
 (defun calcFunc-myfact (n)
-  &quot;Compute the factorial of the integer at the top of the stack.&quot;
+  "Compute the factorial of the integer at the top of the stack."
   (if (math-posp n)
       (math-mul n (calcFunc-myfact (math-add n -1)))
     (and (math-zerop n) 1)))
-</pre></div>
+</pre>
+  </div><a name="index-calc_002dslow_002dwrapper" id=
+  "index-calc_002dslow_002dwrapper"></a>
 
-<a name="index-calc_002dslow_002dwrapper"></a>
-<p>The <code>calc-slow-wrapper</code> function is a version of <code>calc-wrapper</code>
-that automatically puts up a &lsquo;<samp>Working...</samp>&rsquo; message before the
-computation begins.  (This message can be turned off by the user
-with an <kbd>m w</kbd> (<code>calc-working</code>) command.)
-</p>
-<a name="index-calc_002dtop_002dlist_002dn"></a>
-<p>The <code>calc-top-list-n</code> function returns a list of the specified number
-of values from the top of the stack.  It resimplifies each value by
-calling <code>calc-normalize</code>.  If its argument is zero it returns an
-empty list.  It does not actually remove these values from the stack.
-</p>
-<a name="index-calc_002denter_002dresult"></a>
-<p>The <code>calc-enter-result</code> function takes an integer <var>num</var> and string
-<var>tag</var> as described above, plus a third argument which is either a
-Calculator data object or a list of such objects.  These objects are
-resimplified and pushed onto the stack after popping the specified number
-of values from the stack.  If <var>tag</var> is non-<code>nil</code>, the values
-being pushed are also recorded in the trail.
-</p>
-<p>Note that if <code>calcFunc-myfact</code> returns <code>nil</code> this represents
-&ldquo;leave the function in symbolic form.&rdquo;  To return an actual empty list,
-in the sense that <code>calc-enter-result</code> will push zero elements back
-onto the stack, you should return the special value &lsquo;<samp>'(nil)</samp>&rsquo;, a list
-containing the single symbol <code>nil</code>.
-</p>
-<p>The <code>interactive</code> declaration can actually contain a limited
-Emacs-style code string as well which comes just before <var>num</var> and
-<var>tag</var>.  Currently the only Emacs code supported is &lsquo;<samp>&quot;p&quot;</samp>&rsquo;, as in
-</p>
-<div class="example">
-<pre class="example">(defmath foo (a b &amp;optional c)
-  (interactive &quot;p&quot; 2 &quot;foo&quot;)
+  <p>The <code>calc-slow-wrapper</code> function is a version of
+  <code>calc-wrapper</code> that automatically puts up a
+  &lsquo;<samp>Working...</samp>&rsquo; message before the
+  computation begins. (This message can be turned off by the user
+  with an <kbd>m w</kbd> (<code>calc-working</code>)
+  command.)</p><a name="index-calc_002dtop_002dlist_002dn" id=
+  "index-calc_002dtop_002dlist_002dn"></a>
+
+  <p>The <code>calc-top-list-n</code> function returns a list of
+  the specified number of values from the top of the stack. It
+  resimplifies each value by calling <code>calc-normalize</code>.
+  If its argument is zero it returns an empty list. It does not
+  actually remove these values from the stack.</p><a name=
+  "index-calc_002denter_002dresult" id=
+  "index-calc_002denter_002dresult"></a>
+
+  <p>The <code>calc-enter-result</code> function takes an integer
+  <var>num</var> and string <var>tag</var> as described above, plus
+  a third argument which is either a Calculator data object or a
+  list of such objects. These objects are resimplified and pushed
+  onto the stack after popping the specified number of values from
+  the stack. If <var>tag</var> is non-<code>nil</code>, the values
+  being pushed are also recorded in the trail.</p>
+
+  <p>Note that if <code>calcFunc-myfact</code> returns
+  <code>nil</code> this represents &ldquo;leave the function in
+  symbolic form.&rdquo; To return an actual empty list, in the
+  sense that <code>calc-enter-result</code> will push zero elements
+  back onto the stack, you should return the special value
+  &lsquo;<samp>'(nil)</samp>&rsquo;, a list containing the single
+  symbol <code>nil</code>.</p>
+
+  <p>The <code>interactive</code> declaration can actually contain
+  a limited Emacs-style code string as well which comes just before
+  <var>num</var> and <var>tag</var>. Currently the only Emacs code
+  supported is &lsquo;<samp>"p"</samp>&rsquo;, as in</p>
+
+  <div class="example">
+    <pre class="example">
+(defmath foo (a b &amp;optional c)
+  (interactive "p" 2 "foo")
   <var>body</var>)
-</pre></div>
+</pre>
+  </div>
 
-<p>In this example, the command <code>calc-foo</code> will evaluate the expression
-&lsquo;<samp>foo(a,b)</samp>&rsquo; if executed with no argument, or &lsquo;<samp>foo(a,b,n)</samp>&rsquo; if
-executed with a numeric prefix argument of &lsquo;<samp>n</samp>&rsquo;.
-</p>
-<p>The other code string allowed is &lsquo;<samp>&quot;m&quot;</samp>&rsquo; (unrelated to the usual &lsquo;<samp>&quot;m&quot;</samp>&rsquo;
-code as used with <code>defun</code>).  It uses the numeric prefix argument as the
-number of objects to remove from the stack and pass to the function.
-In this case, the integer <var>num</var> serves as a default number of
-arguments to be used when no prefix is supplied.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Argument-Qualifiers.html#Argument-Qualifiers" accesskey="n" rel="next">Argument Qualifiers</a>, Previous: <a href="Defining-Simple-Commands.html#Defining-Simple-Commands" accesskey="p" rel="prev">Defining Simple Commands</a>, Up: <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="u" rel="up">Lisp Definitions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In this example, the command <code>calc-foo</code> will
+  evaluate the expression &lsquo;<samp>foo(a,b)</samp>&rsquo; if
+  executed with no argument, or
+  &lsquo;<samp>foo(a,b,n)</samp>&rsquo; if executed with a numeric
+  prefix argument of &lsquo;<samp>n</samp>&rsquo;.</p>
 
+  <p>The other code string allowed is
+  &lsquo;<samp>"m"</samp>&rsquo; (unrelated to the usual
+  &lsquo;<samp>"m"</samp>&rsquo; code as used with
+  <code>defun</code>). It uses the numeric prefix argument as the
+  number of objects to remove from the stack and pass to the
+  function. In this case, the integer <var>num</var> serves as a
+  default number of arguments to be used when no prefix is
+  supplied.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Argument-Qualifiers.html#Argument-Qualifiers"
+    accesskey="n" rel="next">Argument Qualifiers</a>, Previous:
+    <a href=
+    "Defining-Simple-Commands.html#Defining-Simple-Commands"
+    accesskey="p" rel="prev">Defining Simple Commands</a>, Up:
+    <a href="Lisp-Definitions.html#Lisp-Definitions" accesskey="u"
+    rel="up">Lisp Definitions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

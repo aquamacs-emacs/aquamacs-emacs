@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2008, 2010-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,134 +14,179 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Lisp Regression Testing: Tests and Their Environment</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Lisp Regression Testing: Tests and Their Environment">
-<meta name="keywords" content="Emacs Lisp Regression Testing: Tests and Their Environment">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="How-to-Write-Tests.html#How-to-Write-Tests" rel="up" title="How to Write Tests">
-<link href="Useful-Techniques.html#Useful-Techniques" rel="next" title="Useful Techniques">
-<link href="Expected-Failures.html#Expected-Failures" rel="prev" title="Expected Failures">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Lisp Regression Testing: Tests and Their
+  Environment</title>
+  <meta name="description" content=
+  "Emacs Lisp Regression Testing: Tests and Their Environment" />
+  <meta name="keywords" content=
+  "Emacs Lisp Regression Testing: Tests and Their Environment" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="How-to-Write-Tests.html#How-to-Write-Tests" rel="up"
+  title="How to Write Tests" />
+  <link href="Useful-Techniques.html#Useful-Techniques" rel="next"
+  title="Useful Techniques" />
+  <link href="Expected-Failures.html#Expected-Failures" rel="prev"
+  title="Expected Failures" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Tests-and-Their-Environment"></a>
-<div class="header">
-<p>
-Next: <a href="Useful-Techniques.html#Useful-Techniques" accesskey="n" rel="next">Useful Techniques</a>, Previous: <a href="Expected-Failures.html#Expected-Failures" accesskey="p" rel="prev">Expected Failures</a>, Up: <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel="up">How to Write Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Tests-and-Their-Environment-1"></a>
-<h3 class="section">3.3 Tests and Their Environment</h3>
+<body lang="en" xml:lang="en">
+  <a name="Tests-and-Their-Environment" id=
+  "Tests-and-Their-Environment"></a>
 
-<p>Sometimes, it doesn&rsquo;t make sense to run a test due to missing
-preconditions.  A required Emacs feature might not be compiled in, the
-function to be tested could call an external binary which might not be
-available on the test machine, you name it.  In this case, the macro
-<code>skip-unless</code> could be used to skip the test:
-</p>
-<div class="lisp">
-<pre class="lisp">(ert-deftest test-dbus ()
-  &quot;A test that checks D-BUS functionality.&quot;
+  <div class="header">
+    <p>Next: <a href="Useful-Techniques.html#Useful-Techniques"
+    accesskey="n" rel="next">Useful Techniques</a>, Previous:
+    <a href="Expected-Failures.html#Expected-Failures" accesskey=
+    "p" rel="prev">Expected Failures</a>, Up: <a href=
+    "How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel=
+    "up">How to Write Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Tests-and-Their-Environment-1" id=
+  "Tests-and-Their-Environment-1"></a>
+
+  <h3 class="section">3.3 Tests and Their Environment</h3>
+
+  <p>Sometimes, it doesn&rsquo;t make sense to run a test due to
+  missing preconditions. A required Emacs feature might not be
+  compiled in, the function to be tested could call an external
+  binary which might not be available on the test machine, you name
+  it. In this case, the macro <code>skip-unless</code> could be
+  used to skip the test:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(ert-deftest test-dbus ()
+  "A test that checks D-BUS functionality."
   (skip-unless (featurep 'dbusbind))
   ...)
-</pre></div>
+</pre>
+  </div>
 
-<p>The outcome of running a test should not depend on the current state
-of the environment, and each test should leave its environment in the
-same state it found it in.  In particular, a test should not depend on
-any Emacs customization variables or hooks, and if it has to make any
-changes to Emacs&rsquo;s state or state external to Emacs (such as the file
-system), it should undo these changes before it returns, regardless of
-whether it passed or failed.
-</p>
-<p>Tests should not depend on the environment because any such
-dependencies can make the test brittle or lead to failures that occur
-only under certain circumstances and are hard to reproduce.  Of
-course, the code under test may have settings that affect its
-behavior.  In that case, it is best to make the test <code>let</code>-bind
-all such setting variables to set up a specific configuration for the
-duration of the test.  The test can also set up a number of different
-configurations and run the code under test with each.
-</p>
-<p>Tests that have side effects on their environment should restore it to
-its original state because any side effects that persist after the
-test can disrupt the workflow of the programmer running the tests.  If
-the code under test has side effects on Emacs&rsquo;s current state, such as
-on the current buffer or window configuration, the test should create
-a temporary buffer for the code to manipulate (using
-<code>with-temp-buffer</code>), or save and restore the window configuration
-(using <code>save-window-excursion</code>), respectively.  For aspects of
-the state that can not be preserved with such macros, cleanup should
-be performed with <code>unwind-protect</code>, to ensure that the cleanup
-occurs even if the test fails.
-</p>
-<p>An exception to this are messages that the code under test prints with
-<code>message</code> and similar logging; tests should not bother restoring
-the <samp>*Message*</samp> buffer to its original state.
-</p>
-<p>The above guidelines imply that tests should avoid calling highly
-customizable commands such as <code>find-file</code>, except, of course, if
-such commands are what they want to test.  The exact behavior of
-<code>find-file</code> depends on many settings such as
-<code>find-file-wildcards</code>, <code>enable-local-variables</code>, and
-<code>auto-mode-alist</code>.  It is difficult to write a meaningful test if
-its behavior can be affected by so many external factors.  Also,
-<code>find-file</code> has side effects that are hard to predict and thus
-hard to undo: It may create a new buffer or reuse an existing
-buffer if one is already visiting the requested file; and it runs
-<code>find-file-hook</code>, which can have arbitrary side effects.
-</p>
-<p>Instead, it is better to use lower-level mechanisms with simple and
-predictable semantics like <code>with-temp-buffer</code>, <code>insert</code> or
-<code>insert-file-contents-literally</code>, and to activate any desired mode
-by calling the corresponding function directly, after binding the
-hook variables to <code>nil</code>.  This avoids the above problems.
-</p>
+  <p>The outcome of running a test should not depend on the current
+  state of the environment, and each test should leave its
+  environment in the same state it found it in. In particular, a
+  test should not depend on any Emacs customization variables or
+  hooks, and if it has to make any changes to Emacs&rsquo;s state
+  or state external to Emacs (such as the file system), it should
+  undo these changes before it returns, regardless of whether it
+  passed or failed.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Useful-Techniques.html#Useful-Techniques" accesskey="n" rel="next">Useful Techniques</a>, Previous: <a href="Expected-Failures.html#Expected-Failures" accesskey="p" rel="prev">Expected Failures</a>, Up: <a href="How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel="up">How to Write Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+  <p>Tests should not depend on the environment because any such
+  dependencies can make the test brittle or lead to failures that
+  occur only under certain circumstances and are hard to reproduce.
+  Of course, the code under test may have settings that affect its
+  behavior. In that case, it is best to make the test
+  <code>let</code>-bind all such setting variables to set up a
+  specific configuration for the duration of the test. The test can
+  also set up a number of different configurations and run the code
+  under test with each.</p>
 
+  <p>Tests that have side effects on their environment should
+  restore it to its original state because any side effects that
+  persist after the test can disrupt the workflow of the programmer
+  running the tests. If the code under test has side effects on
+  Emacs&rsquo;s current state, such as on the current buffer or
+  window configuration, the test should create a temporary buffer
+  for the code to manipulate (using <code>with-temp-buffer</code>),
+  or save and restore the window configuration (using
+  <code>save-window-excursion</code>), respectively. For aspects of
+  the state that can not be preserved with such macros, cleanup
+  should be performed with <code>unwind-protect</code>, to ensure
+  that the cleanup occurs even if the test fails.</p>
 
+  <p>An exception to this are messages that the code under test
+  prints with <code>message</code> and similar logging; tests
+  should not bother restoring the <samp>*Message*</samp> buffer to
+  its original state.</p>
 
+  <p>The above guidelines imply that tests should avoid calling
+  highly customizable commands such as <code>find-file</code>,
+  except, of course, if such commands are what they want to test.
+  The exact behavior of <code>find-file</code> depends on many
+  settings such as <code>find-file-wildcards</code>,
+  <code>enable-local-variables</code>, and
+  <code>auto-mode-alist</code>. It is difficult to write a
+  meaningful test if its behavior can be affected by so many
+  external factors. Also, <code>find-file</code> has side effects
+  that are hard to predict and thus hard to undo: It may create a
+  new buffer or reuse an existing buffer if one is already visiting
+  the requested file; and it runs <code>find-file-hook</code>,
+  which can have arbitrary side effects.</p>
+
+  <p>Instead, it is better to use lower-level mechanisms with
+  simple and predictable semantics like
+  <code>with-temp-buffer</code>, <code>insert</code> or
+  <code>insert-file-contents-literally</code>, and to activate any
+  desired mode by calling the corresponding function directly,
+  after binding the hook variables to <code>nil</code>. This avoids
+  the above problems.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Useful-Techniques.html#Useful-Techniques"
+    accesskey="n" rel="next">Useful Techniques</a>, Previous:
+    <a href="Expected-Failures.html#Expected-Failures" accesskey=
+    "p" rel="prev">Expected Failures</a>, Up: <a href=
+    "How-to-Write-Tests.html#How-to-Write-Tests" accesskey="u" rel=
+    "up">How to Write Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

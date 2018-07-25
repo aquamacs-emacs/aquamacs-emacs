@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,125 +16,205 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Indentation Engine Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Indentation Engine Basics">
-<meta name="keywords" content="CC Mode Manual: Indentation Engine Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Syntactic-Analysis.html#Syntactic-Analysis" rel="next" title="Syntactic Analysis">
-<link href="Clean_002dups.html#Clean_002dups" rel="prev" title="Clean-ups">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Indentation Engine Basics</title>
+  <meta name="description" content=
+  "CC Mode Manual: Indentation Engine Basics" />
+  <meta name="keywords" content=
+  "CC Mode Manual: Indentation Engine Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Syntactic-Analysis.html#Syntactic-Analysis" rel=
+  "next" title="Syntactic Analysis" />
+  <link href="Clean_002dups.html#Clean_002dups" rel="prev" title=
+  "Clean-ups" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Indentation-Engine-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Customizing-Indentation.html#Customizing-Indentation" accesskey="n" rel="next">Customizing Indentation</a>, Previous: <a href="Clean_002dups.html#Clean_002dups" accesskey="p" rel="prev">Clean-ups</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Indentation-Engine-Basics-1"></a>
-<h2 class="chapter">10 Indentation Engine Basics</h2>
+<body lang="en" xml:lang="en">
+  <a name="Indentation-Engine-Basics" id=
+  "Indentation-Engine-Basics"></a>
 
-<p>This chapter will briefly cover how CC Mode indents lines of code.
-It is helpful to understand the indentation model being used so that
-you will know how to customize CC Mode for your personal coding
-style.  All the details are in <a href="Customizing-Indentation.html#Customizing-Indentation">Customizing Indentation</a>.
-</p>
-<p>CC Mode has an indentation engine that provides a flexible and
-general mechanism for customizing indentation.  When CC Mode indents
-a line of code, it separates its calculations into two steps:
-</p>
-<ol>
-<li> <a name="index-syntactic-symbol"></a>
-<a name="index-anchor-position"></a>
-It analyzes the line to determine its <em>syntactic symbol(s)</em> (the
-kind of language construct it&rsquo;s looking at) and its <em>anchor
-position</em> (the position earlier in the file that CC Mode will indent
-the line relative to).  The anchor position might be the location of
-an opening brace in the previous line, for example.  See <a href="Syntactic-Analysis.html#Syntactic-Analysis">Syntactic Analysis</a>.
-</li><li> <a name="index-offsets"></a>
-<a name="index-indentation-offset-specifications"></a>
-It looks up the syntactic symbol(s) in the configuration to get the
-corresponding <em>offset(s)</em>.  The symbol <code>+</code>, which means
-&ldquo;indent this line one more level&rdquo; is a typical offset.  CC Mode
-then applies these offset(s) to the anchor position, giving the
-indentation for the line.  The different sorts of offsets are
-described in <a href="c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>.
-</li></ol>
+  <div class="header">
+    <p>Next: <a href=
+    "Customizing-Indentation.html#Customizing-Indentation"
+    accesskey="n" rel="next">Customizing Indentation</a>, Previous:
+    <a href="Clean_002dups.html#Clean_002dups" accesskey="p" rel=
+    "prev">Clean-ups</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Indentation-Engine-Basics-1" id=
+  "Indentation-Engine-Basics-1"></a>
 
-<p>In exceptional circumstances, the syntax directed indentation
-described here may be a nuisance rather than a help.  You can disable
-it by setting <code>c-syntactic-indentation</code> to <code>nil</code>.  (To set
-the variable interactively, <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>).
-</p>
-<dl>
-<dt><a name="index-c_002dsyntactic_002dindentation"></a>User Option: <strong>c-syntactic-indentation</strong></dt>
-<dd><a name="index-syntactic_002dindentation-_0028c_002d_0029"></a>
-<p>When this is non-<code>nil</code> (which it is by default), the indentation
-of code is done according to its syntactic structure.  When it&rsquo;s
-<code>nil</code>, every line is just indented to the same level as the
-previous one, and <kbd>TAB</kbd> (<code>c-indent-command</code>) adjusts the
-indentation in steps of <code>c-basic-offset</code>.  The current style
-(see <a href="Config-Basics.html#Config-Basics">Config Basics</a>) then has no effect on indentation, nor do any
-of the variables associated with indentation, not even
-<code>c-special-indent-hook</code>.
-</p></dd></dl>
+  <h2 class="chapter">10 Indentation Engine Basics</h2>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Syntactic-Analysis.html#Syntactic-Analysis" accesskey="1">Syntactic Analysis</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Syntactic-Symbols.html#Syntactic-Symbols" accesskey="2">Syntactic Symbols</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Indentation-Calculation.html#Indentation-Calculation" accesskey="3">Indentation Calculation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <p>This chapter will briefly cover how CC Mode indents lines of
+  code. It is helpful to understand the indentation model being
+  used so that you will know how to customize CC Mode for your
+  personal coding style. All the details are in <a href=
+  "Customizing-Indentation.html#Customizing-Indentation">Customizing
+  Indentation</a>.</p>
 
+  <p>CC Mode has an indentation engine that provides a flexible and
+  general mechanism for customizing indentation. When CC Mode
+  indents a line of code, it separates its calculations into two
+  steps:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Customizing-Indentation.html#Customizing-Indentation" accesskey="n" rel="next">Customizing Indentation</a>, Previous: <a href="Clean_002dups.html#Clean_002dups" accesskey="p" rel="prev">Clean-ups</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <ol>
+    <li><a name="index-syntactic-symbol" id=
+    "index-syntactic-symbol"></a> <a name="index-anchor-position"
+    id="index-anchor-position"></a> It analyzes the line to
+    determine its <em>syntactic symbol(s)</em> (the kind of
+    language construct it&rsquo;s looking at) and its <em>anchor
+    position</em> (the position earlier in the file that CC Mode
+    will indent the line relative to). The anchor position might be
+    the location of an opening brace in the previous line, for
+    example. See <a href=
+    "Syntactic-Analysis.html#Syntactic-Analysis">Syntactic
+    Analysis</a>.</li>
 
+    <li><a name="index-offsets" id="index-offsets"></a> <a name=
+    "index-indentation-offset-specifications" id=
+    "index-indentation-offset-specifications"></a> It looks up the
+    syntactic symbol(s) in the configuration to get the
+    corresponding <em>offset(s)</em>. The symbol <code>+</code>,
+    which means &ldquo;indent this line one more level&rdquo; is a
+    typical offset. CC Mode then applies these offset(s) to the
+    anchor position, giving the indentation for the line. The
+    different sorts of offsets are described in <a href=
+    "c_002doffsets_002dalist.html#c_002doffsets_002dalist">c-offsets-alist</a>.</li>
+  </ol>
 
+  <p>In exceptional circumstances, the syntax directed indentation
+  described here may be a nuisance rather than a help. You can
+  disable it by setting <code>c-syntactic-indentation</code> to
+  <code>nil</code>. (To set the variable interactively, <a href=
+  "Minor-Modes.html#Minor-Modes">Minor Modes</a>).</p>
 
+  <dl>
+    <dt><a name="index-c_002dsyntactic_002dindentation" id=
+    "index-c_002dsyntactic_002dindentation"></a>User Option:
+    <strong>c-syntactic-indentation</strong></dt>
+
+    <dd>
+      <a name="index-syntactic_002dindentation-_0028c_002d_0029"
+      id="index-syntactic_002dindentation-_0028c_002d_0029"></a>
+
+      <p>When this is non-<code>nil</code> (which it is by
+      default), the indentation of code is done according to its
+      syntactic structure. When it&rsquo;s <code>nil</code>, every
+      line is just indented to the same level as the previous one,
+      and <kbd>TAB</kbd> (<code>c-indent-command</code>) adjusts
+      the indentation in steps of <code>c-basic-offset</code>. The
+      current style (see <a href=
+      "Config-Basics.html#Config-Basics">Config Basics</a>) then
+      has no effect on indentation, nor do any of the variables
+      associated with indentation, not even
+      <code>c-special-indent-hook</code>.</p>
+    </dd>
+  </dl>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Syntactic-Analysis.html#Syntactic-Analysis" accesskey=
+      "1">Syntactic Analysis</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Syntactic-Symbols.html#Syntactic-Symbols" accesskey=
+      "2">Syntactic Symbols</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Indentation-Calculation.html#Indentation-Calculation"
+      accesskey="3">Indentation Calculation</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Customizing-Indentation.html#Customizing-Indentation"
+    accesskey="n" rel="next">Customizing Indentation</a>, Previous:
+    <a href="Clean_002dups.html#Clean_002dups" accesskey="p" rel=
+    "prev">Clean-ups</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

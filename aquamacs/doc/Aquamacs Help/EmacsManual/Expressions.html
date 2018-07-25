@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,173 +20,241 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Expressions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Expressions">
-<meta name="keywords" content="GNU Emacs Manual: Expressions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Parentheses.html#Parentheses" rel="up" title="Parentheses">
-<link href="Moving-by-Parens.html#Moving-by-Parens" rel="next" title="Moving by Parens">
-<link href="Parentheses.html#Parentheses" rel="prev" title="Parentheses">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Expressions</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Expressions" />
+  <meta name="keywords" content="GNU Emacs Manual: Expressions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Parentheses.html#Parentheses" rel="up" title=
+  "Parentheses" />
+  <link href="Moving-by-Parens.html#Moving-by-Parens" rel="next"
+  title="Moving by Parens" />
+  <link href="Parentheses.html#Parentheses" rel="prev" title=
+  "Parentheses" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Expressions" id="Expressions"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Moving-by-Parens.html#Moving-by-Parens"
+    accesskey="n" rel="next">Moving by Parens</a>, Up: <a href=
+    "Parentheses.html#Parentheses" accesskey="u" rel=
+    "up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Expressions-with-Balanced-Parentheses" id=
+  "Expressions-with-Balanced-Parentheses"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Expressions"></a>
-<div class="header">
-<p>
-Next: <a href="Moving-by-Parens.html#Moving-by-Parens" accesskey="n" rel="next">Moving by Parens</a>, Up: <a href="Parentheses.html#Parentheses" accesskey="u" rel="up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Expressions-with-Balanced-Parentheses"></a>
-<h4 class="subsection">26.4.1 Expressions with Balanced Parentheses</h4>
+  <h4 class="subsection">26.4.1 Expressions with Balanced
+  Parentheses</h4><a name="index-sexp" id="index-sexp"></a>
+  <a name="index-expression" id="index-expression"></a> <a name=
+  "index-balanced-expression" id="index-balanced-expression"></a>
 
-<a name="index-sexp"></a>
-<a name="index-expression"></a>
-<a name="index-balanced-expression"></a>
-<p>Each programming language mode has its own definition of a
-<em>balanced expression</em>.  Balanced expressions typically include
-individual symbols, numbers, and string constants, as well as pieces
-of code enclosed in a matching pair of delimiters.  The following
-commands deal with balanced expressions (in Emacs, such expressions
-are referred to internally as <em>sexps</em><a name="DOCF11" href="#FOOT11"><sup>11</sup></a>).
-</p>
-<dl compact="compact">
-<dt><kbd>C-M-f</kbd></dt>
-<dd><p>Move forward over a balanced expression (<code>forward-sexp</code>).
-</p></dd>
-<dt><kbd>C-M-b</kbd></dt>
-<dd><p>Move backward over a balanced expression (<code>backward-sexp</code>).
-</p></dd>
-<dt><kbd>C-M-k</kbd></dt>
-<dd><p>Kill balanced expression forward (<code>kill-sexp</code>).
-</p></dd>
-<dt><kbd>C-M-t</kbd></dt>
-<dd><p>Transpose expressions (<code>transpose-sexps</code>).
-</p></dd>
-<dt><kbd>C-M-@</kbd></dt>
-<dt><kbd>C-M-<span class="key">SPC</span></kbd></dt>
-<dd><p>Put mark after following expression (<code>mark-sexp</code>).
-</p></dd>
-</dl>
+  <p>Each programming language mode has its own definition of a
+  <em>balanced expression</em>. Balanced expressions typically
+  include individual symbols, numbers, and string constants, as
+  well as pieces of code enclosed in a matching pair of delimiters.
+  The following commands deal with balanced expressions (in Emacs,
+  such expressions are referred to internally as
+  <em>sexps</em><a name="DOCF11" href="#FOOT11" id=
+  "DOCF11"><sup>11</sup></a>).</p>
 
-<a name="index-C_002dM_002df"></a>
-<a name="index-C_002dM_002db"></a>
-<a name="index-forward_002dsexp"></a>
-<a name="index-backward_002dsexp"></a>
-<p>To move forward over a balanced expression, use <kbd>C-M-f</kbd>
-(<code>forward-sexp</code>).  If the first significant character after point
-is an opening delimiter (e.g., &lsquo;<samp>(</samp>&rsquo;, &lsquo;<samp>[</samp>&rsquo; or &lsquo;<samp>{</samp>&rsquo; in C),
-this command moves past the matching closing delimiter.  If the
-character begins a symbol, string, or number, the command moves over
-that.
-</p>
-<p>The command <kbd>C-M-b</kbd> (<code>backward-sexp</code>) moves backward over a
-balanced expression&mdash;like <kbd>C-M-f</kbd>, but in the reverse direction.
-If the expression is preceded by any prefix characters (single-quote,
-backquote and comma, in Lisp), the command moves back over them as
-well.
-</p>
-<p><kbd>C-M-f</kbd> or <kbd>C-M-b</kbd> with an argument repeats that operation
-the specified number of times; with a negative argument means to move
-in the opposite direction.  In most modes, these two commands move
-across comments as if they were whitespace.  Note that their keys,
-<kbd>C-M-f</kbd> and <kbd>C-M-b</kbd>, are analogous to <kbd>C-f</kbd> and <kbd>C-b</kbd>,
-which move by characters (see <a href="Moving-Point.html#Moving-Point">Moving Point</a>), and <kbd>M-f</kbd> and
-<kbd>M-b</kbd>, which move by words (see <a href="Words.html#Words">Words</a>).
-</p>
-<a name="index-killing-expressions"></a>
-<a name="index-C_002dM_002dk"></a>
-<a name="index-kill_002dsexp"></a>
-<p>To kill a whole balanced expression, type <kbd>C-M-k</kbd>
-(<code>kill-sexp</code>).  This kills the text that <kbd>C-M-f</kbd> would move
-over.
-</p>
-<a name="index-transposition-of-expressions"></a>
-<a name="index-C_002dM_002dt"></a>
-<a name="index-transpose_002dsexps"></a>
-<p><kbd>C-M-t</kbd> (<code>transpose-sexps</code>) switches the positions of the
-previous balanced expression and the next one.  It is analogous to the
-<kbd>C-t</kbd> command, which transposes characters (see <a href="Transpose.html#Transpose">Transpose</a>).
-An argument to <kbd>C-M-t</kbd> serves as a repeat count, moving the
-previous expression over that many following ones.  A negative
-argument moves the previous balanced expression backwards across those
-before it.  An argument of zero, rather than doing nothing, transposes
-the balanced expressions ending at or after point and the mark.
-</p>
-<a name="index-C_002dM_002d_0040-1"></a>
-<a name="index-C_002dM_002dSPC"></a>
-<a name="index-mark_002dsexp-1"></a>
-<p>To operate on balanced expressions with a command which acts on the
-region, type <kbd>C-M-<span class="key">SPC</span></kbd> (<code>mark-sexp</code>).  This sets the
-mark where <kbd>C-M-f</kbd> would move to.  While the mark is active, each
-successive call to this command extends the region by shifting the
-mark by one expression.  Positive or negative numeric arguments move
-the mark forward or backward by the specified number of expressions.
-The alias <kbd>C-M-@</kbd> is equivalent to <kbd>C-M-<span class="key">SPC</span></kbd>.
-See <a href="Marking-Objects.html#Marking-Objects">Marking Objects</a>, for more information about this and related
-commands.
-</p>
-<p>In languages that use infix operators, such as C, it is not possible
-to recognize all balanced expressions because there can be multiple
-possibilities at a given position.  For example, C mode does not treat
-&lsquo;<samp>foo + bar</samp>&rsquo; as a single expression, even though it <em>is</em> one
-C expression; instead, it recognizes &lsquo;<samp>foo</samp>&rsquo; as one expression and
-&lsquo;<samp>bar</samp>&rsquo; as another, with the &lsquo;<samp>+</samp>&rsquo; as punctuation between them.
-However, C mode recognizes &lsquo;<samp>(foo + bar)</samp>&rsquo; as a single expression,
-because of the parentheses.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <dl compact="compact">
+    <dt><kbd>C-M-f</kbd></dt>
 
-<h3><a name="FOOT11" href="#DOCF11">(11)</a></h3>
-<p>The word &ldquo;sexp&rdquo;
-is used to refer to an expression in Lisp.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Moving-by-Parens.html#Moving-by-Parens" accesskey="n" rel="next">Moving by Parens</a>, Up: <a href="Parentheses.html#Parentheses" accesskey="u" rel="up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Move forward over a balanced expression
+      (<code>forward-sexp</code>).</p>
+    </dd>
 
+    <dt><kbd>C-M-b</kbd></dt>
 
+    <dd>
+      <p>Move backward over a balanced expression
+      (<code>backward-sexp</code>).</p>
+    </dd>
 
+    <dt><kbd>C-M-k</kbd></dt>
+
+    <dd>
+      <p>Kill balanced expression forward
+      (<code>kill-sexp</code>).</p>
+    </dd>
+
+    <dt><kbd>C-M-t</kbd></dt>
+
+    <dd>
+      <p>Transpose expressions (<code>transpose-sexps</code>).</p>
+    </dd>
+
+    <dt><kbd>C-M-@</kbd></dt>
+
+    <dt><kbd>C-M-<span class="key">SPC</span></kbd></dt>
+
+    <dd>
+      <p>Put mark after following expression
+      (<code>mark-sexp</code>).</p>
+    </dd>
+  </dl><a name="index-C_002dM_002df" id="index-C_002dM_002df"></a>
+  <a name="index-C_002dM_002db" id="index-C_002dM_002db"></a>
+  <a name="index-forward_002dsexp" id="index-forward_002dsexp"></a>
+  <a name="index-backward_002dsexp" id=
+  "index-backward_002dsexp"></a>
+
+  <p>To move forward over a balanced expression, use
+  <kbd>C-M-f</kbd> (<code>forward-sexp</code>). If the first
+  significant character after point is an opening delimiter (e.g.,
+  &lsquo;<samp>(</samp>&rsquo;, &lsquo;<samp>[</samp>&rsquo; or
+  &lsquo;<samp>{</samp>&rsquo; in C), this command moves past the
+  matching closing delimiter. If the character begins a symbol,
+  string, or number, the command moves over that.</p>
+
+  <p>The command <kbd>C-M-b</kbd> (<code>backward-sexp</code>)
+  moves backward over a balanced expression&mdash;like
+  <kbd>C-M-f</kbd>, but in the reverse direction. If the expression
+  is preceded by any prefix characters (single-quote, backquote and
+  comma, in Lisp), the command moves back over them as well.</p>
+
+  <p><kbd>C-M-f</kbd> or <kbd>C-M-b</kbd> with an argument repeats
+  that operation the specified number of times; with a negative
+  argument means to move in the opposite direction. In most modes,
+  these two commands move across comments as if they were
+  whitespace. Note that their keys, <kbd>C-M-f</kbd> and
+  <kbd>C-M-b</kbd>, are analogous to <kbd>C-f</kbd> and
+  <kbd>C-b</kbd>, which move by characters (see <a href=
+  "Moving-Point.html#Moving-Point">Moving Point</a>), and
+  <kbd>M-f</kbd> and <kbd>M-b</kbd>, which move by words (see
+  <a href="Words.html#Words">Words</a>).</p><a name=
+  "index-killing-expressions" id="index-killing-expressions"></a>
+  <a name="index-C_002dM_002dk" id="index-C_002dM_002dk"></a>
+  <a name="index-kill_002dsexp" id="index-kill_002dsexp"></a>
+
+  <p>To kill a whole balanced expression, type <kbd>C-M-k</kbd>
+  (<code>kill-sexp</code>). This kills the text that
+  <kbd>C-M-f</kbd> would move over.</p><a name=
+  "index-transposition-of-expressions" id=
+  "index-transposition-of-expressions"></a> <a name=
+  "index-C_002dM_002dt" id="index-C_002dM_002dt"></a> <a name=
+  "index-transpose_002dsexps" id="index-transpose_002dsexps"></a>
+
+  <p><kbd>C-M-t</kbd> (<code>transpose-sexps</code>) switches the
+  positions of the previous balanced expression and the next one.
+  It is analogous to the <kbd>C-t</kbd> command, which transposes
+  characters (see <a href=
+  "Transpose.html#Transpose">Transpose</a>). An argument to
+  <kbd>C-M-t</kbd> serves as a repeat count, moving the previous
+  expression over that many following ones. A negative argument
+  moves the previous balanced expression backwards across those
+  before it. An argument of zero, rather than doing nothing,
+  transposes the balanced expressions ending at or after point and
+  the mark.</p><a name="index-C_002dM_002d_0040-1" id=
+  "index-C_002dM_002d_0040-1"></a> <a name="index-C_002dM_002dSPC"
+  id="index-C_002dM_002dSPC"></a> <a name="index-mark_002dsexp-1"
+  id="index-mark_002dsexp-1"></a>
+
+  <p>To operate on balanced expressions with a command which acts
+  on the region, type <kbd>C-M-<span class="key">SPC</span></kbd>
+  (<code>mark-sexp</code>). This sets the mark where
+  <kbd>C-M-f</kbd> would move to. While the mark is active, each
+  successive call to this command extends the region by shifting
+  the mark by one expression. Positive or negative numeric
+  arguments move the mark forward or backward by the specified
+  number of expressions. The alias <kbd>C-M-@</kbd> is equivalent
+  to <kbd>C-M-<span class="key">SPC</span></kbd>. See <a href=
+  "Marking-Objects.html#Marking-Objects">Marking Objects</a>, for
+  more information about this and related commands.</p>
+
+  <p>In languages that use infix operators, such as C, it is not
+  possible to recognize all balanced expressions because there can
+  be multiple possibilities at a given position. For example, C
+  mode does not treat &lsquo;<samp>foo + bar</samp>&rsquo; as a
+  single expression, even though it <em>is</em> one C expression;
+  instead, it recognizes &lsquo;<samp>foo</samp>&rsquo; as one
+  expression and &lsquo;<samp>bar</samp>&rsquo; as another, with
+  the &lsquo;<samp>+</samp>&rsquo; as punctuation between them.
+  However, C mode recognizes &lsquo;<samp>(foo + bar)</samp>&rsquo;
+  as a single expression, because of the parentheses.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT11" href="#DOCF11" id="FOOT11">(11)</a></h3>
+
+    <p>The word &ldquo;sexp&rdquo; is used to refer to an
+    expression in Lisp.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Moving-by-Parens.html#Moving-by-Parens"
+    accesskey="n" rel="next">Moving by Parens</a>, Up: <a href=
+    "Parentheses.html#Parentheses" accesskey="u" rel=
+    "up">Parentheses</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

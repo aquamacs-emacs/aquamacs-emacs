@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>varioref (LaTeX package) - RefTeX User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="RefTeX User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Labels-and-References.html#Labels-and-References" title="Labels and References">
-<link rel="prev" href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029" title="xr (LaTeX package)">
-<link rel="next" href="fancyref-_0028LaTeX-package_0029.html#fancyref-_0028LaTeX-package_0029" title="fancyref (LaTeX package)">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>varioref (LaTeX package) - RefTeX User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="RefTeX User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Labels-and-References.html#Labels-and-References" title=
+  "Labels and References" />
+  <link rel="prev" href=
+  "xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029"
+  title="xr (LaTeX package)" />
+  <link rel="next" href=
+  "fancyref-_0028LaTeX-package_0029.html#fancyref-_0028LaTeX-package_0029"
+  title="fancyref (LaTeX package)" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents RefTeX, a package to do labels, references,
 citations and indices for LaTeX documents with Emacs.
 
@@ -31,8 +43,10 @@ Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,38 +56,63 @@ Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="varioref-(LaTeX-package)"></a>
-<a name="varioref-_0028LaTeX-package_0029"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="fancyref-_0028LaTeX-package_0029.html#fancyref-_0028LaTeX-package_0029">fancyref (LaTeX package)</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">xr (LaTeX package)</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Labels-and-References.html#Labels-and-References">Labels and References</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="varioref-(LaTeX-package)"></a> <a name=
+    "varioref-_0028LaTeX-package_0029" id=
+    "varioref-_0028LaTeX-package_0029"></a>
 
-<h3 class="section">3.7 <code>varioref</code>: Variable Page References</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "fancyref-_0028LaTeX-package_0029.html#fancyref-_0028LaTeX-package_0029">fancyref
+    (LaTeX package)</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">xr
+    (LaTeX package)</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Labels-and-References.html#Labels-and-References">Labels and
+    References</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-g_t_0040code_007bvarioref_007d_002c-LaTeX-package-181"></a><a name="index-g_t_0040code_007b_005cvref_007d-182"></a><a name="index-LaTeX-packages_002c-_0040code_007bvarioref_007d-183"></a><a name="index-reftex_002dvref_002dis_002ddefault-184"></a><code>varioref</code> is a frequently used LaTeX package to create
-cross&ndash;references with page information.  When you want to make a
-reference with the <code>\vref</code> macro, just press the <kbd>v</kbd> key in the
-selection buffer to toggle between <code>\ref</code> and <code>\vref</code>
-(see <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a>).  The mode line of the selection buffer
-shows the current status of this switch.  If you find that you almost
-always use <code>\vref</code>, you may want to make it the default by
-customizing the variable <code>reftex-vref-is-default</code>.  If this
-toggling seems too inconvenient, you can also use the command
-<code>reftex-varioref-vref</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. 
-Or use AUCTeX to create your macros (see <a href="AUCTeX.html#AUCTeX">AUCTeX</a>).
+  <h3 class="section">3.7 <code>varioref</code>: Variable Page
+  References</h3>
 
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> bind it to <kbd>C-c v</kbd>.</p>
+  <p><a name=
+  "index-g_t_0040code_007bvarioref_007d_002c-LaTeX-package-181" id=
+  "index-g_t_0040code_007bvarioref_007d_002c-LaTeX-package-181"></a><a name="index-g_t_0040code_007b_005cvref_007d-182"
+  id="index-g_t_0040code_007b_005cvref_007d-182"></a><a name=
+  "index-LaTeX-packages_002c-_0040code_007bvarioref_007d-183" id=
+  "index-LaTeX-packages_002c-_0040code_007bvarioref_007d-183"></a><a name="index-reftex_002dvref_002dis_002ddefault-184"
+  id=
+  "index-reftex_002dvref_002dis_002ddefault-184"></a><code>varioref</code>
+  is a frequently used LaTeX package to create
+  cross&ndash;references with page information. When you want to
+  make a reference with the <code>\vref</code> macro, just press
+  the <kbd>v</kbd> key in the selection buffer to toggle between
+  <code>\ref</code> and <code>\vref</code> (see <a href=
+  "Referencing-Labels.html#Referencing-Labels">Referencing
+  Labels</a>). The mode line of the selection buffer shows the
+  current status of this switch. If you find that you almost always
+  use <code>\vref</code>, you may want to make it the default by
+  customizing the variable <code>reftex-vref-is-default</code>. If
+  this toggling seems too inconvenient, you can also use the
+  command <code>reftex-varioref-vref</code><a rel="footnote" href=
+  "#fn-1" name="fnd-1" id="fnd-1"><sup>1</sup></a>. Or use AUCTeX
+  to create your macros (see <a href=
+  "AUCTeX.html#AUCTeX">AUCTeX</a>).</p>
 
-   <hr></div>
+  <div class="footnote">
+    <hr />
 
-   </body></html>
+    <h4>Footnotes</h4>
 
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> bind it to <kbd>C-c v</kbd>.</p>
+    <hr />
+  </div>
+</body>
+</html>

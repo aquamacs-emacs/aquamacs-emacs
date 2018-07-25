@@ -1,14 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Special Marking Function - Dired Extra Version 2 User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Dired Extra Version 2 User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Advanced-Mark-Commands.html#Advanced-Mark-Commands" title="Advanced Mark Commands">
-<link rel="prev" href="Advanced-Cleaning-Variables.html#Advanced-Cleaning-Variables" title="Advanced Cleaning Variables">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Special Marking Function - Dired Extra Version 2 User's
+  Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Dired Extra Version 2 User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Advanced-Mark-Commands.html#Advanced-Mark-Commands" title=
+  "Advanced Mark Commands" />
+  <link rel="prev" href=
+  "Advanced-Cleaning-Variables.html#Advanced-Cleaning-Variables"
+  title="Advanced Cleaning Variables" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004,
 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -24,8 +36,10 @@ Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,54 +49,123 @@ Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Special-Marking-Function"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Advanced-Cleaning-Variables.html#Advanced-Cleaning-Variables">Advanced Cleaning Variables</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Mark-Commands.html#Advanced-Mark-Commands">Advanced Mark Commands</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Special-Marking-Function" id=
+    "Special-Marking-Function"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h3 class="section">7.3 Special Marking Function</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Advanced-Cleaning-Variables.html#Advanced-Cleaning-Variables">Advanced
+    Cleaning Variables</a>, Up:&nbsp;<a rel="up" accesskey="u"
+    href="Advanced-Mark-Commands.html#Advanced-Mark-Commands">Advanced
+    Mark Commands</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-     <dl>
-<dt><kbd>M-(</kbd><dd><a name="index-M_002d_0028-65"></a><a name="index-dired_002dmark_002dsexp-66"></a><a name="index-Lisp-expression_002c-marking-files-with-in-Dired-67"></a><a name="index-Mark-file-by-Lisp-expression-68"></a>(<code>dired-mark-sexp</code>) Mark files for which <var>predicate</var> returns
-non-<code>nil</code>.  With a prefix argument, unflag those files instead.
+  <h3 class="section">7.3 Special Marking Function</h3>
 
-     <p>The <var>predicate</var> is a Lisp expression that can refer to the following
-symbols:
-          <dl>
-<dt><code>inode</code><dd>[<i>integer</i>] the inode of the file (only for &lsquo;<samp><span class="samp">ls -i</span></samp>&rsquo; output)
-<br><dt><code>s</code><dd>[<i>integer</i>] the size of the file for &lsquo;<samp><span class="samp">ls -s</span></samp>&rsquo; output (usually in blocks or,
-with &lsquo;<samp><span class="samp">-k</span></samp>&rsquo;, in KBytes)
-<br><dt><code>mode</code><dd>[<i>string</i>]  file permission bits, e.g., &lsquo;<samp><span class="samp">-rw-r--r--</span></samp>&rsquo;
-<br><dt><code>nlink</code><dd>[<i>integer</i>] number of links to file
-<br><dt><code>uid</code><dd>[<i>string</i>]  owner
-<br><dt><code>gid</code><dd>[<i>string</i>]  group  (If the gid is not displayed by &lsquo;<samp><span class="samp">ls</span></samp>&rsquo;, this
-will still be set (to the same as uid))
-<br><dt><code>size</code><dd>[<i>integer</i>] file size in bytes
-<br><dt><code>time</code><dd>[<i>string</i>]  the time that &lsquo;<samp><span class="samp">ls</span></samp>&rsquo; displays, e.g., &lsquo;<samp><span class="samp">Feb 12 14:17</span></samp>&rsquo;
-<br><dt><code>name</code><dd>[<i>string</i>]  the name of the file
-<br><dt><code>sym</code><dd>[<i>string</i>]  if file is a symbolic link, the linked-to name, else <code>""</code>
-</dl>
+  <dl>
+    <dt><kbd>M-(</kbd></dt>
 
-     <p class="noindent">For example, use
-     <pre class="example">          (equal 0 size)
+    <dd>
+      <a name="index-M_002d_0028-65" id=
+      "index-M_002d_0028-65"></a><a name=
+      "index-dired_002dmark_002dsexp-66" id=
+      "index-dired_002dmark_002dsexp-66"></a><a name=
+      "index-Lisp-expression_002c-marking-files-with-in-Dired-67"
+      id=
+      "index-Lisp-expression_002c-marking-files-with-in-Dired-67"></a><a name="index-Mark-file-by-Lisp-expression-68"
+      id=
+      "index-Mark-file-by-Lisp-expression-68"></a>(<code>dired-mark-sexp</code>)
+      Mark files for which <var>predicate</var> returns
+      non-<code>nil</code>. With a prefix argument, unflag those
+      files instead.
+
+      <p>The <var>predicate</var> is a Lisp expression that can
+      refer to the following symbols:</p>
+
+      <dl>
+        <dt><code>inode</code></dt>
+
+        <dd>[<i>integer</i>] the inode of the file (only for
+        &lsquo;<samp><span class="samp">ls -i</span></samp>&rsquo;
+        output)<br /></dd>
+
+        <dt><code>s</code></dt>
+
+        <dd>[<i>integer</i>] the size of the file for
+        &lsquo;<samp><span class="samp">ls -s</span></samp>&rsquo;
+        output (usually in blocks or, with
+        &lsquo;<samp><span class="samp">-k</span></samp>&rsquo;, in
+        KBytes)<br /></dd>
+
+        <dt><code>mode</code></dt>
+
+        <dd>[<i>string</i>] file permission bits, e.g.,
+        &lsquo;<samp><span class=
+        "samp">-rw-r--r--</span></samp>&rsquo;<br /></dd>
+
+        <dt><code>nlink</code></dt>
+
+        <dd>[<i>integer</i>] number of links to file<br /></dd>
+
+        <dt><code>uid</code></dt>
+
+        <dd>[<i>string</i>] owner<br /></dd>
+
+        <dt><code>gid</code></dt>
+
+        <dd>[<i>string</i>] group (If the gid is not displayed by
+        &lsquo;<samp><span class="samp">ls</span></samp>&rsquo;,
+        this will still be set (to the same as uid))<br /></dd>
+
+        <dt><code>size</code></dt>
+
+        <dd>[<i>integer</i>] file size in bytes<br /></dd>
+
+        <dt><code>time</code></dt>
+
+        <dd>[<i>string</i>] the time that &lsquo;<samp><span class=
+        "samp">ls</span></samp>&rsquo; displays, e.g.,
+        &lsquo;<samp><span class="samp">Feb 12
+        14:17</span></samp>&rsquo;<br /></dd>
+
+        <dt><code>name</code></dt>
+
+        <dd>[<i>string</i>] the name of the file<br /></dd>
+
+        <dt><code>sym</code></dt>
+
+        <dd>[<i>string</i>] if file is a symbolic link, the
+        linked-to name, else <code>""</code></dd>
+      </dl>
+
+      <p class="noindent">For example, use</p>
+      <pre class="example">
+          (equal 0 size)
 </pre>
-     <p>to mark all zero length files.
 
-     <p>To find out all not yet compiled Emacs Lisp files in a directory, Dired
-all <samp><span class="file">.el</span></samp> files in the lisp directory using the wildcard
-&lsquo;<samp><span class="samp">*.el</span></samp>&rsquo;.  Then use <kbd>M-(</kbd> with
-     <pre class="example">          (not (file-exists-p (concat name "c")))
+      <p>to mark all zero length files.</p>
+
+      <p>To find out all not yet compiled Emacs Lisp files in a
+      directory, Dired all <samp><span class=
+      "file">.el</span></samp> files in the lisp directory using
+      the wildcard &lsquo;<samp><span class=
+      "samp">*.el</span></samp>&rsquo;. Then use <kbd>M-(</kbd>
+      with</p>
+      <pre class="example">
+          (not (file-exists-p (concat name "c")))
 </pre>
-     <p>to mark all <samp><span class="file">.el</span></samp> files without a corresponding <samp><span class="file">.elc</span></samp> file.
 
-</dl>
-
-   </body></html>
-
+      <p>to mark all <samp><span class="file">.el</span></samp>
+      files without a corresponding <samp><span class=
+      "file">.elc</span></samp> file.</p>
+    </dd>
+  </dl>
+</body>
+</html>

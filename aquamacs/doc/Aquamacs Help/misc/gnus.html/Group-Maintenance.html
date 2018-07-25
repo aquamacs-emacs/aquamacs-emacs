@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,105 +14,154 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Group Maintenance</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Group Maintenance">
-<meta name="keywords" content="Gnus Manual: Group Maintenance">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Group-Buffer.html#Group-Buffer" rel="up" title="Group Buffer">
-<link href="Browse-Foreign-Server.html#Browse-Foreign-Server" rel="next" title="Browse Foreign Server">
-<link href="Sorting-Groups.html#Sorting-Groups" rel="prev" title="Sorting Groups">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Group Maintenance</title>
+  <meta name="description" content=
+  "Gnus Manual: Group Maintenance" />
+  <meta name="keywords" content="Gnus Manual: Group Maintenance" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Group-Buffer.html#Group-Buffer" rel="up" title=
+  "Group Buffer" />
+  <link href="Browse-Foreign-Server.html#Browse-Foreign-Server"
+  rel="next" title="Browse Foreign Server" />
+  <link href="Sorting-Groups.html#Sorting-Groups" rel="prev" title=
+  "Sorting Groups" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Group-Maintenance"></a>
-<div class="header">
-<p>
-Next: <a href="Browse-Foreign-Server.html#Browse-Foreign-Server" accesskey="n" rel="next">Browse Foreign Server</a>, Previous: <a href="Sorting-Groups.html#Sorting-Groups" accesskey="p" rel="prev">Sorting Groups</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Group-Maintenance-1"></a>
-<h3 class="section">2.13 Group Maintenance</h3>
-<a name="index-bogus-groups"></a>
+<body lang="en" xml:lang="en">
+  <a name="Group-Maintenance" id="Group-Maintenance"></a>
 
-<dl compact="compact">
-<dt><kbd>b</kbd></dt>
-<dd><a name="index-b-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dcheck_002dbogus_002dgroups"></a>
-<p>Find bogus groups and delete them
-(<code>gnus-group-check-bogus-groups</code>).
-</p>
-</dd>
-<dt><kbd>F</kbd></dt>
-<dd><a name="index-F-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dfind_002dnew_002dgroups"></a>
-<p>Find new groups and process them (<code>gnus-group-find-new-groups</code>).
-With 1 <kbd>C-u</kbd>, use the <code>ask-server</code> method to query the server
-for new groups.  With 2 <kbd>C-u</kbd>&rsquo;s, use most complete method possible
-to query the server for new groups, and subscribe the new groups as
-zombies.
-</p>
-</dd>
-<dt><kbd>C-c C-x</kbd></dt>
-<dd><a name="index-C_002dc-C_002dx-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dexpire_002darticles"></a>
-<a name="index-expiring-mail-2"></a>
-<p>Run all expirable articles in the current group through the expiry
-process (if any) (<code>gnus-group-expire-articles</code>).  That is, delete
-all expirable articles in the group that have been around for a while.
-(see <a href="Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>).
-</p>
-</dd>
-<dt><kbd>C-c C-M-x</kbd></dt>
-<dd><a name="index-C_002dc-C_002dM_002dx-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dexpire_002dall_002dgroups"></a>
-<a name="index-expiring-mail-3"></a>
-<p>Run all expirable articles in all groups through the expiry process
-(<code>gnus-group-expire-all-groups</code>).
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Browse-Foreign-Server.html#Browse-Foreign-Server" accesskey=
+    "n" rel="next">Browse Foreign Server</a>, Previous: <a href=
+    "Sorting-Groups.html#Sorting-Groups" accesskey="p" rel=
+    "prev">Sorting Groups</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Group-Maintenance-1" id="Group-Maintenance-1"></a>
 
+  <h3 class="section">2.13 Group Maintenance</h3><a name=
+  "index-bogus-groups" id="index-bogus-groups"></a>
 
+  <dl compact="compact">
+    <dt><kbd>b</kbd></dt>
 
+    <dd>
+      <a name="index-b-_0028Group_0029" id=
+      "index-b-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dcheck_002dbogus_002dgroups" id=
+      "index-gnus_002dgroup_002dcheck_002dbogus_002dgroups"></a>
 
+      <p>Find bogus groups and delete them
+      (<code>gnus-group-check-bogus-groups</code>).</p>
+    </dd>
 
+    <dt><kbd>F</kbd></dt>
+
+    <dd>
+      <a name="index-F-_0028Group_0029" id=
+      "index-F-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dfind_002dnew_002dgroups" id=
+      "index-gnus_002dgroup_002dfind_002dnew_002dgroups"></a>
+
+      <p>Find new groups and process them
+      (<code>gnus-group-find-new-groups</code>). With 1
+      <kbd>C-u</kbd>, use the <code>ask-server</code> method to
+      query the server for new groups. With 2
+      <kbd>C-u</kbd>&rsquo;s, use most complete method possible to
+      query the server for new groups, and subscribe the new groups
+      as zombies.</p>
+    </dd>
+
+    <dt><kbd>C-c C-x</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dx-_0028Group_0029" id=
+      "index-C_002dc-C_002dx-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dexpire_002darticles" id=
+      "index-gnus_002dgroup_002dexpire_002darticles"></a> <a name=
+      "index-expiring-mail-2" id="index-expiring-mail-2"></a>
+
+      <p>Run all expirable articles in the current group through
+      the expiry process (if any)
+      (<code>gnus-group-expire-articles</code>). That is, delete
+      all expirable articles in the group that have been around for
+      a while. (see <a href=
+      "Expiring-Mail.html#Expiring-Mail">Expiring Mail</a>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-M-x</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dM_002dx-_0028Group_0029" id=
+      "index-C_002dc-C_002dM_002dx-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dexpire_002dall_002dgroups" id=
+      "index-gnus_002dgroup_002dexpire_002dall_002dgroups"></a>
+      <a name="index-expiring-mail-3" id=
+      "index-expiring-mail-3"></a>
+
+      <p>Run all expirable articles in all groups through the
+      expiry process
+      (<code>gnus-group-expire-all-groups</code>).</p>
+    </dd>
+  </dl>
 </body>
 </html>

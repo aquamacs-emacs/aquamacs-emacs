@@ -1,14 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Example -- Configuring a tool called directly - GNU Flymake 0.3</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Flymake 0.3">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool" title="Adding support for a new syntax check tool">
-<link rel="next" href="Example-_002d_002d-Configuring-a-tool-called-via-make.html#Example-_002d_002d-Configuring-a-tool-called-via-make" title="Example -- Configuring a tool called via make">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Example -- Configuring a tool called directly - GNU
+  Flymake 0.3</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Flymake 0.3" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool"
+  title="Adding support for a new syntax check tool" />
+  <link rel="next" href=
+  "Example-_002d_002d-Configuring-a-tool-called-via-make.html#Example-_002d_002d-Configuring-a-tool-called-via-make"
+  title="Example -- Configuring a tool called via make" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -27,8 +38,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,28 +51,39 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Example----Configuring-a-tool-called-directly"></a>
-<a name="Example-_002d_002d-Configuring-a-tool-called-directly"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Example-_002d_002d-Configuring-a-tool-called-via-make.html#Example-_002d_002d-Configuring-a-tool-called-via-make">Example -- Configuring a tool called via make</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool">Adding support for a new syntax check tool</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Example----Configuring-a-tool-called-directly" id=
+    "Example----Configuring-a-tool-called-directly"></a> <a name=
+    "Example-_002d_002d-Configuring-a-tool-called-directly" id=
+    "Example-_002d_002d-Configuring-a-tool-called-directly"></a>
 
-<h4 class="subsection">4.2.1 Example &ndash; Configuring a tool called directly</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Example-_002d_002d-Configuring-a-tool-called-via-make.html#Example-_002d_002d-Configuring-a-tool-called-via-make">Example
+    -- Configuring a tool called via make</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool">Adding
+    support for a new syntax check tool</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Adding-support-for-perl-14"></a>
-In this example, we will add support for <code>perl</code> as a syntax check
-tool. <code>perl</code> supports the <code>-c</code> option which does syntax
-checking.
+  <h4 class="subsection">4.2.1 Example &ndash; Configuring a tool
+  called directly</h4>
 
-   <p>First, we write the <code>init-function</code>:
+  <p><a name="index-Adding-support-for-perl-14" id=
+  "index-Adding-support-for-perl-14"></a> In this example, we will
+  add support for <code>perl</code> as a syntax check tool.
+  <code>perl</code> supports the <code>-c</code> option which does
+  syntax checking.</p>
 
-<pre class="lisp">     (defun flymake-perl-init ()
+  <p>First, we write the <code>init-function</code>:</p>
+  <pre class="lisp">
+     (defun flymake-perl-init ()
        (let* ((temp-file (flymake-init-create-temp-buffer-copy
                           'flymake-create-temp-inplace))
               (local-file (file-relative-name
@@ -67,30 +91,33 @@ checking.
                            (file-name-directory buffer-file-name))))
          (list "perl" (list "-wc " local-file))))
 </pre>
-   <p><code>flymake-perl-init</code> creates a temporary copy of the buffer
-contents with the help of
-<code>flymake-init-create-temp-buffer-copy</code>, and builds an appropriate
-command line.
 
-   <p>Next, we add a new entry to the
-<code>flymake-allowed-file-name-masks</code>:
+  <p><code>flymake-perl-init</code> creates a temporary copy of the
+  buffer contents with the help of
+  <code>flymake-init-create-temp-buffer-copy</code>, and builds an
+  appropriate command line.</p>
 
-<pre class="lisp">     (setq flymake-allowed-file-name-masks
+  <p>Next, we add a new entry to the
+  <code>flymake-allowed-file-name-masks</code>:</p>
+  <pre class="lisp">
+     (setq flymake-allowed-file-name-masks
            (cons '(".+\\.pl$"
                    flymake-perl-init
                    flymake-simple-cleanup
                    flymake-get-real-file-name)
                  flymake-allowed-file-name-masks))
 </pre>
-   <p>Note that we use standard <code>cleanup-function</code> and
-<code>getfname-function</code>.
 
-   <p>Finally, we add an entry to <code>flymake-err-line-patterns</code>:
+  <p>Note that we use standard <code>cleanup-function</code> and
+  <code>getfname-function</code>.</p>
 
-<pre class="lisp">     (setq flymake-err-line-patterns
+  <p>Finally, we add an entry to
+  <code>flymake-err-line-patterns</code>:</p>
+  <pre class="lisp">
+     (setq flymake-err-line-patterns
            (cons '("\\(.*\\) at \\([^ \n]+\\) line \\([0-9]+\\)[,.\n]"
                    2 3 nil 1)
                  flymake-err-line-patterns))
 </pre>
-   </body></html>
-
+</body>
+</html>

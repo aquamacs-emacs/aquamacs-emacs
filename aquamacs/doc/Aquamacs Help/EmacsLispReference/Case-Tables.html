@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,211 +19,331 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Case Tables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Case Tables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Case Tables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Strings-and-Characters.html#Strings-and-Characters" rel="up" title="Strings and Characters">
-<link href="Lists.html#Lists" rel="next" title="Lists">
-<link href="Case-Conversion.html#Case-Conversion" rel="prev" title="Case Conversion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Case Tables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Case Tables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Case Tables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Strings-and-Characters.html#Strings-and-Characters"
+  rel="up" title="Strings and Characters" />
+  <link href="Lists.html#Lists" rel="next" title="Lists" />
+  <link href="Case-Conversion.html#Case-Conversion" rel="prev"
+  title="Case Conversion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Case-Tables" id="Case-Tables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Case-Conversion.html#Case-Conversion"
+    accesskey="p" rel="prev">Case Conversion</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Case-Table" id="The-Case-Table"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Case-Tables"></a>
-<div class="header">
-<p>
-Previous: <a href="Case-Conversion.html#Case-Conversion" accesskey="p" rel="prev">Case Conversion</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Case-Table"></a>
-<h3 class="section">4.9 The Case Table</h3>
+  <h3 class="section">4.9 The Case Table</h3>
 
-<p>You can customize case conversion by installing a special <em>case
-table</em>.  A case table specifies the mapping between upper case and lower
-case letters.  It affects both the case conversion functions for Lisp
-objects (see the previous section) and those that apply to text in the
-buffer (see <a href="Case-Changes.html#Case-Changes">Case Changes</a>).  Each buffer has a case table; there is
-also a standard case table which is used to initialize the case table
-of new buffers.
-</p>
-<p>A case table is a char-table (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>) whose subtype is
-<code>case-table</code>.  This char-table maps each character into the
-corresponding lower case character.  It has three extra slots, which
-hold related tables:
-</p>
-<dl compact="compact">
-<dt><var>upcase</var></dt>
-<dd><p>The upcase table maps each character into the corresponding upper
-case character.
-</p></dd>
-<dt><var>canonicalize</var></dt>
-<dd><p>The canonicalize table maps all of a set of case-related characters
-into a particular member of that set.
-</p></dd>
-<dt><var>equivalences</var></dt>
-<dd><p>The equivalences table maps each one of a set of case-related characters
-into the next character in that set.
-</p></dd>
-</dl>
+  <p>You can customize case conversion by installing a special
+  <em>case table</em>. A case table specifies the mapping between
+  upper case and lower case letters. It affects both the case
+  conversion functions for Lisp objects (see the previous section)
+  and those that apply to text in the buffer (see <a href=
+  "Case-Changes.html#Case-Changes">Case Changes</a>). Each buffer
+  has a case table; there is also a standard case table which is
+  used to initialize the case table of new buffers.</p>
 
-<p>In simple cases, all you need to specify is the mapping to lower-case;
-the three related tables will be calculated automatically from that one.
-</p>
-<p>For some languages, upper and lower case letters are not in one-to-one
-correspondence.  There may be two different lower case letters with the
-same upper case equivalent.  In these cases, you need to specify the
-maps for both lower case and upper case.
-</p>
-<p>The extra table <var>canonicalize</var> maps each character to a canonical
-equivalent; any two characters that are related by case-conversion have
-the same canonical equivalent character.  For example, since &lsquo;<samp>a</samp>&rsquo;
-and &lsquo;<samp>A</samp>&rsquo; are related by case-conversion, they should have the same
-canonical equivalent character (which should be either &lsquo;<samp>a</samp>&rsquo; for both
-of them, or &lsquo;<samp>A</samp>&rsquo; for both of them).
-</p>
-<p>The extra table <var>equivalences</var> is a map that cyclically permutes
-each equivalence class (of characters with the same canonical
-equivalent).  (For ordinary <acronym>ASCII</acronym>, this would map &lsquo;<samp>a</samp>&rsquo; into
-&lsquo;<samp>A</samp>&rsquo; and &lsquo;<samp>A</samp>&rsquo; into &lsquo;<samp>a</samp>&rsquo;, and likewise for each set of
-equivalent characters.)
-</p>
-<p>When constructing a case table, you can provide <code>nil</code> for
-<var>canonicalize</var>; then Emacs fills in this slot from the lower case
-and upper case mappings.  You can also provide <code>nil</code> for
-<var>equivalences</var>; then Emacs fills in this slot from
-<var>canonicalize</var>.  In a case table that is actually in use, those
-components are non-<code>nil</code>.  Do not try to specify
-<var>equivalences</var> without also specifying <var>canonicalize</var>.
-</p>
-<p>Here are the functions for working with case tables:
-</p>
-<dl>
-<dt><a name="index-case_002dtable_002dp"></a>Function: <strong>case-table-p</strong> <em>object</em></dt>
-<dd><p>This predicate returns non-<code>nil</code> if <var>object</var> is a valid case
-table.
-</p></dd></dl>
+  <p>A case table is a char-table (see <a href=
+  "Char_002dTables.html#Char_002dTables">Char-Tables</a>) whose
+  subtype is <code>case-table</code>. This char-table maps each
+  character into the corresponding lower case character. It has
+  three extra slots, which hold related tables:</p>
 
-<dl>
-<dt><a name="index-set_002dstandard_002dcase_002dtable"></a>Function: <strong>set-standard-case-table</strong> <em>table</em></dt>
-<dd><p>This function makes <var>table</var> the standard case table, so that it will
-be used in any buffers created subsequently.
-</p></dd></dl>
+  <dl compact="compact">
+    <dt><var>upcase</var></dt>
 
-<dl>
-<dt><a name="index-standard_002dcase_002dtable"></a>Function: <strong>standard-case-table</strong></dt>
-<dd><p>This returns the standard case table.
-</p></dd></dl>
+    <dd>
+      <p>The upcase table maps each character into the
+      corresponding upper case character.</p>
+    </dd>
 
-<dl>
-<dt><a name="index-current_002dcase_002dtable"></a>Function: <strong>current-case-table</strong></dt>
-<dd><p>This function returns the current buffer&rsquo;s case table.
-</p></dd></dl>
+    <dt><var>canonicalize</var></dt>
 
-<dl>
-<dt><a name="index-set_002dcase_002dtable"></a>Function: <strong>set-case-table</strong> <em>table</em></dt>
-<dd><p>This sets the current buffer&rsquo;s case table to <var>table</var>.
-</p></dd></dl>
+    <dd>
+      <p>The canonicalize table maps all of a set of case-related
+      characters into a particular member of that set.</p>
+    </dd>
 
-<dl>
-<dt><a name="index-with_002dcase_002dtable"></a>Macro: <strong>with-case-table</strong> <em>table body&hellip;</em></dt>
-<dd><p>The <code>with-case-table</code> macro saves the current case table, makes
-<var>table</var> the current case table, evaluates the <var>body</var> forms,
-and finally restores the case table.  The return value is the value of
-the last form in <var>body</var>.  The case table is restored even in case
-of an abnormal exit via <code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
-</p></dd></dl>
+    <dt><var>equivalences</var></dt>
 
-<p>Some language environments modify the case conversions of
-<acronym>ASCII</acronym> characters; for example, in the Turkish language
-environment, the <acronym>ASCII</acronym> capital I is downcased into
-a Turkish dotless i (&lsquo;<samp>ı</samp>&rsquo;).  This can interfere with code that requires
-ordinary <acronym>ASCII</acronym> case conversion, such as implementations of
-<acronym>ASCII</acronym>-based network protocols.  In that case, use the
-<code>with-case-table</code> macro with the variable <var>ascii-case-table</var>,
-which stores the unmodified case table for the <acronym>ASCII</acronym>
-character set.
-</p>
-<dl>
-<dt><a name="index-ascii_002dcase_002dtable"></a>Variable: <strong>ascii-case-table</strong></dt>
-<dd><p>The case table for the <acronym>ASCII</acronym> character set.  This should not be
-modified by any language environment settings.
-</p></dd></dl>
+    <dd>
+      <p>The equivalences table maps each one of a set of
+      case-related characters into the next character in that
+      set.</p>
+    </dd>
+  </dl>
 
-<p>The following three functions are convenient subroutines for packages
-that define non-<acronym>ASCII</acronym> character sets.  They modify the specified
-case table <var>case-table</var>; they also modify the standard syntax table.
-See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.  Normally you would use these functions to change
-the standard case table.
-</p>
-<dl>
-<dt><a name="index-set_002dcase_002dsyntax_002dpair"></a>Function: <strong>set-case-syntax-pair</strong> <em>uc lc case-table</em></dt>
-<dd><p>This function specifies a pair of corresponding letters, one upper case
-and one lower case.
-</p></dd></dl>
+  <p>In simple cases, all you need to specify is the mapping to
+  lower-case; the three related tables will be calculated
+  automatically from that one.</p>
 
-<dl>
-<dt><a name="index-set_002dcase_002dsyntax_002ddelims"></a>Function: <strong>set-case-syntax-delims</strong> <em>l r case-table</em></dt>
-<dd><p>This function makes characters <var>l</var> and <var>r</var> a matching pair of
-case-invariant delimiters.
-</p></dd></dl>
+  <p>For some languages, upper and lower case letters are not in
+  one-to-one correspondence. There may be two different lower case
+  letters with the same upper case equivalent. In these cases, you
+  need to specify the maps for both lower case and upper case.</p>
 
-<dl>
-<dt><a name="index-set_002dcase_002dsyntax"></a>Function: <strong>set-case-syntax</strong> <em>char syntax case-table</em></dt>
-<dd><p>This function makes <var>char</var> case-invariant, with syntax
-<var>syntax</var>.
-</p></dd></dl>
+  <p>The extra table <var>canonicalize</var> maps each character to
+  a canonical equivalent; any two characters that are related by
+  case-conversion have the same canonical equivalent character. For
+  example, since &lsquo;<samp>a</samp>&rsquo; and
+  &lsquo;<samp>A</samp>&rsquo; are related by case-conversion, they
+  should have the same canonical equivalent character (which should
+  be either &lsquo;<samp>a</samp>&rsquo; for both of them, or
+  &lsquo;<samp>A</samp>&rsquo; for both of them).</p>
 
-<dl>
-<dt><a name="index-describe_002dbuffer_002dcase_002dtable"></a>Command: <strong>describe-buffer-case-table</strong></dt>
-<dd><p>This command displays a description of the contents of the current
-buffer&rsquo;s case table.
-</p></dd></dl>
+  <p>The extra table <var>equivalences</var> is a map that
+  cyclically permutes each equivalence class (of characters with
+  the same canonical equivalent). (For ordinary
+  <acronym>ASCII</acronym>, this would map
+  &lsquo;<samp>a</samp>&rsquo; into &lsquo;<samp>A</samp>&rsquo;
+  and &lsquo;<samp>A</samp>&rsquo; into
+  &lsquo;<samp>a</samp>&rsquo;, and likewise for each set of
+  equivalent characters.)</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Case-Conversion.html#Case-Conversion" accesskey="p" rel="prev">Case Conversion</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When constructing a case table, you can provide
+  <code>nil</code> for <var>canonicalize</var>; then Emacs fills in
+  this slot from the lower case and upper case mappings. You can
+  also provide <code>nil</code> for <var>equivalences</var>; then
+  Emacs fills in this slot from <var>canonicalize</var>. In a case
+  table that is actually in use, those components are
+  non-<code>nil</code>. Do not try to specify
+  <var>equivalences</var> without also specifying
+  <var>canonicalize</var>.</p>
 
+  <p>Here are the functions for working with case tables:</p>
 
+  <dl>
+    <dt><a name="index-case_002dtable_002dp" id=
+    "index-case_002dtable_002dp"></a>Function:
+    <strong>case-table-p</strong> <em>object</em></dt>
 
+    <dd>
+      <p>This predicate returns non-<code>nil</code> if
+      <var>object</var> is a valid case table.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dstandard_002dcase_002dtable" id=
+    "index-set_002dstandard_002dcase_002dtable"></a>Function:
+    <strong>set-standard-case-table</strong> <em>table</em></dt>
+
+    <dd>
+      <p>This function makes <var>table</var> the standard case
+      table, so that it will be used in any buffers created
+      subsequently.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-standard_002dcase_002dtable" id=
+    "index-standard_002dcase_002dtable"></a>Function:
+    <strong>standard-case-table</strong></dt>
+
+    <dd>
+      <p>This returns the standard case table.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-current_002dcase_002dtable" id=
+    "index-current_002dcase_002dtable"></a>Function:
+    <strong>current-case-table</strong></dt>
+
+    <dd>
+      <p>This function returns the current buffer&rsquo;s case
+      table.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dcase_002dtable" id=
+    "index-set_002dcase_002dtable"></a>Function:
+    <strong>set-case-table</strong> <em>table</em></dt>
+
+    <dd>
+      <p>This sets the current buffer&rsquo;s case table to
+      <var>table</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-with_002dcase_002dtable" id=
+    "index-with_002dcase_002dtable"></a>Macro:
+    <strong>with-case-table</strong> <em>table
+    body&hellip;</em></dt>
+
+    <dd>
+      <p>The <code>with-case-table</code> macro saves the current
+      case table, makes <var>table</var> the current case table,
+      evaluates the <var>body</var> forms, and finally restores the
+      case table. The return value is the value of the last form in
+      <var>body</var>. The case table is restored even in case of
+      an abnormal exit via <code>throw</code> or error (see
+      <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal
+      Exits</a>).</p>
+    </dd>
+  </dl>
+
+  <p>Some language environments modify the case conversions of
+  <acronym>ASCII</acronym> characters; for example, in the Turkish
+  language environment, the <acronym>ASCII</acronym> capital I is
+  downcased into a Turkish dotless i
+  (&lsquo;<samp>&Auml;&plusmn;</samp>&rsquo;). This can interfere
+  with code that requires ordinary <acronym>ASCII</acronym> case
+  conversion, such as implementations of
+  <acronym>ASCII</acronym>-based network protocols. In that case,
+  use the <code>with-case-table</code> macro with the variable
+  <var>ascii-case-table</var>, which stores the unmodified case
+  table for the <acronym>ASCII</acronym> character set.</p>
+
+  <dl>
+    <dt><a name="index-ascii_002dcase_002dtable" id=
+    "index-ascii_002dcase_002dtable"></a>Variable:
+    <strong>ascii-case-table</strong></dt>
+
+    <dd>
+      <p>The case table for the <acronym>ASCII</acronym> character
+      set. This should not be modified by any language environment
+      settings.</p>
+    </dd>
+  </dl>
+
+  <p>The following three functions are convenient subroutines for
+  packages that define non-<acronym>ASCII</acronym> character sets.
+  They modify the specified case table <var>case-table</var>; they
+  also modify the standard syntax table. See <a href=
+  "Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>. Normally
+  you would use these functions to change the standard case
+  table.</p>
+
+  <dl>
+    <dt><a name="index-set_002dcase_002dsyntax_002dpair" id=
+    "index-set_002dcase_002dsyntax_002dpair"></a>Function:
+    <strong>set-case-syntax-pair</strong> <em>uc lc
+    case-table</em></dt>
+
+    <dd>
+      <p>This function specifies a pair of corresponding letters,
+      one upper case and one lower case.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dcase_002dsyntax_002ddelims" id=
+    "index-set_002dcase_002dsyntax_002ddelims"></a>Function:
+    <strong>set-case-syntax-delims</strong> <em>l r
+    case-table</em></dt>
+
+    <dd>
+      <p>This function makes characters <var>l</var> and
+      <var>r</var> a matching pair of case-invariant
+      delimiters.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dcase_002dsyntax" id=
+    "index-set_002dcase_002dsyntax"></a>Function:
+    <strong>set-case-syntax</strong> <em>char syntax
+    case-table</em></dt>
+
+    <dd>
+      <p>This function makes <var>char</var> case-invariant, with
+      syntax <var>syntax</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-describe_002dbuffer_002dcase_002dtable" id=
+    "index-describe_002dbuffer_002dcase_002dtable"></a>Command:
+    <strong>describe-buffer-case-table</strong></dt>
+
+    <dd>
+      <p>This command displays a description of the contents of the
+      current buffer&rsquo;s case table.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Case-Conversion.html#Case-Conversion"
+    accesskey="p" rel="prev">Case Conversion</a>, Up: <a href=
+    "Strings-and-Characters.html#Strings-and-Characters" accesskey=
+    "u" rel="up">Strings and Characters</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

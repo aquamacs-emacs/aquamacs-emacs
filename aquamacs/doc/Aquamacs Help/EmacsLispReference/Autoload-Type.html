@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,82 +19,111 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Autoload Type</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Autoload Type">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Autoload Type">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Programming-Types.html#Programming-Types" rel="up" title="Programming Types">
-<link href="Finalizer-Type.html#Finalizer-Type" rel="next" title="Finalizer Type">
-<link href="Byte_002dCode-Type.html#Byte_002dCode-Type" rel="prev" title="Byte-Code Type">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Autoload Type</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Autoload Type" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Autoload Type" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Programming-Types.html#Programming-Types" rel="up"
+  title="Programming Types" />
+  <link href="Finalizer-Type.html#Finalizer-Type" rel="next" title=
+  "Finalizer Type" />
+  <link href="Byte_002dCode-Type.html#Byte_002dCode-Type" rel=
+  "prev" title="Byte-Code Type" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Autoload-Type" id="Autoload-Type"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Finalizer-Type.html#Finalizer-Type"
+    accesskey="n" rel="next">Finalizer Type</a>, Previous: <a href=
+    "Byte_002dCode-Type.html#Byte_002dCode-Type" accesskey="p" rel=
+    "prev">Byte-Code Type</a>, Up: <a href=
+    "Programming-Types.html#Programming-Types" accesskey="u" rel=
+    "up">Programming Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Autoload-Type-1" id="Autoload-Type-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Autoload-Type"></a>
-<div class="header">
-<p>
-Next: <a href="Finalizer-Type.html#Finalizer-Type" accesskey="n" rel="next">Finalizer Type</a>, Previous: <a href="Byte_002dCode-Type.html#Byte_002dCode-Type" accesskey="p" rel="prev">Byte-Code Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Autoload-Type-1"></a>
-<h4 class="subsection">2.3.17 Autoload Type</h4>
+  <h4 class="subsection">2.3.17 Autoload Type</h4>
 
-<p>An <em>autoload object</em> is a list whose first element is the symbol
-<code>autoload</code>.  It is stored as the function definition of a symbol,
-where it serves as a placeholder for the real definition.  The autoload
-object says that the real definition is found in a file of Lisp code
-that should be loaded when necessary.  It contains the name of the file,
-plus some other information about the real definition.
-</p>
-<p>After the file has been loaded, the symbol should have a new function
-definition that is not an autoload object.  The new definition is then
-called as if it had been there to begin with.  From the user&rsquo;s point of
-view, the function call works as expected, using the function definition
-in the loaded file.
-</p>
-<p>An autoload object is usually created with the function
-<code>autoload</code>, which stores the object in the function cell of a
-symbol.  See <a href="Autoload.html#Autoload">Autoload</a>, for more details.
-</p>
+  <p>An <em>autoload object</em> is a list whose first element is
+  the symbol <code>autoload</code>. It is stored as the function
+  definition of a symbol, where it serves as a placeholder for the
+  real definition. The autoload object says that the real
+  definition is found in a file of Lisp code that should be loaded
+  when necessary. It contains the name of the file, plus some other
+  information about the real definition.</p>
 
+  <p>After the file has been loaded, the symbol should have a new
+  function definition that is not an autoload object. The new
+  definition is then called as if it had been there to begin with.
+  From the user&rsquo;s point of view, the function call works as
+  expected, using the function definition in the loaded file.</p>
 
-
+  <p>An autoload object is usually created with the function
+  <code>autoload</code>, which stores the object in the function
+  cell of a symbol. See <a href=
+  "Autoload.html#Autoload">Autoload</a>, for more details.</p>
 </body>
 </html>

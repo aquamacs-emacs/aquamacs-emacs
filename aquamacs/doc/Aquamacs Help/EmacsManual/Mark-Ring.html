@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,128 +20,179 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Mark Ring</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Mark Ring">
-<meta name="keywords" content="GNU Emacs Manual: Mark Ring">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mark.html#Mark" rel="up" title="Mark">
-<link href="Global-Mark-Ring.html#Global-Mark-Ring" rel="next" title="Global Mark Ring">
-<link href="Using-Region.html#Using-Region" rel="prev" title="Using Region">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Mark Ring</title>
+  <meta name="description" content="GNU Emacs Manual: Mark Ring" />
+  <meta name="keywords" content="GNU Emacs Manual: Mark Ring" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mark.html#Mark" rel="up" title="Mark" />
+  <link href="Global-Mark-Ring.html#Global-Mark-Ring" rel="next"
+  title="Global Mark Ring" />
+  <link href="Using-Region.html#Using-Region" rel="prev" title=
+  "Using Region" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Mark-Ring" id="Mark-Ring"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Global-Mark-Ring.html#Global-Mark-Ring"
+    accesskey="n" rel="next">Global Mark Ring</a>, Previous:
+    <a href="Using-Region.html#Using-Region" accesskey="p" rel=
+    "prev">Using Region</a>, Up: <a href="Mark.html#Mark"
+    accesskey="u" rel="up">Mark</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Mark-Ring" id="The-Mark-Ring"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Mark-Ring"></a>
-<div class="header">
-<p>
-Next: <a href="Global-Mark-Ring.html#Global-Mark-Ring" accesskey="n" rel="next">Global Mark Ring</a>, Previous: <a href="Using-Region.html#Using-Region" accesskey="p" rel="prev">Using Region</a>, Up: <a href="Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Mark-Ring"></a>
-<h3 class="section">11.4 The Mark Ring</h3>
+  <h3 class="section">11.4 The Mark Ring</h3><a name=
+  "index-mark-ring" id="index-mark-ring"></a>
 
-<a name="index-mark-ring"></a>
-<p>Each buffer remembers previous locations of the mark, in the
-<em>mark ring</em>.  Commands that set the mark also push the old mark
-onto this ring.  One of the uses of the mark ring is to remember spots
-that you may want to go back to.
-</p>
-<dl compact="compact">
-<dt><kbd>C-<span class="key">SPC</span> C-<span class="key">SPC</span></kbd></dt>
-<dd><p>Set the mark, pushing it onto the mark ring, without activating it.
-</p></dd>
-<dt><kbd>C-u C-<span class="key">SPC</span></kbd></dt>
-<dd><p>Move point to where the mark was, and restore the mark from the ring
-of former marks.
-</p></dd>
-</dl>
+  <p>Each buffer remembers previous locations of the mark, in the
+  <em>mark ring</em>. Commands that set the mark also push the old
+  mark onto this ring. One of the uses of the mark ring is to
+  remember spots that you may want to go back to.</p>
 
-<a name="index-C_002dSPC-C_002dSPC"></a>
-<p>The command <kbd>C-<span class="key">SPC</span> C-<span class="key">SPC</span></kbd> is handy when you want to
-use the mark to remember a position to which you may wish to return.
-It pushes the current point onto the mark ring, without activating the
-mark (which would cause Emacs to highlight the region).  This is
-actually two consecutive invocations of <kbd>C-<span class="key">SPC</span></kbd>
-(<code>set-mark-command</code>); the first <kbd>C-<span class="key">SPC</span></kbd> sets the mark,
-and the second <kbd>C-<span class="key">SPC</span></kbd> deactivates it.  (When Transient Mark
-mode is off, <kbd>C-<span class="key">SPC</span> C-<span class="key">SPC</span></kbd> instead activates Transient
-Mark mode temporarily; see <a href="Disabled-Transient-Mark.html#Disabled-Transient-Mark">Disabled Transient Mark</a>.)
-</p>
-<a name="index-C_002du-C_002dSPC"></a>
-<p>To return to a marked position, use <code>set-mark-command</code> with a
-prefix argument: <kbd>C-u C-<span class="key">SPC</span></kbd>.  This moves point to where the
-mark was, and deactivates the mark if it was active.  Each subsequent
-<kbd>C-u C-<span class="key">SPC</span></kbd> jumps to a prior position stored in the mark
-ring.  The positions you move through in this way are not lost; they
-go to the end of the ring.
-</p>
-<a name="index-set_002dmark_002dcommand_002drepeat_002dpop"></a>
-<p>If you set <code>set-mark-command-repeat-pop</code> to non-<code>nil</code>,
-then immediately after you type <kbd>C-u C-<span class="key">SPC</span></kbd>, you can type
-<kbd>C-<span class="key">SPC</span></kbd> instead of <kbd>C-u C-<span class="key">SPC</span></kbd> to cycle through
-the mark ring.  By default, <code>set-mark-command-repeat-pop</code> is
-<code>nil</code>.
-</p>
-<p>Each buffer has its own mark ring.  All editing commands use the
-current buffer&rsquo;s mark ring.  In particular, <kbd>C-u C-<span class="key">SPC</span></kbd>
-always stays in the same buffer.
-</p>
-<a name="index-mark_002dring_002dmax"></a>
-<p>The variable <code>mark-ring-max</code> specifies the maximum number of
-entries to keep in the mark ring.  This defaults to 16 entries.  If
-that many entries exist and another one is pushed, the earliest one in
-the list is discarded.  Repeating <kbd>C-u C-<span class="key">SPC</span></kbd> cycles through
-the positions currently in the ring.
-</p>
-<p>If you want to move back to the same place over and over, the mark
-ring may not be convenient enough.  If so, you can record the position
-in a register for later retrieval (see <a href="Position-Registers.html#Position-Registers">Saving
-Positions in Registers</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Global-Mark-Ring.html#Global-Mark-Ring" accesskey="n" rel="next">Global Mark Ring</a>, Previous: <a href="Using-Region.html#Using-Region" accesskey="p" rel="prev">Using Region</a>, Up: <a href="Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>C-<span class="key">SPC</span> C-<span class=
+    "key">SPC</span></kbd></dt>
 
+    <dd>
+      <p>Set the mark, pushing it onto the mark ring, without
+      activating it.</p>
+    </dd>
 
+    <dt><kbd>C-u C-<span class="key">SPC</span></kbd></dt>
 
+    <dd>
+      <p>Move point to where the mark was, and restore the mark
+      from the ring of former marks.</p>
+    </dd>
+  </dl><a name="index-C_002dSPC-C_002dSPC" id=
+  "index-C_002dSPC-C_002dSPC"></a>
+
+  <p>The command <kbd>C-<span class="key">SPC</span> C-<span class=
+  "key">SPC</span></kbd> is handy when you want to use the mark to
+  remember a position to which you may wish to return. It pushes
+  the current point onto the mark ring, without activating the mark
+  (which would cause Emacs to highlight the region). This is
+  actually two consecutive invocations of <kbd>C-<span class=
+  "key">SPC</span></kbd> (<code>set-mark-command</code>); the first
+  <kbd>C-<span class="key">SPC</span></kbd> sets the mark, and the
+  second <kbd>C-<span class="key">SPC</span></kbd> deactivates it.
+  (When Transient Mark mode is off, <kbd>C-<span class=
+  "key">SPC</span> C-<span class="key">SPC</span></kbd> instead
+  activates Transient Mark mode temporarily; see <a href=
+  "Disabled-Transient-Mark.html#Disabled-Transient-Mark">Disabled
+  Transient Mark</a>.)</p><a name="index-C_002du-C_002dSPC" id=
+  "index-C_002du-C_002dSPC"></a>
+
+  <p>To return to a marked position, use
+  <code>set-mark-command</code> with a prefix argument: <kbd>C-u
+  C-<span class="key">SPC</span></kbd>. This moves point to where
+  the mark was, and deactivates the mark if it was active. Each
+  subsequent <kbd>C-u C-<span class="key">SPC</span></kbd> jumps to
+  a prior position stored in the mark ring. The positions you move
+  through in this way are not lost; they go to the end of the
+  ring.</p><a name=
+  "index-set_002dmark_002dcommand_002drepeat_002dpop" id=
+  "index-set_002dmark_002dcommand_002drepeat_002dpop"></a>
+
+  <p>If you set <code>set-mark-command-repeat-pop</code> to
+  non-<code>nil</code>, then immediately after you type <kbd>C-u
+  C-<span class="key">SPC</span></kbd>, you can type
+  <kbd>C-<span class="key">SPC</span></kbd> instead of <kbd>C-u
+  C-<span class="key">SPC</span></kbd> to cycle through the mark
+  ring. By default, <code>set-mark-command-repeat-pop</code> is
+  <code>nil</code>.</p>
+
+  <p>Each buffer has its own mark ring. All editing commands use
+  the current buffer&rsquo;s mark ring. In particular, <kbd>C-u
+  C-<span class="key">SPC</span></kbd> always stays in the same
+  buffer.</p><a name="index-mark_002dring_002dmax" id=
+  "index-mark_002dring_002dmax"></a>
+
+  <p>The variable <code>mark-ring-max</code> specifies the maximum
+  number of entries to keep in the mark ring. This defaults to 16
+  entries. If that many entries exist and another one is pushed,
+  the earliest one in the list is discarded. Repeating <kbd>C-u
+  C-<span class="key">SPC</span></kbd> cycles through the positions
+  currently in the ring.</p>
+
+  <p>If you want to move back to the same place over and over, the
+  mark ring may not be convenient enough. If so, you can record the
+  position in a register for later retrieval (see <a href=
+  "Position-Registers.html#Position-Registers">Saving Positions in
+  Registers</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Global-Mark-Ring.html#Global-Mark-Ring"
+    accesskey="n" rel="next">Global Mark Ring</a>, Previous:
+    <a href="Using-Region.html#Using-Region" accesskey="p" rel=
+    "prev">Using Region</a>, Up: <a href="Mark.html#Mark"
+    accesskey="u" rel="up">Mark</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

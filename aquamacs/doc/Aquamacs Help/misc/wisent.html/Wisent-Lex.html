@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,121 +16,173 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Wisent Lex</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Wisent Lex">
-<meta name="keywords" content="Wisent Parser Development: Wisent Lex">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Wisent-Semantic.html#Wisent-Semantic" rel="up" title="Wisent Semantic">
-<link href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" rel="next" title="GNU Free Documentation License">
-<link href="Useful-functions.html#Useful-functions" rel="prev" title="Useful functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Wisent Lex</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Wisent Lex" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Wisent Lex" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Wisent-Semantic.html#Wisent-Semantic" rel="up" title=
+  "Wisent Semantic" />
+  <link href=
+  "GNU-Free-Documentation-License.html#GNU-Free-Documentation-License"
+  rel="next" title="GNU Free Documentation License" />
+  <link href="Useful-functions.html#Useful-functions" rel="prev"
+  title="Useful functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Wisent-Lex"></a>
-<div class="header">
-<p>
-Previous: <a href="Grammar-styles.html#Grammar-styles" accesskey="p" rel="prev">Grammar styles</a>, Up: <a href="Wisent-Semantic.html#Wisent-Semantic" accesskey="u" rel="up">Wisent Semantic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Wisent-Lex-lexer"></a>
-<h3 class="section">4.2 The Wisent Lex lexer</h3>
+<body lang="en" xml:lang="en">
+  <a name="Wisent-Lex" id="Wisent-Lex"></a>
 
-<a name="index-semantic_002dlex"></a>
-<p>The lexical analysis step of <i>Semantic</i> is performed by the general
-function <code>semantic-lex</code>.  For more information, See <a href="../semantic-langdev/Writing-Lexers.html#Writing-Lexers">(semantic-langdev)Writing
-Lexers</a>.
-</p>
-<p><code>semantic-lex</code> produces lexical tokens of the form:
-</p>
-<div class="example">
-<pre class="example"><code>(<var>token-class start</var> . <var>end</var>)</code>
-</pre></div>
+  <div class="header">
+    <p>Previous: <a href="Grammar-styles.html#Grammar-styles"
+    accesskey="p" rel="prev">Grammar styles</a>, Up: <a href=
+    "Wisent-Semantic.html#Wisent-Semantic" accesskey="u" rel=
+    "up">Wisent Semantic</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Wisent-Lex-lexer" id="The-Wisent-Lex-lexer"></a>
 
-<dl compact="compact">
-<dt><var>token-class</var></dt>
-<dd><p>Is a symbol that identifies a lexical token class, like <code>symbol</code>,
-<code>string</code>, <code>number</code>, or <code>PAREN_BLOCK</code>.
-</p>
-</dd>
-<dt><var>start</var></dt>
-<dt><var>end</var></dt>
-<dd><p>Are the start and end positions of mapped data in the input buffer.
-</p></dd>
-</dl>
+  <h3 class="section">4.2 The Wisent Lex lexer</h3><a name=
+  "index-semantic_002dlex" id="index-semantic_002dlex"></a>
 
-<p>The Wisent&rsquo;s parser doesn&rsquo;t depend on the nature of analyzed input
-stream (buffer, string, etc.), and requires that lexical tokens have a
-different form (see <a href="Writing-a-lexer.html#Writing-a-lexer">Writing a lexer</a>):
-</p>
-<div class="example">
-<pre class="example"><code>(<var>token-class value</var> [<var>start</var> . <var>end</var>])</code>
-</pre></div>
+  <p>The lexical analysis step of <i>Semantic</i> is performed by
+  the general function <code>semantic-lex</code>. For more
+  information, See <a href=
+  "../semantic-langdev/Writing-Lexers.html#Writing-Lexers">(semantic-langdev)Writing
+  Lexers</a>.</p>
 
-<a name="index-lexical-token-mapping"></a>
-<p><code>wisent-lex</code> is the default Wisent&rsquo;s lexer used in <i>Semantic</i>.
-</p>
-<a name="index-wisent_002dlex_002distream"></a>
-<a name="index-wisent_002dlex"></a>
-<dl>
-<dt><a name="index-wisent_002dlex-1"></a>Function: <strong>wisent-lex</strong></dt>
-<dd><p>Return the next available lexical token in Wisent&rsquo;s form.
-</p>
-<p>The variable <code>wisent-lex-istream</code> contains the list of lexical
-tokens produced by <code>semantic-lex</code>.  Pop the next token available
-and convert it to a form suitable for the Wisent&rsquo;s parser.
-</p></dd></dl>
+  <p><code>semantic-lex</code> produces lexical tokens of the
+  form:</p>
 
-<p>Mapping of lexical tokens as produced by <code>semantic-lex</code> into
-equivalent Wisent lexical tokens is straightforward:
-</p>
-<div class="example">
-<pre class="example">(<var>token-class start</var> . <var>end</var>)
+  <div class="example">
+    <pre class="example">
+<code>(<var>token-class start</var> . <var>end</var>)</code>
+</pre>
+  </div>
+
+  <dl compact="compact">
+    <dt><var>token-class</var></dt>
+
+    <dd>
+      <p>Is a symbol that identifies a lexical token class, like
+      <code>symbol</code>, <code>string</code>,
+      <code>number</code>, or <code>PAREN_BLOCK</code>.</p>
+    </dd>
+
+    <dt><var>start</var></dt>
+
+    <dt><var>end</var></dt>
+
+    <dd>
+      <p>Are the start and end positions of mapped data in the
+      input buffer.</p>
+    </dd>
+  </dl>
+
+  <p>The Wisent&rsquo;s parser doesn&rsquo;t depend on the nature
+  of analyzed input stream (buffer, string, etc.), and requires
+  that lexical tokens have a different form (see <a href=
+  "Writing-a-lexer.html#Writing-a-lexer">Writing a lexer</a>):</p>
+
+  <div class="example">
+    <pre class="example">
+<code>(<var>token-class value</var> [<var>start</var> . <var>end</var>])</code>
+</pre>
+  </div><a name="index-lexical-token-mapping" id=
+  "index-lexical-token-mapping"></a>
+
+  <p><code>wisent-lex</code> is the default Wisent&rsquo;s lexer
+  used in <i>Semantic</i>.</p><a name=
+  "index-wisent_002dlex_002distream" id=
+  "index-wisent_002dlex_002distream"></a> <a name=
+  "index-wisent_002dlex" id="index-wisent_002dlex"></a>
+
+  <dl>
+    <dt><a name="index-wisent_002dlex-1" id=
+    "index-wisent_002dlex-1"></a>Function:
+    <strong>wisent-lex</strong></dt>
+
+    <dd>
+      <p>Return the next available lexical token in Wisent&rsquo;s
+      form.</p>
+
+      <p>The variable <code>wisent-lex-istream</code> contains the
+      list of lexical tokens produced by <code>semantic-lex</code>.
+      Pop the next token available and convert it to a form
+      suitable for the Wisent&rsquo;s parser.</p>
+    </dd>
+  </dl>
+
+  <p>Mapping of lexical tokens as produced by
+  <code>semantic-lex</code> into equivalent Wisent lexical tokens
+  is straightforward:</p>
+
+  <div class="example">
+    <pre class="example">
+(<var>token-class start</var> . <var>end</var>)
      &rArr; (<var>token-class value start</var> . <var>end</var>)
-</pre></div>
+</pre>
+  </div>
 
-<p><var>value</var> is the input <code>buffer-substring</code> from <var>start</var> to
-<var>end</var>.
-</p>
-
-
-
+  <p><var>value</var> is the input <code>buffer-substring</code>
+  from <var>start</var> to <var>end</var>.</p>
 </body>
 </html>

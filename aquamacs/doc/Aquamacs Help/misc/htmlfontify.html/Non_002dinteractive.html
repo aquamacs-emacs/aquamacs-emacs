@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents Htmlfontify, a source code -> crosslinked +
 formatted + syntax colorized html transformer.
 
@@ -16,916 +18,1430 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Htmlfontify User Manual: Non-interactive</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Htmlfontify User Manual: Non-interactive">
-<meta name="keywords" content="Htmlfontify User Manual: Non-interactive">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Usage-_0026-Examples.html#Usage-_0026-Examples" rel="up" title="Usage &amp; Examples">
-<link href="Variables.html#Variables" rel="next" title="Variables">
-<link href="Interactive.html#Interactive" rel="prev" title="Interactive">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Htmlfontify User Manual: Non-interactive</title>
+  <meta name="description" content=
+  "Htmlfontify User Manual: Non-interactive" />
+  <meta name="keywords" content=
+  "Htmlfontify User Manual: Non-interactive" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Usage-_0026-Examples.html#Usage-_0026-Examples" rel=
+  "up" title="Usage &amp; Examples" />
+  <link href="Variables.html#Variables" rel="next" title=
+  "Variables" />
+  <link href="Interactive.html#Interactive" rel="prev" title=
+  "Interactive" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Non_002dinteractive"></a>
-<div class="header">
-<p>
-Next: <a href="Variables.html#Variables" accesskey="n" rel="next">Variables</a>, Previous: <a href="Interactive.html#Interactive" accesskey="p" rel="prev">Interactive</a>, Up: <a href="Usage-_0026-Examples.html#Usage-_0026-Examples" accesskey="u" rel="up">Usage &amp; Examples</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Non_002dinteractive-1"></a>
-<h3 class="section">2.2 Non-interactive</h3>
-<a name="index-Noninteractive"></a>
-<a name="index-functions-_0028noninteractive_0029"></a>
+<body lang="en" xml:lang="en">
+  <a name="Non_002dinteractive" id="Non_002dinteractive"></a>
 
-<p>In addition to the aforementioned interactive methods, Htmlfontify
-provides the following non-interactive ones:
-</p>
-<dl compact="compact">
-<dt><code>hfy-face-to-style</code></dt>
-<dd><a name="index-hfy_002dface_002dto_002dstyle"></a>
-<a name="hfy_002dface_002dto_002dstyle"></a>
-<div class="lisp">
-<pre class="lisp">
+  <div class="header">
+    <p>Next: <a href="Variables.html#Variables" accesskey="n" rel=
+    "next">Variables</a>, Previous: <a href=
+    "Interactive.html#Interactive" accesskey="p" rel=
+    "prev">Interactive</a>, Up: <a href=
+    "Usage-_0026-Examples.html#Usage-_0026-Examples" accesskey="u"
+    rel="up">Usage &amp; Examples</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Non_002dinteractive-1" id="Non_002dinteractive-1"></a>
+
+  <h3 class="section">2.2 Non-interactive</h3><a name=
+  "index-Noninteractive" id="index-Noninteractive"></a> <a name=
+  "index-functions-_0028noninteractive_0029" id=
+  "index-functions-_0028noninteractive_0029"></a>
+
+  <p>In addition to the aforementioned interactive methods,
+  Htmlfontify provides the following non-interactive ones:</p>
+
+  <dl compact="compact">
+    <dt><code>hfy-face-to-style</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dface_002dto_002dstyle" id=
+      "index-hfy_002dface_002dto_002dstyle"></a> <a name=
+      "hfy_002dface_002dto_002dstyle" id=
+      "hfy_002dface_002dto_002dstyle"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-face-to-style <var>fn</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Take <var>fn</var>, a font or <code>defface</code> style font specification,
-(as returned by <code>face-attr-construct</code> or <a href="#hfy_002dface_002dattr_002dfor_002dclass">hfy-face-attr-for-class</a>)
-and return a <a href="Data-Structures.html#hfy_002dstyle_002dassoc">hfy-style-assoc</a>.
-</p>
-<p>See also: <a href="#hfy_002dface_002dto_002dstyle_002di">hfy-face-to-style-i</a>, <a href="#hfy_002dflatten_002dstyle">hfy-flatten-style</a>.
-</p>
-</dd>
-<dt><code>hfy-fallback-color-values</code></dt>
-<dd><a name="index-hfy_002dfallback_002dcolor_002dvalues"></a>
-<a name="hfy_002dfallback_002dcolor_002dvalues"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Take <var>fn</var>, a font or <code>defface</code> style
+      font specification, (as returned by
+      <code>face-attr-construct</code> or <a href=
+      "#hfy_002dface_002dattr_002dfor_002dclass">hfy-face-attr-for-class</a>)
+      and return a <a href=
+      "Data-Structures.html#hfy_002dstyle_002dassoc">hfy-style-assoc</a>.</p>
+
+      <p>See also: <a href=
+      "#hfy_002dface_002dto_002dstyle_002di">hfy-face-to-style-i</a>,
+      <a href=
+      "#hfy_002dflatten_002dstyle">hfy-flatten-style</a>.</p>
+    </dd>
+
+    <dt><code>hfy-fallback-color-values</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dfallback_002dcolor_002dvalues" id=
+      "index-hfy_002dfallback_002dcolor_002dvalues"></a> <a name=
+      "hfy_002dfallback_002dcolor_002dvalues" id=
+      "hfy_002dfallback_002dcolor_002dvalues"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-fallback-color-values <var>color-string</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Use a fallback method for obtaining the rgb values for a color.
-If <a href="Interactive.html#htmlfontify_002dload_002drgb_002dfile">htmlfontify-load-rgb-file</a> has been called, it uses the
-color map specified, otherwise it uses Htmlfontify&rsquo;s built in map.
-</p>
-</dd>
-<dt><code>hfy-combined-face-spec</code></dt>
-<dd><a name="index-hfy_002dcombined_002dface_002dspec"></a>
-<a name="hfy_002dcombined_002dface_002dspec"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Use a fallback method for obtaining the rgb values for a
+      color. If <a href=
+      "Interactive.html#htmlfontify_002dload_002drgb_002dfile">htmlfontify-load-rgb-file</a>
+      has been called, it uses the color map specified, otherwise
+      it uses Htmlfontify&rsquo;s built in map.</p>
+    </dd>
+
+    <dt><code>hfy-combined-face-spec</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dcombined_002dface_002dspec" id=
+      "index-hfy_002dcombined_002dface_002dspec"></a> <a name=
+      "hfy_002dcombined_002dface_002dspec" id=
+      "hfy_002dcombined_002dface_002dspec"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-combined-face-spec <var>face</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Return a <code>defface</code> style alist of possible specifications for
-<var>face</var>, with any entries resulting from user customization
-(<code>custom-set-faces</code>) taking precedence.
-</p>
-<p>See also: <a href="Customization.html#hfy_002ddefault_002dface_002ddef">hfy-default-face-def</a>
-</p>
-</dd>
-<dt><code>hfy-word-regex</code></dt>
-<dd><a name="index-hfy_002dword_002dregex"></a>
-<a name="hfy_002dword_002dregex"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Return a <code>defface</code> style alist of possible
+      specifications for <var>face</var>, with any entries
+      resulting from user customization
+      (<code>custom-set-faces</code>) taking precedence.</p>
+
+      <p>See also: <a href=
+      "Customization.html#hfy_002ddefault_002dface_002ddef">hfy-default-face-def</a></p>
+    </dd>
+
+    <dt><code>hfy-word-regex</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dword_002dregex" id=
+      "index-hfy_002dword_002dregex"></a> <a name=
+      "hfy_002dword_002dregex" id="hfy_002dword_002dregex"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-word-regex <var>string</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Return a regex that matches <var>string</var> as the first <code>match-string</code>,
-with non word characters on either side (vaguely emulating the perl <code>\b</code>
-regex atom).
-</p>
-</dd>
-<dt><code>hfy-force-fontification</code></dt>
-<dd><a name="index-hfy_002dforce_002dfontification"></a>
-<a name="hfy_002dforce_002dfontification"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Return a regex that matches <var>string</var> as the first
+      <code>match-string</code>, with non word characters on either
+      side (vaguely emulating the perl <code>\b</code> regex
+      atom).</p>
+    </dd>
+
+    <dt><code>hfy-force-fontification</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dforce_002dfontification" id=
+      "index-hfy_002dforce_002dfontification"></a> <a name=
+      "hfy_002dforce_002dfontification" id=
+      "hfy_002dforce_002dfontification"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-force-fontification)
-</pre></div>
+</pre>
+      </div>
 
-<p>Emacs&rsquo;s fontification is designed for interactive use.  As such, it sometimes
-does things like deferring fontification until a section of the buffer is
-exposed and rendered, or until Emacs is idle for a while.  Sometimes, in
-non-interactive circumstances, or if it can&rsquo;t see X, it doesn&rsquo;t bother
-with some of the harder stuff.  While this is all great from the perspective
-of a user waiting for Emacs to load a 20000 line file and colorize it,
-it&rsquo;s a pain from the point of view from non-interactive code.  This function
-lies, cheats, steals and generally bullies Emacs into fontifying a buffer
-from start to finish, with all the extra frills, whether it thinks it needs
-to or not.  Oh yes: it operates on the current buffer.
-</p>
-</dd>
-<dt><code>hfy-link-style-string</code></dt>
-<dd><a name="index-hfy_002dlink_002dstyle_002dstring"></a>
-<a name="hfy_002dlink_002dstyle_002dstring"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Emacs&rsquo;s fontification is designed for interactive
+      use. As such, it sometimes does things like deferring
+      fontification until a section of the buffer is exposed and
+      rendered, or until Emacs is idle for a while. Sometimes, in
+      non-interactive circumstances, or if it can&rsquo;t see X, it
+      doesn&rsquo;t bother with some of the harder stuff. While
+      this is all great from the perspective of a user waiting for
+      Emacs to load a 20000 line file and colorize it, it&rsquo;s a
+      pain from the point of view from non-interactive code. This
+      function lies, cheats, steals and generally bullies Emacs
+      into fontifying a buffer from start to finish, with all the
+      extra frills, whether it thinks it needs to or not. Oh yes:
+      it operates on the current buffer.</p>
+    </dd>
+
+    <dt><code>hfy-link-style-string</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dlink_002dstyle_002dstring" id=
+      "index-hfy_002dlink_002dstyle_002dstring"></a> <a name=
+      "hfy_002dlink_002dstyle_002dstring" id=
+      "hfy_002dlink_002dstyle_002dstring"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-link-style-string <var>style-string</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Replace the end of a CSS style declaration <var>style-string</var> with the contents
-of the variable <a href="Customization.html#hfy_002dsrc_002ddoc_002dlink_002dstyle">hfy-src-doc-link-style</a>, removing text matching the
-regex <a href="Customization.html#hfy_002dsrc_002ddoc_002dlink_002dunstyle">hfy-src-doc-link-unstyle</a> first, if necessary.
-</p>
+      <p>Replace the end of a CSS style declaration
+      <var>style-string</var> with the contents of the variable
+      <a href=
+      "Customization.html#hfy_002dsrc_002ddoc_002dlink_002dstyle">hfy-src-doc-link-style</a>,
+      removing text matching the regex <a href=
+      "Customization.html#hfy_002dsrc_002ddoc_002dlink_002dunstyle">
+      hfy-src-doc-link-unstyle</a> first, if necessary.</p>
+    </dd>
 
-</dd>
-<dt><code>hfy-prepare-index-i</code></dt>
-<dd><a name="index-hfy_002dprepare_002dindex_002di"></a>
-<a name="hfy_002dprepare_002dindex_002di"></a>
-<div class="lisp">
-<pre class="lisp">
+    <dt><code>hfy-prepare-index-i</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dprepare_002dindex_002di" id=
+      "index-hfy_002dprepare_002dindex_002di"></a> <a name=
+      "hfy_002dprepare_002dindex_002di" id=
+      "hfy_002dprepare_002dindex_002di"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-prepare-index-i <var>srcdir</var> <var>dstdir</var> <var>filename</var> &amp;optional <var>stub</var> <var>map</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Prepare a tags index buffer for <var>srcdir</var>.
-<a href="Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a> must already have an entry for <var>srcdir</var> for
-this to work.  <a href="Customization.html#hfy_002dpage_002dheader">hfy-page-header</a>, <a href="Customization.html#hfy_002dpage_002dfooter">hfy-page-footer</a>,
-<a href="Customization.html#hfy_002dlink_002dextn">hfy-link-extn</a> and <a href="Customization.html#hfy_002dextn">hfy-extn</a> all play a part here.
-</p>
-<p>If <var>stub</var> is set, prepare an (appropriately named) index buffer
-specifically for entries beginning with <var>stub</var>.
-</p>
-<p>If <var>map</var> is set, use that instead of <a href="Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a>.
-</p>
-</dd>
-<dt><code>hfy-compile-stylesheet</code></dt>
-<dd><a name="index-hfy_002dcompile_002dstylesheet"></a>
-<a name="hfy_002dcompile_002dstylesheet"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Prepare a tags index buffer for <var>srcdir</var>.
+      <a href="Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a>
+      must already have an entry for <var>srcdir</var> for this to
+      work. <a href=
+      "Customization.html#hfy_002dpage_002dheader">hfy-page-header</a>,
+      <a href=
+      "Customization.html#hfy_002dpage_002dfooter">hfy-page-footer</a>,
+      <a href=
+      "Customization.html#hfy_002dlink_002dextn">hfy-link-extn</a>
+      and <a href="Customization.html#hfy_002dextn">hfy-extn</a>
+      all play a part here.</p>
+
+      <p>If <var>stub</var> is set, prepare an (appropriately
+      named) index buffer specifically for entries beginning with
+      <var>stub</var>.</p>
+
+      <p>If <var>map</var> is set, use that instead of <a href=
+      "Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a>.</p>
+    </dd>
+
+    <dt><code>hfy-compile-stylesheet</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dcompile_002dstylesheet" id=
+      "index-hfy_002dcompile_002dstylesheet"></a> <a name=
+      "hfy_002dcompile_002dstylesheet" id=
+      "hfy_002dcompile_002dstylesheet"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-compile-stylesheet)
-</pre></div>
+</pre>
+      </div>
 
-<p>Trawl the current buffer, construct and return a <a href="Data-Structures.html#hfy_002dsheet_002dassoc">hfy-sheet-assoc</a>.
-</p>
-</dd>
-<dt><code>hfy-css-name</code></dt>
-<dd><a name="index-hfy_002dcss_002dname"></a>
-<a name="hfy_002dcss_002dname"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Trawl the current buffer, construct and return a <a href=
+      "Data-Structures.html#hfy_002dsheet_002dassoc">hfy-sheet-assoc</a>.</p>
+    </dd>
+
+    <dt><code>hfy-css-name</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dcss_002dname" id=
+      "index-hfy_002dcss_002dname"></a> <a name=
+      "hfy_002dcss_002dname" id="hfy_002dcss_002dname"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-css-name <var>fn</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Strip some of the boring bits from a font-name and return a CSS style
-name.  If <var>fn</var> is a <code>defface</code> attribute list, either construct
-a name for it, store it in the cache, and return it, or just fetch it
-from the cache if it&rsquo;s already there.
-</p>
-</dd>
-<dt><code>hfy-make-directory</code></dt>
-<dd><a name="index-hfy_002dmake_002ddirectory"></a>
-<a name="hfy_002dmake_002ddirectory"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Strip some of the boring bits from a font-name and return
+      a CSS style name. If <var>fn</var> is a <code>defface</code>
+      attribute list, either construct a name for it, store it in
+      the cache, and return it, or just fetch it from the cache if
+      it&rsquo;s already there.</p>
+    </dd>
+
+    <dt><code>hfy-make-directory</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dmake_002ddirectory" id=
+      "index-hfy_002dmake_002ddirectory"></a> <a name=
+      "hfy_002dmake_002ddirectory" id=
+      "hfy_002dmake_002ddirectory"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-make-directory <var>dir</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Approximate equivalent of <code>mkdir -p <var>dir</var></code>.
-</p>
-</dd>
-<dt><code>hfy-triplet</code></dt>
-<dd><a name="index-hfy_002dtriplet"></a>
-<a name="hfy_002dtriplet"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Approximate equivalent of <code>mkdir -p
+      <var>dir</var></code>.</p>
+    </dd>
+
+    <dt><code>hfy-triplet</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dtriplet" id=
+      "index-hfy_002dtriplet"></a> <a name="hfy_002dtriplet" id=
+      "hfy_002dtriplet"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-triplet <var>color</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Takes a color name (string) and return a CSS rgb(R, G, B) triplet string.
-Uses the definition of &ldquo;white&rdquo; to map the numbers to the 0-255 range, so
-if you&rsquo;ve redefined white, (especially if you&rsquo;ve redefined it to have
-a triplet member lower than that of the color you are processing,
-strange things may happen).
-</p>
-</dd>
-<dt><code>hfy-default-footer</code></dt>
-<dd><a name="index-hfy_002ddefault_002dfooter"></a>
-<a name="hfy_002ddefault_002dfooter"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Takes a color name (string) and return a CSS rgb(R, G, B)
+      triplet string. Uses the definition of &ldquo;white&rdquo; to
+      map the numbers to the 0-255 range, so if you&rsquo;ve
+      redefined white, (especially if you&rsquo;ve redefined it to
+      have a triplet member lower than that of the color you are
+      processing, strange things may happen).</p>
+    </dd>
+
+    <dt><code>hfy-default-footer</code></dt>
+
+    <dd>
+      <a name="index-hfy_002ddefault_002dfooter" id=
+      "index-hfy_002ddefault_002dfooter"></a> <a name=
+      "hfy_002ddefault_002dfooter" id=
+      "hfy_002ddefault_002dfooter"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-default-footer <var>file</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Default value for <a href="Customization.html#hfy_002dpage_002dfooter">hfy-page-footer</a>
-</p>
-</dd>
-<dt><code>hfy-list-files</code></dt>
-<dd><a name="index-hfy_002dlist_002dfiles"></a>
-<a name="hfy_002dlist_002dfiles"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Default value for <a href=
+      "Customization.html#hfy_002dpage_002dfooter">hfy-page-footer</a></p>
+    </dd>
+
+    <dt><code>hfy-list-files</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dlist_002dfiles" id=
+      "index-hfy_002dlist_002dfiles"></a> <a name=
+      "hfy_002dlist_002dfiles" id="hfy_002dlist_002dfiles"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-list-files <var>directory</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Return a list of files under <var>directory</var>.
-Strips any leading &lsquo;<samp>./</samp>&rsquo; from each filename.
-</p>
-</dd>
-<dt><code>hfy-color-vals</code></dt>
-<dd><a name="index-hfy_002dcolor_002dvals"></a>
-<a name="hfy_002dcolor_002dvals"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Return a list of files under <var>directory</var>. Strips
+      any leading &lsquo;<samp>./</samp>&rsquo; from each
+      filename.</p>
+    </dd>
+
+    <dt><code>hfy-color-vals</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dcolor_002dvals" id=
+      "index-hfy_002dcolor_002dvals"></a> <a name=
+      "hfy_002dcolor_002dvals" id="hfy_002dcolor_002dvals"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-color-vals <var>color</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Where <var>color</var> is a color name or #XXXXXX style triplet, return a list of
-3 (16 bit) rgb values for said color.  If a window system is unavailable,
-calls <a href="#hfy_002dfallback_002dcolor_002dvalues">hfy-fallback-color-values</a>.
-</p>
-</dd>
-<dt><code>hfy-href-stub</code></dt>
-<dd><a name="index-hfy_002dhref_002dstub"></a>
-<a name="hfy_002dhref_002dstub"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Where <var>color</var> is a color name or #XXXXXX style
+      triplet, return a list of 3 (16 bit) rgb values for said
+      color. If a window system is unavailable, calls <a href=
+      "#hfy_002dfallback_002dcolor_002dvalues">hfy-fallback-color-values</a>.</p>
+    </dd>
+
+    <dt><code>hfy-href-stub</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dhref_002dstub" id=
+      "index-hfy_002dhref_002dstub"></a> <a name=
+      "hfy_002dhref_002dstub" id="hfy_002dhref_002dstub"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-href-stub <var>this-file</var> <var>def-files</var> <var>tag</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Return an href stub for a tag href: if <var>def-files</var> (list of files
-containing definitions for the tag in question) contains only one entry,
-the href should link straight to that file.  Otherwise, the link should
-be to the index file.
-</p>
-<p>We are not yet concerned with the file extensions/tag line number and
-so on at this point.
-</p>
-<p>If <a href="Customization.html#hfy_002dsplit_002dindex">hfy-split-index</a> is set, and the href will be to an index file
-rather than a source file, append a &lsquo;<samp>.X</samp>&rsquo; to <a href="Customization.html#hfy_002dindex_002dfile">hfy-index-file</a>, where
-&lsquo;<samp>X</samp>&rsquo; is the uppercased first character of <var>tag</var>.
-</p>
-<p>See also: <a href="#hfy_002drelstub">hfy-relstub</a>, <a href="Customization.html#hfy_002dindex_002dfile">hfy-index-file</a>.
-</p>
-</dd>
-<dt><code>hfy-line-number</code></dt>
-<dd><a name="index-hfy_002dline_002dnumber"></a>
-<a name="hfy_002dline_002dnumber"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Return an href stub for a tag href: if
+      <var>def-files</var> (list of files containing definitions
+      for the tag in question) contains only one entry, the href
+      should link straight to that file. Otherwise, the link should
+      be to the index file.</p>
+
+      <p>We are not yet concerned with the file extensions/tag line
+      number and so on at this point.</p>
+
+      <p>If <a href=
+      "Customization.html#hfy_002dsplit_002dindex">hfy-split-index</a>
+      is set, and the href will be to an index file rather than a
+      source file, append a &lsquo;<samp>.X</samp>&rsquo; to
+      <a href=
+      "Customization.html#hfy_002dindex_002dfile">hfy-index-file</a>,
+      where &lsquo;<samp>X</samp>&rsquo; is the uppercased first
+      character of <var>tag</var>.</p>
+
+      <p>See also: <a href="#hfy_002drelstub">hfy-relstub</a>,
+      <a href=
+      "Customization.html#hfy_002dindex_002dfile">hfy-index-file</a>.</p>
+    </dd>
+
+    <dt><code>hfy-line-number</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dline_002dnumber" id=
+      "index-hfy_002dline_002dnumber"></a> <a name=
+      "hfy_002dline_002dnumber" id="hfy_002dline_002dnumber"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-line-number)
-</pre></div>
+</pre>
+      </div>
 
-<p>Returns the line number of the point in the current buffer.
-</p>
-</dd>
-<dt><code>hfy-merge-adjacent-spans</code></dt>
-<dd><a name="index-hfy_002dmerge_002dadjacent_002dspans"></a>
-<a name="hfy_002dmerge_002dadjacent_002dspans"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Returns the line number of the point in the current
+      buffer.</p>
+    </dd>
+
+    <dt><code>hfy-merge-adjacent-spans</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dmerge_002dadjacent_002dspans" id=
+      "index-hfy_002dmerge_002dadjacent_002dspans"></a> <a name=
+      "hfy_002dmerge_002dadjacent_002dspans" id=
+      "hfy_002dmerge_002dadjacent_002dspans"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-merge-adjacent-spans <var>face-map</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Where <var>face-map</var> is a <a href="Data-Structures.html#hfy_002dfacemap_002dassoc">hfy-facemap-assoc</a> for the current buffer,
-this function merges adjacent style blocks which are of the same value
-and are separated by nothing more interesting than whitespace.
-</p>
-<p><code>&lt;span class=&quot;foo&quot;&gt;narf&lt;/span&gt; &lt;span class=&quot;foo&quot;&gt;brain&lt;/span&gt;</code>
-</p>
-<p>(as interpreted from <var>face-map</var>) would become:
-</p>
-<p><code>&lt;span class=&quot;foo&quot;&gt;narf brain&lt;/span&gt;</code>
-</p>
-<p>Returns a modified copy of <var>face-map</var> (also a <a href="Data-Structures.html#hfy_002dfacemap_002dassoc">hfy-facemap-assoc</a>).
-</p>
-</dd>
-<dt><code>hfy-mark-tag-names</code></dt>
-<dd><a name="index-hfy_002dmark_002dtag_002dnames"></a>
-<a name="hfy_002dmark_002dtag_002dnames"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Where <var>face-map</var> is a <a href=
+      "Data-Structures.html#hfy_002dfacemap_002dassoc">hfy-facemap-assoc</a>
+      for the current buffer, this function merges adjacent style
+      blocks which are of the same value and are separated by
+      nothing more interesting than whitespace.</p>
+
+      <p><code>&lt;span class="foo"&gt;narf&lt;/span&gt; &lt;span
+      class="foo"&gt;brain&lt;/span&gt;</code></p>
+
+      <p>(as interpreted from <var>face-map</var>) would
+      become:</p>
+
+      <p><code>&lt;span class="foo"&gt;narf
+      brain&lt;/span&gt;</code></p>
+
+      <p>Returns a modified copy of <var>face-map</var> (also a
+      <a href=
+      "Data-Structures.html#hfy_002dfacemap_002dassoc">hfy-facemap-assoc</a>).</p>
+    </dd>
+
+    <dt><code>hfy-mark-tag-names</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dmark_002dtag_002dnames" id=
+      "index-hfy_002dmark_002dtag_002dnames"></a> <a name=
+      "hfy_002dmark_002dtag_002dnames" id=
+      "hfy_002dmark_002dtag_002dnames"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-mark-tag-names <var>srcdir</var> <var>file</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Mark tags in <var>file</var> (lookup <var>srcdir</var> in <a href="Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a>) with the
-<code>hfy-anchor</code> property, with a value of &lsquo;<samp>tag.line-number</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>hfy-weight</code></dt>
-<dd><a name="index-hfy_002dweight"></a>
-<a name="hfy_002dweight"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Mark tags in <var>file</var> (lookup <var>srcdir</var> in
+      <a href=
+      "Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a>)
+      with the <code>hfy-anchor</code> property, with a value of
+      &lsquo;<samp>tag.line-number</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><code>hfy-weight</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dweight" id="index-hfy_002dweight"></a>
+      <a name="hfy_002dweight" id="hfy_002dweight"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-weight <var>weight</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Derive a font-weight CSS specifier from an Emacs weight specification symbol.
-</p>
-</dd>
-<dt><code>hfy-size</code></dt>
-<dd><a name="index-hfy_002dsize"></a>
-<a name="hfy_002dsize"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Derive a font-weight CSS specifier from an Emacs weight
+      specification symbol.</p>
+    </dd>
+
+    <dt><code>hfy-size</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dsize" id="index-hfy_002dsize"></a>
+      <a name="hfy_002dsize" id="hfy_002dsize"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-size <var>height</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Derive a CSS font-size specifier from an Emacs font <code>:height</code> attribute.
-Does not cope with the case where height is a function to be applied to
-the height of the underlying font.
-</p>
-</dd>
-<dt><code>hfy-default-header</code></dt>
-<dd><a name="index-hfy_002ddefault_002dheader"></a>
-<a name="hfy_002ddefault_002dheader"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Derive a CSS font-size specifier from an Emacs font
+      <code>:height</code> attribute. Does not cope with the case
+      where height is a function to be applied to the height of the
+      underlying font.</p>
+    </dd>
+
+    <dt><code>hfy-default-header</code></dt>
+
+    <dd>
+      <a name="index-hfy_002ddefault_002dheader" id=
+      "index-hfy_002ddefault_002dheader"></a> <a name=
+      "hfy_002ddefault_002dheader" id=
+      "hfy_002ddefault_002dheader"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-default-header <var>file</var> <var>style</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Default value for <a href="Customization.html#hfy_002dpage_002dheader">hfy-page-header</a>
-</p>
-</dd>
-<dt><code>hfy-family</code></dt>
-<dd><a name="index-hfy_002dfamily"></a>
-<a name="hfy_002dfamily"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Default value for <a href=
+      "Customization.html#hfy_002dpage_002dheader">hfy-page-header</a></p>
+    </dd>
+
+    <dt><code>hfy-family</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dfamily" id="index-hfy_002dfamily"></a>
+      <a name="hfy_002dfamily" id="hfy_002dfamily"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-family <var>family</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Derives a CSS font-family specifier from an Emacs <code>:family</code> attribute.
-</p>
-</dd>
-<dt><code>hfy-mark-tag-hrefs</code></dt>
-<dd><a name="index-hfy_002dmark_002dtag_002dhrefs"></a>
-<a name="hfy_002dmark_002dtag_002dhrefs"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Derives a CSS font-family specifier from an Emacs
+      <code>:family</code> attribute.</p>
+    </dd>
+
+    <dt><code>hfy-mark-tag-hrefs</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dmark_002dtag_002dhrefs" id=
+      "index-hfy_002dmark_002dtag_002dhrefs"></a> <a name=
+      "hfy_002dmark_002dtag_002dhrefs" id=
+      "hfy_002dmark_002dtag_002dhrefs"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-mark-tag-hrefs <var>srcdir</var> <var>file</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Mark href start points with the <code>hfy-link</code> property (value: href string).
-</p>
-<p>Mark href end points with the <code>hfy-endl</code> property (value <code>t</code>).
-</p>
-<p>Avoid overlapping links, and mark links in descending length of
-tag name in order to prevent subtags from usurping supertags;
-e.g., &ldquo;term&rdquo; for &ldquo;terminal&rdquo;).
-</p>
-</dd>
-<dt><code>hfy-box</code></dt>
-<dd><a name="index-hfy_002dbox"></a>
-<a name="hfy_002dbox"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Mark href start points with the <code>hfy-link</code>
+      property (value: href string).</p>
+
+      <p>Mark href end points with the <code>hfy-endl</code>
+      property (value <code>t</code>).</p>
+
+      <p>Avoid overlapping links, and mark links in descending
+      length of tag name in order to prevent subtags from usurping
+      supertags; e.g., &ldquo;term&rdquo; for
+      &ldquo;terminal&rdquo;).</p>
+    </dd>
+
+    <dt><code>hfy-box</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dbox" id="index-hfy_002dbox"></a>
+      <a name="hfy_002dbox" id="hfy_002dbox"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-box <var>box</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Derive CSS border-* attributes from the Emacs <code>:box</code> attribute.
-</p>
-</dd>
-<dt><code>hfy-box-to-style</code></dt>
-<dd><a name="index-hfy_002dbox_002dto_002dstyle"></a>
-<a name="hfy_002dbox_002dto_002dstyle"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Derive CSS border-* attributes from the Emacs
+      <code>:box</code> attribute.</p>
+    </dd>
+
+    <dt><code>hfy-box-to-style</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dbox_002dto_002dstyle" id=
+      "index-hfy_002dbox_002dto_002dstyle"></a> <a name=
+      "hfy_002dbox_002dto_002dstyle" id=
+      "hfy_002dbox_002dto_002dstyle"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-box-to-style <var>spec</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Convert a complex <code>:box</code> Emacs font attribute set to a list of
-CSS border-* attributes.  Don&rsquo;t call this directly&mdash;it is called by
-<a href="#hfy_002dbox">hfy-box</a> when necessary.
-</p>
-</dd>
-<dt><code>hfy-html-enkludge-buffer</code></dt>
-<dd><a name="index-hfy_002dhtml_002denkludge_002dbuffer"></a>
-<a name="hfy_002dhtml_002denkludge_002dbuffer"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Convert a complex <code>:box</code> Emacs font attribute
+      set to a list of CSS border-* attributes. Don&rsquo;t call
+      this directly&mdash;it is called by <a href=
+      "#hfy_002dbox">hfy-box</a> when necessary.</p>
+    </dd>
+
+    <dt><code>hfy-html-enkludge-buffer</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dhtml_002denkludge_002dbuffer" id=
+      "index-hfy_002dhtml_002denkludge_002dbuffer"></a> <a name=
+      "hfy_002dhtml_002denkludge_002dbuffer" id=
+      "hfy_002dhtml_002denkludge_002dbuffer"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-html-enkludge-buffer)
-</pre></div>
+</pre>
+      </div>
 
-<p>Mark dangerous &lsquo;<samp>[&quot;&lt;&gt;]</samp>&rsquo; characters with the <code>hfy-quoteme</code> property.
-</p>
-<p>See also <a href="#hfy_002dhtml_002ddekludge_002dbuffer">hfy-html-dekludge-buffer</a>.
-</p>
-</dd>
-<dt><code>hfy-buffer</code></dt>
-<dd><a name="index-hfy_002dbuffer"></a>
-<a name="hfy_002dbuffer"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Mark dangerous &lsquo;<samp>["&lt;&gt;]</samp>&rsquo;
+      characters with the <code>hfy-quoteme</code> property.</p>
+
+      <p>See also <a href=
+      "#hfy_002dhtml_002ddekludge_002dbuffer">hfy-html-dekludge-buffer</a>.</p>
+    </dd>
+
+    <dt><code>hfy-buffer</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dbuffer" id="index-hfy_002dbuffer"></a>
+      <a name="hfy_002dbuffer" id="hfy_002dbuffer"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-buffer)
-</pre></div>
+</pre>
+      </div>
 
-<p>Generate and return an Htmlfontify html output buffer for the current
-buffer.  May trample an existing buffer.
-</p>
-</dd>
-<dt><code>hfy-fontified-p</code></dt>
-<dd><a name="index-hfy_002dfontified_002dp"></a>
-<a name="hfy_002dfontified_002dp"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Generate and return an Htmlfontify html output buffer for
+      the current buffer. May trample an existing buffer.</p>
+    </dd>
+
+    <dt><code>hfy-fontified-p</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dfontified_002dp" id=
+      "index-hfy_002dfontified_002dp"></a> <a name=
+      "hfy_002dfontified_002dp" id="hfy_002dfontified_002dp"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-fontified-p)
-</pre></div>
+</pre>
+      </div>
 
-<p><code>font-lock</code> doesn&rsquo;t like to say a buffer&rsquo;s been fontified when in
-batch mode, but we want to know if we should fontify or raw copy, so in
-batch mode we check for non-default face properties.  Otherwise we test
-<code>font-lock-mode</code> and <code>font-lock-fontified</code> for truth.
-</p>
-</dd>
-<dt><code>hfy-lookup</code></dt>
-<dd><a name="index-hfy_002dlookup"></a>
-<a name="hfy_002dlookup"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p><code>font-lock</code> doesn&rsquo;t like to say a
+      buffer&rsquo;s been fontified when in batch mode, but we want
+      to know if we should fontify or raw copy, so in batch mode we
+      check for non-default face properties. Otherwise we test
+      <code>font-lock-mode</code> and
+      <code>font-lock-fontified</code> for truth.</p>
+    </dd>
+
+    <dt><code>hfy-lookup</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dlookup" id="index-hfy_002dlookup"></a>
+      <a name="hfy_002dlookup" id="hfy_002dlookup"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-lookup <var>face</var> <var>style</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Where <var>style</var> is a <a href="Data-Structures.html#hfy_002dsheet_002dassoc">hfy-sheet-assoc</a> and <var>face</var> is an Emacs face,
-return the relevant <var>css</var> style name.
-</p>
-</dd>
-<dt><code>hfy-fontify-buffer</code></dt>
-<dd><a name="index-hfy_002dfontify_002dbuffer"></a>
-<a name="hfy_002dfontify_002dbuffer"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Where <var>style</var> is a <a href=
+      "Data-Structures.html#hfy_002dsheet_002dassoc">hfy-sheet-assoc</a>
+      and <var>face</var> is an Emacs face, return the relevant
+      <var>css</var> style name.</p>
+    </dd>
+
+    <dt><code>hfy-fontify-buffer</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dfontify_002dbuffer" id=
+      "index-hfy_002dfontify_002dbuffer"></a> <a name=
+      "hfy_002dfontify_002dbuffer" id=
+      "hfy_002dfontify_002dbuffer"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-fontify-buffer &amp;optional <var>srcdir</var> <var>file</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Implement the guts of <a href="Interactive.html#htmlfontify_002dbuffer">htmlfontify-buffer</a>.
-</p>
-</dd>
-<dt><code>hfy-color</code></dt>
-<dd><a name="index-hfy_002dcolor"></a>
-<a name="hfy_002dcolor"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Implement the guts of <a href=
+      "Interactive.html#htmlfontify_002dbuffer">htmlfontify-buffer</a>.</p>
+    </dd>
+
+    <dt><code>hfy-color</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dcolor" id="index-hfy_002dcolor"></a>
+      <a name="hfy_002dcolor" id="hfy_002dcolor"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-color <var>color</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Convert an Emacs :foreground property to a CSS color property.
-</p>
-</dd>
-<dt><code>hfy-flatten-style</code></dt>
-<dd><a name="index-hfy_002dflatten_002dstyle"></a>
-<a name="hfy_002dflatten_002dstyle"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Convert an Emacs :foreground property to a CSS color
+      property.</p>
+    </dd>
+
+    <dt><code>hfy-flatten-style</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dflatten_002dstyle" id=
+      "index-hfy_002dflatten_002dstyle"></a> <a name=
+      "hfy_002dflatten_002dstyle" id=
+      "hfy_002dflatten_002dstyle"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-flatten-style <var>style</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Take <var>style</var> (see <a href="#hfy_002dface_002dto_002dstyle_002di">hfy-face-to-style-i</a>, <a href="#hfy_002dface_002dto_002dstyle">hfy-face-to-style</a>)
-and merge any multiple attributes appropriately.  Currently only font-size is
-merged down to a single occurrence&mdash;others may need special handling, but I
-haven&rsquo;t encountered them yet.  Returns a <a href="Data-Structures.html#hfy_002dstyle_002dassoc">hfy-style-assoc</a>.
-</p>
-</dd>
-<dt><code>hfy-size-to-int</code></dt>
-<dd><a name="index-hfy_002dsize_002dto_002dint"></a>
-<a name="hfy_002dsize_002dto_002dint"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Take <var>style</var> (see <a href=
+      "#hfy_002dface_002dto_002dstyle_002di">hfy-face-to-style-i</a>,
+      <a href=
+      "#hfy_002dface_002dto_002dstyle">hfy-face-to-style</a>) and
+      merge any multiple attributes appropriately. Currently only
+      font-size is merged down to a single occurrence&mdash;others
+      may need special handling, but I haven&rsquo;t encountered
+      them yet. Returns a <a href=
+      "Data-Structures.html#hfy_002dstyle_002dassoc">hfy-style-assoc</a>.</p>
+    </dd>
+
+    <dt><code>hfy-size-to-int</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dsize_002dto_002dint" id=
+      "index-hfy_002dsize_002dto_002dint"></a> <a name=
+      "hfy_002dsize_002dto_002dint" id=
+      "hfy_002dsize_002dto_002dint"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-size-to-int <var>spec</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Convert <var>spec</var>, a CSS font-size specifier, back to an Emacs
-<code>:height</code> attribute value.  Used while merging multiple font-size
-attributes.
-</p>
-</dd>
-<dt><code>hfy-sprintf-stylesheet</code></dt>
-<dd><a name="index-hfy_002dsprintf_002dstylesheet"></a>
-<a name="hfy_002dsprintf_002dstylesheet"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Convert <var>spec</var>, a CSS font-size specifier, back
+      to an Emacs <code>:height</code> attribute value. Used while
+      merging multiple font-size attributes.</p>
+    </dd>
+
+    <dt><code>hfy-sprintf-stylesheet</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dsprintf_002dstylesheet" id=
+      "index-hfy_002dsprintf_002dstylesheet"></a> <a name=
+      "hfy_002dsprintf_002dstylesheet" id=
+      "hfy_002dsprintf_002dstylesheet"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-sprintf-stylesheet <var>css</var> <var>file</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Generates a header, via <a href="Customization.html#hfy_002dpage_002dheader">hfy-page-header</a>, for <var>file</var>, containing the
-stylesheet derived from <var>css</var>, which is a <a href="Data-Structures.html#hfy_002dsheet_002dassoc">hfy-sheet-assoc</a>.  Returns a
-string containing the same.
-</p>
-</dd>
-<dt><code>hfy-relstub</code></dt>
-<dd><a name="index-hfy_002drelstub"></a>
-<a name="hfy_002drelstub"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Generates a header, via <a href=
+      "Customization.html#hfy_002dpage_002dheader">hfy-page-header</a>,
+      for <var>file</var>, containing the stylesheet derived from
+      <var>css</var>, which is a <a href=
+      "Data-Structures.html#hfy_002dsheet_002dassoc">hfy-sheet-assoc</a>.
+      Returns a string containing the same.</p>
+    </dd>
+
+    <dt><code>hfy-relstub</code></dt>
+
+    <dd>
+      <a name="index-hfy_002drelstub" id=
+      "index-hfy_002drelstub"></a> <a name="hfy_002drelstub" id=
+      "hfy_002drelstub"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-relstub <var>file</var> &amp;optional <var>start</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Return a &lsquo;<samp>../</samp>&rsquo; stub of the appropriate length for the current source
-tree depth (as determined from <var>file</var>). </p>
-</dd>
-<dt><code>hfy-compile-face-map</code></dt>
-<dd><a name="index-hfy_002dcompile_002dface_002dmap"></a>
-<a name="hfy_002dcompile_002dface_002dmap"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Return a &lsquo;<samp>../</samp>&rsquo; stub of the
+      appropriate length for the current source tree depth (as
+      determined from <var>file</var>).</p>
+    </dd>
+
+    <dt><code>hfy-compile-face-map</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dcompile_002dface_002dmap" id=
+      "index-hfy_002dcompile_002dface_002dmap"></a> <a name=
+      "hfy_002dcompile_002dface_002dmap" id=
+      "hfy_002dcompile_002dface_002dmap"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-compile-face-map)
-</pre></div>
+</pre>
+      </div>
 
-<p>Compile and return a <a href="Data-Structures.html#hfy_002dfacemap_002dassoc">hfy-facemap-assoc</a> for the current buffer.
-</p>
-</dd>
-<dt><code>hfy-prepare-index</code></dt>
-<dd><a name="index-hfy_002dprepare_002dindex"></a>
-<a name="hfy_002dprepare_002dindex"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Compile and return a <a href=
+      "Data-Structures.html#hfy_002dfacemap_002dassoc">hfy-facemap-assoc</a>
+      for the current buffer.</p>
+    </dd>
+
+    <dt><code>hfy-prepare-index</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dprepare_002dindex" id=
+      "index-hfy_002dprepare_002dindex"></a> <a name=
+      "hfy_002dprepare_002dindex" id=
+      "hfy_002dprepare_002dindex"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-prepare-index <var>srcdir</var> <var>dstdir</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Return as list of index buffer(s), as determined by <a href="Customization.html#hfy_002dsplit_002dindex">hfy-split-index</a>.
-Uses <a href="#hfy_002dprepare_002dindex_002di">hfy-prepare-index-i</a> to do this.
-</p>
-</dd>
-<dt><code>hfy-prepare-tag-map</code></dt>
-<dd><a name="index-hfy_002dprepare_002dtag_002dmap"></a>
-<a name="hfy_002dprepare_002dtag_002dmap"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Return as list of index buffer(s), as determined by
+      <a href=
+      "Customization.html#hfy_002dsplit_002dindex">hfy-split-index</a>.
+      Uses <a href=
+      "#hfy_002dprepare_002dindex_002di">hfy-prepare-index-i</a> to
+      do this.</p>
+    </dd>
+
+    <dt><code>hfy-prepare-tag-map</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dprepare_002dtag_002dmap" id=
+      "index-hfy_002dprepare_002dtag_002dmap"></a> <a name=
+      "hfy_002dprepare_002dtag_002dmap" id=
+      "hfy_002dprepare_002dtag_002dmap"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-prepare-tag-map <var>srcdir</var> <var>dstdir</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Prepare the counterpart(s) to the index buffer(s)&mdash;a list of buffers with
-the same structure, but listing (and linking to) instances of tags (as
-opposed to their definitions).
-</p>
-<p>See also: <a href="#hfy_002dprepare_002dindex">hfy-prepare-index</a>, <a href="Customization.html#hfy_002dsplit_002dindex">hfy-split-index</a>
-</p>
-</dd>
-<dt><code>hfy-subtract-maps</code></dt>
-<dd><a name="index-hfy_002dsubtract_002dmaps"></a>
-<a name="hfy_002dsubtract_002dmaps"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Prepare the counterpart(s) to the index buffer(s)&mdash;a
+      list of buffers with the same structure, but listing (and
+      linking to) instances of tags (as opposed to their
+      definitions).</p>
+
+      <p>See also: <a href=
+      "#hfy_002dprepare_002dindex">hfy-prepare-index</a>, <a href=
+      "Customization.html#hfy_002dsplit_002dindex">hfy-split-index</a></p>
+    </dd>
+
+    <dt><code>hfy-subtract-maps</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dsubtract_002dmaps" id=
+      "index-hfy_002dsubtract_002dmaps"></a> <a name=
+      "hfy_002dsubtract_002dmaps" id=
+      "hfy_002dsubtract_002dmaps"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-subtract-maps <var>srcdir</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Internal function&mdash;strips definitions of tags from the instance map.
-See: <a href="Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a> and <a href="Variables.html#hfy_002dtags_002drmap">hfy-tags-rmap</a>
-</p>
-</dd>
-<dt><code>hfy-face-to-style-i</code></dt>
-<dd><a name="index-hfy_002dface_002dto_002dstyle_002di"></a>
-<a name="hfy_002dface_002dto_002dstyle_002di"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Internal function&mdash;strips definitions of tags from
+      the instance map. See: <a href=
+      "Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a>
+      and <a href=
+      "Variables.html#hfy_002dtags_002drmap">hfy-tags-rmap</a></p>
+    </dd>
+
+    <dt><code>hfy-face-to-style-i</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dface_002dto_002dstyle_002di" id=
+      "index-hfy_002dface_002dto_002dstyle_002di"></a> <a name=
+      "hfy_002dface_002dto_002dstyle_002di" id=
+      "hfy_002dface_002dto_002dstyle_002di"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-face-to-style-i <var>fn</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>The guts of <a href="#hfy_002dface_002dto_002dstyle">hfy-face-to-style</a>.  <var>fn</var> should be a <code>defface</code>
-font specification, as returned by <code>face-attr-construct</code> or
-<a href="#hfy_002dface_002dattr_002dfor_002dclass">hfy-face-attr-for-class</a>.  Note that this function does not get
-font-sizes right if they are based on inherited modifiers (via the
-:inherit) attribute, and any other modifiers that are cumulative if they
-appear multiple times need to be merged by the user&mdash;<a href="#hfy_002dflatten_002dstyle">hfy-flatten-style</a>
-should do this.
-</p>
-</dd>
-<dt><code>hfy-face-to-css</code></dt>
-<dd><a name="index-hfy_002dface_002dto_002dcss"></a>
-<a name="hfy_002dface_002dto_002dcss"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>The guts of <a href=
+      "#hfy_002dface_002dto_002dstyle">hfy-face-to-style</a>.
+      <var>fn</var> should be a <code>defface</code> font
+      specification, as returned by
+      <code>face-attr-construct</code> or <a href=
+      "#hfy_002dface_002dattr_002dfor_002dclass">hfy-face-attr-for-class</a>.
+      Note that this function does not get font-sizes right if they
+      are based on inherited modifiers (via the :inherit)
+      attribute, and any other modifiers that are cumulative if
+      they appear multiple times need to be merged by the
+      user&mdash;<a href=
+      "#hfy_002dflatten_002dstyle">hfy-flatten-style</a> should do
+      this.</p>
+    </dd>
+
+    <dt><code>hfy-face-to-css</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dface_002dto_002dcss" id=
+      "index-hfy_002dface_002dto_002dcss"></a> <a name=
+      "hfy_002dface_002dto_002dcss" id=
+      "hfy_002dface_002dto_002dcss"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-face-to-css <var>fn</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Take <var>fn</var>, a font or <code>defface</code> specification (c.f.
-<code>face-attr-construct</code>) and return a CSS style specification.
-</p>
-<p>See also: <a href="#hfy_002dface_002dto_002dstyle">hfy-face-to-style</a>
-</p>
-</dd>
-<dt><code>hfy-html-quote</code></dt>
-<dd><a name="index-hfy_002dhtml_002dquote"></a>
-<a name="hfy_002dhtml_002dquote"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Take <var>fn</var>, a font or <code>defface</code>
+      specification (c.f. <code>face-attr-construct</code>) and
+      return a CSS style specification.</p>
+
+      <p>See also: <a href=
+      "#hfy_002dface_002dto_002dstyle">hfy-face-to-style</a></p>
+    </dd>
+
+    <dt><code>hfy-html-quote</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dhtml_002dquote" id=
+      "index-hfy_002dhtml_002dquote"></a> <a name=
+      "hfy_002dhtml_002dquote" id="hfy_002dhtml_002dquote"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-html-quote <var>char-string</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Map a string (usually 1 character long) to an html safe string
-(entity) if need be.
-</p>
-</dd>
-<dt><code>hfy-link-style</code></dt>
-<dd><a name="index-hfy_002dlink_002dstyle"></a>
-<a name="hfy_002dlink_002dstyle"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Map a string (usually 1 character long) to an html safe
+      string (entity) if need be.</p>
+    </dd>
+
+    <dt><code>hfy-link-style</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dlink_002dstyle" id=
+      "index-hfy_002dlink_002dstyle"></a> <a name=
+      "hfy_002dlink_002dstyle" id="hfy_002dlink_002dstyle"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-link-style <var>style-string</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Convert the CSS style spec <var>style-string</var> to its equivalent
-hyperlink style.
-</p>
-<p>See: <a href="Customization.html#hfy_002dlink_002dstyle_002dfun">hfy-link-style-fun</a>.
-</p>
-</dd>
-<dt><code>hfy-p-to-face</code></dt>
-<dd><a name="index-hfy_002dp_002dto_002dface"></a>
-<a name="hfy_002dp_002dto_002dface"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Convert the CSS style spec <var>style-string</var> to its
+      equivalent hyperlink style.</p>
+
+      <p>See: <a href=
+      "Customization.html#hfy_002dlink_002dstyle_002dfun">hfy-link-style-fun</a>.</p>
+    </dd>
+
+    <dt><code>hfy-p-to-face</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dp_002dto_002dface" id=
+      "index-hfy_002dp_002dto_002dface"></a> <a name=
+      "hfy_002dp_002dto_002dface" id=
+      "hfy_002dp_002dto_002dface"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-p-to-face <var>props</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Given <var>props</var>, a list of text-properties, return the value of the
-face property, or <code>nil</code>.
-</p>
-</dd>
-<dt><code>hfy-box-to-border-assoc</code></dt>
-<dd><a name="index-hfy_002dbox_002dto_002dborder_002dassoc"></a>
-<a name="hfy_002dbox_002dto_002dborder_002dassoc"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Given <var>props</var>, a list of text-properties, return
+      the value of the face property, or <code>nil</code>.</p>
+    </dd>
+
+    <dt><code>hfy-box-to-border-assoc</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dbox_002dto_002dborder_002dassoc" id=
+      "index-hfy_002dbox_002dto_002dborder_002dassoc"></a> <a name=
+      "hfy_002dbox_002dto_002dborder_002dassoc" id=
+      "hfy_002dbox_002dto_002dborder_002dassoc"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-box-to-border-assoc <var>spec</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Helper function for <a href="#hfy_002dbox_002dto_002dstyle">hfy-box-to-style</a>.
-</p>
-</dd>
-<dt><code>hfy-face-attr-for-class</code></dt>
-<dd><a name="index-hfy_002dface_002dattr_002dfor_002dclass"></a>
-<a name="hfy_002dface_002dattr_002dfor_002dclass"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Helper function for <a href=
+      "#hfy_002dbox_002dto_002dstyle">hfy-box-to-style</a>.</p>
+    </dd>
+
+    <dt><code>hfy-face-attr-for-class</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dface_002dattr_002dfor_002dclass" id=
+      "index-hfy_002dface_002dattr_002dfor_002dclass"></a> <a name=
+      "hfy_002dface_002dattr_002dfor_002dclass" id=
+      "hfy_002dface_002dattr_002dfor_002dclass"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-face-attr-for-class <var>face</var> &amp;optional <var>class</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Return the face attributes for <var>face</var>.  If <var>class</var> is set, it
-must be a <code>defface</code> alist key [see below].  Prior to version 0.18,
-the first face specification returned by <a href="#hfy_002dcombined_002dface_002dspec">hfy-combined-face-spec</a>
-which <em>didn&rsquo;t</em> clash with <var>class</var> was returned.  In versions
-from 0.18 onwards, each font attribute list is scored, and the
-non-conflicting list with the highest score is returned.  (A specification
-with a class of <code>t</code> is considered to match any class you specify.
-This matches Emacs&rsquo;s behavior when deciding on which face attributes to
-use, to the best of my understanding ).
-</p>
-<p>If <var>class</var> is <code>nil</code>, then you just get get whatever
-<code>face-attr-construct</code> returns; i.e., the current specification in
-effect for <var>face</var>.
-</p>
-<p>See <a href="Customization.html#hfy_002ddisplay_002dclass">hfy-display-class</a> for details of valid values for <var>class</var>.
-</p>
-</dd>
-<dt><code>hfy-face-at</code></dt>
-<dd><a name="index-hfy_002dface_002dat"></a>
-<a name="hfy_002dface_002dat"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Return the face attributes for <var>face</var>. If
+      <var>class</var> is set, it must be a <code>defface</code>
+      alist key [see below]. Prior to version 0.18, the first face
+      specification returned by <a href=
+      "#hfy_002dcombined_002dface_002dspec">hfy-combined-face-spec</a>
+      which <em>didn&rsquo;t</em> clash with <var>class</var> was
+      returned. In versions from 0.18 onwards, each font attribute
+      list is scored, and the non-conflicting list with the highest
+      score is returned. (A specification with a class of
+      <code>t</code> is considered to match any class you specify.
+      This matches Emacs&rsquo;s behavior when deciding on which
+      face attributes to use, to the best of my understanding
+      ).</p>
+
+      <p>If <var>class</var> is <code>nil</code>, then you just get
+      get whatever <code>face-attr-construct</code> returns; i.e.,
+      the current specification in effect for <var>face</var>.</p>
+
+      <p>See <a href=
+      "Customization.html#hfy_002ddisplay_002dclass">hfy-display-class</a>
+      for details of valid values for <var>class</var>.</p>
+    </dd>
+
+    <dt><code>hfy-face-at</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dface_002dat" id=
+      "index-hfy_002dface_002dat"></a> <a name=
+      "hfy_002dface_002dat" id="hfy_002dface_002dat"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-face-at P)
-</pre></div>
+</pre>
+      </div>
 
-<p>Find face in effect at point P.  If overlays are to be considered
-(see <a href="Customization.html#hfy_002doptimizations">hfy-optimizations</a>) then this may return a <code>defface</code> style
-list of face properties instead of a face symbol.
-</p>
-</dd>
-<dt><code>hfy-bgcol</code></dt>
-<dd><a name="index-hfy_002dbgcol"></a>
-<a name="hfy_002dbgcol"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Find face in effect at point P. If overlays are to be
+      considered (see <a href=
+      "Customization.html#hfy_002doptimizations">hfy-optimizations</a>)
+      then this may return a <code>defface</code> style list of
+      face properties instead of a face symbol.</p>
+    </dd>
+
+    <dt><code>hfy-bgcol</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dbgcol" id="index-hfy_002dbgcol"></a>
+      <a name="hfy_002dbgcol" id="hfy_002dbgcol"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-bgcol <var>color</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>As per <a href="#hfy_002dcolor">hfy-color</a> but for background colors.
-</p>
-</dd>
-<dt><code>hfy-kludge-cperl-mode</code></dt>
-<dd><a name="index-hfy_002dkludge_002dcperl_002dmode"></a>
-<a name="hfy_002dkludge_002dcperl_002dmode"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>As per <a href="#hfy_002dcolor">hfy-color</a> but for
+      background colors.</p>
+    </dd>
+
+    <dt><code>hfy-kludge-cperl-mode</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dkludge_002dcperl_002dmode" id=
+      "index-hfy_002dkludge_002dcperl_002dmode"></a> <a name=
+      "hfy_002dkludge_002dcperl_002dmode" id=
+      "hfy_002dkludge_002dcperl_002dmode"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-kludge-cperl-mode)
-</pre></div>
+</pre>
+      </div>
 
-<p>cperl mode does its best to not do some of its fontification when not
-in a windowing system&mdash;we try to trick it&hellip;
-</p>
-</dd>
-<dt><code>hfy-href</code></dt>
-<dd><a name="index-hfy_002dhref"></a>
-<a name="hfy_002dhref"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>cperl mode does its best to not do some of its
+      fontification when not in a windowing system&mdash;we try to
+      trick it&hellip;</p>
+    </dd>
+
+    <dt><code>hfy-href</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dhref" id="index-hfy_002dhref"></a>
+      <a name="hfy_002dhref" id="hfy_002dhref"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-href <var>this-file</var> <var>def-files</var> <var>tag</var> <var>tag-map</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Return a relative href to the tag in question, based on
-</p>
-<p><var>this-file</var> <a href="Customization.html#hfy_002dlink_002dextn">hfy-link-extn</a> <a href="Customization.html#hfy_002dextn">hfy-extn</a> <var>def-files</var> <var>tag</var> and <var>tag-map</var>
-</p>
-<p><var>this-file</var> is the current source file
-<var>def-files</var> is a list of file containing possible link endpoints for <var>tag</var>
-<var>tag</var> is the <var>tag</var> in question
-<var>tag-map</var> is the entry in <a href="Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a>.
-</p>
-</dd>
-<dt><code>hfy-shell</code></dt>
-<dd><a name="index-hfy_002dshell"></a>
-<a name="hfy_002dshell"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Return a relative href to the tag in question, based
+      on</p>
+
+      <p><var>this-file</var> <a href=
+      "Customization.html#hfy_002dlink_002dextn">hfy-link-extn</a>
+      <a href="Customization.html#hfy_002dextn">hfy-extn</a>
+      <var>def-files</var> <var>tag</var> and
+      <var>tag-map</var></p>
+
+      <p><var>this-file</var> is the current source file
+      <var>def-files</var> is a list of file containing possible
+      link endpoints for <var>tag</var> <var>tag</var> is the
+      <var>tag</var> in question <var>tag-map</var> is the entry in
+      <a href=
+      "Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a>.</p>
+    </dd>
+
+    <dt><code>hfy-shell</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dshell" id="index-hfy_002dshell"></a>
+      <a name="hfy_002dshell" id="hfy_002dshell"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-shell)
-</pre></div>
+</pre>
+      </div>
 
-<p>Returns a best guess at a Bourne compatible shell to use: If the current
-shell doesn&rsquo;t look promising, fall back to <a href="Customization.html#hfy_002dshell_002dfile_002dname">hfy-shell-file-name</a>.
-</p>
-</dd>
-<dt><code>hfy-load-tags-cache</code></dt>
-<dd><a name="index-hfy_002dload_002dtags_002dcache"></a>
-<a name="hfy_002dload_002dtags_002dcache"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Returns a best guess at a Bourne compatible shell to use:
+      If the current shell doesn&rsquo;t look promising, fall back
+      to <a href=
+      "Customization.html#hfy_002dshell_002dfile_002dname">hfy-shell-file-name</a>.</p>
+    </dd>
+
+    <dt><code>hfy-load-tags-cache</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dload_002dtags_002dcache" id=
+      "index-hfy_002dload_002dtags_002dcache"></a> <a name=
+      "hfy_002dload_002dtags_002dcache" id=
+      "hfy_002dload_002dtags_002dcache"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-load-tags-cache <var>srcdir</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Run <a href="Customization.html#hfy_002detags_002dcmd">hfy-etags-cmd</a> on <var>srcdir</var>: load <a href="Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a> and <a href="Variables.html#hfy_002dtags_002dsortl">hfy-tags-sortl</a>.
-</p>
-</dd>
-<dt><code>hfy-parse-tags-buffer</code></dt>
-<dd><a name="index-hfy_002dparse_002dtags_002dbuffer"></a>
-<a name="hfy_002dparse_002dtags_002dbuffer"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Run <a href=
+      "Customization.html#hfy_002detags_002dcmd">hfy-etags-cmd</a>
+      on <var>srcdir</var>: load <a href=
+      "Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a>
+      and <a href=
+      "Variables.html#hfy_002dtags_002dsortl">hfy-tags-sortl</a>.</p>
+    </dd>
+
+    <dt><code>hfy-parse-tags-buffer</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dparse_002dtags_002dbuffer" id=
+      "index-hfy_002dparse_002dtags_002dbuffer"></a> <a name=
+      "hfy_002dparse_002dtags_002dbuffer" id=
+      "hfy_002dparse_002dtags_002dbuffer"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-parse-tags-buffer <var>srcdir</var> <var>buffer</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Parse a <var>buffer</var> containing etags formatted output, loading the
-<a href="Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a> and <a href="Variables.html#hfy_002dtags_002dsortl">hfy-tags-sortl</a> entries for <var>srcdir</var>.
-</p>
-</dd>
-<dt><code>hfy-interq</code></dt>
-<dd><a name="index-hfy_002dinterq"></a>
-<a name="hfy_002dinterq"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Parse a <var>buffer</var> containing etags formatted
+      output, loading the <a href=
+      "Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a>
+      and <a href=
+      "Variables.html#hfy_002dtags_002dsortl">hfy-tags-sortl</a>
+      entries for <var>srcdir</var>.</p>
+    </dd>
+
+    <dt><code>hfy-interq</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dinterq" id="index-hfy_002dinterq"></a>
+      <a name="hfy_002dinterq" id="hfy_002dinterq"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-interq <var>set-a</var> <var>set-b</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Return the intersection (using <code>eq</code>) of 2 lists.
-</p>
-</dd>
-<dt><code>hfy-text-p</code></dt>
-<dd><a name="index-hfy_002dtext_002dp"></a>
-<a name="hfy_002dtext_002dp"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Return the intersection (using <code>eq</code>) of 2
+      lists.</p>
+    </dd>
+
+    <dt><code>hfy-text-p</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dtext_002dp" id=
+      "index-hfy_002dtext_002dp"></a> <a name="hfy_002dtext_002dp"
+      id="hfy_002dtext_002dp"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-text-p <var>srcdir</var> <var>file</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Is <var>srcdir</var>/<var>file</var> text?  Uses <a href="Customization.html#hfy_002distext_002dcommand">hfy-istext-command</a> to determine this.
-</p>
-</dd>
-<dt><code>hfy-opt</code></dt>
-<dd><a name="index-hfy_002dopt"></a>
-<a name="hfy_002dopt"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Is <var>srcdir</var>/<var>file</var> text? Uses <a href=
+      "Customization.html#hfy_002distext_002dcommand">hfy-istext-command</a>
+      to determine this.</p>
+    </dd>
+
+    <dt><code>hfy-opt</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dopt" id="index-hfy_002dopt"></a>
+      <a name="hfy_002dopt" id="hfy_002dopt"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-opt <var>symbol</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Is <a href="Customization.html#hfy_002doptimizations">hfy-optimizations</a> member <var>symbol</var> set or not?
-</p>
-</dd>
-<dt><code>hfy-dirname</code></dt>
-<dd><a name="index-hfy_002ddirname"></a>
-<a name="hfy_002ddirname"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Is <a href=
+      "Customization.html#hfy_002doptimizations">hfy-optimizations</a>
+      member <var>symbol</var> set or not?</p>
+    </dd>
+
+    <dt><code>hfy-dirname</code></dt>
+
+    <dd>
+      <a name="index-hfy_002ddirname" id=
+      "index-hfy_002ddirname"></a> <a name="hfy_002ddirname" id=
+      "hfy_002ddirname"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-dirname <var>file</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Return everything preceding the last &lsquo;<samp>/</samp>&rsquo; from a relative filename,
-on the assumption that this will produce a relative directory name.  Hardly
-bombproof, but good enough in the context in which it is being used.
-</p>
-</dd>
-<dt><code>hfy-html-dekludge-buffer</code></dt>
-<dd><a name="index-hfy_002dhtml_002ddekludge_002dbuffer"></a>
-<a name="hfy_002dhtml_002ddekludge_002dbuffer"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Return everything preceding the last
+      &lsquo;<samp>/</samp>&rsquo; from a relative filename, on the
+      assumption that this will produce a relative directory name.
+      Hardly bombproof, but good enough in the context in which it
+      is being used.</p>
+    </dd>
+
+    <dt><code>hfy-html-dekludge-buffer</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dhtml_002ddekludge_002dbuffer" id=
+      "index-hfy_002dhtml_002ddekludge_002dbuffer"></a> <a name=
+      "hfy_002dhtml_002ddekludge_002dbuffer" id=
+      "hfy_002dhtml_002ddekludge_002dbuffer"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-html-dekludge-buffer)
-</pre></div>
+</pre>
+      </div>
 
-<p>Transform all dangerous characters marked with the <code>hfy-quoteme</code> property
-using <a href="#hfy_002dhtml_002dquote">hfy-html-quote</a>
-</p>
-<p>See also <a href="#hfy_002dhtml_002denkludge_002dbuffer">hfy-html-enkludge-buffer</a>.
-</p>
-</dd>
-<dt><code>hfy-copy-and-fontify-file</code></dt>
-<dd><a name="index-hfy_002dcopy_002dand_002dfontify_002dfile"></a>
-<a name="hfy_002dcopy_002dand_002dfontify_002dfile"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Transform all dangerous characters marked with the
+      <code>hfy-quoteme</code> property using <a href=
+      "#hfy_002dhtml_002dquote">hfy-html-quote</a></p>
+
+      <p>See also <a href=
+      "#hfy_002dhtml_002denkludge_002dbuffer">hfy-html-enkludge-buffer</a>.</p>
+    </dd>
+
+    <dt><code>hfy-copy-and-fontify-file</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dcopy_002dand_002dfontify_002dfile" id=
+      "index-hfy_002dcopy_002dand_002dfontify_002dfile"></a>
+      <a name="hfy_002dcopy_002dand_002dfontify_002dfile" id=
+      "hfy_002dcopy_002dand_002dfontify_002dfile"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-copy-and-fontify-file <var>srcdir</var> <var>dstdir</var> <var>file</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Open <var>file</var> in <var>srcdir</var>&mdash;if fontified, write a fontified copy to <var>dstdir</var>
-adding an extension of <a href="Customization.html#hfy_002dextn">hfy-extn</a>.  Fontification is actually done by
-<a href="Interactive.html#htmlfontify_002dbuffer">htmlfontify-buffer</a>.  If the buffer is not fontified, just copy it.
-</p>
-</dd>
-<dt><code>hfy-decor</code></dt>
-<dd><a name="index-hfy_002ddecor"></a>
-<a name="hfy_002ddecor"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Open <var>file</var> in <var>srcdir</var>&mdash;if
+      fontified, write a fontified copy to <var>dstdir</var> adding
+      an extension of <a href=
+      "Customization.html#hfy_002dextn">hfy-extn</a>. Fontification
+      is actually done by <a href=
+      "Interactive.html#htmlfontify_002dbuffer">htmlfontify-buffer</a>.
+      If the buffer is not fontified, just copy it.</p>
+    </dd>
+
+    <dt><code>hfy-decor</code></dt>
+
+    <dd>
+      <a name="index-hfy_002ddecor" id="index-hfy_002ddecor"></a>
+      <a name="hfy_002ddecor" id="hfy_002ddecor"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-decor <var>tag</var> <var>val</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Derive CSS text-decoration specifiers from various Emacs font attributes.
-</p>
-</dd>
-<dt><code>hfy-slant</code></dt>
-<dd><a name="index-hfy_002dslant"></a>
-<a name="hfy_002dslant"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Derive CSS text-decoration specifiers from various Emacs
+      font attributes.</p>
+    </dd>
+
+    <dt><code>hfy-slant</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dslant" id="index-hfy_002dslant"></a>
+      <a name="hfy_002dslant" id="hfy_002dslant"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-slant <var>slant</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Derive a font-style CSS specifier from the Emacs :slant
-attribute&mdash;CSS does not define the reverse-* styles, so just maps
-those to the regular specifiers.
-</p>
-</dd>
-<dt><code>hfy-tags-for-file</code></dt>
-<dd><a name="index-hfy_002dtags_002dfor_002dfile"></a>
-<a name="hfy_002dtags_002dfor_002dfile"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>Derive a font-style CSS specifier from the Emacs :slant
+      attribute&mdash;CSS does not define the reverse-* styles, so
+      just maps those to the regular specifiers.</p>
+    </dd>
+
+    <dt><code>hfy-tags-for-file</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dtags_002dfor_002dfile" id=
+      "index-hfy_002dtags_002dfor_002dfile"></a> <a name=
+      "hfy_002dtags_002dfor_002dfile" id=
+      "hfy_002dtags_002dfor_002dfile"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-tags-for-file <var>srcdir</var> <var>file</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>List of etags tags that have definitions in this <var>file</var>.  Looks up
-the tags cache in <a href="Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a> using <var>srcdir</var> as the key.
-</p>
-</dd>
-<dt><code>hfy-width</code></dt>
-<dd><a name="index-hfy_002dwidth"></a>
-<a name="hfy_002dwidth"></a>
-<div class="lisp">
-<pre class="lisp">
+      <p>List of etags tags that have definitions in this
+      <var>file</var>. Looks up the tags cache in <a href=
+      "Variables.html#hfy_002dtags_002dcache">hfy-tags-cache</a>
+      using <var>srcdir</var> as the key.</p>
+    </dd>
+
+    <dt><code>hfy-width</code></dt>
+
+    <dd>
+      <a name="index-hfy_002dwidth" id="index-hfy_002dwidth"></a>
+      <a name="hfy_002dwidth" id="hfy_002dwidth"></a>
+
+      <div class="lisp">
+        <pre class="lisp">
 (hfy-width <var>width</var>)
-</pre></div>
+</pre>
+      </div>
 
-<p>Convert an Emacs <code>:width</code> attribute to a CSS font-stretch attribute.
-</p>
-</dd>
-</dl>
+      <p>Convert an Emacs <code>:width</code> attribute to a CSS
+      font-stretch attribute.</p>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Variables.html#Variables" accesskey="n" rel="next">Variables</a>, Previous: <a href="Interactive.html#Interactive" accesskey="p" rel="prev">Interactive</a>, Up: <a href="Usage-_0026-Examples.html#Usage-_0026-Examples" accesskey="u" rel="up">Usage &amp; Examples</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Variables.html#Variables" accesskey="n" rel=
+    "next">Variables</a>, Previous: <a href=
+    "Interactive.html#Interactive" accesskey="p" rel=
+    "prev">Interactive</a>, Up: <a href=
+    "Usage-_0026-Examples.html#Usage-_0026-Examples" accesskey="u"
+    rel="up">Usage &amp; Examples</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

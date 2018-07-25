@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,136 +20,210 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Backup</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Backup">
-<meta name="keywords" content="GNU Emacs Manual: Backup">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Saving.html#Saving" rel="up" title="Saving">
-<link href="Backup-Names.html#Backup-Names" rel="next" title="Backup Names">
-<link href="Save-Commands.html#Save-Commands" rel="prev" title="Save Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Backup</title>
+  <meta name="description" content="GNU Emacs Manual: Backup" />
+  <meta name="keywords" content="GNU Emacs Manual: Backup" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Saving.html#Saving" rel="up" title="Saving" />
+  <link href="Backup-Names.html#Backup-Names" rel="next" title=
+  "Backup Names" />
+  <link href="Save-Commands.html#Save-Commands" rel="prev" title=
+  "Save Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Backup" id="Backup"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Customize-Save.html#Customize-Save"
+    accesskey="n" rel="next">Customize Save</a>, Previous: <a href=
+    "Save-Commands.html#Save-Commands" accesskey="p" rel=
+    "prev">Save Commands</a>, Up: <a href="Saving.html#Saving"
+    accesskey="u" rel="up">Saving</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Backup-Files" id="Backup-Files"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Backup"></a>
-<div class="header">
-<p>
-Next: <a href="Customize-Save.html#Customize-Save" accesskey="n" rel="next">Customize Save</a>, Previous: <a href="Save-Commands.html#Save-Commands" accesskey="p" rel="prev">Save Commands</a>, Up: <a href="Saving.html#Saving" accesskey="u" rel="up">Saving</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Backup-Files"></a>
-<h4 class="subsection">18.3.2 Backup Files</h4>
-<a name="index-backup-file"></a>
-<a name="index-make_002dbackup_002dfiles"></a>
-<a name="index-vc_002dmake_002dbackup_002dfiles"></a>
+  <h4 class="subsection">18.3.2 Backup Files</h4><a name=
+  "index-backup-file" id="index-backup-file"></a> <a name=
+  "index-make_002dbackup_002dfiles" id=
+  "index-make_002dbackup_002dfiles"></a> <a name=
+  "index-vc_002dmake_002dbackup_002dfiles" id=
+  "index-vc_002dmake_002dbackup_002dfiles"></a>
 
-<p>On most operating systems, rewriting a file automatically destroys all
-record of what the file used to contain.  Thus, saving a file from Emacs
-throws away the old contents of the file&mdash;or it would, except that
-Emacs carefully copies the old contents to another file, called the
-<em>backup</em> file, before actually saving.
-</p>
-<p>Emacs makes a backup for a file only the first time the file is
-saved from a buffer.  No matter how many times you subsequently save
-the file, its backup remains unchanged.  However, if you kill the
-buffer and then visit the file again, a new backup file will be made.
-</p>
-<p>For most files, the variable <code>make-backup-files</code> determines
-whether to make backup files.  On most operating systems, its default
-value is <code>t</code>, so that Emacs does write backup files.
-</p>
-<p>For files managed by a version control system (see <a href="Version-Control.html#Version-Control">Version Control</a>), the variable <code>vc-make-backup-files</code> determines whether
-to make backup files.  By default it is <code>nil</code>, since backup files
-are redundant when you store all the previous versions in a version
-control system.
-See <a href="General-VC-Options.html#General-VC-Options">General VC Options</a>.
-</p>
-<p>At your option, Emacs can keep either a single backup for each file,
-or make a series of numbered backup files for each file that you edit.
-See <a href="Backup-Names.html#Backup-Names">Backup Names</a>.
-</p>
-<a name="index-backup_002denable_002dpredicate"></a>
-<a name="index-temporary_002dfile_002ddirectory"></a>
-<a name="index-small_002dtemporary_002dfile_002ddirectory"></a>
-<p>The default value of the <code>backup-enable-predicate</code> variable
-prevents backup files being written for files in the directories used
-for temporary files, specified by <code>temporary-file-directory</code> or
-<code>small-temporary-file-directory</code>.
-</p>
-<p>You can explicitly tell Emacs to make another backup file from a
-buffer, even though that buffer has been saved before.  If you save
-the buffer with <kbd>C-u C-x C-s</kbd>, the version thus saved will be made
-into a backup file if you save the buffer again.  <kbd>C-u C-u C-x
-C-s</kbd> saves the buffer, but first makes the previous file contents into
-a new backup file.  <kbd>C-u C-u C-u C-x C-s</kbd> does both things: it
-makes a backup from the previous contents, and arranges to make
-another from the newly saved contents if you save again.
-</p>
-<a name="index-backup_002ddirectory_002dalist"></a>
-<p>You can customize the variable <code>backup-directory-alist</code> to
-specify that files matching certain patterns should be backed up in
-specific directories.  A typical use is to add an element <code>(&quot;.&quot;
-. <var>dir</var>)</code> to make all backups in the directory with absolute name
-<var>dir</var>.  Emacs modifies the backup file names to avoid clashes
-between files with the same names originating in different
-directories.  Alternatively, adding, <code>(&quot;.&quot; . &quot;.~&quot;)</code> would make
-backups in the invisible subdirectory <samp>.~</samp> of the original file&rsquo;s
-directory.  Emacs creates the directory, if necessary, to make the
-backup.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Backup-Names.html#Backup-Names" accesskey="1">Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How backup files are named.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Backup-Deletion.html#Backup-Deletion" accesskey="2">Deletion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Emacs deletes excess numbered backups.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Backup-Copying.html#Backup-Copying" accesskey="3">Copying</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Backups can be made by copying or renaming.
-</td></tr>
-</table>
+  <p>On most operating systems, rewriting a file automatically
+  destroys all record of what the file used to contain. Thus,
+  saving a file from Emacs throws away the old contents of the
+  file&mdash;or it would, except that Emacs carefully copies the
+  old contents to another file, called the <em>backup</em> file,
+  before actually saving.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Customize-Save.html#Customize-Save" accesskey="n" rel="next">Customize Save</a>, Previous: <a href="Save-Commands.html#Save-Commands" accesskey="p" rel="prev">Save Commands</a>, Up: <a href="Saving.html#Saving" accesskey="u" rel="up">Saving</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Emacs makes a backup for a file only the first time the file
+  is saved from a buffer. No matter how many times you subsequently
+  save the file, its backup remains unchanged. However, if you kill
+  the buffer and then visit the file again, a new backup file will
+  be made.</p>
 
+  <p>For most files, the variable <code>make-backup-files</code>
+  determines whether to make backup files. On most operating
+  systems, its default value is <code>t</code>, so that Emacs does
+  write backup files.</p>
 
+  <p>For files managed by a version control system (see <a href=
+  "Version-Control.html#Version-Control">Version Control</a>), the
+  variable <code>vc-make-backup-files</code> determines whether to
+  make backup files. By default it is <code>nil</code>, since
+  backup files are redundant when you store all the previous
+  versions in a version control system. See <a href=
+  "General-VC-Options.html#General-VC-Options">General VC
+  Options</a>.</p>
 
+  <p>At your option, Emacs can keep either a single backup for each
+  file, or make a series of numbered backup files for each file
+  that you edit. See <a href=
+  "Backup-Names.html#Backup-Names">Backup Names</a>.</p><a name=
+  "index-backup_002denable_002dpredicate" id=
+  "index-backup_002denable_002dpredicate"></a> <a name=
+  "index-temporary_002dfile_002ddirectory" id=
+  "index-temporary_002dfile_002ddirectory"></a> <a name=
+  "index-small_002dtemporary_002dfile_002ddirectory" id=
+  "index-small_002dtemporary_002dfile_002ddirectory"></a>
+
+  <p>The default value of the <code>backup-enable-predicate</code>
+  variable prevents backup files being written for files in the
+  directories used for temporary files, specified by
+  <code>temporary-file-directory</code> or
+  <code>small-temporary-file-directory</code>.</p>
+
+  <p>You can explicitly tell Emacs to make another backup file from
+  a buffer, even though that buffer has been saved before. If you
+  save the buffer with <kbd>C-u C-x C-s</kbd>, the version thus
+  saved will be made into a backup file if you save the buffer
+  again. <kbd>C-u C-u C-x C-s</kbd> saves the buffer, but first
+  makes the previous file contents into a new backup file. <kbd>C-u
+  C-u C-u C-x C-s</kbd> does both things: it makes a backup from
+  the previous contents, and arranges to make another from the
+  newly saved contents if you save again.</p><a name=
+  "index-backup_002ddirectory_002dalist" id=
+  "index-backup_002ddirectory_002dalist"></a>
+
+  <p>You can customize the variable
+  <code>backup-directory-alist</code> to specify that files
+  matching certain patterns should be backed up in specific
+  directories. A typical use is to add an element <code>("." .
+  <var>dir</var>)</code> to make all backups in the directory with
+  absolute name <var>dir</var>. Emacs modifies the backup file
+  names to avoid clashes between files with the same names
+  originating in different directories. Alternatively, adding,
+  <code>("." . ".~")</code> would make backups in the invisible
+  subdirectory <samp>.~</samp> of the original file&rsquo;s
+  directory. Emacs creates the directory, if necessary, to make the
+  backup.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Backup-Names.html#Backup-Names" accesskey=
+      "1">Names</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How backup files are
+      named.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Backup-Deletion.html#Backup-Deletion" accesskey=
+      "2">Deletion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Emacs deletes excess numbered
+      backups.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Backup-Copying.html#Backup-Copying" accesskey=
+      "3">Copying</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Backups can be made by copying
+      or renaming.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Customize-Save.html#Customize-Save"
+    accesskey="n" rel="next">Customize Save</a>, Previous: <a href=
+    "Save-Commands.html#Save-Commands" accesskey="p" rel=
+    "prev">Save Commands</a>, Up: <a href="Saving.html#Saving"
+    accesskey="u" rel="up">Saving</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

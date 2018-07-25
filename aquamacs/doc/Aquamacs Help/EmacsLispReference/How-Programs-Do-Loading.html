@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,230 +19,342 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: How Programs Do Loading</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: How Programs Do Loading">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: How Programs Do Loading">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Loading.html#Loading" rel="up" title="Loading">
-<link href="Load-Suffixes.html#Load-Suffixes" rel="next" title="Load Suffixes">
-<link href="Loading.html#Loading" rel="prev" title="Loading">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: How Programs Do
+  Loading</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: How Programs Do Loading" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: How Programs Do Loading" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Loading.html#Loading" rel="up" title="Loading" />
+  <link href="Load-Suffixes.html#Load-Suffixes" rel="next" title=
+  "Load Suffixes" />
+  <link href="Loading.html#Loading" rel="prev" title="Loading" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="How-Programs-Do-Loading" id=
+  "How-Programs-Do-Loading"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Load-Suffixes.html#Load-Suffixes" accesskey=
+    "n" rel="next">Load Suffixes</a>, Up: <a href=
+    "Loading.html#Loading" accesskey="u" rel="up">Loading</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="How-Programs-Do-Loading-1" id=
+  "How-Programs-Do-Loading-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="How-Programs-Do-Loading"></a>
-<div class="header">
-<p>
-Next: <a href="Load-Suffixes.html#Load-Suffixes" accesskey="n" rel="next">Load Suffixes</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-Programs-Do-Loading-1"></a>
-<h3 class="section">15.1 How Programs Do Loading</h3>
+  <h3 class="section">15.1 How Programs Do Loading</h3>
 
-<p>Emacs Lisp has several interfaces for loading.  For example,
-<code>autoload</code> creates a placeholder object for a function defined in a
-file; trying to call the autoloading function loads the file to get the
-function&rsquo;s real definition (see <a href="Autoload.html#Autoload">Autoload</a>).  <code>require</code> loads a
-file if it isn&rsquo;t already loaded (see <a href="Named-Features.html#Named-Features">Named Features</a>).  Ultimately,
-all these facilities call the <code>load</code> function to do the work.
-</p>
-<dl>
-<dt><a name="index-load"></a>Function: <strong>load</strong> <em>filename &amp;optional missing-ok nomessage nosuffix must-suffix</em></dt>
-<dd><p>This function finds and opens a file of Lisp code, evaluates all the
-forms in it, and closes the file.
-</p>
-<p>To find the file, <code>load</code> first looks for a file named
-<samp><var>filename</var>.elc</samp>, that is, for a file whose name is
-<var>filename</var> with the extension &lsquo;<samp>.elc</samp>&rsquo; appended.  If such a
-file exists, it is loaded.  If there is no file by that name, then
-<code>load</code> looks for a file named <samp><var>filename</var>.el</samp>.  If that
-file exists, it is loaded.  If Emacs was compiled with support for
-dynamic modules (see <a href="Dynamic-Modules.html#Dynamic-Modules">Dynamic Modules</a>), <code>load</code> next looks for
-a file named <samp><var>filename</var>.<var>ext</var></samp>, where <var>ext</var> is a
-system-dependent file-name extension of shared libraries.  Finally, if
-neither of those names is found, <code>load</code> looks for a file named
-<var>filename</var> with nothing appended, and loads it if it exists.  (The
-<code>load</code> function is not clever about looking at <var>filename</var>.
-In the perverse case of a file named <samp>foo.el.el</samp>, evaluation of
-<code>(load &quot;foo.el&quot;)</code> will indeed find it.)
-</p>
-<p>If Auto Compression mode is enabled, as it is by default, then if
-<code>load</code> can not find a file, it searches for a compressed version
-of the file before trying other file names.  It decompresses and loads
-it if it exists.  It looks for compressed versions by appending each
-of the suffixes in <code>jka-compr-load-suffixes</code> to the file name.
-The value of this variable must be a list of strings.  Its standard
-value is <code>(&quot;.gz&quot;)</code>.
-</p>
-<p>If the optional argument <var>nosuffix</var> is non-<code>nil</code>, then
-<code>load</code> does not try the suffixes &lsquo;<samp>.elc</samp>&rsquo; and &lsquo;<samp>.el</samp>&rsquo;.  In
-this case, you must specify the precise file name you want, except
-that, if Auto Compression mode is enabled, <code>load</code> will still use
-<code>jka-compr-load-suffixes</code> to find compressed versions.  By
-specifying the precise file name and using <code>t</code> for
-<var>nosuffix</var>, you can prevent file names like <samp>foo.el.el</samp> from
-being tried.
-</p>
-<p>If the optional argument <var>must-suffix</var> is non-<code>nil</code>, then
-<code>load</code> insists that the file name used must end in either
-&lsquo;<samp>.el</samp>&rsquo; or &lsquo;<samp>.elc</samp>&rsquo; (possibly extended with a compression
-suffix) or the shared-library extension, unless it contains an
-explicit directory name.
-</p>
-<p>If the option <code>load-prefer-newer</code> is non-<code>nil</code>, then when
-searching suffixes, <code>load</code> selects whichever version of a file
-(&lsquo;<samp>.elc</samp>&rsquo;, &lsquo;<samp>.el</samp>&rsquo;, etc.) has been modified most recently.
-</p>
-<p>If <var>filename</var> is a relative file name, such as <samp>foo</samp> or
-<samp>baz/foo.bar</samp>, <code>load</code> searches for the file using the variable
-<code>load-path</code>.  It appends <var>filename</var> to each of the directories
-listed in <code>load-path</code>, and loads the first file it finds whose name
-matches.  The current default directory is tried only if it is specified
-in <code>load-path</code>, where <code>nil</code> stands for the default directory.
-<code>load</code> tries all three possible suffixes in the first directory in
-<code>load-path</code>, then all three suffixes in the second directory, and
-so on.  See <a href="Library-Search.html#Library-Search">Library Search</a>.
-</p>
-<p>Whatever the name under which the file is eventually found, and the
-directory where Emacs found it, Emacs sets the value of the variable
-<code>load-file-name</code> to that file&rsquo;s name.
-</p>
-<p>If you get a warning that <samp>foo.elc</samp> is older than <samp>foo.el</samp>, it
-means you should consider recompiling <samp>foo.el</samp>.  See <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>.
-</p>
-<p>When loading a source file (not compiled), <code>load</code> performs
-character set translation just as Emacs would do when visiting the file.
-See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
-</p>
-<a name="index-eager-macro-expansion"></a>
-<p>When loading an uncompiled file, Emacs tries to expand any macros
-that the file contains (see <a href="Macros.html#Macros">Macros</a>).  We refer to this as
-<em>eager macro expansion</em>.  Doing this (rather than deferring
-the expansion until the relevant code runs) can significantly speed
-up the execution of uncompiled code.  Sometimes, this macro expansion
-cannot be done, owing to a cyclic dependency.  In the simplest
-example of this, the file you are loading refers to a macro defined
-in another file, and that file in turn requires the file you are
-loading.  This is generally harmless.  Emacs prints a warning
-(&lsquo;<samp>Eager macro-expansion skipped due to cycle&hellip;</samp>&rsquo;)
-giving details of the problem, but it still loads the file, just
-leaving the macro unexpanded for now.  You may wish to restructure
-your code so that this does not happen.  Loading a compiled file does
-not cause macroexpansion, because this should already have happened
-during compilation.  See <a href="Compiling-Macros.html#Compiling-Macros">Compiling Macros</a>.
-</p>
-<p>Messages like &lsquo;<samp>Loading foo...</samp>&rsquo; and &lsquo;<samp>Loading foo...done</samp>&rsquo; appear
-in the echo area during loading unless <var>nomessage</var> is
-non-<code>nil</code>.
-</p>
-<a name="index-load-errors"></a>
-<p>Any unhandled errors while loading a file terminate loading.  If the
-load was done for the sake of <code>autoload</code>, any function definitions
-made during the loading are undone.
-</p>
-<a name="index-file_002derror"></a>
-<p>If <code>load</code> can&rsquo;t find the file to load, then normally it signals the
-error <code>file-error</code> (with &lsquo;<samp>Cannot open load file
-<var>filename</var></samp>&rsquo;).  But if <var>missing-ok</var> is non-<code>nil</code>, then
-<code>load</code> just returns <code>nil</code>.
-</p>
-<p>You can use the variable <code>load-read-function</code> to specify a function
-for <code>load</code> to use instead of <code>read</code> for reading expressions.
-See below.
-</p>
-<p><code>load</code> returns <code>t</code> if the file loads successfully.
-</p></dd></dl>
+  <p>Emacs Lisp has several interfaces for loading. For example,
+  <code>autoload</code> creates a placeholder object for a function
+  defined in a file; trying to call the autoloading function loads
+  the file to get the function&rsquo;s real definition (see
+  <a href="Autoload.html#Autoload">Autoload</a>).
+  <code>require</code> loads a file if it isn&rsquo;t already
+  loaded (see <a href="Named-Features.html#Named-Features">Named
+  Features</a>). Ultimately, all these facilities call the
+  <code>load</code> function to do the work.</p>
 
-<dl>
-<dt><a name="index-load_002dfile"></a>Command: <strong>load-file</strong> <em>filename</em></dt>
-<dd><p>This command loads the file <var>filename</var>.  If <var>filename</var> is a
-relative file name, then the current default directory is assumed.
-This command does not use <code>load-path</code>, and does not append
-suffixes.  However, it does look for compressed versions (if Auto
-Compression Mode is enabled).  Use this command if you wish to specify
-precisely the file name to load.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-load" id="index-load"></a>Function:
+    <strong>load</strong> <em>filename &amp;optional missing-ok
+    nomessage nosuffix must-suffix</em></dt>
 
-<dl>
-<dt><a name="index-load_002dlibrary"></a>Command: <strong>load-library</strong> <em>library</em></dt>
-<dd><p>This command loads the library named <var>library</var>.  It is equivalent to
-<code>load</code>, except for the way it reads its argument interactively.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a> in <cite>The GNU Emacs Manual</cite>.
-</p></dd></dl>
+    <dd>
+      <p>This function finds and opens a file of Lisp code,
+      evaluates all the forms in it, and closes the file.</p>
 
-<dl>
-<dt><a name="index-load_002din_002dprogress"></a>Variable: <strong>load-in-progress</strong></dt>
-<dd><p>This variable is non-<code>nil</code> if Emacs is in the process of loading a
-file, and it is <code>nil</code> otherwise.
-</p></dd></dl>
+      <p>To find the file, <code>load</code> first looks for a file
+      named <samp><var>filename</var>.elc</samp>, that is, for a
+      file whose name is <var>filename</var> with the extension
+      &lsquo;<samp>.elc</samp>&rsquo; appended. If such a file
+      exists, it is loaded. If there is no file by that name, then
+      <code>load</code> looks for a file named
+      <samp><var>filename</var>.el</samp>. If that file exists, it
+      is loaded. If Emacs was compiled with support for dynamic
+      modules (see <a href=
+      "Dynamic-Modules.html#Dynamic-Modules">Dynamic Modules</a>),
+      <code>load</code> next looks for a file named
+      <samp><var>filename</var>.<var>ext</var></samp>, where
+      <var>ext</var> is a system-dependent file-name extension of
+      shared libraries. Finally, if neither of those names is
+      found, <code>load</code> looks for a file named
+      <var>filename</var> with nothing appended, and loads it if it
+      exists. (The <code>load</code> function is not clever about
+      looking at <var>filename</var>. In the perverse case of a
+      file named <samp>foo.el.el</samp>, evaluation of <code>(load
+      "foo.el")</code> will indeed find it.)</p>
 
-<dl>
-<dt><a name="index-load_002dfile_002dname"></a>Variable: <strong>load-file-name</strong></dt>
-<dd><p>When Emacs is in the process of loading a file, this variable&rsquo;s value
-is the name of that file, as Emacs found it during the search
-described earlier in this section.
-</p></dd></dl>
+      <p>If Auto Compression mode is enabled, as it is by default,
+      then if <code>load</code> can not find a file, it searches
+      for a compressed version of the file before trying other file
+      names. It decompresses and loads it if it exists. It looks
+      for compressed versions by appending each of the suffixes in
+      <code>jka-compr-load-suffixes</code> to the file name. The
+      value of this variable must be a list of strings. Its
+      standard value is <code>(".gz")</code>.</p>
 
-<dl>
-<dt><a name="index-load_002dread_002dfunction"></a>Variable: <strong>load-read-function</strong></dt>
-<dd><a name="Definition-of-load_002dread_002dfunction"></a><p>This variable specifies an alternate expression-reading function for
-<code>load</code> and <code>eval-region</code> to use instead of <code>read</code>.
-The function should accept one argument, just as <code>read</code> does.
-</p>
-<p>By default, this variable&rsquo;s value is <code>read</code>.  See <a href="Input-Functions.html#Input-Functions">Input Functions</a>.
-</p>
-<p>Instead of using this variable, it is cleaner to use another, newer
-feature: to pass the function as the <var>read-function</var> argument to
-<code>eval-region</code>.  See <a href="Eval.html#Definition-of-eval_002dregion">Eval</a>.
-</p></dd></dl>
+      <p>If the optional argument <var>nosuffix</var> is
+      non-<code>nil</code>, then <code>load</code> does not try the
+      suffixes &lsquo;<samp>.elc</samp>&rsquo; and
+      &lsquo;<samp>.el</samp>&rsquo;. In this case, you must
+      specify the precise file name you want, except that, if Auto
+      Compression mode is enabled, <code>load</code> will still use
+      <code>jka-compr-load-suffixes</code> to find compressed
+      versions. By specifying the precise file name and using
+      <code>t</code> for <var>nosuffix</var>, you can prevent file
+      names like <samp>foo.el.el</samp> from being tried.</p>
 
-<p>For information about how <code>load</code> is used in building Emacs, see
-<a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Load-Suffixes.html#Load-Suffixes" accesskey="n" rel="next">Load Suffixes</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If the optional argument <var>must-suffix</var> is
+      non-<code>nil</code>, then <code>load</code> insists that the
+      file name used must end in either
+      &lsquo;<samp>.el</samp>&rsquo; or
+      &lsquo;<samp>.elc</samp>&rsquo; (possibly extended with a
+      compression suffix) or the shared-library extension, unless
+      it contains an explicit directory name.</p>
 
+      <p>If the option <code>load-prefer-newer</code> is
+      non-<code>nil</code>, then when searching suffixes,
+      <code>load</code> selects whichever version of a file
+      (&lsquo;<samp>.elc</samp>&rsquo;,
+      &lsquo;<samp>.el</samp>&rsquo;, etc.) has been modified most
+      recently.</p>
 
+      <p>If <var>filename</var> is a relative file name, such as
+      <samp>foo</samp> or <samp>baz/foo.bar</samp>,
+      <code>load</code> searches for the file using the variable
+      <code>load-path</code>. It appends <var>filename</var> to
+      each of the directories listed in <code>load-path</code>, and
+      loads the first file it finds whose name matches. The current
+      default directory is tried only if it is specified in
+      <code>load-path</code>, where <code>nil</code> stands for the
+      default directory. <code>load</code> tries all three possible
+      suffixes in the first directory in <code>load-path</code>,
+      then all three suffixes in the second directory, and so on.
+      See <a href="Library-Search.html#Library-Search">Library
+      Search</a>.</p>
 
+      <p>Whatever the name under which the file is eventually
+      found, and the directory where Emacs found it, Emacs sets the
+      value of the variable <code>load-file-name</code> to that
+      file&rsquo;s name.</p>
+
+      <p>If you get a warning that <samp>foo.elc</samp> is older
+      than <samp>foo.el</samp>, it means you should consider
+      recompiling <samp>foo.el</samp>. See <a href=
+      "Byte-Compilation.html#Byte-Compilation">Byte
+      Compilation</a>.</p>
+
+      <p>When loading a source file (not compiled),
+      <code>load</code> performs character set translation just as
+      Emacs would do when visiting the file. See <a href=
+      "Coding-Systems.html#Coding-Systems">Coding
+      Systems</a>.</p><a name="index-eager-macro-expansion" id=
+      "index-eager-macro-expansion"></a>
+
+      <p>When loading an uncompiled file, Emacs tries to expand any
+      macros that the file contains (see <a href=
+      "Macros.html#Macros">Macros</a>). We refer to this as
+      <em>eager macro expansion</em>. Doing this (rather than
+      deferring the expansion until the relevant code runs) can
+      significantly speed up the execution of uncompiled code.
+      Sometimes, this macro expansion cannot be done, owing to a
+      cyclic dependency. In the simplest example of this, the file
+      you are loading refers to a macro defined in another file,
+      and that file in turn requires the file you are loading. This
+      is generally harmless. Emacs prints a warning
+      (&lsquo;<samp>Eager macro-expansion skipped due to
+      cycle&hellip;</samp>&rsquo;) giving details of the problem,
+      but it still loads the file, just leaving the macro
+      unexpanded for now. You may wish to restructure your code so
+      that this does not happen. Loading a compiled file does not
+      cause macroexpansion, because this should already have
+      happened during compilation. See <a href=
+      "Compiling-Macros.html#Compiling-Macros">Compiling
+      Macros</a>.</p>
+
+      <p>Messages like &lsquo;<samp>Loading foo...</samp>&rsquo;
+      and &lsquo;<samp>Loading foo...done</samp>&rsquo; appear in
+      the echo area during loading unless <var>nomessage</var> is
+      non-<code>nil</code>.</p><a name="index-load-errors" id=
+      "index-load-errors"></a>
+
+      <p>Any unhandled errors while loading a file terminate
+      loading. If the load was done for the sake of
+      <code>autoload</code>, any function definitions made during
+      the loading are undone.</p><a name="index-file_002derror" id=
+      "index-file_002derror"></a>
+
+      <p>If <code>load</code> can&rsquo;t find the file to load,
+      then normally it signals the error <code>file-error</code>
+      (with &lsquo;<samp>Cannot open load file
+      <var>filename</var></samp>&rsquo;). But if
+      <var>missing-ok</var> is non-<code>nil</code>, then
+      <code>load</code> just returns <code>nil</code>.</p>
+
+      <p>You can use the variable <code>load-read-function</code>
+      to specify a function for <code>load</code> to use instead of
+      <code>read</code> for reading expressions. See below.</p>
+
+      <p><code>load</code> returns <code>t</code> if the file loads
+      successfully.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-load_002dfile" id=
+    "index-load_002dfile"></a>Command: <strong>load-file</strong>
+    <em>filename</em></dt>
+
+    <dd>
+      <p>This command loads the file <var>filename</var>. If
+      <var>filename</var> is a relative file name, then the current
+      default directory is assumed. This command does not use
+      <code>load-path</code>, and does not append suffixes.
+      However, it does look for compressed versions (if Auto
+      Compression Mode is enabled). Use this command if you wish to
+      specify precisely the file name to load.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-load_002dlibrary" id=
+    "index-load_002dlibrary"></a>Command:
+    <strong>load-library</strong> <em>library</em></dt>
+
+    <dd>
+      <p>This command loads the library named <var>library</var>.
+      It is equivalent to <code>load</code>, except for the way it
+      reads its argument interactively. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Lisp-Libraries.html#Lisp-Libraries">
+      Lisp Libraries</a> in <cite>The GNU Emacs Manual</cite>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-load_002din_002dprogress" id=
+    "index-load_002din_002dprogress"></a>Variable:
+    <strong>load-in-progress</strong></dt>
+
+    <dd>
+      <p>This variable is non-<code>nil</code> if Emacs is in the
+      process of loading a file, and it is <code>nil</code>
+      otherwise.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-load_002dfile_002dname" id=
+    "index-load_002dfile_002dname"></a>Variable:
+    <strong>load-file-name</strong></dt>
+
+    <dd>
+      <p>When Emacs is in the process of loading a file, this
+      variable&rsquo;s value is the name of that file, as Emacs
+      found it during the search described earlier in this
+      section.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-load_002dread_002dfunction" id=
+    "index-load_002dread_002dfunction"></a>Variable:
+    <strong>load-read-function</strong></dt>
+
+    <dd>
+      <a name="Definition-of-load_002dread_002dfunction" id=
+      "Definition-of-load_002dread_002dfunction"></a>
+
+      <p>This variable specifies an alternate expression-reading
+      function for <code>load</code> and <code>eval-region</code>
+      to use instead of <code>read</code>. The function should
+      accept one argument, just as <code>read</code> does.</p>
+
+      <p>By default, this variable&rsquo;s value is
+      <code>read</code>. See <a href=
+      "Input-Functions.html#Input-Functions">Input
+      Functions</a>.</p>
+
+      <p>Instead of using this variable, it is cleaner to use
+      another, newer feature: to pass the function as the
+      <var>read-function</var> argument to
+      <code>eval-region</code>. See <a href=
+      "Eval.html#Definition-of-eval_002dregion">Eval</a>.</p>
+    </dd>
+  </dl>
+
+  <p>For information about how <code>load</code> is used in
+  building Emacs, see <a href=
+  "Building-Emacs.html#Building-Emacs">Building Emacs</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Load-Suffixes.html#Load-Suffixes" accesskey=
+    "n" rel="next">Load Suffixes</a>, Up: <a href=
+    "Loading.html#Loading" accesskey="u" rel="up">Loading</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This document describes Supercite, an Emacs package for citing and
 attributing replies to mail and news messages.
 
@@ -15,105 +17,167 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Supercite User&rsquo;s Manual: Configuring the Citation Engine</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Supercite User&rsquo;s Manual: Configuring the Citation Engine">
-<meta name="keywords" content="Supercite User&rsquo;s Manual: Configuring the Citation Engine">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Using-Regi.html#Using-Regi" rel="next" title="Using Regi">
-<link href="Author-Names.html#Author-Names" rel="prev" title="Author Names">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Supercite User&rsquo;s Manual: Configuring the Citation
+  Engine</title>
+  <meta name="description" content=
+  "Supercite User&rsquo;s Manual: Configuring the Citation Engine" />
+  <meta name="keywords" content=
+  "Supercite User&rsquo;s Manual: Configuring the Citation Engine" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Using-Regi.html#Using-Regi" rel="next" title=
+  "Using Regi" />
+  <link href="Author-Names.html#Author-Names" rel="prev" title=
+  "Author Names" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Configuring-the-Citation-Engine"></a>
-<div class="header">
-<p>
-Next: <a href="Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands" accesskey="n" rel="next">Post-yank Formatting Commands</a>, Previous: <a href="Selecting-an-Attribution.html#Selecting-an-Attribution" accesskey="p" rel="prev">Selecting an Attribution</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Configuring-the-Citation-Engine-1"></a>
-<h2 class="chapter">8 Configuring the Citation Engine</h2>
-<a name="index-Regi"></a>
-<a name="index-frames-_0028Regi_0029"></a>
-<a name="index-entries-_0028Regi_0029"></a>
+<body lang="en" xml:lang="en">
+  <a name="Configuring-the-Citation-Engine" id=
+  "Configuring-the-Citation-Engine"></a>
 
-<p>At the heart of Supercite is a regular expression interpreting engine
-called <em>Regi</em>.  Regi operates by interpreting a data structure
-called a Regi-frame (or just <em>frame</em>), which is a list of
-Regi-entries (or just <em>entry</em>).  Each entry contains a predicate,
-typically a regular expression, which is matched against a line of text
-in the current buffer.  If the predicate matches true, an associated
-expression is <code>eval</code>uated.  In this way, an entire region of text
-can be transformed in an <em>awk</em>-like manner.  Regi is used
-throughout Supercite, from mail header information extraction, to header
-nuking, to citing text.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Using-Regi.html#Using-Regi" accesskey="1">Using Regi</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Frames-You-Can-Customize.html#Frames-You-Can-Customize" accesskey="2">Frames You Can Customize</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href=
+    "Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands"
+    accesskey="n" rel="next">Post-yank Formatting Commands</a>,
+    Previous: <a href=
+    "Selecting-an-Attribution.html#Selecting-an-Attribution"
+    accesskey="p" rel="prev">Selecting an Attribution</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Configuring-the-Citation-Engine-1" id=
+  "Configuring-the-Citation-Engine-1"></a>
 
-<p>While the details of Regi are discussed below (see <a href="Using-Regi.html#Using-Regi">Using Regi</a>), only
-those who wish to customize certain aspects of Supercite need concern
-themselves with it.  It is important to understand though, that any
-conceivable citation style that can be described by a regular expression
-can be recognized by Supercite.  This leads to some interesting
-applications.  For example, if you regularly receive email from a
-co-worker that uses an uncommon citation style (say one that employs a
-&lsquo;<samp>|</samp>&rsquo; or &lsquo;<samp>}</samp>&rsquo; character at the front of the line), it is
-possible for Supercite to recognize this and <em>coerce</em> the citation
-to your preferred style, for consistency.  In theory, it is possible for
-Supercite to recognize such things as uuencoded messages or C code and
-cite or fill those differently than normal text.  None of this is
-currently part of Supercite, but contributions are welcome!
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands" accesskey="n" rel="next">Post-yank Formatting Commands</a>, Previous: <a href="Selecting-an-Attribution.html#Selecting-an-Attribution" accesskey="p" rel="prev">Selecting an Attribution</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h2 class="chapter">8 Configuring the Citation
+  Engine</h2><a name="index-Regi" id="index-Regi"></a> <a name=
+  "index-frames-_0028Regi_0029" id=
+  "index-frames-_0028Regi_0029"></a> <a name=
+  "index-entries-_0028Regi_0029" id=
+  "index-entries-_0028Regi_0029"></a>
 
+  <p>At the heart of Supercite is a regular expression interpreting
+  engine called <em>Regi</em>. Regi operates by interpreting a data
+  structure called a Regi-frame (or just <em>frame</em>), which is
+  a list of Regi-entries (or just <em>entry</em>). Each entry
+  contains a predicate, typically a regular expression, which is
+  matched against a line of text in the current buffer. If the
+  predicate matches true, an associated expression is
+  <code>eval</code>uated. In this way, an entire region of text can
+  be transformed in an <em>awk</em>-like manner. Regi is used
+  throughout Supercite, from mail header information extraction, to
+  header nuking, to citing text.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Using-Regi.html#Using-Regi" accesskey="1">Using
+      Regi</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Frames-You-Can-Customize.html#Frames-You-Can-Customize"
+      accesskey="2">Frames You Can Customize</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
+
+  <p>While the details of Regi are discussed below (see <a href=
+  "Using-Regi.html#Using-Regi">Using Regi</a>), only those who wish
+  to customize certain aspects of Supercite need concern themselves
+  with it. It is important to understand though, that any
+  conceivable citation style that can be described by a regular
+  expression can be recognized by Supercite. This leads to some
+  interesting applications. For example, if you regularly receive
+  email from a co-worker that uses an uncommon citation style (say
+  one that employs a &lsquo;<samp>|</samp>&rsquo; or
+  &lsquo;<samp>}</samp>&rsquo; character at the front of the line),
+  it is possible for Supercite to recognize this and
+  <em>coerce</em> the citation to your preferred style, for
+  consistency. In theory, it is possible for Supercite to recognize
+  such things as uuencoded messages or C code and cite or fill
+  those differently than normal text. None of this is currently
+  part of Supercite, but contributions are welcome!</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands"
+    accesskey="n" rel="next">Post-yank Formatting Commands</a>,
+    Previous: <a href=
+    "Selecting-an-Attribution.html#Selecting-an-Attribution"
+    accesskey="p" rel="prev">Selecting an Attribution</a>, Up:
+    <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

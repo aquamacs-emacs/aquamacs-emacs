@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-1997, 2001-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,93 +14,128 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Viper Is a Package for Emacs Rebels: Undoing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Viper Is a Package for Emacs Rebels: Undoing">
-<meta name="keywords" content="Viper Is a Package for Emacs Rebels: Undoing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text-Handling.html#Text-Handling" rel="up" title="Text Handling">
-<link href="Display.html#Display" rel="next" title="Display">
-<link href="Yanking.html#Yanking" rel="prev" title="Yanking">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Viper Is a Package for Emacs Rebels: Undoing</title>
+  <meta name="description" content=
+  "Viper Is a Package for Emacs Rebels: Undoing" />
+  <meta name="keywords" content=
+  "Viper Is a Package for Emacs Rebels: Undoing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text-Handling.html#Text-Handling" rel="up" title=
+  "Text Handling" />
+  <link href="Display.html#Display" rel="next" title="Display" />
+  <link href="Yanking.html#Yanking" rel="prev" title="Yanking" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Undoing"></a>
-<div class="header">
-<p>
-Previous: <a href="Yanking.html#Yanking" accesskey="p" rel="prev">Yanking</a>, Up: <a href="Text-Handling.html#Text-Handling" accesskey="u" rel="up">Text Handling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Undoing-1"></a>
-<h4 class="subsection">4.2.9 Undoing</h4>
+<body lang="en" xml:lang="en">
+  <a name="Undoing" id="Undoing"></a>
 
-<a name="index-undo-2"></a>
-<a name="index-backup-files-1"></a>
+  <div class="header">
+    <p>Previous: <a href="Yanking.html#Yanking" accesskey="p" rel=
+    "prev">Yanking</a>, Up: <a href=
+    "Text-Handling.html#Text-Handling" accesskey="u" rel="up">Text
+    Handling</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Undoing-1" id="Undoing-1"></a>
 
-<dl compact="compact">
-<dt><kbd>u U</kbd></dt>
-<dd><p>Undo the latest change.
-</p></dd>
-<dt><kbd>.</kbd></dt>
-<dd><p>Repeat undo.
-</p></dd>
-<dt><kbd>:q!</kbd></dt>
-<dd><p>Quit Vi without writing.
-</p></dd>
-<dt><kbd>:e!</kbd></dt>
-<dd><p>Re-edit a messed-up file.
-</p></dd>
-<dt><kbd>:rec</kbd></dt>
-<dd><p>Recover file from autosave.  Viper also creates backup files
-that have a &lsquo;<samp>~</samp>&rsquo; appended to them.
-</p></dd>
-</dl>
-<a name="index-Ex-rec"></a>
-<a name="index-Ex-e_0021"></a>
-<a name="index-Ex-q_0021"></a>
-<a name="index-_002e-1"></a>
-<a name="index-U"></a>
-<a name="index-u-1"></a>
+  <h4 class="subsection">4.2.9 Undoing</h4><a name="index-undo-2"
+  id="index-undo-2"></a> <a name="index-backup-files-1" id=
+  "index-backup-files-1"></a>
 
+  <dl compact="compact">
+    <dt><kbd>u U</kbd></dt>
 
+    <dd>
+      <p>Undo the latest change.</p>
+    </dd>
 
+    <dt><kbd>.</kbd></dt>
 
+    <dd>
+      <p>Repeat undo.</p>
+    </dd>
+
+    <dt><kbd>:q!</kbd></dt>
+
+    <dd>
+      <p>Quit Vi without writing.</p>
+    </dd>
+
+    <dt><kbd>:e!</kbd></dt>
+
+    <dd>
+      <p>Re-edit a messed-up file.</p>
+    </dd>
+
+    <dt><kbd>:rec</kbd></dt>
+
+    <dd>
+      <p>Recover file from autosave. Viper also creates backup
+      files that have a &lsquo;<samp>~</samp>&rsquo; appended to
+      them.</p>
+    </dd>
+  </dl><a name="index-Ex-rec" id="index-Ex-rec"></a> <a name=
+  "index-Ex-e_0021" id="index-Ex-e_0021"></a> <a name=
+  "index-Ex-q_0021" id="index-Ex-q_0021"></a> <a name=
+  "index-_002e-1" id="index-_002e-1"></a> <a name="index-U" id=
+  "index-U"></a> <a name="index-u-1" id="index-u-1"></a>
 </body>
 </html>

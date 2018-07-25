@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Relative timer - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Dates-and-Times.html#Dates-and-Times" title="Dates and Times">
-<link rel="prev" href="Effort-estimates.html#Effort-estimates" title="Effort estimates">
-<link rel="next" href="Countdown-timer.html#Countdown-timer" title="Countdown timer">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Relative timer - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Dates-and-Times.html#Dates-and-Times" title=
+  "Dates and Times" />
+  <link rel="prev" href="Effort-estimates.html#Effort-estimates"
+  title="Effort estimates" />
+  <link rel="next" href="Countdown-timer.html#Countdown-timer"
+  title="Countdown timer" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +42,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,54 +55,97 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Relative-timer"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Countdown-timer.html#Countdown-timer">Countdown timer</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Effort-estimates.html#Effort-estimates">Effort estimates</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Dates-and-Times.html#Dates-and-Times">Dates and Times</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Relative-timer" id="Relative-timer"></a>
 
-<h3 class="section">8.6 Taking notes with a relative timer</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Countdown-timer.html#Countdown-timer">Countdown timer</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Effort-estimates.html#Effort-estimates">Effort estimates</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Dates-and-Times.html#Dates-and-Times">Dates and Times</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-relative-timer-868"></a>
-When taking notes during, for example, a meeting or a video viewing, it can
-be useful to have access to times relative to a starting time.  Org provides
-such a relative timer and make it easy to create timed notes.
+  <h3 class="section">8.6 Taking notes with a relative timer</h3>
 
-     
-<a name="index-C_002dc-C_002dx-_002e-869"></a>
-<a name="index-org_002dtimer-870"></a>
-<dl><dt><kbd>C-c C-x . &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-timer</code><kbd>)</kbd><dd>
-Insert a relative time into the buffer.  The first time you use this, the
-timer will be started.  When called with a prefix argument, the timer is
-restarted. 
-<a name="index-C_002dc-C_002dx-_002d-871"></a><a name="index-org_002dtimer_002ditem-872"></a><br><dt><kbd>C-c C-x - &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-timer-item</code><kbd>)</kbd><dd>
-Insert a description list item with the current relative time.  With a prefix
-argument, first reset the timer to 0. 
-<a name="index-M_002d_0040key_007bRET_007d-873"></a><a name="index-org_002dinsert_002dheading-874"></a><br><dt><kbd>M-&lt;RET&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-insert-heading</code><kbd>)</kbd><dd>
-Once the timer list is started, you can also use <kbd>M-&lt;RET&gt;</kbd> to insert
-new timer items. 
-<!-- for key sequences with a comma, command name macros fail :( -->
-<a name="index-C_002dc-C_002dx-_002c-875"></a><br><dt><kbd>C-c C-x ,</kbd><dd>Pause the timer, or continue it if it is already paused
-(<samp><span class="command">org-timer-pause-or-continue</span></samp>). 
-<!-- removed the sentence because it is redundant to the following item -->
-<a name="index-C_002du-C_002dc-C_002dx-_002c-876"></a><br><dt><kbd>C-u C-c C-x ,</kbd><dd>Stop the timer.  After this, you can only start a new timer, not continue the
-old one.  This command also removes the timer from the mode line. 
-<a name="index-C_002dc-C_002dx-0-877"></a><a name="index-org_002dtimer_002dstart-878"></a><br><dt><kbd>C-c C-x 0 &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-timer-start</code><kbd>)</kbd><dd>
-Reset the timer without inserting anything into the buffer.  By default, the
-timer is reset to 0.  When called with a <kbd>C-u</kbd> prefix, reset the timer to
-specific starting offset.  The user is prompted for the offset, with a
-default taken from a timer string at point, if any, So this can be used to
-restart taking notes after a break in the process.  When called with a double
-prefix argument <kbd>C-u C-u</kbd>, change all timer strings in the active region
-by a certain amount.  This can be used to fix timer strings if the timer was
-not started at exactly the right moment. 
-</dl>
+  <p><a name="index-relative-timer-868" id=
+  "index-relative-timer-868"></a> When taking notes during, for
+  example, a meeting or a video viewing, it can be useful to have
+  access to times relative to a starting time. Org provides such a
+  relative timer and make it easy to create timed notes. <a name=
+  "index-C_002dc-C_002dx-_002e-869" id=
+  "index-C_002dc-C_002dx-_002e-869"></a> <a name=
+  "index-org_002dtimer-870" id="index-org_002dtimer-870"></a></p>
 
-   </body></html>
+  <dl>
+    <dt><kbd>C-c C-x .
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-timer</code><kbd>)</kbd></dt>
 
+    <dd>Insert a relative time into the buffer. The first time you
+    use this, the timer will be started. When called with a prefix
+    argument, the timer is restarted. <a name=
+    "index-C_002dc-C_002dx-_002d-871" id=
+    "index-C_002dc-C_002dx-_002d-871"></a><a name=
+    "index-org_002dtimer_002ditem-872" id=
+    "index-org_002dtimer_002ditem-872"></a><br /></dd>
+
+    <dt><kbd>C-c C-x -
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-timer-item</code><kbd>)</kbd></dt>
+
+    <dd>Insert a description list item with the current relative
+    time. With a prefix argument, first reset the timer to 0.
+    <a name="index-M_002d_0040key_007bRET_007d-873" id=
+    "index-M_002d_0040key_007bRET_007d-873"></a><a name=
+    "index-org_002dinsert_002dheading-874" id=
+    "index-org_002dinsert_002dheading-874"></a><br /></dd>
+
+    <dt><kbd>M-&lt;RET&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-insert-heading</code><kbd>)</kbd></dt>
+
+    <dd>Once the timer list is started, you can also use
+    <kbd>M-&lt;RET&gt;</kbd> to insert new timer items. 
+    <!-- for key sequences with a comma, command name macros fail :( -->
+    <a name="index-C_002dc-C_002dx-_002c-875" id=
+    "index-C_002dc-C_002dx-_002c-875"></a><br /></dd>
+
+    <dt><kbd>C-c C-x ,</kbd></dt>
+
+    <dd>Pause the timer, or continue it if it is already paused
+    (<samp><span class=
+    "command">org-timer-pause-or-continue</span></samp>). 
+    <!-- removed the sentence because it is redundant to the following item -->
+    <a name="index-C_002du-C_002dc-C_002dx-_002c-876" id=
+    "index-C_002du-C_002dc-C_002dx-_002c-876"></a><br /></dd>
+
+    <dt><kbd>C-u C-c C-x ,</kbd></dt>
+
+    <dd>Stop the timer. After this, you can only start a new timer,
+    not continue the old one. This command also removes the timer
+    from the mode line. <a name="index-C_002dc-C_002dx-0-877" id=
+    "index-C_002dc-C_002dx-0-877"></a><a name=
+    "index-org_002dtimer_002dstart-878" id=
+    "index-org_002dtimer_002dstart-878"></a><br /></dd>
+
+    <dt><kbd>C-c C-x 0
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-timer-start</code><kbd>)</kbd></dt>
+
+    <dd>Reset the timer without inserting anything into the buffer.
+    By default, the timer is reset to 0. When called with a
+    <kbd>C-u</kbd> prefix, reset the timer to specific starting
+    offset. The user is prompted for the offset, with a default
+    taken from a timer string at point, if any, So this can be used
+    to restart taking notes after a break in the process. When
+    called with a double prefix argument <kbd>C-u C-u</kbd>, change
+    all timer strings in the active region by a certain amount.
+    This can be used to fix timer strings if the timer was not
+    started at exactly the right moment.</dd>
+  </dl>
+</body>
+</html>

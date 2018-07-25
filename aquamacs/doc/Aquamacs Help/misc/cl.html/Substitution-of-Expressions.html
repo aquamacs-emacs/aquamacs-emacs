@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,119 +16,188 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Substitution of Expressions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Substitution of Expressions">
-<meta name="keywords" content="Common Lisp Extensions: Substitution of Expressions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lists.html#Lists" rel="up" title="Lists">
-<link href="Lists-as-Sets.html#Lists-as-Sets" rel="next" title="Lists as Sets">
-<link href="List-Functions.html#List-Functions" rel="prev" title="List Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Substitution of
+  Expressions</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Substitution of Expressions" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Substitution of Expressions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lists.html#Lists" rel="up" title="Lists" />
+  <link href="Lists-as-Sets.html#Lists-as-Sets" rel="next" title=
+  "Lists as Sets" />
+  <link href="List-Functions.html#List-Functions" rel="prev" title=
+  "List Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Substitution-of-Expressions"></a>
-<div class="header">
-<p>
-Next: <a href="Lists-as-Sets.html#Lists-as-Sets" accesskey="n" rel="next">Lists as Sets</a>, Previous: <a href="List-Functions.html#List-Functions" accesskey="p" rel="prev">List Functions</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Substitution-of-Expressions-1"></a>
-<h3 class="section">10.2 Substitution of Expressions</h3>
+<body lang="en" xml:lang="en">
+  <a name="Substitution-of-Expressions" id=
+  "Substitution-of-Expressions"></a>
 
-<p>These functions substitute elements throughout a tree of cons
-cells.  (See <a href="Sequence-Functions.html#Sequence-Functions">Sequence Functions</a>, for the <code>cl-substitute</code>
-function, which works on just the top-level elements of a list.)
-</p>
-<dl>
-<dt><a name="index-cl_002dsubst"></a>Function: <strong>cl-subst</strong> <em>new old tree <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function substitutes occurrences of <var>old</var> with <var>new</var>
-in <var>tree</var>, a tree of cons cells.  It returns a substituted
-tree, which will be a copy except that it may share storage with
-the argument <var>tree</var> in parts where no substitutions occurred.
-The original <var>tree</var> is not modified.  This function recurses
-on, and compares against <var>old</var>, both <small>CAR</small>s and <small>CDR</small>s
-of the component cons cells.  If <var>old</var> is itself a cons cell,
-then matching cells in the tree are substituted as usual without
-recursively substituting in that cell.  Comparisons with <var>old</var>
-are done according to the specified test (<code>eql</code> by default).
-The <code>:key</code> function is applied to the elements of the tree
-but not to <var>old</var>.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Lists-as-Sets.html#Lists-as-Sets" accesskey=
+    "n" rel="next">Lists as Sets</a>, Previous: <a href=
+    "List-Functions.html#List-Functions" accesskey="p" rel=
+    "prev">List Functions</a>, Up: <a href="Lists.html#Lists"
+    accesskey="u" rel="up">Lists</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Substitution-of-Expressions-1" id=
+  "Substitution-of-Expressions-1"></a>
 
-<dl>
-<dt><a name="index-cl_002dnsubst"></a>Function: <strong>cl-nsubst</strong> <em>new old tree <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function is like <code>cl-subst</code>, except that it works by
-destructive modification (by <code>setcar</code> or <code>setcdr</code>)
-rather than copying.
-</p></dd></dl>
+  <h3 class="section">10.2 Substitution of Expressions</h3>
 
-<a name="index-cl_002dsubst_002dif"></a>
-<a name="index-cl_002dsubst_002dif_002dnot"></a>
-<a name="index-cl_002dnsubst_002dif"></a>
-<a name="index-cl_002dnsubst_002dif_002dnot"></a>
-<p>The <code>cl-subst-if</code>, <code>cl-subst-if-not</code>, <code>cl-nsubst-if</code>, and
-<code>cl-nsubst-if-not</code> functions are defined similarly.
-</p>
-<dl>
-<dt><a name="index-cl_002dsublis"></a>Function: <strong>cl-sublis</strong> <em>alist tree <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function is like <code>cl-subst</code>, except that it takes an
-association list <var>alist</var> of <var>old</var>-<var>new</var> pairs.
-Each element of the tree (after applying the <code>:key</code>
-function, if any), is compared with the <small>CAR</small>s of
-<var>alist</var>; if it matches, it is replaced by the corresponding
-<small>CDR</small>.
-</p></dd></dl>
+  <p>These functions substitute elements throughout a tree of cons
+  cells. (See <a href=
+  "Sequence-Functions.html#Sequence-Functions">Sequence
+  Functions</a>, for the <code>cl-substitute</code> function, which
+  works on just the top-level elements of a list.)</p>
 
-<dl>
-<dt><a name="index-cl_002dnsublis"></a>Function: <strong>cl-nsublis</strong> <em>alist tree <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This is a destructive version of <code>cl-sublis</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dsubst" id=
+    "index-cl_002dsubst"></a>Function: <strong>cl-subst</strong>
+    <em>new old tree <tt>&amp;key :test :test-not
+    :key</tt></em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Lists-as-Sets.html#Lists-as-Sets" accesskey="n" rel="next">Lists as Sets</a>, Previous: <a href="List-Functions.html#List-Functions" accesskey="p" rel="prev">List Functions</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function substitutes occurrences of <var>old</var>
+      with <var>new</var> in <var>tree</var>, a tree of cons cells.
+      It returns a substituted tree, which will be a copy except
+      that it may share storage with the argument <var>tree</var>
+      in parts where no substitutions occurred. The original
+      <var>tree</var> is not modified. This function recurses on,
+      and compares against <var>old</var>, both <small>CAR</small>s
+      and <small>CDR</small>s of the component cons cells. If
+      <var>old</var> is itself a cons cell, then matching cells in
+      the tree are substituted as usual without recursively
+      substituting in that cell. Comparisons with <var>old</var>
+      are done according to the specified test (<code>eql</code> by
+      default). The <code>:key</code> function is applied to the
+      elements of the tree but not to <var>old</var>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dnsubst" id=
+    "index-cl_002dnsubst"></a>Function: <strong>cl-nsubst</strong>
+    <em>new old tree <tt>&amp;key :test :test-not
+    :key</tt></em></dt>
 
+    <dd>
+      <p>This function is like <code>cl-subst</code>, except that
+      it works by destructive modification (by <code>setcar</code>
+      or <code>setcdr</code>) rather than copying.</p>
+    </dd>
+  </dl><a name="index-cl_002dsubst_002dif" id=
+  "index-cl_002dsubst_002dif"></a> <a name=
+  "index-cl_002dsubst_002dif_002dnot" id=
+  "index-cl_002dsubst_002dif_002dnot"></a> <a name=
+  "index-cl_002dnsubst_002dif" id="index-cl_002dnsubst_002dif"></a>
+  <a name="index-cl_002dnsubst_002dif_002dnot" id=
+  "index-cl_002dnsubst_002dif_002dnot"></a>
 
+  <p>The <code>cl-subst-if</code>, <code>cl-subst-if-not</code>,
+  <code>cl-nsubst-if</code>, and <code>cl-nsubst-if-not</code>
+  functions are defined similarly.</p>
+
+  <dl>
+    <dt><a name="index-cl_002dsublis" id=
+    "index-cl_002dsublis"></a>Function: <strong>cl-sublis</strong>
+    <em>alist tree <tt>&amp;key :test :test-not :key</tt></em></dt>
+
+    <dd>
+      <p>This function is like <code>cl-subst</code>, except that
+      it takes an association list <var>alist</var> of
+      <var>old</var>-<var>new</var> pairs. Each element of the tree
+      (after applying the <code>:key</code> function, if any), is
+      compared with the <small>CAR</small>s of <var>alist</var>; if
+      it matches, it is replaced by the corresponding
+      <small>CDR</small>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dnsublis" id=
+    "index-cl_002dnsublis"></a>Function:
+    <strong>cl-nsublis</strong> <em>alist tree <tt>&amp;key :test
+    :test-not :key</tt></em></dt>
+
+    <dd>
+      <p>This is a destructive version of
+      <code>cl-sublis</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Lists-as-Sets.html#Lists-as-Sets" accesskey=
+    "n" rel="next">Lists as Sets</a>, Previous: <a href=
+    "List-Functions.html#List-Functions" accesskey="p" rel=
+    "prev">List Functions</a>, Up: <a href="Lists.html#Lists"
+    accesskey="u" rel="up">Lists</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

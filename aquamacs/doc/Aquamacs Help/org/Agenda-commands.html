@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Agenda commands - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Agenda-Views.html#Agenda-Views" title="Agenda Views">
-<link rel="prev" href="Presentation-and-sorting.html#Presentation-and-sorting" title="Presentation and sorting">
-<link rel="next" href="Custom-agenda-views.html#Custom-agenda-views" title="Custom agenda views">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Agenda commands - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Agenda-Views.html#Agenda-Views" title=
+  "Agenda Views" />
+  <link rel="prev" href=
+  "Presentation-and-sorting.html#Presentation-and-sorting" title=
+  "Presentation and sorting" />
+  <link rel="next" href=
+  "Custom-agenda-views.html#Custom-agenda-views" title=
+  "Custom agenda views" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +44,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,209 +57,544 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  dt.c1 {font-weight: bold}
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Agenda-commands"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Custom-agenda-views.html#Custom-agenda-views">Custom agenda views</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Presentation-and-sorting.html#Presentation-and-sorting">Presentation and sorting</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Agenda-Views.html#Agenda-Views">Agenda Views</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Agenda-commands" id="Agenda-commands"></a>
 
-<h3 class="section">10.5 Commands in the agenda buffer</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Custom-agenda-views.html#Custom-agenda-views">Custom agenda
+    views</a>, Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Presentation-and-sorting.html#Presentation-and-sorting">Presentation
+    and sorting</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Agenda-Views.html#Agenda-Views">Agenda Views</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-commands_002c-in-agenda-buffer-1079"></a>
-Entries in the agenda buffer are linked back to the Org file or diary
-file where they originate.  You are not allowed to edit the agenda
-buffer itself, but commands are provided to show and jump to the
-original entry location, and to edit the Org files &ldquo;remotely&rdquo; from
-the agenda buffer.  In this way, all information is stored only once,
-removing the risk that your agenda and note files may diverge.
+  <h3 class="section">10.5 Commands in the agenda buffer</h3>
 
-   <p>Some commands can be executed with mouse clicks on agenda lines.  For
-the other commands, the cursor needs to be in the desired line.
+  <p><a name="index-commands_002c-in-agenda-buffer-1079" id=
+  "index-commands_002c-in-agenda-buffer-1079"></a> Entries in the
+  agenda buffer are linked back to the Org file or diary file where
+  they originate. You are not allowed to edit the agenda buffer
+  itself, but commands are provided to show and jump to the
+  original entry location, and to edit the Org files
+  &ldquo;remotely&rdquo; from the agenda buffer. In this way, all
+  information is stored only once, removing the risk that your
+  agenda and note files may diverge.</p>
 
-     <dl>
-<dt><b>Motion</b><dd>
-<a name="index-motion-commands-in-agenda-1080"></a><a name="index-n-1081"></a><a name="index-org_002dagenda_002dnext_002dline-1082"></a><br><dt><kbd>n &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-next-line</code><kbd>)</kbd><dd>
-Next line (same as &lt;up&gt; and <kbd>C-p</kbd>). 
-<a name="index-p-1083"></a><a name="index-org_002dagenda_002dprevious_002dline-1084"></a><br><dt><kbd>p &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-previous-line</code><kbd>)</kbd><dd>
-Previous line (same as &lt;down&gt; and <kbd>C-n</kbd>). 
-<br><dt><b>View/Go to Org file</b><dd>
-<a name="index-g_t_0040key_007bSPC_007d-1085"></a><a name="index-mouse_002d3-1086"></a><a name="index-org_002dagenda_002dshow_002dand_002dscroll_002dup-1087"></a><br><dt><kbd>&lt;SPC&gt;  </kbd><span class="roman">or</span><kbd>  mouse-3 &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-show-and-scroll-up</code><kbd>)</kbd><dd>
-Display the original location of the item in another window. 
-With prefix arg, make sure that the entire entry is made visible in the
-outline, not only the heading. 
-<a name="index-L-1088"></a><a name="index-org_002dagenda_002drecenter-1089"></a><br><dt><kbd>L &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-recenter</code><kbd>)</kbd><dd>
-Display original location and recenter that window. 
-<a name="index-g_t_0040key_007bTAB_007d-1090"></a><a name="index-mouse_002d2-1091"></a><a name="index-org_002dagenda_002dgoto-1092"></a><br><dt><kbd>&lt;TAB&gt;  </kbd><span class="roman">or</span><kbd>  mouse-2 &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-goto</code><kbd>)</kbd><dd>
-Go to the original location of the item in another window. 
-<a name="index-g_t_0040key_007bRET_007d-1093"></a><a name="index-org_002dagenda_002dswitch_002dto-1094"></a><br><dt><kbd>&lt;RET&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-switch-to</code><kbd>)</kbd><dd>
-Go to the original location of the item and delete other windows. 
-<a name="index-F-1095"></a><a name="index-org_002dagenda_002dfollow_002dmode-1096"></a><br><dt><kbd>F &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-follow-mode</code><kbd>)</kbd><dd>
-<a name="index-org_002dagenda_002dstart_002dwith_002dfollow_002dmode-1097"></a>Toggle Follow mode.  In Follow mode, as you move the cursor through
-the agenda buffer, the other window always shows the corresponding
-location in the Org file.  The initial setting for this mode in new
-agenda buffers can be set with the variable
-<code>org-agenda-start-with-follow-mode</code>. 
-<a name="index-C_002dc-C_002dx-b-1098"></a><a name="index-org_002dagenda_002dtree_002dto_002dindirect_002dbuffer-1099"></a><br><dt><kbd>C-c C-x b &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-tree-to-indirect-buffer</code><kbd>)</kbd><dd>
-Display the entire subtree of the current item in an indirect buffer.  With a
-numeric prefix argument N, go up to level N and then take that tree.  If N is
-negative, go up that many levels.  With a <kbd>C-u</kbd> prefix, do not remove the
-previously used indirect buffer.
+  <p>Some commands can be executed with mouse clicks on agenda
+  lines. For the other commands, the cursor needs to be in the
+  desired line.</p>
 
-     <p><a name="index-C_002dc-C_002do-1100"></a><a name="index-org_002dagenda_002dopen_002dlink-1101"></a><br><dt><kbd>C-c C-o &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-open-link</code><kbd>)</kbd><dd>
-Follow a link in the entry.  This will offer a selection of any links in the
-text belonging to the referenced Org node.  If there is only one link, it
-will be followed without a selection prompt.
+  <dl>
+    <dt class="c1">Motion</dt>
 
-     <br><dt><b>Change display</b><dd>
-<a name="index-display-changing_002c-in-agenda-1102"></a><a name="index-o-1103"></a><br><dt><kbd>o</kbd><dd>Delete other windows. 
-<!-- @kindex v d -->
-<!-- @kindex d -->
-<!-- @kindex v w -->
-<!-- @kindex w -->
-<!-- @kindex v m -->
-<!-- @kindex v y -->
-<!-- @item v d @ @r{or short} @ d -->
-<!-- @itemx v w @ @r{or short} @ w -->
-<!-- @itemx v m -->
-<!-- @itemx v y -->
-<a name="index-v-d-1104"></a><a name="index-d-1105"></a><a name="index-org_002daganda_002dday_002dview-1106"></a><br><dt><kbd>v d  </kbd><span class="roman">or short</span><kbd>  d &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-aganda-day-view</code><kbd>)</kbd><dd>
-<a name="index-v-w-1107"></a><a name="index-w-1108"></a><a name="index-org_002daganda_002dday_002dview-1109"></a><dt><kbd>v w  </kbd><span class="roman">or short</span><kbd>  w &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-aganda-day-view</code><kbd>)</kbd><dd>
-<a name="index-v-m-1110"></a><a name="index-org_002dagenda_002dmonth_002dview-1111"></a><dt><kbd>v m &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-month-view</code><kbd>)</kbd><dd>
-<a name="index-v-y-1112"></a><a name="index-org_002dagenda_002dmonth_002dyear-1113"></a><dt><kbd>v y &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-month-year</code><kbd>)</kbd><dd>
-Switch to day/week/month/year view.  When switching to day or week view,
-this setting becomes the default for subsequent agenda commands.  Since
-month and year views are slow to create, they do not become the default. 
-A numeric prefix argument may be used to jump directly to a specific day
-of the year, ISO week, month, or year, respectively.  For example,
-<kbd>32 d</kbd> jumps to February 1st, <kbd>9 w</kbd> to ISO week number 9.  When
-setting day, week, or month view, a year may be encoded in the prefix
-argument as well.  For example, <kbd>200712 w</kbd> will jump to week 12 in
-2007.  If such a year specification has only one or two digits, it will
-be mapped to the interval 1938-2037. 
-<a name="index-f-1114"></a><a name="index-org_002dagenda_002dlater-1115"></a><br><dt><kbd>f &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-later</code><kbd>)</kbd><dd>
-Go forward in time to display the following <code>org-agenda-current-span</code> days. 
-For example, if the display covers a week, switch to the following week. 
-With prefix arg, go forward that many times <code>org-agenda-current-span</code> days. 
-<a name="index-b-1116"></a><a name="index-org_002dagenda_002dearlier-1117"></a><br><dt><kbd>b &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-earlier</code><kbd>)</kbd><dd>
-Go backward in time to display earlier dates. 
-<a name="index-g_t_002e-1118"></a><a name="index-org_002dagenda_002dgoto_002dtoday-1119"></a><br><dt><kbd>. &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-goto-today</code><kbd>)</kbd><dd>
-Go to today. 
-<a name="index-j-1120"></a><a name="index-org_002dagenda_002dgoto_002ddate-1121"></a><br><dt><kbd>j &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-goto-date</code><kbd>)</kbd><dd>
-Prompt for a date and go there. 
-<a name="index-J-1122"></a><a name="index-org_002dagenda_002dclock_002dgoto-1123"></a><br><dt><kbd>J &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clock-goto</code><kbd>)</kbd><dd>
-Go to the currently clocked-in task <i>in the agenda buffer</i>. 
-<a name="index-D-1124"></a><a name="index-org_002dagenda_002dtoggle_002ddiary-1125"></a><br><dt><kbd>D &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-toggle-diary</code><kbd>)</kbd><dd>
-Toggle the inclusion of diary entries.  See <a href="Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily agenda</a>. 
-<a name="index-v-l-1126"></a><a name="index-l-1127"></a><a name="index-org_002dagenda_002dlog_002dmode-1128"></a><br><dt><kbd>v l  </kbd><span class="roman">or short</span><kbd>  l &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-log-mode</code><kbd>)</kbd><dd>
-<a name="index-v-L-1129"></a><a name="index-org_002dlog_002ddone-1130"></a><a name="index-org_002dagenda_002dlog_002dmode_002ditems-1131"></a>Toggle Logbook mode.  In Logbook mode, entries that were marked DONE while
-logging was on (variable <code>org-log-done</code>) are shown in the agenda, as are
-entries that have been clocked on that day.  You can configure the entry
-types that should be included in log mode using the variable
-<code>org-agenda-log-mode-items</code>.  When called with a <kbd>C-u</kbd> prefix, show
-all possible logbook entries, including state changes.  When called with two
-prefix args <kbd>C-u C-u</kbd>, show only logging information, nothing else. 
-<kbd>v L</kbd> is equivalent to <kbd>C-u v l</kbd>. 
-<a name="index-v-_005b-1132"></a><a name="index-g_t_005b-1133"></a><a name="index-org_002dagenda_002dmanipulate_002dquery_002dadd-1134"></a><br><dt><kbd>v [  </kbd><span class="roman">or short</span><kbd>  [ &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-manipulate-query-add</code><kbd>)</kbd><dd>
-Include inactive timestamps into the current view.  Only for weekly/daily
-agenda and timeline views. 
-<a name="index-v-a-1135"></a><a name="index-org_002dagenda_002darchives_002dmode-1136"></a><br><dt><kbd>v a &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-archives-mode</code><kbd>)</kbd><dd>
-<a name="index-v-A-1137"></a><a name="index-org_002dagenda_002darchives_002dmode-_0027files-1138"></a><dt><kbd>v A &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-archives-mode 'files</code><kbd>)</kbd><dd>
-Toggle Archives mode.  In Archives mode, trees that are marked
-<code>ARCHIVED</code> are also scanned when producing the agenda.  When you use the
-capital <kbd>A</kbd>, even all archive files are included.  To exit archives mode,
-press <kbd>v a</kbd> again. 
-<a name="index-v-R-1139"></a><a name="index-R-1140"></a><a name="index-org_002dagenda_002dclockreport_002dmode-1141"></a><br><dt><kbd>v R  </kbd><span class="roman">or short</span><kbd>  R &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clockreport-mode</code><kbd>)</kbd><dd>
-<a name="index-org_002dagenda_002dstart_002dwith_002dclockreport_002dmode-1142"></a>Toggle Clockreport mode.  In Clockreport mode, the daily/weekly agenda will
-always show a table with the clocked times for the timespan and file scope
-covered by the current agenda view.  The initial setting for this mode in new
-agenda buffers can be set with the variable
-<code>org-agenda-start-with-clockreport-mode</code>.  By using a prefix argument
-when toggling this mode (i.e. <kbd>C-u R</kbd>), the clock table will not show
-contributions from entries that are hidden by agenda filtering<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. 
-<a name="index-v-E-1143"></a><a name="index-E-1144"></a><a name="index-org_002dagenda_002dentry_002dtext_002dmode-1145"></a><br><dt><kbd>v E  </kbd><span class="roman">or short</span><kbd>  E &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-entry-text-mode</code><kbd>)</kbd><dd>
-<a name="index-org_002dagenda_002dstart_002dwith_002dentry_002dtext_002dmode-1146"></a><a name="index-org_002dagenda_002dentry_002dtext_002dmaxlines-1147"></a>Toggle entry text mode.  In entry text mode, a number of lines from the Org
-outline node referenced by an agenda line will be displayed below the line. 
-The maximum number of lines is given by the variable
-<code>org-agenda-entry-text-maxlines</code>.  Calling this command with a numeric
-prefix argument will temporarily modify that number to the prefix value. 
-<a name="index-G-1148"></a><a name="index-org_002dagenda_002dtoggle_002dtime_002dgrid-1149"></a><br><dt><kbd>G &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-toggle-time-grid</code><kbd>)</kbd><dd>
-<a name="index-org_002dagenda_002duse_002dtime_002dgrid-1150"></a><a name="index-org_002dagenda_002dtime_002dgrid-1151"></a>Toggle the time grid on and off.  See also the variables
-<code>org-agenda-use-time-grid</code> and <code>org-agenda-time-grid</code>. 
-<a name="index-r-1152"></a><a name="index-org_002dagenda_002drodo-1153"></a><br><dt><kbd>r &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-rodo</code><kbd>)</kbd><dd>
-Recreate the agenda buffer, for example to reflect the changes after
-modification of the timestamps of items with <kbd>S-&lt;left&gt;</kbd> and
-<kbd>S-&lt;right&gt;</kbd>.  When the buffer is the global TODO list, a prefix
-argument is interpreted to create a selective list for a specific TODO
-keyword. 
-<a name="index-g-1154"></a><a name="index-org_002dagenda_002drodo-1155"></a><br><dt><kbd>g &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-rodo</code><kbd>)</kbd><dd>
-Same as <kbd>r</kbd>. 
-<a name="index-C_002dx-C_002ds-1156"></a><a name="index-s-1157"></a><a name="index-org_002dsave_002dall_002dorg_002dbuffers-1158"></a><br><dt><kbd>C-x C-s  </kbd><span class="roman">or short</span><kbd>  s &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-save-all-org-buffers</code><kbd>)</kbd><dd>
-Save all Org buffers in the current Emacs session, and also the locations of
-IDs. 
-<a name="index-C_002dc-C_002dx-C_002dc-1159"></a><a name="index-org_002dagenda_002dcolumns-1160"></a><br><dt><kbd>C-c C-x C-c &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-columns</code><kbd>)</kbd><dd>
-<a name="index-org_002dcolumns_002ddefault_002dformat-1161"></a>Invoke column view (see <a href="Column-view.html#Column-view">Column view</a>) in the agenda buffer.  The column
-view format is taken from the entry at point, or (if there is no entry at
-point), from the first entry in the agenda view.  So whatever the format for
-that entry would be in the original buffer (taken from a property, from a
-<code>#+COLUMNS</code> line, or from the default variable
-<code>org-columns-default-format</code>), will be used in the agenda.
+    <dd><a name="index-motion-commands-in-agenda-1080" id=
+    "index-motion-commands-in-agenda-1080"></a><a name=
+    "index-n-1081" id="index-n-1081"></a><a name=
+    "index-org_002dagenda_002dnext_002dline-1082" id=
+    "index-org_002dagenda_002dnext_002dline-1082"></a><br /></dd>
 
-     <p><a name="index-C_002dc-C_002dx-_003e-1162"></a><a name="index-org_002dagenda_002dremove_002drestriction_002dlock-1163"></a><br><dt><kbd>C-c C-x &gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-remove-restriction-lock</code><kbd>)</kbd><dd>
-Remove the restriction lock on the agenda, if it is currently restricted to a
-file or subtree (see <a href="Agenda-files.html#Agenda-files">Agenda files</a>).
+    <dt><kbd>n
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-next-line</code><kbd>)</kbd></dt>
 
-     <br><dt><b>Secondary filtering and query editing</b><dd>
-<a name="index-filtering_002c-by-tag-and-effort_002c-in-agenda-1164"></a><a name="index-tag-filtering_002c-in-agenda-1165"></a><a name="index-effort-filtering_002c-in-agenda-1166"></a><a name="index-query-editing_002c-in-agenda-1167"></a>
-<a name="index-g_t_002f-1168"></a><a name="index-org_002dagenda_002dfilter_002dby_002dtag-1169"></a><br><dt><kbd>/ &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-filter-by-tag</code><kbd>)</kbd><dd>
-<a name="index-org_002dagenda_002dfilter_002dpreset-1170"></a>Filter the current agenda view with respect to a tag and/or effort estimates. 
-The difference between this and a custom agenda command is that filtering is
-very fast, so that you can switch quickly between different filters without
-having to recreate the agenda.<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>
+    <dd>Next line (same as &lt;up&gt; and <kbd>C-p</kbd>). <a name=
+    "index-p-1083" id="index-p-1083"></a><a name=
+    "index-org_002dagenda_002dprevious_002dline-1084" id=
+    "index-org_002dagenda_002dprevious_002dline-1084"></a><br /></dd>
 
-     <p>You will be prompted for a tag selection letter; &lt;SPC&gt; will mean any tag at
-all.  Pressing &lt;TAB&gt; at that prompt will offer use completion to select a
-tag (including any tags that do not have a selection character).  The command
-then hides all entries that do not contain or inherit this tag.  When called
-with prefix arg, remove the entries that <em>do</em> have the tag.  A second
-<kbd>/</kbd> at the prompt will turn off the filter and unhide any hidden entries. 
-If the first key you press is either <kbd>+</kbd> or <kbd>-</kbd>, the previous filter
-will be narrowed by requiring or forbidding the selected additional tag. 
-Instead of pressing <kbd>+</kbd> or <kbd>-</kbd> after <kbd>/</kbd>, you can also
-immediately use the <kbd>\</kbd> command.
+    <dt><kbd>p
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-previous-line</code><kbd>)</kbd></dt>
 
-     <p><a name="index-org_002dsort_002dagenda_002dnoeffort_002dis_002dhigh-1171"></a>In order to filter for effort estimates, you should set up allowed
-efforts globally, for example
-     <pre class="lisp">          (setq org-global-properties
+    <dd>Previous line (same as &lt;down&gt; and
+    <kbd>C-n</kbd>).<br /></dd>
+
+    <dt class="c1">View/Go to Org file</dt>
+
+    <dd><a name="index-g_t_0040key_007bSPC_007d-1085" id=
+    "index-g_t_0040key_007bSPC_007d-1085"></a><a name=
+    "index-mouse_002d3-1086" id=
+    "index-mouse_002d3-1086"></a><a name=
+    "index-org_002dagenda_002dshow_002dand_002dscroll_002dup-1087"
+    id=
+    "index-org_002dagenda_002dshow_002dand_002dscroll_002dup-1087"></a><br />
+    </dd>
+
+    <dt><kbd>&lt;SPC&gt;</kbd> <span class="roman">or</span>
+    <kbd>mouse-3
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-show-and-scroll-up</code><kbd>)</kbd></dt>
+
+    <dd>Display the original location of the item in another
+    window. With prefix arg, make sure that the entire entry is
+    made visible in the outline, not only the heading. <a name=
+    "index-L-1088" id="index-L-1088"></a><a name=
+    "index-org_002dagenda_002drecenter-1089" id=
+    "index-org_002dagenda_002drecenter-1089"></a><br /></dd>
+
+    <dt><kbd>L
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-recenter</code><kbd>)</kbd></dt>
+
+    <dd>Display original location and recenter that window.
+    <a name="index-g_t_0040key_007bTAB_007d-1090" id=
+    "index-g_t_0040key_007bTAB_007d-1090"></a><a name=
+    "index-mouse_002d2-1091" id=
+    "index-mouse_002d2-1091"></a><a name=
+    "index-org_002dagenda_002dgoto-1092" id=
+    "index-org_002dagenda_002dgoto-1092"></a><br /></dd>
+
+    <dt><kbd>&lt;TAB&gt;</kbd> <span class="roman">or</span>
+    <kbd>mouse-2
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-goto</code><kbd>)</kbd></dt>
+
+    <dd>Go to the original location of the item in another window.
+    <a name="index-g_t_0040key_007bRET_007d-1093" id=
+    "index-g_t_0040key_007bRET_007d-1093"></a><a name=
+    "index-org_002dagenda_002dswitch_002dto-1094" id=
+    "index-org_002dagenda_002dswitch_002dto-1094"></a><br /></dd>
+
+    <dt><kbd>&lt;RET&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-switch-to</code><kbd>)</kbd></dt>
+
+    <dd>Go to the original location of the item and delete other
+    windows. <a name="index-F-1095" id="index-F-1095"></a><a name=
+    "index-org_002dagenda_002dfollow_002dmode-1096" id=
+    "index-org_002dagenda_002dfollow_002dmode-1096"></a><br /></dd>
+
+    <dt><kbd>F
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-follow-mode</code><kbd>)</kbd></dt>
+
+    <dd><a name=
+    "index-org_002dagenda_002dstart_002dwith_002dfollow_002dmode-1097"
+    id=
+    "index-org_002dagenda_002dstart_002dwith_002dfollow_002dmode-1097">
+    </a>Toggle Follow mode. In Follow mode, as you move the cursor
+    through the agenda buffer, the other window always shows the
+    corresponding location in the Org file. The initial setting for
+    this mode in new agenda buffers can be set with the variable
+    <code>org-agenda-start-with-follow-mode</code>. <a name=
+    "index-C_002dc-C_002dx-b-1098" id=
+    "index-C_002dc-C_002dx-b-1098"></a><a name=
+    "index-org_002dagenda_002dtree_002dto_002dindirect_002dbuffer-1099"
+    id=
+    "index-org_002dagenda_002dtree_002dto_002dindirect_002dbuffer-1099"></a><br />
+    </dd>
+
+    <dt><kbd>C-c C-x b
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-tree-to-indirect-buffer</code><kbd>)</kbd></dt>
+
+    <dd>
+      Display the entire subtree of the current item in an indirect
+      buffer. With a numeric prefix argument N, go up to level N
+      and then take that tree. If N is negative, go up that many
+      levels. With a <kbd>C-u</kbd> prefix, do not remove the
+      previously used indirect buffer.
+
+      <p><a name="index-C_002dc-C_002do-1100" id=
+      "index-C_002dc-C_002do-1100"></a><a name=
+      "index-org_002dagenda_002dopen_002dlink-1101" id=
+      "index-org_002dagenda_002dopen_002dlink-1101"></a><br /></p>
+    </dd>
+
+    <dt><kbd>C-c C-o
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-open-link</code><kbd>)</kbd></dt>
+
+    <dd>Follow a link in the entry. This will offer a selection of
+    any links in the text belonging to the referenced Org node. If
+    there is only one link, it will be followed without a selection
+    prompt.<br /></dd>
+
+    <dt class="c1">Change display</dt>
+
+    <dd><a name="index-display-changing_002c-in-agenda-1102" id=
+    "index-display-changing_002c-in-agenda-1102"></a><a name=
+    "index-o-1103" id="index-o-1103"></a><br /></dd>
+
+    <dt><kbd>o</kbd></dt>
+
+    <dd>Delete other windows. <!-- @kindex v d -->
+    <!-- @kindex d -->
+    <!-- @kindex v w -->
+    <!-- @kindex w -->
+    <!-- @kindex v m -->
+    <!-- @kindex v y -->
+    <!-- @item v d @ @r{or short} @ d -->
+    <!-- @itemx v w @ @r{or short} @ w -->
+    <!-- @itemx v m -->
+    <!-- @itemx v y -->
+    <a name="index-v-d-1104" id="index-v-d-1104"></a><a name=
+    "index-d-1105" id="index-d-1105"></a><a name=
+    "index-org_002daganda_002dday_002dview-1106" id=
+    "index-org_002daganda_002dday_002dview-1106"></a><br /></dd>
+
+    <dt><kbd>v d</kbd> <span class="roman">or short</span> <kbd>d
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-aganda-day-view</code><kbd>)</kbd></dt>
+
+    <dd><a name="index-v-w-1107" id="index-v-w-1107"></a><a name=
+    "index-w-1108" id="index-w-1108"></a><a name=
+    "index-org_002daganda_002dday_002dview-1109" id=
+    "index-org_002daganda_002dday_002dview-1109"></a></dd>
+
+    <dt><kbd>v w</kbd> <span class="roman">or short</span> <kbd>w
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-aganda-day-view</code><kbd>)</kbd></dt>
+
+    <dd><a name="index-v-m-1110" id="index-v-m-1110"></a><a name=
+    "index-org_002dagenda_002dmonth_002dview-1111" id=
+    "index-org_002dagenda_002dmonth_002dview-1111"></a></dd>
+
+    <dt><kbd>v m
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-month-view</code><kbd>)</kbd></dt>
+
+    <dd><a name="index-v-y-1112" id="index-v-y-1112"></a><a name=
+    "index-org_002dagenda_002dmonth_002dyear-1113" id=
+    "index-org_002dagenda_002dmonth_002dyear-1113"></a></dd>
+
+    <dt><kbd>v y
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-month-year</code><kbd>)</kbd></dt>
+
+    <dd>Switch to day/week/month/year view. When switching to day
+    or week view, this setting becomes the default for subsequent
+    agenda commands. Since month and year views are slow to create,
+    they do not become the default. A numeric prefix argument may
+    be used to jump directly to a specific day of the year, ISO
+    week, month, or year, respectively. For example, <kbd>32
+    d</kbd> jumps to February 1st, <kbd>9 w</kbd> to ISO week
+    number 9. When setting day, week, or month view, a year may be
+    encoded in the prefix argument as well. For example,
+    <kbd>200712 w</kbd> will jump to week 12 in 2007. If such a
+    year specification has only one or two digits, it will be
+    mapped to the interval 1938-2037. <a name="index-f-1114" id=
+    "index-f-1114"></a><a name=
+    "index-org_002dagenda_002dlater-1115" id=
+    "index-org_002dagenda_002dlater-1115"></a><br /></dd>
+
+    <dt><kbd>f
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-later</code><kbd>)</kbd></dt>
+
+    <dd>Go forward in time to display the following
+    <code>org-agenda-current-span</code> days. For example, if the
+    display covers a week, switch to the following week. With
+    prefix arg, go forward that many times
+    <code>org-agenda-current-span</code> days. <a name=
+    "index-b-1116" id="index-b-1116"></a><a name=
+    "index-org_002dagenda_002dearlier-1117" id=
+    "index-org_002dagenda_002dearlier-1117"></a><br /></dd>
+
+    <dt><kbd>b
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-earlier</code><kbd>)</kbd></dt>
+
+    <dd>Go backward in time to display earlier dates. <a name=
+    "index-g_t_002e-1118" id="index-g_t_002e-1118"></a><a name=
+    "index-org_002dagenda_002dgoto_002dtoday-1119" id=
+    "index-org_002dagenda_002dgoto_002dtoday-1119"></a><br /></dd>
+
+    <dt><kbd>.
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-goto-today</code><kbd>)</kbd></dt>
+
+    <dd>Go to today. <a name="index-j-1120" id=
+    "index-j-1120"></a><a name=
+    "index-org_002dagenda_002dgoto_002ddate-1121" id=
+    "index-org_002dagenda_002dgoto_002ddate-1121"></a><br /></dd>
+
+    <dt><kbd>j
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-goto-date</code><kbd>)</kbd></dt>
+
+    <dd>Prompt for a date and go there. <a name="index-J-1122" id=
+    "index-J-1122"></a><a name=
+    "index-org_002dagenda_002dclock_002dgoto-1123" id=
+    "index-org_002dagenda_002dclock_002dgoto-1123"></a><br /></dd>
+
+    <dt><kbd>J
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clock-goto</code><kbd>)</kbd></dt>
+
+    <dd>Go to the currently clocked-in task <i>in the agenda
+    buffer</i>. <a name="index-D-1124" id=
+    "index-D-1124"></a><a name=
+    "index-org_002dagenda_002dtoggle_002ddiary-1125" id=
+    "index-org_002dagenda_002dtoggle_002ddiary-1125"></a><br /></dd>
+
+    <dt><kbd>D
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-toggle-diary</code><kbd>)</kbd></dt>
+
+    <dd>Toggle the inclusion of diary entries. See <a href=
+    "Weekly_002fdaily-agenda.html#Weekly_002fdaily-agenda">Weekly/daily
+    agenda</a>. <a name="index-v-l-1126" id=
+    "index-v-l-1126"></a><a name="index-l-1127" id=
+    "index-l-1127"></a><a name=
+    "index-org_002dagenda_002dlog_002dmode-1128" id=
+    "index-org_002dagenda_002dlog_002dmode-1128"></a><br /></dd>
+
+    <dt><kbd>v l</kbd> <span class="roman">or short</span> <kbd>l
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-log-mode</code><kbd>)</kbd></dt>
+
+    <dd><a name="index-v-L-1129" id="index-v-L-1129"></a><a name=
+    "index-org_002dlog_002ddone-1130" id=
+    "index-org_002dlog_002ddone-1130"></a><a name=
+    "index-org_002dagenda_002dlog_002dmode_002ditems-1131" id=
+    "index-org_002dagenda_002dlog_002dmode_002ditems-1131"></a>Toggle
+    Logbook mode. In Logbook mode, entries that were marked DONE
+    while logging was on (variable <code>org-log-done</code>) are
+    shown in the agenda, as are entries that have been clocked on
+    that day. You can configure the entry types that should be
+    included in log mode using the variable
+    <code>org-agenda-log-mode-items</code>. When called with a
+    <kbd>C-u</kbd> prefix, show all possible logbook entries,
+    including state changes. When called with two prefix args
+    <kbd>C-u C-u</kbd>, show only logging information, nothing
+    else. <kbd>v L</kbd> is equivalent to <kbd>C-u v l</kbd>.
+    <a name="index-v-_005b-1132" id=
+    "index-v-_005b-1132"></a><a name="index-g_t_005b-1133" id=
+    "index-g_t_005b-1133"></a><a name=
+    "index-org_002dagenda_002dmanipulate_002dquery_002dadd-1134"
+    id="index-org_002dagenda_002dmanipulate_002dquery_002dadd-1134"></a><br />
+    </dd>
+
+    <dt><kbd>v [</kbd> <span class="roman">or short</span> <kbd>[
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-manipulate-query-add</code><kbd>)</kbd></dt>
+
+    <dd>Include inactive timestamps into the current view. Only for
+    weekly/daily agenda and timeline views. <a name=
+    "index-v-a-1135" id="index-v-a-1135"></a><a name=
+    "index-org_002dagenda_002darchives_002dmode-1136" id=
+    "index-org_002dagenda_002darchives_002dmode-1136"></a><br /></dd>
+
+    <dt><kbd>v a
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-archives-mode</code><kbd>)</kbd></dt>
+
+    <dd><a name="index-v-A-1137" id="index-v-A-1137"></a><a name=
+    "index-org_002dagenda_002darchives_002dmode-_0027files-1138"
+    id="index-org_002dagenda_002darchives_002dmode-_0027files-1138"></a></dd>
+
+    <dt><kbd>v A
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-archives-mode
+    'files</code><kbd>)</kbd></dt>
+
+    <dd>Toggle Archives mode. In Archives mode, trees that are
+    marked <code>ARCHIVED</code> are also scanned when producing
+    the agenda. When you use the capital <kbd>A</kbd>, even all
+    archive files are included. To exit archives mode, press <kbd>v
+    a</kbd> again. <a name="index-v-R-1139" id=
+    "index-v-R-1139"></a><a name="index-R-1140" id=
+    "index-R-1140"></a><a name=
+    "index-org_002dagenda_002dclockreport_002dmode-1141" id=
+    "index-org_002dagenda_002dclockreport_002dmode-1141"></a><br /></dd>
+
+    <dt><kbd>v R</kbd> <span class="roman">or short</span> <kbd>R
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clockreport-mode</code><kbd>)</kbd></dt>
+
+    <dd><a name=
+    "index-org_002dagenda_002dstart_002dwith_002dclockreport_002dmode-1142"
+    id=
+    "index-org_002dagenda_002dstart_002dwith_002dclockreport_002dmode-1142">
+    </a>Toggle Clockreport mode. In Clockreport mode, the
+    daily/weekly agenda will always show a table with the clocked
+    times for the timespan and file scope covered by the current
+    agenda view. The initial setting for this mode in new agenda
+    buffers can be set with the variable
+    <code>org-agenda-start-with-clockreport-mode</code>. By using a
+    prefix argument when toggling this mode (i.e. <kbd>C-u
+    R</kbd>), the clock table will not show contributions from
+    entries that are hidden by agenda filtering<a rel="footnote"
+    href="#fn-1" name="fnd-1" id="fnd-1"><sup>1</sup></a>. <a name=
+    "index-v-E-1143" id="index-v-E-1143"></a><a name="index-E-1144"
+    id="index-E-1144"></a><a name=
+    "index-org_002dagenda_002dentry_002dtext_002dmode-1145" id=
+    "index-org_002dagenda_002dentry_002dtext_002dmode-1145"></a><br />
+    </dd>
+
+    <dt><kbd>v E</kbd> <span class="roman">or short</span> <kbd>E
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-entry-text-mode</code><kbd>)</kbd></dt>
+
+    <dd><a name=
+    "index-org_002dagenda_002dstart_002dwith_002dentry_002dtext_002dmode-1146"
+    id=
+    "index-org_002dagenda_002dstart_002dwith_002dentry_002dtext_002dmode-1146">
+    </a><a name=
+    "index-org_002dagenda_002dentry_002dtext_002dmaxlines-1147" id=
+    "index-org_002dagenda_002dentry_002dtext_002dmaxlines-1147"></a>Toggle
+    entry text mode. In entry text mode, a number of lines from the
+    Org outline node referenced by an agenda line will be displayed
+    below the line. The maximum number of lines is given by the
+    variable <code>org-agenda-entry-text-maxlines</code>. Calling
+    this command with a numeric prefix argument will temporarily
+    modify that number to the prefix value. <a name="index-G-1148"
+    id="index-G-1148"></a><a name=
+    "index-org_002dagenda_002dtoggle_002dtime_002dgrid-1149" id=
+    "index-org_002dagenda_002dtoggle_002dtime_002dgrid-1149"></a><br />
+    </dd>
+
+    <dt><kbd>G
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-toggle-time-grid</code><kbd>)</kbd></dt>
+
+    <dd><a name=
+    "index-org_002dagenda_002duse_002dtime_002dgrid-1150" id=
+    "index-org_002dagenda_002duse_002dtime_002dgrid-1150"></a><a name="index-org_002dagenda_002dtime_002dgrid-1151"
+    id="index-org_002dagenda_002dtime_002dgrid-1151"></a>Toggle the
+    time grid on and off. See also the variables
+    <code>org-agenda-use-time-grid</code> and
+    <code>org-agenda-time-grid</code>. <a name="index-r-1152" id=
+    "index-r-1152"></a><a name="index-org_002dagenda_002drodo-1153"
+    id="index-org_002dagenda_002drodo-1153"></a><br /></dd>
+
+    <dt><kbd>r
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-rodo</code><kbd>)</kbd></dt>
+
+    <dd>Recreate the agenda buffer, for example to reflect the
+    changes after modification of the timestamps of items with
+    <kbd>S-&lt;left&gt;</kbd> and <kbd>S-&lt;right&gt;</kbd>. When
+    the buffer is the global TODO list, a prefix argument is
+    interpreted to create a selective list for a specific TODO
+    keyword. <a name="index-g-1154" id="index-g-1154"></a><a name=
+    "index-org_002dagenda_002drodo-1155" id=
+    "index-org_002dagenda_002drodo-1155"></a><br /></dd>
+
+    <dt><kbd>g
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-rodo</code><kbd>)</kbd></dt>
+
+    <dd>Same as <kbd>r</kbd>. <a name="index-C_002dx-C_002ds-1156"
+    id="index-C_002dx-C_002ds-1156"></a><a name="index-s-1157" id=
+    "index-s-1157"></a><a name=
+    "index-org_002dsave_002dall_002dorg_002dbuffers-1158" id=
+    "index-org_002dsave_002dall_002dorg_002dbuffers-1158"></a><br />
+    </dd>
+
+    <dt><kbd>C-x C-s</kbd> <span class="roman">or short</span>
+    <kbd>s
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-save-all-org-buffers</code><kbd>)</kbd></dt>
+
+    <dd>Save all Org buffers in the current Emacs session, and also
+    the locations of IDs. <a name=
+    "index-C_002dc-C_002dx-C_002dc-1159" id=
+    "index-C_002dc-C_002dx-C_002dc-1159"></a><a name=
+    "index-org_002dagenda_002dcolumns-1160" id=
+    "index-org_002dagenda_002dcolumns-1160"></a><br /></dd>
+
+    <dt><kbd>C-c C-x C-c
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-columns</code><kbd>)</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dcolumns_002ddefault_002dformat-1161"
+      id=
+      "index-org_002dcolumns_002ddefault_002dformat-1161"></a>Invoke
+      column view (see <a href=
+      "Column-view.html#Column-view">Column view</a>) in the agenda
+      buffer. The column view format is taken from the entry at
+      point, or (if there is no entry at point), from the first
+      entry in the agenda view. So whatever the format for that
+      entry would be in the original buffer (taken from a property,
+      from a <code>#+COLUMNS</code> line, or from the default
+      variable <code>org-columns-default-format</code>), will be
+      used in the agenda.
+
+      <p><a name="index-C_002dc-C_002dx-_003e-1162" id=
+      "index-C_002dc-C_002dx-_003e-1162"></a><a name=
+      "index-org_002dagenda_002dremove_002drestriction_002dlock-1163"
+      id=
+      "index-org_002dagenda_002dremove_002drestriction_002dlock-1163"></a><br />
+      </p>
+    </dd>
+
+    <dt><kbd>C-c C-x &gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-remove-restriction-lock</code><kbd>)</kbd></dt>
+
+    <dd>Remove the restriction lock on the agenda, if it is
+    currently restricted to a file or subtree (see <a href=
+    "Agenda-files.html#Agenda-files">Agenda files</a>).<br /></dd>
+
+    <dt class="c1">Secondary filtering and query editing</dt>
+
+    <dd><a name=
+    "index-filtering_002c-by-tag-and-effort_002c-in-agenda-1164"
+    id="index-filtering_002c-by-tag-and-effort_002c-in-agenda-1164">
+    </a><a name="index-tag-filtering_002c-in-agenda-1165" id=
+    "index-tag-filtering_002c-in-agenda-1165"></a><a name=
+    "index-effort-filtering_002c-in-agenda-1166" id=
+    "index-effort-filtering_002c-in-agenda-1166"></a><a name=
+    "index-query-editing_002c-in-agenda-1167" id=
+    "index-query-editing_002c-in-agenda-1167"></a> <a name=
+    "index-g_t_002f-1168" id="index-g_t_002f-1168"></a><a name=
+    "index-org_002dagenda_002dfilter_002dby_002dtag-1169" id=
+    "index-org_002dagenda_002dfilter_002dby_002dtag-1169"></a><br />
+    </dd>
+
+    <dt><kbd>/
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-filter-by-tag</code><kbd>)</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dagenda_002dfilter_002dpreset-1170" id=
+      "index-org_002dagenda_002dfilter_002dpreset-1170"></a>Filter
+      the current agenda view with respect to a tag and/or effort
+      estimates. The difference between this and a custom agenda
+      command is that filtering is very fast, so that you can
+      switch quickly between different filters without having to
+      recreate the agenda.<a rel="footnote" href="#fn-2" name=
+      "fnd-2" id="fnd-2"><sup>2</sup></a>
+
+      <p>You will be prompted for a tag selection letter;
+      &lt;SPC&gt; will mean any tag at all. Pressing &lt;TAB&gt; at
+      that prompt will offer use completion to select a tag
+      (including any tags that do not have a selection character).
+      The command then hides all entries that do not contain or
+      inherit this tag. When called with prefix arg, remove the
+      entries that <em>do</em> have the tag. A second <kbd>/</kbd>
+      at the prompt will turn off the filter and unhide any hidden
+      entries. If the first key you press is either <kbd>+</kbd> or
+      <kbd>-</kbd>, the previous filter will be narrowed by
+      requiring or forbidding the selected additional tag. Instead
+      of pressing <kbd>+</kbd> or <kbd>-</kbd> after <kbd>/</kbd>,
+      you can also immediately use the <kbd>\</kbd> command.</p>
+
+      <p><a name=
+      "index-org_002dsort_002dagenda_002dnoeffort_002dis_002dhigh-1171"
+      id=
+      "index-org_002dsort_002dagenda_002dnoeffort_002dis_002dhigh-1171">
+      </a>In order to filter for effort estimates, you should set
+      up allowed efforts globally, for example</p>
+      <pre class="lisp">
+          (setq org-global-properties
               '(("Effort_ALL". "0 0:10 0:30 1:00 2:00 3:00 4:00")))
 </pre>
-     <p>You can then filter for an effort by first typing an operator, one of
-<kbd>&lt;</kbd>, <kbd>&gt;</kbd>, and <kbd>=</kbd>, and then the one-digit index of an effort
-estimate in your array of allowed values, where <kbd>0</kbd> means the 10th value. 
-The filter will then restrict to entries with effort smaller-or-equal, equal,
-or larger-or-equal than the selected value.  If the digits 0-9 are not used
-as fast access keys to tags, you can also simply press the index digit
-directly without an operator.  In this case, <kbd>&lt;</kbd> will be assumed.  For
-application of the operator, entries without a defined effort will be treated
-according to the value of <code>org-sort-agenda-noeffort-is-high</code>.  To filter
-for tasks without effort definition, press <kbd>?</kbd> as the operator.
 
-     <p>Org also supports automatic, context-aware tag filtering.  If the variable
-<code>org-agenda-auto-exclude-function</code> is set to a user-defined function,
-that function can decide which tags should be excluded from the agenda
-automatically.  Once this is set, the <kbd>/</kbd> command then accepts <kbd>RET</kbd>
-as a sub-option key and runs the auto exclusion logic.  For example, let's
-say you use a <code>Net</code> tag to identify tasks which need network access, an
-<code>Errand</code> tag for errands in town, and a <code>Call</code> tag for making phone
-calls.  You could auto-exclude these tags based on the availability of the
-Internet, and outside of business hours, with something like this:
+      <p>You can then filter for an effort by first typing an
+      operator, one of <kbd>&lt;</kbd>, <kbd>&gt;</kbd>, and
+      <kbd>=</kbd>, and then the one-digit index of an effort
+      estimate in your array of allowed values, where <kbd>0</kbd>
+      means the 10th value. The filter will then restrict to
+      entries with effort smaller-or-equal, equal, or
+      larger-or-equal than the selected value. If the digits 0-9
+      are not used as fast access keys to tags, you can also simply
+      press the index digit directly without an operator. In this
+      case, <kbd>&lt;</kbd> will be assumed. For application of the
+      operator, entries without a defined effort will be treated
+      according to the value of
+      <code>org-sort-agenda-noeffort-is-high</code>. To filter for
+      tasks without effort definition, press <kbd>?</kbd> as the
+      operator.</p>
 
-     <pre class="lisp">          (defun org-my-auto-exclude-function (tag)
+      <p>Org also supports automatic, context-aware tag filtering.
+      If the variable <code>org-agenda-auto-exclude-function</code>
+      is set to a user-defined function, that function can decide
+      which tags should be excluded from the agenda automatically.
+      Once this is set, the <kbd>/</kbd> command then accepts
+      <kbd>RET</kbd> as a sub-option key and runs the auto
+      exclusion logic. For example, let's say you use a
+      <code>Net</code> tag to identify tasks which need network
+      access, an <code>Errand</code> tag for errands in town, and a
+      <code>Call</code> tag for making phone calls. You could
+      auto-exclude these tags based on the availability of the
+      Internet, and outside of business hours, with something like
+      this:</p>
+      <pre class="lisp">
+          (defun org-my-auto-exclude-function (tag)
             (and (cond
                   ((string= tag "Net")
                    (/= 0 (call-process "/sbin/ping" nil nil nil
@@ -258,222 +606,647 @@ Internet, and outside of business hours, with something like this:
           
           (setq org-agenda-auto-exclude-function 'org-my-auto-exclude-function)
 </pre>
-     <p><a name="index-g_t_002corg_002dagenda_002dfilter_002dby_002dtag_002drefine-1172"></a><a name="index--1173"></a><br><dt><kbd>,org-agenda-filter-by-tag-refine &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><kbd>)</kbd><dd>
-Narrow the current agenda filter by an additional condition.  When called with
-prefix arg, remove the entries that <em>do</em> have the tag, or that do match
-the effort criterion.  You can achieve the same effect by pressing <kbd>+</kbd> or
-<kbd>-</kbd> as the first key after the <kbd>/</kbd> command.
 
-     <p><a name="index-g_t_005b-1174"></a><a name="index-g_t_005d-1175"></a><a name="index-g_t_0040_007b-1176"></a><a name="index-g_t_0040_007d-1177"></a><br><dt><kbd>[ ] { }</kbd><dd>
-          <dl>
-<dt><span class="roman">in</span><i> search view</i><dd>add new search words (<kbd>[</kbd> and <kbd>]</kbd>) or new regular expressions
-(<kbd>{</kbd> and <kbd>}</kbd>) to the query string.  The opening bracket/brace will
-add a positive search term prefixed by &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, indicating that this search
-term <i>must</i> occur/match in the entry.  The closing bracket/brace will add a
-negative search term which <i>must not</i> occur/match in the entry for it to be
-selected. 
-</dl>
+      <p><a name=
+      "index-g_t_002corg_002dagenda_002dfilter_002dby_002dtag_002drefine-1172"
+      id=
+      "index-g_t_002corg_002dagenda_002dfilter_002dby_002dtag_002drefine-1172">
+      </a><a name="index--1173" id="index--1173"></a><br /></p>
+    </dd>
 
-     <br><dt><b>Remote editing</b><dd>
-<a name="index-remote-editing_002c-from-agenda-1178"></a>
-<br><dt><kbd>0-9</kbd><dd>Digit argument. 
-<a name="index-undoing-remote_002dediting-events-1179"></a><a name="index-remote-editing_002c-undo-1180"></a><a name="index-C_002d_005f-1181"></a><a name="index-org_002dagenda_002dundo-1182"></a><br><dt><kbd>C-_ &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-undo</code><kbd>)</kbd><dd>
-Undo a change due to a remote editing command.  The change is undone
-both in the agenda buffer and in the remote buffer. 
-<a name="index-t-1183"></a><a name="index-org_002dagenda_002dtodo-1184"></a><br><dt><kbd>t &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-todo</code><kbd>)</kbd><dd>
-Change the TODO state of the item, both in the agenda and in the
-original org file. 
-<a name="index-C_002dS_002d_0040key_007bright_007d-1185"></a><a name="index-org_002dagenda_002dtodo_002dnextset-1186"></a><br><dt><kbd>C-S-&lt;right&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-todo-nextset</code><kbd>)</kbd><dd>
-<a name="index-C_002dS_002d_0040key_007bleft_007d-1187"></a><a name="index-org_002dagenda_002dtodo_002dpreviousset-1188"></a><br><dt><kbd>C-S-&lt;left&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-todo-previousset</code><kbd>)</kbd><dd>
-Switch to the next/previous set of TODO keywords. 
-<a name="index-C_002dk-1189"></a><a name="index-org_002dagenda_002dkill-1190"></a><br><dt><kbd>C-k &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-kill</code><kbd>)</kbd><dd>
-<a name="index-org_002dagenda_002dconfirm_002dkill-1191"></a>Delete the current agenda item along with the entire subtree belonging
-to it in the original Org file.  If the text to be deleted remotely
-is longer than one line, the kill needs to be confirmed by the user.  See
-variable <code>org-agenda-confirm-kill</code>. 
-<a name="index-C_002dc-C_002dw-1192"></a><a name="index-org_002dagenda_002drefile-1193"></a><br><dt><kbd>C-c C-w &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-refile</code><kbd>)</kbd><dd>
-Refile the entry at point. 
-<a name="index-C_002dc-C_002dx-C_002da-1194"></a><a name="index-a-1195"></a><a name="index-org_002dagenda_002darchive_002ddefault_002dwith_002dconfirmation-1196"></a><br><dt><kbd>C-c C-x C-a  </kbd><span class="roman">or short</span><kbd>  a &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-archive-default-with-confirmation</code><kbd>)</kbd><dd>
-<a name="index-org_002darchive_002ddefault_002dcommand-1197"></a>Archive the subtree corresponding to the entry at point using the default
-archiving command set in <code>org-archive-default-command</code>.  When using the
-<code>a</code> key, confirmation will be required. 
-<a name="index-C_002dc-C_002dx-a-1198"></a><a name="index-org_002dagenda_002dtoggle_002darchive_002dtag-1199"></a><br><dt><kbd>C-c C-x a &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-toggle-archive-tag</code><kbd>)</kbd><dd>
-Toggle the ARCHIVE tag for the current headline. 
-<a name="index-C_002dc-C_002dx-A-1200"></a><a name="index-org_002dagenda_002darchive_002dto_002darchive_002dsibling-1201"></a><br><dt><kbd>C-c C-x A &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-archive-to-archive-sibling</code><kbd>)</kbd><dd>
-Move the subtree corresponding to the current entry to its <em>archive
-sibling</em>. 
-<a name="index-C_002dc-C_002dx-C_002ds-1202"></a><a name="index-g_t_0024-1203"></a><a name="index-org_002dagenda_002darchive-1204"></a><br><dt><kbd>C-c C-x C-s  </kbd><span class="roman">or short</span><kbd>  $ &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-archive</code><kbd>)</kbd><dd>
-Archive the subtree corresponding to the current headline.  This means the
-entry will be moved to the configured archive location, most likely a
-different file. 
-<a name="index-T-1205"></a><a name="index-org_002dagenda_002dshow_002dtags-1206"></a><br><dt><kbd>T &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-show-tags</code><kbd>)</kbd><dd>
-<a name="index-org_002dagenda_002dshow_002dinherited_002dtags-1207"></a>Show all tags associated with the current item.  This is useful if you have
-turned off <code>org-agenda-show-inherited-tags</code>, but still want to see all
-tags of a headline occasionally. 
-<a name="index-g_t_003a-1208"></a><a name="index-org_002dagenda_002dset_002dtags-1209"></a><br><dt><kbd>: &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-set-tags</code><kbd>)</kbd><dd>
-Set tags for the current headline.  If there is an active region in the
-agenda, change a tag for all headings in the region. 
-<a name="index-g_t_002c-1210"></a><br><dt><kbd>,</kbd><dd>Set the priority for the current item (<samp><span class="command">org-agenda-priority</span></samp>). 
-Org-mode prompts for the priority character. If you reply with &lt;SPC&gt;, the
-priority cookie is removed from the entry. 
-<a name="index-P-1211"></a><a name="index-org_002dagenda_002dshow_002dpriority-1212"></a><br><dt><kbd>P &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-show-priority</code><kbd>)</kbd><dd>
-Display weighted priority of current item. 
-<a name="index-g_t_002b-1213"></a><a name="index-S_002d_0040key_007bup_007d-1214"></a><a name="index-org_002dagenda_002dpriority_002dup-1215"></a><br><dt><kbd>+  </kbd><span class="roman">or</span><kbd>  S-&lt;up&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-priority-up</code><kbd>)</kbd><dd>
-Increase the priority of the current item.  The priority is changed in
-the original buffer, but the agenda is not resorted.  Use the <kbd>r</kbd>
-key for this. 
-<a name="index-g_t_002d-1216"></a><a name="index-S_002d_0040key_007bdown_007d-1217"></a><a name="index-org_002dagenda_002dpriority_002ddown-1218"></a><br><dt><kbd>-  </kbd><span class="roman">or</span><kbd>  S-&lt;down&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-priority-down</code><kbd>)</kbd><dd>
-Decrease the priority of the current item. 
-<a name="index-z-1219"></a><a name="index-C_002dc-C_002dz-1220"></a><a name="index-org_002dagenda_002dadd_002dnote-1221"></a><br><dt><kbd>z  </kbd><span class="roman">or</span><kbd>  C-c C-z &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-add-note</code><kbd>)</kbd><dd>
-<a name="index-org_002dlog_002dinto_002ddrawer-1222"></a>Add a note to the entry.  This note will be recorded, and then filed to the
-same location where state change notes are put.  Depending on
-<code>org-log-into-drawer</code>, this may be inside a drawer. 
-<a name="index-C_002dc-C_002da-1223"></a><a name="index-org_002dattach-1224"></a><br><dt><kbd>C-c C-a &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-attach</code><kbd>)</kbd><dd>
-Dispatcher for all command related to attachments. 
-<a name="index-C_002dc-C_002ds-1225"></a><a name="index-org_002dagenda_002dschedule-1226"></a><br><dt><kbd>C-c C-s &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-schedule</code><kbd>)</kbd><dd>
-Schedule this item.  With prefix arg remove the scheduling timestamp
-<a name="index-C_002dc-C_002dd-1227"></a><a name="index-org_002dagenda_002ddeadline-1228"></a><br><dt><kbd>C-c C-d &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-deadline</code><kbd>)</kbd><dd>
-Set a deadline for this item.  With prefix arg remove the deadline. 
-<a name="index-k-1229"></a><a name="index-org_002dagenda_002daction-1230"></a><br><dt><kbd>k &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-action</code><kbd>)</kbd><dd>
-Agenda actions, to set dates for selected items to the cursor date. 
-This command also works in the calendar!  The command prompts for an
-additional key:
-     <pre class="example">          m   <span class="roman">Mark the entry at point for action.  You can also make entries</span>
-              <span class="roman">in Org files with </span><kbd>C-c C-x C-k</kbd><span class="roman">.</span>
-          d   <span class="roman">Set the deadline of the marked entry to the date at point.</span>
-          s   <span class="roman">Schedule the marked entry at the date at point.</span>
-          r   <span class="roman">Call </span><code>org-capture</code><span class="roman"> with the cursor date as default date.</span>
+    <dt><kbd>,org-agenda-filter-by-tag-refine
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><kbd>)</kbd></dt>
+
+    <dd>
+      Narrow the current agenda filter by an additional condition.
+      When called with prefix arg, remove the entries that
+      <em>do</em> have the tag, or that do match the effort
+      criterion. You can achieve the same effect by pressing
+      <kbd>+</kbd> or <kbd>-</kbd> as the first key after the
+      <kbd>/</kbd> command.
+
+      <p><a name="index-g_t_005b-1174" id=
+      "index-g_t_005b-1174"></a><a name="index-g_t_005d-1175" id=
+      "index-g_t_005d-1175"></a><a name="index-g_t_0040_007b-1176"
+      id="index-g_t_0040_007b-1176"></a><a name=
+      "index-g_t_0040_007d-1177" id=
+      "index-g_t_0040_007d-1177"></a><br /></p>
+    </dd>
+
+    <dt><kbd>[ ] { }</kbd></dt>
+
+    <dd>
+      <dl>
+        <dt><span class="roman">in</span> <i>search view</i></dt>
+
+        <dd>add new search words (<kbd>[</kbd> and <kbd>]</kbd>) or
+        new regular expressions (<kbd>{</kbd> and <kbd>}</kbd>) to
+        the query string. The opening bracket/brace will add a
+        positive search term prefixed by &lsquo;<samp><span class=
+        "samp">+</span></samp>&rsquo;, indicating that this search
+        term <i>must</i> occur/match in the entry. The closing
+        bracket/brace will add a negative search term which <i>must
+        not</i> occur/match in the entry for it to be
+        selected.</dd>
+      </dl><br />
+    </dd>
+
+    <dt class="c1">Remote editing</dt>
+
+    <dd><a name="index-remote-editing_002c-from-agenda-1178" id=
+    "index-remote-editing_002c-from-agenda-1178"></a><br /></dd>
+
+    <dt><kbd>0-9</kbd></dt>
+
+    <dd>Digit argument. <a name=
+    "index-undoing-remote_002dediting-events-1179" id=
+    "index-undoing-remote_002dediting-events-1179"></a><a name=
+    "index-remote-editing_002c-undo-1180" id=
+    "index-remote-editing_002c-undo-1180"></a><a name=
+    "index-C_002d_005f-1181" id=
+    "index-C_002d_005f-1181"></a><a name=
+    "index-org_002dagenda_002dundo-1182" id=
+    "index-org_002dagenda_002dundo-1182"></a><br /></dd>
+
+    <dt><kbd>C-_
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-undo</code><kbd>)</kbd></dt>
+
+    <dd>Undo a change due to a remote editing command. The change
+    is undone both in the agenda buffer and in the remote buffer.
+    <a name="index-t-1183" id="index-t-1183"></a><a name=
+    "index-org_002dagenda_002dtodo-1184" id=
+    "index-org_002dagenda_002dtodo-1184"></a><br /></dd>
+
+    <dt><kbd>t
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-todo</code><kbd>)</kbd></dt>
+
+    <dd>Change the TODO state of the item, both in the agenda and
+    in the original org file. <a name=
+    "index-C_002dS_002d_0040key_007bright_007d-1185" id=
+    "index-C_002dS_002d_0040key_007bright_007d-1185"></a><a name=
+    "index-org_002dagenda_002dtodo_002dnextset-1186" id=
+    "index-org_002dagenda_002dtodo_002dnextset-1186"></a><br /></dd>
+
+    <dt><kbd>C-S-&lt;right&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-todo-nextset</code><kbd>)</kbd></dt>
+
+    <dd><a name="index-C_002dS_002d_0040key_007bleft_007d-1187" id=
+    "index-C_002dS_002d_0040key_007bleft_007d-1187"></a><a name=
+    "index-org_002dagenda_002dtodo_002dpreviousset-1188" id=
+    "index-org_002dagenda_002dtodo_002dpreviousset-1188"></a><br /></dd>
+
+    <dt><kbd>C-S-&lt;left&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-todo-previousset</code><kbd>)</kbd></dt>
+
+    <dd>Switch to the next/previous set of TODO keywords. <a name=
+    "index-C_002dk-1189" id="index-C_002dk-1189"></a><a name=
+    "index-org_002dagenda_002dkill-1190" id=
+    "index-org_002dagenda_002dkill-1190"></a><br /></dd>
+
+    <dt><kbd>C-k
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-kill</code><kbd>)</kbd></dt>
+
+    <dd><a name="index-org_002dagenda_002dconfirm_002dkill-1191"
+    id="index-org_002dagenda_002dconfirm_002dkill-1191"></a>Delete
+    the current agenda item along with the entire subtree belonging
+    to it in the original Org file. If the text to be deleted
+    remotely is longer than one line, the kill needs to be
+    confirmed by the user. See variable
+    <code>org-agenda-confirm-kill</code>. <a name=
+    "index-C_002dc-C_002dw-1192" id=
+    "index-C_002dc-C_002dw-1192"></a><a name=
+    "index-org_002dagenda_002drefile-1193" id=
+    "index-org_002dagenda_002drefile-1193"></a><br /></dd>
+
+    <dt><kbd>C-c C-w
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-refile</code><kbd>)</kbd></dt>
+
+    <dd>Refile the entry at point. <a name=
+    "index-C_002dc-C_002dx-C_002da-1194" id=
+    "index-C_002dc-C_002dx-C_002da-1194"></a><a name="index-a-1195"
+    id="index-a-1195"></a><a name=
+    "index-org_002dagenda_002darchive_002ddefault_002dwith_002dconfirmation-1196"
+    id=
+    "index-org_002dagenda_002darchive_002ddefault_002dwith_002dconfirmation-1196"></a><br />
+    </dd>
+
+    <dt><kbd>C-c C-x C-a</kbd> <span class="roman">or short</span>
+    <kbd>a
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-archive-default-with-confirmation</code><kbd>)</kbd></dt>
+
+    <dd><a name=
+    "index-org_002darchive_002ddefault_002dcommand-1197" id=
+    "index-org_002darchive_002ddefault_002dcommand-1197"></a>Archive
+    the subtree corresponding to the entry at point using the
+    default archiving command set in
+    <code>org-archive-default-command</code>. When using the
+    <code>a</code> key, confirmation will be required. <a name=
+    "index-C_002dc-C_002dx-a-1198" id=
+    "index-C_002dc-C_002dx-a-1198"></a><a name=
+    "index-org_002dagenda_002dtoggle_002darchive_002dtag-1199" id=
+    "index-org_002dagenda_002dtoggle_002darchive_002dtag-1199"></a><br />
+    </dd>
+
+    <dt><kbd>C-c C-x a
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-toggle-archive-tag</code><kbd>)</kbd></dt>
+
+    <dd>Toggle the ARCHIVE tag for the current headline. <a name=
+    "index-C_002dc-C_002dx-A-1200" id=
+    "index-C_002dc-C_002dx-A-1200"></a><a name=
+    "index-org_002dagenda_002darchive_002dto_002darchive_002dsibling-1201"
+    id=
+    "index-org_002dagenda_002darchive_002dto_002darchive_002dsibling-1201"></a><br />
+    </dd>
+
+    <dt><kbd>C-c C-x A
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-archive-to-archive-sibling</code><kbd>)</kbd></dt>
+
+    <dd>Move the subtree corresponding to the current entry to its
+    <em>archive sibling</em>. <a name=
+    "index-C_002dc-C_002dx-C_002ds-1202" id=
+    "index-C_002dc-C_002dx-C_002ds-1202"></a><a name=
+    "index-g_t_0024-1203" id="index-g_t_0024-1203"></a><a name=
+    "index-org_002dagenda_002darchive-1204" id=
+    "index-org_002dagenda_002darchive-1204"></a><br /></dd>
+
+    <dt><kbd>C-c C-x C-s</kbd> <span class="roman">or short</span>
+    <kbd>$
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-archive</code><kbd>)</kbd></dt>
+
+    <dd>Archive the subtree corresponding to the current headline.
+    This means the entry will be moved to the configured archive
+    location, most likely a different file. <a name="index-T-1205"
+    id="index-T-1205"></a><a name=
+    "index-org_002dagenda_002dshow_002dtags-1206" id=
+    "index-org_002dagenda_002dshow_002dtags-1206"></a><br /></dd>
+
+    <dt><kbd>T
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-show-tags</code><kbd>)</kbd></dt>
+
+    <dd><a name=
+    "index-org_002dagenda_002dshow_002dinherited_002dtags-1207" id=
+    "index-org_002dagenda_002dshow_002dinherited_002dtags-1207"></a>Show
+    all tags associated with the current item. This is useful if
+    you have turned off
+    <code>org-agenda-show-inherited-tags</code>, but still want to
+    see all tags of a headline occasionally. <a name=
+    "index-g_t_003a-1208" id="index-g_t_003a-1208"></a><a name=
+    "index-org_002dagenda_002dset_002dtags-1209" id=
+    "index-org_002dagenda_002dset_002dtags-1209"></a><br /></dd>
+
+    <dt><kbd>:
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-set-tags</code><kbd>)</kbd></dt>
+
+    <dd>Set tags for the current headline. If there is an active
+    region in the agenda, change a tag for all headings in the
+    region. <a name="index-g_t_002c-1210" id=
+    "index-g_t_002c-1210"></a><br /></dd>
+
+    <dt><kbd>,</kbd></dt>
+
+    <dd>Set the priority for the current item (<samp><span class=
+    "command">org-agenda-priority</span></samp>). Org-mode prompts
+    for the priority character. If you reply with &lt;SPC&gt;, the
+    priority cookie is removed from the entry. <a name=
+    "index-P-1211" id="index-P-1211"></a><a name=
+    "index-org_002dagenda_002dshow_002dpriority-1212" id=
+    "index-org_002dagenda_002dshow_002dpriority-1212"></a><br /></dd>
+
+    <dt><kbd>P
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-show-priority</code><kbd>)</kbd></dt>
+
+    <dd>Display weighted priority of current item. <a name=
+    "index-g_t_002b-1213" id="index-g_t_002b-1213"></a><a name=
+    "index-S_002d_0040key_007bup_007d-1214" id=
+    "index-S_002d_0040key_007bup_007d-1214"></a><a name=
+    "index-org_002dagenda_002dpriority_002dup-1215" id=
+    "index-org_002dagenda_002dpriority_002dup-1215"></a><br /></dd>
+
+    <dt><kbd>+</kbd> <span class="roman">or</span>
+    <kbd>S-&lt;up&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-priority-up</code><kbd>)</kbd></dt>
+
+    <dd>Increase the priority of the current item. The priority is
+    changed in the original buffer, but the agenda is not resorted.
+    Use the <kbd>r</kbd> key for this. <a name=
+    "index-g_t_002d-1216" id="index-g_t_002d-1216"></a><a name=
+    "index-S_002d_0040key_007bdown_007d-1217" id=
+    "index-S_002d_0040key_007bdown_007d-1217"></a><a name=
+    "index-org_002dagenda_002dpriority_002ddown-1218" id=
+    "index-org_002dagenda_002dpriority_002ddown-1218"></a><br /></dd>
+
+    <dt><kbd>-</kbd> <span class="roman">or</span>
+    <kbd>S-&lt;down&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-priority-down</code><kbd>)</kbd></dt>
+
+    <dd>Decrease the priority of the current item. <a name=
+    "index-z-1219" id="index-z-1219"></a><a name=
+    "index-C_002dc-C_002dz-1220" id=
+    "index-C_002dc-C_002dz-1220"></a><a name=
+    "index-org_002dagenda_002dadd_002dnote-1221" id=
+    "index-org_002dagenda_002dadd_002dnote-1221"></a><br /></dd>
+
+    <dt><kbd>z</kbd> <span class="roman">or</span> <kbd>C-c C-z
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-add-note</code><kbd>)</kbd></dt>
+
+    <dd><a name="index-org_002dlog_002dinto_002ddrawer-1222" id=
+    "index-org_002dlog_002dinto_002ddrawer-1222"></a>Add a note to
+    the entry. This note will be recorded, and then filed to the
+    same location where state change notes are put. Depending on
+    <code>org-log-into-drawer</code>, this may be inside a drawer.
+    <a name="index-C_002dc-C_002da-1223" id=
+    "index-C_002dc-C_002da-1223"></a><a name=
+    "index-org_002dattach-1224" id=
+    "index-org_002dattach-1224"></a><br /></dd>
+
+    <dt><kbd>C-c C-a
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-attach</code><kbd>)</kbd></dt>
+
+    <dd>Dispatcher for all command related to attachments. <a name=
+    "index-C_002dc-C_002ds-1225" id=
+    "index-C_002dc-C_002ds-1225"></a><a name=
+    "index-org_002dagenda_002dschedule-1226" id=
+    "index-org_002dagenda_002dschedule-1226"></a><br /></dd>
+
+    <dt><kbd>C-c C-s
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-schedule</code><kbd>)</kbd></dt>
+
+    <dd>Schedule this item. With prefix arg remove the scheduling
+    timestamp <a name="index-C_002dc-C_002dd-1227" id=
+    "index-C_002dc-C_002dd-1227"></a><a name=
+    "index-org_002dagenda_002ddeadline-1228" id=
+    "index-org_002dagenda_002ddeadline-1228"></a><br /></dd>
+
+    <dt><kbd>C-c C-d
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-deadline</code><kbd>)</kbd></dt>
+
+    <dd>Set a deadline for this item. With prefix arg remove the
+    deadline. <a name="index-k-1229" id="index-k-1229"></a><a name=
+    "index-org_002dagenda_002daction-1230" id=
+    "index-org_002dagenda_002daction-1230"></a><br /></dd>
+
+    <dt><kbd>k
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-action</code><kbd>)</kbd></dt>
+
+    <dd>
+      Agenda actions, to set dates for selected items to the cursor
+      date. This command also works in the calendar! The command
+      prompts for an additional key:
+      <pre class="example">
+          m   <span class=
+"roman">Mark the entry at point for action.  You can also make entries</span>
+              <span class=
+"roman">in Org files with </span><kbd>C-c C-x C-k</kbd><span class=
+"roman">.</span>
+          d   <span class=
+"roman">Set the deadline of the marked entry to the date at point.</span>
+          s   <span class=
+"roman">Schedule the marked entry at the date at point.</span>
+          r   <span class=
+"roman">Call </span><code>org-capture</code><span class=
+"roman"> with the cursor date as default date.</span>
 </pre>
-     <p class="noindent">Press <kbd>r</kbd> afterward to refresh the agenda and see the effect of the
-command. 
-<a name="index-S_002d_0040key_007bright_007d-1231"></a><a name="index-org_002dagenda_002ddo_002ddate_002dlater-1232"></a><br><dt><kbd>S-&lt;right&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-do-date-later</code><kbd>)</kbd><dd>
-Change the timestamp associated with the current line by one day into the
-future.  With a numeric prefix argument, change it by that many days.  For
-example, <kbd>3 6 5 S-&lt;right&gt;</kbd> will change it by a year.  With a
-<kbd>C-u</kbd> prefix, change the time by one hour.  If you immediately repeat the
-command, it will continue to change hours even without the prefix arg.  With
-a double <kbd>C-u C-u</kbd> prefix, do the same for changing minutes.  The stamp
-is changed in the original Org file, but the change is not directly reflected
-in the agenda buffer.  Use <kbd>r</kbd> or <kbd>g</kbd> to update the buffer. 
-<a name="index-S_002d_0040key_007bleft_007d-1233"></a><a name="index-org_002dagenda_002ddo_002ddate_002dearlier-1234"></a><br><dt><kbd>S-&lt;left&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-do-date-earlier</code><kbd>)</kbd><dd>
-Change the timestamp associated with the current line by one day
-into the past. 
-<a name="index-g_t_003e-1235"></a><a name="index-org_002dagenda_002ddate_002dprompt-1236"></a><br><dt><kbd>&gt; &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-date-prompt</code><kbd>)</kbd><dd>
-Change the timestamp associated with the current line.  The key <kbd>&gt;</kbd> has
-been chosen, because it is the same as <kbd>S-.</kbd>  on my keyboard. 
-<a name="index-I-1237"></a><a name="index-org_002dagenda_002dclock_002din-1238"></a><br><dt><kbd>I &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clock-in</code><kbd>)</kbd><dd>
-Start the clock on the current item.  If a clock is running already, it
-is stopped first. 
-<a name="index-O-1239"></a><a name="index-org_002dagenda_002dclock_002dout-1240"></a><br><dt><kbd>O &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clock-out</code><kbd>)</kbd><dd>
-Stop the previously started clock. 
-<a name="index-X-1241"></a><a name="index-org_002dagenda_002dclock_002dcancel-1242"></a><br><dt><kbd>X &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clock-cancel</code><kbd>)</kbd><dd>
-Cancel the currently running clock. 
-<a name="index-J-1243"></a><a name="index-org_002dagenda_002dclock_002dgoto-1244"></a><br><dt><kbd>J &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clock-goto</code><kbd>)</kbd><dd>
-Jump to the running clock in another window.
 
-     <br><dt><b>Bulk remote editing selected entries</b><dd>
-<a name="index-remote-editing_002c-bulk_002c-from-agenda-1245"></a>
-<a name="index-m-1246"></a><a name="index-org_002dagenda_002dbulk_002dmark-1247"></a><br><dt><kbd>m &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-bulk-mark</code><kbd>)</kbd><dd>
-Mark the entry at point for bulk action.  With prefix arg, mark that many
-successive entries. 
-<a name="index-u-1248"></a><a name="index-org_002dagenda_002dbulk_002dunmark-1249"></a><br><dt><kbd>u &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-bulk-unmark</code><kbd>)</kbd><dd>
-Unmark entry for bulk action. 
-<a name="index-U-1250"></a><a name="index-org_002dagenda_002dbulk_002dremove_002dall_002dmarks-1251"></a><br><dt><kbd>U &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-bulk-remove-all-marks</code><kbd>)</kbd><dd>
-Unmark all marked entries for bulk action. 
-<a name="index-B-1252"></a><a name="index-org_002dagenda_002dbulk_002daction-1253"></a><br><dt><kbd>B &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-bulk-action</code><kbd>)</kbd><dd>
-Bulk action: act on all marked entries in the agenda.  This will prompt for
-another key to select the action to be applied.  The prefix arg to <kbd>B</kbd>
-will be passed through to the <kbd>s</kbd> and <kbd>d</kbd> commands, to bulk-remove
-these special timestamps.
-     <pre class="example">          r  <span class="roman">Prompt for a single refile target and move all entries.  The entries</span>
-             <span class="roman">will no longer be in the agenda; refresh (</span><kbd>g</kbd><span class="roman">) to bring them back.</span>
-          $  <span class="roman">Archive all selected entries.</span>
-          A  <span class="roman">Archive entries by moving them to their respective archive siblings.</span>
-          t  <span class="roman">Change TODO state.  This prompts for a single TODO keyword and</span>
-             <span class="roman">changes the state of all selected entries, bypassing blocking and</span>
-             <span class="roman">suppressing logging notes (but not time stamps).</span>
-          +  <span class="roman">Add a tag to all selected entries.</span>
-          -  <span class="roman">Remove a tag from all selected entries.</span>
-          s  <span class="roman">Schedule all items to a new date.  To shift existing schedule dates</span>
-             <span class="roman">by a fixed number of days, use something starting with double plus</span>
-             <span class="roman">at the prompt, for example &lsquo;</span><samp><span class="samp">++8d</span></samp><span class="roman">&rsquo; or &lsquo;</span><samp><span class="samp">++2w</span></samp><span class="roman">&rsquo;.</span>
-          S  <span class="roman">Reschedule randomly by N days.  N will be prompted for.  With prefix</span>
-             <span class="roman">arg (</span><kbd>C-u B S</kbd><span class="roman">), scatter only accross weekdays.</span>
-          d  <span class="roman">Set deadline to a specific date.</span>
-</pre>
-     <br><dt><b>Calendar commands</b><dd>
-<a name="index-calendar-commands_002c-from-agenda-1254"></a>
-<a name="index-c-1255"></a><a name="index-org_002dagenda_002dgoto_002dcalendar-1256"></a><br><dt><kbd>c &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-goto-calendar</code><kbd>)</kbd><dd>
-Open the Emacs calendar and move to the date at the agenda cursor. 
-<a name="index-c-1257"></a><a name="index-org_002dcalendar_002dgoto_002dagenda-1258"></a><br><dt><kbd>c &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-calendar-goto-agenda</code><kbd>)</kbd><dd>
-When in the calendar, compute and show the Org-mode agenda for the
-date at the cursor. 
-<a name="index-diary-entries_002c-creating-from-agenda-1259"></a><a name="index-i-1260"></a><a name="index-org_002dagenda_002ddiary_002dentry-1261"></a><br><dt><kbd>i &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-diary-entry</code><kbd>)</kbd><dd>
-<a name="index-org_002dagenda_002ddiary_002dfile-1262"></a>Insert a new entry into the diary, using the date at the cursor and (for
-block entries) the date at the mark.  This will add to the Emacs diary
-file<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>, in a way similar to the <kbd>i</kbd>
-command in the calendar.  The diary file will pop up in another window, where
-you can add the entry.
+      <p class="noindent">Press <kbd>r</kbd> afterward to refresh
+      the agenda and see the effect of the command. <a name=
+      "index-S_002d_0040key_007bright_007d-1231" id=
+      "index-S_002d_0040key_007bright_007d-1231"></a><a name=
+      "index-org_002dagenda_002ddo_002ddate_002dlater-1232" id=
+      "index-org_002dagenda_002ddo_002ddate_002dlater-1232"></a><br />
+      </p>
+    </dd>
 
-     <p>If you configure <code>org-agenda-diary-file</code> to point to an Org-mode file,
-Org will create entries (in org-mode syntax) in that file instead.  Most
-entries will be stored in a date-based outline tree that will later make it
-easy to archive appointments from previous months/years.  The tree will be
-built under an entry with a <code>DATE_TREE</code> property, or else with years as
-top-level entries.  Emacs will prompt you for the entry text&mdash;if you specify
-it, the entry will be created in <code>org-agenda-diary-file</code> without further
-interaction.  If you directly press &lt;RET&gt; at the prompt without typing
-text, the target file will be shown in another window for you to finish the
-entry there.  See also the <kbd>k r</kbd> command. 
-<a name="index-M-1263"></a><a name="index-org_002dagenda_002dphases_002dof_002dmoon-1264"></a><br><dt><kbd>M &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-phases-of-moon</code><kbd>)</kbd><dd>
-Show the phases of the moon for the three months around current date. 
-<a name="index-S-1265"></a><a name="index-org_002dagenda_002dsunrise_002dsunset-1266"></a><br><dt><kbd>S &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-sunrise-sunset</code><kbd>)</kbd><dd>
-Show sunrise and sunset times.  The geographical location must be set
-with calendar variables, see the documentation for the Emacs calendar. 
-<a name="index-C-1267"></a><a name="index-org_002dagenda_002dconvert_002ddate-1268"></a><br><dt><kbd>C &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-convert-date</code><kbd>)</kbd><dd>
-Convert the date at cursor into many other cultural and historic
-calendars. 
-<a name="index-H-1269"></a><a name="index-org_002dagenda_002dholidays-1270"></a><br><dt><kbd>H &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-holidays</code><kbd>)</kbd><dd>
-Show holidays for three months around the cursor date.
+    <dt><kbd>S-&lt;right&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-do-date-later</code><kbd>)</kbd></dt>
 
-     <br><dt><kbd>M-x org-export-icalendar-combine-agenda-files</kbd><dd>Export a single iCalendar file containing entries from all agenda files. 
-This is a globally available command, and also available in the agenda menu.
+    <dd>Change the timestamp associated with the current line by
+    one day into the future. With a numeric prefix argument, change
+    it by that many days. For example, <kbd>3 6 5
+    S-&lt;right&gt;</kbd> will change it by a year. With a
+    <kbd>C-u</kbd> prefix, change the time by one hour. If you
+    immediately repeat the command, it will continue to change
+    hours even without the prefix arg. With a double <kbd>C-u
+    C-u</kbd> prefix, do the same for changing minutes. The stamp
+    is changed in the original Org file, but the change is not
+    directly reflected in the agenda buffer. Use <kbd>r</kbd> or
+    <kbd>g</kbd> to update the buffer. <a name=
+    "index-S_002d_0040key_007bleft_007d-1233" id=
+    "index-S_002d_0040key_007bleft_007d-1233"></a><a name=
+    "index-org_002dagenda_002ddo_002ddate_002dearlier-1234" id=
+    "index-org_002dagenda_002ddo_002ddate_002dearlier-1234"></a><br />
+    </dd>
 
-     <br><dt><b>Exporting to a file</b><dd>
-<a name="index-C_002dx-C_002dw-1271"></a><a name="index-org_002dwrite_002dagenda-1272"></a><br><dt><kbd>C-x C-w &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-write-agenda</code><kbd>)</kbd><dd>
-<a name="index-exporting-agenda-views-1273"></a><a name="index-agenda-views_002c-exporting-1274"></a><a name="index-org_002dagenda_002dexporter_002dsettings-1275"></a>Write the agenda view to a file.  Depending on the extension of the selected
-file name, the view will be exported as HTML (extension <samp><span class="file">.html</span></samp> or
-<samp><span class="file">.htm</span></samp>), Postscript (extension <samp><span class="file">.ps</span></samp>), PDF (extension <samp><span class="file">.pdf</span></samp>),
-and plain text (any other extension).  When called with a <kbd>C-u</kbd> prefix
-argument, immediately open the newly created file.  Use the variable
-<code>org-agenda-exporter-settings</code> to set options for <samp><span class="file">ps-print</span></samp> and
-for <samp><span class="file">htmlize</span></samp> to be used during export.
+    <dt><kbd>S-&lt;left&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-do-date-earlier</code><kbd>)</kbd></dt>
 
-     <br><dt><b>Quit and Exit</b><dd>
-<a name="index-q-1276"></a><a name="index-org_002dagenda_002dquit-1277"></a><br><dt><kbd>q &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-quit</code><kbd>)</kbd><dd>
-Quit agenda, remove the agenda buffer. 
-<a name="index-agenda-files_002c-removing-buffers-1278"></a><a name="index-x-1279"></a><a name="index-org_002dagenda_002dexit-1280"></a><br><dt><kbd>x &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-exit</code><kbd>)</kbd><dd>
-Exit agenda, remove the agenda buffer and all buffers loaded by Emacs
-for the compilation of the agenda.  Buffers created by the user to
-visit Org files will not be removed. 
-</dl>
+    <dd>Change the timestamp associated with the current line by
+    one day into the past. <a name="index-g_t_003e-1235" id=
+    "index-g_t_003e-1235"></a><a name=
+    "index-org_002dagenda_002ddate_002dprompt-1236" id=
+    "index-org_002dagenda_002ddate_002dprompt-1236"></a><br /></dd>
 
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Only
-tags filtering will be respected here, effort filtering is ignored.</p>
+    <dt><kbd>&gt;
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-date-prompt</code><kbd>)</kbd></dt>
 
-   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Custom commands can preset a filter by
-binding the variable <code>org-agenda-filter-preset</code> as an option.  This
-filter will then be applied to the view and persist as a basic filter through
-refreshes and more secondary filtering.  The filter is a global property of
-the entire agenda view&mdash;in a block agenda, you should only set this in the
-global options section, not in the section of an individual block.</p>
+    <dd>Change the timestamp associated with the current line. The
+    key <kbd>&gt;</kbd> has been chosen, because it is the same as
+    <kbd>S-.</kbd> on my keyboard. <a name="index-I-1237" id=
+    "index-I-1237"></a><a name=
+    "index-org_002dagenda_002dclock_002din-1238" id=
+    "index-org_002dagenda_002dclock_002din-1238"></a><br /></dd>
 
-   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> This file is parsed for the agenda when
-<code>org-agenda-include-diary</code> is set.</p>
+    <dt><kbd>I
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clock-in</code><kbd>)</kbd></dt>
 
-   <hr></div>
+    <dd>Start the clock on the current item. If a clock is running
+    already, it is stopped first. <a name="index-O-1239" id=
+    "index-O-1239"></a><a name=
+    "index-org_002dagenda_002dclock_002dout-1240" id=
+    "index-org_002dagenda_002dclock_002dout-1240"></a><br /></dd>
 
-   </body></html>
+    <dt><kbd>O
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clock-out</code><kbd>)</kbd></dt>
 
+    <dd>Stop the previously started clock. <a name="index-X-1241"
+    id="index-X-1241"></a><a name=
+    "index-org_002dagenda_002dclock_002dcancel-1242" id=
+    "index-org_002dagenda_002dclock_002dcancel-1242"></a><br /></dd>
+
+    <dt><kbd>X
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clock-cancel</code><kbd>)</kbd></dt>
+
+    <dd>Cancel the currently running clock. <a name="index-J-1243"
+    id="index-J-1243"></a><a name=
+    "index-org_002dagenda_002dclock_002dgoto-1244" id=
+    "index-org_002dagenda_002dclock_002dgoto-1244"></a><br /></dd>
+
+    <dt><kbd>J
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-clock-goto</code><kbd>)</kbd></dt>
+
+    <dd>Jump to the running clock in another window.<br /></dd>
+
+    <dt class="c1">Bulk remote editing selected entries</dt>
+
+    <dd><a name=
+    "index-remote-editing_002c-bulk_002c-from-agenda-1245" id=
+    "index-remote-editing_002c-bulk_002c-from-agenda-1245"></a>
+    <a name="index-m-1246" id="index-m-1246"></a><a name=
+    "index-org_002dagenda_002dbulk_002dmark-1247" id=
+    "index-org_002dagenda_002dbulk_002dmark-1247"></a><br /></dd>
+
+    <dt><kbd>m
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-bulk-mark</code><kbd>)</kbd></dt>
+
+    <dd>Mark the entry at point for bulk action. With prefix arg,
+    mark that many successive entries. <a name="index-u-1248" id=
+    "index-u-1248"></a><a name=
+    "index-org_002dagenda_002dbulk_002dunmark-1249" id=
+    "index-org_002dagenda_002dbulk_002dunmark-1249"></a><br /></dd>
+
+    <dt><kbd>u
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-bulk-unmark</code><kbd>)</kbd></dt>
+
+    <dd>Unmark entry for bulk action. <a name="index-U-1250" id=
+    "index-U-1250"></a><a name=
+    "index-org_002dagenda_002dbulk_002dremove_002dall_002dmarks-1251"
+    id=
+    "index-org_002dagenda_002dbulk_002dremove_002dall_002dmarks-1251"></a><br />
+    </dd>
+
+    <dt><kbd>U
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-bulk-remove-all-marks</code><kbd>)</kbd></dt>
+
+    <dd>Unmark all marked entries for bulk action. <a name=
+    "index-B-1252" id="index-B-1252"></a><a name=
+    "index-org_002dagenda_002dbulk_002daction-1253" id=
+    "index-org_002dagenda_002dbulk_002daction-1253"></a><br /></dd>
+
+    <dt><kbd>B
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-bulk-action</code><kbd>)</kbd></dt>
+
+    <dd>
+      Bulk action: act on all marked entries in the agenda. This
+      will prompt for another key to select the action to be
+      applied. The prefix arg to <kbd>B</kbd> will be passed
+      through to the <kbd>s</kbd> and <kbd>d</kbd> commands, to
+      bulk-remove these special timestamps.
+      <pre class="example">
+          r  <span class=
+"roman">Prompt for a single refile target and move all entries.  The entries</span>
+             <span class=
+"roman">will no longer be in the agenda; refresh (</span><kbd>g</kbd><span class="roman">) to bring them back.</span>
+          $  <span class=
+"roman">Archive all selected entries.</span>
+          A  <span class=
+"roman">Archive entries by moving them to their respective archive siblings.</span>
+          t  <span class=
+"roman">Change TODO state.  This prompts for a single TODO keyword and</span>
+             <span class=
+"roman">changes the state of all selected entries, bypassing blocking and</span>
+             <span class=
+"roman">suppressing logging notes (but not time stamps).</span>
+          +  <span class=
+"roman">Add a tag to all selected entries.</span>
+          -  <span class=
+"roman">Remove a tag from all selected entries.</span>
+          s  <span class=
+"roman">Schedule all items to a new date.  To shift existing schedule dates</span>
+             <span class=
+"roman">by a fixed number of days, use something starting with double plus</span>
+             <span class=
+"roman">at the prompt, for example &lsquo;</span><samp><span class=
+"samp">++8d</span></samp><span class=
+"roman">&rsquo; or &lsquo;</span><samp><span class=
+"samp">++2w</span></samp><span class="roman">&rsquo;.</span>
+          S  <span class=
+"roman">Reschedule randomly by N days.  N will be prompted for.  With prefix</span>
+             <span class=
+"roman">arg (</span><kbd>C-u B S</kbd><span class=
+"roman">), scatter only accross weekdays.</span>
+          d  <span class=
+"roman">Set deadline to a specific date.</span>
+</pre><br />
+    </dd>
+
+    <dt class="c1">Calendar commands</dt>
+
+    <dd><a name="index-calendar-commands_002c-from-agenda-1254" id=
+    "index-calendar-commands_002c-from-agenda-1254"></a> <a name=
+    "index-c-1255" id="index-c-1255"></a><a name=
+    "index-org_002dagenda_002dgoto_002dcalendar-1256" id=
+    "index-org_002dagenda_002dgoto_002dcalendar-1256"></a><br /></dd>
+
+    <dt><kbd>c
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-goto-calendar</code><kbd>)</kbd></dt>
+
+    <dd>Open the Emacs calendar and move to the date at the agenda
+    cursor. <a name="index-c-1257" id="index-c-1257"></a><a name=
+    "index-org_002dcalendar_002dgoto_002dagenda-1258" id=
+    "index-org_002dcalendar_002dgoto_002dagenda-1258"></a><br /></dd>
+
+    <dt><kbd>c
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-calendar-goto-agenda</code><kbd>)</kbd></dt>
+
+    <dd>When in the calendar, compute and show the Org-mode agenda
+    for the date at the cursor. <a name=
+    "index-diary-entries_002c-creating-from-agenda-1259" id=
+    "index-diary-entries_002c-creating-from-agenda-1259"></a><a name="index-i-1260"
+    id="index-i-1260"></a><a name=
+    "index-org_002dagenda_002ddiary_002dentry-1261" id=
+    "index-org_002dagenda_002ddiary_002dentry-1261"></a><br /></dd>
+
+    <dt><kbd>i
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-diary-entry</code><kbd>)</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dagenda_002ddiary_002dfile-1262" id=
+      "index-org_002dagenda_002ddiary_002dfile-1262"></a>Insert a
+      new entry into the diary, using the date at the cursor and
+      (for block entries) the date at the mark. This will add to
+      the Emacs diary file<a rel="footnote" href="#fn-3" name=
+      "fnd-3" id="fnd-3"><sup>3</sup></a>, in a way similar to the
+      <kbd>i</kbd> command in the calendar. The diary file will pop
+      up in another window, where you can add the entry.
+
+      <p>If you configure <code>org-agenda-diary-file</code> to
+      point to an Org-mode file, Org will create entries (in
+      org-mode syntax) in that file instead. Most entries will be
+      stored in a date-based outline tree that will later make it
+      easy to archive appointments from previous months/years. The
+      tree will be built under an entry with a
+      <code>DATE_TREE</code> property, or else with years as
+      top-level entries. Emacs will prompt you for the entry
+      text&mdash;if you specify it, the entry will be created in
+      <code>org-agenda-diary-file</code> without further
+      interaction. If you directly press &lt;RET&gt; at the prompt
+      without typing text, the target file will be shown in another
+      window for you to finish the entry there. See also the <kbd>k
+      r</kbd> command. <a name="index-M-1263" id=
+      "index-M-1263"></a><a name=
+      "index-org_002dagenda_002dphases_002dof_002dmoon-1264" id=
+      "index-org_002dagenda_002dphases_002dof_002dmoon-1264"></a><br />
+      </p>
+    </dd>
+
+    <dt><kbd>M
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-phases-of-moon</code><kbd>)</kbd></dt>
+
+    <dd>Show the phases of the moon for the three months around
+    current date. <a name="index-S-1265" id=
+    "index-S-1265"></a><a name=
+    "index-org_002dagenda_002dsunrise_002dsunset-1266" id=
+    "index-org_002dagenda_002dsunrise_002dsunset-1266"></a><br /></dd>
+
+    <dt><kbd>S
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-sunrise-sunset</code><kbd>)</kbd></dt>
+
+    <dd>Show sunrise and sunset times. The geographical location
+    must be set with calendar variables, see the documentation for
+    the Emacs calendar. <a name="index-C-1267" id=
+    "index-C-1267"></a><a name=
+    "index-org_002dagenda_002dconvert_002ddate-1268" id=
+    "index-org_002dagenda_002dconvert_002ddate-1268"></a><br /></dd>
+
+    <dt><kbd>C
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-convert-date</code><kbd>)</kbd></dt>
+
+    <dd>Convert the date at cursor into many other cultural and
+    historic calendars. <a name="index-H-1269" id=
+    "index-H-1269"></a><a name=
+    "index-org_002dagenda_002dholidays-1270" id=
+    "index-org_002dagenda_002dholidays-1270"></a><br /></dd>
+
+    <dt><kbd>H
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-holidays</code><kbd>)</kbd></dt>
+
+    <dd>Show holidays for three months around the cursor
+    date.<br /></dd>
+
+    <dt><kbd>M-x
+    org-export-icalendar-combine-agenda-files</kbd></dt>
+
+    <dd>Export a single iCalendar file containing entries from all
+    agenda files. This is a globally available command, and also
+    available in the agenda menu.<br /></dd>
+
+    <dt class="c1">Exporting to a file</dt>
+
+    <dd><a name="index-C_002dx-C_002dw-1271" id=
+    "index-C_002dx-C_002dw-1271"></a><a name=
+    "index-org_002dwrite_002dagenda-1272" id=
+    "index-org_002dwrite_002dagenda-1272"></a><br /></dd>
+
+    <dt><kbd>C-x C-w
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-write-agenda</code><kbd>)</kbd></dt>
+
+    <dd><a name="index-exporting-agenda-views-1273" id=
+    "index-exporting-agenda-views-1273"></a><a name=
+    "index-agenda-views_002c-exporting-1274" id=
+    "index-agenda-views_002c-exporting-1274"></a><a name=
+    "index-org_002dagenda_002dexporter_002dsettings-1275" id=
+    "index-org_002dagenda_002dexporter_002dsettings-1275"></a>Write
+    the agenda view to a file. Depending on the extension of the
+    selected file name, the view will be exported as HTML
+    (extension <samp><span class="file">.html</span></samp> or
+    <samp><span class="file">.htm</span></samp>), Postscript
+    (extension <samp><span class="file">.ps</span></samp>), PDF
+    (extension <samp><span class="file">.pdf</span></samp>), and
+    plain text (any other extension). When called with a
+    <kbd>C-u</kbd> prefix argument, immediately open the newly
+    created file. Use the variable
+    <code>org-agenda-exporter-settings</code> to set options for
+    <samp><span class="file">ps-print</span></samp> and for
+    <samp><span class="file">htmlize</span></samp> to be used
+    during export.<br /></dd>
+
+    <dt class="c1">Quit and Exit</dt>
+
+    <dd><a name="index-q-1276" id="index-q-1276"></a><a name=
+    "index-org_002dagenda_002dquit-1277" id=
+    "index-org_002dagenda_002dquit-1277"></a><br /></dd>
+
+    <dt><kbd>q
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-quit</code><kbd>)</kbd></dt>
+
+    <dd>Quit agenda, remove the agenda buffer. <a name=
+    "index-agenda-files_002c-removing-buffers-1278" id=
+    "index-agenda-files_002c-removing-buffers-1278"></a><a name=
+    "index-x-1279" id="index-x-1279"></a><a name=
+    "index-org_002dagenda_002dexit-1280" id=
+    "index-org_002dagenda_002dexit-1280"></a><br /></dd>
+
+    <dt><kbd>x
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-agenda-exit</code><kbd>)</kbd></dt>
+
+    <dd>Exit agenda, remove the agenda buffer and all buffers
+    loaded by Emacs for the compilation of the agenda. Buffers
+    created by the user to visit Org files will not be
+    removed.</dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4>Footnotes</h4>
+
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> Only tags filtering will be respected
+    here, effort filtering is ignored.</p>
+
+    <p class="footnote"><small>[<a name="fn-2" href="#fnd-2" id=
+    "fn-2">2</a>]</small> Custom commands can preset a filter by
+    binding the variable <code>org-agenda-filter-preset</code> as
+    an option. This filter will then be applied to the view and
+    persist as a basic filter through refreshes and more secondary
+    filtering. The filter is a global property of the entire agenda
+    view&mdash;in a block agenda, you should only set this in the
+    global options section, not in the section of an individual
+    block.</p>
+
+    <p class="footnote"><small>[<a name="fn-3" href="#fnd-3" id=
+    "fn-3">3</a>]</small> This file is parsed for the agenda when
+    <code>org-agenda-include-diary</code> is set.</p>
+    <hr />
+  </div>
+</body>
+</html>

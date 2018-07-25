@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,311 +14,497 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Foreign Groups</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Foreign Groups">
-<meta name="keywords" content="Gnus Manual: Foreign Groups">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Group-Buffer.html#Group-Buffer" rel="up" title="Group Buffer">
-<link href="Group-Parameters.html#Group-Parameters" rel="next" title="Group Parameters">
-<link href="Marking-Groups.html#Marking-Groups" rel="prev" title="Marking Groups">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Foreign Groups</title>
+  <meta name="description" content="Gnus Manual: Foreign Groups" />
+  <meta name="keywords" content="Gnus Manual: Foreign Groups" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Group-Buffer.html#Group-Buffer" rel="up" title=
+  "Group Buffer" />
+  <link href="Group-Parameters.html#Group-Parameters" rel="next"
+  title="Group Parameters" />
+  <link href="Marking-Groups.html#Marking-Groups" rel="prev" title=
+  "Marking Groups" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Foreign-Groups"></a>
-<div class="header">
-<p>
-Next: <a href="Group-Parameters.html#Group-Parameters" accesskey="n" rel="next">Group Parameters</a>, Previous: <a href="Marking-Groups.html#Marking-Groups" accesskey="p" rel="prev">Marking Groups</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Foreign-Groups-1"></a>
-<h3 class="section">2.9 Foreign Groups</h3>
-<a name="index-foreign-groups"></a>
+<body lang="en" xml:lang="en">
+  <a name="Foreign-Groups" id="Foreign-Groups"></a>
 
-<p>If you recall how to subscribe to servers (see <a href="Finding-the-News.html#Finding-the-News">Finding the News</a>)
-you will remember that <code>gnus-secondary-select-methods</code> and
-<code>gnus-select-method</code> let you write a definition in Emacs Lisp of
-what servers you want to see when you start up.  The alternate
-approach is to use foreign servers and groups.  &ldquo;Foreign&rdquo; here means
-they are not coming from the select methods.  All foreign server
-configuration and subscriptions are stored only in the
-<samp>~/.newsrc.eld</samp> file.
-</p>
-<p>Below are some group mode commands for making and editing general foreign
-groups, as well as commands to ease the creation of a few
-special-purpose groups.  All these commands insert the newly created
-groups under point&mdash;<code>gnus-subscribe-newsgroup-method</code> is not
-consulted.
-</p>
-<p>Changes from the group editing commands are stored in
-<samp>~/.newsrc.eld</samp> (<code>gnus-startup-file</code>).  An alternative is the
-variable <code>gnus-parameters</code>, See <a href="Group-Parameters.html#Group-Parameters">Group Parameters</a>.
-</p>
-<dl compact="compact">
-<dt><kbd>G m</kbd></dt>
-<dd><a name="index-G-m-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dmake_002dgroup"></a>
-<a name="index-making-groups"></a>
-<p>Make a new group (<code>gnus-group-make-group</code>).  Gnus will prompt you
-for a name, a method and possibly an <em>address</em>.  For an easier way
-to subscribe to <acronym>NNTP</acronym> groups (see <a href="Browse-Foreign-Server.html#Browse-Foreign-Server">Browse Foreign Server</a>).
-</p>
-</dd>
-<dt><kbd>G M</kbd></dt>
-<dd><a name="index-G-M-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dread_002dephemeral_002dgroup"></a>
-<p>Make an ephemeral group (<code>gnus-group-read-ephemeral-group</code>).  Gnus
-will prompt you for a name, a method and an <em>address</em>.
-</p>
-</dd>
-<dt><kbd>G r</kbd></dt>
-<dd><a name="index-G-r-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002drename_002dgroup"></a>
-<a name="index-renaming-groups"></a>
-<p>Rename the current group to something else
-(<code>gnus-group-rename-group</code>).  This is valid only on some
-groups&mdash;mail groups mostly.  This command might very well be quite slow
-on some back ends.
-</p>
-</dd>
-<dt><kbd>G c</kbd></dt>
-<dd><a name="index-G-c-_0028Group_0029"></a>
-<a name="index-customizing"></a>
-<a name="index-gnus_002dgroup_002dcustomize"></a>
-<p>Customize the group parameters (<code>gnus-group-customize</code>).
-</p>
-</dd>
-<dt><kbd>G e</kbd></dt>
-<dd><a name="index-G-e-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dedit_002dgroup_002dmethod"></a>
-<a name="index-renaming-groups-1"></a>
-<p>Enter a buffer where you can edit the select method of the current
-group (<code>gnus-group-edit-group-method</code>).
-</p>
-</dd>
-<dt><kbd>G p</kbd></dt>
-<dd><a name="index-G-p-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dedit_002dgroup_002dparameters"></a>
-<p>Enter a buffer where you can edit the group parameters
-(<code>gnus-group-edit-group-parameters</code>).
-</p>
-</dd>
-<dt><kbd>G E</kbd></dt>
-<dd><a name="index-G-E-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dedit_002dgroup"></a>
-<p>Enter a buffer where you can edit the group info
-(<code>gnus-group-edit-group</code>).
-</p>
-</dd>
-<dt><kbd>G d</kbd></dt>
-<dd><a name="index-G-d-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dmake_002ddirectory_002dgroup"></a>
-<a name="index-nndir"></a>
-<p>Make a directory group (see <a href="Directory-Groups.html#Directory-Groups">Directory Groups</a>).  You will be prompted
-for a directory name (<code>gnus-group-make-directory-group</code>).
-</p>
-</dd>
-<dt><kbd>G h</kbd></dt>
-<dd><a name="index-G-h-_0028Group_0029"></a>
-<a name="index-help-group"></a>
-<a name="index-gnus_002dgroup_002dmake_002dhelp_002dgroup"></a>
-<p>Make the Gnus help group (<code>gnus-group-make-help-group</code>).
-</p>
-</dd>
-<dt><kbd>G D</kbd></dt>
-<dd><a name="index-G-D-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002denter_002ddirectory"></a>
-<a name="index-nneething"></a>
-<p>Read an arbitrary directory as if it were a newsgroup with the
-<code>nneething</code> back end (<code>gnus-group-enter-directory</code>).
-See <a href="Anything-Groups.html#Anything-Groups">Anything Groups</a>.
-</p>
-</dd>
-<dt><kbd>G f</kbd></dt>
-<dd><a name="index-G-f-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dmake_002ddoc_002dgroup"></a>
-<a name="index-ClariNet-Briefs"></a>
-<a name="index-nndoc"></a>
-<p>Make a group based on some file or other
-(<code>gnus-group-make-doc-group</code>).  If you give a prefix to this
-command, you will be prompted for a file name and a file type.
-Currently supported types are <code>mbox</code>, <code>babyl</code>,
-<code>digest</code>, <code>news</code>, <code>rnews</code>, <code>mmdf</code>, <code>forward</code>,
-<code>rfc934</code>, <code>rfc822-forward</code>, <code>mime-parts</code>,
-<code>standard-digest</code>, <code>slack-digest</code>, <code>clari-briefs</code>,
-<code>nsmail</code>, <code>outlook</code>, <code>oe-dbx</code>, and <code>mailman</code>.  If
-you run this command without a prefix, Gnus will guess at the file
-type.  See <a href="Document-Groups.html#Document-Groups">Document Groups</a>.
-</p>
-</dd>
-<dt><kbd>G u</kbd></dt>
-<dd><a name="index-G-u-_0028Group_0029"></a>
-<a name="index-gnus_002duseful_002dgroups"></a>
-<a name="index-gnus_002dgroup_002dmake_002duseful_002dgroup"></a>
-<p>Create one of the groups mentioned in <code>gnus-useful-groups</code>
-(<code>gnus-group-make-useful-group</code>).
-</p>
-</dd>
-<dt><kbd>G w</kbd></dt>
-<dd><a name="index-G-w-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dmake_002dweb_002dgroup"></a>
-<a name="index-Google"></a>
-<a name="index-nnweb"></a>
-<a name="index-gmane"></a>
-<p>Make an ephemeral group based on a web search
-(<code>gnus-group-make-web-group</code>).  If you give a prefix to this
-command, make a solid group instead.  You will be prompted for the
-search engine type and the search string.  Valid search engine types
-include <code>google</code>, <code>dejanews</code>, and <code>gmane</code>.
-See <a href="Web-Searches.html#Web-Searches">Web Searches</a>.
-</p>
-<p>If you use the <code>google</code> search engine, you can limit the search
-to a particular group by using a match string like
-&lsquo;<samp>shaving group:alt.sysadmin.recovery</samp>&rsquo;.
-</p>
-</dd>
-<dt><kbd>G R</kbd></dt>
-<dd><a name="index-G-R-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dmake_002drss_002dgroup"></a>
-<p>Make a group based on an <acronym>RSS</acronym> feed
-(<code>gnus-group-make-rss-group</code>).  You will be prompted for an URL.
-See <a href="RSS.html#RSS">RSS</a>.
-</p>
-</dd>
-<dt><kbd>G DEL</kbd></dt>
-<dd><a name="index-G-DEL-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002ddelete_002dgroup"></a>
-<p>This function will delete the current group
-(<code>gnus-group-delete-group</code>).  If given a prefix, this function will
-actually delete all the articles in the group, and forcibly remove the
-group itself from the face of the Earth.  Use a prefix only if you are
-absolutely sure of what you are doing.  This command can&rsquo;t be used on
-read-only groups (like <code>nntp</code> groups), though.
-</p>
-</dd>
-<dt><kbd>G V</kbd></dt>
-<dd><a name="index-G-V-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dmake_002dempty_002dvirtual"></a>
-<p>Make a new, fresh, empty <code>nnvirtual</code> group
-(<code>gnus-group-make-empty-virtual</code>).  See <a href="Virtual-Groups.html#Virtual-Groups">Virtual Groups</a>.
-</p>
-</dd>
-<dt><kbd>G v</kbd></dt>
-<dd><a name="index-G-v-_0028Group_0029"></a>
-<a name="index-gnus_002dgroup_002dadd_002dto_002dvirtual"></a>
-<p>Add the current group to an <code>nnvirtual</code> group
-(<code>gnus-group-add-to-virtual</code>).  Uses the process/prefix convention.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Group-Parameters.html#Group-Parameters"
+    accesskey="n" rel="next">Group Parameters</a>, Previous:
+    <a href="Marking-Groups.html#Marking-Groups" accesskey="p" rel=
+    "prev">Marking Groups</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Foreign-Groups-1" id="Foreign-Groups-1"></a>
 
-<p>See <a href="Select-Methods.html#Select-Methods">Select Methods</a>, for more information on the various select
-methods.
-</p>
-<a name="index-gnus_002dactivate_002dforeign_002dnewsgroups"></a>
-<p>If <code>gnus-activate-foreign-newsgroups</code> is a positive number,
-Gnus will check all foreign groups with this level or lower at startup.
-This might take quite a while, especially if you subscribe to lots of
-groups from different <acronym>NNTP</acronym> servers.  Also see <a href="Group-Levels.html#Group-Levels">Group Levels</a>;
-<code>gnus-activate-level</code> also affects activation of foreign
-newsgroups.
-</p>
+  <h3 class="section">2.9 Foreign Groups</h3><a name=
+  "index-foreign-groups" id="index-foreign-groups"></a>
 
-<p>The following commands create ephemeral groups.  They can be called not
-only from the Group buffer, but in any Gnus buffer.
-</p>
-<dl compact="compact">
-<dt><code>gnus-read-ephemeral-gmane-group</code></dt>
-<dd><a name="index-gnus_002dread_002dephemeral_002dgmane_002dgroup"></a>
-<a name="index-gnus_002dgmane_002dgroup_002ddownload_002dformat"></a>
-<p>Read an ephemeral group on Gmane.org.  The articles are downloaded via
-HTTP using the URL specified by <code>gnus-gmane-group-download-format</code>.
-Gnus will prompt you for a group name, the start article number and an
-the article range.
-</p>
-</dd>
-<dt><code>gnus-read-ephemeral-gmane-group-url</code></dt>
-<dd><a name="index-gnus_002dread_002dephemeral_002dgmane_002dgroup_002durl"></a>
-<p>This command is similar to <code>gnus-read-ephemeral-gmane-group</code>, but
-the group name and the article number and range are constructed from a
-given <acronym>URL</acronym>.  Supported <acronym>URL</acronym> formats include:
-&lsquo;<code>http://thread.gmane.org/gmane.foo.bar/12300/focus=12399</code>&rsquo;,
-&lsquo;<code>http://thread.gmane.org/gmane.foo.bar/12345/</code>&rsquo;,
-&lsquo;<code>http://article.gmane.org/gmane.foo.bar/12345/</code>&rsquo;,
-&lsquo;<code>http://permalink.gmane.org/gmane.foo.bar/12345/</code>&rsquo;, and
-&lsquo;<code>http://news.gmane.org/group/gmane.foo.bar/thread=12345</code>&rsquo;.
-</p>
-</dd>
-<dt><code>gnus-read-ephemeral-emacs-bug-group</code></dt>
-<dd><a name="index-gnus_002dread_002dephemeral_002demacs_002dbug_002dgroup"></a>
-<p>Read an Emacs bug report in an ephemeral group.  Gnus will prompt for a
-bug number.  The default is the number at point.  The <acronym>URL</acronym> is
-specified in <code>gnus-bug-group-download-format-alist</code>.
-</p>
-</dd>
-<dt><code>gnus-read-ephemeral-debian-bug-group</code></dt>
-<dd><a name="index-gnus_002dread_002dephemeral_002ddebian_002dbug_002dgroup"></a>
-<p>Read a Debian bug report in an ephemeral group.  Analog to
-<code>gnus-read-ephemeral-emacs-bug-group</code>.
-</p></dd>
-</dl>
+  <p>If you recall how to subscribe to servers (see <a href=
+  "Finding-the-News.html#Finding-the-News">Finding the News</a>)
+  you will remember that <code>gnus-secondary-select-methods</code>
+  and <code>gnus-select-method</code> let you write a definition in
+  Emacs Lisp of what servers you want to see when you start up. The
+  alternate approach is to use foreign servers and groups.
+  &ldquo;Foreign&rdquo; here means they are not coming from the
+  select methods. All foreign server configuration and
+  subscriptions are stored only in the <samp>~/.newsrc.eld</samp>
+  file.</p>
 
-<p>Some of these command are also useful for article buttons, See <a href="Article-Buttons.html#Article-Buttons">Article Buttons</a>.
-</p>
-<p>Here is an example:
-</p><div class="lisp">
-<pre class="lisp">(require 'gnus-art)
+  <p>Below are some group mode commands for making and editing
+  general foreign groups, as well as commands to ease the creation
+  of a few special-purpose groups. All these commands insert the
+  newly created groups under
+  point&mdash;<code>gnus-subscribe-newsgroup-method</code> is not
+  consulted.</p>
+
+  <p>Changes from the group editing commands are stored in
+  <samp>~/.newsrc.eld</samp> (<code>gnus-startup-file</code>). An
+  alternative is the variable <code>gnus-parameters</code>, See
+  <a href="Group-Parameters.html#Group-Parameters">Group
+  Parameters</a>.</p>
+
+  <dl compact="compact">
+    <dt><kbd>G m</kbd></dt>
+
+    <dd>
+      <a name="index-G-m-_0028Group_0029" id=
+      "index-G-m-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dmake_002dgroup" id=
+      "index-gnus_002dgroup_002dmake_002dgroup"></a> <a name=
+      "index-making-groups" id="index-making-groups"></a>
+
+      <p>Make a new group (<code>gnus-group-make-group</code>).
+      Gnus will prompt you for a name, a method and possibly an
+      <em>address</em>. For an easier way to subscribe to
+      <acronym>NNTP</acronym> groups (see <a href=
+      "Browse-Foreign-Server.html#Browse-Foreign-Server">Browse
+      Foreign Server</a>).</p>
+    </dd>
+
+    <dt><kbd>G M</kbd></dt>
+
+    <dd>
+      <a name="index-G-M-_0028Group_0029" id=
+      "index-G-M-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dread_002dephemeral_002dgroup" id=
+      "index-gnus_002dgroup_002dread_002dephemeral_002dgroup"></a>
+
+      <p>Make an ephemeral group
+      (<code>gnus-group-read-ephemeral-group</code>). Gnus will
+      prompt you for a name, a method and an <em>address</em>.</p>
+    </dd>
+
+    <dt><kbd>G r</kbd></dt>
+
+    <dd>
+      <a name="index-G-r-_0028Group_0029" id=
+      "index-G-r-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002drename_002dgroup" id=
+      "index-gnus_002dgroup_002drename_002dgroup"></a> <a name=
+      "index-renaming-groups" id="index-renaming-groups"></a>
+
+      <p>Rename the current group to something else
+      (<code>gnus-group-rename-group</code>). This is valid only on
+      some groups&mdash;mail groups mostly. This command might very
+      well be quite slow on some back ends.</p>
+    </dd>
+
+    <dt><kbd>G c</kbd></dt>
+
+    <dd>
+      <a name="index-G-c-_0028Group_0029" id=
+      "index-G-c-_0028Group_0029"></a> <a name="index-customizing"
+      id="index-customizing"></a> <a name=
+      "index-gnus_002dgroup_002dcustomize" id=
+      "index-gnus_002dgroup_002dcustomize"></a>
+
+      <p>Customize the group parameters
+      (<code>gnus-group-customize</code>).</p>
+    </dd>
+
+    <dt><kbd>G e</kbd></dt>
+
+    <dd>
+      <a name="index-G-e-_0028Group_0029" id=
+      "index-G-e-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dedit_002dgroup_002dmethod" id=
+      "index-gnus_002dgroup_002dedit_002dgroup_002dmethod"></a>
+      <a name="index-renaming-groups-1" id=
+      "index-renaming-groups-1"></a>
+
+      <p>Enter a buffer where you can edit the select method of the
+      current group
+      (<code>gnus-group-edit-group-method</code>).</p>
+    </dd>
+
+    <dt><kbd>G p</kbd></dt>
+
+    <dd>
+      <a name="index-G-p-_0028Group_0029" id=
+      "index-G-p-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dedit_002dgroup_002dparameters" id=
+      "index-gnus_002dgroup_002dedit_002dgroup_002dparameters"></a>
+
+      <p>Enter a buffer where you can edit the group parameters
+      (<code>gnus-group-edit-group-parameters</code>).</p>
+    </dd>
+
+    <dt><kbd>G E</kbd></dt>
+
+    <dd>
+      <a name="index-G-E-_0028Group_0029" id=
+      "index-G-E-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dedit_002dgroup" id=
+      "index-gnus_002dgroup_002dedit_002dgroup"></a>
+
+      <p>Enter a buffer where you can edit the group info
+      (<code>gnus-group-edit-group</code>).</p>
+    </dd>
+
+    <dt><kbd>G d</kbd></dt>
+
+    <dd>
+      <a name="index-G-d-_0028Group_0029" id=
+      "index-G-d-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dmake_002ddirectory_002dgroup" id=
+      "index-gnus_002dgroup_002dmake_002ddirectory_002dgroup"></a>
+      <a name="index-nndir" id="index-nndir"></a>
+
+      <p>Make a directory group (see <a href=
+      "Directory-Groups.html#Directory-Groups">Directory
+      Groups</a>). You will be prompted for a directory name
+      (<code>gnus-group-make-directory-group</code>).</p>
+    </dd>
+
+    <dt><kbd>G h</kbd></dt>
+
+    <dd>
+      <a name="index-G-h-_0028Group_0029" id=
+      "index-G-h-_0028Group_0029"></a> <a name="index-help-group"
+      id="index-help-group"></a> <a name=
+      "index-gnus_002dgroup_002dmake_002dhelp_002dgroup" id=
+      "index-gnus_002dgroup_002dmake_002dhelp_002dgroup"></a>
+
+      <p>Make the Gnus help group
+      (<code>gnus-group-make-help-group</code>).</p>
+    </dd>
+
+    <dt><kbd>G D</kbd></dt>
+
+    <dd>
+      <a name="index-G-D-_0028Group_0029" id=
+      "index-G-D-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002denter_002ddirectory" id=
+      "index-gnus_002dgroup_002denter_002ddirectory"></a> <a name=
+      "index-nneething" id="index-nneething"></a>
+
+      <p>Read an arbitrary directory as if it were a newsgroup with
+      the <code>nneething</code> back end
+      (<code>gnus-group-enter-directory</code>). See <a href=
+      "Anything-Groups.html#Anything-Groups">Anything
+      Groups</a>.</p>
+    </dd>
+
+    <dt><kbd>G f</kbd></dt>
+
+    <dd>
+      <a name="index-G-f-_0028Group_0029" id=
+      "index-G-f-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dmake_002ddoc_002dgroup" id=
+      "index-gnus_002dgroup_002dmake_002ddoc_002dgroup"></a>
+      <a name="index-ClariNet-Briefs" id=
+      "index-ClariNet-Briefs"></a> <a name="index-nndoc" id=
+      "index-nndoc"></a>
+
+      <p>Make a group based on some file or other
+      (<code>gnus-group-make-doc-group</code>). If you give a
+      prefix to this command, you will be prompted for a file name
+      and a file type. Currently supported types are
+      <code>mbox</code>, <code>babyl</code>, <code>digest</code>,
+      <code>news</code>, <code>rnews</code>, <code>mmdf</code>,
+      <code>forward</code>, <code>rfc934</code>,
+      <code>rfc822-forward</code>, <code>mime-parts</code>,
+      <code>standard-digest</code>, <code>slack-digest</code>,
+      <code>clari-briefs</code>, <code>nsmail</code>,
+      <code>outlook</code>, <code>oe-dbx</code>, and
+      <code>mailman</code>. If you run this command without a
+      prefix, Gnus will guess at the file type. See <a href=
+      "Document-Groups.html#Document-Groups">Document
+      Groups</a>.</p>
+    </dd>
+
+    <dt><kbd>G u</kbd></dt>
+
+    <dd>
+      <a name="index-G-u-_0028Group_0029" id=
+      "index-G-u-_0028Group_0029"></a> <a name=
+      "index-gnus_002duseful_002dgroups" id=
+      "index-gnus_002duseful_002dgroups"></a> <a name=
+      "index-gnus_002dgroup_002dmake_002duseful_002dgroup" id=
+      "index-gnus_002dgroup_002dmake_002duseful_002dgroup"></a>
+
+      <p>Create one of the groups mentioned in
+      <code>gnus-useful-groups</code>
+      (<code>gnus-group-make-useful-group</code>).</p>
+    </dd>
+
+    <dt><kbd>G w</kbd></dt>
+
+    <dd>
+      <a name="index-G-w-_0028Group_0029" id=
+      "index-G-w-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dmake_002dweb_002dgroup" id=
+      "index-gnus_002dgroup_002dmake_002dweb_002dgroup"></a>
+      <a name="index-Google" id="index-Google"></a> <a name=
+      "index-nnweb" id="index-nnweb"></a> <a name="index-gmane" id=
+      "index-gmane"></a>
+
+      <p>Make an ephemeral group based on a web search
+      (<code>gnus-group-make-web-group</code>). If you give a
+      prefix to this command, make a solid group instead. You will
+      be prompted for the search engine type and the search string.
+      Valid search engine types include <code>google</code>,
+      <code>dejanews</code>, and <code>gmane</code>. See <a href=
+      "Web-Searches.html#Web-Searches">Web Searches</a>.</p>
+
+      <p>If you use the <code>google</code> search engine, you can
+      limit the search to a particular group by using a match
+      string like &lsquo;<samp>shaving
+      group:alt.sysadmin.recovery</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><kbd>G R</kbd></dt>
+
+    <dd>
+      <a name="index-G-R-_0028Group_0029" id=
+      "index-G-R-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dmake_002drss_002dgroup" id=
+      "index-gnus_002dgroup_002dmake_002drss_002dgroup"></a>
+
+      <p>Make a group based on an <acronym>RSS</acronym> feed
+      (<code>gnus-group-make-rss-group</code>). You will be
+      prompted for an URL. See <a href="RSS.html#RSS">RSS</a>.</p>
+    </dd>
+
+    <dt><kbd>G DEL</kbd></dt>
+
+    <dd>
+      <a name="index-G-DEL-_0028Group_0029" id=
+      "index-G-DEL-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002ddelete_002dgroup" id=
+      "index-gnus_002dgroup_002ddelete_002dgroup"></a>
+
+      <p>This function will delete the current group
+      (<code>gnus-group-delete-group</code>). If given a prefix,
+      this function will actually delete all the articles in the
+      group, and forcibly remove the group itself from the face of
+      the Earth. Use a prefix only if you are absolutely sure of
+      what you are doing. This command can&rsquo;t be used on
+      read-only groups (like <code>nntp</code> groups), though.</p>
+    </dd>
+
+    <dt><kbd>G V</kbd></dt>
+
+    <dd>
+      <a name="index-G-V-_0028Group_0029" id=
+      "index-G-V-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dmake_002dempty_002dvirtual" id=
+      "index-gnus_002dgroup_002dmake_002dempty_002dvirtual"></a>
+
+      <p>Make a new, fresh, empty <code>nnvirtual</code> group
+      (<code>gnus-group-make-empty-virtual</code>). See <a href=
+      "Virtual-Groups.html#Virtual-Groups">Virtual Groups</a>.</p>
+    </dd>
+
+    <dt><kbd>G v</kbd></dt>
+
+    <dd>
+      <a name="index-G-v-_0028Group_0029" id=
+      "index-G-v-_0028Group_0029"></a> <a name=
+      "index-gnus_002dgroup_002dadd_002dto_002dvirtual" id=
+      "index-gnus_002dgroup_002dadd_002dto_002dvirtual"></a>
+
+      <p>Add the current group to an <code>nnvirtual</code> group
+      (<code>gnus-group-add-to-virtual</code>). Uses the
+      process/prefix convention.</p>
+    </dd>
+  </dl>
+
+  <p>See <a href="Select-Methods.html#Select-Methods">Select
+  Methods</a>, for more information on the various select
+  methods.</p><a name=
+  "index-gnus_002dactivate_002dforeign_002dnewsgroups" id=
+  "index-gnus_002dactivate_002dforeign_002dnewsgroups"></a>
+
+  <p>If <code>gnus-activate-foreign-newsgroups</code> is a positive
+  number, Gnus will check all foreign groups with this level or
+  lower at startup. This might take quite a while, especially if
+  you subscribe to lots of groups from different
+  <acronym>NNTP</acronym> servers. Also see <a href=
+  "Group-Levels.html#Group-Levels">Group Levels</a>;
+  <code>gnus-activate-level</code> also affects activation of
+  foreign newsgroups.</p>
+
+  <p>The following commands create ephemeral groups. They can be
+  called not only from the Group buffer, but in any Gnus
+  buffer.</p>
+
+  <dl compact="compact">
+    <dt><code>gnus-read-ephemeral-gmane-group</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dread_002dephemeral_002dgmane_002dgroup" id=
+      "index-gnus_002dread_002dephemeral_002dgmane_002dgroup"></a>
+      <a name=
+      "index-gnus_002dgmane_002dgroup_002ddownload_002dformat" id=
+      "index-gnus_002dgmane_002dgroup_002ddownload_002dformat"></a>
+
+      <p>Read an ephemeral group on Gmane.org. The articles are
+      downloaded via HTTP using the URL specified by
+      <code>gnus-gmane-group-download-format</code>. Gnus will
+      prompt you for a group name, the start article number and an
+      the article range.</p>
+    </dd>
+
+    <dt><code>gnus-read-ephemeral-gmane-group-url</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dread_002dephemeral_002dgmane_002dgroup_002durl"
+      id=
+      "index-gnus_002dread_002dephemeral_002dgmane_002dgroup_002durl">
+      </a>
+
+      <p>This command is similar to
+      <code>gnus-read-ephemeral-gmane-group</code>, but the group
+      name and the article number and range are constructed from a
+      given <acronym>URL</acronym>. Supported
+      <acronym>URL</acronym> formats include:
+      &lsquo;<code>http://thread.gmane.org/gmane.foo.bar/12300/focus=12399</code>&rsquo;,
+      &lsquo;<code>http://thread.gmane.org/gmane.foo.bar/12345/</code>&rsquo;,
+      &lsquo;<code>http://article.gmane.org/gmane.foo.bar/12345/</code>&rsquo;,
+      &lsquo;<code>http://permalink.gmane.org/gmane.foo.bar/12345/</code>&rsquo;,
+      and
+      &lsquo;<code>http://news.gmane.org/group/gmane.foo.bar/thread=12345</code>&rsquo;.</p>
+    </dd>
+
+    <dt><code>gnus-read-ephemeral-emacs-bug-group</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dread_002dephemeral_002demacs_002dbug_002dgroup"
+      id=
+      "index-gnus_002dread_002dephemeral_002demacs_002dbug_002dgroup">
+      </a>
+
+      <p>Read an Emacs bug report in an ephemeral group. Gnus will
+      prompt for a bug number. The default is the number at point.
+      The <acronym>URL</acronym> is specified in
+      <code>gnus-bug-group-download-format-alist</code>.</p>
+    </dd>
+
+    <dt><code>gnus-read-ephemeral-debian-bug-group</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dread_002dephemeral_002ddebian_002dbug_002dgroup"
+      id=
+      "index-gnus_002dread_002dephemeral_002ddebian_002dbug_002dgroup">
+      </a>
+
+      <p>Read a Debian bug report in an ephemeral group. Analog to
+      <code>gnus-read-ephemeral-emacs-bug-group</code>.</p>
+    </dd>
+  </dl>
+
+  <p>Some of these command are also useful for article buttons, See
+  <a href="Article-Buttons.html#Article-Buttons">Article
+  Buttons</a>.</p>
+
+  <p>Here is an example:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(require 'gnus-art)
 (add-to-list
  'gnus-button-alist
- '(&quot;#\\([0-9]+\\)\\&gt;&quot; 1
-   (string-match &quot;\\&lt;emacs\\&gt;&quot; (or gnus-newsgroup-name &quot;&quot;))
+ '("#\\([0-9]+\\)\\&gt;" 1
+   (string-match "\\&lt;emacs\\&gt;" (or gnus-newsgroup-name ""))
    gnus-read-ephemeral-emacs-bug-group 1))
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Group-Parameters.html#Group-Parameters" accesskey="n" rel="next">Group Parameters</a>, Previous: <a href="Marking-Groups.html#Marking-Groups" accesskey="p" rel="prev">Marking Groups</a>, Up: <a href="Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Group-Parameters.html#Group-Parameters"
+    accesskey="n" rel="next">Group Parameters</a>, Previous:
+    <a href="Marking-Groups.html#Marking-Groups" accesskey="p" rel=
+    "prev">Marking Groups</a>, Up: <a href=
+    "Group-Buffer.html#Group-Buffer" accesskey="u" rel="up">Group
+    Buffer</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

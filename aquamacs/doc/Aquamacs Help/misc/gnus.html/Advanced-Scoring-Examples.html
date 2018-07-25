@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,132 +14,174 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Advanced Scoring Examples</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Advanced Scoring Examples">
-<meta name="keywords" content="Gnus Manual: Advanced Scoring Examples">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Advanced-Scoring.html#Advanced-Scoring" rel="up" title="Advanced Scoring">
-<link href="Advanced-Scoring-Tips.html#Advanced-Scoring-Tips" rel="next" title="Advanced Scoring Tips">
-<link href="Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax" rel="prev" title="Advanced Scoring Syntax">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Advanced Scoring Examples</title>
+  <meta name="description" content=
+  "Gnus Manual: Advanced Scoring Examples" />
+  <meta name="keywords" content=
+  "Gnus Manual: Advanced Scoring Examples" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Advanced-Scoring.html#Advanced-Scoring" rel="up"
+  title="Advanced Scoring" />
+  <link href="Advanced-Scoring-Tips.html#Advanced-Scoring-Tips"
+  rel="next" title="Advanced Scoring Tips" />
+  <link href="Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax"
+  rel="prev" title="Advanced Scoring Syntax" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Advanced-Scoring-Examples"></a>
-<div class="header">
-<p>
-Next: <a href="Advanced-Scoring-Tips.html#Advanced-Scoring-Tips" accesskey="n" rel="next">Advanced Scoring Tips</a>, Previous: <a href="Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax" accesskey="p" rel="prev">Advanced Scoring Syntax</a>, Up: <a href="Advanced-Scoring.html#Advanced-Scoring" accesskey="u" rel="up">Advanced Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Advanced-Scoring-Examples-1"></a>
-<h4 class="subsection">7.15.2 Advanced Scoring Examples</h4>
+<body lang="en" xml:lang="en">
+  <a name="Advanced-Scoring-Examples" id=
+  "Advanced-Scoring-Examples"></a>
 
-<p>Please note that the following examples are score file rules.  To
-make a complete score file from them, surround them with another pair
-of parentheses.
-</p>
-<p>Let&rsquo;s say you want to increase the score of articles written by Lars
-when he&rsquo;s talking about Gnus:
-</p>
-<div class="example">
-<pre class="example">((&amp;
-  (&quot;from&quot; &quot;Lars Ingebrigtsen&quot;)
-  (&quot;subject&quot; &quot;Gnus&quot;))
+  <div class="header">
+    <p>Next: <a href=
+    "Advanced-Scoring-Tips.html#Advanced-Scoring-Tips" accesskey=
+    "n" rel="next">Advanced Scoring Tips</a>, Previous: <a href=
+    "Advanced-Scoring-Syntax.html#Advanced-Scoring-Syntax"
+    accesskey="p" rel="prev">Advanced Scoring Syntax</a>, Up:
+    <a href="Advanced-Scoring.html#Advanced-Scoring" accesskey="u"
+    rel="up">Advanced Scoring</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Advanced-Scoring-Examples-1" id=
+  "Advanced-Scoring-Examples-1"></a>
+
+  <h4 class="subsection">7.15.2 Advanced Scoring Examples</h4>
+
+  <p>Please note that the following examples are score file rules.
+  To make a complete score file from them, surround them with
+  another pair of parentheses.</p>
+
+  <p>Let&rsquo;s say you want to increase the score of articles
+  written by Lars when he&rsquo;s talking about Gnus:</p>
+
+  <div class="example">
+    <pre class="example">
+((&amp;
+  ("from" "Lars Ingebrigtsen")
+  ("subject" "Gnus"))
  1000)
-</pre></div>
+</pre>
+  </div>
 
-<p>Quite simple, huh?
-</p>
-<p>When he writes long articles, he sometimes has something nice to say:
-</p>
-<div class="example">
-<pre class="example">((&amp;
-  (&quot;from&quot; &quot;Lars Ingebrigtsen&quot;)
+  <p>Quite simple, huh?</p>
+
+  <p>When he writes long articles, he sometimes has something nice
+  to say:</p>
+
+  <div class="example">
+    <pre class="example">
+((&amp;
+  ("from" "Lars Ingebrigtsen")
   (|
-   (&quot;subject&quot; &quot;Gnus&quot;)
-   (&quot;lines&quot; 100 &gt;)))
+   ("subject" "Gnus")
+   ("lines" 100 &gt;)))
  1000)
-</pre></div>
+</pre>
+  </div>
 
-<p>However, when he responds to things written by Reig Eigil Logge, you
-really don&rsquo;t want to read what he&rsquo;s written:
-</p>
-<div class="example">
-<pre class="example">((&amp;
-  (&quot;from&quot; &quot;Lars Ingebrigtsen&quot;)
-  (1- (&quot;from&quot; &quot;Reig Eigil Logge&quot;)))
+  <p>However, when he responds to things written by Reig Eigil
+  Logge, you really don&rsquo;t want to read what he&rsquo;s
+  written:</p>
+
+  <div class="example">
+    <pre class="example">
+((&amp;
+  ("from" "Lars Ingebrigtsen")
+  (1- ("from" "Reig Eigil Logge")))
  -100000)
-</pre></div>
+</pre>
+  </div>
 
-<p>Everybody that follows up Redmondo when he writes about disappearing
-socks should have their scores raised, but only when they talk about
-white socks.  However, when Lars talks about socks, it&rsquo;s usually not
-very interesting:
-</p>
-<div class="example">
-<pre class="example">((&amp;
+  <p>Everybody that follows up Redmondo when he writes about
+  disappearing socks should have their scores raised, but only when
+  they talk about white socks. However, when Lars talks about
+  socks, it&rsquo;s usually not very interesting:</p>
+
+  <div class="example">
+    <pre class="example">
+((&amp;
   (1-
    (&amp;
-    (&quot;from&quot; &quot;redmondo@.*no&quot; r)
-    (&quot;body&quot; &quot;disappearing.*socks&quot; t)))
-  (! (&quot;from&quot; &quot;Lars Ingebrigtsen&quot;))
-  (&quot;body&quot; &quot;white.*socks&quot;))
+    ("from" "redmondo@.*no" r)
+    ("body" "disappearing.*socks" t)))
+  (! ("from" "Lars Ingebrigtsen"))
+  ("body" "white.*socks"))
  1000)
-</pre></div>
+</pre>
+  </div>
 
-<p>Suppose you&rsquo;re reading a high volume group and you&rsquo;re only interested
-in replies.  The plan is to score down all articles that don&rsquo;t have
-subject that begin with &quot;Re:&quot;, &quot;Fw:&quot; or &quot;Fwd:&quot; and then score up all
-parents of articles that have subjects that begin with reply marks.
-</p>
-<div class="example">
-<pre class="example">((! (&quot;subject&quot; &quot;re:\\|fwd?:&quot; r))
+  <p>Suppose you&rsquo;re reading a high volume group and
+  you&rsquo;re only interested in replies. The plan is to score
+  down all articles that don&rsquo;t have subject that begin with
+  "Re:", "Fw:" or "Fwd:" and then score up all parents of articles
+  that have subjects that begin with reply marks.</p>
+
+  <div class="example">
+    <pre class="example">
+((! ("subject" "re:\\|fwd?:" r))
   -200)
-((1- (&quot;subject&quot; &quot;re:\\|fwd?:&quot; r))
+((1- ("subject" "re:\\|fwd?:" r))
   200)
-</pre></div>
+</pre>
+  </div>
 
-<p>The possibilities are endless.
-</p>
-
-
-
+  <p>The possibilities are endless.</p>
 </body>
 </html>

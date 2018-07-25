@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,132 +19,190 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Indenting Macros</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Indenting Macros">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Indenting Macros">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Macros.html#Macros" rel="up" title="Macros">
-<link href="Customization.html#Customization" rel="next" title="Customization">
-<link href="Repeated-Expansion.html#Repeated-Expansion" rel="prev" title="Repeated Expansion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Indenting Macros</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Indenting Macros" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Indenting Macros" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Macros.html#Macros" rel="up" title="Macros" />
+  <link href="Customization.html#Customization" rel="next" title=
+  "Customization" />
+  <link href="Repeated-Expansion.html#Repeated-Expansion" rel=
+  "prev" title="Repeated Expansion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Indenting-Macros" id="Indenting-Macros"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Problems-with-Macros.html#Problems-with-Macros" accesskey="p"
+    rel="prev">Problems with Macros</a>, Up: <a href=
+    "Macros.html#Macros" accesskey="u" rel="up">Macros</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Indenting-Macros-1" id="Indenting-Macros-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Indenting-Macros"></a>
-<div class="header">
-<p>
-Previous: <a href="Problems-with-Macros.html#Problems-with-Macros" accesskey="p" rel="prev">Problems with Macros</a>, Up: <a href="Macros.html#Macros" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Indenting-Macros-1"></a>
-<h3 class="section">13.6 Indenting Macros</h3>
+  <h3 class="section">13.6 Indenting Macros</h3>
 
-<p>Within a macro definition, you can use the <code>declare</code> form
-(see <a href="Defining-Macros.html#Defining-Macros">Defining Macros</a>) to specify how <tt class="key">TAB</tt> should indent
-calls to the macro.  An indentation specification is written like this:
-</p>
-<div class="example">
-<pre class="example">(declare (indent <var>indent-spec</var>))
-</pre></div>
+  <p>Within a macro definition, you can use the
+  <code>declare</code> form (see <a href=
+  "Defining-Macros.html#Defining-Macros">Defining Macros</a>) to
+  specify how <tt class="key">TAB</tt> should indent calls to the
+  macro. An indentation specification is written like this:</p>
 
-<a name="index-lisp_002dindent_002dfunction-property"></a>
-<p>This results in the <code>lisp-indent-function</code> property being set on
-the macro name.
-</p>
-<p>Here are the possibilities for <var>indent-spec</var>:
-</p>
-<dl compact="compact">
-<dt><code>nil</code></dt>
-<dd><p>This is the same as no property&mdash;use the standard indentation pattern.
-</p></dd>
-<dt><code>defun</code></dt>
-<dd><p>Handle this function like a &lsquo;<samp>def</samp>&rsquo; construct: treat the second
-line as the start of a <em>body</em>.
-</p></dd>
-<dt>an integer, <var>number</var></dt>
-<dd><p>The first <var>number</var> arguments of the function are
-<em>distinguished</em> arguments; the rest are considered the body
-of the expression.  A line in the expression is indented according to
-whether the first argument on it is distinguished or not.  If the
-argument is part of the body, the line is indented <code>lisp-body-indent</code>
-more columns than the open-parenthesis starting the containing
-expression.  If the argument is distinguished and is either the first
-or second argument, it is indented <em>twice</em> that many extra columns.
-If the argument is distinguished and not the first or second argument,
-the line uses the standard pattern.
-</p></dd>
-<dt>a symbol, <var>symbol</var></dt>
-<dd><p><var>symbol</var> should be a function name; that function is called to
-calculate the indentation of a line within this expression.  The
-function receives two arguments:
-</p>
-<dl compact="compact">
-<dt><var>pos</var></dt>
-<dd><p>The position at which the line being indented begins.
-</p></dd>
-<dt><var>state</var></dt>
-<dd><p>The value returned by <code>parse-partial-sexp</code> (a Lisp primitive for
-indentation and nesting computation) when it parses up to the
-beginning of this line.
-</p></dd>
-</dl>
+  <div class="example">
+    <pre class="example">
+(declare (indent <var>indent-spec</var>))
+</pre>
+  </div><a name="index-lisp_002dindent_002dfunction-property" id=
+  "index-lisp_002dindent_002dfunction-property"></a>
 
-<p>It should return either a number, which is the number of columns of
-indentation for that line, or a list whose car is such a number.  The
-difference between returning a number and returning a list is that a
-number says that all following lines at the same nesting level should
-be indented just like this one; a list says that following lines might
-call for different indentations.  This makes a difference when the
-indentation is being computed by <kbd>C-M-q</kbd>; if the value is a
-number, <kbd>C-M-q</kbd> need not recalculate indentation for the following
-lines until the end of the list.
-</p></dd>
-</dl>
+  <p>This results in the <code>lisp-indent-function</code> property
+  being set on the macro name.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Problems-with-Macros.html#Problems-with-Macros" accesskey="p" rel="prev">Problems with Macros</a>, Up: <a href="Macros.html#Macros" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Here are the possibilities for <var>indent-spec</var>:</p>
 
+  <dl compact="compact">
+    <dt><code>nil</code></dt>
 
+    <dd>
+      <p>This is the same as no property&mdash;use the standard
+      indentation pattern.</p>
+    </dd>
 
+    <dt><code>defun</code></dt>
+
+    <dd>
+      <p>Handle this function like a &lsquo;<samp>def</samp>&rsquo;
+      construct: treat the second line as the start of a
+      <em>body</em>.</p>
+    </dd>
+
+    <dt>an integer, <var>number</var></dt>
+
+    <dd>
+      <p>The first <var>number</var> arguments of the function are
+      <em>distinguished</em> arguments; the rest are considered the
+      body of the expression. A line in the expression is indented
+      according to whether the first argument on it is
+      distinguished or not. If the argument is part of the body,
+      the line is indented <code>lisp-body-indent</code> more
+      columns than the open-parenthesis starting the containing
+      expression. If the argument is distinguished and is either
+      the first or second argument, it is indented <em>twice</em>
+      that many extra columns. If the argument is distinguished and
+      not the first or second argument, the line uses the standard
+      pattern.</p>
+    </dd>
+
+    <dt>a symbol, <var>symbol</var></dt>
+
+    <dd>
+      <p><var>symbol</var> should be a function name; that function
+      is called to calculate the indentation of a line within this
+      expression. The function receives two arguments:</p>
+
+      <dl compact="compact">
+        <dt><var>pos</var></dt>
+
+        <dd>
+          <p>The position at which the line being indented
+          begins.</p>
+        </dd>
+
+        <dt><var>state</var></dt>
+
+        <dd>
+          <p>The value returned by <code>parse-partial-sexp</code>
+          (a Lisp primitive for indentation and nesting
+          computation) when it parses up to the beginning of this
+          line.</p>
+        </dd>
+      </dl>
+
+      <p>It should return either a number, which is the number of
+      columns of indentation for that line, or a list whose car is
+      such a number. The difference between returning a number and
+      returning a list is that a number says that all following
+      lines at the same nesting level should be indented just like
+      this one; a list says that following lines might call for
+      different indentations. This makes a difference when the
+      indentation is being computed by <kbd>C-M-q</kbd>; if the
+      value is a number, <kbd>C-M-q</kbd> need not recalculate
+      indentation for the following lines until the end of the
+      list.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Problems-with-Macros.html#Problems-with-Macros" accesskey="p"
+    rel="prev">Problems with Macros</a>, Up: <a href=
+    "Macros.html#Macros" accesskey="u" rel="up">Macros</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

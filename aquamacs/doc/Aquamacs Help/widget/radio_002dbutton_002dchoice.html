@@ -1,15 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>radio-button-choice - The Emacs Widget Library</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Emacs Widget Library">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Basic-Types.html#Basic-Types" title="Basic Types">
-<link rel="prev" href="menu_002dchoice.html#menu_002dchoice" title="menu-choice">
-<link rel="next" href="item.html#item" title="item">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>radio-button-choice - The Emacs Widget Library</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Emacs Widget Library" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Basic-Types.html#Basic-Types" title=
+  "Basic Types" />
+  <link rel="prev" href="menu_002dchoice.html#menu_002dchoice"
+  title="menu-choice" />
+  <link rel="next" href="item.html#item" title="item" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -25,8 +33,10 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,69 +46,141 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="radio-button-choice"></a>
-<a name="radio_002dbutton_002dchoice"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="item.html#item">item</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="menu_002dchoice.html#menu_002dchoice">menu-choice</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Basic-Types.html#Basic-Types">Basic Types</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="radio-button-choice" id="radio-button-choice"></a>
+    <a name="radio_002dbutton_002dchoice" id=
+    "radio_002dbutton_002dchoice"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h4 class="subsection">The <code>radio-button-choice</code> Widget</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "item.html#item">item</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "menu_002dchoice.html#menu_002dchoice">menu-choice</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Basic-Types.html#Basic-Types">Basic Types</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-<p><a name="index-radio_002dbutton_002dchoice_0040r_007b-widget_007d-77"></a>
-Syntax:
+  <h4 class="subsection">The <code>radio-button-choice</code>
+  Widget</h4>
 
-<pre class="example">     <var>type</var> ::= (radio-button-choice [<var>keyword</var> <var>argument</var>]...  <var>type</var> ... )
+  <p><a name=
+  "index-radio_002dbutton_002dchoice_0040r_007b-widget_007d-77" id=
+  "index-radio_002dbutton_002dchoice_0040r_007b-widget_007d-77"></a>
+  Syntax:</p>
+  <pre class="example">
+     <var>type</var> ::= (radio-button-choice [<var>keyword</var> <var>argument</var>]...  <var>type</var> ... )
 </pre>
-   <p>The component types specify the choices, with one radio button for
-each.  The widget's value will be that of the chosen <var>type</var>
-argument.  This widget matches any value that matches at least one of
-the specified <var>type</var> arguments.
 
-   <p>The following extra properties are recognized.
+  <p>The component types specify the choices, with one radio button
+  for each. The widget's value will be that of the chosen
+  <var>type</var> argument. This widget matches any value that
+  matches at least one of the specified <var>type</var>
+  arguments.</p>
 
-     
-<a name="index-entry_002dformat_0040r_007b-keyword_007d-78"></a>
-<dl><dt><code>:entry-format</code><dd>This string will be inserted for each entry in the list. 
-The following &lsquo;<samp><span class="samp">%</span></samp>&rsquo; escapes are available:
-          <dl>
-<dt>&lsquo;<samp><span class="samp">%v</span></samp>&rsquo;<dd>Replace with the buffer representation of the <var>type</var> widget. 
-<br><dt>&lsquo;<samp><span class="samp">%b</span></samp>&rsquo;<dd>Replace with the radio button. 
-<br><dt>&lsquo;<samp><span class="samp">%%</span></samp>&rsquo;<dd>Insert a literal &lsquo;<samp><span class="samp">%</span></samp>&rsquo;. 
-</dl>
+  <p>The following extra properties are recognized. <a name=
+  "index-entry_002dformat_0040r_007b-keyword_007d-78" id=
+  "index-entry_002dformat_0040r_007b-keyword_007d-78"></a></p>
 
-     <p><a name="index-button_002dargs_0040r_007b-keyword_007d-79"></a><br><dt><code>:button-args</code><dd>A list of keywords to pass to the radio buttons.  Useful for setting
-e.g. the &lsquo;<samp><span class="samp">:help-echo</span></samp>&rsquo; for each button.
+  <dl>
+    <dt><code>:entry-format</code></dt>
 
-     <p><a name="index-buttons_0040r_007b-keyword_007d-80"></a><br><dt><code>:buttons</code><dd>The widgets representing the radio buttons.
+    <dd>
+      This string will be inserted for each entry in the list. The
+      following &lsquo;<samp><span class=
+      "samp">%</span></samp>&rsquo; escapes are available:
 
-     <p><a name="index-children_0040r_007b-keyword_007d-81"></a><br><dt><code>:children</code><dd>The widgets representing each type.
+      <dl>
+        <dt>&lsquo;<samp><span class=
+        "samp">%v</span></samp>&rsquo;</dt>
 
-     <p><a name="index-choice_0040r_007b-keyword_007d-82"></a><br><dt><code>:choice</code><dd>The current chosen type
+        <dd>Replace with the buffer representation of the
+        <var>type</var> widget.<br /></dd>
 
-     <p><a name="index-args_0040r_007b-keyword_007d-83"></a><br><dt><code>:args</code><dd>The list of types. 
-</dl>
+        <dt>&lsquo;<samp><span class=
+        "samp">%b</span></samp>&rsquo;</dt>
 
-   <p>You can add extra radio button items to a <code>radio-button-choice</code>
-widget after it has been created with the function
-<code>widget-radio-add-item</code>.
+        <dd>Replace with the radio button.<br /></dd>
 
-<div class="defun">
-&mdash; Function: <b>widget-radio-add-item</b><var> widget type<a name="index-widget_002dradio_002dadd_002ditem-84"></a></var><br>
-<blockquote><p>Add to <code>radio-button-choice</code> widget <var>widget</var> a new radio button
-item of type <var>type</var>. 
-</p></blockquote></div>
+        <dt>&lsquo;<samp><span class=
+        "samp">%%</span></samp>&rsquo;</dt>
 
-   <p>Please note that such items added after the <code>radio-button-choice</code>
-widget has been created will <strong>not</strong> be properly destructed when
-you call <code>widget-delete</code>.
+        <dd>Insert a literal &lsquo;<samp><span class=
+        "samp">%</span></samp>&rsquo;.</dd>
+      </dl>
 
-   </body></html>
+      <p><a name="index-button_002dargs_0040r_007b-keyword_007d-79"
+      id=
+      "index-button_002dargs_0040r_007b-keyword_007d-79"></a><br /></p>
+    </dd>
 
+    <dt><code>:button-args</code></dt>
+
+    <dd>
+      A list of keywords to pass to the radio buttons. Useful for
+      setting e.g. the &lsquo;<samp><span class=
+      "samp">:help-echo</span></samp>&rsquo; for each button.
+
+      <p><a name="index-buttons_0040r_007b-keyword_007d-80" id=
+      "index-buttons_0040r_007b-keyword_007d-80"></a><br /></p>
+    </dd>
+
+    <dt><code>:buttons</code></dt>
+
+    <dd>
+      The widgets representing the radio buttons.
+
+      <p><a name="index-children_0040r_007b-keyword_007d-81" id=
+      "index-children_0040r_007b-keyword_007d-81"></a><br /></p>
+    </dd>
+
+    <dt><code>:children</code></dt>
+
+    <dd>
+      The widgets representing each type.
+
+      <p><a name="index-choice_0040r_007b-keyword_007d-82" id=
+      "index-choice_0040r_007b-keyword_007d-82"></a><br /></p>
+    </dd>
+
+    <dt><code>:choice</code></dt>
+
+    <dd>
+      The current chosen type
+
+      <p><a name="index-args_0040r_007b-keyword_007d-83" id=
+      "index-args_0040r_007b-keyword_007d-83"></a><br /></p>
+    </dd>
+
+    <dt><code>:args</code></dt>
+
+    <dd>The list of types.</dd>
+  </dl>
+
+  <p>You can add extra radio button items to a
+  <code>radio-button-choice</code> widget after it has been created
+  with the function <code>widget-radio-add-item</code>.</p>
+
+  <div class="defun">
+    &mdash; Function: <b>widget-radio-add-item</b> <var>widget
+    type<a name="index-widget_002dradio_002dadd_002ditem-84" id=
+    "index-widget_002dradio_002dadd_002ditem-84"></a></var><br />
+
+    <blockquote>
+      <p>Add to <code>radio-button-choice</code> widget
+      <var>widget</var> a new radio button item of type
+      <var>type</var>.</p>
+    </blockquote>
+  </div>
+
+  <p>Please note that such items added after the
+  <code>radio-button-choice</code> widget has been created will
+  <strong>not</strong> be properly destructed when you call
+  <code>widget-delete</code>.</p>
+</body>
+</html>

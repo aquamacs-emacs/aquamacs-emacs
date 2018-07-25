@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,188 +14,303 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Article Highlighting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Article Highlighting">
-<meta name="keywords" content="Gnus Manual: Article Highlighting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Article-Treatment.html#Article-Treatment" rel="up" title="Article Treatment">
-<link href="Article-Fontisizing.html#Article-Fontisizing" rel="next" title="Article Fontisizing">
-<link href="Article-Treatment.html#Article-Treatment" rel="prev" title="Article Treatment">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Article Highlighting</title>
+  <meta name="description" content=
+  "Gnus Manual: Article Highlighting" />
+  <meta name="keywords" content=
+  "Gnus Manual: Article Highlighting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Article-Treatment.html#Article-Treatment" rel="up"
+  title="Article Treatment" />
+  <link href="Article-Fontisizing.html#Article-Fontisizing" rel=
+  "next" title="Article Fontisizing" />
+  <link href="Article-Treatment.html#Article-Treatment" rel="prev"
+  title="Article Treatment" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Article-Highlighting"></a>
-<div class="header">
-<p>
-Next: <a href="Article-Fontisizing.html#Article-Fontisizing" accesskey="n" rel="next">Article Fontisizing</a>, Up: <a href="Article-Treatment.html#Article-Treatment" accesskey="u" rel="up">Article Treatment</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Article-Highlighting-1"></a>
-<h4 class="subsection">3.18.1 Article Highlighting</h4>
-<a name="index-highlighting-1"></a>
+<body lang="en" xml:lang="en">
+  <a name="Article-Highlighting" id="Article-Highlighting"></a>
 
-<p>Not only do you want your article buffer to look like fruit salad, but
-you want it to look like technicolor fruit salad.
-</p>
-<dl compact="compact">
-<dt><kbd>W H a</kbd></dt>
-<dd><a name="index-W-H-a-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhighlight"></a>
-<a name="index-gnus_002darticle_002dmaybe_002dhighlight"></a>
-<p>Do much highlighting of the current article
-(<code>gnus-article-highlight</code>).  This function highlights header, cited
-text, the signature, and adds buttons to the body and the head.
-</p>
-</dd>
-<dt><kbd>W H h</kbd></dt>
-<dd><a name="index-W-H-h-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhighlight_002dheaders"></a>
-<a name="index-gnus_002dheader_002dface_002dalist"></a>
-<p>Highlight the headers (<code>gnus-article-highlight-headers</code>).  The
-highlighting will be done according to the <code>gnus-header-face-alist</code>
-variable, which is a list where each element has the form
-<code>(<var>regexp</var> <var>name</var> <var>content</var>)</code>.
-<var>regexp</var> is a regular expression for matching the
-header, <var>name</var> is the face used for highlighting the header name
-(see <a href="Faces-and-Fonts.html#Faces-and-Fonts">Faces and Fonts</a>) and <var>content</var> is the face for highlighting
-the header value.  The first match made will be used.  Note that
-<var>regexp</var> shouldn&rsquo;t have &lsquo;<samp>^</samp>&rsquo; prepended&mdash;Gnus will add one.
-</p>
-</dd>
-<dt><kbd>W H c</kbd></dt>
-<dd><a name="index-W-H-c-_0028Summary_0029"></a>
-<a name="index-gnus_002darticle_002dhighlight_002dcitation"></a>
-<p>Highlight cited text (<code>gnus-article-highlight-citation</code>).
-</p>
-<p>Some variables to customize the citation highlights:
-</p>
-<dl compact="compact">
-<dd><a name="index-gnus_002dcite_002dparse_002dmax_002dsize"></a>
+  <div class="header">
+    <p>Next: <a href="Article-Fontisizing.html#Article-Fontisizing"
+    accesskey="n" rel="next">Article Fontisizing</a>, Up: <a href=
+    "Article-Treatment.html#Article-Treatment" accesskey="u" rel=
+    "up">Article Treatment</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Article-Highlighting-1" id="Article-Highlighting-1"></a>
 
-</dd>
-<dt><code>gnus-cite-parse-max-size</code></dt>
-<dd><p>If the article size in bytes is bigger than this variable (which is
-25000 by default), no citation highlighting will be performed.
-</p>
-</dd>
-<dt><code>gnus-cite-max-prefix</code></dt>
-<dd><a name="index-gnus_002dcite_002dmax_002dprefix"></a>
-<p>Maximum possible length for a citation prefix (default 20).
-</p>
-</dd>
-<dt><code>gnus-cite-face-list</code></dt>
-<dd><a name="index-gnus_002dcite_002dface_002dlist"></a>
-<p>List of faces used for highlighting citations (see <a href="Faces-and-Fonts.html#Faces-and-Fonts">Faces and Fonts</a>).
-When there are citations from multiple articles in the same message,
-Gnus will try to give each citation from each article its own face.
-This should make it easier to see who wrote what.
-</p>
-</dd>
-<dt><code>gnus-supercite-regexp</code></dt>
-<dd><a name="index-gnus_002dsupercite_002dregexp"></a>
-<p>Regexp matching normal Supercite attribution lines.
-</p>
-</dd>
-<dt><code>gnus-supercite-secondary-regexp</code></dt>
-<dd><a name="index-gnus_002dsupercite_002dsecondary_002dregexp"></a>
-<p>Regexp matching mangled Supercite attribution lines.
-</p>
-</dd>
-<dt><code>gnus-cite-minimum-match-count</code></dt>
-<dd><a name="index-gnus_002dcite_002dminimum_002dmatch_002dcount"></a>
-<p>Minimum number of identical prefixes we have to see before we believe
-that it&rsquo;s a citation.
-</p>
-</dd>
-<dt><code>gnus-cite-attribution-prefix</code></dt>
-<dd><a name="index-gnus_002dcite_002dattribution_002dprefix"></a>
-<p>Regexp matching the beginning of an attribution line.
-</p>
-</dd>
-<dt><code>gnus-cite-attribution-suffix</code></dt>
-<dd><a name="index-gnus_002dcite_002dattribution_002dsuffix"></a>
-<p>Regexp matching the end of an attribution line.
-</p>
-</dd>
-<dt><code>gnus-cite-attribution-face</code></dt>
-<dd><a name="index-gnus_002dcite_002dattribution_002dface"></a>
-<p>Face used for attribution lines.  It is merged with the face for the
-cited text belonging to the attribution.
-</p>
-</dd>
-<dt><code>gnus-cite-ignore-quoted-from</code></dt>
-<dd><a name="index-gnus_002dcite_002dignore_002dquoted_002dfrom"></a>
-<p>If non-<code>nil</code>, no citation highlighting will be performed on lines
-beginning with &lsquo;<samp>&gt;From </samp>&rsquo;.  Those lines may have been quoted by MTAs
-in order not to mix up with the envelope From line.  The default value
-is <code>t</code>.
-</p>
-</dd>
-</dl>
+  <h4 class="subsection">3.18.1 Article Highlighting</h4><a name=
+  "index-highlighting-1" id="index-highlighting-1"></a>
 
+  <p>Not only do you want your article buffer to look like fruit
+  salad, but you want it to look like technicolor fruit salad.</p>
 
-</dd>
-<dt><kbd>W H s</kbd></dt>
-<dd><a name="index-W-H-s-_0028Summary_0029"></a>
-<a name="index-gnus_002dsignature_002dseparator"></a>
-<a name="index-gnus_002dsignature_002dface"></a>
-<a name="index-gnus_002darticle_002dhighlight_002dsignature"></a>
-<p>Highlight the signature (<code>gnus-article-highlight-signature</code>).
-Everything after <code>gnus-signature-separator</code> (see <a href="Article-Signature.html#Article-Signature">Article Signature</a>) in an article will be considered a signature and will be
-highlighted with <code>gnus-signature-face</code>, which is <code>italic</code> by
-default.
-</p>
-</dd>
-</dl>
+  <dl compact="compact">
+    <dt><kbd>W H a</kbd></dt>
 
-<p>See <a href="Customizing-Articles.html#Customizing-Articles">Customizing Articles</a>, for how to highlight articles automatically.
-</p>
+    <dd>
+      <a name="index-W-H-a-_0028Summary_0029" id=
+      "index-W-H-a-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhighlight" id=
+      "index-gnus_002darticle_002dhighlight"></a> <a name=
+      "index-gnus_002darticle_002dmaybe_002dhighlight" id=
+      "index-gnus_002darticle_002dmaybe_002dhighlight"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Article-Fontisizing.html#Article-Fontisizing" accesskey="n" rel="next">Article Fontisizing</a>, Up: <a href="Article-Treatment.html#Article-Treatment" accesskey="u" rel="up">Article Treatment</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Do much highlighting of the current article
+      (<code>gnus-article-highlight</code>). This function
+      highlights header, cited text, the signature, and adds
+      buttons to the body and the head.</p>
+    </dd>
 
+    <dt><kbd>W H h</kbd></dt>
 
+    <dd>
+      <a name="index-W-H-h-_0028Summary_0029" id=
+      "index-W-H-h-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhighlight_002dheaders" id=
+      "index-gnus_002darticle_002dhighlight_002dheaders"></a>
+      <a name="index-gnus_002dheader_002dface_002dalist" id=
+      "index-gnus_002dheader_002dface_002dalist"></a>
 
+      <p>Highlight the headers
+      (<code>gnus-article-highlight-headers</code>). The
+      highlighting will be done according to the
+      <code>gnus-header-face-alist</code> variable, which is a list
+      where each element has the form <code>(<var>regexp</var>
+      <var>name</var> <var>content</var>)</code>. <var>regexp</var>
+      is a regular expression for matching the header,
+      <var>name</var> is the face used for highlighting the header
+      name (see <a href=
+      "Faces-and-Fonts.html#Faces-and-Fonts">Faces and Fonts</a>)
+      and <var>content</var> is the face for highlighting the
+      header value. The first match made will be used. Note that
+      <var>regexp</var> shouldn&rsquo;t have
+      &lsquo;<samp>^</samp>&rsquo; prepended&mdash;Gnus will add
+      one.</p>
+    </dd>
+
+    <dt><kbd>W H c</kbd></dt>
+
+    <dd>
+      <a name="index-W-H-c-_0028Summary_0029" id=
+      "index-W-H-c-_0028Summary_0029"></a> <a name=
+      "index-gnus_002darticle_002dhighlight_002dcitation" id=
+      "index-gnus_002darticle_002dhighlight_002dcitation"></a>
+
+      <p>Highlight cited text
+      (<code>gnus-article-highlight-citation</code>).</p>
+
+      <p>Some variables to customize the citation highlights:</p>
+
+      <dl compact="compact">
+        <dd><a name=
+        "index-gnus_002dcite_002dparse_002dmax_002dsize" id=
+        "index-gnus_002dcite_002dparse_002dmax_002dsize"></a></dd>
+
+        <dt><code>gnus-cite-parse-max-size</code></dt>
+
+        <dd>
+          <p>If the article size in bytes is bigger than this
+          variable (which is 25000 by default), no citation
+          highlighting will be performed.</p>
+        </dd>
+
+        <dt><code>gnus-cite-max-prefix</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dcite_002dmax_002dprefix" id=
+          "index-gnus_002dcite_002dmax_002dprefix"></a>
+
+          <p>Maximum possible length for a citation prefix (default
+          20).</p>
+        </dd>
+
+        <dt><code>gnus-cite-face-list</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dcite_002dface_002dlist" id=
+          "index-gnus_002dcite_002dface_002dlist"></a>
+
+          <p>List of faces used for highlighting citations (see
+          <a href="Faces-and-Fonts.html#Faces-and-Fonts">Faces and
+          Fonts</a>). When there are citations from multiple
+          articles in the same message, Gnus will try to give each
+          citation from each article its own face. This should make
+          it easier to see who wrote what.</p>
+        </dd>
+
+        <dt><code>gnus-supercite-regexp</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dsupercite_002dregexp" id=
+          "index-gnus_002dsupercite_002dregexp"></a>
+
+          <p>Regexp matching normal Supercite attribution
+          lines.</p>
+        </dd>
+
+        <dt><code>gnus-supercite-secondary-regexp</code></dt>
+
+        <dd>
+          <a name=
+          "index-gnus_002dsupercite_002dsecondary_002dregexp" id=
+          "index-gnus_002dsupercite_002dsecondary_002dregexp"></a>
+
+          <p>Regexp matching mangled Supercite attribution
+          lines.</p>
+        </dd>
+
+        <dt><code>gnus-cite-minimum-match-count</code></dt>
+
+        <dd>
+          <a name=
+          "index-gnus_002dcite_002dminimum_002dmatch_002dcount" id=
+          "index-gnus_002dcite_002dminimum_002dmatch_002dcount"></a>
+
+          <p>Minimum number of identical prefixes we have to see
+          before we believe that it&rsquo;s a citation.</p>
+        </dd>
+
+        <dt><code>gnus-cite-attribution-prefix</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dcite_002dattribution_002dprefix"
+          id="index-gnus_002dcite_002dattribution_002dprefix"></a>
+
+          <p>Regexp matching the beginning of an attribution
+          line.</p>
+        </dd>
+
+        <dt><code>gnus-cite-attribution-suffix</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dcite_002dattribution_002dsuffix"
+          id="index-gnus_002dcite_002dattribution_002dsuffix"></a>
+
+          <p>Regexp matching the end of an attribution line.</p>
+        </dd>
+
+        <dt><code>gnus-cite-attribution-face</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dcite_002dattribution_002dface"
+          id="index-gnus_002dcite_002dattribution_002dface"></a>
+
+          <p>Face used for attribution lines. It is merged with the
+          face for the cited text belonging to the attribution.</p>
+        </dd>
+
+        <dt><code>gnus-cite-ignore-quoted-from</code></dt>
+
+        <dd>
+          <a name=
+          "index-gnus_002dcite_002dignore_002dquoted_002dfrom" id=
+          "index-gnus_002dcite_002dignore_002dquoted_002dfrom"></a>
+
+          <p>If non-<code>nil</code>, no citation highlighting will
+          be performed on lines beginning with
+          &lsquo;<samp>&gt;From</samp> &rsquo;. Those lines may
+          have been quoted by MTAs in order not to mix up with the
+          envelope From line. The default value is
+          <code>t</code>.</p>
+        </dd>
+      </dl>
+    </dd>
+
+    <dt><kbd>W H s</kbd></dt>
+
+    <dd>
+      <a name="index-W-H-s-_0028Summary_0029" id=
+      "index-W-H-s-_0028Summary_0029"></a> <a name=
+      "index-gnus_002dsignature_002dseparator" id=
+      "index-gnus_002dsignature_002dseparator"></a> <a name=
+      "index-gnus_002dsignature_002dface" id=
+      "index-gnus_002dsignature_002dface"></a> <a name=
+      "index-gnus_002darticle_002dhighlight_002dsignature" id=
+      "index-gnus_002darticle_002dhighlight_002dsignature"></a>
+
+      <p>Highlight the signature
+      (<code>gnus-article-highlight-signature</code>). Everything
+      after <code>gnus-signature-separator</code> (see <a href=
+      "Article-Signature.html#Article-Signature">Article
+      Signature</a>) in an article will be considered a signature
+      and will be highlighted with
+      <code>gnus-signature-face</code>, which is
+      <code>italic</code> by default.</p>
+    </dd>
+  </dl>
+
+  <p>See <a href=
+  "Customizing-Articles.html#Customizing-Articles">Customizing
+  Articles</a>, for how to highlight articles automatically.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Article-Fontisizing.html#Article-Fontisizing"
+    accesskey="n" rel="next">Article Fontisizing</a>, Up: <a href=
+    "Article-Treatment.html#Article-Treatment" accesskey="u" rel=
+    "up">Article Treatment</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,127 +18,174 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Complex Number Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Complex Number Functions">
-<meta name="keywords" content="GNU Emacs Calc Manual: Complex Number Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Arithmetic.html#Arithmetic" rel="up" title="Arithmetic">
-<link href="Conversions.html#Conversions" rel="next" title="Conversions">
-<link href="Integer-Truncation.html#Integer-Truncation" rel="prev" title="Integer Truncation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Complex Number Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Complex Number Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Complex Number Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Arithmetic.html#Arithmetic" rel="up" title=
+  "Arithmetic" />
+  <link href="Conversions.html#Conversions" rel="next" title=
+  "Conversions" />
+  <link href="Integer-Truncation.html#Integer-Truncation" rel=
+  "prev" title="Integer Truncation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Complex-Number-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Conversions.html#Conversions" accesskey="n" rel="next">Conversions</a>, Previous: <a href="Integer-Truncation.html#Integer-Truncation" accesskey="p" rel="prev">Integer Truncation</a>, Up: <a href="Arithmetic.html#Arithmetic" accesskey="u" rel="up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Complex-Number-Functions-1"></a>
-<h3 class="section">7.3 Complex Number Functions</h3>
+<body lang="en" xml:lang="en">
+  <a name="Complex-Number-Functions" id=
+  "Complex-Number-Functions"></a>
 
-<a name="index-J"></a>
-<a name="index-calc_002dconj"></a>
-<a name="index-conj"></a>
-<p>The <kbd>J</kbd> (<code>calc-conj</code>) [<code>conj</code>] command computes the
-complex conjugate of a number.  For complex number &lsquo;<samp>a+bi</samp>&rsquo;, the
-complex conjugate is &lsquo;<samp>a-bi</samp>&rsquo;.  If the argument is a real number,
-this command leaves it the same.  If the argument is a vector or matrix,
-this command replaces each element by its complex conjugate.
-</p>
-<a name="index-G"></a>
-<a name="index-calc_002dargument"></a>
-<a name="index-arg"></a>
-<p>The <kbd>G</kbd> (<code>calc-argument</code>) [<code>arg</code>] command computes the
-&ldquo;argument&rdquo; or polar angle of a complex number.  For a number in polar
-notation, this is simply the second component of the pair
-&lsquo;<tt>(</tt><var>r</var><tt>;</tt><var>theta</var><tt>)</tt>&rsquo;.
-The result is expressed according to the current angular mode and will
-be in the range <i>-180</i> degrees (exclusive) to <i>+180</i> degrees
-(inclusive), or the equivalent range in radians.
-</p>
-<a name="index-calc_002dimaginary"></a>
-<p>The <code>calc-imaginary</code> command multiplies the number on the
-top of the stack by the imaginary number &lsquo;<samp>i = (0,1)</samp>&rsquo;.  This
-command is not normally bound to a key in Calc, but it is available
-on the <tt class="key">IMAG</tt> button in Keypad mode.
-</p>
-<a name="index-f-r"></a>
-<a name="index-calc_002dre"></a>
-<a name="index-re"></a>
-<p>The <kbd>f r</kbd> (<code>calc-re</code>) [<code>re</code>] command replaces a complex number
-by its real part.  This command has no effect on real numbers.  (As an
-added convenience, <code>re</code> applied to a modulo form extracts
-the value part.)
-</p>
-<a name="index-f-i"></a>
-<a name="index-calc_002dim"></a>
-<a name="index-im"></a>
-<p>The <kbd>f i</kbd> (<code>calc-im</code>) [<code>im</code>] command replaces a complex number
-by its imaginary part; real numbers are converted to zero.  With a vector
-or matrix argument, these functions operate element-wise.
-</p>
-<a name="index-v-p-_0028complex_0029"></a>
-<a name="index-V-p-_0028complex_0029"></a>
-<a name="index-calc_002dpack"></a>
-<p>The <kbd>v p</kbd> (<code>calc-pack</code>) command can pack the top two numbers on
-the stack into a composite object such as a complex number.  With
-a prefix argument of <i>-1</i>, it produces a rectangular complex number;
-with an argument of <i>-2</i>, it produces a polar complex number.
-(Also, see <a href="Building-Vectors.html#Building-Vectors">Building Vectors</a>.)
-</p>
-<a name="index-v-u-_0028complex_0029"></a>
-<a name="index-V-u-_0028complex_0029"></a>
-<a name="index-calc_002dunpack"></a>
-<p>The <kbd>v u</kbd> (<code>calc-unpack</code>) command takes the complex number
-(or other composite object) on the top of the stack and unpacks it
-into its separate components.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Conversions.html#Conversions" accesskey="n" rel="next">Conversions</a>, Previous: <a href="Integer-Truncation.html#Integer-Truncation" accesskey="p" rel="prev">Integer Truncation</a>, Up: <a href="Arithmetic.html#Arithmetic" accesskey="u" rel="up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Conversions.html#Conversions" accesskey="n"
+    rel="next">Conversions</a>, Previous: <a href=
+    "Integer-Truncation.html#Integer-Truncation" accesskey="p" rel=
+    "prev">Integer Truncation</a>, Up: <a href=
+    "Arithmetic.html#Arithmetic" accesskey="u" rel=
+    "up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Complex-Number-Functions-1" id=
+  "Complex-Number-Functions-1"></a>
 
+  <h3 class="section">7.3 Complex Number Functions</h3><a name=
+  "index-J" id="index-J"></a> <a name="index-calc_002dconj" id=
+  "index-calc_002dconj"></a> <a name="index-conj" id=
+  "index-conj"></a>
 
+  <p>The <kbd>J</kbd> (<code>calc-conj</code>) [<code>conj</code>]
+  command computes the complex conjugate of a number. For complex
+  number &lsquo;<samp>a+bi</samp>&rsquo;, the complex conjugate is
+  &lsquo;<samp>a-bi</samp>&rsquo;. If the argument is a real
+  number, this command leaves it the same. If the argument is a
+  vector or matrix, this command replaces each element by its
+  complex conjugate.</p><a name="index-G" id="index-G"></a>
+  <a name="index-calc_002dargument" id=
+  "index-calc_002dargument"></a> <a name="index-arg" id=
+  "index-arg"></a>
 
+  <p>The <kbd>G</kbd> (<code>calc-argument</code>)
+  [<code>arg</code>] command computes the &ldquo;argument&rdquo; or
+  polar angle of a complex number. For a number in polar notation,
+  this is simply the second component of the pair
+  &lsquo;<tt>(</tt><var>r</var><tt>;</tt><var>theta</var><tt>)</tt>&rsquo;.
+  The result is expressed according to the current angular mode and
+  will be in the range <i>-180</i> degrees (exclusive) to
+  <i>+180</i> degrees (inclusive), or the equivalent range in
+  radians.</p><a name="index-calc_002dimaginary" id=
+  "index-calc_002dimaginary"></a>
+
+  <p>The <code>calc-imaginary</code> command multiplies the number
+  on the top of the stack by the imaginary number &lsquo;<samp>i =
+  (0,1)</samp>&rsquo;. This command is not normally bound to a key
+  in Calc, but it is available on the <tt class="key">IMAG</tt>
+  button in Keypad mode.</p><a name="index-f-r" id="index-f-r"></a>
+  <a name="index-calc_002dre" id="index-calc_002dre"></a> <a name=
+  "index-re" id="index-re"></a>
+
+  <p>The <kbd>f r</kbd> (<code>calc-re</code>) [<code>re</code>]
+  command replaces a complex number by its real part. This command
+  has no effect on real numbers. (As an added convenience,
+  <code>re</code> applied to a modulo form extracts the value
+  part.)</p><a name="index-f-i" id="index-f-i"></a> <a name=
+  "index-calc_002dim" id="index-calc_002dim"></a> <a name=
+  "index-im" id="index-im"></a>
+
+  <p>The <kbd>f i</kbd> (<code>calc-im</code>) [<code>im</code>]
+  command replaces a complex number by its imaginary part; real
+  numbers are converted to zero. With a vector or matrix argument,
+  these functions operate element-wise.</p><a name=
+  "index-v-p-_0028complex_0029" id=
+  "index-v-p-_0028complex_0029"></a> <a name=
+  "index-V-p-_0028complex_0029" id=
+  "index-V-p-_0028complex_0029"></a> <a name="index-calc_002dpack"
+  id="index-calc_002dpack"></a>
+
+  <p>The <kbd>v p</kbd> (<code>calc-pack</code>) command can pack
+  the top two numbers on the stack into a composite object such as
+  a complex number. With a prefix argument of <i>-1</i>, it
+  produces a rectangular complex number; with an argument of
+  <i>-2</i>, it produces a polar complex number. (Also, see
+  <a href="Building-Vectors.html#Building-Vectors">Building
+  Vectors</a>.)</p><a name="index-v-u-_0028complex_0029" id=
+  "index-v-u-_0028complex_0029"></a> <a name=
+  "index-V-u-_0028complex_0029" id=
+  "index-V-u-_0028complex_0029"></a> <a name=
+  "index-calc_002dunpack" id="index-calc_002dunpack"></a>
+
+  <p>The <kbd>v u</kbd> (<code>calc-unpack</code>) command takes
+  the complex number (or other composite object) on the top of the
+  stack and unpacks it into its separate components.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Conversions.html#Conversions" accesskey="n"
+    rel="next">Conversions</a>, Previous: <a href=
+    "Integer-Truncation.html#Integer-Truncation" accesskey="p" rel=
+    "prev">Integer Truncation</a>, Up: <a href=
+    "Arithmetic.html#Arithmetic" accesskey="u" rel=
+    "up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,139 +20,201 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Shell Commands in Dired</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Shell Commands in Dired">
-<meta name="keywords" content="GNU Emacs Manual: Shell Commands in Dired">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Dired.html#Dired" rel="up" title="Dired">
-<link href="Transforming-File-Names.html#Transforming-File-Names" rel="next" title="Transforming File Names">
-<link href="Operating-on-Files.html#Operating-on-Files" rel="prev" title="Operating on Files">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Shell Commands in Dired</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Shell Commands in Dired" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Shell Commands in Dired" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Dired.html#Dired" rel="up" title="Dired" />
+  <link href="Transforming-File-Names.html#Transforming-File-Names"
+  rel="next" title="Transforming File Names" />
+  <link href="Operating-on-Files.html#Operating-on-Files" rel=
+  "prev" title="Operating on Files" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Shell-Commands-in-Dired" id=
+  "Shell-Commands-in-Dired"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Transforming-File-Names.html#Transforming-File-Names"
+    accesskey="n" rel="next">Transforming File Names</a>, Previous:
+    <a href="Operating-on-Files.html#Operating-on-Files" accesskey=
+    "p" rel="prev">Operating on Files</a>, Up: <a href=
+    "Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Shell-Commands-in-Dired-1" id=
+  "Shell-Commands-in-Dired-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Shell-Commands-in-Dired"></a>
-<div class="header">
-<p>
-Next: <a href="Transforming-File-Names.html#Transforming-File-Names" accesskey="n" rel="next">Transforming File Names</a>, Previous: <a href="Operating-on-Files.html#Operating-on-Files" accesskey="p" rel="prev">Operating on Files</a>, Up: <a href="Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Shell-Commands-in-Dired-1"></a>
-<h3 class="section">30.8 Shell Commands in Dired</h3>
-<a name="index-shell-commands_002c-Dired"></a>
+  <h3 class="section">30.8 Shell Commands in Dired</h3><a name=
+  "index-shell-commands_002c-Dired" id=
+  "index-shell-commands_002c-Dired"></a> <a name=
+  "index-dired_002ddo_002dshell_002dcommand" id=
+  "index-dired_002ddo_002dshell_002dcommand"></a> <a name=
+  "index-_0021-_0028Dired_0029" id=
+  "index-_0021-_0028Dired_0029"></a> <a name=
+  "index-X-_0028Dired_0029" id="index-X-_0028Dired_0029"></a>
 
-<a name="index-dired_002ddo_002dshell_002dcommand"></a>
-<a name="index-_0021-_0028Dired_0029"></a>
-<a name="index-X-_0028Dired_0029"></a>
-<p>The Dired command <kbd>!</kbd> (<code>dired-do-shell-command</code>) reads a
-shell command string in the minibuffer, and runs that shell command on
-one or more files.  The files that the shell command operates on are
-determined in the usual way for Dired commands (see <a href="Operating-on-Files.html#Operating-on-Files">Operating on Files</a>).  The command <kbd>X</kbd> is a synonym for <kbd>!</kbd>.
-</p>
-<p>The command <kbd>&amp;</kbd> (<code>dired-do-async-shell-command</code>) does the
-same, except that it runs the shell command asynchronously.  (You can
-also do this with <kbd>!</kbd>, by appending a &lsquo;<samp>&amp;</samp>&rsquo; character to the
-end of the shell command.)  When the command operates on more than one
-file, it runs multiple parallel copies of the specified shell command,
-one for each file.  As an exception, if the specified shell command
-ends in &lsquo;<samp>;</samp>&rsquo; or &lsquo;<samp>;&amp;</samp>&rsquo;, the shell command is run in the
-background on each file sequentially; Emacs waits for each invoked
-shell command to terminate before running the next one.
-</p>
-<p>For both <kbd>!</kbd> and <kbd>&amp;</kbd>, the working directory for the shell
-command is the top-level directory of the Dired buffer.
-</p>
-<p>If you tell <kbd>!</kbd> or <kbd>&amp;</kbd> to operate on more than one file, the
-shell command string determines how those files are passed to the
-shell command:
-</p>
-<ul>
-<li> If you use &lsquo;<samp>*</samp>&rsquo; surrounded by whitespace in the command string,
-then the command runs just once, with the list of file names
-substituted for the &lsquo;<samp>*</samp>&rsquo;.  The order of file names is the order of
-appearance in the Dired buffer.
+  <p>The Dired command <kbd>!</kbd>
+  (<code>dired-do-shell-command</code>) reads a shell command
+  string in the minibuffer, and runs that shell command on one or
+  more files. The files that the shell command operates on are
+  determined in the usual way for Dired commands (see <a href=
+  "Operating-on-Files.html#Operating-on-Files">Operating on
+  Files</a>). The command <kbd>X</kbd> is a synonym for
+  <kbd>!</kbd>.</p>
 
-<p>Thus, <kbd>! tar cf foo.tar * <span class="key">RET</span></kbd> runs <code>tar</code> on the entire
-list of file names, putting them into one tar file <samp>foo.tar</samp>.
-</p>
-<p>If you want to use &lsquo;<samp>*</samp>&rsquo; as a shell wildcard with whitespace around
-it, write &lsquo;<samp>*&quot;&quot;</samp>&rsquo;.  In the shell, this is equivalent to &lsquo;<samp>*</samp>&rsquo;;
-but since the &lsquo;<samp>*</samp>&rsquo; is not surrounded by whitespace, Dired does not
-treat it specially.
-</p>
-</li><li> Otherwise, if the command string contains &lsquo;<samp>?</samp>&rsquo; surrounded by
-whitespace, Emacs runs the shell command once <em>for each file</em>,
-substituting the current file name for &lsquo;<samp>?</samp>&rsquo; each time.  You can
-use &lsquo;<samp>?</samp>&rsquo; more than once in the command; the same file name
-replaces each occurrence.
+  <p>The command <kbd>&amp;</kbd>
+  (<code>dired-do-async-shell-command</code>) does the same, except
+  that it runs the shell command asynchronously. (You can also do
+  this with <kbd>!</kbd>, by appending a
+  &lsquo;<samp>&amp;</samp>&rsquo; character to the end of the
+  shell command.) When the command operates on more than one file,
+  it runs multiple parallel copies of the specified shell command,
+  one for each file. As an exception, if the specified shell
+  command ends in &lsquo;<samp>;</samp>&rsquo; or
+  &lsquo;<samp>;&amp;</samp>&rsquo;, the shell command is run in
+  the background on each file sequentially; Emacs waits for each
+  invoked shell command to terminate before running the next
+  one.</p>
 
-</li><li> If the command string contains neither &lsquo;<samp>*</samp>&rsquo; nor &lsquo;<samp>?</samp>&rsquo;, Emacs
-runs the shell command once for each file, adding the file name at the
-end.  For example, <kbd>! uudecode <span class="key">RET</span></kbd> runs <code>uudecode</code> on
-each file.
-</li></ul>
+  <p>For both <kbd>!</kbd> and <kbd>&amp;</kbd>, the working
+  directory for the shell command is the top-level directory of the
+  Dired buffer.</p>
 
-<p>To iterate over the file names in a more complicated fashion, use an
-explicit shell loop.  For example, here is how to uuencode each file,
-making the output file name by appending &lsquo;<samp>.uu</samp>&rsquo; to the input file
-name:
-</p>
-<div class="example">
-<pre class="example">for file in * ; do uuencode &quot;$file&quot; &quot;$file&quot; &gt;&quot;$file&quot;.uu; done
-</pre></div>
+  <p>If you tell <kbd>!</kbd> or <kbd>&amp;</kbd> to operate on
+  more than one file, the shell command string determines how those
+  files are passed to the shell command:</p>
 
-<p>The <kbd>!</kbd> and <kbd>&amp;</kbd> commands do not attempt to update the Dired
-buffer to show new or modified files, because they don&rsquo;t know what
-files will be changed.  Use the <kbd>g</kbd> command to update the Dired
-buffer (see <a href="Dired-Updating.html#Dired-Updating">Dired Updating</a>).
-</p>
-<p>See <a href="Single-Shell.html#Single-Shell">Single Shell</a>, for information about running shell commands
-outside Dired.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Transforming-File-Names.html#Transforming-File-Names" accesskey="n" rel="next">Transforming File Names</a>, Previous: <a href="Operating-on-Files.html#Operating-on-Files" accesskey="p" rel="prev">Operating on Files</a>, Up: <a href="Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <ul>
+    <li>If you use &lsquo;<samp>*</samp>&rsquo; surrounded by
+    whitespace in the command string, then the command runs just
+    once, with the list of file names substituted for the
+    &lsquo;<samp>*</samp>&rsquo;. The order of file names is the
+    order of appearance in the Dired buffer.
 
+      <p>Thus, <kbd>! tar cf foo.tar * <span class=
+      "key">RET</span></kbd> runs <code>tar</code> on the entire
+      list of file names, putting them into one tar file
+      <samp>foo.tar</samp>.</p>
 
+      <p>If you want to use &lsquo;<samp>*</samp>&rsquo; as a shell
+      wildcard with whitespace around it, write
+      &lsquo;<samp>*""</samp>&rsquo;. In the shell, this is
+      equivalent to &lsquo;<samp>*</samp>&rsquo;; but since the
+      &lsquo;<samp>*</samp>&rsquo; is not surrounded by whitespace,
+      Dired does not treat it specially.</p>
+    </li>
 
+    <li>Otherwise, if the command string contains
+    &lsquo;<samp>?</samp>&rsquo; surrounded by whitespace, Emacs
+    runs the shell command once <em>for each file</em>,
+    substituting the current file name for
+    &lsquo;<samp>?</samp>&rsquo; each time. You can use
+    &lsquo;<samp>?</samp>&rsquo; more than once in the command; the
+    same file name replaces each occurrence.</li>
+
+    <li>If the command string contains neither
+    &lsquo;<samp>*</samp>&rsquo; nor &lsquo;<samp>?</samp>&rsquo;,
+    Emacs runs the shell command once for each file, adding the
+    file name at the end. For example, <kbd>! uudecode <span class=
+    "key">RET</span></kbd> runs <code>uudecode</code> on each
+    file.</li>
+  </ul>
+
+  <p>To iterate over the file names in a more complicated fashion,
+  use an explicit shell loop. For example, here is how to uuencode
+  each file, making the output file name by appending
+  &lsquo;<samp>.uu</samp>&rsquo; to the input file name:</p>
+
+  <div class="example">
+    <pre class="example">
+for file in * ; do uuencode "$file" "$file" &gt;"$file".uu; done
+</pre>
+  </div>
+
+  <p>The <kbd>!</kbd> and <kbd>&amp;</kbd> commands do not attempt
+  to update the Dired buffer to show new or modified files, because
+  they don&rsquo;t know what files will be changed. Use the
+  <kbd>g</kbd> command to update the Dired buffer (see <a href=
+  "Dired-Updating.html#Dired-Updating">Dired Updating</a>).</p>
+
+  <p>See <a href="Single-Shell.html#Single-Shell">Single Shell</a>,
+  for information about running shell commands outside Dired.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Transforming-File-Names.html#Transforming-File-Names"
+    accesskey="n" rel="next">Transforming File Names</a>, Previous:
+    <a href="Operating-on-Files.html#Operating-on-Files" accesskey=
+    "p" rel="prev">Operating on Files</a>, Up: <a href=
+    "Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

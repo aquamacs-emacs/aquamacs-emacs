@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Locating a master file - GNU Flymake 0.3</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Flymake 0.3">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Flymake-Implementation.html#Flymake-Implementation" title="Flymake Implementation">
-<link rel="prev" href="Making-a-temporary-copy.html#Making-a-temporary-copy" title="Making a temporary copy">
-<link rel="next" href="Getting-the-include-directories.html#Getting-the-include-directories" title="Getting the include directories">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Locating a master file - GNU Flymake 0.3</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Flymake 0.3" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Flymake-Implementation.html#Flymake-Implementation" title=
+  "Flymake Implementation" />
+  <link rel="prev" href=
+  "Making-a-temporary-copy.html#Making-a-temporary-copy" title=
+  "Making a temporary copy" />
+  <link rel="next" href=
+  "Getting-the-include-directories.html#Getting-the-include-directories"
+  title="Getting the include directories" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -28,8 +40,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -39,45 +53,58 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Locating-a-master-file"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Getting-the-include-directories.html#Getting-the-include-directories">Getting the include directories</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Making-a-temporary-copy.html#Making-a-temporary-copy">Making a temporary copy</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Flymake-Implementation.html#Flymake-Implementation">Flymake Implementation</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Locating-a-master-file" id=
+    "Locating-a-master-file"></a>
 
-<h3 class="section">5.3 Locating a master file</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Getting-the-include-directories.html#Getting-the-include-directories">Getting
+    the include directories</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Making-a-temporary-copy.html#Making-a-temporary-copy">Making a
+    temporary copy</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Flymake-Implementation.html#Flymake-Implementation">Flymake
+    Implementation</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Master-file-21"></a>
-Master file is located in two steps.
+  <h3 class="section">5.3 Locating a master file</h3>
 
-   <p>First, a list of possible master files is built. A simple name
-matching is used to find the files. For a C++ header <code>file.h</code>,
-Flymake searches for all <code>.cpp</code> files in the directories whose relative paths are
-stored in a customizable variable <code>flymake-master-file-dirs</code>, which
-usually contains something like <code>("." "./src")</code>. No more than
-<code>flymake-master-file-count-limit</code> entries is added to the master file
-list. The list is then sorted to move files with names <code>file.cpp</code> to
-the top.
+  <p><a name="index-Master-file-21" id="index-Master-file-21"></a>
+  Master file is located in two steps.</p>
 
-   <p>Next, each master file in a list is checked to contain the appropriate
-include directives. No more than <code>flymake-check-file-limit</code> of each
-file are parsed.
+  <p>First, a list of possible master files is built. A simple name
+  matching is used to find the files. For a C++ header
+  <code>file.h</code>, Flymake searches for all <code>.cpp</code>
+  files in the directories whose relative paths are stored in a
+  customizable variable <code>flymake-master-file-dirs</code>,
+  which usually contains something like <code>("." "./src")</code>.
+  No more than <code>flymake-master-file-count-limit</code> entries
+  is added to the master file list. The list is then sorted to move
+  files with names <code>file.cpp</code> to the top.</p>
 
-   <p>For <code>file.h</code>, the include directives to look for are
-<code>#include "file.h"</code>, <code>#include "../file.h"</code>, etc. Each
-include is checked against a list of include directories
-(see <a href="Getting-the-include-directories.html#Getting-the-include-directories">Getting the include directories</a>) to be sure it points to the
-correct <code>file.h</code>.
+  <p>Next, each master file in a list is checked to contain the
+  appropriate include directives. No more than
+  <code>flymake-check-file-limit</code> of each file are
+  parsed.</p>
 
-   <p>First matching master file found stops the search. The master file is then
-patched and saved to disk. In case no master file is found, syntax check is
-aborted, and corresponding status (!) is reported in the mode line.
+  <p>For <code>file.h</code>, the include directives to look for
+  are <code>#include "file.h"</code>, <code>#include
+  "../file.h"</code>, etc. Each include is checked against a list
+  of include directories (see <a href=
+  "Getting-the-include-directories.html#Getting-the-include-directories">
+  Getting the include directories</a>) to be sure it points to the
+  correct <code>file.h</code>.</p>
 
-   </body></html>
-
+  <p>First matching master file found stops the search. The master
+  file is then patched and saved to disk. In case no master file is
+  found, syntax check is aborted, and corresponding status (!) is
+  reported in the mode line.</p>
+</body>
+</html>

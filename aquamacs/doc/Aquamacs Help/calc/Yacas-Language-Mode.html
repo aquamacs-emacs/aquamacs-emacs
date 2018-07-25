@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Yacas Language Mode - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Language-Modes.html#Language-Modes" title="Language Modes">
-<link rel="prev" href="Eqn-Language-Mode.html#Eqn-Language-Mode" title="Eqn Language Mode">
-<link rel="next" href="Maxima-Language-Mode.html#Maxima-Language-Mode" title="Maxima Language Mode">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Yacas Language Mode - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Language-Modes.html#Language-Modes" title=
+  "Language Modes" />
+  <link rel="prev" href="Eqn-Language-Mode.html#Eqn-Language-Mode"
+  title="Eqn Language Mode" />
+  <link rel="next" href=
+  "Maxima-Language-Mode.html#Maxima-Language-Mode" title=
+  "Maxima Language Mode" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +39,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,41 +52,65 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Yacas-Language-Mode"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Maxima-Language-Mode.html#Maxima-Language-Mode">Maxima Language Mode</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Eqn-Language-Mode.html#Eqn-Language-Mode">Eqn Language Mode</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Language-Modes.html#Language-Modes">Language Modes</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Yacas-Language-Mode" id="Yacas-Language-Mode"></a>
 
-<h4 class="subsection">7.8.5 Yacas Language Mode</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Maxima-Language-Mode.html#Maxima-Language-Mode">Maxima
+    Language Mode</a>, Previous:&nbsp;<a rel="previous" accesskey=
+    "p" href="Eqn-Language-Mode.html#Eqn-Language-Mode">Eqn
+    Language Mode</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Language-Modes.html#Language-Modes">Language Modes</a></p>
+    <hr />
+  </div>
 
-<p class="noindent"><a name="index-d-Y-600"></a><a name="index-calc_002dyacas_002dlanguage-601"></a><a name="index-Yacas-language-602"></a>The <kbd>d Y</kbd> (<code>calc-yacas-language</code>) command selects the
-conventions of Yacas, a free computer algebra system.  While the
-operators and functions in Yacas are similar to those of Calc, the names
-of built-in functions in Yacas are capitalized.  The Calc formula
-&lsquo;<samp><span class="samp">sin(2 x)</span></samp>&rsquo;, for example, is entered and displayed &lsquo;<samp><span class="samp">Sin(2 x)</span></samp>&rsquo;
-in Yacas mode,  and `&lsquo;<samp><span class="samp">arcsin(x^2)</span></samp>&rsquo; is &lsquo;<samp><span class="samp">ArcSin(x^2)</span></samp>&rsquo; in Yacas
-mode.  Complex numbers are written  are written &lsquo;<samp><span class="samp">3 + 4 I</span></samp>&rsquo;. 
-The standard special constants are written <code>Pi</code>, <code>E</code>,
-<code>I</code>, <code>GoldenRatio</code> and <code>Gamma</code>.  <code>Infinity</code>
-represents both <code>inf</code> and <code>uinf</code>, and <code>Undefined</code>
-represents <code>nan</code>.
+  <h4 class="subsection">7.8.5 Yacas Language Mode</h4>
 
-   <p>Certain operators on functions, such as <code>D</code> for differentiation
-and <code>Integrate</code> for integration, take a prefix form in Yacas.  For
-example, the derivative of &lsquo;<samp><span class="samp">e^x&nbsp;sin(x)</span></samp>&rsquo;<!-- /@w --> can be computed with
-&lsquo;<samp><span class="samp">D(x)&nbsp;Exp(x)*Sin(x)</span></samp>&rsquo;<!-- /@w -->.
+  <p class="noindent"><a name="index-d-Y-600" id=
+  "index-d-Y-600"></a><a name=
+  "index-calc_002dyacas_002dlanguage-601" id=
+  "index-calc_002dyacas_002dlanguage-601"></a><a name=
+  "index-Yacas-language-602" id="index-Yacas-language-602"></a>The
+  <kbd>d Y</kbd> (<code>calc-yacas-language</code>) command selects
+  the conventions of Yacas, a free computer algebra system. While
+  the operators and functions in Yacas are similar to those of
+  Calc, the names of built-in functions in Yacas are capitalized.
+  The Calc formula &lsquo;<samp><span class="samp">sin(2
+  x)</span></samp>&rsquo;, for example, is entered and displayed
+  &lsquo;<samp><span class="samp">Sin(2 x)</span></samp>&rsquo; in
+  Yacas mode, and `&lsquo;<samp><span class=
+  "samp">arcsin(x^2)</span></samp>&rsquo; is
+  &lsquo;<samp><span class="samp">ArcSin(x^2)</span></samp>&rsquo;
+  in Yacas mode. Complex numbers are written are written
+  &lsquo;<samp><span class="samp">3 + 4 I</span></samp>&rsquo;. The
+  standard special constants are written <code>Pi</code>,
+  <code>E</code>, <code>I</code>, <code>GoldenRatio</code> and
+  <code>Gamma</code>. <code>Infinity</code> represents both
+  <code>inf</code> and <code>uinf</code>, and
+  <code>Undefined</code> represents <code>nan</code>.</p>
 
-   <p>Other notable differences between Yacas and standard Calc expressions
-are that vectors and matrices use curly braces in Yacas, and subscripts
-use square brackets.  If, for example, &lsquo;<samp><span class="samp">A</span></samp>&rsquo; represents the list
-&lsquo;<samp><span class="samp">{a,2,c,4}</span></samp>&rsquo;, then &lsquo;<samp><span class="samp">A[3]</span></samp>&rsquo; would equal &lsquo;<samp><span class="samp">c</span></samp>&rsquo;.
+  <p>Certain operators on functions, such as <code>D</code> for
+  differentiation and <code>Integrate</code> for integration, take
+  a prefix form in Yacas. For example, the derivative of
+  &lsquo;<samp><span class=
+  "samp">e^x&nbsp;sin(x)</span></samp>&rsquo;<!-- /@w --> can be
+  computed with &lsquo;<samp><span class=
+  "samp">D(x)&nbsp;Exp(x)*Sin(x)</span></samp>&rsquo;
+  <!-- /@w -->.</p>
 
-   </body></html>
-
+  <p>Other notable differences between Yacas and standard Calc
+  expressions are that vectors and matrices use curly braces in
+  Yacas, and subscripts use square brackets. If, for example,
+  &lsquo;<samp><span class="samp">A</span></samp>&rsquo; represents
+  the list &lsquo;<samp><span class=
+  "samp">{a,2,c,4}</span></samp>&rsquo;, then
+  &lsquo;<samp><span class="samp">A[3]</span></samp>&rsquo; would
+  equal &lsquo;<samp><span class="samp">c</span></samp>&rsquo;.</p>
+</body>
+</html>

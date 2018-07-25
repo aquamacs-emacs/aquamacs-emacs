@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,123 +19,184 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Load Suffixes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Load Suffixes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Load Suffixes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Loading.html#Loading" rel="up" title="Loading">
-<link href="Library-Search.html#Library-Search" rel="next" title="Library Search">
-<link href="How-Programs-Do-Loading.html#How-Programs-Do-Loading" rel="prev" title="How Programs Do Loading">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Load Suffixes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Load Suffixes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Load Suffixes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Loading.html#Loading" rel="up" title="Loading" />
+  <link href="Library-Search.html#Library-Search" rel="next" title=
+  "Library Search" />
+  <link href="How-Programs-Do-Loading.html#How-Programs-Do-Loading"
+  rel="prev" title="How Programs Do Loading" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Load-Suffixes" id="Load-Suffixes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Library-Search.html#Library-Search"
+    accesskey="n" rel="next">Library Search</a>, Previous: <a href=
+    "How-Programs-Do-Loading.html#How-Programs-Do-Loading"
+    accesskey="p" rel="prev">How Programs Do Loading</a>, Up:
+    <a href="Loading.html#Loading" accesskey="u" rel=
+    "up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Load-Suffixes-1" id="Load-Suffixes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Load-Suffixes"></a>
-<div class="header">
-<p>
-Next: <a href="Library-Search.html#Library-Search" accesskey="n" rel="next">Library Search</a>, Previous: <a href="How-Programs-Do-Loading.html#How-Programs-Do-Loading" accesskey="p" rel="prev">How Programs Do Loading</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Load-Suffixes-1"></a>
-<h3 class="section">15.2 Load Suffixes</h3>
-<p>We now describe some technical details about the exact suffixes that
-<code>load</code> tries.
-</p>
-<dl>
-<dt><a name="index-load_002dsuffixes"></a>Variable: <strong>load-suffixes</strong></dt>
-<dd><p>This is a list of suffixes indicating (compiled or source) Emacs Lisp
-files.  It should not include the empty string.  <code>load</code> uses
-these suffixes in order when it appends Lisp suffixes to the specified
-file name.  The standard value is <code>(&quot;.elc&quot; &quot;.el&quot;)</code> which produces
-the behavior described in the previous section.
-</p></dd></dl>
+  <h3 class="section">15.2 Load Suffixes</h3>
 
-<dl>
-<dt><a name="index-load_002dfile_002drep_002dsuffixes"></a>Variable: <strong>load-file-rep-suffixes</strong></dt>
-<dd><p>This is a list of suffixes that indicate representations of the same
-file.  This list should normally start with the empty string.
-When <code>load</code> searches for a file it appends the suffixes in this
-list, in order, to the file name, before searching for another file.
-</p>
-<p>Enabling Auto Compression mode appends the suffixes in
-<code>jka-compr-load-suffixes</code> to this list and disabling Auto
-Compression mode removes them again.  The standard value of
-<code>load-file-rep-suffixes</code> if Auto Compression mode is disabled is
-<code>(&quot;&quot;)</code>.  Given that the standard value of
-<code>jka-compr-load-suffixes</code> is <code>(&quot;.gz&quot;)</code>, the standard value
-of <code>load-file-rep-suffixes</code> if Auto Compression mode is enabled
-is <code>(&quot;&quot; &quot;.gz&quot;)</code>.
-</p></dd></dl>
+  <p>We now describe some technical details about the exact
+  suffixes that <code>load</code> tries.</p>
 
-<dl>
-<dt><a name="index-get_002dload_002dsuffixes"></a>Function: <strong>get-load-suffixes</strong></dt>
-<dd><p>This function returns the list of all suffixes that <code>load</code> should
-try, in order, when its <var>must-suffix</var> argument is non-<code>nil</code>.
-This takes both <code>load-suffixes</code> and <code>load-file-rep-suffixes</code>
-into account.  If <code>load-suffixes</code>, <code>jka-compr-load-suffixes</code>
-and <code>load-file-rep-suffixes</code> all have their standard values, this
-function returns <code>(&quot;.elc&quot; &quot;.elc.gz&quot; &quot;.el&quot; &quot;.el.gz&quot;)</code> if Auto
-Compression mode is enabled and <code>(&quot;.elc&quot; &quot;.el&quot;)</code> if Auto
-Compression mode is disabled.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-load_002dsuffixes" id=
+    "index-load_002dsuffixes"></a>Variable:
+    <strong>load-suffixes</strong></dt>
 
-<p>To summarize, <code>load</code> normally first tries the suffixes in the
-value of <code>(get-load-suffixes)</code> and then those in
-<code>load-file-rep-suffixes</code>.  If <var>nosuffix</var> is non-<code>nil</code>,
-it skips the former group, and if <var>must-suffix</var> is non-<code>nil</code>,
-it skips the latter group.
-</p>
-<dl>
-<dt><a name="index-load_002dprefer_002dnewer"></a>User Option: <strong>load-prefer-newer</strong></dt>
-<dd><p>If this option is non-<code>nil</code>, then rather than stopping at the
-first suffix that exists, <code>load</code> tests them all, and uses
-whichever file is the newest.
-</p></dd></dl>
+    <dd>
+      <p>This is a list of suffixes indicating (compiled or source)
+      Emacs Lisp files. It should not include the empty string.
+      <code>load</code> uses these suffixes in order when it
+      appends Lisp suffixes to the specified file name. The
+      standard value is <code>(".elc" ".el")</code> which produces
+      the behavior described in the previous section.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Library-Search.html#Library-Search" accesskey="n" rel="next">Library Search</a>, Previous: <a href="How-Programs-Do-Loading.html#How-Programs-Do-Loading" accesskey="p" rel="prev">How Programs Do Loading</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-load_002dfile_002drep_002dsuffixes" id=
+    "index-load_002dfile_002drep_002dsuffixes"></a>Variable:
+    <strong>load-file-rep-suffixes</strong></dt>
 
+    <dd>
+      <p>This is a list of suffixes that indicate representations
+      of the same file. This list should normally start with the
+      empty string. When <code>load</code> searches for a file it
+      appends the suffixes in this list, in order, to the file
+      name, before searching for another file.</p>
 
+      <p>Enabling Auto Compression mode appends the suffixes in
+      <code>jka-compr-load-suffixes</code> to this list and
+      disabling Auto Compression mode removes them again. The
+      standard value of <code>load-file-rep-suffixes</code> if Auto
+      Compression mode is disabled is <code>("")</code>. Given that
+      the standard value of <code>jka-compr-load-suffixes</code> is
+      <code>(".gz")</code>, the standard value of
+      <code>load-file-rep-suffixes</code> if Auto Compression mode
+      is enabled is <code>("" ".gz")</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-get_002dload_002dsuffixes" id=
+    "index-get_002dload_002dsuffixes"></a>Function:
+    <strong>get-load-suffixes</strong></dt>
+
+    <dd>
+      <p>This function returns the list of all suffixes that
+      <code>load</code> should try, in order, when its
+      <var>must-suffix</var> argument is non-<code>nil</code>. This
+      takes both <code>load-suffixes</code> and
+      <code>load-file-rep-suffixes</code> into account. If
+      <code>load-suffixes</code>,
+      <code>jka-compr-load-suffixes</code> and
+      <code>load-file-rep-suffixes</code> all have their standard
+      values, this function returns <code>(".elc" ".elc.gz" ".el"
+      ".el.gz")</code> if Auto Compression mode is enabled and
+      <code>(".elc" ".el")</code> if Auto Compression mode is
+      disabled.</p>
+    </dd>
+  </dl>
+
+  <p>To summarize, <code>load</code> normally first tries the
+  suffixes in the value of <code>(get-load-suffixes)</code> and
+  then those in <code>load-file-rep-suffixes</code>. If
+  <var>nosuffix</var> is non-<code>nil</code>, it skips the former
+  group, and if <var>must-suffix</var> is non-<code>nil</code>, it
+  skips the latter group.</p>
+
+  <dl>
+    <dt><a name="index-load_002dprefer_002dnewer" id=
+    "index-load_002dprefer_002dnewer"></a>User Option:
+    <strong>load-prefer-newer</strong></dt>
+
+    <dd>
+      <p>If this option is non-<code>nil</code>, then rather than
+      stopping at the first suffix that exists, <code>load</code>
+      tests them all, and uses whichever file is the newest.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Library-Search.html#Library-Search"
+    accesskey="n" rel="next">Library Search</a>, Previous: <a href=
+    "How-Programs-Do-Loading.html#How-Programs-Do-Loading"
+    accesskey="p" rel="prev">How Programs Do Loading</a>, Up:
+    <a href="Loading.html#Loading" accesskey="u" rel=
+    "up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

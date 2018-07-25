@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,144 +19,216 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Tooltips</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Tooltips">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Tooltips">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="Bidirectional-Display.html#Bidirectional-Display" rel="next" title="Bidirectional Display">
-<link href="Window-Systems.html#Window-Systems" rel="prev" title="Window Systems">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Tooltips</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Tooltips" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Tooltips" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="Bidirectional-Display.html#Bidirectional-Display"
+  rel="next" title="Bidirectional Display" />
+  <link href="Window-Systems.html#Window-Systems" rel="prev" title=
+  "Window Systems" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Tooltips" id="Tooltips"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Bidirectional-Display.html#Bidirectional-Display" accesskey=
+    "n" rel="next">Bidirectional Display</a>, Previous: <a href=
+    "Window-Systems.html#Window-Systems" accesskey="p" rel=
+    "prev">Window Systems</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Tooltips-1" id="Tooltips-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Tooltips"></a>
-<div class="header">
-<p>
-Next: <a href="Bidirectional-Display.html#Bidirectional-Display" accesskey="n" rel="next">Bidirectional Display</a>, Previous: <a href="Window-Systems.html#Window-Systems" accesskey="p" rel="prev">Window Systems</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Tooltips-1"></a>
-<h3 class="section">37.25 Tooltips</h3>
-<a name="index-tooltips"></a>
-<p><em>Tooltips</em> are special frames (see <a href="Frames.html#Frames">Frames</a>) that are used to
-display helpful hints (a.k.a. &ldquo;tips&rdquo;) related to the current
-position of the mouse pointer.  Emacs uses tooltips to display help
-strings about active portions of text (see <a href="Special-Properties.html#Special-Properties">Special Properties</a>) and
-about various UI elements, such as menu items (see <a href="Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu Items</a>) and tool-bar buttons (see <a href="Tool-Bar.html#Tool-Bar">Tool Bar</a>).
-</p>
-<dl>
-<dt><a name="index-tooltip_002dmode"></a>Function: <strong>tooltip-mode</strong></dt>
-<dd><p>Tooltip Mode is a minor mode that enables display of tooltips.
-Turning off this mode causes the tooltips be displayed in the echo
-area.  On text-mode (a.k.a. &ldquo;TTY&rdquo;) frames, tooltips are always
-displayed in the echo area.
-</p></dd></dl>
+  <h3 class="section">37.25 Tooltips</h3><a name="index-tooltips"
+  id="index-tooltips"></a>
 
-<a name="index-x_002dgtk_002duse_002dsystem_002dtooltips"></a>
-<p>When Emacs is built with GTK+ support, it by default displays tooltips
-using GTK+ functions, and the appearance of the tooltips is then
-controlled by GTK+ settings.  GTK+ tooltips can be disabled by
-changing the value of the variable <code>x-gtk-use-system-tooltips</code> to
-<code>nil</code>.  The rest of this subsection describes how to control
-non-GTK+ tooltips, which are presented by Emacs itself.
-</p>
-<p>Since tooltips are special frames, they have their frame parameters
-(see <a href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>).  Unlike other frames, the frame parameters
-for tooltips are stored in a special variable.
-</p>
-<dl>
-<dt><a name="index-tooltip_002dframe_002dparameters"></a>Variable: <strong>tooltip-frame-parameters</strong></dt>
-<dd><p>This customizable option holds the frame parameters used for
-displaying tooltips.  Any font and color parameters are ignored, and
-the corresponding attributes of the <code>tooltip</code> face are used
-instead.  If <code>left</code> or <code>top</code> parameters are included, they
-are used as absolute frame-relative coordinates where the tooltip
-should be shown.  (Mouse-relative position of the tooltip can be
-customized using the variables described in <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Tooltips.html#Tooltips">Tooltips</a> in <cite>The GNU Emacs Manual</cite>.)  Note that the <code>left</code> and <code>top</code>
-parameters, if present, override the values of mouse-relative offsets.
-</p></dd></dl>
+  <p><em>Tooltips</em> are special frames (see <a href=
+  "Frames.html#Frames">Frames</a>) that are used to display helpful
+  hints (a.k.a. &ldquo;tips&rdquo;) related to the current position
+  of the mouse pointer. Emacs uses tooltips to display help strings
+  about active portions of text (see <a href=
+  "Special-Properties.html#Special-Properties">Special
+  Properties</a>) and about various UI elements, such as menu items
+  (see <a href=
+  "Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu
+  Items</a>) and tool-bar buttons (see <a href=
+  "Tool-Bar.html#Tool-Bar">Tool Bar</a>).</p>
 
-<a name="index-tooltip-face"></a>
-<p>The <code>tooltip</code> face determines the appearance of text shown in
-tooltips.  It should generally use a variable-pitch font of size that
-is preferably smaller than the default frame font.
-</p>
-<a name="index-tooltip_002dhelp_002dtips"></a>
-<dl>
-<dt><a name="index-tooltip_002dfunctions"></a>Variable: <strong>tooltip-functions</strong></dt>
-<dd><p>This abnormal hook is a list of functions to call when Emacs needs to
-display a tooltip.  Each function is called with a single argument
-<var>event</var> which is a copy of the last mouse movement event.  If a
-function on this list actually displays the tooltip, it should return
-non-<code>nil</code>, and then the rest of the functions will not be
-called.  The default value of this variable is a single function
-<code>tooltip-help-tips</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-tooltip_002dmode" id=
+    "index-tooltip_002dmode"></a>Function:
+    <strong>tooltip-mode</strong></dt>
 
-<p>If you write your own function to be put on the
-<code>tooltip-functions</code> list, you may need to know the buffer of the
-mouse event that triggered the tooltip display.  The following
-function provides that information.
-</p>
-<dl>
-<dt><a name="index-tooltip_002devent_002dbuffer"></a>Function: <strong>tooltip-event-buffer</strong> <em>event</em></dt>
-<dd><p>This function returns the buffer over which <var>event</var> occurred.
-Call it with the argument of the function from
-<code>tooltip-functions</code> to obtain the buffer whose text triggered the
-tooltip.  Note that the event might occur not over a buffer (e.g.,
-over the tool bar), in which case this function will return
-<code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>Tooltip Mode is a minor mode that enables display of
+      tooltips. Turning off this mode causes the tooltips be
+      displayed in the echo area. On text-mode (a.k.a.
+      &ldquo;TTY&rdquo;) frames, tooltips are always displayed in
+      the echo area.</p>
+    </dd>
+  </dl><a name="index-x_002dgtk_002duse_002dsystem_002dtooltips"
+  id="index-x_002dgtk_002duse_002dsystem_002dtooltips"></a>
 
-<p>Other aspects of tooltip display are controlled by several
-customizable settings; see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Tooltips.html#Tooltips">Tooltips</a> in <cite>The GNU Emacs
-Manual</cite>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Bidirectional-Display.html#Bidirectional-Display" accesskey="n" rel="next">Bidirectional Display</a>, Previous: <a href="Window-Systems.html#Window-Systems" accesskey="p" rel="prev">Window Systems</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When Emacs is built with GTK+ support, it by default displays
+  tooltips using GTK+ functions, and the appearance of the tooltips
+  is then controlled by GTK+ settings. GTK+ tooltips can be
+  disabled by changing the value of the variable
+  <code>x-gtk-use-system-tooltips</code> to <code>nil</code>. The
+  rest of this subsection describes how to control non-GTK+
+  tooltips, which are presented by Emacs itself.</p>
 
+  <p>Since tooltips are special frames, they have their frame
+  parameters (see <a href=
+  "Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>).
+  Unlike other frames, the frame parameters for tooltips are stored
+  in a special variable.</p>
 
+  <dl>
+    <dt><a name="index-tooltip_002dframe_002dparameters" id=
+    "index-tooltip_002dframe_002dparameters"></a>Variable:
+    <strong>tooltip-frame-parameters</strong></dt>
 
+    <dd>
+      <p>This customizable option holds the frame parameters used
+      for displaying tooltips. Any font and color parameters are
+      ignored, and the corresponding attributes of the
+      <code>tooltip</code> face are used instead. If
+      <code>left</code> or <code>top</code> parameters are
+      included, they are used as absolute frame-relative
+      coordinates where the tooltip should be shown.
+      (Mouse-relative position of the tooltip can be customized
+      using the variables described in <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Tooltips.html#Tooltips">
+      Tooltips</a> in <cite>The GNU Emacs Manual</cite>.) Note that
+      the <code>left</code> and <code>top</code> parameters, if
+      present, override the values of mouse-relative offsets.</p>
+    </dd>
+  </dl><a name="index-tooltip-face" id="index-tooltip-face"></a>
+
+  <p>The <code>tooltip</code> face determines the appearance of
+  text shown in tooltips. It should generally use a variable-pitch
+  font of size that is preferably smaller than the default frame
+  font.</p><a name="index-tooltip_002dhelp_002dtips" id=
+  "index-tooltip_002dhelp_002dtips"></a>
+
+  <dl>
+    <dt><a name="index-tooltip_002dfunctions" id=
+    "index-tooltip_002dfunctions"></a>Variable:
+    <strong>tooltip-functions</strong></dt>
+
+    <dd>
+      <p>This abnormal hook is a list of functions to call when
+      Emacs needs to display a tooltip. Each function is called
+      with a single argument <var>event</var> which is a copy of
+      the last mouse movement event. If a function on this list
+      actually displays the tooltip, it should return
+      non-<code>nil</code>, and then the rest of the functions will
+      not be called. The default value of this variable is a single
+      function <code>tooltip-help-tips</code>.</p>
+    </dd>
+  </dl>
+
+  <p>If you write your own function to be put on the
+  <code>tooltip-functions</code> list, you may need to know the
+  buffer of the mouse event that triggered the tooltip display. The
+  following function provides that information.</p>
+
+  <dl>
+    <dt><a name="index-tooltip_002devent_002dbuffer" id=
+    "index-tooltip_002devent_002dbuffer"></a>Function:
+    <strong>tooltip-event-buffer</strong> <em>event</em></dt>
+
+    <dd>
+      <p>This function returns the buffer over which
+      <var>event</var> occurred. Call it with the argument of the
+      function from <code>tooltip-functions</code> to obtain the
+      buffer whose text triggered the tooltip. Note that the event
+      might occur not over a buffer (e.g., over the tool bar), in
+      which case this function will return <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <p>Other aspects of tooltip display are controlled by several
+  customizable settings; see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Tooltips.html#Tooltips">
+  Tooltips</a> in <cite>The GNU Emacs Manual</cite>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Bidirectional-Display.html#Bidirectional-Display" accesskey=
+    "n" rel="next">Bidirectional Display</a>, Previous: <a href=
+    "Window-Systems.html#Window-Systems" accesskey="p" rel=
+    "prev">Window Systems</a>, Up: <a href="Display.html#Display"
+    accesskey="u" rel="up">Display</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

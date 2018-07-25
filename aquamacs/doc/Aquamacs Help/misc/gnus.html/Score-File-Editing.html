@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,108 +14,148 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Score File Editing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Score File Editing">
-<meta name="keywords" content="Gnus Manual: Score File Editing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Scoring.html#Scoring" rel="up" title="Scoring">
-<link href="Adaptive-Scoring.html#Adaptive-Scoring" rel="next" title="Adaptive Scoring">
-<link href="Score-File-Format.html#Score-File-Format" rel="prev" title="Score File Format">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Score File Editing</title>
+  <meta name="description" content=
+  "Gnus Manual: Score File Editing" />
+  <meta name="keywords" content=
+  "Gnus Manual: Score File Editing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Scoring.html#Scoring" rel="up" title="Scoring" />
+  <link href="Adaptive-Scoring.html#Adaptive-Scoring" rel="next"
+  title="Adaptive Scoring" />
+  <link href="Score-File-Format.html#Score-File-Format" rel="prev"
+  title="Score File Format" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Score-File-Editing"></a>
-<div class="header">
-<p>
-Next: <a href="Adaptive-Scoring.html#Adaptive-Scoring" accesskey="n" rel="next">Adaptive Scoring</a>, Previous: <a href="Score-File-Format.html#Score-File-Format" accesskey="p" rel="prev">Score File Format</a>, Up: <a href="Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Score-File-Editing-1"></a>
-<h3 class="section">7.5 Score File Editing</h3>
+<body lang="en" xml:lang="en">
+  <a name="Score-File-Editing" id="Score-File-Editing"></a>
 
-<p>You normally enter all scoring commands from the summary buffer, but you
-might feel the urge to edit them by hand as well, so we&rsquo;ve supplied you
-with a mode for that.
-</p>
-<p>It&rsquo;s simply a slightly customized <code>emacs-lisp</code> mode, with these
-additional commands:
-</p>
-<dl compact="compact">
-<dt><kbd>C-c C-c</kbd></dt>
-<dd><a name="index-C_002dc-C_002dc-_0028Score_0029"></a>
-<a name="index-gnus_002dscore_002dedit_002dexit"></a>
-<p>Save the changes you have made and return to the summary buffer
-(<code>gnus-score-edit-exit</code>).
-</p>
-</dd>
-<dt><kbd>C-c C-d</kbd></dt>
-<dd><a name="index-C_002dc-C_002dd-_0028Score_0029"></a>
-<a name="index-gnus_002dscore_002dedit_002dinsert_002ddate"></a>
-<p>Insert the current date in numerical format
-(<code>gnus-score-edit-insert-date</code>).  This is really the day number, if
-you were wondering.
-</p>
-</dd>
-<dt><kbd>C-c C-p</kbd></dt>
-<dd><a name="index-C_002dc-C_002dp-_0028Score_0029"></a>
-<a name="index-gnus_002dscore_002dpretty_002dprint"></a>
-<p>The adaptive score files are saved in an unformatted fashion.  If you
-intend to read one of these files, you want to <em>pretty print</em> it
-first.  This command (<code>gnus-score-pretty-print</code>) does that for
-you.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Adaptive-Scoring.html#Adaptive-Scoring"
+    accesskey="n" rel="next">Adaptive Scoring</a>, Previous:
+    <a href="Score-File-Format.html#Score-File-Format" accesskey=
+    "p" rel="prev">Score File Format</a>, Up: <a href=
+    "Scoring.html#Scoring" accesskey="u" rel="up">Scoring</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Score-File-Editing-1" id="Score-File-Editing-1"></a>
 
-<p>Type <kbd>M-x gnus-score-mode</kbd> to use this mode.
-</p>
-<a name="index-gnus_002dscore_002dmode_002dhook"></a>
-<p><code>gnus-score-menu-hook</code> is run in score mode buffers.
-</p>
-<p>In the summary buffer you can use commands like <kbd>V f</kbd>, <kbd>V e</kbd> and
-<kbd>V t</kbd> to begin editing score files.
-</p>
+  <h3 class="section">7.5 Score File Editing</h3>
 
+  <p>You normally enter all scoring commands from the summary
+  buffer, but you might feel the urge to edit them by hand as well,
+  so we&rsquo;ve supplied you with a mode for that.</p>
 
+  <p>It&rsquo;s simply a slightly customized
+  <code>emacs-lisp</code> mode, with these additional commands:</p>
 
+  <dl compact="compact">
+    <dt><kbd>C-c C-c</kbd></dt>
 
+    <dd>
+      <a name="index-C_002dc-C_002dc-_0028Score_0029" id=
+      "index-C_002dc-C_002dc-_0028Score_0029"></a> <a name=
+      "index-gnus_002dscore_002dedit_002dexit" id=
+      "index-gnus_002dscore_002dedit_002dexit"></a>
+
+      <p>Save the changes you have made and return to the summary
+      buffer (<code>gnus-score-edit-exit</code>).</p>
+    </dd>
+
+    <dt><kbd>C-c C-d</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dd-_0028Score_0029" id=
+      "index-C_002dc-C_002dd-_0028Score_0029"></a> <a name=
+      "index-gnus_002dscore_002dedit_002dinsert_002ddate" id=
+      "index-gnus_002dscore_002dedit_002dinsert_002ddate"></a>
+
+      <p>Insert the current date in numerical format
+      (<code>gnus-score-edit-insert-date</code>). This is really
+      the day number, if you were wondering.</p>
+    </dd>
+
+    <dt><kbd>C-c C-p</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dc-C_002dp-_0028Score_0029" id=
+      "index-C_002dc-C_002dp-_0028Score_0029"></a> <a name=
+      "index-gnus_002dscore_002dpretty_002dprint" id=
+      "index-gnus_002dscore_002dpretty_002dprint"></a>
+
+      <p>The adaptive score files are saved in an unformatted
+      fashion. If you intend to read one of these files, you want
+      to <em>pretty print</em> it first. This command
+      (<code>gnus-score-pretty-print</code>) does that for you.</p>
+    </dd>
+  </dl>
+
+  <p>Type <kbd>M-x gnus-score-mode</kbd> to use this
+  mode.</p><a name="index-gnus_002dscore_002dmode_002dhook" id=
+  "index-gnus_002dscore_002dmode_002dhook"></a>
+
+  <p><code>gnus-score-menu-hook</code> is run in score mode
+  buffers.</p>
+
+  <p>In the summary buffer you can use commands like <kbd>V
+  f</kbd>, <kbd>V e</kbd> and <kbd>V t</kbd> to begin editing score
+  files.</p>
 </body>
 </html>

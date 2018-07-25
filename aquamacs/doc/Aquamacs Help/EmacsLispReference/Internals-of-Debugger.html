@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,101 +19,144 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Internals of Debugger</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Internals of Debugger">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Internals of Debugger">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugger.html#Debugger" rel="up" title="Debugger">
-<link href="Edebug.html#Edebug" rel="next" title="Edebug">
-<link href="Invoking-the-Debugger.html#Invoking-the-Debugger" rel="prev" title="Invoking the Debugger">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Internals of
+  Debugger</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Internals of Debugger" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Internals of Debugger" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugger.html#Debugger" rel="up" title="Debugger" />
+  <link href="Edebug.html#Edebug" rel="next" title="Edebug" />
+  <link href="Invoking-the-Debugger.html#Invoking-the-Debugger"
+  rel="prev" title="Invoking the Debugger" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Internals-of-Debugger" id="Internals-of-Debugger"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Invoking-the-Debugger.html#Invoking-the-Debugger" accesskey=
+    "p" rel="prev">Invoking the Debugger</a>, Up: <a href=
+    "Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Internals-of-the-Debugger" id=
+  "Internals-of-the-Debugger"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Internals-of-Debugger"></a>
-<div class="header">
-<p>
-Previous: <a href="Invoking-the-Debugger.html#Invoking-the-Debugger" accesskey="p" rel="prev">Invoking the Debugger</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Internals-of-the-Debugger"></a>
-<h4 class="subsection">17.1.8 Internals of the Debugger</h4>
+  <h4 class="subsection">17.1.8 Internals of the Debugger</h4>
 
-<p>This section describes functions and variables used internally by the
-debugger.
-</p>
-<dl>
-<dt><a name="index-debugger"></a>Variable: <strong>debugger</strong></dt>
-<dd><p>The value of this variable is the function to call to invoke the
-debugger.  Its value must be a function of any number of arguments, or,
-more typically, the name of a function.  This function should invoke
-some kind of debugger.  The default value of the variable is
-<code>debug</code>.
-</p>
-<p>The first argument that Lisp hands to the function indicates why it
-was called.  The convention for arguments is detailed in the description
-of <code>debug</code> (see <a href="Invoking-the-Debugger.html#Invoking-the-Debugger">Invoking the Debugger</a>).
-</p></dd></dl>
+  <p>This section describes functions and variables used internally
+  by the debugger.</p>
 
-<dl>
-<dt><a name="index-backtrace"></a>Command: <strong>backtrace</strong></dt>
-<dd><a name="index-run-time-stack"></a>
-<a name="index-call-stack"></a>
-<p>This function prints a trace of Lisp function calls currently active.
-This is the function used by <code>debug</code> to fill up the
-<samp>*Backtrace*</samp> buffer.  It is written in C, since it must have access
-to the stack to determine which function calls are active.  The return
-value is always <code>nil</code>.
-</p>
-<p>In the following example, a Lisp expression calls <code>backtrace</code>
-explicitly.  This prints the backtrace to the stream
-<code>standard-output</code>, which, in this case, is the buffer
-&lsquo;<samp>backtrace-output</samp>&rsquo;.
-</p>
-<p>Each line of the backtrace represents one function call.  The line shows
-the values of the function&rsquo;s arguments if they are all known; if they
-are still being computed, the line says so.  The arguments of special
-forms are elided.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(with-output-to-temp-buffer &quot;backtrace-output&quot;
+  <dl>
+    <dt><a name="index-debugger" id="index-debugger"></a>Variable:
+    <strong>debugger</strong></dt>
+
+    <dd>
+      <p>The value of this variable is the function to call to
+      invoke the debugger. Its value must be a function of any
+      number of arguments, or, more typically, the name of a
+      function. This function should invoke some kind of debugger.
+      The default value of the variable is <code>debug</code>.</p>
+
+      <p>The first argument that Lisp hands to the function
+      indicates why it was called. The convention for arguments is
+      detailed in the description of <code>debug</code> (see
+      <a href=
+      "Invoking-the-Debugger.html#Invoking-the-Debugger">Invoking
+      the Debugger</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-backtrace" id="index-backtrace"></a>Command:
+    <strong>backtrace</strong></dt>
+
+    <dd>
+      <a name="index-run-time-stack" id="index-run-time-stack"></a>
+      <a name="index-call-stack" id="index-call-stack"></a>
+
+      <p>This function prints a trace of Lisp function calls
+      currently active. This is the function used by
+      <code>debug</code> to fill up the <samp>*Backtrace*</samp>
+      buffer. It is written in C, since it must have access to the
+      stack to determine which function calls are active. The
+      return value is always <code>nil</code>.</p>
+
+      <p>In the following example, a Lisp expression calls
+      <code>backtrace</code> explicitly. This prints the backtrace
+      to the stream <code>standard-output</code>, which, in this
+      case, is the buffer
+      &lsquo;<samp>backtrace-output</samp>&rsquo;.</p>
+
+      <p>Each line of the backtrace represents one function call.
+      The line shows the values of the function&rsquo;s arguments
+      if they are all known; if they are still being computed, the
+      line says so. The arguments of special forms are elided.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(with-output-to-temp-buffer "backtrace-output"
   (let ((var 1))
     (save-excursion
       (setq var (eval '(progn
@@ -119,11 +164,16 @@ forms are elided.
                          (list 'testing (backtrace))))))))
 
      &rArr; (testing nil)
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">----------- Buffer: backtrace-output ------------
+</pre>
+        <pre class="smallexample">
+</pre>
+        <pre class="smallexample">
+----------- Buffer: backtrace-output ------------
   backtrace()
   (list ...computing arguments...)
-</pre><pre class="smallexample">  (progn ...)
+</pre>
+        <pre class="smallexample">
+  (progn ...)
   eval((progn (1+ var) (list (quote testing) (backtrace))))
   (setq ...)
   (save-excursion ...)
@@ -131,80 +181,117 @@ forms are elided.
   (with-output-to-temp-buffer ...)
   eval((with-output-to-temp-buffer ...))
   eval-last-sexp-1(nil)
-</pre><pre class="smallexample">  eval-last-sexp(nil)
+</pre>
+        <pre class="smallexample">
+  eval-last-sexp(nil)
   call-interactively(eval-last-sexp)
 ----------- Buffer: backtrace-output ------------
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-debug_002don_002dnext_002dcall"></a>Variable: <strong>debug-on-next-call</strong></dt>
-<dd><a name="index-eval_002c-and-debugging"></a>
-<a name="index-apply_002c-and-debugging"></a>
-<a name="index-funcall_002c-and-debugging"></a>
-<p>If this variable is non-<code>nil</code>, it says to call the debugger before
-the next <code>eval</code>, <code>apply</code> or <code>funcall</code>.  Entering the
-debugger sets <code>debug-on-next-call</code> to <code>nil</code>.
-</p>
-<p>The <kbd>d</kbd> command in the debugger works by setting this variable.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-debug_002don_002dnext_002dcall" id=
+    "index-debug_002don_002dnext_002dcall"></a>Variable:
+    <strong>debug-on-next-call</strong></dt>
 
-<dl>
-<dt><a name="index-backtrace_002ddebug"></a>Function: <strong>backtrace-debug</strong> <em>level flag</em></dt>
-<dd><p>This function sets the debug-on-exit flag of the stack frame <var>level</var>
-levels down the stack, giving it the value <var>flag</var>.  If <var>flag</var> is
-non-<code>nil</code>, this will cause the debugger to be entered when that
-frame later exits.  Even a nonlocal exit through that frame will enter
-the debugger.
-</p>
-<p>This function is used only by the debugger.
-</p></dd></dl>
+    <dd>
+      <a name="index-eval_002c-and-debugging" id=
+      "index-eval_002c-and-debugging"></a> <a name=
+      "index-apply_002c-and-debugging" id=
+      "index-apply_002c-and-debugging"></a> <a name=
+      "index-funcall_002c-and-debugging" id=
+      "index-funcall_002c-and-debugging"></a>
 
-<dl>
-<dt><a name="index-command_002ddebug_002dstatus"></a>Variable: <strong>command-debug-status</strong></dt>
-<dd><p>This variable records the debugging status of the current interactive
-command.  Each time a command is called interactively, this variable is
-bound to <code>nil</code>.  The debugger can set this variable to leave
-information for future debugger invocations during the same command
-invocation.
-</p>
-<p>The advantage of using this variable rather than an ordinary global
-variable is that the data will never carry over to a subsequent command
-invocation.
-</p></dd></dl>
+      <p>If this variable is non-<code>nil</code>, it says to call
+      the debugger before the next <code>eval</code>,
+      <code>apply</code> or <code>funcall</code>. Entering the
+      debugger sets <code>debug-on-next-call</code> to
+      <code>nil</code>.</p>
 
-<dl>
-<dt><a name="index-backtrace_002dframe"></a>Function: <strong>backtrace-frame</strong> <em>frame-number</em></dt>
-<dd><p>The function <code>backtrace-frame</code> is intended for use in Lisp
-debuggers.  It returns information about what computation is happening
-in the stack frame <var>frame-number</var> levels down.
-</p>
-<p>If that frame has not evaluated the arguments yet, or is a special
-form, the value is <code>(nil <var>function</var> <var>arg-forms</var>&hellip;)</code>.
-</p>
-<p>If that frame has evaluated its arguments and called its function
-already, the return value is <code>(t <var>function</var>
-<var>arg-values</var>&hellip;)</code>.
-</p>
-<p>In the return value, <var>function</var> is whatever was supplied as the
-<small>CAR</small> of the evaluated list, or a <code>lambda</code> expression in the
-case of a macro call.  If the function has a <code>&amp;rest</code> argument, that
-is represented as the tail of the list <var>arg-values</var>.
-</p>
-<p>If <var>frame-number</var> is out of range, <code>backtrace-frame</code> returns
-<code>nil</code>.
-</p></dd></dl>
+      <p>The <kbd>d</kbd> command in the debugger works by setting
+      this variable.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-backtrace_002ddebug" id=
+    "index-backtrace_002ddebug"></a>Function:
+    <strong>backtrace-debug</strong> <em>level flag</em></dt>
 
+    <dd>
+      <p>This function sets the debug-on-exit flag of the stack
+      frame <var>level</var> levels down the stack, giving it the
+      value <var>flag</var>. If <var>flag</var> is
+      non-<code>nil</code>, this will cause the debugger to be
+      entered when that frame later exits. Even a nonlocal exit
+      through that frame will enter the debugger.</p>
 
+      <p>This function is used only by the debugger.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Invoking-the-Debugger.html#Invoking-the-Debugger" accesskey="p" rel="prev">Invoking the Debugger</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-command_002ddebug_002dstatus" id=
+    "index-command_002ddebug_002dstatus"></a>Variable:
+    <strong>command-debug-status</strong></dt>
 
+    <dd>
+      <p>This variable records the debugging status of the current
+      interactive command. Each time a command is called
+      interactively, this variable is bound to <code>nil</code>.
+      The debugger can set this variable to leave information for
+      future debugger invocations during the same command
+      invocation.</p>
 
+      <p>The advantage of using this variable rather than an
+      ordinary global variable is that the data will never carry
+      over to a subsequent command invocation.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-backtrace_002dframe" id=
+    "index-backtrace_002dframe"></a>Function:
+    <strong>backtrace-frame</strong> <em>frame-number</em></dt>
+
+    <dd>
+      <p>The function <code>backtrace-frame</code> is intended for
+      use in Lisp debuggers. It returns information about what
+      computation is happening in the stack frame
+      <var>frame-number</var> levels down.</p>
+
+      <p>If that frame has not evaluated the arguments yet, or is a
+      special form, the value is <code>(nil <var>function</var>
+      <var>arg-forms</var>&hellip;)</code>.</p>
+
+      <p>If that frame has evaluated its arguments and called its
+      function already, the return value is <code>(t
+      <var>function</var>
+      <var>arg-values</var>&hellip;)</code>.</p>
+
+      <p>In the return value, <var>function</var> is whatever was
+      supplied as the <small>CAR</small> of the evaluated list, or
+      a <code>lambda</code> expression in the case of a macro call.
+      If the function has a <code>&amp;rest</code> argument, that
+      is represented as the tail of the list
+      <var>arg-values</var>.</p>
+
+      <p>If <var>frame-number</var> is out of range,
+      <code>backtrace-frame</code> returns <code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Invoking-the-Debugger.html#Invoking-the-Debugger" accesskey=
+    "p" rel="prev">Invoking the Debugger</a>, Up: <a href=
+    "Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

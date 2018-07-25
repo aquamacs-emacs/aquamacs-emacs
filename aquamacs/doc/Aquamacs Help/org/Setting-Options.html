@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Setting Options - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Custom-agenda-views.html#Custom-agenda-views" title="Custom agenda views">
-<link rel="prev" href="Block-agenda.html#Block-agenda" title="Block agenda">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Setting Options - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Custom-agenda-views.html#Custom-agenda-views" title=
+  "Custom agenda views" />
+  <link rel="prev" href="Block-agenda.html#Block-agenda" title=
+  "Block agenda" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -32,8 +41,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -43,28 +54,39 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Setting-Options"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Block-agenda.html#Block-agenda">Block agenda</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Custom-agenda-views.html#Custom-agenda-views">Custom agenda views</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Setting-Options" id="Setting-Options"></a>
 
-<h4 class="subsection">10.6.3 Setting options for custom commands</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Block-agenda.html#Block-agenda">Block agenda</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Custom-agenda-views.html#Custom-agenda-views">Custom agenda
+    views</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-options_002c-for-custom-agenda-views-1287"></a>
-<a name="index-org_002dagenda_002dcustom_002dcommands-1288"></a>Org-mode contains a number of variables regulating agenda construction
-and display.  The global variables define the behavior for all agenda
-commands, including the custom commands.  However, if you want to change
-some settings just for a single custom view, you can do so.  Setting
-options requires inserting a list of variable names and values at the
-right spot in <code>org-agenda-custom-commands</code>.  For example:
+  <h4 class="subsection">10.6.3 Setting options for custom
+  commands</h4>
 
-<pre class="lisp">     (setq org-agenda-custom-commands
+  <p><a name="index-options_002c-for-custom-agenda-views-1287" id=
+  "index-options_002c-for-custom-agenda-views-1287"></a> <a name=
+  "index-org_002dagenda_002dcustom_002dcommands-1288" id=
+  "index-org_002dagenda_002dcustom_002dcommands-1288"></a>Org-mode
+  contains a number of variables regulating agenda construction and
+  display. The global variables define the behavior for all agenda
+  commands, including the custom commands. However, if you want to
+  change some settings just for a single custom view, you can do
+  so. Setting options requires inserting a list of variable names
+  and values at the right spot in
+  <code>org-agenda-custom-commands</code>. For example:</p>
+  <pre class="lisp">
+     (setq org-agenda-custom-commands
            '(("w" todo "WAITING"
               ((org-agenda-sorting-strategy '(priority-down))
                (org-agenda-prefix-format "  Mixed: ")))
@@ -75,26 +97,33 @@ right spot in <code>org-agenda-custom-commands</code>.  For example:
               ((org-agenda-files '("~org/notes.org"))
                (org-agenda-text-search-extra-files nil)))))
 </pre>
-   <p class="noindent">Now the <kbd>C-c a w</kbd> command will sort the collected entries only by
-priority, and the prefix format is modified to just say &lsquo;<samp><span class="samp">  Mixed: </span></samp>&rsquo;
-instead of giving the category of the entry.  The sparse tags tree of
-<kbd>C-c a U</kbd> will now turn out ultra-compact, because neither the
-headline hierarchy above the match, nor the headline following the match
-will be shown.  The command <kbd>C-c a N</kbd> will do a text search limited
-to only a single file.
 
-   <p><a name="index-org_002dagenda_002dcustom_002dcommands-1289"></a>For command sets creating a block agenda,
-<code>org-agenda-custom-commands</code> has two separate spots for setting
-options.  You can add options that should be valid for just a single
-command in the set, and options that should be valid for all commands in
-the set.  The former are just added to the command entry; the latter
-must come after the list of command entries.  Going back to the block
-agenda example (see <a href="Block-agenda.html#Block-agenda">Block agenda</a>), let's change the sorting strategy
-for the <kbd>C-c a h</kbd> commands to <code>priority-down</code>, but let's sort
-the results for GARDEN tags query in the opposite order,
-<code>priority-up</code>.  This would look like this:
+  <p class="noindent">Now the <kbd>C-c a w</kbd> command will sort
+  the collected entries only by priority, and the prefix format is
+  modified to just say &lsquo; <samp><span class=
+  "samp">Mixed:</span></samp> &rsquo; instead of giving the
+  category of the entry. The sparse tags tree of <kbd>C-c a U</kbd>
+  will now turn out ultra-compact, because neither the headline
+  hierarchy above the match, nor the headline following the match
+  will be shown. The command <kbd>C-c a N</kbd> will do a text
+  search limited to only a single file.</p>
 
-<pre class="lisp">     (setq org-agenda-custom-commands
+  <p><a name="index-org_002dagenda_002dcustom_002dcommands-1289"
+  id="index-org_002dagenda_002dcustom_002dcommands-1289"></a>For
+  command sets creating a block agenda,
+  <code>org-agenda-custom-commands</code> has two separate spots
+  for setting options. You can add options that should be valid for
+  just a single command in the set, and options that should be
+  valid for all commands in the set. The former are just added to
+  the command entry; the latter must come after the list of command
+  entries. Going back to the block agenda example (see <a href=
+  "Block-agenda.html#Block-agenda">Block agenda</a>), let's change
+  the sorting strategy for the <kbd>C-c a h</kbd> commands to
+  <code>priority-down</code>, but let's sort the results for GARDEN
+  tags query in the opposite order, <code>priority-up</code>. This
+  would look like this:</p>
+  <pre class="lisp">
+     (setq org-agenda-custom-commands
            '(("h" "Agenda and Home-related tasks"
               ((agenda)
                (tags-todo "home")
@@ -106,12 +135,12 @@ the results for GARDEN tags query in the opposite order,
                (tags-todo "work")
                (tags "office")))))
 </pre>
-   <p>As you see, the values and parentheses setting is a little complex. 
-When in doubt, use the customize interface to set this variable&mdash;it
-fully supports its structure.  Just one caveat: when setting options in
-this interface, the <em>values</em> are just Lisp expressions.  So if the
-value is a string, you need to add the double-quotes around the value
-yourself.
 
-   </body></html>
-
+  <p>As you see, the values and parentheses setting is a little
+  complex. When in doubt, use the customize interface to set this
+  variable&mdash;it fully supports its structure. Just one caveat:
+  when setting options in this interface, the <em>values</em> are
+  just Lisp expressions. So if the value is a string, you need to
+  add the double-quotes around the value yourself.</p>
+</body>
+</html>

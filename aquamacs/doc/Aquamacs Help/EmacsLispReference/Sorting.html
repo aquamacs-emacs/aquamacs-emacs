@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,323 +19,468 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Sorting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Sorting">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Sorting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Columns.html#Columns" rel="next" title="Columns">
-<link href="Auto-Filling.html#Auto-Filling" rel="prev" title="Auto Filling">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Sorting</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Sorting" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Sorting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Columns.html#Columns" rel="next" title="Columns" />
+  <link href="Auto-Filling.html#Auto-Filling" rel="prev" title=
+  "Auto Filling" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Sorting" id="Sorting"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Columns.html#Columns" accesskey="n" rel=
+    "next">Columns</a>, Previous: <a href=
+    "Auto-Filling.html#Auto-Filling" accesskey="p" rel="prev">Auto
+    Filling</a>, Up: <a href="Text.html#Text" accesskey="u" rel=
+    "up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sorting-Text" id="Sorting-Text"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Sorting"></a>
-<div class="header">
-<p>
-Next: <a href="Columns.html#Columns" accesskey="n" rel="next">Columns</a>, Previous: <a href="Auto-Filling.html#Auto-Filling" accesskey="p" rel="prev">Auto Filling</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sorting-Text"></a>
-<h3 class="section">31.15 Sorting Text</h3>
-<a name="index-sorting-text"></a>
+  <h3 class="section">31.15 Sorting Text</h3><a name=
+  "index-sorting-text" id="index-sorting-text"></a>
 
-<p>The sorting functions described in this section all rearrange text in
-a buffer.  This is in contrast to the function <code>sort</code>, which
-rearranges the order of the elements of a list (see <a href="Rearrangement.html#Rearrangement">Rearrangement</a>).
-The values returned by these functions are not meaningful.
-</p>
-<dl>
-<dt><a name="index-sort_002dsubr"></a>Function: <strong>sort-subr</strong> <em>reverse nextrecfun endrecfun &amp;optional startkeyfun endkeyfun predicate</em></dt>
-<dd><p>This function is the general text-sorting routine that subdivides a
-buffer into records and then sorts them.  Most of the commands in this
-section use this function.
-</p>
-<p>To understand how <code>sort-subr</code> works, consider the whole accessible
-portion of the buffer as being divided into disjoint pieces called
-<em>sort records</em>.  The records may or may not be contiguous, but they
-must not overlap.  A portion of each sort record (perhaps all of it) is
-designated as the sort key.  Sorting rearranges the records in order by
-their sort keys.
-</p>
-<p>Usually, the records are rearranged in order of ascending sort key.
-If the first argument to the <code>sort-subr</code> function, <var>reverse</var>,
-is non-<code>nil</code>, the sort records are rearranged in order of
-descending sort key.
-</p>
-<p>The next four arguments to <code>sort-subr</code> are functions that are
-called to move point across a sort record.  They are called many times
-from within <code>sort-subr</code>.
-</p>
-<ol>
-<li> <var>nextrecfun</var> is called with point at the end of a record.  This
-function moves point to the start of the next record.  The first record
-is assumed to start at the position of point when <code>sort-subr</code> is
-called.  Therefore, you should usually move point to the beginning of
-the buffer before calling <code>sort-subr</code>.
+  <p>The sorting functions described in this section all rearrange
+  text in a buffer. This is in contrast to the function
+  <code>sort</code>, which rearranges the order of the elements of
+  a list (see <a href=
+  "Rearrangement.html#Rearrangement">Rearrangement</a>). The values
+  returned by these functions are not meaningful.</p>
 
-<p>This function can indicate there are no more sort records by leaving
-point at the end of the buffer.
-</p>
-</li><li> <var>endrecfun</var> is called with point within a record.  It moves point to
-the end of the record.
+  <dl>
+    <dt><a name="index-sort_002dsubr" id=
+    "index-sort_002dsubr"></a>Function: <strong>sort-subr</strong>
+    <em>reverse nextrecfun endrecfun &amp;optional startkeyfun
+    endkeyfun predicate</em></dt>
 
-</li><li> <var>startkeyfun</var> is called to move point from the start of a record to
-the start of the sort key.  This argument is optional; if it is omitted,
-the whole record is the sort key.  If supplied, the function should
-either return a non-<code>nil</code> value to be used as the sort key, or
-return <code>nil</code> to indicate that the sort key is in the buffer
-starting at point.  In the latter case, <var>endkeyfun</var> is called to
-find the end of the sort key.
+    <dd>
+      <p>This function is the general text-sorting routine that
+      subdivides a buffer into records and then sorts them. Most of
+      the commands in this section use this function.</p>
 
-</li><li> <var>endkeyfun</var> is called to move point from the start of the sort key
-to the end of the sort key.  This argument is optional.  If
-<var>startkeyfun</var> returns <code>nil</code> and this argument is omitted (or
-<code>nil</code>), then the sort key extends to the end of the record.  There
-is no need for <var>endkeyfun</var> if <var>startkeyfun</var> returns a
-non-<code>nil</code> value.
-</li></ol>
+      <p>To understand how <code>sort-subr</code> works, consider
+      the whole accessible portion of the buffer as being divided
+      into disjoint pieces called <em>sort records</em>. The
+      records may or may not be contiguous, but they must not
+      overlap. A portion of each sort record (perhaps all of it) is
+      designated as the sort key. Sorting rearranges the records in
+      order by their sort keys.</p>
 
-<p>The argument <var>predicate</var> is the function to use to compare keys.
-If keys are numbers, it defaults to <code>&lt;</code>; otherwise it defaults to
-<code>string&lt;</code>.
-</p>
-<p>As an example of <code>sort-subr</code>, here is the complete function
-definition for <code>sort-lines</code>:
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Note that the first two lines of doc string</span>
-;; <span class="roman">are effectively one line when viewed by a user.</span>
+      <p>Usually, the records are rearranged in order of ascending
+      sort key. If the first argument to the <code>sort-subr</code>
+      function, <var>reverse</var>, is non-<code>nil</code>, the
+      sort records are rearranged in order of descending sort
+      key.</p>
+
+      <p>The next four arguments to <code>sort-subr</code> are
+      functions that are called to move point across a sort record.
+      They are called many times from within
+      <code>sort-subr</code>.</p>
+
+      <ol>
+        <li>
+          <var>nextrecfun</var> is called with point at the end of
+          a record. This function moves point to the start of the
+          next record. The first record is assumed to start at the
+          position of point when <code>sort-subr</code> is called.
+          Therefore, you should usually move point to the beginning
+          of the buffer before calling <code>sort-subr</code>.
+
+          <p>This function can indicate there are no more sort
+          records by leaving point at the end of the buffer.</p>
+        </li>
+
+        <li><var>endrecfun</var> is called with point within a
+        record. It moves point to the end of the record.</li>
+
+        <li><var>startkeyfun</var> is called to move point from the
+        start of a record to the start of the sort key. This
+        argument is optional; if it is omitted, the whole record is
+        the sort key. If supplied, the function should either
+        return a non-<code>nil</code> value to be used as the sort
+        key, or return <code>nil</code> to indicate that the sort
+        key is in the buffer starting at point. In the latter case,
+        <var>endkeyfun</var> is called to find the end of the sort
+        key.</li>
+
+        <li><var>endkeyfun</var> is called to move point from the
+        start of the sort key to the end of the sort key. This
+        argument is optional. If <var>startkeyfun</var> returns
+        <code>nil</code> and this argument is omitted (or
+        <code>nil</code>), then the sort key extends to the end of
+        the record. There is no need for <var>endkeyfun</var> if
+        <var>startkeyfun</var> returns a non-<code>nil</code>
+        value.</li>
+      </ol>
+
+      <p>The argument <var>predicate</var> is the function to use
+      to compare keys. If keys are numbers, it defaults to
+      <code>&lt;</code>; otherwise it defaults to
+      <code>string&lt;</code>.</p>
+
+      <p>As an example of <code>sort-subr</code>, here is the
+      complete function definition for <code>sort-lines</code>:</p>
+
+      <div class="example">
+        <pre class="example">
+;; <span class=
+"roman">Note that the first two lines of doc string</span>
+;; <span class=
+"roman">are effectively one line when viewed by a user.</span>
 (defun sort-lines (reverse beg end)
-  &quot;Sort lines in region alphabetically;\
+  "Sort lines in region alphabetically;\
  argument means descending order.
 Called from a program, there are three arguments:
-</pre><pre class="example">REVERSE (non-nil means reverse order),\
+</pre>
+        <pre class="example">
+REVERSE (non-nil means reverse order),\
  BEG and END (region to sort).
 The variable `sort-fold-case' determines\
  whether alphabetic case affects
-the sort order.&quot;
-</pre><pre class="example">  (interactive &quot;P\nr&quot;)
+the sort order."
+</pre>
+        <pre class="example">
+  (interactive "P\nr")
   (save-excursion
     (save-restriction
       (narrow-to-region beg end)
       (goto-char (point-min))
       (let ((inhibit-field-text-motion t))
         (sort-subr reverse 'forward-line 'end-of-line)))))
-</pre></div>
+</pre>
+      </div>
 
-<p>Here <code>forward-line</code> moves point to the start of the next record,
-and <code>end-of-line</code> moves point to the end of record.  We do not pass
-the arguments <var>startkeyfun</var> and <var>endkeyfun</var>, because the entire
-record is used as the sort key.
-</p>
-<p>The <code>sort-paragraphs</code> function is very much the same, except that
-its <code>sort-subr</code> call looks like this:
-</p>
-<div class="example">
-<pre class="example">(sort-subr reverse
+      <p>Here <code>forward-line</code> moves point to the start of
+      the next record, and <code>end-of-line</code> moves point to
+      the end of record. We do not pass the arguments
+      <var>startkeyfun</var> and <var>endkeyfun</var>, because the
+      entire record is used as the sort key.</p>
+
+      <p>The <code>sort-paragraphs</code> function is very much the
+      same, except that its <code>sort-subr</code> call looks like
+      this:</p>
+
+      <div class="example">
+        <pre class="example">
+(sort-subr reverse
            (function
             (lambda ()
               (while (and (not (eobp))
                           (looking-at paragraph-separate))
                 (forward-line 1))))
            'forward-paragraph)
-</pre></div>
+</pre>
+      </div>
 
-<p>Markers pointing into any sort records are left with no useful
-position after <code>sort-subr</code> returns.
-</p></dd></dl>
+      <p>Markers pointing into any sort records are left with no
+      useful position after <code>sort-subr</code> returns.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-sort_002dfold_002dcase"></a>User Option: <strong>sort-fold-case</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, <code>sort-subr</code> and the other
-buffer sorting functions ignore case when comparing strings.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-sort_002dfold_002dcase" id=
+    "index-sort_002dfold_002dcase"></a>User Option:
+    <strong>sort-fold-case</strong></dt>
 
-<dl>
-<dt><a name="index-sort_002dregexp_002dfields"></a>Command: <strong>sort-regexp-fields</strong> <em>reverse record-regexp key-regexp start end</em></dt>
-<dd><p>This command sorts the region between <var>start</var> and <var>end</var>
-alphabetically as specified by <var>record-regexp</var> and <var>key-regexp</var>.
-If <var>reverse</var> is a negative integer, then sorting is in reverse
-order.
-</p>
-<p>Alphabetical sorting means that two sort keys are compared by
-comparing the first characters of each, the second characters of each,
-and so on.  If a mismatch is found, it means that the sort keys are
-unequal; the sort key whose character is less at the point of first
-mismatch is the lesser sort key.  The individual characters are compared
-according to their numerical character codes in the Emacs character set.
-</p>
-<p>The value of the <var>record-regexp</var> argument specifies how to divide
-the buffer into sort records.  At the end of each record, a search is
-done for this regular expression, and the text that matches it is taken
-as the next record.  For example, the regular expression &lsquo;<samp>^.+$</samp>&rsquo;,
-which matches lines with at least one character besides a newline, would
-make each such line into a sort record.  See <a href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>, for
-a description of the syntax and meaning of regular expressions.
-</p>
-<p>The value of the <var>key-regexp</var> argument specifies what part of each
-record is the sort key.  The <var>key-regexp</var> could match the whole
-record, or only a part.  In the latter case, the rest of the record has
-no effect on the sorted order of records, but it is carried along when
-the record moves to its new position.
-</p>
-<p>The <var>key-regexp</var> argument can refer to the text matched by a
-subexpression of <var>record-regexp</var>, or it can be a regular expression
-on its own.
-</p>
-<p>If <var>key-regexp</var> is:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>\<var>digit</var></samp>&rsquo;</dt>
-<dd><p>then the text matched by the <var>digit</var>th &lsquo;<samp>\(...\)</samp>&rsquo; parenthesis
-grouping in <var>record-regexp</var> is the sort key.
-</p>
-</dd>
-<dt>&lsquo;<samp>\&amp;</samp>&rsquo;</dt>
-<dd><p>then the whole record is the sort key.
-</p>
-</dd>
-<dt>a regular expression</dt>
-<dd><p>then <code>sort-regexp-fields</code> searches for a match for the regular
-expression within the record.  If such a match is found, it is the sort
-key.  If there is no match for <var>key-regexp</var> within a record then
-that record is ignored, which means its position in the buffer is not
-changed.  (The other records may move around it.)
-</p></dd>
-</dl>
+    <dd>
+      <p>If this variable is non-<code>nil</code>,
+      <code>sort-subr</code> and the other buffer sorting functions
+      ignore case when comparing strings.</p>
+    </dd>
+  </dl>
 
-<p>For example, if you plan to sort all the lines in the region by the
-first word on each line starting with the letter &lsquo;<samp>f</samp>&rsquo;, you should
-set <var>record-regexp</var> to &lsquo;<samp>^.*$</samp>&rsquo; and set <var>key-regexp</var> to
-&lsquo;<samp>\&lt;f\w*\&gt;</samp>&rsquo;.  The resulting expression looks like this:
-</p>
-<div class="example">
-<pre class="example">(sort-regexp-fields nil &quot;^.*$&quot; &quot;\\&lt;f\\w*\\&gt;&quot;
+  <dl>
+    <dt><a name="index-sort_002dregexp_002dfields" id=
+    "index-sort_002dregexp_002dfields"></a>Command:
+    <strong>sort-regexp-fields</strong> <em>reverse record-regexp
+    key-regexp start end</em></dt>
+
+    <dd>
+      <p>This command sorts the region between <var>start</var> and
+      <var>end</var> alphabetically as specified by
+      <var>record-regexp</var> and <var>key-regexp</var>. If
+      <var>reverse</var> is a negative integer, then sorting is in
+      reverse order.</p>
+
+      <p>Alphabetical sorting means that two sort keys are compared
+      by comparing the first characters of each, the second
+      characters of each, and so on. If a mismatch is found, it
+      means that the sort keys are unequal; the sort key whose
+      character is less at the point of first mismatch is the
+      lesser sort key. The individual characters are compared
+      according to their numerical character codes in the Emacs
+      character set.</p>
+
+      <p>The value of the <var>record-regexp</var> argument
+      specifies how to divide the buffer into sort records. At the
+      end of each record, a search is done for this regular
+      expression, and the text that matches it is taken as the next
+      record. For example, the regular expression
+      &lsquo;<samp>^.+$</samp>&rsquo;, which matches lines with at
+      least one character besides a newline, would make each such
+      line into a sort record. See <a href=
+      "Regular-Expressions.html#Regular-Expressions">Regular
+      Expressions</a>, for a description of the syntax and meaning
+      of regular expressions.</p>
+
+      <p>The value of the <var>key-regexp</var> argument specifies
+      what part of each record is the sort key. The
+      <var>key-regexp</var> could match the whole record, or only a
+      part. In the latter case, the rest of the record has no
+      effect on the sorted order of records, but it is carried
+      along when the record moves to its new position.</p>
+
+      <p>The <var>key-regexp</var> argument can refer to the text
+      matched by a subexpression of <var>record-regexp</var>, or it
+      can be a regular expression on its own.</p>
+
+      <p>If <var>key-regexp</var> is:</p>
+
+      <dl compact="compact">
+        <dt>&lsquo;<samp>\<var>digit</var></samp>&rsquo;</dt>
+
+        <dd>
+          <p>then the text matched by the <var>digit</var>th
+          &lsquo;<samp>\(...\)</samp>&rsquo; parenthesis grouping
+          in <var>record-regexp</var> is the sort key.</p>
+        </dd>
+
+        <dt>&lsquo;<samp>\&amp;</samp>&rsquo;</dt>
+
+        <dd>
+          <p>then the whole record is the sort key.</p>
+        </dd>
+
+        <dt>a regular expression</dt>
+
+        <dd>
+          <p>then <code>sort-regexp-fields</code> searches for a
+          match for the regular expression within the record. If
+          such a match is found, it is the sort key. If there is no
+          match for <var>key-regexp</var> within a record then that
+          record is ignored, which means its position in the buffer
+          is not changed. (The other records may move around
+          it.)</p>
+        </dd>
+      </dl>
+
+      <p>For example, if you plan to sort all the lines in the
+      region by the first word on each line starting with the
+      letter &lsquo;<samp>f</samp>&rsquo;, you should set
+      <var>record-regexp</var> to &lsquo;<samp>^.*$</samp>&rsquo;
+      and set <var>key-regexp</var> to
+      &lsquo;<samp>\&lt;f\w*\&gt;</samp>&rsquo;. The resulting
+      expression looks like this:</p>
+
+      <div class="example">
+        <pre class="example">
+(sort-regexp-fields nil "^.*$" "\\&lt;f\\w*\\&gt;"
                     (region-beginning)
                     (region-end))
-</pre></div>
+</pre>
+      </div>
 
-<p>If you call <code>sort-regexp-fields</code> interactively, it prompts for
-<var>record-regexp</var> and <var>key-regexp</var> in the minibuffer.
-</p></dd></dl>
+      <p>If you call <code>sort-regexp-fields</code> interactively,
+      it prompts for <var>record-regexp</var> and
+      <var>key-regexp</var> in the minibuffer.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-sort_002dlines"></a>Command: <strong>sort-lines</strong> <em>reverse start end</em></dt>
-<dd><p>This command alphabetically sorts lines in the region between
-<var>start</var> and <var>end</var>.  If <var>reverse</var> is non-<code>nil</code>, the sort
-is in reverse order.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-sort_002dlines" id=
+    "index-sort_002dlines"></a>Command: <strong>sort-lines</strong>
+    <em>reverse start end</em></dt>
 
-<dl>
-<dt><a name="index-sort_002dparagraphs"></a>Command: <strong>sort-paragraphs</strong> <em>reverse start end</em></dt>
-<dd><p>This command alphabetically sorts paragraphs in the region between
-<var>start</var> and <var>end</var>.  If <var>reverse</var> is non-<code>nil</code>, the sort
-is in reverse order.
-</p></dd></dl>
+    <dd>
+      <p>This command alphabetically sorts lines in the region
+      between <var>start</var> and <var>end</var>. If
+      <var>reverse</var> is non-<code>nil</code>, the sort is in
+      reverse order.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-sort_002dpages"></a>Command: <strong>sort-pages</strong> <em>reverse start end</em></dt>
-<dd><p>This command alphabetically sorts pages in the region between
-<var>start</var> and <var>end</var>.  If <var>reverse</var> is non-<code>nil</code>, the sort
-is in reverse order.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-sort_002dparagraphs" id=
+    "index-sort_002dparagraphs"></a>Command:
+    <strong>sort-paragraphs</strong> <em>reverse start
+    end</em></dt>
 
-<dl>
-<dt><a name="index-sort_002dfields"></a>Command: <strong>sort-fields</strong> <em>field start end</em></dt>
-<dd><p>This command sorts lines in the region between <var>start</var> and
-<var>end</var>, comparing them alphabetically by the <var>field</var>th field
-of each line.  Fields are separated by whitespace and numbered starting
-from 1.  If <var>field</var> is negative, sorting is by the
-−<var>field</var>th<!-- /@w --> field from the end of the line.  This command
-is useful for sorting tables.
-</p></dd></dl>
+    <dd>
+      <p>This command alphabetically sorts paragraphs in the region
+      between <var>start</var> and <var>end</var>. If
+      <var>reverse</var> is non-<code>nil</code>, the sort is in
+      reverse order.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-sort_002dnumeric_002dfields"></a>Command: <strong>sort-numeric-fields</strong> <em>field start end</em></dt>
-<dd><p>This command sorts lines in the region between <var>start</var> and
-<var>end</var>, comparing them numerically by the <var>field</var>th field of
-each line.  Fields are separated by whitespace and numbered starting
-from 1.  The specified field must contain a number in each line of the
-region.  Numbers starting with 0 are treated as octal, and numbers
-starting with &lsquo;<samp>0x</samp>&rsquo; are treated as hexadecimal.
-</p>
-<p>If <var>field</var> is negative, sorting is by the
-−<var>field</var>th<!-- /@w --> field from the end of the line.  This
-command is useful for sorting tables.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-sort_002dpages" id=
+    "index-sort_002dpages"></a>Command: <strong>sort-pages</strong>
+    <em>reverse start end</em></dt>
 
-<dl>
-<dt><a name="index-sort_002dnumeric_002dbase"></a>User Option: <strong>sort-numeric-base</strong></dt>
-<dd><p>This variable specifies the default radix for
-<code>sort-numeric-fields</code> to parse numbers.
-</p></dd></dl>
+    <dd>
+      <p>This command alphabetically sorts pages in the region
+      between <var>start</var> and <var>end</var>. If
+      <var>reverse</var> is non-<code>nil</code>, the sort is in
+      reverse order.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-sort_002dcolumns"></a>Command: <strong>sort-columns</strong> <em>reverse &amp;optional beg end</em></dt>
-<dd><p>This command sorts the lines in the region between <var>beg</var> and
-<var>end</var>, comparing them alphabetically by a certain range of
-columns.  The column positions of <var>beg</var> and <var>end</var> bound the
-range of columns to sort on.
-</p>
-<p>If <var>reverse</var> is non-<code>nil</code>, the sort is in reverse order.
-</p>
-<p>One unusual thing about this command is that the entire line
-containing position <var>beg</var>, and the entire line containing position
-<var>end</var>, are included in the region sorted.
-</p>
-<p>Note that <code>sort-columns</code> rejects text that contains tabs, because
-tabs could be split across the specified columns.  Use <kbd>M-x
-untabify</kbd> to convert tabs to spaces before sorting.
-</p>
-<p>When possible, this command actually works by calling the <code>sort</code>
-utility program.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-sort_002dfields" id=
+    "index-sort_002dfields"></a>Command:
+    <strong>sort-fields</strong> <em>field start end</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Columns.html#Columns" accesskey="n" rel="next">Columns</a>, Previous: <a href="Auto-Filling.html#Auto-Filling" accesskey="p" rel="prev">Auto Filling</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This command sorts lines in the region between
+      <var>start</var> and <var>end</var>, comparing them
+      alphabetically by the <var>field</var>th field of each line.
+      Fields are separated by whitespace and numbered starting from
+      1. If <var>field</var> is negative, sorting is by the
+      &acirc;&circ;&rsquo;<var>field</var>th<!-- /@w --> field from
+      the end of the line. This command is useful for sorting
+      tables.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-sort_002dnumeric_002dfields" id=
+    "index-sort_002dnumeric_002dfields"></a>Command:
+    <strong>sort-numeric-fields</strong> <em>field start
+    end</em></dt>
 
+    <dd>
+      <p>This command sorts lines in the region between
+      <var>start</var> and <var>end</var>, comparing them
+      numerically by the <var>field</var>th field of each line.
+      Fields are separated by whitespace and numbered starting from
+      1. The specified field must contain a number in each line of
+      the region. Numbers starting with 0 are treated as octal, and
+      numbers starting with &lsquo;<samp>0x</samp>&rsquo; are
+      treated as hexadecimal.</p>
 
+      <p>If <var>field</var> is negative, sorting is by the
+      &acirc;&circ;&rsquo;<var>field</var>th<!-- /@w --> field from
+      the end of the line. This command is useful for sorting
+      tables.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-sort_002dnumeric_002dbase" id=
+    "index-sort_002dnumeric_002dbase"></a>User Option:
+    <strong>sort-numeric-base</strong></dt>
+
+    <dd>
+      <p>This variable specifies the default radix for
+      <code>sort-numeric-fields</code> to parse numbers.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-sort_002dcolumns" id=
+    "index-sort_002dcolumns"></a>Command:
+    <strong>sort-columns</strong> <em>reverse &amp;optional beg
+    end</em></dt>
+
+    <dd>
+      <p>This command sorts the lines in the region between
+      <var>beg</var> and <var>end</var>, comparing them
+      alphabetically by a certain range of columns. The column
+      positions of <var>beg</var> and <var>end</var> bound the
+      range of columns to sort on.</p>
+
+      <p>If <var>reverse</var> is non-<code>nil</code>, the sort is
+      in reverse order.</p>
+
+      <p>One unusual thing about this command is that the entire
+      line containing position <var>beg</var>, and the entire line
+      containing position <var>end</var>, are included in the
+      region sorted.</p>
+
+      <p>Note that <code>sort-columns</code> rejects text that
+      contains tabs, because tabs could be split across the
+      specified columns. Use <kbd>M-x untabify</kbd> to convert
+      tabs to spaces before sorting.</p>
+
+      <p>When possible, this command actually works by calling the
+      <code>sort</code> utility program.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Columns.html#Columns" accesskey="n" rel=
+    "next">Columns</a>, Previous: <a href=
+    "Auto-Filling.html#Auto-Filling" accesskey="p" rel="prev">Auto
+    Filling</a>, Up: <a href="Text.html#Text" accesskey="u" rel=
+    "up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

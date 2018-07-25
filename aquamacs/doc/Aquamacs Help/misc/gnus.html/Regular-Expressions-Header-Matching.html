@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,99 +14,141 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Regular Expressions Header Matching</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Regular Expressions Header Matching">
-<meta name="keywords" content="Gnus Manual: Regular Expressions Header Matching">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title="Spam Back Ends">
-<link href="Bogofilter.html#Bogofilter" rel="next" title="Bogofilter">
-<link href="Blackholes.html#Blackholes" rel="prev" title="Blackholes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Regular Expressions Header Matching</title>
+  <meta name="description" content=
+  "Gnus Manual: Regular Expressions Header Matching" />
+  <meta name="keywords" content=
+  "Gnus Manual: Regular Expressions Header Matching" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title=
+  "Spam Back Ends" />
+  <link href="Bogofilter.html#Bogofilter" rel="next" title=
+  "Bogofilter" />
+  <link href="Blackholes.html#Blackholes" rel="prev" title=
+  "Blackholes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Regular-Expressions-Header-Matching"></a>
-<div class="header">
-<p>
-Next: <a href="Bogofilter.html#Bogofilter" accesskey="n" rel="next">Bogofilter</a>, Previous: <a href="Blackholes.html#Blackholes" accesskey="p" rel="prev">Blackholes</a>, Up: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel="up">Spam Back Ends</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Regular-Expressions-Header-Matching-1"></a>
-<h4 class="subsubsection">9.17.6.6 Regular Expressions Header Matching</h4>
-<a name="index-spam-filtering-9"></a>
-<a name="index-regular-expressions-header-matching_002c-spam-filtering"></a>
-<a name="index-spam-12"></a>
+<body lang="en" xml:lang="en">
+  <a name="Regular-Expressions-Header-Matching" id=
+  "Regular-Expressions-Header-Matching"></a>
 
-<dl>
-<dt><a name="index-spam_002duse_002dregex_002dheaders"></a>Variable: <strong>spam-use-regex-headers</strong></dt>
-<dd>
-<p>This option is disabled by default.  You can let Gnus check the
-message headers against lists of regular expressions when you set this
-option.  The variables <code>spam-regex-headers-spam</code> and
-<code>spam-regex-headers-ham</code> hold the list of regular expressions.
-Gnus will check against the message headers to determine if the
-message is spam or ham, respectively.
-</p>
-</dd></dl>
+  <div class="header">
+    <p>Next: <a href="Bogofilter.html#Bogofilter" accesskey="n"
+    rel="next">Bogofilter</a>, Previous: <a href=
+    "Blackholes.html#Blackholes" accesskey="p" rel=
+    "prev">Blackholes</a>, Up: <a href=
+    "Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel=
+    "up">Spam Back Ends</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Regular-Expressions-Header-Matching-1" id=
+  "Regular-Expressions-Header-Matching-1"></a>
 
-<dl>
-<dt><a name="index-spam_002dregex_002dheaders_002dspam"></a>Variable: <strong>spam-regex-headers-spam</strong></dt>
-<dd>
-<p>The list of regular expressions that, when matched in the headers of
-the message, positively identify it as spam.
-</p>
-</dd></dl>
+  <h4 class="subsubsection">9.17.6.6 Regular Expressions Header
+  Matching</h4><a name="index-spam-filtering-9" id=
+  "index-spam-filtering-9"></a> <a name=
+  "index-regular-expressions-header-matching_002c-spam-filtering"
+  id=
+  "index-regular-expressions-header-matching_002c-spam-filtering"></a>
+  <a name="index-spam-12" id="index-spam-12"></a>
 
-<dl>
-<dt><a name="index-spam_002dregex_002dheaders_002dham"></a>Variable: <strong>spam-regex-headers-ham</strong></dt>
-<dd>
-<p>The list of regular expressions that, when matched in the headers of
-the message, positively identify it as ham.
-</p>
-</dd></dl>
+  <dl>
+    <dt><a name="index-spam_002duse_002dregex_002dheaders" id=
+    "index-spam_002duse_002dregex_002dheaders"></a>Variable:
+    <strong>spam-use-regex-headers</strong></dt>
 
-<p>Regular expression header checks are done only on incoming mail.
-There is no specific spam or ham processor for regular expressions.
-</p>
+    <dd>
+      <p>This option is disabled by default. You can let Gnus check
+      the message headers against lists of regular expressions when
+      you set this option. The variables
+      <code>spam-regex-headers-spam</code> and
+      <code>spam-regex-headers-ham</code> hold the list of regular
+      expressions. Gnus will check against the message headers to
+      determine if the message is spam or ham, respectively.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-spam_002dregex_002dheaders_002dspam" id=
+    "index-spam_002dregex_002dheaders_002dspam"></a>Variable:
+    <strong>spam-regex-headers-spam</strong></dt>
 
+    <dd>
+      <p>The list of regular expressions that, when matched in the
+      headers of the message, positively identify it as spam.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-spam_002dregex_002dheaders_002dham" id=
+    "index-spam_002dregex_002dheaders_002dham"></a>Variable:
+    <strong>spam-regex-headers-ham</strong></dt>
+
+    <dd>
+      <p>The list of regular expressions that, when matched in the
+      headers of the message, positively identify it as ham.</p>
+    </dd>
+  </dl>
+
+  <p>Regular expression header checks are done only on incoming
+  mail. There is no specific spam or ham processor for regular
+  expressions.</p>
 </body>
 </html>

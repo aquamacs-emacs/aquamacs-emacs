@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,103 +20,174 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Maintaining</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Maintaining">
-<meta name="keywords" content="GNU Emacs Manual: Maintaining">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Version-Control.html#Version-Control" rel="next" title="Version Control">
-<link href="External-Lisp.html#External-Lisp" rel="prev" title="External Lisp">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Maintaining</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Maintaining" />
+  <meta name="keywords" content="GNU Emacs Manual: Maintaining" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Version-Control.html#Version-Control" rel="next"
+  title="Version Control" />
+  <link href="External-Lisp.html#External-Lisp" rel="prev" title=
+  "External Lisp" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Maintaining" id="Maintaining"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Abbrevs.html#Abbrevs" accesskey="n" rel=
+    "next">Abbrevs</a>, Previous: <a href="Building.html#Building"
+    accesskey="p" rel="prev">Building</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Maintaining-Large-Programs" id=
+  "Maintaining-Large-Programs"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Maintaining"></a>
-<div class="header">
-<p>
-Next: <a href="Abbrevs.html#Abbrevs" accesskey="n" rel="next">Abbrevs</a>, Previous: <a href="Building.html#Building" accesskey="p" rel="prev">Building</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Maintaining-Large-Programs"></a>
-<h2 class="chapter">28 Maintaining Large Programs</h2>
+  <h2 class="chapter">28 Maintaining Large Programs</h2>
 
-<p>This chapter describes Emacs features for maintaining medium- to
-large-size programs and packages.  These features include:
-</p>
-<ul class="no-bullet">
-<li>− Unified interface to Support for Version Control Systems
-(<acronym>VCS</acronym>) that record the history of changes to source files.
+  <p>This chapter describes Emacs features for maintaining medium-
+  to large-size programs and packages. These features include:</p>
 
-</li><li>− A specialized mode for maintaining <samp>ChangeLog</samp> files that provide
-a chronological log of program changes.
+  <ul class="no-bullet">
+    <li>&acirc;&circ;&rsquo; Unified interface to Support for
+    Version Control Systems (<acronym>VCS</acronym>) that record
+    the history of changes to source files.</li>
 
-</li><li>− <acronym>Xref</acronym>, a set of commands for displaying definitions of
-symbols (a.k.a. &ldquo;identifiers&rdquo;) and their references.
+    <li>&acirc;&circ;&rsquo; A specialized mode for maintaining
+    <samp>ChangeLog</samp> files that provide a chronological log
+    of program changes.</li>
 
-</li><li>− <acronym>EDE</acronym>, the Emacs&rsquo;s own IDE.
+    <li>&acirc;&circ;&rsquo; <acronym>Xref</acronym>, a set of
+    commands for displaying definitions of symbols (a.k.a.
+    &ldquo;identifiers&rdquo;) and their references.</li>
 
-</li><li>− A mode for merging changes to program sources made on separate
-branches of development.
-</li></ul>
+    <li>&acirc;&circ;&rsquo; <acronym>EDE</acronym>, the
+    Emacs&rsquo;s own IDE.</li>
 
-<p>If you are maintaining a large Lisp program, then in addition to the
-features described here, you may find the Emacs Lisp Regression
-Testing (<acronym>ERT</acronym>) library useful (see <a href="../ert/index.html#Top">ERT</a> in <cite>Emacs
-Lisp Regression Testing</cite>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Version-Control.html#Version-Control" accesskey="1">Version Control</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using version control systems.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Change-Log.html#Change-Log" accesskey="2">Change Log</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Maintaining a change history for your program.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Xref.html#Xref" accesskey="3">Xref</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Find definitions and references of any function,
-                          method, struct, macro, &hellip; in your program.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="EDE.html#EDE" accesskey="4">EDE</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An integrated development environment for Emacs.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Emerge.html#Emerge" accesskey="5">Emerge</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A convenient way of merging two versions of a program.
-</td></tr>
-</table>
+    <li>&acirc;&circ;&rsquo; A mode for merging changes to program
+    sources made on separate branches of development.</li>
+  </ul>
 
+  <p>If you are maintaining a large Lisp program, then in addition
+  to the features described here, you may find the Emacs Lisp
+  Regression Testing (<acronym>ERT</acronym>) library useful (see
+  <a href="../ert/index.html#Top">ERT</a> in <cite>Emacs Lisp
+  Regression Testing</cite>).</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Version-Control.html#Version-Control" accesskey="1">Version
+      Control</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Using version control
+      systems.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Change-Log.html#Change-Log" accesskey="2">Change
+      Log</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Maintaining a change history
+      for your program.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href="Xref.html#Xref"
+      accesskey="3">Xref</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Find definitions and references
+      of any function, method, struct, macro, &hellip; in your
+      program.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href="EDE.html#EDE"
+      accesskey="4">EDE</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">An integrated development
+      environment for Emacs.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Emerge.html#Emerge" accesskey="5">Emerge</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">A convenient way of merging two
+      versions of a program.</td>
+    </tr>
+  </table>
 </body>
 </html>

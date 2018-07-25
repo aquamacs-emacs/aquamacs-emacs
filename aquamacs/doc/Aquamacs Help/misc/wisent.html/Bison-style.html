@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,77 +16,111 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Bison style</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Bison style">
-<meta name="keywords" content="Wisent Parser Development: Bison style">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Grammar-styles.html#Grammar-styles" rel="up" title="Grammar styles">
-<link href="Mixed-style.html#Mixed-style" rel="next" title="Mixed style">
-<link href="Iterative-style.html#Iterative-style" rel="prev" title="Iterative style">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Bison style</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Bison style" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Bison style" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Grammar-styles.html#Grammar-styles" rel="up" title=
+  "Grammar styles" />
+  <link href="Mixed-style.html#Mixed-style" rel="next" title=
+  "Mixed style" />
+  <link href="Iterative-style.html#Iterative-style" rel="prev"
+  title="Iterative style" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Bison-style"></a>
-<div class="header">
-<p>
-Next: <a href="Mixed-style.html#Mixed-style" accesskey="n" rel="next">Mixed style</a>, Previous: <a href="Iterative-style.html#Iterative-style" accesskey="p" rel="prev">Iterative style</a>, Up: <a href="Grammar-styles.html#Grammar-styles" accesskey="u" rel="up">Grammar styles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Bison-style-1"></a>
-<h4 class="subsection">4.1.2 Bison style</h4>
+<body lang="en" xml:lang="en">
+  <a name="Bison-style" id="Bison-style"></a>
 
-<a name="index-grammar-bison-style"></a>
-<p>What we call the <em>Bison style</em> is the traditional style of Bison&rsquo;s
-grammars.  Compared to iterative style, it is not straightforward to
-use grammars written in Bison style in <i>Semantic</i>.  Mainly because such
-grammars are designed to parse the whole input data in one pass, and
-don&rsquo;t use the iterative parser back-end mechanism (see <a href="Iterative-style.html#Iterative-style">Iterative style</a>).  With Bison style the parser is called once to parse the
-grammar start nonterminal.
-</p>
-<p>The following example is a snippet of the Bison style Java grammar
-provided in the <i>Semantic</i> distribution in the file
-<samp>semantic/wisent/java.wy</samp>.
-</p>
-<div class="example">
-<pre class="example">%start formal_parameter
+  <div class="header">
+    <p>Next: <a href="Mixed-style.html#Mixed-style" accesskey="n"
+    rel="next">Mixed style</a>, Previous: <a href=
+    "Iterative-style.html#Iterative-style" accesskey="p" rel=
+    "prev">Iterative style</a>, Up: <a href=
+    "Grammar-styles.html#Grammar-styles" accesskey="u" rel=
+    "up">Grammar styles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Bison-style-1" id="Bison-style-1"></a>
+
+  <h4 class="subsection">4.1.2 Bison style</h4><a name=
+  "index-grammar-bison-style" id="index-grammar-bison-style"></a>
+
+  <p>What we call the <em>Bison style</em> is the traditional style
+  of Bison&rsquo;s grammars. Compared to iterative style, it is not
+  straightforward to use grammars written in Bison style in
+  <i>Semantic</i>. Mainly because such grammars are designed to
+  parse the whole input data in one pass, and don&rsquo;t use the
+  iterative parser back-end mechanism (see <a href=
+  "Iterative-style.html#Iterative-style">Iterative style</a>). With
+  Bison style the parser is called once to parse the grammar start
+  nonterminal.</p>
+
+  <p>The following example is a snippet of the Bison style Java
+  grammar provided in the <i>Semantic</i> distribution in the file
+  <samp>semantic/wisent/java.wy</samp>.</p>
+
+  <div class="example">
+    <pre class="example">
+%start formal_parameter
 &hellip;
 
 formal_parameter_list
@@ -100,22 +136,20 @@ formal_parameter
      (VARIABLE-TAG $3 $2 :typemodifiers $1)
      )
   ;
-</pre></div>
+</pre>
+  </div>
 
-<p>The first consequence is that syntax errors are not automatically
-handled by <i>Semantic</i>.  Thus, it is necessary to explicitly handle
-them at the grammar level, providing error recovery rules to skip
-unexpected input data.
-</p>
-<p>The second consequence is that the iterative parser can&rsquo;t do automatic
-tag expansion, except for the start nonterminal value.  It is
-necessary to explicitly expand tags from concerned semantic actions by
-calling the grammar macro <code>EXPANDTAG</code> with a raw tag as
-parameter.  See also <a href="Start-nonterminals.html#Start-nonterminals">Start nonterminals</a>, for incremental
-re-parse considerations.
-</p>
+  <p>The first consequence is that syntax errors are not
+  automatically handled by <i>Semantic</i>. Thus, it is necessary
+  to explicitly handle them at the grammar level, providing error
+  recovery rules to skip unexpected input data.</p>
 
-
-
+  <p>The second consequence is that the iterative parser
+  can&rsquo;t do automatic tag expansion, except for the start
+  nonterminal value. It is necessary to explicitly expand tags from
+  concerned semantic actions by calling the grammar macro
+  <code>EXPANDTAG</code> with a raw tag as parameter. See also
+  <a href="Start-nonterminals.html#Start-nonterminals">Start
+  nonterminals</a>, for incremental re-parse considerations.</p>
 </body>
 </html>

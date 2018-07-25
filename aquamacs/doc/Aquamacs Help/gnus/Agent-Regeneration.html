@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Agent Regeneration - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Gnus-Unplugged.html#Gnus-Unplugged" title="Gnus Unplugged">
-<link rel="prev" href="Agent-Expiry.html#Agent-Expiry" title="Agent Expiry">
-<link rel="next" href="Agent-and-flags.html#Agent-and-flags" title="Agent and flags">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Agent Regeneration - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Gnus-Unplugged.html#Gnus-Unplugged" title=
+  "Gnus Unplugged" />
+  <link rel="prev" href="Agent-Expiry.html#Agent-Expiry" title=
+  "Agent Expiry" />
+  <link rel="next" href="Agent-and-flags.html#Agent-and-flags"
+  title="Agent and flags" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +35,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,44 +48,65 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Agent-Regeneration"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Agent-and-flags.html#Agent-and-flags">Agent and flags</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Agent-Expiry.html#Agent-Expiry">Agent Expiry</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Unplugged.html#Gnus-Unplugged">Gnus Unplugged</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Agent-Regeneration" id="Agent-Regeneration"></a>
 
-<h4 class="subsection">6.9.7 Agent Regeneration</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Agent-and-flags.html#Agent-and-flags">Agent and flags</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Agent-Expiry.html#Agent-Expiry">Agent Expiry</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Gnus-Unplugged.html#Gnus-Unplugged">Gnus Unplugged</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-agent-regeneration-2392"></a><a name="index-Gnus-agent-regeneration-2393"></a><a name="index-regeneration-2394"></a>
-The local data structures used by <code>nnagent</code> may become corrupted
-due to certain exceptional conditions.  When this happens,
-<code>nnagent</code> functionality may degrade or even fail.  The solution
-to this problem is to repair the local data structures by removing all
-internal inconsistencies.
+  <h4 class="subsection">6.9.7 Agent Regeneration</h4>
 
-   <p>For example, if your connection to your server is lost while
-downloaded articles into the agent, the local data structures will not
-know about articles successfully downloaded prior to the connection
-failure.  Running <code>gnus-agent-regenerate</code> or
-<code>gnus-agent-regenerate-group</code> will update the data structures
-such that you don't need to download these articles a second time.
+  <p><a name="index-agent-regeneration-2392" id=
+  "index-agent-regeneration-2392"></a><a name=
+  "index-Gnus-agent-regeneration-2393" id=
+  "index-Gnus-agent-regeneration-2393"></a><a name=
+  "index-regeneration-2394" id="index-regeneration-2394"></a> The
+  local data structures used by <code>nnagent</code> may become
+  corrupted due to certain exceptional conditions. When this
+  happens, <code>nnagent</code> functionality may degrade or even
+  fail. The solution to this problem is to repair the local data
+  structures by removing all internal inconsistencies.</p>
 
-   <p><a name="index-gnus_002dagent_002dregenerate-2395"></a><a name="index-M_002dx-gnus_002dagent_002dregenerate-2396"></a>The command <code>gnus-agent-regenerate</code> will perform
-<code>gnus-agent-regenerate-group</code> on every agentized group.  While
-you can run <code>gnus-agent-regenerate</code> in any buffer, it is strongly
-recommended that you first close all summary buffers.
+  <p>For example, if your connection to your server is lost while
+  downloaded articles into the agent, the local data structures
+  will not know about articles successfully downloaded prior to the
+  connection failure. Running <code>gnus-agent-regenerate</code> or
+  <code>gnus-agent-regenerate-group</code> will update the data
+  structures such that you don't need to download these articles a
+  second time.</p>
 
-   <p><a name="index-gnus_002dagent_002dregenerate_002dgroup-2397"></a><a name="index-M_002dx-gnus_002dagent_002dregenerate_002dgroup-2398"></a>The command <code>gnus-agent-regenerate-group</code> uses the local copies
-of individual articles to repair the local <acronym>NOV</acronym>(header) database.  It
-then updates the internal data structures that document which articles
-are stored locally.  An optional argument will mark articles in the
-agent as unread.
+  <p><a name="index-gnus_002dagent_002dregenerate-2395" id=
+  "index-gnus_002dagent_002dregenerate-2395"></a><a name=
+  "index-M_002dx-gnus_002dagent_002dregenerate-2396" id=
+  "index-M_002dx-gnus_002dagent_002dregenerate-2396"></a>The
+  command <code>gnus-agent-regenerate</code> will perform
+  <code>gnus-agent-regenerate-group</code> on every agentized
+  group. While you can run <code>gnus-agent-regenerate</code> in
+  any buffer, it is strongly recommended that you first close all
+  summary buffers.</p>
 
-   </body></html>
-
+  <p><a name="index-gnus_002dagent_002dregenerate_002dgroup-2397"
+  id=
+  "index-gnus_002dagent_002dregenerate_002dgroup-2397"></a><a name=
+  "index-M_002dx-gnus_002dagent_002dregenerate_002dgroup-2398" id=
+  "index-M_002dx-gnus_002dagent_002dregenerate_002dgroup-2398"></a>The
+  command <code>gnus-agent-regenerate-group</code> uses the local
+  copies of individual articles to repair the local
+  <acronym>NOV</acronym>(header) database. It then updates the
+  internal data structures that document which articles are stored
+  locally. An optional argument will mark articles in the agent as
+  unread.</p>
+</body>
+</html>

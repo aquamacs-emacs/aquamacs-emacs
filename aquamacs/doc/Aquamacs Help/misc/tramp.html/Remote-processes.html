@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,318 +14,411 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to
 copy and modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>TRAMP User Manual: Remote processes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="TRAMP User Manual: Remote processes">
-<meta name="keywords" content="TRAMP User Manual: Remote processes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Usage.html#Usage" rel="up" title="Usage">
-<link href="Cleanup-remote-connections.html#Cleanup-remote-connections" rel="next" title="Cleanup remote connections">
-<link href="Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops" rel="prev" title="Ad-hoc multi-hops">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>TRAMP User Manual: Remote processes</title>
+  <meta name="description" content=
+  "TRAMP User Manual: Remote processes" />
+  <meta name="keywords" content=
+  "TRAMP User Manual: Remote processes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Usage.html#Usage" rel="up" title="Usage" />
+  <link href=
+  "Cleanup-remote-connections.html#Cleanup-remote-connections" rel=
+  "next" title="Cleanup remote connections" />
+  <link href=
+  "Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops" rel=
+  "prev" title="Ad-hoc multi-hops" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Remote-processes"></a>
-<div class="header">
-<p>
-Next: <a href="Cleanup-remote-connections.html#Cleanup-remote-connections" accesskey="n" rel="next">Cleanup remote connections</a>, Previous: <a href="Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops" accesskey="p" rel="prev">Ad-hoc multi-hops</a>, Up: <a href="Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Integration-with-other-Emacs-packages"></a>
-<h3 class="section">5.4 Integration with other Emacs packages</h3>
-<a name="index-compile"></a>
-<a name="index-recompile"></a>
+<body lang="en" xml:lang="en">
+  <a name="Remote-processes" id="Remote-processes"></a>
 
-<p><small>TRAMP</small> supports starting new running processes on the remote
-host for discovering remote file names.  Emacs packages on
-the remote host need no specific modifications for <small>TRAMP</small>&rsquo;s
-use.
-</p>
-<p>This type of integration does not work with the <samp>ftp</samp> method,
-and does not support the pty association as specified in
-<code>start-file-process</code>.
-</p>
-<p><code>process-file</code> and <code>start-file-process</code> work on the remote
-host when the variable <code>default-directory</code> is remote:
-</p>
-<div class="lisp">
-<pre class="lisp">(let ((default-directory &quot;/ssh:remote.host:&quot;))
-  (start-file-process &quot;grep&quot; (get-buffer-create &quot;*grep*&quot;)
-                      &quot;/bin/sh&quot; &quot;-c&quot; &quot;grep -e tramp *&quot;))
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Cleanup-remote-connections.html#Cleanup-remote-connections"
+    accesskey="n" rel="next">Cleanup remote connections</a>,
+    Previous: <a href=
+    "Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops"
+    accesskey="p" rel="prev">Ad-hoc multi-hops</a>, Up: <a href=
+    "Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Integration-with-other-Emacs-packages" id=
+  "Integration-with-other-Emacs-packages"></a>
 
+  <h3 class="section">5.4 Integration with other Emacs
+  packages</h3><a name="index-compile" id="index-compile"></a>
+  <a name="index-recompile" id="index-recompile"></a>
 
-<p>Remote processes do not apply to GVFS (see <a href="GVFS-based-methods.html#GVFS-based-methods">GVFS based methods</a>)
-because the remote file system is mounted on the local host and
-<small>TRAMP</small> just accesses by changing the <code>default-directory</code>.
-</p>
-<p><small>TRAMP</small> starts a remote process when a command is executed in a
-remote file or directory buffer.  As of now, these packages have been
-integrated to work with <small>TRAMP</small>: <samp>compile.el</samp> (commands
-like <code>compile</code> and <code>grep</code>) and <samp>gud.el</samp> (<code>gdb</code> or
-<code>perldb</code>).
-</p>
-<p>For <small>TRAMP</small> to find the command on the remote, it must be
-accessible through the default search path as setup by <small>TRAMP</small>
-upon first connection.  Alternatively, use an absolute path or extend
-<code>tramp-remote-path</code> (see <a href="Remote-programs.html#Remote-programs">Remote programs</a>):
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'tramp-remote-path &quot;~/bin&quot;)
-(add-to-list 'tramp-remote-path &quot;/appli/pub/bin&quot;)
-</pre></div>
+  <p><small>TRAMP</small> supports starting new running processes
+  on the remote host for discovering remote file names. Emacs
+  packages on the remote host need no specific modifications for
+  <small>TRAMP</small>&rsquo;s use.</p>
 
-<p>Customize <code>tramp-remote-process-environment</code> to suit the remote
-program&rsquo;s environment for the remote host.
-<code>tramp-remote-process-environment</code> is a list of strings
-structured similar to <code>process-environment</code>, where each element
-is a string of the form &lsquo;<samp>ENVVARNAME=VALUE</samp>&rsquo;.
-</p>
-<p>To avoid any conflicts with local host variables set through local
-configuration files, such as <samp>~/.profile</samp>, use &lsquo;<samp>ENVVARNAME=</samp>&rsquo;
-to unset them for the remote environment.
-</p>
-<p>Use <code>add-to-list</code> to add entries:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'tramp-remote-process-environment &quot;JAVA_HOME=/opt/java&quot;)
-</pre></div>
+  <p>This type of integration does not work with the
+  <samp>ftp</samp> method, and does not support the pty association
+  as specified in <code>start-file-process</code>.</p>
 
-<p>Modifying or deleting already existing values in the
-<code>tramp-remote-process-environment</code> list may not be feasible on
-restricted remote hosts.  For example, some system administrators
-disallow changing <code>HISTORY</code> variable.  To accommodate such
-restrictions when using <small>TRAMP</small>, fix the
-<code>tramp-remote-process-environment</code> by the following code in the
-local <samp>.emacs</samp> file:
-</p>
-<div class="lisp">
-<pre class="lisp">(let ((process-environment tramp-remote-process-environment))
-  (setenv &quot;HISTORY&quot; nil)
+  <p><code>process-file</code> and <code>start-file-process</code>
+  work on the remote host when the variable
+  <code>default-directory</code> is remote:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(let ((default-directory "/ssh:remote.host:"))
+  (start-file-process "grep" (get-buffer-create "*grep*")
+                      "/bin/sh" "-c" "grep -e tramp *"))
+</pre>
+  </div>
+
+  <p>Remote processes do not apply to GVFS (see <a href=
+  "GVFS-based-methods.html#GVFS-based-methods">GVFS based
+  methods</a>) because the remote file system is mounted on the
+  local host and <small>TRAMP</small> just accesses by changing the
+  <code>default-directory</code>.</p>
+
+  <p><small>TRAMP</small> starts a remote process when a command is
+  executed in a remote file or directory buffer. As of now, these
+  packages have been integrated to work with <small>TRAMP</small>:
+  <samp>compile.el</samp> (commands like <code>compile</code> and
+  <code>grep</code>) and <samp>gud.el</samp> (<code>gdb</code> or
+  <code>perldb</code>).</p>
+
+  <p>For <small>TRAMP</small> to find the command on the remote, it
+  must be accessible through the default search path as setup by
+  <small>TRAMP</small> upon first connection. Alternatively, use an
+  absolute path or extend <code>tramp-remote-path</code> (see
+  <a href="Remote-programs.html#Remote-programs">Remote
+  programs</a>):</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(add-to-list 'tramp-remote-path "~/bin")
+(add-to-list 'tramp-remote-path "/appli/pub/bin")
+</pre>
+  </div>
+
+  <p>Customize <code>tramp-remote-process-environment</code> to
+  suit the remote program&rsquo;s environment for the remote host.
+  <code>tramp-remote-process-environment</code> is a list of
+  strings structured similar to <code>process-environment</code>,
+  where each element is a string of the form
+  &lsquo;<samp>ENVVARNAME=VALUE</samp>&rsquo;.</p>
+
+  <p>To avoid any conflicts with local host variables set through
+  local configuration files, such as <samp>~/.profile</samp>, use
+  &lsquo;<samp>ENVVARNAME=</samp>&rsquo; to unset them for the
+  remote environment.</p>
+
+  <p>Use <code>add-to-list</code> to add entries:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(add-to-list 'tramp-remote-process-environment "JAVA_HOME=/opt/java")
+</pre>
+  </div>
+
+  <p>Modifying or deleting already existing values in the
+  <code>tramp-remote-process-environment</code> list may not be
+  feasible on restricted remote hosts. For example, some system
+  administrators disallow changing <code>HISTORY</code> variable.
+  To accommodate such restrictions when using <small>TRAMP</small>,
+  fix the <code>tramp-remote-process-environment</code> by the
+  following code in the local <samp>.emacs</samp> file:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(let ((process-environment tramp-remote-process-environment))
+  (setenv "HISTORY" nil)
   (setq tramp-remote-process-environment process-environment))
-</pre></div>
+</pre>
+  </div>
 
-<p><small>TRAMP</small> does not use the defaults specified in
-<code>process-environment</code> for running <code>process-file</code> or
-<code>start-file-process</code> on remote hosts.  When values from
-<code>process-environment</code> are needed for remote processes, then set
-them as follows:
-</p>
-<div class="lisp">
-<pre class="lisp">(let ((process-environment (cons &quot;HGPLAIN=1&quot; process-environment)))
+  <p><small>TRAMP</small> does not use the defaults specified in
+  <code>process-environment</code> for running
+  <code>process-file</code> or <code>start-file-process</code> on
+  remote hosts. When values from <code>process-environment</code>
+  are needed for remote processes, then set them as follows:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(let ((process-environment (cons "HGPLAIN=1" process-environment)))
   (process-file &hellip;))
-</pre></div>
+</pre>
+  </div>
 
-<p>This works only for environment variables not already set in the
-<code>process-environment</code>.
-</p>
-<p>For integrating other Emacs packages so <small>TRAMP</small> can
-execute remotely, please file a bug report.  See <a href="Bug-Reports.html#Bug-Reports">Bug Reports</a>.
-</p>
+  <p>This works only for environment variables not already set in
+  the <code>process-environment</code>.</p>
 
-<a name="Running-remote-programs-that-create-local-X11-windows"></a>
-<h4 class="subsection">5.4.1 Running remote programs that create local X11 windows</h4>
+  <p>For integrating other Emacs packages so <small>TRAMP</small>
+  can execute remotely, please file a bug report. See <a href=
+  "Bug-Reports.html#Bug-Reports">Bug Reports</a>.</p><a name=
+  "Running-remote-programs-that-create-local-X11-windows" id=
+  "Running-remote-programs-that-create-local-X11-windows"></a>
 
-<p>To allow a remote program to create an X11 window on the local host,
-set the <code>DISPLAY</code> environment variable for the remote host as
-follows in the local <samp>.emacs</samp> file:
-</p>
-<div class="lisp">
-<pre class="lisp">(add-to-list 'tramp-remote-process-environment
-             (format &quot;DISPLAY=%s&quot; (getenv &quot;DISPLAY&quot;)))
-</pre></div>
+  <h4 class="subsection">5.4.1 Running remote programs that create
+  local X11 windows</h4>
 
-<p><code>(getenv &quot;DISPLAY&quot;)</code> should return a recognizable name for the
-local host that the remote host can redirect X11 window
-interactions.  If querying for a recognizable name is not possible for
-whatever reason, then replace <code>(getenv &quot;DISPLAY&quot;)</code> with a
-hard-coded, fixed name.  Note that using <code>:0</code> for X11 display name
-here will not work as expected.
-</p>
-<p>An alternate approach is specify <code>ForwardX11 yes</code> or
-<code>ForwardX11Trusted yes</code> in the file <samp>~/.ssh/config</samp> on the
-local host.
-</p>
+  <p>To allow a remote program to create an X11 window on the local
+  host, set the <code>DISPLAY</code> environment variable for the
+  remote host as follows in the local <samp>.emacs</samp> file:</p>
 
-<a name="Running-shell-on-a-remote-host"></a>
-<h4 class="subsection">5.4.2 Running <code>shell</code> on a remote host</h4>
-<a name="index-shell"></a>
+  <div class="lisp">
+    <pre class="lisp">
+(add-to-list 'tramp-remote-process-environment
+             (format "DISPLAY=%s" (getenv "DISPLAY")))
+</pre>
+  </div>
 
-<p>Set <samp>explicit-shell-file-name</samp> to the appropriate shell name
-when using <small>TRAMP</small> between two hosts with different operating
-systems, such as &lsquo;<samp>windows-nt</samp>&rsquo; and &lsquo;<samp>gnu/linux</samp>&rsquo;.  This option
-ensures the correct name of the remote shell program.
-</p>
-<p>Starting with Emacs 24, when <samp>explicit-shell-file-name</samp> is
-equal to <code>nil</code>, calling <code>shell</code> interactively will prompt
-for a shell name.
-</p>
+  <p><code>(getenv "DISPLAY")</code> should return a recognizable
+  name for the local host that the remote host can redirect X11
+  window interactions. If querying for a recognizable name is not
+  possible for whatever reason, then replace <code>(getenv
+  "DISPLAY")</code> with a hard-coded, fixed name. Note that using
+  <code>:0</code> for X11 display name here will not work as
+  expected.</p>
 
-<a name="Running-shell_002dcommand-on-a-remote-host"></a>
-<h4 class="subsection">5.4.3 Running <code>shell-command</code> on a remote host</h4>
-<a name="index-shell_002dcommand"></a>
+  <p>An alternate approach is specify <code>ForwardX11 yes</code>
+  or <code>ForwardX11Trusted yes</code> in the file
+  <samp>~/.ssh/config</samp> on the local host.</p><a name=
+  "Running-shell-on-a-remote-host" id=
+  "Running-shell-on-a-remote-host"></a>
 
-<p><code>shell-command</code> executes commands synchronously or asynchronously
-on remote hosts and displays output in buffers on the local
-host.  Example:
-</p>
-<div class="example">
-<pre class="example"><kbd>C-x C-f /sudo:: <span class="key">RET</span></kbd>
-<kbd>M-! tail -f /var/log/syslog.log &amp; <span class="key">RET</span></kbd>
-</pre></div>
+  <h4 class="subsection">5.4.2 Running <code>shell</code> on a
+  remote host</h4><a name="index-shell" id="index-shell"></a>
 
-<p><code>tail</code> command outputs continuously to the local buffer,
-<samp>*Async Shell Command*</samp>
-</p>
-<p><kbd>M-x auto-revert-tail-mode</kbd> runs similarly showing continuous output.
-</p>
+  <p>Set <samp>explicit-shell-file-name</samp> to the appropriate
+  shell name when using <small>TRAMP</small> between two hosts with
+  different operating systems, such as
+  &lsquo;<samp>windows-nt</samp>&rsquo; and
+  &lsquo;<samp>gnu/linux</samp>&rsquo;. This option ensures the
+  correct name of the remote shell program.</p>
 
-<a name="Running-eshell-on-a-remote-host"></a>
-<h4 class="subsection">5.4.4 Running <code>eshell</code> on a remote host</h4>
-<a name="index-eshell"></a>
+  <p>Starting with Emacs 24, when
+  <samp>explicit-shell-file-name</samp> is equal to
+  <code>nil</code>, calling <code>shell</code> interactively will
+  prompt for a shell name.</p><a name=
+  "Running-shell_002dcommand-on-a-remote-host" id=
+  "Running-shell_002dcommand-on-a-remote-host"></a>
 
-<p><small>TRAMP</small> is integrated into <samp>eshell.el</samp>, which enables
-interactive eshell sessions on remote hosts at the command prompt.
-You must add the module <code>eshell-tramp</code> to
-<code>eshell-modules-list</code>.  Here&rsquo;s a sample interaction after opening
-<kbd>M-x eshell</kbd> on a remote host:
-</p>
-<div class="example">
-<pre class="example"><b>~ $</b> cd /sudo::/etc <span class="key">RET</span>
+  <h4 class="subsection">5.4.3 Running <code>shell-command</code>
+  on a remote host</h4><a name="index-shell_002dcommand" id=
+  "index-shell_002dcommand"></a>
+
+  <p><code>shell-command</code> executes commands synchronously or
+  asynchronously on remote hosts and displays output in buffers on
+  the local host. Example:</p>
+
+  <div class="example">
+    <pre class="example">
+<kbd>C-x C-f /sudo:: <span class="key">RET</span></kbd>
+<kbd>M-! tail -f /var/log/syslog.log &amp; <span class=
+"key">RET</span></kbd>
+</pre>
+  </div>
+
+  <p><code>tail</code> command outputs continuously to the local
+  buffer, <samp>*Async Shell Command*</samp></p>
+
+  <p><kbd>M-x auto-revert-tail-mode</kbd> runs similarly showing
+  continuous output.</p><a name="Running-eshell-on-a-remote-host"
+  id="Running-eshell-on-a-remote-host"></a>
+
+  <h4 class="subsection">5.4.4 Running <code>eshell</code> on a
+  remote host</h4><a name="index-eshell" id="index-eshell"></a>
+
+  <p><small>TRAMP</small> is integrated into
+  <samp>eshell.el</samp>, which enables interactive eshell sessions
+  on remote hosts at the command prompt. You must add the module
+  <code>eshell-tramp</code> to <code>eshell-modules-list</code>.
+  Here&rsquo;s a sample interaction after opening <kbd>M-x
+  eshell</kbd> on a remote host:</p>
+
+  <div class="example">
+    <pre class="example">
+<b>~ $</b> cd /sudo::/etc <span class="key">RET</span>
 <b>/sudo:root@host:/etc $</b> hostname <span class="key">RET</span>
 host
 <b>/sudo:root@host:/etc $</b> id <span class="key">RET</span>
 uid=0(root) gid=0(root) groups=0(root)
-<b>/sudo:root@host:/etc $</b> find-file shadow <span class="key">RET</span>
+<b>/sudo:root@host:/etc $</b> find-file shadow <span class=
+"key">RET</span>
 #&lt;buffer shadow&gt;
 <b>/sudo:root@host:/etc $</b>
-</pre></div>
+</pre>
+  </div>
 
-<p><code>eshell</code> in Emacs 23.2 added custom <code>su</code> and
-<code>sudo</code> commands that set the default directory correctly for the
-<samp>*eshell*</samp> buffer.  <small>TRAMP</small> silently updates
-<code>tramp-default-proxies-alist</code> with an entry for this directory
-(see <a href="Multi_002dhops.html#Multi_002dhops">Multi-hops</a>):
-</p>
-<div class="example">
-<pre class="example"><b>~ $</b> cd /ssh:user@remotehost:/etc <span class="key">RET</span>
-<b>/ssh:user@remotehost:/etc $</b> find-file shadow <span class="key">RET</span>
+  <p><code>eshell</code> in Emacs 23.2 added custom <code>su</code>
+  and <code>sudo</code> commands that set the default directory
+  correctly for the <samp>*eshell*</samp> buffer.
+  <small>TRAMP</small> silently updates
+  <code>tramp-default-proxies-alist</code> with an entry for this
+  directory (see <a href=
+  "Multi_002dhops.html#Multi_002dhops">Multi-hops</a>):</p>
+
+  <div class="example">
+    <pre class="example">
+<b>~ $</b> cd /ssh:user@remotehost:/etc <span class=
+"key">RET</span>
+<b>/ssh:user@remotehost:/etc $</b> find-file shadow <span class=
+"key">RET</span>
 File is not readable: /ssh:user@remotehost:/etc/shadow
 <b>/ssh:user@remotehost:/etc $</b> sudo find-file shadow <span class="key">RET</span>
 #&lt;buffer shadow&gt;
 
-<b>/ssh:user@remotehost:/etc $</b> su - <span class="key">RET</span>
+<b>/ssh:user@remotehost:/etc $</b> su - <span class=
+"key">RET</span>
 <b>/su:root@remotehost:/root $</b> id <span class="key">RET</span>
 uid=0(root) gid=0(root) groups=0(root)
 <b>/su:root@remotehost:/root $</b>
-</pre></div>
+</pre>
+  </div><a name="Running-a-debugger-on-a-remote-host" id=
+  "Running-a-debugger-on-a-remote-host"></a><a name=
+  "Running-a-debugger-on-a-remote-host-1" id=
+  "Running-a-debugger-on-a-remote-host-1"></a>
 
+  <h4 class="subsection">5.4.5 Running a debugger on a remote
+  host</h4><a name="index-gud" id="index-gud"></a> <a name=
+  "index-gdb" id="index-gdb"></a> <a name="index-perldb" id=
+  "index-perldb"></a>
 
-<a name="Running-a-debugger-on-a-remote-host"></a><a name="Running-a-debugger-on-a-remote-host-1"></a>
-<h4 class="subsection">5.4.5 Running a debugger on a remote host</h4>
-<a name="index-gud"></a>
-<a name="index-gdb"></a>
-<a name="index-perldb"></a>
+  <p><samp>gud.el</samp> provides a unified interface to symbolic
+  debuggers <small>TRAMP</small> can run debug on remote hosts by
+  calling <code>gdb</code> with a remote file name:</p>
 
-<p><samp>gud.el</samp> provides a unified interface to symbolic debuggers
-<small>TRAMP</small> can run debug on remote hosts by calling <code>gdb</code>
-with a remote file name:
-</p>
-<div class="example">
-<pre class="example"><kbd>M-x gdb <span class="key">RET</span></kbd>
+  <div class="example">
+    <pre class="example">
+<kbd>M-x gdb <span class="key">RET</span></kbd>
 <b>Run gdb (like this):</b> gdb --annotate=3 /ssh:host:~/myprog <span class="key">RET</span>
-</pre></div>
+</pre>
+  </div>
 
-<p>Relative file names are based on the remote default directory.  When
-<samp>myprog.pl</samp> exists in <samp>/ssh:host:/home/user</samp>,
-valid calls include:
-</p>
-<div class="example">
-<pre class="example"><kbd>M-x perldb <span class="key">RET</span></kbd>
-<b>Run perldb (like this):</b> perl -d myprog.pl <span class="key">RET</span>
-</pre></div>
+  <p>Relative file names are based on the remote default directory.
+  When <samp>myprog.pl</samp> exists in
+  <samp>/ssh:host:/home/user</samp>, valid calls include:</p>
 
-<p>Just the local part of a remote file name, such as <kbd>perl -d
-/home/user/myprog.pl</kbd>, is not possible.
-</p>
-<p>Arguments of the program to be debugged must be literal, can take
-relative or absolute paths, but not remote paths.
-</p>
+  <div class="example">
+    <pre class="example">
+<kbd>M-x perldb <span class="key">RET</span></kbd>
+<b>Run perldb (like this):</b> perl -d myprog.pl <span class=
+"key">RET</span>
+</pre>
+  </div>
 
-<a name="Running-remote-processes-on-Windows-hosts"></a>
-<h4 class="subsection">5.4.6 Running remote processes on Windows hosts</h4>
-<a name="index-winexe"></a>
-<a name="index-powershell"></a>
+  <p>Just the local part of a remote file name, such as <kbd>perl
+  -d /home/user/myprog.pl</kbd>, is not possible.</p>
 
-<p><code>winexe</code> runs processes on a remote Windows host, and
-<small>TRAMP</small> can use it for <code>process-file</code> and
-<code>start-file-process</code>.
-</p>
-<p><code>tramp-smb-winexe-program</code> specifies the local <code>winexe</code>
-command.  Powershell V2.0 on the remote host is required to run
-processes triggered from <small>TRAMP</small>.
-</p>
-<p><samp>explicit-shell-file-name</samp> and <samp>explicit-*-args</samp> have to
-be set properly so <kbd>M-x shell</kbd> can open a proper remote shell on a
-Windows host.  To open <code>cmd</code>, set it as follows:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq explicit-shell-file-name &quot;cmd&quot;
-      explicit-cmd-args '(&quot;/q&quot;))
-</pre></div>
+  <p>Arguments of the program to be debugged must be literal, can
+  take relative or absolute paths, but not remote
+  paths.</p><a name="Running-remote-processes-on-Windows-hosts" id=
+  "Running-remote-processes-on-Windows-hosts"></a>
 
-<p>To open <code>powershell</code> as a remote shell, use this:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq explicit-shell-file-name &quot;powershell&quot;
-      explicit-powershell-args '(&quot;-file&quot; &quot;-&quot;))
-</pre></div>
+  <h4 class="subsection">5.4.6 Running remote processes on Windows
+  hosts</h4><a name="index-winexe" id="index-winexe"></a> <a name=
+  "index-powershell" id="index-powershell"></a>
 
+  <p><code>winexe</code> runs processes on a remote Windows host,
+  and <small>TRAMP</small> can use it for <code>process-file</code>
+  and <code>start-file-process</code>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Cleanup-remote-connections.html#Cleanup-remote-connections" accesskey="n" rel="next">Cleanup remote connections</a>, Previous: <a href="Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops" accesskey="p" rel="prev">Ad-hoc multi-hops</a>, Up: <a href="Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p><code>tramp-smb-winexe-program</code> specifies the local
+  <code>winexe</code> command. Powershell V2.0 on the remote host
+  is required to run processes triggered from
+  <small>TRAMP</small>.</p>
 
+  <p><samp>explicit-shell-file-name</samp> and
+  <samp>explicit-*-args</samp> have to be set properly so <kbd>M-x
+  shell</kbd> can open a proper remote shell on a Windows host. To
+  open <code>cmd</code>, set it as follows:</p>
 
+  <div class="lisp">
+    <pre class="lisp">
+(setq explicit-shell-file-name "cmd"
+      explicit-cmd-args '("/q"))
+</pre>
+  </div>
 
+  <p>To open <code>powershell</code> as a remote shell, use
+  this:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq explicit-shell-file-name "powershell"
+      explicit-powershell-args '("-file" "-"))
+</pre>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Cleanup-remote-connections.html#Cleanup-remote-connections"
+    accesskey="n" rel="next">Cleanup remote connections</a>,
+    Previous: <a href=
+    "Ad_002dhoc-multi_002dhops.html#Ad_002dhoc-multi_002dhops"
+    accesskey="p" rel="prev">Ad-hoc multi-hops</a>, Up: <a href=
+    "Usage.html#Usage" accesskey="u" rel="up">Usage</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

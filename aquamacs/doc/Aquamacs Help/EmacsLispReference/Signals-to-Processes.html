@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,184 +19,275 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Signals to Processes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Signals to Processes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Signals to Processes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Processes.html#Processes" rel="up" title="Processes">
-<link href="Output-from-Processes.html#Output-from-Processes" rel="next" title="Output from Processes">
-<link href="Input-to-Processes.html#Input-to-Processes" rel="prev" title="Input to Processes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Signals to
+  Processes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Signals to Processes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Signals to Processes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Processes.html#Processes" rel="up" title=
+  "Processes" />
+  <link href="Output-from-Processes.html#Output-from-Processes"
+  rel="next" title="Output from Processes" />
+  <link href="Input-to-Processes.html#Input-to-Processes" rel=
+  "prev" title="Input to Processes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Signals-to-Processes" id="Signals-to-Processes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Output-from-Processes.html#Output-from-Processes" accesskey=
+    "n" rel="next">Output from Processes</a>, Previous: <a href=
+    "Input-to-Processes.html#Input-to-Processes" accesskey="p" rel=
+    "prev">Input to Processes</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Sending-Signals-to-Processes" id=
+  "Sending-Signals-to-Processes"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Signals-to-Processes"></a>
-<div class="header">
-<p>
-Next: <a href="Output-from-Processes.html#Output-from-Processes" accesskey="n" rel="next">Output from Processes</a>, Previous: <a href="Input-to-Processes.html#Input-to-Processes" accesskey="p" rel="prev">Input to Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Sending-Signals-to-Processes"></a>
-<h3 class="section">36.8 Sending Signals to Processes</h3>
-<a name="index-process-signals"></a>
-<a name="index-sending-signals"></a>
-<a name="index-signals"></a>
+  <h3 class="section">36.8 Sending Signals to
+  Processes</h3><a name="index-process-signals" id=
+  "index-process-signals"></a> <a name="index-sending-signals" id=
+  "index-sending-signals"></a> <a name="index-signals" id=
+  "index-signals"></a>
 
-<p><em>Sending a signal</em> to a subprocess is a way of interrupting its
-activities.  There are several different signals, each with its own
-meaning.  The set of signals and their names is defined by the operating
-system.  For example, the signal <code>SIGINT</code> means that the user has
-typed <kbd>C-c</kbd>, or that some analogous thing has happened.
-</p>
-<p>Each signal has a standard effect on the subprocess.  Most signals
-kill the subprocess, but some stop (or resume) execution instead.  Most
-signals can optionally be handled by programs; if the program handles
-the signal, then we can say nothing in general about its effects.
-</p>
-<p>You can send signals explicitly by calling the functions in this
-section.  Emacs also sends signals automatically at certain times:
-killing a buffer sends a <code>SIGHUP</code> signal to all its associated
-processes; killing Emacs sends a <code>SIGHUP</code> signal to all remaining
-processes.  (<code>SIGHUP</code> is a signal that usually indicates that the
-user &ldquo;hung up the phone&rdquo;, i.e., disconnected.)
-</p>
-<p>Each of the signal-sending functions takes two optional arguments:
-<var>process</var> and <var>current-group</var>.
-</p>
-<p>The argument <var>process</var> must be either a process, a process
-name, a buffer, a buffer name, or <code>nil</code>.  A buffer or buffer name
-stands for a process through <code>get-buffer-process</code>.  <code>nil</code>
-stands for the process associated with the current buffer.  Except
-with <code>stop-process</code> and <code>continue-process</code>, an error is
-signaled if <var>process</var> does not identify an active process, or if
-it represents a network, serial, or pipe connection.
-</p>
-<p>The argument <var>current-group</var> is a flag that makes a difference
-when you are running a job-control shell as an Emacs subprocess.  If it
-is non-<code>nil</code>, then the signal is sent to the current process-group
-of the terminal that Emacs uses to communicate with the subprocess.  If
-the process is a job-control shell, this means the shell&rsquo;s current
-subjob.  If <var>current-group</var> is <code>nil</code>, the signal is
-sent to the process group of the immediate subprocess of Emacs.  If
-the subprocess is a job-control shell, this is the shell itself.  If
-<var>current-group</var> is <code>lambda</code>, the signal is sent to the
-process-group that owns the terminal, but only if it is not the shell
-itself.
-</p>
-<p>The flag <var>current-group</var> has no effect when a pipe is used to
-communicate with the subprocess, because the operating system does not
-support the distinction in the case of pipes.  For the same reason,
-job-control shells won&rsquo;t work when a pipe is used.  See
-<code>process-connection-type</code> in <a href="Asynchronous-Processes.html#Asynchronous-Processes">Asynchronous Processes</a>.
-</p>
-<dl>
-<dt><a name="index-interrupt_002dprocess"></a>Function: <strong>interrupt-process</strong> <em>&amp;optional process current-group</em></dt>
-<dd><p>This function interrupts the process <var>process</var> by sending the
-signal <code>SIGINT</code>.  Outside of Emacs, typing the interrupt
-character (normally <kbd>C-c</kbd> on some systems, and <tt class="key">DEL</tt> on
-others) sends this signal.  When the argument <var>current-group</var> is
-non-<code>nil</code>, you can think of this function as typing <kbd>C-c</kbd>
-on the terminal by which Emacs talks to the subprocess.
-</p></dd></dl>
+  <p><em>Sending a signal</em> to a subprocess is a way of
+  interrupting its activities. There are several different signals,
+  each with its own meaning. The set of signals and their names is
+  defined by the operating system. For example, the signal
+  <code>SIGINT</code> means that the user has typed <kbd>C-c</kbd>,
+  or that some analogous thing has happened.</p>
 
-<dl>
-<dt><a name="index-kill_002dprocess"></a>Function: <strong>kill-process</strong> <em>&amp;optional process current-group</em></dt>
-<dd><p>This function kills the process <var>process</var> by sending the
-signal <code>SIGKILL</code>.  This signal kills the subprocess immediately,
-and cannot be handled by the subprocess.
-</p></dd></dl>
+  <p>Each signal has a standard effect on the subprocess. Most
+  signals kill the subprocess, but some stop (or resume) execution
+  instead. Most signals can optionally be handled by programs; if
+  the program handles the signal, then we can say nothing in
+  general about its effects.</p>
 
-<dl>
-<dt><a name="index-quit_002dprocess"></a>Function: <strong>quit-process</strong> <em>&amp;optional process current-group</em></dt>
-<dd><p>This function sends the signal <code>SIGQUIT</code> to the process
-<var>process</var>.  This signal is the one sent by the quit
-character (usually <kbd>C-\</kbd>) when you are not inside
-Emacs.
-</p></dd></dl>
+  <p>You can send signals explicitly by calling the functions in
+  this section. Emacs also sends signals automatically at certain
+  times: killing a buffer sends a <code>SIGHUP</code> signal to all
+  its associated processes; killing Emacs sends a
+  <code>SIGHUP</code> signal to all remaining processes.
+  (<code>SIGHUP</code> is a signal that usually indicates that the
+  user &ldquo;hung up the phone&rdquo;, i.e., disconnected.)</p>
 
-<dl>
-<dt><a name="index-stop_002dprocess"></a>Function: <strong>stop-process</strong> <em>&amp;optional process current-group</em></dt>
-<dd><p>This function stops the specified <var>process</var>.  If it is a real
-subprocess running a program, it sends the signal <code>SIGTSTP</code> to
-that subprocess.  If <var>process</var> represents a network, serial, or
-pipe connection, this function inhibits handling of the incoming data
-from the connection; for a network server, this means not accepting
-new connections.  Use <code>continue-process</code> to resume normal
-execution.
-</p>
-<p>Outside of Emacs, on systems with job control, the stop character
-(usually <kbd>C-z</kbd>) normally sends the <code>SIGTSTP</code> signal to a
-subprocess.  When <var>current-group</var> is non-<code>nil</code>, you can think
-of this function as typing <kbd>C-z</kbd> on the terminal Emacs uses to
-communicate with the subprocess.
-</p></dd></dl>
+  <p>Each of the signal-sending functions takes two optional
+  arguments: <var>process</var> and <var>current-group</var>.</p>
 
-<dl>
-<dt><a name="index-continue_002dprocess"></a>Function: <strong>continue-process</strong> <em>&amp;optional process current-group</em></dt>
-<dd><p>This function resumes execution of the process <var>process</var>.  If it
-is a real subprocess running a program, it sends the signal
-<code>SIGCONT</code> to that subprocess; this presumes that <var>process</var>
-was stopped previously.  If <var>process</var> represents a network,
-serial, or pipe connection, this function resumes handling of the
-incoming data from the connection.  For serial connections, data that
-arrived during the time the process was stopped might be lost.
-</p></dd></dl>
+  <p>The argument <var>process</var> must be either a process, a
+  process name, a buffer, a buffer name, or <code>nil</code>. A
+  buffer or buffer name stands for a process through
+  <code>get-buffer-process</code>. <code>nil</code> stands for the
+  process associated with the current buffer. Except with
+  <code>stop-process</code> and <code>continue-process</code>, an
+  error is signaled if <var>process</var> does not identify an
+  active process, or if it represents a network, serial, or pipe
+  connection.</p>
 
-<dl>
-<dt><a name="index-signal_002dprocess"></a>Command: <strong>signal-process</strong> <em>process signal</em></dt>
-<dd><p>This function sends a signal to process <var>process</var>.  The argument
-<var>signal</var> specifies which signal to send; it should be an integer,
-or a symbol whose name is a signal.
-</p>
-<p>The <var>process</var> argument can be a system process <acronym>ID</acronym> (an
-integer); that allows you to send signals to processes that are not
-children of Emacs.  See <a href="System-Processes.html#System-Processes">System Processes</a>.
-</p></dd></dl>
+  <p>The argument <var>current-group</var> is a flag that makes a
+  difference when you are running a job-control shell as an Emacs
+  subprocess. If it is non-<code>nil</code>, then the signal is
+  sent to the current process-group of the terminal that Emacs uses
+  to communicate with the subprocess. If the process is a
+  job-control shell, this means the shell&rsquo;s current subjob.
+  If <var>current-group</var> is <code>nil</code>, the signal is
+  sent to the process group of the immediate subprocess of Emacs.
+  If the subprocess is a job-control shell, this is the shell
+  itself. If <var>current-group</var> is <code>lambda</code>, the
+  signal is sent to the process-group that owns the terminal, but
+  only if it is not the shell itself.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Output-from-Processes.html#Output-from-Processes" accesskey="n" rel="next">Output from Processes</a>, Previous: <a href="Input-to-Processes.html#Input-to-Processes" accesskey="p" rel="prev">Input to Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The flag <var>current-group</var> has no effect when a pipe is
+  used to communicate with the subprocess, because the operating
+  system does not support the distinction in the case of pipes. For
+  the same reason, job-control shells won&rsquo;t work when a pipe
+  is used. See <code>process-connection-type</code> in <a href=
+  "Asynchronous-Processes.html#Asynchronous-Processes">Asynchronous
+  Processes</a>.</p>
 
+  <dl>
+    <dt><a name="index-interrupt_002dprocess" id=
+    "index-interrupt_002dprocess"></a>Function:
+    <strong>interrupt-process</strong> <em>&amp;optional process
+    current-group</em></dt>
 
+    <dd>
+      <p>This function interrupts the process <var>process</var> by
+      sending the signal <code>SIGINT</code>. Outside of Emacs,
+      typing the interrupt character (normally <kbd>C-c</kbd> on
+      some systems, and <tt class="key">DEL</tt> on others) sends
+      this signal. When the argument <var>current-group</var> is
+      non-<code>nil</code>, you can think of this function as
+      typing <kbd>C-c</kbd> on the terminal by which Emacs talks to
+      the subprocess.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-kill_002dprocess" id=
+    "index-kill_002dprocess"></a>Function:
+    <strong>kill-process</strong> <em>&amp;optional process
+    current-group</em></dt>
+
+    <dd>
+      <p>This function kills the process <var>process</var> by
+      sending the signal <code>SIGKILL</code>. This signal kills
+      the subprocess immediately, and cannot be handled by the
+      subprocess.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-quit_002dprocess" id=
+    "index-quit_002dprocess"></a>Function:
+    <strong>quit-process</strong> <em>&amp;optional process
+    current-group</em></dt>
+
+    <dd>
+      <p>This function sends the signal <code>SIGQUIT</code> to the
+      process <var>process</var>. This signal is the one sent by
+      the quit character (usually <kbd>C-\</kbd>) when you are not
+      inside Emacs.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-stop_002dprocess" id=
+    "index-stop_002dprocess"></a>Function:
+    <strong>stop-process</strong> <em>&amp;optional process
+    current-group</em></dt>
+
+    <dd>
+      <p>This function stops the specified <var>process</var>. If
+      it is a real subprocess running a program, it sends the
+      signal <code>SIGTSTP</code> to that subprocess. If
+      <var>process</var> represents a network, serial, or pipe
+      connection, this function inhibits handling of the incoming
+      data from the connection; for a network server, this means
+      not accepting new connections. Use
+      <code>continue-process</code> to resume normal execution.</p>
+
+      <p>Outside of Emacs, on systems with job control, the stop
+      character (usually <kbd>C-z</kbd>) normally sends the
+      <code>SIGTSTP</code> signal to a subprocess. When
+      <var>current-group</var> is non-<code>nil</code>, you can
+      think of this function as typing <kbd>C-z</kbd> on the
+      terminal Emacs uses to communicate with the subprocess.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-continue_002dprocess" id=
+    "index-continue_002dprocess"></a>Function:
+    <strong>continue-process</strong> <em>&amp;optional process
+    current-group</em></dt>
+
+    <dd>
+      <p>This function resumes execution of the process
+      <var>process</var>. If it is a real subprocess running a
+      program, it sends the signal <code>SIGCONT</code> to that
+      subprocess; this presumes that <var>process</var> was stopped
+      previously. If <var>process</var> represents a network,
+      serial, or pipe connection, this function resumes handling of
+      the incoming data from the connection. For serial
+      connections, data that arrived during the time the process
+      was stopped might be lost.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-signal_002dprocess" id=
+    "index-signal_002dprocess"></a>Command:
+    <strong>signal-process</strong> <em>process signal</em></dt>
+
+    <dd>
+      <p>This function sends a signal to process
+      <var>process</var>. The argument <var>signal</var> specifies
+      which signal to send; it should be an integer, or a symbol
+      whose name is a signal.</p>
+
+      <p>The <var>process</var> argument can be a system process
+      <acronym>ID</acronym> (an integer); that allows you to send
+      signals to processes that are not children of Emacs. See
+      <a href="System-Processes.html#System-Processes">System
+      Processes</a>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Output-from-Processes.html#Output-from-Processes" accesskey=
+    "n" rel="next">Output from Processes</a>, Previous: <a href=
+    "Input-to-Processes.html#Input-to-Processes" accesskey="p" rel=
+    "prev">Input to Processes</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

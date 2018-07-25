@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,166 +19,248 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Invoking the Debugger</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Invoking the Debugger">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Invoking the Debugger">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Debugger.html#Debugger" rel="up" title="Debugger">
-<link href="Internals-of-Debugger.html#Internals-of-Debugger" rel="next" title="Internals of Debugger">
-<link href="Debugger-Commands.html#Debugger-Commands" rel="prev" title="Debugger Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Invoking the
+  Debugger</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Invoking the Debugger" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Invoking the Debugger" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Debugger.html#Debugger" rel="up" title="Debugger" />
+  <link href="Internals-of-Debugger.html#Internals-of-Debugger"
+  rel="next" title="Internals of Debugger" />
+  <link href="Debugger-Commands.html#Debugger-Commands" rel="prev"
+  title="Debugger Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Invoking-the-Debugger" id="Invoking-the-Debugger"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Internals-of-Debugger.html#Internals-of-Debugger" accesskey=
+    "n" rel="next">Internals of Debugger</a>, Previous: <a href=
+    "Debugger-Commands.html#Debugger-Commands" accesskey="p" rel=
+    "prev">Debugger Commands</a>, Up: <a href=
+    "Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Invoking-the-Debugger-1" id=
+  "Invoking-the-Debugger-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Invoking-the-Debugger"></a>
-<div class="header">
-<p>
-Next: <a href="Internals-of-Debugger.html#Internals-of-Debugger" accesskey="n" rel="next">Internals of Debugger</a>, Previous: <a href="Debugger-Commands.html#Debugger-Commands" accesskey="p" rel="prev">Debugger Commands</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Invoking-the-Debugger-1"></a>
-<h4 class="subsection">17.1.7 Invoking the Debugger</h4>
-<a name="index-invoking-lisp-debugger"></a>
+  <h4 class="subsection">17.1.7 Invoking the Debugger</h4><a name=
+  "index-invoking-lisp-debugger" id=
+  "index-invoking-lisp-debugger"></a>
 
-<p>Here we describe in full detail the function <code>debug</code> that is used
-to invoke the debugger.
-</p>
-<dl>
-<dt><a name="index-debug"></a>Command: <strong>debug</strong> <em>&amp;rest debugger-args</em></dt>
-<dd><p>This function enters the debugger.  It switches buffers to a buffer
-named <samp>*Backtrace*</samp> (or <samp>*Backtrace*&lt;2&gt;</samp> if it is the second
-recursive entry to the debugger, etc.), and fills it with information
-about the stack of Lisp function calls.  It then enters a recursive
-edit, showing the backtrace buffer in Debugger mode.
-</p>
-<p>The Debugger mode <kbd>c</kbd>, <kbd>d</kbd>, <kbd>j</kbd>, and <kbd>r</kbd> commands exit
-the recursive edit; then <code>debug</code> switches back to the previous
-buffer and returns to whatever called <code>debug</code>.  This is the only
-way the function <code>debug</code> can return to its caller.
-</p>
-<p>The use of the <var>debugger-args</var> is that <code>debug</code> displays the
-rest of its arguments at the top of the <samp>*Backtrace*</samp> buffer, so
-that the user can see them.  Except as described below, this is the
-<em>only</em> way these arguments are used.
-</p>
-<p>However, certain values for first argument to <code>debug</code> have a
-special significance.  (Normally, these values are used only by the
-internals of Emacs, and not by programmers calling <code>debug</code>.)  Here
-is a table of these special values:
-</p>
-<dl compact="compact">
-<dt><code>lambda</code></dt>
-<dd><a name="index-lambda-in-debug"></a>
-<p>A first argument of <code>lambda</code> means <code>debug</code> was called
-because of entry to a function when <code>debug-on-next-call</code> was
-non-<code>nil</code>.  The debugger displays &lsquo;<samp>Debugger
-entered--entering a function:</samp>&rsquo; as a line of text at the top of the
-buffer.
-</p>
-</dd>
-<dt><code>debug</code></dt>
-<dd><p><code>debug</code> as first argument means <code>debug</code> was called because
-of entry to a function that was set to debug on entry.  The debugger
-displays the string &lsquo;<samp>Debugger entered--entering a function:</samp>&rsquo;,
-just as in the <code>lambda</code> case.  It also marks the stack frame for
-that function so that it will invoke the debugger when exited.
-</p>
-</dd>
-<dt><code>t</code></dt>
-<dd><p>When the first argument is <code>t</code>, this indicates a call to
-<code>debug</code> due to evaluation of a function call form when
-<code>debug-on-next-call</code> is non-<code>nil</code>.  The debugger displays
-&lsquo;<samp>Debugger entered--beginning evaluation of function call form:</samp>&rsquo;
-as the top line in the buffer.
-</p>
-</dd>
-<dt><code>exit</code></dt>
-<dd><p>When the first argument is <code>exit</code>, it indicates the exit of a
-stack frame previously marked to invoke the debugger on exit.  The
-second argument given to <code>debug</code> in this case is the value being
-returned from the frame.  The debugger displays &lsquo;<samp>Debugger
-entered--returning value:</samp>&rsquo; in the top line of the buffer, followed by
-the value being returned.
-</p>
-</dd>
-<dt><code>error</code></dt>
-<dd><a name="index-error-in-debug"></a>
-<p>When the first argument is <code>error</code>, the debugger indicates that
-it is being entered because an error or <code>quit</code> was signaled and
-not handled, by displaying &lsquo;<samp>Debugger entered--Lisp error:</samp>&rsquo;
-followed by the error signaled and any arguments to <code>signal</code>.
-For example,
-</p>
-<div class="example">
-<pre class="example">(let ((debug-on-error t))
+  <p>Here we describe in full detail the function
+  <code>debug</code> that is used to invoke the debugger.</p>
+
+  <dl>
+    <dt><a name="index-debug" id="index-debug"></a>Command:
+    <strong>debug</strong> <em>&amp;rest debugger-args</em></dt>
+
+    <dd>
+      <p>This function enters the debugger. It switches buffers to
+      a buffer named <samp>*Backtrace*</samp> (or
+      <samp>*Backtrace*&lt;2&gt;</samp> if it is the second
+      recursive entry to the debugger, etc.), and fills it with
+      information about the stack of Lisp function calls. It then
+      enters a recursive edit, showing the backtrace buffer in
+      Debugger mode.</p>
+
+      <p>The Debugger mode <kbd>c</kbd>, <kbd>d</kbd>,
+      <kbd>j</kbd>, and <kbd>r</kbd> commands exit the recursive
+      edit; then <code>debug</code> switches back to the previous
+      buffer and returns to whatever called <code>debug</code>.
+      This is the only way the function <code>debug</code> can
+      return to its caller.</p>
+
+      <p>The use of the <var>debugger-args</var> is that
+      <code>debug</code> displays the rest of its arguments at the
+      top of the <samp>*Backtrace*</samp> buffer, so that the user
+      can see them. Except as described below, this is the
+      <em>only</em> way these arguments are used.</p>
+
+      <p>However, certain values for first argument to
+      <code>debug</code> have a special significance. (Normally,
+      these values are used only by the internals of Emacs, and not
+      by programmers calling <code>debug</code>.) Here is a table
+      of these special values:</p>
+
+      <dl compact="compact">
+        <dt><code>lambda</code></dt>
+
+        <dd>
+          <a name="index-lambda-in-debug" id=
+          "index-lambda-in-debug"></a>
+
+          <p>A first argument of <code>lambda</code> means
+          <code>debug</code> was called because of entry to a
+          function when <code>debug-on-next-call</code> was
+          non-<code>nil</code>. The debugger displays
+          &lsquo;<samp>Debugger entered--entering a
+          function:</samp>&rsquo; as a line of text at the top of
+          the buffer.</p>
+        </dd>
+
+        <dt><code>debug</code></dt>
+
+        <dd>
+          <p><code>debug</code> as first argument means
+          <code>debug</code> was called because of entry to a
+          function that was set to debug on entry. The debugger
+          displays the string &lsquo;<samp>Debugger
+          entered--entering a function:</samp>&rsquo;, just as in
+          the <code>lambda</code> case. It also marks the stack
+          frame for that function so that it will invoke the
+          debugger when exited.</p>
+        </dd>
+
+        <dt><code>t</code></dt>
+
+        <dd>
+          <p>When the first argument is <code>t</code>, this
+          indicates a call to <code>debug</code> due to evaluation
+          of a function call form when
+          <code>debug-on-next-call</code> is non-<code>nil</code>.
+          The debugger displays &lsquo;<samp>Debugger
+          entered--beginning evaluation of function call
+          form:</samp>&rsquo; as the top line in the buffer.</p>
+        </dd>
+
+        <dt><code>exit</code></dt>
+
+        <dd>
+          <p>When the first argument is <code>exit</code>, it
+          indicates the exit of a stack frame previously marked to
+          invoke the debugger on exit. The second argument given to
+          <code>debug</code> in this case is the value being
+          returned from the frame. The debugger displays
+          &lsquo;<samp>Debugger entered--returning
+          value:</samp>&rsquo; in the top line of the buffer,
+          followed by the value being returned.</p>
+        </dd>
+
+        <dt><code>error</code></dt>
+
+        <dd>
+          <a name="index-error-in-debug" id=
+          "index-error-in-debug"></a>
+
+          <p>When the first argument is <code>error</code>, the
+          debugger indicates that it is being entered because an
+          error or <code>quit</code> was signaled and not handled,
+          by displaying &lsquo;<samp>Debugger entered--Lisp
+          error:</samp>&rsquo; followed by the error signaled and
+          any arguments to <code>signal</code>. For example,</p>
+
+          <div class="example">
+            <pre class="example">
+(let ((debug-on-error t))
   (/ 1 0))
-</pre><pre class="example">
-</pre><pre class="example">------ Buffer: *Backtrace* ------
+</pre>
+            <pre class="example">
+</pre>
+            <pre class="example">
+------ Buffer: *Backtrace* ------
 Debugger entered--Lisp error: (arith-error)
   /(1 0)
 ...
 ------ Buffer: *Backtrace* ------
-</pre></div>
+</pre>
+          </div>
 
-<p>If an error was signaled, presumably the variable
-<code>debug-on-error</code> is non-<code>nil</code>.  If <code>quit</code> was signaled,
-then presumably the variable <code>debug-on-quit</code> is non-<code>nil</code>.
-</p>
-</dd>
-<dt><code>nil</code></dt>
-<dd><p>Use <code>nil</code> as the first of the <var>debugger-args</var> when you want
-to enter the debugger explicitly.  The rest of the <var>debugger-args</var>
-are printed on the top line of the buffer.  You can use this feature to
-display messages&mdash;for example, to remind yourself of the conditions
-under which <code>debug</code> is called.
-</p></dd>
-</dl>
-</dd></dl>
+          <p>If an error was signaled, presumably the variable
+          <code>debug-on-error</code> is non-<code>nil</code>. If
+          <code>quit</code> was signaled, then presumably the
+          variable <code>debug-on-quit</code> is
+          non-<code>nil</code>.</p>
+        </dd>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Internals-of-Debugger.html#Internals-of-Debugger" accesskey="n" rel="next">Internals of Debugger</a>, Previous: <a href="Debugger-Commands.html#Debugger-Commands" accesskey="p" rel="prev">Debugger Commands</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+        <dt><code>nil</code></dt>
 
+        <dd>
+          <p>Use <code>nil</code> as the first of the
+          <var>debugger-args</var> when you want to enter the
+          debugger explicitly. The rest of the
+          <var>debugger-args</var> are printed on the top line of
+          the buffer. You can use this feature to display
+          messages&mdash;for example, to remind yourself of the
+          conditions under which <code>debug</code> is called.</p>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href=
+    "Internals-of-Debugger.html#Internals-of-Debugger" accesskey=
+    "n" rel="next">Internals of Debugger</a>, Previous: <a href=
+    "Debugger-Commands.html#Debugger-Commands" accesskey="p" rel=
+    "prev">Debugger Commands</a>, Up: <a href=
+    "Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

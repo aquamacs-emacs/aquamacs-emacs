@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,176 +19,269 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Window Start and End</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Window Start and End">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Window Start and End">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Textual-Scrolling.html#Textual-Scrolling" rel="next" title="Textual Scrolling">
-<link href="Window-Point.html#Window-Point" rel="prev" title="Window Point">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Window Start and
+  End</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Window Start and End" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Window Start and End" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Textual-Scrolling.html#Textual-Scrolling" rel="next"
+  title="Textual Scrolling" />
+  <link href="Window-Point.html#Window-Point" rel="prev" title=
+  "Window Point" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Window-Start-and-End" id="Window-Start-and-End"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Textual-Scrolling.html#Textual-Scrolling"
+    accesskey="n" rel="next">Textual Scrolling</a>, Previous:
+    <a href="Window-Point.html#Window-Point" accesskey="p" rel=
+    "prev">Window Point</a>, Up: <a href="Windows.html#Windows"
+    accesskey="u" rel="up">Windows</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Window-Start-and-End-Positions" id=
+  "The-Window-Start-and-End-Positions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Window-Start-and-End"></a>
-<div class="header">
-<p>
-Next: <a href="Textual-Scrolling.html#Textual-Scrolling" accesskey="n" rel="next">Textual Scrolling</a>, Previous: <a href="Window-Point.html#Window-Point" accesskey="p" rel="prev">Window Point</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Window-Start-and-End-Positions"></a>
-<h3 class="section">27.20 The Window Start and End Positions</h3>
-<a name="index-window-start-position"></a>
-<a name="index-display_002dstart-position"></a>
+  <h3 class="section">27.20 The Window Start and End
+  Positions</h3><a name="index-window-start-position" id=
+  "index-window-start-position"></a> <a name=
+  "index-display_002dstart-position" id=
+  "index-display_002dstart-position"></a>
 
-<p>Each window maintains a marker used to keep track of a buffer position
-that specifies where in the buffer display should start.  This position
-is called the <em>display-start</em> position of the window (or just the
-<em>start</em>).  The character after this position is the one that appears
-at the upper left corner of the window.  It is usually, but not
-inevitably, at the beginning of a text line.
-</p>
-<p>After switching windows or buffers, and in some other cases, if the
-window start is in the middle of a line, Emacs adjusts the window
-start to the start of a line.  This prevents certain operations from
-leaving the window start at a meaningless point within a line.  This
-feature may interfere with testing some Lisp code by executing it
-using the commands of Lisp mode, because they trigger this
-readjustment.  To test such code, put it into a command and bind the
-command to a key.
-</p>
-<dl>
-<dt><a name="index-window_002dstart"></a>Function: <strong>window-start</strong> <em>&amp;optional window</em></dt>
-<dd><a name="index-window-top-line"></a>
-<p>This function returns the display-start position of window
-<var>window</var>.  If <var>window</var> is <code>nil</code>, the selected window is
-used.
-</p>
-<p>When you create a window, or display a different buffer in it, the
-display-start position is set to a display-start position recently used
-for the same buffer, or to <code>point-min</code> if the buffer doesn&rsquo;t have
-any.
-</p>
-<p>Redisplay updates the window-start position (if you have not specified
-it explicitly since the previous redisplay)&mdash;to make sure point appears
-on the screen.  Nothing except redisplay automatically changes the
-window-start position; if you move point, do not expect the window-start
-position to change in response until after the next redisplay.
-</p></dd></dl>
+  <p>Each window maintains a marker used to keep track of a buffer
+  position that specifies where in the buffer display should start.
+  This position is called the <em>display-start</em> position of
+  the window (or just the <em>start</em>). The character after this
+  position is the one that appears at the upper left corner of the
+  window. It is usually, but not inevitably, at the beginning of a
+  text line.</p>
 
-<dl>
-<dt><a name="index-window_002dgroup_002dstart"></a>Function: <strong>window-group-start</strong> <em>&amp;optional window</em></dt>
-<dd><a name="index-window_002dgroup_002dstart_002dfunction"></a>
-<p>This function is like <code>window-start</code>, except that when
-<var>window</var> is a part of a group of windows (see <a href="Basic-Windows.html#Window-Group">Window Group</a>),
-<code>window-group-start</code> returns the start position of the entire
-group.  This condition holds when the buffer local variable
-<code>window-group-start-function</code> is set to a function.  In this
-case, <code>window-group-start</code> calls the function with the single
-argument <var>window</var>, then returns its result.
-</p></dd></dl>
+  <p>After switching windows or buffers, and in some other cases,
+  if the window start is in the middle of a line, Emacs adjusts the
+  window start to the start of a line. This prevents certain
+  operations from leaving the window start at a meaningless point
+  within a line. This feature may interfere with testing some Lisp
+  code by executing it using the commands of Lisp mode, because
+  they trigger this readjustment. To test such code, put it into a
+  command and bind the command to a key.</p>
 
-<a name="index-window-end-position"></a>
-<dl>
-<dt><a name="index-window_002dend"></a>Function: <strong>window-end</strong> <em>&amp;optional window update</em></dt>
-<dd><p>This function returns the position where display of its buffer ends in
-<var>window</var>.  The default for <var>window</var> is the selected window.
-</p>
-<p>Simply changing the buffer text or moving point does not update the
-value that <code>window-end</code> returns.  The value is updated only when
-Emacs redisplays and redisplay completes without being preempted.
-</p>
-<p>If the last redisplay of <var>window</var> was preempted, and did not finish,
-Emacs does not know the position of the end of display in that window.
-In that case, this function returns <code>nil</code>.
-</p>
-<p>If <var>update</var> is non-<code>nil</code>, <code>window-end</code> always returns an
-up-to-date value for where display ends, based on the current
-<code>window-start</code> value.  If a previously saved value of that position
-is still valid, <code>window-end</code> returns that value; otherwise it
-computes the correct value by scanning the buffer text.
-</p>
-<p>Even if <var>update</var> is non-<code>nil</code>, <code>window-end</code> does not
-attempt to scroll the display if point has moved off the screen, the
-way real redisplay would do.  It does not alter the
-<code>window-start</code> value.  In effect, it reports where the displayed
-text will end if scrolling is not required.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-window_002dstart" id=
+    "index-window_002dstart"></a>Function:
+    <strong>window-start</strong> <em>&amp;optional
+    window</em></dt>
 
-<a name="index-window_002dgroup_002dend_002dfunction"></a>
-<dl>
-<dt><a name="index-window_002dgroup_002dend"></a>Function: <strong>window-group-end</strong> <em>&amp;optional window update</em></dt>
-<dd><p>This function is like <code>window-end</code>, except that when <var>window</var>
-is a part of a group of windows (see <a href="Basic-Windows.html#Window-Group">Window Group</a>),
-<code>window-group-end</code> returns the end position of the entire group.
-This condition holds when the buffer local variable
-<code>window-group-end-function</code> is set to a function.  In this case,
-<code>window-group-end</code> calls the function with the two arguments
-<var>window</var> and <var>update</var>, then returns its result.  The argument
-<var>update</var> has the same meaning as in <code>window-end</code>.
-</p></dd></dl>
+    <dd>
+      <a name="index-window-top-line" id=
+      "index-window-top-line"></a>
 
-<dl>
-<dt><a name="index-set_002dwindow_002dstart"></a>Function: <strong>set-window-start</strong> <em>window position &amp;optional noforce</em></dt>
-<dd><p>This function sets the display-start position of <var>window</var> to
-<var>position</var> in <var>window</var>&rsquo;s buffer.  It returns <var>position</var>.
-</p>
-<p>The display routines insist that the position of point be visible when a
-buffer is displayed.  Normally, they change the display-start position
-(that is, scroll the window) whenever necessary to make point visible.
-However, if you specify the start position with this function using
-<code>nil</code> for <var>noforce</var>, it means you want display to start at
-<var>position</var> even if that would put the location of point off the
-screen.  If this does place point off screen, the display routines move
-point to the left margin on the middle line in the window.
-</p>
-<p>For example, if point is&nbsp;1<!-- /@w --> and you set the start of the window
-to&nbsp;37<!-- /@w -->, the start of the next line, point will be above the top
-of the window.  The display routines will automatically move point if
-it is still 1 when redisplay occurs.  Here is an example:
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Here is what &lsquo;<samp>foo</samp>&rsquo; looks like before executing</span>
-;;   <span class="roman">the <code>set-window-start</code> expression.</span>
-</pre><pre class="example">
-</pre><pre class="example">---------- Buffer: foo ----------
+      <p>This function returns the display-start position of window
+      <var>window</var>. If <var>window</var> is <code>nil</code>,
+      the selected window is used.</p>
+
+      <p>When you create a window, or display a different buffer in
+      it, the display-start position is set to a display-start
+      position recently used for the same buffer, or to
+      <code>point-min</code> if the buffer doesn&rsquo;t have
+      any.</p>
+
+      <p>Redisplay updates the window-start position (if you have
+      not specified it explicitly since the previous
+      redisplay)&mdash;to make sure point appears on the screen.
+      Nothing except redisplay automatically changes the
+      window-start position; if you move point, do not expect the
+      window-start position to change in response until after the
+      next redisplay.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-window_002dgroup_002dstart" id=
+    "index-window_002dgroup_002dstart"></a>Function:
+    <strong>window-group-start</strong> <em>&amp;optional
+    window</em></dt>
+
+    <dd>
+      <a name="index-window_002dgroup_002dstart_002dfunction" id=
+      "index-window_002dgroup_002dstart_002dfunction"></a>
+
+      <p>This function is like <code>window-start</code>, except
+      that when <var>window</var> is a part of a group of windows
+      (see <a href="Basic-Windows.html#Window-Group">Window
+      Group</a>), <code>window-group-start</code> returns the start
+      position of the entire group. This condition holds when the
+      buffer local variable
+      <code>window-group-start-function</code> is set to a
+      function. In this case, <code>window-group-start</code> calls
+      the function with the single argument <var>window</var>, then
+      returns its result.</p>
+    </dd>
+  </dl><a name="index-window-end-position" id=
+  "index-window-end-position"></a>
+
+  <dl>
+    <dt><a name="index-window_002dend" id=
+    "index-window_002dend"></a>Function:
+    <strong>window-end</strong> <em>&amp;optional window
+    update</em></dt>
+
+    <dd>
+      <p>This function returns the position where display of its
+      buffer ends in <var>window</var>. The default for
+      <var>window</var> is the selected window.</p>
+
+      <p>Simply changing the buffer text or moving point does not
+      update the value that <code>window-end</code> returns. The
+      value is updated only when Emacs redisplays and redisplay
+      completes without being preempted.</p>
+
+      <p>If the last redisplay of <var>window</var> was preempted,
+      and did not finish, Emacs does not know the position of the
+      end of display in that window. In that case, this function
+      returns <code>nil</code>.</p>
+
+      <p>If <var>update</var> is non-<code>nil</code>,
+      <code>window-end</code> always returns an up-to-date value
+      for where display ends, based on the current
+      <code>window-start</code> value. If a previously saved value
+      of that position is still valid, <code>window-end</code>
+      returns that value; otherwise it computes the correct value
+      by scanning the buffer text.</p>
+
+      <p>Even if <var>update</var> is non-<code>nil</code>,
+      <code>window-end</code> does not attempt to scroll the
+      display if point has moved off the screen, the way real
+      redisplay would do. It does not alter the
+      <code>window-start</code> value. In effect, it reports where
+      the displayed text will end if scrolling is not required.</p>
+    </dd>
+  </dl><a name="index-window_002dgroup_002dend_002dfunction" id=
+  "index-window_002dgroup_002dend_002dfunction"></a>
+
+  <dl>
+    <dt><a name="index-window_002dgroup_002dend" id=
+    "index-window_002dgroup_002dend"></a>Function:
+    <strong>window-group-end</strong> <em>&amp;optional window
+    update</em></dt>
+
+    <dd>
+      <p>This function is like <code>window-end</code>, except that
+      when <var>window</var> is a part of a group of windows (see
+      <a href="Basic-Windows.html#Window-Group">Window Group</a>),
+      <code>window-group-end</code> returns the end position of the
+      entire group. This condition holds when the buffer local
+      variable <code>window-group-end-function</code> is set to a
+      function. In this case, <code>window-group-end</code> calls
+      the function with the two arguments <var>window</var> and
+      <var>update</var>, then returns its result. The argument
+      <var>update</var> has the same meaning as in
+      <code>window-end</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dwindow_002dstart" id=
+    "index-set_002dwindow_002dstart"></a>Function:
+    <strong>set-window-start</strong> <em>window position
+    &amp;optional noforce</em></dt>
+
+    <dd>
+      <p>This function sets the display-start position of
+      <var>window</var> to <var>position</var> in
+      <var>window</var>&rsquo;s buffer. It returns
+      <var>position</var>.</p>
+
+      <p>The display routines insist that the position of point be
+      visible when a buffer is displayed. Normally, they change the
+      display-start position (that is, scroll the window) whenever
+      necessary to make point visible. However, if you specify the
+      start position with this function using <code>nil</code> for
+      <var>noforce</var>, it means you want display to start at
+      <var>position</var> even if that would put the location of
+      point off the screen. If this does place point off screen,
+      the display routines move point to the left margin on the
+      middle line in the window.</p>
+
+      <p>For example, if point is&nbsp;1<!-- /@w --> and you set
+      the start of the window to&nbsp;37<!-- /@w -->, the start of
+      the next line, point will be above the top of the window. The
+      display routines will automatically move point if it is still
+      1 when redisplay occurs. Here is an example:</p>
+
+      <div class="example">
+        <pre class="example">
+;; <span class=
+"roman">Here is what &lsquo;<samp>foo</samp>&rsquo; looks like before executing</span>
+;;   <span class=
+"roman">the <code>set-window-start</code> expression.</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+---------- Buffer: foo ----------
 &lowast;This is the contents of buffer foo.
 2
 3
@@ -194,17 +289,25 @@ it is still 1 when redisplay occurs.  Here is an example:
 5
 6
 ---------- Buffer: foo ----------
-</pre><pre class="example">
-</pre><pre class="example">(set-window-start
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(set-window-start
  (selected-window)
  (save-excursion
    (goto-char 1)
    (forward-line 1)
    (point)))
 &rArr; 37
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Here is what &lsquo;<samp>foo</samp>&rsquo; looks like after executing</span>
-;;   <span class="roman">the <code>set-window-start</code> expression.</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">Here is what &lsquo;<samp>foo</samp>&rsquo; looks like after executing</span>
+;;   <span class=
+"roman">the <code>set-window-start</code> expression.</span>
 ---------- Buffer: foo ----------
 2
 3
@@ -212,115 +315,180 @@ it is still 1 when redisplay occurs.  Here is an example:
 5
 6
 ---------- Buffer: foo ----------
-</pre></div>
+</pre>
+      </div>
 
-<p>If <var>noforce</var> is non-<code>nil</code>, and <var>position</var> would place point
-off screen at the next redisplay, then redisplay computes a new window-start
-position that works well with point, and thus <var>position</var> is not used.
-</p></dd></dl>
+      <p>If <var>noforce</var> is non-<code>nil</code>, and
+      <var>position</var> would place point off screen at the next
+      redisplay, then redisplay computes a new window-start
+      position that works well with point, and thus
+      <var>position</var> is not used.</p>
+    </dd>
+  </dl><a name=
+  "index-set_002dwindow_002dgroup_002dstart_002dfunction" id=
+  "index-set_002dwindow_002dgroup_002dstart_002dfunction"></a>
 
-<a name="index-set_002dwindow_002dgroup_002dstart_002dfunction"></a>
-<dl>
-<dt><a name="index-set_002dwindow_002dgroup_002dstart"></a>Function: <strong>set-window-group-start</strong> <em>window position &amp;optional noforce</em></dt>
-<dd><p>This function is like <code>set-window-start</code>, except that when
-<var>window</var> is a part of a group of windows (see <a href="Basic-Windows.html#Window-Group">Window Group</a>),
-<code>set-window-group-start</code> sets the start position of the entire
-group.  This condition holds when the buffer local variable
-<code>set-window-group-start-function</code> is set to a function.  In this
-case, <code>set-window-group-start</code> calls the function with the three
-arguments <var>window</var>, <var>position</var>, and <var>noforce</var>, then
-returns its result.  The arguments <var>position</var> and <var>noforce</var> in
-this function have the same meaning as in <code>set-window-start</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dwindow_002dgroup_002dstart" id=
+    "index-set_002dwindow_002dgroup_002dstart"></a>Function:
+    <strong>set-window-group-start</strong> <em>window position
+    &amp;optional noforce</em></dt>
 
-<dl>
-<dt><a name="index-pos_002dvisible_002din_002dwindow_002dp"></a>Function: <strong>pos-visible-in-window-p</strong> <em>&amp;optional position window partially</em></dt>
-<dd><p>This function returns non-<code>nil</code> if <var>position</var> is within the
-range of text currently visible on the screen in <var>window</var>.  It
-returns <code>nil</code> if <var>position</var> is scrolled vertically out of
-view.  Locations that are partially obscured are not considered
-visible unless <var>partially</var> is non-<code>nil</code>.  The argument
-<var>position</var> defaults to the current position of point in
-<var>window</var>; <var>window</var> defaults to the selected window.  If
-<var>position</var> is <code>t</code>, that means to check either the first
-visible position of the last screen line in <var>window</var>, or the
-end-of-buffer position, whichever comes first.
-</p>
-<p>This function considers only vertical scrolling.  If <var>position</var> is
-out of view only because <var>window</var> has been scrolled horizontally,
-<code>pos-visible-in-window-p</code> returns non-<code>nil</code> anyway.
-See <a href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>.
-</p>
-<p>If <var>position</var> is visible, <code>pos-visible-in-window-p</code> returns
-<code>t</code> if <var>partially</var> is <code>nil</code>; if <var>partially</var> is
-non-<code>nil</code>, and the character following <var>position</var> is fully
-visible, it returns a list of the form <code>(<var>x</var> <var>y</var>)</code>, where
-<var>x</var> and <var>y</var> are the pixel coordinates relative to the top left
-corner of the window; otherwise it returns an extended list of the form
-<code>(<var>x</var> <var>y</var> <var>rtop</var> <var>rbot</var> <var>rowh</var> <var>vpos</var>)</code>,
-where <var>rtop</var> and <var>rbot</var> specify the number of off-window pixels
-at the top and bottom of the row at <var>position</var>, <var>rowh</var> specifies
-the visible height of that row, and <var>vpos</var> specifies the vertical
-position (zero-based row number) of that row.
-</p>
-<p>Here is an example:
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">If point is off the screen now, recenter it now.</span>
+    <dd>
+      <p>This function is like <code>set-window-start</code>,
+      except that when <var>window</var> is a part of a group of
+      windows (see <a href="Basic-Windows.html#Window-Group">Window
+      Group</a>), <code>set-window-group-start</code> sets the
+      start position of the entire group. This condition holds when
+      the buffer local variable
+      <code>set-window-group-start-function</code> is set to a
+      function. In this case, <code>set-window-group-start</code>
+      calls the function with the three arguments
+      <var>window</var>, <var>position</var>, and
+      <var>noforce</var>, then returns its result. The arguments
+      <var>position</var> and <var>noforce</var> in this function
+      have the same meaning as in
+      <code>set-window-start</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-pos_002dvisible_002din_002dwindow_002dp" id=
+    "index-pos_002dvisible_002din_002dwindow_002dp"></a>Function:
+    <strong>pos-visible-in-window-p</strong> <em>&amp;optional
+    position window partially</em></dt>
+
+    <dd>
+      <p>This function returns non-<code>nil</code> if
+      <var>position</var> is within the range of text currently
+      visible on the screen in <var>window</var>. It returns
+      <code>nil</code> if <var>position</var> is scrolled
+      vertically out of view. Locations that are partially obscured
+      are not considered visible unless <var>partially</var> is
+      non-<code>nil</code>. The argument <var>position</var>
+      defaults to the current position of point in
+      <var>window</var>; <var>window</var> defaults to the selected
+      window. If <var>position</var> is <code>t</code>, that means
+      to check either the first visible position of the last screen
+      line in <var>window</var>, or the end-of-buffer position,
+      whichever comes first.</p>
+
+      <p>This function considers only vertical scrolling. If
+      <var>position</var> is out of view only because
+      <var>window</var> has been scrolled horizontally,
+      <code>pos-visible-in-window-p</code> returns
+      non-<code>nil</code> anyway. See <a href=
+      "Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal
+      Scrolling</a>.</p>
+
+      <p>If <var>position</var> is visible,
+      <code>pos-visible-in-window-p</code> returns <code>t</code>
+      if <var>partially</var> is <code>nil</code>; if
+      <var>partially</var> is non-<code>nil</code>, and the
+      character following <var>position</var> is fully visible, it
+      returns a list of the form <code>(<var>x</var>
+      <var>y</var>)</code>, where <var>x</var> and <var>y</var> are
+      the pixel coordinates relative to the top left corner of the
+      window; otherwise it returns an extended list of the form
+      <code>(<var>x</var> <var>y</var> <var>rtop</var>
+      <var>rbot</var> <var>rowh</var> <var>vpos</var>)</code>,
+      where <var>rtop</var> and <var>rbot</var> specify the number
+      of off-window pixels at the top and bottom of the row at
+      <var>position</var>, <var>rowh</var> specifies the visible
+      height of that row, and <var>vpos</var> specifies the
+      vertical position (zero-based row number) of that row.</p>
+
+      <p>Here is an example:</p>
+
+      <div class="example">
+        <pre class="example">
+;; <span class=
+"roman">If point is off the screen now, recenter it now.</span>
 (or (pos-visible-in-window-p
      (point) (selected-window))
     (recenter 0))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl><a name=
+  "index-pos_002dvisible_002din_002dwindow_002dgroup_002dp_002dfunction"
+  id=
+  "index-pos_002dvisible_002din_002dwindow_002dgroup_002dp_002dfunction"></a>
 
-<a name="index-pos_002dvisible_002din_002dwindow_002dgroup_002dp_002dfunction"></a>
-<dl>
-<dt><a name="index-pos_002dvisible_002din_002dwindow_002dgroup_002dp"></a>Function: <strong>pos-visible-in-window-group-p</strong> <em>&amp;optional position window partially</em></dt>
-<dd><p>This function is like <code>pos-visible-in-window-p</code>, except that when
-<var>window</var> is a part of a group of windows (see <a href="Basic-Windows.html#Window-Group">Window Group</a>),
-<code>pos-visible-in-window-group-p</code> tests the visibility of <var>pos</var>
-in the entire group, not just in the single <var>window</var>.  This
-condition holds when the buffer local variable
-<code>pos-visible-in-window-group-p-function</code> is set to a function.
-In this case <code>pos-visible-in-window-group-p</code> calls the function
-with the three arguments <var>position</var>, <var>window</var>, and
-<var>partially</var>, then returns its result.  The arguments
-<var>position</var> and <var>partially</var> have the same meaning as in
-<code>pos-visible-in-window-p</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name=
+    "index-pos_002dvisible_002din_002dwindow_002dgroup_002dp" id=
+    "index-pos_002dvisible_002din_002dwindow_002dgroup_002dp"></a>Function:
+    <strong>pos-visible-in-window-group-p</strong>
+    <em>&amp;optional position window partially</em></dt>
 
-<dl>
-<dt><a name="index-window_002dline_002dheight"></a>Function: <strong>window-line-height</strong> <em>&amp;optional line window</em></dt>
-<dd><p>This function returns the height of text line <var>line</var> in
-<var>window</var>.  If <var>line</var> is one of <code>header-line</code> or
-<code>mode-line</code>, <code>window-line-height</code> returns information about
-the corresponding line of the window.  Otherwise, <var>line</var> is a text
-line number starting from 0.  A negative number counts from the end of
-the window.  The default for <var>line</var> is the current line in
-<var>window</var>; the default for <var>window</var> is the selected window.
-</p>
-<p>If the display is not up to date, <code>window-line-height</code> returns
-<code>nil</code>.  In that case, <code>pos-visible-in-window-p</code> may be used
-to obtain related information.
-</p>
-<p>If there is no line corresponding to the specified <var>line</var>,
-<code>window-line-height</code> returns <code>nil</code>.  Otherwise, it returns
-a list <code>(<var>height</var> <var>vpos</var> <var>ypos</var> <var>offbot</var>)</code>,
-where <var>height</var> is the height in pixels of the visible part of the
-line, <var>vpos</var> and <var>ypos</var> are the vertical position in lines and
-pixels of the line relative to the top of the first text line, and
-<var>offbot</var> is the number of off-window pixels at the bottom of the
-text line.  If there are off-window pixels at the top of the (first)
-text line, <var>ypos</var> is negative.
-</p></dd></dl>
+    <dd>
+      <p>This function is like
+      <code>pos-visible-in-window-p</code>, except that when
+      <var>window</var> is a part of a group of windows (see
+      <a href="Basic-Windows.html#Window-Group">Window Group</a>),
+      <code>pos-visible-in-window-group-p</code> tests the
+      visibility of <var>pos</var> in the entire group, not just in
+      the single <var>window</var>. This condition holds when the
+      buffer local variable
+      <code>pos-visible-in-window-group-p-function</code> is set to
+      a function. In this case
+      <code>pos-visible-in-window-group-p</code> calls the function
+      with the three arguments <var>position</var>,
+      <var>window</var>, and <var>partially</var>, then returns its
+      result. The arguments <var>position</var> and
+      <var>partially</var> have the same meaning as in
+      <code>pos-visible-in-window-p</code>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Textual-Scrolling.html#Textual-Scrolling" accesskey="n" rel="next">Textual Scrolling</a>, Previous: <a href="Window-Point.html#Window-Point" accesskey="p" rel="prev">Window Point</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-window_002dline_002dheight" id=
+    "index-window_002dline_002dheight"></a>Function:
+    <strong>window-line-height</strong> <em>&amp;optional line
+    window</em></dt>
 
+    <dd>
+      <p>This function returns the height of text line
+      <var>line</var> in <var>window</var>. If <var>line</var> is
+      one of <code>header-line</code> or <code>mode-line</code>,
+      <code>window-line-height</code> returns information about the
+      corresponding line of the window. Otherwise, <var>line</var>
+      is a text line number starting from 0. A negative number
+      counts from the end of the window. The default for
+      <var>line</var> is the current line in <var>window</var>; the
+      default for <var>window</var> is the selected window.</p>
 
+      <p>If the display is not up to date,
+      <code>window-line-height</code> returns <code>nil</code>. In
+      that case, <code>pos-visible-in-window-p</code> may be used
+      to obtain related information.</p>
 
+      <p>If there is no line corresponding to the specified
+      <var>line</var>, <code>window-line-height</code> returns
+      <code>nil</code>. Otherwise, it returns a list
+      <code>(<var>height</var> <var>vpos</var> <var>ypos</var>
+      <var>offbot</var>)</code>, where <var>height</var> is the
+      height in pixels of the visible part of the line,
+      <var>vpos</var> and <var>ypos</var> are the vertical position
+      in lines and pixels of the line relative to the top of the
+      first text line, and <var>offbot</var> is the number of
+      off-window pixels at the bottom of the text line. If there
+      are off-window pixels at the top of the (first) text line,
+      <var>ypos</var> is negative.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Textual-Scrolling.html#Textual-Scrolling"
+    accesskey="n" rel="next">Textual Scrolling</a>, Previous:
+    <a href="Window-Point.html#Window-Point" accesskey="p" rel=
+    "prev">Window Point</a>, Up: <a href="Windows.html#Windows"
+    accesskey="u" rel="up">Windows</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

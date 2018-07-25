@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,94 +19,188 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Forms</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Forms">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Forms">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Evaluation.html#Evaluation" rel="up" title="Evaluation">
-<link href="Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms" rel="next" title="Self-Evaluating Forms">
-<link href="Intro-Eval.html#Intro-Eval" rel="prev" title="Intro Eval">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Forms</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Forms" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Forms" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Evaluation.html#Evaluation" rel="up" title=
+  "Evaluation" />
+  <link href=
+  "Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms" rel=
+  "next" title="Self-Evaluating Forms" />
+  <link href="Intro-Eval.html#Intro-Eval" rel="prev" title=
+  "Intro Eval" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Forms" id="Forms"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Quoting.html#Quoting" accesskey="n" rel=
+    "next">Quoting</a>, Previous: <a href=
+    "Intro-Eval.html#Intro-Eval" accesskey="p" rel="prev">Intro
+    Eval</a>, Up: <a href="Evaluation.html#Evaluation" accesskey=
+    "u" rel="up">Evaluation</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Kinds-of-Forms" id="Kinds-of-Forms"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Forms"></a>
-<div class="header">
-<p>
-Next: <a href="Quoting.html#Quoting" accesskey="n" rel="next">Quoting</a>, Previous: <a href="Intro-Eval.html#Intro-Eval" accesskey="p" rel="prev">Intro Eval</a>, Up: <a href="Evaluation.html#Evaluation" accesskey="u" rel="up">Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Kinds-of-Forms"></a>
-<h3 class="section">9.2 Kinds of Forms</h3>
+  <h3 class="section">9.2 Kinds of Forms</h3>
 
-<p>A Lisp object that is intended to be evaluated is called a
-<em>form</em> (or an <em>expression</em>).  How Emacs evaluates a form
-depends on its data type.  Emacs has three different kinds of form
-that are evaluated differently: symbols, lists, and all other
-types.  This section describes all three kinds, one by one, starting
-with the other types, which are self-evaluating forms.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms" accesskey="1">Self-Evaluating Forms</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Forms that evaluate to themselves.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Symbol-Forms.html#Symbol-Forms" accesskey="2">Symbol Forms</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Symbols evaluate as variables.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Classifying-Lists.html#Classifying-Lists" accesskey="3">Classifying Lists</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to distinguish various sorts of list forms.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Function-Indirection.html#Function-Indirection" accesskey="4">Function Indirection</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">When a symbol appears as the car of a list,
-                              we find the real function via the symbol.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Function-Forms.html#Function-Forms" accesskey="5">Function Forms</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Forms that call functions.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Macro-Forms.html#Macro-Forms" accesskey="6">Macro Forms</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Forms that call macros.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Special-Forms.html#Special-Forms" accesskey="7">Special Forms</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special forms are idiosyncratic primitives,
-                              most of them extremely important.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Autoloading.html#Autoloading" accesskey="8">Autoloading</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions set up to load files
-                              containing their real definitions.
-</td></tr>
-</table>
+  <p>A Lisp object that is intended to be evaluated is called a
+  <em>form</em> (or an <em>expression</em>). How Emacs evaluates a
+  form depends on its data type. Emacs has three different kinds of
+  form that are evaluated differently: symbols, lists, and all
+  other types. This section describes all three kinds, one by one,
+  starting with the other types, which are self-evaluating
+  forms.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms"
+      accesskey="1">Self-Evaluating Forms</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
 
+      <td align="left" valign="top">Forms that evaluate to
+      themselves.</td>
+    </tr>
 
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Symbol-Forms.html#Symbol-Forms" accesskey="2">Symbol
+      Forms</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Symbols evaluate as
+      variables.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Classifying-Lists.html#Classifying-Lists" accesskey=
+      "3">Classifying Lists</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to distinguish various
+      sorts of list forms.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Function-Indirection.html#Function-Indirection" accesskey=
+      "4">Function Indirection</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">When a symbol appears as the
+      car of a list, we find the real function via the symbol.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Function-Forms.html#Function-Forms" accesskey="5">Function
+      Forms</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Forms that call functions.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Macro-Forms.html#Macro-Forms" accesskey="6">Macro
+      Forms</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Forms that call macros.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Special-Forms.html#Special-Forms" accesskey="7">Special
+      Forms</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Special forms are idiosyncratic
+      primitives, most of them extremely important.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Autoloading.html#Autoloading" accesskey=
+      "8">Autoloading</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Functions set up to load files
+      containing their real definitions.</td>
+    </tr>
+  </table>
 </body>
 </html>

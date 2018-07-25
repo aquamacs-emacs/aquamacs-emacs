@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Mail Variables - Message Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Message Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Variables.html#Variables" title="Variables">
-<link rel="prev" href="Mail-Headers.html#Mail-Headers" title="Mail Headers">
-<link rel="next" href="News-Headers.html#News-Headers" title="News Headers">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Mail Variables - Message Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Message Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Variables.html#Variables" title=
+  "Variables" />
+  <link rel="prev" href="Mail-Headers.html#Mail-Headers" title=
+  "Mail Headers" />
+  <link rel="next" href="News-Headers.html#News-Headers" title=
+  "News Headers" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Message, the Emacs message composition mode.
 
 Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
@@ -27,8 +36,10 @@ Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,79 +49,163 @@ Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Mail-Variables"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="News-Headers.html#News-Headers">News Headers</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Mail-Headers.html#Mail-Headers">Mail Headers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Mail-Variables" id="Mail-Variables"></a>
 
-<h3 class="section">3.3 Mail Variables</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "News-Headers.html#News-Headers">News Headers</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Mail-Headers.html#Mail-Headers">Mail Headers</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Variables.html#Variables">Variables</a></p>
+    <hr />
+  </div>
 
-     <dl>
-<dt><code>message-send-mail-function</code><dd><a name="index-message_002dsend_002dmail_002dfunction-221"></a><a name="index-message_002dsend_002dmail_002dfunction-222"></a><a name="index-message_002dsend_002dmail_002dwith_002dsendmail-223"></a><a name="index-message_002dsend_002dmail_002dwith_002dmh-224"></a><a name="index-message_002dsend_002dmail_002dwith_002dqmail-225"></a><a name="index-message_002dsmtpmail_002dsend_002dit-226"></a><a name="index-smtpmail_002dsend_002dit-227"></a><a name="index-feedmail_002dsend_002dit-228"></a><a name="index-message_002dsend_002dmail_002dwith_002dmailclient-229"></a>Function used to send the current buffer as mail.  The default is
-<code>message-send-mail-with-sendmail</code>, or <code>smtpmail-send-it</code>
-according to the system.  Other valid values include
-<code>message-send-mail-with-mailclient</code>,
-<code>message-send-mail-with-mh</code>, <code>message-send-mail-with-qmail</code>,
-<code>message-smtpmail-send-it</code> and <code>feedmail-send-it</code>.
+  <h3 class="section">3.3 Mail Variables</h3>
 
-     <p>The function
-<code>message-send-mail-with-sendmail</code> pipes your article to the
-<code>sendmail</code> binary for further queuing and sending.  When your local
-system is not configured for sending mail using <code>sendmail</code>, and you
-have access to a remote <acronym>SMTP</acronym> server, you can set
-<code>message-send-mail-function</code> to <code>smtpmail-send-it</code> and make
-sure to setup the <code>smtpmail</code> package correctly.  An example:
+  <dl>
+    <dt><code>message-send-mail-function</code></dt>
 
-     <pre class="lisp">          (setq message-send-mail-function 'smtpmail-send-it
+    <dd>
+      <a name="index-message_002dsend_002dmail_002dfunction-221"
+      id="index-message_002dsend_002dmail_002dfunction-221"></a><a name="index-message_002dsend_002dmail_002dfunction-222"
+      id=
+      "index-message_002dsend_002dmail_002dfunction-222"></a><a name="index-message_002dsend_002dmail_002dwith_002dsendmail-223"
+      id=
+      "index-message_002dsend_002dmail_002dwith_002dsendmail-223"></a><a name="index-message_002dsend_002dmail_002dwith_002dmh-224"
+      id=
+      "index-message_002dsend_002dmail_002dwith_002dmh-224"></a><a name="index-message_002dsend_002dmail_002dwith_002dqmail-225"
+      id=
+      "index-message_002dsend_002dmail_002dwith_002dqmail-225"></a><a name="index-message_002dsmtpmail_002dsend_002dit-226"
+      id=
+      "index-message_002dsmtpmail_002dsend_002dit-226"></a><a name=
+      "index-smtpmail_002dsend_002dit-227" id=
+      "index-smtpmail_002dsend_002dit-227"></a><a name=
+      "index-feedmail_002dsend_002dit-228" id=
+      "index-feedmail_002dsend_002dit-228"></a><a name=
+      "index-message_002dsend_002dmail_002dwith_002dmailclient-229"
+      id=
+      "index-message_002dsend_002dmail_002dwith_002dmailclient-229"></a>Function
+      used to send the current buffer as mail. The default is
+      <code>message-send-mail-with-sendmail</code>, or
+      <code>smtpmail-send-it</code> according to the system. Other
+      valid values include
+      <code>message-send-mail-with-mailclient</code>,
+      <code>message-send-mail-with-mh</code>,
+      <code>message-send-mail-with-qmail</code>,
+      <code>message-smtpmail-send-it</code> and
+      <code>feedmail-send-it</code>.
+
+      <p>The function <code>message-send-mail-with-sendmail</code>
+      pipes your article to the <code>sendmail</code> binary for
+      further queuing and sending. When your local system is not
+      configured for sending mail using <code>sendmail</code>, and
+      you have access to a remote <acronym>SMTP</acronym> server,
+      you can set <code>message-send-mail-function</code> to
+      <code>smtpmail-send-it</code> and make sure to setup the
+      <code>smtpmail</code> package correctly. An example:</p>
+      <pre class="lisp">
+          (setq message-send-mail-function 'smtpmail-send-it
                 smtpmail-default-smtp-server "YOUR SMTP HOST")
 </pre>
-     <p>To the thing similar to this, there is
-<code>message-smtpmail-send-it</code>.  It is useful if your <acronym>ISP</acronym>
-requires the <acronym>POP</acronym>-before-<acronym>SMTP</acronym> authentication. 
-See <a href="../gnus/POP-before-SMTP.html#POP-before-SMTP">POP before SMTP</a>.
 
-     <br><dt><code>message-mh-deletable-headers</code><dd><a name="index-message_002dmh_002ddeletable_002dheaders-230"></a>Most versions of MH doesn't like being fed messages that contain the
-headers in this variable.  If this variable is non-<code>nil</code> (which is
-the default), these headers will be removed before mailing when sending
-messages via MH.  Set it to <code>nil</code> if your MH can handle these
-headers.
+      <p>To the thing similar to this, there is
+      <code>message-smtpmail-send-it</code>. It is useful if your
+      <acronym>ISP</acronym> requires the
+      <acronym>POP</acronym>-before-<acronym>SMTP</acronym>
+      authentication. See <a href=
+      "../gnus/POP-before-SMTP.html#POP-before-SMTP">POP before
+      SMTP</a>.<br /></p>
+    </dd>
 
-     <br><dt><code>message-qmail-inject-program</code><dd><a name="index-message_002dqmail_002dinject_002dprogram-231"></a><a name="index-qmail-232"></a>Location of the qmail-inject program.
+    <dt><code>message-mh-deletable-headers</code></dt>
 
-     <br><dt><code>message-qmail-inject-args</code><dd><a name="index-message_002dqmail_002dinject_002dargs-233"></a>Arguments passed to qmail-inject programs. 
-This should be a list of strings, one string for each argument.  It
-may also be a function.
+    <dd><a name=
+    "index-message_002dmh_002ddeletable_002dheaders-230" id=
+    "index-message_002dmh_002ddeletable_002dheaders-230"></a>Most
+    versions of MH doesn't like being fed messages that contain the
+    headers in this variable. If this variable is
+    non-<code>nil</code> (which is the default), these headers will
+    be removed before mailing when sending messages via MH. Set it
+    to <code>nil</code> if your MH can handle these
+    headers.<br /></dd>
 
-     <p>For e.g., if you wish to set the envelope sender address so that bounces
-go to the right place or to deal with listserv's usage of that address, you
-might set this variable to <code>'("-f" "you@some.where")</code>.
+    <dt><code>message-qmail-inject-program</code></dt>
 
-     <br><dt><code>message-sendmail-f-is-evil</code><dd><a name="index-message_002dsendmail_002df_002dis_002devil-234"></a><a name="index-sendmail-235"></a>Non-<code>nil</code> means don't add &lsquo;<samp><span class="samp">-f username</span></samp>&rsquo; to the sendmail
-command line.  Doing so would be even more evil than leaving it out.
+    <dd><a name=
+    "index-message_002dqmail_002dinject_002dprogram-231" id=
+    "index-message_002dqmail_002dinject_002dprogram-231"></a><a name="index-qmail-232"
+    id="index-qmail-232"></a>Location of the qmail-inject
+    program.<br /></dd>
 
-     <br><dt><code>message-sendmail-envelope-from</code><dd><a name="index-message_002dsendmail_002denvelope_002dfrom-236"></a>When <code>message-sendmail-f-is-evil</code> is <code>nil</code>, this specifies
-the address to use in the <acronym>SMTP</acronym> envelope.  If it is
-<code>nil</code>, use <code>user-mail-address</code>.  If it is the symbol
-<code>header</code>, use the &lsquo;<samp><span class="samp">From</span></samp>&rsquo; header of the message.
+    <dt><code>message-qmail-inject-args</code></dt>
 
-     <br><dt><code>message-mailer-swallows-blank-line</code><dd><a name="index-message_002dmailer_002dswallows_002dblank_002dline-237"></a>Set this to non-<code>nil</code> if the system's mailer runs the header and
-body together.  (This problem exists on SunOS 4 when sendmail is run
-in remote mode.)  The value should be an expression to test whether
-the problem will actually occur.
+    <dd>
+      <a name="index-message_002dqmail_002dinject_002dargs-233" id=
+      "index-message_002dqmail_002dinject_002dargs-233"></a>Arguments
+      passed to qmail-inject programs. This should be a list of
+      strings, one string for each argument. It may also be a
+      function.
 
-     <br><dt><code>message-send-mail-partially-limit</code><dd><a name="index-message_002dsend_002dmail_002dpartially_002dlimit-238"></a><a name="index-split-large-message-239"></a>The limitation of messages sent as message/partial.  The lower bound
-of message size in characters, beyond which the message should be sent
-in several parts.  If it is <code>nil</code> (which is the default), the
-size is unlimited.
+      <p>For e.g., if you wish to set the envelope sender address
+      so that bounces go to the right place or to deal with
+      listserv's usage of that address, you might set this variable
+      to <code>'("-f" "you@some.where")</code>.<br /></p>
+    </dd>
 
-</dl>
+    <dt><code>message-sendmail-f-is-evil</code></dt>
 
-   </body></html>
+    <dd><a name=
+    "index-message_002dsendmail_002df_002dis_002devil-234" id=
+    "index-message_002dsendmail_002df_002dis_002devil-234"></a><a name="index-sendmail-235"
+    id="index-sendmail-235"></a>Non-<code>nil</code> means don't
+    add &lsquo;<samp><span class="samp">-f
+    username</span></samp>&rsquo; to the sendmail command line.
+    Doing so would be even more evil than leaving it
+    out.<br /></dd>
 
+    <dt><code>message-sendmail-envelope-from</code></dt>
+
+    <dd><a name=
+    "index-message_002dsendmail_002denvelope_002dfrom-236" id=
+    "index-message_002dsendmail_002denvelope_002dfrom-236"></a>When
+    <code>message-sendmail-f-is-evil</code> is <code>nil</code>,
+    this specifies the address to use in the
+    <acronym>SMTP</acronym> envelope. If it is <code>nil</code>,
+    use <code>user-mail-address</code>. If it is the symbol
+    <code>header</code>, use the &lsquo;<samp><span class=
+    "samp">From</span></samp>&rsquo; header of the
+    message.<br /></dd>
+
+    <dt><code>message-mailer-swallows-blank-line</code></dt>
+
+    <dd><a name=
+    "index-message_002dmailer_002dswallows_002dblank_002dline-237"
+    id=
+    "index-message_002dmailer_002dswallows_002dblank_002dline-237"></a>Set
+    this to non-<code>nil</code> if the system's mailer runs the
+    header and body together. (This problem exists on SunOS 4 when
+    sendmail is run in remote mode.) The value should be an
+    expression to test whether the problem will actually
+    occur.<br /></dd>
+
+    <dt><code>message-send-mail-partially-limit</code></dt>
+
+    <dd><a name=
+    "index-message_002dsend_002dmail_002dpartially_002dlimit-238"
+    id=
+    "index-message_002dsend_002dmail_002dpartially_002dlimit-238"></a><a name="index-split-large-message-239"
+    id="index-split-large-message-239"></a>The limitation of
+    messages sent as message/partial. The lower bound of message
+    size in characters, beyond which the message should be sent in
+    several parts. If it is <code>nil</code> (which is the
+    default), the size is unlimited.</dd>
+  </dl>
+</body>
+</html>

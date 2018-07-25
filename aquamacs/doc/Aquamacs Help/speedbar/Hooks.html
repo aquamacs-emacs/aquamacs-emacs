@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Hooks - Speedbar: File/Tag summarizing utility</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Speedbar: File/Tag summarizing utility">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Customizing.html#Customizing" title="Customizing">
-<link rel="prev" href="Version-Control.html#Version-Control" title="Version Control">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Hooks - Speedbar: File/Tag summarizing utility</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "Speedbar: File/Tag summarizing utility" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Customizing.html#Customizing" title=
+  "Customizing" />
+  <link rel="prev" href="Version-Control.html#Version-Control"
+  title="Version Control" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -24,8 +33,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,41 +46,107 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Hooks"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Version-Control.html#Version-Control">Version Control</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Customizing.html#Customizing">Customizing</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Hooks" id="Hooks"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h3 class="section">6.4 Hooks</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Version-Control.html#Version-Control">Version Control</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Customizing.html#Customizing">Customizing</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-<p><a name="index-hooks-56"></a>
-There are several hooks in speedbar allowing custom behaviors to be
-added.  Available hooks are:
+  <h3 class="section">6.4 Hooks</h3>
 
-     
-<a name="index-g_t_0040code_007bspeedbar_002dvisiting_002dfile_002dhook_007d-57"></a>
-<dl><dt><code>speedbar-visiting-file-hook</code><dd>Hooks run when speedbar visits a file in the selected frame. 
-<a name="index-g_t_0040code_007bspeedbar_002dvisiting_002dtag_002dhook_007d-58"></a><br><dt><code>speedbar-visiting-tag-hook</code><dd>Hooks run when speedbar visits a tag in the selected frame. 
-<a name="index-g_t_0040code_007bspeedbar_002dload_002dhook_007d-59"></a><br><dt><code>speedbar-load-hook</code><dd>Hooks run when speedbar is loaded. 
-<a name="index-g_t_0040code_007bspeedbar_002dreconfigure_002dkeymaps_002dhook_007d-60"></a><br><dt><code>speedbar-reconfigure-keymaps-hook</code><dd>Hooks run when the keymaps are regenerated.  Keymaps are reconfigured
-whenever modes change.  This will let you add custom key bindings. 
-<a name="index-g_t_0040code_007bspeedbar_002dbefore_002dpopup_002dhook_007d-61"></a><br><dt><code>speedbar-before-popup-hook</code><dd>Hooks called before popping up the speedbar frame. 
-New frames are often popped up when &ldquo;power clicking&rdquo; on an item to view
-it. 
-<a name="index-g_t_0040code_007bspeedbar_002dbefore_002ddelete_002dhook_007d-62"></a><br><dt><code>speedbar-before-delete-hook</code><dd>Hooks called before deleting or hiding the speedbar frame. 
-<a name="index-g_t_0040code_007bspeedbar_002dmode_002dhook_007d-63"></a><br><dt><code>speedbar-mode-hook</code><dd>Hooks called after creating a speedbar buffer. 
-<a name="index-g_t_0040code_007bspeedbar_002dtimer_002dhook_007d-64"></a><br><dt><code>speedbar-timer-hook</code><dd>Hooks called after running the speedbar timer function. 
-<a name="index-g_t_0040code_007bspeedbar_002dscanner_002dreset_002dhook_007d-65"></a><br><dt><code>speedbar-scanner-reset-hook</code><dd>Hook called whenever generic scanners are reset. 
-Set this to implement your own scanning or rescan safe functions with
-state data. 
-</dl>
+  <p><a name="index-hooks-56" id="index-hooks-56"></a> There are
+  several hooks in speedbar allowing custom behaviors to be added.
+  Available hooks are: <a name=
+  "index-g_t_0040code_007bspeedbar_002dvisiting_002dfile_002dhook_007d-57"
+  id=
+  "index-g_t_0040code_007bspeedbar_002dvisiting_002dfile_002dhook_007d-57">
+  </a></p>
 
-   </body></html>
+  <dl>
+    <dt><code>speedbar-visiting-file-hook</code></dt>
 
+    <dd>Hooks run when speedbar visits a file in the selected
+    frame. <a name=
+    "index-g_t_0040code_007bspeedbar_002dvisiting_002dtag_002dhook_007d-58"
+    id=
+    "index-g_t_0040code_007bspeedbar_002dvisiting_002dtag_002dhook_007d-58">
+    </a><br /></dd>
+
+    <dt><code>speedbar-visiting-tag-hook</code></dt>
+
+    <dd>Hooks run when speedbar visits a tag in the selected frame.
+    <a name=
+    "index-g_t_0040code_007bspeedbar_002dload_002dhook_007d-59" id=
+    "index-g_t_0040code_007bspeedbar_002dload_002dhook_007d-59"></a><br />
+    </dd>
+
+    <dt><code>speedbar-load-hook</code></dt>
+
+    <dd>Hooks run when speedbar is loaded. <a name=
+    "index-g_t_0040code_007bspeedbar_002dreconfigure_002dkeymaps_002dhook_007d-60"
+    id=
+    "index-g_t_0040code_007bspeedbar_002dreconfigure_002dkeymaps_002dhook_007d-60">
+    </a><br /></dd>
+
+    <dt><code>speedbar-reconfigure-keymaps-hook</code></dt>
+
+    <dd>Hooks run when the keymaps are regenerated. Keymaps are
+    reconfigured whenever modes change. This will let you add
+    custom key bindings. <a name=
+    "index-g_t_0040code_007bspeedbar_002dbefore_002dpopup_002dhook_007d-61"
+    id=
+    "index-g_t_0040code_007bspeedbar_002dbefore_002dpopup_002dhook_007d-61">
+    </a><br /></dd>
+
+    <dt><code>speedbar-before-popup-hook</code></dt>
+
+    <dd>Hooks called before popping up the speedbar frame. New
+    frames are often popped up when &ldquo;power clicking&rdquo; on
+    an item to view it. <a name=
+    "index-g_t_0040code_007bspeedbar_002dbefore_002ddelete_002dhook_007d-62"
+    id=
+    "index-g_t_0040code_007bspeedbar_002dbefore_002ddelete_002dhook_007d-62">
+    </a><br /></dd>
+
+    <dt><code>speedbar-before-delete-hook</code></dt>
+
+    <dd>Hooks called before deleting or hiding the speedbar frame.
+    <a name=
+    "index-g_t_0040code_007bspeedbar_002dmode_002dhook_007d-63" id=
+    "index-g_t_0040code_007bspeedbar_002dmode_002dhook_007d-63"></a><br />
+    </dd>
+
+    <dt><code>speedbar-mode-hook</code></dt>
+
+    <dd>Hooks called after creating a speedbar buffer. <a name=
+    "index-g_t_0040code_007bspeedbar_002dtimer_002dhook_007d-64"
+    id="index-g_t_0040code_007bspeedbar_002dtimer_002dhook_007d-64">
+    </a><br /></dd>
+
+    <dt><code>speedbar-timer-hook</code></dt>
+
+    <dd>Hooks called after running the speedbar timer function.
+    <a name=
+    "index-g_t_0040code_007bspeedbar_002dscanner_002dreset_002dhook_007d-65"
+    id=
+    "index-g_t_0040code_007bspeedbar_002dscanner_002dreset_002dhook_007d-65">
+    </a><br /></dd>
+
+    <dt><code>speedbar-scanner-reset-hook</code></dt>
+
+    <dd>Hook called whenever generic scanners are reset. Set this
+    to implement your own scanning or rescan safe functions with
+    state data.</dd>
+  </dl>
+</body>
+</html>

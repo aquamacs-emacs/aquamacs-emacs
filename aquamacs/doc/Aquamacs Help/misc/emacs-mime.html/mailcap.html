@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the Emacs MIME interface functionality.
 
 Copyright © 1998-2016 Free Software Foundation, Inc.
@@ -14,107 +16,139 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs MIME Manual: mailcap</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs MIME Manual: mailcap">
-<meta name="keywords" content="Emacs MIME Manual: mailcap">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Basic-Functions.html#Basic-Functions" rel="up" title="Basic Functions">
-<link href="Standards.html#Standards" rel="next" title="Standards">
-<link href="rfc1843.html#rfc1843" rel="prev" title="rfc1843">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs MIME Manual: mailcap</title>
+  <meta name="description" content="Emacs MIME Manual: mailcap" />
+  <meta name="keywords" content="Emacs MIME Manual: mailcap" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Basic-Functions.html#Basic-Functions" rel="up" title=
+  "Basic Functions" />
+  <link href="Standards.html#Standards" rel="next" title=
+  "Standards" />
+  <link href="rfc1843.html#rfc1843" rel="prev" title="rfc1843" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="mailcap"></a>
-<div class="header">
-<p>
-Previous: <a href="rfc1843.html#rfc1843" accesskey="p" rel="prev">rfc1843</a>, Up: <a href="Basic-Functions.html#Basic-Functions" accesskey="u" rel="up">Basic Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="mailcap-1"></a>
-<h3 class="section">4.12 mailcap</h3>
+<body lang="en" xml:lang="en">
+  <a name="mailcap" id="mailcap"></a>
 
-<p>The <samp>~/.mailcap</samp> file is parsed by most <acronym>MIME</acronym>-aware message
-handlers and describes how elements are supposed to be displayed.
-Here&rsquo;s an example file:
-</p>
-<div class="example">
-<pre class="example">image/*; gimp -8 %s
+  <div class="header">
+    <p>Previous: <a href="rfc1843.html#rfc1843" accesskey="p" rel=
+    "prev">rfc1843</a>, Up: <a href=
+    "Basic-Functions.html#Basic-Functions" accesskey="u" rel=
+    "up">Basic Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="mailcap-1" id="mailcap-1"></a>
+
+  <h3 class="section">4.12 mailcap</h3>
+
+  <p>The <samp>~/.mailcap</samp> file is parsed by most
+  <acronym>MIME</acronym>-aware message handlers and describes how
+  elements are supposed to be displayed. Here&rsquo;s an example
+  file:</p>
+
+  <div class="example">
+    <pre class="example">
+image/*; gimp -8 %s
 audio/wav; wavplayer %s
 application/msword; catdoc %s ; copiousoutput ; nametemplate=%s.doc
-</pre></div>
+</pre>
+  </div>
 
-<p>This says that all image files should be displayed with <code>gimp</code>,
-that WAVE audio files should be played by <code>wavplayer</code>, and that
-MS-WORD files should be inlined by <code>catdoc</code>.
-</p>
-<p>The <code>mailcap</code> library parses this file, and provides functions for
-matching types.
-</p>
-<dl compact="compact">
-<dt><code>mailcap-mime-data</code></dt>
-<dd><a name="index-mailcap_002dmime_002ddata"></a>
-<p>This variable is an alist of alists containing backup viewing rules.
-</p>
-</dd>
-</dl>
+  <p>This says that all image files should be displayed with
+  <code>gimp</code>, that WAVE audio files should be played by
+  <code>wavplayer</code>, and that MS-WORD files should be inlined
+  by <code>catdoc</code>.</p>
 
-<p>Interface functions:
-</p>
-<dl compact="compact">
-<dt><code>mailcap-parse-mailcaps</code></dt>
-<dd><a name="index-mailcap_002dparse_002dmailcaps"></a>
-<p>Parse the <samp>~/.mailcap</samp> file.
-</p>
-</dd>
-<dt><code>mailcap-mime-info</code></dt>
-<dd><p>Takes a <acronym>MIME</acronym> type as its argument and returns the matching viewer.
-</p>
-</dd>
-</dl>
+  <p>The <code>mailcap</code> library parses this file, and
+  provides functions for matching types.</p>
 
+  <dl compact="compact">
+    <dt><code>mailcap-mime-data</code></dt>
 
+    <dd>
+      <a name="index-mailcap_002dmime_002ddata" id=
+      "index-mailcap_002dmime_002ddata"></a>
 
+      <p>This variable is an alist of alists containing backup
+      viewing rules.</p>
+    </dd>
+  </dl>
 
+  <p>Interface functions:</p>
 
+  <dl compact="compact">
+    <dt><code>mailcap-parse-mailcaps</code></dt>
 
+    <dd>
+      <a name="index-mailcap_002dparse_002dmailcaps" id=
+      "index-mailcap_002dparse_002dmailcaps"></a>
 
+      <p>Parse the <samp>~/.mailcap</samp> file.</p>
+    </dd>
+
+    <dt><code>mailcap-mime-info</code></dt>
+
+    <dd>
+      <p>Takes a <acronym>MIME</acronym> type as its argument and
+      returns the matching viewer.</p>
+    </dd>
+  </dl>
 </body>
 </html>

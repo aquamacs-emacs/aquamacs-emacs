@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,162 +20,236 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Indentation Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Indentation Commands">
-<meta name="keywords" content="GNU Emacs Manual: Indentation Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Indentation.html#Indentation" rel="up" title="Indentation">
-<link href="Tab-Stops.html#Tab-Stops" rel="next" title="Tab Stops">
-<link href="Indentation.html#Indentation" rel="prev" title="Indentation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Indentation Commands</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Indentation Commands" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Indentation Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Indentation.html#Indentation" rel="up" title=
+  "Indentation" />
+  <link href="Tab-Stops.html#Tab-Stops" rel="next" title=
+  "Tab Stops" />
+  <link href="Indentation.html#Indentation" rel="prev" title=
+  "Indentation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Indentation-Commands" id="Indentation-Commands"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Tab-Stops.html#Tab-Stops" accesskey="n" rel=
+    "next">Tab Stops</a>, Up: <a href=
+    "Indentation.html#Indentation" accesskey="u" rel=
+    "up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Indentation-Commands-1" id="Indentation-Commands-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Indentation-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Tab-Stops.html#Tab-Stops" accesskey="n" rel="next">Tab Stops</a>, Up: <a href="Indentation.html#Indentation" accesskey="u" rel="up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Indentation-Commands-1"></a>
-<h3 class="section">24.1 Indentation Commands</h3>
+  <h3 class="section">24.1 Indentation Commands</h3>
 
-<p>Apart from the <tt class="key">TAB</tt> (<code>indent-for-tab-command</code>) command,
-Emacs provides a variety of commands to perform indentation in other
-ways.
-</p>
-<dl compact="compact">
-<dt><kbd>C-M-o</kbd></dt>
-<dd><a name="index-C_002dM_002do"></a>
-<a name="index-split_002dline"></a>
-<p>Split the current line at point (<code>split-line</code>).  The text on the
-line after point becomes a new line, indented to the same column where
-point is located.  This command first moves point forward over any
-spaces and tabs.  Afterward, point is positioned before the inserted
-newline.
-</p>
-<a name="index-M_002dm"></a>
-<a name="index-back_002dto_002dindentation"></a>
-</dd>
-<dt><kbd>M-m</kbd></dt>
-<dd><p>Move (forward or back) to the first non-whitespace character on the
-current line (<code>back-to-indentation</code>).  If there are no
-non-whitespace characters on the line, move to the end of the line.
-</p>
-</dd>
-<dt><kbd>M-i</kbd></dt>
-<dd><a name="index-M_002di"></a>
-<a name="index-tab_002dto_002dtab_002dstop"></a>
-<p>Indent whitespace at point, up to the next tab stop
-(<code>tab-to-tab-stop</code>).  See <a href="Tab-Stops.html#Tab-Stops">Tab Stops</a>.
-</p>
-<a name="index-indent_002drelative"></a>
-</dd>
-<dt><kbd>M-x indent-relative</kbd></dt>
-<dd><p>Insert whitespace at point, until point is aligned with the first
-non-whitespace character on the previous line (actually, the last
-non-blank line).  If point is already farther right than that, run
-<code>tab-to-tab-stop</code> instead&mdash;unless called with a numeric
-argument, in which case do nothing.
-</p>
-</dd>
-<dt><kbd>M-^</kbd></dt>
-<dd><a name="index-M_002d_005e"></a>
-<a name="index-delete_002dindentation"></a>
-<p>Merge the previous and the current line (<code>delete-indentation</code>).
-This joins the two lines cleanly, by replacing any indentation at
-the front of the current line, together with the line boundary, with a
-single space.
-</p>
-<p>As a special case (useful for Lisp code), the single space is omitted
-if the characters to be joined are consecutive opening and closing
-parentheses, or if the junction follows another newline.
-</p>
-<p>If there is a fill prefix, <kbd>M-^</kbd> deletes the fill prefix if it
-appears after the newline that is deleted.  See <a href="Fill-Prefix.html#Fill-Prefix">Fill Prefix</a>.
-</p>
-</dd>
-<dt><kbd>C-M-\</kbd></dt>
-<dd><a name="index-C_002dM_002d_005c"></a>
-<a name="index-indent_002dregion"></a>
-<p>Indent all the lines in the region, as though you had typed <tt class="key">TAB</tt>
-at the beginning of each line (<code>indent-region</code>).
-</p>
-<p>If a numeric argument is supplied, indent every line in the region to
-that column number.
-</p>
-</dd>
-<dt><kbd>C-x <span class="key">TAB</span></kbd></dt>
-<dd><a name="index-C_002dx-TAB"></a>
-<a name="index-indent_002drigidly"></a>
-<a name="index-remove-indentation"></a>
-<p>This command is used to change the indentation of all lines that begin
-in the region, moving the affected lines as a rigid unit.
-</p>
-<p>If called with no argument, the command activates a transient mode for
-adjusting the indentation of the affected lines interactively.  While
-this transient mode is active, typing <tt class="key">LEFT</tt> or <tt class="key">RIGHT</tt>
-indents leftward and rightward, respectively, by one space.  You can
-also type <kbd>S-<span class="key">LEFT</span></kbd> or <kbd>S-<span class="key">RIGHT</span></kbd> to indent leftward
-or rightward to the next tab stop (see <a href="Tab-Stops.html#Tab-Stops">Tab Stops</a>).  Typing any
-other key disables the transient mode, and resumes normal editing.
-</p>
-<p>If called with a prefix argument <var>n</var>, this command indents the
-lines forward by <var>n</var> spaces (without enabling the transient mode).
-Negative values of <var>n</var> indent backward, so you can remove all
-indentation from the lines in the region using a large negative
-argument, like this:
-</p>
-<div class="smallexample">
-<pre class="smallexample">C-u -999 C-x <span class="key">TAB</span>
-</pre></div>
-</dd>
-</dl>
+  <p>Apart from the <tt class="key">TAB</tt>
+  (<code>indent-for-tab-command</code>) command, Emacs provides a
+  variety of commands to perform indentation in other ways.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Tab-Stops.html#Tab-Stops" accesskey="n" rel="next">Tab Stops</a>, Up: <a href="Indentation.html#Indentation" accesskey="u" rel="up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>C-M-o</kbd></dt>
 
+    <dd>
+      <a name="index-C_002dM_002do" id="index-C_002dM_002do"></a>
+      <a name="index-split_002dline" id="index-split_002dline"></a>
 
+      <p>Split the current line at point (<code>split-line</code>).
+      The text on the line after point becomes a new line, indented
+      to the same column where point is located. This command first
+      moves point forward over any spaces and tabs. Afterward,
+      point is positioned before the inserted newline.</p><a name=
+      "index-M_002dm" id="index-M_002dm"></a> <a name=
+      "index-back_002dto_002dindentation" id=
+      "index-back_002dto_002dindentation"></a>
+    </dd>
 
+    <dt><kbd>M-m</kbd></dt>
+
+    <dd>
+      <p>Move (forward or back) to the first non-whitespace
+      character on the current line
+      (<code>back-to-indentation</code>). If there are no
+      non-whitespace characters on the line, move to the end of the
+      line.</p>
+    </dd>
+
+    <dt><kbd>M-i</kbd></dt>
+
+    <dd>
+      <a name="index-M_002di" id="index-M_002di"></a> <a name=
+      "index-tab_002dto_002dtab_002dstop" id=
+      "index-tab_002dto_002dtab_002dstop"></a>
+
+      <p>Indent whitespace at point, up to the next tab stop
+      (<code>tab-to-tab-stop</code>). See <a href=
+      "Tab-Stops.html#Tab-Stops">Tab Stops</a>.</p><a name=
+      "index-indent_002drelative" id=
+      "index-indent_002drelative"></a>
+    </dd>
+
+    <dt><kbd>M-x indent-relative</kbd></dt>
+
+    <dd>
+      <p>Insert whitespace at point, until point is aligned with
+      the first non-whitespace character on the previous line
+      (actually, the last non-blank line). If point is already
+      farther right than that, run <code>tab-to-tab-stop</code>
+      instead&mdash;unless called with a numeric argument, in which
+      case do nothing.</p>
+    </dd>
+
+    <dt><kbd>M-^</kbd></dt>
+
+    <dd>
+      <a name="index-M_002d_005e" id="index-M_002d_005e"></a>
+      <a name="index-delete_002dindentation" id=
+      "index-delete_002dindentation"></a>
+
+      <p>Merge the previous and the current line
+      (<code>delete-indentation</code>). This joins the two lines
+      cleanly, by replacing any indentation at the front of the
+      current line, together with the line boundary, with a single
+      space.</p>
+
+      <p>As a special case (useful for Lisp code), the single space
+      is omitted if the characters to be joined are consecutive
+      opening and closing parentheses, or if the junction follows
+      another newline.</p>
+
+      <p>If there is a fill prefix, <kbd>M-^</kbd> deletes the fill
+      prefix if it appears after the newline that is deleted. See
+      <a href="Fill-Prefix.html#Fill-Prefix">Fill Prefix</a>.</p>
+    </dd>
+
+    <dt><kbd>C-M-\</kbd></dt>
+
+    <dd>
+      <a name="index-C_002dM_002d_005c" id=
+      "index-C_002dM_002d_005c"></a> <a name=
+      "index-indent_002dregion" id="index-indent_002dregion"></a>
+
+      <p>Indent all the lines in the region, as though you had
+      typed <tt class="key">TAB</tt> at the beginning of each line
+      (<code>indent-region</code>).</p>
+
+      <p>If a numeric argument is supplied, indent every line in
+      the region to that column number.</p>
+    </dd>
+
+    <dt><kbd>C-x <span class="key">TAB</span></kbd></dt>
+
+    <dd>
+      <a name="index-C_002dx-TAB" id="index-C_002dx-TAB"></a>
+      <a name="index-indent_002drigidly" id=
+      "index-indent_002drigidly"></a> <a name=
+      "index-remove-indentation" id="index-remove-indentation"></a>
+
+      <p>This command is used to change the indentation of all
+      lines that begin in the region, moving the affected lines as
+      a rigid unit.</p>
+
+      <p>If called with no argument, the command activates a
+      transient mode for adjusting the indentation of the affected
+      lines interactively. While this transient mode is active,
+      typing <tt class="key">LEFT</tt> or <tt class=
+      "key">RIGHT</tt> indents leftward and rightward,
+      respectively, by one space. You can also type
+      <kbd>S-<span class="key">LEFT</span></kbd> or
+      <kbd>S-<span class="key">RIGHT</span></kbd> to indent
+      leftward or rightward to the next tab stop (see <a href=
+      "Tab-Stops.html#Tab-Stops">Tab Stops</a>). Typing any other
+      key disables the transient mode, and resumes normal
+      editing.</p>
+
+      <p>If called with a prefix argument <var>n</var>, this
+      command indents the lines forward by <var>n</var> spaces
+      (without enabling the transient mode). Negative values of
+      <var>n</var> indent backward, so you can remove all
+      indentation from the lines in the region using a large
+      negative argument, like this:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+C-u -999 C-x <span class="key">TAB</span>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Tab-Stops.html#Tab-Stops" accesskey="n" rel=
+    "next">Tab Stops</a>, Up: <a href=
+    "Indentation.html#Indentation" accesskey="u" rel=
+    "up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

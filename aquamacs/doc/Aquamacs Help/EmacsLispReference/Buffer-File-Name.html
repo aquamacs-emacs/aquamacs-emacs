@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,216 +19,324 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Buffer File Name</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Buffer File Name">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Buffer File Name">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Buffers.html#Buffers" rel="up" title="Buffers">
-<link href="Buffer-Modification.html#Buffer-Modification" rel="next" title="Buffer Modification">
-<link href="Buffer-Names.html#Buffer-Names" rel="prev" title="Buffer Names">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Buffer File Name</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Buffer File Name" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Buffer File Name" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Buffers.html#Buffers" rel="up" title="Buffers" />
+  <link href="Buffer-Modification.html#Buffer-Modification" rel=
+  "next" title="Buffer Modification" />
+  <link href="Buffer-Names.html#Buffer-Names" rel="prev" title=
+  "Buffer Names" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Buffer-File-Name" id="Buffer-File-Name"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Buffer-Modification.html#Buffer-Modification"
+    accesskey="n" rel="next">Buffer Modification</a>, Previous:
+    <a href="Buffer-Names.html#Buffer-Names" accesskey="p" rel=
+    "prev">Buffer Names</a>, Up: <a href="Buffers.html#Buffers"
+    accesskey="u" rel="up">Buffers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Buffer-File-Name-1" id="Buffer-File-Name-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Buffer-File-Name"></a>
-<div class="header">
-<p>
-Next: <a href="Buffer-Modification.html#Buffer-Modification" accesskey="n" rel="next">Buffer Modification</a>, Previous: <a href="Buffer-Names.html#Buffer-Names" accesskey="p" rel="prev">Buffer Names</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Buffer-File-Name-1"></a>
-<h3 class="section">26.4 Buffer File Name</h3>
-<a name="index-visited-file"></a>
-<a name="index-buffer-file-name"></a>
-<a name="index-file-name-of-buffer"></a>
+  <h3 class="section">26.4 Buffer File Name</h3><a name=
+  "index-visited-file" id="index-visited-file"></a> <a name=
+  "index-buffer-file-name" id="index-buffer-file-name"></a>
+  <a name="index-file-name-of-buffer" id=
+  "index-file-name-of-buffer"></a>
 
-<p>The <em>buffer file name</em> is the name of the file that is visited in
-that buffer.  When a buffer is not visiting a file, its buffer file name
-is <code>nil</code>.  Most of the time, the buffer name is the same as the
-nondirectory part of the buffer file name, but the buffer file name and
-the buffer name are distinct and can be set independently.
-See <a href="Visiting-Files.html#Visiting-Files">Visiting Files</a>.
-</p>
-<dl>
-<dt><a name="index-buffer_002dfile_002dname"></a>Function: <strong>buffer-file-name</strong> <em>&amp;optional buffer</em></dt>
-<dd><p>This function returns the absolute file name of the file that
-<var>buffer</var> is visiting.  If <var>buffer</var> is not visiting any file,
-<code>buffer-file-name</code> returns <code>nil</code>.  If <var>buffer</var> is not
-supplied, it defaults to the current buffer.
-</p>
-<div class="example">
-<pre class="example">(buffer-file-name (other-buffer))
-     &rArr; &quot;/usr/user/lewis/manual/files.texi&quot;
-</pre></div>
-</dd></dl>
+  <p>The <em>buffer file name</em> is the name of the file that is
+  visited in that buffer. When a buffer is not visiting a file, its
+  buffer file name is <code>nil</code>. Most of the time, the
+  buffer name is the same as the nondirectory part of the buffer
+  file name, but the buffer file name and the buffer name are
+  distinct and can be set independently. See <a href=
+  "Visiting-Files.html#Visiting-Files">Visiting Files</a>.</p>
 
-<dl>
-<dt><a name="index-buffer_002dfile_002dname-1"></a>Variable: <strong>buffer-file-name</strong></dt>
-<dd><p>This buffer-local variable contains the name of the file being visited
-in the current buffer, or <code>nil</code> if it is not visiting a file.  It
-is a permanent local variable, unaffected by
-<code>kill-all-local-variables</code>.
-</p>
-<div class="example">
-<pre class="example">buffer-file-name
-     &rArr; &quot;/usr/user/lewis/manual/buffers.texi&quot;
-</pre></div>
+  <dl>
+    <dt><a name="index-buffer_002dfile_002dname" id=
+    "index-buffer_002dfile_002dname"></a>Function:
+    <strong>buffer-file-name</strong> <em>&amp;optional
+    buffer</em></dt>
 
-<p>It is risky to change this variable&rsquo;s value without doing various other
-things.  Normally it is better to use <code>set-visited-file-name</code> (see
-below); some of the things done there, such as changing the buffer name,
-are not strictly necessary, but others are essential to avoid confusing
-Emacs.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the absolute file name of the file
+      that <var>buffer</var> is visiting. If <var>buffer</var> is
+      not visiting any file, <code>buffer-file-name</code> returns
+      <code>nil</code>. If <var>buffer</var> is not supplied, it
+      defaults to the current buffer.</p>
 
-<dl>
-<dt><a name="index-buffer_002dfile_002dtruename"></a>Variable: <strong>buffer-file-truename</strong></dt>
-<dd><p>This buffer-local variable holds the abbreviated truename of the file
-visited in the current buffer, or <code>nil</code> if no file is visited.
-It is a permanent local, unaffected by
-<code>kill-all-local-variables</code>.  See <a href="Truenames.html#Truenames">Truenames</a>, and
-<a href="Directory-Names.html#abbreviate_002dfile_002dname">abbreviate-file-name</a>.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+(buffer-file-name (other-buffer))
+     &rArr; "/usr/user/lewis/manual/files.texi"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-buffer_002dfile_002dnumber"></a>Variable: <strong>buffer-file-number</strong></dt>
-<dd><p>This buffer-local variable holds the file number and directory device
-number of the file visited in the current buffer, or <code>nil</code> if no
-file or a nonexistent file is visited.  It is a permanent local,
-unaffected by <code>kill-all-local-variables</code>.
-</p>
-<p>The value is normally a list of the form <code>(<var>filenum</var>
-<var>devnum</var>)</code>.  This pair of numbers uniquely identifies the file among
-all files accessible on the system.  See the function
-<code>file-attributes</code>, in <a href="File-Attributes.html#File-Attributes">File Attributes</a>, for more information
-about them.
-</p>
-<p>If <code>buffer-file-name</code> is the name of a symbolic link, then both
-numbers refer to the recursive target.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-buffer_002dfile_002dname-1" id=
+    "index-buffer_002dfile_002dname-1"></a>Variable:
+    <strong>buffer-file-name</strong></dt>
 
-<dl>
-<dt><a name="index-get_002dfile_002dbuffer"></a>Function: <strong>get-file-buffer</strong> <em>filename</em></dt>
-<dd><p>This function returns the buffer visiting file <var>filename</var>.  If
-there is no such buffer, it returns <code>nil</code>.  The argument
-<var>filename</var>, which must be a string, is expanded (see <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>), then compared against the visited file names of all live
-buffers.  Note that the buffer&rsquo;s <code>buffer-file-name</code> must match
-the expansion of <var>filename</var> exactly.  This function will not
-recognize other names for the same file.
-</p>
-<div class="example">
-<pre class="example">(get-file-buffer &quot;buffers.texi&quot;)
+    <dd>
+      <p>This buffer-local variable contains the name of the file
+      being visited in the current buffer, or <code>nil</code> if
+      it is not visiting a file. It is a permanent local variable,
+      unaffected by <code>kill-all-local-variables</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+buffer-file-name
+     &rArr; "/usr/user/lewis/manual/buffers.texi"
+</pre>
+      </div>
+
+      <p>It is risky to change this variable&rsquo;s value without
+      doing various other things. Normally it is better to use
+      <code>set-visited-file-name</code> (see below); some of the
+      things done there, such as changing the buffer name, are not
+      strictly necessary, but others are essential to avoid
+      confusing Emacs.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-buffer_002dfile_002dtruename" id=
+    "index-buffer_002dfile_002dtruename"></a>Variable:
+    <strong>buffer-file-truename</strong></dt>
+
+    <dd>
+      <p>This buffer-local variable holds the abbreviated truename
+      of the file visited in the current buffer, or
+      <code>nil</code> if no file is visited. It is a permanent
+      local, unaffected by <code>kill-all-local-variables</code>.
+      See <a href="Truenames.html#Truenames">Truenames</a>, and
+      <a href=
+      "Directory-Names.html#abbreviate_002dfile_002dname">abbreviate-file-name</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-buffer_002dfile_002dnumber" id=
+    "index-buffer_002dfile_002dnumber"></a>Variable:
+    <strong>buffer-file-number</strong></dt>
+
+    <dd>
+      <p>This buffer-local variable holds the file number and
+      directory device number of the file visited in the current
+      buffer, or <code>nil</code> if no file or a nonexistent file
+      is visited. It is a permanent local, unaffected by
+      <code>kill-all-local-variables</code>.</p>
+
+      <p>The value is normally a list of the form
+      <code>(<var>filenum</var> <var>devnum</var>)</code>. This
+      pair of numbers uniquely identifies the file among all files
+      accessible on the system. See the function
+      <code>file-attributes</code>, in <a href=
+      "File-Attributes.html#File-Attributes">File Attributes</a>,
+      for more information about them.</p>
+
+      <p>If <code>buffer-file-name</code> is the name of a symbolic
+      link, then both numbers refer to the recursive target.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-get_002dfile_002dbuffer" id=
+    "index-get_002dfile_002dbuffer"></a>Function:
+    <strong>get-file-buffer</strong> <em>filename</em></dt>
+
+    <dd>
+      <p>This function returns the buffer visiting file
+      <var>filename</var>. If there is no such buffer, it returns
+      <code>nil</code>. The argument <var>filename</var>, which
+      must be a string, is expanded (see <a href=
+      "File-Name-Expansion.html#File-Name-Expansion">File Name
+      Expansion</a>), then compared against the visited file names
+      of all live buffers. Note that the buffer&rsquo;s
+      <code>buffer-file-name</code> must match the expansion of
+      <var>filename</var> exactly. This function will not recognize
+      other names for the same file.</p>
+
+      <div class="example">
+        <pre class="example">
+(get-file-buffer "buffers.texi")
     &rArr; #&lt;buffer buffers.texi&gt;
-</pre></div>
+</pre>
+      </div>
 
-<p>In unusual circumstances, there can be more than one buffer visiting
-the same file name.  In such cases, this function returns the first
-such buffer in the buffer list.
-</p></dd></dl>
+      <p>In unusual circumstances, there can be more than one
+      buffer visiting the same file name. In such cases, this
+      function returns the first such buffer in the buffer
+      list.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-find_002dbuffer_002dvisiting"></a>Function: <strong>find-buffer-visiting</strong> <em>filename &amp;optional predicate</em></dt>
-<dd><p>This is like <code>get-file-buffer</code>, except that it can return any
-buffer visiting the file <em>possibly under a different name</em>.  That
-is, the buffer&rsquo;s <code>buffer-file-name</code> does not need to match the
-expansion of <var>filename</var> exactly, it only needs to refer to the
-same file.  If <var>predicate</var> is non-<code>nil</code>, it should be a
-function of one argument, a buffer visiting <var>filename</var>.  The
-buffer is only considered a suitable return value if <var>predicate</var>
-returns non-<code>nil</code>.  If it can not find a suitable buffer to
-return, <code>find-buffer-visiting</code> returns <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-find_002dbuffer_002dvisiting" id=
+    "index-find_002dbuffer_002dvisiting"></a>Function:
+    <strong>find-buffer-visiting</strong> <em>filename
+    &amp;optional predicate</em></dt>
 
-<dl>
-<dt><a name="index-set_002dvisited_002dfile_002dname"></a>Command: <strong>set-visited-file-name</strong> <em>filename &amp;optional no-query along-with-file</em></dt>
-<dd><p>If <var>filename</var> is a non-empty string, this function changes the
-name of the file visited in the current buffer to <var>filename</var>.  (If the
-buffer had no visited file, this gives it one.)  The <em>next time</em>
-the buffer is saved it will go in the newly-specified file.
-</p>
-<p>This command marks the buffer as modified, since it does not (as far
-as Emacs knows) match the contents of <var>filename</var>, even if it
-matched the former visited file.  It also renames the buffer to
-correspond to the new file name, unless the new name is already in
-use.
-</p>
-<p>If <var>filename</var> is <code>nil</code> or the empty string, that stands for
-&ldquo;no visited file&rdquo;.  In this case, <code>set-visited-file-name</code> marks
-the buffer as having no visited file, without changing the buffer&rsquo;s
-modified flag.
-</p>
-<p>Normally, this function asks the user for confirmation if there
-already is a buffer visiting <var>filename</var>.  If <var>no-query</var> is
-non-<code>nil</code>, that prevents asking this question.  If there already
-is a buffer visiting <var>filename</var>, and the user confirms or
-<var>no-query</var> is non-<code>nil</code>, this function makes the new
-buffer name unique by appending a number inside of &lsquo;<samp>&lt;&hellip;&gt;</samp>&rsquo; to
-<var>filename</var>.
-</p>
-<p>If <var>along-with-file</var> is non-<code>nil</code>, that means to assume that
-the former visited file has been renamed to <var>filename</var>.  In this
-case, the command does not change the buffer&rsquo;s modified flag, nor the
-buffer&rsquo;s recorded last file modification time as reported by
-<code>visited-file-modtime</code> (see <a href="Modification-Time.html#Modification-Time">Modification Time</a>).  If
-<var>along-with-file</var> is <code>nil</code>, this function clears the recorded
-last file modification time, after which <code>visited-file-modtime</code>
-returns zero.
-</p>
-<p>When the function <code>set-visited-file-name</code> is called
-interactively, it prompts for <var>filename</var> in the minibuffer.
-</p></dd></dl>
+    <dd>
+      <p>This is like <code>get-file-buffer</code>, except that it
+      can return any buffer visiting the file <em>possibly under a
+      different name</em>. That is, the buffer&rsquo;s
+      <code>buffer-file-name</code> does not need to match the
+      expansion of <var>filename</var> exactly, it only needs to
+      refer to the same file. If <var>predicate</var> is
+      non-<code>nil</code>, it should be a function of one
+      argument, a buffer visiting <var>filename</var>. The buffer
+      is only considered a suitable return value if
+      <var>predicate</var> returns non-<code>nil</code>. If it can
+      not find a suitable buffer to return,
+      <code>find-buffer-visiting</code> returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-list_002dbuffers_002ddirectory"></a>Variable: <strong>list-buffers-directory</strong></dt>
-<dd><p>This buffer-local variable specifies a string to display in a buffer
-listing where the visited file name would go, for buffers that don&rsquo;t
-have a visited file name.  Dired buffers use this variable.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dvisited_002dfile_002dname" id=
+    "index-set_002dvisited_002dfile_002dname"></a>Command:
+    <strong>set-visited-file-name</strong> <em>filename
+    &amp;optional no-query along-with-file</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Buffer-Modification.html#Buffer-Modification" accesskey="n" rel="next">Buffer Modification</a>, Previous: <a href="Buffer-Names.html#Buffer-Names" accesskey="p" rel="prev">Buffer Names</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>If <var>filename</var> is a non-empty string, this
+      function changes the name of the file visited in the current
+      buffer to <var>filename</var>. (If the buffer had no visited
+      file, this gives it one.) The <em>next time</em> the buffer
+      is saved it will go in the newly-specified file.</p>
 
+      <p>This command marks the buffer as modified, since it does
+      not (as far as Emacs knows) match the contents of
+      <var>filename</var>, even if it matched the former visited
+      file. It also renames the buffer to correspond to the new
+      file name, unless the new name is already in use.</p>
 
+      <p>If <var>filename</var> is <code>nil</code> or the empty
+      string, that stands for &ldquo;no visited file&rdquo;. In
+      this case, <code>set-visited-file-name</code> marks the
+      buffer as having no visited file, without changing the
+      buffer&rsquo;s modified flag.</p>
 
+      <p>Normally, this function asks the user for confirmation if
+      there already is a buffer visiting <var>filename</var>. If
+      <var>no-query</var> is non-<code>nil</code>, that prevents
+      asking this question. If there already is a buffer visiting
+      <var>filename</var>, and the user confirms or
+      <var>no-query</var> is non-<code>nil</code>, this function
+      makes the new buffer name unique by appending a number inside
+      of &lsquo;<samp>&lt;&hellip;&gt;</samp>&rsquo; to
+      <var>filename</var>.</p>
+
+      <p>If <var>along-with-file</var> is non-<code>nil</code>,
+      that means to assume that the former visited file has been
+      renamed to <var>filename</var>. In this case, the command
+      does not change the buffer&rsquo;s modified flag, nor the
+      buffer&rsquo;s recorded last file modification time as
+      reported by <code>visited-file-modtime</code> (see <a href=
+      "Modification-Time.html#Modification-Time">Modification
+      Time</a>). If <var>along-with-file</var> is <code>nil</code>,
+      this function clears the recorded last file modification
+      time, after which <code>visited-file-modtime</code> returns
+      zero.</p>
+
+      <p>When the function <code>set-visited-file-name</code> is
+      called interactively, it prompts for <var>filename</var> in
+      the minibuffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-list_002dbuffers_002ddirectory" id=
+    "index-list_002dbuffers_002ddirectory"></a>Variable:
+    <strong>list-buffers-directory</strong></dt>
+
+    <dd>
+      <p>This buffer-local variable specifies a string to display
+      in a buffer listing where the visited file name would go, for
+      buffers that don&rsquo;t have a visited file name. Dired
+      buffers use this variable.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Buffer-Modification.html#Buffer-Modification"
+    accesskey="n" rel="next">Buffer Modification</a>, Previous:
+    <a href="Buffer-Names.html#Buffer-Names" accesskey="p" rel=
+    "prev">Buffer Names</a>, Up: <a href="Buffers.html#Buffers"
+    accesskey="u" rel="up">Buffers</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

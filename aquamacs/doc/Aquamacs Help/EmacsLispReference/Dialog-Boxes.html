@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,124 +19,174 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Dialog Boxes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Dialog Boxes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Dialog Boxes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Frames.html#Frames" rel="up" title="Frames">
-<link href="Pointer-Shape.html#Pointer-Shape" rel="next" title="Pointer Shape">
-<link href="Pop_002dUp-Menus.html#Pop_002dUp-Menus" rel="prev" title="Pop-Up Menus">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Dialog Boxes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Dialog Boxes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Dialog Boxes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Frames.html#Frames" rel="up" title="Frames" />
+  <link href="Pointer-Shape.html#Pointer-Shape" rel="next" title=
+  "Pointer Shape" />
+  <link href="Pop_002dUp-Menus.html#Pop_002dUp-Menus" rel="prev"
+  title="Pop-Up Menus" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Dialog-Boxes" id="Dialog-Boxes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Pointer-Shape.html#Pointer-Shape" accesskey=
+    "n" rel="next">Pointer Shape</a>, Previous: <a href=
+    "Pop_002dUp-Menus.html#Pop_002dUp-Menus" accesskey="p" rel=
+    "prev">Pop-Up Menus</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Dialog-Boxes-1" id="Dialog-Boxes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dialog-Boxes"></a>
-<div class="header">
-<p>
-Next: <a href="Pointer-Shape.html#Pointer-Shape" accesskey="n" rel="next">Pointer Shape</a>, Previous: <a href="Pop_002dUp-Menus.html#Pop_002dUp-Menus" accesskey="p" rel="prev">Pop-Up Menus</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Dialog-Boxes-1"></a>
-<h3 class="section">28.17 Dialog Boxes</h3>
-<a name="index-dialog-boxes"></a>
+  <h3 class="section">28.17 Dialog Boxes</h3><a name=
+  "index-dialog-boxes" id="index-dialog-boxes"></a>
 
-<p>A dialog box is a variant of a pop-up menu&mdash;it looks a little
-different, it always appears in the center of a frame, and it has just
-one level and one or more buttons.  The main use of dialog boxes is
-for asking questions that the user can answer with &ldquo;yes&rdquo;, &ldquo;no&rdquo;,
-and a few other alternatives.  With a single button, they can also
-force the user to acknowledge important information.  The functions
-<code>y-or-n-p</code> and <code>yes-or-no-p</code> use dialog boxes instead of the
-keyboard, when called from commands invoked by mouse clicks.
-</p>
-<dl>
-<dt><a name="index-x_002dpopup_002ddialog"></a>Function: <strong>x-popup-dialog</strong> <em>position contents &amp;optional header</em></dt>
-<dd><p>This function displays a pop-up dialog box and returns an indication of
-what selection the user makes.  The argument <var>contents</var> specifies
-the alternatives to offer; it has this format:
-</p>
-<div class="example">
-<pre class="example">(<var>title</var> (<var>string</var> . <var>value</var>)&hellip;)
-</pre></div>
+  <p>A dialog box is a variant of a pop-up menu&mdash;it looks a
+  little different, it always appears in the center of a frame, and
+  it has just one level and one or more buttons. The main use of
+  dialog boxes is for asking questions that the user can answer
+  with &ldquo;yes&rdquo;, &ldquo;no&rdquo;, and a few other
+  alternatives. With a single button, they can also force the user
+  to acknowledge important information. The functions
+  <code>y-or-n-p</code> and <code>yes-or-no-p</code> use dialog
+  boxes instead of the keyboard, when called from commands invoked
+  by mouse clicks.</p>
 
-<p>which looks like the list that specifies a single pane for
-<code>x-popup-menu</code>.
-</p>
-<p>The return value is <var>value</var> from the chosen alternative.
-</p>
-<p>As for <code>x-popup-menu</code>, an element of the list may be just a
-string instead of a cons cell <code>(<var>string</var> . <var>value</var>)</code>.
-That makes a box that cannot be selected.
-</p>
-<p>If <code>nil</code> appears in the list, it separates the left-hand items from
-the right-hand items; items that precede the <code>nil</code> appear on the
-left, and items that follow the <code>nil</code> appear on the right.  If you
-don&rsquo;t include a <code>nil</code> in the list, then approximately half the
-items appear on each side.
-</p>
-<p>Dialog boxes always appear in the center of a frame; the argument
-<var>position</var> specifies which frame.  The possible values are as in
-<code>x-popup-menu</code>, but the precise coordinates or the individual
-window don&rsquo;t matter; only the frame matters.
-</p>
-<p>If <var>header</var> is non-<code>nil</code>, the frame title for the box is
-&lsquo;<samp>Information</samp>&rsquo;, otherwise it is &lsquo;<samp>Question</samp>&rsquo;.  The former is used
-for <code>message-box</code> (see <a href="Displaying-Messages.html#message_002dbox">message-box</a>).  (On text terminals, the
-box title is not displayed.)
-</p>
-<p>In some configurations, Emacs cannot display a real dialog box; so
-instead it displays the same items in a pop-up menu in the center of the
-frame.
-</p>
-<p>If the user gets rid of the dialog box without making a valid choice,
-for instance using the window manager, then this produces a quit and
-<code>x-popup-dialog</code> does not return.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-x_002dpopup_002ddialog" id=
+    "index-x_002dpopup_002ddialog"></a>Function:
+    <strong>x-popup-dialog</strong> <em>position contents
+    &amp;optional header</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Pointer-Shape.html#Pointer-Shape" accesskey="n" rel="next">Pointer Shape</a>, Previous: <a href="Pop_002dUp-Menus.html#Pop_002dUp-Menus" accesskey="p" rel="prev">Pop-Up Menus</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function displays a pop-up dialog box and returns an
+      indication of what selection the user makes. The argument
+      <var>contents</var> specifies the alternatives to offer; it
+      has this format:</p>
 
+      <div class="example">
+        <pre class="example">
+(<var>title</var> (<var>string</var> . <var>value</var>)&hellip;)
+</pre>
+      </div>
 
+      <p>which looks like the list that specifies a single pane for
+      <code>x-popup-menu</code>.</p>
 
+      <p>The return value is <var>value</var> from the chosen
+      alternative.</p>
+
+      <p>As for <code>x-popup-menu</code>, an element of the list
+      may be just a string instead of a cons cell
+      <code>(<var>string</var> . <var>value</var>)</code>. That
+      makes a box that cannot be selected.</p>
+
+      <p>If <code>nil</code> appears in the list, it separates the
+      left-hand items from the right-hand items; items that precede
+      the <code>nil</code> appear on the left, and items that
+      follow the <code>nil</code> appear on the right. If you
+      don&rsquo;t include a <code>nil</code> in the list, then
+      approximately half the items appear on each side.</p>
+
+      <p>Dialog boxes always appear in the center of a frame; the
+      argument <var>position</var> specifies which frame. The
+      possible values are as in <code>x-popup-menu</code>, but the
+      precise coordinates or the individual window don&rsquo;t
+      matter; only the frame matters.</p>
+
+      <p>If <var>header</var> is non-<code>nil</code>, the frame
+      title for the box is &lsquo;<samp>Information</samp>&rsquo;,
+      otherwise it is &lsquo;<samp>Question</samp>&rsquo;. The
+      former is used for <code>message-box</code> (see <a href=
+      "Displaying-Messages.html#message_002dbox">message-box</a>).
+      (On text terminals, the box title is not displayed.)</p>
+
+      <p>In some configurations, Emacs cannot display a real dialog
+      box; so instead it displays the same items in a pop-up menu
+      in the center of the frame.</p>
+
+      <p>If the user gets rid of the dialog box without making a
+      valid choice, for instance using the window manager, then
+      this produces a quit and <code>x-popup-dialog</code> does not
+      return.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Pointer-Shape.html#Pointer-Shape" accesskey=
+    "n" rel="next">Pointer Shape</a>, Previous: <a href=
+    "Pop_002dUp-Menus.html#Pop_002dUp-Menus" accesskey="p" rel=
+    "prev">Pop-Up Menus</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

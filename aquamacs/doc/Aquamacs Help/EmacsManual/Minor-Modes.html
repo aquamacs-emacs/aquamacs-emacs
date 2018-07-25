@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,209 +20,280 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Minor Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Minor Modes">
-<meta name="keywords" content="GNU Emacs Manual: Minor Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Modes.html#Modes" rel="up" title="Modes">
-<link href="Choosing-Modes.html#Choosing-Modes" rel="next" title="Choosing Modes">
-<link href="Major-Modes.html#Major-Modes" rel="prev" title="Major Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Minor Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Minor Modes" />
+  <meta name="keywords" content="GNU Emacs Manual: Minor Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Modes.html#Modes" rel="up" title="Modes" />
+  <link href="Choosing-Modes.html#Choosing-Modes" rel="next" title=
+  "Choosing Modes" />
+  <link href="Major-Modes.html#Major-Modes" rel="prev" title=
+  "Major Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Minor-Modes" id="Minor-Modes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Choosing-Modes.html#Choosing-Modes"
+    accesskey="n" rel="next">Choosing Modes</a>, Previous: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="p" rel="prev">Major
+    Modes</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel=
+    "up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Minor-Modes-1" id="Minor-Modes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Minor-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Choosing-Modes.html#Choosing-Modes" accesskey="n" rel="next">Choosing Modes</a>, Previous: <a href="Major-Modes.html#Major-Modes" accesskey="p" rel="prev">Major Modes</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Minor-Modes-1"></a>
-<h3 class="section">23.2 Minor Modes</h3>
-<a name="index-minor-modes"></a>
-<a name="index-mode_002c-minor"></a>
+  <h3 class="section">23.2 Minor Modes</h3><a name=
+  "index-minor-modes" id="index-minor-modes"></a> <a name=
+  "index-mode_002c-minor" id="index-mode_002c-minor"></a>
 
-<p>A minor mode is an optional editing mode that alters the behavior of
-Emacs in some well-defined way.  Unlike major modes, any number of
-minor modes can be in effect at any time.  Some minor modes are
-<em>buffer-local</em>, and can be turned on (enabled) in certain buffers
-and off (disabled) in others.  Other minor modes are <em>global</em>:
-while enabled, they affect everything you do in the Emacs session, in
-all buffers.  Most minor modes are disabled by default, but a few are
-enabled by default.
-</p>
-<p>Most buffer-local minor modes say in the mode line when they are
-enabled, just after the major mode indicator.  For example,
-&lsquo;<samp>Fill</samp>&rsquo; in the mode line means that Auto Fill mode is enabled.
-See <a href="Mode-Line.html#Mode-Line">Mode Line</a>.
-</p>
-<a name="index-mode-commands-for-minor-modes"></a>
-<p>Like major modes, each minor mode is associated with a <em>mode
-command</em>, whose name consists of the mode name followed by
-&lsquo;<samp>-mode</samp>&rsquo;.  For instance, the mode command for Auto Fill mode is
-<code>auto-fill-mode</code>.  But unlike a major mode command, which simply
-enables the mode, the mode command for a minor mode can either enable
-or disable it:
-</p>
-<ul>
-<li> If you invoke the mode command directly with no prefix argument
-(either via <kbd>M-x</kbd>, or by binding it to a key and typing that key;
-see <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a>), that <em>toggles</em> the minor mode.  The minor
-mode is turned on if it was off, and turned off if it was on.
+  <p>A minor mode is an optional editing mode that alters the
+  behavior of Emacs in some well-defined way. Unlike major modes,
+  any number of minor modes can be in effect at any time. Some
+  minor modes are <em>buffer-local</em>, and can be turned on
+  (enabled) in certain buffers and off (disabled) in others. Other
+  minor modes are <em>global</em>: while enabled, they affect
+  everything you do in the Emacs session, in all buffers. Most
+  minor modes are disabled by default, but a few are enabled by
+  default.</p>
 
-</li><li> If you invoke the mode command with a prefix argument, the minor mode
-is unconditionally turned off if that argument is zero or negative;
-otherwise, it is unconditionally turned on.
+  <p>Most buffer-local minor modes say in the mode line when they
+  are enabled, just after the major mode indicator. For example,
+  &lsquo;<samp>Fill</samp>&rsquo; in the mode line means that Auto
+  Fill mode is enabled. See <a href="Mode-Line.html#Mode-Line">Mode
+  Line</a>.</p><a name="index-mode-commands-for-minor-modes" id=
+  "index-mode-commands-for-minor-modes"></a>
 
-</li><li> If the mode command is called via Lisp, the minor mode is
-unconditionally turned on if the argument is omitted or <code>nil</code>.
-This makes it easy to turn on a minor mode from a major mode&rsquo;s mode
-hook (see <a href="Major-Modes.html#Major-Modes">Major Modes</a>).  A non-<code>nil</code> argument is handled like
-an interactive prefix argument, as described above.
-</li></ul>
+  <p>Like major modes, each minor mode is associated with a
+  <em>mode command</em>, whose name consists of the mode name
+  followed by &lsquo;<samp>-mode</samp>&rsquo;. For instance, the
+  mode command for Auto Fill mode is <code>auto-fill-mode</code>.
+  But unlike a major mode command, which simply enables the mode,
+  the mode command for a minor mode can either enable or disable
+  it:</p>
 
-<p>Most minor modes also have a <em>mode variable</em>, with the same name
-as the mode command.  Its value is non-<code>nil</code> if the mode is
-enabled, and <code>nil</code> if it is disabled.  In general, you should not
-try to enable or disable the mode by changing the value of the mode
-variable directly in Lisp; you should run the mode command instead.
-However, setting the mode variable through the Customize interface
-(see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>) will always properly enable or disable
-the mode, since Customize automatically runs the mode command for you.
-</p>
-<p>The following is a list of some buffer-local minor modes:
-</p>
-<ul>
-<li> Abbrev mode automatically expands text based on pre-defined
-abbreviation definitions.  See <a href="Abbrevs.html#Abbrevs">Abbrevs</a>.
+  <ul>
+    <li>If you invoke the mode command directly with no prefix
+    argument (either via <kbd>M-x</kbd>, or by binding it to a key
+    and typing that key; see <a href=
+    "Key-Bindings.html#Key-Bindings">Key Bindings</a>), that
+    <em>toggles</em> the minor mode. The minor mode is turned on if
+    it was off, and turned off if it was on.</li>
 
-</li><li> Auto Fill mode inserts newlines as you type to prevent lines from
-becoming too long.  See <a href="Filling.html#Filling">Filling</a>.
+    <li>If you invoke the mode command with a prefix argument, the
+    minor mode is unconditionally turned off if that argument is
+    zero or negative; otherwise, it is unconditionally turned
+    on.</li>
 
-</li><li> Auto Save mode saves the buffer contents periodically to reduce the
-amount of work you can lose in case of a crash.  See <a href="Auto-Save.html#Auto-Save">Auto Save</a>.
+    <li>If the mode command is called via Lisp, the minor mode is
+    unconditionally turned on if the argument is omitted or
+    <code>nil</code>. This makes it easy to turn on a minor mode
+    from a major mode&rsquo;s mode hook (see <a href=
+    "Major-Modes.html#Major-Modes">Major Modes</a>). A
+    non-<code>nil</code> argument is handled like an interactive
+    prefix argument, as described above.</li>
+  </ul>
 
-</li><li> Electric Quote mode automatically converts quotation marks.  For
-example, it requotes text typed <tt>`like this'</tt> to text <tt>‘like
-this’</tt>.  You can control what kind of text it operates in, and you can
-disable it entirely in individual buffers.  See <a href="Quotation-Marks.html#Quotation-Marks">Quotation Marks</a>.
+  <p>Most minor modes also have a <em>mode variable</em>, with the
+  same name as the mode command. Its value is non-<code>nil</code>
+  if the mode is enabled, and <code>nil</code> if it is disabled.
+  In general, you should not try to enable or disable the mode by
+  changing the value of the mode variable directly in Lisp; you
+  should run the mode command instead. However, setting the mode
+  variable through the Customize interface (see <a href=
+  "Easy-Customization.html#Easy-Customization">Easy
+  Customization</a>) will always properly enable or disable the
+  mode, since Customize automatically runs the mode command for
+  you.</p>
 
-</li><li> Enriched mode enables editing and saving of formatted text.
-See <a href="Enriched-Text.html#Enriched-Text">Enriched Text</a>.
+  <p>The following is a list of some buffer-local minor modes:</p>
 
-</li><li> Flyspell mode automatically highlights misspelled words.
-See <a href="Spelling.html#Spelling">Spelling</a>.
+  <ul>
+    <li>Abbrev mode automatically expands text based on pre-defined
+    abbreviation definitions. See <a href=
+    "Abbrevs.html#Abbrevs">Abbrevs</a>.</li>
 
-</li><li> Font-Lock mode automatically highlights certain textual units found in
-programs.  It is enabled globally by default, but you can disable it
-in individual buffers.  See <a href="Faces.html#Faces">Faces</a>.
+    <li>Auto Fill mode inserts newlines as you type to prevent
+    lines from becoming too long. See <a href=
+    "Filling.html#Filling">Filling</a>.</li>
 
-</li><li> <a name="index-linum_002dmode"></a>
-<a name="index-Linum-mode"></a>
-Linum mode displays each line&rsquo;s line number in the window&rsquo;s left margin.
+    <li>Auto Save mode saves the buffer contents periodically to
+    reduce the amount of work you can lose in case of a crash. See
+    <a href="Auto-Save.html#Auto-Save">Auto Save</a>.</li>
 
-</li><li> Outline minor mode provides similar facilities to the major mode
-called Outline mode.  See <a href="Outline-Mode.html#Outline-Mode">Outline Mode</a>.
+    <li>Electric Quote mode automatically converts quotation marks.
+    For example, it requotes text typed <tt>`like this'</tt> to
+    text <tt>&acirc;&euro;&tilde;like
+    this&acirc;&euro;&trade;</tt>. You can control what kind of
+    text it operates in, and you can disable it entirely in
+    individual buffers. See <a href=
+    "Quotation-Marks.html#Quotation-Marks">Quotation
+    Marks</a>.</li>
 
-</li><li> <a name="index-Overwrite-mode"></a>
-<a name="index-mode_002c-Overwrite"></a>
-<a name="index-overwrite_002dmode"></a>
-<a name="index-INSERT"></a>
-Overwrite mode causes ordinary printing characters to replace existing
-text instead of shoving it to the right.  For example, if point is in
-front of the &lsquo;<samp>B</samp>&rsquo; in &lsquo;<samp>FOOBAR</samp>&rsquo;, then in Overwrite mode typing
-a <kbd>G</kbd> changes it to &lsquo;<samp>FOOGAR</samp>&rsquo;, instead of producing
-&lsquo;<samp>FOOGBAR</samp>&rsquo; as usual.  In Overwrite mode, the command <kbd>C-q</kbd>
-inserts the next character whatever it may be, even if it is a
-digit&mdash;this gives you a way to insert a character instead of
-replacing an existing character.  The mode command,
-<code>overwrite-mode</code>, is bound to the <tt class="key">Insert</tt> key.
+    <li>Enriched mode enables editing and saving of formatted text.
+    See <a href="Enriched-Text.html#Enriched-Text">Enriched
+    Text</a>.</li>
 
-</li><li> <a name="index-binary_002doverwrite_002dmode"></a>
-Binary Overwrite mode is a variant of Overwrite mode for editing
-binary files; it treats newlines and tabs like other characters, so
-that they overwrite other characters and can be overwritten by them.
-In Binary Overwrite mode, digits after <kbd>C-q</kbd> specify an octal
-character code, as usual.
+    <li>Flyspell mode automatically highlights misspelled words.
+    See <a href="Spelling.html#Spelling">Spelling</a>.</li>
 
-</li><li> Visual Line mode performs word wrapping, causing long lines to be
-wrapped at word boundaries.  See <a href="Visual-Line-Mode.html#Visual-Line-Mode">Visual Line Mode</a>.
-</li></ul>
+    <li>Font-Lock mode automatically highlights certain textual
+    units found in programs. It is enabled globally by default, but
+    you can disable it in individual buffers. See <a href=
+    "Faces.html#Faces">Faces</a>.</li>
 
-<p>And here are some useful global minor modes:
-</p>
-<ul>
-<li> Column Number mode enables display of the current column number in the
-mode line.  See <a href="Mode-Line.html#Mode-Line">Mode Line</a>.
+    <li><a name="index-linum_002dmode" id=
+    "index-linum_002dmode"></a> <a name="index-Linum-mode" id=
+    "index-Linum-mode"></a> Linum mode displays each line&rsquo;s
+    line number in the window&rsquo;s left margin.</li>
 
-</li><li> Delete Selection mode causes text insertion to first delete the text
-in the region, if the region is active.  See <a href="Using-Region.html#Using-Region">Using Region</a>.
+    <li>Outline minor mode provides similar facilities to the major
+    mode called Outline mode. See <a href=
+    "Outline-Mode.html#Outline-Mode">Outline Mode</a>.</li>
 
-</li><li> Icomplete mode displays an indication of available completions when
-you are in the minibuffer and completion is active.  See <a href="Icomplete.html#Icomplete">Icomplete</a>.
+    <li><a name="index-Overwrite-mode" id=
+    "index-Overwrite-mode"></a> <a name="index-mode_002c-Overwrite"
+    id="index-mode_002c-Overwrite"></a> <a name=
+    "index-overwrite_002dmode" id="index-overwrite_002dmode"></a>
+    <a name="index-INSERT" id="index-INSERT"></a> Overwrite mode
+    causes ordinary printing characters to replace existing text
+    instead of shoving it to the right. For example, if point is in
+    front of the &lsquo;<samp>B</samp>&rsquo; in
+    &lsquo;<samp>FOOBAR</samp>&rsquo;, then in Overwrite mode
+    typing a <kbd>G</kbd> changes it to
+    &lsquo;<samp>FOOGAR</samp>&rsquo;, instead of producing
+    &lsquo;<samp>FOOGBAR</samp>&rsquo; as usual. In Overwrite mode,
+    the command <kbd>C-q</kbd> inserts the next character whatever
+    it may be, even if it is a digit&mdash;this gives you a way to
+    insert a character instead of replacing an existing character.
+    The mode command, <code>overwrite-mode</code>, is bound to the
+    <tt class="key">Insert</tt> key.</li>
 
-</li><li> Line Number mode enables display of the current line number in the
-mode line.  It is enabled by default.  See <a href="Mode-Line.html#Mode-Line">Mode Line</a>.
+    <li><a name="index-binary_002doverwrite_002dmode" id=
+    "index-binary_002doverwrite_002dmode"></a> Binary Overwrite
+    mode is a variant of Overwrite mode for editing binary files;
+    it treats newlines and tabs like other characters, so that they
+    overwrite other characters and can be overwritten by them. In
+    Binary Overwrite mode, digits after <kbd>C-q</kbd> specify an
+    octal character code, as usual.</li>
 
-</li><li> Menu Bar mode gives each frame a menu bar.  It is enabled by default.
-See <a href="Menu-Bars.html#Menu-Bars">Menu Bars</a>.
+    <li>Visual Line mode performs word wrapping, causing long lines
+    to be wrapped at word boundaries. See <a href=
+    "Visual-Line-Mode.html#Visual-Line-Mode">Visual Line
+    Mode</a>.</li>
+  </ul>
 
-</li><li> Scroll Bar mode gives each window a scroll bar.  It is enabled by
-default, but the scroll bar is only displayed on graphical terminals.
-See <a href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>.
+  <p>And here are some useful global minor modes:</p>
 
-</li><li> Tool Bar mode gives each frame a tool bar.  It is enabled by default,
-but the tool bar is only displayed on graphical terminals.  See <a href="Tool-Bars.html#Tool-Bars">Tool Bars</a>.
+  <ul>
+    <li>Column Number mode enables display of the current column
+    number in the mode line. See <a href=
+    "Mode-Line.html#Mode-Line">Mode Line</a>.</li>
 
-</li><li> Transient Mark mode highlights the region, and makes many Emacs
-commands operate on the region when the mark is active.  It is enabled
-by default.  See <a href="Mark.html#Mark">Mark</a>.
-</li></ul>
+    <li>Delete Selection mode causes text insertion to first delete
+    the text in the region, if the region is active. See <a href=
+    "Using-Region.html#Using-Region">Using Region</a>.</li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Choosing-Modes.html#Choosing-Modes" accesskey="n" rel="next">Choosing Modes</a>, Previous: <a href="Major-Modes.html#Major-Modes" accesskey="p" rel="prev">Major Modes</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>Icomplete mode displays an indication of available
+    completions when you are in the minibuffer and completion is
+    active. See <a href=
+    "Icomplete.html#Icomplete">Icomplete</a>.</li>
 
+    <li>Line Number mode enables display of the current line number
+    in the mode line. It is enabled by default. See <a href=
+    "Mode-Line.html#Mode-Line">Mode Line</a>.</li>
 
+    <li>Menu Bar mode gives each frame a menu bar. It is enabled by
+    default. See <a href="Menu-Bars.html#Menu-Bars">Menu
+    Bars</a>.</li>
 
+    <li>Scroll Bar mode gives each window a scroll bar. It is
+    enabled by default, but the scroll bar is only displayed on
+    graphical terminals. See <a href=
+    "Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>.</li>
+
+    <li>Tool Bar mode gives each frame a tool bar. It is enabled by
+    default, but the tool bar is only displayed on graphical
+    terminals. See <a href="Tool-Bars.html#Tool-Bars">Tool
+    Bars</a>.</li>
+
+    <li>Transient Mark mode highlights the region, and makes many
+    Emacs commands operate on the region when the mark is active.
+    It is enabled by default. See <a href=
+    "Mark.html#Mark">Mark</a>.</li>
+  </ul>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Choosing-Modes.html#Choosing-Modes"
+    accesskey="n" rel="next">Choosing Modes</a>, Previous: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="p" rel="prev">Major
+    Modes</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel=
+    "up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

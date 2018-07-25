@@ -1,14 +1,22 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Message Actions - Message Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Message Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Variables.html#Variables" title="Variables">
-<link rel="prev" href="Message-Buffers.html#Message-Buffers" title="Message Buffers">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Message Actions - Message Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Message Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Variables.html#Variables" title=
+  "Variables" />
+  <link rel="prev" href="Message-Buffers.html#Message-Buffers"
+  title="Message Buffers" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Message, the Emacs message composition mode.
 
 Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
@@ -26,8 +34,10 @@ Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,48 +47,65 @@ Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Message-Actions"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Message-Buffers.html#Message-Buffers">Message Buffers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Message-Actions" id="Message-Actions"></a>
 
-<h3 class="section">3.10 Message Actions</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Message-Buffers.html#Message-Buffers">Message Buffers</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Variables.html#Variables">Variables</a></p>
+    <hr />
+  </div>
 
-<p>When Message is being used from a news/mail reader, the reader is likely
-to want to perform some task after the message has been sent.  Perhaps
-return to the previous window configuration or mark an article as
-replied.
+  <h3 class="section">3.10 Message Actions</h3>
 
-   <p><a name="index-message_002dkill_002dactions-334"></a><a name="index-message_002dpostpone_002dactions-335"></a><a name="index-message_002dexit_002dactions-336"></a><a name="index-message_002dsend_002dactions-337"></a>The user may exit from the message buffer in various ways.  The most
-common is <kbd>C-c C-c</kbd>, which sends the message and exits.  Other
-possibilities are <kbd>C-c C-s</kbd> which just sends the message, <kbd>C-c
-C-d</kbd> which postpones the message editing and buries the message buffer,
-and <kbd>C-c C-k</kbd> which kills the message buffer.  Each of these actions
-have lists associated with them that contains actions to be executed:
-<code>message-send-actions</code>, <code>message-exit-actions</code>,
-<code>message-postpone-actions</code>, and <code>message-kill-actions</code>.
+  <p>When Message is being used from a news/mail reader, the reader
+  is likely to want to perform some task after the message has been
+  sent. Perhaps return to the previous window configuration or mark
+  an article as replied.</p>
 
-   <p>Message provides a function to interface with these lists:
-<code>message-add-action</code>.  The first parameter is the action to be
-added, and the rest of the arguments are which lists to add this action
-to.  Here's an example from Gnus:
+  <p><a name="index-message_002dkill_002dactions-334" id=
+  "index-message_002dkill_002dactions-334"></a><a name=
+  "index-message_002dpostpone_002dactions-335" id=
+  "index-message_002dpostpone_002dactions-335"></a><a name=
+  "index-message_002dexit_002dactions-336" id=
+  "index-message_002dexit_002dactions-336"></a><a name=
+  "index-message_002dsend_002dactions-337" id=
+  "index-message_002dsend_002dactions-337"></a>The user may exit
+  from the message buffer in various ways. The most common is
+  <kbd>C-c C-c</kbd>, which sends the message and exits. Other
+  possibilities are <kbd>C-c C-s</kbd> which just sends the
+  message, <kbd>C-c C-d</kbd> which postpones the message editing
+  and buries the message buffer, and <kbd>C-c C-k</kbd> which kills
+  the message buffer. Each of these actions have lists associated
+  with them that contains actions to be executed:
+  <code>message-send-actions</code>,
+  <code>message-exit-actions</code>,
+  <code>message-postpone-actions</code>, and
+  <code>message-kill-actions</code>.</p>
 
-<pre class="lisp">       (message-add-action
+  <p>Message provides a function to interface with these lists:
+  <code>message-add-action</code>. The first parameter is the
+  action to be added, and the rest of the arguments are which lists
+  to add this action to. Here's an example from Gnus:</p>
+  <pre class="lisp">
+       (message-add-action
         `(set-window-configuration ,(current-window-configuration))
         'exit 'postpone 'kill)
 </pre>
-   <p>This restores the Gnus window configuration when the message buffer is
-killed, postponed or exited.
 
-   <p>An <dfn>action</dfn> can be either: a normal function, or a list where the
-<span class="sc">car</span> is a function and the <span class="sc">cdr</span> is the list of arguments, or
-a form to be <code>eval</code>ed.
+  <p>This restores the Gnus window configuration when the message
+  buffer is killed, postponed or exited.</p>
 
-   </body></html>
-
+  <p>An <dfn>action</dfn> can be either: a normal function, or a
+  list where the <span class="sc">car</span> is a function and the
+  <span class="sc">cdr</span> is the list of arguments, or a form
+  to be <code>eval</code>ed.</p>
+</body>
+</html>

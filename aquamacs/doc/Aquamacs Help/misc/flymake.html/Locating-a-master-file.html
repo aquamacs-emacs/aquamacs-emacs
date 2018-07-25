@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -15,91 +17,126 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Flymake 0.3: Locating a master file</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Flymake 0.3: Locating a master file">
-<meta name="keywords" content="GNU Flymake 0.3: Locating a master file">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Flymake-Implementation.html#Flymake-Implementation" rel="up" title="Flymake Implementation">
-<link href="Getting-the-include-directories.html#Getting-the-include-directories" rel="next" title="Getting the include directories">
-<link href="Making-a-temporary-copy.html#Making-a-temporary-copy" rel="prev" title="Making a temporary copy">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Flymake 0.3: Locating a master file</title>
+  <meta name="description" content=
+  "GNU Flymake 0.3: Locating a master file" />
+  <meta name="keywords" content=
+  "GNU Flymake 0.3: Locating a master file" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Flymake-Implementation.html#Flymake-Implementation"
+  rel="up" title="Flymake Implementation" />
+  <link href=
+  "Getting-the-include-directories.html#Getting-the-include-directories"
+  rel="next" title="Getting the include directories" />
+  <link href="Making-a-temporary-copy.html#Making-a-temporary-copy"
+  rel="prev" title="Making a temporary copy" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Locating-a-master-file"></a>
-<div class="header">
-<p>
-Next: <a href="Getting-the-include-directories.html#Getting-the-include-directories" accesskey="n" rel="next">Getting the include directories</a>, Previous: <a href="Making-a-temporary-copy.html#Making-a-temporary-copy" accesskey="p" rel="prev">Making a temporary copy</a>, Up: <a href="Flymake-Implementation.html#Flymake-Implementation" accesskey="u" rel="up">Flymake Implementation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Locating-a-master-file-1"></a>
-<h3 class="section">5.3 Locating a master file</h3>
-<a name="index-Master-file-2"></a>
+<body lang="en" xml:lang="en">
+  <a name="Locating-a-master-file" id="Locating-a-master-file"></a>
 
-<p>Master file is located in two steps.
-</p>
-<p>First, a list of possible master files is built.  A simple name
-matching is used to find the files.  For a C++ header <code>file.h</code>,
-Flymake searches for all <code>.cpp</code> files in the directories whose relative paths are
-stored in a customizable variable <code>flymake-master-file-dirs</code>, which
-usually contains something like <code>(&quot;.&quot; &quot;./src&quot;)</code>.  No more than
-<code>flymake-master-file-count-limit</code> entries is added to the master file
-list.  The list is then sorted to move files with names <code>file.cpp</code> to
-the top.
-</p>
-<p>Next, each master file in a list is checked to contain the appropriate
-include directives.  No more than <code>flymake-check-file-limit</code> of each
-file are parsed.
-</p>
-<p>For <code>file.h</code>, the include directives to look for are
-<code>#include &quot;file.h&quot;</code>, <code>#include &quot;../file.h&quot;</code>, etc.  Each
-include is checked against a list of include directories
-(see <a href="Getting-the-include-directories.html#Getting-the-include-directories">Getting the include directories</a>) to be sure it points to the
-correct <code>file.h</code>.
-</p>
-<p>First matching master file found stops the search.  The master file is then
-patched and saved to disk.  In case no master file is found, syntax check is
-aborted, and corresponding status (!) is reported in the mode line.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Getting-the-include-directories.html#Getting-the-include-directories"
+    accesskey="n" rel="next">Getting the include directories</a>,
+    Previous: <a href=
+    "Making-a-temporary-copy.html#Making-a-temporary-copy"
+    accesskey="p" rel="prev">Making a temporary copy</a>, Up:
+    <a href="Flymake-Implementation.html#Flymake-Implementation"
+    accesskey="u" rel="up">Flymake Implementation</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Locating-a-master-file-1" id=
+  "Locating-a-master-file-1"></a>
 
+  <h3 class="section">5.3 Locating a master file</h3><a name=
+  "index-Master-file-2" id="index-Master-file-2"></a>
 
+  <p>Master file is located in two steps.</p>
 
+  <p>First, a list of possible master files is built. A simple name
+  matching is used to find the files. For a C++ header
+  <code>file.h</code>, Flymake searches for all <code>.cpp</code>
+  files in the directories whose relative paths are stored in a
+  customizable variable <code>flymake-master-file-dirs</code>,
+  which usually contains something like <code>("." "./src")</code>.
+  No more than <code>flymake-master-file-count-limit</code> entries
+  is added to the master file list. The list is then sorted to move
+  files with names <code>file.cpp</code> to the top.</p>
+
+  <p>Next, each master file in a list is checked to contain the
+  appropriate include directives. No more than
+  <code>flymake-check-file-limit</code> of each file are
+  parsed.</p>
+
+  <p>For <code>file.h</code>, the include directives to look for
+  are <code>#include "file.h"</code>, <code>#include
+  "../file.h"</code>, etc. Each include is checked against a list
+  of include directories (see <a href=
+  "Getting-the-include-directories.html#Getting-the-include-directories">
+  Getting the include directories</a>) to be sure it points to the
+  correct <code>file.h</code>.</p>
+
+  <p>First matching master file found stops the search. The master
+  file is then patched and saved to disk. In case no master file is
+  found, syntax check is aborted, and corresponding status (!) is
+  reported in the mode line.</p>
 </body>
 </html>

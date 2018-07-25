@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,117 +19,206 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Customization Types</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Customization Types">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Customization Types">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customization.html#Customization" rel="up" title="Customization">
-<link href="Simple-Types.html#Simple-Types" rel="next" title="Simple Types">
-<link href="Variable-Definitions.html#Variable-Definitions" rel="prev" title="Variable Definitions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Customization
+  Types</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Customization Types" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Customization Types" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customization.html#Customization" rel="up" title=
+  "Customization" />
+  <link href="Simple-Types.html#Simple-Types" rel="next" title=
+  "Simple Types" />
+  <link href="Variable-Definitions.html#Variable-Definitions" rel=
+  "prev" title="Variable Definitions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Customization-Types" id="Customization-Types"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Applying-Customizations.html#Applying-Customizations"
+    accesskey="n" rel="next">Applying Customizations</a>, Previous:
+    <a href="Variable-Definitions.html#Variable-Definitions"
+    accesskey="p" rel="prev">Variable Definitions</a>, Up: <a href=
+    "Customization.html#Customization" accesskey="u" rel=
+    "up">Customization</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Customization-Types-1" id="Customization-Types-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Customization-Types"></a>
-<div class="header">
-<p>
-Next: <a href="Applying-Customizations.html#Applying-Customizations" accesskey="n" rel="next">Applying Customizations</a>, Previous: <a href="Variable-Definitions.html#Variable-Definitions" accesskey="p" rel="prev">Variable Definitions</a>, Up: <a href="Customization.html#Customization" accesskey="u" rel="up">Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Customization-Types-1"></a>
-<h3 class="section">14.4 Customization Types</h3>
+  <h3 class="section">14.4 Customization Types</h3><a name=
+  "index-customization-types" id="index-customization-types"></a>
 
-<a name="index-customization-types"></a>
-<p>When you define a user option with <code>defcustom</code>, you must specify
-its <em>customization type</em>.  That is a Lisp object which describes (1)
-which values are legitimate and (2) how to display the value in the
-customization buffer for editing.
-</p>
-<a name="index-type_002c-defcustom-keyword"></a>
-<p>You specify the customization type in <code>defcustom</code> with the
-<code>:type</code> keyword.  The argument of <code>:type</code> is evaluated, but
-only once when the <code>defcustom</code> is executed, so it isn&rsquo;t useful
-for the value to vary.  Normally we use a quoted constant.  For
-example:
-</p>
-<div class="example">
-<pre class="example">(defcustom diff-command &quot;diff&quot;
-  &quot;The command to use to run diff.&quot;
+  <p>When you define a user option with <code>defcustom</code>, you
+  must specify its <em>customization type</em>. That is a Lisp
+  object which describes (1) which values are legitimate and (2)
+  how to display the value in the customization buffer for
+  editing.</p><a name="index-type_002c-defcustom-keyword" id=
+  "index-type_002c-defcustom-keyword"></a>
+
+  <p>You specify the customization type in <code>defcustom</code>
+  with the <code>:type</code> keyword. The argument of
+  <code>:type</code> is evaluated, but only once when the
+  <code>defcustom</code> is executed, so it isn&rsquo;t useful for
+  the value to vary. Normally we use a quoted constant. For
+  example:</p>
+
+  <div class="example">
+    <pre class="example">
+(defcustom diff-command "diff"
+  "The command to use to run diff."
   :type '(string)
   :group 'diff)
-</pre></div>
+</pre>
+  </div>
 
-<p>In general, a customization type is a list whose first element is a
-symbol, one of the customization type names defined in the following
-sections.  After this symbol come a number of arguments, depending on
-the symbol.  Between the type symbol and its arguments, you can
-optionally write keyword-value pairs (see <a href="Type-Keywords.html#Type-Keywords">Type Keywords</a>).
-</p>
-<p>Some type symbols do not use any arguments; those are called
-<em>simple types</em>.  For a simple type, if you do not use any
-keyword-value pairs, you can omit the parentheses around the type
-symbol.  For example just <code>string</code> as a customization type is
-equivalent to <code>(string)</code>.
-</p>
-<p>All customization types are implemented as widgets; see <a href="../widget/index.html#Top">Introduction</a> in <cite>The Emacs Widget Library</cite>, for details.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Simple-Types.html#Simple-Types" accesskey="1">Simple Types</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Simple customization types: sexp, integer, etc.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Composite-Types.html#Composite-Types" accesskey="2">Composite Types</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Build new types from other types or data.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Splicing-into-Lists.html#Splicing-into-Lists" accesskey="3">Splicing into Lists</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Splice elements into list with <code>:inline</code>.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Type-Keywords.html#Type-Keywords" accesskey="4">Type Keywords</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Keyword-argument pairs in a customization type.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Defining-New-Types.html#Defining-New-Types" accesskey="5">Defining New Types</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Give your type a name.
-</td></tr>
-</table>
+  <p>In general, a customization type is a list whose first element
+  is a symbol, one of the customization type names defined in the
+  following sections. After this symbol come a number of arguments,
+  depending on the symbol. Between the type symbol and its
+  arguments, you can optionally write keyword-value pairs (see
+  <a href="Type-Keywords.html#Type-Keywords">Type
+  Keywords</a>).</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Applying-Customizations.html#Applying-Customizations" accesskey="n" rel="next">Applying Customizations</a>, Previous: <a href="Variable-Definitions.html#Variable-Definitions" accesskey="p" rel="prev">Variable Definitions</a>, Up: <a href="Customization.html#Customization" accesskey="u" rel="up">Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Some type symbols do not use any arguments; those are called
+  <em>simple types</em>. For a simple type, if you do not use any
+  keyword-value pairs, you can omit the parentheses around the type
+  symbol. For example just <code>string</code> as a customization
+  type is equivalent to <code>(string)</code>.</p>
 
+  <p>All customization types are implemented as widgets; see
+  <a href="../widget/index.html#Top">Introduction</a> in <cite>The
+  Emacs Widget Library</cite>, for details.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Simple-Types.html#Simple-Types" accesskey="1">Simple
+      Types</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Simple customization types:
+      sexp, integer, etc.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Composite-Types.html#Composite-Types" accesskey=
+      "2">Composite Types</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Build new types from other
+      types or data.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Splicing-into-Lists.html#Splicing-into-Lists" accesskey=
+      "3">Splicing into Lists</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Splice elements into list with
+      <code>:inline</code>.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Type-Keywords.html#Type-Keywords" accesskey="4">Type
+      Keywords</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Keyword-argument pairs in a
+      customization type.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Defining-New-Types.html#Defining-New-Types" accesskey=
+      "5">Defining New Types</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Give your type a name.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Applying-Customizations.html#Applying-Customizations"
+    accesskey="n" rel="next">Applying Customizations</a>, Previous:
+    <a href="Variable-Definitions.html#Variable-Definitions"
+    accesskey="p" rel="prev">Variable Definitions</a>, Up: <a href=
+    "Customization.html#Customization" accesskey="u" rel=
+    "up">Customization</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

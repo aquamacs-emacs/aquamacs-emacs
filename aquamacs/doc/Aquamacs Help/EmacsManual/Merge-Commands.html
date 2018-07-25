@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,209 +20,312 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Merge Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Merge Commands">
-<meta name="keywords" content="GNU Emacs Manual: Merge Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Emerge.html#Emerge" rel="up" title="Emerge">
-<link href="Exiting-Emerge.html#Exiting-Emerge" rel="next" title="Exiting Emerge">
-<link href="State-of-Difference.html#State-of-Difference" rel="prev" title="State of Difference">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Merge Commands</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Merge Commands" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Merge Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Emerge.html#Emerge" rel="up" title="Emerge" />
+  <link href="Exiting-Emerge.html#Exiting-Emerge" rel="next" title=
+  "Exiting Emerge" />
+  <link href="State-of-Difference.html#State-of-Difference" rel=
+  "prev" title="State of Difference" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Merge-Commands" id="Merge-Commands"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Exiting-Emerge.html#Exiting-Emerge"
+    accesskey="n" rel="next">Exiting Emerge</a>, Previous: <a href=
+    "State-of-Difference.html#State-of-Difference" accesskey="p"
+    rel="prev">State of Difference</a>, Up: <a href=
+    "Emerge.html#Emerge" accesskey="u" rel="up">Emerge</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Merge-Commands-1" id="Merge-Commands-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Merge-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Exiting-Emerge.html#Exiting-Emerge" accesskey="n" rel="next">Exiting Emerge</a>, Previous: <a href="State-of-Difference.html#State-of-Difference" accesskey="p" rel="prev">State of Difference</a>, Up: <a href="Emerge.html#Emerge" accesskey="u" rel="up">Emerge</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Merge-Commands-1"></a>
-<h4 class="subsection">28.5.4 Merge Commands</h4>
+  <h4 class="subsection">28.5.4 Merge Commands</h4>
 
-<p>Here are the Merge commands for Fast mode; in Edit mode, precede them
-with <kbd>C-c C-c</kbd>:
-</p>
-<dl compact="compact">
-<dt><kbd>p</kbd></dt>
-<dd><p>Select the previous difference.
-</p>
-</dd>
-<dt><kbd>n</kbd></dt>
-<dd><p>Select the next difference.
-</p>
-</dd>
-<dt><kbd>a</kbd></dt>
-<dd><p>Choose the A version of this difference.
-</p>
-</dd>
-<dt><kbd>b</kbd></dt>
-<dd><p>Choose the B version of this difference.
-</p>
-</dd>
-<dt><kbd>C-u <var>n</var> j</kbd></dt>
-<dd><p>Select difference number <var>n</var>.
-</p>
-</dd>
-<dt><kbd>.</kbd></dt>
-<dd><p>Select the difference containing point.
-</p>
-</dd>
-<dt><kbd>q</kbd></dt>
-<dd><p>Quit&mdash;finish the merge.
-</p>
-</dd>
-<dt><kbd>C-]</kbd></dt>
-<dd><p>Abort&mdash;exit merging and do not save the output.
-</p>
-</dd>
-<dt><kbd>f</kbd></dt>
-<dd><p>Go into Fast mode.  (In Edit mode, this is actually <kbd>C-c C-c f</kbd>.)
-</p>
-</dd>
-<dt><kbd>e</kbd></dt>
-<dd><p>Go into Edit mode.
-</p>
-</dd>
-<dt><kbd>l</kbd></dt>
-<dd><p>Recenter (like <kbd>C-l</kbd>) all three windows.  With an argument,
-reestablish the default three-window display.
-</p>
-</dd>
-<dt><kbd>-</kbd></dt>
-<dd><p>Specify part of a prefix numeric argument.
-</p>
-</dd>
-<dt><kbd><var>digit</var></kbd></dt>
-<dd><p>Also specify part of a prefix numeric argument.
-</p>
-</dd>
-<dt><kbd>d a</kbd></dt>
-<dd><p>Choose the A version as the default from here down in
-the merge buffer.
-</p>
-</dd>
-<dt><kbd>d b</kbd></dt>
-<dd><p>Choose the B version as the default from here down in
-the merge buffer.
-</p>
-</dd>
-<dt><kbd>c a</kbd></dt>
-<dd><p>Copy the A version of this difference into the kill ring.
-</p>
-</dd>
-<dt><kbd>c b</kbd></dt>
-<dd><p>Copy the B version of this difference into the kill ring.
-</p>
-</dd>
-<dt><kbd>i a</kbd></dt>
-<dd><p>Insert the A version of this difference at point.
-</p>
-</dd>
-<dt><kbd>i b</kbd></dt>
-<dd><p>Insert the B version of this difference at point.
-</p>
-</dd>
-<dt><kbd>m</kbd></dt>
-<dd><p>Put point and mark around the difference.
-</p>
-</dd>
-<dt><kbd>^</kbd></dt>
-<dd><p>Scroll all three windows down (like <kbd>M-v</kbd>).
-</p>
-</dd>
-<dt><kbd>v</kbd></dt>
-<dd><p>Scroll all three windows up (like <kbd>C-v</kbd>).
-</p>
-</dd>
-<dt><kbd>&lt;</kbd></dt>
-<dd><p>Scroll all three windows left (like <kbd>C-x &lt;</kbd>).
-</p>
-</dd>
-<dt><kbd>&gt;</kbd></dt>
-<dd><p>Scroll all three windows right (like <kbd>C-x &gt;</kbd>).
-</p>
-</dd>
-<dt><kbd>|</kbd></dt>
-<dd><p>Reset horizontal scroll on all three windows.
-</p>
-</dd>
-<dt><kbd>x 1</kbd></dt>
-<dd><p>Shrink the merge window to one line.  (Use <kbd>C-u l</kbd> to restore it
-to full size.)
-</p>
-</dd>
-<dt><kbd>x c</kbd></dt>
-<dd><p>Combine the two versions of this difference (see <a href="Combining-in-Emerge.html#Combining-in-Emerge">Combining in Emerge</a>).
-</p>
-</dd>
-<dt><kbd>x f</kbd></dt>
-<dd><p>Show the names of the files/buffers Emerge is operating on, in a Help
-window.  (Use <kbd>C-u l</kbd> to restore windows.)
-</p>
-</dd>
-<dt><kbd>x j</kbd></dt>
-<dd><p>Join this difference with the following one.
-(<kbd>C-u x j</kbd> joins this difference with the previous one.)
-</p>
-</dd>
-<dt><kbd>x s</kbd></dt>
-<dd><p>Split this difference into two differences.  Before you use this
-command, position point in each of the three buffers at the place where
-you want to split the difference.
-</p>
-</dd>
-<dt><kbd>x t</kbd></dt>
-<dd><p>Trim identical lines off the top and bottom of the difference.
-Such lines occur when the A and B versions are
-identical but differ from the ancestor version.
-</p></dd>
-</dl>
+  <p>Here are the Merge commands for Fast mode; in Edit mode,
+  precede them with <kbd>C-c C-c</kbd>:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Exiting-Emerge.html#Exiting-Emerge" accesskey="n" rel="next">Exiting Emerge</a>, Previous: <a href="State-of-Difference.html#State-of-Difference" accesskey="p" rel="prev">State of Difference</a>, Up: <a href="Emerge.html#Emerge" accesskey="u" rel="up">Emerge</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>p</kbd></dt>
 
+    <dd>
+      <p>Select the previous difference.</p>
+    </dd>
 
+    <dt><kbd>n</kbd></dt>
 
+    <dd>
+      <p>Select the next difference.</p>
+    </dd>
+
+    <dt><kbd>a</kbd></dt>
+
+    <dd>
+      <p>Choose the A version of this difference.</p>
+    </dd>
+
+    <dt><kbd>b</kbd></dt>
+
+    <dd>
+      <p>Choose the B version of this difference.</p>
+    </dd>
+
+    <dt><kbd>C-u <var>n</var> j</kbd></dt>
+
+    <dd>
+      <p>Select difference number <var>n</var>.</p>
+    </dd>
+
+    <dt><kbd>.</kbd></dt>
+
+    <dd>
+      <p>Select the difference containing point.</p>
+    </dd>
+
+    <dt><kbd>q</kbd></dt>
+
+    <dd>
+      <p>Quit&mdash;finish the merge.</p>
+    </dd>
+
+    <dt><kbd>C-]</kbd></dt>
+
+    <dd>
+      <p>Abort&mdash;exit merging and do not save the output.</p>
+    </dd>
+
+    <dt><kbd>f</kbd></dt>
+
+    <dd>
+      <p>Go into Fast mode. (In Edit mode, this is actually
+      <kbd>C-c C-c f</kbd>.)</p>
+    </dd>
+
+    <dt><kbd>e</kbd></dt>
+
+    <dd>
+      <p>Go into Edit mode.</p>
+    </dd>
+
+    <dt><kbd>l</kbd></dt>
+
+    <dd>
+      <p>Recenter (like <kbd>C-l</kbd>) all three windows. With an
+      argument, reestablish the default three-window display.</p>
+    </dd>
+
+    <dt><kbd>-</kbd></dt>
+
+    <dd>
+      <p>Specify part of a prefix numeric argument.</p>
+    </dd>
+
+    <dt><kbd><var>digit</var></kbd></dt>
+
+    <dd>
+      <p>Also specify part of a prefix numeric argument.</p>
+    </dd>
+
+    <dt><kbd>d a</kbd></dt>
+
+    <dd>
+      <p>Choose the A version as the default from here down in the
+      merge buffer.</p>
+    </dd>
+
+    <dt><kbd>d b</kbd></dt>
+
+    <dd>
+      <p>Choose the B version as the default from here down in the
+      merge buffer.</p>
+    </dd>
+
+    <dt><kbd>c a</kbd></dt>
+
+    <dd>
+      <p>Copy the A version of this difference into the kill
+      ring.</p>
+    </dd>
+
+    <dt><kbd>c b</kbd></dt>
+
+    <dd>
+      <p>Copy the B version of this difference into the kill
+      ring.</p>
+    </dd>
+
+    <dt><kbd>i a</kbd></dt>
+
+    <dd>
+      <p>Insert the A version of this difference at point.</p>
+    </dd>
+
+    <dt><kbd>i b</kbd></dt>
+
+    <dd>
+      <p>Insert the B version of this difference at point.</p>
+    </dd>
+
+    <dt><kbd>m</kbd></dt>
+
+    <dd>
+      <p>Put point and mark around the difference.</p>
+    </dd>
+
+    <dt><kbd>^</kbd></dt>
+
+    <dd>
+      <p>Scroll all three windows down (like <kbd>M-v</kbd>).</p>
+    </dd>
+
+    <dt><kbd>v</kbd></dt>
+
+    <dd>
+      <p>Scroll all three windows up (like <kbd>C-v</kbd>).</p>
+    </dd>
+
+    <dt><kbd>&lt;</kbd></dt>
+
+    <dd>
+      <p>Scroll all three windows left (like <kbd>C-x
+      &lt;</kbd>).</p>
+    </dd>
+
+    <dt><kbd>&gt;</kbd></dt>
+
+    <dd>
+      <p>Scroll all three windows right (like <kbd>C-x
+      &gt;</kbd>).</p>
+    </dd>
+
+    <dt><kbd>|</kbd></dt>
+
+    <dd>
+      <p>Reset horizontal scroll on all three windows.</p>
+    </dd>
+
+    <dt><kbd>x 1</kbd></dt>
+
+    <dd>
+      <p>Shrink the merge window to one line. (Use <kbd>C-u l</kbd>
+      to restore it to full size.)</p>
+    </dd>
+
+    <dt><kbd>x c</kbd></dt>
+
+    <dd>
+      <p>Combine the two versions of this difference (see <a href=
+      "Combining-in-Emerge.html#Combining-in-Emerge">Combining in
+      Emerge</a>).</p>
+    </dd>
+
+    <dt><kbd>x f</kbd></dt>
+
+    <dd>
+      <p>Show the names of the files/buffers Emerge is operating
+      on, in a Help window. (Use <kbd>C-u l</kbd> to restore
+      windows.)</p>
+    </dd>
+
+    <dt><kbd>x j</kbd></dt>
+
+    <dd>
+      <p>Join this difference with the following one. (<kbd>C-u x
+      j</kbd> joins this difference with the previous one.)</p>
+    </dd>
+
+    <dt><kbd>x s</kbd></dt>
+
+    <dd>
+      <p>Split this difference into two differences. Before you use
+      this command, position point in each of the three buffers at
+      the place where you want to split the difference.</p>
+    </dd>
+
+    <dt><kbd>x t</kbd></dt>
+
+    <dd>
+      <p>Trim identical lines off the top and bottom of the
+      difference. Such lines occur when the A and B versions are
+      identical but differ from the ancestor version.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Exiting-Emerge.html#Exiting-Emerge"
+    accesskey="n" rel="next">Exiting Emerge</a>, Previous: <a href=
+    "State-of-Difference.html#State-of-Difference" accesskey="p"
+    rel="prev">State of Difference</a>, Up: <a href=
+    "Emerge.html#Emerge" accesskey="u" rel="up">Emerge</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,97 +19,153 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Overlays</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Overlays">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Overlays">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Display.html#Display" rel="up" title="Display">
-<link href="Managing-Overlays.html#Managing-Overlays" rel="next" title="Managing Overlays">
-<link href="Temporary-Displays.html#Temporary-Displays" rel="prev" title="Temporary Displays">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Overlays</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Overlays" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Overlays" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Display.html#Display" rel="up" title="Display" />
+  <link href="Managing-Overlays.html#Managing-Overlays" rel="next"
+  title="Managing Overlays" />
+  <link href="Temporary-Displays.html#Temporary-Displays" rel=
+  "prev" title="Temporary Displays" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Overlays" id="Overlays"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Size-of-Displayed-Text.html#Size-of-Displayed-Text" accesskey=
+    "n" rel="next">Size of Displayed Text</a>, Previous: <a href=
+    "Temporary-Displays.html#Temporary-Displays" accesskey="p" rel=
+    "prev">Temporary Displays</a>, Up: <a href=
+    "Display.html#Display" accesskey="u" rel="up">Display</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Overlays-1" id="Overlays-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Overlays"></a>
-<div class="header">
-<p>
-Next: <a href="Size-of-Displayed-Text.html#Size-of-Displayed-Text" accesskey="n" rel="next">Size of Displayed Text</a>, Previous: <a href="Temporary-Displays.html#Temporary-Displays" accesskey="p" rel="prev">Temporary Displays</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Overlays-1"></a>
-<h3 class="section">37.9 Overlays</h3>
-<a name="index-overlays"></a>
+  <h3 class="section">37.9 Overlays</h3><a name="index-overlays"
+  id="index-overlays"></a>
 
-<p>You can use <em>overlays</em> to alter the appearance of a buffer&rsquo;s text on
-the screen, for the sake of presentation features.  An overlay is an
-object that belongs to a particular buffer, and has a specified
-beginning and end.  It also has properties that you can examine and set;
-these affect the display of the text within the overlay.
-</p>
-<a name="index-scalability-of-overlays"></a>
-<a name="index-overlays_002c-scalability"></a>
-<p>The visual effect of an overlay is the same as of the corresponding
-text property (see <a href="Text-Properties.html#Text-Properties">Text Properties</a>).  However, due to a different
-implementation, overlays generally don&rsquo;t scale well (many operations
-take a time that is proportional to the number of overlays in the
-buffer).  If you need to affect the visual appearance of many portions
-in the buffer, we recommend using text properties.
-</p>
-<p>An overlay uses markers to record its beginning and end; thus,
-editing the text of the buffer adjusts the beginning and end of each
-overlay so that it stays with the text.  When you create the overlay,
-you can specify whether text inserted at the beginning should be
-inside the overlay or outside, and likewise for the end of the overlay.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Managing-Overlays.html#Managing-Overlays" accesskey="1">Managing Overlays</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating and moving overlays.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Overlay-Properties.html#Overlay-Properties" accesskey="2">Overlay Properties</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to read and set properties.
-                          What properties do to the screen display.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Finding-Overlays.html#Finding-Overlays" accesskey="3">Finding Overlays</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Searching for overlays.
-</td></tr>
-</table>
+  <p>You can use <em>overlays</em> to alter the appearance of a
+  buffer&rsquo;s text on the screen, for the sake of presentation
+  features. An overlay is an object that belongs to a particular
+  buffer, and has a specified beginning and end. It also has
+  properties that you can examine and set; these affect the display
+  of the text within the overlay.</p><a name=
+  "index-scalability-of-overlays" id=
+  "index-scalability-of-overlays"></a> <a name=
+  "index-overlays_002c-scalability" id=
+  "index-overlays_002c-scalability"></a>
 
+  <p>The visual effect of an overlay is the same as of the
+  corresponding text property (see <a href=
+  "Text-Properties.html#Text-Properties">Text Properties</a>).
+  However, due to a different implementation, overlays generally
+  don&rsquo;t scale well (many operations take a time that is
+  proportional to the number of overlays in the buffer). If you
+  need to affect the visual appearance of many portions in the
+  buffer, we recommend using text properties.</p>
 
+  <p>An overlay uses markers to record its beginning and end; thus,
+  editing the text of the buffer adjusts the beginning and end of
+  each overlay so that it stays with the text. When you create the
+  overlay, you can specify whether text inserted at the beginning
+  should be inside the overlay or outside, and likewise for the end
+  of the overlay.</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Managing-Overlays.html#Managing-Overlays" accesskey=
+      "1">Managing Overlays</a>:</td>
 
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Creating and moving
+      overlays.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Overlay-Properties.html#Overlay-Properties" accesskey=
+      "2">Overlay Properties</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to read and set properties.
+      What properties do to the screen display.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Finding-Overlays.html#Finding-Overlays" accesskey=
+      "3">Finding Overlays</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Searching for overlays.</td>
+    </tr>
+  </table>
 </body>
 </html>

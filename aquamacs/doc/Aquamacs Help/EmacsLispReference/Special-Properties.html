@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,502 +19,793 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Special Properties</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Special Properties">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Special Properties">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text-Properties.html#Text-Properties" rel="up" title="Text Properties">
-<link href="Format-Properties.html#Format-Properties" rel="next" title="Format Properties">
-<link href="Property-Search.html#Property-Search" rel="prev" title="Property Search">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Special
+  Properties</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Special Properties" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Special Properties" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text-Properties.html#Text-Properties" rel="up" title=
+  "Text Properties" />
+  <link href="Format-Properties.html#Format-Properties" rel="next"
+  title="Format Properties" />
+  <link href="Property-Search.html#Property-Search" rel="prev"
+  title="Property Search" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Special-Properties" id="Special-Properties"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Format-Properties.html#Format-Properties"
+    accesskey="n" rel="next">Format Properties</a>, Previous:
+    <a href="Property-Search.html#Property-Search" accesskey="p"
+    rel="prev">Property Search</a>, Up: <a href=
+    "Text-Properties.html#Text-Properties" accesskey="u" rel=
+    "up">Text Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Properties-with-Special-Meanings" id=
+  "Properties-with-Special-Meanings"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Special-Properties"></a>
-<div class="header">
-<p>
-Next: <a href="Format-Properties.html#Format-Properties" accesskey="n" rel="next">Format Properties</a>, Previous: <a href="Property-Search.html#Property-Search" accesskey="p" rel="prev">Property Search</a>, Up: <a href="Text-Properties.html#Text-Properties" accesskey="u" rel="up">Text Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Properties-with-Special-Meanings"></a>
-<h4 class="subsection">31.19.4 Properties with Special Meanings</h4>
+  <h4 class="subsection">31.19.4 Properties with Special
+  Meanings</h4>
 
-<p>Here is a table of text property names that have special built-in
-meanings.  The following sections list a few additional special property
-names that control filling and property inheritance.  All other names
-have no standard meaning, and you can use them as you like.
-</p>
-<p>Note: the properties <code>composition</code>, <code>display</code>,
-<code>invisible</code> and <code>intangible</code> can also cause point to move to
-an acceptable place, after each Emacs command.  See <a href="Adjusting-Point.html#Adjusting-Point">Adjusting Point</a>.
-</p>
-<dl compact="compact">
-<dd><a name="index-property-category-of-text-character"></a>
-<a name="index-category-_0028text-property_0029"></a>
-</dd>
-<dt><code>category</code></dt>
-<dd><p>If a character has a <code>category</code> property, we call it the
-<em>property category</em> of the character.  It should be a symbol.  The
-properties of this symbol serve as defaults for the properties of the
-character.
-</p>
-</dd>
-<dt><code>face</code></dt>
-<dd><a name="index-face-codes-of-text"></a>
-<a name="index-face-_0028text-property_0029"></a>
-<p>The <code>face</code> property controls the appearance of the character
-(see <a href="Faces.html#Faces">Faces</a>).  The value of the property can be the following:
-</p>
-<ul>
-<li> A face name (a symbol or string).
+  <p>Here is a table of text property names that have special
+  built-in meanings. The following sections list a few additional
+  special property names that control filling and property
+  inheritance. All other names have no standard meaning, and you
+  can use them as you like.</p>
 
-</li><li> An anonymous face: a property list of the form <code>(<var>keyword</var>
-<var>value</var> &hellip;)</code>, where each <var>keyword</var> is a face attribute
-name and <var>value</var> is a value for that attribute.
+  <p>Note: the properties <code>composition</code>,
+  <code>display</code>, <code>invisible</code> and
+  <code>intangible</code> can also cause point to move to an
+  acceptable place, after each Emacs command. See <a href=
+  "Adjusting-Point.html#Adjusting-Point">Adjusting Point</a>.</p>
 
-</li><li> A list of faces.  Each list element should be either a face name or an
-anonymous face.  This specifies a face which is an aggregate of the
-attributes of each of the listed faces.  Faces occurring earlier in
-the list have higher priority.
+  <dl compact="compact">
+    <dd><a name="index-property-category-of-text-character" id=
+    "index-property-category-of-text-character"></a> <a name=
+    "index-category-_0028text-property_0029" id=
+    "index-category-_0028text-property_0029"></a></dd>
 
-</li><li> A cons cell of the form <code>(foreground-color . <var>color-name</var>)</code>
-or <code>(background-color . <var>color-name</var>)</code>.  This specifies the
-foreground or background color, similar to <code>(:foreground
-<var>color-name</var>)</code> or <code>(:background <var>color-name</var>)</code>.  This
-form is supported for backward compatibility only, and should be
-avoided.
-</li></ul>
+    <dt><code>category</code></dt>
 
-<p>Font Lock mode (see <a href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>) works in most buffers by
-dynamically updating the <code>face</code> property of characters based on
-the context.
-</p>
-<p>The <code>add-face-text-property</code> function provides a convenient way
-to set this text property.  See <a href="Changing-Properties.html#Changing-Properties">Changing Properties</a>.
-</p>
-</dd>
-<dt><code>font-lock-face</code></dt>
-<dd><a name="index-font_002dlock_002dface-_0028text-property_0029"></a>
-<p>This property specifies a value for the <code>face</code> property that Font
-Lock mode should apply to the underlying text.  It is one of the
-fontification methods used by Font Lock mode, and is useful for
-special modes that implement their own highlighting.
-See <a href="Precalculated-Fontification.html#Precalculated-Fontification">Precalculated Fontification</a>.  When Font Lock mode is disabled,
-<code>font-lock-face</code> has no effect.
-</p>
-</dd>
-<dt><code>mouse-face</code></dt>
-<dd><a name="index-mouse_002dface-_0028text-property_0029"></a>
-<p>This property is used instead of <code>face</code> when the mouse is on or
-near the character.  For this purpose, &ldquo;near&rdquo; means that all text
-between the character and where the mouse is have the same
-<code>mouse-face</code> property value.
-</p>
-<p>Emacs ignores all face attributes from the <code>mouse-face</code> property
-that alter the text size (e.g., <code>:height</code>, <code>:weight</code>, and
-<code>:slant</code>).  Those attributes are always the same as for the
-unhighlighted text.
-</p>
-</dd>
-<dt><code>fontified</code></dt>
-<dd><a name="index-fontified-_0028text-property_0029"></a>
-<p>This property says whether the text is ready for display.  If
-<code>nil</code>, Emacs&rsquo;s redisplay routine calls the functions in
-<code>fontification-functions</code> (see <a href="Auto-Faces.html#Auto-Faces">Auto Faces</a>) to prepare this
-part of the buffer before it is displayed.  It is used internally by
-the just-in-time font locking code.
-</p>
-</dd>
-<dt><code>display</code></dt>
-<dd><p>This property activates various features that change the
-way text is displayed.  For example, it can make text appear taller
-or shorter, higher or lower, wider or narrow, or replaced with an image.
-See <a href="Display-Property.html#Display-Property">Display Property</a>.
-</p>
-</dd>
-<dt><code>help-echo</code></dt>
-<dd><a name="index-help_002decho-_0028text-property_0029"></a>
-<a name="index-tooltip-for-help-strings"></a>
-<a name="Text-help_002decho"></a><p>If text has a string as its <code>help-echo</code> property, then when you
-move the mouse onto that text, Emacs displays that string in the echo
-area, or in the tooltip window (see <a href="Tooltips.html#Tooltips">Tooltips</a>).
-</p>
-<p>If the value of the <code>help-echo</code> property is a function, that
-function is called with three arguments, <var>window</var>, <var>object</var> and
-<var>pos</var> and should return a help string or <code>nil</code> for
-none.  The first argument, <var>window</var> is the window in which
-the help was found.  The second, <var>object</var>, is the buffer, overlay or
-string which had the <code>help-echo</code> property.  The <var>pos</var>
-argument is as follows:
-</p>
-<ul>
-<li> If <var>object</var> is a buffer, <var>pos</var> is the position in the buffer.
-</li><li> If <var>object</var> is an overlay, that overlay has a <code>help-echo</code>
-property, and <var>pos</var> is the position in the overlay&rsquo;s buffer.
-</li><li> If <var>object</var> is a string (an overlay string or a string displayed
-with the <code>display</code> property), <var>pos</var> is the position in that
-string.
-</li></ul>
+    <dd>
+      <p>If a character has a <code>category</code> property, we
+      call it the <em>property category</em> of the character. It
+      should be a symbol. The properties of this symbol serve as
+      defaults for the properties of the character.</p>
+    </dd>
 
-<p>If the value of the <code>help-echo</code> property is neither a function nor
-a string, it is evaluated to obtain a help string.
-</p>
-<p>You can alter the way help text is displayed by setting the variable
-<code>show-help-function</code> (see <a href="#Help-display">Help display</a>).
-</p>
-<p>This feature is used in the mode line and for other active text.
-</p>
-</dd>
-<dt><code>keymap</code></dt>
-<dd><a name="index-keymap-of-character"></a>
-<a name="index-keymap-_0028text-property_0029"></a>
-<p>The <code>keymap</code> property specifies an additional keymap for
-commands.  When this keymap applies, it is used for key lookup before
-the minor mode keymaps and before the buffer&rsquo;s local map.
-See <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>.  If the property value is a symbol, the
-symbol&rsquo;s function definition is used as the keymap.
-</p>
-<p>The property&rsquo;s value for the character before point applies if it is
-non-<code>nil</code> and rear-sticky, and the property&rsquo;s value for the
-character after point applies if it is non-<code>nil</code> and
-front-sticky.  (For mouse clicks, the position of the click is used
-instead of the position of point.)
-</p>
-</dd>
-<dt><code>local-map</code></dt>
-<dd><a name="index-local_002dmap-_0028text-property_0029"></a>
-<p>This property works like <code>keymap</code> except that it specifies a
-keymap to use <em>instead of</em> the buffer&rsquo;s local map.  For most
-purposes (perhaps all purposes), it is better to use the <code>keymap</code>
-property.
-</p>
-</dd>
-<dt><code>syntax-table</code></dt>
-<dd><p>The <code>syntax-table</code> property overrides what the syntax table says
-about this particular character.  See <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>.
-</p>
-</dd>
-<dt><code>read-only</code></dt>
-<dd><a name="index-read_002donly-character"></a>
-<a name="index-read_002donly-_0028text-property_0029"></a>
-<p>If a character has the property <code>read-only</code>, then modifying that
-character is not allowed.  Any command that would do so gets an error,
-<code>text-read-only</code>.  If the property value is a string, that string
-is used as the error message.
-</p>
-<p>Insertion next to a read-only character is an error if inserting
-ordinary text there would inherit the <code>read-only</code> property due to
-stickiness.  Thus, you can control permission to insert next to
-read-only text by controlling the stickiness.  See <a href="Sticky-Properties.html#Sticky-Properties">Sticky Properties</a>.
-</p>
-<p>Since changing properties counts as modifying the buffer, it is not
-possible to remove a <code>read-only</code> property unless you know the
-special trick: bind <code>inhibit-read-only</code> to a non-<code>nil</code> value
-and then remove the property.  See <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>.
-</p>
-</dd>
-<dt><code>inhibit-read-only</code></dt>
-<dd><a name="index-inhibit_002dread_002donly-_0028text-property_0029"></a>
-<p>Characters that have the property <code>inhibit-read-only</code> can be
-edited even in read-only buffers.  See <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>.
-</p>
-</dd>
-<dt><code>invisible</code></dt>
-<dd><a name="index-invisible-_0028text-property_0029"></a>
-<p>A non-<code>nil</code> <code>invisible</code> property can make a character invisible
-on the screen.  See <a href="Invisible-Text.html#Invisible-Text">Invisible Text</a>, for details.
-</p>
-</dd>
-<dt><code>intangible</code></dt>
-<dd><a name="index-intangible-_0028text-property_0029"></a>
-<p>If a group of consecutive characters have equal and non-<code>nil</code>
-<code>intangible</code> properties, then you cannot place point between them.
-If you try to move point forward into the group, point actually moves to
-the end of the group.  If you try to move point backward into the group,
-point actually moves to the start of the group.
-</p>
-<p>If consecutive characters have unequal non-<code>nil</code>
-<code>intangible</code> properties, they belong to separate groups; each
-group is separately treated as described above.
-</p>
-<p>When the variable <code>inhibit-point-motion-hooks</code> is non-<code>nil</code>
-(as it is by default), the <code>intangible</code> property is ignored.
-</p>
-<p>Beware: this property operates at a very low level, and affects a lot of code
-in unexpected ways.  So use it with extreme caution.  A common misuse is to put
-an intangible property on invisible text, which is actually unnecessary since
-the command loop will move point outside of the invisible text at the end of
-each command anyway.  See <a href="Adjusting-Point.html#Adjusting-Point">Adjusting Point</a>.  For these reasons, this
-property is obsolete; use the <code>cursor-intangible</code> property instead.
-</p>
-</dd>
-<dt><code>cursor-intangible</code></dt>
-<dd><a name="index-cursor_002dintangible-_0028text-property_0029"></a>
-<a name="index-cursor_002dintangible_002dmode"></a>
-<p>When the minor mode <code>cursor-intangible-mode</code> is turned on, point
-is moved away of any position that has a non-<code>nil</code>
-<code>cursor-intangible</code> property, just before redisplay happens.
-</p>
-</dd>
-<dt><code>field</code></dt>
-<dd><a name="index-field-_0028text-property_0029"></a>
-<p>Consecutive characters with the same <code>field</code> property constitute a
-<em>field</em>.  Some motion functions including <code>forward-word</code> and
-<code>beginning-of-line</code> stop moving at a field boundary.
-See <a href="Fields.html#Fields">Fields</a>.
-</p>
-</dd>
-<dt><code>cursor</code></dt>
-<dd><a name="index-cursor-_0028text-property_0029"></a>
-<p>Normally, the cursor is displayed at the beginning or the end of any
-overlay and text property strings present at the current buffer
-position.  You can place the cursor on any desired character of these
-strings by giving that character a non-<code>nil</code> <code>cursor</code> text
-property.  In addition, if the value of the <code>cursor</code> property is
-an integer, it specifies the number of buffer&rsquo;s character
-positions, starting with the position where the overlay or the
-<code>display</code> property begins, for which the cursor should be
-displayed on that character.  Specifically, if the value of the
-<code>cursor</code> property of a character is the number <var>n</var>, the
-cursor will be displayed on this character for any buffer position in
-the range <code>[<var>ovpos</var>..<var>ovpos</var>+<var>n</var>)</code>, where <var>ovpos</var>
-is the overlay&rsquo;s starting position given by <code>overlay-start</code>
-(see <a href="Managing-Overlays.html#Managing-Overlays">Managing Overlays</a>), or the position where the <code>display</code>
-text property begins in the buffer.
-</p>
-<p>In other words, the string character with the <code>cursor</code> property
-of any non-<code>nil</code> value is the character where to display the
-cursor.  The value of the property says for which buffer positions to
-display the cursor there.  If the value is an integer <var>n</var>,
-the cursor is displayed there when point is anywhere between the
-beginning of the overlay or <code>display</code> property and <var>n</var>
-positions after that.  If the value is anything else and
-non-<code>nil</code>, the cursor is displayed there only when point is at
-the beginning of the <code>display</code> property or at
-<code>overlay-start</code>.
-</p>
-<a name="index-cursor-position-for-display-properties-and-overlays"></a>
-<p>When the buffer has many overlay strings (e.g., see <a href="Overlay-Properties.html#Overlay-Properties">before-string</a>) that conceal some of the buffer text or
-<code>display</code> properties that are strings, it is a good idea to use
-the <code>cursor</code> property on these strings to cue the Emacs display
-about the places where to put the cursor while traversing these
-strings.  This directly communicates to the display engine where the
-Lisp program wants to put the cursor, or where the user would expect
-the cursor, when point is located on some buffer position that is
-&ldquo;covered&rdquo; by the display or overlay string.
-</p>
-</dd>
-<dt><code>pointer</code></dt>
-<dd><a name="index-pointer-_0028text-property_0029"></a>
-<p>This specifies a specific pointer shape when the mouse pointer is over
-this text or image.  See <a href="Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>, for possible pointer
-shapes.
-</p>
-</dd>
-<dt><code>line-spacing</code></dt>
-<dd><a name="index-line_002dspacing-_0028text-property_0029"></a>
-<p>A newline can have a <code>line-spacing</code> text or overlay property that
-controls the height of the display line ending with that newline.  The
-property value overrides the default frame line spacing and the buffer
-local <code>line-spacing</code> variable.  See <a href="Line-Height.html#Line-Height">Line Height</a>.
-</p>
-</dd>
-<dt><code>line-height</code></dt>
-<dd><a name="index-line_002dheight-_0028text-property_0029"></a>
-<p>A newline can have a <code>line-height</code> text or overlay property that
-controls the total height of the display line ending in that newline.
-See <a href="Line-Height.html#Line-Height">Line Height</a>.
-</p>
-</dd>
-<dt><code>wrap-prefix</code></dt>
-<dd><p>If text has a <code>wrap-prefix</code> property, the prefix it defines will
-be added at display time to the beginning of every continuation line
-due to text wrapping (so if lines are truncated, the wrap-prefix is
-never used).  It may be a string or an image (see <a href="Other-Display-Specs.html#Other-Display-Specs">Other Display Specs</a>), or a stretch of whitespace such as specified by the
-<code>:width</code> or <code>:align-to</code> display properties (see <a href="Specified-Space.html#Specified-Space">Specified Space</a>).
-</p>
-<p>A wrap-prefix may also be specified for an entire buffer using the
-<code>wrap-prefix</code> buffer-local variable (however, a
-<code>wrap-prefix</code> text-property takes precedence over the value of
-the <code>wrap-prefix</code> variable).  See <a href="Truncation.html#Truncation">Truncation</a>.
-</p>
-</dd>
-<dt><code>line-prefix</code></dt>
-<dd><p>If text has a <code>line-prefix</code> property, the prefix it defines will
-be added at display time to the beginning of every non-continuation
-line.  It may be a string or an image (see <a href="Other-Display-Specs.html#Other-Display-Specs">Other Display Specs</a>), or a stretch of whitespace such as specified by the
-<code>:width</code> or <code>:align-to</code> display properties (see <a href="Specified-Space.html#Specified-Space">Specified Space</a>).
-</p>
-<p>A line-prefix may also be specified for an entire buffer using the
-<code>line-prefix</code> buffer-local variable (however, a
-<code>line-prefix</code> text-property takes precedence over the value of
-the <code>line-prefix</code> variable).  See <a href="Truncation.html#Truncation">Truncation</a>.
-</p>
-</dd>
-<dt><code>modification-hooks</code></dt>
-<dd><a name="index-change-hooks-for-a-character"></a>
-<a name="index-hooks-for-changing-a-character"></a>
-<a name="index-modification_002dhooks-_0028text-property_0029"></a>
-<p>If a character has the property <code>modification-hooks</code>, then its
-value should be a list of functions; modifying that character calls
-all of those functions before the actual modification.  Each function
-receives two arguments: the beginning and end of the part of the
-buffer being modified.  Note that if a particular modification hook
-function appears on several characters being modified by a single
-primitive, you can&rsquo;t predict how many times the function will
-be called.
-Furthermore, insertion will not modify any existing character, so this
-hook will only be run when removing some characters, replacing them
-with others, or changing their text-properties.
-</p>
-<p>If these functions modify the buffer, they should bind
-<code>inhibit-modification-hooks</code> to <code>t</code> around doing so, to
-avoid confusing the internal mechanism that calls these hooks.
-</p>
-<p>Overlays also support the <code>modification-hooks</code> property, but the
-details are somewhat different (see <a href="Overlay-Properties.html#Overlay-Properties">Overlay Properties</a>).
-</p>
-</dd>
-<dt><code>insert-in-front-hooks</code></dt>
-<dt><code>insert-behind-hooks</code></dt>
-<dd><a name="index-insert_002din_002dfront_002dhooks-_0028text-property_0029"></a>
-<a name="index-insert_002dbehind_002dhooks-_0028text-property_0029"></a>
-<p>The operation of inserting text in a buffer also calls the functions
-listed in the <code>insert-in-front-hooks</code> property of the following
-character and in the <code>insert-behind-hooks</code> property of the
-preceding character.  These functions receive two arguments, the
-beginning and end of the inserted text.  The functions are called
-<em>after</em> the actual insertion takes place.
-</p>
-<p>See also <a href="Change-Hooks.html#Change-Hooks">Change Hooks</a>, for other hooks that are called
-when you change text in a buffer.
-</p>
-</dd>
-<dt><code>point-entered</code></dt>
-<dt><code>point-left</code></dt>
-<dd><a name="index-hooks-for-motion-of-point"></a>
-<a name="index-point_002dentered-_0028text-property_0029"></a>
-<a name="index-point_002dleft-_0028text-property_0029"></a>
-<p>The special properties <code>point-entered</code> and <code>point-left</code>
-record hook functions that report motion of point.  Each time point
-moves, Emacs compares these two property values:
-</p>
-<ul>
-<li> the <code>point-left</code> property of the character after the old location,
-and
-</li><li> the <code>point-entered</code> property of the character after the new
-location.
-</li></ul>
+    <dt><code>face</code></dt>
 
-<p>If these two values differ, each of them is called (if not <code>nil</code>)
-with two arguments: the old value of point, and the new one.
-</p>
-<p>The same comparison is made for the characters before the old and new
-locations.  The result may be to execute two <code>point-left</code> functions
-(which may be the same function) and/or two <code>point-entered</code>
-functions (which may be the same function).  In any case, all the
-<code>point-left</code> functions are called first, followed by all the
-<code>point-entered</code> functions.
-</p>
-<p>It is possible to use <code>char-after</code> to examine characters at various
-buffer positions without moving point to those positions.  Only an
-actual change in the value of point runs these hook functions.
-</p>
-<p>The variable <code>inhibit-point-motion-hooks</code> by default inhibits
-running the <code>point-left</code> and <code>point-entered</code> hooks, see
-<a href="#Inhibit-point-motion-hooks">Inhibit point motion hooks</a>.
-</p>
-<p>These properties are obsolete; please use
-<code>cursor-sensor-functions</code> instead.
-</p>
-</dd>
-<dt><code>cursor-sensor-functions</code></dt>
-<dd><a name="index-cursor_002dsensor_002dfunctions-_0028text-property_0029"></a>
-<a name="index-cursor_002dsensor_002dmode"></a>
-<p>This special property records a list of functions that react to cursor
-motion.  Each function in the list is called, just before redisplay,
-with 3 arguments: the affected window, the previous known position of
-the cursor, and one of the symbols <code>entered</code> or <code>left</code>,
-depending on whether the cursor is entering the text that has this
-property or leaving it.  The functions are called only when the minor
-mode <code>cursor-sensor-mode</code> is turned on.
-</p>
-</dd>
-<dt><code>composition</code></dt>
-<dd><a name="index-composition-_0028text-property_0029"></a>
-<p>This text property is used to display a sequence of characters as a
-single glyph composed from components.  But the value of the property
-itself is completely internal to Emacs and should not be manipulated
-directly by, for instance, <code>put-text-property</code>.
-</p>
-</dd>
-</dl>
+    <dd>
+      <a name="index-face-codes-of-text" id=
+      "index-face-codes-of-text"></a> <a name=
+      "index-face-_0028text-property_0029" id=
+      "index-face-_0028text-property_0029"></a>
 
-<dl>
-<dt><a name="index-inhibit_002dpoint_002dmotion_002dhooks"></a>Variable: <strong>inhibit-point-motion-hooks</strong></dt>
-<dd><a name="Inhibit-point-motion-hooks"></a><p>When this obsolete variable is
-non-<code>nil</code>, <code>point-left</code> and <code>point-entered</code> hooks are
-not run, and the <code>intangible</code> property has no effect.  Do not set
-this variable globally; bind it with <code>let</code>.  Since the affected
-properties are obsolete, this variable&rsquo;s default value is <code>t</code>, to
-effectively disable them.
-</p></dd></dl>
+      <p>The <code>face</code> property controls the appearance of
+      the character (see <a href="Faces.html#Faces">Faces</a>). The
+      value of the property can be the following:</p>
 
-<dl>
-<dt><a name="index-show_002dhelp_002dfunction"></a>Variable: <strong>show-help-function</strong></dt>
-<dd><a name="Help-display"></a><p>If this variable is non-<code>nil</code>, it specifies a
-function called to display help strings.  These may be <code>help-echo</code>
-properties, menu help strings (see <a href="Simple-Menu-Items.html#Simple-Menu-Items">Simple Menu Items</a>,
-see <a href="Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu Items</a>), or tool bar help strings (see <a href="Tool-Bar.html#Tool-Bar">Tool Bar</a>).  The specified function is called with one argument, the help
-string to display, which is passed through
-<code>substitute-command-keys</code> before being given to the function; see
-<a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.  Tooltip mode (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Tooltips.html#Tooltips">Tooltips</a> in <cite>The GNU Emacs Manual</cite>) provides an example.
-</p></dd></dl>
+      <ul>
+        <li>A face name (a symbol or string).</li>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Format-Properties.html#Format-Properties" accesskey="n" rel="next">Format Properties</a>, Previous: <a href="Property-Search.html#Property-Search" accesskey="p" rel="prev">Property Search</a>, Up: <a href="Text-Properties.html#Text-Properties" accesskey="u" rel="up">Text Properties</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+        <li>An anonymous face: a property list of the form
+        <code>(<var>keyword</var> <var>value</var>
+        &hellip;)</code>, where each <var>keyword</var> is a face
+        attribute name and <var>value</var> is a value for that
+        attribute.</li>
 
+        <li>A list of faces. Each list element should be either a
+        face name or an anonymous face. This specifies a face which
+        is an aggregate of the attributes of each of the listed
+        faces. Faces occurring earlier in the list have higher
+        priority.</li>
 
+        <li>A cons cell of the form <code>(foreground-color .
+        <var>color-name</var>)</code> or <code>(background-color .
+        <var>color-name</var>)</code>. This specifies the
+        foreground or background color, similar to
+        <code>(:foreground <var>color-name</var>)</code> or
+        <code>(:background <var>color-name</var>)</code>. This form
+        is supported for backward compatibility only, and should be
+        avoided.</li>
+      </ul>
 
+      <p>Font Lock mode (see <a href=
+      "Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>)
+      works in most buffers by dynamically updating the
+      <code>face</code> property of characters based on the
+      context.</p>
+
+      <p>The <code>add-face-text-property</code> function provides
+      a convenient way to set this text property. See <a href=
+      "Changing-Properties.html#Changing-Properties">Changing
+      Properties</a>.</p>
+    </dd>
+
+    <dt><code>font-lock-face</code></dt>
+
+    <dd>
+      <a name=
+      "index-font_002dlock_002dface-_0028text-property_0029" id=
+      "index-font_002dlock_002dface-_0028text-property_0029"></a>
+
+      <p>This property specifies a value for the <code>face</code>
+      property that Font Lock mode should apply to the underlying
+      text. It is one of the fontification methods used by Font
+      Lock mode, and is useful for special modes that implement
+      their own highlighting. See <a href=
+      "Precalculated-Fontification.html#Precalculated-Fontification">
+      Precalculated Fontification</a>. When Font Lock mode is
+      disabled, <code>font-lock-face</code> has no effect.</p>
+    </dd>
+
+    <dt><code>mouse-face</code></dt>
+
+    <dd>
+      <a name="index-mouse_002dface-_0028text-property_0029" id=
+      "index-mouse_002dface-_0028text-property_0029"></a>
+
+      <p>This property is used instead of <code>face</code> when
+      the mouse is on or near the character. For this purpose,
+      &ldquo;near&rdquo; means that all text between the character
+      and where the mouse is have the same <code>mouse-face</code>
+      property value.</p>
+
+      <p>Emacs ignores all face attributes from the
+      <code>mouse-face</code> property that alter the text size
+      (e.g., <code>:height</code>, <code>:weight</code>, and
+      <code>:slant</code>). Those attributes are always the same as
+      for the unhighlighted text.</p>
+    </dd>
+
+    <dt><code>fontified</code></dt>
+
+    <dd>
+      <a name="index-fontified-_0028text-property_0029" id=
+      "index-fontified-_0028text-property_0029"></a>
+
+      <p>This property says whether the text is ready for display.
+      If <code>nil</code>, Emacs&rsquo;s redisplay routine calls
+      the functions in <code>fontification-functions</code> (see
+      <a href="Auto-Faces.html#Auto-Faces">Auto Faces</a>) to
+      prepare this part of the buffer before it is displayed. It is
+      used internally by the just-in-time font locking code.</p>
+    </dd>
+
+    <dt><code>display</code></dt>
+
+    <dd>
+      <p>This property activates various features that change the
+      way text is displayed. For example, it can make text appear
+      taller or shorter, higher or lower, wider or narrow, or
+      replaced with an image. See <a href=
+      "Display-Property.html#Display-Property">Display
+      Property</a>.</p>
+    </dd>
+
+    <dt><code>help-echo</code></dt>
+
+    <dd>
+      <a name="index-help_002decho-_0028text-property_0029" id=
+      "index-help_002decho-_0028text-property_0029"></a> <a name=
+      "index-tooltip-for-help-strings" id=
+      "index-tooltip-for-help-strings"></a> <a name=
+      "Text-help_002decho" id="Text-help_002decho"></a>
+
+      <p>If text has a string as its <code>help-echo</code>
+      property, then when you move the mouse onto that text, Emacs
+      displays that string in the echo area, or in the tooltip
+      window (see <a href=
+      "Tooltips.html#Tooltips">Tooltips</a>).</p>
+
+      <p>If the value of the <code>help-echo</code> property is a
+      function, that function is called with three arguments,
+      <var>window</var>, <var>object</var> and <var>pos</var> and
+      should return a help string or <code>nil</code> for none. The
+      first argument, <var>window</var> is the window in which the
+      help was found. The second, <var>object</var>, is the buffer,
+      overlay or string which had the <code>help-echo</code>
+      property. The <var>pos</var> argument is as follows:</p>
+
+      <ul>
+        <li>If <var>object</var> is a buffer, <var>pos</var> is the
+        position in the buffer.</li>
+
+        <li>If <var>object</var> is an overlay, that overlay has a
+        <code>help-echo</code> property, and <var>pos</var> is the
+        position in the overlay&rsquo;s buffer.</li>
+
+        <li>If <var>object</var> is a string (an overlay string or
+        a string displayed with the <code>display</code> property),
+        <var>pos</var> is the position in that string.</li>
+      </ul>
+
+      <p>If the value of the <code>help-echo</code> property is
+      neither a function nor a string, it is evaluated to obtain a
+      help string.</p>
+
+      <p>You can alter the way help text is displayed by setting
+      the variable <code>show-help-function</code> (see <a href=
+      "#Help-display">Help display</a>).</p>
+
+      <p>This feature is used in the mode line and for other active
+      text.</p>
+    </dd>
+
+    <dt><code>keymap</code></dt>
+
+    <dd>
+      <a name="index-keymap-of-character" id=
+      "index-keymap-of-character"></a> <a name=
+      "index-keymap-_0028text-property_0029" id=
+      "index-keymap-_0028text-property_0029"></a>
+
+      <p>The <code>keymap</code> property specifies an additional
+      keymap for commands. When this keymap applies, it is used for
+      key lookup before the minor mode keymaps and before the
+      buffer&rsquo;s local map. See <a href=
+      "Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>. If
+      the property value is a symbol, the symbol&rsquo;s function
+      definition is used as the keymap.</p>
+
+      <p>The property&rsquo;s value for the character before point
+      applies if it is non-<code>nil</code> and rear-sticky, and
+      the property&rsquo;s value for the character after point
+      applies if it is non-<code>nil</code> and front-sticky. (For
+      mouse clicks, the position of the click is used instead of
+      the position of point.)</p>
+    </dd>
+
+    <dt><code>local-map</code></dt>
+
+    <dd>
+      <a name="index-local_002dmap-_0028text-property_0029" id=
+      "index-local_002dmap-_0028text-property_0029"></a>
+
+      <p>This property works like <code>keymap</code> except that
+      it specifies a keymap to use <em>instead of</em> the
+      buffer&rsquo;s local map. For most purposes (perhaps all
+      purposes), it is better to use the <code>keymap</code>
+      property.</p>
+    </dd>
+
+    <dt><code>syntax-table</code></dt>
+
+    <dd>
+      <p>The <code>syntax-table</code> property overrides what the
+      syntax table says about this particular character. See
+      <a href="Syntax-Properties.html#Syntax-Properties">Syntax
+      Properties</a>.</p>
+    </dd>
+
+    <dt><code>read-only</code></dt>
+
+    <dd>
+      <a name="index-read_002donly-character" id=
+      "index-read_002donly-character"></a> <a name=
+      "index-read_002donly-_0028text-property_0029" id=
+      "index-read_002donly-_0028text-property_0029"></a>
+
+      <p>If a character has the property <code>read-only</code>,
+      then modifying that character is not allowed. Any command
+      that would do so gets an error, <code>text-read-only</code>.
+      If the property value is a string, that string is used as the
+      error message.</p>
+
+      <p>Insertion next to a read-only character is an error if
+      inserting ordinary text there would inherit the
+      <code>read-only</code> property due to stickiness. Thus, you
+      can control permission to insert next to read-only text by
+      controlling the stickiness. See <a href=
+      "Sticky-Properties.html#Sticky-Properties">Sticky
+      Properties</a>.</p>
+
+      <p>Since changing properties counts as modifying the buffer,
+      it is not possible to remove a <code>read-only</code>
+      property unless you know the special trick: bind
+      <code>inhibit-read-only</code> to a non-<code>nil</code>
+      value and then remove the property. See <a href=
+      "Read-Only-Buffers.html#Read-Only-Buffers">Read Only
+      Buffers</a>.</p>
+    </dd>
+
+    <dt><code>inhibit-read-only</code></dt>
+
+    <dd>
+      <a name=
+      "index-inhibit_002dread_002donly-_0028text-property_0029" id=
+      "index-inhibit_002dread_002donly-_0028text-property_0029"></a>
+
+      <p>Characters that have the property
+      <code>inhibit-read-only</code> can be edited even in
+      read-only buffers. See <a href=
+      "Read-Only-Buffers.html#Read-Only-Buffers">Read Only
+      Buffers</a>.</p>
+    </dd>
+
+    <dt><code>invisible</code></dt>
+
+    <dd>
+      <a name="index-invisible-_0028text-property_0029" id=
+      "index-invisible-_0028text-property_0029"></a>
+
+      <p>A non-<code>nil</code> <code>invisible</code> property can
+      make a character invisible on the screen. See <a href=
+      "Invisible-Text.html#Invisible-Text">Invisible Text</a>, for
+      details.</p>
+    </dd>
+
+    <dt><code>intangible</code></dt>
+
+    <dd>
+      <a name="index-intangible-_0028text-property_0029" id=
+      "index-intangible-_0028text-property_0029"></a>
+
+      <p>If a group of consecutive characters have equal and
+      non-<code>nil</code> <code>intangible</code> properties, then
+      you cannot place point between them. If you try to move point
+      forward into the group, point actually moves to the end of
+      the group. If you try to move point backward into the group,
+      point actually moves to the start of the group.</p>
+
+      <p>If consecutive characters have unequal
+      non-<code>nil</code> <code>intangible</code> properties, they
+      belong to separate groups; each group is separately treated
+      as described above.</p>
+
+      <p>When the variable <code>inhibit-point-motion-hooks</code>
+      is non-<code>nil</code> (as it is by default), the
+      <code>intangible</code> property is ignored.</p>
+
+      <p>Beware: this property operates at a very low level, and
+      affects a lot of code in unexpected ways. So use it with
+      extreme caution. A common misuse is to put an intangible
+      property on invisible text, which is actually unnecessary
+      since the command loop will move point outside of the
+      invisible text at the end of each command anyway. See
+      <a href="Adjusting-Point.html#Adjusting-Point">Adjusting
+      Point</a>. For these reasons, this property is obsolete; use
+      the <code>cursor-intangible</code> property instead.</p>
+    </dd>
+
+    <dt><code>cursor-intangible</code></dt>
+
+    <dd>
+      <a name="index-cursor_002dintangible-_0028text-property_0029"
+      id="index-cursor_002dintangible-_0028text-property_0029"></a>
+      <a name="index-cursor_002dintangible_002dmode" id=
+      "index-cursor_002dintangible_002dmode"></a>
+
+      <p>When the minor mode <code>cursor-intangible-mode</code> is
+      turned on, point is moved away of any position that has a
+      non-<code>nil</code> <code>cursor-intangible</code> property,
+      just before redisplay happens.</p>
+    </dd>
+
+    <dt><code>field</code></dt>
+
+    <dd>
+      <a name="index-field-_0028text-property_0029" id=
+      "index-field-_0028text-property_0029"></a>
+
+      <p>Consecutive characters with the same <code>field</code>
+      property constitute a <em>field</em>. Some motion functions
+      including <code>forward-word</code> and
+      <code>beginning-of-line</code> stop moving at a field
+      boundary. See <a href="Fields.html#Fields">Fields</a>.</p>
+    </dd>
+
+    <dt><code>cursor</code></dt>
+
+    <dd>
+      <a name="index-cursor-_0028text-property_0029" id=
+      "index-cursor-_0028text-property_0029"></a>
+
+      <p>Normally, the cursor is displayed at the beginning or the
+      end of any overlay and text property strings present at the
+      current buffer position. You can place the cursor on any
+      desired character of these strings by giving that character a
+      non-<code>nil</code> <code>cursor</code> text property. In
+      addition, if the value of the <code>cursor</code> property is
+      an integer, it specifies the number of buffer&rsquo;s
+      character positions, starting with the position where the
+      overlay or the <code>display</code> property begins, for
+      which the cursor should be displayed on that character.
+      Specifically, if the value of the <code>cursor</code>
+      property of a character is the number <var>n</var>, the
+      cursor will be displayed on this character for any buffer
+      position in the range
+      <code>[<var>ovpos</var>..<var>ovpos</var>+<var>n</var>)</code>,
+      where <var>ovpos</var> is the overlay&rsquo;s starting
+      position given by <code>overlay-start</code> (see <a href=
+      "Managing-Overlays.html#Managing-Overlays">Managing
+      Overlays</a>), or the position where the <code>display</code>
+      text property begins in the buffer.</p>
+
+      <p>In other words, the string character with the
+      <code>cursor</code> property of any non-<code>nil</code>
+      value is the character where to display the cursor. The value
+      of the property says for which buffer positions to display
+      the cursor there. If the value is an integer <var>n</var>,
+      the cursor is displayed there when point is anywhere between
+      the beginning of the overlay or <code>display</code> property
+      and <var>n</var> positions after that. If the value is
+      anything else and non-<code>nil</code>, the cursor is
+      displayed there only when point is at the beginning of the
+      <code>display</code> property or at
+      <code>overlay-start</code>.</p><a name=
+      "index-cursor-position-for-display-properties-and-overlays"
+      id=
+      "index-cursor-position-for-display-properties-and-overlays"></a>
+
+      <p>When the buffer has many overlay strings (e.g., see
+      <a href=
+      "Overlay-Properties.html#Overlay-Properties">before-string</a>)
+      that conceal some of the buffer text or <code>display</code>
+      properties that are strings, it is a good idea to use the
+      <code>cursor</code> property on these strings to cue the
+      Emacs display about the places where to put the cursor while
+      traversing these strings. This directly communicates to the
+      display engine where the Lisp program wants to put the
+      cursor, or where the user would expect the cursor, when point
+      is located on some buffer position that is
+      &ldquo;covered&rdquo; by the display or overlay string.</p>
+    </dd>
+
+    <dt><code>pointer</code></dt>
+
+    <dd>
+      <a name="index-pointer-_0028text-property_0029" id=
+      "index-pointer-_0028text-property_0029"></a>
+
+      <p>This specifies a specific pointer shape when the mouse
+      pointer is over this text or image. See <a href=
+      "Pointer-Shape.html#Pointer-Shape">Pointer Shape</a>, for
+      possible pointer shapes.</p>
+    </dd>
+
+    <dt><code>line-spacing</code></dt>
+
+    <dd>
+      <a name="index-line_002dspacing-_0028text-property_0029" id=
+      "index-line_002dspacing-_0028text-property_0029"></a>
+
+      <p>A newline can have a <code>line-spacing</code> text or
+      overlay property that controls the height of the display line
+      ending with that newline. The property value overrides the
+      default frame line spacing and the buffer local
+      <code>line-spacing</code> variable. See <a href=
+      "Line-Height.html#Line-Height">Line Height</a>.</p>
+    </dd>
+
+    <dt><code>line-height</code></dt>
+
+    <dd>
+      <a name="index-line_002dheight-_0028text-property_0029" id=
+      "index-line_002dheight-_0028text-property_0029"></a>
+
+      <p>A newline can have a <code>line-height</code> text or
+      overlay property that controls the total height of the
+      display line ending in that newline. See <a href=
+      "Line-Height.html#Line-Height">Line Height</a>.</p>
+    </dd>
+
+    <dt><code>wrap-prefix</code></dt>
+
+    <dd>
+      <p>If text has a <code>wrap-prefix</code> property, the
+      prefix it defines will be added at display time to the
+      beginning of every continuation line due to text wrapping (so
+      if lines are truncated, the wrap-prefix is never used). It
+      may be a string or an image (see <a href=
+      "Other-Display-Specs.html#Other-Display-Specs">Other Display
+      Specs</a>), or a stretch of whitespace such as specified by
+      the <code>:width</code> or <code>:align-to</code> display
+      properties (see <a href=
+      "Specified-Space.html#Specified-Space">Specified
+      Space</a>).</p>
+
+      <p>A wrap-prefix may also be specified for an entire buffer
+      using the <code>wrap-prefix</code> buffer-local variable
+      (however, a <code>wrap-prefix</code> text-property takes
+      precedence over the value of the <code>wrap-prefix</code>
+      variable). See <a href=
+      "Truncation.html#Truncation">Truncation</a>.</p>
+    </dd>
+
+    <dt><code>line-prefix</code></dt>
+
+    <dd>
+      <p>If text has a <code>line-prefix</code> property, the
+      prefix it defines will be added at display time to the
+      beginning of every non-continuation line. It may be a string
+      or an image (see <a href=
+      "Other-Display-Specs.html#Other-Display-Specs">Other Display
+      Specs</a>), or a stretch of whitespace such as specified by
+      the <code>:width</code> or <code>:align-to</code> display
+      properties (see <a href=
+      "Specified-Space.html#Specified-Space">Specified
+      Space</a>).</p>
+
+      <p>A line-prefix may also be specified for an entire buffer
+      using the <code>line-prefix</code> buffer-local variable
+      (however, a <code>line-prefix</code> text-property takes
+      precedence over the value of the <code>line-prefix</code>
+      variable). See <a href=
+      "Truncation.html#Truncation">Truncation</a>.</p>
+    </dd>
+
+    <dt><code>modification-hooks</code></dt>
+
+    <dd>
+      <a name="index-change-hooks-for-a-character" id=
+      "index-change-hooks-for-a-character"></a> <a name=
+      "index-hooks-for-changing-a-character" id=
+      "index-hooks-for-changing-a-character"></a> <a name=
+      "index-modification_002dhooks-_0028text-property_0029" id=
+      "index-modification_002dhooks-_0028text-property_0029"></a>
+
+      <p>If a character has the property
+      <code>modification-hooks</code>, then its value should be a
+      list of functions; modifying that character calls all of
+      those functions before the actual modification. Each function
+      receives two arguments: the beginning and end of the part of
+      the buffer being modified. Note that if a particular
+      modification hook function appears on several characters
+      being modified by a single primitive, you can&rsquo;t predict
+      how many times the function will be called. Furthermore,
+      insertion will not modify any existing character, so this
+      hook will only be run when removing some characters,
+      replacing them with others, or changing their
+      text-properties.</p>
+
+      <p>If these functions modify the buffer, they should bind
+      <code>inhibit-modification-hooks</code> to <code>t</code>
+      around doing so, to avoid confusing the internal mechanism
+      that calls these hooks.</p>
+
+      <p>Overlays also support the <code>modification-hooks</code>
+      property, but the details are somewhat different (see
+      <a href="Overlay-Properties.html#Overlay-Properties">Overlay
+      Properties</a>).</p>
+    </dd>
+
+    <dt><code>insert-in-front-hooks</code></dt>
+
+    <dt><code>insert-behind-hooks</code></dt>
+
+    <dd>
+      <a name=
+      "index-insert_002din_002dfront_002dhooks-_0028text-property_0029"
+      id=
+      "index-insert_002din_002dfront_002dhooks-_0028text-property_0029">
+      </a> <a name=
+      "index-insert_002dbehind_002dhooks-_0028text-property_0029"
+      id=
+      "index-insert_002dbehind_002dhooks-_0028text-property_0029"></a>
+
+      <p>The operation of inserting text in a buffer also calls the
+      functions listed in the <code>insert-in-front-hooks</code>
+      property of the following character and in the
+      <code>insert-behind-hooks</code> property of the preceding
+      character. These functions receive two arguments, the
+      beginning and end of the inserted text. The functions are
+      called <em>after</em> the actual insertion takes place.</p>
+
+      <p>See also <a href="Change-Hooks.html#Change-Hooks">Change
+      Hooks</a>, for other hooks that are called when you change
+      text in a buffer.</p>
+    </dd>
+
+    <dt><code>point-entered</code></dt>
+
+    <dt><code>point-left</code></dt>
+
+    <dd>
+      <a name="index-hooks-for-motion-of-point" id=
+      "index-hooks-for-motion-of-point"></a> <a name=
+      "index-point_002dentered-_0028text-property_0029" id=
+      "index-point_002dentered-_0028text-property_0029"></a>
+      <a name="index-point_002dleft-_0028text-property_0029" id=
+      "index-point_002dleft-_0028text-property_0029"></a>
+
+      <p>The special properties <code>point-entered</code> and
+      <code>point-left</code> record hook functions that report
+      motion of point. Each time point moves, Emacs compares these
+      two property values:</p>
+
+      <ul>
+        <li>the <code>point-left</code> property of the character
+        after the old location, and</li>
+
+        <li>the <code>point-entered</code> property of the
+        character after the new location.</li>
+      </ul>
+
+      <p>If these two values differ, each of them is called (if not
+      <code>nil</code>) with two arguments: the old value of point,
+      and the new one.</p>
+
+      <p>The same comparison is made for the characters before the
+      old and new locations. The result may be to execute two
+      <code>point-left</code> functions (which may be the same
+      function) and/or two <code>point-entered</code> functions
+      (which may be the same function). In any case, all the
+      <code>point-left</code> functions are called first, followed
+      by all the <code>point-entered</code> functions.</p>
+
+      <p>It is possible to use <code>char-after</code> to examine
+      characters at various buffer positions without moving point
+      to those positions. Only an actual change in the value of
+      point runs these hook functions.</p>
+
+      <p>The variable <code>inhibit-point-motion-hooks</code> by
+      default inhibits running the <code>point-left</code> and
+      <code>point-entered</code> hooks, see <a href=
+      "#Inhibit-point-motion-hooks">Inhibit point motion
+      hooks</a>.</p>
+
+      <p>These properties are obsolete; please use
+      <code>cursor-sensor-functions</code> instead.</p>
+    </dd>
+
+    <dt><code>cursor-sensor-functions</code></dt>
+
+    <dd>
+      <a name=
+      "index-cursor_002dsensor_002dfunctions-_0028text-property_0029"
+      id=
+      "index-cursor_002dsensor_002dfunctions-_0028text-property_0029">
+      </a> <a name="index-cursor_002dsensor_002dmode" id=
+      "index-cursor_002dsensor_002dmode"></a>
+
+      <p>This special property records a list of functions that
+      react to cursor motion. Each function in the list is called,
+      just before redisplay, with 3 arguments: the affected window,
+      the previous known position of the cursor, and one of the
+      symbols <code>entered</code> or <code>left</code>, depending
+      on whether the cursor is entering the text that has this
+      property or leaving it. The functions are called only when
+      the minor mode <code>cursor-sensor-mode</code> is turned
+      on.</p>
+    </dd>
+
+    <dt><code>composition</code></dt>
+
+    <dd>
+      <a name="index-composition-_0028text-property_0029" id=
+      "index-composition-_0028text-property_0029"></a>
+
+      <p>This text property is used to display a sequence of
+      characters as a single glyph composed from components. But
+      the value of the property itself is completely internal to
+      Emacs and should not be manipulated directly by, for
+      instance, <code>put-text-property</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-inhibit_002dpoint_002dmotion_002dhooks" id=
+    "index-inhibit_002dpoint_002dmotion_002dhooks"></a>Variable:
+    <strong>inhibit-point-motion-hooks</strong></dt>
+
+    <dd>
+      <a name="Inhibit-point-motion-hooks" id=
+      "Inhibit-point-motion-hooks"></a>
+
+      <p>When this obsolete variable is non-<code>nil</code>,
+      <code>point-left</code> and <code>point-entered</code> hooks
+      are not run, and the <code>intangible</code> property has no
+      effect. Do not set this variable globally; bind it with
+      <code>let</code>. Since the affected properties are obsolete,
+      this variable&rsquo;s default value is <code>t</code>, to
+      effectively disable them.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-show_002dhelp_002dfunction" id=
+    "index-show_002dhelp_002dfunction"></a>Variable:
+    <strong>show-help-function</strong></dt>
+
+    <dd>
+      <a name="Help-display" id="Help-display"></a>
+
+      <p>If this variable is non-<code>nil</code>, it specifies a
+      function called to display help strings. These may be
+      <code>help-echo</code> properties, menu help strings (see
+      <a href="Simple-Menu-Items.html#Simple-Menu-Items">Simple
+      Menu Items</a>, see <a href=
+      "Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu
+      Items</a>), or tool bar help strings (see <a href=
+      "Tool-Bar.html#Tool-Bar">Tool Bar</a>). The specified
+      function is called with one argument, the help string to
+      display, which is passed through
+      <code>substitute-command-keys</code> before being given to
+      the function; see <a href=
+      "Keys-in-Documentation.html#Keys-in-Documentation">Keys in
+      Documentation</a>. Tooltip mode (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Tooltips.html#Tooltips">
+      Tooltips</a> in <cite>The GNU Emacs Manual</cite>) provides
+      an example.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Format-Properties.html#Format-Properties"
+    accesskey="n" rel="next">Format Properties</a>, Previous:
+    <a href="Property-Search.html#Property-Search" accesskey="p"
+    rel="prev">Property Search</a>, Up: <a href=
+    "Text-Properties.html#Text-Properties" accesskey="u" rel=
+    "up">Text Properties</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

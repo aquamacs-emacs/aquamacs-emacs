@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,159 +19,218 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Error Symbols</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Error Symbols">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Error Symbols">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Errors.html#Errors" rel="up" title="Errors">
-<link href="Cleanups.html#Cleanups" rel="next" title="Cleanups">
-<link href="Handling-Errors.html#Handling-Errors" rel="prev" title="Handling Errors">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Error Symbols</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Error Symbols" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Error Symbols" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Errors.html#Errors" rel="up" title="Errors" />
+  <link href="Cleanups.html#Cleanups" rel="next" title=
+  "Cleanups" />
+  <link href="Handling-Errors.html#Handling-Errors" rel="prev"
+  title="Handling Errors" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Error-Symbols" id="Error-Symbols"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Handling-Errors.html#Handling-Errors"
+    accesskey="p" rel="prev">Handling Errors</a>, Up: <a href=
+    "Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Error-Symbols-and-Condition-Names" id=
+  "Error-Symbols-and-Condition-Names"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Error-Symbols"></a>
-<div class="header">
-<p>
-Previous: <a href="Handling-Errors.html#Handling-Errors" accesskey="p" rel="prev">Handling Errors</a>, Up: <a href="Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Error-Symbols-and-Condition-Names"></a>
-<h4 class="subsubsection">10.6.3.4 Error Symbols and Condition Names</h4>
-<a name="index-error-symbol"></a>
-<a name="index-error-name"></a>
-<a name="index-condition-name"></a>
-<a name="index-user_002ddefined-error"></a>
-<a name="index-error_002dconditions"></a>
-<a name="index-define_002derror-1"></a>
+  <h4 class="subsubsection">10.6.3.4 Error Symbols and Condition
+  Names</h4><a name="index-error-symbol" id=
+  "index-error-symbol"></a> <a name="index-error-name" id=
+  "index-error-name"></a> <a name="index-condition-name" id=
+  "index-condition-name"></a> <a name=
+  "index-user_002ddefined-error" id=
+  "index-user_002ddefined-error"></a> <a name=
+  "index-error_002dconditions" id="index-error_002dconditions"></a>
+  <a name="index-define_002derror-1" id=
+  "index-define_002derror-1"></a>
 
-<p>When you signal an error, you specify an <em>error symbol</em> to specify
-the kind of error you have in mind.  Each error has one and only one
-error symbol to categorize it.  This is the finest classification of
-errors defined by the Emacs Lisp language.
-</p>
-<p>These narrow classifications are grouped into a hierarchy of wider
-classes called <em>error conditions</em>, identified by <em>condition
-names</em>.  The narrowest such classes belong to the error symbols
-themselves: each error symbol is also a condition name.  There are also
-condition names for more extensive classes, up to the condition name
-<code>error</code> which takes in all kinds of errors (but not <code>quit</code>).
-Thus, each error has one or more condition names: <code>error</code>, the
-error symbol if that is distinct from <code>error</code>, and perhaps some
-intermediate classifications.
-</p>
-<dl>
-<dt><a name="index-define_002derror"></a>Function: <strong>define-error</strong> <em>name message &amp;optional parent</em></dt>
-<dd><p>In order for a symbol to be an error symbol, it must be defined with
-<code>define-error</code> which takes a parent condition (defaults to <code>error</code>).
-This parent defines the conditions that this kind of error belongs to.
-The transitive set of parents always includes the error symbol itself, and the
-symbol <code>error</code>.  Because quitting is not considered an error, the set of
-parents of <code>quit</code> is just <code>(quit)</code>.
-</p></dd></dl>
+  <p>When you signal an error, you specify an <em>error symbol</em>
+  to specify the kind of error you have in mind. Each error has one
+  and only one error symbol to categorize it. This is the finest
+  classification of errors defined by the Emacs Lisp language.</p>
 
-<a name="index-peculiar-error"></a>
-<p>In addition to its parents, the error symbol has a <var>message</var> which
-is a string to be printed when that error is signaled but not handled.  If that
-message is not valid, the error message &lsquo;<samp>peculiar error</samp>&rsquo; is used.
-See <a href="Signaling-Errors.html#Definition-of-signal">Definition of signal</a>.
-</p>
-<p>Internally, the set of parents is stored in the <code>error-conditions</code>
-property of the error symbol and the message is stored in the
-<code>error-message</code> property of the error symbol.
-</p>
-<p>Here is how we define a new error symbol, <code>new-error</code>:
-</p>
-<div class="example">
-<pre class="example">(define-error 'new-error &quot;A new error&quot; 'my-own-errors)
-</pre></div>
+  <p>These narrow classifications are grouped into a hierarchy of
+  wider classes called <em>error conditions</em>, identified by
+  <em>condition names</em>. The narrowest such classes belong to
+  the error symbols themselves: each error symbol is also a
+  condition name. There are also condition names for more extensive
+  classes, up to the condition name <code>error</code> which takes
+  in all kinds of errors (but not <code>quit</code>). Thus, each
+  error has one or more condition names: <code>error</code>, the
+  error symbol if that is distinct from <code>error</code>, and
+  perhaps some intermediate classifications.</p>
 
-<p>This error has several condition names: <code>new-error</code>, the narrowest
-classification; <code>my-own-errors</code>, which we imagine is a wider
-classification; and all the conditions of <code>my-own-errors</code> which should
-include <code>error</code>, which is the widest of all.
-</p>
-<p>The error string should start with a capital letter but it should
-not end with a period.  This is for consistency with the rest of Emacs.
-</p>
-<p>Naturally, Emacs will never signal <code>new-error</code> on its own; only
-an explicit call to <code>signal</code> (see <a href="Signaling-Errors.html#Definition-of-signal">Definition of signal</a>) in
-your code can do this:
-</p>
-<div class="example">
-<pre class="example">(signal 'new-error '(x y))
+  <dl>
+    <dt><a name="index-define_002derror" id=
+    "index-define_002derror"></a>Function:
+    <strong>define-error</strong> <em>name message &amp;optional
+    parent</em></dt>
+
+    <dd>
+      <p>In order for a symbol to be an error symbol, it must be
+      defined with <code>define-error</code> which takes a parent
+      condition (defaults to <code>error</code>). This parent
+      defines the conditions that this kind of error belongs to.
+      The transitive set of parents always includes the error
+      symbol itself, and the symbol <code>error</code>. Because
+      quitting is not considered an error, the set of parents of
+      <code>quit</code> is just <code>(quit)</code>.</p>
+    </dd>
+  </dl><a name="index-peculiar-error" id=
+  "index-peculiar-error"></a>
+
+  <p>In addition to its parents, the error symbol has a
+  <var>message</var> which is a string to be printed when that
+  error is signaled but not handled. If that message is not valid,
+  the error message &lsquo;<samp>peculiar error</samp>&rsquo; is
+  used. See <a href=
+  "Signaling-Errors.html#Definition-of-signal">Definition of
+  signal</a>.</p>
+
+  <p>Internally, the set of parents is stored in the
+  <code>error-conditions</code> property of the error symbol and
+  the message is stored in the <code>error-message</code> property
+  of the error symbol.</p>
+
+  <p>Here is how we define a new error symbol,
+  <code>new-error</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(define-error 'new-error "A new error" 'my-own-errors)
+</pre>
+  </div>
+
+  <p>This error has several condition names:
+  <code>new-error</code>, the narrowest classification;
+  <code>my-own-errors</code>, which we imagine is a wider
+  classification; and all the conditions of
+  <code>my-own-errors</code> which should include
+  <code>error</code>, which is the widest of all.</p>
+
+  <p>The error string should start with a capital letter but it
+  should not end with a period. This is for consistency with the
+  rest of Emacs.</p>
+
+  <p>Naturally, Emacs will never signal <code>new-error</code> on
+  its own; only an explicit call to <code>signal</code> (see
+  <a href="Signaling-Errors.html#Definition-of-signal">Definition
+  of signal</a>) in your code can do this:</p>
+
+  <div class="example">
+    <pre class="example">
+(signal 'new-error '(x y))
      error&rarr; A new error: x, y
-</pre></div>
+</pre>
+  </div>
 
-<p>This error can be handled through any of its condition names.
-This example handles <code>new-error</code> and any other errors in the class
-<code>my-own-errors</code>:
-</p>
-<div class="example">
-<pre class="example">(condition-case foo
+  <p>This error can be handled through any of its condition names.
+  This example handles <code>new-error</code> and any other errors
+  in the class <code>my-own-errors</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(condition-case foo
     (bar nil t)
   (my-own-errors nil))
-</pre></div>
+</pre>
+  </div>
 
-<p>The significant way that errors are classified is by their condition
-names&mdash;the names used to match errors with handlers.  An error symbol
-serves only as a convenient way to specify the intended error message
-and list of condition names.  It would be cumbersome to give
-<code>signal</code> a list of condition names rather than one error symbol.
-</p>
-<p>By contrast, using only error symbols without condition names would
-seriously decrease the power of <code>condition-case</code>.  Condition names
-make it possible to categorize errors at various levels of generality
-when you write an error handler.  Using error symbols alone would
-eliminate all but the narrowest level of classification.
-</p>
-<p>See <a href="Standard-Errors.html#Standard-Errors">Standard Errors</a>, for a list of the main error symbols
-and their conditions.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Handling-Errors.html#Handling-Errors" accesskey="p" rel="prev">Handling Errors</a>, Up: <a href="Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The significant way that errors are classified is by their
+  condition names&mdash;the names used to match errors with
+  handlers. An error symbol serves only as a convenient way to
+  specify the intended error message and list of condition names.
+  It would be cumbersome to give <code>signal</code> a list of
+  condition names rather than one error symbol.</p>
 
+  <p>By contrast, using only error symbols without condition names
+  would seriously decrease the power of
+  <code>condition-case</code>. Condition names make it possible to
+  categorize errors at various levels of generality when you write
+  an error handler. Using error symbols alone would eliminate all
+  but the narrowest level of classification.</p>
 
+  <p>See <a href="Standard-Errors.html#Standard-Errors">Standard
+  Errors</a>, for a list of the main error symbols and their
+  conditions.</p>
+  <hr />
 
+  <div class="header">
+    <p>Previous: <a href="Handling-Errors.html#Handling-Errors"
+    accesskey="p" rel="prev">Handling Errors</a>, Up: <a href=
+    "Errors.html#Errors" accesskey="u" rel="up">Errors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

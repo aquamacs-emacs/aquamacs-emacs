@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Making a temporary copy - GNU Flymake 0.3</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Flymake 0.3">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Flymake-Implementation.html#Flymake-Implementation" title="Flymake Implementation">
-<link rel="prev" href="Determining-whether-syntax-check-is-possible.html#Determining-whether-syntax-check-is-possible" title="Determining whether syntax check is possible">
-<link rel="next" href="Locating-a-master-file.html#Locating-a-master-file" title="Locating a master file">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Making a temporary copy - GNU Flymake 0.3</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Flymake 0.3" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Flymake-Implementation.html#Flymake-Implementation" title=
+  "Flymake Implementation" />
+  <link rel="prev" href=
+  "Determining-whether-syntax-check-is-possible.html#Determining-whether-syntax-check-is-possible"
+  title="Determining whether syntax check is possible" />
+  <link rel="next" href=
+  "Locating-a-master-file.html#Locating-a-master-file" title=
+  "Locating a master file" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for GNU Flymake (version 0.3, April 2004),
 which is a universal on-the-fly syntax checker for GNU Emacs.
 
@@ -28,8 +40,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -39,46 +53,62 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Making-a-temporary-copy"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Locating-a-master-file.html#Locating-a-master-file">Locating a master file</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Determining-whether-syntax-check-is-possible.html#Determining-whether-syntax-check-is-possible">Determining whether syntax check is possible</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Flymake-Implementation.html#Flymake-Implementation">Flymake Implementation</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Making-a-temporary-copy" id=
+    "Making-a-temporary-copy"></a>
 
-<h3 class="section">5.2 Making a temporary copy</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Locating-a-master-file.html#Locating-a-master-file">Locating a
+    master file</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href=
+    "Determining-whether-syntax-check-is-possible.html#Determining-whether-syntax-check-is-possible">Determining
+    whether syntax check is possible</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Flymake-Implementation.html#Flymake-Implementation">Flymake
+    Implementation</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Temporary-copy-of-the-buffer-19"></a><a name="index-Master-file-20"></a>
-After the possibility of the syntax check has been determined, a
-temporary copy of the current buffer is made so that the most recent
-unsaved changes could be seen by the syntax check tool. Making a copy
-is quite straightforward in a standalone case (mode <code>1</code>), as it's
-just saving buffer contents to a temporary file.
+  <h3 class="section">5.2 Making a temporary copy</h3>
 
-   <p>Things get trickier, however, when master file is involved, as it
-requires to
+  <p><a name="index-Temporary-copy-of-the-buffer-19" id=
+  "index-Temporary-copy-of-the-buffer-19"></a><a name=
+  "index-Master-file-20" id="index-Master-file-20"></a> After the
+  possibility of the syntax check has been determined, a temporary
+  copy of the current buffer is made so that the most recent
+  unsaved changes could be seen by the syntax check tool. Making a
+  copy is quite straightforward in a standalone case (mode
+  <code>1</code>), as it's just saving buffer contents to a
+  temporary file.</p>
 
-     <ul>
-<li>locate a master file
-<li>patch it to include the current file using its new (temporary)
-name. 
-</ul>
+  <p>Things get trickier, however, when master file is involved, as
+  it requires to</p>
 
-   <p>Locating a master file is discussed in the following section.
+  <ul>
+    <li>locate a master file</li>
 
-   <p>Patching just changes all appropriate lines of the master file so that they
-use the new (temporary) name of the current file. For example, suppose current
-file name is <code>file.h</code>, the master file is <code>file.cpp</code>, and
-it includes current file via <code>#include "file.h"</code>. Current file's copy
-is saved to file <code>file_flymake.h</code>, so the include line must be
-changed to <code>#include "file_flymake.h"</code>. Finally, patched master file
-is saved to <code>file_flymake_master.cpp</code>, and the last one is passed to
-the syntax check tool.
+    <li>patch it to include the current file using its new
+    (temporary) name.</li>
+  </ul>
 
-   </body></html>
+  <p>Locating a master file is discussed in the following
+  section.</p>
 
+  <p>Patching just changes all appropriate lines of the master file
+  so that they use the new (temporary) name of the current file.
+  For example, suppose current file name is <code>file.h</code>,
+  the master file is <code>file.cpp</code>, and it includes current
+  file via <code>#include "file.h"</code>. Current file's copy is
+  saved to file <code>file_flymake.h</code>, so the include line
+  must be changed to <code>#include "file_flymake.h"</code>.
+  Finally, patched master file is saved to
+  <code>file_flymake_master.cpp</code>, and the last one is passed
+  to the syntax check tool.</p>
+</body>
+</html>

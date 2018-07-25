@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,139 +29,203 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: Turning on syntax highlighting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: Turning on syntax highlighting">
-<meta name="keywords" content="GNU Emacs FAQ: Turning on syntax highlighting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Common-requests.html#Common-requests" rel="up" title="Common requests">
-<link href="Scrolling-only-one-line.html#Scrolling-only-one-line" rel="next" title="Scrolling only one line">
-<link href="Deleting-menus-and-menu-options.html#Deleting-menus-and-menu-options" rel="prev" title="Deleting menus and menu options">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: Turning on syntax highlighting</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: Turning on syntax highlighting" />
+  <meta name="keywords" content=
+  "GNU Emacs FAQ: Turning on syntax highlighting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Common-requests.html#Common-requests" rel="up" title=
+  "Common requests" />
+  <link href="Scrolling-only-one-line.html#Scrolling-only-one-line"
+  rel="next" title="Scrolling only one line" />
+  <link href=
+  "Deleting-menus-and-menu-options.html#Deleting-menus-and-menu-options"
+  rel="prev" title="Deleting menus and menu options" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Turning-on-syntax-highlighting"></a>
-<div class="header">
-<p>
-Next: <a href="Scrolling-only-one-line.html#Scrolling-only-one-line" accesskey="n" rel="next">Scrolling only one line</a>, Previous: <a href="Deleting-menus-and-menu-options.html#Deleting-menus-and-menu-options" accesskey="p" rel="prev">Deleting menus and menu options</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-do-I-turn-on-syntax-highlighting_003f"></a>
-<h3 class="section">5.44 How do I turn on syntax highlighting?</h3>
-<a name="index-Syntax-highlighting"></a>
-<a name="index-font_002dlock_002dmode"></a>
-<a name="index-Highlighting-based-on-syntax"></a>
-<a name="index-Colorizing-text"></a>
-<a name="index-FAQ_002c-font_002dlock_002dmode"></a>
+<body lang="en" xml:lang="en">
+  <a name="Turning-on-syntax-highlighting" id=
+  "Turning-on-syntax-highlighting"></a>
 
-<p><code>font-lock-mode</code> is the standard way to have Emacs perform syntax
-highlighting in the current buffer.  It is enabled by default in Emacs
-22.1 and later.
-</p>
-<p>With <code>font-lock-mode</code> turned on, different types of text will
-appear in different colors.  For instance, in a programming mode,
-variables will appear in one face, keywords in a second, and comments in
-a third.
-</p>
-<p>To turn <code>font-lock-mode</code> off within an existing buffer, use
-<kbd>M-x font-lock-mode <span class="key">RET</span></kbd>.
-</p>
-<p>In Emacs 21 and earlier versions, you could use the following code in
-your <samp>.emacs</samp> file to turn on <code>font-lock-mode</code> globally:
-</p>
-<div class="lisp">
-<pre class="lisp">(global-font-lock-mode 1)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Scrolling-only-one-line.html#Scrolling-only-one-line"
+    accesskey="n" rel="next">Scrolling only one line</a>, Previous:
+    <a href=
+    "Deleting-menus-and-menu-options.html#Deleting-menus-and-menu-options"
+    accesskey="p" rel="prev">Deleting menus and menu options</a>,
+    Up: <a href="Common-requests.html#Common-requests" accesskey=
+    "u" rel="up">Common requests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="How-do-I-turn-on-syntax-highlighting_003f" id=
+  "How-do-I-turn-on-syntax-highlighting_003f"></a>
 
-<p>Highlighting a buffer with <code>font-lock-mode</code> can take quite a while,
-and cause an annoying delay in display, so several features exist to
-work around this.
-</p>
-<a name="index-Just_002dIn_002dTime-syntax-highlighting"></a>
-<p>In Emacs 21 and later, turning on <code>font-lock-mode</code> automatically
-activates the new <em>Just-In-Time fontification</em> provided by
-<code>jit-lock-mode</code>.  <code>jit-lock-mode</code> defers the fontification of
-portions of buffer until you actually need to see them, and can also
-fontify while Emacs is idle.  This makes display of the visible portion
-of a buffer almost instantaneous.  For details about customizing
-<code>jit-lock-mode</code>, type <kbd>C-h f jit-lock-mode <span class="key">RET</span></kbd>.
-</p>
-<a name="index-Levels-of-syntax-highlighting"></a>
-<a name="index-Decoration-level_002c-in-font_002dlock_002dmode"></a>
-<p>In versions of Emacs before 21, different levels of decoration are
-available, from slight to gaudy.  More decoration means you need to wait
-more time for a buffer to be fontified (or a faster machine).  To
-control how decorated your buffers should become, set the value of
-<code>font-lock-maximum-decoration</code> in your <samp>.emacs</samp> file, with a
-<code>nil</code> value indicating default (usually minimum) decoration, and a
-<code>t</code> value indicating the maximum decoration.  For the gaudiest
-possible look, then, include the line
-</p>
-<div class="lisp">
-<pre class="lisp">(setq font-lock-maximum-decoration t)
-</pre></div>
+  <h3 class="section">5.44 How do I turn on syntax
+  highlighting?</h3><a name="index-Syntax-highlighting" id=
+  "index-Syntax-highlighting"></a> <a name=
+  "index-font_002dlock_002dmode" id=
+  "index-font_002dlock_002dmode"></a> <a name=
+  "index-Highlighting-based-on-syntax" id=
+  "index-Highlighting-based-on-syntax"></a> <a name=
+  "index-Colorizing-text" id="index-Colorizing-text"></a> <a name=
+  "index-FAQ_002c-font_002dlock_002dmode" id=
+  "index-FAQ_002c-font_002dlock_002dmode"></a>
 
-<p>in your <samp>.emacs</samp> file.  You can also set this variable such that
-different modes are highlighted in a different ways; for more
-information, see the documentation for
-<code>font-lock-maximum-decoration</code> with <kbd>C-h v</kbd> (or <kbd>M-x
-describe-variable <span class="key">RET</span></kbd>).
-</p>
-<p>Also see the documentation for the function <code>font-lock-mode</code>,
-available by typing <kbd>C-h f font-lock-mode</kbd> (<kbd>M-x
-describe-function <span class="key">RET</span> font-lock-mode <span class="key">RET</span></kbd>).
-</p>
-<p>To print buffers with the faces (i.e., colors and fonts) intact, use
-<kbd>M-x ps-print-buffer-with-faces</kbd> or <kbd>M-x
-ps-print-region-with-faces</kbd>.  You will need a way to send text to a
-PostScript printer, or a PostScript interpreter such as Ghostscript;
-consult the documentation of the variables <code>ps-printer-name</code>,
-<code>ps-lpr-command</code>, and <code>ps-lpr-switches</code> for more details.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Scrolling-only-one-line.html#Scrolling-only-one-line" accesskey="n" rel="next">Scrolling only one line</a>, Previous: <a href="Deleting-menus-and-menu-options.html#Deleting-menus-and-menu-options" accesskey="p" rel="prev">Deleting menus and menu options</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p><code>font-lock-mode</code> is the standard way to have Emacs
+  perform syntax highlighting in the current buffer. It is enabled
+  by default in Emacs 22.1 and later.</p>
 
+  <p>With <code>font-lock-mode</code> turned on, different types of
+  text will appear in different colors. For instance, in a
+  programming mode, variables will appear in one face, keywords in
+  a second, and comments in a third.</p>
 
+  <p>To turn <code>font-lock-mode</code> off within an existing
+  buffer, use <kbd>M-x font-lock-mode <span class=
+  "key">RET</span></kbd>.</p>
 
+  <p>In Emacs 21 and earlier versions, you could use the following
+  code in your <samp>.emacs</samp> file to turn on
+  <code>font-lock-mode</code> globally:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(global-font-lock-mode 1)
+</pre>
+  </div>
+
+  <p>Highlighting a buffer with <code>font-lock-mode</code> can
+  take quite a while, and cause an annoying delay in display, so
+  several features exist to work around this.</p><a name=
+  "index-Just_002dIn_002dTime-syntax-highlighting" id=
+  "index-Just_002dIn_002dTime-syntax-highlighting"></a>
+
+  <p>In Emacs 21 and later, turning on <code>font-lock-mode</code>
+  automatically activates the new <em>Just-In-Time
+  fontification</em> provided by <code>jit-lock-mode</code>.
+  <code>jit-lock-mode</code> defers the fontification of portions
+  of buffer until you actually need to see them, and can also
+  fontify while Emacs is idle. This makes display of the visible
+  portion of a buffer almost instantaneous. For details about
+  customizing <code>jit-lock-mode</code>, type <kbd>C-h f
+  jit-lock-mode <span class="key">RET</span></kbd>.</p><a name=
+  "index-Levels-of-syntax-highlighting" id=
+  "index-Levels-of-syntax-highlighting"></a> <a name=
+  "index-Decoration-level_002c-in-font_002dlock_002dmode" id=
+  "index-Decoration-level_002c-in-font_002dlock_002dmode"></a>
+
+  <p>In versions of Emacs before 21, different levels of decoration
+  are available, from slight to gaudy. More decoration means you
+  need to wait more time for a buffer to be fontified (or a faster
+  machine). To control how decorated your buffers should become,
+  set the value of <code>font-lock-maximum-decoration</code> in
+  your <samp>.emacs</samp> file, with a <code>nil</code> value
+  indicating default (usually minimum) decoration, and a
+  <code>t</code> value indicating the maximum decoration. For the
+  gaudiest possible look, then, include the line</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(setq font-lock-maximum-decoration t)
+</pre>
+  </div>
+
+  <p>in your <samp>.emacs</samp> file. You can also set this
+  variable such that different modes are highlighted in a different
+  ways; for more information, see the documentation for
+  <code>font-lock-maximum-decoration</code> with <kbd>C-h v</kbd>
+  (or <kbd>M-x describe-variable <span class=
+  "key">RET</span></kbd>).</p>
+
+  <p>Also see the documentation for the function
+  <code>font-lock-mode</code>, available by typing <kbd>C-h f
+  font-lock-mode</kbd> (<kbd>M-x describe-function <span class=
+  "key">RET</span> font-lock-mode <span class=
+  "key">RET</span></kbd>).</p>
+
+  <p>To print buffers with the faces (i.e., colors and fonts)
+  intact, use <kbd>M-x ps-print-buffer-with-faces</kbd> or <kbd>M-x
+  ps-print-region-with-faces</kbd>. You will need a way to send
+  text to a PostScript printer, or a PostScript interpreter such as
+  Ghostscript; consult the documentation of the variables
+  <code>ps-printer-name</code>, <code>ps-lpr-command</code>, and
+  <code>ps-lpr-switches</code> for more details.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Scrolling-only-one-line.html#Scrolling-only-one-line"
+    accesskey="n" rel="next">Scrolling only one line</a>, Previous:
+    <a href=
+    "Deleting-menus-and-menu-options.html#Deleting-menus-and-menu-options"
+    accesskey="p" rel="prev">Deleting menus and menu options</a>,
+    Up: <a href="Common-requests.html#Common-requests" accesskey=
+    "u" rel="up">Common requests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

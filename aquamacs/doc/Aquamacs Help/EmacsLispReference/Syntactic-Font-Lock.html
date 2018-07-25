@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,115 +19,182 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Syntactic Font Lock</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Syntactic Font Lock">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Syntactic Font Lock">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="up" title="Font Lock Mode">
-<link href="Multiline-Font-Lock.html#Multiline-Font-Lock" rel="next" title="Multiline Font Lock">
-<link href="Faces-for-Font-Lock.html#Faces-for-Font-Lock" rel="prev" title="Faces for Font Lock">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Syntactic Font
+  Lock</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Syntactic Font Lock" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Syntactic Font Lock" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="up" title=
+  "Font Lock Mode" />
+  <link href="Multiline-Font-Lock.html#Multiline-Font-Lock" rel=
+  "next" title="Multiline Font Lock" />
+  <link href="Faces-for-Font-Lock.html#Faces-for-Font-Lock" rel=
+  "prev" title="Faces for Font Lock" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Syntactic-Font-Lock" id="Syntactic-Font-Lock"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Multiline-Font-Lock.html#Multiline-Font-Lock"
+    accesskey="n" rel="next">Multiline Font Lock</a>, Previous:
+    <a href="Faces-for-Font-Lock.html#Faces-for-Font-Lock"
+    accesskey="p" rel="prev">Faces for Font Lock</a>, Up: <a href=
+    "Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel=
+    "up">Font Lock Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Syntactic-Font-Lock-1" id="Syntactic-Font-Lock-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Syntactic-Font-Lock"></a>
-<div class="header">
-<p>
-Next: <a href="Multiline-Font-Lock.html#Multiline-Font-Lock" accesskey="n" rel="next">Multiline Font Lock</a>, Previous: <a href="Faces-for-Font-Lock.html#Faces-for-Font-Lock" accesskey="p" rel="prev">Faces for Font Lock</a>, Up: <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel="up">Font Lock Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Syntactic-Font-Lock-1"></a>
-<h4 class="subsection">22.6.8 Syntactic Font Lock</h4>
-<a name="index-syntactic-font-lock"></a>
+  <h4 class="subsection">22.6.8 Syntactic Font Lock</h4><a name=
+  "index-syntactic-font-lock" id="index-syntactic-font-lock"></a>
 
-<p>Syntactic fontification uses a syntax table (see <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>) to
-find and highlight syntactically relevant text.  If enabled, it runs
-prior to search-based fontification.  The variable
-<code>font-lock-syntactic-face-function</code>, documented below, determines
-which syntactic constructs to highlight.  There are several variables
-that affect syntactic fontification; you should set them by means of
-<code>font-lock-defaults</code> (see <a href="Font-Lock-Basics.html#Font-Lock-Basics">Font Lock Basics</a>).
-</p>
-<p>Whenever Font Lock mode performs syntactic fontification on a stretch
-of text, it first calls the function specified by
-<code>syntax-propertize-function</code>.  Major modes can use this to apply
-<code>syntax-table</code> text properties to override the buffer&rsquo;s syntax
-table in special cases.  See <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>.
-</p>
-<dl>
-<dt><a name="index-font_002dlock_002dkeywords_002donly"></a>Variable: <strong>font-lock-keywords-only</strong></dt>
-<dd><p>If the value of this variable is non-<code>nil</code>, Font Lock does not do
-syntactic fontification, only search-based fontification based on
-<code>font-lock-keywords</code>.  It is normally set by Font Lock mode based
-on the <var>keywords-only</var> element in <code>font-lock-defaults</code>.
-</p></dd></dl>
+  <p>Syntactic fontification uses a syntax table (see <a href=
+  "Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>) to find and
+  highlight syntactically relevant text. If enabled, it runs prior
+  to search-based fontification. The variable
+  <code>font-lock-syntactic-face-function</code>, documented below,
+  determines which syntactic constructs to highlight. There are
+  several variables that affect syntactic fontification; you should
+  set them by means of <code>font-lock-defaults</code> (see
+  <a href="Font-Lock-Basics.html#Font-Lock-Basics">Font Lock
+  Basics</a>).</p>
 
-<dl>
-<dt><a name="index-font_002dlock_002dsyntax_002dtable"></a>Variable: <strong>font-lock-syntax-table</strong></dt>
-<dd><p>This variable holds the syntax table to use for fontification of
-comments and strings.  It is normally set by Font Lock mode based on the
-<var>syntax-alist</var> element in <code>font-lock-defaults</code>.  If this value
-is <code>nil</code>, syntactic fontification uses the buffer&rsquo;s syntax table
-(the value returned by the function <code>syntax-table</code>; see <a href="Syntax-Table-Functions.html#Syntax-Table-Functions">Syntax Table Functions</a>).
-</p></dd></dl>
+  <p>Whenever Font Lock mode performs syntactic fontification on a
+  stretch of text, it first calls the function specified by
+  <code>syntax-propertize-function</code>. Major modes can use this
+  to apply <code>syntax-table</code> text properties to override
+  the buffer&rsquo;s syntax table in special cases. See <a href=
+  "Syntax-Properties.html#Syntax-Properties">Syntax
+  Properties</a>.</p>
 
-<dl>
-<dt><a name="index-font_002dlock_002dsyntactic_002dface_002dfunction"></a>Variable: <strong>font-lock-syntactic-face-function</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, it should be a function to determine
-which face to use for a given syntactic element (a string or a comment).
-The value is normally set through an <var>other-vars</var> element in
-<code>font-lock-defaults</code>.
-</p>
-<p>The function is called with one argument, the parse state at point
-returned by <code>parse-partial-sexp</code>, and should return a face.  The
-default value returns <code>font-lock-comment-face</code> for comments and
-<code>font-lock-string-face</code> for strings (see <a href="Faces-for-Font-Lock.html#Faces-for-Font-Lock">Faces for Font Lock</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-font_002dlock_002dkeywords_002donly" id=
+    "index-font_002dlock_002dkeywords_002donly"></a>Variable:
+    <strong>font-lock-keywords-only</strong></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Multiline-Font-Lock.html#Multiline-Font-Lock" accesskey="n" rel="next">Multiline Font Lock</a>, Previous: <a href="Faces-for-Font-Lock.html#Faces-for-Font-Lock" accesskey="p" rel="prev">Faces for Font Lock</a>, Up: <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel="up">Font Lock Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>If the value of this variable is non-<code>nil</code>,
+      Font Lock does not do syntactic fontification, only
+      search-based fontification based on
+      <code>font-lock-keywords</code>. It is normally set by Font
+      Lock mode based on the <var>keywords-only</var> element in
+      <code>font-lock-defaults</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-font_002dlock_002dsyntax_002dtable" id=
+    "index-font_002dlock_002dsyntax_002dtable"></a>Variable:
+    <strong>font-lock-syntax-table</strong></dt>
 
+    <dd>
+      <p>This variable holds the syntax table to use for
+      fontification of comments and strings. It is normally set by
+      Font Lock mode based on the <var>syntax-alist</var> element
+      in <code>font-lock-defaults</code>. If this value is
+      <code>nil</code>, syntactic fontification uses the
+      buffer&rsquo;s syntax table (the value returned by the
+      function <code>syntax-table</code>; see <a href=
+      "Syntax-Table-Functions.html#Syntax-Table-Functions">Syntax
+      Table Functions</a>).</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name=
+    "index-font_002dlock_002dsyntactic_002dface_002dfunction" id=
+    "index-font_002dlock_002dsyntactic_002dface_002dfunction"></a>Variable:
+    <strong>font-lock-syntactic-face-function</strong></dt>
+
+    <dd>
+      <p>If this variable is non-<code>nil</code>, it should be a
+      function to determine which face to use for a given syntactic
+      element (a string or a comment). The value is normally set
+      through an <var>other-vars</var> element in
+      <code>font-lock-defaults</code>.</p>
+
+      <p>The function is called with one argument, the parse state
+      at point returned by <code>parse-partial-sexp</code>, and
+      should return a face. The default value returns
+      <code>font-lock-comment-face</code> for comments and
+      <code>font-lock-string-face</code> for strings (see <a href=
+      "Faces-for-Font-Lock.html#Faces-for-Font-Lock">Faces for Font
+      Lock</a>).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Multiline-Font-Lock.html#Multiline-Font-Lock"
+    accesskey="n" rel="next">Multiline Font Lock</a>, Previous:
+    <a href="Faces-for-Font-Lock.html#Faces-for-Font-Lock"
+    accesskey="p" rel="prev">Faces for Font Lock</a>, Up: <a href=
+    "Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel=
+    "up">Font Lock Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

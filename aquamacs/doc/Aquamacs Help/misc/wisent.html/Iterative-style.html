@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,91 +16,124 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Iterative style</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Iterative style">
-<meta name="keywords" content="Wisent Parser Development: Iterative style">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Grammar-styles.html#Grammar-styles" rel="up" title="Grammar styles">
-<link href="Bison-style.html#Bison-style" rel="next" title="Bison style">
-<link href="Grammar-styles.html#Grammar-styles" rel="prev" title="Grammar styles">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Iterative style</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Iterative style" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Iterative style" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Grammar-styles.html#Grammar-styles" rel="up" title=
+  "Grammar styles" />
+  <link href="Bison-style.html#Bison-style" rel="next" title=
+  "Bison style" />
+  <link href="Grammar-styles.html#Grammar-styles" rel="prev" title=
+  "Grammar styles" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Iterative-style"></a>
-<div class="header">
-<p>
-Next: <a href="Bison-style.html#Bison-style" accesskey="n" rel="next">Bison style</a>, Up: <a href="Grammar-styles.html#Grammar-styles" accesskey="u" rel="up">Grammar styles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Iterative-style-1"></a>
-<h4 class="subsection">4.1.1 Iterative style</h4>
+<body lang="en" xml:lang="en">
+  <a name="Iterative-style" id="Iterative-style"></a>
 
-<a name="index-grammar-iterative-style"></a>
-<p>The <em>iterative style</em> is the preferred style to use with <i>Semantic</i>.
-It relies on an iterative parser back-end mechanism which parses start
-nonterminals one at a time and automagically skips unexpected lexical
-tokens in input.
-</p>
-<p>Compared to rule-based iterative functions (see <a href="Bison-style.html#Bison-style">Bison style</a>),
-iterative parsers are better in that they can handle obscure errors
-more cleanly.
-</p>
-<a name="index-raw-tag"></a>
-<p>Each start nonterminal must produces a <em>raw tag</em> by calling a
-<code>TAG</code>-like grammar macro with appropriate parameters.  See also
-<a href="Start-nonterminals.html#Start-nonterminals">Start nonterminals</a>.
-</p>
-<a name="index-expanded-tag"></a>
-<p>Then, each parsing iteration automatically translates a raw tag into
-<em>expanded tags</em>, updating the raw tag structure with internal
-properties and buffer related data.
-</p>
-<p>After parsing completes, it results in a tree of expanded tags.
-</p>
-<p>The following example is a snippet of the iterative style Java grammar
-provided in the <i>Semantic</i> distribution in the file
-<samp>semantic/wisent/java-tags.wy</samp>.
-</p>
-<div class="example">
-<pre class="example">&hellip;
+  <div class="header">
+    <p>Next: <a href="Bison-style.html#Bison-style" accesskey="n"
+    rel="next">Bison style</a>, Up: <a href=
+    "Grammar-styles.html#Grammar-styles" accesskey="u" rel=
+    "up">Grammar styles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Iterative-style-1" id="Iterative-style-1"></a>
+
+  <h4 class="subsection">4.1.1 Iterative style</h4><a name=
+  "index-grammar-iterative-style" id=
+  "index-grammar-iterative-style"></a>
+
+  <p>The <em>iterative style</em> is the preferred style to use
+  with <i>Semantic</i>. It relies on an iterative parser back-end
+  mechanism which parses start nonterminals one at a time and
+  automagically skips unexpected lexical tokens in input.</p>
+
+  <p>Compared to rule-based iterative functions (see <a href=
+  "Bison-style.html#Bison-style">Bison style</a>), iterative
+  parsers are better in that they can handle obscure errors more
+  cleanly.</p><a name="index-raw-tag" id="index-raw-tag"></a>
+
+  <p>Each start nonterminal must produces a <em>raw tag</em> by
+  calling a <code>TAG</code>-like grammar macro with appropriate
+  parameters. See also <a href=
+  "Start-nonterminals.html#Start-nonterminals">Start
+  nonterminals</a>.</p><a name="index-expanded-tag" id=
+  "index-expanded-tag"></a>
+
+  <p>Then, each parsing iteration automatically translates a raw
+  tag into <em>expanded tags</em>, updating the raw tag structure
+  with internal properties and buffer related data.</p>
+
+  <p>After parsing completes, it results in a tree of expanded
+  tags.</p>
+
+  <p>The following example is a snippet of the iterative style Java
+  grammar provided in the <i>Semantic</i> distribution in the file
+  <samp>semantic/wisent/java-tags.wy</samp>.</p>
+
+  <div class="example">
+    <pre class="example">
+&hellip;
 ;; Alternate entry points
 ;;    - Needed by partial re-parse
 %start formal_parameter
@@ -125,38 +160,46 @@ formal_parameter
   : formal_parameter_modifier_opt type variable_declarator_id
     (VARIABLE-TAG $3 $2 nil :typemodifiers $1)
   ;
-</pre></div>
+</pre>
+  </div><a name="index-EXPANDFULL" id="index-EXPANDFULL"></a>
 
-<a name="index-EXPANDFULL"></a>
-<p>It shows the use of the <code>EXPANDFULL</code> grammar macro to parse a
-&lsquo;<samp>PAREN_BLOCK</samp>&rsquo; which contains a &lsquo;<samp>formal_parameter_list</samp>&rsquo;.
-<code>EXPANDFULL</code> tells to recursively parse &lsquo;<samp>formal_parameters</samp>&rsquo;
-inside &lsquo;<samp>PAREN_BLOCK</samp>&rsquo;.  The parser iterates until it digested all
-available input data inside the &lsquo;<samp>PAREN_BLOCK</samp>&rsquo;, trying to match
-any of the &lsquo;<samp>formal_parameters</samp>&rsquo; rules:
-</p>
-<ul>
-<li> &lsquo;<samp>LPAREN</samp>&rsquo;
+  <p>It shows the use of the <code>EXPANDFULL</code> grammar macro
+  to parse a &lsquo;<samp>PAREN_BLOCK</samp>&rsquo; which contains
+  a &lsquo;<samp>formal_parameter_list</samp>&rsquo;.
+  <code>EXPANDFULL</code> tells to recursively parse
+  &lsquo;<samp>formal_parameters</samp>&rsquo; inside
+  &lsquo;<samp>PAREN_BLOCK</samp>&rsquo;. The parser iterates until
+  it digested all available input data inside the
+  &lsquo;<samp>PAREN_BLOCK</samp>&rsquo;, trying to match any of
+  the &lsquo;<samp>formal_parameters</samp>&rsquo; rules:</p>
 
-</li><li> &lsquo;<samp>RPAREN</samp>&rsquo;
+  <ul>
+    <li>&lsquo;<samp>LPAREN</samp>&rsquo;</li>
 
-</li><li> &lsquo;<samp>formal_parameter COMMA</samp>&rsquo;
+    <li>&lsquo;<samp>RPAREN</samp>&rsquo;</li>
 
-</li><li> &lsquo;<samp>formal_parameter RPAREN</samp>&rsquo;
-</li></ul>
+    <li>&lsquo;<samp>formal_parameter COMMA</samp>&rsquo;</li>
 
-<p>At each iteration it will return a &lsquo;<samp>formal_parameter</samp>&rsquo; raw tag,
-or <code>nil</code> to skip unwanted (single &lsquo;<samp>LPAREN</samp>&rsquo; or &lsquo;<samp>RPAREN</samp>&rsquo;
-for example) or unexpected input data.  Those raw tags will be
-automatically expanded by the iterative back-end parser.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Bison-style.html#Bison-style" accesskey="n" rel="next">Bison style</a>, Up: <a href="Grammar-styles.html#Grammar-styles" accesskey="u" rel="up">Grammar styles</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <li>&lsquo;<samp>formal_parameter RPAREN</samp>&rsquo;</li>
+  </ul>
 
+  <p>At each iteration it will return a
+  &lsquo;<samp>formal_parameter</samp>&rsquo; raw tag, or
+  <code>nil</code> to skip unwanted (single
+  &lsquo;<samp>LPAREN</samp>&rsquo; or
+  &lsquo;<samp>RPAREN</samp>&rsquo; for example) or unexpected
+  input data. Those raw tags will be automatically expanded by the
+  iterative back-end parser.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Next: <a href="Bison-style.html#Bison-style" accesskey="n"
+    rel="next">Bison style</a>, Up: <a href=
+    "Grammar-styles.html#Grammar-styles" accesskey="u" rel=
+    "up">Grammar styles</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

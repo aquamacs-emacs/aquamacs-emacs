@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,147 +20,194 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Bidirectional Editing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Bidirectional Editing">
-<meta name="keywords" content="GNU Emacs Manual: Bidirectional Editing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="International.html#International" rel="up" title="International">
-<link href="Modes.html#Modes" rel="next" title="Modes">
-<link href="Charsets.html#Charsets" rel="prev" title="Charsets">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Bidirectional Editing</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Bidirectional Editing" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Bidirectional Editing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="International.html#International" rel="up" title=
+  "International" />
+  <link href="Modes.html#Modes" rel="next" title="Modes" />
+  <link href="Charsets.html#Charsets" rel="prev" title=
+  "Charsets" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Bidirectional-Editing" id="Bidirectional-Editing"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Charsets.html#Charsets" accesskey="p"
+    rel="prev">Charsets</a>, Up: <a href=
+    "International.html#International" accesskey="u" rel=
+    "up">International</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Bidirectional-Editing-1" id=
+  "Bidirectional-Editing-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Bidirectional-Editing"></a>
-<div class="header">
-<p>
-Previous: <a href="Charsets.html#Charsets" accesskey="p" rel="prev">Charsets</a>, Up: <a href="International.html#International" accesskey="u" rel="up">International</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Bidirectional-Editing-1"></a>
-<h3 class="section">22.19 Bidirectional Editing</h3>
-<a name="index-bidirectional-editing"></a>
-<a name="index-right_002dto_002dleft-text"></a>
+  <h3 class="section">22.19 Bidirectional Editing</h3><a name=
+  "index-bidirectional-editing" id=
+  "index-bidirectional-editing"></a> <a name=
+  "index-right_002dto_002dleft-text" id=
+  "index-right_002dto_002dleft-text"></a>
 
-<p>Emacs supports editing text written in scripts, such as Arabic and
-Hebrew, whose natural ordering of horizontal text for display is from
-right to left.  However, digits and Latin text embedded in these
-scripts are still displayed left to right.  It is also not uncommon to
-have small portions of text in Arabic or Hebrew embedded in an otherwise
-Latin document; e.g., as comments and strings in a program source
-file.  For these reasons, text that uses these scripts is actually
-<em>bidirectional</em>: a mixture of runs of left-to-right and
-right-to-left characters.
-</p>
-<p>This section describes the facilities and options provided by Emacs
-for editing bidirectional text.
-</p>
-<a name="index-logical-order"></a>
-<a name="index-visual-order"></a>
-<p>Emacs stores right-to-left and bidirectional text in the so-called
-<em>logical</em> (or <em>reading</em>) order: the buffer or string position
-of the first character you read precedes that of the next character.
-Reordering of bidirectional text into the <em>visual</em> order happens
-at display time.  As result, character positions no longer increase
-monotonically with their positions on display.  Emacs implements the
-Unicode Bidirectional Algorithm described in the Unicode Standard
-Annex #9, for reordering of bidirectional text for display.
-</p>
-<a name="index-bidi_002ddisplay_002dreordering"></a>
-<p>The buffer-local variable <code>bidi-display-reordering</code> controls
-whether text in the buffer is reordered for display.  If its value is
-non-<code>nil</code>, Emacs reorders characters that have right-to-left
-directionality when they are displayed.  The default value is
-<code>t</code>.
-</p>
-<a name="index-base-direction-of-paragraphs"></a>
-<a name="index-paragraph_002c-base-direction"></a>
-<p>Each paragraph of bidirectional text can have its own <em>base
-direction</em>, either right-to-left or left-to-right.  (Paragraph
-boundaries are empty lines, i.e., lines consisting entirely of
-whitespace characters.)  Text in left-to-right paragraphs begins on
-the screen at the left margin of the window and is truncated or
-continued when it reaches the right margin.  By contrast, text in
-right-to-left paragraphs is displayed starting at the right margin and
-is continued or truncated at the left margin.
-</p>
-<a name="index-bidi_002dparagraph_002ddirection"></a>
-<p>Emacs determines the base direction of each paragraph dynamically,
-based on the text at the beginning of the paragraph.  However,
-sometimes a buffer may need to force a certain base direction for its
-paragraphs.  The variable <code>bidi-paragraph-direction</code>, if
-non-<code>nil</code>, disables the dynamic determination of the base
-direction, and instead forces all paragraphs in the buffer to have the
-direction specified by its buffer-local value.  The value can be either
-<code>right-to-left</code> or <code>left-to-right</code>.  Any other value is
-interpreted as <code>nil</code>.
-</p>
-<a name="index-LRM"></a>
-<a name="index-RLM"></a>
-<p>Alternatively, you can control the base direction of a paragraph by
-inserting special formatting characters in front of the paragraph.
-The special character <code>RIGHT-TO-LEFT MARK</code>, or <small>RLM</small>, forces
-the right-to-left direction on the following paragraph, while
-<code>LEFT-TO-RIGHT MARK</code>, or <small>LRM</small> forces the left-to-right
-direction.  (You can use <kbd>C-x 8 <span class="key">RET</span></kbd> to insert these characters.)
-In a GUI session, the <small>LRM</small> and <small>RLM</small> characters display as very
-thin blank characters; on text terminals they display as blanks.
-</p>
-<p>Because characters are reordered for display, Emacs commands that
-operate in the logical order or on stretches of buffer positions may
-produce unusual effects.  For example, <kbd>C-f</kbd> and <kbd>C-b</kbd>
-commands move point in the logical order, so the cursor will sometimes
-jump when point traverses reordered bidirectional text.  Similarly, a
-highlighted region covering a contiguous range of character positions
-may look discontinuous if the region spans reordered text.  This is
-normal and similar to the behavior of other programs that support
-bidirectional text.  If you set <code>visual-order-cursor-movement</code> to
-a non-<code>nil</code> value, cursor motion by the arrow keys follows the
-visual order on screen (see <a href="Moving-Point.html#Moving-Point">visual-order movement</a>).
-</p><hr>
-<div class="header">
-<p>
-Previous: <a href="Charsets.html#Charsets" accesskey="p" rel="prev">Charsets</a>, Up: <a href="International.html#International" accesskey="u" rel="up">International</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Emacs supports editing text written in scripts, such as Arabic
+  and Hebrew, whose natural ordering of horizontal text for display
+  is from right to left. However, digits and Latin text embedded in
+  these scripts are still displayed left to right. It is also not
+  uncommon to have small portions of text in Arabic or Hebrew
+  embedded in an otherwise Latin document; e.g., as comments and
+  strings in a program source file. For these reasons, text that
+  uses these scripts is actually <em>bidirectional</em>: a mixture
+  of runs of left-to-right and right-to-left characters.</p>
 
+  <p>This section describes the facilities and options provided by
+  Emacs for editing bidirectional text.</p><a name=
+  "index-logical-order" id="index-logical-order"></a> <a name=
+  "index-visual-order" id="index-visual-order"></a>
 
+  <p>Emacs stores right-to-left and bidirectional text in the
+  so-called <em>logical</em> (or <em>reading</em>) order: the
+  buffer or string position of the first character you read
+  precedes that of the next character. Reordering of bidirectional
+  text into the <em>visual</em> order happens at display time. As
+  result, character positions no longer increase monotonically with
+  their positions on display. Emacs implements the Unicode
+  Bidirectional Algorithm described in the Unicode Standard Annex
+  #9, for reordering of bidirectional text for display.</p><a name=
+  "index-bidi_002ddisplay_002dreordering" id=
+  "index-bidi_002ddisplay_002dreordering"></a>
 
+  <p>The buffer-local variable <code>bidi-display-reordering</code>
+  controls whether text in the buffer is reordered for display. If
+  its value is non-<code>nil</code>, Emacs reorders characters that
+  have right-to-left directionality when they are displayed. The
+  default value is <code>t</code>.</p><a name=
+  "index-base-direction-of-paragraphs" id=
+  "index-base-direction-of-paragraphs"></a> <a name=
+  "index-paragraph_002c-base-direction" id=
+  "index-paragraph_002c-base-direction"></a>
+
+  <p>Each paragraph of bidirectional text can have its own <em>base
+  direction</em>, either right-to-left or left-to-right. (Paragraph
+  boundaries are empty lines, i.e., lines consisting entirely of
+  whitespace characters.) Text in left-to-right paragraphs begins
+  on the screen at the left margin of the window and is truncated
+  or continued when it reaches the right margin. By contrast, text
+  in right-to-left paragraphs is displayed starting at the right
+  margin and is continued or truncated at the left
+  margin.</p><a name="index-bidi_002dparagraph_002ddirection" id=
+  "index-bidi_002dparagraph_002ddirection"></a>
+
+  <p>Emacs determines the base direction of each paragraph
+  dynamically, based on the text at the beginning of the paragraph.
+  However, sometimes a buffer may need to force a certain base
+  direction for its paragraphs. The variable
+  <code>bidi-paragraph-direction</code>, if non-<code>nil</code>,
+  disables the dynamic determination of the base direction, and
+  instead forces all paragraphs in the buffer to have the direction
+  specified by its buffer-local value. The value can be either
+  <code>right-to-left</code> or <code>left-to-right</code>. Any
+  other value is interpreted as <code>nil</code>.</p><a name=
+  "index-LRM" id="index-LRM"></a> <a name="index-RLM" id=
+  "index-RLM"></a>
+
+  <p>Alternatively, you can control the base direction of a
+  paragraph by inserting special formatting characters in front of
+  the paragraph. The special character <code>RIGHT-TO-LEFT
+  MARK</code>, or <small>RLM</small>, forces the right-to-left
+  direction on the following paragraph, while <code>LEFT-TO-RIGHT
+  MARK</code>, or <small>LRM</small> forces the left-to-right
+  direction. (You can use <kbd>C-x 8 <span class=
+  "key">RET</span></kbd> to insert these characters.) In a GUI
+  session, the <small>LRM</small> and <small>RLM</small> characters
+  display as very thin blank characters; on text terminals they
+  display as blanks.</p>
+
+  <p>Because characters are reordered for display, Emacs commands
+  that operate in the logical order or on stretches of buffer
+  positions may produce unusual effects. For example,
+  <kbd>C-f</kbd> and <kbd>C-b</kbd> commands move point in the
+  logical order, so the cursor will sometimes jump when point
+  traverses reordered bidirectional text. Similarly, a highlighted
+  region covering a contiguous range of character positions may
+  look discontinuous if the region spans reordered text. This is
+  normal and similar to the behavior of other programs that support
+  bidirectional text. If you set
+  <code>visual-order-cursor-movement</code> to a
+  non-<code>nil</code> value, cursor motion by the arrow keys
+  follows the visual order on screen (see <a href=
+  "Moving-Point.html#Moving-Point">visual-order movement</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Charsets.html#Charsets" accesskey="p"
+    rel="prev">Charsets</a>, Up: <a href=
+    "International.html#International" accesskey="u" rel=
+    "up">International</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

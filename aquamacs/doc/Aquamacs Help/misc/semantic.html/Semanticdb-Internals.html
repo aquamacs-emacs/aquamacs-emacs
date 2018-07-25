@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents the Semantic library and utilities.
 
 Copyright (C) 1999-2005, 2007, 2009-2016 Free Software
@@ -15,124 +17,175 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Semantic Manual: Semanticdb Internals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Semantic Manual: Semanticdb Internals">
-<meta name="keywords" content="Semantic Manual: Semanticdb Internals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Semantic-Internals.html#Semantic-Internals" rel="up" title="Semantic Internals">
-<link href="Analyzer-Internals.html#Analyzer-Internals" rel="next" title="Analyzer Internals">
-<link href="Tag-handling.html#Tag-handling" rel="prev" title="Tag handling">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Semantic Manual: Semanticdb Internals</title>
+  <meta name="description" content=
+  "Semantic Manual: Semanticdb Internals" />
+  <meta name="keywords" content=
+  "Semantic Manual: Semanticdb Internals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Semantic-Internals.html#Semantic-Internals" rel="up"
+  title="Semantic Internals" />
+  <link href="Analyzer-Internals.html#Analyzer-Internals" rel=
+  "next" title="Analyzer Internals" />
+  <link href="Tag-handling.html#Tag-handling" rel="prev" title=
+  "Tag handling" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Semanticdb-Internals"></a>
-<div class="header">
-<p>
-Next: <a href="Analyzer-Internals.html#Analyzer-Internals" accesskey="n" rel="next">Analyzer Internals</a>, Previous: <a href="Tag-handling.html#Tag-handling" accesskey="p" rel="prev">Tag handling</a>, Up: <a href="Semantic-Internals.html#Semantic-Internals" accesskey="u" rel="up">Semantic Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Semanticdb-Internals-1"></a>
-<h3 class="section">3.3 Semanticdb Internals</h3>
+<body lang="en" xml:lang="en">
+  <a name="Semanticdb-Internals" id="Semanticdb-Internals"></a>
 
-<p><acronym>Semanticdb</acronym> complexity is certainly an issue.  It is a rather
-hairy problem to try and solve.
-</p>
-<dl compact="compact">
-<dt><samp>semanticdb.el</samp></dt>
-<dd><p>Defines a <em>database</em> and a <em>table</em> base class.  You can
-instantiate these classes, and use them, but they are not persistent.
-</p>
-<p>This file also provides support for <code>semanticdb-minor-mode</code>,
-which automatically associates files with tables in databases so that
-tags are <em>saved</em> while a buffer is not in memory.
-</p>
-<p>The database and tables both also provide applicable cache information,
-and cache flushing system.  The semanticdb search routines use caches
-to save data structures that are complex to calculate.
-</p>
-<p>Lastly, it provides the concept of <em>project root</em>.  It is a system
-by which a file can be associated with the root of a project, so if
-you have a tree of directories and source files, it can find the root,
-and allow a tag-search to span all available databases in that
-directory hierarchy.
-</p>
-</dd>
-<dt><samp>semanticdb-file.el</samp></dt>
-<dd><p>Provides a subclass of the basic table so that it can be saved to
-disk.  Implements all the code needed to unbind/rebind tags to a
-buffer and writing them to a file.
-</p>
-</dd>
-<dt><samp>semanticdb-el.el</samp></dt>
-<dd><p>Implements a special kind of <em>system</em> database that uses Emacs
-internals to perform queries.
-</p>
-</dd>
-<dt><samp>semanticdb-ebrowse.el</samp></dt>
-<dd><p>Implements a system database that uses Ebrowse to parse files into a
-table that can be queried for tag names.  Successful tag hits during a
-find causes <i>Semantic</i> to pick up and parse the reference files to
-get the full details.
-</p>
-</dd>
-<dt><samp>semanticdb-find.el</samp></dt>
-<dd><p>Infrastructure for searching groups <i>Semantic</i> databases, and dealing
-with the search results format.
-</p>
-</dd>
-<dt><samp>semanticdb-ref.el</samp></dt>
-<dd><p>Tracks crossreferences.   Cross references are needed when buffer is
-reparsed, and must alert other tables that any dependent caches may
-need to be flushed.  References are in the form of include files.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Analyzer-Internals.html#Analyzer-Internals"
+    accesskey="n" rel="next">Analyzer Internals</a>, Previous:
+    <a href="Tag-handling.html#Tag-handling" accesskey="p" rel=
+    "prev">Tag handling</a>, Up: <a href=
+    "Semantic-Internals.html#Semantic-Internals" accesskey="u" rel=
+    "up">Semantic Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Semanticdb-Internals-1" id="Semanticdb-Internals-1"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Analyzer-Internals.html#Analyzer-Internals" accesskey="n" rel="next">Analyzer Internals</a>, Previous: <a href="Tag-handling.html#Tag-handling" accesskey="p" rel="prev">Tag handling</a>, Up: <a href="Semantic-Internals.html#Semantic-Internals" accesskey="u" rel="up">Semantic Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <h3 class="section">3.3 Semanticdb Internals</h3>
 
+  <p><acronym>Semanticdb</acronym> complexity is certainly an
+  issue. It is a rather hairy problem to try and solve.</p>
 
+  <dl compact="compact">
+    <dt><samp>semanticdb.el</samp></dt>
 
+    <dd>
+      <p>Defines a <em>database</em> and a <em>table</em> base
+      class. You can instantiate these classes, and use them, but
+      they are not persistent.</p>
+
+      <p>This file also provides support for
+      <code>semanticdb-minor-mode</code>, which automatically
+      associates files with tables in databases so that tags are
+      <em>saved</em> while a buffer is not in memory.</p>
+
+      <p>The database and tables both also provide applicable cache
+      information, and cache flushing system. The semanticdb search
+      routines use caches to save data structures that are complex
+      to calculate.</p>
+
+      <p>Lastly, it provides the concept of <em>project root</em>.
+      It is a system by which a file can be associated with the
+      root of a project, so if you have a tree of directories and
+      source files, it can find the root, and allow a tag-search to
+      span all available databases in that directory hierarchy.</p>
+    </dd>
+
+    <dt><samp>semanticdb-file.el</samp></dt>
+
+    <dd>
+      <p>Provides a subclass of the basic table so that it can be
+      saved to disk. Implements all the code needed to
+      unbind/rebind tags to a buffer and writing them to a
+      file.</p>
+    </dd>
+
+    <dt><samp>semanticdb-el.el</samp></dt>
+
+    <dd>
+      <p>Implements a special kind of <em>system</em> database that
+      uses Emacs internals to perform queries.</p>
+    </dd>
+
+    <dt><samp>semanticdb-ebrowse.el</samp></dt>
+
+    <dd>
+      <p>Implements a system database that uses Ebrowse to parse
+      files into a table that can be queried for tag names.
+      Successful tag hits during a find causes <i>Semantic</i> to
+      pick up and parse the reference files to get the full
+      details.</p>
+    </dd>
+
+    <dt><samp>semanticdb-find.el</samp></dt>
+
+    <dd>
+      <p>Infrastructure for searching groups <i>Semantic</i>
+      databases, and dealing with the search results format.</p>
+    </dd>
+
+    <dt><samp>semanticdb-ref.el</samp></dt>
+
+    <dd>
+      <p>Tracks crossreferences. Cross references are needed when
+      buffer is reparsed, and must alert other tables that any
+      dependent caches may need to be flushed. References are in
+      the form of include files.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Analyzer-Internals.html#Analyzer-Internals"
+    accesskey="n" rel="next">Analyzer Internals</a>, Previous:
+    <a href="Tag-handling.html#Tag-handling" accesskey="p" rel=
+    "prev">Tag handling</a>, Up: <a href=
+    "Semantic-Internals.html#Semantic-Internals" accesskey="u" rel=
+    "up">Semantic Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Alternative Syntax - TRAMP User Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="TRAMP User Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Usage.html#Usage" title="Usage">
-<link rel="prev" href="Filename-Syntax.html#Filename-Syntax" title="Filename Syntax">
-<link rel="next" href="Filename-completion.html#Filename-completion" title="Filename completion">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Alternative Syntax - TRAMP User Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="TRAMP User Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Usage.html#Usage" title="Usage" />
+  <link rel="prev" href="Filename-Syntax.html#Filename-Syntax"
+  title="Filename Syntax" />
+  <link rel="next" href=
+  "Filename-completion.html#Filename-completion" title=
+  "Filename completion" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +34,10 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,45 +47,66 @@ Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Alternative-Syntax"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Filename-completion.html#Filename-completion">Filename completion</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Filename-Syntax.html#Filename-Syntax">Filename Syntax</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Usage.html#Usage">Usage</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Alternative-Syntax" id="Alternative-Syntax"></a>
 
-<h3 class="section">5.2 URL-like filename syntax</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Filename-completion.html#Filename-completion">Filename
+    completion</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Filename-Syntax.html#Filename-Syntax">Filename
+    Syntax</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Usage.html#Usage">Usage</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-filename-syntax-178"></a><a name="index-filename-examples-179"></a>
-Additionally to the syntax described in the previous chapter, it is
-possible to use a URL-like syntax for <span class="sc">tramp</span>.  This can be
-switched on by customizing the variable <code>tramp-syntax</code>.  Please
-note that this feature is experimental for the time being.
+  <h3 class="section">5.2 URL-like filename syntax</h3>
 
-   <p>The variable <code>tramp-syntax</code> must be set before requiring <span class="sc">tramp</span>:
+  <p><a name="index-filename-syntax-178" id=
+  "index-filename-syntax-178"></a><a name=
+  "index-filename-examples-179" id=
+  "index-filename-examples-179"></a> Additionally to the syntax
+  described in the previous chapter, it is possible to use a
+  URL-like syntax for <span class="sc">tramp</span>. This can be
+  switched on by customizing the variable
+  <code>tramp-syntax</code>. Please note that this feature is
+  experimental for the time being.</p>
 
-<pre class="lisp">     (setq tramp-syntax 'url)
+  <p>The variable <code>tramp-syntax</code> must be set before
+  requiring <span class="sc">tramp</span>:</p>
+  <pre class="lisp">
+     (setq tramp-syntax 'url)
      (require 'tramp)
 </pre>
-   <p>Then, a <span class="sc">tramp</span> filename would look like this:
-<samp><span class="file">/</span><var>method</var><span class="file">://</span><var>user</var><span class="file">@</span><var>machine</var><span class="file">:</span><var>port</var><span class="file">/</span><var>path/to.file</var></samp>. 
-<samp><span class="file">/</span><var>method</var><span class="file">://</span></samp> is mandatory, all other parts are optional. 
-<samp><span class="file">:</span><var>port</var></samp> is useful for methods only who support this.
 
-   <p>The last example from the previous section would look like this:
-<samp><span class="file">/ssh://daniel@melancholia/.emacs</span></samp>.
+  <p>Then, a <span class="sc">tramp</span> filename would look like
+  this: <samp><span class=
+  "file">/</span><var>method</var><span class=
+  "file">://</span><var>user</var><span class=
+  "file">@</span><var>machine</var><span class=
+  "file">:</span><var>port</var><span class=
+  "file">/</span><var>path/to.file</var></samp>. <samp><span class=
+  "file">/</span><var>method</var><span class=
+  "file">://</span></samp> is mandatory, all other parts are
+  optional. <samp><span class="file">:</span><var>port</var></samp>
+  is useful for methods only who support this.</p>
 
-   <p>For the time being, <code>tramp-syntax</code> can have the following values:
+  <p>The last example from the previous section would look like
+  this: <samp><span class=
+  "file">/ssh://daniel@melancholia/.emacs</span></samp>.</p>
 
-     <ul>
-<li><code>ftp</code> &ndash; That is the default syntax
-<li><code>url</code> &ndash; URL-like syntax
-</ul>
+  <p>For the time being, <code>tramp-syntax</code> can have the
+  following values:</p>
 
-   </body></html>
+  <ul>
+    <li><code>ftp</code> &ndash; That is the default syntax</li>
 
+    <li><code>url</code> &ndash; URL-like syntax</li>
+  </ul>
+</body>
+</html>

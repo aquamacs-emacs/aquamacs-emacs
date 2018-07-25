@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,93 +18,155 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Date Arithmetic</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Date Arithmetic">
-<meta name="keywords" content="GNU Emacs Calc Manual: Date Arithmetic">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Arithmetic.html#Arithmetic" rel="up" title="Arithmetic">
-<link href="Date-Conversions.html#Date-Conversions" rel="next" title="Date Conversions">
-<link href="Conversions.html#Conversions" rel="prev" title="Conversions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Date Arithmetic</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Date Arithmetic" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Date Arithmetic" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Arithmetic.html#Arithmetic" rel="up" title=
+  "Arithmetic" />
+  <link href="Date-Conversions.html#Date-Conversions" rel="next"
+  title="Date Conversions" />
+  <link href="Conversions.html#Conversions" rel="prev" title=
+  "Conversions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Date-Arithmetic"></a>
-<div class="header">
-<p>
-Next: <a href="Financial-Functions.html#Financial-Functions" accesskey="n" rel="next">Financial Functions</a>, Previous: <a href="Conversions.html#Conversions" accesskey="p" rel="prev">Conversions</a>, Up: <a href="Arithmetic.html#Arithmetic" accesskey="u" rel="up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Date-Arithmetic-1"></a>
-<h3 class="section">7.5 Date Arithmetic</h3>
+<body lang="en" xml:lang="en">
+  <a name="Date-Arithmetic" id="Date-Arithmetic"></a>
 
-<a name="index-Date-arithmetic_002c-additional-functions"></a>
-<p>The commands described in this section perform various conversions
-and calculations involving date forms (see <a href="Date-Forms.html#Date-Forms">Date Forms</a>).  They
-use the <kbd>t</kbd> (for time/date) prefix key followed by shifted
-letters.
-</p>
-<p>The simplest date arithmetic is done using the regular <kbd>+</kbd> and <kbd>-</kbd>
-commands.  In particular, adding a number to a date form advances the
-date form by a certain number of days; adding an HMS form to a date
-form advances the date by a certain amount of time; and subtracting two
-date forms produces a difference measured in days.  The commands
-described here provide additional, more specialized operations on dates.
-</p>
-<p>Many of these commands accept a numeric prefix argument; if you give
-plain <kbd>C-u</kbd> as the prefix, these commands will instead take the
-additional argument from the top of the stack.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Date-Conversions.html#Date-Conversions" accesskey="1">Date Conversions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Date-Functions.html#Date-Functions" accesskey="2">Date Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Time-Zones.html#Time-Zones" accesskey="3">Time Zones</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Business-Days.html#Business-Days" accesskey="4">Business Days</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <div class="header">
+    <p>Next: <a href="Financial-Functions.html#Financial-Functions"
+    accesskey="n" rel="next">Financial Functions</a>, Previous:
+    <a href="Conversions.html#Conversions" accesskey="p" rel=
+    "prev">Conversions</a>, Up: <a href=
+    "Arithmetic.html#Arithmetic" accesskey="u" rel=
+    "up">Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Date-Arithmetic-1" id="Date-Arithmetic-1"></a>
 
+  <h3 class="section">7.5 Date Arithmetic</h3><a name=
+  "index-Date-arithmetic_002c-additional-functions" id=
+  "index-Date-arithmetic_002c-additional-functions"></a>
 
+  <p>The commands described in this section perform various
+  conversions and calculations involving date forms (see <a href=
+  "Date-Forms.html#Date-Forms">Date Forms</a>). They use the
+  <kbd>t</kbd> (for time/date) prefix key followed by shifted
+  letters.</p>
 
+  <p>The simplest date arithmetic is done using the regular
+  <kbd>+</kbd> and <kbd>-</kbd> commands. In particular, adding a
+  number to a date form advances the date form by a certain number
+  of days; adding an HMS form to a date form advances the date by a
+  certain amount of time; and subtracting two date forms produces a
+  difference measured in days. The commands described here provide
+  additional, more specialized operations on dates.</p>
 
+  <p>Many of these commands accept a numeric prefix argument; if
+  you give plain <kbd>C-u</kbd> as the prefix, these commands will
+  instead take the additional argument from the top of the
+  stack.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Date-Conversions.html#Date-Conversions" accesskey="1">Date
+      Conversions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Date-Functions.html#Date-Functions" accesskey="2">Date
+      Functions</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Time-Zones.html#Time-Zones" accesskey="3">Time
+      Zones</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Business-Days.html#Business-Days" accesskey="4">Business
+      Days</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

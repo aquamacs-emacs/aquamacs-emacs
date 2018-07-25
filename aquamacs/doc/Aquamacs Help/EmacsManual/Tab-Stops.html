@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,119 +20,167 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Tab Stops</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Tab Stops">
-<meta name="keywords" content="GNU Emacs Manual: Tab Stops">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Indentation.html#Indentation" rel="up" title="Indentation">
-<link href="Just-Spaces.html#Just-Spaces" rel="next" title="Just Spaces">
-<link href="Indentation-Commands.html#Indentation-Commands" rel="prev" title="Indentation Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Tab Stops</title>
+  <meta name="description" content="GNU Emacs Manual: Tab Stops" />
+  <meta name="keywords" content="GNU Emacs Manual: Tab Stops" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Indentation.html#Indentation" rel="up" title=
+  "Indentation" />
+  <link href="Just-Spaces.html#Just-Spaces" rel="next" title=
+  "Just Spaces" />
+  <link href="Indentation-Commands.html#Indentation-Commands" rel=
+  "prev" title="Indentation Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Tab-Stops" id="Tab-Stops"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Just-Spaces.html#Just-Spaces" accesskey="n"
+    rel="next">Just Spaces</a>, Previous: <a href=
+    "Indentation-Commands.html#Indentation-Commands" accesskey="p"
+    rel="prev">Indentation Commands</a>, Up: <a href=
+    "Indentation.html#Indentation" accesskey="u" rel=
+    "up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Tab-Stops-1" id="Tab-Stops-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Tab-Stops"></a>
-<div class="header">
-<p>
-Next: <a href="Just-Spaces.html#Just-Spaces" accesskey="n" rel="next">Just Spaces</a>, Previous: <a href="Indentation-Commands.html#Indentation-Commands" accesskey="p" rel="prev">Indentation Commands</a>, Up: <a href="Indentation.html#Indentation" accesskey="u" rel="up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Tab-Stops-1"></a>
-<h3 class="section">24.2 Tab Stops</h3>
-<a name="index-tab-stops"></a>
+  <h3 class="section">24.2 Tab Stops</h3><a name="index-tab-stops"
+  id="index-tab-stops"></a> <a name="index-tab_002dstop_002dlist"
+  id="index-tab_002dstop_002dlist"></a>
 
-<a name="index-tab_002dstop_002dlist"></a>
-<p>Emacs defines certain column numbers to be <em>tab stops</em>.  These
-are used as stopping points by <tt class="key">TAB</tt> when inserting whitespace in
-Text mode and related modes (see <a href="Indentation.html#Indentation">Indentation</a>), and by commands
-like <kbd>M-i</kbd> (see <a href="Indentation-Commands.html#Indentation-Commands">Indentation Commands</a>).  The variable
-<code>tab-stop-list</code> controls these positions.  The default value is
-<code>nil</code>, which means a tab stop every 8 columns.  The value can
-also be a list of zero-based column numbers (in increasing order) at
-which to place tab stops.  Emacs extends the list forever by repeating
-the difference between the last and next-to-last elements.
-</p>
-<a name="index-edit_002dtab_002dstops"></a>
-<a name="index-C_002dc-C_002dc-_0028Edit-Tab-Stops_0029"></a>
-<p>Instead of customizing the variable <code>tab-stop-list</code> directly, a
-convenient way to view and set tab stops is via the command <kbd>M-x
-edit-tab-stops</kbd>.  This switches to a buffer containing a description
-of the tab stop settings, which looks like this:
-</p>
-<div class="example">
-<pre class="example">        :       :       :       :       :       :
+  <p>Emacs defines certain column numbers to be <em>tab stops</em>.
+  These are used as stopping points by <tt class="key">TAB</tt>
+  when inserting whitespace in Text mode and related modes (see
+  <a href="Indentation.html#Indentation">Indentation</a>), and by
+  commands like <kbd>M-i</kbd> (see <a href=
+  "Indentation-Commands.html#Indentation-Commands">Indentation
+  Commands</a>). The variable <code>tab-stop-list</code> controls
+  these positions. The default value is <code>nil</code>, which
+  means a tab stop every 8 columns. The value can also be a list of
+  zero-based column numbers (in increasing order) at which to place
+  tab stops. Emacs extends the list forever by repeating the
+  difference between the last and next-to-last
+  elements.</p><a name="index-edit_002dtab_002dstops" id=
+  "index-edit_002dtab_002dstops"></a> <a name=
+  "index-C_002dc-C_002dc-_0028Edit-Tab-Stops_0029" id=
+  "index-C_002dc-C_002dc-_0028Edit-Tab-Stops_0029"></a>
+
+  <p>Instead of customizing the variable <code>tab-stop-list</code>
+  directly, a convenient way to view and set tab stops is via the
+  command <kbd>M-x edit-tab-stops</kbd>. This switches to a buffer
+  containing a description of the tab stop settings, which looks
+  like this:</p>
+
+  <div class="example">
+    <pre class="example">
+        :       :       :       :       :       :
 0         1         2         3         4
 0123456789012345678901234567890123456789012345678
 To install changes, type C-c C-c
-</pre></div>
+</pre>
+  </div>
 
-<p>The first line contains a colon at each tab stop.  The numbers on the
-next two lines are present just to indicate where the colons are.
-If the value of <code>tab-stop-list</code> is <code>nil</code>, as it is by default,
-no colons are displayed initially.
-</p>
-<p>You can edit this buffer to specify different tab stops by placing
-colons on the desired columns.  The buffer uses Overwrite mode
-(see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>).  Remember that Emacs will extend the list of
-tab stops forever by repeating the difference between the last two
-explicit stops that you place.  When you are done, type <kbd>C-c C-c</kbd> to make
-the new tab stops take effect.  Normally, the new tab stop settings
-apply to all buffers.  However, if you have made the
-<code>tab-stop-list</code> variable local to the buffer where you called
-<kbd>M-x edit-tab-stops</kbd> (see <a href="Locals.html#Locals">Locals</a>), then the new tab stop
-settings apply only to that buffer.  To save the tab stop settings for
-future Emacs sessions, use the Customize interface to save the value
-of <code>tab-stop-list</code> (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>).
-</p>
-<p>Note that the tab stops discussed in this section have nothing to do
-with how tab characters are displayed in the buffer.  Tab characters
-are always displayed as empty spaces extending to the next
-<em>display tab stop</em>.  See <a href="Text-Display.html#Text-Display">Text Display</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Just-Spaces.html#Just-Spaces" accesskey="n" rel="next">Just Spaces</a>, Previous: <a href="Indentation-Commands.html#Indentation-Commands" accesskey="p" rel="prev">Indentation Commands</a>, Up: <a href="Indentation.html#Indentation" accesskey="u" rel="up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The first line contains a colon at each tab stop. The numbers
+  on the next two lines are present just to indicate where the
+  colons are. If the value of <code>tab-stop-list</code> is
+  <code>nil</code>, as it is by default, no colons are displayed
+  initially.</p>
 
+  <p>You can edit this buffer to specify different tab stops by
+  placing colons on the desired columns. The buffer uses Overwrite
+  mode (see <a href="Minor-Modes.html#Minor-Modes">Minor
+  Modes</a>). Remember that Emacs will extend the list of tab stops
+  forever by repeating the difference between the last two explicit
+  stops that you place. When you are done, type <kbd>C-c C-c</kbd>
+  to make the new tab stops take effect. Normally, the new tab stop
+  settings apply to all buffers. However, if you have made the
+  <code>tab-stop-list</code> variable local to the buffer where you
+  called <kbd>M-x edit-tab-stops</kbd> (see <a href=
+  "Locals.html#Locals">Locals</a>), then the new tab stop settings
+  apply only to that buffer. To save the tab stop settings for
+  future Emacs sessions, use the Customize interface to save the
+  value of <code>tab-stop-list</code> (see <a href=
+  "Easy-Customization.html#Easy-Customization">Easy
+  Customization</a>).</p>
 
+  <p>Note that the tab stops discussed in this section have nothing
+  to do with how tab characters are displayed in the buffer. Tab
+  characters are always displayed as empty spaces extending to the
+  next <em>display tab stop</em>. See <a href=
+  "Text-Display.html#Text-Display">Text Display</a>.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Just-Spaces.html#Just-Spaces" accesskey="n"
+    rel="next">Just Spaces</a>, Previous: <a href=
+    "Indentation-Commands.html#Indentation-Commands" accesskey="p"
+    rel="prev">Indentation Commands</a>, Up: <a href=
+    "Indentation.html#Indentation" accesskey="u" rel=
+    "up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

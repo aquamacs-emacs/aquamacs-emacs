@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,98 +19,136 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Vectors</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Vectors">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Vectors">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up" title="Sequences Arrays Vectors">
-<link href="Vector-Functions.html#Vector-Functions" rel="next" title="Vector Functions">
-<link href="Array-Functions.html#Array-Functions" rel="prev" title="Array Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Vectors</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Vectors" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Vectors" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up"
+  title="Sequences Arrays Vectors" />
+  <link href="Vector-Functions.html#Vector-Functions" rel="next"
+  title="Vector Functions" />
+  <link href="Array-Functions.html#Array-Functions" rel="prev"
+  title="Array Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Vectors" id="Vectors"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Vector-Functions.html#Vector-Functions"
+    accesskey="n" rel="next">Vector Functions</a>, Previous:
+    <a href="Array-Functions.html#Array-Functions" accesskey="p"
+    rel="prev">Array Functions</a>, Up: <a href=
+    "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors"
+    accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Vectors-1" id="Vectors-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Vectors"></a>
-<div class="header">
-<p>
-Next: <a href="Vector-Functions.html#Vector-Functions" accesskey="n" rel="next">Vector Functions</a>, Previous: <a href="Array-Functions.html#Array-Functions" accesskey="p" rel="prev">Array Functions</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Vectors-1"></a>
-<h3 class="section">6.4 Vectors</h3>
-<a name="index-vector-_0028type_0029"></a>
+  <h3 class="section">6.4 Vectors</h3><a name=
+  "index-vector-_0028type_0029" id=
+  "index-vector-_0028type_0029"></a>
 
-<p>A <em>vector</em> is a general-purpose array whose elements can be any
-Lisp objects.  (By contrast, the elements of a string can only be
-characters.  See <a href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>.)  Vectors are used in
-Emacs for many purposes: as key sequences (see <a href="Key-Sequences.html#Key-Sequences">Key Sequences</a>), as
-symbol-lookup tables (see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>), as part of the
-representation of a byte-compiled function (see <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>),
-and more.
-</p>
-<p>Like other arrays, vectors use zero-origin indexing: the first
-element has index 0.
-</p>
-<p>Vectors are printed with square brackets surrounding the elements.
-Thus, a vector whose elements are the symbols <code>a</code>, <code>b</code> and
-<code>a</code> is printed as <code>[a b a]</code>.  You can write vectors in the
-same way in Lisp input.
-</p>
-<p>A vector, like a string or a number, is considered a constant for
-evaluation: the result of evaluating it is the same vector.  This does
-not evaluate or even examine the elements of the vector.
-See <a href="Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms">Self-Evaluating Forms</a>.
-</p>
-<p>Here are examples illustrating these principles:
-</p>
-<div class="example">
-<pre class="example">(setq avector [1 two '(three) &quot;four&quot; [five]])
-     &rArr; [1 two (quote (three)) &quot;four&quot; [five]]
+  <p>A <em>vector</em> is a general-purpose array whose elements
+  can be any Lisp objects. (By contrast, the elements of a string
+  can only be characters. See <a href=
+  "Strings-and-Characters.html#Strings-and-Characters">Strings and
+  Characters</a>.) Vectors are used in Emacs for many purposes: as
+  key sequences (see <a href="Key-Sequences.html#Key-Sequences">Key
+  Sequences</a>), as symbol-lookup tables (see <a href=
+  "Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>),
+  as part of the representation of a byte-compiled function (see
+  <a href="Byte-Compilation.html#Byte-Compilation">Byte
+  Compilation</a>), and more.</p>
+
+  <p>Like other arrays, vectors use zero-origin indexing: the first
+  element has index 0.</p>
+
+  <p>Vectors are printed with square brackets surrounding the
+  elements. Thus, a vector whose elements are the symbols
+  <code>a</code>, <code>b</code> and <code>a</code> is printed as
+  <code>[a b a]</code>. You can write vectors in the same way in
+  Lisp input.</p>
+
+  <p>A vector, like a string or a number, is considered a constant
+  for evaluation: the result of evaluating it is the same vector.
+  This does not evaluate or even examine the elements of the
+  vector. See <a href=
+  "Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms">Self-Evaluating
+  Forms</a>.</p>
+
+  <p>Here are examples illustrating these principles:</p>
+
+  <div class="example">
+    <pre class="example">
+(setq avector [1 two '(three) "four" [five]])
+     &rArr; [1 two (quote (three)) "four" [five]]
 (eval avector)
-     &rArr; [1 two (quote (three)) &quot;four&quot; [five]]
+     &rArr; [1 two (quote (three)) "four" [five]]
 (eq avector (eval avector))
      &rArr; t
-</pre></div>
-
-
-
-
+</pre>
+  </div>
 </body>
 </html>

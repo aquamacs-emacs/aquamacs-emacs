@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>rfc2231 - Emacs MIME Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Emacs MIME Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Basic-Functions.html#Basic-Functions" title="Basic Functions">
-<link rel="prev" href="rfc2045.html#rfc2045" title="rfc2045">
-<link rel="next" href="ietf_002ddrums.html#ietf_002ddrums" title="ietf-drums">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>rfc2231 - Emacs MIME Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Emacs MIME Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Basic-Functions.html#Basic-Functions" title=
+  "Basic Functions" />
+  <link rel="prev" href="rfc2045.html#rfc2045" title="rfc2045" />
+  <link rel="next" href="ietf_002ddrums.html#ietf_002ddrums" title=
+  "ietf-drums" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the Emacs MIME interface functionality.
 
 Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
@@ -27,8 +36,10 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -38,55 +49,75 @@ Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="rfc2231"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="ietf_002ddrums.html#ietf_002ddrums">ietf-drums</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="rfc2045.html#rfc2045">rfc2045</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Basic-Functions.html#Basic-Functions">Basic Functions</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="rfc2231" id="rfc2231"></a>
 
-<h3 class="section">4.2 rfc2231</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "ietf_002ddrums.html#ietf_002ddrums">ietf-drums</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "rfc2045.html#rfc2045">rfc2045</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="Basic-Functions.html#Basic-Functions">Basic
+    Functions</a></p>
+    <hr />
+  </div>
 
-<p>RFC2231 defines a syntax for the <code>Content-Type</code> and
-<code>Content-Disposition</code> headers.  Its snappy name is <dfn>MIME
-Parameter Value and Encoded Word Extensions: Character Sets, Languages,
-and Continuations</dfn>.
+  <h3 class="section">4.2 rfc2231</h3>
 
-   <p>In short, these headers look something like this:
+  <p>RFC2231 defines a syntax for the <code>Content-Type</code> and
+  <code>Content-Disposition</code> headers. Its snappy name is
+  <dfn>MIME Parameter Value and Encoded Word Extensions: Character
+  Sets, Languages, and Continuations</dfn>.</p>
 
-<pre class="example">     Content-Type: application/x-stuff;
+  <p>In short, these headers look something like this:</p>
+  <pre class="example">
+     Content-Type: application/x-stuff;
       title*0*=us-ascii'en'This%20is%20even%20more%20;
       title*1*=%2A%2A%2Afun%2A%2A%2A%20;
       title*2="isn't it!"
 </pre>
-   <p>They usually aren't this bad, though.
 
-   <p>The following functions are defined by this library:
+  <p>They usually aren't this bad, though.</p>
 
-     <dl>
-<dt><code>rfc2231-parse-string</code><dd><a name="index-rfc2231_002dparse_002dstring-103"></a>Parse a <code>Content-Type</code> header and return a list describing its
-elements.
+  <p>The following functions are defined by this library:</p>
 
-     <pre class="example">          (rfc2231-parse-string
+  <dl>
+    <dt><code>rfc2231-parse-string</code></dt>
+
+    <dd>
+      <a name="index-rfc2231_002dparse_002dstring-103" id=
+      "index-rfc2231_002dparse_002dstring-103"></a>Parse a
+      <code>Content-Type</code> header and return a list describing
+      its elements.
+      <pre class="example">
+          (rfc2231-parse-string
            "application/x-stuff;
            title*0*=us-ascii'en'This%20is%20even%20more%20;
            title*1*=%2A%2A%2Afun%2A%2A%2A%20;
            title*2=\"isn't it!\"")
           &rArr; ("application/x-stuff"
               (title . "This is even more ***fun*** isn't it!"))
-</pre>
-     <br><dt><code>rfc2231-get-value</code><dd><a name="index-rfc2231_002dget_002dvalue-104"></a>Takes one of the lists on the format above and returns
-the value of the specified attribute.
+</pre><br />
+    </dd>
 
-     <br><dt><code>rfc2231-encode-string</code><dd><a name="index-rfc2231_002dencode_002dstring-105"></a>Encode a parameter in headers likes <code>Content-Type</code> and
-<code>Content-Disposition</code>.
+    <dt><code>rfc2231-get-value</code></dt>
 
-   </dl>
+    <dd><a name="index-rfc2231_002dget_002dvalue-104" id=
+    "index-rfc2231_002dget_002dvalue-104"></a>Takes one of the
+    lists on the format above and returns the value of the
+    specified attribute.<br /></dd>
 
-   </body></html>
+    <dt><code>rfc2231-encode-string</code></dt>
 
+    <dd><a name="index-rfc2231_002dencode_002dstring-105" id=
+    "index-rfc2231_002dencode_002dstring-105"></a>Encode a
+    parameter in headers likes <code>Content-Type</code> and
+    <code>Content-Disposition</code>.</dd>
+  </dl>
+</body>
+</html>

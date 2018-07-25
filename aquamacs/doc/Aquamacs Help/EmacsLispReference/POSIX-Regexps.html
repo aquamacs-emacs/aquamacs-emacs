@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,111 +19,167 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: POSIX Regexps</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: POSIX Regexps">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: POSIX Regexps">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Searching-and-Matching.html#Searching-and-Matching" rel="up" title="Searching and Matching">
-<link href="Match-Data.html#Match-Data" rel="next" title="Match Data">
-<link href="Regexp-Search.html#Regexp-Search" rel="prev" title="Regexp Search">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: POSIX Regexps</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: POSIX Regexps" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: POSIX Regexps" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Searching-and-Matching.html#Searching-and-Matching"
+  rel="up" title="Searching and Matching" />
+  <link href="Match-Data.html#Match-Data" rel="next" title=
+  "Match Data" />
+  <link href="Regexp-Search.html#Regexp-Search" rel="prev" title=
+  "Regexp Search" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="POSIX-Regexps" id="POSIX-Regexps"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Match-Data.html#Match-Data" accesskey="n"
+    rel="next">Match Data</a>, Previous: <a href=
+    "Regexp-Search.html#Regexp-Search" accesskey="p" rel=
+    "prev">Regexp Search</a>, Up: <a href=
+    "Searching-and-Matching.html#Searching-and-Matching" accesskey=
+    "u" rel="up">Searching and Matching</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="POSIX-Regular-Expression-Searching" id=
+  "POSIX-Regular-Expression-Searching"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="POSIX-Regexps"></a>
-<div class="header">
-<p>
-Next: <a href="Match-Data.html#Match-Data" accesskey="n" rel="next">Match Data</a>, Previous: <a href="Regexp-Search.html#Regexp-Search" accesskey="p" rel="prev">Regexp Search</a>, Up: <a href="Searching-and-Matching.html#Searching-and-Matching" accesskey="u" rel="up">Searching and Matching</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="POSIX-Regular-Expression-Searching"></a>
-<h3 class="section">33.5 POSIX Regular Expression Searching</h3>
+  <h3 class="section">33.5 POSIX Regular Expression
+  Searching</h3><a name=
+  "index-backtracking-and-POSIX-regular-expressions" id=
+  "index-backtracking-and-POSIX-regular-expressions"></a>
 
-<a name="index-backtracking-and-POSIX-regular-expressions"></a>
-<p>The usual regular expression functions do backtracking when necessary
-to handle the &lsquo;<samp>\|</samp>&rsquo; and repetition constructs, but they continue
-this only until they find <em>some</em> match.  Then they succeed and
-report the first match found.
-</p>
-<p>This section describes alternative search functions which perform the
-full backtracking specified by the POSIX standard for regular expression
-matching.  They continue backtracking until they have tried all
-possibilities and found all matches, so they can report the longest
-match, as required by POSIX.  This is much slower, so use these
-functions only when you really need the longest match.
-</p>
-<p>The POSIX search and match functions do not properly support the
-non-greedy repetition operators (see <a href="Regexp-Special.html#Regexp-Special">non-greedy</a>).
-This is because POSIX backtracking conflicts with the semantics of
-non-greedy repetition.
-</p>
-<dl>
-<dt><a name="index-posix_002dsearch_002dforward"></a>Command: <strong>posix-search-forward</strong> <em>regexp &amp;optional limit noerror count</em></dt>
-<dd><p>This is like <code>re-search-forward</code> except that it performs the full
-backtracking specified by the POSIX standard for regular expression
-matching.
-</p></dd></dl>
+  <p>The usual regular expression functions do backtracking when
+  necessary to handle the &lsquo;<samp>\|</samp>&rsquo; and
+  repetition constructs, but they continue this only until they
+  find <em>some</em> match. Then they succeed and report the first
+  match found.</p>
 
-<dl>
-<dt><a name="index-posix_002dsearch_002dbackward"></a>Command: <strong>posix-search-backward</strong> <em>regexp &amp;optional limit noerror count</em></dt>
-<dd><p>This is like <code>re-search-backward</code> except that it performs the full
-backtracking specified by the POSIX standard for regular expression
-matching.
-</p></dd></dl>
+  <p>This section describes alternative search functions which
+  perform the full backtracking specified by the POSIX standard for
+  regular expression matching. They continue backtracking until
+  they have tried all possibilities and found all matches, so they
+  can report the longest match, as required by POSIX. This is much
+  slower, so use these functions only when you really need the
+  longest match.</p>
 
-<dl>
-<dt><a name="index-posix_002dlooking_002dat"></a>Function: <strong>posix-looking-at</strong> <em>regexp</em></dt>
-<dd><p>This is like <code>looking-at</code> except that it performs the full
-backtracking specified by the POSIX standard for regular expression
-matching.
-</p></dd></dl>
+  <p>The POSIX search and match functions do not properly support
+  the non-greedy repetition operators (see <a href=
+  "Regexp-Special.html#Regexp-Special">non-greedy</a>). This is
+  because POSIX backtracking conflicts with the semantics of
+  non-greedy repetition.</p>
 
-<dl>
-<dt><a name="index-posix_002dstring_002dmatch"></a>Function: <strong>posix-string-match</strong> <em>regexp string &amp;optional start</em></dt>
-<dd><p>This is like <code>string-match</code> except that it performs the full
-backtracking specified by the POSIX standard for regular expression
-matching.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-posix_002dsearch_002dforward" id=
+    "index-posix_002dsearch_002dforward"></a>Command:
+    <strong>posix-search-forward</strong> <em>regexp &amp;optional
+    limit noerror count</em></dt>
 
+    <dd>
+      <p>This is like <code>re-search-forward</code> except that it
+      performs the full backtracking specified by the POSIX
+      standard for regular expression matching.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-posix_002dsearch_002dbackward" id=
+    "index-posix_002dsearch_002dbackward"></a>Command:
+    <strong>posix-search-backward</strong> <em>regexp &amp;optional
+    limit noerror count</em></dt>
 
+    <dd>
+      <p>This is like <code>re-search-backward</code> except that
+      it performs the full backtracking specified by the POSIX
+      standard for regular expression matching.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-posix_002dlooking_002dat" id=
+    "index-posix_002dlooking_002dat"></a>Function:
+    <strong>posix-looking-at</strong> <em>regexp</em></dt>
+
+    <dd>
+      <p>This is like <code>looking-at</code> except that it
+      performs the full backtracking specified by the POSIX
+      standard for regular expression matching.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-posix_002dstring_002dmatch" id=
+    "index-posix_002dstring_002dmatch"></a>Function:
+    <strong>posix-string-match</strong> <em>regexp string
+    &amp;optional start</em></dt>
+
+    <dd>
+      <p>This is like <code>string-match</code> except that it
+      performs the full backtracking specified by the POSIX
+      standard for regular expression matching.</p>
+    </dd>
+  </dl>
 </body>
 </html>

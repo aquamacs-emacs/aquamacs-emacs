@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,117 +14,162 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: BBDB Whitelists</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: BBDB Whitelists">
-<meta name="keywords" content="Gnus Manual: BBDB Whitelists">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title="Spam Back Ends">
-<link href="Gmane-Spam-Reporting.html#Gmane-Spam-Reporting" rel="next" title="Gmane Spam Reporting">
-<link href="Blacklists-and-Whitelists.html#Blacklists-and-Whitelists" rel="prev" title="Blacklists and Whitelists">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: BBDB Whitelists</title>
+  <meta name="description" content=
+  "Gnus Manual: BBDB Whitelists" />
+  <meta name="keywords" content="Gnus Manual: BBDB Whitelists" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Spam-Back-Ends.html#Spam-Back-Ends" rel="up" title=
+  "Spam Back Ends" />
+  <link href="Gmane-Spam-Reporting.html#Gmane-Spam-Reporting" rel=
+  "next" title="Gmane Spam Reporting" />
+  <link href=
+  "Blacklists-and-Whitelists.html#Blacklists-and-Whitelists" rel=
+  "prev" title="Blacklists and Whitelists" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="BBDB-Whitelists"></a>
-<div class="header">
-<p>
-Next: <a href="Gmane-Spam-Reporting.html#Gmane-Spam-Reporting" accesskey="n" rel="next">Gmane Spam Reporting</a>, Previous: <a href="Blacklists-and-Whitelists.html#Blacklists-and-Whitelists" accesskey="p" rel="prev">Blacklists and Whitelists</a>, Up: <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel="up">Spam Back Ends</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="BBDB-Whitelists-1"></a>
-<h4 class="subsubsection">9.17.6.2 BBDB Whitelists</h4>
-<a name="index-spam-filtering-6"></a>
-<a name="index-BBDB-whitelists_002c-spam-filtering"></a>
-<a name="index-BBDB_002c-spam-filtering"></a>
-<a name="index-spam-8"></a>
+<body lang="en" xml:lang="en">
+  <a name="BBDB-Whitelists" id="BBDB-Whitelists"></a>
 
-<dl>
-<dt><a name="index-spam_002duse_002dBBDB"></a>Variable: <strong>spam-use-BBDB</strong></dt>
-<dd>
-<p>Analogous to <code>spam-use-whitelist</code> (see <a href="Blacklists-and-Whitelists.html#Blacklists-and-Whitelists">Blacklists and Whitelists</a>), but uses the BBDB as the source of whitelisted
-addresses, without regular expressions.  You must have the BBDB loaded
-for <code>spam-use-BBDB</code> to work properly.  Messages whose senders are
-not in the BBDB will be sent to the next spam-split rule.  This is an
-explicit filter, meaning that unless someone is in the BBDB, their
-messages are not assumed to be spam or ham.
-</p>
-</dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Gmane-Spam-Reporting.html#Gmane-Spam-Reporting" accesskey="n"
+    rel="next">Gmane Spam Reporting</a>, Previous: <a href=
+    "Blacklists-and-Whitelists.html#Blacklists-and-Whitelists"
+    accesskey="p" rel="prev">Blacklists and Whitelists</a>, Up:
+    <a href="Spam-Back-Ends.html#Spam-Back-Ends" accesskey="u" rel=
+    "up">Spam Back Ends</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="BBDB-Whitelists-1" id="BBDB-Whitelists-1"></a>
 
-<dl>
-<dt><a name="index-spam_002duse_002dBBDB_002dexclusive"></a>Variable: <strong>spam-use-BBDB-exclusive</strong></dt>
-<dd>
-<p>Set this variable to <code>t</code> if you want to use the BBDB as an
-implicit filter, meaning that every message will be considered spam
-unless the sender is in the BBDB.  Use with care.  Only sender
-addresses in the BBDB will be allowed through; all others will be
-classified as spammers.
-</p>
-<p>While <code>spam-use-BBDB-exclusive</code> <em>can</em> be used as an alias
-for <code>spam-use-BBDB</code> as far as <code>spam.el</code> is concerned, it is
-<em>not</em> a separate back end.  If you set
-<code>spam-use-BBDB-exclusive</code> to <code>t</code>, <em>all</em> your BBDB splitting
-will be exclusive.
-</p>
-</dd></dl>
+  <h4 class="subsubsection">9.17.6.2 BBDB Whitelists</h4><a name=
+  "index-spam-filtering-6" id="index-spam-filtering-6"></a>
+  <a name="index-BBDB-whitelists_002c-spam-filtering" id=
+  "index-BBDB-whitelists_002c-spam-filtering"></a> <a name=
+  "index-BBDB_002c-spam-filtering" id=
+  "index-BBDB_002c-spam-filtering"></a> <a name="index-spam-8" id=
+  "index-spam-8"></a>
 
-<dl>
-<dt><a name="index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dBBDB"></a>Variable: <strong>gnus-group-ham-exit-processor-BBDB</strong></dt>
-<dd>
-<p>Add this symbol to a group&rsquo;s <code>spam-process</code> parameter by
-customizing the group parameters or the
-<code>gnus-spam-process-newsgroups</code> variable.  When this symbol is
-added to a group&rsquo;s <code>spam-process</code> parameter, the senders of
-ham-marked articles in <em>ham</em> groups will be added to the
-BBDB.
-</p>
-<p><em>WARNING</em>
-</p>
-<p>Instead of the obsolete
-<code>gnus-group-ham-exit-processor-BBDB</code>, it is recommended
-that you use <code>(ham spam-use-BBDB)</code>.  Everything will work
-the same way, we promise.
-</p>
-</dd></dl>
+  <dl>
+    <dt><a name="index-spam_002duse_002dBBDB" id=
+    "index-spam_002duse_002dBBDB"></a>Variable:
+    <strong>spam-use-BBDB</strong></dt>
 
+    <dd>
+      <p>Analogous to <code>spam-use-whitelist</code> (see <a href=
+      "Blacklists-and-Whitelists.html#Blacklists-and-Whitelists">Blacklists
+      and Whitelists</a>), but uses the BBDB as the source of
+      whitelisted addresses, without regular expressions. You must
+      have the BBDB loaded for <code>spam-use-BBDB</code> to work
+      properly. Messages whose senders are not in the BBDB will be
+      sent to the next spam-split rule. This is an explicit filter,
+      meaning that unless someone is in the BBDB, their messages
+      are not assumed to be spam or ham.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-spam_002duse_002dBBDB_002dexclusive" id=
+    "index-spam_002duse_002dBBDB_002dexclusive"></a>Variable:
+    <strong>spam-use-BBDB-exclusive</strong></dt>
 
+    <dd>
+      <p>Set this variable to <code>t</code> if you want to use the
+      BBDB as an implicit filter, meaning that every message will
+      be considered spam unless the sender is in the BBDB. Use with
+      care. Only sender addresses in the BBDB will be allowed
+      through; all others will be classified as spammers.</p>
 
+      <p>While <code>spam-use-BBDB-exclusive</code> <em>can</em> be
+      used as an alias for <code>spam-use-BBDB</code> as far as
+      <code>spam.el</code> is concerned, it is <em>not</em> a
+      separate back end. If you set
+      <code>spam-use-BBDB-exclusive</code> to <code>t</code>,
+      <em>all</em> your BBDB splitting will be exclusive.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dBBDB"
+    id=
+    "index-gnus_002dgroup_002dham_002dexit_002dprocessor_002dBBDB"></a>Variable:
+    <strong>gnus-group-ham-exit-processor-BBDB</strong></dt>
+
+    <dd>
+      <p>Add this symbol to a group&rsquo;s
+      <code>spam-process</code> parameter by customizing the group
+      parameters or the <code>gnus-spam-process-newsgroups</code>
+      variable. When this symbol is added to a group&rsquo;s
+      <code>spam-process</code> parameter, the senders of
+      ham-marked articles in <em>ham</em> groups will be added to
+      the BBDB.</p>
+
+      <p><em>WARNING</em></p>
+
+      <p>Instead of the obsolete
+      <code>gnus-group-ham-exit-processor-BBDB</code>, it is
+      recommended that you use <code>(ham spam-use-BBDB)</code>.
+      Everything will work the same way, we promise.</p>
+    </dd>
+  </dl>
 </body>
 </html>

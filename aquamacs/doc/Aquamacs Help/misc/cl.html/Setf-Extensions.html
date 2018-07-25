@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,80 +16,118 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Setf Extensions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Setf Extensions">
-<meta name="keywords" content="Common Lisp Extensions: Setf Extensions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Generalized-Variables.html#Generalized-Variables" rel="up" title="Generalized Variables">
-<link href="Modify-Macros.html#Modify-Macros" rel="next" title="Modify Macros">
-<link href="Generalized-Variables.html#Generalized-Variables" rel="prev" title="Generalized Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Setf Extensions</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Setf Extensions" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Setf Extensions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Generalized-Variables.html#Generalized-Variables"
+  rel="up" title="Generalized Variables" />
+  <link href="Modify-Macros.html#Modify-Macros" rel="next" title=
+  "Modify Macros" />
+  <link href="Generalized-Variables.html#Generalized-Variables"
+  rel="prev" title="Generalized Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Setf-Extensions"></a>
-<div class="header">
-<p>
-Next: <a href="Modify-Macros.html#Modify-Macros" accesskey="n" rel="next">Modify Macros</a>, Up: <a href="Generalized-Variables.html#Generalized-Variables" accesskey="u" rel="up">Generalized Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Setf-Extensions-1"></a>
-<h4 class="subsection">4.2.1 Setf Extensions</h4>
+<body lang="en" xml:lang="en">
+  <a name="Setf-Extensions" id="Setf-Extensions"></a>
 
-<p>Several standard (e.g., <code>car</code>) and Emacs-specific
-(e.g., <code>window-point</code>) Lisp functions are <code>setf</code>-able by default.
-This package defines <code>setf</code> handlers for several additional functions:
-</p>
-<ul>
-<li> Functions from this package:
-<div class="example">
-<pre class="example">cl-rest        cl-subseq      cl-get         cl-getf
+  <div class="header">
+    <p>Next: <a href="Modify-Macros.html#Modify-Macros" accesskey=
+    "n" rel="next">Modify Macros</a>, Up: <a href=
+    "Generalized-Variables.html#Generalized-Variables" accesskey=
+    "u" rel="up">Generalized Variables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Setf-Extensions-1" id="Setf-Extensions-1"></a>
+
+  <h4 class="subsection">4.2.1 Setf Extensions</h4>
+
+  <p>Several standard (e.g., <code>car</code>) and Emacs-specific
+  (e.g., <code>window-point</code>) Lisp functions are
+  <code>setf</code>-able by default. This package defines
+  <code>setf</code> handlers for several additional functions:</p>
+
+  <ul>
+    <li>Functions from this package:
+
+      <div class="example">
+        <pre class="example">
+cl-rest        cl-subseq      cl-get         cl-getf
 cl-caaar&hellip;cl-cddddr          cl-first&hellip;cl-tenth
-</pre></div>
+</pre>
+      </div>
 
-<p>Note that for <code>cl-getf</code> (as for <code>nthcdr</code>), the list argument
-of the function must itself be a valid <var>place</var> form.
-</p>
-</li><li> General Emacs Lisp functions:
-<div class="example">
-<pre class="example">buffer-file-name                   getenv
+      <p>Note that for <code>cl-getf</code> (as for
+      <code>nthcdr</code>), the list argument of the function must
+      itself be a valid <var>place</var> form.</p>
+    </li>
+
+    <li>General Emacs Lisp functions:
+
+      <div class="example">
+        <pre class="example">
+buffer-file-name                   getenv
 buffer-modified-p                  global-key-binding
 buffer-name                        local-key-binding
 buffer-string                      mark
@@ -112,78 +152,94 @@ frame-parameters                   window-width
 frame-visible-p                    x-get-secondary-selection
 frame-width                        x-get-selection
 get-register
-</pre></div>
+</pre>
+      </div>
 
-<p>Most of these have directly corresponding &ldquo;set&rdquo; functions, like
-<code>use-local-map</code> for <code>current-local-map</code>, or <code>goto-char</code>
-for <code>point</code>.  A few, like <code>point-min</code>, expand to longer
-sequences of code when they are used with <code>setf</code>
-(<code>(narrow-to-region x (point-max))</code> in this case).
-</p>
-</li><li> A call of the form <code>(substring <var>subplace</var> <var>n</var> [<var>m</var>])</code>,
-where <var>subplace</var> is itself a valid generalized variable whose
-current value is a string, and where the value stored is also a
-string.  The new string is spliced into the specified part of the
-destination string.  For example:
+      <p>Most of these have directly corresponding
+      &ldquo;set&rdquo; functions, like <code>use-local-map</code>
+      for <code>current-local-map</code>, or <code>goto-char</code>
+      for <code>point</code>. A few, like <code>point-min</code>,
+      expand to longer sequences of code when they are used with
+      <code>setf</code> (<code>(narrow-to-region x
+      (point-max))</code> in this case).</p>
+    </li>
 
-<div class="example">
-<pre class="example">(setq a (list &quot;hello&quot; &quot;world&quot;))
-     &rArr; (&quot;hello&quot; &quot;world&quot;)
+    <li>A call of the form <code>(substring <var>subplace</var>
+    <var>n</var> [<var>m</var>])</code>, where <var>subplace</var>
+    is itself a valid generalized variable whose current value is a
+    string, and where the value stored is also a string. The new
+    string is spliced into the specified part of the destination
+    string. For example:
+
+      <div class="example">
+        <pre class="example">
+(setq a (list "hello" "world"))
+     &rArr; ("hello" "world")
 (cadr a)
-     &rArr; &quot;world&quot;
+     &rArr; "world"
 (substring (cadr a) 2 4)
-     &rArr; &quot;rl&quot;
-(setf (substring (cadr a) 2 4) &quot;o&quot;)
-     &rArr; &quot;o&quot;
+     &rArr; "rl"
+(setf (substring (cadr a) 2 4) "o")
+     &rArr; "o"
 (cadr a)
-     &rArr; &quot;wood&quot;
+     &rArr; "wood"
 a
-     &rArr; (&quot;hello&quot; &quot;wood&quot;)
-</pre></div>
+     &rArr; ("hello" "wood")
+</pre>
+      </div>
 
-<p>The generalized variable <code>buffer-substring</code>, listed above,
-also works in this way by replacing a portion of the current buffer.
-</p>
+      <p>The generalized variable <code>buffer-substring</code>,
+      listed above, also works in this way by replacing a portion
+      of the current buffer.</p>
+    </li>
 
+    <li>A macro call, in which case the macro is expanded and
+    <code>setf</code> is applied to the resulting form.</li>
+  </ul>
 
-</li><li> A macro call, in which case the macro is expanded and <code>setf</code>
-is applied to the resulting form.
-</li></ul>
+  <p>The <code>setf</code> macro takes care to evaluate all
+  subforms in the proper left-to-right order; for example,</p>
 
-<p>The <code>setf</code> macro takes care to evaluate all subforms in
-the proper left-to-right order; for example,
-</p>
-<div class="example">
-<pre class="example">(setf (aref vec (cl-incf i)) i)
-</pre></div>
+  <div class="example">
+    <pre class="example">
+(setf (aref vec (cl-incf i)) i)
+</pre>
+  </div>
 
-<p>looks like it will evaluate <code>(cl-incf i)</code> exactly once, before the
-following access to <code>i</code>; the <code>setf</code> expander will insert
-temporary variables as necessary to ensure that it does in fact work
-this way no matter what setf-method is defined for <code>aref</code>.
-(In this case, <code>aset</code> would be used and no such steps would
-be necessary since <code>aset</code> takes its arguments in a convenient
-order.)
-</p>
-<p>However, if the <var>place</var> form is a macro which explicitly
-evaluates its arguments in an unusual order, this unusual order
-will be preserved.  Adapting an example from Steele, given
-</p>
-<div class="example">
-<pre class="example">(defmacro wrong-order (x y) (list 'aref y x))
-</pre></div>
+  <p>looks like it will evaluate <code>(cl-incf i)</code> exactly
+  once, before the following access to <code>i</code>; the
+  <code>setf</code> expander will insert temporary variables as
+  necessary to ensure that it does in fact work this way no matter
+  what setf-method is defined for <code>aref</code>. (In this case,
+  <code>aset</code> would be used and no such steps would be
+  necessary since <code>aset</code> takes its arguments in a
+  convenient order.)</p>
 
-<p>the form <code>(setf (wrong-order <var>a</var> <var>b</var>) 17)</code> will
-evaluate <var>b</var> first, then <var>a</var>, just as in an actual call
-to <code>wrong-order</code>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Modify-Macros.html#Modify-Macros" accesskey="n" rel="next">Modify Macros</a>, Up: <a href="Generalized-Variables.html#Generalized-Variables" accesskey="u" rel="up">Generalized Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>However, if the <var>place</var> form is a macro which
+  explicitly evaluates its arguments in an unusual order, this
+  unusual order will be preserved. Adapting an example from Steele,
+  given</p>
 
+  <div class="example">
+    <pre class="example">
+(defmacro wrong-order (x y) (list 'aref y x))
+</pre>
+  </div>
 
+  <p>the form <code>(setf (wrong-order <var>a</var> <var>b</var>)
+  17)</code> will evaluate <var>b</var> first, then <var>a</var>,
+  just as in an actual call to <code>wrong-order</code>.</p>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="Modify-Macros.html#Modify-Macros" accesskey=
+    "n" rel="next">Modify Macros</a>, Up: <a href=
+    "Generalized-Variables.html#Generalized-Variables" accesskey=
+    "u" rel="up">Generalized Variables</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

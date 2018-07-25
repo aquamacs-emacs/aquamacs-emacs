@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,310 +14,865 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Using of D-Bus: Type Conversion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Using of D-Bus: Type Conversion">
-<meta name="keywords" content="Using of D-Bus: Type Conversion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Synchronous-Methods.html#Synchronous-Methods" rel="next" title="Synchronous Methods">
-<link href="Arguments-and-Signatures.html#Arguments-and-Signatures" rel="prev" title="Arguments and Signatures">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Using of D-Bus: Type Conversion</title>
+  <meta name="description" content=
+  "Using of D-Bus: Type Conversion" />
+  <meta name="keywords" content=
+  "Using of D-Bus: Type Conversion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Synchronous-Methods.html#Synchronous-Methods" rel=
+  "next" title="Synchronous Methods" />
+  <link href=
+  "Arguments-and-Signatures.html#Arguments-and-Signatures" rel=
+  "prev" title="Arguments and Signatures" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Type-Conversion"></a>
-<div class="header">
-<p>
-Next: <a href="Synchronous-Methods.html#Synchronous-Methods" accesskey="n" rel="next">Synchronous Methods</a>, Previous: <a href="Inspection.html#Inspection" accesskey="p" rel="prev">Inspection</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Mapping-Lisp-types-and-D_002dBus-types_002e"></a>
-<h2 class="chapter">3 Mapping Lisp types and D-Bus types.</h2>
-<a name="index-type-conversion"></a>
+<body lang="en" xml:lang="en">
+  <a name="Type-Conversion" id="Type-Conversion"></a>
 
-<p>D-Bus method calls and signals accept usually several arguments as
-parameters, either as input parameter, or as output parameter.  Every
-argument belongs to a D-Bus type.
-</p>
-<p>Such arguments must be mapped between the value encoded as a D-Bus
-type, and the corresponding type of Lisp objects.  The mapping is
-applied Lisp object &rarr; D-Bus type for input parameters, and
-D-Bus type &rarr; Lisp object for output parameters.
-</p>
+  <div class="header">
+    <p>Next: <a href="Synchronous-Methods.html#Synchronous-Methods"
+    accesskey="n" rel="next">Synchronous Methods</a>, Previous:
+    <a href="Inspection.html#Inspection" accesskey="p" rel=
+    "prev">Inspection</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Mapping-Lisp-types-and-D_002dBus-types_002e" id=
+  "Mapping-Lisp-types-and-D_002dBus-types_002e"></a>
 
-<a name="Input-parameters_002e"></a>
-<h3 class="section">3.1 Input parameters.</h3>
+  <h2 class="chapter">3 Mapping Lisp types and D-Bus
+  types.</h2><a name="index-type-conversion" id=
+  "index-type-conversion"></a>
 
-<p>Input parameters for D-Bus methods and signals occur as arguments of a
-Lisp function call.  The following mapping to D-Bus types is
-applied, when the corresponding D-Bus message is created:
-</p>
-<div class="example">
-<table>
-<tr><td><pre class="example">Lisp type</pre></td><td></td><td><pre class="example">D-Bus type</pre></td></tr>
-<tr><td></td></tr>
-<tr><td><pre class="example"><code>t</code> and <code>nil</code></pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">DBUS_TYPE_BOOLEAN</pre></td></tr>
-<tr><td><pre class="example">natural number</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">DBUS_TYPE_UINT32</pre></td></tr>
-<tr><td><pre class="example">negative integer</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">DBUS_TYPE_INT32</pre></td></tr>
-<tr><td><pre class="example">float</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">DBUS_TYPE_DOUBLE</pre></td></tr>
-<tr><td><pre class="example">string</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">DBUS_TYPE_STRING</pre></td></tr>
-<tr><td><pre class="example">list</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">DBUS_TYPE_ARRAY</pre></td></tr>
-</table>
-</div>
+  <p>D-Bus method calls and signals accept usually several
+  arguments as parameters, either as input parameter, or as output
+  parameter. Every argument belongs to a D-Bus type.</p>
 
-<p>Other Lisp objects, like symbols or hash tables, are not accepted as
-input parameters.
-</p>
-<p>If it is necessary to use another D-Bus type, a corresponding type
-symbol can be prepended to the corresponding Lisp object.  Basic D-Bus
-types are represented by the type symbols <code>:byte</code>,
-<code>:boolean</code>, <code>:int16</code>, <code>:uint16</code>, <code>:int32</code>,
-<code>:uint32</code>, <code>:int64</code>, <code>:uint64</code>, <code>:double</code>,
-<code>:string</code>, <code>:object-path</code>, <code>:signature</code> and
-<code>:unix-fd</code>.
-</p>
-<p>Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-call-method &hellip; <var>NAT-NUMBER</var> <var>STRING</var>)
-</pre></div>
+  <p>Such arguments must be mapped between the value encoded as a
+  D-Bus type, and the corresponding type of Lisp objects. The
+  mapping is applied Lisp object &rarr; D-Bus type for input
+  parameters, and D-Bus type &rarr; Lisp object for output
+  parameters.</p><a name="Input-parameters_002e" id=
+  "Input-parameters_002e"></a>
 
-<p>is equivalent to
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-call-method &hellip; :uint32 <var>NAT-NUMBER</var> :string <var>STRING</var>)
-</pre></div>
+  <h3 class="section">3.1 Input parameters.</h3>
 
-<p>but different to
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-call-method &hellip; :int32 <var>NAT-NUMBER</var> :signature <var>STRING</var>)
-</pre></div>
+  <p>Input parameters for D-Bus methods and signals occur as
+  arguments of a Lisp function call. The following mapping to D-Bus
+  types is applied, when the corresponding D-Bus message is
+  created:</p>
 
-<p>The value for a byte D-Bus type can be any integer in the range 0
-through 255.  If a character is used as argument, modifiers
-represented outside this range are stripped of.  For example,
-<code>:byte ?x</code> is equal to <code>:byte ?\M-x</code>, but it is not equal to
-<code>:byte ?\C-x</code> or <code>:byte ?\M-\C-x</code>.
-</p>
-<p>Signed and unsigned integer D-Bus types expect a corresponding integer
-value.  If the value does not fit Emacs&rsquo;s integer range, it is also
-possible to use an equivalent floating point number.
-</p>
-<p>A D-Bus compound type is always represented as a list.  The <small>CAR</small>
-of this list can be the type symbol <code>:array</code>, <code>:variant</code>,
-<code>:struct</code> or <code>:dict-entry</code>, which would result in a
-corresponding D-Bus container.  <code>:array</code> is optional, because
-this is the default compound D-Bus type for a list.
-</p>
-<p>The objects being elements of the list are checked according to the
-D-Bus compound type rules.
-</p>
-<ul>
-<li> An array must contain only elements of the same D-Bus type.  It
-can be empty.
+  <div class="example">
+    <table>
+      <tr>
+        <td>
+          <pre class="example">
+Lisp type
+</pre>
+        </td>
 
-</li><li> A variant must contain only one single element.
+        <td></td>
 
-</li><li> A dictionary entry must be element of an array, and it must
-contain only a key-value pair of two elements, with a basic D-Bus type
-key.
+        <td>
+          <pre class="example">
+D-Bus type
+</pre>
+        </td>
+      </tr>
 
-</li><li> There is no restriction for structs.
-</li></ul>
+      <tr>
+        <td></td>
+      </tr>
 
-<p>If an empty array needs an element D-Bus type other than string, it
-can contain exactly one element of D-Bus type <code>:signature</code>.  The
-value of this element (a string) is used as the signature of the
-elements of this array.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-call-method
-  :session &quot;org.freedesktop.Notifications&quot;
-  &quot;/org/freedesktop/Notifications&quot;
-  &quot;org.freedesktop.Notifications&quot; &quot;Notify&quot;
-  &quot;GNU Emacs&quot;                 ;; Application name.
+      <tr>
+        <td>
+          <pre class="example">
+<code>t</code> and <code>nil</code>
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+DBUS_TYPE_BOOLEAN
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+natural number
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+DBUS_TYPE_UINT32
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+negative integer
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+DBUS_TYPE_INT32
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+float
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+DBUS_TYPE_DOUBLE
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+string
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+DBUS_TYPE_STRING
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+list
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+DBUS_TYPE_ARRAY
+</pre>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <p>Other Lisp objects, like symbols or hash tables, are not
+  accepted as input parameters.</p>
+
+  <p>If it is necessary to use another D-Bus type, a corresponding
+  type symbol can be prepended to the corresponding Lisp object.
+  Basic D-Bus types are represented by the type symbols
+  <code>:byte</code>, <code>:boolean</code>, <code>:int16</code>,
+  <code>:uint16</code>, <code>:int32</code>, <code>:uint32</code>,
+  <code>:int64</code>, <code>:uint64</code>, <code>:double</code>,
+  <code>:string</code>, <code>:object-path</code>,
+  <code>:signature</code> and <code>:unix-fd</code>.</p>
+
+  <p>Example:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(dbus-call-method &hellip; <var>NAT-NUMBER</var> <var>STRING</var>)
+</pre>
+  </div>
+
+  <p>is equivalent to</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(dbus-call-method &hellip; :uint32 <var>NAT-NUMBER</var> :string <var>STRING</var>)
+</pre>
+  </div>
+
+  <p>but different to</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(dbus-call-method &hellip; :int32 <var>NAT-NUMBER</var> :signature <var>STRING</var>)
+</pre>
+  </div>
+
+  <p>The value for a byte D-Bus type can be any integer in the
+  range 0 through 255. If a character is used as argument,
+  modifiers represented outside this range are stripped of. For
+  example, <code>:byte ?x</code> is equal to <code>:byte
+  ?\M-x</code>, but it is not equal to <code>:byte ?\C-x</code> or
+  <code>:byte ?\M-\C-x</code>.</p>
+
+  <p>Signed and unsigned integer D-Bus types expect a corresponding
+  integer value. If the value does not fit Emacs&rsquo;s integer
+  range, it is also possible to use an equivalent floating point
+  number.</p>
+
+  <p>A D-Bus compound type is always represented as a list. The
+  <small>CAR</small> of this list can be the type symbol
+  <code>:array</code>, <code>:variant</code>, <code>:struct</code>
+  or <code>:dict-entry</code>, which would result in a
+  corresponding D-Bus container. <code>:array</code> is optional,
+  because this is the default compound D-Bus type for a list.</p>
+
+  <p>The objects being elements of the list are checked according
+  to the D-Bus compound type rules.</p>
+
+  <ul>
+    <li>An array must contain only elements of the same D-Bus type.
+    It can be empty.</li>
+
+    <li>A variant must contain only one single element.</li>
+
+    <li>A dictionary entry must be element of an array, and it must
+    contain only a key-value pair of two elements, with a basic
+    D-Bus type key.</li>
+
+    <li>There is no restriction for structs.</li>
+  </ul>
+
+  <p>If an empty array needs an element D-Bus type other than
+  string, it can contain exactly one element of D-Bus type
+  <code>:signature</code>. The value of this element (a string) is
+  used as the signature of the elements of this array. Example:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(dbus-call-method
+  :session "org.freedesktop.Notifications"
+  "/org/freedesktop/Notifications"
+  "org.freedesktop.Notifications" "Notify"
+  "GNU Emacs"                 ;; Application name.
   0                           ;; No replacement of other notifications.
-  &quot;&quot;                          ;; No icon.
-  &quot;Notification summary&quot;      ;; Summary.
+  ""                          ;; No icon.
+  "Notification summary"      ;; Summary.
   (format                     ;; Body.
-    &quot;This is a test notification, raised from\n%S&quot; (emacs-version))
+    "This is a test notification, raised from\n%S" (emacs-version))
   '(:array)                   ;; No actions (empty array of strings).
-  '(:array :signature &quot;{sv}&quot;) ;; No hints
+  '(:array :signature "{sv}") ;; No hints
                               ;; (empty array of dictionary entries).
   :int32 -1)                  ;; Default timeout.
 
 &rArr; 3
-</pre></div>
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-dbus_002dstring_002dto_002dbyte_002darray"></a>Function: <strong>dbus-string-to-byte-array</strong> <em>string</em></dt>
-<dd><p>Sometimes, D-Bus methods require as input parameter an array of bytes,
-instead of a string.  If it is guaranteed, that <var>string</var> is an
-UTF8 string, this function performs the conversion.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-string-to-byte-array &quot;/etc/hosts&quot;)
+  <dl>
+    <dt><a name="index-dbus_002dstring_002dto_002dbyte_002darray"
+    id=
+    "index-dbus_002dstring_002dto_002dbyte_002darray"></a>Function:
+    <strong>dbus-string-to-byte-array</strong> <em>string</em></dt>
+
+    <dd>
+      <p>Sometimes, D-Bus methods require as input parameter an
+      array of bytes, instead of a string. If it is guaranteed,
+      that <var>string</var> is an UTF8 string, this function
+      performs the conversion. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-string-to-byte-array "/etc/hosts")
 
 &rArr; (:array :byte 47 :byte 101 :byte 116 :byte 99 :byte 47
            :byte 104 :byte 111 :byte 115 :byte 116 :byte 115)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-dbus_002descape_002das_002didentifier"></a>Function: <strong>dbus-escape-as-identifier</strong> <em>string</em></dt>
-<dd><p>Escape an arbitrary <var>string</var> so it follows the rules for a C
-identifier.  The escaped string can be used as object path component,
-interface element component, bus name component or member name in
-D-Bus.
-</p>
-<p>The escaping consists of replacing all non-alphanumerics, and the
-first character if it&rsquo;s a digit, with an underscore and two
-lower-case hex digits.  As a special case, &quot;&quot; is escaped to
-&quot;_&quot;.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-escape-as-identifier &quot;0123abc_xyz\x01\xff&quot;)
+  <dl>
+    <dt><a name="index-dbus_002descape_002das_002didentifier" id=
+    "index-dbus_002descape_002das_002didentifier"></a>Function:
+    <strong>dbus-escape-as-identifier</strong> <em>string</em></dt>
 
-&rArr; &quot;_30123abc_5fxyz_01_ff&quot;
-</pre></div>
-</dd></dl>
+    <dd>
+      <p>Escape an arbitrary <var>string</var> so it follows the
+      rules for a C identifier. The escaped string can be used as
+      object path component, interface element component, bus name
+      component or member name in D-Bus.</p>
 
+      <p>The escaping consists of replacing all non-alphanumerics,
+      and the first character if it&rsquo;s a digit, with an
+      underscore and two lower-case hex digits. As a special case,
+      "" is escaped to "_". Example:</p>
 
-<a name="Output-parameters_002e"></a>
-<h3 class="section">3.2 Output parameters.</h3>
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-escape-as-identifier "0123abc_xyz\x01\xff")
 
-<p>Output parameters of D-Bus methods and signals are mapped to Lisp
-objects.
-</p>
-<div class="example">
-<table>
-<tr><td><pre class="example">D-Bus type</pre></td><td></td><td><pre class="example">Lisp type</pre></td></tr>
-<tr><td></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_BOOLEAN</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example"><code>t</code> or <code>nil</code></pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_BYTE</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">natural number</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_UINT16</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">natural number</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_INT16</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">integer</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_UINT32</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">natural number or float</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_UNIX_FD</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">natural number or float</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_INT32</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">integer or float</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_UINT64</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">natural number or float</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_INT64</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">integer or float</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_DOUBLE</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">float</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_STRING</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">string</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_OBJECT_PATH</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">string</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_SIGNATURE</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">string</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_ARRAY</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">list</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_VARIANT</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">list</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_STRUCT</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">list</pre></td></tr>
-<tr><td><pre class="example">DBUS_TYPE_DICT_ENTRY</pre></td><td><pre class="example">&rarr;</pre></td><td><pre class="example">list</pre></td></tr>
-</table>
-</div>
+&rArr; "_30123abc_5fxyz_01_ff"
+</pre>
+      </div>
+    </dd>
+  </dl><a name="Output-parameters_002e" id=
+  "Output-parameters_002e"></a>
 
-<p>A float object in case of <code>DBUS_TYPE_UINT32</code>,
-<code>DBUS_TYPE_INT32</code>, <code>DBUS_TYPE_UINT64</code>,
-<code>DBUS_TYPE_INT64</code> and <code>DBUS_TYPE_UNIX_FD</code> is returned, when
-the C value exceeds the Emacs number size range.
-</p>
-<p>The resulting list of the last 4 D-Bus compound types contains as
-elements the elements of the D-Bus container, mapped according to the
-same rules.
-</p>
-<p>The signal <code>PropertyModified</code>, discussed as example in
-<a href="Inspection.html#Inspection">Inspection</a>, would offer as Lisp data the following object
-(<var>BOOL</var> stands here for either <code>nil</code> or <code>t</code>):
-</p>
-<div class="lisp">
-<pre class="lisp">(<var>INTEGER</var> ((<var>STRING</var> <var>BOOL</var> <var>BOOL</var>) (<var>STRING</var> <var>BOOL</var> <var>BOOL</var>) &hellip;))
-</pre></div>
+  <h3 class="section">3.2 Output parameters.</h3>
 
-<dl>
-<dt><a name="index-dbus_002dbyte_002darray_002dto_002dstring"></a>Function: <strong>dbus-byte-array-to-string</strong> <em>byte-array &amp;optional multibyte</em></dt>
-<dd><p>If a D-Bus method or signal returns an array of bytes, which are known
-to represent an UTF8 string, this function converts <var>byte-array</var>
-to the corresponding string.  The string is unibyte encoded, unless
-<var>multibyte</var> is non-<code>nil</code>.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-byte-array-to-string '(47 101 116 99 47 104 111 115 116 115))
+  <p>Output parameters of D-Bus methods and signals are mapped to
+  Lisp objects.</p>
 
-&rArr; &quot;/etc/hosts&quot;
-</pre></div>
-</dd></dl>
+  <div class="example">
+    <table>
+      <tr>
+        <td>
+          <pre class="example">
+D-Bus type
+</pre>
+        </td>
 
-<dl>
-<dt><a name="index-dbus_002dunescape_002dfrom_002didentifier"></a>Function: <strong>dbus-unescape-from-identifier</strong> <em>string</em></dt>
-<dd><p>Retrieve the original string from the encoded <var>string</var> as unibyte
-string.  <var>string</var> must have been encoded with
-<code>dbus-escape-as-identifier</code>.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-unescape-from-identifier &quot;_30123abc_5fxyz_01_ff&quot;)
+        <td></td>
 
-&rArr; &quot;0123abc_xyz\x01\xff&quot;
-</pre></div>
+        <td>
+          <pre class="example">
+Lisp type
+</pre>
+        </td>
+      </tr>
 
-<p>If the original string used in <code>dbus-escape-as-identifier</code> is a
-multibyte string, it cannot be expected that this function returns
-that string:
-</p>
-<div class="lisp">
-<pre class="lisp">(string-equal
+      <tr>
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_BOOLEAN
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+<code>t</code> or <code>nil</code>
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_BYTE
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+natural number
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_UINT16
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+natural number
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_INT16
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+integer
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_UINT32
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+natural number or float
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_UNIX_FD
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+natural number or float
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_INT32
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+integer or float
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_UINT64
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+natural number or float
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_INT64
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+integer or float
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_DOUBLE
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+float
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_STRING
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+string
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_OBJECT_PATH
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+string
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_SIGNATURE
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+string
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_ARRAY
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+list
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_VARIANT
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+list
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_STRUCT
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+list
+</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <pre class="example">
+DBUS_TYPE_DICT_ENTRY
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+&rarr;
+</pre>
+        </td>
+
+        <td>
+          <pre class="example">
+list
+</pre>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <p>A float object in case of <code>DBUS_TYPE_UINT32</code>,
+  <code>DBUS_TYPE_INT32</code>, <code>DBUS_TYPE_UINT64</code>,
+  <code>DBUS_TYPE_INT64</code> and <code>DBUS_TYPE_UNIX_FD</code>
+  is returned, when the C value exceeds the Emacs number size
+  range.</p>
+
+  <p>The resulting list of the last 4 D-Bus compound types contains
+  as elements the elements of the D-Bus container, mapped according
+  to the same rules.</p>
+
+  <p>The signal <code>PropertyModified</code>, discussed as example
+  in <a href="Inspection.html#Inspection">Inspection</a>, would
+  offer as Lisp data the following object (<var>BOOL</var> stands
+  here for either <code>nil</code> or <code>t</code>):</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(<var>INTEGER</var> ((<var>STRING</var> <var>BOOL</var> <var>BOOL</var>) (<var>STRING</var> <var>BOOL</var> <var>BOOL</var>) &hellip;))
+</pre>
+  </div>
+
+  <dl>
+    <dt><a name="index-dbus_002dbyte_002darray_002dto_002dstring"
+    id=
+    "index-dbus_002dbyte_002darray_002dto_002dstring"></a>Function:
+    <strong>dbus-byte-array-to-string</strong> <em>byte-array
+    &amp;optional multibyte</em></dt>
+
+    <dd>
+      <p>If a D-Bus method or signal returns an array of bytes,
+      which are known to represent an UTF8 string, this function
+      converts <var>byte-array</var> to the corresponding string.
+      The string is unibyte encoded, unless <var>multibyte</var> is
+      non-<code>nil</code>. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-byte-array-to-string '(47 101 116 99 47 104 111 115 116 115))
+
+&rArr; "/etc/hosts"
+</pre>
+      </div>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-dbus_002dunescape_002dfrom_002didentifier"
+    id=
+    "index-dbus_002dunescape_002dfrom_002didentifier"></a>Function:
+    <strong>dbus-unescape-from-identifier</strong>
+    <em>string</em></dt>
+
+    <dd>
+      <p>Retrieve the original string from the encoded
+      <var>string</var> as unibyte string. <var>string</var> must
+      have been encoded with
+      <code>dbus-escape-as-identifier</code>. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-unescape-from-identifier "_30123abc_5fxyz_01_ff")
+
+&rArr; "0123abc_xyz\x01\xff"
+</pre>
+      </div>
+
+      <p>If the original string used in
+      <code>dbus-escape-as-identifier</code> is a multibyte string,
+      it cannot be expected that this function returns that
+      string:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(string-equal
   (dbus-unescape-from-identifier
-    (dbus-escape-as-identifier &quot;Grüß Göttin&quot;))
-  &quot;Grüß Göttin&quot;)
+    (dbus-escape-as-identifier "Gr&Atilde;&frac14;&Atilde;&Yuml; G&Atilde;&para;ttin"))
+  "Gr&Atilde;&frac14;&Atilde;&Yuml; G&Atilde;&para;ttin")
 
 &rArr; nil
-</pre></div>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-
-</dd></dl>
-
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Synchronous-Methods.html#Synchronous-Methods" accesskey="n" rel="next">Synchronous Methods</a>, Previous: <a href="Inspection.html#Inspection" accesskey="p" rel="prev">Inspection</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Synchronous-Methods.html#Synchronous-Methods"
+    accesskey="n" rel="next">Synchronous Methods</a>, Previous:
+    <a href="Inspection.html#Inspection" accesskey="p" rel=
+    "prev">Inspection</a>, Up: <a href="index.html#Top" accesskey=
+    "u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,179 +19,260 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Edebug Execution Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Edebug Execution Modes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Edebug Execution Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="Jumping.html#Jumping" rel="next" title="Jumping">
-<link href="Instrumenting.html#Instrumenting" rel="prev" title="Instrumenting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Edebug Execution
+  Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Edebug Execution Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Edebug Execution Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="Jumping.html#Jumping" rel="next" title="Jumping" />
+  <link href="Instrumenting.html#Instrumenting" rel="prev" title=
+  "Instrumenting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Edebug-Execution-Modes" id="Edebug-Execution-Modes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Jumping.html#Jumping" accesskey="n" rel=
+    "next">Jumping</a>, Previous: <a href=
+    "Instrumenting.html#Instrumenting" accesskey="p" rel=
+    "prev">Instrumenting</a>, Up: <a href="Edebug.html#Edebug"
+    accesskey="u" rel="up">Edebug</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Edebug-Execution-Modes-1" id=
+  "Edebug-Execution-Modes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Edebug-Execution-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Jumping.html#Jumping" accesskey="n" rel="next">Jumping</a>, Previous: <a href="Instrumenting.html#Instrumenting" accesskey="p" rel="prev">Instrumenting</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Edebug-Execution-Modes-1"></a>
-<h4 class="subsection">17.2.3 Edebug Execution Modes</h4>
+  <h4 class="subsection">17.2.3 Edebug Execution Modes</h4><a name=
+  "index-Edebug-execution-modes" id=
+  "index-Edebug-execution-modes"></a>
 
-<a name="index-Edebug-execution-modes"></a>
-<p>Edebug supports several execution modes for running the program you are
-debugging.  We call these alternatives <em>Edebug execution modes</em>; do
-not confuse them with major or minor modes.  The current Edebug execution mode
-determines how far Edebug continues execution before stopping&mdash;whether
-it stops at each stop point, or continues to the next breakpoint, for
-example&mdash;and how much Edebug displays the progress of the evaluation
-before it stops.
-</p>
-<p>Normally, you specify the Edebug execution mode by typing a command to
-continue the program in a certain mode.  Here is a table of these
-commands; all except for <kbd>S</kbd> resume execution of the program, at
-least for a certain distance.
-</p>
-<dl compact="compact">
-<dt><kbd>S</kbd></dt>
-<dd><p>Stop: don&rsquo;t execute any more of the program, but wait for more
-Edebug commands (<code>edebug-stop</code>).
-</p>
-</dd>
-<dt><kbd><span class="key">SPC</span></kbd></dt>
-<dd><p>Step: stop at the next stop point encountered (<code>edebug-step-mode</code>).
-</p>
-</dd>
-<dt><kbd>n</kbd></dt>
-<dd><p>Next: stop at the next stop point encountered after an expression
-(<code>edebug-next-mode</code>).  Also see <code>edebug-forward-sexp</code> in
-<a href="Jumping.html#Jumping">Jumping</a>.
-</p>
-</dd>
-<dt><kbd>t</kbd></dt>
-<dd><p>Trace: pause (normally one second) at each Edebug stop point
-(<code>edebug-trace-mode</code>).
-</p>
-</dd>
-<dt><kbd>T</kbd></dt>
-<dd><p>Rapid trace: update the display at each stop point, but don&rsquo;t actually
-pause (<code>edebug-Trace-fast-mode</code>).
-</p>
-</dd>
-<dt><kbd>g</kbd></dt>
-<dd><p>Go: run until the next breakpoint (<code>edebug-go-mode</code>).  See <a href="Breakpoints.html#Breakpoints">Breakpoints</a>.
-</p>
-</dd>
-<dt><kbd>c</kbd></dt>
-<dd><p>Continue: pause one second at each breakpoint, and then continue
-(<code>edebug-continue-mode</code>).
-</p>
-</dd>
-<dt><kbd>C</kbd></dt>
-<dd><p>Rapid continue: move point to each breakpoint, but don&rsquo;t pause
-(<code>edebug-Continue-fast-mode</code>).
-</p>
-</dd>
-<dt><kbd>G</kbd></dt>
-<dd><p>Go non-stop: ignore breakpoints (<code>edebug-Go-nonstop-mode</code>).  You
-can still stop the program by typing <kbd>S</kbd>, or any editing command.
-</p></dd>
-</dl>
+  <p>Edebug supports several execution modes for running the
+  program you are debugging. We call these alternatives <em>Edebug
+  execution modes</em>; do not confuse them with major or minor
+  modes. The current Edebug execution mode determines how far
+  Edebug continues execution before stopping&mdash;whether it stops
+  at each stop point, or continues to the next breakpoint, for
+  example&mdash;and how much Edebug displays the progress of the
+  evaluation before it stops.</p>
 
-<p>In general, the execution modes earlier in the above list run the
-program more slowly or stop sooner than the modes later in the list.
-</p>
-<p>When you enter a new Edebug level, Edebug will normally stop at the
-first instrumented function it encounters.  If you prefer to stop only
-at a break point, or not at all (for example, when gathering coverage
-data), change the value of <code>edebug-initial-mode</code> from its default
-<code>step</code> to <code>go</code>, or <code>Go-nonstop</code>, or one of its other
-values (see <a href="Edebug-Options.html#Edebug-Options">Edebug Options</a>).  You can do this readily with
-<kbd>C-x C-a C-m</kbd> (<code>edebug-set-initial-mode</code>):
-</p>
-<dl>
-<dt><a name="index-edebug_002dset_002dinitial_002dmode"></a>Command: <strong>edebug-set-initial-mode</strong></dt>
-<dd><a name="index-C_002dx-C_002da-C_002dm"></a>
-<p>This command, bound to <kbd>C-x C-a C-m</kbd>, sets
-<code>edebug-initial-mode</code>.  It prompts you for a key to indicate the
-mode.  You should enter one of the eight keys listed above, which sets
-the corresponding mode.
-</p></dd></dl>
+  <p>Normally, you specify the Edebug execution mode by typing a
+  command to continue the program in a certain mode. Here is a
+  table of these commands; all except for <kbd>S</kbd> resume
+  execution of the program, at least for a certain distance.</p>
 
-<p>Note that you may reenter the same Edebug level several times if, for
-example, an instrumented function is called several times from one
-command.
-</p>
-<p>While executing or tracing, you can interrupt the execution by typing
-any Edebug command.  Edebug stops the program at the next stop point and
-then executes the command you typed.  For example, typing <kbd>t</kbd> during
-execution switches to trace mode at the next stop point.  You can use
-<kbd>S</kbd> to stop execution without doing anything else.
-</p>
-<p>If your function happens to read input, a character you type intending
-to interrupt execution may be read by the function instead.  You can
-avoid such unintended results by paying attention to when your program
-wants input.
-</p>
-<a name="index-keyboard-macros-_0028Edebug_0029"></a>
-<p>Keyboard macros containing the commands in this section do not
-completely work: exiting from Edebug, to resume the program, loses track
-of the keyboard macro.  This is not easy to fix.  Also, defining or
-executing a keyboard macro outside of Edebug does not affect commands
-inside Edebug.  This is usually an advantage.  See also the
-<code>edebug-continue-kbd-macro</code> option in <a href="Edebug-Options.html#Edebug-Options">Edebug Options</a>.
-</p>
-<dl>
-<dt><a name="index-edebug_002dsit_002dfor_002dseconds"></a>User Option: <strong>edebug-sit-for-seconds</strong></dt>
-<dd><p>This option specifies how many seconds to wait between execution steps
-in trace mode or continue mode.  The default is 1 second.
-</p></dd></dl>
+  <dl compact="compact">
+    <dt><kbd>S</kbd></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Jumping.html#Jumping" accesskey="n" rel="next">Jumping</a>, Previous: <a href="Instrumenting.html#Instrumenting" accesskey="p" rel="prev">Instrumenting</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Stop: don&rsquo;t execute any more of the program, but
+      wait for more Edebug commands (<code>edebug-stop</code>).</p>
+    </dd>
 
+    <dt><kbd><span class="key">SPC</span></kbd></dt>
 
+    <dd>
+      <p>Step: stop at the next stop point encountered
+      (<code>edebug-step-mode</code>).</p>
+    </dd>
 
+    <dt><kbd>n</kbd></dt>
+
+    <dd>
+      <p>Next: stop at the next stop point encountered after an
+      expression (<code>edebug-next-mode</code>). Also see
+      <code>edebug-forward-sexp</code> in <a href=
+      "Jumping.html#Jumping">Jumping</a>.</p>
+    </dd>
+
+    <dt><kbd>t</kbd></dt>
+
+    <dd>
+      <p>Trace: pause (normally one second) at each Edebug stop
+      point (<code>edebug-trace-mode</code>).</p>
+    </dd>
+
+    <dt><kbd>T</kbd></dt>
+
+    <dd>
+      <p>Rapid trace: update the display at each stop point, but
+      don&rsquo;t actually pause
+      (<code>edebug-Trace-fast-mode</code>).</p>
+    </dd>
+
+    <dt><kbd>g</kbd></dt>
+
+    <dd>
+      <p>Go: run until the next breakpoint
+      (<code>edebug-go-mode</code>). See <a href=
+      "Breakpoints.html#Breakpoints">Breakpoints</a>.</p>
+    </dd>
+
+    <dt><kbd>c</kbd></dt>
+
+    <dd>
+      <p>Continue: pause one second at each breakpoint, and then
+      continue (<code>edebug-continue-mode</code>).</p>
+    </dd>
+
+    <dt><kbd>C</kbd></dt>
+
+    <dd>
+      <p>Rapid continue: move point to each breakpoint, but
+      don&rsquo;t pause
+      (<code>edebug-Continue-fast-mode</code>).</p>
+    </dd>
+
+    <dt><kbd>G</kbd></dt>
+
+    <dd>
+      <p>Go non-stop: ignore breakpoints
+      (<code>edebug-Go-nonstop-mode</code>). You can still stop the
+      program by typing <kbd>S</kbd>, or any editing command.</p>
+    </dd>
+  </dl>
+
+  <p>In general, the execution modes earlier in the above list run
+  the program more slowly or stop sooner than the modes later in
+  the list.</p>
+
+  <p>When you enter a new Edebug level, Edebug will normally stop
+  at the first instrumented function it encounters. If you prefer
+  to stop only at a break point, or not at all (for example, when
+  gathering coverage data), change the value of
+  <code>edebug-initial-mode</code> from its default
+  <code>step</code> to <code>go</code>, or <code>Go-nonstop</code>,
+  or one of its other values (see <a href=
+  "Edebug-Options.html#Edebug-Options">Edebug Options</a>). You can
+  do this readily with <kbd>C-x C-a C-m</kbd>
+  (<code>edebug-set-initial-mode</code>):</p>
+
+  <dl>
+    <dt><a name="index-edebug_002dset_002dinitial_002dmode" id=
+    "index-edebug_002dset_002dinitial_002dmode"></a>Command:
+    <strong>edebug-set-initial-mode</strong></dt>
+
+    <dd>
+      <a name="index-C_002dx-C_002da-C_002dm" id=
+      "index-C_002dx-C_002da-C_002dm"></a>
+
+      <p>This command, bound to <kbd>C-x C-a C-m</kbd>, sets
+      <code>edebug-initial-mode</code>. It prompts you for a key to
+      indicate the mode. You should enter one of the eight keys
+      listed above, which sets the corresponding mode.</p>
+    </dd>
+  </dl>
+
+  <p>Note that you may reenter the same Edebug level several times
+  if, for example, an instrumented function is called several times
+  from one command.</p>
+
+  <p>While executing or tracing, you can interrupt the execution by
+  typing any Edebug command. Edebug stops the program at the next
+  stop point and then executes the command you typed. For example,
+  typing <kbd>t</kbd> during execution switches to trace mode at
+  the next stop point. You can use <kbd>S</kbd> to stop execution
+  without doing anything else.</p>
+
+  <p>If your function happens to read input, a character you type
+  intending to interrupt execution may be read by the function
+  instead. You can avoid such unintended results by paying
+  attention to when your program wants input.</p><a name=
+  "index-keyboard-macros-_0028Edebug_0029" id=
+  "index-keyboard-macros-_0028Edebug_0029"></a>
+
+  <p>Keyboard macros containing the commands in this section do not
+  completely work: exiting from Edebug, to resume the program,
+  loses track of the keyboard macro. This is not easy to fix. Also,
+  defining or executing a keyboard macro outside of Edebug does not
+  affect commands inside Edebug. This is usually an advantage. See
+  also the <code>edebug-continue-kbd-macro</code> option in
+  <a href="Edebug-Options.html#Edebug-Options">Edebug
+  Options</a>.</p>
+
+  <dl>
+    <dt><a name="index-edebug_002dsit_002dfor_002dseconds" id=
+    "index-edebug_002dsit_002dfor_002dseconds"></a>User Option:
+    <strong>edebug-sit-for-seconds</strong></dt>
+
+    <dd>
+      <p>This option specifies how many seconds to wait between
+      execution steps in trace mode or continue mode. The default
+      is 1 second.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Jumping.html#Jumping" accesskey="n" rel=
+    "next">Jumping</a>, Previous: <a href=
+    "Instrumenting.html#Instrumenting" accesskey="p" rel=
+    "prev">Instrumenting</a>, Up: <a href="Edebug.html#Edebug"
+    accesskey="u" rel="up">Edebug</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

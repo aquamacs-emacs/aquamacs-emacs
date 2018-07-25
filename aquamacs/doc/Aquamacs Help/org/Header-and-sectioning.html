@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Header and sectioning - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="LaTeX-and-PDF-export.html#LaTeX-and-PDF-export" title="LaTeX and PDF export">
-<link rel="prev" href="LaTeX_002fPDF-export-commands.html#LaTeX_002fPDF-export-commands" title="LaTeX/PDF export commands">
-<link rel="next" href="Quoting-LaTeX-code.html#Quoting-LaTeX-code" title="Quoting LaTeX code">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Header and sectioning - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "LaTeX-and-PDF-export.html#LaTeX-and-PDF-export" title=
+  "LaTeX and PDF export" />
+  <link rel="prev" href=
+  "LaTeX_002fPDF-export-commands.html#LaTeX_002fPDF-export-commands"
+  title="LaTeX/PDF export commands" />
+  <link rel="next" href=
+  "Quoting-LaTeX-code.html#Quoting-LaTeX-code" title=
+  "Quoting LaTeX code" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +45,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,43 +58,83 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Header-and-sectioning"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Quoting-LaTeX-code.html#Quoting-LaTeX-code">Quoting LaTeX code</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="LaTeX_002fPDF-export-commands.html#LaTeX_002fPDF-export-commands">LaTeX/PDF export commands</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="LaTeX-and-PDF-export.html#LaTeX-and-PDF-export">LaTeX and PDF export</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Header-and-sectioning" id="Header-and-sectioning"></a>
 
-<h4 class="subsection">12.6.2 Header and sectioning structure</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Quoting-LaTeX-code.html#Quoting-LaTeX-code">Quoting LaTeX
+    code</a>, Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "LaTeX_002fPDF-export-commands.html#LaTeX_002fPDF-export-commands">LaTeX/PDF
+    export commands</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "LaTeX-and-PDF-export.html#LaTeX-and-PDF-export">LaTeX and PDF
+    export</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-g_t_0040LaTeX_007b_007d-class-1522"></a><a name="index-g_t_0040LaTeX_007b_007d-sectioning-structure-1523"></a><a name="index-g_t_0040LaTeX_007b_007d-header-1524"></a><a name="index-header_002c-for-LaTeX-files-1525"></a><a name="index-sectioning-structure_002c-for-LaTeX-export-1526"></a>
-By default, the LaTeX output uses the class <code>article</code>.
+  <h4 class="subsection">12.6.2 Header and sectioning
+  structure</h4>
 
-   <p><a name="index-org_002dexport_002dlatex_002ddefault_002dclass-1527"></a><a name="index-org_002dexport_002dlatex_002dclasses-1528"></a><a name="index-org_002dexport_002dlatex_002ddefault_002dpackages_002dalist-1529"></a><a name="index-org_002dexport_002dlatex_002dpackages_002dalist-1530"></a><a name="index-g_t_0023_002bLATEX_005fHEADER-1531"></a><a name="index-g_t_0023_002bLATEX_005fCLASS-1532"></a><a name="index-g_t_0023_002bLATEX_005fCLASS_005fOPTIONS-1533"></a><a name="index-property_002c-LATEX_005fCLASS-1534"></a><a name="index-property_002c-LATEX_005fCLASS_005fOPTIONS-1535"></a>You can change this globally by setting a different value for
-<code>org-export-latex-default-class</code> or locally by adding an option like
-<code>#+LaTeX_CLASS: myclass</code> in your file, or with a <code>:LaTeX_CLASS:</code>
-property that applies when exporting a region containing only this (sub)tree. 
-The class must be listed in <code>org-export-latex-classes</code>.  This variable
-defines a header template for each class<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, and allows you to
-define the sectioning structure for each class.  You can also define your own
-classes there.  <code>#+LaTeX_CLASS_OPTIONS</code> or a <code>LaTeX_CLASS_OPTIONS</code>
-property can specify the options for the <code>\documentclass</code> macro.  You
-can also use <code>#+LATEX_HEADER: \usepackage{xyz}</code> to add lines to the
-header.  See the docstring of <code>org-export-latex-classes</code> for more
-information.
+  <p><a name="index-g_t_0040LaTeX_007b_007d-class-1522" id=
+  "index-g_t_0040LaTeX_007b_007d-class-1522"></a><a name=
+  "index-g_t_0040LaTeX_007b_007d-sectioning-structure-1523" id=
+  "index-g_t_0040LaTeX_007b_007d-sectioning-structure-1523"></a><a name="index-g_t_0040LaTeX_007b_007d-header-1524"
+  id="index-g_t_0040LaTeX_007b_007d-header-1524"></a><a name=
+  "index-header_002c-for-LaTeX-files-1525" id=
+  "index-header_002c-for-LaTeX-files-1525"></a><a name=
+  "index-sectioning-structure_002c-for-LaTeX-export-1526" id=
+  "index-sectioning-structure_002c-for-LaTeX-export-1526"></a> By
+  default, the LaTeX output uses the class
+  <code>article</code>.</p>
 
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Into which the values of
-<code>org-export-latex-default-packages-alist</code> and
-<code>org-export-latex-packages-alist</code> are spliced.</p>
+  <p><a name=
+  "index-org_002dexport_002dlatex_002ddefault_002dclass-1527" id=
+  "index-org_002dexport_002dlatex_002ddefault_002dclass-1527"></a><a name="index-org_002dexport_002dlatex_002dclasses-1528"
+  id="index-org_002dexport_002dlatex_002dclasses-1528"></a><a name=
+  "index-org_002dexport_002dlatex_002ddefault_002dpackages_002dalist-1529"
+  id=
+  "index-org_002dexport_002dlatex_002ddefault_002dpackages_002dalist-1529"></a><a name="index-org_002dexport_002dlatex_002dpackages_002dalist-1530"
+  id=
+  "index-org_002dexport_002dlatex_002dpackages_002dalist-1530"></a><a name="index-g_t_0023_002bLATEX_005fHEADER-1531"
+  id="index-g_t_0023_002bLATEX_005fHEADER-1531"></a><a name=
+  "index-g_t_0023_002bLATEX_005fCLASS-1532" id=
+  "index-g_t_0023_002bLATEX_005fCLASS-1532"></a><a name=
+  "index-g_t_0023_002bLATEX_005fCLASS_005fOPTIONS-1533" id=
+  "index-g_t_0023_002bLATEX_005fCLASS_005fOPTIONS-1533"></a><a name="index-property_002c-LATEX_005fCLASS-1534"
+  id="index-property_002c-LATEX_005fCLASS-1534"></a><a name=
+  "index-property_002c-LATEX_005fCLASS_005fOPTIONS-1535" id=
+  "index-property_002c-LATEX_005fCLASS_005fOPTIONS-1535"></a>You
+  can change this globally by setting a different value for
+  <code>org-export-latex-default-class</code> or locally by adding
+  an option like <code>#+LaTeX_CLASS: myclass</code> in your file,
+  or with a <code>:LaTeX_CLASS:</code> property that applies when
+  exporting a region containing only this (sub)tree. The class must
+  be listed in <code>org-export-latex-classes</code>. This variable
+  defines a header template for each class<a rel="footnote" href=
+  "#fn-1" name="fnd-1" id="fnd-1"><sup>1</sup></a>, and allows you
+  to define the sectioning structure for each class. You can also
+  define your own classes there. <code>#+LaTeX_CLASS_OPTIONS</code>
+  or a <code>LaTeX_CLASS_OPTIONS</code> property can specify the
+  options for the <code>\documentclass</code> macro. You can also
+  use <code>#+LATEX_HEADER: \usepackage{xyz}</code> to add lines to
+  the header. See the docstring of
+  <code>org-export-latex-classes</code> for more information.</p>
 
-   <hr></div>
+  <div class="footnote">
+    <hr />
 
-   </body></html>
+    <h4>Footnotes</h4>
 
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> Into which the values of
+    <code>org-export-latex-default-packages-alist</code> and
+    <code>org-export-latex-packages-alist</code> are spliced.</p>
+    <hr />
+  </div>
+</body>
+</html>

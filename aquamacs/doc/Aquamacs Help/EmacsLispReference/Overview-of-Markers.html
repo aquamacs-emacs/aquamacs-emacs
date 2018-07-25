@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,147 +19,211 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Overview of Markers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Overview of Markers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Overview of Markers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Markers.html#Markers" rel="up" title="Markers">
-<link href="Predicates-on-Markers.html#Predicates-on-Markers" rel="next" title="Predicates on Markers">
-<link href="Markers.html#Markers" rel="prev" title="Markers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Overview of
+  Markers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Overview of Markers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Overview of Markers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Markers.html#Markers" rel="up" title="Markers" />
+  <link href="Predicates-on-Markers.html#Predicates-on-Markers"
+  rel="next" title="Predicates on Markers" />
+  <link href="Markers.html#Markers" rel="prev" title="Markers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Overview-of-Markers" id="Overview-of-Markers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Predicates-on-Markers.html#Predicates-on-Markers" accesskey=
+    "n" rel="next">Predicates on Markers</a>, Up: <a href=
+    "Markers.html#Markers" accesskey="u" rel="up">Markers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Overview-of-Markers-1" id="Overview-of-Markers-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Overview-of-Markers"></a>
-<div class="header">
-<p>
-Next: <a href="Predicates-on-Markers.html#Predicates-on-Markers" accesskey="n" rel="next">Predicates on Markers</a>, Up: <a href="Markers.html#Markers" accesskey="u" rel="up">Markers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Overview-of-Markers-1"></a>
-<h3 class="section">30.1 Overview of Markers</h3>
+  <h3 class="section">30.1 Overview of Markers</h3>
 
-<p>A marker specifies a buffer and a position in that buffer.  A
-marker can be used to represent a position in functions that
-require one, just as an integer could be used.  In that case, the
-marker&rsquo;s buffer is normally ignored.  Of course, a marker used in this
-way usually points to a position in the buffer that the function
-operates on, but that is entirely the programmer&rsquo;s responsibility.
-See <a href="Positions.html#Positions">Positions</a>, for a complete description of positions.
-</p>
-<p>A marker has three attributes: the marker position, the marker
-buffer, and the insertion type.  The marker position is an integer
-that is equivalent (at a given time) to the marker as a position in
-that buffer.  But the marker&rsquo;s position value can change during
-the life of the marker, and often does.  Insertion and deletion of
-text in the buffer relocate the marker.  The idea is that a marker
-positioned between two characters remains between those two characters
-despite insertion and deletion elsewhere in the buffer.  Relocation
-changes the integer equivalent of the marker.
-</p>
-<a name="index-marker-relocation"></a>
-<p>Deleting text around a marker&rsquo;s position leaves the marker between the
-characters immediately before and after the deleted text.  Inserting
-text at the position of a marker normally leaves the marker either in
-front of or after the new text, depending on the marker&rsquo;s <em>insertion
-type</em> (see <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>)&mdash;unless the insertion is done
-with <code>insert-before-markers</code> (see <a href="Insertion.html#Insertion">Insertion</a>).
-</p>
-<a name="index-marker-garbage-collection"></a>
-<p>Insertion and deletion in a buffer must check all the markers and
-relocate them if necessary.  This slows processing in a buffer with a
-large number of markers.  For this reason, it is a good idea to make a
-marker point nowhere if you are sure you don&rsquo;t need it any more.
-Markers that can no longer be accessed are eventually removed
-(see <a href="Garbage-Collection.html#Garbage-Collection">Garbage Collection</a>).
-</p>
-<a name="index-markers-as-numbers"></a>
-<p>Because it is common to perform arithmetic operations on a marker
-position, most of these operations (including <code>+</code> and
-<code>-</code>) accept markers as arguments.  In such cases, the marker
-stands for its current position.
-</p>
-<p>Here are examples of creating markers, setting markers, and moving point
-to markers:
-</p>
-<div class="example">
-<pre class="example">;; <span class="roman">Make a new marker that initially does not point anywhere:</span>
+  <p>A marker specifies a buffer and a position in that buffer. A
+  marker can be used to represent a position in functions that
+  require one, just as an integer could be used. In that case, the
+  marker&rsquo;s buffer is normally ignored. Of course, a marker
+  used in this way usually points to a position in the buffer that
+  the function operates on, but that is entirely the
+  programmer&rsquo;s responsibility. See <a href=
+  "Positions.html#Positions">Positions</a>, for a complete
+  description of positions.</p>
+
+  <p>A marker has three attributes: the marker position, the marker
+  buffer, and the insertion type. The marker position is an integer
+  that is equivalent (at a given time) to the marker as a position
+  in that buffer. But the marker&rsquo;s position value can change
+  during the life of the marker, and often does. Insertion and
+  deletion of text in the buffer relocate the marker. The idea is
+  that a marker positioned between two characters remains between
+  those two characters despite insertion and deletion elsewhere in
+  the buffer. Relocation changes the integer equivalent of the
+  marker.</p><a name="index-marker-relocation" id=
+  "index-marker-relocation"></a>
+
+  <p>Deleting text around a marker&rsquo;s position leaves the
+  marker between the characters immediately before and after the
+  deleted text. Inserting text at the position of a marker normally
+  leaves the marker either in front of or after the new text,
+  depending on the marker&rsquo;s <em>insertion type</em> (see
+  <a href=
+  "Marker-Insertion-Types.html#Marker-Insertion-Types">Marker
+  Insertion Types</a>)&mdash;unless the insertion is done with
+  <code>insert-before-markers</code> (see <a href=
+  "Insertion.html#Insertion">Insertion</a>).</p><a name=
+  "index-marker-garbage-collection" id=
+  "index-marker-garbage-collection"></a>
+
+  <p>Insertion and deletion in a buffer must check all the markers
+  and relocate them if necessary. This slows processing in a buffer
+  with a large number of markers. For this reason, it is a good
+  idea to make a marker point nowhere if you are sure you
+  don&rsquo;t need it any more. Markers that can no longer be
+  accessed are eventually removed (see <a href=
+  "Garbage-Collection.html#Garbage-Collection">Garbage
+  Collection</a>).</p><a name="index-markers-as-numbers" id=
+  "index-markers-as-numbers"></a>
+
+  <p>Because it is common to perform arithmetic operations on a
+  marker position, most of these operations (including
+  <code>+</code> and <code>-</code>) accept markers as arguments.
+  In such cases, the marker stands for its current position.</p>
+
+  <p>Here are examples of creating markers, setting markers, and
+  moving point to markers:</p>
+
+  <div class="example">
+    <pre class="example">
+;; <span class=
+"roman">Make a new marker that initially does not point anywhere:</span>
 (setq m1 (make-marker))
      &rArr; #&lt;marker in no buffer&gt;
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Set <code>m1</code> to point between the 99th and 100th characters</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+;; <span class=
+"roman">Set <code>m1</code> to point between the 99th and 100th characters</span>
 ;;   <span class="roman">in the current buffer:</span>
 (set-marker m1 100)
      &rArr; #&lt;marker at 100 in markers.texi&gt;
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Now insert one character at the beginning of the buffer:</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+;; <span class=
+"roman">Now insert one character at the beginning of the buffer:</span>
 (goto-char (point-min))
      &rArr; 1
-(insert &quot;Q&quot;)
+(insert "Q")
      &rArr; nil
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman"><code>m1</code> is updated appropriately.</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+;; <span class=
+"roman"><code>m1</code> is updated appropriately.</span>
 m1
      &rArr; #&lt;marker at 101 in markers.texi&gt;
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">Two markers that point to the same position</span>
-;;   <span class="roman">are not <code>eq</code>, but they are <code>equal</code>.</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+;; <span class=
+"roman">Two markers that point to the same position</span>
+;;   <span class=
+"roman">are not <code>eq</code>, but they are <code>equal</code>.</span>
 (setq m2 (copy-marker m1))
      &rArr; #&lt;marker at 101 in markers.texi&gt;
 (eq m1 m2)
      &rArr; nil
 (equal m1 m2)
      &rArr; t
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">When you are finished using a marker, make it point nowhere.</span>
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+;; <span class=
+"roman">When you are finished using a marker, make it point nowhere.</span>
 (set-marker m1 nil)
      &rArr; #&lt;marker in no buffer&gt;
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Predicates-on-Markers.html#Predicates-on-Markers" accesskey="n" rel="next">Predicates on Markers</a>, Up: <a href="Markers.html#Markers" accesskey="u" rel="up">Markers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Predicates-on-Markers.html#Predicates-on-Markers" accesskey=
+    "n" rel="next">Predicates on Markers</a>, Up: <a href=
+    "Markers.html#Markers" accesskey="u" rel="up">Markers</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

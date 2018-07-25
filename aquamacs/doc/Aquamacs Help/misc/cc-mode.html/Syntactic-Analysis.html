@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for CC Mode in Emacs.
 
 Copyright (C) 1995-2016 Free Software Foundation, Inc.
@@ -14,153 +16,228 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>CC Mode Manual: Syntactic Analysis</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="CC Mode Manual: Syntactic Analysis">
-<meta name="keywords" content="CC Mode Manual: Syntactic Analysis">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Command-and-Function-Index.html#Command-and-Function-Index" rel="index" title="Command and Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" rel="up" title="Indentation Engine Basics">
-<link href="Syntactic-Symbols.html#Syntactic-Symbols" rel="next" title="Syntactic Symbols">
-<link href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" rel="prev" title="Indentation Engine Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>CC Mode Manual: Syntactic Analysis</title>
+  <meta name="description" content=
+  "CC Mode Manual: Syntactic Analysis" />
+  <meta name="keywords" content=
+  "CC Mode Manual: Syntactic Analysis" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href=
+  "Command-and-Function-Index.html#Command-and-Function-Index" rel=
+  "index" title="Command and Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Indentation-Engine-Basics.html#Indentation-Engine-Basics" rel=
+  "up" title="Indentation Engine Basics" />
+  <link href="Syntactic-Symbols.html#Syntactic-Symbols" rel="next"
+  title="Syntactic Symbols" />
+  <link href=
+  "Indentation-Engine-Basics.html#Indentation-Engine-Basics" rel=
+  "prev" title="Indentation Engine Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Syntactic-Analysis"></a>
-<div class="header">
-<p>
-Next: <a href="Syntactic-Symbols.html#Syntactic-Symbols" accesskey="n" rel="next">Syntactic Symbols</a>, Previous: <a href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" accesskey="p" rel="prev">Indentation Engine Basics</a>, Up: <a href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" accesskey="u" rel="up">Indentation Engine Basics</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Syntactic-Analysis-1"></a>
-<h3 class="section">10.1 Syntactic Analysis</h3>
-<a name="index-syntactic-analysis"></a>
+<body lang="en" xml:lang="en">
+  <a name="Syntactic-Analysis" id="Syntactic-Analysis"></a>
 
-<a name="index-syntactic-element"></a>
-<a name="index-syntactic-context"></a>
-<p>The first thing CC Mode does when indenting a line of code, is to
-analyze the line by calling <code>c-guess-basic-syntax</code>, determining
-the syntactic context of the (first) construct on that line.  Although
-this function is mainly used internally, it can sometimes be useful in
-Line-up functions (see <a href="Custom-Line_002dUp.html#Custom-Line_002dUp">Custom Line-Up</a>) or in functions on
-<code>c-special-indent-hook</code> (see <a href="Other-Indentation.html#Other-Indentation">Other Indentation</a>).
-</p>
-<dl>
-<dt><a name="index-c_002dguess_002dbasic_002dsyntax"></a>Function: <strong>c-guess-basic-syntax</strong></dt>
-<dd><a name="index-guess_002dbasic_002dsyntax-_0028c_002d_0029"></a>
-<p>Determine the syntactic context of the current line.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Syntactic-Symbols.html#Syntactic-Symbols"
+    accesskey="n" rel="next">Syntactic Symbols</a>, Previous:
+    <a href=
+    "Indentation-Engine-Basics.html#Indentation-Engine-Basics"
+    accesskey="p" rel="prev">Indentation Engine Basics</a>, Up:
+    <a href=
+    "Indentation-Engine-Basics.html#Indentation-Engine-Basics"
+    accesskey="u" rel="up">Indentation Engine Basics</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Syntactic-Analysis-1" id="Syntactic-Analysis-1"></a>
 
-<p>The <em>syntactic context</em> is a list of <em>syntactic elements</em>,
-where each syntactic element in turn is a list<a name="DOCF32" href="#FOOT32"><sup>32</sup></a>  Here is a
-brief and typical example:
-</p>
-<div class="example">
-<pre class="example">((defun-block-intro 1959))
-</pre></div>
+  <h3 class="section">10.1 Syntactic Analysis</h3><a name=
+  "index-syntactic-analysis" id="index-syntactic-analysis"></a>
+  <a name="index-syntactic-element" id=
+  "index-syntactic-element"></a> <a name="index-syntactic-context"
+  id="index-syntactic-context"></a>
 
-<a name="index-syntactic-symbol-1"></a>
-<p>The first thing inside each syntactic element is always a
-<em>syntactic symbol</em>.  It describes the kind of construct that was
-recognized, e.g., <code>statement</code>, <code>substatement</code>,
-<code>class-open</code>, <code>class-close</code>, etc.  See <a href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>,
-for a complete list of currently recognized syntactic symbols and
-their semantics.  The remaining entries are various data associated
-with the recognized construct; there might be zero or more.
-</p>
-<a name="index-anchor-position-1"></a>
-<p>Conceptually, a line of code is always indented relative to some
-position higher up in the buffer (typically the indentation of the
-previous line).  That position is the <em>anchor position</em> in the
-syntactic element.  If there is an entry after the syntactic symbol in
-the syntactic element list then it&rsquo;s either <code>nil</code> or that anchor position.
-</p>
-<p>Here is an example.  Suppose we had the following code as the only thing
-in a C++ buffer <a name="DOCF33" href="#FOOT33"><sup>33</sup></a>:
-</p>
-<div class="example">
-<pre class="example"> 1: void swap( int&amp; a, int&amp; b )
+  <p>The first thing CC Mode does when indenting a line of code, is
+  to analyze the line by calling <code>c-guess-basic-syntax</code>,
+  determining the syntactic context of the (first) construct on
+  that line. Although this function is mainly used internally, it
+  can sometimes be useful in Line-up functions (see <a href=
+  "Custom-Line_002dUp.html#Custom-Line_002dUp">Custom Line-Up</a>)
+  or in functions on <code>c-special-indent-hook</code> (see
+  <a href="Other-Indentation.html#Other-Indentation">Other
+  Indentation</a>).</p>
+
+  <dl>
+    <dt><a name="index-c_002dguess_002dbasic_002dsyntax" id=
+    "index-c_002dguess_002dbasic_002dsyntax"></a>Function:
+    <strong>c-guess-basic-syntax</strong></dt>
+
+    <dd>
+      <a name="index-guess_002dbasic_002dsyntax-_0028c_002d_0029"
+      id="index-guess_002dbasic_002dsyntax-_0028c_002d_0029"></a>
+
+      <p>Determine the syntactic context of the current line.</p>
+    </dd>
+  </dl>
+
+  <p>The <em>syntactic context</em> is a list of <em>syntactic
+  elements</em>, where each syntactic element in turn is a
+  list<a name="DOCF32" href="#FOOT32" id="DOCF32"><sup>32</sup></a>
+  Here is a brief and typical example:</p>
+
+  <div class="example">
+    <pre class="example">
+((defun-block-intro 1959))
+</pre>
+  </div><a name="index-syntactic-symbol-1" id=
+  "index-syntactic-symbol-1"></a>
+
+  <p>The first thing inside each syntactic element is always a
+  <em>syntactic symbol</em>. It describes the kind of construct
+  that was recognized, e.g., <code>statement</code>,
+  <code>substatement</code>, <code>class-open</code>,
+  <code>class-close</code>, etc. See <a href=
+  "Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>,
+  for a complete list of currently recognized syntactic symbols and
+  their semantics. The remaining entries are various data
+  associated with the recognized construct; there might be zero or
+  more.</p><a name="index-anchor-position-1" id=
+  "index-anchor-position-1"></a>
+
+  <p>Conceptually, a line of code is always indented relative to
+  some position higher up in the buffer (typically the indentation
+  of the previous line). That position is the <em>anchor
+  position</em> in the syntactic element. If there is an entry
+  after the syntactic symbol in the syntactic element list then
+  it&rsquo;s either <code>nil</code> or that anchor position.</p>
+
+  <p>Here is an example. Suppose we had the following code as the
+  only thing in a C++ buffer <a name="DOCF33" href="#FOOT33" id=
+  "DOCF33"><sup>33</sup></a>:</p>
+
+  <div class="example">
+    <pre class="example">
+ 1: void swap( int&amp; a, int&amp; b )
  2: {
  3:     int tmp = a;
  4:     a = b;
  5:     b = tmp;
  6: }
-</pre></div>
+</pre>
+  </div>
 
-<p>We can use <kbd>C-c C-s</kbd> (<code>c-show-syntactic-information</code>) to
-report what the syntactic analysis is for the current line:
-</p>
-<dl compact="compact">
-<dt><kbd>C-c C-s</kbd> (<code>c-show-syntactic-information</code>)</dt>
-<dd><a name="index-C_002dc-C_002ds"></a>
-<a name="index-c_002dshow_002dsyntactic_002dinformation"></a>
-<a name="index-show_002dsyntactic_002dinformation-_0028c_002d_0029"></a>
-<p>This command calculates the syntactic analysis of the current line and
-displays it in the minibuffer.  The command also highlights the anchor
-position(s).
-</p></dd>
-</dl>
+  <p>We can use <kbd>C-c C-s</kbd>
+  (<code>c-show-syntactic-information</code>) to report what the
+  syntactic analysis is for the current line:</p>
 
-<p>Running this command on line 4 of this example, we&rsquo;d see in the echo
-area<a name="DOCF34" href="#FOOT34"><sup>34</sup></a>:
-</p>
-<div class="example">
-<pre class="example">((statement 35))
-</pre></div>
+  <dl compact="compact">
+    <dt><kbd>C-c C-s</kbd>
+    (<code>c-show-syntactic-information</code>)</dt>
 
-<p>and the &lsquo;<samp>i</samp>&rsquo; of <code>int</code> on line 3 would be highlighted.  This
-tells us that the line is a statement and it is indented relative to
-buffer position 35, the highlighted position.  If you were to move
-point to line 3 and hit <kbd>C-c C-s</kbd>, you would see:
-</p>
-<div class="example">
-<pre class="example">((defun-block-intro 29))
-</pre></div>
+    <dd>
+      <a name="index-C_002dc-C_002ds" id=
+      "index-C_002dc-C_002ds"></a> <a name=
+      "index-c_002dshow_002dsyntactic_002dinformation" id=
+      "index-c_002dshow_002dsyntactic_002dinformation"></a>
+      <a name="index-show_002dsyntactic_002dinformation-_0028c_002d_0029"
+      id=
+      "index-show_002dsyntactic_002dinformation-_0028c_002d_0029"></a>
 
-<p>This indicates that the &lsquo;<samp>int</samp>&rsquo; line is the first statement in a top
-level function block, and is indented relative to buffer position 29,
-which is the brace just after the function header.
-</p>
-<p>Here&rsquo;s another example:
-</p>
-<div class="example">
-<pre class="example"> 1: int add( int val, int incr, int doit )
+      <p>This command calculates the syntactic analysis of the
+      current line and displays it in the minibuffer. The command
+      also highlights the anchor position(s).</p>
+    </dd>
+  </dl>
+
+  <p>Running this command on line 4 of this example, we&rsquo;d see
+  in the echo area<a name="DOCF34" href="#FOOT34" id=
+  "DOCF34"><sup>34</sup></a>:</p>
+
+  <div class="example">
+    <pre class="example">
+((statement 35))
+</pre>
+  </div>
+
+  <p>and the &lsquo;<samp>i</samp>&rsquo; of <code>int</code> on
+  line 3 would be highlighted. This tells us that the line is a
+  statement and it is indented relative to buffer position 35, the
+  highlighted position. If you were to move point to line 3 and hit
+  <kbd>C-c C-s</kbd>, you would see:</p>
+
+  <div class="example">
+    <pre class="example">
+((defun-block-intro 29))
+</pre>
+  </div>
+
+  <p>This indicates that the &lsquo;<samp>int</samp>&rsquo; line is
+  the first statement in a top level function block, and is
+  indented relative to buffer position 29, which is the brace just
+  after the function header.</p>
+
+  <p>Here&rsquo;s another example:</p>
+
+  <div class="example">
+    <pre class="example">
+ 1: int add( int val, int incr, int doit )
  2: {
  3:     if( doit )
  4:         {
@@ -168,26 +245,32 @@ which is the brace just after the function header.
  6:         }
  7:     return( val );
  8: }
-</pre></div>
+</pre>
+  </div>
 
-<p>Hitting <kbd>C-c C-s</kbd> on line 4 gives us:
-</p>
-<div class="example">
-<pre class="example">((substatement-open 46))
-</pre></div>
+  <p>Hitting <kbd>C-c C-s</kbd> on line 4 gives us:</p>
 
-<a name="index-substatement"></a>
-<a name="index-substatement-block"></a>
-<p>which tells us that this is a brace that <em>opens</em> a substatement
-block.<a name="DOCF35" href="#FOOT35"><sup>35</sup></a>
-</p>
-<a name="index-comment_002donly-line"></a>
-<p>Syntactic contexts can contain more than one element, and syntactic
-elements need not have anchor positions.  The most common example of
-this is a <em>comment-only line</em>:
-</p>
-<div class="example">
-<pre class="example"> 1: void draw_list( List&lt;Drawables&gt;&amp; drawables )
+  <div class="example">
+    <pre class="example">
+((substatement-open 46))
+</pre>
+  </div><a name="index-substatement" id="index-substatement"></a>
+  <a name="index-substatement-block" id=
+  "index-substatement-block"></a>
+
+  <p>which tells us that this is a brace that <em>opens</em> a
+  substatement block.<a name="DOCF35" href="#FOOT35" id=
+  "DOCF35"><sup>35</sup></a></p><a name=
+  "index-comment_002donly-line" id=
+  "index-comment_002donly-line"></a>
+
+  <p>Syntactic contexts can contain more than one element, and
+  syntactic elements need not have anchor positions. The most
+  common example of this is a <em>comment-only line</em>:</p>
+
+  <div class="example">
+    <pre class="example">
+ 1: void draw_list( List&lt;Drawables&gt;&amp; drawables )
  2: {
  3:         // call the virtual draw() method on each element in list
  4:     for( int i=0; i &lt; drawables.count(), ++i )
@@ -195,49 +278,72 @@ this is a <em>comment-only line</em>:
  6:         drawables[i].draw();
  7:     }
  8: }
-</pre></div>
+</pre>
+  </div>
 
-<p>Hitting <kbd>C-c C-s</kbd> on line 3 of this example gives:
-</p>
-<div class="example">
-<pre class="example">((comment-intro) (defun-block-intro 46))
-</pre></div>
+  <p>Hitting <kbd>C-c C-s</kbd> on line 3 of this example
+  gives:</p>
 
-<p>and you can see that the syntactic context contains two syntactic
-elements.  Notice that the first element, &lsquo;<samp>(comment-intro)</samp>&rsquo;, has no
-anchor position.
-</p>
+  <div class="example">
+    <pre class="example">
+((comment-intro) (defun-block-intro 46))
+</pre>
+  </div>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>and you can see that the syntactic context contains two
+  syntactic elements. Notice that the first element,
+  &lsquo;<samp>(comment-intro)</samp>&rsquo;, has no anchor
+  position.</p>
 
-<h3><a name="FOOT32" href="#DOCF32">(32)</a></h3>
-<p>In
-CC Mode 5.28 and earlier, a syntactic element was a dotted pair; the
-cons was the syntactic symbol and the cdr was the anchor position.
-For compatibility&rsquo;s sake, the parameter passed to a line-up function
-still has this dotted pair form (see <a href="Custom-Line_002dUp.html#Custom-Line_002dUp">Custom Line-Up</a>).</p>
-<h3><a name="FOOT33" href="#DOCF33">(33)</a></h3>
-<p>The line numbers in this and future examples
-don&rsquo;t actually appear in the buffer, of course!</p>
-<h3><a name="FOOT34" href="#DOCF34">(34)</a></h3>
-<p>With a universal argument (i.e., <kbd>C-u C-c C-s</kbd>) the
-analysis is inserted into the buffer as a comment on the current
-line.</p>
-<h3><a name="FOOT35" href="#DOCF35">(35)</a></h3>
-<p>A <em>substatement</em> is the line after a
-conditional statement, such as <code>if</code>, <code>else</code>, <code>while</code>,
-<code>do</code>, <code>switch</code>, etc.  A <em>substatement
-block</em> is a brace block following one of these conditional statements.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Syntactic-Symbols.html#Syntactic-Symbols" accesskey="n" rel="next">Syntactic Symbols</a>, Previous: <a href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" accesskey="p" rel="prev">Indentation Engine Basics</a>, Up: <a href="Indentation-Engine-Basics.html#Indentation-Engine-Basics" accesskey="u" rel="up">Indentation Engine Basics</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Command-and-Function-Index.html#Command-and-Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT32" href="#DOCF32" id="FOOT32">(32)</a></h3>
 
+    <p>In CC Mode 5.28 and earlier, a syntactic element was a
+    dotted pair; the cons was the syntactic symbol and the cdr was
+    the anchor position. For compatibility&rsquo;s sake, the
+    parameter passed to a line-up function still has this dotted
+    pair form (see <a href=
+    "Custom-Line_002dUp.html#Custom-Line_002dUp">Custom
+    Line-Up</a>).</p>
+
+    <h3><a name="FOOT33" href="#DOCF33" id="FOOT33">(33)</a></h3>
+
+    <p>The line numbers in this and future examples don&rsquo;t
+    actually appear in the buffer, of course!</p>
+
+    <h3><a name="FOOT34" href="#DOCF34" id="FOOT34">(34)</a></h3>
+
+    <p>With a universal argument (i.e., <kbd>C-u C-c C-s</kbd>) the
+    analysis is inserted into the buffer as a comment on the
+    current line.</p>
+
+    <h3><a name="FOOT35" href="#DOCF35" id="FOOT35">(35)</a></h3>
+
+    <p>A <em>substatement</em> is the line after a conditional
+    statement, such as <code>if</code>, <code>else</code>,
+    <code>while</code>, <code>do</code>, <code>switch</code>, etc.
+    A <em>substatement block</em> is a brace block following one of
+    these conditional statements.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Syntactic-Symbols.html#Syntactic-Symbols"
+    accesskey="n" rel="next">Syntactic Symbols</a>, Previous:
+    <a href=
+    "Indentation-Engine-Basics.html#Indentation-Engine-Basics"
+    accesskey="p" rel="prev">Indentation Engine Basics</a>, Up:
+    <a href=
+    "Indentation-Engine-Basics.html#Indentation-Engine-Basics"
+    accesskey="u" rel="up">Indentation Engine Basics</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Command-and-Function-Index.html#Command-and-Function-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

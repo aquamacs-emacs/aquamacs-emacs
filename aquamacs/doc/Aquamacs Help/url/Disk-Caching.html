@@ -1,14 +1,21 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Disk Caching - URL Programmer's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="URL Programmer's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="General-Facilities.html#General-Facilities" title="General Facilities">
-<link rel="next" href="Proxies.html#Proxies" title="Proxies">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Disk Caching - URL Programmer's Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="URL Programmer's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="General-Facilities.html#General-Facilities"
+  title="General Facilities" />
+  <link rel="next" href="Proxies.html#Proxies" title="Proxies" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the Emacs Lisp URL loading package.
 
 Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
@@ -26,8 +33,10 @@ Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,111 +46,180 @@ Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Disk-Caching"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Proxies.html#Proxies">Proxies</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="General-Facilities.html#General-Facilities">General Facilities</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Disk-Caching" id="Disk-Caching"></a>
 
-<h3 class="section">5.1 Disk Caching</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Proxies.html#Proxies">Proxies</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "General-Facilities.html#General-Facilities">General
+    Facilities</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Caching-95"></a><a name="index-Persistent-Cache-96"></a><a name="index-Disk-Cache-97"></a>
-The disk cache stores retrieved documents locally, whence they can be
-retrieved more quickly.  When requesting a URL that is in the cache,
-the library checks to see if the page has changed since it was last
-retrieved from the remote machine.  If not, the local copy is used,
-saving the transmission over the network. 
-<a name="index-Cleaning-the-cache-98"></a><a name="index-Clearing-the-cache-99"></a><a name="index-Cache-cleaning-100"></a>Currently the cache isn't cleared automatically. 
-<!-- Running the @code{clean-cache} shell script -->
-<!-- fist is recommended, to allow for future cleaning of the cache.  This -->
-<!-- shell script will remove all files that have not been accessed since it -->
-<!-- was last run.  To keep the cache pared down, it is recommended that this -->
-<!-- script be run from @i{at} or @i{cron} (see the manual pages for -->
-<!-- crontab(5) or at(1) for more information) -->
+  <h3 class="section">5.1 Disk Caching</h3>
 
-<div class="defun">
-&mdash; User Option: <b>url-automatic-caching</b><var><a name="index-url_002dautomatic_002dcaching-101"></a></var><br>
-<blockquote><p>Setting this variable non-<code>nil</code> causes documents to be cached
-automatically. 
-</p></blockquote></div>
+  <p><a name="index-Caching-95" id="index-Caching-95"></a><a name=
+  "index-Persistent-Cache-96" id=
+  "index-Persistent-Cache-96"></a><a name="index-Disk-Cache-97" id=
+  "index-Disk-Cache-97"></a> The disk cache stores retrieved
+  documents locally, whence they can be retrieved more quickly.
+  When requesting a URL that is in the cache, the library checks to
+  see if the page has changed since it was last retrieved from the
+  remote machine. If not, the local copy is used, saving the
+  transmission over the network. <a name=
+  "index-Cleaning-the-cache-98" id=
+  "index-Cleaning-the-cache-98"></a><a name=
+  "index-Clearing-the-cache-99" id=
+  "index-Clearing-the-cache-99"></a><a name=
+  "index-Cache-cleaning-100" id=
+  "index-Cache-cleaning-100"></a>Currently the cache isn't cleared
+  automatically. 
+  <!-- Running the @code{clean-cache} shell script -->
+  <!-- fist is recommended, to allow for future cleaning of the cache.  This -->
+  <!-- shell script will remove all files that have not been accessed since it -->
+  <!-- was last run.  To keep the cache pared down, it is recommended that this -->
+  <!-- script be run from @i{at} or @i{cron} (see the manual pages for -->
+  <!-- crontab(5) or at(1) for more information) --></p>
 
-<div class="defun">
-&mdash; User Option: <b>url-cache-directory</b><var><a name="index-url_002dcache_002ddirectory-102"></a></var><br>
-<blockquote><p>This variable specifies the
-directory to store the cache files.  It defaults to sub-directory
-<samp><span class="file">cache</span></samp> of <code>url-configuration-directory</code>. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; User Option: <b>url-automatic-caching</b><var><a name=
+    "index-url_002dautomatic_002dcaching-101" id=
+    "index-url_002dautomatic_002dcaching-101"></a></var><br />
 
-<div class="defun">
-&mdash; User Option: <b>url-cache-creation-function</b><var><a name="index-url_002dcache_002dcreation_002dfunction-103"></a></var><br>
-<blockquote><p>The cache relies on a scheme for mapping URLs to files in the cache. 
-This variable names a function which sets the type of cache to use. 
-It takes a URL as argument and returns the absolute file name of the
-corresponding cache file.  The two supplied possibilities are
-<code>url-cache-create-filename-using-md5</code> and
-<code>url-cache-create-filename-human-readable</code>. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Setting this variable non-<code>nil</code> causes
+      documents to be cached automatically.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Function: <b>url-cache-create-filename-using-md5</b><var> url<a name="index-url_002dcache_002dcreate_002dfilename_002dusing_002dmd5-104"></a></var><br>
-<blockquote><p>Creates a cache file name from <var>url</var> using MD5 hashing. 
-This is creates entries with very few cache collisions and is fast. 
-<a name="index-MD5-105"></a>
-     <pre class="smallexample">          (url-cache-create-filename-using-md5 "http://www.example.com/foo/bar")
+  <div class="defun">
+    &mdash; User Option: <b>url-cache-directory</b><var><a name=
+    "index-url_002dcache_002ddirectory-102" id=
+    "index-url_002dcache_002ddirectory-102"></a></var><br />
+
+    <blockquote>
+      <p>This variable specifies the directory to store the cache
+      files. It defaults to sub-directory <samp><span class=
+      "file">cache</span></samp> of
+      <code>url-configuration-directory</code>.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; User Option:
+    <b>url-cache-creation-function</b><var><a name=
+    "index-url_002dcache_002dcreation_002dfunction-103" id=
+    "index-url_002dcache_002dcreation_002dfunction-103"></a></var><br />
+
+
+    <blockquote>
+      <p>The cache relies on a scheme for mapping URLs to files in
+      the cache. This variable names a function which sets the type
+      of cache to use. It takes a URL as argument and returns the
+      absolute file name of the corresponding cache file. The two
+      supplied possibilities are
+      <code>url-cache-create-filename-using-md5</code> and
+      <code>url-cache-create-filename-human-readable</code>.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Function: <b>url-cache-create-filename-using-md5</b>
+    <var>url<a name=
+    "index-url_002dcache_002dcreate_002dfilename_002dusing_002dmd5-104"
+    id=
+    "index-url_002dcache_002dcreate_002dfilename_002dusing_002dmd5-104"></a></var><br />
+
+
+    <blockquote>
+      <p>Creates a cache file name from <var>url</var> using MD5
+      hashing. This is creates entries with very few cache
+      collisions and is fast. <a name="index-MD5-105" id=
+      "index-MD5-105"></a></p>
+      <pre class="smallexample">
+          (url-cache-create-filename-using-md5 "http://www.example.com/foo/bar")
             &rArr; "/home/fx/.url/cache/fx/http/com/example/www/b8a35774ad20db71c7c3409a5410e74f"
 </pre>
-        </blockquote></div>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Function: <b>url-cache-create-filename-human-readable</b><var> url<a name="index-url_002dcache_002dcreate_002dfilename_002dhuman_002dreadable-106"></a></var><br>
-<blockquote><p>Creates a cache file name from <var>url</var> more obviously connected to
-<var>url</var> than for <code>url-cache-create-filename-using-md5</code>, but
-more likely to conflict with other files.
-     <pre class="smallexample">          (url-cache-create-filename-human-readable "http://www.example.com/foo/bar")
+  <div class="defun">
+    &mdash; Function:
+    <b>url-cache-create-filename-human-readable</b>
+    <var>url<a name="index-url_002dcache_002dcreate_002dfilename_002dhuman_002dreadable-106"
+    id=
+    "index-url_002dcache_002dcreate_002dfilename_002dhuman_002dreadable-106"></a></var><br />
+
+
+    <blockquote>
+      <p>Creates a cache file name from <var>url</var> more
+      obviously connected to <var>url</var> than for
+      <code>url-cache-create-filename-using-md5</code>, but more
+      likely to conflict with other files.</p>
+      <pre class="smallexample">
+          (url-cache-create-filename-human-readable "http://www.example.com/foo/bar")
             &rArr; "/home/fx/.url/cache/fx/http/com/example/www/foo/bar"
 </pre>
-        </blockquote></div>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Function: <b>url-cache-expired</b><var><a name="index-url_002dcache_002dexpired-107"></a></var><br>
-<blockquote><p>This function returns non-nil if a cache entry has expired (or is absent). 
-The arguments are a URL and optional expiration delay in seconds
-(default <var>url-cache-expire-time</var>). 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Function: <b>url-cache-expired</b><var><a name=
+    "index-url_002dcache_002dexpired-107" id=
+    "index-url_002dcache_002dexpired-107"></a></var><br />
 
-<div class="defun">
-&mdash; User Option: <b>url-cache-expire-time</b><var><a name="index-url_002dcache_002dexpire_002dtime-108"></a></var><br>
-<blockquote><p>This variable is the default number of seconds to use for the
-expire-time argument of the function <code>url-cache-expired</code>. 
-</p></blockquote></div>
+    <blockquote>
+      <p>This function returns non-nil if a cache entry has expired
+      (or is absent). The arguments are a URL and optional
+      expiration delay in seconds (default
+      <var>url-cache-expire-time</var>).</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Function: <b>url-fetch-from-cache</b><var><a name="index-url_002dfetch_002dfrom_002dcache-109"></a></var><br>
-<blockquote><p>This function takes a URL as its argument and returns a buffer
-containing the data cached for that URL. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; User Option: <b>url-cache-expire-time</b><var><a name=
+    "index-url_002dcache_002dexpire_002dtime-108" id=
+    "index-url_002dcache_002dexpire_002dtime-108"></a></var><br />
 
-<!-- Fixme: never actually used currently? -->
-<!-- @defopt url-standalone-mode -->
-<!-- @cindex Relying on cache -->
-<!-- @cindex Cache only mode -->
-<!-- @cindex Standalone mode -->
-<!-- If this variable is non-@code{nil}, the library relies solely on the -->
-<!-- cache for fetching documents and avoids checking if they have changed -->
-<!-- on remote servers. -->
-<!-- @end defopt -->
-<!-- With a large cache of documents on the local disk, it can be very handy -->
-<!-- when traveling, or any other time the network connection is not active -->
-<!-- (a laptop with a dial-on-demand PPP connection, etc).  Emacs/W3 can rely -->
-<!-- solely on its cache, and avoid checking to see if the page has changed -->
-<!-- on the remote server.  In the case of a dial-on-demand PPP connection, -->
-<!-- this will keep the phone line free as long as possible, only bringing up -->
-<!-- the PPP connection when asking for a page that is not located in the -->
-<!-- cache.  This is very useful for demonstrations as well. -->
-   </body></html>
+    <blockquote>
+      <p>This variable is the default number of seconds to use for
+      the expire-time argument of the function
+      <code>url-cache-expired</code>.</p>
+    </blockquote>
+  </div>
 
+  <div class="defun">
+    &mdash; Function: <b>url-fetch-from-cache</b><var><a name=
+    "index-url_002dfetch_002dfrom_002dcache-109" id=
+    "index-url_002dfetch_002dfrom_002dcache-109"></a></var><br />
+
+    <blockquote>
+      <p>This function takes a URL as its argument and returns a
+      buffer containing the data cached for that URL.</p>
+    </blockquote>
+  </div><!-- Fixme: never actually used currently? -->
+  <!-- @defopt url-standalone-mode -->
+  <!-- @cindex Relying on cache -->
+  <!-- @cindex Cache only mode -->
+  <!-- @cindex Standalone mode -->
+  <!-- If this variable is non-@code{nil}, the library relies solely on the -->
+  <!-- cache for fetching documents and avoids checking if they have changed -->
+  <!-- on remote servers. -->
+  <!-- @end defopt -->
+  <!-- With a large cache of documents on the local disk, it can be very handy -->
+  <!-- when traveling, or any other time the network connection is not active -->
+  <!-- (a laptop with a dial-on-demand PPP connection, etc).  Emacs/W3 can rely -->
+  <!-- solely on its cache, and avoid checking to see if the page has changed -->
+  <!-- on the remote server.  In the case of a dial-on-demand PPP connection, -->
+  <!-- this will keep the phone line free as long as possible, only bringing up -->
+  <!-- the PPP connection when asking for a page that is not located in the -->
+  <!-- cache.  This is very useful for demonstrations as well. -->
+</body>
+</html>

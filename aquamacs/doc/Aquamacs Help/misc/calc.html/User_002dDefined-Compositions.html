@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,187 +18,255 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: User-Defined Compositions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: User-Defined Compositions">
-<meta name="keywords" content="GNU Emacs Calc Manual: User-Defined Compositions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Compositions.html#Compositions" rel="up" title="Compositions">
-<link href="Syntax-Tables.html#Syntax-Tables" rel="next" title="Syntax Tables">
-<link href="Information-about-Compositions.html#Information-about-Compositions" rel="prev" title="Information about Compositions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: User-Defined Compositions</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: User-Defined Compositions" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: User-Defined Compositions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Compositions.html#Compositions" rel="up" title=
+  "Compositions" />
+  <link href="Syntax-Tables.html#Syntax-Tables" rel="next" title=
+  "Syntax Tables" />
+  <link href=
+  "Information-about-Compositions.html#Information-about-Compositions"
+  rel="prev" title="Information about Compositions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="User_002dDefined-Compositions"></a>
-<div class="header">
-<p>
-Previous: <a href="Information-about-Compositions.html#Information-about-Compositions" accesskey="p" rel="prev">Information about Compositions</a>, Up: <a href="Compositions.html#Compositions" accesskey="u" rel="up">Compositions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="User_002dDefined-Compositions-1"></a>
-<h4 class="subsubsection">6.8.10.6 User-Defined Compositions</h4>
+<body lang="en" xml:lang="en">
+  <a name="User_002dDefined-Compositions" id=
+  "User_002dDefined-Compositions"></a>
 
-<a name="index-Z-C"></a>
-<a name="index-calc_002duser_002ddefine_002dcomposition"></a>
-<p>The <kbd>Z C</kbd> (<code>calc-user-define-composition</code>) command lets you
-define the display format for any algebraic function.  You provide a
-formula containing a certain number of argument variables on the stack.
-Any time Calc formats a call to the specified function in the current
-language mode and with that number of arguments, Calc effectively
-replaces the function call with that formula with the arguments
-replaced.
-</p>
-<p>Calc builds the default argument list by sorting all the variable names
-that appear in the formula into alphabetical order.  You can edit this
-argument list before pressing <tt class="key">RET</tt> if you wish.  Any variables in
-the formula that do not appear in the argument list will be displayed
-literally; any arguments that do not appear in the formula will not
-affect the display at all.
-</p>
-<p>You can define formats for built-in functions, for functions you have
-defined with <kbd>Z F</kbd> (see <a href="Algebraic-Definitions.html#Algebraic-Definitions">Algebraic Definitions</a>), or for functions
-which have no definitions but are being used as purely syntactic objects.
-You can define different formats for each language mode, and for each
-number of arguments, using a succession of <kbd>Z C</kbd> commands.  When
-Calc formats a function call, it first searches for a format defined
-for the current language mode (and number of arguments); if there is
-none, it uses the format defined for the Normal language mode.  If
-neither format exists, Calc uses its built-in standard format for that
-function (usually just &lsquo;<samp><var>func</var>(<var>args</var>)</samp>&rsquo;).
-</p>
-<p>If you execute <kbd>Z C</kbd> with the number 0 on the stack instead of a
-formula, any defined formats for the function in the current language
-mode will be removed.  The function will revert to its standard format.
-</p>
-<p>For example, the default format for the binomial coefficient function
-&lsquo;<samp>choose(n, m)</samp>&rsquo; in the Big language mode is
-</p>
-<div class="example">
-<pre class="example"> n
+  <div class="header">
+    <p>Previous: <a href=
+    "Information-about-Compositions.html#Information-about-Compositions"
+    accesskey="p" rel="prev">Information about Compositions</a>,
+    Up: <a href="Compositions.html#Compositions" accesskey="u" rel=
+    "up">Compositions</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="User_002dDefined-Compositions-1" id=
+  "User_002dDefined-Compositions-1"></a>
+
+  <h4 class="subsubsection">6.8.10.6 User-Defined
+  Compositions</h4><a name="index-Z-C" id="index-Z-C"></a> <a name=
+  "index-calc_002duser_002ddefine_002dcomposition" id=
+  "index-calc_002duser_002ddefine_002dcomposition"></a>
+
+  <p>The <kbd>Z C</kbd> (<code>calc-user-define-composition</code>)
+  command lets you define the display format for any algebraic
+  function. You provide a formula containing a certain number of
+  argument variables on the stack. Any time Calc formats a call to
+  the specified function in the current language mode and with that
+  number of arguments, Calc effectively replaces the function call
+  with that formula with the arguments replaced.</p>
+
+  <p>Calc builds the default argument list by sorting all the
+  variable names that appear in the formula into alphabetical
+  order. You can edit this argument list before pressing <tt class=
+  "key">RET</tt> if you wish. Any variables in the formula that do
+  not appear in the argument list will be displayed literally; any
+  arguments that do not appear in the formula will not affect the
+  display at all.</p>
+
+  <p>You can define formats for built-in functions, for functions
+  you have defined with <kbd>Z F</kbd> (see <a href=
+  "Algebraic-Definitions.html#Algebraic-Definitions">Algebraic
+  Definitions</a>), or for functions which have no definitions but
+  are being used as purely syntactic objects. You can define
+  different formats for each language mode, and for each number of
+  arguments, using a succession of <kbd>Z C</kbd> commands. When
+  Calc formats a function call, it first searches for a format
+  defined for the current language mode (and number of arguments);
+  if there is none, it uses the format defined for the Normal
+  language mode. If neither format exists, Calc uses its built-in
+  standard format for that function (usually just
+  &lsquo;<samp><var>func</var>(<var>args</var>)</samp>&rsquo;).</p>
+
+  <p>If you execute <kbd>Z C</kbd> with the number 0 on the stack
+  instead of a formula, any defined formats for the function in the
+  current language mode will be removed. The function will revert
+  to its standard format.</p>
+
+  <p>For example, the default format for the binomial coefficient
+  function &lsquo;<samp>choose(n, m)</samp>&rsquo; in the Big
+  language mode is</p>
+
+  <div class="example">
+    <pre class="example">
+ n
 ( )
  m
-</pre></div>
+</pre>
+  </div>
 
-<p>You might prefer the notation,
-</p>
-<div class="example">
-<pre class="example"> C
+  <p>You might prefer the notation,</p>
+
+  <div class="example">
+    <pre class="example">
+ C
 n m
-</pre></div>
+</pre>
+  </div>
 
-<p>To define this notation, first make sure you are in Big mode,
-then put the formula
-</p>
-<div class="smallexample">
-<pre class="smallexample">choriz([cvert([cvspace(1), n]), C, cvert([cvspace(1), m])])
-</pre></div>
+  <p>To define this notation, first make sure you are in Big mode,
+  then put the formula</p>
 
-<p>on the stack and type <kbd>Z C</kbd>.  Answer the first prompt with
-<code>choose</code>.  The second prompt will be the default argument list
-of &lsquo;<samp>(C m n)</samp>&rsquo;.  Edit this list to be &lsquo;<samp>(n m)</samp>&rsquo; and press
-<tt class="key">RET</tt>.  Now, try it out:  For example, turn simplification
-off with <kbd>m O</kbd> and enter &lsquo;<samp>choose(a,b) + choose(7,3)</samp>&rsquo;
-as an algebraic entry.
-</p>
-<div class="example">
-<pre class="example"> C  +  C
+  <div class="smallexample">
+    <pre class="smallexample">
+choriz([cvert([cvspace(1), n]), C, cvert([cvspace(1), m])])
+</pre>
+  </div>
+
+  <p>on the stack and type <kbd>Z C</kbd>. Answer the first prompt
+  with <code>choose</code>. The second prompt will be the default
+  argument list of &lsquo;<samp>(C m n)</samp>&rsquo;. Edit this
+  list to be &lsquo;<samp>(n m)</samp>&rsquo; and press <tt class=
+  "key">RET</tt>. Now, try it out: For example, turn simplification
+  off with <kbd>m O</kbd> and enter &lsquo;<samp>choose(a,b) +
+  choose(7,3)</samp>&rsquo; as an algebraic entry.</p>
+
+  <div class="example">
+    <pre class="example">
+ C  +  C
 a b   7 3
-</pre></div>
+</pre>
+  </div>
 
-<p>As another example, let&rsquo;s define the usual notation for Stirling
-numbers of the first kind, &lsquo;<samp>stir1(n, m)</samp>&rsquo;.  This is just like
-the regular format for binomial coefficients but with square brackets
-instead of parentheses.
-</p>
-<div class="smallexample">
-<pre class="smallexample">choriz([string(&quot;[&quot;), cvert([n, cbase(cvspace(1)), m]), string(&quot;]&quot;)])
-</pre></div>
+  <p>As another example, let&rsquo;s define the usual notation for
+  Stirling numbers of the first kind, &lsquo;<samp>stir1(n,
+  m)</samp>&rsquo;. This is just like the regular format for
+  binomial coefficients but with square brackets instead of
+  parentheses.</p>
 
-<p>Now type <kbd>Z C stir1 <span class="key">RET</span></kbd>, edit the argument list to
-&lsquo;<samp>(n m)</samp>&rsquo;, and type <tt class="key">RET</tt>.
-</p>
-<p>The formula provided to <kbd>Z C</kbd> usually will involve composition
-functions, but it doesn&rsquo;t have to.  Putting the formula &lsquo;<samp>a + b + c</samp>&rsquo;
-onto the stack and typing <kbd>Z C foo <span class="key">RET</span> <span class="key">RET</span></kbd> would define
-the function &lsquo;<samp>foo(x,y,z)</samp>&rsquo; to display like &lsquo;<samp>x + y + z</samp>&rsquo;.
-This &ldquo;sum&rdquo; will act exactly like a real sum for all formatting
-purposes (it will be parenthesized the same, and so on).  However
-it will be computationally unrelated to a sum.  For example, the
-formula &lsquo;<samp>2 * foo(1, 2, 3)</samp>&rsquo; will display as &lsquo;<samp>2 (1 + 2 + 3)</samp>&rsquo;.
-Operator precedences have caused the &ldquo;sum&rdquo; to be written in
-parentheses, but the arguments have not actually been summed.
-(Generally a display format like this would be undesirable, since
-it can easily be confused with a real sum.)
-</p>
-<p>The special function <code>eval</code> can be used inside a <kbd>Z C</kbd>
-composition formula to cause all or part of the formula to be
-evaluated at display time.  For example, if the formula is
-&lsquo;<samp>a + eval(b + c)</samp>&rsquo;, then &lsquo;<samp>foo(1, 2, 3)</samp>&rsquo; will be displayed
-as &lsquo;<samp>1 + 5</samp>&rsquo;.  Evaluation will use the default simplifications,
-regardless of the current simplification mode.  There are also
-<code>evalsimp</code> and <code>evalextsimp</code> which simplify as if by
-<kbd>a s</kbd> and <kbd>a e</kbd> (respectively).  Note that these &ldquo;functions&rdquo;
-operate only in the context of composition formulas (and also in
-rewrite rules, where they serve a similar purpose; see <a href="Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>).  On the stack, a call to <code>eval</code> will be left in
-symbolic form.
-</p>
-<p>It is not a good idea to use <code>eval</code> except as a last resort.
-It can cause the display of formulas to be extremely slow.  For
-example, while &lsquo;<samp>eval(a + b)</samp>&rsquo; might seem quite fast and simple,
-there are several situations where it could be slow.  For example,
-&lsquo;<samp>a</samp>&rsquo; and/or &lsquo;<samp>b</samp>&rsquo; could be polar complex numbers, in which
-case doing the sum requires trigonometry.  Or, &lsquo;<samp>a</samp>&rsquo; could be
-the factorial &lsquo;<samp>fact(100)</samp>&rsquo; which is unevaluated because you
-have typed <kbd>m O</kbd>; <code>eval</code> will evaluate it anyway to
-produce a large, unwieldy integer.
-</p>
-<p>You can save your display formats permanently using the <kbd>Z P</kbd>
-command (see <a href="Creating-User-Keys.html#Creating-User-Keys">Creating User Keys</a>).
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Information-about-Compositions.html#Information-about-Compositions" accesskey="p" rel="prev">Information about Compositions</a>, Up: <a href="Compositions.html#Compositions" accesskey="u" rel="up">Compositions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="smallexample">
+    <pre class="smallexample">
+choriz([string("["), cvert([n, cbase(cvspace(1)), m]), string("]")])
+</pre>
+  </div>
 
+  <p>Now type <kbd>Z C stir1 <span class="key">RET</span></kbd>,
+  edit the argument list to &lsquo;<samp>(n m)</samp>&rsquo;, and
+  type <tt class="key">RET</tt>.</p>
 
+  <p>The formula provided to <kbd>Z C</kbd> usually will involve
+  composition functions, but it doesn&rsquo;t have to. Putting the
+  formula &lsquo;<samp>a + b + c</samp>&rsquo; onto the stack and
+  typing <kbd>Z C foo <span class="key">RET</span> <span class=
+  "key">RET</span></kbd> would define the function
+  &lsquo;<samp>foo(x,y,z)</samp>&rsquo; to display like
+  &lsquo;<samp>x + y + z</samp>&rsquo;. This &ldquo;sum&rdquo; will
+  act exactly like a real sum for all formatting purposes (it will
+  be parenthesized the same, and so on). However it will be
+  computationally unrelated to a sum. For example, the formula
+  &lsquo;<samp>2 * foo(1, 2, 3)</samp>&rsquo; will display as
+  &lsquo;<samp>2 (1 + 2 + 3)</samp>&rsquo;. Operator precedences
+  have caused the &ldquo;sum&rdquo; to be written in parentheses,
+  but the arguments have not actually been summed. (Generally a
+  display format like this would be undesirable, since it can
+  easily be confused with a real sum.)</p>
 
+  <p>The special function <code>eval</code> can be used inside a
+  <kbd>Z C</kbd> composition formula to cause all or part of the
+  formula to be evaluated at display time. For example, if the
+  formula is &lsquo;<samp>a + eval(b + c)</samp>&rsquo;, then
+  &lsquo;<samp>foo(1, 2, 3)</samp>&rsquo; will be displayed as
+  &lsquo;<samp>1 + 5</samp>&rsquo;. Evaluation will use the default
+  simplifications, regardless of the current simplification mode.
+  There are also <code>evalsimp</code> and <code>evalextsimp</code>
+  which simplify as if by <kbd>a s</kbd> and <kbd>a e</kbd>
+  (respectively). Note that these &ldquo;functions&rdquo; operate
+  only in the context of composition formulas (and also in rewrite
+  rules, where they serve a similar purpose; see <a href=
+  "Rewrite-Rules.html#Rewrite-Rules">Rewrite Rules</a>). On the
+  stack, a call to <code>eval</code> will be left in symbolic
+  form.</p>
+
+  <p>It is not a good idea to use <code>eval</code> except as a
+  last resort. It can cause the display of formulas to be extremely
+  slow. For example, while &lsquo;<samp>eval(a + b)</samp>&rsquo;
+  might seem quite fast and simple, there are several situations
+  where it could be slow. For example, &lsquo;<samp>a</samp>&rsquo;
+  and/or &lsquo;<samp>b</samp>&rsquo; could be polar complex
+  numbers, in which case doing the sum requires trigonometry. Or,
+  &lsquo;<samp>a</samp>&rsquo; could be the factorial
+  &lsquo;<samp>fact(100)</samp>&rsquo; which is unevaluated because
+  you have typed <kbd>m O</kbd>; <code>eval</code> will evaluate it
+  anyway to produce a large, unwieldy integer.</p>
+
+  <p>You can save your display formats permanently using the <kbd>Z
+  P</kbd> command (see <a href=
+  "Creating-User-Keys.html#Creating-User-Keys">Creating User
+  Keys</a>).</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Information-about-Compositions.html#Information-about-Compositions"
+    accesskey="p" rel="prev">Information about Compositions</a>,
+    Up: <a href="Compositions.html#Compositions" accesskey="u" rel=
+    "up">Compositions</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,154 +18,203 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Date Conversions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Date Conversions">
-<meta name="keywords" content="GNU Emacs Calc Manual: Date Conversions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Date-Arithmetic.html#Date-Arithmetic" rel="up" title="Date Arithmetic">
-<link href="Date-Functions.html#Date-Functions" rel="next" title="Date Functions">
-<link href="Date-Arithmetic.html#Date-Arithmetic" rel="prev" title="Date Arithmetic">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Date Conversions</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Date Conversions" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Date Conversions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Date-Arithmetic.html#Date-Arithmetic" rel="up" title=
+  "Date Arithmetic" />
+  <link href="Date-Functions.html#Date-Functions" rel="next" title=
+  "Date Functions" />
+  <link href="Date-Arithmetic.html#Date-Arithmetic" rel="prev"
+  title="Date Arithmetic" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Date-Conversions"></a>
-<div class="header">
-<p>
-Next: <a href="Date-Functions.html#Date-Functions" accesskey="n" rel="next">Date Functions</a>, Previous: <a href="Date-Arithmetic.html#Date-Arithmetic" accesskey="p" rel="prev">Date Arithmetic</a>, Up: <a href="Date-Arithmetic.html#Date-Arithmetic" accesskey="u" rel="up">Date Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Date-Conversions-1"></a>
-<h4 class="subsection">7.5.1 Date Conversions</h4>
+<body lang="en" xml:lang="en">
+  <a name="Date-Conversions" id="Date-Conversions"></a>
 
-<a name="index-t-D"></a>
-<a name="index-calc_002ddate"></a>
-<a name="index-date"></a>
-<p>The <kbd>t D</kbd> (<code>calc-date</code>) [<code>date</code>] command converts a
-date form into a number, measured in days since Jan 1, 1 AD.  The
-result will be an integer if <var>date</var> is a pure date form, or a
-fraction or float if <var>date</var> is a date/time form.  Or, if its
-argument is a number, it converts this number into a date form.
-</p>
-<p>With a numeric prefix argument, <kbd>t D</kbd> takes that many objects
-(up to six) from the top of the stack and interprets them in one
-of the following ways:
-</p>
-<p>The &lsquo;<samp>date(<var>year</var>, <var>month</var>, <var>day</var>)</samp>&rsquo; function
-builds a pure date form out of the specified year, month, and
-day, which must all be integers.  <var>Year</var> is a year number,
-such as 1991 (<em>not</em> the same as 91!).  <var>Month</var> must be
-an integer in the range 1 to 12; <var>day</var> must be in the range
-1 to 31.  If the specified month has fewer than 31 days and
-<var>day</var> is too large, the equivalent day in the following
-month will be used.
-</p>
-<p>The &lsquo;<samp>date(<var>month</var>, <var>day</var>)</samp>&rsquo; function builds a
-pure date form using the current year, as determined by the
-real-time clock.
-</p>
-<p>The &lsquo;<samp>date(<var>year</var>, <var>month</var>, <var>day</var>, <var>hms</var>)</samp>&rsquo;
-function builds a date/time form using an <var>hms</var> form.
-</p>
-<p>The &lsquo;<samp>date(<var>year</var>, <var>month</var>, <var>day</var>, <var>hour</var>,
-<var>minute</var>, <var>second</var>)</samp>&rsquo; function builds a date/time form.
-<var>hour</var> should be an integer in the range 0 to 23;
-<var>minute</var> should be an integer in the range 0 to 59;
-<var>second</var> should be any real number in the range &lsquo;<samp>[0 .. 60)</samp>&rsquo;.
-The last two arguments default to zero if omitted.
-</p>
-<a name="index-t-J"></a>
-<a name="index-calc_002djulian"></a>
-<a name="index-julian"></a>
-<a name="index-Julian-day-counts_002c-conversions"></a>
-<p>The <kbd>t J</kbd> (<code>calc-julian</code>) [<code>julian</code>] command converts
-a date form into a Julian day count, which is the number of days
-since noon (GMT) on Jan 1, 4713 BC.  A pure date is converted to an
-integer Julian count representing noon of that day.  A date/time form
-is converted to an exact floating-point Julian count, adjusted to
-interpret the date form in the current time zone but the Julian
-day count in Greenwich Mean Time.  A numeric prefix argument allows
-you to specify the time zone; see <a href="Time-Zones.html#Time-Zones">Time Zones</a>.  Use a prefix of
-zero to suppress the time zone adjustment.  Note that pure date forms
-are never time-zone adjusted.
-</p>
-<p>This command can also do the opposite conversion, from a Julian day
-count (either an integer day, or a floating-point day and time in
-the GMT zone), into a pure date form or a date/time form in the
-current or specified time zone.
-</p>
-<a name="index-t-U"></a>
-<a name="index-calc_002dunix_002dtime"></a>
-<a name="index-unixtime"></a>
-<a name="index-Unix-time-format_002c-conversions"></a>
-<p>The <kbd>t U</kbd> (<code>calc-unix-time</code>) [<code>unixtime</code>] command
-converts a date form into a Unix time value, which is the number of
-seconds since midnight on Jan 1, 1970, or vice-versa.  The numeric result
-will be an integer if the current precision is 12 or less; for higher
-precision, the result may be a float with (<var>precision</var>-12)
-digits after the decimal.  Just as for <kbd>t J</kbd>, the numeric time
-is interpreted in the GMT time zone and the date form is interpreted
-in the current or specified zone.  Some systems use Unix-like
-numbering but with the local time zone; give a prefix of zero to
-suppress the adjustment if so.
-</p>
-<a name="index-t-C"></a>
-<a name="index-calc_002dconvert_002dtime_002dzones"></a>
-<a name="index-tzconv"></a>
-<a name="index-Time-Zones_002c-converting-between"></a>
-<p>The <kbd>t C</kbd> (<code>calc-convert-time-zones</code>) [<code>tzconv</code>]
-command converts a date form from one time zone to another.  You
-are prompted for each time zone name in turn; you can answer with
-any suitable Calc time zone expression (see <a href="Time-Zones.html#Time-Zones">Time Zones</a>).
-If you answer either prompt with a blank line, the local time
-zone is used for that prompt.  You can also answer the first
-prompt with <kbd>$</kbd> to take the two time zone names from the
-stack (and the date to be converted from the third stack level).
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Date-Functions.html#Date-Functions" accesskey="n" rel="next">Date Functions</a>, Previous: <a href="Date-Arithmetic.html#Date-Arithmetic" accesskey="p" rel="prev">Date Arithmetic</a>, Up: <a href="Date-Arithmetic.html#Date-Arithmetic" accesskey="u" rel="up">Date Arithmetic</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Date-Functions.html#Date-Functions"
+    accesskey="n" rel="next">Date Functions</a>, Previous: <a href=
+    "Date-Arithmetic.html#Date-Arithmetic" accesskey="p" rel=
+    "prev">Date Arithmetic</a>, Up: <a href=
+    "Date-Arithmetic.html#Date-Arithmetic" accesskey="u" rel=
+    "up">Date Arithmetic</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Date-Conversions-1" id="Date-Conversions-1"></a>
 
+  <h4 class="subsection">7.5.1 Date Conversions</h4><a name=
+  "index-t-D" id="index-t-D"></a> <a name="index-calc_002ddate" id=
+  "index-calc_002ddate"></a> <a name="index-date" id=
+  "index-date"></a>
 
+  <p>The <kbd>t D</kbd> (<code>calc-date</code>)
+  [<code>date</code>] command converts a date form into a number,
+  measured in days since Jan 1, 1 AD. The result will be an integer
+  if <var>date</var> is a pure date form, or a fraction or float if
+  <var>date</var> is a date/time form. Or, if its argument is a
+  number, it converts this number into a date form.</p>
 
+  <p>With a numeric prefix argument, <kbd>t D</kbd> takes that many
+  objects (up to six) from the top of the stack and interprets them
+  in one of the following ways:</p>
+
+  <p>The &lsquo;<samp>date(<var>year</var>, <var>month</var>,
+  <var>day</var>)</samp>&rsquo; function builds a pure date form
+  out of the specified year, month, and day, which must all be
+  integers. <var>Year</var> is a year number, such as 1991
+  (<em>not</em> the same as 91!). <var>Month</var> must be an
+  integer in the range 1 to 12; <var>day</var> must be in the range
+  1 to 31. If the specified month has fewer than 31 days and
+  <var>day</var> is too large, the equivalent day in the following
+  month will be used.</p>
+
+  <p>The &lsquo;<samp>date(<var>month</var>,
+  <var>day</var>)</samp>&rsquo; function builds a pure date form
+  using the current year, as determined by the real-time clock.</p>
+
+  <p>The &lsquo;<samp>date(<var>year</var>, <var>month</var>,
+  <var>day</var>, <var>hms</var>)</samp>&rsquo; function builds a
+  date/time form using an <var>hms</var> form.</p>
+
+  <p>The &lsquo;<samp>date(<var>year</var>, <var>month</var>,
+  <var>day</var>, <var>hour</var>, <var>minute</var>,
+  <var>second</var>)</samp>&rsquo; function builds a date/time
+  form. <var>hour</var> should be an integer in the range 0 to 23;
+  <var>minute</var> should be an integer in the range 0 to 59;
+  <var>second</var> should be any real number in the range
+  &lsquo;<samp>[0 .. 60)</samp>&rsquo;. The last two arguments
+  default to zero if omitted.</p><a name="index-t-J" id=
+  "index-t-J"></a> <a name="index-calc_002djulian" id=
+  "index-calc_002djulian"></a> <a name="index-julian" id=
+  "index-julian"></a> <a name=
+  "index-Julian-day-counts_002c-conversions" id=
+  "index-Julian-day-counts_002c-conversions"></a>
+
+  <p>The <kbd>t J</kbd> (<code>calc-julian</code>)
+  [<code>julian</code>] command converts a date form into a Julian
+  day count, which is the number of days since noon (GMT) on Jan 1,
+  4713 BC. A pure date is converted to an integer Julian count
+  representing noon of that day. A date/time form is converted to
+  an exact floating-point Julian count, adjusted to interpret the
+  date form in the current time zone but the Julian day count in
+  Greenwich Mean Time. A numeric prefix argument allows you to
+  specify the time zone; see <a href=
+  "Time-Zones.html#Time-Zones">Time Zones</a>. Use a prefix of zero
+  to suppress the time zone adjustment. Note that pure date forms
+  are never time-zone adjusted.</p>
+
+  <p>This command can also do the opposite conversion, from a
+  Julian day count (either an integer day, or a floating-point day
+  and time in the GMT zone), into a pure date form or a date/time
+  form in the current or specified time zone.</p><a name=
+  "index-t-U" id="index-t-U"></a> <a name=
+  "index-calc_002dunix_002dtime" id=
+  "index-calc_002dunix_002dtime"></a> <a name="index-unixtime" id=
+  "index-unixtime"></a> <a name=
+  "index-Unix-time-format_002c-conversions" id=
+  "index-Unix-time-format_002c-conversions"></a>
+
+  <p>The <kbd>t U</kbd> (<code>calc-unix-time</code>)
+  [<code>unixtime</code>] command converts a date form into a Unix
+  time value, which is the number of seconds since midnight on Jan
+  1, 1970, or vice-versa. The numeric result will be an integer if
+  the current precision is 12 or less; for higher precision, the
+  result may be a float with (<var>precision</var>-12) digits after
+  the decimal. Just as for <kbd>t J</kbd>, the numeric time is
+  interpreted in the GMT time zone and the date form is interpreted
+  in the current or specified zone. Some systems use Unix-like
+  numbering but with the local time zone; give a prefix of zero to
+  suppress the adjustment if so.</p><a name="index-t-C" id=
+  "index-t-C"></a> <a name=
+  "index-calc_002dconvert_002dtime_002dzones" id=
+  "index-calc_002dconvert_002dtime_002dzones"></a> <a name=
+  "index-tzconv" id="index-tzconv"></a> <a name=
+  "index-Time-Zones_002c-converting-between" id=
+  "index-Time-Zones_002c-converting-between"></a>
+
+  <p>The <kbd>t C</kbd> (<code>calc-convert-time-zones</code>)
+  [<code>tzconv</code>] command converts a date form from one time
+  zone to another. You are prompted for each time zone name in
+  turn; you can answer with any suitable Calc time zone expression
+  (see <a href="Time-Zones.html#Time-Zones">Time Zones</a>). If you
+  answer either prompt with a blank line, the local time zone is
+  used for that prompt. You can also answer the first prompt with
+  <kbd>$</kbd> to take the two time zone names from the stack (and
+  the date to be converted from the third stack level).</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Date-Functions.html#Date-Functions"
+    accesskey="n" rel="next">Date Functions</a>, Previous: <a href=
+    "Date-Arithmetic.html#Date-Arithmetic" accesskey="p" rel=
+    "prev">Date Arithmetic</a>, Up: <a href=
+    "Date-Arithmetic.html#Date-Arithmetic" accesskey="u" rel=
+    "up">Date Arithmetic</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

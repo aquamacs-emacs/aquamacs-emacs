@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,172 +19,239 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Packaging Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Packaging Basics">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Packaging Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Packaging.html#Packaging" rel="up" title="Packaging">
-<link href="Simple-Packages.html#Simple-Packages" rel="next" title="Simple Packages">
-<link href="Packaging.html#Packaging" rel="prev" title="Packaging">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Packaging Basics</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Packaging Basics" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Packaging Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Packaging.html#Packaging" rel="up" title=
+  "Packaging" />
+  <link href="Simple-Packages.html#Simple-Packages" rel="next"
+  title="Simple Packages" />
+  <link href="Packaging.html#Packaging" rel="prev" title=
+  "Packaging" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Packaging-Basics" id="Packaging-Basics"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Simple-Packages.html#Simple-Packages"
+    accesskey="n" rel="next">Simple Packages</a>, Up: <a href=
+    "Packaging.html#Packaging" accesskey="u" rel="up">Packaging</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Packaging-Basics-1" id="Packaging-Basics-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Packaging-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Simple-Packages.html#Simple-Packages" accesskey="n" rel="next">Simple Packages</a>, Up: <a href="Packaging.html#Packaging" accesskey="u" rel="up">Packaging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Packaging-Basics-1"></a>
-<h3 class="section">39.1 Packaging Basics</h3>
-<a name="index-package-attributes"></a>
-<a name="index-package-name"></a>
-<a name="index-package-version"></a>
-<a name="index-dependencies"></a>
-<a name="index-package-dependencies"></a>
+  <h3 class="section">39.1 Packaging Basics</h3><a name=
+  "index-package-attributes" id="index-package-attributes"></a>
+  <a name="index-package-name" id="index-package-name"></a>
+  <a name="index-package-version" id="index-package-version"></a>
+  <a name="index-dependencies" id="index-dependencies"></a>
+  <a name="index-package-dependencies" id=
+  "index-package-dependencies"></a>
 
-<p>A package is either a <em>simple package</em> or a <em>multi-file
-package</em>.  A simple package is stored in a package archive as a single
-Emacs Lisp file, while a multi-file package is stored as a tar file
-(containing multiple Lisp files, and possibly non-Lisp files such as a
-manual).
-</p>
-<p>In ordinary usage, the difference between simple packages and
-multi-file packages is relatively unimportant; the Package Menu
-interface makes no distinction between them.  However, the procedure
-for creating them differs, as explained in the following sections.
-</p>
-<p>Each package (whether simple or multi-file) has certain
-<em>attributes</em>:
-</p>
-<dl compact="compact">
-<dt>Name</dt>
-<dd><p>A short word (e.g., &lsquo;<samp>auctex</samp>&rsquo;).  This is usually also the symbol
-prefix used in the program (see <a href="Coding-Conventions.html#Coding-Conventions">Coding Conventions</a>).
-</p>
-</dd>
-<dt>Version</dt>
-<dd><p>A version number, in a form that the function <code>version-to-list</code>
-understands (e.g., &lsquo;<samp>11.86</samp>&rsquo;).  Each release of a package should be
-accompanied by an increase in the version number.
-</p>
-</dd>
-<dt>Brief description</dt>
-<dd><p>This is shown when the package is listed in the Package Menu.  It
-should occupy a single line, ideally in 36 characters or less.
-</p>
-</dd>
-<dt>Long description</dt>
-<dd><p>This is shown in the buffer created by <kbd>C-h P</kbd>
-(<code>describe-package</code>), following the package&rsquo;s brief description
-and installation status.  It normally spans multiple lines, and should
-fully describe the package&rsquo;s capabilities and how to begin using it
-once it is installed.
-</p>
-</dd>
-<dt>Dependencies</dt>
-<dd><p>A list of other packages (possibly including minimal acceptable
-version numbers) on which this package depends.  The list may be
-empty, meaning this package has no dependencies.  Otherwise,
-installing this package also automatically installs its dependencies;
-if any dependency cannot be found, the package cannot be installed.
-</p></dd>
-</dl>
+  <p>A package is either a <em>simple package</em> or a
+  <em>multi-file package</em>. A simple package is stored in a
+  package archive as a single Emacs Lisp file, while a multi-file
+  package is stored as a tar file (containing multiple Lisp files,
+  and possibly non-Lisp files such as a manual).</p>
 
-<a name="index-content-directory_002c-package"></a>
-<p>Installing a package, either via the command <code>package-install-file</code>,
-or via the Package Menu, creates a subdirectory of
-<code>package-user-dir</code> named <samp><var>name</var>-<var>version</var></samp>, where
-<var>name</var> is the package&rsquo;s name and <var>version</var> its version
-(e.g., <samp>~/.emacs.d/elpa/auctex-11.86/</samp>).  We call this the
-package&rsquo;s <em>content directory</em>.  It is where Emacs puts the
-package&rsquo;s contents (the single Lisp file for a simple package, or the
-files extracted from a multi-file package).
-</p>
-<a name="index-package-autoloads"></a>
-<p>Emacs then searches every Lisp file in the content directory for
-autoload magic comments (see <a href="Autoload.html#Autoload">Autoload</a>).  These autoload
-definitions are saved to a file named <samp><var>name</var>-autoloads.el</samp>
-in the content directory.  They are typically used to autoload the
-principal user commands defined in the package, but they can also
-perform other tasks, such as adding an element to
-<code>auto-mode-alist</code> (see <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>).  Note that a package
-typically does <em>not</em> autoload every function and variable defined
-within it&mdash;only the handful of commands typically called to begin
-using the package.  Emacs then byte-compiles every Lisp file in the
-package.
-</p>
-<p>After installation, the installed package is <em>loaded</em>: Emacs
-adds the package&rsquo;s content directory to <code>load-path</code>, and
-evaluates the autoload definitions in <samp><var>name</var>-autoloads.el</samp>.
-</p>
-<p>Whenever Emacs starts up, it automatically calls the function
-<code>package-initialize</code> to load installed packages.  This is done
-after loading the init file and abbrev file (if any) and before
-running <code>after-init-hook</code> (see <a href="Startup-Summary.html#Startup-Summary">Startup Summary</a>).  Automatic
-package loading is disabled if the user option
-<code>package-enable-at-startup</code> is <code>nil</code>.
-</p>
-<dl>
-<dt><a name="index-package_002dinitialize"></a>Command: <strong>package-initialize</strong> <em>&amp;optional no-activate</em></dt>
-<dd><p>This function initializes Emacs&rsquo; internal record of which packages are
-installed, and loads them.  The user option <code>package-load-list</code>
-specifies which packages to load; by default, all installed packages
-are loaded.  If called during startup, this function also sets
-<code>package-enable-at-startup</code> to <code>nil</code>, to avoid accidentally
-loading the packages twice.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Installation.html#Package-Installation">Package Installation</a> in <cite>The
-GNU Emacs Manual</cite>.
-</p>
-<p>The optional argument <var>no-activate</var>, if non-<code>nil</code>, causes
-Emacs to update its record of installed packages without actually
-loading them; it is for internal use only.
-</p></dd></dl>
+  <p>In ordinary usage, the difference between simple packages and
+  multi-file packages is relatively unimportant; the Package Menu
+  interface makes no distinction between them. However, the
+  procedure for creating them differs, as explained in the
+  following sections.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Simple-Packages.html#Simple-Packages" accesskey="n" rel="next">Simple Packages</a>, Up: <a href="Packaging.html#Packaging" accesskey="u" rel="up">Packaging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Each package (whether simple or multi-file) has certain
+  <em>attributes</em>:</p>
 
+  <dl compact="compact">
+    <dt>Name</dt>
 
+    <dd>
+      <p>A short word (e.g., &lsquo;<samp>auctex</samp>&rsquo;).
+      This is usually also the symbol prefix used in the program
+      (see <a href=
+      "Coding-Conventions.html#Coding-Conventions">Coding
+      Conventions</a>).</p>
+    </dd>
 
+    <dt>Version</dt>
+
+    <dd>
+      <p>A version number, in a form that the function
+      <code>version-to-list</code> understands (e.g.,
+      &lsquo;<samp>11.86</samp>&rsquo;). Each release of a package
+      should be accompanied by an increase in the version
+      number.</p>
+    </dd>
+
+    <dt>Brief description</dt>
+
+    <dd>
+      <p>This is shown when the package is listed in the Package
+      Menu. It should occupy a single line, ideally in 36
+      characters or less.</p>
+    </dd>
+
+    <dt>Long description</dt>
+
+    <dd>
+      <p>This is shown in the buffer created by <kbd>C-h P</kbd>
+      (<code>describe-package</code>), following the
+      package&rsquo;s brief description and installation status. It
+      normally spans multiple lines, and should fully describe the
+      package&rsquo;s capabilities and how to begin using it once
+      it is installed.</p>
+    </dd>
+
+    <dt>Dependencies</dt>
+
+    <dd>
+      <p>A list of other packages (possibly including minimal
+      acceptable version numbers) on which this package depends.
+      The list may be empty, meaning this package has no
+      dependencies. Otherwise, installing this package also
+      automatically installs its dependencies; if any dependency
+      cannot be found, the package cannot be installed.</p>
+    </dd>
+  </dl><a name="index-content-directory_002c-package" id=
+  "index-content-directory_002c-package"></a>
+
+  <p>Installing a package, either via the command
+  <code>package-install-file</code>, or via the Package Menu,
+  creates a subdirectory of <code>package-user-dir</code> named
+  <samp><var>name</var>-<var>version</var></samp>, where
+  <var>name</var> is the package&rsquo;s name and
+  <var>version</var> its version (e.g.,
+  <samp>~/.emacs.d/elpa/auctex-11.86/</samp>). We call this the
+  package&rsquo;s <em>content directory</em>. It is where Emacs
+  puts the package&rsquo;s contents (the single Lisp file for a
+  simple package, or the files extracted from a multi-file
+  package).</p><a name="index-package-autoloads" id=
+  "index-package-autoloads"></a>
+
+  <p>Emacs then searches every Lisp file in the content directory
+  for autoload magic comments (see <a href=
+  "Autoload.html#Autoload">Autoload</a>). These autoload
+  definitions are saved to a file named
+  <samp><var>name</var>-autoloads.el</samp> in the content
+  directory. They are typically used to autoload the principal user
+  commands defined in the package, but they can also perform other
+  tasks, such as adding an element to <code>auto-mode-alist</code>
+  (see <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major
+  Mode</a>). Note that a package typically does <em>not</em>
+  autoload every function and variable defined within it&mdash;only
+  the handful of commands typically called to begin using the
+  package. Emacs then byte-compiles every Lisp file in the
+  package.</p>
+
+  <p>After installation, the installed package is <em>loaded</em>:
+  Emacs adds the package&rsquo;s content directory to
+  <code>load-path</code>, and evaluates the autoload definitions in
+  <samp><var>name</var>-autoloads.el</samp>.</p>
+
+  <p>Whenever Emacs starts up, it automatically calls the function
+  <code>package-initialize</code> to load installed packages. This
+  is done after loading the init file and abbrev file (if any) and
+  before running <code>after-init-hook</code> (see <a href=
+  "Startup-Summary.html#Startup-Summary">Startup Summary</a>).
+  Automatic package loading is disabled if the user option
+  <code>package-enable-at-startup</code> is <code>nil</code>.</p>
+
+  <dl>
+    <dt><a name="index-package_002dinitialize" id=
+    "index-package_002dinitialize"></a>Command:
+    <strong>package-initialize</strong> <em>&amp;optional
+    no-activate</em></dt>
+
+    <dd>
+      <p>This function initializes Emacs&rsquo; internal record of
+      which packages are installed, and loads them. The user option
+      <code>package-load-list</code> specifies which packages to
+      load; by default, all installed packages are loaded. If
+      called during startup, this function also sets
+      <code>package-enable-at-startup</code> to <code>nil</code>,
+      to avoid accidentally loading the packages twice. See
+      <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Installation.html#Package-Installation">
+      Package Installation</a> in <cite>The GNU Emacs
+      Manual</cite>.</p>
+
+      <p>The optional argument <var>no-activate</var>, if
+      non-<code>nil</code>, causes Emacs to update its record of
+      installed packages without actually loading them; it is for
+      internal use only.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Simple-Packages.html#Simple-Packages"
+    accesskey="n" rel="next">Simple Packages</a>, Up: <a href=
+    "Packaging.html#Packaging" accesskey="u" rel="up">Packaging</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

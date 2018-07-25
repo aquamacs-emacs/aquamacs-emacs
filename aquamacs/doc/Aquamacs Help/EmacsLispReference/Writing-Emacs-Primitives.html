@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,86 +19,129 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Writing Emacs Primitives</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Writing Emacs Primitives">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Writing Emacs Primitives">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" rel="up" title="GNU Emacs Internals">
-<link href="Object-Internals.html#Object-Internals" rel="next" title="Object Internals">
-<link href="C-Dialect.html#C-Dialect" rel="prev" title="C Dialect">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Writing Emacs
+  Primitives</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Writing Emacs Primitives" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Writing Emacs Primitives" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" rel=
+  "up" title="GNU Emacs Internals" />
+  <link href="Object-Internals.html#Object-Internals" rel="next"
+  title="Object Internals" />
+  <link href="C-Dialect.html#C-Dialect" rel="prev" title=
+  "C Dialect" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Writing-Emacs-Primitives" id=
+  "Writing-Emacs-Primitives"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Object-Internals.html#Object-Internals"
+    accesskey="n" rel="next">Object Internals</a>, Previous:
+    <a href="C-Dialect.html#C-Dialect" accesskey="p" rel="prev">C
+    Dialect</a>, Up: <a href=
+    "GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u"
+    rel="up">GNU Emacs Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Writing-Emacs-Primitives-1" id=
+  "Writing-Emacs-Primitives-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Writing-Emacs-Primitives"></a>
-<div class="header">
-<p>
-Next: <a href="Object-Internals.html#Object-Internals" accesskey="n" rel="next">Object Internals</a>, Previous: <a href="C-Dialect.html#C-Dialect" accesskey="p" rel="prev">C Dialect</a>, Up: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Writing-Emacs-Primitives-1"></a>
-<h3 class="section">E.7 Writing Emacs Primitives</h3>
-<a name="index-primitive-function-internals"></a>
-<a name="index-writing-Emacs-primitives"></a>
+  <h3 class="section">E.7 Writing Emacs Primitives</h3><a name=
+  "index-primitive-function-internals" id=
+  "index-primitive-function-internals"></a> <a name=
+  "index-writing-Emacs-primitives" id=
+  "index-writing-Emacs-primitives"></a>
 
-<p>Lisp primitives are Lisp functions implemented in C.  The details of
-interfacing the C function so that Lisp can call it are handled by a few
-C macros.  The only way to really understand how to write new C code is
-to read the source, but we can explain some things here.
-</p>
-<p>An example of a special form is the definition of <code>or</code>, from
-<samp>eval.c</samp>.  (An ordinary function would have the same general
-appearance.)
-</p>
-<div class="smallexample">
-<pre class="smallexample">DEFUN (&quot;or&quot;, For, Sor, 0, UNEVALLED, 0,
+  <p>Lisp primitives are Lisp functions implemented in C. The
+  details of interfacing the C function so that Lisp can call it
+  are handled by a few C macros. The only way to really understand
+  how to write new C code is to read the source, but we can explain
+  some things here.</p>
+
+  <p>An example of a special form is the definition of
+  <code>or</code>, from <samp>eval.c</samp>. (An ordinary function
+  would have the same general appearance.)</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+DEFUN ("or", For, Sor, 0, UNEVALLED, 0,
   doc: /* Eval args until one of them yields non-nil, then return
 that value.
 The remaining args are not evalled at all.
 If all args return nil, return nil.
-</pre><pre class="smallexample">usage: (or CONDITIONS...)  */)
+</pre>
+    <pre class="smallexample">
+usage: (or CONDITIONS...)  */)
   (Lisp_Object args)
 {
   Lisp_Object val = Qnil;
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">  while (CONSP (args))
+</pre>
+    <pre class="smallexample">
+</pre>
+    <pre class="smallexample">
+  while (CONSP (args))
     {
       val = eval_sub (XCAR (args));
       if (!NILP (val))
@@ -104,206 +149,280 @@ If all args return nil, return nil.
       args = XCDR (args);
       QUIT;
     }
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">  return val;
+</pre>
+    <pre class="smallexample">
+</pre>
+    <pre class="smallexample">
+  return val;
 }
-</pre></div>
+</pre>
+  </div><a name=
+  "index-DEFUN_002c-C-macro-to-define-Lisp-primitives" id=
+  "index-DEFUN_002c-C-macro-to-define-Lisp-primitives"></a>
 
-<a name="index-DEFUN_002c-C-macro-to-define-Lisp-primitives"></a>
-<p>Let&rsquo;s start with a precise explanation of the arguments to the
-<code>DEFUN</code> macro.  Here is a template for them:
-</p>
-<div class="example">
-<pre class="example">DEFUN (<var>lname</var>, <var>fname</var>, <var>sname</var>, <var>min</var>, <var>max</var>, <var>interactive</var>, <var>doc</var>)
-</pre></div>
+  <p>Let&rsquo;s start with a precise explanation of the arguments
+  to the <code>DEFUN</code> macro. Here is a template for them:</p>
 
-<dl compact="compact">
-<dt><var>lname</var></dt>
-<dd><p>This is the name of the Lisp symbol to define as the function name; in
-the example above, it is <code>or</code>.
-</p>
-</dd>
-<dt><var>fname</var></dt>
-<dd><p>This is the C function name for this function.  This is the name that
-is used in C code for calling the function.  The name is, by
-convention, &lsquo;<samp>F</samp>&rsquo; prepended to the Lisp name, with all dashes
-(&lsquo;<samp>-</samp>&rsquo;) in the Lisp name changed to underscores.  Thus, to call
-this function from C code, call <code>For</code>.
-</p>
-</dd>
-<dt><var>sname</var></dt>
-<dd><p>This is a C variable name to use for a structure that holds the data for
-the subr object that represents the function in Lisp.  This structure
-conveys the Lisp symbol name to the initialization routine that will
-create the symbol and store the subr object as its definition.  By
-convention, this name is always <var>fname</var> with &lsquo;<samp>F</samp>&rsquo; replaced with
-&lsquo;<samp>S</samp>&rsquo;.
-</p>
-</dd>
-<dt><var>min</var></dt>
-<dd><p>This is the minimum number of arguments that the function requires.  The
-function <code>or</code> allows a minimum of zero arguments.
-</p>
-</dd>
-<dt><var>max</var></dt>
-<dd><p>This is the maximum number of arguments that the function accepts, if
-there is a fixed maximum.  Alternatively, it can be <code>UNEVALLED</code>,
-indicating a special form that receives unevaluated arguments, or
-<code>MANY</code>, indicating an unlimited number of evaluated arguments (the
-equivalent of <code>&amp;rest</code>).  Both <code>UNEVALLED</code> and <code>MANY</code> are
-macros.  If <var>max</var> is a number, it must be more than <var>min</var> but
-less than 8.
-</p>
-<a name="index-interactive-specification-in-primitives"></a>
-</dd>
-<dt><var>interactive</var></dt>
-<dd><p>This is an interactive specification, a string such as might be used
-as the argument of <code>interactive</code> in a Lisp function.  In the case
-of <code>or</code>, it is 0 (a null pointer), indicating that <code>or</code>
-cannot be called interactively.  A value of <code>&quot;&quot;</code> indicates a
-function that should receive no arguments when called interactively.
-If the value begins with a &lsquo;<samp>&quot;(</samp>&rsquo;, the string is evaluated as a
-Lisp form.  For example:
-</p>
-<div class="example">
-<pre class="example">DEFUN (&quot;foo&quot;, Ffoo, Sfoo, 0, UNEVALLED,
-       &quot;(list (read-char-by-name \&quot;Insert character: \&quot;)\
+  <div class="example">
+    <pre class="example">
+DEFUN (<var>lname</var>, <var>fname</var>, <var>sname</var>, <var>min</var>, <var>max</var>, <var>interactive</var>, <var>doc</var>)
+</pre>
+  </div>
+
+  <dl compact="compact">
+    <dt><var>lname</var></dt>
+
+    <dd>
+      <p>This is the name of the Lisp symbol to define as the
+      function name; in the example above, it is
+      <code>or</code>.</p>
+    </dd>
+
+    <dt><var>fname</var></dt>
+
+    <dd>
+      <p>This is the C function name for this function. This is the
+      name that is used in C code for calling the function. The
+      name is, by convention, &lsquo;<samp>F</samp>&rsquo;
+      prepended to the Lisp name, with all dashes
+      (&lsquo;<samp>-</samp>&rsquo;) in the Lisp name changed to
+      underscores. Thus, to call this function from C code, call
+      <code>For</code>.</p>
+    </dd>
+
+    <dt><var>sname</var></dt>
+
+    <dd>
+      <p>This is a C variable name to use for a structure that
+      holds the data for the subr object that represents the
+      function in Lisp. This structure conveys the Lisp symbol name
+      to the initialization routine that will create the symbol and
+      store the subr object as its definition. By convention, this
+      name is always <var>fname</var> with
+      &lsquo;<samp>F</samp>&rsquo; replaced with
+      &lsquo;<samp>S</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><var>min</var></dt>
+
+    <dd>
+      <p>This is the minimum number of arguments that the function
+      requires. The function <code>or</code> allows a minimum of
+      zero arguments.</p>
+    </dd>
+
+    <dt><var>max</var></dt>
+
+    <dd>
+      <p>This is the maximum number of arguments that the function
+      accepts, if there is a fixed maximum. Alternatively, it can
+      be <code>UNEVALLED</code>, indicating a special form that
+      receives unevaluated arguments, or <code>MANY</code>,
+      indicating an unlimited number of evaluated arguments (the
+      equivalent of <code>&amp;rest</code>). Both
+      <code>UNEVALLED</code> and <code>MANY</code> are macros. If
+      <var>max</var> is a number, it must be more than
+      <var>min</var> but less than 8.</p><a name=
+      "index-interactive-specification-in-primitives" id=
+      "index-interactive-specification-in-primitives"></a>
+    </dd>
+
+    <dt><var>interactive</var></dt>
+
+    <dd>
+      <p>This is an interactive specification, a string such as
+      might be used as the argument of <code>interactive</code> in
+      a Lisp function. In the case of <code>or</code>, it is 0 (a
+      null pointer), indicating that <code>or</code> cannot be
+      called interactively. A value of <code>""</code> indicates a
+      function that should receive no arguments when called
+      interactively. If the value begins with a
+      &lsquo;<samp>"(</samp>&rsquo;, the string is evaluated as a
+      Lisp form. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+DEFUN ("foo", Ffoo, Sfoo, 0, UNEVALLED,
+       "(list (read-char-by-name \"Insert character: \")\
               (prefix-numeric-value current-prefix-arg)\
-              t))&quot;,
+              t))",
   doc: /* &hellip; /*)
-</pre></div>
+</pre>
+      </div>
+    </dd>
 
-</dd>
-<dt><var>doc</var></dt>
-<dd><p>This is the documentation string.  It uses C comment syntax rather
-than C string syntax because comment syntax requires nothing special
-to include multiple lines.  The &lsquo;<samp>doc:</samp>&rsquo; identifies the comment
-that follows as the documentation string.  The &lsquo;<samp>/*</samp>&rsquo; and &lsquo;<samp>*/</samp>&rsquo;
-delimiters that begin and end the comment are not part of the
-documentation string.
-</p>
-<p>If the last line of the documentation string begins with the keyword
-&lsquo;<samp>usage:</samp>&rsquo;, the rest of the line is treated as the argument list
-for documentation purposes.  This way, you can use different argument
-names in the documentation string from the ones used in the C code.
-&lsquo;<samp>usage:</samp>&rsquo; is required if the function has an unlimited number of
-arguments.
-</p>
-<p>All the usual rules for documentation strings in Lisp code
-(see <a href="Documentation-Tips.html#Documentation-Tips">Documentation Tips</a>) apply to C code documentation strings
-too.
-</p></dd>
-</dl>
+    <dt><var>doc</var></dt>
 
-<p>After the call to the <code>DEFUN</code> macro, you must write the
-argument list for the C function, including the types for the
-arguments.  If the primitive accepts a fixed maximum number of Lisp
-arguments, there must be one C argument for each Lisp argument, and
-each argument must be of type <code>Lisp_Object</code>.  (Various macros and
-functions for creating values of type <code>Lisp_Object</code> are declared
-in the file <samp>lisp.h</samp>.)  If the primitive has no upper limit on
-the number of Lisp arguments, it must have exactly two C arguments:
-the first is the number of Lisp arguments, and the second is the
-address of a block containing their values.  These have types
-<code>int</code> and <code><span class="nolinebreak">Lisp_Object</span>&nbsp;*</code><!-- /@w --> respectively.  Since
-<code>Lisp_Object</code> can hold any Lisp object of any data type, you
-can determine the actual data type only at run time; so if you want
-a primitive to accept only a certain type of argument, you must check
-the type explicitly using a suitable predicate (see <a href="Type-Predicates.html#Type-Predicates">Type Predicates</a>).
-<a name="index-type-checking-internals"></a>
-</p>
-<a name="index-garbage-collection-protection"></a>
-<a name="index-protect-C-variables-from-garbage-collection"></a>
-<p>Within the function <code>For</code> itself, the local variable
-<code>args</code> refers to objects controlled by Emacs&rsquo;s stack-marking
-garbage collector.  Although the garbage collector does not reclaim
-objects reachable from C <code>Lisp_Object</code> stack variables, it may
-move non-object components of an object, such as string contents; so
-functions that access non-object components must take care to refetch
-their addresses after performing Lisp evaluation.  Lisp evaluation can
-occur via calls to <code>eval_sub</code> or <code>Feval</code>, either directly or
-indirectly.
-</p>
-<a name="index-QUIT_002c-use-in-Lisp-primitives"></a>
-<p>Note the call to the <code>QUIT</code> macro inside the loop: this macro
-checks whether the user pressed <kbd>C-g</kbd>, and if so, aborts the
-processing.  You should do that in any loop that can potentially
-require a large number of iterations; in this case, the list of
-arguments could be very long.  This increases Emacs responsiveness and
-improves user experience.
-</p>
-<p>You must not use C initializers for static or global variables unless
-the variables are never written once Emacs is dumped.  These variables
-with initializers are allocated in an area of memory that becomes
-read-only (on certain operating systems) as a result of dumping Emacs.
-See <a href="Pure-Storage.html#Pure-Storage">Pure Storage</a>.
-</p>
-<a name="index-defsubr_002c-Lisp-symbol-for-a-primitive"></a>
-<p>Defining the C function is not enough to make a Lisp primitive
-available; you must also create the Lisp symbol for the primitive and
-store a suitable subr object in its function cell.  The code looks like
-this:
-</p>
-<div class="example">
-<pre class="example">defsubr (&amp;<var>sname</var>);
-</pre></div>
+    <dd>
+      <p>This is the documentation string. It uses C comment syntax
+      rather than C string syntax because comment syntax requires
+      nothing special to include multiple lines. The
+      &lsquo;<samp>doc:</samp>&rsquo; identifies the comment that
+      follows as the documentation string. The
+      &lsquo;<samp>/*</samp>&rsquo; and
+      &lsquo;<samp>*/</samp>&rsquo; delimiters that begin and end
+      the comment are not part of the documentation string.</p>
 
-<p>Here <var>sname</var> is the name you used as the third argument to <code>DEFUN</code>.
-</p>
-<p>If you add a new primitive to a file that already has Lisp primitives
-defined in it, find the function (near the end of the file) named
-<code>syms_of_<var>something</var></code>, and add the call to <code>defsubr</code>
-there.  If the file doesn&rsquo;t have this function, or if you create a new
-file, add to it a <code>syms_of_<var>filename</var></code> (e.g.,
-<code>syms_of_myfile</code>).  Then find the spot in <samp>emacs.c</samp> where all
-of these functions are called, and add a call to
-<code>syms_of_<var>filename</var></code> there.
-</p>
-<a name="Defining-Lisp-variables-in-C"></a><a name="index-byte_002dboolean_002dvars-1"></a>
-<a name="index-defining-Lisp-variables-in-C"></a>
-<a name="index-DEFVAR_005fINT_002c-DEFVAR_005fLISP_002c-DEFVAR_005fBOOL"></a>
-<p>The function <code>syms_of_<var>filename</var></code> is also the place to define
-any C variables that are to be visible as Lisp variables.
-<code>DEFVAR_LISP</code> makes a C variable of type <code>Lisp_Object</code> visible
-in Lisp.  <code>DEFVAR_INT</code> makes a C variable of type <code>int</code>
-visible in Lisp with a value that is always an integer.
-<code>DEFVAR_BOOL</code> makes a C variable of type <code>int</code> visible in Lisp
-with a value that is either <code>t</code> or <code>nil</code>.  Note that variables
-defined with <code>DEFVAR_BOOL</code> are automatically added to the list
-<code>byte-boolean-vars</code> used by the byte compiler.
-</p>
-<a name="index-defining-customization-variables-in-C"></a>
-<p>If you want to make a Lisp variables that is defined in C behave
-like one declared with <code>defcustom</code>, add an appropriate entry to
-<samp>cus-start.el</samp>.
-</p>
-<a name="index-staticpro_002c-protection-from-GC"></a>
-<p>If you define a file-scope C variable of type <code>Lisp_Object</code>,
-you must protect it from garbage-collection by calling <code>staticpro</code>
-in <code>syms_of_<var>filename</var></code>, like this:
-</p>
-<div class="example">
-<pre class="example">staticpro (&amp;<var>variable</var>);
-</pre></div>
+      <p>If the last line of the documentation string begins with
+      the keyword &lsquo;<samp>usage:</samp>&rsquo;, the rest of
+      the line is treated as the argument list for documentation
+      purposes. This way, you can use different argument names in
+      the documentation string from the ones used in the C code.
+      &lsquo;<samp>usage:</samp>&rsquo; is required if the function
+      has an unlimited number of arguments.</p>
 
-<p>Here is another example function, with more complicated arguments.
-This comes from the code in <samp>window.c</samp>, and it demonstrates the use
-of macros and functions to manipulate Lisp objects.
-</p>
-<div class="smallexample">
-<pre class="smallexample">DEFUN (&quot;coordinates-in-window-p&quot;, Fcoordinates_in_window_p,
+      <p>All the usual rules for documentation strings in Lisp code
+      (see <a href=
+      "Documentation-Tips.html#Documentation-Tips">Documentation
+      Tips</a>) apply to C code documentation strings too.</p>
+    </dd>
+  </dl>
+
+  <p>After the call to the <code>DEFUN</code> macro, you must write
+  the argument list for the C function, including the types for the
+  arguments. If the primitive accepts a fixed maximum number of
+  Lisp arguments, there must be one C argument for each Lisp
+  argument, and each argument must be of type
+  <code>Lisp_Object</code>. (Various macros and functions for
+  creating values of type <code>Lisp_Object</code> are declared in
+  the file <samp>lisp.h</samp>.) If the primitive has no upper
+  limit on the number of Lisp arguments, it must have exactly two C
+  arguments: the first is the number of Lisp arguments, and the
+  second is the address of a block containing their values. These
+  have types <code>int</code> and <code><span class=
+  "nolinebreak">Lisp_Object</span>&nbsp;*</code><!-- /@w -->
+  respectively. Since <code>Lisp_Object</code> can hold any Lisp
+  object of any data type, you can determine the actual data type
+  only at run time; so if you want a primitive to accept only a
+  certain type of argument, you must check the type explicitly
+  using a suitable predicate (see <a href=
+  "Type-Predicates.html#Type-Predicates">Type Predicates</a>).
+  <a name="index-type-checking-internals" id=
+  "index-type-checking-internals"></a></p><a name=
+  "index-garbage-collection-protection" id=
+  "index-garbage-collection-protection"></a> <a name=
+  "index-protect-C-variables-from-garbage-collection" id=
+  "index-protect-C-variables-from-garbage-collection"></a>
+
+  <p>Within the function <code>For</code> itself, the local
+  variable <code>args</code> refers to objects controlled by
+  Emacs&rsquo;s stack-marking garbage collector. Although the
+  garbage collector does not reclaim objects reachable from C
+  <code>Lisp_Object</code> stack variables, it may move non-object
+  components of an object, such as string contents; so functions
+  that access non-object components must take care to refetch their
+  addresses after performing Lisp evaluation. Lisp evaluation can
+  occur via calls to <code>eval_sub</code> or <code>Feval</code>,
+  either directly or indirectly.</p><a name=
+  "index-QUIT_002c-use-in-Lisp-primitives" id=
+  "index-QUIT_002c-use-in-Lisp-primitives"></a>
+
+  <p>Note the call to the <code>QUIT</code> macro inside the loop:
+  this macro checks whether the user pressed <kbd>C-g</kbd>, and if
+  so, aborts the processing. You should do that in any loop that
+  can potentially require a large number of iterations; in this
+  case, the list of arguments could be very long. This increases
+  Emacs responsiveness and improves user experience.</p>
+
+  <p>You must not use C initializers for static or global variables
+  unless the variables are never written once Emacs is dumped.
+  These variables with initializers are allocated in an area of
+  memory that becomes read-only (on certain operating systems) as a
+  result of dumping Emacs. See <a href=
+  "Pure-Storage.html#Pure-Storage">Pure Storage</a>.</p><a name=
+  "index-defsubr_002c-Lisp-symbol-for-a-primitive" id=
+  "index-defsubr_002c-Lisp-symbol-for-a-primitive"></a>
+
+  <p>Defining the C function is not enough to make a Lisp primitive
+  available; you must also create the Lisp symbol for the primitive
+  and store a suitable subr object in its function cell. The code
+  looks like this:</p>
+
+  <div class="example">
+    <pre class="example">
+defsubr (&amp;<var>sname</var>);
+</pre>
+  </div>
+
+  <p>Here <var>sname</var> is the name you used as the third
+  argument to <code>DEFUN</code>.</p>
+
+  <p>If you add a new primitive to a file that already has Lisp
+  primitives defined in it, find the function (near the end of the
+  file) named <code>syms_of_<var>something</var></code>, and add
+  the call to <code>defsubr</code> there. If the file doesn&rsquo;t
+  have this function, or if you create a new file, add to it a
+  <code>syms_of_<var>filename</var></code> (e.g.,
+  <code>syms_of_myfile</code>). Then find the spot in
+  <samp>emacs.c</samp> where all of these functions are called, and
+  add a call to <code>syms_of_<var>filename</var></code>
+  there.</p><a name="Defining-Lisp-variables-in-C" id=
+  "Defining-Lisp-variables-in-C"></a><a name=
+  "index-byte_002dboolean_002dvars-1" id=
+  "index-byte_002dboolean_002dvars-1"></a> <a name=
+  "index-defining-Lisp-variables-in-C" id=
+  "index-defining-Lisp-variables-in-C"></a> <a name=
+  "index-DEFVAR_005fINT_002c-DEFVAR_005fLISP_002c-DEFVAR_005fBOOL"
+  id=
+  "index-DEFVAR_005fINT_002c-DEFVAR_005fLISP_002c-DEFVAR_005fBOOL"></a>
+
+  <p>The function <code>syms_of_<var>filename</var></code> is also
+  the place to define any C variables that are to be visible as
+  Lisp variables. <code>DEFVAR_LISP</code> makes a C variable of
+  type <code>Lisp_Object</code> visible in Lisp.
+  <code>DEFVAR_INT</code> makes a C variable of type
+  <code>int</code> visible in Lisp with a value that is always an
+  integer. <code>DEFVAR_BOOL</code> makes a C variable of type
+  <code>int</code> visible in Lisp with a value that is either
+  <code>t</code> or <code>nil</code>. Note that variables defined
+  with <code>DEFVAR_BOOL</code> are automatically added to the list
+  <code>byte-boolean-vars</code> used by the byte
+  compiler.</p><a name=
+  "index-defining-customization-variables-in-C" id=
+  "index-defining-customization-variables-in-C"></a>
+
+  <p>If you want to make a Lisp variables that is defined in C
+  behave like one declared with <code>defcustom</code>, add an
+  appropriate entry to <samp>cus-start.el</samp>.</p><a name=
+  "index-staticpro_002c-protection-from-GC" id=
+  "index-staticpro_002c-protection-from-GC"></a>
+
+  <p>If you define a file-scope C variable of type
+  <code>Lisp_Object</code>, you must protect it from
+  garbage-collection by calling <code>staticpro</code> in
+  <code>syms_of_<var>filename</var></code>, like this:</p>
+
+  <div class="example">
+    <pre class="example">
+staticpro (&amp;<var>variable</var>);
+</pre>
+  </div>
+
+  <p>Here is another example function, with more complicated
+  arguments. This comes from the code in <samp>window.c</samp>, and
+  it demonstrates the use of macros and functions to manipulate
+  Lisp objects.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+DEFUN ("coordinates-in-window-p", Fcoordinates_in_window_p,
   Scoordinates_in_window_p, 2, 2, 0,
   doc: /* Return non-nil if COORDINATES are in WINDOW.
   ...
-</pre><pre class="smallexample">  or `right-margin' is returned.  */)
+</pre>
+    <pre class="smallexample">
+  or `right-margin' is returned.  */)
   (register Lisp_Object coordinates, Lisp_Object window)
 {
   struct window *w;
   struct frame *f;
   int x, y;
   Lisp_Object lx, ly;
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">  CHECK_LIVE_WINDOW (window);
+</pre>
+    <pre class="smallexample">
+</pre>
+    <pre class="smallexample">
+  CHECK_LIVE_WINDOW (window);
   w = XWINDOW (window);
   f = XFRAME (w-&gt;frame);
   CHECK_CONS (coordinates);
@@ -313,58 +432,78 @@ of macros and functions to manipulate Lisp objects.
   CHECK_NUMBER_OR_FLOAT (ly);
   x = FRAME_PIXEL_X_FROM_CANON_X (f, lx) + FRAME_INTERNAL_BORDER_WIDTH(f);
   y = FRAME_PIXEL_Y_FROM_CANON_Y (f, ly) + FRAME_INTERNAL_BORDER_WIDTH(f);
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">  switch (coordinates_in_window (w, x, y))
+</pre>
+    <pre class="smallexample">
+</pre>
+    <pre class="smallexample">
+  switch (coordinates_in_window (w, x, y))
     {
     case ON_NOTHING:            /* NOT in window at all.  */
       return Qnil;
-</pre><pre class="smallexample">
+</pre>
+    <pre class="smallexample">
     ...
 
-</pre><pre class="smallexample">    case ON_MODE_LINE:          /* In mode line of window.  */
+</pre>
+    <pre class="smallexample">
+    case ON_MODE_LINE:          /* In mode line of window.  */
       return Qmode_line;
-</pre><pre class="smallexample">
+</pre>
+    <pre class="smallexample">
     ...
 
-</pre><pre class="smallexample">    case ON_SCROLL_BAR:         /* On scroll-bar of window.  */
+</pre>
+    <pre class="smallexample">
+    case ON_SCROLL_BAR:         /* On scroll-bar of window.  */
       /* Historically we are supposed to return nil in this case.  */
       return Qnil;
-</pre><pre class="smallexample">
-</pre><pre class="smallexample">    default:
+</pre>
+    <pre class="smallexample">
+</pre>
+    <pre class="smallexample">
+    default:
       abort ();
     }
 }
-</pre></div>
+</pre>
+  </div>
 
-<p>Note that C code cannot call functions by name unless they are defined
-in C.  The way to call a function written in Lisp is to use
-<code>Ffuncall</code>, which embodies the Lisp function <code>funcall</code>.  Since
-the Lisp function <code>funcall</code> accepts an unlimited number of
-arguments, in C it takes two: the number of Lisp-level arguments, and a
-one-dimensional array containing their values.  The first Lisp-level
-argument is the Lisp function to call, and the rest are the arguments to
-pass to it.
-</p>
-<p>The C functions <code>call0</code>, <code>call1</code>, <code>call2</code>, and so on,
-provide handy ways to call a Lisp function conveniently with a fixed
-number of arguments.  They work by calling <code>Ffuncall</code>.
-</p>
-<p><samp>eval.c</samp> is a very good file to look through for examples;
-<samp>lisp.h</samp> contains the definitions for some important macros and
-functions.
-</p>
-<p>If you define a function which is side-effect free, update the code
-in <samp>byte-opt.el</samp> that binds <code>side-effect-free-fns</code> and
-<code>side-effect-and-error-free-fns</code> so that the compiler optimizer
-knows about it.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Object-Internals.html#Object-Internals" accesskey="n" rel="next">Object Internals</a>, Previous: <a href="C-Dialect.html#C-Dialect" accesskey="p" rel="prev">C Dialect</a>, Up: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Note that C code cannot call functions by name unless they are
+  defined in C. The way to call a function written in Lisp is to
+  use <code>Ffuncall</code>, which embodies the Lisp function
+  <code>funcall</code>. Since the Lisp function
+  <code>funcall</code> accepts an unlimited number of arguments, in
+  C it takes two: the number of Lisp-level arguments, and a
+  one-dimensional array containing their values. The first
+  Lisp-level argument is the Lisp function to call, and the rest
+  are the arguments to pass to it.</p>
 
+  <p>The C functions <code>call0</code>, <code>call1</code>,
+  <code>call2</code>, and so on, provide handy ways to call a Lisp
+  function conveniently with a fixed number of arguments. They work
+  by calling <code>Ffuncall</code>.</p>
 
+  <p><samp>eval.c</samp> is a very good file to look through for
+  examples; <samp>lisp.h</samp> contains the definitions for some
+  important macros and functions.</p>
 
+  <p>If you define a function which is side-effect free, update the
+  code in <samp>byte-opt.el</samp> that binds
+  <code>side-effect-free-fns</code> and
+  <code>side-effect-and-error-free-fns</code> so that the compiler
+  optimizer knows about it.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Object-Internals.html#Object-Internals"
+    accesskey="n" rel="next">Object Internals</a>, Previous:
+    <a href="C-Dialect.html#C-Dialect" accesskey="p" rel="prev">C
+    Dialect</a>, Up: <a href=
+    "GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u"
+    rel="up">GNU Emacs Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

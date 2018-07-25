@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,215 +19,346 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: High-Level Completion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: High-Level Completion">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: High-Level Completion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Completion.html#Completion" rel="up" title="Completion">
-<link href="Reading-File-Names.html#Reading-File-Names" rel="next" title="Reading File Names">
-<link href="Completion-Commands.html#Completion-Commands" rel="prev" title="Completion Commands">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: High-Level
+  Completion</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: High-Level Completion" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: High-Level Completion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Completion.html#Completion" rel="up" title=
+  "Completion" />
+  <link href="Reading-File-Names.html#Reading-File-Names" rel=
+  "next" title="Reading File Names" />
+  <link href="Completion-Commands.html#Completion-Commands" rel=
+  "prev" title="Completion Commands" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="High_002dLevel-Completion" id=
+  "High_002dLevel-Completion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Reading-File-Names.html#Reading-File-Names"
+    accesskey="n" rel="next">Reading File Names</a>, Previous:
+    <a href="Completion-Commands.html#Completion-Commands"
+    accesskey="p" rel="prev">Completion Commands</a>, Up: <a href=
+    "Completion.html#Completion" accesskey="u" rel=
+    "up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="High_002dLevel-Completion-Functions" id=
+  "High_002dLevel-Completion-Functions"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="High_002dLevel-Completion"></a>
-<div class="header">
-<p>
-Next: <a href="Reading-File-Names.html#Reading-File-Names" accesskey="n" rel="next">Reading File Names</a>, Previous: <a href="Completion-Commands.html#Completion-Commands" accesskey="p" rel="prev">Completion Commands</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="High_002dLevel-Completion-Functions"></a>
-<h4 class="subsection">19.6.4 High-Level Completion Functions</h4>
+  <h4 class="subsection">19.6.4 High-Level Completion
+  Functions</h4>
 
-<p>This section describes the higher-level convenience functions for
-reading certain sorts of names with completion.
-</p>
-<p>In most cases, you should not call these functions in the middle of a
-Lisp function.  When possible, do all minibuffer input as part of
-reading the arguments for a command, in the <code>interactive</code>
-specification.  See <a href="Defining-Commands.html#Defining-Commands">Defining Commands</a>.
-</p>
-<dl>
-<dt><a name="index-read_002dbuffer"></a>Function: <strong>read-buffer</strong> <em>prompt &amp;optional default require-match predicate</em></dt>
-<dd><p>This function reads the name of a buffer and returns it as a string.
-It prompts with <var>prompt</var>.  The argument <var>default</var> is the
-default name to use, the value to return if the user exits with an
-empty minibuffer.  If non-<code>nil</code>, it should be a string, a list of
-strings, or a buffer.  If it is a list, the default value is the first
-element of this list.  It is mentioned in the prompt, but is not
-inserted in the minibuffer as initial input.
-</p>
-<p>The argument <var>prompt</var> should be a string ending with a colon and a
-space.  If <var>default</var> is non-<code>nil</code>, the function inserts it in
-<var>prompt</var> before the colon to follow the convention for reading from
-the minibuffer with a default value (see <a href="Programming-Tips.html#Programming-Tips">Programming Tips</a>).
-</p>
-<p>The optional argument <var>require-match</var> has the same meaning as in
-<code>completing-read</code>.  See <a href="Minibuffer-Completion.html#Minibuffer-Completion">Minibuffer Completion</a>.
-</p>
-<p>The optional argument <var>predicate</var>, if non-<code>nil</code>, specifies a
-function to filter the buffers that should be considered: the function
-will be called with every potential candidate as its argument, and
-should return <code>nil</code> to reject the candidate, non-<code>nil</code> to
-accept it.
-</p>
-<p>In the following example, the user enters &lsquo;<samp>minibuffer.t</samp>&rsquo;, and
-then types <tt class="key">RET</tt>.  The argument <var>require-match</var> is <code>t</code>,
-and the only buffer name starting with the given input is
-&lsquo;<samp>minibuffer.texi</samp>&rsquo;, so that name is the value.
-</p>
-<div class="example">
-<pre class="example">(read-buffer &quot;Buffer name: &quot; &quot;foo&quot; t)
-</pre><pre class="example">;; <span class="roman">After evaluation of the preceding expression,</span>
+  <p>This section describes the higher-level convenience functions
+  for reading certain sorts of names with completion.</p>
+
+  <p>In most cases, you should not call these functions in the
+  middle of a Lisp function. When possible, do all minibuffer input
+  as part of reading the arguments for a command, in the
+  <code>interactive</code> specification. See <a href=
+  "Defining-Commands.html#Defining-Commands">Defining
+  Commands</a>.</p>
+
+  <dl>
+    <dt><a name="index-read_002dbuffer" id=
+    "index-read_002dbuffer"></a>Function:
+    <strong>read-buffer</strong> <em>prompt &amp;optional default
+    require-match predicate</em></dt>
+
+    <dd>
+      <p>This function reads the name of a buffer and returns it as
+      a string. It prompts with <var>prompt</var>. The argument
+      <var>default</var> is the default name to use, the value to
+      return if the user exits with an empty minibuffer. If
+      non-<code>nil</code>, it should be a string, a list of
+      strings, or a buffer. If it is a list, the default value is
+      the first element of this list. It is mentioned in the
+      prompt, but is not inserted in the minibuffer as initial
+      input.</p>
+
+      <p>The argument <var>prompt</var> should be a string ending
+      with a colon and a space. If <var>default</var> is
+      non-<code>nil</code>, the function inserts it in
+      <var>prompt</var> before the colon to follow the convention
+      for reading from the minibuffer with a default value (see
+      <a href="Programming-Tips.html#Programming-Tips">Programming
+      Tips</a>).</p>
+
+      <p>The optional argument <var>require-match</var> has the
+      same meaning as in <code>completing-read</code>. See <a href=
+      "Minibuffer-Completion.html#Minibuffer-Completion">Minibuffer
+      Completion</a>.</p>
+
+      <p>The optional argument <var>predicate</var>, if
+      non-<code>nil</code>, specifies a function to filter the
+      buffers that should be considered: the function will be
+      called with every potential candidate as its argument, and
+      should return <code>nil</code> to reject the candidate,
+      non-<code>nil</code> to accept it.</p>
+
+      <p>In the following example, the user enters
+      &lsquo;<samp>minibuffer.t</samp>&rsquo;, and then types
+      <tt class="key">RET</tt>. The argument
+      <var>require-match</var> is <code>t</code>, and the only
+      buffer name starting with the given input is
+      &lsquo;<samp>minibuffer.texi</samp>&rsquo;, so that name is
+      the value.</p>
+
+      <div class="example">
+        <pre class="example">
+(read-buffer "Buffer name: " "foo" t)
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">After evaluation of the preceding expression,</span>
 ;;   <span class="roman">the following prompt appears,</span>
 ;;   <span class="roman">with an empty minibuffer:</span>
-</pre><pre class="example">
-</pre><pre class="example">---------- Buffer: Minibuffer ----------
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+---------- Buffer: Minibuffer ----------
 Buffer name (default foo): &lowast;
 ---------- Buffer: Minibuffer ----------
-</pre><pre class="example">
-</pre><pre class="example">;; <span class="roman">The user types <kbd>minibuffer.t <span class="key">RET</span></kbd>.</span>
-     &rArr; &quot;minibuffer.texi&quot;
-</pre></div>
-</dd></dl>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">The user types <kbd>minibuffer.t <span class="key">RET</span></kbd>.</span>
+     &rArr; "minibuffer.texi"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-read_002dbuffer_002dfunction"></a>User Option: <strong>read-buffer-function</strong></dt>
-<dd><p>This variable, if non-<code>nil</code>, specifies a function for reading
-buffer names.  <code>read-buffer</code> calls this function instead of doing
-its usual work, with the same arguments passed to <code>read-buffer</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-read_002dbuffer_002dfunction" id=
+    "index-read_002dbuffer_002dfunction"></a>User Option:
+    <strong>read-buffer-function</strong></dt>
 
-<dl>
-<dt><a name="index-read_002dbuffer_002dcompletion_002dignore_002dcase"></a>User Option: <strong>read-buffer-completion-ignore-case</strong></dt>
-<dd><p>If this variable is non-<code>nil</code>, <code>read-buffer</code> ignores case
-when performing completion while reading the buffer name.
-</p></dd></dl>
+    <dd>
+      <p>This variable, if non-<code>nil</code>, specifies a
+      function for reading buffer names. <code>read-buffer</code>
+      calls this function instead of doing its usual work, with the
+      same arguments passed to <code>read-buffer</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-read_002dcommand"></a>Function: <strong>read-command</strong> <em>prompt &amp;optional default</em></dt>
-<dd><p>This function reads the name of a command and returns it as a Lisp
-symbol.  The argument <var>prompt</var> is used as in
-<code>read-from-minibuffer</code>.  Recall that a command is anything for
-which <code>commandp</code> returns <code>t</code>, and a command name is a symbol
-for which <code>commandp</code> returns <code>t</code>.  See <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>.
-</p>
-<p>The argument <var>default</var> specifies what to return if the user enters
-null input.  It can be a symbol, a string or a list of strings.  If it
-is a string, <code>read-command</code> interns it before returning it.
-If it is a list, <code>read-command</code> interns the first element of this list.
-If <var>default</var> is <code>nil</code>, that means no default has been
-specified; then if the user enters null input, the return value is
-<code>(intern &quot;&quot;)</code>, that is, a symbol whose name is an empty string.
-</p>
-<div class="example">
-<pre class="example">(read-command &quot;Command name? &quot;)
+  <dl>
+    <dt><a name=
+    "index-read_002dbuffer_002dcompletion_002dignore_002dcase" id=
+    "index-read_002dbuffer_002dcompletion_002dignore_002dcase"></a>User
+    Option:
+    <strong>read-buffer-completion-ignore-case</strong></dt>
 
-</pre><pre class="example">;; <span class="roman">After evaluation of the preceding expression,</span>
-;;   <span class="roman">the following prompt appears with an empty minibuffer:</span>
-</pre><pre class="example">
-</pre><pre class="example">---------- Buffer: Minibuffer ----------
+    <dd>
+      <p>If this variable is non-<code>nil</code>,
+      <code>read-buffer</code> ignores case when performing
+      completion while reading the buffer name.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-read_002dcommand" id=
+    "index-read_002dcommand"></a>Function:
+    <strong>read-command</strong> <em>prompt &amp;optional
+    default</em></dt>
+
+    <dd>
+      <p>This function reads the name of a command and returns it
+      as a Lisp symbol. The argument <var>prompt</var> is used as
+      in <code>read-from-minibuffer</code>. Recall that a command
+      is anything for which <code>commandp</code> returns
+      <code>t</code>, and a command name is a symbol for which
+      <code>commandp</code> returns <code>t</code>. See <a href=
+      "Interactive-Call.html#Interactive-Call">Interactive
+      Call</a>.</p>
+
+      <p>The argument <var>default</var> specifies what to return
+      if the user enters null input. It can be a symbol, a string
+      or a list of strings. If it is a string,
+      <code>read-command</code> interns it before returning it. If
+      it is a list, <code>read-command</code> interns the first
+      element of this list. If <var>default</var> is
+      <code>nil</code>, that means no default has been specified;
+      then if the user enters null input, the return value is
+      <code>(intern "")</code>, that is, a symbol whose name is an
+      empty string.</p>
+
+      <div class="example">
+        <pre class="example">
+(read-command "Command name? ")
+
+</pre>
+        <pre class="example">
+;; <span class=
+"roman">After evaluation of the preceding expression,</span>
+;;   <span class=
+"roman">the following prompt appears with an empty minibuffer:</span>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+---------- Buffer: Minibuffer ----------
 Command name?
 ---------- Buffer: Minibuffer ----------
-</pre></div>
+</pre>
+      </div>
 
-<p>If the user types <kbd>forward-c <span class="key">RET</span></kbd>, then this function returns
-<code>forward-char</code>.
-</p>
-<p>The <code>read-command</code> function is a simplified interface to
-<code>completing-read</code>.  It uses the variable <code>obarray</code> so as to
-complete in the set of extant Lisp symbols, and it uses the
-<code>commandp</code> predicate so as to accept only command names:
-</p>
-<a name="index-commandp-example"></a>
-<div class="example">
-<pre class="example">(read-command <var>prompt</var>)
+      <p>If the user types <kbd>forward-c <span class=
+      "key">RET</span></kbd>, then this function returns
+      <code>forward-char</code>.</p>
+
+      <p>The <code>read-command</code> function is a simplified
+      interface to <code>completing-read</code>. It uses the
+      variable <code>obarray</code> so as to complete in the set of
+      extant Lisp symbols, and it uses the <code>commandp</code>
+      predicate so as to accept only command names:</p><a name=
+      "index-commandp-example" id="index-commandp-example"></a>
+
+      <div class="example">
+        <pre class="example">
+(read-command <var>prompt</var>)
 &equiv;
 (intern (completing-read <var>prompt</var> obarray
                          'commandp t nil))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-read_002dvariable"></a>Function: <strong>read-variable</strong> <em>prompt &amp;optional default</em></dt>
-<dd><a name="Definition-of-read_002dvariable"></a><p>This function reads the name of a customizable variable and returns it
-as a symbol.  Its arguments have the same form as those of
-<code>read-command</code>.  It behaves just like <code>read-command</code>, except
-that it uses the predicate <code>custom-variable-p</code> instead of
-<code>commandp</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-read_002dvariable" id=
+    "index-read_002dvariable"></a>Function:
+    <strong>read-variable</strong> <em>prompt &amp;optional
+    default</em></dt>
 
-<dl>
-<dt><a name="index-read_002dcolor"></a>Command: <strong>read-color</strong> <em>&amp;optional prompt convert allow-empty display</em></dt>
-<dd><p>This function reads a string that is a color specification, either the
-color&rsquo;s name or an RGB hex value such as <code>#RRRGGGBBB</code>.  It
-prompts with <var>prompt</var> (default: <code>&quot;Color (name or #RGB triplet):&quot;</code>)
-and provides completion for color names, but not for hex RGB values.
-In addition to names of standard colors, completion candidates include
-the foreground and background colors at point.
-</p>
-<p>Valid RGB values are described in <a href="Color-Names.html#Color-Names">Color Names</a>.
-</p>
-<p>The function&rsquo;s return value is the string typed by the user in the
-minibuffer.  However, when called interactively or if the optional
-argument <var>convert</var> is non-<code>nil</code>, it converts any input color
-name into the corresponding RGB value string and instead returns that.
-This function requires a valid color specification to be input.
-Empty color names are allowed when <var>allow-empty</var> is
-non-<code>nil</code> and the user enters null input.
-</p>
-<p>Interactively, or when <var>display</var> is non-<code>nil</code>, the return
-value is also displayed in the echo area.
-</p></dd></dl>
+    <dd>
+      <a name="Definition-of-read_002dvariable" id=
+      "Definition-of-read_002dvariable"></a>
 
-<p>See also the functions <code>read-coding-system</code> and
-<code>read-non-nil-coding-system</code>, in <a href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems">User-Chosen Coding Systems</a>,
-and <code>read-input-method-name</code>, in <a href="Input-Methods.html#Input-Methods">Input Methods</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Reading-File-Names.html#Reading-File-Names" accesskey="n" rel="next">Reading File Names</a>, Previous: <a href="Completion-Commands.html#Completion-Commands" accesskey="p" rel="prev">Completion Commands</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This function reads the name of a customizable variable
+      and returns it as a symbol. Its arguments have the same form
+      as those of <code>read-command</code>. It behaves just like
+      <code>read-command</code>, except that it uses the predicate
+      <code>custom-variable-p</code> instead of
+      <code>commandp</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-read_002dcolor" id=
+    "index-read_002dcolor"></a>Command: <strong>read-color</strong>
+    <em>&amp;optional prompt convert allow-empty display</em></dt>
 
+    <dd>
+      <p>This function reads a string that is a color
+      specification, either the color&rsquo;s name or an RGB hex
+      value such as <code>#RRRGGGBBB</code>. It prompts with
+      <var>prompt</var> (default: <code>"Color (name or #RGB
+      triplet):"</code>) and provides completion for color names,
+      but not for hex RGB values. In addition to names of standard
+      colors, completion candidates include the foreground and
+      background colors at point.</p>
 
+      <p>Valid RGB values are described in <a href=
+      "Color-Names.html#Color-Names">Color Names</a>.</p>
+
+      <p>The function&rsquo;s return value is the string typed by
+      the user in the minibuffer. However, when called
+      interactively or if the optional argument <var>convert</var>
+      is non-<code>nil</code>, it converts any input color name
+      into the corresponding RGB value string and instead returns
+      that. This function requires a valid color specification to
+      be input. Empty color names are allowed when
+      <var>allow-empty</var> is non-<code>nil</code> and the user
+      enters null input.</p>
+
+      <p>Interactively, or when <var>display</var> is
+      non-<code>nil</code>, the return value is also displayed in
+      the echo area.</p>
+    </dd>
+  </dl>
+
+  <p>See also the functions <code>read-coding-system</code> and
+  <code>read-non-nil-coding-system</code>, in <a href=
+  "User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems">
+  User-Chosen Coding Systems</a>, and
+  <code>read-input-method-name</code>, in <a href=
+  "Input-Methods.html#Input-Methods">Input Methods</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Reading-File-Names.html#Reading-File-Names"
+    accesskey="n" rel="next">Reading File Names</a>, Previous:
+    <a href="Completion-Commands.html#Completion-Commands"
+    accesskey="p" rel="prev">Completion Commands</a>, Up: <a href=
+    "Completion.html#Completion" accesskey="u" rel=
+    "up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

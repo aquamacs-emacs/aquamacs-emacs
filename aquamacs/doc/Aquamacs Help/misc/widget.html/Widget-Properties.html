@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2000-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,167 +14,243 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Emacs Widget Library: Widget Properties</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Emacs Widget Library: Widget Properties">
-<meta name="keywords" content="The Emacs Widget Library: Widget Properties">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Defining-New-Widgets.html#Defining-New-Widgets" rel="next" title="Defining New Widgets">
-<link href="composite.html#composite" rel="prev" title="composite">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Emacs Widget Library: Widget Properties</title>
+  <meta name="description" content=
+  "The Emacs Widget Library: Widget Properties" />
+  <meta name="keywords" content=
+  "The Emacs Widget Library: Widget Properties" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Defining-New-Widgets.html#Defining-New-Widgets" rel=
+  "next" title="Defining New Widgets" />
+  <link href="composite.html#composite" rel="prev" title=
+  "composite" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Widget-Properties"></a>
-<div class="header">
-<p>
-Next: <a href="Defining-New-Widgets.html#Defining-New-Widgets" accesskey="n" rel="next">Defining New Widgets</a>, Previous: <a href="Sexp-Types.html#Sexp-Types" accesskey="p" rel="prev">Sexp Types</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Properties"></a>
-<h2 class="chapter">7 Properties</h2>
-<a name="index-properties-of-widgets"></a>
-<a name="index-widget-properties"></a>
+<body lang="en" xml:lang="en">
+  <a name="Widget-Properties" id="Widget-Properties"></a>
 
-<p>You can examine or set the value of a widget by using the widget object
-that was returned by <code>widget-create</code>.
-</p>
-<dl>
-<dt><a name="index-widget_002dvalue"></a>Function: <strong>widget-value</strong> <em>widget</em></dt>
-<dd><p>Return the current value contained in <var>widget</var>.
-It is an error to call this function on an uninitialized widget.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Defining-New-Widgets.html#Defining-New-Widgets" accesskey="n"
+    rel="next">Defining New Widgets</a>, Previous: <a href=
+    "Sexp-Types.html#Sexp-Types" accesskey="p" rel="prev">Sexp
+    Types</a>, Up: <a href="index.html#Top" accesskey="u" rel=
+    "up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Properties" id="Properties"></a>
 
-<dl>
-<dt><a name="index-widget_002dvalue_002dset"></a>Function: <strong>widget-value-set</strong> <em>widget value</em></dt>
-<dd><p>Set the value contained in <var>widget</var> to <var>value</var>.
-It is an error to call this function with an invalid <var>value</var>.
-</p></dd></dl>
+  <h2 class="chapter">7 Properties</h2><a name=
+  "index-properties-of-widgets" id=
+  "index-properties-of-widgets"></a> <a name=
+  "index-widget-properties" id="index-widget-properties"></a>
 
-<p><strong>Important:</strong> You <em>must</em> call <code>widget-setup</code> after
-modifying the value of a widget before the user is allowed to edit the
-widget again.  It is enough to call <code>widget-setup</code> once if you
-modify multiple widgets.  This is currently only necessary if the widget
-contains an editing field, but may be necessary for other widgets in the
-future.
-</p>
-<p>If your application needs to associate some information with the widget
-objects, for example a reference to the item being edited, it can be
-done with <code>widget-put</code> and <code>widget-get</code>.  The property names
-must begin with a &lsquo;<samp>:</samp>&rsquo;.
-</p>
-<dl>
-<dt><a name="index-widget_002dput"></a>Function: <strong>widget-put</strong> <em>widget property value</em></dt>
-<dd><p>In <var>widget</var> set <var>property</var> to <var>value</var>.
-<var>property</var> should be a symbol, while <var>value</var> can be anything.
-</p></dd></dl>
+  <p>You can examine or set the value of a widget by using the
+  widget object that was returned by
+  <code>widget-create</code>.</p>
 
-<dl>
-<dt><a name="index-widget_002dget"></a>Function: <strong>widget-get</strong> <em>widget property</em></dt>
-<dd><p>In <var>widget</var> return the value for <var>property</var>.
-<var>property</var> should be a symbol, the value is what was last set by
-<code>widget-put</code> for <var>property</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-widget_002dvalue" id=
+    "index-widget_002dvalue"></a>Function:
+    <strong>widget-value</strong> <em>widget</em></dt>
 
-<dl>
-<dt><a name="index-widget_002dmember"></a>Function: <strong>widget-member</strong> <em>widget property</em></dt>
-<dd><p>Non-<code>nil</code> if <var>widget</var> has a value (even <code>nil</code>) for
-property <var>property</var>.
-</p></dd></dl>
+    <dd>
+      <p>Return the current value contained in <var>widget</var>.
+      It is an error to call this function on an uninitialized
+      widget.</p>
+    </dd>
+  </dl>
 
-<p>Occasionally it can be useful to know which kind of widget you have,
-i.e., the name of the widget type you gave when the widget was created.
-</p>
-<dl>
-<dt><a name="index-widget_002dtype"></a>Function: <strong>widget-type</strong> <em>widget</em></dt>
-<dd><p>Return the name of <var>widget</var>, a symbol.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-widget_002dvalue_002dset" id=
+    "index-widget_002dvalue_002dset"></a>Function:
+    <strong>widget-value-set</strong> <em>widget value</em></dt>
 
-<a name="index-active-widget"></a>
-<a name="index-inactive-widget"></a>
-<a name="index-activate-a-widget"></a>
-<a name="index-deactivate-a-widget"></a>
-<p>Widgets can be in two states: active, which means they are modifiable by
-the user, or inactive, which means they cannot be modified by the user.
-You can query or set the state with the following code:
-</p>
-<div class="lisp">
-<pre class="lisp">;; Examine if <var>widget</var> is active or not.
+    <dd>
+      <p>Set the value contained in <var>widget</var> to
+      <var>value</var>. It is an error to call this function with
+      an invalid <var>value</var>.</p>
+    </dd>
+  </dl>
+
+  <p><strong>Important:</strong> You <em>must</em> call
+  <code>widget-setup</code> after modifying the value of a widget
+  before the user is allowed to edit the widget again. It is enough
+  to call <code>widget-setup</code> once if you modify multiple
+  widgets. This is currently only necessary if the widget contains
+  an editing field, but may be necessary for other widgets in the
+  future.</p>
+
+  <p>If your application needs to associate some information with
+  the widget objects, for example a reference to the item being
+  edited, it can be done with <code>widget-put</code> and
+  <code>widget-get</code>. The property names must begin with a
+  &lsquo;<samp>:</samp>&rsquo;.</p>
+
+  <dl>
+    <dt><a name="index-widget_002dput" id=
+    "index-widget_002dput"></a>Function:
+    <strong>widget-put</strong> <em>widget property value</em></dt>
+
+    <dd>
+      <p>In <var>widget</var> set <var>property</var> to
+      <var>value</var>. <var>property</var> should be a symbol,
+      while <var>value</var> can be anything.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-widget_002dget" id=
+    "index-widget_002dget"></a>Function:
+    <strong>widget-get</strong> <em>widget property</em></dt>
+
+    <dd>
+      <p>In <var>widget</var> return the value for
+      <var>property</var>. <var>property</var> should be a symbol,
+      the value is what was last set by <code>widget-put</code> for
+      <var>property</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-widget_002dmember" id=
+    "index-widget_002dmember"></a>Function:
+    <strong>widget-member</strong> <em>widget property</em></dt>
+
+    <dd>
+      <p>Non-<code>nil</code> if <var>widget</var> has a value
+      (even <code>nil</code>) for property <var>property</var>.</p>
+    </dd>
+  </dl>
+
+  <p>Occasionally it can be useful to know which kind of widget you
+  have, i.e., the name of the widget type you gave when the widget
+  was created.</p>
+
+  <dl>
+    <dt><a name="index-widget_002dtype" id=
+    "index-widget_002dtype"></a>Function:
+    <strong>widget-type</strong> <em>widget</em></dt>
+
+    <dd>
+      <p>Return the name of <var>widget</var>, a symbol.</p>
+    </dd>
+  </dl><a name="index-active-widget" id="index-active-widget"></a>
+  <a name="index-inactive-widget" id="index-inactive-widget"></a>
+  <a name="index-activate-a-widget" id=
+  "index-activate-a-widget"></a> <a name=
+  "index-deactivate-a-widget" id="index-deactivate-a-widget"></a>
+
+  <p>Widgets can be in two states: active, which means they are
+  modifiable by the user, or inactive, which means they cannot be
+  modified by the user. You can query or set the state with the
+  following code:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+;; Examine if <var>widget</var> is active or not.
 (if (widget-apply <var>widget</var> :active)
-    (message &quot;Widget is active.&quot;)
-  (message &quot;Widget is inactive.&quot;)
+    (message "Widget is active.")
+  (message "Widget is inactive.")
 
 ;; Make <var>widget</var> inactive.
 (widget-apply <var>widget</var> :deactivate)
 
 ;; Make <var>widget</var> active.
 (widget-apply <var>widget</var> :activate)
-</pre></div>
+</pre>
+  </div>
 
-<p>A widget is inactive if it, or any of its ancestors (found by
-following the <code>:parent</code> link), have been deactivated.  To make sure
-a widget is really active, you must therefore activate both it and
-all its ancestors.
-</p>
-<div class="lisp">
-<pre class="lisp">(while widget
+  <p>A widget is inactive if it, or any of its ancestors (found by
+  following the <code>:parent</code> link), have been deactivated.
+  To make sure a widget is really active, you must therefore
+  activate both it and all its ancestors.</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(while widget
   (widget-apply widget :activate)
   (setq widget (widget-get widget :parent)))
-</pre></div>
+</pre>
+  </div>
 
-<p>You can check if a widget has been made inactive by examining the value
-of the <code>:inactive</code> keyword.  If this is non-<code>nil</code>, the widget itself
-has been deactivated.  This is different from using the <code>:active</code>
-keyword, in that the latter tells you if the widget <strong>or</strong> any of
-its ancestors have been deactivated.  Do not attempt to set the
-<code>:inactive</code> keyword directly.  Use the <code>:activate</code>
-<code>:deactivate</code> keywords instead.
-</p>
+  <p>You can check if a widget has been made inactive by examining
+  the value of the <code>:inactive</code> keyword. If this is
+  non-<code>nil</code>, the widget itself has been deactivated.
+  This is different from using the <code>:active</code> keyword, in
+  that the latter tells you if the widget <strong>or</strong> any
+  of its ancestors have been deactivated. Do not attempt to set the
+  <code>:inactive</code> keyword directly. Use the
+  <code>:activate</code> <code>:deactivate</code> keywords
+  instead.</p>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Defining-New-Widgets.html#Defining-New-Widgets" accesskey="n" rel="next">Defining New Widgets</a>, Previous: <a href="Sexp-Types.html#Sexp-Types" accesskey="p" rel="prev">Sexp Types</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Defining-New-Widgets.html#Defining-New-Widgets" accesskey="n"
+    rel="next">Defining New Widgets</a>, Previous: <a href=
+    "Sexp-Types.html#Sexp-Types" accesskey="p" rel="prev">Sexp
+    Types</a>, Up: <a href="index.html#Top" accesskey="u" rel=
+    "up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

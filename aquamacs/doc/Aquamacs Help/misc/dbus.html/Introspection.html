@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,287 +14,386 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Using of D-Bus: Introspection</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Using of D-Bus: Introspection">
-<meta name="keywords" content="Using of D-Bus: Introspection">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Inspection.html#Inspection" rel="up" title="Inspection">
-<link href="Nodes-and-Interfaces.html#Nodes-and-Interfaces" rel="next" title="Nodes and Interfaces">
-<link href="Bus-names.html#Bus-names" rel="prev" title="Bus names">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Using of D-Bus: Introspection</title>
+  <meta name="description" content=
+  "Using of D-Bus: Introspection" />
+  <meta name="keywords" content="Using of D-Bus: Introspection" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Inspection.html#Inspection" rel="up" title=
+  "Inspection" />
+  <link href="Nodes-and-Interfaces.html#Nodes-and-Interfaces" rel=
+  "next" title="Nodes and Interfaces" />
+  <link href="Bus-names.html#Bus-names" rel="prev" title=
+  "Bus names" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Introspection"></a>
-<div class="header">
-<p>
-Next: <a href="Nodes-and-Interfaces.html#Nodes-and-Interfaces" accesskey="n" rel="next">Nodes and Interfaces</a>, Previous: <a href="Bus-names.html#Bus-names" accesskey="p" rel="prev">Bus names</a>, Up: <a href="Inspection.html#Inspection" accesskey="u" rel="up">Inspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Knowing-the-details-of-D_002dBus-services_002e"></a>
-<h3 class="section">2.3 Knowing the details of D-Bus services.</h3>
+<body lang="en" xml:lang="en">
+  <a name="Introspection" id="Introspection"></a>
 
-<p>D-Bus services publish their interfaces.  This can be retrieved and
-analyzed during runtime, in order to understand the used
-implementation.
-</p>
-<p>The resulting introspection data are in XML format.  The root
-introspection element is always a <code>node</code> element.  It might have
-a <code>name</code> attribute, which denotes the (absolute) object path an
-interface is introspected.
-</p>
-<p>The root <code>node</code> element may have <code>node</code> and <code>interface</code>
-children.  A child <code>node</code> element must have a <code>name</code>
-attribute, this case it is the relative object path to the root
-<code>node</code> element.
-</p>
-<p>An <code>interface</code> element has just one attribute, <code>name</code>, which
-is the full name of that interface.  The default interface
-&lsquo;<samp>org.freedesktop.DBus.Introspectable</samp>&rsquo; is always present.  Example:
-</p>
-<div class="example">
-<pre class="example">&lt;node name=&quot;/org/bluez&quot;&gt;
-  &lt;interface name=&quot;org.freedesktop.DBus.Introspectable&quot;&gt;
+  <div class="header">
+    <p>Next: <a href=
+    "Nodes-and-Interfaces.html#Nodes-and-Interfaces" accesskey="n"
+    rel="next">Nodes and Interfaces</a>, Previous: <a href=
+    "Bus-names.html#Bus-names" accesskey="p" rel="prev">Bus
+    names</a>, Up: <a href="Inspection.html#Inspection" accesskey=
+    "u" rel="up">Inspection</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Knowing-the-details-of-D_002dBus-services_002e" id=
+  "Knowing-the-details-of-D_002dBus-services_002e"></a>
+
+  <h3 class="section">2.3 Knowing the details of D-Bus
+  services.</h3>
+
+  <p>D-Bus services publish their interfaces. This can be retrieved
+  and analyzed during runtime, in order to understand the used
+  implementation.</p>
+
+  <p>The resulting introspection data are in XML format. The root
+  introspection element is always a <code>node</code> element. It
+  might have a <code>name</code> attribute, which denotes the
+  (absolute) object path an interface is introspected.</p>
+
+  <p>The root <code>node</code> element may have <code>node</code>
+  and <code>interface</code> children. A child <code>node</code>
+  element must have a <code>name</code> attribute, this case it is
+  the relative object path to the root <code>node</code>
+  element.</p>
+
+  <p>An <code>interface</code> element has just one attribute,
+  <code>name</code>, which is the full name of that interface. The
+  default interface
+  &lsquo;<samp>org.freedesktop.DBus.Introspectable</samp>&rsquo; is
+  always present. Example:</p>
+
+  <div class="example">
+    <pre class="example">
+&lt;node name="/org/bluez"&gt;
+  &lt;interface name="org.freedesktop.DBus.Introspectable"&gt;
     &hellip;
   &lt;/interface&gt;
-  &lt;interface name=&quot;org.bluez.Manager&quot;&gt;
+  &lt;interface name="org.bluez.Manager"&gt;
     &hellip;
   &lt;/interface&gt;
-  &lt;interface name=&quot;org.bluez.Database&quot;&gt;
+  &lt;interface name="org.bluez.Database"&gt;
     &hellip;
   &lt;/interface&gt;
-  &lt;interface name=&quot;org.bluez.Security&quot;&gt;
+  &lt;interface name="org.bluez.Security"&gt;
     &hellip;
   &lt;/interface&gt;
-  &lt;node name=&quot;service_audio&quot;/&gt;
-  &lt;node name=&quot;service_input&quot;/&gt;
-  &lt;node name=&quot;service_network&quot;/&gt;
-  &lt;node name=&quot;service_serial&quot;/&gt;
+  &lt;node name="service_audio"/&gt;
+  &lt;node name="service_input"/&gt;
+  &lt;node name="service_network"/&gt;
+  &lt;node name="service_serial"/&gt;
 &lt;/node&gt;
-</pre></div>
+</pre>
+  </div>
 
-<p>Children of an <code>interface</code> element can be <code>method</code>,
-<code>signal</code> and <code>property</code> elements.  A <code>method</code> element
-stands for a D-Bus method of the surrounding interface.  The element
-itself has a <code>name</code> attribute, showing the method name.  Children
-elements <code>arg</code> stand for the arguments of a method.  Example:
-</p>
-<div class="example">
-<pre class="example">&lt;method name=&quot;ResolveHostName&quot;&gt;
-  &lt;arg name=&quot;interface&quot; type=&quot;i&quot; direction=&quot;in&quot;/&gt;
-  &lt;arg name=&quot;protocol&quot; type=&quot;i&quot; direction=&quot;in&quot;/&gt;
-  &lt;arg name=&quot;name&quot; type=&quot;s&quot; direction=&quot;in&quot;/&gt;
-  &lt;arg name=&quot;aprotocol&quot; type=&quot;i&quot; direction=&quot;in&quot;/&gt;
-  &lt;arg name=&quot;flags&quot; type=&quot;u&quot; direction=&quot;in&quot;/&gt;
-  &lt;arg name=&quot;interface&quot; type=&quot;i&quot; direction=&quot;out&quot;/&gt;
-  &lt;arg name=&quot;protocol&quot; type=&quot;i&quot; direction=&quot;out&quot;/&gt;
-  &lt;arg name=&quot;name&quot; type=&quot;s&quot; direction=&quot;out&quot;/&gt;
-  &lt;arg name=&quot;aprotocol&quot; type=&quot;i&quot; direction=&quot;out&quot;/&gt;
-  &lt;arg name=&quot;address&quot; type=&quot;s&quot; direction=&quot;out&quot;/&gt;
-  &lt;arg name=&quot;flags&quot; type=&quot;u&quot; direction=&quot;out&quot;/&gt;
+  <p>Children of an <code>interface</code> element can be
+  <code>method</code>, <code>signal</code> and
+  <code>property</code> elements. A <code>method</code> element
+  stands for a D-Bus method of the surrounding interface. The
+  element itself has a <code>name</code> attribute, showing the
+  method name. Children elements <code>arg</code> stand for the
+  arguments of a method. Example:</p>
+
+  <div class="example">
+    <pre class="example">
+&lt;method name="ResolveHostName"&gt;
+  &lt;arg name="interface" type="i" direction="in"/&gt;
+  &lt;arg name="protocol" type="i" direction="in"/&gt;
+  &lt;arg name="name" type="s" direction="in"/&gt;
+  &lt;arg name="aprotocol" type="i" direction="in"/&gt;
+  &lt;arg name="flags" type="u" direction="in"/&gt;
+  &lt;arg name="interface" type="i" direction="out"/&gt;
+  &lt;arg name="protocol" type="i" direction="out"/&gt;
+  &lt;arg name="name" type="s" direction="out"/&gt;
+  &lt;arg name="aprotocol" type="i" direction="out"/&gt;
+  &lt;arg name="address" type="s" direction="out"/&gt;
+  &lt;arg name="flags" type="u" direction="out"/&gt;
 &lt;/method&gt;
-</pre></div>
+</pre>
+  </div>
 
-<p><code>arg</code> elements can have the attributes <code>name</code>, <code>type</code>
-and <code>direction</code>.  The <code>name</code> attribute is optional.  The
-<code>type</code> attribute stands for the <em>signature</em> of the argument
-in D-Bus.  For a discussion of D-Bus types and their Lisp
-representation see <a href="Type-Conversion.html#Type-Conversion">Type Conversion</a>.<a name="DOCF1" href="#FOOT1"><sup>1</sup></a>
-The <code>direction</code> attribute of an <code>arg</code> element can be only
-&lsquo;<samp>in</samp>&rsquo; or &lsquo;<samp>out</samp>&rsquo;; in case it is omitted, it defaults to
-&lsquo;<samp>in</samp>&rsquo;.
-</p>
-<p>A <code>signal</code> element of an <code>interface</code> has a similar
-structure.  The <code>direction</code> attribute of an <code>arg</code> child
-element can be only &lsquo;<samp>out</samp>&rsquo; here; which is also the default value.
-Example:
-</p>
-<div class="example">
-<pre class="example">&lt;signal name=&quot;StateChanged&quot;&gt;
-  &lt;arg name=&quot;state&quot; type=&quot;i&quot;/&gt;
-  &lt;arg name=&quot;error&quot; type=&quot;s&quot;/&gt;
+  <p><code>arg</code> elements can have the attributes
+  <code>name</code>, <code>type</code> and <code>direction</code>.
+  The <code>name</code> attribute is optional. The
+  <code>type</code> attribute stands for the <em>signature</em> of
+  the argument in D-Bus. For a discussion of D-Bus types and their
+  Lisp representation see <a href=
+  "Type-Conversion.html#Type-Conversion">Type
+  Conversion</a>.<a name="DOCF1" href="#FOOT1" id=
+  "DOCF1"><sup>1</sup></a> The <code>direction</code> attribute of
+  an <code>arg</code> element can be only
+  &lsquo;<samp>in</samp>&rsquo; or &lsquo;<samp>out</samp>&rsquo;;
+  in case it is omitted, it defaults to
+  &lsquo;<samp>in</samp>&rsquo;.</p>
+
+  <p>A <code>signal</code> element of an <code>interface</code> has
+  a similar structure. The <code>direction</code> attribute of an
+  <code>arg</code> child element can be only
+  &lsquo;<samp>out</samp>&rsquo; here; which is also the default
+  value. Example:</p>
+
+  <div class="example">
+    <pre class="example">
+&lt;signal name="StateChanged"&gt;
+  &lt;arg name="state" type="i"/&gt;
+  &lt;arg name="error" type="s"/&gt;
 &lt;/signal&gt;
-</pre></div>
+</pre>
+  </div>
 
-<p>A <code>property</code> element has no <code>arg</code> child
-element.  It just has the attributes <code>name</code>, <code>type</code> and
-<code>access</code>, which are all mandatory.  The <code>access</code> attribute
-allows the values &lsquo;<samp>readwrite</samp>&rsquo;, &lsquo;<samp>read</samp>&rsquo;, and &lsquo;<samp>write</samp>&rsquo;.
-Example:
-</p>
-<div class="example">
-<pre class="example">&lt;property name=&quot;Status&quot; type=&quot;u&quot; direction=&quot;read&quot;/&gt;
-</pre></div>
+  <p>A <code>property</code> element has no <code>arg</code> child
+  element. It just has the attributes <code>name</code>,
+  <code>type</code> and <code>access</code>, which are all
+  mandatory. The <code>access</code> attribute allows the values
+  &lsquo;<samp>readwrite</samp>&rsquo;,
+  &lsquo;<samp>read</samp>&rsquo;, and
+  &lsquo;<samp>write</samp>&rsquo;. Example:</p>
 
-<p><code>annotation</code> elements can be children of <code>interface</code>,
-<code>method</code>, <code>signal</code>, and <code>property</code> elements.  Unlike
-properties, which can change their values during lifetime of a D-Bus
-object, annotations are static.  Often they are used for code
-generators of D-Bus language bindings.  Example:
-</p>
-<div class="example">
-<pre class="example">&lt;annotation name=&quot;de.berlios.Pinot.GetStatistics&quot; value=&quot;pinotDBus&quot;/&gt;
-</pre></div>
+  <div class="example">
+    <pre class="example">
+&lt;property name="Status" type="u" direction="read"/&gt;
+</pre>
+  </div>
 
-<p>Annotations have just <code>name</code> and <code>value</code> attributes, both
-must be strings.
-</p>
-<dl>
-<dt><a name="index-dbus_002dintrospect"></a>Function: <strong>dbus-introspect</strong> <em>bus service path</em></dt>
-<dd><p>This function returns all interfaces and sub-nodes of <var>service</var>,
-registered at object path <var>path</var> at bus <var>bus</var>.
-</p>
-<p><var>bus</var> must be either the symbol <code>:system</code> or the symbol
-<code>:session</code>.  <var>service</var> must be a known service name, and
-<var>path</var> must be a valid object path.  The last two parameters are
-strings.  The result, the introspection data, is a string in XML
-format.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-introspect
-  :system &quot;org.freedesktop.Hal&quot;
-  &quot;/org/freedesktop/Hal/devices/computer&quot;)
+  <p><code>annotation</code> elements can be children of
+  <code>interface</code>, <code>method</code>, <code>signal</code>,
+  and <code>property</code> elements. Unlike properties, which can
+  change their values during lifetime of a D-Bus object,
+  annotations are static. Often they are used for code generators
+  of D-Bus language bindings. Example:</p>
 
-&rArr; &quot;&lt;!DOCTYPE node PUBLIC
-    &quot;-//freedesktop//DTD D-BUS Object Introspection 1.0//EN&quot;
-    &quot;http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd&quot;&gt;
+  <div class="example">
+    <pre class="example">
+&lt;annotation name="de.berlios.Pinot.GetStatistics" value="pinotDBus"/&gt;
+</pre>
+  </div>
+
+  <p>Annotations have just <code>name</code> and <code>value</code>
+  attributes, both must be strings.</p>
+
+  <dl>
+    <dt><a name="index-dbus_002dintrospect" id=
+    "index-dbus_002dintrospect"></a>Function:
+    <strong>dbus-introspect</strong> <em>bus service path</em></dt>
+
+    <dd>
+      <p>This function returns all interfaces and sub-nodes of
+      <var>service</var>, registered at object path <var>path</var>
+      at bus <var>bus</var>.</p>
+
+      <p><var>bus</var> must be either the symbol
+      <code>:system</code> or the symbol <code>:session</code>.
+      <var>service</var> must be a known service name, and
+      <var>path</var> must be a valid object path. The last two
+      parameters are strings. The result, the introspection data,
+      is a string in XML format. Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-introspect
+  :system "org.freedesktop.Hal"
+  "/org/freedesktop/Hal/devices/computer")
+
+&rArr; "&lt;!DOCTYPE node PUBLIC
+    "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+    "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd"&gt;
     &lt;node&gt;
-      &lt;interface name=&quot;org.freedesktop.Hal.Device&quot;&gt;
-        &lt;method name=&quot;GetAllProperties&quot;&gt;
-          &lt;arg name=&quot;properties&quot; direction=&quot;out&quot; type=&quot;a{sv}&quot;/&gt;
+      &lt;interface name="org.freedesktop.Hal.Device"&gt;
+        &lt;method name="GetAllProperties"&gt;
+          &lt;arg name="properties" direction="out" type="a{sv}"/&gt;
         &lt;/method&gt;
         &hellip;
-        &lt;signal name=&quot;PropertyModified&quot;&gt;
-          &lt;arg name=&quot;num_updates&quot; type=&quot;i&quot;/&gt;
-          &lt;arg name=&quot;updates&quot; type=&quot;a(sbb)&quot;/&gt;
+        &lt;signal name="PropertyModified"&gt;
+          &lt;arg name="num_updates" type="i"/&gt;
+          &lt;arg name="updates" type="a(sbb)"/&gt;
         &lt;/signal&gt;
       &lt;/interface&gt;
       &hellip;
-    &lt;/node&gt;&quot;
-</pre></div>
+    &lt;/node&gt;"
+</pre>
+      </div>
 
-<p>This example informs us, that the service &lsquo;<samp>org.freedesktop.Hal</samp>&rsquo;
-at object path &lsquo;<samp>/org/freedesktop/Hal/devices/computer</samp>&rsquo; offers the
-interface &lsquo;<samp>org.freedesktop.Hal.Device</samp>&rsquo; (and 2 other interfaces
-not documented here).  This interface contains the method
-&lsquo;<samp>GetAllProperties</samp>&rsquo;, which needs no input parameters, but returns
-as output parameter an array of dictionary entries (key-value pairs).
-Every dictionary entry has a string as key, and a variant as value.
-</p>
-<p>The interface offers also a signal, which returns 2 parameters: an
-integer, and an array consisting of elements which are a struct of a
-string and 2 boolean values.<a name="DOCF2" href="#FOOT2"><sup>2</sup></a>
-</p></dd></dl>
+      <p>This example informs us, that the service
+      &lsquo;<samp>org.freedesktop.Hal</samp>&rsquo; at object path
+      &lsquo;<samp>/org/freedesktop/Hal/devices/computer</samp>&rsquo;
+      offers the interface
+      &lsquo;<samp>org.freedesktop.Hal.Device</samp>&rsquo; (and 2
+      other interfaces not documented here). This interface
+      contains the method
+      &lsquo;<samp>GetAllProperties</samp>&rsquo;, which needs no
+      input parameters, but returns as output parameter an array of
+      dictionary entries (key-value pairs). Every dictionary entry
+      has a string as key, and a variant as value.</p>
 
-<dl>
-<dt><a name="index-dbus_002dintrospect_002dxml"></a>Function: <strong>dbus-introspect-xml</strong> <em>bus service path</em></dt>
-<dd><p>This function has the same intention as function
-<code>dbus-introspect</code>.  The returned value is a parsed XML tree,
-which can be used for further analysis.  Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-introspect-xml
-  :session &quot;org.freedesktop.xesam.searcher&quot;
-  &quot;/org/freedesktop/xesam/searcher/main&quot;)
+      <p>The interface offers also a signal, which returns 2
+      parameters: an integer, and an array consisting of elements
+      which are a struct of a string and 2 boolean values.<a name=
+      "DOCF2" href="#FOOT2" id="DOCF2"><sup>2</sup></a></p>
+    </dd>
+  </dl>
 
-&rArr; (node ((name . &quot;/org/freedesktop/xesam/searcher/main&quot;))
-     (interface ((name . &quot;org.freedesktop.xesam.Search&quot;))
-       (method ((name . &quot;GetHitData&quot;))
-         (arg ((name . &quot;search&quot;) (type . &quot;s&quot;) (direction . &quot;in&quot;)))
-         (arg ((name . &quot;hit_ids&quot;) (type . &quot;au&quot;) (direction . &quot;in&quot;)))
-         (arg ((name . &quot;fields&quot;) (type . &quot;as&quot;) (direction . &quot;in&quot;)))
-         (arg ((name . &quot;hit_data&quot;) (type . &quot;aav&quot;) (direction . &quot;out&quot;)))
+  <dl>
+    <dt><a name="index-dbus_002dintrospect_002dxml" id=
+    "index-dbus_002dintrospect_002dxml"></a>Function:
+    <strong>dbus-introspect-xml</strong> <em>bus service
+    path</em></dt>
+
+    <dd>
+      <p>This function has the same intention as function
+      <code>dbus-introspect</code>. The returned value is a parsed
+      XML tree, which can be used for further analysis.
+      Example:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-introspect-xml
+  :session "org.freedesktop.xesam.searcher"
+  "/org/freedesktop/xesam/searcher/main")
+
+&rArr; (node ((name . "/org/freedesktop/xesam/searcher/main"))
+     (interface ((name . "org.freedesktop.xesam.Search"))
+       (method ((name . "GetHitData"))
+         (arg ((name . "search") (type . "s") (direction . "in")))
+         (arg ((name . "hit_ids") (type . "au") (direction . "in")))
+         (arg ((name . "fields") (type . "as") (direction . "in")))
+         (arg ((name . "hit_data") (type . "aav") (direction . "out")))
        )
        &hellip;
-       (signal ((name . &quot;HitsAdded&quot;))
-         (arg ((name . &quot;search&quot;) (type . &quot;s&quot;)))
-         (arg ((name . &quot;count&quot;) (type . &quot;u&quot;)))
+       (signal ((name . "HitsAdded"))
+         (arg ((name . "search") (type . "s")))
+         (arg ((name . "count") (type . "u")))
        )
      )
      &hellip;
    )
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-dbus_002dintrospect_002dget_002dattribute"></a>Function: <strong>dbus-introspect-get-attribute</strong> <em>object attribute</em></dt>
-<dd><p>It returns the <var>attribute</var> value of a D-Bus introspection
-<var>object</var>.  <var>object</var> can be every subtree of a parsed XML tree
-as retrieved with <code>dbus-introspect-xml</code>.  <var>attribute</var> must be
-a string according to the attribute names in the D-Bus specification.
-Example:
-</p>
-<div class="lisp">
-<pre class="lisp">(dbus-introspect-get-attribute
-  (dbus-introspect-xml :system &quot;org.freedesktop.SystemToolsBackends&quot;
-    &quot;/org/freedesktop/SystemToolsBackends/UsersConfig&quot;)
-  &quot;name&quot;)
+  <dl>
+    <dt><a name="index-dbus_002dintrospect_002dget_002dattribute"
+    id=
+    "index-dbus_002dintrospect_002dget_002dattribute"></a>Function:
+    <strong>dbus-introspect-get-attribute</strong> <em>object
+    attribute</em></dt>
 
-&rArr; &quot;/org/freedesktop/SystemToolsBackends/UsersConfig&quot;
-</pre></div>
+    <dd>
+      <p>It returns the <var>attribute</var> value of a D-Bus
+      introspection <var>object</var>. <var>object</var> can be
+      every subtree of a parsed XML tree as retrieved with
+      <code>dbus-introspect-xml</code>. <var>attribute</var> must
+      be a string according to the attribute names in the D-Bus
+      specification. Example:</p>
 
-<p>If <var>object</var> has no <var>attribute</var>, the function returns
-<code>nil</code>.
-</p></dd></dl>
+      <div class="lisp">
+        <pre class="lisp">
+(dbus-introspect-get-attribute
+  (dbus-introspect-xml :system "org.freedesktop.SystemToolsBackends"
+    "/org/freedesktop/SystemToolsBackends/UsersConfig")
+  "name")
 
+&rArr; "/org/freedesktop/SystemToolsBackends/UsersConfig"
+</pre>
+      </div>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+      <p>If <var>object</var> has no <var>attribute</var>, the
+      function returns <code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<h3><a name="FOOT1" href="#DOCF1">(1)</a></h3>
-<p>D-Bus signatures
-are explained in the D-Bus specification
-<a href="http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-signatures">http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-signatures</a>.</p>
-<h3><a name="FOOT2" href="#DOCF2">(2)</a></h3>
-<p>The interfaces of the service
-&lsquo;<samp>org.freedesktop.Hal</samp>&rsquo; are described in
-<a href="http://people.freedesktop.org/~dkukawka/hal-spec-git/hal-spec.html#interfaces">the HAL specification</a>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Nodes-and-Interfaces.html#Nodes-and-Interfaces" accesskey="n" rel="next">Nodes and Interfaces</a>, Previous: <a href="Bus-names.html#Bus-names" accesskey="p" rel="prev">Bus names</a>, Up: <a href="Inspection.html#Inspection" accesskey="u" rel="up">Inspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT1" href="#DOCF1" id="FOOT1">(1)</a></h3>
 
+    <p>D-Bus signatures are explained in the D-Bus specification
+    <a href=
+    "http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-signatures">
+    http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-signatures</a>.</p>
+
+    <h3><a name="FOOT2" href="#DOCF2" id="FOOT2">(2)</a></h3>
+
+    <p>The interfaces of the service
+    &lsquo;<samp>org.freedesktop.Hal</samp>&rsquo; are described in
+    <a href=
+    "http://people.freedesktop.org/~dkukawka/hal-spec-git/hal-spec.html#interfaces">
+    the HAL specification</a>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Nodes-and-Interfaces.html#Nodes-and-Interfaces" accesskey="n"
+    rel="next">Nodes and Interfaces</a>, Previous: <a href=
+    "Bus-names.html#Bus-names" accesskey="p" rel="prev">Bus
+    names</a>, Up: <a href="Inspection.html#Inspection" accesskey=
+    "u" rel="up">Inspection</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

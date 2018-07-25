@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,150 +19,211 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Porting old advice</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Porting old advice">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Porting old advice">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Advising-Functions.html#Advising-Functions" rel="up" title="Advising Functions">
-<link href="Obsolete-Functions.html#Obsolete-Functions" rel="next" title="Obsolete Functions">
-<link href="Advice-combinators.html#Advice-combinators" rel="prev" title="Advice combinators">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Porting old
+  advice</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Porting old advice" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Porting old advice" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Advising-Functions.html#Advising-Functions" rel="up"
+  title="Advising Functions" />
+  <link href="Obsolete-Functions.html#Obsolete-Functions" rel=
+  "next" title="Obsolete Functions" />
+  <link href="Advice-combinators.html#Advice-combinators" rel=
+  "prev" title="Advice combinators" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Porting-old-advice" id="Porting-old-advice"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Advice-combinators.html#Advice-combinators" accesskey="p" rel=
+    "prev">Advice combinators</a>, Up: <a href=
+    "Advising-Functions.html#Advising-Functions" accesskey="u" rel=
+    "up">Advising Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Adapting-code-using-the-old-defadvice" id=
+  "Adapting-code-using-the-old-defadvice"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Porting-old-advice"></a>
-<div class="header">
-<p>
-Previous: <a href="Advice-combinators.html#Advice-combinators" accesskey="p" rel="prev">Advice combinators</a>, Up: <a href="Advising-Functions.html#Advising-Functions" accesskey="u" rel="up">Advising Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Adapting-code-using-the-old-defadvice"></a>
-<h4 class="subsection">12.11.4 Adapting code using the old defadvice</h4>
-<a name="index-old-advices_002c-porting"></a>
+  <h4 class="subsection">12.11.4 Adapting code using the old
+  defadvice</h4><a name="index-old-advices_002c-porting" id=
+  "index-old-advices_002c-porting"></a>
 
-<p>A lot of code uses the old <code>defadvice</code> mechanism, which is largely made
-obsolete by the new <code>advice-add</code>, whose implementation and semantics is
-significantly simpler.
-</p>
-<p>An old piece of advice such as:
-</p>
-<div class="example">
-<pre class="example">(defadvice previous-line (before next-line-at-end
+  <p>A lot of code uses the old <code>defadvice</code> mechanism,
+  which is largely made obsolete by the new
+  <code>advice-add</code>, whose implementation and semantics is
+  significantly simpler.</p>
+
+  <p>An old piece of advice such as:</p>
+
+  <div class="example">
+    <pre class="example">
+(defadvice previous-line (before next-line-at-end
                                  (&amp;optional arg try-vscroll))
-  &quot;Insert an empty line when moving up from the top line.&quot;
+  "Insert an empty line when moving up from the top line."
   (if (and next-line-add-newlines (= arg 1)
            (save-excursion (beginning-of-line) (bobp)))
       (progn
         (beginning-of-line)
         (newline))))
-</pre></div>
+</pre>
+  </div>
 
-<p>could be translated in the new advice mechanism into a plain function:
-</p>
-<div class="example">
-<pre class="example">(defun previous-line--next-line-at-end (&amp;optional arg try-vscroll)
-  &quot;Insert an empty line when moving up from the top line.&quot;
+  <p>could be translated in the new advice mechanism into a plain
+  function:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun previous-line--next-line-at-end (&amp;optional arg try-vscroll)
+  "Insert an empty line when moving up from the top line."
   (if (and next-line-add-newlines (= arg 1)
            (save-excursion (beginning-of-line) (bobp)))
       (progn
         (beginning-of-line)
         (newline))))
-</pre></div>
+</pre>
+  </div>
 
-<p>Obviously, this does not actually modify <code>previous-line</code>.  For that the
-old advice needed:
-</p><div class="example">
-<pre class="example">(ad-activate 'previous-line)
-</pre></div>
-<p>whereas the new advice mechanism needs:
-</p><div class="example">
-<pre class="example">(advice-add 'previous-line :before #'previous-line--next-line-at-end)
-</pre></div>
+  <p>Obviously, this does not actually modify
+  <code>previous-line</code>. For that the old advice needed:</p>
 
-<p>Note that <code>ad-activate</code> had a global effect: it activated all pieces of
-advice enabled for that specified function.  If you wanted to only activate or
-deactivate a particular piece, you needed to <em>enable</em> or <em>disable</em>
-it with <code>ad-enable-advice</code> and <code>ad-disable-advice</code>.
-The new mechanism does away with this distinction.
-</p>
-<p>Around advice such as:
-</p>
-<div class="example">
-<pre class="example">(defadvice foo (around foo-around)
-  &quot;Ignore case in `foo'.&quot;
+  <div class="example">
+    <pre class="example">
+(ad-activate 'previous-line)
+</pre>
+  </div>
+
+  <p>whereas the new advice mechanism needs:</p>
+
+  <div class="example">
+    <pre class="example">
+(advice-add 'previous-line :before #'previous-line--next-line-at-end)
+</pre>
+  </div>
+
+  <p>Note that <code>ad-activate</code> had a global effect: it
+  activated all pieces of advice enabled for that specified
+  function. If you wanted to only activate or deactivate a
+  particular piece, you needed to <em>enable</em> or
+  <em>disable</em> it with <code>ad-enable-advice</code> and
+  <code>ad-disable-advice</code>. The new mechanism does away with
+  this distinction.</p>
+
+  <p>Around advice such as:</p>
+
+  <div class="example">
+    <pre class="example">
+(defadvice foo (around foo-around)
+  "Ignore case in `foo'."
   (let ((case-fold-search t))
     ad-do-it))
 (ad-activate 'foo)
-</pre></div>
+</pre>
+  </div>
 
-<p>could translate into:
-</p>
-<div class="example">
-<pre class="example">(defun foo--foo-around (orig-fun &amp;rest args)
-  &quot;Ignore case in `foo'.&quot;
+  <p>could translate into:</p>
+
+  <div class="example">
+    <pre class="example">
+(defun foo--foo-around (orig-fun &amp;rest args)
+  "Ignore case in `foo'."
   (let ((case-fold-search t))
     (apply orig-fun args)))
 (advice-add 'foo :around #'foo--foo-around)
-</pre></div>
+</pre>
+  </div>
 
-<p>Regarding the advice&rsquo;s <em>class</em>, note that the new <code>:before</code> is not
-quite equivalent to the old <code>before</code>, because in the old advice you could
-modify the function&rsquo;s arguments (e.g., with <code>ad-set-arg</code>), and that would
-affect the argument values seen by the original function, whereas in the new
-<code>:before</code>, modifying an argument via <code>setq</code> in the advice has no
-effect on the arguments seen by the original function.
-When porting <code>before</code> advice which relied on this behavior, you&rsquo;ll need
-to turn it into new <code>:around</code> or <code>:filter-args</code> advice instead.
-</p>
-<p>Similarly old <code>after</code> advice could modify the returned value by
-changing <code>ad-return-value</code>, whereas new <code>:after</code> advice cannot, so
-when porting such old <code>after</code> advice, you&rsquo;ll need to turn it into new
-<code>:around</code> or <code>:filter-return</code> advice instead.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Advice-combinators.html#Advice-combinators" accesskey="p" rel="prev">Advice combinators</a>, Up: <a href="Advising-Functions.html#Advising-Functions" accesskey="u" rel="up">Advising Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Regarding the advice&rsquo;s <em>class</em>, note that the new
+  <code>:before</code> is not quite equivalent to the old
+  <code>before</code>, because in the old advice you could modify
+  the function&rsquo;s arguments (e.g., with
+  <code>ad-set-arg</code>), and that would affect the argument
+  values seen by the original function, whereas in the new
+  <code>:before</code>, modifying an argument via <code>setq</code>
+  in the advice has no effect on the arguments seen by the original
+  function. When porting <code>before</code> advice which relied on
+  this behavior, you&rsquo;ll need to turn it into new
+  <code>:around</code> or <code>:filter-args</code> advice
+  instead.</p>
 
+  <p>Similarly old <code>after</code> advice could modify the
+  returned value by changing <code>ad-return-value</code>, whereas
+  new <code>:after</code> advice cannot, so when porting such old
+  <code>after</code> advice, you&rsquo;ll need to turn it into new
+  <code>:around</code> or <code>:filter-return</code> advice
+  instead.</p>
+  <hr />
 
-
+  <div class="header">
+    <p>Previous: <a href=
+    "Advice-combinators.html#Advice-combinators" accesskey="p" rel=
+    "prev">Advice combinators</a>, Up: <a href=
+    "Advising-Functions.html#Advising-Functions" accesskey="u" rel=
+    "up">Advising Functions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

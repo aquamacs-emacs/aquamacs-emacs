@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,145 +20,210 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Dired Deletion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Dired Deletion">
-<meta name="keywords" content="GNU Emacs Manual: Dired Deletion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Dired.html#Dired" rel="up" title="Dired">
-<link href="Flagging-Many-Files.html#Flagging-Many-Files" rel="next" title="Flagging Many Files">
-<link href="Dired-Navigation.html#Dired-Navigation" rel="prev" title="Dired Navigation">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Dired Deletion</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Dired Deletion" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Dired Deletion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Dired.html#Dired" rel="up" title="Dired" />
+  <link href="Flagging-Many-Files.html#Flagging-Many-Files" rel=
+  "next" title="Flagging Many Files" />
+  <link href="Dired-Navigation.html#Dired-Navigation" rel="prev"
+  title="Dired Navigation" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Dired-Deletion" id="Dired-Deletion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Flagging-Many-Files.html#Flagging-Many-Files"
+    accesskey="n" rel="next">Flagging Many Files</a>, Previous:
+    <a href="Dired-Navigation.html#Dired-Navigation" accesskey="p"
+    rel="prev">Dired Navigation</a>, Up: <a href="Dired.html#Dired"
+    accesskey="u" rel="up">Dired</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Deleting-Files-with-Dired" id=
+  "Deleting-Files-with-Dired"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dired-Deletion"></a>
-<div class="header">
-<p>
-Next: <a href="Flagging-Many-Files.html#Flagging-Many-Files" accesskey="n" rel="next">Flagging Many Files</a>, Previous: <a href="Dired-Navigation.html#Dired-Navigation" accesskey="p" rel="prev">Dired Navigation</a>, Up: <a href="Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Deleting-Files-with-Dired"></a>
-<h3 class="section">30.3 Deleting Files with Dired</h3>
-<a name="index-flagging-files-_0028in-Dired_0029"></a>
-<a name="index-deleting-files-_0028in-Dired_0029"></a>
+  <h3 class="section">30.3 Deleting Files with Dired</h3><a name=
+  "index-flagging-files-_0028in-Dired_0029" id=
+  "index-flagging-files-_0028in-Dired_0029"></a> <a name=
+  "index-deleting-files-_0028in-Dired_0029" id=
+  "index-deleting-files-_0028in-Dired_0029"></a>
 
-<p>One of the most frequent uses of Dired is to first <em>flag</em> files for
-deletion, then delete the files that were flagged.
-</p>
-<dl compact="compact">
-<dt><kbd>d</kbd></dt>
-<dd><p>Flag this file for deletion (<code>dired-flag-file-deletion</code>).
-</p></dd>
-<dt><kbd>u</kbd></dt>
-<dd><p>Remove the deletion flag (<code>dired-unmark</code>).
-</p></dd>
-<dt><kbd><span class="key">DEL</span></kbd></dt>
-<dd><p>Move point to previous line and remove the deletion flag on that line
-(<code>dired-unmark-backward</code>).
-</p></dd>
-<dt><kbd>x</kbd></dt>
-<dd><p>Delete files flagged for deletion (<code>dired-do-flagged-delete</code>).
-</p></dd>
-</dl>
+  <p>One of the most frequent uses of Dired is to first
+  <em>flag</em> files for deletion, then delete the files that were
+  flagged.</p>
 
-<a name="index-d-_0028Dired_0029"></a>
-<a name="index-dired_002dflag_002dfile_002ddeletion"></a>
-<p>You can flag a file for deletion by moving to the line describing
-the file and typing <kbd>d</kbd> (<code>dired-flag-file-deletion</code>).  The
-deletion flag is visible as a &lsquo;<samp>D</samp>&rsquo; at the beginning of the line.
-This command moves point to the next line, so that repeated <kbd>d</kbd>
-commands flag successive files.  A numeric prefix argument serves as a
-repeat count; a negative count means to flag preceding files.
-</p>
-<p>If the region is active, the <kbd>d</kbd> command flags all files in the
-region for deletion; in this case, the command does not move point,
-and ignores any prefix argument.
-</p>
-<a name="index-u-_0028Dired-deletion_0029"></a>
-<a name="index-DEL-_0028Dired_0029"></a>
-<p>The reason for flagging files for deletion, rather than deleting
-files immediately, is to reduce the danger of deleting a file
-accidentally.  Until you direct Dired to delete the flagged files, you
-can remove deletion flags using the commands <kbd>u</kbd> and <tt class="key">DEL</tt>.
-<kbd>u</kbd> (<code>dired-unmark</code>) works just like <kbd>d</kbd>, but removes
-flags rather than making flags.  <tt class="key">DEL</tt>
-(<code>dired-unmark-backward</code>) moves upward, removing flags; it is
-like <kbd>u</kbd> with argument −1.  A numeric prefix argument to
-either command serves as a repeat count, with a negative count meaning
-to unflag in the opposite direction.  If the region is active, these
-commands instead unflag all files in the region, without moving point.
-</p>
-<a name="index-x-_0028Dired_0029"></a>
-<a name="index-dired_002ddo_002dflagged_002ddelete"></a>
-<p>To delete flagged files, type <kbd>x</kbd>
-(<code>dired-do-flagged-delete</code>).  This command displays a list of all
-the file names flagged for deletion, and requests confirmation with
-<kbd>yes</kbd>.  If you confirm, Dired deletes the flagged files, then
-deletes their lines from the text of the Dired buffer.  The Dired
-buffer, with somewhat fewer lines, remains selected.
-</p>
-<p>If you answer <kbd>no</kbd> or quit with <kbd>C-g</kbd> when asked to confirm, you
-return immediately to Dired, with the deletion flags still present in
-the buffer, and no files actually deleted.
-</p>
-<a name="index-recursive-deletion"></a>
-<a name="index-dired_002drecursive_002ddeletes"></a>
-<p>You can delete empty directories just like other files, but normally
-Dired cannot delete directories that are nonempty.  If the variable
-<code>dired-recursive-deletes</code> is non-<code>nil</code>, then Dired can
-delete nonempty directories including all their contents.  That can
-be somewhat risky.
-</p>
-<a name="index-delete_002dby_002dmoving_002dto_002dtrash-1"></a>
-<p>If you change the variable <code>delete-by-moving-to-trash</code> to
-<code>t</code>, the above deletion commands will move the affected files or
-directories into the operating system&rsquo;s Trash, instead of deleting
-them outright.  See <a href="Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Flagging-Many-Files.html#Flagging-Many-Files" accesskey="n" rel="next">Flagging Many Files</a>, Previous: <a href="Dired-Navigation.html#Dired-Navigation" accesskey="p" rel="prev">Dired Navigation</a>, Up: <a href="Dired.html#Dired" accesskey="u" rel="up">Dired</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>d</kbd></dt>
 
+    <dd>
+      <p>Flag this file for deletion
+      (<code>dired-flag-file-deletion</code>).</p>
+    </dd>
 
+    <dt><kbd>u</kbd></dt>
 
+    <dd>
+      <p>Remove the deletion flag (<code>dired-unmark</code>).</p>
+    </dd>
+
+    <dt><kbd><span class="key">DEL</span></kbd></dt>
+
+    <dd>
+      <p>Move point to previous line and remove the deletion flag
+      on that line (<code>dired-unmark-backward</code>).</p>
+    </dd>
+
+    <dt><kbd>x</kbd></dt>
+
+    <dd>
+      <p>Delete files flagged for deletion
+      (<code>dired-do-flagged-delete</code>).</p>
+    </dd>
+  </dl><a name="index-d-_0028Dired_0029" id=
+  "index-d-_0028Dired_0029"></a> <a name=
+  "index-dired_002dflag_002dfile_002ddeletion" id=
+  "index-dired_002dflag_002dfile_002ddeletion"></a>
+
+  <p>You can flag a file for deletion by moving to the line
+  describing the file and typing <kbd>d</kbd>
+  (<code>dired-flag-file-deletion</code>). The deletion flag is
+  visible as a &lsquo;<samp>D</samp>&rsquo; at the beginning of the
+  line. This command moves point to the next line, so that repeated
+  <kbd>d</kbd> commands flag successive files. A numeric prefix
+  argument serves as a repeat count; a negative count means to flag
+  preceding files.</p>
+
+  <p>If the region is active, the <kbd>d</kbd> command flags all
+  files in the region for deletion; in this case, the command does
+  not move point, and ignores any prefix argument.</p><a name=
+  "index-u-_0028Dired-deletion_0029" id=
+  "index-u-_0028Dired-deletion_0029"></a> <a name=
+  "index-DEL-_0028Dired_0029" id="index-DEL-_0028Dired_0029"></a>
+
+  <p>The reason for flagging files for deletion, rather than
+  deleting files immediately, is to reduce the danger of deleting a
+  file accidentally. Until you direct Dired to delete the flagged
+  files, you can remove deletion flags using the commands
+  <kbd>u</kbd> and <tt class="key">DEL</tt>. <kbd>u</kbd>
+  (<code>dired-unmark</code>) works just like <kbd>d</kbd>, but
+  removes flags rather than making flags. <tt class="key">DEL</tt>
+  (<code>dired-unmark-backward</code>) moves upward, removing
+  flags; it is like <kbd>u</kbd> with argument
+  &acirc;&circ;&rsquo;1. A numeric prefix argument to either
+  command serves as a repeat count, with a negative count meaning
+  to unflag in the opposite direction. If the region is active,
+  these commands instead unflag all files in the region, without
+  moving point.</p><a name="index-x-_0028Dired_0029" id=
+  "index-x-_0028Dired_0029"></a> <a name=
+  "index-dired_002ddo_002dflagged_002ddelete" id=
+  "index-dired_002ddo_002dflagged_002ddelete"></a>
+
+  <p>To delete flagged files, type <kbd>x</kbd>
+  (<code>dired-do-flagged-delete</code>). This command displays a
+  list of all the file names flagged for deletion, and requests
+  confirmation with <kbd>yes</kbd>. If you confirm, Dired deletes
+  the flagged files, then deletes their lines from the text of the
+  Dired buffer. The Dired buffer, with somewhat fewer lines,
+  remains selected.</p>
+
+  <p>If you answer <kbd>no</kbd> or quit with <kbd>C-g</kbd> when
+  asked to confirm, you return immediately to Dired, with the
+  deletion flags still present in the buffer, and no files actually
+  deleted.</p><a name="index-recursive-deletion" id=
+  "index-recursive-deletion"></a> <a name=
+  "index-dired_002drecursive_002ddeletes" id=
+  "index-dired_002drecursive_002ddeletes"></a>
+
+  <p>You can delete empty directories just like other files, but
+  normally Dired cannot delete directories that are nonempty. If
+  the variable <code>dired-recursive-deletes</code> is
+  non-<code>nil</code>, then Dired can delete nonempty directories
+  including all their contents. That can be somewhat
+  risky.</p><a name=
+  "index-delete_002dby_002dmoving_002dto_002dtrash-1" id=
+  "index-delete_002dby_002dmoving_002dto_002dtrash-1"></a>
+
+  <p>If you change the variable
+  <code>delete-by-moving-to-trash</code> to <code>t</code>, the
+  above deletion commands will move the affected files or
+  directories into the operating system&rsquo;s Trash, instead of
+  deleting them outright. See <a href=
+  "Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Flagging-Many-Files.html#Flagging-Many-Files"
+    accesskey="n" rel="next">Flagging Many Files</a>, Previous:
+    <a href="Dired-Navigation.html#Dired-Navigation" accesskey="p"
+    rel="prev">Dired Navigation</a>, Up: <a href="Dired.html#Dired"
+    accesskey="u" rel="up">Dired</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

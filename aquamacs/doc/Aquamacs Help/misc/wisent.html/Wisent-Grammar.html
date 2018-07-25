@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2016
 Free Software Foundation, Inc.
 
@@ -14,114 +16,179 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Wisent Parser Development: Wisent Grammar</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Wisent Parser Development: Wisent Grammar">
-<meta name="keywords" content="Wisent Parser Development: Wisent Grammar">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="top">
-<link href="Grammar-format.html#Grammar-format" rel="next" title="Grammar format">
-<link href="Wisent-Overview.html#Wisent-Overview" rel="prev" title="Wisent Overview">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Wisent Parser Development: Wisent Grammar</title>
+  <meta name="description" content=
+  "Wisent Parser Development: Wisent Grammar" />
+  <meta name="keywords" content=
+  "Wisent Parser Development: Wisent Grammar" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="top" />
+  <link href="Grammar-format.html#Grammar-format" rel="next" title=
+  "Grammar format" />
+  <link href="Wisent-Overview.html#Wisent-Overview" rel="prev"
+  title="Wisent Overview" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Wisent-Grammar"></a>
-<div class="header">
-<p>
-Next: <a href="Wisent-Parsing.html#Wisent-Parsing" accesskey="n" rel="next">Wisent Parsing</a>, Previous: <a href="Wisent-Overview.html#Wisent-Overview" accesskey="p" rel="prev">Wisent Overview</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Wisent-Grammar-1"></a>
-<h2 class="chapter">2 Wisent Grammar</h2>
+<body lang="en" xml:lang="en">
+  <a name="Wisent-Grammar" id="Wisent-Grammar"></a>
 
-<a name="index-context_002dfree-grammar"></a>
-<a name="index-rule"></a>
-<p>In order for Wisent to parse a language, it must be described by a
-<em>context-free grammar</em>.  That is a grammar specified as rules that
-can be applied regardless of context.  For more information, see
-<a href="http://www.gnu.org/software/bison/manual/html_node/Language-and-Grammar.html#Language-and-Grammar">(bison)Language and Grammar</a>, in the Bison manual.
-</p>
-<a name="index-terminal"></a>
-<a name="index-nonterminal"></a>
-<p>The formal grammar is formulated using <em>terminal</em> and
-<em>nonterminal</em> items.  Terminals can be Emacs Lisp symbols or
-characters, and nonterminals are symbols only.
-</p>
-<a name="index-token"></a>
-<p>Terminals (also known as <em>tokens</em>) represent the lexical
-elements of the language like numbers, strings, etc..
-</p>
-<p>For example &lsquo;<samp>PLUS</samp>&rsquo; can represent the operator &lsquo;<samp>+</samp>&rsquo;.
-</p>
-<p>Nonterminal symbols are described by rules:
-</p>
-<div class="example">
-<pre class="example">RESULT &equiv; COMPONENTS&hellip;
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="Wisent-Parsing.html#Wisent-Parsing"
+    accesskey="n" rel="next">Wisent Parsing</a>, Previous: <a href=
+    "Wisent-Overview.html#Wisent-Overview" accesskey="p" rel=
+    "prev">Wisent Overview</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Wisent-Grammar-1" id="Wisent-Grammar-1"></a>
 
-<p>&lsquo;<samp>RESULT</samp>&rsquo; is a nonterminal that this rule describes and
-&lsquo;<samp>COMPONENTS</samp>&rsquo; are various terminals and nonterminals that are put
-together by this rule.
-</p>
-<p>For example, this rule:
-</p>
-<div class="example">
-<pre class="example">exp &equiv; exp PLUS exp
-</pre></div>
+  <h2 class="chapter">2 Wisent Grammar</h2><a name=
+  "index-context_002dfree-grammar" id=
+  "index-context_002dfree-grammar"></a> <a name="index-rule" id=
+  "index-rule"></a>
 
-<p>Says that two groupings of type &lsquo;<samp>exp</samp>&rsquo;, with a &lsquo;<samp>PLUS</samp>&rsquo; token
-in between, can be combined into a larger grouping of type &lsquo;<samp>exp</samp>&rsquo;.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Grammar-format.html#Grammar-format" accesskey="1">Grammar format</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Example.html#Example" accesskey="2">Example</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Compiling-a-grammar.html#Compiling-a-grammar" accesskey="3">Compiling a grammar</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Conflicts.html#Conflicts" accesskey="4">Conflicts</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+  <p>In order for Wisent to parse a language, it must be described
+  by a <em>context-free grammar</em>. That is a grammar specified
+  as rules that can be applied regardless of context. For more
+  information, see <a href=
+  "http://www.gnu.org/software/bison/manual/html_node/Language-and-Grammar.html#Language-and-Grammar">
+  (bison)Language and Grammar</a>, in the Bison manual.</p><a name=
+  "index-terminal" id="index-terminal"></a> <a name=
+  "index-nonterminal" id="index-nonterminal"></a>
 
+  <p>The formal grammar is formulated using <em>terminal</em> and
+  <em>nonterminal</em> items. Terminals can be Emacs Lisp symbols
+  or characters, and nonterminals are symbols only.</p><a name=
+  "index-token" id="index-token"></a>
 
+  <p>Terminals (also known as <em>tokens</em>) represent the
+  lexical elements of the language like numbers, strings, etc..</p>
 
+  <p>For example &lsquo;<samp>PLUS</samp>&rsquo; can represent the
+  operator &lsquo;<samp>+</samp>&rsquo;.</p>
 
+  <p>Nonterminal symbols are described by rules:</p>
+
+  <div class="example">
+    <pre class="example">
+RESULT &equiv; COMPONENTS&hellip;
+</pre>
+  </div>
+
+  <p>&lsquo;<samp>RESULT</samp>&rsquo; is a nonterminal that this
+  rule describes and &lsquo;<samp>COMPONENTS</samp>&rsquo; are
+  various terminals and nonterminals that are put together by this
+  rule.</p>
+
+  <p>For example, this rule:</p>
+
+  <div class="example">
+    <pre class="example">
+exp &equiv; exp PLUS exp
+</pre>
+  </div>
+
+  <p>Says that two groupings of type
+  &lsquo;<samp>exp</samp>&rsquo;, with a
+  &lsquo;<samp>PLUS</samp>&rsquo; token in between, can be combined
+  into a larger grouping of type
+  &lsquo;<samp>exp</samp>&rsquo;.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Grammar-format.html#Grammar-format" accesskey="1">Grammar
+      format</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Example.html#Example" accesskey="2">Example</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Compiling-a-grammar.html#Compiling-a-grammar" accesskey=
+      "3">Compiling a grammar</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Conflicts.html#Conflicts" accesskey="4">Conflicts</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top"></td>
+    </tr>
+  </table>
 </body>
 </html>

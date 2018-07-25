@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Refiling notes - The Org Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Org Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Capture-_002d-Refile-_002d-Archive.html#Capture-_002d-Refile-_002d-Archive" title="Capture - Refile - Archive">
-<link rel="prev" href="Protocols.html#Protocols" title="Protocols">
-<link rel="next" href="Archiving.html#Archiving" title="Archiving">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Refiling notes - The Org Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Org Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Capture-_002d-Refile-_002d-Archive.html#Capture-_002d-Refile-_002d-Archive"
+  title="Capture - Refile - Archive" />
+  <link rel="prev" href="Protocols.html#Protocols" title=
+  "Protocols" />
+  <link rel="next" href="Archiving.html#Archiving" title=
+  "Archiving" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This manual is for Org version 7.4.
 
 Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
@@ -33,8 +43,10 @@ Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -44,65 +56,127 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Refiling-notes"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Archiving.html#Archiving">Archiving</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Protocols.html#Protocols">Protocols</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Capture-_002d-Refile-_002d-Archive.html#Capture-_002d-Refile-_002d-Archive">Capture - Refile - Archive</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Refiling-notes" id="Refiling-notes"></a>
 
-<h3 class="section">9.5 Refiling notes</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Archiving.html#Archiving">Archiving</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Protocols.html#Protocols">Protocols</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href=
+    "Capture-_002d-Refile-_002d-Archive.html#Capture-_002d-Refile-_002d-Archive">Capture
+    - Refile - Archive</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-refiling-notes-940"></a>
-When reviewing the captured data, you may want to refile some of the entries
-into a different list, for example into a project.  Cutting, finding the
-right location, and then pasting the note is cumbersome.  To simplify this
-process, you can use the following special command:
+  <h3 class="section">9.5 Refiling notes</h3>
 
-     
-<a name="index-C_002dc-C_002dw-941"></a>
-<a name="index-org_002drefile-942"></a>
-<dl><dt><kbd>C-c C-w &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-refile</code><kbd>)</kbd><dd>
-<a name="index-org_002dreverse_002dnote_002dorder-943"></a><a name="index-org_002drefile_002dtargets-944"></a><a name="index-org_002drefile_002duse_002doutline_002dpath-945"></a><a name="index-org_002doutline_002dpath_002dcomplete_002din_002dsteps-946"></a><a name="index-org_002drefile_002dallow_002dcreating_002dparent_002dnodes-947"></a><a name="index-org_002dlog_002drefile-948"></a><a name="index-org_002drefile_002duse_002dcache-949"></a>Refile the entry or region at point.  This command offers possible locations
-for refiling the entry and lets you select one with completion.  The item (or
-all items in the region) is filed below the target heading as a subitem. 
-Depending on <code>org-reverse-note-order</code>, it will be either the first or
-last subitem.<br>
-By default, all level 1 headlines in the current buffer are considered to be
-targets, but you can have more complex definitions across a number of files. 
-See the variable <code>org-refile-targets</code> for details.  If you would like to
-select a location via a file-path-like completion along the outline path, see
-the variables <code>org-refile-use-outline-path</code> and
-<code>org-outline-path-complete-in-steps</code>.  If you would like to be able to
-create new nodes as new parents for refiling on the fly, check the
-variable <code>org-refile-allow-creating-parent-nodes</code>. 
-When the variable <code>org-log-refile</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> is set, a time stamp or a note will be
-recorded when an entry has been refiled. 
-<a name="index-C_002du-C_002dc-C_002dw-950"></a><br><dt><kbd>C-u C-c C-w</kbd><dd>
-Use the refile interface to jump to a heading. 
-<a name="index-C_002du-C_002du-C_002dc-C_002dw-951"></a><a name="index-org_002drefile_002dgoto_002dlast_002dstored-952"></a><br><dt><kbd>C-u C-u C-c C-w &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-refile-goto-last-stored</code><kbd>)</kbd><dd>
-Jump to the location where <code>org-refile</code> last moved a tree to. 
-<br><dt><kbd>C-2 C-c C-w</kbd><dd>Refile as the child of the item currently being clocked. 
-<br><dt><kbd>C-0 C-c C-w  </kbd><span class="roman">or</span><kbd>  C-u C-u C-u C-c C-w</kbd><dd>
-<a name="index-C_002d0-C_002dc-C_002dw-953"></a><a name="index-org_002drefile_002dcache_002dclear-954"></a><br><dt><kbd>C-0 C-c C-w  </kbd><span class="roman">or</span><kbd>  C-u C-u C-u C-c C-w &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-refile-cache-clear</code><kbd>)</kbd><dd>
+  <p><a name="index-refiling-notes-940" id=
+  "index-refiling-notes-940"></a> When reviewing the captured data,
+  you may want to refile some of the entries into a different list,
+  for example into a project. Cutting, finding the right location,
+  and then pasting the note is cumbersome. To simplify this
+  process, you can use the following special command: <a name=
+  "index-C_002dc-C_002dw-941" id="index-C_002dc-C_002dw-941"></a>
+  <a name="index-org_002drefile-942" id=
+  "index-org_002drefile-942"></a></p>
 
-     <p>Clear the target cache.  Caching of refile targets can be turned on by
-setting <code>org-refile-use-cache</code>.  To make the command see new possible
-targets, you have to clear the cache with this command. 
-</dl>
+  <dl>
+    <dt><kbd>C-c C-w
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-refile</code><kbd>)</kbd></dt>
 
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> with corresponding
-<code>#+STARTUP</code> keywords <code>logrefile</code>, <code>lognoterefile</code>,
-and <code>nologrefile</code></p>
+    <dd><a name="index-org_002dreverse_002dnote_002dorder-943" id=
+    "index-org_002dreverse_002dnote_002dorder-943"></a><a name=
+    "index-org_002drefile_002dtargets-944" id=
+    "index-org_002drefile_002dtargets-944"></a><a name=
+    "index-org_002drefile_002duse_002doutline_002dpath-945" id=
+    "index-org_002drefile_002duse_002doutline_002dpath-945"></a><a name="index-org_002doutline_002dpath_002dcomplete_002din_002dsteps-946"
+    id=
+    "index-org_002doutline_002dpath_002dcomplete_002din_002dsteps-946"></a><a name="index-org_002drefile_002dallow_002dcreating_002dparent_002dnodes-947"
+    id=
+    "index-org_002drefile_002dallow_002dcreating_002dparent_002dnodes-947"></a><a name="index-org_002dlog_002drefile-948"
+    id="index-org_002dlog_002drefile-948"></a><a name=
+    "index-org_002drefile_002duse_002dcache-949" id=
+    "index-org_002drefile_002duse_002dcache-949"></a>Refile the
+    entry or region at point. This command offers possible
+    locations for refiling the entry and lets you select one with
+    completion. The item (or all items in the region) is filed
+    below the target heading as a subitem. Depending on
+    <code>org-reverse-note-order</code>, it will be either the
+    first or last subitem.<br />
+    By default, all level 1 headlines in the current buffer are
+    considered to be targets, but you can have more complex
+    definitions across a number of files. See the variable
+    <code>org-refile-targets</code> for details. If you would like
+    to select a location via a file-path-like completion along the
+    outline path, see the variables
+    <code>org-refile-use-outline-path</code> and
+    <code>org-outline-path-complete-in-steps</code>. If you would
+    like to be able to create new nodes as new parents for refiling
+    on the fly, check the variable
+    <code>org-refile-allow-creating-parent-nodes</code>. When the
+    variable <code>org-log-refile</code><a rel="footnote" href=
+    "#fn-1" name="fnd-1" id="fnd-1"><sup>1</sup></a> is set, a time
+    stamp or a note will be recorded when an entry has been
+    refiled. <a name="index-C_002du-C_002dc-C_002dw-950" id=
+    "index-C_002du-C_002dc-C_002dw-950"></a><br /></dd>
 
-   <hr></div>
+    <dt><kbd>C-u C-c C-w</kbd></dt>
 
-   </body></html>
+    <dd>Use the refile interface to jump to a heading. <a name=
+    "index-C_002du-C_002du-C_002dc-C_002dw-951" id=
+    "index-C_002du-C_002du-C_002dc-C_002dw-951"></a><a name=
+    "index-org_002drefile_002dgoto_002dlast_002dstored-952" id=
+    "index-org_002drefile_002dgoto_002dlast_002dstored-952"></a><br />
+    </dd>
 
+    <dt><kbd>C-u C-u C-c C-w
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-refile-goto-last-stored</code><kbd>)</kbd></dt>
+
+    <dd>Jump to the location where <code>org-refile</code> last
+    moved a tree to.<br /></dd>
+
+    <dt><kbd>C-2 C-c C-w</kbd></dt>
+
+    <dd>Refile as the child of the item currently being
+    clocked.<br /></dd>
+
+    <dt><kbd>C-0 C-c C-w</kbd> <span class="roman">or</span>
+    <kbd>C-u C-u C-u C-c C-w</kbd></dt>
+
+    <dd><a name="index-C_002d0-C_002dc-C_002dw-953" id=
+    "index-C_002d0-C_002dc-C_002dw-953"></a><a name=
+    "index-org_002drefile_002dcache_002dclear-954" id=
+    "index-org_002drefile_002dcache_002dclear-954"></a><br /></dd>
+
+    <dt><kbd>C-0 C-c C-w</kbd> <span class="roman">or</span>
+    <kbd>C-u C-u C-u C-c C-w
+    &nbsp;&nbsp;&nbsp;&nbsp;(</kbd><code>org-refile-cache-clear</code><kbd>)</kbd></dt>
+
+    <dd>
+      <p>Clear the target cache. Caching of refile targets can be
+      turned on by setting <code>org-refile-use-cache</code>. To
+      make the command see new possible targets, you have to clear
+      the cache with this command.</p>
+    </dd>
+  </dl>
+
+  <div class="footnote">
+    <hr />
+
+    <h4>Footnotes</h4>
+
+    <p class="footnote"><small>[<a name="fn-1" href="#fnd-1" id=
+    "fn-1">1</a>]</small> with corresponding <code>#+STARTUP</code>
+    keywords <code>logrefile</code>, <code>lognoterefile</code>,
+    and <code>nologrefile</code></p>
+    <hr />
+  </div>
+</body>
+</html>

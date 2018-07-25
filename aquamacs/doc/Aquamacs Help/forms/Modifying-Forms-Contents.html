@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Modifying Forms Contents - Forms Mode User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Forms Mode User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Format-Description.html#Format-Description" title="Format Description">
-<link rel="next" href="Miscellaneous.html#Miscellaneous" title="Miscellaneous">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Modifying Forms Contents - Forms Mode User's
+  Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Forms Mode User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="prev" href=
+  "Format-Description.html#Format-Description" title=
+  "Format Description" />
+  <link rel="next" href="Miscellaneous.html#Miscellaneous" title=
+  "Miscellaneous" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Forms mode, a form-editing major mode for GNU Emacs.
 
 Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
@@ -26,8 +36,10 @@ Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,40 +49,49 @@ Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Modifying-Forms-Contents"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Miscellaneous.html#Miscellaneous">Miscellaneous</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Format-Description.html#Format-Description">Format Description</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Modifying-Forms-Contents" id=
+    "Modifying-Forms-Contents"></a>
 
-<h2 class="chapter">7 Modifying The Forms Contents</h2>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Miscellaneous.html#Miscellaneous">Miscellaneous</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Format-Description.html#Format-Description">Format
+    Description</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "index.html#Top">Top</a></p>
+    <hr />
+  </div>
 
-<p>If <code>forms-read-only</code> is <code>nil</code>, the user can modify the fields
-and records of the database.
+  <h2 class="chapter">7 Modifying The Forms Contents</h2>
 
-   <p>All normal editing commands are available for editing the contents of the
-displayed record.  You cannot delete or modify the fixed, explanatory
-text that comes from string formatting elements, but you can modify the
-actual field contents.
+  <p>If <code>forms-read-only</code> is <code>nil</code>, the user
+  can modify the fields and records of the database.</p>
 
-   <p>If the variable <code>forms-modified-record-filter</code> is non-<code>nil</code>,
-it is called as a function before the new data is written to the data
-file.  The function receives one argument, a vector that contains the
-contents of the fields of the record.
+  <p>All normal editing commands are available for editing the
+  contents of the displayed record. You cannot delete or modify the
+  fixed, explanatory text that comes from string formatting
+  elements, but you can modify the actual field contents.</p>
 
-   <p>The function can refer to fields with <code>aref</code> and modify them with
-<code>aset</code>.  The first field has number 1 (one); thus, element 0 of the
-vector is not used.  The function should return the same vector it was
-passed; the (possibly modified) contents of the vector determine what is
-actually written in the file.  Here is an example:
+  <p>If the variable <code>forms-modified-record-filter</code> is
+  non-<code>nil</code>, it is called as a function before the new
+  data is written to the data file. The function receives one
+  argument, a vector that contains the contents of the fields of
+  the record.</p>
 
-<pre class="example">     (defun my-modified-record-filter (record)
+  <p>The function can refer to fields with <code>aref</code> and
+  modify them with <code>aset</code>. The first field has number 1
+  (one); thus, element 0 of the vector is not used. The function
+  should return the same vector it was passed; the (possibly
+  modified) contents of the vector determine what is actually
+  written in the file. Here is an example:</p>
+  <pre class="example">
+     (defun my-modified-record-filter (record)
        ;; <span class="roman">Modify second field.</span>
        (aset record 2 (current-time-string))
        ;; <span class="roman">Return the field vector.</span>
@@ -78,19 +99,21 @@ actually written in the file.  Here is an example:
      
      (setq forms-modified-record-filter 'my-modified-record-filter)
 </pre>
-   <p>If the variable <code>forms-new-record-filter</code> is non-<code>nil</code>, its
-value is a function to be called to fill in default values for the
-fields of a new record.  The function is passed a vector of empty
-strings, one for each field; it should return the same vector, with
-the desired field values stored in it.  Fields are numbered starting
-from 1 (one).  Example:
 
-<pre class="example">     (defun my-new-record-filter (fields)
+  <p>If the variable <code>forms-new-record-filter</code> is
+  non-<code>nil</code>, its value is a function to be called to
+  fill in default values for the fields of a new record. The
+  function is passed a vector of empty strings, one for each field;
+  it should return the same vector, with the desired field values
+  stored in it. Fields are numbered starting from 1 (one).
+  Example:</p>
+  <pre class="example">
+     (defun my-new-record-filter (fields)
        (aset fields 5 (login-name))
        (aset fields 1 (current-time-string))
        fields)
      
      (setq forms-new-record-filter 'my-new-record-filter)
 </pre>
-   </body></html>
-
+</body>
+</html>

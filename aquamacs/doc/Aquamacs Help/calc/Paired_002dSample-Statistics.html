@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Paired-Sample Statistics - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Statistical-Operations.html#Statistical-Operations" title="Statistical Operations">
-<link rel="prev" href="Single_002dVariable-Statistics.html#Single_002dVariable-Statistics" title="Single-Variable Statistics">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Paired-Sample Statistics - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Statistical-Operations.html#Statistical-Operations" title=
+  "Statistical Operations" />
+  <link rel="prev" href=
+  "Single_002dVariable-Statistics.html#Single_002dVariable-Statistics"
+  title="Single-Variable Statistics" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -28,8 +38,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -39,53 +51,79 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Paired-Sample-Statistics"></a>
-<a name="Paired_002dSample-Statistics"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Single_002dVariable-Statistics.html#Single_002dVariable-Statistics">Single-Variable Statistics</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Statistical-Operations.html#Statistical-Operations">Statistical Operations</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Paired-Sample-Statistics" id=
+    "Paired-Sample-Statistics"></a> <a name=
+    "Paired_002dSample-Statistics" id=
+    "Paired_002dSample-Statistics"></a>
 
-<h4 class="subsection">10.7.2 Paired-Sample Statistics</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Single_002dVariable-Statistics.html#Single_002dVariable-Statistics">Single-Variable
+    Statistics</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Statistical-Operations.html#Statistical-Operations">Statistical
+    Operations</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">The functions in this section take two arguments, which must be
-vectors of equal size.  The vectors are each flattened in the same
-way as by the single-variable statistical functions.  Given a numeric
-prefix argument of 1, these functions instead take one object from
-the stack, which must be an
-<!-- @math{N\times2} -->
-Nx2
-matrix of data values.  Once again, variable names can be used in place
-of actual vectors and matrices.
+  <h4 class="subsection">10.7.2 Paired-Sample Statistics</h4>
 
-   <p><a name="index-u-C-1477"></a><a name="index-calc_002dvector_002dcovariance-1478"></a><a name="index-vcov-1479"></a><a name="index-Covariance-1480"></a>The <kbd>u C</kbd> (<code>calc-vector-covariance</code>) [<code>vcov</code>] command
-computes the sample covariance of two vectors.  The covariance
-of vectors <var>x</var> and <var>y</var> is the sum of the products of the
-differences between the elements of <var>x</var> and the mean of <var>x</var>
-times the differences between the corresponding elements of <var>y</var>
-and the mean of <var>y</var>, all divided by &lsquo;<samp><span class="samp">N-1</span></samp>&rsquo;.  Note that
-the variance of a vector is just the covariance of the vector
-with itself.  Once again, if the inputs are error forms the
-errors are used as weight factors.  If both <var>x</var> and <var>y</var>
-are composed of error forms, the error for a given data point
-is taken as the square root of the sum of the squares of the two
-input errors.
+  <p class="noindent">The functions in this section take two
+  arguments, which must be vectors of equal size. The vectors are
+  each flattened in the same way as by the single-variable
+  statistical functions. Given a numeric prefix argument of 1,
+  these functions instead take one object from the stack, which
+  must be an <!-- @math{N\times2} -->
+  Nx2 matrix of data values. Once again, variable names can be used
+  in place of actual vectors and matrices.</p>
 
-   <p><a name="index-I-u-C-1481"></a><a name="index-calc_002dvector_002dpop_002dcovariance-1482"></a><a name="index-vpcov-1483"></a>The <kbd>I u C</kbd> (<code>calc-vector-pop-covariance</code>) [<code>vpcov</code>]
-command computes the population covariance, which is the same as the
-sample covariance computed by <kbd>u C</kbd> except dividing by &lsquo;<samp><span class="samp">N</span></samp>&rsquo;
-instead of &lsquo;<samp><span class="samp">N-1</span></samp>&rsquo;.
+  <p><a name="index-u-C-1477" id="index-u-C-1477"></a><a name=
+  "index-calc_002dvector_002dcovariance-1478" id=
+  "index-calc_002dvector_002dcovariance-1478"></a><a name=
+  "index-vcov-1479" id="index-vcov-1479"></a><a name=
+  "index-Covariance-1480" id="index-Covariance-1480"></a>The <kbd>u
+  C</kbd> (<code>calc-vector-covariance</code>) [<code>vcov</code>]
+  command computes the sample covariance of two vectors. The
+  covariance of vectors <var>x</var> and <var>y</var> is the sum of
+  the products of the differences between the elements of
+  <var>x</var> and the mean of <var>x</var> times the differences
+  between the corresponding elements of <var>y</var> and the mean
+  of <var>y</var>, all divided by &lsquo;<samp><span class=
+  "samp">N-1</span></samp>&rsquo;. Note that the variance of a
+  vector is just the covariance of the vector with itself. Once
+  again, if the inputs are error forms the errors are used as
+  weight factors. If both <var>x</var> and <var>y</var> are
+  composed of error forms, the error for a given data point is
+  taken as the square root of the sum of the squares of the two
+  input errors.</p>
 
-   <p><a name="index-H-u-C-1484"></a><a name="index-calc_002dvector_002dcorrelation-1485"></a><a name="index-vcorr-1486"></a><a name="index-Correlation-coefficient-1487"></a><a name="index-Linear-correlation-1488"></a>The <kbd>H u C</kbd> (<code>calc-vector-correlation</code>) [<code>vcorr</code>]
-command computes the linear correlation coefficient of two vectors. 
-This is defined by the covariance of the vectors divided by the
-product of their standard deviations.  (There is no difference
-between sample or population statistics here.)
+  <p><a name="index-I-u-C-1481" id="index-I-u-C-1481"></a><a name=
+  "index-calc_002dvector_002dpop_002dcovariance-1482" id=
+  "index-calc_002dvector_002dpop_002dcovariance-1482"></a><a name=
+  "index-vpcov-1483" id="index-vpcov-1483"></a>The <kbd>I u C</kbd>
+  (<code>calc-vector-pop-covariance</code>) [<code>vpcov</code>]
+  command computes the population covariance, which is the same as
+  the sample covariance computed by <kbd>u C</kbd> except dividing
+  by &lsquo;<samp><span class="samp">N</span></samp>&rsquo; instead
+  of &lsquo;<samp><span class="samp">N-1</span></samp>&rsquo;.</p>
 
-   </body></html>
-
+  <p><a name="index-H-u-C-1484" id="index-H-u-C-1484"></a><a name=
+  "index-calc_002dvector_002dcorrelation-1485" id=
+  "index-calc_002dvector_002dcorrelation-1485"></a><a name=
+  "index-vcorr-1486" id="index-vcorr-1486"></a><a name=
+  "index-Correlation-coefficient-1487" id=
+  "index-Correlation-coefficient-1487"></a><a name=
+  "index-Linear-correlation-1488" id=
+  "index-Linear-correlation-1488"></a>The <kbd>H u C</kbd>
+  (<code>calc-vector-correlation</code>) [<code>vcorr</code>]
+  command computes the linear correlation coefficient of two
+  vectors. This is defined by the covariance of the vectors divided
+  by the product of their standard deviations. (There is no
+  difference between sample or population statistics here.)</p>
+</body>
+</html>

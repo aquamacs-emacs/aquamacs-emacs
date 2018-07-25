@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents the Semantic library and utilities.
 
 Copyright (C) 1999-2005, 2007, 2009-2016 Free Software
@@ -15,124 +17,170 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Semantic Manual: Analyzer Internals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Semantic Manual: Analyzer Internals">
-<meta name="keywords" content="Semantic Manual: Analyzer Internals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Semantic-Internals.html#Semantic-Internals" rel="up" title="Semantic Internals">
-<link href="Tools.html#Tools" rel="next" title="Tools">
-<link href="Semanticdb-Internals.html#Semanticdb-Internals" rel="prev" title="Semanticdb Internals">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Semantic Manual: Analyzer Internals</title>
+  <meta name="description" content=
+  "Semantic Manual: Analyzer Internals" />
+  <meta name="keywords" content=
+  "Semantic Manual: Analyzer Internals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Semantic-Internals.html#Semantic-Internals" rel="up"
+  title="Semantic Internals" />
+  <link href="Tools.html#Tools" rel="next" title="Tools" />
+  <link href="Semanticdb-Internals.html#Semanticdb-Internals" rel=
+  "prev" title="Semanticdb Internals" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Analyzer-Internals"></a>
-<div class="header">
-<p>
-Next: <a href="Tools.html#Tools" accesskey="n" rel="next">Tools</a>, Previous: <a href="Semanticdb-Internals.html#Semanticdb-Internals" accesskey="p" rel="prev">Semanticdb Internals</a>, Up: <a href="Semantic-Internals.html#Semantic-Internals" accesskey="u" rel="up">Semantic Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Analyzer-Internals-1"></a>
-<h3 class="section">3.4 Analyzer Internals</h3>
+<body lang="en" xml:lang="en">
+  <a name="Analyzer-Internals" id="Analyzer-Internals"></a>
 
-<p>The <i>Semantic</i> analyzer is a complex engine which has been broken
-down across several modules.  When the <i>Semantic</i> analyzer fails,
-start with <code>semantic-analyze-debug-assist</code>, then dive into some
-of these files.
-</p>
-<dl compact="compact">
-<dt><samp>semantic-analyze.el</samp></dt>
-<dd><p>The core analyzer for defining the <em>current context</em>.  The
-current context is an object that contains references to aspects of
-the local context including the current prefix, and a tag list
-defining what the prefix means.
-</p>
-</dd>
-<dt><samp>semantic-analyze-complete.el</samp></dt>
-<dd><p>Provides <code>semantic-analyze-possible-completions</code>.
-</p>
-</dd>
-<dt><samp>semantic-analyze-debug.el</samp></dt>
-<dd><p>The analyzer debugger.  Useful when attempting to get everything
-configured.
-</p>
-</dd>
-<dt><samp>semantic-analyze-fcn.el</samp></dt>
-<dd><p>Various support functions needed by the analyzer.
-</p>
-</dd>
-<dt><samp>semantic-ctxt.el</samp></dt>
-<dd><p>Local context parser.  Contains overloadable functions used to move
-around through different scopes, get local variables, and collect the
-current prefix used when doing completion.
-</p>
-</dd>
-<dt><samp>semantic-scope.el</samp></dt>
-<dd><p>Calculate <em>scope</em> for a location in a buffer.  The scope includes
-local variables, and tag lists in scope for various reasons, such as
-C++ using statements.
-</p>
-</dd>
-<dt><samp>semanticdb-typecache.el</samp></dt>
-<dd><p>The typecache is part of <code>semanticdb</code>, but is used primarily by
-the analyzer to look up datatypes and complex names.  The typecache is
-bound across source files and builds a master lookup table for data
-type names.
-</p>
-</dd>
-<dt><samp>semantic-ia.el</samp></dt>
-<dd><p>Interactive Analyzer functions.  Simple routines that do completion or
-lookups based on the results from the Analyzer.  These routines are
-meant as examples for application writers, but are quite useful as
-they are.
-</p>
-</dd>
-<dt><samp>semantic-ia-sb.el</samp></dt>
-<dd><p>Speedbar support for the analyzer, displaying context info, and
-completion lists.
-</p>
-</dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Tools.html#Tools" accesskey="n" rel=
+    "next">Tools</a>, Previous: <a href=
+    "Semanticdb-Internals.html#Semanticdb-Internals" accesskey="p"
+    rel="prev">Semanticdb Internals</a>, Up: <a href=
+    "Semantic-Internals.html#Semantic-Internals" accesskey="u" rel=
+    "up">Semantic Internals</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Analyzer-Internals-1" id="Analyzer-Internals-1"></a>
 
+  <h3 class="section">3.4 Analyzer Internals</h3>
 
+  <p>The <i>Semantic</i> analyzer is a complex engine which has
+  been broken down across several modules. When the <i>Semantic</i>
+  analyzer fails, start with
+  <code>semantic-analyze-debug-assist</code>, then dive into some
+  of these files.</p>
 
+  <dl compact="compact">
+    <dt><samp>semantic-analyze.el</samp></dt>
 
+    <dd>
+      <p>The core analyzer for defining the <em>current
+      context</em>. The current context is an object that contains
+      references to aspects of the local context including the
+      current prefix, and a tag list defining what the prefix
+      means.</p>
+    </dd>
+
+    <dt><samp>semantic-analyze-complete.el</samp></dt>
+
+    <dd>
+      <p>Provides
+      <code>semantic-analyze-possible-completions</code>.</p>
+    </dd>
+
+    <dt><samp>semantic-analyze-debug.el</samp></dt>
+
+    <dd>
+      <p>The analyzer debugger. Useful when attempting to get
+      everything configured.</p>
+    </dd>
+
+    <dt><samp>semantic-analyze-fcn.el</samp></dt>
+
+    <dd>
+      <p>Various support functions needed by the analyzer.</p>
+    </dd>
+
+    <dt><samp>semantic-ctxt.el</samp></dt>
+
+    <dd>
+      <p>Local context parser. Contains overloadable functions used
+      to move around through different scopes, get local variables,
+      and collect the current prefix used when doing
+      completion.</p>
+    </dd>
+
+    <dt><samp>semantic-scope.el</samp></dt>
+
+    <dd>
+      <p>Calculate <em>scope</em> for a location in a buffer. The
+      scope includes local variables, and tag lists in scope for
+      various reasons, such as C++ using statements.</p>
+    </dd>
+
+    <dt><samp>semanticdb-typecache.el</samp></dt>
+
+    <dd>
+      <p>The typecache is part of <code>semanticdb</code>, but is
+      used primarily by the analyzer to look up datatypes and
+      complex names. The typecache is bound across source files and
+      builds a master lookup table for data type names.</p>
+    </dd>
+
+    <dt><samp>semantic-ia.el</samp></dt>
+
+    <dd>
+      <p>Interactive Analyzer functions. Simple routines that do
+      completion or lookups based on the results from the Analyzer.
+      These routines are meant as examples for application writers,
+      but are quite useful as they are.</p>
+    </dd>
+
+    <dt><samp>semantic-ia-sb.el</samp></dt>
+
+    <dd>
+      <p>Speedbar support for the analyzer, displaying context
+      info, and completion lists.</p>
+    </dd>
+  </dl>
 </body>
 </html>

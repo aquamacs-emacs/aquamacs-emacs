@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Threading - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Summary-Buffer.html#Summary-Buffer" title="Summary Buffer">
-<link rel="prev" href="Limiting.html#Limiting" title="Limiting">
-<link rel="next" href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer" title="Sorting the Summary Buffer">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Threading - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Summary-Buffer.html#Summary-Buffer" title=
+  "Summary Buffer" />
+  <link rel="prev" href="Limiting.html#Limiting" title=
+  "Limiting" />
+  <link rel="next" href=
+  "Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer"
+  title="Sorting the Summary Buffer" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +36,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,59 +49,89 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Threading"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer">Sorting the Summary Buffer</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Limiting.html#Limiting">Limiting</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer.html#Summary-Buffer">Summary Buffer</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Threading" id="Threading"></a>
 
-<h3 class="section">3.9 Threading</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Sorting-the-Summary-Buffer.html#Sorting-the-Summary-Buffer">Sorting
+    the Summary Buffer</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href="Limiting.html#Limiting">Limiting</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Summary-Buffer.html#Summary-Buffer">Summary Buffer</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-threading-939"></a><a name="index-article-threading-940"></a>
-Gnus threads articles by default.  <dfn>To thread</dfn> is to put responses
-to articles directly after the articles they respond to&mdash;in a
-hierarchical fashion.
+  <h3 class="section">3.9 Threading</h3>
 
-   <p>Threading is done by looking at the <code>References</code> headers of the
-articles.  In a perfect world, this would be enough to build pretty
-trees, but unfortunately, the <code>References</code> header is often broken
-or simply missing.  Weird news propagation exacerbates the problem,
-so one has to employ other heuristics to get pleasing results.  A
-plethora of approaches exists, as detailed in horrible detail in
-<a href="Customizing-Threading.html#Customizing-Threading">Customizing Threading</a>.
+  <p><a name="index-threading-939" id=
+  "index-threading-939"></a><a name="index-article-threading-940"
+  id="index-article-threading-940"></a> Gnus threads articles by
+  default. <dfn>To thread</dfn> is to put responses to articles
+  directly after the articles they respond to&mdash;in a
+  hierarchical fashion.</p>
 
-   <p>First, a quick overview of the concepts:
+  <p>Threading is done by looking at the <code>References</code>
+  headers of the articles. In a perfect world, this would be enough
+  to build pretty trees, but unfortunately, the
+  <code>References</code> header is often broken or simply missing.
+  Weird news propagation exacerbates the problem, so one has to
+  employ other heuristics to get pleasing results. A plethora of
+  approaches exists, as detailed in horrible detail in <a href=
+  "Customizing-Threading.html#Customizing-Threading">Customizing
+  Threading</a>.</p>
 
-     <dl>
-<dt><dfn>root</dfn><dd>The top-most article in a thread; the first article in the thread.
+  <p>First, a quick overview of the concepts:</p>
 
-     <br><dt><dfn>thread</dfn><dd>A tree-like article structure.
+  <dl>
+    <dt><dfn>root</dfn></dt>
 
-     <br><dt><dfn>sub-thread</dfn><dd>A small(er) section of this tree-like structure.
+    <dd>The top-most article in a thread; the first article in the
+    thread.<br /></dd>
 
-     <br><dt><dfn>loose threads</dfn><dd>Threads often lose their roots due to article expiry, or due to the root
-already having been read in a previous session, and not displayed in the
-summary buffer.  We then typically have many sub-threads that really
-belong to one thread, but are without connecting roots.  These are
-called loose threads.
+    <dt><dfn>thread</dfn></dt>
 
-     <br><dt><dfn>thread gathering</dfn><dd>An attempt to gather loose threads into bigger threads.
+    <dd>A tree-like article structure.<br /></dd>
 
-     <br><dt><dfn>sparse threads</dfn><dd>A thread where the missing articles have been &ldquo;guessed&rdquo; at, and are
-displayed as empty lines in the summary buffer.
+    <dt><dfn>sub-thread</dfn></dt>
 
-   </dl>
+    <dd>A small(er) section of this tree-like structure.<br /></dd>
 
-<ul class="menu">
-<li><a accesskey="1" href="Customizing-Threading.html#Customizing-Threading">Customizing Threading</a>:        Variables you can change to affect the threading. 
-<li><a accesskey="2" href="Thread-Commands.html#Thread-Commands">Thread Commands</a>:              Thread based commands in the summary buffer. 
-</ul>
+    <dt><dfn>loose threads</dfn></dt>
 
-   </body></html>
+    <dd>Threads often lose their roots due to article expiry, or
+    due to the root already having been read in a previous session,
+    and not displayed in the summary buffer. We then typically have
+    many sub-threads that really belong to one thread, but are
+    without connecting roots. These are called loose
+    threads.<br /></dd>
 
+    <dt><dfn>thread gathering</dfn></dt>
+
+    <dd>An attempt to gather loose threads into bigger
+    threads.<br /></dd>
+
+    <dt><dfn>sparse threads</dfn></dt>
+
+    <dd>A thread where the missing articles have been
+    &ldquo;guessed&rdquo; at, and are displayed as empty lines in
+    the summary buffer.</dd>
+  </dl>
+
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Customizing-Threading.html#Customizing-Threading">Customizing
+    Threading</a>: Variables you can change to affect the
+    threading.</li>
+
+    <li><a accesskey="2" href=
+    "Thread-Commands.html#Thread-Commands">Thread Commands</a>:
+    Thread based commands in the summary buffer.</li>
+  </ul>
+</body>
+</html>

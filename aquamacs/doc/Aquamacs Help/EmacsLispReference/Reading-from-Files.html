@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,130 +19,195 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Reading from Files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Reading from Files">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Reading from Files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="Writing-to-Files.html#Writing-to-Files" rel="next" title="Writing to Files">
-<link href="Saving-Buffers.html#Saving-Buffers" rel="prev" title="Saving Buffers">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Reading from
+  Files</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Reading from Files" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Reading from Files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href="Writing-to-Files.html#Writing-to-Files" rel="next"
+  title="Writing to Files" />
+  <link href="Saving-Buffers.html#Saving-Buffers" rel="prev" title=
+  "Saving Buffers" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Reading-from-Files" id="Reading-from-Files"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Writing-to-Files.html#Writing-to-Files"
+    accesskey="n" rel="next">Writing to Files</a>, Previous:
+    <a href="Saving-Buffers.html#Saving-Buffers" accesskey="p" rel=
+    "prev">Saving Buffers</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Reading-from-Files-1" id="Reading-from-Files-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Reading-from-Files"></a>
-<div class="header">
-<p>
-Next: <a href="Writing-to-Files.html#Writing-to-Files" accesskey="n" rel="next">Writing to Files</a>, Previous: <a href="Saving-Buffers.html#Saving-Buffers" accesskey="p" rel="prev">Saving Buffers</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Reading-from-Files-1"></a>
-<h3 class="section">24.3 Reading from Files</h3>
-<a name="index-reading-from-files"></a>
+  <h3 class="section">24.3 Reading from Files</h3><a name=
+  "index-reading-from-files" id="index-reading-from-files"></a>
 
-<p>To copy the contents of a file into a buffer, use the function
-<code>insert-file-contents</code>.  (Don&rsquo;t use the command
-<code>insert-file</code> in a Lisp program, as that sets the mark.)
-</p>
-<dl>
-<dt><a name="index-insert_002dfile_002dcontents"></a>Function: <strong>insert-file-contents</strong> <em>filename &amp;optional visit beg end replace</em></dt>
-<dd><p>This function inserts the contents of file <var>filename</var> into the
-current buffer after point.  It returns a list of the absolute file name
-and the length of the data inserted.  An error is signaled if
-<var>filename</var> is not the name of a file that can be read.
-</p>
-<p>This function checks the file contents against the defined file
-formats, and converts the file contents if appropriate and also calls
-the functions in the list <code>after-insert-file-functions</code>.
-See <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>.  Normally, one of the functions in the
-<code>after-insert-file-functions</code> list determines the coding system
-(see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>) used for decoding the file&rsquo;s contents,
-including end-of-line conversion.  However, if the file contains null
-bytes, it is by default visited without any code conversions.
-See <a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">inhibit-null-byte-detection</a>.
-</p>
-<p>If <var>visit</var> is non-<code>nil</code>, this function additionally marks the
-buffer as unmodified and sets up various fields in the buffer so that it
-is visiting the file <var>filename</var>: these include the buffer&rsquo;s visited
-file name and its last save file modtime.  This feature is used by
-<code>find-file-noselect</code> and you probably should not use it yourself.
-</p>
-<p>If <var>beg</var> and <var>end</var> are non-<code>nil</code>, they should be numbers
-that are byte offsets specifying the portion of the file to insert.
-In this case, <var>visit</var> must be <code>nil</code>.  For example,
-</p>
-<div class="example">
-<pre class="example">(insert-file-contents filename nil 0 500)
-</pre></div>
+  <p>To copy the contents of a file into a buffer, use the function
+  <code>insert-file-contents</code>. (Don&rsquo;t use the command
+  <code>insert-file</code> in a Lisp program, as that sets the
+  mark.)</p>
 
-<p>inserts the first 500 characters of a file.
-</p>
-<p>If the argument <var>replace</var> is non-<code>nil</code>, it means to replace the
-contents of the buffer (actually, just the accessible portion) with the
-contents of the file.  This is better than simply deleting the buffer
-contents and inserting the whole file, because (1) it preserves some
-marker positions and (2) it puts less data in the undo list.
-</p>
-<p>It is possible to read a special file (such as a FIFO or an I/O device)
-with <code>insert-file-contents</code>, as long as <var>replace</var> and
-<var>visit</var> are <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-insert_002dfile_002dcontents" id=
+    "index-insert_002dfile_002dcontents"></a>Function:
+    <strong>insert-file-contents</strong> <em>filename
+    &amp;optional visit beg end replace</em></dt>
 
-<dl>
-<dt><a name="index-insert_002dfile_002dcontents_002dliterally"></a>Function: <strong>insert-file-contents-literally</strong> <em>filename &amp;optional visit beg end replace</em></dt>
-<dd><p>This function works like <code>insert-file-contents</code> except that it
-does not run <code>find-file-hook</code>, and does not do format decoding,
-character code conversion, automatic uncompression, and so on.
-</p></dd></dl>
+    <dd>
+      <p>This function inserts the contents of file
+      <var>filename</var> into the current buffer after point. It
+      returns a list of the absolute file name and the length of
+      the data inserted. An error is signaled if
+      <var>filename</var> is not the name of a file that can be
+      read.</p>
 
-<p>If you want to pass a file name to another process so that another
-program can read the file, use the function <code>file-local-copy</code>; see
-<a href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Writing-to-Files.html#Writing-to-Files" accesskey="n" rel="next">Writing to Files</a>, Previous: <a href="Saving-Buffers.html#Saving-Buffers" accesskey="p" rel="prev">Saving Buffers</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This function checks the file contents against the defined
+      file formats, and converts the file contents if appropriate
+      and also calls the functions in the list
+      <code>after-insert-file-functions</code>. See <a href=
+      "Format-Conversion.html#Format-Conversion">Format
+      Conversion</a>. Normally, one of the functions in the
+      <code>after-insert-file-functions</code> list determines the
+      coding system (see <a href=
+      "Coding-Systems.html#Coding-Systems">Coding Systems</a>) used
+      for decoding the file&rsquo;s contents, including end-of-line
+      conversion. However, if the file contains null bytes, it is
+      by default visited without any code conversions. See <a href=
+      "Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">inhibit-null-byte-detection</a>.</p>
 
+      <p>If <var>visit</var> is non-<code>nil</code>, this function
+      additionally marks the buffer as unmodified and sets up
+      various fields in the buffer so that it is visiting the file
+      <var>filename</var>: these include the buffer&rsquo;s visited
+      file name and its last save file modtime. This feature is
+      used by <code>find-file-noselect</code> and you probably
+      should not use it yourself.</p>
 
+      <p>If <var>beg</var> and <var>end</var> are
+      non-<code>nil</code>, they should be numbers that are byte
+      offsets specifying the portion of the file to insert. In this
+      case, <var>visit</var> must be <code>nil</code>. For
+      example,</p>
 
+      <div class="example">
+        <pre class="example">
+(insert-file-contents filename nil 0 500)
+</pre>
+      </div>
+
+      <p>inserts the first 500 characters of a file.</p>
+
+      <p>If the argument <var>replace</var> is
+      non-<code>nil</code>, it means to replace the contents of the
+      buffer (actually, just the accessible portion) with the
+      contents of the file. This is better than simply deleting the
+      buffer contents and inserting the whole file, because (1) it
+      preserves some marker positions and (2) it puts less data in
+      the undo list.</p>
+
+      <p>It is possible to read a special file (such as a FIFO or
+      an I/O device) with <code>insert-file-contents</code>, as
+      long as <var>replace</var> and <var>visit</var> are
+      <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-insert_002dfile_002dcontents_002dliterally"
+    id=
+    "index-insert_002dfile_002dcontents_002dliterally"></a>Function:
+    <strong>insert-file-contents-literally</strong> <em>filename
+    &amp;optional visit beg end replace</em></dt>
+
+    <dd>
+      <p>This function works like <code>insert-file-contents</code>
+      except that it does not run <code>find-file-hook</code>, and
+      does not do format decoding, character code conversion,
+      automatic uncompression, and so on.</p>
+    </dd>
+  </dl>
+
+  <p>If you want to pass a file name to another process so that
+  another program can read the file, use the function
+  <code>file-local-copy</code>; see <a href=
+  "Magic-File-Names.html#Magic-File-Names">Magic File
+  Names</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Writing-to-Files.html#Writing-to-Files"
+    accesskey="n" rel="next">Writing to Files</a>, Previous:
+    <a href="Saving-Buffers.html#Saving-Buffers" accesskey="p" rel=
+    "prev">Saving Buffers</a>, Up: <a href="Files.html#Files"
+    accesskey="u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

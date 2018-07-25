@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,101 +19,135 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Properties in Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Properties in Mode">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Properties in Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mode-Line-Format.html#Mode-Line-Format" rel="up" title="Mode Line Format">
-<link href="Header-Lines.html#Header-Lines" rel="next" title="Header Lines">
-<link href="_0025_002dConstructs.html#g_t_0025_002dConstructs" rel="prev" title="%-Constructs">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Properties in
+  Mode</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Properties in Mode" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Properties in Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mode-Line-Format.html#Mode-Line-Format" rel="up"
+  title="Mode Line Format" />
+  <link href="Header-Lines.html#Header-Lines" rel="next" title=
+  "Header Lines" />
+  <link href="_0025_002dConstructs.html#g_t_0025_002dConstructs"
+  rel="prev" title="%-Constructs" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Properties-in-Mode" id="Properties-in-Mode"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Header-Lines.html#Header-Lines" accesskey="n"
+    rel="next">Header Lines</a>, Previous: <a href=
+    "_0025_002dConstructs.html#g_t_0025_002dConstructs" accesskey=
+    "p" rel="prev">%-Constructs</a>, Up: <a href=
+    "Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel=
+    "up">Mode Line Format</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Properties-in-the-Mode-Line" id=
+  "Properties-in-the-Mode-Line"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Properties-in-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="Header-Lines.html#Header-Lines" accesskey="n" rel="next">Header Lines</a>, Previous: <a href="_0025_002dConstructs.html#g_t_0025_002dConstructs" accesskey="p" rel="prev">%-Constructs</a>, Up: <a href="Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel="up">Mode Line Format</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Properties-in-the-Mode-Line"></a>
-<h4 class="subsection">22.4.6 Properties in the Mode Line</h4>
-<a name="index-text-properties-in-the-mode-line"></a>
+  <h4 class="subsection">22.4.6 Properties in the Mode
+  Line</h4><a name="index-text-properties-in-the-mode-line" id=
+  "index-text-properties-in-the-mode-line"></a>
 
-<p>Certain text properties are meaningful in the
-mode line.  The <code>face</code> property affects the appearance of text; the
-<code>help-echo</code> property associates help strings with the text, and
-<code>keymap</code> can make the text mouse-sensitive.
-</p>
-<p>There are four ways to specify text properties for text in the mode
-line:
-</p>
-<ol>
-<li> Put a string with a text property directly into the mode line data
-structure.
+  <p>Certain text properties are meaningful in the mode line. The
+  <code>face</code> property affects the appearance of text; the
+  <code>help-echo</code> property associates help strings with the
+  text, and <code>keymap</code> can make the text
+  mouse-sensitive.</p>
 
-</li><li> Put a text property on a mode line %-construct such as &lsquo;<samp>%12b</samp>&rsquo;; then
-the expansion of the %-construct will have that same text property.
+  <p>There are four ways to specify text properties for text in the
+  mode line:</p>
 
-</li><li> Use a <code>(:propertize <var>elt</var> <var>props</var>&hellip;)</code> construct to
-give <var>elt</var> a text property specified by <var>props</var>.
+  <ol>
+    <li>Put a string with a text property directly into the mode
+    line data structure.</li>
 
-</li><li> Use a list containing <code>:eval <var>form</var></code> in the mode line data
-structure, and make <var>form</var> evaluate to a string that has a text
-property.
-</li></ol>
+    <li>Put a text property on a mode line %-construct such as
+    &lsquo;<samp>%12b</samp>&rsquo;; then the expansion of the
+    %-construct will have that same text property.</li>
 
-<p>You can use the <code>keymap</code> property to specify a keymap.  This
-keymap only takes real effect for mouse clicks; binding character keys
-and function keys to it has no effect, since it is impossible to move
-point into the mode line.
-</p>
-<p>When the mode line refers to a variable which does not have a
-non-<code>nil</code> <code>risky-local-variable</code> property, any text
-properties given or specified within that variable&rsquo;s values are
-ignored.  This is because such properties could otherwise specify
-functions to be called, and those functions could come from file
-local variables.
-</p>
+    <li>Use a <code>(:propertize <var>elt</var>
+    <var>props</var>&hellip;)</code> construct to give
+    <var>elt</var> a text property specified by
+    <var>props</var>.</li>
 
+    <li>Use a list containing <code>:eval <var>form</var></code> in
+    the mode line data structure, and make <var>form</var> evaluate
+    to a string that has a text property.</li>
+  </ol>
 
+  <p>You can use the <code>keymap</code> property to specify a
+  keymap. This keymap only takes real effect for mouse clicks;
+  binding character keys and function keys to it has no effect,
+  since it is impossible to move point into the mode line.</p>
 
+  <p>When the mode line refers to a variable which does not have a
+  non-<code>nil</code> <code>risky-local-variable</code> property,
+  any text properties given or specified within that
+  variable&rsquo;s values are ignored. This is because such
+  properties could otherwise specify functions to be called, and
+  those functions could come from file local variables.</p>
 </body>
 </html>

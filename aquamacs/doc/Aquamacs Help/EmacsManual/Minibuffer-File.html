@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,139 +20,198 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Minibuffer File</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Minibuffer File">
-<meta name="keywords" content="GNU Emacs Manual: Minibuffer File">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Minibuffer.html#Minibuffer" rel="up" title="Minibuffer">
-<link href="Minibuffer-Edit.html#Minibuffer-Edit" rel="next" title="Minibuffer Edit">
-<link href="Basic-Minibuffer.html#Basic-Minibuffer" rel="prev" title="Basic Minibuffer">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Minibuffer File</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Minibuffer File" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Minibuffer File" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Minibuffer.html#Minibuffer" rel="up" title=
+  "Minibuffer" />
+  <link href="Minibuffer-Edit.html#Minibuffer-Edit" rel="next"
+  title="Minibuffer Edit" />
+  <link href="Basic-Minibuffer.html#Basic-Minibuffer" rel="prev"
+  title="Basic Minibuffer" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Minibuffer-File" id="Minibuffer-File"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Minibuffer-Edit.html#Minibuffer-Edit"
+    accesskey="n" rel="next">Minibuffer Edit</a>, Previous:
+    <a href="Basic-Minibuffer.html#Basic-Minibuffer" accesskey="p"
+    rel="prev">Basic Minibuffer</a>, Up: <a href=
+    "Minibuffer.html#Minibuffer" accesskey="u" rel=
+    "up">Minibuffer</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Minibuffers-for-File-Names" id=
+  "Minibuffers-for-File-Names"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Minibuffer-File"></a>
-<div class="header">
-<p>
-Next: <a href="Minibuffer-Edit.html#Minibuffer-Edit" accesskey="n" rel="next">Minibuffer Edit</a>, Previous: <a href="Basic-Minibuffer.html#Basic-Minibuffer" accesskey="p" rel="prev">Basic Minibuffer</a>, Up: <a href="Minibuffer.html#Minibuffer" accesskey="u" rel="up">Minibuffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Minibuffers-for-File-Names"></a>
-<h3 class="section">8.2 Minibuffers for File Names</h3>
+  <h3 class="section">8.2 Minibuffers for File Names</h3><a name=
+  "index-default-directory" id="index-default-directory"></a>
 
-<a name="index-default-directory"></a>
-<p>Commands such as <kbd>C-x C-f</kbd> (<code>find-file</code>) use the minibuffer
-to read a file name argument (see <a href="Basic-Files.html#Basic-Files">Basic Files</a>).  When the
-minibuffer is used to read a file name, it typically starts out with
-some initial text ending in a slash.  This is the <em>default
-directory</em>.  For example, it may start out like this:
-</p>
-<div class="example">
-<pre class="example">Find file: /u2/emacs/src/
-</pre></div>
+  <p>Commands such as <kbd>C-x C-f</kbd> (<code>find-file</code>)
+  use the minibuffer to read a file name argument (see <a href=
+  "Basic-Files.html#Basic-Files">Basic Files</a>). When the
+  minibuffer is used to read a file name, it typically starts out
+  with some initial text ending in a slash. This is the <em>default
+  directory</em>. For example, it may start out like this:</p>
 
-<p>Here, &lsquo;<samp>Find file: </samp>&rsquo; is the prompt and &lsquo;<samp>/u2/emacs/src/</samp>&rsquo; is
-the default directory.  If you now type <kbd>buffer.c</kbd> as input, that
-specifies the file <samp>/u2/emacs/src/buffer.c</samp>.  See <a href="File-Names.html#File-Names">File Names</a>,
-for information about the default directory.
-</p>
-<p>You can specify the parent directory with <samp>..</samp>:
-<samp>/a/b/../foo.el</samp> is equivalent to <samp>/a/foo.el</samp>.
-Alternatively, you can use <kbd>M-<span class="key">DEL</span></kbd> to kill directory names
-backwards (see <a href="Words.html#Words">Words</a>).
-</p>
-<p>To specify a file in a completely different directory, you can kill
-the entire default with <kbd>C-a C-k</kbd> (see <a href="Minibuffer-Edit.html#Minibuffer-Edit">Minibuffer Edit</a>).
-Alternatively, you can ignore the default, and enter an absolute file
-name starting with a slash or a tilde after the default directory.
-For example, you can specify <samp>/etc/termcap</samp> as follows:
-</p>
-<div class="example">
-<pre class="example">Find file: /u2/emacs/src//etc/termcap
-</pre></div>
+  <div class="example">
+    <pre class="example">
+Find file: /u2/emacs/src/
+</pre>
+  </div>
 
-<a name="index-_002f_002f-in-file-name"></a>
-<a name="index-double-slash-in-file-name"></a>
-<a name="index-slashes-repeated-in-file-name"></a>
-<a name="index-file_002dname_002dshadow_002dmode"></a>
-<p>A double slash causes Emacs to ignore everything before the
-second slash in the pair.  In the example above,
-<samp>/u2/emacs/src/</samp> is ignored, so the argument you supplied is
-<samp>/etc/termcap</samp>.  The ignored part of the file name is dimmed if
-the terminal allows it.  (To disable this dimming, turn off File Name
-Shadow mode with the command <kbd>M-x file-name-shadow-mode</kbd>.)
-</p>
-<a name="index-home-directory-shorthand"></a>
-<p>Emacs interprets <samp>~/</samp> as your home directory.  Thus,
-<samp>~/foo/bar.txt</samp> specifies a file named <samp>bar.txt</samp>, inside a
-directory named <samp>foo</samp>, which is in turn located in your home
-directory.  In addition, <samp>~<var>user-id</var>/</samp> means the home
-directory of a user whose login name is <var>user-id</var>.  Any leading
-directory name in front of the <samp>~</samp> is ignored: thus,
-<samp>/u2/emacs/~/foo/bar.txt</samp> is equivalent to <samp>~/foo/bar.txt</samp>.
-</p>
-<p>On MS-Windows and MS-DOS systems, where a user doesn&rsquo;t always have a
-home directory, Emacs uses several alternatives.  For MS-Windows, see
-<a href="Windows-HOME.html#Windows-HOME">Windows HOME</a>; for MS-DOS, see
-<a href="MS_002dDOS-File-Names.html#MS_002dDOS-File-Names">MS-DOS File Names</a>.
-On these systems, the <samp>~<var>user-id</var>/</samp> construct is supported
-only for the current user, i.e., only if <var>user-id</var> is the current
-user&rsquo;s login name.
-</p>
-<a name="index-insert_002ddefault_002ddirectory"></a>
-<p>To prevent Emacs from inserting the default directory when reading
-file names, change the variable <code>insert-default-directory</code> to
-<code>nil</code>.  In that case, the minibuffer starts out empty.
-Nonetheless, relative file name arguments are still interpreted based
-on the same default directory.
-</p>
-<p>You can also enter remote file names in the minibuffer.
-See <a href="Remote-Files.html#Remote-Files">Remote Files</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Minibuffer-Edit.html#Minibuffer-Edit" accesskey="n" rel="next">Minibuffer Edit</a>, Previous: <a href="Basic-Minibuffer.html#Basic-Minibuffer" accesskey="p" rel="prev">Basic Minibuffer</a>, Up: <a href="Minibuffer.html#Minibuffer" accesskey="u" rel="up">Minibuffer</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Here, &lsquo;<samp>Find file:</samp> &rsquo; is the prompt and
+  &lsquo;<samp>/u2/emacs/src/</samp>&rsquo; is the default
+  directory. If you now type <kbd>buffer.c</kbd> as input, that
+  specifies the file <samp>/u2/emacs/src/buffer.c</samp>. See
+  <a href="File-Names.html#File-Names">File Names</a>, for
+  information about the default directory.</p>
 
+  <p>You can specify the parent directory with <samp>..</samp>:
+  <samp>/a/b/../foo.el</samp> is equivalent to
+  <samp>/a/foo.el</samp>. Alternatively, you can use
+  <kbd>M-<span class="key">DEL</span></kbd> to kill directory names
+  backwards (see <a href="Words.html#Words">Words</a>).</p>
 
+  <p>To specify a file in a completely different directory, you can
+  kill the entire default with <kbd>C-a C-k</kbd> (see <a href=
+  "Minibuffer-Edit.html#Minibuffer-Edit">Minibuffer Edit</a>).
+  Alternatively, you can ignore the default, and enter an absolute
+  file name starting with a slash or a tilde after the default
+  directory. For example, you can specify <samp>/etc/termcap</samp>
+  as follows:</p>
 
+  <div class="example">
+    <pre class="example">
+Find file: /u2/emacs/src//etc/termcap
+</pre>
+  </div><a name="index-_002f_002f-in-file-name" id=
+  "index-_002f_002f-in-file-name"></a> <a name=
+  "index-double-slash-in-file-name" id=
+  "index-double-slash-in-file-name"></a> <a name=
+  "index-slashes-repeated-in-file-name" id=
+  "index-slashes-repeated-in-file-name"></a> <a name=
+  "index-file_002dname_002dshadow_002dmode" id=
+  "index-file_002dname_002dshadow_002dmode"></a>
+
+  <p>A double slash causes Emacs to ignore everything before the
+  second slash in the pair. In the example above,
+  <samp>/u2/emacs/src/</samp> is ignored, so the argument you
+  supplied is <samp>/etc/termcap</samp>. The ignored part of the
+  file name is dimmed if the terminal allows it. (To disable this
+  dimming, turn off File Name Shadow mode with the command <kbd>M-x
+  file-name-shadow-mode</kbd>.)</p><a name=
+  "index-home-directory-shorthand" id=
+  "index-home-directory-shorthand"></a>
+
+  <p>Emacs interprets <samp>~/</samp> as your home directory. Thus,
+  <samp>~/foo/bar.txt</samp> specifies a file named
+  <samp>bar.txt</samp>, inside a directory named <samp>foo</samp>,
+  which is in turn located in your home directory. In addition,
+  <samp>~<var>user-id</var>/</samp> means the home directory of a
+  user whose login name is <var>user-id</var>. Any leading
+  directory name in front of the <samp>~</samp> is ignored: thus,
+  <samp>/u2/emacs/~/foo/bar.txt</samp> is equivalent to
+  <samp>~/foo/bar.txt</samp>.</p>
+
+  <p>On MS-Windows and MS-DOS systems, where a user doesn&rsquo;t
+  always have a home directory, Emacs uses several alternatives.
+  For MS-Windows, see <a href=
+  "Windows-HOME.html#Windows-HOME">Windows HOME</a>; for MS-DOS,
+  see <a href=
+  "MS_002dDOS-File-Names.html#MS_002dDOS-File-Names">MS-DOS File
+  Names</a>. On these systems, the
+  <samp>~<var>user-id</var>/</samp> construct is supported only for
+  the current user, i.e., only if <var>user-id</var> is the current
+  user&rsquo;s login name.</p><a name=
+  "index-insert_002ddefault_002ddirectory" id=
+  "index-insert_002ddefault_002ddirectory"></a>
+
+  <p>To prevent Emacs from inserting the default directory when
+  reading file names, change the variable
+  <code>insert-default-directory</code> to <code>nil</code>. In
+  that case, the minibuffer starts out empty. Nonetheless, relative
+  file name arguments are still interpreted based on the same
+  default directory.</p>
+
+  <p>You can also enter remote file names in the minibuffer. See
+  <a href="Remote-Files.html#Remote-Files">Remote Files</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Minibuffer-Edit.html#Minibuffer-Edit"
+    accesskey="n" rel="next">Minibuffer Edit</a>, Previous:
+    <a href="Basic-Minibuffer.html#Basic-Minibuffer" accesskey="p"
+    rel="prev">Basic Minibuffer</a>, Up: <a href=
+    "Minibuffer.html#Minibuffer" accesskey="u" rel=
+    "up">Minibuffer</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

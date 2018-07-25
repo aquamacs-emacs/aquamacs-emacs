@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,120 +20,171 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Time Intervals</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Time Intervals">
-<meta name="keywords" content="GNU Emacs Manual: Time Intervals">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Calendar_002fDiary.html#Calendar_002fDiary" rel="up" title="Calendar/Diary">
-<link href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage" rel="next" title="Advanced Calendar/Diary Usage">
-<link href="Daylight-Saving.html#Daylight-Saving" rel="prev" title="Daylight Saving">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Time Intervals</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Time Intervals" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Time Intervals" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Calendar_002fDiary.html#Calendar_002fDiary" rel="up"
+  title="Calendar/Diary" />
+  <link href=
+  "Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage"
+  rel="next" title="Advanced Calendar/Diary Usage" />
+  <link href="Daylight-Saving.html#Daylight-Saving" rel="prev"
+  title="Daylight Saving" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Time-Intervals" id="Time-Intervals"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage"
+    accesskey="n" rel="next">Advanced Calendar/Diary Usage</a>,
+    Previous: <a href="Daylight-Saving.html#Daylight-Saving"
+    accesskey="p" rel="prev">Daylight Saving</a>, Up: <a href=
+    "Calendar_002fDiary.html#Calendar_002fDiary" accesskey="u" rel=
+    "up">Calendar/Diary</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Summing-Time-Intervals" id="Summing-Time-Intervals"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Time-Intervals"></a>
-<div class="header">
-<p>
-Next: <a href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage" accesskey="n" rel="next">Advanced Calendar/Diary Usage</a>, Previous: <a href="Daylight-Saving.html#Daylight-Saving" accesskey="p" rel="prev">Daylight Saving</a>, Up: <a href="Calendar_002fDiary.html#Calendar_002fDiary" accesskey="u" rel="up">Calendar/Diary</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Summing-Time-Intervals"></a>
-<h3 class="section">31.14 Summing Time Intervals</h3>
-<a name="index-time-intervals_002c-summing"></a>
-<a name="index-summing-time-intervals"></a>
-<a name="index-timeclock"></a>
+  <h3 class="section">31.14 Summing Time Intervals</h3><a name=
+  "index-time-intervals_002c-summing" id=
+  "index-time-intervals_002c-summing"></a> <a name=
+  "index-summing-time-intervals" id=
+  "index-summing-time-intervals"></a> <a name="index-timeclock" id=
+  "index-timeclock"></a>
 
-<p>The timeclock package adds up time intervals, so you can (for
-instance) keep track of how much time you spend working on particular
-projects.
-</p>
-<a name="index-timeclock_002din"></a>
-<a name="index-timeclock_002dout"></a>
-<a name="index-timeclock_002dchange"></a>
-<a name="index-timeclock_002dworkday_002dremaining"></a>
-<a name="index-timeclock_002dwhen_002dto_002dleave"></a>
-<p>Use the <kbd>M-x timeclock-in</kbd> command when you start working on a
-project, and <kbd>M-x timeclock-out</kbd> command when you&rsquo;re done.  Each
-time you do this, it adds one time interval to the record of the
-project.  You can change to working on a different project with <kbd>M-x
-timeclock-change</kbd>.
-</p>
-<p>Once you&rsquo;ve collected data from a number of time intervals, you can use
-<kbd>M-x timeclock-workday-remaining</kbd> to see how much time is left to
-work today (assuming a typical average of 8 hours a day), and <kbd>M-x
-timeclock-when-to-leave</kbd> which will calculate when you&rsquo;re done.
-</p>
-<a name="index-timeclock_002dmodeline_002ddisplay-1"></a>
-<a name="index-timeclock_002dmodeline_002ddisplay"></a>
-<p>If you want Emacs to display the amount of time left of your
-workday in the mode line, either customize the
-<code>timeclock-modeline-display</code> variable and set its value to
-<code>t</code>, or invoke the <kbd>M-x timeclock-modeline-display</kbd> command.
-</p>
-<a name="index-timeclock_002dask_002dbefore_002dexiting"></a>
-<p>Terminating the current Emacs session might or might not mean that
-you have stopped working on the project and, by default, Emacs asks
-you.  You can, however, customize the value of the variable
-<code>timeclock-ask-before-exiting</code> to <code>nil</code> to avoid the question;
-then, only an explicit <kbd>M-x timeclock-out</kbd> or <kbd>M-x
-timeclock-change</kbd> will tell Emacs that the current interval is over.
-</p>
-<a name="index-timelog-file"></a>
-<a name="index-timeclock_002dfile"></a>
-<a name="index-timeclock_002dreread_002dlog"></a>
-<p>The timeclock functions work by accumulating the data in a file
-called <samp>~/.emacs.d/timelog</samp>.  You can specify a
-different name for this file by customizing the variable
-<code>timeclock-file</code>.  If you edit the timeclock file manually, or if
-you change the value of any of timeclock&rsquo;s customizable variables, you
-should run the command <kbd>M-x timeclock-reread-log</kbd> to update the
-data in Emacs from the file.
-</p>
+  <p>The timeclock package adds up time intervals, so you can (for
+  instance) keep track of how much time you spend working on
+  particular projects.</p><a name="index-timeclock_002din" id=
+  "index-timeclock_002din"></a> <a name="index-timeclock_002dout"
+  id="index-timeclock_002dout"></a> <a name=
+  "index-timeclock_002dchange" id="index-timeclock_002dchange"></a>
+  <a name="index-timeclock_002dworkday_002dremaining" id=
+  "index-timeclock_002dworkday_002dremaining"></a> <a name=
+  "index-timeclock_002dwhen_002dto_002dleave" id=
+  "index-timeclock_002dwhen_002dto_002dleave"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage" accesskey="n" rel="next">Advanced Calendar/Diary Usage</a>, Previous: <a href="Daylight-Saving.html#Daylight-Saving" accesskey="p" rel="prev">Daylight Saving</a>, Up: <a href="Calendar_002fDiary.html#Calendar_002fDiary" accesskey="u" rel="up">Calendar/Diary</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Use the <kbd>M-x timeclock-in</kbd> command when you start
+  working on a project, and <kbd>M-x timeclock-out</kbd> command
+  when you&rsquo;re done. Each time you do this, it adds one time
+  interval to the record of the project. You can change to working
+  on a different project with <kbd>M-x timeclock-change</kbd>.</p>
 
+  <p>Once you&rsquo;ve collected data from a number of time
+  intervals, you can use <kbd>M-x timeclock-workday-remaining</kbd>
+  to see how much time is left to work today (assuming a typical
+  average of 8 hours a day), and <kbd>M-x
+  timeclock-when-to-leave</kbd> which will calculate when
+  you&rsquo;re done.</p><a name=
+  "index-timeclock_002dmodeline_002ddisplay-1" id=
+  "index-timeclock_002dmodeline_002ddisplay-1"></a> <a name=
+  "index-timeclock_002dmodeline_002ddisplay" id=
+  "index-timeclock_002dmodeline_002ddisplay"></a>
 
+  <p>If you want Emacs to display the amount of time left of your
+  workday in the mode line, either customize the
+  <code>timeclock-modeline-display</code> variable and set its
+  value to <code>t</code>, or invoke the <kbd>M-x
+  timeclock-modeline-display</kbd> command.</p><a name=
+  "index-timeclock_002dask_002dbefore_002dexiting" id=
+  "index-timeclock_002dask_002dbefore_002dexiting"></a>
 
+  <p>Terminating the current Emacs session might or might not mean
+  that you have stopped working on the project and, by default,
+  Emacs asks you. You can, however, customize the value of the
+  variable <code>timeclock-ask-before-exiting</code> to
+  <code>nil</code> to avoid the question; then, only an explicit
+  <kbd>M-x timeclock-out</kbd> or <kbd>M-x timeclock-change</kbd>
+  will tell Emacs that the current interval is over.</p><a name=
+  "index-timelog-file" id="index-timelog-file"></a> <a name=
+  "index-timeclock_002dfile" id="index-timeclock_002dfile"></a>
+  <a name="index-timeclock_002dreread_002dlog" id=
+  "index-timeclock_002dreread_002dlog"></a>
+
+  <p>The timeclock functions work by accumulating the data in a
+  file called <samp>~/.emacs.d/timelog</samp>. You can specify a
+  different name for this file by customizing the variable
+  <code>timeclock-file</code>. If you edit the timeclock file
+  manually, or if you change the value of any of timeclock&rsquo;s
+  customizable variables, you should run the command <kbd>M-x
+  timeclock-reread-log</kbd> to update the data in Emacs from the
+  file.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage"
+    accesskey="n" rel="next">Advanced Calendar/Diary Usage</a>,
+    Previous: <a href="Daylight-Saving.html#Daylight-Saving"
+    accesskey="p" rel="prev">Daylight Saving</a>, Up: <a href=
+    "Calendar_002fDiary.html#Calendar_002fDiary" accesskey="u" rel=
+    "up">Calendar/Diary</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Subscription Methods - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="New-Groups.html#New-Groups" title="New Groups">
-<link rel="prev" href="Checking-New-Groups.html#Checking-New-Groups" title="Checking New Groups">
-<link rel="next" href="Filtering-New-Groups.html#Filtering-New-Groups" title="Filtering New Groups">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Subscription Methods - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="New-Groups.html#New-Groups" title=
+  "New Groups" />
+  <link rel="prev" href=
+  "Checking-New-Groups.html#Checking-New-Groups" title=
+  "Checking New Groups" />
+  <link rel="next" href=
+  "Filtering-New-Groups.html#Filtering-New-Groups" title=
+  "Filtering New Groups" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +37,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,77 +50,125 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Subscription-Methods"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Filtering-New-Groups.html#Filtering-New-Groups">Filtering New Groups</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Checking-New-Groups.html#Checking-New-Groups">Checking New Groups</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="New-Groups.html#New-Groups">New Groups</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Subscription-Methods" id="Subscription-Methods"></a>
 
-<h4 class="subsection">1.4.2 Subscription Methods</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Filtering-New-Groups.html#Filtering-New-Groups">Filtering New
+    Groups</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Checking-New-Groups.html#Checking-New-Groups">Checking
+    New Groups</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "New-Groups.html#New-Groups">New Groups</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-gnus_002dsubscribe_002dnewsgroup_002dmethod-22"></a>What Gnus does when it encounters a new group is determined by the
-<code>gnus-subscribe-newsgroup-method</code> variable.
+  <h4 class="subsection">1.4.2 Subscription Methods</h4>
 
-   <p>This variable should contain a function.  This function will be called
-with the name of the new group as the only parameter.
+  <p><a name="index-gnus_002dsubscribe_002dnewsgroup_002dmethod-22"
+  id=
+  "index-gnus_002dsubscribe_002dnewsgroup_002dmethod-22"></a>What
+  Gnus does when it encounters a new group is determined by the
+  <code>gnus-subscribe-newsgroup-method</code> variable.</p>
 
-   <p>Some handy pre-fab functions are:
+  <p>This variable should contain a function. This function will be
+  called with the name of the new group as the only parameter.</p>
 
-     <dl>
-<dt><code>gnus-subscribe-zombies</code><dd><a name="index-gnus_002dsubscribe_002dzombies-23"></a>Make all new groups zombies.  This is the default.  You can browse the
-zombies later (with <kbd>A z</kbd>) and either kill them all off properly
-(with <kbd>S z</kbd>), or subscribe to them (with <kbd>u</kbd>).
+  <p>Some handy pre-fab functions are:</p>
 
-     <br><dt><code>gnus-subscribe-randomly</code><dd><a name="index-gnus_002dsubscribe_002drandomly-24"></a>Subscribe all new groups in arbitrary order.  This really means that all
-new groups will be added at &ldquo;the top&rdquo; of the group buffer.
+  <dl>
+    <dt><code>gnus-subscribe-zombies</code></dt>
 
-     <br><dt><code>gnus-subscribe-alphabetically</code><dd><a name="index-gnus_002dsubscribe_002dalphabetically-25"></a>Subscribe all new groups in alphabetical order.
+    <dd><a name="index-gnus_002dsubscribe_002dzombies-23" id=
+    "index-gnus_002dsubscribe_002dzombies-23"></a>Make all new
+    groups zombies. This is the default. You can browse the zombies
+    later (with <kbd>A z</kbd>) and either kill them all off
+    properly (with <kbd>S z</kbd>), or subscribe to them (with
+    <kbd>u</kbd>).<br /></dd>
 
-     <br><dt><code>gnus-subscribe-hierarchically</code><dd><a name="index-gnus_002dsubscribe_002dhierarchically-26"></a>Subscribe all new groups hierarchically.  The difference between this
-function and <code>gnus-subscribe-alphabetically</code> is slight. 
-<code>gnus-subscribe-alphabetically</code> will subscribe new groups in a strictly
-alphabetical fashion, while this function will enter groups into its
-hierarchy.  So if you want to have the &lsquo;<samp><span class="samp">rec</span></samp>&rsquo; hierarchy before the
-&lsquo;<samp><span class="samp">comp</span></samp>&rsquo; hierarchy, this function will not mess that configuration
-up.  Or something like that.
+    <dt><code>gnus-subscribe-randomly</code></dt>
 
-     <br><dt><code>gnus-subscribe-interactively</code><dd><a name="index-gnus_002dsubscribe_002dinteractively-27"></a>Subscribe new groups interactively.  This means that Gnus will ask
-you about <strong>all</strong> new groups.  The groups you choose to subscribe
-to will be subscribed hierarchically.
+    <dd><a name="index-gnus_002dsubscribe_002drandomly-24" id=
+    "index-gnus_002dsubscribe_002drandomly-24"></a>Subscribe all
+    new groups in arbitrary order. This really means that all new
+    groups will be added at &ldquo;the top&rdquo; of the group
+    buffer.<br /></dd>
 
-     <br><dt><code>gnus-subscribe-killed</code><dd><a name="index-gnus_002dsubscribe_002dkilled-28"></a>Kill all new groups.
+    <dt><code>gnus-subscribe-alphabetically</code></dt>
 
-     <br><dt><code>gnus-subscribe-topics</code><dd><a name="index-gnus_002dsubscribe_002dtopics-29"></a>Put the groups into the topic that has a matching <code>subscribe</code> topic
-parameter (see <a href="Topic-Parameters.html#Topic-Parameters">Topic Parameters</a>).  For instance, a <code>subscribe</code>
-topic parameter that looks like
+    <dd><a name="index-gnus_002dsubscribe_002dalphabetically-25"
+    id="index-gnus_002dsubscribe_002dalphabetically-25"></a>Subscribe
+    all new groups in alphabetical order.<br /></dd>
 
-     <pre class="example">          "nnml"
+    <dt><code>gnus-subscribe-hierarchically</code></dt>
+
+    <dd><a name="index-gnus_002dsubscribe_002dhierarchically-26"
+    id="index-gnus_002dsubscribe_002dhierarchically-26"></a>Subscribe
+    all new groups hierarchically. The difference between this
+    function and <code>gnus-subscribe-alphabetically</code> is
+    slight. <code>gnus-subscribe-alphabetically</code> will
+    subscribe new groups in a strictly alphabetical fashion, while
+    this function will enter groups into its hierarchy. So if you
+    want to have the &lsquo;<samp><span class=
+    "samp">rec</span></samp>&rsquo; hierarchy before the
+    &lsquo;<samp><span class="samp">comp</span></samp>&rsquo;
+    hierarchy, this function will not mess that configuration up.
+    Or something like that.<br /></dd>
+
+    <dt><code>gnus-subscribe-interactively</code></dt>
+
+    <dd><a name="index-gnus_002dsubscribe_002dinteractively-27" id=
+    "index-gnus_002dsubscribe_002dinteractively-27"></a>Subscribe
+    new groups interactively. This means that Gnus will ask you
+    about <strong>all</strong> new groups. The groups you choose to
+    subscribe to will be subscribed hierarchically.<br /></dd>
+
+    <dt><code>gnus-subscribe-killed</code></dt>
+
+    <dd><a name="index-gnus_002dsubscribe_002dkilled-28" id=
+    "index-gnus_002dsubscribe_002dkilled-28"></a>Kill all new
+    groups.<br /></dd>
+
+    <dt><code>gnus-subscribe-topics</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dsubscribe_002dtopics-29" id=
+      "index-gnus_002dsubscribe_002dtopics-29"></a>Put the groups
+      into the topic that has a matching <code>subscribe</code>
+      topic parameter (see <a href=
+      "Topic-Parameters.html#Topic-Parameters">Topic
+      Parameters</a>). For instance, a <code>subscribe</code> topic
+      parameter that looks like
+      <pre class="example">
+          "nnml"
 </pre>
-     <p>will mean that all groups that match that regex will be subscribed under
-that topic.
 
-     <p>If no topics match the groups, the groups will be subscribed in the
-top-level topic.
+      <p>will mean that all groups that match that regex will be
+      subscribed under that topic.</p>
 
-   </dl>
+      <p>If no topics match the groups, the groups will be
+      subscribed in the top-level topic.</p>
+    </dd>
+  </dl>
 
-   <p><a name="index-gnus_002dsubscribe_002dhierarchical_002dinteractive-30"></a>A closely related variable is
-<code>gnus-subscribe-hierarchical-interactive</code>.  (That's quite a
-mouthful.)  If this variable is non-<code>nil</code>, Gnus will ask you in a
-hierarchical fashion whether to subscribe to new groups or not.  Gnus
-will ask you for each sub-hierarchy whether you want to descend the
-hierarchy or not.
+  <p><a name=
+  "index-gnus_002dsubscribe_002dhierarchical_002dinteractive-30"
+  id="index-gnus_002dsubscribe_002dhierarchical_002dinteractive-30">
+  </a>A closely related variable is
+  <code>gnus-subscribe-hierarchical-interactive</code>. (That's
+  quite a mouthful.) If this variable is non-<code>nil</code>, Gnus
+  will ask you in a hierarchical fashion whether to subscribe to
+  new groups or not. Gnus will ask you for each sub-hierarchy
+  whether you want to descend the hierarchy or not.</p>
 
-   <p>One common mistake is to set the variable a few paragraphs above
-(<code>gnus-subscribe-newsgroup-method</code>) to
-<code>gnus-subscribe-hierarchical-interactive</code>.  This is an error.  This
-will not work.  This is ga-ga.  So don't do it.
-
-   </body></html>
-
+  <p>One common mistake is to set the variable a few paragraphs
+  above (<code>gnus-subscribe-newsgroup-method</code>) to
+  <code>gnus-subscribe-hierarchical-interactive</code>. This is an
+  error. This will not work. This is ga-ga. So don't do it.</p>
+</body>
+</html>

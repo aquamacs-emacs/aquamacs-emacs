@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,140 +19,212 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Keyboard Macros</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Keyboard Macros">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Keyboard Macros">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Keymaps.html#Keymaps" rel="next" title="Keymaps">
-<link href="Command-History.html#Command-History" rel="prev" title="Command History">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Keyboard Macros</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Keyboard Macros" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Keyboard Macros" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Keymaps.html#Keymaps" rel="next" title="Keymaps" />
+  <link href="Command-History.html#Command-History" rel="prev"
+  title="Command History" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Keyboard-Macros" id="Keyboard-Macros"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Command-History.html#Command-History"
+    accesskey="p" rel="prev">Command History</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Keyboard-Macros-1" id="Keyboard-Macros-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Keyboard-Macros"></a>
-<div class="header">
-<p>
-Previous: <a href="Command-History.html#Command-History" accesskey="p" rel="prev">Command History</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Keyboard-Macros-1"></a>
-<h3 class="section">20.16 Keyboard Macros</h3>
-<a name="index-keyboard-macros"></a>
+  <h3 class="section">20.16 Keyboard Macros</h3><a name=
+  "index-keyboard-macros" id="index-keyboard-macros"></a>
 
-<p>A <em>keyboard macro</em> is a canned sequence of input events that can
-be considered a command and made the definition of a key.  The Lisp
-representation of a keyboard macro is a string or vector containing the
-events.  Don&rsquo;t confuse keyboard macros with Lisp macros
-(see <a href="Macros.html#Macros">Macros</a>).
-</p>
-<dl>
-<dt><a name="index-execute_002dkbd_002dmacro"></a>Function: <strong>execute-kbd-macro</strong> <em>kbdmacro &amp;optional count loopfunc</em></dt>
-<dd><p>This function executes <var>kbdmacro</var> as a sequence of events.  If
-<var>kbdmacro</var> is a string or vector, then the events in it are executed
-exactly as if they had been input by the user.  The sequence is
-<em>not</em> expected to be a single key sequence; normally a keyboard
-macro definition consists of several key sequences concatenated.
-</p>
-<p>If <var>kbdmacro</var> is a symbol, then its function definition is used in
-place of <var>kbdmacro</var>.  If that is another symbol, this process repeats.
-Eventually the result should be a string or vector.  If the result is
-not a symbol, string, or vector, an error is signaled.
-</p>
-<p>The argument <var>count</var> is a repeat count; <var>kbdmacro</var> is executed that
-many times.  If <var>count</var> is omitted or <code>nil</code>, <var>kbdmacro</var> is
-executed once.  If it is 0, <var>kbdmacro</var> is executed over and over until it
-encounters an error or a failing search.
-</p>
-<p>If <var>loopfunc</var> is non-<code>nil</code>, it is a function that is called,
-without arguments, prior to each iteration of the macro.  If
-<var>loopfunc</var> returns <code>nil</code>, then this stops execution of the macro.
-</p>
-<p>See <a href="Reading-One-Event.html#Reading-One-Event">Reading One Event</a>, for an example of using <code>execute-kbd-macro</code>.
-</p></dd></dl>
+  <p>A <em>keyboard macro</em> is a canned sequence of input events
+  that can be considered a command and made the definition of a
+  key. The Lisp representation of a keyboard macro is a string or
+  vector containing the events. Don&rsquo;t confuse keyboard macros
+  with Lisp macros (see <a href=
+  "Macros.html#Macros">Macros</a>).</p>
 
-<dl>
-<dt><a name="index-executing_002dkbd_002dmacro"></a>Variable: <strong>executing-kbd-macro</strong></dt>
-<dd><p>This variable contains the string or vector that defines the keyboard
-macro that is currently executing.  It is <code>nil</code> if no macro is
-currently executing.  A command can test this variable so as to behave
-differently when run from an executing macro.  Do not set this variable
-yourself.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-execute_002dkbd_002dmacro" id=
+    "index-execute_002dkbd_002dmacro"></a>Function:
+    <strong>execute-kbd-macro</strong> <em>kbdmacro &amp;optional
+    count loopfunc</em></dt>
 
-<dl>
-<dt><a name="index-defining_002dkbd_002dmacro"></a>Variable: <strong>defining-kbd-macro</strong></dt>
-<dd><p>This variable is non-<code>nil</code> if and only if a keyboard macro is
-being defined.  A command can test this variable so as to behave
-differently while a macro is being defined.  The value is
-<code>append</code> while appending to the definition of an existing macro.
-The commands <code>start-kbd-macro</code>, <code>kmacro-start-macro</code> and
-<code>end-kbd-macro</code> set this variable&mdash;do not set it yourself.
-</p>
-<p>The variable is always local to the current terminal and cannot be
-buffer-local.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
-</p></dd></dl>
+    <dd>
+      <p>This function executes <var>kbdmacro</var> as a sequence
+      of events. If <var>kbdmacro</var> is a string or vector, then
+      the events in it are executed exactly as if they had been
+      input by the user. The sequence is <em>not</em> expected to
+      be a single key sequence; normally a keyboard macro
+      definition consists of several key sequences
+      concatenated.</p>
 
-<dl>
-<dt><a name="index-last_002dkbd_002dmacro"></a>Variable: <strong>last-kbd-macro</strong></dt>
-<dd><p>This variable is the definition of the most recently defined keyboard
-macro.  Its value is a string or vector, or <code>nil</code>.
-</p>
-<p>The variable is always local to the current terminal and cannot be
-buffer-local.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
-</p></dd></dl>
+      <p>If <var>kbdmacro</var> is a symbol, then its function
+      definition is used in place of <var>kbdmacro</var>. If that
+      is another symbol, this process repeats. Eventually the
+      result should be a string or vector. If the result is not a
+      symbol, string, or vector, an error is signaled.</p>
 
-<dl>
-<dt><a name="index-kbd_002dmacro_002dtermination_002dhook"></a>Variable: <strong>kbd-macro-termination-hook</strong></dt>
-<dd><p>This normal hook is run when a keyboard macro terminates, regardless
-of what caused it to terminate (reaching the macro end or an error
-which ended the macro prematurely).
-</p></dd></dl>
+      <p>The argument <var>count</var> is a repeat count;
+      <var>kbdmacro</var> is executed that many times. If
+      <var>count</var> is omitted or <code>nil</code>,
+      <var>kbdmacro</var> is executed once. If it is 0,
+      <var>kbdmacro</var> is executed over and over until it
+      encounters an error or a failing search.</p>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Command-History.html#Command-History" accesskey="p" rel="prev">Command History</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If <var>loopfunc</var> is non-<code>nil</code>, it is a
+      function that is called, without arguments, prior to each
+      iteration of the macro. If <var>loopfunc</var> returns
+      <code>nil</code>, then this stops execution of the macro.</p>
 
+      <p>See <a href=
+      "Reading-One-Event.html#Reading-One-Event">Reading One
+      Event</a>, for an example of using
+      <code>execute-kbd-macro</code>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-executing_002dkbd_002dmacro" id=
+    "index-executing_002dkbd_002dmacro"></a>Variable:
+    <strong>executing-kbd-macro</strong></dt>
 
+    <dd>
+      <p>This variable contains the string or vector that defines
+      the keyboard macro that is currently executing. It is
+      <code>nil</code> if no macro is currently executing. A
+      command can test this variable so as to behave differently
+      when run from an executing macro. Do not set this variable
+      yourself.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-defining_002dkbd_002dmacro" id=
+    "index-defining_002dkbd_002dmacro"></a>Variable:
+    <strong>defining-kbd-macro</strong></dt>
+
+    <dd>
+      <p>This variable is non-<code>nil</code> if and only if a
+      keyboard macro is being defined. A command can test this
+      variable so as to behave differently while a macro is being
+      defined. The value is <code>append</code> while appending to
+      the definition of an existing macro. The commands
+      <code>start-kbd-macro</code>, <code>kmacro-start-macro</code>
+      and <code>end-kbd-macro</code> set this variable&mdash;do not
+      set it yourself.</p>
+
+      <p>The variable is always local to the current terminal and
+      cannot be buffer-local. See <a href=
+      "Multiple-Terminals.html#Multiple-Terminals">Multiple
+      Terminals</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-last_002dkbd_002dmacro" id=
+    "index-last_002dkbd_002dmacro"></a>Variable:
+    <strong>last-kbd-macro</strong></dt>
+
+    <dd>
+      <p>This variable is the definition of the most recently
+      defined keyboard macro. Its value is a string or vector, or
+      <code>nil</code>.</p>
+
+      <p>The variable is always local to the current terminal and
+      cannot be buffer-local. See <a href=
+      "Multiple-Terminals.html#Multiple-Terminals">Multiple
+      Terminals</a>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-kbd_002dmacro_002dtermination_002dhook" id=
+    "index-kbd_002dmacro_002dtermination_002dhook"></a>Variable:
+    <strong>kbd-macro-termination-hook</strong></dt>
+
+    <dd>
+      <p>This normal hook is run when a keyboard macro terminates,
+      regardless of what caused it to terminate (reaching the macro
+      end or an error which ended the macro prematurely).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Command-History.html#Command-History"
+    accesskey="p" rel="prev">Command History</a>, Up: <a href=
+    "Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command
+    Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

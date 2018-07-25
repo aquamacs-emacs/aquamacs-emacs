@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,153 +19,225 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Adaptive Fill</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Adaptive Fill">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Adaptive Fill">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Auto-Filling.html#Auto-Filling" rel="next" title="Auto Filling">
-<link href="Margins.html#Margins" rel="prev" title="Margins">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Adaptive Fill</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Adaptive Fill" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Adaptive Fill" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Auto-Filling.html#Auto-Filling" rel="next" title=
+  "Auto Filling" />
+  <link href="Margins.html#Margins" rel="prev" title="Margins" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Adaptive-Fill" id="Adaptive-Fill"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Auto-Filling.html#Auto-Filling" accesskey="n"
+    rel="next">Auto Filling</a>, Previous: <a href=
+    "Margins.html#Margins" accesskey="p" rel="prev">Margins</a>,
+    Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Adaptive-Fill-Mode" id="Adaptive-Fill-Mode"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Adaptive-Fill"></a>
-<div class="header">
-<p>
-Next: <a href="Auto-Filling.html#Auto-Filling" accesskey="n" rel="next">Auto Filling</a>, Previous: <a href="Margins.html#Margins" accesskey="p" rel="prev">Margins</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Adaptive-Fill-Mode"></a>
-<h3 class="section">31.13 Adaptive Fill Mode</h3>
+  <h3 class="section">31.13 Adaptive Fill Mode</h3>
 
-<p>When <em>Adaptive Fill Mode</em> is enabled, Emacs determines the fill
-prefix automatically from the text in each paragraph being filled
-rather than using a predetermined value.  During filling, this fill
-prefix gets inserted at the start of the second and subsequent lines
-of the paragraph as described in <a href="Filling.html#Filling">Filling</a>, and in <a href="Auto-Filling.html#Auto-Filling">Auto Filling</a>.
-</p>
-<dl>
-<dt><a name="index-adaptive_002dfill_002dmode"></a>User Option: <strong>adaptive-fill-mode</strong></dt>
-<dd><p>Adaptive Fill mode is enabled when this variable is non-<code>nil</code>.
-It is <code>t</code> by default.
-</p></dd></dl>
+  <p>When <em>Adaptive Fill Mode</em> is enabled, Emacs determines
+  the fill prefix automatically from the text in each paragraph
+  being filled rather than using a predetermined value. During
+  filling, this fill prefix gets inserted at the start of the
+  second and subsequent lines of the paragraph as described in
+  <a href="Filling.html#Filling">Filling</a>, and in <a href=
+  "Auto-Filling.html#Auto-Filling">Auto Filling</a>.</p>
 
-<dl>
-<dt><a name="index-fill_002dcontext_002dprefix"></a>Function: <strong>fill-context-prefix</strong> <em>from to</em></dt>
-<dd><p>This function implements the heart of Adaptive Fill mode; it chooses a
-fill prefix based on the text between <var>from</var> and <var>to</var>,
-typically the start and end of a paragraph.  It does this by looking
-at the first two lines of the paragraph, based on the variables
-described below.
-</p>
-<p>Usually, this function returns the fill prefix, a string.  However,
-before doing this, the function makes a final check (not specially
-mentioned in the following) that a line starting with this prefix
-wouldn&rsquo;t look like the start of a paragraph.  Should this happen, the
-function signals the anomaly by returning <code>nil</code> instead.
-</p>
-<p>In detail, <code>fill-context-prefix</code> does this:
-</p>
-<ol>
-<li> It takes a candidate for the fill prefix from the first line&mdash;it
-tries first the function in <code>adaptive-fill-function</code> (if any),
-then the regular expression <code>adaptive-fill-regexp</code> (see below).
-The first non-<code>nil</code> result of these, or the empty string if
-they&rsquo;re both <code>nil</code>, becomes the first line&rsquo;s candidate.
-</li><li> If the paragraph has as yet only one line, the function tests the
-validity of the prefix candidate just found.  The function then
-returns the candidate if it&rsquo;s valid, or a string of spaces otherwise.
-(see the description of <code>adaptive-fill-first-line-regexp</code> below).
-</li><li> When the paragraph already has two lines, the function next looks for
-a prefix candidate on the second line, in just the same way it did for
-the first line.  If it doesn&rsquo;t find one, it returns <code>nil</code>.
-</li><li> The function now compares the two candidate prefixes heuristically: if
-the non-whitespace characters in the line 2 candidate occur in the
-same order in the line 1 candidate, the function returns the line 2
-candidate.  Otherwise, it returns the largest initial substring which
-is common to both candidates (which might be the empty string).
-</li></ol>
-</dd></dl>
+  <dl>
+    <dt><a name="index-adaptive_002dfill_002dmode" id=
+    "index-adaptive_002dfill_002dmode"></a>User Option:
+    <strong>adaptive-fill-mode</strong></dt>
 
-<dl>
-<dt><a name="index-adaptive_002dfill_002dregexp"></a>User Option: <strong>adaptive-fill-regexp</strong></dt>
-<dd><p>Adaptive Fill mode matches this regular expression against the text
-starting after the left margin whitespace (if any) on a line; the
-characters it matches are that line&rsquo;s candidate for the fill prefix.
-</p>
-<p>The default value matches whitespace with certain punctuation
-characters intermingled.
-</p></dd></dl>
+    <dd>
+      <p>Adaptive Fill mode is enabled when this variable is
+      non-<code>nil</code>. It is <code>t</code> by default.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-adaptive_002dfill_002dfirst_002dline_002dregexp"></a>User Option: <strong>adaptive-fill-first-line-regexp</strong></dt>
-<dd><p>Used only in one-line paragraphs, this regular expression acts as an
-additional check of the validity of the one available candidate fill
-prefix: the candidate must match this regular expression, or match
-<code>comment-start-skip</code>.  If it doesn&rsquo;t, <code>fill-context-prefix</code>
-replaces the candidate with a string of spaces of the same width
-as it.
-</p>
-<p>The default value of this variable is <code>&quot;\\`[&nbsp;\t]*\\'&quot;</code><!-- /@w -->, which
-matches only a string of whitespace.  The effect of this default is to
-force the fill prefixes found in one-line paragraphs always to be pure
-whitespace.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-fill_002dcontext_002dprefix" id=
+    "index-fill_002dcontext_002dprefix"></a>Function:
+    <strong>fill-context-prefix</strong> <em>from to</em></dt>
 
-<dl>
-<dt><a name="index-adaptive_002dfill_002dfunction"></a>User Option: <strong>adaptive-fill-function</strong></dt>
-<dd><p>You can specify more complex ways of choosing a fill prefix
-automatically by setting this variable to a function.  The function is
-called with point after the left margin (if any) of a line, and it
-must preserve point.  It should return either that line&rsquo;s fill
-prefix or <code>nil</code>, meaning it has failed to determine a prefix.
-</p></dd></dl>
+    <dd>
+      <p>This function implements the heart of Adaptive Fill mode;
+      it chooses a fill prefix based on the text between
+      <var>from</var> and <var>to</var>, typically the start and
+      end of a paragraph. It does this by looking at the first two
+      lines of the paragraph, based on the variables described
+      below.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Auto-Filling.html#Auto-Filling" accesskey="n" rel="next">Auto Filling</a>, Previous: <a href="Margins.html#Margins" accesskey="p" rel="prev">Margins</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>Usually, this function returns the fill prefix, a string.
+      However, before doing this, the function makes a final check
+      (not specially mentioned in the following) that a line
+      starting with this prefix wouldn&rsquo;t look like the start
+      of a paragraph. Should this happen, the function signals the
+      anomaly by returning <code>nil</code> instead.</p>
 
+      <p>In detail, <code>fill-context-prefix</code> does this:</p>
 
+      <ol>
+        <li>It takes a candidate for the fill prefix from the first
+        line&mdash;it tries first the function in
+        <code>adaptive-fill-function</code> (if any), then the
+        regular expression <code>adaptive-fill-regexp</code> (see
+        below). The first non-<code>nil</code> result of these, or
+        the empty string if they&rsquo;re both <code>nil</code>,
+        becomes the first line&rsquo;s candidate.</li>
 
+        <li>If the paragraph has as yet only one line, the function
+        tests the validity of the prefix candidate just found. The
+        function then returns the candidate if it&rsquo;s valid, or
+        a string of spaces otherwise. (see the description of
+        <code>adaptive-fill-first-line-regexp</code> below).</li>
+
+        <li>When the paragraph already has two lines, the function
+        next looks for a prefix candidate on the second line, in
+        just the same way it did for the first line. If it
+        doesn&rsquo;t find one, it returns <code>nil</code>.</li>
+
+        <li>The function now compares the two candidate prefixes
+        heuristically: if the non-whitespace characters in the line
+        2 candidate occur in the same order in the line 1
+        candidate, the function returns the line 2 candidate.
+        Otherwise, it returns the largest initial substring which
+        is common to both candidates (which might be the empty
+        string).</li>
+      </ol>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-adaptive_002dfill_002dregexp" id=
+    "index-adaptive_002dfill_002dregexp"></a>User Option:
+    <strong>adaptive-fill-regexp</strong></dt>
+
+    <dd>
+      <p>Adaptive Fill mode matches this regular expression against
+      the text starting after the left margin whitespace (if any)
+      on a line; the characters it matches are that line&rsquo;s
+      candidate for the fill prefix.</p>
+
+      <p>The default value matches whitespace with certain
+      punctuation characters intermingled.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-adaptive_002dfill_002dfirst_002dline_002dregexp" id=
+    "index-adaptive_002dfill_002dfirst_002dline_002dregexp"></a>User
+    Option: <strong>adaptive-fill-first-line-regexp</strong></dt>
+
+    <dd>
+      <p>Used only in one-line paragraphs, this regular expression
+      acts as an additional check of the validity of the one
+      available candidate fill prefix: the candidate must match
+      this regular expression, or match
+      <code>comment-start-skip</code>. If it doesn&rsquo;t,
+      <code>fill-context-prefix</code> replaces the candidate with
+      a string of spaces of the same width as it.</p>
+
+      <p>The default value of this variable is
+      <code>"\\`[&nbsp;\t]*\\'"</code><!-- /@w -->, which matches
+      only a string of whitespace. The effect of this default is to
+      force the fill prefixes found in one-line paragraphs always
+      to be pure whitespace.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-adaptive_002dfill_002dfunction" id=
+    "index-adaptive_002dfill_002dfunction"></a>User Option:
+    <strong>adaptive-fill-function</strong></dt>
+
+    <dd>
+      <p>You can specify more complex ways of choosing a fill
+      prefix automatically by setting this variable to a function.
+      The function is called with point after the left margin (if
+      any) of a line, and it must preserve point. It should return
+      either that line&rsquo;s fill prefix or <code>nil</code>,
+      meaning it has failed to determine a prefix.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Auto-Filling.html#Auto-Filling" accesskey="n"
+    rel="next">Auto Filling</a>, Previous: <a href=
+    "Margins.html#Margins" accesskey="p" rel="prev">Margins</a>,
+    Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

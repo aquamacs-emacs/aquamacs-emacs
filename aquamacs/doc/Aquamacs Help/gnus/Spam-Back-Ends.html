@@ -1,15 +1,27 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Spam Back Ends - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Spam-Package.html#Spam-Package" title="Spam Package">
-<link rel="prev" href="Spam-Package-Configuration-Examples.html#Spam-Package-Configuration-Examples" title="Spam Package Configuration Examples">
-<link rel="next" href="Extending-the-Spam-package.html#Extending-the-Spam-package" title="Extending the Spam package">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Spam Back Ends - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Spam-Package.html#Spam-Package" title=
+  "Spam Package" />
+  <link rel="prev" href=
+  "Spam-Package-Configuration-Examples.html#Spam-Package-Configuration-Examples"
+  title="Spam Package Configuration Examples" />
+  <link rel="next" href=
+  "Extending-the-Spam-package.html#Extending-the-Spam-package"
+  title="Extending the Spam package" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +37,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,39 +50,79 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Spam-Back-Ends"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Extending-the-Spam-package.html#Extending-the-Spam-package">Extending the Spam package</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Spam-Package-Configuration-Examples.html#Spam-Package-Configuration-Examples">Spam Package Configuration Examples</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Package.html#Spam-Package">Spam Package</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Spam-Back-Ends" id="Spam-Back-Ends"></a>
 
-<h4 class="subsection">9.18.6 Spam Back Ends</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Extending-the-Spam-package.html#Extending-the-Spam-package">Extending
+    the Spam package</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Spam-Package-Configuration-Examples.html#Spam-Package-Configuration-Examples">Spam
+    Package Configuration Examples</a>, Up:&nbsp;<a rel="up"
+    accesskey="u" href="Spam-Package.html#Spam-Package">Spam
+    Package</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-spam-back-ends-2771"></a>
-The spam package offers a variety of back ends for detecting spam. 
-Each back end defines a set of methods for detecting spam
-(see <a href="Filtering-Incoming-Mail.html#Filtering-Incoming-Mail">Filtering Incoming Mail</a>, see <a href="Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups">Detecting Spam in Groups</a>),
-and a pair of spam and ham processors (see <a href="Spam-and-Ham-Processors.html#Spam-and-Ham-Processors">Spam and Ham Processors</a>).
+  <h4 class="subsection">9.18.6 Spam Back Ends</h4>
 
-<ul class="menu">
-<li><a accesskey="1" href="Blacklists-and-Whitelists.html#Blacklists-and-Whitelists">Blacklists and Whitelists</a>
-<li><a accesskey="2" href="BBDB-Whitelists.html#BBDB-Whitelists">BBDB Whitelists</a>
-<li><a accesskey="3" href="Gmane-Spam-Reporting.html#Gmane-Spam-Reporting">Gmane Spam Reporting</a>
-<li><a accesskey="4" href="Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments">Anti-spam Hashcash Payments</a>
-<li><a accesskey="5" href="Blackholes.html#Blackholes">Blackholes</a>
-<li><a accesskey="6" href="Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching">Regular Expressions Header Matching</a>
-<li><a accesskey="7" href="Bogofilter.html#Bogofilter">Bogofilter</a>
-<li><a accesskey="8" href="SpamAssassin-back-end.html#SpamAssassin-back-end">SpamAssassin back end</a>
-<li><a accesskey="9" href="ifile-spam-filtering.html#ifile-spam-filtering">ifile spam filtering</a>
-<li><a href="Spam-Statistics-Filtering.html#Spam-Statistics-Filtering">Spam Statistics Filtering</a>
-<li><a href="SpamOracle.html#SpamOracle">SpamOracle</a>
-</ul>
+  <p><a name="index-spam-back-ends-2771" id=
+  "index-spam-back-ends-2771"></a> The spam package offers a
+  variety of back ends for detecting spam. Each back end defines a
+  set of methods for detecting spam (see <a href=
+  "Filtering-Incoming-Mail.html#Filtering-Incoming-Mail">Filtering
+  Incoming Mail</a>, see <a href=
+  "Detecting-Spam-in-Groups.html#Detecting-Spam-in-Groups">Detecting
+  Spam in Groups</a>), and a pair of spam and ham processors (see
+  <a href=
+  "Spam-and-Ham-Processors.html#Spam-and-Ham-Processors">Spam and
+  Ham Processors</a>).</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Blacklists-and-Whitelists.html#Blacklists-and-Whitelists">Blacklists
+    and Whitelists</a></li>
 
+    <li><a accesskey="2" href=
+    "BBDB-Whitelists.html#BBDB-Whitelists">BBDB Whitelists</a></li>
+
+    <li><a accesskey="3" href=
+    "Gmane-Spam-Reporting.html#Gmane-Spam-Reporting">Gmane Spam
+    Reporting</a></li>
+
+    <li><a accesskey="4" href=
+    "Anti_002dspam-Hashcash-Payments.html#Anti_002dspam-Hashcash-Payments">
+    Anti-spam Hashcash Payments</a></li>
+
+    <li><a accesskey="5" href=
+    "Blackholes.html#Blackholes">Blackholes</a></li>
+
+    <li><a accesskey="6" href=
+    "Regular-Expressions-Header-Matching.html#Regular-Expressions-Header-Matching">
+    Regular Expressions Header Matching</a></li>
+
+    <li><a accesskey="7" href=
+    "Bogofilter.html#Bogofilter">Bogofilter</a></li>
+
+    <li><a accesskey="8" href=
+    "SpamAssassin-back-end.html#SpamAssassin-back-end">SpamAssassin
+    back end</a></li>
+
+    <li><a accesskey="9" href=
+    "ifile-spam-filtering.html#ifile-spam-filtering">ifile spam
+    filtering</a></li>
+
+    <li><a href=
+    "Spam-Statistics-Filtering.html#Spam-Statistics-Filtering">Spam
+    Statistics Filtering</a></li>
+
+    <li><a href="SpamOracle.html#SpamOracle">SpamOracle</a></li>
+  </ul>
+</body>
+</html>

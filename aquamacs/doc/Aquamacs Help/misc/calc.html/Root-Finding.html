@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,142 +18,186 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Root Finding</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Root Finding">
-<meta name="keywords" content="GNU Emacs Calc Manual: Root Finding">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Numerical-Solutions.html#Numerical-Solutions" rel="up" title="Numerical Solutions">
-<link href="Minimization.html#Minimization" rel="next" title="Minimization">
-<link href="Numerical-Solutions.html#Numerical-Solutions" rel="prev" title="Numerical Solutions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Root Finding</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Root Finding" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Root Finding" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Numerical-Solutions.html#Numerical-Solutions" rel=
+  "up" title="Numerical Solutions" />
+  <link href="Minimization.html#Minimization" rel="next" title=
+  "Minimization" />
+  <link href="Numerical-Solutions.html#Numerical-Solutions" rel=
+  "prev" title="Numerical Solutions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Root-Finding"></a>
-<div class="header">
-<p>
-Next: <a href="Minimization.html#Minimization" accesskey="n" rel="next">Minimization</a>, Previous: <a href="Numerical-Solutions.html#Numerical-Solutions" accesskey="p" rel="prev">Numerical Solutions</a>, Up: <a href="Numerical-Solutions.html#Numerical-Solutions" accesskey="u" rel="up">Numerical Solutions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Root-Finding-1"></a>
-<h4 class="subsection">10.7.1 Root Finding</h4>
+<body lang="en" xml:lang="en">
+  <a name="Root-Finding" id="Root-Finding"></a>
 
-<a name="index-a-R"></a>
-<a name="index-calc_002dfind_002droot"></a>
-<a name="index-root"></a>
-<a name="index-Newton_0027s-method"></a>
-<a name="index-Roots-of-equations"></a>
-<a name="index-Numerical-root_002dfinding"></a>
-<p>The <kbd>a R</kbd> (<code>calc-find-root</code>) [<code>root</code>] command finds a
-numerical solution (or <em>root</em>) of an equation.  (This command treats
-inequalities the same as equations.  If the input is any other kind
-of formula, it is interpreted as an equation of the form &lsquo;<samp>X = 0</samp>&rsquo;.)
-</p>
-<p>The <kbd>a R</kbd> command requires an initial guess on the top of the
-stack, and a formula in the second-to-top position.  It prompts for a
-solution variable, which must appear in the formula.  All other variables
-that appear in the formula must have assigned values, i.e., when
-a value is assigned to the solution variable and the formula is
-evaluated with <kbd>=</kbd>, it should evaluate to a number.  Any assigned
-value for the solution variable itself is ignored and unaffected by
-this command.
-</p>
-<p>When the command completes, the initial guess is replaced on the stack
-by a vector of two numbers:  The value of the solution variable that
-solves the equation, and the difference between the lefthand and
-righthand sides of the equation at that value.  Ordinarily, the second
-number will be zero or very nearly zero.  (Note that Calc uses a
-slightly higher precision while finding the root, and thus the second
-number may be slightly different from the value you would compute from
-the equation yourself.)
-</p>
-<p>The <kbd>v h</kbd> (<code>calc-head</code>) command is a handy way to extract
-the first element of the result vector, discarding the error term.
-</p>
-<p>The initial guess can be a real number, in which case Calc searches
-for a real solution near that number, or a complex number, in which
-case Calc searches the whole complex plane near that number for a
-solution, or it can be an interval form which restricts the search
-to real numbers inside that interval.
-</p>
-<p>Calc tries to use <kbd>a d</kbd> to take the derivative of the equation.
-If this succeeds, it uses Newton&rsquo;s method.  If the equation is not
-differentiable Calc uses a bisection method.  (If Newton&rsquo;s method
-appears to be going astray, Calc switches over to bisection if it
-can, or otherwise gives up.  In this case it may help to try again
-with a slightly different initial guess.)  If the initial guess is a
-complex number, the function must be differentiable.
-</p>
-<p>If the formula (or the difference between the sides of an equation)
-is negative at one end of the interval you specify and positive at
-the other end, the root finder is guaranteed to find a root.
-Otherwise, Calc subdivides the interval into small parts looking for
-positive and negative values to bracket the root.  When your guess is
-an interval, Calc will not look outside that interval for a root.
-</p>
-<a name="index-H-a-R"></a>
-<a name="index-wroot"></a>
-<p>The <kbd>H a R</kbd> [<code>wroot</code>] command is similar to <kbd>a R</kbd>, except
-that if the initial guess is an interval for which the function has
-the same sign at both ends, then rather than subdividing the interval
-Calc attempts to widen it to enclose a root.  Use this mode if
-you are not sure if the function has a root in your interval.
-</p>
-<p>If the function is not differentiable, and you give a simple number
-instead of an interval as your initial guess, Calc uses this widening
-process even if you did not type the Hyperbolic flag.  (If the function
-<em>is</em> differentiable, Calc uses Newton&rsquo;s method which does not
-require a bounding interval in order to work.)
-</p>
-<p>If Calc leaves the <code>root</code> or <code>wroot</code> function in symbolic
-form on the stack, it will normally display an explanation for why
-no root was found.  If you miss this explanation, press <kbd>w</kbd>
-(<code>calc-why</code>) to get it back.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Minimization.html#Minimization" accesskey="n" rel="next">Minimization</a>, Previous: <a href="Numerical-Solutions.html#Numerical-Solutions" accesskey="p" rel="prev">Numerical Solutions</a>, Up: <a href="Numerical-Solutions.html#Numerical-Solutions" accesskey="u" rel="up">Numerical Solutions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Minimization.html#Minimization" accesskey="n"
+    rel="next">Minimization</a>, Previous: <a href=
+    "Numerical-Solutions.html#Numerical-Solutions" accesskey="p"
+    rel="prev">Numerical Solutions</a>, Up: <a href=
+    "Numerical-Solutions.html#Numerical-Solutions" accesskey="u"
+    rel="up">Numerical Solutions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Root-Finding-1" id="Root-Finding-1"></a>
 
+  <h4 class="subsection">10.7.1 Root Finding</h4><a name=
+  "index-a-R" id="index-a-R"></a> <a name=
+  "index-calc_002dfind_002droot" id=
+  "index-calc_002dfind_002droot"></a> <a name="index-root" id=
+  "index-root"></a> <a name="index-Newton_0027s-method" id=
+  "index-Newton_0027s-method"></a> <a name=
+  "index-Roots-of-equations" id="index-Roots-of-equations"></a>
+  <a name="index-Numerical-root_002dfinding" id=
+  "index-Numerical-root_002dfinding"></a>
 
+  <p>The <kbd>a R</kbd> (<code>calc-find-root</code>)
+  [<code>root</code>] command finds a numerical solution (or
+  <em>root</em>) of an equation. (This command treats inequalities
+  the same as equations. If the input is any other kind of formula,
+  it is interpreted as an equation of the form &lsquo;<samp>X =
+  0</samp>&rsquo;.)</p>
 
+  <p>The <kbd>a R</kbd> command requires an initial guess on the
+  top of the stack, and a formula in the second-to-top position. It
+  prompts for a solution variable, which must appear in the
+  formula. All other variables that appear in the formula must have
+  assigned values, i.e., when a value is assigned to the solution
+  variable and the formula is evaluated with <kbd>=</kbd>, it
+  should evaluate to a number. Any assigned value for the solution
+  variable itself is ignored and unaffected by this command.</p>
+
+  <p>When the command completes, the initial guess is replaced on
+  the stack by a vector of two numbers: The value of the solution
+  variable that solves the equation, and the difference between the
+  lefthand and righthand sides of the equation at that value.
+  Ordinarily, the second number will be zero or very nearly zero.
+  (Note that Calc uses a slightly higher precision while finding
+  the root, and thus the second number may be slightly different
+  from the value you would compute from the equation yourself.)</p>
+
+  <p>The <kbd>v h</kbd> (<code>calc-head</code>) command is a handy
+  way to extract the first element of the result vector, discarding
+  the error term.</p>
+
+  <p>The initial guess can be a real number, in which case Calc
+  searches for a real solution near that number, or a complex
+  number, in which case Calc searches the whole complex plane near
+  that number for a solution, or it can be an interval form which
+  restricts the search to real numbers inside that interval.</p>
+
+  <p>Calc tries to use <kbd>a d</kbd> to take the derivative of the
+  equation. If this succeeds, it uses Newton&rsquo;s method. If the
+  equation is not differentiable Calc uses a bisection method. (If
+  Newton&rsquo;s method appears to be going astray, Calc switches
+  over to bisection if it can, or otherwise gives up. In this case
+  it may help to try again with a slightly different initial
+  guess.) If the initial guess is a complex number, the function
+  must be differentiable.</p>
+
+  <p>If the formula (or the difference between the sides of an
+  equation) is negative at one end of the interval you specify and
+  positive at the other end, the root finder is guaranteed to find
+  a root. Otherwise, Calc subdivides the interval into small parts
+  looking for positive and negative values to bracket the root.
+  When your guess is an interval, Calc will not look outside that
+  interval for a root.</p><a name="index-H-a-R" id=
+  "index-H-a-R"></a> <a name="index-wroot" id="index-wroot"></a>
+
+  <p>The <kbd>H a R</kbd> [<code>wroot</code>] command is similar
+  to <kbd>a R</kbd>, except that if the initial guess is an
+  interval for which the function has the same sign at both ends,
+  then rather than subdividing the interval Calc attempts to widen
+  it to enclose a root. Use this mode if you are not sure if the
+  function has a root in your interval.</p>
+
+  <p>If the function is not differentiable, and you give a simple
+  number instead of an interval as your initial guess, Calc uses
+  this widening process even if you did not type the Hyperbolic
+  flag. (If the function <em>is</em> differentiable, Calc uses
+  Newton&rsquo;s method which does not require a bounding interval
+  in order to work.)</p>
+
+  <p>If Calc leaves the <code>root</code> or <code>wroot</code>
+  function in symbolic form on the stack, it will normally display
+  an explanation for why no root was found. If you miss this
+  explanation, press <kbd>w</kbd> (<code>calc-why</code>) to get it
+  back.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Minimization.html#Minimization" accesskey="n"
+    rel="next">Minimization</a>, Previous: <a href=
+    "Numerical-Solutions.html#Numerical-Solutions" accesskey="p"
+    rel="prev">Numerical Solutions</a>, Up: <a href=
+    "Numerical-Solutions.html#Numerical-Solutions" accesskey="u"
+    rel="up">Numerical Solutions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

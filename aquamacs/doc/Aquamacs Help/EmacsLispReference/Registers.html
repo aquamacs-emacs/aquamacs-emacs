@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,186 +19,281 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Registers</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Registers">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Registers">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Text.html#Text" rel="up" title="Text">
-<link href="Transposition.html#Transposition" rel="next" title="Transposition">
-<link href="Substitution.html#Substitution" rel="prev" title="Substitution">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Registers</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Registers" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Registers" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Text.html#Text" rel="up" title="Text" />
+  <link href="Transposition.html#Transposition" rel="next" title=
+  "Transposition" />
+  <link href="Substitution.html#Substitution" rel="prev" title=
+  "Substitution" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Registers" id="Registers"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Transposition.html#Transposition" accesskey=
+    "n" rel="next">Transposition</a>, Previous: <a href=
+    "Substitution.html#Substitution" accesskey="p" rel=
+    "prev">Substitution</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Registers-1" id="Registers-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Registers"></a>
-<div class="header">
-<p>
-Next: <a href="Transposition.html#Transposition" accesskey="n" rel="next">Transposition</a>, Previous: <a href="Substitution.html#Substitution" accesskey="p" rel="prev">Substitution</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Registers-1"></a>
-<h3 class="section">31.21 Registers</h3>
-<a name="index-registers"></a>
+  <h3 class="section">31.21 Registers</h3><a name="index-registers"
+  id="index-registers"></a>
 
-<p>A register is a sort of variable used in Emacs editing that can hold a
-variety of different kinds of values.  Each register is named by a
-single character.  All <acronym>ASCII</acronym> characters and their meta variants
-(but with the exception of <kbd>C-g</kbd>) can be used to name registers.
-Thus, there are 255 possible registers.  A register is designated in
-Emacs Lisp by the character that is its name.
-</p>
-<dl>
-<dt><a name="index-register_002dalist"></a>Variable: <strong>register-alist</strong></dt>
-<dd><p>This variable is an alist of elements of the form <code>(<var>name</var> .
-<var>contents</var>)</code>.  Normally, there is one element for each Emacs
-register that has been used.
-</p>
-<p>The object <var>name</var> is a character (an integer) identifying the
-register.
-</p></dd></dl>
+  <p>A register is a sort of variable used in Emacs editing that
+  can hold a variety of different kinds of values. Each register is
+  named by a single character. All <acronym>ASCII</acronym>
+  characters and their meta variants (but with the exception of
+  <kbd>C-g</kbd>) can be used to name registers. Thus, there are
+  255 possible registers. A register is designated in Emacs Lisp by
+  the character that is its name.</p>
 
-<p>The <var>contents</var> of a register can have several possible types:
-</p>
-<dl compact="compact">
-<dt>a number</dt>
-<dd><p>A number stands for itself.  If <code>insert-register</code> finds a number
-in the register, it converts the number to decimal.
-</p>
-</dd>
-<dt>a marker</dt>
-<dd><p>A marker represents a buffer position to jump to.
-</p>
-</dd>
-<dt>a string</dt>
-<dd><p>A string is text saved in the register.
-</p>
-</dd>
-<dt>a rectangle</dt>
-<dd><p>A rectangle is represented by a list of strings.
-</p>
-</dd>
-<dt><code>(<var>window-configuration</var> <var>position</var>)</code></dt>
-<dd><p>This represents a window configuration to restore in one frame, and a
-position to jump to in the current buffer.
-</p>
-</dd>
-<dt><code>(<var>frame-configuration</var> <var>position</var>)</code></dt>
-<dd><p>This represents a frame configuration to restore, and a position
-to jump to in the current buffer.
-</p>
-</dd>
-<dt>(file <var>filename</var>)</dt>
-<dd><p>This represents a file to visit; jumping to this value visits file
-<var>filename</var>.
-</p>
-</dd>
-<dt>(file-query <var>filename</var> <var>position</var>)</dt>
-<dd><p>This represents a file to visit and a position in it; jumping to this
-value visits file <var>filename</var> and goes to buffer position
-<var>position</var>.  Restoring this type of position asks the user for
-confirmation first.
-</p></dd>
-</dl>
+  <dl>
+    <dt><a name="index-register_002dalist" id=
+    "index-register_002dalist"></a>Variable:
+    <strong>register-alist</strong></dt>
 
-<p>The functions in this section return unpredictable values unless
-otherwise stated.
-</p>
-<dl>
-<dt><a name="index-get_002dregister"></a>Function: <strong>get-register</strong> <em>reg</em></dt>
-<dd><p>This function returns the contents of the register
-<var>reg</var>, or <code>nil</code> if it has no contents.
-</p></dd></dl>
+    <dd>
+      <p>This variable is an alist of elements of the form
+      <code>(<var>name</var> . <var>contents</var>)</code>.
+      Normally, there is one element for each Emacs register that
+      has been used.</p>
 
-<dl>
-<dt><a name="index-set_002dregister"></a>Function: <strong>set-register</strong> <em>reg value</em></dt>
-<dd><p>This function sets the contents of register <var>reg</var> to <var>value</var>.
-A register can be set to any value, but the other register functions
-expect only certain data types.  The return value is <var>value</var>.
-</p></dd></dl>
+      <p>The object <var>name</var> is a character (an integer)
+      identifying the register.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-view_002dregister"></a>Command: <strong>view-register</strong> <em>reg</em></dt>
-<dd><p>This command displays what is contained in register <var>reg</var>.
-</p></dd></dl>
+  <p>The <var>contents</var> of a register can have several
+  possible types:</p>
 
-<dl>
-<dt><a name="index-insert_002dregister"></a>Command: <strong>insert-register</strong> <em>reg &amp;optional beforep</em></dt>
-<dd><p>This command inserts contents of register <var>reg</var> into the current
-buffer.
-</p>
-<p>Normally, this command puts point before the inserted text, and the
-mark after it.  However, if the optional second argument <var>beforep</var>
-is non-<code>nil</code>, it puts the mark before and point after.
-</p>
-<p>When called interactively, the command defaults to putting point after
-text, and a prefix argument inverts this behavior.
-</p>
-<p>If the register contains a rectangle, then the rectangle is inserted
-with its upper left corner at point.  This means that text is inserted
-in the current line and underneath it on successive lines.
-</p>
-<p>If the register contains something other than saved text (a string) or
-a rectangle (a list), currently useless things happen.  This may be
-changed in the future.
-</p></dd></dl>
+  <dl compact="compact">
+    <dt>a number</dt>
 
-<dl>
-<dt><a name="index-register_002dread_002dwith_002dpreview"></a>Function: <strong>register-read-with-preview</strong> <em>prompt</em></dt>
-<dd><a name="index-register-preview"></a>
-<p>This function reads and returns a register name, prompting with
-<var>prompt</var> and possibly showing a preview of the existing registers
-and their contents.  The preview is shown in a temporary window, after
-the delay specified by the user option <code>register-preview-delay</code>,
-if its value and <code>register-alist</code> are both non-<code>nil</code>.  The
-preview is also shown if the user requests help (e.g., by typing the
-help character).  We recommend that all interactive commands which
-read register names use this function.
-</p></dd></dl>
+    <dd>
+      <p>A number stands for itself. If
+      <code>insert-register</code> finds a number in the register,
+      it converts the number to decimal.</p>
+    </dd>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Transposition.html#Transposition" accesskey="n" rel="next">Transposition</a>, Previous: <a href="Substitution.html#Substitution" accesskey="p" rel="prev">Substitution</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dt>a marker</dt>
 
+    <dd>
+      <p>A marker represents a buffer position to jump to.</p>
+    </dd>
 
+    <dt>a string</dt>
 
+    <dd>
+      <p>A string is text saved in the register.</p>
+    </dd>
+
+    <dt>a rectangle</dt>
+
+    <dd>
+      <p>A rectangle is represented by a list of strings.</p>
+    </dd>
+
+    <dt><code>(<var>window-configuration</var>
+    <var>position</var>)</code></dt>
+
+    <dd>
+      <p>This represents a window configuration to restore in one
+      frame, and a position to jump to in the current buffer.</p>
+    </dd>
+
+    <dt><code>(<var>frame-configuration</var>
+    <var>position</var>)</code></dt>
+
+    <dd>
+      <p>This represents a frame configuration to restore, and a
+      position to jump to in the current buffer.</p>
+    </dd>
+
+    <dt>(file <var>filename</var>)</dt>
+
+    <dd>
+      <p>This represents a file to visit; jumping to this value
+      visits file <var>filename</var>.</p>
+    </dd>
+
+    <dt>(file-query <var>filename</var> <var>position</var>)</dt>
+
+    <dd>
+      <p>This represents a file to visit and a position in it;
+      jumping to this value visits file <var>filename</var> and
+      goes to buffer position <var>position</var>. Restoring this
+      type of position asks the user for confirmation first.</p>
+    </dd>
+  </dl>
+
+  <p>The functions in this section return unpredictable values
+  unless otherwise stated.</p>
+
+  <dl>
+    <dt><a name="index-get_002dregister" id=
+    "index-get_002dregister"></a>Function:
+    <strong>get-register</strong> <em>reg</em></dt>
+
+    <dd>
+      <p>This function returns the contents of the register
+      <var>reg</var>, or <code>nil</code> if it has no
+      contents.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-set_002dregister" id=
+    "index-set_002dregister"></a>Function:
+    <strong>set-register</strong> <em>reg value</em></dt>
+
+    <dd>
+      <p>This function sets the contents of register <var>reg</var>
+      to <var>value</var>. A register can be set to any value, but
+      the other register functions expect only certain data types.
+      The return value is <var>value</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-view_002dregister" id=
+    "index-view_002dregister"></a>Command:
+    <strong>view-register</strong> <em>reg</em></dt>
+
+    <dd>
+      <p>This command displays what is contained in register
+      <var>reg</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-insert_002dregister" id=
+    "index-insert_002dregister"></a>Command:
+    <strong>insert-register</strong> <em>reg &amp;optional
+    beforep</em></dt>
+
+    <dd>
+      <p>This command inserts contents of register <var>reg</var>
+      into the current buffer.</p>
+
+      <p>Normally, this command puts point before the inserted
+      text, and the mark after it. However, if the optional second
+      argument <var>beforep</var> is non-<code>nil</code>, it puts
+      the mark before and point after.</p>
+
+      <p>When called interactively, the command defaults to putting
+      point after text, and a prefix argument inverts this
+      behavior.</p>
+
+      <p>If the register contains a rectangle, then the rectangle
+      is inserted with its upper left corner at point. This means
+      that text is inserted in the current line and underneath it
+      on successive lines.</p>
+
+      <p>If the register contains something other than saved text
+      (a string) or a rectangle (a list), currently useless things
+      happen. This may be changed in the future.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-register_002dread_002dwith_002dpreview" id=
+    "index-register_002dread_002dwith_002dpreview"></a>Function:
+    <strong>register-read-with-preview</strong>
+    <em>prompt</em></dt>
+
+    <dd>
+      <a name="index-register-preview" id=
+      "index-register-preview"></a>
+
+      <p>This function reads and returns a register name, prompting
+      with <var>prompt</var> and possibly showing a preview of the
+      existing registers and their contents. The preview is shown
+      in a temporary window, after the delay specified by the user
+      option <code>register-preview-delay</code>, if its value and
+      <code>register-alist</code> are both non-<code>nil</code>.
+      The preview is also shown if the user requests help (e.g., by
+      typing the help character). We recommend that all interactive
+      commands which read register names use this function.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Transposition.html#Transposition" accesskey=
+    "n" rel="next">Transposition</a>, Previous: <a href=
+    "Substitution.html#Substitution" accesskey="p" rel=
+    "prev">Substitution</a>, Up: <a href="Text.html#Text"
+    accesskey="u" rel="up">Text</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

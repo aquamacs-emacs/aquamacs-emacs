@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>History - URL Programmer's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="URL Programmer's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="General-Facilities.html#General-Facilities" title="General Facilities">
-<link rel="prev" href="Gateways-in-general.html#Gateways-in-general" title="Gateways in general">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>History - URL Programmer's Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="URL Programmer's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="General-Facilities.html#General-Facilities"
+  title="General Facilities" />
+  <link rel="prev" href=
+  "Gateways-in-general.html#Gateways-in-general" title=
+  "Gateways in general" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents the Emacs Lisp URL loading package.
 
 Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
@@ -26,8 +35,10 @@ Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,71 +48,131 @@ Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="History"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Gateways-in-general.html#Gateways-in-general">Gateways in general</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="General-Facilities.html#General-Facilities">General Facilities</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="History" id="History"></a>
 
-<h3 class="section">5.4 History</h3>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Gateways-in-general.html#Gateways-in-general">Gateways in
+    general</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "General-Facilities.html#General-Facilities">General
+    Facilities</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-url_002ddo_002dsetup-148"></a>The library can maintain a global history list tracking URLs accessed. 
-URL completion can be done from it.  The history mechanism is set up
-automatically via <code>url-do-setup</code> when it is configured to be on. 
-Note that the size of the history list is currently not limited.
+  <h3 class="section">5.4 History</h3>
 
-   <p><a name="index-url_002dhistory_002dhash_002dtable-149"></a>The history `list' is actually a hash table,
-<code>url-history-hash-table</code>.  It contains access times keyed by URL
-strings.  The times are in the format returned by <code>current-time</code>.
+  <p><a name="index-url_002ddo_002dsetup-148" id=
+  "index-url_002ddo_002dsetup-148"></a>The library can maintain a
+  global history list tracking URLs accessed. URL completion can be
+  done from it. The history mechanism is set up automatically via
+  <code>url-do-setup</code> when it is configured to be on. Note
+  that the size of the history list is currently not limited.</p>
 
-<div class="defun">
-&mdash; Function: <b>url-history-update-url</b><var> url time<a name="index-url_002dhistory_002dupdate_002durl-150"></a></var><br>
-<blockquote><p>This function updates the history table with an entry for <var>url</var>
-accessed at the given <var>time</var>. 
-</p></blockquote></div>
+  <p><a name="index-url_002dhistory_002dhash_002dtable-149" id=
+  "index-url_002dhistory_002dhash_002dtable-149"></a>The history
+  `list' is actually a hash table,
+  <code>url-history-hash-table</code>. It contains access times
+  keyed by URL strings. The times are in the format returned by
+  <code>current-time</code>.</p>
 
-<div class="defun">
-&mdash; User Option: <b>url-history-track</b><var><a name="index-url_002dhistory_002dtrack-151"></a></var><br>
-<blockquote><p>If non-<code>nil</code>, the library will keep track of all the URLs
-accessed.  If it is <code>t</code>, the list is saved to disk at the end of
-each Emacs session.  The default is <code>nil</code>. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Function: <b>url-history-update-url</b> <var>url
+    time<a name="index-url_002dhistory_002dupdate_002durl-150" id=
+    "index-url_002dhistory_002dupdate_002durl-150"></a></var><br />
 
-<div class="defun">
-&mdash; User Option: <b>url-history-file</b><var><a name="index-url_002dhistory_002dfile-152"></a></var><br>
-<blockquote><p>The file storing the history list between sessions.  It defaults to
-<samp><span class="file">history</span></samp> in <code>url-configuration-directory</code>. 
-</p></blockquote></div>
+    <blockquote>
+      <p>This function updates the history table with an entry for
+      <var>url</var> accessed at the given <var>time</var>.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; User Option: <b>url-history-save-interval</b><var><a name="index-url_002dhistory_002dsave_002dinterval-153"></a></var><br>
-<blockquote><p><a name="index-url_002dhistory_002dsetup_002dsave_002dtimer-154"></a>The number of seconds between automatic saves of the history list. 
-Default is one hour.  Note that if you change this variable directly,
-rather than using Custom, after <code>url-do-setup</code> has been run, you
-need to run the function <code>url-history-setup-save-timer</code>. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; User Option: <b>url-history-track</b><var><a name=
+    "index-url_002dhistory_002dtrack-151" id=
+    "index-url_002dhistory_002dtrack-151"></a></var><br />
 
-<div class="defun">
-&mdash; Function: <b>url-history-parse-history</b><var> &amp;optional fname<a name="index-url_002dhistory_002dparse_002dhistory-155"></a></var><br>
-<blockquote><p>Parses the history file <var>fname</var> (default <code>url-history-file</code>)
-and sets up the history list. 
-</p></blockquote></div>
+    <blockquote>
+      <p>If non-<code>nil</code>, the library will keep track of
+      all the URLs accessed. If it is <code>t</code>, the list is
+      saved to disk at the end of each Emacs session. The default
+      is <code>nil</code>.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Function: <b>url-history-save-history</b><var> &amp;optional fname<a name="index-url_002dhistory_002dsave_002dhistory-156"></a></var><br>
-<blockquote><p>Saves the current history to file <var>fname</var> (default
-<code>url-history-file</code>). 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; User Option: <b>url-history-file</b><var><a name=
+    "index-url_002dhistory_002dfile-152" id=
+    "index-url_002dhistory_002dfile-152"></a></var><br />
 
-<div class="defun">
-&mdash; Function: <b>url-completion-function</b><var> string predicate function<a name="index-url_002dcompletion_002dfunction-157"></a></var><br>
-<blockquote><p>You can use this function to do completion of URLs from the history. 
-</p></blockquote></div>
+    <blockquote>
+      <p>The file storing the history list between sessions. It
+      defaults to <samp><span class="file">history</span></samp> in
+      <code>url-configuration-directory</code>.</p>
+    </blockquote>
+  </div>
 
-   </body></html>
+  <div class="defun">
+    &mdash; User Option:
+    <b>url-history-save-interval</b><var><a name=
+    "index-url_002dhistory_002dsave_002dinterval-153" id=
+    "index-url_002dhistory_002dsave_002dinterval-153"></a></var><br />
 
+
+    <blockquote>
+      <p><a name=
+      "index-url_002dhistory_002dsetup_002dsave_002dtimer-154" id=
+      "index-url_002dhistory_002dsetup_002dsave_002dtimer-154"></a>The
+      number of seconds between automatic saves of the history
+      list. Default is one hour. Note that if you change this
+      variable directly, rather than using Custom, after
+      <code>url-do-setup</code> has been run, you need to run the
+      function <code>url-history-setup-save-timer</code>.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Function: <b>url-history-parse-history</b>
+    <var>&amp;optional fname<a name=
+    "index-url_002dhistory_002dparse_002dhistory-155" id=
+    "index-url_002dhistory_002dparse_002dhistory-155"></a></var><br />
+
+
+    <blockquote>
+      <p>Parses the history file <var>fname</var> (default
+      <code>url-history-file</code>) and sets up the history
+      list.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Function: <b>url-history-save-history</b>
+    <var>&amp;optional fname<a name=
+    "index-url_002dhistory_002dsave_002dhistory-156" id=
+    "index-url_002dhistory_002dsave_002dhistory-156"></a></var><br />
+
+
+    <blockquote>
+      <p>Saves the current history to file <var>fname</var>
+      (default <code>url-history-file</code>).</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Function: <b>url-completion-function</b> <var>string
+    predicate function<a name=
+    "index-url_002dcompletion_002dfunction-157" id=
+    "index-url_002dcompletion_002dfunction-157"></a></var><br />
+
+    <blockquote>
+      <p>You can use this function to do completion of URLs from
+      the history.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

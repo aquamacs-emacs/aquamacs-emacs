@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,179 +19,265 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Building Lists</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Building Lists">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Building Lists">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lists.html#Lists" rel="up" title="Lists">
-<link href="List-Variables.html#List-Variables" rel="next" title="List Variables">
-<link href="List-Elements.html#List-Elements" rel="prev" title="List Elements">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Building Lists</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Building Lists" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Building Lists" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lists.html#Lists" rel="up" title="Lists" />
+  <link href="List-Variables.html#List-Variables" rel="next" title=
+  "List Variables" />
+  <link href="List-Elements.html#List-Elements" rel="prev" title=
+  "List Elements" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Building-Lists" id="Building-Lists"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="List-Variables.html#List-Variables"
+    accesskey="n" rel="next">List Variables</a>, Previous: <a href=
+    "List-Elements.html#List-Elements" accesskey="p" rel=
+    "prev">List Elements</a>, Up: <a href="Lists.html#Lists"
+    accesskey="u" rel="up">Lists</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Building-Cons-Cells-and-Lists" id=
+  "Building-Cons-Cells-and-Lists"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Building-Lists"></a>
-<div class="header">
-<p>
-Next: <a href="List-Variables.html#List-Variables" accesskey="n" rel="next">List Variables</a>, Previous: <a href="List-Elements.html#List-Elements" accesskey="p" rel="prev">List Elements</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Building-Cons-Cells-and-Lists"></a>
-<h3 class="section">5.4 Building Cons Cells and Lists</h3>
-<a name="index-cons-cells"></a>
-<a name="index-building-lists"></a>
+  <h3 class="section">5.4 Building Cons Cells and
+  Lists</h3><a name="index-cons-cells" id="index-cons-cells"></a>
+  <a name="index-building-lists" id="index-building-lists"></a>
 
-<p>Many functions build lists, as lists reside at the very heart of Lisp.
-<code>cons</code> is the fundamental list-building function; however, it is
-interesting to note that <code>list</code> is used more times in the source
-code for Emacs than <code>cons</code>.
-</p>
-<dl>
-<dt><a name="index-cons"></a>Function: <strong>cons</strong> <em>object1 object2</em></dt>
-<dd><p>This function is the most basic function for building new list
-structure.  It creates a new cons cell, making <var>object1</var> the
-<small>CAR</small>, and <var>object2</var> the <small>CDR</small>.  It then returns the new
-cons cell.  The arguments <var>object1</var> and <var>object2</var> may be any
-Lisp objects, but most often <var>object2</var> is a list.
-</p>
-<div class="example">
-<pre class="example">(cons 1 '(2))
+  <p>Many functions build lists, as lists reside at the very heart
+  of Lisp. <code>cons</code> is the fundamental list-building
+  function; however, it is interesting to note that
+  <code>list</code> is used more times in the source code for Emacs
+  than <code>cons</code>.</p>
+
+  <dl>
+    <dt><a name="index-cons" id="index-cons"></a>Function:
+    <strong>cons</strong> <em>object1 object2</em></dt>
+
+    <dd>
+      <p>This function is the most basic function for building new
+      list structure. It creates a new cons cell, making
+      <var>object1</var> the <small>CAR</small>, and
+      <var>object2</var> the <small>CDR</small>. It then returns
+      the new cons cell. The arguments <var>object1</var> and
+      <var>object2</var> may be any Lisp objects, but most often
+      <var>object2</var> is a list.</p>
+
+      <div class="example">
+        <pre class="example">
+(cons 1 '(2))
      &rArr; (1 2)
-</pre><pre class="example">(cons 1 '())
+</pre>
+        <pre class="example">
+(cons 1 '())
      &rArr; (1)
-</pre><pre class="example">(cons 1 2)
+</pre>
+        <pre class="example">
+(cons 1 2)
      &rArr; (1 . 2)
-</pre></div>
+</pre>
+      </div><a name="index-consing" id="index-consing"></a>
 
-<a name="index-consing"></a>
-<p><code>cons</code> is often used to add a single element to the front of a
-list.  This is called <em>consing the element onto the list</em>.
-<a name="DOCF2" href="#FOOT2"><sup>2</sup></a>
-For example:
-</p>
-<div class="example">
-<pre class="example">(setq list (cons newelt list))
-</pre></div>
+      <p><code>cons</code> is often used to add a single element to
+      the front of a list. This is called <em>consing the element
+      onto the list</em>. <a name="DOCF2" href="#FOOT2" id=
+      "DOCF2"><sup>2</sup></a> For example:</p>
 
-<p>Note that there is no conflict between the variable named <code>list</code>
-used in this example and the function named <code>list</code> described below;
-any symbol can serve both purposes.
-</p></dd></dl>
+      <div class="example">
+        <pre class="example">
+(setq list (cons newelt list))
+</pre>
+      </div>
 
-<dl>
-<dt><a name="index-list"></a>Function: <strong>list</strong> <em>&amp;rest objects</em></dt>
-<dd><p>This function creates a list with <var>objects</var> as its elements.  The
-resulting list is always <code>nil</code>-terminated.  If no <var>objects</var>
-are given, the empty list is returned.
-</p>
-<div class="example">
-<pre class="example">(list 1 2 3 4 5)
+      <p>Note that there is no conflict between the variable named
+      <code>list</code> used in this example and the function named
+      <code>list</code> described below; any symbol can serve both
+      purposes.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-list" id="index-list"></a>Function:
+    <strong>list</strong> <em>&amp;rest objects</em></dt>
+
+    <dd>
+      <p>This function creates a list with <var>objects</var> as
+      its elements. The resulting list is always
+      <code>nil</code>-terminated. If no <var>objects</var> are
+      given, the empty list is returned.</p>
+
+      <div class="example">
+        <pre class="example">
+(list 1 2 3 4 5)
      &rArr; (1 2 3 4 5)
-</pre><pre class="example">(list 1 2 '(3 4 5) 'foo)
+</pre>
+        <pre class="example">
+(list 1 2 '(3 4 5) 'foo)
      &rArr; (1 2 (3 4 5) foo)
-</pre><pre class="example">(list)
+</pre>
+        <pre class="example">
+(list)
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-make_002dlist"></a>Function: <strong>make-list</strong> <em>length object</em></dt>
-<dd><p>This function creates a list of <var>length</var> elements, in which each
-element is <var>object</var>.  Compare <code>make-list</code> with
-<code>make-string</code> (see <a href="Creating-Strings.html#Creating-Strings">Creating Strings</a>).
-</p>
-<div class="example">
-<pre class="example">(make-list 3 'pigs)
+  <dl>
+    <dt><a name="index-make_002dlist" id=
+    "index-make_002dlist"></a>Function: <strong>make-list</strong>
+    <em>length object</em></dt>
+
+    <dd>
+      <p>This function creates a list of <var>length</var>
+      elements, in which each element is <var>object</var>. Compare
+      <code>make-list</code> with <code>make-string</code> (see
+      <a href="Creating-Strings.html#Creating-Strings">Creating
+      Strings</a>).</p>
+
+      <div class="example">
+        <pre class="example">
+(make-list 3 'pigs)
      &rArr; (pigs pigs pigs)
-</pre><pre class="example">(make-list 0 'pigs)
+</pre>
+        <pre class="example">
+(make-list 0 'pigs)
      &rArr; nil
-</pre><pre class="example">(setq l (make-list 3 '(a b)))
+</pre>
+        <pre class="example">
+(setq l (make-list 3 '(a b)))
      &rArr; ((a b) (a b) (a b))
 (eq (car l) (cadr l))
      &rArr; t
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-append"></a>Function: <strong>append</strong> <em>&amp;rest sequences</em></dt>
-<dd><a name="index-copying-lists"></a>
-<p>This function returns a list containing all the elements of
-<var>sequences</var>.  The <var>sequences</var> may be lists, vectors,
-bool-vectors, or strings, but the last one should usually be a list.
-All arguments except the last one are copied, so none of the arguments
-is altered.  (See <code>nconc</code> in <a href="Rearrangement.html#Rearrangement">Rearrangement</a>, for a way to join
-lists with no copying.)
-</p>
-<p>More generally, the final argument to <code>append</code> may be any Lisp
-object.  The final argument is not copied or converted; it becomes the
-<small>CDR</small> of the last cons cell in the new list.  If the final argument
-is itself a list, then its elements become in effect elements of the
-result list.  If the final element is not a list, the result is a
-dotted list since its final <small>CDR</small> is not <code>nil</code> as required
-in a true list.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-append" id="index-append"></a>Function:
+    <strong>append</strong> <em>&amp;rest sequences</em></dt>
 
-<p>Here is an example of using <code>append</code>:
-</p>
-<div class="example">
-<pre class="example">(setq trees '(pine oak))
+    <dd>
+      <a name="index-copying-lists" id="index-copying-lists"></a>
+
+      <p>This function returns a list containing all the elements
+      of <var>sequences</var>. The <var>sequences</var> may be
+      lists, vectors, bool-vectors, or strings, but the last one
+      should usually be a list. All arguments except the last one
+      are copied, so none of the arguments is altered. (See
+      <code>nconc</code> in <a href=
+      "Rearrangement.html#Rearrangement">Rearrangement</a>, for a
+      way to join lists with no copying.)</p>
+
+      <p>More generally, the final argument to <code>append</code>
+      may be any Lisp object. The final argument is not copied or
+      converted; it becomes the <small>CDR</small> of the last cons
+      cell in the new list. If the final argument is itself a list,
+      then its elements become in effect elements of the result
+      list. If the final element is not a list, the result is a
+      dotted list since its final <small>CDR</small> is not
+      <code>nil</code> as required in a true list.</p>
+    </dd>
+  </dl>
+
+  <p>Here is an example of using <code>append</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(setq trees '(pine oak))
      &rArr; (pine oak)
 (setq more-trees (append '(maple birch) trees))
      &rArr; (maple birch pine oak)
-</pre><pre class="example">
-</pre><pre class="example">trees
+</pre>
+    <pre class="example">
+</pre>
+    <pre class="example">
+trees
      &rArr; (pine oak)
 more-trees
      &rArr; (maple birch pine oak)
-</pre><pre class="example">(eq trees (cdr (cdr more-trees)))
+</pre>
+    <pre class="example">
+(eq trees (cdr (cdr more-trees)))
      &rArr; t
-</pre></div>
+</pre>
+  </div>
 
-<p>You can see how <code>append</code> works by looking at a box diagram.  The
-variable <code>trees</code> is set to the list <code>(pine oak)</code> and then the
-variable <code>more-trees</code> is set to the list <code>(maple birch pine
-oak)</code>.  However, the variable <code>trees</code> continues to refer to the
-original list:
-</p>
-<div class="smallexample">
-<pre class="smallexample">more-trees                trees
+  <p>You can see how <code>append</code> works by looking at a box
+  diagram. The variable <code>trees</code> is set to the list
+  <code>(pine oak)</code> and then the variable
+  <code>more-trees</code> is set to the list <code>(maple birch
+  pine oak)</code>. However, the variable <code>trees</code>
+  continues to refer to the original list:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+more-trees                trees
 |                           |
 |     --- ---      --- ---   -&gt; --- ---      --- ---
  --&gt; |   |   |--&gt; |   |   |--&gt; |   |   |--&gt; |   |   |--&gt; nil
@@ -197,107 +285,153 @@ original list:
        |            |            |            |
        |            |            |            |
         --&gt; maple    --&gt;birch     --&gt; pine     --&gt; oak
-</pre></div>
+</pre>
+  </div>
 
-<p>An empty sequence contributes nothing to the value returned by
-<code>append</code>.  As a consequence of this, a final <code>nil</code> argument
-forces a copy of the previous argument:
-</p>
-<div class="example">
-<pre class="example">trees
+  <p>An empty sequence contributes nothing to the value returned by
+  <code>append</code>. As a consequence of this, a final
+  <code>nil</code> argument forces a copy of the previous
+  argument:</p>
+
+  <div class="example">
+    <pre class="example">
+trees
      &rArr; (pine oak)
-</pre><pre class="example">(setq wood (append trees nil))
+</pre>
+    <pre class="example">
+(setq wood (append trees nil))
      &rArr; (pine oak)
-</pre><pre class="example">wood
+</pre>
+    <pre class="example">
+wood
      &rArr; (pine oak)
-</pre><pre class="example">(eq wood trees)
+</pre>
+    <pre class="example">
+(eq wood trees)
      &rArr; nil
-</pre></div>
+</pre>
+  </div>
 
-<p>This once was the usual way to copy a list, before the function
-<code>copy-sequence</code> was invented.  See <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>.
-</p>
-<p>Here we show the use of vectors and strings as arguments to <code>append</code>:
-</p>
-<div class="example">
-<pre class="example">(append [a b] &quot;cd&quot; nil)
+  <p>This once was the usual way to copy a list, before the
+  function <code>copy-sequence</code> was invented. See <a href=
+  "Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences
+  Arrays Vectors</a>.</p>
+
+  <p>Here we show the use of vectors and strings as arguments to
+  <code>append</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+(append [a b] "cd" nil)
      &rArr; (a b 99 100)
-</pre></div>
+</pre>
+  </div>
 
-<p>With the help of <code>apply</code> (see <a href="Calling-Functions.html#Calling-Functions">Calling Functions</a>), we can append
-all the lists in a list of lists:
-</p>
-<div class="example">
-<pre class="example">(apply 'append '((a b c) nil (x y z) nil))
+  <p>With the help of <code>apply</code> (see <a href=
+  "Calling-Functions.html#Calling-Functions">Calling
+  Functions</a>), we can append all the lists in a list of
+  lists:</p>
+
+  <div class="example">
+    <pre class="example">
+(apply 'append '((a b c) nil (x y z) nil))
      &rArr; (a b c x y z)
-</pre></div>
+</pre>
+  </div>
 
-<p>If no <var>sequences</var> are given, <code>nil</code> is returned:
-</p>
-<div class="example">
-<pre class="example">(append)
+  <p>If no <var>sequences</var> are given, <code>nil</code> is
+  returned:</p>
+
+  <div class="example">
+    <pre class="example">
+(append)
      &rArr; nil
-</pre></div>
+</pre>
+  </div>
 
-<p>Here are some examples where the final argument is not a list:
-</p>
-<div class="example">
-<pre class="example">(append '(x y) 'z)
+  <p>Here are some examples where the final argument is not a
+  list:</p>
+
+  <div class="example">
+    <pre class="example">
+(append '(x y) 'z)
      &rArr; (x y . z)
 (append '(x y) [z])
      &rArr; (x y . [z])
-</pre></div>
+</pre>
+  </div>
 
-<p>The second example shows that when the final argument is a sequence but
-not a list, the sequence&rsquo;s elements do not become elements of the
-resulting list.  Instead, the sequence becomes the final <small>CDR</small>, like
-any other non-list final argument.
-</p>
-<dl>
-<dt><a name="index-copy_002dtree"></a>Function: <strong>copy-tree</strong> <em>tree &amp;optional vecp</em></dt>
-<dd><p>This function returns a copy of the tree <code>tree</code>.  If <var>tree</var> is a
-cons cell, this makes a new cons cell with the same <small>CAR</small> and
-<small>CDR</small>, then recursively copies the <small>CAR</small> and <small>CDR</small> in the
-same way.
-</p>
-<p>Normally, when <var>tree</var> is anything other than a cons cell,
-<code>copy-tree</code> simply returns <var>tree</var>.  However, if <var>vecp</var> is
-non-<code>nil</code>, it copies vectors too (and operates recursively on
-their elements).
-</p></dd></dl>
+  <p>The second example shows that when the final argument is a
+  sequence but not a list, the sequence&rsquo;s elements do not
+  become elements of the resulting list. Instead, the sequence
+  becomes the final <small>CDR</small>, like any other non-list
+  final argument.</p>
 
-<dl>
-<dt><a name="index-number_002dsequence"></a>Function: <strong>number-sequence</strong> <em>from &amp;optional to separation</em></dt>
-<dd><p>This returns a list of numbers starting with <var>from</var> and
-incrementing by <var>separation</var>, and ending at or just before
-<var>to</var>.  <var>separation</var> can be positive or negative and defaults
-to 1.  If <var>to</var> is <code>nil</code> or numerically equal to <var>from</var>,
-the value is the one-element list <code>(<var>from</var>)</code>.  If <var>to</var> is
-less than <var>from</var> with a positive <var>separation</var>, or greater than
-<var>from</var> with a negative <var>separation</var>, the value is <code>nil</code>
-because those arguments specify an empty sequence.
-</p>
-<p>If <var>separation</var> is 0 and <var>to</var> is neither <code>nil</code> nor
-numerically equal to <var>from</var>, <code>number-sequence</code> signals an
-error, since those arguments specify an infinite sequence.
-</p>
-<p>All arguments are numbers.
-Floating-point arguments can be tricky, because floating-point
-arithmetic is inexact.  For instance, depending on the machine, it may
-quite well happen that <code>(number-sequence 0.4 0.6 0.2)</code> returns
-the one element list <code>(0.4)</code>, whereas
-<code>(number-sequence 0.4 0.8 0.2)</code> returns a list with three
-elements.  The <var>n</var>th element of the list is computed by the exact
-formula <code>(+ <var>from</var> (* <var>n</var> <var>separation</var>))</code>.  Thus, if
-one wants to make sure that <var>to</var> is included in the list, one can
-pass an expression of this exact type for <var>to</var>.  Alternatively,
-one can replace <var>to</var> with a slightly larger value (or a slightly
-more negative value if <var>separation</var> is negative).
-</p>
-<p>Some examples:
-</p>
-<div class="example">
-<pre class="example">(number-sequence 4 9)
+  <dl>
+    <dt><a name="index-copy_002dtree" id=
+    "index-copy_002dtree"></a>Function: <strong>copy-tree</strong>
+    <em>tree &amp;optional vecp</em></dt>
+
+    <dd>
+      <p>This function returns a copy of the tree
+      <code>tree</code>. If <var>tree</var> is a cons cell, this
+      makes a new cons cell with the same <small>CAR</small> and
+      <small>CDR</small>, then recursively copies the
+      <small>CAR</small> and <small>CDR</small> in the same
+      way.</p>
+
+      <p>Normally, when <var>tree</var> is anything other than a
+      cons cell, <code>copy-tree</code> simply returns
+      <var>tree</var>. However, if <var>vecp</var> is
+      non-<code>nil</code>, it copies vectors too (and operates
+      recursively on their elements).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-number_002dsequence" id=
+    "index-number_002dsequence"></a>Function:
+    <strong>number-sequence</strong> <em>from &amp;optional to
+    separation</em></dt>
+
+    <dd>
+      <p>This returns a list of numbers starting with
+      <var>from</var> and incrementing by <var>separation</var>,
+      and ending at or just before <var>to</var>.
+      <var>separation</var> can be positive or negative and
+      defaults to 1. If <var>to</var> is <code>nil</code> or
+      numerically equal to <var>from</var>, the value is the
+      one-element list <code>(<var>from</var>)</code>. If
+      <var>to</var> is less than <var>from</var> with a positive
+      <var>separation</var>, or greater than <var>from</var> with a
+      negative <var>separation</var>, the value is <code>nil</code>
+      because those arguments specify an empty sequence.</p>
+
+      <p>If <var>separation</var> is 0 and <var>to</var> is neither
+      <code>nil</code> nor numerically equal to <var>from</var>,
+      <code>number-sequence</code> signals an error, since those
+      arguments specify an infinite sequence.</p>
+
+      <p>All arguments are numbers. Floating-point arguments can be
+      tricky, because floating-point arithmetic is inexact. For
+      instance, depending on the machine, it may quite well happen
+      that <code>(number-sequence 0.4 0.6 0.2)</code> returns the
+      one element list <code>(0.4)</code>, whereas
+      <code>(number-sequence 0.4 0.8 0.2)</code> returns a list
+      with three elements. The <var>n</var>th element of the list
+      is computed by the exact formula <code>(+ <var>from</var> (*
+      <var>n</var> <var>separation</var>))</code>. Thus, if one
+      wants to make sure that <var>to</var> is included in the
+      list, one can pass an expression of this exact type for
+      <var>to</var>. Alternatively, one can replace <var>to</var>
+      with a slightly larger value (or a slightly more negative
+      value if <var>separation</var> is negative).</p>
+
+      <p>Some examples:</p>
+
+      <div class="example">
+        <pre class="example">
+(number-sequence 4 9)
      &rArr; (4 5 6 7 8 9)
 (number-sequence 9 4 -1)
      &rArr; (9 8 7 6 5 4)
@@ -311,30 +445,41 @@ more negative value if <var>separation</var> is negative).
      &rArr; nil
 (number-sequence 1.5 6 2)
      &rArr; (1.5 3.5 5.5)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <div class="footnote">
+    <hr />
 
-<h3><a name="FOOT2" href="#DOCF2">(2)</a></h3>
-<p>There is no strictly equivalent way to add an element to
-the end of a list.  You can use <code>(append <var>listname</var> (list
-<var>newelt</var>))</code>, which creates a whole new list by copying <var>listname</var>
-and adding <var>newelt</var> to its end.  Or you can use <code>(nconc
-<var>listname</var> (list <var>newelt</var>))</code>, which modifies <var>listname</var>
-by following all the <small>CDR</small>s and then replacing the terminating
-<code>nil</code>.  Compare this to adding an element to the beginning of a
-list with <code>cons</code>, which neither copies nor modifies the list.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="List-Variables.html#List-Variables" accesskey="n" rel="next">List Variables</a>, Previous: <a href="List-Elements.html#List-Elements" accesskey="p" rel="prev">List Elements</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT2" href="#DOCF2" id="FOOT2">(2)</a></h3>
 
+    <p>There is no strictly equivalent way to add an element to the
+    end of a list. You can use <code>(append <var>listname</var>
+    (list <var>newelt</var>))</code>, which creates a whole new
+    list by copying <var>listname</var> and adding
+    <var>newelt</var> to its end. Or you can use <code>(nconc
+    <var>listname</var> (list <var>newelt</var>))</code>, which
+    modifies <var>listname</var> by following all the
+    <small>CDR</small>s and then replacing the terminating
+    <code>nil</code>. Compare this to adding an element to the
+    beginning of a list with <code>cons</code>, which neither
+    copies nor modifies the list.</p>
+  </div>
+  <hr />
 
+  <div class="header">
+    <p>Next: <a href="List-Variables.html#List-Variables"
+    accesskey="n" rel="next">List Variables</a>, Previous: <a href=
+    "List-Elements.html#List-Elements" accesskey="p" rel=
+    "prev">List Elements</a>, Up: <a href="Lists.html#Lists"
+    accesskey="u" rel="up">Lists</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

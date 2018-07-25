@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file describes EDE, the Emacs Development Environment.
 
 Copyright (C) 1998-2001, 2004-2005, 2008-2016
@@ -15,109 +17,147 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Development Environment: Creating a project</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Development Environment: Creating a project">
-<meta name="keywords" content="Emacs Development Environment: Creating a project">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Modifying-your-project.html#Modifying-your-project" rel="next" title="Modifying your project">
-<link href="Quick-Start.html#Quick-Start" rel="prev" title="Quick Start">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Development Environment: Creating a project</title>
+  <meta name="description" content=
+  "Emacs Development Environment: Creating a project" />
+  <meta name="keywords" content=
+  "Emacs Development Environment: Creating a project" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Modifying-your-project.html#Modifying-your-project"
+  rel="next" title="Modifying your project" />
+  <link href="Quick-Start.html#Quick-Start" rel="prev" title=
+  "Quick Start" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-a-project"></a>
-<div class="header">
-<p>
-Next: <a href="Modifying-your-project.html#Modifying-your-project" accesskey="n" rel="next">Modifying your project</a>, Previous: <a href="Quick-Start.html#Quick-Start" accesskey="p" rel="prev">Quick Start</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Creating-a-project-1"></a>
-<h2 class="chapter">4 Creating a project</h2>
+<body lang="en" xml:lang="en">
+  <a name="Creating-a-project" id="Creating-a-project"></a>
 
-<p>To create a new project, first visit a file that you want to include
-in that project.  If you have a hierarchy of directories, first visit
-a file in the topmost directory.  From this buffer, type <kbd>M-x
-ede-new</kbd>, or click on the &lsquo;<samp>Create Project</samp>&rsquo; item in the
-&lsquo;<samp>Development</samp>&rsquo; menu.
-</p>
-<p>The <code>ede-new</code> command prompts for the type of project you
-would like to create.  Each project type has its own benefits or
-language specific enhancements.  Not all projects that <i>EDE</i> supports
-also allow creating a new project.  Projects such as <code>emacs</code>
-or <code>linux</code> are designed to recognize existing projects only.
-Project types such as &lsquo;<samp>Make</samp>&rsquo; and &lsquo;<samp>Automake</samp>&rsquo; do support
-creating new project types with <code>ede-new</code>.
-</p>
-<ul>
-<li> For the &lsquo;<samp>Make</samp>&rsquo; project type, <i>EDE</i> creates a <em>project file</em>,
-called <samp>Project.ede</samp>, in each project directory.  Information
-about the project is stored in this file.  This project autogenerates
-a <samp>Makefile</samp>.
+  <div class="header">
+    <p>Next: <a href=
+    "Modifying-your-project.html#Modifying-your-project" accesskey=
+    "n" rel="next">Modifying your project</a>, Previous: <a href=
+    "Quick-Start.html#Quick-Start" accesskey="p" rel="prev">Quick
+    Start</a>, Up: <a href="index.html#Top" accesskey="u" rel=
+    "up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-a-project-1" id="Creating-a-project-1"></a>
 
-</li><li> For the &lsquo;<samp>Automake</samp>&rsquo; project type, <i>EDE</i> creates a
-<samp>Project.ede</samp> project file similar to a &lsquo;<samp>Make</samp>&rsquo; project.
-Unlike a &lsquo;<samp>Make</samp>&rsquo; project, this project autogenerates a
-<samp>Makefile.am</samp> file.  <i>EDE</i> handles the Automake bootstrapping
-routines, which import and maintain a <samp>configure.am</samp> script and
-other required files.
-</li></ul>
+  <h2 class="chapter">4 Creating a project</h2>
 
-<p>A subproject is merely a project in a subdirectory of another project.
-You can create a subproject by using the <code>ede-new</code> command (or
-the &lsquo;<samp>Create Project</samp>&rsquo; menu item), while visiting a buffer in a
-subdirectory of the project root.  This new project is automatically
-added to the parent project, and will be automatically loaded when
-<i>EDE</i> reads the parent project.
-</p>
-<p>When using a project command that involves a makefile, <i>EDE</i> uses
-the top-most project&rsquo;s makefile as a starting place for the build.  How
-the toplevel project handles subprojects in the build process is
-dependent on that project&rsquo;s type.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Modifying-your-project.html#Modifying-your-project" accesskey="n" rel="next">Modifying your project</a>, Previous: <a href="Quick-Start.html#Quick-Start" accesskey="p" rel="prev">Quick Start</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+  <p>To create a new project, first visit a file that you want to
+  include in that project. If you have a hierarchy of directories,
+  first visit a file in the topmost directory. From this buffer,
+  type <kbd>M-x ede-new</kbd>, or click on the &lsquo;<samp>Create
+  Project</samp>&rsquo; item in the
+  &lsquo;<samp>Development</samp>&rsquo; menu.</p>
 
+  <p>The <code>ede-new</code> command prompts for the type of
+  project you would like to create. Each project type has its own
+  benefits or language specific enhancements. Not all projects that
+  <i>EDE</i> supports also allow creating a new project. Projects
+  such as <code>emacs</code> or <code>linux</code> are designed to
+  recognize existing projects only. Project types such as
+  &lsquo;<samp>Make</samp>&rsquo; and
+  &lsquo;<samp>Automake</samp>&rsquo; do support creating new
+  project types with <code>ede-new</code>.</p>
 
+  <ul>
+    <li>For the &lsquo;<samp>Make</samp>&rsquo; project type,
+    <i>EDE</i> creates a <em>project file</em>, called
+    <samp>Project.ede</samp>, in each project directory.
+    Information about the project is stored in this file. This
+    project autogenerates a <samp>Makefile</samp>.</li>
 
+    <li>For the &lsquo;<samp>Automake</samp>&rsquo; project type,
+    <i>EDE</i> creates a <samp>Project.ede</samp> project file
+    similar to a &lsquo;<samp>Make</samp>&rsquo; project. Unlike a
+    &lsquo;<samp>Make</samp>&rsquo; project, this project
+    autogenerates a <samp>Makefile.am</samp> file. <i>EDE</i>
+    handles the Automake bootstrapping routines, which import and
+    maintain a <samp>configure.am</samp> script and other required
+    files.</li>
+  </ul>
+
+  <p>A subproject is merely a project in a subdirectory of another
+  project. You can create a subproject by using the
+  <code>ede-new</code> command (or the &lsquo;<samp>Create
+  Project</samp>&rsquo; menu item), while visiting a buffer in a
+  subdirectory of the project root. This new project is
+  automatically added to the parent project, and will be
+  automatically loaded when <i>EDE</i> reads the parent
+  project.</p>
+
+  <p>When using a project command that involves a makefile,
+  <i>EDE</i> uses the top-most project&rsquo;s makefile as a
+  starting place for the build. How the toplevel project handles
+  subprojects in the build process is dependent on that
+  project&rsquo;s type.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Modifying-your-project.html#Modifying-your-project" accesskey=
+    "n" rel="next">Modifying your project</a>, Previous: <a href=
+    "Quick-Start.html#Quick-Start" accesskey="p" rel="prev">Quick
+    Start</a>, Up: <a href="index.html#Top" accesskey="u" rel=
+    "up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,126 +14,168 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: The Active File</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: The Active File">
-<meta name="keywords" content="Gnus Manual: The Active File">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Starting-Up.html#Starting-Up" rel="up" title="Starting Up">
-<link href="Startup-Variables.html#Startup-Variables" rel="next" title="Startup Variables">
-<link href="Auto-Save.html#Auto-Save" rel="prev" title="Auto Save">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: The Active File</title>
+  <meta name="description" content=
+  "Gnus Manual: The Active File" />
+  <meta name="keywords" content="Gnus Manual: The Active File" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Starting-Up.html#Starting-Up" rel="up" title=
+  "Starting Up" />
+  <link href="Startup-Variables.html#Startup-Variables" rel="next"
+  title="Startup Variables" />
+  <link href="Auto-Save.html#Auto-Save" rel="prev" title=
+  "Auto Save" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-Active-File"></a>
-<div class="header">
-<p>
-Next: <a href="Startup-Variables.html#Startup-Variables" accesskey="n" rel="next">Startup Variables</a>, Previous: <a href="Auto-Save.html#Auto-Save" accesskey="p" rel="prev">Auto Save</a>, Up: <a href="Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting Up</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Active-File-1"></a>
-<h3 class="section">1.8 The Active File</h3>
-<a name="index-active-file"></a>
-<a name="index-ignored-groups"></a>
+<body lang="en" xml:lang="en">
+  <a name="The-Active-File" id="The-Active-File"></a>
 
-<p>When Gnus starts, or indeed whenever it tries to determine whether new
-articles have arrived, it reads the active file.  This is a very large
-file that lists all the active groups and articles on the server.
-</p>
-<a name="index-gnus_002dignored_002dnewsgroups"></a>
-<p>Before examining the active file, Gnus deletes all lines that match the
-regexp <code>gnus-ignored-newsgroups</code>.  This is done primarily to reject
-any groups with bogus names, but you can use this variable to make Gnus
-ignore hierarchies you aren&rsquo;t ever interested in.  However, this is not
-recommended.  In fact, it&rsquo;s highly discouraged.  Instead, see <a href="New-Groups.html#New-Groups">New Groups</a> for an overview of other variables that can be used instead.
-</p>
+  <div class="header">
+    <p>Next: <a href="Startup-Variables.html#Startup-Variables"
+    accesskey="n" rel="next">Startup Variables</a>, Previous:
+    <a href="Auto-Save.html#Auto-Save" accesskey="p" rel=
+    "prev">Auto Save</a>, Up: <a href=
+    "Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting
+    Up</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Active-File-1" id="The-Active-File-1"></a>
 
-<a name="index-gnus_002dread_002dactive_002dfile"></a>
-<p>The active file can be rather Huge, so if you have a slow network, you
-can set <code>gnus-read-active-file</code> to <code>nil</code> to prevent Gnus from
-reading the active file.  This variable is <code>some</code> by default.
-</p>
-<p>Gnus will try to make do by getting information just on the groups that
-you actually subscribe to.
-</p>
-<p>Note that if you subscribe to lots and lots of groups, setting this
-variable to <code>nil</code> will probably make Gnus slower, not faster.  At
-present, having this variable <code>nil</code> will slow Gnus down
-considerably, unless you read news over a 2400 baud modem.
-</p>
-<p>This variable can also have the value <code>some</code>.  Gnus will then
-attempt to read active info only on the subscribed groups.  On some
-servers this is quite fast (on sparkling, brand new INN servers that
-support the <code>LIST ACTIVE group</code> command), on others this isn&rsquo;t fast
-at all.  In any case, <code>some</code> should be faster than <code>nil</code>, and
-is certainly faster than <code>t</code> over slow lines.
-</p>
-<p>Some news servers (old versions of Leafnode and old versions of INN, for
-instance) do not support the <code>LIST ACTIVE group</code>.  For these
-servers, <code>nil</code> is probably the most efficient value for this
-variable.
-</p>
-<p>If this variable is <code>nil</code>, Gnus will ask for group info in total
-lock-step, which isn&rsquo;t very fast.  If it is <code>some</code> and you use an
-<acronym>NNTP</acronym> server, Gnus will pump out commands as fast as it can, and
-read all the replies in one swoop.  This will normally result in better
-performance, but if the server does not support the aforementioned
-<code>LIST ACTIVE group</code> command, this isn&rsquo;t very nice to the server.
-</p>
-<p>If you think that starting up Gnus takes too long, try all the three
-different values for this variable and see what works best for you.
-</p>
-<p>In any case, if you use <code>some</code> or <code>nil</code>, you should definitely
-kill all groups that you aren&rsquo;t interested in to speed things up.
-</p>
-<p>Note that this variable also affects active file retrieval from
-secondary select methods.
-</p>
+  <h3 class="section">1.8 The Active File</h3><a name=
+  "index-active-file" id="index-active-file"></a> <a name=
+  "index-ignored-groups" id="index-ignored-groups"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Startup-Variables.html#Startup-Variables" accesskey="n" rel="next">Startup Variables</a>, Previous: <a href="Auto-Save.html#Auto-Save" accesskey="p" rel="prev">Auto Save</a>, Up: <a href="Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting Up</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>When Gnus starts, or indeed whenever it tries to determine
+  whether new articles have arrived, it reads the active file. This
+  is a very large file that lists all the active groups and
+  articles on the server.</p><a name=
+  "index-gnus_002dignored_002dnewsgroups" id=
+  "index-gnus_002dignored_002dnewsgroups"></a>
 
+  <p>Before examining the active file, Gnus deletes all lines that
+  match the regexp <code>gnus-ignored-newsgroups</code>. This is
+  done primarily to reject any groups with bogus names, but you can
+  use this variable to make Gnus ignore hierarchies you
+  aren&rsquo;t ever interested in. However, this is not
+  recommended. In fact, it&rsquo;s highly discouraged. Instead, see
+  <a href="New-Groups.html#New-Groups">New Groups</a> for an
+  overview of other variables that can be used instead.</p><a name=
+  "index-gnus_002dread_002dactive_002dfile" id=
+  "index-gnus_002dread_002dactive_002dfile"></a>
 
+  <p>The active file can be rather Huge, so if you have a slow
+  network, you can set <code>gnus-read-active-file</code> to
+  <code>nil</code> to prevent Gnus from reading the active file.
+  This variable is <code>some</code> by default.</p>
 
+  <p>Gnus will try to make do by getting information just on the
+  groups that you actually subscribe to.</p>
+
+  <p>Note that if you subscribe to lots and lots of groups, setting
+  this variable to <code>nil</code> will probably make Gnus slower,
+  not faster. At present, having this variable <code>nil</code>
+  will slow Gnus down considerably, unless you read news over a
+  2400 baud modem.</p>
+
+  <p>This variable can also have the value <code>some</code>. Gnus
+  will then attempt to read active info only on the subscribed
+  groups. On some servers this is quite fast (on sparkling, brand
+  new INN servers that support the <code>LIST ACTIVE group</code>
+  command), on others this isn&rsquo;t fast at all. In any case,
+  <code>some</code> should be faster than <code>nil</code>, and is
+  certainly faster than <code>t</code> over slow lines.</p>
+
+  <p>Some news servers (old versions of Leafnode and old versions
+  of INN, for instance) do not support the <code>LIST ACTIVE
+  group</code>. For these servers, <code>nil</code> is probably the
+  most efficient value for this variable.</p>
+
+  <p>If this variable is <code>nil</code>, Gnus will ask for group
+  info in total lock-step, which isn&rsquo;t very fast. If it is
+  <code>some</code> and you use an <acronym>NNTP</acronym> server,
+  Gnus will pump out commands as fast as it can, and read all the
+  replies in one swoop. This will normally result in better
+  performance, but if the server does not support the
+  aforementioned <code>LIST ACTIVE group</code> command, this
+  isn&rsquo;t very nice to the server.</p>
+
+  <p>If you think that starting up Gnus takes too long, try all the
+  three different values for this variable and see what works best
+  for you.</p>
+
+  <p>In any case, if you use <code>some</code> or <code>nil</code>,
+  you should definitely kill all groups that you aren&rsquo;t
+  interested in to speed things up.</p>
+
+  <p>Note that this variable also affects active file retrieval
+  from secondary select methods.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Startup-Variables.html#Startup-Variables"
+    accesskey="n" rel="next">Startup Variables</a>, Previous:
+    <a href="Auto-Save.html#Auto-Save" accesskey="p" rel=
+    "prev">Auto Save</a>, Up: <a href=
+    "Starting-Up.html#Starting-Up" accesskey="u" rel="up">Starting
+    Up</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

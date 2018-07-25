@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
 
 Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
@@ -27,99 +29,150 @@ itself allows free copying and redistribution.
 [This version has been heavily edited since it was included in the Emacs
 distribution.] -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs FAQ: Displaying the current line or column</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs FAQ: Displaying the current line or column">
-<meta name="keywords" content="GNU Emacs FAQ: Displaying the current line or column">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Common-requests.html#Common-requests" rel="up" title="Common requests">
-<link href="Displaying-the-current-file-name-in-the-titlebar.html#Displaying-the-current-file-name-in-the-titlebar" rel="next" title="Displaying the current file name in the titlebar">
-<link href="Debugging-a-customization-file.html#Debugging-a-customization-file" rel="prev" title="Debugging a customization file">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs FAQ: Displaying the current line or
+  column</title>
+  <meta name="description" content=
+  "GNU Emacs FAQ: Displaying the current line or column" />
+  <meta name="keywords" content=
+  "GNU Emacs FAQ: Displaying the current line or column" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-index.html#Concept-index" rel="index" title=
+  "Concept index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Common-requests.html#Common-requests" rel="up" title=
+  "Common requests" />
+  <link href=
+  "Displaying-the-current-file-name-in-the-titlebar.html#Displaying-the-current-file-name-in-the-titlebar"
+  rel="next" title=
+  "Displaying the current file name in the titlebar" />
+  <link href=
+  "Debugging-a-customization-file.html#Debugging-a-customization-file"
+  rel="prev" title="Debugging a customization file" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Displaying-the-current-line-or-column"></a>
-<div class="header">
-<p>
-Next: <a href="Displaying-the-current-file-name-in-the-titlebar.html#Displaying-the-current-file-name-in-the-titlebar" accesskey="n" rel="next">Displaying the current file name in the titlebar</a>, Previous: <a href="Debugging-a-customization-file.html#Debugging-a-customization-file" accesskey="p" rel="prev">Debugging a customization file</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="How-do-I-make-Emacs-display-the-current-line-_0028or-column_0029-number_003f"></a>
-<h3 class="section">5.5 How do I make Emacs display the current line (or column) number?</h3>
-<a name="index-line_002dnumber_002dmode"></a>
-<a name="index-Displaying-the-current-line-or-column"></a>
-<a name="index-Line-number_002c-displaying-the-current"></a>
-<a name="index-Column_002c-displaying-the-current"></a>
-<a name="index-mode_002dline_002dformat"></a>
+<body lang="en" xml:lang="en">
+  <a name="Displaying-the-current-line-or-column" id=
+  "Displaying-the-current-line-or-column"></a>
 
-<p>By default, Emacs displays the current line number of the point in the
-mode line.  You can toggle this feature off or on with the command
-<kbd>M-x line-number-mode</kbd>, or by setting the variable
-<code>line-number-mode</code>.  Note that Emacs will not display the line
-number if the buffer&rsquo;s size in bytes is larger than the value of the
-variable <code>line-number-display-limit</code>.
-</p>
-<p>You can similarly display the current column with
-<kbd>M-x column-number-mode</kbd>, or by putting the form
-</p>
-<div class="lisp">
-<pre class="lisp">(setq column-number-mode t)
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Displaying-the-current-file-name-in-the-titlebar.html#Displaying-the-current-file-name-in-the-titlebar"
+    accesskey="n" rel="next">Displaying the current file name in
+    the titlebar</a>, Previous: <a href=
+    "Debugging-a-customization-file.html#Debugging-a-customization-file"
+    accesskey="p" rel="prev">Debugging a customization file</a>,
+    Up: <a href="Common-requests.html#Common-requests" accesskey=
+    "u" rel="up">Common requests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Concept-index.html#Concept-index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name=
+  "How-do-I-make-Emacs-display-the-current-line-_0028or-column_0029-number_003f"
+  id=
+  "How-do-I-make-Emacs-display-the-current-line-_0028or-column_0029-number_003f"></a>
 
-<p>in your <samp>.emacs</samp> file.  This feature is off by default.
-</p>
-<p>The <code>&quot;%c&quot;</code> format specifier in the variable <code>mode-line-format</code>
-will insert the current column&rsquo;s value into the mode line.  See the
-documentation for <code>mode-line-format</code> (using <kbd>C-h v
-mode-line-format <span class="key">RET</span></kbd>) for more information on how to set and use
-this variable.
-</p>
-<a name="index-Set-number-capability-in-vi-emulators"></a>
-<p>The &lsquo;<samp>linum</samp>&rsquo; package (distributed with Emacs since version 23.1)
-displays line numbers in the left margin, like the &ldquo;set number&rdquo;
-capability of <code>vi</code>.  The packages &lsquo;<samp>setnu</samp>&rsquo; and
-&lsquo;<samp>wb-line-number</samp>&rsquo; (not distributed with Emacs) also implement this
-feature.
-</p>
+  <h3 class="section">5.5 How do I make Emacs display the current
+  line (or column) number?</h3><a name=
+  "index-line_002dnumber_002dmode" id=
+  "index-line_002dnumber_002dmode"></a> <a name=
+  "index-Displaying-the-current-line-or-column" id=
+  "index-Displaying-the-current-line-or-column"></a> <a name=
+  "index-Line-number_002c-displaying-the-current" id=
+  "index-Line-number_002c-displaying-the-current"></a> <a name=
+  "index-Column_002c-displaying-the-current" id=
+  "index-Column_002c-displaying-the-current"></a> <a name=
+  "index-mode_002dline_002dformat" id=
+  "index-mode_002dline_002dformat"></a>
 
+  <p>By default, Emacs displays the current line number of the
+  point in the mode line. You can toggle this feature off or on
+  with the command <kbd>M-x line-number-mode</kbd>, or by setting
+  the variable <code>line-number-mode</code>. Note that Emacs will
+  not display the line number if the buffer&rsquo;s size in bytes
+  is larger than the value of the variable
+  <code>line-number-display-limit</code>.</p>
 
+  <p>You can similarly display the current column with <kbd>M-x
+  column-number-mode</kbd>, or by putting the form</p>
 
+  <div class="lisp">
+    <pre class="lisp">
+(setq column-number-mode t)
+</pre>
+  </div>
+
+  <p>in your <samp>.emacs</samp> file. This feature is off by
+  default.</p>
+
+  <p>The <code>"%c"</code> format specifier in the variable
+  <code>mode-line-format</code> will insert the current
+  column&rsquo;s value into the mode line. See the documentation
+  for <code>mode-line-format</code> (using <kbd>C-h v
+  mode-line-format <span class="key">RET</span></kbd>) for more
+  information on how to set and use this variable.</p><a name=
+  "index-Set-number-capability-in-vi-emulators" id=
+  "index-Set-number-capability-in-vi-emulators"></a>
+
+  <p>The &lsquo;<samp>linum</samp>&rsquo; package (distributed with
+  Emacs since version 23.1) displays line numbers in the left
+  margin, like the &ldquo;set number&rdquo; capability of
+  <code>vi</code>. The packages &lsquo;<samp>setnu</samp>&rsquo;
+  and &lsquo;<samp>wb-line-number</samp>&rsquo; (not distributed
+  with Emacs) also implement this feature.</p>
 </body>
 </html>

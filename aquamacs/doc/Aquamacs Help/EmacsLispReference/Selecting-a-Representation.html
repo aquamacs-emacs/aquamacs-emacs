@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,125 +19,187 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Selecting a Representation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Selecting a Representation">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Selecting a Representation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up" title="Non-ASCII Characters">
-<link href="Character-Codes.html#Character-Codes" rel="next" title="Character Codes">
-<link href="Converting-Representations.html#Converting-Representations" rel="prev" title="Converting Representations">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Selecting a
+  Representation</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Selecting a Representation" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Selecting a Representation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up"
+  title="Non-ASCII Characters" />
+  <link href="Character-Codes.html#Character-Codes" rel="next"
+  title="Character Codes" />
+  <link href=
+  "Converting-Representations.html#Converting-Representations" rel=
+  "prev" title="Converting Representations" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Selecting-a-Representation" id=
+  "Selecting-a-Representation"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Character-Codes.html#Character-Codes"
+    accesskey="n" rel="next">Character Codes</a>, Previous:
+    <a href="Converting-Representations.html#Converting-Representations"
+    accesskey="p" rel="prev">Converting Representations</a>, Up:
+    <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Selecting-a-Representation-1" id=
+  "Selecting-a-Representation-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Selecting-a-Representation"></a>
-<div class="header">
-<p>
-Next: <a href="Character-Codes.html#Character-Codes" accesskey="n" rel="next">Character Codes</a>, Previous: <a href="Converting-Representations.html#Converting-Representations" accesskey="p" rel="prev">Converting Representations</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Selecting-a-Representation-1"></a>
-<h3 class="section">32.4 Selecting a Representation</h3>
+  <h3 class="section">32.4 Selecting a Representation</h3>
 
-<p>Sometimes it is useful to examine an existing buffer or string as
-multibyte when it was unibyte, or vice versa.
-</p>
-<dl>
-<dt><a name="index-set_002dbuffer_002dmultibyte"></a>Function: <strong>set-buffer-multibyte</strong> <em>multibyte</em></dt>
-<dd><p>Set the representation type of the current buffer.  If <var>multibyte</var>
-is non-<code>nil</code>, the buffer becomes multibyte.  If <var>multibyte</var>
-is <code>nil</code>, the buffer becomes unibyte.
-</p>
-<p>This function leaves the buffer contents unchanged when viewed as a
-sequence of bytes.  As a consequence, it can change the contents
-viewed as characters; for instance, a sequence of three bytes which is
-treated as one character in multibyte representation will count as
-three characters in unibyte representation.  Eight-bit characters
-representing raw bytes are an exception.  They are represented by one
-byte in a unibyte buffer, but when the buffer is set to multibyte,
-they are converted to two-byte sequences, and vice versa.
-</p>
-<p>This function sets <code>enable-multibyte-characters</code> to record which
-representation is in use.  It also adjusts various data in the buffer
-(including overlays, text properties and markers) so that they cover the
-same text as they did before.
-</p>
-<p>This function signals an error if the buffer is narrowed, since the
-narrowing might have occurred in the middle of multibyte character
-sequences.
-</p>
-<p>This function also signals an error if the buffer is an indirect
-buffer.  An indirect buffer always inherits the representation of its
-base buffer.
-</p></dd></dl>
+  <p>Sometimes it is useful to examine an existing buffer or string
+  as multibyte when it was unibyte, or vice versa.</p>
 
-<dl>
-<dt><a name="index-string_002das_002dunibyte"></a>Function: <strong>string-as-unibyte</strong> <em>string</em></dt>
-<dd><p>If <var>string</var> is already a unibyte string, this function returns
-<var>string</var> itself.  Otherwise, it returns a new string with the same
-bytes as <var>string</var>, but treating each byte as a separate character
-(so that the value may have more characters than <var>string</var>); as an
-exception, each eight-bit character representing a raw byte is
-converted into a single byte.  The newly-created string contains no
-text properties.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dbuffer_002dmultibyte" id=
+    "index-set_002dbuffer_002dmultibyte"></a>Function:
+    <strong>set-buffer-multibyte</strong> <em>multibyte</em></dt>
 
-<dl>
-<dt><a name="index-string_002das_002dmultibyte"></a>Function: <strong>string-as-multibyte</strong> <em>string</em></dt>
-<dd><p>If <var>string</var> is a multibyte string, this function returns
-<var>string</var> itself.  Otherwise, it returns a new string with the same
-bytes as <var>string</var>, but treating each multibyte sequence as one
-character.  This means that the value may have fewer characters than
-<var>string</var> has.  If a byte sequence in <var>string</var> is invalid as a
-multibyte representation of a single character, each byte in the
-sequence is treated as a raw 8-bit byte.  The newly-created string
-contains no text properties.
-</p></dd></dl>
+    <dd>
+      <p>Set the representation type of the current buffer. If
+      <var>multibyte</var> is non-<code>nil</code>, the buffer
+      becomes multibyte. If <var>multibyte</var> is
+      <code>nil</code>, the buffer becomes unibyte.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Character-Codes.html#Character-Codes" accesskey="n" rel="next">Character Codes</a>, Previous: <a href="Converting-Representations.html#Converting-Representations" accesskey="p" rel="prev">Converting Representations</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>This function leaves the buffer contents unchanged when
+      viewed as a sequence of bytes. As a consequence, it can
+      change the contents viewed as characters; for instance, a
+      sequence of three bytes which is treated as one character in
+      multibyte representation will count as three characters in
+      unibyte representation. Eight-bit characters representing raw
+      bytes are an exception. They are represented by one byte in a
+      unibyte buffer, but when the buffer is set to multibyte, they
+      are converted to two-byte sequences, and vice versa.</p>
 
+      <p>This function sets
+      <code>enable-multibyte-characters</code> to record which
+      representation is in use. It also adjusts various data in the
+      buffer (including overlays, text properties and markers) so
+      that they cover the same text as they did before.</p>
 
+      <p>This function signals an error if the buffer is narrowed,
+      since the narrowing might have occurred in the middle of
+      multibyte character sequences.</p>
 
+      <p>This function also signals an error if the buffer is an
+      indirect buffer. An indirect buffer always inherits the
+      representation of its base buffer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-string_002das_002dunibyte" id=
+    "index-string_002das_002dunibyte"></a>Function:
+    <strong>string-as-unibyte</strong> <em>string</em></dt>
+
+    <dd>
+      <p>If <var>string</var> is already a unibyte string, this
+      function returns <var>string</var> itself. Otherwise, it
+      returns a new string with the same bytes as
+      <var>string</var>, but treating each byte as a separate
+      character (so that the value may have more characters than
+      <var>string</var>); as an exception, each eight-bit character
+      representing a raw byte is converted into a single byte. The
+      newly-created string contains no text properties.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-string_002das_002dmultibyte" id=
+    "index-string_002das_002dmultibyte"></a>Function:
+    <strong>string-as-multibyte</strong> <em>string</em></dt>
+
+    <dd>
+      <p>If <var>string</var> is a multibyte string, this function
+      returns <var>string</var> itself. Otherwise, it returns a new
+      string with the same bytes as <var>string</var>, but treating
+      each multibyte sequence as one character. This means that the
+      value may have fewer characters than <var>string</var> has.
+      If a byte sequence in <var>string</var> is invalid as a
+      multibyte representation of a single character, each byte in
+      the sequence is treated as a raw 8-bit byte. The
+      newly-created string contains no text properties.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Character-Codes.html#Character-Codes"
+    accesskey="n" rel="next">Character Codes</a>, Previous:
+    <a href="Converting-Representations.html#Converting-Representations"
+    accesskey="p" rel="prev">Converting Representations</a>, Up:
+    <a href=
+    "Non_002dASCII-Characters.html#Non_002dASCII-Characters"
+    accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

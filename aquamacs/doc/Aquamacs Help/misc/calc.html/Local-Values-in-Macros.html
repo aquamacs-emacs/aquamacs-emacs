@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,131 +18,178 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Local Values in Macros</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Local Values in Macros">
-<meta name="keywords" content="GNU Emacs Calc Manual: Local Values in Macros">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title="Keyboard Macros">
-<link href="Queries-in-Macros.html#Queries-in-Macros" rel="next" title="Queries in Macros">
-<link href="Loops-in-Macros.html#Loops-in-Macros" rel="prev" title="Loops in Macros">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Local Values in Macros</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Local Values in Macros" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Local Values in Macros" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title=
+  "Keyboard Macros" />
+  <link href="Queries-in-Macros.html#Queries-in-Macros" rel="next"
+  title="Queries in Macros" />
+  <link href="Loops-in-Macros.html#Loops-in-Macros" rel="prev"
+  title="Loops in Macros" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Local-Values-in-Macros"></a>
-<div class="header">
-<p>
-Next: <a href="Queries-in-Macros.html#Queries-in-Macros" accesskey="n" rel="next">Queries in Macros</a>, Previous: <a href="Loops-in-Macros.html#Loops-in-Macros" accesskey="p" rel="prev">Loops in Macros</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Local-Values-in-Macros-1"></a>
-<h4 class="subsection">17.2.4 Local Values in Macros</h4>
+<body lang="en" xml:lang="en">
+  <a name="Local-Values-in-Macros" id="Local-Values-in-Macros"></a>
 
-<a name="index-Local-variables"></a>
-<a name="index-Restoring-saved-modes"></a>
-<p>Keyboard macros sometimes want to operate under known conditions
-without affecting surrounding conditions.  For example, a keyboard
-macro may wish to turn on Fraction mode, or set a particular
-precision, independent of the user&rsquo;s normal setting for those
-modes.
-</p>
-<a name="index-Z-_0060"></a>
-<a name="index-Z-_0027"></a>
-<a name="index-calc_002dkbd_002dpush"></a>
-<a name="index-calc_002dkbd_002dpop"></a>
-<p>Macros also sometimes need to use local variables.  Assignments to
-local variables inside the macro should not affect any variables
-outside the macro.  The <kbd>Z `</kbd> (<code>calc-kbd-push</code>) and <kbd>Z '</kbd>
-(<code>calc-kbd-pop</code>) commands give you both of these capabilities.
-</p>
-<p>When you type <kbd>Z `</kbd> (with a grave accent),
-the values of various mode settings are saved away.  The ten &ldquo;quick&rdquo;
-variables <code>q0</code> through <code>q9</code> are also saved.  When
-you type <kbd>Z&nbsp;'</kbd><!-- /@w --> (with an apostrophe), these values are restored.
-Pairs of <kbd>Z `</kbd> and <kbd>Z '</kbd> commands may be nested.
-</p>
-<p>If a keyboard macro halts due to an error in between a <kbd>Z `</kbd> and
-a <kbd>Z '</kbd>, the saved values will be restored correctly even though
-the macro never reaches the <kbd>Z '</kbd> command.  Thus you can use
-<kbd>Z `</kbd> and <kbd>Z '</kbd> without having to worry about what happens
-in exceptional conditions.
-</p>
-<p>If you type <kbd>Z `</kbd> &ldquo;live&rdquo; (not in a keyboard macro), Calc puts
-you into a &ldquo;recursive edit.&rdquo;  You can tell you are in a recursive
-edit because there will be extra square brackets in the mode line,
-as in &lsquo;<samp>[(Calculator)]</samp>&rsquo;.  These brackets will go away when you
-type the matching <kbd>Z '</kbd> command.  The modes and quick variables
-will be saved and restored in just the same way as if actual keyboard
-macros were involved.
-</p>
-<p>The modes saved by <kbd>Z `</kbd> and <kbd>Z '</kbd> are the current precision
-and binary word size, the angular mode (Deg, Rad, or HMS), the
-simplification mode, Algebraic mode, Symbolic mode, Infinite mode,
-Matrix or Scalar mode, Fraction mode, and the current complex mode
-(Polar or Rectangular).  The ten &ldquo;quick&rdquo; variables&rsquo; values (or lack
-thereof) are also saved.
-</p>
-<p>Most mode-setting commands act as toggles, but with a numeric prefix
-they force the mode either on (positive prefix) or off (negative
-or zero prefix).  Since you don&rsquo;t know what the environment might
-be when you invoke your macro, it&rsquo;s best to use prefix arguments
-for all mode-setting commands inside the macro.
-</p>
-<p>In fact, <kbd>C-u Z `</kbd> is like <kbd>Z `</kbd> except that it sets the modes
-listed above to their default values.  As usual, the matching <kbd>Z '</kbd>
-will restore the modes to their settings from before the <kbd>C-u Z `</kbd>.
-Also, <kbd>Z&nbsp;`</kbd><!-- /@w --> with a negative prefix argument resets the algebraic mode
-to its default (off) but leaves the other modes the same as they were
-outside the construct.
-</p>
-<p>The contents of the stack and trail, values of non-quick variables, and
-other settings such as the language mode and the various display modes,
-are <em>not</em> affected by <kbd>Z `</kbd> and <kbd>Z '</kbd>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Queries-in-Macros.html#Queries-in-Macros" accesskey="n" rel="next">Queries in Macros</a>, Previous: <a href="Loops-in-Macros.html#Loops-in-Macros" accesskey="p" rel="prev">Loops in Macros</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="header">
+    <p>Next: <a href="Queries-in-Macros.html#Queries-in-Macros"
+    accesskey="n" rel="next">Queries in Macros</a>, Previous:
+    <a href="Loops-in-Macros.html#Loops-in-Macros" accesskey="p"
+    rel="prev">Loops in Macros</a>, Up: <a href=
+    "Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel=
+    "up">Keyboard Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Local-Values-in-Macros-1" id=
+  "Local-Values-in-Macros-1"></a>
 
+  <h4 class="subsection">17.2.4 Local Values in Macros</h4><a name=
+  "index-Local-variables" id="index-Local-variables"></a> <a name=
+  "index-Restoring-saved-modes" id=
+  "index-Restoring-saved-modes"></a>
 
+  <p>Keyboard macros sometimes want to operate under known
+  conditions without affecting surrounding conditions. For example,
+  a keyboard macro may wish to turn on Fraction mode, or set a
+  particular precision, independent of the user&rsquo;s normal
+  setting for those modes.</p><a name="index-Z-_0060" id=
+  "index-Z-_0060"></a> <a name="index-Z-_0027" id=
+  "index-Z-_0027"></a> <a name="index-calc_002dkbd_002dpush" id=
+  "index-calc_002dkbd_002dpush"></a> <a name=
+  "index-calc_002dkbd_002dpop" id="index-calc_002dkbd_002dpop"></a>
 
+  <p>Macros also sometimes need to use local variables. Assignments
+  to local variables inside the macro should not affect any
+  variables outside the macro. The <kbd>Z `</kbd>
+  (<code>calc-kbd-push</code>) and <kbd>Z '</kbd>
+  (<code>calc-kbd-pop</code>) commands give you both of these
+  capabilities.</p>
+
+  <p>When you type <kbd>Z `</kbd> (with a grave accent), the values
+  of various mode settings are saved away. The ten
+  &ldquo;quick&rdquo; variables <code>q0</code> through
+  <code>q9</code> are also saved. When you type <kbd>Z&nbsp;'</kbd>
+  <!-- /@w --> (with an apostrophe), these values are restored.
+  Pairs of <kbd>Z `</kbd> and <kbd>Z '</kbd> commands may be
+  nested.</p>
+
+  <p>If a keyboard macro halts due to an error in between a <kbd>Z
+  `</kbd> and a <kbd>Z '</kbd>, the saved values will be restored
+  correctly even though the macro never reaches the <kbd>Z '</kbd>
+  command. Thus you can use <kbd>Z `</kbd> and <kbd>Z '</kbd>
+  without having to worry about what happens in exceptional
+  conditions.</p>
+
+  <p>If you type <kbd>Z `</kbd> &ldquo;live&rdquo; (not in a
+  keyboard macro), Calc puts you into a &ldquo;recursive
+  edit.&rdquo; You can tell you are in a recursive edit because
+  there will be extra square brackets in the mode line, as in
+  &lsquo;<samp>[(Calculator)]</samp>&rsquo;. These brackets will go
+  away when you type the matching <kbd>Z '</kbd> command. The modes
+  and quick variables will be saved and restored in just the same
+  way as if actual keyboard macros were involved.</p>
+
+  <p>The modes saved by <kbd>Z `</kbd> and <kbd>Z '</kbd> are the
+  current precision and binary word size, the angular mode (Deg,
+  Rad, or HMS), the simplification mode, Algebraic mode, Symbolic
+  mode, Infinite mode, Matrix or Scalar mode, Fraction mode, and
+  the current complex mode (Polar or Rectangular). The ten
+  &ldquo;quick&rdquo; variables&rsquo; values (or lack thereof) are
+  also saved.</p>
+
+  <p>Most mode-setting commands act as toggles, but with a numeric
+  prefix they force the mode either on (positive prefix) or off
+  (negative or zero prefix). Since you don&rsquo;t know what the
+  environment might be when you invoke your macro, it&rsquo;s best
+  to use prefix arguments for all mode-setting commands inside the
+  macro.</p>
+
+  <p>In fact, <kbd>C-u Z `</kbd> is like <kbd>Z `</kbd> except that
+  it sets the modes listed above to their default values. As usual,
+  the matching <kbd>Z '</kbd> will restore the modes to their
+  settings from before the <kbd>C-u Z `</kbd>. Also,
+  <kbd>Z&nbsp;`</kbd><!-- /@w --> with a negative prefix argument
+  resets the algebraic mode to its default (off) but leaves the
+  other modes the same as they were outside the construct.</p>
+
+  <p>The contents of the stack and trail, values of non-quick
+  variables, and other settings such as the language mode and the
+  various display modes, are <em>not</em> affected by <kbd>Z
+  `</kbd> and <kbd>Z '</kbd>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Queries-in-Macros.html#Queries-in-Macros"
+    accesskey="n" rel="next">Queries in Macros</a>, Previous:
+    <a href="Loops-in-Macros.html#Loops-in-Macros" accesskey="p"
+    rel="prev">Loops in Macros</a>, Up: <a href=
+    "Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel=
+    "up">Keyboard Macros</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

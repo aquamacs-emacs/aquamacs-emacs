@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,86 +18,120 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Maxima Language Mode</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Maxima Language Mode">
-<meta name="keywords" content="GNU Emacs Calc Manual: Maxima Language Mode">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Language-Modes.html#Language-Modes" rel="up" title="Language Modes">
-<link href="Giac-Language-Mode.html#Giac-Language-Mode" rel="next" title="Giac Language Mode">
-<link href="Yacas-Language-Mode.html#Yacas-Language-Mode" rel="prev" title="Yacas Language Mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Maxima Language Mode</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Maxima Language Mode" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Maxima Language Mode" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Language-Modes.html#Language-Modes" rel="up" title=
+  "Language Modes" />
+  <link href="Giac-Language-Mode.html#Giac-Language-Mode" rel=
+  "next" title="Giac Language Mode" />
+  <link href="Yacas-Language-Mode.html#Yacas-Language-Mode" rel=
+  "prev" title="Yacas Language Mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Maxima-Language-Mode"></a>
-<div class="header">
-<p>
-Next: <a href="Giac-Language-Mode.html#Giac-Language-Mode" accesskey="n" rel="next">Giac Language Mode</a>, Previous: <a href="Yacas-Language-Mode.html#Yacas-Language-Mode" accesskey="p" rel="prev">Yacas Language Mode</a>, Up: <a href="Language-Modes.html#Language-Modes" accesskey="u" rel="up">Language Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Maxima-Language-Mode-1"></a>
-<h4 class="subsection">6.8.6 Maxima Language Mode</h4>
+<body lang="en" xml:lang="en">
+  <a name="Maxima-Language-Mode" id="Maxima-Language-Mode"></a>
 
-<a name="index-d-X"></a>
-<a name="index-calc_002dmaxima_002dlanguage"></a>
-<a name="index-Maxima-language"></a>
-<p>The <kbd>d X</kbd> (<code>calc-maxima-language</code>) command selects the
-conventions of Maxima, another free computer algebra system.  The
-function names in Maxima are similar, but not always identical, to Calc.
-For example, instead of &lsquo;<samp>arcsin(x)</samp>&rsquo;, Maxima will use
-&lsquo;<samp>asin(x)</samp>&rsquo;.  Complex numbers are written &lsquo;<samp>3 + 4 %i</samp>&rsquo;.  The
-standard special constants are written <code>%pi</code>,  <code>%e</code>,
-<code>%i</code>, <code>%phi</code> and <code>%gamma</code>.  In Maxima,  <code>inf</code> means
-the same as in Calc, but <code>infinity</code> represents Calc&rsquo;s <code>uinf</code>.
-</p>
-<p>Underscores as well as percent signs are allowed in function and
-variable names in Maxima mode.  The underscore again is equivalent to
-the &lsquo;<samp>#</samp>&rsquo; in Normal mode, and the percent sign is equivalent to
-&lsquo;<samp>o'o</samp>&rsquo;.
-</p>
-<p>Maxima uses square brackets for lists and vectors, and matrices are
-written as calls to the function <code>matrix</code>, given the row vectors of
-the matrix as arguments.  Square brackets are also used as subscripts.
-</p>
+  <div class="header">
+    <p>Next: <a href="Giac-Language-Mode.html#Giac-Language-Mode"
+    accesskey="n" rel="next">Giac Language Mode</a>, Previous:
+    <a href="Yacas-Language-Mode.html#Yacas-Language-Mode"
+    accesskey="p" rel="prev">Yacas Language Mode</a>, Up: <a href=
+    "Language-Modes.html#Language-Modes" accesskey="u" rel=
+    "up">Language Modes</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Maxima-Language-Mode-1" id="Maxima-Language-Mode-1"></a>
 
+  <h4 class="subsection">6.8.6 Maxima Language Mode</h4><a name=
+  "index-d-X" id="index-d-X"></a> <a name=
+  "index-calc_002dmaxima_002dlanguage" id=
+  "index-calc_002dmaxima_002dlanguage"></a> <a name=
+  "index-Maxima-language" id="index-Maxima-language"></a>
 
+  <p>The <kbd>d X</kbd> (<code>calc-maxima-language</code>) command
+  selects the conventions of Maxima, another free computer algebra
+  system. The function names in Maxima are similar, but not always
+  identical, to Calc. For example, instead of
+  &lsquo;<samp>arcsin(x)</samp>&rsquo;, Maxima will use
+  &lsquo;<samp>asin(x)</samp>&rsquo;. Complex numbers are written
+  &lsquo;<samp>3 + 4 %i</samp>&rsquo;. The standard special
+  constants are written <code>%pi</code>, <code>%e</code>,
+  <code>%i</code>, <code>%phi</code> and <code>%gamma</code>. In
+  Maxima, <code>inf</code> means the same as in Calc, but
+  <code>infinity</code> represents Calc&rsquo;s
+  <code>uinf</code>.</p>
 
+  <p>Underscores as well as percent signs are allowed in function
+  and variable names in Maxima mode. The underscore again is
+  equivalent to the &lsquo;<samp>#</samp>&rsquo; in Normal mode,
+  and the percent sign is equivalent to
+  &lsquo;<samp>o'o</samp>&rsquo;.</p>
+
+  <p>Maxima uses square brackets for lists and vectors, and
+  matrices are written as calls to the function
+  <code>matrix</code>, given the row vectors of the matrix as
+  arguments. Square brackets are also used as subscripts.</p>
 </body>
 </html>

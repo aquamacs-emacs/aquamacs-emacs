@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,123 +20,195 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Creating Frames</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Creating Frames">
-<meta name="keywords" content="GNU Emacs Manual: Creating Frames">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Frames.html#Frames" rel="up" title="Frames">
-<link href="Frame-Commands.html#Frame-Commands" rel="next" title="Frame Commands">
-<link href="Mode-Line-Mouse.html#Mode-Line-Mouse" rel="prev" title="Mode Line Mouse">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Creating Frames</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Creating Frames" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Creating Frames" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Frames.html#Frames" rel="up" title="Frames" />
+  <link href="Frame-Commands.html#Frame-Commands" rel="next" title=
+  "Frame Commands" />
+  <link href="Mode-Line-Mouse.html#Mode-Line-Mouse" rel="prev"
+  title="Mode Line Mouse" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Creating-Frames" id="Creating-Frames"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Frame-Commands.html#Frame-Commands"
+    accesskey="n" rel="next">Frame Commands</a>, Previous: <a href=
+    "Mode-Line-Mouse.html#Mode-Line-Mouse" accesskey="p" rel=
+    "prev">Mode Line Mouse</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Creating-Frames-1" id="Creating-Frames-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Creating-Frames"></a>
-<div class="header">
-<p>
-Next: <a href="Frame-Commands.html#Frame-Commands" accesskey="n" rel="next">Frame Commands</a>, Previous: <a href="Mode-Line-Mouse.html#Mode-Line-Mouse" accesskey="p" rel="prev">Mode Line Mouse</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Creating-Frames-1"></a>
-<h3 class="section">21.6 Creating Frames</h3>
-<a name="index-creating-frames"></a>
+  <h3 class="section">21.6 Creating Frames</h3><a name=
+  "index-creating-frames" id="index-creating-frames"></a> <a name=
+  "index-C_002dx-5" id="index-C_002dx-5"></a>
 
-<a name="index-C_002dx-5"></a>
-<p>The prefix key <kbd>C-x 5</kbd> is analogous to <kbd>C-x 4</kbd>.  Whereas
-each <kbd>C-x 4</kbd> command pops up a buffer in a different window in the
-selected frame (see <a href="Pop-Up-Window.html#Pop-Up-Window">Pop Up Window</a>), the <kbd>C-x 5</kbd> commands use a
-different frame.  If an existing visible or iconified (a.k.a. &ldquo;minimized&rdquo;)
-frame already displays the requested buffer, that frame is raised and
-deiconified (&ldquo;un-minimized&rdquo;); otherwise, a new frame is created on
-the current display terminal.
-</p>
-<p>The various <kbd>C-x 5</kbd> commands differ in how they find or create the
-buffer to select:
-</p>
-<dl compact="compact">
-<dt><kbd>C-x 5 2</kbd></dt>
-<dd><a name="index-C_002dx-5-2"></a>
-<a name="index-make_002dframe_002dcommand"></a>
-<p>Create a new frame (<code>make-frame-command</code>).
-</p></dd>
-<dt><kbd>C-x 5 b <var>bufname</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Select buffer <var>bufname</var> in another frame.  This runs
-<code>switch-to-buffer-other-frame</code>.
-</p></dd>
-<dt><kbd>C-x 5 f <var>filename</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Visit file <var>filename</var> and select its buffer in another frame.  This
-runs <code>find-file-other-frame</code>.  See <a href="Visiting.html#Visiting">Visiting</a>.
-</p></dd>
-<dt><kbd>C-x 5 d <var>directory</var> <span class="key">RET</span></kbd></dt>
-<dd><p>Select a Dired buffer for directory <var>directory</var> in another frame.
-This runs <code>dired-other-frame</code>.  See <a href="Dired.html#Dired">Dired</a>.
-</p></dd>
-<dt><kbd>C-x 5 m</kbd></dt>
-<dd><p>Start composing a mail message in another frame.  This runs
-<code>compose-mail-other-frame</code>.  It is the other-frame variant of
-<kbd>C-x m</kbd>.  See <a href="Sending-Mail.html#Sending-Mail">Sending Mail</a>.
-</p></dd>
-<dt><kbd>C-x 5 .</kbd></dt>
-<dd><p>Find the definition of an identifier in another frame.  This runs
-<code>xref-find-definitions-other-frame</code>, the multiple-frame variant
-of <kbd>M-.</kbd>.  See <a href="Xref.html#Xref">Xref</a>.
-</p></dd>
-<dt><kbd>C-x 5 r <var>filename</var> <span class="key">RET</span></kbd></dt>
-<dd><a name="index-C_002dx-5-r"></a>
-<a name="index-find_002dfile_002dread_002donly_002dother_002dframe"></a>
-<p>Visit file <var>filename</var> read-only, and select its buffer in another
-frame.  This runs <code>find-file-read-only-other-frame</code>.
-See <a href="Visiting.html#Visiting">Visiting</a>.
-</p></dd>
-</dl>
+  <p>The prefix key <kbd>C-x 5</kbd> is analogous to <kbd>C-x
+  4</kbd>. Whereas each <kbd>C-x 4</kbd> command pops up a buffer
+  in a different window in the selected frame (see <a href=
+  "Pop-Up-Window.html#Pop-Up-Window">Pop Up Window</a>), the
+  <kbd>C-x 5</kbd> commands use a different frame. If an existing
+  visible or iconified (a.k.a. &ldquo;minimized&rdquo;) frame
+  already displays the requested buffer, that frame is raised and
+  deiconified (&ldquo;un-minimized&rdquo;); otherwise, a new frame
+  is created on the current display terminal.</p>
 
-<p>You can control the appearance and behavior of the newly-created
-frames by specifying <em>frame parameters</em>.  See <a href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Frame-Commands.html#Frame-Commands" accesskey="n" rel="next">Frame Commands</a>, Previous: <a href="Mode-Line-Mouse.html#Mode-Line-Mouse" accesskey="p" rel="prev">Mode Line Mouse</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The various <kbd>C-x 5</kbd> commands differ in how they find
+  or create the buffer to select:</p>
 
+  <dl compact="compact">
+    <dt><kbd>C-x 5 2</kbd></dt>
 
+    <dd>
+      <a name="index-C_002dx-5-2" id="index-C_002dx-5-2"></a>
+      <a name="index-make_002dframe_002dcommand" id=
+      "index-make_002dframe_002dcommand"></a>
 
+      <p>Create a new frame (<code>make-frame-command</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x 5 b <var>bufname</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Select buffer <var>bufname</var> in another frame. This
+      runs <code>switch-to-buffer-other-frame</code>.</p>
+    </dd>
+
+    <dt><kbd>C-x 5 f <var>filename</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Visit file <var>filename</var> and select its buffer in
+      another frame. This runs <code>find-file-other-frame</code>.
+      See <a href="Visiting.html#Visiting">Visiting</a>.</p>
+    </dd>
+
+    <dt><kbd>C-x 5 d <var>directory</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Select a Dired buffer for directory <var>directory</var>
+      in another frame. This runs <code>dired-other-frame</code>.
+      See <a href="Dired.html#Dired">Dired</a>.</p>
+    </dd>
+
+    <dt><kbd>C-x 5 m</kbd></dt>
+
+    <dd>
+      <p>Start composing a mail message in another frame. This runs
+      <code>compose-mail-other-frame</code>. It is the other-frame
+      variant of <kbd>C-x m</kbd>. See <a href=
+      "Sending-Mail.html#Sending-Mail">Sending Mail</a>.</p>
+    </dd>
+
+    <dt><kbd>C-x 5 .</kbd></dt>
+
+    <dd>
+      <p>Find the definition of an identifier in another frame.
+      This runs <code>xref-find-definitions-other-frame</code>, the
+      multiple-frame variant of <kbd>M-.</kbd>. See <a href=
+      "Xref.html#Xref">Xref</a>.</p>
+    </dd>
+
+    <dt><kbd>C-x 5 r <var>filename</var> <span class=
+    "key">RET</span></kbd></dt>
+
+    <dd>
+      <a name="index-C_002dx-5-r" id="index-C_002dx-5-r"></a>
+      <a name=
+      "index-find_002dfile_002dread_002donly_002dother_002dframe"
+      id=
+      "index-find_002dfile_002dread_002donly_002dother_002dframe"></a>
+
+      <p>Visit file <var>filename</var> read-only, and select its
+      buffer in another frame. This runs
+      <code>find-file-read-only-other-frame</code>. See <a href=
+      "Visiting.html#Visiting">Visiting</a>.</p>
+    </dd>
+  </dl>
+
+  <p>You can control the appearance and behavior of the
+  newly-created frames by specifying <em>frame parameters</em>. See
+  <a href="Frame-Parameters.html#Frame-Parameters">Frame
+  Parameters</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Frame-Commands.html#Frame-Commands"
+    accesskey="n" rel="next">Frame Commands</a>, Previous: <a href=
+    "Mode-Line-Mouse.html#Mode-Line-Mouse" accesskey="p" rel=
+    "prev">Mode Line Mouse</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

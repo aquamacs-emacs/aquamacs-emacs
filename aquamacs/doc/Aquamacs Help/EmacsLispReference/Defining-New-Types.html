@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,137 +19,182 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Defining New Types</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Defining New Types">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Defining New Types">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customization-Types.html#Customization-Types" rel="up" title="Customization Types">
-<link href="Applying-Customizations.html#Applying-Customizations" rel="next" title="Applying Customizations">
-<link href="Type-Keywords.html#Type-Keywords" rel="prev" title="Type Keywords">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Defining New
+  Types</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Defining New Types" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Defining New Types" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customization-Types.html#Customization-Types" rel=
+  "up" title="Customization Types" />
+  <link href="Applying-Customizations.html#Applying-Customizations"
+  rel="next" title="Applying Customizations" />
+  <link href="Type-Keywords.html#Type-Keywords" rel="prev" title=
+  "Type Keywords" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Defining-New-Types" id="Defining-New-Types"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href="Type-Keywords.html#Type-Keywords"
+    accesskey="p" rel="prev">Type Keywords</a>, Up: <a href=
+    "Customization-Types.html#Customization-Types" accesskey="u"
+    rel="up">Customization Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-New-Types-1" id="Defining-New-Types-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Defining-New-Types"></a>
-<div class="header">
-<p>
-Previous: <a href="Type-Keywords.html#Type-Keywords" accesskey="p" rel="prev">Type Keywords</a>, Up: <a href="Customization-Types.html#Customization-Types" accesskey="u" rel="up">Customization Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-New-Types-1"></a>
-<h4 class="subsection">14.4.5 Defining New Types</h4>
-<a name="index-customization-types_002c-define-new"></a>
-<a name="index-define-new-customization-types"></a>
+  <h4 class="subsection">14.4.5 Defining New Types</h4><a name=
+  "index-customization-types_002c-define-new" id=
+  "index-customization-types_002c-define-new"></a> <a name=
+  "index-define-new-customization-types" id=
+  "index-define-new-customization-types"></a>
 
-<p>In the previous sections we have described how to construct elaborate
-type specifications for <code>defcustom</code>.  In some cases you may want
-to give such a type specification a name.  The obvious case is when
-you are using the same type for many user options: rather than repeat
-the specification for each option, you can give the type specification
-a name, and use that name each <code>defcustom</code>.  The other case is
-when a user option&rsquo;s value is a recursive data structure.  To make it
-possible for a datatype to refer to itself, it needs to have a name.
-</p>
-<p>Since custom types are implemented as widgets, the way to define a new
-customize type is to define a new widget.  We are not going to describe
-the widget interface here in details, see <a href="../widget/index.html#Top">Introduction</a> in <cite>The Emacs Widget Library</cite>, for that.  Instead we are going to
-demonstrate the minimal functionality needed for defining new customize
-types by a simple example.
-</p>
-<div class="example">
-<pre class="example">(define-widget 'binary-tree-of-string 'lazy
-  &quot;A binary tree made of cons-cells and strings.&quot;
+  <p>In the previous sections we have described how to construct
+  elaborate type specifications for <code>defcustom</code>. In some
+  cases you may want to give such a type specification a name. The
+  obvious case is when you are using the same type for many user
+  options: rather than repeat the specification for each option,
+  you can give the type specification a name, and use that name
+  each <code>defcustom</code>. The other case is when a user
+  option&rsquo;s value is a recursive data structure. To make it
+  possible for a datatype to refer to itself, it needs to have a
+  name.</p>
+
+  <p>Since custom types are implemented as widgets, the way to
+  define a new customize type is to define a new widget. We are not
+  going to describe the widget interface here in details, see
+  <a href="../widget/index.html#Top">Introduction</a> in <cite>The
+  Emacs Widget Library</cite>, for that. Instead we are going to
+  demonstrate the minimal functionality needed for defining new
+  customize types by a simple example.</p>
+
+  <div class="example">
+    <pre class="example">
+(define-widget 'binary-tree-of-string 'lazy
+  "A binary tree made of cons-cells and strings."
   :offset 4
-  :tag &quot;Node&quot;
-  :type '(choice (string :tag &quot;Leaf&quot; :value &quot;&quot;)
-                 (cons :tag &quot;Interior&quot;
-                       :value (&quot;&quot; . &quot;&quot;)
+  :tag "Node"
+  :type '(choice (string :tag "Leaf" :value "")
+                 (cons :tag "Interior"
+                       :value ("" . "")
                        binary-tree-of-string
                        binary-tree-of-string)))
 
-(defcustom foo-bar &quot;&quot;
-  &quot;Sample variable holding a binary tree of strings.&quot;
+(defcustom foo-bar ""
+  "Sample variable holding a binary tree of strings."
   :type 'binary-tree-of-string)
-</pre></div>
+</pre>
+  </div>
 
-<p>The function to define a new widget is called <code>define-widget</code>.  The
-first argument is the symbol we want to make a new widget type.  The
-second argument is a symbol representing an existing widget, the new
-widget is going to be defined in terms of difference from the existing
-widget.  For the purpose of defining new customization types, the
-<code>lazy</code> widget is perfect, because it accepts a <code>:type</code> keyword
-argument with the same syntax as the keyword argument to
-<code>defcustom</code> with the same name.  The third argument is a
-documentation string for the new widget.  You will be able to see that
-string with the <kbd>M-x widget-browse <span class="key">RET</span> binary-tree-of-string
-<span class="key">RET</span></kbd> command.
-</p>
-<p>After these mandatory arguments follow the keyword arguments.  The most
-important is <code>:type</code>, which describes the data type we want to match
-with this widget.  Here a <code>binary-tree-of-string</code> is described as
-being either a string, or a cons-cell whose car and cdr are themselves
-both <code>binary-tree-of-string</code>.  Note the reference to the widget
-type we are currently in the process of defining.  The <code>:tag</code>
-attribute is a string to name the widget in the user interface, and the
-<code>:offset</code> argument is there to ensure that child nodes are
-indented four spaces relative to the parent node, making the tree
-structure apparent in the customization buffer.
-</p>
-<p>The <code>defcustom</code> shows how the new widget can be used as an ordinary
-customization type.
-</p>
-<p>The reason for the name <code>lazy</code> is that the other composite
-widgets convert their inferior widgets to internal form when the
-widget is instantiated in a buffer.  This conversion is recursive, so
-the inferior widgets will convert <em>their</em> inferior widgets.  If
-the data structure is itself recursive, this conversion is an infinite
-recursion.  The <code>lazy</code> widget prevents the recursion: it convert
-its <code>:type</code> argument only when needed.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Type-Keywords.html#Type-Keywords" accesskey="p" rel="prev">Type Keywords</a>, Up: <a href="Customization-Types.html#Customization-Types" accesskey="u" rel="up">Customization Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The function to define a new widget is called
+  <code>define-widget</code>. The first argument is the symbol we
+  want to make a new widget type. The second argument is a symbol
+  representing an existing widget, the new widget is going to be
+  defined in terms of difference from the existing widget. For the
+  purpose of defining new customization types, the
+  <code>lazy</code> widget is perfect, because it accepts a
+  <code>:type</code> keyword argument with the same syntax as the
+  keyword argument to <code>defcustom</code> with the same name.
+  The third argument is a documentation string for the new widget.
+  You will be able to see that string with the <kbd>M-x
+  widget-browse <span class="key">RET</span> binary-tree-of-string
+  <span class="key">RET</span></kbd> command.</p>
 
+  <p>After these mandatory arguments follow the keyword arguments.
+  The most important is <code>:type</code>, which describes the
+  data type we want to match with this widget. Here a
+  <code>binary-tree-of-string</code> is described as being either a
+  string, or a cons-cell whose car and cdr are themselves both
+  <code>binary-tree-of-string</code>. Note the reference to the
+  widget type we are currently in the process of defining. The
+  <code>:tag</code> attribute is a string to name the widget in the
+  user interface, and the <code>:offset</code> argument is there to
+  ensure that child nodes are indented four spaces relative to the
+  parent node, making the tree structure apparent in the
+  customization buffer.</p>
 
+  <p>The <code>defcustom</code> shows how the new widget can be
+  used as an ordinary customization type.</p>
 
+  <p>The reason for the name <code>lazy</code> is that the other
+  composite widgets convert their inferior widgets to internal form
+  when the widget is instantiated in a buffer. This conversion is
+  recursive, so the inferior widgets will convert <em>their</em>
+  inferior widgets. If the data structure is itself recursive, this
+  conversion is an infinite recursion. The <code>lazy</code> widget
+  prevents the recursion: it convert its <code>:type</code>
+  argument only when needed.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href="Type-Keywords.html#Type-Keywords"
+    accesskey="p" rel="prev">Type Keywords</a>, Up: <a href=
+    "Customization-Types.html#Customization-Types" accesskey="u"
+    rel="up">Customization Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,109 +19,168 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Position Parse</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Position Parse">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Position Parse">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Parsing-Expressions.html#Parsing-Expressions" rel="up" title="Parsing Expressions">
-<link href="Parser-State.html#Parser-State" rel="next" title="Parser State">
-<link href="Motion-via-Parsing.html#Motion-via-Parsing" rel="prev" title="Motion via Parsing">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Position Parse</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Position Parse" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Position Parse" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Parsing-Expressions.html#Parsing-Expressions" rel=
+  "up" title="Parsing Expressions" />
+  <link href="Parser-State.html#Parser-State" rel="next" title=
+  "Parser State" />
+  <link href="Motion-via-Parsing.html#Motion-via-Parsing" rel=
+  "prev" title="Motion via Parsing" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Position-Parse" id="Position-Parse"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Parser-State.html#Parser-State" accesskey="n"
+    rel="next">Parser State</a>, Previous: <a href=
+    "Motion-via-Parsing.html#Motion-via-Parsing" accesskey="p" rel=
+    "prev">Motion via Parsing</a>, Up: <a href=
+    "Parsing-Expressions.html#Parsing-Expressions" accesskey="u"
+    rel="up">Parsing Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Finding-the-Parse-State-for-a-Position" id=
+  "Finding-the-Parse-State-for-a-Position"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Position-Parse"></a>
-<div class="header">
-<p>
-Next: <a href="Parser-State.html#Parser-State" accesskey="n" rel="next">Parser State</a>, Previous: <a href="Motion-via-Parsing.html#Motion-via-Parsing" accesskey="p" rel="prev">Motion via Parsing</a>, Up: <a href="Parsing-Expressions.html#Parsing-Expressions" accesskey="u" rel="up">Parsing Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Finding-the-Parse-State-for-a-Position"></a>
-<h4 class="subsection">34.6.2 Finding the Parse State for a Position</h4>
-<a name="index-parse-state-for-a-position"></a>
+  <h4 class="subsection">34.6.2 Finding the Parse State for a
+  Position</h4><a name="index-parse-state-for-a-position" id=
+  "index-parse-state-for-a-position"></a>
 
-<p>For syntactic analysis, such as in indentation, often the useful
-thing is to compute the syntactic state corresponding to a given buffer
-position.  This function does that conveniently.
-</p>
-<dl>
-<dt><a name="index-syntax_002dppss"></a>Function: <strong>syntax-ppss</strong> <em>&amp;optional pos</em></dt>
-<dd><p>This function returns the parser state that the parser would reach at
-position <var>pos</var> starting from the beginning of the buffer.
-See <a href="Parser-State.html#Parser-State">Parser State</a>,
-for a description of the parser state.
-</p>
-<p>The return value is the same as if you call the low-level parsing
-function <code>parse-partial-sexp</code> to parse from the beginning of the
-buffer to <var>pos</var> (see <a href="Low_002dLevel-Parsing.html#Low_002dLevel-Parsing">Low-Level Parsing</a>).  However,
-<code>syntax-ppss</code> uses a cache to speed up the computation.  Due to
-this optimization, the second value (previous complete subexpression)
-and sixth value (minimum parenthesis depth) in the returned parser
-state are not meaningful.
-</p>
-<p>This function has a side effect: it adds a buffer-local entry to
-<code>before-change-functions</code> (see <a href="Change-Hooks.html#Change-Hooks">Change Hooks</a>) for
-<code>syntax-ppss-flush-cache</code> (see below).  This entry keeps the
-cache consistent as the buffer is modified.  However, the cache might
-not be updated if <code>syntax-ppss</code> is called while
-<code>before-change-functions</code> is temporarily let-bound, or if the
-buffer is modified without running the hook, such as when using
-<code>inhibit-modification-hooks</code>.  In those cases, it is necessary to
-call <code>syntax-ppss-flush-cache</code> explicitly.
-</p></dd></dl>
+  <p>For syntactic analysis, such as in indentation, often the
+  useful thing is to compute the syntactic state corresponding to a
+  given buffer position. This function does that conveniently.</p>
 
-<dl>
-<dt><a name="index-syntax_002dppss_002dflush_002dcache"></a>Function: <strong>syntax-ppss-flush-cache</strong> <em>beg &amp;rest ignored-args</em></dt>
-<dd><p>This function flushes the cache used by <code>syntax-ppss</code>, starting
-at position <var>beg</var>.  The remaining arguments, <var>ignored-args</var>,
-are ignored; this function accepts them so that it can be directly
-used on hooks such as <code>before-change-functions</code> (see <a href="Change-Hooks.html#Change-Hooks">Change Hooks</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-syntax_002dppss" id=
+    "index-syntax_002dppss"></a>Function:
+    <strong>syntax-ppss</strong> <em>&amp;optional pos</em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Parser-State.html#Parser-State" accesskey="n" rel="next">Parser State</a>, Previous: <a href="Motion-via-Parsing.html#Motion-via-Parsing" accesskey="p" rel="prev">Motion via Parsing</a>, Up: <a href="Parsing-Expressions.html#Parsing-Expressions" accesskey="u" rel="up">Parsing Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function returns the parser state that the parser
+      would reach at position <var>pos</var> starting from the
+      beginning of the buffer. See <a href=
+      "Parser-State.html#Parser-State">Parser State</a>, for a
+      description of the parser state.</p>
 
+      <p>The return value is the same as if you call the low-level
+      parsing function <code>parse-partial-sexp</code> to parse
+      from the beginning of the buffer to <var>pos</var> (see
+      <a href=
+      "Low_002dLevel-Parsing.html#Low_002dLevel-Parsing">Low-Level
+      Parsing</a>). However, <code>syntax-ppss</code> uses a cache
+      to speed up the computation. Due to this optimization, the
+      second value (previous complete subexpression) and sixth
+      value (minimum parenthesis depth) in the returned parser
+      state are not meaningful.</p>
 
+      <p>This function has a side effect: it adds a buffer-local
+      entry to <code>before-change-functions</code> (see <a href=
+      "Change-Hooks.html#Change-Hooks">Change Hooks</a>) for
+      <code>syntax-ppss-flush-cache</code> (see below). This entry
+      keeps the cache consistent as the buffer is modified.
+      However, the cache might not be updated if
+      <code>syntax-ppss</code> is called while
+      <code>before-change-functions</code> is temporarily
+      let-bound, or if the buffer is modified without running the
+      hook, such as when using
+      <code>inhibit-modification-hooks</code>. In those cases, it
+      is necessary to call <code>syntax-ppss-flush-cache</code>
+      explicitly.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-syntax_002dppss_002dflush_002dcache" id=
+    "index-syntax_002dppss_002dflush_002dcache"></a>Function:
+    <strong>syntax-ppss-flush-cache</strong> <em>beg &amp;rest
+    ignored-args</em></dt>
+
+    <dd>
+      <p>This function flushes the cache used by
+      <code>syntax-ppss</code>, starting at position
+      <var>beg</var>. The remaining arguments,
+      <var>ignored-args</var>, are ignored; this function accepts
+      them so that it can be directly used on hooks such as
+      <code>before-change-functions</code> (see <a href=
+      "Change-Hooks.html#Change-Hooks">Change Hooks</a>).</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Parser-State.html#Parser-State" accesskey="n"
+    rel="next">Parser State</a>, Previous: <a href=
+    "Motion-via-Parsing.html#Motion-via-Parsing" accesskey="p" rel=
+    "prev">Motion via Parsing</a>, Up: <a href=
+    "Parsing-Expressions.html#Parsing-Expressions" accesskey="u"
+    rel="up">Parsing Expressions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

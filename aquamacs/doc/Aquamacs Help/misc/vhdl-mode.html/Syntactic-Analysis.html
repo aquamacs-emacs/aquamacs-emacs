@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents VHDL Mode, an Emacs mode for editing VHDL code.
 
 Copyright (C) 1995-2008, 2010, 2012, 2015-2016 Free Software
@@ -15,162 +17,230 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>VHDL Mode, an Emacs mode for editing VHDL code: Syntactic Analysis</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="VHDL Mode, an Emacs mode for editing VHDL code: Syntactic Analysis">
-<meta name="keywords" content="VHDL Mode, an Emacs mode for editing VHDL code: Syntactic Analysis">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="New-Indentation-Engine.html#New-Indentation-Engine" rel="up" title="New Indentation Engine">
-<link href="Indentation-Calculation.html#Indentation-Calculation" rel="next" title="Indentation Calculation">
-<link href="New-Indentation-Engine.html#New-Indentation-Engine" rel="prev" title="New Indentation Engine">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>VHDL Mode, an Emacs mode for editing VHDL code: Syntactic
+  Analysis</title>
+  <meta name="description" content=
+  "VHDL Mode, an Emacs mode for editing VHDL code: Syntactic Analysis" />
+  <meta name="keywords" content=
+  "VHDL Mode, an Emacs mode for editing VHDL code: Syntactic Analysis" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Concept-Index.html#Concept-Index" rel="index" title=
+  "Concept Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="New-Indentation-Engine.html#New-Indentation-Engine"
+  rel="up" title="New Indentation Engine" />
+  <link href="Indentation-Calculation.html#Indentation-Calculation"
+  rel="next" title="Indentation Calculation" />
+  <link href="New-Indentation-Engine.html#New-Indentation-Engine"
+  rel="prev" title="New Indentation Engine" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Syntactic-Analysis"></a>
-<div class="header">
-<p>
-Next: <a href="Indentation-Calculation.html#Indentation-Calculation" accesskey="n" rel="next">Indentation Calculation</a>, Up: <a href="New-Indentation-Engine.html#New-Indentation-Engine" accesskey="u" rel="up">New Indentation Engine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Syntactic-Analysis-1"></a>
-<h3 class="section">3.1 Syntactic Analysis</h3>
-<a name="index-Syntactic-Analysis"></a>
+<body lang="en" xml:lang="en">
+  <a name="Syntactic-Analysis" id="Syntactic-Analysis"></a>
 
-<a name="index-vhdl_002doffsets_002dalist"></a>
-<a name="index-offsets_002dalist-_0028vhdl_002d_0029"></a>
-<a name="index-relative-buffer-position"></a>
-<a name="index-syntactic-symbol"></a>
-<a name="index-syntactic-component"></a>
-<a name="index-syntactic-component-list"></a>
-<a name="index-relative-buffer-position-1"></a>
-<p>The first thing VHDL Mode does when indenting a line of code, is
-to analyze the line, determining the <em>syntactic component list</em> of
-the construct on that line.  A <em>syntactic component</em> consists of a
-pair of information (in lisp parlance, a <em>cons cell</em>), where the
-first part is a <em>syntactic symbol</em>, and the second part is a
-<em>relative buffer position</em>.  Syntactic symbols describe elements of
-VHDL code, e.g., <code>statement</code>, <code>comment</code>, <code>block-open</code>,
-<code>block-close</code>, etc.  See <a href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic Symbols</a>, for a complete list
-of currently recognized syntactic symbols and their semantics.  Also,
-the variable <code>vhdl-offsets-alist</code> contains the list of currently
-supported syntactic symbols.
-</p>
-<p>Conceptually, a line of VHDL code is always indented relative to the
-indentation of some line higher up in the buffer.  This is represented
-by the relative buffer position in the syntactic component.
-</p>
-<p>It might help to see an example. Suppose we had the following code as
-the only thing in a VHDL Mode buffer <a name="DOCF1" href="#FOOT1"><sup>1</sup></a>:
-</p><div class="example">
-<pre class="example">
+  <div class="header">
+    <p>Next: <a href=
+    "Indentation-Calculation.html#Indentation-Calculation"
+    accesskey="n" rel="next">Indentation Calculation</a>, Up:
+    <a href="New-Indentation-Engine.html#New-Indentation-Engine"
+    accesskey="u" rel="up">New Indentation Engine</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Syntactic-Analysis-1" id="Syntactic-Analysis-1"></a>
+
+  <h3 class="section">3.1 Syntactic Analysis</h3><a name=
+  "index-Syntactic-Analysis" id="index-Syntactic-Analysis"></a>
+  <a name="index-vhdl_002doffsets_002dalist" id=
+  "index-vhdl_002doffsets_002dalist"></a> <a name=
+  "index-offsets_002dalist-_0028vhdl_002d_0029" id=
+  "index-offsets_002dalist-_0028vhdl_002d_0029"></a> <a name=
+  "index-relative-buffer-position" id=
+  "index-relative-buffer-position"></a> <a name=
+  "index-syntactic-symbol" id="index-syntactic-symbol"></a>
+  <a name="index-syntactic-component" id=
+  "index-syntactic-component"></a> <a name=
+  "index-syntactic-component-list" id=
+  "index-syntactic-component-list"></a> <a name=
+  "index-relative-buffer-position-1" id=
+  "index-relative-buffer-position-1"></a>
+
+  <p>The first thing VHDL Mode does when indenting a line of code,
+  is to analyze the line, determining the <em>syntactic component
+  list</em> of the construct on that line. A <em>syntactic
+  component</em> consists of a pair of information (in lisp
+  parlance, a <em>cons cell</em>), where the first part is a
+  <em>syntactic symbol</em>, and the second part is a <em>relative
+  buffer position</em>. Syntactic symbols describe elements of VHDL
+  code, e.g., <code>statement</code>, <code>comment</code>,
+  <code>block-open</code>, <code>block-close</code>, etc. See
+  <a href="Syntactic-Symbols.html#Syntactic-Symbols">Syntactic
+  Symbols</a>, for a complete list of currently recognized
+  syntactic symbols and their semantics. Also, the variable
+  <code>vhdl-offsets-alist</code> contains the list of currently
+  supported syntactic symbols.</p>
+
+  <p>Conceptually, a line of VHDL code is always indented relative
+  to the indentation of some line higher up in the buffer. This is
+  represented by the relative buffer position in the syntactic
+  component.</p>
+
+  <p>It might help to see an example. Suppose we had the following
+  code as the only thing in a VHDL Mode buffer <a name="DOCF1"
+  href="#FOOT1" id="DOCF1"><sup>1</sup></a>:</p>
+
+  <div class="example">
+    <pre class="example">
   1: inverter : process
   2: begin
   3:   q &lt;= not d;
   4:   wait on d;
   5: end inverter;
 
-</pre></div>
+</pre>
+  </div><a name="index-C_002dc-C_002dx" id=
+  "index-C_002dc-C_002dx"></a> <a name=
+  "index-vhdl_002dshow_002dsyntactic_002dinformation" id=
+  "index-vhdl_002dshow_002dsyntactic_002dinformation"></a> <a name=
+  "index-show_002dsyntactic_002dinformation-_0028vhdl_002d_0029"
+  id="index-show_002dsyntactic_002dinformation-_0028vhdl_002d_0029">
+  </a>
 
-<a name="index-C_002dc-C_002dx"></a>
-<a name="index-vhdl_002dshow_002dsyntactic_002dinformation"></a>
-<a name="index-show_002dsyntactic_002dinformation-_0028vhdl_002d_0029"></a>
-<p>We can use the command <kbd>C-c C-x</kbd>
-(<code>vhdl-show-syntactic-information</code>) to simply report what the
-syntactic analysis is for the current line.  Running this command on
-line 4 of example 1, we&rsquo;d see in the echo area:
-</p><div class="example">
-<pre class="example">
+  <p>We can use the command <kbd>C-c C-x</kbd>
+  (<code>vhdl-show-syntactic-information</code>) to simply report
+  what the syntactic analysis is for the current line. Running this
+  command on line 4 of example 1, we&rsquo;d see in the echo
+  area:</p>
+
+  <div class="example">
+    <pre class="example">
 ((statement . 28))
 
-</pre></div>
+</pre>
+  </div>
 
-<p>This tells us that the line is a statement and it is indented relative
-to buffer position 28, which happens to be the &lsquo;<samp>q</samp>&rsquo; on line 3.  If
-you were to move point to line 3 and hit <kbd>C-c C-x</kbd>, you would see:
-</p><div class="example">
-<pre class="example">
+  <p>This tells us that the line is a statement and it is indented
+  relative to buffer position 28, which happens to be the
+  &lsquo;<samp>q</samp>&rsquo; on line 3. If you were to move point
+  to line 3 and hit <kbd>C-c C-x</kbd>, you would see:</p>
+
+  <div class="example">
+    <pre class="example">
 ((statement-block-intro . 20))
 
-</pre></div>
+</pre>
+  </div>
 
-<p>This indicates that line 3 is the first statement in a block, and is
-indented relative to buffer position 20, which is the &lsquo;<samp>b</samp>&rsquo; in the
-<code>begin</code> keyword on line 2.
-</p>
-<a name="index-comment-only-line"></a>
-<p>Syntactic component lists can contain more than one component, and
-individual syntactic components need not have relative buffer positions.
-The most common example of this is a line that contains a <em>comment
-only line</em>.
-</p><div class="example">
-<pre class="example">
+  <p>This indicates that line 3 is the first statement in a block,
+  and is indented relative to buffer position 20, which is the
+  &lsquo;<samp>b</samp>&rsquo; in the <code>begin</code> keyword on
+  line 2.</p><a name="index-comment-only-line" id=
+  "index-comment-only-line"></a>
+
+  <p>Syntactic component lists can contain more than one component,
+  and individual syntactic components need not have relative buffer
+  positions. The most common example of this is a line that
+  contains a <em>comment only line</em>.</p>
+
+  <div class="example">
+    <pre class="example">
 %%% TBD %%%
 
-</pre></div>
+</pre>
+  </div>
 
-<p>Hitting <kbd>C-c C-x</kbd> on line 3 of the example gives us:
-</p><div class="example">
-<pre class="example">
+  <p>Hitting <kbd>C-c C-x</kbd> on line 3 of the example gives
+  us:</p>
+
+  <div class="example">
+    <pre class="example">
 ((comment-intro) (block-intro . 46))
 
-</pre></div>
+</pre>
+  </div>
 
-<p>so you can see that the syntactic component list contains two syntactic
-components.  Also notice that the first component,
-&lsquo;<samp>(comment-intro)</samp>&rsquo; has no relative buffer position.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>so you can see that the syntactic component list contains two
+  syntactic components. Also notice that the first component,
+  &lsquo;<samp>(comment-intro)</samp>&rsquo; has no relative buffer
+  position.</p>
 
-<h3><a name="FOOT1" href="#DOCF1">(1)</a></h3>
-<p>The line numbers
-in this and future examples don&rsquo;t actually appear in the buffer.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Indentation-Calculation.html#Indentation-Calculation" accesskey="n" rel="next">Indentation Calculation</a>, Up: <a href="New-Indentation-Engine.html#New-Indentation-Engine" accesskey="u" rel="up">New Indentation Engine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="footnote">
+    <hr />
 
+    <h4 class="footnotes-heading">Footnotes</h4>
 
+    <h3><a name="FOOT1" href="#DOCF1" id="FOOT1">(1)</a></h3>
 
+    <p>The line numbers in this and future examples don&rsquo;t
+    actually appear in the buffer.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Indentation-Calculation.html#Indentation-Calculation"
+    accesskey="n" rel="next">Indentation Calculation</a>, Up:
+    <a href="New-Indentation-Engine.html#New-Indentation-Engine"
+    accesskey="u" rel="up">New Indentation Engine</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Concept-Index.html#Concept-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

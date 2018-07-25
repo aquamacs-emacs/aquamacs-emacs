@@ -1,14 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Key management - EasyPG Assistant User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="EasyPG Assistant User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Commands.html#Commands" title="Commands">
-<link rel="next" href="Cryptographic-operations-on-regions.html#Cryptographic-operations-on-regions" title="Cryptographic operations on regions">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Key management - EasyPG Assistant User's Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "EasyPG Assistant User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Commands.html#Commands" title="Commands" />
+  <link rel="next" href=
+  "Cryptographic-operations-on-regions.html#Cryptographic-operations-on-regions"
+  title="Cryptographic operations on regions" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file describes EasyPG Assistant 1.0.0.
 
 Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
@@ -31,8 +40,10 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
      copy of the license to the document, as described in section 6 of
      the license.
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -42,41 +53,56 @@ Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Key-management"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Cryptographic-operations-on-regions.html#Cryptographic-operations-on-regions">Cryptographic operations on regions</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Key-management" id="Key-management"></a>
 
-<h3 class="section">3.1 Key management</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Cryptographic-operations-on-regions.html#Cryptographic-operations-on-regions">Cryptographic
+    operations on regions</a>, Up:&nbsp;<a rel="up" accesskey="u"
+    href="Commands.html#Commands">Commands</a></p>
+    <hr />
+  </div>
 
-<p>Probably the first step of using EasyPG Assistant is to browse your
-keyring.  <kbd>M-x epa-list-keys</kbd> is corresponding to &lsquo;<samp><span class="samp">gpg
---list-keys</span></samp>&rsquo; from the command line.
+  <h3 class="section">3.1 Key management</h3>
 
-<div class="defun">
-&mdash; Command: <b>epa-list-keys</b><var> name mode<a name="index-epa_002dlist_002dkeys-1"></a></var><br>
-<blockquote><p>Show all keys matched with <var>name</var> from the public keyring. 
-</p></blockquote></div>
+  <p>Probably the first step of using EasyPG Assistant is to browse
+  your keyring. <kbd>M-x epa-list-keys</kbd> is corresponding to
+  &lsquo;<samp><span class="samp">gpg
+  --list-keys</span></samp>&rsquo; from the command line.</p>
 
-<p class="noindent">The output looks as follows.
+  <div class="defun">
+    &mdash; Command: <b>epa-list-keys</b> <var>name mode<a name=
+    "index-epa_002dlist_002dkeys-1" id=
+    "index-epa_002dlist_002dkeys-1"></a></var><br />
 
-<pre class="example">       u A5B6B2D4B15813FE Daiki Ueno &lt;ueno@unixuser.org&gt;
+    <blockquote>
+      <p>Show all keys matched with <var>name</var> from the public
+      keyring.</p>
+    </blockquote>
+  </div>
+
+  <p class="noindent">The output looks as follows.</p>
+  <pre class="example">
+       u A5B6B2D4B15813FE Daiki Ueno &lt;ueno@unixuser.org&gt;
 </pre>
-   <p class="noindent">A character on the leftmost column indicates the trust level of the
-key.  If it is &lsquo;<samp><span class="samp">u</span></samp>&rsquo;, the key is marked as ultimately trusted.  The
-second column is the key ID, and the rest is the user ID.
 
-   <p>You can move over entries by &lt;TAB&gt;.  If you type &lt;RET&gt; or
-click button1 on an entry, you will see more detailed information
-about the key you selected.
+  <p class="noindent">A character on the leftmost column indicates
+  the trust level of the key. If it is &lsquo;<samp><span class=
+  "samp">u</span></samp>&rsquo;, the key is marked as ultimately
+  trusted. The second column is the key ID, and the rest is the
+  user ID.</p>
 
-<pre class="example">      u Daiki Ueno &lt;ueno@unixuser.org&gt;
+  <p>You can move over entries by &lt;TAB&gt;. If you type
+  &lt;RET&gt; or click button1 on an entry, you will see more
+  detailed information about the key you selected.</p>
+  <pre class="example">
+      u Daiki Ueno &lt;ueno@unixuser.org&gt;
       u A5B6B2D4B15813FE 1024bits DSA
              Created: 2001-10-09
              Expires: 2007-09-04
@@ -88,52 +114,90 @@ about the key you selected.
              Capabilities: encrypt
              Fingerprint: 9003 D76B 73B7 4A8A E588  10AF 4447 461B 2A9B EA2D
 </pre>
-   <p class="noindent">To browse your private keyring, use <kbd>M-x epa-list-secret-keys</kbd>.
 
-<div class="defun">
-&mdash; Command: <b>epa-list-secret-keys</b><var> name<a name="index-epa_002dlist_002dsecret_002dkeys-2"></a></var><br>
-<blockquote><p>Show all keys matched with <var>name</var> from the private keyring. 
-</p></blockquote></div>
+  <p class="noindent">To browse your private keyring, use <kbd>M-x
+  epa-list-secret-keys</kbd>.</p>
 
-<p class="noindent">In &lsquo;<samp><span class="samp">*Keys*</span></samp>&rsquo; buffer, several commands are available.  The common
-use case is to export some keys to a file.  To do that, type <kbd>m</kbd>
-to select keys, type <kbd>o</kbd>, and then supply the filename.
+  <div class="defun">
+    &mdash; Command: <b>epa-list-secret-keys</b> <var>name<a name=
+    "index-epa_002dlist_002dsecret_002dkeys-2" id=
+    "index-epa_002dlist_002dsecret_002dkeys-2"></a></var><br />
 
-   <p>Below are other commands related to key management.  Some of them take
-a file as input/output, and others take the current region.
+    <blockquote>
+      <p>Show all keys matched with <var>name</var> from the
+      private keyring.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Command: <b>epa-insert-keys</b><var> keys<a name="index-epa_002dinsert_002dkeys-3"></a></var><br>
-<blockquote><p>Insert selected <var>keys</var> after the point.  It will let you select
-keys before insertion.  By default, it will encode keys in the OpenPGP
-armor format. 
-</p></blockquote></div>
+  <p class="noindent">In &lsquo;<samp><span class=
+  "samp">*Keys*</span></samp>&rsquo; buffer, several commands are
+  available. The common use case is to export some keys to a file.
+  To do that, type <kbd>m</kbd> to select keys, type <kbd>o</kbd>,
+  and then supply the filename.</p>
 
-<div class="defun">
-&mdash; Command: <b>epa-import-keys</b><var> file<a name="index-epa_002dimport_002dkeys-4"></a></var><br>
-<blockquote><p>Import keys from <var>file</var> to your keyring. 
-</p></blockquote></div>
+  <p>Below are other commands related to key management. Some of
+  them take a file as input/output, and others take the current
+  region.</p>
 
-<div class="defun">
-&mdash; Command: <b>epa-import-keys-region</b><var> start end<a name="index-epa_002dimport_002dkeys_002dregion-5"></a></var><br>
-<blockquote><p>Import keys from the current region between <var>start</var> and <var>end</var>
-to your keyring. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Command: <b>epa-insert-keys</b> <var>keys<a name=
+    "index-epa_002dinsert_002dkeys-3" id=
+    "index-epa_002dinsert_002dkeys-3"></a></var><br />
 
-<div class="defun">
-&mdash; Command: <b>epa-import-armor-in-region</b><var> start end<a name="index-epa_002dimport_002darmor_002din_002dregion-6"></a></var><br>
-<blockquote><p>Import keys in the OpenPGP armor format in the current region between
-<var>start</var> and <var>end</var>.  The difference from
-<code>epa-import-keys-region</code> is that
-<code>epa-import-armor-in-region</code> searches armors in the region and
-applies <code>epa-import-keys-region</code> to each of them. 
-</p></blockquote></div>
+    <blockquote>
+      <p>Insert selected <var>keys</var> after the point. It will
+      let you select keys before insertion. By default, it will
+      encode keys in the OpenPGP armor format.</p>
+    </blockquote>
+  </div>
 
-<div class="defun">
-&mdash; Command: <b>epa-delete-keys</b><var> allow-secret<a name="index-epa_002ddelete_002dkeys-7"></a></var><br>
-<blockquote><p>Delete selected keys.  If <var>allow-secret</var> is non-<code>nil</code>, it
-also delete the secret keys. 
-</p></blockquote></div>
+  <div class="defun">
+    &mdash; Command: <b>epa-import-keys</b> <var>file<a name=
+    "index-epa_002dimport_002dkeys-4" id=
+    "index-epa_002dimport_002dkeys-4"></a></var><br />
 
-   </body></html>
+    <blockquote>
+      <p>Import keys from <var>file</var> to your keyring.</p>
+    </blockquote>
+  </div>
 
+  <div class="defun">
+    &mdash; Command: <b>epa-import-keys-region</b> <var>start
+    end<a name="index-epa_002dimport_002dkeys_002dregion-5" id=
+    "index-epa_002dimport_002dkeys_002dregion-5"></a></var><br />
+
+    <blockquote>
+      <p>Import keys from the current region between
+      <var>start</var> and <var>end</var> to your keyring.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Command: <b>epa-import-armor-in-region</b> <var>start
+    end<a name="index-epa_002dimport_002darmor_002din_002dregion-6"
+    id=
+    "index-epa_002dimport_002darmor_002din_002dregion-6"></a></var><br />
+
+
+    <blockquote>
+      <p>Import keys in the OpenPGP armor format in the current
+      region between <var>start</var> and <var>end</var>. The
+      difference from <code>epa-import-keys-region</code> is that
+      <code>epa-import-armor-in-region</code> searches armors in
+      the region and applies <code>epa-import-keys-region</code> to
+      each of them.</p>
+    </blockquote>
+  </div>
+
+  <div class="defun">
+    &mdash; Command: <b>epa-delete-keys</b>
+    <var>allow-secret<a name="index-epa_002ddelete_002dkeys-7" id=
+    "index-epa_002ddelete_002dkeys-7"></a></var><br />
+
+    <blockquote>
+      <p>Delete selected keys. If <var>allow-secret</var> is
+      non-<code>nil</code>, it also delete the secret keys.</p>
+    </blockquote>
+  </div>
+</body>
+</html>

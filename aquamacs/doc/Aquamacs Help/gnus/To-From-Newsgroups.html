@@ -1,15 +1,28 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>To From Newsgroups - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Summary-Buffer-Format.html#Summary-Buffer-Format" title="Summary Buffer Format">
-<link rel="prev" href="Summary-Buffer-Lines.html#Summary-Buffer-Lines" title="Summary Buffer Lines">
-<link rel="next" href="Summary-Buffer-Mode-Line.html#Summary-Buffer-Mode-Line" title="Summary Buffer Mode Line">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>To From Newsgroups - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Summary-Buffer-Format.html#Summary-Buffer-Format" title=
+  "Summary Buffer Format" />
+  <link rel="prev" href=
+  "Summary-Buffer-Lines.html#Summary-Buffer-Lines" title=
+  "Summary Buffer Lines" />
+  <link rel="next" href=
+  "Summary-Buffer-Mode-Line.html#Summary-Buffer-Mode-Line" title=
+  "Summary Buffer Mode Line" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +38,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,74 +51,110 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="To-From-Newsgroups"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Summary-Buffer-Mode-Line.html#Summary-Buffer-Mode-Line">Summary Buffer Mode Line</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Summary-Buffer-Lines.html#Summary-Buffer-Lines">Summary Buffer Lines</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Summary-Buffer-Format.html#Summary-Buffer-Format">Summary Buffer Format</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="To-From-Newsgroups" id="To-From-Newsgroups"></a>
 
-<h4 class="subsection">3.1.2 To From Newsgroups</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Summary-Buffer-Mode-Line.html#Summary-Buffer-Mode-Line">Summary
+    Buffer Mode Line</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href=
+    "Summary-Buffer-Lines.html#Summary-Buffer-Lines">Summary Buffer
+    Lines</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Summary-Buffer-Format.html#Summary-Buffer-Format">Summary
+    Buffer Format</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-To-588"></a><a name="index-Newsgroups-589"></a>
-In some groups (particularly in archive groups), the <code>From</code> header
-isn't very interesting, since all the articles there are written by
-you.  To display the information in the <code>To</code> or <code>Newsgroups</code>
-headers instead, you need to decide three things: What information to
-gather; where to display it; and when to display it.
+  <h4 class="subsection">3.1.2 To From Newsgroups</h4>
 
-     <ol type=1 start=1>
-<li><a name="index-gnus_002dextra_002dheaders-590"></a>The reading of extra header information is controlled by the
-<code>gnus-extra-headers</code>.  This is a list of header symbols.  For
-instance:
+  <p><a name="index-To-588" id="index-To-588"></a><a name=
+  "index-Newsgroups-589" id="index-Newsgroups-589"></a> In some
+  groups (particularly in archive groups), the <code>From</code>
+  header isn't very interesting, since all the articles there are
+  written by you. To display the information in the <code>To</code>
+  or <code>Newsgroups</code> headers instead, you need to decide
+  three things: What information to gather; where to display it;
+  and when to display it.</p>
 
-     <pre class="lisp">          (setq gnus-extra-headers
+  <ol type="1" start="1">
+    <li>
+      <a name="index-gnus_002dextra_002dheaders-590" id=
+      "index-gnus_002dextra_002dheaders-590"></a>The reading of
+      extra header information is controlled by the
+      <code>gnus-extra-headers</code>. This is a list of header
+      symbols. For instance:
+      <pre class="lisp">
+          (setq gnus-extra-headers
                 '(To Newsgroups X-Newsreader))
 </pre>
-     <p>This will result in Gnus trying to obtain these three headers, and
-storing it in header structures for later easy retrieval.
 
-     <li><a name="index-gnus_002dextra_002dheader-591"></a>The value of these extra headers can be accessed via the
-<code>gnus-extra-header</code> function.  Here's a format line spec that will
-access the <code>X-Newsreader</code> header:
+      <p>This will result in Gnus trying to obtain these three
+      headers, and storing it in header structures for later easy
+      retrieval.</p>
+    </li>
 
-     <pre class="example">          "%~(form (gnus-extra-header 'X-Newsreader))@"
+    <li>
+      <a name="index-gnus_002dextra_002dheader-591" id=
+      "index-gnus_002dextra_002dheader-591"></a>The value of these
+      extra headers can be accessed via the
+      <code>gnus-extra-header</code> function. Here's a format line
+      spec that will access the <code>X-Newsreader</code> header:
+      <pre class="example">
+          "%~(form (gnus-extra-header 'X-Newsreader))@"
 </pre>
-     <li><a name="index-gnus_002dignored_002dfrom_002daddresses-592"></a>The <code>gnus-ignored-from-addresses</code> variable says when the &lsquo;<samp><span class="samp">%f</span></samp>&rsquo;
-summary line spec returns the <code>To</code>, <code>Newsreader</code> or
-<code>From</code> header.  If this regexp matches the contents of the
-<code>From</code> header, the value of the <code>To</code> or <code>Newsreader</code>
-headers are used instead.
+    </li>
 
-     <p>To distinguish regular articles from those where the <code>From</code> field
-has been swapped, a string is prefixed to the <code>To</code> or
-<code>Newsgroups</code> header in the summary line.  By default the string is
-&lsquo;<samp><span class="samp">-&gt; </span></samp>&rsquo; for <code>To</code> and &lsquo;<samp><span class="samp">=&gt; </span></samp>&rsquo; for <code>Newsgroups</code>, you can
-customize these strings with <code>gnus-summary-to-prefix</code> and
-<code>gnus-summary-newsgroup-prefix</code>.
+    <li>
+      <a name="index-gnus_002dignored_002dfrom_002daddresses-592"
+      id=
+      "index-gnus_002dignored_002dfrom_002daddresses-592"></a>The
+      <code>gnus-ignored-from-addresses</code> variable says when
+      the &lsquo;<samp><span class="samp">%f</span></samp>&rsquo;
+      summary line spec returns the <code>To</code>,
+      <code>Newsreader</code> or <code>From</code> header. If this
+      regexp matches the contents of the <code>From</code> header,
+      the value of the <code>To</code> or <code>Newsreader</code>
+      headers are used instead.
 
-        </ol>
+      <p>To distinguish regular articles from those where the
+      <code>From</code> field has been swapped, a string is
+      prefixed to the <code>To</code> or <code>Newsgroups</code>
+      header in the summary line. By default the string is
+      &lsquo;<samp><span class="samp">-&gt;</span></samp> &rsquo;
+      for <code>To</code> and &lsquo;<samp><span class=
+      "samp">=&gt;</span></samp> &rsquo; for
+      <code>Newsgroups</code>, you can customize these strings with
+      <code>gnus-summary-to-prefix</code> and
+      <code>gnus-summary-newsgroup-prefix</code>.</p>
+    </li>
+  </ol>
 
-   <p><a name="index-nnmail_002dextra_002dheaders-593"></a>A related variable is <code>nnmail-extra-headers</code>, which controls when
-to include extra headers when generating overview (<acronym>NOV</acronym>) files. 
-If you have old overview files, you should regenerate them after
-changing this variable, by entering the server buffer using <kbd>^</kbd>,
-and then <kbd>g</kbd> on the appropriate mail server (e.g. nnml) to cause
-regeneration.
+  <p><a name="index-nnmail_002dextra_002dheaders-593" id=
+  "index-nnmail_002dextra_002dheaders-593"></a>A related variable
+  is <code>nnmail-extra-headers</code>, which controls when to
+  include extra headers when generating overview
+  (<acronym>NOV</acronym>) files. If you have old overview files,
+  you should regenerate them after changing this variable, by
+  entering the server buffer using <kbd>^</kbd>, and then
+  <kbd>g</kbd> on the appropriate mail server (e.g. nnml) to cause
+  regeneration.</p>
 
-   <p><a name="index-gnus_002dsummary_002dline_002dformat-594"></a>You also have to instruct Gnus to display the data by changing the
-<code>%n</code> spec to the <code>%f</code> spec in the
-<code>gnus-summary-line-format</code> variable.
+  <p><a name="index-gnus_002dsummary_002dline_002dformat-594" id=
+  "index-gnus_002dsummary_002dline_002dformat-594"></a>You also
+  have to instruct Gnus to display the data by changing the
+  <code>%n</code> spec to the <code>%f</code> spec in the
+  <code>gnus-summary-line-format</code> variable.</p>
 
-   <p>In summary, you'd typically put something like the following in
-<samp><span class="file">~/.gnus.el</span></samp>:
-
-<pre class="lisp">     (setq gnus-extra-headers
+  <p>In summary, you'd typically put something like the following
+  in <samp><span class="file">~/.gnus.el</span></samp>:</p>
+  <pre class="lisp">
+     (setq gnus-extra-headers
            '(To Newsgroups))
      (setq nnmail-extra-headers gnus-extra-headers)
      (setq gnus-summary-line-format
@@ -111,21 +162,24 @@ regeneration.
      (setq gnus-ignored-from-addresses
            "Your Name Here")
 </pre>
-   <p>(The values listed above are the default values in Gnus.  Alter them
-to fit your needs.)
 
-   <p>A note for news server administrators, or for users who wish to try to
-convince their news server administrator to provide some additional
-support:
+  <p>(The values listed above are the default values in Gnus. Alter
+  them to fit your needs.)</p>
 
-   <p>The above is mostly useful for mail groups, where you have control over
-the <acronym>NOV</acronym> files that are created.  However, if you can persuade your
-nntp admin to add (in the usual implementation, notably INN):
+  <p>A note for news server administrators, or for users who wish
+  to try to convince their news server administrator to provide
+  some additional support:</p>
 
-<pre class="example">     Newsgroups:full
+  <p>The above is mostly useful for mail groups, where you have
+  control over the <acronym>NOV</acronym> files that are created.
+  However, if you can persuade your nntp admin to add (in the usual
+  implementation, notably INN):</p>
+  <pre class="example">
+     Newsgroups:full
 </pre>
-   <p>to the end of her <samp><span class="file">overview.fmt</span></samp> file, then you can use that just
-as you would the extra headers from the mail groups.
 
-   </body></html>
-
+  <p>to the end of her <samp><span class=
+  "file">overview.fmt</span></samp> file, then you can use that
+  just as you would the extra headers from the mail groups.</p>
+</body>
+</html>

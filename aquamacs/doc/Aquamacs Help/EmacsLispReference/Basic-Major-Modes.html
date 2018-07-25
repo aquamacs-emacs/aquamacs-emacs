@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,125 +19,198 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Basic Major Modes</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Basic Major Modes">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Basic Major Modes">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Major-Modes.html#Major-Modes" rel="up" title="Major Modes">
-<link href="Mode-Hooks.html#Mode-Hooks" rel="next" title="Mode Hooks">
-<link href="Derived-Modes.html#Derived-Modes" rel="prev" title="Derived Modes">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Basic Major Modes</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Basic Major Modes" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Basic Major Modes" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Major-Modes.html#Major-Modes" rel="up" title=
+  "Major Modes" />
+  <link href="Mode-Hooks.html#Mode-Hooks" rel="next" title=
+  "Mode Hooks" />
+  <link href="Derived-Modes.html#Derived-Modes" rel="prev" title=
+  "Derived Modes" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Basic-Major-Modes" id="Basic-Major-Modes"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Mode-Hooks.html#Mode-Hooks" accesskey="n"
+    rel="next">Mode Hooks</a>, Previous: <a href=
+    "Derived-Modes.html#Derived-Modes" accesskey="p" rel=
+    "prev">Derived Modes</a>, Up: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major
+    Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Basic-Major-Modes-1" id="Basic-Major-Modes-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Basic-Major-Modes"></a>
-<div class="header">
-<p>
-Next: <a href="Mode-Hooks.html#Mode-Hooks" accesskey="n" rel="next">Mode Hooks</a>, Previous: <a href="Derived-Modes.html#Derived-Modes" accesskey="p" rel="prev">Derived Modes</a>, Up: <a href="Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Basic-Major-Modes-1"></a>
-<h4 class="subsection">22.2.5 Basic Major Modes</h4>
+  <h4 class="subsection">22.2.5 Basic Major Modes</h4>
 
-<p>Apart from Fundamental mode, there are three major modes that other
-major modes commonly derive from: Text mode, Prog mode, and Special
-mode.  While Text mode is useful in its own right (e.g., for editing
-files ending in <samp>.txt</samp>), Prog mode and Special mode exist mainly to
-let other modes derive from them.
-</p>
-<a name="index-prog_002dmode_002dhook"></a>
-<p>As far as possible, new major modes should be derived, either directly
-or indirectly, from one of these three modes.  One reason is that this
-allows users to customize a single mode hook
-(e.g., <code>prog-mode-hook</code>) for an entire family of relevant modes
-(e.g., all programming language modes).
-</p>
-<dl>
-<dt><a name="index-text_002dmode"></a>Command: <strong>text-mode</strong></dt>
-<dd><p>Text mode is a major mode for editing human languages.  It defines the
-&lsquo;<samp>&quot;</samp>&rsquo; and &lsquo;<samp>\</samp>&rsquo; characters as having punctuation syntax
-(see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>), and binds <kbd>M-<span class="key">TAB</span></kbd> to
-<code>ispell-complete-word</code> (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Spelling.html#Spelling">Spelling</a> in <cite>The GNU Emacs
-Manual</cite>).
-</p>
-<p>An example of a major mode derived from Text mode is HTML mode.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/HTML-Mode.html#HTML-Mode">SGML and HTML Modes</a> in <cite>The GNU Emacs Manual</cite>.
-</p></dd></dl>
+  <p>Apart from Fundamental mode, there are three major modes that
+  other major modes commonly derive from: Text mode, Prog mode, and
+  Special mode. While Text mode is useful in its own right (e.g.,
+  for editing files ending in <samp>.txt</samp>), Prog mode and
+  Special mode exist mainly to let other modes derive from
+  them.</p><a name="index-prog_002dmode_002dhook" id=
+  "index-prog_002dmode_002dhook"></a>
 
-<dl>
-<dt><a name="index-prog_002dmode"></a>Command: <strong>prog-mode</strong></dt>
-<dd><p>Prog mode is a basic major mode for buffers containing programming
-language source code.  Most of the programming language major modes
-built into Emacs are derived from it.
-</p>
-<p>Prog mode binds <code>parse-sexp-ignore-comments</code> to <code>t</code>
-(see <a href="Motion-via-Parsing.html#Motion-via-Parsing">Motion via Parsing</a>) and <code>bidi-paragraph-direction</code> to
-<code>left-to-right</code> (see <a href="Bidirectional-Display.html#Bidirectional-Display">Bidirectional Display</a>).
-</p></dd></dl>
+  <p>As far as possible, new major modes should be derived, either
+  directly or indirectly, from one of these three modes. One reason
+  is that this allows users to customize a single mode hook (e.g.,
+  <code>prog-mode-hook</code>) for an entire family of relevant
+  modes (e.g., all programming language modes).</p>
 
-<dl>
-<dt><a name="index-special_002dmode"></a>Command: <strong>special-mode</strong></dt>
-<dd><p>Special mode is a basic major mode for buffers containing text that is
-produced specially by Emacs, rather than directly from a file.  Major
-modes derived from Special mode are given a <code>mode-class</code> property
-of <code>special</code> (see <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>).
-</p>
-<p>Special mode sets the buffer to read-only.  Its keymap defines several
-common bindings, including <kbd>q</kbd> for <code>quit-window</code> and <kbd>g</kbd>
-for <code>revert-buffer</code> (see <a href="Reverting.html#Reverting">Reverting</a>).
-</p>
-<p>An example of a major mode derived from Special mode is Buffer Menu
-mode, which is used by the <samp>*Buffer List*</samp> buffer.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/List-Buffers.html#List-Buffers">Listing Existing Buffers</a> in <cite>The GNU Emacs Manual</cite>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-text_002dmode" id=
+    "index-text_002dmode"></a>Command:
+    <strong>text-mode</strong></dt>
 
-<p>In addition, modes for buffers of tabulated data can inherit from
-Tabulated List mode, which is in turn derived from Special mode.
-See <a href="Tabulated-List-Mode.html#Tabulated-List-Mode">Tabulated List Mode</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Mode-Hooks.html#Mode-Hooks" accesskey="n" rel="next">Mode Hooks</a>, Previous: <a href="Derived-Modes.html#Derived-Modes" accesskey="p" rel="prev">Derived Modes</a>, Up: <a href="Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>Text mode is a major mode for editing human languages. It
+      defines the &lsquo;<samp>"</samp>&rsquo; and
+      &lsquo;<samp>\</samp>&rsquo; characters as having punctuation
+      syntax (see <a href=
+      "Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class
+      Table</a>), and binds <kbd>M-<span class=
+      "key">TAB</span></kbd> to <code>ispell-complete-word</code>
+      (see <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/Spelling.html#Spelling">
+      Spelling</a> in <cite>The GNU Emacs Manual</cite>).</p>
 
+      <p>An example of a major mode derived from Text mode is HTML
+      mode. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/HTML-Mode.html#HTML-Mode">
+      SGML and HTML Modes</a> in <cite>The GNU Emacs
+      Manual</cite>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-prog_002dmode" id=
+    "index-prog_002dmode"></a>Command:
+    <strong>prog-mode</strong></dt>
 
+    <dd>
+      <p>Prog mode is a basic major mode for buffers containing
+      programming language source code. Most of the programming
+      language major modes built into Emacs are derived from
+      it.</p>
+
+      <p>Prog mode binds <code>parse-sexp-ignore-comments</code> to
+      <code>t</code> (see <a href=
+      "Motion-via-Parsing.html#Motion-via-Parsing">Motion via
+      Parsing</a>) and <code>bidi-paragraph-direction</code> to
+      <code>left-to-right</code> (see <a href=
+      "Bidirectional-Display.html#Bidirectional-Display">Bidirectional
+      Display</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-special_002dmode" id=
+    "index-special_002dmode"></a>Command:
+    <strong>special-mode</strong></dt>
+
+    <dd>
+      <p>Special mode is a basic major mode for buffers containing
+      text that is produced specially by Emacs, rather than
+      directly from a file. Major modes derived from Special mode
+      are given a <code>mode-class</code> property of
+      <code>special</code> (see <a href=
+      "Major-Mode-Conventions.html#Major-Mode-Conventions">Major
+      Mode Conventions</a>).</p>
+
+      <p>Special mode sets the buffer to read-only. Its keymap
+      defines several common bindings, including <kbd>q</kbd> for
+      <code>quit-window</code> and <kbd>g</kbd> for
+      <code>revert-buffer</code> (see <a href=
+      "Reverting.html#Reverting">Reverting</a>).</p>
+
+      <p>An example of a major mode derived from Special mode is
+      Buffer Menu mode, which is used by the <samp>*Buffer
+      List*</samp> buffer. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/emacs/List-Buffers.html#List-Buffers">
+      Listing Existing Buffers</a> in <cite>The GNU Emacs
+      Manual</cite>.</p>
+    </dd>
+  </dl>
+
+  <p>In addition, modes for buffers of tabulated data can inherit
+  from Tabulated List mode, which is in turn derived from Special
+  mode. See <a href=
+  "Tabulated-List-Mode.html#Tabulated-List-Mode">Tabulated List
+  Mode</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Mode-Hooks.html#Mode-Hooks" accesskey="n"
+    rel="next">Mode Hooks</a>, Previous: <a href=
+    "Derived-Modes.html#Derived-Modes" accesskey="p" rel=
+    "prev">Derived Modes</a>, Up: <a href=
+    "Major-Modes.html#Major-Modes" accesskey="u" rel="up">Major
+    Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

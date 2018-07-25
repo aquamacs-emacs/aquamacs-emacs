@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,179 +19,288 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: User Identification</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: User Identification">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: User Identification">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="System-Interface.html#System-Interface" rel="up" title="System Interface">
-<link href="Time-of-Day.html#Time-of-Day" rel="next" title="Time of Day">
-<link href="System-Environment.html#System-Environment" rel="prev" title="System Environment">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: User
+  Identification</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: User Identification" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: User Identification" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="System-Interface.html#System-Interface" rel="up"
+  title="System Interface" />
+  <link href="Time-of-Day.html#Time-of-Day" rel="next" title=
+  "Time of Day" />
+  <link href="System-Environment.html#System-Environment" rel=
+  "prev" title="System Environment" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="User-Identification" id="User-Identification"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Time-of-Day.html#Time-of-Day" accesskey="n"
+    rel="next">Time of Day</a>, Previous: <a href=
+    "System-Environment.html#System-Environment" accesskey="p" rel=
+    "prev">System Environment</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="User-Identification-1" id="User-Identification-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="User-Identification"></a>
-<div class="header">
-<p>
-Next: <a href="Time-of-Day.html#Time-of-Day" accesskey="n" rel="next">Time of Day</a>, Previous: <a href="System-Environment.html#System-Environment" accesskey="p" rel="prev">System Environment</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="User-Identification-1"></a>
-<h3 class="section">38.4 User Identification</h3>
-<a name="index-user-identification"></a>
+  <h3 class="section">38.4 User Identification</h3><a name=
+  "index-user-identification" id="index-user-identification"></a>
 
-<dl>
-<dt><a name="index-init_002dfile_002duser"></a>Variable: <strong>init-file-user</strong></dt>
-<dd><p>This variable says which user&rsquo;s init files should be used by
-Emacs&mdash;or <code>nil</code> if none.  <code>&quot;&quot;</code> stands for the user who
-originally logged in.  The value reflects command-line options such as
-&lsquo;<samp>-q</samp>&rsquo; or &lsquo;<samp>-u <var>user</var></samp>&rsquo;.
-</p>
-<p>Lisp packages that load files of customizations, or any other sort of
-user profile, should obey this variable in deciding where to find it.
-They should load the profile of the user name found in this variable.
-If <code>init-file-user</code> is <code>nil</code>, meaning that the &lsquo;<samp>-q</samp>&rsquo;,
-&lsquo;<samp>-Q</samp>&rsquo;, or &lsquo;<samp>-batch</samp>&rsquo; option was used, then Lisp packages should
-not load any customization files or user profile.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-init_002dfile_002duser" id=
+    "index-init_002dfile_002duser"></a>Variable:
+    <strong>init-file-user</strong></dt>
 
-<dl>
-<dt><a name="index-user_002dmail_002daddress"></a>User Option: <strong>user-mail-address</strong></dt>
-<dd><p>This holds the nominal email address of the user who is using Emacs.
-Emacs normally sets this variable to a default value after reading your
-init files, but not if you have already set it.  So you can set the
-variable to some other value in your init file if you do not
-want to use the default value.
-</p></dd></dl>
+    <dd>
+      <p>This variable says which user&rsquo;s init files should be
+      used by Emacs&mdash;or <code>nil</code> if none.
+      <code>""</code> stands for the user who originally logged in.
+      The value reflects command-line options such as
+      &lsquo;<samp>-q</samp>&rsquo; or &lsquo;<samp>-u
+      <var>user</var></samp>&rsquo;.</p>
 
-<dl>
-<dt><a name="index-user_002dlogin_002dname"></a>Function: <strong>user-login-name</strong> <em>&amp;optional uid</em></dt>
-<dd><p>This function returns the name under which the user is logged in.
-It uses the environment variables <code>LOGNAME</code> or <code>USER</code> if
-either is set.  Otherwise, the value is based on the effective
-<acronym>UID</acronym>, not the real <acronym>UID</acronym>.
-</p>
-<p>If you specify <var>uid</var> (a number), the result is the user name that
-corresponds to <var>uid</var>, or <code>nil</code> if there is no such user.
-</p></dd></dl>
+      <p>Lisp packages that load files of customizations, or any
+      other sort of user profile, should obey this variable in
+      deciding where to find it. They should load the profile of
+      the user name found in this variable. If
+      <code>init-file-user</code> is <code>nil</code>, meaning that
+      the &lsquo;<samp>-q</samp>&rsquo;,
+      &lsquo;<samp>-Q</samp>&rsquo;, or
+      &lsquo;<samp>-batch</samp>&rsquo; option was used, then Lisp
+      packages should not load any customization files or user
+      profile.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-user_002dreal_002dlogin_002dname"></a>Function: <strong>user-real-login-name</strong></dt>
-<dd><p>This function returns the user name corresponding to Emacs&rsquo;s real
-<acronym>UID</acronym>.  This ignores the effective <acronym>UID</acronym>, and the
-environment variables <code>LOGNAME</code> and <code>USER</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-user_002dmail_002daddress" id=
+    "index-user_002dmail_002daddress"></a>User Option:
+    <strong>user-mail-address</strong></dt>
 
-<dl>
-<dt><a name="index-user_002dfull_002dname"></a>Function: <strong>user-full-name</strong> <em>&amp;optional uid</em></dt>
-<dd><p>This function returns the full name of the logged-in user&mdash;or the value
-of the environment variable <code>NAME</code>, if that is set.
-</p>
-<p>If the Emacs process&rsquo;s user-id does not correspond to any known user (and
-provided <code>NAME</code> is not set), the result is <code>&quot;unknown&quot;</code>.
-</p>
-<p>If <var>uid</var> is non-<code>nil</code>, then it should be a number (a user-id)
-or a string (a login name).  Then <code>user-full-name</code> returns the full
-name corresponding to that user-id or login name.  If you specify a
-user-id or login name that isn&rsquo;t defined, it returns <code>nil</code>.
-</p></dd></dl>
+    <dd>
+      <p>This holds the nominal email address of the user who is
+      using Emacs. Emacs normally sets this variable to a default
+      value after reading your init files, but not if you have
+      already set it. So you can set the variable to some other
+      value in your init file if you do not want to use the default
+      value.</p>
+    </dd>
+  </dl>
 
-<a name="index-user_002dfull_002dname-1"></a>
-<a name="index-user_002dreal_002dlogin_002dname-1"></a>
-<a name="index-user_002dlogin_002dname-1"></a>
-<p>The symbols <code>user-login-name</code>, <code>user-real-login-name</code> and
-<code>user-full-name</code> are variables as well as functions.  The functions
-return the same values that the variables hold.  These variables allow
-you to fake out Emacs by telling the functions what to return.  The
-variables are also useful for constructing frame titles (see <a href="Frame-Titles.html#Frame-Titles">Frame Titles</a>).
-</p>
-<a name="index-UID"></a>
-<dl>
-<dt><a name="index-user_002dreal_002duid"></a>Function: <strong>user-real-uid</strong></dt>
-<dd><p>This function returns the real <acronym>UID</acronym> of the user.
-The value may be floating point, in the (unlikely) event that
-the UID is too large to fit in a Lisp integer.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-user_002dlogin_002dname" id=
+    "index-user_002dlogin_002dname"></a>Function:
+    <strong>user-login-name</strong> <em>&amp;optional
+    uid</em></dt>
 
-<dl>
-<dt><a name="index-user_002duid"></a>Function: <strong>user-uid</strong></dt>
-<dd><p>This function returns the effective <acronym>UID</acronym> of the user.
-The value may be floating point.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the name under which the user is
+      logged in. It uses the environment variables
+      <code>LOGNAME</code> or <code>USER</code> if either is set.
+      Otherwise, the value is based on the effective
+      <acronym>UID</acronym>, not the real
+      <acronym>UID</acronym>.</p>
 
-<a name="index-GID"></a>
-<dl>
-<dt><a name="index-group_002dgid"></a>Function: <strong>group-gid</strong></dt>
-<dd><p>This function returns the effective <acronym>GID</acronym> of the Emacs process.
-The value may be floating point.
-</p></dd></dl>
+      <p>If you specify <var>uid</var> (a number), the result is
+      the user name that corresponds to <var>uid</var>, or
+      <code>nil</code> if there is no such user.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-group_002dreal_002dgid"></a>Function: <strong>group-real-gid</strong></dt>
-<dd><p>This function returns the real <acronym>GID</acronym> of the Emacs process.
-The value may be floating point.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-user_002dreal_002dlogin_002dname" id=
+    "index-user_002dreal_002dlogin_002dname"></a>Function:
+    <strong>user-real-login-name</strong></dt>
 
-<dl>
-<dt><a name="index-system_002dusers"></a>Function: <strong>system-users</strong></dt>
-<dd><p>This function returns a list of strings, listing the user names on the
-system.  If Emacs cannot retrieve this information, the return value
-is a list containing just the value of <code>user-real-login-name</code>.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the user name corresponding to
+      Emacs&rsquo;s real <acronym>UID</acronym>. This ignores the
+      effective <acronym>UID</acronym>, and the environment
+      variables <code>LOGNAME</code> and <code>USER</code>.</p>
+    </dd>
+  </dl>
 
-<a name="index-user-groups"></a>
-<dl>
-<dt><a name="index-system_002dgroups"></a>Function: <strong>system-groups</strong></dt>
-<dd><p>This function returns a list of strings, listing the names of user
-groups on the system.  If Emacs cannot retrieve this information, the
-return value is <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-user_002dfull_002dname" id=
+    "index-user_002dfull_002dname"></a>Function:
+    <strong>user-full-name</strong> <em>&amp;optional uid</em></dt>
 
+    <dd>
+      <p>This function returns the full name of the logged-in
+      user&mdash;or the value of the environment variable
+      <code>NAME</code>, if that is set.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Time-of-Day.html#Time-of-Day" accesskey="n" rel="next">Time of Day</a>, Previous: <a href="System-Environment.html#System-Environment" accesskey="p" rel="prev">System Environment</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If the Emacs process&rsquo;s user-id does not correspond
+      to any known user (and provided <code>NAME</code> is not
+      set), the result is <code>"unknown"</code>.</p>
 
+      <p>If <var>uid</var> is non-<code>nil</code>, then it should
+      be a number (a user-id) or a string (a login name). Then
+      <code>user-full-name</code> returns the full name
+      corresponding to that user-id or login name. If you specify a
+      user-id or login name that isn&rsquo;t defined, it returns
+      <code>nil</code>.</p>
+    </dd>
+  </dl><a name="index-user_002dfull_002dname-1" id=
+  "index-user_002dfull_002dname-1"></a> <a name=
+  "index-user_002dreal_002dlogin_002dname-1" id=
+  "index-user_002dreal_002dlogin_002dname-1"></a> <a name=
+  "index-user_002dlogin_002dname-1" id=
+  "index-user_002dlogin_002dname-1"></a>
 
+  <p>The symbols <code>user-login-name</code>,
+  <code>user-real-login-name</code> and <code>user-full-name</code>
+  are variables as well as functions. The functions return the same
+  values that the variables hold. These variables allow you to fake
+  out Emacs by telling the functions what to return. The variables
+  are also useful for constructing frame titles (see <a href=
+  "Frame-Titles.html#Frame-Titles">Frame Titles</a>).</p><a name=
+  "index-UID" id="index-UID"></a>
 
+  <dl>
+    <dt><a name="index-user_002dreal_002duid" id=
+    "index-user_002dreal_002duid"></a>Function:
+    <strong>user-real-uid</strong></dt>
+
+    <dd>
+      <p>This function returns the real <acronym>UID</acronym> of
+      the user. The value may be floating point, in the (unlikely)
+      event that the UID is too large to fit in a Lisp integer.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-user_002duid" id=
+    "index-user_002duid"></a>Function:
+    <strong>user-uid</strong></dt>
+
+    <dd>
+      <p>This function returns the effective <acronym>UID</acronym>
+      of the user. The value may be floating point.</p>
+    </dd>
+  </dl><a name="index-GID" id="index-GID"></a>
+
+  <dl>
+    <dt><a name="index-group_002dgid" id=
+    "index-group_002dgid"></a>Function:
+    <strong>group-gid</strong></dt>
+
+    <dd>
+      <p>This function returns the effective <acronym>GID</acronym>
+      of the Emacs process. The value may be floating point.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-group_002dreal_002dgid" id=
+    "index-group_002dreal_002dgid"></a>Function:
+    <strong>group-real-gid</strong></dt>
+
+    <dd>
+      <p>This function returns the real <acronym>GID</acronym> of
+      the Emacs process. The value may be floating point.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-system_002dusers" id=
+    "index-system_002dusers"></a>Function:
+    <strong>system-users</strong></dt>
+
+    <dd>
+      <p>This function returns a list of strings, listing the user
+      names on the system. If Emacs cannot retrieve this
+      information, the return value is a list containing just the
+      value of <code>user-real-login-name</code>.</p>
+    </dd>
+  </dl><a name="index-user-groups" id="index-user-groups"></a>
+
+  <dl>
+    <dt><a name="index-system_002dgroups" id=
+    "index-system_002dgroups"></a>Function:
+    <strong>system-groups</strong></dt>
+
+    <dd>
+      <p>This function returns a list of strings, listing the names
+      of user groups on the system. If Emacs cannot retrieve this
+      information, the return value is <code>nil</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Time-of-Day.html#Time-of-Day" accesskey="n"
+    rel="next">Time of Day</a>, Previous: <a href=
+    "System-Environment.html#System-Environment" accesskey="p" rel=
+    "prev">System Environment</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

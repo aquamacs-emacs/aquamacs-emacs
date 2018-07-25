@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,186 +19,274 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Key Binding Commands</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Key Binding Commands">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Key Binding Commands">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
-<link href="Scanning-Keymaps.html#Scanning-Keymaps" rel="next" title="Scanning Keymaps">
-<link href="Translation-Keymaps.html#Translation-Keymaps" rel="prev" title="Translation Keymaps">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Key Binding
+  Commands</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Key Binding Commands" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Key Binding Commands" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keymaps.html#Keymaps" rel="up" title="Keymaps" />
+  <link href="Scanning-Keymaps.html#Scanning-Keymaps" rel="next"
+  title="Scanning Keymaps" />
+  <link href="Translation-Keymaps.html#Translation-Keymaps" rel=
+  "prev" title="Translation Keymaps" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Key-Binding-Commands" id="Key-Binding-Commands"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Scanning-Keymaps.html#Scanning-Keymaps"
+    accesskey="n" rel="next">Scanning Keymaps</a>, Previous:
+    <a href="Translation-Keymaps.html#Translation-Keymaps"
+    accesskey="p" rel="prev">Translation Keymaps</a>, Up: <a href=
+    "Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Commands-for-Binding-Keys" id=
+  "Commands-for-Binding-Keys"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Key-Binding-Commands"></a>
-<div class="header">
-<p>
-Next: <a href="Scanning-Keymaps.html#Scanning-Keymaps" accesskey="n" rel="next">Scanning Keymaps</a>, Previous: <a href="Translation-Keymaps.html#Translation-Keymaps" accesskey="p" rel="prev">Translation Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Commands-for-Binding-Keys"></a>
-<h3 class="section">21.15 Commands for Binding Keys</h3>
+  <h3 class="section">21.15 Commands for Binding Keys</h3>
 
-<p>This section describes some convenient interactive interfaces for
-changing key bindings.  They work by calling <code>define-key</code>.
-</p>
-<p>People often use <code>global-set-key</code> in their init files
-(see <a href="Init-File.html#Init-File">Init File</a>) for simple customization.  For example,
-</p>
-<div class="smallexample">
-<pre class="smallexample">(global-set-key (kbd &quot;C-x C-\\&quot;) 'next-line)
-</pre></div>
+  <p>This section describes some convenient interactive interfaces
+  for changing key bindings. They work by calling
+  <code>define-key</code>.</p>
 
-<p>or
-</p>
-<div class="smallexample">
-<pre class="smallexample">(global-set-key [?\C-x ?\C-\\] 'next-line)
-</pre></div>
+  <p>People often use <code>global-set-key</code> in their init
+  files (see <a href="Init-File.html#Init-File">Init File</a>) for
+  simple customization. For example,</p>
 
-<p>or
-</p>
-<div class="smallexample">
-<pre class="smallexample">(global-set-key [(control ?x) (control ?\\)] 'next-line)
-</pre></div>
+  <div class="smallexample">
+    <pre class="smallexample">
+(global-set-key (kbd "C-x C-\\") 'next-line)
+</pre>
+  </div>
 
-<p>redefines <kbd>C-x C-\</kbd> to move down a line.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(global-set-key [M-mouse-1] 'mouse-set-point)
-</pre></div>
+  <p>or</p>
 
-<p>redefines the first (leftmost) mouse button, entered with the Meta key, to
-set point where you click.
-</p>
-<a name="index-non_002dASCII-text-in-keybindings"></a>
-<p>Be careful when using non-<acronym>ASCII</acronym> text characters in Lisp
-specifications of keys to bind.  If these are read as multibyte text, as
-they usually will be in a Lisp file (see <a href="Loading-Non_002dASCII.html#Loading-Non_002dASCII">Loading Non-ASCII</a>), you
-must type the keys as multibyte too.  For instance, if you use this:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(global-set-key &quot;ö&quot; 'my-function) ; bind o-umlaut
-</pre></div>
+  <div class="smallexample">
+    <pre class="smallexample">
+(global-set-key [?\C-x ?\C-\\] 'next-line)
+</pre>
+  </div>
 
-<p>or
-</p>
-<div class="smallexample">
-<pre class="smallexample">(global-set-key ?ö 'my-function) ; bind o-umlaut
-</pre></div>
+  <p>or</p>
 
-<p>and your language environment is multibyte Latin-1, these commands
-actually bind the multibyte character with code 246, not the byte
-code 246 (<kbd>M-v</kbd>) sent by a Latin-1 terminal.  In order to use this
-binding, you need to teach Emacs how to decode the keyboard by using an
-appropriate input method (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Input-Methods.html#Input-Methods">Input Methods</a> in <cite>The GNU
-Emacs Manual</cite>).
-</p>
-<dl>
-<dt><a name="index-global_002dset_002dkey"></a>Command: <strong>global-set-key</strong> <em>key binding</em></dt>
-<dd><p>This function sets the binding of <var>key</var> in the current global map
-to <var>binding</var>.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(global-set-key <var>key</var> <var>binding</var>)
+  <div class="smallexample">
+    <pre class="smallexample">
+(global-set-key [(control ?x) (control ?\\)] 'next-line)
+</pre>
+  </div>
+
+  <p>redefines <kbd>C-x C-\</kbd> to move down a line.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(global-set-key [M-mouse-1] 'mouse-set-point)
+</pre>
+  </div>
+
+  <p>redefines the first (leftmost) mouse button, entered with the
+  Meta key, to set point where you click.</p><a name=
+  "index-non_002dASCII-text-in-keybindings" id=
+  "index-non_002dASCII-text-in-keybindings"></a>
+
+  <p>Be careful when using non-<acronym>ASCII</acronym> text
+  characters in Lisp specifications of keys to bind. If these are
+  read as multibyte text, as they usually will be in a Lisp file
+  (see <a href=
+  "Loading-Non_002dASCII.html#Loading-Non_002dASCII">Loading
+  Non-ASCII</a>), you must type the keys as multibyte too. For
+  instance, if you use this:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(global-set-key "&Atilde;&para;" 'my-function) ; bind o-umlaut
+</pre>
+  </div>
+
+  <p>or</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+(global-set-key ?&Atilde;&para; 'my-function) ; bind o-umlaut
+</pre>
+  </div>
+
+  <p>and your language environment is multibyte Latin-1, these
+  commands actually bind the multibyte character with code 246, not
+  the byte code 246 (<kbd>M-v</kbd>) sent by a Latin-1 terminal. In
+  order to use this binding, you need to teach Emacs how to decode
+  the keyboard by using an appropriate input method (see <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Input-Methods.html#Input-Methods">
+  Input Methods</a> in <cite>The GNU Emacs Manual</cite>).</p>
+
+  <dl>
+    <dt><a name="index-global_002dset_002dkey" id=
+    "index-global_002dset_002dkey"></a>Command:
+    <strong>global-set-key</strong> <em>key binding</em></dt>
+
+    <dd>
+      <p>This function sets the binding of <var>key</var> in the
+      current global map to <var>binding</var>.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(global-set-key <var>key</var> <var>binding</var>)
 &equiv;
 (define-key (current-global-map) <var>key</var> <var>binding</var>)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-global_002dunset_002dkey"></a>Command: <strong>global-unset-key</strong> <em>key</em></dt>
-<dd><a name="index-unbinding-keys"></a>
-<p>This function removes the binding of <var>key</var> from the current
-global map.
-</p>
-<p>One use of this function is in preparation for defining a longer key
-that uses <var>key</var> as a prefix&mdash;which would not be allowed if
-<var>key</var> has a non-prefix binding.  For example:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(global-unset-key &quot;\C-l&quot;)
-    &rArr; nil
-</pre><pre class="smallexample">(global-set-key &quot;\C-l\C-l&quot; 'redraw-display)
-    &rArr; nil
-</pre></div>
+  <dl>
+    <dt><a name="index-global_002dunset_002dkey" id=
+    "index-global_002dunset_002dkey"></a>Command:
+    <strong>global-unset-key</strong> <em>key</em></dt>
 
-<p>This function is equivalent to using <code>define-key</code> as follows:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(global-unset-key <var>key</var>)
+    <dd>
+      <a name="index-unbinding-keys" id="index-unbinding-keys"></a>
+
+      <p>This function removes the binding of <var>key</var> from
+      the current global map.</p>
+
+      <p>One use of this function is in preparation for defining a
+      longer key that uses <var>key</var> as a prefix&mdash;which
+      would not be allowed if <var>key</var> has a non-prefix
+      binding. For example:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(global-unset-key "\C-l")
+    &rArr; nil
+</pre>
+        <pre class="smallexample">
+(global-set-key "\C-l\C-l" 'redraw-display)
+    &rArr; nil
+</pre>
+      </div>
+
+      <p>This function is equivalent to using
+      <code>define-key</code> as follows:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(global-unset-key <var>key</var>)
 &equiv;
 (define-key (current-global-map) <var>key</var> nil)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-local_002dset_002dkey"></a>Command: <strong>local-set-key</strong> <em>key binding</em></dt>
-<dd><p>This function sets the binding of <var>key</var> in the current local
-keymap to <var>binding</var>.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(local-set-key <var>key</var> <var>binding</var>)
+  <dl>
+    <dt><a name="index-local_002dset_002dkey" id=
+    "index-local_002dset_002dkey"></a>Command:
+    <strong>local-set-key</strong> <em>key binding</em></dt>
+
+    <dd>
+      <p>This function sets the binding of <var>key</var> in the
+      current local keymap to <var>binding</var>.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(local-set-key <var>key</var> <var>binding</var>)
 &equiv;
 (define-key (current-local-map) <var>key</var> <var>binding</var>)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-local_002dunset_002dkey"></a>Command: <strong>local-unset-key</strong> <em>key</em></dt>
-<dd><p>This function removes the binding of <var>key</var> from the current
-local map.
-</p>
-<div class="smallexample">
-<pre class="smallexample">(local-unset-key <var>key</var>)
+  <dl>
+    <dt><a name="index-local_002dunset_002dkey" id=
+    "index-local_002dunset_002dkey"></a>Command:
+    <strong>local-unset-key</strong> <em>key</em></dt>
+
+    <dd>
+      <p>This function removes the binding of <var>key</var> from
+      the current local map.</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(local-unset-key <var>key</var>)
 &equiv;
 (define-key (current-local-map) <var>key</var> nil)
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Scanning-Keymaps.html#Scanning-Keymaps" accesskey="n" rel="next">Scanning Keymaps</a>, Previous: <a href="Translation-Keymaps.html#Translation-Keymaps" accesskey="p" rel="prev">Translation Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Scanning-Keymaps.html#Scanning-Keymaps"
+    accesskey="n" rel="next">Scanning Keymaps</a>, Previous:
+    <a href="Translation-Keymaps.html#Translation-Keymaps"
+    accesskey="p" rel="prev">Translation Keymaps</a>, Up: <a href=
+    "Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

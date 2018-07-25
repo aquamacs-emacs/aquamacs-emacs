@@ -1,14 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Spam Statistics Package - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Spam-Package.html#Spam-Package" title="Spam Package">
-<link rel="prev" href="Extending-the-Spam-package.html#Extending-the-Spam-package" title="Extending the Spam package">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Spam Statistics Package - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Spam-Package.html#Spam-Package" title=
+  "Spam Package" />
+  <link rel="prev" href=
+  "Extending-the-Spam-package.html#Extending-the-Spam-package"
+  title="Extending the Spam package" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -24,8 +34,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -35,54 +47,81 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Spam-Statistics-Package"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Extending-the-Spam-package.html#Extending-the-Spam-package">Extending the Spam package</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Spam-Package.html#Spam-Package">Spam Package</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Spam-Statistics-Package" id=
+    "Spam-Statistics-Package"></a>
 
-<h4 class="subsection">9.18.8 Spam Statistics Package</h4>
+    <p>Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Extending-the-Spam-package.html#Extending-the-Spam-package">Extending
+    the Spam package</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Spam-Package.html#Spam-Package">Spam Package</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Paul-Graham-2855"></a><a name="index-Graham_002c-Paul-2856"></a><a name="index-naive-Bayesian-spam-filtering-2857"></a><a name="index-Bayesian-spam-filtering_002c-naive-2858"></a><a name="index-spam-filtering_002c-naive-Bayesian-2859"></a>
-Paul Graham has written an excellent essay about spam filtering using
-statistics: <a href="http://www.paulgraham.com/spam.html">A Plan for Spam</a>.  In it he describes the inherent deficiency of rule-based
-filtering as used by SpamAssassin, for example: Somebody has to write
-the rules, and everybody else has to install these rules.  You are
-always late.  It would be much better, he argues, to filter mail based
-on whether it somehow resembles spam or non-spam.  One way to measure
-this is word distribution.  He then goes on to describe a solution
-that checks whether a new mail resembles any of your other spam mails
-or not.
+  <h4 class="subsection">9.18.8 Spam Statistics Package</h4>
 
-   <p>The basic idea is this:  Create a two collections of your mail, one
-with spam, one with non-spam.  Count how often each word appears in
-either collection, weight this by the total number of mails in the
-collections, and store this information in a dictionary.  For every
-word in a new mail, determine its probability to belong to a spam or a
-non-spam mail.  Use the 15 most conspicuous words, compute the total
-probability of the mail being spam.  If this probability is higher
-than a certain threshold, the mail is considered to be spam.
+  <p><a name="index-Paul-Graham-2855" id=
+  "index-Paul-Graham-2855"></a><a name=
+  "index-Graham_002c-Paul-2856" id=
+  "index-Graham_002c-Paul-2856"></a><a name=
+  "index-naive-Bayesian-spam-filtering-2857" id=
+  "index-naive-Bayesian-spam-filtering-2857"></a><a name=
+  "index-Bayesian-spam-filtering_002c-naive-2858" id=
+  "index-Bayesian-spam-filtering_002c-naive-2858"></a><a name=
+  "index-spam-filtering_002c-naive-Bayesian-2859" id=
+  "index-spam-filtering_002c-naive-Bayesian-2859"></a> Paul Graham
+  has written an excellent essay about spam filtering using
+  statistics: <a href="http://www.paulgraham.com/spam.html">A Plan
+  for Spam</a>. In it he describes the inherent deficiency of
+  rule-based filtering as used by SpamAssassin, for example:
+  Somebody has to write the rules, and everybody else has to
+  install these rules. You are always late. It would be much
+  better, he argues, to filter mail based on whether it somehow
+  resembles spam or non-spam. One way to measure this is word
+  distribution. He then goes on to describe a solution that checks
+  whether a new mail resembles any of your other spam mails or
+  not.</p>
 
-   <p>The Spam Statistics package adds support to Gnus for this kind of
-filtering.  It can be used as one of the back ends of the Spam package
-(see <a href="Spam-Package.html#Spam-Package">Spam Package</a>), or by itself.
+  <p>The basic idea is this: Create a two collections of your mail,
+  one with spam, one with non-spam. Count how often each word
+  appears in either collection, weight this by the total number of
+  mails in the collections, and store this information in a
+  dictionary. For every word in a new mail, determine its
+  probability to belong to a spam or a non-spam mail. Use the 15
+  most conspicuous words, compute the total probability of the mail
+  being spam. If this probability is higher than a certain
+  threshold, the mail is considered to be spam.</p>
 
-   <p>Before using the Spam Statistics package, you need to set it up. 
-First, you need two collections of your mail, one with spam, one with
-non-spam.  Then you need to create a dictionary using these two
-collections, and save it.  And last but not least, you need to use
-this dictionary in your fancy mail splitting rules.
+  <p>The Spam Statistics package adds support to Gnus for this kind
+  of filtering. It can be used as one of the back ends of the Spam
+  package (see <a href="Spam-Package.html#Spam-Package">Spam
+  Package</a>), or by itself.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary">Creating a spam-stat dictionary</a>
-<li><a accesskey="2" href="Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat">Splitting mail using spam-stat</a>
-<li><a accesskey="3" href="Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary">Low-level interface to the spam-stat dictionary</a>
-</ul>
+  <p>Before using the Spam Statistics package, you need to set it
+  up. First, you need two collections of your mail, one with spam,
+  one with non-spam. Then you need to create a dictionary using
+  these two collections, and save it. And last but not least, you
+  need to use this dictionary in your fancy mail splitting
+  rules.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href=
+    "Creating-a-spam_002dstat-dictionary.html#Creating-a-spam_002dstat-dictionary">
+    Creating a spam-stat dictionary</a></li>
 
+    <li><a accesskey="2" href=
+    "Splitting-mail-using-spam_002dstat.html#Splitting-mail-using-spam_002dstat">
+    Splitting mail using spam-stat</a></li>
+
+    <li><a accesskey="3" href=
+    "Low_002dlevel-interface-to-the-spam_002dstat-dictionary.html#Low_002dlevel-interface-to-the-spam_002dstat-dictionary">
+    Low-level interface to the spam-stat dictionary</a></li>
+  </ul>
+</body>
+</html>

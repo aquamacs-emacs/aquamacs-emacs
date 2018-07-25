@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,120 +20,184 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Isearch Yank</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Isearch Yank">
-<meta name="keywords" content="GNU Emacs Manual: Isearch Yank">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Incremental-Search.html#Incremental-Search" rel="up" title="Incremental Search">
-<link href="Error-in-Isearch.html#Error-in-Isearch" rel="next" title="Error in Isearch">
-<link href="Repeat-Isearch.html#Repeat-Isearch" rel="prev" title="Repeat Isearch">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Isearch Yank</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Isearch Yank" />
+  <meta name="keywords" content="GNU Emacs Manual: Isearch Yank" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Incremental-Search.html#Incremental-Search" rel="up"
+  title="Incremental Search" />
+  <link href="Error-in-Isearch.html#Error-in-Isearch" rel="next"
+  title="Error in Isearch" />
+  <link href="Repeat-Isearch.html#Repeat-Isearch" rel="prev" title=
+  "Repeat Isearch" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Isearch-Yank" id="Isearch-Yank"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Error-in-Isearch.html#Error-in-Isearch"
+    accesskey="n" rel="next">Error in Isearch</a>, Previous:
+    <a href="Repeat-Isearch.html#Repeat-Isearch" accesskey="p" rel=
+    "prev">Repeat Isearch</a>, Up: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="u" rel=
+    "up">Incremental Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Isearch-Yanking" id="Isearch-Yanking"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Isearch-Yank"></a>
-<div class="header">
-<p>
-Next: <a href="Error-in-Isearch.html#Error-in-Isearch" accesskey="n" rel="next">Error in Isearch</a>, Previous: <a href="Repeat-Isearch.html#Repeat-Isearch" accesskey="p" rel="prev">Repeat Isearch</a>, Up: <a href="Incremental-Search.html#Incremental-Search" accesskey="u" rel="up">Incremental Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Isearch-Yanking"></a>
-<h4 class="subsection">15.1.3 Isearch Yanking</h4>
+  <h4 class="subsection">15.1.3 Isearch Yanking</h4>
 
-<p>In many cases, you will want to use text at or near point as your
-search string.  The commands described in this subsection let you do
-that conveniently.
-</p>
-<a name="index-C_002dw-_0028Incremental-search_0029"></a>
-<a name="index-isearch_002dyank_002dword_002dor_002dchar"></a>
-<p><kbd>C-w</kbd> (<code>isearch-yank-word-or-char</code>) appends the next
-character or word at point to the search string.  This is an easy way
-to search for another occurrence of the text at point.  (The decision
-of whether to copy a character or a word is heuristic.)
-</p>
-<a name="index-M_002ds-C_002de-_0028Incremental-search_0029"></a>
-<a name="index-isearch_002dyank_002dline"></a>
-<p>Similarly, <kbd>M-s C-e</kbd> (<code>isearch-yank-line</code>) appends the rest
-of the current line to the search string.  If point is already at the
-end of a line, it appends the next line.  With a prefix argument
-<var>n</var>, it appends the next <var>n</var> lines.
-</p>
-<a name="index-C_002dy-_0028Incremental-search_0029"></a>
-<a name="index-M_002dy-_0028Incremental-search_0029"></a>
-<a name="index-mouse_002d2-in-the-minibuffer-_0028Incremental-search_0029"></a>
-<a name="index-isearch_002dyank_002dkill"></a>
-<a name="index-isearch_002dyank_002dpop"></a>
-<a name="index-isearch_002dyank_002dx_002dselection"></a>
-<p>Within incremental search, <kbd>C-y</kbd> (<code>isearch-yank-kill</code>)
-appends the current kill to the search string.  <kbd>M-y</kbd>
-(<code>isearch-yank-pop</code>), if called after <kbd>C-y</kbd>, replaces that
-appended text with an earlier kill, similar to the usual <kbd>M-y</kbd>
-(<code>yank-pop</code>) command (see <a href="Yanking.html#Yanking">Yanking</a>).  Clicking <kbd>mouse-2</kbd>
-in the echo area appends the current X selection (see <a href="Primary-Selection.html#Primary-Selection">Primary Selection</a>) to the search string (<code>isearch-yank-x-selection</code>).
-</p>
-<a name="index-C_002dM_002dw-_0028Incremental-search_0029"></a>
-<a name="index-C_002dM_002dy-_0028Incremental-search_0029"></a>
-<a name="index-isearch_002ddel_002dchar"></a>
-<a name="index-isearch_002dyank_002dchar"></a>
-<p><kbd>C-M-w</kbd> (<code>isearch-del-char</code>) deletes the last character
-from the search string, and <kbd>C-M-y</kbd> (<code>isearch-yank-char</code>)
-appends the character after point to the search string.  An
-alternative method to add the character after point is to enter the
-minibuffer with <kbd>M-e</kbd> (see <a href="Repeat-Isearch.html#Repeat-Isearch">Repeat Isearch</a>) and type <kbd>C-f</kbd>
-or <kbd><span class="key">RIGHT</span></kbd> at the end of the search string in the
-minibuffer.  Each <kbd>C-f</kbd> or <kbd><span class="key">RIGHT</span></kbd> you type adds another
-character following point to the search string.
-</p>
-<p>Normally, when the search is case-insensitive, text yanked into the
-search string is converted to lower case, so that the search remains
-case-insensitive (see <a href="Lax-Search.html#Lax-Search">case folding</a>).  However, if the
-value of the variable <code>search-upper-case</code> (see <a href="Lax-Search.html#Lax-Search">search-upper-case</a>) is other than <code>not-yanks</code>, that disables this
-down-casing.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Error-in-Isearch.html#Error-in-Isearch" accesskey="n" rel="next">Error in Isearch</a>, Previous: <a href="Repeat-Isearch.html#Repeat-Isearch" accesskey="p" rel="prev">Repeat Isearch</a>, Up: <a href="Incremental-Search.html#Incremental-Search" accesskey="u" rel="up">Incremental Search</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In many cases, you will want to use text at or near point as
+  your search string. The commands described in this subsection let
+  you do that conveniently.</p><a name=
+  "index-C_002dw-_0028Incremental-search_0029" id=
+  "index-C_002dw-_0028Incremental-search_0029"></a> <a name=
+  "index-isearch_002dyank_002dword_002dor_002dchar" id=
+  "index-isearch_002dyank_002dword_002dor_002dchar"></a>
 
+  <p><kbd>C-w</kbd> (<code>isearch-yank-word-or-char</code>)
+  appends the next character or word at point to the search string.
+  This is an easy way to search for another occurrence of the text
+  at point. (The decision of whether to copy a character or a word
+  is heuristic.)</p><a name=
+  "index-M_002ds-C_002de-_0028Incremental-search_0029" id=
+  "index-M_002ds-C_002de-_0028Incremental-search_0029"></a>
+  <a name="index-isearch_002dyank_002dline" id=
+  "index-isearch_002dyank_002dline"></a>
 
+  <p>Similarly, <kbd>M-s C-e</kbd> (<code>isearch-yank-line</code>)
+  appends the rest of the current line to the search string. If
+  point is already at the end of a line, it appends the next line.
+  With a prefix argument <var>n</var>, it appends the next
+  <var>n</var> lines.</p><a name=
+  "index-C_002dy-_0028Incremental-search_0029" id=
+  "index-C_002dy-_0028Incremental-search_0029"></a> <a name=
+  "index-M_002dy-_0028Incremental-search_0029" id=
+  "index-M_002dy-_0028Incremental-search_0029"></a> <a name=
+  "index-mouse_002d2-in-the-minibuffer-_0028Incremental-search_0029"
+  id=
+  "index-mouse_002d2-in-the-minibuffer-_0028Incremental-search_0029">
+  </a> <a name="index-isearch_002dyank_002dkill" id=
+  "index-isearch_002dyank_002dkill"></a> <a name=
+  "index-isearch_002dyank_002dpop" id=
+  "index-isearch_002dyank_002dpop"></a> <a name=
+  "index-isearch_002dyank_002dx_002dselection" id=
+  "index-isearch_002dyank_002dx_002dselection"></a>
 
+  <p>Within incremental search, <kbd>C-y</kbd>
+  (<code>isearch-yank-kill</code>) appends the current kill to the
+  search string. <kbd>M-y</kbd> (<code>isearch-yank-pop</code>), if
+  called after <kbd>C-y</kbd>, replaces that appended text with an
+  earlier kill, similar to the usual <kbd>M-y</kbd>
+  (<code>yank-pop</code>) command (see <a href=
+  "Yanking.html#Yanking">Yanking</a>). Clicking <kbd>mouse-2</kbd>
+  in the echo area appends the current X selection (see <a href=
+  "Primary-Selection.html#Primary-Selection">Primary Selection</a>)
+  to the search string
+  (<code>isearch-yank-x-selection</code>).</p><a name=
+  "index-C_002dM_002dw-_0028Incremental-search_0029" id=
+  "index-C_002dM_002dw-_0028Incremental-search_0029"></a> <a name=
+  "index-C_002dM_002dy-_0028Incremental-search_0029" id=
+  "index-C_002dM_002dy-_0028Incremental-search_0029"></a> <a name=
+  "index-isearch_002ddel_002dchar" id=
+  "index-isearch_002ddel_002dchar"></a> <a name=
+  "index-isearch_002dyank_002dchar" id=
+  "index-isearch_002dyank_002dchar"></a>
+
+  <p><kbd>C-M-w</kbd> (<code>isearch-del-char</code>) deletes the
+  last character from the search string, and <kbd>C-M-y</kbd>
+  (<code>isearch-yank-char</code>) appends the character after
+  point to the search string. An alternative method to add the
+  character after point is to enter the minibuffer with
+  <kbd>M-e</kbd> (see <a href=
+  "Repeat-Isearch.html#Repeat-Isearch">Repeat Isearch</a>) and type
+  <kbd>C-f</kbd> or <kbd><span class="key">RIGHT</span></kbd> at
+  the end of the search string in the minibuffer. Each
+  <kbd>C-f</kbd> or <kbd><span class="key">RIGHT</span></kbd> you
+  type adds another character following point to the search
+  string.</p>
+
+  <p>Normally, when the search is case-insensitive, text yanked
+  into the search string is converted to lower case, so that the
+  search remains case-insensitive (see <a href=
+  "Lax-Search.html#Lax-Search">case folding</a>). However, if the
+  value of the variable <code>search-upper-case</code> (see
+  <a href="Lax-Search.html#Lax-Search">search-upper-case</a>) is
+  other than <code>not-yanks</code>, that disables this
+  down-casing.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Error-in-Isearch.html#Error-in-Isearch"
+    accesskey="n" rel="next">Error in Isearch</a>, Previous:
+    <a href="Repeat-Isearch.html#Repeat-Isearch" accesskey="p" rel=
+    "prev">Repeat Isearch</a>, Up: <a href=
+    "Incremental-Search.html#Incremental-Search" accesskey="u" rel=
+    "up">Incremental Search</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

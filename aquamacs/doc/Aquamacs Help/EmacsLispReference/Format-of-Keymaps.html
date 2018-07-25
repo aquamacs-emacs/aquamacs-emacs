@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,213 +19,320 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Format of Keymaps</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Format of Keymaps">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Format of Keymaps">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
-<link href="Creating-Keymaps.html#Creating-Keymaps" rel="next" title="Creating Keymaps">
-<link href="Keymap-Basics.html#Keymap-Basics" rel="prev" title="Keymap Basics">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Format of Keymaps</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Format of Keymaps" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Format of Keymaps" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Keymaps.html#Keymaps" rel="up" title="Keymaps" />
+  <link href="Creating-Keymaps.html#Creating-Keymaps" rel="next"
+  title="Creating Keymaps" />
+  <link href="Keymap-Basics.html#Keymap-Basics" rel="prev" title=
+  "Keymap Basics" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Format-of-Keymaps" id="Format-of-Keymaps"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Creating-Keymaps.html#Creating-Keymaps"
+    accesskey="n" rel="next">Creating Keymaps</a>, Previous:
+    <a href="Keymap-Basics.html#Keymap-Basics" accesskey="p" rel=
+    "prev">Keymap Basics</a>, Up: <a href="Keymaps.html#Keymaps"
+    accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Format-of-Keymaps-1" id="Format-of-Keymaps-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Format-of-Keymaps"></a>
-<div class="header">
-<p>
-Next: <a href="Creating-Keymaps.html#Creating-Keymaps" accesskey="n" rel="next">Creating Keymaps</a>, Previous: <a href="Keymap-Basics.html#Keymap-Basics" accesskey="p" rel="prev">Keymap Basics</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Format-of-Keymaps-1"></a>
-<h3 class="section">21.3 Format of Keymaps</h3>
-<a name="index-format-of-keymaps"></a>
-<a name="index-keymap-format"></a>
-<a name="index-full-keymap"></a>
-<a name="index-sparse-keymap"></a>
+  <h3 class="section">21.3 Format of Keymaps</h3><a name=
+  "index-format-of-keymaps" id="index-format-of-keymaps"></a>
+  <a name="index-keymap-format" id="index-keymap-format"></a>
+  <a name="index-full-keymap" id="index-full-keymap"></a> <a name=
+  "index-sparse-keymap" id="index-sparse-keymap"></a>
 
-<p>Each keymap is a list whose <small>CAR</small> is the symbol <code>keymap</code>.  The
-remaining elements of the list define the key bindings of the keymap.
-A symbol whose function definition is a keymap is also a keymap.  Use
-the function <code>keymapp</code> (see below) to test whether an object is a
-keymap.
-</p>
-<p>Several kinds of elements may appear in a keymap, after the symbol
-<code>keymap</code> that begins it:
-</p>
-<dl compact="compact">
-<dt><code>(<var>type</var> . <var>binding</var>)</code></dt>
-<dd><p>This specifies one binding, for events of type <var>type</var>.  Each
-ordinary binding applies to events of a particular <em>event type</em>,
-which is always a character or a symbol.  See <a href="Classifying-Events.html#Classifying-Events">Classifying Events</a>.
-In this kind of binding, <var>binding</var> is a command.
-</p>
-</dd>
-<dt><code>(<var>type</var> <var>item-name</var> . <var>binding</var>)</code></dt>
-<dd><p>This specifies a binding which is also a simple menu item that
-displays as <var>item-name</var> in the menu.  See <a href="Simple-Menu-Items.html#Simple-Menu-Items">Simple Menu Items</a>.
-</p>
-</dd>
-<dt><code>(<var>type</var> <var>item-name</var> <var>help-string</var> . <var>binding</var>)</code></dt>
-<dd><p>This is a simple menu item with help string <var>help-string</var>.
-</p>
-</dd>
-<dt><code>(<var>type</var> menu-item . <var>details</var>)</code></dt>
-<dd><p>This specifies a binding which is also an extended menu item.  This
-allows use of other features.  See <a href="Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu Items</a>.
-</p>
-</dd>
-<dt><code>(t . <var>binding</var>)</code></dt>
-<dd><a name="index-default-key-binding"></a>
-<p>This specifies a <em>default key binding</em>; any event not bound by other
-elements of the keymap is given <var>binding</var> as its binding.  Default
-bindings allow a keymap to bind all possible event types without having
-to enumerate all of them.  A keymap that has a default binding
-completely masks any lower-precedence keymap, except for events
-explicitly bound to <code>nil</code> (see below).
-</p>
-</dd>
-<dt><code><var>char-table</var></code></dt>
-<dd><p>If an element of a keymap is a char-table, it counts as holding
-bindings for all character events with no modifier bits
-(see <a href="Other-Char-Bits.html#modifier-bits">modifier bits</a>): the element whose index is <var>c</var> is the
-binding for the character <var>c</var>.  This is a compact way to record
-lots of bindings.  A keymap with such a char-table is called a
-<em>full keymap</em>.  Other keymaps are called <em>sparse keymaps</em>.
-</p>
-</dd>
-<dt><code><var>vector</var></code></dt>
-<dd><p>This kind of element is similar to a char-table: the element whose
-index is <var>c</var> is the binding for the character <var>c</var>.  Since the
-range of characters that can be bound this way is limited by the
-vector size, and vector creation allocates space for all character
-codes from 0 up, this format should not be used except for creating
-menu keymaps (see <a href="Menu-Keymaps.html#Menu-Keymaps">Menu Keymaps</a>), where the bindings themselves
-don&rsquo;t matter.
-</p>
-</dd>
-<dt><code><var>string</var></code></dt>
-<dd><a name="index-keymap-prompt-string"></a>
-<a name="index-overall-prompt-string"></a>
-<a name="index-prompt-string-of-keymap"></a>
-<p>Aside from elements that specify bindings for keys, a keymap can also
-have a string as an element.  This is called the <em>overall prompt
-string</em> and makes it possible to use the keymap as a menu.
-See <a href="Defining-Menus.html#Defining-Menus">Defining Menus</a>.
-</p>
-</dd>
-<dt><code>(keymap &hellip;)</code></dt>
-<dd><p>If an element of a keymap is itself a keymap, it counts as if this inner keymap
-were inlined in the outer keymap.  This is used for multiple-inheritance, such
-as in <code>make-composed-keymap</code>.
-</p></dd>
-</dl>
+  <p>Each keymap is a list whose <small>CAR</small> is the symbol
+  <code>keymap</code>. The remaining elements of the list define
+  the key bindings of the keymap. A symbol whose function
+  definition is a keymap is also a keymap. Use the function
+  <code>keymapp</code> (see below) to test whether an object is a
+  keymap.</p>
 
-<p>When the binding is <code>nil</code>, it doesn&rsquo;t constitute a definition
-but it does take precedence over a default binding or a binding in the
-parent keymap.  On the other hand, a binding of <code>nil</code> does
-<em>not</em> override lower-precedence keymaps; thus, if the local map
-gives a binding of <code>nil</code>, Emacs uses the binding from the
-global map.
-</p>
-<a name="index-meta-characters-lookup"></a>
-<p>Keymaps do not directly record bindings for the meta characters.
-Instead, meta characters are regarded for purposes of key lookup as
-sequences of two characters, the first of which is <tt class="key">ESC</tt> (or
-whatever is currently the value of <code>meta-prefix-char</code>).  Thus, the
-key <kbd>M-a</kbd> is internally represented as <kbd><span class="key">ESC</span> a</kbd>, and its
-global binding is found at the slot for <kbd>a</kbd> in <code>esc-map</code>
-(see <a href="Prefix-Keys.html#Prefix-Keys">Prefix Keys</a>).
-</p>
-<p>This conversion applies only to characters, not to function keys or
-other input events; thus, <kbd>M-<span class="key">end</span></kbd> has nothing to do with
-<kbd><span class="key">ESC</span> <span class="key">end</span></kbd>.
-</p>
-<p>Here as an example is the local keymap for Lisp mode, a sparse
-keymap.  It defines bindings for <tt class="key">DEL</tt>, <kbd>C-c C-z</kbd>,
-<kbd>C-M-q</kbd>, and <kbd>C-M-x</kbd> (the actual value also contains a menu
-binding, which is omitted here for the sake of brevity).
-</p>
-<div class="example">
-<pre class="example">lisp-mode-map
+  <p>Several kinds of elements may appear in a keymap, after the
+  symbol <code>keymap</code> that begins it:</p>
+
+  <dl compact="compact">
+    <dt><code>(<var>type</var> . <var>binding</var>)</code></dt>
+
+    <dd>
+      <p>This specifies one binding, for events of type
+      <var>type</var>. Each ordinary binding applies to events of a
+      particular <em>event type</em>, which is always a character
+      or a symbol. See <a href=
+      "Classifying-Events.html#Classifying-Events">Classifying
+      Events</a>. In this kind of binding, <var>binding</var> is a
+      command.</p>
+    </dd>
+
+    <dt><code>(<var>type</var> <var>item-name</var> .
+    <var>binding</var>)</code></dt>
+
+    <dd>
+      <p>This specifies a binding which is also a simple menu item
+      that displays as <var>item-name</var> in the menu. See
+      <a href="Simple-Menu-Items.html#Simple-Menu-Items">Simple
+      Menu Items</a>.</p>
+    </dd>
+
+    <dt><code>(<var>type</var> <var>item-name</var>
+    <var>help-string</var> . <var>binding</var>)</code></dt>
+
+    <dd>
+      <p>This is a simple menu item with help string
+      <var>help-string</var>.</p>
+    </dd>
+
+    <dt><code>(<var>type</var> menu-item .
+    <var>details</var>)</code></dt>
+
+    <dd>
+      <p>This specifies a binding which is also an extended menu
+      item. This allows use of other features. See <a href=
+      "Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu
+      Items</a>.</p>
+    </dd>
+
+    <dt><code>(t . <var>binding</var>)</code></dt>
+
+    <dd>
+      <a name="index-default-key-binding" id=
+      "index-default-key-binding"></a>
+
+      <p>This specifies a <em>default key binding</em>; any event
+      not bound by other elements of the keymap is given
+      <var>binding</var> as its binding. Default bindings allow a
+      keymap to bind all possible event types without having to
+      enumerate all of them. A keymap that has a default binding
+      completely masks any lower-precedence keymap, except for
+      events explicitly bound to <code>nil</code> (see below).</p>
+    </dd>
+
+    <dt><code><var>char-table</var></code></dt>
+
+    <dd>
+      <p>If an element of a keymap is a char-table, it counts as
+      holding bindings for all character events with no modifier
+      bits (see <a href=
+      "Other-Char-Bits.html#modifier-bits">modifier bits</a>): the
+      element whose index is <var>c</var> is the binding for the
+      character <var>c</var>. This is a compact way to record lots
+      of bindings. A keymap with such a char-table is called a
+      <em>full keymap</em>. Other keymaps are called <em>sparse
+      keymaps</em>.</p>
+    </dd>
+
+    <dt><code><var>vector</var></code></dt>
+
+    <dd>
+      <p>This kind of element is similar to a char-table: the
+      element whose index is <var>c</var> is the binding for the
+      character <var>c</var>. Since the range of characters that
+      can be bound this way is limited by the vector size, and
+      vector creation allocates space for all character codes from
+      0 up, this format should not be used except for creating menu
+      keymaps (see <a href="Menu-Keymaps.html#Menu-Keymaps">Menu
+      Keymaps</a>), where the bindings themselves don&rsquo;t
+      matter.</p>
+    </dd>
+
+    <dt><code><var>string</var></code></dt>
+
+    <dd>
+      <a name="index-keymap-prompt-string" id=
+      "index-keymap-prompt-string"></a> <a name=
+      "index-overall-prompt-string" id=
+      "index-overall-prompt-string"></a> <a name=
+      "index-prompt-string-of-keymap" id=
+      "index-prompt-string-of-keymap"></a>
+
+      <p>Aside from elements that specify bindings for keys, a
+      keymap can also have a string as an element. This is called
+      the <em>overall prompt string</em> and makes it possible to
+      use the keymap as a menu. See <a href=
+      "Defining-Menus.html#Defining-Menus">Defining Menus</a>.</p>
+    </dd>
+
+    <dt><code>(keymap &hellip;)</code></dt>
+
+    <dd>
+      <p>If an element of a keymap is itself a keymap, it counts as
+      if this inner keymap were inlined in the outer keymap. This
+      is used for multiple-inheritance, such as in
+      <code>make-composed-keymap</code>.</p>
+    </dd>
+  </dl>
+
+  <p>When the binding is <code>nil</code>, it doesn&rsquo;t
+  constitute a definition but it does take precedence over a
+  default binding or a binding in the parent keymap. On the other
+  hand, a binding of <code>nil</code> does <em>not</em> override
+  lower-precedence keymaps; thus, if the local map gives a binding
+  of <code>nil</code>, Emacs uses the binding from the global
+  map.</p><a name="index-meta-characters-lookup" id=
+  "index-meta-characters-lookup"></a>
+
+  <p>Keymaps do not directly record bindings for the meta
+  characters. Instead, meta characters are regarded for purposes of
+  key lookup as sequences of two characters, the first of which is
+  <tt class="key">ESC</tt> (or whatever is currently the value of
+  <code>meta-prefix-char</code>). Thus, the key <kbd>M-a</kbd> is
+  internally represented as <kbd><span class="key">ESC</span>
+  a</kbd>, and its global binding is found at the slot for
+  <kbd>a</kbd> in <code>esc-map</code> (see <a href=
+  "Prefix-Keys.html#Prefix-Keys">Prefix Keys</a>).</p>
+
+  <p>This conversion applies only to characters, not to function
+  keys or other input events; thus, <kbd>M-<span class=
+  "key">end</span></kbd> has nothing to do with <kbd><span class=
+  "key">ESC</span> <span class="key">end</span></kbd>.</p>
+
+  <p>Here as an example is the local keymap for Lisp mode, a sparse
+  keymap. It defines bindings for <tt class="key">DEL</tt>,
+  <kbd>C-c C-z</kbd>, <kbd>C-M-q</kbd>, and <kbd>C-M-x</kbd> (the
+  actual value also contains a menu binding, which is omitted here
+  for the sake of brevity).</p>
+
+  <div class="example">
+    <pre class="example">
+lisp-mode-map
 &rArr;
-</pre><pre class="example">(keymap
+</pre>
+    <pre class="example">
+(keymap
  (3 keymap
     ;; <kbd>C-c C-z</kbd>
     (26 . run-lisp))
-</pre><pre class="example"> (27 keymap
-     ;; <span class="roman"><kbd>C-M-x</kbd>, treated as <kbd><span class="key">ESC</span> C-x</kbd></span>
+</pre>
+    <pre class="example">
+ (27 keymap
+     ;; <span class=
+"roman"><kbd>C-M-x</kbd>, treated as <kbd><span class=
+"key">ESC</span> C-x</kbd></span>
      (24 . lisp-send-defun))
-</pre><pre class="example"> ;; <span class="roman">This part is inherited from <code>lisp-mode-shared-map</code>.</span>
+</pre>
+    <pre class="example">
+ ;; <span class=
+"roman">This part is inherited from <code>lisp-mode-shared-map</code>.</span>
  keymap
  ;; <span class="key">DEL</span>
  (127 . backward-delete-char-untabify)
-</pre><pre class="example"> (27 keymap
-     ;; <span class="roman"><kbd>C-M-q</kbd>, treated as <kbd><span class="key">ESC</span> C-q</kbd></span>
+</pre>
+    <pre class="example">
+ (27 keymap
+     ;; <span class=
+"roman"><kbd>C-M-q</kbd>, treated as <kbd><span class=
+"key">ESC</span> C-q</kbd></span>
      (17 . indent-sexp)))
-</pre></div>
+</pre>
+  </div>
 
-<dl>
-<dt><a name="index-keymapp"></a>Function: <strong>keymapp</strong> <em>object</em></dt>
-<dd><p>This function returns <code>t</code> if <var>object</var> is a keymap, <code>nil</code>
-otherwise.  More precisely, this function tests for a list whose
-<small>CAR</small> is <code>keymap</code>, or for a symbol whose function definition
-satisfies <code>keymapp</code>.
-</p>
-<div class="example">
-<pre class="example">(keymapp '(keymap))
+  <dl>
+    <dt><a name="index-keymapp" id="index-keymapp"></a>Function:
+    <strong>keymapp</strong> <em>object</em></dt>
+
+    <dd>
+      <p>This function returns <code>t</code> if <var>object</var>
+      is a keymap, <code>nil</code> otherwise. More precisely, this
+      function tests for a list whose <small>CAR</small> is
+      <code>keymap</code>, or for a symbol whose function
+      definition satisfies <code>keymapp</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(keymapp '(keymap))
     &rArr; t
-</pre><pre class="example">(fset 'foo '(keymap))
+</pre>
+        <pre class="example">
+(fset 'foo '(keymap))
 (keymapp 'foo)
     &rArr; t
-</pre><pre class="example">(keymapp (current-global-map))
+</pre>
+        <pre class="example">
+(keymapp (current-global-map))
     &rArr; t
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Creating-Keymaps.html#Creating-Keymaps" accesskey="n" rel="next">Creating Keymaps</a>, Previous: <a href="Keymap-Basics.html#Keymap-Basics" accesskey="p" rel="prev">Keymap Basics</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Creating-Keymaps.html#Creating-Keymaps"
+    accesskey="n" rel="next">Creating Keymaps</a>, Previous:
+    <a href="Keymap-Basics.html#Keymap-Basics" accesskey="p" rel=
+    "prev">Keymap Basics</a>, Up: <a href="Keymaps.html#Keymaps"
+    accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

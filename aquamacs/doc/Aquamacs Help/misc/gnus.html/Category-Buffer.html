@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,132 +14,207 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Category Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Category Buffer">
-<meta name="keywords" content="Gnus Manual: Category Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Agent-Categories.html#Agent-Categories" rel="up" title="Agent Categories">
-<link href="Category-Variables.html#Category-Variables" rel="next" title="Category Variables">
-<link href="Category-Syntax.html#Category-Syntax" rel="prev" title="Category Syntax">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Category Buffer</title>
+  <meta name="description" content=
+  "Gnus Manual: Category Buffer" />
+  <meta name="keywords" content="Gnus Manual: Category Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Agent-Categories.html#Agent-Categories" rel="up"
+  title="Agent Categories" />
+  <link href="Category-Variables.html#Category-Variables" rel=
+  "next" title="Category Variables" />
+  <link href="Category-Syntax.html#Category-Syntax" rel="prev"
+  title="Category Syntax" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Category-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Category-Variables.html#Category-Variables" accesskey="n" rel="next">Category Variables</a>, Previous: <a href="Category-Syntax.html#Category-Syntax" accesskey="p" rel="prev">Category Syntax</a>, Up: <a href="Agent-Categories.html#Agent-Categories" accesskey="u" rel="up">Agent Categories</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Category-Buffer-1"></a>
-<h4 class="subsubsection">6.9.2.2 Category Buffer</h4>
+<body lang="en" xml:lang="en">
+  <a name="Category-Buffer" id="Category-Buffer"></a>
 
-<p>You&rsquo;d normally do all category maintenance from the category buffer.
-When you enter it for the first time (with the <kbd>J c</kbd> command from
-the group buffer), you&rsquo;ll only see the <code>default</code> category.
-</p>
-<p>The following commands are available in this buffer:
-</p>
-<dl compact="compact">
-<dt><kbd>q</kbd></dt>
-<dd><a name="index-q-_0028Category_0029"></a>
-<a name="index-gnus_002dcategory_002dexit"></a>
-<p>Return to the group buffer (<code>gnus-category-exit</code>).
-</p>
-</dd>
-<dt><kbd>e</kbd></dt>
-<dd><a name="index-e-_0028Category_0029"></a>
-<a name="index-gnus_002dcategory_002dcustomize_002dcategory"></a>
-<p>Use a customization buffer to set all of the selected category&rsquo;s
-parameters at one time (<code>gnus-category-customize-category</code>).
-</p>
-</dd>
-<dt><kbd>k</kbd></dt>
-<dd><a name="index-k-_0028Category_0029"></a>
-<a name="index-gnus_002dcategory_002dkill"></a>
-<p>Kill the current category (<code>gnus-category-kill</code>).
-</p>
-</dd>
-<dt><kbd>c</kbd></dt>
-<dd><a name="index-c-_0028Category_0029"></a>
-<a name="index-gnus_002dcategory_002dcopy"></a>
-<p>Copy the current category (<code>gnus-category-copy</code>).
-</p>
-</dd>
-<dt><kbd>a</kbd></dt>
-<dd><a name="index-a-_0028Category_0029"></a>
-<a name="index-gnus_002dcategory_002dadd"></a>
-<p>Add a new category (<code>gnus-category-add</code>).
-</p>
-</dd>
-<dt><kbd>p</kbd></dt>
-<dd><a name="index-p-_0028Category_0029"></a>
-<a name="index-gnus_002dcategory_002dedit_002dpredicate"></a>
-<p>Edit the predicate of the current category
-(<code>gnus-category-edit-predicate</code>).
-</p>
-</dd>
-<dt><kbd>g</kbd></dt>
-<dd><a name="index-g-_0028Category_0029"></a>
-<a name="index-gnus_002dcategory_002dedit_002dgroups"></a>
-<p>Edit the list of groups belonging to the current category
-(<code>gnus-category-edit-groups</code>).
-</p>
-</dd>
-<dt><kbd>s</kbd></dt>
-<dd><a name="index-s-_0028Category_0029"></a>
-<a name="index-gnus_002dcategory_002dedit_002dscore"></a>
-<p>Edit the download score rule of the current category
-(<code>gnus-category-edit-score</code>).
-</p>
-</dd>
-<dt><kbd>l</kbd></dt>
-<dd><a name="index-l-_0028Category_0029"></a>
-<a name="index-gnus_002dcategory_002dlist"></a>
-<p>List all the categories (<code>gnus-category-list</code>).
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href="Category-Variables.html#Category-Variables"
+    accesskey="n" rel="next">Category Variables</a>, Previous:
+    <a href="Category-Syntax.html#Category-Syntax" accesskey="p"
+    rel="prev">Category Syntax</a>, Up: <a href=
+    "Agent-Categories.html#Agent-Categories" accesskey="u" rel=
+    "up">Agent Categories</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Category-Buffer-1" id="Category-Buffer-1"></a>
 
+  <h4 class="subsubsection">6.9.2.2 Category Buffer</h4>
 
+  <p>You&rsquo;d normally do all category maintenance from the
+  category buffer. When you enter it for the first time (with the
+  <kbd>J c</kbd> command from the group buffer), you&rsquo;ll only
+  see the <code>default</code> category.</p>
 
+  <p>The following commands are available in this buffer:</p>
 
+  <dl compact="compact">
+    <dt><kbd>q</kbd></dt>
 
+    <dd>
+      <a name="index-q-_0028Category_0029" id=
+      "index-q-_0028Category_0029"></a> <a name=
+      "index-gnus_002dcategory_002dexit" id=
+      "index-gnus_002dcategory_002dexit"></a>
+
+      <p>Return to the group buffer
+      (<code>gnus-category-exit</code>).</p>
+    </dd>
+
+    <dt><kbd>e</kbd></dt>
+
+    <dd>
+      <a name="index-e-_0028Category_0029" id=
+      "index-e-_0028Category_0029"></a> <a name=
+      "index-gnus_002dcategory_002dcustomize_002dcategory" id=
+      "index-gnus_002dcategory_002dcustomize_002dcategory"></a>
+
+      <p>Use a customization buffer to set all of the selected
+      category&rsquo;s parameters at one time
+      (<code>gnus-category-customize-category</code>).</p>
+    </dd>
+
+    <dt><kbd>k</kbd></dt>
+
+    <dd>
+      <a name="index-k-_0028Category_0029" id=
+      "index-k-_0028Category_0029"></a> <a name=
+      "index-gnus_002dcategory_002dkill" id=
+      "index-gnus_002dcategory_002dkill"></a>
+
+      <p>Kill the current category
+      (<code>gnus-category-kill</code>).</p>
+    </dd>
+
+    <dt><kbd>c</kbd></dt>
+
+    <dd>
+      <a name="index-c-_0028Category_0029" id=
+      "index-c-_0028Category_0029"></a> <a name=
+      "index-gnus_002dcategory_002dcopy" id=
+      "index-gnus_002dcategory_002dcopy"></a>
+
+      <p>Copy the current category
+      (<code>gnus-category-copy</code>).</p>
+    </dd>
+
+    <dt><kbd>a</kbd></dt>
+
+    <dd>
+      <a name="index-a-_0028Category_0029" id=
+      "index-a-_0028Category_0029"></a> <a name=
+      "index-gnus_002dcategory_002dadd" id=
+      "index-gnus_002dcategory_002dadd"></a>
+
+      <p>Add a new category (<code>gnus-category-add</code>).</p>
+    </dd>
+
+    <dt><kbd>p</kbd></dt>
+
+    <dd>
+      <a name="index-p-_0028Category_0029" id=
+      "index-p-_0028Category_0029"></a> <a name=
+      "index-gnus_002dcategory_002dedit_002dpredicate" id=
+      "index-gnus_002dcategory_002dedit_002dpredicate"></a>
+
+      <p>Edit the predicate of the current category
+      (<code>gnus-category-edit-predicate</code>).</p>
+    </dd>
+
+    <dt><kbd>g</kbd></dt>
+
+    <dd>
+      <a name="index-g-_0028Category_0029" id=
+      "index-g-_0028Category_0029"></a> <a name=
+      "index-gnus_002dcategory_002dedit_002dgroups" id=
+      "index-gnus_002dcategory_002dedit_002dgroups"></a>
+
+      <p>Edit the list of groups belonging to the current category
+      (<code>gnus-category-edit-groups</code>).</p>
+    </dd>
+
+    <dt><kbd>s</kbd></dt>
+
+    <dd>
+      <a name="index-s-_0028Category_0029" id=
+      "index-s-_0028Category_0029"></a> <a name=
+      "index-gnus_002dcategory_002dedit_002dscore" id=
+      "index-gnus_002dcategory_002dedit_002dscore"></a>
+
+      <p>Edit the download score rule of the current category
+      (<code>gnus-category-edit-score</code>).</p>
+    </dd>
+
+    <dt><kbd>l</kbd></dt>
+
+    <dd>
+      <a name="index-l-_0028Category_0029" id=
+      "index-l-_0028Category_0029"></a> <a name=
+      "index-gnus_002dcategory_002dlist" id=
+      "index-gnus_002dcategory_002dlist"></a>
+
+      <p>List all the categories
+      (<code>gnus-category-list</code>).</p>
+    </dd>
+  </dl>
 </body>
 </html>

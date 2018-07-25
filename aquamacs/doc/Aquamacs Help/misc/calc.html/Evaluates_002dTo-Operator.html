@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,190 +18,255 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Evaluates-To Operator</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Evaluates-To Operator">
-<meta name="keywords" content="GNU Emacs Calc Manual: Evaluates-To Operator">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Store-and-Recall.html#Store-and-Recall" rel="up" title="Store and Recall">
-<link href="Graphics.html#Graphics" rel="next" title="Graphics">
-<link href="Let-Command.html#Let-Command" rel="prev" title="Let Command">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Evaluates-To Operator</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Evaluates-To Operator" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Evaluates-To Operator" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Store-and-Recall.html#Store-and-Recall" rel="up"
+  title="Store and Recall" />
+  <link href="Graphics.html#Graphics" rel="next" title=
+  "Graphics" />
+  <link href="Let-Command.html#Let-Command" rel="prev" title=
+  "Let Command" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Evaluates_002dTo-Operator"></a>
-<div class="header">
-<p>
-Previous: <a href="Let-Command.html#Let-Command" accesskey="p" rel="prev">Let Command</a>, Up: <a href="Store-and-Recall.html#Store-and-Recall" accesskey="u" rel="up">Store and Recall</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Evaluates_002dTo-Operator"></a>
-<h3 class="section">12.5 The Evaluates-To Operator</h3>
+<body lang="en" xml:lang="en">
+  <a name="Evaluates_002dTo-Operator" id=
+  "Evaluates_002dTo-Operator"></a>
 
-<a name="index-evalto"></a>
-<a name="index-_003d_003e"></a>
-<a name="index-Evaluates_002dto-operator"></a>
-<a name="index-_003d_003e-operator"></a>
-<p>The special algebraic symbol &lsquo;<samp>=&gt;</samp>&rsquo; is known as the <em>evaluates-to
-operator</em>.  (It will show up as an <code>evalto</code> function call in
-other language modes like Pascal and LaTeX.)  This is a binary
-operator, that is, it has a lefthand and a righthand argument,
-although it can be entered with the righthand argument omitted.
-</p>
-<p>A formula like &lsquo;<samp><var>a</var> =&gt; <var>b</var></samp>&rsquo; is evaluated by Calc as
-follows:  First, <var>a</var> is not simplified or modified in any
-way.  The previous value of argument <var>b</var> is thrown away; the
-formula <var>a</var> is then copied and evaluated as if by the <kbd>=</kbd>
-command according to all current modes and stored variable values,
-and the result is installed as the new value of <var>b</var>.
-</p>
-<p>For example, suppose you enter the algebraic formula &lsquo;<samp>2 + 3 =&gt; 17</samp>&rsquo;.
-The number 17 is ignored, and the lefthand argument is left in its
-unevaluated form; the result is the formula &lsquo;<samp>2 + 3 =&gt; 5</samp>&rsquo;.
-</p>
-<a name="index-s-_003d"></a>
-<a name="index-calc_002devalto"></a>
-<p>You can enter an &lsquo;<samp>=&gt;</samp>&rsquo; formula either directly using algebraic
-entry (in which case the righthand side may be omitted since it is
-going to be replaced right away anyhow), or by using the <kbd>s =</kbd>
-(<code>calc-evalto</code>) command, which takes <var>a</var> from the stack
-and replaces it with &lsquo;<samp><var>a</var> =&gt; <var>b</var></samp>&rsquo;.
-</p>
-<p>Calc keeps track of all &lsquo;<samp>=&gt;</samp>&rsquo; operators on the stack, and
-recomputes them whenever anything changes that might affect their
-values, i.e., a mode setting or variable value.  This occurs only
-if the &lsquo;<samp>=&gt;</samp>&rsquo; operator is at the top level of the formula, or
-if it is part of a top-level vector.  In other words, pushing
-&lsquo;<samp>2 + (a =&gt; 17)</samp>&rsquo; will change the 17 to the actual value of
-&lsquo;<samp>a</samp>&rsquo; when you enter the formula, but the result will not be
-dynamically updated when &lsquo;<samp>a</samp>&rsquo; is changed later because the
-&lsquo;<samp>=&gt;</samp>&rsquo; operator is buried inside a sum.  However, a vector
-of &lsquo;<samp>=&gt;</samp>&rsquo; operators will be recomputed, since it is convenient
-to push a vector like &lsquo;<samp>[a =&gt;, b =&gt;, c =&gt;]</samp>&rsquo; on the stack to
-make a concise display of all the variables in your problem.
-(Another way to do this would be to use &lsquo;<samp>[a, b, c] =&gt;</samp>&rsquo;,
-which provides a slightly different format of display.  You
-can use whichever you find easiest to read.)
-</p>
-<a name="index-m-C-1"></a>
-<a name="index-calc_002dauto_002drecompute-1"></a>
-<p>The <kbd>m C</kbd> (<code>calc-auto-recompute</code>) command allows you to
-turn this automatic recomputation on or off.  If you turn
-recomputation off, you must explicitly recompute an &lsquo;<samp>=&gt;</samp>&rsquo;
-operator on the stack in one of the usual ways, such as by
-pressing <kbd>=</kbd>.  Turning recomputation off temporarily can save
-a lot of time if you will be changing several modes or variables
-before you look at the &lsquo;<samp>=&gt;</samp>&rsquo; entries again.
-</p>
-<p>Most commands are not especially useful with &lsquo;<samp>=&gt;</samp>&rsquo; operators
-as arguments.  For example, given &lsquo;<samp>x + 2 =&gt; 17</samp>&rsquo;, it won&rsquo;t
-work to type <kbd>1 +</kbd> to get &lsquo;<samp>x + 3 =&gt; 18</samp>&rsquo;.  If you want
-to operate on the lefthand side of the &lsquo;<samp>=&gt;</samp>&rsquo; operator on
-the top of the stack, type <kbd>j 1</kbd> (that&rsquo;s the digit &ldquo;one&rdquo;)
-to select the lefthand side, execute your commands, then type
-<kbd>j u</kbd> to unselect.
-</p>
-<p>All current modes apply when an &lsquo;<samp>=&gt;</samp>&rsquo; operator is computed,
-including the current simplification mode.  Recall that the
-formula &lsquo;<samp>arcsin(sin(x))</samp>&rsquo; will not be handled by Calc&rsquo;s algebraic
-simplifications, but Calc&rsquo;s unsafe simplifications will reduce it to
-&lsquo;<samp>x</samp>&rsquo;.   If you enter &lsquo;<samp>arcsin(sin(x)) =&gt;</samp>&rsquo; normally, the result
-will be &lsquo;<samp>arcsin(sin(x)) =&gt; arcsin(sin(x))</samp>&rsquo;.  If you change to
-Extended Simplification mode, the result will be
-&lsquo;<samp>arcsin(sin(x)) =&gt; x</samp>&rsquo;.  However, just pressing <kbd>a e</kbd>
-once will have no effect on &lsquo;<samp>arcsin(sin(x)) =&gt; arcsin(sin(x))</samp>&rsquo;,
-because the righthand side depends only on the lefthand side
-and the current mode settings, and the lefthand side is not
-affected by commands like <kbd>a e</kbd>.
-</p>
-<p>The &ldquo;let&rdquo; command (<kbd>s l</kbd>) has an interesting interaction
-with the &lsquo;<samp>=&gt;</samp>&rsquo; operator.  The <kbd>s l</kbd> command evaluates the
-second-to-top stack entry with the top stack entry supplying
-a temporary value for a given variable.  As you might expect,
-if that stack entry is an &lsquo;<samp>=&gt;</samp>&rsquo; operator its righthand
-side will temporarily show this value for the variable.  In
-fact, all &lsquo;<samp>=&gt;</samp>&rsquo;s on the stack will be updated if they refer
-to that variable.  But this change is temporary in the sense
-that the next command that causes Calc to look at those stack
-entries will make them revert to the old variable value.
-</p>
-<div class="smallexample">
-<pre class="smallexample">2:  a =&gt; a             2:  a =&gt; 17         2:  a =&gt; a
+  <div class="header">
+    <p>Previous: <a href="Let-Command.html#Let-Command" accesskey=
+    "p" rel="prev">Let Command</a>, Up: <a href=
+    "Store-and-Recall.html#Store-and-Recall" accesskey="u" rel=
+    "up">Store and Recall</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Evaluates_002dTo-Operator" id=
+  "The-Evaluates_002dTo-Operator"></a>
+
+  <h3 class="section">12.5 The Evaluates-To Operator</h3><a name=
+  "index-evalto" id="index-evalto"></a> <a name="index-_003d_003e"
+  id="index-_003d_003e"></a> <a name=
+  "index-Evaluates_002dto-operator" id=
+  "index-Evaluates_002dto-operator"></a> <a name=
+  "index-_003d_003e-operator" id="index-_003d_003e-operator"></a>
+
+  <p>The special algebraic symbol &lsquo;<samp>=&gt;</samp>&rsquo;
+  is known as the <em>evaluates-to operator</em>. (It will show up
+  as an <code>evalto</code> function call in other language modes
+  like Pascal and LaTeX.) This is a binary operator, that is, it
+  has a lefthand and a righthand argument, although it can be
+  entered with the righthand argument omitted.</p>
+
+  <p>A formula like &lsquo;<samp><var>a</var> =&gt;
+  <var>b</var></samp>&rsquo; is evaluated by Calc as follows:
+  First, <var>a</var> is not simplified or modified in any way. The
+  previous value of argument <var>b</var> is thrown away; the
+  formula <var>a</var> is then copied and evaluated as if by the
+  <kbd>=</kbd> command according to all current modes and stored
+  variable values, and the result is installed as the new value of
+  <var>b</var>.</p>
+
+  <p>For example, suppose you enter the algebraic formula
+  &lsquo;<samp>2 + 3 =&gt; 17</samp>&rsquo;. The number 17 is
+  ignored, and the lefthand argument is left in its unevaluated
+  form; the result is the formula &lsquo;<samp>2 + 3 =&gt;
+  5</samp>&rsquo;.</p><a name="index-s-_003d" id=
+  "index-s-_003d"></a> <a name="index-calc_002devalto" id=
+  "index-calc_002devalto"></a>
+
+  <p>You can enter an &lsquo;<samp>=&gt;</samp>&rsquo; formula
+  either directly using algebraic entry (in which case the
+  righthand side may be omitted since it is going to be replaced
+  right away anyhow), or by using the <kbd>s =</kbd>
+  (<code>calc-evalto</code>) command, which takes <var>a</var> from
+  the stack and replaces it with &lsquo;<samp><var>a</var> =&gt;
+  <var>b</var></samp>&rsquo;.</p>
+
+  <p>Calc keeps track of all &lsquo;<samp>=&gt;</samp>&rsquo;
+  operators on the stack, and recomputes them whenever anything
+  changes that might affect their values, i.e., a mode setting or
+  variable value. This occurs only if the
+  &lsquo;<samp>=&gt;</samp>&rsquo; operator is at the top level of
+  the formula, or if it is part of a top-level vector. In other
+  words, pushing &lsquo;<samp>2 + (a =&gt; 17)</samp>&rsquo; will
+  change the 17 to the actual value of &lsquo;<samp>a</samp>&rsquo;
+  when you enter the formula, but the result will not be
+  dynamically updated when &lsquo;<samp>a</samp>&rsquo; is changed
+  later because the &lsquo;<samp>=&gt;</samp>&rsquo; operator is
+  buried inside a sum. However, a vector of
+  &lsquo;<samp>=&gt;</samp>&rsquo; operators will be recomputed,
+  since it is convenient to push a vector like &lsquo;<samp>[a
+  =&gt;, b =&gt;, c =&gt;]</samp>&rsquo; on the stack to make a
+  concise display of all the variables in your problem. (Another
+  way to do this would be to use &lsquo;<samp>[a, b, c]
+  =&gt;</samp>&rsquo;, which provides a slightly different format
+  of display. You can use whichever you find easiest to
+  read.)</p><a name="index-m-C-1" id="index-m-C-1"></a> <a name=
+  "index-calc_002dauto_002drecompute-1" id=
+  "index-calc_002dauto_002drecompute-1"></a>
+
+  <p>The <kbd>m C</kbd> (<code>calc-auto-recompute</code>) command
+  allows you to turn this automatic recomputation on or off. If you
+  turn recomputation off, you must explicitly recompute an
+  &lsquo;<samp>=&gt;</samp>&rsquo; operator on the stack in one of
+  the usual ways, such as by pressing <kbd>=</kbd>. Turning
+  recomputation off temporarily can save a lot of time if you will
+  be changing several modes or variables before you look at the
+  &lsquo;<samp>=&gt;</samp>&rsquo; entries again.</p>
+
+  <p>Most commands are not especially useful with
+  &lsquo;<samp>=&gt;</samp>&rsquo; operators as arguments. For
+  example, given &lsquo;<samp>x + 2 =&gt; 17</samp>&rsquo;, it
+  won&rsquo;t work to type <kbd>1 +</kbd> to get &lsquo;<samp>x + 3
+  =&gt; 18</samp>&rsquo;. If you want to operate on the lefthand
+  side of the &lsquo;<samp>=&gt;</samp>&rsquo; operator on the top
+  of the stack, type <kbd>j 1</kbd> (that&rsquo;s the digit
+  &ldquo;one&rdquo;) to select the lefthand side, execute your
+  commands, then type <kbd>j u</kbd> to unselect.</p>
+
+  <p>All current modes apply when an
+  &lsquo;<samp>=&gt;</samp>&rsquo; operator is computed, including
+  the current simplification mode. Recall that the formula
+  &lsquo;<samp>arcsin(sin(x))</samp>&rsquo; will not be handled by
+  Calc&rsquo;s algebraic simplifications, but Calc&rsquo;s unsafe
+  simplifications will reduce it to &lsquo;<samp>x</samp>&rsquo;.
+  If you enter &lsquo;<samp>arcsin(sin(x)) =&gt;</samp>&rsquo;
+  normally, the result will be &lsquo;<samp>arcsin(sin(x)) =&gt;
+  arcsin(sin(x))</samp>&rsquo;. If you change to Extended
+  Simplification mode, the result will be
+  &lsquo;<samp>arcsin(sin(x)) =&gt; x</samp>&rsquo;. However, just
+  pressing <kbd>a e</kbd> once will have no effect on
+  &lsquo;<samp>arcsin(sin(x)) =&gt; arcsin(sin(x))</samp>&rsquo;,
+  because the righthand side depends only on the lefthand side and
+  the current mode settings, and the lefthand side is not affected
+  by commands like <kbd>a e</kbd>.</p>
+
+  <p>The &ldquo;let&rdquo; command (<kbd>s l</kbd>) has an
+  interesting interaction with the &lsquo;<samp>=&gt;</samp>&rsquo;
+  operator. The <kbd>s l</kbd> command evaluates the second-to-top
+  stack entry with the top stack entry supplying a temporary value
+  for a given variable. As you might expect, if that stack entry is
+  an &lsquo;<samp>=&gt;</samp>&rsquo; operator its righthand side
+  will temporarily show this value for the variable. In fact, all
+  &lsquo;<samp>=&gt;</samp>&rsquo;s on the stack will be updated if
+  they refer to that variable. But this change is temporary in the
+  sense that the next command that causes Calc to look at those
+  stack entries will make them revert to the old variable
+  value.</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+2:  a =&gt; a             2:  a =&gt; 17         2:  a =&gt; a
 1:  a + 1 =&gt; a + 1     1:  a + 1 =&gt; 18     1:  a + 1 =&gt; a + 1
     .                      .                   .
 
-                           17 s l a <span class="key">RET</span>        p 8 <span class="key">RET</span>
-</pre></div>
+                           17 s l a <span class=
+"key">RET</span>        p 8 <span class="key">RET</span>
+</pre>
+  </div>
 
-<p>Here the <kbd>p 8</kbd> command changes the current precision,
-thus causing the &lsquo;<samp>=&gt;</samp>&rsquo; forms to be recomputed after the
-influence of the &ldquo;let&rdquo; is gone.  The <kbd>d <span class="key">SPC</span></kbd> command
-(<code>calc-refresh</code>) is a handy way to force the &lsquo;<samp>=&gt;</samp>&rsquo;
-operators on the stack to be recomputed without any other
-side effects.
-</p>
-<a name="index-s-_003a"></a>
-<a name="index-calc_002dassign"></a>
-<a name="index-assign"></a>
-<a name="index-_003a_003d"></a>
-<p>Embedded mode also uses &lsquo;<samp>=&gt;</samp>&rsquo; operators.  In Embedded mode,
-the lefthand side of an &lsquo;<samp>=&gt;</samp>&rsquo; operator can refer to variables
-assigned elsewhere in the file by &lsquo;<samp>:=</samp>&rsquo; operators.  The
-assignment operator &lsquo;<samp>a := 17</samp>&rsquo; does not actually do anything
-by itself.  But Embedded mode recognizes it and marks it as a sort
-of file-local definition of the variable.  You can enter &lsquo;<samp>:=</samp>&rsquo;
-operators in Algebraic mode, or by using the <kbd>s :</kbd>
-(<code>calc-assign</code>) [<code>assign</code>] command which takes a variable
-and value from the stack and replaces them with an assignment.
-</p>
-<p>See <a href="TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">TeX and LaTeX Language Modes</a>, for the way &lsquo;<samp>=&gt;</samp>&rsquo; appears in
-TeX language output.  The <em>eqn</em> mode gives similar
-treatment to &lsquo;<samp>=&gt;</samp>&rsquo;.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Let-Command.html#Let-Command" accesskey="p" rel="prev">Let Command</a>, Up: <a href="Store-and-Recall.html#Store-and-Recall" accesskey="u" rel="up">Store and Recall</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Here the <kbd>p 8</kbd> command changes the current precision,
+  thus causing the &lsquo;<samp>=&gt;</samp>&rsquo; forms to be
+  recomputed after the influence of the &ldquo;let&rdquo; is gone.
+  The <kbd>d <span class="key">SPC</span></kbd> command
+  (<code>calc-refresh</code>) is a handy way to force the
+  &lsquo;<samp>=&gt;</samp>&rsquo; operators on the stack to be
+  recomputed without any other side effects.</p><a name=
+  "index-s-_003a" id="index-s-_003a"></a> <a name=
+  "index-calc_002dassign" id="index-calc_002dassign"></a> <a name=
+  "index-assign" id="index-assign"></a> <a name="index-_003a_003d"
+  id="index-_003a_003d"></a>
 
+  <p>Embedded mode also uses &lsquo;<samp>=&gt;</samp>&rsquo;
+  operators. In Embedded mode, the lefthand side of an
+  &lsquo;<samp>=&gt;</samp>&rsquo; operator can refer to variables
+  assigned elsewhere in the file by &lsquo;<samp>:=</samp>&rsquo;
+  operators. The assignment operator &lsquo;<samp>a :=
+  17</samp>&rsquo; does not actually do anything by itself. But
+  Embedded mode recognizes it and marks it as a sort of file-local
+  definition of the variable. You can enter
+  &lsquo;<samp>:=</samp>&rsquo; operators in Algebraic mode, or by
+  using the <kbd>s :</kbd> (<code>calc-assign</code>)
+  [<code>assign</code>] command which takes a variable and value
+  from the stack and replaces them with an assignment.</p>
 
+  <p>See <a href=
+  "TeX-and-LaTeX-Language-Modes.html#TeX-and-LaTeX-Language-Modes">TeX
+  and LaTeX Language Modes</a>, for the way
+  &lsquo;<samp>=&gt;</samp>&rsquo; appears in TeX language output.
+  The <em>eqn</em> mode gives similar treatment to
+  &lsquo;<samp>=&gt;</samp>&rsquo;.</p>
+  <hr />
 
+  <div class="header">
+    <p>Previous: <a href="Let-Command.html#Let-Command" accesskey=
+    "p" rel="prev">Let Command</a>, Up: <a href=
+    "Store-and-Recall.html#Store-and-Recall" accesskey="u" rel=
+    "up">Store and Recall</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents RefTeX (version 25.1), a package
 to do labels, references, citations and indices for LaTeX documents
 with Emacs.
@@ -16,321 +18,476 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>RefTeX User Manual: Referencing Labels</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="RefTeX User Manual: Referencing Labels">
-<meta name="keywords" content="RefTeX User Manual: Referencing Labels">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Labels-and-References.html#Labels-and-References" rel="up" title="Labels and References">
-<link href="Builtin-Label-Environments.html#Builtin-Label-Environments" rel="next" title="Builtin Label Environments">
-<link href="Creating-Labels.html#Creating-Labels" rel="prev" title="Creating Labels">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>RefTeX User Manual: Referencing Labels</title>
+  <meta name="description" content=
+  "RefTeX User Manual: Referencing Labels" />
+  <meta name="keywords" content=
+  "RefTeX User Manual: Referencing Labels" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Labels-and-References.html#Labels-and-References"
+  rel="up" title="Labels and References" />
+  <link href=
+  "Builtin-Label-Environments.html#Builtin-Label-Environments" rel=
+  "next" title="Builtin Label Environments" />
+  <link href="Creating-Labels.html#Creating-Labels" rel="prev"
+  title="Creating Labels" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Referencing-Labels"></a>
-<div class="header">
-<p>
-Next: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments" accesskey="n" rel="next">Builtin Label Environments</a>, Previous: <a href="Creating-Labels.html#Creating-Labels" accesskey="p" rel="prev">Creating Labels</a>, Up: <a href="Labels-and-References.html#Labels-and-References" accesskey="u" rel="up">Labels and References</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Referencing-Labels-1"></a>
-<h3 class="section">3.2 Referencing Labels</h3>
-<a name="index-Referencing-labels"></a>
-<a name="index-Labels_002c-referencing"></a>
-<a name="index-Selection-buffer_002c-labels"></a>
-<a name="index-Selection-process"></a>
-<a name="index-_005cref"></a>
-<a name="index-C_002dc-_0029"></a>
-<a name="index-reftex_002dreference"></a>
+<body lang="en" xml:lang="en">
+  <a name="Referencing-Labels" id="Referencing-Labels"></a>
 
-<a name="index-reftex_002dtrust_002dlabel_002dprefix"></a>
-<p>RefTeX scans the document in order to find all labels.  To make
-referencing labels easier, it assigns to each label a category, the
-<em>label type</em> (for example section, table, figure, equation, etc.).
-In order to determine the label type, RefTeX parses around each label
-to see in what kind of environments it is located.  You can speed up
-the parsing by using type-specific prefixes for labels and configuring
-the variable <code>reftex-trust-label-prefix</code>.
-</p>
-<p>Referencing Labels is really at the heart of RefTeX.  Press <kbd>C-c
-)</kbd> in order to reference a label (<code>reftex-reference</code>).  This will
-start a selection process and finally insert the complete
-&lsquo;<samp>\ref{label}</samp>&rsquo; into the buffer.
-</p>
-<a name="index-reftex_002dref_002dmacro_002dprompt"></a>
-<p>First, you can select which reference macro you want to use,
-e.g., &lsquo;<samp>\ref</samp>&rsquo; or &lsquo;<samp>\pageref</samp>&rsquo;.  Later in the process you have
-another chance to make this selection and you can therefore disable this
-step by customizing <code>reftex-ref-macro-prompt</code> if you find it too
-intrusive.  See <a href="Reference-Styles.html#Reference-Styles">Reference Styles</a>.
-</p>
-<p>Then, RefTeX will determine the label category which is required.
-Often that can be figured out from context.  For example, if you write
-&lsquo;<samp>As shown in eq.</samp>&rsquo; and then press <kbd>C-c )</kbd>, RefTeX knows that
-an equation label is going to be referenced.  If it cannot figure out
-what label category is needed, it will query for one.
-</p>
-<p>You will then be presented with a label selection menu.  This is a
-special buffer which contains an outline of the document along with all
-labels of the given label category.  In addition, next to the label
-there will be one line of context of the label definition, which is some
-text in the buffer near the label definition.  Usually this is
-sufficient to identify the label.  If you are unsure about a certain
-label, pressing <tt class="key">SPC</tt> will show the label definition point in
-another window.
-</p>
-<p>In order to reference a label, move the cursor to the correct label and
-press <tt class="key">RET</tt>.  You can also reference several labels with a single
-call to <code>reftex-reference</code> by marking entries with the <kbd>m</kbd>
-key (see below).
-</p>
-<a name="index-_003f-1"></a>
-<p>Here is a list of special commands in the selection buffer.  A summary
-of this information is always available from the selection process by
-pressing <kbd>?</kbd>.
-</p>
+  <div class="header">
+    <p>Next: <a href=
+    "Builtin-Label-Environments.html#Builtin-Label-Environments"
+    accesskey="n" rel="next">Builtin Label Environments</a>,
+    Previous: <a href="Creating-Labels.html#Creating-Labels"
+    accesskey="p" rel="prev">Creating Labels</a>, Up: <a href=
+    "Labels-and-References.html#Labels-and-References" accesskey=
+    "u" rel="up">Labels and References</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Referencing-Labels-1" id="Referencing-Labels-1"></a>
 
+  <h3 class="section">3.2 Referencing Labels</h3><a name=
+  "index-Referencing-labels" id="index-Referencing-labels"></a>
+  <a name="index-Labels_002c-referencing" id=
+  "index-Labels_002c-referencing"></a> <a name=
+  "index-Selection-buffer_002c-labels" id=
+  "index-Selection-buffer_002c-labels"></a> <a name=
+  "index-Selection-process" id="index-Selection-process"></a>
+  <a name="index-_005cref" id="index-_005cref"></a> <a name=
+  "index-C_002dc-_0029" id="index-C_002dc-_0029"></a> <a name=
+  "index-reftex_002dreference" id="index-reftex_002dreference"></a>
+  <a name="index-reftex_002dtrust_002dlabel_002dprefix" id=
+  "index-reftex_002dtrust_002dlabel_002dprefix"></a>
 
-<dl compact="compact">
-<dt><kbd><b>General</b></kbd></dt>
-<dt><kbd>?</kbd></dt>
-<dd><p>Show a summary of available commands.
-</p>
-</dd>
-<dt><kbd>0-9,-</kbd></dt>
-<dd><p>Prefix argument.
-</p>
-</dd>
-<dt><kbd><b>Moving around</b></kbd></dt>
-<dt><kbd>n</kbd></dt>
-<dd><p>Go to next label.
-</p>
-</dd>
-<dt><kbd>p</kbd></dt>
-<dd><p>Go to previous label.
-</p>
-</dd>
-<dt><kbd>b</kbd></dt>
-<dd><p>Jump back to the position where you last left the selection buffer.
-Normally this should get you back to the last referenced label.
-</p>
-</dd>
-<dt><kbd>C-c C-n</kbd></dt>
-<dd><p>Goto next section heading.
-</p>
-</dd>
-<dt><kbd>C-c C-p</kbd></dt>
-<dd><p>Goto previous section heading.
-</p>
-</dd>
-<dt><kbd>N z</kbd></dt>
-<dd><p>Jump to section N, using the prefix arg.  For example <kbd>3 z</kbd> jumps to
-section 3.
-</p>
-</dd>
-<dt><kbd><b>Displaying Context</b></kbd></dt>
-<dt><kbd><span class="key">SPC</span></kbd></dt>
-<dd><p>Show the surroundings of the definition of the current label in another
-window.  See also the <kbd>f</kbd> key.
-</p>
-</dd>
-<dt><kbd>f</kbd></dt>
-<dd><a name="index-reftex_002drevisit_002dto_002dfollow-1"></a>
-<p>Toggle follow mode.  When follow mode is active, the other window will
-always display the full context of the current label.  This is similar
-to pressing <tt class="key">SPC</tt> after each cursor motion.  Note that only context
-in files already visited is shown.  RefTeX will not visit a file
-just for follow mode.  See, however, the variable
-<code>reftex-revisit-to-follow</code>.
-</p>
-</dd>
-<dt><kbd>.</kbd></dt>
-<dd><p>Show insertion point in another window.  This is the point from where you
-called <code>reftex-reference</code>.
-</p>
-</dd>
-<dt><kbd><b>Selecting a label and creating the reference</b></kbd></dt>
-<dt><kbd><span class="key">RET</span></kbd></dt>
-<dd><p>Insert a reference to the label at point into the buffer from which the
-selection process was started.  When entries have been marked, <tt class="key">RET</tt>
-references all marked labels.
-</p>
-</dd>
-<dt><kbd>mouse-2</kbd></dt>
-<dd><a name="index-reftex_002dhighlight_002dselection-1"></a>
-<p>Clicking with mouse button 2 on a label will accept it like <tt class="key">RET</tt>
-would.  See also variable <code>reftex-highlight-selection</code>,
-<a href="Options-_002d-Misc.html#Options-_002d-Misc">Options - Misc</a>.
-</p>
-<a name="index-reftex_002dmultiref_002dpunctuation"></a>
-</dd>
-<dt><kbd>m - + ,</kbd></dt>
-<dd><p>Mark the current entry.  When several entries have been marked, pressing
-<kbd>RET</kbd> will accept all of them and place them into several
-<code>\ref</code> macros.  The special markers &lsquo;<samp>,-+</samp>&rsquo; also store a
-separator to be inserted before the corresponding reference.  So marking
-six entries with the keys &lsquo;<samp>m , , - , +</samp>&rsquo; will give a reference list
-like this (see the variable <code>reftex-multiref-punctuation</code>)
-</p><div class="example">
-<pre class="example">In eqs. (1), (2), (3)--(4), (5) and (6)
-</pre></div>
+  <p>RefTeX scans the document in order to find all labels. To make
+  referencing labels easier, it assigns to each label a category,
+  the <em>label type</em> (for example section, table, figure,
+  equation, etc.). In order to determine the label type, RefTeX
+  parses around each label to see in what kind of environments it
+  is located. You can speed up the parsing by using type-specific
+  prefixes for labels and configuring the variable
+  <code>reftex-trust-label-prefix</code>.</p>
 
-</dd>
-<dt><kbd>u</kbd></dt>
-<dd><p>Unmark a marked entry.
-</p>
-<a name="index-LaTeX-packages_002c-saferef"></a>
-<a name="index-saferef_002c-LaTeX-package"></a>
-</dd>
-<dt><kbd>a</kbd></dt>
-<dd><p>Accept the marked entries and put all labels as a comma-separated list
-into one <em>single</em> <code>\ref</code> macro.  Some packages like
-<samp>saferef.sty</samp> support multiple references in this way.
-</p>
-</dd>
-<dt><kbd>l</kbd></dt>
-<dd><p>Use the last referenced label(s) again.  This is equivalent to moving to
-that label and pressing <tt class="key">RET</tt>.
-</p>
-</dd>
-<dt><kbd><span class="key">TAB</span></kbd></dt>
-<dd><p>Enter a label with completion.  This may also be a label which does not
-yet exist in the document.
-</p>
-</dd>
-<dt><kbd>v</kbd></dt>
-<dd><p>Cycle forward through active reference macros.  The selected macro is
-displayed by the &lsquo;<samp>S&lt;...&gt;</samp>&rsquo; indicator in the mode line of the
-selection buffer.  This mechanism comes in handy if you are using
-LaTeX packages like <code>varioref</code> or <code>fancyref</code> and want to
-use the special referencing macros they provide (e.g., <code>\vref</code> or
-<code>\fref</code>) instead of <code>\ref</code>.
-</p>
-</dd>
-<dt><kbd>V</kbd></dt>
-<dd><p>Cycle backward through active reference macros.
-</p>
-</dd>
-<dt><kbd><b>Exiting</b></kbd></dt>
-<dt><kbd>q</kbd></dt>
-<dd><p>Exit the selection process without inserting any reference into the
-buffer.
-</p>
-</dd>
-<dt><kbd><b>Controlling what gets displayed</b></kbd></dt>
-<dd><a name="index-reftex_002dlabel_002dmenu_002dflags"></a>
-<p>The defaults for the following flags can be configured with the variable
-<code>reftex-label-menu-flags</code> (see <a href="Options-_002d-Referencing-Labels.html#Options-_002d-Referencing-Labels">Options - Referencing Labels</a>).
-</p>
-</dd>
-<dt><kbd>c</kbd></dt>
-<dd><p>Toggle the display of the one-line label definition context in the
-selection buffer.
-</p>
-</dd>
-<dt><kbd>F</kbd></dt>
-<dd><p>Toggle the display of the file borders of a multifile document in the
-selection buffer.
-</p>
-</dd>
-<dt><kbd>t</kbd></dt>
-<dd><p>Toggle the display of the table of contents in the selection buffer.
-With prefix <var>arg</var>, change the maximum level of toc entries displayed
-to <var>arg</var>.  Chapters are level 1, sections are level 2.
-</p>
-</dd>
-<dt><kbd>#</kbd></dt>
-<dd><p>Toggle the display of a label counter in the selection buffer.
-</p>
-</dd>
-<dt><kbd>%</kbd></dt>
-<dd><p>Toggle the display of labels hidden in comments in the selection
-buffers.  Sometimes, you may have commented out parts of your document.
-If these parts contain label definitions, RefTeX can still display
-and reference these labels.
-</p>
-</dd>
-<dt><kbd><b>Updating the buffer</b></kbd></dt>
-<dt><kbd>g</kbd></dt>
-<dd><p>Update the menu.  This will rebuilt the menu from the internal label
-list, but not reparse the document (see <kbd>r</kbd>).
-</p>
-</dd>
-<dt><kbd>r</kbd></dt>
-<dd><a name="index-reftex_002denable_002dpartial_002dscans-1"></a>
-<p>Reparse the document to update the information on all labels and rebuild
-the menu.  If the variable <code>reftex-enable-partial-scans</code> is
-non-<code>nil</code> and your document is a multifile document, this will
-reparse only a part of the document (the file in which the label at
-point was defined).
-</p>
-</dd>
-<dt><kbd>C-u r</kbd></dt>
-<dd><p>Reparse the <em>entire</em> document.
-</p>
-</dd>
-<dt><kbd>s</kbd></dt>
-<dd><p>Switch the label category.  After prompting for another label category,
-a menu for that category will be shown.
-</p>
-</dd>
-<dt><kbd>x</kbd></dt>
-<dd><p>Reference a label from an external document.  With the LaTeX package
-<code>xr</code> it is possible to reference labels defined in another
-document.  This key will switch to the label menu of an external
-document and let you select a label from there (see <a href="LaTeX-xr-Package.html#LaTeX-xr-Package">xr</a>).
-</p>
-</dd>
-</dl>
+  <p>Referencing Labels is really at the heart of RefTeX. Press
+  <kbd>C-c )</kbd> in order to reference a label
+  (<code>reftex-reference</code>). This will start a selection
+  process and finally insert the complete
+  &lsquo;<samp>\ref{label}</samp>&rsquo; into the
+  buffer.</p><a name="index-reftex_002dref_002dmacro_002dprompt"
+  id="index-reftex_002dref_002dmacro_002dprompt"></a>
 
-<a name="index-reftex_002dselect_002dlabel_002dmap-1"></a>
-<p>In order to define additional commands for the selection process, the
-keymap <code>reftex-select-label-map</code> may be used.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Builtin-Label-Environments.html#Builtin-Label-Environments" accesskey="n" rel="next">Builtin Label Environments</a>, Previous: <a href="Creating-Labels.html#Creating-Labels" accesskey="p" rel="prev">Creating Labels</a>, Up: <a href="Labels-and-References.html#Labels-and-References" accesskey="u" rel="up">Labels and References</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>First, you can select which reference macro you want to use,
+  e.g., &lsquo;<samp>\ref</samp>&rsquo; or
+  &lsquo;<samp>\pageref</samp>&rsquo;. Later in the process you
+  have another chance to make this selection and you can therefore
+  disable this step by customizing
+  <code>reftex-ref-macro-prompt</code> if you find it too
+  intrusive. See <a href=
+  "Reference-Styles.html#Reference-Styles">Reference
+  Styles</a>.</p>
 
+  <p>Then, RefTeX will determine the label category which is
+  required. Often that can be figured out from context. For
+  example, if you write &lsquo;<samp>As shown in eq.</samp>&rsquo;
+  and then press <kbd>C-c )</kbd>, RefTeX knows that an equation
+  label is going to be referenced. If it cannot figure out what
+  label category is needed, it will query for one.</p>
 
+  <p>You will then be presented with a label selection menu. This
+  is a special buffer which contains an outline of the document
+  along with all labels of the given label category. In addition,
+  next to the label there will be one line of context of the label
+  definition, which is some text in the buffer near the label
+  definition. Usually this is sufficient to identify the label. If
+  you are unsure about a certain label, pressing <tt class=
+  "key">SPC</tt> will show the label definition point in another
+  window.</p>
 
+  <p>In order to reference a label, move the cursor to the correct
+  label and press <tt class="key">RET</tt>. You can also reference
+  several labels with a single call to
+  <code>reftex-reference</code> by marking entries with the
+  <kbd>m</kbd> key (see below).</p><a name="index-_003f-1" id=
+  "index-_003f-1"></a>
+
+  <p>Here is a list of special commands in the selection buffer. A
+  summary of this information is always available from the
+  selection process by pressing <kbd>?</kbd>.</p>
+
+  <dl compact="compact">
+    <dt><kbd><b>General</b></kbd></dt>
+
+    <dt><kbd>?</kbd></dt>
+
+    <dd>
+      <p>Show a summary of available commands.</p>
+    </dd>
+
+    <dt><kbd>0-9,-</kbd></dt>
+
+    <dd>
+      <p>Prefix argument.</p>
+    </dd>
+
+    <dt><kbd><b>Moving around</b></kbd></dt>
+
+    <dt><kbd>n</kbd></dt>
+
+    <dd>
+      <p>Go to next label.</p>
+    </dd>
+
+    <dt><kbd>p</kbd></dt>
+
+    <dd>
+      <p>Go to previous label.</p>
+    </dd>
+
+    <dt><kbd>b</kbd></dt>
+
+    <dd>
+      <p>Jump back to the position where you last left the
+      selection buffer. Normally this should get you back to the
+      last referenced label.</p>
+    </dd>
+
+    <dt><kbd>C-c C-n</kbd></dt>
+
+    <dd>
+      <p>Goto next section heading.</p>
+    </dd>
+
+    <dt><kbd>C-c C-p</kbd></dt>
+
+    <dd>
+      <p>Goto previous section heading.</p>
+    </dd>
+
+    <dt><kbd>N z</kbd></dt>
+
+    <dd>
+      <p>Jump to section N, using the prefix arg. For example
+      <kbd>3 z</kbd> jumps to section 3.</p>
+    </dd>
+
+    <dt><kbd><b>Displaying Context</b></kbd></dt>
+
+    <dt><kbd><span class="key">SPC</span></kbd></dt>
+
+    <dd>
+      <p>Show the surroundings of the definition of the current
+      label in another window. See also the <kbd>f</kbd> key.</p>
+    </dd>
+
+    <dt><kbd>f</kbd></dt>
+
+    <dd>
+      <a name="index-reftex_002drevisit_002dto_002dfollow-1" id=
+      "index-reftex_002drevisit_002dto_002dfollow-1"></a>
+
+      <p>Toggle follow mode. When follow mode is active, the other
+      window will always display the full context of the current
+      label. This is similar to pressing <tt class="key">SPC</tt>
+      after each cursor motion. Note that only context in files
+      already visited is shown. RefTeX will not visit a file just
+      for follow mode. See, however, the variable
+      <code>reftex-revisit-to-follow</code>.</p>
+    </dd>
+
+    <dt><kbd>.</kbd></dt>
+
+    <dd>
+      <p>Show insertion point in another window. This is the point
+      from where you called <code>reftex-reference</code>.</p>
+    </dd>
+
+    <dt><kbd><b>Selecting a label and creating the
+    reference</b></kbd></dt>
+
+    <dt><kbd><span class="key">RET</span></kbd></dt>
+
+    <dd>
+      <p>Insert a reference to the label at point into the buffer
+      from which the selection process was started. When entries
+      have been marked, <tt class="key">RET</tt> references all
+      marked labels.</p>
+    </dd>
+
+    <dt><kbd>mouse-2</kbd></dt>
+
+    <dd>
+      <a name="index-reftex_002dhighlight_002dselection-1" id=
+      "index-reftex_002dhighlight_002dselection-1"></a>
+
+      <p>Clicking with mouse button 2 on a label will accept it
+      like <tt class="key">RET</tt> would. See also variable
+      <code>reftex-highlight-selection</code>, <a href=
+      "Options-_002d-Misc.html#Options-_002d-Misc">Options -
+      Misc</a>.</p><a name=
+      "index-reftex_002dmultiref_002dpunctuation" id=
+      "index-reftex_002dmultiref_002dpunctuation"></a>
+    </dd>
+
+    <dt><kbd>m - + ,</kbd></dt>
+
+    <dd>
+      <p>Mark the current entry. When several entries have been
+      marked, pressing <kbd>RET</kbd> will accept all of them and
+      place them into several <code>\ref</code> macros. The special
+      markers &lsquo;<samp>,-+</samp>&rsquo; also store a separator
+      to be inserted before the corresponding reference. So marking
+      six entries with the keys &lsquo;<samp>m , , - ,
+      +</samp>&rsquo; will give a reference list like this (see the
+      variable <code>reftex-multiref-punctuation</code>)</p>
+
+      <div class="example">
+        <pre class="example">
+In eqs. (1), (2), (3)--(4), (5) and (6)
+</pre>
+      </div>
+    </dd>
+
+    <dt><kbd>u</kbd></dt>
+
+    <dd>
+      <p>Unmark a marked entry.</p><a name=
+      "index-LaTeX-packages_002c-saferef" id=
+      "index-LaTeX-packages_002c-saferef"></a> <a name=
+      "index-saferef_002c-LaTeX-package" id=
+      "index-saferef_002c-LaTeX-package"></a>
+    </dd>
+
+    <dt><kbd>a</kbd></dt>
+
+    <dd>
+      <p>Accept the marked entries and put all labels as a
+      comma-separated list into one <em>single</em>
+      <code>\ref</code> macro. Some packages like
+      <samp>saferef.sty</samp> support multiple references in this
+      way.</p>
+    </dd>
+
+    <dt><kbd>l</kbd></dt>
+
+    <dd>
+      <p>Use the last referenced label(s) again. This is equivalent
+      to moving to that label and pressing <tt class=
+      "key">RET</tt>.</p>
+    </dd>
+
+    <dt><kbd><span class="key">TAB</span></kbd></dt>
+
+    <dd>
+      <p>Enter a label with completion. This may also be a label
+      which does not yet exist in the document.</p>
+    </dd>
+
+    <dt><kbd>v</kbd></dt>
+
+    <dd>
+      <p>Cycle forward through active reference macros. The
+      selected macro is displayed by the
+      &lsquo;<samp>S&lt;...&gt;</samp>&rsquo; indicator in the mode
+      line of the selection buffer. This mechanism comes in handy
+      if you are using LaTeX packages like <code>varioref</code> or
+      <code>fancyref</code> and want to use the special referencing
+      macros they provide (e.g., <code>\vref</code> or
+      <code>\fref</code>) instead of <code>\ref</code>.</p>
+    </dd>
+
+    <dt><kbd>V</kbd></dt>
+
+    <dd>
+      <p>Cycle backward through active reference macros.</p>
+    </dd>
+
+    <dt><kbd><b>Exiting</b></kbd></dt>
+
+    <dt><kbd>q</kbd></dt>
+
+    <dd>
+      <p>Exit the selection process without inserting any reference
+      into the buffer.</p>
+    </dd>
+
+    <dt><kbd><b>Controlling what gets displayed</b></kbd></dt>
+
+    <dd>
+      <a name="index-reftex_002dlabel_002dmenu_002dflags" id=
+      "index-reftex_002dlabel_002dmenu_002dflags"></a>
+
+      <p>The defaults for the following flags can be configured
+      with the variable <code>reftex-label-menu-flags</code> (see
+      <a href=
+      "Options-_002d-Referencing-Labels.html#Options-_002d-Referencing-Labels">
+      Options - Referencing Labels</a>).</p>
+    </dd>
+
+    <dt><kbd>c</kbd></dt>
+
+    <dd>
+      <p>Toggle the display of the one-line label definition
+      context in the selection buffer.</p>
+    </dd>
+
+    <dt><kbd>F</kbd></dt>
+
+    <dd>
+      <p>Toggle the display of the file borders of a multifile
+      document in the selection buffer.</p>
+    </dd>
+
+    <dt><kbd>t</kbd></dt>
+
+    <dd>
+      <p>Toggle the display of the table of contents in the
+      selection buffer. With prefix <var>arg</var>, change the
+      maximum level of toc entries displayed to <var>arg</var>.
+      Chapters are level 1, sections are level 2.</p>
+    </dd>
+
+    <dt><kbd>#</kbd></dt>
+
+    <dd>
+      <p>Toggle the display of a label counter in the selection
+      buffer.</p>
+    </dd>
+
+    <dt><kbd>%</kbd></dt>
+
+    <dd>
+      <p>Toggle the display of labels hidden in comments in the
+      selection buffers. Sometimes, you may have commented out
+      parts of your document. If these parts contain label
+      definitions, RefTeX can still display and reference these
+      labels.</p>
+    </dd>
+
+    <dt><kbd><b>Updating the buffer</b></kbd></dt>
+
+    <dt><kbd>g</kbd></dt>
+
+    <dd>
+      <p>Update the menu. This will rebuilt the menu from the
+      internal label list, but not reparse the document (see
+      <kbd>r</kbd>).</p>
+    </dd>
+
+    <dt><kbd>r</kbd></dt>
+
+    <dd>
+      <a name="index-reftex_002denable_002dpartial_002dscans-1" id=
+      "index-reftex_002denable_002dpartial_002dscans-1"></a>
+
+      <p>Reparse the document to update the information on all
+      labels and rebuild the menu. If the variable
+      <code>reftex-enable-partial-scans</code> is
+      non-<code>nil</code> and your document is a multifile
+      document, this will reparse only a part of the document (the
+      file in which the label at point was defined).</p>
+    </dd>
+
+    <dt><kbd>C-u r</kbd></dt>
+
+    <dd>
+      <p>Reparse the <em>entire</em> document.</p>
+    </dd>
+
+    <dt><kbd>s</kbd></dt>
+
+    <dd>
+      <p>Switch the label category. After prompting for another
+      label category, a menu for that category will be shown.</p>
+    </dd>
+
+    <dt><kbd>x</kbd></dt>
+
+    <dd>
+      <p>Reference a label from an external document. With the
+      LaTeX package <code>xr</code> it is possible to reference
+      labels defined in another document. This key will switch to
+      the label menu of an external document and let you select a
+      label from there (see <a href=
+      "LaTeX-xr-Package.html#LaTeX-xr-Package">xr</a>).</p>
+    </dd>
+  </dl><a name="index-reftex_002dselect_002dlabel_002dmap-1" id=
+  "index-reftex_002dselect_002dlabel_002dmap-1"></a>
+
+  <p>In order to define additional commands for the selection
+  process, the keymap <code>reftex-select-label-map</code> may be
+  used.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Builtin-Label-Environments.html#Builtin-Label-Environments"
+    accesskey="n" rel="next">Builtin Label Environments</a>,
+    Previous: <a href="Creating-Labels.html#Creating-Labels"
+    accesskey="p" rel="prev">Creating Labels</a>, Up: <a href=
+    "Labels-and-References.html#Labels-and-References" accesskey=
+    "u" rel="up">Labels and References</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,15 +1,23 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>editable-list - The Emacs Widget Library</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="The Emacs Widget Library">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Basic-Types.html#Basic-Types" title="Basic Types">
-<link rel="prev" href="checklist.html#checklist" title="checklist">
-<link rel="next" href="group.html#group" title="group">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>editable-list - The Emacs Widget Library</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="The Emacs Widget Library" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Basic-Types.html#Basic-Types" title=
+  "Basic Types" />
+  <link rel="prev" href="checklist.html#checklist" title=
+  "checklist" />
+  <link rel="next" href="group.html#group" title="group" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
 2008, 2009, 2010  Free Software Foundation, Inc.
 
@@ -25,8 +33,10 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,56 +46,135 @@ Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="editable-list"></a>
-<a name="editable_002dlist"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="group.html#group">group</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="checklist.html#checklist">checklist</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Basic-Types.html#Basic-Types">Basic Types</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="editable-list" id="editable-list"></a> <a name=
+    "editable_002dlist" id="editable_002dlist"></a>
 
-<!-- node-name,  next,  previous,  up -->
-<h4 class="subsection">The <code>editable-list</code> Widget</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "group.html#group">group</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href="checklist.html#checklist">checklist</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Basic-Types.html#Basic-Types">Basic Types</a></p>
+    <hr />
+  </div><!-- node-name,  next,  previous,  up -->
 
-<p><a name="index-editable_002dlist_0040r_007b-widget_007d-98"></a>
-Syntax:
+  <h4 class="subsection">The <code>editable-list</code> Widget</h4>
 
-<pre class="example">     <var>type</var> ::= (editable-list [<var>keyword</var> <var>argument</var>]... <var>type</var>)
+  <p><a name="index-editable_002dlist_0040r_007b-widget_007d-98"
+  id="index-editable_002dlist_0040r_007b-widget_007d-98"></a>
+  Syntax:</p>
+  <pre class="example">
+     <var>type</var> ::= (editable-list [<var>keyword</var> <var>argument</var>]... <var>type</var>)
 </pre>
-   <p>The value is a list, where each member represents one widget of type
-<var>type</var>.
 
-   <p>The following extra properties are recognized:
+  <p>The value is a list, where each member represents one widget
+  of type <var>type</var>.</p>
 
-     
-<a name="index-entry_002dformat_0040r_007b-keyword_007d-99"></a>
-<dl><dt><code>:entry-format</code><dd>This string will be inserted for each entry in the list. 
-The following &lsquo;<samp><span class="samp">%</span></samp>&rsquo; escapes are available:
-          <dl>
-<dt>&lsquo;<samp><span class="samp">%v</span></samp>&rsquo;<dd>This will be replaced with the buffer representation of the <var>type</var>
-widget. 
-<br><dt>&lsquo;<samp><span class="samp">%i</span></samp>&rsquo;<dd>Insert the <b>[INS]</b> button. 
-<br><dt>&lsquo;<samp><span class="samp">%d</span></samp>&rsquo;<dd>Insert the <b>[DEL]</b> button. 
-<br><dt>&lsquo;<samp><span class="samp">%%</span></samp>&rsquo;<dd>Insert a literal &lsquo;<samp><span class="samp">%</span></samp>&rsquo;. 
-</dl>
+  <p>The following extra properties are recognized: <a name=
+  "index-entry_002dformat_0040r_007b-keyword_007d-99" id=
+  "index-entry_002dformat_0040r_007b-keyword_007d-99"></a></p>
 
-     <p><a name="index-insert_002dbutton_002dargs_0040r_007b-keyword_007d-100"></a><br><dt><code>:insert-button-args</code><dd>A list of keyword arguments to pass to the insert buttons.
+  <dl>
+    <dt><code>:entry-format</code></dt>
 
-     <p><a name="index-delete_002dbutton_002dargs_0040r_007b-keyword_007d-101"></a><br><dt><code>:delete-button-args</code><dd>A list of keyword arguments to pass to the delete buttons.
+    <dd>
+      This string will be inserted for each entry in the list. The
+      following &lsquo;<samp><span class=
+      "samp">%</span></samp>&rsquo; escapes are available:
 
-     <p><a name="index-append_002dbutton_002dargs_0040r_007b-keyword_007d-102"></a><br><dt><code>:append-button-args</code><dd>A list of keyword arguments to pass to the trailing insert button.
+      <dl>
+        <dt>&lsquo;<samp><span class=
+        "samp">%v</span></samp>&rsquo;</dt>
 
-     <p><a name="index-buttons_0040r_007b-keyword_007d-103"></a><br><dt><code>:buttons</code><dd>The widgets representing the insert and delete buttons.
+        <dd>This will be replaced with the buffer representation of
+        the <var>type</var> widget.<br /></dd>
 
-     <p><a name="index-children_0040r_007b-keyword_007d-104"></a><br><dt><code>:children</code><dd>The widgets representing the elements of the list.
+        <dt>&lsquo;<samp><span class=
+        "samp">%i</span></samp>&rsquo;</dt>
 
-     <p><a name="index-args_0040r_007b-keyword_007d-105"></a><br><dt><code>:args</code><dd>List whose <span class="sc">car</span> is the type of the list elements. 
-</dl>
+        <dd>Insert the <b>[INS]</b> button.<br /></dd>
 
-   </body></html>
+        <dt>&lsquo;<samp><span class=
+        "samp">%d</span></samp>&rsquo;</dt>
 
+        <dd>Insert the <b>[DEL]</b> button.<br /></dd>
+
+        <dt>&lsquo;<samp><span class=
+        "samp">%%</span></samp>&rsquo;</dt>
+
+        <dd>Insert a literal &lsquo;<samp><span class=
+        "samp">%</span></samp>&rsquo;.</dd>
+      </dl>
+
+      <p><a name=
+      "index-insert_002dbutton_002dargs_0040r_007b-keyword_007d-100"
+      id=
+      "index-insert_002dbutton_002dargs_0040r_007b-keyword_007d-100">
+      </a><br /></p>
+    </dd>
+
+    <dt><code>:insert-button-args</code></dt>
+
+    <dd>
+      A list of keyword arguments to pass to the insert buttons.
+
+      <p><a name=
+      "index-delete_002dbutton_002dargs_0040r_007b-keyword_007d-101"
+      id=
+      "index-delete_002dbutton_002dargs_0040r_007b-keyword_007d-101">
+      </a><br /></p>
+    </dd>
+
+    <dt><code>:delete-button-args</code></dt>
+
+    <dd>
+      A list of keyword arguments to pass to the delete buttons.
+
+      <p><a name=
+      "index-append_002dbutton_002dargs_0040r_007b-keyword_007d-102"
+      id=
+      "index-append_002dbutton_002dargs_0040r_007b-keyword_007d-102">
+      </a><br /></p>
+    </dd>
+
+    <dt><code>:append-button-args</code></dt>
+
+    <dd>
+      A list of keyword arguments to pass to the trailing insert
+      button.
+
+      <p><a name="index-buttons_0040r_007b-keyword_007d-103" id=
+      "index-buttons_0040r_007b-keyword_007d-103"></a><br /></p>
+    </dd>
+
+    <dt><code>:buttons</code></dt>
+
+    <dd>
+      The widgets representing the insert and delete buttons.
+
+      <p><a name="index-children_0040r_007b-keyword_007d-104" id=
+      "index-children_0040r_007b-keyword_007d-104"></a><br /></p>
+    </dd>
+
+    <dt><code>:children</code></dt>
+
+    <dd>
+      The widgets representing the elements of the list.
+
+      <p><a name="index-args_0040r_007b-keyword_007d-105" id=
+      "index-args_0040r_007b-keyword_007d-105"></a><br /></p>
+    </dd>
+
+    <dt><code>:args</code></dt>
+
+    <dd>List whose <span class="sc">car</span> is the type of the
+    list elements.</dd>
+  </dl>
+</body>
+</html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,146 +19,218 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Adding Generalized Variables</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Adding Generalized Variables">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Adding Generalized Variables">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Generalized-Variables.html#Generalized-Variables" rel="up" title="Generalized Variables">
-<link href="Functions.html#Functions" rel="next" title="Functions">
-<link href="Setting-Generalized-Variables.html#Setting-Generalized-Variables" rel="prev" title="Setting Generalized Variables">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Adding Generalized
+  Variables</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Adding Generalized Variables" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Adding Generalized Variables" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Generalized-Variables.html#Generalized-Variables"
+  rel="up" title="Generalized Variables" />
+  <link href="Functions.html#Functions" rel="next" title=
+  "Functions" />
+  <link href=
+  "Setting-Generalized-Variables.html#Setting-Generalized-Variables"
+  rel="prev" title="Setting Generalized Variables" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Adding-Generalized-Variables" id=
+  "Adding-Generalized-Variables"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Previous: <a href=
+    "Setting-Generalized-Variables.html#Setting-Generalized-Variables"
+    accesskey="p" rel="prev">Setting Generalized Variables</a>, Up:
+    <a href="Generalized-Variables.html#Generalized-Variables"
+    accesskey="u" rel="up">Generalized Variables</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Defining-new-setf-forms" id=
+  "Defining-new-setf-forms"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Adding-Generalized-Variables"></a>
-<div class="header">
-<p>
-Previous: <a href="Setting-Generalized-Variables.html#Setting-Generalized-Variables" accesskey="p" rel="prev">Setting Generalized Variables</a>, Up: <a href="Generalized-Variables.html#Generalized-Variables" accesskey="u" rel="up">Generalized Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Defining-new-setf-forms"></a>
-<h4 class="subsection">11.15.2 Defining new <code>setf</code> forms</h4>
+  <h4 class="subsection">11.15.2 Defining new <code>setf</code>
+  forms</h4>
 
-<p>This section describes how to define new forms that <code>setf</code> can
-operate on.
-</p>
-<dl>
-<dt><a name="index-gv_002ddefine_002dsimple_002dsetter"></a>Macro: <strong>gv-define-simple-setter</strong> <em>name setter &amp;optional fix-return</em></dt>
-<dd><p>This macro enables you to easily define <code>setf</code> methods for simple
-cases.  <var>name</var> is the name of a function, macro, or special form.
-You can use this macro whenever <var>name</var> has a directly
-corresponding <var>setter</var> function that updates it, e.g.,
-<code>(gv-define-simple-setter car setcar)</code>.
-</p>
-<p>This macro translates a call of the form
-</p>
-<div class="example">
-<pre class="example">(setf (<var>name</var> <var>args</var>&hellip;) <var>value</var>)
-</pre></div>
+  <p>This section describes how to define new forms that
+  <code>setf</code> can operate on.</p>
 
-<p>into
-</p><div class="example">
-<pre class="example">(<var>setter</var> <var>args</var>&hellip; <var>value</var>)
-</pre></div>
+  <dl>
+    <dt><a name="index-gv_002ddefine_002dsimple_002dsetter" id=
+    "index-gv_002ddefine_002dsimple_002dsetter"></a>Macro:
+    <strong>gv-define-simple-setter</strong> <em>name setter
+    &amp;optional fix-return</em></dt>
 
-<p>Such a <code>setf</code> call is documented to return <var>value</var>.  This is
-no problem with, e.g., <code>car</code> and <code>setcar</code>, because
-<code>setcar</code> returns the value that it set.  If your <var>setter</var>
-function does not return <var>value</var>, use a non-<code>nil</code> value for
-the <var>fix-return</var> argument of <code>gv-define-simple-setter</code>.  This
-expands into something equivalent to
-</p><div class="example">
-<pre class="example">(let ((temp <var>value</var>))
+    <dd>
+      <p>This macro enables you to easily define <code>setf</code>
+      methods for simple cases. <var>name</var> is the name of a
+      function, macro, or special form. You can use this macro
+      whenever <var>name</var> has a directly corresponding
+      <var>setter</var> function that updates it, e.g.,
+      <code>(gv-define-simple-setter car setcar)</code>.</p>
+
+      <p>This macro translates a call of the form</p>
+
+      <div class="example">
+        <pre class="example">
+(setf (<var>name</var> <var>args</var>&hellip;) <var>value</var>)
+</pre>
+      </div>
+
+      <p>into</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>setter</var> <var>args</var>&hellip; <var>value</var>)
+</pre>
+      </div>
+
+      <p>Such a <code>setf</code> call is documented to return
+      <var>value</var>. This is no problem with, e.g.,
+      <code>car</code> and <code>setcar</code>, because
+      <code>setcar</code> returns the value that it set. If your
+      <var>setter</var> function does not return <var>value</var>,
+      use a non-<code>nil</code> value for the
+      <var>fix-return</var> argument of
+      <code>gv-define-simple-setter</code>. This expands into
+      something equivalent to</p>
+
+      <div class="example">
+        <pre class="example">
+(let ((temp <var>value</var>))
   (<var>setter</var> <var>args</var>&hellip; temp)
   temp)
-</pre></div>
-<p>so ensuring that it returns the correct result.
-</p></dd></dl>
+</pre>
+      </div>
 
+      <p>so ensuring that it returns the correct result.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-gv_002ddefine_002dsetter"></a>Macro: <strong>gv-define-setter</strong> <em>name arglist &amp;rest body</em></dt>
-<dd><p>This macro allows for more complex <code>setf</code> expansions than the
-previous form.  You may need to use this form, for example, if there
-is no simple setter function to call, or if there is one but it
-requires different arguments to the place form.
-</p>
-<p>This macro expands the form
-<code>(setf (<var>name</var> <var>args</var>&hellip;) <var>value</var>)</code> by
-first binding the <code>setf</code> argument forms
-<code>(<var>value</var> <var>args</var>&hellip;)</code> according to <var>arglist</var>,
-and then executing <var>body</var>.  <var>body</var> should return a Lisp
-form that does the assignment, and finally returns the value that was
-set.  An example of using this macro is:
-</p>
-<div class="example">
-<pre class="example">(gv-define-setter caar (val x) `(setcar (car ,x) ,val))
-</pre></div>
-</dd></dl>
+  <dl>
+    <dt><a name="index-gv_002ddefine_002dsetter" id=
+    "index-gv_002ddefine_002dsetter"></a>Macro:
+    <strong>gv-define-setter</strong> <em>name arglist &amp;rest
+    body</em></dt>
 
-<a name="index-gv_002ddefine_002dexpander"></a>
-<a name="index-gv_002dletplace"></a>
-<p>For more control over the expansion, see the macro <code>gv-define-expander</code>.
-The macro <code>gv-letplace</code> can be useful in defining macros that
-perform similarly to <code>setf</code>; for example, the <code>incf</code> macro
-of Common Lisp.  Consult the source file <samp>gv.el</samp> for more details.
-</p>
-<a name="index-CL-note_002d_002d_002dno-setf-functions"></a>
-<blockquote>
-<p><b>Common Lisp note:</b> Common Lisp defines another way to specify the
-<code>setf</code> behavior of a function, namely <code>setf</code> functions,
-whose names are lists <code>(setf <var>name</var>)</code> rather than symbols.
-For example, <code>(defun (setf foo) &hellip;)</code> defines the function
-that is used when <code>setf</code> is applied to <code>foo</code>.  Emacs does
-not support this.  It is a compile-time error to use <code>setf</code> on a
-form that has not already had an appropriate expansion defined.  In
-Common Lisp, this is not an error since the function <code>(setf
-<var>func</var>)</code> might be defined later.
-</p></blockquote>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Setting-Generalized-Variables.html#Setting-Generalized-Variables" accesskey="p" rel="prev">Setting Generalized Variables</a>, Up: <a href="Generalized-Variables.html#Generalized-Variables" accesskey="u" rel="up">Generalized Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This macro allows for more complex <code>setf</code>
+      expansions than the previous form. You may need to use this
+      form, for example, if there is no simple setter function to
+      call, or if there is one but it requires different arguments
+      to the place form.</p>
 
+      <p>This macro expands the form <code>(setf (<var>name</var>
+      <var>args</var>&hellip;) <var>value</var>)</code> by first
+      binding the <code>setf</code> argument forms
+      <code>(<var>value</var> <var>args</var>&hellip;)</code>
+      according to <var>arglist</var>, and then executing
+      <var>body</var>. <var>body</var> should return a Lisp form
+      that does the assignment, and finally returns the value that
+      was set. An example of using this macro is:</p>
 
+      <div class="example">
+        <pre class="example">
+(gv-define-setter caar (val x) `(setcar (car ,x) ,val))
+</pre>
+      </div>
+    </dd>
+  </dl><a name="index-gv_002ddefine_002dexpander" id=
+  "index-gv_002ddefine_002dexpander"></a> <a name=
+  "index-gv_002dletplace" id="index-gv_002dletplace"></a>
 
+  <p>For more control over the expansion, see the macro
+  <code>gv-define-expander</code>. The macro
+  <code>gv-letplace</code> can be useful in defining macros that
+  perform similarly to <code>setf</code>; for example, the
+  <code>incf</code> macro of Common Lisp. Consult the source file
+  <samp>gv.el</samp> for more details.</p><a name=
+  "index-CL-note_002d_002d_002dno-setf-functions" id=
+  "index-CL-note_002d_002d_002dno-setf-functions"></a>
+
+  <blockquote>
+    <p><b>Common Lisp note:</b> Common Lisp defines another way to
+    specify the <code>setf</code> behavior of a function, namely
+    <code>setf</code> functions, whose names are lists <code>(setf
+    <var>name</var>)</code> rather than symbols. For example,
+    <code>(defun (setf foo) &hellip;)</code> defines the function
+    that is used when <code>setf</code> is applied to
+    <code>foo</code>. Emacs does not support this. It is a
+    compile-time error to use <code>setf</code> on a form that has
+    not already had an appropriate expansion defined. In Common
+    Lisp, this is not an error since the function <code>(setf
+    <var>func</var>)</code> might be defined later.</p>
+  </blockquote>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Setting-Generalized-Variables.html#Setting-Generalized-Variables"
+    accesskey="p" rel="prev">Setting Generalized Variables</a>, Up:
+    <a href="Generalized-Variables.html#Generalized-Variables"
+    accesskey="u" rel="up">Generalized Variables</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

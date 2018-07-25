@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,201 +19,288 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Font Lock Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Font Lock Basics">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Font Lock Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="up" title="Font Lock Mode">
-<link href="Search_002dbased-Fontification.html#Search_002dbased-Fontification" rel="next" title="Search-based Fontification">
-<link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="prev" title="Font Lock Mode">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Font Lock Basics</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Font Lock Basics" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Font Lock Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="up" title=
+  "Font Lock Mode" />
+  <link href=
+  "Search_002dbased-Fontification.html#Search_002dbased-Fontification"
+  rel="next" title="Search-based Fontification" />
+  <link href="Font-Lock-Mode.html#Font-Lock-Mode" rel="prev" title=
+  "Font Lock Mode" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Font-Lock-Basics" id="Font-Lock-Basics"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Search_002dbased-Fontification.html#Search_002dbased-Fontification"
+    accesskey="n" rel="next">Search-based Fontification</a>, Up:
+    <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel=
+    "up">Font Lock Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Font-Lock-Basics-1" id="Font-Lock-Basics-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Font-Lock-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Search_002dbased-Fontification.html#Search_002dbased-Fontification" accesskey="n" rel="next">Search-based Fontification</a>, Up: <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel="up">Font Lock Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Font-Lock-Basics-1"></a>
-<h4 class="subsection">22.6.1 Font Lock Basics</h4>
+  <h4 class="subsection">22.6.1 Font Lock Basics</h4>
 
-<p>The Font Lock functionality is based on several basic functions.
-Each of these calls the function specified by the corresponding
-variable.  This indirection allows major and minor modes to modify the
-way fontification works in the buffers of that mode, and even use the
-Font Lock mechanisms for features that have nothing to do with
-fontification.  (This is why the description below says &ldquo;should&rdquo;
-when it describes what the functions do: the mode can customize the
-values of the corresponding variables to do something entirely
-different.)  The variables mentioned below are described in <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>.
-</p>
-<dl compact="compact">
-<dt><code>font-lock-fontify-buffer</code>
-<a name="index-font_002dlock_002dfontify_002dbuffer"></a>
-</dt>
-<dd><p>This function should fontify the current buffer&rsquo;s accessible portion,
-by calling the function specified by
-<code>font-lock-fontify-buffer-function</code>.
-</p>
-</dd>
-<dt><code>font-lock-unfontify-buffer</code>
-<a name="index-font_002dlock_002dunfontify_002dbuffer"></a>
-</dt>
-<dd><p>Used when turning Font Lock off to remove the fontification.  Calls
-the function specified by <code>font-lock-unfontify-buffer-function</code>.
-</p>
-</dd>
-<dt><code>font-lock-fontify-region beg end &amp;optional loudly</code>
-<a name="index-font_002dlock_002dfontify_002dregion-beg-end-_0026optional-loudly"></a>
-</dt>
-<dd><p>Should fontify the region between <var>beg</var> and <var>end</var>.  If
-<var>loudly</var> is non-<code>nil</code>, should display status messages while
-fontifying.  Calls the function specified by
-<code>font-lock-fontify-region-function</code>.
-</p>
-</dd>
-<dt><code>font-lock-unfontify-region beg end</code>
-<a name="index-font_002dlock_002dunfontify_002dregion-beg-end"></a>
-</dt>
-<dd><p>Should remove fontification from the region between <var>beg</var> and
-<var>end</var>.  Calls the function specified by
-<code>font-lock-unfontify-region-function</code>.
-</p>
-</dd>
-<dt><code>font-lock-flush &amp;optional beg end</code>
-<a name="index-font_002dlock_002dflush-_0026optional-beg-end"></a>
-</dt>
-<dd><p>This function should mark the fontification of the region between
-<var>beg</var> and <var>end</var> as outdated.  If not specified or <code>nil</code>,
-<var>beg</var> and <var>end</var> default to the beginning and end of the
-buffer&rsquo;s accessible portion.  Calls the function specified by
-<code>font-lock-flush-function</code>.
-</p>
-</dd>
-<dt><code>font-lock-ensure &amp;optional beg end</code>
-<a name="index-font_002dlock_002densure-_0026optional-beg-end"></a>
-</dt>
-<dd><p>This function should make sure the region between <var>beg</var> and
-<var>end</var> has been fontified.  The optional arguments <var>beg</var> and
-<var>end</var> default to the beginning and the end of the buffer&rsquo;s
-accessible portion.  Calls the function specified by
-<code>font-lock-ensure-function</code>.
-</p></dd>
-</dl>
+  <p>The Font Lock functionality is based on several basic
+  functions. Each of these calls the function specified by the
+  corresponding variable. This indirection allows major and minor
+  modes to modify the way fontification works in the buffers of
+  that mode, and even use the Font Lock mechanisms for features
+  that have nothing to do with fontification. (This is why the
+  description below says &ldquo;should&rdquo; when it describes
+  what the functions do: the mode can customize the values of the
+  corresponding variables to do something entirely different.) The
+  variables mentioned below are described in <a href=
+  "Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other
+  Font Lock Variables</a>.</p>
 
-<p>There are several variables that control how Font Lock mode highlights
-text.  But major modes should not set any of these variables directly.
-Instead, they should set <code>font-lock-defaults</code> as a buffer-local
-variable.  The value assigned to this variable is used, if and when Font
-Lock mode is enabled, to set all the other variables.
-</p>
-<dl>
-<dt><a name="index-font_002dlock_002ddefaults"></a>Variable: <strong>font-lock-defaults</strong></dt>
-<dd><p>This variable is set by modes to specify how to fontify text in that
-mode.  It automatically becomes buffer-local when set.  If its value
-is <code>nil</code>, Font Lock mode does no highlighting, and you can use
-the &lsquo;<samp>Faces</samp>&rsquo; menu (under &lsquo;<samp>Edit</samp>&rsquo; and then &lsquo;<samp>Text
-Properties</samp>&rsquo; in the menu bar) to assign faces explicitly to text in the
-buffer.
-</p>
-<p>If non-<code>nil</code>, the value should look like this:
-</p>
-<div class="example">
-<pre class="example">(<var>keywords</var> [<var>keywords-only</var> [<var>case-fold</var>
+  <dl compact="compact">
+    <dt><code>font-lock-fontify-buffer</code> <a name=
+    "index-font_002dlock_002dfontify_002dbuffer" id=
+    "index-font_002dlock_002dfontify_002dbuffer"></a></dt>
+
+    <dd>
+      <p>This function should fontify the current buffer&rsquo;s
+      accessible portion, by calling the function specified by
+      <code>font-lock-fontify-buffer-function</code>.</p>
+    </dd>
+
+    <dt><code>font-lock-unfontify-buffer</code> <a name=
+    "index-font_002dlock_002dunfontify_002dbuffer" id=
+    "index-font_002dlock_002dunfontify_002dbuffer"></a></dt>
+
+    <dd>
+      <p>Used when turning Font Lock off to remove the
+      fontification. Calls the function specified by
+      <code>font-lock-unfontify-buffer-function</code>.</p>
+    </dd>
+
+    <dt><code>font-lock-fontify-region beg end &amp;optional
+    loudly</code> <a name=
+    "index-font_002dlock_002dfontify_002dregion-beg-end-_0026optional-loudly"
+    id=
+    "index-font_002dlock_002dfontify_002dregion-beg-end-_0026optional-loudly">
+    </a></dt>
+
+    <dd>
+      <p>Should fontify the region between <var>beg</var> and
+      <var>end</var>. If <var>loudly</var> is non-<code>nil</code>,
+      should display status messages while fontifying. Calls the
+      function specified by
+      <code>font-lock-fontify-region-function</code>.</p>
+    </dd>
+
+    <dt><code>font-lock-unfontify-region beg end</code> <a name=
+    "index-font_002dlock_002dunfontify_002dregion-beg-end" id=
+    "index-font_002dlock_002dunfontify_002dregion-beg-end"></a></dt>
+
+    <dd>
+      <p>Should remove fontification from the region between
+      <var>beg</var> and <var>end</var>. Calls the function
+      specified by
+      <code>font-lock-unfontify-region-function</code>.</p>
+    </dd>
+
+    <dt><code>font-lock-flush &amp;optional beg end</code> <a name=
+    "index-font_002dlock_002dflush-_0026optional-beg-end" id=
+    "index-font_002dlock_002dflush-_0026optional-beg-end"></a></dt>
+
+    <dd>
+      <p>This function should mark the fontification of the region
+      between <var>beg</var> and <var>end</var> as outdated. If not
+      specified or <code>nil</code>, <var>beg</var> and
+      <var>end</var> default to the beginning and end of the
+      buffer&rsquo;s accessible portion. Calls the function
+      specified by <code>font-lock-flush-function</code>.</p>
+    </dd>
+
+    <dt><code>font-lock-ensure &amp;optional beg end</code>
+    <a name="index-font_002dlock_002densure-_0026optional-beg-end"
+    id=
+    "index-font_002dlock_002densure-_0026optional-beg-end"></a></dt>
+
+    <dd>
+      <p>This function should make sure the region between
+      <var>beg</var> and <var>end</var> has been fontified. The
+      optional arguments <var>beg</var> and <var>end</var> default
+      to the beginning and the end of the buffer&rsquo;s accessible
+      portion. Calls the function specified by
+      <code>font-lock-ensure-function</code>.</p>
+    </dd>
+  </dl>
+
+  <p>There are several variables that control how Font Lock mode
+  highlights text. But major modes should not set any of these
+  variables directly. Instead, they should set
+  <code>font-lock-defaults</code> as a buffer-local variable. The
+  value assigned to this variable is used, if and when Font Lock
+  mode is enabled, to set all the other variables.</p>
+
+  <dl>
+    <dt><a name="index-font_002dlock_002ddefaults" id=
+    "index-font_002dlock_002ddefaults"></a>Variable:
+    <strong>font-lock-defaults</strong></dt>
+
+    <dd>
+      <p>This variable is set by modes to specify how to fontify
+      text in that mode. It automatically becomes buffer-local when
+      set. If its value is <code>nil</code>, Font Lock mode does no
+      highlighting, and you can use the
+      &lsquo;<samp>Faces</samp>&rsquo; menu (under
+      &lsquo;<samp>Edit</samp>&rsquo; and then &lsquo;<samp>Text
+      Properties</samp>&rsquo; in the menu bar) to assign faces
+      explicitly to text in the buffer.</p>
+
+      <p>If non-<code>nil</code>, the value should look like
+      this:</p>
+
+      <div class="example">
+        <pre class="example">
+(<var>keywords</var> [<var>keywords-only</var> [<var>case-fold</var>
  [<var>syntax-alist</var> <var>other-vars</var>&hellip;]]])
-</pre></div>
+</pre>
+      </div>
 
-<p>The first element, <var>keywords</var>, indirectly specifies the value of
-<code>font-lock-keywords</code> which directs search-based fontification.
-It can be a symbol, a variable or a function whose value is the list
-to use for <code>font-lock-keywords</code>.  It can also be a list of
-several such symbols, one for each possible level of fontification.
-The first symbol specifies the &lsquo;<samp>mode default</samp>&rsquo; level of
-fontification, the next symbol level 1 fontification, the next level 2,
-and so on.  The &lsquo;<samp>mode default</samp>&rsquo; level is normally the same as level
-1.  It is used when <code>font-lock-maximum-decoration</code> has a <code>nil</code>
-value.  See <a href="Levels-of-Font-Lock.html#Levels-of-Font-Lock">Levels of Font Lock</a>.
-</p>
-<p>The second element, <var>keywords-only</var>, specifies the value of the
-variable <code>font-lock-keywords-only</code>.  If this is omitted or
-<code>nil</code>, syntactic fontification (of strings and comments) is also
-performed.  If this is non-<code>nil</code>, syntactic fontification is not
-performed.  See <a href="Syntactic-Font-Lock.html#Syntactic-Font-Lock">Syntactic Font Lock</a>.
-</p>
-<p>The third element, <var>case-fold</var>, specifies the value of
-<code>font-lock-keywords-case-fold-search</code>.  If it is non-<code>nil</code>,
-Font Lock mode ignores case during search-based fontification.
-</p>
-<p>If the fourth element, <var>syntax-alist</var>, is non-<code>nil</code>, it should
-be a list of cons cells of the form <code>(<var>char-or-string</var>
-. <var>string</var>)</code>.  These are used to set up a syntax table for syntactic
-fontification; the resulting syntax table is stored in
-<code>font-lock-syntax-table</code>.  If <var>syntax-alist</var> is omitted or
-<code>nil</code>, syntactic fontification uses the syntax table returned by
-the <code>syntax-table</code> function.  See <a href="Syntax-Table-Functions.html#Syntax-Table-Functions">Syntax Table Functions</a>.
-</p>
-<p>All the remaining elements (if any) are collectively called
-<var>other-vars</var>.  Each of these elements should have the form
-<code>(<var>variable</var> . <var>value</var>)</code>&mdash;which means, make
-<var>variable</var> buffer-local and then set it to <var>value</var>.  You can
-use these <var>other-vars</var> to set other variables that affect
-fontification, aside from those you can control with the first five
-elements.  See <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>.
-</p></dd></dl>
+      <p>The first element, <var>keywords</var>, indirectly
+      specifies the value of <code>font-lock-keywords</code> which
+      directs search-based fontification. It can be a symbol, a
+      variable or a function whose value is the list to use for
+      <code>font-lock-keywords</code>. It can also be a list of
+      several such symbols, one for each possible level of
+      fontification. The first symbol specifies the
+      &lsquo;<samp>mode default</samp>&rsquo; level of
+      fontification, the next symbol level 1 fontification, the
+      next level 2, and so on. The &lsquo;<samp>mode
+      default</samp>&rsquo; level is normally the same as level 1.
+      It is used when <code>font-lock-maximum-decoration</code> has
+      a <code>nil</code> value. See <a href=
+      "Levels-of-Font-Lock.html#Levels-of-Font-Lock">Levels of Font
+      Lock</a>.</p>
 
-<p>If your mode fontifies text explicitly by adding
-<code>font-lock-face</code> properties, it can specify <code>(nil t)</code> for
-<code>font-lock-defaults</code> to turn off all automatic fontification.
-However, this is not required; it is possible to fontify some things
-using <code>font-lock-face</code> properties and set up automatic
-fontification for other parts of the text.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Search_002dbased-Fontification.html#Search_002dbased-Fontification" accesskey="n" rel="next">Search-based Fontification</a>, Up: <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel="up">Font Lock Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>The second element, <var>keywords-only</var>, specifies
+      the value of the variable
+      <code>font-lock-keywords-only</code>. If this is omitted or
+      <code>nil</code>, syntactic fontification (of strings and
+      comments) is also performed. If this is non-<code>nil</code>,
+      syntactic fontification is not performed. See <a href=
+      "Syntactic-Font-Lock.html#Syntactic-Font-Lock">Syntactic Font
+      Lock</a>.</p>
 
+      <p>The third element, <var>case-fold</var>, specifies the
+      value of <code>font-lock-keywords-case-fold-search</code>. If
+      it is non-<code>nil</code>, Font Lock mode ignores case
+      during search-based fontification.</p>
 
+      <p>If the fourth element, <var>syntax-alist</var>, is
+      non-<code>nil</code>, it should be a list of cons cells of
+      the form <code>(<var>char-or-string</var> .
+      <var>string</var>)</code>. These are used to set up a syntax
+      table for syntactic fontification; the resulting syntax table
+      is stored in <code>font-lock-syntax-table</code>. If
+      <var>syntax-alist</var> is omitted or <code>nil</code>,
+      syntactic fontification uses the syntax table returned by the
+      <code>syntax-table</code> function. See <a href=
+      "Syntax-Table-Functions.html#Syntax-Table-Functions">Syntax
+      Table Functions</a>.</p>
 
+      <p>All the remaining elements (if any) are collectively
+      called <var>other-vars</var>. Each of these elements should
+      have the form <code>(<var>variable</var> .
+      <var>value</var>)</code>&mdash;which means, make
+      <var>variable</var> buffer-local and then set it to
+      <var>value</var>. You can use these <var>other-vars</var> to
+      set other variables that affect fontification, aside from
+      those you can control with the first five elements. See
+      <a href=
+      "Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other
+      Font Lock Variables</a>.</p>
+    </dd>
+  </dl>
+
+  <p>If your mode fontifies text explicitly by adding
+  <code>font-lock-face</code> properties, it can specify <code>(nil
+  t)</code> for <code>font-lock-defaults</code> to turn off all
+  automatic fontification. However, this is not required; it is
+  possible to fontify some things using <code>font-lock-face</code>
+  properties and set up automatic fontification for other parts of
+  the text.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Search_002dbased-Fontification.html#Search_002dbased-Fontification"
+    accesskey="n" rel="next">Search-based Fontification</a>, Up:
+    <a href="Font-Lock-Mode.html#Font-Lock-Mode" accesskey="u" rel=
+    "up">Font Lock Mode</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

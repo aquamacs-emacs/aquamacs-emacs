@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,148 +20,212 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Rmail Deletion</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Rmail Deletion">
-<meta name="keywords" content="GNU Emacs Manual: Rmail Deletion">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Rmail.html#Rmail" rel="up" title="Rmail">
-<link href="Rmail-Inbox.html#Rmail-Inbox" rel="next" title="Rmail Inbox">
-<link href="Rmail-Motion.html#Rmail-Motion" rel="prev" title="Rmail Motion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Rmail Deletion</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Rmail Deletion" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Rmail Deletion" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Rmail.html#Rmail" rel="up" title="Rmail" />
+  <link href="Rmail-Inbox.html#Rmail-Inbox" rel="next" title=
+  "Rmail Inbox" />
+  <link href="Rmail-Motion.html#Rmail-Motion" rel="prev" title=
+  "Rmail Motion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Rmail-Deletion" id="Rmail-Deletion"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Rmail-Inbox.html#Rmail-Inbox" accesskey="n"
+    rel="next">Rmail Inbox</a>, Previous: <a href=
+    "Rmail-Motion.html#Rmail-Motion" accesskey="p" rel="prev">Rmail
+    Motion</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel=
+    "up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Deleting-Messages" id="Deleting-Messages"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Rmail-Deletion"></a>
-<div class="header">
-<p>
-Next: <a href="Rmail-Inbox.html#Rmail-Inbox" accesskey="n" rel="next">Rmail Inbox</a>, Previous: <a href="Rmail-Motion.html#Rmail-Motion" accesskey="p" rel="prev">Rmail Motion</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Deleting-Messages"></a>
-<h3 class="section">33.4 Deleting Messages</h3>
+  <h3 class="section">33.4 Deleting Messages</h3><a name=
+  "index-deletion-_0028Rmail_0029" id=
+  "index-deletion-_0028Rmail_0029"></a>
 
-<a name="index-deletion-_0028Rmail_0029"></a>
-<p>When you no longer need to keep a message, you can <em>delete</em> it.  This
-flags it as ignorable, and some Rmail commands pretend it is no longer
-present; but it still has its place in the Rmail file, and still has its
-message number.
-</p>
-<a name="index-expunging-_0028Rmail_0029"></a>
-<p><em>Expunging</em> the Rmail file actually removes the deleted messages.
-The remaining messages are renumbered consecutively.
-</p>
-<dl compact="compact">
-<dt><kbd>d</kbd></dt>
-<dd><p>Delete the current message, and move to the next nondeleted message
-(<code>rmail-delete-forward</code>).
-</p></dd>
-<dt><kbd>C-d</kbd></dt>
-<dd><p>Delete the current message, and move to the previous nondeleted
-message (<code>rmail-delete-backward</code>).
-</p></dd>
-<dt><kbd>u</kbd></dt>
-<dd><p>Undelete the current message, or move back to the previous deleted
-message and undelete it (<code>rmail-undelete-previous-message</code>).
-</p></dd>
-<dt><kbd>x</kbd></dt>
-<dd><p>Expunge the Rmail file (<code>rmail-expunge</code>).
-</p></dd>
-</dl>
+  <p>When you no longer need to keep a message, you can
+  <em>delete</em> it. This flags it as ignorable, and some Rmail
+  commands pretend it is no longer present; but it still has its
+  place in the Rmail file, and still has its message
+  number.</p><a name="index-expunging-_0028Rmail_0029" id=
+  "index-expunging-_0028Rmail_0029"></a>
 
-<a name="index-d-_0028Rmail_0029"></a>
-<a name="index-C_002dd-_0028Rmail_0029"></a>
-<a name="index-rmail_002ddelete_002dforward"></a>
-<a name="index-rmail_002ddelete_002dbackward"></a>
-<p>There are two Rmail commands for deleting messages.  Both delete the
-current message and select another.  <kbd>d</kbd>
-(<code>rmail-delete-forward</code>) moves to the following message, skipping
-messages already deleted, while <kbd>C-d</kbd> (<code>rmail-delete-backward</code>)
-moves to the previous nondeleted message.  If there is no nondeleted
-message to move to in the specified direction, the message that was just
-deleted remains current.  A numeric prefix argument serves as a repeat
-count, to allow deletion of several messages in a single command.  A
-negative argument reverses the meaning of <kbd>d</kbd> and <kbd>C-d</kbd>.
-</p>
-<a name="index-rmail_002ddelete_002dmessage_002dhook"></a>
-<p>Whenever Rmail deletes a message, it runs the hook
-<code>rmail-delete-message-hook</code>.  When the hook functions are invoked,
-the message has been marked deleted, but it is still the current message
-in the Rmail buffer.
-</p>
-<a name="index-undeletion-_0028Rmail_0029"></a>
-<a name="index-x-_0028Rmail_0029"></a>
-<a name="index-rmail_002dexpunge"></a>
-<a name="index-u-_0028Rmail_0029"></a>
-<a name="index-rmail_002dundelete_002dprevious_002dmessage"></a>
-<p>To make all the deleted messages finally vanish from the Rmail file,
-type <kbd>x</kbd> (<code>rmail-expunge</code>).  Until you do this, you can still
-<em>undelete</em> the deleted messages.  The undeletion command, <kbd>u</kbd>
-(<code>rmail-undelete-previous-message</code>), is designed to cancel the
-effect of a <kbd>d</kbd> command in most cases.  It undeletes the current
-message if the current message is deleted.  Otherwise it moves backward
-to previous messages until a deleted message is found, and undeletes
-that message.  A numeric prefix argument serves as a repeat count, to
-allow deletion of several messages in a single command.
-</p>
-<p>You can usually undo a <kbd>d</kbd> with a <kbd>u</kbd> because the <kbd>u</kbd>
-moves back to and undeletes the message that the <kbd>d</kbd> deleted.  But
-this does not work when the <kbd>d</kbd> skips a few already-deleted messages
-that follow the message being deleted; then the <kbd>u</kbd> command
-undeletes the last of the messages that were skipped.  There is no clean
-way to avoid this problem.  However, by repeating the <kbd>u</kbd> command,
-you can eventually get back to the message that you intend to
-undelete.  You can also select a particular deleted message with
-the <kbd>M-p</kbd> command, then type <kbd>u</kbd> to undelete it.
-</p>
-<p>A deleted message has the &lsquo;<samp>deleted</samp>&rsquo; attribute, and as a result
-&lsquo;<samp>deleted</samp>&rsquo; appears in the mode line when the current message is
-deleted.  In fact, deleting or undeleting a message is nothing more than
-adding or removing this attribute.  See <a href="Rmail-Attributes.html#Rmail-Attributes">Rmail Attributes</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Rmail-Inbox.html#Rmail-Inbox" accesskey="n" rel="next">Rmail Inbox</a>, Previous: <a href="Rmail-Motion.html#Rmail-Motion" accesskey="p" rel="prev">Rmail Motion</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p><em>Expunging</em> the Rmail file actually removes the deleted
+  messages. The remaining messages are renumbered
+  consecutively.</p>
 
+  <dl compact="compact">
+    <dt><kbd>d</kbd></dt>
 
+    <dd>
+      <p>Delete the current message, and move to the next
+      nondeleted message (<code>rmail-delete-forward</code>).</p>
+    </dd>
 
+    <dt><kbd>C-d</kbd></dt>
+
+    <dd>
+      <p>Delete the current message, and move to the previous
+      nondeleted message (<code>rmail-delete-backward</code>).</p>
+    </dd>
+
+    <dt><kbd>u</kbd></dt>
+
+    <dd>
+      <p>Undelete the current message, or move back to the previous
+      deleted message and undelete it
+      (<code>rmail-undelete-previous-message</code>).</p>
+    </dd>
+
+    <dt><kbd>x</kbd></dt>
+
+    <dd>
+      <p>Expunge the Rmail file (<code>rmail-expunge</code>).</p>
+    </dd>
+  </dl><a name="index-d-_0028Rmail_0029" id=
+  "index-d-_0028Rmail_0029"></a> <a name=
+  "index-C_002dd-_0028Rmail_0029" id=
+  "index-C_002dd-_0028Rmail_0029"></a> <a name=
+  "index-rmail_002ddelete_002dforward" id=
+  "index-rmail_002ddelete_002dforward"></a> <a name=
+  "index-rmail_002ddelete_002dbackward" id=
+  "index-rmail_002ddelete_002dbackward"></a>
+
+  <p>There are two Rmail commands for deleting messages. Both
+  delete the current message and select another. <kbd>d</kbd>
+  (<code>rmail-delete-forward</code>) moves to the following
+  message, skipping messages already deleted, while <kbd>C-d</kbd>
+  (<code>rmail-delete-backward</code>) moves to the previous
+  nondeleted message. If there is no nondeleted message to move to
+  in the specified direction, the message that was just deleted
+  remains current. A numeric prefix argument serves as a repeat
+  count, to allow deletion of several messages in a single command.
+  A negative argument reverses the meaning of <kbd>d</kbd> and
+  <kbd>C-d</kbd>.</p><a name=
+  "index-rmail_002ddelete_002dmessage_002dhook" id=
+  "index-rmail_002ddelete_002dmessage_002dhook"></a>
+
+  <p>Whenever Rmail deletes a message, it runs the hook
+  <code>rmail-delete-message-hook</code>. When the hook functions
+  are invoked, the message has been marked deleted, but it is still
+  the current message in the Rmail buffer.</p><a name=
+  "index-undeletion-_0028Rmail_0029" id=
+  "index-undeletion-_0028Rmail_0029"></a> <a name=
+  "index-x-_0028Rmail_0029" id="index-x-_0028Rmail_0029"></a>
+  <a name="index-rmail_002dexpunge" id=
+  "index-rmail_002dexpunge"></a> <a name="index-u-_0028Rmail_0029"
+  id="index-u-_0028Rmail_0029"></a> <a name=
+  "index-rmail_002dundelete_002dprevious_002dmessage" id=
+  "index-rmail_002dundelete_002dprevious_002dmessage"></a>
+
+  <p>To make all the deleted messages finally vanish from the Rmail
+  file, type <kbd>x</kbd> (<code>rmail-expunge</code>). Until you
+  do this, you can still <em>undelete</em> the deleted messages.
+  The undeletion command, <kbd>u</kbd>
+  (<code>rmail-undelete-previous-message</code>), is designed to
+  cancel the effect of a <kbd>d</kbd> command in most cases. It
+  undeletes the current message if the current message is deleted.
+  Otherwise it moves backward to previous messages until a deleted
+  message is found, and undeletes that message. A numeric prefix
+  argument serves as a repeat count, to allow deletion of several
+  messages in a single command.</p>
+
+  <p>You can usually undo a <kbd>d</kbd> with a <kbd>u</kbd>
+  because the <kbd>u</kbd> moves back to and undeletes the message
+  that the <kbd>d</kbd> deleted. But this does not work when the
+  <kbd>d</kbd> skips a few already-deleted messages that follow the
+  message being deleted; then the <kbd>u</kbd> command undeletes
+  the last of the messages that were skipped. There is no clean way
+  to avoid this problem. However, by repeating the <kbd>u</kbd>
+  command, you can eventually get back to the message that you
+  intend to undelete. You can also select a particular deleted
+  message with the <kbd>M-p</kbd> command, then type <kbd>u</kbd>
+  to undelete it.</p>
+
+  <p>A deleted message has the &lsquo;<samp>deleted</samp>&rsquo;
+  attribute, and as a result &lsquo;<samp>deleted</samp>&rsquo;
+  appears in the mode line when the current message is deleted. In
+  fact, deleting or undeleting a message is nothing more than
+  adding or removing this attribute. See <a href=
+  "Rmail-Attributes.html#Rmail-Attributes">Rmail
+  Attributes</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Rmail-Inbox.html#Rmail-Inbox" accesskey="n"
+    rel="next">Rmail Inbox</a>, Previous: <a href=
+    "Rmail-Motion.html#Rmail-Motion" accesskey="p" rel="prev">Rmail
+    Motion</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel=
+    "up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,143 +19,215 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Window System Selections</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Window System Selections">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Window System Selections">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Frames.html#Frames" rel="up" title="Frames">
-<link href="Drag-and-Drop.html#Drag-and-Drop" rel="next" title="Drag and Drop">
-<link href="Pointer-Shape.html#Pointer-Shape" rel="prev" title="Pointer Shape">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Window System
+  Selections</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Window System Selections" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Window System Selections" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Frames.html#Frames" rel="up" title="Frames" />
+  <link href="Drag-and-Drop.html#Drag-and-Drop" rel="next" title=
+  "Drag and Drop" />
+  <link href="Pointer-Shape.html#Pointer-Shape" rel="prev" title=
+  "Pointer Shape" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Window-System-Selections" id=
+  "Window-System-Selections"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Drag-and-Drop.html#Drag-and-Drop" accesskey=
+    "n" rel="next">Drag and Drop</a>, Previous: <a href=
+    "Pointer-Shape.html#Pointer-Shape" accesskey="p" rel=
+    "prev">Pointer Shape</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Window-System-Selections-1" id=
+  "Window-System-Selections-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Window-System-Selections"></a>
-<div class="header">
-<p>
-Next: <a href="Drag-and-Drop.html#Drag-and-Drop" accesskey="n" rel="next">Drag and Drop</a>, Previous: <a href="Pointer-Shape.html#Pointer-Shape" accesskey="p" rel="prev">Pointer Shape</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Window-System-Selections-1"></a>
-<h3 class="section">28.19 Window System Selections</h3>
-<a name="index-selection-_0028for-window-systems_0029"></a>
-<a name="index-clipboard"></a>
-<a name="index-primary-selection"></a>
-<a name="index-secondary-selection"></a>
+  <h3 class="section">28.19 Window System Selections</h3><a name=
+  "index-selection-_0028for-window-systems_0029" id=
+  "index-selection-_0028for-window-systems_0029"></a> <a name=
+  "index-clipboard" id="index-clipboard"></a> <a name=
+  "index-primary-selection" id="index-primary-selection"></a>
+  <a name="index-secondary-selection" id=
+  "index-secondary-selection"></a>
 
-<p>In window systems, such as X, data can be transferred between
-different applications by means of <em>selections</em>.  X defines an
-arbitrary number of <em>selection types</em>, each of which can store its
-own data; however, only three are commonly used: the <em>clipboard</em>,
-<em>primary selection</em>, and <em>secondary selection</em>.  Other window
-systems support only the clipboard.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Cut-and-Paste.html#Cut-and-Paste">Cut and
-Paste</a> in <cite>The GNU Emacs Manual</cite>, for Emacs commands that make use
-of these selections.  This section documents the low-level functions
-for reading and setting window-system selections.
-</p>
-<dl>
-<dt><a name="index-gui_002dset_002dselection"></a>Command: <strong>gui-set-selection</strong> <em>type data</em></dt>
-<dd><p>This function sets a window-system selection.  It takes two arguments:
-a selection type <var>type</var>, and the value to assign to it, <var>data</var>.
-</p>
-<p><var>type</var> should be a symbol; it is usually one of <code>PRIMARY</code>,
-<code>SECONDARY</code> or <code>CLIPBOARD</code>.  These are symbols with
-upper-case names, in accord with X Window System conventions.  If
-<var>type</var> is <code>nil</code>, that stands for <code>PRIMARY</code>.
-</p>
-<p>If <var>data</var> is <code>nil</code>, it means to clear out the selection.
-Otherwise, <var>data</var> may be a string, a symbol, an integer (or a cons
-of two integers or list of two integers), an overlay, or a cons of two
-markers pointing to the same buffer.  An overlay or a pair of markers
-stands for text in the overlay or between the markers.  The argument
-<var>data</var> may also be a vector of valid non-vector selection values.
-</p>
-<p>This function returns <var>data</var>.
-</p></dd></dl>
+  <p>In window systems, such as X, data can be transferred between
+  different applications by means of <em>selections</em>. X defines
+  an arbitrary number of <em>selection types</em>, each of which
+  can store its own data; however, only three are commonly used:
+  the <em>clipboard</em>, <em>primary selection</em>, and
+  <em>secondary selection</em>. Other window systems support only
+  the clipboard. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Cut-and-Paste.html#Cut-and-Paste">
+  Cut and Paste</a> in <cite>The GNU Emacs Manual</cite>, for Emacs
+  commands that make use of these selections. This section
+  documents the low-level functions for reading and setting
+  window-system selections.</p>
 
-<dl>
-<dt><a name="index-gui_002dget_002dselection"></a>Function: <strong>gui-get-selection</strong> <em>&amp;optional type data-type</em></dt>
-<dd><p>This function accesses selections set up by Emacs or by other
-programs.  It takes two optional arguments, <var>type</var> and
-<var>data-type</var>.  The default for <var>type</var>, the selection type, is
-<code>PRIMARY</code>.
-</p>
-<p>The <var>data-type</var> argument specifies the form of data conversion to
-use, to convert the raw data obtained from another program into Lisp
-data.  Meaningful values include <code>TEXT</code>, <code>STRING</code>,
-<code>UTF8_STRING</code>, <code>TARGETS</code>, <code>LENGTH</code>, <code>DELETE</code>,
-<code>FILE_NAME</code>, <code>CHARACTER_POSITION</code>, <code>NAME</code>,
-<code>LINE_NUMBER</code>, <code>COLUMN_NUMBER</code>, <code>OWNER_OS</code>,
-<code>HOST_NAME</code>, <code>USER</code>, <code>CLASS</code>, <code>ATOM</code>, and
-<code>INTEGER</code>.  (These are symbols with upper-case names in accord
-with X conventions.)  The default for <var>data-type</var> is
-<code>STRING</code>.  Window systems other than X usually support only a
-small subset of these types, in addition to <code>STRING</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-gui_002dset_002dselection" id=
+    "index-gui_002dset_002dselection"></a>Command:
+    <strong>gui-set-selection</strong> <em>type data</em></dt>
 
-<dl>
-<dt><a name="index-selection_002dcoding_002dsystem"></a>User Option: <strong>selection-coding-system</strong></dt>
-<dd><p>This variable specifies the coding system to use when reading and
-writing selections or the clipboard.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.  The default is <code>compound-text-with-extensions</code>, which
-converts to the text representation that X11 normally uses.
-</p></dd></dl>
+    <dd>
+      <p>This function sets a window-system selection. It takes two
+      arguments: a selection type <var>type</var>, and the value to
+      assign to it, <var>data</var>.</p>
 
-<a name="index-clipboard-support-_0028for-MS_002dWindows_0029"></a>
-<p>When Emacs runs on MS-Windows, it does not implement X selections in
-general, but it does support the clipboard.  <code>gui-get-selection</code>
-and <code>gui-set-selection</code> on MS-Windows support the text data type
-only; if the clipboard holds other types of data, Emacs treats the
-clipboard as empty.  The supported data type is <code>STRING</code>.
-</p>
-<p>For backward compatibility, there are obsolete aliases
-<code>x-get-selection</code> and <code>x-set-selection</code>, which were the
-names of <code>gui-get-selection</code> and <code>gui-set-selection</code> before
-Emacs 25.1.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Drag-and-Drop.html#Drag-and-Drop" accesskey="n" rel="next">Drag and Drop</a>, Previous: <a href="Pointer-Shape.html#Pointer-Shape" accesskey="p" rel="prev">Pointer Shape</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p><var>type</var> should be a symbol; it is usually one of
+      <code>PRIMARY</code>, <code>SECONDARY</code> or
+      <code>CLIPBOARD</code>. These are symbols with upper-case
+      names, in accord with X Window System conventions. If
+      <var>type</var> is <code>nil</code>, that stands for
+      <code>PRIMARY</code>.</p>
 
+      <p>If <var>data</var> is <code>nil</code>, it means to clear
+      out the selection. Otherwise, <var>data</var> may be a
+      string, a symbol, an integer (or a cons of two integers or
+      list of two integers), an overlay, or a cons of two markers
+      pointing to the same buffer. An overlay or a pair of markers
+      stands for text in the overlay or between the markers. The
+      argument <var>data</var> may also be a vector of valid
+      non-vector selection values.</p>
 
+      <p>This function returns <var>data</var>.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-gui_002dget_002dselection" id=
+    "index-gui_002dget_002dselection"></a>Function:
+    <strong>gui-get-selection</strong> <em>&amp;optional type
+    data-type</em></dt>
+
+    <dd>
+      <p>This function accesses selections set up by Emacs or by
+      other programs. It takes two optional arguments,
+      <var>type</var> and <var>data-type</var>. The default for
+      <var>type</var>, the selection type, is
+      <code>PRIMARY</code>.</p>
+
+      <p>The <var>data-type</var> argument specifies the form of
+      data conversion to use, to convert the raw data obtained from
+      another program into Lisp data. Meaningful values include
+      <code>TEXT</code>, <code>STRING</code>,
+      <code>UTF8_STRING</code>, <code>TARGETS</code>,
+      <code>LENGTH</code>, <code>DELETE</code>,
+      <code>FILE_NAME</code>, <code>CHARACTER_POSITION</code>,
+      <code>NAME</code>, <code>LINE_NUMBER</code>,
+      <code>COLUMN_NUMBER</code>, <code>OWNER_OS</code>,
+      <code>HOST_NAME</code>, <code>USER</code>,
+      <code>CLASS</code>, <code>ATOM</code>, and
+      <code>INTEGER</code>. (These are symbols with upper-case
+      names in accord with X conventions.) The default for
+      <var>data-type</var> is <code>STRING</code>. Window systems
+      other than X usually support only a small subset of these
+      types, in addition to <code>STRING</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-selection_002dcoding_002dsystem" id=
+    "index-selection_002dcoding_002dsystem"></a>User Option:
+    <strong>selection-coding-system</strong></dt>
+
+    <dd>
+      <p>This variable specifies the coding system to use when
+      reading and writing selections or the clipboard. See <a href=
+      "Coding-Systems.html#Coding-Systems">Coding Systems</a>. The
+      default is <code>compound-text-with-extensions</code>, which
+      converts to the text representation that X11 normally
+      uses.</p>
+    </dd>
+  </dl><a name=
+  "index-clipboard-support-_0028for-MS_002dWindows_0029" id=
+  "index-clipboard-support-_0028for-MS_002dWindows_0029"></a>
+
+  <p>When Emacs runs on MS-Windows, it does not implement X
+  selections in general, but it does support the clipboard.
+  <code>gui-get-selection</code> and <code>gui-set-selection</code>
+  on MS-Windows support the text data type only; if the clipboard
+  holds other types of data, Emacs treats the clipboard as empty.
+  The supported data type is <code>STRING</code>.</p>
+
+  <p>For backward compatibility, there are obsolete aliases
+  <code>x-get-selection</code> and <code>x-set-selection</code>,
+  which were the names of <code>gui-get-selection</code> and
+  <code>gui-set-selection</code> before Emacs 25.1.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Drag-and-Drop.html#Drag-and-Drop" accesskey=
+    "n" rel="next">Drag and Drop</a>, Previous: <a href=
+    "Pointer-Shape.html#Pointer-Shape" accesskey="p" rel=
+    "prev">Pointer Shape</a>, Up: <a href="Frames.html#Frames"
+    accesskey="u" rel="up">Frames</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

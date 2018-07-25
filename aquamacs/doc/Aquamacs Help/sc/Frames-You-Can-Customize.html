@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Frames You Can Customize - Supercite User's Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="Supercite User's Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine" title="Configuring the Citation Engine">
-<link rel="prev" href="Using-Regi.html#Using-Regi" title="Using Regi">
-<link rel="next" href="Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands" title="Post-yank Formatting Commands">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Frames You Can Customize - Supercite User's Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="Supercite User's Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine"
+  title="Configuring the Citation Engine" />
+  <link rel="prev" href="Using-Regi.html#Using-Regi" title=
+  "Using Regi" />
+  <link rel="next" href=
+  "Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands"
+  title="Post-yank Formatting Commands" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This document describes Supercite, an Emacs package for citing and
 attributing replies to mail and news messages.
 
@@ -28,8 +39,10 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -39,69 +52,103 @@ Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Frames-You-Can-Customize"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands">Post-yank Formatting Commands</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-Regi.html#Using-Regi">Using Regi</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine">Configuring the Citation Engine</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Frames-You-Can-Customize" id=
+    "Frames-You-Can-Customize"></a>
 
-   <p><a name="index-sc_002dnuke_002dmail_002dheader-217"></a>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Post_002dyank-Formatting-Commands.html#Post_002dyank-Formatting-Commands">Post-yank
+    Formatting Commands</a>, Previous:&nbsp;<a rel="previous"
+    accesskey="p" href="Using-Regi.html#Using-Regi">Using Regi</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine">Configuring
+    the Citation Engine</a></p>
+    <hr />
+  </div>
 
-<h3 class="section">8.2 Frames You Can Customize</h3>
+  <p><a name="index-sc_002dnuke_002dmail_002dheader-217" id=
+  "index-sc_002dnuke_002dmail_002dheader-217"></a></p>
 
-<p>As mentioned earlier, Supercite uses various frames to perform
-certain jobs such as mail header information extraction and mail header
-nuking.  However, these frames are not available for you to customize,
-except through abstract interfaces such as <code>sc-nuke-mail-header</code>,
-et al.
+  <h3 class="section">8.2 Frames You Can Customize</h3>
 
-   <p><a name="index-sc_002ddefault_002dcite_002dframe-218"></a>However, the citation frames Supercite uses provide a lot of customizing
-power and are thus available to you to change to suit your needs.  The
-workhorse of citation is the frame contained in the variable
-<code>sc-default-cite-frame</code>.  This frame recognizes many situations,
-such as blank lines, which it interprets as paragraph separators.  It
-also recognizes previously cited nested and non-nested citations in the
-original message.  By default it will coerce non-nested citations into
-your preferred citation style, and it will add a level of citation to
-nested citations.  It will also simply cite uncited lines in your
-preferred style.
+  <p>As mentioned earlier, Supercite uses various frames to perform
+  certain jobs such as mail header information extraction and mail
+  header nuking. However, these frames are not available for you to
+  customize, except through abstract interfaces such as
+  <code>sc-nuke-mail-header</code>, et al.</p>
 
-   <p><a name="index-unciting-219"></a><a name="index-reciting-220"></a><a name="index-sc_002ddefault_002duncite_002dframe-221"></a><a name="index-sc_002ddefault_002drecite_002dframe-222"></a>In a similar vein, there are default frames for <dfn>unciting</dfn> and
-<dfn>reciting</dfn>, contained in the variables
-<code>sc-default-uncite-frame</code> and <code>sc-default-recite-frame</code>
-respectively.
+  <p><a name="index-sc_002ddefault_002dcite_002dframe-218" id=
+  "index-sc_002ddefault_002dcite_002dframe-218"></a>However, the
+  citation frames Supercite uses provide a lot of customizing power
+  and are thus available to you to change to suit your needs. The
+  workhorse of citation is the frame contained in the variable
+  <code>sc-default-cite-frame</code>. This frame recognizes many
+  situations, such as blank lines, which it interprets as paragraph
+  separators. It also recognizes previously cited nested and
+  non-nested citations in the original message. By default it will
+  coerce non-nested citations into your preferred citation style,
+  and it will add a level of citation to nested citations. It will
+  also simply cite uncited lines in your preferred style.</p>
 
-   <p>As mentioned earlier (see <a href="Recognizing-Citations.html#Recognizing-Citations">Recognizing Citations</a>), citations are
-recognized through the values of the regular expressions
-<code>sc-citation-root-regexp</code>, et al.  To recognize odd styles, you
-could modify these variables, or you could modify the default citing
-frame.  Alternatively, you could set up association lists of frames for
-recognizing specific alternative forms.
+  <p><a name="index-unciting-219" id=
+  "index-unciting-219"></a><a name="index-reciting-220" id=
+  "index-reciting-220"></a><a name=
+  "index-sc_002ddefault_002duncite_002dframe-221" id=
+  "index-sc_002ddefault_002duncite_002dframe-221"></a><a name=
+  "index-sc_002ddefault_002drecite_002dframe-222" id=
+  "index-sc_002ddefault_002drecite_002dframe-222"></a>In a similar
+  vein, there are default frames for <dfn>unciting</dfn> and
+  <dfn>reciting</dfn>, contained in the variables
+  <code>sc-default-uncite-frame</code> and
+  <code>sc-default-recite-frame</code> respectively.</p>
 
-   <p><a name="index-sc_002dcite_002dframe_002dalist-223"></a><a name="index-sc_002duncite_002dframe_002dalist-224"></a><a name="index-sc_002drecite_002dframe_002dalist-225"></a>For each of the actions &ndash; citing, unciting, and reciting &ndash; an alist is
-consulted to find the frame to use (<code>sc-cite-frame-alist</code>,
-<code>sc-uncite-frame-alist</code>, and <code>sc-recite-frame-alist</code>
-respectively).  These frames can contain alists of the form:
+  <p>As mentioned earlier (see <a href=
+  "Recognizing-Citations.html#Recognizing-Citations">Recognizing
+  Citations</a>), citations are recognized through the values of
+  the regular expressions <code>sc-citation-root-regexp</code>, et
+  al. To recognize odd styles, you could modify these variables, or
+  you could modify the default citing frame. Alternatively, you
+  could set up association lists of frames for recognizing specific
+  alternative forms.</p>
 
-<pre class="example">     ((<var>infokey</var> (<var>regexp</var> . <var>frame</var>) (<var>regexp</var> . <var>frame</var>) ...)
+  <p><a name="index-sc_002dcite_002dframe_002dalist-223" id=
+  "index-sc_002dcite_002dframe_002dalist-223"></a><a name=
+  "index-sc_002duncite_002dframe_002dalist-224" id=
+  "index-sc_002duncite_002dframe_002dalist-224"></a><a name=
+  "index-sc_002drecite_002dframe_002dalist-225" id=
+  "index-sc_002drecite_002dframe_002dalist-225"></a>For each of the
+  actions &ndash; citing, unciting, and reciting &ndash; an alist
+  is consulted to find the frame to use
+  (<code>sc-cite-frame-alist</code>,
+  <code>sc-uncite-frame-alist</code>, and
+  <code>sc-recite-frame-alist</code> respectively). These frames
+  can contain alists of the form:</p>
+  <pre class="example">
+     ((<var>infokey</var> (<var>regexp</var> . <var>frame</var>) (<var>regexp</var> . <var>frame</var>) ...)
       (<var>infokey</var> (<var>regexp</var> . <var>frame</var>) (<var>regexp</var> . <var>frame</var>) ...)
       (...))
 </pre>
-   <p><a name="index-sc_002dmail_002dfield-226"></a><a name="index-string_002dmatch-227"></a>Where <var>infokey</var> is a key suitable for <code>sc-mail-field</code>,
-<var>regexp</var> is a regular expression which is <code>string-match</code>'d
-against the value of the <code>sc-mail-field</code> key, and <var>frame</var> is
-the frame to use if a match occurred.  <var>frame</var> can be a variable
-containing a frame or a frame in-lined.
 
-   <p>When Supercite is about to cite, uncite, or recite a region, it consults
-the appropriate alist and attempts to find a frame to use.  If one
-is not found from the alist, then the appropriate default frame is used.
+  <p><a name="index-sc_002dmail_002dfield-226" id=
+  "index-sc_002dmail_002dfield-226"></a><a name=
+  "index-string_002dmatch-227" id=
+  "index-string_002dmatch-227"></a>Where <var>infokey</var> is a
+  key suitable for <code>sc-mail-field</code>, <var>regexp</var> is
+  a regular expression which is <code>string-match</code>'d against
+  the value of the <code>sc-mail-field</code> key, and
+  <var>frame</var> is the frame to use if a match occurred.
+  <var>frame</var> can be a variable containing a frame or a frame
+  in-lined.</p>
 
-   </body></html>
-
+  <p>When Supercite is about to cite, uncite, or recite a region,
+  it consults the appropriate alist and attempts to find a frame to
+  use. If one is not found from the alist, then the appropriate
+  default frame is used.</p>
+</body>
+</html>

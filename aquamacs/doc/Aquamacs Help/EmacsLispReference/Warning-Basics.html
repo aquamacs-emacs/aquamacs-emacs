@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,140 +19,204 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Warning Basics</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Warning Basics">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Warning Basics">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Warnings.html#Warnings" rel="up" title="Warnings">
-<link href="Warning-Variables.html#Warning-Variables" rel="next" title="Warning Variables">
-<link href="Warnings.html#Warnings" rel="prev" title="Warnings">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Warning Basics</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Warning Basics" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Warning Basics" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Warnings.html#Warnings" rel="up" title="Warnings" />
+  <link href="Warning-Variables.html#Warning-Variables" rel="next"
+  title="Warning Variables" />
+  <link href="Warnings.html#Warnings" rel="prev" title=
+  "Warnings" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Warning-Basics" id="Warning-Basics"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Warning-Variables.html#Warning-Variables"
+    accesskey="n" rel="next">Warning Variables</a>, Up: <a href=
+    "Warnings.html#Warnings" accesskey="u" rel="up">Warnings</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Warning-Basics-1" id="Warning-Basics-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Warning-Basics"></a>
-<div class="header">
-<p>
-Next: <a href="Warning-Variables.html#Warning-Variables" accesskey="n" rel="next">Warning Variables</a>, Up: <a href="Warnings.html#Warnings" accesskey="u" rel="up">Warnings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Warning-Basics-1"></a>
-<h4 class="subsection">37.5.1 Warning Basics</h4>
-<a name="index-severity-level"></a>
+  <h4 class="subsection">37.5.1 Warning Basics</h4><a name=
+  "index-severity-level" id="index-severity-level"></a>
 
-<p>Every warning has a textual message, which explains the problem for
-the user, and a <em>severity level</em> which is a symbol.  Here are the
-possible severity levels, in order of decreasing severity, and their
-meanings:
-</p>
-<dl compact="compact">
-<dt><code>:emergency</code></dt>
-<dd><p>A problem that will seriously impair Emacs operation soon
-if you do not attend to it promptly.
-</p></dd>
-<dt><code>:error</code></dt>
-<dd><p>A report of data or circumstances that are inherently wrong.
-</p></dd>
-<dt><code>:warning</code></dt>
-<dd><p>A report of data or circumstances that are not inherently wrong, but
-raise suspicion of a possible problem.
-</p></dd>
-<dt><code>:debug</code></dt>
-<dd><p>A report of information that may be useful if you are debugging.
-</p></dd>
-</dl>
+  <p>Every warning has a textual message, which explains the
+  problem for the user, and a <em>severity level</em> which is a
+  symbol. Here are the possible severity levels, in order of
+  decreasing severity, and their meanings:</p>
 
-<p>When your program encounters invalid input data, it can either
-signal a Lisp error by calling <code>error</code> or <code>signal</code> or report
-a warning with severity <code>:error</code>.  Signaling a Lisp error is the
-easiest thing to do, but it means the program cannot continue
-processing.  If you want to take the trouble to implement a way to
-continue processing despite the bad data, then reporting a warning of
-severity <code>:error</code> is the right way to inform the user of the
-problem.  For instance, the Emacs Lisp byte compiler can report an
-error that way and continue compiling other functions.  (If the
-program signals a Lisp error and then handles it with
-<code>condition-case</code>, the user won&rsquo;t see the error message; it could
-show the message to the user by reporting it as a warning.)
-</p>
-<a name="index-warning-type"></a>
-<p>Each warning has a <em>warning type</em> to classify it.  The type is a
-list of symbols.  The first symbol should be the custom group that you
-use for the program&rsquo;s user options.  For example, byte compiler
-warnings use the warning type <code>(bytecomp)</code>.  You can also
-subcategorize the warnings, if you wish, by using more symbols in the
-list.
-</p>
-<dl>
-<dt><a name="index-display_002dwarning"></a>Function: <strong>display-warning</strong> <em>type message &amp;optional level buffer-name</em></dt>
-<dd><p>This function reports a warning, using <var>message</var> as the message
-and <var>type</var> as the warning type.  <var>level</var> should be the
-severity level, with <code>:warning</code> being the default.
-</p>
-<p><var>buffer-name</var>, if non-<code>nil</code>, specifies the name of the buffer
-for logging the warning.  By default, it is <samp>*Warnings*</samp>.
-</p></dd></dl>
+  <dl compact="compact">
+    <dt><code>:emergency</code></dt>
 
-<dl>
-<dt><a name="index-lwarn"></a>Function: <strong>lwarn</strong> <em>type level message &amp;rest args</em></dt>
-<dd><p>This function reports a warning using the value of <code>(format-message
-<var>message</var> <var>args</var>...)</code> as the message in the <samp>*Warnings*</samp>
-buffer.  In other respects it is equivalent to <code>display-warning</code>.
-</p></dd></dl>
+    <dd>
+      <p>A problem that will seriously impair Emacs operation soon
+      if you do not attend to it promptly.</p>
+    </dd>
 
-<dl>
-<dt><a name="index-warn"></a>Function: <strong>warn</strong> <em>message &amp;rest args</em></dt>
-<dd><p>This function reports a warning using the value of <code>(format-message
-<var>message</var> <var>args</var>...)</code> as the message, <code>(emacs)</code> as the
-type, and <code>:warning</code> as the severity level.  It exists for
-compatibility only; we recommend not using it, because you should
-specify a specific warning type.
-</p></dd></dl>
+    <dt><code>:error</code></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Warning-Variables.html#Warning-Variables" accesskey="n" rel="next">Warning Variables</a>, Up: <a href="Warnings.html#Warnings" accesskey="u" rel="up">Warnings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>A report of data or circumstances that are inherently
+      wrong.</p>
+    </dd>
 
+    <dt><code>:warning</code></dt>
 
+    <dd>
+      <p>A report of data or circumstances that are not inherently
+      wrong, but raise suspicion of a possible problem.</p>
+    </dd>
 
+    <dt><code>:debug</code></dt>
+
+    <dd>
+      <p>A report of information that may be useful if you are
+      debugging.</p>
+    </dd>
+  </dl>
+
+  <p>When your program encounters invalid input data, it can either
+  signal a Lisp error by calling <code>error</code> or
+  <code>signal</code> or report a warning with severity
+  <code>:error</code>. Signaling a Lisp error is the easiest thing
+  to do, but it means the program cannot continue processing. If
+  you want to take the trouble to implement a way to continue
+  processing despite the bad data, then reporting a warning of
+  severity <code>:error</code> is the right way to inform the user
+  of the problem. For instance, the Emacs Lisp byte compiler can
+  report an error that way and continue compiling other functions.
+  (If the program signals a Lisp error and then handles it with
+  <code>condition-case</code>, the user won&rsquo;t see the error
+  message; it could show the message to the user by reporting it as
+  a warning.)</p><a name="index-warning-type" id=
+  "index-warning-type"></a>
+
+  <p>Each warning has a <em>warning type</em> to classify it. The
+  type is a list of symbols. The first symbol should be the custom
+  group that you use for the program&rsquo;s user options. For
+  example, byte compiler warnings use the warning type
+  <code>(bytecomp)</code>. You can also subcategorize the warnings,
+  if you wish, by using more symbols in the list.</p>
+
+  <dl>
+    <dt><a name="index-display_002dwarning" id=
+    "index-display_002dwarning"></a>Function:
+    <strong>display-warning</strong> <em>type message &amp;optional
+    level buffer-name</em></dt>
+
+    <dd>
+      <p>This function reports a warning, using <var>message</var>
+      as the message and <var>type</var> as the warning type.
+      <var>level</var> should be the severity level, with
+      <code>:warning</code> being the default.</p>
+
+      <p><var>buffer-name</var>, if non-<code>nil</code>, specifies
+      the name of the buffer for logging the warning. By default,
+      it is <samp>*Warnings*</samp>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-lwarn" id="index-lwarn"></a>Function:
+    <strong>lwarn</strong> <em>type level message &amp;rest
+    args</em></dt>
+
+    <dd>
+      <p>This function reports a warning using the value of
+      <code>(format-message <var>message</var>
+      <var>args</var>...)</code> as the message in the
+      <samp>*Warnings*</samp> buffer. In other respects it is
+      equivalent to <code>display-warning</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-warn" id="index-warn"></a>Function:
+    <strong>warn</strong> <em>message &amp;rest args</em></dt>
+
+    <dd>
+      <p>This function reports a warning using the value of
+      <code>(format-message <var>message</var>
+      <var>args</var>...)</code> as the message,
+      <code>(emacs)</code> as the type, and <code>:warning</code>
+      as the severity level. It exists for compatibility only; we
+      recommend not using it, because you should specify a specific
+      warning type.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Warning-Variables.html#Warning-Variables"
+    accesskey="n" rel="next">Warning Variables</a>, Up: <a href=
+    "Warnings.html#Warnings" accesskey="u" rel="up">Warnings</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

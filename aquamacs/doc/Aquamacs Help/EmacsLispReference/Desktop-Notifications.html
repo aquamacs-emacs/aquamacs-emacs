@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,420 +19,648 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Desktop Notifications</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Desktop Notifications">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Desktop Notifications">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="System-Interface.html#System-Interface" rel="up" title="System Interface">
-<link href="File-Notifications.html#File-Notifications" rel="next" title="File Notifications">
-<link href="Session-Management.html#Session-Management" rel="prev" title="Session Management">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Desktop
+  Notifications</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Desktop Notifications" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Desktop Notifications" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="System-Interface.html#System-Interface" rel="up"
+  title="System Interface" />
+  <link href="File-Notifications.html#File-Notifications" rel=
+  "next" title="File Notifications" />
+  <link href="Session-Management.html#Session-Management" rel=
+  "prev" title="Session Management" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Desktop-Notifications" id="Desktop-Notifications"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="File-Notifications.html#File-Notifications"
+    accesskey="n" rel="next">File Notifications</a>, Previous:
+    <a href="Session-Management.html#Session-Management" accesskey=
+    "p" rel="prev">Session Management</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Desktop-Notifications-1" id=
+  "Desktop-Notifications-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Desktop-Notifications"></a>
-<div class="header">
-<p>
-Next: <a href="File-Notifications.html#File-Notifications" accesskey="n" rel="next">File Notifications</a>, Previous: <a href="Session-Management.html#Session-Management" accesskey="p" rel="prev">Session Management</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Desktop-Notifications-1"></a>
-<h3 class="section">38.19 Desktop Notifications</h3>
-<a name="index-desktop-notifications"></a>
-<a name="index-notifications_002c-on-desktop"></a>
+  <h3 class="section">38.19 Desktop Notifications</h3><a name=
+  "index-desktop-notifications" id=
+  "index-desktop-notifications"></a> <a name=
+  "index-notifications_002c-on-desktop" id=
+  "index-notifications_002c-on-desktop"></a>
 
-<p>Emacs is able to send <em>notifications</em> on systems that support the
-freedesktop.org Desktop Notifications Specification and on MS-Windows.
-In order to use this functionality on Posix hosts, Emacs must have
-been compiled with D-Bus support, and the <code>notifications</code> library
-must be loaded.  See <a href="../dbus/index.html#Top">D-Bus</a> in <cite>D-Bus integration in Emacs</cite>.
-The following function is supported when D-Bus support is available:
-</p>
-<dl>
-<dt><a name="index-notifications_002dnotify"></a>Function: <strong>notifications-notify</strong> <em>&amp;rest params</em></dt>
-<dd><p>This function sends a notification to the desktop via D-Bus,
-consisting of the parameters specified by the <var>params</var> arguments.
-These arguments should consist of alternating keyword and value pairs.
-The supported keywords and values are as follows:
-</p>
-<dl compact="compact">
-<dt><code>:bus <var>bus</var></code></dt>
-<dd><p>The D-Bus bus.  This argument is needed only if a bus other than
-<code>:session</code> shall be used.
-</p>
-</dd>
-<dt><code>:title <var>title</var></code></dt>
-<dd><p>The notification title.
-</p>
-</dd>
-<dt><code>:body <var>text</var></code></dt>
-<dd><p>The notification body text.  Depending on the implementation of the
-notification server, the text could contain HTML markups, like
-&lsquo;<samp>&quot;&lt;b&gt;bold text&lt;/b&gt;&quot;</samp>&rsquo;, hyperlinks, or images.  Special HTML
-characters must be encoded, as &lsquo;<samp>&quot;Contact
-&amp;lt;postmaster@localhost&amp;gt;!&quot;</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>:app-name <var>name</var></code></dt>
-<dd><p>The name of the application sending the notification.  The default is
-<code>notifications-application-name</code>.
-</p>
-</dd>
-<dt><code>:replaces-id <var>id</var></code></dt>
-<dd><p>The notification <var>id</var> that this notification replaces.  <var>id</var>
-must be the result of a previous <code>notifications-notify</code> call.
-</p>
-</dd>
-<dt><code>:app-icon <var>icon-file</var></code></dt>
-<dd><p>The file name of the notification icon.  If set to <code>nil</code>, no icon
-is displayed.  The default is <code>notifications-application-icon</code>.
-</p>
-</dd>
-<dt><code>:actions (<var>key</var> <var>title</var> <var>key</var> <var>title</var> ...)</code></dt>
-<dd><p>A list of actions to be applied.  <var>key</var> and <var>title</var> are both
-strings.  The default action (usually invoked by clicking the
-notification) should have a key named &lsquo;<samp>&quot;default&quot;</samp>&rsquo;.  The title can
-be anything, though implementations are free not to display it.
-</p>
-</dd>
-<dt><code>:timeout <var>timeout</var></code></dt>
-<dd><p>The timeout time in milliseconds since the display of the notification
-at which the notification should automatically close.  If −1, the
-notification&rsquo;s expiration time is dependent on the notification
-server&rsquo;s settings, and may vary for the type of notification.  If 0,
-the notification never expires.  Default value is −1.
-</p>
-</dd>
-<dt><code>:urgency <var>urgency</var></code></dt>
-<dd><p>The urgency level.  It can be <code>low</code>, <code>normal</code>, or <code>critical</code>.
-</p>
-</dd>
-<dt><code>:action-items</code></dt>
-<dd><p>When this keyword is given, the <var>title</var> string of the actions is
-interpreted as icon name.
-</p>
-</dd>
-<dt><code>:category <var>category</var></code></dt>
-<dd><p>The type of notification this is, a string.  See the
-<a href="http://developer.gnome.org/notification-spec/#categories">Desktop Notifications Specification</a> for a list of standard
-categories.
-</p>
-</dd>
-<dt><code>:desktop-entry <var>filename</var></code></dt>
-<dd><p>This specifies the name of the desktop filename representing the
-calling program, like &lsquo;<samp>&quot;emacs&quot;</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>:image-data (<var>width</var> <var>height</var> <var>rowstride</var> <var>has-alpha</var> <var>bits</var> <var>channels</var> <var>data</var>)</code></dt>
-<dd><p>This is a raw data image format that describes the width, height,
-rowstride, whether there is an alpha channel, bits per sample,
-channels and image data, respectively.
-</p>
-</dd>
-<dt><code>:image-path <var>path</var></code></dt>
-<dd><p>This is represented either as a URI (&lsquo;<samp>file://</samp>&rsquo; is the only URI
-schema supported right now) or a name in a freedesktop.org-compliant
-icon theme from &lsquo;<samp>$XDG_DATA_DIRS/icons</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>:sound-file <var>filename</var></code></dt>
-<dd><p>The path to a sound file to play when the notification pops up.
-</p>
-</dd>
-<dt><code>:sound-name <var>name</var></code></dt>
-<dd><p>A themable named sound from the freedesktop.org sound naming
-specification from &lsquo;<samp>$XDG_DATA_DIRS/sounds</samp>&rsquo;, to play when the
-notification pops up.  Similar to the icon name, only for sounds.  An
-example would be &lsquo;<samp>&quot;message-new-instant&quot;</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>:suppress-sound</code></dt>
-<dd><p>Causes the server to suppress playing any sounds, if it has that
-ability.
-</p>
-</dd>
-<dt><code>:resident</code></dt>
-<dd><p>When set the server will not automatically remove the notification
-when an action has been invoked.  The notification will remain resident
-in the server until it is explicitly removed by the user or by the
-sender.  This hint is likely only useful when the server has the
-<code>:persistence</code> capability.
-</p>
-</dd>
-<dt><code>:transient</code></dt>
-<dd><p>When set the server will treat the notification as transient and
-by-pass the server&rsquo;s persistence capability, if it should exist.
-</p>
-</dd>
-<dt><code>:x <var>position</var></code></dt>
-<dt><code>:y <var>position</var></code></dt>
-<dd><p>Specifies the X, Y location on the screen that the
-notification should point to.  Both arguments must be used together.
-</p>
-</dd>
-<dt><code>:on-action <var>function</var></code></dt>
-<dd><p>Function to call when an action is invoked.  The notification <var>id</var>
-and the <var>key</var> of the action are passed as arguments to the
-function.
-</p>
-</dd>
-<dt><code>:on-close <var>function</var></code></dt>
-<dd><p>Function to call when the notification has been closed by timeout or
-by the user.  The function receive the notification <var>id</var> and the closing
-<var>reason</var> as arguments:
-</p>
-<ul>
-<li> <code>expired</code> if the notification has expired
-</li><li> <code>dismissed</code> if the notification was dismissed by the user
-</li><li> <code>close-notification</code> if the notification was closed by a call to
-<code>notifications-close-notification</code>
-</li><li> <code>undefined</code> if the notification server hasn&rsquo;t provided a reason
-</li></ul>
-</dd>
-</dl>
+  <p>Emacs is able to send <em>notifications</em> on systems that
+  support the freedesktop.org Desktop Notifications Specification
+  and on MS-Windows. In order to use this functionality on Posix
+  hosts, Emacs must have been compiled with D-Bus support, and the
+  <code>notifications</code> library must be loaded. See <a href=
+  "../dbus/index.html#Top">D-Bus</a> in <cite>D-Bus integration in
+  Emacs</cite>. The following function is supported when D-Bus
+  support is available:</p>
 
-<p>Which parameters are accepted by the notification server can be
-checked via <code>notifications-get-capabilities</code>.
-</p>
-<p>This function returns a notification id, an integer, which can be used
-to manipulate the notification item with
-<code>notifications-close-notification</code> or the <code>:replaces-id</code>
-argument of another <code>notifications-notify</code> call.  For example:
-</p>
-<div class="example">
-<pre class="example">(defun my-on-action-function (id key)
-  (message &quot;Message %d, key \&quot;%s\&quot; pressed&quot; id key))
+  <dl>
+    <dt><a name="index-notifications_002dnotify" id=
+    "index-notifications_002dnotify"></a>Function:
+    <strong>notifications-notify</strong> <em>&amp;rest
+    params</em></dt>
+
+    <dd>
+      <p>This function sends a notification to the desktop via
+      D-Bus, consisting of the parameters specified by the
+      <var>params</var> arguments. These arguments should consist
+      of alternating keyword and value pairs. The supported
+      keywords and values are as follows:</p>
+
+      <dl compact="compact">
+        <dt><code>:bus <var>bus</var></code></dt>
+
+        <dd>
+          <p>The D-Bus bus. This argument is needed only if a bus
+          other than <code>:session</code> shall be used.</p>
+        </dd>
+
+        <dt><code>:title <var>title</var></code></dt>
+
+        <dd>
+          <p>The notification title.</p>
+        </dd>
+
+        <dt><code>:body <var>text</var></code></dt>
+
+        <dd>
+          <p>The notification body text. Depending on the
+          implementation of the notification server, the text could
+          contain HTML markups, like &lsquo;<samp>"&lt;b&gt;bold
+          text&lt;/b&gt;"</samp>&rsquo;, hyperlinks, or images.
+          Special HTML characters must be encoded, as
+          &lsquo;<samp>"Contact
+          &amp;lt;postmaster@localhost&amp;gt;!"</samp>&rsquo;.</p>
+        </dd>
+
+        <dt><code>:app-name <var>name</var></code></dt>
+
+        <dd>
+          <p>The name of the application sending the notification.
+          The default is
+          <code>notifications-application-name</code>.</p>
+        </dd>
+
+        <dt><code>:replaces-id <var>id</var></code></dt>
+
+        <dd>
+          <p>The notification <var>id</var> that this notification
+          replaces. <var>id</var> must be the result of a previous
+          <code>notifications-notify</code> call.</p>
+        </dd>
+
+        <dt><code>:app-icon <var>icon-file</var></code></dt>
+
+        <dd>
+          <p>The file name of the notification icon. If set to
+          <code>nil</code>, no icon is displayed. The default is
+          <code>notifications-application-icon</code>.</p>
+        </dd>
+
+        <dt><code>:actions (<var>key</var> <var>title</var>
+        <var>key</var> <var>title</var> ...)</code></dt>
+
+        <dd>
+          <p>A list of actions to be applied. <var>key</var> and
+          <var>title</var> are both strings. The default action
+          (usually invoked by clicking the notification) should
+          have a key named &lsquo;<samp>"default"</samp>&rsquo;.
+          The title can be anything, though implementations are
+          free not to display it.</p>
+        </dd>
+
+        <dt><code>:timeout <var>timeout</var></code></dt>
+
+        <dd>
+          <p>The timeout time in milliseconds since the display of
+          the notification at which the notification should
+          automatically close. If &acirc;&circ;&rsquo;1, the
+          notification&rsquo;s expiration time is dependent on the
+          notification server&rsquo;s settings, and may vary for
+          the type of notification. If 0, the notification never
+          expires. Default value is &acirc;&circ;&rsquo;1.</p>
+        </dd>
+
+        <dt><code>:urgency <var>urgency</var></code></dt>
+
+        <dd>
+          <p>The urgency level. It can be <code>low</code>,
+          <code>normal</code>, or <code>critical</code>.</p>
+        </dd>
+
+        <dt><code>:action-items</code></dt>
+
+        <dd>
+          <p>When this keyword is given, the <var>title</var>
+          string of the actions is interpreted as icon name.</p>
+        </dd>
+
+        <dt><code>:category <var>category</var></code></dt>
+
+        <dd>
+          <p>The type of notification this is, a string. See the
+          <a href=
+          "http://developer.gnome.org/notification-spec/#categories">
+          Desktop Notifications Specification</a> for a list of
+          standard categories.</p>
+        </dd>
+
+        <dt><code>:desktop-entry <var>filename</var></code></dt>
+
+        <dd>
+          <p>This specifies the name of the desktop filename
+          representing the calling program, like
+          &lsquo;<samp>"emacs"</samp>&rsquo;.</p>
+        </dd>
+
+        <dt><code>:image-data (<var>width</var> <var>height</var>
+        <var>rowstride</var> <var>has-alpha</var> <var>bits</var>
+        <var>channels</var> <var>data</var>)</code></dt>
+
+        <dd>
+          <p>This is a raw data image format that describes the
+          width, height, rowstride, whether there is an alpha
+          channel, bits per sample, channels and image data,
+          respectively.</p>
+        </dd>
+
+        <dt><code>:image-path <var>path</var></code></dt>
+
+        <dd>
+          <p>This is represented either as a URI
+          (&lsquo;<samp>file://</samp>&rsquo; is the only URI
+          schema supported right now) or a name in a
+          freedesktop.org-compliant icon theme from
+          &lsquo;<samp>$XDG_DATA_DIRS/icons</samp>&rsquo;.</p>
+        </dd>
+
+        <dt><code>:sound-file <var>filename</var></code></dt>
+
+        <dd>
+          <p>The path to a sound file to play when the notification
+          pops up.</p>
+        </dd>
+
+        <dt><code>:sound-name <var>name</var></code></dt>
+
+        <dd>
+          <p>A themable named sound from the freedesktop.org sound
+          naming specification from
+          &lsquo;<samp>$XDG_DATA_DIRS/sounds</samp>&rsquo;, to play
+          when the notification pops up. Similar to the icon name,
+          only for sounds. An example would be
+          &lsquo;<samp>"message-new-instant"</samp>&rsquo;.</p>
+        </dd>
+
+        <dt><code>:suppress-sound</code></dt>
+
+        <dd>
+          <p>Causes the server to suppress playing any sounds, if
+          it has that ability.</p>
+        </dd>
+
+        <dt><code>:resident</code></dt>
+
+        <dd>
+          <p>When set the server will not automatically remove the
+          notification when an action has been invoked. The
+          notification will remain resident in the server until it
+          is explicitly removed by the user or by the sender. This
+          hint is likely only useful when the server has the
+          <code>:persistence</code> capability.</p>
+        </dd>
+
+        <dt><code>:transient</code></dt>
+
+        <dd>
+          <p>When set the server will treat the notification as
+          transient and by-pass the server&rsquo;s persistence
+          capability, if it should exist.</p>
+        </dd>
+
+        <dt><code>:x <var>position</var></code></dt>
+
+        <dt><code>:y <var>position</var></code></dt>
+
+        <dd>
+          <p>Specifies the X, Y location on the screen that the
+          notification should point to. Both arguments must be used
+          together.</p>
+        </dd>
+
+        <dt><code>:on-action <var>function</var></code></dt>
+
+        <dd>
+          <p>Function to call when an action is invoked. The
+          notification <var>id</var> and the <var>key</var> of the
+          action are passed as arguments to the function.</p>
+        </dd>
+
+        <dt><code>:on-close <var>function</var></code></dt>
+
+        <dd>
+          <p>Function to call when the notification has been closed
+          by timeout or by the user. The function receive the
+          notification <var>id</var> and the closing
+          <var>reason</var> as arguments:</p>
+
+          <ul>
+            <li><code>expired</code> if the notification has
+            expired</li>
+
+            <li><code>dismissed</code> if the notification was
+            dismissed by the user</li>
+
+            <li><code>close-notification</code> if the notification
+            was closed by a call to
+            <code>notifications-close-notification</code></li>
+
+            <li><code>undefined</code> if the notification server
+            hasn&rsquo;t provided a reason</li>
+          </ul>
+        </dd>
+      </dl>
+
+      <p>Which parameters are accepted by the notification server
+      can be checked via
+      <code>notifications-get-capabilities</code>.</p>
+
+      <p>This function returns a notification id, an integer, which
+      can be used to manipulate the notification item with
+      <code>notifications-close-notification</code> or the
+      <code>:replaces-id</code> argument of another
+      <code>notifications-notify</code> call. For example:</p>
+
+      <div class="example">
+        <pre class="example">
+(defun my-on-action-function (id key)
+  (message "Message %d, key \"%s\" pressed" id key))
      &rArr; my-on-action-function
-</pre><pre class="example">
-</pre><pre class="example">(defun my-on-close-function (id reason)
-  (message &quot;Message %d, closed due to \&quot;%s\&quot;&quot; id reason))
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(defun my-on-close-function (id reason)
+  (message "Message %d, closed due to \"%s\"" id reason))
      &rArr; my-on-close-function
-</pre><pre class="example">
-</pre><pre class="example">(notifications-notify
- :title &quot;Title&quot;
- :body &quot;This is &lt;b&gt;important&lt;/b&gt;.&quot;
- :actions '(&quot;Confirm&quot; &quot;I agree&quot; &quot;Refuse&quot; &quot;I disagree&quot;)
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+(notifications-notify
+ :title "Title"
+ :body "This is &lt;b&gt;important&lt;/b&gt;."
+ :actions '("Confirm" "I agree" "Refuse" "I disagree")
  :on-action 'my-on-action-function
  :on-close 'my-on-close-function)
      &rArr; 22
-</pre><pre class="example">
-</pre><pre class="example">A message window opens on the desktop.  Press ``I agree''.
-     &rArr; Message 22, key &quot;Confirm&quot; pressed
-        Message 22, closed due to &quot;dismissed&quot;
-</pre></div>
-</dd></dl>
+</pre>
+        <pre class="example">
+</pre>
+        <pre class="example">
+A message window opens on the desktop.  Press ``I agree''.
+     &rArr; Message 22, key "Confirm" pressed
+        Message 22, closed due to "dismissed"
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-notifications_002dclose_002dnotification"></a>Function: <strong>notifications-close-notification</strong> <em>id &amp;optional bus</em></dt>
-<dd><p>This function closes a notification with identifier <var>id</var>.
-<var>bus</var> can be a string denoting a D-Bus connection, the default is
-<code>:session</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-notifications_002dclose_002dnotification"
+    id="index-notifications_002dclose_002dnotification"></a>Function:
+    <strong>notifications-close-notification</strong> <em>id
+    &amp;optional bus</em></dt>
 
-<dl>
-<dt><a name="index-notifications_002dget_002dcapabilities"></a>Function: <strong>notifications-get-capabilities</strong> <em>&amp;optional bus</em></dt>
-<dd><p>Returns the capabilities of the notification server, a list of
-symbols.  <var>bus</var> can be a string denoting a D-Bus connection, the
-default is <code>:session</code>.  The following capabilities can be
-expected:
-</p>
-<dl compact="compact">
-<dt><code>:actions</code></dt>
-<dd><p>The server will provide the specified actions to the user.
-</p>
-</dd>
-<dt><code>:body</code></dt>
-<dd><p>Supports body text.
-</p>
-</dd>
-<dt><code>:body-hyperlinks</code></dt>
-<dd><p>The server supports hyperlinks in the notifications.
-</p>
-</dd>
-<dt><code>:body-images</code></dt>
-<dd><p>The server supports images in the notifications.
-</p>
-</dd>
-<dt><code>:body-markup</code></dt>
-<dd><p>Supports markup in the body text.
-</p>
-</dd>
-<dt><code>:icon-multi</code></dt>
-<dd><p>The server will render an animation of all the frames in a given image
-array.
-</p>
-</dd>
-<dt><code>:icon-static</code></dt>
-<dd><p>Supports display of exactly 1 frame of any given image array.  This
-value is mutually exclusive with <code>:icon-multi</code>.
-</p>
-</dd>
-<dt><code>:persistence</code></dt>
-<dd><p>The server supports persistence of notifications.
-</p>
-</dd>
-<dt><code>:sound</code></dt>
-<dd><p>The server supports sounds on notifications.
-</p></dd>
-</dl>
+    <dd>
+      <p>This function closes a notification with identifier
+      <var>id</var>. <var>bus</var> can be a string denoting a
+      D-Bus connection, the default is <code>:session</code>.</p>
+    </dd>
+  </dl>
 
-<p>Further vendor-specific caps start with <code>:x-vendor</code>, like
-<code>:x-gnome-foo-cap</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-notifications_002dget_002dcapabilities" id=
+    "index-notifications_002dget_002dcapabilities"></a>Function:
+    <strong>notifications-get-capabilities</strong>
+    <em>&amp;optional bus</em></dt>
 
-<dl>
-<dt><a name="index-notifications_002dget_002dserver_002dinformation"></a>Function: <strong>notifications-get-server-information</strong> <em>&amp;optional bus</em></dt>
-<dd><p>Return information on the notification server, a list of strings.
-<var>bus</var> can be a string denoting a D-Bus connection, the default is
-<code>:session</code>.  The returned list is <code>(<var>name</var> <var>vendor</var>
-<var>version</var> <var>spec-version</var>)</code>.
-</p>
-<dl compact="compact">
-<dt><var>name</var></dt>
-<dd><p>The product name of the server.
-</p>
-</dd>
-<dt><var>vendor</var></dt>
-<dd><p>The vendor name.  For example, &lsquo;<samp>&quot;KDE&quot;</samp>&rsquo;, &lsquo;<samp>&quot;GNOME&quot;</samp>&rsquo;.
-</p>
-</dd>
-<dt><var>version</var></dt>
-<dd><p>The server&rsquo;s version number.
-</p>
-</dd>
-<dt><var>spec-version</var></dt>
-<dd><p>The specification version the server is compliant with.
-</p></dd>
-</dl>
+    <dd>
+      <p>Returns the capabilities of the notification server, a
+      list of symbols. <var>bus</var> can be a string denoting a
+      D-Bus connection, the default is <code>:session</code>. The
+      following capabilities can be expected:</p>
 
-<p>If <var>spec_version</var> is <code>nil</code>, the server supports a
-specification prior to &lsquo;<samp>&quot;1.0&quot;</samp>&rsquo;.
-</p></dd></dl>
+      <dl compact="compact">
+        <dt><code>:actions</code></dt>
 
-<a name="index-tray-notifications_002c-MS_002dWindows"></a>
-<p>When Emacs runs on MS-Windows as a GUI session, it supports a small
-subset of the D-Bus notifications functionality via a native
-primitive:
-</p>
-<dl>
-<dt><a name="index-w32_002dnotification_002dnotify"></a>Function: <strong>w32-notification-notify</strong> <em>&amp;rest params</em></dt>
-<dd><p>This function displays an MS-Windows tray notification as specified by
-<var>params</var>.  MS-Windows tray notifications are displayed in a
-balloon from an icon in the notification area of the taskbar.
-</p>
-<p>Value is the integer unique ID of the notification that can be used to
-remove the notification using <code>w32-notification-close</code>, described
-below.  If the function fails, the return value is <code>nil</code>.
-</p>
-<p>The arguments <var>params</var> are specified as keyword/value pairs.  All the
-parameters are optional, but if no parameters are specified, the
-function will do nothing and return <code>nil</code>.
-</p>
-<p>The following parameters are supported:
-</p>
-<dl compact="compact">
-<dt><code>:icon <var>icon</var></code></dt>
-<dd><p>Display <var>icon</var> in the system tray.  If <var>icon</var> is a string, it
-should specify a file name from which to load the icon; the specified
-file should be a <samp>.ico</samp> Windows icon file.  If <var>icon</var> is not
-a string, or if this parameter is not specified, the standard Emacs
-icon will be used.
-</p>
-</dd>
-<dt><code>:tip <var>tip</var></code></dt>
-<dd><p>Use <var>tip</var> as the tooltip for the notification.  If <var>tip</var> is a
-string, this is the text of a tooltip that will be shown when the
-mouse pointer hovers over the tray icon added by the notification.  If
-<var>tip</var> is not a string, or if this parameter is not specified, the
-default tooltip text is &lsquo;<samp>Emacs notification</samp>&rsquo;.  The tooltip text can
-be up to 127 characters long (63 on Windows versions before W2K).
-Longer strings will be truncated.
-</p>
-</dd>
-<dt><code>:level <var>level</var></code></dt>
-<dd><p>Notification severity level, one of <code>info</code>, <code>warning</code>, or
-<code>error</code>.  If given, the value determines the icon displayed to the
-left of the notification title, but only if the <code>:title</code> parameter
-(see below) is also specified and is a string.
-</p>
-</dd>
-<dt><code>:title <var>title</var></code></dt>
-<dd><p>The title of the notification.  If <var>title</var> is a string, it is
-displayed in a larger font immediately above the body text.  The title
-text can be up to 63 characters long; longer text will be truncated.
-</p>
-</dd>
-<dt><code>:body <var>body</var></code></dt>
-<dd><p>The body of the notification.  If <var>body</var> is a string, it specifies
-the text of the notification message.  Use embedded newlines to
-control how the text is broken into lines.  The body text can be up to
-255 characters long, and will be truncated if it&rsquo;s longer.  Unlike
-with D-Bus, the body text should be plain text, with no markup.
-</p></dd>
-</dl>
+        <dd>
+          <p>The server will provide the specified actions to the
+          user.</p>
+        </dd>
 
-<p>Note that versions of Windows before W2K support only <code>:icon</code> and
-<code>:tip</code>.  The other parameters can be passed, but they will be
-ignored on those old systems.
-</p>
-<p>There can be at most one active notification at any given time.  An
-active notification must be removed by calling
-<code>w32-notification-close</code> before a new one can be shown.
-</p></dd></dl>
+        <dt><code>:body</code></dt>
 
-<p>To remove the notification and its icon from the taskbar, use the
-following function:
-</p>
-<dl>
-<dt><a name="index-w32_002dnotification_002dclose"></a>Function: <strong>w32-notification-close</strong> <em>id</em></dt>
-<dd><p>This function removes the tray notification given by its unique
-<var>id</var>.
-</p></dd></dl>
+        <dd>
+          <p>Supports body text.</p>
+        </dd>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="File-Notifications.html#File-Notifications" accesskey="n" rel="next">File Notifications</a>, Previous: <a href="Session-Management.html#Session-Management" accesskey="p" rel="prev">Session Management</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+        <dt><code>:body-hyperlinks</code></dt>
 
+        <dd>
+          <p>The server supports hyperlinks in the
+          notifications.</p>
+        </dd>
 
+        <dt><code>:body-images</code></dt>
 
+        <dd>
+          <p>The server supports images in the notifications.</p>
+        </dd>
+
+        <dt><code>:body-markup</code></dt>
+
+        <dd>
+          <p>Supports markup in the body text.</p>
+        </dd>
+
+        <dt><code>:icon-multi</code></dt>
+
+        <dd>
+          <p>The server will render an animation of all the frames
+          in a given image array.</p>
+        </dd>
+
+        <dt><code>:icon-static</code></dt>
+
+        <dd>
+          <p>Supports display of exactly 1 frame of any given image
+          array. This value is mutually exclusive with
+          <code>:icon-multi</code>.</p>
+        </dd>
+
+        <dt><code>:persistence</code></dt>
+
+        <dd>
+          <p>The server supports persistence of notifications.</p>
+        </dd>
+
+        <dt><code>:sound</code></dt>
+
+        <dd>
+          <p>The server supports sounds on notifications.</p>
+        </dd>
+      </dl>
+
+      <p>Further vendor-specific caps start with
+      <code>:x-vendor</code>, like
+      <code>:x-gnome-foo-cap</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-notifications_002dget_002dserver_002dinformation" id=
+    "index-notifications_002dget_002dserver_002dinformation"></a>Function:
+    <strong>notifications-get-server-information</strong>
+    <em>&amp;optional bus</em></dt>
+
+    <dd>
+      <p>Return information on the notification server, a list of
+      strings. <var>bus</var> can be a string denoting a D-Bus
+      connection, the default is <code>:session</code>. The
+      returned list is <code>(<var>name</var> <var>vendor</var>
+      <var>version</var> <var>spec-version</var>)</code>.</p>
+
+      <dl compact="compact">
+        <dt><var>name</var></dt>
+
+        <dd>
+          <p>The product name of the server.</p>
+        </dd>
+
+        <dt><var>vendor</var></dt>
+
+        <dd>
+          <p>The vendor name. For example,
+          &lsquo;<samp>"KDE"</samp>&rsquo;,
+          &lsquo;<samp>"GNOME"</samp>&rsquo;.</p>
+        </dd>
+
+        <dt><var>version</var></dt>
+
+        <dd>
+          <p>The server&rsquo;s version number.</p>
+        </dd>
+
+        <dt><var>spec-version</var></dt>
+
+        <dd>
+          <p>The specification version the server is compliant
+          with.</p>
+        </dd>
+      </dl>
+
+      <p>If <var>spec_version</var> is <code>nil</code>, the server
+      supports a specification prior to
+      &lsquo;<samp>"1.0"</samp>&rsquo;.</p>
+    </dd>
+  </dl><a name="index-tray-notifications_002c-MS_002dWindows" id=
+  "index-tray-notifications_002c-MS_002dWindows"></a>
+
+  <p>When Emacs runs on MS-Windows as a GUI session, it supports a
+  small subset of the D-Bus notifications functionality via a
+  native primitive:</p>
+
+  <dl>
+    <dt><a name="index-w32_002dnotification_002dnotify" id=
+    "index-w32_002dnotification_002dnotify"></a>Function:
+    <strong>w32-notification-notify</strong> <em>&amp;rest
+    params</em></dt>
+
+    <dd>
+      <p>This function displays an MS-Windows tray notification as
+      specified by <var>params</var>. MS-Windows tray notifications
+      are displayed in a balloon from an icon in the notification
+      area of the taskbar.</p>
+
+      <p>Value is the integer unique ID of the notification that
+      can be used to remove the notification using
+      <code>w32-notification-close</code>, described below. If the
+      function fails, the return value is <code>nil</code>.</p>
+
+      <p>The arguments <var>params</var> are specified as
+      keyword/value pairs. All the parameters are optional, but if
+      no parameters are specified, the function will do nothing and
+      return <code>nil</code>.</p>
+
+      <p>The following parameters are supported:</p>
+
+      <dl compact="compact">
+        <dt><code>:icon <var>icon</var></code></dt>
+
+        <dd>
+          <p>Display <var>icon</var> in the system tray. If
+          <var>icon</var> is a string, it should specify a file
+          name from which to load the icon; the specified file
+          should be a <samp>.ico</samp> Windows icon file. If
+          <var>icon</var> is not a string, or if this parameter is
+          not specified, the standard Emacs icon will be used.</p>
+        </dd>
+
+        <dt><code>:tip <var>tip</var></code></dt>
+
+        <dd>
+          <p>Use <var>tip</var> as the tooltip for the
+          notification. If <var>tip</var> is a string, this is the
+          text of a tooltip that will be shown when the mouse
+          pointer hovers over the tray icon added by the
+          notification. If <var>tip</var> is not a string, or if
+          this parameter is not specified, the default tooltip text
+          is &lsquo;<samp>Emacs notification</samp>&rsquo;. The
+          tooltip text can be up to 127 characters long (63 on
+          Windows versions before W2K). Longer strings will be
+          truncated.</p>
+        </dd>
+
+        <dt><code>:level <var>level</var></code></dt>
+
+        <dd>
+          <p>Notification severity level, one of <code>info</code>,
+          <code>warning</code>, or <code>error</code>. If given,
+          the value determines the icon displayed to the left of
+          the notification title, but only if the
+          <code>:title</code> parameter (see below) is also
+          specified and is a string.</p>
+        </dd>
+
+        <dt><code>:title <var>title</var></code></dt>
+
+        <dd>
+          <p>The title of the notification. If <var>title</var> is
+          a string, it is displayed in a larger font immediately
+          above the body text. The title text can be up to 63
+          characters long; longer text will be truncated.</p>
+        </dd>
+
+        <dt><code>:body <var>body</var></code></dt>
+
+        <dd>
+          <p>The body of the notification. If <var>body</var> is a
+          string, it specifies the text of the notification
+          message. Use embedded newlines to control how the text is
+          broken into lines. The body text can be up to 255
+          characters long, and will be truncated if it&rsquo;s
+          longer. Unlike with D-Bus, the body text should be plain
+          text, with no markup.</p>
+        </dd>
+      </dl>
+
+      <p>Note that versions of Windows before W2K support only
+      <code>:icon</code> and <code>:tip</code>. The other
+      parameters can be passed, but they will be ignored on those
+      old systems.</p>
+
+      <p>There can be at most one active notification at any given
+      time. An active notification must be removed by calling
+      <code>w32-notification-close</code> before a new one can be
+      shown.</p>
+    </dd>
+  </dl>
+
+  <p>To remove the notification and its icon from the taskbar, use
+  the following function:</p>
+
+  <dl>
+    <dt><a name="index-w32_002dnotification_002dclose" id=
+    "index-w32_002dnotification_002dclose"></a>Function:
+    <strong>w32-notification-close</strong> <em>id</em></dt>
+
+    <dd>
+      <p>This function removes the tray notification given by its
+      unique <var>id</var>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="File-Notifications.html#File-Notifications"
+    accesskey="n" rel="next">File Notifications</a>, Previous:
+    <a href="Session-Management.html#Session-Management" accesskey=
+    "p" rel="prev">Session Management</a>, Up: <a href=
+    "System-Interface.html#System-Interface" accesskey="u" rel=
+    "up">System Interface</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

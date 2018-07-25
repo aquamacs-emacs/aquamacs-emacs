@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,132 +19,184 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Killing Emacs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Killing Emacs">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Killing Emacs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Getting-Out.html#Getting-Out" rel="up" title="Getting Out">
-<link href="Suspending-Emacs.html#Suspending-Emacs" rel="next" title="Suspending Emacs">
-<link href="Getting-Out.html#Getting-Out" rel="prev" title="Getting Out">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Killing Emacs</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Killing Emacs" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Killing Emacs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Getting-Out.html#Getting-Out" rel="up" title=
+  "Getting Out" />
+  <link href="Suspending-Emacs.html#Suspending-Emacs" rel="next"
+  title="Suspending Emacs" />
+  <link href="Getting-Out.html#Getting-Out" rel="prev" title=
+  "Getting Out" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Killing-Emacs" id="Killing-Emacs"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Suspending-Emacs.html#Suspending-Emacs"
+    accesskey="n" rel="next">Suspending Emacs</a>, Up: <a href=
+    "Getting-Out.html#Getting-Out" accesskey="u" rel="up">Getting
+    Out</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Killing-Emacs-1" id="Killing-Emacs-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Killing-Emacs"></a>
-<div class="header">
-<p>
-Next: <a href="Suspending-Emacs.html#Suspending-Emacs" accesskey="n" rel="next">Suspending Emacs</a>, Up: <a href="Getting-Out.html#Getting-Out" accesskey="u" rel="up">Getting Out</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Killing-Emacs-1"></a>
-<h4 class="subsection">38.2.1 Killing Emacs</h4>
-<a name="index-killing-Emacs"></a>
+  <h4 class="subsection">38.2.1 Killing Emacs</h4><a name=
+  "index-killing-Emacs" id="index-killing-Emacs"></a>
 
-<p>Killing Emacs means ending the execution of the Emacs process.
-If you started Emacs from a terminal, the parent process normally
-resumes control.  The low-level primitive for killing Emacs is
-<code>kill-emacs</code>.
-</p>
-<dl>
-<dt><a name="index-kill_002demacs"></a>Command: <strong>kill-emacs</strong> <em>&amp;optional exit-data</em></dt>
-<dd><p>This command calls the hook <code>kill-emacs-hook</code>, then exits the
-Emacs process and kills it.
-</p>
-<p>If <var>exit-data</var> is an integer, that is used as the exit status of
-the Emacs process.  (This is useful primarily in batch operation; see
-<a href="Batch-Mode.html#Batch-Mode">Batch Mode</a>.)
-</p>
-<p>If <var>exit-data</var> is a string, its contents are stuffed into the
-terminal input buffer so that the shell (or whatever program next reads
-input) can read them.
-</p></dd></dl>
+  <p>Killing Emacs means ending the execution of the Emacs process.
+  If you started Emacs from a terminal, the parent process normally
+  resumes control. The low-level primitive for killing Emacs is
+  <code>kill-emacs</code>.</p>
 
-<a name="index-SIGTERM"></a>
-<a name="index-SIGHUP"></a>
-<a name="index-SIGINT"></a>
-<a name="index-operating-system-signal"></a>
-<p>The <code>kill-emacs</code> function is normally called via the
-higher-level command <kbd>C-x C-c</kbd>
-(<code>save-buffers-kill-terminal</code>).  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Exiting.html#Exiting">Exiting</a> in <cite>The GNU
-Emacs Manual</cite>.  It is also called automatically if Emacs receives a
-<code>SIGTERM</code> or <code>SIGHUP</code> operating system signal (e.g., when the
-controlling terminal is disconnected), or if it receives a
-<code>SIGINT</code> signal while running in batch mode (see <a href="Batch-Mode.html#Batch-Mode">Batch Mode</a>).
-</p>
-<dl>
-<dt><a name="index-kill_002demacs_002dhook"></a>Variable: <strong>kill-emacs-hook</strong></dt>
-<dd><p>This normal hook is run by <code>kill-emacs</code>, before it kills Emacs.
-</p>
-<p>Because <code>kill-emacs</code> can be called in situations where user
-interaction is impossible (e.g., when the terminal is disconnected),
-functions on this hook should not attempt to interact with the user.
-If you want to interact with the user when Emacs is shutting down, use
-<code>kill-emacs-query-functions</code>, described below.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-kill_002demacs" id=
+    "index-kill_002demacs"></a>Command: <strong>kill-emacs</strong>
+    <em>&amp;optional exit-data</em></dt>
 
-<p>When Emacs is killed, all the information in the Emacs process,
-aside from files that have been saved, is lost.  Because killing Emacs
-inadvertently can lose a lot of work, the
-<code>save-buffers-kill-terminal</code> command queries for confirmation if
-you have buffers that need saving or subprocesses that are running.
-It also runs the abnormal hook <code>kill-emacs-query-functions</code>:
-</p>
-<dl>
-<dt><a name="index-kill_002demacs_002dquery_002dfunctions"></a>Variable: <strong>kill-emacs-query-functions</strong></dt>
-<dd><p>When <code>save-buffers-kill-terminal</code> is killing Emacs, it calls the
-functions in this hook, after asking the standard questions and before
-calling <code>kill-emacs</code>.  The functions are called in order of
-appearance, with no arguments.  Each function can ask for additional
-confirmation from the user.  If any of them returns <code>nil</code>,
-<code>save-buffers-kill-emacs</code> does not kill Emacs, and does not run
-the remaining functions in this hook.  Calling <code>kill-emacs</code>
-directly does not run this hook.
-</p></dd></dl>
+    <dd>
+      <p>This command calls the hook <code>kill-emacs-hook</code>,
+      then exits the Emacs process and kills it.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Suspending-Emacs.html#Suspending-Emacs" accesskey="n" rel="next">Suspending Emacs</a>, Up: <a href="Getting-Out.html#Getting-Out" accesskey="u" rel="up">Getting Out</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>If <var>exit-data</var> is an integer, that is used as the
+      exit status of the Emacs process. (This is useful primarily
+      in batch operation; see <a href=
+      "Batch-Mode.html#Batch-Mode">Batch Mode</a>.)</p>
 
+      <p>If <var>exit-data</var> is a string, its contents are
+      stuffed into the terminal input buffer so that the shell (or
+      whatever program next reads input) can read them.</p>
+    </dd>
+  </dl><a name="index-SIGTERM" id="index-SIGTERM"></a> <a name=
+  "index-SIGHUP" id="index-SIGHUP"></a> <a name="index-SIGINT" id=
+  "index-SIGINT"></a> <a name="index-operating-system-signal" id=
+  "index-operating-system-signal"></a>
 
+  <p>The <code>kill-emacs</code> function is normally called via
+  the higher-level command <kbd>C-x C-c</kbd>
+  (<code>save-buffers-kill-terminal</code>). See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Exiting.html#Exiting">
+  Exiting</a> in <cite>The GNU Emacs Manual</cite>. It is also
+  called automatically if Emacs receives a <code>SIGTERM</code> or
+  <code>SIGHUP</code> operating system signal (e.g., when the
+  controlling terminal is disconnected), or if it receives a
+  <code>SIGINT</code> signal while running in batch mode (see
+  <a href="Batch-Mode.html#Batch-Mode">Batch Mode</a>).</p>
 
+  <dl>
+    <dt><a name="index-kill_002demacs_002dhook" id=
+    "index-kill_002demacs_002dhook"></a>Variable:
+    <strong>kill-emacs-hook</strong></dt>
+
+    <dd>
+      <p>This normal hook is run by <code>kill-emacs</code>, before
+      it kills Emacs.</p>
+
+      <p>Because <code>kill-emacs</code> can be called in
+      situations where user interaction is impossible (e.g., when
+      the terminal is disconnected), functions on this hook should
+      not attempt to interact with the user. If you want to
+      interact with the user when Emacs is shutting down, use
+      <code>kill-emacs-query-functions</code>, described below.</p>
+    </dd>
+  </dl>
+
+  <p>When Emacs is killed, all the information in the Emacs
+  process, aside from files that have been saved, is lost. Because
+  killing Emacs inadvertently can lose a lot of work, the
+  <code>save-buffers-kill-terminal</code> command queries for
+  confirmation if you have buffers that need saving or subprocesses
+  that are running. It also runs the abnormal hook
+  <code>kill-emacs-query-functions</code>:</p>
+
+  <dl>
+    <dt><a name="index-kill_002demacs_002dquery_002dfunctions" id=
+    "index-kill_002demacs_002dquery_002dfunctions"></a>Variable:
+    <strong>kill-emacs-query-functions</strong></dt>
+
+    <dd>
+      <p>When <code>save-buffers-kill-terminal</code> is killing
+      Emacs, it calls the functions in this hook, after asking the
+      standard questions and before calling
+      <code>kill-emacs</code>. The functions are called in order of
+      appearance, with no arguments. Each function can ask for
+      additional confirmation from the user. If any of them returns
+      <code>nil</code>, <code>save-buffers-kill-emacs</code> does
+      not kill Emacs, and does not run the remaining functions in
+      this hook. Calling <code>kill-emacs</code> directly does not
+      run this hook.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Suspending-Emacs.html#Suspending-Emacs"
+    accesskey="n" rel="next">Suspending Emacs</a>, Up: <a href=
+    "Getting-Out.html#Getting-Out" accesskey="u" rel="up">Getting
+    Out</a> &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,119 +16,180 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Multiple sets in one file</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Multiple sets in one file">
-<meta name="keywords" content="The Org Manual: Multiple sets in one file">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="TODO-extensions.html#TODO-extensions" rel="up" title="TODO extensions">
-<link href="Fast-access-to-TODO-states.html#Fast-access-to-TODO-states" rel="next" title="Fast access to TODO states">
-<link href="TODO-types.html#TODO-types" rel="prev" title="TODO types">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Multiple sets in one file</title>
+  <meta name="description" content=
+  "The Org Manual: Multiple sets in one file" />
+  <meta name="keywords" content=
+  "The Org Manual: Multiple sets in one file" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="TODO-extensions.html#TODO-extensions" rel="up" title=
+  "TODO extensions" />
+  <link href=
+  "Fast-access-to-TODO-states.html#Fast-access-to-TODO-states" rel=
+  "next" title="Fast access to TODO states" />
+  <link href="TODO-types.html#TODO-types" rel="prev" title=
+  "TODO types" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Multiple-sets-in-one-file"></a>
-<div class="header">
-<p>
-Next: <a href="Fast-access-to-TODO-states.html#Fast-access-to-TODO-states" accesskey="n" rel="next">Fast access to TODO states</a>, Previous: <a href="TODO-types.html#TODO-types" accesskey="p" rel="prev">TODO types</a>, Up: <a href="TODO-extensions.html#TODO-extensions" accesskey="u" rel="up">TODO extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Multiple-keyword-sets-in-one-file"></a>
-<h4 class="subsection">5.2.3 Multiple keyword sets in one file</h4>
-<a name="index-TODO-keyword-sets"></a>
+<body lang="en" xml:lang="en">
+  <a name="Multiple-sets-in-one-file" id=
+  "Multiple-sets-in-one-file"></a>
 
-<p>Sometimes you may want to use different sets of TODO keywords in
-parallel.  For example, you may want to have the basic
-<code>TODO</code>/<code>DONE</code>, but also a workflow for bug fixing, and a
-separate state indicating that an item has been canceled (so it is not
-DONE, but also does not require action).  Your setup would then look
-like this:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq org-todo-keywords
-      '((sequence &quot;TODO&quot; &quot;|&quot; &quot;DONE&quot;)
-        (sequence &quot;REPORT&quot; &quot;BUG&quot; &quot;KNOWNCAUSE&quot; &quot;|&quot; &quot;FIXED&quot;)
-        (sequence &quot;|&quot; &quot;CANCELED&quot;)))
-</pre></div>
+  <div class="header">
+    <p>Next: <a href=
+    "Fast-access-to-TODO-states.html#Fast-access-to-TODO-states"
+    accesskey="n" rel="next">Fast access to TODO states</a>,
+    Previous: <a href="TODO-types.html#TODO-types" accesskey="p"
+    rel="prev">TODO types</a>, Up: <a href=
+    "TODO-extensions.html#TODO-extensions" accesskey="u" rel=
+    "up">TODO extensions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Multiple-keyword-sets-in-one-file" id=
+  "Multiple-keyword-sets-in-one-file"></a>
 
-<p>The keywords should all be different, this helps Org mode to keep track
-of which subsequence should be used for a given entry.  In this setup,
-<kbd>C-c C-t</kbd> only operates within a subsequence, so it switches from
-<code>DONE</code> to (nothing) to <code>TODO</code>, and from <code>FIXED</code> to
-(nothing) to <code>REPORT</code>.  Therefore you need a mechanism to initially
-select the correct sequence.  Besides the obvious ways like typing a
-keyword or using completion, you may also apply the following commands:
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002dS_002dright"></a>
-<a name="index-C_002dS_002dleft"></a>
-<a name="index-C_002du-C_002du-C_002dc-C_002dt"></a>
-</dd>
-<dt><kbd>C-u C-u C-c C-t</kbd></dt>
-<dt><kbd>C-S-<span class="key">right</span></kbd></dt>
-<dt><kbd>C-S-<span class="key">left</span></kbd></dt>
-<dd><p>These keys jump from one TODO subset to the next.  In the above example,
-<kbd>C-u C-u C-c C-t</kbd> or <kbd>C-S-<span class="key">right</span></kbd> would jump from <code>TODO</code> or
-<code>DONE</code> to <code>REPORT</code>, and any of the words in the second row to
-<code>CANCELED</code>.  Note that the <kbd>C-S-</kbd> key binding conflict with
-<code>shift-selection-mode</code> (see <a href="Conflicts.html#Conflicts">Conflicts</a>).
-<a name="index-S_002dright-3"></a>
-<a name="index-S_002dleft-3"></a>
-</p></dd>
-<dt><kbd>S-<span class="key">right</span></kbd></dt>
-<dt><kbd>S-<span class="key">left</span></kbd></dt>
-<dd><p><kbd>S-<span class="key">&lt;left&gt;</span></kbd> and <kbd>S-<span class="key">&lt;right&gt;</span></kbd> and walk through <em>all</em>
-keywords from all sets, so for example <kbd>S-<span class="key">&lt;right&gt;</span></kbd> would switch
-from <code>DONE</code> to <code>REPORT</code> in the example above.  See also
-<a href="Conflicts.html#Conflicts">Conflicts</a>, for a discussion of the interaction with
-<code>shift-selection-mode</code>.
-</p></dd>
-</dl>
+  <h4 class="subsection">5.2.3 Multiple keyword sets in one
+  file</h4><a name="index-TODO-keyword-sets" id=
+  "index-TODO-keyword-sets"></a>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Fast-access-to-TODO-states.html#Fast-access-to-TODO-states" accesskey="n" rel="next">Fast access to TODO states</a>, Previous: <a href="TODO-types.html#TODO-types" accesskey="p" rel="prev">TODO types</a>, Up: <a href="TODO-extensions.html#TODO-extensions" accesskey="u" rel="up">TODO extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Sometimes you may want to use different sets of TODO keywords
+  in parallel. For example, you may want to have the basic
+  <code>TODO</code>/<code>DONE</code>, but also a workflow for bug
+  fixing, and a separate state indicating that an item has been
+  canceled (so it is not DONE, but also does not require action).
+  Your setup would then look like this:</p>
 
+  <div class="lisp">
+    <pre class="lisp">
+(setq org-todo-keywords
+      '((sequence "TODO" "|" "DONE")
+        (sequence "REPORT" "BUG" "KNOWNCAUSE" "|" "FIXED")
+        (sequence "|" "CANCELED")))
+</pre>
+  </div>
 
+  <p>The keywords should all be different, this helps Org mode to
+  keep track of which subsequence should be used for a given entry.
+  In this setup, <kbd>C-c C-t</kbd> only operates within a
+  subsequence, so it switches from <code>DONE</code> to (nothing)
+  to <code>TODO</code>, and from <code>FIXED</code> to (nothing) to
+  <code>REPORT</code>. Therefore you need a mechanism to initially
+  select the correct sequence. Besides the obvious ways like typing
+  a keyword or using completion, you may also apply the following
+  commands:</p>
 
+  <dl compact="compact">
+    <dd><a name="index-C_002dS_002dright" id=
+    "index-C_002dS_002dright"></a> <a name="index-C_002dS_002dleft"
+    id="index-C_002dS_002dleft"></a> <a name=
+    "index-C_002du-C_002du-C_002dc-C_002dt" id=
+    "index-C_002du-C_002du-C_002dc-C_002dt"></a></dd>
+
+    <dt><kbd>C-u C-u C-c C-t</kbd></dt>
+
+    <dt><kbd>C-S-<span class="key">right</span></kbd></dt>
+
+    <dt><kbd>C-S-<span class="key">left</span></kbd></dt>
+
+    <dd>
+      <p>These keys jump from one TODO subset to the next. In the
+      above example, <kbd>C-u C-u C-c C-t</kbd> or
+      <kbd>C-S-<span class="key">right</span></kbd> would jump from
+      <code>TODO</code> or <code>DONE</code> to
+      <code>REPORT</code>, and any of the words in the second row
+      to <code>CANCELED</code>. Note that the <kbd>C-S-</kbd> key
+      binding conflict with <code>shift-selection-mode</code> (see
+      <a href="Conflicts.html#Conflicts">Conflicts</a>). <a name=
+      "index-S_002dright-3" id="index-S_002dright-3"></a> <a name=
+      "index-S_002dleft-3" id="index-S_002dleft-3"></a></p>
+    </dd>
+
+    <dt><kbd>S-<span class="key">right</span></kbd></dt>
+
+    <dt><kbd>S-<span class="key">left</span></kbd></dt>
+
+    <dd>
+      <p><kbd>S-<span class="key">&lt;left&gt;</span></kbd> and
+      <kbd>S-<span class="key">&lt;right&gt;</span></kbd> and walk
+      through <em>all</em> keywords from all sets, so for example
+      <kbd>S-<span class="key">&lt;right&gt;</span></kbd> would
+      switch from <code>DONE</code> to <code>REPORT</code> in the
+      example above. See also <a href=
+      "Conflicts.html#Conflicts">Conflicts</a>, for a discussion of
+      the interaction with <code>shift-selection-mode</code>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Fast-access-to-TODO-states.html#Fast-access-to-TODO-states"
+    accesskey="n" rel="next">Fast access to TODO states</a>,
+    Previous: <a href="TODO-types.html#TODO-types" accesskey="p"
+    rel="prev">TODO types</a>, Up: <a href=
+    "TODO-extensions.html#TODO-extensions" accesskey="u" rel=
+    "up">TODO extensions</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

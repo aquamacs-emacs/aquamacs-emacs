@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,110 +19,162 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: General Escape Syntax</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: General Escape Syntax">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: General Escape Syntax">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Character-Type.html#Character-Type" rel="up" title="Character Type">
-<link href="Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax" rel="next" title="Ctl-Char Syntax">
-<link href="Basic-Char-Syntax.html#Basic-Char-Syntax" rel="prev" title="Basic Char Syntax">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: General Escape
+  Syntax</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: General Escape Syntax" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: General Escape Syntax" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Character-Type.html#Character-Type" rel="up" title=
+  "Character Type" />
+  <link href="Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax" rel=
+  "next" title="Ctl-Char Syntax" />
+  <link href="Basic-Char-Syntax.html#Basic-Char-Syntax" rel="prev"
+  title="Basic Char Syntax" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="General-Escape-Syntax" id="General-Escape-Syntax"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax"
+    accesskey="n" rel="next">Ctl-Char Syntax</a>, Previous:
+    <a href="Basic-Char-Syntax.html#Basic-Char-Syntax" accesskey=
+    "p" rel="prev">Basic Char Syntax</a>, Up: <a href=
+    "Character-Type.html#Character-Type" accesskey="u" rel=
+    "up">Character Type</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="General-Escape-Syntax-1" id=
+  "General-Escape-Syntax-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="General-Escape-Syntax"></a>
-<div class="header">
-<p>
-Next: <a href="Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax" accesskey="n" rel="next">Ctl-Char Syntax</a>, Previous: <a href="Basic-Char-Syntax.html#Basic-Char-Syntax" accesskey="p" rel="prev">Basic Char Syntax</a>, Up: <a href="Character-Type.html#Character-Type" accesskey="u" rel="up">Character Type</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="General-Escape-Syntax-1"></a>
-<h4 class="subsubsection">2.3.3.2 General Escape Syntax</h4>
+  <h4 class="subsubsection">2.3.3.2 General Escape Syntax</h4>
 
-<p>In addition to the specific escape sequences for special important
-control characters, Emacs provides several types of escape syntax that
-you can use to specify non-<acronym>ASCII</acronym> text characters.
-</p>
-<a name="index-_005c-in-character-constant"></a>
-<a name="index-backslash-in-character-constants"></a>
-<a name="index-unicode-character-escape"></a>
-<p>Firstly, you can specify characters by their Unicode values.
-<code>?\u<var>nnnn</var></code> represents a character with Unicode code point
-&lsquo;<samp>U+<var>nnnn</var></samp>&rsquo;, where <var>nnnn</var> is (by convention) a hexadecimal
-number with exactly four digits.  The backslash indicates that the
-subsequent characters form an escape sequence, and the &lsquo;<samp>u</samp>&rsquo;
-specifies a Unicode escape sequence.
-</p>
-<p>There is a slightly different syntax for specifying Unicode
-characters with code points higher than <code>U+<var>ffff</var></code>:
-<code>?\U00<var>nnnnnn</var></code> represents the character with code point
-&lsquo;<samp>U+<var>nnnnnn</var></samp>&rsquo;, where <var>nnnnnn</var> is a six-digit hexadecimal
-number.  The Unicode Standard only defines code points up to
-&lsquo;<samp>U+<var>10ffff</var></samp>&rsquo;, so if you specify a code point higher than
-that, Emacs signals an error.
-</p>
-<p>Secondly, you can specify characters by their hexadecimal character
-codes.  A hexadecimal escape sequence consists of a backslash,
-&lsquo;<samp>x</samp>&rsquo;, and the hexadecimal character code.  Thus, &lsquo;<samp>?\x41</samp>&rsquo; is
-the character <kbd>A</kbd>, &lsquo;<samp>?\x1</samp>&rsquo; is the character <kbd>C-a</kbd>, and
-<code>?\xe0</code> is the character <kbd>à</kbd> (<kbd>a</kbd> with grave accent).
-You can use any number of hex digits, so you can represent any
-character code in this way.
-</p>
-<a name="index-octal-character-code"></a>
-<p>Thirdly, you can specify characters by their character code in
-octal.  An octal escape sequence consists of a backslash followed by
-up to three octal digits; thus, &lsquo;<samp>?\101</samp>&rsquo; for the character
-<kbd>A</kbd>, &lsquo;<samp>?\001</samp>&rsquo; for the character <kbd>C-a</kbd>, and <code>?\002</code>
-for the character <kbd>C-b</kbd>.  Only characters up to octal code 777 can
-be specified this way.
-</p>
-<p>These escape sequences may also be used in strings.  See <a href="Non_002dASCII-in-Strings.html#Non_002dASCII-in-Strings">Non-ASCII in Strings</a>.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax" accesskey="n" rel="next">Ctl-Char Syntax</a>, Previous: <a href="Basic-Char-Syntax.html#Basic-Char-Syntax" accesskey="p" rel="prev">Basic Char Syntax</a>, Up: <a href="Character-Type.html#Character-Type" accesskey="u" rel="up">Character Type</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In addition to the specific escape sequences for special
+  important control characters, Emacs provides several types of
+  escape syntax that you can use to specify
+  non-<acronym>ASCII</acronym> text characters.</p><a name=
+  "index-_005c-in-character-constant" id=
+  "index-_005c-in-character-constant"></a> <a name=
+  "index-backslash-in-character-constants" id=
+  "index-backslash-in-character-constants"></a> <a name=
+  "index-unicode-character-escape" id=
+  "index-unicode-character-escape"></a>
 
+  <p>Firstly, you can specify characters by their Unicode values.
+  <code>?\u<var>nnnn</var></code> represents a character with
+  Unicode code point &lsquo;<samp>U+<var>nnnn</var></samp>&rsquo;,
+  where <var>nnnn</var> is (by convention) a hexadecimal number
+  with exactly four digits. The backslash indicates that the
+  subsequent characters form an escape sequence, and the
+  &lsquo;<samp>u</samp>&rsquo; specifies a Unicode escape
+  sequence.</p>
 
+  <p>There is a slightly different syntax for specifying Unicode
+  characters with code points higher than
+  <code>U+<var>ffff</var></code>:
+  <code>?\U00<var>nnnnnn</var></code> represents the character with
+  code point &lsquo;<samp>U+<var>nnnnnn</var></samp>&rsquo;, where
+  <var>nnnnnn</var> is a six-digit hexadecimal number. The Unicode
+  Standard only defines code points up to
+  &lsquo;<samp>U+<var>10ffff</var></samp>&rsquo;, so if you specify
+  a code point higher than that, Emacs signals an error.</p>
 
+  <p>Secondly, you can specify characters by their hexadecimal
+  character codes. A hexadecimal escape sequence consists of a
+  backslash, &lsquo;<samp>x</samp>&rsquo;, and the hexadecimal
+  character code. Thus, &lsquo;<samp>?\x41</samp>&rsquo; is the
+  character <kbd>A</kbd>, &lsquo;<samp>?\x1</samp>&rsquo; is the
+  character <kbd>C-a</kbd>, and <code>?\xe0</code> is the character
+  <kbd>&Atilde;&nbsp;</kbd> (<kbd>a</kbd> with grave accent). You
+  can use any number of hex digits, so you can represent any
+  character code in this way.</p><a name=
+  "index-octal-character-code" id="index-octal-character-code"></a>
+
+  <p>Thirdly, you can specify characters by their character code in
+  octal. An octal escape sequence consists of a backslash followed
+  by up to three octal digits; thus,
+  &lsquo;<samp>?\101</samp>&rsquo; for the character <kbd>A</kbd>,
+  &lsquo;<samp>?\001</samp>&rsquo; for the character
+  <kbd>C-a</kbd>, and <code>?\002</code> for the character
+  <kbd>C-b</kbd>. Only characters up to octal code 777 can be
+  specified this way.</p>
+
+  <p>These escape sequences may also be used in strings. See
+  <a href=
+  "Non_002dASCII-in-Strings.html#Non_002dASCII-in-Strings">Non-ASCII
+  in Strings</a>.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Ctl_002dChar-Syntax.html#Ctl_002dChar-Syntax"
+    accesskey="n" rel="next">Ctl-Char Syntax</a>, Previous:
+    <a href="Basic-Char-Syntax.html#Basic-Char-Syntax" accesskey=
+    "p" rel="prev">Basic Char Syntax</a>, Up: <a href=
+    "Character-Type.html#Character-Type" accesskey="u" rel=
+    "up">Character Type</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

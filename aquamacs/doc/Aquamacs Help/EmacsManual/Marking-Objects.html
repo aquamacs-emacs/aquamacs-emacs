@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,137 +20,196 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Marking Objects</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Marking Objects">
-<meta name="keywords" content="GNU Emacs Manual: Marking Objects">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Mark.html#Mark" rel="up" title="Mark">
-<link href="Using-Region.html#Using-Region" rel="next" title="Using Region">
-<link href="Setting-Mark.html#Setting-Mark" rel="prev" title="Setting Mark">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Marking Objects</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Marking Objects" />
+  <meta name="keywords" content=
+  "GNU Emacs Manual: Marking Objects" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Mark.html#Mark" rel="up" title="Mark" />
+  <link href="Using-Region.html#Using-Region" rel="next" title=
+  "Using Region" />
+  <link href="Setting-Mark.html#Setting-Mark" rel="prev" title=
+  "Setting Mark" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Marking-Objects" id="Marking-Objects"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Using-Region.html#Using-Region" accesskey="n"
+    rel="next">Using Region</a>, Previous: <a href=
+    "Setting-Mark.html#Setting-Mark" accesskey="p" rel=
+    "prev">Setting Mark</a>, Up: <a href="Mark.html#Mark"
+    accesskey="u" rel="up">Mark</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Commands-to-Mark-Textual-Objects" id=
+  "Commands-to-Mark-Textual-Objects"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Marking-Objects"></a>
-<div class="header">
-<p>
-Next: <a href="Using-Region.html#Using-Region" accesskey="n" rel="next">Using Region</a>, Previous: <a href="Setting-Mark.html#Setting-Mark" accesskey="p" rel="prev">Setting Mark</a>, Up: <a href="Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Commands-to-Mark-Textual-Objects"></a>
-<h3 class="section">11.2 Commands to Mark Textual Objects</h3>
+  <h3 class="section">11.2 Commands to Mark Textual
+  Objects</h3><a name="index-marking-sections-of-text" id=
+  "index-marking-sections-of-text"></a>
 
-<a name="index-marking-sections-of-text"></a>
-<p>Here are commands for placing point and the mark around a textual
-object such as a word, list, paragraph or page:
-</p>
-<dl compact="compact">
-<dt><kbd>M-@</kbd></dt>
-<dd><p>Set mark after end of next word (<code>mark-word</code>).  This does not
-move point.
-</p></dd>
-<dt><kbd>C-M-@</kbd></dt>
-<dd><p>Set mark after end of following balanced expression
-(<code>mark-sexp</code>).  This does not move point.
-</p></dd>
-<dt><kbd>M-h</kbd></dt>
-<dd><p>Move point to the beginning of the current paragraph, and set mark at
-the end (<code>mark-paragraph</code>).
-</p></dd>
-<dt><kbd>C-M-h</kbd></dt>
-<dd><p>Move point to the beginning of the current defun, and set mark at the
-end (<code>mark-defun</code>).
-</p></dd>
-<dt><kbd>C-x C-p</kbd></dt>
-<dd><p>Move point to the beginning of the current page, and set mark at the
-end (<code>mark-page</code>).
-</p></dd>
-<dt><kbd>C-x h</kbd></dt>
-<dd><p>Move point to the beginning of the buffer, and set mark at the end
-(<code>mark-whole-buffer</code>).
-</p></dd>
-</dl>
+  <p>Here are commands for placing point and the mark around a
+  textual object such as a word, list, paragraph or page:</p>
 
-<a name="index-M_002d_0040"></a>
-<a name="index-mark_002dword"></a>
-<p><kbd>M-@</kbd> (<code>mark-word</code>) sets the mark at the end of the next
-word (see <a href="Words.html#Words">Words</a>, for information about words).  Repeated
-invocations of this command extend the region by advancing the mark
-one word at a time.  As an exception, if the mark is active and
-located before point, <kbd>M-@</kbd> moves the mark backwards from its
-current position one word at a time.
-</p>
-<p>This command also accepts a numeric argument <var>n</var>, which tells it
-to advance the mark by <var>n</var> words.  A negative argument moves the
-mark back by <var>n</var> words.
-</p>
-<a name="index-C_002dM_002d_0040"></a>
-<a name="index-mark_002dsexp"></a>
-<p>Similarly, <kbd>C-M-@</kbd> (<code>mark-sexp</code>) puts the mark at the end
-of the next balanced expression (see <a href="Expressions.html#Expressions">Expressions</a>).  Repeated
-invocations extend the region to subsequent expressions, while
-positive or negative numeric arguments move the mark forward or
-backward by the specified number of expressions.
-</p>
-<p>The other commands in the above list set both point and mark, so as
-to delimit an object in the buffer.  <kbd>M-h</kbd> (<code>mark-paragraph</code>)
-marks paragraphs (see <a href="Paragraphs.html#Paragraphs">Paragraphs</a>), <kbd>C-M-h</kbd> (<code>mark-defun</code>)
-marks top-level definitions (see <a href="Moving-by-Defuns.html#Moving-by-Defuns">Moving by Defuns</a>), and <kbd>C-x
-C-p</kbd> (<code>mark-page</code>) marks pages (see <a href="Pages.html#Pages">Pages</a>).  Repeated
-invocations again play the same role, extending the region to
-consecutive objects; similarly, numeric arguments specify how many
-objects to move the mark by.
-</p>
-<a name="index-C_002dx-h"></a>
-<a name="index-mark_002dwhole_002dbuffer"></a>
-<a name="index-select-all"></a>
-<p><kbd>C-x h</kbd> (<code>mark-whole-buffer</code>) sets up the entire buffer as
-the region, by putting point at the beginning and the mark at the end.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Using-Region.html#Using-Region" accesskey="n" rel="next">Using Region</a>, Previous: <a href="Setting-Mark.html#Setting-Mark" accesskey="p" rel="prev">Setting Mark</a>, Up: <a href="Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><kbd>M-@</kbd></dt>
 
+    <dd>
+      <p>Set mark after end of next word (<code>mark-word</code>).
+      This does not move point.</p>
+    </dd>
 
+    <dt><kbd>C-M-@</kbd></dt>
 
+    <dd>
+      <p>Set mark after end of following balanced expression
+      (<code>mark-sexp</code>). This does not move point.</p>
+    </dd>
+
+    <dt><kbd>M-h</kbd></dt>
+
+    <dd>
+      <p>Move point to the beginning of the current paragraph, and
+      set mark at the end (<code>mark-paragraph</code>).</p>
+    </dd>
+
+    <dt><kbd>C-M-h</kbd></dt>
+
+    <dd>
+      <p>Move point to the beginning of the current defun, and set
+      mark at the end (<code>mark-defun</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x C-p</kbd></dt>
+
+    <dd>
+      <p>Move point to the beginning of the current page, and set
+      mark at the end (<code>mark-page</code>).</p>
+    </dd>
+
+    <dt><kbd>C-x h</kbd></dt>
+
+    <dd>
+      <p>Move point to the beginning of the buffer, and set mark at
+      the end (<code>mark-whole-buffer</code>).</p>
+    </dd>
+  </dl><a name="index-M_002d_0040" id="index-M_002d_0040"></a>
+  <a name="index-mark_002dword" id="index-mark_002dword"></a>
+
+  <p><kbd>M-@</kbd> (<code>mark-word</code>) sets the mark at the
+  end of the next word (see <a href="Words.html#Words">Words</a>,
+  for information about words). Repeated invocations of this
+  command extend the region by advancing the mark one word at a
+  time. As an exception, if the mark is active and located before
+  point, <kbd>M-@</kbd> moves the mark backwards from its current
+  position one word at a time.</p>
+
+  <p>This command also accepts a numeric argument <var>n</var>,
+  which tells it to advance the mark by <var>n</var> words. A
+  negative argument moves the mark back by <var>n</var>
+  words.</p><a name="index-C_002dM_002d_0040" id=
+  "index-C_002dM_002d_0040"></a> <a name="index-mark_002dsexp" id=
+  "index-mark_002dsexp"></a>
+
+  <p>Similarly, <kbd>C-M-@</kbd> (<code>mark-sexp</code>) puts the
+  mark at the end of the next balanced expression (see <a href=
+  "Expressions.html#Expressions">Expressions</a>). Repeated
+  invocations extend the region to subsequent expressions, while
+  positive or negative numeric arguments move the mark forward or
+  backward by the specified number of expressions.</p>
+
+  <p>The other commands in the above list set both point and mark,
+  so as to delimit an object in the buffer. <kbd>M-h</kbd>
+  (<code>mark-paragraph</code>) marks paragraphs (see <a href=
+  "Paragraphs.html#Paragraphs">Paragraphs</a>), <kbd>C-M-h</kbd>
+  (<code>mark-defun</code>) marks top-level definitions (see
+  <a href="Moving-by-Defuns.html#Moving-by-Defuns">Moving by
+  Defuns</a>), and <kbd>C-x C-p</kbd> (<code>mark-page</code>)
+  marks pages (see <a href="Pages.html#Pages">Pages</a>). Repeated
+  invocations again play the same role, extending the region to
+  consecutive objects; similarly, numeric arguments specify how
+  many objects to move the mark by.</p><a name="index-C_002dx-h"
+  id="index-C_002dx-h"></a> <a name=
+  "index-mark_002dwhole_002dbuffer" id=
+  "index-mark_002dwhole_002dbuffer"></a> <a name="index-select-all"
+  id="index-select-all"></a>
+
+  <p><kbd>C-x h</kbd> (<code>mark-whole-buffer</code>) sets up the
+  entire buffer as the region, by putting point at the beginning
+  and the mark at the end.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Using-Region.html#Using-Region" accesskey="n"
+    rel="next">Using Region</a>, Previous: <a href=
+    "Setting-Mark.html#Setting-Mark" accesskey="p" rel=
+    "prev">Setting Mark</a>, Up: <a href="Mark.html#Mark"
+    accesskey="u" rel="up">Mark</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

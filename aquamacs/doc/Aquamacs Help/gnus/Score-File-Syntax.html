@@ -1,15 +1,26 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Score File Syntax - Gnus Manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="description" content="Gnus Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide" title="Gnus Reference Guide">
-<link rel="prev" href="Back-End-Interface.html#Back-End-Interface" title="Back End Interface">
-<link rel="next" href="Headers.html#Headers" title="Headers">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Score File Syntax - Gnus Manual</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="description" content="Gnus Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href=
+  "Gnus-Reference-Guide.html#Gnus-Reference-Guide" title=
+  "Gnus Reference Guide" />
+  <link rel="prev" href=
+  "Back-End-Interface.html#Back-End-Interface" title=
+  "Back End Interface" />
+  <link rel="next" href="Headers.html#Headers" title="Headers" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
@@ -25,8 +36,10 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -36,36 +49,44 @@ Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Score-File-Syntax"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Headers.html#Headers">Headers</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Back-End-Interface.html#Back-End-Interface">Back End Interface</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference Guide</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Score-File-Syntax" id="Score-File-Syntax"></a>
 
-<h4 class="subsection">11.7.3 Score File Syntax</h4>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Headers.html#Headers">Headers</a>, Previous:&nbsp;<a rel=
+    "previous" accesskey="p" href=
+    "Back-End-Interface.html#Back-End-Interface">Back End
+    Interface</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Gnus-Reference-Guide.html#Gnus-Reference-Guide">Gnus Reference
+    Guide</a></p>
+    <hr />
+  </div>
 
-<p>Score files are meant to be easily parseable, but yet extremely
-mallable.  It was decided that something that had the same read syntax
-as an Emacs Lisp list would fit that spec.
+  <h4 class="subsection">11.7.3 Score File Syntax</h4>
 
-   <p>Here's a typical score file:
+  <p>Score files are meant to be easily parseable, but yet
+  extremely mallable. It was decided that something that had the
+  same read syntax as an Emacs Lisp list would fit that spec.</p>
 
-<pre class="lisp">     (("summary"
+  <p>Here's a typical score file:</p>
+  <pre class="lisp">
+     (("summary"
        ("win95" -10000 nil s)
        ("Gnus"))
       ("from"
        ("Lars" -1000))
       (mark -100))
 </pre>
-   <p>BNF definition of a score file:
 
-<pre class="example">     score-file      = "" / "(" *element ")"
+  <p>BNF definition of a score file:</p>
+  <pre class="example">
+     score-file      = "" / "(" *element ")"
      element         = rule / atom
      rule            = string-rule / number-rule / date-rule
      string-rule     = "(" quote string-header quote space *string-match ")"
@@ -107,16 +128,18 @@ as an Emacs Lisp list would fit that spec.
      eval            = "eval" space &lt;form&gt;
      space           = *[ " " / &lt;TAB&gt; / &lt;NEWLINE&gt; ]
 </pre>
-   <p>Any unrecognized elements in a score file should be ignored, but not
-discarded.
 
-   <p>As you can see, white space is needed, but the type and amount of white
-space is irrelevant.  This means that formatting of the score file is
-left up to the programmer&mdash;if it's simpler to just spew it all out on
-one looong line, then that's ok.
+  <p>Any unrecognized elements in a score file should be ignored,
+  but not discarded.</p>
 
-   <p>The meaning of the various atoms are explained elsewhere in this
-manual (see <a href="Score-File-Format.html#Score-File-Format">Score File Format</a>).
+  <p>As you can see, white space is needed, but the type and amount
+  of white space is irrelevant. This means that formatting of the
+  score file is left up to the programmer&mdash;if it's simpler to
+  just spew it all out on one looong line, then that's ok.</p>
 
-   </body></html>
-
+  <p>The meaning of the various atoms are explained elsewhere in
+  this manual (see <a href=
+  "Score-File-Format.html#Score-File-Format">Score File
+  Format</a>).</p>
+</body>
+</html>

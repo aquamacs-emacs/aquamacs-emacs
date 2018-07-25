@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual documents EIEIO, an object framework for Emacs Lisp.
 
 Copyright (C) 2007-2016 Free Software Foundation, Inc.
@@ -14,247 +16,370 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Enhanced Implementation of Emacs Interpreted Objects: Slot Options</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects: Slot Options">
-<meta name="keywords" content="Enhanced Implementation of Emacs Interpreted Objects: Slot Options">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="Function-Index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Building-Classes.html#Building-Classes" rel="up" title="Building Classes">
-<link href="Class-Options.html#Class-Options" rel="next" title="Class Options">
-<link href="Inheritance.html#Inheritance" rel="prev" title="Inheritance">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Enhanced Implementation of Emacs Interpreted Objects: Slot
+  Options</title>
+  <meta name="description" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Slot Options" />
+  <meta name="keywords" content=
+  "Enhanced Implementation of Emacs Interpreted Objects: Slot Options" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="Function-Index.html#SEC_Contents" rel="contents"
+  title="Table of Contents" />
+  <link href="Building-Classes.html#Building-Classes" rel="up"
+  title="Building Classes" />
+  <link href="Class-Options.html#Class-Options" rel="next" title=
+  "Class Options" />
+  <link href="Inheritance.html#Inheritance" rel="prev" title=
+  "Inheritance" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Slot-Options"></a>
-<div class="header">
-<p>
-Next: <a href="Class-Options.html#Class-Options" accesskey="n" rel="next">Class Options</a>, Previous: <a href="Inheritance.html#Inheritance" accesskey="p" rel="prev">Inheritance</a>, Up: <a href="Building-Classes.html#Building-Classes" accesskey="u" rel="up">Building Classes</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Slot-Options-1"></a>
-<h3 class="section">3.2 Slot Options</h3>
+<body lang="en" xml:lang="en">
+  <a name="Slot-Options" id="Slot-Options"></a>
 
-<p>The <var>slot-list</var> argument to <code>defclass</code> is a list of elements
-where each element defines one slot.  Each slot is a list of the form
-</p>
-<div class="example">
-<pre class="example">  (SLOT-NAME :TAG1 ATTRIB-VALUE1
+  <div class="header">
+    <p>Next: <a href="Class-Options.html#Class-Options" accesskey=
+    "n" rel="next">Class Options</a>, Previous: <a href=
+    "Inheritance.html#Inheritance" accesskey="p" rel=
+    "prev">Inheritance</a>, Up: <a href=
+    "Building-Classes.html#Building-Classes" accesskey="u" rel=
+    "up">Building Classes</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Slot-Options-1" id="Slot-Options-1"></a>
+
+  <h3 class="section">3.2 Slot Options</h3>
+
+  <p>The <var>slot-list</var> argument to <code>defclass</code> is
+  a list of elements where each element defines one slot. Each slot
+  is a list of the form</p>
+
+  <div class="example">
+    <pre class="example">
+  (SLOT-NAME :TAG1 ATTRIB-VALUE1
              :TAG2 ATTRIB-VALUE2
              :TAGN ATTRIB-VALUEN)
-</pre></div>
+</pre>
+  </div>
 
-<p>where <var>SLOT-NAME</var> is a symbol that will be used to refer to the
-slot.  <var>:TAG</var> is a symbol that describes a feature to be set
-on the slot.  <var>ATTRIB-VALUE</var> is a lisp expression that will be
-used for <var>:TAG</var>.
-</p>
-<p>Valid tags are:
-</p>
-<dl compact="compact">
-<dt><code>:initarg</code></dt>
-<dd><p>A symbol that can be used in the argument list of the constructor to
-specify a value for this slot of the new instance being created.
-</p>
-<p>A good symbol to use for initarg is one that starts with a colon <code>:</code>.
-</p>
-<p>The slot specified like this:
-</p><div class="example">
-<pre class="example">  (myslot :initarg :myslot)
-</pre></div>
-<p>could then be initialized to the number 1 like this:
-</p><div class="example">
-<pre class="example">  (myobject :myslot 1)
-</pre></div>
+  <p>where <var>SLOT-NAME</var> is a symbol that will be used to
+  refer to the slot. <var>:TAG</var> is a symbol that describes a
+  feature to be set on the slot. <var>ATTRIB-VALUE</var> is a lisp
+  expression that will be used for <var>:TAG</var>.</p>
 
-<p>See <a href="Making-New-Objects.html#Making-New-Objects">Making New Objects</a>.
-</p>
-</dd>
-<dt><code>:initform</code></dt>
-<dd><p>An expression used as the default value for this slot.
-</p>
-<p>If <code>:initform</code> is left out, that slot defaults to being unbound.
-It is an error to reference an unbound slot, so if you need
-slots to always be in a bound state, you should always use an
-<code>:initform</code> specifier.
-</p>
-<p>Use <code>slot-boundp</code> to test if a slot is unbound
-(see <a href="Predicates.html#Predicates">Predicates</a>).  Use <code>slot-makeunbound</code> to set a slot to
-being unbound after giving it a value (see <a href="Accessing-Slots.html#Accessing-Slots">Accessing Slots</a>).
-</p>
-<p>The value passed to initform used to be automatically quoted.  Thus,
-</p><div class="example">
-<pre class="example">:initform (1 2 3)
-</pre></div>
-<p>will use the list as a value.  This is incompatible with CLOS (which would
-signal an error since 1 is not a valid function) and will likely change in the
-future, so better quote your initforms if they&rsquo;re just values.
-</p>
-</dd>
-<dt><code>:type</code></dt>
-<dd><p>An unquoted type specifier used to validate data set into this slot.
-See <a href="http://www.gnu.org/software/emacs/manual/html_node/cl/Type-Predicates.html#Type-Predicates">Type Predicates</a> in <cite>Common Lisp Extensions</cite>.
-Here are some examples:
- </p><dl compact="compact">
-<dt><code>symbol</code></dt>
-<dd><p>A symbol.
- </p></dd>
-<dt><code>number</code></dt>
-<dd><p>A number type
- </p></dd>
-<dt><code>my-class-name</code></dt>
-<dd><p>An object of your class type.
- </p></dd>
-<dt><code>(or null symbol)</code></dt>
-<dd><p>A symbol, or <code>nil</code>.
- </p></dd>
-</dl>
+  <p>Valid tags are:</p>
 
-</dd>
-<dt><code>:allocation</code></dt>
-<dd><p>Either :class or :instance (defaults to :instance) used to
-specify how data is stored.  Slots stored per instance have unique
-values for each object.  Slots stored per class have shared values for
-each object.  If one object changes a :class allocated slot, then all
-objects for that class gain the new value.
-</p>
-</dd>
-<dt><code>:documentation</code></dt>
-<dd><p>Documentation detailing the use of this slot.  This documentation is
-exposed when the user describes a class, and during customization of an
-object.
-</p>
-</dd>
-<dt><code>:accessor</code></dt>
-<dd><p>Name of a generic function which can be used to fetch the value of this slot.
-You can call this function later on your object and retrieve the value
-of the slot.
-</p>
-<p>This options is in the CLOS spec, but is not fully compliant in <i>EIEIO</i>.
-</p>
-</dd>
-<dt><code>:writer</code></dt>
-<dd><p>Name of a generic function which will write this slot.
-</p>
-<p>This options is in the CLOS spec, but is not fully compliant in <i>EIEIO</i>.
-</p>
-</dd>
-<dt><code>:reader</code></dt>
-<dd><p>Name of a generic function which will read this slot.
-</p>
-<p>This options is in the CLOS spec, but is not fully compliant in <i>EIEIO</i>.
-</p>
-</dd>
-<dt><code>:custom</code></dt>
-<dd><p>A custom :type specifier used when editing an object of this type.
-See documentation for <code>defcustom</code> for details.  This specifier is
-equivalent to the :type spec of a <code>defcustom</code> call.
-</p>
-<p>This options is specific to Emacs, and is not in the CLOS spec.
-</p>
-</dd>
-<dt><code>:label</code></dt>
-<dd><p>When customizing an object, the value of :label will be used instead
-of the slot name.  This enables better descriptions of the data than
-would usually be afforded.
-</p>
-<p>This options is specific to Emacs, and is not in the CLOS spec.
-</p>
-</dd>
-<dt><code>:group</code></dt>
-<dd><p>Similar to <code>defcustom</code>&rsquo;s :group command, this organizes different
-slots in an object into groups.  When customizing an object, only the
-slots belonging to a specific group need be worked with, simplifying the
-size of the display.
-</p>
-<p>This options is specific to Emacs, and is not in the CLOS spec.
-</p>
-</dd>
-<dt><code>:printer</code></dt>
-<dd><p>This routine takes a symbol which is a function name.  The function
-should accept one argument.  The argument is the value from the slot
-to be printed.  The function in <code>object-write</code> will write the
-slot value out to a printable form on <code>standard-output</code>.
-</p>
-<p>The output format MUST be something that could in turn be interpreted
-with <code>read</code> such that the object can be brought back in from the
-output stream.  Thus, if you wanted to output a symbol, you would need
-to quote the symbol.  If you wanted to run a function on load, you
-can output the code to do the construction of the value.
-</p>
-</dd>
-<dt><code>:protection</code></dt>
-<dd><p>This is an old option that is not supported any more.
-</p>
-<p>When using a slot referencing function such as <code>slot-value</code>, and
-the value behind <var>slot</var> is private or protected, then the current
-scope of operation must be within a method of the calling object.
-</p>
-<p>This protection is not enforced by the code any more, so it&rsquo;s only useful
-as documentation.
-</p>
-<p>Valid values are:
-</p>
-<dl compact="compact">
-<dt><code>:public</code></dt>
-<dd><p>Access this slot from any scope.
-</p></dd>
-<dt><code>:protected</code></dt>
-<dd><p>Access this slot only from methods of the same class or a child class.
-</p></dd>
-<dt><code>:private</code></dt>
-<dd><p>Access this slot only from methods of the same class.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><code>:initarg</code></dt>
 
-<p>This options is specific to Emacs, and is not in the CLOS spec.
-</p>
-</dd>
-</dl>
+    <dd>
+      <p>A symbol that can be used in the argument list of the
+      constructor to specify a value for this slot of the new
+      instance being created.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Class-Options.html#Class-Options" accesskey="n" rel="next">Class Options</a>, Previous: <a href="Inheritance.html#Inheritance" accesskey="p" rel="prev">Inheritance</a>, Up: <a href="Building-Classes.html#Building-Classes" accesskey="u" rel="up">Building Classes</a> &nbsp; [<a href="Function-Index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+      <p>A good symbol to use for initarg is one that starts with a
+      colon <code>:</code>.</p>
 
+      <p>The slot specified like this:</p>
 
+      <div class="example">
+        <pre class="example">
+  (myslot :initarg :myslot)
+</pre>
+      </div>
 
+      <p>could then be initialized to the number 1 like this:</p>
+
+      <div class="example">
+        <pre class="example">
+  (myobject :myslot 1)
+</pre>
+      </div>
+
+      <p>See <a href=
+      "Making-New-Objects.html#Making-New-Objects">Making New
+      Objects</a>.</p>
+    </dd>
+
+    <dt><code>:initform</code></dt>
+
+    <dd>
+      <p>An expression used as the default value for this slot.</p>
+
+      <p>If <code>:initform</code> is left out, that slot defaults
+      to being unbound. It is an error to reference an unbound
+      slot, so if you need slots to always be in a bound state, you
+      should always use an <code>:initform</code> specifier.</p>
+
+      <p>Use <code>slot-boundp</code> to test if a slot is unbound
+      (see <a href="Predicates.html#Predicates">Predicates</a>).
+      Use <code>slot-makeunbound</code> to set a slot to being
+      unbound after giving it a value (see <a href=
+      "Accessing-Slots.html#Accessing-Slots">Accessing
+      Slots</a>).</p>
+
+      <p>The value passed to initform used to be automatically
+      quoted. Thus,</p>
+
+      <div class="example">
+        <pre class="example">
+:initform (1 2 3)
+</pre>
+      </div>
+
+      <p>will use the list as a value. This is incompatible with
+      CLOS (which would signal an error since 1 is not a valid
+      function) and will likely change in the future, so better
+      quote your initforms if they&rsquo;re just values.</p>
+    </dd>
+
+    <dt><code>:type</code></dt>
+
+    <dd>
+      <p>An unquoted type specifier used to validate data set into
+      this slot. See <a href=
+      "http://www.gnu.org/software/emacs/manual/html_node/cl/Type-Predicates.html#Type-Predicates">
+      Type Predicates</a> in <cite>Common Lisp Extensions</cite>.
+      Here are some examples:</p>
+
+      <dl compact="compact">
+        <dt><code>symbol</code></dt>
+
+        <dd>
+          <p>A symbol.</p>
+        </dd>
+
+        <dt><code>number</code></dt>
+
+        <dd>
+          <p>A number type</p>
+        </dd>
+
+        <dt><code>my-class-name</code></dt>
+
+        <dd>
+          <p>An object of your class type.</p>
+        </dd>
+
+        <dt><code>(or null symbol)</code></dt>
+
+        <dd>
+          <p>A symbol, or <code>nil</code>.</p>
+        </dd>
+      </dl>
+    </dd>
+
+    <dt><code>:allocation</code></dt>
+
+    <dd>
+      <p>Either :class or :instance (defaults to :instance) used to
+      specify how data is stored. Slots stored per instance have
+      unique values for each object. Slots stored per class have
+      shared values for each object. If one object changes a :class
+      allocated slot, then all objects for that class gain the new
+      value.</p>
+    </dd>
+
+    <dt><code>:documentation</code></dt>
+
+    <dd>
+      <p>Documentation detailing the use of this slot. This
+      documentation is exposed when the user describes a class, and
+      during customization of an object.</p>
+    </dd>
+
+    <dt><code>:accessor</code></dt>
+
+    <dd>
+      <p>Name of a generic function which can be used to fetch the
+      value of this slot. You can call this function later on your
+      object and retrieve the value of the slot.</p>
+
+      <p>This options is in the CLOS spec, but is not fully
+      compliant in <i>EIEIO</i>.</p>
+    </dd>
+
+    <dt><code>:writer</code></dt>
+
+    <dd>
+      <p>Name of a generic function which will write this slot.</p>
+
+      <p>This options is in the CLOS spec, but is not fully
+      compliant in <i>EIEIO</i>.</p>
+    </dd>
+
+    <dt><code>:reader</code></dt>
+
+    <dd>
+      <p>Name of a generic function which will read this slot.</p>
+
+      <p>This options is in the CLOS spec, but is not fully
+      compliant in <i>EIEIO</i>.</p>
+    </dd>
+
+    <dt><code>:custom</code></dt>
+
+    <dd>
+      <p>A custom :type specifier used when editing an object of
+      this type. See documentation for <code>defcustom</code> for
+      details. This specifier is equivalent to the :type spec of a
+      <code>defcustom</code> call.</p>
+
+      <p>This options is specific to Emacs, and is not in the CLOS
+      spec.</p>
+    </dd>
+
+    <dt><code>:label</code></dt>
+
+    <dd>
+      <p>When customizing an object, the value of :label will be
+      used instead of the slot name. This enables better
+      descriptions of the data than would usually be afforded.</p>
+
+      <p>This options is specific to Emacs, and is not in the CLOS
+      spec.</p>
+    </dd>
+
+    <dt><code>:group</code></dt>
+
+    <dd>
+      <p>Similar to <code>defcustom</code>&rsquo;s :group command,
+      this organizes different slots in an object into groups. When
+      customizing an object, only the slots belonging to a specific
+      group need be worked with, simplifying the size of the
+      display.</p>
+
+      <p>This options is specific to Emacs, and is not in the CLOS
+      spec.</p>
+    </dd>
+
+    <dt><code>:printer</code></dt>
+
+    <dd>
+      <p>This routine takes a symbol which is a function name. The
+      function should accept one argument. The argument is the
+      value from the slot to be printed. The function in
+      <code>object-write</code> will write the slot value out to a
+      printable form on <code>standard-output</code>.</p>
+
+      <p>The output format MUST be something that could in turn be
+      interpreted with <code>read</code> such that the object can
+      be brought back in from the output stream. Thus, if you
+      wanted to output a symbol, you would need to quote the
+      symbol. If you wanted to run a function on load, you can
+      output the code to do the construction of the value.</p>
+    </dd>
+
+    <dt><code>:protection</code></dt>
+
+    <dd>
+      <p>This is an old option that is not supported any more.</p>
+
+      <p>When using a slot referencing function such as
+      <code>slot-value</code>, and the value behind <var>slot</var>
+      is private or protected, then the current scope of operation
+      must be within a method of the calling object.</p>
+
+      <p>This protection is not enforced by the code any more, so
+      it&rsquo;s only useful as documentation.</p>
+
+      <p>Valid values are:</p>
+
+      <dl compact="compact">
+        <dt><code>:public</code></dt>
+
+        <dd>
+          <p>Access this slot from any scope.</p>
+        </dd>
+
+        <dt><code>:protected</code></dt>
+
+        <dd>
+          <p>Access this slot only from methods of the same class
+          or a child class.</p>
+        </dd>
+
+        <dt><code>:private</code></dt>
+
+        <dd>
+          <p>Access this slot only from methods of the same
+          class.</p>
+        </dd>
+      </dl>
+
+      <p>This options is specific to Emacs, and is not in the CLOS
+      spec.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Class-Options.html#Class-Options" accesskey=
+    "n" rel="next">Class Options</a>, Previous: <a href=
+    "Inheritance.html#Inheritance" accesskey="p" rel=
+    "prev">Inheritance</a>, Up: <a href=
+    "Building-Classes.html#Building-Classes" accesskey="u" rel=
+    "up">Building Classes</a> &nbsp; [<a href=
+    "Function-Index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

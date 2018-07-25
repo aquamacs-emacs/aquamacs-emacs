@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents the GNU Emacs Common Lisp emulation package.
 
 Copyright (C) 1993, 2001-2016 Free Software Foundation, Inc.
@@ -14,177 +16,298 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Common Lisp Extensions: Lists as Sets</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Common Lisp Extensions: Lists as Sets">
-<meta name="keywords" content="Common Lisp Extensions: Lists as Sets">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Lists.html#Lists" rel="up" title="Lists">
-<link href="Association-Lists.html#Association-Lists" rel="next" title="Association Lists">
-<link href="Substitution-of-Expressions.html#Substitution-of-Expressions" rel="prev" title="Substitution of Expressions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Common Lisp Extensions: Lists as Sets</title>
+  <meta name="description" content=
+  "Common Lisp Extensions: Lists as Sets" />
+  <meta name="keywords" content=
+  "Common Lisp Extensions: Lists as Sets" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Lists.html#Lists" rel="up" title="Lists" />
+  <link href="Association-Lists.html#Association-Lists" rel="next"
+  title="Association Lists" />
+  <link href=
+  "Substitution-of-Expressions.html#Substitution-of-Expressions"
+  rel="prev" title="Substitution of Expressions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Lists-as-Sets"></a>
-<div class="header">
-<p>
-Next: <a href="Association-Lists.html#Association-Lists" accesskey="n" rel="next">Association Lists</a>, Previous: <a href="Substitution-of-Expressions.html#Substitution-of-Expressions" accesskey="p" rel="prev">Substitution of Expressions</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Lists-as-Sets-1"></a>
-<h3 class="section">10.3 Lists as Sets</h3>
+<body lang="en" xml:lang="en">
+  <a name="Lists-as-Sets" id="Lists-as-Sets"></a>
 
-<p>These functions perform operations on lists that represent sets
-of elements.
-</p>
-<dl>
-<dt><a name="index-cl_002dmember"></a>Function: <strong>cl-member</strong> <em>item list <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function searches <var>list</var> for an element matching <var>item</var>.
-If a match is found, it returns the cons cell whose <small>CAR</small> was
-the matching element.  Otherwise, it returns <code>nil</code>.  Elements
-are compared by <code>eql</code> by default; you can use the <code>:test</code>,
-<code>:test-not</code>, and <code>:key</code> arguments to modify this behavior.
-See <a href="Sequences.html#Sequences">Sequences</a>.
-</p>
-<p>The standard Emacs lisp function <code>member</code> uses <code>equal</code> for
-comparisons; it is equivalent to <code>(cl-member <var>item</var> <var>list</var>
-:test 'equal)</code>.  With no keyword arguments, <code>cl-member</code> is
-equivalent to <code>memq</code>.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href="Association-Lists.html#Association-Lists"
+    accesskey="n" rel="next">Association Lists</a>, Previous:
+    <a href=
+    "Substitution-of-Expressions.html#Substitution-of-Expressions"
+    accesskey="p" rel="prev">Substitution of Expressions</a>, Up:
+    <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Lists-as-Sets-1" id="Lists-as-Sets-1"></a>
 
-<a name="index-cl_002dmember_002dif"></a>
-<a name="index-cl_002dmember_002dif_002dnot"></a>
-<p>The <code>cl-member-if</code> and <code>cl-member-if-not</code> functions
-analogously search for elements that satisfy a given predicate.
-</p>
-<dl>
-<dt><a name="index-cl_002dtailp"></a>Function: <strong>cl-tailp</strong> <em>sublist list</em></dt>
-<dd><p>This function returns <code>t</code> if <var>sublist</var> is a sublist of
-<var>list</var>, i.e., if <var>sublist</var> is <code>eql</code> to <var>list</var> or to
-any of its <small>CDR</small>s.
-</p></dd></dl>
+  <h3 class="section">10.3 Lists as Sets</h3>
 
-<dl>
-<dt><a name="index-cl_002dadjoin"></a>Function: <strong>cl-adjoin</strong> <em>item list <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function conses <var>item</var> onto the front of <var>list</var>,
-like <code>(cons <var>item</var> <var>list</var>)</code>, but only if <var>item</var>
-is not already present on the list (as determined by <code>cl-member</code>).
-If a <code>:key</code> argument is specified, it is applied to
-<var>item</var> as well as to the elements of <var>list</var> during
-the search, on the reasoning that <var>item</var> is &ldquo;about&rdquo; to
-become part of the list.
-</p></dd></dl>
+  <p>These functions perform operations on lists that represent
+  sets of elements.</p>
 
-<dl>
-<dt><a name="index-cl_002dunion"></a>Function: <strong>cl-union</strong> <em>list1 list2 <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function combines two lists that represent sets of items,
-returning a list that represents the union of those two sets.
-The resulting list contains all items that appear in <var>list1</var>
-or <var>list2</var>, and no others.  If an item appears in both
-<var>list1</var> and <var>list2</var> it is copied only once.  If
-an item is duplicated in <var>list1</var> or <var>list2</var>, it is
-undefined whether or not that duplication will survive in the
-result list.  The order of elements in the result list is also
-undefined.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dmember" id=
+    "index-cl_002dmember"></a>Function: <strong>cl-member</strong>
+    <em>item list <tt>&amp;key :test :test-not :key</tt></em></dt>
 
-<dl>
-<dt><a name="index-cl_002dnunion"></a>Function: <strong>cl-nunion</strong> <em>list1 list2 <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This is a destructive version of <code>cl-union</code>; rather than copying,
-it tries to reuse the storage of the argument lists if possible.
-</p></dd></dl>
+    <dd>
+      <p>This function searches <var>list</var> for an element
+      matching <var>item</var>. If a match is found, it returns the
+      cons cell whose <small>CAR</small> was the matching element.
+      Otherwise, it returns <code>nil</code>. Elements are compared
+      by <code>eql</code> by default; you can use the
+      <code>:test</code>, <code>:test-not</code>, and
+      <code>:key</code> arguments to modify this behavior. See
+      <a href="Sequences.html#Sequences">Sequences</a>.</p>
 
-<dl>
-<dt><a name="index-cl_002dintersection"></a>Function: <strong>cl-intersection</strong> <em>list1 list2 <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function computes the intersection of the sets represented
-by <var>list1</var> and <var>list2</var>.  It returns the list of items
-that appear in both <var>list1</var> and <var>list2</var>.
-</p></dd></dl>
+      <p>The standard Emacs lisp function <code>member</code> uses
+      <code>equal</code> for comparisons; it is equivalent to
+      <code>(cl-member <var>item</var> <var>list</var> :test
+      'equal)</code>. With no keyword arguments,
+      <code>cl-member</code> is equivalent to
+      <code>memq</code>.</p>
+    </dd>
+  </dl><a name="index-cl_002dmember_002dif" id=
+  "index-cl_002dmember_002dif"></a> <a name=
+  "index-cl_002dmember_002dif_002dnot" id=
+  "index-cl_002dmember_002dif_002dnot"></a>
 
-<dl>
-<dt><a name="index-cl_002dnintersection"></a>Function: <strong>cl-nintersection</strong> <em>list1 list2 <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This is a destructive version of <code>cl-intersection</code>.  It
-tries to reuse storage of <var>list1</var> rather than copying.
-It does <em>not</em> reuse the storage of <var>list2</var>.
-</p></dd></dl>
+  <p>The <code>cl-member-if</code> and
+  <code>cl-member-if-not</code> functions analogously search for
+  elements that satisfy a given predicate.</p>
 
-<dl>
-<dt><a name="index-cl_002dset_002ddifference"></a>Function: <strong>cl-set-difference</strong> <em>list1 list2 <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function computes the &ldquo;set difference&rdquo; of <var>list1</var>
-and <var>list2</var>, i.e., the set of elements that appear in
-<var>list1</var> but <em>not</em> in <var>list2</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dtailp" id=
+    "index-cl_002dtailp"></a>Function: <strong>cl-tailp</strong>
+    <em>sublist list</em></dt>
 
-<dl>
-<dt><a name="index-cl_002dnset_002ddifference"></a>Function: <strong>cl-nset-difference</strong> <em>list1 list2 <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This is a destructive <code>cl-set-difference</code>, which will try
-to reuse <var>list1</var> if possible.
-</p></dd></dl>
+    <dd>
+      <p>This function returns <code>t</code> if <var>sublist</var>
+      is a sublist of <var>list</var>, i.e., if <var>sublist</var>
+      is <code>eql</code> to <var>list</var> or to any of its
+      <small>CDR</small>s.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dset_002dexclusive_002dor"></a>Function: <strong>cl-set-exclusive-or</strong> <em>list1 list2 <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function computes the &ldquo;set exclusive or&rdquo; of <var>list1</var>
-and <var>list2</var>, i.e., the set of elements that appear in
-exactly one of <var>list1</var> and <var>list2</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dadjoin" id=
+    "index-cl_002dadjoin"></a>Function: <strong>cl-adjoin</strong>
+    <em>item list <tt>&amp;key :test :test-not :key</tt></em></dt>
 
-<dl>
-<dt><a name="index-cl_002dnset_002dexclusive_002dor"></a>Function: <strong>cl-nset-exclusive-or</strong> <em>list1 list2 <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This is a destructive <code>cl-set-exclusive-or</code>, which will try
-to reuse <var>list1</var> and <var>list2</var> if possible.
-</p></dd></dl>
+    <dd>
+      <p>This function conses <var>item</var> onto the front of
+      <var>list</var>, like <code>(cons <var>item</var>
+      <var>list</var>)</code>, but only if <var>item</var> is not
+      already present on the list (as determined by
+      <code>cl-member</code>). If a <code>:key</code> argument is
+      specified, it is applied to <var>item</var> as well as to the
+      elements of <var>list</var> during the search, on the
+      reasoning that <var>item</var> is &ldquo;about&rdquo; to
+      become part of the list.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-cl_002dsubsetp"></a>Function: <strong>cl-subsetp</strong> <em>list1 list2 <tt>&amp;key :test :test-not :key</tt></em></dt>
-<dd><p>This function checks whether <var>list1</var> represents a subset
-of <var>list2</var>, i.e., whether every element of <var>list1</var>
-also appears in <var>list2</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-cl_002dunion" id=
+    "index-cl_002dunion"></a>Function: <strong>cl-union</strong>
+    <em>list1 list2 <tt>&amp;key :test :test-not
+    :key</tt></em></dt>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Association-Lists.html#Association-Lists" accesskey="n" rel="next">Association Lists</a>, Previous: <a href="Substitution-of-Expressions.html#Substitution-of-Expressions" accesskey="p" rel="prev">Substitution of Expressions</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+    <dd>
+      <p>This function combines two lists that represent sets of
+      items, returning a list that represents the union of those
+      two sets. The resulting list contains all items that appear
+      in <var>list1</var> or <var>list2</var>, and no others. If an
+      item appears in both <var>list1</var> and <var>list2</var> it
+      is copied only once. If an item is duplicated in
+      <var>list1</var> or <var>list2</var>, it is undefined whether
+      or not that duplication will survive in the result list. The
+      order of elements in the result list is also undefined.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dnunion" id=
+    "index-cl_002dnunion"></a>Function: <strong>cl-nunion</strong>
+    <em>list1 list2 <tt>&amp;key :test :test-not
+    :key</tt></em></dt>
 
+    <dd>
+      <p>This is a destructive version of <code>cl-union</code>;
+      rather than copying, it tries to reuse the storage of the
+      argument lists if possible.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-cl_002dintersection" id=
+    "index-cl_002dintersection"></a>Function:
+    <strong>cl-intersection</strong> <em>list1 list2 <tt>&amp;key
+    :test :test-not :key</tt></em></dt>
+
+    <dd>
+      <p>This function computes the intersection of the sets
+      represented by <var>list1</var> and <var>list2</var>. It
+      returns the list of items that appear in both
+      <var>list1</var> and <var>list2</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dnintersection" id=
+    "index-cl_002dnintersection"></a>Function:
+    <strong>cl-nintersection</strong> <em>list1 list2 <tt>&amp;key
+    :test :test-not :key</tt></em></dt>
+
+    <dd>
+      <p>This is a destructive version of
+      <code>cl-intersection</code>. It tries to reuse storage of
+      <var>list1</var> rather than copying. It does <em>not</em>
+      reuse the storage of <var>list2</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dset_002ddifference" id=
+    "index-cl_002dset_002ddifference"></a>Function:
+    <strong>cl-set-difference</strong> <em>list1 list2 <tt>&amp;key
+    :test :test-not :key</tt></em></dt>
+
+    <dd>
+      <p>This function computes the &ldquo;set difference&rdquo; of
+      <var>list1</var> and <var>list2</var>, i.e., the set of
+      elements that appear in <var>list1</var> but <em>not</em> in
+      <var>list2</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dnset_002ddifference" id=
+    "index-cl_002dnset_002ddifference"></a>Function:
+    <strong>cl-nset-difference</strong> <em>list1 list2
+    <tt>&amp;key :test :test-not :key</tt></em></dt>
+
+    <dd>
+      <p>This is a destructive <code>cl-set-difference</code>,
+      which will try to reuse <var>list1</var> if possible.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dset_002dexclusive_002dor" id=
+    "index-cl_002dset_002dexclusive_002dor"></a>Function:
+    <strong>cl-set-exclusive-or</strong> <em>list1 list2
+    <tt>&amp;key :test :test-not :key</tt></em></dt>
+
+    <dd>
+      <p>This function computes the &ldquo;set exclusive or&rdquo;
+      of <var>list1</var> and <var>list2</var>, i.e., the set of
+      elements that appear in exactly one of <var>list1</var> and
+      <var>list2</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dnset_002dexclusive_002dor" id=
+    "index-cl_002dnset_002dexclusive_002dor"></a>Function:
+    <strong>cl-nset-exclusive-or</strong> <em>list1 list2
+    <tt>&amp;key :test :test-not :key</tt></em></dt>
+
+    <dd>
+      <p>This is a destructive <code>cl-set-exclusive-or</code>,
+      which will try to reuse <var>list1</var> and <var>list2</var>
+      if possible.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cl_002dsubsetp" id=
+    "index-cl_002dsubsetp"></a>Function:
+    <strong>cl-subsetp</strong> <em>list1 list2 <tt>&amp;key :test
+    :test-not :key</tt></em></dt>
+
+    <dd>
+      <p>This function checks whether <var>list1</var> represents a
+      subset of <var>list2</var>, i.e., whether every element of
+      <var>list1</var> also appears in <var>list2</var>.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Association-Lists.html#Association-Lists"
+    accesskey="n" rel="next">Association Lists</a>, Previous:
+    <a href=
+    "Substitution-of-Expressions.html#Substitution-of-Expressions"
+    accesskey="p" rel="prev">Substitution of Expressions</a>, Up:
+    <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

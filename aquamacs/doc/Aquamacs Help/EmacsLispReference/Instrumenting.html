@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,140 +19,191 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Instrumenting</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Instrumenting">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Instrumenting">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Edebug.html#Edebug" rel="up" title="Edebug">
-<link href="Edebug-Execution-Modes.html#Edebug-Execution-Modes" rel="next" title="Edebug Execution Modes">
-<link href="Using-Edebug.html#Using-Edebug" rel="prev" title="Using Edebug">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Instrumenting</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Instrumenting" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Instrumenting" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Edebug.html#Edebug" rel="up" title="Edebug" />
+  <link href="Edebug-Execution-Modes.html#Edebug-Execution-Modes"
+  rel="next" title="Edebug Execution Modes" />
+  <link href="Using-Edebug.html#Using-Edebug" rel="prev" title=
+  "Using Edebug" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Instrumenting" id="Instrumenting"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Edebug-Execution-Modes.html#Edebug-Execution-Modes" accesskey=
+    "n" rel="next">Edebug Execution Modes</a>, Previous: <a href=
+    "Using-Edebug.html#Using-Edebug" accesskey="p" rel="prev">Using
+    Edebug</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel=
+    "up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Instrumenting-for-Edebug" id=
+  "Instrumenting-for-Edebug"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Instrumenting"></a>
-<div class="header">
-<p>
-Next: <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes" accesskey="n" rel="next">Edebug Execution Modes</a>, Previous: <a href="Using-Edebug.html#Using-Edebug" accesskey="p" rel="prev">Using Edebug</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Instrumenting-for-Edebug"></a>
-<h4 class="subsection">17.2.2 Instrumenting for Edebug</h4>
-<a name="index-instrumenting-for-Edebug"></a>
+  <h4 class="subsection">17.2.2 Instrumenting for
+  Edebug</h4><a name="index-instrumenting-for-Edebug" id=
+  "index-instrumenting-for-Edebug"></a>
 
-<p>In order to use Edebug to debug Lisp code, you must first
-<em>instrument</em> the code.  Instrumenting code inserts additional code
-into it, to invoke Edebug at the proper places.
-</p>
-<a name="index-C_002dM_002dx"></a>
-<a name="index-eval_002ddefun-_0028Edebug_0029"></a>
-<p>When you invoke command <kbd>C-M-x</kbd> (<code>eval-defun</code>) with a
-prefix argument on a function definition, it instruments the
-definition before evaluating it.  (This does not modify the source
-code itself.)  If the variable <code>edebug-all-defs</code> is
-non-<code>nil</code>, that inverts the meaning of the prefix argument: in
-this case, <kbd>C-M-x</kbd> instruments the definition <em>unless</em> it has
-a prefix argument.  The default value of <code>edebug-all-defs</code> is
-<code>nil</code>.  The command <kbd>M-x edebug-all-defs</kbd> toggles the value
-of the variable <code>edebug-all-defs</code>.
-</p>
-<a name="index-eval_002dregion-_0028Edebug_0029"></a>
-<a name="index-eval_002dbuffer-_0028Edebug_0029"></a>
-<a name="index-eval_002dcurrent_002dbuffer-_0028Edebug_0029"></a>
-<p>If <code>edebug-all-defs</code> is non-<code>nil</code>, then the commands
-<code>eval-region</code>, <code>eval-current-buffer</code>, and <code>eval-buffer</code>
-also instrument any definitions they evaluate.  Similarly,
-<code>edebug-all-forms</code> controls whether <code>eval-region</code> should
-instrument <em>any</em> form, even non-defining forms.  This doesn&rsquo;t apply
-to loading or evaluations in the minibuffer.  The command <kbd>M-x
-edebug-all-forms</kbd> toggles this option.
-</p>
-<a name="index-edebug_002deval_002dtop_002dlevel_002dform"></a>
-<a name="index-edebug_002ddefun"></a>
-<p>Another command, <kbd>M-x edebug-eval-top-level-form</kbd>, is available to
-instrument any top-level form regardless of the values of
-<code>edebug-all-defs</code> and <code>edebug-all-forms</code>.
-<code>edebug-defun</code> is an alias for <code>edebug-eval-top-level-form</code>.
-</p>
-<p>While Edebug is active, the command <kbd>I</kbd>
-(<code>edebug-instrument-callee</code>) instruments the definition of the
-function or macro called by the list form after point, if it is not already
-instrumented.  This is possible only if Edebug knows where to find the
-source for that function; for this reason, after loading Edebug,
-<code>eval-region</code> records the position of every definition it
-evaluates, even if not instrumenting it.  See also the <kbd>i</kbd> command
-(see <a href="Jumping.html#Jumping">Jumping</a>), which steps into the call after instrumenting the
-function.
-</p>
-<p>Edebug knows how to instrument all the standard special forms,
-<code>interactive</code> forms with an expression argument, anonymous lambda
-expressions, and other defining forms.  However, Edebug cannot determine
-on its own what a user-defined macro will do with the arguments of a
-macro call, so you must provide that information using Edebug
-specifications; for details, see <a href="Edebug-and-Macros.html#Edebug-and-Macros">Edebug and Macros</a>.
-</p>
-<p>When Edebug is about to instrument code for the first time in a
-session, it runs the hook <code>edebug-setup-hook</code>, then sets it to
-<code>nil</code>.  You can use this to load Edebug specifications
-associated with a package you are using, but only when you use Edebug.
-</p>
-<a name="index-eval_002dexpression-_0028Edebug_0029"></a>
-<p>To remove instrumentation from a definition, simply re-evaluate its
-definition in a way that does not instrument.  There are two ways of
-evaluating forms that never instrument them: from a file with
-<code>load</code>, and from the minibuffer with <code>eval-expression</code>
-(<kbd>M-:</kbd>).
-</p>
-<p>If Edebug detects a syntax error while instrumenting, it leaves point
-at the erroneous code and signals an <code>invalid-read-syntax</code> error.
-</p>
-<p>See <a href="Edebug-Eval.html#Edebug-Eval">Edebug Eval</a>, for other evaluation functions available
-inside of Edebug.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Edebug-Execution-Modes.html#Edebug-Execution-Modes" accesskey="n" rel="next">Edebug Execution Modes</a>, Previous: <a href="Using-Edebug.html#Using-Edebug" accesskey="p" rel="prev">Using Edebug</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>In order to use Edebug to debug Lisp code, you must first
+  <em>instrument</em> the code. Instrumenting code inserts
+  additional code into it, to invoke Edebug at the proper
+  places.</p><a name="index-C_002dM_002dx" id=
+  "index-C_002dM_002dx"></a> <a name=
+  "index-eval_002ddefun-_0028Edebug_0029" id=
+  "index-eval_002ddefun-_0028Edebug_0029"></a>
 
+  <p>When you invoke command <kbd>C-M-x</kbd>
+  (<code>eval-defun</code>) with a prefix argument on a function
+  definition, it instruments the definition before evaluating it.
+  (This does not modify the source code itself.) If the variable
+  <code>edebug-all-defs</code> is non-<code>nil</code>, that
+  inverts the meaning of the prefix argument: in this case,
+  <kbd>C-M-x</kbd> instruments the definition <em>unless</em> it
+  has a prefix argument. The default value of
+  <code>edebug-all-defs</code> is <code>nil</code>. The command
+  <kbd>M-x edebug-all-defs</kbd> toggles the value of the variable
+  <code>edebug-all-defs</code>.</p><a name=
+  "index-eval_002dregion-_0028Edebug_0029" id=
+  "index-eval_002dregion-_0028Edebug_0029"></a> <a name=
+  "index-eval_002dbuffer-_0028Edebug_0029" id=
+  "index-eval_002dbuffer-_0028Edebug_0029"></a> <a name=
+  "index-eval_002dcurrent_002dbuffer-_0028Edebug_0029" id=
+  "index-eval_002dcurrent_002dbuffer-_0028Edebug_0029"></a>
 
+  <p>If <code>edebug-all-defs</code> is non-<code>nil</code>, then
+  the commands <code>eval-region</code>,
+  <code>eval-current-buffer</code>, and <code>eval-buffer</code>
+  also instrument any definitions they evaluate. Similarly,
+  <code>edebug-all-forms</code> controls whether
+  <code>eval-region</code> should instrument <em>any</em> form,
+  even non-defining forms. This doesn&rsquo;t apply to loading or
+  evaluations in the minibuffer. The command <kbd>M-x
+  edebug-all-forms</kbd> toggles this option.</p><a name=
+  "index-edebug_002deval_002dtop_002dlevel_002dform" id=
+  "index-edebug_002deval_002dtop_002dlevel_002dform"></a> <a name=
+  "index-edebug_002ddefun" id="index-edebug_002ddefun"></a>
 
+  <p>Another command, <kbd>M-x edebug-eval-top-level-form</kbd>, is
+  available to instrument any top-level form regardless of the
+  values of <code>edebug-all-defs</code> and
+  <code>edebug-all-forms</code>. <code>edebug-defun</code> is an
+  alias for <code>edebug-eval-top-level-form</code>.</p>
+
+  <p>While Edebug is active, the command <kbd>I</kbd>
+  (<code>edebug-instrument-callee</code>) instruments the
+  definition of the function or macro called by the list form after
+  point, if it is not already instrumented. This is possible only
+  if Edebug knows where to find the source for that function; for
+  this reason, after loading Edebug, <code>eval-region</code>
+  records the position of every definition it evaluates, even if
+  not instrumenting it. See also the <kbd>i</kbd> command (see
+  <a href="Jumping.html#Jumping">Jumping</a>), which steps into the
+  call after instrumenting the function.</p>
+
+  <p>Edebug knows how to instrument all the standard special forms,
+  <code>interactive</code> forms with an expression argument,
+  anonymous lambda expressions, and other defining forms. However,
+  Edebug cannot determine on its own what a user-defined macro will
+  do with the arguments of a macro call, so you must provide that
+  information using Edebug specifications; for details, see
+  <a href="Edebug-and-Macros.html#Edebug-and-Macros">Edebug and
+  Macros</a>.</p>
+
+  <p>When Edebug is about to instrument code for the first time in
+  a session, it runs the hook <code>edebug-setup-hook</code>, then
+  sets it to <code>nil</code>. You can use this to load Edebug
+  specifications associated with a package you are using, but only
+  when you use Edebug.</p><a name=
+  "index-eval_002dexpression-_0028Edebug_0029" id=
+  "index-eval_002dexpression-_0028Edebug_0029"></a>
+
+  <p>To remove instrumentation from a definition, simply
+  re-evaluate its definition in a way that does not instrument.
+  There are two ways of evaluating forms that never instrument
+  them: from a file with <code>load</code>, and from the minibuffer
+  with <code>eval-expression</code> (<kbd>M-:</kbd>).</p>
+
+  <p>If Edebug detects a syntax error while instrumenting, it
+  leaves point at the erroneous code and signals an
+  <code>invalid-read-syntax</code> error.</p>
+
+  <p>See <a href="Edebug-Eval.html#Edebug-Eval">Edebug Eval</a>,
+  for other evaluation functions available inside of Edebug.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Edebug-Execution-Modes.html#Edebug-Execution-Modes" accesskey=
+    "n" rel="next">Edebug Execution Modes</a>, Previous: <a href=
+    "Using-Edebug.html#Using-Edebug" accesskey="p" rel="prev">Using
+    Edebug</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel=
+    "up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

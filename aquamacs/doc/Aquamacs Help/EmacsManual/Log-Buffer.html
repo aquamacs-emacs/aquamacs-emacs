@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,148 +20,220 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Log Buffer</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Log Buffer">
-<meta name="keywords" content="GNU Emacs Manual: Log Buffer">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Version-Control.html#Version-Control" rel="up" title="Version Control">
-<link href="Registering.html#Registering" rel="next" title="Registering">
-<link href="Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v" rel="prev" title="Advanced C-x v v">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Log Buffer</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Log Buffer" />
+  <meta name="keywords" content="GNU Emacs Manual: Log Buffer" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Version-Control.html#Version-Control" rel="up" title=
+  "Version Control" />
+  <link href="Registering.html#Registering" rel="next" title=
+  "Registering" />
+  <link href="Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v" rel=
+  "prev" title="Advanced C-x v v" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Log-Buffer" id="Log-Buffer"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Registering.html#Registering" accesskey="n"
+    rel="next">Registering</a>, Previous: <a href=
+    "Basic-VC-Editing.html#Basic-VC-Editing" accesskey="p" rel=
+    "prev">Basic VC Editing</a>, Up: <a href=
+    "Version-Control.html#Version-Control" accesskey="u" rel=
+    "up">Version Control</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Features-of-the-Log-Entry-Buffer" id=
+  "Features-of-the-Log-Entry-Buffer"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Log-Buffer"></a>
-<div class="header">
-<p>
-Next: <a href="Registering.html#Registering" accesskey="n" rel="next">Registering</a>, Previous: <a href="Basic-VC-Editing.html#Basic-VC-Editing" accesskey="p" rel="prev">Basic VC Editing</a>, Up: <a href="Version-Control.html#Version-Control" accesskey="u" rel="up">Version Control</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Features-of-the-Log-Entry-Buffer"></a>
-<h4 class="subsection">28.1.4 Features of the Log Entry Buffer</h4>
+  <h4 class="subsection">28.1.4 Features of the Log Entry
+  Buffer</h4><a name=
+  "index-C_002dc-C_002dc-_0028Log-Edit-mode_0029" id=
+  "index-C_002dc-C_002dc-_0028Log-Edit-mode_0029"></a> <a name=
+  "index-log_002dedit_002ddone" id=
+  "index-log_002dedit_002ddone"></a>
 
-<a name="index-C_002dc-C_002dc-_0028Log-Edit-mode_0029"></a>
-<a name="index-log_002dedit_002ddone"></a>
-<p>When you tell VC to commit a change, it pops up a buffer named
-<samp>*vc-log*</samp>.  In this buffer, you should write a <em>log entry</em>
-describing the changes you have made (see <a href="Why-Version-Control_003f.html#Why-Version-Control_003f">Why Version Control?</a>).
-After you are done, type <kbd>C-c C-c</kbd> (<code>log-edit-done</code>) to exit
-the buffer and commit the change, together with your log entry.
-</p>
-<a name="index-Log-Edit-mode"></a>
-<a name="index-mode_002c-Log-Edit"></a>
-<a name="index-vc_002dlog_002dmode_002dhook"></a>
-<p>The major mode for the <samp>*vc-log*</samp> buffer is Log Edit mode, a
-variant of Text mode (see <a href="Text-Mode.html#Text-Mode">Text Mode</a>).  On entering Log Edit mode,
-Emacs runs the hooks <code>text-mode-hook</code> and <code>vc-log-mode-hook</code>
-(see <a href="Hooks.html#Hooks">Hooks</a>).
-</p>
-<p>In the <samp>*vc-log*</samp> buffer, you can write one or more <em>header
-lines</em>, specifying additional information to be supplied to the
-version control system.  Each header line must occupy a single line at
-the top of the buffer; the first line that is not a header line is
-treated as the start of the log entry.  For example, the following
-header line states that the present change was not written by you, but
-by another developer:
-</p>
-<div class="smallexample">
-<pre class="smallexample">Author: J. R. Hacker &lt;jrh@example.com&gt;
-</pre></div>
+  <p>When you tell VC to commit a change, it pops up a buffer named
+  <samp>*vc-log*</samp>. In this buffer, you should write a <em>log
+  entry</em> describing the changes you have made (see <a href=
+  "Why-Version-Control_003f.html#Why-Version-Control_003f">Why
+  Version Control?</a>). After you are done, type <kbd>C-c
+  C-c</kbd> (<code>log-edit-done</code>) to exit the buffer and
+  commit the change, together with your log entry.</p><a name=
+  "index-Log-Edit-mode" id="index-Log-Edit-mode"></a> <a name=
+  "index-mode_002c-Log-Edit" id="index-mode_002c-Log-Edit"></a>
+  <a name="index-vc_002dlog_002dmode_002dhook" id=
+  "index-vc_002dlog_002dmode_002dhook"></a>
 
-<p>Apart from the &lsquo;<samp>Author</samp>&rsquo; header, Emacs recognizes the headers
-&lsquo;<samp>Date</samp>&rsquo; (a manually-specified commit time) and &lsquo;<samp>Fixes</samp>&rsquo; (a
-reference to a bug fixed by the change).  Not all version control
-systems recognize all headers: Bazaar recognizes all three headers,
-while Git, Mercurial, and Monotone recognize only &lsquo;<samp>Author</samp>&rsquo; and
-&lsquo;<samp>Date</samp>&rsquo;.  If you specify a header for a system that does not
-support it, the header is treated as part of the log entry.
-</p>
-<a name="index-C_002dc-C_002df-_0028Log-Edit-mode_0029"></a>
-<a name="index-log_002dedit_002dshow_002dfiles"></a>
-<a name="index-C_002dc-C_002dd-_0028Log-Edit-mode_0029"></a>
-<a name="index-log_002dedit_002dshow_002ddiff"></a>
-<p>While in the <samp>*vc-log*</samp> buffer, the current VC fileset is
-considered to be the fileset that will be committed if you type
-<kbd><span class="nolinebreak">C-c</span>&nbsp;<span class="nolinebreak">C-c</span></kbd><!-- /@w -->.  To view a list of the files in the VC fileset,
-type <kbd><span class="nolinebreak">C-c</span>&nbsp;<span class="nolinebreak">C-f</span></kbd><!-- /@w --> (<code>log-edit-show-files</code>).  To view a diff
-of changes between the VC fileset and the version from which you
-started editing (see <a href="Old-Revisions.html#Old-Revisions">Old Revisions</a>), type <kbd>C-c C-d</kbd>
-(<code>log-edit-show-diff</code>).
-</p>
-<a name="index-C_002dc-C_002da-_0028Log-Edit-mode_0029"></a>
-<a name="index-log_002dedit_002dinsert_002dchangelog"></a>
-<p>If the VC fileset includes one or more <samp>ChangeLog</samp> files
-(see <a href="Change-Log.html#Change-Log">Change Log</a>), type <kbd>C-c C-a</kbd>
-(<code>log-edit-insert-changelog</code>) to pull the relevant entries into
-the <samp>*vc-log*</samp> buffer.  If the topmost item in each
-<samp>ChangeLog</samp> was made under your user name on the current date,
-this command searches that item for entries matching the file(s) to be
-committed, and inserts them.
-If you are using CVS or RCS, see <a href="Change-Logs-and-VC.html#Change-Logs-and-VC">Change Logs and VC</a>, for the
-opposite way of working&mdash;generating ChangeLog entries from the Log
-Edit buffer.
-</p>
-<p>To abort a commit, just <em>don&rsquo;t</em> type <kbd>C-c C-c</kbd> in that
-buffer.  You can switch buffers and do other editing.  As long as you
-don&rsquo;t try to make another commit, the entry you were editing remains
-in the <samp>*vc-log*</samp> buffer, and you can go back to that buffer at
-any time to complete the commit.
-</p>
-<a name="index-M_002dn-_0028Log-Edit-mode_0029"></a>
-<a name="index-M_002dp-_0028Log-Edit-mode_0029"></a>
-<a name="index-M_002ds-_0028Log-Edit-mode_0029"></a>
-<a name="index-M_002dr-_0028Log-Edit-mode_0029"></a>
-<p>You can also browse the history of previous log entries to duplicate
-a commit comment.  This can be useful when you want to make several
-commits with similar comments.  The commands <kbd>M-n</kbd>, <kbd>M-p</kbd>,
-<kbd>M-s</kbd> and <kbd>M-r</kbd> for doing this work just like the minibuffer
-history commands (see <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>), except that they are
-used outside the minibuffer.
-</p>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Registering.html#Registering" accesskey="n" rel="next">Registering</a>, Previous: <a href="Basic-VC-Editing.html#Basic-VC-Editing" accesskey="p" rel="prev">Basic VC Editing</a>, Up: <a href="Version-Control.html#Version-Control" accesskey="u" rel="up">Version Control</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The major mode for the <samp>*vc-log*</samp> buffer is Log
+  Edit mode, a variant of Text mode (see <a href=
+  "Text-Mode.html#Text-Mode">Text Mode</a>). On entering Log Edit
+  mode, Emacs runs the hooks <code>text-mode-hook</code> and
+  <code>vc-log-mode-hook</code> (see <a href=
+  "Hooks.html#Hooks">Hooks</a>).</p>
 
+  <p>In the <samp>*vc-log*</samp> buffer, you can write one or more
+  <em>header lines</em>, specifying additional information to be
+  supplied to the version control system. Each header line must
+  occupy a single line at the top of the buffer; the first line
+  that is not a header line is treated as the start of the log
+  entry. For example, the following header line states that the
+  present change was not written by you, but by another
+  developer:</p>
 
+  <div class="smallexample">
+    <pre class="smallexample">
+Author: J. R. Hacker &lt;jrh@example.com&gt;
+</pre>
+  </div>
 
+  <p>Apart from the &lsquo;<samp>Author</samp>&rsquo; header, Emacs
+  recognizes the headers &lsquo;<samp>Date</samp>&rsquo; (a
+  manually-specified commit time) and
+  &lsquo;<samp>Fixes</samp>&rsquo; (a reference to a bug fixed by
+  the change). Not all version control systems recognize all
+  headers: Bazaar recognizes all three headers, while Git,
+  Mercurial, and Monotone recognize only
+  &lsquo;<samp>Author</samp>&rsquo; and
+  &lsquo;<samp>Date</samp>&rsquo;. If you specify a header for a
+  system that does not support it, the header is treated as part of
+  the log entry.</p><a name=
+  "index-C_002dc-C_002df-_0028Log-Edit-mode_0029" id=
+  "index-C_002dc-C_002df-_0028Log-Edit-mode_0029"></a> <a name=
+  "index-log_002dedit_002dshow_002dfiles" id=
+  "index-log_002dedit_002dshow_002dfiles"></a> <a name=
+  "index-C_002dc-C_002dd-_0028Log-Edit-mode_0029" id=
+  "index-C_002dc-C_002dd-_0028Log-Edit-mode_0029"></a> <a name=
+  "index-log_002dedit_002dshow_002ddiff" id=
+  "index-log_002dedit_002dshow_002ddiff"></a>
+
+  <p>While in the <samp>*vc-log*</samp> buffer, the current VC
+  fileset is considered to be the fileset that will be committed if
+  you type <kbd><span class=
+  "nolinebreak">C-c</span>&nbsp;<span class=
+  "nolinebreak">C-c</span></kbd><!-- /@w -->. To view a list of the
+  files in the VC fileset, type <kbd><span class=
+  "nolinebreak">C-c</span>&nbsp;<span class=
+  "nolinebreak">C-f</span></kbd><!-- /@w -->
+  (<code>log-edit-show-files</code>). To view a diff of changes
+  between the VC fileset and the version from which you started
+  editing (see <a href="Old-Revisions.html#Old-Revisions">Old
+  Revisions</a>), type <kbd>C-c C-d</kbd>
+  (<code>log-edit-show-diff</code>).</p><a name=
+  "index-C_002dc-C_002da-_0028Log-Edit-mode_0029" id=
+  "index-C_002dc-C_002da-_0028Log-Edit-mode_0029"></a> <a name=
+  "index-log_002dedit_002dinsert_002dchangelog" id=
+  "index-log_002dedit_002dinsert_002dchangelog"></a>
+
+  <p>If the VC fileset includes one or more <samp>ChangeLog</samp>
+  files (see <a href="Change-Log.html#Change-Log">Change Log</a>),
+  type <kbd>C-c C-a</kbd> (<code>log-edit-insert-changelog</code>)
+  to pull the relevant entries into the <samp>*vc-log*</samp>
+  buffer. If the topmost item in each <samp>ChangeLog</samp> was
+  made under your user name on the current date, this command
+  searches that item for entries matching the file(s) to be
+  committed, and inserts them. If you are using CVS or RCS, see
+  <a href="Change-Logs-and-VC.html#Change-Logs-and-VC">Change Logs
+  and VC</a>, for the opposite way of working&mdash;generating
+  ChangeLog entries from the Log Edit buffer.</p>
+
+  <p>To abort a commit, just <em>don&rsquo;t</em> type <kbd>C-c
+  C-c</kbd> in that buffer. You can switch buffers and do other
+  editing. As long as you don&rsquo;t try to make another commit,
+  the entry you were editing remains in the <samp>*vc-log*</samp>
+  buffer, and you can go back to that buffer at any time to
+  complete the commit.</p><a name=
+  "index-M_002dn-_0028Log-Edit-mode_0029" id=
+  "index-M_002dn-_0028Log-Edit-mode_0029"></a> <a name=
+  "index-M_002dp-_0028Log-Edit-mode_0029" id=
+  "index-M_002dp-_0028Log-Edit-mode_0029"></a> <a name=
+  "index-M_002ds-_0028Log-Edit-mode_0029" id=
+  "index-M_002ds-_0028Log-Edit-mode_0029"></a> <a name=
+  "index-M_002dr-_0028Log-Edit-mode_0029" id=
+  "index-M_002dr-_0028Log-Edit-mode_0029"></a>
+
+  <p>You can also browse the history of previous log entries to
+  duplicate a commit comment. This can be useful when you want to
+  make several commits with similar comments. The commands
+  <kbd>M-n</kbd>, <kbd>M-p</kbd>, <kbd>M-s</kbd> and <kbd>M-r</kbd>
+  for doing this work just like the minibuffer history commands
+  (see <a href=
+  "Minibuffer-History.html#Minibuffer-History">Minibuffer
+  History</a>), except that they are used outside the
+  minibuffer.</p>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Registering.html#Registering" accesskey="n"
+    rel="next">Registering</a>, Previous: <a href=
+    "Basic-VC-Editing.html#Basic-VC-Editing" accesskey="p" rel=
+    "prev">Basic VC Editing</a>, Up: <a href=
+    "Version-Control.html#Version-Control" accesskey="u" rel=
+    "up">Version Control</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,261 +14,397 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Gnus Manual: Loose Threads</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Gnus Manual: Loose Threads">
-<meta name="keywords" content="Gnus Manual: Loose Threads">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Customizing-Threading.html#Customizing-Threading" rel="up" title="Customizing Threading">
-<link href="Filling-In-Threads.html#Filling-In-Threads" rel="next" title="Filling In Threads">
-<link href="Customizing-Threading.html#Customizing-Threading" rel="prev" title="Customizing Threading">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Gnus Manual: Loose Threads</title>
+  <meta name="description" content="Gnus Manual: Loose Threads" />
+  <meta name="keywords" content="Gnus Manual: Loose Threads" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Customizing-Threading.html#Customizing-Threading"
+  rel="up" title="Customizing Threading" />
+  <link href="Filling-In-Threads.html#Filling-In-Threads" rel=
+  "next" title="Filling In Threads" />
+  <link href="Customizing-Threading.html#Customizing-Threading"
+  rel="prev" title="Customizing Threading" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Loose-Threads"></a>
-<div class="header">
-<p>
-Next: <a href="Filling-In-Threads.html#Filling-In-Threads" accesskey="n" rel="next">Filling In Threads</a>, Up: <a href="Customizing-Threading.html#Customizing-Threading" accesskey="u" rel="up">Customizing Threading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Loose-Threads-1"></a>
-<h4 class="subsubsection">3.9.1.1 Loose Threads</h4>
-<a name="index-_003c"></a>
-<a name="index-_003e"></a>
-<a name="index-loose-threads"></a>
+<body lang="en" xml:lang="en">
+  <a name="Loose-Threads" id="Loose-Threads"></a>
 
-<dl compact="compact">
-<dt><code>gnus-summary-make-false-root</code></dt>
-<dd><a name="index-gnus_002dsummary_002dmake_002dfalse_002droot"></a>
-<p>If non-<code>nil</code>, Gnus will gather all loose subtrees into one big tree
-and create a dummy root at the top.  (Wait a minute.  Root at the top?
-Yup.)  Loose subtrees occur when the real root has expired, or you&rsquo;ve
-read or killed the root in a previous session.
-</p>
-<p>When there is no real root of a thread, Gnus will have to fudge
-something.  This variable says what fudging method Gnus should use.
-There are four possible values:
-</p>
+  <div class="header">
+    <p>Next: <a href="Filling-In-Threads.html#Filling-In-Threads"
+    accesskey="n" rel="next">Filling In Threads</a>, Up: <a href=
+    "Customizing-Threading.html#Customizing-Threading" accesskey=
+    "u" rel="up">Customizing Threading</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Loose-Threads-1" id="Loose-Threads-1"></a>
 
-<a name="index-adopting-articles"></a>
+  <h4 class="subsubsection">3.9.1.1 Loose Threads</h4><a name=
+  "index-_003c" id="index-_003c"></a> <a name="index-_003e" id=
+  "index-_003e"></a> <a name="index-loose-threads" id=
+  "index-loose-threads"></a>
 
-<dl compact="compact">
-<dt><code>adopt</code></dt>
-<dd><p>Gnus will make the first of the orphaned articles the parent.  This
-parent will adopt all the other articles.  The adopted articles will be
-marked as such by pointy brackets (&lsquo;<samp>&lt;&gt;</samp>&rsquo;) instead of the standard
-square brackets (&lsquo;<samp>[]</samp>&rsquo;).  This is the default method.
-</p>
-</dd>
-<dt><code>dummy</code></dt>
-<dd><a name="index-gnus_002dsummary_002ddummy_002dline_002dformat"></a>
-<a name="index-gnus_002dsummary_002dmake_002dfalse_002droot_002dalways"></a>
-<p>Gnus will create a dummy summary line that will pretend to be the
-parent.  This dummy line does not correspond to any real article, so
-selecting it will just select the first real article after the dummy
-article.  <code>gnus-summary-dummy-line-format</code> is used to specify the
-format of the dummy roots.  It accepts only one format spec:  &lsquo;<samp>S</samp>&rsquo;,
-which is the subject of the article.  See <a href="Formatting-Variables.html#Formatting-Variables">Formatting Variables</a>.
-If you want all threads to have a dummy root, even the non-gathered
-ones, set <code>gnus-summary-make-false-root-always</code> to <code>t</code>.
-</p>
-</dd>
-<dt><code>empty</code></dt>
-<dd><p>Gnus won&rsquo;t actually make any article the parent, but simply leave the
-subject field of all orphans except the first empty.  (Actually, it will
-use <code>gnus-summary-same-subject</code> as the subject (see <a href="Summary-Buffer-Format.html#Summary-Buffer-Format">Summary Buffer Format</a>).)
-</p>
-</dd>
-<dt><code>none</code></dt>
-<dd><p>Don&rsquo;t make any article parent at all.  Just gather the threads and
-display them after one another.
-</p>
-</dd>
-<dt><code>nil</code></dt>
-<dd><p>Don&rsquo;t gather loose threads.
-</p></dd>
-</dl>
+  <dl compact="compact">
+    <dt><code>gnus-summary-make-false-root</code></dt>
 
-</dd>
-<dt><code>gnus-summary-gather-subject-limit</code></dt>
-<dd><a name="index-gnus_002dsummary_002dgather_002dsubject_002dlimit"></a>
-<p>Loose threads are gathered by comparing subjects of articles.  If this
-variable is <code>nil</code>, Gnus requires an exact match between the
-subjects of the loose threads before gathering them into one big
-super-thread.  This might be too strict a requirement, what with the
-presence of stupid newsreaders that chop off long subject lines.  If
-you think so, set this variable to, say, 20 to require that only the
-first 20 characters of the subjects have to match.  If you set this
-variable to a really low number, you&rsquo;ll find that Gnus will gather
-everything in sight into one thread, which isn&rsquo;t very helpful.
-</p>
-<a name="index-fuzzy-article-gathering"></a>
-<p>If you set this variable to the special value <code>fuzzy</code>, Gnus will
-use a fuzzy string comparison algorithm on the subjects (see <a href="Fuzzy-Matching.html#Fuzzy-Matching">Fuzzy Matching</a>).
-</p>
-</dd>
-<dt><code>gnus-simplify-subject-fuzzy-regexp</code></dt>
-<dd><a name="index-gnus_002dsimplify_002dsubject_002dfuzzy_002dregexp"></a>
-<p>This can either be a regular expression or list of regular expressions
-that match strings that will be removed from subjects if fuzzy subject
-simplification is used.
-</p>
-</dd>
-<dt><code>gnus-simplify-ignored-prefixes</code></dt>
-<dd><a name="index-gnus_002dsimplify_002dignored_002dprefixes"></a>
-<p>If you set <code>gnus-summary-gather-subject-limit</code> to something as low
-as 10, you might consider setting this variable to something sensible:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-simplify-ignored-prefixes
+    <dd>
+      <a name="index-gnus_002dsummary_002dmake_002dfalse_002droot"
+      id="index-gnus_002dsummary_002dmake_002dfalse_002droot"></a>
+
+      <p>If non-<code>nil</code>, Gnus will gather all loose
+      subtrees into one big tree and create a dummy root at the
+      top. (Wait a minute. Root at the top? Yup.) Loose subtrees
+      occur when the real root has expired, or you&rsquo;ve read or
+      killed the root in a previous session.</p>
+
+      <p>When there is no real root of a thread, Gnus will have to
+      fudge something. This variable says what fudging method Gnus
+      should use. There are four possible values:</p><a name=
+      "index-adopting-articles" id="index-adopting-articles"></a>
+
+      <dl compact="compact">
+        <dt><code>adopt</code></dt>
+
+        <dd>
+          <p>Gnus will make the first of the orphaned articles the
+          parent. This parent will adopt all the other articles.
+          The adopted articles will be marked as such by pointy
+          brackets (&lsquo;<samp>&lt;&gt;</samp>&rsquo;) instead of
+          the standard square brackets
+          (&lsquo;<samp>[]</samp>&rsquo;). This is the default
+          method.</p>
+        </dd>
+
+        <dt><code>dummy</code></dt>
+
+        <dd>
+          <a name=
+          "index-gnus_002dsummary_002ddummy_002dline_002dformat"
+          id="index-gnus_002dsummary_002ddummy_002dline_002dformat">
+          </a> <a name=
+          "index-gnus_002dsummary_002dmake_002dfalse_002droot_002dalways"
+          id=
+          "index-gnus_002dsummary_002dmake_002dfalse_002droot_002dalways">
+          </a>
+
+          <p>Gnus will create a dummy summary line that will
+          pretend to be the parent. This dummy line does not
+          correspond to any real article, so selecting it will just
+          select the first real article after the dummy article.
+          <code>gnus-summary-dummy-line-format</code> is used to
+          specify the format of the dummy roots. It accepts only
+          one format spec: &lsquo;<samp>S</samp>&rsquo;, which is
+          the subject of the article. See <a href=
+          "Formatting-Variables.html#Formatting-Variables">Formatting
+          Variables</a>. If you want all threads to have a dummy
+          root, even the non-gathered ones, set
+          <code>gnus-summary-make-false-root-always</code> to
+          <code>t</code>.</p>
+        </dd>
+
+        <dt><code>empty</code></dt>
+
+        <dd>
+          <p>Gnus won&rsquo;t actually make any article the parent,
+          but simply leave the subject field of all orphans except
+          the first empty. (Actually, it will use
+          <code>gnus-summary-same-subject</code> as the subject
+          (see <a href=
+          "Summary-Buffer-Format.html#Summary-Buffer-Format">Summary
+          Buffer Format</a>).)</p>
+        </dd>
+
+        <dt><code>none</code></dt>
+
+        <dd>
+          <p>Don&rsquo;t make any article parent at all. Just
+          gather the threads and display them after one
+          another.</p>
+        </dd>
+
+        <dt><code>nil</code></dt>
+
+        <dd>
+          <p>Don&rsquo;t gather loose threads.</p>
+        </dd>
+      </dl>
+    </dd>
+
+    <dt><code>gnus-summary-gather-subject-limit</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dsummary_002dgather_002dsubject_002dlimit" id=
+      "index-gnus_002dsummary_002dgather_002dsubject_002dlimit"></a>
+
+      <p>Loose threads are gathered by comparing subjects of
+      articles. If this variable is <code>nil</code>, Gnus requires
+      an exact match between the subjects of the loose threads
+      before gathering them into one big super-thread. This might
+      be too strict a requirement, what with the presence of stupid
+      newsreaders that chop off long subject lines. If you think
+      so, set this variable to, say, 20 to require that only the
+      first 20 characters of the subjects have to match. If you set
+      this variable to a really low number, you&rsquo;ll find that
+      Gnus will gather everything in sight into one thread, which
+      isn&rsquo;t very helpful.</p><a name=
+      "index-fuzzy-article-gathering" id=
+      "index-fuzzy-article-gathering"></a>
+
+      <p>If you set this variable to the special value
+      <code>fuzzy</code>, Gnus will use a fuzzy string comparison
+      algorithm on the subjects (see <a href=
+      "Fuzzy-Matching.html#Fuzzy-Matching">Fuzzy Matching</a>).</p>
+    </dd>
+
+    <dt><code>gnus-simplify-subject-fuzzy-regexp</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dsimplify_002dsubject_002dfuzzy_002dregexp"
+      id="index-gnus_002dsimplify_002dsubject_002dfuzzy_002dregexp">
+      </a>
+
+      <p>This can either be a regular expression or list of regular
+      expressions that match strings that will be removed from
+      subjects if fuzzy subject simplification is used.</p>
+    </dd>
+
+    <dt><code>gnus-simplify-ignored-prefixes</code></dt>
+
+    <dd>
+      <a name="index-gnus_002dsimplify_002dignored_002dprefixes"
+      id="index-gnus_002dsimplify_002dignored_002dprefixes"></a>
+
+      <p>If you set <code>gnus-summary-gather-subject-limit</code>
+      to something as low as 10, you might consider setting this
+      variable to something sensible:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq gnus-simplify-ignored-prefixes
       (concat
-       &quot;\\`\\[?\\(&quot;
+       "\\`\\[?\\("
        (mapconcat
         'identity
-        '(&quot;looking&quot;
-          &quot;wanted&quot; &quot;followup&quot; &quot;summary\\( of\\)?&quot;
-          &quot;help&quot; &quot;query&quot; &quot;problem&quot; &quot;question&quot;
-          &quot;answer&quot; &quot;reference&quot; &quot;announce&quot;
-          &quot;How can I&quot; &quot;How to&quot; &quot;Comparison of&quot;
+        '("looking"
+          "wanted" "followup" "summary\\( of\\)?"
+          "help" "query" "problem" "question"
+          "answer" "reference" "announce"
+          "How can I" "How to" "Comparison of"
           ;; ...
           )
-        &quot;\\|&quot;)
-       &quot;\\)\\s *\\(&quot;
+        "\\|")
+       "\\)\\s *\\("
        (mapconcat 'identity
-                  '(&quot;for&quot; &quot;for reference&quot; &quot;with&quot; &quot;about&quot;)
-                  &quot;\\|&quot;)
-       &quot;\\)?\\]?:?[ \t]*&quot;))
-</pre></div>
+                  '("for" "for reference" "with" "about")
+                  "\\|")
+       "\\)?\\]?:?[ \t]*"))
+</pre>
+      </div>
 
-<p>All words that match this regexp will be removed before comparing two
-subjects.
-</p>
-</dd>
-<dt><code>gnus-simplify-subject-functions</code></dt>
-<dd><a name="index-gnus_002dsimplify_002dsubject_002dfunctions"></a>
-<p>If non-<code>nil</code>, this variable overrides
-<code>gnus-summary-gather-subject-limit</code>.  This variable should be a
-list of functions to apply to the <code>Subject</code> string iteratively to
-arrive at the simplified version of the string.
-</p>
-<p>Useful functions to put in this list include:
-</p>
-<dl compact="compact">
-<dt><code>gnus-simplify-subject-re</code></dt>
-<dd><a name="index-gnus_002dsimplify_002dsubject_002dre"></a>
-<p>Strip the leading &lsquo;<samp>Re:</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>gnus-simplify-subject-fuzzy</code></dt>
-<dd><a name="index-gnus_002dsimplify_002dsubject_002dfuzzy"></a>
-<p>Simplify fuzzily.
-</p>
-</dd>
-<dt><code>gnus-simplify-whitespace</code></dt>
-<dd><a name="index-gnus_002dsimplify_002dwhitespace"></a>
-<p>Remove excessive whitespace.
-</p>
-</dd>
-<dt><code>gnus-simplify-all-whitespace</code></dt>
-<dd><a name="index-gnus_002dsimplify_002dall_002dwhitespace"></a>
-<p>Remove all whitespace.
-</p></dd>
-</dl>
+      <p>All words that match this regexp will be removed before
+      comparing two subjects.</p>
+    </dd>
 
-<p>You may also write your own functions, of course.
-</p>
+    <dt><code>gnus-simplify-subject-functions</code></dt>
 
-</dd>
-<dt><code>gnus-summary-gather-exclude-subject</code></dt>
-<dd><a name="index-gnus_002dsummary_002dgather_002dexclude_002dsubject"></a>
-<p>Since loose thread gathering is done on subjects only, that might lead
-to many false hits, especially with certain common subjects like
-&lsquo;<samp></samp>&rsquo; and &lsquo;<samp>(none)</samp>&rsquo;.  To make the situation slightly better,
-you can use the regexp <code>gnus-summary-gather-exclude-subject</code> to say
-what subjects should be excluded from the gathering process.<br>
-The default is &lsquo;<samp>^ *$\\|^(none)$</samp>&rsquo;.
-</p>
-</dd>
-<dt><code>gnus-summary-thread-gathering-function</code></dt>
-<dd><a name="index-gnus_002dsummary_002dthread_002dgathering_002dfunction"></a>
-<p>Gnus gathers threads by looking at <code>Subject</code> headers.  This means
-that totally unrelated articles may end up in the same &ldquo;thread&rdquo;, which
-is confusing.  An alternate approach is to look at all the
-<code>Message-ID</code>s in all the <code>References</code> headers to find matches.
-This will ensure that no gathered threads ever include unrelated
-articles, but it also means that people who have posted with broken
-newsreaders won&rsquo;t be gathered properly.  The choice is yours&mdash;plague or
-cholera:
-</p>
-<dl compact="compact">
-<dt><code>gnus-gather-threads-by-subject</code></dt>
-<dd><a name="index-gnus_002dgather_002dthreads_002dby_002dsubject"></a>
-<p>This function is the default gathering function and looks at
-<code>Subject</code>s exclusively.
-</p>
-</dd>
-<dt><code>gnus-gather-threads-by-references</code></dt>
-<dd><a name="index-gnus_002dgather_002dthreads_002dby_002dreferences"></a>
-<p>This function looks at <code>References</code> headers exclusively.
-</p></dd>
-</dl>
+    <dd>
+      <a name="index-gnus_002dsimplify_002dsubject_002dfunctions"
+      id="index-gnus_002dsimplify_002dsubject_002dfunctions"></a>
 
-<p>If you want to test gathering by <code>References</code>, you could say
-something like:
-</p>
-<div class="lisp">
-<pre class="lisp">(setq gnus-summary-thread-gathering-function
+      <p>If non-<code>nil</code>, this variable overrides
+      <code>gnus-summary-gather-subject-limit</code>. This variable
+      should be a list of functions to apply to the
+      <code>Subject</code> string iteratively to arrive at the
+      simplified version of the string.</p>
+
+      <p>Useful functions to put in this list include:</p>
+
+      <dl compact="compact">
+        <dt><code>gnus-simplify-subject-re</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dsimplify_002dsubject_002dre" id=
+          "index-gnus_002dsimplify_002dsubject_002dre"></a>
+
+          <p>Strip the leading &lsquo;<samp>Re:</samp>&rsquo;.</p>
+        </dd>
+
+        <dt><code>gnus-simplify-subject-fuzzy</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dsimplify_002dsubject_002dfuzzy"
+          id="index-gnus_002dsimplify_002dsubject_002dfuzzy"></a>
+
+          <p>Simplify fuzzily.</p>
+        </dd>
+
+        <dt><code>gnus-simplify-whitespace</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dsimplify_002dwhitespace" id=
+          "index-gnus_002dsimplify_002dwhitespace"></a>
+
+          <p>Remove excessive whitespace.</p>
+        </dd>
+
+        <dt><code>gnus-simplify-all-whitespace</code></dt>
+
+        <dd>
+          <a name="index-gnus_002dsimplify_002dall_002dwhitespace"
+          id="index-gnus_002dsimplify_002dall_002dwhitespace"></a>
+
+          <p>Remove all whitespace.</p>
+        </dd>
+      </dl>
+
+      <p>You may also write your own functions, of course.</p>
+    </dd>
+
+    <dt><code>gnus-summary-gather-exclude-subject</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dsummary_002dgather_002dexclude_002dsubject"
+      id=
+      "index-gnus_002dsummary_002dgather_002dexclude_002dsubject"></a>
+
+      <p>Since loose thread gathering is done on subjects only,
+      that might lead to many false hits, especially with certain
+      common subjects like &lsquo;&rsquo; and
+      &lsquo;<samp>(none)</samp>&rsquo;. To make the situation
+      slightly better, you can use the regexp
+      <code>gnus-summary-gather-exclude-subject</code> to say what
+      subjects should be excluded from the gathering process.<br />
+      The default is &lsquo;<samp>^
+      *$\\|^(none)$</samp>&rsquo;.</p>
+    </dd>
+
+    <dt><code>gnus-summary-thread-gathering-function</code></dt>
+
+    <dd>
+      <a name=
+      "index-gnus_002dsummary_002dthread_002dgathering_002dfunction"
+      id=
+      "index-gnus_002dsummary_002dthread_002dgathering_002dfunction">
+      </a>
+
+      <p>Gnus gathers threads by looking at <code>Subject</code>
+      headers. This means that totally unrelated articles may end
+      up in the same &ldquo;thread&rdquo;, which is confusing. An
+      alternate approach is to look at all the
+      <code>Message-ID</code>s in all the <code>References</code>
+      headers to find matches. This will ensure that no gathered
+      threads ever include unrelated articles, but it also means
+      that people who have posted with broken newsreaders
+      won&rsquo;t be gathered properly. The choice is
+      yours&mdash;plague or cholera:</p>
+
+      <dl compact="compact">
+        <dt><code>gnus-gather-threads-by-subject</code></dt>
+
+        <dd>
+          <a name=
+          "index-gnus_002dgather_002dthreads_002dby_002dsubject"
+          id="index-gnus_002dgather_002dthreads_002dby_002dsubject">
+          </a>
+
+          <p>This function is the default gathering function and
+          looks at <code>Subject</code>s exclusively.</p>
+        </dd>
+
+        <dt><code>gnus-gather-threads-by-references</code></dt>
+
+        <dd>
+          <a name=
+          "index-gnus_002dgather_002dthreads_002dby_002dreferences"
+          id=
+          "index-gnus_002dgather_002dthreads_002dby_002dreferences">
+          </a>
+
+          <p>This function looks at <code>References</code> headers
+          exclusively.</p>
+        </dd>
+      </dl>
+
+      <p>If you want to test gathering by <code>References</code>,
+      you could say something like:</p>
+
+      <div class="lisp">
+        <pre class="lisp">
+(setq gnus-summary-thread-gathering-function
       'gnus-gather-threads-by-references)
-</pre></div>
+</pre>
+      </div>
+    </dd>
+  </dl>
+  <hr />
 
-</dd>
-</dl>
-
-
-<hr>
-<div class="header">
-<p>
-Next: <a href="Filling-In-Threads.html#Filling-In-Threads" accesskey="n" rel="next">Filling In Threads</a>, Up: <a href="Customizing-Threading.html#Customizing-Threading" accesskey="u" rel="up">Customizing Threading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href="Filling-In-Threads.html#Filling-In-Threads"
+    accesskey="n" rel="next">Filling In Threads</a>, Up: <a href=
+    "Customizing-Threading.html#Customizing-Threading" accesskey=
+    "u" rel="up">Customizing Threading</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

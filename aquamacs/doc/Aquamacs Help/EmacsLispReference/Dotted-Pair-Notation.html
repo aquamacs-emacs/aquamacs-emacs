@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,143 +19,195 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Dotted Pair Notation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Dotted Pair Notation">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Dotted Pair Notation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Cons-Cell-Type.html#Cons-Cell-Type" rel="up" title="Cons Cell Type">
-<link href="Association-List-Type.html#Association-List-Type" rel="next" title="Association List Type">
-<link href="Box-Diagrams.html#Box-Diagrams" rel="prev" title="Box Diagrams">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Dotted Pair
+  Notation</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Dotted Pair Notation" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Dotted Pair Notation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Cons-Cell-Type.html#Cons-Cell-Type" rel="up" title=
+  "Cons Cell Type" />
+  <link href="Association-List-Type.html#Association-List-Type"
+  rel="next" title="Association List Type" />
+  <link href="Box-Diagrams.html#Box-Diagrams" rel="prev" title=
+  "Box Diagrams" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Dotted-Pair-Notation" id="Dotted-Pair-Notation"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Association-List-Type.html#Association-List-Type" accesskey=
+    "n" rel="next">Association List Type</a>, Previous: <a href=
+    "Box-Diagrams.html#Box-Diagrams" accesskey="p" rel="prev">Box
+    Diagrams</a>, Up: <a href="Cons-Cell-Type.html#Cons-Cell-Type"
+    accesskey="u" rel="up">Cons Cell Type</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Dotted-Pair-Notation-1" id="Dotted-Pair-Notation-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Dotted-Pair-Notation"></a>
-<div class="header">
-<p>
-Next: <a href="Association-List-Type.html#Association-List-Type" accesskey="n" rel="next">Association List Type</a>, Previous: <a href="Box-Diagrams.html#Box-Diagrams" accesskey="p" rel="prev">Box Diagrams</a>, Up: <a href="Cons-Cell-Type.html#Cons-Cell-Type" accesskey="u" rel="up">Cons Cell Type</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Dotted-Pair-Notation-1"></a>
-<h4 class="subsubsection">2.3.6.2 Dotted Pair Notation</h4>
-<a name="index-dotted-pair-notation"></a>
-<a name="index-_002e-in-lists"></a>
+  <h4 class="subsubsection">2.3.6.2 Dotted Pair
+  Notation</h4><a name="index-dotted-pair-notation" id=
+  "index-dotted-pair-notation"></a> <a name="index-_002e-in-lists"
+  id="index-_002e-in-lists"></a>
 
-<p><em>Dotted pair notation</em> is a general syntax for cons cells that
-represents the <small>CAR</small> and <small>CDR</small> explicitly.  In this syntax,
-<code>(<var>a</var> . <var>b</var>)</code> stands for a cons cell whose <small>CAR</small> is
-the object <var>a</var> and whose <small>CDR</small> is the object <var>b</var>.  Dotted
-pair notation is more general than list syntax because the <small>CDR</small>
-does not have to be a list.  However, it is more cumbersome in cases
-where list syntax would work.  In dotted pair notation, the list
-&lsquo;<samp>(1 2 3)</samp>&rsquo; is written as &lsquo;<samp>(1 .  (2 . (3 . nil)))</samp>&rsquo;.  For
-<code>nil</code>-terminated lists, you can use either notation, but list
-notation is usually clearer and more convenient.  When printing a
-list, the dotted pair notation is only used if the <small>CDR</small> of a cons
-cell is not a list.
-</p>
-<p>Here&rsquo;s an example using boxes to illustrate dotted pair notation.
-This example shows the pair <code>(rose . violet)</code>:
-</p>
-<div class="example">
-<pre class="example">    --- ---
+  <p><em>Dotted pair notation</em> is a general syntax for cons
+  cells that represents the <small>CAR</small> and
+  <small>CDR</small> explicitly. In this syntax,
+  <code>(<var>a</var> . <var>b</var>)</code> stands for a cons cell
+  whose <small>CAR</small> is the object <var>a</var> and whose
+  <small>CDR</small> is the object <var>b</var>. Dotted pair
+  notation is more general than list syntax because the
+  <small>CDR</small> does not have to be a list. However, it is
+  more cumbersome in cases where list syntax would work. In dotted
+  pair notation, the list &lsquo;<samp>(1 2 3)</samp>&rsquo; is
+  written as &lsquo;<samp>(1 . (2 . (3 . nil)))</samp>&rsquo;. For
+  <code>nil</code>-terminated lists, you can use either notation,
+  but list notation is usually clearer and more convenient. When
+  printing a list, the dotted pair notation is only used if the
+  <small>CDR</small> of a cons cell is not a list.</p>
+
+  <p>Here&rsquo;s an example using boxes to illustrate dotted pair
+  notation. This example shows the pair <code>(rose .
+  violet)</code>:</p>
+
+  <div class="example">
+    <pre class="example">
+    --- ---
    |   |   |--&gt; violet
     --- ---
      |
      |
       --&gt; rose
-</pre></div>
+</pre>
+  </div>
 
-<p>You can combine dotted pair notation with list notation to represent
-conveniently a chain of cons cells with a non-<code>nil</code> final <small>CDR</small>.
-You write a dot after the last element of the list, followed by the
-<small>CDR</small> of the final cons cell.  For example, <code>(rose violet
-. buttercup)</code> is equivalent to <code>(rose . (violet . buttercup))</code>.
-The object looks like this:
-</p>
-<div class="example">
-<pre class="example">    --- ---      --- ---
+  <p>You can combine dotted pair notation with list notation to
+  represent conveniently a chain of cons cells with a
+  non-<code>nil</code> final <small>CDR</small>. You write a dot
+  after the last element of the list, followed by the
+  <small>CDR</small> of the final cons cell. For example,
+  <code>(rose violet . buttercup)</code> is equivalent to
+  <code>(rose . (violet . buttercup))</code>. The object looks like
+  this:</p>
+
+  <div class="example">
+    <pre class="example">
+    --- ---      --- ---
    |   |   |--&gt; |   |   |--&gt; buttercup
     --- ---      --- ---
      |            |
      |            |
       --&gt; rose     --&gt; violet
-</pre></div>
+</pre>
+  </div>
 
-<p>The syntax <code>(rose . violet . buttercup)</code> is invalid because
-there is nothing that it could mean.  If anything, it would say to put
-<code>buttercup</code> in the <small>CDR</small> of a cons cell whose <small>CDR</small> is already
-used for <code>violet</code>.
-</p>
-<p>The list <code>(rose violet)</code> is equivalent to <code>(rose . (violet))</code>,
-and looks like this:
-</p>
-<div class="example">
-<pre class="example">    --- ---      --- ---
+  <p>The syntax <code>(rose . violet . buttercup)</code> is invalid
+  because there is nothing that it could mean. If anything, it
+  would say to put <code>buttercup</code> in the <small>CDR</small>
+  of a cons cell whose <small>CDR</small> is already used for
+  <code>violet</code>.</p>
+
+  <p>The list <code>(rose violet)</code> is equivalent to
+  <code>(rose . (violet))</code>, and looks like this:</p>
+
+  <div class="example">
+    <pre class="example">
+    --- ---      --- ---
    |   |   |--&gt; |   |   |--&gt; nil
     --- ---      --- ---
      |            |
      |            |
       --&gt; rose     --&gt; violet
-</pre></div>
+</pre>
+  </div>
 
-<p>Similarly, the three-element list <code>(rose violet buttercup)</code>
-is equivalent to <code>(rose . (violet . (buttercup)))</code>.
-It looks like this:
-</p>
-<div class="example">
-<pre class="example">    --- ---      --- ---      --- ---
+  <p>Similarly, the three-element list <code>(rose violet
+  buttercup)</code> is equivalent to <code>(rose . (violet .
+  (buttercup)))</code>. It looks like this:</p>
+
+  <div class="example">
+    <pre class="example">
+    --- ---      --- ---      --- ---
    |   |   |--&gt; |   |   |--&gt; |   |   |--&gt; nil
     --- ---      --- ---      --- ---
      |            |            |
      |            |            |
       --&gt; rose     --&gt; violet   --&gt; buttercup
-</pre></div>
+</pre>
+  </div>
+  <hr />
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Association-List-Type.html#Association-List-Type" accesskey="n" rel="next">Association List Type</a>, Previous: <a href="Box-Diagrams.html#Box-Diagrams" accesskey="p" rel="prev">Box Diagrams</a>, Up: <a href="Cons-Cell-Type.html#Cons-Cell-Type" accesskey="u" rel="up">Cons Cell Type</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-
-
-
+  <div class="header">
+    <p>Next: <a href=
+    "Association-List-Type.html#Association-List-Type" accesskey=
+    "n" rel="next">Association List Type</a>, Previous: <a href=
+    "Box-Diagrams.html#Box-Diagrams" accesskey="p" rel="prev">Box
+    Diagrams</a>, Up: <a href="Cons-Cell-Type.html#Cons-Cell-Type"
+    accesskey="u" rel="up">Cons Cell Type</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

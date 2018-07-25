@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,192 +18,263 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Decomposing Polynomials</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Decomposing Polynomials">
-<meta name="keywords" content="GNU Emacs Calc Manual: Decomposing Polynomials">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Solving-Equations.html#Solving-Equations" rel="up" title="Solving Equations">
-<link href="Numerical-Solutions.html#Numerical-Solutions" rel="next" title="Numerical Solutions">
-<link href="Solving-Systems-of-Equations.html#Solving-Systems-of-Equations" rel="prev" title="Solving Systems of Equations">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Decomposing Polynomials</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Decomposing Polynomials" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Decomposing Polynomials" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Solving-Equations.html#Solving-Equations" rel="up"
+  title="Solving Equations" />
+  <link href="Numerical-Solutions.html#Numerical-Solutions" rel=
+  "next" title="Numerical Solutions" />
+  <link href=
+  "Solving-Systems-of-Equations.html#Solving-Systems-of-Equations"
+  rel="prev" title="Solving Systems of Equations" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Decomposing-Polynomials"></a>
-<div class="header">
-<p>
-Previous: <a href="Solving-Systems-of-Equations.html#Solving-Systems-of-Equations" accesskey="p" rel="prev">Solving Systems of Equations</a>, Up: <a href="Solving-Equations.html#Solving-Equations" accesskey="u" rel="up">Solving Equations</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Decomposing-Polynomials-1"></a>
-<h4 class="subsection">10.6.3 Decomposing Polynomials</h4>
+<body lang="en" xml:lang="en">
+  <a name="Decomposing-Polynomials" id=
+  "Decomposing-Polynomials"></a>
 
-<a name="index-poly"></a>
-<p>The <code>poly</code> function takes a polynomial and a variable as
-arguments, and returns a vector of polynomial coefficients (constant
-coefficient first).  For example, &lsquo;<samp>poly(x^3 + 2 x, x)</samp>&rsquo; returns
-&lsquo;<samp>[0, 2, 0, 1]</samp>&rsquo;.  If the input is not a polynomial in &lsquo;<samp>x</samp>&rsquo;,
-the call to <code>poly</code> is left in symbolic form.  If the input does
-not involve the variable &lsquo;<samp>x</samp>&rsquo;, the input is returned in a list
-of length one, representing a polynomial with only a constant
-coefficient.  The call &lsquo;<samp>poly(x, x)</samp>&rsquo; returns the vector &lsquo;<samp>[0, 1]</samp>&rsquo;.
-The last element of the returned vector is guaranteed to be nonzero;
-note that &lsquo;<samp>poly(0, x)</samp>&rsquo; returns the empty vector &lsquo;<samp>[]</samp>&rsquo;.
-Note also that &lsquo;<samp>x</samp>&rsquo; may actually be any formula; for example,
-&lsquo;<samp>poly(sin(x)^2 - sin(x) + 3, sin(x))</samp>&rsquo; returns &lsquo;<samp>[3, -1, 1]</samp>&rsquo;.
-</p>
-<a name="index-Coefficients-of-polynomial"></a>
-<a name="index-Degree-of-polynomial"></a>
-<p>To get the &lsquo;<samp>x^k</samp>&rsquo; coefficient of polynomial &lsquo;<samp>p</samp>&rsquo;, use
-&lsquo;<samp>poly(p, x)_(k+1)</samp>&rsquo;.  To get the degree of polynomial &lsquo;<samp>p</samp>&rsquo;,
-use &lsquo;<samp>vlen(poly(p, x)) - 1</samp>&rsquo;.  For example, &lsquo;<samp>poly((x+1)^4, x)</samp>&rsquo;
-returns &lsquo;<samp>[1, 4, 6, 4, 1]</samp>&rsquo;, so &lsquo;<samp>poly((x+1)^4, x)_(2+1)</samp>&rsquo;
-gives the &lsquo;<samp>x^2</samp>&rsquo; coefficient of this polynomial, 6.
-</p>
-<a name="index-gpoly"></a>
-<p>One important feature of the solver is its ability to recognize
-formulas which are &ldquo;essentially&rdquo; polynomials.  This ability is
-made available to the user through the <code>gpoly</code> function, which
-is used just like <code>poly</code>:  &lsquo;<samp>gpoly(<var>expr</var>, <var>var</var>)</samp>&rsquo;.
-If <var>expr</var> is a polynomial in some term which includes <var>var</var>, then
-this function will return a vector &lsquo;<samp>[<var>x</var>, <var>c</var>, <var>a</var>]</samp>&rsquo;
-where <var>x</var> is the term that depends on <var>var</var>, <var>c</var> is a
-vector of polynomial coefficients (like the one returned by <code>poly</code>),
-and <var>a</var> is a multiplier which is usually 1.  Basically,
-&lsquo;<samp><var>expr</var> = <var>a</var>*(<var>c</var>_1 + <var>c</var>_2 <var>x</var> +
-<var>c</var>_3 <var>x</var>^2 + ...)</samp>&rsquo;.  The last element of <var>c</var> is
-guaranteed to be non-zero, and <var>c</var> will not equal &lsquo;<samp>[1]</samp>&rsquo;
-(i.e., the trivial decomposition <var>expr</var> = <var>x</var> is not
-considered a polynomial).  One side effect is that &lsquo;<samp>gpoly(x, x)</samp>&rsquo;
-and &lsquo;<samp>gpoly(6, x)</samp>&rsquo;, both of which might be expected to recognize
-their arguments as polynomials, will not because the decomposition
-is considered trivial.
-</p>
-<p>For example, &lsquo;<samp>gpoly((x-2)^2, x)</samp>&rsquo; returns &lsquo;<samp>[x, [4, -4, 1], 1]</samp>&rsquo;,
-since the expanded form of this polynomial is &lsquo;<samp>4 - 4 x + x^2</samp>&rsquo;.
-</p>
-<p>The term <var>x</var> may itself be a polynomial in <var>var</var>.  This is
-done to reduce the size of the <var>c</var> vector.  For example,
-&lsquo;<samp>gpoly(x^4 + x^2 - 1, x)</samp>&rsquo; returns &lsquo;<samp>[x^2, [-1, 1, 1], 1]</samp>&rsquo;,
-since a quadratic polynomial in &lsquo;<samp>x^2</samp>&rsquo; is easier to solve than
-a quartic polynomial in &lsquo;<samp>x</samp>&rsquo;.
-</p>
-<p>A few more examples of the kinds of polynomials <code>gpoly</code> can
-discover:
-</p>
-<div class="smallexample">
-<pre class="smallexample">sin(x) - 1               [sin(x), [-1, 1], 1]
+  <div class="header">
+    <p>Previous: <a href=
+    "Solving-Systems-of-Equations.html#Solving-Systems-of-Equations"
+    accesskey="p" rel="prev">Solving Systems of Equations</a>, Up:
+    <a href="Solving-Equations.html#Solving-Equations" accesskey=
+    "u" rel="up">Solving Equations</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Decomposing-Polynomials-1" id=
+  "Decomposing-Polynomials-1"></a>
+
+  <h4 class="subsection">10.6.3 Decomposing
+  Polynomials</h4><a name="index-poly" id="index-poly"></a>
+
+  <p>The <code>poly</code> function takes a polynomial and a
+  variable as arguments, and returns a vector of polynomial
+  coefficients (constant coefficient first). For example,
+  &lsquo;<samp>poly(x^3 + 2 x, x)</samp>&rsquo; returns
+  &lsquo;<samp>[0, 2, 0, 1]</samp>&rsquo;. If the input is not a
+  polynomial in &lsquo;<samp>x</samp>&rsquo;, the call to
+  <code>poly</code> is left in symbolic form. If the input does not
+  involve the variable &lsquo;<samp>x</samp>&rsquo;, the input is
+  returned in a list of length one, representing a polynomial with
+  only a constant coefficient. The call &lsquo;<samp>poly(x,
+  x)</samp>&rsquo; returns the vector &lsquo;<samp>[0,
+  1]</samp>&rsquo;. The last element of the returned vector is
+  guaranteed to be nonzero; note that &lsquo;<samp>poly(0,
+  x)</samp>&rsquo; returns the empty vector
+  &lsquo;<samp>[]</samp>&rsquo;. Note also that
+  &lsquo;<samp>x</samp>&rsquo; may actually be any formula; for
+  example, &lsquo;<samp>poly(sin(x)^2 - sin(x) + 3,
+  sin(x))</samp>&rsquo; returns &lsquo;<samp>[3, -1,
+  1]</samp>&rsquo;.</p><a name="index-Coefficients-of-polynomial"
+  id="index-Coefficients-of-polynomial"></a> <a name=
+  "index-Degree-of-polynomial" id="index-Degree-of-polynomial"></a>
+
+  <p>To get the &lsquo;<samp>x^k</samp>&rsquo; coefficient of
+  polynomial &lsquo;<samp>p</samp>&rsquo;, use &lsquo;<samp>poly(p,
+  x)_(k+1)</samp>&rsquo;. To get the degree of polynomial
+  &lsquo;<samp>p</samp>&rsquo;, use &lsquo;<samp>vlen(poly(p, x)) -
+  1</samp>&rsquo;. For example, &lsquo;<samp>poly((x+1)^4,
+  x)</samp>&rsquo; returns &lsquo;<samp>[1, 4, 6, 4,
+  1]</samp>&rsquo;, so &lsquo;<samp>poly((x+1)^4,
+  x)_(2+1)</samp>&rsquo; gives the &lsquo;<samp>x^2</samp>&rsquo;
+  coefficient of this polynomial, 6.</p><a name="index-gpoly" id=
+  "index-gpoly"></a>
+
+  <p>One important feature of the solver is its ability to
+  recognize formulas which are &ldquo;essentially&rdquo;
+  polynomials. This ability is made available to the user through
+  the <code>gpoly</code> function, which is used just like
+  <code>poly</code>: &lsquo;<samp>gpoly(<var>expr</var>,
+  <var>var</var>)</samp>&rsquo;. If <var>expr</var> is a polynomial
+  in some term which includes <var>var</var>, then this function
+  will return a vector &lsquo;<samp>[<var>x</var>, <var>c</var>,
+  <var>a</var>]</samp>&rsquo; where <var>x</var> is the term that
+  depends on <var>var</var>, <var>c</var> is a vector of polynomial
+  coefficients (like the one returned by <code>poly</code>), and
+  <var>a</var> is a multiplier which is usually 1. Basically,
+  &lsquo;<samp><var>expr</var> = <var>a</var>*(<var>c</var>_1 +
+  <var>c</var>_2 <var>x</var> + <var>c</var>_3 <var>x</var>^2 +
+  ...)</samp>&rsquo;. The last element of <var>c</var> is
+  guaranteed to be non-zero, and <var>c</var> will not equal
+  &lsquo;<samp>[1]</samp>&rsquo; (i.e., the trivial decomposition
+  <var>expr</var> = <var>x</var> is not considered a polynomial).
+  One side effect is that &lsquo;<samp>gpoly(x, x)</samp>&rsquo;
+  and &lsquo;<samp>gpoly(6, x)</samp>&rsquo;, both of which might
+  be expected to recognize their arguments as polynomials, will not
+  because the decomposition is considered trivial.</p>
+
+  <p>For example, &lsquo;<samp>gpoly((x-2)^2, x)</samp>&rsquo;
+  returns &lsquo;<samp>[x, [4, -4, 1], 1]</samp>&rsquo;, since the
+  expanded form of this polynomial is &lsquo;<samp>4 - 4 x +
+  x^2</samp>&rsquo;.</p>
+
+  <p>The term <var>x</var> may itself be a polynomial in
+  <var>var</var>. This is done to reduce the size of the
+  <var>c</var> vector. For example, &lsquo;<samp>gpoly(x^4 + x^2 -
+  1, x)</samp>&rsquo; returns &lsquo;<samp>[x^2, [-1, 1, 1],
+  1]</samp>&rsquo;, since a quadratic polynomial in
+  &lsquo;<samp>x^2</samp>&rsquo; is easier to solve than a quartic
+  polynomial in &lsquo;<samp>x</samp>&rsquo;.</p>
+
+  <p>A few more examples of the kinds of polynomials
+  <code>gpoly</code> can discover:</p>
+
+  <div class="smallexample">
+    <pre class="smallexample">
+sin(x) - 1               [sin(x), [-1, 1], 1]
 x + 1/x - 1              [x, [1, -1, 1], 1/x]
 x + 1/x                  [x^2, [1, 1], 1/x]
 x^3 + 2 x                [x^2, [2, 1], x]
 x + x^2:3 + sqrt(x)      [x^1:6, [1, 1, 0, 1], x^1:2]
 x^(2a) + 2 x^a + 5       [x^a, [5, 2, 1], 1]
 (exp(-x) + exp(x)) / 2   [e^(2 x), [0.5, 0.5], e^-x]
-</pre></div>
+</pre>
+  </div>
 
-<p>The <code>poly</code> and <code>gpoly</code> functions accept a third integer argument
-which specifies the largest degree of polynomial that is acceptable.
-If this is &lsquo;<samp>n</samp>&rsquo;, then only <var>c</var> vectors of length &lsquo;<samp>n+1</samp>&rsquo;
-or less will be returned.  Otherwise, the <code>poly</code> or <code>gpoly</code>
-call will remain in symbolic form.  For example, the equation solver
-can handle quartics and smaller polynomials, so it calls
-&lsquo;<samp>gpoly(<var>expr</var>, <var>var</var>, 4)</samp>&rsquo; to discover whether <var>expr</var>
-can be treated by its linear, quadratic, cubic, or quartic formulas.
-</p>
-<a name="index-pdeg"></a>
-<p>The <code>pdeg</code> function computes the degree of a polynomial;
-&lsquo;<samp>pdeg(p,x)</samp>&rsquo; is the highest power of <code>x</code> that appears in
-<code>p</code>.  This is the same as &lsquo;<samp>vlen(poly(p,x))-1</samp>&rsquo;, but is
-much more efficient.  If <code>p</code> is constant with respect to <code>x</code>,
-then &lsquo;<samp>pdeg(p,x) = 0</samp>&rsquo;.  If <code>p</code> is not a polynomial in <code>x</code>
-(e.g., &lsquo;<samp>pdeg(2 cos(x), x)</samp>&rsquo;, the function remains unevaluated.
-It is possible to omit the second argument <code>x</code>, in which case
-&lsquo;<samp>pdeg(p)</samp>&rsquo; returns the highest total degree of any term of the
-polynomial, counting all variables that appear in <code>p</code>.  Note
-that <code>pdeg(c) = pdeg(c,x) = 0</code> for any nonzero constant <code>c</code>;
-the degree of the constant zero is considered to be <code>-inf</code>
-(minus infinity).
-</p>
-<a name="index-plead"></a>
-<p>The <code>plead</code> function finds the leading term of a polynomial.
-Thus &lsquo;<samp>plead(p,x)</samp>&rsquo; is equivalent to &lsquo;<samp>poly(p,x)_vlen(poly(p,x))</samp>&rsquo;,
-though again more efficient.  In particular, &lsquo;<samp>plead((2x+1)^10, x)</samp>&rsquo;
-returns 1024 without expanding out the list of coefficients.  The
-value of <code>plead(p,x)</code> will be zero only if &lsquo;<samp>p = 0</samp>&rsquo;.
-</p>
-<a name="index-pcont"></a>
-<p>The <code>pcont</code> function finds the <em>content</em> of a polynomial.  This
-is the greatest common divisor of all the coefficients of the polynomial.
-With two arguments, <code>pcont(p,x)</code> effectively uses &lsquo;<samp>poly(p,x)</samp>&rsquo;
-to get a list of coefficients, then uses <code>pgcd</code> (the polynomial
-GCD function) to combine these into an answer.  For example,
-&lsquo;<samp>pcont(4 x y^2 + 6 x^2 y, x)</samp>&rsquo; is &lsquo;<samp>2 y</samp>&rsquo;.  The content is
-basically the &ldquo;biggest&rdquo; polynomial that can be divided into <code>p</code>
-exactly.  The sign of the content is the same as the sign of the leading
-coefficient.
-</p>
-<p>With only one argument, &lsquo;<samp>pcont(p)</samp>&rsquo; computes the numerical
-content of the polynomial, i.e., the <code>gcd</code> of the numerical
-coefficients of all the terms in the formula.  Note that <code>gcd</code>
-is defined on rational numbers as well as integers; it computes
-the <code>gcd</code> of the numerators and the <code>lcm</code> of the
-denominators.  Thus &lsquo;<samp>pcont(4:3 x y^2 + 6 x^2 y)</samp>&rsquo; returns 2:3.
-Dividing the polynomial by this number will clear all the
-denominators, as well as dividing by any common content in the
-numerators.  The numerical content of a polynomial is negative only
-if all the coefficients in the polynomial are negative.
-</p>
-<a name="index-pprim"></a>
-<p>The <code>pprim</code> function finds the <em>primitive part</em> of a
-polynomial, which is simply the polynomial divided (using <code>pdiv</code>
-if necessary) by its content.  If the input polynomial has rational
-coefficients, the result will have integer coefficients in simplest
-terms.
-</p>
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Solving-Systems-of-Equations.html#Solving-Systems-of-Equations" accesskey="p" rel="prev">Solving Systems of Equations</a>, Up: <a href="Solving-Equations.html#Solving-Equations" accesskey="u" rel="up">Solving Equations</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>The <code>poly</code> and <code>gpoly</code> functions accept
+  a third integer argument which specifies the largest degree of
+  polynomial that is acceptable. If this is
+  &lsquo;<samp>n</samp>&rsquo;, then only <var>c</var> vectors of
+  length &lsquo;<samp>n+1</samp>&rsquo; or less will be returned.
+  Otherwise, the <code>poly</code> or <code>gpoly</code> call will
+  remain in symbolic form. For example, the equation solver can
+  handle quartics and smaller polynomials, so it calls
+  &lsquo;<samp>gpoly(<var>expr</var>, <var>var</var>,
+  4)</samp>&rsquo; to discover whether <var>expr</var> can be
+  treated by its linear, quadratic, cubic, or quartic
+  formulas.</p><a name="index-pdeg" id="index-pdeg"></a>
 
+  <p>The <code>pdeg</code> function computes the degree of a
+  polynomial; &lsquo;<samp>pdeg(p,x)</samp>&rsquo; is the highest
+  power of <code>x</code> that appears in <code>p</code>. This is
+  the same as &lsquo;<samp>vlen(poly(p,x))-1</samp>&rsquo;, but is
+  much more efficient. If <code>p</code> is constant with respect
+  to <code>x</code>, then &lsquo;<samp>pdeg(p,x) = 0</samp>&rsquo;.
+  If <code>p</code> is not a polynomial in <code>x</code> (e.g.,
+  &lsquo;<samp>pdeg(2 cos(x), x)</samp>&rsquo;, the function
+  remains unevaluated. It is possible to omit the second argument
+  <code>x</code>, in which case &lsquo;<samp>pdeg(p)</samp>&rsquo;
+  returns the highest total degree of any term of the polynomial,
+  counting all variables that appear in <code>p</code>. Note that
+  <code>pdeg(c) = pdeg(c,x) = 0</code> for any nonzero constant
+  <code>c</code>; the degree of the constant zero is considered to
+  be <code>-inf</code> (minus infinity).</p><a name="index-plead"
+  id="index-plead"></a>
 
+  <p>The <code>plead</code> function finds the leading term of a
+  polynomial. Thus &lsquo;<samp>plead(p,x)</samp>&rsquo; is
+  equivalent to
+  &lsquo;<samp>poly(p,x)_vlen(poly(p,x))</samp>&rsquo;, though
+  again more efficient. In particular,
+  &lsquo;<samp>plead((2x+1)^10, x)</samp>&rsquo; returns 1024
+  without expanding out the list of coefficients. The value of
+  <code>plead(p,x)</code> will be zero only if &lsquo;<samp>p =
+  0</samp>&rsquo;.</p><a name="index-pcont" id="index-pcont"></a>
 
+  <p>The <code>pcont</code> function finds the <em>content</em> of
+  a polynomial. This is the greatest common divisor of all the
+  coefficients of the polynomial. With two arguments,
+  <code>pcont(p,x)</code> effectively uses
+  &lsquo;<samp>poly(p,x)</samp>&rsquo; to get a list of
+  coefficients, then uses <code>pgcd</code> (the polynomial GCD
+  function) to combine these into an answer. For example,
+  &lsquo;<samp>pcont(4 x y^2 + 6 x^2 y, x)</samp>&rsquo; is
+  &lsquo;<samp>2 y</samp>&rsquo;. The content is basically the
+  &ldquo;biggest&rdquo; polynomial that can be divided into
+  <code>p</code> exactly. The sign of the content is the same as
+  the sign of the leading coefficient.</p>
+
+  <p>With only one argument, &lsquo;<samp>pcont(p)</samp>&rsquo;
+  computes the numerical content of the polynomial, i.e., the
+  <code>gcd</code> of the numerical coefficients of all the terms
+  in the formula. Note that <code>gcd</code> is defined on rational
+  numbers as well as integers; it computes the <code>gcd</code> of
+  the numerators and the <code>lcm</code> of the denominators. Thus
+  &lsquo;<samp>pcont(4:3 x y^2 + 6 x^2 y)</samp>&rsquo; returns
+  2:3. Dividing the polynomial by this number will clear all the
+  denominators, as well as dividing by any common content in the
+  numerators. The numerical content of a polynomial is negative
+  only if all the coefficients in the polynomial are
+  negative.</p><a name="index-pprim" id="index-pprim"></a>
+
+  <p>The <code>pprim</code> function finds the <em>primitive
+  part</em> of a polynomial, which is simply the polynomial divided
+  (using <code>pdiv</code> if necessary) by its content. If the
+  input polynomial has rational coefficients, the result will have
+  integer coefficients in simplest terms.</p>
+  <hr />
+
+  <div class="header">
+    <p>Previous: <a href=
+    "Solving-Systems-of-Equations.html#Solving-Systems-of-Equations"
+    accesskey="p" rel="prev">Solving Systems of Equations</a>, Up:
+    <a href="Solving-Equations.html#Solving-Equations" accesskey=
+    "u" rel="up">Solving Equations</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

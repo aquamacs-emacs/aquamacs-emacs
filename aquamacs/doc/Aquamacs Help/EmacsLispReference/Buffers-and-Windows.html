@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,184 +19,298 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Buffers and Windows</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Buffers and Windows">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Buffers and Windows">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Windows.html#Windows" rel="up" title="Windows">
-<link href="Switching-Buffers.html#Switching-Buffers" rel="next" title="Switching Buffers">
-<link href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering" rel="prev" title="Cyclic Window Ordering">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Buffers and
+  Windows</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Buffers and Windows" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Buffers and Windows" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Windows.html#Windows" rel="up" title="Windows" />
+  <link href="Switching-Buffers.html#Switching-Buffers" rel="next"
+  title="Switching Buffers" />
+  <link href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering"
+  rel="prev" title="Cyclic Window Ordering" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Buffers-and-Windows" id="Buffers-and-Windows"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Switching-Buffers.html#Switching-Buffers"
+    accesskey="n" rel="next">Switching Buffers</a>, Previous:
+    <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering"
+    accesskey="p" rel="prev">Cyclic Window Ordering</a>, Up:
+    <a href="Windows.html#Windows" accesskey="u" rel=
+    "up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Buffers-and-Windows-1" id="Buffers-and-Windows-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Buffers-and-Windows"></a>
-<div class="header">
-<p>
-Next: <a href="Switching-Buffers.html#Switching-Buffers" accesskey="n" rel="next">Switching Buffers</a>, Previous: <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering" accesskey="p" rel="prev">Cyclic Window Ordering</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Buffers-and-Windows-1"></a>
-<h3 class="section">27.11 Buffers and Windows</h3>
-<a name="index-examining-windows"></a>
-<a name="index-windows_002c-controlling-precisely"></a>
-<a name="index-buffers_002c-controlled-in-windows"></a>
+  <h3 class="section">27.11 Buffers and Windows</h3><a name=
+  "index-examining-windows" id="index-examining-windows"></a>
+  <a name="index-windows_002c-controlling-precisely" id=
+  "index-windows_002c-controlling-precisely"></a> <a name=
+  "index-buffers_002c-controlled-in-windows" id=
+  "index-buffers_002c-controlled-in-windows"></a>
 
-<p>This section describes low-level functions for examining and setting
-the contents of windows.  See <a href="Switching-Buffers.html#Switching-Buffers">Switching Buffers</a>, for higher-level
-functions for displaying a specific buffer in a window.
-</p>
-<dl>
-<dt><a name="index-window_002dbuffer"></a>Function: <strong>window-buffer</strong> <em>&amp;optional window</em></dt>
-<dd><p>This function returns the buffer that <var>window</var> is displaying.  If
-<var>window</var> is omitted or <code>nil</code> it defaults to the selected
-window.  If <var>window</var> is an internal window, this function returns
-<code>nil</code>.
-</p></dd></dl>
+  <p>This section describes low-level functions for examining and
+  setting the contents of windows. See <a href=
+  "Switching-Buffers.html#Switching-Buffers">Switching Buffers</a>,
+  for higher-level functions for displaying a specific buffer in a
+  window.</p>
 
-<dl>
-<dt><a name="index-set_002dwindow_002dbuffer"></a>Function: <strong>set-window-buffer</strong> <em>window buffer-or-name &amp;optional keep-margins</em></dt>
-<dd><p>This function makes <var>window</var> display <var>buffer-or-name</var>.
-<var>window</var> should be a live window; if <code>nil</code>, it defaults to
-the selected window.  <var>buffer-or-name</var> should be a buffer, or the
-name of an existing buffer.  This function does not change which
-window is selected, nor does it directly change which buffer is
-current (see <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>).  Its return value is <code>nil</code>.
-</p>
-<p>If <var>window</var> is <em>strongly dedicated</em> to a buffer and
-<var>buffer-or-name</var> does not specify that buffer, this function
-signals an error.  See <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>.
-</p>
-<p>By default, this function resets <var>window</var>&rsquo;s position, display
-margins, fringe widths, and scroll bar settings, based on the local
-variables in the specified buffer.  However, if the optional argument
-<var>keep-margins</var> is non-<code>nil</code>, it leaves the display margins
-and fringe widths unchanged.
-</p>
-<p>When writing an application, you should normally use the higher-level
-functions described in <a href="Switching-Buffers.html#Switching-Buffers">Switching Buffers</a>, instead of calling
-<code>set-window-buffer</code> directly.
-</p>
-<p>This runs <code>window-scroll-functions</code>, followed by
-<code>window-configuration-change-hook</code>.  See <a href="Window-Hooks.html#Window-Hooks">Window Hooks</a>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-window_002dbuffer" id=
+    "index-window_002dbuffer"></a>Function:
+    <strong>window-buffer</strong> <em>&amp;optional
+    window</em></dt>
 
-<dl>
-<dt><a name="index-buffer_002ddisplay_002dcount"></a>Variable: <strong>buffer-display-count</strong></dt>
-<dd><p>This buffer-local variable records the number of times a buffer has been
-displayed in a window.  It is incremented each time
-<code>set-window-buffer</code> is called for the buffer.
-</p></dd></dl>
+    <dd>
+      <p>This function returns the buffer that <var>window</var> is
+      displaying. If <var>window</var> is omitted or
+      <code>nil</code> it defaults to the selected window. If
+      <var>window</var> is an internal window, this function
+      returns <code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-buffer_002ddisplay_002dtime"></a>Variable: <strong>buffer-display-time</strong></dt>
-<dd><p>This buffer-local variable records the time at which a buffer was last
-displayed in a window.  The value is <code>nil</code> if the buffer has
-never been displayed.  It is updated each time
-<code>set-window-buffer</code> is called for the buffer, with the value
-returned by <code>current-time</code> (see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>).
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-set_002dwindow_002dbuffer" id=
+    "index-set_002dwindow_002dbuffer"></a>Function:
+    <strong>set-window-buffer</strong> <em>window buffer-or-name
+    &amp;optional keep-margins</em></dt>
 
-<dl>
-<dt><a name="index-get_002dbuffer_002dwindow"></a>Function: <strong>get-buffer-window</strong> <em>&amp;optional buffer-or-name all-frames</em></dt>
-<dd><p>This function returns the first window displaying <var>buffer-or-name</var>
-in the cyclic ordering of windows, starting from the selected window
-(see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).  If no such window exists, the
-return value is <code>nil</code>.
-</p>
-<p><var>buffer-or-name</var> should be a buffer or the name of a buffer; if
-omitted or <code>nil</code>, it defaults to the current buffer.  The
-optional argument <var>all-frames</var> specifies which windows to
-consider:
-</p>
-<ul>
-<li> <code>t</code> means consider windows on all existing frames.
-</li><li> <code>visible</code> means consider windows on all visible frames.
-</li><li> 0 means consider windows on all visible or iconified frames.
-</li><li> A frame means consider windows on that frame only.
-</li><li> Any other value means consider windows on the selected frame.
-</li></ul>
+    <dd>
+      <p>This function makes <var>window</var> display
+      <var>buffer-or-name</var>. <var>window</var> should be a live
+      window; if <code>nil</code>, it defaults to the selected
+      window. <var>buffer-or-name</var> should be a buffer, or the
+      name of an existing buffer. This function does not change
+      which window is selected, nor does it directly change which
+      buffer is current (see <a href=
+      "Current-Buffer.html#Current-Buffer">Current Buffer</a>). Its
+      return value is <code>nil</code>.</p>
 
-<p>Note that these meanings differ slightly from those of the
-<var>all-frames</var> argument to <code>next-window</code> (see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).  This function may be changed in a future version of Emacs
-to eliminate this discrepancy.
-</p></dd></dl>
+      <p>If <var>window</var> is <em>strongly dedicated</em> to a
+      buffer and <var>buffer-or-name</var> does not specify that
+      buffer, this function signals an error. See <a href=
+      "Dedicated-Windows.html#Dedicated-Windows">Dedicated
+      Windows</a>.</p>
 
-<dl>
-<dt><a name="index-get_002dbuffer_002dwindow_002dlist"></a>Function: <strong>get-buffer-window-list</strong> <em>&amp;optional buffer-or-name minibuf all-frames</em></dt>
-<dd><p>This function returns a list of all windows currently displaying
-<var>buffer-or-name</var>.  <var>buffer-or-name</var> should be a buffer or the
-name of an existing buffer.  If omitted or <code>nil</code>, it defaults to
-the current buffer.  If the currently selected window displays
-<var>buffer-or-name</var>, it will be the first in the list returned by
-this function.
-</p>
-<p>The arguments <var>minibuf</var> and <var>all-frames</var> have the same
-meanings as in the function <code>next-window</code> (see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).  Note that the <var>all-frames</var> argument does <em>not</em>
-behave exactly like in <code>get-buffer-window</code>.
-</p></dd></dl>
+      <p>By default, this function resets <var>window</var>&rsquo;s
+      position, display margins, fringe widths, and scroll bar
+      settings, based on the local variables in the specified
+      buffer. However, if the optional argument
+      <var>keep-margins</var> is non-<code>nil</code>, it leaves
+      the display margins and fringe widths unchanged.</p>
 
-<dl>
-<dt><a name="index-replace_002dbuffer_002din_002dwindows"></a>Command: <strong>replace-buffer-in-windows</strong> <em>&amp;optional buffer-or-name</em></dt>
-<dd><p>This command replaces <var>buffer-or-name</var> with some other buffer, in
-all windows displaying it.  <var>buffer-or-name</var> should be a buffer, or
-the name of an existing buffer; if omitted or <code>nil</code>, it defaults to
-the current buffer.
-</p>
-<p>The replacement buffer in each window is chosen via
-<code>switch-to-prev-buffer</code> (see <a href="Window-History.html#Window-History">Window History</a>).  Any dedicated
-window displaying <var>buffer-or-name</var> is deleted if possible
-(see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>).  If such a window is the only window on its
-frame and there are other frames on the same terminal, the frame is
-deleted as well.  If the dedicated window is the only window on the only
-frame on its terminal, the buffer is replaced anyway.
-</p></dd></dl>
+      <p>When writing an application, you should normally use the
+      higher-level functions described in <a href=
+      "Switching-Buffers.html#Switching-Buffers">Switching
+      Buffers</a>, instead of calling
+      <code>set-window-buffer</code> directly.</p>
 
+      <p>This runs <code>window-scroll-functions</code>, followed
+      by <code>window-configuration-change-hook</code>. See
+      <a href="Window-Hooks.html#Window-Hooks">Window
+      Hooks</a>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Switching-Buffers.html#Switching-Buffers" accesskey="n" rel="next">Switching Buffers</a>, Previous: <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering" accesskey="p" rel="prev">Cyclic Window Ordering</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-buffer_002ddisplay_002dcount" id=
+    "index-buffer_002ddisplay_002dcount"></a>Variable:
+    <strong>buffer-display-count</strong></dt>
 
+    <dd>
+      <p>This buffer-local variable records the number of times a
+      buffer has been displayed in a window. It is incremented each
+      time <code>set-window-buffer</code> is called for the
+      buffer.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-buffer_002ddisplay_002dtime" id=
+    "index-buffer_002ddisplay_002dtime"></a>Variable:
+    <strong>buffer-display-time</strong></dt>
 
+    <dd>
+      <p>This buffer-local variable records the time at which a
+      buffer was last displayed in a window. The value is
+      <code>nil</code> if the buffer has never been displayed. It
+      is updated each time <code>set-window-buffer</code> is called
+      for the buffer, with the value returned by
+      <code>current-time</code> (see <a href=
+      "Time-of-Day.html#Time-of-Day">Time of Day</a>).</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-get_002dbuffer_002dwindow" id=
+    "index-get_002dbuffer_002dwindow"></a>Function:
+    <strong>get-buffer-window</strong> <em>&amp;optional
+    buffer-or-name all-frames</em></dt>
+
+    <dd>
+      <p>This function returns the first window displaying
+      <var>buffer-or-name</var> in the cyclic ordering of windows,
+      starting from the selected window (see <a href=
+      "Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic
+      Window Ordering</a>). If no such window exists, the return
+      value is <code>nil</code>.</p>
+
+      <p><var>buffer-or-name</var> should be a buffer or the name
+      of a buffer; if omitted or <code>nil</code>, it defaults to
+      the current buffer. The optional argument
+      <var>all-frames</var> specifies which windows to
+      consider:</p>
+
+      <ul>
+        <li><code>t</code> means consider windows on all existing
+        frames.</li>
+
+        <li><code>visible</code> means consider windows on all
+        visible frames.</li>
+
+        <li>0 means consider windows on all visible or iconified
+        frames.</li>
+
+        <li>A frame means consider windows on that frame only.</li>
+
+        <li>Any other value means consider windows on the selected
+        frame.</li>
+      </ul>
+
+      <p>Note that these meanings differ slightly from those of the
+      <var>all-frames</var> argument to <code>next-window</code>
+      (see <a href=
+      "Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic
+      Window Ordering</a>). This function may be changed in a
+      future version of Emacs to eliminate this discrepancy.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-get_002dbuffer_002dwindow_002dlist" id=
+    "index-get_002dbuffer_002dwindow_002dlist"></a>Function:
+    <strong>get-buffer-window-list</strong> <em>&amp;optional
+    buffer-or-name minibuf all-frames</em></dt>
+
+    <dd>
+      <p>This function returns a list of all windows currently
+      displaying <var>buffer-or-name</var>.
+      <var>buffer-or-name</var> should be a buffer or the name of
+      an existing buffer. If omitted or <code>nil</code>, it
+      defaults to the current buffer. If the currently selected
+      window displays <var>buffer-or-name</var>, it will be the
+      first in the list returned by this function.</p>
+
+      <p>The arguments <var>minibuf</var> and <var>all-frames</var>
+      have the same meanings as in the function
+      <code>next-window</code> (see <a href=
+      "Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic
+      Window Ordering</a>). Note that the <var>all-frames</var>
+      argument does <em>not</em> behave exactly like in
+      <code>get-buffer-window</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-replace_002dbuffer_002din_002dwindows" id=
+    "index-replace_002dbuffer_002din_002dwindows"></a>Command:
+    <strong>replace-buffer-in-windows</strong> <em>&amp;optional
+    buffer-or-name</em></dt>
+
+    <dd>
+      <p>This command replaces <var>buffer-or-name</var> with some
+      other buffer, in all windows displaying it.
+      <var>buffer-or-name</var> should be a buffer, or the name of
+      an existing buffer; if omitted or <code>nil</code>, it
+      defaults to the current buffer.</p>
+
+      <p>The replacement buffer in each window is chosen via
+      <code>switch-to-prev-buffer</code> (see <a href=
+      "Window-History.html#Window-History">Window History</a>). Any
+      dedicated window displaying <var>buffer-or-name</var> is
+      deleted if possible (see <a href=
+      "Dedicated-Windows.html#Dedicated-Windows">Dedicated
+      Windows</a>). If such a window is the only window on its
+      frame and there are other frames on the same terminal, the
+      frame is deleted as well. If the dedicated window is the only
+      window on the only frame on its terminal, the buffer is
+      replaced anyway.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Switching-Buffers.html#Switching-Buffers"
+    accesskey="n" rel="next">Switching Buffers</a>, Previous:
+    <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering"
+    accesskey="p" rel="prev">Cyclic Window Ordering</a>, Up:
+    <a href="Windows.html#Windows" accesskey="u" rel=
+    "up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

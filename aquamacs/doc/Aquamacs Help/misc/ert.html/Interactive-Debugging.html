@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 2008, 2010-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,111 +14,149 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Emacs Lisp Regression Testing: Interactive Debugging</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Emacs Lisp Regression Testing: Interactive Debugging">
-<meta name="keywords" content="Emacs Lisp Regression Testing: Interactive Debugging">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="How-to-Debug-Tests.html#How-to-Debug-Tests" rel="up" title="How to Debug Tests">
-<link href="Extending-ERT.html#Extending-ERT" rel="next" title="Extending ERT">
-<link href="Understanding-Explanations.html#Understanding-Explanations" rel="prev" title="Understanding Explanations">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Emacs Lisp Regression Testing: Interactive
+  Debugging</title>
+  <meta name="description" content=
+  "Emacs Lisp Regression Testing: Interactive Debugging" />
+  <meta name="keywords" content=
+  "Emacs Lisp Regression Testing: Interactive Debugging" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="How-to-Debug-Tests.html#How-to-Debug-Tests" rel="up"
+  title="How to Debug Tests" />
+  <link href="Extending-ERT.html#Extending-ERT" rel="next" title=
+  "Extending ERT" />
+  <link href=
+  "Understanding-Explanations.html#Understanding-Explanations" rel=
+  "prev" title="Understanding Explanations" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Interactive-Debugging"></a>
-<div class="header">
-<p>
-Previous: <a href="Understanding-Explanations.html#Understanding-Explanations" accesskey="p" rel="prev">Understanding Explanations</a>, Up: <a href="How-to-Debug-Tests.html#How-to-Debug-Tests" accesskey="u" rel="up">How to Debug Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
-<hr>
-<a name="Interactive-Debugging-1"></a>
-<h3 class="section">4.2 Interactive Debugging</h3>
+<body lang="en" xml:lang="en">
+  <a name="Interactive-Debugging" id="Interactive-Debugging"></a>
 
-<p>Debugging failed tests essentially works the same way as debugging any
-other problems with Lisp code.  Here are a few tricks specific to
-tests:
-</p>
-<ul>
-<li> Re-run the failed test a few times to see if it fails in the same way
-each time.  It&rsquo;s good to find out whether the behavior is
-deterministic before spending any time looking for a cause.  In the
-ERT results buffer, <kbd>r</kbd> re-runs the selected test.
+  <div class="header">
+    <p>Previous: <a href=
+    "Understanding-Explanations.html#Understanding-Explanations"
+    accesskey="p" rel="prev">Understanding Explanations</a>, Up:
+    <a href="How-to-Debug-Tests.html#How-to-Debug-Tests" accesskey=
+    "u" rel="up">How to Debug Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
+  <hr />
+  <a name="Interactive-Debugging-1" id=
+  "Interactive-Debugging-1"></a>
 
-</li><li> Use <kbd>.</kbd> to jump to the source code of the test to find out exactly
-what it does.  Perhaps the test is broken rather than the code
-under test.
+  <h3 class="section">4.2 Interactive Debugging</h3>
 
-</li><li> If the test contains a series of <code>should</code> forms and you can&rsquo;t
-tell which one failed, use <kbd>l</kbd>, which shows you the list of all
-<code>should</code> forms executed during the test before it failed.
+  <p>Debugging failed tests essentially works the same way as
+  debugging any other problems with Lisp code. Here are a few
+  tricks specific to tests:</p>
 
-</li><li> Use <kbd>b</kbd> to view the backtrace.  You can also use <kbd>d</kbd> to re-run
-the test with debugging enabled, this will enter the debugger and show
-the backtrace as well; but the top few frames shown there will not be
-relevant to you since they are ERT&rsquo;s own debugger hook.  <kbd>b</kbd>
-strips them out, so it is more convenient.
+  <ul>
+    <li>Re-run the failed test a few times to see if it fails in
+    the same way each time. It&rsquo;s good to find out whether the
+    behavior is deterministic before spending any time looking for
+    a cause. In the ERT results buffer, <kbd>r</kbd> re-runs the
+    selected test.</li>
 
-</li><li> If the test or the code under testing prints messages using
-<code>message</code>, use <kbd>m</kbd> to see what messages it printed before it
-failed.  This can be useful to figure out how far it got.
+    <li>Use <kbd>.</kbd> to jump to the source code of the test to
+    find out exactly what it does. Perhaps the test is broken
+    rather than the code under test.</li>
 
-</li><li> You can instrument tests for debugging the same way you instrument
-<code>defun</code>s for debugging: go to the source code of the test and
-type <kbd><kbd>C-u</kbd> <kbd>C-M-x</kbd></kbd>.  Then, go back to the ERT buffer and
-re-run the test with <kbd>r</kbd> or <kbd>d</kbd>.
+    <li>If the test contains a series of <code>should</code> forms
+    and you can&rsquo;t tell which one failed, use <kbd>l</kbd>,
+    which shows you the list of all <code>should</code> forms
+    executed during the test before it failed.</li>
 
-</li><li> If you have been editing and rearranging tests, it is possible that
-ERT remembers an old test that you have since renamed or removed:
-renamings or removals of definitions in the source code leave around a
-stray definition under the old name in the running process (this is a
-common problem in Lisp).  In such a situation, hit <kbd>D</kbd> to let ERT
-forget about the obsolete test.
-</li></ul>
+    <li>Use <kbd>b</kbd> to view the backtrace. You can also use
+    <kbd>d</kbd> to re-run the test with debugging enabled, this
+    will enter the debugger and show the backtrace as well; but the
+    top few frames shown there will not be relevant to you since
+    they are ERT&rsquo;s own debugger hook. <kbd>b</kbd> strips
+    them out, so it is more convenient.</li>
 
+    <li>If the test or the code under testing prints messages using
+    <code>message</code>, use <kbd>m</kbd> to see what messages it
+    printed before it failed. This can be useful to figure out how
+    far it got.</li>
 
-<hr>
-<div class="header">
-<p>
-Previous: <a href="Understanding-Explanations.html#Understanding-Explanations" accesskey="p" rel="prev">Understanding Explanations</a>, Up: <a href="How-to-Debug-Tests.html#How-to-Debug-Tests" accesskey="u" rel="up">How to Debug Tests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
-</div>
+    <li>You can instrument tests for debugging the same way you
+    instrument <code>defun</code>s for debugging: go to the source
+    code of the test and type <kbd><kbd>C-u</kbd>
+    <kbd>C-M-x</kbd></kbd>. Then, go back to the ERT buffer and
+    re-run the test with <kbd>r</kbd> or <kbd>d</kbd>.</li>
 
+    <li>If you have been editing and rearranging tests, it is
+    possible that ERT remembers an old test that you have since
+    renamed or removed: renamings or removals of definitions in the
+    source code leave around a stray definition under the old name
+    in the running process (this is a common problem in Lisp). In
+    such a situation, hit <kbd>D</kbd> to let ERT forget about the
+    obsolete test.</li>
+  </ul>
+  <hr />
 
-
+  <div class="header">
+    <p>Previous: <a href=
+    "Understanding-Explanations.html#Understanding-Explanations"
+    accesskey="p" rel="prev">Understanding Explanations</a>, Up:
+    <a href="How-to-Debug-Tests.html#How-to-Debug-Tests" accesskey=
+    "u" rel="up">How to Debug Tests</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>]</p>
+  </div>
 </body>
 </html>

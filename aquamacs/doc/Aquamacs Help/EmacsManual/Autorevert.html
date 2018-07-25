@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Manual,
 updated for Emacs version 25.1.
 
@@ -18,109 +20,171 @@ License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Manual: Autorevert</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Manual: Autorevert">
-<meta name="keywords" content="GNU Emacs Manual: Autorevert">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Files.html#Files" rel="up" title="Files">
-<link href="Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu" rel="next" title="Auto Reverting the Buffer Menu">
-<link href="Reverting.html#Reverting" rel="prev" title="Reverting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Manual: Autorevert</title>
+  <meta name="description" content=
+  "GNU Emacs Manual: Autorevert" />
+  <meta name="keywords" content="GNU Emacs Manual: Autorevert" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Files.html#Files" rel="up" title="Files" />
+  <link href=
+  "Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu"
+  rel="next" title="Auto Reverting the Buffer Menu" />
+  <link href="Reverting.html#Reverting" rel="prev" title=
+  "Reverting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Autorevert" id="Autorevert"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Auto-Save.html#Auto-Save" accesskey="n" rel=
+    "next">Auto Save</a>, Previous: <a href=
+    "Reverting.html#Reverting" accesskey="p" rel=
+    "prev">Reverting</a>, Up: <a href="Files.html#Files" accesskey=
+    "u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Auto-Reverting-Non_002dFile-Buffers" id=
+  "Auto-Reverting-Non_002dFile-Buffers"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Autorevert"></a>
-<div class="header">
-<p>
-Next: <a href="Auto-Save.html#Auto-Save" accesskey="n" rel="next">Auto Save</a>, Previous: <a href="Reverting.html#Reverting" accesskey="p" rel="prev">Reverting</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Auto-Reverting-Non_002dFile-Buffers"></a>
-<h3 class="section">18.5 Auto Reverting Non-File Buffers</h3>
+  <h3 class="section">18.5 Auto Reverting Non-File Buffers</h3>
 
-<p>Global Auto Revert Mode normally only reverts file buffers.  There are
-two ways to auto-revert certain non-file buffers: by enabling Auto
-Revert Mode in those buffers (using <kbd>M-x auto-revert-mode</kbd>); and
-by setting <code>global-auto-revert-non-file-buffers</code> to a
-non-<code>nil</code> value.  The latter enables Auto Reverting for all types
-of buffers for which it is implemented (listed in the menu below).
-</p>
-<p>Like file buffers, non-file buffers should normally not revert while
-you are working on them, or while they contain information that might
-get lost after reverting.  Therefore, they do not revert if they are
-modified.  This can get tricky, because deciding when a non-file
-buffer should be marked modified is usually more difficult than for
-file buffers.
-</p>
-<p>Another tricky detail is that, for efficiency reasons, Auto Revert
-often does not try to detect all possible changes in the buffer, only
-changes that are major or easy to detect.  Hence, enabling
-auto-reverting for a non-file buffer does not always guarantee that
-all information in the buffer is up-to-date, and does not necessarily
-make manual reverts useless.
-</p>
-<p>At the other extreme, certain buffers automatically revert every
-<code>auto-revert-interval</code> seconds.  (This currently only applies to
-the Buffer Menu.)  In this case, Auto Revert does not print any
-messages while reverting, even when <code>auto-revert-verbose</code> is
-non-<code>nil</code>.
-</p>
-<p>The details depend on the particular types of buffers and are
-explained in the corresponding sections.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu" accesskey="1">Auto Reverting the Buffer Menu</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Auto Revert of the Buffer Menu.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Auto-Reverting-Dired.html#Auto-Reverting-Dired" accesskey="2">Auto Reverting Dired</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Auto Revert of Dired buffers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Supporting-additional-buffers.html#Supporting-additional-buffers" accesskey="3">Supporting additional buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to add more Auto Revert support.
-</td></tr>
-</table>
+  <p>Global Auto Revert Mode normally only reverts file buffers.
+  There are two ways to auto-revert certain non-file buffers: by
+  enabling Auto Revert Mode in those buffers (using <kbd>M-x
+  auto-revert-mode</kbd>); and by setting
+  <code>global-auto-revert-non-file-buffers</code> to a
+  non-<code>nil</code> value. The latter enables Auto Reverting for
+  all types of buffers for which it is implemented (listed in the
+  menu below).</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Auto-Save.html#Auto-Save" accesskey="n" rel="next">Auto Save</a>, Previous: <a href="Reverting.html#Reverting" accesskey="p" rel="prev">Reverting</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Like file buffers, non-file buffers should normally not revert
+  while you are working on them, or while they contain information
+  that might get lost after reverting. Therefore, they do not
+  revert if they are modified. This can get tricky, because
+  deciding when a non-file buffer should be marked modified is
+  usually more difficult than for file buffers.</p>
 
+  <p>Another tricky detail is that, for efficiency reasons, Auto
+  Revert often does not try to detect all possible changes in the
+  buffer, only changes that are major or easy to detect. Hence,
+  enabling auto-reverting for a non-file buffer does not always
+  guarantee that all information in the buffer is up-to-date, and
+  does not necessarily make manual reverts useless.</p>
 
+  <p>At the other extreme, certain buffers automatically revert
+  every <code>auto-revert-interval</code> seconds. (This currently
+  only applies to the Buffer Menu.) In this case, Auto Revert does
+  not print any messages while reverting, even when
+  <code>auto-revert-verbose</code> is non-<code>nil</code>.</p>
 
+  <p>The details depend on the particular types of buffers and are
+  explained in the corresponding sections.</p>
+
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Auto-Reverting-the-Buffer-Menu.html#Auto-Reverting-the-Buffer-Menu"
+      accesskey="1">Auto Reverting the Buffer Menu</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Auto Revert of the Buffer
+      Menu.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Auto-Reverting-Dired.html#Auto-Reverting-Dired" accesskey=
+      "2">Auto Reverting Dired</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Auto Revert of Dired
+      buffers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Supporting-additional-buffers.html#Supporting-additional-buffers"
+      accesskey="3">Supporting additional buffers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">How to add more Auto Revert
+      support.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Auto-Save.html#Auto-Save" accesskey="n" rel=
+    "next">Auto Save</a>, Previous: <a href=
+    "Reverting.html#Reverting" accesskey="p" rel=
+    "prev">Reverting</a>, Up: <a href="Files.html#Files" accesskey=
+    "u" rel="up">Files</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Key-Index.html#Key-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

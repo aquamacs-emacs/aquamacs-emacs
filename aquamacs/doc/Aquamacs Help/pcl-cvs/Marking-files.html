@@ -1,15 +1,25 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Marking files - PCL-CVS -- Emacs Front-End to CVS</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="PCL-CVS -- Emacs Front-End to CVS">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Commands.html#Commands" title="Commands">
-<link rel="prev" href="Movement-commands.html#Movement-commands" title="Movement commands">
-<link rel="next" href="Committing-changes.html#Committing-changes" title="Committing changes">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Marking files - PCL-CVS -- Emacs Front-End to CVS</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content=
+  "PCL-CVS -- Emacs Front-End to CVS" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Commands.html#Commands" title="Commands" />
+  <link rel="prev" href="Movement-commands.html#Movement-commands"
+  title="Movement commands" />
+  <link rel="next" href=
+  "Committing-changes.html#Committing-changes" title=
+  "Committing changes" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 Copyright (C) 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998,
 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
 Free Software Foundation, Inc.
@@ -26,8 +36,10 @@ Free Software Foundation, Inc.
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -37,48 +49,107 @@ Free Software Foundation, Inc.
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Marking-files"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Committing-changes.html#Committing-changes">Committing changes</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Movement-commands.html#Movement-commands">Movement commands</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Marking-files" id="Marking-files"></a>
 
-<h3 class="section">5.5 Marking files</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Committing-changes.html#Committing-changes">Committing
+    changes</a>, Previous:&nbsp;<a rel="previous" accesskey="p"
+    href="Movement-commands.html#Movement-commands">Movement
+    commands</a>, Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Commands.html#Commands">Commands</a></p>
+    <hr />
+  </div>
 
-<p><a name="index-Selecting-files-_0028commands-to-mark-files_0029-40"></a><a name="index-Marking-files-41"></a><a name="index-m_0040r_007b_002d_002dmarking-a-file_007d-42"></a><a name="index-M_0040r_007b_002d_002dmarking-all-files_007d-43"></a><a name="index-u_0040r_007b_002d_002dunmark-a-file_007d-44"></a><a name="index-ESC-DEL_0040r_007b_002d_002dunmark-all-files_007d-45"></a><a name="index-DEL_0040r_007b_002d_002dunmark-previous-file_007d-46"></a><a name="index-g_t_0025_0040r_007b_002d_002dmark-files-matching-regexp_007d-47"></a><a name="index-S_0040r_007b_002d_002dmark-files-in-a-particular-state_007d-48"></a><a name="index-T_0040r_007b_002d_002dtoggle-marks_007d-49"></a><a name="index-cvs_002dmode_002dmark-50"></a><a name="index-cvs_002dmode_002dunmark-51"></a><a name="index-cvs_002dmode_002dmark_002dall_002dfiles-52"></a><a name="index-cvs_002dmode_002dunmark_002dall_002dfiles-53"></a><a name="index-cvs_002dmode_002dunmark_002dup-54"></a><a name="index-cvs_002dmode_002dmark_002dmatching_002dfiles-55"></a><a name="index-cvs_002dmode_002dmark_002don_002dstate-56"></a><a name="index-cvs_002dmode_002dtoggle_002dmarks-57"></a>
-PCL-CVS works on a set of <dfn>selected files</dfn> (see <a href="Selected-files.html#Selected-files">Selected files</a>). 
-You can mark and unmark files with these commands:
+  <h3 class="section">5.5 Marking files</h3>
 
-     <dl>
-<dt><kbd>m</kbd><dd>This marks the file that the cursor is positioned on.  If the cursor is
-positioned on a directory all files in that directory are marked
-(<code>cvs-mode-mark</code>).
+  <p><a name=
+  "index-Selecting-files-_0028commands-to-mark-files_0029-40" id=
+  "index-Selecting-files-_0028commands-to-mark-files_0029-40"></a><a name="index-Marking-files-41"
+  id="index-Marking-files-41"></a><a name=
+  "index-m_0040r_007b_002d_002dmarking-a-file_007d-42" id=
+  "index-m_0040r_007b_002d_002dmarking-a-file_007d-42"></a><a name=
+  "index-M_0040r_007b_002d_002dmarking-all-files_007d-43" id=
+  "index-M_0040r_007b_002d_002dmarking-all-files_007d-43"></a><a name="index-u_0040r_007b_002d_002dunmark-a-file_007d-44"
+  id=
+  "index-u_0040r_007b_002d_002dunmark-a-file_007d-44"></a><a name=
+  "index-ESC-DEL_0040r_007b_002d_002dunmark-all-files_007d-45" id=
+  "index-ESC-DEL_0040r_007b_002d_002dunmark-all-files_007d-45"></a><a name="index-DEL_0040r_007b_002d_002dunmark-previous-file_007d-46"
+  id=
+  "index-DEL_0040r_007b_002d_002dunmark-previous-file_007d-46"></a><a name="index-g_t_0025_0040r_007b_002d_002dmark-files-matching-regexp_007d-47"
+  id=
+  "index-g_t_0025_0040r_007b_002d_002dmark-files-matching-regexp_007d-47"></a><a name="index-S_0040r_007b_002d_002dmark-files-in-a-particular-state_007d-48"
+  id=
+  "index-S_0040r_007b_002d_002dmark-files-in-a-particular-state_007d-48"></a><a name="index-T_0040r_007b_002d_002dtoggle-marks_007d-49"
+  id=
+  "index-T_0040r_007b_002d_002dtoggle-marks_007d-49"></a><a name="index-cvs_002dmode_002dmark-50"
+  id="index-cvs_002dmode_002dmark-50"></a><a name=
+  "index-cvs_002dmode_002dunmark-51" id=
+  "index-cvs_002dmode_002dunmark-51"></a><a name=
+  "index-cvs_002dmode_002dmark_002dall_002dfiles-52" id=
+  "index-cvs_002dmode_002dmark_002dall_002dfiles-52"></a><a name=
+  "index-cvs_002dmode_002dunmark_002dall_002dfiles-53" id=
+  "index-cvs_002dmode_002dunmark_002dall_002dfiles-53"></a><a name=
+  "index-cvs_002dmode_002dunmark_002dup-54" id=
+  "index-cvs_002dmode_002dunmark_002dup-54"></a><a name=
+  "index-cvs_002dmode_002dmark_002dmatching_002dfiles-55" id=
+  "index-cvs_002dmode_002dmark_002dmatching_002dfiles-55"></a><a name="index-cvs_002dmode_002dmark_002don_002dstate-56"
+  id="index-cvs_002dmode_002dmark_002don_002dstate-56"></a><a name=
+  "index-cvs_002dmode_002dtoggle_002dmarks-57" id=
+  "index-cvs_002dmode_002dtoggle_002dmarks-57"></a> PCL-CVS works
+  on a set of <dfn>selected files</dfn> (see <a href=
+  "Selected-files.html#Selected-files">Selected files</a>). You can
+  mark and unmark files with these commands:</p>
 
-     <br><dt><kbd>u</kbd><dd>Unmark the file that the cursor is positioned on. If the cursor is on a
-directory, all files in that directory are unmarked
-(<code>cvs-mode-unmark</code>).
+  <dl>
+    <dt><kbd>m</kbd></dt>
 
-     <br><dt><kbd>M</kbd><dd>Mark <em>all</em> files in the buffer (<code>cvs-mode-mark-all-files</code>).
+    <dd>This marks the file that the cursor is positioned on. If
+    the cursor is positioned on a directory all files in that
+    directory are marked (<code>cvs-mode-mark</code>).<br /></dd>
 
-     <br><dt><kbd>M-&lt;DEL&gt;</kbd><dd>Unmark <em>all</em> files (<code>cvs-mode-unmark-all-files</code>).
+    <dt><kbd>u</kbd></dt>
 
-     <br><dt><kbd>&lt;DEL&gt;</kbd><dd>Unmark the file on the previous line, and move point to that line
-(<code>cvs-mode-unmark-up</code>).
+    <dd>Unmark the file that the cursor is positioned on. If the
+    cursor is on a directory, all files in that directory are
+    unmarked (<code>cvs-mode-unmark</code>).<br /></dd>
 
-     <br><dt><kbd>%</kbd><dd>Mark all files matching a regular expression
-(<code>cvs-mode-mark-matching-files</code>).
+    <dt><kbd>M</kbd></dt>
 
-     <br><dt><kbd>S</kbd><dd>Mark all files in a particular state, such as &ldquo;Modified&rdquo; or
-&ldquo;Removed&rdquo; (<code>cvs-mode-mark-on-state</code>).
+    <dd>Mark <em>all</em> files in the buffer
+    (<code>cvs-mode-mark-all-files</code>).<br /></dd>
 
-     <br><dt><kbd>T</kbd><dd>Toggle use of marks for the next command (<code>cvs-mode-toggle-marks</code>). 
-</dl>
+    <dt><kbd>M-&lt;DEL&gt;</kbd></dt>
 
-   </body></html>
+    <dd>Unmark <em>all</em> files
+    (<code>cvs-mode-unmark-all-files</code>).<br /></dd>
 
+    <dt><kbd>&lt;DEL&gt;</kbd></dt>
+
+    <dd>Unmark the file on the previous line, and move point to
+    that line (<code>cvs-mode-unmark-up</code>).<br /></dd>
+
+    <dt><kbd>%</kbd></dt>
+
+    <dd>Mark all files matching a regular expression
+    (<code>cvs-mode-mark-matching-files</code>).<br /></dd>
+
+    <dt><kbd>S</kbd></dt>
+
+    <dd>Mark all files in a particular state, such as
+    &ldquo;Modified&rdquo; or &ldquo;Removed&rdquo;
+    (<code>cvs-mode-mark-on-state</code>).<br /></dd>
+
+    <dt><kbd>T</kbd></dt>
+
+    <dd>Toggle use of marks for the next command
+    (<code>cvs-mode-toggle-marks</code>).</dd>
+  </dl>
+</body>
+</html>

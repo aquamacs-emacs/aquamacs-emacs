@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,149 +16,221 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: The Export Dispatcher</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: The Export Dispatcher">
-<meta name="keywords" content="The Org Manual: The Export Dispatcher">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Exporting.html#Exporting" rel="up" title="Exporting">
-<link href="Export-back_002dends.html#Export-back_002dends" rel="next" title="Export back-ends">
-<link href="Exporting.html#Exporting" rel="prev" title="Exporting">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: The Export Dispatcher</title>
+  <meta name="description" content=
+  "The Org Manual: The Export Dispatcher" />
+  <meta name="keywords" content=
+  "The Org Manual: The Export Dispatcher" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Exporting.html#Exporting" rel="up" title=
+  "Exporting" />
+  <link href="Export-back_002dends.html#Export-back_002dends" rel=
+  "next" title="Export back-ends" />
+  <link href="Exporting.html#Exporting" rel="prev" title=
+  "Exporting" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="The-Export-Dispatcher"></a>
-<div class="header">
-<p>
-Next: <a href="Export-back_002dends.html#Export-back_002dends" accesskey="n" rel="next">Export back-ends</a>, Previous: <a href="Exporting.html#Exporting" accesskey="p" rel="prev">Exporting</a>, Up: <a href="Exporting.html#Exporting" accesskey="u" rel="up">Exporting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="The-Export-Dispatcher-1"></a>
-<h3 class="section">12.1 The Export Dispatcher</h3>
-<a name="index-org_002dexport_002ddispatch_002duse_002dexpert_002dui"></a>
-<a name="index-Export_002c-dispatcher"></a>
+<body lang="en" xml:lang="en">
+  <a name="The-Export-Dispatcher" id="The-Export-Dispatcher"></a>
 
-<p>The main entry point for export related tasks is the dispatcher, a
-hierarchical menu from which it is possible to select an export format and
-toggle export options<a name="DOCF132" href="#FOOT132"><sup>132</sup></a> from which it is possible to select an export format and to toggle
-export options.
-</p>
-<dl compact="compact">
-<dd><a name="index-C_002dc-C_002de"></a>
-<a name="index-org_002dexport_002ddispatch"></a>
-</dd>
-<dt><kbd>C-c C-e</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-export-dispatch</code>)</dt>
-<dd>
-<p>Dispatch for export and publishing commands.  When called with a <kbd>C-u</kbd>
-prefix argument, repeat the last export command on the current buffer while
-preserving toggled options.  If the current buffer hasn&rsquo;t changed and subtree
-export was activated, the command will affect that same subtree.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Export-back_002dends.html#Export-back_002dends" accesskey="n"
+    rel="next">Export back-ends</a>, Previous: <a href=
+    "Exporting.html#Exporting" accesskey="p" rel=
+    "prev">Exporting</a>, Up: <a href="Exporting.html#Exporting"
+    accesskey="u" rel="up">Exporting</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="The-Export-Dispatcher-1" id=
+  "The-Export-Dispatcher-1"></a>
 
-<p>Normally the entire buffer is exported, but if there is an active region
-only that part of the buffer will be exported.
-</p>
-<p>Several export options (see <a href="Export-settings.html#Export-settings">Export settings</a>) can be toggled from the
-export dispatcher with the following key combinations:
-</p>
-<dl compact="compact">
-<dt><kbd>C-a</kbd></dt>
-<dd><a name="index-org_002dexport_002dasync_002dinit_002dfile"></a>
-<p>Toggle asynchronous export.  Asynchronous export uses an external Emacs
-process that is configured with a specified initialization file.
-</p>
-<p>While exporting asynchronously, the output is not displayed, but stored in
-a place called &ldquo;the export stack&rdquo;.  This stack can be displayed by calling
-the dispatcher with a double <kbd>C-u</kbd> prefix argument, or with <kbd>&amp;</kbd> key
-from the dispatcher menu.
-</p>
-<a name="index-org_002dexport_002din_002dbackground"></a>
-<p>To make this behavior the default, customize the variable
-<code>org-export-in-background</code>.
-</p>
-</dd>
-<dt><kbd>C-b</kbd></dt>
-<dd><p>Toggle body-only export.  Its effect depends on the back-end used.
-Typically, if the back-end has a header section (like <code>&lt;head&gt;...&lt;/head&gt;</code>
-in the HTML back-end), a body-only export will not include this header.
-</p>
-</dd>
-<dt><kbd>C-s</kbd></dt>
-<dd><a name="index-org_002dexport_002dinitial_002dscope"></a>
-<p>Toggle subtree export.  The top heading becomes the document title.
-</p>
-<p>You can change the default state of this option by setting
-<code>org-export-initial-scope</code>.
-</p>
-</dd>
-<dt><kbd>C-v</kbd></dt>
-<dd><p>Toggle visible-only export.  Only export the text that is currently
-visible, i.e., not hidden by outline visibility in the buffer.
-</p>
-</dd>
-</dl>
+  <h3 class="section">12.1 The Export Dispatcher</h3><a name=
+  "index-org_002dexport_002ddispatch_002duse_002dexpert_002dui" id=
+  "index-org_002dexport_002ddispatch_002duse_002dexpert_002dui"></a>
+  <a name="index-Export_002c-dispatcher" id=
+  "index-Export_002c-dispatcher"></a>
 
-<a name="index-org_002dexport_002dcopy_002dto_002dkill_002dring"></a>
-<p>With the exception of asynchronous export, a successful export process writes
-its output to the kill-ring. You can configure this behavior by altering the
-option <code>org-export-copy-to-kill-ring</code>.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>The main entry point for export related tasks is the
+  dispatcher, a hierarchical menu from which it is possible to
+  select an export format and toggle export options<a name=
+  "DOCF132" href="#FOOT132" id="DOCF132"><sup>132</sup></a> from
+  which it is possible to select an export format and to toggle
+  export options.</p>
 
-<h3><a name="FOOT132" href="#DOCF132">(132)</a></h3>
-<p>It is also possible to use a less intrusive
-interface by setting <code>org-export-dispatch-use-expert-ui</code> to a
-non-<code>nil</code> value.  In that case, only a prompt is visible from the
-minibuffer.  From there one can still switch back to regular menu by pressing
-<tt class="key">?</tt>.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Export-back_002dends.html#Export-back_002dends" accesskey="n" rel="next">Export back-ends</a>, Previous: <a href="Exporting.html#Exporting" accesskey="p" rel="prev">Exporting</a>, Up: <a href="Exporting.html#Exporting" accesskey="u" rel="up">Exporting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dd><a name="index-C_002dc-C_002de" id=
+    "index-C_002dc-C_002de"></a> <a name=
+    "index-org_002dexport_002ddispatch" id=
+    "index-org_002dexport_002ddispatch"></a></dd>
 
+    <dt><kbd>C-c C-e</kbd>
+    &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-export-dispatch</code>)</dt>
 
+    <dd>
+      <p>Dispatch for export and publishing commands. When called
+      with a <kbd>C-u</kbd> prefix argument, repeat the last export
+      command on the current buffer while preserving toggled
+      options. If the current buffer hasn&rsquo;t changed and
+      subtree export was activated, the command will affect that
+      same subtree.</p>
+    </dd>
+  </dl>
 
+  <p>Normally the entire buffer is exported, but if there is an
+  active region only that part of the buffer will be exported.</p>
+
+  <p>Several export options (see <a href=
+  "Export-settings.html#Export-settings">Export settings</a>) can
+  be toggled from the export dispatcher with the following key
+  combinations:</p>
+
+  <dl compact="compact">
+    <dt><kbd>C-a</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dexport_002dasync_002dinit_002dfile"
+      id="index-org_002dexport_002dasync_002dinit_002dfile"></a>
+
+      <p>Toggle asynchronous export. Asynchronous export uses an
+      external Emacs process that is configured with a specified
+      initialization file.</p>
+
+      <p>While exporting asynchronously, the output is not
+      displayed, but stored in a place called &ldquo;the export
+      stack&rdquo;. This stack can be displayed by calling the
+      dispatcher with a double <kbd>C-u</kbd> prefix argument, or
+      with <kbd>&amp;</kbd> key from the dispatcher
+      menu.</p><a name="index-org_002dexport_002din_002dbackground"
+      id="index-org_002dexport_002din_002dbackground"></a>
+
+      <p>To make this behavior the default, customize the variable
+      <code>org-export-in-background</code>.</p>
+    </dd>
+
+    <dt><kbd>C-b</kbd></dt>
+
+    <dd>
+      <p>Toggle body-only export. Its effect depends on the
+      back-end used. Typically, if the back-end has a header
+      section (like <code>&lt;head&gt;...&lt;/head&gt;</code> in
+      the HTML back-end), a body-only export will not include this
+      header.</p>
+    </dd>
+
+    <dt><kbd>C-s</kbd></dt>
+
+    <dd>
+      <a name="index-org_002dexport_002dinitial_002dscope" id=
+      "index-org_002dexport_002dinitial_002dscope"></a>
+
+      <p>Toggle subtree export. The top heading becomes the
+      document title.</p>
+
+      <p>You can change the default state of this option by setting
+      <code>org-export-initial-scope</code>.</p>
+    </dd>
+
+    <dt><kbd>C-v</kbd></dt>
+
+    <dd>
+      <p>Toggle visible-only export. Only export the text that is
+      currently visible, i.e., not hidden by outline visibility in
+      the buffer.</p>
+    </dd>
+  </dl><a name=
+  "index-org_002dexport_002dcopy_002dto_002dkill_002dring" id=
+  "index-org_002dexport_002dcopy_002dto_002dkill_002dring"></a>
+
+  <p>With the exception of asynchronous export, a successful export
+  process writes its output to the kill-ring. You can configure
+  this behavior by altering the option
+  <code>org-export-copy-to-kill-ring</code>.</p>
+
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT132" href="#DOCF132" id=
+    "FOOT132">(132)</a></h3>
+
+    <p>It is also possible to use a less intrusive interface by
+    setting <code>org-export-dispatch-use-expert-ui</code> to a
+    non-<code>nil</code> value. In that case, only a prompt is
+    visible from the minibuffer. From there one can still switch
+    back to regular menu by pressing <tt class="key">?</tt>.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Export-back_002dends.html#Export-back_002dends" accesskey="n"
+    rel="next">Export back-ends</a>, Previous: <a href=
+    "Exporting.html#Exporting" accesskey="p" rel=
+    "prev">Exporting</a>, Up: <a href="Exporting.html#Exporting"
+    accesskey="u" rel="up">Exporting</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Main-Index.html#Main-Index"
+    title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

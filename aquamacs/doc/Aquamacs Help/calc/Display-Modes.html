@@ -1,15 +1,24 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>Display Modes - GNU Emacs Calc Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
-<meta name="description" content="GNU Emacs Calc Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Mode-Settings.html#Mode-Settings" title="Mode Settings">
-<link rel="prev" href="Declarations.html#Declarations" title="Declarations">
-<link rel="next" href="Language-Modes.html#Language-Modes" title="Language Modes">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
-<!--
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
+
+  <title>Display Modes - GNU Emacs Calc Manual</title>
+  <meta http-equiv="Content-Type" content="text/html" />
+  <meta name="description" content="GNU Emacs Calc Manual" />
+  <meta name="generator" content="makeinfo 4.13" />
+  <link title="Top" rel="start" href="index.html#Top" />
+  <link rel="up" href="Mode-Settings.html#Mode-Settings" title=
+  "Mode Settings" />
+  <link rel="prev" href="Declarations.html#Declarations" title=
+  "Declarations" />
+  <link rel="next" href="Language-Modes.html#Language-Modes" title=
+  "Language Modes" />
+  <link href="http://www.gnu.org/software/texinfo/" rel=
+  "generator-home" title="Texinfo Homepage" /><!--
 This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs {No value for `EMACSVER'}.
 
@@ -29,8 +38,10 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
      and modify this GNU manual.  Buying copies from the FSF supports
      it in developing GNU and promoting software freedom.''
    -->
-<meta http-equiv="Content-Style-Type" content="text/css">
-<style type="text/css"><!--
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
   pre.display { font-family:inherit }
   pre.format  { font-family:inherit }
   pre.smalldisplay { font-family:inherit; font-size:smaller }
@@ -40,58 +51,97 @@ Copyright (C) 1990, 1991, 2001, 2002, 2003, 2004,
   span.sc    { font-variant:small-caps }
   span.roman { font-family:serif; font-weight:normal; } 
   span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
+  -->
+  /*]]>*/
+  </style>
 </head>
+
 <body>
-<div class="node">
-<a name="Display-Modes"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Language-Modes.html#Language-Modes">Language Modes</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Declarations.html#Declarations">Declarations</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Settings.html#Mode-Settings">Mode Settings</a>
-<hr>
-</div>
+  <div class="node">
+    <a name="Display-Modes" id="Display-Modes"></a>
 
-<h3 class="section">7.7 Display Modes</h3>
+    <p>Next:&nbsp;<a rel="next" accesskey="n" href=
+    "Language-Modes.html#Language-Modes">Language Modes</a>,
+    Previous:&nbsp;<a rel="previous" accesskey="p" href=
+    "Declarations.html#Declarations">Declarations</a>,
+    Up:&nbsp;<a rel="up" accesskey="u" href=
+    "Mode-Settings.html#Mode-Settings">Mode Settings</a></p>
+    <hr />
+  </div>
 
-<p class="noindent">The commands in this section are two-key sequences beginning with the
-<kbd>d</kbd> prefix.  The <kbd>d l</kbd> (<code>calc-line-numbering</code>) and <kbd>d b</kbd>
-(<code>calc-line-breaking</code>) commands are described elsewhere;
-see <a href="Stack-Basics.html#Stack-Basics">Stack Basics</a> and see <a href="Normal-Language-Modes.html#Normal-Language-Modes">Normal Language Modes</a>, respectively. 
-Display formats for vectors and matrices are also covered elsewhere;
-see <a href="Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats">Vector and Matrix Formats</a>.
+  <h3 class="section">7.7 Display Modes</h3>
 
-   <p>One thing all display modes have in common is their treatment of the
-<kbd>H</kbd> prefix.  This prefix causes any mode command that would normally
-refresh the stack to leave the stack display alone.  The word &ldquo;Dirty&rdquo;
-will appear in the mode line when Calc thinks the stack display may not
-reflect the latest mode settings.
+  <p class="noindent">The commands in this section are two-key
+  sequences beginning with the <kbd>d</kbd> prefix. The <kbd>d
+  l</kbd> (<code>calc-line-numbering</code>) and <kbd>d b</kbd>
+  (<code>calc-line-breaking</code>) commands are described
+  elsewhere; see <a href="Stack-Basics.html#Stack-Basics">Stack
+  Basics</a> and see <a href=
+  "Normal-Language-Modes.html#Normal-Language-Modes">Normal
+  Language Modes</a>, respectively. Display formats for vectors and
+  matrices are also covered elsewhere; see <a href=
+  "Vector-and-Matrix-Formats.html#Vector-and-Matrix-Formats">Vector
+  and Matrix Formats</a>.</p>
 
-   <p><a name="index-d-_0040key_007bRET_007d-478"></a><a name="index-calc_002drefresh_002dtop-479"></a>The <kbd>d &lt;RET&gt;</kbd> (<code>calc-refresh-top</code>) command reformats the
-top stack entry according to all the current modes.  Positive prefix
-arguments reformat the top <var>n</var> entries; negative prefix arguments
-reformat the specified entry, and a prefix of zero is equivalent to
-<kbd>d &lt;SPC&gt;</kbd> (<code>calc-refresh</code>), which reformats the entire stack. 
-For example, <kbd>H d s M-2 d &lt;RET&gt;</kbd> changes to scientific notation
-but reformats only the top two stack entries in the new mode.
+  <p>One thing all display modes have in common is their treatment
+  of the <kbd>H</kbd> prefix. This prefix causes any mode command
+  that would normally refresh the stack to leave the stack display
+  alone. The word &ldquo;Dirty&rdquo; will appear in the mode line
+  when Calc thinks the stack display may not reflect the latest
+  mode settings.</p>
 
-   <p>The <kbd>I</kbd> prefix has another effect on the display modes.  The mode
-is set only temporarily; the top stack entry is reformatted according
-to that mode, then the original mode setting is restored.  In other
-words, <kbd>I d s</kbd> is equivalent to <kbd>H d s d &lt;RET&gt; H d (</kbd><var>old mode</var><kbd>)</kbd>.
+  <p><a name="index-d-_0040key_007bRET_007d-478" id=
+  "index-d-_0040key_007bRET_007d-478"></a><a name=
+  "index-calc_002drefresh_002dtop-479" id=
+  "index-calc_002drefresh_002dtop-479"></a>The <kbd>d
+  &lt;RET&gt;</kbd> (<code>calc-refresh-top</code>) command
+  reformats the top stack entry according to all the current modes.
+  Positive prefix arguments reformat the top <var>n</var> entries;
+  negative prefix arguments reformat the specified entry, and a
+  prefix of zero is equivalent to <kbd>d &lt;SPC&gt;</kbd>
+  (<code>calc-refresh</code>), which reformats the entire stack.
+  For example, <kbd>H d s M-2 d &lt;RET&gt;</kbd> changes to
+  scientific notation but reformats only the top two stack entries
+  in the new mode.</p>
 
-<ul class="menu">
-<li><a accesskey="1" href="Radix-Modes.html#Radix-Modes">Radix Modes</a>
-<li><a accesskey="2" href="Grouping-Digits.html#Grouping-Digits">Grouping Digits</a>
-<li><a accesskey="3" href="Float-Formats.html#Float-Formats">Float Formats</a>
-<li><a accesskey="4" href="Complex-Formats.html#Complex-Formats">Complex Formats</a>
-<li><a accesskey="5" href="Fraction-Formats.html#Fraction-Formats">Fraction Formats</a>
-<li><a accesskey="6" href="HMS-Formats.html#HMS-Formats">HMS Formats</a>
-<li><a accesskey="7" href="Date-Formats.html#Date-Formats">Date Formats</a>
-<li><a accesskey="8" href="Truncating-the-Stack.html#Truncating-the-Stack">Truncating the Stack</a>
-<li><a accesskey="9" href="Justification.html#Justification">Justification</a>
-<li><a href="Labels.html#Labels">Labels</a>
-</ul>
+  <p>The <kbd>I</kbd> prefix has another effect on the display
+  modes. The mode is set only temporarily; the top stack entry is
+  reformatted according to that mode, then the original mode
+  setting is restored. In other words, <kbd>I d s</kbd> is
+  equivalent to <kbd>H d s d &lt;RET&gt; H d (</kbd><var>old
+  mode</var><kbd>)</kbd>.</p>
 
-   </body></html>
+  <ul class="menu">
+    <li><a accesskey="1" href="Radix-Modes.html#Radix-Modes">Radix
+    Modes</a></li>
 
+    <li><a accesskey="2" href=
+    "Grouping-Digits.html#Grouping-Digits">Grouping Digits</a></li>
+
+    <li><a accesskey="3" href=
+    "Float-Formats.html#Float-Formats">Float Formats</a></li>
+
+    <li><a accesskey="4" href=
+    "Complex-Formats.html#Complex-Formats">Complex Formats</a></li>
+
+    <li><a accesskey="5" href=
+    "Fraction-Formats.html#Fraction-Formats">Fraction
+    Formats</a></li>
+
+    <li><a accesskey="6" href="HMS-Formats.html#HMS-Formats">HMS
+    Formats</a></li>
+
+    <li><a accesskey="7" href="Date-Formats.html#Date-Formats">Date
+    Formats</a></li>
+
+    <li><a accesskey="8" href=
+    "Truncating-the-Stack.html#Truncating-the-Stack">Truncating the
+    Stack</a></li>
+
+    <li><a accesskey="9" href=
+    "Justification.html#Justification">Justification</a></li>
+
+    <li><a href="Labels.html#Labels">Labels</a></li>
+  </ul>
+</body>
+</html>

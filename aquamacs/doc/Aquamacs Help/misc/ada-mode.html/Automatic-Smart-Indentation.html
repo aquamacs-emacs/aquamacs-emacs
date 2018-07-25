@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Copyright (C) 1999-2016 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
@@ -12,154 +14,238 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>Ada Mode: Automatic Smart Indentation</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="Ada Mode: Automatic Smart Indentation">
-<meta name="keywords" content="Ada Mode: Automatic Smart Indentation">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Formatting-Parameter-Lists.html#Formatting-Parameter-Lists" rel="next" title="Formatting Parameter Lists">
-<link href="Identifier-completion.html#Identifier-completion" rel="prev" title="Identifier completion">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>Ada Mode: Automatic Smart Indentation</title>
+  <meta name="description" content=
+  "Ada Mode: Automatic Smart Indentation" />
+  <meta name="keywords" content=
+  "Ada Mode: Automatic Smart Indentation" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href=
+  "Formatting-Parameter-Lists.html#Formatting-Parameter-Lists" rel=
+  "next" title="Formatting Parameter Lists" />
+  <link href="Identifier-completion.html#Identifier-completion"
+  rel="prev" title="Identifier completion" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Automatic-Smart-Indentation"></a>
-<div class="header">
-<p>
-Next: <a href="Formatting-Parameter-Lists.html#Formatting-Parameter-Lists" accesskey="n" rel="next">Formatting Parameter Lists</a>, Previous: <a href="Identifier-completion.html#Identifier-completion" accesskey="p" rel="prev">Identifier completion</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Automatic-Smart-Indentation-1"></a>
-<h2 class="chapter">9 Automatic Smart Indentation</h2>
+<body lang="en" xml:lang="en">
+  <a name="Automatic-Smart-Indentation" id=
+  "Automatic-Smart-Indentation"></a>
 
-<p>Ada mode comes with a full set of rules for automatic indentation. You
-can also configure the indentation, via the following variables:
-</p>
-<dl compact="compact">
-<dt><code>ada-broken-indent</code>           (default value: 2)</dt>
-<dd><p>Number of columns to indent the continuation of a broken line.
-</p>
-</dd>
-<dt><code>ada-indent</code>                  (default value: 3)</dt>
-<dd><p>Number of columns for default indentation.
-</p>
-</dd>
-<dt><code>ada-indent-record-rel-type</code>  (default value: 3)</dt>
-<dd><p>Indentation for <code>record</code> relative to <code>type</code> or <code>use</code>.
-</p>
-</dd>
-<dt><code>ada-indent-return</code>           (default value: 0)</dt>
-<dd><p>Indentation for <code>return</code> relative to <code>function</code> (if
-<code>ada-indent-return</code> is greater than 0), or the open parenthesis
-(if <code>ada-indent-return</code> is negative or 0).  Note that in the second
-case, when there is no open parenthesis, the indentation is done
-relative to <code>function</code> with the value of <code>ada-broken-indent</code>.
-</p>
-</dd>
-<dt><code>ada-label-indent</code>            (default value: -4)</dt>
-<dd><p>Number of columns to indent a label.
-</p>
-</dd>
-<dt><code>ada-stmt-end-indent</code>         (default value: 0)</dt>
-<dd><p>Number of columns to indent a statement <code>end</code> keyword on a separate line.
-</p>
-</dd>
-<dt><code>ada-when-indent</code>             (default value: 3)</dt>
-<dd><p>Indentation for <code>when</code> relative to <code>exception</code> or <code>case</code>.
-</p>
-</dd>
-<dt><code>ada-indent-is-separate</code>      (default value: t)</dt>
-<dd><p>Non-<code>nil</code> means indent <code>is separate</code> or <code>is abstract</code> if on a single line.
-</p>
-</dd>
-<dt><code>ada-indent-to-open-paren</code>    (default value: t)</dt>
-<dd><p>Non-<code>nil</code> means indent according to the innermost open parenthesis.
-</p>
-</dd>
-<dt><code>ada-indent-after-return</code>     (default value: t)</dt>
-<dd><p>Non-<code>nil</code> means that the current line will also be re-indented
-before inserting a newline, when you press <tt class="key">RET</tt>.
-</p></dd>
-</dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Formatting-Parameter-Lists.html#Formatting-Parameter-Lists"
+    accesskey="n" rel="next">Formatting Parameter Lists</a>,
+    Previous: <a href=
+    "Identifier-completion.html#Identifier-completion" accesskey=
+    "p" rel="prev">Identifier completion</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Automatic-Smart-Indentation-1" id=
+  "Automatic-Smart-Indentation-1"></a>
 
-<p>Most of the time, the indentation will be automatic, i.e., when you
-press <tt class="key">RET</tt>, the cursor will move to the correct column on the
-next line.
-</p>
-<p>You can also indent single lines, or the current region, with <tt class="key">TAB</tt>.
-</p>
-<p>Another mode of indentation exists that helps you to set up your
-indentation scheme. If you press <kbd>C-c <span class="key">TAB</span></kbd>, Ada mode will do
-the following:
-</p>
-<ul>
-<li> Reindent the current line, as <tt class="key">TAB</tt> would do.
-</li><li> Temporarily move the cursor to a reference line, i.e., the line that
-was used to calculate the current indentation.
-</li><li> Display in the message window the name of the variable that provided
-the offset for the indentation.
-</li></ul>
+  <h2 class="chapter">9 Automatic Smart Indentation</h2>
 
-<p>The exact indentation of the current line is the same as the one for the
-reference line, plus an offset given by the variable.
-</p>
-<dl compact="compact">
-<dt><kbd><span class="key">TAB</span></kbd></dt>
-<dd><p>Indent the current line or the current region.
-</p></dd>
-<dt><kbd>C-M-\</kbd></dt>
-<dd><p>Indent lines in the current region.
-</p></dd>
-<dt><kbd>C-c <span class="key">TAB</span></kbd></dt>
-<dd><p>Indent the current line and display the name of the variable used for
-indentation.
-</p></dd>
-</dl>
+  <p>Ada mode comes with a full set of rules for automatic
+  indentation. You can also configure the indentation, via the
+  following variables:</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Formatting-Parameter-Lists.html#Formatting-Parameter-Lists" accesskey="n" rel="next">Formatting Parameter Lists</a>, Previous: <a href="Identifier-completion.html#Identifier-completion" accesskey="p" rel="prev">Identifier completion</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl compact="compact">
+    <dt><code>ada-broken-indent</code> (default value: 2)</dt>
 
+    <dd>
+      <p>Number of columns to indent the continuation of a broken
+      line.</p>
+    </dd>
 
+    <dt><code>ada-indent</code> (default value: 3)</dt>
 
+    <dd>
+      <p>Number of columns for default indentation.</p>
+    </dd>
+
+    <dt><code>ada-indent-record-rel-type</code> (default value:
+    3)</dt>
+
+    <dd>
+      <p>Indentation for <code>record</code> relative to
+      <code>type</code> or <code>use</code>.</p>
+    </dd>
+
+    <dt><code>ada-indent-return</code> (default value: 0)</dt>
+
+    <dd>
+      <p>Indentation for <code>return</code> relative to
+      <code>function</code> (if <code>ada-indent-return</code> is
+      greater than 0), or the open parenthesis (if
+      <code>ada-indent-return</code> is negative or 0). Note that
+      in the second case, when there is no open parenthesis, the
+      indentation is done relative to <code>function</code> with
+      the value of <code>ada-broken-indent</code>.</p>
+    </dd>
+
+    <dt><code>ada-label-indent</code> (default value: -4)</dt>
+
+    <dd>
+      <p>Number of columns to indent a label.</p>
+    </dd>
+
+    <dt><code>ada-stmt-end-indent</code> (default value: 0)</dt>
+
+    <dd>
+      <p>Number of columns to indent a statement <code>end</code>
+      keyword on a separate line.</p>
+    </dd>
+
+    <dt><code>ada-when-indent</code> (default value: 3)</dt>
+
+    <dd>
+      <p>Indentation for <code>when</code> relative to
+      <code>exception</code> or <code>case</code>.</p>
+    </dd>
+
+    <dt><code>ada-indent-is-separate</code> (default value: t)</dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means indent <code>is separate</code>
+      or <code>is abstract</code> if on a single line.</p>
+    </dd>
+
+    <dt><code>ada-indent-to-open-paren</code> (default value:
+    t)</dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means indent according to the
+      innermost open parenthesis.</p>
+    </dd>
+
+    <dt><code>ada-indent-after-return</code> (default value:
+    t)</dt>
+
+    <dd>
+      <p>Non-<code>nil</code> means that the current line will also
+      be re-indented before inserting a newline, when you press
+      <tt class="key">RET</tt>.</p>
+    </dd>
+  </dl>
+
+  <p>Most of the time, the indentation will be automatic, i.e.,
+  when you press <tt class="key">RET</tt>, the cursor will move to
+  the correct column on the next line.</p>
+
+  <p>You can also indent single lines, or the current region, with
+  <tt class="key">TAB</tt>.</p>
+
+  <p>Another mode of indentation exists that helps you to set up
+  your indentation scheme. If you press <kbd>C-c <span class=
+  "key">TAB</span></kbd>, Ada mode will do the following:</p>
+
+  <ul>
+    <li>Reindent the current line, as <tt class="key">TAB</tt>
+    would do.</li>
+
+    <li>Temporarily move the cursor to a reference line, i.e., the
+    line that was used to calculate the current indentation.</li>
+
+    <li>Display in the message window the name of the variable that
+    provided the offset for the indentation.</li>
+  </ul>
+
+  <p>The exact indentation of the current line is the same as the
+  one for the reference line, plus an offset given by the
+  variable.</p>
+
+  <dl compact="compact">
+    <dt><kbd><span class="key">TAB</span></kbd></dt>
+
+    <dd>
+      <p>Indent the current line or the current region.</p>
+    </dd>
+
+    <dt><kbd>C-M-\</kbd></dt>
+
+    <dd>
+      <p>Indent lines in the current region.</p>
+    </dd>
+
+    <dt><kbd>C-c <span class="key">TAB</span></kbd></dt>
+
+    <dd>
+      <p>Indent the current line and display the name of the
+      variable used for indentation.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Formatting-Parameter-Lists.html#Formatting-Parameter-Lists"
+    accesskey="n" rel="next">Formatting Parameter Lists</a>,
+    Previous: <a href=
+    "Identifier-completion.html#Identifier-completion" accesskey=
+    "p" rel="prev">Identifier completion</a>, Up: <a href=
+    "index.html#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

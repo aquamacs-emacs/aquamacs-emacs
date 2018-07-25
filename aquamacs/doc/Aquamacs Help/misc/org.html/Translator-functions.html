@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This manual is for Org version 8.2.9.
 
 Copyright (C) 2004-2016 Free Software Foundation, Inc.
@@ -14,144 +16,205 @@ is included in the section entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>The Org Manual: Translator functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="The Org Manual: Translator functions">
-<meta name="keywords" content="The Org Manual: Translator functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax" rel="up" title="Tables in arbitrary syntax">
-<link href="Radio-lists.html#Radio-lists" rel="next" title="Radio lists">
-<link href="A-LaTeX-example.html#A-LaTeX-example" rel="prev" title="A LaTeX example">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>The Org Manual: Translator functions</title>
+  <meta name="description" content=
+  "The Org Manual: Translator functions" />
+  <meta name="keywords" content=
+  "The Org Manual: Translator functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Main-Index.html#Main-Index" rel="index" title=
+  "Main Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href=
+  "Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax" rel=
+  "up" title="Tables in arbitrary syntax" />
+  <link href="Radio-lists.html#Radio-lists" rel="next" title=
+  "Radio lists" />
+  <link href="A-LaTeX-example.html#A-LaTeX-example" rel="prev"
+  title="A LaTeX example" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Translator-functions"></a>
-<div class="header">
-<p>
-Next: <a href="Radio-lists.html#Radio-lists" accesskey="n" rel="next">Radio lists</a>, Previous: <a href="A-LaTeX-example.html#A-LaTeX-example" accesskey="p" rel="prev">A LaTeX example</a>, Up: <a href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax" accesskey="u" rel="up">Tables in arbitrary syntax</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Translator-functions-1"></a>
-<h4 class="subsection">A.6.3 Translator functions</h4>
-<a name="index-HTML_002c-and-Orgtbl-mode"></a>
-<a name="index-translator-function"></a>
+<body lang="en" xml:lang="en">
+  <a name="Translator-functions" id="Translator-functions"></a>
 
-<p>Orgtbl mode has several translator functions built-in: <code>orgtbl-to-csv</code>
-(comma-separated values), <code>orgtbl-to-tsv</code> (TAB-separated values)
-<code>orgtbl-to-latex</code>, <code>orgtbl-to-html</code>, and <code>orgtbl-to-texinfo</code>.
-Except for <code>orgtbl-to-html</code><a name="DOCF183" href="#FOOT183"><sup>183</sup></a>, these all use a generic
-translator, <code>orgtbl-to-generic</code>.  For example, <code>orgtbl-to-latex</code>
-itself is a very short function that computes the column definitions for the
-<code>tabular</code> environment, defines a few field and line separators and then
-hands processing over to the generic translator.  Here is the entire code:
-</p>
-<div class="lisp">
-<pre class="lisp">(defun orgtbl-to-latex (table params)
-  &quot;Convert the Orgtbl mode TABLE to LaTeX.&quot;
-  (let* ((alignment (mapconcat (lambda (x) (if x &quot;r&quot; &quot;l&quot;))
-                               org-table-last-alignment &quot;&quot;))
+  <div class="header">
+    <p>Next: <a href="Radio-lists.html#Radio-lists" accesskey="n"
+    rel="next">Radio lists</a>, Previous: <a href=
+    "A-LaTeX-example.html#A-LaTeX-example" accesskey="p" rel=
+    "prev">A LaTeX example</a>, Up: <a href=
+    "Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax"
+    accesskey="u" rel="up">Tables in arbitrary syntax</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Translator-functions-1" id="Translator-functions-1"></a>
+
+  <h4 class="subsection">A.6.3 Translator functions</h4><a name=
+  "index-HTML_002c-and-Orgtbl-mode" id=
+  "index-HTML_002c-and-Orgtbl-mode"></a> <a name=
+  "index-translator-function" id="index-translator-function"></a>
+
+  <p>Orgtbl mode has several translator functions built-in:
+  <code>orgtbl-to-csv</code> (comma-separated values),
+  <code>orgtbl-to-tsv</code> (TAB-separated values)
+  <code>orgtbl-to-latex</code>, <code>orgtbl-to-html</code>, and
+  <code>orgtbl-to-texinfo</code>. Except for
+  <code>orgtbl-to-html</code><a name="DOCF183" href="#FOOT183" id=
+  "DOCF183"><sup>183</sup></a>, these all use a generic translator,
+  <code>orgtbl-to-generic</code>. For example,
+  <code>orgtbl-to-latex</code> itself is a very short function that
+  computes the column definitions for the <code>tabular</code>
+  environment, defines a few field and line separators and then
+  hands processing over to the generic translator. Here is the
+  entire code:</p>
+
+  <div class="lisp">
+    <pre class="lisp">
+(defun orgtbl-to-latex (table params)
+  "Convert the Orgtbl mode TABLE to LaTeX."
+  (let* ((alignment (mapconcat (lambda (x) (if x "r" "l"))
+                               org-table-last-alignment ""))
          (params2
           (list
-           :tstart (concat &quot;\\begin{tabular}{&quot; alignment &quot;}&quot;)
-           :tend &quot;\\end{tabular}&quot;
-           :lstart &quot;&quot; :lend &quot; \\\\&quot; :sep &quot; &amp; &quot;
-           :efmt &quot;%s\\,(%s)&quot; :hline &quot;\\hline&quot;)))
+           :tstart (concat "\\begin{tabular}{" alignment "}")
+           :tend "\\end{tabular}"
+           :lstart "" :lend " \\\\" :sep " &amp; "
+           :efmt "%s\\,(%s)" :hline "\\hline")))
     (orgtbl-to-generic table (org-combine-plists params2 params))))
-</pre></div>
+</pre>
+  </div>
 
-<p>As you can see, the properties passed into the function (variable
-<var>PARAMS</var>) are combined with the ones newly defined in the function
-(variable <var>PARAMS2</var>).  The ones passed into the function (i.e., the
-ones set by the &lsquo;<samp>ORGTBL SEND</samp>&rsquo; line) take precedence.  So if you
-would like to use the LaTeX translator, but wanted the line endings to
-be &lsquo;<samp>\\[2mm]</samp>&rsquo; instead of the default &lsquo;<samp>\\</samp>&rsquo;, you could just
-overrule the default with
-</p>
-<div class="example">
-<pre class="example">#+ORGTBL: SEND test orgtbl-to-latex :lend &quot; \\\\[2mm]&quot;
-</pre></div>
+  <p>As you can see, the properties passed into the function
+  (variable <var>PARAMS</var>) are combined with the ones newly
+  defined in the function (variable <var>PARAMS2</var>). The ones
+  passed into the function (i.e., the ones set by the
+  &lsquo;<samp>ORGTBL SEND</samp>&rsquo; line) take precedence. So
+  if you would like to use the LaTeX translator, but wanted the
+  line endings to be &lsquo;<samp>\\[2mm]</samp>&rsquo; instead of
+  the default &lsquo;<samp>\\</samp>&rsquo;, you could just
+  overrule the default with</p>
 
-<p>For a new language, you can either write your own converter function in
-analogy with the LaTeX translator, or you can use the generic function
-directly.  For example, if you have a language where a table is started
-with &lsquo;<samp>!BTBL!</samp>&rsquo;, ended with &lsquo;<samp>!ETBL!</samp>&rsquo;, and where table lines are
-started with &lsquo;<samp>!BL!</samp>&rsquo;, ended with &lsquo;<samp>!EL!</samp>&rsquo;, and where the field
-separator is a TAB, you could call the generic translator like this (on
-a single line!):
-</p>
-<div class="example">
-<pre class="example">#+ORGTBL: SEND test orgtbl-to-generic :tstart &quot;!BTBL!&quot; :tend &quot;!ETBL!&quot;
-                              :lstart &quot;!BL! &quot; :lend &quot; !EL!&quot; :sep &quot;\t&quot;
-</pre></div>
+  <div class="example">
+    <pre class="example">
+#+ORGTBL: SEND test orgtbl-to-latex :lend " \\\\[2mm]"
+</pre>
+  </div>
 
-<p>Please check the documentation string of the function
-<code>orgtbl-to-generic</code> for a full list of parameters understood by
-that function, and remember that you can pass each of them into
-<code>orgtbl-to-latex</code>, <code>orgtbl-to-texinfo</code>, and any other function
-using the generic function.
-</p>
-<p>Of course you can also write a completely new function doing complicated
-things the generic translator cannot do.  A translator function takes
-two arguments.  The first argument is the table, a list of lines, each
-line either the symbol <code>hline</code> or a list of fields.  The second
-argument is the property list containing all parameters specified in the
-&lsquo;<samp>#+ORGTBL: SEND</samp>&rsquo; line.  The function must return a single string
-containing the formatted table.  If you write a generally useful
-translator, please post it on <a href="mailto:emacs-orgmode@gnu.org">emacs-orgmode@gnu.org</a> so that
-others can benefit from your work.
-</p>
-<div class="footnote">
-<hr>
-<h4 class="footnotes-heading">Footnotes</h4>
+  <p>For a new language, you can either write your own converter
+  function in analogy with the LaTeX translator, or you can use the
+  generic function directly. For example, if you have a language
+  where a table is started with &lsquo;<samp>!BTBL!</samp>&rsquo;,
+  ended with &lsquo;<samp>!ETBL!</samp>&rsquo;, and where table
+  lines are started with &lsquo;<samp>!BL!</samp>&rsquo;, ended
+  with &lsquo;<samp>!EL!</samp>&rsquo;, and where the field
+  separator is a TAB, you could call the generic translator like
+  this (on a single line!):</p>
 
-<h3><a name="FOOT183" href="#DOCF183">(183)</a></h3>
-<p>The HTML translator uses the same
-code that produces tables during HTML export.</p>
-</div>
-<hr>
-<div class="header">
-<p>
-Next: <a href="Radio-lists.html#Radio-lists" accesskey="n" rel="next">Radio lists</a>, Previous: <a href="A-LaTeX-example.html#A-LaTeX-example" accesskey="p" rel="prev">A LaTeX example</a>, Up: <a href="Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax" accesskey="u" rel="up">Tables in arbitrary syntax</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <div class="example">
+    <pre class="example">
+#+ORGTBL: SEND test orgtbl-to-generic :tstart "!BTBL!" :tend "!ETBL!"
+                              :lstart "!BL! " :lend " !EL!" :sep "\t"
+</pre>
+  </div>
 
+  <p>Please check the documentation string of the function
+  <code>orgtbl-to-generic</code> for a full list of parameters
+  understood by that function, and remember that you can pass each
+  of them into <code>orgtbl-to-latex</code>,
+  <code>orgtbl-to-texinfo</code>, and any other function using the
+  generic function.</p>
 
+  <p>Of course you can also write a completely new function doing
+  complicated things the generic translator cannot do. A translator
+  function takes two arguments. The first argument is the table, a
+  list of lines, each line either the symbol <code>hline</code> or
+  a list of fields. The second argument is the property list
+  containing all parameters specified in the &lsquo;<samp>#+ORGTBL:
+  SEND</samp>&rsquo; line. The function must return a single string
+  containing the formatted table. If you write a generally useful
+  translator, please post it on <a href=
+  "mailto:emacs-orgmode@gnu.org">emacs-orgmode@gnu.org</a> so that
+  others can benefit from your work.</p>
 
+  <div class="footnote">
+    <hr />
+
+    <h4 class="footnotes-heading">Footnotes</h4>
+
+    <h3><a name="FOOT183" href="#DOCF183" id=
+    "FOOT183">(183)</a></h3>
+
+    <p>The HTML translator uses the same code that produces tables
+    during HTML export.</p>
+  </div>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Radio-lists.html#Radio-lists" accesskey="n"
+    rel="next">Radio lists</a>, Previous: <a href=
+    "A-LaTeX-example.html#A-LaTeX-example" accesskey="p" rel=
+    "prev">A LaTeX example</a>, Up: <a href=
+    "Tables-in-arbitrary-syntax.html#Tables-in-arbitrary-syntax"
+    accesskey="u" rel="up">Tables in arbitrary syntax</a> &nbsp;
+    [<a href="index.html#SEC_Contents" title="Table of contents"
+    rel="contents">Contents</a>][<a href=
+    "Main-Index.html#Main-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

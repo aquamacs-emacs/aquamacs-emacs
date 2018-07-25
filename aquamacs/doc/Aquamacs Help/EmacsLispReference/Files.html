@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,123 +19,275 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Files</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Files">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Files">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="index.html#Top" rel="up" title="Top">
-<link href="Visiting-Files.html#Visiting-Files" rel="next" title="Visiting Files">
-<link href="Help-Functions.html#Help-Functions" rel="prev" title="Help Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Files</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Files" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Files" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="index.html#Top" rel="up" title="Top" />
+  <link href="Visiting-Files.html#Visiting-Files" rel="next" title=
+  "Visiting Files" />
+  <link href="Help-Functions.html#Help-Functions" rel="prev" title=
+  "Help Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Files" id="Files"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href=
+    "Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving"
+    accesskey="n" rel="next">Backups and Auto-Saving</a>, Previous:
+    <a href="Documentation.html#Documentation" accesskey="p" rel=
+    "prev">Documentation</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Files-1" id="Files-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Files"></a>
-<div class="header">
-<p>
-Next: <a href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" accesskey="n" rel="next">Backups and Auto-Saving</a>, Previous: <a href="Documentation.html#Documentation" accesskey="p" rel="prev">Documentation</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Files-1"></a>
-<h2 class="chapter">24 Files</h2>
+  <h2 class="chapter">24 Files</h2>
 
-<p>This chapter describes the Emacs Lisp functions and variables to
-find, create, view, save, and otherwise work with files and
-directories.  A few other file-related functions are described in
-<a href="Buffers.html#Buffers">Buffers</a>, and those related to backups and auto-saving are
-described in <a href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving">Backups and Auto-Saving</a>.
-</p>
-<p>Many of the file functions take one or more arguments that are file
-names.  A file name is a string.  Most of these functions expand file
-name arguments using the function <code>expand-file-name</code>, so that
-<samp>~</samp> is handled correctly, as are relative file names (including
-<samp>../</samp>).  See <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>.
-</p>
-<p>In addition, certain <em>magic</em> file names are handled specially.
-For example, when a remote file name is specified, Emacs accesses the
-file over the network via an appropriate protocol.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Remote-Files.html#Remote-Files">Remote Files</a> in <cite>The GNU Emacs Manual</cite>.  This handling is
-done at a very low level, so you may assume that all the functions
-described in this chapter accept magic file names as file name
-arguments, except where noted.  See <a href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>, for details.
-</p>
-<p>When file I/O functions signal Lisp errors, they usually use the
-condition <code>file-error</code> (see <a href="Handling-Errors.html#Handling-Errors">Handling Errors</a>).  The error
-message is in most cases obtained from the operating system, according
-to locale <code>system-messages-locale</code>, and decoded using coding system
-<code>locale-coding-system</code> (see <a href="Locales.html#Locales">Locales</a>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="Visiting-Files.html#Visiting-Files" accesskey="1">Visiting Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading files into Emacs buffers for editing.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Saving-Buffers.html#Saving-Buffers" accesskey="2">Saving Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Writing changed buffers back into files.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Reading-from-Files.html#Reading-from-Files" accesskey="3">Reading from Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading files into buffers without visiting.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Writing-to-Files.html#Writing-to-Files" accesskey="4">Writing to Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Writing new files from parts of buffers.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="File-Locks.html#File-Locks" accesskey="5">File Locks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Locking and unlocking files, to prevent
-                               simultaneous editing by two people.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Information-about-Files.html#Information-about-Files" accesskey="6">Information about Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Testing existence, accessibility, size of files.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Changing-Files.html#Changing-Files" accesskey="7">Changing Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Renaming files, changing permissions, etc.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="File-Names.html#File-Names" accesskey="8">File Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Decomposing and expanding file names.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Contents-of-Directories.html#Contents-of-Directories" accesskey="9">Contents of Directories</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting a list of the files in a directory.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs">Create/Delete Dirs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating and Deleting Directories.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special handling for certain file names.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Conversion to and from various file formats.
-</td></tr>
-</table>
+  <p>This chapter describes the Emacs Lisp functions and variables
+  to find, create, view, save, and otherwise work with files and
+  directories. A few other file-related functions are described in
+  <a href="Buffers.html#Buffers">Buffers</a>, and those related to
+  backups and auto-saving are described in <a href=
+  "Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving">Backups
+  and Auto-Saving</a>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" accesskey="n" rel="next">Backups and Auto-Saving</a>, Previous: <a href="Documentation.html#Documentation" accesskey="p" rel="prev">Documentation</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>Many of the file functions take one or more arguments that are
+  file names. A file name is a string. Most of these functions
+  expand file name arguments using the function
+  <code>expand-file-name</code>, so that <samp>~</samp> is handled
+  correctly, as are relative file names (including
+  <samp>../</samp>). See <a href=
+  "File-Name-Expansion.html#File-Name-Expansion">File Name
+  Expansion</a>.</p>
 
+  <p>In addition, certain <em>magic</em> file names are handled
+  specially. For example, when a remote file name is specified,
+  Emacs accesses the file over the network via an appropriate
+  protocol. See <a href=
+  "http://www.gnu.org/software/emacs/manual/html_node/emacs/Remote-Files.html#Remote-Files">
+  Remote Files</a> in <cite>The GNU Emacs Manual</cite>. This
+  handling is done at a very low level, so you may assume that all
+  the functions described in this chapter accept magic file names
+  as file name arguments, except where noted. See <a href=
+  "Magic-File-Names.html#Magic-File-Names">Magic File Names</a>,
+  for details.</p>
 
+  <p>When file I/O functions signal Lisp errors, they usually use
+  the condition <code>file-error</code> (see <a href=
+  "Handling-Errors.html#Handling-Errors">Handling Errors</a>). The
+  error message is in most cases obtained from the operating
+  system, according to locale <code>system-messages-locale</code>,
+  and decoded using coding system <code>locale-coding-system</code>
+  (see <a href="Locales.html#Locales">Locales</a>).</p>
 
+  <table class="menu" border="0" cellspacing="0">
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Visiting-Files.html#Visiting-Files" accesskey="1">Visiting
+      Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading files into Emacs
+      buffers for editing.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Saving-Buffers.html#Saving-Buffers" accesskey="2">Saving
+      Buffers</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Writing changed buffers back
+      into files.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Reading-from-Files.html#Reading-from-Files" accesskey=
+      "3">Reading from Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Reading files into buffers
+      without visiting.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Writing-to-Files.html#Writing-to-Files" accesskey=
+      "4">Writing to Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Writing new files from parts of
+      buffers.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "File-Locks.html#File-Locks" accesskey="5">File
+      Locks</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Locking and unlocking files, to
+      prevent simultaneous editing by two people.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Information-about-Files.html#Information-about-Files"
+      accesskey="6">Information about Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Testing existence,
+      accessibility, size of files.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Changing-Files.html#Changing-Files" accesskey="7">Changing
+      Files</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Renaming files, changing
+      permissions, etc.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "File-Names.html#File-Names" accesskey="8">File
+      Names</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Decomposing and expanding file
+      names.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Contents-of-Directories.html#Contents-of-Directories"
+      accesskey="9">Contents of Directories</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Getting a list of the files in
+      a directory.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Create_002fDelete-Dirs.html#Create_002fDelete-Dirs">Create/Delete
+      Dirs</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Creating and Deleting
+      Directories.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Magic-File-Names.html#Magic-File-Names">Magic File
+      Names</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Special handling for certain
+      file names.</td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top">&bull; <a href=
+      "Format-Conversion.html#Format-Conversion">Format
+      Conversion</a>:</td>
+
+      <td>&nbsp;&nbsp;</td>
+
+      <td align="left" valign="top">Conversion to and from various
+      file formats.</td>
+    </tr>
+  </table>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving"
+    accesskey="n" rel="next">Backups and Auto-Saving</a>, Previous:
+    <a href="Documentation.html#Documentation" accesskey="p" rel=
+    "prev">Documentation</a>, Up: <a href="index.html#Top"
+    accesskey="u" rel="up">Top</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href="Index.html#Index" title=
+    "Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

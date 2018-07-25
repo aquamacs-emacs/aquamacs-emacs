@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This file documents Calc, the GNU Emacs calculator, included with
 GNU Emacs 25.1.
 
@@ -16,250 +18,404 @@ entitled "GNU Free Documentation License."
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Calc Manual: Symbolic Lisp Functions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Calc Manual: Symbolic Lisp Functions">
-<meta name="keywords" content="GNU Emacs Calc Manual: Symbolic Lisp Functions">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Internals.html#Internals" rel="up" title="Internals">
-<link href="Formatting-Lisp-Functions.html#Formatting-Lisp-Functions" rel="next" title="Formatting Lisp Functions">
-<link href="Vector-Lisp-Functions.html#Vector-Lisp-Functions" rel="prev" title="Vector Lisp Functions">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>GNU Emacs Calc Manual: Symbolic Lisp Functions</title>
+  <meta name="description" content=
+  "GNU Emacs Calc Manual: Symbolic Lisp Functions" />
+  <meta name="keywords" content=
+  "GNU Emacs Calc Manual: Symbolic Lisp Functions" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Key-Index.html#Key-Index" rel="index" title=
+  "Key Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Internals.html#Internals" rel="up" title=
+  "Internals" />
+  <link href=
+  "Formatting-Lisp-Functions.html#Formatting-Lisp-Functions" rel=
+  "next" title="Formatting Lisp Functions" />
+  <link href="Vector-Lisp-Functions.html#Vector-Lisp-Functions"
+  rel="prev" title="Vector Lisp Functions" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Symbolic-Lisp-Functions"></a>
-<div class="header">
-<p>
-Next: <a href="Formatting-Lisp-Functions.html#Formatting-Lisp-Functions" accesskey="n" rel="next">Formatting Lisp Functions</a>, Previous: <a href="Vector-Lisp-Functions.html#Vector-Lisp-Functions" accesskey="p" rel="prev">Vector Lisp Functions</a>, Up: <a href="Internals.html#Internals" accesskey="u" rel="up">Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Symbolic-Functions"></a>
-<h4 class="subsubsection">17.5.7.7 Symbolic Functions</h4>
+<body lang="en" xml:lang="en">
+  <a name="Symbolic-Lisp-Functions" id=
+  "Symbolic-Lisp-Functions"></a>
 
-<p>The functions described here operate on symbolic formulas in the
-Calculator.
-</p>
-<dl>
-<dt><a name="index-calc_002dprepare_002dselection"></a>Function: <strong>calc-prepare-selection</strong> <em>num</em></dt>
-<dd><p>Prepare a stack entry for selection operations.  If <var>num</var> is
-omitted, the stack entry containing the cursor is used; otherwise,
-it is the number of the stack entry to use.  This function stores
-useful information about the current stack entry into a set of
-variables.  <code>calc-selection-cache-num</code> contains the number of
-the stack entry involved (equal to <var>num</var> if you specified it);
-<code>calc-selection-cache-entry</code> contains the stack entry as a
-list (such as <code>calc-top-list</code> would return with <code>entry</code>
-as the selection mode); and <code>calc-selection-cache-comp</code> contains
-a special &ldquo;tagged&rdquo; composition (see <a href="Formatting-Lisp-Functions.html#Formatting-Lisp-Functions">Formatting Lisp Functions</a>)
-which allows Calc to relate cursor positions in the buffer with
-their corresponding sub-formulas.
-</p>
-<p>A slight complication arises in the selection mechanism because
-formulas may contain small integers.  For example, in the vector
-&lsquo;<samp>[1, 2, 1]</samp>&rsquo; the first and last elements are <code>eq</code> to each
-other; selections are recorded as the actual Lisp object that
-appears somewhere in the tree of the whole formula, but storing
-<code>1</code> would falsely select both <code>1</code>&rsquo;s in the vector.  So
-<code>calc-prepare-selection</code> also checks the stack entry and
-replaces any plain integers with &ldquo;complex number&rdquo; lists of the form
-&lsquo;<samp>(cplx <var>n</var> 0)</samp>&rsquo;.  This list will be displayed the same as a
-plain <var>n</var> and the change will be completely invisible to the
-user, but it will guarantee that no two sub-formulas of the stack
-entry will be <code>eq</code> to each other.  Next time the stack entry
-is involved in a computation, <code>calc-normalize</code> will replace
-these lists with plain numbers again, again invisibly to the user.
-</p></dd></dl>
+  <div class="header">
+    <p>Next: <a href=
+    "Formatting-Lisp-Functions.html#Formatting-Lisp-Functions"
+    accesskey="n" rel="next">Formatting Lisp Functions</a>,
+    Previous: <a href=
+    "Vector-Lisp-Functions.html#Vector-Lisp-Functions" accesskey=
+    "p" rel="prev">Vector Lisp Functions</a>, Up: <a href=
+    "Internals.html#Internals" accesskey="u" rel="up">Internals</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Symbolic-Functions" id="Symbolic-Functions"></a>
 
-<dl>
-<dt><a name="index-calc_002dencase_002datoms"></a>Function: <strong>calc-encase-atoms</strong> <em>x</em></dt>
-<dd><p>This modifies the formula <var>x</var> to ensure that each part of the
-formula is a unique atom, using the &lsquo;<samp>(cplx <var>n</var> 0)</samp>&rsquo; trick
-described above.  This function may use <code>setcar</code> to modify
-the formula in-place.
-</p></dd></dl>
+  <h4 class="subsubsection">17.5.7.7 Symbolic Functions</h4>
 
-<dl>
-<dt><a name="index-calc_002dfind_002dselected_002dpart"></a>Function: <strong>calc-find-selected-part</strong></dt>
-<dd><p>Find the smallest sub-formula of the current formula that contains
-the cursor.  This assumes <code>calc-prepare-selection</code> has been
-called already.  If the cursor is not actually on any part of the
-formula, this returns <code>nil</code>.
-</p></dd></dl>
+  <p>The functions described here operate on symbolic formulas in
+  the Calculator.</p>
 
-<dl>
-<dt><a name="index-calc_002dchange_002dcurrent_002dselection"></a>Function: <strong>calc-change-current-selection</strong> <em>selection</em></dt>
-<dd><p>Change the currently prepared stack element&rsquo;s selection to
-<var>selection</var>, which should be <code>eq</code> to some sub-formula
-of the stack element, or <code>nil</code> to unselect the formula.
-The stack element&rsquo;s appearance in the Calc buffer is adjusted
-to reflect the new selection.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-calc_002dprepare_002dselection" id=
+    "index-calc_002dprepare_002dselection"></a>Function:
+    <strong>calc-prepare-selection</strong> <em>num</em></dt>
 
-<dl>
-<dt><a name="index-calc_002dfind_002dnth_002dpart"></a>Function: <strong>calc-find-nth-part</strong> <em>expr n</em></dt>
-<dd><p>Return the <var>n</var>th sub-formula of <var>expr</var>.  This function is used
-by the selection commands, and (unless <kbd>j b</kbd> has been used) treats
-sums and products as flat many-element formulas.  Thus if <var>expr</var>
-is &lsquo;<samp>((a + b) - c) + d</samp>&rsquo;, calling <code>calc-find-nth-part</code> with
-<var>n</var> equal to four will return &lsquo;<samp>d</samp>&rsquo;.
-</p></dd></dl>
+    <dd>
+      <p>Prepare a stack entry for selection operations. If
+      <var>num</var> is omitted, the stack entry containing the
+      cursor is used; otherwise, it is the number of the stack
+      entry to use. This function stores useful information about
+      the current stack entry into a set of variables.
+      <code>calc-selection-cache-num</code> contains the number of
+      the stack entry involved (equal to <var>num</var> if you
+      specified it); <code>calc-selection-cache-entry</code>
+      contains the stack entry as a list (such as
+      <code>calc-top-list</code> would return with
+      <code>entry</code> as the selection mode); and
+      <code>calc-selection-cache-comp</code> contains a special
+      &ldquo;tagged&rdquo; composition (see <a href=
+      "Formatting-Lisp-Functions.html#Formatting-Lisp-Functions">Formatting
+      Lisp Functions</a>) which allows Calc to relate cursor
+      positions in the buffer with their corresponding
+      sub-formulas.</p>
 
-<dl>
-<dt><a name="index-calc_002dfind_002dparent_002dformula"></a>Function: <strong>calc-find-parent-formula</strong> <em>expr part</em></dt>
-<dd><p>Return the sub-formula of <var>expr</var> which immediately contains
-<var>part</var>.  If <var>expr</var> is &lsquo;<samp>a*b + (c+1)*d</samp>&rsquo; and <var>part</var>
-is <code>eq</code> to the &lsquo;<samp>c+1</samp>&rsquo; term of <var>expr</var>, then this function
-will return &lsquo;<samp>(c+1)*d</samp>&rsquo;.  If <var>part</var> turns out not to be a
-sub-formula of <var>expr</var>, the function returns <code>nil</code>.  If
-<var>part</var> is <code>eq</code> to <var>expr</var>, the function returns <code>t</code>.
-This function does not take associativity into account.
-</p></dd></dl>
+      <p>A slight complication arises in the selection mechanism
+      because formulas may contain small integers. For example, in
+      the vector &lsquo;<samp>[1, 2, 1]</samp>&rsquo; the first and
+      last elements are <code>eq</code> to each other; selections
+      are recorded as the actual Lisp object that appears somewhere
+      in the tree of the whole formula, but storing <code>1</code>
+      would falsely select both <code>1</code>&rsquo;s in the
+      vector. So <code>calc-prepare-selection</code> also checks
+      the stack entry and replaces any plain integers with
+      &ldquo;complex number&rdquo; lists of the form
+      &lsquo;<samp>(cplx <var>n</var> 0)</samp>&rsquo;. This list
+      will be displayed the same as a plain <var>n</var> and the
+      change will be completely invisible to the user, but it will
+      guarantee that no two sub-formulas of the stack entry will be
+      <code>eq</code> to each other. Next time the stack entry is
+      involved in a computation, <code>calc-normalize</code> will
+      replace these lists with plain numbers again, again invisibly
+      to the user.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-calc_002dfind_002dassoc_002dparent_002dformula"></a>Function: <strong>calc-find-assoc-parent-formula</strong> <em>expr part</em></dt>
-<dd><p>This is the same as <code>calc-find-parent-formula</code>, except that
-(unless <kbd>j b</kbd> has been used) it continues widening the selection
-to contain a complete level of the formula.  Given &lsquo;<samp>a</samp>&rsquo; from
-&lsquo;<samp>((a + b) - c) + d</samp>&rsquo;, <code>calc-find-parent-formula</code> will
-return &lsquo;<samp>a + b</samp>&rsquo; but <code>calc-find-assoc-parent-formula</code> will
-return the whole expression.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-calc_002dencase_002datoms" id=
+    "index-calc_002dencase_002datoms"></a>Function:
+    <strong>calc-encase-atoms</strong> <em>x</em></dt>
 
-<dl>
-<dt><a name="index-calc_002dgrow_002dassoc_002dformula"></a>Function: <strong>calc-grow-assoc-formula</strong> <em>expr part</em></dt>
-<dd><p>This expands sub-formula <var>part</var> of <var>expr</var> to encompass a
-complete level of the formula.  If <var>part</var> and its immediate
-parent are not compatible associative operators, or if <kbd>j b</kbd>
-has been used, this simply returns <var>part</var>.
-</p></dd></dl>
+    <dd>
+      <p>This modifies the formula <var>x</var> to ensure that each
+      part of the formula is a unique atom, using the
+      &lsquo;<samp>(cplx <var>n</var> 0)</samp>&rsquo; trick
+      described above. This function may use <code>setcar</code> to
+      modify the formula in-place.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-calc_002dfind_002dsub_002dformula"></a>Function: <strong>calc-find-sub-formula</strong> <em>expr part</em></dt>
-<dd><p>This finds the immediate sub-formula of <var>expr</var> which contains
-<var>part</var>.  It returns an index <var>n</var> such that
-&lsquo;<samp>(calc-find-nth-part <var>expr</var> <var>n</var>)</samp>&rsquo; would return <var>part</var>.
-If <var>part</var> is not a sub-formula of <var>expr</var>, it returns <code>nil</code>.
-If <var>part</var> is <code>eq</code> to <var>expr</var>, it returns <code>t</code>.  This
-function does not take associativity into account.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-calc_002dfind_002dselected_002dpart" id=
+    "index-calc_002dfind_002dselected_002dpart"></a>Function:
+    <strong>calc-find-selected-part</strong></dt>
 
-<dl>
-<dt><a name="index-calc_002dreplace_002dsub_002dformula"></a>Function: <strong>calc-replace-sub-formula</strong> <em>expr old new</em></dt>
-<dd><p>This function returns a copy of formula <var>expr</var>, with the
-sub-formula that is <code>eq</code> to <var>old</var> replaced by <var>new</var>.
-</p></dd></dl>
+    <dd>
+      <p>Find the smallest sub-formula of the current formula that
+      contains the cursor. This assumes
+      <code>calc-prepare-selection</code> has been called already.
+      If the cursor is not actually on any part of the formula,
+      this returns <code>nil</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-simplify"></a>Function: <strong>simplify</strong> <em>expr</em></dt>
-<dd><p>Simplify the expression <var>expr</var> by applying Calc&rsquo;s algebraic
-simplifications.  This  always returns a copy of the expression; the
-structure <var>expr</var> points to remains unchanged in memory.
-</p>
-<p>More precisely, here is what <code>simplify</code> does:  The expression is
-first normalized and evaluated by calling <code>normalize</code>.  If any
-<code>AlgSimpRules</code> have been defined, they are then applied.  Then
-the expression is traversed in a depth-first, bottom-up fashion; at
-each level, any simplifications that can be made are made until no
-further changes are possible.  Once the entire formula has been
-traversed in this way, it is compared with the original formula (from
-before the call to <code>normalize</code>) and, if it has changed,
-the entire procedure is repeated (starting with <code>normalize</code>)
-until no further changes occur.  Usually only two iterations are
-needed: one to simplify the formula, and another to verify that no
-further simplifications were possible.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-calc_002dchange_002dcurrent_002dselection"
+    id=
+    "index-calc_002dchange_002dcurrent_002dselection"></a>Function:
+    <strong>calc-change-current-selection</strong>
+    <em>selection</em></dt>
 
-<dl>
-<dt><a name="index-simplify_002dextended"></a>Function: <strong>simplify-extended</strong> <em>expr</em></dt>
-<dd><p>Simplify the expression <var>expr</var>, with additional rules enabled that
-help do a more thorough job, while not being entirely &ldquo;safe&rdquo; in all
-circumstances.  (For example, this mode will simplify &lsquo;<samp>sqrt(x^2)</samp>&rsquo;
-to &lsquo;<samp>x</samp>&rsquo;, which is only valid when <var>x</var> is positive.)  This is
-implemented by temporarily binding the variable <code>math-living-dangerously</code>
-to <code>t</code> (using a <code>let</code> form) and calling <code>simplify</code>.
-Dangerous simplification rules are written to check this variable
-before taking any action.
-</p></dd></dl>
+    <dd>
+      <p>Change the currently prepared stack element&rsquo;s
+      selection to <var>selection</var>, which should be
+      <code>eq</code> to some sub-formula of the stack element, or
+      <code>nil</code> to unselect the formula. The stack
+      element&rsquo;s appearance in the Calc buffer is adjusted to
+      reflect the new selection.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-simplify_002dunits"></a>Function: <strong>simplify-units</strong> <em>expr</em></dt>
-<dd><p>Simplify the expression <var>expr</var>, treating variable names as units
-whenever possible.  This works by binding the variable
-<code>math-simplifying-units</code> to <code>t</code> while calling <code>simplify</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-calc_002dfind_002dnth_002dpart" id=
+    "index-calc_002dfind_002dnth_002dpart"></a>Function:
+    <strong>calc-find-nth-part</strong> <em>expr n</em></dt>
 
-<dl>
-<dt><a name="index-math_002ddefsimplify"></a>Macro: <strong>math-defsimplify</strong> <em>funcs body</em></dt>
-<dd><p>Register a new simplification rule; this is normally called as a top-level
-form, like <code>defun</code> or <code>defmath</code>.  If <var>funcs</var> is a symbol
-(like <code>+</code> or <code>calcFunc-sqrt</code>), this simplification rule is
-applied to the formulas which are calls to the specified function.  Or,
-<var>funcs</var> can be a list of such symbols; the rule applies to all
-functions on the list.  The <var>body</var> is written like the body of a
-function with a single argument called <code>expr</code>.  The body will be
-executed with <code>expr</code> bound to a formula which is a call to one of
-the functions <var>funcs</var>.  If the function body returns <code>nil</code>, or
-if it returns a result <code>equal</code> to the original <code>expr</code>, it is
-ignored and Calc goes on to try the next simplification rule that applies.
-If the function body returns something different, that new formula is
-substituted for <var>expr</var> in the original formula.
-</p>
-<p>At each point in the formula, rules are tried in the order of the
-original calls to <code>math-defsimplify</code>; the search stops after the
-first rule that makes a change.  Thus later rules for that same
-function will not have a chance to trigger until the next iteration
-of the main <code>simplify</code> loop.
-</p>
-<p>Note that, since <code>defmath</code> is not being used here, <var>body</var> must
-be written in true Lisp code without the conveniences that <code>defmath</code>
-provides.  If you prefer, you can have <var>body</var> simply call another
-function (defined with <code>defmath</code>) which does the real work.
-</p>
-<p>The arguments of a function call will already have been simplified
-before any rules for the call itself are invoked.  Since a new argument
-list is consed up when this happens, this means that the rule&rsquo;s body is
-allowed to rearrange the function&rsquo;s arguments destructively if that is
-convenient.  Here is a typical example of a simplification rule:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(math-defsimplify calcFunc-arcsinh
+    <dd>
+      <p>Return the <var>n</var>th sub-formula of <var>expr</var>.
+      This function is used by the selection commands, and (unless
+      <kbd>j b</kbd> has been used) treats sums and products as
+      flat many-element formulas. Thus if <var>expr</var> is
+      &lsquo;<samp>((a + b) - c) + d</samp>&rsquo;, calling
+      <code>calc-find-nth-part</code> with <var>n</var> equal to
+      four will return &lsquo;<samp>d</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-calc_002dfind_002dparent_002dformula" id=
+    "index-calc_002dfind_002dparent_002dformula"></a>Function:
+    <strong>calc-find-parent-formula</strong> <em>expr
+    part</em></dt>
+
+    <dd>
+      <p>Return the sub-formula of <var>expr</var> which
+      immediately contains <var>part</var>. If <var>expr</var> is
+      &lsquo;<samp>a*b + (c+1)*d</samp>&rsquo; and <var>part</var>
+      is <code>eq</code> to the &lsquo;<samp>c+1</samp>&rsquo; term
+      of <var>expr</var>, then this function will return
+      &lsquo;<samp>(c+1)*d</samp>&rsquo;. If <var>part</var> turns
+      out not to be a sub-formula of <var>expr</var>, the function
+      returns <code>nil</code>. If <var>part</var> is
+      <code>eq</code> to <var>expr</var>, the function returns
+      <code>t</code>. This function does not take associativity
+      into account.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name=
+    "index-calc_002dfind_002dassoc_002dparent_002dformula" id=
+    "index-calc_002dfind_002dassoc_002dparent_002dformula"></a>Function:
+    <strong>calc-find-assoc-parent-formula</strong> <em>expr
+    part</em></dt>
+
+    <dd>
+      <p>This is the same as <code>calc-find-parent-formula</code>,
+      except that (unless <kbd>j b</kbd> has been used) it
+      continues widening the selection to contain a complete level
+      of the formula. Given &lsquo;<samp>a</samp>&rsquo; from
+      &lsquo;<samp>((a + b) - c) + d</samp>&rsquo;,
+      <code>calc-find-parent-formula</code> will return
+      &lsquo;<samp>a + b</samp>&rsquo; but
+      <code>calc-find-assoc-parent-formula</code> will return the
+      whole expression.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-calc_002dgrow_002dassoc_002dformula" id=
+    "index-calc_002dgrow_002dassoc_002dformula"></a>Function:
+    <strong>calc-grow-assoc-formula</strong> <em>expr
+    part</em></dt>
+
+    <dd>
+      <p>This expands sub-formula <var>part</var> of
+      <var>expr</var> to encompass a complete level of the formula.
+      If <var>part</var> and its immediate parent are not
+      compatible associative operators, or if <kbd>j b</kbd> has
+      been used, this simply returns <var>part</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-calc_002dfind_002dsub_002dformula" id=
+    "index-calc_002dfind_002dsub_002dformula"></a>Function:
+    <strong>calc-find-sub-formula</strong> <em>expr part</em></dt>
+
+    <dd>
+      <p>This finds the immediate sub-formula of <var>expr</var>
+      which contains <var>part</var>. It returns an index
+      <var>n</var> such that &lsquo;<samp>(calc-find-nth-part
+      <var>expr</var> <var>n</var>)</samp>&rsquo; would return
+      <var>part</var>. If <var>part</var> is not a sub-formula of
+      <var>expr</var>, it returns <code>nil</code>. If
+      <var>part</var> is <code>eq</code> to <var>expr</var>, it
+      returns <code>t</code>. This function does not take
+      associativity into account.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-calc_002dreplace_002dsub_002dformula" id=
+    "index-calc_002dreplace_002dsub_002dformula"></a>Function:
+    <strong>calc-replace-sub-formula</strong> <em>expr old
+    new</em></dt>
+
+    <dd>
+      <p>This function returns a copy of formula <var>expr</var>,
+      with the sub-formula that is <code>eq</code> to
+      <var>old</var> replaced by <var>new</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-simplify" id="index-simplify"></a>Function:
+    <strong>simplify</strong> <em>expr</em></dt>
+
+    <dd>
+      <p>Simplify the expression <var>expr</var> by applying
+      Calc&rsquo;s algebraic simplifications. This always returns a
+      copy of the expression; the structure <var>expr</var> points
+      to remains unchanged in memory.</p>
+
+      <p>More precisely, here is what <code>simplify</code> does:
+      The expression is first normalized and evaluated by calling
+      <code>normalize</code>. If any <code>AlgSimpRules</code> have
+      been defined, they are then applied. Then the expression is
+      traversed in a depth-first, bottom-up fashion; at each level,
+      any simplifications that can be made are made until no
+      further changes are possible. Once the entire formula has
+      been traversed in this way, it is compared with the original
+      formula (from before the call to <code>normalize</code>) and,
+      if it has changed, the entire procedure is repeated (starting
+      with <code>normalize</code>) until no further changes occur.
+      Usually only two iterations are needed: one to simplify the
+      formula, and another to verify that no further
+      simplifications were possible.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-simplify_002dextended" id=
+    "index-simplify_002dextended"></a>Function:
+    <strong>simplify-extended</strong> <em>expr</em></dt>
+
+    <dd>
+      <p>Simplify the expression <var>expr</var>, with additional
+      rules enabled that help do a more thorough job, while not
+      being entirely &ldquo;safe&rdquo; in all circumstances. (For
+      example, this mode will simplify
+      &lsquo;<samp>sqrt(x^2)</samp>&rsquo; to
+      &lsquo;<samp>x</samp>&rsquo;, which is only valid when
+      <var>x</var> is positive.) This is implemented by temporarily
+      binding the variable <code>math-living-dangerously</code> to
+      <code>t</code> (using a <code>let</code> form) and calling
+      <code>simplify</code>. Dangerous simplification rules are
+      written to check this variable before taking any action.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-simplify_002dunits" id=
+    "index-simplify_002dunits"></a>Function:
+    <strong>simplify-units</strong> <em>expr</em></dt>
+
+    <dd>
+      <p>Simplify the expression <var>expr</var>, treating variable
+      names as units whenever possible. This works by binding the
+      variable <code>math-simplifying-units</code> to
+      <code>t</code> while calling <code>simplify</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-math_002ddefsimplify" id=
+    "index-math_002ddefsimplify"></a>Macro:
+    <strong>math-defsimplify</strong> <em>funcs body</em></dt>
+
+    <dd>
+      <p>Register a new simplification rule; this is normally
+      called as a top-level form, like <code>defun</code> or
+      <code>defmath</code>. If <var>funcs</var> is a symbol (like
+      <code>+</code> or <code>calcFunc-sqrt</code>), this
+      simplification rule is applied to the formulas which are
+      calls to the specified function. Or, <var>funcs</var> can be
+      a list of such symbols; the rule applies to all functions on
+      the list. The <var>body</var> is written like the body of a
+      function with a single argument called <code>expr</code>. The
+      body will be executed with <code>expr</code> bound to a
+      formula which is a call to one of the functions
+      <var>funcs</var>. If the function body returns
+      <code>nil</code>, or if it returns a result
+      <code>equal</code> to the original <code>expr</code>, it is
+      ignored and Calc goes on to try the next simplification rule
+      that applies. If the function body returns something
+      different, that new formula is substituted for
+      <var>expr</var> in the original formula.</p>
+
+      <p>At each point in the formula, rules are tried in the order
+      of the original calls to <code>math-defsimplify</code>; the
+      search stops after the first rule that makes a change. Thus
+      later rules for that same function will not have a chance to
+      trigger until the next iteration of the main
+      <code>simplify</code> loop.</p>
+
+      <p>Note that, since <code>defmath</code> is not being used
+      here, <var>body</var> must be written in true Lisp code
+      without the conveniences that <code>defmath</code> provides.
+      If you prefer, you can have <var>body</var> simply call
+      another function (defined with <code>defmath</code>) which
+      does the real work.</p>
+
+      <p>The arguments of a function call will already have been
+      simplified before any rules for the call itself are invoked.
+      Since a new argument list is consed up when this happens,
+      this means that the rule&rsquo;s body is allowed to rearrange
+      the function&rsquo;s arguments destructively if that is
+      convenient. Here is a typical example of a simplification
+      rule:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(math-defsimplify calcFunc-arcsinh
   (or (and (math-looks-negp (nth 1 expr))
            (math-neg (list 'calcFunc-arcsinh
                            (math-neg (nth 1 expr)))))
@@ -267,33 +423,50 @@ convenient.  Here is a typical example of a simplification rule:
            (or math-living-dangerously
                (math-known-realp (nth 1 (nth 1 expr))))
            (nth 1 (nth 1 expr)))))
-</pre></div>
+</pre>
+      </div>
 
-<p>This is really a pair of rules written with one <code>math-defsimplify</code>
-for convenience; the first replaces &lsquo;<samp>arcsinh(-x)</samp>&rsquo; with
-&lsquo;<samp>-arcsinh(x)</samp>&rsquo;, and the second, which is safe only for real &lsquo;<samp>x</samp>&rsquo;,
-replaces &lsquo;<samp>arcsinh(sinh(x))</samp>&rsquo; with &lsquo;<samp>x</samp>&rsquo;.
-</p></dd></dl>
+      <p>This is really a pair of rules written with one
+      <code>math-defsimplify</code> for convenience; the first
+      replaces &lsquo;<samp>arcsinh(-x)</samp>&rsquo; with
+      &lsquo;<samp>-arcsinh(x)</samp>&rsquo;, and the second, which
+      is safe only for real &lsquo;<samp>x</samp>&rsquo;, replaces
+      &lsquo;<samp>arcsinh(sinh(x))</samp>&rsquo; with
+      &lsquo;<samp>x</samp>&rsquo;.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-common_002dconstant_002dfactor"></a>Function: <strong>common-constant-factor</strong> <em>expr</em></dt>
-<dd><p>Check <var>expr</var> to see if it is a sum of terms all multiplied by the
-same rational value.  If so, return this value.  If not, return <code>nil</code>.
-For example, if called on &lsquo;<samp>6x + 9y + 12z</samp>&rsquo;, it would return 3, since
-3 is a common factor of all the terms.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-common_002dconstant_002dfactor" id=
+    "index-common_002dconstant_002dfactor"></a>Function:
+    <strong>common-constant-factor</strong> <em>expr</em></dt>
 
-<dl>
-<dt><a name="index-cancel_002dcommon_002dfactor"></a>Function: <strong>cancel-common-factor</strong> <em>expr factor</em></dt>
-<dd><p>Assuming <var>expr</var> is a sum with <var>factor</var> as a common factor,
-divide each term of the sum by <var>factor</var>.  This is done by
-destructively modifying parts of <var>expr</var>, on the assumption that
-it is being used by a simplification rule (where such things are
-allowed; see above).  For example, consider this built-in rule for
-square roots:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(math-defsimplify calcFunc-sqrt
+    <dd>
+      <p>Check <var>expr</var> to see if it is a sum of terms all
+      multiplied by the same rational value. If so, return this
+      value. If not, return <code>nil</code>. For example, if
+      called on &lsquo;<samp>6x + 9y + 12z</samp>&rsquo;, it would
+      return 3, since 3 is a common factor of all the terms.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-cancel_002dcommon_002dfactor" id=
+    "index-cancel_002dcommon_002dfactor"></a>Function:
+    <strong>cancel-common-factor</strong> <em>expr factor</em></dt>
+
+    <dd>
+      <p>Assuming <var>expr</var> is a sum with <var>factor</var>
+      as a common factor, divide each term of the sum by
+      <var>factor</var>. This is done by destructively modifying
+      parts of <var>expr</var>, on the assumption that it is being
+      used by a simplification rule (where such things are allowed;
+      see above). For example, consider this built-in rule for
+      square roots:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(math-defsimplify calcFunc-sqrt
   (let ((fac (math-common-constant-factor (nth 1 expr))))
     (and fac (not (eq fac 1))
          (math-mul (math-normalize (list 'calcFunc-sqrt fac))
@@ -301,143 +474,228 @@ square roots:
                     (list 'calcFunc-sqrt
                           (math-cancel-common-factor
                            (nth 1 expr) fac)))))))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-frac_002dgcd"></a>Function: <strong>frac-gcd</strong> <em>a b</em></dt>
-<dd><p>Compute a &ldquo;rational GCD&rdquo; of <var>a</var> and <var>b</var>, which must both be
-rational numbers.  This is the fraction composed of the GCD of the
-numerators of <var>a</var> and <var>b</var>, over the GCD of the denominators.
-It is used by <code>common-constant-factor</code>.  Note that the standard
-<code>gcd</code> function uses the LCM to combine the denominators.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-frac_002dgcd" id=
+    "index-frac_002dgcd"></a>Function: <strong>frac-gcd</strong>
+    <em>a b</em></dt>
 
-<dl>
-<dt><a name="index-map_002dtree"></a>Function: <strong>map-tree</strong> <em>func expr many</em></dt>
-<dd><p>Try applying Lisp function <var>func</var> to various sub-expressions of
-<var>expr</var>.  Initially, call <var>func</var> with <var>expr</var> itself as an
-argument.  If this returns an expression which is not <code>equal</code> to
-<var>expr</var>, apply <var>func</var> again until eventually it does return
-<var>expr</var> with no changes.  Then, if <var>expr</var> is a function call,
-recursively apply <var>func</var> to each of the arguments.  This keeps going
-until no changes occur anywhere in the expression; this final expression
-is returned by <code>map-tree</code>.  Note that, unlike simplification rules,
-<var>func</var> functions may <em>not</em> make destructive changes to
-<var>expr</var>.  If a third argument <var>many</var> is provided, it is an
-integer which says how many times <var>func</var> may be applied; the
-default, as described above, is infinitely many times.
-</p></dd></dl>
+    <dd>
+      <p>Compute a &ldquo;rational GCD&rdquo; of <var>a</var> and
+      <var>b</var>, which must both be rational numbers. This is
+      the fraction composed of the GCD of the numerators of
+      <var>a</var> and <var>b</var>, over the GCD of the
+      denominators. It is used by
+      <code>common-constant-factor</code>. Note that the standard
+      <code>gcd</code> function uses the LCM to combine the
+      denominators.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-compile_002drewrites"></a>Function: <strong>compile-rewrites</strong> <em>rules</em></dt>
-<dd><p>Compile the rewrite rule set specified by <var>rules</var>, which should
-be a formula that is either a vector or a variable name.  If the latter,
-the compiled rules are saved so that later <code>compile-rules</code> calls
-for that same variable can return immediately.  If there are problems
-with the rules, this function calls <code>error</code> with a suitable
-message.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-map_002dtree" id=
+    "index-map_002dtree"></a>Function: <strong>map-tree</strong>
+    <em>func expr many</em></dt>
 
-<dl>
-<dt><a name="index-apply_002drewrites"></a>Function: <strong>apply-rewrites</strong> <em>expr crules heads</em></dt>
-<dd><p>Apply the compiled rewrite rule set <var>crules</var> to the expression
-<var>expr</var>.  This will make only one rewrite and only checks at the
-top level of the expression.  The result <code>nil</code> if no rules
-matched, or if the only rules that matched did not actually change
-the expression.  The <var>heads</var> argument is optional; if is given,
-it should be a list of all function names that (may) appear in
-<var>expr</var>.  The rewrite compiler tags each rule with the
-rarest-looking function name in the rule; if you specify <var>heads</var>,
-<code>apply-rewrites</code> can use this information to narrow its search
-down to just a few rules in the rule set.
-</p></dd></dl>
+    <dd>
+      <p>Try applying Lisp function <var>func</var> to various
+      sub-expressions of <var>expr</var>. Initially, call
+      <var>func</var> with <var>expr</var> itself as an argument.
+      If this returns an expression which is not <code>equal</code>
+      to <var>expr</var>, apply <var>func</var> again until
+      eventually it does return <var>expr</var> with no changes.
+      Then, if <var>expr</var> is a function call, recursively
+      apply <var>func</var> to each of the arguments. This keeps
+      going until no changes occur anywhere in the expression; this
+      final expression is returned by <code>map-tree</code>. Note
+      that, unlike simplification rules, <var>func</var> functions
+      may <em>not</em> make destructive changes to <var>expr</var>.
+      If a third argument <var>many</var> is provided, it is an
+      integer which says how many times <var>func</var> may be
+      applied; the default, as described above, is infinitely many
+      times.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-rewrite_002dheads"></a>Function: <strong>rewrite-heads</strong> <em>expr</em></dt>
-<dd><p>Compute a <var>heads</var> list for <var>expr</var> suitable for use with
-<code>apply-rewrites</code>, as discussed above.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-compile_002drewrites" id=
+    "index-compile_002drewrites"></a>Function:
+    <strong>compile-rewrites</strong> <em>rules</em></dt>
 
-<dl>
-<dt><a name="index-rewrite"></a>Function: <strong>rewrite</strong> <em>expr rules many</em></dt>
-<dd><p>This is an all-in-one rewrite function.  It compiles the rule set
-specified by <var>rules</var>, then uses <code>map-tree</code> to apply the
-rules throughout <var>expr</var> up to <var>many</var> (default infinity)
-times.
-</p></dd></dl>
+    <dd>
+      <p>Compile the rewrite rule set specified by
+      <var>rules</var>, which should be a formula that is either a
+      vector or a variable name. If the latter, the compiled rules
+      are saved so that later <code>compile-rules</code> calls for
+      that same variable can return immediately. If there are
+      problems with the rules, this function calls
+      <code>error</code> with a suitable message.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-match_002dpatterns"></a>Function: <strong>match-patterns</strong> <em>pat vec not-flag</em></dt>
-<dd><p>Given a Calc vector <var>vec</var> and an uncompiled pattern set or
-pattern set variable <var>pat</var>, this function returns a new vector
-of all elements of <var>vec</var> which do (or don&rsquo;t, if <var>not-flag</var> is
-non-<code>nil</code>) match any of the patterns in <var>pat</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-apply_002drewrites" id=
+    "index-apply_002drewrites"></a>Function:
+    <strong>apply-rewrites</strong> <em>expr crules heads</em></dt>
 
-<dl>
-<dt><a name="index-deriv"></a>Function: <strong>deriv</strong> <em>expr var value symb</em></dt>
-<dd><p>Compute the derivative of <var>expr</var> with respect to variable <var>var</var>
-(which may actually be any sub-expression).  If <var>value</var> is specified,
-the derivative is evaluated at the value of <var>var</var>; otherwise, the
-derivative is left in terms of <var>var</var>.  If the expression contains
-functions for which no derivative formula is known, new derivative
-functions are invented by adding primes to the names; see <a href="Calculus.html#Calculus">Calculus</a>.
-However, if <var>symb</var> is non-<code>nil</code>, the presence of nondifferentiable
-functions in <var>expr</var> instead cancels the whole differentiation, and
-<code>deriv</code> returns <code>nil</code> instead.
-</p>
-<p>Derivatives of an <var>n</var>-argument function can be defined by
-adding a <code>math-derivative-<var>n</var></code> property to the property list
-of the symbol for the function&rsquo;s derivative, which will be the
-function name followed by an apostrophe.  The value of the property
-should be a Lisp function; it is called with the same arguments as the
-original function call that is being differentiated.  It should return
-a formula for the derivative.  For example, the derivative of <code>ln</code>
-is defined by
-</p>
-<div class="smallexample">
-<pre class="smallexample">(put 'calcFunc-ln\' 'math-derivative-1
+    <dd>
+      <p>Apply the compiled rewrite rule set <var>crules</var> to
+      the expression <var>expr</var>. This will make only one
+      rewrite and only checks at the top level of the expression.
+      The result <code>nil</code> if no rules matched, or if the
+      only rules that matched did not actually change the
+      expression. The <var>heads</var> argument is optional; if is
+      given, it should be a list of all function names that (may)
+      appear in <var>expr</var>. The rewrite compiler tags each
+      rule with the rarest-looking function name in the rule; if
+      you specify <var>heads</var>, <code>apply-rewrites</code> can
+      use this information to narrow its search down to just a few
+      rules in the rule set.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-rewrite_002dheads" id=
+    "index-rewrite_002dheads"></a>Function:
+    <strong>rewrite-heads</strong> <em>expr</em></dt>
+
+    <dd>
+      <p>Compute a <var>heads</var> list for <var>expr</var>
+      suitable for use with <code>apply-rewrites</code>, as
+      discussed above.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-rewrite" id="index-rewrite"></a>Function:
+    <strong>rewrite</strong> <em>expr rules many</em></dt>
+
+    <dd>
+      <p>This is an all-in-one rewrite function. It compiles the
+      rule set specified by <var>rules</var>, then uses
+      <code>map-tree</code> to apply the rules throughout
+      <var>expr</var> up to <var>many</var> (default infinity)
+      times.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-match_002dpatterns" id=
+    "index-match_002dpatterns"></a>Function:
+    <strong>match-patterns</strong> <em>pat vec not-flag</em></dt>
+
+    <dd>
+      <p>Given a Calc vector <var>vec</var> and an uncompiled
+      pattern set or pattern set variable <var>pat</var>, this
+      function returns a new vector of all elements of
+      <var>vec</var> which do (or don&rsquo;t, if
+      <var>not-flag</var> is non-<code>nil</code>) match any of the
+      patterns in <var>pat</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-deriv" id="index-deriv"></a>Function:
+    <strong>deriv</strong> <em>expr var value symb</em></dt>
+
+    <dd>
+      <p>Compute the derivative of <var>expr</var> with respect to
+      variable <var>var</var> (which may actually be any
+      sub-expression). If <var>value</var> is specified, the
+      derivative is evaluated at the value of <var>var</var>;
+      otherwise, the derivative is left in terms of <var>var</var>.
+      If the expression contains functions for which no derivative
+      formula is known, new derivative functions are invented by
+      adding primes to the names; see <a href=
+      "Calculus.html#Calculus">Calculus</a>. However, if
+      <var>symb</var> is non-<code>nil</code>, the presence of
+      nondifferentiable functions in <var>expr</var> instead
+      cancels the whole differentiation, and <code>deriv</code>
+      returns <code>nil</code> instead.</p>
+
+      <p>Derivatives of an <var>n</var>-argument function can be
+      defined by adding a <code>math-derivative-<var>n</var></code>
+      property to the property list of the symbol for the
+      function&rsquo;s derivative, which will be the function name
+      followed by an apostrophe. The value of the property should
+      be a Lisp function; it is called with the same arguments as
+      the original function call that is being differentiated. It
+      should return a formula for the derivative. For example, the
+      derivative of <code>ln</code> is defined by</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(put 'calcFunc-ln\' 'math-derivative-1
      (function (lambda (u) (math-div 1 u))))
-</pre></div>
+</pre>
+      </div>
 
-<p>The two-argument <code>log</code> function has two derivatives,
-</p><div class="smallexample">
-<pre class="smallexample">(put 'calcFunc-log\' 'math-derivative-2     ; d(log(x,b)) / dx
+      <p>The two-argument <code>log</code> function has two
+      derivatives,</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(put 'calcFunc-log\' 'math-derivative-2     ; d(log(x,b)) / dx
      (function (lambda (x b) ... )))
 (put 'calcFunc-log\'2 'math-derivative-2    ; d(log(x,b)) / db
      (function (lambda (x b) ... )))
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-tderiv"></a>Function: <strong>tderiv</strong> <em>expr var value symb</em></dt>
-<dd><p>Compute the total derivative of <var>expr</var>.  This is the same as
-<code>deriv</code>, except that variables other than <var>var</var> are not
-assumed to be constant with respect to <var>var</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-tderiv" id="index-tderiv"></a>Function:
+    <strong>tderiv</strong> <em>expr var value symb</em></dt>
 
-<dl>
-<dt><a name="index-integ"></a>Function: <strong>integ</strong> <em>expr var low high</em></dt>
-<dd><p>Compute the integral of <var>expr</var> with respect to <var>var</var>.
-See <a href="Calculus.html#Calculus">Calculus</a>, for further details.
-</p></dd></dl>
+    <dd>
+      <p>Compute the total derivative of <var>expr</var>. This is
+      the same as <code>deriv</code>, except that variables other
+      than <var>var</var> are not assumed to be constant with
+      respect to <var>var</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-math_002ddefintegral"></a>Macro: <strong>math-defintegral</strong> <em>funcs body</em></dt>
-<dd><p>Define a rule for integrating a function or functions of one argument;
-this macro is very similar in format to <code>math-defsimplify</code>.
-The main difference is that here <var>body</var> is the body of a function
-with a single argument <code>u</code> which is bound to the argument to the
-function being integrated, not the function call itself.  Also, the
-variable of integration is available as <code>math-integ-var</code>.  If
-evaluation of the integral requires doing further integrals, the body
-should call &lsquo;<samp>(math-integral <var>x</var>)</samp>&rsquo; to find the integral of
-<var>x</var> with respect to <code>math-integ-var</code>; this function returns
-<code>nil</code> if the integral could not be done.  Some examples:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(math-defintegral calcFunc-conj
+  <dl>
+    <dt><a name="index-integ" id="index-integ"></a>Function:
+    <strong>integ</strong> <em>expr var low high</em></dt>
+
+    <dd>
+      <p>Compute the integral of <var>expr</var> with respect to
+      <var>var</var>. See <a href=
+      "Calculus.html#Calculus">Calculus</a>, for further
+      details.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-math_002ddefintegral" id=
+    "index-math_002ddefintegral"></a>Macro:
+    <strong>math-defintegral</strong> <em>funcs body</em></dt>
+
+    <dd>
+      <p>Define a rule for integrating a function or functions of
+      one argument; this macro is very similar in format to
+      <code>math-defsimplify</code>. The main difference is that
+      here <var>body</var> is the body of a function with a single
+      argument <code>u</code> which is bound to the argument to the
+      function being integrated, not the function call itself.
+      Also, the variable of integration is available as
+      <code>math-integ-var</code>. If evaluation of the integral
+      requires doing further integrals, the body should call
+      &lsquo;<samp>(math-integral <var>x</var>)</samp>&rsquo; to
+      find the integral of <var>x</var> with respect to
+      <code>math-integ-var</code>; this function returns
+      <code>nil</code> if the integral could not be done. Some
+      examples:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(math-defintegral calcFunc-conj
   (let ((int (math-integral u)))
     (and int
          (list 'calcFunc-conj int))))
@@ -445,260 +703,448 @@ should call &lsquo;<samp>(math-integral <var>x</var>)</samp>&rsquo; to find the 
 (math-defintegral calcFunc-cos
   (and (equal u math-integ-var)
        (math-from-radians-2 (list 'calcFunc-sin u))))
-</pre></div>
+</pre>
+      </div>
 
-<p>In the <code>cos</code> example, we define only the integral of &lsquo;<samp>cos(x) dx</samp>&rsquo;,
-relying on the general integration-by-substitution facility to handle
-cosines of more complicated arguments.  An integration rule should return
-<code>nil</code> if it can&rsquo;t do the integral; if several rules are defined for
-the same function, they are tried in order until one returns a non-<code>nil</code>
-result.
-</p></dd></dl>
+      <p>In the <code>cos</code> example, we define only the
+      integral of &lsquo;<samp>cos(x) dx</samp>&rsquo;, relying on
+      the general integration-by-substitution facility to handle
+      cosines of more complicated arguments. An integration rule
+      should return <code>nil</code> if it can&rsquo;t do the
+      integral; if several rules are defined for the same function,
+      they are tried in order until one returns a
+      non-<code>nil</code> result.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-math_002ddefintegral_002d2"></a>Macro: <strong>math-defintegral-2</strong> <em>funcs body</em></dt>
-<dd><p>Define a rule for integrating a function or functions of two arguments.
-This is exactly analogous to <code>math-defintegral</code>, except that <var>body</var>
-is written as the body of a function with two arguments, <var>u</var> and
-<var>v</var>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-math_002ddefintegral_002d2" id=
+    "index-math_002ddefintegral_002d2"></a>Macro:
+    <strong>math-defintegral-2</strong> <em>funcs body</em></dt>
 
-<dl>
-<dt><a name="index-solve_002dfor"></a>Function: <strong>solve-for</strong> <em>lhs rhs var full</em></dt>
-<dd><p>Attempt to solve the equation &lsquo;<samp><var>lhs</var> = <var>rhs</var></samp>&rsquo; by isolating
-the variable <var>var</var> on the lefthand side; return the resulting righthand
-side, or <code>nil</code> if the equation cannot be solved.  The variable
-<var>var</var> must appear at least once in <var>lhs</var> or <var>rhs</var>.  Note that
-the return value is a formula which does not contain <var>var</var>; this is
-different from the user-level <code>solve</code> and <code>finv</code> functions,
-which return a rearranged equation or a functional inverse, respectively.
-If <var>full</var> is non-<code>nil</code>, a full solution including dummy signs
-and dummy integers will be produced.  User-defined inverses are provided
-as properties in a manner similar to derivatives:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(put 'calcFunc-ln 'math-inverse
+    <dd>
+      <p>Define a rule for integrating a function or functions of
+      two arguments. This is exactly analogous to
+      <code>math-defintegral</code>, except that <var>body</var> is
+      written as the body of a function with two arguments,
+      <var>u</var> and <var>v</var>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-solve_002dfor" id=
+    "index-solve_002dfor"></a>Function: <strong>solve-for</strong>
+    <em>lhs rhs var full</em></dt>
+
+    <dd>
+      <p>Attempt to solve the equation &lsquo;<samp><var>lhs</var>
+      = <var>rhs</var></samp>&rsquo; by isolating the variable
+      <var>var</var> on the lefthand side; return the resulting
+      righthand side, or <code>nil</code> if the equation cannot be
+      solved. The variable <var>var</var> must appear at least once
+      in <var>lhs</var> or <var>rhs</var>. Note that the return
+      value is a formula which does not contain <var>var</var>;
+      this is different from the user-level <code>solve</code> and
+      <code>finv</code> functions, which return a rearranged
+      equation or a functional inverse, respectively. If
+      <var>full</var> is non-<code>nil</code>, a full solution
+      including dummy signs and dummy integers will be produced.
+      User-defined inverses are provided as properties in a manner
+      similar to derivatives:</p>
+
+      <div class="smallexample">
+        <pre class="smallexample">
+(put 'calcFunc-ln 'math-inverse
      (function (lambda (x) (list 'calcFunc-exp x))))
-</pre></div>
+</pre>
+      </div>
 
-<p>This function can call &lsquo;<samp>(math-solve-get-sign <var>x</var>)</samp>&rsquo; to create
-a new arbitrary sign variable, returning <var>x</var> times that sign, and
-&lsquo;<samp>(math-solve-get-int <var>x</var>)</samp>&rsquo; to create a new arbitrary integer
-variable multiplied by <var>x</var>.  These functions simply return <var>x</var>
-if the caller requested a non-&ldquo;full&rdquo; solution.
-</p></dd></dl>
+      <p>This function can call &lsquo;<samp>(math-solve-get-sign
+      <var>x</var>)</samp>&rsquo; to create a new arbitrary sign
+      variable, returning <var>x</var> times that sign, and
+      &lsquo;<samp>(math-solve-get-int <var>x</var>)</samp>&rsquo;
+      to create a new arbitrary integer variable multiplied by
+      <var>x</var>. These functions simply return <var>x</var> if
+      the caller requested a non-&ldquo;full&rdquo; solution.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-solve_002deqn"></a>Function: <strong>solve-eqn</strong> <em>expr var full</em></dt>
-<dd><p>This version of <code>solve-for</code> takes an expression which will
-typically be an equation or inequality.  (If it is not, it will be
-interpreted as the equation &lsquo;<samp><var>expr</var> = 0</samp>&rsquo;.)  It returns an
-equation or inequality, or <code>nil</code> if no solution could be found.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-solve_002deqn" id=
+    "index-solve_002deqn"></a>Function: <strong>solve-eqn</strong>
+    <em>expr var full</em></dt>
 
-<dl>
-<dt><a name="index-solve_002dsystem"></a>Function: <strong>solve-system</strong> <em>exprs vars full</em></dt>
-<dd><p>This function solves a system of equations.  Generally, <var>exprs</var>
-and <var>vars</var> will be vectors of equal length.
-See <a href="Solving-Systems-of-Equations.html#Solving-Systems-of-Equations">Solving Systems of Equations</a>, for other options.
-</p></dd></dl>
+    <dd>
+      <p>This version of <code>solve-for</code> takes an expression
+      which will typically be an equation or inequality. (If it is
+      not, it will be interpreted as the equation
+      &lsquo;<samp><var>expr</var> = 0</samp>&rsquo;.) It returns
+      an equation or inequality, or <code>nil</code> if no solution
+      could be found.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-expr_002dcontains"></a>Function: <strong>expr-contains</strong> <em>expr var</em></dt>
-<dd><p>Returns a non-<code>nil</code> value if <var>var</var> occurs as a subexpression
-of <var>expr</var>.
-</p>
-<p>This function might seem at first to be identical to
-<code>calc-find-sub-formula</code>.  The key difference is that
-<code>expr-contains</code> uses <code>equal</code> to test for matches, whereas
-<code>calc-find-sub-formula</code> uses <code>eq</code>.  In the formula
-&lsquo;<samp>f(a, a)</samp>&rsquo;, the two &lsquo;<samp>a</samp>&rsquo;s will be <code>equal</code> but not
-<code>eq</code> to each other.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-solve_002dsystem" id=
+    "index-solve_002dsystem"></a>Function:
+    <strong>solve-system</strong> <em>exprs vars full</em></dt>
 
-<dl>
-<dt><a name="index-expr_002dcontains_002dcount"></a>Function: <strong>expr-contains-count</strong> <em>expr var</em></dt>
-<dd><p>Returns the number of occurrences of <var>var</var> as a subexpression
-of <var>expr</var>, or <code>nil</code> if there are no occurrences.
-</p></dd></dl>
+    <dd>
+      <p>This function solves a system of equations. Generally,
+      <var>exprs</var> and <var>vars</var> will be vectors of equal
+      length. See <a href=
+      "Solving-Systems-of-Equations.html#Solving-Systems-of-Equations">
+      Solving Systems of Equations</a>, for other options.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-expr_002ddepends"></a>Function: <strong>expr-depends</strong> <em>expr var</em></dt>
-<dd><p>Returns true if <var>expr</var> refers to any variable the occurs in <var>var</var>.
-In other words, it checks if <var>expr</var> and <var>var</var> have any variables
-in common.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-expr_002dcontains" id=
+    "index-expr_002dcontains"></a>Function:
+    <strong>expr-contains</strong> <em>expr var</em></dt>
 
-<dl>
-<dt><a name="index-expr_002dcontains_002dvars"></a>Function: <strong>expr-contains-vars</strong> <em>expr</em></dt>
-<dd><p>Return true if <var>expr</var> contains any variables, or <code>nil</code> if <var>expr</var>
-contains only constants and functions with constant arguments.
-</p></dd></dl>
+    <dd>
+      <p>Returns a non-<code>nil</code> value if <var>var</var>
+      occurs as a subexpression of <var>expr</var>.</p>
 
-<dl>
-<dt><a name="index-expr_002dsubst"></a>Function: <strong>expr-subst</strong> <em>expr old new</em></dt>
-<dd><p>Returns a copy of <var>expr</var>, with all occurrences of <var>old</var> replaced
-by <var>new</var>.  This treats <code>lambda</code> forms specially with respect
-to the dummy argument variables, so that the effect is always to return
-<var>expr</var> evaluated at <var>old</var> = <var>new</var>.
-</p></dd></dl>
+      <p>This function might seem at first to be identical to
+      <code>calc-find-sub-formula</code>. The key difference is
+      that <code>expr-contains</code> uses <code>equal</code> to
+      test for matches, whereas <code>calc-find-sub-formula</code>
+      uses <code>eq</code>. In the formula &lsquo;<samp>f(a,
+      a)</samp>&rsquo;, the two &lsquo;<samp>a</samp>&rsquo;s will
+      be <code>equal</code> but not <code>eq</code> to each
+      other.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-multi_002dsubst"></a>Function: <strong>multi-subst</strong> <em>expr old new</em></dt>
-<dd><p>This is like <code>expr-subst</code>, except that <var>old</var> and <var>new</var>
-are lists of expressions to be substituted simultaneously.  If one
-list is shorter than the other, trailing elements of the longer list
-are ignored.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-expr_002dcontains_002dcount" id=
+    "index-expr_002dcontains_002dcount"></a>Function:
+    <strong>expr-contains-count</strong> <em>expr var</em></dt>
 
-<dl>
-<dt><a name="index-expr_002dweight"></a>Function: <strong>expr-weight</strong> <em>expr</em></dt>
-<dd><p>Returns the &ldquo;weight&rdquo; of <var>expr</var>, basically a count of the total
-number of objects and function calls that appear in <var>expr</var>.  For
-&ldquo;primitive&rdquo; objects, this will be one.
-</p></dd></dl>
+    <dd>
+      <p>Returns the number of occurrences of <var>var</var> as a
+      subexpression of <var>expr</var>, or <code>nil</code> if
+      there are no occurrences.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-expr_002dheight"></a>Function: <strong>expr-height</strong> <em>expr</em></dt>
-<dd><p>Returns the &ldquo;height&rdquo; of <var>expr</var>, which is the deepest level to
-which function calls are nested.  (Note that &lsquo;<samp><var>a</var> + <var>b</var></samp>&rsquo;
-counts as a function call.)  For primitive objects, this returns zero.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-expr_002ddepends" id=
+    "index-expr_002ddepends"></a>Function:
+    <strong>expr-depends</strong> <em>expr var</em></dt>
 
-<dl>
-<dt><a name="index-polynomial_002dp"></a>Function: <strong>polynomial-p</strong> <em>expr var</em></dt>
-<dd><p>Check if <var>expr</var> is a polynomial in variable (or sub-expression)
-<var>var</var>.  If so, return the degree of the polynomial, that is, the
-highest power of <var>var</var> that appears in <var>expr</var>.  For example,
-for &lsquo;<samp>(x^2 + 3)^3 + 4</samp>&rsquo; this would return 6.  This function returns
-<code>nil</code> unless <var>expr</var>, when expanded out by <kbd>a x</kbd>
-(<code>calc-expand</code>), would consist of a sum of terms in which <var>var</var>
-appears only raised to nonnegative integer powers.  Note that if
-<var>var</var> does not occur in <var>expr</var>, then <var>expr</var> is considered
-a polynomial of degree 0.
-</p></dd></dl>
+    <dd>
+      <p>Returns true if <var>expr</var> refers to any variable the
+      occurs in <var>var</var>. In other words, it checks if
+      <var>expr</var> and <var>var</var> have any variables in
+      common.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-is_002dpolynomial"></a>Function: <strong>is-polynomial</strong> <em>expr var degree loose</em></dt>
-<dd><p>Check if <var>expr</var> is a polynomial in variable or sub-expression
-<var>var</var>, and, if so, return a list representation of the polynomial
-where the elements of the list are coefficients of successive powers of
-<var>var</var>: &lsquo;<samp><var>a</var> + <var>b</var> x + <var>c</var> x^3</samp>&rsquo; would produce the
-list &lsquo;<samp>(<var>a</var> <var>b</var> 0 <var>c</var>)</samp>&rsquo;, and &lsquo;<samp>(x + 1)^2</samp>&rsquo; would
-produce the list &lsquo;<samp>(1 2 1)</samp>&rsquo;.  The highest element of the list will
-be non-zero, with the special exception that if <var>expr</var> is the
-constant zero, the returned value will be &lsquo;<samp>(0)</samp>&rsquo;.  Return <code>nil</code>
-if <var>expr</var> is not a polynomial in <var>var</var>.  If <var>degree</var> is
-specified, this will not consider polynomials of degree higher than that
-value.  This is a good precaution because otherwise an input of
-&lsquo;<samp>(x+1)^1000</samp>&rsquo; will cause a huge coefficient list to be built.  If
-<var>loose</var> is non-<code>nil</code>, then a looser definition of a polynomial
-is used in which coefficients are no longer required not to depend on
-<var>var</var>, but are only required not to take the form of polynomials
-themselves.  For example, &lsquo;<samp>sin(x) x^2 + cos(x)</samp>&rsquo; is a loose
-polynomial with coefficients &lsquo;<samp>((calcFunc-cos x) 0 (calcFunc-sin
-x))</samp>&rsquo;.  The result will never be <code>nil</code> in loose mode, since any
-expression can be interpreted as a &ldquo;constant&rdquo; loose polynomial.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-expr_002dcontains_002dvars" id=
+    "index-expr_002dcontains_002dvars"></a>Function:
+    <strong>expr-contains-vars</strong> <em>expr</em></dt>
 
-<dl>
-<dt><a name="index-polynomial_002dbase"></a>Function: <strong>polynomial-base</strong> <em>expr pred</em></dt>
-<dd><p>Check if <var>expr</var> is a polynomial in any variable that occurs in it;
-if so, return that variable.  (If <var>expr</var> is a multivariate polynomial,
-this chooses one variable arbitrarily.)  If <var>pred</var> is specified, it should
-be a Lisp function which is called as &lsquo;<samp>(<var>pred</var> <var>subexpr</var>)</samp>&rsquo;,
-and which should return true if <code>mpb-top-expr</code> (a global name for
-the original <var>expr</var>) is a suitable polynomial in <var>subexpr</var>.
-The default predicate uses &lsquo;<samp>(polynomial-p mpb-top-expr <var>subexpr</var>)</samp>&rsquo;;
-you can use <var>pred</var> to specify additional conditions.  Or, you could
-have <var>pred</var> build up a list of every suitable <var>subexpr</var> that
-is found.
-</p></dd></dl>
+    <dd>
+      <p>Return true if <var>expr</var> contains any variables, or
+      <code>nil</code> if <var>expr</var> contains only constants
+      and functions with constant arguments.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-poly_002dsimplify"></a>Function: <strong>poly-simplify</strong> <em>poly</em></dt>
-<dd><p>Simplify polynomial coefficient list <var>poly</var> by (destructively)
-clipping off trailing zeros.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-expr_002dsubst" id=
+    "index-expr_002dsubst"></a>Function:
+    <strong>expr-subst</strong> <em>expr old new</em></dt>
 
-<dl>
-<dt><a name="index-poly_002dmix"></a>Function: <strong>poly-mix</strong> <em>a ac b bc</em></dt>
-<dd><p>Mix two polynomial lists <var>a</var> and <var>b</var> (in the form returned by
-<code>is-polynomial</code>) in a linear combination with coefficient expressions
-<var>ac</var> and <var>bc</var>.  The result is a (not necessarily simplified)
-polynomial list representing &lsquo;<samp><var>ac</var> <var>a</var> + <var>bc</var> <var>b</var></samp>&rsquo;.
-</p></dd></dl>
+    <dd>
+      <p>Returns a copy of <var>expr</var>, with all occurrences of
+      <var>old</var> replaced by <var>new</var>. This treats
+      <code>lambda</code> forms specially with respect to the dummy
+      argument variables, so that the effect is always to return
+      <var>expr</var> evaluated at <var>old</var> =
+      <var>new</var>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-poly_002dmul"></a>Function: <strong>poly-mul</strong> <em>a b</em></dt>
-<dd><p>Multiply two polynomial coefficient lists <var>a</var> and <var>b</var>.  The
-result will be in simplified form if the inputs were simplified.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-multi_002dsubst" id=
+    "index-multi_002dsubst"></a>Function:
+    <strong>multi-subst</strong> <em>expr old new</em></dt>
 
-<dl>
-<dt><a name="index-build_002dpolynomial_002dexpr"></a>Function: <strong>build-polynomial-expr</strong> <em>poly var</em></dt>
-<dd><p>Construct a Calc formula which represents the polynomial coefficient
-list <var>poly</var> applied to variable <var>var</var>.  The <kbd>a c</kbd>
-(<code>calc-collect</code>) command uses <code>is-polynomial</code> to turn an
-expression into a coefficient list, then <code>build-polynomial-expr</code>
-to turn the list back into an expression in regular form.
-</p></dd></dl>
+    <dd>
+      <p>This is like <code>expr-subst</code>, except that
+      <var>old</var> and <var>new</var> are lists of expressions to
+      be substituted simultaneously. If one list is shorter than
+      the other, trailing elements of the longer list are
+      ignored.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-check_002dunit_002dname"></a>Function: <strong>check-unit-name</strong> <em>var</em></dt>
-<dd><p>Check if <var>var</var> is a variable which can be interpreted as a unit
-name.  If so, return the units table entry for that unit.  This
-will be a list whose first element is the unit name (not counting
-prefix characters) as a symbol and whose second element is the
-Calc expression which defines the unit.  (Refer to the Calc sources
-for details on the remaining elements of this list.)  If <var>var</var>
-is not a variable or is not a unit name, return <code>nil</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-expr_002dweight" id=
+    "index-expr_002dweight"></a>Function:
+    <strong>expr-weight</strong> <em>expr</em></dt>
 
-<dl>
-<dt><a name="index-units_002din_002dexpr_002dp"></a>Function: <strong>units-in-expr-p</strong> <em>expr sub-exprs</em></dt>
-<dd><p>Return true if <var>expr</var> contains any variables which can be
-interpreted as units.  If <var>sub-exprs</var> is <code>t</code>, the entire
-expression is searched.  If <var>sub-exprs</var> is <code>nil</code>, this
-checks whether <var>expr</var> is directly a units expression.
-</p></dd></dl>
+    <dd>
+      <p>Returns the &ldquo;weight&rdquo; of <var>expr</var>,
+      basically a count of the total number of objects and function
+      calls that appear in <var>expr</var>. For
+      &ldquo;primitive&rdquo; objects, this will be one.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-single_002dunits_002din_002dexpr_002dp"></a>Function: <strong>single-units-in-expr-p</strong> <em>expr</em></dt>
-<dd><p>Check whether <var>expr</var> contains exactly one units variable.  If so,
-return the units table entry for the variable.  If <var>expr</var> does
-not contain any units, return <code>nil</code>.  If <var>expr</var> contains
-two or more units, return the symbol <code>wrong</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-expr_002dheight" id=
+    "index-expr_002dheight"></a>Function:
+    <strong>expr-height</strong> <em>expr</em></dt>
 
-<dl>
-<dt><a name="index-to_002dstandard_002dunits"></a>Function: <strong>to-standard-units</strong> <em>expr which</em></dt>
-<dd><p>Convert units expression <var>expr</var> to base units.  If <var>which</var>
-is <code>nil</code>, use Calc&rsquo;s native base units.  Otherwise, <var>which</var>
-can specify a units system, which is a list of two-element lists,
-where the first element is a Calc base symbol name and the second
-is an expression to substitute for it.
-</p></dd></dl>
+    <dd>
+      <p>Returns the &ldquo;height&rdquo; of <var>expr</var>, which
+      is the deepest level to which function calls are nested.
+      (Note that &lsquo;<samp><var>a</var> +
+      <var>b</var></samp>&rsquo; counts as a function call.) For
+      primitive objects, this returns zero.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-remove_002dunits"></a>Function: <strong>remove-units</strong> <em>expr</em></dt>
-<dd><p>Return a copy of <var>expr</var> with all units variables replaced by ones.
-This expression is generally normalized before use.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-polynomial_002dp" id=
+    "index-polynomial_002dp"></a>Function:
+    <strong>polynomial-p</strong> <em>expr var</em></dt>
 
-<dl>
-<dt><a name="index-extract_002dunits"></a>Function: <strong>extract-units</strong> <em>expr</em></dt>
-<dd><p>Return a copy of <var>expr</var> with everything but units variables replaced
-by ones.
-</p></dd></dl>
+    <dd>
+      <p>Check if <var>expr</var> is a polynomial in variable (or
+      sub-expression) <var>var</var>. If so, return the degree of
+      the polynomial, that is, the highest power of <var>var</var>
+      that appears in <var>expr</var>. For example, for
+      &lsquo;<samp>(x^2 + 3)^3 + 4</samp>&rsquo; this would return
+      6. This function returns <code>nil</code> unless
+      <var>expr</var>, when expanded out by <kbd>a x</kbd>
+      (<code>calc-expand</code>), would consist of a sum of terms
+      in which <var>var</var> appears only raised to nonnegative
+      integer powers. Note that if <var>var</var> does not occur in
+      <var>expr</var>, then <var>expr</var> is considered a
+      polynomial of degree 0.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Formatting-Lisp-Functions.html#Formatting-Lisp-Functions" accesskey="n" rel="next">Formatting Lisp Functions</a>, Previous: <a href="Vector-Lisp-Functions.html#Vector-Lisp-Functions" accesskey="p" rel="prev">Vector Lisp Functions</a>, Up: <a href="Internals.html#Internals" accesskey="u" rel="up">Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-is_002dpolynomial" id=
+    "index-is_002dpolynomial"></a>Function:
+    <strong>is-polynomial</strong> <em>expr var degree
+    loose</em></dt>
 
+    <dd>
+      <p>Check if <var>expr</var> is a polynomial in variable or
+      sub-expression <var>var</var>, and, if so, return a list
+      representation of the polynomial where the elements of the
+      list are coefficients of successive powers of <var>var</var>:
+      &lsquo;<samp><var>a</var> + <var>b</var> x + <var>c</var>
+      x^3</samp>&rsquo; would produce the list
+      &lsquo;<samp>(<var>a</var> <var>b</var> 0
+      <var>c</var>)</samp>&rsquo;, and &lsquo;<samp>(x +
+      1)^2</samp>&rsquo; would produce the list &lsquo;<samp>(1 2
+      1)</samp>&rsquo;. The highest element of the list will be
+      non-zero, with the special exception that if <var>expr</var>
+      is the constant zero, the returned value will be
+      &lsquo;<samp>(0)</samp>&rsquo;. Return <code>nil</code> if
+      <var>expr</var> is not a polynomial in <var>var</var>. If
+      <var>degree</var> is specified, this will not consider
+      polynomials of degree higher than that value. This is a good
+      precaution because otherwise an input of
+      &lsquo;<samp>(x+1)^1000</samp>&rsquo; will cause a huge
+      coefficient list to be built. If <var>loose</var> is
+      non-<code>nil</code>, then a looser definition of a
+      polynomial is used in which coefficients are no longer
+      required not to depend on <var>var</var>, but are only
+      required not to take the form of polynomials themselves. For
+      example, &lsquo;<samp>sin(x) x^2 + cos(x)</samp>&rsquo; is a
+      loose polynomial with coefficients
+      &lsquo;<samp>((calcFunc-cos x) 0 (calcFunc-sin
+      x))</samp>&rsquo;. The result will never be <code>nil</code>
+      in loose mode, since any expression can be interpreted as a
+      &ldquo;constant&rdquo; loose polynomial.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-polynomial_002dbase" id=
+    "index-polynomial_002dbase"></a>Function:
+    <strong>polynomial-base</strong> <em>expr pred</em></dt>
 
+    <dd>
+      <p>Check if <var>expr</var> is a polynomial in any variable
+      that occurs in it; if so, return that variable. (If
+      <var>expr</var> is a multivariate polynomial, this chooses
+      one variable arbitrarily.) If <var>pred</var> is specified,
+      it should be a Lisp function which is called as
+      &lsquo;<samp>(<var>pred</var>
+      <var>subexpr</var>)</samp>&rsquo;, and which should return
+      true if <code>mpb-top-expr</code> (a global name for the
+      original <var>expr</var>) is a suitable polynomial in
+      <var>subexpr</var>. The default predicate uses
+      &lsquo;<samp>(polynomial-p mpb-top-expr
+      <var>subexpr</var>)</samp>&rsquo;; you can use
+      <var>pred</var> to specify additional conditions. Or, you
+      could have <var>pred</var> build up a list of every suitable
+      <var>subexpr</var> that is found.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-poly_002dsimplify" id=
+    "index-poly_002dsimplify"></a>Function:
+    <strong>poly-simplify</strong> <em>poly</em></dt>
+
+    <dd>
+      <p>Simplify polynomial coefficient list <var>poly</var> by
+      (destructively) clipping off trailing zeros.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-poly_002dmix" id=
+    "index-poly_002dmix"></a>Function: <strong>poly-mix</strong>
+    <em>a ac b bc</em></dt>
+
+    <dd>
+      <p>Mix two polynomial lists <var>a</var> and <var>b</var> (in
+      the form returned by <code>is-polynomial</code>) in a linear
+      combination with coefficient expressions <var>ac</var> and
+      <var>bc</var>. The result is a (not necessarily simplified)
+      polynomial list representing &lsquo;<samp><var>ac</var>
+      <var>a</var> + <var>bc</var> <var>b</var></samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-poly_002dmul" id=
+    "index-poly_002dmul"></a>Function: <strong>poly-mul</strong>
+    <em>a b</em></dt>
+
+    <dd>
+      <p>Multiply two polynomial coefficient lists <var>a</var> and
+      <var>b</var>. The result will be in simplified form if the
+      inputs were simplified.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-build_002dpolynomial_002dexpr" id=
+    "index-build_002dpolynomial_002dexpr"></a>Function:
+    <strong>build-polynomial-expr</strong> <em>poly var</em></dt>
+
+    <dd>
+      <p>Construct a Calc formula which represents the polynomial
+      coefficient list <var>poly</var> applied to variable
+      <var>var</var>. The <kbd>a c</kbd>
+      (<code>calc-collect</code>) command uses
+      <code>is-polynomial</code> to turn an expression into a
+      coefficient list, then <code>build-polynomial-expr</code> to
+      turn the list back into an expression in regular form.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-check_002dunit_002dname" id=
+    "index-check_002dunit_002dname"></a>Function:
+    <strong>check-unit-name</strong> <em>var</em></dt>
+
+    <dd>
+      <p>Check if <var>var</var> is a variable which can be
+      interpreted as a unit name. If so, return the units table
+      entry for that unit. This will be a list whose first element
+      is the unit name (not counting prefix characters) as a symbol
+      and whose second element is the Calc expression which defines
+      the unit. (Refer to the Calc sources for details on the
+      remaining elements of this list.) If <var>var</var> is not a
+      variable or is not a unit name, return <code>nil</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-units_002din_002dexpr_002dp" id=
+    "index-units_002din_002dexpr_002dp"></a>Function:
+    <strong>units-in-expr-p</strong> <em>expr sub-exprs</em></dt>
+
+    <dd>
+      <p>Return true if <var>expr</var> contains any variables
+      which can be interpreted as units. If <var>sub-exprs</var> is
+      <code>t</code>, the entire expression is searched. If
+      <var>sub-exprs</var> is <code>nil</code>, this checks whether
+      <var>expr</var> is directly a units expression.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-single_002dunits_002din_002dexpr_002dp" id=
+    "index-single_002dunits_002din_002dexpr_002dp"></a>Function:
+    <strong>single-units-in-expr-p</strong> <em>expr</em></dt>
+
+    <dd>
+      <p>Check whether <var>expr</var> contains exactly one units
+      variable. If so, return the units table entry for the
+      variable. If <var>expr</var> does not contain any units,
+      return <code>nil</code>. If <var>expr</var> contains two or
+      more units, return the symbol <code>wrong</code>.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-to_002dstandard_002dunits" id=
+    "index-to_002dstandard_002dunits"></a>Function:
+    <strong>to-standard-units</strong> <em>expr which</em></dt>
+
+    <dd>
+      <p>Convert units expression <var>expr</var> to base units. If
+      <var>which</var> is <code>nil</code>, use Calc&rsquo;s native
+      base units. Otherwise, <var>which</var> can specify a units
+      system, which is a list of two-element lists, where the first
+      element is a Calc base symbol name and the second is an
+      expression to substitute for it.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-remove_002dunits" id=
+    "index-remove_002dunits"></a>Function:
+    <strong>remove-units</strong> <em>expr</em></dt>
+
+    <dd>
+      <p>Return a copy of <var>expr</var> with all units variables
+      replaced by ones. This expression is generally normalized
+      before use.</p>
+    </dd>
+  </dl>
+
+  <dl>
+    <dt><a name="index-extract_002dunits" id=
+    "index-extract_002dunits"></a>Function:
+    <strong>extract-units</strong> <em>expr</em></dt>
+
+    <dd>
+      <p>Return a copy of <var>expr</var> with everything but units
+      variables replaced by ones.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href=
+    "Formatting-Lisp-Functions.html#Formatting-Lisp-Functions"
+    accesskey="n" rel="next">Formatting Lisp Functions</a>,
+    Previous: <a href=
+    "Vector-Lisp-Functions.html#Vector-Lisp-Functions" accesskey=
+    "p" rel="prev">Vector Lisp Functions</a>, Up: <a href=
+    "Internals.html#Internals" accesskey="u" rel="up">Internals</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Key-Index.html#Key-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
 </body>
 </html>

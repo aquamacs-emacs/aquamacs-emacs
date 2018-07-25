@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,191 +19,273 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Recursive Editing</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Recursive Editing">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Recursive Editing">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
-<link href="Disabling-Commands.html#Disabling-Commands" rel="next" title="Disabling Commands">
-<link href="Prefix-Command-Arguments.html#Prefix-Command-Arguments" rel="prev" title="Prefix Command Arguments">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Recursive Editing</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Recursive Editing" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Recursive Editing" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Command-Loop.html#Command-Loop" rel="up" title=
+  "Command Loop" />
+  <link href="Disabling-Commands.html#Disabling-Commands" rel=
+  "next" title="Disabling Commands" />
+  <link href=
+  "Prefix-Command-Arguments.html#Prefix-Command-Arguments" rel=
+  "prev" title="Prefix Command Arguments" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Recursive-Editing" id="Recursive-Editing"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Disabling-Commands.html#Disabling-Commands"
+    accesskey="n" rel="next">Disabling Commands</a>, Previous:
+    <a href=
+    "Prefix-Command-Arguments.html#Prefix-Command-Arguments"
+    accesskey="p" rel="prev">Prefix Command Arguments</a>, Up:
+    <a href="Command-Loop.html#Command-Loop" accesskey="u" rel=
+    "up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Recursive-Editing-1" id="Recursive-Editing-1"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Recursive-Editing"></a>
-<div class="header">
-<p>
-Next: <a href="Disabling-Commands.html#Disabling-Commands" accesskey="n" rel="next">Disabling Commands</a>, Previous: <a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments" accesskey="p" rel="prev">Prefix Command Arguments</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Recursive-Editing-1"></a>
-<h3 class="section">20.13 Recursive Editing</h3>
-<a name="index-recursive-command-loop"></a>
-<a name="index-recursive-editing-level"></a>
-<a name="index-command-loop_002c-recursive"></a>
+  <h3 class="section">20.13 Recursive Editing</h3><a name=
+  "index-recursive-command-loop" id=
+  "index-recursive-command-loop"></a> <a name=
+  "index-recursive-editing-level" id=
+  "index-recursive-editing-level"></a> <a name=
+  "index-command-loop_002c-recursive" id=
+  "index-command-loop_002c-recursive"></a>
 
-<p>The Emacs command loop is entered automatically when Emacs starts up.
-This top-level invocation of the command loop never exits; it keeps
-running as long as Emacs does.  Lisp programs can also invoke the
-command loop.  Since this makes more than one activation of the command
-loop, we call it <em>recursive editing</em>.  A recursive editing level has
-the effect of suspending whatever command invoked it and permitting the
-user to do arbitrary editing before resuming that command.
-</p>
-<p>The commands available during recursive editing are the same ones
-available in the top-level editing loop and defined in the keymaps.
-Only a few special commands exit the recursive editing level; the others
-return to the recursive editing level when they finish.  (The special
-commands for exiting are always available, but they do nothing when
-recursive editing is not in progress.)
-</p>
-<p>All command loops, including recursive ones, set up all-purpose error
-handlers so that an error in a command run from the command loop will
-not exit the loop.
-</p>
-<a name="index-minibuffer-input"></a>
-<p>Minibuffer input is a special kind of recursive editing.  It has a few
-special wrinkles, such as enabling display of the minibuffer and the
-minibuffer window, but fewer than you might suppose.  Certain keys
-behave differently in the minibuffer, but that is only because of the
-minibuffer&rsquo;s local map; if you switch windows, you get the usual Emacs
-commands.
-</p>
-<a name="index-throw-example"></a>
-<a name="index-exit"></a>
-<a name="index-exit-recursive-editing"></a>
-<a name="index-aborting"></a>
-<p>To invoke a recursive editing level, call the function
-<code>recursive-edit</code>.  This function contains the command loop; it also
-contains a call to <code>catch</code> with tag <code>exit</code>, which makes it
-possible to exit the recursive editing level by throwing to <code>exit</code>
-(see <a href="Catch-and-Throw.html#Catch-and-Throw">Catch and Throw</a>).  If you throw a value other than <code>t</code>,
-then <code>recursive-edit</code> returns normally to the function that called
-it.  The command <kbd>C-M-c</kbd> (<code>exit-recursive-edit</code>) does this.
-Throwing a <code>t</code> value causes <code>recursive-edit</code> to quit, so that
-control returns to the command loop one level up.  This is called
-<em>aborting</em>, and is done by <kbd>C-]</kbd> (<code>abort-recursive-edit</code>).
-</p>
-<p>Most applications should not use recursive editing, except as part of
-using the minibuffer.  Usually it is more convenient for the user if you
-change the major mode of the current buffer temporarily to a special
-major mode, which should have a command to go back to the previous mode.
-(The <kbd>e</kbd> command in Rmail uses this technique.)  Or, if you wish to
-give the user different text to edit recursively, create and select
-a new buffer in a special mode.  In this mode, define a command to
-complete the processing and go back to the previous buffer.  (The
-<kbd>m</kbd> command in Rmail does this.)
-</p>
-<p>Recursive edits are useful in debugging.  You can insert a call to
-<code>debug</code> into a function definition as a sort of breakpoint, so that
-you can look around when the function gets there.  <code>debug</code> invokes
-a recursive edit but also provides the other features of the debugger.
-</p>
-<p>Recursive editing levels are also used when you type <kbd>C-r</kbd> in
-<code>query-replace</code> or use <kbd>C-x q</kbd> (<code>kbd-macro-query</code>).
-</p>
-<dl>
-<dt><a name="index-recursive_002dedit"></a>Command: <strong>recursive-edit</strong></dt>
-<dd><a name="index-suspend-evaluation"></a>
-<p>This function invokes the editor command loop.  It is called
-automatically by the initialization of Emacs, to let the user begin
-editing.  When called from a Lisp program, it enters a recursive editing
-level.
-</p>
-<p>If the current buffer is not the same as the selected window&rsquo;s buffer,
-<code>recursive-edit</code> saves and restores the current buffer.  Otherwise,
-if you switch buffers, the buffer you switched to is current after
-<code>recursive-edit</code> returns.
-</p>
-<p>In the following example, the function <code>simple-rec</code> first
-advances point one word, then enters a recursive edit, printing out a
-message in the echo area.  The user can then do any editing desired, and
-then type <kbd>C-M-c</kbd> to exit and continue executing <code>simple-rec</code>.
-</p>
-<div class="example">
-<pre class="example">(defun simple-rec ()
+  <p>The Emacs command loop is entered automatically when Emacs
+  starts up. This top-level invocation of the command loop never
+  exits; it keeps running as long as Emacs does. Lisp programs can
+  also invoke the command loop. Since this makes more than one
+  activation of the command loop, we call it <em>recursive
+  editing</em>. A recursive editing level has the effect of
+  suspending whatever command invoked it and permitting the user to
+  do arbitrary editing before resuming that command.</p>
+
+  <p>The commands available during recursive editing are the same
+  ones available in the top-level editing loop and defined in the
+  keymaps. Only a few special commands exit the recursive editing
+  level; the others return to the recursive editing level when they
+  finish. (The special commands for exiting are always available,
+  but they do nothing when recursive editing is not in
+  progress.)</p>
+
+  <p>All command loops, including recursive ones, set up
+  all-purpose error handlers so that an error in a command run from
+  the command loop will not exit the loop.</p><a name=
+  "index-minibuffer-input" id="index-minibuffer-input"></a>
+
+  <p>Minibuffer input is a special kind of recursive editing. It
+  has a few special wrinkles, such as enabling display of the
+  minibuffer and the minibuffer window, but fewer than you might
+  suppose. Certain keys behave differently in the minibuffer, but
+  that is only because of the minibuffer&rsquo;s local map; if you
+  switch windows, you get the usual Emacs commands.</p><a name=
+  "index-throw-example" id="index-throw-example"></a> <a name=
+  "index-exit" id="index-exit"></a> <a name=
+  "index-exit-recursive-editing" id=
+  "index-exit-recursive-editing"></a> <a name="index-aborting" id=
+  "index-aborting"></a>
+
+  <p>To invoke a recursive editing level, call the function
+  <code>recursive-edit</code>. This function contains the command
+  loop; it also contains a call to <code>catch</code> with tag
+  <code>exit</code>, which makes it possible to exit the recursive
+  editing level by throwing to <code>exit</code> (see <a href=
+  "Catch-and-Throw.html#Catch-and-Throw">Catch and Throw</a>). If
+  you throw a value other than <code>t</code>, then
+  <code>recursive-edit</code> returns normally to the function that
+  called it. The command <kbd>C-M-c</kbd>
+  (<code>exit-recursive-edit</code>) does this. Throwing a
+  <code>t</code> value causes <code>recursive-edit</code> to quit,
+  so that control returns to the command loop one level up. This is
+  called <em>aborting</em>, and is done by <kbd>C-]</kbd>
+  (<code>abort-recursive-edit</code>).</p>
+
+  <p>Most applications should not use recursive editing, except as
+  part of using the minibuffer. Usually it is more convenient for
+  the user if you change the major mode of the current buffer
+  temporarily to a special major mode, which should have a command
+  to go back to the previous mode. (The <kbd>e</kbd> command in
+  Rmail uses this technique.) Or, if you wish to give the user
+  different text to edit recursively, create and select a new
+  buffer in a special mode. In this mode, define a command to
+  complete the processing and go back to the previous buffer. (The
+  <kbd>m</kbd> command in Rmail does this.)</p>
+
+  <p>Recursive edits are useful in debugging. You can insert a call
+  to <code>debug</code> into a function definition as a sort of
+  breakpoint, so that you can look around when the function gets
+  there. <code>debug</code> invokes a recursive edit but also
+  provides the other features of the debugger.</p>
+
+  <p>Recursive editing levels are also used when you type
+  <kbd>C-r</kbd> in <code>query-replace</code> or use <kbd>C-x
+  q</kbd> (<code>kbd-macro-query</code>).</p>
+
+  <dl>
+    <dt><a name="index-recursive_002dedit" id=
+    "index-recursive_002dedit"></a>Command:
+    <strong>recursive-edit</strong></dt>
+
+    <dd>
+      <a name="index-suspend-evaluation" id=
+      "index-suspend-evaluation"></a>
+
+      <p>This function invokes the editor command loop. It is
+      called automatically by the initialization of Emacs, to let
+      the user begin editing. When called from a Lisp program, it
+      enters a recursive editing level.</p>
+
+      <p>If the current buffer is not the same as the selected
+      window&rsquo;s buffer, <code>recursive-edit</code> saves and
+      restores the current buffer. Otherwise, if you switch
+      buffers, the buffer you switched to is current after
+      <code>recursive-edit</code> returns.</p>
+
+      <p>In the following example, the function
+      <code>simple-rec</code> first advances point one word, then
+      enters a recursive edit, printing out a message in the echo
+      area. The user can then do any editing desired, and then type
+      <kbd>C-M-c</kbd> to exit and continue executing
+      <code>simple-rec</code>.</p>
+
+      <div class="example">
+        <pre class="example">
+(defun simple-rec ()
   (forward-word 1)
-  (message &quot;Recursive edit in progress&quot;)
+  (message "Recursive edit in progress")
   (recursive-edit)
   (forward-word 1))
      &rArr; simple-rec
 (simple-rec)
      &rArr; nil
-</pre></div>
-</dd></dl>
+</pre>
+      </div>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-exit_002drecursive_002dedit"></a>Command: <strong>exit-recursive-edit</strong></dt>
-<dd><p>This function exits from the innermost recursive edit (including
-minibuffer input).  Its definition is effectively <code>(throw 'exit
-nil)</code>.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-exit_002drecursive_002dedit" id=
+    "index-exit_002drecursive_002dedit"></a>Command:
+    <strong>exit-recursive-edit</strong></dt>
 
-<dl>
-<dt><a name="index-abort_002drecursive_002dedit"></a>Command: <strong>abort-recursive-edit</strong></dt>
-<dd><p>This function aborts the command that requested the innermost recursive
-edit (including minibuffer input), by signaling <code>quit</code>
-after exiting the recursive edit.  Its definition is effectively
-<code>(throw 'exit t)</code>.  See <a href="Quitting.html#Quitting">Quitting</a>.
-</p></dd></dl>
+    <dd>
+      <p>This function exits from the innermost recursive edit
+      (including minibuffer input). Its definition is effectively
+      <code>(throw 'exit nil)</code>.</p>
+    </dd>
+  </dl>
 
-<dl>
-<dt><a name="index-top_002dlevel"></a>Command: <strong>top-level</strong></dt>
-<dd><p>This function exits all recursive editing levels; it does not return a
-value, as it jumps completely out of any computation directly back to
-the main command loop.
-</p></dd></dl>
+  <dl>
+    <dt><a name="index-abort_002drecursive_002dedit" id=
+    "index-abort_002drecursive_002dedit"></a>Command:
+    <strong>abort-recursive-edit</strong></dt>
 
-<dl>
-<dt><a name="index-recursion_002ddepth"></a>Function: <strong>recursion-depth</strong></dt>
-<dd><p>This function returns the current depth of recursive edits.  When no
-recursive edit is active, it returns 0.
-</p></dd></dl>
+    <dd>
+      <p>This function aborts the command that requested the
+      innermost recursive edit (including minibuffer input), by
+      signaling <code>quit</code> after exiting the recursive edit.
+      Its definition is effectively <code>(throw 'exit t)</code>.
+      See <a href="Quitting.html#Quitting">Quitting</a>.</p>
+    </dd>
+  </dl>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Disabling-Commands.html#Disabling-Commands" accesskey="n" rel="next">Disabling Commands</a>, Previous: <a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments" accesskey="p" rel="prev">Prefix Command Arguments</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <dl>
+    <dt><a name="index-top_002dlevel" id=
+    "index-top_002dlevel"></a>Command:
+    <strong>top-level</strong></dt>
 
+    <dd>
+      <p>This function exits all recursive editing levels; it does
+      not return a value, as it jumps completely out of any
+      computation directly back to the main command loop.</p>
+    </dd>
+  </dl>
 
+  <dl>
+    <dt><a name="index-recursion_002ddepth" id=
+    "index-recursion_002ddepth"></a>Function:
+    <strong>recursion-depth</strong></dt>
 
+    <dd>
+      <p>This function returns the current depth of recursive
+      edits. When no recursive edit is active, it returns 0.</p>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Disabling-Commands.html#Disabling-Commands"
+    accesskey="n" rel="next">Disabling Commands</a>, Previous:
+    <a href=
+    "Prefix-Command-Arguments.html#Prefix-Command-Arguments"
+    accesskey="p" rel="prev">Prefix Command Arguments</a>, Up:
+    <a href="Command-Loop.html#Command-Loop" accesskey="u" rel=
+    "up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents"
+    title="Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>

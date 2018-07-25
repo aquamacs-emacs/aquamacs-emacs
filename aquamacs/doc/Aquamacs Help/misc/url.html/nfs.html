@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the manual for the url Emacs Lisp library.
 
 Copyright (C) 1993-1999, 2002, 2004-2016 Free Software
@@ -15,105 +17,154 @@ is included in the section entitled "GNU Free Documentation License".
 (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
 modify this GNU manual." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>URL Programmer&rsquo;s Manual: nfs</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="URL Programmer&rsquo;s Manual: nfs">
-<meta name="keywords" content="URL Programmer&rsquo;s Manual: nfs">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Function-Index.html#Function-Index" rel="index" title="Function Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Supported-URL-Types.html#Supported-URL-Types" rel="up" title="Supported URL Types">
-<link href="ldap.html#ldap" rel="next" title="ldap">
-<link href="data.html#data" rel="prev" title="data">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-
-
+  <title>URL Programmer&rsquo;s Manual: nfs</title>
+  <meta name="description" content=
+  "URL Programmer&rsquo;s Manual: nfs" />
+  <meta name="keywords" content=
+  "URL Programmer&rsquo;s Manual: nfs" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Function-Index.html#Function-Index" rel="index"
+  title="Function Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Supported-URL-Types.html#Supported-URL-Types" rel=
+  "up" title="Supported URL Types" />
+  <link href="ldap.html#ldap" rel="next" title="ldap" />
+  <link href="data.html#data" rel="prev" title="data" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
 </head>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="nfs"></a>
-<div class="header">
-<p>
-Next: <a href="ldap.html#ldap" accesskey="n" rel="next">ldap</a>, Previous: <a href="data.html#data" accesskey="p" rel="prev">data</a>, Up: <a href="Supported-URL-Types.html#Supported-URL-Types" accesskey="u" rel="up">Supported URL Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Function-Index.html#Function-Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="nfs-1"></a>
-<h3 class="section">4.9 nfs</h3>
-<a name="index-NFS"></a>
-<a name="index-Network-File-System"></a>
-<a name="index-automounter"></a>
+<body lang="en" xml:lang="en">
+  <a name="nfs" id="nfs"></a>
 
-<p>The <code>nfs</code> scheme, defined in RFC 2224, is similar to <code>ftp</code>
-except that it points to a file on a remote host that is handled by an
-NFS automounter on the local host.  Such URLs have the form
-</p>
-<div class="example">
-<pre class="example">nfs://<var>user</var>:<var>password</var>@<var>host</var>:<var>port</var>/<var>file</var>
-</pre></div>
+  <div class="header">
+    <p>Next: <a href="ldap.html#ldap" accesskey="n" rel=
+    "next">ldap</a>, Previous: <a href="data.html#data" accesskey=
+    "p" rel="prev">data</a>, Up: <a href=
+    "Supported-URL-Types.html#Supported-URL-Types" accesskey="u"
+    rel="up">Supported URL Types</a> &nbsp; [<a href=
+    "index.html#SEC_Contents" title="Table of contents" rel=
+    "contents">Contents</a>][<a href=
+    "Function-Index.html#Function-Index" title="Index" rel=
+    "index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="nfs-1" id="nfs-1"></a>
 
-<dl>
-<dt><a name="index-url_002dnfs_002dautomounter_002ddirectory_002dspec"></a>Variable: <strong>url-nfs-automounter-directory-spec</strong></dt>
-</dl>
-<p>A string saying how to invoke the NFS automounter.  Certain &lsquo;<samp>%</samp>&rsquo;
-sequences are recognized:
-</p>
-<dl compact="compact">
-<dt>&lsquo;<samp>%h</samp>&rsquo;</dt>
-<dd><p>The hostname of the NFS server;
-</p></dd>
-<dt>&lsquo;<samp>%n</samp>&rsquo;</dt>
-<dd><p>The port number of the NFS server;
-</p></dd>
-<dt>&lsquo;<samp>%u</samp>&rsquo;</dt>
-<dd><p>The username to use to authenticate;
-</p></dd>
-<dt>&lsquo;<samp>%p</samp>&rsquo;</dt>
-<dd><p>The password to use to authenticate;
-</p></dd>
-<dt>&lsquo;<samp>%f</samp>&rsquo;</dt>
-<dd><p>The filename on the remote server;
-</p></dd>
-<dt>&lsquo;<samp>%%</samp>&rsquo;</dt>
-<dd><p>A literal &lsquo;<samp>%</samp>&rsquo;.
-</p></dd>
-</dl>
+  <h3 class="section">4.9 nfs</h3><a name="index-NFS" id=
+  "index-NFS"></a> <a name="index-Network-File-System" id=
+  "index-Network-File-System"></a> <a name="index-automounter" id=
+  "index-automounter"></a>
 
-<p>Each can be used any number of times.
-</p>
+  <p>The <code>nfs</code> scheme, defined in RFC 2224, is similar
+  to <code>ftp</code> except that it points to a file on a remote
+  host that is handled by an NFS automounter on the local host.
+  Such URLs have the form</p>
 
+  <div class="example">
+    <pre class="example">
+nfs://<var>user</var>:<var>password</var>@<var>host</var>:<var>port</var>/<var>file</var>
+</pre>
+  </div>
 
+  <dl>
+    <dt><a name=
+    "index-url_002dnfs_002dautomounter_002ddirectory_002dspec" id=
+    "index-url_002dnfs_002dautomounter_002ddirectory_002dspec"></a>Variable:
+    <strong>url-nfs-automounter-directory-spec</strong></dt>
+  </dl>
 
+  <p>A string saying how to invoke the NFS automounter. Certain
+  &lsquo;<samp>%</samp>&rsquo; sequences are recognized:</p>
+
+  <dl compact="compact">
+    <dt>&lsquo;<samp>%h</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The hostname of the NFS server;</p>
+    </dd>
+
+    <dt>&lsquo;<samp>%n</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The port number of the NFS server;</p>
+    </dd>
+
+    <dt>&lsquo;<samp>%u</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The username to use to authenticate;</p>
+    </dd>
+
+    <dt>&lsquo;<samp>%p</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The password to use to authenticate;</p>
+    </dd>
+
+    <dt>&lsquo;<samp>%f</samp>&rsquo;</dt>
+
+    <dd>
+      <p>The filename on the remote server;</p>
+    </dd>
+
+    <dt>&lsquo;<samp>%%</samp>&rsquo;</dt>
+
+    <dd>
+      <p>A literal &lsquo;<samp>%</samp>&rsquo;.</p>
+    </dd>
+  </dl>
+
+  <p>Each can be used any number of times.</p>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- This is the GNU Emacs Lisp Reference Manual
 corresponding to Emacs version 25.1.
 
@@ -17,263 +19,402 @@ section entitled "GNU Free Documentation License."
 modify this GNU manual.  Buying copies from the FSF supports it in
 developing GNU and promoting software freedom." -->
 <!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+
 <head>
-<title>GNU Emacs Lisp Reference Manual: Network</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.18.1), see www.w3.org" />
 
-<meta name="description" content="GNU Emacs Lisp Reference Manual: Network">
-<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Network">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="index.html#Top" rel="start" title="Top">
-<link href="Index.html#Index" rel="index" title="Index">
-<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="Processes.html#Processes" rel="up" title="Processes">
-<link href="Network-Servers.html#Network-Servers" rel="next" title="Network Servers">
-<link href="Transaction-Queues.html#Transaction-Queues" rel="prev" title="Transaction Queues">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.indentedblock {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style:oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nocodebreak {white-space:nowrap}
-span.nolinebreak {white-space:nowrap}
-span.roman {font-family:serif; font-weight:normal}
-span.sansserif {font-family:sans-serif; font-weight:normal}
-ul.no-bullet {list-style: none}
--->
-</style>
+  <title>GNU Emacs Lisp Reference Manual: Network</title>
+  <meta name="description" content=
+  "GNU Emacs Lisp Reference Manual: Network" />
+  <meta name="keywords" content=
+  "GNU Emacs Lisp Reference Manual: Network" />
+  <meta name="resource-type" content="document" />
+  <meta name="distribution" content="global" />
+  <meta name="Generator" content="makeinfo" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link href="index.html#Top" rel="start" title="Top" />
+  <link href="Index.html#Index" rel="index" title="Index" />
+  <link href="index.html#SEC_Contents" rel="contents" title=
+  "Table of Contents" />
+  <link href="Processes.html#Processes" rel="up" title=
+  "Processes" />
+  <link href="Network-Servers.html#Network-Servers" rel="next"
+  title="Network Servers" />
+  <link href="Transaction-Queues.html#Transaction-Queues" rel=
+  "prev" title="Transaction Queues" />
+  <style type="text/css">
+/*<![CDATA[*/
+  <!--
+  a.summary-letter {text-decoration: none}
+  blockquote.smallquotation {font-size: smaller}
+  div.display {margin-left: 3.2em}
+  div.example {margin-left: 3.2em}
+  div.indentedblock {margin-left: 3.2em}
+  div.lisp {margin-left: 3.2em}
+  div.smalldisplay {margin-left: 3.2em}
+  div.smallexample {margin-left: 3.2em}
+  div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+  div.smalllisp {margin-left: 3.2em}
+  kbd {font-style:oblique}
+  pre.display {font-family: inherit}
+  pre.format {font-family: inherit}
+  pre.menu-comment {font-family: serif}
+  pre.menu-preformatted {font-family: serif}
+  pre.smalldisplay {font-family: inherit; font-size: smaller}
+  pre.smallexample {font-size: smaller}
+  pre.smallformat {font-family: inherit; font-size: smaller}
+  pre.smalllisp {font-size: smaller}
+  span.nocodebreak {white-space:nowrap}
+  span.nolinebreak {white-space:nowrap}
+  span.roman {font-family:serif; font-weight:normal}
+  span.sansserif {font-family:sans-serif; font-weight:normal}
+  ul.no-bullet {list-style: none}
+  -->
+  /*]]>*/
+  </style>
+  <link rel="stylesheet" href="aquamacs.css" type="text/css" />
+  <style type="text/css">
+/*<![CDATA[*/
+  body {
+  background-color: #FFFFFF;
+  color: #000000;
+  }
+  :link { color: #0000FF }
+  :visited { color: #800080 }
+  :active { color: #FF0000 }
+  /*]]>*/
+  </style>
+</head>
 
+<body lang="en" xml:lang="en">
+  <a name="Network" id="Network"></a>
 
-<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+  <div class="header">
+    <p>Next: <a href="Network-Servers.html#Network-Servers"
+    accesskey="n" rel="next">Network Servers</a>, Previous:
+    <a href="Transaction-Queues.html#Transaction-Queues" accesskey=
+    "p" rel="prev">Transaction Queues</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
+  <hr />
+  <a name="Network-Connections" id="Network-Connections"></a>
 
-<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
-<a name="Network"></a>
-<div class="header">
-<p>
-Next: <a href="Network-Servers.html#Network-Servers" accesskey="n" rel="next">Network Servers</a>, Previous: <a href="Transaction-Queues.html#Transaction-Queues" accesskey="p" rel="prev">Transaction Queues</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<hr>
-<a name="Network-Connections"></a>
-<h3 class="section">36.14 Network Connections</h3>
-<a name="index-network-connection"></a>
-<a name="index-TCP"></a>
-<a name="index-UDP"></a>
+  <h3 class="section">36.14 Network Connections</h3><a name=
+  "index-network-connection" id="index-network-connection"></a>
+  <a name="index-TCP" id="index-TCP"></a> <a name="index-UDP" id=
+  "index-UDP"></a>
 
-<p>Emacs Lisp programs can open stream (TCP) and datagram (UDP) network
-connections (see <a href="Datagrams.html#Datagrams">Datagrams</a>) to other processes on the same machine
-or other machines.
-A network connection is handled by Lisp much like a subprocess, and is
-represented by a process object.  However, the process you are
-communicating with is not a child of the Emacs process, has no
-process <acronym>ID</acronym>, and you can&rsquo;t kill it or send it signals.  All you
-can do is send and receive data.  <code>delete-process</code> closes the
-connection, but does not kill the program at the other end; that
-program must decide what to do about closure of the connection.
-</p>
-<p>Lisp programs can listen for connections by creating network
-servers.  A network server is also represented by a kind of process
-object, but unlike a network connection, the network server never
-transfers data itself.  When it receives a connection request, it
-creates a new network connection to represent the connection just
-made.  (The network connection inherits certain information, including
-the process plist, from the server.)  The network server then goes
-back to listening for more connection requests.
-</p>
-<p>Network connections and servers are created by calling
-<code>make-network-process</code> with an argument list consisting of
-keyword/argument pairs, for example <code>:server t</code> to create a
-server process, or <code>:type 'datagram</code> to create a datagram
-connection.  See <a href="Low_002dLevel-Network.html#Low_002dLevel-Network">Low-Level Network</a>, for details.  You can also use
-the <code>open-network-stream</code> function described below.
-</p>
-<p>To distinguish the different types of processes, the
-<code>process-type</code> function returns the symbol <code>network</code> for a
-network connection or server, <code>serial</code> for a serial port
-connection, <code>pipe</code> for a pipe connection, or <code>real</code> for a
-real subprocess.
-</p>
-<p>The <code>process-status</code> function returns <code>open</code>,
-<code>closed</code>, <code>connect</code>, <code>stop</code>, or <code>failed</code> for
-network connections.  For a network server, the status is always
-<code>listen</code>.  Except for <code>stop</code>, none of those values is
-possible for a real subprocess.  See <a href="Process-Information.html#Process-Information">Process Information</a>.
-</p>
-<p>You can stop and resume operation of a network process by calling
-<code>stop-process</code> and <code>continue-process</code>.  For a server
-process, being stopped means not accepting new connections.  (Up to 5
-connection requests will be queued for when you resume the server; you
-can increase this limit, unless it is imposed by the operating
-system&mdash;see the <code>:server</code> keyword of <code>make-network-process</code>,
-<a href="Network-Processes.html#Network-Processes">Network Processes</a>.)  For a network stream connection, being
-stopped means not processing input (any arriving input waits until you
-resume the connection).  For a datagram connection, some number of
-packets may be queued but input may be lost.  You can use the function
-<code>process-command</code> to determine whether a network connection or
-server is stopped; a non-<code>nil</code> value means yes.
-</p>
-<a name="index-network-connection_002c-encrypted"></a>
-<a name="index-encrypted-network-connections"></a>
-<a name="index-TLS-network-connections"></a>
-<a name="index-STARTTLS-network-connections"></a>
-<p>Emacs can create encrypted network connections, using either built-in
-or external support.  The built-in support uses the GnuTLS
-Transport Layer Security Library; see
-<a href="http://www.gnu.org/software/gnutls/">the GnuTLS project page</a>.
-If your Emacs was compiled with GnuTLS support, the function
-<code>gnutls-available-p</code> is defined and returns non-<code>nil</code>.  For
-more details, see <a href="../emacs-gnutls/index.html#Top">Overview</a> in <cite>The Emacs-GnuTLS manual</cite>.
-The external support uses the <samp>starttls.el</samp> library, which
-requires a helper utility such as <code>gnutls-cli</code> to be installed
-on the system.  The <code>open-network-stream</code> function can
-transparently handle the details of creating encrypted connections for
-you, using whatever support is available.
-</p>
-<dl>
-<dt><a name="index-open_002dnetwork_002dstream"></a>Function: <strong>open-network-stream</strong> <em>name buffer host service &amp;rest parameters</em></dt>
-<dd><p>This function opens a TCP connection, with optional encryption, and
-returns a process object that represents the connection.
-</p>
-<p>The <var>name</var> argument specifies the name for the process object.  It
-is modified as necessary to make it unique.
-</p>
-<p>The <var>buffer</var> argument is the buffer to associate with the
-connection.  Output from the connection is inserted in the buffer,
-unless you specify your own filter function to handle the output.  If
-<var>buffer</var> is <code>nil</code>, it means that the connection is not
-associated with any buffer.
-</p>
-<p>The arguments <var>host</var> and <var>service</var> specify where to connect to;
-<var>host</var> is the host name (a string), and <var>service</var> is the name of
-a defined network service (a string) or a port number (an integer).
-</p>
-<p>The remaining arguments <var>parameters</var> are keyword/argument pairs
-that are mainly relevant to encrypted connections:
-</p>
-<dl compact="compact">
-<dt><code>:nowait <var>boolean</var></code></dt>
-<dd><p>If non-<code>nil</code>, try to make an asynchronous connection.
-</p>
-</dd>
-<dt><code>:type <var>type</var></code></dt>
-<dd><p>The type of connection.  Options are:
-</p>
-<dl compact="compact">
-<dt><code>plain</code></dt>
-<dd><p>An ordinary, unencrypted connection.
-</p></dd>
-<dt><code>tls</code></dt>
-<dt><code>ssl</code></dt>
-<dd><p>A <acronym>TLS</acronym> (Transport Layer Security) connection.
-</p></dd>
-<dt><code>nil</code></dt>
-<dt><code>network</code></dt>
-<dd><p>Start with a plain connection, and if parameters &lsquo;<samp>:success</samp>&rsquo;
-and &lsquo;<samp>:capability-command</samp>&rsquo; are supplied, try to upgrade to an encrypted
-connection via <acronym>STARTTLS</acronym>.  If that fails, retain the
-unencrypted connection.
-</p></dd>
-<dt><code>starttls</code></dt>
-<dd><p>As for <code>nil</code>, but if <acronym>STARTTLS</acronym> fails drop the connection.
-</p></dd>
-<dt><code>shell</code></dt>
-<dd><p>A shell connection.
-</p></dd>
-</dl>
+  <p>Emacs Lisp programs can open stream (TCP) and datagram (UDP)
+  network connections (see <a href=
+  "Datagrams.html#Datagrams">Datagrams</a>) to other processes on
+  the same machine or other machines. A network connection is
+  handled by Lisp much like a subprocess, and is represented by a
+  process object. However, the process you are communicating with
+  is not a child of the Emacs process, has no process
+  <acronym>ID</acronym>, and you can&rsquo;t kill it or send it
+  signals. All you can do is send and receive data.
+  <code>delete-process</code> closes the connection, but does not
+  kill the program at the other end; that program must decide what
+  to do about closure of the connection.</p>
 
-</dd>
-<dt><code>:always-query-capabilities <var>boolean</var></code></dt>
-<dd><p>If non-<code>nil</code>, always ask for the server&rsquo;s capabilities, even when
-doing a &lsquo;<samp>plain</samp>&rsquo; connection.
-</p>
-</dd>
-<dt><code>:capability-command <var>capability-command</var></code></dt>
-<dd><p>Command string to query the host capabilities.
-</p>
-</dd>
-<dt><code>:end-of-command <var>regexp</var></code></dt>
-<dt><code>:end-of-capability <var>regexp</var></code></dt>
-<dd><p>Regular expression matching the end of a command, or the end of the
-command <var>capability-command</var>.  The latter defaults to the former.
-</p>
-</dd>
-<dt><code>:starttls-function <var>function</var></code></dt>
-<dd><p>Function of one argument (the response to <var>capability-command</var>),
-which returns either <code>nil</code>, or the command to activate <acronym>STARTTLS</acronym>
-if supported.
-</p>
-</dd>
-<dt><code>:success <var>regexp</var></code></dt>
-<dd><p>Regular expression matching a successful <acronym>STARTTLS</acronym> negotiation.
-</p>
-</dd>
-<dt><code>:use-starttls-if-possible <var>boolean</var></code></dt>
-<dd><p>If non-<code>nil</code>, do opportunistic <acronym>STARTTLS</acronym> upgrades even if Emacs
-doesn&rsquo;t have built-in <acronym>TLS</acronym> support.
-</p>
-</dd>
-<dt><code>:warn-unless-encrypted <var>boolean</var></code></dt>
-<dd><p>If non-<code>nil</code>, and <code>:return-value</code> is also non-<code>nil</code>,
-Emacs will warn if the connection isn&rsquo;t encrypted.  This is useful for
-protocols like <acronym>IMAP</acronym> and the like, where most users would
-expect the network traffic to be encrypted.
-</p>
-</dd>
-<dt><code>:client-certificate <var>list-or-t</var></code></dt>
-<dd><p>Either a list of the form <code>(<var>key-file</var> <var>cert-file</var>)</code>,
-naming the certificate key file and certificate file itself, or
-<code>t</code>, meaning to query <code>auth-source</code> for this information
-(see <a href="../auth/index.html#Top">Overview</a> in <cite>The Auth-Source Manual</cite>).
-Only used for <acronym>TLS</acronym> or <acronym>STARTTLS</acronym>.
-</p>
-</dd>
-<dt><code>:return-list <var>cons-or-nil</var></code></dt>
-<dd><p>The return value of this function.  If omitted or <code>nil</code>, return a
-process object.  Otherwise, a cons of the form <code>(<var>process-object</var>
-. <var>plist</var>)</code>, where <var>plist</var> has keywords:
-</p>
-<dl compact="compact">
-<dt><code>:greeting <var>string-or-nil</var></code></dt>
-<dd><p>If non-<code>nil</code>, the greeting string returned by the host.
-</p></dd>
-<dt><code>:capabilities <var>string-or-nil</var></code></dt>
-<dd><p>If non-<code>nil</code>, the host&rsquo;s capability string.
-</p></dd>
-<dt><code>:type <var>symbol</var></code></dt>
-<dd><p>The connection type: &lsquo;<samp>plain</samp>&rsquo; or &lsquo;<samp>tls</samp>&rsquo;.
-</p></dd>
-</dl>
+  <p>Lisp programs can listen for connections by creating network
+  servers. A network server is also represented by a kind of
+  process object, but unlike a network connection, the network
+  server never transfers data itself. When it receives a connection
+  request, it creates a new network connection to represent the
+  connection just made. (The network connection inherits certain
+  information, including the process plist, from the server.) The
+  network server then goes back to listening for more connection
+  requests.</p>
 
-</dd>
-</dl>
+  <p>Network connections and servers are created by calling
+  <code>make-network-process</code> with an argument list
+  consisting of keyword/argument pairs, for example <code>:server
+  t</code> to create a server process, or <code>:type
+  'datagram</code> to create a datagram connection. See <a href=
+  "Low_002dLevel-Network.html#Low_002dLevel-Network">Low-Level
+  Network</a>, for details. You can also use the
+  <code>open-network-stream</code> function described below.</p>
 
-</dd></dl>
+  <p>To distinguish the different types of processes, the
+  <code>process-type</code> function returns the symbol
+  <code>network</code> for a network connection or server,
+  <code>serial</code> for a serial port connection,
+  <code>pipe</code> for a pipe connection, or <code>real</code> for
+  a real subprocess.</p>
 
+  <p>The <code>process-status</code> function returns
+  <code>open</code>, <code>closed</code>, <code>connect</code>,
+  <code>stop</code>, or <code>failed</code> for network
+  connections. For a network server, the status is always
+  <code>listen</code>. Except for <code>stop</code>, none of those
+  values is possible for a real subprocess. See <a href=
+  "Process-Information.html#Process-Information">Process
+  Information</a>.</p>
 
-<hr>
-<div class="header">
-<p>
-Next: <a href="Network-Servers.html#Network-Servers" accesskey="n" rel="next">Network Servers</a>, Previous: <a href="Transaction-Queues.html#Transaction-Queues" accesskey="p" rel="prev">Transaction Queues</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
-</div>
+  <p>You can stop and resume operation of a network process by
+  calling <code>stop-process</code> and
+  <code>continue-process</code>. For a server process, being
+  stopped means not accepting new connections. (Up to 5 connection
+  requests will be queued for when you resume the server; you can
+  increase this limit, unless it is imposed by the operating
+  system&mdash;see the <code>:server</code> keyword of
+  <code>make-network-process</code>, <a href=
+  "Network-Processes.html#Network-Processes">Network
+  Processes</a>.) For a network stream connection, being stopped
+  means not processing input (any arriving input waits until you
+  resume the connection). For a datagram connection, some number of
+  packets may be queued but input may be lost. You can use the
+  function <code>process-command</code> to determine whether a
+  network connection or server is stopped; a non-<code>nil</code>
+  value means yes.</p><a name=
+  "index-network-connection_002c-encrypted" id=
+  "index-network-connection_002c-encrypted"></a> <a name=
+  "index-encrypted-network-connections" id=
+  "index-encrypted-network-connections"></a> <a name=
+  "index-TLS-network-connections" id=
+  "index-TLS-network-connections"></a> <a name=
+  "index-STARTTLS-network-connections" id=
+  "index-STARTTLS-network-connections"></a>
 
+  <p>Emacs can create encrypted network connections, using either
+  built-in or external support. The built-in support uses the
+  GnuTLS Transport Layer Security Library; see <a href=
+  "http://www.gnu.org/software/gnutls/">the GnuTLS project
+  page</a>. If your Emacs was compiled with GnuTLS support, the
+  function <code>gnutls-available-p</code> is defined and returns
+  non-<code>nil</code>. For more details, see <a href=
+  "../emacs-gnutls/index.html#Top">Overview</a> in <cite>The
+  Emacs-GnuTLS manual</cite>. The external support uses the
+  <samp>starttls.el</samp> library, which requires a helper utility
+  such as <code>gnutls-cli</code> to be installed on the system.
+  The <code>open-network-stream</code> function can transparently
+  handle the details of creating encrypted connections for you,
+  using whatever support is available.</p>
 
+  <dl>
+    <dt><a name="index-open_002dnetwork_002dstream" id=
+    "index-open_002dnetwork_002dstream"></a>Function:
+    <strong>open-network-stream</strong> <em>name buffer host
+    service &amp;rest parameters</em></dt>
 
+    <dd>
+      <p>This function opens a TCP connection, with optional
+      encryption, and returns a process object that represents the
+      connection.</p>
+
+      <p>The <var>name</var> argument specifies the name for the
+      process object. It is modified as necessary to make it
+      unique.</p>
+
+      <p>The <var>buffer</var> argument is the buffer to associate
+      with the connection. Output from the connection is inserted
+      in the buffer, unless you specify your own filter function to
+      handle the output. If <var>buffer</var> is <code>nil</code>,
+      it means that the connection is not associated with any
+      buffer.</p>
+
+      <p>The arguments <var>host</var> and <var>service</var>
+      specify where to connect to; <var>host</var> is the host name
+      (a string), and <var>service</var> is the name of a defined
+      network service (a string) or a port number (an integer).</p>
+
+      <p>The remaining arguments <var>parameters</var> are
+      keyword/argument pairs that are mainly relevant to encrypted
+      connections:</p>
+
+      <dl compact="compact">
+        <dt><code>:nowait <var>boolean</var></code></dt>
+
+        <dd>
+          <p>If non-<code>nil</code>, try to make an asynchronous
+          connection.</p>
+        </dd>
+
+        <dt><code>:type <var>type</var></code></dt>
+
+        <dd>
+          <p>The type of connection. Options are:</p>
+
+          <dl compact="compact">
+            <dt><code>plain</code></dt>
+
+            <dd>
+              <p>An ordinary, unencrypted connection.</p>
+            </dd>
+
+            <dt><code>tls</code></dt>
+
+            <dt><code>ssl</code></dt>
+
+            <dd>
+              <p>A <acronym>TLS</acronym> (Transport Layer
+              Security) connection.</p>
+            </dd>
+
+            <dt><code>nil</code></dt>
+
+            <dt><code>network</code></dt>
+
+            <dd>
+              <p>Start with a plain connection, and if parameters
+              &lsquo;<samp>:success</samp>&rsquo; and
+              &lsquo;<samp>:capability-command</samp>&rsquo; are
+              supplied, try to upgrade to an encrypted connection
+              via <acronym>STARTTLS</acronym>. If that fails,
+              retain the unencrypted connection.</p>
+            </dd>
+
+            <dt><code>starttls</code></dt>
+
+            <dd>
+              <p>As for <code>nil</code>, but if
+              <acronym>STARTTLS</acronym> fails drop the
+              connection.</p>
+            </dd>
+
+            <dt><code>shell</code></dt>
+
+            <dd>
+              <p>A shell connection.</p>
+            </dd>
+          </dl>
+        </dd>
+
+        <dt><code>:always-query-capabilities
+        <var>boolean</var></code></dt>
+
+        <dd>
+          <p>If non-<code>nil</code>, always ask for the
+          server&rsquo;s capabilities, even when doing a
+          &lsquo;<samp>plain</samp>&rsquo; connection.</p>
+        </dd>
+
+        <dt><code>:capability-command
+        <var>capability-command</var></code></dt>
+
+        <dd>
+          <p>Command string to query the host capabilities.</p>
+        </dd>
+
+        <dt><code>:end-of-command <var>regexp</var></code></dt>
+
+        <dt><code>:end-of-capability <var>regexp</var></code></dt>
+
+        <dd>
+          <p>Regular expression matching the end of a command, or
+          the end of the command <var>capability-command</var>. The
+          latter defaults to the former.</p>
+        </dd>
+
+        <dt><code>:starttls-function
+        <var>function</var></code></dt>
+
+        <dd>
+          <p>Function of one argument (the response to
+          <var>capability-command</var>), which returns either
+          <code>nil</code>, or the command to activate
+          <acronym>STARTTLS</acronym> if supported.</p>
+        </dd>
+
+        <dt><code>:success <var>regexp</var></code></dt>
+
+        <dd>
+          <p>Regular expression matching a successful
+          <acronym>STARTTLS</acronym> negotiation.</p>
+        </dd>
+
+        <dt><code>:use-starttls-if-possible
+        <var>boolean</var></code></dt>
+
+        <dd>
+          <p>If non-<code>nil</code>, do opportunistic
+          <acronym>STARTTLS</acronym> upgrades even if Emacs
+          doesn&rsquo;t have built-in <acronym>TLS</acronym>
+          support.</p>
+        </dd>
+
+        <dt><code>:warn-unless-encrypted
+        <var>boolean</var></code></dt>
+
+        <dd>
+          <p>If non-<code>nil</code>, and
+          <code>:return-value</code> is also non-<code>nil</code>,
+          Emacs will warn if the connection isn&rsquo;t encrypted.
+          This is useful for protocols like <acronym>IMAP</acronym>
+          and the like, where most users would expect the network
+          traffic to be encrypted.</p>
+        </dd>
+
+        <dt><code>:client-certificate
+        <var>list-or-t</var></code></dt>
+
+        <dd>
+          <p>Either a list of the form <code>(<var>key-file</var>
+          <var>cert-file</var>)</code>, naming the certificate key
+          file and certificate file itself, or <code>t</code>,
+          meaning to query <code>auth-source</code> for this
+          information (see <a href=
+          "../auth/index.html#Top">Overview</a> in <cite>The
+          Auth-Source Manual</cite>). Only used for
+          <acronym>TLS</acronym> or
+          <acronym>STARTTLS</acronym>.</p>
+        </dd>
+
+        <dt><code>:return-list <var>cons-or-nil</var></code></dt>
+
+        <dd>
+          <p>The return value of this function. If omitted or
+          <code>nil</code>, return a process object. Otherwise, a
+          cons of the form <code>(<var>process-object</var> .
+          <var>plist</var>)</code>, where <var>plist</var> has
+          keywords:</p>
+
+          <dl compact="compact">
+            <dt><code>:greeting
+            <var>string-or-nil</var></code></dt>
+
+            <dd>
+              <p>If non-<code>nil</code>, the greeting string
+              returned by the host.</p>
+            </dd>
+
+            <dt><code>:capabilities
+            <var>string-or-nil</var></code></dt>
+
+            <dd>
+              <p>If non-<code>nil</code>, the host&rsquo;s
+              capability string.</p>
+            </dd>
+
+            <dt><code>:type <var>symbol</var></code></dt>
+
+            <dd>
+              <p>The connection type:
+              &lsquo;<samp>plain</samp>&rsquo; or
+              &lsquo;<samp>tls</samp>&rsquo;.</p>
+            </dd>
+          </dl>
+        </dd>
+      </dl>
+    </dd>
+  </dl>
+  <hr />
+
+  <div class="header">
+    <p>Next: <a href="Network-Servers.html#Network-Servers"
+    accesskey="n" rel="next">Network Servers</a>, Previous:
+    <a href="Transaction-Queues.html#Transaction-Queues" accesskey=
+    "p" rel="prev">Transaction Queues</a>, Up: <a href=
+    "Processes.html#Processes" accesskey="u" rel="up">Processes</a>
+    &nbsp; [<a href="index.html#SEC_Contents" title=
+    "Table of contents" rel="contents">Contents</a>][<a href=
+    "Index.html#Index" title="Index" rel="index">Index</a>]</p>
+  </div>
 </body>
 </html>
